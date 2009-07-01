@@ -5,7 +5,7 @@
 //
 // Implementation of subclasses of TSolMod for aqueous activity models
 // subclasses: TSIT, TPitzer, TEUNIQUAC, THelgeson, TDavies,
-// 				TLimitingLaw, TDebyeHueckel, TKarpov
+// 				TLimitingLaw, TDebyeHueckel, TKarpov, TShvarov
 //
 // This file is part of a GEM-Selektor (GEMS) v.2.x.x program
 // environment for thermodynamic modeling in geochemistry
@@ -39,8 +39,7 @@ using namespace std;
 
 // Generic constructor for the TSIT class
 TSIT::TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-        long int NPperDC, char Mod_Code,
-        long int* arIPx, double* arIPc, double* arDCc,
+        long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
         double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
         double T_k, double P_bar, double *dW, double *eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
@@ -77,7 +76,7 @@ long int TSIT::PTparam()
 {
 	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
 
-	// pull and convert parameters
+	// read and convert rho and eps
 	rho = RhoW[0];
 	alp = - 1./rho*RhoW[1];
 	dal = pow(alp,2.) - 1./rho*RhoW[2];
@@ -93,6 +92,9 @@ long int TSIT::PTparam()
 	d2AdT2 = 1./A*pow(dAdT,2.) - 3./2.*A*( d2edt2 - 1/pow(Tk,2.) + 1/3.*dal );
 	dAdP = 1./2.*A*( bet - 3.*dedp);
 
+ 	ErrorIf( fabs(A) < 1e-9, "SIT model",
+ 			"Error: DH parameter A was not calculated - no values of RoW and EpsW !" );
+
 	return 0;
 }
 
@@ -101,18 +103,10 @@ long int TSIT::PTparam()
 long int TSIT::MixMod()
 {
 	long int j, index1, index2, ip;
-    double sqI, lgI, Z2, lgGam, SumSIT, rho, eps, lg_to_ln;
+    double sqI, lgI, Z2, lgGam, SumSIT, lg_to_ln;
     lg_to_ln = 2.302585093;
 
-    rho = RhoW[0];
-    eps = EpsW[0];
-
-    A = (1.82483e6) * sqrt( rho ) / pow( Tk*eps, 1.5 );
-
- 	ErrorIf( fabs(A) < 1e-9, "SIT",
- 			"Error: DH parameter A was not calculated - no values of RoW and EpsW !" );
-
-    I = IonicStr();
+    I = IonicStrength();
     sqI = sqrt( I );
     lgI = log10(I);
 
@@ -195,7 +189,7 @@ long int TSIT::ExcessProp( double *Zex )
     lg_to_ln = 2.302585093;
     g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
 
-    I = IonicStr();
+    I = IonicStrength();
     sqI = sqrt( I );
     lgI = log10(I);
 
@@ -322,12 +316,14 @@ long int TSIT::IdealProp( double *Zid )
 
 
 // calculates true ionic strength
-double TSIT::IonicStr()
+double TSIT::IonicStrength()
 {
-	double Is=0.;
-	for( long int ii=0; ii<NComp; ii++ )
-		Is += aZ[ii]*aZ[ii]*aM[ii];
-	return 0.5*Is;
+	double Is = 0.;
+
+	for( long int ii=0; ii<(NComp-1); ii++ )
+		Is += 0.5*( aZ[ii]*aZ[ii]*aM[ii] );
+
+	return Is;
 }
 
 
@@ -346,8 +342,7 @@ double TSIT::IonicStr()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Generic constructor for the TPitzer class
 TPitzer::TPitzer( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-        long int NPperDC, char Mod_Code,
-        long int* arIPx, double* arIPc, double* arDCc,
+        long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
         double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
         double T_k, double P_bar, double *dW, double *eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
@@ -1339,8 +1334,7 @@ long int TPitzer::IdealProp( double *Zid )
 
 // Generic constructor for the TEUNIQUAC class
 TEUNIQUAC::TEUNIQUAC( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-        long int NPperDC, char Mod_Code,
-        long int *arIPx, double *arIPc, double *arDCc,
+        long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
         double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
         double T_k, double P_bar, double *dW, double *eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
@@ -1415,6 +1409,7 @@ long int TEUNIQUAC::PTparam()
 {
 	long int j, i, ip, i1, i2;
 	double u0, u1, u, du, d2u, psi, dpsi, d2psi, v, dv;
+	double c, alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
 
     if ( NPcoef < 2 || NPar < 1 || NP_DC < 2 )
        return 1;
@@ -1475,6 +1470,32 @@ long int TEUNIQUAC::PTparam()
 		}
 	}
 
+	// read and convert rho and eps (check density units)
+	c = (1.3287e+5);
+	rho = RhoW[0]*1000.;
+	alp = - 1./rho*RhoW[1]*1000.;
+	dal = pow(alp,2.) - 1./rho*RhoW[2];
+	bet = 1./rho*RhoW[3]*1000.;
+	eps = EpsW[0];
+	dedt = 1./eps*EpsW[1];
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];
+	dedp = 1./eps*EpsW[3];
+
+	// calculate A term of Debye-Huckel equation (and derivatives)
+	A = c*sqrt(rho)/pow((eps*Tk),1.5);
+	dAdT = - 3./2.*A*( dedt + 1./Tk + alp/3. );
+	d2AdT2 = 1./A*pow(dAdT,2.) - 3./2.*A*( d2edt2 - 1/pow(Tk,2.) + 1/3.*dal );
+	dAdP = 1./2.*A*( bet - 3.*dedp);
+
+	// approximation valid only for temperatures below 200 deg. C and Psat
+	A = 1.131 + (1.335e-3)*(Tk-273.15) + (1.164e-5)*pow( (Tk-273.15), 2.);
+	dAdT = (1.335e-3) + 2.*(1.164e-5)*(Tk-273.15);
+	d2AdT2 = 2.*(1.164e-5);
+	dAdP = 0.;
+
+ 	ErrorIf( fabs(A) < 1e-9, "EUNIQUAC model",
+ 			"Error: DH parameter A was not calculated - no values of RoW and EpsW !" );
+
 	return 0;
 }
 
@@ -1483,20 +1504,11 @@ long int TEUNIQUAC::PTparam()
 long int TEUNIQUAC::MixMod()
 {
 	long int j, i, l, k, w;
-	double Mw, Xw, IS, b, c, A, RR, QQ, K, L, M, gamDH, gamC, gamR, lnGam, Gam, rho, eps;
+	double Mw, Xw, b, RR, QQ, K, L, M, gamDH, gamC, gamR, lnGam, Gam;
+	b = 1.5;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
-
-	// calculation of DH parameters
-	rho = RhoW[0]*1000.;  // density in kg m-3
-	eps = EpsW[0];
-	b = 1.5;
-	c = (1.3287e+5);  // corrected
-	A = c*sqrt(rho)/pow((eps*Tk),1.5);
-
-	// approximation valid only for temperatures below 200 deg. C and Psat
-	A = 1.131 + (1.335e-3)*(Tk-273.15) + (1.164e-5)*pow( (Tk-273.15), 2.);
 
 	// calculation of ionic strength
 	IS = 0.0;
@@ -1546,7 +1558,6 @@ long int TEUNIQUAC::MixMod()
 					- 5.0*Q[j] * ( log(Phi[j]/Theta[j]) - Phi[j]/Theta[j]
 					- log(R[j]*Q[w]/(R[w]*Q[j])) + R[j]*Q[w]/(R[w]*Q[j]) );
 			gamR = Q[j] * ( - log(K) - L + log(Psi[w][j]) + Psi[j][w] );
-
 			lnGam = gamDH + gamC + gamR;
 
 			// convert activity coefficient to molality scale
@@ -1579,11 +1590,8 @@ long int TEUNIQUAC::MixMod()
 			}
 
 			gamDH = Mw*2.*A/pow(b,3.) * ( 1. + b*sqrt(IS) - 1./(1.+b*sqrt(IS)) - 2*log(1.+b*sqrt(IS)) );
-
 			gamC = log(Phi[j]/x[j]) + 1. - Phi[j]/x[j] - 5.0*Q[j] * ( log(Phi[j]/Theta[j]) + 1. - Phi[j]/Theta[j] );
-
 			gamR = Q[j] * (1. - log(K) - L );
-
 			lnGam = gamDH + gamC + gamR;
 			lnGamma[j] = lnGam;
 
@@ -1602,38 +1610,14 @@ long int TEUNIQUAC::MixMod()
 long int TEUNIQUAC::ExcessProp( double *Zex )
 {
 	long int j, i, w;
-	double Mw, Xw, IS, b, c, A, dAdT, dAdP, d2AdT2, phiti, phthi, RR, QQ,
-			N, TPI, tpx, TPX, dtpx, DTPX, CON;
+	double Mw, Xw, b, phiti, phthi, RR, QQ, N, TPI, tpx, TPX,
+			dtpx, DTPX, con;
 	double gDH, gC, gR, hR, cpR, gCI, gRI, gCX, gRX, dg, d2g, dgRI, d2gRI,
 			dgRX, d2gRX, dgDH, d2gDH, dgDHdP;
-	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
+	b = 1.5;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
-
-	// pull and convert parameters (check density units)
-	b = 1.5;
-	c = (1.3287e+5);
-	rho = RhoW[0]*1000.;
-	alp = - 1./rho*RhoW[1]*1000.;
-	dal = pow(alp,2.) - 1./rho*RhoW[2];
-	bet = 1./rho*RhoW[3]*1000.;
-	eps = EpsW[0];
-	dedt = 1./eps*EpsW[1];
-	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];
-	dedp = 1./eps*EpsW[3];
-
-	// calculate A term of Debye-Huckel equation (and derivatives)
-	A = c*sqrt(rho)/pow((eps*Tk),1.5);
-	dAdT = - 3./2.*A*( dedt + 1./Tk + alp/3. );
-	d2AdT2 = 1./A*pow(dAdT,2.) - 3./2.*A*( d2edt2 - 1/pow(Tk,2.) + 1/3.*dal );
-	dAdP = 1./2.*A*( bet - 3.*dedp);
-
-	// approximation valid only for temperatures below 200 deg. C and Psat
-	A = 1.131 + (1.335e-3)*(Tk-273.15) + (1.164e-5)*pow( (Tk-273.15), 2.);
-	dAdT = (1.335e-3) + 2.*(1.164e-5)*(Tk-273.15);
-	d2AdT2 = 2.*(1.164e-5);
-	dAdP = 0.;
 
 	// calculation of ionic strength
 	IS = 0.0;
@@ -1716,11 +1700,11 @@ long int TEUNIQUAC::ExcessProp( double *Zex )
 	}
 
 	// DH part
-	CON = - x[w]*Mw*4./pow(b,3.) * ( log(1.+b*sqrt(IS)) - b*sqrt(IS) + 0.5*pow(b,2.)*IS );
-	gDH = CON*A;
-	dgDH = - CON*dAdT;
-	d2gDH = - CON*d2AdT2;
-	dgDHdP = CON*dAdP;
+	con = - x[w]*Mw*4./pow(b,3.) * ( log(1.+b*sqrt(IS)) - b*sqrt(IS) + 0.5*pow(b,2.)*IS );
+	gDH = con*A;
+	dgDH = - con*dAdT;
+	d2gDH = - con*d2AdT2;
+	dgDHdP = con*dAdP;
 
 	// increment thermodynamic properties
 	dg = ( dgDH + dgRX + dgRI );
@@ -1818,20 +1802,17 @@ void TEUNIQUAC::Euniquac_test_out( const char *path )
 
 
 //=============================================================================================
-// Extended Debye-Hueckel (EDH) model for aqueous solutions, Helgesons variant (c) TW May 2009
+// Extended Debye-Hueckel (EDH) model for aqueous solutions, Helgeson version (c) TW May 2009
 // References: Helgeson et al. (1981); Oelkers and Helgeson (1990);
 // Pokrovskii and Helgeson (1995; 1997a; 1997b)
 //=============================================================================================
 
 
 // Generic constructor for the THelgeson class
-THelgeson::THelgeson( long int NSpecies, long int NParams,
-		long int NPcoefs, long int MaxOrder,
-		long int NPperDC, char Mod_Code,
-		long int *arIPx, double *arIPc, double *arDCc,
-		double *arWx, double *arlnGam, double *aphVOL,
-		double *arM, double *arZ, double T_k, double P_bar,
-		double *dW, double *eW ):
+THelgeson::THelgeson( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+		long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+		double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
+		double T_k, double P_bar, double *dW, double *eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar )
@@ -1878,7 +1859,7 @@ long int THelgeson::PTparam()
 {
 	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
 
-	// pull and convert parameters
+	// read and convert rho and eps
 	rho = RhoW[0];
 	alp = - 1./rho*RhoW[1];
 	dal = pow(alp,2.) - 1./rho*RhoW[2];
@@ -1897,6 +1878,9 @@ long int THelgeson::PTparam()
 	dBdT = - 1./2.*B*( dedt +1./Tk + alp );
 	d2BdT2 = 1./B*pow(dBdT,2.) - 1./2.*B*( d2edt2 - 1./pow(Tk,2.) + dal );
 	dBdP = 1./2.*B*( bet - dedp );
+
+ 	ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "Helgeson EDH model",
+ 			"Error: DH parameter A or B was not calculated - no values of RoW and EpsW !" );
 
 	// b_gamma constant
 	if ( flagElect == 0)
@@ -1949,20 +1933,6 @@ long int THelgeson::MixMod()
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
 	lnwxWat = log(WxW);
 	sqI = sqrt(IS);
-
-	// not sure if still needed
-	if( fabs(A) < 1e-9 )
-	{
-		A = 1.82483e6 * sqrt( RhoW[0] ) / pow( Tk*EpsW[0], 1.5 );
-	}
-
-	if( fabs(B) < 1e-9 )
-	{
-		B = 50.2916 * sqrt( RhoW[0] ) / sqrt( Tk*EpsW[0] );
-	}
-
-	if ( fabs(A) < 1e-9 || fabs(B) < 1e-9 )
-		return -1;
 
 	// loop over species
 	for( j=0; j<NComp; j++ )
@@ -2286,20 +2256,13 @@ long int THelgeson::IonicStrength()
 {
 	long int j;
 	double is, mt, mz;
-	is = 0.0;
-	mt = 0.0;
-	mz = 0.0;
+	is = 0.0; mt = 0.0; mz = 0.0;
 
-	// calculate ionic strength
-	for (j=0; j<NComp; j++)
-	{
-		is += 0.5*m[j]*z[j]*z[j];
-	}
-
-	// calculate total molalities
+	// calculate ionic strength and total molalities
 	// needs to be modified when nonaqueous solvents are present
 	for (j=0; j<(NComp-1); j++)
 	{
+		is += 0.5*m[j]*z[j]*z[j];
 		mt += m[j];
 		if ( z[j] )
 			mz += m[j];
@@ -2553,19 +2516,16 @@ long int THelgeson::GShok2( double T, double P, double D, double beta,
 
 
 //=============================================================================================
-// Extended Debye-Hueckel (EDH) model for aqueous solutions, Davies variant (c) TW May 2009
+// Extended Debye-Hueckel (EDH) model for aqueous solutions, Davies version (c) TW May 2009
 // References: Langmuir (1997)
 //=============================================================================================
 
 
 // Generic constructor for the TDavies class
-TDavies::TDavies( long int NSpecies, long int NParams,
-		long int NPcoefs, long int MaxOrder,
-		long int NPperDC, char Mod_Code,
-		long int *arIPx, double *arIPc, double *arDCc,
-		double *arWx, double *arlnGam, double *aphVOL,
-		double *arM, double *arZ, double T_k, double P_bar,
-		double *dW, double *eW ):
+TDavies::TDavies( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+		long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+		double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
+		double T_k, double P_bar, double *dW, double *eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar )
@@ -2578,7 +2538,6 @@ TDavies::TDavies( long int NSpecies, long int NParams,
 	flagNeut = 0;
 	flagMol = aIPc[2];  // 0: no scale correction, 1: scale correction
 	flagH2O = aIPc[3];  // 0: unity, 1: calculated
-
 }
 
 
@@ -2611,7 +2570,7 @@ long int TDavies::PTparam()
 {
 	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
 
-	// pull and convert parameters
+	// read and convert rho and eps
 	rho = RhoW[0];
 	alp = - 1./rho*RhoW[1];
 	dal = pow(alp,2.) - 1./rho*RhoW[2];
@@ -2626,6 +2585,9 @@ long int TDavies::PTparam()
 	dAdT = - 3./2.*A*( dedt + 1./Tk + alp/3. );
 	d2AdT2 = 1./A*pow(dAdT,2.) - 3./2.*A*( d2edt2 - 1/pow(Tk,2.) + 1/3.*dal );
 	dAdP = 1./2.*A*( bet - 3.*dedp);
+
+ 	ErrorIf( fabs(A) < 1e-9, "Davies model",
+ 			"Error: DH parameter A was not calculated - no values of RoW and EpsW !" );
 
 	return 0;
 }
@@ -2652,15 +2614,6 @@ long int TDavies::MixMod()
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
 	lnwxWat = log(WxW);
 	sqI = sqrt(IS);
-
-	// not sure if still needed
-	if( fabs(A) < 1e-9 )
-	{
-		A = 1.82483e6 * sqrt( RhoW[0] ) / pow( Tk*EpsW[0], 1.5 );
-	}
-
-	if ( fabs(A) < 1e-9  )
-		return -1;
 
 	// loop over species
 	for( j=0; j<NComp; j++ )
@@ -2852,19 +2805,13 @@ long int TDavies::IonicStrength()
 {
 	long int j;
 	double is, mt;
-	is = 0.0;
-	mt = 0.0;
+	is = 0.0; mt = 0.0;
 
-	// calculate ionic strength
-	for (j=0; j<NComp; j++)
-	{
-		is += 0.5*m[j]*z[j]*z[j];
-	}
-
-
-	// calculate total molalities
+	// calculate ionic strength and total molalities
+	// needs to be modified if nonaqueous solvents are present
 	for (j=0; j<(NComp-1); j++)
 	{
+		is += 0.5*m[j]*z[j]*z[j];
 		mt += m[j];
 	}
 
@@ -2886,13 +2833,10 @@ long int TDavies::IonicStrength()
 
 
 // Generic constructor for the TDLimitingLaw class
-TLimitingLaw::TLimitingLaw( long int NSpecies, long int NParams,
-		long int NPcoefs, long int MaxOrder,
-		long int NPperDC, char Mod_Code,
-		long int *arIPx, double *arIPc, double *arDCc,
-		double *arWx, double *arlnGam, double *aphVOL,
-		double *arM, double *arZ, double T_k, double P_bar,
-		double *dW, double *eW ):
+TLimitingLaw::TLimitingLaw( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+		long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+		double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
+		double T_k, double P_bar, double *dW, double *eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar )
@@ -2936,7 +2880,7 @@ long int TLimitingLaw::PTparam()
 {
 	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
 
-	// pull and convert parameters
+	// read and convert rho and eps
 	rho = RhoW[0];
 	alp = - 1./rho*RhoW[1];
 	dal = pow(alp,2.) - 1./rho*RhoW[2];
@@ -2951,6 +2895,9 @@ long int TLimitingLaw::PTparam()
 	dAdT = - 3./2.*A*( dedt + 1./Tk + alp/3. );
 	d2AdT2 = 1./A*pow(dAdT,2.) - 3./2.*A*( d2edt2 - 1/pow(Tk,2.) + 1/3.*dal );
 	dAdP = 1./2.*A*( bet - 3.*dedp);
+
+ 	ErrorIf( fabs(A) < 1e-9, "DH limiting law model",
+ 			"Error: DH parameter A was not calculated - no values of RoW and EpsW !" );
 
 	return 0;
 }
@@ -2977,15 +2924,6 @@ long int TLimitingLaw::MixMod()
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
 	lnwxWat = log(WxW);
 	sqI = sqrt(IS);
-
-	// not sure if still needed
-	if( fabs(A) < 1e-9 )
-	{
-		A = 1.82483e6 * sqrt( RhoW[0] ) / pow( Tk*EpsW[0], 1.5 );
-	}
-
-	if ( fabs(A) < 1e-9  )
-		return -1;
 
 	// loop over species
 	for( j=0; j<NComp; j++ )
@@ -3170,17 +3108,20 @@ long int TLimitingLaw::IdealProp( double *Zid )
 long int TLimitingLaw::IonicStrength()
 {
 	long int j;
-	double is;
-	is = 0.0;
+	double is, mt;
+	is = 0.0; mt = 0.0;
 
-	// calculate ionic strength
-	for (j=0; j<NComp; j++)
+	// calculate ionic strength and total molalities
+	// needs to be modified when nonaqueous solvents are present
+	for (j=0; j<(NComp-1); j++)
 	{
 		is += 0.5*m[j]*z[j]*z[j];
+		mt += m[j];
 	}
 
 	// assignments
 	IS = is;
+	molT = mt;
 
 	return 0;
 }
@@ -3190,20 +3131,17 @@ long int TLimitingLaw::IonicStrength()
 
 
 //=============================================================================================
-// Two-term Debye-Hueckel (DH) model for aqueous solutions (c) TW May 2009
+// Debye-Hueckel (DH) two term model for aqueous solutions (c) TW May 2009
 // References: Helgeson et al. (1981)
 // uses individual ion-size parameters, optionally individual salting-out coefficients
 //=============================================================================================
 
 
 // Generic constructor for the TDebyeHueckel class
-TDebyeHueckel::TDebyeHueckel( long int NSpecies, long int NParams,
-		long int NPcoefs, long int MaxOrder,
-		long int NPperDC, char Mod_Code,
-		long int *arIPx, double *arIPc, double *arDCc,
-		double *arWx, double *arlnGam, double *aphVOL,
-		double *arM, double *arZ, double T_k, double P_bar,
-		double *dW, double *eW ):
+TDebyeHueckel::TDebyeHueckel( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+		long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+		double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
+		double T_k, double P_bar, double *dW, double *eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar )
@@ -3217,7 +3155,6 @@ TDebyeHueckel::TDebyeHueckel( long int NSpecies, long int NParams,
 	bc = 0.064;   // common b_setch
 	flagNeut = aIPc[2];   // 0: unity, 1: calculated from bg
 	flagH2O = aIPc[3];   // 0: unity, 1: calculated from bg
-
 }
 
 
@@ -3262,7 +3199,7 @@ long int TDebyeHueckel::PTparam()
 		bg[j] = aDCc[NP_DC*j+1];   // individual bg
 	}
 
-	// pull and convert parameters
+	// read and convert rho and eps
 	rho = RhoW[0];
 	alp = - 1./rho*RhoW[1];
 	dal = pow(alp,2.) - 1./rho*RhoW[2];
@@ -3281,6 +3218,9 @@ long int TDebyeHueckel::PTparam()
 	dBdT = - 1./2.*B*( dedt +1./Tk + alp );
 	d2BdT2 = 1./B*pow(dBdT,2.) - 1./2.*B*( d2edt2 - 1./pow(Tk,2.) + dal );
 	dBdP = 1./2.*B*( bet - dedp );
+
+ 	ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "DH two-term model",
+ 			"Error: DH parameter A or B was not calculated - no values of RoW and EpsW !" );
 
 	return 0;
 }
@@ -3307,20 +3247,6 @@ long int TDebyeHueckel::MixMod()
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
 	lnwxWat = log(WxW);
 	sqI = sqrt(IS);
-
-	// not sure if still needed
-	if( fabs(A) < 1e-9 )
-	{
-		A = 1.82483e6 * sqrt( RhoW[0] ) / pow( Tk*EpsW[0], 1.5 );
-	}
-
-	if( fabs(B) < 1e-9 )
-	{
-		B = 50.2916 * sqrt( RhoW[0] ) / sqrt( Tk*EpsW[0] );
-	}
-
-	if ( fabs(A) < 1e-9 || fabs(B) < 1e-9 )
-		return -1;
 
 	// loop over species
 	for( j=0; j<NComp; j++ )
@@ -3542,30 +3468,20 @@ long int TDebyeHueckel::IdealProp( double *Zid )
 long int TDebyeHueckel::IonicStrength()
 {
 	long int j;
-	double is, mt, mz;
-	is = 0.0;
-	mt = 0.0;
-	mz = 0.0;
+	double is, mt;
+	is = 0.0; mt = 0.0;
 
-	// calculate ionic strength
-	for (j=0; j<NComp; j++)
-	{
-		is += 0.5*m[j]*z[j]*z[j];
-	}
-
-	// calculate total molalities
+	// calculate ionic strength and total molalities
 	// needs to be modified when nonaqueous solvents are present
 	for (j=0; j<(NComp-1); j++)
 	{
+		is += 0.5*m[j]*z[j]*z[j];
 		mt += m[j];
-		if ( z[j] )
-			mz += m[j];
 	}
 
 	// assignments
 	IS = is;
 	molT = mt;
-	molZ = mz;
 
 	return 0;
 }
@@ -3575,20 +3491,17 @@ long int TDebyeHueckel::IonicStrength()
 
 
 //=============================================================================================
-// Extended Debye-Hueckel (EDH) model for aqueous solutions, Karpovs variant (c) TW May 2009
+// Extended Debye-Hueckel (EDH) model for aqueous solutions, Karpov version (c) TW May 2009
 // References: Karpov et al. (1997); Helgeson et al. (1981); Oelkers and Helgeson (1990);
 // Pokrovskii and Helgeson (1995; 1997a; 1997b)
 //=============================================================================================
 
 
 // Generic constructor for the TKarpov class
-TKarpov::TKarpov( long int NSpecies, long int NParams,
-		long int NPcoefs, long int MaxOrder,
-		long int NPperDC, char Mod_Code,
-		long int *arIPx, double *arIPc, double *arDCc,
-		double *arWx, double *arlnGam, double *aphVOL,
-		double *arM, double *arZ, double T_k, double P_bar,
-		double *dW, double *eW ):
+TKarpov::TKarpov( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+		long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+		double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
+		double T_k, double P_bar, double *dW, double *eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar )
@@ -3603,7 +3516,6 @@ TKarpov::TKarpov( long int NSpecies, long int NParams,
 	flagNeut = aIPc[2];   // 0: unity, 1: calculated
 	flagH2O = aIPc[3];   // 0: unity, 1: calculated
 	flagElect = aIPc[4];  // 0: constant, 1: NaCl, 2: KCl, 3: NaOH, 4: KOH
-
 }
 
 
@@ -3648,7 +3560,7 @@ long int TKarpov::PTparam()
 		bg[j] = aDCc[NP_DC*j+1];  // individual bg (not used)
 	}
 
-	// pull and convert parameters
+	// read and convert rho and eps
 	rho = RhoW[0];
 	alp = - 1./rho*RhoW[1];
 	dal = pow(alp,2.) - 1./rho*RhoW[2];
@@ -3667,6 +3579,9 @@ long int TKarpov::PTparam()
 	dBdT = - 1./2.*B*( dedt +1./Tk + alp );
 	d2BdT2 = 1./B*pow(dBdT,2.) - 1./2.*B*( d2edt2 - 1./pow(Tk,2.) + dal );
 	dBdP = 1./2.*B*( bet - dedp );
+
+ 	ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "Karpov EDH model",
+ 			"Error: DH parameter A or B was not calculated - no values of RoW and EpsW !" );
 
 	// b_gamma constant
 	if ( flagElect == 0)
@@ -3712,20 +3627,6 @@ long int TKarpov::MixMod()
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
 	lnwxWat = log(WxW);
 	sqI = sqrt(IS);
-
-	// not sure if still needed
-	if( fabs(A) < 1e-9 )
-	{
-		A = 1.82483e6 * sqrt( RhoW[0] ) / pow( Tk*EpsW[0], 1.5 );
-	}
-
-	if( fabs(B) < 1e-9 )
-	{
-		B = 50.2916 * sqrt( RhoW[0] ) / sqrt( Tk*EpsW[0] );
-	}
-
-	if ( fabs(A) < 1e-9 || fabs(B) < 1e-9 )
-		return -1;
 
 	// loop over species
 	for( j=0; j<NComp; j++ )
@@ -4051,16 +3952,11 @@ long int TKarpov::IonicStrength()
 	double is, mt, mz, as;
 	is = 0.0; mt = 0.0; mz = 0.0; as = 0.0;
 
-	// calculate ionic strength
-	for (j=0; j<NComp; j++)
-	{
-		is += 0.5*m[j]*z[j]*z[j];
-	}
-
-	// calculate total molalities
+	// calculate ionic strength and total molalities
 	// needs to be modified when nonaqueous solvents are present
 	for (j=0; j<(NComp-1); j++)
 	{
+		is += 0.5*m[j]*z[j]*z[j];
 		mt += m[j];
 		if ( z[j] )
 		{
@@ -4278,6 +4174,501 @@ long int TKarpov::GShok2( double T, double P, double D, double beta,
 
 
 
+
+
+//=============================================================================================
+// Extended Debye-Hueckel (EDH) model for aqueous solutions, Shvarov version (c) TW June 2009
+// References: Shvarov (2007); Oelkers and Helgeson (1990);
+// Pokrovskii and Helgeson (1995; 1997a; 1997b)
+//=============================================================================================
+
+
+// Generic constructor for the TShvarov class
+TShvarov::TShvarov( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+		long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+		double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
+		double T_k, double P_bar, double *dW, double *eW ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
+        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
+        			 arlnGam, aphVOL, T_k, P_bar )
+{
+	alloc_internal();
+	m = arM;
+	z = arZ;
+	RhoW = dW;
+	EpsW = eW;
+	ac = aIPc[1];   // common ion size parameter
+	bc = aIPc[0];   // common b_gamma
+	flagNeut = aIPc[2];   // 0: unity, 1: calculated
+	flagH2O = aIPc[3];   // 0: unity, 1: calculated
+	flagElect = aIPc[4];  // 0: constant, 1: NaCl, 2: KCl, 3: NaOH, 4: KOH
+}
+
+
+TShvarov::~TShvarov()
+{
+	free_internal();
+}
+
+
+void TShvarov::alloc_internal()
+{
+	LnG = new double [NComp];
+	dLnGdT = new double [NComp];
+	d2LnGdT2 = new double [NComp];
+	dLnGdP = new double [NComp];
+	bj = new double [NComp];
+}
+
+
+void TShvarov::free_internal()
+{
+	delete[]LnG;
+	delete[]dLnGdT;
+	delete[]d2LnGdT2;
+	delete[]dLnGdP;
+	delete[]bj;
+}
+
+
+long int TShvarov::PTparam()
+{
+	long int j;
+	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
+
+	// read and copy individual bj parameters
+	for (j=0; j<NComp; j++)
+	{
+		if ( (aDCc[NP_DC*j+1]) >= 0 )
+			bj[j] = aDCc[NP_DC*j+1];  // individual bj
+		else
+			bj[j] = 1.;
+	}
+
+	// read and convert rho and eps
+	rho = RhoW[0];
+	alp = - 1./rho*RhoW[1];
+	dal = pow(alp,2.) - 1./rho*RhoW[2];
+	bet = 1./rho*RhoW[3];
+	eps = EpsW[0];
+	dedt = 1./eps*EpsW[1];
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
+	dedp = 1./eps*EpsW[3];
+
+	// calculate A and B terms of Debye-Huckel equation (and derivatives)
+	A = (1.82483e6)*sqrt(rho) / pow(Tk*eps,1.5);
+	dAdT = - 3./2.*A*( dedt + 1./Tk + alp/3. );
+	d2AdT2 = 1./A*pow(dAdT,2.) - 3./2.*A*( d2edt2 - 1/pow(Tk,2.) + 1/3.*dal );
+	dAdP = 1./2.*A*( bet - 3.*dedp);
+	B = (50.2916)*sqrt(rho) / sqrt(Tk*eps);
+	dBdT = - 1./2.*B*( dedt +1./Tk + alp );
+	d2BdT2 = 1./B*pow(dBdT,2.) - 1./2.*B*( d2edt2 - 1./pow(Tk,2.) + dal );
+	dBdP = 1./2.*B*( bet - dedp );
+
+ 	ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "Shvarov EDH model",
+ 			"Error: DH parameter A or B was not calculated - no values of RoW and EpsW !" );
+
+	// b_gamma constant
+	if ( flagElect == 0)
+	{
+		bgam = bc;
+		dbgdT = 0.0;
+		d2bgdT2 = 0.0;
+		dbgdP = 0.0;
+		ao = ac;
+		daodT = 0.0;
+		d2aodT2 = 0.0;
+		daodP = 0.0;
+	}
+
+	// b_gamma TP-dependent
+	else
+	{
+		Gfunction();
+		BgammaTP();
+		IonsizeTP();
+		// ao = ac;
+		// daodT = 0.0;
+		// d2aodT2 = 0.0;
+		// daodP = 0.0;
+	}
+
+	return 0;
+}
+
+
+long int TShvarov::MixMod()
+{
+	long int j, k, w;
+	double sqI, Z2, lgGam, lnGam, Nw, WxW, lnwxWat, Lgam,
+				msum, C, lg_to_ln;
+	lg_to_ln = 2.302585093;
+
+	// get index of water (assumes water is last species in phase)
+	w = NComp - 1;
+
+	// calculate ionic strength and total molaities (molT and molZ)
+	IonicStrength();
+
+	WxW = x[w];
+	Nw = 1000./18.01528;
+	// Lgam = -log10(1.+0.0180153*molT);
+	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	if( Lgam < -0.7 )
+		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
+	lnwxWat = log(WxW);
+	sqI = sqrt(IS);
+	C = (0.5*bgam);
+
+	// loop over species
+	for( j=0; j<NComp; j++ )
+	{
+		lgGam = 0.0;
+		lnGam = 0.0;
+		msum = 0.0;
+
+		// calculate (bj*mj) sum
+		for (k=0; k<(NComp-1); k++)
+		{
+			msum += bj[k]*m[k];
+		}
+
+		// charged species
+		if ( z[j] )
+		{
+			lgGam = 0.0;
+			Z2 = z[j]*z[j];
+			lgGam = - (A*Z2*sqI) / (1.+ao*B*sqI) + C*bj[j]*msum;
+			lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
+		}
+
+		// neutral species and water solvent
+		else
+		{
+			// neutral species
+			if ( j != (NComp-1) )
+			{
+				lgGam = 0.0;
+				if ( flagNeut == 1 )
+					lgGam = C*bj[j]*msum;
+				else
+					lgGam = 0.0;
+				lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
+				continue;
+			}
+
+			// water solvent
+			else
+			{
+				lgGam = 0.0;
+				lnGam = 0.0;
+				if ( flagH2O == 1 )
+				{
+					// water activity coefficient calculated
+					lgGam = - A/(ao*B) * (2./Nw) * ( IS/(1.+ao*B*sqI) - 2.*sqI/(ao*B) + 2./pow((ao*B),2.) * log(1.+ao*B*sqI) )
+								 - C*pow(msum,2.)/(2.*Nw);
+				}
+				else
+					lgGam = 0.0;
+				lnGamma[j] = (lgGam) * lg_to_ln;
+			}
+		}
+	}  // j
+
+	return 0;
+}
+
+
+long int TShvarov::ExcessProp( double *Zex )
+{
+	// to be implemented
+
+	return 0;
+}
+
+
+long int TShvarov::IdealProp( double *Zid )
+{
+	long int j;
+	double si;
+	si = 0.0;
+	for (j=0; j<NComp; j++)
+	{
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
+	}
+	Hid = 0.0;
+	CPid = 0.0;
+	Vid = 0.0;
+	Sid = (-1.)*R_CONST*si;
+	Gid = Hid - Sid*Tk;
+	Aid = Gid - Vid*Pbar;
+	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
+	Zid[0] = Gid;
+	Zid[1] = Hid;
+	Zid[2] = Sid;
+	Zid[3] = CPid;
+	Zid[4] = Vid;
+	Zid[5] = Aid;
+	Zid[6] = Uid;
+	return 0;
+}
+
+
+long int TShvarov::IonicStrength()
+{
+	long int j;
+	double is, mt;
+	is = 0.0; mt = 0.0;
+
+	// calculate ionic strength and total molalities
+	// needs to be modified when nonaqueous solvents are present
+	for (j=0; j<(NComp-1); j++)
+	{
+		is += 0.5*m[j]*z[j]*z[j];
+		mt += m[j];
+	}
+
+	// assignments
+	IS = is;
+	molT = mt;
+
+	return 0;
+}
+
+
+long int TShvarov::BgammaTP()
+{
+	// ni: stoichiometric number of moles of ions in one mole of electrolyte
+	// rc, ra: radius of cation and anion, respectively at 298 K/1 bar
+	// units are cal, kg, K, mol, bar
+	double ni, nc, na, zc, za, rc, ra, a1, a2, a3, a4, a5, c1, c2, omg, bg, bs, bh;
+	double rec, rea, omgpt, domdt, d2omdt2, domdp, nbg, nbv, nbj, nbh;
+	double eps, eta, xborn, yborn, qborn, X1, X2;
+
+	// set parameters
+	eps = EpsW[0];
+	yborn = 1./pow(EpsW[0],2.)*EpsW[1];
+	xborn = 1./pow(EpsW[0],2.) * ( EpsW[2] - 2./EpsW[0]*pow(EpsW[1],2.) );
+	qborn = 1./pow(EpsW[0],2.)*EpsW[3];
+	eta = (1.66027e5);
+
+	switch ( flagElect )
+	{
+		case 1:  // NaCl
+			ni = 2.; nc = 1.; na = 1.; zc = 1.; za = -1.;
+			a1 = 0.030056; a2 = -202.55; a3 = -2.9092; a4 = 20302;
+			a5 = -0.206; c1 = -1.50; c2 = 53300.; omg = 178650.;
+			bg = -174.623; bs = 2.164; rc = 0.97; ra = 1.81;
+			break;
+		case 2:  // KCl
+			ni = 2.; nc = 1.; na = 1.; zc = 1.; za = -1.;
+			a1 = 0.0172; a2 = -115.36; a3 = -1.1857; a4 = 13854.2;
+			a5 = -0.262; c1 = -2.53; c2 = 38628.4; omg = 164870.;
+			bg = -70.0; bs = 1.727; rc = 1.33; ra = 1.81;
+			break;
+		case 3:  // NaOH
+			ni = 2.; nc = 1.; na = 1.; zc = 1.; za = -1.;
+			a1 = 0.030056; a2 = -202.55; a3 = -2.9092; a4 = 20302;
+			a5 = -0.206; c1 = -1.50; c2 = 53300.; omg = 205520.;
+			bg = -267.4; bs = 1.836; rc = 0.97; ra = 1.40;
+			break;
+		case 4:  // KOH
+			ni = 2.; nc = 1.; na = 1.; zc = 1.; za = -1.;
+			a1 = 0.0172; a2 = -115.36; a3 = -1.1857; a4 = 13854.2;
+			a5 = -0.262; c1 = -2.53; c2 = 38628.4; omg = 191730.;
+			bg = -335.7; bs = 1.26; rc = 1.33; ra = 1.40;
+			break;
+		default:  // wrong mode
+			return -1;
+	}
+
+	// calculation part, extended 06.06.2009 (TW)
+	bh = bg + (298.15)*bs;
+	rec = rc + fabs(zc)*(0.94+Gf);
+	rea = ra + fabs(za)*Gf;
+	X1 = - eta*nc*( fabs(pow(zc,3.))/pow(rec,2.) - zc/pow((3.082+Gf),2.) )
+			- eta*na*( fabs(pow(za,3.))/pow(rea,2.) - za/pow((3.082+Gf),2.) );
+	X2 = 2.*eta*nc*( fabs(pow(zc,4.))/pow(rec,3.) - zc/pow((3.082+Gf),3.) )
+			+ 2.*eta*nc * ( fabs(pow(zc,4.))/pow(rec,3.) - zc/pow((3.082+Gf),3.) );
+	omgpt = eta*( nc*pow(zc,2.)/rec + na*pow(za,2.)/rea );
+	// omgpt = (1.66027e5)*(1./(0.94+rc+Gf)+1./(ra+Gf));
+	domdt = X1*dGfdT;
+	d2omdt2 = X2*pow(dGfdT,2.) + X1*d2GfdT2;
+	domdp = X1*dGfdP;
+	nbg = - ni*bg/2. + ni*bs*(Tk-298.15)/2. - c1*(Tk*log(Tk/298.15)-Tk+298.15)
+				+ a1*(Pbar-1.) + a2*log((2600.+Pbar)/(2600.+1.))
+				- c2*((1./(Tk-228.)-1./(298.15-228.))*(228.-Tk)/228.-Tk/(228.*228.)
+				* log((298.15*(Tk-228.))/(Tk*(298.15-228.))))
+				+ 1./(Tk-228.)*(a3*(Pbar-1.) + a4*log((2600.+Pbar)/(2600.+1.)))
+				+ a5*(omgpt*(1./eps-1.)-omg*(1./(78.24513795)-1.)+(-5.798650444e-5)*omg*(Tk-298.15));
+	nbh = - ni/2.*bh + c1*(Tk-298.15) - c2*(1./(Tk-228.)-1./(298.15-228.))
+				+ a1*(Pbar-1.) + a2*log((2600.+Pbar)/(2600.+1.))
+				+ ((2.*Tk-228.)/pow((Tk-228.),2.))*(a3*(Pbar-1.)+a4*log((2600.+Pbar)/(2600.+1.)))
+				+ a5*( omgpt*(1./eps-1.) + omgpt*Tk*yborn - Tk*(1./eps-1.)*domdt
+				- omg*(1./(78.24513795)-1.) - omg*(298.15)*(-5.798650444e-5) );
+	nbj = c1 + c2/pow((Tk-228.),2.)  - ( (2.*Tk)/pow((Tk-228.),3.) )
+				* ( a3*(Pbar-1.) + a4*log((2600.+Pbar)/(2600.+1.)) )
+				+ a5*( omgpt*Tk*xborn + 2.*Tk*yborn*domdt - Tk*(1./eps-1.)*d2omdt2 );
+	nbv = a1 + a2/(2600.+Pbar) + a3/(Tk-228.) + a4/((2600.+Pbar)*(Tk-228.))
+				+ a5*(-omgpt*qborn + (1./eps-1.)*domdp);
+	// b_gamma = nbg/(2.*log(10.)*1.98721*Tk);
+	// bgam = b_gamma;
+	bgam = nbg/(2.*log(10.)*(1.98721)*Tk)*2./ni;
+	dbgdT = - nbh/(2.*log(10.)*(1.98721)*pow(Tk,2.))*2./ni;
+	d2bgdT2 = - nbj/( 2.*log(10.)*(1.98721)*pow(Tk,2.))*2./ni - 2./Tk*dbgdT;
+	dbgdP = nbv/(2.*log(10.)*(1.98721)*Tk)*2./ni;
+
+	return 0;
+}
+
+
+long int TShvarov::IonsizeTP()
+{
+	double nc, na, ni, zc, za, c;
+
+	switch ( flagElect )
+	{
+		case 1:  // NaCl
+			nc = 1.; na = 1.; ni = 2.;
+			zc = 1.; za = -1.;
+			break;
+		case 2:  // KCl
+			nc = 1.; na = 1.; ni = 2.;
+			zc = 1.; za = -1.;
+			break;
+		case 3:  // NaOH
+			nc = 1.; na = 1.; ni = 2.;
+			zc = 1.; za = -1.;
+			break;
+		case 4:  // KOH
+			nc = 1.; na = 1.; ni = 2.;
+			zc = 1.; za = -1.;
+			break;
+		default:  // wrong mode
+			return -1;
+	}
+
+	c = 2./ni * ( nc*fabs(zc) + na*fabs(za) );
+	ao = ac + c*Gf;
+	daodT = c*dGfdT;
+	d2aodT2 = c*d2GfdT2;
+	daodP = c*dGfdP;
+
+	return 0;
+}
+
+
+long int TShvarov::Gfunction()
+{
+	double T, P, D, beta, alpha, daldT;
+	double g, dgdP, dgdT, d2gdT2;
+	double TMAX = 1000., PMAX = 5000., TOL = 1.0e-4;
+
+	// convert parameters
+	T = Tk - 273.15;
+	P = Pbar;
+	D = RhoW[0];
+	alpha = - RhoW[1]/RhoW[0];
+	daldT = pow(alpha, 2.) - RhoW[2]/RhoW[0];
+	beta = RhoW[3]/RhoW[0];
+
+	// initialize g and derivatives to zero
+	g = 0.0;
+	dgdP = 0.0;
+	dgdT = 0.0;
+	d2gdT2 = 0.0;
+
+	if ((T > TMAX+TOL) || (P > PMAX+TOL))
+		return -1;
+	else
+		GShok2( T, P, D, beta, alpha, daldT, g, dgdP, dgdT, d2gdT2 );
+
+	// assignments
+	Gf = g;
+	dGfdT = dgdT;
+	d2GfdT2 = d2gdT2;
+	dGfdP = dgdP;
+
+	return 0;
+}
+
+
+long int TShvarov::GShok2( double T, double P, double D, double beta,
+		double alpha, double daldT, double &g, double &dgdP, double &dgdT, double &d2gdT2 )
+{
+	double a, b, dgdD, /*dgdD2,*/ dadT, dadTT, dbdT, dbdTT, dDdT, dDdP,
+		dDdTT, Db, dDbdT, dDbdTT, ft, dftdT, dftdTT, fp, dfpdP,
+		f, dfdP, dfdT, d2fdT2, tempy;
+	double C[6]  = {-0.2037662e+01,  0.5747000e-02, -0.6557892e-05,
+			0.6107361e+01, -0.1074377e-01,  0.1268348e-04 };
+	double cC[3] = { 0.3666666e+02, -0.1504956e-09,  0.5017997e-13 };
+
+	if ( D >= 1.3 )
+		return -1;
+	// Sveta 19/02/2000 1-D < 0 pri D>1 => pow(-number, b) = -NaN0000 error
+	double pw = fabs(1.0 - D); // insert Sveta 19/02/2000
+
+	// calculation part
+	a = C[0] + C[1]*T + C[2]*pow(T,2.);
+	b = C[3] + C[4]*T + C[5]*pow(T,2.);
+	g = a * pow(pw, b);
+
+	dgdD = - a*b* pow(pw, (b - 1.0));
+	// dgdD2 = a * b * (b - 1.0) * pow((1.0 - D),(b - 2.0));
+
+	dadT = C[1] + 2.0*C[2]*T;
+	dadTT = 2.0*C[2];
+	dbdT = C[4] + 2.0*C[5]*T;
+	dbdTT = 2.0*C[5];
+	dDdT = - D * alpha;
+	dDdP = D * beta;
+	dDdTT = - D * (daldT - pow(alpha,2.));
+
+	// Db = pow((1.0 - D), b);  Fixed by DAK 01.11.00
+	Db = pow(pw , b);
+	dDbdT = - b*pow(pw,(b - 1.0))*dDdT + log(pw)*Db*dbdT;
+
+	dDbdTT = - (b*pow(pw,(b-1.0)) *dDdTT + pow(pw,(b - 1.0)) * dDdT * dbdT
+				+ b * dDdT * (-(b - 1.0) * pow(pw,(b - 2.0)) * dDdT
+				+ log(pw) * pow(pw,(b - 1.0)) * dbdT))
+				+ log(pw) * pow(pw,b) * dbdTT
+				- pow(pw,b) * dbdT * dDdT / (1.0 - D)
+				+ log(pw) * dbdT * dDbdT;
+
+	dgdP = dgdD * dDdP;
+	dgdT = a * dDbdT + Db * dadT;
+	d2gdT2 = a * dDbdTT + 2.0 * dDbdT * dadT + Db * dadTT;
+
+	if((T < 155.0) || (P > 1000.0) || (T > 355.0))
+		return 0;
+
+	tempy = ((T - 155.0) / 300.0);
+	ft = pow(tempy,4.8) + cC[0] * pow(tempy,16.);
+
+	dftdT = 4.8 / 300.0 * pow(tempy, 3.8) + 16.0 / 300.0 * cC[0] * pow(tempy, 15.);
+
+	dftdTT = 3.8 * 4.8 / (300.0 * 300.0) * pow(tempy, 2.8)
+		+ 15.0 * 16.0 / (300.0*300.0) * cC[0] * pow(tempy,14.);
+
+	fp = cC[1] * pow((1000.0 - P),3.) + cC[2] * pow((1000.0 - P),4.);
+
+	dfpdP = -3.0 * cC[1] * pow((1000.0 - P),2.) - 4.0 * cC[2] * pow((1000.0 - P),3.);
+
+	f = ft * fp;
+	dfdP = ft * dfpdP;
+	dfdT = fp * dftdT;
+	d2fdT2 = fp * dftdTT;
+
+	g -= f;
+	dgdP -= dfdP;
+	dgdT -= dfdT;
+	d2gdT2 -= d2fdT2;
+
+	return 0;
+}
 
 
 //--------------------- End of s_fgl1.cpp ---------------------------

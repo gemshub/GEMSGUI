@@ -72,10 +72,8 @@ class TSolMod
 
 		// Generic constructor
 		TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, long int NPTPperDC, char Mod_Code,
-				long int* arIPx, double* arIPc, double* arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double T_k, double P_bar );
+					long int NPperDC, long int NPTPperDC, char Mod_Code, long int* arIPx, double* arIPc, double* arDCc,
+					double *arWx, double *arlnGam, double *aphVOL, double T_k, double P_bar );
 
 		// Destructor
 		virtual ~TSolMod();
@@ -309,11 +307,9 @@ class TCGFcalc: public TSolMod
 		// Constructor
 		TCGFcalc( long int NCmp, double Pp, double Tkp );
 		TCGFcalc( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double *aPparc, double *aphWGT, double *arX, double *arGEX, double *arVol,
-				double T_k, double P_bar );
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double *aPparc, double *aphWGT,
+				double *arX, double *arGEX, double *arVol, double T_k, double P_bar );
 
 		// Destructor
 		~TCGFcalc();
@@ -384,11 +380,9 @@ class TPRSVcalc: public TSolMod
 		// Constructor
 		TPRSVcalc( long int NCmp, double Pp, double Tkp );
 		TPRSVcalc( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL, double *aPparc,
-				double *arGEX, double *arVol,
-				double T_k, double P_bar );
+				double *arGEX, double *arVol, double T_k, double P_bar );
 
 		// Destructor
 		~TPRSVcalc();
@@ -464,8 +458,7 @@ class TSRKcalc: public TSolMod
 		// Constructor
 		TSRKcalc( long int NCmp, double Pp, double Tkp );
 		TSRKcalc( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL, double *aPparc,
 				double *arGEX, double *arVol, double T_k, double P_bar );
 
@@ -529,10 +522,8 @@ class TVanLaar: public TSolMod
 
 		// Constructor
 		TVanLaar( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double T_k, double P_bar );
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double T_k, double P_bar );
 
 		// Destructor
 		~TVanLaar();
@@ -572,10 +563,8 @@ class TRegular: public TSolMod
 
 		// Constructor
 		TRegular( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double T_k, double P_bar );
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double T_k, double P_bar );
 
 		// Destructor
 		~TRegular();
@@ -616,10 +605,8 @@ class TRedlichKister: public TSolMod
 
 		// Constructor
 		TRedlichKister( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double T_k, double P_bar );
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double T_k, double P_bar );
 
 		// Destructor
 		~TRedlichKister();
@@ -664,10 +651,8 @@ class TNRTL: public TSolMod
 
 		// Constructor
 		TNRTL( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double T_k, double P_bar );
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double T_k, double P_bar );
 
 		// Destructor
 		~TNRTL();
@@ -706,10 +691,8 @@ class TWilson: public TSolMod
 
 		// Constructor
 		TWilson( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double T_k, double P_bar );
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double T_k, double P_bar );
 
 		// Destructor
 		~TWilson();
@@ -752,7 +735,7 @@ class TSIT: public TSolMod
 		double *dLnGdP;
 
 		// internal functions
-		double IonicStr();
+		double IonicStrength();
 		void alloc_internal();
 		void free_internal();
 
@@ -760,8 +743,7 @@ class TSIT: public TSolMod
 
 		// Constructor
 		TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
 				double T_k, double P_bar, double *dW, double *eW );
 
@@ -906,8 +888,7 @@ public:
 
     // Constructor
 	TPitzer( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-	         long int NPperDC, char Mod_Code,
-	         long int *arIPx, double *arIPc, double *arDCc,
+	         long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
 	         double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
 	         double T_k, double P_bar, double *dW, double *eW );
 
@@ -942,10 +923,14 @@ public:
 class TEUNIQUAC: public TSolMod
 {
 	private:
+
+		// data objects copied from MULTI
 		double *Z;   // species charges
 		double *M;   // species molalities
 		double *RhoW;  // water density properties
 		double *EpsW;  // water dielectrical properties
+
+		// internal work objects
 		double *R;   // volume parameter
 		double *Q;   // surface parameter
 		double *Phi;
@@ -956,12 +941,15 @@ class TEUNIQUAC: public TSolMod
 		double **Psi;
 		double **dPsi;
 		double **d2Psi;
+		double IS;  // ionic strength
+		double A, dAdT, d2AdT2, dAdP;  // A term of DH equation (and derivatives)
 
-		// only needed for debugging output
+		// objects needed for debugging output
 		double gammaDH[200];
 		double gammaC[200];
 		double gammaR[200];
 
+		// internal functions
 		void alloc_internal();
 		void free_internal();
 
@@ -969,8 +957,7 @@ class TEUNIQUAC: public TSolMod
 
 		// Constructor
 		TEUNIQUAC( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
 				double T_k, double P_bar, double *dW, double *eW );
 
@@ -1047,10 +1034,8 @@ class THelgeson: public TSolMod
 
 		// Constructor
 		THelgeson( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double *arM, double *arZ,
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
 				double T_k, double P_bar, double *dW, double *eW );
 
 		// Destructor
@@ -1097,7 +1082,6 @@ class TDavies: public TSolMod
 		double *dLnGdP;
 		double IS;  // ionic strength
 		double molT;  // total molality of aqueous species (except water solvent)
-		double molZ;  // total molality of charged species
 		double A, dAdT, d2AdT2, dAdP;  // A term of DH equation (and derivatives)
 
 		// internal functions
@@ -1109,11 +1093,10 @@ class TDavies: public TSolMod
 
 		// Constructor
 		TDavies( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double *arM, double *arZ,
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
 				double T_k, double P_bar, double *dW, double *eW );
+
 		// Destructor
 		~TDavies();
 
@@ -1156,6 +1139,7 @@ class TLimitingLaw: public TSolMod
 		double *d2LnGdT2;
 		double *dLnGdP;
 		double IS;  // ionic strength
+		double molT;  // total molality of aqueous species (except water solvent)
 		double A, dAdT, d2AdT2, dAdP;  // A term of DH equation (and derivatives)
 
 		// internal functions
@@ -1167,10 +1151,8 @@ class TLimitingLaw: public TSolMod
 
 		// Constructor
 		TLimitingLaw( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double *arM, double *arZ,
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
 				double T_k, double P_bar, double *dW, double *eW );
 		// Destructor
 		~TLimitingLaw();
@@ -1221,7 +1203,6 @@ class TDebyeHueckel: public TSolMod
 		double *dLnGdP;
 		double IS;  // ionic strength
 		double molT;  // total molality of aqueous species (except water solvent)
-		double molZ;  // total molality of charged species
 		double A, dAdT, d2AdT2, dAdP;  // A term of DH equation (and derivatives)
 		double B, dBdT, d2BdT2, dBdP;  // B term of DH equation (and derivatives)
 
@@ -1234,10 +1215,8 @@ class TDebyeHueckel: public TSolMod
 
 		// Constructor
 		TDebyeHueckel( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double *arM, double *arZ,
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
 				double T_k, double P_bar, double *dW, double *eW );
 
 		// Destructor
@@ -1312,10 +1291,8 @@ class TKarpov: public TSolMod
 
 		// Constructor
 		TKarpov( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double *arM, double *arZ,
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
 				double T_k, double P_bar, double *dW, double *eW );
 
 		// Destructor
@@ -1334,6 +1311,82 @@ class TKarpov: public TSolMod
 		long int IdealProp( double *Zid );
 
 };
+
+
+
+// -------------------------------------------------------------------------------------
+// Extended Debye-Hueckel (EDH) model for aqueous electrolyte solutions, Shvarov variant
+// References: Shvarov (2007); Oelkers and Helgeson (1990);
+// Pokrovskii and Helgeson (1995; 1997a; 1997b)
+
+class TShvarov: public TSolMod
+{
+	private:
+
+		// status flags copied from MULTI
+		long int flagH2O;  // new flag for water
+		long int flagNeut;  // new flag for neutral species
+		long int flagElect;  // flag for selection of background electrolyte model
+
+		// data objects copied from MULTI
+		double *z;   // species charges
+		double *m;   // species molalities
+		double *RhoW;  // water density properties
+		double *EpsW;  // water dielectrical properties
+		double *bj;  // individual ion parameters
+		double ac;  // common ion size parameters
+		double bc;  // common extended-term parameter
+
+		// internal work objects
+		double ao, daodT, d2aodT2, daodP;  // ion-size parameter (TP corrected)
+		double bgam, dbgdT, d2bgdT2, dbgdP;  // extended-term parameter (TP corrected)
+		double *LnG;  // activity coefficient
+		double *dLnGdT;  // derivatives
+		double *d2LnGdT2;
+		double *dLnGdP;
+		double IS;  // ionic strength
+		double molT;  // total molality of aqueous species (except water solvent)
+		double A, dAdT, d2AdT2, dAdP;  // A term of DH equation (and derivatives)
+		double B, dBdT, d2BdT2, dBdP;  // B term of DH equation (and derivatives)
+		double Gf, dGfdT, d2GfdT2, dGfdP;  // g function (and derivatives)
+
+		// internal functions
+		void alloc_internal();
+		void free_internal();
+		long int IonicStrength();
+		long int BgammaTP();
+		long int IonsizeTP();
+		long int Gfunction();
+		long int GShok2( double T, double P, double D, double beta,
+				double alpha, double daldT, double &g, double &dgdP,
+				double &dgdT, double &d2gdT2 );
+
+	public:
+
+		// Constructor
+		TShvarov( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
+				double T_k, double P_bar, double *dW, double *eW );
+
+		// Destructor
+		~TShvarov();
+
+		// calculates T,P corrected interaction parameters
+		long int PTparam();
+
+		// calculates activity coefficients
+		long int MixMod();
+
+		// calculates excess properties
+		long int ExcessProp( double *Zex );
+
+		// calculates ideal mixing properties
+		long int IdealProp( double *Zid );
+
+};
+
+
 
 
 
@@ -1361,8 +1414,7 @@ class TModOther: public TSolMod
 
 		// Constructor
 		TModOther( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL,
 				double T_k, double P_bar, double *dW, double *eW );
 
@@ -1410,10 +1462,8 @@ class TMargules: public TSolMod
 
 		// Constructor
 		TMargules( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double T_k, double P_bar );
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double T_k, double P_bar );
 
 		// Destructor
 		~TMargules();
@@ -1449,10 +1499,8 @@ class TSubregular: public TSolMod
 
 		// Constructor
 		TSubregular( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double T_k, double P_bar );
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double T_k, double P_bar );
 
 		// Destructor
 		~TSubregular();
@@ -1488,10 +1536,8 @@ class TGuggenheim: public TSolMod
 
 		// Constructor
 		TGuggenheim( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-				long int NPperDC, char Mod_Code,
-				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL,
-				double T_k, double P_bar );
+				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double T_k, double P_bar );
 
 		// Destructor
 		~TGuggenheim();
