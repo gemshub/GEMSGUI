@@ -742,7 +742,7 @@ class TSIT: public TSolMod
 				double T_k, double P_bar, double *dW, double *eW );
 
 		// Destructor
-		~TSIT() { }
+		~TSIT();
 
 		// calculates activity coefficients
 		long int MixMod();
@@ -813,12 +813,13 @@ private:
 	double bk[21];   // work space
 	double dk[21];   // work space
 */
+
 	enum eTableType
 	{ bet0_ = -10, bet1_ = -11, bet2_ = -12, Cphi_ = -20, Lam_ = -30, Lam1_ = -31,
 	  Theta_ = -40,  Theta1_ = -41, Psi_ = -50, Psi1_ = -51, Zeta_ = -60
 	};
 
- // internal calculations
+	// internal calculations
 	// Calculation of Etheta and Ethetap values
 	void Ecalc( double z, double z1, double I, double Aphi,
 			double& Etheta, double& Ethetap);
@@ -835,14 +836,15 @@ private:
 	double lnGammaX(  long int X );
 	double lnGammaH2O();
 
-  // calc vector of interaction parameters corrected to T,P of interest
+	// calc vector of interaction parameters corrected to T,P of interest
 	void PTcalc( double T );
 
-   // internal setup
+	// internal setup
 	void calcSizes();
 	void alloc_internal();
 	void free_internal();
-  // build conversion of species indexes between aq phase and Pitzer parameter tables
+
+	// build conversion of species indexes between aq phase and Pitzer parameter tables
 	void setIndexes();
 	void setValues();
 
@@ -1149,6 +1151,7 @@ class TLimitingLaw: public TSolMod
 				long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
 				double T_k, double P_bar, double *dW, double *eW );
+
 		// Destructor
 		~TLimitingLaw();
 
@@ -1380,8 +1383,6 @@ class TShvarov: public TSolMod
 		long int IdealProp( double *Zid );
 
 };
-
-
 
 
 
