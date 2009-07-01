@@ -219,7 +219,7 @@ class TCGFcalc: public TSolMod
         A22, A23, A31,
         A32, A33, A34;
 
-		//  double PhVol;  // bar, T Kelvin, phase volume in cm3
+		//  double PhVol;  // phase volume in cm3
 		double *Pparc;     // DC partial pressures/ pure fugacities, bar (Pc by default) [0:L-1]
 		double *phWGT;
 		double *aX;        // DC quantities at eqstate x_j, moles - primal IPM solution [L]
@@ -233,6 +233,7 @@ class TCGFcalc: public TSolMod
 		double *EoSparam;
 		double *EoSparam1;
 
+		// internal functions
 		void alloc_internal();
 		void free_internal();
 		void set_internal();
@@ -356,14 +357,14 @@ class TPRSVcalc: public TSolMod
 {
 	private:
 
-		double PhVol;   // bar, T Kelvin, phase volume in cm3
+		double PhVol;   // phase volume in cm3
 		double *Pparc;  // DC partial pressures/ pure fugacities, bar (Pc by default) [0:L-1]
 		double *aGEX;   // Increments to molar G0 values of DCs from pure fugacities or DQF terms, normalized [L]
 		double *aVol;   // DC molar volumes, cm3/mol [L]
 
 		// main work arrays
 		double (*Eosparm)[6];   // EoS parameters
-		double (*Pureparm)[4];  // parameters a, b, da and d2a for cubic EoS
+		double (*Pureparm)[4];  // Parameters a, b, da/dT, d2a/dT2 for cubic EoS
 		double (*Fugpure)[6];   // fugacity parameters of pure gas species
 		double (*Fugci)[4];     // fugacity parameters of species in the mixture
 
@@ -372,8 +373,19 @@ class TPRSVcalc: public TSolMod
 		double **d2KK;   // second derivative
 		double **AA;     // binary a terms in the mixture
 
+		// internal functions
 		void alloc_internal();
 		void free_internal();
+		long int AB( double Tcrit, double Pcrit, double omg, double k1, double k2, double k3,
+				double &apure, double &bpure, double &da, double &d2a );
+		long int PRFugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
+				double &Fugacity, double &Volume, double &DeltaH, double &DeltaS );
+		long int FugacityPure( long int j ); // Calculates the fugacity of pure species
+		long int Cardano( double a2, double a1, double a0, double &z1, double &z2, double &z3 );
+		long int MixParam( double &amix, double &bmix );
+		long int FugacityMix( double amix, double bmix, double &fugmix, double &zmix, double &vmix );
+		long int FugacitySpec( double *fugpure );
+		long int DepartureFunct( double *fugpure );
 
 	public:
 
@@ -388,10 +400,10 @@ class TPRSVcalc: public TSolMod
 		~TPRSVcalc();
 
 		// Calculates pure species properties (pure fugacities)
-		long int PureSpecies( );
+		long int PureSpecies();
 
 		// Calculates T,P corrected interaction parameters
-		long int PTparam( );
+		long int PTparam();
 
 		// Calculates activity coefficients
 		long int MixMod();
@@ -404,21 +416,6 @@ class TPRSVcalc: public TSolMod
 
 		// Calculates pure species properties (called from DCthermo)
 		long int PRCalcFugPure( void );
-
-	protected:
-
-		// long int PureParam( long int i,double *params ); // calculates a and b arrays
-		long int AB( double Tcrit, double Pcrit, double omg, double k1, double k2, double k3,
-				double &apure, double &bpure, double &da, double &d2a );
-		// Calc. fugacity for 1 species at X=1
-		long int PRFugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
-				double &Fugacity, double &Volume, double &DeltaH, double &DeltaS );
-		long int FugacityPure( long int j ); // Calculates the fugacity of pure species
-		long int Cardano( double a2, double a1, double a0, double &z1, double &z2, double &z3 );
-		long int MixParam( double &amix, double &bmix );
-		long int FugacityMix( double amix, double bmix, double &fugmix, double &zmix, double &vmix );
-		long int FugacitySpec( double *fugpure );
-		long int DepartureFunct( double *fugpure );
 
 };
 
@@ -434,14 +431,14 @@ class TSRKcalc: public TSolMod
 {
 	private:
 
-		double PhVol;   // bar, T Kelvin, phase volume in cm3
+		double PhVol;   // phase volume in cm3
 		double *Pparc;  // DC partial pressures/ pure fugacities, bar (Pc by default) [0:L-1]
 		double *aGEX;   // Increments to molar G0 values of DCs from pure fugacities or DQF terms, normalized [L]
 		double *aVol;   // DC molar volumes, cm3/mol [L]
 
 		// main work arrays
 		double (*Eosparm)[4];   // EoS parameters
-		double (*Pureparm)[4];  // Parameters a, b, sqrAl, ac, dAldT for cubic EoS
+		double (*Pureparm)[4];  // Parameters a, b, da/dT, d2a/dT2 for cubic EoS
 		double (*Fugpure)[6];   // Fugacity parameters of pure gas species
 		double (*Fugci)[4];     // Fugacity parameters of species in the mixture
 
@@ -450,8 +447,19 @@ class TSRKcalc: public TSolMod
 		double **d2KK;  // second derivative
 		double **AA;    // binary a terms in the mixture
 
+		// internal functions
 		void alloc_internal();
 		void free_internal();
+		long int AB( double Tcrit, double Pcrit, double omg, double N,
+				double &apure, double &bpure, double &da, double &d2a );
+		long int SRFugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
+				double &Fugacity, double &Volume, double &DeltaH, double &DeltaS );
+		long int FugacityPure( long int j ); // Calculates the fugacity of pure species
+		long int Cardano( double a2, double a1, double a0, double &z1, double &z2, double &z3 );
+		long int MixParam( double &amix, double &bmix );
+		long int FugacityMix( double amix, double bmix, double &fugmix, double &zmix, double &vmix );
+		long int FugacitySpec( double *fugpure );
+		long int DepartureFunct( double *fugpure );
 
 	public:
 
@@ -466,7 +474,7 @@ class TSRKcalc: public TSolMod
 		~TSRKcalc();
 
 		// Calculates pure species properties (pure fugacities)
-		long int PureSpecies( );
+		long int PureSpecies();
 
 		// Calculates T,P corrected interaction parameters
 		long int PTparam();
@@ -482,20 +490,6 @@ class TSRKcalc: public TSolMod
 
 		// Calculates pure species properties (called from DCthermo)
 		long int SRCalcFugPure( void );
-
-	protected:
-
-		long int AB( double Tcrit, double Pcrit, double omg, double N,
-				double &apure, double &bpure, double &da, double &d2a );
-		// Calc. fugacity for 1 species at X=1
-		long int SRFugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
-				double &Fugacity, double &Volume, double &DeltaH, double &DeltaS );
-		long int FugacityPure( long int j ); // Calculates the fugacity of pure species
-		long int Cardano( double a2, double a1, double a0, double &z1, double &z2, double &z3 );
-		long int MixParam( double &amix, double &bmix );
-		long int FugacityMix( double amix, double bmix, double &fugmix, double &zmix, double &vmix );
-		long int FugacitySpec( double *fugpure );
-		long int DepartureFunct( double *fugpure );
 
 };
 

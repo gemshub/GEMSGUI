@@ -295,10 +295,10 @@ long int TPRSVcalc::PRFugacityPT( long int i, double P, double Tk, double *EoSpa
 
 	AB( Tcrit, Pcrit, omg, k1, k2, k3, apure, bpure, da, d2a );
 
-	Pureparm[i][0] = apure;
-	Pureparm[i][1] = bpure;
-	Pureparm[i][2] = da;
-	Pureparm[i][3] = d2a;
+	Pureparm[i][0] = apure;  // a parameter
+	Pureparm[i][1] = bpure;  // b parameter
+	Pureparm[i][2] = da;  // da/dT
+	Pureparm[i][3] = d2a;  // d2a/dT2
 	Eos2parPT[0] = apure;
 	Eos2parPT[1] = bpure;
 	Eos2parPT[2] = da;
@@ -311,7 +311,7 @@ long int TPRSVcalc::PRFugacityPT( long int i, double P, double Tk, double *EoSpa
 	Fugacity = Fugpure[i][0];  // Fugacity coefficient
 	DeltaH = Fugpure[i][2];  // H departure function
 	DeltaS = Fugpure[i][3];  // S departure function
-	Volume = Fugpure[i][4];  //  J/bar
+	Volume = Fugpure[i][4];  // J/bar
 
 	return iRet;
 }
@@ -2572,10 +2572,10 @@ long int TSRKcalc::SRFugacityPT( long int i, double P, double Tk, double *EoSpar
 
 	AB(Tcrit, Pcrit, omg, N, apure, bpure, da, d2a);
 
-	Pureparm[i][0] = apure;
-	Pureparm[i][1] = bpure;
-	Pureparm[i][2] = da;
-	Pureparm[i][3] = d2a;
+	Pureparm[i][0] = apure;  // a parameter
+	Pureparm[i][1] = bpure;  // b parameter
+	Pureparm[i][2] = da;  // da/dT
+	Pureparm[i][3] = d2a;  // d2a/dT2
 	Eos2parPT[0] = apure;
 	Eos2parPT[1] = bpure;
 	Eos2parPT[2] = da;
