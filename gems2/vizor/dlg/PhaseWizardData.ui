@@ -60,42 +60,42 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>G   Binary Redlich-Kister model (built-in)</string>
+                            <string>M   Binary subregular Margules solid-solution model (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>M   Binary Margules subregular model (built-in)</string>
+                            <string>G   Binary Redlich-Kister solid-solution model (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>T   Ternary regular Margules model (built-in)</string>
+                            <string>T   Ternary regular Margules solid-solution model (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>R   Regular multicomponent mixing model (built-in)</string>
+                            <string>R   Regular multicomponent solid-solution model (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>V   Van Laar multicomponent mixing model (built-in)</string>
+                            <string>V   Van Laar multicomponent solid-solution model (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>K   Multicomponent Redlich-Kister mixing model (built-in)  </string>
+                            <string>K   Redlich-Kister multicomponent solid-solution model (built-in)  </string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>L   NRTL multicomponent mixing model (built-in)</string>
+                            <string>L   NRTL multicomponent liquid solution model (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>W  Wilson multicomponent mixing model (built-in)</string>
+                            <string>W  Wilson multicomponent liquid solution model (built-in)</string>
                         </property>
                     </item>
                     <item>
@@ -115,47 +115,47 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>D   Aqueous Davies equation (built-in)</string>
+                            <string>D   Davies equation aqueous model (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>H   Aqueous extended Debye-Hueckel model (Helgeson), common a0 (built-in)</string>
+                            <string>H   Extended Debye-Hueckel aqueous model (Helgeson), common a0 (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Y   Aqueous extended Debye-Hueckel model (Shvarov), common a0 (built-ib)</string>
+                            <string>Y   Extended Debye-Hueckel aqueous model (Shvarov), common a0 (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>3   Aqueous extended Debye-Hueckel model (Karpov), individual a0 (built-in)</string>
+                            <string>3   Extended Debye-Hueckel aqueous model (Karpov), individual a0 (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>2   Aqueous Debye-Hueckel model (2-term,) individual a0 (built-in)</string>
+                            <string>2   Debye-Hueckel aqueous model (2-term) individual a0 (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>1   Aqueous Debye-Hueckel limiting law model (built-in)</string>
+                            <string>1   Debye-Hueckel limiting law aqueous model (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>S   Aqueous SIT model (NEA TDB variant, built-in)</string>
+                            <string>S   SIT aqueous model (NEA TDB version, built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Q   Aqueous extended UNIQAC model (built-in)</string>
+                            <string>Q   Extended UNIQAC aqueous model (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Z   Aqueous Pitzer model (built-in, reserved)</string>
+                            <string>Z   Pitzer aqueous model (built-in)</string>
                         </property>
                     </item>
                     <item>
