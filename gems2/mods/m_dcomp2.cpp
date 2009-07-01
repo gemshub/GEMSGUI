@@ -4,7 +4,7 @@
 // Implementation of TDComp class, calculation functions
 //
 // Rewritten from C to C++ by S.Dmytriyeva
-// Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik, V.Sinitsyn
+// Copyright (C) 1995-2009  S.Dmytriyeva, D.Kulik, V.Sinitsyn, T. Wagner
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -105,9 +105,6 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
      }
      aW.twp->Cp = ( ac[0] + ac[1]*T + ac[2]/T2 + ac[3]/T05 + ac[4]*T2
            + ac[5]*T3 + ac[6]*T4 + ac[7]/T3 + ac[8]/T + ac[9]*T05 /*+ ac[10]*log(T)*/);
-// cout << " T=" << T <<  " T^2=" << T2 << " T^3=" << T3 << " T^4=" << T4 << " T^0.5=" << T05 << endl
-//     << "     ac: " << ac[0] << ' ' << ac[1] << ' ' << ac[2] << ' ' << ac[3] << ' ' << ac[4] << ' ' << ac[5]
-//     << " Cp(T)=" << aW.twp->Cp << " k= " << k << endl;
 
     if( fabs( T - Tst ) > TEMPER_PREC )
         for( j=0, jf=0; j<=k; j++ )
@@ -169,11 +166,10 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
 		  + ac[7] * ( 1./ Tst2 - 1./ T2 ) / 2. + ac[8] * log( TT )
 		  + ac[9] * 2.* ( T * T05 - Tst * Tst05 ) / 3.  );
 
-// cout << " j=" << j << " T-Tst=" << T_Tst << " S(T)=" << aW.twp->S << " G(T)=" << aW.twp->G
-//     << " H(T)=" << aW.twp->H << endl;
         }
     T=aW.twp->T;
 NEXT:
+	// Holland-Powell phases with Landau transition
     if( CE == CTM_CHP )  // Rewritten 11.11.04 using input by Th.Wagner & D.Dolejs
     {
         double Qq, Tcr, Tcr0, Smax, Vmax, k298, kT, a0, p, pp, ivdp, idvdtdp,
@@ -225,14 +221,9 @@ NEXT:
                 aW.twp->Cp += T * Smax / 2. / sqrt( Tcr ) / sqrt( Tcr-T );
         }
     }
-// cout << "   qQ=" << a << " S(T)=" << aW.twp->S << " G(T)=" << aW.twp->G << " H(T)="
-//     << aW.twp->H << " Cp(T)=" << aW.twp->Cp << " Tcr=" << Tcr_ << endl;
 
     if( CV != CPM_AKI )
        calc_voldp( q, p, CE, CV );
-
-// cout << " P=" << aW.twp->P << " S(T,P)=" << aW.twp->S << " G(T,P)=" << aW.twp->G
-//     << " H(T,P)=" << aW.twp->H << " V(T,P)=" << aW.twp->V <<  endl;
 
 }
 
@@ -274,7 +265,7 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
          Holland & Powell, 1998 */
       // reading and checking the coeffs
       aC = (double)dc[q].Comp; // This is the bulk modulus k in kbar at 298 K!
-//      aC *= 1000.;   Check! conversion from kbar to bar
+      // aC *= 1000.;   Check! conversion from kbar to bar
       if( IsFloatEmpty( dc[q].Comp ))
           aC = 0.;
       aE = (double)dc[q].Expa; // This is the a parameter in 1/K !
@@ -284,38 +275,25 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
            && fabs(Vst) > 1e-9 && fabs(aC) > 1e-9 && fabs(aE) > 1e-9 )
                              // No zero molar volume !
       {
-// Inserted 01.07.03 - calculations acc. to Holland&Powell, 1998
+    	  // Inserted 01.07.03 - calculations acc. to Holland&Powell, 1998
          double VT, PP = P*0.001; // P seems to be in kbar in HP98 eqns!
-//       double PP = P_Pst*0.001;  // this is used by C.DeCapitani in Theriac
          // Coeff. of thermal expansion at T
          aW.twp->Alp = aE * (1. - 10./T05 );
          // Bulk modulus at T
          kap = aC * ( 1. - 1.5e-4*T_Tst );
          // Compressibility at T  - check !
          aW.twp->Bet = 1./PP * (1. - pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 ));  // to check (compressibility)
-// Molar properties
-//         aW.twp->V = Vst *(1.+ aE*T_Tst - 20.*aE*(T05 - Tst05));
+
+         // Molar properties
          VT = Vst *(1.+ aE*T_Tst - 20.*aE*(T05 - Tst05));
-//         aW.twp->G += 1./3.* aW.twp->V * kap * 1000. * (pow((1.+4.*PP/kap),0.75 )- 1.); // sign in pow((1-4... fixed 21.10.2004
          aW.twp->G += 1./3.* VT * kap * 1000. * (pow((1.+4.*PP/kap),0.75 )- 1.); // sign in pow((1-4... fixed 21.10.2004
          aW.twp->S -= Vst * P * ( aE - 10.*aE / T05 );
          aW.twp->H += -T * Vst * P * ( aE - 10.*aE / T05 )
-//              + 1./3. * aW.twp->V * kap * 1000. * ( pow((1.+4.*PP/kap),0.75 ) - 1.);  // sign in pow((1-4... fixed 21.10.2004
               + 1./3. * VT * kap * 1000. * ( pow((1.+4.*PP/kap),0.75 ) - 1.);  // sign in pow((1-4... fixed 21.10.2004
-//         aW.twp->V *= pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 );
          aW.twp->V += VT * pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 );
-//       aW.twp->V *= pow( (kap / (kap + 4*PP )), 0.25);  // Corr. C. De Capitani
-                // Check calculation of H !
-//  Abandoned from 01.07.03 KD - old HP90 calculations, appear wrong
-//          aE /= Vst;  // ?  check
-//          aC /= Vst;  // ?  check
-//          aW.twp->V = Vst * ( 1. + aE * T_Tst ) * ( 1.- aC * P_Pst );
-//          aW.twp->S -= Vst * P_Pst * aE; // * (1. - aC * P_Pst / 2.);
-//          aW.twp->G += Vst * (1. + aE * T_Tst)*( P_Pst - aC * P_Pst * P_Pst/2.);
-//          aW.twp->H += P_Pst * Vst * (1.-aC * P_Pst / 2.)*(1.+aE * T_Tst - aE );
       }
       else {  // aE and aC are not provided
-// Warning here?
+    	  // Warning here?
         // Molar volume assumed independent of T and P
         aW.twp->V = Vst;
         aW.twp->G += Vst * P_Pst;
@@ -326,11 +304,11 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
     {  /* Vm = f(T,P) equations */
         aC = 0.;
         aE = 0.;
-//
-//  VOLUME EQUATION (BERMAN):
+
+//  Volume equation (Berman)
 //  V(P,T)/V(1,298) = 1 + V1(T-298) + V2(T-298)**2 + V3(P-1) + V4(P-1)**2
 // The same as usual one but a2=0 and 1 is added instead of a2: to Check!
-//
+
         for( i=0; i<5; i++ )
         { // Finding compressibility and expandability from V=f(T,P) coeffs
             a = (double)dc[q].Vt[i];
@@ -351,7 +329,7 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
                 break;
             case 4:
               aC -= a * 2. * P;
-//                aC -= a * 2. * P_Pst;
+              // aC -= a * 2. * P_Pst;
                 break;
             }
         }
@@ -424,6 +402,7 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
    }  // End of Birch-Murnaghan section
 }
 
+
 //---------------------------------------------------------------------------
 // Calculations related to Burch-Murnaghan (1947) equation (12 coeffs)
 // Written in fortran by M.Gottschalk, GFZ Potsdam
@@ -448,6 +427,7 @@ double TDComp::BM_IntVol(double P, double Pref, double vt, double vpt,
 // return vdP
    return -Pref*vt+P*vpt-pint;
 }
+
 
 //-----------------------------------------------------------------------
 // calculate the volume at P and T
@@ -483,6 +463,7 @@ double TDComp::BM_Volume( double P, double vt, double kt0, double kp,
       return vv;
 }
 
+
 //------------------------------------------------------------------------
 // calculate the integral vdP using the Birch-Murnaghan EOS
 // this function will be incorporated into GEM-Selektor v.2.1.0 code
@@ -499,40 +480,37 @@ TDComp::BirchMurnaghan( double Pref, double P, double Tref, double T, double v0,
           vPplus, vPminus, vTplus, vTminus,
           kt0Tplus, kt0Tminus, kppTplus, kppTminus,
           vtTplus, vtTminus, dGTplus, dGTminus;
-//
-//      v0   = BMConst(1) - in GEMS passed as a separate function parameter
+
+   // v0   = BMConst(1) - in GEMS passed as a separate function parameter
     a1   = BMConst[0];
     a2   = BMConst[1];
     a3   = BMConst[2];
-//    a4   = BMConst[3];  for future extensions
-//    a5   = BMConst[4];
+    // a4   = BMConst[3];  for future extensions
+    // a5   = BMConst[4];
     kt00 = BMConst[5];
     dkdt = BMConst[6];
     kp   = BMConst[7];
     kpp  = BMConst[8];
-//
+
     Pplus  = P + Pincr;
     Pminus = P - Pincr;
     Tplus  = T + Tincr;
     Tminus = T - Tincr;
-//
-// calculate bulk modulus at T and its T increments
-//
+
+    // calculate bulk modulus at T and its T increments
     kt0        = kt00 + dkdt*(T - Tref);
     kt0Tplus   = kt00 + dkdt*(Tplus - Tref);
     kt0Tminus  = kt00 + dkdt*(Tminus - Tref);
-//
-// set kpp if not already defined and its T increments
-//
+
+    // set kpp if not already defined and its T increments
     if ( fabs(kpp) < 1e-20 )
     {
       kpp       = -((35./9.+(3.-kp)*(4.-kp))/kt0);
       kppTplus  = -((35./9.+(3.-kp)*(4.-kp))/kt0Tplus);
       kppTminus = -((35./9.+(3.-kp)*(4.-kp))/kt0Tminus);
     }
-//
-// calculate volume at T and Pref and its T increments
-//
+
+    // calculate volume at T and Pref and its T increments
     vt = v0* exp( a1*(T-Tref)
          + a2/2.*(T*T-Tref*Tref)
          + a3*(-1./T+1./Tref) );
@@ -542,44 +520,37 @@ TDComp::BirchMurnaghan( double Pref, double P, double Tref, double T, double v0,
     vtTminus =  v0* exp( a1*(Tminus-Tref)
          + a2/2.*(Tminus*Tminus-Tref*Tref)
          + a3*(-1./Tminus+1./Tref) );
-//
-// calculate volume to start iterations
+
+    // calculate volume to start iterations
     vstart = vt* exp( -1./kt0*(P-Pref) );
-//
-// calculate volumes at P and T and its increments
-//
+
+    // calculate volumes at P and T and its increments
     vv      = BM_Volume(P, vt, kt0, kp, kpp, vstart);
     vPplus  = BM_Volume(Pplus, vt, kt0, kp, kpp, vv);
     vPminus = BM_Volume(Pminus, vt, kt0, kp, kpp, vv);
     vTplus  = BM_Volume(P, vtTplus, kt0Tplus, kp, kppTplus, vv);
     vTminus = BM_Volume(P, vtTminus,kt0Tminus,kp,kppTminus, vv);
-//
-// calculate aplha and beta at P and T
-//
+
+    // calculate aplha and beta at P and T
     alpha =  1./vv*((vTplus-vTminus)/(2.*Tincr));
     beta  = -1./vv*((vPplus-vPminus)/(2.*Pincr));
-//
-// calculate vdP (P-T correction of G ->  dG)
-//
+
+    // calculate vdP (P-T correction of G ->  dG)
     dG = BM_IntVol(P, Pref, vt, vv, kt0, kp, kpp);
-//
-// calculate d(vdP)/dT (dS)
-//
+
+    // calculate d(vdP)/dT (dS)
     dGTplus  = BM_IntVol(P,Pref,vtTplus,vTplus,kt0Tplus,kp,kppTplus);
     dGTminus = BM_IntVol(P,Pref,vtTminus,vTminus,kt0Tminus,kp,kppTminus);
     dS = (dGTplus-dGTminus)/(2.*Tincr);
-//
-// calculate dH
-//
+
+    // calculate dH
     dH = dG + T*dS;
-//
-}
-// End of section for Birch-Murnaghan calculations
-//
+
+}  // End of section for Birch-Murnaghan calculations
 
 
 //-----------------------------------------------------------------
-// calculation of partial molal volumes for aqueous nonelectrolyte species 
+// calculation of partial molal volumes for aqueous nonelectrolyte species
 // using EOS (Akinfiev and Diamond, 2003) provided by TW 30.01.2008
 //
 void TDComp::calc_akinf( int q, int p )
@@ -592,13 +563,13 @@ void TDComp::calc_akinf( int q, int p )
 	double Geos, Veos, Seos, CPeos, Heos;
 	double Gids, Vids, Sids, CPids, Hids;
 	double Geos298, Veos298, Seos298, CPeos298, Heos298;
-	
+
 	dH0k = (-182161.88);  // enthapy of ideal gas water at 0 K
-			
+
 	// Properties of water at Tr,Pr (25 deg C, 1 bar) from SUPCRT92 routines
 	// adopted H2O ideal gas data from NIST-TRC database
 	Gig = -228526.66;
-	Sig = 188.72683;  
+	Sig = 188.72683;
 	CPig = 33.58743;
 	Gw = -237181.38;
 	Sw = 69.92418;
@@ -607,21 +578,21 @@ void TDComp::calc_akinf( int q, int p )
 	alp = 2.59426542e-4;
 	bet = 4.52187717e-5;
 	dalpT = 9.56485765e-6;
-	
-	Akinfiev_EOS_increments(Tr, Pr, Gig, Sig, CPig, Gw, Sw, CPw, rho, alp, bet, dalpT, q, 
-			           Geos298, Veos298, Seos298, CPeos298, Heos298 );	
-	
+
+	Akinfiev_EOS_increments(Tr, Pr, Gig, Sig, CPig, Gw, Sw, CPw, rho, alp, bet, dalpT, q,
+			           Geos298, Veos298, Seos298, CPeos298, Heos298 );
+
 	// Getting back ideal gas properties corrected for T of interest
 	// by substracting properties of hydration at Tr, Pr
     Gids = aW.twp->G -= Geos298;
-//	Vids = aW.twp->V -= Veos298;
+    // Vids = aW.twp->V -= Veos298;
     Sids = aW.twp->S -= Seos298;
-//  CPids = aW.twp->Cp -= CPeos298;
+    // CPids = aW.twp->Cp -= CPeos298;
     CPids = aW.twp->Cp;
-    Hids = aW.twp->H -= Heos298;    
- 
+    Hids = aW.twp->H -= Heos298;
+
     // Properties of water at T,P of interest, modified 06.02.2008 (TW)
-	Tk = aW.twp->T; 
+	Tk = aW.twp->T;
 	Pbar = aW.twp->P;
 	Gig = aWp.Gigw[aSpc.isat]*R_CONST*Tk + dH0k;  // converting normalized ideal gas values
 	Sig = aWp.Sigw[aSpc.isat]*R_CONST;
@@ -633,38 +604,39 @@ void TDComp::calc_akinf( int q, int p )
 	alp = aWp.Alphaw[aSpc.isat];
 	bet = aWp.Betaw[aSpc.isat];
 	dalpT = aWp.dAldT[aSpc.isat];
-        
+
 	Akinfiev_EOS_increments(Tk, Pbar, Gig, Sig, CPig, Gw, Sw, CPw, rho, alp, bet, dalpT, q,
-			           Geos, Veos, Seos, CPeos, Heos );	
-	
+			           Geos, Veos, Seos, CPeos, Heos );
+
 	// Getting dissolved gas properties corrected for T,P of interest
 	// by adding properties of hydration at T,P
 	aW.twp->G = Gids + Geos + Seos298*(Tk-298.15);  // S(T-Tr) corrected for dSh at Tr,Pr
-//	aW.twp->V = Vids + Veos;
+	// aW.twp->V = Vids + Veos;
 	aW.twp->V = Veos;
 	aW.twp->S = Sids + Seos;
     aW.twp->Cp = CPids + CPeos;
     aW.twp->H = Hids + Heos;
 }
 
+
 // Implementation of calculation of hydration properties of nonelectrolytes (Akinfiev and Diamond, 2003)
-void 
-TDComp::Akinfiev_EOS_increments(double Tk, double P, double Gig, double Sig, double CPig, 
-		double Gw, double Sw, double CPw, double rho, double alp, double bet, double dalpT, int q, 
+void
+TDComp::Akinfiev_EOS_increments(double Tk, double P, double Gig, double Sig, double CPig,
+		double Gw, double Sw, double CPw, double rho, double alp, double bet, double dalpT, int q,
 		double& Geos, double& Veos, double& Seos, double& CPeos, double& Heos )
 {
 	double derP, derT, der2T;
-	double deltaB, lnKH, Nw, xi, aa, bb, RT; 	
+	double deltaB, lnKH, Nw, xi, aa, bb, RT;
 	double fug, vol, drhoT, drhoP, d2rhoT, lnfug, Gres, Sres, CPres;
 	const double RR = 83.1451, R_CONST = 8.31451;
 	const double MW = 18.01528;
 
 	RT = Tk*R_CONST;
-	// EOS coefficients 
+	// EOS coefficients
 	xi = (double)dc[q].CpFS[0];
 	aa = (double)dc[q].CpFS[1];
 	bb = (double)dc[q].CpFS[2];
-	
+
 	Gres = Gw-Gig;
 	Sres = Sw-Sig;
 	CPres = CPw - CPig;
@@ -694,6 +666,7 @@ TDComp::Akinfiev_EOS_increments(double Tk, double P, double Gig, double Sig, dou
 	Heos = Geos + Tk*Seos;
 }
 
+
 //--------------------------------------------------------------------
 // Begin section converted from SUPCRT92
 //
@@ -716,6 +689,7 @@ TDComp::calc_tpH2O( int pst )
     aW.twp->Bet = aWp.Betaw[pst];
     aW.twp->Alp = aWp.Alphaw[pst];
 }
+
 
 //--------------------------------------------------------------------//
 /* gShok2- Calc  g, dgdP, dgdT, d2gdT2 use equations in Shock et al. (1991)
@@ -801,6 +775,8 @@ void TDComp::gShok2(double T, double P, double D, double beta, double alpha,
     *d2gdT2 -= d2fdT2;
 
 }
+
+
 //--------------------------------------------------------------------//
 /* gfun92 - Calculation: function g for (Tanger and Helgeson, 1988;
 *           Shock et al.,1991) and it  частные производные (dgdP, dgdT,
@@ -834,6 +810,7 @@ void TDComp::gfun92(double TdegC, double Pbars, double Dgcm3, double betab,
         Error( GetName(), "E25DCrun: gfun92()- error in HGK calculations" );
 }
 
+
 //--------------------------------------------------------------------//
 /* omeg92 - calc the conventinal born coef(W)current aqueous species
 *  and dwdP, dwdP, as functions  g, dgdP, dgdT, d2gdT2, wref and Z
@@ -864,6 +841,7 @@ void TDComp::omeg92(double g, double dgdP, double dgdT, double d2gdT2,
         *d2wdT2 = 2.0e0 * eta * Z4 * pow(dgdT,2.) - eta * Z3 * d2gdT2;
     }
 }
+
 
 //--------------------------------------------------------------------//
 // Calculation  t/d parametres for water solution (Res to TPWORK)
@@ -939,6 +917,7 @@ void TDComp::calc_thkf( AQSREF& arf, double P, double T, double Dw, double betaw
     aW.twp->gfun = g;  // solvent g-function - passed for b_gamma=f(T,P) 07.06.05
 }
 
+
 //--------------------------------------------------------------------//
 // Calculation  t/d parametres for water solution (Res to TPWORK)
 void TDComp::calc_tphkf( int q, int /*p*/ )
@@ -962,8 +941,8 @@ void TDComp::calc_tphkf( int q, int /*p*/ )
     arf.wref = dc[q].HKFc[6];
     arf.chg = (int)dc[q].Zz;
     if ( aSpc.isat )
-        i=1;        // below Psat curve (vapour field)? 
-    else             
+        i=1;        // below Psat curve (vapour field)?
+    else
         i=0;        // Above Psat curve (liquid field)
     TK = TdegK(aSpc.it, aSta.Temp);     /* transform T to degK */
     /*Calc t/d param water solut for Temp (K), Pres (bar) */

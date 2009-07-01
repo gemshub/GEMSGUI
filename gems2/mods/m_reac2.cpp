@@ -1,10 +1,10 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Implementation of TReacDC class,  calculation functions
+// Implementation of TReacDC class, calculation functions
 //
 // Rewritten from C to C++ by S.Dmytriyeva
-// Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
+// Copyright (C) 1995-2009  S.Dmytriyeva, D.Kulik, T.Wagner
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -29,7 +29,8 @@
 #include "visor.h"
 #include "num_methods.h"
 
-/*-----------------------------------------------------------------*/
+
+//-----------------------------------------------------------------
 // Calculates coefficients A0 to A6 of logK=f(T)
 // from coefficients a0 to a4 of Haas-Fischer Cp=f(T)
 // Coeffs a5 to a9 are ignored
@@ -50,7 +51,7 @@ void TReacDC::Convert_Cp_to_KT( int /*CE*/ )
     Cp = rcp->DCp;
     A = rcp->pKt;
 
-// calculation of logK=f(T) coeffs (only first 5 Cp coefficients, conforming to Haas-Fisher function)
+    // calculation of logK=f(T) coeffs (only first 5 Cp coefficients, conforming to Haas-Fisher function)
     A[0] = ( Sr - Cp[0] - Cp[0]*lnT - Cp[1]*T + Cp[2]/(2.0*T_2)
                   + 2.0*Cp[3]/T_05 - Cp[4]*T_2/2.0 ) / Rln10;
     A[1] = Cp[1]/(2.0*Rln10);
@@ -85,7 +86,9 @@ void TReacDC::Convert_Cp_to_KT( int /*CE*/ )
     default:
         return;
     }
-*/   // Calculation of Cpr and lgK at 25 C
+*/
+
+    // Calculation of Cpr and lgK at 25 C
     Cpr = Cp[0] + Cp[1]*T + Cp[2]/T_2 + Cp[3]/T_05 + Cp[4]*T_2;
     lgK = A[0] + A[1]*T + A[2]/T + A[3]*lnT + A[4]/T_2 +
           A[5]*T_2 + A[6]/T_05;
@@ -93,7 +96,8 @@ void TReacDC::Convert_Cp_to_KT( int /*CE*/ )
     rcp->Ks[1] = lgK;
 }
 
-/*-----------------------------------------------------------------*/
+
+//-----------------------------------------------------------------
 void TReacDC::Convert_KT_to_Cp( int CE )
 {
     double Rln10, T, lnT, T_2, T_05, /*T_15,*/ T_3,
@@ -106,13 +110,14 @@ void TReacDC::Convert_KT_to_Cp( int CE )
     T_2 = T*T;
     T_3 = T_2*T;
     T_05 = sqrt( T );
-//    T_15 = pow( T, 1.5 );
+		// T_15 = pow( T, 1.5 );
     Cp = rcp->DCp;
     A = rcp->pKt;
     Sr = rcp->Ss[0];
-//    Hr = rcp->Hs[0];
+		// Hr = rcp->Hs[0];
     Gr = rcp->Gs[0];
     lgK = rcp->Ks[1];
+
     //AGAIN_CP:
     switch( CE )
     { // calculation 2- and 3-term�param approximation
@@ -245,7 +250,8 @@ void TReacDC::Convert_KT_to_Cp( int CE )
     return;
 }
 
-/*-----------------------------------------------------------------*/
+
+//-----------------------------------------------------------------
 void TReacDC::Recalc( int q, const char *key  )
 {
     int i, st0, st1, Count, rShift=0, CM, CE;
@@ -498,12 +504,12 @@ NEXT:
         		 rc[q].DCp =   (float *)aObj[ o_redcp ].Alloc( MAXCPCOEF, 1, F_);
             for( i=0; i<7; i++ )
               if( IsFloatEmpty( rc[q].pKt[i] ) )
-                  rc[q].pKt[i] = 0.0;        	
+                  rc[q].pKt[i] = 0.0;
         }
-        	
+
     }
-    /*----------------------------------------------------*/
-    /*if( rc[q].pct[0]==CTP_CP && rc[q].pct[1]==CEV_ST && rc[q].pct[2]==CVV_NO )*/
+
+		// if( rc[q].pct[0]==CTP_CP && rc[q].pct[1]==CEV_ST && rc[q].pct[2]==CVV_NO )
     if( rc[q].rDC[rc[q].nDC-1] == SRC_NEWDC )
         Recalc_rDCN( foS  );
     else if( rc[q].rDC[rc[q].nDC-1] == SRC_NEWISO )
@@ -528,10 +534,10 @@ NEXT:
                        "Estimate S, H, Cp, V using PRONSPREP97 algorithm?" ))
         { /* Check if this is a dissociation reaction */
             if( rc[q].scDC[rc[q].nDC-1] < 0 )
-            {              
+            {
                 if( rc[q].pct[1] != CTM_PPE )  // if not 'E' then old PRONSPREP
             	   PronsPrep( key );
-                else 
+                else
                    PronsPrepOH( key, nICs, listAN );
             }
             else Error( GetName(),"W27RErun: PP97 requires a dissociation reaction!");
@@ -539,8 +545,9 @@ NEXT:
     }
 }
 
-/*-----------------------------------------------------------------*/
-// Caclulation of the properties of new reaction-defined component 
+
+//-----------------------------------------------------------------
+// Caclulation of the properties of new reaction-defined component
 //  from reaction deltas and properties of other involved components
 void TReacDC::Recalc_rDCN( double /*foS*/ )
 {
@@ -676,7 +683,7 @@ STAGE2:
     else
         Error( GetName(),"W29RErun: One of values dGr, dHr, or dSr is missing.");
 
-    /* calc Cp and V for the reaction-defined component */
+    // calc Cp and V for the reaction-defined component
     if( IsFloatEmpty( rcp->Cps[0] ))
         rcp->Cps[0] = 0.0;
     if( IsFloatEmpty( rcp->Vs[0] ))
@@ -695,7 +702,8 @@ STAGE2:
 
 }
 
-/*-----------------------------------------------------------------*/
+
+//-----------------------------------------------------------------
 // Calculate delta_reaction from properties of components
 void TReacDC::Recalc_rDCD( )
 {
@@ -735,7 +743,8 @@ void TReacDC::Recalc_rDCD( )
     rcp->Ks[0] = pow( 10., lgK );
 }
 
-/*-----------------------------------------------------------------*/
+
+//-----------------------------------------------------------------
 void TReacDC::Recalc_ISO1( double /*foS*/ )
 {
     double  LK, RR, R_T;
@@ -788,7 +797,8 @@ STAGE2:
     return;
 }
 
-/*-----------------------------------------------------------------*/
+
+//-----------------------------------------------------------------
 // etap 2
 void TReacDC::Recalc_ISO2( double foS )
 {
@@ -882,7 +892,7 @@ void TReacDC::Recalc_ISO2( double foS )
     }
     Error( GetName(),"W32RErun: One of values dGr, dHr, or dSr is missing (Iso2)");
 FINITA:
-    /*calc Cp and  V for vedushiy component */
+    // calc Cp and  V for vedushiy component
     Cp = 0.0;
     V = 0.0;
     if( IsFloatEmpty( rcp->Cps[0] ))
@@ -900,7 +910,8 @@ FINITA:
                       (rcp->Vs[0] - V)/rcp->scDC[rcp->nDC-1];
 }
 
-/*-----------------------------------------------------------------*/
+
+//-----------------------------------------------------------------
 // Calc parametres of reaction if vedushiy d or r
 void TReacDC::Calc_rDCD( int q, int p )
 {
@@ -955,7 +966,8 @@ void TReacDC::Calc_rDCD( int q, int p )
     return;
 }
 
-/*-----------------------------------------------------------------*/
+
+//-----------------------------------------------------------------
 // Calc aqueous species
 void TReacDC::calc_tphkf_r( int q, int p )
 {
@@ -980,12 +992,12 @@ void TReacDC::calc_tphkf_r( int q, int p )
 }
 
 
-/*-----------------------------------------------------------------*/
+//-----------------------------------------------------------------
 // Calculation of d(reaction) from logK = f(T)
 void TReacDC::calc_lgk_r( int q, int p, int CE, int /*CV*/ )
 {
     double Rln10, T, lnT, T_2, T_05, /*T_15,*/ T_3, /*DH,*/ Tr, //dGr_d,
-        dSr, dGr, dHr, dCpr, dVr, lgK, R_T; /* Units of measurement!!!!! */
+        dSr, dGr, dHr, dCpr, dVr, lgK, R_T; // units of measurement
     float *A, *Cp;
 
     Rln10 = R_CONSTANT * lg_to_ln;
@@ -1026,33 +1038,33 @@ void TReacDC::calc_lgk_r( int q, int p, int CE, int /*CV*/ )
     // Re-written by KD on 15.07.03 to implement partial 1,2 and 3 term
     /*  else if( CE == CTM_EK1 ) Only dG(Tr)=const was specified * 05.12.96
          lgK = -Gr/R_T/lg_to_ln; */
-    switch (CE)
-    {
-       case CTM_EK0: // 1-term lgK = const
-// lgK = A[0];
+	switch (CE)
+	{
+		case CTM_EK0: // 1-term lgK = const
+				// lgK = A[0];
             dCpr = 0.0;
             dHr = 0.0;
-//            dGr_d = -dSr * T;
+				// dGr_d = -dSr * T;
             break;
-       case CTM_EK1: // 1-term dGr = const
-// lgK = A[2]/T;
-            dCpr = 0.0;
+		case CTM_EK1: // 1-term dGr = const
+				// lgK = A[2]/T;
+			dCpr = 0.0;
             dSr = 0.0;
-//            dGr_d = dHr;
+				// dGr_d = dHr;
             lgK = - dHr / T / Rln10;
           break;
-       case CTM_EK2:  // 2-term or 1-term lgK=const at dHr=0
-// lgK = A[0] + A[2]/T;
+		case CTM_EK2:  // 2-term or 1-term lgK=const at dHr=0
+				// lgK = A[0] + A[2]/T;
             dCpr = 0.0;
-//            dGr_d = dHr - dSr * T;
+				// dGr_d = dHr - dSr * T;
             lgK = (dSr - dHr/T ) / Rln10;
           break;
-       case CTM_EK3:  // 3-term
-// lgK = A[0] + A[2]/T + A[3] * lnT;
+		case CTM_EK3:  // 3-term
+				// lgK = A[0] + A[2]/T + A[3] * lnT;
             lgK = ( dSr - dHr/T - dCpr * ( 1 - Tr/T - log( T/Tr ))) / Rln10;
             dSr += dCpr * log( T / Tr );
             dHr += dCpr * (T - Tr );
-//            dGr_d = dHr - dSr * T;
+				// dGr_d = dHr - dSr * T;
           break;
        case CTM_LGK:  // full 7-term logK approx
        case CTM_LGX:  // (derived from dCp=f(T))
@@ -1062,38 +1074,41 @@ void TReacDC::calc_lgk_r( int q, int p, int CE, int /*CV*/ )
                      + 2.0*A[5]*T_3 - 0.5*A[6]*T_05 );
             dSr = Rln10 * ( A[0] + 2.0*A[1]*T + A[3]*(1.0+lnT) -
                        A[4]/T_2 + 3.0*A[5]*T_2 + 0.5*A[6]/T_05 );
-//            dGr_d = dHr - dSr * T;
-//         if( rc[q].DCp )
+				// dGr_d = dHr - dSr * T;
+				// if( rc[q].DCp )
             dCpr = Cp[0] + Cp[1]*T + Cp[2]/T_2 + Cp[4]*T_2 + Cp[3]/T_05;
-//            dHr = Rln10 * T_2 * ( A[1] - A[2]/T_2 + A[3]/T -
-//                             2.0*A[4]/T_3 + 2.0*A[5]*T - 0.5*A[6]/T_15 );
-//            dSr = Rln10 * ( A[0] + 2.0*A[1]*T + A[3]*(1.0+lnT) -
-//                       A[4]/T_2 + 3.0*A[5]*T_2 + 0.5*A[6]/T_05 );
+				// dHr = Rln10 * T_2 * ( A[1] - A[2]/T_2 + A[3]/T -
+				// 2.0*A[4]/T_3 + 2.0*A[5]*T - 0.5*A[6]/T_15 );
+				// dSr = Rln10 * ( A[0] + 2.0*A[1]*T + A[3]*(1.0+lnT) -
+				// A[4]/T_2 + 3.0*A[5]*T_2 + 0.5*A[6]/T_05 );
           break;
        default:
        ; // error message ?
     }
     // Calculation of dGr
     dGr = -R_T * lgK * lg_to_ln;
-    /* Loading output data */
+
+    // Loading output data
     aW.WW(p).lgK = lgK;
     if( fabs(lgK) < 34. )
         aW.WW(p).K = exp( lgK*lg_to_ln );
     else aW.WW(p).K = FLOAT_EMPTY;
-//
+
     aW.WW(p).dG = dGr;
     aW.WW(p).dH =  dHr;
     aW.WW(p).dS = dSr;
     aW.WW(p).dCp = dCpr;
-  /* Checking consistency of Gr, Hr and Sr,  Gr == Hr - T*Sr; */
-//    DH = dGr + T*dSr;
-//    if( fabs( dGr - dGr_d ) > 1. || fabs( DH - dHr ) > 57.08 )  // J/mol
-//    {
-//       cout << "\nlgK_r: DH=" << DH << " | " << dHr << " ;   dGr=" << dGr_d;
- //      cout << " rKey:" /* << aW.WW(p).DRkey */ << rc[q].name ;
-//      To add an error message ?
-//    }
-  // Correction for pressure at constant dVr ?
+
+		// Checking consistency of Gr, Hr and Sr,  Gr == Hr - T*Sr;
+		// DH = dGr + T*dSr;
+		// if( fabs( dGr - dGr_d ) > 1. || fabs( DH - dHr ) > 57.08 )  // J/mol
+		// {
+		// cout << "\nlgK_r: DH=" << DH << " | " << dHr << " ;   dGr=" << dGr_d;
+		// cout << " rKey:" /* << aW.WW(p).DRkey */ << rc[q].name ;
+		// To add an error message ?
+		// }
+
+	// Correction for pressure at constant dVr
     aW.WW(p).dV = dVr;
 
  FINITA: // Copying uncertainties
@@ -1105,14 +1120,15 @@ void TReacDC::calc_lgk_r( int q, int p, int CE, int /*CV*/ )
     aW.WW(p).devCp=rc[q].Cps[2];
 }
 
-/*-----------------------------------------------------------------*/
+
+//-----------------------------------------------------------------
 // Interpolation on tabulated values of logK for TP pairs
 void TReacDC::calc_r_interp( int q, int p, int /*CE*/, int /*CV*/ )
 {
     int nP;
     double Pa, lgK, RR = R_CONSTANT, R_T; /* !!!!! */
     R_T = aW.WW(p).T * RR;
-    /* R_T = aW.WW(p).RT; */
+		// R_T = aW.WW(p).RT;
     if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.2 )
     {
         aW.WW(p).K =   rc[q].Ks[0];
@@ -1151,23 +1167,24 @@ void TReacDC::calc_r_interp( int q, int p, int /*CE*/, int /*CV*/ )
         nP = rc[q].nPp;
         break;
     }
-    /* call interpolations */
+    // call interpolations
     lgK = LagranInterp(  rc[q].Pint, rc[q].TCint, rc[q].logK,
                 Pa, aW.WW(p).TC, rc[q].nTp, nP, 1 );
-    //  if( lgK > 7777776. )
-    //    return 1;
+		// if( lgK > 7777776. )
+		// return 1;
     aW.WW(p).lgK = lgK;
     if( fabs(lgK) > 34 )
         aW.WW(p).K = exp( lgK*lg_to_ln );
     else aW.WW(p).K = FLOAT_EMPTY;
     aW.WW(p).dG = -R_T* lgK * lg_to_ln;
-    /* Recalc dH and Pr. - to complete ! */
+		// Recalc dH and Pr. - to complete
     aW.WW(p).dH =  rc[q].Hs[0];
     aW.WW(p).dS =  rc[q].Ss[0];
     aW.WW(p).dV =  rc[q].Vs[0];
     aW.WW(p).dCp = rc[q].Cps[0];
+
 FINITA:
-    aW.WW(p).dlgK =rc[q].Ks[2];
+	aW.WW(p).dlgK =rc[q].Ks[2];
     aW.WW(p).devG = rc[q].Gs[2];
     aW.WW(p).devH =rc[q].Hs[2];
     aW.WW(p).devS =rc[q].Ss[2];
@@ -1175,6 +1192,7 @@ FINITA:
     aW.WW(p).devCp=rc[q].Cps[2];
     return;
 }
+
 
 //-----------------------------------------------------------------
 // Calculation of deltaR with modified Ryzhenko-Bryzgalin
@@ -1190,50 +1208,51 @@ void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
 
     if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.2 )
     {  // standard temperature - just get data from ReacDC record
-       aW.WW(p).K =   rc[q].Ks[0];
-       aW.WW(p).lgK = rc[q].Ks[1];
-       aW.WW(p).dG =  rc[q].Gs[0];
-       aW.WW(p).G  =  rc[q].Gs[1];
-       aW.WW(p).dH =  rc[q].Hs[0];
-       aW.WW(p).H  =  rc[q].Hs[1];
-       aW.WW(p).dS =  rc[q].Ss[0];
-       aW.WW(p).S  =  rc[q].Ss[1];
-       aW.WW(p).dV =  rc[q].Vs[0];
-       aW.WW(p).V  =  rc[q].Vs[1];
-       aW.WW(p).dCp = rc[q].Cps[0];
-       aW.WW(p).Cp =  rc[q].Cps[1];
-        goto FINITA;
-    }
+    	aW.WW(p).K =   rc[q].Ks[0];
+    	aW.WW(p).lgK = rc[q].Ks[1];
+    	aW.WW(p).dG =  rc[q].Gs[0];
+    	aW.WW(p).G  =  rc[q].Gs[1];
+    	aW.WW(p).dH =  rc[q].Hs[0];
+    	aW.WW(p).H  =  rc[q].Hs[1];
+    	aW.WW(p).dS =  rc[q].Ss[0];
+    	aW.WW(p).S  =  rc[q].Ss[1];
+    	aW.WW(p).dV =  rc[q].Vs[0];
+    	aW.WW(p).V  =  rc[q].Vs[1];
+    	aW.WW(p).dCp = rc[q].Cps[0];
+    	aW.WW(p).Cp =  rc[q].Cps[1];
+    	goto FINITA;
+	}
 
-     TK = aW.WW(p).T;
-//     P = aW.WW(p).P;
-       rhoW = aW.WW(p).wRo;
-       alphaW = aW.WW(p).wAlp;
-       dAldTW = aW.WW(p).wdAlpdT;
-       betaW = aW.WW(p).wBet;
+	TK = aW.WW(p).T;
+		// P = aW.WW(p).P;
+	rhoW = aW.WW(p).wRo;
+	alphaW = aW.WW(p).wAlp;
+	dAldTW = aW.WW(p).wdAlpdT;
+	betaW = aW.WW(p).wBet;
     H2Oprop[0] = rhoW;
     H2Oprop[1] = alphaW;
     H2Oprop[2] = dAldTW;
     H2Oprop[3] = betaW;
 
-// get species parameters
+    // get species parameters
     MRBcoef[0] = rc[q].DSt[0];
     MRBcoef[1] = rc[q].DSt[1];
     MRBcoef[2] = rc[q].DSt[2];
 
-// calculate results - call MRB function (see below)
+    // calculate results - call MRB function (see below)
     MRBcalc (TK, H2Oprop, MRBcoef, ReactProp);
 
-//       aW.WW(p).K =   rc[q].Ks[0];
-       aW.WW(p).lgK = ReactProp[0];
-       if( fabs(aW.WW(p).lgK) < 34. )
-         aW.WW(p).K = exp( aW.WW(p).lgK*lg_to_ln );
-       else aW.WW(p).K = FLOAT_EMPTY;
-       aW.WW(p).dG =  ReactProp[1];
-       aW.WW(p).dH =  ReactProp[3];
-       aW.WW(p).dS =  ReactProp[2];
-       aW.WW(p).dV =  ReactProp[5];
-       aW.WW(p).dCp = ReactProp[4];
+		// aW.WW(p).K =   rc[q].Ks[0];
+    aW.WW(p).lgK = ReactProp[0];
+    if( fabs(aW.WW(p).lgK) < 34. )
+    	aW.WW(p).K = exp( aW.WW(p).lgK*lg_to_ln );
+    else
+    	aW.WW(p).K = FLOAT_EMPTY;
+    aW.WW(p).dG =  ReactProp[1];
+	aW.WW(p).dH =  ReactProp[3];
+	aW.WW(p).dS =  ReactProp[2];
+	aW.WW(p).dV =  ReactProp[5];
+	aW.WW(p).dCp = ReactProp[4];
 
 FINITA:
     aW.WW(p).dlgK =rc[q].Ks[2];
@@ -1243,6 +1262,7 @@ FINITA:
     aW.WW(p).devV =rc[q].Vs[2];
     aW.WW(p).devCp=rc[q].Cps[2];
 }
+
 
 // -------------------------------
 // Written 10/07/2007 by T. Wagner
@@ -1357,17 +1377,17 @@ void TReacDC::calc_r_FMD( int q, int p, int /*CE*/, int /*CV*/ )
     }
 
      TK = aW.WW(p).T;
-//     P = aW.WW(p).P;
-       rhoW = aW.WW(p).wRo;
+     // P = aW.WW(p).P;
+      rhoW = aW.WW(p).wRo;
        alphaW = aW.WW(p).wAlp;
        dAldTW = aW.WW(p).wdAlpdT;
        betaW = aW.WW(p).wBet;
-    H2Oprop[0] = rhoW;
+   	H2Oprop[0] = rhoW;
     H2Oprop[1] = alphaW;
     H2Oprop[2] = dAldTW;
     H2Oprop[3] = betaW;
 
-// get species parameters
+    // get species parameters
     MFDcoef[0] = rc[q].DSt[0];
     MFDcoef[1] = rc[q].DSt[1];
     MFDcoef[2] = rc[q].DSt[2];
@@ -1379,7 +1399,7 @@ void TReacDC::calc_r_FMD( int q, int p, int /*CE*/, int /*CV*/ )
     // calculate results - call MRB function (see below)
     MFDcalc (TK, H2Oprop, MFDcoef, ReactProp);
 
-//       aW.WW(p).K =   rc[q].Ks[0];
+    // aW.WW(p).K =   rc[q].Ks[0];
        aW.WW(p).lgK = ReactProp[0];
        if( fabs(aW.WW(p).lgK) < 34. )
          aW.WW(p).K = exp( aW.WW(p).lgK*lg_to_ln );
@@ -1474,16 +1494,16 @@ void TReacDC::calc_iso_a( int q, int p )
         goto FINITA;
     }
     if( rc[q].PrIso != S_OFF && rc[q].pKt )
-    { /* calc zavisimosti 1000*lnK = f(T) */
+    { // calc zavisimosti 1000*lnK = f(T)
         lna1000 = rc[q].pKt[0] +
                   rc[q].pKt[1] / aW.WW(p).T +
                   rc[q].pKt[2] / (aW.WW(p).T * aW.WW(p).T) +
                   rc[q].pKt[3] / pow( aW.WW(p).T, 3.0 ) +
                   rc[q].pKt[4] / pow( aW.WW(p).T, 4.0 );
-        /*Calc parametres reaction dH, dS, dC  Do it!!!!!! */
+        //Calc parametres reaction dH, dS, dC
     }
     else
-    { /* We have only alfa for standart T */
+    { // We have only alfa for standart T
         lna1000 = rc[q].Ks[1];
     }
     aW.WW(p).lgK = lna1000;
@@ -1502,7 +1522,8 @@ FINITA:
     aW.WW(p).devCp= rc[q].Cps[2];
 }
 
-/*-----------------------------------------------------------------*/
+
+//-----------------------------------------------------------------
 void TReacDC::calc_exion_r( int q, int p )
 {
     aW.WW(p).K =   rc[q].Ks[0];
@@ -1525,7 +1546,8 @@ void TReacDC::calc_exion_r( int q, int p )
     aW.WW(p).devCp=rc[q].Cps[2];
 }
 
-/*-----------------------------------------------------------------*/
+
+//-----------------------------------------------------------------
 //  Calc volume if calc params of reaction
 void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
 {
@@ -1540,16 +1562,16 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
     dT = TK_DELTA; //TC = aW.twp->TC;
     aW.twp->T =    T = aW.twp->TC + dT;
     aW.twp->Tst =  Tst = (double)rc[q].TCst + dT;
-    //T2 = T * T;  //T3 = T2 * T;   //T4 = T3 * T;   //T05 = sqrt( T );
-    //Tst2 = Tst * Tst;  //Tst3 = Tst2 * Tst;
-    //Tst4 = Tst3 * Tst; //Tst05 = sqrt( Tst );
+		//T2 = T * T;  //T3 = T2 * T;   //T4 = T3 * T;   //T05 = sqrt( T );
+		//Tst2 = Tst * Tst;  //Tst3 = Tst2 * Tst;
+		//Tst4 = Tst3 * Tst; //Tst05 = sqrt( Tst );
     T_Tst = T - Tst;
     Ts2 = T_Tst * T_Tst;   //TT = T / Tst;
 
-    /* set begin values */
+    // set begin values
     aW.twp->dV = Vst;
     if(( rc[q].pstate[0] == CP_GAS || rc[q].pstate[0] == CP_GASI ) && aW.twp->P > 0.0 )
-    { /* molar volume from the ideal gas law */
+    { // molar volume from the ideal gas law
         aW.twp->dV = T / aW.twp->P * R_CONSTANT;
     }
 
@@ -1576,15 +1598,16 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
     }
     else
 */
+
     if( (CV == CPM_VKE || CV == CPM_VBE) && rc[q].DVt )
-    {  /* calc on equation V(P,T) */
+    {  // calc on equation V(P,T)
         aC = 0.;
         aE = 0.;
         for( i=0; i<5; i++ )
-        { /* see all  coef Vp(T,P) */
+        { // see all  coef Vp(T,P)
             a = (double)rc[q].DVt[i];
             if( IsDoubleEmpty( a ) || !a ) continue;
-            switch( i ) /* calc delta */
+            switch( i ) // calc delta
             {
             case 0:
                 aE += a;
@@ -1605,7 +1628,7 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
         }
         if( fabs( aW.twp->P - Pst ) > PRESSURE_PREC ||
                 fabs( T - Tst ) > TEMPER_PREC )
-        { /* Calc mol volume and P */
+        { // Calc mol volume and P
             P_Pst = aW.twp->P - Pst;
             VP = Vst * P_Pst;
             VT = Vst * T_Tst;
@@ -1615,55 +1638,57 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
             {
                 a = (double)rc[q].DVt[i];
                 if( IsDoubleEmpty( a ) || !a ) continue;
-                switch( i ) /*calc delta coef Vp(T) */
+                switch( i ) //calc delta coef Vp(T)
                 {
                 case 0:
                     aW.twp->dV += a * VT;
-                    /*    aW.twp->dS  -= a * VP;
-                          aW.twp->dG += a * T_Tst * VP;
-                          aW.twp->dH -= a * Tst * VP;  */
+						// aW.twp->dS  -= a * VP;
+						// aW.twp->dG += a * T_Tst * VP;
+						// aW.twp->dH -= a * Tst * VP;
                     break;
                 case 1:
                     aW.twp->dV += a * VT * T_Tst;
-                    /*    aW.twp->dS  -= a * VP * 2. * T_Tst;
-                          aW.twp->dG += a * VP * Ts2;
-                          aW.twp->dH -= a * VP * ( T + Tst ) * T_Tst; */
+						// aW.twp->dS  -= a * VP * 2. * T_Tst;
+                        // aW.twp->dG += a * VP * Ts2;
+                        // aW.twp->dH -= a * VP * ( T + Tst ) * T_Tst;
                     break;
                 case 2:
                     aW.twp->dV += a * VT * Ts2;
-                    /*    aW.twp->dS  -= a * VP * 3.* Ts2;
-                          aW.twp->dG += a * VP * Ts2 * T_Tst;
-                          aW.twp->dH += a * VP * Ts2 * ( 2.*T + Tst ); */
+						// aW.twp->dS  -= a * VP * 3.* Ts2;
+                        // aW.twp->dG += a * VP * Ts2 * T_Tst;
+						// aW.twp->dH += a * VP * Ts2 * ( 2.*T + Tst );
                     break;
                 case 3:
                     aW.twp->dV += a * VP;
-                    /*    aW.twp->dG += a * VP * P_Pst / 2.;
-                          aW.twp->dH += a * VP * P_Pst / 2.; */
+						// aW.twp->dG += a * VP * P_Pst / 2.;
+						// aW.twp->dH += a * VP * P_Pst / 2.;
                     break;
                 case 4:
                     aW.twp->dV += a * VP * P_Pst;
-                    /*    aW.twp->dG += a * VP * ( aW.twp->P*aW.twp->P - Pst*Pst ) / 3.;
-                    aW.twp->dH += a * VP * ( aW.twp->P*aW.twp->P - Pst*Pst ) / 3.; */
+						// aW.twp->dG += a * VP * ( aW.twp->P*aW.twp->P - Pst*Pst ) / 3.;
+						// aW.twp->dH += a * VP * ( aW.twp->P*aW.twp->P - Pst*Pst ) / 3.;
                     break;
                 }
             }
         }
         aW.twp->Alp = aC;
         aW.twp->Bet = aE;
-        /*       rc[q].Comp = (float)aW.twp->Alp;
-                 rc[q].Expa = (float)aW.twp->Bet;  */
+				// rc[q].Comp = (float)aW.twp->Alp;
+                // rc[q].Expa = (float)aW.twp->Bet;
     }
     if( CV == CPM_CON || CV == CPM_NUL )
     {
             P_Pst = aW.twp->P - Pst;
             VP = Vst * P_Pst;
-//            VT = Vst * T_Tst;
+				// VT = Vst * T_Tst;
             aW.twp->dG += VP;
             aW.twp->dH += VP;
     }
-// Calculating pressure correction to logK
+
+    // Calculating pressure correction to logK
     aW.twp->lgK -= aW.twp->dV * (aW.twp->P - aW.twp->Pst) / aW.twp->RT / lg_to_ln;
 }
+
 
 // ------------------ End of m_reac2.cpp --------------------------
 
