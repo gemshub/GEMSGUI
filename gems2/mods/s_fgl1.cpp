@@ -2120,8 +2120,8 @@ long int THelgeson::ExcessProp( double *Zex )
 			dVdP = ( daodP*B + ao*dBdP ) * sqI;
 			LnG[j] = ( U/V + bgam*IS ) * lg_to_ln;
 			dLnGdT[j] = ( (dUdT*V - U*dVdT)/pow(V,2.) + dbgdT*IS ) * lg_to_ln;
-			d2LnGdT2[j] = ( (d2UdT2*V + dUdT*dVdT)*pow(V,2.)/pow(V,4.) - (dUdT*V)*(2.*V*dVdT)/pow(V,4.)
-				- (dUdT*dVdT + U*d2VdT2)*pow(V,2.)/pow(V,4.) + (U*dVdT)*(2.*V*dVdT)/pow(V,4.)
+			d2LnGdT2[j] = ( (d2UdT2*V + dUdT*dVdT)/pow(V,2.) - (dUdT*V)*(2.*dVdT)/pow(V,3.)
+				- (dUdT*dVdT + U*d2VdT2)/pow(V,2.) + (U*dVdT)*(2.*dVdT)/pow(V,3.)
 				+ d2bgdT2*IS ) * lg_to_ln;
 			dLnGdP[j] = ( (dUdP*V - U*dVdP)/pow(V,2.) + dbgdP*IS ) * lg_to_ln;
 		}
@@ -2204,12 +2204,12 @@ long int THelgeson::ExcessProp( double *Zex )
 					Z = U1/V1 - U2/V2 - U3/V3;
 					dZdT = (dU1dT*V1 - U1*dV1dT)/pow(V1,2.) - (dU2dT*V2 - U2*dV2dT)/pow(V2,2.)
 								- (dU3dT*V3 - U3*dV3dT)/pow(V3,2.);
-					d2ZdT2 = (d2U1dT2*V1 + dU1dT*dV1dT)*pow(V1,2.)/pow(V1,4.) - (dU1dT*V1)*(2.*V1*dV1dT)/pow(V1,4.)
-								- (dU1dT*dV1dT + U1*d2V1dT2)*pow(V1,2.)/pow(V1,4.) + (U1*dV1dT)*(2.*V1*dV1dT)/pow(V1,4.)
-								- (d2U2dT2*V2 + dU2dT*dV2dT)*pow(V2,2.)/pow(V2,4.) + (dU2dT*V2)*(2.*V2*dV2dT)/pow(V2,4.)
-								+ (dU2dT*dV2dT + U2*d2V2dT2)*pow(V2,2.)/pow(V2,4.) - (U2*dV2dT)*(2.*V2*dV2dT)/pow(V2,4.)
-								- (d2U3dT2*V3 + dU3dT*dV3dT)*pow(V3,2.)/pow(V3,4.) + (dU3dT*V3)*(2.*V3*dV3dT)/pow(V3,4.)
-								+ (dU3dT*dV3dT + U3*d2V3dT2)*pow(V3,2.)/pow(V3,4.) - (U3*dV3dT)*(2.*V3*dV3dT)/pow(V3,4.);
+					d2ZdT2 = (d2U1dT2*V1 + dU1dT*dV1dT)/pow(V1,2.) - (dU1dT*V1)*(2.*dV1dT)/pow(V1,3.)
+								- (dU1dT*dV1dT + U1*d2V1dT2)/pow(V1,2.) + (U1*dV1dT)*(2.*dV1dT)/pow(V1,3.)
+								- (d2U2dT2*V2 + dU2dT*dV2dT)/pow(V2,2.) + (dU2dT*V2)*(2.*dV2dT)/pow(V2,3.)
+								+ (dU2dT*dV2dT + U2*d2V2dT2)/pow(V2,2.) - (U2*dV2dT)*(2.*dV2dT)/pow(V2,3.)
+								- (d2U3dT2*V3 + dU3dT*dV3dT)/pow(V3,2.) + (dU3dT*V3)*(2.*dV3dT)/pow(V3,3.)
+								+ (dU3dT*dV3dT + U3*d2V3dT2)/pow(V3,2.) - (U3*dV3dT)*(2.*dV3dT)/pow(V3,3.);
 					dZdP = (dU1dP*V1 - U1*dV1dP)/pow(V1,2.) - (dU2dP*V2 - U2*dV2dP)/pow(V2,2.)
 								- (dU3dP*V3 - U3*dV3dP)/pow(V3,2.);
 
@@ -3423,8 +3423,8 @@ long int TDebyeHueckel::ExcessProp( double *Zex )
 			dVdP = ( an[j]*dBdP ) * sqI;
 			LnG[j] = ( ( - A * sqI * Z2 ) / ( 1. + B * an[j] * sqI ) ) * lg_to_ln;
 			dLnGdT[j] = ( (dUdT*V - U*dVdT)/pow(V,2.) ) * lg_to_ln;
-			d2LnGdT2[j] = ( (d2UdT2*V + dUdT*dVdT)*pow(V,2.)/pow(V,4.) - (dUdT*V)*(2.*V*dVdT)/pow(V,4.)
-				- (dUdT*dVdT + U*d2VdT2)*pow(V,2.)/pow(V,4.) + (U*dVdT)*(2.*V*dVdT)/pow(V,4.) ) * lg_to_ln;
+			d2LnGdT2[j] = ( (d2UdT2*V + dUdT*dVdT)/pow(V,2.) - (dUdT*V)*(2.*dVdT)/pow(V,3.)
+				- (dUdT*dVdT + U*d2VdT2)/pow(V,2.) + (U*dVdT)*(2.*dVdT)/pow(V,3.) ) * lg_to_ln;
 			dLnGdP[j] = ( (dUdP*V - U*dVdP)/pow(V,2.) ) * lg_to_ln;
 		}
 
@@ -3814,8 +3814,8 @@ long int TKarpov::ExcessProp( double *Zex )
 			dVdP = ( an[j]*dBdP ) * sqI;
 			LnG[j] = ( U/V + bgam*IS ) * lg_to_ln;
 			dLnGdT[j] = ( (dUdT*V - U*dVdT)/pow(V,2.) + dbgdT*IS ) * lg_to_ln;
-			d2LnGdT2[j] = ( (d2UdT2*V + dUdT*dVdT)*pow(V,2.)/pow(V,4.) - (dUdT*V)*(2.*V*dVdT)/pow(V,4.)
-				- (dUdT*dVdT + U*d2VdT2)*pow(V,2.)/pow(V,4.) + (U*dVdT)*(2.*V*dVdT)/pow(V,4.)
+			d2LnGdT2[j] = ( (d2UdT2*V + dUdT*dVdT)/pow(V,2.) - (dUdT*V)*(2.*dVdT)/pow(V,3.)
+				- (dUdT*dVdT + U*d2VdT2)/pow(V,2.) + (U*dVdT)*(2.*dVdT)/pow(V,3.)
 				+ d2bgdT2*IS ) * lg_to_ln;
 			dLnGdP[j] = ( (dUdP*V - U*dVdP)/pow(V,2.) + dbgdP*IS ) * lg_to_ln;
 		}
@@ -3898,12 +3898,12 @@ long int TKarpov::ExcessProp( double *Zex )
 					Z = U1/V1 - U2/V2 - U3/V3;
 					dZdT = (dU1dT*V1 - U1*dV1dT)/pow(V1,2.) - (dU2dT*V2 - U2*dV2dT)/pow(V2,2.)
 								- (dU3dT*V3 - U3*dV3dT)/pow(V3,2.);
-					d2ZdT2 = (d2U1dT2*V1 + dU1dT*dV1dT)*pow(V1,2.)/pow(V1,4.) - (dU1dT*V1)*(2.*V1*dV1dT)/pow(V1,4.)
-								- (dU1dT*dV1dT + U1*d2V1dT2)*pow(V1,2.)/pow(V1,4.) + (U1*dV1dT)*(2.*V1*dV1dT)/pow(V1,4.)
-								- (d2U2dT2*V2 + dU2dT*dV2dT)*pow(V2,2.)/pow(V2,4.) + (dU2dT*V2)*(2.*V2*dV2dT)/pow(V2,4.)
-								+ (dU2dT*dV2dT + U2*d2V2dT2)*pow(V2,2.)/pow(V2,4.) - (U2*dV2dT)*(2.*V2*dV2dT)/pow(V2,4.)
-								- (d2U3dT2*V3 + dU3dT*dV3dT)*pow(V3,2.)/pow(V3,4.) + (dU3dT*V3)*(2.*V3*dV3dT)/pow(V3,4.)
-								+ (dU3dT*dV3dT + U3*d2V3dT2)*pow(V3,2.)/pow(V3,4.) - (U3*dV3dT)*(2.*V3*dV3dT)/pow(V3,4.);
+					d2ZdT2 = (d2U1dT2*V1 + dU1dT*dV1dT)/pow(V1,2.) - (dU1dT*V1)*(2.*dV1dT)/pow(V1,3.)
+								- (dU1dT*dV1dT + U1*d2V1dT2)/pow(V1,2.) + (U1*dV1dT)*(2.*dV1dT)/pow(V1,3.)
+								- (d2U2dT2*V2 + dU2dT*dV2dT)/pow(V2,2.) + (dU2dT*V2)*(2.*dV2dT)/pow(V2,3.)
+								+ (dU2dT*dV2dT + U2*d2V2dT2)/pow(V2,2.) - (U2*dV2dT)*(2.*dV2dT)/pow(V2,3.)
+								- (d2U3dT2*V3 + dU3dT*dV3dT)/pow(V3,2.) + (dU3dT*V3)*(2.*dV3dT)/pow(V3,3.)
+								+ (dU3dT*dV3dT + U3*d2V3dT2)/pow(V3,2.) - (U3*dV3dT)*(2.*dV3dT)/pow(V3,3.);
 					dZdP = (dU1dP*V1 - U1*dV1dP)/pow(V1,2.) - (dU2dP*V2 - U2*dV2dP)/pow(V2,2.)
 								- (dU3dP*V3 - U3*dV3dP)/pow(V3,2.);
 
@@ -4503,8 +4503,8 @@ long int TShvarov::ExcessProp( double *Zex )
 			dVdP = ( daodP*B + ao*dBdP ) * sqI;
 			LnG[j] = ( U/V + C*bj[j]*msum ) * lg_to_ln;
 			dLnGdT[j] = ( (dUdT*V - U*dVdT)/pow(V,2.) + dCdT*bj[j]*msum ) * lg_to_ln;
-			d2LnGdT2[j] = ( (d2UdT2*V + dUdT*dVdT)/pow(V,2.) - (dUdT*V)*(2.*V*dVdT)/pow(V,4.)
-				- (dUdT*dVdT + U*d2VdT2)/pow(V,2.) + (U*dVdT)*(2.*V*dVdT)/pow(V,4.)
+			d2LnGdT2[j] = ( (d2UdT2*V + dUdT*dVdT)/pow(V,2.) - (dUdT*V)*(2.*dVdT)/pow(V,3.)
+				- (dUdT*dVdT + U*d2VdT2)/pow(V,2.) + (U*dVdT)*(2.*dVdT)/pow(V,3.)
 				+ d2CdT2*bj[j]*msum ) * lg_to_ln;
 			dLnGdP[j] = ( (dUdP*V - U*dVdP)/pow(V,2.) + dCdP*bj[j]*msum ) * lg_to_ln;
 		}
@@ -4580,12 +4580,12 @@ long int TShvarov::ExcessProp( double *Zex )
 					Z = U1/V1 - U2/V2 + U3/V3;
 					dZdT = (dU1dT*V1 - U1*dV1dT)/pow(V1,2.) - (dU2dT*V2 - U2*dV2dT)/pow(V2,2.)
 								+ (dU3dT*V3 - U3*dV3dT)/pow(V3,2.);
-					d2ZdT2 = (d2U1dT2*V1 + dU1dT*dV1dT)/pow(V1,2.) - (dU1dT*V1)*(2.*V1*dV1dT)/pow(V1,4.)
-								- (dU1dT*dV1dT + U1*d2V1dT2)/pow(V1,2.) + (U1*dV1dT)*(2.*V1*dV1dT)/pow(V1,4.)
-								- (d2U2dT2*V2 + dU2dT*dV2dT)/pow(V2,2.) + (dU2dT*V2)*(2.*V2*dV2dT)/pow(V2,4.)
-								+ (dU2dT*dV2dT + U2*d2V2dT2)/pow(V2,2.) - (U2*dV2dT)*(2.*V2*dV2dT)/pow(V2,4.)
-								+ (d2U3dT2*V3 + dU3dT*dV3dT)/pow(V3,2.) - (dU3dT*V3)*(2.*V3*dV3dT)/pow(V3,4.)
-								- (dU3dT*dV3dT + U3*d2V3dT2)/pow(V3,2.) + (U3*dV3dT)*(2.*V3*dV3dT)/pow(V3,4.);
+					d2ZdT2 = (d2U1dT2*V1 + dU1dT*dV1dT)/pow(V1,2.) - (dU1dT*V1)*(2.*dV1dT)/pow(V1,3.)
+								- (dU1dT*dV1dT + U1*d2V1dT2)/pow(V1,2.) + (U1*dV1dT)*(2.*dV1dT)/pow(V1,3.)
+								- (d2U2dT2*V2 + dU2dT*dV2dT)/pow(V2,2.) + (dU2dT*V2)*(2.*dV2dT)/pow(V2,3.)
+								+ (dU2dT*dV2dT + U2*d2V2dT2)/pow(V2,2.) - (U2*dV2dT)*(2.*dV2dT)/pow(V2,3.)
+								+ (d2U3dT2*V3 + dU3dT*dV3dT)/pow(V3,2.) - (dU3dT*V3)*(2.*dV3dT)/pow(V3,3.)
+								- (dU3dT*dV3dT + U3*d2V3dT2)/pow(V3,2.) + (U3*dV3dT)*(2.*dV3dT)/pow(V3,3.);
 					dZdP = (dU1dP*V1 - U1*dV1dP)/pow(V1,2.) - (dU2dP*V2 - U2*dV2dP)/pow(V2,2.)
 								+ (dU3dP*V3 - U3*dV3dP)/pow(V3,2.);
 
