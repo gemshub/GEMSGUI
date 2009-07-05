@@ -529,14 +529,14 @@ AGAIN_SETUP:
                           php->ncpM = 0;
                           php->nscM = 12; // last changed 12.12.2008 (TW)
                           php->npxM = 0;
-//                          php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
+                          // php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
                           break;
           case SM_PRFLUID:  // Peng-Robinson-Stryjek-Vera (PRSV) EoS, one binary interaction parameter
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
 						  if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
 							  php->ncpN = (php->nDC*(php->nDC-1)/2);
-                          php->ncpM = 1;  // NPcoef
+                          php->ncpM = 2;  // NPcoef
                           php->nscM = 7;  // set to 7 to pull all parameters from CPg
                           php->npxM = 2;
                           break;
@@ -545,7 +545,7 @@ AGAIN_SETUP:
                               php->ncpN = 1;
 						  if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
 							  php->ncpN = (php->nDC*(php->nDC-1)/2);
-                          php->ncpM = 1;  // NPcoef
+                          php->ncpM = 2;  // NPcoef
                           php->nscM = 7;  // set to 7 to pull all parameters from CPg
                           php->npxM = 2;
                           break;
