@@ -174,6 +174,7 @@ enum solmod_switches { /* indexes of keys of model solution*/
     LINK_UX_MODE,
     LINK_TP_MODE,
     LINK_FIA_MODE,
+    LINK_PHP_MODE,
 
     // Posible modes of calculation of activity coefficients (private, public)
     SM_UNDEF = 'N',

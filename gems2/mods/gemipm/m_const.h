@@ -55,6 +55,7 @@ enum solmod_switches { // indexes of keys of model solution
     LINK_UX_MODE,
     LINK_TP_MODE,
     LINK_FIA_MODE,
+    LINK_PHP_MODE,
     // Posible values of �of keys of model solution - DCOMP_DEP, SPHAS_DEP
     SM_UNDEF = 'N',
     SM_TPDEP = 'T',

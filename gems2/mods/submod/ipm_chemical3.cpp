@@ -353,7 +353,7 @@ static double ICold=0.;
 // 		Added 13.03.2008 by DK: returns int value showing (if not 0)
 //    	that some extreme values were obtained for some SACTs, PSIs,
 //    	or activity coefficients (for detecting bad PIA case)
-// LINK_EP_MODE - calculation of excess properties after GEMIPM has converged
+// LINK_PHP_MODE - calculation of integral phase properties after GEMIPM has converged
 //		needs to be implemented
 
 long int
@@ -461,6 +461,34 @@ TMulti::GammaCalc( long int LinkMode  )
             }
         } // k
         break;
+    case LINK_PHP_MODE: // Mode of calculation of integral solution phase properties
+    	for( k=0; k<pmp->FIs; k++ )
+        { // loop on solution phases
+            jb = je;
+            je += pmp->L1[k];
+
+    		switch( pmp->PHC[k] )
+            {
+              case PH_AQUEL:
+			  case PH_LIQUID:
+              case PH_SINCOND:
+              case PH_SINDIS:
+              case PH_HCARBL:
+              case PH_SIMELT:
+              case PH_GASMIX:
+              case PH_PLASMA:
+              case PH_FLUID:
+           	       SolModExcessProp( k, sMod[SPHAS_TYP] ); // extracting integral phase properties
+           	       SolModIdealProp( jb, k, sMod[SPHAS_TYP] );
+           	       SolModStandProp( jb, k, sMod[SPHAS_TYP] );
+           	       SolModDarkenProp( jb, k, sMod[SPHAS_TYP] );
+           	       break;
+			  default:
+					break;
+            }
+       } // k
+       break;
+
     case LINK_UX_MODE:
     	// Getting actual smoothing parameter
     	// SetSmoothingFactor();   // Changed 18.06.2008 by DK
@@ -640,6 +668,27 @@ TMulti::GammaCalc( long int LinkMode  )
         case LINK_FIA_MODE: // cold start approximation
             goto END_LOOP;
         	break;
+        case LINK_PHP_MODE: // Mode of calculation of integral solution phase properties
+        		switch( pmp->PHC[k] )
+                {
+                  case PH_AQUEL:
+    			  case PH_LIQUID:
+                  case PH_SINCOND:
+                  case PH_SINDIS:
+                  case PH_HCARBL:
+                  case PH_SIMELT:
+                  case PH_GASMIX:
+                  case PH_PLASMA:
+                  case PH_FLUID:  // How to pull this stuff out of the script?
+            //   	       SolModExcessProp( k, sMod[SPHAS_TYP] ); // extracting integral phase properties
+            //   	       SolModIdealProp( jb, k, sMod[SPHAS_TYP] );
+            //   	       SolModStandProp( jb, k, sMod[SPHAS_TYP] );
+            //   	       SolModDarkenProp( jb, k, sMod[SPHAS_TYP] );
+               	       break;
+    			  default:
+    					break;
+                }
+             break;
         case LINK_UX_MODE:  // the model is dependent on current concentrations on IPM iteration
             switch( pmp->PHC[k] )
             {  //
