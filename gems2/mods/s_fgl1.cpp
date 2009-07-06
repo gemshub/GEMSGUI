@@ -1897,9 +1897,9 @@ THelgeson::THelgeson( long int NSpecies, long int NParams, long int NPcoefs, lon
 	EpsW = eW;
 	ac = aIPc[1];   // common ion size parameter
 	bc = aIPc[0];   // common b_gamma
-	flagNeut = aIPc[2];   // 0: unity, 1: calculated
-	flagH2O = aIPc[3];   // 0: unity, 1: calculated
-	flagElect = aIPc[4];  // 0: constant, 1: NaCl, 2: KCl, 3: NaOH, 4: KOH
+	flagNeut = (long int)aIPc[2];   // 0: unity, 1: calculated
+	flagH2O = (long int)aIPc[3];   // 0: unity, 1: calculated
+	flagElect = (long int)aIPc[4];  // 0: constant, 1: NaCl, 2: KCl, 3: NaOH, 4: KOH
 }
 
 
@@ -2609,8 +2609,8 @@ TDavies::TDavies( long int NSpecies, long int NParams, long int NPcoefs, long in
 	RhoW = dW;
 	EpsW = eW;
 	flagNeut = 0;
-	flagMol = aIPc[2];  // 0: no scale correction, 1: scale correction
-	flagH2O = aIPc[3];  // 0: unity, 1: calculated
+	flagMol = (long int)aIPc[2];  // 0: no scale correction, 1: scale correction
+	flagH2O = (long int)aIPc[3];  // 0: unity, 1: calculated
 }
 
 
@@ -2919,8 +2919,8 @@ TLimitingLaw::TLimitingLaw( long int NSpecies, long int NParams, long int NPcoef
 	z = arZ;
 	RhoW = dW;
 	EpsW = eW;
-	flagNeut = aIPc[2];  // 0: unity
-	flagH2O = aIPc[3];  // 0: unity, 1: calculated
+	flagNeut = (long int)aIPc[2];  // 0: unity
+	flagH2O = (long int)aIPc[3];  // 0: unity, 1: calculated
 }
 
 
@@ -3226,8 +3226,8 @@ TDebyeHueckel::TDebyeHueckel( long int NSpecies, long int NParams, long int NPco
 	EpsW = eW;
 	ac = 3.72;   // common ion size parameter
 	bc = 0.064;   // common b_setch
-	flagNeut = aIPc[2];   // 0: unity, 1: calculated from bg
-	flagH2O = aIPc[3];   // 0: unity, 1: calculated from bg
+	flagNeut = (long int)aIPc[2];   // 0: unity, 1: calculated from bg
+	flagH2O = (long int)aIPc[3];   // 0: unity, 1: calculated from bg
 }
 
 
@@ -3586,9 +3586,9 @@ TKarpov::TKarpov( long int NSpecies, long int NParams, long int NPcoefs, long in
 	EpsW = eW;
 	ac = aIPc[1];   // common ion size parameter
 	bc = aIPc[0];   // common b_gamma
-	flagNeut = aIPc[2];   // 0: unity, 1: calculated
-	flagH2O = aIPc[3];   // 0: unity, 1: calculated
-	flagElect = aIPc[4];  // 0: constant, 1: NaCl, 2: KCl, 3: NaOH, 4: KOH
+	flagNeut = (long int)aIPc[2];   // 0: unity, 1: calculated
+	flagH2O = (long int)aIPc[3];   // 0: unity, 1: calculated
+	flagElect = (long int)aIPc[4];  // 0: constant, 1: NaCl, 2: KCl, 3: NaOH, 4: KOH
 }
 
 
@@ -4272,9 +4272,9 @@ TShvarov::TShvarov( long int NSpecies, long int NParams, long int NPcoefs, long 
 	EpsW = eW;
 	ac = aIPc[1];   // common ion size parameter
 	bc = aIPc[0];   // common b_gamma
-	flagNeut = aIPc[2];   // 0: unity, 1: calculated
-	flagH2O = aIPc[3];   // 0: unity, 1: calculated
-	flagElect = aIPc[4];  // 0: constant, 1: NaCl, 2: KCl, 3: NaOH, 4: KOH
+	flagNeut = (long int)aIPc[2];   // 0: unity, 1: calculated
+	flagH2O = (long int)aIPc[3];   // 0: unity, 1: calculated
+	flagElect = (long int)aIPc[4];  // 0: constant, 1: NaCl, 2: KCl, 3: NaOH, 4: KOH
 }
 
 
