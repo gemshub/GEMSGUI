@@ -410,6 +410,7 @@ TMulti::GammaCalc( long int LinkMode  )
             pmp->Gamma[j] = 1.;
         }
         break;      // added as bugfix 04.03.2008  DK
+
     case LINK_TP_MODE:  // Built-in functions depending on T,P only
          pmp->FitVar[3] = 1.0;  // resetting the IPM smoothing factor
 
@@ -461,6 +462,7 @@ TMulti::GammaCalc( long int LinkMode  )
             }
         } // k
         break;
+
     case LINK_PHP_MODE: // Mode of calculation of integral solution phase properties
     	for( k=0; k<pmp->FIs; k++ )
         { // loop on solution phases
@@ -665,9 +667,11 @@ TMulti::GammaCalc( long int LinkMode  )
                 }
             }
         	break;
+
         case LINK_FIA_MODE: // cold start approximation
             goto END_LOOP;
         	break;
+
         case LINK_PHP_MODE: // Mode of calculation of integral solution phase properties
         		switch( pmp->PHC[k] )
                 {
@@ -680,15 +684,16 @@ TMulti::GammaCalc( long int LinkMode  )
                   case PH_GASMIX:
                   case PH_PLASMA:
                   case PH_FLUID:  // How to pull this stuff out of the script?
-            //   	       SolModExcessProp( k, sMod[SPHAS_TYP] ); // extracting integral phase properties
-            //   	       SolModIdealProp( jb, k, sMod[SPHAS_TYP] );
-            //   	       SolModStandProp( jb, k, sMod[SPHAS_TYP] );
-            //   	       SolModDarkenProp( jb, k, sMod[SPHAS_TYP] );
+                	  // SolModExcessProp( k, sMod[SPHAS_TYP] ); // extracting integral phase properties
+                	  // SolModIdealProp( jb, k, sMod[SPHAS_TYP] );
+                	  // SolModStandProp( jb, k, sMod[SPHAS_TYP] );
+                	  // SolModDarkenProp( jb, k, sMod[SPHAS_TYP] );
                	       break;
     			  default:
     					break;
                 }
              break;
+
         case LINK_UX_MODE:  // the model is dependent on current concentrations on IPM iteration
             switch( pmp->PHC[k] )
             {  //

@@ -502,13 +502,14 @@ if( pmp->PCI < 1e-7 || pmp->PCI > 1e-3 )
   pmp->PCI = sqrt( pmp->PCI );
 }
 */
+
 pmp->logCDvalues[0] = pmp->logCDvalues[1] = pmp->logCDvalues[2] = pmp->logCDvalues[3] =
    	 pmp->logCDvalues[4] = log( pmp->PCI );  // reset CD sampler array
         if( pmp->PD >= 2 /* && pmp->Lads==0 */ )    // added for stability at PIA 06.03.2008 DK
         {
         	GammaCalc( LINK_UX_MODE);
-//          if( pmp->PD >= 3 )
-//        	    GammaCalc( LINK_PHP_MODE);    // Temporarily disabled (DK 06.07.2009)
+				// if( pmp->PD >= 3 )
+				// GammaCalc( LINK_PHP_MODE );  // Temporarily disabled (DK 06.07.2009)
         }
 
         if( pmp->pNP <= -1 )
@@ -643,7 +644,8 @@ STEP_POINT("FIA Iteration");
     //  Prescribed mass balance precision cannot be reached
     //  Take a look at vector b or values of DHB and DS
 
-    long int ScaleEFD = 1;  // added 11.02.2009 (TW)
+    long int ScaleEFD = 1000;  // added 11.02.2009 (TW)
+    // long int ScaleEFD = 1;  // added 11.02.2009 (TW)
    if( IT1 == ScaleEFD * pa->p.DP )
    {  // Experimental
        iRet = 2;
@@ -820,8 +822,8 @@ pmp->PCI = pmp->DX * 0.999999; // temporary
   if( pmp->PD == 1 || pmp->PD == 2  || pmp->PD == 3  )
   {
 	  GammaCalc( LINK_UX_MODE );
-	  if( pmp->PD >= 3 )
-	      GammaCalc( LINK_PHP_MODE); // May be temporarily disabled (DK 06.07.2009)
+		  // if( pmp->PD >= 3 )
+		  // GammaCalc( LINK_PHP_MODE );  // Temporarily disabled (DK 06.07.2009)
   }
 //   else
   ConCalc( pmp->X, pmp->XF, pmp->XFA );
