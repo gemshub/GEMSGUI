@@ -1195,6 +1195,7 @@ class TDebyeHueckel: public TSolMod
 		double bc;  // common extended-term parameter
 
 		// internal work objects
+		double ao;  // average ion-size parameter
 		double *LnG;  // activity coefficient
 		double *dLnGdT;  // derivatives
 		double *d2LnGdT2;

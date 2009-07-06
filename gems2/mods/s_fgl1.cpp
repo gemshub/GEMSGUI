@@ -99,7 +99,7 @@ long int TSIT::PTparam()
 	dAdP = 1./2.*A*( bet - 3.*dedp);
 
  	ErrorIf( fabs(A) < 1e-9, "SIT model",
- 			"Error: DH parameter A was not calculated - no values of RoW and EpsW !" );
+ 			"Error: DH parameter A was not calculated - no values of RhoW and EpsW !" );
 
 	return 0;
 }
@@ -984,6 +984,9 @@ double TPitzer::A_Factor( double T )
 	// Computing A- Factor
 	Aphi = (1./3.) * pow((2.*pi*N0*dens*1000.),0.5) * pow((el*el)/(eps*4.*pi*eps0*k*T),1.5);
 
+ 	ErrorIf( fabs(Aphi) < 1e-9, "Pitzer model",
+ 			"Error: DH parameter A was not calculated - no values of RhoW and EpsW !" );
+
 	return Aphi;
 }
 
@@ -1560,7 +1563,7 @@ long int TEUNIQUAC::PTparam()
 	dAdP = 0.;
 
  	ErrorIf( fabs(A) < 1e-9, "EUNIQUAC model",
- 			"Error: DH parameter A was not calculated - no values of RoW and EpsW !" );
+ 			"Error: DH parameter A was not calculated - no values of RhoW and EpsW !" );
 
 	return 0;
 }
@@ -1953,7 +1956,7 @@ long int THelgeson::PTparam()
 	dBdP = 1./2.*B*( bet - dedp );
 
  	ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "Helgeson EDH model",
- 			"Error: DH parameter A or B was not calculated - no values of RoW and EpsW !" );
+ 			"Error: DH parameter A or B was not calculated - no values of RhoW and EpsW !" );
 
 	// b_gamma constant
 	if ( flagElect == 0)
@@ -2660,7 +2663,7 @@ long int TDavies::PTparam()
 	dAdP = 1./2.*A*( bet - 3.*dedp);
 
  	ErrorIf( fabs(A) < 1e-9, "Davies model",
- 			"Error: DH parameter A was not calculated - no values of RoW and EpsW !" );
+ 			"Error: DH parameter A was not calculated - no values of RhoW and EpsW !" );
 
 	return 0;
 }
@@ -2970,7 +2973,7 @@ long int TLimitingLaw::PTparam()
 	dAdP = 1./2.*A*( bet - 3.*dedp);
 
  	ErrorIf( fabs(A) < 1e-9, "DH limiting law model",
- 			"Error: DH parameter A was not calculated - no values of RoW and EpsW !" );
+ 			"Error: DH parameter A was not calculated - no values of RhoW and EpsW !" );
 
 	return 0;
 }
@@ -3293,7 +3296,7 @@ long int TDebyeHueckel::PTparam()
 	dBdP = 1./2.*B*( bet - dedp );
 
  	ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "DH two-term model",
- 			"Error: DH parameter A or B was not calculated - no values of RoW and EpsW !" );
+ 			"Error: DH parameter A or B was not calculated - no values of RhoW and EpsW !" );
 
 	return 0;
 }
@@ -3302,8 +3305,9 @@ long int TDebyeHueckel::PTparam()
 // Calculates activity coefficients
 long int TDebyeHueckel::MixMod()
 {
-	long int j, w;
-	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, lg_to_ln;
+	long int j, k, w;
+	double sqI, Z2, lgGam, lnGam, Nw, Lgam, Lam, lnActWat, lnwxWat, WxW, lg_to_ln,
+				SigTerm, Phi, Phit;
 	lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
@@ -3361,16 +3365,30 @@ long int TDebyeHueckel::MixMod()
 				lgGam = 0.0;
 				lnGam = 0.0;
 
-				// rational osmotic coefficient
+				// water activity coefficient calculated
 				if ( flagH2O == 1 )
 				{
-					lgGam = bg[j] * molT;
-					lnGam = lgGam * lg_to_ln;
-				}
+					Phit = 0.0;
+					// Phi corrected using eq. (190) from Helgeson et al. (1981)
+					Lam = 1. + (ao*B) * sqI;
+					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
+					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
+					// Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (Lgam*psi)/(0.0180153*2.*IS) - bgam*IS/2. );
 
+					for (k=0; k<(NComp-1); k++)
+					{
+						if ( (z[k] == 0) && (flagNeut == 1) )
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bg[j]*IS/2. );
+						else
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - 0. );
+					}
+
+					Phi = Phit/molT;
+					lnActWat = - Phi*molT/Nw;
+					lnGam = lnActWat - lnwxWat;
+				}
 				else
 					lnGam = 0.0;
-
 				lnGamma[j] = lnGam;
 			}
 		}
@@ -3541,8 +3559,8 @@ long int TDebyeHueckel::IdealProp( double *Zid )
 long int TDebyeHueckel::IonicStrength()
 {
 	long int j;
-	double is, mt;
-	is = 0.0; mt = 0.0;
+	double is, mt, mz, as;
+	is = 0.0; mt = 0.0; mz = 0.0; as = 0.0;
 
 	// calculate ionic strength and total molalities
 	// needs to be modified when nonaqueous solvents are present
@@ -3550,11 +3568,17 @@ long int TDebyeHueckel::IonicStrength()
 	{
 		is += 0.5*m[j]*z[j]*z[j];
 		mt += m[j];
+		if ( z[j] )
+		{
+			mz += m[j];
+			as += m[j]*an[j];
+		}
 	}
 
 	// assignments
 	IS = is;
 	molT = mt;
+	ao = as/mz;
 
 	return 0;
 }
@@ -3654,7 +3678,7 @@ long int TKarpov::PTparam()
 	dBdP = 1./2.*B*( bet - dedp );
 
  	ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "Karpov EDH model",
- 			"Error: DH parameter A or B was not calculated - no values of RoW and EpsW !" );
+ 			"Error: DH parameter A or B was not calculated - no values of RhoW and EpsW !" );
 
 	// b_gamma constant
 	if ( flagElect == 0)
@@ -4339,7 +4363,7 @@ long int TShvarov::PTparam()
 	dBdP = 1./2.*B*( bet - dedp );
 
  	ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "Shvarov EDH model",
- 			"Error: DH parameter A or B was not calculated - no values of RoW and EpsW !" );
+ 			"Error: DH parameter A or B was not calculated - no values of RhoW and EpsW !" );
 
 	// b_gamma constant
 	if ( flagElect == 0)
