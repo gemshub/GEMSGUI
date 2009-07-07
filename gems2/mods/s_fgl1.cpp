@@ -2651,8 +2651,8 @@ TDavies::TDavies( long int NSpecies, long int NParams, long int NPcoefs, long in
 	RhoW = dW;
 	EpsW = eW;
 	flagNeut = 0;
-	flagMol = (long int)aIPc[2];  // 0: no scale correction, 1: scale correction
 	flagH2O = (long int)aIPc[3];  // 0: unity, 1: calculated
+	flagMol = (long int)aIPc[5];  // 0: no scale correction, 1: scale correction
 }
 
 
@@ -2742,7 +2742,7 @@ long int TDavies::MixMod()
 			lgGam = 0.0;
 			Z2 = z[j]*z[j];
 			lgGam = ( -A * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * IS );
-			if ( flagMol == 1 )
+			if ( (flagMol == 0) || (flagMol == 1) )
 				lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
 			else
 				lnGamma[j] = lgGam * lg_to_ln;
@@ -2755,7 +2755,7 @@ long int TDavies::MixMod()
 			if ( j != (NComp-1) )
 			{
 				lgGam = 0.0;
-				if ( flagMol == 1 )
+				if ( (flagMol == 0) || (flagMol == 2) )
 					lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
 				else
 					lnGamma[j] = lgGam * lg_to_ln;
