@@ -23,8 +23,8 @@ const char * dfAqKeyH =  "a   AQELIA  aq_gen          aq  EDH_H           ";
 const char * dfAqKey3 =  "a   AQELIA  aq_gen          aq  EDH_K           ";
 const char * dfAqKey2 =  "a   AQELIA  aq_gen          aq  DH_K            ";
 const char * dfAqKey1 =  "a   AQELIA  aq_gen          aq  DH_LL           ";
-const char * dfAqKeyS =  "a   AQELSI  aq_gen          aq  SIT             ";
-const char * dfAqKeyU =  "a   AQELSI  aq_gen          aq  EUNIQUAC        ";
+const char * dfAqKeyY =  "a   AQELIA  aq_gen          aq  EDH_Y           ";
+const char * dfAqKeyU =  "a   AQELSI  aq_gen          aq  User-Provided   ";
 const char * dfGasKey =  "g   GASMXID gas_gen         gm  Ideal           ";
 const char * dfFluKey =  "f   FLUIDMX fluid_gen       gm  GC_EoS          ";
 
@@ -63,6 +63,7 @@ AutoPhaseDialog::AutoPhaseDialog (
     {
       case '-': aselNo->setChecked( true ); break;
       case 'U': aselU->setChecked( true );  break;
+      case 'Y': aselY->setChecked( true ); break;
       case 'H': aselH->setChecked( true ); break;
       case '3': asel3->setChecked( true ); break;
       case '2': asel2->setChecked( true ); break;
@@ -106,6 +107,7 @@ AutoPhaseDialog::get_apar ( float par[8] )
     par[2] = (float)apEdit2->currentItem();
     par[3] = (float)apEdit3->currentItem();
     par[4] = (float)pBG_T->currentItem();
+    par[5] = (float)comMolal->currentItem();
 }
 
 void
@@ -141,6 +143,7 @@ AutoPhaseDialog::set_apar ( float par[8] )
     apEdit3->setCurrentItem( (int)par[3] );
 //   apEdit3->setText( str.setNum( (double)par[3] ) );
     pBG_T->setCurrentItem( (int)par[4] );
+    comMolal->setCurrentItem( (int)par[5] );
 }
 
 char
@@ -158,8 +161,8 @@ AutoPhaseDialog::get_acode()
                   aqu_code ='2';
                else if( asel1->isChecked())
                      aqu_code = '1';
-                 else if( aselS->isChecked())
-                       aqu_code = 'S';
+                 else if( aselY->isChecked())
+                       aqu_code = 'Y';
                    else if( aselNo->isChecked())
                          aqu_code = '-';
   return aqu_code;
@@ -189,8 +192,8 @@ AutoPhaseDialog::set_akey( gstring& a_key )
                   aqu_key = dfAqKey2;
                else if( asel1->isChecked())
                       aqu_key = dfAqKey1;
-//                   else if( asel1->isChecked())
-//                         aqu_key = dfAqKeyS;
+                   else if( aselY->isChecked())
+                         aqu_key = dfAqKeyY;
                       else if( aselNo->isChecked())
                             aqu_key ="";
 

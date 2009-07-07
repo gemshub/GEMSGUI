@@ -1300,7 +1300,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
 							apar[0], tempdbuf, apar[1], neutbuf, H2Obuf );
                 break;
        case 'Y': // EDH model with common bg and common a0 (Shvarov)
-                memcpy( php->sol_t, "HNNSNN", 6 );
+                memcpy( php->sol_t, "YNNSNN", 6 );
                 memcpy( &php->PphC, "a++---", 6 );
                 php->ncpN = 2;
                 php->ncpM = 4;
@@ -1357,7 +1357,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
     part = "a:*:*:*:";
 
 // Call assembling of the aqueous phase
-    AssemblePhase( akey, part, apar, file, useLst, lst, 5 );
+    AssemblePhase( akey, part, apar, file, useLst, lst, 6 );
 
 MAKE_GAS_PHASE:
     Name = "Auto-set ";

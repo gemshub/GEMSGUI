@@ -657,6 +657,7 @@ TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     aparam[2] = aPa->pa.aqPar[2];
     aparam[3] = aPa->pa.aqPar[3];
     aparam[4] = aPa->pa.aqPar[4];
+    aparam[5] = 0.;
     gparam[0] = 0.; //  = aPa->pa.ResFloat;
     gparam[1]=gparam[2]=gparam[3]=0.0;
 
