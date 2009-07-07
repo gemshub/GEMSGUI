@@ -4375,7 +4375,7 @@ long int TShvarov::PTparam()
 	// read and copy individual bj parameters
 	for (j=0; j<NComp; j++)
 	{
-		if ( (aDCc[NP_DC*j+1]) >= 0 )
+		if ( (aDCc[NP_DC*j+1]) > 0 )
 			bj[j] = aDCc[NP_DC*j+1];  // individual bj
 		else
 			bj[j] = 1.;
