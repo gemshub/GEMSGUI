@@ -76,7 +76,7 @@ the aqueous phase model</string>
                                     <cstring>textLabel2_5</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>b_gamma (298,1) value:</string>
+                                    <string>b_gamma (298,1) value</string>
                                 </property>
                             </widget>
                             <widget class="QComboBox">
@@ -159,7 +159,7 @@ the aqueous phase model</string>
                                     <cstring>textLabel2_2_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Common a0 value:</string>
+                                    <string>Common a0 value</string>
                                 </property>
                             </widget>
                             <widget class="QComboBox">
@@ -198,7 +198,7 @@ the aqueous phase model</string>
                                     <cstring>textLabel2_3_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Gamma (neutral sp.)</string>
+                                    <string>Gamma (neutral species)</string>
                                 </property>
                             </widget>
                             <widget class="QComboBox">
@@ -224,7 +224,7 @@ the aqueous phase model</string>
                                     <cstring>textLabel2_4_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Gamma (H2O)</string>
+                                    <string>Gamma (water solvent)</string>
                                 </property>
                             </widget>
                             <widget class="QComboBox">
@@ -235,12 +235,7 @@ the aqueous phase model</string>
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>From osmotic coeff.</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>From Gibbs-Duhem </string>
+                                        <string>From osmotic coefficient</string>
                                     </property>
                                 </item>
                                 <property name="name">
@@ -255,28 +250,28 @@ the aqueous phase model</string>
                                     <cstring>textLabel1_3</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>molality conversion</string>
+                                    <string>Molality conversion</string>
                                 </property>
                             </widget>
                             <widget class="QComboBox">
                                 <item>
                                     <property name="text">
-                                        <string>to all species</string>
+                                        <string>All species</string>
                                     </property>
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>to charged only</string>
+                                        <string>Charged species only</string>
                                     </property>
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>to neutral only</string>
+                                        <string>Neutral species only</string>
                                     </property>
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>no conversion</string>
+                                        <string>No conversion</string>
                                     </property>
                                 </item>
                                 <property name="name">
@@ -315,7 +310,7 @@ the aqueous phase model</string>
                                     <cstring>aselH</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>IA with extended Debye-Hueckel equation, common b_gamma and a0, &amp;H</string>
+                                    <string>IA with extended Debye-Hueckel equation (Helgeson), common b_gamma and a0, &amp;H</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+H</string>
@@ -326,7 +321,7 @@ the aqueous phase model</string>
                                     <cstring>aselY</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>IA with extended Debye-Hueckel equation, common b_gamma and a0, &amp;Y</string>
+                                    <string>IA with extended Debye-Hueckel equation (Shvarov), common b_gamma and a0, &amp;Y</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+Y</string>
@@ -337,7 +332,7 @@ the aqueous phase model</string>
                                     <cstring>asel3</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>IA with extended Debye-Hueckel equation, common b_gamma, individual a0, &amp;3</string>
+                                    <string>IA with extended Debye-Hueckel equation (Karpov), common b_gamma, individual a0, &amp;3</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+3</string>
@@ -351,7 +346,7 @@ the aqueous phase model</string>
                                     <cstring>asel2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>IA with Debye-Hueckel equation, no b_gamma, individual (Kielland) a0, &amp;2</string>
+                                    <string>IA with Debye-Hueckel equation, no b_gamma, individual a0, &amp;2</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+2</string>
