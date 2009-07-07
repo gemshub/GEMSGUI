@@ -66,21 +66,60 @@ void TSIT::alloc_internal()
 	dLnGdT = new double [NComp];
 	d2LnGdT2 = new double [NComp];
 	dLnGdP = new double [NComp];
+	e0 = new double *[NComp];
+	e1 = new double *[NComp];
+
+	for (long int j=0; j<NComp; j++)
+	{
+		e0[j] = new double [NComp];
+		e1[j] = new double [NComp];
+	}
 }
 
 
 void TSIT::free_internal()
 {
+	for (long int j=0; j<NComp; j++)
+	{
+		delete[]e0[j];
+		delete[]e1[j];
+	}
 	delete[]LnG;
 	delete[]dLnGdT;
 	delete[]d2LnGdT2;
 	delete[]dLnGdP;
+	delete[]e0;
+	delete[]e1;
 }
 
 
 long int TSIT::PTparam()
 {
-	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
+	long int j, i, ip, i1, i2;
+	double p0, p1, alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
+
+	// fill internal arrays of interaction parameters with standard value
+	for (j=0; j<NComp; j++)
+	{
+		for (i=0; i<NComp; i++)
+		{
+			e0[j][i] = 0.0;
+			e1[j][i] = 0.0;
+		}
+	}
+
+	// read and convert interaction parameters that have non-standard value
+	for (ip=0; ip<NPar; ip++)
+	{
+		i1 = aIPx[MaxOrd*ip];
+		i2 = aIPx[MaxOrd*ip+1];
+		p0 = aIPc[NPcoef*ip+0];
+		p1 = aIPc[NPcoef*ip+1];
+		e0[i1][i2] = p0;
+		e1[i1][i2] = p1;
+		e0[i2][i1] = p0;
+		e1[i2][i1] = p1;
+	}
 
 	// read and convert rho and eps
 	rho = RhoW[0];
@@ -108,7 +147,7 @@ long int TSIT::PTparam()
 // Calculates activity coefficients in SIT (NEA) model
 long int TSIT::MixMod()
 {
-	long int j, index1, index2, ip;
+	long int j, i1, i2, ip;
     double sqI, lgI, Z2, lgGam, SumSIT, lg_to_ln;
     lg_to_ln = 2.302585093;
 
@@ -136,20 +175,20 @@ long int TSIT::MixMod()
 		{
 			for( ip=0; ip<NPar; ip++ )
 			{
-				index1 = aIPx[ip*MaxOrd];  // order of indexes for binary parameters plays no role
-				index2 = aIPx[ip*MaxOrd+1];
+				i1 = aIPx[ip*MaxOrd];  // order of indexes for binary parameters plays no role
+				i2 = aIPx[ip*MaxOrd+1];
 
-				if( index1 == index2 )
+				if( i1 == i2 )
 					continue;
 
-				if( index1 == j )
+				if( i1 == j )
 				{
-					SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index2]; // epsilon
+					SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[i2]; // epsilon
 				}
 
-				else if( index2 == j )
+				else if( i2 == j )
 				{
-					SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index1]; // epsilon
+					SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[i1]; // epsilon
 				}
 			}
 		}

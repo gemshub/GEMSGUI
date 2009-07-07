@@ -727,6 +727,8 @@ class TSIT: public TSolMod
 		double *dLnGdT;  // derivatives
 		double *d2LnGdT2;
 		double *dLnGdP;
+		double **e0;  // interaction parameter
+		double **e1;
 
 		// internal functions
 		double IonicStrength();
