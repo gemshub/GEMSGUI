@@ -47,8 +47,8 @@ TSIT::TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxO
         			 arlnGam, aphVOL, T_k, P_bar )
 {
 	alloc_internal();
-	aZ = arZ;
-	aM = arM;
+	z = arZ;
+	m = arM;
 	RhoW = dW;
 	EpsW = eW;
 }
@@ -66,13 +66,21 @@ void TSIT::alloc_internal()
 	dLnGdT = new double [NComp];
 	d2LnGdT2 = new double [NComp];
 	dLnGdP = new double [NComp];
-	e0 = new double *[NComp];
-	e1 = new double *[NComp];
+	E0 = new double *[NComp];
+	E1 = new double *[NComp];
+	dE0 = new double *[NComp];
+	dE1 = new double *[NComp];
+	d2E0 = new double *[NComp];
+	d2E1 = new double *[NComp];
 
 	for (long int j=0; j<NComp; j++)
 	{
-		e0[j] = new double [NComp];
-		e1[j] = new double [NComp];
+		E0[j] = new double [NComp];
+		E1[j] = new double [NComp];
+		dE0[j] = new double [NComp];
+		dE1[j] = new double [NComp];
+		d2E0[j] = new double [NComp];
+		d2E1[j] = new double [NComp];
 	}
 }
 
@@ -81,15 +89,23 @@ void TSIT::free_internal()
 {
 	for (long int j=0; j<NComp; j++)
 	{
-		delete[]e0[j];
-		delete[]e1[j];
+		delete[]E0[j];
+		delete[]E1[j];
+		delete[]dE0[j];
+		delete[]dE1[j];
+		delete[]d2E0[j];
+		delete[]d2E1[j];
 	}
 	delete[]LnG;
 	delete[]dLnGdT;
 	delete[]d2LnGdT2;
 	delete[]dLnGdP;
-	delete[]e0;
-	delete[]e1;
+	delete[]E0;
+	delete[]E1;
+	delete[]dE0;
+	delete[]dE1;
+	delete[]d2E0;
+	delete[]d2E1;
 }
 
 
@@ -103,8 +119,12 @@ long int TSIT::PTparam()
 	{
 		for (i=0; i<NComp; i++)
 		{
-			e0[j][i] = 0.0;
-			e1[j][i] = 0.0;
+			E0[j][i] = 0.0;
+			E1[j][i] = 0.0;
+			dE0[j][i] = 0.0;
+			dE1[j][i] = 0.0;
+			d2E0[j][i] = 0.0;
+			d2E1[j][i] = 0.0;
 		}
 	}
 
@@ -113,12 +133,12 @@ long int TSIT::PTparam()
 	{
 		i1 = aIPx[MaxOrd*ip];
 		i2 = aIPx[MaxOrd*ip+1];
-		p0 = aIPc[NPcoef*ip+0];
+		p0 = aIPc[NPcoef*ip];
 		p1 = aIPc[NPcoef*ip+1];
-		e0[i1][i2] = p0;
-		e1[i1][i2] = p1;
-		e0[i2][i1] = p0;
-		e1[i2][i1] = p1;
+		E0[i1][i2] = p0;
+		E1[i1][i2] = p1;
+		E0[i2][i1] = p0;
+		E1[i2][i1] = p1;
 	}
 
 	// read and convert rho and eps
@@ -152,7 +172,7 @@ long int TSIT::MixMod()
     lg_to_ln = 2.302585093;
 
     I = IonicStrength();
-    sqI = sqrt( I );
+    sqI = sqrt(I);
     lgI = log10(I);
 
     // check already performed in GammaCalc()
@@ -169,7 +189,7 @@ long int TSIT::MixMod()
 		lgGam = 0.;
 
 		// Calculation of the SIT sum (new variant)
-		// Corrected to 2-coeff SIT parameter and extended to neutral species by DK on 13.05.09
+		// Corrected to 2-coeff SIT parameter and extended to neutral species by DK on 13.05.2009
 		SumSIT = 0.;
 		if( j != NComp-1 )  // not for water solvent
 		{
@@ -183,21 +203,23 @@ long int TSIT::MixMod()
 
 				if( i1 == j )
 				{
-					SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[i2]; // epsilon
+					// SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * m[i2]; // epsilon
+					SumSIT += ( E0[i1][i2] + E1[i1][i2]*lgI ) * m[i2];  // epsilon
 				}
 
 				else if( i2 == j )
 				{
-					SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[i1]; // epsilon
+					// SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * m[i1]; // epsilon
+					SumSIT += ( E0[i1][i2] + E1[i1][i2]*lgI ) * m[i1];  // epsilon
 				}
 			}
 		}
 
 		// Charged species
-		if( aZ[j] )
+		if( z[j] )
 		{
 			lgGam = 0.;
-			Z2 = aZ[j]*aZ[j];
+			Z2 = z[j]*z[j];
 			lgGam = ( - A * sqI * Z2 ) / ( 1. + 1.5 * sqI );  // DH part for charged species
 			lgGam += SumSIT;
 			lnGamma[j] = lgGam * lg_to_ln;
@@ -214,7 +236,7 @@ long int TSIT::MixMod()
 				lnGamma[j] = lgGam * lg_to_ln;
 			}
 
-			// water solvent (osmotic coefficient not considered)
+			// water solvent (osmotic coefficient not yet considered)
 			else
 			{
 				lgGam = 0.;
@@ -230,47 +252,49 @@ long int TSIT::MixMod()
 long int TSIT::ExcessProp( double *Zex )
 {
 	// (under construction)
-	long int j, index1, index2, ip;
+	long int j, i1, i2, ip;
     double sqI, lgI, Z2, SumSIT, lg_to_ln, g, dgt, d2gt, dgp;
     lg_to_ln = 2.302585093;
     g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
 
     I = IonicStrength();
-    sqI = sqrt( I );
+    sqI = sqrt(I);
     lgI = log10(I);
 
 	// loop over species
 	for( j=0; j<NComp; j++ )
     {
 		// Calculation of the SIT sum (new variant)
-		// Corrected to 2-coeff SIT parameter and extended to neutral species by DK on 13.05.09
+		// Corrected to 2-coeff SIT parameter and extended to neutral species by DK on 13.05.2009
 		SumSIT = 0.;
 		if( j != NComp-1 )  // not for water solvent
 		{
 			for( ip=0; ip<NPar; ip++ )
 			{
-				index1 = aIPx[ip*MaxOrd];  // order of indexes for binary parameters plays no role
-				index2 = aIPx[ip*MaxOrd+1];
+				i1 = aIPx[ip*MaxOrd];  // order of indexes for binary parameters plays no role
+				i2 = aIPx[ip*MaxOrd+1];
 
-				if( index1 == index2 )
+				if( i1 == i2 )
 					continue;
 
-				if( index1 == j )
+				if( i1 == j )
 				{
-					SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index2]; // epsilon
+					// SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * m[index2]; // epsilon
+					SumSIT += ( E0[i1][i2] + E1[i1][i2]*lgI ) * m[i2]; // epsilon
 				}
 
-				else if( index2 == j )
+				else if( i2 == j )
 				{
-					SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index1]; // epsilon
+					// SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * m[index1]; // epsilon
+					SumSIT += ( E0[i1][i2] + E1[i1][i2]*lgI ) * m[i1]; // epsilon
 				}
 			}
 		}
 
-		// Charged species
-		if( aZ[j] )
+		// Charged species (no TP dependence of SIT parameters)
+		if( z[j] )
 		{
-			Z2 = aZ[j]*aZ[j];
+			Z2 = z[j]*z[j];
 			LnG[j] = - ( ( A * sqI * Z2 ) / ( 1. + 1.5 * sqI ) + SumSIT ) * lg_to_ln;
 			dLnGdT[j] = - ( ( dAdT * sqI * Z2 ) / ( 1. + 1.5 * sqI ) ) * lg_to_ln;
 			d2LnGdT2[j] = - ( ( d2AdT2 * sqI * Z2 ) / ( 1. + 1.5 * sqI ) ) * lg_to_ln;
@@ -289,7 +313,7 @@ long int TSIT::ExcessProp( double *Zex )
 				dLnGdP[j] = 0.;
 			}
 
-			// water solvent (osmotic coefficient not considered)
+			// water solvent (osmotic coefficient not yet considered)
 			else
 			{
 				LnG[j] = 0.;
@@ -367,7 +391,7 @@ double TSIT::IonicStrength()
 	double Is = 0.;
 
 	for( long int ii=0; ii<(NComp-1); ii++ )
-		Is += 0.5*( aZ[ii]*aZ[ii]*aM[ii] );
+		Is += 0.5*( z[ii]*z[ii]*m[ii] );
 
 	return Is;
 }
@@ -2096,7 +2120,7 @@ long int THelgeson::MixMod()
 					for (k=0; k<(NComp-1); k++)
 					{
 						if ( (z[k] == 0) && (flagNeut == 0) )
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - 0. );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) );
 						else
 							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bgam*IS/2. );
 					}
@@ -2121,13 +2145,12 @@ long int THelgeson::ExcessProp( double *Zex )
 {
 	long int j, k, w;
 	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, dPhidT, d2PhidT2, dPhidP,
-			Phit, dPhitdT, d2PhitdT2, dPhitdP, lnActWat, lg_to_ln, zc, za, psi,
-			g, dgt, d2gt, dgp;
+			Phit, dPhitdT, d2PhitdT2, dPhitdP, lnActWat, lg_to_ln, g, dgt, d2gt, dgp;
 	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP, U1, U2, U3, V1, V2, V3,
 			dU1dT, dU2dT, dU3dT, dV1dT, dV2dT, dV3dT, d2U1dT2, d2U2dT2, d2U3dT2,
 			d2V1dT2, d2V2dT2, d2V3dT2, dU1dP, dU2dP, dU3dP, dV1dP, dV2dP, dV3dP,
 			L, dLdT, d2LdT2, dLdP, Z, dZdT, d2ZdT2, dZdP;
-	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
+	lg_to_ln = 2.302585093;
 	g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
 
 	// get index of water (assumes water is last species in phase)
@@ -2195,7 +2218,7 @@ long int THelgeson::ExcessProp( double *Zex )
 			// water solvent
 			else
 			{
-				// water activity coeff. calculated
+				// H2O activity coefficient calculated
 				if ( flagH2O == 1 )
 				{
 					Phit = 0.; dPhitdT = 0.; d2PhitdT2 = 0.; dPhitdP = 0.;
@@ -2258,17 +2281,15 @@ long int THelgeson::ExcessProp( double *Zex )
 					// increments to osmotic coefficient (and derivatives)
 					Lam = 1. + (ao*B) * sqI;
 					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
-					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
-					// Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (Lgam*psi)/(0.0180153*2.*IS) - bgam*IS/2. );
 
 					for (k=0; k<(NComp-1); k++)
 					{
 						if ( (z[k] == 0) && (flagNeut == 0) )
 						{
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - 0. );
-							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT - 0. );
-							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 - 0. );
-							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP - 0. );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) );
+							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT );
+							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 );
+							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP );
 						}
 
 						else
@@ -2294,7 +2315,7 @@ long int THelgeson::ExcessProp( double *Zex )
 
 				}
 
-				// water activity coeff. unity
+				// H2O activity coefficient 0
 				else
 				{
 					LnG[j] = 0.;
@@ -2835,6 +2856,7 @@ long int TDavies::ExcessProp( double *Zex )
 			// water solvent
 			else
 			{
+				// H2O activity coefficient calculated
 				if ( flagH2O == 1 )
 				{
 					// add water activity coefficient equation
@@ -2844,6 +2866,7 @@ long int TDavies::ExcessProp( double *Zex )
 					dLnGdP[j] = 0.;
 				}
 
+				// H2O activity coefficient 0
 				else
 				{
 					LnG[j] = 0.;
@@ -3417,9 +3440,9 @@ long int TDebyeHueckel::MixMod()
 					for (k=0; k<(NComp-1); k++)
 					{
 						if ( (z[k] == 0) && (flagNeut == 1) )
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bg[j]*IS/2. );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bg[k]*IS/2. );
 						else
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - 0. );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) );
 					}
 
 					Phi = Phit/molT;
@@ -3441,12 +3464,15 @@ long int TDebyeHueckel::MixMod()
 long int TDebyeHueckel::ExcessProp( double *Zex )
 {
 	// (under construction)
-	long int j, w;
-	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, lg_to_ln, g, dgt, d2gt, dgp,
-			U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP;
+	long int j, k, w;
+	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, dPhidT, d2PhidT2, dPhidP,
+			Phit, dPhitdT, d2PhitdT2, dPhitdP, lnActWat, lg_to_ln, g, dgt, d2gt, dgp;
+	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP, U1, U2, U3, V1, V2, V3,
+			dU1dT, dU2dT, dU3dT, dV1dT, dV2dT, dV3dT, d2U1dT2, d2U2dT2, d2U3dT2,
+			d2V1dT2, d2V2dT2, d2V3dT2, dU1dP, dU2dP, dU3dP, dV1dP, dV2dP, dV3dP,
+			L, dLdT, d2LdT2, dLdP, Z, dZdT, d2ZdT2, dZdP;
 	lg_to_ln = 2.302585093;
 	g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
-
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
@@ -3513,16 +3539,97 @@ long int TDebyeHueckel::ExcessProp( double *Zex )
 			// water solvent
 			else
 			{
-				// rational osmotic coefficient
+				// H2O activity coefficient calculated
 				if ( flagH2O == 1 )
 				{
+					Phit = 0.; dPhitdT = 0.; d2PhitdT2 = 0.; dPhitdP = 0.;
 
-					LnG[j] = ( bg[j] * molT ) * lg_to_ln;
-					dLnGdT[j] = 0.;
-					d2LnGdT2[j] = 0.;
-					dLnGdP[j] = 0.;
+					// derivatives of lambda and sigma terms
+					L = 1. + (ao*B) * sqI;
+					dLdT = ( ao*dBdT ) * sqI;
+					d2LdT2 = ( ao*d2BdT2 ) * sqI;
+					dLdP = ( ao*dBdP ) * sqI;
+
+					U1 = (A*L);
+					dU1dT = (dAdT*L + A*dLdT);
+					d2U1dT2 = ( d2AdT2*L + 2.*dAdT*dLdT + A*d2LdT2 );
+					dU1dP = ( dAdP*L + A*dLdP );
+					V1 = pow(ao,3.)*pow(B,3.) * IS;
+					dV1dT = ( 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;
+					d2V1dT2 = ( 6.*pow(ao,3.)*B*pow(dBdT,2.) + 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
+					dV1dP = ( 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
+
+					U2 = A;
+					dU2dT = dAdT;
+					d2U2dT2 = d2AdT2;
+					dU2dP = dAdP;
+					V2 = pow(ao,3.)*pow(B,3.)*L * IS;
+					dV2dT = ( 3.*pow(ao,3.)*pow(B,2.)*dBdT*L + pow(ao,3.)*pow(B,3.)*dLdT ) * IS;
+					d2V2dT2 = ( 6.*pow(ao,3.)*B*pow(dBdT,2.)*L + 3.*pow(ao,3.)*pow(B,2.)*d2BdT2*L
+								+ 6.*pow(ao,3.)*pow(B,2.)*dBdT*dLdT + pow(ao,3.)*pow(B,3.)*d2LdT2 ) * IS;
+					dV2dP = ( 3.*pow(ao,3.)*pow(B,2.)*dBdP*L + pow(ao,3.)*pow(B,3.)*dLdP ) * IS;
+
+					U3 = 2.*( A*log(L) );
+					dU3dT = 2.*( dAdT*log(L) + A*(1./L)*dLdT );
+					d2U3dT2 = 2.*( d2AdT2*log(L) + 2.*dAdT*(1./L)*dLdT
+								- A*(1./pow(L,2.))*pow(dLdT,2.) + A*(1./L)*d2LdT2 );
+					dU3dP = 2.*( dAdP*log(L) + A*(1./L)*dLdP );
+					V3 = pow(ao,3.)*pow(B,3.) * IS;
+					dV3dT = ( 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;
+					d2V3dT2 = ( 6.*pow(ao,3.)*B*pow(dBdT,2.) + 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
+					dV3dP = ( 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
+
+					Z = U1/V1 - U2/V2 - U3/V3;
+					dZdT = (dU1dT*V1 - U1*dV1dT)/pow(V1,2.) - (dU2dT*V2 - U2*dV2dT)/pow(V2,2.)
+								- (dU3dT*V3 - U3*dV3dT)/pow(V3,2.);
+					d2ZdT2 = (d2U1dT2*V1 + dU1dT*dV1dT)/pow(V1,2.) - (dU1dT*V1)*(2.*dV1dT)/pow(V1,3.)
+								- (dU1dT*dV1dT + U1*d2V1dT2)/pow(V1,2.) + (U1*dV1dT)*(2.*dV1dT)/pow(V1,3.)
+								- (d2U2dT2*V2 + dU2dT*dV2dT)/pow(V2,2.) + (dU2dT*V2)*(2.*dV2dT)/pow(V2,3.)
+								+ (dU2dT*dV2dT + U2*d2V2dT2)/pow(V2,2.) - (U2*dV2dT)*(2.*dV2dT)/pow(V2,3.)
+								- (d2U3dT2*V3 + dU3dT*dV3dT)/pow(V3,2.) + (dU3dT*V3)*(2.*dV3dT)/pow(V3,3.)
+								+ (dU3dT*dV3dT + U3*d2V3dT2)/pow(V3,2.) - (U3*dV3dT)*(2.*dV3dT)/pow(V3,3.);
+					dZdP = (dU1dP*V1 - U1*dV1dP)/pow(V1,2.) - (dU2dP*V2 - U2*dV2dP)/pow(V2,2.)
+								- (dU3dP*V3 - U3*dV3dP)/pow(V3,2.);
+
+					// increments to osmotic coefficient (and derivatives)
+					Lam = 1. + (ao*B) * sqI;
+					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
+
+					for (k=0; k<(NComp-1); k++)
+					{
+						if ( (z[k] == 0) && (flagNeut == 1) )
+						{
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bg[k]*IS/2. );
+							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT );
+							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 );
+							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP );
+
+						}
+
+						else
+						{
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) );
+							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT );
+							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 );
+							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP );
+						}
+					}
+
+					Phi = Phit/molT;
+					dPhidT = dPhitdT/molT;
+					d2PhidT2 = d2PhitdT2/molT;
+					dPhidP = dPhitdP/molT;
+
+					// activity coefficient (and derivatives)
+					lnActWat = - Phi*molT/Nw;
+					LnG[j] = lnActWat - lnwxWat;
+					dLnGdT[j] = - (molT/Nw) * dPhidT;
+					d2LnGdT2[j] = - (molT/Nw) * d2PhidT2;
+					dLnGdP[j] = - (molT/Nw) * dPhidP;
+
 				}
 
+				// H2O activity coefficient 0
 				else
 				{
 					LnG[j] = 0.;
@@ -3811,7 +3918,7 @@ long int TKarpov::MixMod()
 					for (k=0; k<(NComp-1); k++)
 					{
 						if ( (z[k] == 0) && (flagNeut == 0) )
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - 0. );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) );
 						else
 							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bgam*IS/2. );
 					}
@@ -3836,13 +3943,12 @@ long int TKarpov::ExcessProp( double *Zex )
 {
 	long int j, k, w;
 	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, dPhidT, d2PhidT2, dPhidP,
-			Phit, dPhitdT, d2PhitdT2, dPhitdP, lnActWat, lg_to_ln, zc, za, psi,
-			g, dgt, d2gt, dgp;
+			Phit, dPhitdT, d2PhitdT2, dPhitdP, lnActWat, lg_to_ln, g, dgt, d2gt, dgp;
 	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP, U1, U2, U3, V1, V2, V3,
 			dU1dT, dU2dT, dU3dT, dV1dT, dV2dT, dV3dT, d2U1dT2, d2U2dT2, d2U3dT2,
 			d2V1dT2, d2V2dT2, d2V3dT2, dU1dP, dU2dP, dU3dP, dV1dP, dV2dP, dV3dP,
 			L, dLdT, d2LdT2, dLdP, Z, dZdT, d2ZdT2, dZdP;
-	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
+	lg_to_ln = 2.302585093;
 	g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
 
 	// get index of water (assumes water is last species in phase)
@@ -3910,18 +4016,10 @@ long int TKarpov::ExcessProp( double *Zex )
 			// water solvent
 			else
 			{
-				// water activity coefficient calculated
+				// H2O activity coefficient calculated
 				if ( flagH2O == 1 )
 				{
 					Phit = 0.; dPhitdT = 0.; d2PhitdT2 = 0.; dPhitdP = 0.;
-
-					// Phi corrected using eq. (190) from Helgeson et al. (1981)
-					Lam = 1. + (ao*B) * sqI;
-					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
-					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
-					Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (Lgam*psi)/(0.0180153*2.*IS) - bgam*IS/2. );
-					lnActWat = - Phi*molT/Nw;
-					LnG[j] = lnActWat - lnwxWat;
 
 					// derivatives of lambda and sigma terms
 					L = 1. + (ao*B) * sqI;
@@ -3973,17 +4071,15 @@ long int TKarpov::ExcessProp( double *Zex )
 					// increments to osmotic coefficient (and derivatives)
 					Lam = 1. + (ao*B) * sqI;
 					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
-					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
-					// Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (Lgam*psi)/(0.0180153*2.*IS) - bgam*IS/2. );
 
 					for (k=0; k<(NComp-1); k++)
 					{
 						if ( (z[k] == 0) && (flagNeut == 0) )
 						{
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - 0. );
-							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT - 0. );
-							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 - 0. );
-							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP - 0. );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) );
+							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT );
+							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 );
+							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP );
 
 						}
 
@@ -4009,7 +4105,7 @@ long int TKarpov::ExcessProp( double *Zex )
 					dLnGdP[j] = - (molT/Nw) * dPhidP;
 				}
 
-				// water activity coefficient unity
+				// H2O activity coefficient 0
 				else
 				{
 					LnG[j] = 0.;
@@ -4500,7 +4596,6 @@ long int TShvarov::MixMod()
 				lnGam = 0.0;
 				if ( flagH2O == 1 )
 				{
-					// water activity coefficient calculated
 					lgGam = - A/(ao*B) * (2./Nw) * ( IS/(1.+ao*B*sqI) - 2.*sqI/(ao*B) + 2./pow((ao*B),2.) * log(1.+ao*B*sqI) )
 								 - C*pow(msum,2.)/(2.*Nw);
 				}
@@ -4599,7 +4694,7 @@ long int TShvarov::ExcessProp( double *Zex )
 			// water solvent
 			else
 			{
-				// activity coefficient of water calculated
+				// H2O activity coefficient calculated
 				if ( flagH2O == 1 )
 				{
 					// derivatives of lambda and sigma terms
@@ -4659,6 +4754,7 @@ long int TShvarov::ExcessProp( double *Zex )
 					dLnGdP[j] = ( - (2./Nw)*dZdP - dCdP*pow(msum,2.)/(2.*Nw) ) * lg_to_ln;
 				}
 
+				// H2O activity coefficient 0
 				else
 				{
 					LnG[j] = 0.;

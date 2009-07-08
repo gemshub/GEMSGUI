@@ -715,8 +715,8 @@ class TSIT: public TSolMod
 	private:
 
 		// data objects copied from MULTI
-		double *aZ;    // vector of species charges (for aqueous models)
-		double *aM;    // vector of species molalities (for aqueous models)
+		double *z;    // vector of species charges (for aqueous models)
+		double *m;    // vector of species molalities (for aqueous models)
 		double *RhoW;  // water density properties
 		double *EpsW;  // water dielectrical properties
 
@@ -727,8 +727,12 @@ class TSIT: public TSolMod
 		double *dLnGdT;  // derivatives
 		double *d2LnGdT2;
 		double *dLnGdP;
-		double **e0;  // interaction parameter
-		double **e1;
+		double **E0;  // interaction parameter
+		double **E1;
+		double **dE0;
+		double **dE1;
+		double **d2E0;
+		double **d2E1;
 
 		// internal functions
 		double IonicStrength();
