@@ -1215,7 +1215,7 @@ TUnSpace::RecordPrint( const char* key )
 	        ErrorIf( !ff1.good() , filename.c_str(), "Fileopen error");
 	        result_to_text_file( ff1, true );
 		}
-		TProfil::pm->outMulti();
+		TProfil::pm->makeGEM2MTFiles( window() );
 		//	     na->GEM_init( f_name.c_str(), 0, true );
 	}
 	else

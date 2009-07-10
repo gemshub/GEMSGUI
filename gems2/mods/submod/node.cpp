@@ -1022,16 +1022,16 @@ void TNode::makeStartDataChBR(
 
    G0_V0_H0_Cp0_DD_arrays();
 
-   if(  CSD->iGrd > 3 )
+   if(  CSD->iGrd > 5 )
      for( i1=0; i1< CSD->nDCs*CSD->nPp*CSD->nTp; i1++ )
        CSD->DD[i1] = 0.;
 }
 
 void TNode::G0_V0_H0_Cp0_DD_arrays()
 {
-
+  int kk, jj, ii, ll;
   double cT, cP;
-  double *G0, *V0, *H0, *Cp0, *S0, roW, epsW;
+  double *G0, *V0, *H0, *Cp0, *S0, *A0, *U0, denW[5], epsW[5], denWg, epsWg;
 
   G0 =  new double[TProfil::pm->mup->L];
   V0 =  new double[TProfil::pm->mup->L];
@@ -1047,21 +1047,38 @@ void TNode::G0_V0_H0_Cp0_DD_arrays()
       S0 = new double[TProfil::pm->mup->L];
   else
       S0 = 0;
+  if ( pmm->A0 )
+      A0 = new double[TProfil::pm->mup->L];
+  else
+      A0 = 0;
+  if ( pmm->U0 )
+      U0 = new double[TProfil::pm->mup->L];
+  else
+      U0 = 0;
 
-  for( int ii=0; ii<CSD->nTp; ii++)
+  for(  ii=0; ii<CSD->nTp; ii++)
   {
     cT = CSD->TCval[ii];
-    for( int jj=0; jj<CSD->nPp; jj++)
+    for(  jj=0; jj<CSD->nPp; jj++)
     {
       cP = CSD->Pval[jj];
      // calculates new G0, V0, H0, Cp0, S0
-     TProfil::pm->LoadFromMtparm( cT, cP, G0, V0, H0, S0, Cp0, roW, epsW );
-     CSD->roW[ jj * CSD->nTp + ii] = roW;
-     CSD->epsW[ jj * CSD->nTp + ii] = epsW;
-     // copy to arrays
-     for(int kk=0; kk<CSD->nDC; kk++)
+     TProfil::pm->LoadFromMtparm( cT, cP, G0, V0, H0, S0, Cp0, 
+    		 A0, U0, denW, epsW, denWg, epsWg );
+     for( kk=0; kk<5; kk++)
+     {
+        ll = ( kk * CSD->nPp + jj) * CSD->nTp + ii;
+    	if(CSD->denW)
+             CSD->denW[ ll ] = denW[kk];
+      	if(CSD->epsW)
+             CSD->epsW[ ll ] = epsW[kk];
+      }
+      CSD->denWg[ jj * CSD->nTp + ii] = denWg;
+      CSD->epsWg[ jj * CSD->nTp + ii] = epsWg;
+      // copy to arrays
+     for( kk=0; kk<CSD->nDC; kk++)
       {
-         int ll = ( kk * CSD->nPp + jj) * CSD->nTp + ii;
+         ll = ( kk * CSD->nPp + jj) * CSD->nTp + ii;
          CSD->G0[ll] =  G0[pmm->muj[kk]]; //
          CSD->V0[ll] =  V0[pmm->muj[kk]];
          if(  CSD->iGrd > 0 )
@@ -1083,18 +1100,31 @@ void TNode::G0_V0_H0_Cp0_DD_arrays()
             else
              CSD->S0[ll] = 0.;
          }
+         if(  CSD->iGrd > 3 )
+         {
+            if ( A0 )
+               CSD->A0[ll] = A0[pmm->muj[kk]];
+            else
+             CSD->A0[ll] = 0.;
+         }
+         if(  CSD->iGrd > 4 )
+         {
+            if ( U0 )
+               CSD->U0[ll] = U0[pmm->muj[kk]];
+            else
+               CSD->U0[ll] = 0.;
+         }
      }
     }
   }
   // free memory
   delete[] G0;
   delete[] V0;
-  if( H0 )
-   delete[] H0;
-  if( Cp0 )
-   delete[] Cp0;
-  if( S0 )
-   delete[] S0;
+  if( H0 )  delete[] H0;
+  if( Cp0 ) delete[] Cp0;
+  if( S0 )  delete[] S0;
+  if( A0 )  delete[] A0;
+  if( U0 )  delete[] U0;
 }
 
 TNode::TNode( MULTI *apm  )
@@ -1546,7 +1576,8 @@ double TNode::ResizeNode( double Factor )
 // if called in loop for each node), or in text format
 // (false or 0, default)
 //
-   void  TNode::GEM_write_dbr( const char* fname, bool binary_f, bool with_comments )
+   void  TNode::GEM_write_dbr( const char* fname, bool binary_f, 
+		   bool with_comments, bool brief_mode )
    {
        gstring str_file;
        if( fname == 0)
@@ -1563,7 +1594,7 @@ double TNode::ResizeNode( double Factor )
       else
       {  fstream out_br(str_file.c_str(), ios::out );
          ErrorIf( !out_br.good() , str_file.c_str(), "DataBR text make error");
-         databr_to_text_file(out_br, with_comments );
+         databr_to_text_file(out_br, with_comments, brief_mode);
       }
    }
 

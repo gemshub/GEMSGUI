@@ -30,6 +30,7 @@
 #include "submod/ms_calc.h"
 
 class GemDataStream;
+class QWidget;
 
 // Physical constants - see m_param.cpp
 extern const double R_CONSTANT, NA_CONSTANT, F_CONSTANT,
@@ -261,8 +262,9 @@ double CalcEqstat( bool show_progress=true );
 
     // Multi make functions
     void PMtest( const char *key );
-    void LoadFromMtparm(double T, double P,double *G0,
-        double *V0, double *H0, double *S0, double *Cp0, double &roW, double &epsW );
+    void LoadFromMtparm(double T, double P,double *G0,  double *V0, 
+    		double *H0, double *S0, double *Cp0, double *A0, double *U0, 
+    		double denW[5], double epsW[5], double &denWg, double &epsWg );
     void CalcBcc(); // Calc bulk composition
     void ShowPhaseWindow();
     void ShowEqPhaseWindow();
@@ -277,8 +279,11 @@ double CalcEqstat( bool show_progress=true );
 
    //test
    void outMulti( GemDataStream& ff, gstring& path  );
-   void outMulti( gstring& path, bool addMui  );
-   void outMulti();
+   // brief_mode - Do not write data items that contain only default values
+   // with_comments -Write files with comments for all data entries ( in text mode)
+   // addMui - Print internal indices in RMULTS to IPM file for reading into Gems back 
+   void outMulti( gstring& path, bool addMui, bool with_comments = true, bool brief_mode = false );
+   void makeGEM2MTFiles(QWidget* par);
    void outMultiTxt( const char *path, bool append=false  );
    void readMulti( GemDataStream& ff );
    void readMulti( const char* path );

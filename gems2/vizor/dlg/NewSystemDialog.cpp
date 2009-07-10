@@ -132,7 +132,7 @@ NewSystemDialog::LoadMenu()
         p2->insertItem( "&Commit ISD list view", this, SLOT(CmCommit()) );
         p2->insertItem( "&Reset ISD list view", this, SLOT(CmReset()) );
         p2->insertSeparator();
-        p2->insertItem( "&Write IPM files (test)", this, SLOT(CmOutMulti()) );
+        p2->insertItem( "&Write IPM files", this, SLOT(CmOutMulti()) );
         p2->insertItem( "Read &IPM file (test)", this, SLOT(CmReadMulti()) );
         menuBar()->insertItem( "&Data", p2 );
     }
@@ -330,7 +330,7 @@ NewSystemDialog::CmOutMulti()
                return;
       GemDataStream  f(filename, ios::out|ios::binary);
 */
-      TProfil::pm->outMulti();
+      TProfil::pm->makeGEM2MTFiles( this );
     }
     catch( TError& xcpt )
     {

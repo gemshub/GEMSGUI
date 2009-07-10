@@ -71,14 +71,16 @@ typedef struct
     RT,   	// RT factor (R=8.3144 J/mole/K)
     TK,   	// T in Kelvins, added 27.11.00 by DAK
     RoW, RoV,  // Density of H2O g/cm3 (liquid; vapour)
-    EpsW, EpsV,  // Dielectric constant of H2O (liquid; vapour)
     dRdTW, dRdTV,
     d2RdT2W, d2RdT2V,
     dRdPW, dRdPV,
+    d2RdP2W, d2RdP2V,
+    EpsW, EpsV,  // Dielectric constant of H2O (liquid; vapour)
     dEdTW, dEdTV,
     d2EdT2W, d2EdT2V,
     dEdPW, dEdPV,
-    VisW, VisV; // Viscosity of H2O (dynamic), kg/m*sec (water; steam)
+    d2EdP2W, d2EdP2V,
+      VisW, VisV; // Viscosity of H2O (dynamic), kg/m*sec (water; steam)
 
 
 // Arrays loaded from current data, not from DB !!!!

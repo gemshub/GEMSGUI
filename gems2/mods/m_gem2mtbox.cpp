@@ -714,7 +714,7 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments )
 {
   _comment = with_comments;
   
-  TPrintArrays  prar(ff);
+  TPrintArrays  prar(0, 0, ff);
 
    if( _comment )
    {  ff << "# GEMIPM2K v. 2.2.4" << endl;

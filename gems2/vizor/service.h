@@ -118,6 +118,9 @@ bool
  vfAutoPhaseSet(QWidget* par, const char* pr_key, gstring& a_key, gstring& g_key,
         char& acode, char& gcode, float apar[8], float gpar[4] /*, int& resp_T */ );
 
+bool vfLookupDialogSet(QWidget* wpar, char flags[4], 
+		int& nT, int& nP, float Tai[4], float Pai[4] );
+
 gstring
 vfKeyEdit(QWidget* par, const char* title, int iRt, const char* key=0);
 

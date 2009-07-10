@@ -90,13 +90,17 @@ protected:
     void databr_from_file( GemDataStream& ff );
 
     // Text i/o functions
-      // writes CSD (DATACH structure) to a text DCH file
-    void datach_to_text_file( fstream& ff, bool with_comments = true );
-      // reads CSD (DATACH structure) from a text DCH file
+    // writes CSD (DATACH structure) to a text DCH file
+    // brief_mode - Do not write data items that contain only default values
+    // with_comments -Write files with comments for all data entries ( in text mode)
+    void datach_to_text_file( fstream& ff, bool with_comments = true, bool brief_mode = false );
+    // reads CSD (DATACH structure) from a text DCH file
     void datach_from_text_file( fstream& ff);
-      // writes work node (DATABR structure) to a text DBR file
-    void databr_to_text_file(fstream& ff, bool with_comments = true );
-      // reads work node (DATABR structure) from a text DBR file
+    // writes work node (DATABR structure) to a text DBR file
+    // brief_mode - Do not write data items that contain only default values
+    // with_comments -Write files with comments for all data entries ( in text mode)
+    void databr_to_text_file(fstream& ff, bool with_comments = true, bool brief_mode = false  );
+     // reads work node (DATABR structure) from a text DBR file
     void databr_from_text_file(fstream& ff );
 
     // virtual functions for interaction with TNodeArray class (not used at TNode level)
@@ -281,8 +285,10 @@ void GEM_set_MT(
 // if called in loop for each node), or in text format
 // (false or 0, default). Parameter with_comments, if true, tells that 
 // the text file will be written with comments for all data entries. 
-//
-   void  GEM_write_dbr( const char* fname,  bool binary_f=false, bool with_comments = true);
+//   Parameter brief_mode, if true, tells that do not write data items 
+//   that contain only default values in text format
+   void  GEM_write_dbr( const char* fname,  bool binary_f=false, 
+		                  bool with_comments = true, bool brief_mode = false);
 
 // (5a) For detailed examination of GEM work data structure:
 // writes GEMIPM internal MULTI data structure into text file

@@ -81,7 +81,7 @@ SPP_SETTING pa_ = {
     "++*-1-23----------4-------------", /* RPpvc[32] reserved free */
     "INNINN",   /* PHsol_t[6] */  "s-----",   /* PHpvc[6] */
     "++++-+-+++", /* MUpmv[10] */ "jjbC++0+", /* TPpdc[8] */
-    "*-------*-----------", /* TPpvc[20] */ "+-+-+-----", /* SYppc[10] */
+    "*-*-*-*-*-----------", /* TPpvc[20] */ "+-+-+-----", /* SYppc[10] */
     "***-*-*---**-***-----------*", /* SYpvc[28]*/  "-+++----ME", /* UTppc[10] */
     "0*----------", /* PEpsc[12]  */  "------------", /* PEpvc[12] */
     { "GTDEMO task name   ", "Graphic screen # " } ,   /* GDcode[2][20] */
@@ -329,9 +329,12 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
 }
 
 // outpu MULTI to txt format
-void TProfil::outMulti( gstring& path, bool addMui  )
+// brief_mode - Do not write data items that contain only default values
+// with_comments -Write files with comments for all data entries ( in text mode)
+// addMui - Print internal indices in RMULTS to IPM file for reading into Gems back 
+void TProfil::outMulti( gstring& path, bool addMui, bool with_comments, bool brief_mode )
 {
-    multi->to_text_file_gemipm( path.c_str(), addMui );
+    multi->to_text_file_gemipm( path.c_str(), addMui, with_comments, brief_mode );
 }
 
 void TProfil::outMultiTxt( const char *path, bool append  )
@@ -339,26 +342,74 @@ void TProfil::outMultiTxt( const char *path, bool append  )
     multi->to_text_file( path, append );
 }
 
-void TProfil::outMulti( )
+void TProfil::makeGEM2MTFiles(QWidget* par )
 {
-   TNodeArray* na = new TNodeArray( 1, TProfil::pm->pmp/*multi->GetPM()*/ );
+    TNodeArray* na = 0;
+    float* Tval = 0;
+    float* Pval = 0;
 
-// set default data and realloc arrays
-   float Tai[3], Pai[3];
-   Tai[0] = Tai[1] = pmp->TCc; // 25.;
-   Pai[0] = Pai[1] = pmp->Pc; //  1.;
-   Tai[2] = Pai[2] = 0.;
+    try
+	 {
+      // set default data and realloc arrays
+      char flags[4];
+      int ii, nT, nP;
+      float Tai[4], Pai[4];
+   
+      if( !vfLookupDialogSet(window(), flags, nT, nP, Tai, Pai ) )// ask constants
+        	return;  
+      //  define setup arrays
+ 	  float cT = Tai[START_];
+ 	  float cP = Pai[START_];
+       Tval = new float[nT];
+       Pval = new float[nP];
+ 	 
+ 	 for( ii=0; ii<nT; ii++ )
+ 	 {
+ 	     Tval[ii] = cT;
+ 	     cT += Tai[STEP_];
+ 	 }
 
-// realloc and setup data for dataCH and DataBr structures
-   na->MakeNodeStructures( window(), false, Tai, Pai );
+ 	 for( ii=0; ii<nP; ii++ )
+ 	 {
+ 	     Pval[ii] = cP;
+ 	     cP += Pai[STEP_];
+ 	 }
 
-// setup dataBR and NodeT0 data
-   na->packDataBr();
+     na = new TNodeArray( 1, TProfil::pm->pmp/*multi->GetPM()*/ );
+
+    // realloc and setup data for dataCH and DataBr structures
+    na->MakeNodeStructures( par, ( flags[0] == S_OFF ) ,
+		    Tval, Pval, nT, nP, Tai[3], Pai[3]  );
+
+    // setup dataBR and NodeT0 data
+   //na->packDataBr();
    na->MoveWorkNodeToArray( 0, 1, na->pNodT0() );
-// make  all files
-//   na->PutGEM2MTFiles( window(), 1, true, true );
-na->PutGEM2MTFiles( window(), 1, true, false );// addMui, to txt
-   delete na;
+   // make  all files
+   na->PutGEM2MTFiles( par, 1,  ( flags[1] == S_ON ), ( flags[2] == S_ON ),
+		   ( flags[3] == S_ON ), false, true );// addMui, to txt
+   }
+    catch( TError& xcpt )
+    {
+      if( na )
+       delete na;
+      na = 0;
+      if( Tval )
+       delete[] Tval;
+      Tval = 0;
+      if( Pval )
+       delete[] Pval;
+      Pval = 0;
+       Error(  xcpt.title.c_str(), xcpt.mess.c_str() );
+    }
+    if( na )
+     delete na;
+    na = 0;
+    if( Tval )
+     delete[] Tval;
+    Tval = 0;
+    if( Pval )
+     delete[] Pval;
+    Pval = 0;
 }
 
 // Reading structure MULTI (GEM IPM work structure)
@@ -811,8 +862,9 @@ void TProfil::PMtest( const char *key )
     }
 }
 
-void TProfil::LoadFromMtparm(double T, double P,double *G0,
-        double *V0, double *H0, double *S0, double *Cp0, double &roW, double &epsW )
+void TProfil::LoadFromMtparm(double T, double P,double *G0,  double *V0, 
+		double *H0, double *S0, double *Cp0, double *A0, double *U0, 
+		double denW[5], double epsW[5], double &denWg, double &epsWg )
 {
     if( fabs( tpp->curT - T ) > 1.e-10 ||
             fabs( tpp->curP - P ) > 1.e-10 )
@@ -820,19 +872,52 @@ void TProfil::LoadFromMtparm(double T, double P,double *G0,
         mtparm->LoadMtparm( T, P );
         pmp->pTPD = 0;
     }
-
-    roW = tpp->RoW;
-    epsW = tpp->EpsW;
+    denW[0] = tpp->RoW;
+    denW[1] = tpp->dRdTW;
+    denW[2] = tpp->d2RdT2W;
+    denW[3] = tpp->dRdPW;
+    denW[4] = tpp->d2RdP2W;
+    denWg = tpp->RoV;
+    epsW[0] = tpp->EpsW;
+    epsW[1] = tpp->dEdTW;
+    epsW[2] = tpp->d2EdT2W;
+    epsW[3] = tpp->dEdPW;
+    epsW[4] = tpp->d2EdP2W;
+    epsWg = tpp->EpsV;
     for( int jj=0; jj<mup->L; jj++ )
     {
       G0[jj] =  tpp->G[jj]+syp->GEX[jj];
       V0[jj] =  tpp->Vm[jj];
-      if( H0 && tpp->H )
-        H0[jj] =  tpp->H[jj];
-      if( S0 && tpp->S )
-        S0[jj] =  tpp->S[jj];
-      if( Cp0 && tpp->Cp )
-         Cp0[jj] =  tpp->Cp[jj];
+      if( H0 )
+      { if( tpp->H )
+           H0[jj] =  tpp->H[jj];
+        else  
+           H0[jj] = 0.; 	
+      }
+      if( S0 )
+      {	 if( tpp->S )
+            S0[jj] =  tpp->S[jj];
+         else
+           	S0[jj] = 0.;	
+      }
+      if( Cp0 )
+      {	  if( tpp->Cp )
+             Cp0[jj] =  tpp->Cp[jj];
+          else   
+             Cp0[jj] =  0.;
+      }
+      if( A0 )
+      {	 if( tpp->F )
+            A0[jj] =  tpp->F[jj];
+         else
+           	A0[jj] = 0.;	
+      }
+      if( U0 )
+      {	 if( tpp->U )
+            U0[jj] =  tpp->U[jj];
+         else
+            U0[jj] = 0.;	
+      }
     }
 }
 

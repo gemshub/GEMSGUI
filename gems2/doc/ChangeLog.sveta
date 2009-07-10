@@ -1,3 +1,25 @@
+10/07/2009
+Changed DATACH structure
+ renamed field   roW to denW
+ added   fields denWg, epsWd, A0, U0
+ changed size of denW, epsW to 5 rows
+Inserted changes to functions 
+  for loading lookup arrays (G0, H0, S0, Cp0, A0, U0, denW, epsW )
+Changed default values for TPpvc (added H,S,Cp in new project as default )   
+ 
+
+09/07/200
+When writing IPM, DCH and DBR files to text format added brief_mode 
+"Do not write data items that contain only default values"
+Inserted changes to TPrintArrays class
+
+08/07/2009
+Added to Gems2 LookupDialogData "Setup for writing GEMIPM2K input files " 
+
+07/07/2009
+Added to AutoPhaseDialog 
+  -"IA with extended Debye-Hueckel equation, common b_gamma and a0, &Y" type equation.
+  - "molality conversion" selector that returns float (0,1,2,3) into  php->pnc[5]
 
 10/02/2009
 Bugfix in math script interpreter 

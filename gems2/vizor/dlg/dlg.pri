@@ -31,6 +31,7 @@
 		  $$DLG_H/ElementsDialog.h \
 		  $$DLG_H/SetFiltersDialog.h \
  		  $$DLG_H/LoadMessage.h \
+ 		  $$DLG_H/LookupDialog.h \
                   $$DLG_H/AutoPhaseDialog.h
 
        SOURCES +=  $$DLG_CPP/MainDialog.cpp \
@@ -65,6 +66,7 @@
 		  $$DLG_CPP/ElementsDialog.cpp \
 		  $$DLG_CPP/SetFiltersDialog.cpp \
  		  $$DLG_CPP/LoadMessage.cpp \
+ 		  $$DLG_CPP/LookupDialog.cpp \
                   $$DLG_CPP/AutoPhaseDialog.cpp
 
 
@@ -98,6 +100,7 @@
 		$$DLG_CPP/ListFilesDialogData.ui \
 		$$DLG_CPP/ElementsDialogData.ui \
 		$$DLG_CPP/SetFiltersDialogData.ui \
+		$$DLG_CPP/LookupDialogData.ui \
                 $$DLG_CPP/AutoPhaseDialogData.ui
 
 

@@ -72,6 +72,7 @@ using namespace std;
 #include "dlg/KeyProfile.h"
 #include "dlg/ChangeKeyDialog.h"
 #include "dlg/AutoPhaseDialog.h"
+#include "dlg/LookupDialog.h"
 
 const char* GEMS_LOGO_ICON = "img/gems1.png";
 const char* GEMS_SYS_ICON = "img/sciences_section.xpm";
@@ -1037,6 +1038,20 @@ if( acode == 'S' )
     return true;
 }
 
+// call to LookupDialog  added 2009
+bool vfLookupDialogSet(QWidget* wpar, char flags[4], 
+		int& nT, int& nP, float Tai[4], float Pai[4] )
+{
+	LookupDialog apdlg( wpar );
+
+     if( !apdlg.exec() )
+      return false;
+
+     apdlg.getTdata( nT, Tai );
+     apdlg.getPdata( nP, Pai );
+     apdlg.getFlags( flags );
+    return true;
+}
 
 //=============================================
 // KeyEdit dialog

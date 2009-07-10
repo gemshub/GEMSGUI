@@ -598,8 +598,7 @@ void TGEM2MT::outMulti()
   pVisor->CloseMessage();
 
   na->PutGEM2MTFiles( window(),
-       mtp->nIV, false, mtp->PsSdat==S_OFF ); // mui,muj,muk do not output
-
+       mtp->nIV, mtp->PsSdat==S_OFF, false, true, false, false ); // mui,muj,muk do not output
 }
 
 

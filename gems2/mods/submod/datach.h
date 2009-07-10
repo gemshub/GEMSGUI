@@ -95,13 +95,17 @@ typedef struct
 // Require a Lagrange interpolation subroutine to extract data
 // for a given P,T point (new interpolation is done when P or T differs
 // from the previous P,T by more than Ptol, Ttol)
-    *roW,   // density of water-solvent, g/cm3, [ nPp][nTp] elements
-    *epsW,  // dielectric  constant of water-solvent, [nPp][nTp] elements
+*denW,   // density of water-solvent, g/cm3, [5][ nPp][nTp] elements
+*denWg,   // density of water-solvent, g/cm3 (vapor), [ nPp][nTp] elements
+*epsW,  // dielectric  constant of water-solvent , [5][nPp][nTp] elements
+*epsWg,  // dielectric  constant of water-solvent (vapor), [nPp][nTp] elements
     *G0,    // G0 standard molar Gibbs energy of DC, J/mol, [nDC][nPp][nTp] elements
     *V0,    // V0 standard molar volume of DC, J/bar, [nDC][nPp][nTp] elements
     *S0,    // S0 standard molar entropy of DC, J/K/mol, [nDC][nPp][nTp] elements
     *H0,    // H0 standard molar enthalpy of DC, J/mol, reserved, [nDC][nPp][nTp] elements
-    *Cp0;   // Cp0 molar heat capacity of DC, J/K/mol, [nDC][nPp][nTp] elements
+    *Cp0,   // Cp0 molar heat capacity of DC, J/K/mol, [nDC][nPp][nTp] elements
+ *A0,    // Helmholtz energy of DC, J/mol, reserved, [nDC][nPp][nTp] elements
+ *U0;   // Internal energy of DC, J/K/mol, [nDC][nPp][nTp] elements
 
 // Name lists
    // List of IC names in the system, [nIC] elements of MaxICN length

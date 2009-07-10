@@ -1454,7 +1454,7 @@ void TMulti::to_text_file( const char *path, bool append )
    ff << "\nNext record" << endl;
   ff << pm.stkey << endl;
 
-  TPrintArrays  prar(ff);
+  TPrintArrays  prar(0,0,ff);
 
   prar.writeArray( "Short_Const",  &pm.N, 38L );
   prar.writeArray(  "Double_Const",  &pm.TC, 55 );
