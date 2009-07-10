@@ -2054,8 +2054,8 @@ long int THelgeson::PTparam()
 long int THelgeson::MixMod()
 {
 	long int j, k, w;
-	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm,
-			Phi, Phit, zc, za, psi, lnActWat, lg_to_ln;
+	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnxw, xw, Lam, sig,
+			Phi, Phit, zc, za, psi, lnaw, lg_to_ln;
 	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
@@ -2064,13 +2064,13 @@ long int THelgeson::MixMod()
 	// calculate ionic strength and total molaities
 	IonicStrength();
 
-	WxW = x[w];
+	xw = x[w];
 	Nw = 1000./18.01528;
 	// Lgam = -log10(1.+0.0180153*molT);
-	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	Lgam = log10(xw);  // Helgeson large gamma simplified
 	if( Lgam < -0.7 )
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
-	lnwxWat = log(WxW);
+	lnxw = log(xw);
 	sqI = sqrt(IS);
 
 	// loop over species
@@ -2113,21 +2113,21 @@ long int THelgeson::MixMod()
 					Phit = 0.0;
 					// Phi corrected using eq. (190) from Helgeson et al. (1981)
 					Lam = 1. + (ao*B) * sqI;
-					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
+					sig = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
 					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
 					// Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (Lgam*psi)/(0.0180153*2.*IS) - bgam*IS/2. );
 
 					for (k=0; k<(NComp-1); k++)
 					{
 						if ( (z[k] == 0) && (flagNeut == 0) )
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*sig)/3. + Lgam/(0.0180153*molT) );
 						else
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bgam*IS/2. );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*sig)/3. + Lgam/(0.0180153*molT) - bgam*IS/2. );
 					}
 
 					Phi = Phit/molT;
-					lnActWat = - Phi*molT/Nw;
-					lnGam = lnActWat - lnwxWat;
+					lnaw = - Phi*molT/Nw;
+					lnGam = lnaw - lnxw;
 				}
 				else
 					lnGam = 0.0;
@@ -2144,8 +2144,8 @@ long int THelgeson::MixMod()
 long int THelgeson::ExcessProp( double *Zex )
 {
 	long int j, k, w;
-	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, dPhidT, d2PhidT2, dPhidP,
-			Phit, dPhitdT, d2PhitdT2, dPhitdP, lnActWat, lg_to_ln, g, dgt, d2gt, dgp;
+	double sqI, Z2, Nw, Lgam, lnxw, xw, Lam, sig, Phi, dPhidT, d2PhidT2, dPhidP,
+			Phit, dPhitdT, d2PhitdT2, dPhitdP, lnaw, lg_to_ln, g, dgt, d2gt, dgp;
 	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP, U1, U2, U3, V1, V2, V3,
 			dU1dT, dU2dT, dU3dT, dV1dT, dV2dT, dV3dT, d2U1dT2, d2U2dT2, d2U3dT2,
 			d2V1dT2, d2V2dT2, d2V3dT2, dU1dP, dU2dP, dU3dP, dV1dP, dV2dP, dV3dP,
@@ -2159,13 +2159,13 @@ long int THelgeson::ExcessProp( double *Zex )
 	// calculate ionic strength and total molalities
 	IonicStrength();
 
-	WxW = x[w];
+	xw = x[w];
 	Nw = 1000./18.01528;
 	// Lgam = -log10(1.+0.0180153*molT);
-	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	Lgam = log10(xw);  // Helgeson large gamma simplified
 	if( Lgam < -0.7 )
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
-	lnwxWat = log(WxW);
+	lnxw = log(xw);
 	sqI = sqrt(IS);
 
 	// loop over species
@@ -2280,13 +2280,13 @@ long int THelgeson::ExcessProp( double *Zex )
 
 					// increments to osmotic coefficient (and derivatives)
 					Lam = 1. + (ao*B) * sqI;
-					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
+					sig = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
 
 					for (k=0; k<(NComp-1); k++)
 					{
 						if ( (z[k] == 0) && (flagNeut == 0) )
 						{
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*sig)/3. + Lgam/(0.0180153*molT) );
 							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT );
 							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 );
 							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP );
@@ -2294,7 +2294,7 @@ long int THelgeson::ExcessProp( double *Zex )
 
 						else
 						{
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bgam*IS/2. );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*sig)/3. + Lgam/(0.0180153*molT) - bgam*IS/2. );
 							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT - dbgdT*IS/2. );
 							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 - d2bgdT2*IS/2. );
 							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP - dbgdP*IS/2. );
@@ -2307,8 +2307,8 @@ long int THelgeson::ExcessProp( double *Zex )
 					dPhidP = dPhitdP/molT;
 
 					// activity coefficient (and derivatives)
-					lnActWat = - Phi*molT/Nw;
-					LnG[j] = lnActWat - lnwxWat;
+					lnaw = - Phi*molT/Nw;
+					LnG[j] = lnaw - lnxw;
 					dLnGdT[j] = - (molT/Nw) * dPhidT;
 					d2LnGdT2[j] = - (molT/Nw) * d2PhidT2;
 					dLnGdP[j] = - (molT/Nw) * dPhidP;
@@ -2733,7 +2733,7 @@ long int TDavies::PTparam()
 long int TDavies::MixMod()
 {
 	long int j, w;
-	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, lg_to_ln;
+	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnxw, xw, lgaw, lnaw, sig, lg_to_ln;
 	lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
@@ -2742,13 +2742,13 @@ long int TDavies::MixMod()
 	// calculate ionic strength and total molalities
 	IonicStrength();
 
-	WxW = x[w];
+	xw = x[w];
 	Nw = 1000./18.01528;
 	// Lgam = -log10(1.+0.0180153*molT);
-	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	Lgam = log10(xw);  // Helgeson large gamma simplified
 	if( Lgam < -0.7 )
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
-	lnwxWat = log(WxW);
+	lnxw = log(xw);
 	sqI = sqrt(IS);
 
 	// loop over species
@@ -2763,7 +2763,7 @@ long int TDavies::MixMod()
 			lgGam = 0.0;
 			Z2 = z[j]*z[j];
 			lgGam = ( -A * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * IS );
-			if ( (flagMol == 0) || (flagMol == 1) )
+			if ( flagMol == 0 )
 				lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
 			else
 				lnGamma[j] = lgGam * lg_to_ln;
@@ -2776,7 +2776,7 @@ long int TDavies::MixMod()
 			if ( j != (NComp-1) )
 			{
 				lgGam = 0.0;
-				if ( (flagMol == 0) || (flagMol == 2) )
+				if ( flagMol == 0 )
 					lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
 				else
 					lnGamma[j] = lgGam * lg_to_ln;
@@ -2790,8 +2790,13 @@ long int TDavies::MixMod()
 				lnGam = 0.0;
 				if ( flagH2O == 1 )
 				{
-					// add water activity coefficient equation
-					lnGam = 0.0;
+					// equation rearranged based on Wolery (1990)
+					sig = 3./sqI * ( 1. + sqI - 1./(1.+sqI) - 2.*log(1.+sqI) );
+					lgaw = (1./Nw) * ( - molT/log(10.) + 2./3.*A*sqI*sig + 2.*(0.3)*A*pow(IS,2.) );
+					if ( flagMol == 0 )
+						lgaw += molT/(Nw)/log(10.) + lnxw/log(10.);
+					lnaw = lgaw * lg_to_ln;
+					lnGam = lnaw - lnxw;
 				}
 				else
 					lnGam = 0.0;
@@ -2809,7 +2814,8 @@ long int TDavies::ExcessProp( double *Zex )
 {
 	// (under construction)
 	long int j, w;
-	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, lg_to_ln, g, dgt, d2gt, dgp;
+	double sqI, Z2, Nw, Lgam, lnxw, xw, lnaw, lgGam, lgaw, sig, dawdt, d2awdt2, dawdp,
+				lg_to_ln, g, dgt, d2gt, dgp;
 	lg_to_ln = 2.302585093;
 	g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
 
@@ -2819,13 +2825,13 @@ long int TDavies::ExcessProp( double *Zex )
 	// calculate ionic strength and total molalities
 	IonicStrength();
 
-	WxW = x[w];
+	xw = x[w];
 	Nw = 1000./18.01528;
 	// Lgam = -log10(1.+0.0180153*molT);
-	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	Lgam = log10(xw);  // Helgeson large gamma simplified
 	if( Lgam < -0.7 )
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
-	lnwxWat = log(WxW);
+	lnxw = log(xw);
 	sqI = sqrt(IS);
 
 	// loop over species
@@ -2834,8 +2840,13 @@ long int TDavies::ExcessProp( double *Zex )
 		// charged species
 		if ( z[j] )
 		{
+			lgGam = 0.0;
 			Z2 = z[j]*z[j];
-			LnG[j] = - ( A * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * IS ) * lg_to_ln;
+			lgGam = - ( A * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * IS );
+			if ( flagMol == 0 )
+				LnG[j] = lgGam * lg_to_ln;
+			else
+				LnG[j] = (lgGam - Lgam) * lg_to_ln;
 			dLnGdT[j] = - ( dAdT * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * IS ) * lg_to_ln;
 			d2LnGdT2[j] = - ( d2AdT2 * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * IS ) * lg_to_ln;
 			dLnGdP[j] = - ( dAdP * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * IS ) * lg_to_ln;
@@ -2847,7 +2858,11 @@ long int TDavies::ExcessProp( double *Zex )
 			// neutral species
 			if ( j != (NComp-1) )
 			{
-				LnG[j] = 0.;
+				lgGam = 0.0;
+				if ( flagMol == 0 )
+					LnG[j] = 0.0;
+				else
+					LnG[j] = (lgGam - Lgam) * lg_to_ln;
 				dLnGdT[j] = 0.;
 				d2LnGdT2[j] = 0.;
 				dLnGdP[j] = 0.;
@@ -2859,11 +2874,18 @@ long int TDavies::ExcessProp( double *Zex )
 				// H2O activity coefficient calculated
 				if ( flagH2O == 1 )
 				{
-					// add water activity coefficient equation
-					LnG[j] = 0.;
-					dLnGdT[j] = 0.;
-					d2LnGdT2[j] = 0.;
-					dLnGdP[j] = 0.;
+					sig = 3./sqI * ( 1. + sqI - 1./(1.+sqI) - 2.*log(1.+sqI) );
+					lgaw = (1./Nw) * ( - molT/log(10.) + 2./3.*A*sqI*sig + 2.*(0.3)*A*pow(IS,2.) );
+					if ( flagMol == 0 )
+						lgaw += molT/(Nw)/log(10.) + lnxw/log(10.);
+					lnaw = lgaw * lg_to_ln;
+					dawdt = (1./Nw) * ( 2./3.*dAdT*sqI*sig + 2.*(0.3)*dAdT*pow(IS,2.) ) * lg_to_ln;
+					d2awdt2 = (1./Nw) * ( 2./3.*d2AdT2*sqI*sig + 2.*(0.3)*d2AdT2*pow(IS,2.) ) * lg_to_ln;
+					dawdp = (1./Nw) * ( 2./3.*dAdP*sqI*sig + 2.*(0.3)*dAdP*pow(IS,2.) ) * lg_to_ln;
+					LnG[j] = lnaw - lnxw;
+					dLnGdT[j] = dawdt;
+					d2LnGdT2[j] = d2awdt2;
+					dLnGdP[j] = dawdp;
 				}
 
 				// H2O activity coefficient 0
@@ -3044,8 +3066,8 @@ long int TLimitingLaw::PTparam()
 // Calculates activity coefficients
 long int TLimitingLaw::MixMod()
 {
-	long int j, w;
-	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, lg_to_ln;
+	long int j, k, w;
+	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnxw, xw, lnaw, Phi, Phit, lg_to_ln;
 	lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
@@ -3054,13 +3076,13 @@ long int TLimitingLaw::MixMod()
 	// calculate ionic strength and total molalities
 	IonicStrength();
 
-	WxW = x[w];
+	xw = x[w];
 	Nw = 1000./18.01528;
 	// Lgam = -log10(1.+0.0180153*molT);
-	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	Lgam = log10(xw);  // Helgeson large gamma simplified
 	if( Lgam < -0.7 )
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
-	lnwxWat = log(WxW);
+	lnxw = log(xw);
 	sqI = sqrt(IS);
 
 	// loop over species
@@ -3096,8 +3118,17 @@ long int TLimitingLaw::MixMod()
 				lnGam = 0.0;
 				if ( flagH2O == 1 )
 				{
-					// add water activity coefficient equation
-					lnGam = 0.0;
+					Phit = 0.0;
+					// Phi corrected using eq. (190) from Helgeson et al. (1981)
+
+					for (k=0; k<(NComp-1); k++)
+					{
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI)/3. + Lgam/(0.0180153*molT) );
+					}
+
+					Phi = Phit/molT;
+					lnaw = - Phi*molT/Nw;
+					lnGam = lnaw - lnxw;
 				}
 				else
 					lnGam = 0.0;
@@ -3113,9 +3144,9 @@ long int TLimitingLaw::MixMod()
 // calculates excess properties
 long int TLimitingLaw::ExcessProp( double *Zex )
 {
-	// (under construction)
-	long int j, w;
-	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, lg_to_ln, g, dgt, d2gt, dgp;
+	long int j, k, w;
+	double sqI, Z2, Nw, Lgam, lnxw, xw, Phi, dPhidT, d2PhidT2, dPhidP,
+			Phit, dPhitdT, d2PhitdT2, dPhitdP, lnaw, lg_to_ln, g, dgt, d2gt, dgp;
 	lg_to_ln = 2.302585093;
 	g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
 
@@ -3125,13 +3156,13 @@ long int TLimitingLaw::ExcessProp( double *Zex )
 	// calculate ionic strength and total molalities
 	IonicStrength();
 
-	WxW = x[w];
+	xw = x[w];
 	Nw = 1000./18.01528;
 	// Lgam = -log10(1.+0.0180153*molT);
-	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	Lgam = log10(xw);  // Helgeson large gamma simplified
 	if( Lgam < -0.7 )
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
-	lnwxWat = log(WxW);
+	lnxw = log(xw);
 	sqI = sqrt(IS);
 
 	// loop over species
@@ -3164,11 +3195,28 @@ long int TLimitingLaw::ExcessProp( double *Zex )
 			{
 				if ( flagH2O == 1 )
 				{
-					// add water activity coefficient equation
-					LnG[j] = 0.;
-					LnG[j] = 0.;
-					dLnGdT[j] = 0.;
-					dLnGdP[j] = 0.;
+					Phit = 0.; dPhitdT = 0.; d2PhitdT2 = 0.; dPhitdP = 0.;
+					// Phi corrected using eq. (190) from Helgeson et al. (1981)
+
+					for (k=0; k<(NComp-1); k++)
+					{
+						Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI)/3. + Lgam/(0.0180153*molT) );
+						dPhitdT += - log(10.) * m[k] * ( (pow(z[k],2.)*dAdT*sqI)/3. );
+						d2PhitdT2 += - log(10.) * m[k] * ( (pow(z[k],2.)*d2AdT2*sqI)/3. );
+						dPhitdP += - log(10.) * m[k] * ( (pow(z[k],2.)*dAdP*sqI)/3. );
+					}
+
+					Phi = Phit/molT;
+					dPhidT = dPhitdT/molT;
+					d2PhidT2 = d2PhitdT2/molT;
+					dPhidP = dPhitdP/molT;
+
+					// activity coefficient (and derivatives)
+					lnaw = - Phi*molT/Nw;
+					LnG[j] = lnaw - lnxw;
+					dLnGdT[j] = - (molT/Nw) * dPhidT;
+					d2LnGdT2[j] = - (molT/Nw) * d2PhidT2;
+					dLnGdP[j] = - (molT/Nw) * dPhidP;
 				}
 
 				else
@@ -3368,8 +3416,8 @@ long int TDebyeHueckel::PTparam()
 long int TDebyeHueckel::MixMod()
 {
 	long int j, k, w;
-	double sqI, Z2, lgGam, lnGam, Nw, Lgam, Lam, lnActWat, lnwxWat, WxW, lg_to_ln,
-				SigTerm, Phi, Phit;
+	double sqI, Z2, lgGam, lnGam, Nw, Lgam, Lam, lnaw, lnxw, xw, lg_to_ln,
+				sig, Phi, Phit;
 	lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
@@ -3378,13 +3426,13 @@ long int TDebyeHueckel::MixMod()
 	// calculate ionic strength and total molalities
 	IonicStrength();
 
-	WxW = x[w];
+	xw = x[w];
 	Nw = 1000./18.01528;
 	// Lgam = -log10(1.+0.0180153*molT);
-	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	Lgam = log10(xw);  // Helgeson large gamma simplified
 	if( Lgam < -0.7 )
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
-	lnwxWat = log(WxW);
+	lnxw = log(xw);
 	sqI = sqrt(IS);
 
 	// loop over species
@@ -3433,21 +3481,21 @@ long int TDebyeHueckel::MixMod()
 					Phit = 0.0;
 					// Phi corrected using eq. (190) from Helgeson et al. (1981)
 					Lam = 1. + (ao*B) * sqI;
-					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
+					sig = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
 					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
 					// Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (Lgam*psi)/(0.0180153*2.*IS) - bgam*IS/2. );
 
 					for (k=0; k<(NComp-1); k++)
 					{
 						if ( (z[k] == 0) && (flagNeut == 1) )
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bg[k]*IS/2. );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*sig)/3. + Lgam/(0.0180153*molT) - bg[k]*IS/2. );
 						else
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*sig)/3. + Lgam/(0.0180153*molT) );
 					}
 
 					Phi = Phit/molT;
-					lnActWat = - Phi*molT/Nw;
-					lnGam = lnActWat - lnwxWat;
+					lnaw = - Phi*molT/Nw;
+					lnGam = lnaw - lnxw;
 				}
 				else
 					lnGam = 0.0;
@@ -3465,8 +3513,8 @@ long int TDebyeHueckel::ExcessProp( double *Zex )
 {
 	// (under construction)
 	long int j, k, w;
-	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, dPhidT, d2PhidT2, dPhidP,
-			Phit, dPhitdT, d2PhitdT2, dPhitdP, lnActWat, lg_to_ln, g, dgt, d2gt, dgp;
+	double sqI, Z2, Nw, Lgam, lnxw, xw, Lam, sig, Phi, dPhidT, d2PhidT2, dPhidP,
+			Phit, dPhitdT, d2PhitdT2, dPhitdP, lnaw, lg_to_ln, g, dgt, d2gt, dgp;
 	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP, U1, U2, U3, V1, V2, V3,
 			dU1dT, dU2dT, dU3dT, dV1dT, dV2dT, dV3dT, d2U1dT2, d2U2dT2, d2U3dT2,
 			d2V1dT2, d2V2dT2, d2V3dT2, dU1dP, dU2dP, dU3dP, dV1dP, dV2dP, dV3dP,
@@ -3480,13 +3528,13 @@ long int TDebyeHueckel::ExcessProp( double *Zex )
 	// calculate ionic strength and total molalities
 	IonicStrength();
 
-	WxW = x[w];
+	xw = x[w];
 	Nw = 1000./18.01528;
 	// Lgam = -log10(1.+0.0180153*molT);
-	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	Lgam = log10(xw);  // Helgeson large gamma simplified
 	if( Lgam < -0.7 )
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
-	lnwxWat = log(WxW);
+	lnxw = log(xw);
 	sqI = sqrt(IS);
 
 	// loop over species
@@ -3593,13 +3641,13 @@ long int TDebyeHueckel::ExcessProp( double *Zex )
 
 					// increments to osmotic coefficient (and derivatives)
 					Lam = 1. + (ao*B) * sqI;
-					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
+					sig = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
 
 					for (k=0; k<(NComp-1); k++)
 					{
 						if ( (z[k] == 0) && (flagNeut == 1) )
 						{
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bg[k]*IS/2. );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*sig)/3. + Lgam/(0.0180153*molT) - bg[k]*IS/2. );
 							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT );
 							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 );
 							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP );
@@ -3608,7 +3656,7 @@ long int TDebyeHueckel::ExcessProp( double *Zex )
 
 						else
 						{
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*sig)/3. + Lgam/(0.0180153*molT) );
 							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT );
 							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 );
 							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP );
@@ -3621,8 +3669,8 @@ long int TDebyeHueckel::ExcessProp( double *Zex )
 					dPhidP = dPhitdP/molT;
 
 					// activity coefficient (and derivatives)
-					lnActWat = - Phi*molT/Nw;
-					LnG[j] = lnActWat - lnwxWat;
+					lnaw = - Phi*molT/Nw;
+					LnG[j] = lnaw - lnxw;
 					dLnGdT[j] = - (molT/Nw) * dPhidT;
 					d2LnGdT2[j] = - (molT/Nw) * d2PhidT2;
 					dLnGdP[j] = - (molT/Nw) * dPhidP;
@@ -3852,8 +3900,8 @@ long int TKarpov::PTparam()
 long int TKarpov::MixMod()
 {
 	long int j, k, w;
-	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm,
-			Phi, Phit, psi, zc, za, lnActWat, lg_to_ln;
+	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnxw, xw, Lam, sig,
+			Phi, Phit, psi, zc, za, lnaw, lg_to_ln;
 	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
@@ -3862,13 +3910,13 @@ long int TKarpov::MixMod()
 	// calculate ionic strength and total molalities
 	IonicStrength();
 
-	WxW = x[w];
+	xw = x[w];
 	Nw = 1000./18.01528;
 	// Lgam = -log10(1.+0.0180153*molT);
-	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	Lgam = log10(xw);  // Helgeson large gamma simplified
 	if( Lgam < -0.7 )
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
-	lnwxWat = log(WxW);
+	lnxw = log(xw);
 	sqI = sqrt(IS);
 
 	// loop over species
@@ -3911,21 +3959,21 @@ long int TKarpov::MixMod()
 					Phit = 0.0;
 					// Phi corrected using eq. (190) from Helgeson et al. (1981)
 					Lam = 1. + ao*B*sqI;
-					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
+					sig = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
 					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
 					// Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (psi*Lgam)/(0.0180153*2.*IS) - bgam*IS/2. );
 
 					for (k=0; k<(NComp-1); k++)
 					{
 						if ( (z[k] == 0) && (flagNeut == 0) )
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*sig)/3. + Lgam/(0.0180153*molT) );
 						else
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bgam*IS/2. );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*sig)/3. + Lgam/(0.0180153*molT) - bgam*IS/2. );
 					}
 
 					Phi = Phit/molT;
-					lnActWat = - Phi*molT/Nw;
-					lnGam = lnActWat - lnwxWat;
+					lnaw = - Phi*molT/Nw;
+					lnGam = lnaw - lnxw;
 				}
 				else
 					lnGam = 0.0;
@@ -3942,8 +3990,8 @@ long int TKarpov::MixMod()
 long int TKarpov::ExcessProp( double *Zex )
 {
 	long int j, k, w;
-	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, dPhidT, d2PhidT2, dPhidP,
-			Phit, dPhitdT, d2PhitdT2, dPhitdP, lnActWat, lg_to_ln, g, dgt, d2gt, dgp;
+	double sqI, Z2, Nw, Lgam, lnxw, xw, Lam, sig, Phi, dPhidT, d2PhidT2, dPhidP,
+			Phit, dPhitdT, d2PhitdT2, dPhitdP, lnaw, lg_to_ln, g, dgt, d2gt, dgp;
 	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP, U1, U2, U3, V1, V2, V3,
 			dU1dT, dU2dT, dU3dT, dV1dT, dV2dT, dV3dT, d2U1dT2, d2U2dT2, d2U3dT2,
 			d2V1dT2, d2V2dT2, d2V3dT2, dU1dP, dU2dP, dU3dP, dV1dP, dV2dP, dV3dP,
@@ -3957,13 +4005,13 @@ long int TKarpov::ExcessProp( double *Zex )
 	// calculate ionic strength and total molalities
 	IonicStrength();
 
-	WxW = x[w];
+	xw = x[w];
 	Nw = 1000./18.01528;
 	// Lgam = -log10(1.+0.0180153*molT);
-	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	Lgam = log10(xw);  // Helgeson large gamma simplified
 	if( Lgam < -0.7 )
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
-	lnwxWat = log(WxW);
+	lnxw = log(xw);
 	sqI = sqrt(IS);
 
 	// loop over species
@@ -4070,13 +4118,13 @@ long int TKarpov::ExcessProp( double *Zex )
 
 					// increments to osmotic coefficient (and derivatives)
 					Lam = 1. + (ao*B) * sqI;
-					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
+					sig = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
 
 					for (k=0; k<(NComp-1); k++)
 					{
 						if ( (z[k] == 0) && (flagNeut == 0) )
 						{
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*sig)/3. + Lgam/(0.0180153*molT) );
 							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT );
 							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 );
 							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP );
@@ -4085,7 +4133,7 @@ long int TKarpov::ExcessProp( double *Zex )
 
 						else
 						{
-							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bgam*IS/2. );
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*sig)/3. + Lgam/(0.0180153*molT) - bgam*IS/2. );
 							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT - dbgdT*IS/2. );
 							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 - d2bgdT2*IS/2. );
 							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP - dbgdP*IS/2. );
@@ -4098,8 +4146,8 @@ long int TKarpov::ExcessProp( double *Zex )
 					dPhidP = dPhitdP/molT;
 
 					// activity coefficient (and derivatives)
-					lnActWat = - Phi*molT/Nw;
-					LnG[j] = lnActWat - lnwxWat;
+					lnaw = - Phi*molT/Nw;
+					LnG[j] = lnaw - lnxw;
 					dLnGdT[j] = - (molT/Nw) * dPhidT;
 					d2LnGdT2[j] = - (molT/Nw) * d2PhidT2;
 					dLnGdP[j] = - (molT/Nw) * dPhidP;
@@ -4532,7 +4580,7 @@ long int TShvarov::PTparam()
 long int TShvarov::MixMod()
 {
 	long int j, k, w;
-	double sqI, Z2, lgGam, lnGam, Nw, WxW, lnwxWat, Lgam,
+	double sqI, Z2, lgGam, lnGam, Nw, xw, lnxw, Lgam,
 				msum, C, lg_to_ln;
 	lg_to_ln = 2.302585093;
 
@@ -4542,13 +4590,13 @@ long int TShvarov::MixMod()
 	// calculate ionic strength and total molaities (molT and molZ)
 	IonicStrength();
 
-	WxW = x[w];
+	xw = x[w];
 	Nw = 1000./18.01528;
 	// Lgam = -log10(1.+0.0180153*molT);
-	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	Lgam = log10(xw);  // Helgeson large gamma simplified
 	if( Lgam < -0.7 )
 		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
-	lnwxWat = log(WxW);
+	lnxw = log(xw);
 	sqI = sqrt(IS);
 	C = (0.5*bgam);
 
@@ -4613,7 +4661,7 @@ long int TShvarov::MixMod()
 long int TShvarov::ExcessProp( double *Zex )
 {
 	long int j, k, w;
-	double sqI, Z2, Nw, WxW, msum, C, dCdT, d2CdT2, dCdP, lg_to_ln,
+	double sqI, Z2, Nw, xw, msum, C, dCdT, d2CdT2, dCdP, lg_to_ln,
 				g, dgt, d2gt, dgp;
 	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP, U1, U2, U3, V1, V2, V3,
 				dU1dT, dU2dT, dU3dT, dV1dT, dV2dT, dV3dT, d2U1dT2, d2U2dT2, d2U3dT2,
@@ -4628,7 +4676,7 @@ long int TShvarov::ExcessProp( double *Zex )
 	// calculate ionic strength and total molalities
 	IonicStrength();
 
-	WxW = x[w];
+	xw = x[w];
 	Nw = 1000./18.01528;
 	sqI = sqrt(IS);
 	C = (0.5*bgam);

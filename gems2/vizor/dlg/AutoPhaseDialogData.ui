@@ -256,17 +256,7 @@ the aqueous phase model</string>
                             <widget class="QComboBox">
                                 <item>
                                     <property name="text">
-                                        <string>All species</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>Charged species only</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>Neutral species only</string>
+                                        <string>Applied to all species</string>
                                     </property>
                                 </item>
                                 <item>
