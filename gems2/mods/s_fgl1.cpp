@@ -5065,7 +5065,7 @@ long int TShvarov::GShok2( double T, double P, double D, double beta,
 	g = a * pow(pw, b);
 
 	dgdD = - a*b* pow(pw, (b - 1.0));
-	// dgdD2 = a * b * (b - 1.0) * pow((1.0 - D),(b - 2.0));
+		// dgdD2 = a * b * (b - 1.0) * pow((1.0 - D),(b - 2.0));
 
 	dadT = C[1] + 2.0*C[2]*T;
 	dadTT = 2.0*C[2];
@@ -5075,7 +5075,7 @@ long int TShvarov::GShok2( double T, double P, double D, double beta,
 	dDdP = D * beta;
 	dDdTT = - D * (daldT - pow(alpha,2.));
 
-	// Db = pow((1.0 - D), b);  Fixed by DAK 01.11.00
+		// Db = pow((1.0 - D), b);  Fixed by DAK 01.11.00
 	Db = pow(pw , b);
 	dDbdT = - b*pow(pw,(b - 1.0))*dDdT + log(pw)*Db*dbdT;
 

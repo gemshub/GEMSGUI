@@ -227,6 +227,7 @@ NEXT:
 
 }
 
+
 //--------------------------------------------------------------------//
 // Calculation of V*dP correction to standard properties of
 // condensed components
@@ -239,12 +240,12 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
           aC/*=0.*/, aE/*=0.*/, kap, T05, Tst05;
     int i;
 
-    /* Init numbers - volume Vst must be in J/bar ! */
+	// Initialize numbers - volume Vst must be in J/bar
     Pst = (double)dc[q].Pst;
     Vst = (double)dc[q].mVs[0];
     if( IsFloatEmpty( dc[q].mVs[0] ))
         Vst = 0.;
-//    dT = TK_DELTA; //TC = aW.twp->TC;
+		// dT = TK_DELTA; //TC = aW.twp->TC;
     T = aW.twp->T;
     Tst = aW.twp->Tst;
     P = aW.twp->P;
@@ -254,66 +255,71 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
     T05 = sqrt(T);
     Tst05 = sqrt(Tst);
 
+    // Molar volume assumed independent of T and P
     if( CV == CPM_CON )
-    { // Molar volume assumed independent of T and P
+    {
       aW.twp->V = Vst;
       aW.twp->G += Vst * P_Pst;
       aW.twp->H += P_Pst * Vst;
     }
-    else if( CV == CPM_CEH )
-    { /* Calculation over compressibility/expandability according to
-         Holland & Powell, 1998 */
-      // reading and checking the coeffs
-      aC = (double)dc[q].Comp; // This is the bulk modulus k in kbar at 298 K!
-      // aC *= 1000.;   Check! conversion from kbar to bar
-      if( IsFloatEmpty( dc[q].Comp ))
-          aC = 0.;
-      aE = (double)dc[q].Expa; // This is the a parameter in 1/K !
-      if( IsFloatEmpty( dc[q].Expa ))
-          aE = 0.;
-      if(( fabs( P_Pst ) > PRESSURE_PREC || fabs( T_Tst ) > TEMPER_PREC )
-           && fabs(Vst) > 1e-9 && fabs(aC) > 1e-9 && fabs(aE) > 1e-9 )
-                             // No zero molar volume !
-      {
-    	  // Inserted 01.07.03 - calculations acc. to Holland&Powell, 1998
-         double VT, PP = P*0.001; // P seems to be in kbar in HP98 eqns!
-         // Coeff. of thermal expansion at T
-         aW.twp->Alp = aE * (1. - 10./T05 );
-         // Bulk modulus at T
-         kap = aC * ( 1. - 1.5e-4*T_Tst );
-         // Compressibility at T  - check !
-         aW.twp->Bet = 1./PP * (1. - pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 ));  // to check (compressibility)
 
-         // Molar properties
-         VT = Vst *(1.+ aE*T_Tst - 20.*aE*(T05 - Tst05));
-         aW.twp->G += 1./3.* VT * kap * 1000. * (pow((1.+4.*PP/kap),0.75 )- 1.); // sign in pow((1-4... fixed 21.10.2004
-         aW.twp->S -= Vst * P * ( aE - 10.*aE / T05 );
-         aW.twp->H += -T * Vst * P * ( aE - 10.*aE / T05 )
-              + 1./3. * VT * kap * 1000. * ( pow((1.+4.*PP/kap),0.75 ) - 1.);  // sign in pow((1-4... fixed 21.10.2004
-         aW.twp->V += VT * pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 );
-      }
-      else {  // aE and aC are not provided
+	// Calculation over compressibility/expandability according to Holland and Powell (1998)
+    else if( CV == CPM_CEH )
+    {
+    	// reading and checking the coeffs
+    	aC = (double)dc[q].Comp; // This is the bulk modulus k in kbar at 298 K
+    	// aC *= 1000.;   Check! conversion from kbar to bar
+    	if( IsFloatEmpty( dc[q].Comp ))
+    		aC = 0.;
+    	aE = (double)dc[q].Expa; // This is the a parameter in 1/K
+    	if( IsFloatEmpty( dc[q].Expa ))
+    		aE = 0.;
+    	if(( fabs( P_Pst ) > PRESSURE_PREC || fabs( T_Tst ) > TEMPER_PREC )
+    			&& fabs(Vst) > 1e-9 && fabs(aC) > 1e-9 && fabs(aE) > 1e-9 )
+    		// No zero molar volume
+    	{
+    		// Inserted 01.07.03
+    		double VT, PP = P*0.001;  // P seems to be in kbar in HP98 eqns
+    		// Coeff. of thermal expansion at T
+    		aW.twp->Alp = aE * (1. - 10./T05 );
+			// Bulk modulus at T
+    		kap = aC * ( 1. - 1.5e-4*T_Tst );
+    		// Compressibility at T  - check
+    		aW.twp->Bet = 1./PP * (1. - pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 ));  // to check (compressibility)
+
+    		// Molar properties
+    		VT = Vst *(1.+ aE*T_Tst - 20.*aE*(T05 - Tst05));
+    		aW.twp->G += 1./3.* VT * kap * 1000. * (pow((1.+4.*PP/kap),0.75 )- 1.); // sign in pow((1-4... fixed 21.10.2004
+    		aW.twp->S -= Vst * P * ( aE - 10.*aE / T05 );
+    		aW.twp->H += -T * Vst * P * ( aE - 10.*aE / T05 )
+				  + 1./3. * VT * kap * 1000. * ( pow((1.+4.*PP/kap),0.75 ) - 1.);  // sign in pow((1-4... fixed 21.10.2004
+    		aW.twp->V += VT * pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 );
+    	}
+
+      else
+      {
+    	  // aE and aC are not provided
     	  // Warning here?
-        // Molar volume assumed independent of T and P
-        aW.twp->V = Vst;
-        aW.twp->G += Vst * P_Pst;
-        aW.twp->H += P_Pst * Vst;
+    	  // Molar volume assumed independent of T and P
+    	  aW.twp->V = Vst;
+    	  aW.twp->G += Vst * P_Pst;
+    	  aW.twp->H += P_Pst * Vst;
       }
     }
+
+    // Volume equation (Berman)
+    // V(P,T)/V(1,298) = 1 + V1(T-298) + V2(T-298)**2 + V3(P-1) + V4(P-1)**2
+    // The same as usual one but a2=0 and 1 is added instead of a2: to Check
     else if( (CV == CPM_VKE || CV == CPM_VBE ) && dc[q].Vt )
-    {  /* Vm = f(T,P) equations */
+    {  // Vm = f(T,P) equations
         aC = 0.;
         aE = 0.;
-
-//  Volume equation (Berman)
-//  V(P,T)/V(1,298) = 1 + V1(T-298) + V2(T-298)**2 + V3(P-1) + V4(P-1)**2
-// The same as usual one but a2=0 and 1 is added instead of a2: to Check!
 
         for( i=0; i<5; i++ )
         { // Finding compressibility and expandability from V=f(T,P) coeffs
             a = (double)dc[q].Vt[i];
             if( IsDoubleEmpty( a ) || !a ) continue;
-            switch( i ) /* running over coeffs Vp(T,P) */
+            switch( i ) // running over coeffs Vp(T,P)
             {
             case 0:
                 aE += a;
@@ -333,9 +339,10 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
                 break;
             }
         }
-        aW.twp->V = Vst;                 // added by KD 22.11.04
+
+        aW.twp->V = Vst;  // added by KD 22.11.04
         if( fabs( P_Pst ) > PRESSURE_PREC || fabs( T_Tst ) > TEMPER_PREC )
-        { /* can be calculated */
+        { // can be calculated
             VP = Vst * P_Pst;
             VT = Vst * T_Tst;
             aW.twp->G += VP;
@@ -377,13 +384,17 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
                 }
             }
         }
+
         aW.twp->Alp = aC;
         aW.twp->Bet = aE;
-        /*       dc[q].Comp = (float)aW.twp->Alp;
-                 dc[q].Expa = (float)aW.twp->Bet;  */
+			// dc[q].Comp = (float)aW.twp->Alp;
+			// dc[q].Expa = (float)aW.twp->Bet;
     }
-    else if( CV == CPM_VBM && dc[q].ODc )  /* Code 'B' - Birch-Murnaghan */
-    { // Inserted 04.04.2003 M.Gottschalk and KD
+
+    // Birch-Murnaghan (Gottschalk version)
+    // Inserted 04.04.2003 M.Gottschalk and KD
+    else if( CV == CPM_VBM && dc[q].ODc )
+    {
       if( fabs( P_Pst ) > PRESSURE_PREC || fabs( T_Tst ) > TEMPER_PREC )
       {
          double VV0=0.0, GG0=0.0, HH0=0.0, SS0=0.0, aC=0.0, aE=0.0;
@@ -392,14 +403,14 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
                          VV0, aC, aE, GG0, HH0, SS0 );
          // increments to V, G, H, S
          aW.twp->V += Vst+VV0/10.;    // fixed by KD on 22.11.04
-//         aW.twp->V += VV0/10.;
+			 // aW.twp->V += VV0/10.;
          aW.twp->S += SS0;
          aW.twp->G += GG0;
          aW.twp->H += HH0;
          aW.twp->Alp = aC;
          aW.twp->Bet = aE;
       }
-   }  // End of Birch-Murnaghan section
+   }
 }
 
 
@@ -412,17 +423,15 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
 double TDComp::BM_IntVol(double P, double Pref, double vt, double vpt,
                          double kt0, double kp, double kpp)
 {
-   double vt23, pint;
+	double vt23, pint;
 
-   vt23 = pow( vt/vpt, 2./3. );
+	vt23 = pow( vt/vpt, 2./3. );
 
-   pint = (-3.*kt0*vt*(6.*(199. - 75.*kp + 9.*kp*kp + 9.*kpp*kt0)*vpt*vt*
-          pow( vt/vpt, 1./3. ) +
-          vt*vt*(-668. + kp*(276. - 63.*vt23) + 9*kp*kp*(-4. + vt23) +
-          9.*kpp*kt0*(-4. + vt23) + 143.*vt23) +
-          vpt*vpt*(287. + kp*kp*(9. - 36.*vt23) +
-          9.*kpp*kt0*(1. - 4.*vt23) - 956.*vt23 + kp*(-87. + 324.*vt23))
-          ))/(128.*vpt*vpt);
+	pint = (-3.*kt0*vt*(6.*(199. - 75.*kp + 9.*kp*kp + 9.*kpp*kt0)*vpt*vt*pow( vt/vpt, 1./3. )
+				+ vt*vt*(-668. + kp*(276. - 63.*vt23) + 9*kp*kp*(-4. + vt23)
+				+ 9.*kpp*kt0*(-4. + vt23) + 143.*vt23)
+				+ vpt*vpt*(287. + kp*kp*(9. - 36.*vt23)
+				+ 9.*kpp*kt0*(1. - 4.*vt23) - 956.*vt23 + kp*(-87. + 324.*vt23))))/(128.*vpt*vpt);
 
 // return vdP
    return -Pref*vt+P*vpt-pint;
@@ -433,33 +442,32 @@ double TDComp::BM_IntVol(double P, double Pref, double vt, double vpt,
 // calculate the volume at P and T
 //
 double TDComp::BM_Volume( double P, double vt, double kt0, double kp,
-                         double kpp, double vstart)
+			double kpp, double vstart)
 {
       double  veq, vv, vvnew, vvold, vt23, dveq;
-      int i=0;
+      long int i=0;
 
-      vv    = vstart;
+      vv = vstart;
       vvold = vv;
       vvnew = vvold + 1.;
 
-// Newton iteration (max. 50 iterations)
-  while ( fabs(vvnew-vvold) > 1e-10 && i++ < 50 )
-  {
-        vt23 = pow( vt/vv, 2./3.);
-        veq =  3./2.*kt0*(1.+3./4.*(kp-4.)*(vt23-1.)
-             +3./8.*(143./9.-7.*kp+kp*kp+kpp*kt0)*(vt23-1.)*(vt23-1.))
-             *(vt23-1.)*pow( vt/vv, 5./3. ) - P;
-        dveq = (kt0*vt*(vt*vt*(4509. + kp*kp*(243. - 99.*vt23)
-             + 9.*kpp*kt0*(27. - 11.*vt23) + 9.*kp*(-207. + 77.*vt23)
-             - 1573.*vt23) - 21.*(199. - 75.*kp + 9.*kp*kp + 9.*kpp*kt0)
-             *vt*pow( vt/vv, 1./3. ) *vv
-             + 5.*(239. - 81.*kp + 9.*kp*kp + 9.*kpp*kt0)
-             *vt23*vv*vv))/(48.*vv*vv*vv*vv);
-        vvold = vv;
-        vvnew = vv - veq/dveq/2.;
-        vv    = vvnew;
-   }
-// returns volume
+      // Newton iteration (max. 50 iterations)
+      while ( fabs(vvnew-vvold) > 1e-10 && i++ < 50 )
+      {
+    	  vt23 = pow( vt/vv, 2./3.);
+    	  veq = 3./2.*kt0*(1.+3./4.*(kp-4.)*(vt23-1.)
+    			  + 3./8.*(143./9.-7.*kp+kp*kp+kpp*kt0)*(vt23-1.)*(vt23-1.))
+    			  * (vt23-1.)*pow( vt/vv, 5./3. ) - P;
+    	  dveq = (kt0*vt*(vt*vt*(4509. + kp*kp*(243. - 99.*vt23)
+    			  + 9.*kpp*kt0*(27. - 11.*vt23) + 9.*kp*(-207. + 77.*vt23)
+    			  - 1573.*vt23) - 21.*(199. - 75.*kp + 9.*kp*kp + 9.*kpp*kt0)*vt*pow( vt/vv, 1./3. )*vv
+    			  + 5.*(239. - 81.*kp + 9.*kp*kp + 9.*kpp*kt0)*vt23*vv*vv))/(48.*vv*vv*vv*vv);
+    	  vvold = vv;
+    	  vvnew = vv - veq/dveq/2.;
+    	  vv = vvnew;
+      }
+
+      // returns volume
       return vv;
 }
 
@@ -473,40 +481,37 @@ TDComp::BirchMurnaghan( double Pref, double P, double Tref, double T, double v0,
           const float *BMConst, double &vv, double &alpha, double &beta,
           double &dG, double &dH, double &dS )
 {
-   double vt, /*vpt,*/ a1, a2, a3,    //  a4, a5,
-          kt00, kt0, dkdt, kp, kpp, vstart,
-          /*Volume, IntVol, */ Pincr=0.01, Tincr=0.1,
-          Pplus, Pminus, Tplus, Tminus,
-          vPplus, vPminus, vTplus, vTminus,
-          kt0Tplus, kt0Tminus, kppTplus, kppTminus,
+   double vt, /*vpt,*/ a1, a2, a3, /*a4, a5,*/ kt00, kt0, dkdt, kp, kpp, vstart,
+          /*Volume, IntVol, */ Pincr=0.01, Tincr=0.1, Pplus, Pminus, Tplus, Tminus,
+          vPplus, vPminus, vTplus, vTminus, kt0Tplus, kt0Tminus, kppTplus, kppTminus,
           vtTplus, vtTminus, dGTplus, dGTminus;
 
-   // v0   = BMConst(1) - in GEMS passed as a separate function parameter
-    a1   = BMConst[0];
-    a2   = BMConst[1];
-    a3   = BMConst[2];
-    // a4   = BMConst[3];  for future extensions
-    // a5   = BMConst[4];
+	   // v0 = BMConst(1) - in GEMS passed as a separate function parameter
+    a1 = BMConst[0];
+    a2 = BMConst[1];
+    a3 = BMConst[2];
+		// a4   = BMConst[3];  for future extensions
+		// a5   = BMConst[4];
     kt00 = BMConst[5];
     dkdt = BMConst[6];
-    kp   = BMConst[7];
-    kpp  = BMConst[8];
+    kp = BMConst[7];
+    kpp = BMConst[8];
 
-    Pplus  = P + Pincr;
+    Pplus = P + Pincr;
     Pminus = P - Pincr;
-    Tplus  = T + Tincr;
+    Tplus = T + Tincr;
     Tminus = T - Tincr;
 
     // calculate bulk modulus at T and its T increments
-    kt0        = kt00 + dkdt*(T - Tref);
-    kt0Tplus   = kt00 + dkdt*(Tplus - Tref);
-    kt0Tminus  = kt00 + dkdt*(Tminus - Tref);
+    kt0 = kt00 + dkdt*(T - Tref);
+    kt0Tplus = kt00 + dkdt*(Tplus - Tref);
+    kt0Tminus = kt00 + dkdt*(Tminus - Tref);
 
     // set kpp if not already defined and its T increments
     if ( fabs(kpp) < 1e-20 )
     {
-      kpp       = -((35./9.+(3.-kp)*(4.-kp))/kt0);
-      kppTplus  = -((35./9.+(3.-kp)*(4.-kp))/kt0Tplus);
+      kpp = -((35./9.+(3.-kp)*(4.-kp))/kt0);
+      kppTplus = -((35./9.+(3.-kp)*(4.-kp))/kt0Tplus);
       kppTminus = -((35./9.+(3.-kp)*(4.-kp))/kt0Tminus);
     }
 
@@ -525,21 +530,21 @@ TDComp::BirchMurnaghan( double Pref, double P, double Tref, double T, double v0,
     vstart = vt* exp( -1./kt0*(P-Pref) );
 
     // calculate volumes at P and T and its increments
-    vv      = BM_Volume(P, vt, kt0, kp, kpp, vstart);
-    vPplus  = BM_Volume(Pplus, vt, kt0, kp, kpp, vv);
+    vv = BM_Volume(P, vt, kt0, kp, kpp, vstart);
+    vPplus = BM_Volume(Pplus, vt, kt0, kp, kpp, vv);
     vPminus = BM_Volume(Pminus, vt, kt0, kp, kpp, vv);
-    vTplus  = BM_Volume(P, vtTplus, kt0Tplus, kp, kppTplus, vv);
+    vTplus = BM_Volume(P, vtTplus, kt0Tplus, kp, kppTplus, vv);
     vTminus = BM_Volume(P, vtTminus,kt0Tminus,kp,kppTminus, vv);
 
     // calculate aplha and beta at P and T
-    alpha =  1./vv*((vTplus-vTminus)/(2.*Tincr));
-    beta  = -1./vv*((vPplus-vPminus)/(2.*Pincr));
+    alpha = 1./vv*((vTplus-vTminus)/(2.*Tincr));
+    beta = - 1./vv*((vPplus-vPminus)/(2.*Pincr));
 
     // calculate vdP (P-T correction of G ->  dG)
     dG = BM_IntVol(P, Pref, vt, vv, kt0, kp, kpp);
 
     // calculate d(vdP)/dT (dS)
-    dGTplus  = BM_IntVol(P,Pref,vtTplus,vTplus,kt0Tplus,kp,kppTplus);
+    dGTplus = BM_IntVol(P,Pref,vtTplus,vTplus,kt0Tplus,kp,kppTplus);
     dGTminus = BM_IntVol(P,Pref,vtTminus,vTminus,kt0Tminus,kp,kppTminus);
     dS = (dGTplus-dGTminus)/(2.*Tincr);
 
@@ -585,9 +590,9 @@ void TDComp::calc_akinf( int q, int p )
 	// Getting back ideal gas properties corrected for T of interest
 	// by substracting properties of hydration at Tr, Pr
     Gids = aW.twp->G -= Geos298;
-    // Vids = aW.twp->V -= Veos298;
+		// Vids = aW.twp->V -= Veos298;
     Sids = aW.twp->S -= Seos298;
-    // CPids = aW.twp->Cp -= CPeos298;
+		// CPids = aW.twp->Cp -= CPeos298;
     CPids = aW.twp->Cp;
     Hids = aW.twp->H -= Heos298;
 
@@ -653,16 +658,17 @@ TDComp::Akinfiev_EOS_increments(double Tk, double P, double Gig, double Sig, dou
 	lnKH = (1.-xi)*log(fug) + xi*log(RR*Tk/MW*rho) + 2.*rho*deltaB;
 
 	Geos = - R_CONST*Tk*log(Nw) + (1.-xi)*R_CONST*Tk*log(fug) + R_CONST*Tk*xi*log(RR*Tk/MW*rho)
-		+ R_CONST*Tk*rho*(aa+bb*pow((1000./Tk),0.5));
+				+ R_CONST*Tk*rho*(aa+bb*pow((1000./Tk),0.5));
 	derP = aa*Tk*drhoP + bb*pow(10.,1.5)*pow(Tk,0.5)*drhoP;
 	derT = aa*(rho+Tk*drhoT) + bb*(0.5*pow(10.,1.5)*pow(Tk,-0.5)*rho + pow(10.,1.5)*pow(Tk,0.5)*drhoT);
 	der2T = aa*(2.*drhoT+Tk*d2rhoT) + bb*((-0.25)*pow(10.,1.5)*pow(Tk,-1.5)*rho
-		+ pow(10.,1.5)*pow(Tk,-0.5)*drhoT + pow(10.,1.5)*pow(Tk,0.5)*d2rhoT);
+				+ pow(10.,1.5)*pow(Tk,-0.5)*drhoT + pow(10.,1.5)*pow(Tk,0.5)*d2rhoT);
+
 	Veos = (vol*(1.-xi) + xi*RR*Tk*(1./rho)*drhoP + RR*derP)/10.;
 	Seos = (1.-xi)*(Sres) + R_CONST*log(Nw) - R_CONST*(xi + xi*log(RR*Tk/MW) + xi*log(rho)
-		+ xi*Tk*(1./rho)*drhoT) - R_CONST*derT;
+				+ xi*Tk*(1./rho)*drhoT) - R_CONST*derT;
 	CPeos = (1.-xi)*(CPres) - R_CONST*(xi + 2.*xi*Tk*(1./rho)*drhoT
-		- xi*pow(Tk,2.)/pow(rho,2.)*pow(drhoT,2.) + xi*pow(Tk,2.)/rho*d2rhoT) - R_CONST*Tk*der2T;
+				- xi*pow(Tk,2.)/pow(rho,2.)*pow(drhoT,2.) + xi*pow(Tk,2.)/rho*d2rhoT) - R_CONST*Tk*der2T;
 	Heos = Geos + Tk*Seos;
 }
 
@@ -679,171 +685,168 @@ TDComp::calc_tpH2O( int pst )
     aW.twp->T = aSta.Temp;
     aW.twp->P = aSta.Pres;
     aW.twp->V = dcp->mwt / aSta.Dens[pst] / 10.;  /* j/bar */
-//    aW.twp->F = aWp.Aw[pst] * CaltoJ;
-//    aW.twp->U = aWp.Uw[pst] * CaltoJ;
+		// aW.twp->F = aWp.Aw[pst] * CaltoJ;
+		// aW.twp->U = aWp.Uw[pst] * CaltoJ;
     aW.twp->H = aWp.Hw[pst] * CaltoJ;
     aW.twp->G = aWp.Gw[pst] * CaltoJ;
     aW.twp->S = aWp.Sw[pst] * CaltoJ;
     aW.twp->Cp = aWp.Cpw[pst] * CaltoJ;
-//    aW.twp->Cv = aWp.Cvw[pst] * CaltoJ;
+		// aW.twp->Cv = aWp.Cvw[pst] * CaltoJ;
     aW.twp->Bet = aWp.Betaw[pst];
     aW.twp->Alp = aWp.Alphaw[pst];
 }
 
 
-//--------------------------------------------------------------------//
-/* gShok2- Calc  g, dgdP, dgdT, d2gdT2 use equations in Shock et al. (1991)
-* units:   T ................. C
-*          D ................. g/cm**3
-*          beta, dgdP ........ bars**(-1)
-*          alpha, dgdT ....... K**(-1)
-*          daldT, d2gdT2 ..... K**(-2)                            */
-void TDComp::gShok2(double T, double P, double D, double beta, double alpha,
+//-------------------------------------------------------------------------
+// gShok2- Calc  g, dgdP, dgdT, d2gdT2 use equations in Shock et al. (1991)
+// units:  T ................. C
+//         D ................. g/cm**3
+//         beta, dgdP ........ bars**(-1)
+//         alpha, dgdT ....... K**(-1)
+//         daldT, d2gdT2 ..... K**(-2)
+void TDComp::gShok2( double T, double P, double D, double beta, double alpha,
                     double daldT, double *g, double *dgdP, double *dgdT,
-                    double *d2gdT2)
+                    double *d2gdT2 )
 {
     double a, b, dgdD, /*dgdD2,*/ dadT, dadTT, dbdT, dbdTT, dDdT, dDdP,
-    dDdTT, Db, dDbdT, dDbdTT, ft, dftdT, dftdTT, fp, dfpdP,
-    f, dfdP, dfdT, d2fdT2, tempy;
+				dDdTT, Db, dDbdT, dDbdTT, ft, dftdT, dftdTT, fp, dfpdP,
+				f, dfdP, dfdT, d2fdT2, tempy;
+
     double C[6]  = {-0.2037662e+01,  0.5747000e-02, -0.6557892e-05,
                     0.6107361e+01, -0.1074377e-01,  0.1268348e-04 };
     double cC[3] = { 0.3666666e+02, -0.1504956e-09,  0.5017997e-13 };
+
     /*  SUBROUTINE gShok2(T,P,D,beta,alpha,daldT,g,dgdP,dgdT,d2gdT2) */
     //Sveta 19/02/2000 1-D < 0 pri D>1 => pow(-number, b) = -NaN0000 error
-    ErrorIf( D >= 1.3, GetName(), "gShok2: D >= 1.3!" );
+
+    ErrorIf( D >= 1.3, GetName(), "gShok2: water density higher than 1.3 g cm-3" );
 
     double pw = fabs(1.0e0 - D); // insert Sveta 19/02/2000
 
-    a  = C[0] + C[1] * T + C[2] * pow(T,2.);
-    b  = C[3] + C[4] * T + C[5] * pow(T,2.);
-    *g = a * pow( pw, b );
+    a = C[0] + C[1]*T + C[2]*pow(T,2.);
+    b = C[3] + C[4]*T + C[5]*pow(T,2.);
+    *g = a * pow(pw, b);
 
-    dgdD   = - a * b * pow(pw,(b - 1.0e0));
-    // dgdD2  =   a * b * (b - 1.0e0) * pow((1.0e0 - D),(b - 2.0e0));
+    dgdD = - a*b*pow(pw,(b - 1.0e0));
+    // dgdD2 = a * b * (b - 1.0e0) * pow((1.0e0 - D),(b - 2.0e0));
 
-    dadT   =   C[1] + 2.0e0 * C[2] * T;
-    dadTT  =   2.0e0 * C[2];
-    dbdT   =   C[4] + 2.0e0 * C[5] * T;
-    dbdTT  =   2.0e0 * C[5];
+    dadT = C[1] + 2.0*C[2]*T;
+    dadTT = 2.0*C[2];
+    dbdT = C[4] + 2.0*C[5]*T;
+    dbdTT = 2.0*C[5];
 
-    dDdT   = - D * alpha;
-    dDdP   =   D * beta;
-    dDdTT  = - D * (daldT - pow(alpha,2.));
+    dDdT = - D * alpha;
+    dDdP = D * beta;
+    dDdTT = - D * (daldT - pow(alpha,2.));
+		// Db = pow((1.0 - D),b);  Fixed by DAK 01.11.00
+    Db = pow( pw , b );
+    dDbdT = -b * pow(pw,(b - 1.0)) * dDdT + log(pw) * Db  * dbdT;
 
-//    Db     = pow((1.0e0 - D),b);  Fixed by DAK 01.11.00
-    Db     = pow( pw , b );
-    dDbdT  = -b * pow(pw,(b - 1.0e0)) * dDdT +
-             log(pw) * Db  * dbdT;
 
-    dDbdTT = -(b * pow(pw,(b-1.0e0)) * dDdTT +
-               pow(pw,(b - 1.0e0)) * dDdT * dbdT + b * dDdT *
-               ( -(b - 1.0e0) * pow(pw,(b - 2.0e0)) * dDdT +
-                 log(pw) * pow(pw,(b - 1.0e0)) * dbdT)) +
-             log(pw) * pow(pw,b) * dbdTT -
-             pow(pw,b) * dbdT * dDdT / (1.0e0 - D) +
-             log(pw) * dbdT * dDbdT;
+	dDbdTT = -(b * pow(pw,(b-1.0)) * dDdTT + pow(pw,(b - 1.0)) * dDdT * dbdT
+				+ b * dDdT * ( -(b - 1.0) * pow(pw,(b - 2.0)) * dDdT
+				+ log(pw) * pow(pw,(b - 1.0)) * dbdT))
+				+ log(pw) * pow(pw,b) * dbdTT
+				- pow(pw,b) * dbdT * dDdT / (1.0 - D)
+				+ log(pw) * dbdT * dDbdT;
 
-    *dgdP   = dgdD * dDdP;
-    *dgdT   = a * dDbdT + Db * dadT;
+	*dgdP = dgdD * dDdP;
+    *dgdT = a * dDbdT + Db * dadT;
     *d2gdT2 = a * dDbdTT + 2.0e0 * dDbdT * dadT + Db * dadTT;
 
     if((T < 155.0) || (P > 1000.0) || (T > 355.0))
         return;
 
-    tempy  = ((T - 155.0e0) / 300.0e0);
-    ft     = pow(tempy,4.8) + cC[0] * pow(tempy,16.);
+    tempy = ((T - 155.0) / 300.0);
+    ft = pow(tempy,4.8) + cC[0] * pow(tempy,16.);
+    dftdT = 4.8e0 / 300.0 * pow(tempy,3.8) + 16.0 / 300.0 * cC[0] * pow(tempy,15.);
+    dftdTT = 3.8 * 4.8 / (300.0 * 300.0) * pow(tempy,2.8)
+             + 15.0 * 16.0 / (300.0 * 300.0) * cC[0] * pow(tempy,14.);
+    fp = cC[1] * pow((1000.0 - P),3.) + cC[2] * pow((1000.0 - P),4.);
+    dfpdP  = -3.0 * cC[1] * pow((1000.0 - P),2.) - 4.0 * cC[2] * pow((1000.0 - P),3.);
 
-    dftdT  = 4.8e0 / 300.0e0 * pow(tempy,3.8) + 16.0e0 / 300.0e0 *
-             cC[0] * pow(tempy,15.);
-
-    dftdTT = 3.8e0 * 4.8e0 / (300.0e0 * 300.0e0) * pow(tempy,2.8) +
-             15.0e0 * 16.0e0 / (300.0e0*300.0e0) * cC[0] * pow(tempy,14.);
-
-    fp     = cC[1] * pow((1000.0e0 - P),3.) + cC[2] * pow((1000.0e0 - P),4.);
-
-    dfpdP  = -3.0e0 * cC[1] * pow((1000.0e0 - P),2.) -
-             4.0e0 * cC[2] * pow((1000.0e0 - P),3.);
-
-    f      = ft * fp;
-    dfdP   = ft * dfpdP;
-    dfdT   = fp * dftdT;
+    f = ft * fp;
+    dfdP = ft * dfpdP;
+    dfdT = fp * dftdT;
     d2fdT2 = fp * dftdTT;
 
-    *g      -= f;
-    *dgdP   -= dfdP;
-    *dgdT   -= dfdT;
+    *g -= f;
+    *dgdP -= dfdP;
+    *dgdT -= dfdT;
     *d2gdT2 -= d2fdT2;
 
 }
 
 
-//--------------------------------------------------------------------//
-/* gfun92 - Calculation: function g for (Tanger and Helgeson, 1988;
-*           Shock et al.,1991) and it  частные производные (dgdP, dgdT,
-*           d2gdT2)  for  TdegC,  Pbars  for algoritm :
-*        geqn = 1 ...... use Tanger-Helgeson (1988) equations
-*        geqn = 2 ...... use Shock et al. (1991) equations
-*                        without the f(P,T) difference function
-*        geqn = 3 ...... use Shock et al. (1991) equations
-*                        with the f(P,T) difference function       */
-void TDComp::gfun92(double TdegC, double Pbars, double Dgcm3, double betab,
+//-------------------------------------------------------------------------
+// gfun92 - Calculation: function g for (Tanger and Helgeson, 1988;
+//          Shock et al.,1991) and it  частные производные (dgdP, dgdT,
+//          d2gdT2)  for  TdegC,  Pbars  for algoritm :
+//       geqn = 1 ...... use Tanger-Helgeson (1988) equations
+//       geqn = 2 ...... use Shock et al. (1991) equations
+//                       without the f(P,T) difference function
+//       geqn = 3 ...... use Shock et al. (1991) equations
+//                       with the f(P,T) difference function
+void TDComp::gfun92( double TdegC, double Pbars, double Dgcm3, double betab,
                     double alphaK, double daldT, double *g, double *dgdP,
-                    double *dgdT, double *d2gdT2, int geqn)
+                    double *dgdT, double *d2gdT2, int geqn )
 {
-    double TMAX = 1000.0e0, PMAX = 5000.0e0, TOL=1.0e-4;
-    /*  SUBROUTINE gfun92(TdegC,Pbars,Dgcm3,betab,alphaK,daldT,
-                          g,dgdP,dgdT,d2gdT2,geqn)                 */
-    /* initialize g and derivatives to zero */
-    *g      = 0.0e0;
-    *dgdP   = 0.0e0;
-    *dgdT   = 0.0e0;
-    *d2gdT2 = 0.0e0;
+    double TMAX = 1000.0, PMAX = 5000.0, TOL=1.0e-4;
+
+    // initialize g and derivatives to zero
+    *g = 0.0;
+    *dgdP = 0.0;
+    *dgdT = 0.0;
+    *d2gdT2 = 0.0;
+
     if ((TdegC > TMAX+TOL) || (Pbars > PMAX+TOL))
-        Error( GetName(), "E24DCrun: (TdegC > TMAX+TOL) || (Pbars > PMAX+TOL)!" );
-    /* use Shock et al.(1991) equations with f(P,T) difference function */
+        Error( GetName(), "E24DCrun: (T > 1000 deg. C) or (P > 5000 bar)" );
+
+    // use Shock et al.(1991) equations with f(P,T) difference function
     if (geqn == 3)
     {
-        gShok2(TdegC,Pbars,Dgcm3,betab,alphaK,daldT,
-               g,dgdP,dgdT,d2gdT2);
+        gShok2( TdegC, Pbars, Dgcm3, betab, alphaK, daldT,
+               g, dgdP, dgdT, d2gdT2 );
     }
+
     else
         Error( GetName(), "E25DCrun: gfun92()- error in HGK calculations" );
 }
 
 
-//--------------------------------------------------------------------//
-/* omeg92 - calc the conventinal born coef(W)current aqueous species
-*  and dwdP, dwdP, as functions  g, dgdP, dgdT, d2gdT2, wref and Z
-*           see equat Johnson et al. (1991).  */
-/* SUBROUTINE omeg92(g,dgdP,dgdT,d2gdT2,wref,Z,w,dwdP,dwdT,d2wdT2) */
-/* COMMON /aqscon/ eta, theta, psi, anion, cation, gref */
-void TDComp::omeg92(double g, double dgdP, double dgdT, double d2gdT2,
+//-------------------------------------------------------------------------
+// omeg92 - calc the conventinal born coef(W)current aqueous species
+// and dwdP, dwdP, as functions  g, dgdP, dgdT, d2gdT2, wref and Z
+//          see equat Johnson et al. (1991)
+// SUBROUTINE omeg92(g,dgdP,dgdT,d2gdT2,wref,Z,w,dwdP,dwdT,d2wdT2)
+// COMMON /aqscon/ eta, theta, psi, anion, cation, gref
+void TDComp::omeg92( double g, double dgdP, double dgdT, double d2gdT2,
                     double wref, double ZZ, double *W, double *dwdP,
-                    double *dwdT, double *d2wdT2)
+                    double *dwdT, double *d2wdT2 )
 {
     double reref, re, Z3, Z4;
-    if( ZZ == 0.0e0 ) /* neutral aqueous species */
+    if( ZZ == 0.0 )  // neutral aqueous species
     {
-        *W      = wref;
-        *dwdP   = 0.0e0;
-        *dwdT   = 0.0e0;
-        *d2wdT2 = 0.0e0;
+        *W = wref;
+        *dwdP = 0.0;
+        *dwdT = 0.0;
+        *d2wdT2 = 0.0;
     }
-    else             /* charged aqueous species */
+    else  // charged aqueous species
     {
-        reref = pow(ZZ,2.) / (wref / eta + ZZ / (3.082e0 + gref));
+        reref = pow(ZZ,2.) / (wref / eta + ZZ / (3.082 + gref));
         re = reref + fabs(ZZ) * g;
-        *W = eta * (pow(ZZ,2.) / re - ZZ / (3.082e0 + g));
-        Z3 = fabs(pow(ZZ,3.)) / pow(re,2.) - ZZ / pow((3.082e0 + g),2.);
-        Z4 = fabs(pow(ZZ,4.)) / pow(re,3.) - ZZ / pow((3.082e0 + g),3.);
-        *dwdP   = -eta * Z3 * dgdP;
-        *dwdT   = -eta * Z3 * dgdT;
-        *d2wdT2 = 2.0e0 * eta * Z4 * pow(dgdT,2.) - eta * Z3 * d2gdT2;
+        *W = eta * (pow(ZZ,2.) / re - ZZ / (3.082 + g));
+        Z3 = fabs(pow(ZZ,3.)) / pow(re,2.) - ZZ / pow((3.082 + g),2.);
+        Z4 = fabs(pow(ZZ,4.)) / pow(re,3.) - ZZ / pow((3.082 + g),3.);
+        *dwdP = -eta * Z3 * dgdP;
+        *dwdT = -eta * Z3 * dgdT;
+        *d2wdT2 = 2.0 * eta * Z4 * pow(dgdT,2.) - eta * Z3 * d2gdT2;
     }
 }
 
 
-//--------------------------------------------------------------------//
+//-------------------------------------------------------------------------
 // Calculation  t/d parametres for water solution (Res to TPWORK)
 // (Using equations given  by  Tanger  and  Helgeson (1988), Shock et al.(1991),
 // and  Johnson et al. (1991)).
@@ -851,69 +854,67 @@ void TDComp::calc_thkf( AQSREF& arf, double P, double T, double Dw, double betaw
                         double alphaw, double daldTw, double Z, double Q,
                         double Y, double X, int geqn)
 {
-    double Vaqs,Saqs,Cpaqs,Haqs,Gaqs,VQterm,SYterm,CpXtrm,HYterm,GZterm,
-    /*Gfaqs,Hfaqs,SPrTra,a[4],c[2],wref,chg,*/
-    g,dgdP,dgdT,d2gdT2,W,dwdP,dwdT,d2wdT2, CaltoJ = cal_to_J;
-    // Calc g, dgdP, dgdT, d2gdT2
+    double Vaqs, Saqs, Cpaqs, Haqs, Gaqs, VQterm, SYterm, CpXtrm, HYterm, GZterm,
+				g, dgdP, dgdT, d2gdT2, W, dwdP, dwdT, d2wdT2, CaltoJ = cal_to_J;
+				// Gfaqs,Hfaqs,SPrTra,a[4],c[2],wref,chg,
+				// Calc g, dgdP, dgdT, d2gdT2
+
     gfun92(T-273.15, P, Dw, betaw, alphaw, daldTw,&g, &dgdP, &dgdT,&d2gdT2, geqn);
-    //Calc  W, dwdP, dwdT, d2wdT2
+				//Calc  W, dwdP, dwdT, d2wdT2
     omeg92(g, dgdP, dgdT, d2gdT2, arf.wref, arf.chg, &W, &dwdP, &dwdT, &d2wdT2);
 
-    VQterm = 0.4184004e2 * (-W * Q + (-Z - 1.0e0) * dwdP);
+    VQterm = 0.4184004e2 * (-W * Q + (-Z - 1.0) * dwdP);
 
-    /* the leading constant converts cal/(mol*bar) -> cm3/mol */
+    // the leading constant converts cal/(mol*bar) -> cm3/mol
 
     Vaqs   = 0.4184004e2 * (arf.A[0] + arf.A[1] / (psi + P) + arf.A[2] /
                             ( T - theta) + arf.A[3] / (psi + P) / (T - theta)) + VQterm;
 
-    SYterm = W * Y - (-Z - 1.0e0) * dwdT - arf.wref * YPrTr;
-    Saqs   = arf.SPrTra + arf.C[0] * log(T / Tref) - arf.C[1] / theta *
-             (1.0e0 / (T - theta) - 1.0e0 / (Tref - theta) + (1.0e0 / theta) *
-              log(Tref * (T - theta) / T / (Tref - theta))) + (arf.A[2] *
-                      (P - Pref) + arf.A[3] * log((psi + P) / (psi+Pref))) *
-             pow((1.0e0 / (T-theta)),2.) + SYterm;
+    SYterm = W * Y - (-Z - 1.0) * dwdT - arf.wref * YPrTr;
+    Saqs = arf.SPrTra + arf.C[0] * log(T / Tref) - arf.C[1] / theta
+				* (1.0 / (T - theta) - 1.0 / (Tref - theta) + (1.0 / theta)
+				* log(Tref * (T - theta) / T / (Tref - theta))) + (arf.A[2]
+				* (P - Pref) + arf.A[3] * log((psi + P) / (psi+Pref)))
+				* pow((1.0 / (T-theta)),2.) + SYterm;
 
-    CpXtrm = W * T * X + 2.0e0 * T * Y * dwdT + T * (Z + 1.0e0) * d2wdT2;
-    Cpaqs  = arf.C[0] + arf.C[1] / pow((T - theta),2.) - (2.0e0 * T /
-             pow((T-theta),3.)) * (arf.A[2] * (P - Pref) + arf.A[3] *
-                                   log((psi + P) / (psi + Pref))) + CpXtrm;
+    CpXtrm = W * T * X + 2.0 * T * Y * dwdT + T * (Z + 1.0) * d2wdT2;
+    Cpaqs = arf.C[0] + arf.C[1] / pow((T - theta),2.) - (2.0 * T
+				/ pow((T-theta),3.)) * (arf.A[2] * (P - Pref) + arf.A[3]
+				* log((psi + P) / (psi + Pref))) + CpXtrm;
 
-    HYterm = W * (-Z - 1.0e0) + W * T * Y - T * (-Z - 1.0e0) *dwdT -
-             arf.wref * (-ZPrTr - 1.0e0) - arf.wref * Tref * YPrTr;
-    Haqs   = arf.Hfaqs + arf.C[0] * (T - Tref) - arf.C[1] * (1.0e0 /
-             (T - theta) - 1.0e0 / (Tref - theta)) + arf.A[0] * (P -
-                     Pref) + arf.A[1] * log((psi + P) / (psi + Pref)) +
-             (arf.A[2] * (P - Pref) + arf.A[3] * log((psi + P) /
-                                                     (psi + Pref))) * ((2.0e0 * T - theta) / pow((T - theta),2.))
-             + HYterm;
+    HYterm = W * (-Z - 1.0) + W * T * Y - T * (-Z - 1.0) *dwdT
+				- arf.wref * (-ZPrTr - 1.0) - arf.wref * Tref * YPrTr;
+    Haqs = arf.Hfaqs + arf.C[0] * (T - Tref) - arf.C[1] * (1.0
+				/ (T - theta) - 1.0 / (Tref - theta)) + arf.A[0] * (P
+				- Pref) + arf.A[1] * log((psi + P) / (psi + Pref))
+				+ (arf.A[2] * (P - Pref) + arf.A[3] * log((psi + P)
+				/ (psi + Pref))) * ((2.0 * T - theta) / pow((T - theta),2.))
+				+ HYterm;
 
-    GZterm = W * (-Z - 1.0e0) - arf.wref * (-ZPrTr - 1.0e0) + arf.wref *
-             YPrTr * (T - Tref);
-    Gaqs   = arf.Gfaqs - arf.SPrTra * (T - Tref) - arf.C[0] * (T * log(T /
-             Tref) - T + Tref) + arf.A[0] * (P - Pref) + arf.A[1] *
-             log((psi + P) / (psi + Pref)) - arf.C[1] * ((1.0e0 / (T - theta) -
-                     1.0e0 / (Tref - theta)) * ((theta - T) / theta) - T / pow(theta,2.)
-                     * log((Tref * (T - theta)) / (T * (Tref - theta)))) + (1.0e0 /
-                             (T - theta)) * (arf.A[2] * (P - Pref) + arf.A[3] * log((psi + P) /
-                                             (psi + Pref))) + GZterm;
+    GZterm = W * (-Z - 1.0e0) - arf.wref * (-ZPrTr - 1.0e0) + arf.wref
+				 * YPrTr * (T - Tref);
+    Gaqs = arf.Gfaqs - arf.SPrTra * (T - Tref) - arf.C[0] * (T * log(T
+				/ Tref) - T + Tref) + arf.A[0] * (P - Pref) + arf.A[1]
+				* log((psi + P) / (psi + Pref)) - arf.C[1] * ((1.0 / (T - theta)
+                - 1.0 / (Tref - theta)) * ((theta - T) / theta) - T / pow(theta,2.)
+                * log((Tref * (T - theta)) / (T * (Tref - theta)))) + (1.0
+                / (T - theta)) * (arf.A[2] * (P - Pref) + arf.A[3] * log((psi + P)
+                / (psi + Pref))) + GZterm;
     // GZterm = W * (-Z - 1.0e0);
 
-    aW.twp->P   = P;
-    aW.twp->TC  = T-C_to_K;
-    aW.twp->V  = Vaqs / 10.;       /* J/bar */
-    aW.twp->S   = Saqs * CaltoJ;
-    aW.twp->G   = Gaqs * CaltoJ;
-    aW.twp->H   = Haqs * CaltoJ;
-    /*
-      aW.twp->F   =
-      aW.twp->U   =
-    */
+    aW.twp->P = P;
+    aW.twp->TC = T-C_to_K;
+    aW.twp->V = Vaqs / 10.;       // J/bar
+    aW.twp->S = Saqs * CaltoJ;
+    aW.twp->G = Gaqs * CaltoJ;
+    aW.twp->H = Haqs * CaltoJ;
+		// aW.twp->F =
+		// aW.twp->U =
+
     aW.twp->Cp  = Cpaqs * CaltoJ;
-    /*
-      aW.twp->Cv  =
-      aW.twp->Bet =
-      aW.twp->Alp =
-    */
+		// aW.twp->Cv  =
+		// aW.twp->Bet =
+		// aW.twp->Alp =
     aW.twp->gfun = g;  // solvent g-function - passed for b_gamma=f(T,P) 07.06.05
 }
 
@@ -951,4 +952,6 @@ void TDComp::calc_tphkf( int q, int /*p*/ )
                aWp.ZBorn[i], aWp.QBorn[i], aWp.YBorn[i],
                aWp.XBorn[i], 3);
 }
+
+
 // ------------------ End of m_dcomp2.cpp ----------------------------
