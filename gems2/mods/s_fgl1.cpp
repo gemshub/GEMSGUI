@@ -2732,8 +2732,9 @@ long int TDavies::PTparam()
 // Calculates activity coefficients
 long int TDavies::MixMod()
 {
-	long int j, w;
-	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnxw, xw, lgaw, lnaw, sig, lg_to_ln;
+	long int j, k, w;
+	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnxw, xw, lgaw, lnaw,
+				sig, zt, zz, lg_to_ln;
 	lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
@@ -2790,9 +2791,18 @@ long int TDavies::MixMod()
 				lnGam = 0.0;
 				if ( flagH2O == 1 )
 				{
-					// equation rearranged based on Wolery (1990)
+					// equation from Wolery (1990), corrected for species charges terms
+					zt = 0.;
 					sig = 3./sqI * ( 1. + sqI - 1./(1.+sqI) - 2.*log(1.+sqI) );
-					lgaw = (1./Nw) * ( - molT/log(10.) + 2./3.*A*sqI*sig + 2.*(0.3)*A*pow(IS,2.) );
+
+					for (k=0; k<(NComp-1); k++)
+					{
+						zt += m[k]*pow(z[k],2.);
+					}
+
+					zz = zt/molT;
+					lgaw = (1./Nw) * ( - molT/log(10.) + 2./3.*A*sqI*sig - 2.*(-0.3/zz)*A*pow(IS,2.) );
+					// lgaw = (1./Nw) * ( - molT/log(10.) + 2./3.*A*sqI*sig - 2.*(-0.3/zz)*A*pow(IS,2.) );
 					if ( flagMol == 0 )
 						lgaw += molT/(Nw)/log(10.) + lnxw/log(10.);
 					lnaw = lgaw * lg_to_ln;
@@ -2812,10 +2822,9 @@ long int TDavies::MixMod()
 // calculates excess properties
 long int TDavies::ExcessProp( double *Zex )
 {
-	// (under construction)
-	long int j, w;
-	double sqI, Z2, Nw, Lgam, lnxw, xw, lnaw, lgGam, lgaw, sig, dawdt, d2awdt2, dawdp,
-				lg_to_ln, g, dgt, d2gt, dgp;
+	long int j, k, w;
+	double sqI, Z2, Nw, Lgam, lnxw, xw, lnaw, lgGam, lgaw, sig, zt, zz,
+				dawdt, d2awdt2, dawdp, lg_to_ln, g, dgt, d2gt, dgp;
 	lg_to_ln = 2.302585093;
 	g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
 
@@ -2874,14 +2883,24 @@ long int TDavies::ExcessProp( double *Zex )
 				// H2O activity coefficient calculated
 				if ( flagH2O == 1 )
 				{
+					// equation from Wolery (1990), corrected for species charges terms
+					zt = 0.;
 					sig = 3./sqI * ( 1. + sqI - 1./(1.+sqI) - 2.*log(1.+sqI) );
-					lgaw = (1./Nw) * ( - molT/log(10.) + 2./3.*A*sqI*sig + 2.*(0.3)*A*pow(IS,2.) );
+
+					for (k=0; k<(NComp-1); k++)
+					{
+						zt += m[k]*pow(z[k],2.);
+					}
+
+					zz = zt/molT;
+					// lgaw = (1./Nw) * ( - molT/log(10.) + 2./3.*A*sqI*sig - 2.*(-0.3)*A*pow(IS,2.) );
+					lgaw = (1./Nw) * ( - molT/log(10.) + 2./3.*A*sqI*sig - 2.*(-0.3/zz)*A*pow(IS,2.) );
 					if ( flagMol == 0 )
 						lgaw += molT/(Nw)/log(10.) + lnxw/log(10.);
 					lnaw = lgaw * lg_to_ln;
-					dawdt = (1./Nw) * ( 2./3.*dAdT*sqI*sig + 2.*(0.3)*dAdT*pow(IS,2.) ) * lg_to_ln;
-					d2awdt2 = (1./Nw) * ( 2./3.*d2AdT2*sqI*sig + 2.*(0.3)*d2AdT2*pow(IS,2.) ) * lg_to_ln;
-					dawdp = (1./Nw) * ( 2./3.*dAdP*sqI*sig + 2.*(0.3)*dAdP*pow(IS,2.) ) * lg_to_ln;
+					dawdt = (1./Nw) * ( 2./3.*dAdT*sqI*sig - 2.*(-0.3/zz)*dAdT*pow(IS,2.) ) * lg_to_ln;
+					d2awdt2 = (1./Nw) * ( 2./3.*d2AdT2*sqI*sig - 2.*(-0.3/zz)*d2AdT2*pow(IS,2.) ) * lg_to_ln;
+					dawdp = (1./Nw) * ( 2./3.*dAdP*sqI*sig - 2.*(-0.3/zz)*dAdP*pow(IS,2.) ) * lg_to_ln;
 					LnG[j] = lnaw - lnxw;
 					dLnGdT[j] = dawdt;
 					d2LnGdT2[j] = d2awdt2;
