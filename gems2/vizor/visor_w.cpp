@@ -341,22 +341,26 @@ TVisorImp::SetDialog(QWidget* centralDialog)
     QWidget* oldCentral = centralWidget();
     // if there's central widget already open
     if( oldCentral )
-	oldCentral->close(true);
+	 oldCentral->close(true);
 
     setUpdatesEnabled( FALSE );
 
     setCentralWidget(centralDialog);
-    QWidget* d = QApplication::desktop();
-    QSize sz = (d->size() - centralDialog->size()) / 2;
-    if( sz.width()%2 )
-        sz.setWidth( sz.width()+1 );
-    move( sz.width(), sz.height() );
+    
+    if( !oldCentral )
+    {
+    	QWidget* d = QApplication::desktop();
+        QSize sz = (d->size() - centralDialog->size()) / 2;
+        // if( sz.width()%2 )
+        //    sz.setWidth( sz.width()+1 );
+       sz.setWidth( 200 );
+       move( sz.width(), sz.height() );
+    }   
     setFixedSize( centralDialog->size() );
     centralDialog->show();
 
     setUpdatesEnabled( TRUE );
     repaint();
-
 
 }
 

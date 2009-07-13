@@ -1,4 +1,8 @@
 13/07/2009
+Changed the first position for start Gems window
+other windows are remain positions
+
+13/07/2009
 Added Remake mode when "Open project"
 Checked units for PmvAq and PmvGas values on screen 
 Changed in LookupDialogData from "points" to "step"
