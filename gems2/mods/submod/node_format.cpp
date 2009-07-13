@@ -595,7 +595,7 @@ void TNode::datach_to_text_file( fstream& ff, bool with_comments, bool brief_mod
 // fstream ff("DataCH.out", ios::out );
 // ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
   _comment = with_comments;
-  TPrintArrays  prar(25, DataCH_dynamic_fields, ff);
+  TPrintArrays  prar(29, DataCH_dynamic_fields, ff);
   if( CSD->nIC == CSD->nICb )
 	  prar.setNoAlws( "xIC");
   if(CSD->nDC == CSD->nDCb )
@@ -913,7 +913,7 @@ void TNode::datach_from_text_file(fstream& ff)
   databr_realloc();
 
 //dynamic data
- TReadArrays  rddar( 25, DataCH_dynamic_fields, ff);
+ TReadArrays  rddar( 29, DataCH_dynamic_fields, ff);
 
    if( CSD->iGrd <= 5 )
       rddar.setNoAlws( 28 /*"DD"*/);

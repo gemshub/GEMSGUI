@@ -1055,13 +1055,16 @@ void TNode::G0_V0_H0_Cp0_DD_arrays()
       U0 = new double[TProfil::pm->mup->L];
   else
       U0 = 0;
-
+  
   for(  ii=0; ii<CSD->nTp; ii++)
   {
     cT = CSD->TCval[ii];
     for(  jj=0; jj<CSD->nPp; jj++)
     {
-      cP = CSD->Pval[jj];
+      pVisor->Message( 0, "Building lookup arrays",
+            "Loading thermodynamic data", ii*CSD->nPp+jj, CSD->nTp*CSD->nPp );
+
+     cP = CSD->Pval[jj];
      // calculates new G0, V0, H0, Cp0, S0
      TProfil::pm->LoadFromMtparm( cT, cP, G0, V0, H0, S0, Cp0, 
     		 A0, U0, denW, epsW, denWg, epsWg );
@@ -1117,6 +1120,7 @@ void TNode::G0_V0_H0_Cp0_DD_arrays()
      }
     }
   }
+  pVisor->CloseMessage();
   // free memory
   delete[] G0;
   delete[] V0;

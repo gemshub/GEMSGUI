@@ -100,7 +100,7 @@ TProfil::initCalcMode()
       }
      }
     else
-       OpenProfileMode(  str.c_str(),changeAqGas, addfiles );
+       OpenProfileMode(  str.c_str(),changeAqGas, addfiles, remakeRec );
 
     pVisor->Message( 0, "Loading Modelling Project",
         "Loading thermodynamic data", 80 );
@@ -135,7 +135,7 @@ TProfil::initCalcMode()
 
 //Opening Existing Project
 void TProfil::OpenProfileMode( const char* key,
-       bool changeAqGas, bool addFile )
+       bool changeAqGas, bool addFile,  bool remakeRec )
 {
    int Rnum = -1;
  try
@@ -143,13 +143,16 @@ void TProfil::OpenProfileMode( const char* key,
         Rnum = rt[RT_PARAM].Find( key );
         ErrorIf( Rnum < 0,  key , "Project record do not exist!");
 
-      pVisor->Message( 0, "Loading Modelling Project",
-       "Opening data base files to Project", 5 );
+//        pVisor->Message( 0, "Loading Modelling Project",
+//       "Opening data base files to Project", 5 );
 
         rt[RT_PARAM].Get( Rnum ); // read record
         dyn_set();
         SetFN();                  // reopen files of data base
 
+        if( remakeRec )   // added 13/07/2009
+         RecBuild( key, VF_REMAKE );  // Edit flags
+        
         if( addFile == true )
         {  // part to add files to list
            rt[RT_PARAM].SetKey( key );
@@ -160,6 +163,9 @@ void TProfil::OpenProfileMode( const char* key,
            GetFN( fstKeyFld.c_str() );
            SetFN();
         }
+
+        pVisor->Message( 0, "Loading Modelling Project",
+       "Opening data base files to Project", 5 );
 
         rt[RT_PARAM].SetKey( key );
         SaveOldList();
@@ -180,6 +186,7 @@ void TProfil::OpenProfileMode( const char* key,
    TestChangeProfile();  // test and insert changes to data base file
    DeleteOldList();
    rt[RT_PARAM].Rep( Rnum );
+   contentsChanged = false;
 
  }
  catch( TError& xcpt )

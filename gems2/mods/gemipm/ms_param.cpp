@@ -268,7 +268,7 @@ void TProfil::readMulti( const char* path )
 void TMulti::CompG0Load()
 {
   long int j, jj, k, xTP, jb, je=0;
-  double Go, Gg, Vv;
+  double Go, Gg, Vv, h0=0., S0 = 0., Cp0= 0., a0 = 0., u0 = 0.;
   double TC, P;
 
   DATACH  *dCH = TNode::na->pCSD();
@@ -295,28 +295,44 @@ void TMulti::CompG0Load()
  pmp->T = pmp->Tc = TC + C_to_K;
  pmp->TC = pmp->TCc = TC;
  pmp->P = pmp->Pc = P;
+ 
  if( dCH->ccPH[0] == PH_AQUEL )
  {
-   if( xTP >= 0 )
-   {
-      pmp->denW[0] = dCH->roW[xTP];
-      pmp->epsW[0] = dCH->epsW[xTP];
-   }
-   else
-   {
-       pmp->denW[0] = LagranInterp( dCH->Pval, dCH->TCval, dCH->roW,
+   for( k=0; k<5; k++ )
+   {	 
+     jj =  k * dCH->nPp * dCH->nTp;
+     if( xTP >= 0 )
+      {
+       pmp->denW[k] = dCH->denW[jj+xTP];
+       pmp->epsW[k] = dCH->epsW[jj+xTP];
+      }
+     else
+     {
+       pmp->denW[k] = LagranInterp( dCH->Pval, dCH->TCval, dCH->denW+jj,
                           P, TC, dCH->nTp, dCH->nPp,1 );
-        //       pmp->denWg = tpp->RoV;
-       pmp->epsW[0] = LagranInterp( dCH->Pval, dCH->TCval, dCH->epsW,
+       pmp->epsW[k] = LagranInterp( dCH->Pval, dCH->TCval, dCH->epsW+jj,
                           P, TC, dCH->nTp, dCH->nPp,1 );
-       //       pmp->epsWg = tpp->EpsV;
-   }
- }
+     }
+  }
+ }  
  else
  {
    pmp->denW[0] = 1.;
    pmp->epsW[0] = 78.;
  }
+
+ if( xTP >= 0 )
+   {
+    pmp->denWg[0] = dCH->denWg[xTP];
+    pmp->epsWg[0] = dCH->epsWg[xTP];
+   }
+  else
+  {
+    pmp->denWg[0] = LagranInterp( dCH->Pval, dCH->TCval, dCH->denWg,
+                       P, TC, dCH->nTp, dCH->nPp,1 );
+    pmp->epsWg[0] = LagranInterp( dCH->Pval, dCH->TCval, dCH->epsWg,
+                       P, TC, dCH->nTp, dCH->nPp,1 );
+  }
 
  pmp->RT = R_CONSTANT * pmp->Tc;
  pmp->FRT = F_CONSTANT/pmp->RT;
@@ -337,6 +353,11 @@ void TMulti::CompG0Load()
       {
         Go = dCH->G0[ jj+xTP];
         Vv = dCH->V0[ jj+xTP];
+        if( dCH->S0 ) S0 = dCH->S0[ jj+xTP];	
+        if( dCH->H0 ) h0 = dCH->H0[ jj+xTP];	
+        if( dCH->Cp0 ) Cp0 = dCH->Cp0[ jj+xTP];	
+        if( dCH->A0 ) a0 = dCH->A0[ jj+xTP];	
+        if( dCH->U0 ) h0 = dCH->U0[ jj+xTP];	
       }
      else
      {
@@ -344,6 +365,16 @@ void TMulti::CompG0Load()
                           P, TC, dCH->nTp, dCH->nPp,1 );
        Vv = LagranInterp( dCH->Pval, dCH->TCval, dCH->V0+jj,
                           P, TC, dCH->nTp, dCH->nPp, 1 );
+       if( dCH->S0 ) S0 =  LagranInterp( dCH->Pval, dCH->TCval, dCH->S0+jj,
+                          P, TC, dCH->nTp, dCH->nPp,1 );
+       if( dCH->H0 ) h0 =  LagranInterp( dCH->Pval, dCH->TCval, dCH->H0+jj,
+                          P, TC, dCH->nTp, dCH->nPp,1 );
+       if( dCH->Cp0 ) Cp0 =  LagranInterp( dCH->Pval, dCH->TCval, dCH->Cp0+jj,
+                          P, TC, dCH->nTp, dCH->nPp,1 );
+       if( dCH->A0 ) a0 =  LagranInterp( dCH->Pval, dCH->TCval, dCH->A0+jj,
+                          P, TC, dCH->nTp, dCH->nPp,1 );
+       if( dCH->U0 ) u0 =  LagranInterp( dCH->Pval, dCH->TCval, dCH->U0+jj,
+                          P, TC, dCH->nTp, dCH->nPp,1 );
      }
      if( pmp->tpp_G )
     	  pmp->tpp_G[j] = Go;
@@ -369,6 +400,11 @@ void TMulti::CompG0Load()
  	          pmp->Vol[j] = Vv  * 10.;
               break;
      }
+     if( pmp->S0 ) pmp->S0[j] = S0;
+     if( pmp->H0 ) pmp->H0[j] = h0;
+     if( pmp->Cp0 ) pmp->Cp0[j] = Cp0;
+     if( pmp->A0 ) pmp->A0[j] = a0;
+     if( pmp->U0 ) pmp->U0[j] = u0;
    }
  }
  load = true;

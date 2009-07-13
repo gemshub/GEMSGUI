@@ -330,7 +330,8 @@ NewSystemDialog::CmOutMulti()
                return;
       GemDataStream  f(filename, ios::out|ios::binary);
 */
-      TProfil::pm->makeGEM2MTFiles( this );
+    	//TProfil::pm->outMultiTxt("Internal_32.ipm"  );
+    	TProfil::pm->makeGEM2MTFiles( this );
     }
     catch( TError& xcpt )
     {

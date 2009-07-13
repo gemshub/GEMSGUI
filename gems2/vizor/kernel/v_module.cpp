@@ -598,7 +598,7 @@ TCModule::RecBuild( const char *key, int mode  )
 //        pImp->MakeQuery();
         MakeQuery();
 
-        if( pVisor->ProfileMode == true && nRT == RT_SYSEQ )
+        if( pVisor->ProfileMode == true && (nRT == RT_SYSEQ || nRT == RT_PARAM) )
             pImp->CloseWin();
 
         contentsChanged = true;

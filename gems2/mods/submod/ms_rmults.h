@@ -40,8 +40,8 @@ typedef struct
     PmvIP,  // Arrays of IC properties  { + * }
     PmvIF,  // List of IC formulae { + * - }? (reserved)
     PmvDF,  // Lisr of DC formulae (for stoichiometry matrix A) { + * }
-    PmvAq,  // Default aqueous phase { 3 D + - }
-    PmvGas, // Default gaseous phase { + - }
+    PmvAq,  // Default aqueous phase { D H Y 3 2 1 U N + - }
+    PmvGas, // Default gaseous phase { I F U N + - }
 
     name[MAXFORMULA],   // Full name of root multisystem DB
     notes[MAXFORMULA];  // Comments DB

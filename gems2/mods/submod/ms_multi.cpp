@@ -76,8 +76,8 @@ aObj[ o_wo_it_ipm ].SetPtr( &pm.ITG ); /* pm.ITG */
     aObj[ o_wi_mol ].SetPtr( &pm.DHBM );
     aObj[ o_wi_gwat ].SetPtr( &pm.GWAT );
     aObj[ o_wi_ymet ].SetPtr( &pm.YMET );
-    aObj[ o_wio_denw ].SetPtr(&pm.denW ); /*d 2*/
-    aObj[ o_wio_epsw ].SetPtr(&pm.epsW ); /*d 2*/
+    aObj[ o_wio_denw ].SetPtr(&pm.denW ); /*d 10*/
+    aObj[ o_wio_epsw ].SetPtr(&pm.epsW ); /*d 10*/
     aObj[ o_wo_psi ].SetPtr( &pm.PCI );   /*d 2*/
     aObj[ o_wo_lnp ].SetPtr( &pm.lnP );
     aObj[ o_wo_rt ].SetPtr( &pm.RT );

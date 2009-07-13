@@ -1,3 +1,9 @@
+13/07/2009
+Added Remake mode when "Open project"
+Checked units for PmvAq and PmvGas values on screen 
+Changed in LookupDialogData from "points" to "step"
+Added interpolation for H0, S0, Cp0, A0, U0, denW, denWg, epsW, epsWg to gemipm2k
+
 10/07/2009
 Changed DATACH structure
  renamed field   roW to denW
@@ -6,7 +12,6 @@ Changed DATACH structure
 Inserted changes to functions 
   for loading lookup arrays (G0, H0, S0, Cp0, A0, U0, denW, epsW )
 Changed default values for TPpvc (added H,S,Cp in new project as default )   
- 
 
 09/07/200
 When writing IPM, DCH and DBR files to text format added brief_mode 

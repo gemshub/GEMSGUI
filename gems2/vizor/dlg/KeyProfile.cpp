@@ -146,8 +146,8 @@ bool
 KeyProfile::getRemakeState()
 {
 
-    if( newKey == false )
-        return false;    // not new record => only read
+// 13/07/2009    if( newKey == false )
+//        return false;    // not new record => only read
 
     if( CheckBox4->isChecked() )
         return true;   // remake flags

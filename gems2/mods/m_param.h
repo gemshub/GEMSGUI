@@ -193,7 +193,7 @@ protected:
     bool rCopyFilterProfile( const char * prfName );
 
     void OpenProfileMode(
-        const char* key, bool changeAqGas, bool addFile );
+        const char* key, bool changeAqGas, bool addFile,  bool remakeRec );
     bool NewProfileMode( bool remakeRec, gstring& key_templ );
     bool NewProfileModeElements( bool remakeRec, gstring& key_templ );
     void CalcAllSystems(int makeDump);
