@@ -35,36 +35,36 @@ LookupDialog::LookupDialog(QWidget* parent):
     // setCaption( "Setup for writing GEMIPM2K input files " );
 
 	QDoubleValidator *vPfrom = new QDoubleValidator( pPfrom );
-	vPfrom->setRange ( 0., 10000., 1 );  
+//	vPfrom->setRange ( 0., 10000., 1 );  
 	pPfrom->setValidator( vPfrom );
 	 
 	QDoubleValidator *vPuntil = new QDoubleValidator( pPuntil );
-	vPuntil->setRange ( 0., 10000., 1 );  
+//	vPuntil->setRange ( 0., 10000., 1 );  
 	pPuntil->setValidator( vPuntil );
 
 	QDoubleValidator *vPstep = new QDoubleValidator( pPstep );
-	vPstep->setRange ( 0., 1000., 1 );  
+//	vPstep->setRange ( 0., 1000., 1 );  
 	pPstep->setValidator( vPstep );
 
 	QDoubleValidator *vpPtol = new QDoubleValidator( pPtol );
-	vpPtol->setRange ( 0.001, 10., 3 );  
+//	vpPtol->setRange ( 0.001, 10., 3 );  
 	pPtol->setValidator( vpPtol );
 	pPtol->setText("0.5");
 
 	QDoubleValidator *vTfrom = new QDoubleValidator( pTfrom );
-	vTfrom->setRange ( 0., 2000., 2 );  
+//	vTfrom->setRange ( 0., 2000., 2 );  
 	pTfrom->setValidator( vTfrom );
 	 
 	QDoubleValidator *vTuntil = new QDoubleValidator( pTuntil );
-	vTuntil->setRange ( 0., 2000., 2 );  
+//	vTuntil->setRange ( 0., 2000., 2 );  
 	pTuntil->setValidator( vTuntil );
 
 	QDoubleValidator *vTstep = new QDoubleValidator( pTstep );
-	vTstep->setRange ( 0., 200., 1 );  
+//	vTstep->setRange ( 0., 200., 1 );  
 	pTstep->setValidator( vTstep );
 
 	QDoubleValidator *vpTtol = new QDoubleValidator( pTtol );
-	vpTtol->setRange ( 0.001, 10., 3 );  
+//	vpTtol->setRange ( 0.001, 10., 3 );  
 	pTtol->setValidator( vpTtol );
 	pTtol->setText("1.");
 }
