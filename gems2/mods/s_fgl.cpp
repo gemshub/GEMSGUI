@@ -75,6 +75,8 @@ void TPRSVcalc::alloc_internal()
 	Pureparm = new double [NComp][4];
 	Fugpure = new double [NComp][6];
 	Fugci = new double [NComp][4];
+	a = new double *[NComp];
+	b = new double *[NComp];
 	KK = new double *[NComp];
 	dKK = new double *[NComp];
 	d2KK = new double *[NComp];
@@ -82,6 +84,8 @@ void TPRSVcalc::alloc_internal()
 
     for (long int i=0; i<NComp; i++)
     {
+    	a[i] = new double[NComp];
+    	b[i] = new double[NComp];
     	KK[i] = new double[NComp];
     	dKK[i] = new double[NComp];
     	d2KK[i] = new double[NComp];
@@ -96,6 +100,8 @@ void TPRSVcalc::free_internal()
 
 	for (i=0; i<NComp; i++)
 	{
+		delete[]a[i];
+		delete[]b[i];
 		delete[]KK[i];
 		delete[]dKK[i];
 		delete[]d2KK[i];
@@ -106,6 +112,8 @@ void TPRSVcalc::free_internal()
 	delete[]Pureparm;
 	delete[]Fugpure;
 	delete[]Fugci;
+	delete[]a;
+	delete[]b;
 	delete[]KK;
 	delete[]dKK;
 	delete[]d2KK;
@@ -148,19 +156,19 @@ long int TPRSVcalc::PTparam()
 
 	PureSpecies();
 
+	// fill internal array of interaction parameters with standard value
+	for( j=0; j<NComp; j++ )
+	{
+		for( i=0; i<NComp; i++ )
+		{
+			KK[j][i] = 0.;
+			dKK[j][i] = 0.;
+			d2KK[j][i] = 0.;
+		}
+	}
+
 	if( NPcoef > 0 )
 	{
-		// fill internal array of interaction parameters with standard value
-		for( j=0; j<NComp; j++ )
-		{
-			for( i=0; i<NComp; i++ )
-			{
-				KK[j][i] = 0.;
-				dKK[j][i] = 0.;
-				d2KK[j][i] = 0.;
-			}
-		}
-
 		// transfer those interaction parameters that have non-standard value
 		for ( ip=0; ip<NPar; ip++ )
 		{
@@ -270,6 +278,153 @@ long int TPRSVcalc::IdealProp( double *Zid )
 	Zid[4] = Vid;
 	Zid[5] = Aid;
 	Zid[6] = Uid;
+
+	return 0;
+}
+
+
+// basic van der waals mixing rule
+long int TPRSVcalc::MixingWaals()
+{
+	long int j, i;
+
+	// set all interaction parameters zero
+	for( j=0; j<NComp; j++ )
+	{
+		for( i=0; i<NComp; i++ )
+		{
+			KK[j][i] = 0.;
+			dKK[j][i] = 0.;
+			d2KK[j][i] = 0.;
+		}
+	}
+
+	return 0;
+}
+
+
+// constant one-term interaction parameter
+long int TPRSVcalc::MixingConst()
+{
+	long int j, i, ip, i1, i2;
+	double k, dk, d2k;
+
+	// set all interaction parameters zero
+	for( j=0; j<NComp; j++ )
+	{
+		for( i=0; i<NComp; i++ )
+		{
+			KK[j][i] = 0.;
+			dKK[j][i] = 0.;
+			d2KK[j][i] = 0.;
+		}
+	}
+
+	if( NPcoef > 0 )
+	{
+		// transfer interaction parameters that have non-standard value
+		for ( ip=0; ip<NPar; ip++ )
+		{
+			i1 = aIPx[MaxOrd*ip];
+			i2 = aIPx[MaxOrd*ip+1];
+			k = aIPc[NPcoef*ip];
+			dk = 0.;
+			d2k = 0.;
+			KK[i1][i2] = k;
+			dKK[i1][i2] = dk;
+			d2KK[i1][i2] = d2k;
+			KK[i2][i1] = k;   // symmetric case
+			dKK[i2][i1] = dk;
+			d2KK[i2][i1] = d2k;
+		}
+	}
+
+	return 0;
+}
+
+
+// temperature dependent one-term interaction parameter
+long int TPRSVcalc::MixingTemp()
+{
+	long int i, j, ip, i1, i2;
+	double ai, aj, bi, bj, di, dj, dai, daj, d2ai, d2aj, ddi, ddj, d2di, d2dj,
+				U, V, dU, dV, d2U, d2V, tmp, k, dk, d2k, C;
+
+	// set all interaction parameters zero
+	for( j=0; j<NComp; j++ )
+	{
+		for( i=0; i<NComp; i++ )
+		{
+			a[j][i] = 0.;
+			b[j][i] = 0.;
+			KK[j][i] = 0.;
+			dKK[j][i] = 0.;
+			d2KK[j][i] = 0.;
+		}
+	}
+
+	if( NPcoef > 0 )
+	{
+		// transfer parameters that have non-standard value
+		for ( ip=0; ip<NPar; ip++ )
+		{
+			i1 = aIPx[MaxOrd*ip];
+			i2 = aIPx[MaxOrd*ip+1];
+			a[i1][i2] = aIPc[NPcoef*ip];
+			b[i1][i2] = aIPc[NPcoef*ip+1];
+			a[i2][i1] = aIPc[NPcoef*ip];  // symmetric case
+			b[i2][i1] = aIPc[NPcoef*ip+1];
+		}
+	}
+
+	// calculate binary interaction parameters
+	for (i=0; i<NComp; i++)
+	{
+		for (j=0; j<NComp; j++)
+		{
+			if ( a[i][j] == 0.0 )
+				tmp = 1.0;
+			else
+				tmp = a[i][j];
+
+			// read a, b, da, d2a
+			ai = Pureparm[i][0];
+			aj = Pureparm[j][0];
+			bi = Pureparm[i][1];
+			bj = Pureparm[j][1];
+			dai = Pureparm[i][2];
+			daj = Pureparm[j][2];
+			d2ai = Pureparm[i][3];
+			d2aj = Pureparm[j][3];
+
+			// calculate k and derivatives
+			di = sqrt(ai)/bi;
+			dj = sqrt(aj)/bj;
+			ddi = (0.5/bi) * pow(ai,-0.5) * dai;
+			ddj = (0.5/bj) * pow(aj,-0.5) * daj;
+			d2di = (0.5/bi) * ( (-0.5)*pow(ai,-1.5)*dai*dai + pow(ai,-0.5)*d2ai );
+			d2dj = (0.5/bj) * ( (-0.5)*pow(aj,-1.5)*daj*daj + pow(aj,-0.5)*d2aj );
+
+			C = ( b[i][j]/tmp - 1. );
+			U = a[i][j]*pow((298.15/Tk),C) - pow((di-dj),2.);
+			V = (2.*di*dj);
+			dU = - ( a[i][j]*C*pow((298.15/Tk),C) ) / Tk - 2.*(di-dj)*(ddi-ddj);
+			dV = 2.*( ddi*dj + di*ddj );
+			d2U = ( a[i][j]*pow(C,2.)*pow((298.15/Tk),C) ) / pow(Tk,2.)
+						+ ( a[i][j]*C*pow((298.15/Tk),C) ) / pow(Tk,2.)
+						- 2.*( pow((ddi-ddj),2.) + (di-dj)*(d2di-d2dj) );
+			d2V = 2.*( d2di*dj + 2.*ddi*ddj + di*d2dj );
+			k = U/V;
+			dk = (dU*V-U*dV)/pow(V,2.);
+			d2k = (d2U*V+dU*dV)*pow(V,2.)/pow(V,4.) - (dU*V)*(2.*V*dV)/pow(V,4.)
+						- (dU*dV+U*d2V)*pow(V,2.)/pow(V,4.) + (U*dV)*(2.*V*dV)/pow(V,4.);
+
+			// assignments
+			KK[i][j] = k;
+			dKK[i][j] = dk;
+			d2KK[i][j] = d2k;
+		}
+	}
 
 	return 0;
 }
@@ -2365,6 +2520,8 @@ void TSRKcalc::alloc_internal()
 	Pureparm = new double [NComp][4];
 	Fugpure = new double [NComp][6];
 	Fugci = new double [NComp][4];
+	a = new double *[NComp];
+	b = new double *[NComp];
 	KK = new double *[NComp];
 	dKK = new double *[NComp];
 	d2KK = new double *[NComp];
@@ -2372,6 +2529,8 @@ void TSRKcalc::alloc_internal()
 
 	for (long int i=0; i<NComp; i++)
 	{
+		a[i] = new double[NComp];
+		b[i] = new double[NComp];
 		KK[i] = new double[NComp];
 		dKK[i] = new double[NComp];
 		d2KK[i] = new double[NComp];
@@ -2386,6 +2545,8 @@ void TSRKcalc::free_internal()
 
 	for (i=0; i<NComp; i++)
 	{
+		delete[]a[i];
+		delete[]b[i];
 		delete[]KK[i];
 		delete[]dKK[i];
 		delete[]d2KK[i];
@@ -2396,6 +2557,8 @@ void TSRKcalc::free_internal()
 	delete[]Pureparm;
 	delete[]Fugpure;
 	delete[]Fugci;
+	delete[]a;
+	delete[]b;
 	delete[]KK;
 	delete[]dKK;
 	delete[]d2KK;
@@ -2438,19 +2601,19 @@ long int TSRKcalc::PTparam()
 
 	PureSpecies();
 
+	// fill internal array of interaction parameters with standard value
+	for( j=0; j<NComp; j++ )
+	{
+		for( i=0; i<NComp; i++ )
+		{
+			KK[j][i] = 0.;
+			dKK[j][i] = 0.;
+			d2KK[j][i] = 0.;
+		}
+	}
+
 	if( NPcoef > 0 )
 	{
-		// fill internal array of interaction parameters with standard value
-		for( j=0; j<NComp; j++ )
-		{
-			for( i=0; i<NComp; i++ )
-			{
-				KK[j][i] = 0.;
-				dKK[j][i] = 0.;
-				d2KK[j][i] = 0.;
-			}
-		}
-
 		// transfer those interaction parameters that have non-standard value
 		for ( ip=0; ip<NPar; ip++ )
 		{
@@ -2526,6 +2689,153 @@ long int TSRKcalc::ExcessProp( double *Zex )
 
 	return iRet;
 
+}
+
+
+// basic van der waals mixing rule
+long int TSRKcalc::MixingWaals()
+{
+	long int j, i;
+
+	// set all interaction parameters zero
+	for( j=0; j<NComp; j++ )
+	{
+		for( i=0; i<NComp; i++ )
+		{
+			KK[j][i] = 0.;
+			dKK[j][i] = 0.;
+			d2KK[j][i] = 0.;
+		}
+	}
+
+	return 0;
+}
+
+
+// constant one-term interaction parameter
+long int TSRKcalc::MixingConst()
+{
+	long int j, i, ip, i1, i2;
+	double k, dk, d2k;
+
+	// set all interaction parameters zero
+	for( j=0; j<NComp; j++ )
+	{
+		for( i=0; i<NComp; i++ )
+		{
+			KK[j][i] = 0.;
+			dKK[j][i] = 0.;
+			d2KK[j][i] = 0.;
+		}
+	}
+
+	if( NPcoef > 0 )
+	{
+		// transfer interaction parameters that have non-standard value
+		for ( ip=0; ip<NPar; ip++ )
+		{
+			i1 = aIPx[MaxOrd*ip];
+			i2 = aIPx[MaxOrd*ip+1];
+			k = aIPc[NPcoef*ip];
+			dk = 0.;
+			d2k = 0.;
+			KK[i1][i2] = k;
+			dKK[i1][i2] = dk;
+			d2KK[i1][i2] = d2k;
+			KK[i2][i1] = k;   // symmetric case
+			dKK[i2][i1] = dk;
+			d2KK[i2][i1] = d2k;
+		}
+	}
+
+	return 0;
+}
+
+
+// temperature dependent one-term interaction parameter
+long int TSRKcalc::MixingTemp()
+{
+	long int i, j, ip, i1, i2;
+	double ai, aj, bi, bj, di, dj, dai, daj, d2ai, d2aj, ddi, ddj, d2di, d2dj,
+				U, V, dU, dV, d2U, d2V, tmp, k, dk, d2k, C;
+
+	// set all interaction parameters zero
+	for( j=0; j<NComp; j++ )
+	{
+		for( i=0; i<NComp; i++ )
+		{
+			a[j][i] = 0.;
+			b[j][i] = 0.;
+			KK[j][i] = 0.;
+			dKK[j][i] = 0.;
+			d2KK[j][i] = 0.;
+		}
+	}
+
+	if( NPcoef > 0 )
+	{
+		// transfer parameters that have non-standard value
+		for ( ip=0; ip<NPar; ip++ )
+		{
+			i1 = aIPx[MaxOrd*ip];
+			i2 = aIPx[MaxOrd*ip+1];
+			a[i1][i2] = aIPc[NPcoef*ip];
+			b[i1][i2] = aIPc[NPcoef*ip+1];
+			a[i2][i1] = aIPc[NPcoef*ip];  // symmetric case
+			b[i2][i1] = aIPc[NPcoef*ip+1];
+		}
+	}
+
+	// calculate binary interaction parameters
+	for (i=0; i<NComp; i++)
+	{
+		for (j=0; j<NComp; j++)
+		{
+			if ( a[i][j] == 0.0 )
+				tmp = 1.0;
+			else
+				tmp = a[i][j];
+
+			// read a, b, da, d2a
+			ai = Pureparm[i][0];
+			aj = Pureparm[j][0];
+			bi = Pureparm[i][1];
+			bj = Pureparm[j][1];
+			dai = Pureparm[i][2];
+			daj = Pureparm[j][2];
+			d2ai = Pureparm[i][3];
+			d2aj = Pureparm[j][3];
+
+			// calculate k and derivatives
+			di = sqrt(ai)/bi;
+			dj = sqrt(aj)/bj;
+			ddi = (0.5/bi) * pow(ai,-0.5) * dai;
+			ddj = (0.5/bj) * pow(aj,-0.5) * daj;
+			d2di = (0.5/bi) * ( (-0.5)*pow(ai,-1.5)*dai*dai + pow(ai,-0.5)*d2ai );
+			d2dj = (0.5/bj) * ( (-0.5)*pow(aj,-1.5)*daj*daj + pow(aj,-0.5)*d2aj );
+
+			C = ( b[i][j]/tmp - 1. );
+			U = a[i][j]*pow((298.15/Tk),C) - pow((di-dj),2.);
+			V = (2.*di*dj);
+			dU = - ( a[i][j]*C*pow((298.15/Tk),C) ) / Tk - 2.*(di-dj)*(ddi-ddj);
+			dV = 2.*( ddi*dj + di*ddj );
+			d2U = ( a[i][j]*pow(C,2.)*pow((298.15/Tk),C) ) / pow(Tk,2.)
+						+ ( a[i][j]*C*pow((298.15/Tk),C) ) / pow(Tk,2.)
+						- 2.*( pow((ddi-ddj),2.) + (di-dj)*(d2di-d2dj) );
+			d2V = 2.*( d2di*dj + 2.*ddi*ddj + di*d2dj );
+			k = U/V;
+			dk = (dU*V-U*dV)/pow(V,2.);
+			d2k = (d2U*V+dU*dV)*pow(V,2.)/pow(V,4.) - (dU*V)*(2.*V*dV)/pow(V,4.)
+						- (dU*dV+U*d2V)*pow(V,2.)/pow(V,4.) + (U*dV)*(2.*V*dV)/pow(V,4.);
+
+			// assignments
+			KK[i][j] = k;
+			dKK[i][j] = dk;
+			d2KK[i][j] = d2k;
+		}
+	}
+
+	return 0;
 }
 
 
@@ -2634,7 +2944,7 @@ long int TSRKcalc::AB( double Tcrit, double Pcrit, double omg, double N,
 // Calculates fugacities and departure functions of pure fluid species
 long int TSRKcalc::FugacityPure( long int i )
 {
-	double Tcrit, Pcrit, Tred, asrk, bsrk, alph, da, d2a, A, B, a2, a1, a0,
+	double Tcrit, Pcrit, Tred, asrk, bsrk, da, d2a, A, B, a2, a1, a0,
 			z1, z2, z3, vol1, vol2, vol3, lnf1, lnf2, lnf3, z, vol, lnf;
 	double gig, hig, sig, cpig, fugpure, gdep, hdep, sdep, cpdep,
 			cv, dPdT, dPdV, dVdT;

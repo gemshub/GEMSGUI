@@ -371,10 +371,14 @@ class TPRSVcalc: public TSolMod
 		double (*Fugpure)[6];   // fugacity parameters of pure gas species
 		double (*Fugci)[4];     // fugacity parameters of species in the mixture
 
+		double **a;		// arrays of generic parameters
+		double **b;
 		double **KK;     // binary interaction parameter
 		double **dKK;    // derivative of interaction parameter
 		double **d2KK;   // second derivative
 		double **AA;     // binary a terms in the mixture
+
+
 
 		// internal functions
 		void alloc_internal();
@@ -389,6 +393,9 @@ class TPRSVcalc: public TSolMod
 		long int FugacityMix( double amix, double bmix, double &fugmix, double &zmix, double &vmix );
 		long int FugacitySpec( double *fugpure );
 		long int DepartureFunct( double *fugpure );
+		long int MixingWaals();
+		long int MixingConst();
+		long int MixingTemp();
 
 	public:
 
@@ -446,6 +453,8 @@ class TSRKcalc: public TSolMod
 		double (*Fugpure)[6];   // Fugacity parameters of pure gas species
 		double (*Fugci)[4];     // Fugacity parameters of species in the mixture
 
+		double **a;		// arrays of generic parameters
+		double **b;
 		double **KK;    // binary interaction parameter
 		double **dKK;   // derivative of interaction parameter
 		double **d2KK;  // second derivative
@@ -464,6 +473,9 @@ class TSRKcalc: public TSolMod
 		long int FugacityMix( double amix, double bmix, double &fugmix, double &zmix, double &vmix );
 		long int FugacitySpec( double *fugpure );
 		long int DepartureFunct( double *fugpure );
+		long int MixingWaals();
+		long int MixingConst();
+		long int MixingTemp();
 
 	public:
 
