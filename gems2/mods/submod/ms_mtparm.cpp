@@ -299,6 +299,8 @@ void TMTparm::MTparmAlloc( )
     aSta.setdef();  //Added by Sveta 15/06/2002
 }
 
+#define  Fill_zero( type, val )   ( ((type) == 'T') ? (0) : (val) )
+
 // realoc memory to MTPARM structure and load data to arrays
 void TMTparm::LoadMtparm( double cT, double cP )
 {
@@ -377,21 +379,21 @@ if( P < 1e-5 )  // trial check  5.12.2006
             tp.P_HKF = S_ON;
         }
         /* load work structure to MTPARM */
-        if( tp.PtvG != S_OFF )    tp.G[j] = aW.twp->G;
-        if( tp.PtvdG != S_OFF )    tp.devG[j] = aW.twp->devG;
-        if( tp.PtvH != S_OFF )    tp.H[j] = aW.twp->H;
-        if( tp.PtvdH != S_OFF )   tp.devH[j] = aW.twp->devH;
-        if( tp.PtvS != S_OFF )    tp.S[j] = aW.twp->S;
-        if( tp.PtvdS != S_OFF )   tp.devS[j] = aW.twp->devS;
-        if( tp.PtvCp != S_OFF )   tp.Cp[j] = aW.twp->Cp;
-        if( tp.PtvdCp != S_OFF )  tp.devC[j] = aW.twp->devCp;
-        if( tp.PtvVm != S_OFF )   tp.Vm[j] = aW.twp->V;
-        if( tp.PtvdVm != S_OFF )  tp.devV[j] = aW.twp->devV;
-//        if( tp.PtvF != S_OFF )    tp.F[j] = aW.twp->F;
-//        if( tp.PtvU != S_OFF )    tp.U[j] = aW.twp->U;
-//        if( tp.PtCv != S_OFF )    tp.Cv[j] = aW.twp->Cv;
-        if( tp.PtvA != S_OFF )    tp.Alp[j] = aW.twp->Alp;
-        if( tp.PtvB != S_OFF )    tp.Bet[j] = aW.twp->Bet;
+        if( tp.PtvG != S_OFF )    tp.G[j] = Fill_zero( mup->DCC[j], aW.twp->G );
+        if( tp.PtvdG != S_OFF )    tp.devG[j] = Fill_zero( mup->DCC[j], aW.twp->devG);
+        if( tp.PtvH != S_OFF )    tp.H[j] = Fill_zero( mup->DCC[j], aW.twp->H);
+        if( tp.PtvdH != S_OFF )   tp.devH[j] = Fill_zero( mup->DCC[j], aW.twp->devH);
+        if( tp.PtvS != S_OFF )    tp.S[j] = Fill_zero( mup->DCC[j], aW.twp->S);
+        if( tp.PtvdS != S_OFF )   tp.devS[j] = Fill_zero( mup->DCC[j], aW.twp->devS);
+        if( tp.PtvCp != S_OFF )   tp.Cp[j] = Fill_zero( mup->DCC[j], aW.twp->Cp );
+        if( tp.PtvdCp != S_OFF )  tp.devC[j] = Fill_zero( mup->DCC[j],aW.twp->devCp);
+        if( tp.PtvVm != S_OFF )   tp.Vm[j] = Fill_zero( mup->DCC[j],aW.twp->V);
+        if( tp.PtvdVm != S_OFF )  tp.devV[j] = Fill_zero( mup->DCC[j],aW.twp->devV);
+//        if( tp.PtvF != S_OFF )    tp.F[j] = Fill_zero( mup->DCC[j],aW.twp->F); //SD 14/07/2009
+//        if( tp.PtvU != S_OFF )    tp.U[j] = Fill_zero( mup->DCC[j],aW.twp->U);
+//        if( tp.PtCv != S_OFF )    tp.Cv[j] = Fill_zero( mup->DCC[j],aW.twp->Cv);
+        if( tp.PtvA != S_OFF )    tp.Alp[j] = Fill_zero( mup->DCC[j], aW.twp->Alp);
+        if( tp.PtvB != S_OFF )    tp.Bet[j] = Fill_zero( mup->DCC[j],aW.twp->Bet);
 //        if( tp.PtvWb != S_OFF && j< tp.Ls )   tp.Wbor[j] = aW.twp->Wbor;
 //        if( tp.PtvWr != S_OFF && j< tp.Ls )   tp.Wrad[j] = aW.twp->Wrad;
         jf = j - tp.La; // gas/fluid phase(s) must immediately follow aqueous phase

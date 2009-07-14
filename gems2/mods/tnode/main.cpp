@@ -133,7 +133,7 @@ int main( int argc, char* argv[] )
      dBR->NodeStatusCH = NEED_GEM_AIA; // direct access to node DATABR structure
 
      // re-calculating equilibrium by calling GEMIPM
-     m_NodeStatusCH[in] = node->GEM_run(1., false);
+     m_NodeStatusCH[in] = node->GEM_run( false);
 
      if( !( m_NodeStatusCH[in] == OK_GEM_AIA || m_NodeStatusCH[in] == OK_GEM_SIA ) )
         return 5;
@@ -182,7 +182,7 @@ int main( int argc, char* argv[] )
  //   cout << " FMT loop begins: " << endl;
 
      // Loop over nodes for calculating the mass transport step
-     for(  in=2; in<nNodes; in++ )
+/*     for(  in=2; in<nNodes; in++ )
      {
        ; // add here some operators as function of tc and dt
        // in this example, simply adding MgCl2 to m_bIC vector
@@ -193,7 +193,7 @@ int main( int argc, char* argv[] )
          m_bIC[in*nIC+xCl] += dt*8e-7;
        }
      }
-//     cout << " FMT loop ends: ";
+*///     cout << " FMT loop ends: ";
      cout << " it = " << it << "  dt = " << dt << "  tc = " << tc << endl;
 
 //     cout << " Chemical loop begins: " << endl;
@@ -211,7 +211,7 @@ int main( int argc, char* argv[] )
              m_bIC+in*nIC, m_dul+in*nDC, m_dll+in*nDC, m_aPH+in*nPH );
 
         // Calling GEMIPM calculation
-        m_NodeStatusCH[in] = node->GEM_run(1., true );
+        m_NodeStatusCH[in] = node->GEM_run( true );
         if( !( m_NodeStatusCH[in] == OK_GEM_AIA ||
                m_NodeStatusCH[in] == OK_GEM_SIA ) )
             return 5;

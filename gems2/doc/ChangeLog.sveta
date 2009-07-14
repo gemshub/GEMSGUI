@@ -1,3 +1,11 @@
+14/07/2009
+Allocate S0, Cp0, H0, A0, U0 for all tasks (Multi and DataCH)
+Changed size for denWg, epsWg
+F and U is showed on MTPARM window, but not calculated
+Zero off the properties of H+ using the T species class code
+
+
+
 13/07/2009
 Changed the first position for start Gems window
 other windows are remain positions

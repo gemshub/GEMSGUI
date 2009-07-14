@@ -376,8 +376,8 @@ class TMulti
 
    char PAalp_;
    char PSigm_;
-   double EpsW_;
-   double RoW_;
+ //  double EpsW_;
+ //  double RoW_;
 
 #endif
 

@@ -296,8 +296,8 @@ void TMulti::CompG0Load()
  pmp->TC = pmp->TCc = TC;
  pmp->P = pmp->Pc = P;
  
- if( dCH->ccPH[0] == PH_AQUEL )
- {
+// if( dCH->ccPH[0] == PH_AQUEL )
+// {
    for( k=0; k<5; k++ )
    {	 
      jj =  k * dCH->nPp * dCH->nTp;
@@ -305,34 +305,27 @@ void TMulti::CompG0Load()
       {
        pmp->denW[k] = dCH->denW[jj+xTP];
        pmp->epsW[k] = dCH->epsW[jj+xTP];
+       pmp->denWg[k] = dCH->denWg[jj+xTP];
+       pmp->epsWg[k] = dCH->epsWg[jj+xTP];
       }
      else
      {
        pmp->denW[k] = LagranInterp( dCH->Pval, dCH->TCval, dCH->denW+jj,
-                          P, TC, dCH->nTp, dCH->nPp,1 );
+                          P, TC, dCH->nTp, dCH->nPp,5 );
        pmp->epsW[k] = LagranInterp( dCH->Pval, dCH->TCval, dCH->epsW+jj,
-                          P, TC, dCH->nTp, dCH->nPp,1 );
+                          P, TC, dCH->nTp, dCH->nPp,5 );
+       pmp->denWg[k] = LagranInterp( dCH->Pval, dCH->TCval, dCH->denWg+jj,
+                          P, TC, dCH->nTp, dCH->nPp,5 );
+       pmp->epsWg[k] = LagranInterp( dCH->Pval, dCH->TCval, dCH->epsWg+jj,
+                          P, TC, dCH->nTp, dCH->nPp,5 );
      }
   }
- }  
- else
- {
-   pmp->denW[0] = 1.;
-   pmp->epsW[0] = 78.;
- }
-
- if( xTP >= 0 )
-   {
-    pmp->denWg[0] = dCH->denWg[xTP];
-    pmp->epsWg[0] = dCH->epsWg[xTP];
-   }
-  else
-  {
-    pmp->denWg[0] = LagranInterp( dCH->Pval, dCH->TCval, dCH->denWg,
-                       P, TC, dCH->nTp, dCH->nPp,1 );
-    pmp->epsWg[0] = LagranInterp( dCH->Pval, dCH->TCval, dCH->epsWg,
-                       P, TC, dCH->nTp, dCH->nPp,1 );
-  }
+// }  
+// else
+// {
+//   pmp->denW[0] = 1.;
+//   pmp->epsW[0] = 78.;
+// }
 
  pmp->RT = R_CONSTANT * pmp->Tc;
  pmp->FRT = F_CONSTANT/pmp->RT;
@@ -362,19 +355,19 @@ void TMulti::CompG0Load()
      else
      {
        Go = LagranInterp( dCH->Pval, dCH->TCval, dCH->G0+jj,
-                          P, TC, dCH->nTp, dCH->nPp,1 );
+                          P, TC, dCH->nTp, dCH->nPp,5 );
        Vv = LagranInterp( dCH->Pval, dCH->TCval, dCH->V0+jj,
-                          P, TC, dCH->nTp, dCH->nPp, 1 );
+                          P, TC, dCH->nTp, dCH->nPp, 5 );
        if( dCH->S0 ) S0 =  LagranInterp( dCH->Pval, dCH->TCval, dCH->S0+jj,
-                          P, TC, dCH->nTp, dCH->nPp,1 );
+                          P, TC, dCH->nTp, dCH->nPp,5 );
        if( dCH->H0 ) h0 =  LagranInterp( dCH->Pval, dCH->TCval, dCH->H0+jj,
-                          P, TC, dCH->nTp, dCH->nPp,1 );
+                          P, TC, dCH->nTp, dCH->nPp,5 );
        if( dCH->Cp0 ) Cp0 =  LagranInterp( dCH->Pval, dCH->TCval, dCH->Cp0+jj,
-                          P, TC, dCH->nTp, dCH->nPp,1 );
+                          P, TC, dCH->nTp, dCH->nPp,5 );
        if( dCH->A0 ) a0 =  LagranInterp( dCH->Pval, dCH->TCval, dCH->A0+jj,
-                          P, TC, dCH->nTp, dCH->nPp,1 );
+                          P, TC, dCH->nTp, dCH->nPp,5 );
        if( dCH->U0 ) u0 =  LagranInterp( dCH->Pval, dCH->TCval, dCH->U0+jj,
-                          P, TC, dCH->nTp, dCH->nPp,1 );
+                          P, TC, dCH->nTp, dCH->nPp,5 );
      }
      if( pmp->tpp_G )
     	  pmp->tpp_G[j] = Go;

@@ -44,9 +44,8 @@ typedef struct
 	    //       for the interpolation of thermodynamic data
     nPp,    // Number of pressure points in grid arrays
             //       for the interpolation of thermodynamic data
-    iGrd,   // flag for grid array setup: 0 - only V0 and G0; 1 - plus H0;
-            //    2 - plus S0; 3 - plus Cp0; 4 - plus A0 (Helmholtz);
-            //    -1 - V0, G0 and DD (diffusion coefficients in aq, reserved)
+    iGrd,   // flag for grid array setup: 0 - only V0 and G0
+            //    1 - V0, G0 and DD (diffusion coefficients in aq, reserved)
     nAalp,  // Flag for considering surface areas of phases
 
   // These dimensionalities define sizes of packed arrays in DATABR structures
@@ -96,9 +95,9 @@ typedef struct
 // for a given P,T point (new interpolation is done when P or T differs
 // from the previous P,T by more than Ptol, Ttol)
 *denW,   // density of water-solvent, g/cm3, [5][ nPp][nTp] elements
-*denWg,   // density of water-solvent, g/cm3 (vapor), [ nPp][nTp] elements
+*denWg,   // density of water-solvent, g/cm3 (vapor), [5][ nPp][nTp] elements
 *epsW,  // dielectric  constant of water-solvent , [5][nPp][nTp] elements
-*epsWg,  // dielectric  constant of water-solvent (vapor), [nPp][nTp] elements
+*epsWg,  // dielectric  constant of water-solvent (vapor), [5][nPp][nTp] elements
     *G0,    // G0 standard molar Gibbs energy of DC, J/mol, [nDC][nPp][nTp] elements
     *V0,    // V0 standard molar volume of DC, J/bar, [nDC][nPp][nTp] elements
     *S0,    // S0 standard molar entropy of DC, J/K/mol, [nDC][nPp][nTp] elements

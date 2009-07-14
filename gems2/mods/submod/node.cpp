@@ -916,12 +916,6 @@ void TNode::makeStartDataChBR(
   else
     CSD->nAalp = 0;
   CSD->iGrd = 0;
-  if ( pmm->H0 )
-    CSD->iGrd = 1;
-  if ( pmm->S0 )
-    CSD->iGrd = 2;
-  if ( pmm->Cp0 )
-    CSD->iGrd = 3;
 
 // These dimensionalities define sizes of dynamic data in DATABR structure!!!
 
@@ -1022,7 +1016,7 @@ void TNode::makeStartDataChBR(
 
    G0_V0_H0_Cp0_DD_arrays();
 
-   if(  CSD->iGrd > 5 )
+   if(  CSD->iGrd  )
      for( i1=0; i1< CSD->nDCs*CSD->nPp*CSD->nTp; i1++ )
        CSD->DD[i1] = 0.;
 }
@@ -1031,30 +1025,15 @@ void TNode::G0_V0_H0_Cp0_DD_arrays()
 {
   int kk, jj, ii, ll;
   double cT, cP;
-  double *G0, *V0, *H0, *Cp0, *S0, *A0, *U0, denW[5], epsW[5], denWg, epsWg;
+  double *G0, *V0, *H0, *Cp0, *S0, *A0, *U0, denW[5], epsW[5], denWg[5], epsWg[5];
 
   G0 =  new double[TProfil::pm->mup->L];
   V0 =  new double[TProfil::pm->mup->L];
-  if ( pmm->H0 )
-    H0 =  new double[TProfil::pm->mup->L];
-  else
-    H0 = 0;
-  if ( pmm->Cp0 )
-    Cp0 = new double[TProfil::pm->mup->L];
-  else
-    Cp0 = 0;
-  if ( pmm->S0 )
-      S0 = new double[TProfil::pm->mup->L];
-  else
-      S0 = 0;
-  if ( pmm->A0 )
-      A0 = new double[TProfil::pm->mup->L];
-  else
-      A0 = 0;
-  if ( pmm->U0 )
-      U0 = new double[TProfil::pm->mup->L];
-  else
-      U0 = 0;
+  H0 =  new double[TProfil::pm->mup->L];
+  Cp0 = new double[TProfil::pm->mup->L];
+  S0 = new double[TProfil::pm->mup->L];
+  A0 = new double[TProfil::pm->mup->L];
+  U0 = new double[TProfil::pm->mup->L];
   
   for(  ii=0; ii<CSD->nTp; ii++)
   {
@@ -1066,69 +1045,39 @@ void TNode::G0_V0_H0_Cp0_DD_arrays()
 
      cP = CSD->Pval[jj];
      // calculates new G0, V0, H0, Cp0, S0
-     TProfil::pm->LoadFromMtparm( cT, cP, G0, V0, H0, S0, Cp0, 
+    TProfil::pm->LoadFromMtparm( cT, cP, G0, V0, H0, S0, Cp0, 
     		 A0, U0, denW, epsW, denWg, epsWg );
      for( kk=0; kk<5; kk++)
      {
         ll = ( kk * CSD->nPp + jj) * CSD->nTp + ii;
-    	if(CSD->denW)
-             CSD->denW[ ll ] = denW[kk];
-      	if(CSD->epsW)
-             CSD->epsW[ ll ] = epsW[kk];
+        CSD->denW[ ll ] = denW[kk];
+        CSD->epsW[ ll ] = epsW[kk];
+        CSD->denWg[ ll ] = denWg[kk];
+        CSD->epsWg[ ll ] = epsWg[kk];
       }
-      CSD->denWg[ jj * CSD->nTp + ii] = denWg;
-      CSD->epsWg[ jj * CSD->nTp + ii] = epsWg;
       // copy to arrays
      for( kk=0; kk<CSD->nDC; kk++)
       {
          ll = ( kk * CSD->nPp + jj) * CSD->nTp + ii;
          CSD->G0[ll] =  G0[pmm->muj[kk]]; //
          CSD->V0[ll] =  V0[pmm->muj[kk]];
-         if(  CSD->iGrd > 0 )
-         {  if ( H0 )
-              CSD->H0[ll] = H0[pmm->muj[kk]];
-            else
-              CSD->H0[ll] = 0.;
-         }
-         if(  CSD->iGrd > 2 )
-         { if ( Cp0 )
-             CSD->Cp0[ll] = Cp0[pmm->muj[kk]];
-           else
-             CSD->Cp0[ll] = 0.;
-         }
-         if(  CSD->iGrd > 1 )
-         {
-            if ( S0 )
-               CSD->S0[ll] = S0[pmm->muj[kk]];
-            else
-             CSD->S0[ll] = 0.;
-         }
-         if(  CSD->iGrd > 3 )
-         {
-            if ( A0 )
-               CSD->A0[ll] = A0[pmm->muj[kk]];
-            else
-             CSD->A0[ll] = 0.;
-         }
-         if(  CSD->iGrd > 4 )
-         {
-            if ( U0 )
-               CSD->U0[ll] = U0[pmm->muj[kk]];
-            else
-               CSD->U0[ll] = 0.;
-         }
-     }
-    }
+         CSD->H0[ll] = H0[pmm->muj[kk]];
+         CSD->Cp0[ll] = Cp0[pmm->muj[kk]];
+         CSD->S0[ll] = S0[pmm->muj[kk]];
+         CSD->A0[ll] = A0[pmm->muj[kk]];
+         CSD->U0[ll] = U0[pmm->muj[kk]];
+      }
+     }    
   }
   pVisor->CloseMessage();
   // free memory
   delete[] G0;
   delete[] V0;
-  if( H0 )  delete[] H0;
-  if( Cp0 ) delete[] Cp0;
-  if( S0 )  delete[] S0;
-  if( A0 )  delete[] A0;
-  if( U0 )  delete[] U0;
+  delete[] H0;
+  delete[] Cp0;
+  delete[] S0;
+  delete[] A0;
+  delete[] U0;
 }
 
 TNode::TNode( MULTI *apm  )

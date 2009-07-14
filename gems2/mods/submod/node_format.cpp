@@ -127,11 +127,11 @@ outField DataCH_dynamic_fields[29] =  { //+4
    { "epsWg",  1, 0 },
    { "V0",  1, 0 },
    { "G0",  1, 0 },
-   { "H0", 0, 0 },    // Depending on iGrd flag
-   { "S0",  0, 0 },   // Depending on iGrd flag
-   { "Cp0",  0, 0 },  // Depending on iGrd flag
-   { "A0",  0, 0 },  // Depending on iGrd flag
-   { "U0",  0, 0 },  // Depending on iGrd flag
+   { "H0", 0, 0 },   
+   { "S0",  0, 0 },  
+   { "Cp0",  0, 0 }, 
+   { "A0",  0, 0 }, 
+   { "U0",  0, 0 }, 
    { "DD",  0, 0 }    // Depending on iGrd flag
 };
 
@@ -650,8 +650,7 @@ void TNode::datach_to_text_file( fstream& ff, bool with_comments, bool brief_mod
      ff << "# nPp: Number of pressure points in the interpolation grid array" << endl;
   ff << left << setw(7) << "<nPp> " <<  CSD->nPp << endl;
   if( _comment )
-   {  ff << "# iGrd: flag for DC array setup: 0 - only V0 and G0; 1 - plus H0; 2 - plus S0; 3 - plus Cp0;" << endl;
-      ff << "# 4 - plus A0 (Helmholtz)" << endl;
+   {  ff << "# iGrd: flag for DD array setup" << endl;
    }
   ff << left << setw(7) << "<iGrd> " <<  CSD->iGrd << endl;
   if( _comment )
@@ -775,7 +774,7 @@ void TNode::datach_to_text_file( fstream& ff, bool with_comments, bool brief_mod
     if(!brief_mode || prar.getAlws("denWg" ))
     {  if( _comment )
          ff << "\n\n# denWg: Lookup array for the density of water-solvent (g/cm3) (vapor)";
-      prar.writeArray(  "denWg", CSD->denWg, CSD->nPp*CSD->nTp );
+      prar.writeArray(  "denWg", CSD->denWg, 5*(CSD->nPp*CSD->nTp), CSD->nPp*CSD->nTp );
     }  
     if(!brief_mode || prar.getAlws("epsW" ))
     {  if( _comment )
@@ -785,7 +784,7 @@ void TNode::datach_to_text_file( fstream& ff, bool with_comments, bool brief_mod
     if(!brief_mode || prar.getAlws("epsWg" ))
     {  if( _comment )
         ff << "\n\n# epsWg: Lookup array for the dielectric constant of water-solvent (vapor)";
-      prar.writeArray(  "epsWg", CSD->epsWg,  CSD->nPp*CSD->nTp );
+      prar.writeArray(  "epsWg", CSD->epsWg, 5*(CSD->nPp*CSD->nTp),  CSD->nPp*CSD->nTp );
     }  
   }
   if(!brief_mode || prar.getAlws("V0" ))
@@ -800,52 +799,38 @@ void TNode::datach_to_text_file( fstream& ff, bool with_comments, bool brief_mod
     prar.writeArray(  "G0", CSD->G0, CSD->nDC*CSD->nPp*CSD->nTp,
                                  CSD->nPp*CSD->nTp );
   }
-  if( CSD->iGrd > 0 )
-  {
-    if(!brief_mode || prar.getAlws("H0" ))
+ if(!brief_mode || prar.getAlws("H0" ))
     {  if( _comment )
         ff << "\n\n# H0: Lookup array for DC molar enthalpy function (J/mol)";
        prar.writeArray(  "H0", CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp,
                                         CSD->nPp*CSD->nTp );
     }   
-  }
-  if( CSD->iGrd > 1 )
-  {
-    if(!brief_mode || prar.getAlws("S0" ))
+  if(!brief_mode || prar.getAlws("S0" ))
     { if( _comment )
        ff << "\n\n# S0: Lookup array for DC absolute entropy function (J/K/mol)";
       prar.writeArray(  "S0", CSD->S0,CSD->nDC*CSD->nPp*CSD->nTp,
                                         CSD->nPp*CSD->nTp  );
     }  
-  }
-  if( CSD->iGrd > 2 )
-  {
-	 if(!brief_mode || prar.getAlws("Cp0" ))
+  if(!brief_mode || prar.getAlws("Cp0" ))
 	 {  if( _comment )
             ff << "\n\n# Cp0: Lookup array for DC heat capacity function (J/K/mol)";
         prar.writeArray(  "Cp0", CSD->Cp0,CSD->nDC*CSD->nPp*CSD->nTp,
                                         CSD->nPp*CSD->nTp  );
 	 }   
-  }
-  if( CSD->iGrd > 3 )
-  {
-	 if(!brief_mode || prar.getAlws("A0" ))
+ if(!brief_mode || prar.getAlws("A0" ))
 	 {  if( _comment )
             ff << "\n\n# A0: Helmholtz energy of DC, J/mol, reserved";
         prar.writeArray(  "A0", CSD->A0, CSD->nDC*CSD->nPp*CSD->nTp,
                                          CSD->nPp*CSD->nTp  );
 	 }   
-  }
-  if( CSD->iGrd > 4 )
-  {
-	 if(!brief_mode || prar.getAlws("U0" ))
+ if(!brief_mode || prar.getAlws("U0" ))
 	 {  if( _comment )
             ff << "\n\n# U0: Internal energy of DC, J/K/mol";
         prar.writeArray(  "U0", CSD->U0, CSD->nDC*CSD->nPp*CSD->nTp,
                                         CSD->nPp*CSD->nTp  );
 	 }   
-  }
-  if( CSD->iGrd > 5 )
+ 
+  if( CSD->iGrd  )
   {
     if(!brief_mode || prar.getAlws("DD" ))
     { if( _comment )
@@ -915,19 +900,19 @@ void TNode::datach_from_text_file(fstream& ff)
 //dynamic data
  TReadArrays  rddar( 29, DataCH_dynamic_fields, ff);
 
-   if( CSD->iGrd <= 5 )
+   if( CSD->iGrd  )
       rddar.setNoAlws( 28 /*"DD"*/);
-   if( CSD->iGrd <= 4 )
-      rddar.setNoAlws( 27 /*"U0"*/);
+/*   if( CSD->iGrd <= 4 )
+      rddar.setNoAlws( 27 *"U0"*);
    if( CSD->iGrd <= 3 )
-      rddar.setNoAlws( 26 /*"A0"*/);
+      rddar.setNoAlws( 26 *"A0"*);
    if( CSD->iGrd <= 2 )
-      rddar.setNoAlws( 25 /*"Cp0"*/);
+      rddar.setNoAlws( 25 *"Cp0"*);
    if( CSD->iGrd <= 0 )
-      rddar.setNoAlws( 23 /*"H0"*/);
+      rddar.setNoAlws( 23 *"H0"*);
    if( CSD->iGrd <= 1 )
-      rddar.setNoAlws( 24 /*"S0"*/);
-
+      rddar.setNoAlws( 24 *"S0"*);
+*/
 // default set up
   for( ii=0; ii< CSD->nDCs*CSD->nPp*CSD->nTp; ii++ )
   { 
@@ -1004,7 +989,7 @@ void TNode::datach_from_text_file(fstream& ff)
               break;
     case 18: if( !CSD->denWg )
                    Error( "Error", "Array denWg is not allocated in DCH!");
-             rddar.readArray( "denWg", CSD->denWg, CSD->nPp*CSD->nTp );
+             rddar.readArray( "denWg", CSD->denWg, 5*CSD->nPp*CSD->nTp );
               break;
     case 19: if( !CSD->epsW )
                    Error( "Error", "Array epsW is not allocated in DCH!");
@@ -1012,7 +997,7 @@ void TNode::datach_from_text_file(fstream& ff)
             break;
     case 20: if( !CSD->epsWg )
                    Error( "Error", "Array epsWg is not allocated in DCH!");
-             rddar.readArray( "epsWg", CSD->epsWg,  CSD->nPp*CSD->nTp );
+             rddar.readArray( "epsWg", CSD->epsWg,  5*CSD->nPp*CSD->nTp );
             break;
     case 21: rddar.readArray( "V0", CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp );
             break;
@@ -1094,23 +1079,18 @@ void TNode::datach_to_file( GemDataStream& ff )
 
    if( CSD->ccPH[0] == PH_AQUEL )
    { ff.writeArray( CSD->denW,  5*CSD->nPp*CSD->nTp );
-     ff.writeArray( CSD->denWg,  CSD->nPp*CSD->nTp );
+     ff.writeArray( CSD->denWg,  5*CSD->nPp*CSD->nTp );
      ff.writeArray( CSD->epsW, 5*CSD->nPp*CSD->nTp );
-     ff.writeArray( CSD->epsWg, CSD->nPp*CSD->nTp );
+     ff.writeArray( CSD->epsWg, 5*CSD->nPp*CSD->nTp );
    }
    ff.writeArray( CSD->G0,  CSD->nDC*CSD->nPp*CSD->nTp );
    ff.writeArray( CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   if(  CSD->iGrd > 0 )
-      ff.writeArray( CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   if(  CSD->iGrd > 1 )
-      ff.writeArray( CSD->S0, CSD->nDC*CSD->nPp*CSD->nTp );
-   if(  CSD->iGrd > 2 )
-      ff.writeArray( CSD->Cp0, CSD->nDC*CSD->nPp*CSD->nTp );
-   if(  CSD->iGrd > 3 )
-      ff.writeArray( CSD->A0, CSD->nDCs*CSD->nPp*CSD->nTp );
-   if(  CSD->iGrd > 4 )
-      ff.writeArray( CSD->U0, CSD->nDCs*CSD->nPp*CSD->nTp );
-   if(  CSD->iGrd > 5 )
+   ff.writeArray( CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp );
+   ff.writeArray( CSD->S0, CSD->nDC*CSD->nPp*CSD->nTp );
+   ff.writeArray( CSD->Cp0, CSD->nDC*CSD->nPp*CSD->nTp );
+   ff.writeArray( CSD->A0, CSD->nDC*CSD->nPp*CSD->nTp );
+   ff.writeArray( CSD->U0, CSD->nDC*CSD->nPp*CSD->nTp );
+   if(  CSD->iGrd  )
       ff.writeArray( CSD->DD, CSD->nDCs*CSD->nPp*CSD->nTp );
 
    ff.writeArray( (char *)CSD->ICNL, MaxICN*CSD->nIC );
@@ -1149,23 +1129,18 @@ void TNode::datach_from_file( GemDataStream& ff )
    if( CSD->ccPH[0] == PH_AQUEL )
    {  
 	 ff.readArray( CSD->denW,  5*CSD->nPp*CSD->nTp );
-	 ff.readArray( CSD->denWg,  CSD->nPp*CSD->nTp );
+	 ff.readArray( CSD->denWg,  5*CSD->nPp*CSD->nTp );
      ff.readArray( CSD->epsW, 5*CSD->nPp*CSD->nTp );
-     ff.readArray( CSD->epsWg, CSD->nPp*CSD->nTp );
+     ff.readArray( CSD->epsWg, 5*CSD->nPp*CSD->nTp );
    }
    ff.readArray( CSD->G0,  CSD->nDC*CSD->nPp*CSD->nTp );
    ff.readArray( CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   if(  CSD->iGrd > 0 )
      ff.readArray( CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   if(  CSD->iGrd > 1 )
      ff.readArray( CSD->S0, CSD->nDC*CSD->nPp*CSD->nTp );
-   if(  CSD->iGrd > 2 )
      ff.readArray( CSD->Cp0, CSD->nDC*CSD->nPp*CSD->nTp );
-   if(  CSD->iGrd > 3 )
-     ff.readArray( CSD->A0, CSD->nDCs*CSD->nPp*CSD->nTp );
-   if(  CSD->iGrd > 4 )
-     ff.readArray( CSD->U0, CSD->nDCs*CSD->nPp*CSD->nTp );
-   if(  CSD->iGrd > 5 )
+     ff.readArray( CSD->A0, CSD->nDC*CSD->nPp*CSD->nTp );
+     ff.readArray( CSD->U0, CSD->nDC*CSD->nPp*CSD->nTp );
+   if(  CSD->iGrd  )
      ff.readArray( CSD->DD, CSD->nDCs*CSD->nPp*CSD->nTp );
 
    ff.readArray( (char *)CSD->ICNL, MaxICN*CSD->nIC );
@@ -1199,34 +1174,19 @@ CSD->DCmm[0] = 0.0;   // Added by DK on 03.03.2007
   CSD->Pval = new double[CSD->nPp];
 
   CSD->denW = new double[ 5*CSD->nPp*CSD->nTp];
-  CSD->denWg = new double[ CSD->nPp*CSD->nTp];
+  CSD->denWg = new double[ 5*CSD->nPp*CSD->nTp];
   CSD->epsW = new double[ 5*CSD->nPp*CSD->nTp];
-  CSD->epsWg = new double[ CSD->nPp*CSD->nTp];
+  CSD->epsWg = new double[ 5*CSD->nPp*CSD->nTp];
 
   CSD->G0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
   CSD->V0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
-
-  if(  CSD->iGrd > 0 )
-    CSD->H0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
-  else
-    CSD->H0 = 0;
-  if(  CSD->iGrd > 1 )
-      CSD->S0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
-  else
-      CSD->S0 = 0;
-  if(  CSD->iGrd > 2 )
-    CSD->Cp0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
-  else
-    CSD->Cp0 = 0;
-  if(  CSD->iGrd > 3 )
-      CSD->A0 = new double[CSD->nDCs*CSD->nPp*CSD->nTp];
-  else
-      CSD->A0 = 0;
-  if(  CSD->iGrd > 4 )
-      CSD->U0 = new double[CSD->nDCs*CSD->nPp*CSD->nTp];
-  else
-      CSD->U0 = 0;
-  if(  CSD->iGrd > 5 )
+  CSD->H0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
+  CSD->S0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
+  CSD->Cp0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
+  CSD->A0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
+  CSD->U0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
+  
+  if(  CSD->iGrd  )
        CSD->DD = new double[CSD->nDCs*CSD->nPp*CSD->nTp];
   else
        CSD->DD = 0;

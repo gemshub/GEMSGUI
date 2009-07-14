@@ -130,19 +130,19 @@ void TMulti::to_text_file_gemipm( const char *path, bool addMui,
    //static values
    char PAalp;
    char PSigm;
-   double EpsW;
-   double RoW;
+//   double EpsW;
+//   double RoW;
 
 #ifndef IPMGEMPLUGIN
    PAalp = syp->PAalp;
    PSigm = syp->PSigm;
-   EpsW = TProfil::pm->tpp->EpsW;
-   RoW = TProfil::pm->tpp->RoW;
+//   EpsW = TProfil::pm->tpp->EpsW;
+//   RoW = TProfil::pm->tpp->RoW;
 #else
    PAalp = PAalp_;
    PSigm = PSigm_;
-   EpsW = EpsW_;
-   RoW = RoW_;
+//   EpsW = EpsW_;
+//   RoW = RoW_;
 #endif
   fstream ff( path, ios::out );
   ErrorIf( !ff.good() , path, "Fileopen error");
@@ -592,8 +592,8 @@ void TMulti::from_text_file_gemipm( const char *path )
    //static values
    char PAalp;
    char PSigm;
-   double EpsW;
-   double RoW;
+//   double EpsW;
+//   double RoW;
 
 #ifdef IPMGEMPLUGIN
    set_def();
@@ -679,8 +679,8 @@ void TMulti::from_text_file_gemipm( const char *path )
 //   }
 //   else
 //  {
-    RoW = 0.99706137180;
-    EpsW = 78.245147705;
+//    RoW = 0.99706137180;
+//    EpsW = 78.245147705;
 //  }
 
 #ifndef IPMGEMPLUGIN
@@ -689,8 +689,8 @@ void TMulti::from_text_file_gemipm( const char *path )
 #else
    PAalp_ = PAalp;
    PSigm_ = PSigm;
-   EpsW_ = EpsW;
-   RoW_ =  RoW;
+//   EpsW_ = EpsW;
+//   RoW_ =  RoW;
 #endif
 
    //realloc memory

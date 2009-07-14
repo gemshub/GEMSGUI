@@ -864,7 +864,7 @@ void TProfil::PMtest( const char *key )
 
 void TProfil::LoadFromMtparm(double T, double P,double *G0,  double *V0, 
 		double *H0, double *S0, double *Cp0, double *A0, double *U0, 
-		double denW[5], double epsW[5], double &denWg, double &epsWg )
+		double denW[5], double epsW[5], double denWg[5], double epsWg[5] )
 {
     if( fabs( tpp->curT - T ) > 1.e-10 ||
             fabs( tpp->curP - P ) > 1.e-10 )
@@ -877,13 +877,21 @@ void TProfil::LoadFromMtparm(double T, double P,double *G0,  double *V0,
     denW[2] = tpp->d2RdT2W;
     denW[3] = tpp->dRdPW;
     denW[4] = tpp->d2RdP2W;
-    denWg = tpp->RoV;
+    denWg[0] = tpp->RoV;
+    denWg[1] = tpp->dRdTV;
+    denWg[2] = tpp->d2RdT2V;
+    denWg[3] = tpp->dRdPV;
+    denWg[4] = tpp->d2RdP2V;
     epsW[0] = tpp->EpsW;
     epsW[1] = tpp->dEdTW;
     epsW[2] = tpp->d2EdT2W;
     epsW[3] = tpp->dEdPW;
     epsW[4] = tpp->d2EdP2W;
-    epsWg = tpp->EpsV;
+    epsWg[0] = tpp->EpsV;
+    epsWg[1] = tpp->dEdTV;
+    epsWg[2] = tpp->d2EdT2V;
+    epsWg[3] = tpp->dEdPV;
+    epsWg[4] = tpp->d2EdP2V;
     for( int jj=0; jj<mup->L; jj++ )
     {
       G0[jj] =  tpp->G[jj]+syp->GEX[jj];

@@ -984,24 +984,12 @@ void TMulti::dyn_new(int /*q*/)
         pm.Qd    = (double *)aObj[ o_wi_qd ].Free();
     }
 
-// SD 11/02/2009
+// SD 14/07/2009
     pm.Cp0   = (double *)aObj[ o_wio_cp0 ].Alloc( pm.L, 1, D_ );
-    if( syp->PHfst != S_OFF )
-    	pm.H0    = (double *)aObj[ o_wio_h0 ].Alloc( pm.L, 1, D_ );
-      else
-        pm.H0    = (double *)aObj[ o_wio_h0 ].Free();
-    if( syp->PUfst != S_OFF )
-    	pm.U0    = (double *)aObj[ o_wio_u0 ].Alloc( pm.L, 1, D_ );
-      else
-        pm.U0    = (double *)aObj[ o_wio_u0 ].Free();
-    if( syp->PSfst != S_OFF )
-    	   pm.S0    = (double *)aObj[ o_wio_s0 ].Alloc( pm.L, 1, D_ );
-      else
-    	pm.S0    = (double *)aObj[ o_wio_s0 ].Free();
-    if( syp->PSfst != S_OFF || syp->PHfst != S_OFF || syp->PUfst != S_OFF )
-    	pm.A0    = (double *)aObj[ o_wio_a0 ].Alloc( pm.L, 1, D_ );
-      else
-        pm.A0    = (double *)aObj[ o_wio_a0 ].Free();
+   	pm.H0    = (double *)aObj[ o_wio_h0 ].Alloc( pm.L, 1, D_ );
+   	pm.U0    = (double *)aObj[ o_wio_u0 ].Alloc( pm.L, 1, D_ );
+    pm.S0    = (double *)aObj[ o_wio_s0 ].Alloc( pm.L, 1, D_ );
+   	pm.A0    = (double *)aObj[ o_wio_a0 ].Alloc( pm.L, 1, D_ );
         
     // 11/02/2009
         pm.VPh = (double (*)[MIXPHPROPS])aObj[ o_wo_vph].Alloc(pm.FIs,MIXPHPROPS, D_);
