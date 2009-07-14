@@ -264,7 +264,7 @@ double CalcEqstat( bool show_progress=true );
     void PMtest( const char *key );
     void LoadFromMtparm(double T, double P,double *G0,  double *V0, 
     		double *H0, double *S0, double *Cp0, double *A0, double *U0, 
-    		double denW[5], double epsW[5], double denWg[5], double epsWg[5] );
+    		double denW[5], double epsW[5], double denWg[5], double epsWg[5], int* tp_mark );
     void CalcBcc(); // Calc bulk composition
     void ShowPhaseWindow();
     void ShowEqPhaseWindow();

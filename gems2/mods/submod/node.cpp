@@ -832,7 +832,7 @@ void TNode::MakeNodeStructures(
      aSelPH.Add( axPH[ii] );
 
 // set default data and realloc arrays
-   makeStartDataChBR( aSelIC, aSelDC, aSelPH,
+   makeStartDataChBR( 0, aSelIC, aSelDC, aSelPH,
                       nTp_, nPp_, Ttol_, Ptol_, Tai, Pai );
 }
 
@@ -884,13 +884,13 @@ void TNode::MakeNodeStructures( QWidget* par, bool select_all,
 
 
 // set default data and realloc arrays
-   makeStartDataChBR( aSelIC, aSelDC, aSelPH,
+   makeStartDataChBR( par, aSelIC, aSelDC, aSelPH,
                       nTp_, nPp_, Ttol_, Ptol_, Tai, Pai );
 }
 
 
 // Writing dataCH structure to binary file
-void TNode::makeStartDataChBR(
+void TNode::makeStartDataChBR( QWidget* par,
   TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
   short nTp_, short nPp_, float Ttol_, float Ptol_,
   float *Tai, float *Pai )
@@ -1014,19 +1014,20 @@ void TNode::makeStartDataChBR(
    for( i1=0; i1<CSD->nPp; i1++ )
     CSD->Pval[i1] = Pai[i1];
 
-   G0_V0_H0_Cp0_DD_arrays();
+   G0_V0_H0_Cp0_DD_arrays( par );
 
    if(  CSD->iGrd  )
      for( i1=0; i1< CSD->nDCs*CSD->nPp*CSD->nTp; i1++ )
        CSD->DD[i1] = 0.;
 }
 
-void TNode::G0_V0_H0_Cp0_DD_arrays()
+void TNode::G0_V0_H0_Cp0_DD_arrays( QWidget* par )
 {
   int kk, jj, ii, ll;
   double cT, cP;
   double *G0, *V0, *H0, *Cp0, *S0, *A0, *U0, denW[5], epsW[5], denWg[5], epsWg[5];
-
+  int *tp_mark;
+  
   G0 =  new double[TProfil::pm->mup->L];
   V0 =  new double[TProfil::pm->mup->L];
   H0 =  new double[TProfil::pm->mup->L];
@@ -1034,19 +1035,22 @@ void TNode::G0_V0_H0_Cp0_DD_arrays()
   S0 = new double[TProfil::pm->mup->L];
   A0 = new double[TProfil::pm->mup->L];
   U0 = new double[TProfil::pm->mup->L];
+  tp_mark = new int[TProfil::pm->mup->L];
+  fillValue( tp_mark, 0, TProfil::pm->mup->L);
   
   for(  ii=0; ii<CSD->nTp; ii++)
   {
     cT = CSD->TCval[ii];
     for(  jj=0; jj<CSD->nPp; jj++)
     {
-      pVisor->Message( 0, "Building lookup arrays",
+     if( par )
+    	pVisor->Message( par, "Building lookup arrays",
             "Loading thermodynamic data", ii*CSD->nPp+jj, CSD->nTp*CSD->nPp );
 
      cP = CSD->Pval[jj];
      // calculates new G0, V0, H0, Cp0, S0
     TProfil::pm->LoadFromMtparm( cT, cP, G0, V0, H0, S0, Cp0, 
-    		 A0, U0, denW, epsW, denWg, epsWg );
+    		 A0, U0, denW, epsW, denWg, epsWg, tp_mark);
      for( kk=0; kk<5; kk++)
      {
         ll = ( kk * CSD->nPp + jj) * CSD->nTp + ii;
@@ -1069,7 +1073,19 @@ void TNode::G0_V0_H0_Cp0_DD_arrays()
       }
      }    
   }
+ if( par )
   pVisor->CloseMessage();
+  gstring err = "";
+  for( ii =0, kk=0; kk<CSD->nDC; kk++)
+   {
+	  if( tp_mark[pmm->muj[kk]]==1 )
+	  {	  err +=" ";
+	      err += gstring(CSD->DCNL[kk],0, MaxDCN);
+	      if(!((++ii)%5)) err += "\n";
+	  }
+  }
+  if( !err.empty() )
+	  vfMessage(par,"Not quality for TP dependencies of DC", err.c_str());
   // free memory
   delete[] G0;
   delete[] V0;

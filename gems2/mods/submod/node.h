@@ -112,13 +112,13 @@ protected:
 #ifndef IPMGEMPLUGIN
     // Integration in GEMS-PSI GUI environment
     // Prepares and writes DCH and DBR files for reading into the coupled code
-    void makeStartDataChBR(
+    void makeStartDataChBR( QWidget* par,
          TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
          short nTp_, short nPp_, float Ttol_, float Ptol_,
          float *Tai, float *Pai );
 
     // Creates lookup arrays for interpolation of thermodynamic data 
-    void G0_V0_H0_Cp0_DD_arrays(); // to be written into DCH file
+    void G0_V0_H0_Cp0_DD_arrays( QWidget* par ); // to be written into DCH file
 
     // Virtual function for interaction with TNodeArray class
     virtual void  setNodeArray( gstring& , long int , bool ) { }

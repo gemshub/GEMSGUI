@@ -864,7 +864,7 @@ void TProfil::PMtest( const char *key )
 
 void TProfil::LoadFromMtparm(double T, double P,double *G0,  double *V0, 
 		double *H0, double *S0, double *Cp0, double *A0, double *U0, 
-		double denW[5], double epsW[5], double denWg[5], double epsWg[5] )
+		double denW[5], double epsW[5], double denWg[5], double epsWg[5], int* tp_mark_ )
 {
     if( fabs( tpp->curT - T ) > 1.e-10 ||
             fabs( tpp->curP - P ) > 1.e-10 )
@@ -894,6 +894,8 @@ void TProfil::LoadFromMtparm(double T, double P,double *G0,  double *V0,
     epsWg[4] = tpp->d2EdP2V;
     for( int jj=0; jj<mup->L; jj++ )
     {
+      if( tpp->mark[jj] == 'e'/*CP_NOT_VALID*/ )
+    	  tp_mark_[jj] = 1;  
       G0[jj] =  tpp->G[jj]+syp->GEX[jj];
       V0[jj] =  tpp->Vm[jj];
       if( H0 )

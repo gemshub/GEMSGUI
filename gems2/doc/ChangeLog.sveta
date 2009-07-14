@@ -1,4 +1,7 @@
 14/07/2009
+Show message about "Quality codes for temperature and pressure corrections"
+
+14/07/2009
 Allocate S0, Cp0, H0, A0, U0 for all tasks (Multi and DataCH)
 Changed size for denWg, epsWg
 F and U is showed on MTPARM window, but not calculated
