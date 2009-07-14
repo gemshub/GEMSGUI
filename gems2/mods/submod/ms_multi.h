@@ -158,13 +158,13 @@ double
      *ENT,    // reserved no object
 
  // Convert H0, A0, U0, S0, Cp0 to double
-*H0,     // DC pmolar enthalpies, reserved [L]
-*A0,     // DC molar Helmholtz energies, reserved [L]
-*U0,     // DC molar internal energies, reserved [L]
-*S0,     // DC molar entropies, reserved [L]
-*Cp0,    // DC molar heat capacity, reserved [L]
-    *Cv0,    // DC molar Cv, reserved [L]
-  //
+     *H0,     // DC pmolar enthalpies, reserved [L]
+     *A0,     // DC molar Helmholtz energies, reserved [L]
+     *U0,     // DC molar internal energies, reserved [L]
+     *S0,     // DC molar entropies, reserved [L]
+     *Cp0,    // DC molar heat capacity, reserved [L]
+     *Cv0,    // DC molar Cv, reserved [L]
+
     *VL,        // ln mole fraction of end members in phases-solutions
     *Xcond, 	// conductivity of phase carrier, sm/m2   [0:FI-1], reserved
     *Xeps,  	// diel.permeability of phase carrier (solvent) [0:FI-1], reserved
@@ -446,7 +446,8 @@ class TMulti
     void MargulesBinary( long int jb, long int je, long int jpb, long int jdb, long int k );
     void MargulesTernary( long int jb, long int je, long int jpb, long int jdb, long int k );
 // Generic solution model calls
-    void SolModCreate( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb, char ModCode );
+    void SolModCreate( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb,
+    		char ModCode, char MixCode );
     void SolModParPT( long int k, char ModCode );
     void SolModActCoeff( long int k, char ModCode );
     void SolModExcessProp( long int k, char ModCode );
@@ -570,7 +571,7 @@ public:
     void to_file( GemDataStream& ff );
     void to_text_file( const char *path, bool append=false  );
     void from_file( GemDataStream& ff );
-    void to_text_file_gemipm( const char *path, bool addMui, 
+    void to_text_file_gemipm( const char *path, bool addMui,
     		bool with_comments = true, bool brief_mode = false );
     void from_text_file_gemipm( const char *path );
 

@@ -50,7 +50,7 @@ enum solmod_switches { // indexes of keys of model solution
     SPHAS_DEP,
     SGM_MODE,
     DCE_LINK,
-    SCM_TYPE,
+    MIX_TYP,
     // link state
     LINK_UX_MODE,
     LINK_TP_MODE,

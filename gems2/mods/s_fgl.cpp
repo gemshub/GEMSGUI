@@ -36,7 +36,7 @@
 
 // Generic constructor
 TPRSVcalc::TPRSVcalc( long int NCmp, double Pp, double Tkp ):
-	TSolMod( NCmp, 0, 0, 0, 0, 4, 'P',
+	TSolMod( NCmp, 0, 0, 0, 0, 4, 'P', 0,
          0, 0, 0, 0, 0, 0, Tkp, Pp  )
 
 {
@@ -48,12 +48,12 @@ TPRSVcalc::TPRSVcalc( long int NCmp, double Pp, double Tkp ):
 
 
 TPRSVcalc::TPRSVcalc( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-        long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
-        double *arWx, double *arlnGam, double *aphVOL, double *arPparc,
-        double *arGEX, double *arVol, double T_k, double P_bar ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 4,
-        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL, T_k, P_bar )
+        long int NPperDC, char Mod_Code, char Mix_Code, long int *arIPx,
+        double *arIPc, double *arDCc, double *arWx, double *arlnGam,
+        double *aphVOL, double *arPparc, double *arGEX, double *arVol,
+        double T_k, double P_bar ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 4, Mod_Code, Mix_Code,
+						arIPx, arIPc, arDCc, arWx, arlnGam, aphVOL, T_k, P_bar )
 {
 	aGEX = arGEX;
 	aVol = arVol;
@@ -751,7 +751,7 @@ long int TPRSVcalc::PRCalcFugPure( void )
 
 // Generic constructor
 TCGFcalc::TCGFcalc( long int NCmp, double Pp, double Tkp ):
-    TSolMod( NCmp, 0, 0, 0, 0, 0, 'F',
+    TSolMod( NCmp, 0, 0, 0, 0, 0, 'F', 0,
          0, 0, 0, 0, 0, 0, Tkp, Pp )
 {
 	Pparc = 0;
@@ -766,12 +766,12 @@ TCGFcalc::TCGFcalc( long int NCmp, double Pp, double Tkp ):
 
 
 TCGFcalc::TCGFcalc( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-        long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
-        double *arWx, double *arlnGam, double *aphVOL, double *arPparc, double *arphWGT,
-        double *arX, double *arGEX, double *arVol, double T_k, double P_bar ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 8,
-        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL, T_k, P_bar )
+        long int NPperDC, char Mod_Code, char Mix_Code, long int *arIPx,
+        double *arIPc, double *arDCc, double *arWx, double *arlnGam,
+        double *aphVOL, double *arPparc, double *arphWGT, double *arX,
+        double *arGEX, double *arVol, double T_k, double P_bar ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 8, Mod_Code, Mix_Code,
+						arIPx, arIPc, arDCc, arWx, arlnGam, aphVOL, T_k, P_bar )
 {
 	Pparc = arPparc;
 	phWGT = arphWGT;
@@ -2327,7 +2327,7 @@ long int EOSPARAM::ParamMix( double *Xin )
 
 // Constructor
 TSRKcalc::TSRKcalc( long int NCmp, double Pp, double Tkp ):
-    TSolMod( NCmp, 0, 0, 0, 0, 4, 'E',
+    TSolMod( NCmp, 0, 0, 0, 0, 4, 'E', 0,
          0, 0, 0, 0, 0, 0, Tkp, Pp )
 {
 	aGEX = 0;
@@ -2338,12 +2338,12 @@ TSRKcalc::TSRKcalc( long int NCmp, double Pp, double Tkp ):
 
 
 TSRKcalc::TSRKcalc( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-        long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
-        double *arWx, double *arlnGam, double *aphVOL, double *arPparc,
-        double *arGEX, double *arVol, double T_k, double P_bar ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 4,
-        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL, T_k, P_bar )
+        long int NPperDC, char Mod_Code, char Mix_Code, long int *arIPx,
+        double *arIPc, double *arDCc, double *arWx, double *arlnGam,
+        double *aphVOL, double *arPparc, double *arGEX, double *arVol,
+        double T_k, double P_bar ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 4, Mod_Code, Mix_Code,
+						arIPx, arIPc, arDCc, arWx, arlnGam, aphVOL, T_k, P_bar )
 {
 	Pparc = arPparc;
 	aGEX = arGEX;

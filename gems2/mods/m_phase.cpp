@@ -454,17 +454,16 @@ AGAIN_SETUP:
        php->sol_t[DCOMP_DEP] = SM_UNDEF;
        php->sol_t[SPHAS_DEP] = SM_UNDEF;
        php->sol_t[DCE_LINK] = SM_UNDEF;
-//       php->sol_t[SCM_TYPE] = SM_UNDEF;
 
        switch(php->sol_t[SPHAS_TYP])
        {
-       case SM_OTHER:   // Customized hardcoded solid-solution models
+		   case SM_OTHER:   // Customized hardcoded solid-solution models
 						  php->nscM = 0;   // NP_DC
 						  php->npxM = 0;   // MaxOrd
                           php->ncpN = 0;   // NPar
 						  php->ncpM = 0;   // NPcoef
 						  break;
-       case SM_VANLAAR:   // Van Laar model (multicomponent)
+		   case SM_VANLAAR:   // Van Laar model (multicomponent)
                           php->nscM = 1;  // NP_DC
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
@@ -473,7 +472,7 @@ AGAIN_SETUP:
 							  php->ncpN = (php->nDC*(php->nDC-1)/2);
 						  php->ncpM = 3;  // NPcoef
                           break;
-          case SM_REGULAR:   // Regular model (multicomponent)
+		   case SM_REGULAR:   // Regular model (multicomponent)
                           php->nscM = 0;  // NP_DC
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
@@ -482,7 +481,7 @@ AGAIN_SETUP:
 							  php->ncpN = (php->nDC*(php->nDC-1)/2);
                           php->ncpM = 3;  // NPcoef
                           break;
-          case SM_GUGGENM:   // Redlich-Kister model (multicomponent)
+		   case SM_GUGGENM:   // Redlich-Kister model (multicomponent)
                           php->nscM = 0;  // NP_DC
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
@@ -826,7 +825,9 @@ AGAINRC:
         php->PphC = PH_SORPTION;
         for( i=0; i<php->NsiT; i++ )
         { /* if( !php->SCMC[i] || php->SCMC[i]==A_NUL ) */
-            php->SCMC[i] = php->sol_t[SCM_TYPE];  // fix by DK 24.07.2006
+            // php->SCMC[i] = php->sol_t[SCM_TYPE];  // fixed, 24.07.2006 (DK)
+            php->SCMC[i] = SC_BSM;  // changed, 14.07.2009 (TW)
+
             if( !php->FsiT )
                 php->FsiT[i] = 1./php->NsiT;
             if( !php->MSDT[i][0] )

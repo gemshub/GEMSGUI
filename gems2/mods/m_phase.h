@@ -37,12 +37,12 @@ typedef struct
     cls[MAXSYMB],       // Class of phase
     grp[MAXPHGROUP],    // Record key comment to phase definition
 
-    sol_t[6], /* Phase type { IRV123HPEAU } or { N }
+    sol_t[6], /* Phase type { IGMTVKRLWFPED123HYSQZAUOX } or { N }
                        Mode of calculation of DC non-ideality parameters { NTX }
                        Mode of calculation of phase non-ideality parameters { NTX }
                        Mode of calculation of DC activity coefficients { NSI }
-                   One group of equations for all DC {U},one group per DC {P},no {N}
-                       Default type of adsorption/ion exchange model { NCLDTE }  */
+					   One group of equations for all DC {U},one group per DC {P},no {N}
+                       Type of mixing rule in EoS models { WCT }  */
     PphC, // Default class of phase in the system {agpmlsxdh}
     Ppnc, // Flag for 'ph_cf' array for phase-related input parameters {+*-}
     Psco, // Flag for 'dc_cf' array for DC-related parameters {+*-}
@@ -54,11 +54,11 @@ typedef struct
     ;
  short nDC,      // N of DC in phase definition >= 1
     Nsd,        //  N of references to Data Sources  <= 4
-// changed 07.12.2006 KD
-ncpN,    // Number of interaction parameters (rows in pnc and ipx tables)
-ncpM,    // Number of coefficients per IP (cols in pnc table)
-npxM,    // Maximum order of interaction parameters (cols in ipx, to set up on remake)
-nscM,    // Number of parameters per solution phase species (cols in scoef table)
+    // changed 07.12.2006 KD
+    ncpN,    // Number of interaction parameters (rows in pnc and ipx tables)
+    ncpM,    // Number of coefficients per IP (cols in pnc table)
+    npxM,    // Maximum order of interaction parameters (cols in ipx, to set up on remake)
+    nscM,    // Number of parameters per solution phase species (cols in scoef table)
     NsiT,     // N of surface site types (to set up on remake)
     NR1;      // Number of elements per species in MaSdj array (1: old 6: new)
 short *ipxt;  // Table of indexation for interaction parameters ncpN x npxM
@@ -101,10 +101,10 @@ char (*lsNs)[MAXDCNAME];        // work object - names of neutral species except
   short
     nCat,   // Work data - number of cations
     nAn,    // Work data - number of anions
-nNs,      // Work data - number of neutral species except water
+    nNs,      // Work data - number of neutral species except water
    *nxCat,            // Vector of indexes for cations in SIT or Pitzer coeff table
    *nxAn,             // vector of indexes for anions  in SIT or Pitzer coeff table
-*nxNs;    // Vector of indexes of neutral species in Pitzer coeff table
+   *nxNs;    // Vector of indexes of neutral species in Pitzer coeff table
 }
 
 PHASE;
@@ -168,7 +168,7 @@ enum solmod_switches { /* indexes of keys of model solution*/
     SPHAS_DEP,
     SGM_MODE,
     DCE_LINK,
-    SCM_TYPE,
+    MIX_TYP,
 
     // Link state of GammaCalc() calculation of activity coefficients
     LINK_UX_MODE,
@@ -187,7 +187,7 @@ enum solmod_switches { /* indexes of keys of model solution*/
     SM_STNGAM = 'S',        // Built-in function for activity coefficients
     SM_NOSTGAM = 'N',
 
-    // Code to identify the mixing models used (during IPM iterations)
+    // Codes to identify the mixing models used (during IPM iterations)
     SM_IDEAL =  'I',	// ideal solution or single-component phase;
     SM_REDKIS = 'G', 	// built-in binary Guggenheim (Redlich-Kister) solid-solution model
     SM_MARGB = 'M',		// built-in binary Margules solid-solutions (subregular)
@@ -205,59 +205,69 @@ enum solmod_switches { /* indexes of keys of model solution*/
     SM_AQDH2 = '2',		// built-in 2-term Debye-Hueckel model for aqueous electrolytes
     SM_AQDH3 = '3',		// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Karpov version)
     SM_AQDHH = 'H',		// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Helgeson version)
-    SM_AQDHS = 'Y',		// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Shvarov version), reserved
+    SM_AQDHS = 'Y',		// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Shvarov version)
     SM_AQSIT = 'S',		// built-in SIT model for aqueous electrolytes
-    SM_AQEXUQ = 'Q',    // built-in EUNIQUAC model for aqueous electrolytes
+    SM_AQEXUQ = 'Q',    // built-in extended UNIQUAC model for aqueous electrolytes
     SM_AQPITZ = 'Z',    // built-in Pitzer HMW model for aqueous electrolytes
-// SM_IONEX = 'E',		// ion exchange (Donnan, Nikolskii) (reserved)
+		// SM_IONEX = 'X',		// ion exchange (Donnan, Nikolskii) (reserved)
     SM_SURCOM = 'A',	// models of surface complexation at solid-aqueous interface
     SM_USERDEF = 'U',	// user-defined mixing model (scripts in Phase record)
-    SM_OTHER = 'O'		// other built-in phase-specific models of non-ideal solutions
+    SM_OTHER = 'O',		// other built-in phase-specific models of non-ideal solutions
     	                //    (selected through phase name)
+
+    // Codes to identify specific mixing rules in EoS models
+    MR_WAAL = 'W',		// Basic Van der Waals mixing rules in cubic EoS models
+    MR_CONST = 'C',		// Constant one-term interaction parameter kij
+    MR_TEMP = 'T',		// Temperature-dependent one-term interaction parameter kij (Jaubert et al. 2005)
 };
 
-//    This code defines standard state and reference scale of concentra-
-// tions for components of this phase. It is used by many subroutines
+// This code defines standard state and reference scale of concentrations
+// for components of this phase. It is used by many subroutines
 // during calculations of equilibrium states
 enum PH_CLASSES{  /* Possible values */
-    PH_AQUEL    = 'a',  // aqueous electrolyte
-    PH_GASMIX   = 'g',  // mixture of gases
-    PH_FLUID    = 'f',  // fluid phase
-    PH_PLASMA   = 'p',  // plasma
-    PH_LIQUID   = 'l',  // non-electrolyte liquid (melt)
-    PH_SIMELT   = 'm',  // silicate (magmatic) melt or non-aqueous electrolyte
+	PH_AQUEL = 'a',  	// aqueous electrolyte
+    PH_GASMIX = 'g',  	// mixture of gases
+    PH_FLUID = 'f',  	// fluid phase
+    PH_PLASMA = 'p',  	// plasma
+    PH_LIQUID = 'l',  	// non-electrolyte liquid (melt)
+    PH_SIMELT = 'm',  	// silicate (magmatic) melt or non-aqueous electrolyte
     PH_SORPTION = 'x',  // dilspersed solid with adsorption (ion exchange) in aqueous
-    PH_POLYEL   = 'y',  // colloidal poly- (oligo)electrolyte
-    PH_SINCOND  = 's',  // condenced solid phase, also multicomponent
-    PH_SINDIS   = 'd',  // dispersed solid phase, also multicomponent
-    PH_HCARBL   = 'h'   // mixture of condensed hydrocarbons
+    PH_POLYEL = 'y',  	// colloidal poly- (oligo)electrolyte
+    PH_SINCOND = 's',  	// condenced solid phase, also multicomponent
+    PH_SINDIS = 'd',  	// dispersed solid phase, also multicomponent
+    PH_HCARBL = 'h'   	// mixture of condensed hydrocarbons
 };
 
 enum sorption_control {
-    /* EDL interface models - separate for site types in v. 3.1 */
+    // EDL interface models - separate for site types in v. 3.1
     SC_DDLM = 'D',  SC_CCM = 'C',     SC_TLM = 'T',   SC_MTL = 'M',
     SC_MXC = 'E',   SC_NNE = 'X',     SC_IEV  = 'I',  SC_BSM = 'S',
-SC_3LM = '3', SC_NOT_USED = 'N',
-    /* Methods of Surface Activity Terms calculation */
+    SC_3LM = '3', SC_NOT_USED = 'N',
+
+    // Methods of Surface Activity Terms calculation
     SAT_COMP = 'C', SAT_NCOMP = 'N', SAT_SOLV = 'S', SAT_INDEF = 'I',
-/* New methods for surface activity coefficient terms (2004) */
- SAT_L_COMP = 'L', SAT_QCA_NCOMP = 'Q', SAT_QCA1_NCOMP = '1',
- SAT_QCA2_NCOMP = '2', SAT_QCA3_NCOMP = '3', SAT_FREU_NCOMP = 'f',
- SAT_QCA4_NCOMP = '4', SAT_BET_NCOMP = 'B', SAT_VIR_NCOMP = 'W',
- SAT_FRUM_NCOMP = 'F', SAT_FRUM_COMP = 'R', SAT_PIVO_NCOMP = 'P',
-    /* Assignment of surtype to carrier (end-member) */
+
+    // New methods for surface activity coefficient terms (2004)
+    SAT_L_COMP = 'L', SAT_QCA_NCOMP = 'Q', SAT_QCA1_NCOMP = '1',
+    SAT_QCA2_NCOMP = '2', SAT_QCA3_NCOMP = '3', SAT_FREU_NCOMP = 'f',
+    SAT_QCA4_NCOMP = '4', SAT_BET_NCOMP = 'B', SAT_VIR_NCOMP = 'W',
+    SAT_FRUM_NCOMP = 'F', SAT_FRUM_COMP = 'R', SAT_PIVO_NCOMP = 'P',
+
+    // Assignment of surtype to carrier (end-member) */
     CCA_VOL = 'V', CCA_0 = '0', CCA_1, CCA_2, CCA_3, CCA_4, CCA_5,
     CCA_6, CCA_7, CCA_8, CCA_9, SPL_0='0', SPL_1, SPL_2, SPL_3,
     SPL_B = 'b', SPL_D = 'd', SPL_C = 'c',
     SDU_N = 'n', SDU_m = 'm', SDU_M = 'M', SDU_g = 'g',
     CST_0 = '0', CST_1, CST_2, CST_3, CST_4, CST_5, // surface type index
     CSI_0 = '0', CSI_1, CSI_2, CSI_3, CSI_4, CSI_5, // surface site index
-// Number of parameters per surface species in the MaSdj array
-// MCAS = 6 = DFCN ; position index    added by KD 25.10.2004
-// Column indices of surface species allocation table MCAS
-   SA_MCA=0, SA_EMX, SA_STX, SA_PLAX, SA_SITX, SA_UNIT,
-// Column indices of MaSdj table of adsorption parameters
-   PI_DEN=0, PI_CD0, PI_CDB, PI_P1, PI_P2, PI_P3
+
+    // Number of parameters per surface species in the MaSdj array
+    // MCAS = 6 = DFCN ; position index    added by KD 25.10.2004
+    // Column indices of surface species allocation table MCAS
+    SA_MCA=0, SA_EMX, SA_STX, SA_PLAX, SA_SITX, SA_UNIT,
+
+    // Column indices of MaSdj table of adsorption parameters
+    PI_DEN=0, PI_CD0, PI_CDB, PI_P1, PI_P2, PI_P3
 };
 
 enum volume_code {  /* Codes of volume parameter ??? */

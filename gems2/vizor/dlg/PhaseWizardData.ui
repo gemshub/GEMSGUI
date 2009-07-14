@@ -317,7 +317,7 @@
                         <cstring>SCM_codeLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>Select the most complex SCM to be used in this phase (sorption only):</string>
+                        <string>Select specific mixing rules for EoS models:</string>
                     </property>
                     <property name="alignment">
                         <set>WordBreak|AlignBottom</set>
@@ -326,47 +326,17 @@
                 <widget class="QComboBox">
                     <item>
                         <property name="text">
-                            <string>N   Surface complexation models are not specified (default)</string>
+                            <string>N   Basic Van der Waals mixing rules in cubic EoS models (default)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>I    NEM (non-electrostatic), ignores any Coulomb's corrections</string>
+                            <string>C    Constant one-term binary interaction parameter kij</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>D   DLM  (diffuse double layer model), Gouy-Chapman only </string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>C   CCM (constant capacitance model)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>S   BSM (basic Stern model) as TLM but only with C1 and CD </string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>T   TLM (triple layer model) with C1, C2 </string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>M   modified TLM for permanent-charge surfaces </string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>E   extended BSM for permanent-charge surfaces</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>3   3-layer CD (MUSIC) model with C1,C2</string>
+                            <string>T   Temperature-dependent one-term binary interaction parameter kij</string>
                         </property>
                     </item>
                     <property name="name">

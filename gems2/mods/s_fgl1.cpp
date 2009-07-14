@@ -39,12 +39,12 @@ using namespace std;
 
 // Generic constructor for the TSIT class
 TSIT::TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-        long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
-        double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
-        double T_k, double P_bar, double *dW, double *eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
-        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL, T_k, P_bar )
+        long int NPperDC, char Mod_Code, char Mix_Code, long int *arIPx,
+        double *arIPc, double *arDCc, double *arWx, double *arlnGam,
+        double *aphVOL, double *arM, double *arZ, double T_k, double P_bar,
+        double *dW, double *eW ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0, Mod_Code, Mix_Code,
+						arIPx, arIPc, arDCc, arWx, arlnGam, aphVOL, T_k, P_bar )
 {
 	alloc_internal();
 	z = arZ;
@@ -412,12 +412,12 @@ double TSIT::IonicStrength()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Generic constructor for the TPitzer class
 TPitzer::TPitzer( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-        long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
-        double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
-        double T_k, double P_bar, double *dW, double *eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
-        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL, T_k, P_bar )
+        long int NPperDC, char Mod_Code, char Mix_Code, long int *arIPx,
+        double *arIPc, double *arDCc, double *arWx, double *arlnGam,
+        double *aphVOL, double *arM, double *arZ, double T_k, double P_bar,
+        double *dW, double *eW ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0, Mod_Code, Mix_Code,
+						arIPx, arIPc, arDCc, arWx, arlnGam, aphVOL, T_k, P_bar )
 {
 	aZ = arZ;
 	aM = arM;
@@ -1466,12 +1466,12 @@ long int TPitzer::IdealProp( double *Zid )
 
 // Generic constructor for the TEUNIQUAC class
 TEUNIQUAC::TEUNIQUAC( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-        long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
-        double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
-        double T_k, double P_bar, double *dW, double *eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
-        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL, T_k, P_bar )
+        long int NPperDC, char Mod_Code, char Mix_Code, long int *arIPx,
+        double *arIPc, double *arDCc, double *arWx, double *arlnGam,
+        double *aphVOL, double *arM, double *arZ, double T_k, double P_bar,
+        double *dW, double *eW ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0, Mod_Code, Mix_Code,
+						arIPx, arIPc, arDCc, arWx, arlnGam, aphVOL, T_k, P_bar )
 {
 	alloc_internal();
 	z = arZ;
@@ -1949,12 +1949,12 @@ void TEUNIQUAC::Euniquac_test_out( const char *path )
 
 // Generic constructor for the THelgeson class
 THelgeson::THelgeson( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-		long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
-		double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
-		double T_k, double P_bar, double *dW, double *eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
-        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL, T_k, P_bar )
+		long int NPperDC, char Mod_Code, char Mix_Code, long int *arIPx,
+		double *arIPc, double *arDCc, double *arWx, double *arlnGam,
+		double *aphVOL, double *arM, double *arZ, double T_k, double P_bar,
+		double *dW, double *eW ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0, Mod_Code, Mix_Code,
+						arIPx, arIPc, arDCc, arWx, arlnGam, aphVOL, T_k, P_bar )
 {
 	alloc_internal();
 	m = arM;
@@ -2659,12 +2659,12 @@ long int THelgeson::GShok2( double T, double P, double D, double beta,
 
 // Generic constructor for the TDavies class
 TDavies::TDavies( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-		long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
-		double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
-		double T_k, double P_bar, double *dW, double *eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
-        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL, T_k, P_bar )
+		long int NPperDC, char Mod_Code, char Mix_Code, long int *arIPx,
+		double *arIPc, double *arDCc, double *arWx, double *arlnGam,
+		double *aphVOL, double *arM, double *arZ, double T_k, double P_bar,
+		double *dW, double *eW ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0, Mod_Code, Mix_Code,
+						arIPx, arIPc, arDCc, arWx, arlnGam, aphVOL, T_k, P_bar )
 {
 	alloc_internal();
 	m = arM;
@@ -3013,12 +3013,12 @@ long int TDavies::IonicStrength()
 
 // Generic constructor for the TDLimitingLaw class
 TLimitingLaw::TLimitingLaw( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-		long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
-		double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
-		double T_k, double P_bar, double *dW, double *eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
-        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL, T_k, P_bar )
+		long int NPperDC, char Mod_Code, char Mix_Code, long int *arIPx,
+		double *arIPc, double *arDCc, double *arWx, double *arlnGam,
+		double *aphVOL, double *arM, double *arZ, double T_k, double P_bar,
+		double *dW, double *eW ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0, Mod_Code, Mix_Code,
+						arIPx, arIPc, arDCc, arWx, arlnGam, aphVOL, T_k, P_bar )
 {
 	alloc_internal();
 	m = arM;
@@ -3344,12 +3344,12 @@ long int TLimitingLaw::IonicStrength()
 
 // Generic constructor for the TDebyeHueckel class
 TDebyeHueckel::TDebyeHueckel( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-		long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
-		double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
-		double T_k, double P_bar, double *dW, double *eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
-        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL, T_k, P_bar )
+		long int NPperDC, char Mod_Code, char Mix_Code, long int *arIPx,
+		double *arIPc, double *arDCc, double *arWx, double *arlnGam,
+		double *aphVOL, double *arM, double *arZ, double T_k, double P_bar,
+		double *dW, double *eW ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0, Mod_Code, Mix_Code,
+						arIPx, arIPc, arDCc, arWx, arlnGam, aphVOL, T_k, P_bar )
 {
 	alloc_internal();
 	m = arM;
@@ -3809,12 +3809,12 @@ long int TDebyeHueckel::IonicStrength()
 
 // Generic constructor for the TKarpov class
 TKarpov::TKarpov( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-		long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
-		double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
-		double T_k, double P_bar, double *dW, double *eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
-        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL, T_k, P_bar )
+		long int NPperDC, char Mod_Code, char Mix_Code, long int *arIPx,
+		double *arIPc, double *arDCc, double *arWx, double *arlnGam,
+		double *aphVOL, double *arM, double *arZ, double T_k, double P_bar,
+		double *dW, double *eW ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0, Mod_Code, Mix_Code,
+						arIPx, arIPc, arDCc, arWx, arlnGam, aphVOL, T_k, P_bar )
 {
 	alloc_internal();
 	m = arM;
@@ -4484,12 +4484,12 @@ long int TKarpov::GShok2( double T, double P, double D, double beta,
 
 // Generic constructor for the TShvarov class
 TShvarov::TShvarov( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-		long int NPperDC, char Mod_Code, long int *arIPx, double *arIPc, double *arDCc,
-		double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
-		double T_k, double P_bar, double *dW, double *eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
-        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL, T_k, P_bar )
+		long int NPperDC, char Mod_Code, char Mix_Code, long int *arIPx,
+		double *arIPc, double *arDCc, double *arWx, double *arlnGam,
+		double *aphVOL, double *arM, double *arZ, double T_k, double P_bar,
+		double *dW, double *eW ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0, Mod_Code, Mix_Code,
+						arIPx, arIPc, arDCc, arWx, arlnGam, aphVOL, T_k, P_bar )
 {
 	alloc_internal();
 	m = arM;

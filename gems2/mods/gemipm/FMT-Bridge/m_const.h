@@ -38,7 +38,7 @@ const int
     EQ_RKLEN = 58;
 
 enum solmod_switches { // indexes of keys of model solution
-    SPHAS_TYP, DCOMP_DEP, SPHAS_DEP, SGM_MODE, DCE_LINK, SCM_TYPE,
+    SPHAS_TYP, DCOMP_DEP, SPHAS_DEP, SGM_MODE, DCE_LINK, MIX_TYP,
     // link state
     LINK_UX_MODE, LINK_TP_MODE, LINK_FIA_MODE, LINK_PHP_MODE,
     // Posible values of �of keys of model solution - DCOMP_DEP, SPHAS_DEP
