@@ -136,21 +136,21 @@ long int TNode::GEM_run( bool uPrimalSol )
 
     // test error result GEM IPM calculation of equilibrium state in MULTI
     long int erCode = TProfil::pm->testMulti();
-    
+
     if( erCode )
-    {	
+    {
         if( CNode->NodeStatusCH  == NEED_GEM_AIA )
           CNode->NodeStatusCH = BAD_GEM_AIA;
         else
           CNode->NodeStatusCH = BAD_GEM_SIA;
     }
     else
-    {	
+    {
       if( CNode->NodeStatusCH  == NEED_GEM_AIA )
           CNode->NodeStatusCH = OK_GEM_AIA;
       else
          CNode->NodeStatusCH = OK_GEM_SIA;
-    }     
+    }
 
    }
    catch(TError& err)
@@ -172,7 +172,7 @@ long int TNode::GEM_run( bool uPrimalSol )
    catch(...)
    {
     fstream f_log("ipmlog.txt", ios::out|ios::app );
-    f_log << "Node:" << CNode->NodeHandle << ":time:" << CNode->Tm << ":dt:" << CNode->dt<< ": " 
+    f_log << "Node:" << CNode->NodeHandle << ":time:" << CNode->Tm << ":dt:" << CNode->dt<< ": "
    		<< "gems2: Unknown exception: GEM calculation aborted" << endl;
       if( CNode->NodeStatusCH  == NEED_GEM_AIA )
         CNode->NodeStatusCH = ERR_GEM_AIA;
@@ -239,21 +239,21 @@ long int i;
 // *********************************************************
     // test error result GEM IPM calculation of equilibrium state in MULTI
     long int erCode = TProfil::pm->testMulti();
-    
+
     if( erCode )
-    {	
+    {
         if( CNode->NodeStatusCH  == NEED_GEM_AIA )
           CNode->NodeStatusCH = BAD_GEM_AIA;
         else
           CNode->NodeStatusCH = BAD_GEM_SIA;
     }
     else
-    {	
+    {
       if( CNode->NodeStatusCH  == NEED_GEM_AIA )
           CNode->NodeStatusCH = OK_GEM_AIA;
       else
          CNode->NodeStatusCH = OK_GEM_SIA;
-    }     
+    }
    }
    catch(TError& err)
     {
@@ -274,7 +274,7 @@ long int i;
     catch(...)
     {
      fstream f_log("ipmlog.txt", ios::out|ios::app );
-     f_log << "Node:" << CNode->NodeHandle << ":time:" << CNode->Tm << ":dt:" << CNode->dt<< ": " 
+     f_log << "Node:" << CNode->NodeHandle << ":time:" << CNode->Tm << ":dt:" << CNode->dt<< ": "
     		<< "gems2: Unknown exception: GEM calculation aborted" << endl;
        if( CNode->NodeStatusCH  == NEED_GEM_AIA )
          CNode->NodeStatusCH = ERR_GEM_AIA;
@@ -357,6 +357,8 @@ long int  TNode::GEM_read_dbr( const char* fname, bool binary_f )
 //    in the ipmfiles_lst_name list. This array (handle for each FMT node),
 //    specifies from which DBR_DAT file the initial chemical system should
 //    be taken.
+//  getNodT1 - optional flag, used only (if true) when reading multiple DBR files
+//    after the coupled modeling task interruption in GEM-Selektor
 //  This function returns:
 //   0: OK; 1: GEM IPM read file error; -1: System error (e.g. memory allocation)
 //
@@ -475,7 +477,8 @@ if( binary_f )
 //    unpackDataBr();
 
 #ifndef IPMGEMPLUGIN
-        if( getNodT1 )
+        if( getNodT1 )  // optional parameter used only when reading multiple
+        	// DBR files after coupled modeling task interruption in GEM-Selektor
         {
            setNodeArray( dbr_file, i, binary_f );
         }
@@ -672,7 +675,7 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
 
  // Returns the (interpolated) G0 value for Tc, P from the DCH structure in J/mol
  //    ( xCH is the DC index in DATACH)
- //  In the case of error (e.g. Tc and P out of range) returns 7777777
+ //  In the case of error (e.g. Tc and P out of range) returns 7777777.
   double  TNode::DC_G0_TP( const long int xCH, double Tc, double P )
   {
     long int xTP, jj;
@@ -743,13 +746,13 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
     return mass;
   }
 
-  //kg44 Retrieval of activity ( xBR the Ph DBR index)
+  //kg44 Retrieval of activity ( xCH is the DCH index of the dependent component)
   double  TNode::DC_Activity( const long int xCH )
    {
 	return 	pow(10.0,pmm->Y_la[xCH]);
    }
 
-  // Retrieval of Phase composition ( xBR the Ph DBR index)
+  // Retrieval of bulk Phase composition ( xBR the Ph DBR index), works also for pure phases
   double *TNode::Ph_BC( const long int xBR, double* ARout )
   {
     long int ii;
@@ -1027,7 +1030,7 @@ void TNode::G0_V0_H0_Cp0_DD_arrays( QWidget* par )
   double cT, cP;
   double *G0, *V0, *H0, *Cp0, *S0, *A0, *U0, denW[5], epsW[5], denWg[5], epsWg[5];
   int *tp_mark;
-  
+
   G0 =  new double[TProfil::pm->mup->L];
   V0 =  new double[TProfil::pm->mup->L];
   H0 =  new double[TProfil::pm->mup->L];
@@ -1037,7 +1040,7 @@ void TNode::G0_V0_H0_Cp0_DD_arrays( QWidget* par )
   U0 = new double[TProfil::pm->mup->L];
   tp_mark = new int[TProfil::pm->mup->L];
   fillValue( tp_mark, 0, TProfil::pm->mup->L);
-  
+
   for(  ii=0; ii<CSD->nTp; ii++)
   {
     cT = CSD->TCval[ii];
@@ -1049,7 +1052,7 @@ void TNode::G0_V0_H0_Cp0_DD_arrays( QWidget* par )
 
      cP = CSD->Pval[jj];
      // calculates new G0, V0, H0, Cp0, S0
-    TProfil::pm->LoadFromMtparm( cT, cP, G0, V0, H0, S0, Cp0, 
+    TProfil::pm->LoadFromMtparm( cT, cP, G0, V0, H0, S0, Cp0,
     		 A0, U0, denW, epsW, denWg, epsWg, tp_mark);
      for( kk=0; kk<5; kk++)
      {
@@ -1071,7 +1074,7 @@ void TNode::G0_V0_H0_Cp0_DD_arrays( QWidget* par )
          CSD->A0[ll] = A0[pmm->muj[kk]];
          CSD->U0[ll] = U0[pmm->muj[kk]];
       }
-     }    
+     }
   }
  if( par )
   pVisor->CloseMessage();
@@ -1294,12 +1297,12 @@ void TNode::unpackDataBr( bool uPrimalSol )
  long int ii;
  //double Gamm;
 // numbers
-  
+
 #ifdef IPMGEMPLUGIN
  char buf[300];
  sprintf( buf, "Node:%ld:time:%lg:dt:%lg", CNode->NodeHandle, CNode->Tm, CNode->dt );
  strncpy( pmm->stkey, buf, EQ_RKLEN );
-#endif 
+#endif
 //  if( CNode->NodeStatusCH >= NEED_GEM_SIA )
 //   pmm->pNP = 1;
 //  else
@@ -1388,8 +1391,8 @@ void TNode::unpackDataBr( bool uPrimalSol, double ScFact )
  char buf[300];
  sprintf( buf, "Node:%ld:time:%lg:dt:%lg", CNode->NodeHandle, CNode->Tm, CNode->dt );
  strncpy( pmm->stkey, buf, EQ_RKLEN );
-#endif 
- 
+#endif
+
  if( ScFact < 1e-6 )    // foolproof
 	 ScFact = 1e-6;
  if( ScFact > 1e6 )
@@ -1407,7 +1410,7 @@ void TNode::unpackDataBr( bool uPrimalSol, double ScFact )
        pmm->DUL[ CSD->xDC[ii] ] = 1e6;          // Bugfix for upper metastability limit
 
 // kg44 19.06.2009 the condition below totally breaks calculation precipitation  kinetics for small amounts/rates!!!!
-//      
+//
 //    if(	pmm->DUL[ CSD->xDC[ii] ] < TProfil::pm->pa.p.DKIN )
 //    	pmm->DUL[ CSD->xDC[ii] ] = TProfil::pm->pa.p.DKIN;
 
@@ -1415,27 +1418,27 @@ void TNode::unpackDataBr( bool uPrimalSol, double ScFact )
     if( CNode->dll[ii] > 0. )
     	pmm->DLL[ CSD->xDC[ii] ] *= ScFact;
 //     pmm->DLL[ CSD->xDC[ii] ] = 0.;				  // Bugfix for lower metastability limit // kg44  19.06.2009 this is not a bugfix...it breaks dissolution kinetics!!!
-    
+
     if( pmm->DUL[ CSD->xDC[ii] ] < pmm->DLL[ CSD->xDC[ii] ] )
     {
        char buf[300];
-       sprintf(buf, "Upper kinetic restrictions smolest than lower for DC&RC %-6.6s",  
+       sprintf(buf, "Upper kinetic restrictions smolest than lower for DC&RC %-6.6s",
             		 pmm->SM[CSD->xDC[ii]] );
     	Error("unpackDataBr", buf );
-    }	
+    }
   }
   for( ii=0; ii<CSD->nICb; ii++ )
-  {	  
+  {
     pmm->B[ CSD->xIC[ii] ] = CNode->bIC[ii] * ScFact;
     if( ii < CSD->nICb-1 && pmm->B[ CSD->xIC[ii] ] < TProfil::pm->pa.p.DB )
     {
        char buf[300];
-       sprintf(buf, "Bulk mole amounts of IC  %-6.6s is %lg",  
+       sprintf(buf, "Bulk mole amounts of IC  %-6.6s is %lg",
             		 pmm->SB[CSD->xIC[ii]], pmm->B[ CSD->xIC[ii] ] );
     	Error("unpackDataBr", buf );
-    }	
-    
-  } 
+    }
+
+  }
   for( ii=0; ii<CSD->nPHb; ii++ )
   {
     if( CSD->nAalp >0 )
@@ -1545,7 +1548,7 @@ double TNode::ResizeNode( double Factor )
 // if called in loop for each node), or in text format
 // (false or 0, default)
 //
-   void  TNode::GEM_write_dbr( const char* fname, bool binary_f, 
+   void  TNode::GEM_write_dbr( const char* fname, bool binary_f,
 		   bool with_comments, bool brief_mode )
    {
        gstring str_file;
@@ -1677,7 +1680,7 @@ void TNode::GEM_restore_MT(
         p_aPH[ii] = CNode->aPH[ii];
 }
 
-// Copying results that must be returned into the FMT part into MAIF_CALC parameters
+// Copying results that must be returned into the FMT part into provided call parameters
 void TNode::GEM_to_MT(
        long int &p_NodeHandle,    // Node identification handle
        long int &p_NodeStatusCH,  // Node status code (changed after GEM calculation); see typedef NODECODECH
@@ -1785,7 +1788,7 @@ void TNode::GEM_from_MT(
          CNode->aPH[ii] = p_aPH[ii];
    if( useSimplex && CNode->NodeStatusCH == NEED_GEM_SIA )
      CNode->NodeStatusCH = NEED_GEM_AIA;
-   // Switch only if PIA is ordered, leave if simplex is ordered (KD)
+   // Switch only if SIA is ordered, leave if simplex is ordered (KD)
 
    // Optional part - convolution of xDC vector into bIC vector
    if( p_xDC )
@@ -1853,8 +1856,18 @@ void TNode::GEM_from_MT(
       }
    }
    else if( CNode->NodeStatusCH == NEED_GEM_SIA )
-            CNode->NodeStatusCH = NEED_GEM_AIA;   // no complete old primal solution
-                                                  // provided!
+            CNode->NodeStatusCH = NEED_GEM_AIA;   // no complete old primal solution provided!
+
+//  Discuss the policy!
+//   if( p_xDC )
+//   {  long int jj;
+//      // Correction of bIC vector by convoluting the amounts of DCs
+//      for( jj=0; jj<CSD->nDCb; jj++ )
+//        if( p_xDC[jj] )
+//          for( ii=0; ii<CSD->nICb; ii++ )
+//            CNode->bIC[ii] += p_xDC[jj] * nodeCH_A( jj, ii );
+//   }
+
 }
 
 #endif
