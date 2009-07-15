@@ -37,6 +37,7 @@ INPUT(
 ./obj\moc_ElementsDialog.o
 ./obj\moc_SetFiltersDialog.o
 ./obj\moc_LoadMessage.o
+./obj\moc_LookupDialog.o
 ./obj\moc_AutoPhaseDialog.o
 ./obj\moc_MainDialogData.o
 ./obj\moc_DBDialogData.o
@@ -67,5 +68,6 @@ INPUT(
 ./obj\moc_ListFilesDialogData.o
 ./obj\moc_ElementsDialogData.o
 ./obj\moc_SetFiltersDialogData.o
+./obj\moc_LookupDialogData.o
 ./obj\moc_AutoPhaseDialogData.o
 );

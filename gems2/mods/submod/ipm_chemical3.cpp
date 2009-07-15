@@ -522,7 +522,7 @@ TMulti::GammaCalc( long int LinkMode  )
          } // pmp->E
         break;
     default:
-        Error("GammaCalc","Invalid Link Mode.");
+        Error("GammaCalc","Invalid Link Mode 1");
     }
 
     jpe=0; jde=0; ipe=0; je=0;

@@ -116,6 +116,7 @@ INPUT(
 ./obj\ElementsDialog.o
 ./obj\SetFiltersDialog.o
 ./obj\LoadMessage.o
+./obj\LookupDialog.o
 ./obj\AutoPhaseDialog.o
 ./obj\MainDialogData.o
 ./obj\DBDialogData.o
@@ -146,5 +147,6 @@ INPUT(
 ./obj\ListFilesDialogData.o
 ./obj\ElementsDialogData.o
 ./obj\SetFiltersDialogData.o
+./obj\LookupDialogData.o
 ./obj\AutoPhaseDialogData.o
 );

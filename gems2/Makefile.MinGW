@@ -153,6 +153,7 @@ HEADERS =	vizor\libs\config.h \
 		vizor\dlg\ElementsDialog.h \
 		vizor\dlg\SetFiltersDialog.h \
 		vizor\dlg\LoadMessage.h \
+		vizor\dlg\LookupDialog.h \
 		vizor\dlg\AutoPhaseDialog.h
 SOURCES =	vizor\libs\config.cpp \
 		vizor\libs\gstring.cpp \
@@ -271,6 +272,7 @@ SOURCES =	vizor\libs\config.cpp \
 		vizor\dlg\ElementsDialog.cpp \
 		vizor\dlg\SetFiltersDialog.cpp \
 		vizor\dlg\LoadMessage.cpp \
+		vizor\dlg\LookupDialog.cpp \
 		vizor\dlg\AutoPhaseDialog.cpp
 OBJECTS =	obj\config.o \
 		obj\gstring.o \
@@ -389,6 +391,7 @@ OBJECTS =	obj\config.o \
 		obj\ElementsDialog.o \
 		obj\SetFiltersDialog.o \
 		obj\LoadMessage.o \
+		obj\LookupDialog.o \
 		obj\AutoPhaseDialog.o \
 		obj\MainDialogData.o \
 		obj\DBDialogData.o \
@@ -419,6 +422,7 @@ OBJECTS =	obj\config.o \
 		obj\ListFilesDialogData.o \
 		obj\ElementsDialogData.o \
 		obj\SetFiltersDialogData.o \
+		obj\LookupDialogData.o \
 		obj\AutoPhaseDialogData.o
 FORMS =	vizor\dlg\MainDialogData.ui \
 		vizor\dlg\DBDialogData.ui \
@@ -449,6 +453,7 @@ FORMS =	vizor\dlg\MainDialogData.ui \
 		vizor\dlg\ListFilesDialogData.ui \
 		vizor\dlg\ElementsDialogData.ui \
 		vizor\dlg\SetFiltersDialogData.ui \
+		vizor\dlg\LookupDialogData.ui \
 		vizor\dlg\AutoPhaseDialogData.ui
 UICDECLS =	tmp\MainDialogData.h \
 		tmp\DBDialogData.h \
@@ -479,6 +484,7 @@ UICDECLS =	tmp\MainDialogData.h \
 		tmp\ListFilesDialogData.h \
 		tmp\ElementsDialogData.h \
 		tmp\SetFiltersDialogData.h \
+		tmp\LookupDialogData.h \
 		tmp\AutoPhaseDialogData.h
 UICIMPLS =	tmp\MainDialogData.cpp \
 		tmp\DBDialogData.cpp \
@@ -509,6 +515,7 @@ UICIMPLS =	tmp\MainDialogData.cpp \
 		tmp\ListFilesDialogData.cpp \
 		tmp\ElementsDialogData.cpp \
 		tmp\SetFiltersDialogData.cpp \
+		tmp\LookupDialogData.cpp \
 		tmp\AutoPhaseDialogData.cpp
 SRCMOC	=	tmp\moc_visor_w.cpp \
 		tmp\moc_module_w.cpp \
@@ -548,6 +555,7 @@ SRCMOC	=	tmp\moc_visor_w.cpp \
 		tmp\moc_ElementsDialog.cpp \
 		tmp\moc_SetFiltersDialog.cpp \
 		tmp\moc_LoadMessage.cpp \
+		tmp\moc_LookupDialog.cpp \
 		tmp\moc_AutoPhaseDialog.cpp \
 		tmp\moc_MainDialogData.cpp \
 		tmp\moc_DBDialogData.cpp \
@@ -578,6 +586,7 @@ SRCMOC	=	tmp\moc_visor_w.cpp \
 		tmp\moc_ListFilesDialogData.cpp \
 		tmp\moc_ElementsDialogData.cpp \
 		tmp\moc_SetFiltersDialogData.cpp \
+		tmp\moc_LookupDialogData.cpp \
 		tmp\moc_AutoPhaseDialogData.cpp
 OBJMOC	=	obj\moc_visor_w.o \
 		obj\moc_module_w.o \
@@ -617,6 +626,7 @@ OBJMOC	=	obj\moc_visor_w.o \
 		obj\moc_ElementsDialog.o \
 		obj\moc_SetFiltersDialog.o \
 		obj\moc_LoadMessage.o \
+		obj\moc_LookupDialog.o \
 		obj\moc_AutoPhaseDialog.o \
 		obj\moc_MainDialogData.o \
 		obj\moc_DBDialogData.o \
@@ -647,6 +657,7 @@ OBJMOC	=	obj\moc_visor_w.o \
 		obj\moc_ListFilesDialogData.o \
 		obj\moc_ElementsDialogData.o \
 		obj\moc_SetFiltersDialogData.o \
+		obj\moc_LookupDialogData.o \
 		obj\moc_AutoPhaseDialogData.o
 DIST	=	
 TARGET	=	gems2.exe
@@ -814,6 +825,7 @@ clean:
 	-$(DEL_FILE) obj\ElementsDialog.o
 	-$(DEL_FILE) obj\SetFiltersDialog.o
 	-$(DEL_FILE) obj\LoadMessage.o
+	-$(DEL_FILE) obj\LookupDialog.o
 	-$(DEL_FILE) obj\AutoPhaseDialog.o
 	-$(DEL_FILE) obj\MainDialogData.o
 	-$(DEL_FILE) obj\DBDialogData.o
@@ -844,6 +856,7 @@ clean:
 	-$(DEL_FILE) obj\ListFilesDialogData.o
 	-$(DEL_FILE) obj\ElementsDialogData.o
 	-$(DEL_FILE) obj\SetFiltersDialogData.o
+	-$(DEL_FILE) obj\LookupDialogData.o
 	-$(DEL_FILE) obj\AutoPhaseDialogData.o
 	-$(DEL_FILE) tmp\moc_visor_w.cpp
 	-$(DEL_FILE) tmp\moc_module_w.cpp
@@ -883,6 +896,7 @@ clean:
 	-$(DEL_FILE) tmp\moc_ElementsDialog.cpp
 	-$(DEL_FILE) tmp\moc_SetFiltersDialog.cpp
 	-$(DEL_FILE) tmp\moc_LoadMessage.cpp
+	-$(DEL_FILE) tmp\moc_LookupDialog.cpp
 	-$(DEL_FILE) tmp\moc_AutoPhaseDialog.cpp
 	-$(DEL_FILE) tmp\moc_MainDialogData.cpp
 	-$(DEL_FILE) tmp\moc_DBDialogData.cpp
@@ -913,6 +927,7 @@ clean:
 	-$(DEL_FILE) tmp\moc_ListFilesDialogData.cpp
 	-$(DEL_FILE) tmp\moc_ElementsDialogData.cpp
 	-$(DEL_FILE) tmp\moc_SetFiltersDialogData.cpp
+	-$(DEL_FILE) tmp\moc_LookupDialogData.cpp
 	-$(DEL_FILE) tmp\moc_AutoPhaseDialogData.cpp
 	-$(DEL_FILE) obj\moc_visor_w.o
 	-$(DEL_FILE) obj\moc_module_w.o
@@ -952,6 +967,7 @@ clean:
 	-$(DEL_FILE) obj\moc_ElementsDialog.o
 	-$(DEL_FILE) obj\moc_SetFiltersDialog.o
 	-$(DEL_FILE) obj\moc_LoadMessage.o
+	-$(DEL_FILE) obj\moc_LookupDialog.o
 	-$(DEL_FILE) obj\moc_AutoPhaseDialog.o
 	-$(DEL_FILE) obj\moc_MainDialogData.o
 	-$(DEL_FILE) obj\moc_DBDialogData.o
@@ -982,6 +998,7 @@ clean:
 	-$(DEL_FILE) obj\moc_ListFilesDialogData.o
 	-$(DEL_FILE) obj\moc_ElementsDialogData.o
 	-$(DEL_FILE) obj\moc_SetFiltersDialogData.o
+	-$(DEL_FILE) obj\moc_LookupDialogData.o
 	-$(DEL_FILE) obj\moc_AutoPhaseDialogData.o
 	-$(DEL_FILE) tmp\MainDialogData.h
 	-$(DEL_FILE) tmp\DBDialogData.h
@@ -1012,6 +1029,7 @@ clean:
 	-$(DEL_FILE) tmp\ListFilesDialogData.h
 	-$(DEL_FILE) tmp\ElementsDialogData.h
 	-$(DEL_FILE) tmp\SetFiltersDialogData.h
+	-$(DEL_FILE) tmp\LookupDialogData.h
 	-$(DEL_FILE) tmp\AutoPhaseDialogData.h
 	-$(DEL_FILE) tmp\MainDialogData.cpp
 	-$(DEL_FILE) tmp\DBDialogData.cpp
@@ -1042,6 +1060,7 @@ clean:
 	-$(DEL_FILE) tmp\ListFilesDialogData.cpp
 	-$(DEL_FILE) tmp\ElementsDialogData.cpp
 	-$(DEL_FILE) tmp\SetFiltersDialogData.cpp
+	-$(DEL_FILE) tmp\LookupDialogData.cpp
 	-$(DEL_FILE) tmp\AutoPhaseDialogData.cpp
 	-$(DEL_FILE) $(TARGET)
 
@@ -1816,6 +1835,7 @@ obj\m_prfget2.o: mods\m_prfget2.cpp mods\m_param.h \
 		mods\m_gem2mt.h \
 		mods\m_syseq.h \
 		vizor\service.h \
+		vizor\visor.h \
 		mods\v_mod.h \
 		mods\submod\ms_rmults.h \
 		mods\submod\ms_mtparm.h \
@@ -2774,6 +2794,7 @@ obj\visor_w.o: vizor\visor_w.cpp vizor\helpwindow.h \
 		vizor\dlg\KeyProfile.h \
 		vizor\dlg\ChangeKeyDialog.h \
 		vizor\dlg\AutoPhaseDialog.h \
+		vizor\dlg\LookupDialog.h \
 		vizor\libs\array.h \
 		vizor\libs\gstring.h \
 		vizor\kernel\v_user.h \
@@ -2817,7 +2838,8 @@ obj\visor_w.o: vizor\visor_w.cpp vizor\helpwindow.h \
 		tmp\KeyDialogData.h \
 		tmp\KeyProfileData.h \
 		tmp\ChangeKeyDialogData.h \
-		tmp\AutoPhaseDialogData.h
+		tmp\AutoPhaseDialogData.h \
+		tmp\LookupDialogData.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj\visor_w.o vizor\visor_w.cpp
 
 obj\module_w.o: vizor\module_w.cpp vizor\visor.h \
@@ -3485,6 +3507,14 @@ obj\LoadMessage.o: vizor\dlg\LoadMessage.cpp vizor\dlg\LoadMessage.h \
 		mods\submod\databr.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj\LoadMessage.o vizor\dlg\LoadMessage.cpp
 
+obj\LookupDialog.o: vizor\dlg\LookupDialog.cpp vizor\dlg\LookupDialog.h \
+		vizor\visor_w.h \
+		tmp\LookupDialogData.h \
+		vizor\kernel\v_vals.h \
+		vizor\libs\gstring.h \
+		vizor\libs\array.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj\LookupDialog.o vizor\dlg\LookupDialog.cpp
+
 obj\AutoPhaseDialog.o: vizor\dlg\AutoPhaseDialog.cpp vizor\dlg\AutoPhaseDialog.h \
 		vizor\visor_w.h \
 		vizor\libs\gstring.h \
@@ -3667,6 +3697,12 @@ tmp\SetFiltersDialogData.h: vizor\dlg\SetFiltersDialogData.ui
 tmp\SetFiltersDialogData.cpp: tmp\SetFiltersDialogData.h vizor\dlg\SetFiltersDialogData.ui 
 	$(UIC) vizor\dlg\SetFiltersDialogData.ui -i SetFiltersDialogData.h -o tmp\SetFiltersDialogData.cpp
 
+tmp\LookupDialogData.h: vizor\dlg\LookupDialogData.ui 
+	$(UIC) vizor\dlg\LookupDialogData.ui -o tmp\LookupDialogData.h
+
+tmp\LookupDialogData.cpp: tmp\LookupDialogData.h vizor\dlg\LookupDialogData.ui 
+	$(UIC) vizor\dlg\LookupDialogData.ui -i LookupDialogData.h -o tmp\LookupDialogData.cpp
+
 tmp\AutoPhaseDialogData.h: vizor\dlg\AutoPhaseDialogData.ui 
 	$(UIC) vizor\dlg\AutoPhaseDialogData.ui -o tmp\AutoPhaseDialogData.h
 
@@ -3759,6 +3795,9 @@ obj\ElementsDialogData.o: tmp\ElementsDialogData.cpp tmp\ElementsDialogData.h
 
 obj\SetFiltersDialogData.o: tmp\SetFiltersDialogData.cpp tmp\SetFiltersDialogData.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj\SetFiltersDialogData.o tmp\SetFiltersDialogData.cpp
+
+obj\LookupDialogData.o: tmp\LookupDialogData.cpp tmp\LookupDialogData.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj\LookupDialogData.o tmp\LookupDialogData.cpp
 
 obj\AutoPhaseDialogData.o: tmp\AutoPhaseDialogData.cpp tmp\AutoPhaseDialogData.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj\AutoPhaseDialogData.o tmp\AutoPhaseDialogData.cpp
@@ -4009,6 +4048,9 @@ obj\moc_SetFiltersDialog.o: tmp\moc_SetFiltersDialog.cpp  vizor\dlg\SetFiltersDi
 obj\moc_LoadMessage.o: tmp\moc_LoadMessage.cpp  vizor\dlg\LoadMessage.h 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj\moc_LoadMessage.o tmp\moc_LoadMessage.cpp
 
+obj\moc_LookupDialog.o: tmp\moc_LookupDialog.cpp  vizor\dlg\LookupDialog.h tmp\LookupDialogData.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj\moc_LookupDialog.o tmp\moc_LookupDialog.cpp
+
 obj\moc_AutoPhaseDialog.o: tmp\moc_AutoPhaseDialog.cpp  vizor\dlg\AutoPhaseDialog.h vizor\libs\gstring.h \
 		tmp\AutoPhaseDialogData.h \
 		vizor\libs\array.h
@@ -4100,6 +4142,9 @@ obj\moc_ElementsDialogData.o: tmp\moc_ElementsDialogData.cpp  tmp\ElementsDialog
 
 obj\moc_SetFiltersDialogData.o: tmp\moc_SetFiltersDialogData.cpp  tmp\SetFiltersDialogData.h 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj\moc_SetFiltersDialogData.o tmp\moc_SetFiltersDialogData.cpp
+
+obj\moc_LookupDialogData.o: tmp\moc_LookupDialogData.cpp  tmp\LookupDialogData.h 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj\moc_LookupDialogData.o tmp\moc_LookupDialogData.cpp
 
 obj\moc_AutoPhaseDialogData.o: tmp\moc_AutoPhaseDialogData.cpp  tmp\AutoPhaseDialogData.h 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj\moc_AutoPhaseDialogData.o tmp\moc_AutoPhaseDialogData.cpp
@@ -4218,6 +4263,9 @@ tmp\moc_SetFiltersDialog.cpp: $(MOC) vizor\dlg\SetFiltersDialog.h
 tmp\moc_LoadMessage.cpp: $(MOC) vizor\dlg\LoadMessage.h
 	$(MOC) vizor\dlg\LoadMessage.h -o tmp\moc_LoadMessage.cpp
 
+tmp\moc_LookupDialog.cpp: $(MOC) vizor\dlg\LookupDialog.h
+	$(MOC) vizor\dlg\LookupDialog.h -o tmp\moc_LookupDialog.cpp
+
 tmp\moc_AutoPhaseDialog.cpp: $(MOC) vizor\dlg\AutoPhaseDialog.h
 	$(MOC) vizor\dlg\AutoPhaseDialog.h -o tmp\moc_AutoPhaseDialog.cpp
 
@@ -4307,6 +4355,9 @@ tmp\moc_ElementsDialogData.cpp: $(MOC) tmp\ElementsDialogData.h
 
 tmp\moc_SetFiltersDialogData.cpp: $(MOC) tmp\SetFiltersDialogData.h
 	$(MOC) tmp\SetFiltersDialogData.h -o tmp\moc_SetFiltersDialogData.cpp
+
+tmp\moc_LookupDialogData.cpp: $(MOC) tmp\LookupDialogData.h
+	$(MOC) tmp\LookupDialogData.h -o tmp\moc_LookupDialogData.cpp
 
 tmp\moc_AutoPhaseDialogData.cpp: $(MOC) tmp\AutoPhaseDialogData.h
 	$(MOC) tmp\AutoPhaseDialogData.h -o tmp\moc_AutoPhaseDialogData.cpp

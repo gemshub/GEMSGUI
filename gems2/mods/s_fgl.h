@@ -15,25 +15,25 @@
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch; chud@igc.irk.ru
-//-------------------------------------------------------------------
+//------------------------------------------------------------------
 //
 
 #include <string.h>
 #ifndef _s_fgl_h_
 #define _s_fgl_h_
 
-
-
-
-
-// -------------------------------------------------------------------------------------
+enum fluid_mix_rules {  // Codes to identify specific mixing rules in EoS models (see also m_phase.h)
+    MR_WAAL_ = 'W',		// Basic Van der Waals mixing rules in cubic EoS models
+    MR_CONST_ = 'C',    // Constant one-term interaction parameter kij
+    MR_TEMP_ = 'T',		// Temperature-dependent one-term interaction parameter kij (Jaubert et al. 2005)
+};
+// ------------------------------------------------------------------
 // Added 07 March 2007 by TW and DK; extended 25.11.2008 by DK
 // Definition of a class for built-in solution models
 #define MAXPHASENAME 16
 
 class TSolMod
 {
-
 	protected:
 		char ModCode;   // Code of the mixing model
 		char MixCode;	// Code for specific EoS mixing rules
