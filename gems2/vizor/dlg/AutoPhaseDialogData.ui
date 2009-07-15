@@ -492,7 +492,7 @@ the aqueous phase model</string>
                                     <cstring>gselF</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>CG EoS for non-electrolyte fluid (Churakov &amp;&amp; Gottschalk, 2003), &amp;F</string>
+                                    <string>Churakov-Gottschalk (CG) multicomponent fluid EoS model, &amp;F</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+F</string>
@@ -503,7 +503,7 @@ the aqueous phase model</string>
                                     <cstring>gselP</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Peng-Robinson-Stryjek-Vera (PRSV) fluid EOS model, &amp;P</string>
+                                    <string>Peng-Robinson-Stryjek-Vera (PRSV) multicomponent fluid EoS model, &amp;P</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+P</string>
@@ -514,7 +514,7 @@ the aqueous phase model</string>
                                     <cstring>gselE</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Soave-Redlich-Kwong (SRK) fluid EOS model, &amp;E</string>
+                                    <string>Soave-Redlich-Kwong (SRK) multicomponent fluid EoS model, &amp;E</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+E</string>
