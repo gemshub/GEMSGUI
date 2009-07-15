@@ -26,9 +26,9 @@ const char * dfAqKey1 =  "a   AQELIA  aq_gen          aq  DH_LL           ";
 const char * dfAqKeyY =  "a   AQELIA  aq_gen          aq  EDH_Y           ";
 const char * dfAqKeyU =  "a   AQELSI  aq_gen          aq  User-Provided   ";
 const char * dfGasKey =  "g   GASMXID gas_gen         gm  Ideal           ";
-const char * dfFluKey =  "f   FLUIDMX fluid_gen       gm  GC_EoS          ";
-const char * dfFluKeyP=  "f   PSRV    fluid_gen       gm  PSRV_EoS        ";
-const char * dfFluKeyE=  "f   SRK     fluid_gen       gm  SRK_EoS         ";
+const char * dfFluKey =  "f   FLUIDMX fluid_gen       gm  CG_EoS          ";
+const char * dfFluKeyP=  "g   PSRV    fluid_gen       gm  PSRV_EoS        ";
+const char * dfFluKeyE=  "g   SRK     fluid_gen       gm  SRK_EoS         ";
 
 // List of maximum values of ionic strength up to which the respective model is applicable
 // (not used in calculations, just to inform the user)
