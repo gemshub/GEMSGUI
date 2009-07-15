@@ -27,6 +27,8 @@ const char * dfAqKeyY =  "a   AQELIA  aq_gen          aq  EDH_Y           ";
 const char * dfAqKeyU =  "a   AQELSI  aq_gen          aq  User-Provided   ";
 const char * dfGasKey =  "g   GASMXID gas_gen         gm  Ideal           ";
 const char * dfFluKey =  "f   FLUIDMX fluid_gen       gm  GC_EoS          ";
+const char * dfFluKeyP=  "f   PSRV    fluid_gen       gm  PSRV_EoS        ";
+const char * dfFluKeyE=  "f   SRK     fluid_gen       gm  SRK_EoS         ";
 
 // List of maximum values of ionic strength up to which the respective model is applicable
 // (not used in calculations, just to inform the user)
@@ -76,29 +78,18 @@ AutoPhaseDialog::AutoPhaseDialog (
     switch( gcode )
     {
       case '-': gselNo->setChecked( true ); break;
-      case 'U': gselU->setChecked( true );
-                break;
+      case 'U': gselU->setChecked( true );  break;
       case 'F': gselF->setChecked( true ); break;
-      case 'I':
+      case 'P': gselP->setChecked( true ); break;
+      case 'E': gselE->setChecked( true ); break;
+        case 'I':
       default: gselI->setChecked( true ); break;
     }
 }
 
 AutoPhaseDialog::~AutoPhaseDialog()
 {}
-/*
-int    // merged into get_apar() and set_apar()
-AutoPhaseDialog::get_resp()   // T-calculation mode of b_g Helgeson parameter
-{
-  return pBG_T->currentItem();
-}
 
-void
-AutoPhaseDialog::set_resp( int resp_t )
-{
-  pBG_T->setCurrentItem( resp_t );
-}
-*/
 void
 AutoPhaseDialog::get_apar ( float par[8] )
 {
@@ -125,21 +116,6 @@ AutoPhaseDialog::set_apar ( float par[8] )
 //    apEdit2->setValidator( new QDoubleValidator( apEdit2 ) ); // SD 2008
     apEdit2->setCurrentItem( ( (int)par[2] ) );
 
-/*    switch( aqu_code )
-    {
-       case '-':
-       default:  I_max = 0.; break;
-       case 'Q':
-       case 'U': I_max =  dfImaxU; break;
-       case 'S': I_max =  dfImaxS; break;
-       case 'H': I_max =  dfImaxH; break;
-       case '3': I_max =  dfImax3; break;
-       case '2': I_max =  dfImax2; break;
-       case '1': I_max =  dfImax1; break;
-       case 'D': I_max =  dfImaxD; break;
-    }
-    apEdit3->setValidator( new QDoubleValidator( apEdit3 ) );
-*/
     apEdit3->setCurrentItem( (int)par[3] );
 //   apEdit3->setText( str.setNum( (double)par[3] ) );
     pBG_T->setCurrentItem( (int)par[4] );
@@ -200,33 +176,6 @@ AutoPhaseDialog::set_akey( gstring& a_key )
   apRkeyEdit->setText( aqu_key.c_str() );
 }
 
-void
-AutoPhaseDialog::get_gpar ( float par[4] )
-{
-    par[0] = QString( gpEdit0->text() ).toDouble();
-    par[1] = QString( gpEdit1->text() ).toDouble();
-    par[2] = QString( gpEdit2->text() ).toDouble();
-    par[3] = QString( gpEdit3->text() ).toDouble();
-}
-
-void
-AutoPhaseDialog::set_gpar ( float par[4] )
-{
-    QString str;
-
-    gpEdit0->setValidator( new QDoubleValidator( gpEdit0 ) );
-    gpEdit0->setText( str.setNum( (double)par[0] ) );
-
-    gpEdit1->setValidator( new QDoubleValidator( gpEdit1 ) );
-    gpEdit1->setText( str.setNum( (double)par[1] ) );
-
-    gpEdit2->setValidator( new QDoubleValidator( gpEdit2 ) );
-    gpEdit2->setText( str.setNum( (double)par[2] ) );
-
-    gpEdit3->setValidator( new QDoubleValidator( gpEdit3 ) );
-    gpEdit3->setText( str.setNum( (double)par[3] ) );
-}
-
 
 char
 AutoPhaseDialog::get_gcode()
@@ -239,6 +188,10 @@ AutoPhaseDialog::get_gcode()
           gas_code ='F';
        else if( gselNo->isChecked())
              gas_code ='-';
+              else if( gselP->isChecked())
+                   gas_code ='P';
+                   else if( gselE->isChecked())
+                   gas_code ='E';
 
   return gas_code;
 }
@@ -262,6 +215,10 @@ AutoPhaseDialog::set_gkey( gstring& g_key )
                gas_key = dfFluKey;
             else if( gselNo->isChecked())
                   gas_key ="";
+               else if( gselP->isChecked())
+                      gas_key =dfFluKeyP;
+                  else if( gselE->isChecked())
+                              gas_key =dfFluKeyE;
   gpRkeyEdit->setText( gas_key.c_str() );
 }
 
@@ -286,8 +243,6 @@ AutoPhaseDialog::CmCheck()
 
   set_gkey( g_key );
   get_gcode();
-  get_gpar( par );
-// set_gpar( par );
 }
 
 void

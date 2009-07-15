@@ -608,6 +608,7 @@ void TMulti::from_text_file_gemipm( const char *path )
   pmp->L = dCH->nDC;
   pmp->FI = dCH->nPH;
   pmp->FIs = dCH->nPS;
+  //
   pmp->Ls = 0; //dCH->nDCs;
   for( ii=0; ii<dCH->nPS; ii++)
   {

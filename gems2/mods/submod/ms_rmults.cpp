@@ -645,7 +645,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
     gstring FluKey;
     char amod = SM_AQDAV;    // Added KD 25.01.02
     char gmod = SM_IDEAL;    // Added KD 16.06.03
-    float aparam[8], gparam[4];
+    float aparam[8]/*, gparam[4]*/;
 
 TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     if( aPa->tpp->Pbg < '0' || aPa->tpp->Pbg > '4' )
@@ -658,8 +658,8 @@ TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     aparam[3] = aPa->pa.aqPar[3];
     aparam[4] = aPa->pa.aqPar[4];
     aparam[5] = 0.;
-    gparam[0] = 0.; //  = aPa->pa.ResFloat;
-    gparam[1]=gparam[2]=gparam[3]=0.0;
+    //gparam[0] = 0.; //  = aPa->pa.ResFloat;
+    //gparam[1]=gparam[2]=gparam[3]=0.0;
 
     if( NewRec == false )
     { // Assemble aqueous and gaseous phase records automatically
@@ -719,7 +719,7 @@ NEW_PHASE_AGAIN:
 */
 // Calling the wizard to set generated aq and gas phases
        if( !vfAutoPhaseSet( window(), prfName.c_str(), AqKey, GasKey,
-              amod, gmod, aparam, gparam /*, resp */ ) )
+              amod, gmod, aparam ) )
        {
           if( vfQuestion( window(), "Project: Attempt to cancel setup of phases",
             "Are you really sure?\n Repeat phase setup (Yes) or\nCancel creating the project (No)?" ))
@@ -771,7 +771,7 @@ NEW_PHASE_AGAIN:
 
     // Creating automatic aq and/or gas phases
     TPhase::pm->newAqGasPhase( AqKey.c_str(), GasKey.c_str(), file,
-        amod, gmod, aparam, gparam /*,  bool useLst, TCStringArray lst */ );
+        amod, gmod, aparam );
 
     MakeRecordLists( AqKey, GasKey ); // build records lists and calc size of arrays
 

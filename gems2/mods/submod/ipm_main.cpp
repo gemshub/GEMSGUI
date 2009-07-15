@@ -111,7 +111,7 @@ STEP_POINT("After FIA");
    	         {   // bad PIA mode - trying the AIA mode
        	        pmp->MK = 2;   // Set to check in calcMulti() later on
 #ifdef GEMITERTRACE
-f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " ! PIA->AIA on E04IPM" << endl;
+//f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " ! PIA->AIA on E04IPM" << endl;
 #endif
                goto FORCED_AIA;
    	         }
@@ -146,7 +146,7 @@ to_text_file( "MultiDumpD.txt" );   // Debugging
          {   // bad PIA mode - trying the AIA mode
 	        pmp->MK = 2;   // Set to check in calcMulti() later on
 #ifdef GEMITERTRACE
-f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " ! PIA->AIA on E06IPM" << endl;
+//f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " ! PIA->AIA on E06IPM" << endl;
 #endif
 	        goto FORCED_AIA;
          }
@@ -156,7 +156,7 @@ f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " ! 
         	    pmp->DX = 1e-4;
                 pmp->DHBM = 1e-6;
 #ifdef GEMITERTRACE
-f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " AIA: DX->1e-4, DHBM->1e-6 on E06IPM" << endl;
+//f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " AIA: DX->1e-4, DHBM->1e-6 on E06IPM" << endl;
 #endif
                 goto mEFD;
              }
@@ -220,8 +220,8 @@ if( iB >= 0 )
                 break;
       case 0:   // some phases were inserted and a new IPM loop is needed
 #ifdef GEMITERTRACE
-f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " K2=" << pmp->K2 <<
-      " k_miss=" << k_miss << " k_unst=" << k_unst <<  " ! (new Selekt loop)" << endl;
+//f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " K2=" << pmp->K2 <<
+//      " k_miss=" << k_miss << " k_unst=" << k_unst <<  " ! (new Selekt loop)" << endl;
 #endif
     	        goto mEFD;
       default:
@@ -245,8 +245,8 @@ f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " K2=" << pmp->K2 <<
     	  {   // bad PIA mode - there are inconsistent phases after 3 attempts. Attempting AIA mode
         	  pmp->MK = 2;   // Set to check in calcMulti() later on
 #ifdef GEMITERTRACE
-f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT <<
-      " k_miss=" << k_miss << " k_unst=" << k_unst << " ! PIA->AIA on E08IPM (Selekt)" << endl;
+//f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT <<
+//      " k_miss=" << k_miss << " k_unst=" << k_unst << " ! PIA->AIA on E08IPM (Selekt)" << endl;
 #endif
         	  goto FORCED_AIA;
     	  }
@@ -294,8 +294,8 @@ f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT <<
                {   // bad PIA mode - precision cannot be reached. Attempting the AIA mode
                  	  pmp->MK = 2;   // Set to check in calcMulti() later on
 #ifdef GEMITERTRACE
-  f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT <<
-      " W1= " << pmp->W1 << " ! PIA-AEA on Prec.refin.errors E09IPM or E10IPM" << endl;
+ // f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT <<
+ //     " W1= " << pmp->W1 << " ! PIA-AEA on Prec.refin.errors E09IPM or E10IPM" << endl;
 #endif
                      goto FORCED_AIA;
                 }
@@ -332,12 +332,12 @@ f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT <<
       }
    }
 #ifdef GEMITERTRACE
-f_log << "ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " MBPRL="
+/*f_log << "ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " MBPRL="
    << pmp->W1 << " rLoop=" << rLoop;
     if( pmp->pNP )
 	   f_log << " Ok after PIA" << endl;
     else
-	   f_log << " Ok after AIA" << endl;
+	   f_log << " Ok after AIA" << endl;*/
 #endif
 
 FORCED_AIA:

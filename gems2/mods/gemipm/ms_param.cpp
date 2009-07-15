@@ -67,7 +67,7 @@ SPP_SETTING pa_ = {
 }; // SPP_SETTING
 
 
-void BASE_PARAM::write(ostream& oss)
+void BASE_PARAM::write(fstream& oss)
 {
   short arr[10];
 
@@ -87,7 +87,7 @@ void BASE_PARAM::write(ostream& oss)
     oss.write( (char*)&tprn, sizeof(char*) );
 }
 
-void SPP_SETTING::write(ostream& oss)
+void SPP_SETTING::write(fstream& oss)
 {
     oss.write( ver, TDBVERSION );
     p.write( oss );

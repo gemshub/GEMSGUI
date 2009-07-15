@@ -151,10 +151,10 @@ public:
     void MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut );
     // make new aq and/or gas phases (re-written by KD 30.07.03)
     void newAqGasPhase( const char *akey, const char *gkey, int file,
-        const char amod, const char gmod, float apar[4], float gpar[4],
+        const char amod, const char gmod, float apar[4], /*float gpar[4],*/
             bool useLst = false, TCStringArray lst = 0 );
     // Added by KD on 31.07.03
-    void AssemblePhase( const char* key, const char* part, float param[4],
+    void AssemblePhase( const char* key, const char* part, float *param,
            int file, bool useLst = false, TCStringArray lst = 0, int Npar = 4 );
 
     void CopyRecords( const char * prfName, TCStringArray& aPHnoused,

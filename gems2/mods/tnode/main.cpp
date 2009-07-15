@@ -132,6 +132,9 @@ int main( int argc, char* argv[] )
    {
      dBR->NodeStatusCH = NEED_GEM_AIA; // direct access to node DATABR structure
 
+    if(in == 0 ) // 25 gr.
+           node->GEM_print_ipm("Point_25_start_before.ipm");
+
      // re-calculating equilibrium by calling GEMIPM
      m_NodeStatusCH[in] = node->GEM_run( false);
 
@@ -139,6 +142,7 @@ int main( int argc, char* argv[] )
         return 5;
     if(in == 0 ) // 25 gr.
            node->GEM_print_ipm("Point_25_start.ipm");
+    return 1;
      // Extracting chemical data into FMT part
      node->GEM_restore_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_T[in],
        m_P[in], m_Vs[in], m_Ms[in],

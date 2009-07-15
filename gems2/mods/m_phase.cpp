@@ -1252,7 +1252,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
 // called from Project - extended by KD on 16.06.03 to add CG EoS
 // Re-written (for AutoPhaseWizard) by KD on 31.07.03
 void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
-   const char amod, const char gmod, float apar[8], float gpar[4],
+   const char amod, const char gmod, float apar[8], /*float gpar[4],*/
    bool useLst, TCStringArray lst )
 {
 //    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
@@ -1431,7 +1431,7 @@ MAKE_GAS_PHASE:
         part = "f:*:*:*:";
 
     // Assembling gas phase
-    AssemblePhase( gkey, part, gpar, file, useLst, lst, 4 );
+    AssemblePhase( gkey, part, 0, file, useLst, lst, 0 );
 
     // Do sometning else here?
     DONE:

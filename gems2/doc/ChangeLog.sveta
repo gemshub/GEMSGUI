@@ -1,3 +1,8 @@
+15/07/2009
+Added to AutoPhaseDialog 
+  -"built-in Peng-Robinson-Stryjek-Vera (PRSV) fluid EOS model" type equation.
+  - "built-in Soave-Redlich-Kwong (SRK) fluid EOS model"
+
 14/07/2009
 Show message about "Quality codes for temperature and pressure corrections"
 

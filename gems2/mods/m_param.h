@@ -83,7 +83,7 @@ struct BASE_PARAM
     IEPS,  // Accuracy of cutoff limits 1+eps for surface activity terms {1e-3}
     DKIN; // Range of lower to upper kinetic restrictions for DC { 1e-6 }
     char *tprn;       // internal
-
+    void write(fstream& oss);
     void write(GemDataStream& oss);
     void read(GemDataStream& oss);
 };
