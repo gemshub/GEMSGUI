@@ -634,7 +634,7 @@ AGAIN_SETUP:
             php->NsiT < 0 || php->NsiT > 6 )
     {
         if(vfQuestion(window(), GetName(),
- "W06PHrem: Invalid number of coeffs in the non-ideal solution model!\n Repeat (Y) or Cancel (N)?"))
+        		"W06PHrem: Invalid number of coeffs in the non-ideal solution model!\n Repeat (Y) or Cancel (N)?"))
             goto AGAIN_SETUP;
         else   Error( GetName(), "E07PHrem: The user cancelled remaking Phase definition !");
     }
@@ -1029,7 +1029,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
         nsc = php->nscM;
     //        nCat = 0; nAn = 0;
         if( pVisor->ProfileMode == true || vfQuestion(window(), GetName(),
-   "Parameters of aqueous species: Collect from DComp/ReacDC records?"))
+        		"Parameters of aqueous species: Collect from DComp/ReacDC records?"))
         {
             pa0 = 1;
             Kielland = 0;
@@ -1112,7 +1112,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
     if( php->PphC == PH_SORPTION || php->PphC == PH_POLYEL )
     {
 // Rewritten by KD on 13.09.04 for Frumkin and on 25.10.04 for CD EDL models
-//      nsc = (short)(php->nscN * php->nscM);
+    	// nsc = (short)(php->nscN * php->nscM);
       nsc = php->nscM;
       memset( dcn, 0, MAXRKEYLEN );
       for( i=0; i<php->nDC; i++ )
@@ -1187,7 +1187,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
 //        nsc = (short)(php->nscN * php->nscM);
         nsc = php->nscM;
         if( pVisor->ProfileMode == true || vfQuestion(window(), GetName(),
-   "PRSV or CG2003 fluid EoS coefficients: Collect from DComp records?"))
+        		"Fluid EoS coefficients: Collect from DComp records?"))
         {
            memset( dcn, 0, MAXRKEYLEN );
            for( i=0; i<php->nDC; i++ )
@@ -1212,7 +1212,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
                  }
                  if( aDC->dcp->CPg && !aDC->dcp->Cemp )
                  {
-                    mcex = min( MAXCRITPARAM, (int)nsc );  // PRSV model
+                    mcex = min( MAXCRITPARAM, (int)nsc );  // PRSV and SRK model
                     for( kx=0; kx< nsc; kx++ )
                     {
                       if( kx < mcex ) // Copying only what is possible
@@ -1357,7 +1357,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
     strcpy( php->notes, nbuf );
     part = "a:*:*:*:";
 
-// Call assembling of the aqueous phase
+    // Call assembling of the aqueous phase
     AssemblePhase( akey, part, apar, file, useLst, lst, 6 );
 
 MAKE_GAS_PHASE:
@@ -1367,40 +1367,74 @@ MAKE_GAS_PHASE:
       case 'N': // No gas/fluid phase in the system
       case 'U': // User - selected from database
                 goto DONE;
-      case 'I':  // Ideal mixture (default)
+      case 'I':  // Ideal gas mixture (default)
               memcpy( php->sol_t, "INNINN", 6 );
               memcpy( &php->PphC, "g-----", 6 );
-              php->ncpN = 0; php->ncpM = 0;
-              php->nscM = 0; php->npxM = 0;
-              Name += "ideal mixture of ideal or real gases";
+              php->ncpN = 0;
+              php->ncpM = 0;
+              php->nscM = 0;
+              php->npxM = 0;
+              Name += "Ideal mixture of ideal or real gases";
               strcpy( php->name, Name.c_str() );
               strcpy( php->notes,
-     "Applicable at low P - elevated T (with CST gases - at elevated P)" );
+            		  "Applicable only at low P and elevated T" );
               break;
-      case 'F':  // Fluid CG EoS model
+      case 'F':  // CG fluid EoS model
               memcpy( php->sol_t, "FNNSNN", 6 );
               memcpy( &php->PphC, "f-+---", 6 );
-              php->ncpN = 0; php->ncpM = 0;
+              php->ncpN = 0;
+              php->ncpM = 0;
               php->nscM = 12; // last changed 12.12.2008 (TW)
               php->npxM = 0;
-              Name += "Perturbation-based EoS (Churakov&Gottschalk,2003)";
+              Name += "Churakov-Gottschalk (CG) EoS model";
               strcpy( php->name, Name.c_str() );
               strcpy( php->notes,
-     "Applicable at high P - moderate T for mixed non-electrolyte fluids" );
+            		  "Applicable at high P and moderate T" );
               break;
-      // case SM_PRFLUID: // 'P': Peng-Robinson EoS, under construction
-      //        break;
+      case 'P':  // PRSV fluid EoS model
+              memcpy( php->sol_t, "PNNSNN", 6 );
+              memcpy( &php->PphC, "g++---", 6 );
+              if( php->ncpN < 1 ) // NPar
+            	  php->ncpN = 1;
+              if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+            	  php->ncpN = (php->nDC*(php->nDC-1)/2);
+              // php->ncpN = 0;
+              php->ncpM = 2;
+              php->nscM = 7;
+              php->npxM = 2;
+              Name += "Peng-Robinson-Stryjek-Vera (PRSV) EoS model";
+              strcpy( php->name, Name.c_str() );
+              strcpy( php->notes,
+            		  "Applicable at moderate P and moderate T" );
+              break;
+      case 'E':  // SRK fluid EoS model
+              memcpy( php->sol_t, "ENNSNN", 6 );
+              memcpy( &php->PphC, "g++---", 6 );
+              if( php->ncpN < 1 ) // NPar
+            	  php->ncpN = 1;
+              if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+            	  php->ncpN = (php->nDC*(php->nDC-1)/2);
+              // php->ncpN = 0;
+              php->ncpM = 2;
+              php->nscM = 7;
+              php->npxM = 2;
+              Name += "Soave-Redlich-Kwong (SRK) EoS model";
+              strcpy( php->name, Name.c_str() );
+              strcpy( php->notes,
+            		  "Applicable at moderate P and moderate T" );
+              break;
       default:  // unrecognized code
               goto DONE;
     }
     part = "g:*:*:*:";
     if( gkey[0] == 'f' )
         part = "f:*:*:*:";
-// Assembling gas phase
+
+    // Assembling gas phase
     AssemblePhase( gkey, part, gpar, file, useLst, lst, 4 );
 
-// Do sometning else here?
-   DONE:
+    // Do sometning else here?
+    DONE:
     contentsChanged = false;
 }
 
@@ -1565,23 +1599,21 @@ TPhase::AssemblePhase( const char* key, const char* part, float* param,
         }
         php->PFsiT = S_ON;
     }
-// set up all 0 06/02/2007
-   for( i=0; i<php->ncpN * php->ncpM; i++)
-	   php->pnc[i] = 0.;
+    // set up all 0 06/02/2007
+    for( i=0; i<php->ncpN * php->ncpM; i++)
+    	php->pnc[i] = 0.;
 
-   for( i=0; i < min(Npar,(php->ncpN * php->ncpM)); i++ )
-	   php->pnc[i] = param[i];
-// Semantics of DH model parameters transmitted through 'param' ('ph_cf')
-//   array (DK, TW on 22.05.2009)
-//   ph_cf[0]:  b_gamma common at Tr, Pr (default 0.064 for NaCl)
-//   ph_cf[1]:  common ion size (default 3.72 A)
-//   ph_cf[2]:  flag for internal gamma calculation for neutral species: 0: set to 1;
-//                    1: use b_gamma(T,P)
-//   ph_cf[3]:  flag for internal gamma calculation of H2O-solvent: 0: set to 1; 1 - built-in
-//   ph_cf[4]:  flag for T-P dependence of b_gamma: 0: No (set constant to b_gamma(Tr,Pr);
-//                1: for NaCl; 2: for KCl; 3: NaOH; 4: KOH
-//  More can be defined in future (check also TSolMod)
-// set model parameters, if necessary  !!!!!!!!!!!!! check !
+    for( i=0; i < min(Npar,(php->ncpN * php->ncpM)); i++ )
+    	php->pnc[i] = param[i];
+
+	   // Semantics of DH model parameters transmitted through ph_cf array, 22.05.2009 (DK)
+	   // ph_cf[0]  b_gamma common at Tr, Pr
+	   // ph_cf[1]  common ion size
+	   // ph_cf[2]  flag for internal gamma calculation for neutral species
+	   // ph_cf[3]  flag for internal gamma calculation of water solvent
+	   // ph_cf[4]  flag for T-P dependence of b_gamma
+	   // ph_cf[5]  flag for mole fraction to molality conversion
+
 
 /*    if( php->pnc && ( php->ncpN * php->ncpM >= 8 ) )
     {
@@ -1598,6 +1630,7 @@ else if( param[2] && !param[3] )
 	   php->pnc[7] = 1.;
     }
 */
+
 // Calculating the phase record and saving it to database
     CalcPhaseRecord( true );
     int  Rnum = db->Find( key );
@@ -1605,14 +1638,14 @@ else if( param[2] && !param[3] )
         db->AddRecordToFile( key, file );
     else
         db->Rep( Rnum );
-//    contentsChanged = false;
+		// contentsChanged = false;
 }
 
 
 void
 TPhase::CmHelp()
 {
-    pVisor->OpenHelp( GEMS_PH_HTML );  //  05.01.01
+    pVisor->OpenHelp( GEMS_PH_HTML );  // 05.01.2001
 }
 
 void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
@@ -1681,16 +1714,16 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
 // cbSolids  - single-component
      if( !el_data.flags[cbSolids_] && ( pKey1[0] == 's' ||
           pKey1[0] == 'd' || pKey1[0] == 'l' || pKey1[0] == 'h' )
-//        && ( pKey4[0] == 'c' && pKey4[1] == ' ' ||
-//          pKey4[0] == 'd' && pKey4[1] == ' ' ||
-//          pKey4[0] == 'l' && pKey4[1] == ' ' ))
+			  // && ( pKey4[0] == 'c' && pKey4[1] == ' ' ||
+			  // pKey4[0] == 'd' && pKey4[1] == ' ' ||
+			  // pKey4[0] == 'l' && pKey4[1] == ' ' ))
           && pKey4[1] == ' ' )
         continue;
 
 // cbSolutions - multi-component, non-gas, non-electrolyte
      if( !el_data.flags[cbSolutions_] && ( pKey1[0] == 's'
         || pKey1[0] == 'l' || pKey1[0] == 'd' || pKey1[0] == 'h' )
-    //  &&  !( pKey4[0] == 'c' || pKey4[0] == 'd' || pKey4[0] == 'l' ))
+			// &&  !( pKey4[0] == 'c' || pKey4[0] == 'd' || pKey4[0] == 'l' ))
           && pKey4[1] != ' ' )
         continue;
 

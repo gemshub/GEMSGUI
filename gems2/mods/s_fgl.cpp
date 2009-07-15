@@ -151,12 +151,11 @@ long int TPRSVcalc::PureSpecies()
 // High-level method to calculate T,P corrected binary interaction parameters
 long int TPRSVcalc::PTparam()
 {
-	long int j, i, ip, i1, i2;
-	double p0, p1, k, dk, d2k;
+	long int j, i;
 
 	PureSpecies();
 
-	// fill internal array of interaction parameters with standard value
+	// set all interaction parameters zero
 	for( j=0; j<NComp; j++ )
 	{
 		for( i=0; i<NComp; i++ )
@@ -167,25 +166,19 @@ long int TPRSVcalc::PTparam()
 		}
 	}
 
-	if( NPcoef > 0 )
+	switch ( MixCode )
 	{
-		// transfer those interaction parameters that have non-standard value
-		for ( ip=0; ip<NPar; ip++ )
-		{
-			i1 = aIPx[MaxOrd*ip];
-			i2 = aIPx[MaxOrd*ip+1];
-			p0 = aIPc[NPcoef*ip];
-			p1 = aIPc[NPcoef*ip+1];
-			k = p0 + p1*Tk;
-			dk = p1;
-			d2k = 0.;
-			KK[i1][i2] = k;
-			dKK[i1][i2] = dk;
-			d2KK[i1][i2] = d2k;
-			KK[i2][i1] = k;   // symmetric case
-			dKK[i2][i1] = dk;
-			d2KK[i2][i1] = d2k;
-		}
+		case MR_WAAL_:
+			MixingWaals();
+			break;
+		case MR_CONST_:
+			MixingConst();
+			break;
+		case MR_TEMP_:
+			MixingTemp();
+			break;
+		default:
+			break;
 	}
 
 	return 0;
@@ -286,18 +279,7 @@ long int TPRSVcalc::IdealProp( double *Zid )
 // basic van der waals mixing rule
 long int TPRSVcalc::MixingWaals()
 {
-	long int j, i;
-
-	// set all interaction parameters zero
-	for( j=0; j<NComp; j++ )
-	{
-		for( i=0; i<NComp; i++ )
-		{
-			KK[j][i] = 0.;
-			dKK[j][i] = 0.;
-			d2KK[j][i] = 0.;
-		}
-	}
+	// currently no calculations
 
 	return 0;
 }
@@ -306,19 +288,8 @@ long int TPRSVcalc::MixingWaals()
 // constant one-term interaction parameter
 long int TPRSVcalc::MixingConst()
 {
-	long int j, i, ip, i1, i2;
+	long int ip, i1, i2;
 	double k, dk, d2k;
-
-	// set all interaction parameters zero
-	for( j=0; j<NComp; j++ )
-	{
-		for( i=0; i<NComp; i++ )
-		{
-			KK[j][i] = 0.;
-			dKK[j][i] = 0.;
-			d2KK[j][i] = 0.;
-		}
-	}
 
 	if( NPcoef > 0 )
 	{
@@ -350,16 +321,13 @@ long int TPRSVcalc::MixingTemp()
 	double ai, aj, bi, bj, di, dj, dai, daj, d2ai, d2aj, ddi, ddj, d2di, d2dj,
 				U, V, dU, dV, d2U, d2V, tmp, k, dk, d2k, C;
 
-	// set all interaction parameters zero
+	// set model specific interaction parameters zero
 	for( j=0; j<NComp; j++ )
 	{
 		for( i=0; i<NComp; i++ )
 		{
 			a[j][i] = 0.;
 			b[j][i] = 0.;
-			KK[j][i] = 0.;
-			dKK[j][i] = 0.;
-			d2KK[j][i] = 0.;
 		}
 	}
 
@@ -2596,12 +2564,11 @@ long int TSRKcalc::PureSpecies()
 // High-level method to calculate T,P corrected binary interaction parameters
 long int TSRKcalc::PTparam()
 {
-	long int j, i, ip, i1, i2;
-	double p0, p1, k, dk, d2k;
+	long int j, i;
 
 	PureSpecies();
 
-	// fill internal array of interaction parameters with standard value
+	// set all interaction parameters zero
 	for( j=0; j<NComp; j++ )
 	{
 		for( i=0; i<NComp; i++ )
@@ -2612,26 +2579,21 @@ long int TSRKcalc::PTparam()
 		}
 	}
 
-	if( NPcoef > 0 )
+	switch ( MixCode )
 	{
-		// transfer those interaction parameters that have non-standard value
-		for ( ip=0; ip<NPar; ip++ )
-		{
-			i1 = aIPx[MaxOrd*ip];
-			i2 = aIPx[MaxOrd*ip+1];
-			p0 = aIPc[NPcoef*ip];
-			p1 = aIPc[NPcoef*ip+1];
-			k = p0 + p1*Tk;
-			dk = p1;
-			d2k = 0.;
-			KK[i1][i2] = k;
-			dKK[i1][i2] = dk;
-			d2KK[i1][i2] = d2k;
-			KK[i2][i1] = k;   // symmetric case
-			dKK[i2][i1] = dk;
-			d2KK[i2][i1] = d2k;
-		}
+		case MR_WAAL_:
+			MixingWaals();
+			break;
+		case MR_CONST_:
+			MixingConst();
+			break;
+		case MR_TEMP_:
+			MixingTemp();
+			break;
+		default:
+			break;
 	}
+
 	return 0;
 }
 
@@ -2695,18 +2657,7 @@ long int TSRKcalc::ExcessProp( double *Zex )
 // basic van der waals mixing rule
 long int TSRKcalc::MixingWaals()
 {
-	long int j, i;
-
-	// set all interaction parameters zero
-	for( j=0; j<NComp; j++ )
-	{
-		for( i=0; i<NComp; i++ )
-		{
-			KK[j][i] = 0.;
-			dKK[j][i] = 0.;
-			d2KK[j][i] = 0.;
-		}
-	}
+	// currently no calculations
 
 	return 0;
 }
@@ -2715,19 +2666,8 @@ long int TSRKcalc::MixingWaals()
 // constant one-term interaction parameter
 long int TSRKcalc::MixingConst()
 {
-	long int j, i, ip, i1, i2;
+	long int ip, i1, i2;
 	double k, dk, d2k;
-
-	// set all interaction parameters zero
-	for( j=0; j<NComp; j++ )
-	{
-		for( i=0; i<NComp; i++ )
-		{
-			KK[j][i] = 0.;
-			dKK[j][i] = 0.;
-			d2KK[j][i] = 0.;
-		}
-	}
 
 	if( NPcoef > 0 )
 	{
@@ -2759,16 +2699,13 @@ long int TSRKcalc::MixingTemp()
 	double ai, aj, bi, bj, di, dj, dai, daj, d2ai, d2aj, ddi, ddj, d2di, d2dj,
 				U, V, dU, dV, d2U, d2V, tmp, k, dk, d2k, C;
 
-	// set all interaction parameters zero
+	// set model specific interaction parameters zero
 	for( j=0; j<NComp; j++ )
 	{
 		for( i=0; i<NComp; i++ )
 		{
 			a[j][i] = 0.;
 			b[j][i] = 0.;
-			KK[j][i] = 0.;
-			dKK[j][i] = 0.;
-			d2KK[j][i] = 0.;
 		}
 	}
 
