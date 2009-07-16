@@ -288,11 +288,14 @@ NewSystemDialog::Update()
             case SM_AQDH2: // DH Kielland
                       msg += QString(" built-in DH2;");
                       break;
-            case SM_AQDH3: // EDH Kielland
+            case SM_AQDH3: // EDH Karpov
                       msg += QString(" built-in EDH(K);");
                       break;
             case SM_AQDHH: // EDH Helgeson
                       msg += QString(" built-in EDH(H);");
+                      break;
+            case SM_AQDHS: // EDH Shvarov
+                      msg += QString(" built-in EDH(S);");
                       break;
             case SM_AQSIT: // SIT PSI (under construction)
                       msg += QString(" built-in SIT;");
@@ -870,7 +873,7 @@ void NewSystemDialog::loadList2()
    long int *l1_     = (long int *)aObj[ o_wi_l1 ].GetPtr();
    double *Y_la_  = (double *)aObj[ o_wd_yla ].GetPtr();
 // double *lnGam_ = (double *)aObj[ o_wo_lngam ].GetPtr();  Changed to Gamma 26.06.08 DK
-   double *Gamma_ = (double *)aObj[ o_wd_gamma ].GetPtr(); 
+   double *Gamma_ = (double *)aObj[ o_wd_gamma ].GetPtr();
    double *Wx_ = (double *)aObj[ o_wo_wx ].GetPtr();
    double *Ym_ = (double *)aObj[o_wd_ym ].GetPtr();
    vstr buf(30), buf1(30), buf2(30);
@@ -1092,23 +1095,23 @@ void NewSystemDialog::setGex(char code, QString& val )
 {
   double dat = val.toDouble();
   double tK = TProfil::pm->tpp->TK;
-  
+
   switch( code )
   {
      case 'J': //dat *=1.; J/mol
-           break;   
+           break;
      case 'k': dat *=1000.; // kJ/mol
-           break;   
+           break;
      case 'p': dat *=lg_to_ln*R_CONSTANT*tK; // pK
-           break;   
+           break;
      case 'l': dat *=(-1)*lg_to_ln*R_CONSTANT*tK; // logK
-           break;   
+           break;
      case 'n': dat *=(-1)*R_CONSTANT*tK; // lnK
-           break;   
+           break;
      case 'm': dat *=R_CONSTANT*tK; // mol/mol
-           break;   
+           break;
   }
- val = QString("%1").arg(dat);	
+ val = QString("%1").arg(dat);
 }
 
 void NewSystemDialog::saveList1()
@@ -1147,7 +1150,7 @@ void NewSystemDialog::saveList1()
               case 5: if( !aObj[o_syphm].IsNull() )
                        aObj[o_syphm].SetString( col, nPh );
                       break;
-              case 7: 
+              case 7:
             	      val = col;
             	      setGex( cType, val );
             	      if( !aObj[o_syyof].IsNull() )
@@ -1433,7 +1436,7 @@ MLineEdit::keyPressEvent(QKeyEvent* e)
             return;
 
         SetIndex(newIndex);
-        return;   
+        return;
      }
   }
   QLineEdit::keyPressEvent(e);
