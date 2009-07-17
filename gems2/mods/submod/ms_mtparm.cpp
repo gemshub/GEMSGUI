@@ -292,7 +292,7 @@ void TMTparm::MTparmAlloc( )
         tp.PtvVm = S_REM;  /* default array */
   if( tp.Lg )  // Added on 13.06.03 by KD
   {
-     tp.PtvdVg = S_REM; // Arrays used by CG-EoS and PRSV-EoS for fluids !
+    // SD 17/07/2009 tp.PtvdVg = S_REM; // Arrays used by CG-EoS and PRSV-EoS for fluids !
      tp.PtvFg = S_REM;
   }
     dyn_new();
