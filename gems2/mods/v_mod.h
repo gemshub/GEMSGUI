@@ -173,8 +173,8 @@ o_nldcvs, o_nldchs, o_nlphv, o_nlphh, // new !!!
     o_wi_g0,  o_wo_lngam,  o_w_lngmo,  o_wo_lnsat,  o_wi_b,
     o_wo_u,   o_wd_uc,  o_wd_ur, o_wo_c,  o_wd_icm,  o_wd_iclcm ,
     o_wd_icwm,  o_wo_bf, o_wo_bfc, o_w_xf ,  o_wo_yf,  o_ww_xfa,
-    o_ww_yfa,  o_wo_falp,  
-    o_wo_vph, o_wo_gph, o_wo_hph , o_wo_sph,  o_wo_cph,  o_wo_aph,   o_wo_uph, 
+    o_ww_yfa,  o_wo_falp,
+    o_wo_vph, o_wo_gph, o_wo_hph , o_wo_sph,  o_wo_cph,  o_wo_aph,   o_wo_uph,
     o_w_xetaa,  o_w_xetab, o_w_xetad, o_w_xfts,
     o_w_x,  o_wo_y, o_w_xy ,  o_w_xu ,o_wi_qp, o_wi_qd,
     o_wo_mu,  o_w_emu,  o_w_nmu,  o_w_w,  o_wo_fxa,
@@ -336,19 +336,16 @@ enum DC_CNTRL_CODES {
                         sibility and isobaric expansibility (Holland and Powell, 1998) */
     CPM_GAS  = 'G',  /* calculation of fugacities of gases from their critical para-
                         meters and corresponding state theory (reserved) */
-    CPM_PRSV = 'R',  /* Peng-Robinson-Stryjek-Vera EOS for gases and fluids (nonelectrolytes)
-                        (added by T.Wagner in July 2006) */
-    CPM_EMP  = 'S',  /* calculation from Churakov-Gottschalk (2003) EOS for gases
-                        and fluids (nonelectrolytes) */
-    CPM_SRK  = 'T',  /* Soave-Redlich-Kwong EOS for gases and fluids (nonelectrolytes) */
-
+    CPM_PRSV = 'R',  /* Peng-Robinson-Stryjek-Vera (PRSV) EoS for fluids (nonelectrolytes) */
+    CPM_EMP  = 'S',  /* Churakov-Gottschalk (CG) EoS for fluids (nonelectrolytes) */
+    CPM_SRK  = 'T',  /* Soave-Redlich-Kwong (SRK) EoS for fluids (nonelectrolytes) */
+    CPM_PR78 = '7',	 /* Peng-Robinson (PR78) EoS for fluids (nonelectrolytes) */
     CPM_HKF  = 'F',  /* account for pressure up to 5 kbar by HKF (Tanger,Helgeson,1988) */
     CPM_AKI  = 'A',  /* calculation of partial molal volumes for aqueous nonelectrolyte species
                         using EOS (Akinfiev and Diamond, 2003) */
     CPM_PCR  = 'P',  /* PARCOR estimation of HKF EoS parameters 19.05.98 */
     CPM_INK  = 'Z'   /* calculation using Lagrange polinomial interpolation over
                         the array  of lgK(T,P) */
-
 };
 
 enum DC_phase_state {   // Code of phase state identification of DC record keys

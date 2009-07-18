@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id: s_fgl2.cpp 806 2006-12-04 16:28:29Z gems $
 //
-// Copyright (c) 2003-2007   S.Churakov, Th.Wagner, 
+// Copyright (c) 2003-2007   S.Churakov, Th.Wagner,
 //    D.Kulik, S.Dmitrieva
 //
 // Implementation of TFGLcalc class
@@ -44,7 +44,7 @@ int TPRSVcalc::CalcFugPure( void )
 // Calling PRSV EoS functions here
 
     if( T >= aW.twp->TClow +273.15 && T < 1e4 && P >= 1e-5 && P < 1e5 )
-       retCode = PRFugacityPT( P, T, Coeff, Eos2parPT, Fugcoeff, Volume,
+       retCode = FugacityPT( P, T, Coeff, Eos2parPT, Fugcoeff, Volume,
             DeltaH, DeltaS );
     else {
             Fugcoeff = 1.;
@@ -58,7 +58,7 @@ int TPRSVcalc::CalcFugPure( void )
     // add enthalpy and enthropy increments - check later!
     aW.twp->H +=  DeltaH;   // in J/mol - to be completed
     aW.twp->S +=  DeltaS;   // to be completed
-    aW.twp->V = Volume      // /10.  in J/bar ;
+    aW.twp->V = Volume;      // /10.  in J/bar ;
     aW.twp->Fug = Fugcoeff * P;   // fugacity at P
 
 //  passing corrected EoS coeffs to calculation of fluid mixtures

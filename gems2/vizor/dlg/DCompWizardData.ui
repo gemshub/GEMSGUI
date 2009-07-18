@@ -365,6 +365,11 @@
                     </item>
                     <item>
                         <property name="text">
+                            <string>7   Pressure correction for fluids using Peng-Robinson (PR78) EoS</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
                             <string>F   Pressure correction using HKF EoS for aqueous electrolytes or HGK EoS for water</string>
                         </property>
                     </item>

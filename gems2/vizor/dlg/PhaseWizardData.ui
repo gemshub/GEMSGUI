@@ -55,7 +55,7 @@
                 <widget class="QComboBox">
                     <item>
                         <property name="text">
-                            <string>I   Ideal mixture or pure phase (default)</string>
+                            <string>I    Ideal mixture or pure phase (default)</string>
                         </property>
                     </item>
                     <item>
@@ -100,17 +100,22 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>F   Churakov-Gottschalk (CG) EoS fluid model (built-in)</string>
+                            <string>F   Churakov-Gottschalk (CG) multicomponent fluid EoS model (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>P   Peng-Robinson-Stryjek-Vera (PRSV) EoS fluid model (built-in)</string>
+                            <string>P   Peng-Robinson-Stryjek-Vera (PRSV) multicomponent fluid EoS model (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>E   Soave-Redlich-Kwong (SRK) EoS fluid model (built-in)</string>
+                            <string>E   Soave-Redlich-Kwong (SRK) multicomponent fluid EoS model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>7   Peng-Robinson (PR78) multicomponent fluid EoS model (buil-in)</string>
                         </property>
                     </item>
                     <item>
@@ -145,17 +150,17 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>S   SIT aqueous model (NEA TDB version, built-in)</string>
+                            <string>S   SIT multicomponent aqueous model (NEA TDB version, built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Q   Extended UNIQAC aqueous model (built-in)</string>
+                            <string>Q   Extended UNIQAC multicomponent aqueous model (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Z   Pitzer aqueous model (built-in)</string>
+                            <string>Z   Pitzer multicomponent aqueous model (built-in)</string>
                         </property>
                     </item>
                     <item>

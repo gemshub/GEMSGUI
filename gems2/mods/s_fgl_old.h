@@ -401,7 +401,7 @@ class TPRSVcalc // Peng-Robinson-Styjek-Vera EOS calculations
 
    int CalcFugPure( void );
    // Calc. fugacity for 1 species at X=1
-   int PRFugacityPT( double Tk, double P, float *EoSparam, double *Eos2parPT,
+   int FugacityPT( double Tk, double P, float *EoSparam, double *Eos2parPT,
         double &Fugacity, double &Volume, double &DeltaH, double &DeltaS );
 
 protected:

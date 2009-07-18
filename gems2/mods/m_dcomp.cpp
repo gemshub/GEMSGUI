@@ -265,7 +265,7 @@ void TDComp::dyn_new(int q)
     else
         dc[q].Vt = (float *)aObj[ o_dcvt].Alloc(MAXVTCOEF, 1, F_ );
 
-    if( CV == CPM_GAS  || CV == CPM_PRSV  || CV == CPM_SRK )  // case SRK added, 17.12.2008 (TW)
+    if( CV == CPM_GAS  || CV == CPM_PRSV  || CV == CPM_SRK || CV == CPM_PR78 )  // PR78 added, 18.07.2009 (TW)
         dc[q].CPg = (float *)aObj[ o_dccritpg].Alloc(MAXCRITPARAM, 1, F_ );
     else
         dc[q].CPg = (float *)aObj[ o_dccritpg ].Free();
@@ -744,7 +744,7 @@ TDComp::DCthermo( int q, int p )
 
         else if( CV == CPM_EMP )  // Calculation of fugacity at X=1 using GC EoS
         {
-            TCGFcalc aCGF(1, aW.twp->P, aW.twp->TC+273.15 );
+        	TCGFcalc aCGF(1, aW.twp->P, aW.twp->TC+273.15 );
             aW.twp->Cemp = dcp->Cemp;
             aW.twp->PdcC = dcp->PdcC;
             aW.twp->TClow = dcp->TCint[0];
@@ -754,23 +754,33 @@ TDComp::DCthermo( int q, int p )
 
         else if( CV == CPM_PRSV )  // Calculation of fugacity at X=1 using PRSV EoS
         {
-           TPRSVcalc aPRSV( 1, aW.twp->P, aW.twp->TC+273.15 );
-           // aPRSV.TPRSVcalc( 1, aW.twp->P, aW.twp->TC+273.15 );
-           aW.twp->CPg = dcp->CPg;
-           aW.twp->TClow = dcp->TCint[0];
-           aPRSV.PRCalcFugPure( );
-           // aPRSV.~TPRSVcalc();
-           aW.twp->CPg = NULL; // ????
+        	TPRSVcalc aPRSV( 1, aW.twp->P, aW.twp->TC+273.15 );
+        	// aPRSV.TPRSVcalc( 1, aW.twp->P, aW.twp->TC+273.15 );
+        	aW.twp->CPg = dcp->CPg;
+        	aW.twp->TClow = dcp->TCint[0];
+        	aPRSV.PRSVCalcFugPure();
+        	// aPRSV.~TPRSVcalc();
+        	aW.twp->CPg = NULL;
         }
 
         else if( CV == CPM_SRK )  // Calculation of fugacity at X=1 using SRK EoS
-        {                         // added 17.12.2008 (TW)
-           TSRKcalc aSRK( 1, aW.twp->P, aW.twp->TC+273.15 );
-           aW.twp->CPg = dcp->CPg;
-           aW.twp->TClow = dcp->TCint[0];
-           aSRK.SRCalcFugPure( );
-           // aSRK.~TSRKcalc();
-           aW.twp->CPg = NULL; // ????
+        {
+        	TSRKcalc aSRK( 1, aW.twp->P, aW.twp->TC+273.15 );
+        	aW.twp->CPg = dcp->CPg;
+        	aW.twp->TClow = dcp->TCint[0];
+        	aSRK.SRKCalcFugPure();
+        	// aSRK.~TSRKcalc();
+        	aW.twp->CPg = NULL;
+        }
+
+        else if( CV == CPM_PR78 )  // Calculation of fugacity at X=1 using PR78 EoS
+        {
+        	TPR78calc aPR78( 1, aW.twp->P, aW.twp->TC+273.15 );
+        	aW.twp->CPg = dcp->CPg;
+        	aW.twp->TClow = dcp->TCint[0];
+        	aPR78.PR78CalcFugPure();
+        	// aPR78.~TPR78calc();
+        	aW.twp->CPg = NULL;
         }
 
         else if( CV == CPM_AKI )

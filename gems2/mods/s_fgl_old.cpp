@@ -1764,7 +1764,7 @@ TPRSVcalc::~TPRSVcalc()
  // Implementation of the TPRSVcalc class
 
 int
-TPRSVcalc::PRFugacityPT( double Tk, double P, float *EoSparam, double *Eos2parPT,
+TPRSVcalc::FugacityPT( double Tk, double P, float *EoSparam, double *Eos2parPT,
         double &Fugacity, double &Volume, double &DeltaH, double &DeltaS )
  {
 

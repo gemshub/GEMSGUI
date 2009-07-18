@@ -548,6 +548,15 @@ AGAIN_SETUP:
                           php->nscM = 7;  // set to 7 to pull all parameters from CPg
                           php->npxM = 2;
                           break;
+          case SM_PR78FL:  // Peng-Robinson (PR78) EoS, one binary interaction parameter
+                          if( php->ncpN < 1 ) // NPar
+                              php->ncpN = 1;
+						  if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+							  php->ncpN = (php->nDC*(php->nDC-1)/2);
+                          php->ncpM = 2;  // NPcoef
+                          php->nscM = 7;  // set to 7 to pull all parameters from CPg
+                          php->npxM = 2;
+                          break;
           case SM_AQDAV:  // aqueous Davies
                           // php->ncpN = php->ncpM = 0;
         	  			  php->ncpN = 2;
@@ -1419,6 +1428,22 @@ MAKE_GAS_PHASE:
               php->nscM = 7;
               php->npxM = 2;
               Name += "Soave-Redlich-Kwong (SRK) EoS model";
+              strcpy( php->name, Name.c_str() );
+              strcpy( php->notes,
+            		  "Applicable at moderate P and moderate T" );
+              break;
+      case '7':  // PR78 fluid EoS model
+              memcpy( php->sol_t, "7NNSNN", 6 );
+              memcpy( &php->PphC, "g++---", 6 );
+              if( php->ncpN < 1 ) // NPar
+            	  php->ncpN = 1;
+              if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+            	  php->ncpN = (php->nDC*(php->nDC-1)/2);
+              // php->ncpN = 0;
+              php->ncpM = 2;
+              php->nscM = 7;
+              php->npxM = 2;
+              Name += "Peng-Rosinson (PR78) EoS model";
               strcpy( php->name, Name.c_str() );
               strcpy( php->notes,
             		  "Applicable at moderate P and moderate T" );

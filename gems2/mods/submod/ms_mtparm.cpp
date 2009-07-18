@@ -402,30 +402,24 @@ if( P < 1e-5 )  // trial check  5.12.2006
 
         if( jf >= 0 && jf < tp.Lg )
         {
-        // TP corrected fugacity and EoS coeffs for gases/fluids
-          if( tp.PtvFg != S_OFF )
-          {
-             tp.Fug[jf] = aW.twp->Fug;
-             // Back correction for the new variant of PRSV EoS model
-             if( mup->DCS[j] == SRC_DCOMP && aDC->dcp->pct[2] == CPM_PRSV )  // since 15.02.2007 (DK)
-            	 tp.G[j] -= 8.31451 * tp.TK * log( aW.twp->Fug/tp.P );
-             // Back correction for the new variant of CG EoS model
-             if( mup->DCS[j] == SRC_DCOMP && aDC->dcp->pct[2] == CPM_EMP )  // since 15.02.2007 (DK)
-            	 tp.G[j] -= 8.31451 * tp.TK * log( aW.twp->Fug/tp.P );
-             // Back correction for the SRK EoS model
-             if( mup->DCS[j] == SRC_DCOMP && aDC->dcp->pct[2] == CPM_SRK )  // added 17.12.2008 (TW)
-            	 tp.G[j] -= 8.31451 * tp.TK * log( aW.twp->Fug/tp.P );
-          }
+        	// TP corrected fugacity and EoS coeffs for gases/fluids
+        	if( tp.PtvFg != S_OFF )
+        	{
+        		tp.Fug[jf] = aW.twp->Fug;
 
-          // For passing corrected EoS coeffs to calculation of fluid mixture
-//          if( tp.PtvdVg != S_OFF )
-//          {
-//            tp.dVg[jf*4] = aW.twp->wtW[6];
-//            tp.dVg[jf*4+1] = aW.twp->wtW[7];
-//            tp.dVg[jf*4+2] = aW.twp->wtW[8];
-//            tp.dVg[jf*4+3] = aW.twp->wtW[9];
-//   tp.dVg[jf*5+4] = aW.twp->wtW[10];
-//          }
+        		// Back correction for the PRSV EoS model
+        		if( mup->DCS[j] == SRC_DCOMP && aDC->dcp->pct[2] == CPM_PRSV )  // since 15.02.2007 (DK)
+        			tp.G[j] -= 8.31451 * tp.TK * log( aW.twp->Fug/tp.P );
+        		// Back correction for the CG EoS model
+        		if( mup->DCS[j] == SRC_DCOMP && aDC->dcp->pct[2] == CPM_EMP )  // since 15.02.2007 (DK)
+        			tp.G[j] -= 8.31451 * tp.TK * log( aW.twp->Fug/tp.P );
+        		// Back correction for the SRK EoS model
+        		if( mup->DCS[j] == SRC_DCOMP && aDC->dcp->pct[2] == CPM_SRK )  // added 17.12.2008 (TW)
+        			tp.G[j] -= 8.31451 * tp.TK * log( aW.twp->Fug/tp.P );
+        		// Back correction for the PR78 EoS model
+        		if( mup->DCS[j] == SRC_DCOMP && aDC->dcp->pct[2] == CPM_PR78 )  // added 18.07.2009 (TW)
+        			tp.G[j] -= 8.31451 * tp.TK * log( aW.twp->Fug/tp.P );
+        	}
         }
 
         /* set scales - not done yet?
