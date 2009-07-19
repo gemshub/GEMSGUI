@@ -830,7 +830,7 @@ long int TPRSVcalc::PRSVCalcFugPure( void )
     T = aW.twp->TC+273.15;   /* T?in K */
 
     for(long int ii=0; ii<7; ii++ )
-      Coeff[ii] = aW.twp->CPg[ii];
+    	Coeff[ii] = aW.twp->CPg[ii];
 		// Coeff = aW.twp->CPg;
 
 
@@ -852,6 +852,13 @@ long int TPRSVcalc::PRSVCalcFugPure( void )
     aW.twp->S +=  DeltaS;  // to be completed
     aW.twp->V = Volume;  // in J/bar
     aW.twp->Fug = Fugcoeff * P;  // fugacity at P
+
+    // increment thermodynamic properties (new version)
+    // aW.twp->G += Fugpure[0][1];
+    // aW.twp->H += Fugpure[0][2];
+    // aW.twp->S += Fugpure[0][3];
+    // aW.twp->V = Fugpure[0][4];
+    // aW.twp->Fug = Fugpure[0][0] * Pbar;
 
     // passing corrected EoS coeffs to calculation of fluid mixtures
     aW.twp->wtW[6] = Eos2parPT[0];  // a
