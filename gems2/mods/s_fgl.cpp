@@ -464,9 +464,9 @@ long int TPRSVcalc::AB( double Tcrit, double Pcrit, double omg, double k1, doubl
 	}
 	k = k0 + (k1 + k2*(k3-Tred)*(1.-sqrt(Tred))) * (1.+sqrt(Tred)) * (0.7-Tred);
 	alph = pow(1. + k*(1.-sqrt(Tred)), 2.);
-	ac = 0.457235*pow(R_CONST,2.)*pow(Tcrit,2.) / Pcrit;
+	ac = (0.457235)*pow(R_CONST,2.)*pow(Tcrit,2.) / Pcrit;
 	apure = alph*ac;
-	bpure = 0.077796*R_CONST*Tcrit/Pcrit;
+	bpure = (0.077796)*R_CONST*Tcrit/Pcrit;
 	sqa = 1.+k*(1.-sqrt(Tred));
 	// dsqa = (-1.)*k0/(2.*sqrt(Tk*Tcrit)) - 1.7*k1/Tcrit + 2.*k1*Tk/(pow(Tcrit,2.));  // extend dA/dT for k2, k3
 	dsqa = ( k1*(0.7-Tred)/(2.*sqrt(Tred)*Tcrit) - k1*(1.+sqrt(Tred))/Tcrit ) * (1.-sqrt(Tred))
@@ -481,12 +481,12 @@ long int TPRSVcalc::AB( double Tcrit, double Pcrit, double omg, double k1, doubl
 }
 
 
-// Calculates fugacities and departure functions of pure fluid species
+// Calculates fugacities and residual functions of pure fluid species
 long int TPRSVcalc::FugacityPure( long int i )
 {
 	double Tcrit, Pcrit, Tred, aprsv, bprsv, alph, da, d2a, k, A, B, a2, a1, a0,
 			z1, z2, z3, vol1, vol2, vol3, lnf1, lnf2, lnf3, z, vol, lnf;
-	double gig, hig, sig, cpig, fugpure, gdep, hdep, sdep, cpdep,
+	double gig, hig, sig, cpig, fugpure, grs, hrs, srs, cprs,
 			cv, dPdT, dPdV, dVdT;
 
 	// ideal gas changes from 1 bar to P at T of interest
@@ -550,30 +550,30 @@ long int TPRSVcalc::FugacityPure( long int i )
 	}
 
 	// calculate thermodynamic properties
-	alph = aprsv/(0.457235*pow(R_CONST,2.)*pow(Tcrit,2.) / Pcrit);
+	alph = aprsv/((0.457235)*pow(R_CONST,2.)*pow(Tcrit,2.) / Pcrit);
 	k = (sqrt(alph)-1.)/(1.-sqrt(Tred));
-	gdep = R_CONST*Tk*(z-1.-log(z-B)-A/(B*sqrt(8.))
+	grs = R_CONST*Tk*(z-1.-log(z-B)-A/(B*sqrt(8.))
 				*log((z+(1+sqrt(2.))*B)/(z+(1-sqrt(2.))*B)));
-	hdep = R_CONST*Tk*(z-1.-log((z+(1+sqrt(2.))*B)/(z+(1-sqrt(2.))*B))
+	hrs = R_CONST*Tk*(z-1.-log((z+(1+sqrt(2.))*B)/(z+(1-sqrt(2.))*B))
 				*A/(B*sqrt(8.))*(1+k*sqrt(Tred)/sqrt(alph)));
-	sdep = (hdep-gdep)/Tk;
+	srs = (hrs-grs)/Tk;
 
 	// heat capacity part
 	cv = Tk*d2a/(bprsv*sqrt(8.))
 			 * log( (z+B*(1.+sqrt(2.)))/(z+B*(1.-sqrt(2.))) );
 	dPdT = R_CONST/(vol-bprsv) - da/( vol*(vol+bprsv) + bprsv*(vol-bprsv) );
-	dPdV = - R_CONST*Tk/pow((vol-bprsv),2.) + 2*aprsv*(vol+bprsv)/pow((vol*(vol+bprsv)+bprsv*(vol-bprsv)),2.);
+	dPdV = - R_CONST*Tk/pow((vol-bprsv),2.) + 2.*aprsv*(vol+bprsv)/pow((vol*(vol+bprsv)+bprsv*(vol-bprsv)),2.);
 	dVdT = (-1.)*(1./dPdV)*dPdT;
-	cpdep = cv + Tk*dPdT*dVdT - R_CONST;
+	cprs = cv + Tk*dPdT*dVdT - R_CONST;
 
 	// increment thermodynamic properties
 	fugpure = exp(lnf);
 	Fugpure[i][0] = fugpure;
-	Fugpure[i][1] = gdep;  // changed to departure functions, 31.05.2008 (TW)
-	Fugpure[i][2] = hdep;
-	Fugpure[i][3] = sdep;
+	Fugpure[i][1] = grs;  // changed to residual functions, 31.05.2008 (TW)
+	Fugpure[i][2] = hrs;
+	Fugpure[i][3] = srs;
     Fugpure[i][4] = vol;
-    Fugpure[i][5] = cpdep;
+    Fugpure[i][5] = cprs;
 
     return 0;
 }
@@ -796,14 +796,14 @@ long int TPRSVcalc::ResidualFunct( double *fugpure )
 	Grs = (amix/(R_CONST*Tk*sqrt(8.)*bmix) * log((vmix+(1.-sqrt(2.))*bmix)
 		/ (vmix+(1.+sqrt(2.))*bmix))-log(zmix*(1.-bmix/vmix))+zmix-1.)*R_CONST*Tk;
 	Hrs = ((amix-Tk*damix)/(R_CONST*Tk*sqrt(8.)*bmix)*log((vmix+(1.-sqrt(2.))
-		*bmix)/(vmix+(1.+sqrt(2))*bmix))+zmix-1.)*R_CONST*Tk;
+		*bmix)/(vmix+(1.+sqrt(2.))*bmix))+zmix-1.)*R_CONST*Tk;
 	Srs = (Hrs - Grs)/Tk;
 
 	// heat capacity part
 	cv = Tk*d2amix/(bmix*sqrt(8.))
 			 * log( (zmix+B*(1.+sqrt(2.)))/(zmix+B*(1.-sqrt(2.))) );
 	dPdT = R_CONST/(vmix-bmix) - damix/( vmix*(vmix+bmix) + bmix*(vmix-bmix) );
-	dPdV = - R_CONST*Tk/pow((vmix-bmix),2.) + 2*amix*(vmix+bmix)/pow((vmix*(vmix+bmix)+bmix*(vmix-bmix)),2.);
+	dPdV = - R_CONST*Tk/pow((vmix-bmix),2.) + 2.*amix*(vmix+bmix)/pow((vmix*(vmix+bmix)+bmix*(vmix-bmix)),2.);
 	dVdT = (-1.)*(1./dPdV)*dPdT;
 	CPrs = cv + Tk*dPdT*dVdT - R_CONST;
 	Vrs = vmix;
@@ -2865,9 +2865,9 @@ long int TSRKcalc::AB( double Tcrit, double Pcrit, double omg, double N,
 	Tred = Tk/Tcrit;
 	m = 0.48 + 1.574*omg - 0.176*pow(omg,2.);
 	alph = pow(1. + m*(1-sqrt(Tred)), 2.);
-	ac = 0.42747*pow(R_CONST,2.)*pow(Tcrit,2.) / Pcrit;
+	ac = (0.42747)*pow(R_CONST,2.)*pow(Tcrit,2.) / Pcrit;
 	apure = alph*ac;
-	bpure = 0.08664*R_CONST*Tcrit/Pcrit;
+	bpure = (0.08664)*R_CONST*Tcrit/Pcrit;
 	sqa = 1. + m*(1-sqrt(Tred));
 	dsqa = -0.5*m/(sqrt(Tred)*Tcrit);
 	da = 2.*ac*(sqa*dsqa);
@@ -2878,12 +2878,12 @@ long int TSRKcalc::AB( double Tcrit, double Pcrit, double omg, double N,
 }
 
 
-// Calculates fugacities and departure functions of pure fluid species
+// Calculates fugacities and residual functions of pure fluid species
 long int TSRKcalc::FugacityPure( long int i )
 {
 	double Tcrit, Pcrit, Tred, asrk, bsrk, da, d2a, A, B, a2, a1, a0,
 			z1, z2, z3, vol1, vol2, vol3, lnf1, lnf2, lnf3, z, vol, lnf;
-	double gig, hig, sig, cpig, fugpure, gdep, hdep, sdep, cpdep,
+	double gig, hig, sig, cpig, fugpure, grs, hrs, srs, cprs,
 			cv, dPdT, dPdV, dVdT;
 
 	// ideal gas changes from 1 bar to P at T of interest
@@ -2945,25 +2945,25 @@ long int TSRKcalc::FugacityPure( long int i )
 	}
 
 	// calculate thermodynamic properties
-	hdep = - ( 1 - z + 1./(bsrk*R_CONST*Tk) * (asrk-Tk*da) * log(1.+ bsrk/vol) )*R_CONST*Tk;
-	sdep = ( log(z*(1.-bsrk/vol)) + 1./(bsrk*R_CONST) * da * log(1.+bsrk/vol) )*R_CONST;
-	gdep = hdep - Tk*sdep;
+	hrs = - ( 1 - z + 1./(bsrk*R_CONST*Tk) * (asrk-Tk*da) * log(1.+ bsrk/vol) )*R_CONST*Tk;
+	srs = ( log(z*(1.-bsrk/vol)) + 1./(bsrk*R_CONST) * da * log(1.+bsrk/vol) )*R_CONST;
+	grs = hrs - Tk*srs;
 
 	// heat capacity part
 	cv = Tk*d2a/bsrk * log(1.+B/z);
 	dPdT = R_CONST/(vol-bsrk) - da/(vol*(vol+bsrk));
 	dPdV = - R_CONST*Tk/pow((vol-bsrk),2.) + asrk*(2.*vol+bsrk)/pow((vol*(vol+bsrk)),2.);
 	dVdT = (-1.)*(1./dPdV)*dPdT;
-	cpdep = cv + Tk*dPdT*dVdT - R_CONST;
+	cprs = cv + Tk*dPdT*dVdT - R_CONST;
 
 	// increment thermodynamic properties
 	fugpure = exp(lnf);
 	Fugpure[i][0] = fugpure;
-	Fugpure[i][1] = gdep;
-	Fugpure[i][2] = hdep;
-	Fugpure[i][3] = sdep;
+	Fugpure[i][1] = grs;
+	Fugpure[i][2] = hrs;
+	Fugpure[i][3] = srs;
 	Fugpure[i][4] = vol;
-	Fugpure[i][5] = 0.;
+	Fugpure[i][5] = cprs;
 
 	return 0;
 }
@@ -3686,9 +3686,9 @@ long int TPR78calc::AB( double Tcrit, double Pcrit, double omg, double N,
 			k = 0.379642 + 1.48503*omg - 0.164423*pow(omg,2.) + 0.0166666*pow(omg,3.);
 
 	alph = pow(1.+k*(1.-sqrt(Tred)),2.);
-	ac = 0.457235529*pow(R_CONST,2.)*pow(Tcrit,2.) / Pcrit;
+	ac = (0.457235529)*pow(R_CONST,2.)*pow(Tcrit,2.) / Pcrit;
 	apure = alph*ac;
-	bpure = 0.0777960739*R_CONST*Tcrit/Pcrit;
+	bpure = (0.0777960739)*R_CONST*Tcrit/Pcrit;
 	sqa = 1.+k*(1.-sqrt(Tred));
 	dsqa = -0.5*k/(sqrt(Tred)*Tcrit);
 	da = 2.*ac*(sqa*dsqa);
@@ -3699,12 +3699,12 @@ long int TPR78calc::AB( double Tcrit, double Pcrit, double omg, double N,
 }
 
 
-// Calculates fugacities and departure functions of pure fluid species
+// Calculates fugacities and residual functions of pure fluid species
 long int TPR78calc::FugacityPure( long int i )
 {
 	double Tcrit, Pcrit, Tred, apr, bpr, alph, da, d2a, k, A, B, a2, a1, a0,
 			z1, z2, z3, vol1, vol2, vol3, lnf1, lnf2, lnf3, z, vol, lnf;
-	double gig, hig, sig, cpig, fugpure, gdep, hdep, sdep, cpdep,
+	double gig, hig, sig, cpig, fugpure, grs, hrs, srs, cprs,
 			cv, dPdT, dPdV, dVdT;
 
 	// ideal gas changes from 1 bar to P at T of interest
@@ -3768,30 +3768,30 @@ long int TPR78calc::FugacityPure( long int i )
 	}
 
 	// calculate thermodynamic properties
-	alph = apr/(0.457235*pow(R_CONST,2.)*pow(Tcrit,2.) / Pcrit);
+	alph = apr/((0.457235529)*pow(R_CONST,2.)*pow(Tcrit,2.) / Pcrit);
 	k = (sqrt(alph)-1.)/(1.-sqrt(Tred));
-	gdep = R_CONST*Tk*(z-1.-log(z-B)-A/(B*sqrt(8.))
+	grs = R_CONST*Tk*(z-1.-log(z-B)-A/(B*sqrt(8.))
 				*log((z+(1+sqrt(2.))*B)/(z+(1-sqrt(2.))*B)));
-	hdep = R_CONST*Tk*(z-1.-log((z+(1+sqrt(2.))*B)/(z+(1-sqrt(2.))*B))
+	hrs = R_CONST*Tk*(z-1.-log((z+(1+sqrt(2.))*B)/(z+(1-sqrt(2.))*B))
 				*A/(B*sqrt(8.))*(1+k*sqrt(Tred)/sqrt(alph)));
-	sdep = (hdep-gdep)/Tk;
+	srs = (hrs-grs)/Tk;
 
 	// heat capacity part
 	cv = Tk*d2a/(bpr*sqrt(8.))
 			 * log( (z+B*(1.+sqrt(2.)))/(z+B*(1.-sqrt(2.))) );
 	dPdT = R_CONST/(vol-bpr) - da/( vol*(vol+bpr) + bpr*(vol-bpr) );
-	dPdV = - R_CONST*Tk/pow((vol-bpr),2.) + 2*apr*(vol+bpr)/pow((vol*(vol+bpr)+bpr*(vol-bpr)),2.);
+	dPdV = - R_CONST*Tk/pow((vol-bpr),2.) + 2.*apr*(vol+bpr)/pow((vol*(vol+bpr)+bpr*(vol-bpr)),2.);
 	dVdT = (-1.)*(1./dPdV)*dPdT;
-	cpdep = cv + Tk*dPdT*dVdT - R_CONST;
+	cprs = cv + Tk*dPdT*dVdT - R_CONST;
 
 	// increment thermodynamic properties
 	fugpure = exp(lnf);
 	Fugpure[i][0] = fugpure;
-	Fugpure[i][1] = gdep;  // changed to departure functions, 31.05.2008 (TW)
-	Fugpure[i][2] = hdep;
-	Fugpure[i][3] = sdep;
+	Fugpure[i][1] = grs;
+	Fugpure[i][2] = hrs;
+	Fugpure[i][3] = srs;
     Fugpure[i][4] = vol;
-    Fugpure[i][5] = cpdep;
+    Fugpure[i][5] = cprs;
 
 	return 0;
 }
@@ -4017,14 +4017,14 @@ long int TPR78calc::ResidualFunct( double *fugpure )
 	Grs = (amix/(R_CONST*Tk*sqrt(8.)*bmix) * log((vmix+(1.-sqrt(2.))*bmix)
 		/ (vmix+(1.+sqrt(2.))*bmix))-log(zmix*(1.-bmix/vmix))+zmix-1.)*R_CONST*Tk;
 	Hrs = ((amix-Tk*damix)/(R_CONST*Tk*sqrt(8.)*bmix)*log((vmix+(1.-sqrt(2.))
-		*bmix)/(vmix+(1.+sqrt(2))*bmix))+zmix-1.)*R_CONST*Tk;
+		*bmix)/(vmix+(1.+sqrt(2.))*bmix))+zmix-1.)*R_CONST*Tk;
 	Srs = (Hrs - Grs)/Tk;
 
 	// heat capacity part
 	cv = Tk*d2amix/(bmix*sqrt(8.))
 			 * log( (zmix+B*(1.+sqrt(2.)))/(zmix+B*(1.-sqrt(2.))) );
 	dPdT = R_CONST/(vmix-bmix) - damix/( vmix*(vmix+bmix) + bmix*(vmix-bmix) );
-	dPdV = - R_CONST*Tk/pow((vmix-bmix),2.) + 2*amix*(vmix+bmix)/pow((vmix*(vmix+bmix)+bmix*(vmix-bmix)),2.);
+	dPdV = - R_CONST*Tk/pow((vmix-bmix),2.) + 2.*amix*(vmix+bmix)/pow((vmix*(vmix+bmix)+bmix*(vmix-bmix)),2.);
 	dVdT = (-1.)*(1./dPdV)*dPdT;
 	CPrs = cv + Tk*dPdT*dVdT - R_CONST;
 	Vrs = vmix;
