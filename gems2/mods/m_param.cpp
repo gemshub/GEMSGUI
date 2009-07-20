@@ -140,12 +140,6 @@ SPP_SETTING::read(GemDataStream& iss)
     iss.readArray( Pi, 19 );
 }
 
-void BASE_PARAM::write(fstream& oss)
-{
-	oss.write( (char*)&PC, 10*sizeof(short) );
-    oss.write( (char*)&DG, 28*sizeof(double) );
-    oss.write( (char*)&tprn, sizeof(char*) );
-}
 
 TProfil::TProfil( int nrt ):
         TCModule( nrt )

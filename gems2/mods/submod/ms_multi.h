@@ -558,6 +558,8 @@ public:
 
     void multi_realloc( char PAalp, char PSigm );
     void multi_free();
+  //  void test_G0_V0_H0_Cp0_DD_arrays( long int nT, long int nP );
+     
 
 #endif
 

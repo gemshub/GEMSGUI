@@ -116,7 +116,7 @@ public:
    void readMulti( const char* path );
    double calcMulti( long int& PrecLoops_, long int& NumIterFIA_, long int& NumIterIPM_ );
    long int testMulti( );
-
+   void test_G0_V0_H0_Cp0_DD_arrays( long int nT, long int nP );
 };
 
 // Work DC classifier codes  pm->DCCW
