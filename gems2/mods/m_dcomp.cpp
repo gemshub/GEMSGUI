@@ -742,19 +742,27 @@ TDComp::DCthermo( int q, int p )
             aW.twp->CPg = NULL;
         }
 
-        else if( CV == CPM_EMP )  // Calculation of fugacity at X=1 using GC EoS
+        else if( CV == CPM_EMP )  // Calculation of fugacity at (X=1) using CG EoS
         {
+        	double FugProps[6];
         	TCGFcalc aCGF( 1, (aW.twp->P), (aW.twp->TC+273.15) );
             aW.twp->Cemp = dcp->Cemp;
             aW.twp->PdcC = dcp->PdcC;
             aW.twp->TClow = dcp->TCint[0];
-            aCGF.CGcalcFug( );
+            aCGF.CGcalcFugPure( (aW.twp->TClow+273.15), (aW.twp->Cemp), FugProps );
+
+            // increment thermodynamic properties
+            aW.twp->G += 8.31451 * (aW.twp->TC+273.15) * log( FugProps[0] );
+            aW.twp->H += FugProps[2];
+            aW.twp->S += FugProps[3];
+            aW.twp->V = FugProps[4];
+            aW.twp->Fug = FugProps[0] * aW.twp->P;
             aW.twp->Cemp = NULL;
         }
 
-        else if( CV == CPM_PRSV )  // Calculation of fugacity at X=1 using PRSV EoS
+        else if( CV == CPM_PRSV )  // Calculation of fugacity at (X=1) using PRSV EoS
         {
-        	double FugProps[5];
+        	double FugProps[6];
         	TPRSVcalc aPRSV( 1, (aW.twp->P), (aW.twp->TC+273.15) );
         	// aPRSV.TPRSVcalc( 1, aW.twp->P, aW.twp->TC+273.15 );
         	aW.twp->CPg = dcp->CPg;
@@ -771,9 +779,9 @@ TDComp::DCthermo( int q, int p )
         	aW.twp->CPg = NULL;
         }
 
-        else if( CV == CPM_SRK )  // Calculation of fugacity at X=1 using SRK EoS
+        else if( CV == CPM_SRK )  // Calculation of fugacity at (X=1) using SRK EoS
         {
-        	double FugProps[5];
+        	double FugProps[6];
         	TSRKcalc aSRK( 1, (aW.twp->P), (aW.twp->TC+273.15) );
         	aW.twp->CPg = dcp->CPg;
         	aW.twp->TClow = dcp->TCint[0];
@@ -789,9 +797,9 @@ TDComp::DCthermo( int q, int p )
         	aW.twp->CPg = NULL;
         }
 
-        else if( CV == CPM_PR78 )  // Calculation of fugacity at X=1 using PR78 EoS
+        else if( CV == CPM_PR78 )  // Calculation of fugacity at (X=1) using PR78 EoS
         {
-        	double FugProps[5];
+        	double FugProps[6];
         	TPR78calc aPR78( 1, (aW.twp->P), (aW.twp->TC+273.15) );
         	aW.twp->CPg = dcp->CPg;
         	aW.twp->TClow = dcp->TCint[0];

@@ -799,7 +799,6 @@ long int TPRSVcalc::ResidualFunct( double *fugpure )
 
 
 #ifndef IPMGEMPLUGIN
-#include "s_tpwork.h"
 
 // Calculates properties of pure fluids when called from DCthermo
 long int TPRSVcalc::PRSVCalcFugPure( double Tmin, float *Cpg, double *FugProps )
@@ -813,14 +812,14 @@ long int TPRSVcalc::PRSVCalcFugPure( double Tmin, float *Cpg, double *FugProps )
 	if( (Tk >= Tmin) && (Tk < 1e4) && (Pbar >= 1e-5) && (Pbar < 1e5) )
 	{
 		retCode = FugacityPT( 0, Coeff );
-		for( int i=0; i<5; i++ )
+		for( int i=0; i<6; i++ )
 			FugProps[i] = Fugpure[0][i];
 		return retCode;
 	}
 
 	else
 	{
-		for( int i=1; i<4; i++ )
+		for( int i=1; i<6; i++ )
 			FugProps[i] = 0.;
 		FugProps[0] = 1.;
 		FugProps[4] = 8.31451*Tk/Pbar;
@@ -1560,7 +1559,7 @@ double TCGFcalc::K23_13( double T, double ro )
 }
 
 
-double TCGFcalc::DENSITY( double *X,double *param, unsigned long NN ,double Pbar, double T )
+double TCGFcalc::DENSITY( double *X, double *param, unsigned long NN, double Pbar, double T )
 {
 	double P = Pbar * 0.1;
 	double *xtmp;
@@ -2206,66 +2205,44 @@ double TCGFcalc::ROTOTALMIX( double P,double TT,EOSPARAM* param )
 #ifndef IPMGEMPLUGIN
 
 // Calculates properties of pure fluids when called from DCthermo
-long int TCGFcalc::CGcalcFug( void )
+long int TCGFcalc::CGcalcFugPure( double Tmin, float *Cemp, double *FugProps )
 {
+	long int retCode = 0;
 	double T, P, Fugacity = 0.1, Volume = 0.0;
 	double X[1] = {1.};
-	double roro;  // added 21.06.2008 (TW)
+	double roro = 1.;  // added 21.06.2008 (TW)
 	double Coeff[12];  // MAXEOSPARAM = 20;
 	double Eos4parPT[4] = { 0.0, 0.0, 0.0, 0.0 },
 		Eos4parPT1[4] = { 0.0, 0.0, 0.0, 0.0 } ;
-	long int retCode = 0;
 
-	ErrorIf( !aW.twp, "CG EoS", "Undefined twp");
-
-	P = aW.twp->P;
-	T = aW.twp->TC+273.15;
+	T = Tk;
+	P = Pbar;
 
 	for(long int ii=0; ii<12; ii++ )
-		Coeff[ii] = aW.twp->Cemp[ii];
+		Coeff[ii] = (double)Cemp[ii];
 
 	// Calling CG EoS functions here
-	if( T >= aW.twp->TClow +273.15 && T < 1e4 && P >= 1e-6 && P < 1e5 )
-		retCode = CGFugacityPT( Coeff, Eos4parPT, Fugacity, Volume, P, T, roro );
-
-	else
+	if( (Tk >= Tmin) && (Tk < 1e4) && (Pbar >= 1e-6) && (Pbar < 1e5) )
 	{
-		Fugacity = P;
-		Volume = 8.31451*T/P;
-		aW.twp->V = Volume;
-		aW.twp->Fug = Fugacity;
-		aW.twp->wtW[6] = Coeff[0];
-		if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
-			aW.twp->wtW[6] = 1.;                 // foolproof temporary
-		aW.twp->wtW[7] = Coeff[1];
-		aW.twp->wtW[8] = Coeff[2];
-		aW.twp->wtW[9] = Coeff[3];
+		retCode = CGFugacityPT( Coeff, Eos4parPT, Fugacity, Volume, P, T, roro );
+		FugProps[0] = Fugacity/Pbar;
+		FugProps[1] = 8.31451 * Tk * log( Fugacity / P );
+		FugProps[4] = Volume;
+		retCode = CGFugacityPT( Coeff, Eos4parPT1, Fugacity, Volume, P, T+T*DELTA, roro );
+		CGResidualFunct( X, Eos4parPT, Eos4parPT1, 1, roro, T );
+		FugProps[2] = Hrs;
+		FugProps[3] = Srs;
 		return retCode;
 	}
 
-	// increments to thermodynamic properties
-	aW.twp->G += 8.31451 * T * log( Fugacity / P );
-	aW.twp->V = Volume /* /10.  in J/bar */;
-	// aW.twp->U = ((aW.twp->H/4.184)-RP*fg.VLK*fg.P2)*4.184;
-	aW.twp->Fug = Fugacity;   /* fugacity at P */
-
-	// passing corrected EoS coeffs to calculation of fluid mixtures
-	// (possibly not required any more)
-	aW.twp->wtW[6] = Eos4parPT[0];
-	if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
-		aW.twp->wtW[6] = 1.;  // foolproof temporary
-	aW.twp->wtW[7] = Eos4parPT[1];
-	aW.twp->wtW[8] = Eos4parPT[2];
-	aW.twp->wtW[9] = Eos4parPT[3];
-
-	// calculate departure functions and increment thermodynamic properties
-	retCode = CGFugacityPT( Coeff, Eos4parPT1, Fugacity, Volume, P, T+T*DELTA, roro );
-	CGResidualFunct( X, Eos4parPT, Eos4parPT1, 1, roro, T );
-
-	aW.twp->S += Srs;
-	aW.twp->H += Hrs;
-
-    return retCode;
+	else
+	{
+		for( int i=1; i<6; i++ )
+			FugProps[i] = 0.;
+		FugProps[0] = 1.;
+		FugProps[4] = 8.31451*Tk/Pbar;
+		return -1;
+	}
 }
 
 #endif
@@ -3162,7 +3139,6 @@ long int TSRKcalc::ResidualFunct( double *fugpure )
 
 
 #ifndef IPMGEMPLUGIN
-#include "s_tpwork.h"
 
 // Calculates properties of pure fluids when called from DCthermo
 long int TSRKcalc::SRKCalcFugPure( double Tmin, float *Cpg, double *FugProps )
@@ -3176,14 +3152,14 @@ long int TSRKcalc::SRKCalcFugPure( double Tmin, float *Cpg, double *FugProps )
 	if( (Tk >= Tmin) && (Tk < 1e4) && (Pbar >= 1e-5) && (Pbar < 1e5) )
 	{
 		retCode = FugacityPT( 0, Coeff );
-		for( int i=0; i<5; i++ )
+		for( int i=0; i<6; i++ )
 			FugProps[i] = Fugpure[0][i];
 		return retCode;
 	}
 
 	else
 	{
-		for( int i=1; i<4; i++ )
+		for( int i=1; i<6; i++ )
 			FugProps[i] = 0.;
 		FugProps[0] = 1.;
 		FugProps[4] = 8.31451*Tk/Pbar;
@@ -3961,7 +3937,6 @@ long int TPR78calc::ResidualFunct( double *fugpure )
 
 
 #ifndef IPMGEMPLUGIN
-#include "s_tpwork.h"
 
 // Calculates properties of pure fluids when called from DCthermo
 long int TPR78calc::PR78CalcFugPure( double Tmin, float *Cpg, double *FugProps )
@@ -3975,14 +3950,14 @@ long int TPR78calc::PR78CalcFugPure( double Tmin, float *Cpg, double *FugProps )
 	if( (Tk >= Tmin) && (Tk < 1e4) && (Pbar >= 1e-5) && (Pbar < 1e5) )
 	{
 		retCode = FugacityPT( 0, Coeff );
-		for( int i=0; i<5; i++ )
+		for( int i=0; i<6; i++ )
 			FugProps[i] = Fugpure[0][i];
 		return retCode;
 	}
 
 	else
 	{
-		for( int i=1; i<4; i++ )
+		for( int i=1; i<6; i++ )
 			FugProps[i] = 0.;
 		FugProps[0] = 1.;
 		FugProps[4] = 8.31451*Tk/Pbar;

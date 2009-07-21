@@ -335,8 +335,8 @@ class TCGFcalc: public TSolMod
 		// calculates ideal mixing properties
 		long int IdealProp( double *Zid );
 
-		// CGofPureGases - Calc. fugacity for 1 species at X=1
-		long int CGcalcFug( void );  // Calc. fugacity for 1 species at X=1
+		// CGofPureGases, calculates fugacity for 1 species at (X=1)
+		long int CGcalcFugPure( double Tmin, float *Cemp, double *FugProps );  // called from DCthermo
 		long int CGFugacityPT( double *EoSparam, double *EoSparPT, double &Fugacity,
 				double &Volume, double P, double T, double &roro );
 
