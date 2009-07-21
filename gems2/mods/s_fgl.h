@@ -387,8 +387,7 @@ class TPRSVcalc: public TSolMod
 		void free_internal();
 		long int AB( double Tcrit, double Pcrit, double omg, double k1, double k2, double k3,
 				double &apure, double &bpure, double &da, double &d2a );
-		long int FugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
-				double &Fugacity, double &Volume, double &DeltaH, double &DeltaS );
+		long int FugacityPT( long int i, double *EoSparam );
 		long int FugacityPure( long int j ); // Calculates the fugacity of pure species
 		long int Cardano( double a2, double a1, double a0, double &z1, double &z2, double &z3 );
 		long int MixParam( double &amix, double &bmix );
@@ -428,7 +427,7 @@ class TPRSVcalc: public TSolMod
 		long int IdealProp( double *Zid );
 
 		// Calculates pure species properties (called from DCthermo)
-		long int PRSVCalcFugPure( void );
+		long int PRSVCalcFugPure( double Tmin, float *Cpg, double *FugProps );
 
 };
 
@@ -466,8 +465,7 @@ class TSRKcalc: public TSolMod
 		void free_internal();
 		long int AB( double Tcrit, double Pcrit, double omg, double N,
 				double &apure, double &bpure, double &da, double &d2a );
-		long int FugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
-				double &Fugacity, double &Volume, double &DeltaH, double &DeltaS );
+		long int FugacityPT( long int i, double *EoSparam );
 		long int FugacityPure( long int j ); // Calculates the fugacity of pure species
 		long int Cardano( double a2, double a1, double a0, double &z1, double &z2, double &z3 );
 		long int MixParam( double &amix, double &bmix );
@@ -507,7 +505,7 @@ class TSRKcalc: public TSolMod
 		long int IdealProp( double *Zid );
 
 		// Calculates pure species properties (called from DCthermo)
-		long int SRKCalcFugPure( void );
+		long int SRKCalcFugPure( double Tmin, float *Cpg, double *FugProps );
 
 };
 
@@ -545,8 +543,7 @@ class TPR78calc: public TSolMod
 		void free_internal();
 		long int AB( double Tcrit, double Pcrit, double omg, double N,
 				double &apure, double &bpure, double &da, double &d2a );
-		long int FugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
-				double &Fugacity, double &Volume, double &DeltaH, double &DeltaS );
+		long int FugacityPT( long int i, double *EoSparam );
 		long int FugacityPure( long int j ); // Calculates the fugacity of pure species
 		long int Cardano( double a2, double a1, double a0, double &z1, double &z2, double &z3 );
 		long int MixParam( double &amix, double &bmix );
@@ -586,7 +583,7 @@ class TPR78calc: public TSolMod
 		long int IdealProp( double *Zid );
 
 		// Calculates pure species properties (called from DCthermo)
-		long int PR78CalcFugPure( void );
+		long int PR78CalcFugPure( double Tmin, float *Cpg, double *FugProps );
 
 };
 
