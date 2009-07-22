@@ -163,6 +163,8 @@ gems2/mods/gemipm/Makefile.mod_lin svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/Makefile.mod_w32 svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/Makefile.w32 svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/doc/html/GEMS1.PNG -text
+gems2/mods/gemipm/doc/html/IPM-2.png -text
+gems2/mods/gemipm/doc/html/IPM.png -text
 gems2/mods/gemipm/doc/html/gemipm2k-exm.html -text
 gems2/mods/gemipm/doc/html/gemipm2k-inp.html -text
 gems2/mods/gemipm/doc/html/gemipm2k-man.html -text
