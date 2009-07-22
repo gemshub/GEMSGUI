@@ -152,7 +152,7 @@
 ## (5) Some data arrays which are not provided in DATACH and DATABR files
 # B: Full total bulk composition of the initial system (vector b) - see DATACH file for dimension nIC
 <B>
-0.000330000009853393 0.000330000009853393 1.99999988126365e-07 110.683692932129 9.99999940631824e-08 55.3428344726562 0 
+0.00032999999719675 0.00032999999719675 1.9999999466652e-07 110.68369217257 9.9999997333262e-08 55.342836086276 0 
 
 # Initial data for DCs - see DATACH file for dimensions nDC, nDCs
 # Pparc: Partial pressures (fugacities) of dependent components

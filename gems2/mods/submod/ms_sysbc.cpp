@@ -19,6 +19,7 @@
 //
 #include <math.h>
 #include <stdio.h>
+#include <iomanip>
 
 #include "v_object.h"
 #include "m_param.h"
@@ -468,7 +469,7 @@ void TSyst::systbc_calc( int mode )
     //  uint ii;
     double MsysC = 0., MaqC = 0., VaqC = 0., VsysC = 0., R1C = 0.;
     double Xincr, DCmw, ACmw;
-    float *A=0;
+    double *A=0;
     vstr ICs(MAXRKEYLEN);
     TFormula aFo;
     gstring form;
@@ -485,7 +486,7 @@ void TSyst::systbc_calc( int mode )
         {
             if( sy.Icl[i] == S_OFF || !sy.BI[i] || IsDoubleEmpty(sy.BI[i] ))
                 continue;
-            float ICmv = mup->BC[i];
+            double ICmv = mup->BC[i];
             Xincr = aCMP->Reduce_Conc( sy.BIun[i], sy.BI[i], ICmv, 1.0, sy.R1,
                                        sy.Msys, sy.Mwat, sy.Vaq, sy.Maq, sy.Vsys );
             sy.B[i] += Xincr;
@@ -498,7 +499,7 @@ void TSyst::systbc_calc( int mode )
     if( sy.PbDC != S_OFF )
     {
         sy.Lb = 0;
-        A = new float[mup->N];
+        A = new double[mup->N];
         for( j=0; j<mup->L; j++ )
         {
             if( sy.Dcl[j] == S_OFF || !sy.XeD[j] || IsDoubleEmpty( sy.XeD[j] ))
@@ -506,7 +507,7 @@ void TSyst::systbc_calc( int mode )
             //Xincr = 0.;
             DCmw = 0.;
             sy.Lb++;
-            memset( A, 0, sizeof(float)*mup->N );
+            memset( A, 0, sizeof(double)*mup->N );
             // analyse DC formule
             form = aFo.form_extr( j, mup->L, mup->DCF );
             aFo.SetFormula( form.c_str() );   // set formula to analyse
@@ -522,7 +523,7 @@ void TSyst::systbc_calc( int mode )
                         if( sy.Icl[i] == S_OFF )  //we have switch off IC in formule DC
                             goto NEXT_DC;
                         A[i] += aFo.GetSC(ii);
-                        DCmw += (double)(A[i]*mup->BC[i]);
+                        DCmw += A[i]*(double)(mup->BC[i]);
                         break;
                     }
             } // ii
@@ -533,8 +534,8 @@ void TSyst::systbc_calc( int mode )
             for( i=0; i<mup->N; i++ )
                 if( A[i] )
                 {
-                    sy.B[i] += Xincr*(double)(A[i]);
-                    R1C += Xincr*(double)(A[i]);
+                    sy.B[i] += Xincr*(A[i]);
+                    R1C += Xincr*(A[i]);
                 }
             MsysC += Xincr*DCmw;
 NEXT_DC:
@@ -547,7 +548,7 @@ NEXT_DC:
     /* calc bulk chemical composition from COMPOS */
     if( sy.PbAC != S_OFF && mup->La )
     {
-        A = new float[mup->N];
+        A = new double[mup->N];
         aCMP->ods_link(0);
         for( j=0; j<mup->La; j++ )
         {
@@ -555,7 +556,7 @@ NEXT_DC:
                 continue;
             //Xincr = 0.;
             ACmw = 0.;
-            memset( A, 0, sizeof(float)*mup->N );
+            memset( A, 0, sizeof(double)*mup->N );
             aCMP->TryRecInp( mup->SA[j], crt, 0 );
             for(int ii=0; ii<aCMP->bcp->N; ii++ )
             { // cycle on COMPOS elements
@@ -567,8 +568,8 @@ NEXT_DC:
                             //Incomplete++;
                             break;
                         }
-                        A[i] = (float)aCMP->bcp->C[ii];
-                        ACmw += (double)(A[i]*mup->BC[i]);
+                        A[i] = aCMP->bcp->C[ii];
+                        ACmw += A[i]*(double)(mup->BC[i]);
                         break;
                     }
             } // ii
@@ -578,8 +579,8 @@ NEXT_DC:
             for( i=0; i<mup->N; i++ )
                 if( A[i] )
                 {
-                    sy.B[i] += Xincr*(double)(A[i]);
-                    R1C += Xincr*(double)(A[i]);
+                	sy.B[i] += Xincr*(A[i]);
+                    R1C += Xincr*(A[i]);
                 }
             MsysC += Xincr*ACmw;
         } //  j
@@ -694,7 +695,10 @@ NEXT_DC:
             aICnums.Add(i);
             sy.Icl[i] = S_REM;
         }
-        else sy.Icl[i] = S_ON;
+        else 
+        {
+        	sy.Icl[i] = S_ON;
+        }
     }
 
     if( aICkeys.GetCount() > 0 )
@@ -722,6 +726,7 @@ NEXT_DC:
             }
         }
     }
+	NormDoubleRound(sy.B, N, 13 ); // SD 22/07/2009
     if( A )
         delete[] A;
     ///  pVisor->Update();  //Sveta
@@ -737,7 +742,7 @@ void TSyst::PHbcalc( double *MsysC, double *MaqC, double *R1C,
     TIArray<TFormula> aFo;
     gstring form;
     int i, j, jf=0, jsf=0, k, Lf;
-    float *A;
+    double *A;
     double *B, Xf, Mass, Xincr;
     double *X;
 
@@ -770,10 +775,10 @@ NEXT:
             aFo[i].SetFormula( form.c_str() ); // and ce_fscan
             X[i] = aSE->stp->Y[jsf+i];   // load mole quantities
         }
-        A = new float[Lf*mup->N];
-        fillValue( A, (float)0., (Lf*mup->N) );
+        A = new double[Lf*mup->N];
+        fillValue( A, 0., (Lf*mup->N) );
         B = new double[mup->N];
-        memset( B, 0, sizeof(double)*(mup->N) );
+        fillValue( B, 0., (mup->N) );
 
         for( i=0; i<Lf; i++ )
             aFo[i].Stm_line( mup->N, A+i*mup->N, (char *)mup->SB, mup->Val );
@@ -806,7 +811,7 @@ NEXT:
     } /* k */
 }
 
-void TSyst::stbal( int N, int L, float *Smatr, double *DCstc,
+void TSyst::stbal( int N, int L, double *Smatr, double *DCstc,
                    double *ICm )
 {
     int i, j;
@@ -820,20 +825,20 @@ void TSyst::stbal( int N, int L, float *Smatr, double *DCstc,
         if( fabs( DCv ) < 1e-19 )
             continue;
         for( i=0; i<N; i++ )
-            ICm[i] += (double)(*(Smatr+i+N*j)) * DCv;
+            ICm[i] += (*(Smatr+i+N*j)) * DCv;
     }
 }
 
 //Calc mol mass ofDC by gstring of stehiometric matr and vector
 // atom mass
-double TSyst::MolWeight( int N, float *ICaw, float *Smline )
+double TSyst::MolWeight( int N, float *ICaw, double *Smline )
 {
     int i;
     double MW = 0.0;
 
     for( i=0; i<N; i++ )
         if( ICaw[i] && Smline[i] )
-            MW += (double)(ICaw[i]) * (double)(Smline[i]);
+            MW += (double)(ICaw[i]) * (Smline[i]);
 
     return( MW );
 }

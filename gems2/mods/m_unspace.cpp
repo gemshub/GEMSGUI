@@ -549,7 +549,7 @@ void TUnSpace::work_dyn_kill()
     usp->POR = (float *)aObj[ o_unpor].Free();
     aObj[ o_unpmr].SetPtr( usp->pmr );
     aObj[ o_unpmr].SetDim( usp->Q, 1 );
-    usp->A = (float *)aObj[ o_una].Free();
+    usp->A = (double *)aObj[ o_una].Free();
     usp->Zcp = (double *)aObj[ o_unzcp].Free();
     usp->Zmin = (double *)aObj[ o_unzmin].Free();
     usp->Zmax = (double *)aObj[ o_unzmax].Free();
@@ -591,7 +591,7 @@ void TUnSpace::work_dyn_new()
 {
 
 //  work (not in record)
-    usp->A = (float *)aObj[ o_una].Alloc( usp->L, usp->N, F_);
+    usp->A = (double *)aObj[ o_una].Alloc( usp->L, usp->N, D_);
     usp->sv = (short *)aObj[ o_unsv].Alloc( usp->Q, 1, I_ );
 
     usp->Zcp = (double *)aObj[ o_unzcp].Alloc( usp->Q, 1, D_);

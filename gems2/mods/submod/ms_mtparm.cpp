@@ -27,12 +27,12 @@
 #include "service.h"
 #include "visor.h"
 
-inline
+/*inline
 double ROUND_EXP(double x, int ex )
 {    double dd = pow( 10., double(ex) );
      return double( int( (x)*dd+.5 ) ) / dd;
 }
-
+*/
 
 TMTparm::TMTparm( int nrt, RMULTS* mu_ ):
         TSubModule( nrt ), mup(mu_)
@@ -578,6 +578,10 @@ if( P < 1e-5 )  // trial check  5.12.2006
 
     if( tp.mark && tp.G )
         polmod_test();
+    
+	NormDoubleRound(tp.G, tp.L, 13 ); // SD 22/07/2009
+	NormDoubleRound(tp.RoW, 13 ); 
+	NormDoubleRound(tp.EpsW, 13 ); 
 }
 
 // test polimorf modifications

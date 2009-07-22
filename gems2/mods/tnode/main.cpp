@@ -34,12 +34,12 @@ int main( int argc, char* argv[] )
  {
    // Analyzing command line arguments ( Default arguments)
      char ipm_input_file_list_name[256] = "system-dat.lst";
-//     char dbr_input_file_name[256] = "system-dbr.dat";
+     char dbr_input_file_name[256] = "system-dbr.dat";
 
      if (argc >= 2 )  // list of files needed as input for initializing GEMIPM2K
        strncpy( ipm_input_file_list_name, argv[1], 256);
-//     if (argc >= 3 ) // input file for boundary conditions
-//       strncpy( dbr_input_file_name, argv[2], 256);
+     if (argc >= 3 ) // input file for boundary conditions
+       strncpy( dbr_input_file_name, argv[2], 256);
 
      // Creates TNode structure instance accessible trough the "node" pointer
       TNode* node  = new TNode();
@@ -121,17 +121,18 @@ int main( int argc, char* argv[] )
 cout << "Begin Initialiation part" << endl;
       // Initialization of GEMIPM2K and chemical information for nodes kept in the FMT part
       long int in;
-      for(  in=0; in<nNodes; in++ )
+      for(  in=1; in<nNodes; in++ )
       {
     	  // Asking GEM to run with automatic initial approximation
     	  dBR->NodeStatusCH = NEED_GEM_AIA;
     	  // (2) re-calculating equilibrium by calling GEMIPM2K, getting the status back
-          m_NodeStatusCH[in] = node->GEM_run(1., false);
+          m_NodeStatusCH[in] = node->GEM_run( false);
           if( !( m_NodeStatusCH[in] == OK_GEM_AIA || m_NodeStatusCH[in] == OK_GEM_SIA ) )
           {
               cout << "Error occured during re-calculating equilibrium" ;
               return 5;
           }
+
           // (6) Extracting GEMIPM input data to mass-transport program arrays
           node->GEM_restore_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_T[in], m_P[in],
             m_Vs[in], m_Ms[in], m_bIC[in], m_dul[in], m_dll[in], m_aPH[in] );
@@ -147,6 +148,36 @@ cout << "Begin Initialiation part" << endl;
           // Here the file output for the initial conditions can be implemented
         }
 
+      // Read DATABR structure from text file (read boundary condition)
+      node->GEM_read_dbr( dbr_input_file_name );
+
+      for(  in=0; in<1; in++ )
+      {
+    	  // Asking GEM to run with automatic initial approximation
+    	  dBR->NodeStatusCH = NEED_GEM_AIA;
+    	  // (2) re-calculating equilibrium by calling GEMIPM2K, getting the status back
+          m_NodeStatusCH[in] = node->GEM_run( false);
+          if( !( m_NodeStatusCH[in] == OK_GEM_AIA || m_NodeStatusCH[in] == OK_GEM_SIA ) )
+          {
+              cout << "Error occured during re-calculating equilibrium" ;
+              return 5;
+          }
+
+          // (6) Extracting GEMIPM input data to mass-transport program arrays
+          node->GEM_restore_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_T[in], m_P[in],
+            m_Vs[in], m_Ms[in], m_bIC[in], m_dul[in], m_dll[in], m_aPH[in] );
+          
+          // (7) Extracting GEMIPM output data to mass-transport program arrays
+          node->GEM_to_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_IterDone[in],
+            m_Vs[in], m_Ms[in], m_Gs[in], m_Hs[in], m_IC[in], m_pH[in], m_pe[in],
+            m_Eh[in], m_rMB[in], m_uIC[in], m_xDC[in], m_gam[in], m_xPH[in],
+            m_vPS[in], m_mPS[in], m_bPS[in], m_xPA[in] );
+
+          // Here the setup of initial differences between node compositions,
+          //    temperatures, etc. can be implemented
+          // Here the file output for the initial conditions can be implemented
+     }
+      
 cout << "End Initialiation part" << endl;
         int xCalcite = node->Ph_name_to_xDB("Calcite");
         int xDolomite = node->Ph_name_to_xDB("Dolomite-dis");

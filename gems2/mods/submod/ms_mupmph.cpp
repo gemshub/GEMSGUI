@@ -194,7 +194,7 @@ void TMulti::multi_sys_dc()
 {
     int j, ii, L, iZ=0;
     short jj, jja, ja, kk;
-    float a, *A; // , Vv =0.;
+    double a, *A; // , Vv =0.;
     double mm;
     TIArray<TFormula> aFo;
     gstring form;
@@ -214,8 +214,8 @@ void TMulti::multi_sys_dc()
             aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
         }
 
-        A = new float[mup->N*mup->L];
-        memset(A, 0, sizeof(float)*(mup->N*mup->L) );
+        A = new double[mup->N*mup->L];
+        fillValue(A, 0., (mup->N*mup->L) );
         for( ii=0; ii<mup->L; ii++ )
             aFo[ii].Stm_line( mup->N, A+ii*mup->N, (char *)mup->SB, mup->Val );
         aFo.Clear();

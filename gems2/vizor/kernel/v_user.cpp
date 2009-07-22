@@ -20,14 +20,41 @@
 #include <stdlib.h>
 #include <time.h>
 #include <fstream>
-
+#include <iomanip>
+#include  <iostream>
+#include <math.h>
 #include "v_user.h"
 
-//____________________________________________________________________________
-//
-// Memory allocation
-//____________________________________________________________________________
 
+
+double NormDoubleRound(double aVal, int digits)
+{
+    double val;
+    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
+    sprintf(vbuf, "%.*le" , digits , aVal);
+    sscanf(vbuf.p, "%le", &val );
+	return val;
+}
+
+void NormDoubleRound(double *aArr, int size, int digits)
+{
+    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
+    
+	for(int ii=0; ii<size; ii++ )
+    { sprintf(vbuf, "%.*le" , digits, aArr[ii]);
+      sscanf(vbuf.p, "%le", &aArr[ii] );
+    }  
+}
+
+void NormFloatRound(float *aArr, int size, int digits)
+{
+    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
+    
+	for(int ii=0; ii<size; ii++ )
+    { sprintf(vbuf, "%.*e" , digits, aArr[ii]);
+      sscanf(vbuf.p, "%e", &aArr[ii] );
+    }  
+}
 
 gstring
 u_makepath(const gstring& dir,

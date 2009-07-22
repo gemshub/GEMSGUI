@@ -308,11 +308,11 @@ void TCompos::bc_work_dyn_new()
         for( int i=0; i<Nic; i++)
             memcpy( bcp->SB1[i], aKey[i].c_str(), IC_RKLEN);
     }
-    bcp->ICw = (float *)aObj[ o_bcicw ].Alloc(bcp->Nmax, 1, F_);
+    bcp->ICw = (double *)aObj[ o_bcicw ].Alloc(bcp->Nmax, 1, D_);
     if( bcp->A )
         delete[] bcp->A;
-    bcp->A = new float[bcp->Nmax];
-    memset(bcp->A, 0, sizeof(float)*(bcp->Nmax) );
+    bcp->A = new double[bcp->Nmax];
+    memset(bcp->A, 0, sizeof(double)*(bcp->Nmax) );
 
     // Realloc COMPOS: Inserted by DAK 22.10.99
     bcp->C = (double *)aObj[ o_bccv].Alloc( bcp->Nmax, 1, D_ );
@@ -341,7 +341,7 @@ void TCompos::bc_work_dyn_kill()
 {
     bcp->Nmax = 0;  // Restored by DAK 22.10.99
     bcp->SB1 = (char (*)[IC_RKLEN])aObj[ o_bcsb1 ].Free();
-    bcp->ICw = (float *)aObj[ o_bcicw ].Free();
+    bcp->ICw = (double *)aObj[ o_bcicw ].Free();
     delete[] bcp->A;
     bcp->A =0;
     if( C )
@@ -712,7 +712,7 @@ TCompos::RecCalc( const char* key )
     short wps;
     double MsysC = 0., R1C = 0.;
     double Xincr, ICmw, DCmw;
-    float *A;
+    double *A;
     vstr ICs(MAXRKEYLEN+10), pkey(MAXRKEYLEN+10);
     char *Formula, *CIcl;
     time_t crt, tim;
@@ -727,7 +727,10 @@ TCompos::RecCalc( const char* key )
     aRC->ods_link(0);
 
     bc_work_dyn_new();  // allocate work arrays and set bcp->Nmax
-
+//    NormFloatRound(bcp->CI, bcp->Nc, 7 );
+//    NormFloatRound(bcp->CD, bcp->Ld, 7 );
+//    NormFloatRound(bcp->CA, bcp->La, 7 );
+     
 SPECIFY_C:
 
 	memset( pkey, 0, MAXRKEYLEN+9 );
@@ -739,10 +742,12 @@ SPECIFY_C:
         aIC->TryRecInp( pkey, crt, 0 );
         /* atomic mass and valence*/
         if( IsFloatEmpty( aIC->icp->awt ))
-            bcp->ICw[i] = 0;
-        else bcp->ICw[i] = aIC->icp->awt;
+            bcp->ICw[i] = 0.;
+        else bcp->ICw[i] = (double)aIC->icp->awt;
         /* icp->val; */
     }
+//   NormDoubleRound(bcp->ICw, bcp->Nmax, 7 );
+    
     if( !C )
         C = new double[bcp->Nmax];
     fillValue( C, 0., bcp->Nmax );
@@ -751,8 +756,8 @@ SPECIFY_C:
     { /*  Through IC */
         if( !CI )
         {
-            CI =new float[bcp->Nmax];
-            memset( CI, 0, sizeof(float)*bcp->Nmax );
+            CI =new double[bcp->Nmax];
+            memset( CI, 0, sizeof(double)*bcp->Nmax );
             CIcl = new char[bcp->Nmax];
             memset( CIcl, QUAN_MOL, bcp->Nmax );
         }
@@ -766,7 +771,7 @@ SPECIFY_C:
                     goto IC_FOUND;
             Error( GetName(), "No get index im!");
 IC_FOUND:
-            CI[im] = bcp->CI[i];
+            CI[im] = (double)bcp->CI[i];
             CIcl[im] = bcp->CIcl[i];
             ICmw = bcp->ICw[im];
             Xincr = Reduce_Conc( CIcl[im], CI[im], ICmw, 1.0, bcp->R1,
@@ -823,7 +828,7 @@ IC_FOUND:
                 continue;
             /*Xincr = 0.;*/
             DCmw = 0.;
-            memset( A, 0, sizeof(float)*bcp->Nmax );
+            memset( A, 0, sizeof(double)*bcp->Nmax );
             /* Get DC formula and test it */
             aFo.SetFormula( Formula );   // set formula to analyse
             for(int ii=0; ii<aFo.GetIn(); ii++ )
@@ -841,13 +846,13 @@ IC_FOUND:
             } /* ii */
 
             if( j<Ld )
-                Xincr = Reduce_Conc( bcp->CDcl[j], bcp->CD[j], DCmw, 1.0, bcp->R1,
+                Xincr = Reduce_Conc( bcp->CDcl[j], (double)bcp->CD[j], DCmw, 1.0, bcp->R1,
                        bcp->Msys, bcp->Mwat, bcp->Vaq, bcp->Maq, bcp->Vsys );
             else if( j<bcp->Ld+bcp->La )
-                Xincr = Reduce_Conc( bcp->AUcl[j-Ld], bcp->CA[j-Ld], DCmw, 1.0,
+                Xincr = Reduce_Conc( bcp->AUcl[j-Ld], (double)bcp->CA[j-Ld], DCmw, 1.0,
                   bcp->R1, bcp->Msys, bcp->Mwat, bcp->Vaq, bcp->Maq, bcp->Vsys );
             else
-                Xincr = Reduce_Conc( bcp->PcRes, bcp->R2, DCmw, 1.0,
+                Xincr = Reduce_Conc( bcp->PcRes, (double)bcp->R2, DCmw, 1.0,
                  bcp->R1, bcp->Msys, bcp->Mwat, bcp->Vaq, bcp->Maq, bcp->Vsys );
             /*   if( Xincr < 1e-15 )
                    continue;   30.4.96 */
@@ -883,7 +888,7 @@ IC_FOUND:
         /*Xincr = 1.*/;
     else
     { /* normalisation */
-        Xincr = bcp->R1 / R1C;
+        Xincr = (double)bcp->R1 / R1C;
         MsysC = 0.0;
         for( i=0; i<bcp->Nmax; i++ )
             if( fabs( C[i] ) >= 1e-12 )
@@ -901,7 +906,7 @@ IC_FOUND:
         /*Xincr = 1.*/;
     else
     { /* normalisation */
-        Xincr = bcp->Msys / MsysC;
+        Xincr = (double)bcp->Msys / MsysC;
         R1C = 0.0;
         for( i=0; i<bcp->Nmax; i++ )
             if( fabs( C[i] ) >= 1e-12 )
@@ -941,6 +946,7 @@ IC_FOUND:
             bcp->CIcl[i1] = CIcl[i];
         }
     }
+	NormDoubleRound(bcp->C, bcp->N,6 ); // SD 22/07/2009
     bc_work_dyn_kill();
     TCModule::RecCalc(key);
 }

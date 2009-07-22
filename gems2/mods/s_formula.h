@@ -32,8 +32,8 @@ struct ICTERM
 { // description of parsed element
     gstring ick;
     short val;             // valence IC
-    float stoc;          // stoich. coef.
-    ICTERM( const char* aIck, short aVal, float aStoc ):
+    double stoc;          // stoich. coef.
+    ICTERM( const char* aIck, short aVal, double aStoc ):
             ick(aIck), val(aVal), stoc(aStoc)
     {}
 
@@ -51,7 +51,7 @@ class Formuan  // stack for analyzing formula
     char *cur;   // current position
     char *next;  // position of end of token +1
     int lev;     // level of recursion
-    float mult[MAXLEVELS];  // stack stoich. coef.
+    double mult[MAXLEVELS];  // stack stoich. coef.
 
     TIArray<ICTERM> itt_;
 
@@ -63,7 +63,7 @@ protected:
     char *xblanc( char *cur );
     int ictcomp( int ii, const char *ick, short val );
     void icadd(  const char *icn,
-                 const char *iso, short val, float csto );
+                 const char *iso, short val, double csto );
     int bterm();
     int rterm();
     int isotop();
@@ -75,22 +75,22 @@ protected:
     void iso_get( gstring& isotop );
     void symb_get( gstring& ic );
     void val_get( short& val );
-    void stoc_get( float& bstoc );
+    void stoc_get( double& bstoc );
 
 public:
 
     Formuan( const char * formula );
     ~Formuan();
 
-    float scan_formulae( TIArray<ICTERM>& tt );
+    double scan_formulae( TIArray<ICTERM>& tt );
 };
 
 class TFormula  // description of disassembled formula token
 {
-    float aZ;   // calculated charge in Mol
+    double aZ;   // calculated charge in Mol
 
     TCStringArray  aCn;  // list of IC
-    TOArray<float> aSC;  // list of stoichiometric coef.
+    TOArray<double> aSC;  // list of stoichiometric coef.
     TOArray<short> aVal;  // list of valence numbers
 
     gstring aFormula;  // analayzed formula
@@ -110,15 +110,15 @@ public:
     {
         return aCn[ii].c_str();
     }
-    float GetSC( int ii ) const
+    double GetSC( int ii ) const
     {
         return aSC[ii];
     }
-    float GetVal( int ii ) const
+    short GetVal( int ii ) const
     {
         return aVal[ii];
     }
-    float GetZ() const
+    double GetZ() const
     {
         return aZ;
     }
@@ -136,7 +136,7 @@ public:
     void SetFormula( const char * StrFopm ); // and ce_fscan
     int Fmwtz( double &Z, double &mW, double &eSm, short *lAn );
     void TestIC( const char *key, int N, char *ICsym );
-    void Stm_line( int N, float *Sml, char *ICsym, short *ICval );
+    void Stm_line( int N, double *Sml, char *ICsym, short *ICval );
     void Reset();
     gstring form_extr( int nCk, int L, char *Cfor );
 

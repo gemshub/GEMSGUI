@@ -375,7 +375,7 @@ void TGEM2MT::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
   int ii;
 
   if( !siz_ )
-  { mtp->An = (float *)aObj[ o_mtan ].Free();
+  { mtp->An = (double *)aObj[ o_mtan ].Free();
     return;
   }
   for( ii=0; ii<siz_; ii++ )
@@ -389,8 +389,8 @@ void TGEM2MT::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
   ErrorIf( mtp->Nb != TProfil::pm->mup->N, GetName(),
                "Illegal data in mtp->Nb ");
 
-  mtp->An = (float *)aObj[ o_mtan ].Alloc( siz_, mtp->Nb, F_ );
-  memset(mtp->An, 0, sizeof(float)*(siz_*mtp->Nb) );
+  mtp->An = (double *)aObj[ o_mtan ].Alloc( siz_, mtp->Nb, D_ );
+  fillValue(mtp->An, 0., (siz_*mtp->Nb) );
   for( ii=0; ii<siz_; ii++ )
      aFo[ii].Stm_line( TProfil::pm->mup->N, mtp->An+ii*TProfil::pm->mup->N,
            (char *)TProfil::pm->mup->SB, TProfil::pm->mup->Val );
@@ -406,8 +406,8 @@ TGEM2MT::Bn_Calc()
     double MsysC = 0., R1C = 0.;
     double Xincr, ICmw, DCmw;
     vstr  pkey(MAXRKEYLEN+10);
-    float  *ICw;  //IC atomic (molar) masses [0:Nmax-1]
-    float *A;
+    double  *ICw;  //IC atomic (molar) masses [0:Nmax-1]
+    double *A;
     time_t crt;
 
     if( mtp->PvICi == S_OFF  &&   mtp->PvAUi == S_OFF )
@@ -416,7 +416,7 @@ TGEM2MT::Bn_Calc()
 // get data fron IComp
     TIComp* aIC=(TIComp *)(&aMod[RT_ICOMP]);
     aIC->ods_link(0);
-    ICw = new float[mtp->Nb];
+    ICw = new double[mtp->Nb];
     memset( pkey, 0, MAXRKEYLEN+9 );
     for( i=0; i<mtp->Nb; i++ )
     {

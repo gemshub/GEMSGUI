@@ -215,7 +215,7 @@ float (*grid)[3];      // Array of grid point locations, size is nC
 
 
 /* Work arrays */
- float
+ double
    *An,  // [Lbi][N] stoich matrix for formula units from the for_i list
     *Ae  // [nE][N] stoich matrix for for diffusing electrolytes
    ;

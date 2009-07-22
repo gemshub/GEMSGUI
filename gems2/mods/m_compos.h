@@ -72,7 +72,7 @@ typedef struct
     char (*SA)[MAXFORMUNIT];// List of formula units
     char (*SM)[DC_RKLEN]; // List of DC record keys      [0:Ld-1]
     // COMPOS Work arrays
-    float *A,   // stoichiometry matrix formul. ed and DC  [0:Nmax-1]
+    double *A,   // stoichiometry matrix formul. ed and DC  [0:Nmax-1]
     *ICw  //IC atomic (molar) masses [0:Nmax-1]
     ;
     char (*SB1)[IC_RKLEN], //Complete work list of IC keys in ICOMP chain [0:Nmax-1]
@@ -93,7 +93,7 @@ class TCompos : public TCModule
 
     // work data for calc
     double  *C;
-    float *CI;
+    double *CI;
     char *CIcl;
 
 

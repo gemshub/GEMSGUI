@@ -52,6 +52,9 @@ typedef unsigned int uint;
 #endif //  __noborl
 
 void Gcvt(double number, size_t ndigit, char *buf);
+double NormDoubleRound(double aVal, int digits);
+void NormDoubleRound(double *aArr, int size, int digits);
+void NormFloatRound(float *aArr, int size, int digits);
 
 inline
 int ROUND(double x )
@@ -86,6 +89,15 @@ void copyValues( double* arr, float* data, int size )
     return;
   for(int ii=0; ii<size; ii++)
     arr[ii] = (double)data[ii];
+}
+
+inline
+void copyValues( float* arr, double* data, int size )
+{
+  if( !arr || !data )
+    return;
+  for(int ii=0; ii<size; ii++)
+    arr[ii] = (float)data[ii];
 }
 
 inline

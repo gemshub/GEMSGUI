@@ -284,7 +284,7 @@ double
     char (*sdval)[V_SD_VALEN]; // Comments to data sources [Nsd]
 
     // work data
-float
+double
   *A;   // work stoichiometry matrix in project/system indexation
 
 }

@@ -84,7 +84,7 @@ Formuan::~Formuan()
 double Formuan::charge( const char *chan )
 {
 //    int cha=1;
-float cha = 1.0;
+double cha = 1.0;
     int sign = 1;
     double aZ = 0.0;
     switch( *chan )
@@ -101,7 +101,7 @@ float cha = 1.0;
         }
         else
 //            if( sscanf( chan+1, "%d", &cha ) )
-            if( sscanf( chan+1, "%g", &cha ) )
+            if( sscanf( chan+1, "%lg", &cha ) )
             {
 //                aZ += (float)(cha*sign);
                 aZ += cha * sign;
@@ -334,11 +334,11 @@ int Formuan::icstoc()
 }
 
 //get <elem_st_coef>  ::= <real>
-void Formuan::stoc_get( float& bstoc )
+void Formuan::stoc_get( double& bstoc )
 {
     int len = next - cur;
     gstring buf( cur, 0, len );
-    if( sscanf( buf.c_str(), " %g", &bstoc )) //%lg - double
+    if( sscanf( buf.c_str(), " %lg", &bstoc )) //%lg - double
     {
         cur += len;
     }
@@ -356,7 +356,7 @@ int Formuan::ictcomp( int ii, const char *ick, short val )
 
 //add component to sorted list
 void Formuan::icadd(  const char *icn,
-                      const char *iso,short val,float csto)
+                      const char *iso,short val,double csto)
 {
     char ICkey[MAXICNAME+MAXSYMB+1];
     int iRet;
@@ -386,7 +386,7 @@ void Formuan::icadd(  const char *icn,
 }
 
 // scan <fterm> s
-float Formuan::scan_formulae( TIArray<ICTERM>& tt )
+double Formuan::scan_formulae( TIArray<ICTERM>& tt )
 {
 //    char savc=' ';
     char *pp, *fs;
@@ -394,13 +394,13 @@ float Formuan::scan_formulae( TIArray<ICTERM>& tt )
 
     int State = SCAN_YES;
     short val;
-    float stoc, aZ =0.0;
+    double stoc, aZ =0.0;
     gstring ic_symb, ic_isotop;
 
     cur = form_buf;
     next = cur;
     lev = 0;
-    memset( mult, 0, MAXLEVELS*sizeof(float) );
+    memset( mult, 0, MAXLEVELS*sizeof(double) );
 
     itt_.Clear();
 
@@ -695,14 +695,14 @@ const char* tc_ecname    ="Zz";
 
 // get string of stoichiometric matrix from unpack formulae,
 // ICsym - list of IC names, ICval standart valence
-void TFormula::Stm_line( int N, float *Sml, char *ICsym, short *ICval )
+void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
 {
     uint i, ii;
     int jj=-1;
     vstr ICS(MAXICNAME+MAXSYMB+10);
     char *icsp = ICS;
 
-    memset( Sml, 0, N*sizeof(float));
+    fillValue( Sml, 0., N);
     for( i=0; i<aCn.GetCount(); i++ )
     {
         memset( ICS, ' ', MAXICNAME+MAXSYMB );
@@ -719,7 +719,7 @@ void TFormula::Stm_line( int N, float *Sml, char *ICsym, short *ICval )
         }
         if( jj==-1 )
             Error( icsp, "E33FPrun: This is not a symbol of IComp!");
-        Sml[jj] += aSC[i];
+        Sml[jj] += (float)aSC[i];
         if( aVal[i] == SHORT_EMPTY/*I_EMPTY*/ )
             aVal[i] = ICval[jj];
     }
@@ -733,15 +733,15 @@ void TFormula::Stm_line( int N, float *Sml, char *ICsym, short *ICval )
         aZ += aVal[i] * aSC[i];
 
     // Sveta
-    float tt=aSC[ii];
+    double tt=aSC[ii];
     if( ii < aCn.GetCount() )
-        if( fabs( (double)(aZ - tt) ) > 1e-6 )
+        if( fabs( (aZ - tt) ) > 1e-6 )
         {
             gstring str = " in the formula: ";
             str +=  aFormula;
             str += "\n calculated charge: ";
             vstr   buf(40);
-            sprintf( buf, "%g != %g", aZ, tt );
+            sprintf( buf, "%lg != %lg", aZ, tt );
             str += buf.p;
  aSC[ii] = aZ;  // KD 03.01.04  - temporary workaround (adsorption)
             vfMessage( 0,  "W34FPrun: Charge disbalance ", str.c_str() );

@@ -124,11 +124,16 @@ void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
                "Illegal data in dtp->Nb ");
 
   dtp->An = (float *)aObj[ o_dtan ].Alloc( siz_, dtp->Nb, F_ );
-dtp->Asiz = (short)siz_;
-memset(dtp->An, 0, sizeof(float)*(siz_*dtp->Nb) );
+  dtp->Asiz = (short)siz_;
+  double *AA = new double[TProfil::pm->mup->N]; // dtp->An must be double SD 21/07/2009
+  fillValue(dtp->An, (float)0., (siz_*dtp->Nb) );
   for( ii=0; ii<siz_; ii++ )
-     aFo[ii].Stm_line( TProfil::pm->mup->N, dtp->An+ii*TProfil::pm->mup->N,
-           (char *)TProfil::pm->mup->SB, TProfil::pm->mup->Val );
+  {  fillValue(AA, 0., TProfil::pm->mup->N );
+     aFo[ii].Stm_line( TProfil::pm->mup->N, AA,
+             (char *)TProfil::pm->mup->SB, TProfil::pm->mup->Val );
+     copyValues( dtp->An+ii*TProfil::pm->mup->N, AA, dtp->Nb );
+  }	  
+  delete[] AA;
   aFo.Clear();
 }
 

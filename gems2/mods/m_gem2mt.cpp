@@ -373,8 +373,8 @@ mtp->nPmax = (short *)aObj[o_mtnpmax].GetPtr();
 mtp->ParTD = (short (*)[6])aObj[o_mtpartd].GetPtr();
 
 // work
-    mtp->An = (float *)aObj[ o_mtan].GetPtr();
-mtp->Ae = (float *)aObj[ o_mtae].GetPtr();
+    mtp->An = (double *)aObj[ o_mtan].GetPtr();
+mtp->Ae = (double *)aObj[ o_mtae].GetPtr();
     mtp->gfc = (double *)aObj[ o_mtgc].GetPtr();
     mtp->etext = (char *)aObj[ o_mwetext].GetPtr();
     mtp->tprn = (char *)aObj[ o_mwtprn].GetPtr();
@@ -444,8 +444,8 @@ mtp->nPmax = (short *)aObj[o_mtnpmax].Free();
 mtp->ParTD = (short (*)[6])aObj[o_mtpartd].Free();
 
 // work
-    mtp->An = (float *)aObj[ o_mtan].Free();
-    mtp->Ae = (float *)aObj[ o_mtae].Free();
+    mtp->An = (double *)aObj[ o_mtan].Free();
+    mtp->Ae = (double *)aObj[ o_mtae].Free();
     mtp->gfc = (double *)aObj[ o_mtgc].Free();
 if( mtp->yfb) 
 {	
@@ -515,7 +515,7 @@ if( mtp->PvAUi == S_OFF )
       mtp->CAb = (float *)aObj[ o_mtcab].Free();
       mtp->for_i = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_i].Free();
       mtp->AUcln = (char *)aObj[ o_mtaucln].Free();
-      mtp->An = (float *)aObj[ o_mtan].Free();
+      mtp->An = (double *)aObj[ o_mtan].Free();
       mtp->Lbi = 0;
     }
     else
@@ -524,7 +524,7 @@ if( mtp->PvAUi == S_OFF )
       mtp->for_i = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_i].Alloc(
           1, mtp->Lbi, MAXFORMUNITDT);
       mtp->AUcln = (char *)aObj[ o_mtaucln].Alloc( 1, mtp->Lbi, A_);
-      mtp->An = (float *)aObj[ o_mtan].Alloc( mtp->Lbi, mtp->Nb, F_ );
+      mtp->An = (double *)aObj[ o_mtan].Alloc( mtp->Lbi, mtp->Nb, D_ );
     }
 
 if( mtp->PvFDL == S_OFF )
@@ -593,7 +593,7 @@ if( mtp->PvFDL == S_OFF )
    {
      mtp->DEl = (float*)aObj[ o_mtdel].Free();
      mtp->for_e = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_e].Free();
-     mtp->Ae = (float*)aObj[ o_mtae].Free();
+     mtp->Ae = (double*)aObj[ o_mtae].Free();
      mtp->nEl = 0;
    }
    else
@@ -601,7 +601,7 @@ if( mtp->PvFDL == S_OFF )
      mtp->DEl = (float*)aObj[ o_mtdel].Alloc( mtp->nEl, 1, F_);
      mtp->for_e = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_e].Alloc(
            mtp->nEl, 1, MAXFORMUNITDT);
-     mtp->Ae = (float*)aObj[ o_mtae].Alloc( mtp->nEl, mtp->Nb, F_);
+     mtp->Ae = (double*)aObj[ o_mtae].Alloc( mtp->nEl, mtp->Nb, D_);
    }
 
 

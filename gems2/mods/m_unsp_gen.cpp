@@ -515,7 +515,7 @@ void TUnSpace::init_analyse( )
      aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
   }
 
-  fillValue(usp->A, (float)0., (TProfil::pm->mup->N*TProfil::pm->mup->L) );
+  fillValue(usp->A, 0., (TProfil::pm->mup->N*TProfil::pm->mup->L) );
   for( ii=0; ii<TProfil::pm->mup->L; ii++ )
      aFo[ii].Stm_line( TProfil::pm->mup->N, usp->A+ii*TProfil::pm->mup->N,
            (char *)TProfil::pm->mup->SB, TProfil::pm->mup->Val );

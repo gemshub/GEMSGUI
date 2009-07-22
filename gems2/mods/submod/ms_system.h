@@ -196,7 +196,7 @@ protected:
     void systbc_calc( int mode );
     void PHbcalc( double *MsysC, double *MaqC, double *R1C,
                   double *VaqC, double *VsysC );
-    void stbal( int N, int L, float *Smatr, double *DCstc, double *ICm );
+    void stbal( int N, int L, double *Smatr, double *DCstc, double *ICm );
     // mark data
     void mark_ic_to_bc();
     //void mark_ph_to_dc();
@@ -250,7 +250,7 @@ public:
     bool BccCalculated();
 
     //Multi calck
-    double MolWeight( int N, float *ICaw, float *Smline );
+    double MolWeight( int N, float *ICaw, double *Smline );
     double MolWeight( int N, double *ICaw, double *Smline );
 
     const gstring& GetString()
