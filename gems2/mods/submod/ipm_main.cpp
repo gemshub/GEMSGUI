@@ -36,7 +36,7 @@ using namespace JAMA;
 #endif
 #include "node.h"
 
-//#define GEMITERTRACE
+// #define GEMITERTRACE
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Main sequence of IPM calculations
@@ -985,6 +985,7 @@ void TMulti::RaiseZeroedOffDCs( long int jStart, long int jEnd, double scalingFa
        case DC_AQ_PROTON:
        case DC_AQ_ELECTRON:
        case DC_AQ_SPECIES:
+case DC_AQ_SURCOMP:
           if( k >= 0 || pmp->Y[j] < pa->p.DFYaq * sfactor )
                pmp->Y[j] =  pa->p.DFYaq * sfactor;
            break;

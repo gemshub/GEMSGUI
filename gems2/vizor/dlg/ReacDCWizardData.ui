@@ -78,6 +78,11 @@
                             </item>
                             <item>
                                 <property name="text">
+                                    <string>K    Aqueous-surface species (in adsorption site-ligand models)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
                                     <string>W   Water H2O (solvent in aqueous phase)</string>
                                 </property>
                             </item>

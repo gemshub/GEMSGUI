@@ -458,6 +458,7 @@ typedef enum {  /* Classifications of DC */
     DC_AQ_PROTON   = 'T',      // hydrogen ion H+
     DC_AQ_ELECTRON = 'E',      // electron (as a DC)
     DC_AQ_SPECIES  = 'S',      // other aqueous species (ions, complexes and ion pairs)
+DC_AQ_SURCOMP = 'K',     // Surface complex represented as aqueous species
     DC_AQ_SOLVENT  = 'W',      // water H2O (major solvent)
     DC_AQ_SOLVCOM  = 'L',      // other components of a solvent (eg. alcohol)
     /*Gas phase ( G code can be used for all gases; V,C,H,N codes are reserved

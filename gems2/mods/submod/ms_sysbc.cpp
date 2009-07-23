@@ -227,6 +227,7 @@ void TSyst::make_syst_sizes()
         case DC_AQ_PROTON:
         case DC_AQ_ELECTRON:
         case DC_AQ_SPECIES:
+case DC_AQ_SURCOMP:
             sy.Lw++;
             // sy.Ls++;
             break;
@@ -695,7 +696,7 @@ NEXT_DC:
             aICnums.Add(i);
             sy.Icl[i] = S_REM;
         }
-        else 
+        else
         {
         	sy.Icl[i] = S_ON;
         }

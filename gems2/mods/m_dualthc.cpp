@@ -132,7 +132,7 @@ void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
      aFo[ii].Stm_line( TProfil::pm->mup->N, AA,
              (char *)TProfil::pm->mup->SB, TProfil::pm->mup->Val );
      copyValues( dtp->An+ii*TProfil::pm->mup->N, AA, dtp->Nb );
-  }	  
+  }
   delete[] AA;
   aFo.Clear();
 }
@@ -151,7 +151,7 @@ void TDualTh::calc_eqstat()
     Gcvt( dtp->cT, 6, dtp->TCp );
     Gcvt( dtp->cP, 6, dtp->Pp );
     Gcvt( dtp->cV, 6, dtp->Bnamep );
- 
+
    rt[RT_SYSEQ].MakeKey( RT_DUALTH,  dtp->sykey, RT_DUALTH, 0, RT_DUALTH,1,
          RT_DUALTH, 2, K_IMM, dtp->timep, K_IMM, dtp->Bnamep,
          K_IMM, dtp->Pp, K_IMM, dtp->TCp, K_IMM, dtp->NVp, K_END );
@@ -173,7 +173,7 @@ void TDualTh::build_Ub()
 
  dt_initiate( false );
  showMss = 1L;
- 
+
  for( ii=0; ii<dtp->nQ; ii++)
  {
    dtp->q = ii;
@@ -791,7 +791,7 @@ TDualTh::Calc_muo_n( char eState )
               break;
           case DC_AQ_ELECTRON:
           case DC_AQ_PROTON:
-          case DC_AQ_SPECIES:
+          case DC_AQ_SPECIES: case DC_AQ_SURCOMP:
               muo = dtp->mu_b[ii*dtp->nM+j] + RT*( Dsur + lnFmol - lnGam - lnChi );
               mua = muo + RT*lnGam;
               break;
@@ -1088,7 +1088,7 @@ TDualTh::Calc_gam_n( char eState )
               break;
           case DC_AQ_ELECTRON:
           case DC_AQ_PROTON:
-          case DC_AQ_SPECIES:
+          case DC_AQ_SPECIES: case DC_AQ_SURCOMP:
               gam = exp((dtp->mu_b[ii*dtp->nM+j] - muoi)/RT + Dsur + lnFmol
                    - log(dtp->chi[ii*dtp->nM+j]));
               break;
@@ -1277,7 +1277,7 @@ TDualTh::Calc_act_n( char eState )
           case DC_SCP_CONDEN:
                     lna = (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT;
                     break;
-               case DC_AQ_ELECTRON: case DC_AQ_PROTON:  case DC_AQ_SPECIES:
+               case DC_AQ_ELECTRON: case DC_AQ_PROTON:  case DC_AQ_SPECIES: case DC_AQ_SURCOMP:
                     lna = (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
                             + Dsur + lnFmol;
                     break;
@@ -1304,7 +1304,7 @@ TDualTh::Calc_act_n( char eState )
           case DC_SCP_CONDEN: // actually, this is the saturation index
                     lna = (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT;
                     break;
-               case DC_AQ_ELECTRON: case DC_AQ_PROTON:  case DC_AQ_SPECIES:
+               case DC_AQ_ELECTRON: case DC_AQ_PROTON:  case DC_AQ_SPECIES: case DC_AQ_SURCOMP:
                     lna = (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
                             + Dsur + lnFmol;
                     break;

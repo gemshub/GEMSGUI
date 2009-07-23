@@ -730,7 +730,7 @@ TCompos::RecCalc( const char* key )
 //    NormFloatRound(bcp->CI, bcp->Nc, 7 );
 //    NormFloatRound(bcp->CD, bcp->Ld, 7 );
 //    NormFloatRound(bcp->CA, bcp->La, 7 );
-     
+
 SPECIFY_C:
 
 	memset( pkey, 0, MAXRKEYLEN+9 );
@@ -747,7 +747,7 @@ SPECIFY_C:
         /* icp->val; */
     }
 //   NormDoubleRound(bcp->ICw, bcp->Nmax, 7 );
-    
+
     if( !C )
         C = new double[bcp->Nmax];
     fillValue( C, 0., bcp->Nmax );
@@ -946,7 +946,7 @@ IC_FOUND:
             bcp->CIcl[i1] = CIcl[i];
         }
     }
-	NormDoubleRound(bcp->C, bcp->N,6 ); // SD 22/07/2009
+	NormDoubleRound(bcp->C, bcp->N, 7 ); // SD 22/07/2009
     bc_work_dyn_kill();
     TCModule::RecCalc(key);
 }
