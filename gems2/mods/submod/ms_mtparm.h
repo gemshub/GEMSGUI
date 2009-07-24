@@ -64,7 +64,7 @@ typedef struct
     Lg,   // PG of DC in gas phase (for FGL)
     La    // Laq number of aqueous species and water - changed from Lx on 05.01.05
     ;
-    float  /* genP[8] */
+    double  /* genP[8] */
     curT, curP, // current T & P
     T,    	// Temperature T, C
     P,    	// Pressure P, bar
@@ -85,8 +85,7 @@ typedef struct
 
 // Arrays loaded from current data, not from DB !!!!
     double        /* size [0:L-1] */
-    *G;    // Partial molar(molal) Gibbs energy g(TP) (always), J/mole
-    float
+    *G,    // Partial molar(molal) Gibbs energy g(TP) (always), J/mole
     *devG, // Uncertainty of g(TP)
     *H,    // Partial molar(molal) enthalpy h(TP), J/mole
     *devH, // Uncertainty of h(TP)
@@ -146,7 +145,7 @@ public:
     void set_def( int i=0);
 
     void LoadMtparm( double cT, double cP );
-    float b_gamma_TP( double tk, double pb, double eps, double gsf, int mode );
+    double b_gamma_TP( double tk, double pb, double eps, double gsf, int mode );
     void MTparmAlloc();
 
 };

@@ -108,24 +108,24 @@ void TMTparm::dyn_set(int /*q*/)
 {
     tp.mark = (char *)aObj[ o_tpmark ].GetPtr();
     tp.G =    (double *)aObj[ o_tpg ].GetPtr();
-    tp.devG = (float *)aObj[ o_tpdevg ].GetPtr();
-    tp.H =    (float *)aObj[ o_tph ].GetPtr();
-    tp.devH = (float *)aObj[ o_tpdevh ].GetPtr();
-    tp.S =    (float *)aObj[ o_tps ].GetPtr();
-    tp.devS = (float *)aObj[ o_tpdevs ].GetPtr();
-    tp.Cp =   (float *)aObj[ o_tpcp ].GetPtr();
-    tp.devC = (float *)aObj[ o_tpdevcp ].GetPtr();
-    tp.Vm =   (float *)aObj[ o_tpvm ].GetPtr();
-    tp.devV = (float *)aObj[ o_tpdevv ].GetPtr();
-    tp.F =    (float *)aObj[ o_tpf ].GetPtr();
-    tp.U =    (float *)aObj[ o_tpu ].GetPtr();
-    tp.Cv =   (float *)aObj[ o_tpcv ].GetPtr();
-    tp.Alp =  (float *)aObj[ o_tpalp ].GetPtr();
-    tp.Bet =  (float *)aObj[ o_tpbet ].GetPtr();
-    tp.Wbor = (float *)aObj[ o_tpwbor ].GetPtr();
-    tp.Wrad = (float *)aObj[ o_tpwrad ].GetPtr();
-    tp.Fug =  (float *)aObj[ o_tpfug ].GetPtr();
-    tp.dVg =  (float *)aObj[ o_tpdvg ].GetPtr();
+    tp.devG = (double *)aObj[ o_tpdevg ].GetPtr();
+    tp.H =    (double *)aObj[ o_tph ].GetPtr();
+    tp.devH = (double *)aObj[ o_tpdevh ].GetPtr();
+    tp.S =    (double *)aObj[ o_tps ].GetPtr();
+    tp.devS = (double *)aObj[ o_tpdevs ].GetPtr();
+    tp.Cp =   (double *)aObj[ o_tpcp ].GetPtr();
+    tp.devC = (double *)aObj[ o_tpdevcp ].GetPtr();
+    tp.Vm =   (double *)aObj[ o_tpvm ].GetPtr();
+    tp.devV = (double *)aObj[ o_tpdevv ].GetPtr();
+    tp.F =    (double *)aObj[ o_tpf ].GetPtr();
+    tp.U =    (double *)aObj[ o_tpu ].GetPtr();
+    tp.Cv =   (double *)aObj[ o_tpcv ].GetPtr();
+    tp.Alp =  (double *)aObj[ o_tpalp ].GetPtr();
+    tp.Bet =  (double *)aObj[ o_tpbet ].GetPtr();
+    tp.Wbor = (double *)aObj[ o_tpwbor ].GetPtr();
+    tp.Wrad = (double *)aObj[ o_tpwrad ].GetPtr();
+    tp.Fug =  (double *)aObj[ o_tpfug ].GetPtr();
+    tp.dVg =  (double *)aObj[ o_tpdvg ].GetPtr();
 }
 
 // free dynamic memory in objects and values
@@ -133,24 +133,24 @@ void TMTparm::dyn_kill(int /*q*/)
 {
     tp.mark = (char *)aObj[ o_tpmark ].Free();
     tp.G =    (double *)aObj[ o_tpg ].Free();
-    tp.devG = (float *)aObj[ o_tpdevg ].Free();
-    tp.H =    (float *)aObj[ o_tph ].Free();
-    tp.devH = (float *)aObj[ o_tpdevh ].Free();
-    tp.S =    (float *)aObj[ o_tps ].Free();
-    tp.devS = (float *)aObj[ o_tpdevs ].Free();
-    tp.Cp =   (float *)aObj[ o_tpcp ].Free();
-    tp.devC = (float *)aObj[ o_tpdevcp ].Free();
-    tp.Vm =   (float *)aObj[ o_tpvm ].Free();
-    tp.devV = (float *)aObj[ o_tpdevv ].Free();
-    tp.F =    (float *)aObj[ o_tpf ].Free();
-    tp.U =    (float *)aObj[ o_tpu ].Free();
-    tp.Cv =   (float *)aObj[ o_tpcv ].Free();
-    tp.Alp =  (float *)aObj[ o_tpalp ].Free();
-    tp.Bet =  (float *)aObj[ o_tpbet ].Free();
-    tp.Wbor = (float *)aObj[ o_tpwbor ].Free();
-    tp.Wrad = (float *)aObj[ o_tpwrad ].Free();
-    tp.Fug =  (float *)aObj[ o_tpfug ].Free();
-    tp.dVg =  (float *)aObj[ o_tpdvg ].Free();
+    tp.devG = (double *)aObj[ o_tpdevg ].Free();
+    tp.H =    (double *)aObj[ o_tph ].Free();
+    tp.devH = (double *)aObj[ o_tpdevh ].Free();
+    tp.S =    (double *)aObj[ o_tps ].Free();
+    tp.devS = (double *)aObj[ o_tpdevs ].Free();
+    tp.Cp =   (double *)aObj[ o_tpcp ].Free();
+    tp.devC = (double *)aObj[ o_tpdevcp ].Free();
+    tp.Vm =   (double *)aObj[ o_tpvm ].Free();
+    tp.devV = (double *)aObj[ o_tpdevv ].Free();
+    tp.F =    (double *)aObj[ o_tpf ].Free();
+    tp.U =    (double *)aObj[ o_tpu ].Free();
+    tp.Cv =   (double *)aObj[ o_tpcv ].Free();
+    tp.Alp =  (double *)aObj[ o_tpalp ].Free();
+    tp.Bet =  (double *)aObj[ o_tpbet ].Free();
+    tp.Wbor = (double *)aObj[ o_tpwbor ].Free();
+    tp.Wrad = (double *)aObj[ o_tpwrad ].Free();
+    tp.Fug =  (double *)aObj[ o_tpfug ].Free();
+    tp.dVg =  (double *)aObj[ o_tpdvg ].Free();
 }
 
 // realloc dynamic memory
@@ -166,76 +166,76 @@ void TMTparm::dyn_new(int /*q*/)
     else tp.G =    (double *)aObj[ o_tpg ].Free();
 
     if( tp.PtvdG != S_OFF )
-        tp.devG = (float *)aObj[ o_tpdevg].Alloc( tp.L, 1, F_ );
-    else tp.devG = (float *)aObj[ o_tpdevg ].Free();
+        tp.devG = (double *)aObj[ o_tpdevg].Alloc( tp.L, 1, D_ );
+    else tp.devG = (double *)aObj[ o_tpdevg ].Free();
 
     if( tp.PtvH != S_OFF )
-        tp.H = (float *)aObj[ o_tph].Alloc( tp.L, 1, F_ );
-    else  tp.H =    (float *)aObj[ o_tph ].Free();
+        tp.H = (double *)aObj[ o_tph].Alloc( tp.L, 1, D_ );
+    else  tp.H =    (double *)aObj[ o_tph ].Free();
 
     if( tp.PtvdH != S_OFF )
-        tp.devH = (float *)aObj[ o_tpdevh].Alloc( tp.L, 1, F_ );
-    else tp.devH = (float *)aObj[ o_tpdevh ].Free();
+        tp.devH = (double *)aObj[ o_tpdevh].Alloc( tp.L, 1, D_ );
+    else tp.devH = (double *)aObj[ o_tpdevh ].Free();
 
     if( tp.PtvS != S_OFF )
-        tp.S = (float *)aObj[ o_tps].Alloc( tp.L, 1, F_ );
-    else  tp.S =    (float *)aObj[ o_tps ].Free();
+        tp.S = (double *)aObj[ o_tps].Alloc( tp.L, 1, D_ );
+    else  tp.S =    (double *)aObj[ o_tps ].Free();
 
     if( tp.PtvdS != S_OFF )
-        tp.devS = (float *)aObj[ o_tpdevs].Alloc( tp.L, 1, F_ );
-    else tp.devS = (float *)aObj[ o_tpdevs ].Free();
+        tp.devS = (double *)aObj[ o_tpdevs].Alloc( tp.L, 1, D_ );
+    else tp.devS = (double *)aObj[ o_tpdevs ].Free();
 
     if( tp.PtvCp != S_OFF )
-        tp.Cp = (float *)aObj[ o_tpcp].Alloc( tp.L, 1, F_ );
-    else   tp.Cp =   (float *)aObj[ o_tpcp ].Free();
+        tp.Cp = (double *)aObj[ o_tpcp].Alloc( tp.L, 1, D_ );
+    else   tp.Cp =   (double *)aObj[ o_tpcp ].Free();
 
     if( tp.PtvdCp != S_OFF )
-        tp.devC = (float *)aObj[ o_tpdevcp].Alloc( tp.L, 1, F_ );
-    else  tp.devC = (float *)aObj[ o_tpdevcp ].Free();
+        tp.devC = (double *)aObj[ o_tpdevcp].Alloc( tp.L, 1, D_ );
+    else  tp.devC = (double *)aObj[ o_tpdevcp ].Free();
 
     if( tp.PtvVm != S_OFF )
-        tp.Vm = (float *)aObj[ o_tpvm].Alloc( tp.L, 1, F_ );
-    else   tp.Vm =   (float *)aObj[ o_tpvm ].Free();
+        tp.Vm = (double *)aObj[ o_tpvm].Alloc( tp.L, 1, D_ );
+    else   tp.Vm =   (double *)aObj[ o_tpvm ].Free();
 
     if( tp.PtvdVm != S_OFF )
-        tp.devV = (float *)aObj[ o_tpdevv].Alloc( tp.L, 1, F_ );
-    else  tp.devV = (float *)aObj[ o_tpdevv ].Free();
+        tp.devV = (double *)aObj[ o_tpdevv].Alloc( tp.L, 1, D_ );
+    else  tp.devV = (double *)aObj[ o_tpdevv ].Free();
 
     if( tp.PtvF != S_OFF )
-        tp.F = (float *)aObj[ o_tpf].Alloc( tp.L, 1, F_ );
-    else  tp.F =    (float *)aObj[ o_tpf ].Free();
+        tp.F = (double *)aObj[ o_tpf].Alloc( tp.L, 1, D_ );
+    else  tp.F =    (double *)aObj[ o_tpf ].Free();
 
     if( tp.PtvU != S_OFF )
-        tp.U = (float *)aObj[ o_tpu].Alloc( tp.L, 1, F_ );
-    else  tp.U =    (float *)aObj[ o_tpu ].Free();
+        tp.U = (double *)aObj[ o_tpu].Alloc( tp.L, 1, D_ );
+    else  tp.U =    (double *)aObj[ o_tpu ].Free();
 
     if( tp.PtCv != S_OFF )
-        tp.Cv = (float *)aObj[ o_tpcv].Alloc( tp.L, 1, F_ );
-    else  tp.Cv =   (float *)aObj[ o_tpcv ].Free();
+        tp.Cv = (double *)aObj[ o_tpcv].Alloc( tp.L, 1, D_ );
+    else  tp.Cv =   (double *)aObj[ o_tpcv ].Free();
 
     if( tp.PtvA != S_OFF )
-        tp.Alp = (float *)aObj[ o_tpalp].Alloc( tp.L, 1, F_ );
-    else  tp.Alp =  (float *)aObj[ o_tpalp ].Free();
+        tp.Alp = (double *)aObj[ o_tpalp].Alloc( tp.L, 1, D_ );
+    else  tp.Alp =  (double *)aObj[ o_tpalp ].Free();
 
     if( tp.PtvB != S_OFF )
-        tp.Bet = (float *)aObj[ o_tpbet].Alloc( tp.L, 1, F_ );
-    else   tp.Bet =  (float *)aObj[ o_tpbet ].Free();
+        tp.Bet = (double *)aObj[ o_tpbet].Alloc( tp.L, 1, D_ );
+    else   tp.Bet =  (double *)aObj[ o_tpbet ].Free();
 
     if( tp.PtvWb != S_OFF )
-        tp.Wbor = (float *)aObj[ o_tpwbor].Alloc( tp.Ls, 1, F_ );
-    else tp.Wbor = (float *)aObj[ o_tpwbor ].Free();
+        tp.Wbor = (double *)aObj[ o_tpwbor].Alloc( tp.Ls, 1, D_ );
+    else tp.Wbor = (double *)aObj[ o_tpwbor ].Free();
 
     if( tp.PtvWr != S_OFF )
-        tp.Wrad = (float *)aObj[ o_tpwrad].Alloc( tp.Ls, 1, F_ );
-    else   tp.Wrad = (float *)aObj[ o_tpwrad ].Free();
+        tp.Wrad = (double *)aObj[ o_tpwrad].Alloc( tp.Ls, 1, D_ );
+    else   tp.Wrad = (double *)aObj[ o_tpwrad ].Free();
 
     if( tp.PtvFg != S_OFF )
-        tp.Fug = (float *)aObj[ o_tpfug].Alloc( tp.Lg, 1, F_ );
-    else tp.Fug =  (float *)aObj[ o_tpfug ].Free();
+        tp.Fug = (double *)aObj[ o_tpfug].Alloc( tp.Lg, 1, D_ );
+    else tp.Fug =  (double *)aObj[ o_tpfug ].Free();
 
     if( tp.PtvdVg != S_OFF )
-        tp.dVg = (float *)aObj[ o_tpdvg].Alloc( tp.Lg, 4, F_ ); // 5 for PRSV  4 for CG EoS
-    else tp.dVg =  (float *)aObj[ o_tpdvg ].Free();
+        tp.dVg = (double *)aObj[ o_tpdvg].Alloc( tp.Lg, 4, D_ ); // 5 for PRSV  4 for CG EoS
+    else tp.dVg =  (double *)aObj[ o_tpdvg ].Free();
 }
 
 
@@ -251,7 +251,7 @@ void TMTparm::set_def( int /*q*/)
       tp.La = mup->Laq;
      */
     tp.L = tp.Ls =  tp.Lg =  tp.La = 0;
-    memset( &tp.T, 0, 10*sizeof(float));
+    memset( &tp.T, 0, 10*sizeof(double));
     tp.mark = 0;
     tp.G =    0;
     tp.devG = 0;
@@ -629,10 +629,10 @@ eps - dielectric constant
 gsf(pb,tc,dh2o) is the g-function of solvent at p(bar), t(C) and water density,
 obtained from HKF-EOS
 returns b_gamma value or -1 in the case of error */
-float
+double
 TMTparm::b_gamma_TP( double tk, double pb, double eps, double gsf, int mode )
 {
-   float bgm_result;
+   double bgm_result;
    double ni, a1, a2, a3, a4, a5, c1, c2, omg, bg, bs, rc, ra;
    double omgpt, nbg;
 /* ni = stoichiometric number of moles of ions in one mole of electrolyte */

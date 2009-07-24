@@ -1,5 +1,6 @@
 24/07/2009
 Fixed bug in comparing when calculate "Compos" (double=>float lost digits af) 
+Change all float in MTPARM structure to double
 
 22/07/2009
 Added function  "NormDoubleRound" for norms double values mantissa to fixed digits(13)
