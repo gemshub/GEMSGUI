@@ -139,20 +139,18 @@ static TNode* na;   // static pointer to this TNode class instance
 
 // Typical sequence for using TNode class ----------------------------------
 // (1)
-// For separate coupled FMT-GEM programs that use GEMIPM2K module
-// Reads in the MULTI, DATACH and optionally DATABR files prepared
-// in text format from GEMS and fills out nodes in node arrays
-// according to distribution vector nodeTypes ( only for compatibility
-// with TNodeArray class; If TnodeArray is not used then nodeTypes = 0
-// must be set).
-// Optional parameter getNodT1 defines whether the DATABR (node) files
-// will be read (if set to true or 1). In this case, on the TNode level,
-// only the contents of the last file (in the ipmfiles_lst list) will be
-// accessible because all DATABR files are read into a single work DATABR
-// structure. On the level of TNodeArray, the initial node contents
-// from DATABR files will be distributed among nodes in T1 node array
-// according to the distribution list nodeTypes.
-//
+// Initialization of GEM IPM2 data structures in coupled FMT-GEM programs 
+//  that use GEMIPM2K module. Also reads in the IPM, DCH and DBR text input files. 
+//  Parameters: 
+//   ipmfiles_lst_name  pointer to a null-terminated C string with a path to a text file
+//                      containing the list of names of  GEMIPM2K input files.
+//                      Example: file "test.lst" with a content:    -t "dch.dat" "ipm.dat" "dbr-0.dat" 
+//                      (-t  tells that input files are in text format)
+//   nodeTypes          optional parameter used only on the TNodeArray, the initial node contents
+//                      from DATABR files will be distributed among nodes in array according to the distribution list nodeTypes
+//   getNodT1           optional parameter used only when reading multiple DBR files after modeling 
+//                      task interruption  in GEM-Selektor 
+//  Return values: 0  if successful; 1 if input file(s) were not found or corrupt; -1 if internal memory allocation error occurred. 
     long int  GEM_init( const char *ipmfiles_lst_name,
                    long int *nodeTypes = 0, bool getNodT1 = false);
 
@@ -245,56 +243,69 @@ void GEM_set_MT(
 );
 #endif
 
-// (3 alternative)
-// Reads work node (DATABR structure) from a file path name fname
-// Parameter binary_f defines if the file is in binary format (true or 1)
-// or in text format (false or 0, default)
-//
+// (5) Reads another DBR file (with input system composition, T,P etc.). The DBR file must be compatible with 
+// the currently loaded IPM and DCH files (see description  of GEM_init() function call).
+// Parameters:
+//    fname       Null-terminated (C) string containing a full path to the input DBR disk file.
+//    binary_f    Flag defining whether the file specified in fname is in text fromat (false or 0, default) or in binary format (true or 1)
+// Return values:     0  if successful; 1 if input file(s) has not found been or is corrupt; -1 if internal memory allocation error occurred.
    long int GEM_read_dbr( const char* fname, bool binary_f=false );
 
-// (4)
-// Main call for GEM IPM calculation, returns p_NodeStatusCH value
-// see databr.h for p_NodeStatusCH flag values
-// Before calling GEM_run(), make sure that the node data are
-// loaded using GEM_from_MT() call; after calling GEM_run(),
-// check the return code and retrieve chemical speciation etc.
-// using the GEM_to_MT() call
-//
-   long int  GEM_run( bool uPrimalSol );   // calls GEM for a work node
-//
-// Calls GEM for a work node - an overloaded variant which scales the system
-//   provided in DATABR and DATACH multiplying by a factor InternalMass/Ms before
-//   calling GEM and the results by Ms/InternalMass after the GEM calculation
-//
+// (2) Main call for GEM IPM calculations using the input bulk composition, temperature, pressure 
+//   and metastability constraints provided in the work instance of DATABR structure.  
+//   Actual calculation will be performed only when dBR->NodeStatusCH == NEED_GEM_SIA (5) or dBR->NodeStatusCH = NEED_GEM_AIA (1).
+//   By other values of NodeStatusCH, no calculation will be performed and the status will remain unchanged.
+//  In "smart initial approximation" (SIA) mode, the program can automatically switch into the "automatic initial
+//  approximation" (AIA) mode and return  OK_GEM_AIA instead of OK_GEM_SIA.
+//  The variant with one function parameter performs no internal scaling of the mass of the system. 
+//   Parameters:
+//   uPrimalSol  flag to define the mode of GEM smart initial approximation
+//               (only if dBR->NodeStatusCH = NEED_GEM_SIA has been set before GEM_run() call).
+//               false  (0) -  use speciation and activity coefficients from previous GEM_run() calculation
+//               true  (1)  -  use speciation provided in the DATABR memory structure (e.g. after reading the DBR file)  
+//  InternalMass Mass (kg) to which the input bulk composition (provided in DATABR memory structure) will be scaled 
+//               internally during the GEM IPM calculation (results will be scaled back to the original mass).
+//               Default value - 1 kg, reasonable range from 0.01 to 100 kg. This scaling is used for achieving
+//               better convergence and balance accuracy of GEM IPM2 algorithm.
+//  Return values:    NodeStatusCH  (the same as set in dBR->NodeStatusCH). Possible values (see "databr.h" file for the full list)
    long int  GEM_run( double InternalMass = 1., bool uPrimalSol = false  );
+   long int  GEM_run( bool uPrimalSol );   // calls GEM for a work node
 
-// Returns GEMIPM2 calculation time in sec after the last call to GEM_run()
+// Returns GEMIPM2 calculation time in seconds elapsed during the last call of GEM_run() - can be used for monitoring
+//                      the performance of calculations.
+// Return value:  double number, may contain 0.0 if the calculation time is less than the internal time resolution of C/C++ function
    double GEM_CalcTime();
 
-// Returns total number of FIA + IPM iterations after the last call to GEM_run()
-// More detailed info is returned via parameters by reference:
-//    PrecLoops:  Number of performed IPM-2 precision refinement loops
-//    NumIterFIA: Total Number of performed FIA entry iterations
-//    NumIterIPM: Total Number of performed IPM main iterations
+// To obtain the number of GEM IPM2 iterations performed during the last call of GEM_run() e.g. for monitoring the
+// performance of GEMIPM2K in AIA or SIA modes, or for problem diagnostics.   
+// Parameters:  long int variables per reference (must be allocated before calling GEM_Iterations(), previous values will be lost. See Return values.
+// Return values:
+//   Function         Total number of EFD + IPM iterations from the last call to GEM_run()
+//   PrecLoops        Number of performed IPM-2 precision refinement loops
+//   NumIterFIA       Total number of performed EnterFeasibleDomain() (EFD) iterations to obtain a feasible initial approximation for the IPM algorithm.
+//   NumIterIPM       Total number of performed IPM main descent algorithm iterations.
    long int GEM_Iterations( long int& PrecLoops, long int& NumIterFIA, long int& NumIterIPM );
 
-// (5) For interruption/debugging
-// Writes work node (DATABR structure) into a file path name fname
-// Parameter binary_f defines if the file is to be written in binary
-// format (true or 1, good for interruption of coupled modeling task
-// if called in loop for each node), or in text format
-// (false or 0, default). Parameter with_comments, if true, tells that
-// the text file will be written with comments for all data entries.
-//   Parameter brief_mode, if true, tells that do not write data items 
-//   that contain only default values in text format
+// (3) Writes the contents of the work instance of the DATABR structure into a disk file with path name  fname.
+//   Parameters: 
+//   fname         null-terminated (C) string containing a full path to the DBR disk file to be written.
+//                 NULL  - the disk file name path stored in the  dbr_file_name  field of the TNode class instance
+//                 will be used, extended with ".out".  Usually the dbr_file_name field contains the path to the last input DBR file.
+//   binary_f      defines if the file is to be written in binary format (true or 1, good for interruption of coupled modeling task
+//                 if called in the loop for each node), or in text format (false or 0, default).
+//   with_comments (text format only): defines the mode of output of comments written before each data tag and  content 
+//                 in the DBR file. If set to true (1), the comments will be written for all data entries (default). 
+//                 If   false (0), comments will not be written. 
+//  brief_mode     if true, tells that do not write data items,  that contain only default values in text format
    void  GEM_write_dbr( const char* fname,  bool binary_f=false, 
 		                  bool with_comments = true, bool brief_mode = false);
 
-// (5a) For detailed examination of GEM work data structure:
-// writes GEMIPM internal MULTI data structure into text file
-// path name fname in debugging format (different from MULTI input format).
-// This file cannot be read back with GEM_init()!
-//
+// (4) Produces a formatted text file with detailed contents (scalars and arrays) of the GEM IPM work structure. 
+// This call is useful when GEM_run() returns with a NodeStatusCH value indicating a GEM calculation error
+// (see  above).  Another use is for a detailed comparison of a test system calculation after the version upgrade of GEMIPM2K.
+// Parameters: fname   null-terminated (C) string containing a full path to the disk file to be written.
+//                     NULL  - the disk file name path stored in the  dbr_file_name  field of the TNode class instance will be used,
+//                     extended with ".dump.out".  Usually the dbr_file_name field contains the path to the last input DBR file.
    void  GEM_print_ipm( const char* fname );
 
 #ifdef IPMGEMPLUGIN

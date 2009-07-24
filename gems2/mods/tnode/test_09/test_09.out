@@ -1,1092 +1,1189 @@
-Begin Initialiation part
-End Initialiation part
-Time step0 node 0 Cal= 0.000209947 Dol= 0 pH= 9.90961
-Time step0 node 1 Cal= 0.000213026 Dol= 0 pH= 9.91221
-Time step0 node 2 Cal= 0.000213026 Dol= 0 pH= 9.91221
-Time step0 node 3 Cal= 0.000213026 Dol= 0 pH= 9.91221
-Time step0 node 4 Cal= 0.000213026 Dol= 0 pH= 9.91221
-Time step0 node 5 Cal= 0.000213026 Dol= 0 pH= 9.91221
-Time step0 node 6 Cal= 0.000213026 Dol= 0 pH= 9.91221
-Time step0 node 7 Cal= 0.000213026 Dol= 0 pH= 9.91221
-Time step0 node 8 Cal= 0.000213026 Dol= 0 pH= 9.91221
-Time step0 node 9 Cal= 0.000213026 Dol= 0 pH= 9.91221
-Time step0 node 10 Cal= 0.000216489 Dol= 0 pH= 9.92509
-Time step1 node 0 Cal= 0.000206645 Dol= 0 pH= 9.90964
-Time step1 node 1 Cal= 0.000213303 Dol= 0 pH= 9.91224
-Time step1 node 2 Cal= 0.000213303 Dol= 0 pH= 9.91224
-Time step1 node 3 Cal= 0.000213303 Dol= 0 pH= 9.91224
-Time step1 node 4 Cal= 0.000213303 Dol= 0 pH= 9.91224
-Time step1 node 5 Cal= 0.000213303 Dol= 0 pH= 9.91224
-Time step1 node 6 Cal= 0.000213303 Dol= 0 pH= 9.91224
-Time step1 node 7 Cal= 0.000213303 Dol= 0 pH= 9.91224
-Time step1 node 8 Cal= 0.000213303 Dol= 0 pH= 9.91224
-Time step1 node 9 Cal= 0.000213303 Dol= 0 pH= 9.91224
-Time step1 node 10 Cal= 0.000219659 Dol= 0 pH= 9.93775
-Time step2 node 0 Cal= 0.000203422 Dol= 0 pH= 9.90965
-Time step2 node 1 Cal= 0.00021318 Dol= 0 pH= 9.91224
-Time step2 node 2 Cal= 0.00021318 Dol= 0 pH= 9.91224
-Time step2 node 3 Cal= 0.00021318 Dol= 0 pH= 9.91224
-Time step2 node 4 Cal= 0.00021318 Dol= 0 pH= 9.91224
-Time step2 node 5 Cal= 0.00021318 Dol= 0 pH= 9.91224
-Time step2 node 6 Cal= 0.00021318 Dol= 0 pH= 9.91224
-Time step2 node 7 Cal= 0.00021318 Dol= 0 pH= 9.91224
-Time step2 node 8 Cal= 0.00021318 Dol= 0 pH= 9.91224
-Time step2 node 9 Cal= 0.00021318 Dol= 0 pH= 9.91224
-Time step2 node 10 Cal= 0.000222755 Dol= 0 pH= 9.95023
-Time step3 node 0 Cal= 0.000200248 Dol= 0 pH= 9.90963
-Time step3 node 1 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step3 node 2 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step3 node 3 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step3 node 4 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step3 node 5 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step3 node 6 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step3 node 7 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step3 node 8 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step3 node 9 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step3 node 10 Cal= 0.000225821 Dol= 0 pH= 9.96245
-Time step4 node 0 Cal= 0.00019711 Dol= 0 pH= 9.90968
-Time step4 node 1 Cal= 0.000213214 Dol= 0 pH= 9.9123
-Time step4 node 2 Cal= 0.000213214 Dol= 0 pH= 9.9123
-Time step4 node 3 Cal= 0.000213214 Dol= 0 pH= 9.9123
-Time step4 node 4 Cal= 0.000213214 Dol= 0 pH= 9.9123
-Time step4 node 5 Cal= 0.000213214 Dol= 0 pH= 9.9123
-Time step4 node 6 Cal= 0.000213214 Dol= 0 pH= 9.9123
-Time step4 node 7 Cal= 0.000213214 Dol= 0 pH= 9.9123
-Time step4 node 8 Cal= 0.000213214 Dol= 0 pH= 9.9123
-Time step4 node 9 Cal= 0.000213214 Dol= 0 pH= 9.9123
-Time step4 node 10 Cal= 0.00022879 Dol= 0 pH= 9.97449
-Time step5 node 0 Cal= 0.000193904 Dol= 0 pH= 9.90964
-Time step5 node 1 Cal= 0.000213139 Dol= 0 pH= 9.9122
-Time step5 node 2 Cal= 0.000213139 Dol= 0 pH= 9.9122
-Time step5 node 3 Cal= 0.000213139 Dol= 0 pH= 9.9122
-Time step5 node 4 Cal= 0.000213139 Dol= 0 pH= 9.9122
-Time step5 node 5 Cal= 0.000213139 Dol= 0 pH= 9.9122
-Time step5 node 6 Cal= 0.000213139 Dol= 0 pH= 9.9122
-Time step5 node 7 Cal= 0.000213139 Dol= 0 pH= 9.9122
-Time step5 node 8 Cal= 0.000213139 Dol= 0 pH= 9.9122
-Time step5 node 9 Cal= 0.000213139 Dol= 0 pH= 9.9122
-Time step5 node 10 Cal= 0.000231822 Dol= 0 pH= 9.98629
-Time step6 node 0 Cal= 0.000190804 Dol= 0 pH= 9.90966
-Time step6 node 1 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step6 node 2 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step6 node 3 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step6 node 4 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step6 node 5 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step6 node 6 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step6 node 7 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step6 node 8 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step6 node 9 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step6 node 10 Cal= 0.000234571 Dol= 0 pH= 9.9979
-Time step7 node 0 Cal= 0.000187742 Dol= 0 pH= 9.90966
-Time step7 node 1 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step7 node 2 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step7 node 3 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step7 node 4 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step7 node 5 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step7 node 6 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step7 node 7 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step7 node 8 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step7 node 9 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step7 node 10 Cal= 0.000237278 Dol= 0 pH= 10.0093
-Time step8 node 0 Cal= 0.000184709 Dol= 0 pH= 9.90966
-Time step8 node 1 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step8 node 2 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step8 node 3 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step8 node 4 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step8 node 5 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step8 node 6 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step8 node 7 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step8 node 8 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step8 node 9 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step8 node 10 Cal= 0.000239952 Dol= 0 pH= 10.0205
-Time step9 node 0 Cal= 0.000181674 Dol= 0 pH= 9.90968
-Time step9 node 1 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step9 node 2 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step9 node 3 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step9 node 4 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step9 node 5 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step9 node 6 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step9 node 7 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step9 node 8 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step9 node 9 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step9 node 10 Cal= 0.000242565 Dol= 0 pH= 10.0314
-Time step10 node 0 Cal= 0.000178687 Dol= 0 pH= 9.90969
-Time step10 node 1 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step10 node 2 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step10 node 3 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step10 node 4 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step10 node 5 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step10 node 6 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step10 node 7 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step10 node 8 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step10 node 9 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step10 node 10 Cal= 0.000245112 Dol= 0 pH= 10.0422
-Time step11 node 0 Cal= 0.000175725 Dol= 0 pH= 9.9097
-Time step11 node 1 Cal= 0.000213222 Dol= 0 pH= 9.91221
-Time step11 node 2 Cal= 0.000213222 Dol= 0 pH= 9.91221
-Time step11 node 3 Cal= 0.000213222 Dol= 0 pH= 9.91221
-Time step11 node 4 Cal= 0.000213222 Dol= 0 pH= 9.91221
-Time step11 node 5 Cal= 0.000213222 Dol= 0 pH= 9.91221
-Time step11 node 6 Cal= 0.000213222 Dol= 0 pH= 9.91221
-Time step11 node 7 Cal= 0.000213222 Dol= 0 pH= 9.91221
-Time step11 node 8 Cal= 0.000213222 Dol= 0 pH= 9.91221
-Time step11 node 9 Cal= 0.000213222 Dol= 0 pH= 9.91221
-Time step11 node 10 Cal= 0.000247626 Dol= 0 pH= 10.0528
-Time step12 node 0 Cal= 0.000173094 Dol= 0 pH= 9.90971
-Time step12 node 1 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step12 node 2 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step12 node 3 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step12 node 4 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step12 node 5 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step12 node 6 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step12 node 7 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step12 node 8 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step12 node 9 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step12 node 10 Cal= 0.000250098 Dol= 0 pH= 10.0631
-Time step13 node 0 Cal= 0.000169937 Dol= 0 pH= 9.90969
-Time step13 node 1 Cal= 0.000213207 Dol= 0 pH= 9.91222
-Time step13 node 2 Cal= 0.000213207 Dol= 0 pH= 9.91222
-Time step13 node 3 Cal= 0.000213207 Dol= 0 pH= 9.91222
-Time step13 node 4 Cal= 0.000213207 Dol= 0 pH= 9.91222
-Time step13 node 5 Cal= 0.000213207 Dol= 0 pH= 9.91222
-Time step13 node 6 Cal= 0.000213207 Dol= 0 pH= 9.91222
-Time step13 node 7 Cal= 0.000213207 Dol= 0 pH= 9.91222
-Time step13 node 8 Cal= 0.000213207 Dol= 0 pH= 9.91222
-Time step13 node 9 Cal= 0.000213207 Dol= 0 pH= 9.91222
-Time step13 node 10 Cal= 0.000252464 Dol= 0 pH= 10.0733
-Time step14 node 0 Cal= 0.000167061 Dol= 0 pH= 9.9097
-Time step14 node 1 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step14 node 2 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step14 node 3 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step14 node 4 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step14 node 5 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step14 node 6 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step14 node 7 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step14 node 8 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step14 node 9 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step14 node 10 Cal= 0.000254801 Dol= 0 pH= 10.0833
-Time step15 node 0 Cal= 0.000164131 Dol= 0 pH= 9.9097
-Time step15 node 1 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step15 node 2 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step15 node 3 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step15 node 4 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step15 node 5 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step15 node 6 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step15 node 7 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step15 node 8 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step15 node 9 Cal= 0.000213213 Dol= 0 pH= 9.91222
-Time step15 node 10 Cal= 0.000257043 Dol= 0 pH= 10.0931
-Time step16 node 0 Cal= 0.0001615 Dol= 0 pH= 9.90972
-Time step16 node 1 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step16 node 2 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step16 node 3 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step16 node 4 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step16 node 5 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step16 node 6 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step16 node 7 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step16 node 8 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step16 node 9 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step16 node 10 Cal= 0.000259281 Dol= 0 pH= 10.1027
-Time step17 node 0 Cal= 0.000158634 Dol= 0 pH= 9.9097
-Time step17 node 1 Cal= 0.000213214 Dol= 0 pH= 9.9122
-Time step17 node 2 Cal= 0.000213214 Dol= 0 pH= 9.9122
-Time step17 node 3 Cal= 0.000213214 Dol= 0 pH= 9.9122
-Time step17 node 4 Cal= 0.000213214 Dol= 0 pH= 9.9122
-Time step17 node 5 Cal= 0.000213214 Dol= 0 pH= 9.9122
-Time step17 node 6 Cal= 0.000213214 Dol= 0 pH= 9.9122
-Time step17 node 7 Cal= 0.000213214 Dol= 0 pH= 9.9122
-Time step17 node 8 Cal= 0.000213214 Dol= 0 pH= 9.9122
-Time step17 node 9 Cal= 0.000213214 Dol= 0 pH= 9.9122
-Time step17 node 10 Cal= 0.000261458 Dol= 0 pH= 10.1121
-Time step18 node 0 Cal= 0.000155869 Dol= 0 pH= 9.90972
-Time step18 node 1 Cal= 0.000213226 Dol= 0 pH= 9.91221
-Time step18 node 2 Cal= 0.000213226 Dol= 0 pH= 9.91221
-Time step18 node 3 Cal= 0.000213226 Dol= 0 pH= 9.91221
-Time step18 node 4 Cal= 0.000213226 Dol= 0 pH= 9.91221
-Time step18 node 5 Cal= 0.000213226 Dol= 0 pH= 9.91221
-Time step18 node 6 Cal= 0.000213226 Dol= 0 pH= 9.91221
-Time step18 node 7 Cal= 0.000213226 Dol= 0 pH= 9.91221
-Time step18 node 8 Cal= 0.000213226 Dol= 0 pH= 9.91221
-Time step18 node 9 Cal= 0.000213226 Dol= 0 pH= 9.91221
-Time step18 node 10 Cal= 0.000263534 Dol= 0 pH= 10.1213
-Time step19 node 0 Cal= 0.000153153 Dol= 0 pH= 9.90971
-Time step19 node 1 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step19 node 2 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step19 node 3 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step19 node 4 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step19 node 5 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step19 node 6 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step19 node 7 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step19 node 8 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step19 node 9 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step19 node 10 Cal= 0.000265635 Dol= 0 pH= 10.1304
-Time step20 node 0 Cal= 0.000150425 Dol= 0 pH= 9.90973
-Time step20 node 1 Cal= 0.00021321 Dol= 0 pH= 9.91222
-Time step20 node 2 Cal= 0.00021321 Dol= 0 pH= 9.91222
-Time step20 node 3 Cal= 0.00021321 Dol= 0 pH= 9.91222
-Time step20 node 4 Cal= 0.00021321 Dol= 0 pH= 9.91222
-Time step20 node 5 Cal= 0.00021321 Dol= 0 pH= 9.91222
-Time step20 node 6 Cal= 0.00021321 Dol= 0 pH= 9.91222
-Time step20 node 7 Cal= 0.00021321 Dol= 0 pH= 9.91222
-Time step20 node 8 Cal= 0.00021321 Dol= 0 pH= 9.91222
-Time step20 node 9 Cal= 0.00021321 Dol= 0 pH= 9.91222
-Time step20 node 10 Cal= 0.000267652 Dol= 0 pH= 10.1393
-Time step21 node 0 Cal= 0.000147794 Dol= 0 pH= 9.90975
-Time step21 node 1 Cal= 0.000213278 Dol= 0 pH= 9.91222
-Time step21 node 2 Cal= 0.000213278 Dol= 0 pH= 9.91222
-Time step21 node 3 Cal= 0.000213278 Dol= 0 pH= 9.91222
-Time step21 node 4 Cal= 0.000213278 Dol= 0 pH= 9.91222
-Time step21 node 5 Cal= 0.000213278 Dol= 0 pH= 9.91222
-Time step21 node 6 Cal= 0.000213278 Dol= 0 pH= 9.91222
-Time step21 node 7 Cal= 0.000213278 Dol= 0 pH= 9.91222
-Time step21 node 8 Cal= 0.000213278 Dol= 0 pH= 9.91222
-Time step21 node 9 Cal= 0.000213278 Dol= 0 pH= 9.91222
-Time step21 node 10 Cal= 0.000269617 Dol= 0 pH= 10.148
-Time step22 node 0 Cal= 0.000145134 Dol= 0 pH= 9.90975
-Time step22 node 1 Cal= 0.000213134 Dol= 0 pH= 9.91221
-Time step22 node 2 Cal= 0.000213134 Dol= 0 pH= 9.91221
-Time step22 node 3 Cal= 0.000213134 Dol= 0 pH= 9.91221
-Time step22 node 4 Cal= 0.000213134 Dol= 0 pH= 9.91221
-Time step22 node 5 Cal= 0.000213134 Dol= 0 pH= 9.91221
-Time step22 node 6 Cal= 0.000213134 Dol= 0 pH= 9.91221
-Time step22 node 7 Cal= 0.000213134 Dol= 0 pH= 9.91221
-Time step22 node 8 Cal= 0.000213134 Dol= 0 pH= 9.91221
-Time step22 node 9 Cal= 0.000213134 Dol= 0 pH= 9.91221
-Time step22 node 10 Cal= 0.000271544 Dol= 0 pH= 10.1565
-Time step23 node 0 Cal= 0.000142426 Dol= 0 pH= 9.90974
-Time step23 node 1 Cal= 0.000213234 Dol= 0 pH= 9.91218
-Time step23 node 2 Cal= 0.000213234 Dol= 0 pH= 9.91218
-Time step23 node 3 Cal= 0.000213234 Dol= 0 pH= 9.91218
-Time step23 node 4 Cal= 0.000213234 Dol= 0 pH= 9.91218
-Time step23 node 5 Cal= 0.000213234 Dol= 0 pH= 9.91218
-Time step23 node 6 Cal= 0.000213234 Dol= 0 pH= 9.91218
-Time step23 node 7 Cal= 0.000213234 Dol= 0 pH= 9.91218
-Time step23 node 8 Cal= 0.000213234 Dol= 0 pH= 9.91218
-Time step23 node 9 Cal= 0.000213234 Dol= 0 pH= 9.91218
-Time step23 node 10 Cal= 0.000273406 Dol= 0 pH= 10.1648
-Time step24 node 0 Cal= 0.00013993 Dol= 0 pH= 9.90976
-Time step24 node 1 Cal= 0.000213232 Dol= 0 pH= 9.91221
-Time step24 node 2 Cal= 0.000213232 Dol= 0 pH= 9.91221
-Time step24 node 3 Cal= 0.000213232 Dol= 0 pH= 9.91221
-Time step24 node 4 Cal= 0.000213232 Dol= 0 pH= 9.91221
-Time step24 node 5 Cal= 0.000213232 Dol= 0 pH= 9.91221
-Time step24 node 6 Cal= 0.000213232 Dol= 0 pH= 9.91221
-Time step24 node 7 Cal= 0.000213232 Dol= 0 pH= 9.91221
-Time step24 node 8 Cal= 0.000213232 Dol= 0 pH= 9.91221
-Time step24 node 9 Cal= 0.000213232 Dol= 0 pH= 9.91221
-Time step24 node 10 Cal= 0.000275296 Dol= 0 pH= 10.173
-Time step25 node 0 Cal= 0.00013766 Dol= 0 pH= 9.90978
-Time step25 node 1 Cal= 0.000213164 Dol= 0 pH= 9.91225
-Time step25 node 2 Cal= 0.000213164 Dol= 0 pH= 9.91225
-Time step25 node 3 Cal= 0.000213164 Dol= 0 pH= 9.91225
-Time step25 node 4 Cal= 0.000213164 Dol= 0 pH= 9.91225
-Time step25 node 5 Cal= 0.000213164 Dol= 0 pH= 9.91225
-Time step25 node 6 Cal= 0.000213164 Dol= 0 pH= 9.91225
-Time step25 node 7 Cal= 0.000213164 Dol= 0 pH= 9.91225
-Time step25 node 8 Cal= 0.000213164 Dol= 0 pH= 9.91225
-Time step25 node 9 Cal= 0.000213164 Dol= 0 pH= 9.91225
-Time step25 node 10 Cal= 0.000277095 Dol= 0 pH= 10.1811
-Time step26 node 0 Cal= 0.00013482 Dol= 0 pH= 9.90976
-Time step26 node 1 Cal= 0.000213183 Dol= 0 pH= 9.91218
-Time step26 node 2 Cal= 0.000213183 Dol= 0 pH= 9.91218
-Time step26 node 3 Cal= 0.000213183 Dol= 0 pH= 9.91218
-Time step26 node 4 Cal= 0.000213183 Dol= 0 pH= 9.91218
-Time step26 node 5 Cal= 0.000213183 Dol= 0 pH= 9.91218
-Time step26 node 6 Cal= 0.000213183 Dol= 0 pH= 9.91218
-Time step26 node 7 Cal= 0.000213183 Dol= 0 pH= 9.91218
-Time step26 node 8 Cal= 0.000213183 Dol= 0 pH= 9.91218
-Time step26 node 9 Cal= 0.000213183 Dol= 0 pH= 9.91218
-Time step26 node 10 Cal= 0.000278875 Dol= 0 pH= 10.189
-Time step27 node 0 Cal= 0.00013212 Dol= 0 pH= 9.90976
-Time step27 node 1 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step27 node 2 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step27 node 3 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step27 node 4 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step27 node 5 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step27 node 6 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step27 node 7 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step27 node 8 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step27 node 9 Cal= 0.000213205 Dol= 0 pH= 9.91223
-Time step27 node 10 Cal= 0.000280645 Dol= 0 pH= 10.1967
-Time step28 node 0 Cal= 0.000129821 Dol= 0 pH= 9.90977
-Time step28 node 1 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step28 node 2 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step28 node 3 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step28 node 4 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step28 node 5 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step28 node 6 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step28 node 7 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step28 node 8 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step28 node 9 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step28 node 10 Cal= 0.000282266 Dol= 0 pH= 10.2043
-Time step29 node 0 Cal= 0.000127338 Dol= 0 pH= 9.90979
-Time step29 node 1 Cal= 0.000213244 Dol= 0 pH= 9.9122
-Time step29 node 2 Cal= 0.000213244 Dol= 0 pH= 9.9122
-Time step29 node 3 Cal= 0.000213244 Dol= 0 pH= 9.9122
-Time step29 node 4 Cal= 0.000213244 Dol= 0 pH= 9.9122
-Time step29 node 5 Cal= 0.000213244 Dol= 0 pH= 9.9122
-Time step29 node 6 Cal= 0.000213244 Dol= 0 pH= 9.9122
-Time step29 node 7 Cal= 0.000213244 Dol= 0 pH= 9.9122
-Time step29 node 8 Cal= 0.000213244 Dol= 0 pH= 9.9122
-Time step29 node 9 Cal= 0.000213244 Dol= 0 pH= 9.9122
-Time step29 node 10 Cal= 0.000283905 Dol= 0 pH= 10.2117
-Time step30 node 0 Cal= 0.000124877 Dol= 0 pH= 9.90982
-Time step30 node 1 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step30 node 2 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step30 node 3 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step30 node 4 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step30 node 5 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step30 node 6 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step30 node 7 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step30 node 8 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step30 node 9 Cal= 0.000213208 Dol= 0 pH= 9.91222
-Time step30 node 10 Cal= 0.000285511 Dol= 0 pH= 10.219
-Time step31 node 0 Cal= 0.000122484 Dol= 0 pH= 9.9098
-Time step31 node 1 Cal= 0.000213547 Dol= 0 pH= 9.91222
-Time step31 node 2 Cal= 0.000213547 Dol= 0 pH= 9.91222
-Time step31 node 3 Cal= 0.000213547 Dol= 0 pH= 9.91222
-Time step31 node 4 Cal= 0.000213547 Dol= 0 pH= 9.91222
-Time step31 node 5 Cal= 0.000213547 Dol= 0 pH= 9.91222
-Time step31 node 6 Cal= 0.000213547 Dol= 0 pH= 9.91222
-Time step31 node 7 Cal= 0.000213547 Dol= 0 pH= 9.91222
-Time step31 node 8 Cal= 0.000213547 Dol= 0 pH= 9.91222
-Time step31 node 9 Cal= 0.000213547 Dol= 0 pH= 9.91222
-Time step31 node 10 Cal= 0.000287086 Dol= 0 pH= 10.2261
-Time step32 node 0 Cal= 0.00012007 Dol= 0 pH= 9.90979
-Time step32 node 1 Cal= 0.000213201 Dol= 0 pH= 9.91222
-Time step32 node 2 Cal= 0.000213201 Dol= 0 pH= 9.91222
-Time step32 node 3 Cal= 0.000213201 Dol= 0 pH= 9.91222
-Time step32 node 4 Cal= 0.000213201 Dol= 0 pH= 9.91222
-Time step32 node 5 Cal= 0.000213201 Dol= 0 pH= 9.91222
-Time step32 node 6 Cal= 0.000213201 Dol= 0 pH= 9.91222
-Time step32 node 7 Cal= 0.000213201 Dol= 0 pH= 9.91222
-Time step32 node 8 Cal= 0.000213201 Dol= 0 pH= 9.91222
-Time step32 node 9 Cal= 0.000213201 Dol= 0 pH= 9.91222
-Time step32 node 10 Cal= 0.000288641 Dol= 0 pH= 10.2331
-Time step33 node 0 Cal= 0.000117744 Dol= 0 pH= 9.90979
-Time step33 node 1 Cal= 0.000213216 Dol= 0 pH= 9.91222
-Time step33 node 2 Cal= 0.000213216 Dol= 0 pH= 9.91222
-Time step33 node 3 Cal= 0.000213216 Dol= 0 pH= 9.91222
-Time step33 node 4 Cal= 0.000213216 Dol= 0 pH= 9.91222
-Time step33 node 5 Cal= 0.000213216 Dol= 0 pH= 9.91222
-Time step33 node 6 Cal= 0.000213216 Dol= 0 pH= 9.91222
-Time step33 node 7 Cal= 0.000213216 Dol= 0 pH= 9.91222
-Time step33 node 8 Cal= 0.000213216 Dol= 0 pH= 9.91222
-Time step33 node 9 Cal= 0.000213216 Dol= 0 pH= 9.91222
-Time step33 node 10 Cal= 0.000289922 Dol= 0 pH= 10.24
-Time step34 node 0 Cal= 0.000115401 Dol= 0 pH= 9.90979
-Time step34 node 1 Cal= 0.00021324 Dol= 0 pH= 9.91221
-Time step34 node 2 Cal= 0.00021324 Dol= 0 pH= 9.91221
-Time step34 node 3 Cal= 0.00021324 Dol= 0 pH= 9.91221
-Time step34 node 4 Cal= 0.00021324 Dol= 0 pH= 9.91221
-Time step34 node 5 Cal= 0.00021324 Dol= 0 pH= 9.91221
-Time step34 node 6 Cal= 0.00021324 Dol= 0 pH= 9.91221
-Time step34 node 7 Cal= 0.00021324 Dol= 0 pH= 9.91221
-Time step34 node 8 Cal= 0.00021324 Dol= 0 pH= 9.91221
-Time step34 node 9 Cal= 0.00021324 Dol= 0 pH= 9.91221
-Time step34 node 10 Cal= 0.000291613 Dol= 0 pH= 10.2468
-Time step35 node 0 Cal= 0.000113057 Dol= 0 pH= 9.90982
-Time step35 node 1 Cal= 0.000213223 Dol= 0 pH= 9.91228
-Time step35 node 2 Cal= 0.000213223 Dol= 0 pH= 9.91228
-Time step35 node 3 Cal= 0.000213223 Dol= 0 pH= 9.91228
-Time step35 node 4 Cal= 0.000213223 Dol= 0 pH= 9.91228
-Time step35 node 5 Cal= 0.000213223 Dol= 0 pH= 9.91228
-Time step35 node 6 Cal= 0.000213223 Dol= 0 pH= 9.91228
-Time step35 node 7 Cal= 0.000213223 Dol= 0 pH= 9.91228
-Time step35 node 8 Cal= 0.000213223 Dol= 0 pH= 9.91228
-Time step35 node 9 Cal= 0.000213223 Dol= 0 pH= 9.91228
-Time step35 node 10 Cal= 0.000293055 Dol= 0 pH= 10.2534
-Time step36 node 0 Cal= 0.000110782 Dol= 0 pH= 9.9098
-Time step36 node 1 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step36 node 2 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step36 node 3 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step36 node 4 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step36 node 5 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step36 node 6 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step36 node 7 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step36 node 8 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step36 node 9 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step36 node 10 Cal= 0.000294484 Dol= 0 pH= 10.2598
-Time step37 node 0 Cal= 0.000108482 Dol= 0 pH= 9.90982
-Time step37 node 1 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step37 node 2 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step37 node 3 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step37 node 4 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step37 node 5 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step37 node 6 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step37 node 7 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step37 node 8 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step37 node 9 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step37 node 10 Cal= 0.000295867 Dol= 0 pH= 10.2662
-Time step38 node 0 Cal= 0.00010623 Dol= 0 pH= 9.90983
-Time step38 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step38 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step38 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step38 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step38 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step38 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step38 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step38 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step38 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step38 node 10 Cal= 0.000297231 Dol= 0 pH= 10.2724
-Time step39 node 0 Cal= 0.000103979 Dol= 0 pH= 9.90981
-Time step39 node 1 Cal= 0.000213218 Dol= 0 pH= 9.91222
-Time step39 node 2 Cal= 0.000213218 Dol= 0 pH= 9.91222
-Time step39 node 3 Cal= 0.000213218 Dol= 0 pH= 9.91222
-Time step39 node 4 Cal= 0.000213218 Dol= 0 pH= 9.91222
-Time step39 node 5 Cal= 0.000213218 Dol= 0 pH= 9.91222
-Time step39 node 6 Cal= 0.000213218 Dol= 0 pH= 9.91222
-Time step39 node 7 Cal= 0.000213218 Dol= 0 pH= 9.91222
-Time step39 node 8 Cal= 0.000213218 Dol= 0 pH= 9.91222
-Time step39 node 9 Cal= 0.000213218 Dol= 0 pH= 9.91222
-Time step39 node 10 Cal= 0.000298557 Dol= 0 pH= 10.2786
-Time step40 node 0 Cal= 0.000101754 Dol= 0 pH= 9.90983
-Time step40 node 1 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step40 node 2 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step40 node 3 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step40 node 4 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step40 node 5 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step40 node 6 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step40 node 7 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step40 node 8 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step40 node 9 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step40 node 10 Cal= 0.000299755 Dol= 0 pH= 10.2846
-Time step41 node 0 Cal= 9.93892e-05 Dol= 0 pH= 9.90981
-Time step41 node 1 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step41 node 2 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step41 node 3 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step41 node 4 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step41 node 5 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step41 node 6 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step41 node 7 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step41 node 8 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step41 node 9 Cal= 0.000213224 Dol= 0 pH= 9.91222
-Time step41 node 10 Cal= 0.000301132 Dol= 0 pH= 10.2905
-Time step42 node 0 Cal= 9.7426e-05 Dol= 0 pH= 9.90984
-Time step42 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step42 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step42 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step42 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step42 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step42 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step42 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step42 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step42 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step42 node 10 Cal= 0.000302395 Dol= 0 pH= 10.2962
-Time step43 node 0 Cal= 9.53243e-05 Dol= 0 pH= 9.90983
-Time step43 node 1 Cal= 0.000213203 Dol= 0 pH= 9.91223
-Time step43 node 2 Cal= 0.000213203 Dol= 0 pH= 9.91223
-Time step43 node 3 Cal= 0.000213203 Dol= 0 pH= 9.91223
-Time step43 node 4 Cal= 0.000213203 Dol= 0 pH= 9.91223
-Time step43 node 5 Cal= 0.000213203 Dol= 0 pH= 9.91223
-Time step43 node 6 Cal= 0.000213203 Dol= 0 pH= 9.91223
-Time step43 node 7 Cal= 0.000213203 Dol= 0 pH= 9.91223
-Time step43 node 8 Cal= 0.000213203 Dol= 0 pH= 9.91223
-Time step43 node 9 Cal= 0.000213203 Dol= 0 pH= 9.91223
-Time step43 node 10 Cal= 0.000303627 Dol= 0 pH= 10.3019
-Time step44 node 0 Cal= 9.31214e-05 Dol= 0 pH= 9.90984
-Time step44 node 1 Cal= 0.000213342 Dol= 0 pH= 9.91223
-Time step44 node 2 Cal= 0.000213342 Dol= 0 pH= 9.91223
-Time step44 node 3 Cal= 0.000213342 Dol= 0 pH= 9.91223
-Time step44 node 4 Cal= 0.000213342 Dol= 0 pH= 9.91223
-Time step44 node 5 Cal= 0.000213342 Dol= 0 pH= 9.91223
-Time step44 node 6 Cal= 0.000213342 Dol= 0 pH= 9.91223
-Time step44 node 7 Cal= 0.000213342 Dol= 0 pH= 9.91223
-Time step44 node 8 Cal= 0.000213342 Dol= 0 pH= 9.91223
-Time step44 node 9 Cal= 0.000213342 Dol= 0 pH= 9.91223
-Time step44 node 10 Cal= 0.000304822 Dol= 0 pH= 10.3075
-Time step45 node 0 Cal= 9.11184e-05 Dol= 0 pH= 9.90982
-Time step45 node 1 Cal= 0.000213199 Dol= 0 pH= 9.91224
-Time step45 node 2 Cal= 0.000213199 Dol= 0 pH= 9.91224
-Time step45 node 3 Cal= 0.000213199 Dol= 0 pH= 9.91224
-Time step45 node 4 Cal= 0.000213199 Dol= 0 pH= 9.91224
-Time step45 node 5 Cal= 0.000213199 Dol= 0 pH= 9.91224
-Time step45 node 6 Cal= 0.000213199 Dol= 0 pH= 9.91224
-Time step45 node 7 Cal= 0.000213199 Dol= 0 pH= 9.91224
-Time step45 node 8 Cal= 0.000213199 Dol= 0 pH= 9.91224
-Time step45 node 9 Cal= 0.000213199 Dol= 0 pH= 9.91224
-Time step45 node 10 Cal= 0.000306016 Dol= 0 pH= 10.313
-Time step46 node 0 Cal= 8.8999e-05 Dol= 0 pH= 9.90983
-Time step46 node 1 Cal= 0.00021318 Dol= 0 pH= 9.91222
-Time step46 node 2 Cal= 0.00021318 Dol= 0 pH= 9.91222
-Time step46 node 3 Cal= 0.00021318 Dol= 0 pH= 9.91222
-Time step46 node 4 Cal= 0.00021318 Dol= 0 pH= 9.91222
-Time step46 node 5 Cal= 0.00021318 Dol= 0 pH= 9.91222
-Time step46 node 6 Cal= 0.00021318 Dol= 0 pH= 9.91222
-Time step46 node 7 Cal= 0.00021318 Dol= 0 pH= 9.91222
-Time step46 node 8 Cal= 0.00021318 Dol= 0 pH= 9.91222
-Time step46 node 9 Cal= 0.00021318 Dol= 0 pH= 9.91222
-Time step46 node 10 Cal= 0.000307155 Dol= 0 pH= 10.3183
-Time step47 node 0 Cal= 8.69731e-05 Dol= 0 pH= 9.90983
-Time step47 node 1 Cal= 0.000213252 Dol= 0 pH= 9.91222
-Time step47 node 2 Cal= 0.000213252 Dol= 0 pH= 9.91222
-Time step47 node 3 Cal= 0.000213252 Dol= 0 pH= 9.91222
-Time step47 node 4 Cal= 0.000213252 Dol= 0 pH= 9.91222
-Time step47 node 5 Cal= 0.000213252 Dol= 0 pH= 9.91222
-Time step47 node 6 Cal= 0.000213252 Dol= 0 pH= 9.91222
-Time step47 node 7 Cal= 0.000213252 Dol= 0 pH= 9.91222
-Time step47 node 8 Cal= 0.000213252 Dol= 0 pH= 9.91222
-Time step47 node 9 Cal= 0.000213252 Dol= 0 pH= 9.91222
-Time step47 node 10 Cal= 0.000308289 Dol= 0 pH= 10.3236
-Time step48 node 0 Cal= 8.49075e-05 Dol= 0 pH= 9.90986
-Time step48 node 1 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step48 node 2 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step48 node 3 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step48 node 4 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step48 node 5 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step48 node 6 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step48 node 7 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step48 node 8 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step48 node 9 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step48 node 10 Cal= 0.000309375 Dol= 0 pH= 10.3288
-Time step49 node 0 Cal= 8.29164e-05 Dol= 0 pH= 9.90988
-Time step49 node 1 Cal= 0.000213225 Dol= 0 pH= 9.91225
-Time step49 node 2 Cal= 0.000213225 Dol= 0 pH= 9.91225
-Time step49 node 3 Cal= 0.000213225 Dol= 0 pH= 9.91225
-Time step49 node 4 Cal= 0.000213225 Dol= 0 pH= 9.91225
-Time step49 node 5 Cal= 0.000213225 Dol= 0 pH= 9.91225
-Time step49 node 6 Cal= 0.000213225 Dol= 0 pH= 9.91225
-Time step49 node 7 Cal= 0.000213225 Dol= 0 pH= 9.91225
-Time step49 node 8 Cal= 0.000213225 Dol= 0 pH= 9.91225
-Time step49 node 9 Cal= 0.000213225 Dol= 0 pH= 9.91225
-Time step49 node 10 Cal= 0.000310353 Dol= 0 pH= 10.3338
-Time step50 node 0 Cal= 8.08744e-05 Dol= 0 pH= 9.90987
-Time step50 node 1 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step50 node 2 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step50 node 3 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step50 node 4 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step50 node 5 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step50 node 6 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step50 node 7 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step50 node 8 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step50 node 9 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step50 node 10 Cal= 0.00031158 Dol= 0 pH= 10.3388
-Time step51 node 0 Cal= 7.89164e-05 Dol= 0 pH= 9.90987
-Time step51 node 1 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step51 node 2 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step51 node 3 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step51 node 4 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step51 node 5 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step51 node 6 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step51 node 7 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step51 node 8 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step51 node 9 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step51 node 10 Cal= 0.000312623 Dol= 0 pH= 10.3437
-Time step52 node 0 Cal= 7.69857e-05 Dol= 0 pH= 9.90984
-Time step52 node 1 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step52 node 2 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step52 node 3 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step52 node 4 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step52 node 5 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step52 node 6 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step52 node 7 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step52 node 8 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step52 node 9 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step52 node 10 Cal= 0.000313651 Dol= 0 pH= 10.3485
-Time step53 node 0 Cal= 7.50476e-05 Dol= 0 pH= 9.90987
-Time step53 node 1 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step53 node 2 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step53 node 3 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step53 node 4 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step53 node 5 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step53 node 6 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step53 node 7 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step53 node 8 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step53 node 9 Cal= 0.000213214 Dol= 0 pH= 9.91222
-Time step53 node 10 Cal= 0.000314666 Dol= 0 pH= 10.3532
-Time step54 node 0 Cal= 7.31276e-05 Dol= 0 pH= 9.90987
-Time step54 node 1 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step54 node 2 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step54 node 3 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step54 node 4 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step54 node 5 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step54 node 6 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step54 node 7 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step54 node 8 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step54 node 9 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step54 node 10 Cal= 0.000315659 Dol= 0 pH= 10.3579
-Time step55 node 0 Cal= 7.1251e-05 Dol= 0 pH= 9.90985
-Time step55 node 1 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step55 node 2 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step55 node 3 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step55 node 4 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step55 node 5 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step55 node 6 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step55 node 7 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step55 node 8 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step55 node 9 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step55 node 10 Cal= 0.000316641 Dol= 0 pH= 10.3624
-Time step56 node 0 Cal= 6.93539e-05 Dol= 0 pH= 9.90988
-Time step56 node 1 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step56 node 2 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step56 node 3 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step56 node 4 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step56 node 5 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step56 node 6 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step56 node 7 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step56 node 8 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step56 node 9 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step56 node 10 Cal= 0.000317618 Dol= 0 pH= 10.3669
-Time step57 node 0 Cal= 6.7374e-05 Dol= 0 pH= 9.90987
-Time step57 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step57 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step57 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step57 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step57 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step57 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step57 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step57 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step57 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step57 node 10 Cal= 0.000318538 Dol= 0 pH= 10.3713
-Time step58 node 0 Cal= 6.56167e-05 Dol= 0 pH= 9.90989
-Time step58 node 1 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step58 node 2 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step58 node 3 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step58 node 4 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step58 node 5 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step58 node 6 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step58 node 7 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step58 node 8 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step58 node 9 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step58 node 10 Cal= 0.000319467 Dol= 0 pH= 10.3756
-Time step59 node 0 Cal= 6.38325e-05 Dol= 0 pH= 9.90988
-Time step59 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step59 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step59 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step59 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step59 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step59 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step59 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step59 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step59 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step59 node 10 Cal= 0.000320396 Dol= 0 pH= 10.3799
-Time step60 node 0 Cal= 6.20342e-05 Dol= 0 pH= 9.90988
-Time step60 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step60 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step60 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step60 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step60 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step60 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step60 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step60 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step60 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step60 node 10 Cal= 0.000321143 Dol= 0 pH= 10.3841
-Time step61 node 0 Cal= 6.0258e-05 Dol= 0 pH= 9.90987
-Time step61 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step61 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step61 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step61 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step61 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step61 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step61 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step61 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step61 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step61 node 10 Cal= 0.000322172 Dol= 0 pH= 10.3882
-Time step62 node 0 Cal= 5.84375e-05 Dol= 0 pH= 9.90988
-Time step62 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step62 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step62 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step62 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step62 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step62 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step62 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step62 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step62 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step62 node 10 Cal= 0.000323017 Dol= 0 pH= 10.3922
-Time step63 node 0 Cal= 5.67312e-05 Dol= 0 pH= 9.90988
-Time step63 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step63 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step63 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step63 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step63 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step63 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step63 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step63 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step63 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step63 node 10 Cal= 0.000323873 Dol= 0 pH= 10.3962
-Time step64 node 0 Cal= 5.49575e-05 Dol= 0 pH= 9.90998
-Time step64 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step64 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step64 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step64 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step64 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step64 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step64 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step64 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step64 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step64 node 10 Cal= 0.000324691 Dol= 0 pH= 10.4001
-Time step65 node 0 Cal= 5.32591e-05 Dol= 0 pH= 9.90989
-Time step65 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step65 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step65 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step65 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step65 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step65 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step65 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step65 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step65 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step65 node 10 Cal= 0.000325521 Dol= 0 pH= 10.4039
-Time step66 node 0 Cal= 5.15569e-05 Dol= 0 pH= 9.90992
-Time step66 node 1 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step66 node 2 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step66 node 3 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step66 node 4 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step66 node 5 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step66 node 6 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step66 node 7 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step66 node 8 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step66 node 9 Cal= 0.000213222 Dol= 0 pH= 9.91222
-Time step66 node 10 Cal= 0.000326329 Dol= 0 pH= 10.4076
-Time step67 node 0 Cal= 4.98461e-05 Dol= 0 pH= 9.90988
-Time step67 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step67 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step67 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step67 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step67 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step67 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step67 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step67 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step67 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step67 node 10 Cal= 0.000327137 Dol= 0 pH= 10.4114
-Time step68 node 0 Cal= 4.81753e-05 Dol= 0 pH= 9.91001
-Time step68 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step68 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step68 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step68 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step68 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step68 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step68 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step68 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step68 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step68 node 10 Cal= 0.000327835 Dol= 0 pH= 10.415
-Time step69 node 0 Cal= 4.66139e-05 Dol= 0 pH= 9.90985
-Time step69 node 1 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step69 node 2 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step69 node 3 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step69 node 4 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step69 node 5 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step69 node 6 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step69 node 7 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step69 node 8 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step69 node 9 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step69 node 10 Cal= 0.000328694 Dol= 0 pH= 10.4186
-Time step70 node 0 Cal= 4.48807e-05 Dol= 0 pH= 9.91
-Time step70 node 1 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step70 node 2 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step70 node 3 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step70 node 4 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step70 node 5 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step70 node 6 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step70 node 7 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step70 node 8 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step70 node 9 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step70 node 10 Cal= 0.000329474 Dol= 0 pH= 10.4221
-Time step71 node 0 Cal= 4.32405e-05 Dol= 0 pH= 9.90986
-Time step71 node 1 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step71 node 2 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step71 node 3 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step71 node 4 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step71 node 5 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step71 node 6 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step71 node 7 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step71 node 8 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step71 node 9 Cal= 0.00021322 Dol= 0 pH= 9.91222
-Time step71 node 10 Cal= 0.000330175 Dol= 0 pH= 10.4256
-Time step72 node 0 Cal= 4.16568e-05 Dol= 0 pH= 9.91002
-Time step72 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step72 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step72 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step72 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step72 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step72 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step72 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step72 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step72 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step72 node 10 Cal= 0.000330931 Dol= 0 pH= 10.429
-Time step73 node 0 Cal= 4.01796e-05 Dol= 0 pH= 9.90986
-Time step73 node 1 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step73 node 2 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step73 node 3 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step73 node 4 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step73 node 5 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step73 node 6 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step73 node 7 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step73 node 8 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step73 node 9 Cal= 0.000213219 Dol= 0 pH= 9.91222
-Time step73 node 10 Cal= 0.000331637 Dol= 0 pH= 10.4323
-Time step74 node 0 Cal= 3.86443e-05 Dol= 0 pH= 9.90981
-Time step74 node 1 Cal= 0.000213255 Dol= 0 pH= 9.91222
-Time step74 node 2 Cal= 0.000213255 Dol= 0 pH= 9.91222
-Time step74 node 3 Cal= 0.000213255 Dol= 0 pH= 9.91222
-Time step74 node 4 Cal= 0.000213255 Dol= 0 pH= 9.91222
-Time step74 node 5 Cal= 0.000213255 Dol= 0 pH= 9.91222
-Time step74 node 6 Cal= 0.000213255 Dol= 0 pH= 9.91222
-Time step74 node 7 Cal= 0.000213255 Dol= 0 pH= 9.91222
-Time step74 node 8 Cal= 0.000213255 Dol= 0 pH= 9.91222
-Time step74 node 9 Cal= 0.000213255 Dol= 0 pH= 9.91222
-Time step74 node 10 Cal= 0.000332346 Dol= 0 pH= 10.4356
-Time step75 node 0 Cal= 3.70445e-05 Dol= 0 pH= 9.90987
-Time step75 node 1 Cal= 0.000213144 Dol= 0 pH= 9.91222
-Time step75 node 2 Cal= 0.000213144 Dol= 0 pH= 9.91222
-Time step75 node 3 Cal= 0.000213144 Dol= 0 pH= 9.91222
-Time step75 node 4 Cal= 0.000213144 Dol= 0 pH= 9.91222
-Time step75 node 5 Cal= 0.000213144 Dol= 0 pH= 9.91222
-Time step75 node 6 Cal= 0.000213144 Dol= 0 pH= 9.91222
-Time step75 node 7 Cal= 0.000213144 Dol= 0 pH= 9.91222
-Time step75 node 8 Cal= 0.000213144 Dol= 0 pH= 9.91222
-Time step75 node 9 Cal= 0.000213144 Dol= 0 pH= 9.91222
-Time step75 node 10 Cal= 0.000333061 Dol= 0 pH= 10.4389
-Time step76 node 0 Cal= 3.53647e-05 Dol= 0 pH= 9.90987
-Time step76 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step76 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step76 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step76 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step76 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step76 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step76 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step76 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step76 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step76 node 10 Cal= 0.000333603 Dol= 0 pH= 10.4421
-Time step77 node 0 Cal= 3.39369e-05 Dol= 0 pH= 9.90993
-Time step77 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step77 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step77 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step77 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step77 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step77 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step77 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step77 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step77 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step77 node 10 Cal= 0.000334425 Dol= 0 pH= 10.4452
-Time step78 node 0 Cal= 3.24379e-05 Dol= 0 pH= 9.90993
-Time step78 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step78 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step78 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step78 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step78 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step78 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step78 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step78 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step78 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step78 node 10 Cal= 0.00033479 Dol= 0 pH= 10.4483
-Time step79 node 0 Cal= 3.09502e-05 Dol= 0 pH= 9.90995
-Time step79 node 1 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step79 node 2 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step79 node 3 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step79 node 4 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step79 node 5 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step79 node 6 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step79 node 7 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step79 node 8 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step79 node 9 Cal= 0.000213221 Dol= 0 pH= 9.91222
-Time step79 node 10 Cal= 0.000335583 Dol= 0 pH= 10.4514
-Time step80 node 0 Cal= 2.94655e-05 Dol= 0 pH= 9.90993
-Time step80 node 1 Cal= 0.000213253 Dol= 0 pH= 9.91219
-Time step80 node 2 Cal= 0.000213253 Dol= 0 pH= 9.91219
-Time step80 node 3 Cal= 0.000213253 Dol= 0 pH= 9.91219
-Time step80 node 4 Cal= 0.000213253 Dol= 0 pH= 9.91219
-Time step80 node 5 Cal= 0.000213253 Dol= 0 pH= 9.91219
-Time step80 node 6 Cal= 0.000213253 Dol= 0 pH= 9.91219
-Time step80 node 7 Cal= 0.000213253 Dol= 0 pH= 9.91219
-Time step80 node 8 Cal= 0.000213253 Dol= 0 pH= 9.91219
-Time step80 node 9 Cal= 0.000213253 Dol= 0 pH= 9.91219
-Time step80 node 10 Cal= 0.000336395 Dol= 0 pH= 10.4544
-Time step81 node 0 Cal= 2.79745e-05 Dol= 0 pH= 9.90982
-Time step81 node 1 Cal= 0.000213206 Dol= 0 pH= 9.9122
-Time step81 node 2 Cal= 0.000213206 Dol= 0 pH= 9.9122
-Time step81 node 3 Cal= 0.000213206 Dol= 0 pH= 9.9122
-Time step81 node 4 Cal= 0.000213206 Dol= 0 pH= 9.9122
-Time step81 node 5 Cal= 0.000213206 Dol= 0 pH= 9.9122
-Time step81 node 6 Cal= 0.000213206 Dol= 0 pH= 9.9122
-Time step81 node 7 Cal= 0.000213206 Dol= 0 pH= 9.9122
-Time step81 node 8 Cal= 0.000213206 Dol= 0 pH= 9.9122
-Time step81 node 9 Cal= 0.000213206 Dol= 0 pH= 9.9122
-Time step81 node 10 Cal= 0.000337015 Dol= 0 pH= 10.4573
-Time step82 node 0 Cal= 2.6603e-05 Dol= 0 pH= 9.90985
-Time step82 node 1 Cal= 0.000213274 Dol= 0 pH= 9.91219
-Time step82 node 2 Cal= 0.000213274 Dol= 0 pH= 9.91219
-Time step82 node 3 Cal= 0.000213274 Dol= 0 pH= 9.91219
-Time step82 node 4 Cal= 0.000213274 Dol= 0 pH= 9.91219
-Time step82 node 5 Cal= 0.000213274 Dol= 0 pH= 9.91219
-Time step82 node 6 Cal= 0.000213274 Dol= 0 pH= 9.91219
-Time step82 node 7 Cal= 0.000213274 Dol= 0 pH= 9.91219
-Time step82 node 8 Cal= 0.000213274 Dol= 0 pH= 9.91219
-Time step82 node 9 Cal= 0.000213274 Dol= 0 pH= 9.91219
-Time step82 node 10 Cal= 0.000337668 Dol= 0 pH= 10.4602
-Time step83 node 0 Cal= 2.51389e-05 Dol= 0 pH= 9.90989
-Time step83 node 1 Cal= 0.000213211 Dol= 0 pH= 9.91219
-Time step83 node 2 Cal= 0.000213211 Dol= 0 pH= 9.91219
-Time step83 node 3 Cal= 0.000213211 Dol= 0 pH= 9.91219
-Time step83 node 4 Cal= 0.000213211 Dol= 0 pH= 9.91219
-Time step83 node 5 Cal= 0.000213211 Dol= 0 pH= 9.91219
-Time step83 node 6 Cal= 0.000213211 Dol= 0 pH= 9.91219
-Time step83 node 7 Cal= 0.000213211 Dol= 0 pH= 9.91219
-Time step83 node 8 Cal= 0.000213211 Dol= 0 pH= 9.91219
-Time step83 node 9 Cal= 0.000213211 Dol= 0 pH= 9.91219
-Time step83 node 10 Cal= 0.000338281 Dol= 0 pH= 10.4631
-Time step84 node 0 Cal= 2.34312e-05 Dol= 0 pH= 9.90986
-Time step84 node 1 Cal= 0.00021216 Dol= 0 pH= 9.91221
-Time step84 node 2 Cal= 0.00021216 Dol= 0 pH= 9.91221
-Time step84 node 3 Cal= 0.00021216 Dol= 0 pH= 9.91221
-Time step84 node 4 Cal= 0.00021216 Dol= 0 pH= 9.91221
-Time step84 node 5 Cal= 0.00021216 Dol= 0 pH= 9.91221
-Time step84 node 6 Cal= 0.00021216 Dol= 0 pH= 9.91221
-Time step84 node 7 Cal= 0.00021216 Dol= 0 pH= 9.91221
-Time step84 node 8 Cal= 0.00021216 Dol= 0 pH= 9.91221
-Time step84 node 9 Cal= 0.00021216 Dol= 0 pH= 9.91221
-Time step84 node 10 Cal= 0.000338893 Dol= 0 pH= 10.4659
-Time step85 node 0 Cal= 2.23786e-05 Dol= 0 pH= 9.90983
-Time step85 node 1 Cal= 0.000213231 Dol= 0 pH= 9.91223
-Time step85 node 2 Cal= 0.000213231 Dol= 0 pH= 9.91223
-Time step85 node 3 Cal= 0.000213231 Dol= 0 pH= 9.91223
-Time step85 node 4 Cal= 0.000213231 Dol= 0 pH= 9.91223
-Time step85 node 5 Cal= 0.000213231 Dol= 0 pH= 9.91223
-Time step85 node 6 Cal= 0.000213231 Dol= 0 pH= 9.91223
-Time step85 node 7 Cal= 0.000213231 Dol= 0 pH= 9.91223
-Time step85 node 8 Cal= 0.000213231 Dol= 0 pH= 9.91223
-Time step85 node 9 Cal= 0.000213231 Dol= 0 pH= 9.91223
-Time step85 node 10 Cal= 0.000339501 Dol= 0 pH= 10.4687
-Time step86 node 0 Cal= 2.09301e-05 Dol= 0 pH= 9.90983
-Time step86 node 1 Cal= 0.000213151 Dol= 0 pH= 9.91221
-Time step86 node 2 Cal= 0.000213151 Dol= 0 pH= 9.91221
-Time step86 node 3 Cal= 0.000213151 Dol= 0 pH= 9.91221
-Time step86 node 4 Cal= 0.000213151 Dol= 0 pH= 9.91221
-Time step86 node 5 Cal= 0.000213151 Dol= 0 pH= 9.91221
-Time step86 node 6 Cal= 0.000213151 Dol= 0 pH= 9.91221
-Time step86 node 7 Cal= 0.000213151 Dol= 0 pH= 9.91221
-Time step86 node 8 Cal= 0.000213151 Dol= 0 pH= 9.91221
-Time step86 node 9 Cal= 0.000213151 Dol= 0 pH= 9.91221
-Time step86 node 10 Cal= 0.000340095 Dol= 0 pH= 10.4714
-Time step87 node 0 Cal= 1.93884e-05 Dol= 0 pH= 9.90979
-Time step87 node 1 Cal= 0.000213193 Dol= 0 pH= 9.91223
-Time step87 node 2 Cal= 0.000213193 Dol= 0 pH= 9.91223
-Time step87 node 3 Cal= 0.000213193 Dol= 0 pH= 9.91223
-Time step87 node 4 Cal= 0.000213193 Dol= 0 pH= 9.91223
-Time step87 node 5 Cal= 0.000213193 Dol= 0 pH= 9.91223
-Time step87 node 6 Cal= 0.000213193 Dol= 0 pH= 9.91223
-Time step87 node 7 Cal= 0.000213193 Dol= 0 pH= 9.91223
-Time step87 node 8 Cal= 0.000213193 Dol= 0 pH= 9.91223
-Time step87 node 9 Cal= 0.000213193 Dol= 0 pH= 9.91223
-Time step87 node 10 Cal= 0.00034102 Dol= 0 pH= 10.4741
-Time step88 node 0 Cal= 1.82823e-05 Dol= 0 pH= 9.90977
-Time step88 node 1 Cal= 0.000213208 Dol= 0 pH= 9.91223
-Time step88 node 2 Cal= 0.000213208 Dol= 0 pH= 9.91223
-Time step88 node 3 Cal= 0.000213208 Dol= 0 pH= 9.91223
-Time step88 node 4 Cal= 0.000213208 Dol= 0 pH= 9.91223
-Time step88 node 5 Cal= 0.000213208 Dol= 0 pH= 9.91223
-Time step88 node 6 Cal= 0.000213208 Dol= 0 pH= 9.91223
-Time step88 node 7 Cal= 0.000213208 Dol= 0 pH= 9.91223
-Time step88 node 8 Cal= 0.000213208 Dol= 0 pH= 9.91223
-Time step88 node 9 Cal= 0.000213208 Dol= 0 pH= 9.91223
-Time step88 node 10 Cal= 0.000341233 Dol= 0 pH= 10.4768
-Time step89 node 0 Cal= 1.68688e-05 Dol= 0 pH= 9.90971
-Time step89 node 1 Cal= 0.000213384 Dol= 0 pH= 9.91222
-Time step89 node 2 Cal= 0.000213384 Dol= 0 pH= 9.91222
-Time step89 node 3 Cal= 0.000213384 Dol= 0 pH= 9.91222
-Time step89 node 4 Cal= 0.000213384 Dol= 0 pH= 9.91222
-Time step89 node 5 Cal= 0.000213384 Dol= 0 pH= 9.91222
-Time step89 node 6 Cal= 0.000213384 Dol= 0 pH= 9.91222
-Time step89 node 7 Cal= 0.000213384 Dol= 0 pH= 9.91222
-Time step89 node 8 Cal= 0.000213384 Dol= 0 pH= 9.91222
-Time step89 node 9 Cal= 0.000213384 Dol= 0 pH= 9.91222
-Time step89 node 10 Cal= 0.000341749 Dol= 0 pH= 10.4794
-Time step90 node 0 Cal= 1.55465e-05 Dol= 0 pH= 9.9098
-Time step90 node 1 Cal= 0.000213225 Dol= 0 pH= 9.9122
-Time step90 node 2 Cal= 0.000213225 Dol= 0 pH= 9.9122
-Time step90 node 3 Cal= 0.000213225 Dol= 0 pH= 9.9122
-Time step90 node 4 Cal= 0.000213225 Dol= 0 pH= 9.9122
-Time step90 node 5 Cal= 0.000213225 Dol= 0 pH= 9.9122
-Time step90 node 6 Cal= 0.000213225 Dol= 0 pH= 9.9122
-Time step90 node 7 Cal= 0.000213225 Dol= 0 pH= 9.9122
-Time step90 node 8 Cal= 0.000213225 Dol= 0 pH= 9.9122
-Time step90 node 9 Cal= 0.000213225 Dol= 0 pH= 9.9122
-Time step90 node 10 Cal= 0.000342296 Dol= 0 pH= 10.4819
-Time step91 node 0 Cal= 1.42542e-05 Dol= 0 pH= 9.90981
-Time step91 node 1 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step91 node 2 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step91 node 3 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step91 node 4 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step91 node 5 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step91 node 6 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step91 node 7 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step91 node 8 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step91 node 9 Cal= 0.000213209 Dol= 0 pH= 9.91222
-Time step91 node 10 Cal= 0.000342932 Dol= 0 pH= 10.4845
-Time step92 node 0 Cal= 1.28807e-05 Dol= 0 pH= 9.90995
-Time step92 node 1 Cal= 0.000213162 Dol= 0 pH= 9.91221
-Time step92 node 2 Cal= 0.000213162 Dol= 0 pH= 9.91221
-Time step92 node 3 Cal= 0.000213162 Dol= 0 pH= 9.91221
-Time step92 node 4 Cal= 0.000213162 Dol= 0 pH= 9.91221
-Time step92 node 5 Cal= 0.000213162 Dol= 0 pH= 9.91221
-Time step92 node 6 Cal= 0.000213162 Dol= 0 pH= 9.91221
-Time step92 node 7 Cal= 0.000213162 Dol= 0 pH= 9.91221
-Time step92 node 8 Cal= 0.000213162 Dol= 0 pH= 9.91221
-Time step92 node 9 Cal= 0.000213162 Dol= 0 pH= 9.91221
-Time step92 node 10 Cal= 0.000343469 Dol= 0 pH= 10.487
-Time step93 node 0 Cal= 1.16521e-05 Dol= 0 pH= 9.90975
-Time step93 node 1 Cal= 0.000213273 Dol= 0 pH= 9.91223
-Time step93 node 2 Cal= 0.000213273 Dol= 0 pH= 9.91223
-Time step93 node 3 Cal= 0.000213273 Dol= 0 pH= 9.91223
-Time step93 node 4 Cal= 0.000213273 Dol= 0 pH= 9.91223
-Time step93 node 5 Cal= 0.000213273 Dol= 0 pH= 9.91223
-Time step93 node 6 Cal= 0.000213273 Dol= 0 pH= 9.91223
-Time step93 node 7 Cal= 0.000213273 Dol= 0 pH= 9.91223
-Time step93 node 8 Cal= 0.000213273 Dol= 0 pH= 9.91223
-Time step93 node 9 Cal= 0.000213273 Dol= 0 pH= 9.91223
-Time step93 node 10 Cal= 0.000343943 Dol= 0 pH= 10.4894
-Time step94 node 0 Cal= 1.03864e-05 Dol= 0 pH= 9.90969
-Time step94 node 1 Cal= 0.000213241 Dol= 0 pH= 9.9122
-Time step94 node 2 Cal= 0.000213241 Dol= 0 pH= 9.9122
-Time step94 node 3 Cal= 0.000213241 Dol= 0 pH= 9.9122
-Time step94 node 4 Cal= 0.000213241 Dol= 0 pH= 9.9122
-Time step94 node 5 Cal= 0.000213241 Dol= 0 pH= 9.9122
-Time step94 node 6 Cal= 0.000213241 Dol= 0 pH= 9.9122
-Time step94 node 7 Cal= 0.000213241 Dol= 0 pH= 9.9122
-Time step94 node 8 Cal= 0.000213241 Dol= 0 pH= 9.9122
-Time step94 node 9 Cal= 0.000213241 Dol= 0 pH= 9.9122
-Time step94 node 10 Cal= 0.000344426 Dol= 0 pH= 10.4918
-Time step95 node 0 Cal= 9.06701e-06 Dol= 0 pH= 9.90987
-Time step95 node 1 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step95 node 2 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step95 node 3 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step95 node 4 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step95 node 5 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step95 node 6 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step95 node 7 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step95 node 8 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step95 node 9 Cal= 0.000213235 Dol= 0 pH= 9.91221
-Time step95 node 10 Cal= 0.000344981 Dol= 0 pH= 10.4942
-Time step96 node 0 Cal= 7.84288e-06 Dol= 0 pH= 9.90954
-Time step96 node 1 Cal= 0.000213205 Dol= 0 pH= 9.91222
-Time step96 node 2 Cal= 0.000213205 Dol= 0 pH= 9.91222
-Time step96 node 3 Cal= 0.000213205 Dol= 0 pH= 9.91222
-Time step96 node 4 Cal= 0.000213205 Dol= 0 pH= 9.91222
-Time step96 node 5 Cal= 0.000213205 Dol= 0 pH= 9.91222
-Time step96 node 6 Cal= 0.000213205 Dol= 0 pH= 9.91222
-Time step96 node 7 Cal= 0.000213205 Dol= 0 pH= 9.91222
-Time step96 node 8 Cal= 0.000213205 Dol= 0 pH= 9.91222
-Time step96 node 9 Cal= 0.000213205 Dol= 0 pH= 9.91222
-Time step96 node 10 Cal= 0.000345535 Dol= 0 pH= 10.4966
-Time step97 node 0 Cal= 6.25374e-06 Dol= 0 pH= 9.90985
-Time step97 node 1 Cal= 0.000213233 Dol= 0 pH= 9.91218
-Time step97 node 2 Cal= 0.000213233 Dol= 0 pH= 9.91218
-Time step97 node 3 Cal= 0.000213233 Dol= 0 pH= 9.91218
-Time step97 node 4 Cal= 0.000213233 Dol= 0 pH= 9.91218
-Time step97 node 5 Cal= 0.000213233 Dol= 0 pH= 9.91218
-Time step97 node 6 Cal= 0.000213233 Dol= 0 pH= 9.91218
-Time step97 node 7 Cal= 0.000213233 Dol= 0 pH= 9.91218
-Time step97 node 8 Cal= 0.000213233 Dol= 0 pH= 9.91218
-Time step97 node 9 Cal= 0.000213233 Dol= 0 pH= 9.91218
-Time step97 node 10 Cal= 0.000346077 Dol= 0 pH= 10.4989
-Time step98 node 0 Cal= 5.24364e-06 Dol= 0 pH= 9.91013
-Time step98 node 1 Cal= 0.000213342 Dol= 0 pH= 9.91224
-Time step98 node 2 Cal= 0.000213342 Dol= 0 pH= 9.91224
-Time step98 node 3 Cal= 0.000213342 Dol= 0 pH= 9.91224
-Time step98 node 4 Cal= 0.000213342 Dol= 0 pH= 9.91224
-Time step98 node 5 Cal= 0.000213342 Dol= 0 pH= 9.91224
-Time step98 node 6 Cal= 0.000213342 Dol= 0 pH= 9.91224
-Time step98 node 7 Cal= 0.000213342 Dol= 0 pH= 9.91224
-Time step98 node 8 Cal= 0.000213342 Dol= 0 pH= 9.91224
-Time step98 node 9 Cal= 0.000213342 Dol= 0 pH= 9.91224
-Time step98 node 10 Cal= 0.000346581 Dol= 0 pH= 10.5012
- End Coupled Modelling part
+xCa= 1 xC=0 xO=5 xCalcite=3 xAq_gen=0
+Time step  0
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 55.3429 Cal= 0.00901596 pH= 11.4352
+  Node 2 Aq= 55.3708 Cal= 0 pH= 9.58248
+  Node 3 Aq= 55.371 Cal= 0 pH= 9.57887
+  Node 4 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.28498
+Time step  1
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 55.34 Cal= 0.0174597 pH= 12.2648
+  Node 2 Aq= 55.3703 Cal= 0 pH= 9.5899
+  Node 3 Aq= 55.371 Cal= 0 pH= 9.57897
+  Node 4 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.28739
+Time step  2
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 55.3222 Cal= 0.0258187 pH= 12.4122
+  Node 2 Aq= 55.3697 Cal= 0 pH= 9.60142
+  Node 3 Aq= 55.371 Cal= 0 pH= 9.57919
+  Node 4 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.2897
+Time step  3
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 55.2892 Cal= 0.0340906 pH= 12.411
+  Node 2 Aq= 55.3686 Cal= 0 pH= 9.61765
+  Node 3 Aq= 55.371 Cal= 0 pH= 9.57955
+  Node 4 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.29194
+Time step  4
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 55.2566 Cal= 0.0422797 pH= 12.4109
+  Node 2 Aq= 55.367 Cal= 1.00108e-07 pH= 9.63959
+  Node 3 Aq= 55.3709 Cal= 0 pH= 9.58006
+  Node 4 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.29413
+Time step  5
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 55.2244 Cal= 0.0503869 pH= 12.4109
+  Node 2 Aq= 55.365 Cal= 0.00219478 pH= 9.63322
+  Node 3 Aq= 55.3709 Cal= 0 pH= 9.58078
+  Node 4 Aq= 55.371 Cal= 0 pH= 9.57887
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.29625
+Time step  6
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 55.1925 Cal= 0.058413 pH= 12.4109
+  Node 2 Aq= 55.3628 Cal= 0.00277054 pH= 9.65646
+  Node 3 Aq= 55.3708 Cal= 0 pH= 9.58175
+  Node 4 Aq= 55.371 Cal= 0 pH= 9.5789
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.29831
+Time step  7
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 55.1609 Cal= 0.0663589 pH= 12.4109
+  Node 2 Aq= 55.3603 Cal= 0.00341033 pH= 9.68648
+  Node 3 Aq= 55.3708 Cal= 0 pH= 9.58298
+  Node 4 Aq= 55.371 Cal= 0 pH= 9.57894
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.30032
+Time step  8
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 55.1296 Cal= 0.0742253 pH= 12.4108
+  Node 2 Aq= 55.3575 Cal= 0.00412121 pH= 9.72569
+  Node 3 Aq= 55.3707 Cal= 0 pH= 9.58452
+  Node 4 Aq= 55.371 Cal= 0 pH= 9.579
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.30228
+Time step  9
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 55.0987 Cal= 0.0820131 pH= 12.4108
+  Node 2 Aq= 55.3544 Cal= 0.00490197 pH= 9.77897
+  Node 3 Aq= 55.3705 Cal= 0 pH= 9.58641
+  Node 4 Aq= 55.371 Cal= 0 pH= 9.57907
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.30419
+Time step  10
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 55.0681 Cal= 0.089723 pH= 12.4108
+  Node 2 Aq= 55.351 Cal= 0.00575141 pH= 9.85706
+  Node 3 Aq= 55.3704 Cal= 0 pH= 9.58865
+  Node 4 Aq= 55.371 Cal= 0 pH= 9.57916
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.30606
+Time step  11
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 55.0377 Cal= 0.0973557 pH= 12.4107
+  Node 2 Aq= 55.3474 Cal= 0.00666832 pH= 9.99234
+  Node 3 Aq= 55.3702 Cal= 0 pH= 9.59132
+  Node 4 Aq= 55.371 Cal= 0 pH= 9.57928
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.30788
+Time step  12
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 55.0077 Cal= 0.104912 pH= 12.4107
+  Node 2 Aq= 55.3438 Cal= 0.0076518 pH= 10.4202
+  Node 3 Aq= 55.3701 Cal= 0 pH= 9.59444
+  Node 4 Aq= 55.371 Cal= 0 pH= 9.57942
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.30966
+Time step  13
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.978 Cal= 0.112393 pH= 12.4107
+  Node 2 Aq= 55.343 Cal= 0.00870028 pH= 11.3223
+  Node 3 Aq= 55.3699 Cal= 0 pH= 9.59806
+  Node 4 Aq= 55.371 Cal= 0 pH= 9.5796
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57886
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.31139
+Time step  14
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.9485 Cal= 0.119799 pH= 12.4106
+  Node 2 Aq= 55.3427 Cal= 0.00981156 pH= 11.6345
+  Node 3 Aq= 55.3696 Cal= 0 pH= 9.60224
+  Node 4 Aq= 55.3709 Cal= 0 pH= 9.57982
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57887
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.3131
+Time step  15
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.9194 Cal= 0.127131 pH= 12.4106
+  Node 2 Aq= 55.3424 Cal= 0.010985 pH= 11.8189
+  Node 3 Aq= 55.3694 Cal= 0 pH= 9.60702
+  Node 4 Aq= 55.3709 Cal= 0 pH= 9.58007
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57888
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57878
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.31476
+Time step  16
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.8905 Cal= 0.13439 pH= 12.4106
+  Node 2 Aq= 55.342 Cal= 0.0122194 pH= 11.9511
+  Node 3 Aq= 55.3691 Cal= 0 pH= 9.61247
+  Node 4 Aq= 55.3709 Cal= 0 pH= 9.58037
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57889
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.31639
+Time step  17
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.862 Cal= 0.141576 pH= 12.4106
+  Node 2 Aq= 55.3415 Cal= 0.0135135 pH= 12.0546
+  Node 3 Aq= 55.3685 Cal= 0 pH= 9.61867
+  Node 4 Aq= 55.3709 Cal= 0 pH= 9.58072
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.5789
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57869
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57881
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.31799
+Time step  18
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.8337 Cal= 0.14869 pH= 12.4105
+  Node 2 Aq= 55.341 Cal= 0.0148658 pH= 12.1399
+  Node 3 Aq= 55.368 Cal= 0 pH= 9.62571
+  Node 4 Aq= 55.3709 Cal= 0 pH= 9.58113
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57892
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.31955
+Time step  19
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.8057 Cal= 0.155733 pH= 12.4105
+  Node 2 Aq= 55.3405 Cal= 0.0162753 pH= 12.2127
+  Node 3 Aq= 55.3674 Cal= 9.99019e-08 pH= 9.63368
+  Node 4 Aq= 55.3708 Cal= 0 pH= 9.58159
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57896
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.32108
+Time step  20
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.778 Cal= 0.162706 pH= 12.4105
+  Node 2 Aq= 55.3399 Cal= 0.0177406 pH= 12.2762
+  Node 3 Aq= 55.3667 Cal= 2.38445e-07 pH= 9.64269
+  Node 4 Aq= 55.3708 Cal= 0 pH= 9.58212
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57899
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57888
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.32259
+Time step  21
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.7506 Cal= 0.169609 pH= 12.4104
+  Node 2 Aq= 55.3392 Cal= 0.0192604 pH= 12.3326
+  Node 3 Aq= 55.366 Cal= 0.00137119 pH= 9.63146
+  Node 4 Aq= 55.3708 Cal= 0 pH= 9.58279
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57903
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.32407
+Time step  22
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.7234 Cal= 0.176443 pH= 12.4104
+  Node 2 Aq= 55.3385 Cal= 0.0208336 pH= 12.3833
+  Node 3 Aq= 55.3653 Cal= 0.00205642 pH= 9.6317
+  Node 4 Aq= 55.3707 Cal= 0 pH= 9.58346
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57907
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.32551
+Time step  23
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.6965 Cal= 0.183208 pH= 12.4104
+  Node 2 Aq= 55.3377 Cal= 0.022459 pH= 12.4295
+  Node 3 Aq= 55.3645 Cal= 0.00233883 pH= 9.63841
+  Node 4 Aq= 55.3707 Cal= 0 pH= 9.58418
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57912
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57861
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57877
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.32694
+Time step  24
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.6699 Cal= 0.189906 pH= 12.4104
+  Node 2 Aq= 55.3288 Cal= 0.0241328 pH= 12.4112
+  Node 3 Aq= 55.3636 Cal= 0.00255888 pH= 9.64741
+  Node 4 Aq= 55.3706 Cal= 0 pH= 9.58504
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57918
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.32833
+Time step  25
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.6435 Cal= 0.196537 pH= 12.4103
+  Node 2 Aq= 55.3219 Cal= 0.0258568 pH= 12.411
+  Node 3 Aq= 55.3627 Cal= 0.00279373 pH= 9.65748
+  Node 4 Aq= 55.3706 Cal= 0 pH= 9.58599
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57925
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.32971
+Time step  26
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.6175 Cal= 0.203102 pH= 12.4103
+  Node 2 Aq= 55.3148 Cal= 0.0276293 pH= 12.411
+  Node 3 Aq= 55.3617 Cal= 0.00304374 pH= 9.66876
+  Node 4 Aq= 55.3705 Cal= 0 pH= 9.58704
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57932
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57886
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57878
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.33106
+Time step  27
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.5916 Cal= 0.209601 pH= 12.4103
+  Node 2 Aq= 55.3076 Cal= 0.029449 pH= 12.411
+  Node 3 Aq= 55.3607 Cal= 0.0033092 pH= 9.68144
+  Node 4 Aq= 55.3704 Cal= 0 pH= 9.5882
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57941
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.33238
+Time step  28
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.5661 Cal= 0.216035 pH= 12.4103
+  Node 2 Aq= 55.3002 Cal= 0.0313148 pH= 12.411
+  Node 3 Aq= 55.3595 Cal= 0.00359042 pH= 9.69576
+  Node 4 Aq= 55.3704 Cal= 0 pH= 9.58949
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57951
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57887
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.33369
+Time step  29
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.5407 Cal= 0.222405 pH= 12.4102
+  Node 2 Aq= 55.2926 Cal= 0.0332257 pH= 12.411
+  Node 3 Aq= 55.3584 Cal= 0.00388788 pH= 9.71202
+  Node 4 Aq= 55.3703 Cal= 0 pH= 9.59091
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57962
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57888
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.33497
+Time step  30
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.5157 Cal= 0.228711 pH= 12.4102
+  Node 2 Aq= 55.2848 Cal= 0.0351806 pH= 12.411
+  Node 3 Aq= 55.3571 Cal= 0.00420171 pH= 9.73062
+  Node 4 Aq= 55.3702 Cal= 0 pH= 9.59246
+  Node 5 Aq= 55.371 Cal= 0 pH= 9.57974
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57888
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.33623
+Time step  31
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.4909 Cal= 0.234953 pH= 12.4102
+  Node 2 Aq= 55.2769 Cal= 0.0371783 pH= 12.411
+  Node 3 Aq= 55.3558 Cal= 0.00453224 pH= 9.75211
+  Node 4 Aq= 55.3701 Cal= 0 pH= 9.59417
+  Node 5 Aq= 55.3709 Cal= 0 pH= 9.57988
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.5789
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.33748
+Time step  32
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.4663 Cal= 0.241134 pH= 12.4102
+  Node 2 Aq= 55.2688 Cal= 0.0392179 pH= 12.4109
+  Node 3 Aq= 55.3545 Cal= 0.00487975 pH= 9.77726
+  Node 4 Aq= 55.37 Cal= 0 pH= 9.59606
+  Node 5 Aq= 55.3709 Cal= 0 pH= 9.58004
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57891
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.3387
+Time step  33
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.442 Cal= 0.247253 pH= 12.4101
+  Node 2 Aq= 55.2605 Cal= 0.0412982 pH= 12.4109
+  Node 3 Aq= 55.353 Cal= 0.00524446 pH= 9.8072
+  Node 4 Aq= 55.3699 Cal= 0 pH= 9.59804
+  Node 5 Aq= 55.3709 Cal= 0 pH= 9.58021
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57891
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57887
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.33992
+Time step  34
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.4179 Cal= 0.25331 pH= 12.4101
+  Node 2 Aq= 55.2521 Cal= 0.0434184 pH= 12.4109
+  Node 3 Aq= 55.3515 Cal= 0.00562667 pH= 9.8437
+  Node 4 Aq= 55.3697 Cal= 0 pH= 9.60025
+  Node 5 Aq= 55.3709 Cal= 0 pH= 9.5804
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57893
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.3411
+Time step  35
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.3941 Cal= 0.259307 pH= 12.4101
+  Node 2 Aq= 55.2435 Cal= 0.0455772 pH= 12.4109
+  Node 3 Aq= 55.3499 Cal= 0.00602656 pH= 9.88974
+  Node 4 Aq= 55.3696 Cal= 0 pH= 9.60263
+  Node 5 Aq= 55.3709 Cal= 0 pH= 9.58061
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57895
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.34227
+Time step  36
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.3705 Cal= 0.265244 pH= 12.4101
+  Node 2 Aq= 55.2348 Cal= 0.0477739 pH= 12.4109
+  Node 3 Aq= 55.3483 Cal= 0.00644434 pH= 9.95097
+  Node 4 Aq= 55.3695 Cal= 0 pH= 9.60522
+  Node 5 Aq= 55.3709 Cal= 0 pH= 9.58084
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57897
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.34342
+Time step  37
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.3471 Cal= 0.271121 pH= 12.41
+  Node 2 Aq= 55.2259 Cal= 0.0500073 pH= 12.4109
+  Node 3 Aq= 55.3466 Cal= 0.0068803 pH= 10.04
+  Node 4 Aq= 55.3693 Cal= 0 pH= 9.60804
+  Node 5 Aq= 55.3709 Cal= 0 pH= 9.5811
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57899
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.34456
+Time step  38
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.324 Cal= 0.27694 pH= 12.41
+  Node 2 Aq= 55.2169 Cal= 0.0522767 pH= 12.4109
+  Node 3 Aq= 55.3449 Cal= 0.00733464 pH= 10.196
+  Node 4 Aq= 55.3691 Cal= 0 pH= 9.61109
+  Node 5 Aq= 55.3709 Cal= 0 pH= 9.58137
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57901
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57877
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.34568
+Time step  39
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.3011 Cal= 0.282701 pH= 12.41
+  Node 2 Aq= 55.2077 Cal= 0.0545809 pH= 12.4109
+  Node 3 Aq= 55.3435 Cal= 0.00780777 pH= 10.6093
+  Node 4 Aq= 55.3688 Cal= 0 pH= 9.61438
+  Node 5 Aq= 55.3708 Cal= 0 pH= 9.58168
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57904
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.34679
+Time step  40
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.2784 Cal= 0.288404 pH= 12.41
+  Node 2 Aq= 55.1984 Cal= 0.0569192 pH= 12.4109
+  Node 3 Aq= 55.3431 Cal= 0.00829944 pH= 11.1127
+  Node 4 Aq= 55.3686 Cal= 0 pH= 9.61794
+  Node 5 Aq= 55.3708 Cal= 0 pH= 9.58201
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57907
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.5788
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.34789
+Time step  41
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.256 Cal= 0.29405 pH= 12.41
+  Node 2 Aq= 55.189 Cal= 0.0592905 pH= 12.4109
+  Node 3 Aq= 55.343 Cal= 0.00880954 pH= 11.3654
+  Node 4 Aq= 55.3683 Cal= 0 pH= 9.62179
+  Node 5 Aq= 55.3708 Cal= 0 pH= 9.58238
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.5791
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.34896
+Time step  42
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.2338 Cal= 0.299639 pH= 12.4099
+  Node 2 Aq= 55.1794 Cal= 0.061694 pH= 12.4109
+  Node 3 Aq= 55.3428 Cal= 0.00933849 pH= 11.5283
+  Node 4 Aq= 55.3679 Cal= 0 pH= 9.62595
+  Node 5 Aq= 55.3708 Cal= 0 pH= 9.58277
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57914
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.5789
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.35002
+Time step  43
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.2118 Cal= 0.305173 pH= 12.4099
+  Node 2 Aq= 55.1698 Cal= 0.0641287 pH= 12.4109
+  Node 3 Aq= 55.3427 Cal= 0.00988648 pH= 11.6491
+  Node 4 Aq= 55.3676 Cal= 0 pH= 9.63044
+  Node 5 Aq= 55.3707 Cal= 0 pH= 9.5832
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57918
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57881
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.35107
+Time step  44
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.19 Cal= 0.310651 pH= 12.4099
+  Node 2 Aq= 55.16 Cal= 0.066594 pH= 12.4108
+  Node 3 Aq= 55.3425 Cal= 0.0104536 pH= 11.7454
+  Node 4 Aq= 55.3673 Cal= 9.99565e-08 pH= 9.63529
+  Node 5 Aq= 55.3707 Cal= 0 pH= 9.58366
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57922
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57886
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.35211
+Time step  45
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.1685 Cal= 0.316075 pH= 12.4099
+  Node 2 Aq= 55.1501 Cal= 0.0690888 pH= 12.4108
+  Node 3 Aq= 55.3424 Cal= 0.0110401 pH= 11.8258
+  Node 4 Aq= 55.3669 Cal= 1.81043e-07 pH= 9.64054
+  Node 5 Aq= 55.3707 Cal= 0 pH= 9.58416
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57927
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57887
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.35313
+Time step  46
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.1471 Cal= 0.321444 pH= 12.4098
+  Node 2 Aq= 55.14 Cal= 0.0716123 pH= 12.4108
+  Node 3 Aq= 55.3422 Cal= 0.0116459 pH= 11.895
+  Node 4 Aq= 55.3665 Cal= 0.000953874 pH= 9.63163
+  Node 5 Aq= 55.3706 Cal= 0 pH= 9.5847
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57932
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57886
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.35415
+Time step  47
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.126 Cal= 0.32676 pH= 12.4098
+  Node 2 Aq= 55.1299 Cal= 0.0741638 pH= 12.4108
+  Node 3 Aq= 55.342 Cal= 0.0122713 pH= 11.9558
+  Node 4 Aq= 55.3661 Cal= 0.00133123 pH= 9.63161
+  Node 5 Aq= 55.3706 Cal= 0 pH= 9.58528
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57938
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57892
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.35514
+Time step  48
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.1051 Cal= 0.332022 pH= 12.4098
+  Node 2 Aq= 55.1196 Cal= 0.0767424 pH= 12.4108
+  Node 3 Aq= 55.3417 Cal= 0.0129162 pH= 12.0101
+  Node 4 Aq= 55.3656 Cal= 0.0017347 pH= 9.63152
+  Node 5 Aq= 55.3706 Cal= 0 pH= 9.58591
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57945
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57887
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.35613
+Time step  49
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.0844 Cal= 0.337232 pH= 12.4098
+  Node 2 Aq= 55.1093 Cal= 0.0793473 pH= 12.4108
+  Node 3 Aq= 55.3415 Cal= 0.0135807 pH= 12.0593
+  Node 4 Aq= 55.3652 Cal= 0.00210688 pH= 9.63221
+  Node 5 Aq= 55.3705 Cal= 0 pH= 9.58657
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57952
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57896
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.35711
+Time step  50
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.0639 Cal= 0.342389 pH= 12.4098
+  Node 2 Aq= 55.0988 Cal= 0.0819777 pH= 12.4108
+  Node 3 Aq= 55.3413 Cal= 0.014265 pH= 12.1043
+  Node 4 Aq= 55.3647 Cal= 0.00228265 pH= 9.63618
+  Node 5 Aq= 55.3705 Cal= 0 pH= 9.58729
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.5796
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.5789
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.35807
+Time step  51
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.0436 Cal= 0.347496 pH= 12.4097
+  Node 2 Aq= 55.0883 Cal= 0.0846329 pH= 12.4108
+  Node 3 Aq= 55.341 Cal= 0.014969 pH= 12.1457
+  Node 4 Aq= 55.3642 Cal= 0.00241085 pH= 9.64131
+  Node 5 Aq= 55.3704 Cal= 0 pH= 9.58807
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57967
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57889
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.35902
+Time step  52
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.0235 Cal= 0.352551 pH= 12.4097
+  Node 2 Aq= 55.0776 Cal= 0.0873121 pH= 12.4108
+  Node 3 Aq= 55.3407 Cal= 0.0156928 pH= 12.1842
+  Node 4 Aq= 55.3637 Cal= 0.00254486 pH= 9.64683
+  Node 5 Aq= 55.3704 Cal= 0 pH= 9.58889
+  Node 6 Aq= 55.371 Cal= 0 pH= 9.57977
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57891
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.35996
+Time step  53
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 54.0036 Cal= 0.357555 pH= 12.4097
+  Node 2 Aq= 55.0669 Cal= 0.0900145 pH= 12.4108
+  Node 3 Aq= 55.3404 Cal= 0.0164364 pH= 12.2202
+  Node 4 Aq= 55.3631 Cal= 0.0026849 pH= 9.65276
+  Node 5 Aq= 55.3703 Cal= 0 pH= 9.58978
+  Node 6 Aq= 55.3709 Cal= 0 pH= 9.57986
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.5789
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.36089
+Time step  54
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.9839 Cal= 0.36251 pH= 12.4097
+  Node 2 Aq= 55.0561 Cal= 0.0927394 pH= 12.4107
+  Node 3 Aq= 55.3401 Cal= 0.0171999 pH= 12.2539
+  Node 4 Aq= 55.3625 Cal= 0.0028311 pH= 9.65913
+  Node 5 Aq= 55.3703 Cal= 0 pH= 9.59072
+  Node 6 Aq= 55.3709 Cal= 0 pH= 9.57997
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57893
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.36182
+Time step  55
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.9644 Cal= 0.367414 pH= 12.4097
+  Node 2 Aq= 55.0451 Cal= 0.0954862 pH= 12.4107
+  Node 3 Aq= 55.3398 Cal= 0.0179833 pH= 12.2857
+  Node 4 Aq= 55.3619 Cal= 0.0029836 pH= 9.66599
+  Node 5 Aq= 55.3702 Cal= 0 pH= 9.59172
+  Node 6 Aq= 55.3709 Cal= 0 pH= 9.58008
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57893
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.36273
+Time step  56
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.9451 Cal= 0.37227 pH= 12.4096
+  Node 2 Aq= 55.0341 Cal= 0.098254 pH= 12.4107
+  Node 3 Aq= 55.3394 Cal= 0.0187866 pH= 12.3158
+  Node 4 Aq= 55.3613 Cal= 0.0031425 pH= 9.67339
+  Node 5 Aq= 55.3702 Cal= 0 pH= 9.59279
+  Node 6 Aq= 55.3709 Cal= 0 pH= 9.58021
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57895
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.36363
+Time step  57
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.926 Cal= 0.377078 pH= 12.4096
+  Node 2 Aq= 55.0231 Cal= 0.101042 pH= 12.4107
+  Node 3 Aq= 55.3391 Cal= 0.0196098 pH= 12.3444
+  Node 4 Aq= 55.3607 Cal= 0.00330797 pH= 9.68138
+  Node 5 Aq= 55.3701 Cal= 0 pH= 9.59393
+  Node 6 Aq= 55.3709 Cal= 0 pH= 9.58034
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57896
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.36452
+Time step  58
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.9071 Cal= 0.381837 pH= 12.4096
+  Node 2 Aq= 55.0119 Cal= 0.10385 pH= 12.4107
+  Node 3 Aq= 55.3387 Cal= 0.0204529 pH= 12.3716
+  Node 4 Aq= 55.36 Cal= 0.00348015 pH= 9.69003
+  Node 5 Aq= 55.37 Cal= 0 pH= 9.59515
+  Node 6 Aq= 55.3709 Cal= 0 pH= 9.58048
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57898
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.3654
+Time step  59
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.8884 Cal= 0.386549 pH= 12.4096
+  Node 2 Aq= 55.0007 Cal= 0.106677 pH= 12.4107
+  Node 3 Aq= 55.3383 Cal= 0.021316 pH= 12.3976
+  Node 4 Aq= 55.3593 Cal= 0.00365917 pH= 9.69941
+  Node 5 Aq= 55.3699 Cal= 0 pH= 9.59644
+  Node 6 Aq= 55.3709 Cal= 0 pH= 9.58064
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.579
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.36627
+Time step  60
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.8699 Cal= 0.391213 pH= 12.4096
+  Node 2 Aq= 54.9894 Cal= 0.109523 pH= 12.4107
+  Node 3 Aq= 55.3379 Cal= 0.0221989 pH= 12.4225
+  Node 4 Aq= 55.3585 Cal= 0.00384519 pH= 9.70961
+  Node 5 Aq= 55.3699 Cal= 0 pH= 9.59781
+  Node 6 Aq= 55.3709 Cal= 0 pH= 9.5808
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57901
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.5788
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.36714
+Time step  61
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.8515 Cal= 0.395831 pH= 12.4095
+  Node 2 Aq= 54.978 Cal= 0.112386 pH= 12.4107
+  Node 3 Aq= 55.3329 Cal= 0.0231004 pH= 12.4115
+  Node 4 Aq= 55.3578 Cal= 0.00403825 pH= 9.72073
+  Node 5 Aq= 55.3698 Cal= 0 pH= 9.59929
+  Node 6 Aq= 55.3709 Cal= 0 pH= 9.58098
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57903
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.36799
+Time step  62
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.8333 Cal= 0.400403 pH= 12.4095
+  Node 2 Aq= 54.9665 Cal= 0.115266 pH= 12.4107
+  Node 3 Aq= 55.3292 Cal= 0.024022 pH= 12.4111
+  Node 4 Aq= 55.357 Cal= 0.00423858 pH= 9.73291
+  Node 5 Aq= 55.3697 Cal= 0 pH= 9.60084
+  Node 6 Aq= 55.3709 Cal= 0 pH= 9.58117
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57905
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.36884
+Time step  63
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.8153 Cal= 0.404929 pH= 12.4095
+  Node 2 Aq= 54.955 Cal= 0.118162 pH= 12.4106
+  Node 3 Aq= 55.3254 Cal= 0.0249634 pH= 12.4111
+  Node 4 Aq= 55.3562 Cal= 0.00444625 pH= 9.74631
+  Node 5 Aq= 55.3696 Cal= 0 pH= 9.60247
+  Node 6 Aq= 55.3709 Cal= 0 pH= 9.58137
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57908
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.36968
+Time step  64
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.7975 Cal= 0.409409 pH= 12.4095
+  Node 2 Aq= 54.9434 Cal= 0.121075 pH= 12.4106
+  Node 3 Aq= 55.3216 Cal= 0.0259246 pH= 12.4111
+  Node 4 Aq= 55.3553 Cal= 0.00466144 pH= 9.76112
+  Node 5 Aq= 55.3695 Cal= 0 pH= 9.60421
+  Node 6 Aq= 55.3708 Cal= 0 pH= 9.58158
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.5791
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57887
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.37051
+Time step  65
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.7799 Cal= 0.413845 pH= 12.4095
+  Node 2 Aq= 54.9318 Cal= 0.124003 pH= 12.4106
+  Node 3 Aq= 55.3177 Cal= 0.0269053 pH= 12.411
+  Node 4 Aq= 55.3544 Cal= 0.00488424 pH= 9.7776
+  Node 5 Aq= 55.3694 Cal= 0 pH= 9.60604
+  Node 6 Aq= 55.3708 Cal= 0 pH= 9.58182
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57913
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.37133
+Time step  66
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.7625 Cal= 0.418237 pH= 12.4095
+  Node 2 Aq= 54.9201 Cal= 0.126945 pH= 12.4106
+  Node 3 Aq= 55.3137 Cal= 0.0279057 pH= 12.411
+  Node 4 Aq= 55.3535 Cal= 0.00511476 pH= 9.79607
+  Node 5 Aq= 55.3693 Cal= 0 pH= 9.608
+  Node 6 Aq= 55.3708 Cal= 0 pH= 9.58206
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57916
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57887
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.37214
+Time step  67
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.7452 Cal= 0.422584 pH= 12.4094
+  Node 2 Aq= 54.9084 Cal= 0.129901 pH= 12.4106
+  Node 3 Aq= 55.3097 Cal= 0.0289257 pH= 12.411
+  Node 4 Aq= 55.3526 Cal= 0.00535315 pH= 9.81697
+  Node 5 Aq= 55.3692 Cal= 0 pH= 9.61007
+  Node 6 Aq= 55.3708 Cal= 0 pH= 9.58232
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57919
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57886
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.37295
+Time step  68
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.7281 Cal= 0.426889 pH= 12.4094
+  Node 2 Aq= 54.8966 Cal= 0.132871 pH= 12.4106
+  Node 3 Aq= 55.3055 Cal= 0.0299651 pH= 12.411
+  Node 4 Aq= 55.3516 Cal= 0.00559952 pH= 9.84089
+  Node 5 Aq= 55.3691 Cal= 0 pH= 9.61226
+  Node 6 Aq= 55.3708 Cal= 0 pH= 9.5826
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57922
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57887
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.37375
+Time step  69
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.7111 Cal= 0.43115 pH= 12.4094
+  Node 2 Aq= 54.8847 Cal= 0.135854 pH= 12.4106
+  Node 3 Aq= 55.3013 Cal= 0.031024 pH= 12.411
+  Node 4 Aq= 55.3506 Cal= 0.00585398 pH= 9.86868
+  Node 5 Aq= 55.3688 Cal= 0 pH= 9.61458
+  Node 6 Aq= 55.3708 Cal= 0 pH= 9.5829
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57926
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57886
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.37454
+Time step  70
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.6944 Cal= 0.435368 pH= 12.4094
+  Node 2 Aq= 54.8728 Cal= 0.138849 pH= 12.4106
+  Node 3 Aq= 55.2971 Cal= 0.0321023 pH= 12.411
+  Node 4 Aq= 55.3496 Cal= 0.00611665 pH= 9.90159
+  Node 5 Aq= 55.3686 Cal= 0 pH= 9.61703
+  Node 6 Aq= 55.3707 Cal= 0 pH= 9.58321
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.5793
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57887
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57881
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.37532
+Time step  71
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.6778 Cal= 0.439545 pH= 12.4094
+  Node 2 Aq= 54.8609 Cal= 0.141856 pH= 12.4105
+  Node 3 Aq= 55.2927 Cal= 0.0331998 pH= 12.411
+  Node 4 Aq= 55.3485 Cal= 0.00638765 pH= 9.9416
+  Node 5 Aq= 55.3684 Cal= 0 pH= 9.61963
+  Node 6 Aq= 55.3707 Cal= 0 pH= 9.58355
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57934
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57888
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.3761
+Time step  72
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.6613 Cal= 0.443679 pH= 12.4094
+  Node 2 Aq= 54.8489 Cal= 0.144874 pH= 12.4105
+  Node 3 Aq= 55.2883 Cal= 0.0343166 pH= 12.411
+  Node 4 Aq= 55.3474 Cal= 0.00666712 pH= 9.9921
+  Node 5 Aq= 55.3682 Cal= 0 pH= 9.62237
+  Node 6 Aq= 55.3707 Cal= 0 pH= 9.5839
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57938
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57888
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.37687
+Time step  73
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.6451 Cal= 0.447772 pH= 12.4093
+  Node 2 Aq= 54.8368 Cal= 0.147903 pH= 12.4105
+  Node 3 Aq= 55.2837 Cal= 0.0354524 pH= 12.411
+  Node 4 Aq= 55.3463 Cal= 0.00695514 pH= 10.0596
+  Node 5 Aq= 55.368 Cal= 0 pH= 9.62527
+  Node 6 Aq= 55.3707 Cal= 0 pH= 9.58428
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57944
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57889
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.37764
+Time step  74
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.629 Cal= 0.451825 pH= 12.4093
+  Node 2 Aq= 54.8247 Cal= 0.150943 pH= 12.4105
+  Node 3 Aq= 55.2791 Cal= 0.0366072 pH= 12.411
+  Node 4 Aq= 55.3452 Cal= 0.00725186 pH= 10.1589
+  Node 5 Aq= 55.3678 Cal= 0 pH= 9.62834
+  Node 6 Aq= 55.3706 Cal= 0 pH= 9.58468
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57949
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.5789
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57882
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.37839
+Time step  75
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.613 Cal= 0.455836 pH= 12.4093
+  Node 2 Aq= 54.8126 Cal= 0.153991 pH= 12.4105
+  Node 3 Aq= 55.2745 Cal= 0.0377812 pH= 12.411
+  Node 4 Aq= 55.3441 Cal= 0.00755746 pH= 10.3344
+  Node 5 Aq= 55.3675 Cal= 0 pH= 9.63159
+  Node 6 Aq= 55.3706 Cal= 0 pH= 9.5851
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57954
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.5789
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57886
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.37914
+Time step  76
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.5972 Cal= 0.459808 pH= 12.4093
+  Node 2 Aq= 54.8005 Cal= 0.15705 pH= 12.4105
+  Node 3 Aq= 55.2697 Cal= 0.0389739 pH= 12.4109
+  Node 4 Aq= 55.3434 Cal= 0.00787213 pH= 10.6961
+  Node 5 Aq= 55.3673 Cal= 9.99485e-08 pH= 9.63503
+  Node 6 Aq= 55.3706 Cal= 0 pH= 9.58554
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.5796
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.5789
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.37989
+Time step  77
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.5816 Cal= 0.46374 pH= 12.4093
+  Node 2 Aq= 54.7883 Cal= 0.160117 pH= 12.4105
+  Node 3 Aq= 55.2649 Cal= 0.0401853 pH= 12.4109
+  Node 4 Aq= 55.3432 Cal= 0.00819559 pH= 11.0374
+  Node 5 Aq= 55.367 Cal= 1.62805e-07 pH= 9.63867
+  Node 6 Aq= 55.3706 Cal= 0 pH= 9.58601
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57966
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57891
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.38063
+Time step  78
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.5661 Cal= 0.467633 pH= 12.4093
+  Node 2 Aq= 54.7761 Cal= 0.163192 pH= 12.4105
+  Node 3 Aq= 55.26 Cal= 0.0414154 pH= 12.4109
+  Node 4 Aq= 55.3431 Cal= 0.00852794 pH= 11.2441
+  Node 5 Aq= 55.3667 Cal= 4.38604e-07 pH= 9.64252
+  Node 6 Aq= 55.3705 Cal= 0 pH= 9.58651
+  Node 7 Aq= 55.371 Cal= 0 pH= 9.57973
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.5789
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57886
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.38136
+Time step  79
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.5508 Cal= 0.471486 pH= 12.4092
+  Node 2 Aq= 54.7638 Cal= 0.166275 pH= 12.4105
+  Node 3 Aq= 55.2551 Cal= 0.0426639 pH= 12.4109
+  Node 4 Aq= 55.343 Cal= 0.00886937 pH= 11.3873
+  Node 5 Aq= 55.3665 Cal= 0.000979978 pH= 9.63157
+  Node 6 Aq= 55.3705 Cal= 0 pH= 9.58704
+  Node 7 Aq= 55.3709 Cal= 0 pH= 9.5798
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57892
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.38208
+Time step  80
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.5357 Cal= 0.475301 pH= 12.4092
+  Node 2 Aq= 54.7515 Cal= 0.169365 pH= 12.4104
+  Node 3 Aq= 55.25 Cal= 0.043931 pH= 12.4109
+  Node 4 Aq= 55.3429 Cal= 0.00922003 pH= 11.4969
+  Node 5 Aq= 55.3662 Cal= 0.00124668 pH= 9.6316
+  Node 6 Aq= 55.3705 Cal= 0 pH= 9.58759
+  Node 7 Aq= 55.3709 Cal= 0 pH= 9.57988
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57894
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.3828
+Time step  81
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.5207 Cal= 0.479078 pH= 12.4092
+  Node 2 Aq= 54.7392 Cal= 0.172462 pH= 12.4104
+  Node 3 Aq= 55.2449 Cal= 0.0452163 pH= 12.4109
+  Node 4 Aq= 55.3428 Cal= 0.00958003 pH= 11.5859
+  Node 5 Aq= 55.3659 Cal= 0.00152401 pH= 9.63159
+  Node 6 Aq= 55.3704 Cal= 0 pH= 9.58817
+  Node 7 Aq= 55.3709 Cal= 0 pH= 9.57996
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57895
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57881
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.38352
+Time step  82
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.5058 Cal= 0.482818 pH= 12.4092
+  Node 2 Aq= 54.7269 Cal= 0.175566 pH= 12.4104
+  Node 3 Aq= 55.2397 Cal= 0.0465198 pH= 12.4109
+  Node 4 Aq= 55.3427 Cal= 0.00994946 pH= 11.6609
+  Node 5 Aq= 55.3656 Cal= 0.00181307 pH= 9.6316
+  Node 6 Aq= 55.3704 Cal= 0 pH= 9.58879
+  Node 7 Aq= 55.3709 Cal= 0 pH= 9.58005
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57896
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.38423
+Time step  83
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.4911 Cal= 0.486519 pH= 12.4092
+  Node 2 Aq= 54.7145 Cal= 0.178675 pH= 12.4104
+  Node 3 Aq= 55.2345 Cal= 0.0478413 pH= 12.4109
+  Node 4 Aq= 55.3426 Cal= 0.0103284 pH= 11.726
+  Node 5 Aq= 55.3652 Cal= 0.0020781 pH= 9.63208
+  Node 6 Aq= 55.3704 Cal= 0 pH= 9.58943
+  Node 7 Aq= 55.3709 Cal= 0 pH= 9.58014
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57897
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.38493
+Time step  84
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.4765 Cal= 0.490184 pH= 12.4092
+  Node 2 Aq= 54.7022 Cal= 0.18179 pH= 12.4104
+  Node 3 Aq= 55.2292 Cal= 0.0491808 pH= 12.4109
+  Node 4 Aq= 55.3425 Cal= 0.010717 pH= 11.7835
+  Node 5 Aq= 55.3649 Cal= 0.00223639 pH= 9.63437
+  Node 6 Aq= 55.3703 Cal= 0 pH= 9.59011
+  Node 7 Aq= 55.3709 Cal= 0 pH= 9.58024
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57899
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57884
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.38563
+Time step  85
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.4621 Cal= 0.493812 pH= 12.4092
+  Node 2 Aq= 54.6898 Cal= 0.18491 pH= 12.4104
+  Node 3 Aq= 55.2238 Cal= 0.0505381 pH= 12.4109
+  Node 4 Aq= 55.3423 Cal= 0.0111152 pH= 11.835
+  Node 5 Aq= 55.3645 Cal= 0.00232652 pH= 9.63792
+  Node 6 Aq= 55.3703 Cal= 0 pH= 9.59083
+  Node 7 Aq= 55.3709 Cal= 0 pH= 9.58034
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.579
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.38632
+Time step  86
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.4478 Cal= 0.497404 pH= 12.4091
+  Node 2 Aq= 54.6773 Cal= 0.188035 pH= 12.4104
+  Node 3 Aq= 55.2183 Cal= 0.0519131 pH= 12.4109
+  Node 4 Aq= 55.3422 Cal= 0.0115233 pH= 11.8819
+  Node 5 Aq= 55.3642 Cal= 0.00241915 pH= 9.64165
+  Node 6 Aq= 55.3702 Cal= 0 pH= 9.59159
+  Node 7 Aq= 55.3709 Cal= 0 pH= 9.58045
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57902
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57883
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.38701
+Time step  87
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.4337 Cal= 0.50096 pH= 12.4091
+  Node 2 Aq= 54.6649 Cal= 0.191165 pH= 12.4104
+  Node 3 Aq= 55.2128 Cal= 0.0533056 pH= 12.4109
+  Node 4 Aq= 55.3421 Cal= 0.0119412 pH= 11.9248
+  Node 5 Aq= 55.3638 Cal= 0.0025152 pH= 9.6456
+  Node 6 Aq= 55.3702 Cal= 0 pH= 9.59237
+  Node 7 Aq= 55.3709 Cal= 0 pH= 9.58056
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57903
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57881
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.38769
+Time step  88
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.4197 Cal= 0.504481 pH= 12.4091
+  Node 2 Aq= 54.6524 Cal= 0.194298 pH= 12.4103
+  Node 3 Aq= 55.2072 Cal= 0.0547155 pH= 12.4109
+  Node 4 Aq= 55.3419 Cal= 0.012369 pH= 11.9645
+  Node 5 Aq= 55.3634 Cal= 0.00261458 pH= 9.64976
+  Node 6 Aq= 55.3701 Cal= 0 pH= 9.5932
+  Node 7 Aq= 55.3709 Cal= 0 pH= 9.58069
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57905
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57886
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.38836
+Time step  89
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.4058 Cal= 0.507966 pH= 12.4091
+  Node 2 Aq= 54.64 Cal= 0.197434 pH= 12.4103
+  Node 3 Aq= 55.2015 Cal= 0.0561428 pH= 12.4109
+  Node 4 Aq= 55.3418 Cal= 0.0128069 pH= 12.0014
+  Node 5 Aq= 55.363 Cal= 0.00271723 pH= 9.65415
+  Node 6 Aq= 55.3701 Cal= 0 pH= 9.59407
+  Node 7 Aq= 55.3709 Cal= 0 pH= 9.58082
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57907
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57886
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.38903
+Time step  90
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.3921 Cal= 0.511416 pH= 12.4091
+  Node 2 Aq= 54.6275 Cal= 0.200574 pH= 12.4103
+  Node 3 Aq= 55.1958 Cal= 0.057587 pH= 12.4109
+  Node 4 Aq= 55.3416 Cal= 0.0132548 pH= 12.0359
+  Node 5 Aq= 55.3626 Cal= 0.00282336 pH= 9.65879
+  Node 6 Aq= 55.37 Cal= 0 pH= 9.59499
+  Node 7 Aq= 55.3709 Cal= 0 pH= 9.58095
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57908
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57886
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.3897
+Time step  91
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.3786 Cal= 0.514832 pH= 12.4091
+  Node 2 Aq= 54.615 Cal= 0.203717 pH= 12.4103
+  Node 3 Aq= 55.19 Cal= 0.0590483 pH= 12.4109
+  Node 4 Aq= 55.3415 Cal= 0.0137129 pH= 12.0684
+  Node 5 Aq= 55.3621 Cal= 0.00293291 pH= 9.66369
+  Node 6 Aq= 55.37 Cal= 0 pH= 9.59595
+  Node 7 Aq= 55.3709 Cal= 0 pH= 9.5811
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.5791
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57886
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.39036
+Time step  92
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.3651 Cal= 0.518214 pH= 12.4091
+  Node 2 Aq= 54.6025 Cal= 0.206862 pH= 12.4103
+  Node 3 Aq= 55.1841 Cal= 0.0605264 pH= 12.4109
+  Node 4 Aq= 55.3413 Cal= 0.0141812 pH= 12.099
+  Node 5 Aq= 55.3617 Cal= 0.00304606 pH= 9.66887
+  Node 6 Aq= 55.3699 Cal= 0 pH= 9.59695
+  Node 7 Aq= 55.3709 Cal= 0 pH= 9.58125
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57912
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.39102
+Time step  93
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.3518 Cal= 0.521562 pH= 12.409
+  Node 2 Aq= 54.59 Cal= 0.210009 pH= 12.4103
+  Node 3 Aq= 55.1781 Cal= 0.0620213 pH= 12.4109
+  Node 4 Aq= 55.3411 Cal= 0.0146598 pH= 12.128
+  Node 5 Aq= 55.3612 Cal= 0.00316281 pH= 9.67436
+  Node 6 Aq= 55.3699 Cal= 0 pH= 9.59801
+  Node 7 Aq= 55.3708 Cal= 0 pH= 9.58141
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57915
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57887
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.39167
+Time step  94
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.3386 Cal= 0.524876 pH= 12.409
+  Node 2 Aq= 54.5775 Cal= 0.213157 pH= 12.4103
+  Node 3 Aq= 55.1721 Cal= 0.0635326 pH= 12.4109
+  Node 4 Aq= 55.3409 Cal= 0.0151487 pH= 12.1556
+  Node 5 Aq= 55.3608 Cal= 0.00328324 pH= 9.68017
+  Node 6 Aq= 55.3698 Cal= 0 pH= 9.59912
+  Node 7 Aq= 55.3708 Cal= 0 pH= 9.58158
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57917
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57887
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.39232
+Time step  95
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.3256 Cal= 0.528157 pH= 12.409
+  Node 2 Aq= 54.565 Cal= 0.216307 pH= 12.4103
+  Node 3 Aq= 55.1661 Cal= 0.0650604 pH= 12.4108
+  Node 4 Aq= 55.3407 Cal= 0.0156481 pH= 12.182
+  Node 5 Aq= 55.3603 Cal= 0.00340741 pH= 9.68633
+  Node 6 Aq= 55.3697 Cal= 0 pH= 9.60027
+  Node 7 Aq= 55.3708 Cal= 0 pH= 9.58176
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.5792
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57885
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.39296
+Time step  96
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.3127 Cal= 0.531406 pH= 12.409
+  Node 2 Aq= 54.5524 Cal= 0.219458 pH= 12.4102
+  Node 3 Aq= 55.1599 Cal= 0.0666044 pH= 12.4108
+  Node 4 Aq= 55.3405 Cal= 0.0161579 pH= 12.2071
+  Node 5 Aq= 55.3598 Cal= 0.00353542 pH= 9.69288
+  Node 6 Aq= 55.3697 Cal= 0 pH= 9.60148
+  Node 7 Aq= 55.3708 Cal= 0 pH= 9.58195
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57922
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57887
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.3936
+Time step  97
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.2999 Cal= 0.534622 pH= 12.409
+  Node 2 Aq= 54.5399 Cal= 0.22261 pH= 12.4102
+  Node 3 Aq= 55.1537 Cal= 0.0681644 pH= 12.4108
+  Node 4 Aq= 55.3403 Cal= 0.0166783 pH= 12.2312
+  Node 5 Aq= 55.3592 Cal= 0.00366732 pH= 9.69985
+  Node 6 Aq= 55.3696 Cal= 0 pH= 9.60276
+  Node 7 Aq= 55.3708 Cal= 0 pH= 9.58215
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57925
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57889
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.39423
+Time step  98
+  Node 0 Aq= 52.3956 Cal= 1.00124 pH= 12.4726
+  Node 1 Aq= 53.2873 Cal= 0.537805 pH= 12.409
+  Node 2 Aq= 54.5274 Cal= 0.225762 pH= 12.4102
+  Node 3 Aq= 55.1475 Cal= 0.0697404 pH= 12.4108
+  Node 4 Aq= 55.3401 Cal= 0.0172092 pH= 12.2543
+  Node 5 Aq= 55.3587 Cal= 0.00380318 pH= 9.70726
+  Node 6 Aq= 55.3695 Cal= 0 pH= 9.60409
+  Node 7 Aq= 55.3708 Cal= 0 pH= 9.58235
+  Node 8 Aq= 55.371 Cal= 0 pH= 9.57929
+  Node 9 Aq= 55.371 Cal= 0 pH= 9.57889
+  Node 10 Aq= 55.3733 Cal= 0 pH= 9.39486

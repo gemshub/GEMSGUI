@@ -68,7 +68,7 @@ typedef struct
     curT, curP, // current T & P
     T,    	// Temperature T, C
     P,    	// Pressure P, bar
-    RT,   	// RT factor (R=8.3144 J/mole/K)
+    RT,   	// RT factor (R=8.31451 J/mole/K)
     TK,   	// T in Kelvins, added 27.11.00 by DAK
     RoW, RoV,  // Density of H2O g/cm3 (liquid; vapour)
     dRdTW, dRdTV,

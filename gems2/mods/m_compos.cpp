@@ -727,10 +727,6 @@ TCompos::RecCalc( const char* key )
     aRC->ods_link(0);
 
     bc_work_dyn_new();  // allocate work arrays and set bcp->Nmax
-//    NormFloatRound(bcp->CI, bcp->Nc, 7 );
-//    NormFloatRound(bcp->CD, bcp->Ld, 7 );
-//    NormFloatRound(bcp->CA, bcp->La, 7 );
-
 SPECIFY_C:
 
 	memset( pkey, 0, MAXRKEYLEN+9 );
@@ -884,7 +880,7 @@ IC_FOUND:
     /* Analyze control sum */
     if( fabs( bcp->R1 ) < 1e-12 )
         bcp->R1 = R1C;
-    if( fabs( bcp->R1 - R1C ) < 1e-12 || fabs( R1C ) < 1e-15 )
+    if( fabs( (double)bcp->R1 - R1C ) < 1e-8 || fabs( R1C ) < 1e-15 )
         /*Xincr = 1.*/;
     else
     { /* normalisation */
@@ -902,7 +898,7 @@ IC_FOUND:
 
     if( fabs( bcp->Msys ) < 1e-12 )
         bcp->Msys = MsysC;
-    if( fabs( bcp->Msys - MsysC ) < 1e-12 || fabs( MsysC ) < 1e-15 )
+    if( fabs( (double)bcp->Msys - MsysC ) < 1e-8 || fabs( MsysC ) < 1e-15 )
         /*Xincr = 1.*/;
     else
     { /* normalisation */
@@ -946,7 +942,7 @@ IC_FOUND:
             bcp->CIcl[i1] = CIcl[i];
         }
     }
-	NormDoubleRound(bcp->C, bcp->N, 7 ); // SD 22/07/2009
+	NormDoubleRound(bcp->C, bcp->N, 13 ); // SD 22/07/2009
     bc_work_dyn_kill();
     TCModule::RecCalc(key);
 }

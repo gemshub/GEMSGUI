@@ -752,7 +752,7 @@ TDComp::DCthermo( int q, int p )
             aCGF.CGcalcFugPure( (aW.twp->TClow+273.15), (aW.twp->Cemp), FugProps );
 
             // increment thermodynamic properties
-            aW.twp->G += 8.31451 * (aW.twp->TC+273.15) * log( FugProps[0] );
+            aW.twp->G += R_CONSTANT * (aW.twp->TC+273.15) * log( FugProps[0] );
             aW.twp->H += FugProps[2];
             aW.twp->S += FugProps[3];
             aW.twp->V = FugProps[4];
@@ -771,7 +771,7 @@ TDComp::DCthermo( int q, int p )
         	// aPRSV.~TPRSVcalc();
 
             // increment thermodynamic properties
-            aW.twp->G += 8.31451 * (aW.twp->TC+273.15) * log( FugProps[0] );
+            aW.twp->G += R_CONSTANT * (aW.twp->TC+273.15) * log( FugProps[0] );
             aW.twp->H += FugProps[2];
             aW.twp->S += FugProps[3];
             aW.twp->V = FugProps[4];
@@ -789,7 +789,7 @@ TDComp::DCthermo( int q, int p )
         	// aSRK.~TSRKcalc();
 
         	// increment thermodynamic properties
-        	aW.twp->G += 8.31451 * (aW.twp->TC+273.15) * log( FugProps[0] );
+        	aW.twp->G += R_CONSTANT * (aW.twp->TC+273.15) * log( FugProps[0] );
         	aW.twp->H += FugProps[2];
         	aW.twp->S += FugProps[3];
         	aW.twp->V = FugProps[4];
@@ -807,7 +807,7 @@ TDComp::DCthermo( int q, int p )
         	// aPR78.~TPR78calc();
 
         	// increment thermodynamic properties
-        	aW.twp->G += 8.31451 * (aW.twp->TC+273.15) * log( FugProps[0] );
+        	aW.twp->G += R_CONSTANT * (aW.twp->TC+273.15) * log( FugProps[0] );
         	aW.twp->H += FugProps[2];
         	aW.twp->S += FugProps[3];
         	aW.twp->V = FugProps[4];

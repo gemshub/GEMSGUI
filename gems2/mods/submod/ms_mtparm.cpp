@@ -409,16 +409,16 @@ if( P < 1e-5 )  // trial check  5.12.2006
 
         		// Back correction for the PRSV EoS model
         		if( mup->DCS[j] == SRC_DCOMP && aDC->dcp->pct[2] == CPM_PRSV )  // since 15.02.2007 (DK)
-        			tp.G[j] -= 8.31451 * tp.TK * log( aW.twp->Fug/tp.P );
+        			tp.G[j] -= R_CONSTANT * tp.TK * log( aW.twp->Fug/tp.P );
         		// Back correction for the CG EoS model
         		if( mup->DCS[j] == SRC_DCOMP && aDC->dcp->pct[2] == CPM_EMP )  // since 15.02.2007 (DK)
-        			tp.G[j] -= 8.31451 * tp.TK * log( aW.twp->Fug/tp.P );
+        			tp.G[j] -= R_CONSTANT * tp.TK * log( aW.twp->Fug/tp.P );
         		// Back correction for the SRK EoS model
         		if( mup->DCS[j] == SRC_DCOMP && aDC->dcp->pct[2] == CPM_SRK )  // added 17.12.2008 (TW)
-        			tp.G[j] -= 8.31451 * tp.TK * log( aW.twp->Fug/tp.P );
+        			tp.G[j] -= R_CONSTANT * tp.TK * log( aW.twp->Fug/tp.P );
         		// Back correction for the PR78 EoS model
         		if( mup->DCS[j] == SRC_DCOMP && aDC->dcp->pct[2] == CPM_PR78 )  // added 18.07.2009 (TW)
-        			tp.G[j] -= 8.31451 * tp.TK * log( aW.twp->Fug/tp.P );
+        			tp.G[j] -= R_CONSTANT * tp.TK * log( aW.twp->Fug/tp.P );
         	}
         }
 
@@ -582,6 +582,7 @@ if( P < 1e-5 )  // trial check  5.12.2006
 	NormDoubleRound(tp.G, tp.L, 13 ); // SD 22/07/2009
 	NormDoubleRound(tp.RoW, 13 ); 
 	NormDoubleRound(tp.EpsW, 13 ); 
+//cout << "T = " << tp.T << " P= " << tp.P << " G[0] " << setprecision(18) << scientific << tp.G[0]<< endl;
 }
 
 // test polimorf modifications

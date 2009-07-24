@@ -118,7 +118,6 @@ int main( int argc, char* argv[] )
          m_bPS[in] = new double [nIC*nPS];
       }
 
-cout << "Begin Initialiation part" << endl;
       // Initialization of GEMIPM2K and chemical information for nodes kept in the FMT part
       long int in;
       for(  in=1; in<nNodes; in++ )
@@ -178,35 +177,39 @@ cout << "Begin Initialiation part" << endl;
           // Here the file output for the initial conditions can be implemented
      }
       
-cout << "End Initialiation part" << endl;
-        int xCalcite = node->Ph_name_to_xDB("Calcite");
-        int xDolomite = node->Ph_name_to_xDB("Dolomite-dis");
-      
       // Main loop - iterations over nTimes time steps
+        int xCalcite = node->Ph_name_to_xDB("Calcite");
+        int xAq_gen = node->Ph_name_to_xDB("aq_gen");
+        int ICndx[3];
+        ICndx[0] = node->IC_name_to_xDB("Ca");
+        ICndx[1] = node->IC_name_to_xDB("C");
+        ICndx[2] = node->IC_name_to_xDB("O");
+        double parcel[3];
+        
+        // Checking indexes
+        cout << "xCa= " << ICndx[0] << " xC=" << ICndx[1] << " xO=" << ICndx[2]
+             << " xCalcite=" << xCalcite << " xAq_gen=" << xAq_gen << endl;
+
       long int it, nTimes = 99;
       for( it=0; it<nTimes; it++ ) 
       {
-         // Mass transport loop over nodes (here not a real transport model)
-         double parcel[3];
-         for (int i=0; i<3; i++)
-         {
-            parcel[i] = 0.01*m_bIC[0][i];
+          cout << "Time step  " << it << endl;
+          // Mass transport loop over nodes (here not a real transport model)
+          for(  in=1; in<nNodes; in++ )
+          {
+               // some operators that change in some nodes some amounts of some migrating chemical species (m_xDC array)
+               // (or  some amounts of migrating chemical elements in m_bIC array), possibly using data from other arrays
+               // in such a way that the mass conservation within the whole array of nodes  is retained
+            for (int i=0; i<3; i++)
+            {
+         	  parcel[i] = 0.01*m_bIC[in-1][ICndx[i]];
+         	  m_bIC[in][ICndx[i]] += parcel[i];
+              if( in > 1 )  m_bIC[in-1][ICndx[i]] -= parcel[i];
+            }
+            // The above example loop implements a zero-order flux of the CaCO in one direction
+            // real advective/diffusive transport models are much more complex, but essentially
+            //   do similar things
          }
-         for(  in=1; in<nNodes; in++ )
-         {
-              // some operators that change in some nodes some amounts of some migrating chemical species (m_xDC array)
-              // (or  some amounts of migrating chemical elements in m_bIC array), possibly using data from other arrays
-              // in such a way that the mass conservation within the whole array of nodes  is retained
-           for (int i=0; i<3; i++)
-           {
-              m_bIC[in][i] += parcel[i];
-              m_bIC[in-1][i] -= parcel[i];
-           }
-           // The above example loop implements a zero-order flux of the first three
-           //   chemical elements in one direction
-           // real advective/diffusive transport models are much more complex, but essentially
-           //   do similar things
-        }
 
         // Chemical equilibration loop over nodes
         for( in=0; in<nNodes; in++ )
@@ -244,9 +247,9 @@ cout << "End Initialiation part" << endl;
            }
      // Here, the output upon completion of the time step is usually implemented
      //  to monitor the coupled simulation or collect results
-        cout << "Time step" << it << " node " << in ;
-        cout << " Cal= " << m_xPH[in][xCalcite] <<
-                " Dol= " << m_xPH[in][xDolomite] <<
+        cout << "  Node " << in ;
+        cout << " Aq= " << m_xPH[in][xAq_gen] <<
+                " Cal= " << m_xPH[in][xCalcite] <<
                 " pH= " << m_pH[in] << endl;
         }
    }
@@ -255,7 +258,6 @@ cout << "End Initialiation part" << endl;
 
    // Final output e.g. of total simulation time or of the final distribution of
    //  components and phases in all nodes can be implemented here
-cout << " End Coupled Modelling part" << endl;
 
    // Deleting chemical data arrays for nodes
    for (long int in=0; in<nNodes; in++)  

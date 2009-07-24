@@ -181,7 +181,7 @@ NEXT2:
     if( pmp->pBAL < 2 )
         ConvertDCC(); // Loading generic species codes
 
-   if(  !pmp->pBAL || pmp->pTPD < 2)
+   if(  !pmp->pBAL || pmp->pTPD < 2) 
       CompG0Load();
 
     // Tests on integrity of CSD can be added here

@@ -18,6 +18,7 @@
 //-------------------------------------------------------------------
 //
 #include <stdio.h>
+#include <iomanip>
 #include <math.h>
 
 #include "m_param.h"
@@ -295,6 +296,15 @@ void TMulti::CompG0Load()
     }
 
   Alloc_internal(); // performance optimization 08/02/2007
+//  cout << "G0Load  T = " << tpp-> T << " P= " << tpp->P << endl;
+//  cout << " G[0] " << setprecision(18) << scientific << pmp->G0[0] << endl;
+//  cout << "Guns " << syp->Guns[pmp->muj[0]] << endl;
+//  cout << "GEX " << syp->GEX[pmp->muj[0]] << endl;
+//  cout << "G " << tpp->G[pmp->muj[0]] << endl;
+//  cout << "YOF " << pmp->YOF[0] << endl;
+//  cout << "pmp->ln5551 " << pmp->ln5551 << endl;
+//  cout << "pmp->RT " << pmp->RT << endl;
+//  cout << "pmp->Pc " << pmp->Pc << endl;
   pmp->pTPD = 2;
 }
 

@@ -15,8 +15,7 @@ from running the GEM-Selektor package as described in Section 2.4 of
 the Technical Report, and
 can also be modified using any ASCII text editor. The file formats are
 described in detail in <a href="gemipm2k-inp.html">gemipm2k-inp.html</a>
-file. These files should be
-located in the same directory where the program executable is located.
+file.&nbsp;
 The names of IPM, DCH and one or several DBR files should be collected
 in
 a list (txt file) with the file name/path given as a string in the
@@ -24,7 +23,10 @@ first parameter of GEM_init() function call. Contents of this list
 usually look like this: <br>
 </p>
 <p><span style="font-family: monospace;">-t "Test-dch.dat"
-"Test-ipm.dat" "Test-dbr-0.dat"</span><br>
+"Test-ipm.dat" "Test-dbr-0.dat"<br>
+</span><br>
+<span style="color: rgb(0, 153, 0);">These files should be
+located in the same directory where&nbsp; the list file is located.</span><br>
 </p>
 <h2>1. The simplest case: data exchange using disk files only</h2>
 <p>Programming example fragment (see full example in
@@ -292,7 +294,8 @@ GEM_run() call, as shown in the above code example.<br>
 <h3>(3) GEM_write_dbr()
 </h3>
 <span style="font-family: monospace;">void&nbsp; GEM_write_dbr( const
-char* fname,&nbsp; bool binary_f=false, bool with_comments = true);</span><br>
+char* fname,&nbsp; bool binary_f=false, bool with_comments = true<span
+ style="color: rgb(0, 153, 0);">, bool brief_mode = false );</span></span><br>
 <br>
 Purpose:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Writes the contents
 of the work instance of the DATABR structure into a disk file with path
@@ -345,6 +348,12 @@ comments will be written for all data entries (default).&nbsp;
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp; If&nbsp;&nbsp; false (0), comments will not be
 written. <br>
+<span style="color: rgb(0, 153, 0);">&nbsp; <span
+ style="font-family: monospace;">brief_mode</span><span
+ style="font-family: monospace;">&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+if true, tells that do not write data items,&nbsp; that contain only
+default values in text format</span><br>
+<br>
 <br>
 Any DBR file written using GEM_write_dbr() can be read as input file
 using GEM_init() or GEM_read_dbr() as long as it is consistent with the
@@ -815,6 +824,17 @@ conditions can be implemented</span><br style="font-family: monospace;">
       <td style="vertical-align: top;"><span
  style="font-family: monospace;">// Main loop -
 iterations over nTimes time steps <br>
+&nbsp;<span style="color: rgb(0, 153, 0);">&nbsp; int ICndx[3];</span><br
+ style="color: rgb(0, 153, 0);">
+      <span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; ICndx[0] =
+node-&gt;IC_name_to_xDB("Ca");</span><br style="color: rgb(0, 153, 0);">
+      <span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; ICndx[1] =
+node-&gt;IC_name_to_xDB("C");</span><br style="color: rgb(0, 153, 0);">
+      <span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; ICndx[2] =
+node-&gt;IC_name_to_xDB("O");</span><br style="color: rgb(0, 153, 0);">
+      <span style="color: rgb(0, 153, 0);">&nbsp;&nbsp; double
+parcel[3];</span><br>
+      <br>
 &nbsp;&nbsp; long int it, nTimes = 99; <br>
 &nbsp;&nbsp; for( it=0; it&lt;nTimes; it++ )&nbsp; </span><br
  style="font-family: monospace;">
@@ -824,16 +844,10 @@ iterations over nTimes time steps <br>
 Mass
 transport loop over nodes (here not a real transport model) </span><br
  style="font-family: monospace;">
-      <span style="font-family: monospace;">&nbsp;&nbsp;&nbsp;&nbsp; </span><span
- style="font-family: monospace;">double parcel[3];<br>
-      </span><span style="font-family: monospace;"><span
- style="color: rgb(0, 153, 0);">&nbsp;&nbsp;&nbsp;&nbsp;
-for (int i=0; i&lt;3; i++)</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp; {<br>
-&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="font-family: monospace;"></span><span
- style="font-family: monospace;">&nbsp; parcel[i] = 0.01*m_bIC[0][i];</span><br>
-      <span style="font-family: monospace;">&nbsp;&nbsp;&nbsp;&nbsp; } <br>
-      </span><span style="font-family: monospace;">&nbsp;&nbsp;&nbsp;&nbsp;
+      <span style="font-family: monospace;"></span><span
+ style="font-family: monospace;"></span><span
+ style="font-family: monospace;"><span style="color: rgb(0, 153, 0);">&nbsp;</span></span><span
+ style="font-family: monospace;">&nbsp;&nbsp;&nbsp;
 for(&nbsp; in=1; in&lt;nNodes; in++ )</span><br
  style="font-family: monospace;">
       <span style="font-family: monospace;">&nbsp;&nbsp;&nbsp;&nbsp; {</span><br
@@ -847,21 +861,27 @@ chemical species (m_xDC array)<br>
 chemical elements in m_bIC array), possibly using data from other arrays<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // in such a way that the mass
 conservation within the whole array of nodes&nbsp; is retained<br>
-&nbsp;<span style="color: rgb(0, 153, 0);">&nbsp;&nbsp;
-&nbsp;&nbsp;
-for (int i=0; i&lt;3; i++)</span><br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; {<br>
-&nbsp;</span><span style="font-family: monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-m_bIC[in][i] += parcel[i];<br>
-      </span><span style="font-family: monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-m_bIC[in-1][i] -= parcel[i];</span><br>
-      <span style="font-family: monospace;"></span><span
- style="font-family: monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // The above example loop
-implements a zero-order flux of the first three <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //&nbsp;&nbsp; chemical elements
-in one direction<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // real advective/diffusive
+      <span style="color: rgb(0, 153, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+for (int i=0; i&lt;3; i++)</span><br style="color: rgb(0, 153, 0);">
+      <span style="color: rgb(0, 153, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+{</span><br style="color: rgb(0, 153, 0);">
+      <span style="color: rgb(0, 153, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+parcel[i] = 0.01*m_bIC[in-1][ICndx[i]];</span><br
+ style="color: rgb(0, 153, 0);">
+      <span style="color: rgb(0, 153, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+m_bIC[in][ICndx[i]] += parcel[i];</span><br
+ style="color: rgb(0, 153, 0);">
+      <span style="color: rgb(0, 153, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+if( in &gt; 1 )&nbsp; m_bIC[in-1][ICndx[i]] -= parcel[i];</span><br
+ style="color: rgb(0, 153, 0);">
+      <span style="color: rgb(0, 153, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}</span><br style="color: rgb(0, 153, 0);">
+      <span style="color: rgb(0, 153, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+// The above example loop implements a zero-order flux of the CaCO in
+one direction</span><br style="color: rgb(0, 153, 0);">
+      </span><span style="font-family: monospace;"><span
+ style="color: rgb(0, 153, 0);">&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;
+// real advective/diffusive
 transport models are much more complex, but essentially<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //&nbsp;&nbsp; do similar things<br>
       </span><span style="font-family: monospace;">&nbsp;&nbsp;&nbsp;&nbsp;

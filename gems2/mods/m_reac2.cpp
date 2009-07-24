@@ -1275,7 +1275,7 @@ TReacDC::MRBcalc( double TK, double *H2Oprop, double *MRBcoef, double *ReactProp
 {
 	// calculates reaction properties from MRB model
 	double a, b, c, d, e, f, g, RHO298;
-	double R_C = 8.31451;
+	double R_C = R_CONSTANT;
 	double RHO, ALP, dALPdT, BET, dRHOdT, d2RHOdT2, dRHOdP;
 	double pK298, A, B;
 	double dGr, dSr, dHr, dCPr, dVr, dG298;
@@ -1424,7 +1424,7 @@ TReacDC::MFDcalc( double TK, double *H2Oprop, double *MFDcoef, double *ReactProp
 {
 	// calculates reaction properties from Marshall-Franck density (MFD) model
 	double a, b, c, d, e, f, g;
-	double R_C = 8.31451;
+	double R_C = R_CONSTANT;
 	double RHO, ALP, dALPdT, BET, dRHOdT, d2RHOdT2, dRHOdP;
 	double logK, dGr, dSr, dHr, dCPr, dVr;
 	double J, dJ, d2J;

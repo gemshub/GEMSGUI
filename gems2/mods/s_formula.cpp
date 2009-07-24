@@ -719,7 +719,7 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
         }
         if( jj==-1 )
             Error( icsp, "E33FPrun: This is not a symbol of IComp!");
-        Sml[jj] += (float)aSC[i];
+        Sml[jj] += aSC[i];
         if( aVal[i] == SHORT_EMPTY/*I_EMPTY*/ )
             aVal[i] = ICval[jj];
     }

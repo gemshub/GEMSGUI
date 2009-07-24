@@ -36,7 +36,7 @@ using namespace JAMA;
 #endif
 #include "node.h"
 
-// #define GEMITERTRACE
+//#define GEMITERTRACE
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Main sequence of IPM calculations

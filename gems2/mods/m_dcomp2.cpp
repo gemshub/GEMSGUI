@@ -563,7 +563,7 @@ void TDComp::calc_akinf( int q, int p )
 	double CaltoJ = cal_to_J;
 	// calculate infinite dilution properties of aqueous species at T and P of interest
 	double Pbar, Tk, rho, alp, bet, dalpT, dH0k;
-	double Tr = 298.15, Pr = 1.0, R_CONST = 8.31451;
+	double Tr = 298.15, Pr = 1.0, R_CONST = R_CONSTANT;
 	double Gig, Sig, CPig, Gw, Sw, CPw;
 	double Geos, Veos, Seos, CPeos, Heos;
 	double Gids, Vids, Sids, CPids, Hids;
@@ -633,7 +633,7 @@ TDComp::Akinfiev_EOS_increments(double Tk, double P, double Gig, double Sig, dou
 	double derP, derT, der2T;
 	double deltaB, lnKH, Nw, xi, aa, bb, RT;
 	double fug, vol, drhoT, drhoP, d2rhoT, lnfug, Gres, Sres, CPres;
-	const double RR = 83.1451, R_CONST = 8.31451;
+	const double RR = 83.1451, R_CONST = R_CONSTANT;
 	const double MW = 18.01528;
 
 	RT = Tk*R_CONST;
@@ -780,7 +780,7 @@ void TDComp::gShok2( double T, double P, double D, double beta, double alpha,
 
 //-------------------------------------------------------------------------
 // gfun92 - Calculation: function g for (Tanger and Helgeson, 1988;
-//          Shock et al.,1991) and it  частные производные (dgdP, dgdT,
+//          Shock et al.,1991) and it  пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (dgdP, dgdT,
 //          d2gdT2)  for  TdegC,  Pbars  for algoritm :
 //       geqn = 1 ...... use Tanger-Helgeson (1988) equations
 //       geqn = 2 ...... use Shock et al. (1991) equations

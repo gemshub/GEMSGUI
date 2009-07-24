@@ -727,7 +727,7 @@ NEXT_DC:
             }
         }
     }
-	NormDoubleRound(sy.B, N, 13 ); // SD 22/07/2009
+//	NormDoubleRound(sy.B, N, 13 ); // SD 22/07/2009
     if( A )
         delete[] A;
     ///  pVisor->Update();  //Sveta

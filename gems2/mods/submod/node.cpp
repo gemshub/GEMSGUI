@@ -86,21 +86,114 @@ bool  TNode::check_TP( double Tc, double P )
    return ( okT && okP );
 }
 
-//-------------------------------------------------------------------------
-// GEM_run()
-// GEM IPM calculation of equilibrium state for the work node.
-//   mode of GEM calculation is taken from the DATABR work structure
-//
-//  if uPrimalSol == true then the primal solution (vectors x, gamma, IC etc.)
-//    will be unpacked before GEMIPM calculation - as an option for the PIA mode
-//    with previous GEM solution taken from the same node.
-//  If uPrimalSol == false then the primal solution data will not be unpacked
-//    into the MULTI structure (AIA mode or PIA mode with primal solution retained
-//    in the MULTI structure from any previous IPM calculation)
-//
-//   Function returns: NodeStatusCH code from DATABR structure
-//   ( OK; GEMIPM2K calculation error; system error )
-//
+//-------------------------------------------------------------------------------------------------------------------------------
+// (2) Main call for GEM IPM calculations using the input bulk composition, temperature, pressure 
+//   and metastability constraints provided in the work instance of DATABR structure.  
+//   Actual calculation will be performed only when dBR->NodeStatusCH == NEED_GEM_SIA (5) or dBR->NodeStatusCH = NEED_GEM_AIA (1).
+//   By other values of NodeStatusCH, no calculation will be performed and the status will remain unchanged.
+//  In "smart initial approximation" (SIA) mode, the program can automatically switch into the "automatic initial
+//  approximation" (AIA) mode and return  OK_GEM_AIA instead of OK_GEM_SIA.
+//  The variant with one function parameter performs no internal scaling of the mass of the system. 
+//   Parameters:
+//   uPrimalSol  flag to define the mode of GEM smart initial approximation
+//               (only if dBR->NodeStatusCH = NEED_GEM_SIA has been set before GEM_run() call).
+//               false  (0) -  use speciation and activity coefficients from previous GEM_run() calculation
+//               true  (1)  -  use speciation provided in the DATABR memory structure (e.g. after reading the DBR file)  
+//  InternalMass Mass (kg) to which the input bulk composition (provided in DATABR memory structure) will be scaled 
+//               internally during the GEM IPM calculation (results will be scaled back to the original mass).
+//               Default value - 1 kg, reasonable range from 0.01 to 100 kg. This scaling is used for achieving
+//               better convergence and balance accuracy of GEM IPM2 algorithm.
+//  Return values:    NodeStatusCH  (the same as set in dBR->NodeStatusCH). Possible values (see "databr.h" file for the full list)
+long int TNode::GEM_run( double InternalMass,  bool uPrimalSol )
+{
+  CalcTime = 0.0;
+  PrecLoops = 0; NumIterFIA = 0; NumIterIPM = 0;
+  
+  double mass_temp=0.0, ScFact=0.0;
+  long int i;
+
+  for (i=0;i<CSD->nICb;i++)
+  {
+	mass_temp += CNode->bIC[i]*CSD->ICmm[IC_xDB_to_xCH(i)];
+  }
+  mass_temp *= 1e-3;
+  CNode->Ms=mass_temp;
+  ScFact = InternalMass/mass_temp; // changed to scaling via newly calculated mass from bIC vector,
+
+  try
+  {
+// f_log << " GEM_run() begin Mode= " << p_NodeStatusCH endl;
+//---------------------------------------------
+// Checking T and P  for interpolation intervals
+   check_TP( CNode->TC, CNode->P);
+// Unpacking work DATABR structure into MULTI (GEM IPM structure): uses DATACH
+// setting up up PIA or AIA mode
+   if( CNode->NodeStatusCH == NEED_GEM_SIA )
+   {
+	   pmm->pNP = 1;
+	   unpackDataBr( uPrimalSol, ScFact );
+   }
+   else if( CNode->NodeStatusCH == NEED_GEM_AIA )
+         {
+	        pmm->pNP = 0; // As default setting AIA mode
+	       unpackDataBr( false, ScFact );
+         }
+        else 
+	           return CNode->NodeStatusCH;
+   // GEM IPM calculation of equilibrium state in MULTI
+   CalcTime = TProfil::pm->calcMulti( PrecLoops, NumIterFIA, NumIterIPM );
+   // Extracting and packing GEM IPM results into work DATABR structure
+    packDataBr( ScFact );
+    CNode->IterDone = NumIterFIA+NumIterIPM;
+//**************************************************************
+// only for testing output results for files
+//    GEM_write_dbr( "calculated_dbr.dat",  false );
+//    GEM_print_ipm( "calc_multi.ipm" );
+// *********************************************************
+    // test error result GEM IPM calculation of equilibrium state in MULTI
+    long int erCode = TProfil::pm->testMulti();
+
+    if( erCode )
+    {
+        if( CNode->NodeStatusCH  == NEED_GEM_AIA )
+          CNode->NodeStatusCH = BAD_GEM_AIA;
+        else
+          CNode->NodeStatusCH = BAD_GEM_SIA;
+    }
+    else
+    {
+      if( CNode->NodeStatusCH  == NEED_GEM_AIA )
+          CNode->NodeStatusCH = OK_GEM_AIA;
+      else
+         CNode->NodeStatusCH = OK_GEM_SIA;
+    }
+   }
+   catch(TError& err)
+    {
+	if( TProfil::pm->pa.p.PSM  )
+	{
+			fstream f_log("ipmlog.txt", ios::out|ios::app );
+	        f_log << "Error Node:" << CNode->NodeHandle << ":time:" << CNode->Tm << ":dt:" << CNode->dt<< ": " <<
+	          err.title.c_str() << ":" << endl;
+	       if( TProfil::pm->pa.p.PSM == 2  )
+	          f_log  << err.mess.c_str() << endl;
+	}
+     if( CNode->NodeStatusCH  == NEED_GEM_AIA )
+       CNode->NodeStatusCH = ERR_GEM_AIA;
+     else
+       CNode->NodeStatusCH = ERR_GEM_SIA;
+
+    }
+    catch(...)
+    {
+     fstream f_log("ipmlog.txt", ios::out|ios::app );
+     f_log << "Node:" << CNode->NodeHandle << ":time:" << CNode->Tm << ":dt:" << CNode->dt<< ": "
+    		<< "gems2: Unknown exception: GEM calculation aborted" << endl;
+     CNode->NodeStatusCH = T_ERROR_GEM;
+    }
+   return CNode->NodeStatusCH;
+}
+
 long int TNode::GEM_run( bool uPrimalSol )
 {
   CalcTime = 0.0;
@@ -119,10 +212,12 @@ long int TNode::GEM_run( bool uPrimalSol )
 	   pmm->pNP = 1;
 	   unpackDataBr( uPrimalSol );
    }
-   else {
-	   pmm->pNP = 0; // As default setting AIA mode
-	   unpackDataBr( false );
-   }
+   else if( CNode->NodeStatusCH == NEED_GEM_AIA )
+	     {  pmm->pNP = 0; // As default setting AIA mode
+	        unpackDataBr( false );
+         }
+        else
+	       return CNode->NodeStatusCH;
    // GEM IPM calculation of equilibrium state in MULTI
    CalcTime = TProfil::pm->calcMulti( PrecLoops, NumIterFIA, NumIterIPM );
 // Extracting and packing GEM IPM results into work DATABR structure
@@ -131,7 +226,7 @@ long int TNode::GEM_run( bool uPrimalSol )
 //**************************************************************
 // only for testing output results for files
 //    GEM_write_dbr( "calculated_dbr.dat",  false );
-//    GEM_printf( "calc_multi.ipm", "calculated_dbr.dat", "calculated.dbr" );
+//    GEM_print_ipm( "calc_multi.ipm" );
 // *********************************************************
 
     // test error result GEM IPM calculation of equilibrium state in MULTI
@@ -174,130 +269,29 @@ long int TNode::GEM_run( bool uPrimalSol )
     fstream f_log("ipmlog.txt", ios::out|ios::app );
     f_log << "Node:" << CNode->NodeHandle << ":time:" << CNode->Tm << ":dt:" << CNode->dt<< ": "
    		<< "gems2: Unknown exception: GEM calculation aborted" << endl;
-      if( CNode->NodeStatusCH  == NEED_GEM_AIA )
-        CNode->NodeStatusCH = ERR_GEM_AIA;
-      else
-        CNode->NodeStatusCH = ERR_GEM_SIA;
-   }
-   return CNode->NodeStatusCH;
-}
-
-// Main call for GEM IPM calculation, returns p_NodeStatusCH value
-// see databr.h for p_NodeStatusCH flag values
-// Before calling GEM_run(), make sure that the node data are
-// loaded using GEM_from_MT() call; after calling GEM_run(),
-// check the return code and retrieve chemical speciation etc.
-// using the GEM_to_MT() call
-// This is an overloaded variant which scales extensive properties of the system
-// provided in DATABR and DATACH to the given internal mass (InternalMass) in kg
-// by multiplying by a factor ScalingCoef/Ms before calling GEM and the results
-// by Ms/ScalingCoef after the GEM calculation.
-// This method may help stabilizing convergence of GEMIPM2 algorithm
-// by providing a constant mass of the internal system regardless of
-// different node (reactive chemical system) sizes.
-//
-long int TNode::GEM_run( double InternalMass,  bool uPrimalSol )
-{
-  CalcTime = 0.0;
-  PrecLoops = 0; NumIterFIA = 0; NumIterIPM = 0;
-//  double ScFact = InternalMass/CNode->Ms; //bug: old mass from previous run will be taken
-double mass_temp=0.0, ScFact=0.0;
-long int i;
-	for (i=0;i<CSD->nICb;i++){
-		mass_temp += CNode->bIC[i]*CSD->ICmm[IC_xDB_to_xCH(i)];
-	}
-	mass_temp *= 1e-3;
-	CNode->Ms=mass_temp;
-	ScFact = InternalMass/mass_temp; // changed to scaling via newly calculated mass from bIC vector,
-//
-  try
-  {
-// f_log << " GEM_run() begin Mode= " << p_NodeStatusCH endl;
-//---------------------------------------------
-// Checking T and P  for interpolation intervals
-   check_TP( CNode->TC, CNode->P);
-// Unpacking work DATABR structure into MULTI (GEM IPM structure): uses DATACH
-// setting up up PIA or AIA mode
-   if( CNode->NodeStatusCH == NEED_GEM_SIA )
-   {
-	   pmm->pNP = 1;
-	   unpackDataBr( uPrimalSol, ScFact );
-   }
-   else {
-	   pmm->pNP = 0; // As default setting AIA mode
-	   unpackDataBr( false, ScFact );
-   }
-   // GEM IPM calculation of equilibrium state in MULTI
-   CalcTime = TProfil::pm->calcMulti( PrecLoops, NumIterFIA, NumIterIPM );
-   // Extracting and packing GEM IPM results into work DATABR structure
-    packDataBr( ScFact );
-    CNode->IterDone = NumIterFIA+NumIterIPM;
-//**************************************************************
-// only for testing output results for files
-//    GEM_write_dbr( "calculated_dbr.dat",  false );
-//    GEM_printf( "calc_multi.ipm", "calculated_dbr.dat", "calculated.dbr" );
-// *********************************************************
-    // test error result GEM IPM calculation of equilibrium state in MULTI
-    long int erCode = TProfil::pm->testMulti();
-
-    if( erCode )
-    {
-        if( CNode->NodeStatusCH  == NEED_GEM_AIA )
-          CNode->NodeStatusCH = BAD_GEM_AIA;
-        else
-          CNode->NodeStatusCH = BAD_GEM_SIA;
-    }
-    else
-    {
-      if( CNode->NodeStatusCH  == NEED_GEM_AIA )
-          CNode->NodeStatusCH = OK_GEM_AIA;
-      else
-         CNode->NodeStatusCH = OK_GEM_SIA;
-    }
-   }
-   catch(TError& err)
-    {
-	if( TProfil::pm->pa.p.PSM  )
-	{
-			fstream f_log("ipmlog.txt", ios::out|ios::app );
-	        f_log << "Error Node:" << CNode->NodeHandle << ":time:" << CNode->Tm << ":dt:" << CNode->dt<< ": " <<
-	          err.title.c_str() << ":" << endl;
-	       if( TProfil::pm->pa.p.PSM == 2  )
-	          f_log  << err.mess.c_str() << endl;
-	}
-     if( CNode->NodeStatusCH  == NEED_GEM_AIA )
-       CNode->NodeStatusCH = ERR_GEM_AIA;
-     else
-       CNode->NodeStatusCH = ERR_GEM_SIA;
-
-    }
-    catch(...)
-    {
-     fstream f_log("ipmlog.txt", ios::out|ios::app );
-     f_log << "Node:" << CNode->NodeHandle << ":time:" << CNode->Tm << ":dt:" << CNode->dt<< ": "
-    		<< "gems2: Unknown exception: GEM calculation aborted" << endl;
-       if( CNode->NodeStatusCH  == NEED_GEM_AIA )
-         CNode->NodeStatusCH = ERR_GEM_AIA;
-       else
-         CNode->NodeStatusCH = ERR_GEM_SIA;
+    CNode->NodeStatusCH = T_ERROR_GEM;
     }
    return CNode->NodeStatusCH;
 }
 
 
-//-----------------------------------------------------------------------
-// Returns calculation time after the last GEM_run() call
-//
+
+// Returns GEMIPM2 calculation time in seconds elapsed during the last call of GEM_run() - can be used for monitoring
+//                      the performance of calculations.
+// Return value:  double number, may contain 0.0 if the calculation time is less than the internal time resolution of C/C++ function
 double TNode::GEM_CalcTime()
 {
   return CalcTime;
 }
 
-// Returns total number of FIA + IPM iterations after the last call to GEM_run()
-// More detailed info is returned via parameters by reference:
-//    PrecLoops:  Number of performed IPM-2 precision refinement loops
-//    NumIterFIA: Total Number of performed FIA entry iterations
-//    NumIterIPM: Total Number of performed IPM main iterations
+// To obtain the number of GEM IPM2 iterations performed during the last call of GEM_run() e.g. for monitoring the
+// performance of GEMIPM2K in AIA or SIA modes, or for problem diagnostics.   
+// Parameters:  long int variables per reference (must be allocated before calling GEM_Iterations(), previous values will be lost. See Return values.
+// Return values:
+//   Function         Total number of EFD + IPM iterations from the last call to GEM_run()
+//   PrecLoops        Number of performed IPM-2 precision refinement loops
+//   NumIterFIA       Total number of performed EnterFeasibleDomain() (EFD) iterations to obtain a feasible initial approximation for the IPM algorithm.
+//   NumIterIPM       Total number of performed IPM main descent algorithm iterations.
 long int TNode::GEM_Iterations( long int& PrecLoops_, long int& NumIterFIA_, long int& NumIterIPM_ )
 {
 	PrecLoops_ = PrecLoops;
@@ -306,8 +300,12 @@ long int TNode::GEM_Iterations( long int& PrecLoops_, long int& NumIterFIA_, lon
 	return NumIterFIA+NumIterIPM;
 }
 
-// ----------------------------------------------------------------------
-// reads work node (DATABR structure) from a  file
+// (5) Reads another DBR file (with input system composition, T,P etc.). The DBR file must be compatible with 
+// the currently loaded IPM and DCH files (see description  of GEM_init() function call).
+// Parameters:
+//    fname       Null-terminated (C) string containing a full path to the input DBR disk file.
+//    binary_f    Flag defining whether the file specified in fname is in text fromat (false or 0, default) or in binary format (true or 1)
+// Return values:     0  if successful; 1 if input file(s) has not found been or is corrupt; -1 if internal memory allocation error occurred. 
 long int  TNode::GEM_read_dbr( const char* fname, bool binary_f )
 {
   try
@@ -326,8 +324,11 @@ long int  TNode::GEM_read_dbr( const char* fname, bool binary_f )
 
     dbr_file_name = fname;
 
-  } catch(TError& /*err*/)
+  } catch(TError& err)
     {
+	  fstream f_log("ipmlog.txt", ios::out|ios::app );
+      f_log << "Error Node:" << CNode->NodeHandle << ":time:" << CNode->Tm << ":dt:" << CNode->dt<< ": " <<
+        err.title.c_str() << ":" <<  err.mess.c_str() << endl;
       return 1;
     }
     catch(...)
@@ -338,9 +339,8 @@ long int  TNode::GEM_read_dbr( const char* fname, bool binary_f )
 }
 
 //-------------------------------------------------------------------
-// GEM_init()
-// reads in the data from IPM_DAT, DCH_DAT, DBR_DAT files (prepared by hand or
-// using the GEMS-PSI GEM2MT module).
+// (1) Initialization of GEM IPM2 data structures in coupled FMT-GEM programs 
+//  that use GEMIPM2K module. Also reads in the IPM, DCH and DBR text input files. 
 //  Parameters:
 //  ipmfiles_lst_name - name of a text file that contains:
 //    " -t/-b <DCH_DAT file name> <IPM_DAT file name> <dataBR file name1>,
@@ -353,7 +353,8 @@ long int  TNode::GEM_read_dbr( const char* fname, bool binary_f )
 //    node array. If -t flag or nothing is specified then all data files must
 //    be in text (ASCII) format; if -b flag is specified then all data files
 //    are  assumed to be binary (little-endian) files.
-//  nodeTypes[nNodes] - array of node type (fortran) indexes of DBR_DAT files
+//  nodeTypes[nNodes] - optional parameter used only on the TNodeArray level,
+//    array of node type (fortran) indexes of DBR_DAT files
 //    in the ipmfiles_lst_name list. This array (handle for each FMT node),
 //    specifies from which DBR_DAT file the initial chemical system should
 //    be taken.
@@ -363,7 +364,6 @@ long int  TNode::GEM_read_dbr( const char* fname, bool binary_f )
 //   0: OK; 1: GEM IPM read file error; -1: System error (e.g. memory allocation)
 //
 //-------------------------------------------------------------------
-
 long int  TNode::GEM_init( const char* ipmfiles_lst_name,
                           long int* nodeTypes, bool getNodT1)
 {
@@ -375,7 +375,6 @@ long int  TNode::GEM_init( const char* ipmfiles_lst_name,
 #else
       size_t npos = gstring::npos;
 #endif
-//     bool binary_mult = true;
      bool binary_f = false;
      gstring lst_in = ipmfiles_lst_name;
 
@@ -394,7 +393,6 @@ long int  TNode::GEM_init( const char* ipmfiles_lst_name,
 
 //  Syntax: -t/-b  "<DCH_DAT file name>"  "<IPM_DAT file name>"
 //       "<DBR_DAT file1 name>" [, ... , "<DBR_DAT fileN name>"]
-// Rearranged in logical shape by KD on 12.01.2007
 
 //Testing flag "-t" or "-b" (by default "-t")   // use binary or text files
       pos = datachbr_fn.find( '-');
@@ -1140,20 +1138,12 @@ void TNode::packDataBr()
 //   CNode->NodeTypeHY = normal;
    CNode->NodeTypeMT = normal;
    CNode->NodeStatusFMT = Initial_RUN;
-   //   CNode->NodeStatusCH = NEED_GEM_AIA;
+#endif
+//   CNode->NodeStatusCH = NEED_GEM_AIA;
    if( pmm->pNP == 0 )
     CNode->NodeStatusCH = NEED_GEM_AIA;
   else
      CNode->NodeStatusCH = NEED_GEM_SIA;
-//#else
-//
- // numbers
-//  if( pmm->pNP == 0 )
-//    CNode->NodeStatusCH = OK_GEM_AIA;
-//  else
-//    CNode->NodeStatusCH = OK_GEM_SIA;
-//
-#endif
 
    CNode->TC = pmm->TCc; //25
    CNode->P = pmm->Pc; //1
@@ -1222,20 +1212,12 @@ void TNode::packDataBr( double ScFact )
 //   CNode->NodeTypeHY = normal;
    CNode->NodeTypeMT = normal;
    CNode->NodeStatusFMT = Initial_RUN;
+#endif
    //   CNode->NodeStatusCH = NEED_GEM_AIA;
    if( pmm->pNP == 0 )
     CNode->NodeStatusCH = NEED_GEM_AIA;
   else
      CNode->NodeStatusCH = NEED_GEM_SIA;
-//#else
-//
- // numbers
-//  if( pmm->pNP == 0 )
-//    CNode->NodeStatusCH = OK_GEM_AIA;
-//  else
-//    CNode->NodeStatusCH = OK_GEM_SIA;
-//
-#endif
 
    CNode->TC = pmm->TCc; //25
    CNode->P = pmm->Pc; //1
@@ -1295,19 +1277,12 @@ void TNode::packDataBr( double ScFact )
 void TNode::unpackDataBr( bool uPrimalSol )
 {
  long int ii;
- //double Gamm;
-// numbers
 
 #ifdef IPMGEMPLUGIN
  char buf[300];
  sprintf( buf, "Node:%ld:time:%lg:dt:%lg", CNode->NodeHandle, CNode->Tm, CNode->dt );
  strncpy( pmm->stkey, buf, EQ_RKLEN );
 #endif
-//  if( CNode->NodeStatusCH >= NEED_GEM_SIA )
-//   pmm->pNP = 1;
-//  else
-//   pmm->pNP = 0; //  NEED_GEM_AIA;
-//  CNode->IterDone = 0;
   pmm->TCc = CNode->TC;
   pmm->Tc = CNode->TC+C_to_K;
   pmm->Pc  = CNode->P;
@@ -1331,10 +1306,9 @@ void TNode::unpackDataBr( bool uPrimalSol )
 //   pmm->IT = 0;
  }
  else {   // Unpacking primal solution provided in the node DATABR structure
-   pmm->IT = 0;
+  pmm->IT = 0;
   pmm->MBX = CNode->Ms;
   pmm->IC = CNode->IC;
-//  pmm->FitVar[3] = CNode->Eh;  Bugfix 19.12.2006  KD
   pmm->Eh = CNode->Eh;
   for( ii=0; ii<CSD->nDCb; ii++ )
   /*    pmm->X[ CSD->xDC[ii] ] = */
@@ -1386,7 +1360,7 @@ void TNode::unpackDataBr( bool uPrimalSol )
 void TNode::unpackDataBr( bool uPrimalSol, double ScFact )
 {
  long int ii;
- //double Gamm;
+
 #ifdef IPMGEMPLUGIN
  char buf[300];
  sprintf( buf, "Node:%ld:time:%lg:dt:%lg", CNode->NodeHandle, CNode->Tm, CNode->dt );
@@ -1397,8 +1371,6 @@ void TNode::unpackDataBr( bool uPrimalSol, double ScFact )
 	 ScFact = 1e-6;
  if( ScFact > 1e6 )
 	 ScFact = 1e6;
-// if( ScFact < 0. ) SD 0 < 1e-6
-//	 ScFact = 1.;
   pmm->TCc = CNode->TC;
   pmm->Tc = CNode->TC+C_to_K;
   pmm->Pc  = CNode->P;
@@ -1406,18 +1378,12 @@ void TNode::unpackDataBr( bool uPrimalSol, double ScFact )
   for( ii=0; ii<CSD->nDCb; ii++ )
   {
     pmm->DUL[ CSD->xDC[ii] ] = CNode->dul[ii]* ScFact;
-    if(	pmm->DUL[ CSD->xDC[ii] ] > 1e6 )		// 28.01.2009
+    if(	pmm->DUL[ CSD->xDC[ii] ] > 1e6 )		
        pmm->DUL[ CSD->xDC[ii] ] = 1e6;          // Bugfix for upper metastability limit
-
-// kg44 19.06.2009 the condition below totally breaks calculation precipitation  kinetics for small amounts/rates!!!!
-//
-//    if(	pmm->DUL[ CSD->xDC[ii] ] < TProfil::pm->pa.p.DKIN )
-//    	pmm->DUL[ CSD->xDC[ii] ] = TProfil::pm->pa.p.DKIN;
 
     pmm->DLL[ CSD->xDC[ii] ] = CNode->dll[ii];
     if( CNode->dll[ii] > 0. )
     	pmm->DLL[ CSD->xDC[ii] ] *= ScFact;
-//     pmm->DLL[ CSD->xDC[ii] ] = 0.;				  // Bugfix for lower metastability limit // kg44  19.06.2009 this is not a bugfix...it breaks dissolution kinetics!!!
 
     if( pmm->DUL[ CSD->xDC[ii] ] < pmm->DLL[ CSD->xDC[ii] ] )
     {
@@ -1541,15 +1507,18 @@ double TNode::ResizeNode( double Factor )
     return CNode->Ms;
 }
 
-// (5) For interruption/debugging
-// Writes work node (DATABR structure) into a file path name fname
-// Parameter binary_f defines if the file is to be written in binary
-// format (true or 1, good for interruption of coupled modeling task
-// if called in loop for each node), or in text format
-// (false or 0, default)
-//
-   void  TNode::GEM_write_dbr( const char* fname, bool binary_f,
-		   bool with_comments, bool brief_mode )
+// (3) Writes the contents of the work instance of the DATABR structure into a disk file with path name  fname.
+//   Parameters: 
+//   fname         null-terminated (C) string containing a full path to the DBR disk file to be written.
+//                 NULL  - the disk file name path stored in the  dbr_file_name  field of the TNode class instance
+//                 will be used, extended with ".out".  Usually the dbr_file_name field contains the path to the last input DBR file.
+//   binary_f      defines if the file is to be written in binary format (true or 1, good for interruption of coupled modeling task
+//                 if called in the loop for each node), or in text format (false or 0, default).
+//   with_comments (text format only): defines the mode of output of comments written before each data tag and  content 
+//                 in the DBR file. If set to true (1), the comments will be written for all data entries (default). 
+//                 If   false (0), comments will not be written. 
+//  brief_mode     if true, tells that do not write data items,  that contain only default values in text format
+void  TNode::GEM_write_dbr( const char* fname, bool binary_f, bool with_comments, bool brief_mode )
    {
        gstring str_file;
        if( fname == 0)
@@ -1570,11 +1539,12 @@ double TNode::ResizeNode( double Factor )
       }
    }
 
-// (5a) For detailed examination of GEM work data structure:
-// writes GEMIPM internal MULTI data structure into text file
-// path name fname in debugging format (different from MULTI input format).
-// This file cannot be read back with GEM_init()!
-//
+// (4) Produces a formatted text file with detailed contents (scalars and arrays) of the GEM IPM work structure. 
+// This call is useful when GEM_run() returns with a NodeStatusCH value indicating a GEM calculation error
+// (see  above).  Another use is for a detailed comparison of a test system calculation after the version upgrade of GEMIPM2K.
+// Parameters: fname   null-terminated (C) string containing a full path to the disk file to be written.
+//                     NULL  - the disk file name path stored in the  dbr_file_name  field of the TNode class instance will be used,
+//                     extended with ".dump.out".  Usually the dbr_file_name field contains the path to the last input DBR file.
    void  TNode::GEM_print_ipm( const char* fname )
    {
      gstring str_file;
