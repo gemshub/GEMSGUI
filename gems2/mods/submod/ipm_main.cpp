@@ -35,6 +35,7 @@ using namespace JAMA;
 #include "stepwise.h"
 #endif
 #include "node.h"
+#define GEMITERTRACE
 
 //#define GEMITERTRACE
 

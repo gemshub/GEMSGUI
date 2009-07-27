@@ -469,7 +469,7 @@ void TSyst::systbc_calc( int mode )
     int i,j, N; // wps, Incomplete=0;
     //  uint ii;
     double MsysC = 0., MaqC = 0., VaqC = 0., VsysC = 0., R1C = 0.;
-    double Xincr, DCmw, ACmw;
+    double Xincr, DCmw, ACmw, Term;
     double *A=0;
     vstr ICs(MAXRKEYLEN);
     TFormula aFo;
@@ -579,9 +579,10 @@ NEXT_DC:
             // recalc stehiometric COMPOS
             for( i=0; i<mup->N; i++ )
                 if( A[i] )
-                {
-                	sy.B[i] += Xincr*(A[i]);
-                    R1C += Xincr*(A[i]);
+                {   Term = Xincr*(A[i]);
+                    //Term = NormDoubleRound(Term, 15 ); // SD 22/07/2009
+                	sy.B[i] += Term;
+                    R1C += Term;
                 }
             MsysC += Xincr*ACmw;
         } //  j
@@ -727,10 +728,10 @@ NEXT_DC:
             }
         }
     }
-	NormDoubleRound(sy.B, N, 13 ); // SD 22/07/2009
+ 	NormDoubleRound(sy.B, N, 15 ); // SD 22/07/2009
     if( A )
         delete[] A;
-    ///  pVisor->Update();  //Sveta
+   ///  pVisor->Update();  //Sveta
 }
 
 //Calc bulk chemical composition from phases in EQStat
