@@ -98,10 +98,10 @@ typedef struct
     *dul,  // upper kinetic restrictions on xDC [nDCb]     +      +      -     -
     *dll,  // lower kinetic restrictions on xDC [nDCb]     +      +      -     -
 // Phases in reactive subsystem
-    *aPH,  // Specific surface areas of phases (m2/g)      +      +      -     -
+    *aPH,  // Specific surface areas of phases (m2/kg)      +      +      -     -
     *xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
-    *vPS,  // volumes of phases-solutions, cm3/mol [nPSb]  -      -      +     +
-    *mPS,  // masses of phases-solutions, g   [nPSb]       -      -      +     +
+    *vPS,  // volumes of phases-solutions, m3/mol [nPSb]  -      -      +     +
+    *mPS,  // masses of phases-solutions, kg   [nPSb]       -      -      +     +
     *bPS,  // bulk compositions of phases-solutions
            //    [nPSb][nICb]                              -      -      +     +
     *xPA,  // amounts of solvent/sorbent in

@@ -403,7 +403,7 @@
 // returns porosity if ref_volume is set to initial volume of phases 
 // double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +
 // double    TC,     // Temperature T, C                        	+      +      -     -
-// double    P, 	    // Pressure P, bar                         	+      +      -     -
+// double    P, 	    // Pressure P, Pa                         	+      +      -     -
 #ifdef __unix
 #ifdef __PGI
     extern "C" double  f_gem_get_molar_volume_(int& i, double& Tc, double& P)

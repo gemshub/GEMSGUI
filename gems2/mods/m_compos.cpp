@@ -942,7 +942,7 @@ IC_FOUND:
             bcp->CIcl[i1] = CIcl[i];
         }
     }
-	NormDoubleRound(bcp->C, bcp->N, 13 ); // SD 22/07/2009
+//NormDoubleRound(bcp->C, bcp->N, 15 ); // SD 22/07/2009
     bc_work_dyn_kill();
     TCModule::RecCalc(key);
 }

@@ -46,7 +46,7 @@ typedef struct
             //       for the interpolation of thermodynamic data
     iGrd,   // flag for grid array setup: 0 - only V0 and G0
             //    1 - V0, G0 and DD (diffusion coefficients in aq, reserved)
-    nAalp,  // Flag for considering surface areas of phases
+    nAalp,  // Flag for keeping specific surface areas of phases in DATABR structure (1) or ignoring them (0)
 
   // These dimensionalities define sizes of packed arrays in DATABR structures
   // describing nodes. They are needed to save on the storage demand for nodes.
@@ -63,61 +63,60 @@ typedef struct
 
 // Indices connecting the lists used in nodes (DATABR structure), see
 //    databr.h, with the lists in this (DATACH) structure
-    *xIC,   // IC name indices in DATABR IC vectors, [nICb] elements
-    *xDC,   // DC name indices in DATABR DC vectors, [nDCb] elements
-    *xPH;   // PH name indices in DATABR Phase vectors, [nPHb] elements
+    *xic,   // IC name indices in DATABR IC vectors, [nICb] elements
+    *xdc,   // DC name indices in DATABR DC vectors, [nDCb] elements
+    *xph;   // PH name indices in DATABR Phase vectors, [nPHb] elements
             // see below definitions of the ICNL, DCNL and PHNL lists
 
   double  // changed from float on 26.06.2008   DK
     *TCval,   // discrete values of Temperature (C), [nTp] elements,
  // that correspond to grid arrays for the interpolation of thermodynamic data
-    *Pval,   // discrete values of Pressure (bar), [nPp] elements,
+    *Pval,   // discrete values of Pressure (Pa), [nPp] elements,
  // that correspond to grid arrays for the interpolation of thermodynamic data
-    *A;      // Stoichiometry matrix A containing elemental stoichiometries
-             // of Dependent Components, [nIC][nDC] elements
+    *A;      // Stoichiometry matrix A for Dependent Components. [nIC][nDC] elements
  double
-    Ttol,    // Temperature tolerance (K) for interpolation of thermodynamic data
-    Ptol,    // Pressure tolerance (bar) for interpolation of thermodynamic data
+    Ttol,    // Temperature tolerance (C) for interpolation of thermodynamic data
+    Ptol,    // Pressure tolerance (Pa) for interpolation of thermodynamic data
     dRes1,   // reserved
     dRes2,   // reserved
 
 // Data vectors - must be loaded before calling GEMIPM2K
 
 // Values for IC (independent components)
-    *ICmm,   // IC atomic (molar) mass, g/mol, [nIC] elements
+    *ICmm,   // IC atomic (molar) mass, kg/mol, [nIC] elements
 
 // DC - related values
-    *DCmm,   // DC molar mass, g/mol, [nDC] elements
+    *DCmm,   // Molar masses of Dependent Components (kg/mol) [nDC] 
     *DD,     // Diffusition coefficients, [nDC][nPp][nTp] elements, for now constant
 
 // Look-up grid arrays of thermodynamic data
 // Require a Lagrange interpolation subroutine to extract data
 // for a given P,T point (new interpolation is done when P or T differs
 // from the previous P,T by more than Ptol, Ttol)
-*denW,   // density of water-solvent, g/cm3, [5][ nPp][nTp] elements
-*denWg,   // density of water-solvent, g/cm3 (vapor), [5][ nPp][nTp] elements
-*epsW,  // dielectric  constant of water-solvent , [5][nPp][nTp] elements
-*epsWg,  // dielectric  constant of water-solvent (vapor), [5][nPp][nTp] elements
-    *G0,    // G0 standard molar Gibbs energy of DC, J/mol, [nDC][nPp][nTp] elements
-    *V0,    // V0 standard molar volume of DC, J/bar, [nDC][nPp][nTp] elements
+*denW,   // Lookup array for the density of water-solvent (kg/m3) [5][nPp][nTp] 
+*denWg,  // Optional lookup array for the density of water vapour (kg/m3) [5][nPp][nTp]
+*epsW,   // Lookup array for the dielectric constant of water-solvent (dimensionless) [5][nPp][nTp] 
+*epsWg,  // Optional lookup array for the dielectric constant of water vapour [5][nPp][nTp] 
+    *G0,    // Obligatory lookup array for DC molar Gibbs energy function g(T,P) (J/mol) [nDC][nPp][nTp] 
+    *V0,    // V0 standard molar volume of DC, J/Pa, [nDC][nPp][nTp] elements
     *S0,    // S0 standard molar entropy of DC, J/K/mol, [nDC][nPp][nTp] elements
-    *H0,    // H0 standard molar enthalpy of DC, J/mol, reserved, [nDC][nPp][nTp] elements
-    *Cp0,   // Cp0 molar heat capacity of DC, J/K/mol, [nDC][nPp][nTp] elements
+    *H0,    // Optional lookup array for DC molar enthalpy h(T,P) (J/mol) [nDC][nPp][nTp]
+    *Cp0,   // Optional lookup array for DC heat capacity function (J/K/mol) [nDC][nPp][nTp] 
  *A0,    // Helmholtz energy of DC, J/mol, reserved, [nDC][nPp][nTp] elements
  *U0;   // Internal energy of DC, J/K/mol, [nDC][nPp][nTp] elements
 
 // Name lists
    // List of IC names in the system, [nIC] elements of MaxICN length
  char (*ICNL)[MaxICN];
-   // List of DC names in the system, [nDC] elements of MaxDCN length
+   // List of DC names in the system, [nDC] of MaxDCN length
  char (*DCNL)[MaxDCN];
    // List of phase names in the system, [nPH] elements of MaxPHN length
  char (*PHNL)[MaxPHN];
 
 // Class code lists
- char   *ccIC,   // Class codes of IC, see  enum ICL_CLASSES  ([nIC] elements)
-        *ccDC,   // Class codes of DC, see  enum DCL_CLASSES  ([nDC] elements)
-        *ccPH;   // Class codes of phases, see enum PHL_CLASSES ([nPH] elements)
+char *ccIC,   // Class codes of IC, see  enum ICL_CLASSES  [nIC]
+      *ccDC,   // Type codes of DC, see  enum DCL_CLASSES  [nDC] 
+      *ccPH;   // Class codes of phases, see enum PHL_CLASSES ([nPH] elements)
 }
 DATACH;
 

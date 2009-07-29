@@ -227,14 +227,15 @@ int main( int argc, char* argv[] )
           // Calling GEMIPM calculation
           m_NodeStatusCH[in] = node->GEM_run( 1., true );
 
-       	  if( ( m_NodeStatusCH[in] == ERR_GEM_AIA || m_NodeStatusCH[in] == ERR_GEM_SIA ) )
+       	  if( ( m_NodeStatusCH[in] == ERR_GEM_AIA || m_NodeStatusCH[in] == ERR_GEM_SIA ||
+          		m_NodeStatusCH[in] ==  T_ERROR_GEM ) )
           {
               cout << "Error: GEM calculation results are not retrieved. Time step"
                  << it << " node " << in << endl;
           }
            else
            {   
-            if( ( m_NodeStatusCH[in] == BAD_GEM_AIA || m_NodeStatusCH[in] == BAD_GEM_SIA ) )
+            if( ( m_NodeStatusCH[in] == BAD_GEM_AIA || m_NodeStatusCH[in] == BAD_GEM_SIA  ) )
             {
                cout << "Warning about insufficient quality of GEM solution, but GEM results are retrieved"
                << it << " node " << in << endl;

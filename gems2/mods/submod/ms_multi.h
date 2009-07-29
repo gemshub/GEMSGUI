@@ -168,7 +168,7 @@ double
     *VL,        // ln mole fraction of end members in phases-solutions
     *Xcond, 	// conductivity of phase carrier, sm/m2   [0:FI-1], reserved
     *Xeps,  	// diel.permeability of phase carrier (solvent) [0:FI-1], reserved
-    *Aalp,  	// phase specific surface area m2/g       [0:FI-1]
+    *Aalp,  	// Full vector of specific surface areas of phases (m2/g) [0:FI-1]
     *Sigw,  	// st.surface free energy in water,J/m2   [0:FI-1]
     *Sigg  	// st.surface free energy in air,J/m2     [0:FI-1], reserved
     ;
@@ -276,7 +276,7 @@ double
   char  (*SF)[MAXPHNAME+MAXSYMB];  // List of phase names in the system [FI]
   char  (*SM2)[MAXDCNAME];  // List of multicomp. phase DC names in the system [Ls]
   char  (*SM3)[MAXDCNAME];  // List of adsorption DC names in the system [Lads]
-  char  *DCC3;   // Classifier of DC in sorption phases [Lads]
+  char  *DCC3;   // Classifier of DCs involved in sorption phases [Lads]
   char  (*SF2)[MAXPHNAME+MAXSYMB]; // List of multicomp. phase names in the syst [FIs]
   char  (*SFs)[MAXPHNAME+MAXSYMB];
     // List of phases currently present in non-zero quantities [FI]

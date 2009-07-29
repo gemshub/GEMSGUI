@@ -378,8 +378,8 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
    return iRet;  
 }
 
-#undef dMB
-#undef MB
+#undef dMb
+#undef Mb
 
 //Calculate record
 bool TGEM2MT::CalcBoxModel( char mode )

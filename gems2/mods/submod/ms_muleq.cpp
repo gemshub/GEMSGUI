@@ -238,18 +238,22 @@ void TMulti::CompG0Load()
         pmp->denW[1] = tpp->dRdTW;
         pmp->denW[2] = tpp->d2RdT2W;
         pmp->denW[3] = tpp->dRdPW;
+        pmp->denW[4] = tpp->d2RdP2W;
         pmp->denWg[0] = tpp->RoV;
         pmp->denWg[1] = tpp->dRdTV;
         pmp->denWg[2] = tpp->d2RdT2V;
         pmp->denWg[3] = tpp->dRdPV;
+        pmp->denWg[4] = tpp->d2RdP2V;
         pmp->epsW[0] = tpp->EpsW;
         pmp->epsW[1] = tpp->dEdTW;
         pmp->epsW[2] = tpp->d2EdT2W;
         pmp->epsW[3] = tpp->dEdPW;
+        pmp->epsW[4] = tpp->d2EdP2W;
         pmp->epsWg[0] = tpp->EpsV;
         pmp->epsWg[1] = tpp->dEdTV;
         pmp->epsWg[2] = tpp->d2EdT2V;
         pmp->epsWg[3] = tpp->dEdPV;
+        pmp->epsWg[4] = tpp->d2EdP2V;
 
     }
     if( pmp->pTPD <= 1 )

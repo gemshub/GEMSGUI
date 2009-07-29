@@ -303,8 +303,8 @@ void GEM_from_MT(
     double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]  -      -       +     +
     double  *p_gam,    // activity coeffs of DC [nDCb]           -      -       +     +
     double  *p_xPH,  // total mole amounts of phases [nPHb]      -      -       +     +
-    double  *p_vPS,  // phase volume, cm3/mol        [nPSb]      -      -       +     +
-    double  *p_mPS,  // phase (carrier) mass, g      [nPSb]      -      -       +     +
+    double  *p_vPS,  // phase volume, m3/mol        [nPSb]      -      -       +     +
+    double  *p_mPS,  // phase (carrier) mass, kg      [nPSb]      -      -       +     +
     double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]   -      -    +     +
     double  *p_xPA  // amount of carrier in phases  [nPSb] ??       -      -    +     +
   );
@@ -324,7 +324,7 @@ void GEM_from_MT(
     double cTC() const     // get current Temperature T, C
     {  return CNode->TC;   }
 
-    double cP() const     // get current Pressure P, bar
+    double cP() const     // get current Pressure P, Pa
     {        return CNode->P;   }
 
     // Setting node identification handle

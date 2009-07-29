@@ -938,7 +938,11 @@ node-&gt;GEM_run( 1., true );</span><br style="font-family: monospace;">
       <span style="font-family: monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 if( ( m_NodeStatusCH[in] ==
 ERR_GEM_AIA ||</span><span style="font-family: monospace;">
-m_NodeStatusCH[in] == ERR_GEM_SIA ) )</span><br
+m_NodeStatusCH[in] == ERR_GEM_SIA <br>
+      <span style="color: rgb(0, 153, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+|| </span></span><span
+ style="font-family: monospace; color: rgb(0, 153, 0);">m_NodeStatusCH[in]
+== T_ERROR_GEM&nbsp; </span><span style="font-family: monospace;">) )</span><br
  style="font-family: monospace;">
       <span style="font-family: monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 {</span><br style="font-family: monospace;">
@@ -1285,7 +1289,8 @@ DBR file<br>
       <td style="vertical-align: top;">long int &amp;<br>
       </td>
       <td style="vertical-align: top;">Node identification handle</td>
-      <td style="vertical-align: top;"><br>
+      <td style="vertical-align: top;"><span
+ style="color: rgb(0, 153, 0); font-family: monospace;">NodeHandle</span><br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
@@ -1298,7 +1303,8 @@ DBR file<br>
       <td style="vertical-align: top;">Node status
 code (see Section 2 for possible codes)<br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td style="vertical-align: top;"><span
+ style="color: rgb(0, 153, 0); font-family: monospace;">NodeStatusCH</span><br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
@@ -1321,9 +1327,8 @@ C&nbsp; <br>
  style="font-family: monospace;">p_P</span></td>
       <td style="vertical-align: top;">double &amp;<br>
       </td>
-      <td style="vertical-align: top;">Pressure P,
-bar <span style="color: rgb(255, 102, 102);">Pa (1 bar = 1e5 Pa</span>)
-      <br>
+      <td style="vertical-align: top;">Pressure P,&nbsp; <span
+ style="color: rgb(255, 102, 102);">Pa&nbsp;</span> <br>
       </td>
       <td style="vertical-align: top; font-family: monospace;">P<br>
       </td>
@@ -1336,7 +1341,7 @@ bar <span style="color: rgb(255, 102, 102);">Pa (1 bar = 1e5 Pa</span>)
       <td style="vertical-align: top;">double &amp;<br>
       </td>
       <td style="vertical-align: top;">Volume
-V of reactive subsystem, cm3 <span style="color: rgb(255, 102, 102);">m3</span><br>
+V of reactive subsystem,&nbsp; <span style="color: rgb(255, 102, 102);">m3</span><br>
       </td>
       <td style="vertical-align: top; font-family: monospace;">Vs<br>
       </td>
@@ -1404,7 +1409,7 @@ elements] <br>
       <td style="vertical-align: top;">double *<br>
       </td>
       <td style="vertical-align: top;">Specific
-surface areas of phases (m2/g) <span style="color: rgb(255, 102, 102);">m2/kg</span>
+surface areas of phases, <span style="color: rgb(255, 102, 102);">m2/kg</span>
 [<span style="font-family: monospace;">dCH-&gt;nPHb</span>
 elements]<br>
       </td>
@@ -1474,8 +1479,8 @@ DBR file<br>
       <td style="vertical-align: top;">long int &amp;<br>
       </td>
       <td style="vertical-align: top;">Node identification handle</td>
-      <td style="vertical-align: top; font-family: monospace;"><br>
-      </td>
+      <td
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">NodeHandle</td>
       <td style="vertical-align: top;"><br>
       </td>
     </tr>
@@ -1487,7 +1492,8 @@ DBR file<br>
       <td style="vertical-align: top;">Node status
 code (see Section 2 for possible codes)<br>
       </td>
-      <td style="vertical-align: top; font-family: monospace;"><br>
+      <td style="vertical-align: top; font-family: monospace;"><span
+ style="color: rgb(0, 153, 0);">NodeStatusCH</span><br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
@@ -1498,7 +1504,8 @@ code (see Section 2 for possible codes)<br>
       <td style="vertical-align: top;">Number of iterations performed
 in the last GEM IPM calculation<br>
       </td>
-      <td style="vertical-align: top; font-family: monospace;"><br>
+      <td style="vertical-align: top; font-family: monospace;"><span
+ style="color: rgb(0, 153, 0);">IterDone</span><br>
       </td>
       <td style="vertical-align: top;"><br>
       </td>
@@ -1509,7 +1516,7 @@ in the last GEM IPM calculation<br>
       <td style="vertical-align: top;">double &amp;<br>
       </td>
       <td style="vertical-align: top;">Total volume
-V of reactive subsystem at given P,T&nbsp; cm3&nbsp;&nbsp; <span
+V of reactive subsystem at given P,T,&nbsp; <span
  style="color: rgb(255, 102, 102);">m3</span> <br>
       </td>
       <td style="vertical-align: top; font-family: monospace;">Vs<br>
@@ -1534,7 +1541,7 @@ kg&nbsp; <br>
       <td style="vertical-align: top; font-family: monospace;">p_Gs</td>
       <td style="vertical-align: top;">double &amp;</td>
       <td style="vertical-align: top;">Total Gibbs energy
-of the reactive subsystem (J) <br>
+of the reactive subsystem<span style="color: rgb(0, 153, 0);">, J</span><br>
       </td>
       <td style="vertical-align: top; font-family: monospace;">Gs<br>
       </td>
@@ -1545,7 +1552,7 @@ of the reactive subsystem (J) <br>
       <td style="vertical-align: top; font-family: monospace;">p_Hs</td>
       <td style="vertical-align: top;">double &amp;</td>
       <td style="vertical-align: top;">Total enthalpy of
-reactive subsystem (J) (reserved)<br>
+reactive subsystem, J (reserved)<br>
       </td>
       <td style="vertical-align: top; font-family: monospace;">Hs<br>
       </td>
@@ -1614,7 +1621,7 @@ elements]</td>
       </td>
       <td style="vertical-align: top;"><span style="font-style: italic;">Dual
 solution</span>: IC chemical
-potentials (mol/mol) [<span style="font-family: monospace;">dCH-&gt;nICb</span>
+potentials, mol/mol [<span style="font-family: monospace;">dCH-&gt;nICb</span>
 elements]<br>
       </td>
       <td style="vertical-align: top; font-family: monospace;">uIC </td>
@@ -1651,7 +1658,7 @@ elements] </td>
  style="vertical-align: top; font-family: monospace; text-decoration: underline;">p_xPH</td>
       <td style="vertical-align: top;">double *<br>
       </td>
-      <td style="vertical-align: top;">total mole amounts of
+      <td style="vertical-align: top;">Total mole amounts of
 all phases [<span style="font-family: monospace;">dCH-&gt;nPHb</span>
 elements]<br>
       </td>
@@ -1663,9 +1670,8 @@ elements]<br>
       <td
  style="vertical-align: top; font-family: monospace; text-decoration: underline;">p_vPS</td>
       <td style="vertical-align: top;">double *</td>
-      <td style="vertical-align: top;">total volumes of multicomponent
-phases,
-cm3&nbsp; <span style="color: rgb(255, 102, 102);">m3</span> [<span
+      <td style="vertical-align: top;">Total volumes of multicomponent
+phases, <span style="color: rgb(255, 102, 102);">m3</span> [<span
  style="font-family: monospace;">dCH-&gt;nPSb</span>
 elements]&nbsp;&nbsp; <br>
       </td>
@@ -1676,10 +1682,9 @@ elements]&nbsp;&nbsp; <br>
     <tr>
       <td style="vertical-align: top; font-family: monospace;">p_mPS</td>
       <td style="vertical-align: top;">double *</td>
-      <td style="vertical-align: top;">total mass of multicomponent
-phase (carrier),
-g&nbsp; <span style="color: rgb(255, 102, 102);">kg</span> [<span
- style="font-family: monospace;">dCH-&gt;nPSb</span>
+      <td style="vertical-align: top;">Total mass of multicomponent
+phase (carrier),&nbsp; <span style="color: rgb(255, 102, 102);">kg</span>
+[<span style="font-family: monospace;">dCH-&gt;nPSb</span>
 elements]&nbsp;&nbsp;&nbsp; ????<br>
       </td>
       <td style="vertical-align: top; font-family: monospace;">mPS</td>
@@ -1690,7 +1695,7 @@ elements]&nbsp;&nbsp;&nbsp; ????<br>
       <td
  style="vertical-align: top; font-family: monospace; text-decoration: underline;">p_bPS</td>
       <td style="vertical-align: top;">double *</td>
-      <td style="vertical-align: top;">bulk compositions of
+      <td style="vertical-align: top;">Bulk compositions of
 phases [<span style="font-family: monospace;">dCH-&gt;nPSb*dCH-&gt;nICb</span>
 elements]</td>
       <td style="vertical-align: top; font-family: monospace;">bPS</td>
@@ -1700,7 +1705,7 @@ elements]</td>
     <tr>
       <td style="vertical-align: top; font-family: monospace;">p_xPA</td>
       <td style="vertical-align: top;">double *</td>
-      <td style="vertical-align: top;">amount of carrier in
+      <td style="vertical-align: top;">Amount of carrier in
 a multicomponent asymmetric phase&nbsp; [<span
  style="font-family: monospace;">dCH-&gt;nPSb</span> elements] </td>
       <td style="vertical-align: top; font-family: monospace;">xPA</td>
@@ -1763,7 +1768,8 @@ DBR file<br>
       </td>
       <td style="vertical-align: top;">Node identification handle<br>
       </td>
-      <td style="vertical-align: top;"><br>
+      <td
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">NodeHandle
       </td>
       <td style="vertical-align: top;"><br>
       </td>
@@ -1777,8 +1783,8 @@ DBR file<br>
 code (NEED_GEM_SIA or NEED_GEM_AIA), will be changed internally after
 GEM_run() <br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
+      <td style="vertical-align: top; font-family: monospace;"><span
+ style="color: rgb(0, 153, 0);">NodeStatusCH</span> </td>
       <td style="vertical-align: top;"><br>
       </td>
     </tr>
@@ -1800,8 +1806,7 @@ C<br>
  style="font-family: monospace;">p_P</span></td>
       <td style="vertical-align: top;">double <br>
       </td>
-      <td style="vertical-align: top;">Pressure P,
-bar Pa (1 Pa = 1e-5 bar) <br>
+      <td style="vertical-align: top;">Pressure P,&nbsp; Pa <br>
       </td>
       <td style="vertical-align: top; font-family: monospace;">P<br>
       </td>
@@ -1814,8 +1819,7 @@ bar Pa (1 Pa = 1e-5 bar) <br>
       <td style="vertical-align: top;">double <br>
       </td>
       <td style="vertical-align: top;">Volume
-V of reactive subsystem, cm3 (<span style="color: rgb(255, 102, 102);">m3</span>?)
-, may change in GEM_run() internally<br>
+V of reactive subsystem, m3, may change in GEM_run() internally<br>
       </td>
       <td style="vertical-align: top; font-family: monospace;">Vs<br>
       </td>
@@ -1882,7 +1886,7 @@ elements] <br>
       <td style="vertical-align: top;">double*<br>
       </td>
       <td style="vertical-align: top;">Specific
-surface areas of phases (m2/g) (<span style="color: rgb(255, 102, 102);">m2/kg</span>?)
+surface areas of phases, <span style="color: rgb(255, 102, 102);">m2/kg</span>
 [<span style="font-family: monospace;">dCH-&gt;nPHb</span>
 elements]<br>
       </td>
@@ -2062,8 +2066,8 @@ Open issue: shall p_xDC content used for updating bIC content in the
 same way as in variant (8a)? <br>
 <br>
 <h3>(9) GEM_set_MT()</h3>
-<span style="font-family: monospace;">void GEM_set_MT( long int
-NodeTypeHY, long int NodeTypeMT, double p_Tm, double p_dt );</span><br>
+<span style="font-family: monospace;">void GEM_set_MT( double p_Tm,
+double p_dt );</span><br>
 <br>
 Purpose:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Optional, for passing the
 current mass transport iteration information into the work DATABR
@@ -2073,12 +2077,6 @@ structure<br>
 or in writing DBR files for nodes).<br>
 <br>
 Parameters:&nbsp; <br>
-&nbsp;&nbsp;&nbsp; <span style="font-family: monospace;">NodeTypeHY</span>&nbsp;&nbsp;&nbsp;
-Node
-type (hydraulic); see typedef NODETYPE<br>
-&nbsp;&nbsp;&nbsp; <span style="font-family: monospace;">NodeTypeMT</span>&nbsp;&nbsp;&nbsp;
-Node
-type (mass transport); see typedef NODETYPE<br>
 &nbsp;&nbsp;&nbsp; <span style="font-family: monospace;">p_Tm</span>&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Actual total
 simulation time,
@@ -2167,8 +2165,8 @@ TC = node-&gt;cTC(); <br>
       <td style="vertical-align: top; font-family: monospace;"> double
 cP()</td>
       <td style="vertical-align: top;">Get
-current node Pressure P, bar <span style="color: rgb(255, 102, 102);">Pa</span>
-(1 bar = 1e5 Pa)<br>
+current node Pressure P,&nbsp; <span style="color: rgb(255, 102, 102);">Pa</span>
+      <br>
       </td>
       <td style="vertical-align: top; font-family: monospace;">double P
 = node-&gt;cP(); </td>
@@ -2496,9 +2494,10 @@ node-&gt;IC_name_to_xCH("Ca");</span></td>
     <tr>
       <td style="vertical-align: top; font-family: monospace;">long int
 DC_name_to_xCH(const char *Name);</td>
-      <td style="vertical-align: top;"> Returns DCH index of IC given
-the IC Name string
-(null-terminated) or -1 if no such name was found in the DATACH IC name
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"> Returns
+DCH index of DC given
+the DC Name string
+(null-terminated) or -1 if no such name was found in the DATACH DC name
 list</td>
       <td style="vertical-align: top;"> l<span
  style="font-family: monospace;">ong int xCa_ion = </span><span

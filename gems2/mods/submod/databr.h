@@ -46,27 +46,27 @@ typedef struct
    double
 // Chemical scalar variables
     TC,     // Temperature T, C                        	+      +      -     -
-    P, 	    // Pressure P, bar                         	+      +      -     -
-    Vs,     // Volume V of reactive subsystem, cm3     (+)    (+)     +     +
-    Vi,     // Volume of inert subsystem, cm3          	+      -      -     +
-    Ms,     // Mass of reactive subsystem,  g          	+     (+)     -     -
-    Mi,     // Mass of inert subsystem, g              	+      -      -     +
+    P, 	    // Pressure P, Pa                         	+      +      -     -
+    Vs,     // Volume V of reactive subsystem, m3      (+)    (+)     +     +
+    Vi,     // Volume of inert subsystem, m3          	+      -      -     +
+    Ms,     // Mass of reactive subsystem,  kg        	+     (+)     -     -
+    Mi,     // Mass of inert subsystem, kg             	+      -      -     +
 
-    Gs,     // Gibbs energy of reactive subsystem, J   	-      -      +     +
-    Hs, 	// Enthalpy of reactive subsystem, J        -      -      +     +
-    Hi,     // Enthalpy of inert subsystem, J           +      -      -     +
+    Gs,     // Total Gibbs energy of the reactive subsystem (J/RT) (norm)   	-      -      +     +
+    Hs, 	// Total enthalpy of reactive subsystem (J) (reserved)        -      -      +     +
+    Hi,     // Total enthalpy of inert subsystem (J) (reserved)          +      -      -     +
 
     IC,     // Effective aqueous ionic strength, molal  -      -      +     +
     pH,     // pH of aqueous solution (-log10 molal)    -      -      +     +
     pe,     // pe of aqueous solution (-log10 molal)    -      -      +     +
-    Eh,     // Eh of aqueous solution, V                -      -      +     +
+    Eh,     // Eh of aqueous solution (V)                -      -      +     +
 
 //  FMT variables (units or dimensionsless) - to be used for storing them
 //  at the nodearray level, normally not used in the single-node FMT-GEM coupling
     Tm,     // actual total simulation time, s
-    dt,     // actual time step, s
-    Dif,    // General diffusivity of disolved matter in the mode
-    Vt,		// total volume of the node (voxel), cm3 (Vs + Vi)
+    dt,     // Actual time step (s)
+    Dif,    // General diffusivity of disolved matter in the node (m2/s)
+    Vt,		// total volume of the node (voxel), m3 (Vs + Vi)
     vp,		// advection velocity (in pores) in this node, m/s
     eps,	// effective (actual) porosity normalized to 1
     Km,		// actual permeability, m2
@@ -75,14 +75,14 @@ typedef struct
                //  if not 1.0 then can be used as mass scaling factor relative to Ms for the
                //  bulk composition/speciation of reactive sub-system in this node
     Tr,     // transmissivity m2/s
-    h,		// actual hydraulic head (hydraulic potential), m
-    rho,	// actual carrier density for density-driven flow, g/cm3
-    al,		// specific longitudinal dispersivity of porous media, m
-    at,		// specific transversal dispersivity of porous media, m
-    av,		// specific vertical dispersivity of porous media, m
-    hDl,	// hydraulic longitudinal dispersivity, m2/s
-    hDt,	// hydraulic transversal dispersivity, m2/s
-    hDv,	// hydraulic vertical dispersivity, m2/s
+    h,		// Actual hydraulic head (hydraulic potential) (m)
+    rho,	// actual carrier density for density-driven flow, kg/m3
+    al,		// Specific longitudinal dispersivity of porous media (m)
+    at,		// Specific transversal dispersivity of porous media (m)
+    av,		// Specific vertical dispersivity of porous media (m) 
+    hDl,	// Hydraulic longitudinal dispersivity (m2/s)
+    hDt,	// Hydraulic transversal dispersivity (m2/s)
+    hDv,	// Hydraulic vertical dispersivity (m2/s)
     nto;	// tortuosity factor
 
 // Data arrays - dimensions nICb, nDCb, nPHb, nPSb see in the DATACH structure
@@ -91,27 +91,21 @@ typedef struct
 //      Usage of this variable (DB = data bridge)        MT-DB DB-GEM GEM-DB DB-MT
    double
 // IC (stoichiometry units)
-    *bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
+    *bIC,  // Bulk composition of (reactive part of) the system (moles)[nICb]                +      +      -     -
     *rMB,  // Mass balance residuals from GEMIPM [nICb]    -      -      +     +
     *uIC,  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
 // DC (species) in reactive subsystem
     *xDC,  // DC mole amounts at equilibrium [nDCb]       (+)    (+)     +     +
-    *gam,  // activity coefficients of DC [nDCb]          (+)    (+)     +     +
+    *gam,  // Activity coefficients of DCs in their respective phases  [nDCb]          (+)    (+)     +     +
 // Metastability/kinetic controls
-    *dul,  // upper metastability limit on xDC [nDCb]      +      +      -     -
-           //   Trivial (no limit): > 1e6 mol per 1 kg
-           //   of the reactive node mass; non-trivial:
-           //   positive amount compatible with bIC vector
-    *dll,  // lower metastability limit on xDC [nDCb]      +      +      -     -
-           //   Trivial (no limit): 0 mol; non-trivial:
-           //   positive amount compatible with bIC vector
+    *dul,  // Upper metastability constraints on amounts of DCs (moles) [nDCb]     +      +      -     -
+    *dll,  // Lower metastability constraints on amounts of DCs (moles)  [nDCb]      +      +      -     -
 // Phases in reactive subsystem
-    *aPH,  // Specific surface areas of phases (m2/g)      +      +      -     -
+    *aPH,  // Specific surface areas of phases (m2/kg) [nPHb] - GEM input    +      +      -     -
     *xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
-    *vPS,  // volumes of phases-solutions, cm3 [nPSb]      -      -      +     +
-    *mPS,  // masses of phases-solutions, g   [nPSb]       -      -      +     +
-    *bPS,  // bulk compositions of phases-solutions
-           //    [nPSb][nICb]                              -      -      +     +
+    *vPS,  // volumes of phases-solutions, m3 [nPSb]      -      -      +     +
+    *mPS,  // masses of phases-solutions, kg   [nPSb]       -      -      +     +
+    *bPS,  // Bulk elemental compositions of multicomponent phases (moles) [nPSb][nICb]    -      -      +     +
     *xPA,  // amounts of solvent/sorbent in
            //    phases-solutions [nPSb]                   -      -      +     +
 // (+) can be used as input in "smart initial approximation" mode of GEM IPM-2 algorithm

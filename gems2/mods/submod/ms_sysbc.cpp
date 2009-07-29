@@ -580,7 +580,7 @@ NEXT_DC:
             for( i=0; i<mup->N; i++ )
                 if( A[i] )
                 {   Term = Xincr*(A[i]);
-                    //Term = NormDoubleRound(Term, 15 ); // SD 22/07/2009
+                   // Term = NormDoubleRound(Term, 15 ); // SD 22/07/2009
                 	sy.B[i] += Term;
                     R1C += Term;
                 }

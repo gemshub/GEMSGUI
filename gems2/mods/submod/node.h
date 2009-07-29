@@ -32,6 +32,9 @@
 class QWidget;
 #endif
 
+extern const double bar_to_Pa,
+               m3_to_cm3;
+
 class TNode
 {
   gstring dbr_file_name;  // place for the *dbr. I/O file name
@@ -129,10 +132,11 @@ public:
 static TNode* na;   // static pointer to this TNode class instance
 
 #ifndef IPMGEMPLUGIN
-   TNode( MULTI *apm );   // constructor for integration in GEMS environment
+// Constructor of the class instance in memory in GEMS environment
+  TNode( MULTI *apm );   
 #else
-
-  TNode();      // constructor for standalone GEMIPM2K or coupled program
+  // Constructor of the class instance in memory for standalone GEMIPM2K or coupled program
+  TNode();    
 #endif
 
   virtual ~TNode();      // destructor
@@ -157,89 +161,88 @@ static TNode* na;   // static pointer to this TNode class instance
 #ifdef IPMGEMPLUGIN
 //  Calls for direct coupling of a FMT code with GEMIPM2K
 
-// (2)
-// Passes (copies) the GEM input data from an already loaded DATABR
-//  work structure into parameters provided by the FMT part
-//
+// (6) Passes (copies) the GEMIPM2K input data from the work instance of DATABR structure. 
+//  This call is useful after the GEM_init() (1) and GEM_run() (2) calls to initialize the arrays which keep the
+//   chemical data for all nodes used in the mass-transport model. 
    void GEM_restore_MT(
     long int  &p_NodeHandle,   // Node identification handle
     long int  &p_NodeStatusCH, // Node status code;  see typedef NODECODECH
                       //                                    GEM input output  FMT control
-    double &p_TC,      // Temperature T, C                       +       -      -
-    double &p_P,      // Pressure P, bar                         +       -      -
-    double &p_Vs,     // Volume V of reactive subsystem, cm3    (+)      -      +
-    double &p_Ms,     // Mass of reactive subsystem, kg          -       -      +
-    double *p_bIC,    // bulk mole amounts of IC [nICb]          +       -      -
-    double *p_dul,    // upper kinetic restrictions [nDCb]       +       -      -
-    double *p_dll,    // lower kinetic restrictions [nDCb]       +       -      -
-    double *p_aPH     // Specific surface areas of phases (m2/g) +       -      -
+    double &p_TC,      // Temperature T, C                            +       -      -
+    double &p_P,      // Pressure P,  Pa                              +       -      -
+    double &p_Vs,     // Volume V of reactive subsystem,  m3         (+)      -      +
+    double &p_Ms,     // Mass of reactive subsystem, kg               -       -      +
+    double *p_bIC,    // Bulk mole amounts of IC  [nICb]              +       -      -
+    double *p_dul,    // Upper restrictions to amounts of DC [nDCb]   +       -      -
+    double *p_dll,    // Lower restrictions to amounts of DC [nDCb]   +       -      -
+    double *p_aPH     // Specific surface areas of phases,m2/kg[nPHb] +       -      -
    );
 
-// (3)
-// Loads GEM input data  provided in parameters by the FMT part
-// into the DATABR work structure for the subsequent GEM calculation
-//
-   void GEM_from_MT(
-    long int  p_NodeHandle,   // Node identification handle
-    long int  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
-                     //                                     GEM input output  FMT control
-    double p_TC,     // Temperature T, C                        +       -      -
-    double p_P,      // Pressure P, bar                         +       -      -
-    double p_Vs,     // Volume V of reactive subsystem, cm3     -       -      +
-    double p_Ms,     // Mass of reactive subsystem, kg          -       -      +
-    double *p_bIC,   // bulk mole amounts of IC [nICb]         +       -      -
-    double *p_dul,   // upper kinetic restrictions [nDCb]       +       -      -
-    double *p_dll,   // lower kinetic restrictions [nDCb]       +       -      -
-    double *p_aPH    // Specific surface areas of phases (m2/g)   +       -      -
-   );
-
-// Overload - uses also xDC vector for bulk composition input to GEM
-// added by DK on 09.07.2007
+// (8) Loads the GEMIPM2K input data for a given mass-transport node into the work instance of DATABR structure.  
+//     This call is usually preceeding the GEM_run() call
 void GEM_from_MT(
  long int  p_NodeHandle,   // Node identification handle
- long int  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
-                  //                                     GEM input output  FMT control
- double p_TC,     // Temperature T, C                        +       -      -
- double p_P,      // Pressure P, bar                         +       -      -
- double p_Vs,     // Volume V of reactive subsystem, cm3     -       -      +
- double p_Ms,     // Mass of reactive subsystem, kg          -       -      +
- double *p_bIC,   // bulk mole amounts of IC [nICb]         +       -      -
- double *p_dul,   // upper kinetic restrictions [nDCb]       +       -      -
- double *p_dll,   // lower kinetic restrictions [nDCb]       +       -      -
- double *p_aPH,   // Specific surface areas of phases (m2/g)   +       -      -
+ long int  p_NodeStatusCH, // Node status code (NEED_GEM_SIA or NEED_GEM_AIA)
+                  //                                              GEM input output  FMT control
+ double p_TC,     // Temperature T, C                                 +       -      -
+ double p_P,      // Pressure P, Pa                                   +       -      -
+ double p_Vs,     // Volume V of reactive subsystem, m3               -       -      +
+ double p_Ms,     // Mass of reactive subsystem, kg                   -       -      +
+ double *p_bIC,   // Bulk mole amounts of IC [nICb]                   +       -      -
+ double *p_dul,   // Upper restrictions to amounts of DC [nDCb]       +       -      -
+ double *p_dll,   // Lower restrictions to amounts of DC [nDCb]       +       -      -
+ double *p_aPH    // Specific surface areas of phases, m2/kg [nPHb]   +       -      -
+ );
+
+//(8a) Loads the GEMIPM2K input data for a given mass-transport node into the work instance of DATABR structure.
+//This overloaded variant uses the xDC speciation vector for setting the 
+// new bulk chemical composition to be used in the next GEM_run() calculation. 
+void GEM_from_MT(  
+ long int  p_NodeHandle,   // Node identification handle
+ long int  p_NodeStatusCH, // Node status code (NEED_GEM_SIA or NEED_GEM_AIA)
+                  //                                              GEM input output  FMT control
+ double p_TC,     // Temperature T, C                                 +       -      -
+ double p_P,      // Pressure P, Pa                                   +       -      -
+ double p_Vs,     // Volume V of reactive subsystem, m3               -       -      +
+ double p_Ms,     // Mass of reactive subsystem, kg                   -       -      +
+ double *p_bIC,   // Bulk mole amounts of IC [nICb]                   +       -      -
+ double *p_dul,   // Upper restrictions to amounts of DC [nDCb]       +       -      -
+ double *p_dll,   // Lower restrictions to amounts of DC [nDCb]       +       -      -
+ double *p_aPH,    // Specific surface areas of phases, m2/kg [nPHb]   +       -      -
  double *p_xDC    // Mole amounts of DCs [nDCb] - will be convoluted
                   // and added to the bIC GEM input vector (if full speciation
                   // and not just increments then p_bIC vector must be zeroed off -
                   // it will be calculated from p_xDC and stoichiometry matrix A
 );
 
-// Overload - uses xDC and gam vectors as input primal solution for the node
-// in GEM IPM2 input when NEED_GEM_SIA flag is set for calculation
-// Important! This variant works only when DATACH contains a full list of DCs
-// with passed through the DATABR structure.
-// added by DK on 17.09.2007
+//(8b) Loads the GEMIPM2K input data for a given mass-transport node into the work instance of DATABR structure.
+//In addition, provides access to speciation vector p_xDC and DC activity coefficients p_gam that will be used in
+// GEM "smart initial approximation" SIA mode if dBR->NodeStatusCH == NEED_GEM_SIA (5) and
+// uPrimalSol = true are set for the GEM_run() call (see Section 2) . This works only when the DATACH
+//  structure contains a full list of Dependent Components used in GEM IPM2 calculations. 
 void GEM_from_MT(
  long int  p_NodeHandle,   // Node identification handle
- long int  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
-                  //                                     GEM input output  FMT control
- double p_TC,     // Temperature T, C                         +      -      -
- double p_P,      // Pressure P, bar                          +      -      -
- double p_Vs,     // Volume V of reactive subsystem, cm3      -      -      +
- double p_Ms,     // Mass of reactive subsystem, kg           -      -      +
- double *p_bIC,    // bulk mole amounts of IC [nICb]          +      -      -
- double *p_dul,   // upper kinetic restrictions [nDCb]        +      -      -
- double *p_dll,   // lower kinetic restrictions [nDCb]        +      -      -
- double *p_aPH,  // Specific surface areas of phases (m2/g)   +      -      -
- double *p_xDC,  // Amounts of DCs [nDCb] - old primal soln.  +      -      -
- double *p_gam   // DC activity coeffs [nDCb] - old primal s. +      -      -
+ long int  p_NodeStatusCH, // Node status code (NEED_GEM_SIA or NEED_GEM_AIA)
+                  //                                              GEM input output  FMT control
+ double p_TC,     // Temperature T, C                                 +       -      -
+ double p_P,      // Pressure P, Pa                                   +       -      -
+ double p_Vs,     // Volume V of reactive subsystem, m3               -       -      +
+ double p_Ms,     // Mass of reactive subsystem, kg                   -       -      +
+ double *p_bIC,   // Bulk mole amounts of IC [nICb]                   +       -      -
+ double *p_dul,   // Upper restrictions to amounts of DC [nDCb]       +       -      -
+ double *p_dll,   // Lower restrictions to amounts of DC [nDCb]       +       -      -
+ double *p_aPH,   // Specific surface areas of phases, m2/kg [nPHb]   +       -      -
+ double *p_xDC,  // Mole amounts of DCs [nDCb] - old primal soln.     +      -      -
+ double *p_gam   // DC activity coefficients [nDCb] - old primal s.   +      -      -
 );
 
-// Passing current FMT iteration information into the work DATABR structure
+// (9) Optional, for passing the current mass transport iteration information into the work 
+// DATABR structure (e.g. for using it in tracing/debugging or in writing DBR files for nodes)
 void GEM_set_MT(
 //   long int  NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
 //   long int  NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
-   double p_Tm,      // actual total simulation time, s                        +       -      -
-   double p_dt       // actual time step, s                          +       -      -
+   double p_Tm,      // Actual total simulation time, s                        +       -      -
+   double p_dt       // Actual time step, s                          +       -      -
 );
 #endif
 
@@ -309,70 +312,68 @@ void GEM_set_MT(
    void  GEM_print_ipm( const char* fname );
 
 #ifdef IPMGEMPLUGIN
-// (6)
-// Copies GEM calculation results into parameters provided by the
-// FMT part (dimensions and order of elements in arrays must correspond
-// to those in currently existing DATACH structure )
-//
+// (7)  Retrieves the GEMIPM2 chemical speciation calculation results from the work DATABR structure instance
+//   into memory provided by the mass transport part. Dimensions and order of elements in the arrays must correspond
+//   to those in currently existing DATACH memory structure.
    void GEM_to_MT(
    long int &p_NodeHandle,    // Node identification handle
    long int &p_NodeStatusCH,  // Node status code (changed after GEM calculation); see typedef NODECODECH
-   long int &p_IterDone,      // Number of iterations performed by GEM IPM
-                         //                                     GEM input output  FMT control
+   long int &p_IterDone,      // Number of iterations performed in the last GEM IPM calculation
+                         //                                                  GEM input output  FMT control
     // Chemical scalar variables
-    double &p_Vs,    // Volume V of reactive subsystem, cm3     -      -      +     +
-    double &p_Ms,    // Mass of reactive subsystem, kg          -      -      +     +
-    double &p_Gs,    // Gibbs energy of reactive subsystem (J)  -      -      +     +
-    double &p_Hs,    // Enthalpy of reactive subsystem (J)      -      -      +     +
-    double &p_IC,    // Effective molal aq ionic strength       -      -      +     +
-    double &p_pH,    // pH of aqueous solution                  -      -      +     +
-    double &p_pe,    // pe of aqueous solution                  -      -      +     +
-    double &p_Eh,    // Eh of aqueous solution, V               -      -      +     +
+    double &p_Vs,    // Total volume V of reactive subsystem at given P,T, m3    -      -      +     +
+    double &p_Ms,    // Total mass of the reactive subsystem, kg                 -      -      +     +
+    double &p_Gs,    // Total Gibbs energy of the reactive subsystem, J          -      -      +     +
+    double &p_Hs,    // Total enthalpy of reactive subsystem, J (reserved)       -      -      +     +
+    double &p_IC,    // Effective aqueous ionic strength, molal                  -      -      +     +
+    double &p_pH,    // pH of aqueous solution                                   -      -      +     +
+    double &p_pe,    // pe of aqueous solution                                   -      -      +     +
+    double &p_Eh,    // Eh of aqueous solution, V                                -      -      +     +
     // Dynamic data - dimensions see in DATACH.H structure
-    double  *p_rMB,  // MB Residuals from GEM IPM [nICb]         -      -       +     +
-    double  *p_uIC,   // IC chemical potentials (mol/mol)[nICb]  -      -       +     +
-    double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]  -      -       +     +
-    double  *p_gam,    // activity coeffs of DC [nDCb]           -      -       +     +
-    double  *p_xPH,  // total mole amounts of phases [nPHb]      -      -       +     +
-    double  *p_vPS,  // phase volume, cm3/mol        [nPSb]      -      -       +     +
-    double  *p_mPS,  // phase (carrier) mass, g      [nPSb]      -      -       +     +
-    double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]   -      -    +     +
-    double  *p_xPA  // amount of carrier in phases  [nPSb] ??       -      -    +     +
+    double  *p_rMB,  // Mole balance residuals for Independent Components [nICb] -      -       +     +
+    double  *p_uIC,  // Dual solution: IC chemical potentials, mol/mol [nICb]    -      -       +     +
+    double  *p_xDC,  // Primal solution: DC mole amounts  [nDCb]                 -      -       +     +
+    double  *p_gam,  // External activity coefficients of DC [nDCb]              -      -       +     +
+    double  *p_xPH,  // Total mole amounts of all phases [nPHb]                  -      -       +     +
+    double  *p_vPS,  // Total volumes of multicomponent phases, m3   [nPSb]      -      -       +     +
+    double  *p_mPS,  // Total mass of multicomponent phase (carrier),kg [nPSb]   -      -       +     +
+    double  *p_bPS,  // Bulk compositions of phases  [nPSb][nICb]                -      -       +     +
+    double  *p_xPA   //Amount of carrier in a multicomponent asymmetric phase[nPSb]-    -       +     +
   );
 
 #endif
 
 // Access methods for direct or protected manipulation of CSD and DBR data
 //
-    DATACH* pCSD() const  // get pointer to chemical system data structure
+    DATACH* pCSD() const  // Get the pointer to chemical system definition data structure
     {     return CSD;   }
 
-    DATABR* pCNode() const  // get pointer to work node data structure
+    DATABR* pCNode() const  // Get pointer to work node data structure
     {        return CNode;
     }  // usage on the level of Tnodearray is not recommended !
 
     // These methods get contents of fields in the work node structure
-    double cTC() const     // get current Temperature T, C
+    double cTC() const     // Get current node Temperature T, C
     {  return CNode->TC;   }
 
-    double cP() const     // get current Pressure P, bar
+    double cP() const     // Get current node Pressure P, Pa
     {        return CNode->P;   }
 
-    // Setting node identification handle
+    // Set current node identification handle to value of parameter jj
     void setNodeHandle( long int jj )
     {      CNode->NodeHandle = jj;  }
 
-    // Resizes the node chemical system
-    // Returns new node mass Ms
+    // Resizes the node chemical system size by factor Factor; 
+    // returns new mass of the chemical system in kg
     double ResizeNode( double Factor );
 
 // Useful methods facilitating the communication between DataCH (or FMT)
 // and DataBR (or node) data structures for components and phases
 // (i.e. between the chemical system definition and the node)
 
-   // Returns DCH index of IC given the IC Name string (null-terminated)
-   // or -1 if no such name was found in the DATACH IC name list
-   long int IC_name_to_xCH( const char *Name );
+  //Returns DCH index of IC given the IC Name string (null-terminated) 
+  // or -1 if no such name was found in the DATACH IC name list
+  long int IC_name_to_xCH( const char *Name );
 
    // Returns DCH index of DC given the DC Name string
    // or -1 if no such name was found in the DATACH DC name list
@@ -382,7 +383,7 @@ void GEM_set_MT(
    // or -1 if no such name was found in the DATACH Phase name list
    long int Ph_name_to_xCH( const char *Name );
 
-   // Returns DBR index of IC given the IC Name string
+   //Returns DBR index of IC given the IC Name string 
    // or -1 if no such name was found in the DATACH IC name list
    inline long int IC_name_to_xDB( const char *Name )
    { return IC_xCH_to_xDB( IC_name_to_xCH( Name ) ); }
@@ -411,25 +412,25 @@ void GEM_set_MT(
 
    // Converts the IC DBR index into the IC DCH index
    inline long int IC_xDB_to_xCH( const long int xBR )
-   { return CSD->xIC[xBR]; }
+   { return CSD->xic[xBR]; }
 
    // Converts the DC DBR index into the DC DCH index
    inline long int DC_xDB_to_xCH( const long int xBR )
-   { return CSD->xDC[xBR]; }
+   { return CSD->xdc[xBR]; }
 
    // Converts the Phase DBR index into the Phase DCH index
    inline long int Ph_xDB_to_xCH( const long int xBR )
-   { return CSD->xPH[xBR]; }
+   { return CSD->xph[xBR]; }
 
-   // Converts the Phase DCH index into the DC DCH index (for pure phases)
+   // Returns the DCH index of the first DC belonging to the phase with DCH index Phx 
     long int Phx_to_DCx( const long int Phx );
 
-   // Converts the Phase DCH index into the DC DCH index (1-st)
-   // returns into nDCinPh number of DC included into Phx phase
+   // Returns the DCH index of the first DC belonging to the phase with DCH index Phx, 
+   // plus returns through the nDCinPh (reference) parameter the number of DCs included into this phase 
     long int  PhtoDC_DCH( const long int Phx, long int& nDCinPh );
 
-   // Converts the Phase DBR index into the DC DBR index (1-st selected )
-   // returns into nDCinPh number of DC selected into Phx phase
+   // Returns the DBR index of the first DC belonging to the phase with DBR index Phx, 
+   //plus returns through the nDCinPh (reference) parameter the number of DCs included into DBR for this phase
     long int  PhtoDC_DBR( const long int Phx, long int& nDCinPh );
 
     // Data exchange methods between GEMIPM and work node DATABR structure
@@ -441,11 +442,13 @@ void GEM_set_MT(
     void unpackDataBr( bool uPrimalSol, double ScFact );
 
     // Access to interpolated thermodynamic data from DCH structure
-    // Checks if given Tc and P fit within the interpolation intervals
+    // Checks if given temperature Tc and pressure P fit within the interpolation 
+    //intervals of the DATACH lookup arrays (returns true) or not (returns false)
     bool  check_TP( double Tc, double P );
 
-    // Test Tc and P as grid point for the interpolation of thermodynamic data
-    // Return index in grid matrix or -1
+    // Tests Tc and P as a grid point for the interpolation of thermodynamic data using DATACH 
+    // lookup arrays. Returns -1L if interpolation is needed, or 1D index of the lookup array element 
+    // if Tc and P fit within the respective tolerances. 
      long int  check_grid_TP(  double Tc, double P );
 
      // Access to interpolated G0 from DCH structure ( xCH is the DC DCH index)
@@ -499,11 +502,11 @@ void GEM_set_MT(
 //
 // Molar mass of Independent Component with node DATABRIDGE index ICx
 #define nodeCH_ICmm( ICx )  (  TNode::na->pCSD()->ICmm[ \
-                               TNode::na->pCSD()->xIC[(ICx)]] )
+                               TNode::na->pCSD()->xic[(ICx)]] )
 
 // Molar mass of Dependent Component with node DATABRIDGE index DCx
 #define nodeCH_DCmm( DCx )  (  TNode::na->pCSD()->DCmm[ \
-                               TNode::na->pCSD()->xDC[(DCx)]] )
+                               TNode::na->pCSD()->xdc[(DCx)]] )
 
 // Redo into a function with interpolation
 // Diffusion coefficient of dependent component with node DBr index ICx
@@ -513,8 +516,8 @@ void GEM_set_MT(
 // stoichiometry coefficient A[j][i] of IC with node DATABRIDGE index ICx
 // in the formula of DC with node index DCx
 #define nodeCH_A( DCx, ICx )  ( (TNode::na->pCSD()->A[ \
-                                 (TNode::na->pCSD()->xIC[(ICx)])+ \
-                                 (TNode::na->pCSD()->xDC[(DCx)]) * \
+                                 (TNode::na->pCSD()->xic[(ICx)])+ \
+                                 (TNode::na->pCSD()->xdc[(DCx)]) * \
                                   TNode::na->pCSD()->nIC]) )
 
 // more will be added soon!

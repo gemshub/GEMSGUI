@@ -177,6 +177,7 @@ int main( int argc, char* argv[] )
           // Here the file output for the initial conditions can be implemented
      }
       
+      // Main loop - iterations over nTimes time steps
         int xCalcite = node->Ph_name_to_xDB("Calcite");
         int xAq_gen = node->Ph_name_to_xDB("aq_gen");
         int ICndx[3];
@@ -189,7 +190,6 @@ int main( int argc, char* argv[] )
         cout << "xCa= " << ICndx[0] << " xC=" << ICndx[1] << " xO=" << ICndx[2]
              << " xCalcite=" << xCalcite << " xAq_gen=" << xAq_gen << endl;
 
-      // Main loop - iterations over nTimes time steps
       long int it, nTimes = 99;
       for( it=0; it<nTimes; it++ ) 
       {

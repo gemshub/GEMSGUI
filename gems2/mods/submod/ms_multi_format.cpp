@@ -226,12 +226,11 @@ if( _comment )
 }
 ff << left << setw(12) << "<Lads> " <<  right << setw(8) << pmp->Lads << endl;
 if( _comment )
-  ff << "# FIa: Number of sorption phases included in this system" << endl;
+  ff << "# FIa: Number of sorption phases included in this system (0 if no sorption phases are included)" << endl;
 ff << left << setw(12) << "<FIa> " <<  right << setw(8) << pmp->FIa << endl;
 if( _comment )
-  ff << "# FIat: Allowed number of surface types per adsorption phase (default: 6 if FIa > 0)" << endl;
+  ff << "# FIat: Maximum number of surface types per adsorption phase (if FIa > 0, FIat must be set to default value of 6)" << endl;
 ff << left << setw(12) << "<FIat> " <<  right << setw(8) << pmp->FIat << endl << endl;
-//   ff << left << setw(12) << "<FIat> " <<  right << setw(8) << pmp->FIat << endl;
 //   ff << left << setw(12) << "<sitNc> " <<  right << setw(8) << pmp->sitNcat << endl;
 //   ff << left << setw(12) << "<sitNa> " <<  right << setw(8) << pmp->sitNan << endl;
  } // brief_mode
@@ -396,13 +395,13 @@ getLsMdcsum( LsMdcSum );
    prar.writeArray(  "LsMdc", pmp->LsMdc, pmp->FIs);
    if(LsMdcSum )
    {   if( _comment )
-          ff << "\n\n# DMc: Parameters of non-ideal mixing models for components in the phase ";
+          ff << "\n\n# DMc: Collected parameters per phase component for the non-ideal mixing models ";
     prar.writeArray(  "DMc", pmp->DMc,  LsMdcSum);
    }
 } // sMod
   if( _comment )
   {  ff << "\n\n## (5) Some data arrays which are not provided in DATACH and DATABR files" << endl;
-     ff << "# B: Full total bulk composition of the initial system (vector b) - see DATACH file for dimension nIC";
+     ff << "# B: Full total bulk composition of the initial system (vector b)  (moles) [nIC]";
   }
   prar.writeArray(  "B", pmp->B,  pmp->N);
 
@@ -420,7 +419,7 @@ getLsMdcsum( LsMdcSum );
   if(!brief_mode || prar.getAlws("GEX" ))
   { 
    if( _comment )
-      ff << "\n\n# GEX: for dependent components, G0 increments";
+      ff << "\n\n# GEX: Increments for adjustment of G0 values of Dependent Components in (J/mol/(RT)) (normalized units) [nDC]";
    prar.writeArray(  "GEX", pmp->GEX,  pmp->L);
   }
   if(!brief_mode || prar.getAlws("lnGmf" ))
@@ -449,19 +448,19 @@ getLsMdcsum( LsMdcSum );
    }  
    if(!brief_mode || prar.getAlws("DLL" ))
    { if( _comment )
-        ff << "\n\n# DLL: Vector of lower metastability constraints on DC amounts in the system";
+        ff << "\n\n# DLL: Full vector of lower metastability constraints on DC amounts <xDC> in the system (moles) [nDC]";
      prar.writeArray(  "DLL", pmp->DLL,  pmp->L);
    }  
    if(!brief_mode || prar.getAlws("DUL" ))
    {  if( _comment )
-       ff << "\n\n# DUL: Vector of upper metastability constraints on DC amounts in the system";
+       ff << "\n\n# DUL:Full vector of upper metastability constraints on DC amounts <xDC> in the system (moles) [nDC]";
       prar.writeArray(  "DUL", pmp->DUL,  pmp->L);
    }   
    if( _comment )
      ff << "\n\n# (7) Initial data for phases" << endl;
    if(!brief_mode || prar.getAlws("Aalp" ))
    { if( _comment )
-      ff << "\n# Aalp: Specific surface areas of phases (whole list), set 0 if unknown";
+      ff << "\n# Aalp: Full vector of specific surface areas of phases (m2/g) [nPH]";
      prar.writeArray(  "Aalp", pmp->Aalp,  pmp->FI);
    }  
    if( PSigm != S_OFF )
@@ -498,17 +497,17 @@ getLsMdcsum( LsMdcSum );
       }  
       if(!brief_mode || prar.getAlws("C1" ))
       { if( _comment )
-           ff << "\n# C1: Inner capacitance density parameter C1 (TLM, BSM, CCM), F/m2";
+           ff << "\n# C1: Inner capacitance density parameter C1 (F/m2) [nPS*6]";
         prar.writeArray(  "C1", &pmp->XcapA[0][0], pmp->FIs*pmp->FIat, pmp->FIat);
       }  
       if(!brief_mode || prar.getAlws("C2" ))
       { if( _comment )
-          ff << "\n# C2: Outer capacitance density parameter C2 (TLM, 3LM), F/m2";
+          ff << "\n# C2: Outer capacitance density parameter C2 (F/m2) [nPS*6]";
         prar.writeArray(  "C2", &pmp->XcapB[0][0], pmp->FIs*pmp->FIat, pmp->FIat);
       }  
       if(!brief_mode || prar.getAlws("C3" ))
       { if( _comment )
-          ff << "\n# C3: Third capacitance density parameter C3 (reserved)";
+          ff << "\n# C3: Third capacitance density parameter C3  (F/m2) [nPS*6]";
         prar.writeArray(  "C3", &pmp->XcapF[0][0], pmp->FIs*pmp->FIat, pmp->FIat);
       }  
       if(!brief_mode || prar.getAlws("pCh" ))
@@ -545,7 +544,7 @@ getLsMdcsum( LsMdcSum );
      }  
      if(!brief_mode || prar.getAlws("DCads" ))
      { if( _comment )
-         ff << "\n# DCads: Classifier of species in sorption phase.";
+         ff << "\n# DCads: Classifier of DCs involved in sorption phases [Lads]";
       prar.writeArray(  "DCads", pmp->DCC3, pmp->Lads, 1L );
      } 
     }
@@ -721,7 +720,7 @@ void TMulti::from_text_file_gemipm( const char *path )
   }
 
   for( ii=0; ii< dCH->nIC; ii++ )
-  { pmp->Awt[ii]  = dCH->ICmm[ii];
+  { pmp->Awt[ii]  = dCH->ICmm[ii]*1e3;
     fillValue(pmp->SB[ii], ' ', MaxICN );
     copyValues( pmp->SB[ii], dCH->ICNL[ii], min(MaxICN,(long int)MAXICNAME));
     pmp->SB[ii][MaxICN] = dCH->ccIC[ii];
@@ -738,7 +737,7 @@ if( fabs(dCH->DCmm[0]) < 1e-32 )  // Restore DCmm if skipped from the DCH file
 
   for( ii=0; ii< dCH->nDC; ii++ )
   {
-    pmp->MM[ii] = dCH->DCmm[ii];
+    pmp->MM[ii] = dCH->DCmm[ii]*1e3;
     pmp->DCC[ii] = dCH->ccDC[ii];
     copyValues( pmp->SM[ii], dCH->DCNL[ii], min(MaxDCN,(long int)MAXDCNAME) );
   }
