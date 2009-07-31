@@ -207,7 +207,7 @@ float (*grid)[3];      // Array of grid point locations, size is nC
    //  value order to be described
  float
    *Tval,   // discrete values of T [nTai] in grid arrays in DataCH
-   *Pval,   // discrete values of P [nPai], Pa
+   *Pval,   // discrete values of P [nPai]
 
    *CIb, // [nIV][Nb] Table of quantity/concentration of IC in initial systems
    *CAb, // [nIV][Lbi] Table of quantity/concentration of formulae for initial systems
