@@ -33,7 +33,8 @@ class QWidget;
 #endif
 
 extern const double bar_to_Pa,
-               m3_to_cm3;
+               m3_to_cm3,
+               kg_to_g;
 
 class TNode
 {
@@ -425,14 +426,20 @@ void GEM_set_MT(
 
    // Returns the DCH index of the first DC belonging to the phase with DCH index Phx 
     long int Phx_to_DCx( const long int Phx );
-
+    
    // Returns the DCH index of the first DC belonging to the phase with DCH index Phx, 
    // plus returns through the nDCinPh (reference) parameter the number of DCs included into this phase 
     long int  PhtoDC_DCH( const long int Phx, long int& nDCinPh );
 
+   // Returns the DCH index of the Phase that Dependent Components xCH was included  
+    long int  DCtoPh_DCH( const long int xCH );
+    
    // Returns the DBR index of the first DC belonging to the phase with DBR index Phx, 
    //plus returns through the nDCinPh (reference) parameter the number of DCs included into DBR for this phase
     long int  PhtoDC_DBR( const long int Phx, long int& nDCinPh );
+
+   // Returns the DBR index of the Phase that Dependent Components xBR was included  
+     long int  DCtoPh_DBR( const long int xBR );
 
     // Data exchange methods between GEMIPM and work node DATABR structure
     // Are called inside of GEM_run()
@@ -459,48 +466,48 @@ void GEM_set_MT(
      double DC_G0(const long int xCH, const double P, const double Tc,  bool norm=true);
 
      // Retrieves (interpolated, if necessary) molar volume V0(P,Tc) value for Dependent Component (in J/Pa) 
-     // from the DATACH structure ( xCH is the DC DCH index)or -777., if Tc (temperature, C) 
+     // from the DATACH structure ( xCH is the DC DCH index)or 0.0, if Tc (temperature, C) 
      // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
      double DC_V0(const long int xCH, const double P, const double Tc);
 
      // Retrieves (interpolated) molar enthalpy H0(P,Tc) value for Dependent Component (in J/mol) 
-     // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C) 
+     // from the DATACH structure ( xCH is the DC DCH index) or 7777777., if Tc (temperature, C) 
      // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.  
      double DC_H0(const long int xCH, const double P, const double Tc);
      
      // Retrieves (interpolated) absolute molar enropy S0(P,Tc) value for Dependent Component (in J/K/mol) 
-     // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C) 
+     // from the DATACH structure ( xCH is the DC DCH index) or 0.0, if Tc (temperature, C) 
      // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.  
      double DC_S0(const long int xCH, const double P, const double Tc);
 
      // Retrieves (interpolated) constant-pressure heat capacity Cp0(P,Tc) value for Dependent Component (in J/K/mol)
-     // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C) 
+     // from the DATACH structure ( xCH is the DC DCH index) or 0.0, if Tc (temperature, C) 
      // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
      double DC_Cp0(const long int xCH, const double P, const double Tc);
 
      // Retrieves (interpolated) Helmholtz energy  of Dependent Component (in J/mol) 
-     // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C)
+     // from the DATACH structure ( xCH is the DC DCH index) or 7777777., if Tc (temperature, C)
      // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
      double DC_A0(const long int xCH, const double P, const double Tc);
 
      // Retrieves (interpolated) Internal energy of  Dependent Component (in J/mol) 
-     // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C)
+     // from the DATACH structure ( xCH is the DC DCH index) or 7777777., if Tc (temperature, C)
      // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
      double DC_U0(const long int xCH, const double P, const double Tc);
 
-     // Retrieves (interpolated) dielectric constant of liquid water at (P,Tc) from the DATACH structure or -777., 
+     // Retrieves (interpolated) dielectric constant of liquid water at (P,Tc) from the DATACH structure or 0.0, 
      // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
      double EpsH2Ow(const double P, const double Tc);
 
-     // Retrieves (interpolated) density of liquid water (in kg/m3) at (P,Tc) from the DATACH structure or -777.,
+     // Retrieves (interpolated) density of liquid water (in kg/m3) at (P,Tc) from the DATACH structure or 0.0,
      // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances. 
      double DenH2Ow(const double P, const double Tc);
 
-     // Retrieves (interpolated) dielectric constant of H2O vapor at (P,Tc) from the DATACH structure or -777., 
+     // Retrieves (interpolated) dielectric constant of H2O vapor at (P,Tc) from the DATACH structure or 0.0, 
      // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
      double EpsH2Og(const double P, const double Tc);
      
-     // Retrieves (interpolated) density of H2O vapor (in kg/m3) at (P,Tc) from the DATACH structure or -777., 
+     // Retrieves (interpolated) density of H2O vapor (in kg/m3) at (P,Tc) from the DATACH structure or 0.0, 
      // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
      double DenH2Og(const double P, const double Tc);
      
@@ -564,9 +571,10 @@ void GEM_set_MT(
       double Get_cDC( const long int xdc ); 
       
       // Retrieves the activity coefficient of Dependent Component (xdc is the DC DBR index) 
-      // in its phase in the respective scale
+      // in its phase in the respective scale.
+      // Returns 1.0 if amount of this DC is 0.0
       inline double Get_gDC(const long int xdc) const
-      {  return CNode->gam[xdc];  }
+      {  return ( CNode->gam[xdc] ? CNode->gam[xdc]: 1.);  }
 
       //Retrieves the molar mass of Dependent Component (xdc is DC DBR index) in kg/mol
       inline double DCmm( const long int xdc ) const
@@ -588,8 +596,7 @@ void GEM_set_MT(
       // Internal re-scaling to mass of the system is applied
       inline double IC_b(const long int xCH) const
       { return pmm->B[xCH]/internalScFact; }
-      
-      
+            
       // Retrieves the current mole amount of DC (xCH is DC DCH index) directly from 
       // GEM IPM2 work structure. Also amount of DCs not included into DATABR 
       // list can be retrieved. Internal re-scaling to mass of the system is applied.

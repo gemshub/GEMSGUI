@@ -2646,6 +2646,18 @@ long int xGas = </span><span style="font-family: monospace;">node-&gt;</span><sp
 node-&gt;Phx_to_DCx(xGas,nDCGas);</span></td>
     </tr>
     <tr>
+      <td
+ style="vertical-align: top; color: rgb(0, 153, 0); font-family: monospace;">long
+int&nbsp; DCtoPh_DCH( const long int xCH )</td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);">Returns
+the DCH index of the Phase that Dependent Components xCH was included<br>
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
+ style="font-family: monospace;">xPh = </span><span
+ style="font-family: monospace;">node-&gt;</span><span
+ style="font-family: monospace;">DCtoPh_DCH(xCa_ion);</span></td>
+    </tr>
+    <tr>
       <td style="vertical-align: top; font-family: monospace;">long
 int&nbsp; PhtoDC_DBR( const long int Phx, long
 int&amp; nDCinPh );</td>
@@ -2660,6 +2672,19 @@ long int xbGas = </span><span style="font-family: monospace;">node-&gt;</span><s
  style="font-family: monospace;">Ph_name_to_xDB("Gasmix");</span><br>
       <span style="font-family: monospace;">long int xbCH4 =
 node-&gt;Phx_to_DCx(xbGas,nbDCGas);</span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
+ style="font-family: monospace;">long int&nbsp; DCtoPh_DBR( const long
+int xBR )</span><br>
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);">Returns
+the DBR index of the Phase that Dependent Components xBR was included<br>
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
+ style="font-family: monospace;">xbPh = </span><span
+ style="font-family: monospace;">node-&gt;</span><span
+ style="font-family: monospace;">DCtoPh_DCH(xbCa_ion);</span></td>
     </tr>
   </tbody>
 </table>
@@ -2697,7 +2722,7 @@ using DATABR indexation<br>
     </tr>
     <tr>
       <td style="vertical-align: top; font-family: monospace;">double
-Ph_Volume(const long int
+Ph_Volume( const long int
 xph );</td>
       <td style="vertical-align: top;">Retrieves the current phase
 volume in <span style="color: rgb(0, 0, 0);">m3</span> ( xph is
@@ -2715,7 +2740,7 @@ double CalVol = nod-&gt;Ph_Volume(xbCalcite);<br>
     </tr>
     <tr>
       <td style="vertical-align: top; font-family: monospace;">double
-Ph_Mass(const long int xph
+Ph_Mass( const long int xph
 );</td>
       <td style="vertical-align: top;">Retrieves the phase mass in kg
 ( xph is DBR phase
@@ -2729,10 +2754,9 @@ node-&gt;Ph_Mass(xbCalcite); </span><span
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
-Ph_SatInd(const long int xph
-);</td>
-      <td style="vertical-align: top; color: rgb(204, 102, 0);">Retrieves
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
+Ph_SatInd( const long int xph);</td>
+      <td style="vertical-align: top; color: rgb(0, 0, 0);">Retrieves
 the phase saturation
 index
 ( xph is DBR phase
@@ -2744,7 +2768,7 @@ Returns 0.0 if phase amount is zero.</td>
     </tr>
     <tr>
       <td style="vertical-align: top; font-family: monospace;">double*
-Ph_BC(const long int xph,
+Ph_BC( const long int xph,
 double *ARout=0 );</td>
       <td style="vertical-align: top;">Retrieval of the phase bulk
 composition ( xph is DBR
@@ -2882,9 +2906,7 @@ node-&gt;Get_aDC( xbCa_ion);</span> </td>
     </tr>
     <tr>
       <td style="vertical-align: top; font-family: monospace;"><span
- style="color: rgb(255, 102, 102);">double Get_cDC( const long int xdc);</span><br>
-&nbsp;
-(was DC_Conc())<br>
+ style="color: rgb(0, 0, 0);">double Get_cDC( const long int xdc);</span><br>
       </td>
       <td style="vertical-align: top;"><span
  style="color: rgb(204, 102, 0);">Retrieves concentration of
@@ -2902,7 +2924,9 @@ node-&gt;Get_cDC( xbCa_ion);</span> </td>
       </td>
       <td style="vertical-align: top;">Retrieves the activity
 coefficient of Dependent Component (xdc is the
-DC DBR index) in its phase in the respective scale </td>
+DC DBR index) in its phase in the respective scale. Returns 1.0 if
+amount of this DC is 0.0<br>
+      </td>
       <td style="vertical-align: top;"><span
  style="color: rgb(0, 153, 0); font-family: monospace;">double gDC =
 node-&gt;Get_gDC( xbCa_ion);</span> </td>
@@ -3109,14 +3133,14 @@ const double Tc)</span><br>
       </td>
       <td style="vertical-align: top;">Retrieves (interpolated, if
 necessary) molar
-volume V0(P,Tc) value for Dependent Component (in J/Pa) from the
+volume V0(P,Tc) value for Dependent Component (in J/Pa or m3/mol) from
+the
 DATACH
-structure ( xCH is the DC DCH index) <span
- style="color: rgb(0, 153, 0);">or <span
- style="color: rgb(204, 102, 0);">-777.,</span> if Tc (temperature, C)
+structure ( xCH is the DC DCH index) <span style="color: rgb(0, 0, 0);">or
+0., if Tc (temperature, C)
 or P (pressure, Pa) parameters go beyond the valid lookup array
-intervals or tolerances.</span>&nbsp;&nbsp;<span
- style="color: rgb(204, 102, 0);"> J/Pa m3/mol? </span><br>
+intervals or tolerances.&nbsp; </span><span
+ style="color: rgb(204, 102, 0);"></span><br>
       </td>
       <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
  style="font-family: monospace;">double v0_Ca_ion = node-&gt;DC_V0(
@@ -3128,13 +3152,13 @@ xCa_ion, 1e5,
  style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 DC_H0(const long int xCH,
 const double P, const double Tc)</td>
-      <td style="vertical-align: top;">Retrieves (interpolated) molar
+      <td style="vertical-align: top; color: rgb(0, 0, 0);">Retrieves
+(interpolated) molar
 enthalpy H0(P,Tc) value for Dependent Component (in J/mol) from the
 DATACH
-structure ( xCH is the DC DCH index) <span
- style="color: rgb(0, 153, 0);">or<span style="color: rgb(204, 102, 0);">
--777.,</span> if Tc (temperature, C) or P (pressure, Pa) parameters go
-beyond the valid lookup array intervals or tolerances.</span></td>
+structure ( xCH is the DC DCH index) or 7777777., if Tc (temperature,
+C) or P (pressure, Pa) parameters go
+beyond the valid lookup array intervals or tolerances.</td>
       <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
  style="font-family: monospace;">double h0_Ca_ion = node-&gt;DC_H0(
 xCa_ion, 1e5,
@@ -3150,9 +3174,9 @@ absolute molar enropy S0(P,Tc) value for Dependent Component (<span
  style="color: rgb(0, 153, 0);">in J/K/mol</span>)
 from the DATACH
 structure ( xCH is the DC DCH index)<span style="color: rgb(0, 153, 0);">
-or <span style="color: rgb(204, 102, 0);">-777., </span>if Tc
+      <span style="color: rgb(0, 0, 0);">or 0.0, if Tc
 (temperature, C) or P (pressure, Pa) parameters go beyond the valid
-lookup array intervals or tolerances.</span></td>
+lookup array intervals or tolerances.</span></span></td>
       <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
  style="font-family: monospace;">double s0_Ca_ion = node-&gt;DC_S0(
 xCa_ion, 1e5,
@@ -3163,15 +3187,14 @@ xCa_ion, 1e5,
  style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 DC_Cp0(const long int xCH, const double P,
 const double Tc)</td>
-      <td style="vertical-align: top;">Retrieves (interpolated)
+      <td style="vertical-align: top; color: rgb(0, 0, 0);">Retrieves
+(interpolated)
 constant-pressure heat capacity Cp0(P,Tc) value for Dependent Component
-      <span style="color: rgb(0, 153, 0);">(in J/K/mol)</span> from the
+(in J/K/mol) from the
 DATACH
-structure ( xCH is the DC DCH index) <span
- style="color: rgb(0, 153, 0);">or <span
- style="color: rgb(204, 102, 0);">-777.</span>, if Tc (temperature, C)
+structure ( xCH is the DC DCH index) or 0.0, if Tc (temperature, C)
 or P (pressure, Pa) parameters go beyond the valid lookup array
-intervals or tolerances.</span></td>
+intervals or tolerances.</td>
       <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
  style="font-family: monospace;">double cp0_Ca_ion = node-&gt;DC_Cp0(
 xCa_ion,
@@ -3186,8 +3209,8 @@ const double P, const double Tc)</td>
 (interpolated) Helmholtz energy&nbsp; of Dependent Component (in J/mol)
 from the
 DATACH
-structure ( xCH is the DC DCH index) or
--777., if Tc (temperature, C) or P (pressure, Pa) parameters go
+structure ( xCH is the DC DCH index) or 7777777., if Tc (temperature,
+C) or P (pressure, Pa) parameters go
 beyond the valid lookup array intervals or tolerances.</td>
       <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
  style="font-family: monospace;">double u0_Ca_ion = node-&gt;DC_U0(
@@ -3203,8 +3226,8 @@ const double P, const double Tc)</td>
 (interpolated) Internal energy of Dependent Component (in J/K/mol) from
 the
 DATACH
-structure ( xCH is the DC DCH index) or
--777., if Tc (temperature, C) or P (pressure, Pa) parameters go
+structure ( xCH is the DC DCH index) or 7777777., if Tc (temperature,
+C) or P (pressure, Pa) parameters go
 beyond the valid lookup array intervals or tolerances.</td>
       <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
  style="font-family: monospace;">double a0_Ca_ion = node-&gt;DC_A0(
@@ -3215,13 +3238,12 @@ xCa_ion, 1e5,
       <td
  style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 EpsH2Ow(const double P, const double Tc)</td>
-      <td style="vertical-align: top;"><span
- style="color: rgb(0, 153, 0);">Retrieves (interpolated)
+      <td style="vertical-align: top; color: rgb(0, 0, 0);">Retrieves
+(interpolated)
 dielectric constant of liquid water at (P,Tc) from the DATACH
-structure</span>&nbsp; <span style="color: rgb(0, 153, 0);">or <span
- style="color: rgb(204, 102, 0);">-777.,</span> if Tc (temperature, C)
+structure&nbsp; or 0.0, if Tc (temperature, C)
 or P (pressure, Pa) parameters go beyond the valid lookup array
-intervals or tolerances.</span></td>
+intervals or tolerances.</td>
       <td
  style="vertical-align: top; color: rgb(0, 153, 0); font-family: monospace;">double
 epsW = node-&gt;EpsH2Ow( 1e5, 25); </td>
@@ -3232,13 +3254,13 @@ epsW = node-&gt;EpsH2Ow( 1e5, 25); </td>
  style="color: rgb(0, 0, 0);">double
 DenH2Ow(const double P, const double Tc)</span><br>
       </td>
-      <td style="vertical-align: top;"><span
- style="color: rgb(0, 153, 0);">Retrieves (interpolated) density
+      <td style="vertical-align: top; color: rgb(0, 0, 0);">Retrieves
+(interpolated) density
 of liquid water (in kg/m3)
 at (P,Tc) from the DATACH
-structure or <span style="color: rgb(204, 102, 0);">-777.</span>, if
+structure or 0.0, if
 Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid
-lookup array intervals or tolerances.</span></td>
+lookup array intervals or tolerances.</td>
       <td
  style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">double
 denW = node-&gt;DenH2Ow( 1e5, 25); </td>
@@ -3250,7 +3272,7 @@ VisH2Ow(const double P, const double Tc)</td>
       <td style="vertical-align: top;">Retrieves (interpolated)
 viscosity (units???) of liquid water at (P,Tc) from the DATACH
 structure <span style="color: rgb(0, 153, 0);">or <span
- style="color: rgb(204, 102, 0);">-777.,</span> if Tc (temperature, C)
+ style="color: rgb(204, 102, 0);">0.0,</span> if Tc (temperature, C)
 or P (pressure, Pa) parameters go beyond the valid lookup array
 intervals or tolerances.</span></td>
       <td style="vertical-align: top;"><br>
@@ -3260,12 +3282,12 @@ intervals or tolerances.</span></td>
       <td
  style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 EpsH2Og(const double P, const double Tc)</td>
-      <td style="vertical-align: top;">Retrieves (interpolated)
+      <td style="vertical-align: top; color: rgb(0, 0, 0);">Retrieves
+(interpolated)
 dielectric constant of H2O vapor at (P,Tc) from the DATACH
-structure <span style="color: rgb(0, 153, 0);">or <span
- style="color: rgb(204, 102, 0);">-777.,</span> if Tc (temperature, C)
+structure or 0.0, if Tc (temperature, C)
 or P (pressure, Pa) parameters go beyond the valid lookup array
-intervals or tolerances.</span></td>
+intervals or tolerances.</td>
       <td
  style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">double
 epsWg = node-&gt;EpsH2Og( 1e5, 25); </td>
@@ -3274,13 +3296,13 @@ epsWg = node-&gt;EpsH2Og( 1e5, 25); </td>
       <td
  style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 DenH2Og(const double P, const double Tc)</td>
-      <td style="vertical-align: top;">Retrieves (interpolated) density
-of H2O vapor (in <span style="color: rgb(0, 0, 0);">kg/m3</span>)
+      <td style="vertical-align: top; color: rgb(0, 0, 0);">Retrieves
+(interpolated) density
+of H2O vapor (in kg/m3)
 at (P,Tc) from the DATACH
-structure <span style="color: rgb(0, 153, 0);">or<span
- style="color: rgb(204, 102, 0);"> -777.,</span> if Tc (temperature, C)
+structure or 0.0, if Tc (temperature, C)
 or P (pressure, Pa) parameters go beyond the valid lookup array
-intervals or tolerances.</span></td>
+intervals or tolerances.</td>
       <td
  style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">double
 denW g= node-&gt;DenH2Og( 1e5, 25); </td>

@@ -214,7 +214,7 @@ double
     *lnGmf,   // ln of initial DC activity coefficients for correcting G0 [0:L-1]
     *lnGmM,   // ln of DC pure gas fugacity (or metastability) coeffs or DDF correction [0:L-1]
     *EZ,      // Formula charge of DC in multi-component phases [0:Ls-1]
-    *FVOL,    // phase volumes, cm3/mol                   [0:FI-1]
+    *FVOL,    // phase volumes, cm3 comment corrected DK 04.08.2009  [0:FI-1]
     *FWGT,    // phase (carrier) masses, g                [0:FI-1]
 //
     *G,    // Normalized DC energy function c(j), mole/mole [0:L-1]
