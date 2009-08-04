@@ -53,6 +53,7 @@ protected:
          // used for exchanging input data and results between FMT and GEM IPM
 
     // These four values are set by the last GEM_run() call
+    double internalScFact;
     double CalcTime;  // GEMIPM2 calculation time, s
     long int
         PrecLoops,    // Number of performed IPM-2 precision refinement loops
@@ -411,15 +412,15 @@ void GEM_set_MT(
    long int Ph_xCH_to_xDB( const long int xCH );
 
    // Converts the IC DBR index into the IC DCH index
-   inline long int IC_xDB_to_xCH( const long int xBR )
+   inline long int IC_xDB_to_xCH( const long int xBR ) const
    { return CSD->xic[xBR]; }
 
    // Converts the DC DBR index into the DC DCH index
-   inline long int DC_xDB_to_xCH( const long int xBR )
+   inline long int DC_xDB_to_xCH( const long int xBR ) const
    { return CSD->xdc[xBR]; }
 
    // Converts the Phase DBR index into the Phase DCH index
-   inline long int Ph_xDB_to_xCH( const long int xBR )
+   inline long int Ph_xDB_to_xCH( const long int xBR ) const
    { return CSD->xph[xBR]; }
 
    // Returns the DCH index of the first DC belonging to the phase with DCH index Phx 
@@ -451,29 +452,182 @@ void GEM_set_MT(
     // if Tc and P fit within the respective tolerances. 
      long int  check_grid_TP(  double Tc, double P );
 
-     // Access to interpolated G0 from DCH structure ( xCH is the DC DCH index)
-     double  DC_G0_TP( const long int xCH, double Tc, double P );
+    //Retrieves (interpolated) molar Gibbs energy G0(P,Tc) value for Dependent Component  
+    //from the DATACH structure ( xCH is the DC DCH index) or 7777777., if Tc (temperature, C) 
+    // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances. 
+    // Parameter norm defines in wnich units the value is returned: false - in J/mol; true (default) - in mol/mol
+     double DC_G0(const long int xCH, const double P, const double Tc,  bool norm=true);
 
-     // Access to interpolated V0 from DCH structure ( xCH is the DC DCH index)
-     double  DC_V0_TP( const long int xCH, double Tc, double P );
+     // Retrieves (interpolated, if necessary) molar volume V0(P,Tc) value for Dependent Component (in J/Pa) 
+     // from the DATACH structure ( xCH is the DC DCH index)or -777., if Tc (temperature, C) 
+     // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+     double DC_V0(const long int xCH, const double P, const double Tc);
 
+     // Retrieves (interpolated) molar enthalpy H0(P,Tc) value for Dependent Component (in J/mol) 
+     // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C) 
+     // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.  
+     double DC_H0(const long int xCH, const double P, const double Tc);
+     
+     // Retrieves (interpolated) absolute molar enropy S0(P,Tc) value for Dependent Component (in J/K/mol) 
+     // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C) 
+     // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.  
+     double DC_S0(const long int xCH, const double P, const double Tc);
+
+     // Retrieves (interpolated) constant-pressure heat capacity Cp0(P,Tc) value for Dependent Component (in J/K/mol)
+     // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C) 
+     // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+     double DC_Cp0(const long int xCH, const double P, const double Tc);
+
+     // Retrieves (interpolated) Helmholtz energy  of Dependent Component (in J/mol) 
+     // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C)
+     // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+     double DC_A0(const long int xCH, const double P, const double Tc);
+
+     // Retrieves (interpolated) Internal energy of  Dependent Component (in J/mol) 
+     // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C)
+     // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+     double DC_U0(const long int xCH, const double P, const double Tc);
+
+     // Retrieves (interpolated) dielectric constant of liquid water at (P,Tc) from the DATACH structure or -777., 
+     // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+     double EpsH2Ow(const double P, const double Tc);
+
+     // Retrieves (interpolated) density of liquid water (in kg/m3) at (P,Tc) from the DATACH structure or -777.,
+     // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances. 
+     double DenH2Ow(const double P, const double Tc);
+
+     // Retrieves (interpolated) dielectric constant of H2O vapor at (P,Tc) from the DATACH structure or -777., 
+     // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+     double EpsH2Og(const double P, const double Tc);
+     
+     // Retrieves (interpolated) density of H2O vapor (in kg/m3) at (P,Tc) from the DATACH structure or -777., 
+     // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+     double DenH2Og(const double P, const double Tc);
+     
 // To be provided - access to interpolated thermodynamic data from DCH structure
-//  DC_H0_TP
-//  DC_S0_TP
-//  DC_Cp0_TP
 //  DC_DD_TP
 
-     // retrieval of activities (xCH is the DC DCH index)
-     double  DC_Activity( const long int xCH );
-
-     // Retrieval of Phase Volume ( xBR is DBR phase index), works also for pure phases
+     //Retrieves the current phase volume in m3 ( xph is DBR phase index) in the reactive sub-system.
+     // Works both for multicomponent and for single-component phases. Returns 0.0 if the phase mole amount is zero.
       double  Ph_Volume( const long int xBR );
-     // Retrieval of Phase mass ( xBR is DBR phase index), works also for pure phases
+     
+     // Retrieves the phase mass in kg ( xph is DBR phase index). 
+     // Works for multicomponent and for single-component phases. Returns 0.0 if phase amount is zero.
       double  Ph_Mass( const long int xBR );
-     // Retrieval of multi-component Phase composition ( xBR is DBR phase index)
-     // Returns pointer to ARout which may also be allocated inside of Ph_BC()
-      double* Ph_BC( const long int xBR, double *ARout=0 );
+     
+      // Retrieves the phase saturation index ( xph is DBR phase index). Works for multicomponent and for 
+      // single-component phases. Returns 0.0 if phase amount is zero.
+      double Ph_SatInd(const long int xph );
+      
+      // Retrieval of the phase bulk composition ( xph is DBR phase index) into memory indicated by 
+      // ARout (array of at least [dCH->nICb elements]). Returns pointer to ARout which may also be 
+      // allocated inside of Ph_BC() in the case if parameter ARout = NULL is specified;
+      // to avoid a memory leak, you will have to free this memory wherever appropriate. 
+      // This function works for multicomponent and for single-component phases
+      double *Ph_BC( const long int xBR, double* ARout=0 );
 
+     // Sets the amount of IC (xic is IC DBR index) in the bIC input vector of the work DATABR structure
+      void Set_bIC( const long int xic, const double bIC) 
+      {  CNode->bIC[xic] = bIC;  }
+      
+      // Retrieves the current amount of Independent Component (xic is IC DBR index)
+      inline double Get_bIC(const long int xic) const
+      {  return CNode->bIC[xic];  }
+
+      // Sets the metastability constraint from below to the amount of DC (xdc is DC DBR index)
+      // in the dll vector of the work DATABR structure 
+      inline void Set_dll( const long int xdc, const double dll) 
+      {  CNode->dll[xdc] = dll;  }
+      
+      //Sets the metastability constraint from above to the amount of DC (xdc is DC DBR index)
+      // in the dul vector of the work DATABR structure
+      inline void Set_dul( const long int xdc, const double dul) 
+      {  CNode->dul[xdc] = dul;  }
+      
+      // Sets the amount of DC (xdc is DC DBR index) in the xDC vector of the work DATABR structure  
+      void Set_nDC( const long int xdc, const double nDC) 
+      {  CNode->xDC[xdc] = nDC;  }
+      
+      // Retrieves the current mole amount of Dependent Component (xdc is DC DBR index)
+      inline double Get_nDC(const long int xdc) const
+      {  return CNode->xDC[xdc];  }
+      
+      // Retrieval of (dual-thermodynamic) chemical potential of the DC (xdc is the DC DBR index).
+      // Parameter norm defines the scale: if true (1) then in mol/mol, otherwise in J/mol
+      double Get_muDC( const long int xDC, bool norm=true );
+      
+      //Retrieval of (dual-thermodynamic) activity of the DC (xdc is the DC DBR index)
+      double Get_aDC( const long int xdc);
+      
+      //Retrieves concentration of DC (xdc is the DC DBR index) in its phase 
+      // in the respective concentration scale 
+      double Get_cDC( const long int xdc ); 
+      
+      // Retrieves the activity coefficient of Dependent Component (xdc is the DC DBR index) 
+      // in its phase in the respective scale
+      inline double Get_gDC(const long int xdc) const
+      {  return CNode->gam[xdc];  }
+
+      //Retrieves the molar mass of Dependent Component (xdc is DC DBR index) in kg/mol
+      inline double DCmm( const long int xdc ) const
+      { return CSD->DCmm[ CSD->xdc[xdc]]; }
+      
+      //Retrieves the molar mass of Independent Component (xic is IC DBR index) in kg/mol
+      inline double ICmm( const long int xic ) const
+      { return CSD->ICmm[ CSD->xic[xic]]; }
+      
+      //Retrieves the stoichiometry coefficient A[j][i] of IC (xic is IC DBR index) 
+      // in the formula of DC (xdc is DC DBR index)
+      inline double DCaJI( const long int xdc, const long int xic) const
+      { return CSD->A[ CSD->xic[xic] + CSD->xdc[xdc] * CSD->nIC ]; }
+ 
+// This functions used only for currently node after GEM run
+      
+      // Retrieves the current amount of Independent Component (xCH is IC DCH index).
+      // Also amount of ICs not included into DATABR list can be retrieved.
+      // Internal re-scaling to mass of the system is applied
+      inline double IC_b(const long int xCH) const
+      { return pmm->B[xCH]/internalScFact; }
+      
+      
+      // Retrieves the current mole amount of DC (xCH is DC DCH index) directly from 
+      // GEM IPM2 work structure. Also amount of DCs not included into DATABR 
+      // list can be retrieved. Internal re-scaling to mass of the system is applied.
+      inline double DC_n(const long int xCH) const
+      {  return pmm->X[xCH]/internalScFact; }
+      
+      // Retrieves the current (dual-thermodynamic) activity of DC (xCH is DC DCH index) 
+      // directly from GEM IPM2 work structure. Also activity of a DC not included into DATABR list 
+      // can be retrieved. If DC has zero amount, its dual-thermodynamic activity is returned anyway.
+      // For single condensed phase component, this value has a meaning of the saturation index, 
+      // also in the presence of metastability constraint(s).
+      double DC_a(const long int xCH);
+      
+      // Retrieves the current concentration of Dependent Component (xCH is DC DCH index) 
+      // in its phase directly from GEM IPM2 work structure.Also activity of a DC not included 
+      // into DATABR list can be retrieved. For aqueous species, molality is returned; 
+      // for gas species, partial pressure; for surface complexes - density in mol/m2;
+      // for other phases - mole fraction. If DC has zero amount, the function returns 0.0.
+      double DC_c(const long int xCH);
+      
+      // Retrieves the current activity coefficient of DC (xCH is DC DCH index) in its phase 
+      // directly from GEM IPM2 work structure. Also activity coefficient of a DC not included 
+      // into DATABR list can be retrieved. If DC has zero amount, this function returns 1.0.
+      inline double DC_g(const long int xCH) const
+      {  return pmm->Gamma[xCH];  }
+      
+      // Retrieves the current (dual-thermodynamic) chemical potential of DC (xCH is DC DCH index)
+      // directly from GEM IPM2 work structure, also for any DC not included into DATABR or having zero amount.
+      // Parameter norm defines in wnich units the chemical potential value is returned:
+      // false - in J/mol; true (default) - in mol/mol
+      double DC_mu(const long int xCH, bool norm=true);
+      
+      // Retrieves the standard chemical potential of DC (xCH is DC DCH index) directly
+      // from GEM IPM2 work structure at current pressure and temperature,
+      // also for any DC not included into DATABR or having zero amount. 
+      // Parameter norm defines in which units the chemical potential value is returned: 
+      // false - in J/mol; true (default) - in mol/mol
+      double DC_mu0(const long int xCH, bool norm=true);
 
 #ifndef IPMGEMPLUGIN
 // These calls are used only inside the GEMS-PSI GEM2MT module
@@ -496,31 +650,11 @@ void GEM_set_MT(
 #endif
 };
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Data direct access macroses (for FMT programs written in C++)
-// Work on both sides of assignment - use with caution!
-//
-// Molar mass of Independent Component with node DATABRIDGE index ICx
-#define nodeCH_ICmm( ICx )  (  TNode::na->pCSD()->ICmm[ \
-                               TNode::na->pCSD()->xic[(ICx)]] )
-
-// Molar mass of Dependent Component with node DATABRIDGE index DCx
-#define nodeCH_DCmm( DCx )  (  TNode::na->pCSD()->DCmm[ \
-                               TNode::na->pCSD()->xdc[(DCx)]] )
-
 // Redo into a function with interpolation
 // Diffusion coefficient of dependent component with node DBr index ICx
 // #define nodeCH_DD( DCx )    ( TNode::na->pCSD()->DD[
 //                              TNode::na->pCSD()->xDC[(DCx)]] )
 
-// stoichiometry coefficient A[j][i] of IC with node DATABRIDGE index ICx
-// in the formula of DC with node index DCx
-#define nodeCH_A( DCx, ICx )  ( (TNode::na->pCSD()->A[ \
-                                 (TNode::na->pCSD()->xic[(ICx)])+ \
-                                 (TNode::na->pCSD()->xdc[(DCx)]) * \
-                                  TNode::na->pCSD()->nIC]) )
-
-// more will be added soon!
 
 #endif
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

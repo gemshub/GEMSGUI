@@ -177,8 +177,7 @@ if( _comment )
 }
   ff << "\"" << pmp->stkey << "\"" << endl;
 
- if( !brief_mode ) 
- { if( _comment )
+ if( _comment )
    {  ff << "\n## (1) Important flags that affect memory allocation" << endl;
       ff << "# PE: Flag for using electroneutrality condition in GEM IPM calculations " << endl;
    }
@@ -209,10 +208,11 @@ if( _comment )
     ff << "\n# PSigm: Flag for using (+) or ignoring (-) specific surface free energies  " << endl;
    ff << left << setw(12) << "<PSigm> " <<  right << setw(6) <<
       "\'" << PSigm << "\'" << endl;
-   if( _comment )
-   {  ff << "\n## (2) Important dimensionalities that affect memory allocation" << endl;
-      ff << "# Lads: Total number of Dependent Components in sorption phases included into this system" << endl;
-   }
+  if( !brief_mode || pmp->FIat > 0 || pmp->Lads > 0 ) 
+  { if( _comment )
+    {  ff << "\n## (2) Important dimensionalities that affect memory allocation" << endl;
+       ff << "# Lads: Total number of Dependent Components in sorption phases included into this system" << endl;
+    }
    ff << left << setw(12) << "<Lads> " <<  right << setw(8) << pmp->Lads << endl;
    if( _comment )
      ff << "# FIa: Number of sorption phases included in this system (0 if no sorption phases are included)" << endl;

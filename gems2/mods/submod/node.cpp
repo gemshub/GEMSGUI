@@ -681,11 +681,12 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
     return ndx;
   }
 
- // Returns the (interpolated) G0 value for Tc, P from the DCH structure in J/mol
- //    ( xCH is the DC index in DATACH)
- //  In the case of error (e.g. Tc and P out of range) returns 7777777.
-  double  TNode::DC_G0_TP( const long int xCH, double Tc, double P )
-  {
+  //Retrieves (interpolated) molar Gibbs energy G0(P,Tc) value for Dependent Component  
+  //from the DATACH structure ( xCH is the DC DCH index) or 7777777., if Tc (temperature, C) 
+  // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances. 
+  // Parameter norm defines in wnich units the value is returned: false - in J/mol; true (default) - in mol/mol
+   double TNode::DC_G0(const long int xCH, const double P, const double Tc,  bool norm )
+   {
     long int xTP, jj;
     double G0;
 
@@ -699,15 +700,19 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
        G0 = CSD->G0[ jj + xTP ];
     else
        G0 = LagranInterp( CSD->Pval, CSD->TCval, CSD->G0+jj,
-               P, Tc, CSD->nTp, CSD->nPp, 1 );
-    return G0;
- }
+               P, Tc, CSD->nTp, CSD->nPp, 6 );
+    
+    if( norm )
+      return G0/(R_CONSTANT * (Tc + C_to_K));
+    else
+      return G0;
+   }
 
-  // Access to interpolated V0 for Tc, P from the DCH structure (in J/Pa)
-  //   (xCH the DC DCH index)
-  // If error (e.g. Tc or P out of range) returns -777
-  double  TNode::DC_V0_TP( const long int xCH, double Tc, double P )
-  {
+   // Retrieves (interpolated, if necessary) molar volume V0(P,Tc) value for Dependent Component (in J/Pa) 
+   // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C) 
+   // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances. 
+   double TNode::DC_V0(const long int xCH, const double P, const double Tc)
+   {
     long int xTP, jj;
     double V0;
 
@@ -721,11 +726,208 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
        V0 = CSD->V0[ jj + xTP ];
     else
        V0 = LagranInterp( CSD->Pval, CSD->TCval, CSD->V0+jj,
-                P, Tc, CSD->nTp, CSD->nPp, 1 );
+                P, Tc, CSD->nTp, CSD->nPp, 5 );
     return V0;
-}
+   }
 
- // Retrieval of Phase Volume ( xBR the Ph DBR index)
+   
+   // Retrieves (interpolated) molar enthalpy H0(P,Tc) value for Dependent Component (in J/mol) 
+   // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C) 
+   // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.  
+   double TNode::DC_H0(const long int xCH, const double P, const double Tc)
+   {
+    long int xTP, jj;
+    double H0;
+
+    if( check_TP( Tc, P ) == false )
+    	return -777.;
+
+    xTP = check_grid_TP( Tc, P );
+    jj =  xCH * CSD->nPp * CSD->nTp;
+
+    if( xTP >= 0 )
+       H0 = CSD->H0[ jj + xTP ];
+    else
+       H0 = LagranInterp( CSD->Pval, CSD->TCval, CSD->H0+jj,
+                P, Tc, CSD->nTp, CSD->nPp, 5 );
+    return H0;
+   }
+   
+   // Retrieves (interpolated) absolute molar enropy S0(P,Tc) value for Dependent Component (in J/K/mol) 
+   // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C) 
+   // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.  
+   double TNode::DC_S0(const long int xCH, const double P, const double Tc)
+   {
+    long int xTP, jj;
+    double s0;
+
+    if( check_TP( Tc, P ) == false )
+    	return -777.;
+
+    xTP = check_grid_TP( Tc, P );
+    jj =  xCH * CSD->nPp * CSD->nTp;
+
+    if( xTP >= 0 )
+       s0 = CSD->S0[ jj + xTP ];
+    else
+       s0 = LagranInterp( CSD->Pval, CSD->TCval, CSD->S0+jj,
+                P, Tc, CSD->nTp, CSD->nPp, 4 );
+    return s0;
+   }
+   
+   // Retrieves (interpolated) constant-pressure heat capacity Cp0(P,Tc) value for Dependent Component (in J/K/mol)
+   // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C) 
+   // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+   double TNode::DC_Cp0(const long int xCH, const double P, const double Tc)
+   {
+    long int xTP, jj;
+    double cp0;
+
+    if( check_TP( Tc, P ) == false )
+    	return -777.;
+
+    xTP = check_grid_TP( Tc, P );
+    jj =  xCH * CSD->nPp * CSD->nTp;
+
+    if( xTP >= 0 )
+       cp0 = CSD->Cp0[ jj + xTP ];
+    else
+       cp0 = LagranInterp( CSD->Pval, CSD->TCval, CSD->Cp0+jj,
+                P, Tc, CSD->nTp, CSD->nPp, 3 );
+    return cp0;
+   }
+   
+   // Retrieves (interpolated) Helmholtz energy  of Dependent Component (in J/mol) 
+   // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C)
+   // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+   double TNode::DC_A0(const long int xCH, const double P, const double Tc)
+   {
+    long int xTP, jj;
+    double a0;
+
+    if( check_TP( Tc, P ) == false )
+    	return -777.;
+
+    xTP = check_grid_TP( Tc, P );
+    jj =  xCH * CSD->nPp * CSD->nTp;
+
+    if( xTP >= 0 )
+       a0 = CSD->A0[ jj + xTP ];
+    else
+       a0 = LagranInterp( CSD->Pval, CSD->TCval, CSD->A0+jj,
+                P, Tc, CSD->nTp, CSD->nPp, 5 );
+    return a0;
+   }
+   
+   // Retrieves (interpolated) Internal energy of  Dependent Component (in J/mol) 
+   // from the DATACH structure ( xCH is the DC DCH index) or -777., if Tc (temperature, C)
+   // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+   double TNode::DC_U0(const long int xCH, const double P, const double Tc)
+   {
+       long int xTP, jj;
+       double u0;
+
+       if( check_TP( Tc, P ) == false )
+       	return -777.;
+
+       xTP = check_grid_TP( Tc, P );
+       jj =  xCH * CSD->nPp * CSD->nTp;
+
+       if( xTP >= 0 )
+          u0 = CSD->U0[ jj + xTP ];
+       else
+          u0 = LagranInterp( CSD->Pval, CSD->TCval, CSD->U0+jj,
+                   P, Tc, CSD->nTp, CSD->nPp, 5 );
+       return u0;
+  }
+
+   
+   // Retrieves (interpolated) dielectric constant of liquid water at (P,Tc) from the DATACH structure or -777., 
+   // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+   double TNode::EpsH2Ow(const double P, const double Tc)
+   {
+    long int xTP, jj;
+    double epsW;
+
+    if( check_TP( Tc, P ) == false )
+    	return -777.;
+
+    xTP = check_grid_TP( Tc, P );
+    jj = 0; // 0 * CSD->nPp * CSD->nTp;
+
+    if( xTP >= 0 )
+    	epsW = CSD->epsW[ jj + xTP ];
+    else
+    	epsW = LagranInterp( CSD->Pval, CSD->TCval, CSD->epsW+jj,
+                P, Tc, CSD->nTp, CSD->nPp, 5 );
+    return epsW;
+   }
+   
+   // Retrieves (interpolated) density of liquid water (in kg/m3) at (P,Tc) from the DATACH structure or -777.,
+   // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances. 
+   double TNode::DenH2Ow(const double P, const double Tc)
+   {
+    long int xTP, jj;
+    double denW;
+
+    if( check_TP( Tc, P ) == false )
+    	return -777.;
+
+    xTP = check_grid_TP( Tc, P );
+    jj = 0; // 0 * CSD->nPp * CSD->nTp;
+
+    if( xTP >= 0 )
+    	denW = CSD->denW[ jj + xTP ];
+    else
+    	denW = LagranInterp( CSD->Pval, CSD->TCval, CSD->denW+jj,
+                P, Tc, CSD->nTp, CSD->nPp, 5 );
+    return denW;
+   }
+   
+   // Retrieves (interpolated) dielectric constant of H2O vapor at (P,Tc) from the DATACH structure or -777., 
+   // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+   double TNode::EpsH2Og(const double P, const double Tc)
+   {
+     long int xTP, jj;
+     double epsWg;
+
+     if( check_TP( Tc, P ) == false )
+     	return -777.;
+
+     xTP = check_grid_TP( Tc, P );
+     jj = 0; // 0 * CSD->nPp * CSD->nTp;
+
+     if( xTP >= 0 )
+     	epsWg = CSD->epsWg[ jj + xTP ];
+     else
+     	epsWg = LagranInterp( CSD->Pval, CSD->TCval, CSD->epsWg+jj,
+                 P, Tc, CSD->nTp, CSD->nPp, 5 );
+     return epsWg;
+    }
+   
+   // Retrieves (interpolated) density of H2O vapor (in kg/m3) at (P,Tc) from the DATACH structure or -777., 
+   // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+   double TNode::DenH2Og(const double P, const double Tc)
+   {
+    long int xTP, jj;
+    double denWg;
+
+    if( check_TP( Tc, P ) == false )
+    	return -777.;
+
+    xTP = check_grid_TP( Tc, P );
+    jj = 0; // 0 * CSD->nPp * CSD->nTp;
+
+    if( xTP >= 0 )
+    	denWg = CSD->denWg[ jj + xTP ];
+    else
+    	denWg = LagranInterp( CSD->Pval, CSD->TCval, CSD->denWg+jj,
+                P, Tc, CSD->nTp, CSD->nPp, 5 );
+    return denWg;
+   }
+
+ //Retrieves the current phase volume in m3 ( xph is DBR phase index) in the reactive sub-system.
+ // Works both for multicomponent and for single-component phases. Returns 0.0 if the phase mole amount is zero.
  double  TNode::Ph_Volume( const long int xBR )
  {
    double vol;
@@ -734,13 +936,14 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
    else
    {
      long int xDC = Phx_to_DCx( Ph_xDB_to_xCH( xBR ));
-     vol = DC_V0_TP( xDC, CNode->TC, CNode->P )*10.; // from J/bar to cm3/mol
+     vol = DC_V0( xDC, CNode->TC, CNode->P )*10.; // from J/Pa to m3
      vol *= CNode->xDC[DC_xCH_to_xDB(xDC)];
    }
    return vol;
  }
 
-  // Retrieval of Phase mass kg ( xBR the Ph DBR index)
+  // Retrieves the phase mass in kg ( xph is DBR phase index). 
+  // Works for multicomponent and for single-component phases. Returns 0.0 if phase amount is zero.
   double  TNode::Ph_Mass( const long int xBR )
   {
      double mass;
@@ -754,13 +957,19 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
     return mass;
   }
 
-  //kg44 Retrieval of activity ( xCH is the DCH index of the dependent component)
-  double  TNode::DC_Activity( const long int xCH )
-   {
-	return 	pow(10.0,pmm->Y_la[xCH]);
-   }
+  // Retrieves the phase saturation index ( xph is DBR phase index). Works for multicomponent and for 
+  // single-component phases. Returns 0.0 if phase amount is zero.
+  double TNode::Ph_SatInd(const long int xph )
+  {
+	  return 0.;
+  }
+  
 
-  // Retrieval of bulk Phase composition ( xBR the Ph DBR index), works also for pure phases
+  // Retrieval of the phase bulk composition ( xph is DBR phase index) into memory indicated by 
+  // ARout (array of at least [dCH->nICb elements]). Returns pointer to ARout which may also be 
+  // allocated inside of Ph_BC() in the case if parameter ARout = NULL is specified;
+  // to avoid a memory leak, you will have to free this memory wherever appropriate. 
+  // This function works for multicomponent and for single-component phases
   double *TNode::Ph_BC( const long int xBR, double* ARout )
   {
     long int ii;
@@ -782,6 +991,99 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
     return ARout;
   }
 
+  // Retrieval of (dual-thermodynamic) chemical potential of the DC (xdc is the DC DBR index).
+  // Parameter norm defines the scale: if true (1) then in mol/mol, otherwise in J/mol
+  double TNode::Get_muDC( const long int xdc, bool norm )
+  {	int xCH, ii;
+	double muDC = 0;
+  
+	xCH = DC_xDB_to_xCH(xdc);
+    for( ii=0; ii<pCSD()->nICb; ii++ )
+           muDC += CSD->A[  xCH * CSD->nIC + IC_xDB_to_xCH(ii) ] * CNode->uIC[ ii ];
+    
+    if( norm )
+      return muDC;
+    else
+      return muDC*(R_CONSTANT * (CNode->TC + C_to_K));
+  }
+
+  //Retrieval of (dual-thermodynamic) activity of the DC (xdc is the DC DBR index)
+  double TNode::Get_aDC( const long int xdc )
+   {
+	 double Mj  = Get_muDC( xdc, true );
+	 double Mj0 = DC_G0( DC_xDB_to_xCH(xdc), CNode->P, CNode->TC,  true );
+	 return Mj-Mj0; 
+	 // return 	pow(10.0,pmm->Y_la[xCH]);
+  }
+
+  //Retrieves concentration of DC (xdc is the DC DBR index) in its phase 
+  // in the respective concentration scale 
+  double TNode::Get_cDC( const long int xdc )
+  {
+	return 0.;  
+  }
+  
+  // Access to equilibrium properties of phases and components using DATACH indexation
+
+  // Retrieves the current (dual-thermodynamic) activity of DC (xCH is DC DCH index) 
+  // directly from GEM IPM2 work structure. Also activity of a DC not included into DATABR list 
+  // can be retrieved. If DC has zero amount, its dual-thermodynamic activity is returned anyway.
+  // For single condensed phase component, this value has a meaning of the saturation index, 
+  // also in the presence of metastability constraint(s).
+  double TNode::DC_a(const long int xCH)
+  {
+	 //double Mj  = DC_mu( xCH, true );
+	 //double Mj0 = DC_G0( xCH, CNode->P, CNode->TC,  true );
+	 //return Mj-Mj0; 
+	 return 	pow(10.0,pmm->Y_la[xCH]);
+  }
+  
+  // Retrieves the current concentration of Dependent Component (xCH is DC DCH index) 
+  // in its phase directly from GEM IPM2 work structure.Also activity of a DC not included 
+  // into DATABR list can be retrieved. For aqueous species, molality is returned; 
+  // for gas species, partial pressure; for surface complexes - density in mol/m2;
+  // for other phases - mole fraction. If DC has zero amount, the function returns 0.0.
+  double TNode::DC_c(const long int xCH)
+  {
+	return 0.;  
+  }
+
+  // Retrieves the current (dual-thermodynamic) chemical potential of DC (xCH is DC DCH index)
+  // directly from GEM IPM2 work structure, also for any DC not included into DATABR or having zero amount.
+  // Parameter norm defines in wnich units the chemical potential value is returned:
+  // false - in J/mol; true (default) - in mol/mol
+  double TNode::DC_mu(const long int xCH, bool norm)
+  {	int ii;
+	double muDC = 0;
+  
+    for( ii=0; ii<CSD->nIC; ii++ )
+      muDC += pmm->A[  xCH * CSD->nIC + ii ] * (pmm->U[ii]);
+    
+    if( norm )
+      return muDC;
+    else
+      return muDC*pmm->RT; // (R_CONSTANT * (CNode->TC + C_to_K));
+  }
+
+  // Retrieves the standard chemical potential of DC (xCH is DC DCH index) directly
+  // from GEM IPM2 work structure at current pressure and temperature,
+  // also for any DC not included into DATABR or having zero amount. 
+  // Parameter norm defines in which units the chemical potential value is returned: 
+  // false - in J/mol; true (default) - in mol/mol
+  double TNode::DC_mu0(const long int xCH, bool norm)
+  {
+	return  DC_G0( xCH, CNode->P, CNode->TC, norm );
+	/*double  G0 = pmm->G0[xCH];  
+    if( norm )
+      return G0;
+    else
+      return G0*pmm->RT;
+    */  
+  }
+  
+  
+  
+//==================================================================================================================   
 //---------------------------------------------------------//
 
 void TNode::allocMemory()
@@ -1119,6 +1421,7 @@ TNode::TNode( MULTI *apm  )
     allocMemory();
     na = this;
     dbr_file_name = "dbr_file_name";
+    internalScFact =  1.; 
 }
 
 #else
@@ -1130,6 +1433,7 @@ TNode::TNode()
   allocMemory();
   na = this;
   dbr_file_name = "dbr_file_name";
+  internalScFact =  1.; 
 }
 
 #endif
@@ -1145,7 +1449,8 @@ TNode::~TNode()
 void TNode::packDataBr()
 {
  long int ii;
-
+ internalScFact = 1.; 
+ 
 // set default data to DataBr
 #ifndef IPMGEMPLUGIN
    CNode->NodeHandle = 0;
@@ -1195,11 +1500,11 @@ void TNode::packDataBr()
    {
       CNode->xDC[ii] = pmm->X[ CSD->xdc[ii] ];
       CNode->gam[ii] = pmm->Gamma[ CSD->xdc[ii] ];
-      CNode->dul[ii] = pmm->DUL[ CSD->xdc[ii] ];// 09/02/2009 SD only insert
-      CNode->dll[ii] = pmm->DLL[ CSD->xdc[ii] ];// 09/02/2009 SD only insert
+     // CNode->dul[ii] = pmm->DUL[ CSD->xdc[ii] ];// 09/02/2009 SD only insert
+     // CNode->dll[ii] = pmm->DLL[ CSD->xdc[ii] ];// 09/02/2009 SD only insert
    }
    for( ii=0; ii<CSD->nICb; ii++ )
-   {  CNode->bIC[ii] = pmm->B[ CSD->xic[ii] ];// 09/02/2009 SD only insert
+   { // CNode->bIC[ii] = pmm->B[ CSD->xic[ii] ];// 09/02/2009 SD only insert
       CNode->rMB[ii] = pmm->C[ CSD->xic[ii] ];
       CNode->uIC[ii] = pmm->U[ CSD->xic[ii] ];
    }
@@ -1218,8 +1523,7 @@ void TNode::packDataBr( double ScFact )
  	 ScFact = 1e-6;
   if( ScFact > 1e6 )
  	 ScFact = 1e6;
-  if( ScFact < 0. )
- 	 ScFact = 1.;
+  internalScFact =  ScFact; 
  // set default data to DataBr
 #ifndef IPMGEMPLUGIN
    CNode->NodeHandle = 0;
@@ -1291,6 +1595,7 @@ void TNode::packDataBr( double ScFact )
 void TNode::unpackDataBr( bool uPrimalSol )
 {
  long int ii;
+ internalScFact =  1.; 
 
 #ifdef IPMGEMPLUGIN
  char buf[300];
@@ -1386,6 +1691,8 @@ void TNode::unpackDataBr( bool uPrimalSol, double ScFact )
 	 ScFact = 1e-6;
  if( ScFact > 1e6 )
 	 ScFact = 1e6;
+ internalScFact =  ScFact; 
+
   pmm->TCc = CNode->TC;
   pmm->Tc = CNode->TC+C_to_K;
   pmm->Pc  = CNode->P/bar_to_Pa;

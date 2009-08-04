@@ -1328,7 +1328,7 @@ C&nbsp; <br>
       <td style="vertical-align: top;">double &amp;<br>
       </td>
       <td style="vertical-align: top;">Pressure P,&nbsp; <span
- style="color: rgb(255, 102, 102);">Pa&nbsp;</span> <br>
+ style="color: rgb(0, 0, 0);">Pa&nbsp;</span> <br>
       </td>
       <td style="vertical-align: top; font-family: monospace;">P<br>
       </td>
@@ -1341,7 +1341,7 @@ C&nbsp; <br>
       <td style="vertical-align: top;">double &amp;<br>
       </td>
       <td style="vertical-align: top;">Volume
-V of reactive subsystem,&nbsp; <span style="color: rgb(255, 102, 102);">m3</span><br>
+V of reactive subsystem,&nbsp; <span style="color: rgb(0, 0, 0);">m3</span><br>
       </td>
       <td style="vertical-align: top; font-family: monospace;">Vs<br>
       </td>
@@ -1409,7 +1409,7 @@ elements] <br>
       <td style="vertical-align: top;">double *<br>
       </td>
       <td style="vertical-align: top;">Specific
-surface areas of phases, <span style="color: rgb(255, 102, 102);">m2/kg</span>
+surface areas of phases, <span style="color: rgb(0, 0, 0);">m2/kg</span>
 [<span style="font-family: monospace;">dCH-&gt;nPHb</span>
 elements]<br>
       </td>
@@ -1517,7 +1517,7 @@ in the last GEM IPM calculation<br>
       </td>
       <td style="vertical-align: top;">Total volume
 V of reactive subsystem at given P,T,&nbsp; <span
- style="color: rgb(255, 102, 102);">m3</span> <br>
+ style="color: rgb(0, 0, 0);">m3</span> <br>
       </td>
       <td style="vertical-align: top; font-family: monospace;">Vs<br>
       </td>
@@ -1671,7 +1671,7 @@ elements]<br>
  style="vertical-align: top; font-family: monospace; text-decoration: underline;">p_vPS</td>
       <td style="vertical-align: top;">double *</td>
       <td style="vertical-align: top;">Total volumes of multicomponent
-phases, <span style="color: rgb(255, 102, 102);">m3</span> [<span
+phases, <span style="color: rgb(0, 0, 0);">m3</span> [<span
  style="font-family: monospace;">dCH-&gt;nPSb</span>
 elements]&nbsp;&nbsp; <br>
       </td>
@@ -1683,7 +1683,7 @@ elements]&nbsp;&nbsp; <br>
       <td style="vertical-align: top; font-family: monospace;">p_mPS</td>
       <td style="vertical-align: top;">double *</td>
       <td style="vertical-align: top;">Total mass of multicomponent
-phase (carrier),&nbsp; <span style="color: rgb(255, 102, 102);">kg</span>
+phase (carrier),&nbsp; <span style="color: rgb(0, 0, 0);">kg</span>
 [<span style="font-family: monospace;">dCH-&gt;nPSb</span>
 elements]&nbsp;&nbsp;&nbsp; ????<br>
       </td>
@@ -1886,7 +1886,7 @@ elements] <br>
       <td style="vertical-align: top;">double*<br>
       </td>
       <td style="vertical-align: top;">Specific
-surface areas of phases, <span style="color: rgb(255, 102, 102);">m2/kg</span>
+surface areas of phases, <span style="color: rgb(0, 0, 0);">m2/kg</span>
 [<span style="font-family: monospace;">dCH-&gt;nPHb</span>
 elements]<br>
       </td>
@@ -2165,7 +2165,7 @@ TC = node-&gt;cTC(); <br>
       <td style="vertical-align: top; font-family: monospace;"> double
 cP()</td>
       <td style="vertical-align: top;">Get
-current node Pressure P,&nbsp; <span style="color: rgb(255, 102, 102);">Pa</span>
+current node Pressure P,&nbsp; <span style="color: rgb(0, 0, 0);">Pa</span>
       <br>
       </td>
       <td style="vertical-align: top; font-family: monospace;">double P
@@ -2186,7 +2186,7 @@ handle to value of parameter jj<br>
 ResizeNode( double Factor );</td>
       <td style="vertical-align: top;">Resizes the node chemical system
 size by factor Factor; returns new mass of the chemical system in <span
- style="color: rgb(255, 102, 102);">kg</span><br>
+ style="color: rgb(0, 0, 0);">kg</span><br>
       </td>
       <td style="vertical-align: top;"><span
  style="font-family: monospace;">double NewMass&nbsp; =
@@ -2698,9 +2698,9 @@ using DATABR indexation<br>
     <tr>
       <td style="vertical-align: top; font-family: monospace;">double
 Ph_Volume(const long int
-xPh );</td>
+xph );</td>
       <td style="vertical-align: top;">Retrieves the current phase
-volume in <span style="color: rgb(255, 102, 102);">m3</span> ( xPh is
+volume in <span style="color: rgb(0, 0, 0);">m3</span> ( xph is
 DBR
 phase index) in the reactive sub-system. Works both for multicomponent
 and for single-component phases.
@@ -2710,30 +2710,32 @@ Returns 0.0 if the phase mole amount is zero.<br>
  style="font-family: monospace;">ong int xbCalcite = </span><span
  style="font-family: monospace;">node-&gt;</span><span
  style="font-family: monospace;">Ph_name_to_xDB("Calcite");<br>
-double CalVol = Ph_Volume(xbCalcite);<br>
+double CalVol = nod-&gt;Ph_Volume(xbCalcite);<br>
       </span> </td>
     </tr>
     <tr>
       <td style="vertical-align: top; font-family: monospace;">double
-Ph_Mass(const long int xPh
+Ph_Mass(const long int xph
 );</td>
       <td style="vertical-align: top;">Retrieves the phase mass in kg
-( xPh is DBR phase
+( xph is DBR phase
 index). Works for multicomponent and for single-component phases.
 Returns 0.0 if phase amount is zero.</td>
       <td style="vertical-align: top;"><span
- style="font-family: monospace;">double CalM = Ph_Mass(xbCalcite); </span><span
+ style="font-family: monospace;">double CalM =
+node-&gt;Ph_Mass(xbCalcite); </span><span
  style="font-family: monospace;">double CalDen = </span><span
  style="font-family: monospace;">CalM / CalVol;&nbsp;</span> </td>
     </tr>
     <tr>
       <td
  style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
-Ph_SatInd(const long int xPh
+Ph_SatInd(const long int xph
 );</td>
-      <td style="vertical-align: top;">Retrieves the phase saturation
+      <td style="vertical-align: top; color: rgb(204, 102, 0);">Retrieves
+the phase saturation
 index
-( xPh is DBR phase
+( xph is DBR phase
 index). Works for multicomponent and for single-component phases.
 Returns 0.0 if phase amount is zero.</td>
       <td style="vertical-align: top;"><span
@@ -2742,10 +2744,10 @@ Returns 0.0 if phase amount is zero.</td>
     </tr>
     <tr>
       <td style="vertical-align: top; font-family: monospace;">double*
-Ph_BC(const long int xBR,
+Ph_BC(const long int xph,
 double *ARout=0 );</td>
       <td style="vertical-align: top;">Retrieval of the phase bulk
-composition ( xPh is DBR
+composition ( xph is DBR
 phase index) into memory indicated by ARout (array of at least [<span
  style="font-family: monospace;">dCH-&gt;nICb</span> elements]).
 Returns pointer to ARout which may also be
@@ -2757,161 +2759,192 @@ single-component phases</td>
  style="font-family: monospace;">double* PhB; <br>
 PhB = new double [</span><span style="font-family: monospace;">dCH-&gt;nICb</span><span
  style="font-family: monospace;">];<br>
-Ph_BC( xbCalcite, PhB );<br>
+node-&gt;Ph_BC( xbCalcite, PhB );<br>
 . . . . . . . . . . . . <br>
 delete[]PhB;<br>
       </span> </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><span
- style="font-family: monospace; color: rgb(255, 102, 102);">void
+      <td style="vertical-align: top; color: rgb(0, 0, 0);"><span
+ style="font-family: monospace;">void
 Set_bIC( const
-long int xIC, const double bDC);</span></td>
+long int xic, const double bIC);</span></td>
       <td style="vertical-align: top;">Sets the amount of Independent
-Component (xIC is IC DBR index) in the bIC input vector of the work
+Component (xic is IC DBR index) in the bIC input vector of the work
 DATABR structure</td>
-      <td style="vertical-align: top;"><br>
-      </td>
+      <td style="vertical-align: top;"> l<span
+ style="font-family: monospace; color: rgb(0, 153, 0);">ong int xbCa =
+node-&gt;</span><span style="font-family: monospace;"><span
+ style="color: rgb(0, 153, 0);">IC_name_to_xDB("Ca");</span><br
+ style="color: rgb(0, 153, 0);">
+      <span style="color: rgb(0, 153, 0);">node-&gt;Set_bIC(xbCa, 0.1 );</span><br>
+      </span> </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><span
- style="font-family: monospace; color: rgb(255, 102, 102);">double
+      <td style="vertical-align: top; color: rgb(0, 0, 0);"><span
+ style="font-family: monospace;">double
 Get_bIC(const
-long int xIC);</span></td>
+long int xic);</span></td>
       <td style="vertical-align: top;">Retrieves the current amount of
-Independent Component (xIC is IC DBR index)</td>
-      <td style="vertical-align: top;"><br>
+Independent Component (xic is IC DBR index)</td>
+      <td style="vertical-align: top;"><span
+ style="color: rgb(0, 153, 0); font-family: monospace;">double bIC =
+node-&gt;Get_bIC(xbCa);</span><br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><span
- style="font-family: monospace; color: rgb(255, 102, 102);">void
+      <td style="vertical-align: top; color: rgb(0, 0, 0);"><span
+ style="font-family: monospace;">void
 Set_dll( const
-long int xDC, const double dll);</span></td>
+long int xdc, const double dll);</span></td>
       <td style="vertical-align: top;">Sets the metastability
-constraint from below to the amount of Dependent Component (xDC is DC
+constraint from below to the amount of Dependent Component (xdc is DC
 DBR index) in the <span style="font-family: monospace;">dll </span>vector
 of the work DATABR structure</td>
-      <td style="vertical-align: top;"><br>
-      </td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"> l<span
+ style="font-family: monospace;">ong int xbCa_ion = </span><span
+ style="font-family: monospace;">node-&gt;</span><span
+ style="font-family: monospace;">DC_name_to_xDB("Ca+2");<br>
+      </span><span style="font-family: monospace;">node-&gt;Set_dll(</span><span
+ style="font-family: monospace;">xbCa_ion</span><span
+ style="font-family: monospace;">, 0.001 );</span> </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><span
- style="font-family: monospace; color: rgb(255, 102, 102);">void
+      <td style="vertical-align: top; color: rgb(0, 0, 0);"><span
+ style="font-family: monospace;">void
 Set_dul( const
-long int xDC, const double dll);</span></td>
+long int xdc, const double dll);</span></td>
       <td style="vertical-align: top;">Sets the metastability
-constraint from above to the amount of Dependent Component (xDC is DC
+constraint from above to the amount of Dependent Component (xdc is DC
 DBR index) in the <span style="font-family: monospace;">dul </span>vector
 of the work DATABR structure</td>
-      <td style="vertical-align: top;"><br>
-      </td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
+ style="font-family: monospace;">node-&gt;Set_dul(</span><span
+ style="font-family: monospace;">xbCa_ion</span><span
+ style="font-family: monospace;">, 1e5 );</span> </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;"><span
- style="font-family: monospace; color: rgb(255, 102, 102);">void
+      <td style="vertical-align: top; color: rgb(0, 0, 0);"><span
+ style="font-family: monospace;">void
 Set_nDC( const
-long int xDC, const double nDC);</span></td>
+long int xdc, const double nDC);</span></td>
       <td style="vertical-align: top;">Sets the amount of Dependent
-Component (xDC is DC DBR index) in the xDC vector of the work DATABR
+Component (xdc is DC DBR index) in the xDC vector of the work DATABR
 structure<br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
+ style="font-family: monospace;">node-&gt;Set_nDC(</span><span
+ style="font-family: monospace;">xbCa_ion</span><span
+ style="font-family: monospace;">, 1e-5 );</span> </td>
     </tr>
     <tr>
       <td style="vertical-align: top;"><span
- style="font-family: monospace; color: rgb(255, 102, 102);">double
+ style="font-family: monospace; color: rgb(0, 0, 0);">double
 Get_nDC(const
-long int xDC);</span><br>
+long int xdc);</span><br>
       </td>
       <td style="vertical-align: top;">Retrieves the current mole
-amount of Dependent Component (xDC is DC DBR index)<br>
+amount of Dependent Component (xdc is DC DBR index)<br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
+      <td style="vertical-align: top;"><span
+ style="color: rgb(0, 153, 0); font-family: monospace;">double nDC =
+node-&gt;Get_nDC(xbCa_ion);</span> </td>
     </tr>
     <tr>
-      <td style="vertical-align: top; font-family: monospace;"><span
- style="color: rgb(255, 102, 102);">double Get_muDC( const long int
-xDC, bool norm=true );</span></td>
+      <td
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
+Get_muDC( const long int
+xDC, bool norm=true );</td>
       <td style="vertical-align: top;">Retrieval of
-(dual-thermodynamic) chemical potential of the Dependent Component (xDC
+(dual-thermodynamic) chemical potential of the Dependent Component (xdc
 is the
-DC DBR index). Parameter norm defines the scale: if true (1) then in
-mol/mol, otherwise in J/mol<br>
+DC DBR index). Parameter norm defines the scale: <span
+ style="color: rgb(0, 0, 0);">if true (1) then in
+mol/mol, otherwise in J/mol</span><br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
+      <td style="vertical-align: top;"><span
+ style="color: rgb(0, 153, 0); font-family: monospace;">double muDC =
+node-&gt;Get_muDC( xbCa_ion);</span> </td>
     </tr>
     <tr>
       <td style="vertical-align: top; font-family: monospace;"><span
- style="color: rgb(255, 102, 102);">double Get_aDC( const long int xDC
-); </span>(was DC_Activity())<br>
+ style="color: rgb(255, 102, 102);"><span style="color: rgb(0, 0, 0);">double
+Get_aDC( const long int xdc);</span> </span><br>
       </td>
       <td style="vertical-align: top;">Retrieval of
 (dual-thermodynamic)
-activity of the Dependent Component (xDC is the
+activity of the Dependent Component (xdc is the
 DC DBR index) <br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
+      <td style="vertical-align: top;"><span
+ style="color: rgb(0, 153, 0); font-family: monospace;">double aDC =
+node-&gt;Get_aDC( xbCa_ion);</span> </td>
     </tr>
     <tr>
       <td style="vertical-align: top; font-family: monospace;"><span
- style="color: rgb(255, 102, 102);">double Get_cDC( const long int xDC
-);</span>&nbsp;
+ style="color: rgb(255, 102, 102);">double Get_cDC( const long int xdc);</span><br>
+&nbsp;
 (was DC_Conc())<br>
       </td>
-      <td style="vertical-align: top;">Retrieves concentration of
-Dependent Component (xDC is the
-DC DBR index) in its phase in the respective concentration scale <br>
+      <td style="vertical-align: top;"><span
+ style="color: rgb(204, 102, 0);">Retrieves concentration of
+Dependent Component (xdc is the
+DC DBR index) in its phase in the respective concentration scale </span><br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
+      <td style="vertical-align: top;"><span
+ style="color: rgb(0, 153, 0); font-family: monospace;">double cDC =
+node-&gt;Get_cDC( xbCa_ion);</span> </td>
     </tr>
     <tr>
       <td style="vertical-align: top; font-family: monospace;"><span
- style="color: rgb(255, 102, 102);">double Get_gDC( const long int xDC
-);</span>
-(was DC_gamma())<br>
+ style="color: rgb(0, 0, 0);">double Get_gDC( const long int xDC);</span>
+      <br>
       </td>
       <td style="vertical-align: top;">Retrieves the activity
-coefficient of Dependent Component (xDC is the
+coefficient of Dependent Component (xdc is the
 DC DBR index) in its phase in the respective scale </td>
-      <td style="vertical-align: top;"><br>
-      </td>
+      <td style="vertical-align: top;"><span
+ style="color: rgb(0, 153, 0); font-family: monospace;">double gDC =
+node-&gt;Get_gDC( xbCa_ion);</span> </td>
     </tr>
     <tr>
-      <td style="vertical-align: top; font-family: monospace;"><span
- style="color: rgb(255, 102, 102);">double DCmm( const long int xDC );</span></td>
+      <td
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
+DCmm( const long int xdc );</td>
       <td style="vertical-align: top;">Retrieves the molar mass of
-Dependent Component (xDC is DC DBR index) in <span
- style="color: rgb(255, 102, 102);">kg/mol</span><br>
+Dependent Component (xdc is DC DBR index) in <span
+ style="color: rgb(0, 0, 0);">kg/mol</span><br>
       </td>
-      <td style="vertical-align: top; color: rgb(255, 102, 102);">Rewrite
-from macro nodeCH_DCmm( DCx ) </td>
+      <td style="vertical-align: top; color: rgb(255, 102, 102);"> <span
+ style="color: rgb(0, 153, 0); font-family: monospace;">double mm =
+node-&gt;DCmm( xbCa_ion);</span></td>
     </tr>
     <tr>
-      <td style="vertical-align: top; font-family: monospace;"><span
- style="color: rgb(255, 102, 102);">double ICmm( const long int xIC );</span></td>
+      <td
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
+ICmm( const long int xic );</td>
       <td style="vertical-align: top;">Retrieves the molar mass of
-Independent Component (xIC is IC DBR index) in <span
- style="color: rgb(255, 102, 102);">kg/mol</span><br>
+Independent Component (xic is IC DBR index) in <span
+ style="color: rgb(0, 0, 0);">kg/mol</span><br>
       </td>
-      <td style="vertical-align: top; color: rgb(255, 102, 102);">Rewrite
-from macro nodeCH_ICmm( ICx )&nbsp; </td>
+      <td style="vertical-align: top; color: rgb(255, 102, 102);"><span
+ style="color: rgb(0, 153, 0); font-family: monospace;">double mm =
+node-&gt;ICmm( xbCa );</span> </td>
     </tr>
     <tr>
       <td style="vertical-align: top;"><span
- style="font-family: monospace; color: rgb(255, 102, 102);">double
-DCaJI( const long int xDC, const long int xIC)</span><br>
+ style="font-family: monospace; color: rgb(0, 0, 0);">double
+DCaJI( const long int xdc, const long int xic);</span><br>
       </td>
       <td style="vertical-align: top;">Retrieves the stoichiometry
-coefficient A[j][i] of IC (xIC is IC DBR index) in the formula of DC
-(xDC is DC DBR index) </td>
-      <td style="vertical-align: top; color: rgb(255, 102, 102);">Rewrite
-from macro nodeCH_A( DCx, ICx ) </td>
+coefficient A[j][i] of IC (xic is IC DBR index) in the formula of DC
+(xdc is DC DBR index) </td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
+ style="font-family: monospace;">double aij = node-&gt;</span><span
+ style="font-family: monospace;">DCaJI( <br>
+      </span><span style="font-family: monospace;">xbCa_ion</span><span
+ style="font-family: monospace;">,&nbsp;</span><span
+ style="font-family: monospace;"> xbCa );</span> </td>
     </tr>
   </tbody>
 </table>
@@ -2921,6 +2954,7 @@ from macro nodeCH_A( DCx, ICx ) </td>
 Table 3.4. Access to thermodynamic and equilibrium properties of phases
 and components
 using DATACH indexation<br>
+<br>
 <br>
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2"
  cellspacing="2">
@@ -2935,14 +2969,29 @@ using DATACH indexation<br>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">double
+IC_b(const long int xCH);</td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);">(*)
+Retrieves the current amount of
+Independent Component (xCH is IC DCH index). Also amount of ICs not
+included into DATABR list
+can be retrieved. Internal re-scaling to mass of the system is
+applied </td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"> l<span
+ style="font-family: monospace;">ong int xCa = </span><span
+ style="font-family: monospace;">node-&gt;</span><span
+ style="font-family: monospace;">IC_name_to_xCH("Ca");<br>
+double moles_Ca = IC_b(xCa);</span> </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 DC_n(const long int xCH)</td>
-      <td style="vertical-align: top;">Retrieves the current mole
-amount of Dependent Component (xDC is DC DCH index) directly from GEM
+      <td style="vertical-align: top;">(*) Retrieves the current mole
+amount of Dependent Component (xCH is DC DCH index) directly from GEM
 IPM2 work structure. Also amount of DCs not included into DATABR list
-can be retrieved. No internal re-scaling to mass of the system is
-applied <span style="color: rgb(204, 102, 204);">(can we do that
-anyway?)</span>. <br>
+can be retrieved. Internal re-scaling to mass of the system is
+applied.<span style="color: rgb(204, 102, 204);"></span><br>
       </td>
       <td style="vertical-align: top;"> l<span
  style="font-family: monospace;">ong int xCa_ion = </span><span
@@ -2952,10 +3001,10 @@ double moles_Ca_ion = DC_n(xCa_ion);</span></td>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 DC_a(const long int xCH)</td>
-      <td style="vertical-align: top;">Retrieves the current
-(dual-thermodynamic) activity of Dependent Component (xDC is DC DCH
+      <td style="vertical-align: top;">(*) Retrieves the current
+(dual-thermodynamic) activity of Dependent Component (xCH is DC DCH
 index) directly from GEM IPM2 work structure. Also activity of a DC not
 included into DATABR list can be retrieved. If DC has zero amount, its
 dual-thermodynamic activity is returned anyway. For single condensed
@@ -2967,11 +3016,11 @@ in the presence of metastability constraint(s). <br>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 DC_c(const long int xCH)</td>
-      <td style="vertical-align: top;">Retrieves the current
+      <td style="vertical-align: top;">(*) Retrieves the current
 concentration of Dependent
-Component (xDC is DC DCH index) in its phase directly from GEM IPM2
+Component (xCH is DC DCH index) in its phase directly from GEM IPM2
 work structure.Also activity of a DC not included into DATABR list can
 be retrieved. For aqueous species, molality is returned; for gas
 species, partial pressure; for surface complexes - density in mol/m2;
@@ -2983,11 +3032,12 @@ returns 0.0. <br>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 DC_g(const long int xCH)</td>
-      <td style="vertical-align: top;">Retrieves the current activity
+      <td style="vertical-align: top;">(*) Retrieves the current
+activity
 coefficient of Dependent
-Component (xDC is DC DCH index) in its phase directly from GEM IPM2
+Component (xCH is DC DCH index) in its phase directly from GEM IPM2
 work structure. Also activity coefficient of a DC not included into
 DATABR list can
 be retrieved. If DC has zero amount, this function returns 1.0. </td>
@@ -2996,130 +3046,202 @@ be retrieved. If DC has zero amount, this function returns 1.0. </td>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 DC_mu(const long int xCH, bool norm=true)</td>
-      <td style="vertical-align: top;">Retrieves the current
-(dual-thermodynamic) chemical potential of Dependent Component (xDC is
+      <td style="vertical-align: top;">(*) Retrieves the current
+(dual-thermodynamic) chemical potential of Dependent Component (xCH is
 DC DCH index) directly from GEM IPM2 work structure, also for any DC
 not included into DATABR or having zero amount. Parameter<span
  style="font-family: monospace;"> norm </span>defines in wnich units
 the chemical potential value is returned: false - in J/mol; true
 (default) - in mol/mol. <br>
       </td>
-      <td style="vertical-align: top;"><span
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
  style="font-family: monospace;">double mu_Ca_ion_J_mol =
-DC_mu(xCa_ion);</span></td>
+DC_mu(xCa_ion, false);</span></td>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 DC_mu0(const long int xCH, bool norm=true)</td>
-      <td style="vertical-align: top;">Retrieves the standard chemical
-potential of Dependent Component (xDC is DC DCH index) directly from
+      <td style="vertical-align: top;">(*) Retrieves the standard
+chemical
+potential of Dependent Component (xCH is DC DCH index) directly from
 GEM IPM2 work structure at current pressure and temperature, also for
 any DC not included into DATABR or having zero amount. Parameter<span
  style="font-family: monospace;"> norm </span>defines in which units
 the chemical potential value is returned: false - in J/mol; true
 (default) - in mol/mol. </td>
-      <td style="vertical-align: top;"><span
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
  style="font-family: monospace;">double mu0_Ca_ion_J_mol =
-DC_mu0(xCa_ion);</span></td>
+DC_mu0(xCa_ion, false);</span></td>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
+ style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);"><span
+ style="color: rgb(0, 0, 0);">double
 DC_G0(const long int xCH,
-const double P, const double Tc,&nbsp; <span
- style="color: rgb(255, 102, 102);">bool norm=true</span>)<br>
-      <span style="color: rgb(0, 0, 0);">was DC_G0_TP( </span><br>
+const double P, const double Tc,&nbsp; bool norm=true)</span><br>
+      <span style="color: rgb(0, 0, 0);"></span><br>
       </td>
       <td style="vertical-align: top;">Retrieves (interpolated) molar
-Gibbs energy G0(P,Tc) value for Dependent Component (in J/mol) from the
+Gibbs energy G0(P,Tc) value for Dependent Component from the
 DATACH
 structure ( xCH is the DC DCH index) or 7777777., if Tc (temperature,
-C) or P (pressure, <span style="color: rgb(255, 102, 102);">Pa</span>)
+C) or P (pressure, <span style="color: rgb(0, 0, 0);">Pa</span>)
 parameters go beyond the valid lookup array
 intervals or tolerances. Parameter<span style="font-family: monospace;">
-norm </span>defines in wnich units the value is returned: false - in
-J/mol; true (default) - in mol/mol. </td>
-      <td style="vertical-align: top;"><span
- style="font-family: monospace;">double g0_Ca_ion = DC_G0(xCa_ion,
-false);</span></td>
+norm </span>defines in wnich units the value is returned: <span
+ style="color: rgb(0, 0, 0);">false - in
+J/mol; true (default) - in mol/mol.</span> </td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
+ style="font-family: monospace;">double g0_Ca_ion = node-&gt;DC_G0(
+xCa_ion, 1e5,
+25, false);</span></td>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
+ style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);"><span
+ style="color: rgb(0, 0, 0);">double
 DC_V0(const long int xCH, const double P,
-const double Tc)<br>
-      <span style="color: rgb(0, 0, 0);">was DC_V0_TP(</span><br>
+const double Tc)</span><br>
+      <span style="color: rgb(0, 0, 0);"></span><br>
       </td>
       <td style="vertical-align: top;">Retrieves (interpolated, if
 necessary) molar
-volume V0(P,Tc) value for Dependent Component (in J/bar) from the
+volume V0(P,Tc) value for Dependent Component (in J/Pa) from the
 DATACH
 structure ( xCH is the DC DCH index) <span
- style="color: rgb(255, 102, 102);">m3/mol</span>? <br>
+ style="color: rgb(0, 153, 0);">or <span
+ style="color: rgb(204, 102, 0);">-777.,</span> if Tc (temperature, C)
+or P (pressure, Pa) parameters go beyond the valid lookup array
+intervals or tolerances.</span>&nbsp;&nbsp;<span
+ style="color: rgb(204, 102, 0);"> J/Pa m3/mol? </span><br>
       </td>
-      <td style="vertical-align: top;"><br>
-      </td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
+ style="font-family: monospace;">double v0_Ca_ion = node-&gt;DC_V0(
+xCa_ion, 1e5,
+25 );</span> </td>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 DC_H0(const long int xCH,
 const double P, const double Tc)</td>
       <td style="vertical-align: top;">Retrieves (interpolated) molar
 enthalpy H0(P,Tc) value for Dependent Component (in J/mol) from the
 DATACH
-structure ( xCH is the DC DCH index)</td>
-      <td style="vertical-align: top;"><br>
-      </td>
+structure ( xCH is the DC DCH index) <span
+ style="color: rgb(0, 153, 0);">or<span style="color: rgb(204, 102, 0);">
+-777.,</span> if Tc (temperature, C) or P (pressure, Pa) parameters go
+beyond the valid lookup array intervals or tolerances.</span></td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
+ style="font-family: monospace;">double h0_Ca_ion = node-&gt;DC_H0(
+xCa_ion, 1e5,
+25 );</span> </td>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 DC_S0(const long int xCH,
 const double P, const double Tc)</td>
       <td style="vertical-align: top;">Retrieves (interpolated)
-absolute molar enropy S0(P,Tc) value for Dependent Component (in J/mol)
+absolute molar enropy S0(P,Tc) value for Dependent Component (<span
+ style="color: rgb(0, 153, 0);">in J/K/mol</span>)
 from the DATACH
-structure ( xCH is the DC DCH index)</td>
-      <td style="vertical-align: top;"><br>
-      </td>
+structure ( xCH is the DC DCH index)<span style="color: rgb(0, 153, 0);">
+or <span style="color: rgb(204, 102, 0);">-777., </span>if Tc
+(temperature, C) or P (pressure, Pa) parameters go beyond the valid
+lookup array intervals or tolerances.</span></td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
+ style="font-family: monospace;">double s0_Ca_ion = node-&gt;DC_S0(
+xCa_ion, 1e5,
+25 );</span> </td>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 DC_Cp0(const long int xCH, const double P,
 const double Tc)</td>
       <td style="vertical-align: top;">Retrieves (interpolated)
 constant-pressure heat capacity Cp0(P,Tc) value for Dependent Component
-(in J/mol) from the DATACH
-structure ( xCH is the DC DCH index)</td>
-      <td style="vertical-align: top;"><br>
-      </td>
+      <span style="color: rgb(0, 153, 0);">(in J/K/mol)</span> from the
+DATACH
+structure ( xCH is the DC DCH index) <span
+ style="color: rgb(0, 153, 0);">or <span
+ style="color: rgb(204, 102, 0);">-777.</span>, if Tc (temperature, C)
+or P (pressure, Pa) parameters go beyond the valid lookup array
+intervals or tolerances.</span></td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
+ style="font-family: monospace;">double cp0_Ca_ion = node-&gt;DC_Cp0(
+xCa_ion,
+1e5, 25 );</span> </td>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">double
+DC_A0(const long int xCH,
+const double P, const double Tc)</td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);">Retrieves
+(interpolated) Helmholtz energy&nbsp; of Dependent Component (in J/mol)
+from the
+DATACH
+structure ( xCH is the DC DCH index) or
+-777., if Tc (temperature, C) or P (pressure, Pa) parameters go
+beyond the valid lookup array intervals or tolerances.</td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
+ style="font-family: monospace;">double u0_Ca_ion = node-&gt;DC_U0(
+xCa_ion, 1e5,
+25 );</span> </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">double
+DC_U0(const long int xCH,
+const double P, const double Tc)</td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);">Retrieves
+(interpolated) Internal energy of Dependent Component (in J/K/mol) from
+the
+DATACH
+structure ( xCH is the DC DCH index) or
+-777., if Tc (temperature, C) or P (pressure, Pa) parameters go
+beyond the valid lookup array intervals or tolerances.</td>
+      <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
+ style="font-family: monospace;">double a0_Ca_ion = node-&gt;DC_A0(
+xCa_ion, 1e5,
+25 );</span> </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 EpsH2Ow(const double P, const double Tc)</td>
-      <td style="vertical-align: top;">Retrieves (interpolated)
+      <td style="vertical-align: top;"><span
+ style="color: rgb(0, 153, 0);">Retrieves (interpolated)
 dielectric constant of liquid water at (P,Tc) from the DATACH
-structure ( xCH is the DC DCH index)</td>
-      <td style="vertical-align: top;"><br>
-      </td>
+structure</span>&nbsp; <span style="color: rgb(0, 153, 0);">or <span
+ style="color: rgb(204, 102, 0);">-777.,</span> if Tc (temperature, C)
+or P (pressure, Pa) parameters go beyond the valid lookup array
+intervals or tolerances.</span></td>
+      <td
+ style="vertical-align: top; color: rgb(0, 153, 0); font-family: monospace;">double
+epsW = node-&gt;EpsH2Ow( 1e5, 25); </td>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
-DenH2Ow(const double P, const double Tc)<br>
+ style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);"><span
+ style="color: rgb(0, 0, 0);">double
+DenH2Ow(const double P, const double Tc)</span><br>
       </td>
-      <td style="vertical-align: top;">Retrieves (interpolated) density
-of liquid water (in <span style="color: rgb(255, 102, 102);">kg/m3</span>)
+      <td style="vertical-align: top;"><span
+ style="color: rgb(0, 153, 0);">Retrieves (interpolated) density
+of liquid water (in kg/m3)
 at (P,Tc) from the DATACH
-structure ( xCH is the DC DCH index)</td>
-      <td style="vertical-align: top;"><br>
-      </td>
+structure or <span style="color: rgb(204, 102, 0);">-777.</span>, if
+Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid
+lookup array intervals or tolerances.</span></td>
+      <td
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">double
+denW = node-&gt;DenH2Ow( 1e5, 25); </td>
     </tr>
     <tr>
       <td
@@ -3127,33 +3249,48 @@ structure ( xCH is the DC DCH index)</td>
 VisH2Ow(const double P, const double Tc)</td>
       <td style="vertical-align: top;">Retrieves (interpolated)
 viscosity (units???) of liquid water at (P,Tc) from the DATACH
-structure ( xCH is the DC DCH index)</td>
+structure <span style="color: rgb(0, 153, 0);">or <span
+ style="color: rgb(204, 102, 0);">-777.,</span> if Tc (temperature, C)
+or P (pressure, Pa) parameters go beyond the valid lookup array
+intervals or tolerances.</span></td>
       <td style="vertical-align: top;"><br>
       </td>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 EpsH2Og(const double P, const double Tc)</td>
       <td style="vertical-align: top;">Retrieves (interpolated)
 dielectric constant of H2O vapor at (P,Tc) from the DATACH
-structure ( xCH is the DC DCH index)</td>
-      <td style="vertical-align: top;"><br>
-      </td>
+structure <span style="color: rgb(0, 153, 0);">or <span
+ style="color: rgb(204, 102, 0);">-777.,</span> if Tc (temperature, C)
+or P (pressure, Pa) parameters go beyond the valid lookup array
+intervals or tolerances.</span></td>
+      <td
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">double
+epsWg = node-&gt;EpsH2Og( 1e5, 25); </td>
     </tr>
     <tr>
       <td
- style="vertical-align: top; font-family: monospace; color: rgb(255, 102, 102);">double
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 DenH2Og(const double P, const double Tc)</td>
       <td style="vertical-align: top;">Retrieves (interpolated) density
-of H2O vapor (in <span style="color: rgb(255, 102, 102);">kg/m3</span>)
+of H2O vapor (in <span style="color: rgb(0, 0, 0);">kg/m3</span>)
 at (P,Tc) from the DATACH
-structure ( xCH is the DC DCH index)</td>
-      <td style="vertical-align: top;"><br>
-      </td>
+structure <span style="color: rgb(0, 153, 0);">or<span
+ style="color: rgb(204, 102, 0);"> -777.,</span> if Tc (temperature, C)
+or P (pressure, Pa) parameters go beyond the valid lookup array
+intervals or tolerances.</span></td>
+      <td
+ style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">double
+denW g= node-&gt;DenH2Og( 1e5, 25); </td>
     </tr>
   </tbody>
 </table>
+<span style="color: rgb(204, 102, 0);">* only for currently&nbsp; node </span><span
+ style="color: rgb(204, 102, 0);">used</span><span
+ style="color: rgb(204, 102, 0);">
+after GEM run</span><br>
 <br>
 <br>
 // Diffusion coefficient of dependent component with node DBr index ICx<br>
