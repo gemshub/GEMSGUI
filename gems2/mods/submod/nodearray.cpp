@@ -579,7 +579,7 @@ double TNodeArray::get_vPH( long int ia, long int nodex, long int PHx )
       P = pNodT1()[(nodex)]->P;
       val = pNodT1()[nodex]->xDC[DC_xCH_to_xDB(DCx)];
      }
-     val *= DC_V0( DCx, T, P )*10.;  // from j/bar to cm3/mol
+     val *= DC_V0( DCx, T, P );  
   }
   return val;
 }

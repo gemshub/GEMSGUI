@@ -2735,7 +2735,7 @@ Returns 0.0 if the phase mole amount is zero.<br>
  style="font-family: monospace;">ong int xbCalcite = </span><span
  style="font-family: monospace;">node-&gt;</span><span
  style="font-family: monospace;">Ph_name_to_xDB("Calcite");<br>
-double CalVol = nod-&gt;Ph_Volume(xbCalcite);<br>
+double CalVol = node-&gt;Ph_Volume(xbCalcite);<br>
       </span> </td>
     </tr>
     <tr>
@@ -3021,7 +3021,7 @@ applied.<span style="color: rgb(204, 102, 204);"></span><br>
  style="font-family: monospace;">ong int xCa_ion = </span><span
  style="font-family: monospace;">node-&gt;</span><span
  style="font-family: monospace;">DC_name_to_xCH("Ca+2");<br>
-double moles_Ca_ion = DC_n(xCa_ion);</span></td>
+double moles_Ca_ion = node-&gt;DC_n(xCa_ion);</span></td>
     </tr>
     <tr>
       <td
@@ -3036,7 +3036,8 @@ phase component, this value has a meaning of the saturation index, also
 in the presence of metastability constraint(s). <br>
       </td>
       <td style="vertical-align: top;"><span
- style="font-family: monospace;">double a_Ca_ion = DC_a(xCa_ion);</span></td>
+ style="font-family: monospace;">double a_Ca_ion =
+node-&gt;DC_a(xCa_ion);</span></td>
     </tr>
     <tr>
       <td
@@ -3066,7 +3067,8 @@ work structure. Also activity coefficient of a DC not included into
 DATABR list can
 be retrieved. If DC has zero amount, this function returns 1.0. </td>
       <td style="vertical-align: top;"><span
- style="font-family: monospace;">double gamma_Ca_ion = DC_g(xCa_ion);</span></td>
+ style="font-family: monospace;">double gamma_Ca_ion =
+node-&gt;DC_g(xCa_ion);</span></td>
     </tr>
     <tr>
       <td
@@ -3082,7 +3084,7 @@ the chemical potential value is returned: false - in J/mol; true
       </td>
       <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
  style="font-family: monospace;">double mu_Ca_ion_J_mol =
-DC_mu(xCa_ion, false);</span></td>
+node-&gt;DC_mu(xCa_ion, false);</span></td>
     </tr>
     <tr>
       <td
@@ -3098,7 +3100,7 @@ the chemical potential value is returned: false - in J/mol; true
 (default) - in mol/mol. </td>
       <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
  style="font-family: monospace;">double mu0_Ca_ion_J_mol =
-DC_mu0(xCa_ion, false);</span></td>
+node-&gt;DC_mu0(xCa_ion, false);</span></td>
     </tr>
     <tr>
       <td

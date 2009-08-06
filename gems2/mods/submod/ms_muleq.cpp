@@ -295,6 +295,12 @@ void TMulti::CompG0Load()
                         break;
                     }
                 else pmp->Vol[j] = 0.0;
+                // added 05/08/2009 SD
+                if( pmp->S0 && tpp->S ) pmp->S0[j] = tpp->S[jj];
+                if( pmp->H0 && tpp->H) pmp->H0[j] = tpp->H[jj];
+                if( pmp->Cp0 && tpp->Cp ) pmp->Cp0[j] = tpp->Cp[jj];
+                if( pmp->A0 && tpp->F ) pmp->A0[j] = tpp->F[jj];
+                if( pmp->U0 && tpp->U ) pmp->U0[j] = tpp->U[jj];
             }
         }
     }

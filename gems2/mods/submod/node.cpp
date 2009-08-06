@@ -417,6 +417,8 @@ long int  TNode::GEM_init( const char* ipmfiles_lst_name,
       if( binary_f )
       {  GemDataStream f_ch(dat_ch, ios::in|ios::binary);
          datach_from_file(f_ch);
+fstream  f_ch2("dch.out", ios::out);
+datach_to_text_file(f_ch2, true, false );      // only test 06.08.2009 SD   
        }
       else
       { fstream f_ch(dat_ch.c_str(), ios::in );
@@ -430,6 +432,8 @@ if( binary_f )
    GemDataStream f_m(mult_in, ios::in|ios::binary);
 #ifdef IPMGEMPLUGIN
     profil->readMulti(f_m);
+//profil->outMulti( "ipm.out", true,  true, false );
+    
 #else
     TProfil::pm->readMulti(f_m);
 #endif
@@ -465,6 +469,8 @@ if( binary_f )
          {
              GemDataStream in_br(dbr_file, ios::in|ios::binary);
              databr_from_file(in_br);
+fstream  f_br2("dbr.out", ios::out);
+databr_to_text_file(f_br2, true, false );      // only test 06.08.2009 SD
           }
          else
           {   fstream in_br(dbr_file.c_str(), ios::in );
@@ -958,7 +964,7 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
    else
    {
      long int xDC = Phx_to_DCx( Ph_xDB_to_xCH( xBR ));
-     vol = DC_V0( xDC, CNode->TC, CNode->P ); 
+     vol = DC_V0( xDC, CNode->P, CNode->TC ); 
      vol *= CNode->xDC[DC_xCH_to_xDB(xDC)];
    }
    return vol;
@@ -1210,9 +1216,9 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
  //  for(long ii=0; ii<CSD->nIC; ii++ )
  //    muDC += pmm->A[  xCH * CSD->nIC + ii ] * (pmm->U[ii]);
     if( norm )
-      return muDC;
+        return muDC/pmm->RT; // (R_CONSTANT * (CNode->TC + C_to_K));
     else
-      return muDC*pmm->RT; // (R_CONSTANT * (CNode->TC + C_to_K));
+        return muDC;
   }
 
   // Retrieves the standard chemical potential of DC (xCH is DC DCH index) directly
@@ -1647,11 +1653,11 @@ void TNode::packDataBr()
    {
       CNode->xDC[ii] = pmm->X[ CSD->xdc[ii] ];
       CNode->gam[ii] = pmm->Gamma[ CSD->xdc[ii] ];
-     // CNode->dul[ii] = pmm->DUL[ CSD->xdc[ii] ];// 09/02/2009 SD only insert
-     // CNode->dll[ii] = pmm->DLL[ CSD->xdc[ii] ];// 09/02/2009 SD only insert
+      CNode->dul[ii] = pmm->DUL[ CSD->xdc[ii] ];// always for GEM2MT init
+      CNode->dll[ii] = pmm->DLL[ CSD->xdc[ii] ];// always for GEM2MT init
    }
    for( ii=0; ii<CSD->nICb; ii++ )
-   { // CNode->bIC[ii] = pmm->B[ CSD->xic[ii] ];// 09/02/2009 SD only insert
+   {  CNode->bIC[ii] = pmm->B[ CSD->xic[ii] ]; // always for GEM2MT  init
       CNode->rMB[ii] = pmm->C[ CSD->xic[ii] ];
       CNode->uIC[ii] = pmm->U[ CSD->xic[ii] ];
    }

@@ -919,19 +919,19 @@ void TNode::datach_from_text_file(fstream& ff)
   CSD->Ptol = 10000;
   if( CSD->nIC == CSD->nICb )
   {
-    rddar.setNoAlws( "xIC");
+    rddar.setNoAlws( "xic" );
     for( ii=0; ii< CSD->nICb; ii++ )
       CSD->xic[ii] = ii;
   }
   if(CSD->nDC == CSD->nDCb )
   {
-    rddar.setNoAlws( 1 /*"xDC"*/);
+    rddar.setNoAlws( 1 /*"xdc"*/);
     for( ii=0; ii< CSD->nDCb; ii++ )
       CSD->xdc[ii] = ii;
   }
   if(CSD->nPH == CSD->nPHb )
   {
-    rddar.setNoAlws( 2 /*"xPH"*/);
+    rddar.setNoAlws( 2 /*"xph"*/);
     for( ii=0; ii< CSD->nPHb; ii++ )
       CSD->xph[ii] = ii;
   }

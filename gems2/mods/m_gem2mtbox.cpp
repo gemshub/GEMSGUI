@@ -297,7 +297,7 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
    for( q=0; q <mtp->nC; q++ )
 	 for(i =0; i< mtp->Nf; i++ )
 	 {
-		node1_bIC(q, i) += dMb( q, i) / na->ICmm( i ) * mtp->dTau;
+		node1_bIC(q, i) += dMb( q, i) / TNode::na->ICmm( i ) * mtp->dTau;
 		if( i == mtp->Nf-1 )
 			node1_bIC(q, i) = 0.0;  // Provisorial - zeroing-off charge
 		else if( node1_bIC(q, i) < 1e-12 )   
@@ -344,7 +344,7 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
   // Calculation of current box reactive IC masses in g   
      for( q=0; q <mtp->nC; q++ )
 		 for(i=0; i<mtp->Nf; i++ )
-			 Mb( q, i) = node1_bIC( q, i ) * na->ICmm( i );
+			 Mb( q, i) = node1_bIC( q, i ) * TNode::na->ICmm( i );
   
   // Calculation of MPG bulk compoisitions
      for( q=0; q <mtp->nC; q++ )

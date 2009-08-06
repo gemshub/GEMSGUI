@@ -17,7 +17,7 @@
 # NodeStatusCH: Node status code in GEM (input and output); see typedef NODECODECH
 <NodeStatusCH>   2
 # IterDone:  Number of iterations performed by GEM IPM in the last run - GEM output
-<IterDone>       48
+<IterDone>       60
 
 ## (2) Chemical scalar variables
 # TC: Node temperature T (C). This value must always be provided - GEM input.
@@ -39,13 +39,13 @@
 # Gs: Total Gibbs energy of the reactive subsystem (J/RT) (normalized) - GEM output
 <Gs>   -5295.11
 # IS: Effective aqueous ionic strength (molal)  - GEM output
-<IS>   0.000385638
+<IS>   0.000385304
 # pH: pH of aqueous solution in the activity scale - GEM output
 <pH>   9.90961
 # pe: pe of aqueous solution in the activity scale - GEM output 
-<pe>   -7.08279
+<pe>   -7.16679
 # Eh: Eh of aqueous solution (V) - GEM output
-<Eh>   -0.41817
+<Eh>   -0.42313
 
 ## (3) FMT scalar variables (used only in NodeArray, not used in GEM)
 # Tm: Actual total simulation time (s)
@@ -97,21 +97,21 @@
 
 # rMB: Mass balance residuals (moles) [nICb] - GEM output
 <rMB>
--2.20568900229259e-09 -2.34399481430546e-09 2.07611117621278e-21 5.33912175010384e-09 -4.18185751990381e-20 4.22704975726274e-09 5.09543803086159e-10 
+7.55290585877627e-13 3.30716584270862e-13 6.86172337900835e-21 -7.77672226011077e-09 3.32211559190515e-13 3.08033588456965e-08 3.20490859726091e-15 
 
 # uIC: Chemical potentials of ICs (dual GEM solution) - GEM output, normalized scale [nICb]
 <uIC>
--8.00598187336621 -199.517907279827 -84.7146748592589 -6.50899055211081 -166.749362182765 -82.6593720342129 -16.3087253116786 
+-7.23245200275083 -199.131129991513 -84.9080894455642 -6.31557231844303 -166.362489622548 -83.0462084996603 -16.502147826332 
 
 ## (5) DC data section
 #  'Ca+2' 'CaOH+' 'Mg+2' 'MgOH+' 'CO2@' 'CO3-2' 'HCO3-' 'CH4@' 'Cl-' 'H2@' 'O2@' 'OH-' 'H+' 'H2O@' 'Gr' 'Cal' 'Dis-Dol' 'Portlandite' 'Brc' 
 # xDC:  Speciation - amounts of DCs in equilibrium state - primal GEM solution (moles) [nDCb] - GEM output
 <xDC>
-0.00011673000323894 1.47013989649257e-07 9.7344688188996e-08 2.65530914430812e-09 2.24486998598622e-08 3.3848422250473e-05 8.30042221360296e-05 1.78583641458175e-09 1.99999994666523e-07 1.42428495230403e-09 0 8.29039337692124e-05 1.25704000321566e-10 55.3417630496435 0 0.000213125323962971 0 0 0 
+0.000116634654695797 1.46996666636495e-07 9.73160272411596e-08 2.68363788054352e-09 2.24489645473597e-08 3.38016919948491e-05 8.29494759305452e-05 8.03404791832562e-09 1.99999994666518e-07 2.55333039439181e-09 0 8.28608874043446e-05 1.2556545519418e-10 55.3417630914668 0 0.000213218345503595 0 0 0 
 
 # gam:  Activity coefficients of DCs in their respective phases [nDCb] - GEM output
 <gam>
-0.913778482015991 0.977710392981269 0.913778482015991 0.977710392981269 0.999999999983599 0.913778482015991 0.977710392981269 0.999999999983599 0.977710392981269 0.999999999983599 1 0.977710392981269 0.977710392981269 1.00000010476317 1 1 1 1 1 
+0.913813275049878 0.977719699674811 0.913813275049878 0.977719699674811 0.999999999983623 0.913813275049878 0.977719699674811 0.999999999983623 0.977719699674811 0.999999999983623 1 0.977719699674811 0.977719699674811 1.00000010462812 1 1 1 1 1 
 
 # dll: Lower metastability constraints on amounts of DCs (moles) [nDCb] - GEM input
 <dll>
@@ -129,24 +129,24 @@
 
 # xPH: Amounts of phases in equilibrium state (moles) [nPHb] - GEM output
 <xPH>
-55.3420800090234 0 0.000213125323962971 0 0 0 
+55.3420798183351 0 0.000213218345503595 0 0 0 
 
 # vPS: Volumes of multicomponent phases (m3) [nPSb] - GEM output
 <vPS>
-0.000999936220770221 
+0.00099993622270707 
 
 # mPS: Masses of multicomponent phases (kg) [nPSb] - GEM output
 <mPS>
-0.997011668965517 
+0.99701165912282 
 
 # xPA: Amount of carrier (sorbent or solvent) in multicomponent phases [nPSb] - GEM output
 <xPA>
-55.3417630496435 
+55.3417630914668 
 
 # bPS: Bulk elemental compositions of multicomponent phases (moles) [nPSb*nICb]- GEM output
 #  'C' 'Ca' 'Cl' 'H' 'Mg' 'O' 'Zz' 
 <bPS>
-0.000116876878922777 0.000116877017228589 1.99999994666523e-07 110.68369216723 9.99999973333041e-08 55.3421967060772 -5.09543803086159e-10 
+0.00011678165093786 0.000116781651362434 1.99999994666518e-07 110.683692180346 9.99996651217031e-08 55.3421964004362 -3.20490859726091e-15 
 
 # reserved
 
