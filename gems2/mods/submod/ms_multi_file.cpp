@@ -19,6 +19,7 @@
 
 #include "io_arrays.h"
 #include "m_param.h"
+#include "node.h"
 #include "gdatastream.h"
 
 void TMulti::getLsModsum( long int& LsModSum, long int& LsIPxSum )
@@ -505,7 +506,7 @@ void TMulti::from_file( GemDataStream& ff )
    //static values
    char PAalp;
    char PSigm;
-
+   
    ff.readArray(pm.stkey, sizeof(char)*(EQ_RKLEN+5));
    ff.readArray( &pm.N, 38);
    ff.readArray(&pm.TC, 55);
@@ -532,7 +533,6 @@ void TMulti::from_file( GemDataStream& ff )
 #endif
 
    //dynamic values
-
     // Part 1
 
     /* need  always to alloc vectors */
