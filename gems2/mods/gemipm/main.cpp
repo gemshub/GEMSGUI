@@ -124,7 +124,7 @@ int main( int argc, char* argv[] )
   cout << "A0   Ca+2: " << node->DC_A0( xCa_ion, node->cP(), node->cTC() ) <<  " Cal: " << node->DC_A0( xCal, node->cP(), node->cTC() ) << endl;   
   cout << "U0   Ca+2: " << node->DC_U0( xCa_ion, node->cP(), node->cTC() ) <<  " Cal: " << node->DC_U0( xCal, node->cP(), node->cTC() ) << endl;   
    
- return 1;  
+
    // Here a possible loop on input recipes begins
    if (argc >= 3 )
    {  

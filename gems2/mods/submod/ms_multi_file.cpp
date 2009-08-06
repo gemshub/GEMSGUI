@@ -19,7 +19,6 @@
 
 #include "io_arrays.h"
 #include "m_param.h"
-#include "node.h"
 #include "gdatastream.h"
 
 void TMulti::getLsModsum( long int& LsModSum, long int& LsIPxSum )
