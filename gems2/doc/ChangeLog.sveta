@@ -1,3 +1,11 @@
+07/08/2009
+Changed BASE_PARAM default values
+Added to AutoPhaseDialog selector for numerical settings
+Fixed all warnings  in IPM
+
+06/08/2009
+Added new functions for TNode class and edited html documentation
+
 24/07/2009
 Fixed bug in comparing when calculate "Compos" (double=>float lost digits af) 
 Change all float in MTPARM structure to double

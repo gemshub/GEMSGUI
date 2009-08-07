@@ -91,6 +91,7 @@ struct SPP_SETTING
     void write(fstream& oss);
 };
 
+extern SPP_SETTING pa_;
 
 // Module TParam ( +MULTY )
 class TProfil //: public TCModule

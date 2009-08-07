@@ -60,7 +60,7 @@ TSolMod::TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long in
 
 
 bool TSolMod::testSizes( long int NSpecies, long int NParams,	long int NPcoefs,
-		long int MaxOrder,  long int NPperDC, char Mod_Code, char Mix_Code )
+		long int MaxOrder,  long int NPperDC, char Mod_Code, char /*Mix_Code*/ )
 {
   return(  (ModCode == Mod_Code) && (NComp == NSpecies) && ( NPar == NParams) &&
 		    (NPcoef == NPcoefs) && (MaxOrd == MaxOrder) &&  ( NP_DC == NPperDC) );

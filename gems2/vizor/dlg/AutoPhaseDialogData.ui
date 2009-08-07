@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>777</width>
-            <height>478</height>
+            <height>447</height>
         </rect>
     </property>
     <property name="caption">
@@ -37,7 +37,219 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QGroupBox" row="0" column="1" rowspan="3" colspan="1">
+                    <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>ButtonGroup1</cstring>
+                        </property>
+                        <property name="title">
+                            <string></string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>aselD</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Ion-association (IA)  with Davies equation, &amp;D (default)</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+D</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>aselH</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>IA with extended Debye-Hueckel equation (Helgeson), common b_gamma and a0, &amp;H</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+H</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>aselY</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>IA with extended Debye-Hueckel equation (Shvarov), common b_gamma and a0, &amp;Y</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+Y</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>asel3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>IA with extended Debye-Hueckel equation (Karpov), common b_gamma, individual a0, &amp;3</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+3</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>asel2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>IA with Debye-Hueckel equation, no b_gamma, individual a0, &amp;2</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+2</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>asel1</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>IA with Debye-Hueckel limiting law (very low ionic strength), &amp;1</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+1</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer7</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>40</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>aselU</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Do not generate; select a user-defined Phase record from database ( Q, S, Z ), &amp;U</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+U</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>aselNo</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Do not include aqueous electrolyte phase into the system definition, &amp;N</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+N</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QLabel" row="1" column="0">
+                        <property name="name">
+                            <cstring>textLabel1</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Phase record key:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="1" column="1">
+                        <property name="name">
+                            <cstring>apRkeyEdit</cstring>
+                        </property>
+                        <property name="frameShape">
+                            <enum>LineEditPanel</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Sunken</enum>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>This field shows a record key of the aqueous Phase to be automatically generated</string>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="4" column="0" rowspan="1" colspan="2">
+                        <item>
+                            <property name="text">
+                                <string>Take default or live selected before</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Restore default values</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Task2</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Task 3</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Task 4</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Task 5</string>
+                            </property>
+                        </item>
+                        <property name="name">
+                            <cstring>pTaskType</cstring>
+                        </property>
+                    </widget>
+                    <spacer row="2" column="1">
+                        <property name="name">
+                            <cstring>spacer7_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>40</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLabel" row="3" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>textLabel1_4</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Change IPM numerical settings</string>
+                        </property>
+                    </widget>
+                    <widget class="QGroupBox" row="0" column="2" rowspan="5" colspan="1">
                         <property name="name">
                             <cstring>groupBox1_2</cstring>
                         </property>
@@ -270,185 +482,6 @@ the aqueous phase model</string>
                             </widget>
                         </vbox>
                     </widget>
-                    <widget class="QButtonGroup" row="0" column="0">
-                        <property name="name">
-                            <cstring>ButtonGroup1</cstring>
-                        </property>
-                        <property name="title">
-                            <string></string>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>aselD</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Ion-association (IA)  with Davies equation, &amp;D (default)</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+D</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>aselH</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>IA with extended Debye-Hueckel equation (Helgeson), common b_gamma and a0, &amp;H</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+H</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>aselY</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>IA with extended Debye-Hueckel equation (Shvarov), common b_gamma and a0, &amp;Y</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+Y</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>asel3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>IA with extended Debye-Hueckel equation (Karpov), common b_gamma, individual a0, &amp;3</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+3</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>asel2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>IA with Debye-Hueckel equation, no b_gamma, individual a0, &amp;2</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+2</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>asel1</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>IA with Debye-Hueckel limiting law (very low ionic strength), &amp;1</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+1</string>
-                                </property>
-                            </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>spacer7</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>40</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>aselU</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Do not generate; select a user-defined Phase record from database ( Q, S, Z ), &amp;U</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+U</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton">
-                                <property name="name">
-                                    <cstring>aselNo</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Do not include aqueous electrolyte phase into the system definition, &amp;N</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+N</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                        </vbox>
-                    </widget>
-                    <widget class="QLayoutWidget" row="1" column="0">
-                        <property name="name">
-                            <cstring>layout13</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>textLabel1</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Phase record key:</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit">
-                                <property name="name">
-                                    <cstring>apRkeyEdit</cstring>
-                                </property>
-                                <property name="frameShape">
-                                    <enum>LineEditPanel</enum>
-                                </property>
-                                <property name="frameShadow">
-                                    <enum>Sunken</enum>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>This field shows a record key of the aqueous Phase to be automatically generated</string>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <spacer row="2" column="0">
-                        <property name="name">
-                            <cstring>spacer6_2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>40</height>
-                            </size>
-                        </property>
-                    </spacer>
                 </grid>
             </widget>
             <widget class="QWidget">
@@ -458,11 +491,11 @@ the aqueous phase model</string>
                 <attribute name="title">
                     <string>Select Gas/Fluid Mixture Model</string>
                 </attribute>
-                <vbox>
+                <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QButtonGroup">
+                    <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>selGRP</cstring>
                         </property>
@@ -567,7 +600,7 @@ the aqueous phase model</string>
                             </widget>
                         </vbox>
                     </widget>
-                    <spacer>
+                    <spacer row="2" column="1">
                         <property name="name">
                             <cstring>spacer6</cstring>
                         </property>
@@ -580,11 +613,11 @@ the aqueous phase model</string>
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>40</height>
+                                <height>50</height>
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QLabel">
+                    <widget class="QLabel" row="1" column="0">
                         <property name="name">
                             <cstring>textLabel1_2</cstring>
                         </property>
@@ -592,7 +625,7 @@ the aqueous phase model</string>
                             <string>Phase record key:</string>
                         </property>
                     </widget>
-                    <widget class="QLineEdit">
+                    <widget class="QLineEdit" row="1" column="1">
                         <property name="name">
                             <cstring>gpRkeyEdit</cstring>
                         </property>
@@ -600,7 +633,7 @@ the aqueous phase model</string>
                             <string>This field shows a record key of the gas/fluid Phase to be automatically generated</string>
                         </property>
                     </widget>
-                </vbox>
+                </grid>
             </widget>
         </widget>
         <widget class="QLayoutWidget">

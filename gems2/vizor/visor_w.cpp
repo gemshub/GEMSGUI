@@ -1013,7 +1013,7 @@ vfDualThSet(QWidget* par, const char * p_key,
 // call to AutoPhaseDialog  added 18.07.03
 bool
 vfAutoPhaseSet(QWidget* wpar, const char *pr_key, gstring& a_key, gstring& g_key,
-         char& acode, char& gcode, float apar[8]  )
+         char& acode, char& gcode, float apar[8], int&  nSettings  )
 {
      AutoPhaseDialog apdlg( pr_key, acode, gcode, wpar );
 
@@ -1032,6 +1032,7 @@ vfAutoPhaseSet(QWidget* wpar, const char *pr_key, gstring& a_key, gstring& g_key
     apdlg.get_apar( apar );
     apdlg.get_akey( a_key );
     apdlg.get_gkey( g_key );
+    nSettings = apdlg.get_Settings();
 
 if( acode == 'S' )
 	acode = 'U';     // Blocking unavailable automatic SIT mode ?????

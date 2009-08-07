@@ -116,7 +116,7 @@ vfDualThSet(QWidget* par, const char * p_key,
 
 bool
  vfAutoPhaseSet(QWidget* par, const char* pr_key, gstring& a_key, gstring& g_key,
-        char& acode, char& gcode, float apar[8]);
+        char& acode, char& gcode, float apar[8], int&  nSettings);
 
 bool vfLookupDialogSet(QWidget* wpar, char flags[4], 
 		int& nT, int& nP, float Tai[4], float Pai[4] );
