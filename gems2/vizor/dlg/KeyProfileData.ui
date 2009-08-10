@@ -66,7 +66,7 @@
                 <cstring>pAqGas</cstring>
             </property>
             <property name="text">
-                <string>Re&amp;tain setup of aqueous (and gas) phases</string>
+                <string>Re&amp;tain setup of aq/gas phases &amp;&amp; numerical controls</string>
             </property>
             <property name="accel">
                 <string>Alt+T</string>
@@ -112,7 +112,7 @@
                 <bool>false</bool>
             </property>
             <property name="text">
-                <string>Create a new project &amp;using the selected one as template</string>
+                <string>Create a new project &amp;using selected one as template</string>
             </property>
             <property name="accel">
                 <string>Alt+U</string>
@@ -304,7 +304,7 @@
                 <cstring>buttonGroup2</cstring>
             </property>
             <property name="title">
-                <string>Re-calculate and save all equilibria (SysEq)</string>
+                <string>Re-calculate and save all equilibria (SysEq) using:</string>
             </property>
             <hbox>
                 <property name="name">
@@ -315,7 +315,7 @@
                         <cstring>pRe_runIA</cstring>
                     </property>
                     <property name="text">
-                        <string>Use AIA mode (simplex)</string>
+                        <string>AIA mode (simplex)</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -323,7 +323,7 @@
                         <cstring>pRe_runSmart</cstring>
                     </property>
                     <property name="text">
-                        <string>Use SIA mode</string>
+                        <string>Smart IA mode (SIA)</string>
                     </property>
                 </widget>
             </hbox>

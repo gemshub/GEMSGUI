@@ -57,7 +57,7 @@ const double R_CONSTANT = 8.31451,
                             ln_to_lg = 0.434294481;
 
 SPP_SETTING pa_ = {
-    "GEMS-PSI v2.3.0: Controls and defaults for numeric modules",
+    "GEMS-PSI v2.3.2: Controls and defaults for numeric modules",
     {
         1,  /* PC */  3,     /* PD */   3,   /* PRD */
         1,  /* PSM  */ 150,  /* DP */   15,   /* DW */
@@ -67,8 +67,8 @@ SPP_SETTING pa_ = {
         1e-4,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
         1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
         1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
-        1e-7, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
-        0.07,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+        1e-7, /* DFYs, */  1e-17,  /* DB */   -1.0,   /* AG */
+        -0.8,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
         0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
         1e-7,  /* ScMin, */  1e-20, /* DcMin, */   1e-10, /* PhMin, */
         3e-5,  /* ICmin */   1e-7,  /* EPS */   1e-3,  /* IEPS */
@@ -101,9 +101,25 @@ SPP_SETTING pa_ = {
     { (float)0.064, (float)3.72, 0., 0., 0. },  // Defaults for aqueous auto-phase models
 }; /* SPP_SETTING */
 
-BASE_PARAM dfBase[4] = 
-	{
-	    { // default 2
+BASE_PARAM dfBase[4] =
+	{     // Added on 07.08.2009 to facilitate pre-setting in projects (SD,DK)
+	    { // Variant for aquatic systems with moderate non-ideality
+	        1,  /* PC */  3,     /* PD */   3,   /* PRD */
+	        1,  /* PSM  */ 150,  /* DP */   15,   /* DW */
+	        -3, /* DT */     200,   /* PLLG */   1,  /* PE */
+	        500,   /* IIM */
+	        1e-5, /* DG */   1e-9,  /* DHB */  1e-12,  /* DS */
+	        5e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
+	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
+	        1e-7, /* DFYs, */  1e-17,  /* DB */   1.0,   /* AG */
+	        -0.5,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+	        0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
+	        1e-7,  /* ScMin, */  1e-20, /* DcMin, */   1e-10, /* PhMin, */
+	        3e-5,  /* ICmin */   1e-7,  /* EPS */   1e-3,  /* IEPS */
+	        1e-7,  /* DKIN  */ 0,  /* tprn */
+	    },
+	    { // Variant for aquatic systems with SCMs in sorption phases
 	        1,  /* PC */  3,     /* PD */   3,   /* PRD */
 	        1,  /* PSM  */ 150,  /* DP */   15,   /* DW */
 	        -3, /* DT */     200,   /* PLLG */   1,  /* PE */
@@ -119,29 +135,29 @@ BASE_PARAM dfBase[4] =
 	        3e-5,  /* ICmin */   1e-7,  /* EPS */   1e-3,  /* IEPS */
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
 	    },
-	    { // default 3
+	    { // Variant for fluid-rock systems with highly non-ideal phases
 	        1,  /* PC */  3,     /* PD */   3,   /* PRD */
-	        1,  /* PSM  */ 150,  /* DP */   15,   /* DW */
+	        1,  /* PSM  */ 500,  /* DP */   15,   /* DW */
 	        -3, /* DT */     200,   /* PLLG */   1,  /* PE */
-	        500,   /* IIM */
+	        1000,   /* IIM */
 	        1e-5, /* DG */   1e-8,  /* DHB */  1e-12,  /* DS */
-	        1e-4,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+	        7e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
 	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
 	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
-	        1e-7, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
-	        0.07,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+	        1e-7, /* DFYs, */  1e-17,  /* DB */   -1.0,   /* AG */
+	        -0.8,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
 	        0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
 	        1e-7,  /* ScMin, */  1e-20, /* DcMin, */   1e-10, /* PhMin, */
 	        3e-5,  /* ICmin */   1e-7,  /* EPS */   1e-3,  /* IEPS */
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
 	    },
-	    { // default 4
-	        1,  /* PC */  3,     /* PD */   3,   /* PRD */
+	    { // Variant of strict settings for highest accuracy (may be slow)
+	        1,  /* PC */  3,     /* PD */   -3,   /* PRD */
 	        1,  /* PSM  */ 150,  /* DP */   15,   /* DW */
 	        -3, /* DT */     200,   /* PLLG */   1,  /* PE */
-	        500,   /* IIM */
-	        1e-5, /* DG */   1e-8,  /* DHB */  1e-12,  /* DS */
-	        1e-4,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+	        1000,   /* IIM */
+	        1e-5, /* DG */   1e-9,  /* DHB */  1e-12,  /* DS */
+	        1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
 	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
 	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
 	        1e-7, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
@@ -150,23 +166,9 @@ BASE_PARAM dfBase[4] =
 	        1e-7,  /* ScMin, */  1e-20, /* DcMin, */   1e-10, /* PhMin, */
 	        3e-5,  /* ICmin */   1e-7,  /* EPS */   1e-3,  /* IEPS */
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
-	    },
-	    { // default 5
-	        1,  /* PC */  3,     /* PD */   3,   /* PRD */
-	        1,  /* PSM  */ 150,  /* DP */   15,   /* DW */
-	        -3, /* DT */     200,   /* PLLG */   1,  /* PE */
-	        500,   /* IIM */
-	        1e-5, /* DG */   1e-8,  /* DHB */  1e-12,  /* DS */
-	        1e-4,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
-	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
-	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
-	        1e-7, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
-	        0.07,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-	        0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
-	        1e-7,  /* ScMin, */  1e-20, /* DcMin, */   1e-10, /* PhMin, */
-	        3e-5,  /* ICmin */   1e-7,  /* EPS */   1e-3,  /* IEPS */
-	        1e-7,  /* DKIN  */ 0,  /* tprn */
-	    }		
+	    }
+	    // More preset parameter structures can be added here
+	    // (if so, increase number of elements from 4 above and in dfBase() call below)
 	};
 
 // Setup one of 5 default IPM numerical settings
@@ -179,7 +181,6 @@ void TProfil::ChangeSettings(int nSettings)
 	     else
 	        pa.p = dfBase[min(nSettings-2,4)];
 }
-
 
 void
 BASE_PARAM::write(GemDataStream& oss)
@@ -410,7 +411,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
 // outpu MULTI to txt format
 // brief_mode - Do not write data items that contain only default values
 // with_comments -Write files with comments for all data entries ( in text mode)
-// addMui - Print internal indices in RMULTS to IPM file for reading into Gems back 
+// addMui - Print internal indices in RMULTS to IPM file for reading into Gems back
 void TProfil::outMulti( gstring& path, bool addMui, bool with_comments, bool brief_mode )
 {
     multi->to_text_file_gemipm( path.c_str(), addMui, with_comments, brief_mode );
@@ -433,15 +434,15 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       char flags[4];
       int ii, nT, nP;
       float Tai[4], Pai[4];
-   
+
       if( !vfLookupDialogSet(window(), flags, nT, nP, Tai, Pai ) )// ask constants
-        	return;  
+        	return;
       //  define setup arrays
  	  float cT = Tai[START_];
  	  float cP = Pai[START_];
        Tval = new float[nT];
        Pval = new float[nP];
- 	 
+
  	 for( ii=0; ii<nT; ii++ )
  	 {
  	     Tval[ii] = cT;
@@ -941,8 +942,8 @@ void TProfil::PMtest( const char *key )
     }
 }
 
-void TProfil::LoadFromMtparm(double T, double P,double *G0,  double *V0, 
-		double *H0, double *S0, double *Cp0, double *A0, double *U0, 
+void TProfil::LoadFromMtparm(double T, double P,double *G0,  double *V0,
+		double *H0, double *S0, double *Cp0, double *A0, double *U0,
 		double denW[5], double epsW[5], double denWg[5], double epsWg[5], int* tp_mark_ )
 {
     if( fabs( tpp->curT - T ) > 1.e-10 ||
@@ -974,38 +975,38 @@ void TProfil::LoadFromMtparm(double T, double P,double *G0,  double *V0,
     for( int jj=0; jj<mup->L; jj++ )
     {
       if( tpp->mark[jj] == 'e'/*CP_NOT_VALID*/ )
-    	  tp_mark_[jj] = 1;  
+    	  tp_mark_[jj] = 1;
       G0[jj] =  tpp->G[jj]+syp->GEX[jj];
       V0[jj] =  tpp->Vm[jj];
       if( H0 )
       { if( tpp->H )
            H0[jj] =  tpp->H[jj];
-        else  
-           H0[jj] = 0.; 	
+        else
+           H0[jj] = 0.;
       }
       if( S0 )
       {	 if( tpp->S )
             S0[jj] =  tpp->S[jj];
          else
-           	S0[jj] = 0.;	
+           	S0[jj] = 0.;
       }
       if( Cp0 )
       {	  if( tpp->Cp )
              Cp0[jj] =  tpp->Cp[jj];
-          else   
+          else
              Cp0[jj] =  0.;
       }
       if( A0 )
       {	 if( tpp->F )
             A0[jj] =  tpp->F[jj];
          else
-           	A0[jj] = 0.;	
+           	A0[jj] = 0.;
       }
       if( U0 )
       {	 if( tpp->U )
             U0[jj] =  tpp->U[jj];
          else
-            U0[jj] = 0.;	
+            U0[jj] = 0.;
       }
     }
 }
