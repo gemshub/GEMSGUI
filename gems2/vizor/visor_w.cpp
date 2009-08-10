@@ -78,14 +78,14 @@ const char* GEMS_LOGO_ICON = "img/gems1.png";
 const char* GEMS_SYS_ICON = "img/sciences_section.xpm";
 const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
 #ifdef __unix
-const char* GEMS_VERSION_STAMP = "GEM-Selektor v2.3.0-PSI (Linux/MacOS)";
+const char* GEMS_VERSION_STAMP = "GEM-Selektor v2.3.1-PSI (Linux/MacOS)";
 #ifdef __APPLE__
 const int GEMS_DEFAULT_FONT_SIZE = 12;
 #else
 const int GEMS_DEFAULT_FONT_SIZE = 10;
 #endif
 #else
-const char* GEMS_VERSION_STAMP = "GEM-Selektor v2.3.0-PSI (Windows)";
+const char* GEMS_VERSION_STAMP = "GEM-Selektor v2.3.1-PSI (Windows)";
 const int GEMS_DEFAULT_FONT_SIZE = 9;
 #endif
 extern const char* GEMS_ABOUT_HTML;
@@ -346,7 +346,7 @@ TVisorImp::SetDialog(QWidget* centralDialog)
     setUpdatesEnabled( FALSE );
 
     setCentralWidget(centralDialog);
-    
+
     if( !oldCentral )
     {
     	QWidget* d = QApplication::desktop();
@@ -355,7 +355,7 @@ TVisorImp::SetDialog(QWidget* centralDialog)
         //    sz.setWidth( sz.width()+1 );
        sz.setWidth( 200 );
        move( sz.width(), sz.height() );
-    }   
+    }
     setFixedSize( centralDialog->size() );
     centralDialog->show();
 
@@ -1040,7 +1040,7 @@ if( acode == 'S' )
 }
 
 // call to LookupDialog  added 2009
-bool vfLookupDialogSet(QWidget* wpar, char flags[4], 
+bool vfLookupDialogSet(QWidget* wpar, char flags[4],
 		int& nT, int& nP, float Tai[4], float Pai[4] )
 {
 	LookupDialog apdlg( wpar );
