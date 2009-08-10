@@ -51,10 +51,10 @@ void TSyst::EvPageChanged(int nPage)
     }
 }
 
-void TSyst::CellChanged()
+void TSyst::CellChanged(bool val )
 {
-    TSysEq::pm->CellChanged();
-    TSubModule::CellChanged();
+    TSysEq::pm->CellChanged(val);
+    TSubModule::CellChanged(val);
 }
 
 // link values to objects

@@ -206,7 +206,7 @@ int main( int argc, char* argv[] )
          	  m_bIC[in][ICndx[i]] += parcel[i];
               if( in > 1 )  m_bIC[in-1][ICndx[i]] -= parcel[i];
             }
-            // The above example loop implements a zero-order flux of the CaCO in one direction
+            // The above example loop implements a zero-order flux of CaO and C in one direction.
             // real advective/diffusive transport models are much more complex, but essentially
             //   do similar things
          }

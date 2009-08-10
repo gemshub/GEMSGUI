@@ -607,7 +607,7 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
    return DCx;
  }
 
- // Returns the DCH index of the Phase that Dependent Components xdc was included
+ // Returns the DCH index of the Phase to which the Dependent Component with index xCH belongs
   long int  TNode::DCtoPh_DCH( const long int xdc )
   {
     long int k, DCx = 0;
@@ -636,7 +636,7 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
    return DCx;
  }
 
- // Returns the DBR index of the Phase that Dependent Components xdc was included
+ // Returns the DBR index of the Phase to which the  Dependent Component with index xBR belongs
   long int  TNode::DCtoPh_DBR( const long int xBR )
   {
     long int DCxCH = DC_xDB_to_xCH( xBR );
@@ -1054,8 +1054,10 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
 	 // return 	pow(10.0,pmm->Y_la[xCH]);
   }
 
-  //Retrieves concentration of DC (xdc is the DC DBR index) in its phase
-  // in the respective concentration scale
+  // Retrieves concentration of Dependent Component (xdc is the DC DBR index) in its phase
+  // in the respective concentration scale. For aqueous species, molality is returned;
+  // for gas species, partial pressure; for surface complexes - density in mol/m2; 
+  // for species in other phases - mole fraction. If DC has zero amount, the function returns 0.0.
   double TNode::Get_cDC( const long int xdc )
   {
     long int xph = DCtoPh_DBR( xdc);
@@ -1137,7 +1139,7 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
   // Access to equilibrium properties of phases and components using DATACH indexation
 
   // Retrieves the current (dual-thermodynamic) activity of DC (xCH is DC DCH index)
-  // directly from GEM IPM2 work structure. Also activity of a DC not included into DATABR list
+  // directly from GEM IPM work structure. Also activity of a DC not included into DATABR list
   // can be retrieved. If DC has zero amount, its dual-thermodynamic activity is returned anyway.
   // For single condensed phase component, this value has a meaning of the saturation index,
   // also in the presence of metastability constraint(s).
@@ -1149,11 +1151,11 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
 	 return 	pow(10.0,pmm->Y_la[xCH]);
   }
 
-  // Retrieves the current concentration of Dependent Component (xCH is DC DCH index)
-  // in its phase directly from GEM IPM2 work structure.Also activity of a DC not included
-  // into DATABR list can be retrieved. For aqueous species, molality is returned;
-  // for gas species, partial pressure; for surface complexes - density in mol/m2;
-  // for other phases - mole fraction. If DC has zero amount, the function returns 0.0.
+  // Retrieves the current concentration of Dependent Component (xCH is DC DCH index) in its
+  // phase directly from GEM IPM work structure.Also activity of a DC not included into 
+  // DATABR list can be retrieved. For aqueous species, molality is returned; for gas species, 
+  // partial pressure; for surface complexes - density in mol/m2; for species in other phases - 
+  // mole fraction. If DC has zero amount, the function returns 0.0. 
   double TNode::DC_c(const long int xCH)
   {
     double DCcon = 0.;
@@ -1205,7 +1207,7 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
   }
 
   // Retrieves the current (dual-thermodynamic) chemical potential of DC (xCH is DC DCH index)
-  // directly from GEM IPM2 work structure, also for any DC not included into DATABR or having zero amount.
+  // directly from GEM IPM work structure, also for any DC not included into DATABR or having zero amount.
   // Parameter norm defines in wnich units the chemical potential value is returned:
   // false - in J/mol; true (default) - in mol/mol
   double TNode::DC_mu(const long int xCH, bool norm)
@@ -1220,7 +1222,7 @@ long int TNode::Ph_xCH_to_xDB( const long int xCH )
   }
 
   // Retrieves the standard chemical potential of DC (xCH is DC DCH index) directly
-  // from GEM IPM2 work structure at current pressure and temperature,
+  // from GEM IPM work structure at current pressure and temperature,
   // also for any DC not included into DATABR or having zero amount.
   // Parameter norm defines in which units the chemical potential value is returned:
   // false - in J/mol; true (default) - in mol/mol

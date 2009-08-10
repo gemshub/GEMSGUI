@@ -3371,7 +3371,7 @@ tmp/SetFiltersDialogData.cpp: tmp/SetFiltersDialogData.h vizor/dlg/SetFiltersDia
 tmp/LookupDialogData.h: vizor/dlg/LookupDialogData.ui 
 	$(UIC) vizor/dlg/LookupDialogData.ui -o tmp/LookupDialogData.h
 
-tmp/LookupDialogData.cpp: tmp/LookupDialogData.h vizor/dlg/LookupDialogData.ui vizor/dlg/LookupDialogData.ui.h 
+tmp/LookupDialogData.cpp: tmp/LookupDialogData.h vizor/dlg/LookupDialogData.ui
 	$(UIC) vizor/dlg/LookupDialogData.ui -i LookupDialogData.h -o tmp/LookupDialogData.cpp
 
 tmp/AutoPhaseDialogData.h: vizor/dlg/AutoPhaseDialogData.ui 
@@ -3467,7 +3467,7 @@ obj/ElementsDialogData.o: tmp/ElementsDialogData.cpp tmp/ElementsDialogData.h
 obj/SetFiltersDialogData.o: tmp/SetFiltersDialogData.cpp tmp/SetFiltersDialogData.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/SetFiltersDialogData.o tmp/SetFiltersDialogData.cpp
 
-obj/LookupDialogData.o: tmp/LookupDialogData.cpp vizor/dlg/LookupDialogData.ui.h \
+obj/LookupDialogData.o: tmp/LookupDialogData.cpp  \
 		tmp/LookupDialogData.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/LookupDialogData.o tmp/LookupDialogData.cpp
 

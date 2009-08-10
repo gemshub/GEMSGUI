@@ -145,10 +145,11 @@ void TMulti::unpackData()
                 goto FOUNDI;
             }
         pm.pNP = 1;
-        //   gstring err = "No '";
-        //   err += gstring(TProfil::pm->mup->SB[i], 0, IC_RKLEN);
-        //   err += "' IComp in system.";
-        Error( GetName(), "no such IComp in this system" );
+        { gstring err = "No ";
+          err += gstring(TProfil::pm->mup->SB[i], 0, MAXICNAME);
+          err += " IComp in system.";
+          Error( GetName(), err.c_str() /*"no such IComp in this system"*/ );
+        }  
 FOUNDI:
         pm.U[ip] = STat->stp->U[is];
         if( pm.pESU != 2 ) pm.B[ip] = STat->stp->B[is];    // Added

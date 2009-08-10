@@ -212,7 +212,7 @@ protected:
 
 public:
 
-    void CellChanged();
+    void CellChanged( bool val = true );
     SYSTEM* GetSY()
     {
         return &sy;

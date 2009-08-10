@@ -874,7 +874,7 @@ if( in &gt; 1 )&nbsp; m_bIC[in-1][ICndx[i]] -= parcel[i];<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 }<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-// <span style="color: rgb(255, 0, 0);">The above example loop
+// <span style="color: rgb(0, 0, 0);">The above example loop
 implements a zero-order flux of CaO and C in
 one direction.</span><br>
       </span><span style="font-family: monospace;"><span
@@ -2553,7 +2553,7 @@ node-&gt;Phx_to_DCx(xGas,nDCGas);</span></td>
       <td style="vertical-align: top; font-family: monospace;">long
 int DCtoPh_DCH( const long int xCH )</td>
       <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
- style="color: rgb(255, 0, 0);">Returns
+ style="color: rgb(0, 0, 0);">Returns
 the DCH index of the Phase to which the Dependent Component with index
 xCH belongs</span><br>
       </td>
@@ -2585,7 +2585,7 @@ DCtoPh_DBR( const long
 int xBR )</span><br>
       </td>
       <td style="vertical-align: top; color: rgb(0, 153, 0);"><span
- style="color: rgb(255, 0, 0);">Returns
+ style="color: rgb(0, 0, 0);">Returns
 the DBR index of the Phase to which the&nbsp; Dependent Component with
 index xBR belongs</span><br>
       </td>
@@ -2818,18 +2818,16 @@ node-&gt;Get_aDC( xbCa_ion);</span> </td>
       <td style="vertical-align: top; font-family: monospace;"><span
  style="color: rgb(0, 0, 0);">double Get_cDC( const long int xdc);</span><br>
       </td>
-      <td style="vertical-align: top;"><span
- style="color: rgb(255, 0, 0);">Retrieves concentration of
+      <td style="vertical-align: top; color: rgb(0, 0, 0);">Retrieves
+concentration of
 Dependent Component (xdc is the
-DC DBR index) in its phase in the respective concentration scale</span>.
-      <span style="color: rgb(255, 0, 0);">For aqueous species,
+DC DBR index) in its phase in the respective concentration scale. For
+aqueous species,
 molality is returned; for gas
-species, partial pressure; for surface complexes - density in mol/m</span><sup
- style="color: rgb(255, 0, 0);">2</sup><span
- style="color: rgb(255, 0, 0);">;
+species, partial pressure; for surface complexes - density in mol/m<sup>2</sup>;
 for species in other phases - mole fraction. If DC has zero amount, the
 function
-returns 0.0.</span> </td>
+returns 0.0. </td>
       <td style="vertical-align: top;"><span
  style="font-family: monospace;">double cDC =
 node-&gt;Get_cDC( xbCa_ion);</span> </td>
@@ -2878,7 +2876,7 @@ node-&gt;ICmm( xbCa );</span> </td>
 DCaJI( const long int xdc, const long int xic);</span><br>
       </td>
       <td style="vertical-align: top;">Retrieves the stoichiometry
-coefficient <span style="color: rgb(255, 0, 0);">a[j][i]</span> of IC
+coefficient <span style="color: rgb(0, 0, 0);">a[j][i]</span> of IC
 (xic is IC DBR index) in the formula of DC
 (xdc is DC DBR index) </td>
       <td style="vertical-align: top;"><span
@@ -2934,8 +2932,9 @@ double moles_Ca = IC_b(xCa);</span> </td>
 DC_n(const long int xCH)</td>
       <td style="vertical-align: top;">(*) Retrieves the current mole
 amount of Dependent Component (xCH is DC DCH index) directly from <span
- style="color: rgb(255, 102, 102);">GEM
-IPM </span>work structure. Also amount of DCs not included into DATABR
+ style="color: rgb(255, 102, 102);"><span style="color: rgb(0, 0, 0);">GEM
+IPM</span> </span>work structure. Also amount of DCs not included into
+DATABR
 list
 can be retrieved. Internal re-scaling to mass of the system is
 applied.<span style="color: rgb(204, 102, 204);"></span><br>
@@ -2952,7 +2951,7 @@ double moles_Ca_ion = node-&gt;DC_n(xCa_ion);</span></td>
 DC_a(const long int xCH)</td>
       <td style="vertical-align: top;">(*) Retrieves the current
 (dual-thermodynamic) activity of Dependent Component (xCH is DC DCH
-index) directly from <span style="color: rgb(255, 102, 102);">GEM IPM</span>
+index) directly from <span style="color: rgb(0, 0, 0);">GEM IPM</span>
 work structure. Also activity of a DC not
 included into DATABR list can be retrieved. If DC has zero amount, its
 dual-thermodynamic activity is returned anyway. For single condensed
@@ -2967,8 +2966,8 @@ node-&gt;DC_a(xCa_ion);</span></td>
       <td
  style="vertical-align: top; font-family: monospace; color: rgb(0, 0, 0);">double
 DC_c(const long int xCH)</td>
-      <td style="vertical-align: top;"><span
- style="color: rgb(255, 0, 0);">(*) Retrieves the current
+      <td style="vertical-align: top; color: rgb(0, 0, 0);">(*)
+Retrieves the current
 concentration of Dependent
 Component (xCH is DC DCH index) in its phase directly from GEM IPM
 work structure.Also activity of a DC not included into DATABR list can
@@ -2976,7 +2975,7 @@ be retrieved. For aqueous species, molality is returned; for gas
 species, partial pressure; for surface complexes - density in mol/m2;
 for species in other phases - mole fraction. If DC has zero amount, the
 function
-returns 0.0. </span><br>
+returns 0.0. <br>
       </td>
       <td style="vertical-align: top;"><span
  style="font-family: monospace;">double m_Ca_ion = DC_c(xCa_ion);</span></td>
@@ -2989,7 +2988,7 @@ DC_g(const long int xCH)</td>
 activity
 coefficient of Dependent
 Component (xCH is DC DCH index) in its phase directly from <span
- style="color: rgb(255, 102, 102);">GEM IPM</span>
+ style="color: rgb(0, 0, 0);">GEM IPM</span>
 work structure. Also activity coefficient of a DC not included into
 DATABR list can
 be retrieved. If DC has zero amount, this function returns 1.0. </td>
@@ -3003,7 +3002,7 @@ node-&gt;DC_g(xCa_ion);</span></td>
 DC_mu(const long int xCH, bool norm=true)</td>
       <td style="vertical-align: top;">(*) Retrieves the current
 (dual-thermodynamic) chemical potential of Dependent Component (xCH is
-DC DCH index) directly from <span style="color: rgb(255, 102, 102);">GEM
+DC DCH index) directly from <span style="color: rgb(0, 0, 0);">GEM
 IPM </span>work structure, also for any DC
 not included into DATABR or having zero amount. Parameter<span
  style="font-family: monospace;"> norm </span>defines in wnich units
@@ -3020,8 +3019,8 @@ node-&gt;DC_mu(xCa_ion, false);</span></td>
 DC_mu0(const long int xCH, bool norm=true)</td>
       <td style="vertical-align: top;">(*) Retrieves the standard
 chemical
-potential of Dependent Component (xCH is DC DCH index) directly from
-      <span style="color: rgb(255, 102, 102);">GEM IPM</span> work
+potential of Dependent Component (xCH is DC DCH index) directly from <span
+ style="color: rgb(0, 0, 0);">GEM IPM</span> work
 structure at current pressure and temperature, also for
 any DC not included into DATABR or having zero amount. Parameter<span
  style="font-family: monospace;"> norm </span>defines in which units
@@ -3101,7 +3100,8 @@ xCa_ion, 1e5,
 DC_S0(const long int xCH,
 const double P, const double Tc)</td>
       <td style="vertical-align: top;">Retrieves (interpolated)
-absolute molar enropy S0(P,Tc) value for Dependent Component (in J/K/mol)
+absolute molar enropy S0(P,Tc) value for Dependent Component (in
+J/K/mol)
 from the DATACH
 structure ( xCH is the DC DCH index)<span style="color: rgb(0, 153, 0);">
       <span style="color: rgb(0, 0, 0);">or 0.0, if Tc

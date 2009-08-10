@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>661</width>
-            <height>399</height>
+            <width>554</width>
+            <height>374</height>
         </rect>
     </property>
     <property name="caption">
@@ -401,9 +401,6 @@
         <slot>CmHelp()</slot>
     </connection>
 </connections>
-<includes>
-    <include location="local" impldecl="in implementation">LookupDialogData.ui.h</include>
-</includes>
 <slots>
     <slot>CmHelp()</slot>
 </slots>

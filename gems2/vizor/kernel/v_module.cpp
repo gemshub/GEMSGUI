@@ -286,7 +286,7 @@ TCModule::RecSave( const char *key, bool onOld )
 void TCModule::CmSaveM()
 {
   try{
-        gstring str=db->PackKey();
+       gstring str=db->PackKey();
        if( str.find_first_of("*?" ) != gstring::npos
             || ( db->GetStatus() == UNDF_  && db->RecCount() &&  // 09/11/2004 Sveta
               nRT != RT_SDATA ) )   // oct 2005  Sveta
@@ -598,8 +598,8 @@ TCModule::RecBuild( const char *key, int mode  )
 //        pImp->MakeQuery();
         MakeQuery();
 
-        if( pVisor->ProfileMode == true && (nRT == RT_SYSEQ || nRT == RT_PARAM) )
-            pImp->CloseWin();
+       if( pVisor->ProfileMode == true && nRT == RT_SYSEQ )
+         pImp->CloseWin();
 
         contentsChanged = true;
         break;

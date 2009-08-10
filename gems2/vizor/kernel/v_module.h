@@ -86,11 +86,16 @@ public:
     {}
 
     // used by TCell derivatives to mark changes in the module
-    virtual void CellChanged()
+    virtual void CellChanged( bool val = true)
     {
-        contentsChanged = true;
+        contentsChanged = val;
     }
 
+    // used by TCell derivatives to mark changes in the module
+    virtual bool isCellChanged() const
+    {
+        return contentsChanged;
+    }
 
     int rtNum() const
     {
@@ -151,8 +156,6 @@ protected:
 
     TCStringArray aFldKeysHelp;      // gstring help of fields
     gstring start_title;
-
-    bool MessageToSave();  // save solicitation
 
     virtual void Setup();
     virtual bool EvClose();
@@ -221,6 +224,7 @@ public:
         return false;
     }        // test input data (nessasary recalck)
 
+    bool MessageToSave();  // save solicitation
     virtual void RecSave( const char *key, bool onOld= true );
     virtual void RecInput( const char *key );
     virtual int RecBuild( const char *key, int mode = VF_UNDEF );
