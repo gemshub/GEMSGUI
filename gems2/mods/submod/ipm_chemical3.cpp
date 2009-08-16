@@ -175,7 +175,7 @@ NEXT_PHASE:
 #ifdef IPMGEMPLUGIN
    void TMulti::pm_GC_ods_link( long int /*k*/, long int /*jb*/, long int /*jpb*/, long int /*jdb*/, long int /*ipb*/ )
    {
-#else 
+#else
 	void TMulti::pm_GC_ods_link( long int k, long int jb, long int jpb, long int jdb, long int ipb )
 	{
 
@@ -1309,7 +1309,7 @@ TMulti::SolModIdealProp( long int jb, long int k, char ModCode )
 
 // Wrapper call for retrieving bulk phase Darken quadratic terms
 void
-TMulti::SolModDarkenProp( long int /*jb*/, long int k, char /*ModCode*/ )
+TMulti::SolModDarkenProp( long int jb, long int k, char ModCode )
 {
 	// order of phase properties: G, H, S, CP, V, A, U
 	long int j;
@@ -1344,7 +1344,7 @@ TMulti::SolModDarkenProp( long int /*jb*/, long int k, char /*ModCode*/ )
 
 // Wrapper call for retrieving bulk phase standard state terms
 void
-TMulti::SolModStandProp ( long int /*jb*/, long int k, char /*ModCode*/ )
+TMulti::SolModStandProp ( long int jb, long int k, char ModCode )
 {
 	// order of phase properties: G, H, S, CP, V, A, U
 	double Gst, Hst, Sst, CPst, Vst, Ast, Ust;
@@ -1480,7 +1480,7 @@ void TMulti::IdealOneSite( long int jb, long int k, double *Zid )
 
 
 // calculates ideal mixing properties of condensed phases (multi-site mixing)
-void TMulti::IdealMultiSite( long int /*jb*/, long int /*k*/, double */*Zid*/ )
+void TMulti::IdealMultiSite( long int jb, long int k, double *Zid )
 {
 	// reserved for future multi-site configurational property models
 	//double Gid, Hid, Sid, CPid, Vid, Aid, Uid;
