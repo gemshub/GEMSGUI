@@ -96,17 +96,17 @@ ProcessProgressDialog::ProcessProgressDialog( QWidget* parent ):
     QToolTip::add( pProgress, trUtf8( "Shows number of steps" ) );
 
 
-    pStopStep = new QPushButton( "&Stop", this, "pStepAccept" );
+    pStopStep = new QPushButton( "&Step", this, "pStepAccept" );
     pStopStep->setGeometry( QRect( 20, 60, 70, 35 ) );
     QToolTip::add( pStopStep, trUtf8( "Make next iteration in Stepwise mode" ) );
-    connect( pStopStep, SIGNAL(clicked()), this, SLOT(CmStop()) );
+    connect( pStopStep, SIGNAL(clicked()), this, SLOT(CmStep()) );
 
 
     pResume = new QPushButton( "Resume", this, "pResume" );
     pResume->setGeometry( QRect( 100, 60, 70, 35 ) );
     QToolTip::add( pResume, trUtf8( "Make next iteration not in Stepwise mode" ) );
     connect( pResume, SIGNAL(clicked()), this, SLOT(CmResume()) );
-    pResume->hide();
+    //pResume->hide();
 
     pClose = new QPushButton( "&Cancel", this, "pClose" );
     pClose->setGeometry( QRect( 180, 60, 70, 35 ) );

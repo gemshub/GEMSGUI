@@ -281,6 +281,8 @@ double CalcEqstat( bool show_progress=true );
      { multi->ET_translate( nOet, nOpex, JB, JE, jb, je, get_ndx); }
     double MolWeight( int N, double *ICaw, double *Smline )
      { 	return syst->MolWeight( N, ICaw, Smline ); }
+    void SyTestSizes()
+     { 	syst->SyTestSizes(); }
 
    //test
    void outMulti( GemDataStream& ff, gstring& path  );

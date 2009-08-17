@@ -1,7 +1,7 @@
 // $Id$
 
-//#ifndef _stepwise_h_
-//#define _stepwise_h_
+#ifndef _stepwise_h_
+#define _stepwise_h_
 
 #ifdef Use_mt_mode
 
@@ -29,10 +29,10 @@ class ThreadControl {
 
 #define STEP_POINT2() { \
 	if( stepWise ) { \
-           ThreadControl::wakeOne(); \
+           ThreadControl::wait(); \
 	} \
         if( userCancel ) \
-            throw UserCancelException(); \
+           throw UserCancelException(); \
 	}
 
 
@@ -42,3 +42,4 @@ class ThreadControl {
 
 #endif
 
+#endif

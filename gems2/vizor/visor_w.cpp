@@ -220,6 +220,10 @@ TVisorImp::CmExit()
 void
 TVisorImp::Update(bool force)
 {
+    if( pThread != QThread::currentThread () )
+      return;
+	
+	
 #ifndef Use_mt_mode
     if( ProgressDialog::pDia )
         ProgressDialog::pDia->Update(force);

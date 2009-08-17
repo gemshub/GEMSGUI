@@ -1107,6 +1107,8 @@ TProcess::RecCalc( const char *key )
     TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
     TProfil::pm->userCancel = false;
     TProfil::pm->stepWise = false;
+    userCancel = false;
+    stepWise = false;
     showMss = 1L;
 
     if( pVisor->ProfileMode != true )
@@ -1156,7 +1158,6 @@ pep->ccTime = 0.0;
       pep->Istat = P_MT_EXECUTE;
     else
       pep->Istat = P_EXECUTE;
-    TCModule::RecCalc(key);
 
     pe_qekey();
     pep->pet= rt[RT_PROCES].Rtime();
@@ -1181,15 +1182,14 @@ pep->ccTime = 0.0;
         //       if( nRec < 0 || pep->syt < pep->pet )
 
         { // current key in base set before
-pep->ccTime += PRof->CalcEqstat( false /*pointShow==-1*/); // calc current SyStat
-//	    pVisorImp->CalcMulti();
-            TSysEq::pm->CmSave();  // save results
+          pep->ccTime += PRof->CalcEqstat( false /*pointShow==-1*/); // calc current SyStat
+//	      pVisorImp->CalcMulti();
+          TSysEq::pm->CmSave();  // save results
         }
 
 //    }
     pe_text_analyze();  //translate equations of process
-
-//    ModUpdate("Pe_calc    Process simulation");
+    TCModule::RecCalc(key);
     ModUpdate("Working...");
 
 #ifdef Use_mt_mode
@@ -1211,20 +1211,6 @@ pep->ccTime += PRof->CalcEqstat( false /*pointShow==-1*/); // calc current SySta
       internalCalc();
 #endif
 
-if( pep->Istat >=P_MT_MODE )
-  pep->Istat = P_MT_FINISHED;
-else
-  pep->Istat = P_FINISHED;
-
-// Get startup syseq record for fitting
-rt[RT_SYSEQ].MakeKey( RT_PROCES, pep->stkey, RT_PROCES, 0, RT_PROCES,1,
-         RT_PROCES, 2,  RT_PROCES, 3, RT_PROCES, 4, RT_PROCES, 5,
-                        RT_PROCES, 6, RT_PROCES, 7, K_END );
-nRec = rt[RT_SYSEQ].Find(pep->stkey);
-if( nRec >= 0)
-   PRof->loadSystat( pep->stkey );   // read parent SysEq record and unpack data
-
-// ModUpdate("");
 }
 
 //internal calc record structure
@@ -1236,6 +1222,7 @@ TProcess::internalCalc()
     TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
     calcFinished = false;
 
+    
     while( pep->Loop ) // main cycle of process
     {
 #ifdef Use_mt_mode
@@ -1259,7 +1246,7 @@ TProcess::internalCalc()
          if( iRet )
            break;   //cancel process
 
-        // calc equations of process
+     // calc equations of process
         if( pep->PsPro == S_OFF )
         {
             pe_next();
@@ -1311,18 +1298,17 @@ TProcess::internalCalc()
         nRec = rt[RT_SYSEQ].Find(pep->stkey);
         if( nRec >= 0 )
             pep->syt = rt[RT_SYSEQ].GetTime( nRec );
+
 //        if( nRec < 0 || pep->PsUX != S_OFF || pep->syt < pep->pet )
 //        {
-pep->ccTime += PRof->CalcEqstat( false/*pointShow==-1*/); // calc current SyStat
+        pep->ccTime += PRof->CalcEqstat( false/*pointShow==-1*/); // calc current SyStat
 //	    pVisorImp->CalcMulti();
-    if( pep->Istat < P_MT_MODE )
-           if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
+        if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
+//13/08/2009        	    if( pep->Istat < P_MT_MODE )
                  TSysEq::pm->CmSave();  // save results
 //        }
 
-
      // set results
-
         if(  pep->PsGR != S_OFF  )
             rpn[1].CalcEquat();
         if( pep->stl )
@@ -1366,20 +1352,31 @@ pep->ccTime += PRof->CalcEqstat( false/*pointShow==-1*/); // calc current SyStat
 
         if( !(pep->PsPro != S_OFF && pep->NP == 1 ))
             pep->Nst++;
-//    ModUpdate("Working..."); // 11/02/2007 ????
-
+     
+//     if( pep->Istat < P_MT_MODE )
+        ModUpdate("Working..."); 
     }  /* end while() */
+ 
     calcFinished = true;
-
+    
 #ifdef Use_mt_mode
- if( pep->Istat < P_MT_MODE )
-    if( pointShow == -1 )
-       pVisor->CloseMessage();
-#else
-    if( pointShow == -1 )
-       pVisor->CloseMessage();
+   if( pep->Istat < P_MT_MODE )
 #endif
+    if( pointShow == -1 )
+        pVisor->CloseMessage();
 
+  if( pep->Istat >=P_MT_MODE )
+      pep->Istat = P_MT_FINISHED;
+    else
+      pep->Istat = P_FINISHED;
+
+    // Get startup syseq record for fitting
+    rt[RT_SYSEQ].MakeKey( RT_PROCES, pep->stkey, RT_PROCES, 0, RT_PROCES,1,
+             RT_PROCES, 2,  RT_PROCES, 3, RT_PROCES, 4, RT_PROCES, 5,
+                            RT_PROCES, 6, RT_PROCES, 7, K_END );
+    nRec = rt[RT_SYSEQ].Find(pep->stkey);
+    if( nRec >= 0 && pep->Istat < P_MT_MODE )
+       PRof->loadSystat( pep->stkey );   // read parent SysEq record and unpack data
 }
 
 

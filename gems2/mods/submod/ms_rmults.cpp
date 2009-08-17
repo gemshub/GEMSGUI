@@ -808,8 +808,8 @@ NEW_PHASE_AGAIN:
     SetAqGas( AqKey.c_str() , GasKey.c_str() );
 }
 
-extern const char * dfAqKeyD ;
-extern const char * dfGasKey ;
+//extern const char * dfAqKeyD ;
+//extern const char * dfGasKey ;
 // Select aqueous phase from available or make default
 gstring TRMults::SelectAqPhase(const char * dfKey )
 {

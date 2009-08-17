@@ -507,43 +507,5 @@ AGAIN:
 
 }
 
-/*
-// Show phase information in System Configurator
-// not used anymore ?
-// This has to be re-implemented using ListView dialog
-void TProfil::ShowPhaseWindow()
-{
-    int k, nPHrec;
-    TCStringArray aPHList;
-
-    for( k=0; k<mup->Fi; k++ )
-        aPHList.Add( gstring( mup->SF[k], 0, PH_RKLEN) );
-    nPHrec = vfChoice(window(), aPHList, "Select a Phase name to show record");
-    if( nPHrec >= 0 )
-    {
-        TPhase::pm->RecInput( mup->SF[nPHrec] );
-        TPhase::pm->Show(window(), "Phase demo mode", true);
-    }
-}
-
-// Show species/phase equilibrium data
-// This has to be re-implemented using ListView dialog
-
-void TProfil::ShowEqPhaseWindow()
-{
-    int k, nPHrec;
-    TCStringArray aPHList;
-
-    for( k=0; k<mup->Fi; k++ )
-        aPHList.Add( gstring( mup->SF[k], 0, PH_RKLEN) );
-    nPHrec = vfChoice(window(), aPHList, "Select a Phase name to show record");
-    if( nPHrec >= 0 )
-    {
-        TPhase::pm->RecInput( mup->SF[nPHrec] );
-        TPhase::pm->Show(window(), "Phase demo mode", true);
-    }
-}
-
-*/
 //------------------ End of m_prfget2.cpp --------------------------
 
