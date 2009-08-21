@@ -182,7 +182,7 @@ TSysEq::RecBuild( const char *key, int mode  )
         ssp->switches[30] = S_OFF;
         ssp->DM[17] = 0;
     }
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    //TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     // for phase separation (exsolution)
     ssp->switches[21] = S_REM;
     ssp->switches[20] = S_REM;

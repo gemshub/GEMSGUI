@@ -38,7 +38,7 @@ ZPrTr = -0.1278034682e-1,
 void
 TDComp::calc_tpcv( int q, int p, int CE, int CV )
 {
-    double a=0., T/*=0.*/, TC/*=0.*/, /*Vst=0.,*/ Tst/*=0.*/,
+    double /*a=0.,*/ T/*=0.*/, TC/*=0.*/, /*Vst=0.,*/ Tst/*=0.*/,
            T_Tst/*=0.*/, Ts2/*=0.*/, TT/*=0.*/, dT/*=0.*/,
            T2/*=0.*/, T3/*=0.*/, T4/*=0.*/, T05/*=0.*/,
            Tst2/*=0.*/, Tst3/*=0.*/, Tst4/*=0.*/, Tst05/*=0.*/;
@@ -566,7 +566,7 @@ void TDComp::calc_akinf( int q, int p )
 	double Tr = 298.15, Pr = 1.0, R_CONST = R_CONSTANT;
 	double Gig, Sig, CPig, Gw, Sw, CPw;
 	double Geos, Veos, Seos, CPeos, Heos;
-	double Gids, Vids, Sids, CPids, Hids;
+        double Gids, /*Vids,*/ Sids, CPids, Hids;
 	double Geos298, Veos298, Seos298, CPeos298, Heos298;
 
 	dH0k = (-182161.88);  // enthapy of ideal gas water at 0 K

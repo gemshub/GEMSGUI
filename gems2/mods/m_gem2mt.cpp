@@ -1100,8 +1100,8 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
     int j, ii, jj;
     uint i;
     int Nold = mtp->Nb;
-    int FIold = mtp->FIb;
-    int Lsold = mtp->Lb;
+    //int FIold = mtp->FIb;
+    //int Lsold = mtp->Lb;
 
     double *p_Bn = new double[mtp->nIV*mtp->Nb];
     memcpy( p_Bn, mtp->Bn, mtp->nIV*mtp->Nb*sizeof(double));

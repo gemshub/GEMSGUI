@@ -412,8 +412,8 @@ void TGEM2MT::MassTransParticleStep( bool CompMode )
 //
 void TGEM2MT::MassTransAdvecStep( bool CompMode )
 {
- double c0, c1, cm1,  cm2, cmax, c12, cm12, 
-        charge, c0new, dc, cr, aji, fmolal;      // some help variables
+ double c0, c1, cm1,  cm2, /*cmax,*/ c12, cm12,
+        charge, /*c0new,*/ dc, cr, aji, fmolal;      // some help variables
  int ii, ic, jc;
 
  //  Getting direct access to TNodeArray class data
@@ -528,7 +528,7 @@ bool TGEM2MT::Trans1D( char mode )
   bool iRet = false;
   bool CompMode;   // Component transport mode: true: DC; false: IC
   int nStart = 0, nEnd = mtp->nC;
-  int NodesSetToAIA;
+  // int NodesSetToAIA;
 
 FILE* logfile;
 FILE* ph_file;

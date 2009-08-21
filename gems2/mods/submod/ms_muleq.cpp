@@ -325,7 +325,7 @@ void TMulti::CompG0Load()
 //
 void TMulti::EqstatExpand( const char *key )
 {
-    long int i, j, k, jb, je=0; // jpb, jpe=0, jdb, jde=0;
+    long int i, j, k;//, jb, je=0, jpb, jpe=0, jdb, jde=0;
 //    double FitVar3;
     SPP_SETTING *pa = &TProfil::pm->pa;
     pmp->NR = pmp->N;
@@ -439,7 +439,7 @@ if(pmp->E && pmp->LO && pmp->Lads )  // Calling this only when sorption models a
 //
 void TMulti::MultiCalcInit( const char *key )
 {
-    long int j, k, jb, je=0;
+    long int j, k;//, jb, je=0;
     SPP_SETTING *pa = &TProfil::pm->pa;
    // Bulk composition and/or dimensions changed ?
     if( pmp->pBAL < 2 || pmp->pTPD < 2)

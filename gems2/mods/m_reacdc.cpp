@@ -1324,8 +1324,8 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
     double ZC,HC,SC,CPC,VC,ZL,HL,SL,CPL,VL,Z,H,S,CP,V,
     H1,S1,CP1,V1,H2,S2,CP2,V2,H3,S3,CP3,V3,H4,S4,CP4,V4,
     DELGR1,DELGR2,DELGR3,DELGR4,DELSR1,DELSR2,DELSR3,DELSR4,
-    DELHR1,DELHR2,DELHR3,DELHR4,DELVR1,DELVR2,DELVR3,DELVR4,
-    CSC, LSC, DZ, scC, LOGKR, Sw, Hw, Gw, Cpw, Vw;
+    DELHR1,DELHR2,DELHR3,DELHR4,DELVR1,//DELVR2,DELVR3,DELVR4,
+    CSC, LSC, /*DZ,*/ scC, LOGKR, Sw, Hw, Gw, Cpw, Vw;
     int i, iL, iC, scL, NC, ZZ;
     vstr dcn(MAXRKEYLEN+5);
     int Rfind;

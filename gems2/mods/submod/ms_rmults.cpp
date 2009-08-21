@@ -650,7 +650,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
 TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     if( aPa->tpp->Pbg < '0' || aPa->tpp->Pbg > '4' )
        aPa->tpp->Pbg = '0';
-    int resp = aPa->tpp->Pbg-'0';
+    //int resp = aPa->tpp->Pbg-'0';
     // Copying stored params for automatic aq models
     aparam[0] = aPa->pa.aqPar[0];
     aparam[1] = aPa->pa.aqPar[1];

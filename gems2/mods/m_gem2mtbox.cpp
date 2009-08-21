@@ -72,7 +72,7 @@ void TGEM2MT::Solut( double *m, double *dm, double t )
 { 
   int kk, q, p, f, fe=-1, i;
   char FLXid[MAXSYMB+1], MGPid[MAXSYMB+1];
-  int FLXorder, FLXtype;
+  int FLXorder/*, FLXtype*/;
   double fRate;
   bool sinkOut; 
   
@@ -288,7 +288,7 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
     "Error writing monitoring file (ICdif-log.dat)");
  }
 */
- clock_t t_start, t_end, t_out, t_out2;
+ clock_t t_start, /*t_end,*/ t_out, t_out2;
  clock_t outp_time = (clock_t)0;
  t_start = clock();
 
