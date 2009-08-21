@@ -66,7 +66,7 @@
                 <cstring>pAqGas</cstring>
             </property>
             <property name="text">
-                <string>Re&amp;tain setup of aq/gas phases &amp;&amp; numerical controls</string>
+                <string>Re&amp;tain setup of aqueus (and gas) phases</string>
             </property>
             <property name="accel">
                 <string>Alt+T</string>
