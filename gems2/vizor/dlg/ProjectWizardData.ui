@@ -1,0 +1,472 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>ProjectWizardData</class>
+<widget class="QWizard">
+    <property name="name">
+        <cstring>ProjectWizardData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>567</width>
+            <height>522</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>GEM-Selektor Project Wizard</string>
+    </property>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Step 1 - Project Simulator configuration</string>
+        </attribute>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel2</cstring>
+                </property>
+                <property name="text">
+                    <string>Modelling Project is an innovation that makes GEM-Selektor different from the preceding SELEKTOR codes. The project is a large (keyed) record in the database which contains a framework of chemical thermodynamic systems for solving a certain class of geochemical modelling problems. In addition, the project record contains links to a collection of GEMS database files where the input data is kept and modelling results will be accumulated. As a rule, these database files are located in an (automatically created) directory having the same name as the modelling project.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel2_2</cstring>
+                </property>
+                <property name="text">
+                    <string>Thermodynamic data array is another important part of the project system framework. It is allocated in the program memory after the project has been successfully opened; but thermodynamic data arrays are never saved in the Project database record.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QButtonGroup">
+                <property name="name">
+                    <cstring>buttonGroup9</cstring>
+                </property>
+                <property name="title">
+                    <string>Thermodynamic data allocation</string>
+                </property>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QCheckBox" row="5" column="0">
+                        <property name="name">
+                            <cstring>pMSpmv6</cstring>
+                        </property>
+                        <property name="text">
+                            <string>list of IC formulas</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="3" column="0">
+                        <property name="name">
+                            <cstring>pTPptv_6</cstring>
+                        </property>
+                        <property name="text">
+                            <string>allocation flag for CpTP vector</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="1" column="1">
+                        <property name="name">
+                            <cstring>pTPptv_10</cstring>
+                        </property>
+                        <property name="text">
+                            <string>allocation flag for F vector</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="4" column="0">
+                        <property name="name">
+                            <cstring>pMSpmv4</cstring>
+                        </property>
+                        <property name="text">
+                            <string>list of IC_DC refereces</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="2" column="0">
+                        <property name="name">
+                            <cstring>pTPptv_4</cstring>
+                        </property>
+                        <property name="text">
+                            <string>allocation flag for sTP vector</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="3" column="1">
+                        <property name="name">
+                            <cstring>pTPptv_12</cstring>
+                        </property>
+                        <property name="text">
+                            <string>allocation flag for Cv vector</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="1" column="0">
+                        <property name="name">
+                            <cstring>pTPptv_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>allocation flag for hTP vector</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>pTPptv_un</cstring>
+                        </property>
+                        <property name="text">
+                            <string>allocation flag for uncertainty vectors</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="2" column="1">
+                        <property name="name">
+                            <cstring>pTPptv_11</cstring>
+                        </property>
+                        <property name="text">
+                            <string>allocation flag for U vector</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="5" column="1">
+                        <property name="name">
+                            <cstring>pTPptv_14</cstring>
+                        </property>
+                        <property name="text">
+                            <string>allocation flag for Bet vector</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="4" column="1">
+                        <property name="name">
+                            <cstring>pTPptv_13</cstring>
+                        </property>
+                        <property name="text">
+                            <string>allocation flag for Alp vector</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_4</cstring>
+                </property>
+                <property name="text">
+                    <string>Change preconfigured variant of GEM IPM2 numerical controls</string>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>Retain previous settings (for old projects) or take default</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>Restore normal (default) variant for fast convergence</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>Variant for aquatic systems with moderate non-ideality</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>Variant for aquatic systems with SCMs in sorption phases</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>Variant for fluid-rock systems with highly non-ideal phases</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>Variant of strict settings for highest accuracy (may be slow)</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>pTaskType</cstring>
+                </property>
+            </widget>
+        </vbox>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>2 - Useful hints</string>
+        </attribute>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QButtonGroup">
+                <property name="name">
+                    <cstring>ButtonGroup1</cstring>
+                </property>
+                <property name="title">
+                    <string>No need to change in this version of GEMS-PSI </string>
+                </property>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLabel" row="2" column="1">
+                        <property name="name">
+                            <cstring>textLabel1_2_3</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Units of measurement of volume in this  record (default:  j)</string>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="3" column="0">
+                        <item>
+                            <property name="text">
+                                <string>b    bar  = 10^5 Pa</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>B    kbar (kilobar)</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>p    Pa  (Pascal)</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>P    MPa  = 10^6 Pa  </string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>A    atm (=1.013 bar)</string>
+                            </property>
+                        </item>
+                        <property name="name">
+                            <cstring>pPunP</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="3" column="1">
+                        <property name="name">
+                            <cstring>textLabel1_2_3_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Units of measurement of pressure in this record (default: b)</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="1" column="1">
+                        <property name="name">
+                            <cstring>textLabel1_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Units of measurement of energy in this  record (default: j)</string>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="4" column="0">
+                        <item>
+                            <property name="text">
+                                <string>C   Celsius  </string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>K   Kelvin</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>F   Fahrenheit</string>
+                            </property>
+                        </item>
+                        <property name="name">
+                            <cstring>pPunT</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="4" column="1">
+                        <property name="name">
+                            <cstring>textLabel1_2_3_2_2</cstring>
+                        </property>
+                        <property name="frameShape">
+                            <enum>NoFrame</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Plain</enum>
+                        </property>
+                        <property name="text">
+                            <string>Units of measurement of temperature in this  record (default: C)</string>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="2" column="0">
+                        <item>
+                            <property name="text">
+                                <string>j    J/bar  = 0.1 cm3/mol</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>a   cal/bar</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>m   cm3/mol</string>
+                            </property>
+                        </item>
+                        <property name="name">
+                            <cstring>pPunV</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="1" column="0">
+                        <item>
+                            <property name="text">
+                                <string>j     J/mol(/K) </string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>c    cal/mol(/K)</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>J     kJ/mol(/K)</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>C    kcal/mol(/K)</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>N   Normalized</string>
+                            </property>
+                        </item>
+                        <property name="name">
+                            <cstring>pPunE</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QButtonGroup">
+                <property name="name">
+                    <cstring>buttonGroup19</cstring>
+                </property>
+                <property name="title">
+                    <string>What will happen after you click "Finish"</string>
+                </property>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel14</cstring>
+                        </property>
+                        <property name="text">
+                            <string>(1) The RTParm arrays will be allocated, and "Scripts" page of RTParm module window appears. Enter the full data sampler name into the "RTname" field and (optionally) a comment into the "RTcom" line. Then type the math script into the "tExpr" area. Typically, such a script collects data from objects visible on the "TPwork" page and assign to xT, xP and yF array elements. You can also look at template scripts accessible through the "Help" "View Scripts..." menu command.</string>
+                        </property>
+                        <property name="alignment">
+                            <set>WordBreak|AlignVCenter</set>
+                        </property>
+                    </widget>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel15</cstring>
+                        </property>
+                        <property name="text">
+                            <string>(2) When ready, click on the "Calculate" toolbar button to start consecutive reading of records and data sampling (in the case of messages about errors in scripts, fix them and try calculation again). After the sampling has finished, check sampled results on the "Tables" page. Enter axis and plot names, and click on the "Plot data" button to see a customizable graph.</string>
+                        </property>
+                        <property name="alignment">
+                            <set>WordBreak|AlignVCenter</set>
+                        </property>
+                    </widget>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel13_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>(3) If you wish to plot some experimental values against sampled data, close the graph dialog, find on the "Tables" page arrays xTE, xPE and ytE, and type the empirical data in there. Open the plot again and customise it, if necessary.</string>
+                        </property>
+                        <property name="alignment">
+                            <set>WordBreak|AlignVCenter</set>
+                        </property>
+                    </widget>
+                </vbox>
+            </widget>
+        </vbox>
+    </widget>
+</widget>
+<tabstops>
+    <tabstop>pTPptv_un</tabstop>
+    <tabstop>pTPptv_2</tabstop>
+    <tabstop>pTPptv_4</tabstop>
+    <tabstop>pTPptv_6</tabstop>
+    <tabstop>pMSpmv4</tabstop>
+    <tabstop>pMSpmv6</tabstop>
+    <tabstop>pTPptv_10</tabstop>
+    <tabstop>pTPptv_11</tabstop>
+    <tabstop>pTPptv_12</tabstop>
+    <tabstop>pTPptv_13</tabstop>
+    <tabstop>pTPptv_14</tabstop>
+    <tabstop>pTaskType</tabstop>
+    <tabstop>pPunE</tabstop>
+    <tabstop>pPunV</tabstop>
+    <tabstop>pPunP</tabstop>
+    <tabstop>pPunT</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

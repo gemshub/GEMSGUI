@@ -189,41 +189,6 @@
                             <string>This field shows a record key of the aqueous Phase to be automatically generated</string>
                         </property>
                     </widget>
-                    <widget class="QComboBox" row="4" column="0" rowspan="1" colspan="2">
-                        <item>
-                            <property name="text">
-                                <string>Retain previous settings (for old projects) or take default</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Restore normal (default) variant for fast convergence</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Variant for aquatic systems with moderate non-ideality</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Variant for aquatic systems with SCMs in sorption phases</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Variant for fluid-rock systems with highly non-ideal phases</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Variant of strict settings for highest accuracy (may be slow)</string>
-                            </property>
-                        </item>
-                        <property name="name">
-                            <cstring>pTaskType</cstring>
-                        </property>
-                    </widget>
                     <spacer row="2" column="1">
                         <property name="name">
                             <cstring>spacer7_2</cstring>
@@ -241,14 +206,6 @@
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QLabel" row="3" column="0" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>textLabel1_4</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Change preconfigured variant of GEM IPM2 numerical controls</string>
-                        </property>
-                    </widget>
                     <widget class="QGroupBox" row="0" column="2" rowspan="5" colspan="1">
                         <property name="name">
                             <cstring>groupBox1_2</cstring>

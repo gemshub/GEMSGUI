@@ -394,6 +394,30 @@ void TProfil::set_def( int )
     if( multi ) multi->set_def();
 }
 
+/* opens window with 'Remake record' parameters
+*/
+void TProfil::MakeQuery()
+{
+    const char * p_key;
+    char flgs[38];
+    int tasktype = 0;
+
+    p_key  = db->PackKey();
+    // flgs 0-9 MSpmv, 10-29 TPptv, 30-33  TPun, 34-37 TPsv
+    memcpy( flgs, &mup->PmvSA, 10);
+    memcpy( flgs+10, &tpp->PtvG, 20);
+    memcpy( flgs+30, &tpp->PunE, 8);
+
+    if( !vfProjectSet( window(), p_key, flgs, tasktype ))
+         Error( p_key, "Project record configuration cancelled by the user!" );
+
+    memcpy( &mup->PmvSA, flgs,    10);
+    memcpy( &tpp->PtvG,  flgs+10, 20);
+    memcpy( &tpp->PunE,  flgs+30, 8);
+    // SD 07/08/2009 set BASE_PARAM from default
+    ChangeSettings(tasktype);
+}
+
 // Help on Modelling Project module ( ? button )
 void
 TProfil::CmHelp()

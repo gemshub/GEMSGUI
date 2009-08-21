@@ -638,7 +638,7 @@ void TRMults::PHmake()
 //realloc memory and load data to structure RMULTS
 void TRMults::LoadRmults( bool NewRec, bool changePhases )
 {
-    int file, nSettings;
+    int file;
     gstring AqKey("a:*:*:*:*:");
     gstring PrKey("g:*:*:*:*:");
     gstring GasKey;
@@ -719,7 +719,7 @@ NEW_PHASE_AGAIN:
 */
 // Calling the wizard to set generated aq and gas phases
        if( !vfAutoPhaseSet( window(), prfName.c_str(), AqKey, GasKey,
-              amod, gmod, aparam, nSettings ) )
+              amod, gmod, aparam ) )
        {
           if( vfQuestion( window(), "Project: Attempt to cancel setup of phases",
             "Are you really sure?\n Repeat phase setup (Yes) or\nCancel creating the project (No)?" ))
@@ -727,8 +727,6 @@ NEW_PHASE_AGAIN:
           else
             Error( GetName(), "Project creation aborted by the user - bailing out..." );
        }
-       // SD 07/08/2009 set BASE_PARAM from default
-       aPa->ChangeSettings(nSettings);
 // aparam[4] = resp;
        aPa->tpp->Pbg = (int)aparam[4]+'0'; // resp+'0';  to check in TSolMod implementation
        if( amod == '-' )

@@ -48,8 +48,8 @@ public:
     char get_acode();
     char get_gcode();
 
-    int get_Settings()
-    { return pTaskType->currentItem(); }
+//    int get_Settings()
+//    { return pTaskType->currentItem(); }
     
 private:
    float a_param[8];  // Changed size from 4 to 8 on 22.05.2009 (DK,TW)

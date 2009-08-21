@@ -14,6 +14,7 @@
 		  $$DLG_H/RTparmWizard.h \
 		  $$DLG_H/GtDemoWizard.h \
 		  $$DLG_H/PhaseWizard.h \
+		  $$DLG_H/ProjectWizard.h \
 		  $$DLG_H/KeyDialog.h \
 		  $$DLG_H/ChangeKeyDialog.h \
 		  $$DLG_H/KeyProfile.h \
@@ -49,6 +50,7 @@
 		  $$DLG_CPP/RTparmWizard.cpp \
 		  $$DLG_CPP/GtDemoWizard.cpp \
 		  $$DLG_CPP/PhaseWizard.cpp \
+		  $$DLG_CPP/ProjectWizard.cpp \
 		  $$DLG_CPP/KeyDialog.cpp \
 		  $$DLG_CPP/ChangeKeyDialog.cpp \
 		  $$DLG_CPP/KeyProfile.cpp \
@@ -86,6 +88,7 @@
 		$$DLG_CPP/RTparmWizardData.ui \
 		$$DLG_CPP/GtDemoWizardData.ui \
 		$$DLG_CPP/PhaseWizardData.ui \
+		$$DLG_CPP/ProjectWizardData.ui \
 		$$DLG_CPP/KeyDialogData.ui \
 		$$DLG_CPP/ChangeKeyDialogData.ui \
 		$$DLG_CPP/KeyProfileData.ui \

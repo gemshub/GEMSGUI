@@ -60,6 +60,7 @@ using namespace std;
 #include "dlg/GtDemoWizard.h"
 #include "dlg/ComposWizard.h"
 #include "dlg/DCompWizard.h"
+#include "dlg/ProjectWizard.h"
 #include "dlg/ReacDCWizard.h"
 #include "dlg/RTparmWizard.h"
 #include "dlg/PhaseWizard.h"
@@ -1014,10 +1015,24 @@ vfDualThSet(QWidget* par, const char * p_key,
     return true;
 }
 
+bool
+vfProjectSet(QWidget* par, const char * p_key,
+              char flgs[38], int&  taskset )
+{
+     ProjectWizard pdlg( p_key, flgs, par );
+     if( !pdlg.exec() )
+      return false;
+
+    pdlg.getFlags( flgs );
+    taskset = pdlg.get_Settings();
+
+    return true;
+}
+
 // call to AutoPhaseDialog  added 18.07.03
 bool
 vfAutoPhaseSet(QWidget* wpar, const char *pr_key, gstring& a_key, gstring& g_key,
-         char& acode, char& gcode, float apar[8], int&  nSettings  )
+         char& acode, char& gcode, float apar[8]  )
 {
      AutoPhaseDialog apdlg( pr_key, acode, gcode, wpar );
 
@@ -1036,7 +1051,7 @@ vfAutoPhaseSet(QWidget* wpar, const char *pr_key, gstring& a_key, gstring& g_key
     apdlg.get_apar( apar );
     apdlg.get_akey( a_key );
     apdlg.get_gkey( g_key );
-    nSettings = apdlg.get_Settings();
+//    nSettings = apdlg.get_Settings();
 
 if( acode == 'S' )
 	acode = 'U';     // Blocking unavailable automatic SIT mode ?????
