@@ -428,10 +428,12 @@ AGAINRC:    //get  keypart
         //          goto AGAINRC;
         Nr = rt[gdp->nRT].GetKeyList( str.c_str(), aRklist, anRk );
         if( Nr<1 )
+        {
             if( vfQuestion(window(), GetName(),
                            "W09GDrem: No record keys matching a template! Repeat?"))
                 goto AGAINRC;
             else Error( GetName(), "E00GDrem: No record keys matching a template" );
+        }
     }
     if( gdp->rkey )  // old selections
     {
@@ -449,9 +451,10 @@ AGAINRC:    //get  keypart
     aMrk = vfMultiChoiceSet(window(), aRklist,
                             "Please, mark some record keys for data sampling", aMrk );
     if( aMrk.GetCount() < 1 )
-        if( vfQuestion(window(), GetName(), "No record keys selected! Repeat marking?" ))
+    {    if( vfQuestion(window(), GetName(), "No record keys selected! Repeat marking?" ))
             goto AGAIN;
         else Error( GetName(), "E01GDrem: No record keys selected...");
+    }
     gdp->Nlrk = (short)aMrk.GetCount();
     gdp->rkey = (char *)aObj[ o_gdrkey ].Alloc( gdp->Nlrk, 1, rtlen );
     // make list of record
@@ -818,8 +821,8 @@ TGtDemo::elst(int N,double *U,double *par)
 }
 
 char pb_kr1[7][30] ={           "Criterion Valda",
-                                "Criterion Laplasa",           "Criterion Karpova (medium)",
-                                "Criterion Karpova (median)", "Criterion Sevidga",
+                                "Criterion Laplasa",           "Criterion Karpova (medium)",
+                                "Criterion Karpova (median)", "Criterion Sevidga",
                                 "Criterion Gurvitsa (a=0)"  ,  "Criterion Gurvitsa (a=0.5)"};
 
 // Table of Probe resalts
@@ -834,7 +837,7 @@ void TGtDemo::probe_stat( const char *key )
     TUnSpace* Prob = (TUnSpace*)(&aMod[RT_UNSPACE]);
     TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
 
-    if( gdp->PsPB != S_OFF && *gdp->prKey)    // read probe record 
+    if( gdp->PsPB != S_OFF && *gdp->prKey)    // read probe record 
         TUnSpace::pm->RecInput( gdp->prKey );
     else
         Error( GetName(), "No TUnSpace mode in GtDemo!");
@@ -953,7 +956,7 @@ void TGtDemo::probe_stat( const char *key )
     prTab.PutEnd();
     // Put results to object
     const char *tab= prTab.GetTable();
-    tblen = strlen(tab)+1; // Get size of text buf 
+    tblen = strlen(tab)+1; // Get size of text buf 
     gdp->prtab = (char *)aObj[ o_gwprtab ].Alloc( 1, tblen, S_ );
     memcpy( gdp->prtab, tab, tblen );
 

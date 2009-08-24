@@ -117,14 +117,14 @@ double cha = 1.0;
 
 bool Formuan::iscapl( char ch )  // is cap letter
 {
-    if( ch>='A' && ch<='Z' || ch=='$' )
+    if( (ch>='A' && ch<='Z') || ch=='$' )
         return true;
     return false;
 }
 
 bool Formuan::islowl( char ch )  // is lcase letter
 {
-    if( ch>='a' && ch<='z' ||  ch == '_' )
+    if( (ch>='a' && ch<='z') ||  ch == '_' )
         return true;
     return false;
 }
@@ -244,7 +244,7 @@ int Formuan::isotop()
     if( *cur != B_ISOTOPE )
         return SCAN_NO;
     next = strchr( cur+1, B_ISOTOPE );
-    if( !next || next - cur -1 >= MAXICNAME )
+    if( !next || ((next - cur -1) >= MAXICNAME) )
         Error( cur,  "No isotope");
     next++;
     return SCAN_YES;

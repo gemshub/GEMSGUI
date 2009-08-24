@@ -470,7 +470,7 @@ TMulti::GammaCalc( long int LinkMode  )
         { // loop on solution phases
             jb = je;
             je += pmp->L1[k];
-
+            sMod = pmp->sMod[k];
     		switch( pmp->PHC[k] )
             {
               case PH_AQUEL:
@@ -1347,7 +1347,7 @@ void
 TMulti::SolModStandProp ( long int jb, long int k, char ModCode )
 {
 	// order of phase properties: G, H, S, CP, V, A, U
-	double Gst, Hst, Sst, CPst, Vst, Ast, Ust;
+        double Gst=0., Hst=0., Sst=0., CPst=0., Vst=0., Ast=0., Ust=0.;
 
 	// add if statement that checks DC class code (aqueous or not)
 

@@ -411,11 +411,12 @@ AGAIN_MOD:
         Nn1 = 1;
     }
     if( rcp->nTp < 0 || rcp->nPp < 0 || rcp->Nsd < 0 || rcp->Nsd > 4 )
-        if( vfQuestion( window(), GetName(),
+    {    if( vfQuestion( window(), GetName(),
            "W06RErem: Some counters (nTp, nCp, Nsd) are invalid! Remake again?" ))
             goto AGAIN_MOD;
         else
             Error( GetName(), "E07RErem: Invalid counters (nTp, nCp, Nsd) - bailing out!");
+    }
     CM = toupper( rcp->pct[0] );
     CE = toupper( rcp->pct[1] );
     CV = toupper( rcp->pct[2] );

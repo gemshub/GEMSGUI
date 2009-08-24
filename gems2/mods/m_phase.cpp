@@ -1245,6 +1245,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
 // NEXT:  /* define more precisely code of phase  */
 //    iic = 0;
     if( php->Asur > 1. )
+    {
         if( php->nDC == 1 )
         {
             php->PphC = PH_SINDIS;   /* iic++; */
@@ -1253,6 +1254,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
         {
             php->PphC = PH_SORPTION; /* iic++; */
         }
+    }
 //    if( iic ) goto NEXT;
 }
 
