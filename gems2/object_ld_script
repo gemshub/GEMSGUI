@@ -99,6 +99,7 @@ INPUT(
 ./obj\RTparmWizard.o
 ./obj\GtDemoWizard.o
 ./obj\PhaseWizard.o
+./obj\ProjectWizard.o
 ./obj\KeyDialog.o
 ./obj\ChangeKeyDialog.o
 ./obj\KeyProfile.o
@@ -133,6 +134,7 @@ INPUT(
 ./obj\RTparmWizardData.o
 ./obj\GtDemoWizardData.o
 ./obj\PhaseWizardData.o
+./obj\ProjectWizardData.o
 ./obj\KeyDialogData.o
 ./obj\ChangeKeyDialogData.o
 ./obj\KeyProfileData.o

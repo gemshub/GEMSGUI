@@ -129,7 +129,7 @@
                 <cstring>CheckBox4</cstring>
             </property>
             <property name="text">
-                <string>&amp;Remake</string>
+                <string>Activate Project &amp;Remake wizard</string>
             </property>
             <property name="accel">
                 <string>Alt+R</string>

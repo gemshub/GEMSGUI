@@ -20,6 +20,7 @@ INPUT(
 ./obj\moc_RTparmWizard.o
 ./obj\moc_GtDemoWizard.o
 ./obj\moc_PhaseWizard.o
+./obj\moc_ProjectWizard.o
 ./obj\moc_KeyDialog.o
 ./obj\moc_ChangeKeyDialog.o
 ./obj\moc_KeyProfile.o
@@ -54,6 +55,7 @@ INPUT(
 ./obj\moc_RTparmWizardData.o
 ./obj\moc_GtDemoWizardData.o
 ./obj\moc_PhaseWizardData.o
+./obj\moc_ProjectWizardData.o
 ./obj\moc_KeyDialogData.o
 ./obj\moc_ChangeKeyDialogData.o
 ./obj\moc_KeyProfileData.o

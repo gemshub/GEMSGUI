@@ -20,7 +20,7 @@
             <cstring>WizardPage</cstring>
         </property>
         <attribute name="title">
-            <string>Step 1 - Project Simulator configuration</string>
+            <string>Step 1 - Project configuration (thermodynamic data)</string>
         </attribute>
         <vbox>
             <property name="name">
@@ -31,29 +31,37 @@
                     <cstring>textLabel2</cstring>
                 </property>
                 <property name="text">
-                    <string>Modelling Project is an innovation that makes GEM-Selektor different from the preceding SELEKTOR codes. The project is a large (keyed) record in the database which contains a framework of chemical thermodynamic systems for solving a certain class of geochemical modelling problems. In addition, the project record contains links to a collection of GEMS database files where the input data is kept and modelling results will be accumulated. As a rule, these database files are located in an (automatically created) directory having the same name as the modelling project.</string>
+                    <string>Modelling Project is a named set of GEMS database records for a specific class of modelling application. Main part of the project is a generic definition of chemical thermodynamic systems. This includes lists of record keys for independent components (IC), dependent components (DC), phases etc. kept in the project files. 
+   Further, the project configuration record contains links to a GEMS database files where the input data is kept and the modelling results will be stored. As a rule, these database files are located in an (automatically created) directory having the same name as the modelling project itself. 
+   Finally, a selection of internally calculated thermodynamic data (in addition to obligatory g0 and v0 vectors), as well as all the project-specific numerical settings and default values, can be set ut in this wizard and in the Project window pages. They also will be kept in the project definition record. Thermodynamic data arrayscurrently used in CSDs are not saved and will be calculated whenever necessary.</string>
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignVCenter</set>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <spacer>
                 <property name="name">
-                    <cstring>textLabel2_2</cstring>
+                    <cstring>spacer14</cstring>
                 </property>
-                <property name="text">
-                    <string>Thermodynamic data array is another important part of the project system framework. It is allocated in the program memory after the project has been successfully opened; but thermodynamic data arrays are never saved in the Project database record.</string>
+                <property name="orientation">
+                    <enum>Vertical</enum>
                 </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
                 </property>
-            </widget>
+                <property name="sizeHint">
+                    <size>
+                        <width>20</width>
+                        <height>16</height>
+                    </size>
+                </property>
+            </spacer>
             <widget class="QButtonGroup">
                 <property name="name">
                     <cstring>buttonGroup9</cstring>
                 </property>
                 <property name="title">
-                    <string>Thermodynamic data allocation</string>
+                    <string>Allocation flags for using additional thermodynamic data in CSDs </string>
                 </property>
                 <grid>
                     <property name="name">
@@ -64,7 +72,7 @@
                             <cstring>pMSpmv6</cstring>
                         </property>
                         <property name="text">
-                            <string>list of IC formulas</string>
+                            <string>List of IC formulas (reserved)</string>
                         </property>
                         <property name="checked">
                             <bool>false</bool>
@@ -75,7 +83,7 @@
                             <cstring>pTPptv_6</cstring>
                         </property>
                         <property name="text">
-                            <string>allocation flag for CpTP vector</string>
+                            <string>CpTP vector (const.-P heat capacity)</string>
                         </property>
                         <property name="checked">
                             <bool>false</bool>
@@ -86,7 +94,7 @@
                             <cstring>pTPptv_10</cstring>
                         </property>
                         <property name="text">
-                            <string>allocation flag for F vector</string>
+                            <string>F vector (Helmholtz energy function)</string>
                         </property>
                         <property name="checked">
                             <bool>false</bool>
@@ -97,7 +105,7 @@
                             <cstring>pMSpmv4</cstring>
                         </property>
                         <property name="text">
-                            <string>list of IC_DC refereces</string>
+                            <string>List of IC_DC references (reserved)</string>
                         </property>
                         <property name="checked">
                             <bool>false</bool>
@@ -108,7 +116,7 @@
                             <cstring>pTPptv_4</cstring>
                         </property>
                         <property name="text">
-                            <string>allocation flag for sTP vector</string>
+                            <string>sTP vector (abs. entropy)</string>
                         </property>
                         <property name="checked">
                             <bool>false</bool>
@@ -119,7 +127,7 @@
                             <cstring>pTPptv_12</cstring>
                         </property>
                         <property name="text">
-                            <string>allocation flag for Cv vector</string>
+                            <string>Cv vector (const-V heat capacity)</string>
                         </property>
                         <property name="checked">
                             <bool>false</bool>
@@ -130,7 +138,7 @@
                             <cstring>pTPptv_2</cstring>
                         </property>
                         <property name="text">
-                            <string>allocation flag for hTP vector</string>
+                            <string>hTP vector (enthalpy function)</string>
                         </property>
                         <property name="checked">
                             <bool>false</bool>
@@ -141,7 +149,7 @@
                             <cstring>pTPptv_un</cstring>
                         </property>
                         <property name="text">
-                            <string>allocation flag for uncertainty vectors</string>
+                            <string>Data uncertainty vectors (gTPuns, vTPuns, sTPuns, ...)</string>
                         </property>
                         <property name="checked">
                             <bool>false</bool>
@@ -152,7 +160,7 @@
                             <cstring>pTPptv_11</cstring>
                         </property>
                         <property name="text">
-                            <string>allocation flag for U vector</string>
+                            <string>U vector (internal energy function)</string>
                         </property>
                         <property name="checked">
                             <bool>false</bool>
@@ -163,7 +171,7 @@
                             <cstring>pTPptv_14</cstring>
                         </property>
                         <property name="text">
-                            <string>allocation flag for Bet vector</string>
+                            <string>Beta - vector (isobaric expansibility)</string>
                         </property>
                         <property name="checked">
                             <bool>false</bool>
@@ -174,7 +182,7 @@
                             <cstring>pTPptv_13</cstring>
                         </property>
                         <property name="text">
-                            <string>allocation flag for Alp vector</string>
+                            <string>Alpha - vector (isothermal compressibility)</string>
                         </property>
                         <property name="checked">
                             <bool>false</bool>
@@ -182,6 +190,23 @@
                     </widget>
                 </grid>
             </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>spacer13</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Vertical</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>20</width>
+                        <height>20</height>
+                    </size>
+                </property>
+            </spacer>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>textLabel1_4</cstring>
@@ -232,7 +257,7 @@
             <cstring>WizardPage</cstring>
         </property>
         <attribute name="title">
-            <string>2 - Useful hints</string>
+            <string>Step 2 - Project configuration (units and hints)</string>
         </attribute>
         <vbox>
             <property name="name">
@@ -243,7 +268,7 @@
                     <cstring>ButtonGroup1</cstring>
                 </property>
                 <property name="title">
-                    <string>No need to change in this version of GEMS-PSI </string>
+                    <string>No need to change in this version of GEM-Selektor </string>
                 </property>
                 <grid>
                     <property name="name">
@@ -254,7 +279,7 @@
                             <cstring>textLabel1_2_3</cstring>
                         </property>
                         <property name="text">
-                            <string>Units of measurement of volume in this  record (default:  j)</string>
+                            <string>Units of measurement of volume (default:  j)</string>
                         </property>
                     </widget>
                     <widget class="QComboBox" row="3" column="0">
@@ -295,7 +320,7 @@
                             <cstring>textLabel1_2_3_2</cstring>
                         </property>
                         <property name="text">
-                            <string>Units of measurement of pressure in this record (default: b)</string>
+                            <string>Units of measurement of pressure (default: b)</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="1" column="1">
@@ -303,7 +328,7 @@
                             <cstring>textLabel1_2</cstring>
                         </property>
                         <property name="text">
-                            <string>Units of measurement of energy in this  record (default: j)</string>
+                            <string>Units of measurement of energy (default: j)</string>
                         </property>
                     </widget>
                     <widget class="QComboBox" row="4" column="0">
@@ -340,7 +365,7 @@
                             <enum>Plain</enum>
                         </property>
                         <property name="text">
-                            <string>Units of measurement of temperature in this  record (default: C)</string>
+                            <string>Units of measurement of temperature (default: C)</string>
                         </property>
                     </widget>
                     <widget class="QComboBox" row="2" column="0">
@@ -417,7 +442,7 @@
                             <cstring>textLabel14</cstring>
                         </property>
                         <property name="text">
-                            <string>(1) The RTParm arrays will be allocated, and "Scripts" page of RTParm module window appears. Enter the full data sampler name into the "RTname" field and (optionally) a comment into the "RTcom" line. Then type the math script into the "tExpr" area. Typically, such a script collects data from objects visible on the "TPwork" page and assign to xT, xP and yF array elements. You can also look at template scripts accessible through the "Help" "View Scripts..." menu command.</string>
+                            <string>(1) The configutarion of modeling project will become active, and later on will be saved in the project configuration file in project directory.</string>
                         </property>
                         <property name="alignment">
                             <set>WordBreak|AlignVCenter</set>
@@ -428,7 +453,7 @@
                             <cstring>textLabel15</cstring>
                         </property>
                         <property name="text">
-                            <string>(2) When ready, click on the "Calculate" toolbar button to start consecutive reading of records and data sampling (in the case of messages about errors in scripts, fix them and try calculation again). After the sampling has finished, check sampled results on the "Tables" page. Enter axis and plot names, and click on the "Plot data" button to see a customizable graph.</string>
+                            <string>(2) The Project module window will remain open. In most cases, you should just close it and proceed working with the modeling project.</string>
                         </property>
                         <property name="alignment">
                             <set>WordBreak|AlignVCenter</set>
@@ -439,7 +464,7 @@
                             <cstring>textLabel13_2</cstring>
                         </property>
                         <property name="text">
-                            <string>(3) If you wish to plot some experimental values against sampled data, close the graph dialog, find on the "Tables" page arrays xTE, xPE and ytE, and type the empirical data in there. Open the plot again and customise it, if necessary.</string>
+                            <string>(3) Before closing the Project module window, you may wish to additionally change some default settings on pages Param_1 or Param_2. This will affect newly created records in the respective modules; old records will remain intact. Do not forget to close the Project window then.</string>
                         </property>
                         <property name="alignment">
                             <set>WordBreak|AlignVCenter</set>
