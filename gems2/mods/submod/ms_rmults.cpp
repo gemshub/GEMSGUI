@@ -485,7 +485,7 @@ void TRMults::MakeRecordLists( gstring& AqKey, gstring& GasKey )
 // Make list of ICOMP and set data to work arrays
 void TRMults::ICmake()
 {
-    int ii, j;
+    int ii, j=0;
     time_t crt;
     TIComp* aIC=(TIComp *)(&aMod[RT_ICOMP]);
     aIC->ods_link(0);
@@ -535,8 +535,9 @@ void TRMults::PHmake()
 {
     int  jj, ii,  kk, forlen, sflast=-1;
     short ij, i;
+    char buf[MAXFORMULA];
     time_t crt;
-    char *Formula, *item, dkey[MAXRKEYLEN];
+    char *Formula=0, *item=buf, dkey[MAXRKEYLEN];
     TPhase* aPH=(TPhase *)(&aMod[RT_PHASE]);
     aPH->ods_link(0);
     TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);

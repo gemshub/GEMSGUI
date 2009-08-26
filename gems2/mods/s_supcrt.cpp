@@ -23,7 +23,7 @@
 //--------------------------------------------------------------------//
 double  TdegK(int it, double t)
 {
-    double TdegK;
+    double TdegK=t;
     switch(it)
     {
     case 0:
@@ -202,7 +202,7 @@ void TSupcrt::resid(double t, double *d)
     {
         qzr[i] = qr[i+2];
         qzt[i]=qt[i+1];
-    }                  /* ‚ as resalt: qzr[0]=qr[2], ... qzr[8]=qr[10];
+    }                  /* ï¿½ as resalt: qzr[0]=qr[2], ... qzr[8]=qr[10];
                                          qzt[0]=qt[1], ... qzt[8]=qt[9]; */
     i=-1;
     while(++i <  nc->nc)
@@ -951,7 +951,7 @@ void TSupcrt::dimHGK(int isat,
 }
 
 //--------------------------------------------------------------------//
-// (dliq & dvap),   (Gl-Gv)/RT  (delg)
+// (dliq & dvap),   (Gl-Gv)/RT  (delg)
 void  TSupcrt::corr(int itripl, double t, double *p, double *dL,
                     double *dV, double *delg, int epseqn)
 {
@@ -973,8 +973,8 @@ void  TSupcrt::corr(int itripl, double t, double *p, double *dL,
         *dV = 5.0e-7;
     ideal(t);
     thmHGK(dV,t);
-    /*    á¢®©áâ¢  ¯ à  ¡ã¤ãâ á®¤¥à¦ âìáï ¢ áâàãªâãà¥ FCTS
-     *    ¢ ¡¥§à §¬¥à­®¬ ¢¨¤¥ (dimensionless); after
+    /*    á¢®ï¿½ï¿½ï¿½ï¿½  ï¿½ ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ á®¤ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ FCTS
+     *    ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½à­®ï¿½ ï¿½ï¿½ï¿½ï¿½ (dimensionless); after
      *    pcorr's final call of corr (*delg < 10d-4)   */
     gv    = fct.gd;
     *delg = gl - gv;

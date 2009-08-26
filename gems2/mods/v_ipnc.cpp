@@ -1187,7 +1187,7 @@ void IPNCalc::CalcEquat()
 //print IPN notation
 void IPNCalc::PrintEquat( char *s, fstream& f)
 {
-    int k,l,j;
+    int k,l=0,j;
 
     f << "Source expressions :\n" << s;
     for(uint i=0; i < aEq.GetCount(); l=0, i++)

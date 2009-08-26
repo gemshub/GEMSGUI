@@ -646,8 +646,8 @@ int get_ndx_( int i, int nO, int Xplace )
    if( Xplace )
       nO = o_n0_bic;
 
-  int N, type = 0;
-  short *arr;
+  int N=0, type = 0;
+  short *arr=0;
 
   switch( nO )
   {

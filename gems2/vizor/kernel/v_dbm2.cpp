@@ -876,7 +876,7 @@ void TDataBase::DelFile(const gstring& path)
 // add open PDB files
 void TDataBase::AddOpenFile(const TCIntArray& nff)
 {
-  uint j;
+  uint j=0;
   if( nff.GetCount()<1 )
         return;
 try{

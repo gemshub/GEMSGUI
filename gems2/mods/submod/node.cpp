@@ -48,7 +48,7 @@ const double bar_to_Pa = 1e5,
 bool  TNode::check_TP( double Tc, double P )
 {
    bool okT = true, okP = true;
-   double T_, P_;
+   double T_=Tc, P_=P;
 
    if( Tc <= CSD->TCval[0] - CSD->Ttol )
    { 				// Lower boundary of T interpolation interval

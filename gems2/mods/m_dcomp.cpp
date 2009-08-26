@@ -911,8 +911,8 @@ TDComp::DCthermo( int q, int p )
 void TDComp::ParCor(  )
 {
     double z, /*g, h,*/ s, v, cp, ak, rx, sigma, polar, Q, x, y, xN,
-    conv, tr, theta, pfunk, eta, wabsh, gamma, alphaz,  re,
-    wcon, wabs, vs, cps, /*ss,*/ vn, cpn, /*sn,*/ aks, akn, a1, a2,
+    conv, tr, theta, pfunk, eta, wabsh, gamma, alphaz=0.,  re,
+    wcon=1., wabs, vs, cps, /*ss,*/ vn, cpn, /*sn,*/ aks, akn, a1, a2,
     a4, a3, c1, c2;
     float  ra, ia1, ia2, ia3, ia4, ic1, ic2, ire, iwcon, isigma;
 

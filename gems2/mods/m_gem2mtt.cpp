@@ -526,12 +526,12 @@ bool TGEM2MT::Trans1D( char mode )
 {
   int evrt =10;
   bool iRet = false;
-  bool CompMode;   // Component transport mode: true: DC; false: IC
+  bool CompMode = false;   // Component transport mode: true: DC; false: IC
   int nStart = 0, nEnd = mtp->nC;
   // int NodesSetToAIA;
 
-FILE* logfile;
-FILE* ph_file;
+FILE* logfile = NULL;
+FILE* ph_file = NULL;
 FILE* diffile = NULL;
 
 #ifndef IPMGEMPLUGIN

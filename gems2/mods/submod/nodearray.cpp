@@ -816,7 +816,7 @@ double TNodeArray::GetNodeMass( long int ndx,
 void TNodeArray::MoveParticleMass( long int ndx_from, long int ndx_to,
        char /*type*/, char CompMode, char tcode, unsigned char iips, double m_v )
 {
-   double mass = 0., coeff, mol, mWat, fmolal, aji;
+   double mass = 0., coeff, mol, mWat=0., fmolal=1., aji;
    DATABR* dbr = NodT1[ndx_from];
    DATACH* dch = CSD;
    long int xWatCH=0, ic, ips = (long int)iips;

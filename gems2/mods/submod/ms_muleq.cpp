@@ -219,7 +219,7 @@ void TMulti::loadData( bool newRec )
 void TMulti::CompG0Load()
 {
     long int j, jj, k, jb, je=0;
-    double Go, Gg=0., Ge, Vv = 0.;
+    double Go, Gg=0., Ge=0., Vv = 0.;
 
     // ->pTPD state of reload t/d data 0-all, 1 G0, Vol, 2 do not load
     if( pmp->pTPD < 1 )

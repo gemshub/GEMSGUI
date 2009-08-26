@@ -482,7 +482,7 @@ void TMulti::multi_sys_ph()
     time_t crt;
 //    double G;
     double PMM;  // Phase mean mol. mass
-    int Cjs, car_l[32], car_c; // current index carrier sorbent
+    int Cjs, car_l[32], car_c=0; // current index carrier sorbent
     TPhase* aPH=(TPhase *)(&aMod[RT_PHASE]);
     aPH->ods_link(0);
 

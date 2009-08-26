@@ -273,7 +273,7 @@ StripLine(gstring& line)
 
 char chLowUp(char ch)
 {
-   char ch1;
+   char ch1=ch;
 
    if( isalpha(ch) )
    { if( islower(ch))

@@ -593,7 +593,7 @@ void TSupcrt::crtreg(int isat, int iopt, int it, double *T, double *P,
     PTmins= co->x[9];
     PTmaxs= co->x[10];
 
-    *T = TdegK(it, *T);     /* �࠭��ନ�㥬 T � degK */
+    *T = TdegK(it, *T);     /* �� ���ନ�㥬 T � degK */
 
     if (isat == 0)
     {
@@ -1280,7 +1280,7 @@ void TSupcrt::HGKeqn(int isat, int iopt, int itripl, double Temp,
 // translate t from deg to users units
 double TSupcrt::TdegUS(int it, double t)
 {
-    double TdegUS;
+    double TdegUS=t;
     switch(it)
     {
     case 0:

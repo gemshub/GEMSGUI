@@ -344,7 +344,7 @@ void TMulti::sm_text_analyze( int nph, int Type,
 //
 gstring TMulti::PressSolMod( int nP )
 {
-    int j, jp, k, ks, jb, je=0, EGlen;
+    int j, jp, k, ks, jb=0, je=0, EGlen;
     char *EGb;
     TPhase* aPH=TPhase::pm;
     gstring etext;
@@ -606,7 +606,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
         tget_ndx *get_ndx )
 {
     size_t eLen, ls, lb;
-    int i, ii, pj, LNplace=1, Xplace=0, nO=0;
+    int i=0, ii, pj, LNplace=1, Xplace=0, nO=0;
     char cstate, cc, *etext, *pexpr, *ecur, *cur, *next, *end,
       *prev, *last, iCode, odlab[MAXKEYWD+2];
     vstr name(64), nbuf(64);

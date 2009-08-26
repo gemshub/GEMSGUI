@@ -74,7 +74,7 @@ void TGEM2MT::Solut( double *m, double *dm, double t )
   char FLXid[MAXSYMB+1], MGPid[MAXSYMB+1];
   int FLXorder/*, FLXtype*/;
   double fRate;
-  bool sinkOut; 
+  bool sinkOut=false;
   
   // Zeroing element mass derivatives off
   for( q=0; q <mtp->nC; q++ )

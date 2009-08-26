@@ -1106,8 +1106,8 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
     double *p_Bn = new double[mtp->nIV*mtp->Nb];
     memcpy( p_Bn, mtp->Bn, mtp->nIV*mtp->Nb*sizeof(double));
 
-    char  *p_CIclb;
-    float *p_CIb;
+    char  *p_CIclb=0;
+    float *p_CIb=0;
  //   float *p_PGT;   all this arrays must be changed by user after remake the record!!! 17/12/2007
  //   char  *p_UMPG;  Nf, Lsf, FIf sizes from selection undef after resize the project
  //   double* p_BSF;

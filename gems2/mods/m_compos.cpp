@@ -714,7 +714,7 @@ TCompos::RecCalc( const char* key )
     double Xincr, ICmw, DCmw;
     double *A;
     vstr ICs(MAXRKEYLEN+10), pkey(MAXRKEYLEN+10);
-    char *Formula, *CIcl;
+    char *Formula, *CIcl=0;
     time_t crt, tim;
     int i1;
 
