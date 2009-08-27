@@ -45,7 +45,7 @@ typedef struct  // DATABR - template node data bridge structure
 //      Usage of this variable (DB - data bridge)      	               MT-DB DB-GEM GEM-DB DB-MT
    double
 // Chemical scalar variables
-    TC,     // Node temperature T (C)                       	          +      +      -     -
+    TK,     // Node temperature T (Kelvin)                     	          +      +      -     -
     P, 	    // Node Pressure P (Pa)                         	          +      +      -     -
     Vs,     // Volume V of reactive subsystem  (m3)                      (+)    (+)     +     +
     Vi,     // Volume of inert subsystem (m3)          	                  +      -      -     +

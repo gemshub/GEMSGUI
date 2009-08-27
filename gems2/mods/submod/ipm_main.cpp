@@ -910,7 +910,8 @@ TMulti::CheckMassBalanceResiduals(double *Y )
 //
 double TMulti::LMD( double LM )
 {
-    double A,B,C,LM1,LM2,FX1,FX2;
+    double A,B,C,LM1,LM2;
+    double FX1,FX2;
     A=0.0;
     B=LM;
     if( LM<2. )

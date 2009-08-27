@@ -64,13 +64,13 @@ typedef struct   // Structure DataCH
     *xph;   // DATACH access index list for Phases kept in the DATABR structure and in DBR files [nPHb]
 
   double
-    Ttol,    // Tolerance for the temperature interpolation (C, K)
+    Ttol,    // Tolerance for the temperature interpolation (K)
     Ptol,    // Tolerance for the pressure interpolation (Pa)
     dRes1,   // reserved
     dRes2,   // reserved
 
 // Data vectors - must be loaded before calling GEMIPM2K
-    *TCval,  // Temperature values for the interpolation grid (C) for the lookup arrays of thermodynamic data [nTp]
+    *TKval,  // Temperature values for the interpolation grid (Kelvin) for the lookup arrays of thermodynamic data [nTp]
     *Pval,   // Pressure values for the interpolation grid (Pa) for the lookup arrays of thermodynamic data [nPp]
     *A,      // Stoichiometry matrix A for Dependent Components. [nIC][nDC] elements
 

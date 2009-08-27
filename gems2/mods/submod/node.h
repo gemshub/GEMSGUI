@@ -61,9 +61,9 @@ protected:
         NumIterFIA,   // Total Number of performed FIA entry iterations
         NumIterIPM;   // Total Number of performed IPM main iterations
 
-    // Tests Tc as a grid point for the interpolation of thermodynamic data
+    // Tests TK as a grid point for the interpolation of thermodynamic data
     // Returns index in the lookup grid array or -1  if it is not a grid point
-    long int  check_grid_T( double Tc );
+    long int  check_grid_T( double TK );
 
     // Tests P as a grid point for the interpolation of thermodynamic data
     // Return index in the lookup grid array or -1 if it is not a grid point
@@ -170,7 +170,7 @@ static TNode* na;   // static pointer to this TNode class instance
     long int  &p_NodeHandle,   // Node identification handle
     long int  &p_NodeStatusCH, // Node status code;  see typedef NODECODECH
                       //                                    GEM input output  FMT control
-    double &p_TC,      // Temperature T, C                            +       -      -
+    double &p_TK,      // Temperature T, Kelvin                       +       -      -
     double &p_P,      // Pressure P,  Pa                              +       -      -
     double &p_Vs,     // Volume V of reactive subsystem,  m3         (+)      -      +
     double &p_Ms,     // Mass of reactive subsystem, kg               -       -      +
@@ -186,7 +186,7 @@ void GEM_from_MT(
  long int  p_NodeHandle,   // Node identification handle
  long int  p_NodeStatusCH, // Node status code (NEED_GEM_SIA or NEED_GEM_AIA)
                   //                                              GEM input output  FMT control
- double p_TC,     // Temperature T, C                                 +       -      -
+ double p_TK,     // Temperature T, Kelvin                            +       -      -
  double p_P,      // Pressure P, Pa                                   +       -      -
  double p_Vs,     // Volume V of reactive subsystem, m3               -       -      +
  double p_Ms,     // Mass of reactive subsystem, kg                   -       -      +
@@ -203,7 +203,7 @@ void GEM_from_MT(
  long int  p_NodeHandle,   // Node identification handle
  long int  p_NodeStatusCH, // Node status code (NEED_GEM_SIA or NEED_GEM_AIA)
                   //                                              GEM input output  FMT control
- double p_TC,     // Temperature T, C                                 +       -      -
+ double p_TK,     // Temperature T, Kelvin                            +       -      -
  double p_P,      // Pressure P, Pa                                   +       -      -
  double p_Vs,     // Volume V of reactive subsystem, m3               -       -      +
  double p_Ms,     // Mass of reactive subsystem, kg                   -       -      +
@@ -226,7 +226,7 @@ void GEM_from_MT(
  long int  p_NodeHandle,   // Node identification handle
  long int  p_NodeStatusCH, // Node status code (NEED_GEM_SIA or NEED_GEM_AIA)
                   //                                              GEM input output  FMT control
- double p_TC,     // Temperature T, C                                 +       -      -
+ double p_TK,     // Temperature T, Kelvin                            +       -      -
  double p_P,      // Pressure P, Pa                                   +       -      -
  double p_Vs,     // Volume V of reactive subsystem, m3               -       -      +
  double p_Ms,     // Mass of reactive subsystem, kg                   -       -      +
@@ -356,7 +356,11 @@ void GEM_set_MT(
 
     // These methods get contents of fields in the work node structure
     double cTC() const     // Get current node Temperature T, C
-    {  return CNode->TC;   }
+    {  return CNode->TK+C_to_K;   }
+
+    // These methods get contents of fields in the work node structure
+    double cTK() const     // Get current node Temperature T, Kelvin
+    {  return CNode->TK;   }
 
     double cP() const     // Get current node Pressure P, Pa
     {        return CNode->P;   }
@@ -450,66 +454,66 @@ void GEM_set_MT(
     void unpackDataBr( bool uPrimalSol, double ScFact );
 
     // Access to interpolated thermodynamic data from DCH structure
-    // Checks if given temperature Tc and pressure P fit within the interpolation 
+    // Checks if given temperature TK and pressure P fit within the interpolation 
     //intervals of the DATACH lookup arrays (returns true) or not (returns false)
-    bool  check_TP( double Tc, double P );
+    bool  check_TP( double TK, double P );
 
-    // Tests Tc and P as a grid point for the interpolation of thermodynamic data using DATACH 
+    // Tests TK and P as a grid point for the interpolation of thermodynamic data using DATACH 
     // lookup arrays. Returns -1L if interpolation is needed, or 1D index of the lookup array element 
-    // if Tc and P fit within the respective tolerances. 
-     long int  check_grid_TP(  double Tc, double P );
+    // if TK and P fit within the respective tolerances. 
+     long int  check_grid_TP(  double TK, double P );
 
-    //Retrieves (interpolated) molar Gibbs energy G0(P,Tc) value for Dependent Component  
-    //from the DATACH structure ( xCH is the DC DCH index) or 7777777., if Tc (temperature, C) 
+    //Retrieves (interpolated) molar Gibbs energy G0(P,TK) value for Dependent Component  
+    //from the DATACH structure ( xCH is the DC DCH index) or 7777777., if TK (temperature, Kelvin) 
     // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances. 
     // Parameter norm defines in wnich units the value is returned: false - in J/mol; true (default) - in mol/mol
-     double DC_G0(const long int xCH, const double P, const double Tc,  bool norm=true);
+     double DC_G0(const long int xCH, const double P, const double TK,  bool norm=true);
 
-     // Retrieves (interpolated, if necessary) molar volume V0(P,Tc) value for Dependent Component (in J/Pa) 
-     // from the DATACH structure ( xCH is the DC DCH index)or 0.0, if Tc (temperature, C) 
+     // Retrieves (interpolated, if necessary) molar volume V0(P,TK) value for Dependent Component (in J/Pa) 
+     // from the DATACH structure ( xCH is the DC DCH index)or 0.0, if TK (temperature, Kelvin) 
      // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
-     double DC_V0(const long int xCH, const double P, const double Tc);
+     double DC_V0(const long int xCH, const double P, const double TK);
 
-     // Retrieves (interpolated) molar enthalpy H0(P,Tc) value for Dependent Component (in J/mol) 
-     // from the DATACH structure ( xCH is the DC DCH index) or 7777777., if Tc (temperature, C) 
+     // Retrieves (interpolated) molar enthalpy H0(P,TK) value for Dependent Component (in J/mol) 
+     // from the DATACH structure ( xCH is the DC DCH index) or 7777777., if TK (temperature, Kelvin) 
      // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.  
-     double DC_H0(const long int xCH, const double P, const double Tc);
+     double DC_H0(const long int xCH, const double P, const double Tk);
      
-     // Retrieves (interpolated) absolute molar enropy S0(P,Tc) value for Dependent Component (in J/K/mol) 
-     // from the DATACH structure ( xCH is the DC DCH index) or 0.0, if Tc (temperature, C) 
+     // Retrieves (interpolated) absolute molar enropy S0(P,TK) value for Dependent Component (in J/K/mol) 
+     // from the DATACH structure ( xCH is the DC DCH index) or 0.0, if TK (temperature, Kelvin) 
      // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.  
-     double DC_S0(const long int xCH, const double P, const double Tc);
+     double DC_S0(const long int xCH, const double P, const double TK);
 
-     // Retrieves (interpolated) constant-pressure heat capacity Cp0(P,Tc) value for Dependent Component (in J/K/mol)
-     // from the DATACH structure ( xCH is the DC DCH index) or 0.0, if Tc (temperature, C) 
+     // Retrieves (interpolated) constant-pressure heat capacity Cp0(P,TK) value for Dependent Component (in J/K/mol)
+     // from the DATACH structure ( xCH is the DC DCH index) or 0.0, if TK (temperature, K) 
      // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
-     double DC_Cp0(const long int xCH, const double P, const double Tc);
+     double DC_Cp0(const long int xCH, const double P, const double TK);
 
      // Retrieves (interpolated) Helmholtz energy  of Dependent Component (in J/mol) 
-     // from the DATACH structure ( xCH is the DC DCH index) or 7777777., if Tc (temperature, C)
+     // from the DATACH structure ( xCH is the DC DCH index) or 7777777., if TK (temperature, Kelvin)
      // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
-     double DC_A0(const long int xCH, const double P, const double Tc);
+     double DC_A0(const long int xCH, const double P, const double TK);
 
      // Retrieves (interpolated) Internal energy of  Dependent Component (in J/mol) 
-     // from the DATACH structure ( xCH is the DC DCH index) or 7777777., if Tc (temperature, C)
+     // from the DATACH structure ( xCH is the DC DCH index) or 7777777., if TK (temperature, Kelvin)
      // or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
-     double DC_U0(const long int xCH, const double P, const double Tc);
+     double DC_U0(const long int xCH, const double P, const double TK);
 
-     // Retrieves (interpolated) dielectric constant of liquid water at (P,Tc) from the DATACH structure or 0.0, 
-     // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
-     double EpsH2Ow(const double P, const double Tc);
+     // Retrieves (interpolated) dielectric constant of liquid water at (P,TK) from the DATACH structure or 0.0, 
+     // if TK (temperature, Kelvin) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+     double EpsH2Ow(const double P, const double TK);
 
-     // Retrieves (interpolated) density of liquid water (in kg/m3) at (P,Tc) from the DATACH structure or 0.0,
-     // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances. 
-     double DenH2Ow(const double P, const double Tc);
+     // Retrieves (interpolated) density of liquid water (in kg/m3) at (P,TK) from the DATACH structure or 0.0,
+     // if TK (temperature, Kelvin) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances. 
+     double DenH2Ow(const double P, const double TK);
 
-     // Retrieves (interpolated) dielectric constant of H2O vapor at (P,Tc) from the DATACH structure or 0.0, 
-     // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
-     double EpsH2Og(const double P, const double Tc);
+     // Retrieves (interpolated) dielectric constant of H2O vapor at (P,TK) from the DATACH structure or 0.0, 
+     // if TK (temperature, Kelvin) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+     double EpsH2Og(const double P, const double TK);
      
-     // Retrieves (interpolated) density of H2O vapor (in kg/m3) at (P,Tc) from the DATACH structure or 0.0, 
-     // if Tc (temperature, C) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
-     double DenH2Og(const double P, const double Tc);
+     // Retrieves (interpolated) density of H2O vapor (in kg/m3) at (P,TK) from the DATACH structure or 0.0, 
+     // if TK (temperature, Kelvin) or P (pressure, Pa) parameters go beyond the valid lookup array intervals or tolerances.
+     double DenH2Og(const double P, const double TK);
      
 // To be provided - access to interpolated thermodynamic data from DCH structure
 //  DC_DD_TP

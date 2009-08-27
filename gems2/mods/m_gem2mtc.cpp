@@ -860,7 +860,7 @@ void  TGEM2MT::LinkNode0(  int nNode )
      DATACH* CH = na->pCSD();
      // static
      aObj[o_n0_ct].SetPtr( &BR->NodeHandle );   /* s6 */
-     aObj[o_n0_cs].SetPtr( &BR->TC );            /* d17 */
+     aObj[o_n0_cs].SetPtr( &BR->TK );            /* d17 */
      aObj[o_n0_ts].SetPtr( &BR->Tm );            /* d19 */
      //dynamic
      aObj[o_n0_xdc].SetPtr( BR->xDC );
@@ -942,7 +942,7 @@ void  TGEM2MT::LinkNode1(  int nNode )
      DATACH* CH = na->pCSD();
      // static
      aObj[o_n1_ct].SetPtr( &BR->NodeHandle );   /* s6 */
-     aObj[o_n1_cs].SetPtr( &BR->TC );            /* d17 */
+     aObj[o_n1_cs].SetPtr( &BR->TK );            /* d17 */
      aObj[o_n1_ts].SetPtr( &BR->Tm );            /* d19 */
      //dynamic
      aObj[o_n1_xdc].SetPtr( BR->xDC );
