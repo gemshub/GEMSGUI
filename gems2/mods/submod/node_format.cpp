@@ -125,6 +125,7 @@ outField DataCH_dynamic_fields[29] =  { //+4
    { "denWg",  1, 0 },
    { "epsW",  1, 0 },
    { "epsWg",  1, 0 },
+//   { "visW",  1, 0 },
    { "V0",  1, 0 },
    { "G0",  1, 0 },
    { "H0", 0, 0 },
@@ -147,8 +148,8 @@ void TNode::databr_to_text_file( fstream& ff, bool with_comments, bool brief_mod
   TPrintArrays  prar(51, DataBR_fields, ff);
 
    if( _comment )
-   {  ff << "# GEMIPM2K v. 2.3.1" << endl;
-      ff << "# Prototype 13.08.2009" << endl;
+   {  ff << "# GEMIPM2K v. 3.0.0" << endl;
+      ff << "# Prototype 28.08.2009" << endl;
       ff << "# Comments can be marked with # $ ;" << endl << endl;
       ff << "# Template for the dbr-dat text input file for DATABR (node) data" << endl;
       ff << "# (should be read only after the DATACH and the IPM-DAT files)" << endl << endl;
@@ -604,8 +605,8 @@ void TNode::datach_to_text_file( fstream& ff, bool with_comments, bool brief_mod
 	  prar.setNoAlws( 2 /*"xph"*/);
 
   if( _comment )
-  {  ff << "# GEMIPM2K v. 2.3.1" << endl;
-     ff << "# Prototype 13.08.2009" << endl;
+  {  ff << "# GEMIPM2K v. 3.0.0" << endl;
+     ff << "# Prototype 28.08.2009" << endl;
      ff << "# Comments are marked with # $ ;" << endl;
      ff << "\n# Template for the dch-dat text input file for DATACH data " << endl;
      ff << "# (should be read first, before the IPM-DAT file and DATABR files)" << endl;
@@ -744,12 +745,12 @@ void TNode::datach_to_text_file( fstream& ff, bool with_comments, bool brief_mod
     ff << "\n## (9) Thermodynamic data section";
   if(!brief_mode || prar.getAlws("Ttol" ))
   { if( _comment )
-     ff << "\n# Ttol: Tolerance for the temperature interpolation (C, K)" << endl;
+     ff << "\n# Ttol: Tolerance for the temperature interpolation (K)" << endl;
     ff << left << setw(7) << "<Ttol> " <<  CSD->Ttol;
   }
   if(!brief_mode || prar.getAlws("TKval" ))
   { if( _comment )
-      ff << "\n# Tval: Temperature values for the interpolation grid (C) for the lookup arrays of thermodynamic data [nTp]";
+      ff << "\n# Tval: Temperature values for the interpolation grid (K) for the lookup arrays of thermodynamic data [nTp]";
     prar.writeArray(  "TKval", CSD->TKval, CSD->nTp );
   }
   ff << endl;
