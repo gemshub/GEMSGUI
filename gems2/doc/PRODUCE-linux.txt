@@ -71,11 +71,11 @@ open another terminal and type su <root password>
 #  you may also be prompted to enter the root password. 
 
 This process takes some time. When finished, 
-the distribution package gems-2.3.0-rc8.i586.rpm
+the distribution package gems-2.3.1-rc9.i586.rpm
 can be copied from /usr/src/packages/RPMS/i586/. 
 
 Alternatively (on 64bit Linux), 
-the distribution package gems-2.3.0-rc8.x86-64.rpm
+the distribution package gems-2.3.1-rc9.x86-64.rpm
 can be copied from /usr/src/packages/RPMS/x86-64/. 
 
 6. For installation steps, see INSTALL-linux.txt
