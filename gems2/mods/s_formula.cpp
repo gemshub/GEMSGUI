@@ -657,7 +657,7 @@ void TFormula::fixup_ics( char* ICs )
     ICs[MAXICNAME+MAXSYMB] = '*';  // This key field is actually not checked!
 }
 
-// calculate charge, molar mass and elemental entropy from chemical formulae
+// Calculate charge, molar mass and elemental entropy from chemical formulae
 // Modified by adding extraction of atomic numbers lAn on 28.03.2008  DK TW
 // returns number of elements (ICs) used in the formula
 int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
@@ -693,8 +693,10 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
 
 const char* tc_ecname    ="Zz";
 
-// get string of stoichiometric matrix from unpack formulae,
-// ICsym - list of IC names, ICval standart valence
+// Get a row of stoichiometry matrix (Sml) from the unpacked formula,
+// ICsym - list of IC names, ICval is the vector of IC default valences
+// if ICval is NULL, valences and formula charge balance are not checked
+//
 void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
 {
     uint i, ii;
@@ -720,13 +722,13 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
         if( jj==-1 )
             Error( icsp, "E33FPrun: This is not a symbol of IComp!");
         Sml[jj] += aSC[i];
-        if( aVal[i] == SHORT_EMPTY/*I_EMPTY*/ )
+        if( aVal[i] == SHORT_EMPTY && ICval )
             aVal[i] = ICval[jj];
     }
     ii = aCn.GetCount();
-    if( ii < 1 )
+    if( ii < 1 || !ICval )
         return;
-    aZ = 0;    // calc charge balans
+    aZ = 0;    // calculate charge balance
     if( !memcmp( aCn[ii-1].c_str(), tc_ecname, 2 ))
         ii--;
     for( i=0; i<ii; i++ )
@@ -744,11 +746,11 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
             sprintf( buf, "%lg != %lg", aZ, tt );
             str += buf.p;
  aSC[ii] = aZ;  // KD 03.01.04  - temporary workaround (adsorption)
-            vfMessage( 0,  "W34FPrun: Charge disbalance ", str.c_str() );
+            vfMessage( 0,  "W34FPrun: Charge imbalance ", str.c_str() );
          }
 }
 
-// Get formule number nCK from list Cfor (L - number formules in list)
+// Get a formula with index nCk from the formula list Cfor (L is total number of formulae in the list)
 gstring TFormula::form_extr( int nCk, int L, char *Cfor )
 {
     int i, len;
@@ -775,7 +777,7 @@ gstring TFormula::form_extr( int nCk, int L, char *Cfor )
     return rez;
 }
 
-// test all IComps in DB, for set before formula
+// test all IComps in DB, before unpacking the formula
 void TFormula::TestIC( const char* key, int N, char *ICsym )
 {
     uint i;

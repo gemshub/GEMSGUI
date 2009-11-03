@@ -48,7 +48,7 @@ void TMulti::setSizes()
     STat->stp->PCI = pm.PCI;
     STat->stp->ParE = pm.FitVar[3]; // smoothing factor
 
-    // calculatging number of DC to be packed
+    // calculating number of DC to be packed
     for( Lp=0,j=0; j<pm.L; j++ )
         if( pm.X[j] > pm.lowPosNum )
             Lp++;

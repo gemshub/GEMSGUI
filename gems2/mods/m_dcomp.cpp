@@ -823,39 +823,44 @@ TDComp::DCthermo( int q, int p )
         }
         break;
 
-	case CTPM_HKF:
-        {
+        case CTPM_HKF:   //  'H'  HKF (HGK) EoS
+        {       // Calculations based on SUPCRT92
             switch( CE )
             {
-            case CTM_WAT:
+              case CTM_WAT:             //  'W'     H2O
                 if( CV == CPM_GAS )
-                    idx = 0; /* H2O_gas */
+                    idx = 0;            //  'G'     H2O_gas (vapor, steam)
                 else
-                    idx = 1; /* H2O_liquid */
+                    idx = 1;            //  'F'     H2O_liquid
                 switch( aSpc.isat )
-                {
-                case 0: /* 1-phase region */
+                {      // shall we have an option for metastable systems (water at P<Psat or vapor at P>Psat)?
+                  case 0: // 1-phase region
                     if(idx != 0)
-                    {
-                        idx = 0; /* get water-liquid */
-                        calc_tpH2O( idx );
-                    }
-                    else //Calc water-gas on from Cp=f(T)
-                        //(on isat = 0)
-                        calc_tpcv( q, p, CE, CV );
-                    break;
-                case 1: /* KHP 2-phase region */
+//                    {
+                        idx = 0;   // H2O -liquid
                     calc_tpH2O( idx );
+//                    }                             Fixed on 02.Nov.2009 by DK after discussion with TW
+//                    else //Calc water-gas on from Cp=f(T)
+                        //(on isat = 0)
+//                        calc_tpcv( q, p, CE, CV );
                     break;
-
-                default:
+                  case 1: // P_sat  2-phase region
+                        calc_tpH2O( idx );
+                    break;
+                  default:
                     Error( GetName(),
                            "E13DCrun: Invalid method code!");
                 }
+                if( CV == CPM_GAS )
+                {   double fd = aW.twp->RT * log(aW.twp->P);
+                    // Provisional - HGK seems to return a value corrected with ln(P)!
+                    aW.twp->G -= fd;
+                    aW.twp->S += fd/aW.twp->T;   // even more provisional for entropy!
+                }
                 break;
-            default:
-                calc_tphkf( q, p );
-                break; /* calc aqueous species */
+              default:    // 'K' or any other code
+                calc_tphkf( q, p );  // HKF calculations for aqueous species
+                break;
             }
         }
         break;

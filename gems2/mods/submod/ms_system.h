@@ -249,7 +249,7 @@ public:
                    TCIntArray DCon, TCIntArray DCoff);
     bool BccCalculated();
 
-    //Multi calck
+    //Molar mass calculations
     double MolWeight( int N, float *ICaw, double *Smline );
     double MolWeight( int N, double *ICaw, double *Smline );
 

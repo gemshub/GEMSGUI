@@ -822,13 +822,15 @@ IC_FOUND:
             else Formula = bcp->CFOR;
             if( Formula[0] == '`' )
                 continue;
-            /*Xincr = 0.;*/
-            DCmw = 0.;
-            memset( A, 0, sizeof(double)*bcp->Nmax );
-            /* Get DC formula and test it */
-            aFo.SetFormula( Formula );   // set formula to analyse
+            // Xincr = 0.; //    DCmw = 0.;   // memset( A, 0, sizeof(double)*bcp->Nmax );
+            // Get formula and analyze it
+            aFo.SetFormula( Formula );
+            aFo.Stm_line( bcp->Nmax, A, (char *)bcp->SB1, NULL );
+            aFo.Reset();
+            DCmw = MolWeight( bcp->Nmax, bcp->ICw, A );
+ /*
             for(int ii=0; ii<aFo.GetIn(); ii++ )
-            { /* terms */
+            { // terms
                 ICs[IC_RKLEN-1]=0;
                 fillValue( ICs.p, ' ', IC_RKLEN-1 );
                 memcpy( ICs, aFo.GetCn( ii ), MAXICNAME+MAXSYMB );
@@ -839,8 +841,8 @@ IC_FOUND:
                         A[i] += aFo.GetSC(ii);
                         DCmw += A[i]* bcp->ICw[i];
                     }
-            } /* ii */
-
+            } // ii
+*/
             if( j<Ld )
                 Xincr = Reduce_Conc( bcp->CDcl[j], (double)bcp->CD[j], DCmw, 1.0, bcp->R1,
                        bcp->Msys, bcp->Mwat, bcp->Vaq, bcp->Maq, bcp->Vsys );
@@ -1041,7 +1043,19 @@ void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
     db->OpenOnlyFromList(names1);
 }
 
+//Calculate molar mass from the stoichiometry line and atomic masses
+double
+TCompos::MolWeight( int N, double *ICaw, double *Smline )
+{
+    int i;
+    double MW = 0.0;
 
+    for( i=0; i<N; i++ )
+        if( ICaw[i] && Smline[i] )
+            MW += (ICaw[i]) * (Smline[i]);
+
+    return( MW );
+}
 
 
 // ----------------------- End of m_compos.cpp ---------------------

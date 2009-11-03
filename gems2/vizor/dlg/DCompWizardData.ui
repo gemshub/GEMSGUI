@@ -22,28 +22,6 @@
         <attribute name="title">
             <string>Step 1 - Defining the dependent component type and the calculation method codes</string>
         </attribute>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel1_4</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>130</y>
-                    <width>590</width>
-                    <height>70</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>By setting the codes below, you will configure the DComp record data objects and tell the program how the temperature and pressure corrections for the molar properties of this dependent component should be calculated.</string>
-            </property>
-            <property name="scaledContents">
-                <bool>false</bool>
-            </property>
-            <property name="alignment">
-                <set>WordBreak|AlignVCenter</set>
-            </property>
-        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>MixingModelGroup</cstring>
@@ -192,6 +170,11 @@
                     <item>
                         <property name="text">
                             <string>F   Pressure correction using HKF EoS for aqueous electrolytes or HGK EoS for water</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>G   Pressure/temperature corrections for H2O vapour from HGK EoS</string>
                         </property>
                     </item>
                     <item>
@@ -403,6 +386,28 @@
                     </property>
                 </widget>
             </vbox>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>130</y>
+                    <width>590</width>
+                    <height>70</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>By setting the codes below, you will configure the DComp record data objects and tell the program how the temperature and pressure corrections for the molar properties of this dependent component should be calculated.</string>
+            </property>
+            <property name="scaledContents">
+                <bool>false</bool>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignVCenter</set>
+            </property>
         </widget>
     </widget>
     <widget class="QWidget">

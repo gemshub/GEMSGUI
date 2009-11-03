@@ -195,7 +195,7 @@ void TSyst::mark_ic_to_dc()
                     sy.Dcl[j] = S_OFF;
                     break;
                 }
-            /* ���� �� ���������� D�, ���� ����� ������� IC? */
+            /* IC? */
         } /* ii */
         aFo.Reset();
         if( sy.Dcl[j] != S_OFF )
@@ -496,7 +496,7 @@ void TSyst::systbc_calc( int mode )
         } // cycle i *
         sy.PbIC = S_ON;
     }
-    /* calc composition from DCOMP/REACDC */
+    // add compositions from DCOMP/REACDC formulae amounts/concentrations
     if( sy.PbDC != S_OFF )
     {
         sy.Lb = 0;
@@ -505,13 +505,15 @@ void TSyst::systbc_calc( int mode )
         {
             if( sy.Dcl[j] == S_OFF || !sy.XeD[j] || IsDoubleEmpty( sy.XeD[j] ))
                 continue;
-            //Xincr = 0.;
-            DCmw = 0.;
-            sy.Lb++;
-            memset( A, 0, sizeof(double)*mup->N );
-            // analyse DC formule
+            //Xincr = 0.;  // DCmw = 0.;  // memset( A, 0, sizeof(double)*mup->N );
+            sy.Lb++;            
+            // analyse DC formula
             form = aFo.form_extr( j, mup->L, mup->DCF );
             aFo.SetFormula( form.c_str() );   // set formula to analyse
+            aFo.Stm_line( mup->N, A, (char *)mup->SB, mup->Val );
+            aFo.Reset();
+            DCmw = MolWeight( mup->N, mup->BC, A );
+/*   Commented out by DK because of a bug in molar mass calculation for FeS|0|S|-2| (Nov.2009)
             for(int ii=0; ii<aFo.GetIn(); ii++ )
             { // cycle on formula terms
                 ICs[IC_RKLEN-1]=0;
@@ -528,10 +530,10 @@ void TSyst::systbc_calc( int mode )
                         break;
                     }
             } // ii
-            aFo.Reset();
+            aFo.Reset();  */
             Xincr = aCMP->Reduce_Conc( sy.XDun[j], sy.XeD[j], DCmw, 1.0, sy.R1,
                                        sy.Msys, sy.Mwat, sy.Vaq, sy.Maq, sy.Vsys );
-            // recalc stehiometric
+            // recalculate using stoichiometry line
             for( i=0; i<mup->N; i++ )
                 if( A[i] )
                 {
@@ -539,8 +541,6 @@ void TSyst::systbc_calc( int mode )
                     R1C += Xincr*(A[i]);
                 }
             MsysC += Xincr*DCmw;
-NEXT_DC:
-            ;
         } //  j
         delete[] A;
         A=0;
@@ -663,7 +663,7 @@ NEXT_DC:
          "Warning: there are COMPOS definitions used incompletely\n"
          "for calculation of 'b' vector (marked with '*')", vfErr);
     */
-    /* test calculated of composition */
+    // test calculated composition
     if( !memcmp( mup->SB[mup->N-1], "Zz", 2 ))
     {
         N = mup->N - 1;
@@ -831,8 +831,7 @@ void TSyst::stbal( int N, int L, double *Smatr, double *DCstc,
     }
 }
 
-//Calc mol mass ofDC by gstring of stehiometric matr and vector
-// atom mass
+//Calculate molar mass of DC from the stoichiometry line and vector of IC atomic masses
 double TSyst::MolWeight( int N, float *ICaw, double *Smline )
 {
     int i;
@@ -845,8 +844,7 @@ double TSyst::MolWeight( int N, float *ICaw, double *Smline )
     return( MW );
 }
 
-//Calc mol mass ofDC by gstring of stehiometric matr and vector
-// atom mass
+//Calculate molar mass of DC from the stoichiometry line and vector of IC atomic masses
 double TSyst::MolWeight( int N, double *ICaw, double *Smline )
 {
     int i;

@@ -13,7 +13,7 @@ WindowIcon on
 
 ; The file to write
 ; OutFile "gems-w32-install.exe"
-OutFile "gems231rc9-1430-w32-install.exe"
+OutFile "gems231rc9-1453-w32-install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\GEMS2
@@ -98,7 +98,7 @@ SectionEnd
 Section "Start Menu Shortcuts"
   CreateDirectory "$SMPROGRAMS\GEM-Selektor v2-PSI"
   CreateShortCut "$SMPROGRAMS\GEM-Selektor v2-PSI\Uninstall GEMS2.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
-  CreateShortCut "$SMPROGRAMS\GEM-Selektor v2-PSI\Run GEMS2.lnk" "$INSTDIR\program\gems2.exe" '-s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\gems2.ico" 0
+  CreateShortCut "$SMPROGRAMS\GEM-Selektor v2-PSI\Run GEMS2.lnk" "$INSTDIR\program\gems2.exe" '-c -s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\gems2.ico" 0
   CreateShortCut "$SMPROGRAMS\GEM-Selektor v2-PSI\Run GEMS2 with new projects.lnk" "$INSTDIR\program\gems2.exe" '-d -s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\gems2.ico" 0
   CreateShortCut "$DESKTOP\Run GEMS2.lnk" "$INSTDIR\program\gems2.exe" '-c -s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\gems2.ico" 0
 SectionEnd
