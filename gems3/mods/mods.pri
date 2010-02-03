@@ -9,7 +9,7 @@
 		    $$MODS_H/m_gem2mt.h \
 		    $$MODS_H/m_gtdemo.h \
                     $$MODS_H/m_icomp.h  \
-                    $$MODS_H/m_param.h  \
+#                    $$MODS_H/m_param.h  \
                     $$MODS_H/m_phase.h  \
                     $$MODS_H/m_proces.h  \
                     $$MODS_H/m_reacdc.h  \
@@ -17,7 +17,7 @@
                     $$MODS_H/m_sdata.h  \
                     $$MODS_H/m_syseq.h  \
                     $$MODS_H/m_unspace.h  \
-                    $$MODS_H/s_fgl.h  \
+ #                   $$MODS_H/s_fgl.h  \
                     $$MODS_H/s_formula.h  \
                     $$MODS_H/s_lsm.h  \
                     $$MODS_H/s_supcrt.h  \
@@ -41,11 +41,11 @@
                      $$MODS_CPP/s_supcrt.cpp \
                      $$MODS_CPP/s_supcrt2.cpp \
                      $$MODS_CPP/m_compos.cpp \
-                     $$MODS_CPP/s_fgl.cpp \
-                     $$MODS_CPP/s_fgl1.cpp \
-                     $$MODS_CPP/s_fgl2.cpp \
-                     $$MODS_CPP/s_fgl3.cpp \
-                     $$MODS_CPP/s_fgl4.cpp \
+ #                    $$MODS_CPP/s_fgl.cpp \
+ #                    $$MODS_CPP/s_fgl1.cpp \
+ #                    $$MODS_CPP/s_fgl2.cpp \
+ #                    $$MODS_CPP/s_fgl3.cpp \
+ #                    $$MODS_CPP/s_fgl4.cpp \
                      $$MODS_CPP/s_lsm_fun.cpp \
                      $$MODS_CPP/s_lsm_lm.cpp  \
                      $$MODS_CPP/s_lsm_svd.cpp \

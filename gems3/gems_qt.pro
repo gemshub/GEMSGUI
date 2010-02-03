@@ -40,6 +40,7 @@ DLG4_CPP        =  ./vizor4/dlg4
 MODS_CPP       =  ./mods
 SUBMOD_CPP     =  ./mods/submod
 NUMERICS_CPP     =  ./mods/numerics
+GEMIPM2K_CPP     =  ../standalone/GEMIPM2K
 
 VIZOR4_H      =  $$VIZOR4_CPP
 KERNEL_H     =  $$KERNEL_CPP
@@ -48,12 +49,14 @@ DLG4_H        =  $$DLG4_CPP
 MODS_H       =  $$MODS_CPP
 SUBMOD_H     =  $$SUBMOD_CPP
 NUMERICS_H     =  $$NUMERICS_CPP
+GEMIPM2K_H     =  $$GEMIPM2K_CPP
+
 
 
 DEPENDPATH   += ;$$VIZOR4_H;$$KERNEL_H;$$LIBS_H;$$DLG4_H;$$MODS_H;$$SUBMOD_H
-DEPENDPATH   += ;$$NUMERICS_H
+DEPENDPATH   += ;$$NUMERICS_H;$$GEMIPM2K_H
 INCLUDEPATH   += ;$$VIZOR4_H;$$KERNEL_H;$$LIBS_H;$$DLG4_H;$$MODS_H;$$SUBMOD_H
-INCLUDEPATH   += ;$$NUMERICS_H
+INCLUDEPATH   += ;$$NUMERICS_H;$$GEMIPM2K_H
 
 MOC_DIR = tmp
 UI_DIR  = $$MOC_DIR
@@ -68,3 +71,4 @@ include($$SUBMOD_CPP/submod.pri)
 include($$MODS_CPP/mods.pri)
 include($$KERNEL_CPP/kernel.pri)
 include($$VIZOR4_CPP/vizor4.pri)
+include($$GEMIPM2K_CPP/standalone.pri)

@@ -1,6 +1,6 @@
 
-         HEADERS += $$KERNEL_H/v_user.h \
-                    $$KERNEL_H/v_vals.h \
+         HEADERS += $$KERNEL_H/v_vals.h \
+#                    $$KERNEL_H/v_user.h \
                     $$KERNEL_H/v_vals_impl.h \
                     $$KERNEL_H/v_object.h \
                     $$KERNEL_H/v_file.h  \
