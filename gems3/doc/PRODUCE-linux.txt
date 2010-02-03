@@ -1,0 +1,84 @@
+HOW TO PRODUCE UPGRADED INSTALLATION PACKAGE OF GEMS_PSI FOR LINUX
+
+1. Open a Linux terminal 
+
+Check $QTDIR (if Qt is istalled):
+
+  echo $QTDIR
+
+QTDIR should point to ~/QtComm or another directory within
+your user's home directory where you have compiled the Qt3
+Commercial version for Linux. This directory should contain
+a static Qt library with multithread extensions. To create 
+a static lib (assuming the usual build of shared Qt libraries
+was successful):
+
+  cd $QTDIR/src
+  make staticlib 
+
+2. To update the GEMS source code tree:
+
+  cd work/gems2
+  svn update <password> 
+
+3. Build the GEMS executable file: 
+
+  qmake gems_qt.pro
+  make
+
+This will create an executable of the debugging version of 
+GEMS-PSI (*gems2) in .~/work/gems2 subdirectory
+
+4. Check that the actual distribution directories 
+are located in work/gems2/shared/
+It should look like this:
+  ./shared/
+           DB.default/
+	   img/
+	   doc/
+	   data/
+           projects/
+      ...
+
+#  make copy_data 
+    make -f Makefile.lin copy_data 
+
+This will refresh the configuration files.
+
+It makes sense to re-read configuration files before 
+producing the rpm package. This needs a graphic desktop
+(KDE) running.
+
+To run debugging version of GEMS, type in the terminal:
+  
+ cd work/gems2
+ ./rungems.sh -d $@ [-s ./shared -u ./shared]
+
+After GEMS-PSI has started, close it. The configuration
+files are now re-created.  
+
+5. To produce a distribution rpm of GEMS-PSI release:
+
+create makefile for release version:
+
+qmake gems_release.pro
+
+open another terminal and type su <root password>
+
+#   make rpm
+    make -f Makefile.lin rpm
+
+#  you may also be prompted to enter the root password. 
+
+This process takes some time. When finished, 
+the distribution package gems-2.3.0-rc8.i586.rpm
+can be copied from /usr/src/packages/RPMS/i586/. 
+
+Alternatively (on 64bit Linux), 
+the distribution package gems-2.3.0-rc8.x86-64.rpm
+can be copied from /usr/src/packages/RPMS/x86-64/. 
+
+6. For installation steps, see INSTALL-linux.txt
+
+
+

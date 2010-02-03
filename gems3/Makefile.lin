@@ -1,0 +1,84 @@
+# GNU standard requirements
+# SHELL=/bin/sh
+# compile variables
+
+NAME		= gems
+VERSION		= 3.0.0
+BUILD		= 1511
+MACAPP		= gems3.app/Contents/Resources/
+
+ifeq ("x$(QTDIR)","x")
+QTDIR		= /usr/lib/qt3
+# QTDIR		= /usr/local/qt
+endif
+
+subdirs		= mods vizor
+backupfiles	= doc data vizor mods  Makefile* *.spec
+rpmfiles	= lib doc vizor mods shared img projects  *.spec *.pro
+
+ifeq ("$(shell uname)", "Darwin")
+SHARED_SRC_DIR = /gems3.app/Contents/Resources
+else
+SHARED_SRC_DIR = shared
+endif	
+
+
+ifeq ("$(shell ls /usr/src/packages -d)", "/usr/src/packages")
+RPMDIR=/usr/src/packages
+else
+RPMDIR=/usr/src/RPM
+endif
+
+EXCLUDE_LIST=--exclude *Data.* --exclude .* --exclude @* --exclude *.o --exclude *.bak --exclude *~ --exclude *.out \
+--exclude *.rpo  --exclude tmp.moc.cpp --exclude CVS
+
+backup: 
+	 tar cv $(EXCLUDE_LIST) \
+	    $(backupfiles) | bzip2 > gems-`date +%Y%m%d`.tar.bz2
+
+backupd: 
+	 tar cv ~/GEMS3test | bzip2 > gems_data-`date +%Y%m%d`.tar.bz2
+
+# builds binary package (rpm -bb)
+rpm:	check_shared
+	mkdir -p /tmp/$(NAME)-$(VERSION)
+	tar c --exclude-from doc/tar_backup.exclude $(rpmfiles) | tar -xC /tmp/$(NAME)-$(VERSION)
+#	cp -fr /usr/share/gems3 /tmp/$(NAME)-$(VERSION)/shared
+	tar Ccv /tmp --remove-files $(NAME)-$(VERSION) | bzip2 > /tmp/$(NAME)-$(VERSION).tar.bz2
+	cp gems2.spec   /tmp
+#	rm -fr ./program
+#	rm -fr /tmp/gems-3.0
+	su -c "	mv /tmp/$(NAME)-$(VERSION).tar.bz2 $(RPMDIR)/SOURCES; \
+		mv /tmp/gems3.spec $(RPMDIR)/SPECS; \
+		cd $(RPMDIR)/SPECS; \
+		rpmbuild -bb  gems3.spec"
+#		rpmbuild -bb --target i386 gems3.spec"
+	
+ifeq ("$(shell uname)", "Darwin")
+
+copy_data:
+		cp -R ./data ./gems3.app/Contents/Resources/
+else
+
+copy_data:	
+		cp -R ./data ./shared/ 
+endif	
+
+zip:
+# check_shared
+	-mv ~/Desktop/$(NAME)-$(VERSION)-$(BUILD)-macosx86.zip ~/Desktop/$(NAME)-$(VERSION)-$(BUILD)-macosx86.zip.bak
+	zip -r ~/Desktop/$(NAME)-$(VERSION)-$(BUILD)-macosx86.zip gems3.app/Contents/MacOS gems3.app/Contents/Resources gems3.app/Contents/Info.plist gems3.app/Contents/PkgInfo -x *.svn/\*
+
+
+check_shared:
+	if [ -d $(SHARED_SRC_DIR)/DB.default ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/projects/TryNPTDB ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/data ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/visor.data ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/doc/html ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/doc/pdf ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/doc/txt ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/img ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/data ]; then /bin/true; else /bin/false; fi
+	if [ -f $(SHARED_SRC_DIR)/img/gems32.xpm ]; then /bin/true; else /bin/false; fi
+	if [ -f doc/gems2.desktop ]; then /bin/true; else /bin/false; fi

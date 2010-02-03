@@ -1,0 +1,86 @@
+HOW TO PRODUCE UPGRADED INSTALLATION PACKAGE OF GEMS_PSI FOR MAC
+
+Needs Tres Thoenen's G4 Mac running 
+
+1. Open a SSH terminal: 
+
+  ssh guest@129.129.204.98:0   (password: a )
+
+Check QTDIR (if Qt is istalled):
+
+  echo $QTDIR
+
+  cd work/gems2
+
+
+2. Make update of GEMS source code tree use SVN client,
+   for example SmartSvn 
+
+
+3. Build the release executable file: 
+
+  cp Makefile.mac Makefile
+  make RELEASE=YES
+
+This will create a release version of GEMS-PSI 
+in ~/work/gems2/gems2.app/Contents/MacOS
+
+4. Check that actual distribution directories stored 
+in ~/work/gems2/shared/ are copied into
+~/work/gems2/gems2.app/Contents/Resources.
+It should look like this:
+  ./gems2.app/
+              Contents/
+	               Resources/
+		                 DB.default/
+		                 img/
+		                 doc/
+		                 data/
+                         projects/
+                ...
+
+If necessary, use "cp -R" command to copy the five
+directories listed above from ./shared/.
+
+
+Execute 
+
+  make -f Makefile.lin copy_data
+
+This will refresh configuration files.
+It makes sense to re-read configuration files before 
+producing the zip package. This needs a graphic desktop, 
+either native or virtual.
+
+5. To run GEMS in terminal: 
+
+  cd ~/work/gems2/gems2.app 
+  exec ~/work/gems2/gems2.app -d 
+
+ or 
+ 
+ use eclipse "Run" command with argument -d
+ 
+ and then exit GEMS.
+
+6. In terminal, get in ~/work/gems2/ and execute 
+
+   make -f Makefile.lin zip
+
+This will create the archive 'gems2-mac-{current_date}.zip' 
+on the current MacOS user's Desktop (if there is an existing 
+zip file, it will be renamed to 
+   ~/Desktop/gems2-mac-{current_date}.zip.bak).
+
+gems2-mac-{current_date}.zip file can be distributed by 
+copying it from the desktop to your (remote) location, 
+e.g. for Linux as follows:
+
+  scp guest@129.129.204.98:/Users/guest/Desktop/gems2-mac*.zip .  
+
+and type the "guest" user's password on the prompt. 
+
+6. For installation steps, see INSTALL-mac.txt
+
+
+

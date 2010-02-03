@@ -1,0 +1,52 @@
+REQUIREMENTS for GEMS v0.91:
+
+UNIX:
+    
+1)	egcs-1.0.3 or later (if you going to compile it)
+
+2)	glibc-2.0.7 for Linux or higher (actually, any libc.* for other Unixes)
+2)	qt-2.0 or later (can work with Qt-1.4x but this support will be removed
+	 soon!!)
+3)	libstdc++-2.8.0 (if compiled with egcs-1.0.3)
+        libstdc++-2.9.0 (if compiled with egcs-1.1 or later)
+	
+4)	andy HTML-browser for reading docs if compiled against Qt-1.4x 
+	(will be obsolete soon!!)
+        
+
+WIN32:
+
+1)	MSVC 5.0/6.0 (still does not work)
+2)	Borland C++ Builder 3.0 or higher (tested mostly with BCB 4 
+	+ patch 1 and 2)
+3)	one should use new makefiles (they are different for MSVC and BCB and 
+	GNU make)
+4)	convert *.ini,*.txt (and recommended *.cpp, *.h) files with 
+	'unix2dos' command. THIS IS IMPORTANT! Otherwise GEMS can crash.
+
+
+COMPILING:
+
+1)	for Qt-1.4x
+    Makefile.common should include -DQTv1 in CCFLAGS
+    and 3 paths - to libqt, includes/qt and moc
+    
+2)	for Qt-2.x
+    Makefile.common should include -DQTv2 in CCLAGS
+    and 3 paths - to libqt, includes/qt and moc
+    
+RUNNING:
+
+1)	flag '-f' - some Sveta's stuff :-)
+2)	flag '-d' - reload visor arrays info from
+	'./data/*.ini' and save it in '<sysDir>/visor.data/*.dat' files
+	 (only if compiled not in RELEASE mode) 
+3)	flag '-c' - load default DB configuration - default DB files
+4)	flag '-s <sysDir>' set GEMS system dir to <sysDir>
+5)	flag '-u <userDir>' set GEMS user dir to <userDir>
+
+
+NOTE:	QT-2.0.x has some glitches, we would recommend Qt-2.1 (or 2.2)
+	 when its available
+
+2000 (c) Andy Rysin <arysin@yahoo.com>

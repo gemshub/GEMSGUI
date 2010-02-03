@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ColorDialogData</class>
+ <widget class="QDialog" name="ColorDialogData">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>434</width>
+    <height>173</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <weight>75</weight>
+    <bold>true</bold>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>ColorDialogData</string>
+  </property>
+  <layout class="QHBoxLayout">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="title">
+      <string>GroupBox</string>
+     </property>
+     <layout class="QVBoxLayout">
+      <item>
+       <layout class="QHBoxLayout">
+        <property name="spacing">
+         <number>15</number>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="TextLabel1">
+          <property name="text">
+           <string>&amp;Line Size</string>
+          </property>
+          <property name="wordWrap">
+           <bool>false</bool>
+          </property>
+          <property name="buddy">
+           <cstring>pLine</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="pLine">
+          <property name="minimum">
+           <number>-20</number>
+          </property>
+          <property name="maximum">
+           <number>20</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="TextLabel2">
+          <property name="text">
+           <string>&amp;Symbol Size</string>
+          </property>
+          <property name="wordWrap">
+           <bool>false</bool>
+          </property>
+          <property name="buddy">
+           <cstring>pSize</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="pSize"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QGridLayout">
+        <item row="1" column="4">
+         <widget class="QRadioButton" name="p9">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../../img.qrc">
+            <normaloff>:/graphics/img/p_fillcircle.png</normaloff>:/graphics/img/p_fillcircle.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QRadioButton" name="p0">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../../img.qrc">
+            <normaloff>:/graphics/img/p_point.png</normaloff>:/graphics/img/p_point.png</iconset>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QRadioButton" name="p3">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../../img.qrc">
+            <normaloff>:/graphics/img/p_fillsquare.png</normaloff>:/graphics/img/p_fillsquare.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QRadioButton" name="p5">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../../img.qrc">
+            <normaloff>:/graphics/img/p_wye.png</normaloff>:/graphics/img/p_wye.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QRadioButton" name="p8">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../../img.qrc">
+            <normaloff>:/graphics/img/p_fillrombbus.png</normaloff>:/graphics/img/p_fillrombbus.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QRadioButton" name="p6">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../../img.qrc">
+            <normaloff>:/graphics/img/p_star.png</normaloff>:/graphics/img/p_star.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QRadioButton" name="p4">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../../img.qrc">
+            <normaloff>:/graphics/img/p_rombbus.png</normaloff>:/graphics/img/p_rombbus.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QRadioButton" name="p2">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../../img.qrc">
+            <normaloff>:/graphics/img/p_square.png</normaloff>:/graphics/img/p_square.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QRadioButton" name="p1">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../../img.qrc">
+            <normaloff>:/graphics/img/p_crossdiag.png</normaloff>:/graphics/img/p_crossdiag.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QRadioButton" name="p7">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../../img.qrc">
+            <normaloff>:/graphics/img/p_circle.png</normaloff>:/graphics/img/p_circle.png</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout">
+        <item>
+         <widget class="QFrame" name="pColor">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="PushButton12">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>C&amp;hange Color...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout">
+     <item>
+      <widget class="QPushButton" name="PushButton10">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>&amp;Ok</string>
+       </property>
+       <property name="shortcut">
+        <string>Alt+O</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="PushButton11">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>&amp;Cancel</string>
+       </property>
+       <property name="shortcut">
+        <string>Alt+C</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>71</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>pLine</tabstop>
+  <tabstop>pSize</tabstop>
+  <tabstop>p0</tabstop>
+  <tabstop>p1</tabstop>
+  <tabstop>p5</tabstop>
+  <tabstop>p2</tabstop>
+  <tabstop>p3</tabstop>
+  <tabstop>p4</tabstop>
+  <tabstop>p8</tabstop>
+  <tabstop>p6</tabstop>
+  <tabstop>p7</tabstop>
+  <tabstop>p9</tabstop>
+  <tabstop>PushButton12</tabstop>
+  <tabstop>PushButton10</tabstop>
+  <tabstop>PushButton11</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../img.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>PushButton10</sender>
+   <signal>clicked()</signal>
+   <receiver>ColorDialogData</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>PushButton11</sender>
+   <signal>clicked()</signal>
+   <receiver>ColorDialogData</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

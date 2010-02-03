@@ -1,0 +1,52 @@
+*How to execute make operations for GEMS*
+
+
+The make script is located in /home/sveta/test/gems directory.
+
+From this directory, different modes can be invoked by 
+typing  make <target>
+
+The parameter <target> may be one of the following:
+
+  all      create executable file
+
+  clean    remove *.bac, *.o, *.exe ....  files
+
+  dep      refresh dependancies of *.cpp from *.h . One have to do this 
+           after changing #include directives
+
+  rpm      create rpm file
+	To prepare:
+	   copy data dirs (GEMS and GEMS.sys) into /usr/src/redhat/i386/BUILD
+	   copy gems source files into /usr/src/redhat/i386/BUILD
+	Type 
+	   'make rpm' (it will compile *optimized* version of gems 
+	               and create rpm)
+	   'rpm -U gems-0.99-4.rpm'
+	   'rpm -e gems'
+	RPM file is in /usr/src/redhat/RPMS/i386 
+	  
+	Note: optimized version of GEMS hasn't been tested thoroghly yet
+
+  backup   creates a gems-YYYYmmdd.tar.bz2 of current directory
+
+  backupd  creates a gems_data-YYYYmmdd.tar.bz2 of test database
+
+  backup_win32	creates gems_code-YYYYmmdd.tar.bz2 containing only source code
+	(usually used for transferring files to Win32 environment) 
+
+  install	not implemented yet, and probably will never be :-(
+  
+
+'make RELEASE=YES' will make optimized release version of
+                  GEMS without debugging and *.ini read feature;
+		  don't forget to run make clean before doing it
+		  
+'make PROFILE=YES' will make GEMS with profile information 
+		  don't forget to run make clean before doing it
+
+    Note: I would only profile with optimized (at least -O) code,
+	otherwise inline functions not inlined and you get not final picture
+
+1999-2000 (c) Andy Rysin <arysin@yahoo.com>
+

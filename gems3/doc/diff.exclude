@@ -1,0 +1,16 @@
+out
+*.bak
+*.o
+*.obj
+*.html
+*.out
+*.xpm
+*.bmp
+*.png
+*~
+*.moc.cpp
+*.orig
+*.rej
+Makefile
+Makefile.common
+gems

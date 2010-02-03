@@ -1,0 +1,133 @@
+Version 1.91 beta    25.01.01          PSI
+
+Chart of HTML on-line help files in /GEMS.sys/doc/html/
+
+Name              Call Point
+
+1. Generic files
+
+index.html        ------ Standard http entry point
+
+gems_toc.html     TSubModule::CmHelp() and most dialogs
+			index.html g_about.html
+
+g_about.html      MainDialog.cpp "About" and module menus
+
+gm_about.html     "more About" file - refd from g_about.html
+		      index.html gems_toc.html
+
+gemsetup.html     SettingsDialog and gems_toc.html
+			Fix/add Help button!
+
+gemstart.html     MainDialog, index.html and gems_toc.html
+
+gmscript.html     To implement; Phase, Proces, GTdemo, ...
+                  gems_toc, ge_howto etc.
+
+
+
+2. Special index for re-directing F1 requests on DOD fields
+		  to module and submodule html files
+		  (example: gm_icomp.html)
+
+g_objndx.html     help.cpp,page_w.cpp: F1 help on DOD fields
+			re-organize in alphabetical order
+
+
+3. Modules
+
+gm_sdref.html     TSData::CmHelp(); gems_toc.html gt_howto.html
+
+gm_icomp.html     TIComp::CmHelp(); gems_toc.html gt_howto.html
+
+gm_dcomp.html     TDComp::CmHelp(); gems_toc.html gt_howto.html
+
+gm_compos.html    TCompos::CmHelp(); gems_toc.html gt_howto.html
+
+gm_reacdc.html    TReacDC::CmHelp(); gems_toc.html gt_howto.html
+
+gm_rtparm.html    TRTparm::CmHelp(); gems_toc.html gt_howto.html
+
+gm_phase.html     TPhase::CmHelp(); gems_toc.html gt_howto.html
+
+gm_syseq.html     TSysEq::CmHelp(); gems_toc.html ge_howto.html
+
+gm_proces.html    TProcess::CmHelp(); gems_toc.html ge_howto.html
+
+gm_gtdemo.html    TGtDemo::CmHelp(); gems_toc.html ge_howto.html
+
+gm_profil.html    TProfile::CmHelp(); gems_toc.html gp_howto.html
+
+gm_duterm.html    TDuterm::CmHelp(); reserved for ver. 3.0
+
+gm_probe.html     TProbe::CmHelp();  reserved for ver. 3.0
+
+gm_integ.html     TInteg::CmHelp();  reserved for ver. 4.0
+
+
+4. "Help" buttons in five dialogs: (provide refs to gems_toc
+						in howto files):
+
+gp_howto.html     index.html gems_toc.html
+			KeyProfile ("Help" button)
+
+ge_howto.html     index.html gems_toc.html
+			 EqDialog ("Help" button)
+
+gt_howto.html     index.html gems_toc.html
+			 DBDialog ("Help" button)
+
+g_miscel.html     index.html gems_toc.html
+			 DBAdvDialog ("Help" button)
+
+g_formats.html    index.html gems_toc.html
+			 DBAdvDialog ("Formats" button)
+
+gdb_rkey.html      index.html gems_toc.html
+                         KeyFilter dialog ("Help" button) 
+
+5. Help for submodules (called from SystemDialog)
+
+gems_sys.html       SystemDialog.cpp(206) gems_toc.html
+
+gems_bcc.html       SystemDialog.cpp(213) gems_toc.html
+
+gems_ipm.html       SystemDialog.cpp(221) gems_toc.html
+
+gems_scm.html       Not implemented yet... gems_toc.html
+
+
+6. Theory (to make refs to it from howto and submodule files)
+
+theorgem.html       ???? Picture format for equations (PNG?)
+
+theortdb.html
+
+theorscm.html
+
+theorkin.html  (to version 2.2 up )
+
+theoruns.html  (to version 3.0 up )
+
+
+7. Literature
+
+g_litref.html    All other files
+
+
+8. Users reference (codes and other technical info)
+
+g_useref.html   All other html files, g_formats.html
+
+
+9. Tutorial examples and test problems library
+
+g_tutor.html     gemstart.html
+
+g_tests.html     gemstart.html
+
+
+
+end of file
+
+
