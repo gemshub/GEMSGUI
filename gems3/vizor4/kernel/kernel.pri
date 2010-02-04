@@ -8,7 +8,8 @@
                     $$KERNEL_H/v_dbm.h \
                     $$KERNEL_H/t_print.h \
                     $$KERNEL_H/t_read.h \
-                    $$KERNEL_H/v_module.h
+                    $$KERNEL_H/v_module.h \
+                    $$KERNEL_H/config.h
 
          SOURCES += $$KERNEL_CPP/v_user.cpp \
                     $$KERNEL_CPP/v_vals.cpp \
@@ -18,6 +19,7 @@
                     $$KERNEL_CPP/v_dbm2.cpp \
                     $$KERNEL_CPP/t_print.cpp \
                     $$KERNEL_CPP/t_read.cpp \
-                    $$KERNEL_CPP/v_module.cpp
+                    $$KERNEL_CPP/v_module.cpp\
+                    $$KERNEL_CPP/config.cpp
 
 

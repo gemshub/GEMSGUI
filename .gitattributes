@@ -1533,6 +1533,8 @@ gems3/vizor4/graph.cpp -text
 gems3/vizor4/graph.h -text
 gems3/vizor4/help.cpp -text
 gems3/vizor4/help.h -text
+gems3/vizor4/kernel/config.cpp -text
+gems3/vizor4/kernel/config.h -text
 gems3/vizor4/kernel/kernel.pri -text
 gems3/vizor4/kernel/t_print.cpp -text
 gems3/vizor4/kernel/t_print.h -text
@@ -1552,9 +1554,6 @@ gems3/vizor4/kernel/v_user.cpp -text
 gems3/vizor4/kernel/v_vals.cpp -text
 gems3/vizor4/kernel/v_vals.h -text
 gems3/vizor4/kernel/v_vals_impl.h -text
-gems3/vizor4/libs/config.cpp -text
-gems3/vizor4/libs/config.h -text
-gems3/vizor4/libs/libs.pri -text
 gems3/vizor4/main.cpp -text
 gems3/vizor4/model_w.cpp -text
 gems3/vizor4/model_w.h -text

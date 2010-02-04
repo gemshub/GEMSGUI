@@ -35,7 +35,7 @@ macx-g++ {
 
 VIZOR4_CPP      =  ./vizor4
 KERNEL_CPP     =  ./vizor4/kernel
-LIBS_CPP       =  ./vizor4/libs
+#LIBS_CPP       =  ./vizor4/libs
 DLG4_CPP        =  ./vizor4/dlg4
 MODS_CPP       =  ./mods
 SUBMOD_CPP     =  ./mods/submod
@@ -44,7 +44,7 @@ GEMIPM2K_CPP     =  ../standalone/GEMIPM2K
 
 VIZOR4_H      =  $$VIZOR4_CPP
 KERNEL_H     =  $$KERNEL_CPP
-LIBS_H       =  $$LIBS_CPP
+#LIBS_H       =  $$LIBS_CPP
 DLG4_H        =  $$DLG4_CPP
 MODS_H       =  $$MODS_CPP
 SUBMOD_H     =  $$SUBMOD_CPP
@@ -53,9 +53,9 @@ GEMIPM2K_H     =  $$GEMIPM2K_CPP
 
 
 
-DEPENDPATH   += ;$$VIZOR4_H;$$KERNEL_H;$$LIBS_H;$$DLG4_H;$$MODS_H;$$SUBMOD_H
+DEPENDPATH   += ;$$VIZOR4_H;$$KERNEL_H;$$DLG4_H;$$MODS_H;$$SUBMOD_H
 DEPENDPATH   += ;$$NUMERICS_H;$$GEMIPM2K_H
-INCLUDEPATH   += ;$$VIZOR4_H;$$KERNEL_H;$$LIBS_H;$$DLG4_H;$$MODS_H;$$SUBMOD_H
+INCLUDEPATH   += ;$$VIZOR4_H;$$KERNEL_H;$$DLG4_H;$$MODS_H;$$SUBMOD_H
 INCLUDEPATH   += ;$$NUMERICS_H;$$GEMIPM2K_H
 
 MOC_DIR = tmp
@@ -65,7 +65,7 @@ UI_HEADERDIR  = $$MOC_DIR
 OBJECTS_DIR       = obj
 
 include($$DLG4_CPP/dlg4.pri)
-include($$LIBS_CPP/libs.pri)
+#include($$LIBS_CPP/libs.pri)
 include($$NUMERICS_CPP/numerics.pri)
 include($$SUBMOD_CPP/submod.pri)
 include($$MODS_CPP/mods.pri)

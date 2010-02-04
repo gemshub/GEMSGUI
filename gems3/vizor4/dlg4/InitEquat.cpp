@@ -20,6 +20,8 @@
 #include "EquatSetupWidget.h"
 #include "v_mod.h"
 
+//  nRT = -1 TPwork
+//  nRT  >= 0 type of SubModule
 void GetListsnRT( int nRT, TIArray<pagesSetupData>& wnData, TIArray<pagesSetupData>& scalarsList )
 {
 
@@ -157,8 +159,50 @@ void GetListsnRT( int nRT, TIArray<pagesSetupData>& wnData, TIArray<pagesSetupDa
    scalarsList.Add( new pagesSetupData("rpTi[0]",o_rpti)); //   o_rpti    rpTi   F_ 3 1    N "Temperature TC, centigrade: start value of the temperature iterator_
    scalarsList.Add( new pagesSetupData("rpTi[1]",o_rpti,1)); //    Temperature TC, end value of the iterator_
    scalarsList.Add( new pagesSetupData("rpTi[2]",o_rpti,2)); //    Temperature TC, step value of the iterator "
-// add Tpwork objects here
+
+   scalarsList.Add( new pagesSetupData("xT",o_rpxt,-1)); //"T vector-column of temperature, usually an abscissa on the plots "
+   scalarsList.Add( new pagesSetupData("xP",o_rpxp,-1)); //"P vector-column of pressures, optionally an abscissa on the plots "
+   scalarsList.Add( new pagesSetupData("yF",o_rpyf,-1)); // "RTParm table of sampled data "
+   scalarsList.Add( new pagesSetupData("xTE[0]",o_rpxte)); // "T vector (temperatures), abscissa on the plots for empirical data (optional) "
+   scalarsList.Add( new pagesSetupData("xPE[0]",o_rpxpe)); //"P vector (pressures), abscissa on the plots for empirical data (optional) "
+   scalarsList.Add( new pagesSetupData("ytE[0]",o_rpyte)); //"RTParm input table of empirical data (optional) "
+
     break;
+case -1: //# TPwork DOD
+// add Tpwork objects here
+   scalarsList.Add( new pagesSetupData("twP",o_twpp)); // "P, pressure of interest, bar (10^5 Pa) "
+   scalarsList.Add( new pagesSetupData("twPr",o_twppr)); //"Pr, reference pressure "
+   scalarsList.Add( new pagesSetupData("twTC",o_twtc)); // "TC, temperature of interest, C "
+   scalarsList.Add( new pagesSetupData("twTCr",o_twtcr)); // "TCr, reference temperature, C "
+   scalarsList.Add( new pagesSetupData("twTK",o_twtk)); //  "T, temperature of interest, K "
+   scalarsList.Add( new pagesSetupData("twTKr",o_twtkr)); //"Tr, reference temperature, K "
+   scalarsList.Add( new pagesSetupData("tdSr",o_tdsr)); //"dSr, entropy effect of reaction at T,P of interest "
+   scalarsList.Add( new pagesSetupData("twS",o_tws)); //"S0, absolute molar entropy of this species at T,P of interest "
+   scalarsList.Add( new pagesSetupData("tdevS",o_tdevs)); //"devS, uncertainty of S0 at T,P of interest (reserved) "
+   scalarsList.Add( new pagesSetupData("tdGr",o_tdgr)); //"dGr, Gibbs energy change in the reaction at T,P of interest "
+   scalarsList.Add( new pagesSetupData("twG",o_twg)); //"g0, molar (partial molal) Gibbs energy function of this species at T,P of interest "
+   scalarsList.Add( new pagesSetupData("tdevG",o_tdevg)); //"devG, uncertainty of g0 at T,P of interest (reserved) "
+   scalarsList.Add( new pagesSetupData("twK",o_twk)); //"K, equilibrium constant of the reaction at T,P of interest "
+   scalarsList.Add( new pagesSetupData("tlogK",o_tlogk)); //"logK of reaction at T,P of interest "
+   scalarsList.Add( new pagesSetupData("tdlogK",o_tdlogK)); // "dev_logK, uncertainty of logK at T,P of interest (reserved) "
+   scalarsList.Add( new pagesSetupData("tdHr",o_tdhr)); //"dHr, enthalpy change in the reaction at T,P of interest "
+   scalarsList.Add( new pagesSetupData("twH",o_twh)); //"h0, molar (partial molal) enthalpy function of this species at T,P of interest "
+   scalarsList.Add( new pagesSetupData("tdevH",o_tdevh)); // "devH, uncertainty of h0 at T,P of interest (reserved) "
+   scalarsList.Add( new pagesSetupData("tdCpr",o_tdcpr)); //"dCpr, constant-pressure heat capacity effect of reaction at T,P of interest "
+   scalarsList.Add( new pagesSetupData("twCp",o_twcp)); // "Cp0, absolute molar constant-pressure heat capacity of this species at T,P of interest "
+   scalarsList.Add( new pagesSetupData("tdevCp",o_tdevcp)); // "devCp, uncertainty of Cp0 at T,P of interest (reserved) "
+   scalarsList.Add( new pagesSetupData("tdVr",o_tdvr)); // "dVr, volume effect of reaction at T,P of interest "
+   scalarsList.Add( new pagesSetupData("twV",o_twv)); // "V0, molar (partial molal) volume of this species at T,P of interest "
+   scalarsList.Add( new pagesSetupData("tdevV",o_tdevv)); // "devV, uncertainty of V0 at T,P of interest (reserved) "
+   scalarsList.Add( new pagesSetupData("ab_TP[0]",o_twalpbet)); //"Compressibility (reserved)_
+   scalarsList.Add( new pagesSetupData("ab_TP[1]",o_twalpbet,1)); // expandability (reserved) "
+   scalarsList.Add( new pagesSetupData("fugVTP[0]",o_twfugv)); //"molar fugacity at TP (reserved)_
+   scalarsList.Add( new pagesSetupData("fugVTP[1]",o_twfugv,1)); //  dVm of gas (reserved) "
+   scalarsList.Add( new pagesSetupData("twRT",o_twRT)); //"RT factor  at T of interest"
+   scalarsList.Add( new pagesSetupData("twRow",o_twrow)); //"Density of H2O fluid at T,P of interest (g/cm3) "
+   scalarsList.Add( new pagesSetupData("twEw",o_twew)); // "Dielectric constant of H2O fluid at T,P of interest "
+   scalarsList.Add( new pagesSetupData("tw[0]",o_tww)); // 10  N "Work cells for the tExpr math script "
+   break;
 
   case RT_PHASE:
     scalarsList.Add( new pagesSetupData("DisPar[0]",o_phdisep,0)); //   "A  - phase specific surface area, m2/g_
