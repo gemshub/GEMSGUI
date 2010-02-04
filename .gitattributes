@@ -842,8 +842,6 @@ gems2/vizor/visor.h svn_keywords=Author+Date+Id+Revision
 gems2/vizor/visor_w.cpp svn_keywords=Author+Date+Id+Revision
 gems2/vizor/visor_w.h svn_keywords=Author+Date+Id+Revision
 gems2/vizor/vizor.pri -text
-gems3/.cproject -text
-gems3/.project -text
 gems3/Makefile -text
 gems3/data/units.ini -text
 gems3/data/vis_cn.ini -text
@@ -1031,10 +1029,7 @@ gems3/gems3.app/Contents/Resources/projects/TryNPTDB/syseq.TryNPTDB.ndx -text
 gems3/gems3.app/Contents/Resources/projects/TryNPTDB/syseq.TryNPTDB.pdb -text
 gems3/gems3.app/Contents/Resources/visor.data/visobj.dat -text
 gems3/gems3.app/Contents/Resources/visor.data/visor.dat -text
-gems3/gems_no_qt.pro -text
 gems3/gems_qt.pro -text
-gems3/gems_qt_lib.pro -text
-gems3/gems_release.pro -text
 gems3/img.qrc -text
 gems3/img/RunBCC.png -text
 gems3/img/RunIPM.png -text
@@ -1133,8 +1128,6 @@ gems3/mods/numerics/numerics.pri -text
 gems3/mods/numerics/tnt_array1d_utils.h -text
 gems3/mods/numerics/tnt_array2d_utils.h -text
 gems3/mods/numerics/tnt_math_utils.h -text
-gems3/mods/s_fglbred.cpp -text
-gems3/mods/s_fglbred_old.cpp -text
 gems3/mods/s_formula.cpp -text
 gems3/mods/s_formula.h -text
 gems3/mods/s_lsm.h -text
@@ -1146,7 +1139,6 @@ gems3/mods/s_supcrt.h -text
 gems3/mods/s_supcrt2.cpp -text
 gems3/mods/s_tpwork.cpp -text
 gems3/mods/s_tpwork.h -text
-gems3/mods/submod/ipm_old.cpp -text
 gems3/mods/submod/ms_calc.h -text
 gems3/mods/submod/ms_mtparm.cpp -text
 gems3/mods/submod/ms_mtparm.h -text
@@ -1559,18 +1551,6 @@ gems3/vizor4/model_w.cpp -text
 gems3/vizor4/model_w.h -text
 gems3/vizor4/module_w.cpp -text
 gems3/vizor4/module_w.h -text
-gems3/vizor4/old/MLineEdit.cpp -text
-gems3/vizor4/old/MLineEdit.h -text
-gems3/vizor4/old/cell_w.cpp -text
-gems3/vizor4/old/cell_w.h -text
-gems3/vizor4/old/helpwindow.cpp -text
-gems3/vizor4/old/helpwindow.h -text
-gems3/vizor4/old/page_i.h -text
-gems3/vizor4/old/page_w.cpp -text
-gems3/vizor4/old/page_w.h -text
-gems3/vizor4/old/page_win_w.cpp -text
-gems3/vizor4/old/page_win_w.h -text
-gems3/vizor4/old/query_w.h -text
 gems3/vizor4/page_f.cpp -text
 gems3/vizor4/page_f.h -text
 gems3/vizor4/page_w.cpp -text
