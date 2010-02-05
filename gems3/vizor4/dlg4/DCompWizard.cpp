@@ -78,12 +78,12 @@ DCompWizard::DCompWizard( const char* pkey, char flgs[15], int size[4],
                             QWidget* parent):
       QDialog( parent )
 {
+
+    setupUi(this);
     gstring str1= "GEM-Selektor DComp Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
 
-    //setFinishEnabled( WizardPage3, true);
-    setupUi(this);
     QObject::connect( pHelp, SIGNAL(clicked()), this, SLOT(help()));
     QObject::connect( pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
     QObject::connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()));

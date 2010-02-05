@@ -68,12 +68,13 @@ ProjectWizard::ProjectWizard( const char* pkey, char flgs[38], QWidget* parent):
     QDialog( parent )
 {
     int ii;
+
+    //setFinishEnabled( WizardPage3, true);
+    setupUi(this);
     gstring str1= "GEM-Selektor Project Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
 
-    //setFinishEnabled( WizardPage3, true);
-    setupUi(this);
     QObject::connect( pHelp, SIGNAL(clicked()), this, SLOT(help()));
     QObject::connect( pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
     QObject::connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()));

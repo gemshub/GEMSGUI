@@ -84,11 +84,11 @@ GtDemoWizard::GtDemoWizard( const char* pkey, int size[7], const char *ascript,
                             const char *proc_key, QWidget* parent):
             QDialog( parent ), script(ascript), pageScript(0)
 {
+    setupUi(this);
+
     gstring str1= "GEM-Selektor GtDemo Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
-
-    setupUi(this);
 
     allButtons = new QButtonGroup( groupBox_7 );
     allButtons->addButton(psIC, 0);

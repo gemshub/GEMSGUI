@@ -78,12 +78,10 @@ ComposWizard::ComposWizard( const char* pkey, char flgs[6], int size[2],
                             double r2, QWidget* parent):
     QDialog( parent )
 {
+    setupUi(this);
     gstring str1= "GEM-Selektor Compos Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
-
-//    setFinishEnabled( WizardPage2, true);
-    setupUi(this);
     QObject::connect( pHelp, SIGNAL(clicked()), this, SLOT(help()));
     QObject::connect( pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
     QObject::connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()));

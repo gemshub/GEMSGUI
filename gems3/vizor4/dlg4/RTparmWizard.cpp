@@ -91,9 +91,6 @@ RTparmWizard::RTparmWizard( const char* pkey, char flgs[10], int size[7],
     QDialog( parent ), calcScript(acalcScript), pageScript(0)
 {
     int ii;
-    gstring str1= "GEM-Selektor RTparm Setup:  ";
-            str1 += pkey;
-            setWindowTitle( str1.c_str() );
 
    if( flgs[0] == SRC_DCOMP )
       isDC = true;
@@ -102,6 +99,9 @@ RTparmWizard::RTparmWizard( const char* pkey, char flgs[10], int size[7],
 
 
     setupUi(this);
+    gstring str1= "GEM-Selektor RTparm Setup:  ";
+            str1 += pkey;
+    setWindowTitle( str1.c_str() );
     resetNextButton();
     resetBackButton();
 

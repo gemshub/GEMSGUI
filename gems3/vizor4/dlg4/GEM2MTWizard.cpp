@@ -78,12 +78,13 @@ GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[22],
                               int size[17], QWidget* parent):
           QDialog( parent )
 {
+
+//    setFinishEnabled( WizardPage2, true);
+    setupUi(this);
     gstring str1= "GEM-Selektor GEM2MT Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
 
-//    setFinishEnabled( WizardPage2, true);
-    setupUi(this);
     QObject::connect( pHelp, SIGNAL(clicked()), this, SLOT(help()));
     QObject::connect( pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
     QObject::connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()));

@@ -82,13 +82,12 @@ ProcessWizard::ProcessWizard( const char* pkey, char flgs[24], int size[6],
             const char *acalcScript, const char *aoutScript, QWidget* parent):
         QDialog( parent ), calcScript(acalcScript), outScript(aoutScript), pageScript(0)
 {
-    
-	gstring str1= "GEM-Selektor Process Setup:  ";
-            str1 += pkey;
-            setWindowTitle( str1.c_str() );
-
     //setFinishEnabled( WizardPage2, true);
     setupUi(this);
+    gstring str1= "GEM-Selektor Process Setup:  ";
+        str1 += pkey;
+        setWindowTitle( str1.c_str() );
+
     QObject::connect( pHelp, SIGNAL(clicked()), this, SLOT(help()));
     QObject::connect( pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
     QObject::connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()));
