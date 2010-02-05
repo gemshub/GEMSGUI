@@ -490,14 +490,15 @@ int TMulti::find_icnum( char *name, int LNmode )
 //  jb and je - range to search
 //  Return index >=0 or exeption if no match
 //
-int TMulti::find_dcnum( char *name, int jb, int je, int LNmode )
+int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
 {
-    int j, jf[8], ii=0, len;
+    int j, jf[20], ii=0, len, jj;
+    vstr pbuf(164);
 
     len = strlen( name );
     if( LNmode == 1 )
     {
-        for( j=jb; j<=je && ii<8; j++ )
+        for( j=jb; j<=je && ii<20; j++ )
             if(!memcmp(name, pmp->SM[j], min(len,MAXDCNAME)))
                 jf[ii++] = j;
         if( !ii )
@@ -505,23 +506,45 @@ int TMulti::find_dcnum( char *name, int jb, int je, int LNmode )
     }
     if( LNmode == 0 )
     {
-        for( j=jb; j<=je && ii<8; j++ )
+        for( j=jb; j<=je && ii<20; j++ )
             if(!memcmp(name, mup->SM[j]+MAXSYMB+MAXDRGROUP, min(len,MAXDCNAME)))
                 jf[ii++] = j;
         if( !ii )
             Error( name, "E15MSPrep: DC name cannot be found in Project lists..." );
     }
+
+    /* more then one index found */
+    if( LNmode == 0 )
+    {
+        jj=0;
+        for( j=0; j<ii; j++ )
+        {    if( syp->Dcl[jf[j]] == S_OFF )
+                continue;
+             jf[jj] = jf[j];
+             jj++;
+        }
+       if( !jj )
+       {
+         if( !vfQuestion(window(), name,
+              "W25MSPrep: All DCs with this name are switched off!\n"
+              "the changes programmed in the script will not be effective...\n"
+              "Continue (Y) or cancel (N)?"))
+          Error( "E25MSPrep:", "Preprocessing cancelled by the user..." );
+       }
+       else
+        ii = jj;
+    }
+
     if( ii == 1 )
         return( jf[0] );
 
-    /* more then one index found */
-    vstr pbuf(164);
-    sprintf( pbuf, "%d DC indices found for the name %s (->%d) \n"
-             "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
-    if( !vfQuestion(window(), "W20MSPrep: ", /*(const char *)*/pbuf.p ))
+    sprintf( pbuf, "Select DC index \n for the DC name %s\n in statement %s", name, stmt );
+
+   j = vfChoice( window(),  "W20MSPrep: ", pbuf.p, ii, jf);
+   if( j<0 )
         Error( "E20MSPrep:", "Preprocessing cancelled by the user..." );
 
-    return( jf[0] );
+   return( j );
 }
 
 // Search of phase index by name ( *name )
@@ -610,7 +633,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
     size_t eLen, ls, lb;
     int i=0, ii, pj, LNplace=1, Xplace=0, nO=0;
     char cstate, cc, *etext, *pexpr, *ecur, *cur, *next, *end,
-      *prev, *last, iCode, odlab[MAXKEYWD+2];
+      *prev, *last, *stmt, iCode, odlab[MAXKEYWD+2];
     vstr name(64), nbuf(64);
 
     etext = (char *)aObj[ nOet ].GetPtr();
@@ -628,6 +651,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
     ecur = etext;
     cur = pexpr;
     next = cur;
+    stmt = next;
 
     if( *cur != '$' ) //SD&DK fixed error 05/12/2007)
     {
@@ -639,6 +663,9 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
     cstate = A_dcx;
     while( next < end )
     {  // loop for analyzing the text
+        if( *next == ';')
+           stmt = next+1;
+
         if( *next != A_delim_IPM && !cc && *next != N_BEGIN )
         {   // Flush text if not relevant for preprocessing
             *ecur = *cur;
@@ -764,17 +791,17 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
                 i = find_icnum( name, LNplace );
                 break;
             case A_DCx:
-                i = find_dcnum( name, JB, JE, LNplace );
+                i = find_dcnum( name, JB, JE, LNplace, stmt );
                 break;
             case A_DCSx:
-                i = find_dcnum( name, JB, JE, LNplace );
+                i = find_dcnum( name, JB, JE, LNplace,stmt );
                 i -=  mup->Ls - mup->Lads ;
                 break;
             case A_dcx:
-                i = find_dcnum( name, jb, je, LNplace );
+                i = find_dcnum( name, jb, je, LNplace,stmt );
                 break;
             case A_dcsx:
-                i = find_dcnum( name, jb, je, LNplace );
+                i = find_dcnum( name, jb, je, LNplace,stmt );
                 i -= pmp->Ls - pmp->Lads;
                 break;
             case A_phx:
@@ -788,25 +815,25 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
                 if( !Xplace )
                    i = find_icnum( name, LNplace );
                 else
-                   i = find_dcnum( name, JB, JE, LNplace );
+                   i = find_dcnum( name, JB, JE, LNplace, stmt );
                 break;
             case A_icxdcx:
                 if( !Xplace )
                    i = find_icnum( name, LNplace );
                 else
-                   i = find_dcnum( name, jb, je, LNplace );
+                   i = find_dcnum( name, jb, je, LNplace, stmt );
                 break;
             case A_DCxICx:
                 if( Xplace )
                    i = find_icnum( name, LNplace );
                 else
-                   i = find_dcnum( name, JB, JE, LNplace );
+                   i = find_dcnum( name, JB, JE, LNplace, stmt );
                 break;
             case A_dcxicx:
                 if( Xplace )
                    i = find_icnum( name, LNplace );
                 else
-                   i = find_dcnum( name, jb, je, LNplace );
+                   i = find_dcnum( name, jb, je, LNplace, stmt );
                 break;
             case A_ICxPHx:
             case A_icxphx:

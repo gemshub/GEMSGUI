@@ -93,7 +93,7 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
              str = QString("%1 + ").arg(jj);
 
           if( aObj[awnData[ii].nObj].GetIndexationCode() == 'J' )
-             str += QString(" In %1 phase").arg(
+              str += QString(" in phase: %1 ").arg(
                    TProfil::pm->PhNameforDC( jj, true ).c_str());
 
           item1->setToolTip( str );

@@ -199,6 +199,25 @@ int vfChoice(QWidget* par, TCStringArray& arr, const char* prompt, int sel)
     return cw.selected();
 }
 
+int vfChoice(QWidget* par, const char* title, const char* prompt,
+         int nVal, int *arr, int sel)
+{
+  QStringList items;
+  bool ok;
+
+  for( int ii=0; ii<nVal; ii++)
+   items << QString("%1").arg(arr[ii]);
+
+  QString res =  QInputDialog::getItem ( par, title, prompt,
+    items, sel, false,  &ok  );
+
+  if (ok && !res.isEmpty())
+      return res.toInt(&ok);
+
+  return -1;
+}
+
+
 int vfChoice2(QWidget* par, TCStringArray& arr, const char* prompt,
                int sel, bool& all_)
 {

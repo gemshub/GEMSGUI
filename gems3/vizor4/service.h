@@ -56,7 +56,10 @@ int
 vfChoice(QWidget* par, TCStringArray& arr, const char* prompt, int sel=0);
 int
 vfChoice2(QWidget* par, TCStringArray& arr, const char* prompt,
-               int sel, bool& all_);
+                         int sel, bool& all_);
+int
+vfChoice(QWidget* par, const char* title, const char* prompt,
+         int nVal, int *arr, int sel=0);
 
 TCIntArray
 vfMultiChoice(QWidget* par, TCStringArray& arr, const char* prompt);

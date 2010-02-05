@@ -540,7 +540,9 @@ Set up different default colors for default plotlines
 
 05/02/2010
 Added Output Dialog for RTparam and did some changes in calculation rtparm module
-
+BugFix: In mathscripts preprocessin select DC index  for the DC name <name> in statement,
+    if more then one  DCs with this name switched on
+Added Dialog for select one number from integer list
 
 
 
