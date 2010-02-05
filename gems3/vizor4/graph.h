@@ -27,6 +27,25 @@ class GemDataStream;
 
 const int maxPLOT = 20;
 
+
+struct GColor
+{
+    int red;    // parts of class QColor
+    int green;
+    int blue;
+
+    GColor( int aRed = 25, int aGreen = 0, int aBlue = 150 ):
+            red(aRed), green(aGreen), blue(aBlue)
+    {}
+    GColor( GColor& data ):
+            red(data.red), green(data.green), blue(data.blue)
+    {}
+
+    GColor( bool large, int i, int n);
+};
+
+
+
 struct TPlotLine
 {
     int type;  // type of points
@@ -50,6 +69,21 @@ struct TPlotLine
         strncpy( name, aName, 14);
         name[14] = '\0';
     }
+
+    TPlotLine( int ii, int maxII, const char *aName = 0,
+               int aPointType = 6, int aPointSize = 0, int aPutLine = 1 ):
+            type(aPointType), size(aPointSize), line_size(aPutLine)
+    {
+        GColor col( false, ii, maxII);
+        red = col.red;
+        blue = col.blue;
+        green = col.green;
+
+        strncpy( name, aName, 14);
+        name[14] = '\0';
+    }
+
+
 
     TPlotLine(const TPlotLine& plt ):
             type(plt.type), size(plt.size), line_size(plt.line_size),
@@ -120,21 +154,6 @@ public:
 
 //-------------------------------------------------------------------------
 
-struct GColor
-{
-    int red;    // parts of class QColor
-    int green;
-    int blue;
-
-    GColor( int aRed = 25, int aGreen = 0, int aBlue = 150 ):
-            red(aRed), green(aGreen), blue(aBlue)
-    {}
-    GColor( GColor& data ):
-            red(data.red), green(data.green), blue(data.blue)
-    {}
-
-    GColor( bool large, int i, int n);
-};
 
 enum GRAPHTYPES {
                  LINES_POINTS = 0,

@@ -787,7 +787,10 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
         for(int ii=0; ii<nLn; ii++ )
         {
             if( ii >= oldN )
+            {
+                TPlotLine defpl(ii, nLn, "");
                 plot[ii] = defpl;
+            }
             if(ii < mtp->nYS )
                 strncpy( plot[ii].name, mtp->lNam[ii], MAXGRNAME );
             else

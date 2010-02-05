@@ -532,6 +532,16 @@ Added Output Dialog for GtDemo
 
 03/02/2010
 Added Output Dialog for Process
+Changed files configurations (deleted all files from standalone/GEMIPM2K)
+
+
+04/02/2010
+Set up different default colors for default plotlines
+
+05/02/2010
+Added Output Dialog for RTparam and did some changes in calculation rtparm module
+
+
 
 
 T. Wagner

@@ -27,6 +27,8 @@ const char *RTPARM_HTML = "gm_rtparm";
 
 #include "RTparmWizard.h"
 #include "visor_w.h"
+#include "v_mod.h"
+#include "service.h"
 
 void RTparmWizard::languageChange()
 {
@@ -44,7 +46,21 @@ RTparmWizard::CmBack()
 void
 RTparmWizard::CmNext()
 {
-	stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()+1 );
+    int ndx = stackedWidget->currentIndex();
+
+    if( ndx == 0 )
+    {
+      if( !TChange() )
+        return;
+      if( !PChange() )
+        return;
+    }
+
+    int nLines = pageScript->getScriptLinesNum();
+    if( ndx == 1 && nLines > 0)
+        pdimY->setValue( nLines );
+
+    stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()+1 );
     resetNextButton();
     resetBackButton();
 }
@@ -71,61 +87,86 @@ void 	RTparmWizard::resetBackButton()
 }
 
 RTparmWizard::RTparmWizard( const char* pkey, char flgs[10], int size[7],
-                            QWidget* parent):
-    QDialog( parent )
+          float val[6],  const char *acalcScript,   QWidget* parent):
+    QDialog( parent ), calcScript(acalcScript), pageScript(0)
 {
     int ii;
     gstring str1= "GEM-Selektor RTparm Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
 
-    //setFinishEnabled( WizardPage3, true);
+   if( flgs[0] == SRC_DCOMP )
+      isDC = true;
+   else
+      isDC = false;
+
+
     setupUi(this);
-    QObject::connect( pHelp, SIGNAL(clicked()), this, SLOT(help()));
-    QObject::connect( pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
-    QObject::connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()));
-    stackedWidget->setCurrentIndex (0);
     resetNextButton();
     resetBackButton();
 
+
 // page1
-    ii = pWhat->findText(QChar(flgs[0]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
-    if( ii >= 0  )
-    	pWhat->setCurrentIndex(ii);
+    ii = min( size[2],pMode->count()-1 );
+    pMode->setCurrentIndex(ii);
+    pTfrom->setValue(val[0]);
+    pTuntil->setValue(val[1]);
+    pTstep->setValue(val[2]);
+    pPfrom->setValue(val[3]);
+    pPuntil->setValue(val[4]);
+    pPstep->setValue(val[5]);
 
-    ii = pPunE->findText(QChar(flgs[1]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    ii = pPtun->findText(QChar(flgs[7]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
-    	pPunE->setCurrentIndex(ii);
+        pPtun->setCurrentIndex(ii);
+    ii = pPun->findText(QChar(flgs[8]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    if( ii >= 0  )
+        pPun->setCurrentIndex(ii);
+    if( flgs[6] == 'T' )
+     butT->setChecked(true);
+    else
+     butP->setChecked(true);
 
-    ii = pPunV->findText(QChar(flgs[2]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
-    if( ii >= 0  )
-    	pPunV->setCurrentIndex(ii);
 
-    ii = pPunP->findText(QChar(flgs[3]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
-    if( ii >= 0  )
-    	pPunP->setCurrentIndex(ii);
-    ii = pPunT->findText(QChar(flgs[4]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
-    if( ii >= 0  )
-    	pPunT->setCurrentIndex(ii);
+//Page 2 equations
+     resetPageList();
 
- // Page 2
+
+// Page 3
     pNP->setValue(size[0]);
     pNT->setValue(size[1]);
     pdimY->setValue(size[6]);
     pECol->setValue(size[5]);
     pELine->setValue(size[4]);
-    ii = min( size[2],pMode->count()-1 );
-    pMode->setCurrentIndex(ii);
 
-//Page 3
-   spinBox18->setValue(size[3]);
+   ii = pWhat->findText(QChar(flgs[0]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+   if( ii >= 0  )
+       pWhat->setCurrentIndex(ii);
 
-    ii = pPabs->findText(QChar(flgs[6]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
-    if( ii >= 0  )
-    	pPabs->setCurrentIndex(ii);
-    ii = pPtun->findText(QChar(flgs[7]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
-    if( ii >= 0  )
-    	pPtun->setCurrentIndex(ii);
+   ii = pPunE->findText(QChar(flgs[1]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+   if( ii >= 0  )
+       pPunE->setCurrentIndex(ii);
+
+   ii = pPunV->findText(QChar(flgs[2]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+   if( ii >= 0  )
+       pPunV->setCurrentIndex(ii);
+
+   ii = pPunP->findText(QChar(flgs[3]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+   if( ii >= 0  )
+       pPunP->setCurrentIndex(ii);
+   ii = pPunT->findText(QChar(flgs[4]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+   if( ii >= 0  )
+       pPunT->setCurrentIndex(ii);
+
+   //Page 4
+      spinBox18->setValue(size[3]);
+
+   // commands
+   stackedWidget->setCurrentIndex (0);
+
+   QObject::connect( pHelp, SIGNAL(clicked()), this, SLOT(help()));
+   QObject::connect( pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
+   QObject::connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()));
 
 }
 
@@ -148,21 +189,123 @@ void   RTparmWizard::getSizes( int size[7] )
 void RTparmWizard::getFlags( char flgs[6] )
 {
 // Page 1 - not return
+    QString str = pPtun->currentText();
+    flgs[7] = str[0].toLatin1();
+
+    str = pPun->currentText();
+    flgs[8] = str[0].toLatin1();
+
+    if(butP->isChecked())
+      flgs[6] = 'P';
+    else
+      flgs[6] = 'T';
+
 // Page 2
   if( pECol->value() > 0 && pELine->value() > 0 )
        flgs[5] = '+';
   else flgs[5] = '-';
-//Page 3
-  QString str = pPabs->currentText();
-  flgs[6] = str[0].toLatin1();
-  str = pPtun->currentText();
-  flgs[7] = str[0].toLatin1();
 }
+
+void   RTparmWizard::getFloat( float val[6] )
+{
+    val[0] = pTfrom->text().toDouble();
+    val[1] = pTuntil->text().toDouble();
+    val[2] = pTstep->text().toDouble();
+    val[3] = pPfrom->text().toDouble();
+    val[4] = pPuntil->text().toDouble();
+    val[5] = pPstep->text().toDouble();
+}
+
 
 void
 RTparmWizard::help()
 {
   pVisorImp->OpenHelp( RTPARM_HTML, 0, this/*, true*/ );
+}
+
+
+bool RTparmWizard::TChange()
+{
+  double from, until, step;
+  int nT;
+
+  from = pTfrom->text().toDouble();
+  until = pTuntil->text().toDouble();
+  step = pTstep->text().toDouble();
+
+  if( until < from )
+  {
+      //pTfrom->setValue(until);
+      //pTuntil->setValue(from);
+      vfMessage(this, "Temperature", "Illegal interval fo values: from > until");
+      return false;
+  }
+
+  if( step <= 1e-9 )
+    nT = 1;
+   else
+    nT  = (int)((until-from)/step)+1;
+
+  pNT->setValue(nT);
+  return true;
+}
+
+bool RTparmWizard::PChange()
+{
+  double from, until, step;
+  int nP;
+
+  from = pPfrom->text().toDouble();
+  until = pPuntil->text().toDouble();
+  step = pPstep->text().toDouble();
+
+  if( until < from )
+  {
+      //pTfrom->setValue(until);
+      //pPuntil->setValue(from);
+      vfMessage(this, "Pressure", "Illegal interval fo values: from > until");
+      return false;
+  }
+
+  if( step <= 1e-9 )
+    nP = 1;
+   else
+    nP  = (int)((until-from)/step)+1;
+
+  pNP->setValue(nP);
+  return true;
+}
+
+
+//==============================================================================
+
+equatSetupData eq( "", "yF", "jTP", "" );
+equatSetupData eqT( "xT", "yF", "jTP", "twTC" );
+equatSetupData eqP( "xP", "yF", "jTP", "twP" );
+
+// work with lists
+void RTparmWizard::resetPageList()
+{
+
+    TIArray<pagesSetupData> scalarsList;
+    TIArray<pagesSetupData> pgData;
+
+    GetListsnRT( -1, pgData,  scalarsList );
+    GetListsnRT( RT_RTPARM, pgData,  scalarsList );
+
+   if( isDC )
+   {
+       GetListsnRT( RT_DCOMP,  pgData,  scalarsList );
+   }
+   else
+   {
+       GetListsnRT( RT_REACDC, pgData,  scalarsList );
+   }
+
+   pageScript = new EquatSetup( page_3, eq,
+             RT_PROCES, pgData, scalarsList, calcScript.c_str()  );
+    verticalLayout_5->addWidget(pageScript);
+
 }
 
 //--------------------- End of RTparmWizard.cpp ---------------------------

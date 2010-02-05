@@ -37,7 +37,7 @@ GColor::GColor( bool is_green, int i, int n)
       }
       else
          if( i <= 3*n/4 )
-         { red = (255 - (4*(i-n/2)*255/n))%256;
+         { red = abs((255 - (4*(i-n/2)*255/n)))%256;
            green = 255;
          }
          else
@@ -324,12 +324,13 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
     for( uint ii=0, nLines=0; ii<aPlots.GetCount(); ii++)
     {
         plots.Add( new TPlot(aPlots[ii], nLines ));
-        for( int jj=0; jj<plots[ii].getLinesNumber(); jj++, nLines++ )
+        int nLinN = plots[ii].getLinesNumber();
+        for( int jj=0; jj<nLinN; jj++, nLines++ )
         {
           if( nLines < line_names.GetCount() )
-            lines.Add( new TPlotLine( line_names[nLines].c_str() ) );
+            lines.Add( new TPlotLine( jj, nLinN, line_names[nLines].c_str() ) );
           else
-            lines.Add( new TPlotLine( plots[ii].getName(jj).c_str() ) );
+            lines.Add( new TPlotLine( jj, nLinN, plots[ii].getName(jj).c_str() ) );
         }
     }
     goodIsolineStructure( graphType );

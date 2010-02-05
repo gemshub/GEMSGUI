@@ -79,7 +79,7 @@ SPP_SETTING pa_ = {
     "CSC   ",   /* DCpct[6] */  "OjjbC+---",    /* DCpdc[9] */
     "+----M",   /* BCpc[6] */   "K3C   ",   /* REpct[6] */
     "SjjbC ",   /* REpdc[6]*/  "+-------", /* REpvc[8]  */
-    "rjjbC-TK--",   /* RPpdc[10]  */
+    "rjjbC-TCb-",   /* RPpdc[10]  */
     "++*-1-23----------4-------------", /* RPpvc[32] reserved free */
     "INNINN",   /* PHsol_t[6] */  "s-----",   /* PHpvc[6] */
     "++++-+-+++", /* MUpmv[10] */ "jjbC++0+", /* TPpdc[8] */
@@ -95,7 +95,7 @@ SPP_SETTING pa_ = {
     1, 15, 0,   /* P T V */  2,  /* Mode */
     { 1, 2, 3, 4, 5, },  /* ResShort */
     /* RTPARM */
-    {0., 10000., 1000.}, /* Pi[3]*/  {0.0, 374., 25.}, /* Ti[3] */
+    {1., 1., 0.}, /* Pi[3]*/  {0.0, 375., 25.}, /* Ti[3] */
     {0., 0., 0.},   /* Vi[3] */
     1., 25.,      /* Pr, Tr */
     /* MULTI */

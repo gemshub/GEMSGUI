@@ -1433,13 +1433,15 @@ TProcess::RecordPlot( const char* /*key*/ )
     if( plot )
     {
         int oldN = aObj[o_pcplline].GetN();
-        TPlotLine defpl("", 4);
 
         plot = (TPlotLine * )aObj[ o_pcplline ].Alloc( nLn, sizeof(TPlotLine) );
         for(int ii=0; ii<nLn; ii++ )
         {
             if( ii >= oldN )
+            {
+                TPlotLine defpl(ii, nLn, "");
                 plot[ii] = defpl;
+            }
             if(ii < pep->dimXY[1] )
                 strncpy( plot[ii].name, pep->lNam[ii], MAXGRNAME );
             else

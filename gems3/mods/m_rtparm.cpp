@@ -292,7 +292,7 @@ void TRTParm::set_def( int q)
     rpp->dimXY[1] = 1;
     rpp->expr = (char *)aObj[ o_rtexpr ].Alloc(1, 2048, S_);
     strcpy( (char *)aObj[o_rtexpr].GetPtr(),
-  " xT[jTP] =: twTK;\n xP[jTP] =: twP;\n yF[jTP][0] =: twG/1000;\n  " );
+  " yF[jTP][0] =: twG/1000;\n  " );
     rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].Alloc( 1,
                  rpp->dimXY[1], MAXGRNAME);
     strcpy( rpp->lNam[0], "g0 ");
@@ -349,6 +349,7 @@ TRTParm::MakeQuery()
     const char * p_key;
     char flgs[10];
     int size[7];
+    float val[6];
 
     p_key  = db->PackKey();
     memcpy( flgs, &rpp->What, 10);
@@ -360,7 +361,21 @@ TRTParm::MakeQuery()
     size[5] = rpp->dimEF[1];
     size[6] = rpp->dimXY[1];
 
-    if( !vfRTparmSet( window(), p_key, flgs, size ))
+    val[0] = rpp->Ti[0];
+    val[1] = rpp->Ti[1];
+    val[2] = rpp->Ti[2];
+    val[3] = rpp->Pi[0];
+    val[4] = rpp->Pi[1];
+    val[5] = rpp->Pi[2];
+
+    // for scripts
+    TCStringArray namesLines;
+    gstring calcScript;
+    if( rpp->expr )
+     calcScript = rpp->expr;
+
+
+    if( !vfRTparmSet( window(), p_key, flgs, size, val, calcScript, namesLines ))
          Error( p_key, "RTparm record configuration cancelled by the user!" );
      //  return;   // cancel
 
@@ -372,6 +387,27 @@ TRTParm::MakeQuery()
     rpp->dimEF[0] = (short)size[4];
     rpp->dimEF[1] = (short)size[5];
     rpp->dimXY[1] = (short)size[6];
+
+    rpp->Ti[0] = val[0];
+    rpp->Ti[1] = val[1];
+    rpp->Ti[2] = val[2];
+    rpp->Pi[0] = val[3];
+    rpp->Pi[1] = val[4];
+    rpp->Pi[2] = val[5];
+
+    // from scripts
+    if( !rpp->expr )
+       rpp->expr = (char *)aObj[ o_rtexpr ].Alloc(1, 2048, S_);
+    aObj[o_rtexpr].SetString( calcScript.c_str(),0,0);
+    if(namesLines.GetCount() > 0)
+     {
+        rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].Alloc( 1,
+                         rpp->dimXY[1], MAXGRNAME);
+        for(short ii=0; ii< min( (short)namesLines.GetCount(),rpp->dimXY[1]); ii++)
+        {
+          strncpy(  rpp->lNam[ii], namesLines[ii].c_str(), MAXGRNAME );
+        }
+     }
 }
 
 //Rebuild record structure before calculation
@@ -511,11 +547,11 @@ void
 TRTParm::RecCalc( const char *key )
 {
   short ij, i, j;
-  double P_old;
+  double P_old, P, TC;
   
-  float K_to_C = 0.;
-  if(rpp->Ptun == PVT_KELVIN )
-	  K_to_C = -C_to_K;
+  //float K_to_C = 0.;
+  //if(rpp->Ptun == PVT_KELVIN )
+  //	  K_to_C = -C_to_K;
   
     /* insert values to arrays  rp->T, rp->P, rp->RT; */
    switch( rpp->Mode )
@@ -526,7 +562,7 @@ TRTParm::RecCalc( const char *key )
     case 1: // increments in cycle on P nested into cycle on T
         for( ij=0, i=0; i<rpp->NT; i++ )
         {
-            rpp->T[ij] = (rpp->Ti[0]+K_to_C) + rpp->Ti[2] * i;
+            rpp->T[ij] = (rpp->Ti[0]) + rpp->Ti[2] * i;
             for( j=0; j<rpp->NP; j++ )
             {
                 rpp->P[ij] = rpp->Pi[0] + rpp->Pi[2] * j;
@@ -541,7 +577,7 @@ TRTParm::RecCalc( const char *key )
             rpp->P[ij] = rpp->Pi[0] + rpp->Pi[2] * i;
             for( j=0; j<rpp->NT; j++ )
             {
-                rpp->T[ij] = (rpp->Ti[0]+K_to_C) + rpp->Ti[2] * j;
+                rpp->T[ij] = (rpp->Ti[0]) + rpp->Ti[2] * j;
                 if( j ) rpp->P[ij] = rpp->P[ij-1];
                 ij++;
             }
@@ -551,7 +587,7 @@ TRTParm::RecCalc( const char *key )
         for( i=0; i<rpp->NV; i++ )
         {
             rpp->P[i] = rpp->Pi[0] + rpp->Pi[2] * i;
-            rpp->T[i] = (rpp->Ti[0]+K_to_C) + rpp->Ti[2] * i;
+            rpp->T[i] = (rpp->Ti[0]) + rpp->Ti[2] * i;
         }
         break;
     }
@@ -572,8 +608,25 @@ TRTParm::RecCalc( const char *key )
          aW.ods_link( 0 );
         /* clear new work structure */
         aW.set_zero( 0 );
-        aW.twp->P = P_old = rpp->P[j];
-        aW.twp->TC = rpp->T[j];
+        switch( rpp->Ppun)
+        {
+        case 'b':
+        default: P =rpp->P[j];
+                 break;
+        case 'B': P =rpp->P[j]*1000;
+                 break;
+        case 'p': P =rpp->P[j]/1e5;
+                 break;
+        case 'P': P =rpp->P[j]*10;
+                 break;
+        case 'A': P =rpp->P[j]/1.013;
+                 break;
+        }
+        aW.twp->P = P_old = P /*rpp->P[j]*/;
+        TC = rpp->T[j];
+        if( rpp->Ppun == 'K' )
+          TC = TC - C_to_K;
+        aW.twp->TC = TC/*rpp->T[j]*/;
         aW.twp->T = aW.twp->TC + C_to_K;
         aW.twp->unE = rpp->PunE;
         aW.twp->unV = rpp->PunV;
@@ -649,13 +702,15 @@ TRTParm::RecordPlot( const char* /*key*/ )
     if( plot )
     {
         int oldN = aObj[o_rppline].GetN();
-        TPlotLine defpl("", 4);
 
         plot = (TPlotLine * )aObj[ o_rppline ].Alloc( nLn, sizeof(TPlotLine) );
         for(int ii=0; ii<nLn; ii++ )
         {
             if( ii >= oldN )
+            {
+                TPlotLine defpl(ii, nLn, "");
                 plot[ii] = defpl;
+            }
             if(ii < rpp->dimXY[1] )
                 strncpy( plot[ii].name, rpp->lNam[ii], MAXGRNAME );
             else

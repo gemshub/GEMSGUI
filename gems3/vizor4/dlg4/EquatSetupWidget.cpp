@@ -340,7 +340,8 @@ void EquatSetup::scriptUpdate()
 {
   QString buf, tScript;
 
-  tScript = QString("%1[%2] =: %3;\n").arg( eqData.xName.c_str(),
+  if( !eqData.xName.empty() )
+    tScript = QString("%1[%2] =: %3;\n").arg( eqData.xName.c_str(),
                     eqData.indexName.c_str(), eqData.abscissaEquat.c_str() );
 
   for(uint ii=0; ii<scriptData.GetCount(); ii++ )

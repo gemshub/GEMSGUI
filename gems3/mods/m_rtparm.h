@@ -45,7 +45,7 @@ typedef struct
     Pplot, // Flag of plotting empirical data { + - }_
     Pabs,  // P or T for abscissa { P T } default T_
     Ptun,  // Units of T in abscissa { K C } default K_
-    Pres,  //reserved ( + - )"
+    Ppun,  // Units of P in abscissa { b;  B p P A reserved }
     PunR1, //  reserved ( + - )
 
     name[MAXGSNAME+1],    // Full name  sampler definition (title)

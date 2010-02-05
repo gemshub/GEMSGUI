@@ -21,24 +21,38 @@
 
 #include <QDialog>
 #include "ui_RTparmWizard4.h"
+#include "EquatSetupWidget.h"
+
 
 class RTparmWizard : public QDialog, public Ui::RTparmWizardData
 {
     Q_OBJECT
 
+    bool isDC;
+    gstring calcScript;
+    EquatSetup *pageScript;
+
     void 	resetNextButton();
     void 	resetBackButton();
+    bool PChange();
+    bool TChange();
 
 public:
 
-    RTparmWizard( const char* pkey, char flgs[10], int sizes[7],
-                  QWidget* parent = NULL);
+    RTparmWizard( const char* pkey, char flgs[10], int sizes[7], float val[6],
+                  const char *acalcScript, QWidget* parent = NULL);
     virtual ~RTparmWizard();
-
 
     void   getSizes( int size[7] );
     void   getFlags( char flgs[10] );
-//    double   getR2();
+    void   getFloat( float val[6] );
+
+    gstring getScript() const
+    { return pageScript->getScript();
+    }
+    TCStringArray getNames() const
+    { return pageScript->getNames();
+    }
 
 protected slots:
     virtual void languageChange();
@@ -48,7 +62,8 @@ protected slots:
     void help();
     void CmNext();
     void CmBack();
-    
+    void resetPageList();
+
 };
 
 

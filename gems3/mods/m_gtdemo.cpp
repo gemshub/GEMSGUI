@@ -720,13 +720,15 @@ TGtDemo::RecordPlot( const char* /*key*/ )
     if( plot )
     {
         int oldN = aObj[o_gdplline].GetN();
-        TPlotLine defpl("", 4);
 
         plot = (TPlotLine * )aObj[ o_gdplline ].Alloc( nLn, sizeof(TPlotLine) );
         for(int ii=0; ii<nLn; ii++ )
         {
             if( ii >= oldN )
-                plot[ii] = defpl;
+            {
+               TPlotLine defpl(ii, nLn, "");
+               plot[ii] = defpl;
+            }
             if(ii < gdp->dimXY[1] )
                 strncpy( plot[ii].name, gdp->lNam0[ii], MAXGRNAME );
             else
