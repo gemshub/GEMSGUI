@@ -538,7 +538,7 @@ int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
     if( ii == 1 )
         return( jf[0] );
 
-    sprintf( pbuf, "Select DC index \n for the DC name %s\n in statement %s", name, stmt );
+    sprintf( pbuf, "Please, select DC index for the DC name %s\n in the first script statement below %s", name, stmt );
 
    j = vfChoice( window(),  "W20MSPrep: ", pbuf.p, ii, jf);
    if( j<0 )

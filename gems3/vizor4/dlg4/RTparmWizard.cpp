@@ -292,7 +292,7 @@ void RTparmWizard::resetPageList()
 
     GetListsnRT( -1, pgData,  scalarsList );
     GetListsnRT( RT_RTPARM, pgData,  scalarsList );
-
+/*
    if( isDC )
    {
        GetListsnRT( RT_DCOMP,  pgData,  scalarsList );
@@ -301,7 +301,7 @@ void RTparmWizard::resetPageList()
    {
        GetListsnRT( RT_REACDC, pgData,  scalarsList );
    }
-
+*/
    pageScript = new EquatSetup( page_3, eq,
              RT_PROCES, pgData, scalarsList, calcScript.c_str()  );
     verticalLayout_5->addWidget(pageScript);
