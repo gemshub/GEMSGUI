@@ -20,7 +20,7 @@
   <property name="windowTitle">
    <string>Database File Configuration for Modelling Project</string>
   </property>
-  <layout class="QVBoxLayout">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="pLabel">
      <property name="text">
@@ -45,12 +45,6 @@
      <attribute name="headerDefaultSectionSize">
       <number>200</number>
      </attribute>
-     <attribute name="headerCascadingSectionResizes">
-      <bool>true</bool>
-     </attribute>
-     <attribute name="headerDefaultSectionSize">
-      <number>200</number>
-     </attribute>
      <column>
       <property name="text">
        <string>File Keyword</string>
@@ -64,7 +58,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout">
+    <layout class="QHBoxLayout" name="layout1">
      <item>
       <widget class="QPushButton" name="pGO_OKButton">
        <property name="sizePolicy">
@@ -186,7 +180,6 @@
   <tabstop>pListFiles</tabstop>
   <tabstop>pGO_OKButton</tabstop>
   <tabstop>pCancelButton</tabstop>
-  <tabstop>pHelpButton</tabstop>
  </tabstops>
  <resources/>
  <connections>

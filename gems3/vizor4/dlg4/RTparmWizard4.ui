@@ -194,12 +194,12 @@ p, li { white-space: pre-wrap; }
                </property>
                <item>
                 <property name="text">
-                 <string>C   Celsius  </string>
+                 <string>C Celsius  </string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>K   Kelvin</string>
+                 <string>K Kelvin</string>
                 </property>
                </item>
               </widget>
@@ -1226,6 +1226,38 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>317</x>
      <y>270</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>butT</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>butP</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>428</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>468</x>
+     <y>428</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>butP</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>butT</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>468</x>
+     <y>428</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>172</x>
+     <y>428</y>
     </hint>
    </hints>
   </connection>

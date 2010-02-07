@@ -373,9 +373,9 @@ TRTParm::MakeQuery()
     gstring calcScript;
     if( rpp->expr )
      calcScript = rpp->expr;
+    gstring    xName;
 
-
-    if( !vfRTparmSet( window(), p_key, flgs, size, val, calcScript, namesLines ))
+    if( !vfRTparmSet( window(), p_key, flgs, size, val, calcScript, xName, namesLines ))
          Error( p_key, "RTparm record configuration cancelled by the user!" );
      //  return;   // cancel
 
@@ -407,6 +407,7 @@ TRTParm::MakeQuery()
         {
           strncpy(  rpp->lNam[ii], namesLines[ii].c_str(), MAXGRNAME );
         }
+        strncpy( rpp->xNames, xName.c_str(), MAXAXISNAME  );
      }
 }
 

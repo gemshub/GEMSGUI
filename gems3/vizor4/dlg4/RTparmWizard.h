@@ -24,6 +24,7 @@
 #include "EquatSetupWidget.h"
 
 
+
 class RTparmWizard : public QDialog, public Ui::RTparmWizardData
 {
     Q_OBJECT
@@ -44,7 +45,7 @@ public:
     virtual ~RTparmWizard();
 
     void   getSizes( int size[7] );
-    void   getFlags( char flgs[10] );
+    void   getFlags( char flgs[10], gstring& xName );
     void   getFloat( float val[6] );
 
     gstring getScript() const

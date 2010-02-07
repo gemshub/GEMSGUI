@@ -143,7 +143,7 @@ vfReacDCSet(QWidget* par, const char * p_key,
 bool
 vfRTparmSet(QWidget* par, const char * p_key,
             char flgs[10], int sizes[7], float val[6],
-            gstring& script, TCStringArray& names  );
+            gstring& script, gstring& xName, TCStringArray& names  );
 
 bool
 vfPhaseSet(QWidget* par, const char * p_key,

@@ -123,10 +123,15 @@ RTparmWizard::RTparmWizard( const char* pkey, char flgs[10], int size[7],
     if( ii >= 0  )
         pPun->setCurrentIndex(ii);
     if( flgs[6] == 'T' )
+    {
      butT->setChecked(true);
+     butP->setChecked(false);
+    }
     else
-     butP->setChecked(true);
-
+    {
+        butT->setChecked(false);
+        butP->setChecked(true);
+    }
 
 //Page 2 equations
      resetPageList();
@@ -186,7 +191,7 @@ void   RTparmWizard::getSizes( int size[7] )
     size[2] = pMode->currentIndex();
 }
 
-void RTparmWizard::getFlags( char flgs[6] )
+void RTparmWizard::getFlags( char flgs[6], gstring& xName )
 {
 // Page 1 - not return
     QString str = pPtun->currentText();
@@ -196,9 +201,13 @@ void RTparmWizard::getFlags( char flgs[6] )
     flgs[8] = str[0].toLatin1();
 
     if(butP->isChecked())
-      flgs[6] = 'P';
+    {  flgs[6] = 'P';
+       xName = pPun->currentText().toLatin1().data();
+    }
     else
-      flgs[6] = 'T';
+    {  flgs[6] = 'T';
+       xName = pPtun->currentText().toLatin1().data();
+    }
 
 // Page 2
   if( pECol->value() > 0 && pELine->value() > 0 )

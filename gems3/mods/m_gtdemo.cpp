@@ -473,8 +473,8 @@ AGAINRC:    //get  keypart
        aMrk.Clear();
        aMrk2 = vfMultiChoiceSet(window(), aRklist,
                        "Please, mark some record keys for data sampling", aMrk2 );
-      for( i=0; i<aMrk2.GetCount(); i++ )
-          aMrk.Add(aRklist[aMrk2[i]]);
+      for(uint j=0; j<aMrk2.GetCount(); j++ )
+          aMrk.Add(aRklist[aMrk2[j]]);
     }
     else
     {

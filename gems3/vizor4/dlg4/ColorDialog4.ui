@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>434</width>
+    <width>447</width>
     <height>173</height>
    </rect>
   </property>
@@ -32,7 +32,7 @@
      </property>
      <layout class="QVBoxLayout">
       <item>
-       <layout class="QHBoxLayout">
+       <layout class="QHBoxLayout" name="layout">
         <property name="spacing">
          <number>15</number>
         </property>
@@ -81,7 +81,7 @@
        </layout>
       </item>
       <item>
-       <layout class="QGridLayout">
+       <layout class="QGridLayout" name="layuot2">
         <item row="1" column="4">
          <widget class="QRadioButton" name="p9">
           <property name="text">
@@ -198,7 +198,7 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout">
+       <layout class="QHBoxLayout" name="layout3">
         <item>
          <widget class="QFrame" name="pColor">
           <property name="frameShape">
@@ -228,7 +228,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout">
+    <layout class="QVBoxLayout" name="layout4">
      <item>
       <widget class="QPushButton" name="PushButton10">
        <property name="sizePolicy">

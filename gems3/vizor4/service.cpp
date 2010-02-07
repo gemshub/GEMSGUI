@@ -660,12 +660,13 @@ vfReacDCSet(QWidget* par, const char * p_key,
 
 bool
 vfRTparmSet(QWidget* par, const char * p_key,
-            char flgs[10], int size[7], float val[6], gstring& script, TCStringArray& names   )
+            char flgs[10], int size[7], float val[6],
+            gstring& script, gstring& xName, TCStringArray& names   )
 {
      RTparmWizard cdlg( p_key, flgs, size, val, script.c_str(), par );
      if( !cdlg.exec() )
        return false;
-    cdlg.getFlags( flgs );
+    cdlg.getFlags( flgs, xName  );
     cdlg.getSizes( size );
     cdlg.getFloat( val );
 

@@ -134,7 +134,7 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <layout class="QGridLayout">
+    <layout class="QGridLayout" name="laypout">
      <property name="margin">
       <number>0</number>
      </property>
@@ -462,7 +462,7 @@
     </widget>
    </item>
    <item row="6" column="0" colspan="2">
-    <layout class="QHBoxLayout">
+    <layout class="QHBoxLayout" name="layout2">
      <item>
       <widget class="QPushButton" name="pStepAccept">
        <property name="sizePolicy">
