@@ -79,5 +79,46 @@ This will be announced after the agreement of all developer parties involved has
 reached. 
 
 
+Appendix: Files removed from the gems3 svn module
+
+ \vizor4\kernel\v_user.h  
+ \vizor4\libs\gdatastream.h  
+ \vizor4\libs\gstring.h  
+ \vizor4\libs\array.h  
+ \vizor4\libs\verror.h  
+ \vizor4\libs\gdatastream.cpp  
+ \vizor4\libs\gstring.cpp  
+ \mods\s_fgl1.cpp  
+ \mods\s_fgl2.cpp  
+ \mods\s_fgl3.cpp  
+ \mods\s_fgl4.cpp  
+ \mods\m_param.h  
+ \mods\s_fgl.h  
+ \mods\submod\ms_multi_format.cpp  
+ \mods\submod\databr.h  
+ \mods\submod\ipm_chemical.cpp  
+ \mods\submod\nodearray.cpp  
+ \mods\submod\node.cpp  
+ \mods\submod\io_arrays.cpp  
+ \mods\submod\datach.h  
+ \mods\submod\ipm_chemical2.cpp  
+ \mods\submod\node_format.cpp  
+ \mods\submod\ipm_chemical3.cpp  
+ \mods\submod\ms_multi.h  
+ \mods\submod\ipm_simplex.cpp  
+ \mods\submod\ms_multi_file.cpp  
+ \mods\submod\ipm_main.cpp  
+ \mods\submod\nodearray.h  
+ \mods\submod\node.h  
+ \mods\submod\io_arrays.h  
+ \mods\numerics\jama_cholesky.h  
+ \mods\numerics\tnt_array2d.h  
+ \mods\numerics\num_methods.cpp  
+ \mods\numerics\num_methods.h  
+ \mods\numerics\tnt.h  
+ \mods\numerics\tnt_i_refvec.h  
+ \mods\numerics\jama_lu.h  
+ \mods\numerics\tnt_array1d.h  
+ \mods\s_fgl.cpp  
 
  

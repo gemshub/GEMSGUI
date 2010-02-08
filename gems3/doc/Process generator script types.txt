@@ -1,0 +1,447 @@
+Typical process simulation setups 
+
+Pressure and/or temperature (P) sequence at constant bulk composition.
+
+The simplest variant (requires no P_expr script): pairwise change of T and P.
+
+Start with setting iterators as shown below. 
+
+iTm	iV	iP	iTC	iNv	iTau	ipXi	iNu	ipH	ipe
+1000	0	500	400	0	0	0	0	0	0
+1000	0	500	700	0	0	0	0	0	0
+0	0	0	1	0	0	0	0	0	0
+
+Comment: For calculations along the Psat curve, set iP[0] and iP[1] to zeros.   
+
+pgExpr template script: 
+Abscissa xp[J] can be either T or P (alternatively, TC[0], TK[0] or PG[0]).
+As ordinates, any properties of the system or of any phase or species can be
+selected. For example (calculation along Psat curve, H2O in gas phase): 
+
+xp[J] =: TC[0];
+yp[J][0] =: PG[0];
+yp[J][1] =: pH;  
+yp[J][2] =: lga[{H2O}];
+
+
+A particular case: plotting solvus for a two-phase binary solid solution. 
+Also the total number of GEMIPM iterations for each temperature point is 
+collected. 
+
+xp[J] =: cTC;
+yp[J][0] =: Wxx[{EM0-Phase0}];
+yp[J][1] =: Wxx[{EM0-Phase1}];
+yp[J][2] =: (ItEfd+ItIpm)/1000;
+
+
+(P) type process:
+Variant to generate PT phase diagrams (uses vT and vP Process vectors).
+
+Start with setting iterators as shown below.
+
+iTm	iV	iP	iTC	iNv	iTau	ipXi	iNu	ipH	ipe
+1000	0	0	0	0	0	0	0	0	0
+1000	0	1000	500	0	0	0	0	0	0
+0	0	100	25	0	0	0	0	0	0
+
+In this example, a grid of 11 x 21 = 231 T,P pairs will be generated using 
+the P_expr script:
+
+$ Calculation of number of TC points
+I =: floor( (iTC[1]-iTC[0])/iTC[2] )+1; 
+$ Calculation of current P value from J index
+cP =: iP[0]+ floor( J/I )*iP[2]; vP[J] =: cP; 
+$ Calculation of current T value from J index
+cTC =: iTC[0] + mod( J, I ) * iTC[2];
+cT =: cTC+273.15; vT[J] =: cT; 
+$ End of script
+
+The script stores generated T values in vT and P values in vP arrays 
+(each at least with 231 cells). 
+
+To construct the T,P phase diagram, the pgExpr script below can be used:
+
+$ Plotting calculated grid as T,P diagram 
+xp[J] =: vT[J];
+$ Ordinates: Presence of the phase in equilibrium
+yp[J][0] =: (Xa[{Phase1}]>1e-8? vP[J]/10: empty());
+yp[J][1] =: (Xa[{Phase2}]>1e-8? vP[J]/10: empty());
+$ ...... more phase names
+
+Comments: The script uses values collected in the vT vector as an abscissa, 
+and many ordinates (in the yp table) for all different phases (Phase1, Phase2, 
+...) to be shown on the diagram. Each phase is checked on its presence in 
+equilibrium at T,P, and if present, the respective pressure (in J/bar) is 
+taken; otherwise, the empty() value is taken (invisible on the graph). On 
+this graph, the line thicknesses should be set to 0.
+
+
+
+Sequential (irreversible) change of bulk composition etc. (S), or direct titration 
+
+Can generate any regular change of bulk composition and/or kinetic 
+constraints, T, P, using only the parent system as the initial state. 
+This change(s) can be set up using either linear (iNu) or logarithmic (ipXi) 
+process extent value iterators. The first case is used e.g. for changing 
+solid/water ratio or for simulating oxidation/reduction of the system. 
+The second case is typical for reproducing e.g. trace element uptake 
+isotherms.  
+
+Variant with linear titration scale.
+
+Iterators (iTm should have the same number of steps as iNu)
+ 
+iTm	iV	iP	iTC	iNv	iTau	ipXi	iNu	ipH	ipe
+2010	0	90	290	0	0	0	0.1	0	0
+2310	0	90	290	0	0	0	3.1	0	0
+10	0	0	0	0	0	0	0.1	0	0
+
+Here, the iNu iterator sets the addition of titrants to the the bulk 
+composition of the process-generated system (0 to 3 with step 0.1). 
+
+P_expr script template: 
+
+modC[J] =: cNu;
+xa_[{Titrant0}] =: cNu * Coeff0;
+xd_[{Titrant1}] =: cNu * Coeff1;
+bi_[{Titrant2}] =: cNu * Coeff2; 
+$ .... more titrants
+
+Here, titrants Titrant0, ... must be selected from Compos, DComp or IComp project 
+system name lists. Stoichiometric coefficients Coeff0, ... and units of measurement 
+for the respective xa_, xd_, and bi_ elements must be set consistently in the 
+parent system and in the above script. The same collection of objects should 
+be provided for selection as in the input system recipe dialog.   
+
+pgExpr script template (should be assembled using the selection dialog): 
+
+xp[J] =: modC[J];
+$ Abscissa can also be another property of the system
+yp[J][0] =: lga[{Component1}];
+yp[J][1] =: (x[{Component2}]? lg(x[{Component2}]): empty());
+yp[J][2] =: (Xa[{Phase1}]? 1: empty{());
+yp[J][3] =: (Xa[{Phase2}]? 2: empty{());
+$ .... other feasible properties of the system, 
+$      any components and phases can be added
+
+The actual names of components and phases shall be taken from the usual output 
+selection lists for constructing the pgExpr script. 
+
+
+Variant for plotting Kd and D for a non-ideal binary solid solution.
+The iterator iNu defines the change in composition for sparingly soluble 
+solid phases (if the solubility is higher then increase all three values 
+proportionally).
+  
+iTm	iV	iP	iTC	iNv	iTau	ipXi	iNu	ipH	ipe
+1000	0	1	25	0	0	0	0.001	0	0
+1200	0	1	25	0	0	0	0.999	0	0
+1	0	0	0	0	0	0	0.01	0	0
+
+P_expr script sets the composition of (predominant) solid solution in the
+system (provided the rest of recipe is set in the parent system and remains
+unchanged). BL and CL stand for the DC names of solid solution end members 
+
+xd_[{BL}] =: cNu;
+xd_[{CL}] =: 1-cNu; 
+
+The pgExpr script has the mole fraction as abscissa and the calculation of 
+two partition coefficients (log Kd) and their ratio - distribution coefficient
+(log D)-  as ordinates:
+ 
+$ Abscissa - mole fraction of BL in solid solution
+xp[J] =: Wxx[{BL}];
+$ log(Kd(C)) in kgH2O
+yp[J][0] =: lg( Wxx[{CL}] / my[{C_ion}] );
+$ log(Kd(B)) in kgH2O
+yp[J][1] =: lg( Wxx[{BL}] / my[{B_ion}] );
+$ log(D), dimensionless
+$ yp[J][2] =: lg( Wxx[{BL}] / my[{B_ion}] / (Wxx[{CL}] / my[{C_ion}]) );
+yp[J][2] =: yp[J][1] - yp[J][0]; 
+$ Done
+
+
+
+Variant with the logarithmic titration scale.
+Typical use - modeling of trace element uptake isotherms e.g. in a solid 
+solution. The iterators should look like this:
+
+iTm	iV	iP	iTC	iNv	iTau	ipXi	iNu	ipH	ipe
+1000	0	1	25	0	0	0.001	0	0	0
+1700	0	1	25	0	0	7.001	0	0	0
+2	0	0	0	0	0	0.02	0	0	0
+
+The ipXi iterator sets the logarithmic titration scale.
+In the P_expr script below, it is assumed that ipXi sets the pC scale where 
+p denotes -log10 (similar to pH). Also, the presence of Compos records for 
+setting up additions of trace and host stoichiometries in the bulk composition
+is assumed (the rest is defined in the parent system). The first statement
+converts from the pC into the "usual" scale.    
+
+cNu =: 1/cXi;
+xa_[{Trace}] =: cNu;
+xa_[{Host}] =: 1-cNu; 
+modC[J] =: cXi;
+
+Of course, it is possible to use the ipXi iterator setting the "usual" scale directly. 
+In this case, set ipXi[0] to -7.001 and ipXi[1] to -0.001 (do not set to 0 because this
+will cause the Host addition to zero). The P_expr script then takes the form: 
+
+xa_[{Trace}] =: cXi;
+xa_[{Host}] =: 1-cXi; 
+
+In the pgExpr script, the abscissa is usually the log of total aqueous dissolved 
+concentration of Trace El(ement), and ordinates can be concentration in the solid, 
+as well as partition (Kd) and distribution (D) coefficients: 
+
+$ Abscissa - log total molality of Trace element
+xp[J] =: lgm_t[{TraceEl}];
+$ lg(x Trace end member)
+yp[J][0] =: lg( bXs[{TraceEl}]/( bXs[{TraceEl}]+ bXs[{HostEl}]) );
+$ lg(kd(TraceEl))
+yp[J][1] =: lg( bXs[{TraceEl}]/( bXs[{TraceEl}]+ bXs[{HostEl}])/my[{TraceEl}] );
+$ lg(D) host-trace
+yp[J][2] =: yp[J][1] 
+     - lg( bXs[{HostEl}]/( bXs[{TraceEl}]+ bXs[{HostEl}])/my[{HostEl}] ); 
+
+In the above script, concentration of trace or host elements in solid are given 
+using the bXs object - the bulk elemental composition of all solids in the system
+together. This is convenient e.g. for modeling bulk isotherms or Kds of trace 
+element in soil or rock aggregate. Actual element names (e.g. Sr, Ca) should be
+substituted for TraceEl and HostEl. If the solid of interest is a binary solid 
+solution only then the pgExpr script provided in previous section can be used
+as an alternative.
+
+
+
+
+Lippmann diagram (L) - can be plotted in GEMS only in transposed form!
+
+First step: select a binary solid solution phase (end members EM0 and EM1)
+
+In the classic variant:
+Select common ion (Comion) and end-member ions (EMion0, EMion1) consistent with 
+order of end members in phase. Mole fractions of EM1 and Cation1 will be sampled.
+
+In the variant with total dissolved concentrations:
+Select independent components for common ion (ComIC) and end-member ions (EM0IC, EM1IC).
+
+Iterators: (iTm should have more or the same number of steps as ipXi)  
+
+iTm	iV	iP	iTC	iNv	iTau	ipXi	iNu	ipH	ipe
+1000	0	1	25	0	0	-5	0	0	0
+1200	0	1	25	0	0	5	0	0	0
+1	0	0	0	0	0	0.1	0	0	0
+
+P_expr script template:
+
+if(cXi < 0.5) begin
+   xd_[{EM0}] =: 1-cXi; xd_[{EM1}] =: cXi; 
+   modC[J] =: cXi;
+end
+if( cXi >= 0.5 & cXi <= 2 ) begin
+   xd_[{EM0}] =: 0.5; xd_[{EM1}] =: 0.5; 
+   modC[J] =: 0.5;
+end
+if(cXi > 2) begin
+   xd_[{EM0}] =: 1/cXi; xd_[{EM1}] =: 1-1/cXi; 
+   modC[J] =: 1/cXi;
+end
+
+
+pgExpr script template (classic Lippmann diagram variant):
+
+$ Abscissa - log10 of Lippmann's total solubility product
+xp[J] =: lga[{Comion}] + lg( 10^lga[{EMion0}] +  10^lga[{EMion1}] );
+$ Solidus
+yp[J][0] =: Wxx[{EM1}];  
+$ Solutus
+yp[J][1] =: 10^lga[{EMion1}] / ( 10^lga[{EMion0}] + 10^lga[{EMion1}] ); 
+
+
+pgExpr script template (Lippmann diagram variant with total dissolved concentrations):
+
+$ Abscissa - total dissolved elements product
+xp[J] =: lg( m_t[{ComIC}] ) + lg( m_t[{EM0IC}] +  m_t[{EM1IC}] );
+$ Solidus
+yp[J][0] =: Wxx[{EM1}];  
+$ Solutus
+yp[J][1] =: m_t[{EM1IC}] / ( m_t[{EM0IC}] + m_t[{EM1IC}] ); 
+$ Done
+
+
+
+One arbitrary inverse calculation (T) as defined in the P_expr script
+
+Suppose a process simulator should find how many moles of CO2 per 1 kg of water in equilibrium 
+with excess calcite CaCO3 (closed system) must be added to bring it to a prescribed equilibrium 
+pH=6.4±0.01. 
+This can be done using the following P_expr script (Titrant should be replaced by CO2@):
+
+$ Finding amount of CO2 added to obtain a prescribed pH 
+$ Initialization 
+  if( NeIt[1] = 0 ) 
+  begin 
+     ipH[1]=:pH-ipH[0]; iNu[2]=:0; 
+     cNu=:iNu[0]; iNu[1]=: xd_[{Titrant}]; 
+  end 
+$ Calculation of difference between given and computed pH 
+  cpH =: pH-ipH[0]; 
+$ Recalculation of a step in titrant molality 
+  cNu =: ( ( cpH * ipH[1] ) < 0 ? cNu*0.382 : cNu ); 
+   ipH[1] =: cpH; 
+$ Calculation of the amount of titrant 
+  iNu[2] =: iNu[2] + cNu*sign(cpH); 
+  xd_[{Titrant}] =: iNu[1]+iNu[2]; 
+$ Check of convergence 
+  Next =: ( ( abs( cpH ) < ipH[2] ) ? 0 : 1); 
+$ Finish
+
+The iterators should be set as follows:
+
+iTm	iV	iP	iTC	iNv	iTau	ipXi	iNu	ipH	ipe
+1000	0	1	25	0	0	0	0.01	6.4	0
+1000	0	1	25	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0.01	0
+
+The iNu[0] cell should contain an initial guess how much Titrant will be added; 
+if it is too small or too large then too many steps of this simple  "gold-section" 
+algorithm will be performed. 
+The iNu[2] cell will contain the current amount of titrant added; 
+iNu[1] is loaded at the beginning with the amount of this titrant in the parent 
+SysEq definition. 
+ipH[0] contains the prescribed pH value, ipH[2] gives precision to be achieved, 
+ipH[1] will hold the current difference between the calculated and prescribed pH. 
+If alkali is used for titration instead of acid, the assignment cpH =: pH-ipH[0]; 
+must be replaced by cpH =: ipH[0]-pH;  
+
+<Important: please debug process CaSrBaCS:G:TestInvT:1:0:1:25:0:SingleInvTit:T:>
+
+The pgExpr script may not be necessary in this case of process simulator. 
+
+
+
+Batch inverse titration sequence (G) - typical for property-vs-pH diagrams  
+
+Typical variant: a sequence of equilibria with pH step is generated
+
+First step: select Acid and Base from the project Compos list (option for the 
+program: write it also into the PeNote field as e.g. Acid={HCl},Base={NaOH}).   
+
+Second step: set in the ipH iterator the initial pH, the final pH, and the pH
+increment. Set in iNu[1] the tolerance with which a pH value is obtained by 
+automatic adjustment of acid- or base additions from the interval given in 
+ipXi[0] and ipXi[1]. The absolute minimum change in the titrant addition is 
+given in ipXi[2] (usually no need to change).
+
+Default settings: 
+
+iTm	iV	iP	iTC	iNv	iTau	ipXi	iNu	ipH	ipe
+1350	0	1	25	0	0	-0.1	0	3.5	0
+2250	0	1	25	0	0	0.1	0.01	12.5	0
+25	0	0	0	0	0	1e-011	0	0.25	0
+
+iTm should have more or the same number of steps as ipH. 
+
+Comments: It is assumed that Compos records exist for the acid "Acid" (e.g. HCl) 
+and base "Base" (e.g. NaOH), and units of measurement in xa_ Compos settings in 
+the parent system and for the ipXi iterator values are the same. Convention 
+for the ipXi iterator: negative number is the (maximum) addition of acid that 
+yields in equilibrium pH < ipH[0]; positive number is the (maximum) addition 
+of base that yields pH > ipH[1] in this system. These limits must be known for 
+the Process parent system before setting up the inverse acid-base titration 
+simulator.    
+
+P_expr script template:
+
+$ pH sequence of inv. titrations
+if ( Next=1) begin
+ cNu =: cpH-pH; end
+if (Next=2) begin
+ xa_[{Base}] =: ((cEh < 0)? 1e-9: cEh); 
+ xa_[{Acid}] =: ((0-cEh < 0)? 1e-9: 0-cEh);
+ modC[J] =: cEh; 
+end
+$ modC[J]: acid or base added
+
+pgExpr script template (should be assembled using the selection dialog): 
+
+xp[J] =: pH;
+$ Abscissa must be pH
+yp[J][0] =: lga[{OH-}];
+yp[J][1] =: lg(gamma[{OH-}]);
+yp[J][2] =: lg(my[{OH-}]);
+yp[J][3] =: lgm_t[{H}];
+$ .... any optional properties of any components and phases can be added
+$ such script can be used for plotting pH-speciation or pH-solubility diagrams
+
+
+Variant: After running this inverse titration simulator and cloning it into 
+another Process record of "direct titration type" (S) with the same parent 
+SysEq record, the additions of acid or base stored in the modC array can be
+used with the following simple P_expr script (set ipXi iterator fields to 0):
+
+cEh =: modC[J];
+ xa_[{Base}] =: ((cEh < 0)? 1e-8: cEh); 
+ xa_[{Acid}] =: ((0-cEh < 0)? 1e-8: 0-cEh);
+
+The actual Compos names to substitute for Acid and Base can be taken from the 
+PeNote field (if stored there, of course). 
+This process simulator runs about 10-15 times faster, but only for the same 
+parent system. 
+
+
+Variant of inverse titration process setup to model sorption isotherms at constant pH.
+
+The iterators should be set as shown below (note that there is no increment in ipH). 
+
+iTm	iV	iP	iTC	iNv	iTau	ipXi	iNu	ipH	ipe
+1020	0	1	25	0	0	-0.03	0	6	-12
+1120	0	1	25	0	0	0.01	0.01	6	-2
+2	0	0	0	0	0	1e-010	0	0	0.2
+
+The ipe iterator sets logarithmic addition of a titrant TraceM (e.g. Ni(OH)2) assuming 
+that a Compos record TraceM exists in the project. Iterators ipXi and iNu are set as
+usual for the inverse titration sequence (see above). 
+
+The P_expr script is also the same as above, except that a line adding the TraceM  
+appears in the second begin-end block:
+
+$ inv. titration model of constant-pH TraceM isotherm
+if ( Next=1) begin
+ cNu =: cpH-pH; end
+if (Next=2) begin
+ xa_[{Base}] =: ((cEh < 0)? 1e-9: cEh); 
+ xa_[{Acid}] =: ((0-cEh < 0)? 1e-9: 0-cEh);
+ modC[J] =: cEh;
+ xa_[{TraceM}] =: 10^cpe;   
+end
+
+This script is useful if the addition of TraceM can significantly change pH of the
+system (usually at relatively high additions exceeding 0.00001 mol/kgH2O). 
+
+pgExpr script template usually looks like this: 
+
+xp[J]=: lg(my[{M_ion}] + my[{M_c1}] + my[{M_c2}]);
+$ ... more aqueous complexes of M can be accounted for
+yp[J][0]=: (x[{M_s1}]> 0?
+	lg(x[{M_s1}]/SorbentMass) : empty() );
+yp[J][1]=: (x[{M_s2}]> 0?
+	lg(x[{M_s2}]/SorbentMass) : empty() );
+$ ... other sorbed species of M can be considered
+$ log total M sorbed
+yp[J][2] =: lg((x[{M_s1}]+x[{M_s2}])/SorbentMass);
+$ log Kd
+yp[J][3] =: yp[J][2] - xp[J];
+
+The abscissa in the above script is the log of total aqueous dissolved molality
+of TraceM (represented by species M_ion, M_c1, M_c2, ...). 
+The ordinates are concentrations of sorbed Trace M species in the solid (here 
+in mol/g if SorbentMass is expressed in g), as well as the total isotherm
+and the Kd plot (the last statement). 
+
+
+
+Sequential reactor (R) scheme (reciprocal, uses equilibrium composition of some phases)
+
+
