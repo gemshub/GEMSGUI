@@ -862,8 +862,8 @@ short TProfil::BAL_compare()
     double Go, Gg, Ge, pGo;
 
 // Test A - sizes and selectors
-    if( pmp->N != syp->N || pmp->L != syp->L || pmp->Ls != syp->Ls
-            || pmp->LO != syp->Lw || pmp->PG != syp->Lg
+    if( pmp->N != syp->N || pmp->L != syp->L || pmp->Ls != syp->Ls || pmp->LO != syp->Lw
+            || pmp->PG != syp->Lg || pmp->E != syp->PE  // check of E added 08.02.2010 DK
             || pmp->PSOL != syp->Lhc || pmp->Lads != syp->Lsor
             || pmp->FI != syp->Fi || pmp->FIs != syp->Fis )
         return 0;

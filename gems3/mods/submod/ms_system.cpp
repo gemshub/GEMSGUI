@@ -658,6 +658,13 @@ void TSyst::SyTest()
     if( strchr( rt[RT_SYSEQ].PackKey(), '*') != NULL )
         Error( "The system is not defined! ",
                "Please, create a new record key\n and specify bulk composition of the system");
+
+    // Added as bugfix for System remake  08.02.2010 DK
+    if( sy.PE != S_OFF && mup->ICC[mup->N-1] == IC_CHARGE )
+           sy.Icl[mup->N-1] = S_ON;
+    if( sy.PE == S_OFF && mup->ICC[mup->N-1] == IC_CHARGE )
+           sy.Icl[mup->N-1] = S_OFF;
+
     mark_ic_to_dc();
     mark_dc_to_ph();
     mark_ph_to_dc();

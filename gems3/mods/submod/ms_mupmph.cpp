@@ -73,7 +73,7 @@ void TMulti::MultiRemake( const char *key )
     else pmp->PLIM = 0;
 //    pmp->IT = 0;     Debugging 12.03.2008 DK
     pmp->ITF = 0; pmp->ITG = 0;
-    if( syp->PE != S_OFF )
+    if( syp->PE != S_OFF )  
         pmp->E = 1;
     else pmp->E = 0;
     if( syp->NsTm > 0 && syp->PNfsp != S_OFF )
@@ -91,7 +91,7 @@ void TMulti::MultiRemake( const char *key )
     pmp->GWAT = syp->Mwat;
     pmp->YMET = 0;
 //    pmp->PCI = 0.0;
-pmp->PCI = 1.0;
+    pmp->PCI = 1.0;
 // setting volume balance constraints, if necessary
     memcpy( pkey, pmp->stkey+48-MAXSYWHAT, MAXPTN );
     pkey[MAXPTN] = 0;
@@ -153,6 +153,7 @@ pmp->PCI = 1.0;
     // Reallocating memory, if necessary
     if( !pmp->pBAL )
         dyn_new();
+
     if( pmp->pBAL == 2 )
          goto NEXT2;
 
