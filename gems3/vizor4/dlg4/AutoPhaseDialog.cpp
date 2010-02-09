@@ -3,7 +3,7 @@
 //
 // Implementation of AutoPhaseDialog class
 //
-// Copyright (C) 2003 S.Dmytriyeva
+// Copyright (C) 2003,2010 SD, DK
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Vizor library which uses the
@@ -24,11 +24,13 @@ const char * dfAqKey3 =  "a   AQELIA  aq_gen          aq  EDH_K           ";
 const char * dfAqKey2 =  "a   AQELIA  aq_gen          aq  DH_K            ";
 const char * dfAqKey1 =  "a   AQELIA  aq_gen          aq  DH_LL           ";
 const char * dfAqKeyY =  "a   AQELIA  aq_gen          aq  EDH_Y           ";
-const char * dfAqKeyU =  "a   AQELSI  aq_gen          aq  User-Provided   ";
+const char * dfAqKeyU =  "a   AQELSI  aq_spec         aq  User-Provided   ";
 const char * dfGasKey =  "g   GASMXID gas_gen         gm  Ideal           ";
-const char * dfFluKey =  "f   FLUIDMX fluid_gen       gm  CG_EoS          ";
-const char * dfFluKeyP=  "f   PSRV    fluid_gen       gm  PSRV_EoS        ";
+const char * dfFluKeyF=  "f   CG      fluid_gen       gm  CG_EoS          ";
+const char * dfFluKey7=  "f   PR      fluid_gen       gm  PR_EoS          ";
+const char * dfFluKeyP=  "f   PRSV    fluid_gen       gm  PRSV_EoS        ";
 const char * dfFluKeyE=  "f   SRK     fluid_gen       gm  SRK_EoS         ";
+const char * dfFluKeyU = "f   FLUID   fluid_spec      gm  User-Provided   ";
 
 // List of maximum values of ionic strength up to which the respective model is applicable
 // (not used in calculations, just to inform the user)
@@ -82,6 +84,7 @@ AutoPhaseDialog::AutoPhaseDialog (
       case '-': gselNo->setChecked( true ); break;
       case 'U': gselU->setChecked( true );  break;
       case 'F': gselF->setChecked( true ); break;
+      case '7': gsel7->setChecked( true ); break;
       case 'P': gselP->setChecked( true ); break;
       case 'E': gselE->setChecked( true ); break;
         case 'I':
@@ -191,8 +194,10 @@ char AutoPhaseDialog::get_gcode()
              gas_code ='-';
               else if( gselP->isChecked())
                    gas_code ='P';
-                   else if( gselE->isChecked())
-                   gas_code ='E';
+                   else if( gsel7->isChecked())
+                       gas_code ='7';
+                       else if( gselE->isChecked())
+                            gas_code ='E';
 
   return gas_code;
 }
@@ -213,12 +218,14 @@ AutoPhaseDialog::set_gkey( gstring& g_key )
     else*/ if( gselI->isChecked())
             gas_key = dfGasKey;
          else if( gselF->isChecked())
-               gas_key = dfFluKey;
+               gas_key = dfFluKeyF;
             else if( gselNo->isChecked())
                   gas_key ="";
                else if( gselP->isChecked())
                       gas_key =dfFluKeyP;
-                  else if( gselE->isChecked())
+                   else if( gsel7->isChecked())
+                           gas_key =dfFluKey7;
+                      else if( gselE->isChecked())
                               gas_key =dfFluKeyE;
   gpRkeyEdit->setText( gas_key.c_str() );
 }
