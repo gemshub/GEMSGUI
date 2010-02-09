@@ -118,7 +118,7 @@ bool  vfSystemInput(QWidget* par, const char * p_key,
 
 bool
 vfProcessSet(QWidget* par, const char * p_key,
-              char flds[24], int size[6],
+              char flds[24], int size[6], short tabInt[6], double tabDoubl[24],
               gstring& calcScript, gstring& outScript, TCStringArray& names );
 bool
 vfGEM2MTSet(QWidget* par, const char * p_key,

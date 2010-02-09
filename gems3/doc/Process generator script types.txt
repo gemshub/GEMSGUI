@@ -199,10 +199,10 @@ xp[J] =: lgm_t[{TraceEl}];
 $ lg(x Trace end member)
 yp[J][0] =: lg( bXs[{TraceEl}]/( bXs[{TraceEl}]+ bXs[{HostEl}]) );
 $ lg(kd(TraceEl))
-yp[J][1] =: lg( bXs[{TraceEl}]/( bXs[{TraceEl}]+ bXs[{HostEl}])/my[{TraceEl}] );
+yp[J][1] =: lg( bXs[{TraceEl}]/( bXs[{TraceEl}]+ bXs[{HostEl}])/m_t[{TraceEl}] );
 $ lg(D) host-trace
 yp[J][2] =: yp[J][1] 
-     - lg( bXs[{HostEl}]/( bXs[{TraceEl}]+ bXs[{HostEl}])/my[{HostEl}] ); 
+     - lg( bXs[{HostEl}]/( bXs[{TraceEl}]+ bXs[{HostEl}])/m_t[{HostEl}] );
 
 In the above script, concentration of trace or host elements in solid are given 
 using the bXs object - the bulk elemental composition of all solids in the system

@@ -23,28 +23,72 @@
 #include "ui_ProcessWizard4.h"
 #include "EquatSetupWidget.h"
 
+
+/*!
+  \ class TProcesDelegate
+  \ individual items in views are rendered and edited using delegates
+*/
+class TProcesDelegate: public QItemDelegate
+{
+        Q_OBJECT
+
+public:
+
+         TProcesDelegate( QObject * parent = 0 );
+         QWidget *createEditor(QWidget *parent,
+                               const QStyleOptionViewItem &option,
+                               const QModelIndex &index) const;
+};
+
+
 class ProcessWizard : public QDialog, public Ui::ProcessWizardData
 {
     Q_OBJECT
 
+    char curType;
     gstring calcScript;
     gstring outScript;
     EquatSetup *pageScript;
+    QList<QListWidget *> pLsts;
+    QButtonGroup *subTypeButtons;
+    TIArray<pagesSetupData> pgData;
+
+    bool page1Changed;
+    bool tItersChanged;
 
     void 	resetNextButton();
     void 	resetBackButton();
 
+    // internal functions
+    char        getType() const;
+    QStringList getSelected( QListWidget *lst  );
+    int         getNPoints( int col );
+    void        setupPages();
+
+    // functions for page 1 functionality
+    void defineWindow( char type );
+    int  getNPV( char type, int subtype);            // get number of points
+    void  setCalcScript( char type, int subtype );   // set process script
+    void  setOutScript( char type, int subtype );    // set output script
+
 public:
 
     ProcessWizard( const char* pkey, char flgs[24], int sizes[6],
+                   short tabInt[6], double tabDoubl[24],
        const char *acalcScript, const char *aoutScript,  QWidget* parent = NULL);
     virtual ~ProcessWizard();
 
-
     void   getSizes( int size[6] );
+    void   getTable( short size[6], double dbl[24] );
     void   getFlags( char flgs[24] );
+
+    gstring getCalcScript() const
+    { gstring res = textEquat1->toPlainText().toLatin1().data();
+      return res;
+    }
     gstring getOutScript() const
     { return pageScript->getScript(); }
+
     TCStringArray getNames() const
     { return pageScript->getNames(); }
 
@@ -56,7 +100,12 @@ protected slots:
     void help();
     void CmNext();
     void CmBack();
+
     void resetPageList();
+    void setMode(int);
+    void CmItersEdit(int , int );
+    void CmSetMode();
+    void changePage( int );
 
 };
 

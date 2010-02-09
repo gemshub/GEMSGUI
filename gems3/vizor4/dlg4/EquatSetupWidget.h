@@ -21,6 +21,7 @@
 #define EquatSetupWidget_included
 
 #include <QWidget>
+#include <QButtonGroup>
 #include "ui_EquatSetupWidget4.h"
 #include "array.h"
 #include "model_w.h"

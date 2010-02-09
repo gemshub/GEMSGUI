@@ -558,18 +558,20 @@ vfSystemInput(QWidget* par, const char * p_key,
 
 bool
 vfProcessSet(QWidget* par, const char * p_key,
-              char flgs[24], int size[6],
+              char flgs[24], int size[6], short tabInt[6], double tabDoubl[24],
               gstring& calcScript, gstring& outScript, TCStringArray& names )
 {
-     ProcessWizard pdlg( p_key, flgs, size,
+     ProcessWizard pdlg( p_key, flgs, size,  tabInt, tabDoubl,
                  calcScript.c_str(), outScript.c_str(), par );
      if( !pdlg.exec() )
       return false;
 
     pdlg.getFlags( flgs );
     pdlg.getSizes( size );
+    pdlg.getTable( tabInt, tabDoubl );
 
     outScript = pdlg.getOutScript();
+    calcScript = pdlg.getCalcScript();
     names = pdlg.getNames();
 
     return true;
