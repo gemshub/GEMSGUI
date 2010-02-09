@@ -397,7 +397,7 @@ char   ProcessWizard::getType() const
   if( pselT->isChecked())
    type='T';
   else if( pselG->isChecked())
-           type='G';
+           type=P_INV_TITR;
        else if( pselR->isChecked())
                 type='R';
           else if( pselP->isChecked())
@@ -405,7 +405,7 @@ char   ProcessWizard::getType() const
                 else  if( pselS->isChecked())
                            type=P_SYST;
                     else  if( pselL->isChecked())
-                                type='L';
+                                type=P_LIP;
   return type;
 }
 
@@ -417,13 +417,13 @@ void   ProcessWizard::getFlags( char flgs[24] )
    {
     case 'T': strncpy( flgs, "0++-+--++-+-", 12);
         break;
-    case 'G': strncpy( flgs, "0++-+--+--++", 12);
+    case P_INV_TITR: strncpy( flgs, "0++-+--+--++", 12);
         break;
     case 'R': strncpy( flgs, "0++-++-+--+-", 12);
         break;
     case P_SYST: strncpy( flgs, "0++-+-----+-", 12);
         break;
-    case 'L': strncpy( flgs, "0++-+-----+-", 12);
+    case P_LIP: strncpy( flgs, "0++-+-----+-", 12);
        break;
     case P_PVT:
     default:  memcpy( flgs, "0*----------", 12 );
@@ -519,6 +519,15 @@ void ProcessWizard::defineWindow(char type)
             pgData.Add( new pagesSetupData("my",o_wd_ym ));
             pgData.Add( new pagesSetupData("bXs", o_wo_bfc));
            break;
+    case P_LIP:
+           pgData.Add( new pagesSetupData("xd_", o_syxed));
+           pgData.Add( new pagesSetupData("lga",o_wd_yla ));
+           pgData.Add( new pagesSetupData("m_t", o_wd_icm));
+          break;
+    case P_INV_TITR:
+          pgData.Add( new pagesSetupData("xa_", o_syxea));
+          pgData.Add( new pagesSetupData("my",o_wd_ym ));
+          break;
 
      default: break;
      }
@@ -556,6 +565,24 @@ void ProcessWizard::defineWindow(char type)
                            this, SLOT(CmSetMode()));
        }
        break;
+   case P_LIP:
+       {
+         sub1->setText("Classic Lippmann diagram");
+         sub2->setText("Variant with total dissolved concentrations");
+         sub3->hide();
+         QObject::connect( pLsts[0], SIGNAL(itemSelectionChanged()),
+                           this, SLOT(CmSetMode()));
+        }
+         break;
+   case P_INV_TITR:
+         {
+           sub1->setText("pH diagram");
+           sub2->setText("Sorption isotherms at constant pH");
+           sub3->hide();
+           QObject::connect( pLsts[0], SIGNAL(itemSelectionChanged()),
+                             this, SLOT(CmSetMode()));
+          }
+          break;
 
    default: break;
    }
@@ -590,6 +617,15 @@ int  ProcessWizard::getNPV( char type, int subtype)             // get number of
              else
                ret = getNPoints( 7 ); // iNu
             break;
+   case P_LIP:
+            ret = getNPoints( 6 ); // iPxi
+            break;
+   case P_INV_TITR:
+            if( subtype == 0 )
+              ret = getNPoints( 8 ); // ipH
+            if( subtype == 1 )
+              ret = getNPoints( 9 ); // ipe
+           break;
 
    default: break;
    }
@@ -674,6 +710,57 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                          "modC[J] =: cXi;\n").arg(Trace, Host);
          }
      break;
+     //-------------------------------------------------------------------------
+   case P_LIP:
+     c_PsEqn->setChecked(true);
+     if( subtype == 0 || subtype == 1 )
+     {
+      QString EM0 = "EM0", EM1 = "EM1";
+      lst = getSelected( pLsts[0] );
+      if( lst.count() > 0 )
+        EM0 = lst[0].trimmed();
+      if( lst.count() > 1 )
+        EM1 = lst[1].trimmed();
+      ret = QString("if(cXi < 0.5) begin\n"
+                    "  xd_[{%1}] =: 1-cXi; xd_[{%2}] =: cXi;\n"
+                    "  modC[J] =: cXi;\n"
+                    " end \n"
+                    "if( cXi >= 0.5 & cXi <= 2 ) begin\n"
+                    "   xd_[{%1}] =: 0.5; xd_[{%2}] =: 0.5; \n"
+                    "   modC[J] =: 0.5;\n"
+                    "  end \n"
+                    " if(cXi > 2) begin \n"
+                    "  xd_[{%1}] =: 1/cXi; xd_[{%2}] =: 1-1/cXi; \n"
+                    "  modC[J] =: 1/cXi;\n"
+                    " end  \n").arg(EM0, EM1);
+      }
+      break;
+  //-------------------------------------------------------------------------
+   case P_INV_TITR:
+     c_PsEqn->setChecked(true);
+     if( subtype == 0 || subtype == 1 )
+     {
+        QString Asid = "Asid", Base = "Base", TraceM="TraceM";
+       lst = getSelected( pLsts[0] );
+       if( lst.count() > 0 )
+         Asid = lst[0].trimmed();
+       if( lst.count() > 1 )
+         Base = lst[1].trimmed();
+       ret = QString("$ pH sequence of inv. titrations\n"
+                     "if ( Next=1) begin \n"
+                     "  cNu =: cpH-pH; end \n"
+                     "if (Next=2) begin \n"
+                     "  xa_[{%2}] =: ((cEh < 0)? 1e-9: cEh);\n"
+                     "  xa_[{%1}] =: ((0-cEh < 0)? 1e-9: 0-cEh);\n"
+                     "  modC[J] =: cEh; \n").arg(Asid, Base);
+       if( lst.count() > 2 )
+       {
+         TraceM = lst[2].trimmed();
+         ret += QString( "xa_[{%1}] =: 10^cpe; \n").arg(TraceM);
+       }
+       ret += QString( " end \n"
+                     "$ modC[J]: acid or base added\n");
+     }
 
      default: break;
      }
@@ -710,6 +797,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           }
       }
       break;
+  //-------------------------------------------------------------------------
   case P_SYST:
          if( subtype == 1 )
          {
@@ -760,12 +848,91 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             "    - lg( bXs[{%2}]/( bXs[{%1}]+ bXs[{%2}])/m_t[{%2}] );\n").arg(TraceE1, HostE1);
          }
      break;
+  //-------------------------------------------------------------------------
+   case P_LIP:
+     if( subtype == 0 )
+     {
+       QString EM1;
+       lst = getSelected( pLsts[0] );
+       if( lst.count() < 2 )
+         return;
+       EM1 = lst[1].trimmed();
 
+       QString ComIon, EMion0, EMion1;
+       lst = getSelected( pLsts[1] );
+       if( lst.count() < 3 )
+         return;
+       ComIon = lst[0].trimmed();
+       EMion0 = lst[1].trimmed();
+       EMion1 = lst[2].trimmed();
+
+       ret = QString(
+        "$ Abscissa - log10 of Lippmann's total solubility product \n"
+        "xp[J] =: lga[{%2}] + lg( 10^lga[{%3}] +  10^lga[{%4}] );\n"
+        "$ Solidus \n"
+        "yp[J][0] =: Wxx[{%1}]; \n"
+        "$ Solutus \n"
+        "yp[J][1] =: 10^lga[{%4}] / ( 10^lga[{%3}] + 10^lga[{%4}] );\n").arg(EM1, ComIon, EMion0, EMion1);
+     }
+     if( subtype == 2 )
+     {
+         QString EM1;
+         lst = getSelected( pLsts[0] );
+         if( lst.count() < 2 )
+           return;
+         EM1 = lst[1].trimmed();
+
+         QString ComIC, EM0IC, EM1IC;
+         lst = getSelected( pLsts[2] );
+         if( lst.count() < 3 )
+           return;
+         ComIC = lst[0].trimmed();
+         EM0IC = lst[1].trimmed();
+         EM1IC = lst[2].trimmed();
+
+         ret = QString(
+          "$ Abscissa - total dissolved elements product \n"
+          "xp[J] =: lg( m_t[{%2}] ) + lg( m_t[{%3}] +  m_t[{%4}] ); \n"
+          "$ Solidus \n"
+          "yp[J][0] =: Wxx[{%1}];  \n"
+          "$ Solutus\n"
+          "yp[J][1] =: m_t[{%4}] / ( m_t[{%3}] + m_t[{%4}] ); \n"
+          "$ Done\n").arg(EM1, ComIC, EM0IC, EM1IC);
+     }
+     break;
+  //-------------------------------------------------------------------------
+  case P_INV_TITR:
+        if( subtype == 1 )
+        {
+          QString M_ion, M_c1, M_c2;
+          lst = getSelected( pLsts[1] );
+          if( lst.count() <3  )
+           return;
+          M_ion = lst[0].trimmed();
+          M_c1 = lst[1].trimmed();
+          M_c2 = lst[2].trimmed();
+
+          ret = QString(
+          "xp[J]=: lg(my[{%1}] + my[{%2}] + my[{%3}]);\n"
+          "$ ... more aqueous complexes of M can be accounted for \n"
+          " yp[J][0]=: (x[{%2}]> 0? \n"
+          "        lg(x[{%2}]/SorbentMass) : empty() ); \n"
+          " yp[J][1]=: (x[{%3}]> 0? \n"
+          "        lg(x[{%3}]/SorbentMass) : empty() ); \n"
+          "$ ... other sorbed species of M can be considered \n"
+          "$ log total M sorbed \n"
+          "yp[J][2] =: lg((x[{%1}]+x[{%2}])/SorbentMass); \n"
+          "$ log Kd \n"
+          "yp[J][3] =: yp[J][2] - xp[J];\n").arg(M_ion, M_c1, M_c2 );
+        }
      default: break;
      }
 
    pageScript->textScript->setText( ret );
  }
+
+//=================================================================================
+// special slots
 
 void ProcessWizard::CmSetMode()
 {
@@ -782,6 +949,8 @@ void ProcessWizard::setMode(int subtype)
                 pLsts[0]->setDisabled(subtype!=2);
                 listObj->setDisabled(subtype!=2);
                 break;
+    case P_INV_TITR:
+    case P_LIP:
     case P_SYST: page1Changed = true;
                  setCalcScript( type, subtype );
     default : break;
@@ -801,6 +970,8 @@ void ProcessWizard::changePage( int nPage )
   }
 
 // ==================================================================================
+// Internal functions
+
 void ProcessWizard::setupPages()
 {
   int jj, nO;
