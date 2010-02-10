@@ -875,7 +875,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
         break;
       DCx += mup->Ll[k];
     }
-    for( j= DCx; j<mup->Ll[k];j++ )
+    for( j= DCx; j<DCx+mup->Ll[k];j++ )
       {
         dcstr = gstring( mup->SM[j]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME );
         dcstr.strip();
@@ -889,7 +889,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
            break;
        DCx += pmp->L1[k];
     }
-    for( j= DCx; j<pmp->L1[k];j++ )
+    for( j= DCx; j<DCx+pmp->L1[k];j++ )
     {   dcstr =  gstring( pmp->SM[j],0, MAXDCNAME );
         dcstr.strip();
         DCnames.Add(dcstr);

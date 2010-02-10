@@ -122,10 +122,14 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
     buttonBox->addWidget( buttonCancel );
 
 /// Missin IC
+    QVBoxLayout* scrollBox = new QVBoxLayout();
+    label1 = new QLabel( this );
+    label1->setText( trUtf8( "Missing IC" ) );
+    scrollBox->addWidget( label1 );
 
     QGroupBox* grpBox = new QGroupBox( this );
     //grpBox->setMaximumHeight(400);
-    grpBox->setTitle( trUtf8( "Missing IC" ) );
+    //grpBox->setTitle( trUtf8( "Missing IC" ) );
     GroupBox1 = new QButtonGroup( grpBox );
     GroupBox1->setExclusive(false);
     QVBoxLayout *plotLayout = new QVBoxLayout( grpBox );
@@ -142,10 +146,12 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
     }
     QScrollArea *scroll = new QScrollArea(this);
     scroll->setWidget(grpBox);
+    scrollBox->addWidget( scroll );
 
     QHBoxLayout* mainBox = new QHBoxLayout(this);
-    mainBox->addWidget( scroll/*grpBox*/ );
-    mainBox->addLayout(labelsBox);   
+    //mainBox->addWidget( scroll/*grpBox*/ );
+    mainBox->addLayout(scrollBox);
+    mainBox->addLayout(labelsBox);
     mainBox->addLayout(buttonBox);   
     
     // signals and slots connections

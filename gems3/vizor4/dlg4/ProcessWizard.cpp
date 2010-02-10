@@ -912,13 +912,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
        gstring phname = lst[0].trimmed().toLatin1().data();
        dclst = TProfil::pm->DCNamesforPh( phname.c_str(), true );
        if( dclst.GetCount() < 2 )
-         break;
-       EM1 = dclst[1].c_str();
-
-
-       if( lst.count() < 2 )
          return;
-       EM1 = lst[1].trimmed();
+       EM1 = dclst[1].c_str();
 
        QString ComIon, EMion0, EMion1;
        lst = getSelected( "AqIons" );
