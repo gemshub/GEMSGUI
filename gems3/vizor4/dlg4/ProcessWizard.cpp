@@ -233,7 +233,7 @@ item = new QTableWidgetItem();
 item->setText( QString::number (  tabDoubl[18], 'g', 3 ));
 tIters->setItem(0, 8, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[18], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[19], 'g', 3 ));
 tIters->setItem(1, 8, item);
 item = new QTableWidgetItem();
 item->setText( QString::number (  tabDoubl[20], 'g', 3 ));
@@ -545,7 +545,7 @@ void ProcessWizard::defineWindow(char type)
    {
    case P_PVT:
        {
-           lAbout->setText("For PT phase diagram: please, select phases and skip the next wizard page.");
+           lAbout->setText("Please, set Step in iTm to 0. For PT phase diagram: select phases and skip the next wizard page.");
          sub1->setText("No script");
          sub2->setText("User defined script");
          sub3->setText("PT phase diagram");
@@ -584,7 +584,7 @@ void ProcessWizard::defineWindow(char type)
          break;
    case P_INV_TITR:
          {
-           lAbout->setText("Please, select acid and base from AcidBase list; to plot sorption isotherms, select species from Molality list for the abscissa, then sorbed species from the Sorbed list, and skip the next wizard page");
+           lAbout->setText("Please, select acid and base from AcidBase list; to plot sorption isotherms, also select trace element addition in AcidBase list and set ipe iterator accordingly, then aqueous species in Molality list for the abscissa, then sorbed species from the Sorbed list, and skip the next wizard page");
            sub1->setText("pH diagram");
            sub2->setText("Sorption isotherms at constant pH");
            sub3->hide();
