@@ -150,6 +150,7 @@ ProcessWizard::ProcessWizard( const char* pkey, char flgs[24], int size[6],
    subTypeButtons->addButton(sub1, 0);
    subTypeButtons->addButton(sub2, 1);
    subTypeButtons->addButton(sub3, 2);
+   subTypeButtons->addButton(sub4, 3);
    QObject::connect( subTypeButtons, SIGNAL(buttonClicked(int)), this, SLOT(setMode(int)));
 
    textEquat1->setText(calcScript.c_str());
