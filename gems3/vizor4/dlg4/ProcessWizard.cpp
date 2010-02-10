@@ -510,23 +510,28 @@ void ProcessWizard::defineWindow(char type)
     switch(type)
     {
      case P_PVT:
-            pgData.Add( new pagesSetupData("Xa", o_w_xf));
+            pgData.Add( new pagesSetupData("Phases", o_w_xf));
             break;
      case P_SYST:
-            pgData.Add( new pagesSetupData("xa_", o_syxea));
-            pgData.Add( new pagesSetupData("xd_", o_syxed));
-            pgData.Add( new pagesSetupData("bi_", o_sybi));
-            pgData.Add( new pagesSetupData("my",o_wd_ym ));
-            pgData.Add( new pagesSetupData("bXs", o_wo_bfc));
+            pgData.Add( new pagesSetupData("Compos", o_syxea));
+            pgData.Add( new pagesSetupData("DComp", o_syxed));
+            pgData.Add( new pagesSetupData("IComp", o_sybi));
+            pgData.Add( new pagesSetupData("Phases", o_syphm)); // xp_
+            pgData.Add( new pagesSetupData("Kin-DC-low", o_sydll)); // dll_
+            pgData.Add( new pagesSetupData("Kin-DC-up", o_sydul)); // dul_
+            pgData.Add( new pagesSetupData("Molality",o_wd_ym ));
+            pgData.Add( new pagesSetupData("Sorbed", o_wo_bfc));
            break;
     case P_LIP:
+//           pgData.Add( new pagesSetupData("Phases", o_syyof)); // Yof_
            pgData.Add( new pagesSetupData("xd_", o_syxed));
-           pgData.Add( new pagesSetupData("lga",o_wd_yla ));
-           pgData.Add( new pagesSetupData("m_t", o_wd_icm));
+           pgData.Add( new pagesSetupData("AqIons",o_wd_yla ));
+           pgData.Add( new pagesSetupData("AqElements", o_wd_icm));
           break;
     case P_INV_TITR:
-          pgData.Add( new pagesSetupData("xa_", o_syxea));
-          pgData.Add( new pagesSetupData("my",o_wd_ym ));
+          pgData.Add( new pagesSetupData("AcidBase", o_syxea));
+          pgData.Add( new pagesSetupData("Molality",o_wd_ym ));
+          pgData.Add( new pagesSetupData("Sorbed",o_w_x )); // x
           break;
 
      default: break;
@@ -540,7 +545,7 @@ void ProcessWizard::defineWindow(char type)
    {
    case P_PVT:
        {
-         lAbout->setText("PT phase diagram");
+           lAbout->setText("For PT phase diagram: please, select phases and skip the next wizard page.");
          sub1->setText("No script");
          sub2->setText("User defined script");
          sub3->setText("PT phase diagram");
@@ -555,6 +560,7 @@ void ProcessWizard::defineWindow(char type)
        break;
    case P_SYST:
        {
+         lAbout->setText("Please, select items from Compos, DComp, IComp or Phase lists to set changes in system composition; from Kin-DC-low or Kin-DC-up to change metastability constraints. To produce and plot sorption isotherms, select species from Molality list for the abscissa, then sorbed species from the Sorbed list, and skip the next wizard page ");
          sub1->setText("iNu linear");
          sub2->setText("Kd output");
          sub3->setText("ipXi logarithmic");
@@ -568,6 +574,7 @@ void ProcessWizard::defineWindow(char type)
        break;
    case P_LIP:
        {
+         lAbout->setText("Please, select a binary solid solution in Phases; then anion, cation1, cation2 in AqIons (classic variant) or anionic, cationic1, cationic2 elements in AqElements (variant with total dissolved concentrations) ");
          sub1->setText("Classic Lippmann diagram");
          sub2->setText("Variant with total dissolved concentrations");
          sub3->hide();
@@ -577,6 +584,7 @@ void ProcessWizard::defineWindow(char type)
          break;
    case P_INV_TITR:
          {
+           lAbout->setText("Please, select acid and base from AcidBase list; to plot sorption isotherms, select species from Molality list for the abscissa, then sorbed species from the Sorbed list, and skip the next wizard page");
            sub1->setText("pH diagram");
            sub2->setText("Sorption isotherms at constant pH");
            sub3->hide();
@@ -742,7 +750,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
      c_PsEqn->setChecked(true);
      if( subtype == 0 || subtype == 1 )
      {
-        QString Asid = "Asid", Base = "Base", TraceM="TraceM";
+        QString Asid = "Acid", Base = "Base", TraceM="TraceM";
        lst = getSelected( pLsts[0] );
        if( lst.count() > 0 )
          Asid = lst[0].trimmed();
@@ -794,7 +802,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           for(ii=0; ii<lst.count();ii++)
           {
               lst[ii] = lst[ii].trimmed();
-              ret  += QString("yp[J][%1] =: (Xa[{%2}]>1e-8? vP[J]/10: empty());\n").arg(
+              ret  += QString("yp[J][%1] =: (Xa[{%2}]>1e-6? vP[J]/10: empty());\n").arg(
                     ii).arg( lst[ii]);
           }
           pGraph->setValue( lst.count() );
@@ -881,7 +889,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
         "yp[J][1] =: 10^lga[{%4}] / ( 10^lga[{%3}] + 10^lga[{%4}] );\n").arg(EM1, ComIon, EMion0, EMion1);
        pGraph->setValue( 2 );
      }
-     if( subtype == 2 )
+     if( subtype == 1 )
      {
          QString EM1;
          lst = getSelected( pLsts[0] );
@@ -898,7 +906,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
          EM1IC = lst[2].trimmed();
 
          ret = QString(
-          "$ Abscissa - total dissolved elements product \n"
+          "$ Abscissa - log10 of total dissolved elements product \n"
           "xp[J] =: lg( m_t[{%2}] ) + lg( m_t[{%3}] +  m_t[{%4}] ); \n"
           "$ Solidus \n"
           "yp[J][0] =: Wxx[{%1}];  \n"
