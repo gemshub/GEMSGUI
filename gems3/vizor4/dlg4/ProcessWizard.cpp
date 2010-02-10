@@ -601,7 +601,7 @@ int  ProcessWizard::getNPV( char type, int subtype)             // get number of
    case P_PVT: i1 = getNPoints( 2 ); // nP
              i2 = getNPoints( 3 ); // nT
              if( subtype == 2 )
-               ret = i1*12;
+               ret = i1*i2;
              else
              { if(i1==1)
                  ret = i2;
@@ -610,6 +610,7 @@ int  ProcessWizard::getNPV( char type, int subtype)             // get number of
                     else
                       ret = min( i1, i2);
               }
+             tIters->item(2, 0)->setText( QString::number( 0 ));
             break;
    case P_SYST:
              if( subtype == 2 )
@@ -795,7 +796,9 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
               ret  += QString("yp[J][%1] =: (Xa[{%2}]>1e-8? vP[J]/10: empty());\n").arg(
                     ii).arg( lst[ii]);
           }
+          pGraph->setValue( lst.count() );
       }
+
       break;
   //-------------------------------------------------------------------------
   case P_SYST:
@@ -826,6 +829,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             "$ yp[J][2] =: lg( Wxx[{%1}] / my[{%3}] / (Wxx[{%2}] / my[{%4}]) );\n"
             "yp[J][2] =: yp[J][1] - yp[J][0]; \n"
             "$ Done\n").arg(BL, CL, b_ion, c_ion);
+           pGraph->setValue( 3 );
          }
          if( subtype == 2 )
          {
@@ -846,6 +850,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             "$ lg(D) host-trace \n"
             "yp[J][2] =: yp[J][1]\n"
             "    - lg( bXs[{%2}]/( bXs[{%1}]+ bXs[{%2}])/m_t[{%2}] );\n").arg(TraceE1, HostE1);
+           pGraph->setValue( 3 );
          }
      break;
   //-------------------------------------------------------------------------
@@ -873,6 +878,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
         "yp[J][0] =: Wxx[{%1}]; \n"
         "$ Solutus \n"
         "yp[J][1] =: 10^lga[{%4}] / ( 10^lga[{%3}] + 10^lga[{%4}] );\n").arg(EM1, ComIon, EMion0, EMion1);
+       pGraph->setValue( 2 );
      }
      if( subtype == 2 )
      {
@@ -898,6 +904,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           "$ Solutus\n"
           "yp[J][1] =: m_t[{%4}] / ( m_t[{%3}] + m_t[{%4}] ); \n"
           "$ Done\n").arg(EM1, ComIC, EM0IC, EM1IC);
+         pGraph->setValue( 2 );
+
      }
      break;
   //-------------------------------------------------------------------------
@@ -924,6 +932,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           "yp[J][2] =: lg((x[{%1}]+x[{%2}])/SorbentMass); \n"
           "$ log Kd \n"
           "yp[J][3] =: yp[J][2] - xp[J];\n").arg(M_ion, M_c1, M_c2 );
+          pGraph->setValue( 4 );
         }
      default: break;
      }
