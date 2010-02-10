@@ -540,6 +540,7 @@ void ProcessWizard::defineWindow(char type)
    {
    case P_PVT:
        {
+         lAbout->setText("PT phase diagram");
          sub1->setText("No script");
          sub2->setText("User defined script");
          sub3->setText("PT phase diagram");
