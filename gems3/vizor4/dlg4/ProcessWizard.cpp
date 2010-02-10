@@ -150,7 +150,6 @@ ProcessWizard::ProcessWizard( const char* pkey, char flgs[24], int size[6],
    subTypeButtons->addButton(sub1, 0);
    subTypeButtons->addButton(sub2, 1);
    subTypeButtons->addButton(sub3, 2);
-   subTypeButtons->addButton(sub4, 3);
    QObject::connect( subTypeButtons, SIGNAL(buttonClicked(int)), this, SLOT(setMode(int)));
 
    textEquat1->setText(calcScript.c_str());
@@ -563,8 +562,8 @@ void ProcessWizard::defineWindow(char type)
    {
    case P_PVT:
        {
-           lAbout->setText("Please, set Step in iTm to 0. For PT phase diagram:"
-                           " select phases and skip the next wizard page.");
+           lAbout->setText("Please, set Step in iTm to 0 and check iP and iT iterators.\nFor PT phase diagram:"
+                           " select phases to plot and skip the next wizard page.");
          sub1->setText("No script");
          sub2->setText("User defined script");
          sub3->setText("PT phase diagram");
@@ -580,10 +579,11 @@ void ProcessWizard::defineWindow(char type)
        break;
    case P_SYST:
        {
-         lAbout->setText("Please, select items from Compos, DComp, IComp or Phase lists to set changes in system composition;"
-                         " from Kin-DC-low or Kin-DC-up to change metastability constraints. "
-                         "To produce and plot sorption isotherms, select species from Molality list for the abscissa, "
-                         "then sorbed species from the Sorbed list, and skip the next wizard page ");
+         lAbout->setText("Please, select items from Compos, DComp, IComp or Phase lists to change system composition;\n"
+                         " select items from Kin-DC-low or Kin-DC-up to change metastability constraints.\n "
+                         "To plot logarithmic Kd and sorption isotherms, select trace and host elements from the Sorbed list.\n "
+                         "To plot linear Kd, select trace and host end members from DComp list, then trace and host ions from Molality list.\n"
+                         "In both Kd cases, skip the next wizard page. ");
          sub1->setText("iNu linear");
          sub2->setText("linear Kd");
          sub3->setText("ipXi logarithmic");
@@ -596,9 +596,10 @@ void ProcessWizard::defineWindow(char type)
        break;
    case P_LIP:
        {
-         lAbout->setText("Please, select a binary solid solution in Phases; then anion, cation1, "
-                         "cation2 in AqIons (classic variant) or anionic, cationic1, cationic2 elements "
-                         "in AqElements (variant with total dissolved concentrations) ");
+         lAbout->setText("Please, select a binary solid solution in Phases;\n then select anion, cation1, "
+                         "cation2 in AqIons (classic variant)\n or anionic, cationic1, cationic2 elements "
+                         "in AqElements (variant with total dissolved concentrations).\n"
+                         "Skip the next wizard page.");
          sub1->setText("Classic Lippmann diagram");
          sub2->setText("Variant with total dissolved concentrations");
          sub3->hide();
@@ -610,10 +611,11 @@ void ProcessWizard::defineWindow(char type)
          break;
    case P_INV_TITR:
          {
-           lAbout->setText("Please, select acid and base from AcidBase list; to plot sorption isotherms, "
-                           "also select trace element addition in AcidBase list and set ipe iterator accordingly, "
-                           "then aqueous species in Molality list for the abscissa, then sorbed species from the Sorbed list, "
-                           "and skip the next wizard page");
+           lAbout->setText("Please, select acid and base from the AcidBase list and proceed to the next wizard page.\n"
+                           "To plot sorption isotherms:\n also select the trace element addition in AcidBase list and"
+                           "set the ipe iterator accordingly,\n "
+                           "then select aqueous species in the Molality list for the abscissa,\n"
+                           "then select one or more sorbed species from the Sorbed list, and skip the next wizard page");
            sub1->setText("pH diagram");
            sub2->setText("Sorption isotherms at constant pH");
            sub3->hide();
@@ -872,8 +874,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             "$ yp[J][2] =: lg( Wxx[{%1}] / my[{%3}] / (Wxx[{%2}] / my[{%4}]) );\n"
             "yp[J][2] =: yp[J][1] - yp[J][0]; \n"
             "$ Done\n").arg(BL, CL, b_ion, c_ion);
-           lineNames.Add(CL.toLatin1().data());
-           lineNames.Add(BL.toLatin1().data());
+           lineNames.Add("log(Kd(C))");
+           lineNames.Add("log(Kd(B))");
            lineNames.Add("log(D)");
            pGraph->setValue( 3 );
          }
