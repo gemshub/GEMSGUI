@@ -896,9 +896,9 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             "$ lg(D) host-trace \n"
             "yp[J][2] =: yp[J][1]\n"
             "    - lg( bXs[{%2}]/( bXs[{%1}]+ bXs[{%2}])/m_t[{%2}] );\n").arg(TraceE1, HostE1);
-           lineNames.Add("lg(x)");
-           lineNames.Add("lg(kd)");
-           lineNames.Add("lg(D)");
+           lineNames.Add("x");
+           lineNames.Add("Kd");
+           lineNames.Add("D");
            pGraph->setValue( 3 );
          }
      break;
