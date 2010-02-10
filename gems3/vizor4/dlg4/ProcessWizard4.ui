@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>658</width>
+    <width>783</width>
     <height>511</height>
    </rect>
   </property>
@@ -305,7 +305,7 @@ p, li { white-space: pre-wrap; }
           <enum>Qt::ElideLeft</enum>
          </property>
          <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>56</number>
+          <number>70</number>
          </attribute>
          <attribute name="horizontalHeaderMinimumSectionSize">
           <number>10</number>
@@ -315,6 +315,9 @@ p, li { white-space: pre-wrap; }
          </attribute>
          <attribute name="verticalHeaderHighlightSections">
           <bool>false</bool>
+         </attribute>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>70</number>
          </attribute>
          <row>
           <property name="text">
@@ -468,10 +471,17 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="0" column="3">
+           <widget class="QRadioButton" name="sub4">
+            <property name="text">
+             <string>RadioButton</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="4">
            <widget class="QLabel" name="lAbout">
             <property name="text">
-             <string>TextLabel</string>
+             <string>Label</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>

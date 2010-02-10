@@ -128,6 +128,8 @@ public:
 
    gstring getScript() const;
    TCStringArray getNames() const;
+   void setNames(TCStringArray lst );
+
 
    int getScriptLinesNum() const
    {  return   scriptData.GetCount(); }

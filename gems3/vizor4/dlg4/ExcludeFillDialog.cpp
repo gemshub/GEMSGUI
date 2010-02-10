@@ -22,6 +22,7 @@
 #include <qstring.h>
 #include <qvalidator.h>
 #include <QGroupBox>
+#include <QScrollArea>
 
 #include "v_user.h"
 #include "visor_w.h"
@@ -121,7 +122,9 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
     buttonBox->addWidget( buttonCancel );
 
 /// Missin IC
+
     QGroupBox* grpBox = new QGroupBox( this );
+    //grpBox->setMaximumHeight(400);
     grpBox->setTitle( trUtf8( "Missing IC" ) );
     GroupBox1 = new QButtonGroup( grpBox );
     GroupBox1->setExclusive(false);
@@ -137,9 +140,11 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
       GroupBox1->addButton( CheckBox1, ii );
       plotLayout->addWidget( CheckBox1 );
     }
+    QScrollArea *scroll = new QScrollArea(this);
+    scroll->setWidget(grpBox);
 
     QHBoxLayout* mainBox = new QHBoxLayout(this);
-    mainBox->addWidget( grpBox );
+    mainBox->addWidget( scroll/*grpBox*/ );
     mainBox->addLayout(labelsBox);   
     mainBox->addLayout(buttonBox);   
     

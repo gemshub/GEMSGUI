@@ -61,7 +61,8 @@ class ProcessWizard : public QDialog, public Ui::ProcessWizardData
 
     // internal functions
     char        getType() const;
-    QStringList getSelected( QListWidget *lst  );
+    QStringList  getSelected( int nI );
+    QStringList getSelected( const char *name );
     int         getNPoints( int col );
     void        setupPages();
 

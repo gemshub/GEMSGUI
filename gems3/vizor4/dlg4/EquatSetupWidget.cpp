@@ -185,6 +185,13 @@ TCStringArray EquatSetup::getNames() const
    return  namLines;
 }
 
+void EquatSetup::setNames(TCStringArray lst )
+{
+   namLines.Clear();
+   for(uint ii=0; ii<lst.GetCount(); ii++ )
+       namLines.Add(lst[ii]);
+}
+
 void EquatSetup::changePage( int nPage )
 {
     if(nPage < 0 )
@@ -279,6 +286,10 @@ void EquatSetup::tableInsertRow( int nO, int ndx, const char * andName )
           str = calc.funText( str.c_str() );
        }
      }
+
+    // added for clear names that got from Process calcScripts
+    if(namLines.GetCount() > scriptData.GetCount() )
+        namLines.Clear();
 
     if(cPage == 0)
      {  scriptData.Add( new scriptSetupData( cPage, nO, andName,

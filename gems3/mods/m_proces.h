@@ -56,7 +56,7 @@ typedef struct
     PsGR,  // Use graphics window (+ -)
     PsUX,  // Do PROCES depend on output equilibrium parameters (pH, Eh etc.)(+-)
     PsIN,  // Is this an inverse titration problem (+ -)
-    PsKI,  // Is this a problem with kinetically-restricted DC (+ -)
+    PsType,  // Type of Process (PSGTRL)
     PsEqn, // Will IPN-equations be specified in PROCES definition (+ -)
     PsPro, // Is this a sequence of inverse titration points (+ -)
 

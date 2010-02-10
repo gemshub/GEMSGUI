@@ -862,5 +862,42 @@ gstring TProfil::PhNameforDC( int xdc, bool system )
  }
 }
 
+TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
+{
+  int k, j, DCx = 0, len = strlen( PhName );
+  TCStringArray DCnames;
+  gstring dcstr;
+
+  if( system )
+  { for( k=0; k<mup->Fi; k++ )
+    {
+      if( !memcmp(PhName, mup->SF[k]+MAXSYMB+MAXPHSYMB, min(len,MAXPHNAME)))
+        break;
+      DCx += mup->Ll[k];
+    }
+    for( j= DCx; j<mup->Ll[k];j++ )
+      {
+        dcstr = gstring( mup->SM[j]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME );
+        dcstr.strip();
+        DCnames.Add(dcstr);
+      }
+  }
+  else
+  { for( k=0; k<pmp->FI; k++ )
+    {
+       if( !memcmp(PhName, pmp->SF[k]+MAXSYMB, min(len,MAXPHNAME)))
+           break;
+       DCx += pmp->L1[k];
+    }
+    for( j= DCx; j<pmp->L1[k];j++ )
+    {   dcstr =  gstring( pmp->SM[j],0, MAXDCNAME );
+        dcstr.strip();
+        DCnames.Add(dcstr);
+    }
+  }
+  return DCnames;
+}
+
+
 //------------------ End of m_prfget2.cpp --------------------------
 

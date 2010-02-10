@@ -115,16 +115,33 @@ ProcessWizard::ProcessWizard( const char* pkey, char flgs[24], int size[6],
 
 
  //Page1
-   if( flgs[8] != '-' )
-       pselT->setChecked( true );
-   else  if( flgs[11] != '-' )
-            pselG->setChecked( true );
-          else  if( flgs[5] != '-' )
-                  pselR->setChecked( true );
-                else if( flgs[2] != '-' )
-                       pselS->setChecked( true );
-                     else
-                       pselP->setChecked( true );
+    switch( flgs[9] )
+     {
+      case 'T': pselT->setChecked( true );
+          break;
+      case P_INV_TITR: pselG->setChecked( true );
+          break;
+      case 'R': pselR->setChecked( true );
+          break;
+      case P_SYST: pselS->setChecked( true );
+          break;
+      case P_LIP: pselL->setChecked( true );
+         break;
+      case P_PVT: pselP->setChecked( true );
+         break;
+      default: // for old records
+         if( flgs[8] != '-' )
+              pselT->setChecked( true );
+         else  if( flgs[11] != '-' )
+                 pselG->setChecked( true );
+               else  if( flgs[5] != '-' )
+                       pselR->setChecked( true );
+                     else if( flgs[2] != '-' )
+                            pselS->setChecked( true );
+                         else
+                            pselP->setChecked( true );
+      break;
+  }
    if( !pselP->isChecked() )
      flgs[10] = '+';
 
@@ -415,18 +432,18 @@ void   ProcessWizard::getFlags( char flgs[24] )
 
   switch( type )
    {
-    case 'T': strncpy( flgs, "0++-+--++-+-", 12);
+    case 'T': strncpy( flgs, "0++-+--++T+-", 12);
         break;
-    case P_INV_TITR: strncpy( flgs, "0++-+--+--++", 12);
+    case P_INV_TITR: strncpy( flgs, "0++-+--+-G++", 12);
         break;
-    case 'R': strncpy( flgs, "0++-++-+--+-", 12);
+    case 'R': strncpy( flgs, "0++-++-+-R+-", 12);
         break;
-    case P_SYST: strncpy( flgs, "0++-+-----+-", 12);
+    case P_SYST: strncpy( flgs, "0++-+----S+-", 12);
         break;
-    case P_LIP: strncpy( flgs, "0++-+-----+-", 12);
+    case P_LIP: strncpy( flgs, "0++-+----L+-", 12);
        break;
     case P_PVT:
-    default:  memcpy( flgs, "0*----------", 12 );
+    default:  memcpy( flgs, "0*-------P--", 12 );
    }
 // Putting other flags
    if( c_PvTm->isChecked() )
@@ -523,8 +540,8 @@ void ProcessWizard::defineWindow(char type)
             pgData.Add( new pagesSetupData("Sorbed", o_wo_bfc));
            break;
     case P_LIP:
-//           pgData.Add( new pagesSetupData("Phases", o_syyof)); // Yof_
-           pgData.Add( new pagesSetupData("xd_", o_syxed));
+           pgData.Add( new pagesSetupData("Phases", o_syyof)); // Yof_
+//           pgData.Add( new pagesSetupData("xd_", o_syxed));
            pgData.Add( new pagesSetupData("AqIons",o_wd_yla ));
            pgData.Add( new pagesSetupData("AqElements", o_wd_icm));
           break;
@@ -545,10 +562,12 @@ void ProcessWizard::defineWindow(char type)
    {
    case P_PVT:
        {
-           lAbout->setText("Please, set Step in iTm to 0. For PT phase diagram: select phases and skip the next wizard page.");
+           lAbout->setText("Please, set Step in iTm to 0. For PT phase diagram:"
+                           " select phases and skip the next wizard page.");
          sub1->setText("No script");
          sub2->setText("User defined script");
          sub3->setText("PT phase diagram");
+         sub4->hide();
          if( c_PsEqn->isChecked() )
            sub2->setChecked(true); // to left an old script
          else
@@ -560,34 +579,44 @@ void ProcessWizard::defineWindow(char type)
        break;
    case P_SYST:
        {
-         lAbout->setText("Please, select items from Compos, DComp, IComp or Phase lists to set changes in system composition; from Kin-DC-low or Kin-DC-up to change metastability constraints. To produce and plot sorption isotherms, select species from Molality list for the abscissa, then sorbed species from the Sorbed list, and skip the next wizard page ");
+         lAbout->setText("Please, select items from Compos, DComp, IComp or Phase lists to set changes in system composition;"
+                         " from Kin-DC-low or Kin-DC-up to change metastability constraints. "
+                         "To produce and plot sorption isotherms, select species from Molality list for the abscissa, "
+                         "then sorbed species from the Sorbed list, and skip the next wizard page ");
          sub1->setText("iNu linear");
-         sub2->setText("Kd output");
+         sub2->setText("linear Kd");
          sub3->setText("ipXi logarithmic");
-         QObject::connect( pLsts[0], SIGNAL(itemSelectionChanged()),
+         sub4->setText("logarithmic Kd");
+
+         for(jj=0; jj<6; jj++ )
+           QObject::connect( pLsts[jj], SIGNAL(itemSelectionChanged()),
                            this, SLOT(CmSetMode()));
-         QObject::connect( pLsts[1], SIGNAL(itemSelectionChanged()),
-                           this, SLOT(CmSetMode()));
-         QObject::connect( pLsts[2], SIGNAL(itemSelectionChanged()),
-                           this, SLOT(CmSetMode()));
-       }
+         }
        break;
    case P_LIP:
        {
-         lAbout->setText("Please, select a binary solid solution in Phases; then anion, cation1, cation2 in AqIons (classic variant) or anionic, cationic1, cationic2 elements in AqElements (variant with total dissolved concentrations) ");
+         lAbout->setText("Please, select a binary solid solution in Phases; then anion, cation1, "
+                         "cation2 in AqIons (classic variant) or anionic, cationic1, cationic2 elements "
+                         "in AqElements (variant with total dissolved concentrations) ");
          sub1->setText("Classic Lippmann diagram");
          sub2->setText("Variant with total dissolved concentrations");
          sub3->hide();
+         sub4->hide();
+         sub1->setChecked(true);
          QObject::connect( pLsts[0], SIGNAL(itemSelectionChanged()),
                            this, SLOT(CmSetMode()));
         }
          break;
    case P_INV_TITR:
          {
-           lAbout->setText("Please, select acid and base from AcidBase list; to plot sorption isotherms, also select trace element addition in AcidBase list and set ipe iterator accordingly, then aqueous species in Molality list for the abscissa, then sorbed species from the Sorbed list, and skip the next wizard page");
+           lAbout->setText("Please, select acid and base from AcidBase list; to plot sorption isotherms, "
+                           "also select trace element addition in AcidBase list and set ipe iterator accordingly, "
+                           "then aqueous species in Molality list for the abscissa, then sorbed species from the Sorbed list, "
+                           "and skip the next wizard page");
            sub1->setText("pH diagram");
            sub2->setText("Sorption isotherms at constant pH");
            sub3->hide();
+           sub4->hide();
            QObject::connect( pLsts[0], SIGNAL(itemSelectionChanged()),
                              this, SLOT(CmSetMode()));
           }
@@ -622,7 +651,7 @@ int  ProcessWizard::getNPV( char type, int subtype)             // get number of
              tIters->item(2, 0)->setText( QString::number( 0 ));
             break;
    case P_SYST:
-             if( subtype == 2 )
+             if( subtype >= 2 )
                ret = getNPoints( 6 ); // iPxi
              else
                ret = getNPoints( 7 ); // iNu
@@ -647,6 +676,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
   int ii;
   QString ret = textEquat1->toPlainText();
   QStringList lst;
+  TCStringArray dclst;
 
   if( !page1Changed )
       return;
@@ -676,29 +706,23 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
           if( subtype == 0 )
           {
               ret = QString("modC[J] =: cNu;\n");
-              lst = getSelected( pLsts[0] );
-              for(ii=0; ii<lst.count();ii++)
-              {
+
+             for(int jj=0; jj<6; jj++ )
+             {
+               lst = getSelected( jj );
+               gstring oName = aObj[pgData[jj].nObj].GetKeywd();
+               for(ii=0; ii<lst.count();ii++)
+               {
                   lst[ii] = lst[ii].trimmed();
-                  ret  += QString("xa_[{%1}] =: cNu * 1.;\n").arg( lst[ii]);
-              }
-              lst = getSelected( pLsts[1] );
-              for(ii=0; ii<lst.count();ii++)
-              {
-                  lst[ii] = lst[ii].trimmed();
-                  ret  += QString("xd_[{%1}] =: cNu * 1.;\n").arg( lst[ii]);
-              }
-              lst = getSelected( pLsts[2] );
-              for(ii=0; ii<lst.count();ii++)
-              {
-                  lst[ii] = lst[ii].trimmed();
-                  ret  += QString("bi_[{%1}] =: cNu * 1.;\n").arg( lst[ii]);
-              }
+                  ret  += QString("%1[{%2}] =: cNu * 1.;\n").arg(oName.c_str(), lst[ii]);
+               }
+
+             }
           }
          if( subtype == 1 )
          {
            QString BL = "BL", CL = "CL";
-           lst = getSelected( pLsts[1] );
+           lst = getSelected( "DComp" );
            if( lst.count() > 0 )
              BL = lst[0].trimmed();
            if( lst.count() > 1 )
@@ -706,10 +730,10 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
            ret = QString("xd_[{%1}] =: cNu;\n"
                          "xd_[{%2}] =: 1-cNu;\n").arg(BL, CL);
          }
-         if( subtype == 2 )
+         if( subtype >= 2 )
          {
            QString Trace = "Trace", Host = "Host";
-           lst = getSelected( pLsts[0] );
+           lst = getSelected( "Compos" );
            if( lst.count() > 0 )
              Trace = lst[0].trimmed();
            if( lst.count() > 1 )
@@ -726,11 +750,17 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
      if( subtype == 0 || subtype == 1 )
      {
       QString EM0 = "EM0", EM1 = "EM1";
-      lst = getSelected( pLsts[0] );
+      lst = getSelected( "Phases" );
       if( lst.count() > 0 )
-        EM0 = lst[0].trimmed();
-      if( lst.count() > 1 )
-        EM1 = lst[1].trimmed();
+      {   gstring phname = lst[0].trimmed().toLatin1().data();
+
+          dclst = TProfil::pm->DCNamesforPh( phname.c_str() , true );
+          // Here may be message if illegal phase
+          if( dclst.GetCount() > 0 )
+             EM0 = dclst[0].c_str();
+          if( dclst.GetCount()  > 1 )
+             EM1 = dclst[1].c_str();
+      }
       ret = QString("if(cXi < 0.5) begin\n"
                     "  xd_[{%1}] =: 1-cXi; xd_[{%2}] =: cXi;\n"
                     "  modC[J] =: cXi;\n"
@@ -751,7 +781,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
      if( subtype == 0 || subtype == 1 )
      {
         QString Asid = "Acid", Base = "Base", TraceM="TraceM";
-       lst = getSelected( pLsts[0] );
+       lst = getSelected( "AcidBase" );
        if( lst.count() > 0 )
          Asid = lst[0].trimmed();
        if( lst.count() > 1 )
@@ -785,6 +815,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
   int ii;
   QString ret = pageScript->textScript->toPlainText();
   QStringList lst;
+  TCStringArray lineNames;
+  TCStringArray dclst;
 
   switch(type)
   {
@@ -793,7 +825,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
       {
           c_PvT->setChecked(true);
           c_PvP->setChecked(true);
-          lst = getSelected( pLsts[0] );
+          lst = getSelected( "Phases" );
           if( lst.count() < 1 )
            return;
           ret = QString("$ Plotting calculated grid as T,P diagram \n"
@@ -802,6 +834,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           for(ii=0; ii<lst.count();ii++)
           {
               lst[ii] = lst[ii].trimmed();
+              lineNames.Add(lst[ii].toLatin1().data());
               ret  += QString("yp[J][%1] =: (Xa[{%2}]>1e-6? vP[J]/10: empty());\n").arg(
                     ii).arg( lst[ii]);
           }
@@ -814,14 +847,14 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
          if( subtype == 1 )
          {
            QString BL, CL;
-           lst = getSelected( pLsts[1] );
+           lst = getSelected( "DComp" );
            if( lst.count() < 2 )
              return;
            BL = lst[0].trimmed();
            CL = lst[1].trimmed();
 
            QString b_ion, c_ion;
-           lst = getSelected( pLsts[3] );
+           lst = getSelected( "Molality" );
            if( lst.count() < 2 )
              return;
            b_ion = lst[0].trimmed();
@@ -838,12 +871,15 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             "$ yp[J][2] =: lg( Wxx[{%1}] / my[{%3}] / (Wxx[{%2}] / my[{%4}]) );\n"
             "yp[J][2] =: yp[J][1] - yp[J][0]; \n"
             "$ Done\n").arg(BL, CL, b_ion, c_ion);
+           lineNames.Add("log(Kd(C))");
+           lineNames.Add("log(Kd(B))");
+           lineNames.Add("log(D)");
            pGraph->setValue( 3 );
          }
-         if( subtype == 2 )
+         if( subtype == 3 )
          {
            QString TraceE1, HostE1;
-           lst = getSelected( pLsts[4] );
+           lst = getSelected( "Sorbed" );
            if( lst.count() < 2 )
              return;
            TraceE1 = lst[0].trimmed();
@@ -859,6 +895,9 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             "$ lg(D) host-trace \n"
             "yp[J][2] =: yp[J][1]\n"
             "    - lg( bXs[{%2}]/( bXs[{%1}]+ bXs[{%2}])/m_t[{%2}] );\n").arg(TraceE1, HostE1);
+           lineNames.Add("lg(x)");
+           lineNames.Add("lg(kd)");
+           lineNames.Add("lg(D)");
            pGraph->setValue( 3 );
          }
      break;
@@ -867,13 +906,22 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
      if( subtype == 0 )
      {
        QString EM1;
-       lst = getSelected( pLsts[0] );
+       lst = getSelected( "Phases" );
+       if( lst.count() < 0 )
+         return;
+       gstring phname = lst[0].trimmed().toLatin1().data();
+       dclst = TProfil::pm->DCNamesforPh( phname.c_str(), true );
+       if( dclst.GetCount() < 2 )
+         break;
+       EM1 = dclst[1].c_str();
+
+
        if( lst.count() < 2 )
          return;
        EM1 = lst[1].trimmed();
 
        QString ComIon, EMion0, EMion1;
-       lst = getSelected( pLsts[1] );
+       lst = getSelected( "AqIons" );
        if( lst.count() < 3 )
          return;
        ComIon = lst[0].trimmed();
@@ -887,18 +935,24 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
         "yp[J][0] =: Wxx[{%1}]; \n"
         "$ Solutus \n"
         "yp[J][1] =: 10^lga[{%4}] / ( 10^lga[{%3}] + 10^lga[{%4}] );\n").arg(EM1, ComIon, EMion0, EMion1);
+       lineNames.Add("Solidus");
+       lineNames.Add("Solutus");
        pGraph->setValue( 2 );
      }
      if( subtype == 1 )
      {
          QString EM1;
-         lst = getSelected( pLsts[0] );
-         if( lst.count() < 2 )
+         lst = getSelected( "Phases" );
+         if( lst.count() < 0 )
            return;
-         EM1 = lst[1].trimmed();
+         gstring phname = lst[0].trimmed().toLatin1().data();
+         dclst = TProfil::pm->DCNamesforPh( phname.c_str(), true );
+         if( dclst.GetCount() < 2 )
+           break;
+         EM1 = dclst[1].c_str();
 
          QString ComIC, EM0IC, EM1IC;
-         lst = getSelected( pLsts[2] );
+         lst = getSelected( "AqElements" );
          if( lst.count() < 3 )
            return;
          ComIC = lst[0].trimmed();
@@ -913,39 +967,59 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           "$ Solutus\n"
           "yp[J][1] =: m_t[{%4}] / ( m_t[{%3}] + m_t[{%4}] ); \n"
           "$ Done\n").arg(EM1, ComIC, EM0IC, EM1IC);
+         lineNames.Add("Solidus");
+         lineNames.Add("Solutus");
          pGraph->setValue( 2 );
-
      }
      break;
   //-------------------------------------------------------------------------
   case P_INV_TITR:
         if( subtype == 1 )
         {
-          QString M_ion, M_c1, M_c2;
-          lst = getSelected( pLsts[1] );
-          if( lst.count() <3  )
+          QString M_c1;
+          lst = getSelected( "Molality" );
+          if( lst.count() <1  )
            return;
-          M_ion = lst[0].trimmed();
-          M_c1 = lst[1].trimmed();
-          M_c2 = lst[2].trimmed();
+          M_c1 = lst[0].trimmed();
+          ret = QString( "xp[J]=: lg(my[{%1}]").arg(M_c1);
+          for( ii=1; ii<lst.count(); ii++)
+          {
+             M_c1 = lst[ii].trimmed();
+             ret += QString(" + my[{%1}]").arg( M_c1);
+          }
+          ret += QString (");\n");
 
-          ret = QString(
-          "xp[J]=: lg(my[{%1}] + my[{%2}] + my[{%3}]);\n"
-          "$ ... more aqueous complexes of M can be accounted for \n"
-          " yp[J][0]=: (x[{%2}]> 0? \n"
-          "        lg(x[{%2}]/SorbentMass) : empty() ); \n"
-          " yp[J][1]=: (x[{%3}]> 0? \n"
-          "        lg(x[{%3}]/SorbentMass) : empty() ); \n"
-          "$ ... other sorbed species of M can be considered \n"
-          "$ log total M sorbed \n"
-          "yp[J][2] =: lg((x[{%1}]+x[{%2}])/SorbentMass); \n"
-          "$ log Kd \n"
-          "yp[J][3] =: yp[J][2] - xp[J];\n").arg(M_ion, M_c1, M_c2 );
-          pGraph->setValue( 4 );
+          ret += QString("$ ... more aqueous complexes of M can be accounted for \n");
+          lst = getSelected( "Sorbed" );
+          if( lst.count() <1  )
+           return;
+          for( ii=0; ii<lst.count(); ii++)
+          {
+             M_c1 = lst[ii].trimmed();
+             lineNames.Add(M_c1.toLatin1().data());
+             ret += QString(" yp[J][%1]=: (x[{%2}]> 0? \n"
+                            "   lg(x[{%2}]/0.001) : empty() ); \n").arg( QString("%1").arg(ii),M_c1);
+          }
+          ret += QString("$ log total M sorbed \n");
+          lineNames.Add("log sorbed");
+          ret += QString( "yp[J][%1] =: lg((").arg(ii);
+          for( ii=0; ii<lst.count(); ii++)
+          {
+             M_c1 = lst[ii].trimmed();
+             if( ii > 0) ret += QString(" + ");
+             ret += QString("x[{%1}]").arg( M_c1);
+          }
+          ret += QString( ")/0.001); \n$ log Kd \n");
+          lineNames.Add("log Kd");
+          ret += QString( "yp[J][%1] =: ").arg(ii+1);
+          ret += QString( " yp[J][%1]- xp[J];\n").arg(ii);
+          pGraph->setValue( ii+2 );
         }
      default: break;
      }
 
+   if( lineNames.GetCount() > 0)
+       pageScript->setNames(lineNames);
    pageScript->textScript->setText( ret );
  }
 
@@ -1029,7 +1103,7 @@ void ProcessWizard::setupPages()
       pageLists->addWidget(page1);
 
       // insert items to list of indexes
-       for(  jj=0; jj<lst.GetCount(); jj++ )
+       for(uint  jj=0; jj<lst.GetCount(); jj++ )
           {
              item1 = new QListWidgetItem( lst[jj].c_str(), lstIndexes1);
           }
@@ -1037,18 +1111,33 @@ void ProcessWizard::setupPages()
     }
 }
 
-QStringList  ProcessWizard::getSelected( QListWidget *lst )
+QStringList  ProcessWizard::getSelected( const char *name )
+{
+    QStringList ret;
+
+    QList<QListWidgetItem*> itms = listObj->findItems(name, Qt::MatchExactly);
+    if(itms.count()<1)
+      return ret;
+
+    ret = getSelected( listObj->row(itms[0]) );
+
+   return ret;
+}
+
+
+QStringList  ProcessWizard::getSelected( int nI )
 {
     QStringList ret;
     QListWidgetItem*  ndx;
+    QListWidget *lst = pLsts[nI];
 
-   foreach( ndx,  lst->selectedItems()  )
+    foreach( ndx,  lst->selectedItems()  )
      ret << ndx->text();
 
    return ret;
 }
 
- int  ProcessWizard::getNPoints( int col )
+int  ProcessWizard::getNPoints( int col )
  {
      double from, until, step;
      int nP = 1;

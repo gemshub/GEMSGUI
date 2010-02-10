@@ -425,19 +425,19 @@ void  TProcess::set_type_flags( char type)
     switch( type )
     {
     case P_TITR:
-        strncpy( &pep->Istat, "0++-+--++-+-", 12);
+        strncpy( &pep->Istat, "0++-+--++T+-", 12);
         break;
     case P_INV_TITR:
-        strncpy( &pep->Istat, "0++-+--+--++", 12);
+        strncpy( &pep->Istat, "0++-+--+-G++", 12);
         break;
     case P_REACT:
-        strncpy( &pep->Istat, "0++-++-+--+-", 12);
+        strncpy( &pep->Istat, "0++-++-+-R+-", 12);
         break;
     case P_SYST:
-        strncpy( &pep->Istat, "0++-+-----+-", 12);
+        strncpy( &pep->Istat, "0++-+----S+-", 12);
         break;
     case P_LIP:
-        strncpy( &pep->Istat, "0++-+-----+-", 12);
+        strncpy( &pep->Istat, "0++-+----L+-", 12);
         break;
     case P_PVT:
     default:
