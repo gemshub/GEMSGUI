@@ -871,8 +871,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             "$ yp[J][2] =: lg( Wxx[{%1}] / my[{%3}] / (Wxx[{%2}] / my[{%4}]) );\n"
             "yp[J][2] =: yp[J][1] - yp[J][0]; \n"
             "$ Done\n").arg(BL, CL, b_ion, c_ion);
-           lineNames.Add("log(Kd(C))");
-           lineNames.Add("log(Kd(B))");
+           lineNames.Add(CL.toLatin1().data());
+           lineNames.Add(BL.toLatin1().data());
            lineNames.Add("log(D)");
            pGraph->setValue( 3 );
          }
