@@ -552,6 +552,7 @@ BugFix: ExcludeFillDialog window was high
 11/11/2010
 Added SystemWizard
 BugFix: cut titles on GraphWindow
+Changed Remake command for System
 
 
 

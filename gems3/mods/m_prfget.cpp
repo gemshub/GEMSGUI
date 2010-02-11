@@ -549,7 +549,7 @@ void TProfil::deriveSystat()
     gstring keyp = rt[RT_SYSEQ].UnpackKey();
     if( keyp.find_first_of( "*?") != gstring::npos )
         Error("SyStat", "Undefined current record!");
-    int ret = TSysEq::pm->RecBuild( keyp.c_str() );
+    int ret = TSysEq::pm->RecBuild( keyp.c_str(), VF_REMAKE );
 
     // unpack to SYSTEM structure
     syst->loadData( false, ret );  // set def and unpack syseq to system
@@ -567,6 +567,8 @@ void TProfil::deriveSystat()
             pmp->X[j] = pmp->Y[j];
         multi->EqstatExpand( keyp.c_str() );
     }
+    // SD 22/01/2010 bool
+    systbcInput( window(), keyp.c_str() );
     pVisor->Update();
 //    pVisor->OpenModule(window(), MD_SYSTEM);
 }

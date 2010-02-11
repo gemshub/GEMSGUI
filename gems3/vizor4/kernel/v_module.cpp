@@ -591,15 +591,15 @@ TCModule::RecBuild( const char *key, int mode  )
         dyn_kill();
         set_def(); // set default data or zero if necessary
     case VF3_2:
-        if( !pImp )
-        {    Show(pVisorImp, "Remaking...");
+        //if( !pImp )
+        //{    Show(pVisorImp, "Remaking...");
 
-        }
+        //}
 //        pImp->MakeQuery();
         MakeQuery();
 
-       if( pVisor->ProfileMode == true && nRT == RT_SYSEQ )
-         pImp->CloseWin();
+       //if( pVisor->ProfileMode == true && nRT == RT_SYSEQ )
+       //  pImp->CloseWin();
 
         contentsChanged = true;
         break;

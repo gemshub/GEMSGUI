@@ -197,7 +197,7 @@ NewSystemDialog::CmRemake()
     TProfil::pm->deriveSystat();
     ListViewResult->resetList();
     Update();
-    pVisor->OpenModule(this, MD_SYSTEM);
+   //  pVisor->OpenModule(this, MD_SYSTEM);
  }
  catch( TError& xcpt )
     {
