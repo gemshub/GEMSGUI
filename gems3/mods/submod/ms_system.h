@@ -203,7 +203,9 @@ protected:
     void make_syst_sizes();
     void make_syst();
     void systbc_calc( int mode );
-    void PHbcalc( double *MsysC, double *MaqC, double *R1C,
+    void PHbcalcSysEq( double *MsysC, double *MaqC, double *R1C,
+                  double *VaqC, double *VsysC, qd_real *BB );
+    void PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
                   double *VaqC, double *VsysC, qd_real *BB );
     void stbal( int N, int L, double *Smatr, double *DCstc, double *ICm );
     // mark data

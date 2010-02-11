@@ -84,7 +84,7 @@ SPP_SETTING pa_ = {
     "INNINN",   /* PHsol_t[6] */  "s-----",   /* PHpvc[6] */
     "++++-+-+++", /* MUpmv[10] */ "jjbC++0+", /* TPpdc[8] */
     "*-*-*-*-*-----------", /* TPpvc[20] */ "+-+-+-----", /* SYppc[10] */
-    "***-*-*---**-***-----------*", /* SYpvc[28]*/  "-+++----ME", /* UTppc[10] */
+    "*****-*---**-***-----------*", /* SYpvc[28]*/  "-+++----ME", /* UTppc[10] */
     "0*-------P--", /* PEpsc[12]  */  "------------", /* PEpvc[12] */
     { "GTDEMO task name   ", "Graphic screen # " } ,   /* GDcode[2][20] */
     "Plot ",                  /* GDpsc[7] */
@@ -804,7 +804,7 @@ void TProfil::PMtest( const char *key )
     TProcess* Proc = (TProcess*)(&aMod[RT_PROCES]);
 
     // test for available old solution
-    if( STat->ifCalcFlag())
+    if( STat->ifCalcFlag() )
     { if( !pmp->pESU )      // if pESU == 2 (task loaded before), left value
           pmp->pESU = 1;
     }

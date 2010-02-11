@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>847</width>
-    <height>500</height>
+    <width>841</width>
+    <height>528</height>
    </rect>
   </property>
   <property name="font">
@@ -18,7 +18,7 @@
   <property name="windowTitle">
    <string>GEM-Selektor System</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_4">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="mouseTracking">
@@ -40,7 +40,7 @@
       <number>0</number>
      </property>
      <widget class="QWidget" name="page">
-      <layout class="QGridLayout" name="gridLayout_2">
+      <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0" colspan="2">
         <widget class="QLabel" name="pageName">
          <property name="sizePolicy">
@@ -50,23 +50,29 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Step 1 - System configuration (thermodynamic data)</string>
+          <string>Step 1 - Configuration of Chemical System Definition (SysEq record)</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="3">
+       <item row="1" column="0" colspan="2">
         <widget class="Line" name="line">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="3">
+       <item row="2" column="0" colspan="2">
         <widget class="QLabel" name="textLabel12">
          <property name="text">
-          <string>Modelling Project is a named set of GEMS database records for a specific modelling application, whose main is a generic definition of chemical thermodynamic systems. This includes lists of record keys for ICs, DCs, phases etc. kept in the project files. 
-   The project configuration record contains links to GEMS database files where the input data is kept and the modelling results will be stored.These database files are located in an (automatically created) subdirectory having the same name as the modelling project. 
-   A selection of internally calculated thermodynamic data, plus project-specific numerical settings and default values, can be set up in this wizard. Thermodynamic data currently used in CSDs are not saved and will be calculated again whenever necessary.</string>
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Chemical system definition (CSD) contains the &amp;quot;recipe&amp;quot; to set bulk elemental composition, the lists of phases and their components to be considered in the calculation of equilibrium states, and optional metastability constraints and/or parameters of surfaces and surface species. &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This information is kept in the GEMS project data base in a SysEq record and may change from one such record to another. In addition, SysEq records keep the calculated primal and dual GEM solution, as well as the activity coefficients. &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;In this wizard, it is possible to (re)configure some optional CSD features (in most cases, e.g. by &amp;quot;cloning&amp;quot; SysEq records, this is not necessary).  It is recommended to fill out System name and Comment fields - this will help identify this CSD and recipe in the future.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignVCenter</set>
@@ -79,7 +85,7 @@
        <item row="3" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Full name of System</string>
+          <string>System name</string>
          </property>
         </widget>
        </item>
@@ -96,100 +102,106 @@
        <item row="4" column="1">
         <widget class="QLineEdit" name="pComment"/>
        </item>
-       <item row="5" column="0" colspan="3">
+       <item row="5" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>32</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="6" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Allocation flags for using additional thermodynamic data in CSDs </string>
+          <string>CSD optional settings</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
-           <widget class="QCheckBox" name="pPE">
+           <widget class="QCheckBox" name="pPAalp">
             <property name="text">
-             <string>electroneutrality constraint PE</string>
+             <string>Keep specific surface areas for phases (mandatory for sorption)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="pPXlam">
+            <property name="text">
+             <string>Keep additional parameters for surface types (reserved)</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QCheckBox" name="pPV">
+           <widget class="QCheckBox" name="pPSigm">
             <property name="text">
-             <string>volume constraint PV</string>
+             <string> Keep specific surface energies for solid-aqueous (-gas) interfaces</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QCheckBox" name="pXr0h0">
+           <widget class="QCheckBox" name="pPDelB">
             <property name="text">
-             <string>Xr0h0_ parameters r0 and h0 of particles (pores)</string>
+             <string>Keep uncertainties of bulk composition (vector b) elements</string>
             </property>
            </widget>
           </item>
           <item row="2" column="0">
            <widget class="QCheckBox" name="pPBeq">
             <property name="text">
-             <string>Account for electrostatic sorption models (DDLM,CCM,TLM)</string>
+             <string>Use electrostatic sorption models (DLM,CCM,TLM,BSM,...)</string>
             </property>
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QCheckBox" name="pPXepsC">
+           <widget class="QCheckBox" name="pPParc">
             <property name="text">
-             <string>XepsC_ diel.const &amp; el.conductivity of phase carriers</string>
+             <string>Keep Pparc_ (partial pressures) of Dependent Components</string>
             </property>
            </widget>
           </item>
           <item row="3" column="0">
-           <widget class="QCheckBox" name="pPAalp">
+           <widget class="QCheckBox" name="pPNfsp">
             <property name="text">
-             <string>Aalp_ specific surface areas for phases</string>
+             <string>Keep area fractions and SCM codes for surface types</string>
             </property>
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QCheckBox" name="pPParc">
+           <widget class="QCheckBox" name="pPLim">
             <property name="text">
-             <string>Pparc_ partial pressures for DC</string>
+             <string>Keep lower/upper restrictions for amounts of phases </string>
             </property>
            </widget>
           </item>
           <item row="4" column="0">
-           <widget class="QCheckBox" name="pPSigm">
+           <widget class="QCheckBox" name="pXr0h0">
             <property name="text">
-             <string>Sigm_ specific surface energy for solid phase-aqueous(gas)interface</string>
+             <string>Keep size parameters r0, h0 of solid particles (pores), reserved</string>
             </property>
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QCheckBox" name="pPDelB">
+           <widget class="QCheckBox" name="pPV">
             <property name="text">
-             <string>delB_  uncertainties of bulk composition (vector b) elements</string>
+             <string>Set a constraint on total volume V of the system</string>
             </property>
            </widget>
           </item>
           <item row="5" column="0">
-           <widget class="QCheckBox" name="pPNfsp">
+           <widget class="QCheckBox" name="pPXepsC">
             <property name="text">
-             <string>Nfsp_,SCMT_: fractions and SCM codes for surface types</string>
+             <string>Keep diel.constant and el.conductivity of solid phases (reserved)</string>
             </property>
            </widget>
           </item>
           <item row="5" column="1">
-           <widget class="QCheckBox" name="pPXlam">
+           <widget class="QCheckBox" name="pPE">
             <property name="text">
-             <string>Xlam_ EDL discretness parameter for surface types, &gt;0, &lt;1</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QCheckBox" name="pPbPh">
-            <property name="text">
-             <string>xp_ via quantities of phases from EQSTATe pointed by rkey in SyPhEQ</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QCheckBox" name="pPLim">
-            <property name="text">
-             <string>lower and  upper restrictions for X_a (phases)</string>
+             <string>Use electroneutrality equation (PE) in GEM calculations</string>
             </property>
            </widget>
           </item>
@@ -199,7 +211,7 @@
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QLabel" name="label">
          <property name="sizePolicy">
@@ -209,7 +221,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Step 2 - System configuration (hints)</string>
+          <string>Step 2 - Additional CSD configuration</string>
          </property>
         </widget>
        </item>
@@ -231,15 +243,35 @@
          <property name="title">
           <string/>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QLabel" name="label_4">
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="pPbPh">
             <property name="text">
-             <string>Key of EQSTATe record to supply phases for b vector calculation</string>
+             <string>Use the xp_ vector of the system recipe to set quantities of phases from another calculated equilibrium state</string>
             </property>
            </widget>
           </item>
-          <item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Composition of phase(s) referred to in the xp_ vector can be obtained either from another SysEq record with a key given in the field below; if nothing or '*' is given there, you will be asked to select one. &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;If you cancel selection of SysEq record key or type the &amp;quot;empty&amp;quot; value --- in the field below then, upon calculation of this SysEq record, the program will attempt getting compositions of phases from what is available in RAM from the previously read or calculated single thermodynamic system. This may be useful e.g. for various &amp;quot;sequential reactor&amp;quot; models.  &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;  &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Key of SysEq record to be used in getting phase compositions for the xp_ recipe vector:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="scaledContents">
+             <bool>true</bool>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
            <widget class="QLineEdit" name="pKey"/>
           </item>
          </layout>
@@ -256,11 +288,11 @@
          <property name="title">
           <string>What will happen after you click &quot;Finish&quot;</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QLabel" name="textLabel13">
             <property name="text">
-             <string>(1) The configutarion of modeling project will become active, and later on will be saved in the project configuration file in project directory.</string>
+             <string>(1) The new configutarion of SysEq record will be activated and used in the recipe and equilibrium state calculations.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -273,7 +305,7 @@
           <item>
            <widget class="QLabel" name="textLabel13_2">
             <property name="text">
-             <string>(2) The Project module window will remain open. In most cases, you should just close it and proceed working with the modeling project.</string>
+             <string>(2) The Single Thermodynamic System dialog will appear. Just set or check the recipe and proceed with GEM calculation. </string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -286,7 +318,20 @@
           <item>
            <widget class="QLabel" name="textLabel13_3">
             <property name="text">
-             <string>(3) Before closing the Project module window, you may wish to additionally change some default settings on pages Param_1 or Param_2. This will affect newly created records in the respective modules; old records will remain intact. Do not forget to close the Project window then.</string>
+             <string>(3) To save newly configured SysEq record into Project data base, click &quot;Accept&quot; when the GEM calculation is finished. </string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="textLabel13_4">
+            <property name="text">
+             <string>This configuration will be taken over in any SysEq record produced from this one using the New(Clone) button or menu command. </string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>

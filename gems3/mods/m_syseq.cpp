@@ -124,7 +124,7 @@ void TSysEq::MakeQuery()
 
 
     if( !vfSystemSet( window(), p_key, ssp->switches, name,notes,EQkey ))
-         Error( p_key, "System record configuration cancelled by the user!" );
+         Error( p_key, "Project record configuration cancelled by the user!" );
 
     memcpy(ssp->name, name.c_str(), MAXFORMULA);
     memcpy(ssp->notes, notes.c_str(), MAXFORMULA);
@@ -157,19 +157,22 @@ TSysEq::RecBuild( const char *key, int mode  )
 
 
         gstring skey = gstring(ssp->PhmKey, 0, EQ_RKLEN);
-        if( skey.empty() )
-           skey = "*";
-        else
-           rt[RT_SYSEQ].Find( skey.c_str() );
+        if( /* !skey.empty() && */ skey[0] != '-' && skey != S_EMPTY )
+        {
+           if( skey.empty() || skey[0] == '\0' || skey[0] == ' ' )
+              skey = "*";
+           else
+              rt[RT_SYSEQ].Find( skey.c_str() );
 
-        skey = vfKeyEdit( window(),
-           "Please, select one SysEq record",  nRT,  skey.c_str() );
-        if( skey.empty() )
-            memcpy( ssp->PhmKey, S_EMPTY, EQ_RKLEN );
-        else
-            memcpy( ssp->PhmKey, skey.c_str(), EQ_RKLEN );
+          skey = vfKeyEdit( window(),
+               "Please, select one SysEq record",  nRT,  skey.c_str() );
+          if( skey.empty() )
+               memcpy( ssp->PhmKey, S_EMPTY, EQ_RKLEN );
+          else
+               memcpy( ssp->PhmKey, skey.c_str(), EQ_RKLEN );
 
-        rt[RT_SYSEQ].Find( key );  // DAK fixed 27.10.99
+          rt[RT_SYSEQ].Find( key );  // DAK fixed 27.10.99
+       }
     }
     // Check flags to alloc data
 
