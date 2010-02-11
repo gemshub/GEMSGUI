@@ -45,6 +45,7 @@ using namespace std;
 #include "PhaseWizard.h"
 #include "DualThWizard.h"
 #include "ProjectWizard.h"
+#include "SystemWizard.h"
 #include "ListFilesDialog.h"
 #include "ElementsDialog.h"
 #include "KeyDialog.h"
@@ -716,6 +717,22 @@ vfProjectSet(QWidget* par, const char * p_key,
 
     pdlg.getFlags( flgs );
     taskset = pdlg.get_Settings();
+
+    return true;
+}
+
+bool
+vfSystemSet(QWidget* par, const char * p_key,
+            char flgs[40],  gstring& name, gstring& comment, gstring& EQkey )
+{
+     SystemWizard pdlg( p_key, flgs, name, comment,  EQkey, par );
+     if( !pdlg.exec() )
+      return false;
+
+    pdlg.getFlags( flgs );
+    name = pdlg.getName();
+    comment = pdlg.getComment();
+    EQkey = pdlg.getEQkey();
 
     return true;
 }

@@ -193,6 +193,7 @@ public:
     void set_def( int i=0);
 
     void RecInput( const char *key );
+    void MakeQuery();
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
     void RecSave( const char *key, bool onOld );

@@ -20,7 +20,8 @@
 		  $$DLG4_H/GtDemoWizard.h \
 		  $$DLG4_H/PhaseWizard.h \
 		  $$DLG4_H/ProjectWizard.h \
-		  $$DLG4_H/KeyDialog.h \
+                  $$DLG4_H/SystemWizard.h \
+                  $$DLG4_H/KeyDialog.h \
 		  $$DLG4_H/ChangeKeyDialog.h \ 
 		  $$DLG4_H/KeyProfile.h \
                   $$DLG4_H/AutoPhaseDialog.h\
@@ -57,8 +58,9 @@
 		  $$DLG4_CPP/RTparmWizard.cpp \
 		  $$DLG4_CPP/GtDemoWizard.cpp \ 
 		  $$DLG4_CPP/PhaseWizard.cpp \ 
-		  $$DLG4_CPP/ProjectWizard.cpp \ 
-		  $$DLG4_CPP/KeyDialog.cpp \
+                  $$DLG4_CPP/ProjectWizard.cpp \
+                  $$DLG4_CPP/SystemWizard.cpp \
+                  $$DLG4_CPP/KeyDialog.cpp \
 		  $$DLG4_CPP/ChangeKeyDialog.cpp \
 		  $$DLG4_CPP/KeyProfile.cpp \ 
                   $$DLG4_CPP/AutoPhaseDialog.cpp \
@@ -100,7 +102,8 @@
 		$$DLG4_CPP/GtDemoWizard4.ui \
 		$$DLG4_CPP/PhaseWizard4.ui\ 
 		$$DLG4_CPP/ProjectWizard4.ui\ 
-		$$DLG4_CPP/KeyDialog4.ui \
+                $$DLG4_CPP/SystemWizard4.ui\
+                $$DLG4_CPP/KeyDialog4.ui \
 		$$DLG4_CPP/ChangeKeyDialog4.ui \ 
 		$$DLG4_CPP/KeyProfile4.ui \
                 $$DLG4_CPP/AutoPhaseDialog4.ui \

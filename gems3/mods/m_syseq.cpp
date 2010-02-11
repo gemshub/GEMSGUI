@@ -111,6 +111,28 @@ void TSysEq::keyTest( const char *key )
     }
 }
 
+/* opens window with 'Remake record' parameters
+*/
+void TSysEq::MakeQuery()
+{
+    const char * p_key;
+    gstring name = gstring(ssp->name, 0, MAXFORMULA);
+    gstring notes = gstring(ssp->notes, 0, MAXFORMULA);
+    gstring EQkey = gstring(ssp->PhmKey, 0, EQ_RKLEN);
+
+    p_key  = db->PackKey();
+
+
+    if( !vfSystemSet( window(), p_key, ssp->switches, name,notes,EQkey ))
+         Error( p_key, "Project record configuration cancelled by the user!" );
+
+    memcpy(ssp->name, name.c_str(), MAXFORMULA);
+    memcpy(ssp->notes, notes.c_str(), MAXFORMULA);
+    memcpy(ssp->PhmKey, EQkey.c_str(), EQ_RKLEN);
+
+}
+
+
 //Rebild record structure before calc
 int
 TSysEq::RecBuild( const char *key, int mode  )

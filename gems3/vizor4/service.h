@@ -157,6 +157,9 @@ bool
 vfProjectSet(QWidget* par, const char * p_key,
               char flds[38], int&  taskset );
 bool
+vfSystemSet(QWidget* par, const char * p_key,
+            char flgs[40],  gstring& name, gstring& comment, gstring& EQkey );
+bool
  vfAutoPhaseSet(QWidget* par, const char* pr_key, gstring& a_key, gstring& g_key,
         char& acode, char& gcode, float apar[8]);
 

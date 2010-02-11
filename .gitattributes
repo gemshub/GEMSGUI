@@ -1516,6 +1516,9 @@ gems3/vizor4/dlg4/SetFiltersDialog4.ui -text
 gems3/vizor4/dlg4/SettingsDialog.cpp -text
 gems3/vizor4/dlg4/SettingsDialog.h -text
 gems3/vizor4/dlg4/SettingsDialog4.ui -text
+gems3/vizor4/dlg4/SystemWizard.cpp -text
+gems3/vizor4/dlg4/SystemWizard.h -text
+gems3/vizor4/dlg4/SystemWizard4.ui -text
 gems3/vizor4/dlg4/UnSpaceWizard.cpp -text
 gems3/vizor4/dlg4/UnSpaceWizard.h -text
 gems3/vizor4/dlg4/UnSpaceWizard4.ui -text
