@@ -124,7 +124,7 @@ void TSysEq::MakeQuery()
 
 
     if( !vfSystemSet( window(), p_key, ssp->switches, name,notes,EQkey ))
-         Error( p_key, "Project record configuration cancelled by the user!" );
+         Error( p_key, "System record configuration cancelled by the user!" );
 
     memcpy(ssp->name, name.c_str(), MAXFORMULA);
     memcpy(ssp->notes, notes.c_str(), MAXFORMULA);

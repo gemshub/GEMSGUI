@@ -272,7 +272,7 @@ TPlotWin::PaintToDC(QPainter& dc)
     paintGrid(dc);
 
     int txtWidth = dc.fontMetrics().width(title);
-    QPoint point((/*dc.window().*/width() - txtWidth)/2, 13);
+    QPoint point((/*dc.window().*/width() - txtWidth)/2, QFontMetrics(font).xHeight()*2+7/*13*/);
     dc.drawText(point, title);
 
     for( uint ii=0; ii<shapes.GetCount(); ii++ )
@@ -304,9 +304,10 @@ TPlotWin::paintGrid(QPainter& dc)
     QFont font = pVisorImp->getAxisLabelFont();
     font.setBold(true);
     dc.setFont(font);
+
     dc.drawText( (width() - fm.width(xTitle))/2, height() - 7, xTitle);
     dc.rotate(-90);
-    dc.drawText( -(width() - fm.width(yTitle))/2, 10, yTitle);
+    dc.drawText( -(width() - fm.width(yTitle))/2, QFontMetrics(font).xHeight()*2+7, yTitle);
 //    dc.drawText( dc.xForm(QPoint(7, (height() - fm.width(yTitle))/2)), yTitle);
     dc.rotate(90);
     font.setBold(false);
