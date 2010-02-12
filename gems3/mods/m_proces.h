@@ -244,7 +244,7 @@ public:
 
 enum pe_statcode {
     /*  types of process */
-    P_TITR ='T', P_INV_TITR = 'G', P_REACT = 'R', P_SYST = 'S',
+    P_TITRSING ='T', P_INV_TITR = 'G', P_REACTORS = 'R', P_SEQUENT = 'S',
     P_PVT ='P', P_LIP = 'L'
 };
 

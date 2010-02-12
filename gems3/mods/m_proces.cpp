@@ -436,16 +436,16 @@ void  TProcess::set_type_flags( char type)
 
     switch( type )
     {
-    case P_TITR:
+    case P_TITRSING:
         strncpy( &pep->Istat, "0++-+--++T+-", 12);
         break;
     case P_INV_TITR:
         strncpy( &pep->Istat, "0++-+--+-G++", 12);
         break;
-    case P_REACT:
+    case P_REACTORS:
         strncpy( &pep->Istat, "0++-++-+-R+-", 12);
         break;
-    case P_SYST:
+    case P_SEQUENT:
         strncpy( &pep->Istat, "0++-+----S+-", 12);
         break;
     case P_LIP:

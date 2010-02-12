@@ -117,13 +117,13 @@ ProcessWizard::ProcessWizard( const char* pkey, char flgs[24], int size[6],
  //Page1
     switch( flgs[9] )
      {
-      case 'T': pselT->setChecked( true );
+      case P_TITRSING: pselT->setChecked( true );
           break;
       case P_INV_TITR: pselG->setChecked( true );
           break;
-      case 'R': pselR->setChecked( true );
+      case P_REACTORS: pselR->setChecked( true );
           break;
-      case P_SYST: pselS->setChecked( true );
+      case P_SEQUENT: pselS->setChecked( true );
           break;
       case P_LIP: pselL->setChecked( true );
          break;
@@ -409,18 +409,18 @@ void   ProcessWizard::getTable( short tabInt[6], double dbl[24] )
 
 char   ProcessWizard::getType() const
 {
-  char type=P_SYST;
+  char type=P_SEQUENT;
 
   if( pselT->isChecked())
-   type='T';
+   type=P_TITRSING;
   else if( pselG->isChecked())
            type=P_INV_TITR;
        else if( pselR->isChecked())
-                type='R';
+                type=P_REACTORS;
           else if( pselP->isChecked())
                 type=P_PVT;
                 else  if( pselS->isChecked())
-                           type=P_SYST;
+                           type=P_SEQUENT;
                     else  if( pselL->isChecked())
                                 type=P_LIP;
   return type;
@@ -432,13 +432,13 @@ void   ProcessWizard::getFlags( char flgs[24] )
 
   switch( type )
    {
-    case 'T': strncpy( flgs, "0++-+--++T+-", 12);
+    case P_TITRSING: strncpy( flgs, "0++-+--++T+-", 12);
         break;
     case P_INV_TITR: strncpy( flgs, "0++-+--+-G++", 12);
         break;
-    case 'R': strncpy( flgs, "0++-++-+-R+-", 12);
+    case P_REACTORS: strncpy( flgs, "0++-++-+-R+-", 12);
         break;
-    case P_SYST: strncpy( flgs, "0++-+----S+-", 12);
+    case P_SEQUENT: strncpy( flgs, "0++-+----S+-", 12);
         break;
     case P_LIP: strncpy( flgs, "0++-+----L+-", 12);
        break;
@@ -529,7 +529,7 @@ void ProcessWizard::defineWindow(char type)
      case P_PVT:
             pgData.Add( new pagesSetupData("Phases", o_w_xf));
             break;
-     case P_SYST:
+     case P_SEQUENT:
             pgData.Add( new pagesSetupData("Compos", o_syxea));
             pgData.Add( new pagesSetupData("DComp", o_syxed));
             pgData.Add( new pagesSetupData("IComp", o_sybi));
@@ -550,6 +550,19 @@ void ProcessWizard::defineWindow(char type)
           pgData.Add( new pagesSetupData("Molality",o_wd_ym ));
           pgData.Add( new pagesSetupData("Sorbed",o_w_x )); // x
           break;
+    case P_TITRSING:
+          pgData.Add( new pagesSetupData("Compos", o_syxea));
+          pgData.Add( new pagesSetupData("DComp", o_syxed));
+          pgData.Add( new pagesSetupData("IComp", o_sybi));
+          break;
+    case P_REACTORS:
+          pgData.Add( new pagesSetupData("Compos", o_syxea));
+          pgData.Add( new pagesSetupData("DComp", o_syxed));
+          pgData.Add( new pagesSetupData("IComp", o_sybi));
+          pgData.Add( new pagesSetupData("Phases", o_syphm)); // xp_
+          pgData.Add( new pagesSetupData("Kin-DC-low", o_sydll)); // dll_
+          pgData.Add( new pagesSetupData("Kin-DC-up", o_sydul));
+         break;
 
      default: break;
      }
@@ -577,7 +590,7 @@ void ProcessWizard::defineWindow(char type)
          listObj->setDisabled(true);
        }
        break;
-   case P_SYST:
+   case P_SEQUENT:
        {
          lAbout->setText("Please, select items from Compos, DComp, IComp or Phase lists to change system composition;\n"
                          " select items from Kin-DC-low or Kin-DC-up to change metastability constraints.\n "
@@ -625,6 +638,12 @@ void ProcessWizard::defineWindow(char type)
           }
           break;
 
+    case P_TITRSING:
+          break;
+
+   case P_REACTORS:
+          break;
+
    default: break;
    }
 
@@ -653,7 +672,7 @@ int  ProcessWizard::getNPV( char type, int subtype)             // get number of
               }
              tIters->item(2, 0)->setText( QString::number( 0 ));
             break;
-   case P_SYST:
+   case P_SEQUENT:
              if( subtype >= 2 )
                ret = getNPoints( 6 ); // iPxi
              else
@@ -669,6 +688,10 @@ int  ProcessWizard::getNPV( char type, int subtype)             // get number of
               ret = getNPoints( 9 ); // ipe
            break;
 
+    case P_TITRSING:
+            break;
+    case P_REACTORS:
+           break;
    default: break;
    }
   return ret;
@@ -704,7 +727,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                       "$ End of script");
        break;
 //-------------------------------------------------------------------------
-  case P_SYST:
+  case P_SEQUENT:
           c_PsEqn->setChecked(true);
           if( subtype == 0 )
           {
@@ -804,11 +827,15 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
        ret += QString( " end \n"
                      "$ modC[J]: acid or base added\n");
      }
+   case P_TITRSING:
+       break;
+   case P_REACTORS:
+            break;
 
      default: break;
      }
 
-  // if( !ret.isEmpty() )
+ // if( !ret.isEmpty() )
     textEquat1->setText(ret);
  }
 
@@ -846,7 +873,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
 
       break;
   //-------------------------------------------------------------------------
-  case P_SYST:
+  case P_SEQUENT:
          if( subtype == 1 )
          {
            QString BL, CL;
@@ -1013,7 +1040,11 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           ret += QString( " yp[J][%1]- xp[J];\n").arg(ii);
           pGraph->setValue( ii+2 );
         }
-     default: break;
+         break;
+         case P_TITRSING:
+         break;
+          case P_REACTORS:
+        default: break;
      }
 
    if( lineNames.GetCount() > 0)
@@ -1041,8 +1072,13 @@ void ProcessWizard::setMode(int subtype)
                 break;
     case P_INV_TITR:
     case P_LIP:
-    case P_SYST: page1Changed = true;
+    case P_SEQUENT: page1Changed = true;
                  setCalcScript( type, subtype );
+                break;
+     case P_TITRSING:
+         break;
+    case P_REACTORS:
+         break;
     default : break;
     }
 }
@@ -1144,18 +1180,17 @@ int  ProcessWizard::getNPoints( int col )
      until = tIters->item(1,col)->data(Qt::DisplayRole).toDouble();
      step = tIters->item(2,col)->data(Qt::DisplayRole).toDouble();
 
-     if( until < from )
-     {
-         gstring str = tIters->horizontalHeaderItem( col )->text().toLatin1().data();
-         vfMessage(this, str.c_str(), "Illegal interval fo values: from > until");
-         return nP;
-     }
+     if( fabs(step) < 1e-30 )
+         nP = 1;
+     else
+         nP  = (int)((until-from)/step)+1;
 
-     if( step <= 1e-9 )
-       nP = 1;
-      else
-       nP  = (int)((until-from)/step)+1;
-
+      if( nP < 1 || nP > 9999 )
+      {
+          gstring str = tIters->horizontalHeaderItem( col )->text().toLatin1().data();
+          vfMessage(this, str.c_str(), "Wrong number of steps - please, check values in this iterator!");
+          return nP;
+      }
      return nP;
  }
 

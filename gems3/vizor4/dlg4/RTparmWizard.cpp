@@ -19,6 +19,7 @@
 
 const char *RTPARM_HTML = "gm_rtparm";
 
+#include <math.h>
 #include <qspinbox.h>
 #include <qstring.h>
 #include <qvalidator.h>
@@ -242,18 +243,18 @@ bool RTparmWizard::TChange()
   until = pTuntil->text().toDouble();
   step = pTstep->text().toDouble();
 
-  if( until < from )
-  {
-      //pTfrom->setValue(until);
-      //pTuntil->setValue(from);
-      vfMessage(this, "Temperature", "Illegal interval fo values: from > until");
-      return false;
-  }
+  if( fabs(step) < 1e-30 )
+      nT = 1;
+  else
+      nT  = (int)((until-from)/step)+1;
 
-  if( step <= 1e-9 )
-    nT = 1;
-   else
-    nT  = (int)((until-from)/step)+1;
+   if( nT < 1 || nT > 9999 )
+   {
+       //pTfrom->setValue(until);
+       //pTuntil->setValue(from);
+       vfMessage(this, "Temperature", "Wrong number of steps - please, check values in this iterator!");
+       return false;
+   }
 
   pNT->setValue(nT);
   return true;
@@ -268,18 +269,18 @@ bool RTparmWizard::PChange()
   until = pPuntil->text().toDouble();
   step = pPstep->text().toDouble();
 
-  if( until < from )
-  {
-      //pTfrom->setValue(until);
-      //pPuntil->setValue(from);
-      vfMessage(this, "Pressure", "Illegal interval fo values: from > until");
-      return false;
-  }
+  if( fabs(step) < 1e-30 )
+      nP = 1;
+  else
+      nP  = (int)((until-from)/step)+1;
 
-  if( step <= 1e-9 )
-    nP = 1;
-   else
-    nP  = (int)((until-from)/step)+1;
+   if( nP < 1 || nP > 9999 )
+   {
+       //pTfrom->setValue(until);
+       //pPuntil->setValue(from);
+       vfMessage(this, "Pressure", "Wrong number of steps - please, check values in this iterator!");
+       return false;
+   }
 
   pNP->setValue(nP);
   return true;
