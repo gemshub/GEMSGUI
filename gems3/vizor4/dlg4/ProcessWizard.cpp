@@ -868,10 +868,11 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
        ret += QString( " end \n"
                      "$ modC[J]: acid or base added\n");
      }
+     break;
      //-------------------------------------------------------------------------
    case P_TITRSING:
                c_PsEqn->setChecked(true);
-               if( subtype == 0 )
+           //    if( subtype == 0 )
                {
                  QString pH = "pH", com = "Titrant";
                  gstring oName;
@@ -1208,13 +1209,12 @@ void ProcessWizard::setMode(int subtype)
                 pLsts[0]->setDisabled(subtype!=2);
                 listObj->setDisabled(subtype!=2);
                 break;
+    case P_TITRSING:
     case P_INV_TITR:
     case P_LIP:
     case P_SEQUENT: page1Changed = true;
                  setCalcScript( type, subtype );
                 break;
-     case P_TITRSING:
-         break;
     case P_REACTORS:
          break;
     default : break;
