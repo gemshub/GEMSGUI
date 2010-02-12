@@ -986,7 +986,8 @@ TProcess::pe_test()
          }
     /////
 
-    if( pep->PsIN != S_OFF  )  nIt--;
+    if( pep->PsIN != S_OFF  )
+    {   pep->Loop = 1; nIt--; }
     if( nIt >= pep->Nxi-1 || pep->Nst >= pep->NeMax )
               pep->Loop = 0;
     if( pep->PsPro != S_OFF && pep->NP == 1)
