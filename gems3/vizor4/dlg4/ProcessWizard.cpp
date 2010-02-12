@@ -515,7 +515,7 @@ ProcessWizard::help()
 
 void ProcessWizard::defineWindow(char type)
 {
-  int jj;
+  uint jj;
 
   page1Changed = false;
   if( type == curType )
@@ -551,9 +551,12 @@ void ProcessWizard::defineWindow(char type)
           pgData.Add( new pagesSetupData("Sorbed",o_w_x )); // x
           break;
     case P_TITRSING:
-          pgData.Add( new pagesSetupData("Compos", o_syxea));
-          pgData.Add( new pagesSetupData("DComp", o_syxed));
-          pgData.Add( new pagesSetupData("IComp", o_sybi));
+          {
+            pgData.Add( new pagesSetupData("Compos", o_syxea));
+            pgData.Add( new pagesSetupData("DComp", o_syxed));
+            pgData.Add( new pagesSetupData("IComp", o_sybi));
+            pgData.Add( new pagesSetupData("lga", o_wd_yla));
+          }
           break;
     case P_REACTORS:
           pgData.Add( new pagesSetupData("Compos", o_syxea));
@@ -639,7 +642,43 @@ void ProcessWizard::defineWindow(char type)
           break;
 
     case P_TITRSING:
-          break;
+          {
+              lAbout->setText("then select one or more sorbed species from the Sorbed list, and skip the next wizard page");
+              sub1->setText("Inverse titration (single point)");
+              sub1->setChecked(true);
+              sub2->hide();
+              sub3->hide();
+              sub4->hide();
+
+              TIArray<pagesSetupData> scalarsList;
+              TIArray<pagesSetupData> pgData1;
+              GetListsnRT( MD_MULTI, pgData1,  scalarsList );
+
+              pgData.Add( new pagesSetupData("Functions", -1));
+              QListWidgetItem *item1 = new QListWidgetItem( "Functions",  listObj);
+
+              // add page
+              QWidget *page1 = new QWidget();
+              QHBoxLayout *horizontalLayout1 = new QHBoxLayout(page1);
+              QListWidget *lstIndexes1 = new QListWidget(page1);
+              lstIndexes1->setWrapping( true );
+              lstIndexes1->setSelectionMode(QAbstractItemView::MultiSelection);
+              horizontalLayout1->addWidget(lstIndexes1);
+              pageLists->addWidget(page1);
+
+              // insert items to list of indexes
+               for(  jj=0; jj<scalarsList.GetCount(); jj++ )
+                  {
+                     item1 = new QListWidgetItem( scalarsList[jj].pageName.c_str(), lstIndexes1);
+                  }
+               pLsts.append(lstIndexes1);
+
+              for(jj=0; jj<5; jj++ )
+                QObject::connect( pLsts[jj], SIGNAL(itemSelectionChanged()),
+                                this, SLOT(CmSetMode()));
+
+          }
+              break;
 
    case P_REACTORS:
           break;
@@ -689,7 +728,9 @@ int  ProcessWizard::getNPV( char type, int subtype)             // get number of
            break;
 
     case P_TITRSING:
-            break;
+           if( subtype == 0 )
+              ret = 1;
+           break;
     case P_REACTORS:
            break;
    default: break;
@@ -827,7 +868,62 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
        ret += QString( " end \n"
                      "$ modC[J]: acid or base added\n");
      }
+     //-------------------------------------------------------------------------
    case P_TITRSING:
+               c_PsEqn->setChecked(true);
+               if( subtype == 0 )
+               {
+                 QString pH = "pH", com = "Titrant";
+                 gstring oName;
+
+                 // find titrant
+                 for(int jj=0; jj<3; jj++ )
+                 {
+                     lst = getSelected( jj );
+                     if( lst.count() > 0 )
+                     {
+                       oName = aObj[pgData[jj].nObj].GetKeywd();
+                       lst[0] = lst[0].trimmed();
+                       com  = QString("%1[{%2}]").arg(oName.c_str(), lst[0]);
+                       break;
+                     }
+                 }
+                 // find function
+                 for(int jj=3; jj<5; jj++ )
+                 {
+                     lst = getSelected( jj );
+                     if( lst.count() > 0 )
+                     {
+                       if( jj== 3)
+                       {  oName = aObj[pgData[jj].nObj].GetKeywd();
+                          lst[0] = lst[0].trimmed();
+                          pH  = QString("%1[{%2}]").arg(oName.c_str(), lst[0]);
+                       }
+                       else
+                          pH =  lst[0].trimmed();
+                       break;
+                     }
+                 }
+                 ret = QString(
+                    "$ Finding amount of CO2 added to obtain a prescribed pH \n"
+                    "$ Initialization \n"
+                    "if( NeIt[1] = 0 ) \n"
+                    " begin \n"
+                    "   ipH[1]=:%2-ipH[0]; iNu[2]=:0; \n"
+                    "   cNu=:iNu[0]; iNu[1]=: %1; \n"
+                    " end \n"
+                    "$ Calculation of difference between given and computed pH \n"
+                    " cpH =: %2-ipH[0]; \n"
+                    "$ Recalculation of a step in titrant molality \n"
+                    " cNu =: ( ( cpH * ipH[1] ) < 0 ? cNu*0.382 : cNu ); \n"
+                    " ipH[1] =: cpH; \n"
+                    "$ Calculation of the amount of titrant \n"
+                    " iNu[2] =: iNu[2] + cNu*sign(cpH);  \n"
+                    " %1 =: iNu[1]+iNu[2];  \n"
+                    "$ Check of convergence \n"
+                    "Next =: ( ( abs( cpH ) < ipH[2] ) ? 0 : 1); \n"
+                    " $ Finish\n").arg(com, pH);
+               }
        break;
    case P_REACTORS:
             break;
@@ -1041,9 +1137,51 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           pGraph->setValue( ii+2 );
         }
          break;
-         case P_TITRSING:
-         break;
-          case P_REACTORS:
+//-------------------------------------------------------------------------
+   case P_TITRSING:
+               if( subtype == 0 )
+               {
+                 QString pH, com;
+                 gstring oName;
+
+                 // find titrant
+                 for(ii=0; ii<3; ii++ )
+                 {
+                     lst = getSelected( ii );
+                     if( lst.count() > 0 )
+                     {
+                       oName = aObj[pgData[ii].nObj].GetKeywd();
+                       lst[0] = lst[0].trimmed();
+                       com  = QString("%1[{%2}]").arg(oName.c_str(), lst[0]);
+                       break;
+                     }
+                 }
+                 // find function
+                 for(ii=3; ii<5; ii++ )
+                 {
+                     lst = getSelected( ii );
+                     if( lst.count() > 0 )
+                     {
+                       if( ii== 3)
+                       {  oName = aObj[pgData[ii].nObj].GetKeywd();
+                          lst[0] = lst[0].trimmed();
+                          pH  = QString("%1[{%2}]").arg(oName.c_str(), lst[0]);
+                       }
+                       else
+                          pH =  lst[0].trimmed();
+                       break;
+                     }
+                 }
+                 if( pH.isEmpty() || com.isEmpty() )
+                   return;
+                 ret = QString(
+                         "xp[J] =: %2; \n"
+                         "yp[J][0] =: %1;  \n"
+                         "yp[J][1] =: cpH; \n").arg(com, pH);
+                pGraph->setValue( 2 );
+               }
+       break;
+   case P_REACTORS:
         default: break;
      }
 
