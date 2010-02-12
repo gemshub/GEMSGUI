@@ -127,7 +127,7 @@ typedef struct
     Time, // Tau - physical time (for PROCES) reserved
     KSI,  // Xi - current value of process extent variable (reserved)
     NU,   // Nu - current value of process extent variable (reserved)
-    Rkin; // reserved
+    Msolids; // Amount of total solids (g) from another equilibrium to add to B_ (provisional)
 
   short *Ll;  // N of DC selected within each phase [0:mu.Fi-1]
   char

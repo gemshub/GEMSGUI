@@ -613,7 +613,9 @@ void TSyst::systbc_calc( int mode )
     /* calc bulk chemical composition from phases - whole block fixed by DAK 27.10.99 */
     if( sy.PbPH != S_OFF )
     {        
-      for( k = 0; k<mup->Fi; k++ )
+       if( sy.Msolids )
+           ProvidedPhm = true;
+       for( k = 0; k<mup->Fi; k++ )
           if( sy.Phm[k] )
               ProvidedPhm = true;
       if( ProvidedPhm )
@@ -865,100 +867,86 @@ NEXT:
 void TSyst::PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
                      double */*VaqC*/,  double */*VsysC*/, qd_real* BB )
 {
-
-    int Lf, i,j,k;
-    double TT;
-    double *A;
-    double *B, Xf, Mass, Xincr;
+    double *A, *B, Mass, Xincr;
+    TCompos* aCMP=(TCompos *)(&aMod[RT_COMPOS]);
     MULTI* pmp = TProfil::pm->pmp;
+    int j, i, k, k_, i_;
 
-//    A = new double[Lf*mup->N];
-//    fillValue( A, 0., (Lf*mup->N) );
-//    B = new double[mup->N];
-//    fillValue( B, 0., (mup->N) );
-//
-    TT = pmp->TC;
-}
-
-/*    TCompos* aCMP=(TCompos *)(&aMod[RT_COMPOS]);
-    TIArray<TFormula> aFo;
-    gstring form;
-    int i, j, jf=0, jsf=0, k, Lf;
-    double *A;
-    double *B, Xf, Mass, Xincr;
-    double *X;
-
-    for( k = 0; k<mup->Fi; k++ ) //*phases
-    {
-        Lf=0;  //* count of selected DC
-        Xf = 0.0;
-        for( j=jsf; j<aSE->stp->L; j++ )
+    B = new double[mup->N];
+    j=0;
+    for( k=0; k< pmp->FI; k++ )
+    { // cycle by phases
+        i=j+pmp->L1[k];
+        k_ = (int)pmp->muk[k];
+        if( !sy.Phm[k_] || !pmp->XFs[k] )
         {
-            if( aSE->stp->llf[j] >= jf+mup->Ll[k] )
-                break;
-            Xf += aSE->stp->Y[j];
-            Lf++;
+            j=i;       // There is no amount given for this phase in xp_
+            continue;  // or amount of this phase in equilibrium is zero
         }
-        if( Lf && Xf && sy.Phm[k] )
-            goto NEXT;
-        jf+=mup->Ll[k];
-        jsf += Lf;
-        continue;
-NEXT:
-        X = new double[Lf];
-        memset( X, 0, sizeof(double)*Lf );
-
-        // load formulae
-        for( i=0; i<Lf; i++ )
-        {
-            aFo.Add( new TFormula() );
-            j=aSE->stp->llf[jsf+i];
-            form = aFo[i].form_extr( j, mup->L, mup->DCF );
-            aFo[i].SetFormula( form.c_str() ); // and ce_fscan
-            X[i] = aSE->stp->Y[jsf+i];   // load mole quantities
+        if( k < pmp->FIs )
+        {   // This is a multicomponent phase
+            A = pmp->BF+k*pmp->N;
+            for( i=0; i<pmp->N; i++ )
+            {
+                i_ = (int)pmp->mui[i];
+                B[i_] = A[i];
+            }
         }
-        A = new double[Lf*mup->N];
-        fillValue( A, 0., (Lf*mup->N) );
-        B = new double[mup->N];
-        fillValue( B, 0., (mup->N) );
-
-        for( i=0; i<Lf; i++ )
-            aFo[i].Stm_line( mup->N, A+i*mup->N, (char *)mup->SB, mup->Val );
-        aFo.Clear();
-        Mass = 0.0; // calc mass of phase
-        for( i=0; i<Lf; i++ )
-            Mass += X[i]*MolWeight( mup->N, mup->BC, A+i*mup->N );
-        /* calc stoichiometry of phase
-        stbal( mup->N, Lf, A, X, B );
-        delete[] A;
-        delete[] X;
-        Xincr = aCMP->Reduce_Conc( sy.XPun[k], sy.Phm[k], Mass, 1.0, sy.R1,
+        else {  // This is a single-component phase
+            A = pmp->A+j*pmp->N;
+            fillValue( B, 0., (mup->N) );
+            for( i = 0; i < pmp->N; i++ )
+            {
+                i_ = pmp->mui[i];
+                B[i_] = pmp->X[j]*A[i];
+            }
+        }
+        // calculate the mass of phase
+        Mass = MolWeight( mup->N, mup->BC, B );
+        // calculate the conversion factor
+        Xincr = aCMP->Reduce_Conc( sy.XPun[k_], sy.Phm[k_], Mass, 1.0, sy.R1,
                                    sy.Msys, sy.Mwat, sy.Vaq, sy.Maq, sy.Vsys );
-        /* recalc stehiometric of PHASE
-        for( i=0; i<mup->N; i++ )
-            if( B[i] )
+        // recalculate phase stoichiometry
+        for( i_=0; i_<mup->N; i_++ )
+            if( B[i_] )
             {  if(TProfil::pm->pa.p.PD<0)
-                  BB[i] += Xincr*B[i];
+                  BB[i_] += Xincr*B[i_];
                else
-                sy.B[i] += Xincr*B[i];
+                sy.B[i_] += Xincr*B[i_];
             }
 
         if( sy.Msys > 1e-7 )
             *MsysC += Xincr*Mass;
         if( sy.Maq > 1e-7 )
             *MaqC += Xincr*Mass;
-      for( i=0; i<mup->N; i++ ) // added Sveta 13/04/2006
-        if( sy.R1 > 1e-7 )
-            *R1C += Xincr*B[i];
-
-        delete[] B;
-        jf+=mup->Ll[k];
-        jsf+=Lf;
-    } /* k
+        for( i_=0; i_<mup->N; i_++ ) // added Sveta 13/04/2006
+           if( sy.R1 > 1e-7 )
+              *R1C += Xincr*B[i_];
+        j=i;
+    }
+    if( sy.Msolids )
+    {  // adding total solids, for now in grams only!
+        A = pmp->BFC;
+        for( i=0; i<pmp->N; i++ )
+        {
+            i_ = (int)pmp->mui[i];
+            B[i_] = A[i];
+        }
+        Mass = MolWeight( mup->N, mup->BC, B );
+        Xincr = aCMP->Reduce_Conc( 'g', sy.Msolids, Mass, 1.0, sy.R1,
+                                   sy.Msys, sy.Mwat, sy.Vaq, sy.Maq, sy.Vsys );
+        for( i_=0; i_<mup->N; i_++ )
+            if( B[i_] )
+            {  if(TProfil::pm->pa.p.PD<0)
+                  BB[i_] += Xincr*B[i_];
+               else
+                sy.B[i_] += Xincr*B[i_];
+            }
+    }
+    delete[] B;
 }
 
-*/
-
+// Calculation of phase stoichiometry
 void TSyst::stbal( int N, int L, double *Smatr, double *DCstc,
                    double *ICm )
 {
