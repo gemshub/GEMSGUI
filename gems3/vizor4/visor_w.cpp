@@ -92,6 +92,8 @@ TVisorImp::TVisorImp(int c, char** v):
 //    defaultFont = QApplication::font();
     defaultFont = QFont(GEMS_DEFAULT_FONT_NAME, GEMS_DEFAULT_FONT_SIZE);
     setCellFont( defaultFont );
+    //setAxisLabelFont(defaultFont);
+    axisLabelFont.setPointSize( 11);
 
 #ifndef __unix
     if( font().pixelSize() < 12 ) {

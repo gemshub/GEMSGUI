@@ -781,15 +781,22 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
     if( plot )
     {
         int oldN = aObj[o_mtplline].GetN();
-        TPlotLine defpl("", 4);
 
         plot = (TPlotLine * )aObj[ o_mtplline ].Alloc( nLn, sizeof(TPlotLine) );
         for(int ii=0; ii<nLn; ii++ )
         {
             if( ii >= oldN )
             {
-                TPlotLine defpl(ii, nLn, "");
-                plot[ii] = defpl;
+                if(ii < mtp->nYS )
+                {
+                    TPlotLine defpl(ii, nLn, "",6,0,2);
+                    plot[ii] = defpl;
+                }
+                else
+                {
+                    TPlotLine defpl(ii, nLn, "",7,7,0);
+                    plot[ii] = defpl;
+                }
             }
             if(ii < mtp->nYS )
                plot[ii].setName( mtp->lNam[ii] );

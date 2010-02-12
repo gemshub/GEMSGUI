@@ -62,12 +62,14 @@ class DragLabel: public QLabel
 
     void startDrag()
     {
-        QFontMetrics fm = QPainter(this).fontMetrics();
+        QFontMetrics fm(this->font());
+        //QFontMetrics fm = QPainter(nativeParentWidget () /*this*/).fontMetrics();
         QPixmap pixmap(fm.width(text())+2, fm.height()+2);
         pixmap.fill(QColor(0, 0, 0, 0));
         QPainter dc(&pixmap);
         dc.drawText(2, fm.height()-2, text()); 
     	
+
       QMimeData * mimeData = new QMimeData;
       mimeData->setText( text() );
       QDrag *drag = new QDrag(this);

@@ -1457,8 +1457,16 @@ TProcess::RecordPlot( const char* /*key*/ )
         {
             if( ii >= oldN )
             {
-                TPlotLine defpl(ii, nLn, "");
-                plot[ii] = defpl;
+                if(ii < pep->dimXY[1] )
+                {
+                    TPlotLine defpl(ii, nLn, "",6,0,2);
+                    plot[ii] = defpl;
+                }
+                else
+                {
+                    TPlotLine defpl(ii, nLn, "",7,7,0);
+                    plot[ii] = defpl;
+                }
             }
             if(ii < pep->dimXY[1] )
                 plot[ii].setName( pep->lNam[ii]);

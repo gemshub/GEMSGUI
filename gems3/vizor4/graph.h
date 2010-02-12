@@ -84,7 +84,7 @@ public:
     }
 
     TPlotLine( int ii, int maxII, const char *aName = 0,
-               int aPointType = 6, int aPointSize = 0, int aPutLine = 1 ):
+               int aPointType = 6, int aPointSize = 0, int aPutLine = 2 ):
             type(aPointType), size(aPointSize), line_size(aPutLine)
     {
         GColor col( false, ii, maxII);
