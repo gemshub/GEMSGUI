@@ -150,8 +150,21 @@ void TRTParm::dyn_set(int q)
              "E01RTrem: Illegal access to rp in dyn_set().");
 //    memcpy( rpp->pstate, rt[nRT].UnpackKey(), RP_RKLEN-MAXSYMB-1 );
 //    rpp->nvch = 0;
-    rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].GetPtr();
-    rpp->lNamE = (char (*)[MAXGRNAME])aObj[ o_rtlname ].GetPtr();
+    // Change MAXGRNAME from 7 to 16
+    if(aObj[ o_rtlnam ].GetType() == 7 )
+        rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].Alloc( 1,
+                     rpp->dimXY[1], MAXGRNAME);
+    else
+        rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].GetPtr();
+
+    if(aObj[ o_rtlname ].GetType() == 7 && rpp->Pplot != S_OFF )
+        rpp->lNamE = (char (*)[MAXGRNAME])aObj[ o_rtlname ].Alloc(1,
+                     rpp->dimEF[1], MAXGRNAME);
+    else
+        rpp->lNamE = (char (*)[MAXGRNAME])aObj[ o_rtlname ].GetPtr();
+
+
+
     rpp->expr = (char *)aObj[ o_rtexpr ].GetPtr();
     rpp->exprE = (char *)aObj[ o_rtexpre ].GetPtr();
     rpp->T    = (double *)aObj[ o_rpxt ].GetPtr();
@@ -713,11 +726,12 @@ TRTParm::RecordPlot( const char* /*key*/ )
                 plot[ii] = defpl;
             }
             if(ii < rpp->dimXY[1] )
-                strncpy( plot[ii].name, rpp->lNam[ii], MAXGRNAME );
+                 plot[ii].setName( rpp->lNam[ii]);
+                // strncpy( plot[ii].name, rpp->lNam[ii], MAXGRNAME-1 );
             else
-                strncpy( plot[ii].name, rpp->lNamE[ii-rpp->dimXY[1]],
-                     MAXGRNAME );
-            plot[ii].name[MAXGRNAME] = '\0';
+                plot[ii].setName( rpp->lNamE[ii-rpp->dimXY[1]]);
+                //strncpy( plot[ii].name, rpp->lNamE[ii-rpp->dimXY[1]], MAXGRNAME-1 );
+           // plot[ii].name[MAXGRNAME-1] = '\0';
         }
         gd_gr = new GraphWindow( this, plt, rpp->name,
                                      rpp->size[0], rpp->size[1], plot,
@@ -762,9 +776,9 @@ TRTParm::SaveGraphData( GraphData *gr )
         plot[ii] = gr->lines[ii];
         //  lNam0 and lNamE back
         if(ii < rpp->dimXY[1] )
-            strncpy(  rpp->lNam[ii], plot[ii].name, MAXGRNAME );
+            strncpy(  rpp->lNam[ii], plot[ii].getName().c_str(), MAXGRNAME );
         else
-            strncpy(  rpp->lNamE[ii-rpp->dimXY[1]], plot[ii].name, MAXGRNAME );
+            strncpy(  rpp->lNamE[ii-rpp->dimXY[1]], plot[ii].getName().c_str(), MAXGRNAME );
     }
    if( gr->graphType == ISOLINES )
        gr->getColorList();

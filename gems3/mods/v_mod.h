@@ -647,7 +647,7 @@ enum pe_valind { /* index control */
 enum grr_constants { // gstring len for graph
     MAXAXISNAME = 9,
     MAXGSNAME = 70,
-    MAXGRNAME = 7
+    MAXGRNAME = 16
 };
 
 

@@ -71,7 +71,7 @@ ColorDialog::ColorDialog( TPlotLine& aData, QWidget* parent) :
         break;
     }
     gstring s= "Set up plot line: ";
-    s+= dat.name;
+    s+= dat.getName();
     setWindowTitle(s.c_str());
 }
 

@@ -126,8 +126,20 @@ void TGtDemo::dyn_set(int q)
 {
     ErrorIf( gdp!=&gd[q], GetName(), "E06GDrem: Illegal access to gd in dyn_set");
     // memcpy( gdp->symb , rt[nRT].UnpackKey(), GD_RKLEN );
-    gdp->lNam0 = (char (*)[MAXGRNAME])aObj[ o_gdlnam ].GetPtr();
-    gdp->lNamE = (char (*)[MAXGRNAME])aObj[ o_gdlname ].GetPtr();
+
+    // Change MAXGRNAME from 7 to 16
+    if(aObj[ o_gdlnam ].GetType() == 7 )
+        gdp->lNam0 = (char (*)[MAXGRNAME])aObj[ o_gdlnam ].Alloc( 1,
+                     gdp->dimXY[1], MAXGRNAME);
+    else
+        gdp->lNam0 = (char (*)[MAXGRNAME])aObj[ o_gdlnam ].GetPtr();
+
+    if(gdp->PtAEF != S_OFF && aObj[ o_gdlname ].GetType() == 7 )
+        gdp->lNamE = (char (*)[MAXGRNAME])aObj[ o_gdlname ].Alloc(1,
+                     gdp->dimEF[1], MAXGRNAME);
+    else
+       gdp->lNamE = (char (*)[MAXGRNAME])aObj[ o_gdlname ].GetPtr();
+
     gdp->expr = (char *)aObj[ o_gdexpr ].GetPtr();
     gdp->exprE = (char *)aObj[ o_gdexpre ].GetPtr();
     gdp->rkey  = (char *)aObj[ o_gdrkey ].GetPtr();
@@ -730,10 +742,12 @@ TGtDemo::RecordPlot( const char* /*key*/ )
                plot[ii] = defpl;
             }
             if(ii < gdp->dimXY[1] )
-                strncpy( plot[ii].name, gdp->lNam0[ii], MAXGRNAME );
+                plot[ii].setName( gdp->lNam0[ii]);
+                //strncpy( plot[ii].name, gdp->lNam0[ii], MAXGRNAME-1 );
             else
-                strncpy( plot[ii].name, gdp->lNamE[ii-gdp->dimXY[1]], MAXGRNAME );
-            plot[ii].name[MAXGRNAME] = '\0';
+                plot[ii].setName( gdp->lNamE[ii-gdp->dimXY[1]]);
+                //strncpy( plot[ii].name, gdp->lNamE[ii-gdp->dimXY[1]], MAXGRNAME-1 );
+            //plot[ii].name[MAXGRNAME-1] = '\0';
         }
         gd_gr = new GraphWindow( this, plt, gdp->name,
                                      gdp->size[0], gdp->size[1], plot,
@@ -778,9 +792,9 @@ TGtDemo::SaveGraphData( GraphData *gr )
         plot[ii] = gr->lines[ii];
         //  lNam0 and lNamE back
         if( ii < gdp->dimXY[1] )
-            strncpy(  gdp->lNam0[ii], plot[ii].name, MAXGRNAME );
+            strncpy(  gdp->lNam0[ii], plot[ii].getName().c_str(), MAXGRNAME );
         else
-            strncpy(  gdp->lNamE[ii-gdp->dimXY[1]], plot[ii].name, MAXGRNAME );
+            strncpy(  gdp->lNamE[ii-gdp->dimXY[1]], plot[ii].getName().c_str(), MAXGRNAME );
     }
 
     if( gr->graphType == ISOLINES )

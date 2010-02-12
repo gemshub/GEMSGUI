@@ -605,8 +605,9 @@ TUnSpace::RecordPlot( const char* /*key*/ )
         {
             if( ii >= oldN )
                 plot[ii] = defpl;
-            strncpy( plot[ii].name, usp->lNam[ii], MAXGRNAME );
-            plot[ii].name[MAXGRNAME] = '\0';
+            plot[ii].setName( usp->lNam[ii]);
+            //strncpy( plot[ii].name, usp->lNam[ii], MAXGRNAME-1 );
+            //plot[ii].name[MAXGRNAME-1] = '\0';
         }
         gd_gr = new GraphWindow( this, plt, usp->name,
                usp->size[0], usp->size[1], plot,
@@ -646,7 +647,7 @@ TUnSpace::SaveGraphData( GraphData *gr )
     for(int ii=0; ii<(int)gr->lines.GetCount(); ii++ )
     {
         plot[ii] = gr->lines[ii];
-        strncpy(  usp->lNam[ii], plot[ii].name, MAXGRNAME );
+        strncpy(  usp->lNam[ii], plot[ii].getName().c_str(), MAXGRNAME );
     }
 
     if( gr->graphType == ISOLINES )

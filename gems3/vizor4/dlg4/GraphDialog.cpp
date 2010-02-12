@@ -202,8 +202,8 @@ void GraphDialog::ShowLegend()
 
             pLabelD = new DragLabel( pGrpLegend );
 //	        aLegendLabels.Add( pLabelD );
-            pLabelD->setText( gr_data.lines[kk].name );
-	        pGrp->addWidget(pLabelD, ll, 1);
+            pLabelD->setText( QString( gr_data.lines[kk].getName().c_str()) );
+            pGrp->addWidget(pLabelD, ll, 1);
         }
 
        line = new QFrame(pGrpLegend);
@@ -771,7 +771,8 @@ void PlotTypeBtn::setColor( QColor& cl)
 
 void PlotTypeBtn::setName( const char* name)
 {
-    strncpy(plLine.name, name, 15 );
+    plLine.setName(name);
+    //strncpy(plLine.name, name, 15 );
 }
 
 

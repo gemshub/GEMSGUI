@@ -56,7 +56,20 @@ struct TPlotLine
     int green;
     int blue;
 
+private:
     char name[16];
+public:
+
+    void setName( const char *aName )
+    {
+        strncpy( name, aName, 15);
+        name[15] = '\0';
+    }
+
+    gstring getName()
+    {
+        return gstring(name, 0, 15);
+    }
 
 
     TPlotLine( const char *aName = 0,
@@ -66,8 +79,8 @@ struct TPlotLine
             type(aPointType), size(aPointSize), line_size(aPutLine),
             red(aRed),        green(aGreen), blue(aBlue)
     {
-        strncpy( name, aName, 14);
-        name[14] = '\0';
+        strncpy( name, aName, 15);
+        name[15] = '\0';
     }
 
     TPlotLine( int ii, int maxII, const char *aName = 0,
@@ -79,8 +92,8 @@ struct TPlotLine
         blue = col.blue;
         green = col.green;
 
-        strncpy( name, aName, 14);
-        name[14] = '\0';
+        strncpy( name, aName, 15);
+        name[15] = '\0';
     }
 
 
@@ -205,9 +218,9 @@ struct GraphData
     {
         return lines[ii].line_size;
     }
-    const char * getName( int ii) const
+    gstring getName( int ii) const
     {
-        return lines[ii].name;
+        return lines[ii].getName();
     }
 
    int getPointCol( int i,TIArray<FPoint>& pnts1  );

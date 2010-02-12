@@ -282,8 +282,10 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
                 lines.Add( new TPlotLine( aLinesDesc[nLines] ) );
             else
                 lines.Add( new TPlotLine( plots[ii].getName(jj).c_str() ) );
-            if( *lines[nLines].name == 0 )
-                strncpy( lines[nLines].name, plots[ii].getName(jj).c_str(), 15 );
+            if( lines[nLines].getName().empty() )
+                lines[nLines].setName( plots[ii].getName(jj).c_str());
+//            if( *lines[nLines].name == 0 )
+//                strncpy( lines[nLines].name, plots[ii].getName(jj).c_str(), 15 );
         }
     }
 

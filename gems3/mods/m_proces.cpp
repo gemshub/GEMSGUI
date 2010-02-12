@@ -269,8 +269,20 @@ void TProcess::dyn_set(int q)
     pe[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_pesdval ].GetPtr();
     pe[q].tprn = (char *)aObj[ o_petprn ].GetPtr();
     // graphics
-    pe[q].lNam = (char (*)[MAXGRNAME])aObj[ o_pclnam ].GetPtr();
-    pe[q].lNamE = (char (*)[MAXGRNAME])aObj[ o_pclname ].GetPtr();
+
+    // Change MAXGRNAME from 7 to 16
+    if(pe[q].PsGR != S_OFF && aObj[ o_pclnam ].GetType() == 7 )
+      pe[q].lNam = (char (*)[MAXGRNAME])aObj[ o_pclnam ].Alloc( 1,
+                 pe[q].dimXY[1], MAXGRNAME);
+    else
+      pe[q].lNam = (char (*)[MAXGRNAME])aObj[ o_pclnam ].GetPtr();
+
+    if( pe[q].PvEF != S_OFF && aObj[ o_pclname ].GetType() == 7  )
+          pe[q].lNamE = (char (*)[MAXGRNAME])aObj[ o_pclname ].Alloc(1,
+                     pe[q].dimEF[1], MAXGRNAME);
+    else
+         pe[q].lNamE = (char (*)[MAXGRNAME])aObj[ o_pclname ].GetPtr();
+
     pe[q].gr_expr = (char *)aObj[ o_pcexpr ].GetPtr();
     pe[q].x0    = (double *)aObj[ o_pcx0 ].GetPtr();
     pe[q].y0    = (double *)aObj[ o_pcy0 ].GetPtr();
@@ -1449,10 +1461,12 @@ TProcess::RecordPlot( const char* /*key*/ )
                 plot[ii] = defpl;
             }
             if(ii < pep->dimXY[1] )
-                strncpy( plot[ii].name, pep->lNam[ii], MAXGRNAME );
+                plot[ii].setName( pep->lNam[ii]);
+                //strncpy( plot[ii].name, pep->lNam[ii], MAXGRNAME-1 );
             else
-                strncpy( plot[ii].name, pep->lNamE[ii-pep->dimXY[1]], MAXGRNAME );
-            plot[ii].name[MAXGRNAME] = '\0';
+                plot[ii].setName( pep->lNamE[ii-pep->dimXY[1]]);
+                //strncpy( plot[ii].name, pep->lNamE[ii-pep->dimXY[1]], MAXGRNAME-1 );
+            //plot[ii].name[MAXGRNAME-1] = '\0';
         }
         gd_gr = new GraphWindow( this, plt, pep->name,
                                      pep->size[0], pep->size[1], plot,
@@ -1497,9 +1511,9 @@ TProcess::SaveGraphData( GraphData *gr )
         plot[ii] = gr->lines[ii];
         //  lNam and lNamE back
         if( (int)ii < pep->dimXY[1] )
-            strncpy(  pep->lNam[ii], plot[ii].name, MAXGRNAME );
+            strncpy(  pep->lNam[ii], plot[ii].getName().c_str(), MAXGRNAME );
         else
-            strncpy(  pep->lNamE[ii-pep->dimXY[1]], plot[ii].name, MAXGRNAME );
+            strncpy(  pep->lNamE[ii-pep->dimXY[1]], plot[ii].getName().c_str(), MAXGRNAME );
     }
 
     if( gr->graphType == ISOLINES )

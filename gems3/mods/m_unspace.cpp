@@ -414,7 +414,14 @@ void TUnSpace::dyn_set(int q)
     usp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_unsdref].GetPtr();
     usp->sdval = (char (*)[V_SD_VALEN])aObj[ o_unsdval].GetPtr();
 // graphics
-    usp->lNam = (char (*)[MAXGRNAME])aObj[ o_unlnam ].GetPtr();
+
+    // Change MAXGRNAME from 7 to 16
+    if( usp->PsGraph != S_OFF && aObj[ o_unlnam ].GetType() == 7 )
+       usp->lNam = (char (*)[MAXGRNAME])aObj[ o_unlnam ].Alloc( 1,
+                  usp->dimXY[1]+usp->dimEF[1], MAXGRNAME);
+    else
+       usp->lNam = (char (*)[MAXGRNAME])aObj[ o_unlnam ].GetPtr();
+
     usp->ParNames = (char (*)[PARNAME_SIZE])aObj[ o_unlname ].GetPtr();
     usp->ExprGraph = (char *)aObj[ o_ungexpr ].GetPtr();
     usp->x0    = (double *)aObj[ o_unxa ].GetPtr();

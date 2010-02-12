@@ -544,17 +544,18 @@ BugFix: In mathscripts preprocessin select DC index  for the DC name <name> in s
     if more then one  DCs with this name switched on
 Added Dialog for select one number from integer list
 
-10/11/2010
+10/02/2010
 Added window for setup default scripts for Process calculation (types P, G, S, L)
 on the ProcessWizard screen
 BugFix: ExcludeFillDialog window was high
 
-11/11/2010
+11/02/2010
 Added SystemWizard
 BugFix: cut titles on GraphWindow
 Changed Remake command for System
 
-
+12/02/2010
+Changed MAXGRNAME form 7 to 16 (did names of graphic lines longer)
 
 
 

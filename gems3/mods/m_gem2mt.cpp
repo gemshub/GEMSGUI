@@ -314,9 +314,23 @@ void TGEM2MT::dyn_set(int q)
 {
     ErrorIf( mtp!=&mt[q], GetName(),
        "E06GDrem: Illegal access to mt in dyn_set");
+    // Change MAXGRNAME from 7 to 16
+    if( mtp->PvMSg != S_OFF && aObj[ o_mtlnam ].GetType() == 7  )
+    {
+      mtp->lNam = (char (*)[MAXGRNAME])aObj[ o_mtlnam ].Alloc(
+                    1, mtp->nYS, MAXGRNAME);
+    }
+    else
+     mtp->lNam = ( char (*)[MAXGRNAME] )aObj[ o_mtlnam].GetPtr();
 
-    mtp->lNam = ( char (*)[MAXGRNAME] )aObj[ o_mtlnam].GetPtr();
-    mtp->lNamE = (char (*)[MAXGRNAME])aObj[ o_mtlname].GetPtr();
+    if( mtp->PvEF != S_OFF && aObj[ o_mtlname ].GetType() == 7  )
+    {
+        mtp->lNamE = (char (*)[MAXGRNAME])aObj[ o_mtlname ].Alloc(
+                              1, mtp->nYE, MAXGRNAME);
+    }
+    else
+      mtp->lNamE = (char (*)[MAXGRNAME])aObj[ o_mtlname].GetPtr();
+
     mtp->tExpr = (char *)aObj[o_mttexpr].GetPtr();
     mtp->gExpr = (char *)aObj[o_mtgexpr].GetPtr();
     mtp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_mtsdref].GetPtr();

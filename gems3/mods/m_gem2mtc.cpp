@@ -792,10 +792,12 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
                 plot[ii] = defpl;
             }
             if(ii < mtp->nYS )
-                strncpy( plot[ii].name, mtp->lNam[ii], MAXGRNAME );
+               plot[ii].setName( mtp->lNam[ii] );
+               // strncpy( plot[ii].name, mtp->lNam[ii], MAXGRNAME-1 );
             else
-                strncpy( plot[ii].name, mtp->lNamE[ii-mtp->nYS], MAXGRNAME );
-            plot[ii].name[MAXGRNAME] = '\0';
+                plot[ii].setName( mtp->lNamE[ii-mtp->nYS]);
+               // strncpy( plot[ii].name, mtp->lNamE[ii-mtp->nYS], MAXGRNAME-1 );
+            //plot[ii].name[MAXGRNAME-1] = '\0';
         }
         gd_gr = new GraphWindow( this, plt, mtp->name,
               mtp->size[0], mtp->size[1], plot,
@@ -841,9 +843,9 @@ TGEM2MT::SaveGraphData( GraphData *gr )
         plot[ii] = gr->lines[ii];
         //  lNam0 and lNamE back
         if( ii < mtp->nYS )
-            strncpy(  mtp->lNam[ii], plot[ii].name, MAXGRNAME );
+            strncpy(  mtp->lNam[ii], plot[ii].getName().c_str(), MAXGRNAME );
         else
-            strncpy(  mtp->lNamE[ii-mtp->nYS], plot[ii].name, MAXGRNAME );
+            strncpy(  mtp->lNamE[ii-mtp->nYS], plot[ii].getName().c_str(), MAXGRNAME );
     }
     if( gr->graphType == ISOLINES )
        gr->getColorList();

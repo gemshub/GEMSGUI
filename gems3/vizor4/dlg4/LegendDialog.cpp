@@ -184,7 +184,7 @@ void  LegendDialog::ShowLines()
             B_2->addButton(pButton, kk );
 
             pName = new QLineEdit;
-            pName->setText( graph->lines[kk].name );
+            pName->setText( graph->lines[kk].getName().c_str() );
             pName->setMaxLength( 15 );
         	plotLayout->addWidget(pName, ll, 2, 1, 1);
             pNames.Add( pName );
@@ -232,9 +232,9 @@ void  LegendDialog::ShowIsoline()
         B_2->addButton(pButton, kk + graph->scale.GetCount() );
 
         pName = new QLineEdit( plotsLst );
-        pName->setText( graph->lines[kk].name );
-        pName->setMaxLength( 15 );
-    	plotLayout->addWidget(pName, kk, 3, 1, 1);
+        pName->setMaxLength( 14/*15*/ );
+        pName->setText( graph->lines[kk].getName().c_str() );
+        plotLayout->addWidget(pName, kk, 3, 1, 1);
         pNames.Add( pName );
     }
 }
