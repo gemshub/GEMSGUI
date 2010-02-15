@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>783</width>
-    <height>511</height>
+    <width>797</width>
+    <height>565</height>
    </rect>
   </property>
   <property name="font">
@@ -312,6 +312,15 @@ p, li { white-space: pre-wrap; }
          </attribute>
          <attribute name="verticalHeaderDefaultSectionSize">
           <number>22</number>
+         </attribute>
+         <attribute name="verticalHeaderHighlightSections">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="verticalHeaderDefaultSectionSize">
+          <number>22</number>
+         </attribute>
+         <attribute name="horizontalHeaderMinimumSectionSize">
+          <number>10</number>
          </attribute>
          <attribute name="verticalHeaderHighlightSections">
           <bool>false</bool>
