@@ -764,8 +764,8 @@ int  ProcessWizard::getNPV( char type, int subtype)   // get number of points
                  else if ( ret == -1 && subtype == 1 )
                  {
                      setIterColumn( 7, 0.001, 0.999, 0.01 );
-//                     tIters->item(0, 7)->setText( QString::number( 0.001, 'g', 3 ));  // set iNu[0] to 0.001
-//                     tIters->item(1, 7)->setText( QString::number( 0.999, 'g', 3 ));  // set iNu[1] to 0.999
+//                     tIters->item(0, 7)->setText( QString::number( 0.001, 'g', 4 ));  // set iNu[0] to 0.001
+//                     tIters->item(1, 7)->setText( QString::number( 0.999, 'g', 4 ));  // set iNu[1] to 0.999
 //                     tIters->item(2, 7)->setText( QString::number( 0.01, 'g', 3 ));  // set iNu[2] to 0.01
                      ret = 100;
                  }
@@ -817,7 +817,7 @@ int  ProcessWizard::getNPV( char type, int subtype)   // get number of points
                     setIterColumn( 6, -0.1, 0.1, 1e-11 );
 //                   tIters->item(0, 6)->setText( QString::number( -0.1, 'g', 3 ));  // set ipXi[0] to -0.1
 //                   tIters->item(1, 6)->setText( QString::number( 0.1, 'g', 3 ));  // set ipXi[1] to 0.1
-//                   tIters->item(2, 6)->setText( QString::number( 1e-11, 'g', 3 ));  // set ipXi[2] to 1e-11
+//                   tIters->item(2, 6)->setText( QString::number( 1e-11, 'g', 4 ));  // set ipXi[2] to 1e-11
                 }
                 ret = getNPoints( 8 ); // ipH
                 if( ret == -1 )
@@ -841,7 +841,7 @@ int  ProcessWizard::getNPV( char type, int subtype)   // get number of points
                     setIterColumn( 6, -0.03, 0.03, 1e-10 );
 //                    tIters->item(0, 6)->setText( QString::number( -0.03, 'g', 3 ));  // set ipXi[0] to -0.03
 //                    tIters->item(1, 6)->setText( QString::number( 0.03, 'g', 3 ));  // set ipXi[1] to 0.03
-//                    tIters->item(2, 6)->setText( QString::number( 1e-10, 'g', 3 ));  // set ipXi[2] to 1e-10
+//                    tIters->item(2, 6)->setText( QString::number( 1e-10, 'g', 4 ));  // set ipXi[2] to 1e-10
                 }
                 ret = getNPoints( 9 ); // ipe
                 if( ret == -1 )
@@ -1571,9 +1571,9 @@ int  ProcessWizard::isUndefined( int col )
 // set default data to column col
 void  ProcessWizard::setIterColumn( int col, double from, double until, double step )
  {
-    tIters->item(0,col)->setText( QString::number (  from, 'g', 3 ));
-    tIters->item(1,col)->setText( QString::number (  until, 'g', 3 ));
-    tIters->item(2,col)->setText( QString::number (  step, 'g', 3 ));
+    tIters->item(0,col)->setText( QString::number (  from, 'g', 4 ));
+    tIters->item(1,col)->setText( QString::number (  until, 'g', 4 ));
+    tIters->item(2,col)->setText( QString::number (  step, 'g', 4 ));
  }
 
 void  ProcessWizard::setIterColumn( int col, int from, int until, int step )
