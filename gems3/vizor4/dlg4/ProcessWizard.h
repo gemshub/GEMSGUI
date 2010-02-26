@@ -66,7 +66,8 @@ class ProcessWizard : public QDialog, public Ui::ProcessWizardData
     int         getNPoints( int col );
     void        setupPages();
     int         isUndefined( int col );
-    void        setIterColumn( int col, double from,double until,double step );
+    void        setIterColumn( int col, double from, double until, double step );
+    void        setIterColumn( int col, int from, int until, int step );
 
     // functions for page 1 functionality
     void defineWindow( char type );
