@@ -776,7 +776,7 @@ int  ProcessWizard::getNPV( char type, int subtype)   // get number of points
              {
                   tIters->item(2, 0)->setText( QString::number( 1 ));  // set iTm[2] to 1
                   i2 = tIters->item(0, 0)->data(Qt::DisplayRole).toInt(); // get iTm[0]
-                  tIters->item(2, 0)->setText( QString::number( i2+ret ));  // set iTm[1]
+                  tIters->item(1, 0)->setText( QString::number( i2+ret ));  // set iTm[1]
              }
             break;
    case P_LIP:
@@ -794,7 +794,7 @@ int  ProcessWizard::getNPV( char type, int subtype)   // get number of points
             {
                  tIters->item(2, 0)->setText( QString::number( 1 ));  // set iTm[2] to 1
                  i2 = tIters->item(0, 0)->data(Qt::DisplayRole).toInt(); // get iTm[0]
-                 tIters->item(2, 0)->setText( QString::number( i2+ret ));  // set iTm[1]
+                 tIters->item(1, 0)->setText( QString::number( i2+ret ));  // set iTm[1]
             }
             tIters->item(2, 1)->setText( QString::number( 0., 'g', 3 ));  // set iV[2] to 0
             tIters->item(2, 2)->setText( QString::number( 0., 'g', 3 ));  // set iV[2] to 0
@@ -859,7 +859,7 @@ int  ProcessWizard::getNPV( char type, int subtype)   // get number of points
             {
                  tIters->item(2, 0)->setText( QString::number( 1 ));  // set iTm[2] to 1
                  i2 = tIters->item(0, 0)->data(Qt::DisplayRole).toInt(); // get iTm[0]
-                 tIters->item(2, 0)->setText( QString::number( i2+ret ));  // set iTm[1]
+                 tIters->item(1, 0)->setText( QString::number( i2+ret ));  // set iTm[1]
             }
             tIters->item(2, 1)->setText( QString::number( 0., 'g', 3 ));  // set iV[2] to 0
             tIters->item(2, 2)->setText( QString::number( 0., 'g', 3 ));  // set iP[2] to 0
@@ -1574,6 +1574,7 @@ void  ProcessWizard::setIterColumn( int col, double from, double until, double s
     tIters->item(0,col)->setText( QString::number (  from, 'g', 4 ));
     tIters->item(1,col)->setText( QString::number (  until, 'g', 4 ));
     tIters->item(2,col)->setText( QString::number (  step, 'g', 4 ));
+    tItersChanged = true;
  }
 
 void  ProcessWizard::setIterColumn( int col, int from, int until, int step )
@@ -1581,6 +1582,7 @@ void  ProcessWizard::setIterColumn( int col, int from, int until, int step )
     tIters->item(0,col)->setText( QString::number (  from ));
     tIters->item(1,col)->setText( QString::number (  until ));
     tIters->item(2,col)->setText( QString::number (  step ));
+    tItersChanged = true;
  }
 
 //==============================================================================

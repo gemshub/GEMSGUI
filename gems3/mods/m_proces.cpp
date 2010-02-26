@@ -785,9 +785,11 @@ TProcess::MakeQuery()
          pep->PvEF = S_ON;
 
      // from scripts
-     if( !outScript.empty() && !pep->gr_expr )
-        pep->gr_expr = (char *)aObj[ o_pcexpr ].Alloc( 1, 2048, S_);
-     aObj[o_pcexpr].SetString( outScript.c_str(),0,0);
+     if( !outScript.empty() )
+     {   if( !pep->gr_expr )
+            pep->gr_expr = (char *)aObj[ o_pcexpr ].Alloc( 1, 2048, S_);
+         aObj[o_pcexpr].SetString( outScript.c_str(),0,0);
+     }
      if(namesLines.GetCount() > 0)
       {
          pep->lNam = (char (*)[MAXGRNAME])aObj[ o_pclnam ].Alloc( 1,
