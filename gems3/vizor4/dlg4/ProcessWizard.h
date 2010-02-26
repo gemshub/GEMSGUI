@@ -65,12 +65,15 @@ class ProcessWizard : public QDialog, public Ui::ProcessWizardData
     QStringList getSelected( const char *name );
     int         getNPoints( int col );
     void        setupPages();
+    int         isUndefined( int col );
+    void        setIterColumn( int col, double from,double until,double step );
 
     // functions for page 1 functionality
     void defineWindow( char type );
     int  getNPV( char type, int subtype);            // get number of points
     void  setCalcScript( char type, int subtype );   // set process script
     void  setOutScript( char type, int subtype );    // set output script
+    void  setIter( char type, int ); // set up default iterators
 
 public:
 

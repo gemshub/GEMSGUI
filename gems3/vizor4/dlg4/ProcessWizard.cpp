@@ -57,12 +57,14 @@ ProcessWizard::CmNext()
 
     if( ndx == 0)
     {
+       setIter( type, 0 ); // here undefined subtype
       defineWindow( type);
     }
 
     if( ndx == 1)
     {
         int subtype = subTypeButtons->checkedId();
+      //   setIter( type, subtype ); // here hide changing
         pPoints->setValue(  getNPV( type, subtype));
         setOutScript( type, subtype );
     }
@@ -738,6 +740,54 @@ int  ProcessWizard::getNPV( char type, int subtype)             // get number of
   return ret;
 }
 
+
+// set up default
+void  ProcessWizard::setIter( char type, int /*subtype*/)
+{
+  switch(type)
+   {
+   case P_PVT:
+      if( isUndefined( 2 ) ) //iP
+        setIterColumn( 2, 500, 500, 0 );
+      if( isUndefined( 3 ) ) //iTC
+        setIterColumn( 3, 400, 700, 1 );
+      break;
+   case P_SEQUENT:
+      if( isUndefined( 7 ) ) //iNu
+        setIterColumn( 7, 0.001, 0.999, 0.01 );
+      if( isUndefined( 6 ) ) //ipXi
+        setIterColumn( 6, 0.001, 7.001, 0.02 );
+      break;
+   case P_LIP:
+      if( isUndefined( 6 ) ) //ipXi
+        setIterColumn( 6, -5, 5, 0.1 );
+      break;
+   case P_INV_TITR:
+      if( isUndefined( 7 ) ) //iNu
+        setIterColumn( 7, 0, 0.01, 0 );
+      if( isUndefined( 6 ) ) //ipXi
+        setIterColumn( 6, -0.1, 0.1, 1e-011 );
+      if( isUndefined( 8 ) ) //ipH
+        setIterColumn( 8, 3.5, 12.5, 0.25 );
+      if( isUndefined( 9 ) ) //ipe
+        setIterColumn( 9, -12, -2, 0.2 );
+      break;
+    case P_TITRSING:
+           if( isUndefined( 7 ) ) //iNu
+             setIterColumn( 7, 0.01, 0, 0 );
+           if( isUndefined( 8 ) ) //ipXi
+             setIterColumn( 8, 6.4, 0, 0.01 );
+           break;
+    case P_REACTORS:
+           break;
+   default: break;
+   }
+
+}
+
+
+
+
 void  ProcessWizard::setCalcScript( char type, int subtype )   // get process script
 {
   int ii;
@@ -945,6 +995,9 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
   TCStringArray lineNames;
   TCStringArray dclst;
 
+  if( !page1Changed )
+          return;
+
   switch(type)
   {
     case P_PVT:
@@ -1034,7 +1087,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
      {
        QString EM1;
        lst = getSelected( "Phases" );
-       if( lst.count() < 0 )
+       if( lst.count() < 1 )
          return;
        gstring phname = lst[0].trimmed().toLatin1().data();
        dclst = TProfil::pm->DCNamesforPh( phname.c_str(), true );
@@ -1065,7 +1118,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
      {
          QString EM1;
          lst = getSelected( "Phases" );
-         if( lst.count() < 0 )
+         if( lst.count() < 1 )
            return;
          gstring phname = lst[0].trimmed().toLatin1().data();
          dclst = TProfil::pm->DCNamesforPh( phname.c_str(), true );
@@ -1330,6 +1383,30 @@ int  ProcessWizard::getNPoints( int col )
           return nP;
       }
      return nP;
+ }
+
+// test data in column col
+int  ProcessWizard::isUndefined( int col )
+ {
+     double from, until, step;
+
+     from = tIters->item(0,col)->data(Qt::DisplayRole).toDouble();
+     until = tIters->item(1,col)->data(Qt::DisplayRole).toDouble();
+     step = tIters->item(2,col)->data(Qt::DisplayRole).toDouble();
+
+     if( fabs(from) < 1e-30 && fabs(until) < 1e-30 && fabs(step) < 1e-30  )
+         return 1;
+     else
+         return 0;
+
+ }
+
+// set default data to column col
+void  ProcessWizard::setIterColumn( int col, double from,double until,double step )
+ {
+    tIters->item(0,col)->setText( QString::number (  from, 'g', 3 ));
+    tIters->item(1,col)->setText( QString::number (  until, 'g', 3 ));
+    tIters->item(2,col)->setText( QString::number (  step, 'g', 3 ));
  }
 
 //==============================================================================

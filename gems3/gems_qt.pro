@@ -64,7 +64,6 @@ UI_HEADERDIR  = $$MOC_DIR
 OBJECTS_DIR       = obj
 
 include($$DLG4_CPP/dlg4.pri)
-#include($$LIBS_CPP/libs.pri)
 include($$NUMERICS_CPP/numerics.pri)
 include($$SUBMOD_CPP/submod.pri)
 include($$MODS_CPP/mods.pri)
