@@ -144,7 +144,7 @@ int IPNCalc::INDEX( const char *s, char ch )
 {
     if( s == 0 )
         return -1;
-    char *f = strchr(s, ch);
+    const char *f = strchr(s, ch);
     if( f==0 )
         return -1;
     return (int)(f-s);
