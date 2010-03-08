@@ -82,7 +82,7 @@ TVisor::TVisor(int c, char *v[]):
 #ifdef __APPLE__
 	char work_path[PATH_MAX];
 	char cur_dir[PATH_MAX];
-
+ 
 	// let's try to find resources by path of the executable
 	getcwd(cur_dir, PATH_MAX);
 	strcpy(work_path, argv[0]);
@@ -107,18 +107,21 @@ TVisor::TVisor(int c, char *v[]):
         UserGEMDir += "/Library/gems3/";
 #else
 #ifdef GEMS_RELEASE
-        SysGEMDir = "/usr/share/gems3/";
+        SysGEMDir = getenv("HOME");
+        SysGEMDir += "/GEM-Selektor/shared/";
+//        SysGEMDir = "/usr/share/gems3/";
 #else
 //        SysGEMDir = getenv("HOME");
         SysGEMDir = "./shared/";
 #endif
 	UserGEMDir += getenv("HOME");
+//        UserGEMDir += "/Library/gems3/";
         UserGEMDir += "/.gems3/";
-#endif //__APPLE__
-#else //__unix
-    SysGEMDir = "c:/GEMS3test/program/";
-    UserGEMDir = "c:/GEMS3test/";
-#endif //__unix
+#endif // __unix
+#else // win
+    SysGEMDir = "c:/GEM-Selektor/program/";
+    UserGEMDir = "c:/GEMS-Selektor/";
+#endif // win
 
 
     char* env_s = getenv("GEMS_SYSDIR");
@@ -281,7 +284,7 @@ TVisor::Setup()
 #endif
 
         if (system(cmd.c_str()) != 0)
-            throw TFatalError("GEMS Init", "Cannot copy default project to user directory");
+            throw TFatalError("GEMS Init", "Cannot copy default projects to user directory");
     }
 
 

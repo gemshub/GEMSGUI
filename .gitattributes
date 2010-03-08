@@ -843,6 +843,7 @@ gems2/vizor/visor_w.cpp svn_keywords=Author+Date+Id+Revision
 gems2/vizor/visor_w.h svn_keywords=Author+Date+Id+Revision
 gems2/vizor/vizor.pri -text
 gems3/Makefile -text
+gems3/assistant.sh -text
 gems3/data/units.ini -text
 gems3/data/vis_cn.ini -text
 gems3/data/vis_od.ini -text
@@ -1028,6 +1029,7 @@ gems3/gems3.app/Contents/Resources/projects/TryNPTDB/syseq.TryNPTDB.ndx -text
 gems3/gems3.app/Contents/Resources/projects/TryNPTDB/syseq.TryNPTDB.pdb -text
 gems3/gems3.app/Contents/Resources/visor.data/visobj.dat -text
 gems3/gems3.app/Contents/Resources/visor.data/visor.dat -text
+gems3/gems3.sh -text
 gems3/gems_qt.pro -text
 gems3/img.qrc -text
 gems3/img/RunBCC.png -text
@@ -1158,6 +1160,7 @@ gems3/mods/submod/v_smodhand.h -text
 gems3/mods/v_ipnc.cpp -text
 gems3/mods/v_ipnc.h -text
 gems3/mods/v_mod.h -text
+gems3/qt.conf -text
 gems3/rungems.sh -text
 gems3/shared/DB.default/compos.complem.slop98.ndx -text
 gems3/shared/DB.default/compos.complem.slop98.pdb -text

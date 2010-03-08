@@ -19,7 +19,6 @@
 #include <fstream>
 #include <iostream>
 using namespace std;
-
 #include "help.h"
 #include "visor.h"
 
@@ -44,27 +43,32 @@ Helper::~Helper()
 
 bool Helper::startAssistant()
 {
-	   if (!proc)
+    char cur_dir[512];
+    size_t PATH_MAX = 512;
+    if (!proc)
         proc = new QProcess();
 
     if (proc->state() != QProcess::Running) {
     	
     	docPath = pVisor->docDir();
-    	
-
-        //        QString app = "/home/gems/qt-4.5.2/bin/";//QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
+        // let's try to find resources by path of the executable
+        getcwd( cur_dir, PATH_MAX );
+ //   QString app = "/home/gems/qt-4.5.2/bin/";//QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
        // QString app = "c:/Qt/2009.03/qt/bin/";
-       QString app; // = QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
+ //    QString app = QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
 #if !defined(Q_OS_MAC)
-        app += QLatin1String("assistant");
+        QString app;
+        app += QLatin1String("assistant.sh");
 #else
+        QString app = cur_dir;
+        app += QDir::separator();
         app += QLatin1String("Assistant.app/Contents/MacOS/Assistant");    // ?????
 #endif
 
 #if defined(Q_OS_WIN)
+        QString app = "assistant";
         app += QLatin1String(".exe");
-#endif
-        
+#endif        
         QStringList args;
         args << QLatin1String("-enableRemoteControl")
             << QLatin1String("-collectionFile")
