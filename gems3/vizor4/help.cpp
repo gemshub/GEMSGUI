@@ -43,8 +43,6 @@ Helper::~Helper()
 
 bool Helper::startAssistant()
 {
-    char cur_dir[512];
-    size_t PATH_MAX = 512;
     if (!proc)
         proc = new QProcess();
 
@@ -52,22 +50,22 @@ bool Helper::startAssistant()
     	
     	docPath = pVisor->docDir();
         // let's try to find resources by path of the executable
-        getcwd( cur_dir, PATH_MAX );
  //   QString app = "/home/gems/qt-4.5.2/bin/";//QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
-       // QString app = "c:/Qt/2009.03/qt/bin/";
+       QString app;
  //    QString app = QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
 #if !defined(Q_OS_MAC)
-        QString app;
+       char cur_dir[512];
+        getcwd( cur_dir, 512 );
+        app += QLatin1String(cur_dir);
+        app += QDir::separator();
         app += QLatin1String("assistant.sh");
 #else
-        QString app = cur_dir;
-        app += QDir::separator();
-        app += QLatin1String("Assistant.app/Contents/MacOS/Assistant");    // ?????
+        app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/Assistant");    // expected to work
 #endif
 
 #if defined(Q_OS_WIN)
-        QString app = "assistant";
-        app += QLatin1String(".exe");
+        app += QLatin1String("assistant.exe");
+//        app += QLatin1String(".exe");
 #endif        
         QStringList args;
         args << QLatin1String("-enableRemoteControl")
