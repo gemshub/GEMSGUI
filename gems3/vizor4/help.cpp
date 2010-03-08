@@ -19,6 +19,8 @@
 #include <fstream>
 #include <iostream>
 using namespace std;
+#include <stdlib.h>
+#include <unistd.h>
 #include "help.h"
 #include "visor.h"
 
@@ -53,17 +55,23 @@ bool Helper::startAssistant()
  //   QString app = "/home/gems/qt-4.5.2/bin/";//QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
        QString app;
  //    QString app = QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
-#if !defined(Q_OS_MAC)
-       char cur_dir[512];
+#ifdef __unix
+#ifdef __APPLE__
+        app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/Assistant");    // expected to work
+#else
+#ifdef GEMS_RELEASE
+// #if !defined(Q_OS_MAC)
+        char cur_dir[512];
         getcwd( cur_dir, 512 );
         app += QLatin1String(cur_dir);
         app += QDir::separator();
         app += QLatin1String("assistant.sh");
 #else
-        app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/Assistant");    // expected to work
+        app += QLatin1String("assistant");
 #endif
-
-#if defined(Q_OS_WIN)
+#endif  // unix
+#else    // windows
+// #if defined(Q_OS_WIN)
         app += QLatin1String("assistant.exe");
 //        app += QLatin1String(".exe");
 #endif        
