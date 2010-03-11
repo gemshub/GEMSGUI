@@ -682,24 +682,31 @@ pmp->ITF = 0; pmp->ITG = 0;
 #endif
 
 FORCED_AIA:
-	multi->MultiCalcInit( keyp.c_str() );
-	if( pmp->pNP )
+    multi->MultiCalcInit( keyp.c_str() );
+    if( pmp->pNP )
     {
 	   if( pmp->ITaia <=30 )       // Foolproof
 		  pmp->IT = 30;
 	   else
 		  pmp->IT = pmp->ITaia;     // Setting number of iterations for the smoothing parameter
     }
-	if( multi->AutoInitialApprox( ) == false )
+
+    bool IAstatus;
+    IAstatus = multi->AutoInitialApprox( );
+    if( IAstatus == false )
     {
     	multi->MultiCalcIterations(-1 );    // Calling main IPM2 sequence
     }
+
     int NumPrecLoops = pmp->W1+pmp->K2-1;
     int NumIterFIA = pmp->ITF;
     int NumIterIPM = pmp->ITG;
 
+    if( IAstatus == true )
+        goto FINISHED;  // Only pure phases - simplex solution is Ok
+
     if( pmp->MK || pmp->PZ ) // no good solution
-    	goto FINISHED;
+        goto FINISHED;
 
         //    else //Show results   //if( wn[W_EQCALC].status )
     // aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");

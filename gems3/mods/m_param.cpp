@@ -725,17 +725,22 @@ FORCED_AIA:
 	   else
 		  pmp->IT = pmp->ITaia;     // Setting number of iterations for the smoothing parameter
    }
-   if( multi->AutoInitialApprox( ) == false )
+
+   bool IAstatus;
+   IAstatus = multi->AutoInitialApprox( );
+   if( IAstatus == false )
    {
-	   multi->MultiCalcIterations( -1 );
+      multi->MultiCalcIterations(-1 );    // Calling main IPM2 sequence
    }
    NumPrecLoops = pmp->W1+pmp->K2-1;
    NumIterFIA = pmp->ITF;
    NumIterIPM = pmp->ITG;
 
-   if( pmp->MK || pmp->PZ ) // no good solution
-         goto FINISHED;
+   if( IAstatus == true )
+       goto FINISHED;  // Only pure phases - simplex solution is Ok
 
+   if( pmp->MK || pmp->PZ ) // no good solution
+       goto FINISHED;
    pmp->IT = pmp->ITG;   // This is to provide correct number of IPM iterations to upper levels
 
    if( pa.p.PRD < 0 && pa.p.PRD > -50 ) // max 50 loops

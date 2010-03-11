@@ -13,7 +13,7 @@ WindowIcon on
 
 ; The file to write
 ; OutFile "gems-w32-install.exe"
-OutFile "gems300rc0-1561-w32-install.exe"
+OutFile "gems300rc0-1571-w32-install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\GEMS3
@@ -46,7 +46,7 @@ Section "GEMS3 (required)"
  ; Set the right version of *.dll below
     File "C:\GEMS3inst\program\*.dll"
     File "C:\GEMS3inst\program\assistant.exe"
-    File "C:\GEMS3inst\program\assistant_adp.exe"
+ ;   File "C:\GEMS3inst\program\assistant_adp.exe"
     File "C:\GEMS3inst\program\readme.txt"
   CreateDirectory "$INSTDIR\program\codecs"
   SetOutPath "$INSTDIR\program\codecs"
@@ -132,10 +132,14 @@ ConfSkip:
   SetOutPath $INSTDIR\projects\Kaolinite
     File "C:\GEMS3inst\projects\Kaolinite\*.pdb"
     File "C:\GEMS3inst\projects\Kaolinite\*.ndx"
-  CreateDirectory "$INSTDIR\projects\Solvus2"
-  SetOutPath $INSTDIR\projects\Solvus2
-    File "C:\GEMS3inst\projects\Solvus2\*.pdb"
-    File "C:\GEMS3inst\projects\Solvus2\*.ndx"
+  CreateDirectory "$INSTDIR\projects\AragCalc"
+  SetOutPath $INSTDIR\projects\AragCalc
+    File "C:\GEMS3inst\projects\AragCalc\*.pdb"
+    File "C:\GEMS3inst\projects\AragCalc\*.ndx"
+  CreateDirectory "$INSTDIR\projects\Ca-Sr-CO3"
+  SetOutPath $INSTDIR\projects\Ca-Sr-CO3
+    File "C:\GEMS3inst\projects\Ca-Sr-CO3\*.pdb"
+    File "C:\GEMS3inst\projects\Ca-Sr-CO3\*.ndx"
 ; More test projects to come here!  
 MessageBox MB_YESNO "Please, click YES to check if GEMS can start Ok and refresh its configuration files. This is especially recommended if you install GEMS in this directory for the first time." IDNO ExecSkipped 
   Exec '"$INSTDIR\program\gems3.exe" -d -s "$INSTDIR\program" -u "$INSTDIR"'
@@ -171,6 +175,8 @@ Section "Uninstall"
   Delete "$INSTDIR\projects\TryNPTDB\*.*" 
 ;  Delete "$INSTDIR\projects\Kaolinite\*.*" 
 ;  Delete "$INSTDIR\projects\Solvus2\*.*" 
+;  Delete "$INSTDIR\projects\AragCalc\*.*"
+;  Delete "$INSTDIR\projects\Ca-Sr-CO3\*.*"
 ;
 ; MUST REMOVE UNINSTALLER, too
   Delete $INSTDIR\uninstall.exe
@@ -194,8 +200,10 @@ Section "Uninstall"
   RMDir "$INSTDIR\program" 
 ;
   RMDir "$INSTDIR\projects\TryNPTDB" 
-  RMDir "$INSTDIR\projects\Kaolinite" 
-  RMDir "$INSTDIR\projects\Solvus2" 
+;  RMDir "$INSTDIR\projects\Kaolinite" 
+;  RMDir "$INSTDIR\projects\Solvus2" 
+;  RMDir "$INSTDIR\projects\AragCalc" 
+;  RMDir "$INSTDIR\projects\Ca-Sr-CO3" 
 ;  RMDir "$INSTDIR\projects"
 ;
 ;  RMDir "$INSTDIR"

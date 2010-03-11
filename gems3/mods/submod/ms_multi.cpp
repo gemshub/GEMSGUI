@@ -782,6 +782,7 @@ void TMulti::dyn_new(int /*q*/)
     pm.GEX = (double *)aObj[ o_wi_gex].Alloc( pm.L, 1, D_ );
     pm.FVOL = (double *)aObj[ o_wd_fvol].Alloc( pm.FI, 1, D_ );
     pm.FWGT = (double *)aObj[ o_wd_fwgt].Alloc( pm.FI, 1, D_ );
+    pm.BFC = (double *)aObj[ o_wo_bfc].Alloc( 1, pm.N, D_ );  // Bugfix 11.03.2010 DK
 
     if( pm.L > 0 )
     {
@@ -810,12 +811,12 @@ void TMulti::dyn_new(int /*q*/)
     if( pm.FIs > 0 && pm.Ls > 0 )
     {
        pm.BF = (double *)aObj[ o_wo_bf].Alloc( pm.FIs, pm.N, D_ );
-       pm.BFC = (double *)aObj[ o_wo_bfc].Alloc( 1, pm.N, D_ );
+//      pm.BFC = (double *)aObj[ o_wo_bfc].Alloc( 1, pm.N, D_ );
         pm.XFA = (double *)aObj[ o_ww_xfa].Alloc( pm.FIs, 1, D_ );
         pm.YFA = (double *)aObj[ o_ww_yfa].Alloc( pm.FIs, 1, D_ );
         pm.LsMod = (long int *)aObj[ o_wi_lsmod].Alloc( pm.FIs, 3, L_ );
         pm.LsMdc = (long int *)aObj[ o_wi_lsmdc].Alloc( pm.FIs, 1, L_ );
-    // IPx, PMc and DMc may be realloced after load arrays LsMod and LsMdc
+    // IPx, PMc and DMc may be reallocated after loading arrays LsMod and LsMdc
         pm.IPx = (long int *)aObj[ o_wi_ipxpm ].Alloc(pm.FIs, 1, L_);  // added 07.12.2006 KD
         pm.PMc = (double *)aObj[ o_wi_pmc].Alloc( pm.FIs, 1, D_);
         pm.DMc = (double *)aObj[ o_wi_dmc].Alloc( pm.Ls, 1, D_ );
@@ -829,7 +830,7 @@ void TMulti::dyn_new(int /*q*/)
     else
     {
         pm.BF    = (double *)aObj[ o_wo_bf ].Free();
-        pm.BFC    = (double *)aObj[ o_wo_bfc ].Free();
+//        pm.BFC    = (double *)aObj[ o_wo_bfc ].Free();
         pm.XFA   = (double *)aObj[ o_ww_xfa ].Free();
         pm.YFA   = (double *)aObj[ o_ww_yfa ].Free();
         pm.LsMod = (long int *)aObj[ o_wi_lsmod ].Free();
@@ -988,10 +989,10 @@ void TMulti::dyn_new(int /*q*/)
 
 // SD 14/07/2009
     pm.Cp0   = (double *)aObj[ o_wio_cp0 ].Alloc( pm.L, 1, D_ );
-   	pm.H0    = (double *)aObj[ o_wio_h0 ].Alloc( pm.L, 1, D_ );
-   	pm.U0    = (double *)aObj[ o_wio_u0 ].Alloc( pm.L, 1, D_ );
+    pm.H0    = (double *)aObj[ o_wio_h0 ].Alloc( pm.L, 1, D_ );
+    pm.U0    = (double *)aObj[ o_wio_u0 ].Alloc( pm.L, 1, D_ );
     pm.S0    = (double *)aObj[ o_wio_s0 ].Alloc( pm.L, 1, D_ );
-   	pm.A0    = (double *)aObj[ o_wio_a0 ].Alloc( pm.L, 1, D_ );
+    pm.A0    = (double *)aObj[ o_wio_a0 ].Alloc( pm.L, 1, D_ );
         
     // 11/02/2009
         pm.VPh = (double (*)[MIXPHPROPS])aObj[ o_wo_vph].Alloc(pm.FIs,MIXPHPROPS, D_);
