@@ -331,6 +331,12 @@ void TMulti::EqstatExpand( const char *key )
     SPP_SETTING *pa = &TProfil::pm->pa;
     pmp->NR = pmp->N;
 
+    bool AllPhasesPure = true;   // Added by DK on 09.03.2010
+    // checking if all phases are pure
+    for( k=0; k < pmp->FI; k++ )
+        if( pmp->L1[k] > 1 )
+            AllPhasesPure = false;
+
     // recalculate kinetic restrictions for DC
     if( pmp->pULR && pmp->PLIM )
          Set_DC_limits( DC_LIM_INIT );
@@ -369,7 +375,7 @@ void TMulti::EqstatExpand( const char *key )
 
     // test multicomponent phases and load data for mixing models
     // Added experimentally 07.03.2008   by DK
-    if( pmp->FIs )
+    if( pmp->FIs && AllPhasesPure == false )   // bugfix DK 11.03.2010
     {
       int k, jb, je=0;
       for( k=0; k<pmp->FIs; k++ )
@@ -447,6 +453,12 @@ void TMulti::MultiCalcInit( const char *key )
     long int j, k;//, jb, je=0;
 //    SPP_SETTING *pa = &TProfil::pm->pa;
    // Bulk composition and/or dimensions changed ?
+    bool AllPhasesPure = true;   // Added by DK on 09.03.2010
+    // checking if all phases are pure
+    for( k=0; k < pmp->FI; k++ )
+        if( pmp->L1[k] > 1 )
+            AllPhasesPure = false;
+
     if( pmp->pBAL < 2 || pmp->pTPD < 2 )
     {
        // Allocating list of phases currently present in non-zero quantities
@@ -474,7 +486,7 @@ void TMulti::MultiCalcInit( const char *key )
        TotalPhases( pmp->X, pmp->XF, pmp->XFA );
        ConCalc( pmp->X, pmp->XF, pmp->XFA);             // 13.03.2008  DK
        // test multicomponent phases and load data for mixing models
-       if( pmp->FIs )
+       if( pmp->FIs && AllPhasesPure == false )
        {
            // Load activity coeffs for phases-solutions
          int k, jb, je=0;
@@ -516,7 +528,7 @@ void TMulti::MultiCalcInit( const char *key )
      if( pmp->pULR && pmp->PLIM )
           Set_DC_limits(  DC_LIM_INIT );
 
-    if( pmp->FIs )
+    if( pmp->FIs && AllPhasesPure == false )
     {
        if( pmp->pIPN <=0 )  // mixing models finalized in any case (AIA or SIA)
        {
