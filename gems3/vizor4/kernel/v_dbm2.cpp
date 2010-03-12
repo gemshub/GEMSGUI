@@ -328,7 +328,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     bool flag_spppar = false;
     for( j=0; j<nOD; j++ )   // get objects from file
     {
-        if ( j+frstOD == o_tpstr )
+       if ( j+frstOD == o_tpstr )
           if( StillLen < 28 )
              continue;
         StillLen -= aObj[j+frstOD].ofDB(f);
