@@ -450,9 +450,11 @@ if(pmp->E && pmp->LO && pmp->Lads )  // Calling this only when sorption models a
 //
 void TMulti::MultiCalcInit( const char *key )
 {
-    long int j, k;//, jb, je=0;
+    long int i, j, k;//, jb, je=0;
 //    SPP_SETTING *pa = &TProfil::pm->pa;
-   // Bulk composition and/or dimensions changed ?
+    for( i=0; i<pmp->N; i++ )
+        pmp->Uefd[i] = 0.;
+
     bool AllPhasesPure = true;   // Added by DK on 09.03.2010
     // checking if all phases are pure
     for( k=0; k < pmp->FI; k++ )
