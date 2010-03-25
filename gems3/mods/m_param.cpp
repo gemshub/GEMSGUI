@@ -60,19 +60,19 @@ const double R_CONSTANT = 8.31451,
 
 SPP_SETTING pa_ = {
     "GEM-Selektor v3.0.0: Numerical flags, controls and thresholds",
-    {   // Typical default set (interim, 08.12.2009)
+    {   // Typical default set (interim, 25.03.2010)
         1,  /* PC */  2,     /* PD */   3,   /* PRD */
-        1,  /* PSM  */ 300,  /* DP */   30,   /* DW */
-        -2, /* DT */     200,   /* PLLG */   1,  /* PE */
+        1,  /* PSM  */ 30,  /* DP */   0,   /* DW */
+        0, /* DT */     200,   /* PLLG */   1,  /* PE */
         1000,   /* IIM */
-        1e-5, /* DG */   1e-11,  /* DHB */  1e-13,  /* DS */
-        7e-7,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+        1e-5, /* DG */   1e-12,  /* DHB */  1e-12,  /* DS */
+        1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
         1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
         1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
         1e-7, /* DFYs, */  1e-17,  /* DB */   -1.0,   /* AG */
-        -0.5,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-        0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
-        1e-7,  /* ScMin, */  1e-23, /* DcMin, */   1e-13, /* PhMin, */
+        -0.9,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+       1e-9, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
+        1e-7,  /* ScMin, */  1e-25, /* DcMin, */   1e-12, /* PhMin, */
         3e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
         1e-7,  /* DKIN  */ 0,  /* tprn */
     },
@@ -107,80 +107,80 @@ BASE_PARAM dfBase[5] =
 	{     // Added on 07.08.2009 to facilitate pre-setting in projects (SD,DK)
             { // Variant for aquatic systems with moderate non-ideality (interim, 08.12.2009)
                 1,  /* PC */  2,     /* PD */   3,   /* PRD */
-                1,  /* PSM  */ 300,  /* DP */   30,   /* DW */
-                -1, /* DT */     200,   /* PLLG */   1,  /* PE */
+                1,  /* PSM  */ 30,  /* DP */   0,   /* DW */
+                0, /* DT */     200,   /* PLLG */   1,  /* PE */
                 1000,   /* IIM */
-                1e-5, /* DG */   1e-13,  /* DHB */  1e-14,  /* DS */
-                1e-7,  /* DK */  0.01,  /* DF */  0.3,  /* DFM */
+                1e-5, /* DG */   1e-12,  /* DHB */  1e-14,  /* DS */
+                1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
 	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
 	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
 	        1e-7, /* DFYs, */  1e-17,  /* DB */   1.0,   /* AG */
                 -0.8,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-	        0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
+               1e-9, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
                 1e-7,  /* ScMin, */  1e-24, /* DcMin, */   1e-14, /* PhMin, */
                 3e-5,  /* ICmin */   1e-11,  /* EPS */   1e-3,  /* IEPS */
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
 	    },
             { // Variant for aquatic systems with SCMs in sorption phases ((interim, 08.12.2009))
                 1,  /* PC */  2,     /* PD */   3,   /* PRD */
-                1,  /* PSM  */ 300,  /* DP */  30,   /* DW */
-                -1, /* DT */     200,   /* PLLG */   1,  /* PE */
+                1,  /* PSM  */ 30,  /* DP */  0,   /* DW */
+                0, /* DT */     200,   /* PLLG */   1,  /* PE */
                 1000,   /* IIM */
-                1e-5, /* DG */   1e-13,  /* DHB */  1e-14,  /* DS */
-                3e-7,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+                1e-5, /* DG */   1e-12,  /* DHB */  1e-14,  /* DS */
+                1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
 	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
 	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
 	        1e-7, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
                 -0.03,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-	        0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
+                1e-9, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
                 1e-7,  /* ScMin, */  1e-24, /* DcMin, */   1e-14, /* PhMin, */
                 3e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
 	    },
             { // Variant for fluid-rock systems with highly non-ideal phases (interim, 08.12.2009)
                 1,  /* PC */  2,     /* PD */   3,   /* PRD */
-                1,  /* PSM  */ 500,  /* DP */   30,   /* DW */
-                -2, /* DT */     200,   /* PLLG */   1,  /* PE */
+                1,  /* PSM  */ 50,  /* DP */   0,   /* DW */
+                0, /* DT */     200,   /* PLLG */   1,  /* PE */
                 2000,   /* IIM */
                 1e-5, /* DG */   1e-11,  /* DHB */  1e-13,  /* DS */
-                7e-7,  /* DK */  0.01,  /* DF */  0.3,  /* DFM */
+                1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
 	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
 	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
 	        1e-7, /* DFYs, */  1e-17,  /* DB */   -1.0,   /* AG */
-                -0.5,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-	        0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
+                -0.9,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                1e-6, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
                 1e-7,  /* ScMin, */  1e-23, /* DcMin, */   1e-13, /* PhMin, */
                 3e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
 	    },
             { // Variant of strict settings for highest accuracy (may be slow) (interim, 08.12.2009)
                 1,  /* PC */  2,     /* PD */   3,   /* PRD */
-                1,  /* PSM  */ 600,  /* DP */   30,   /* DW */
-                -2, /* DT */     200,   /* PLLG */   1,  /* PE */
+                1,  /* PSM  */ 60,  /* DP */   0,   /* DW */
+                0, /* DT */     200,   /* PLLG */   1,  /* PE */
 	        1000,   /* IIM */
-                1e-5, /* DG */   1e-13,  /* DHB */  1e-14,  /* DS */
-                3e-7,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+                1e-5, /* DG */   1e-13,  /* DHB */  1e-16,  /* DS */
+                1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
 	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
 	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
-                1e-7, /* DFYs, */  1e-17,  /* DB */   1,   /* AG */
-                -0.5,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-	        0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
-                1e-7,  /* ScMin, */  1e-24, /* DcMin, */   1e-14, /* PhMin, */
+                1e-7, /* DFYs, */  1e-17,  /* DB */   -1,   /* AG */
+                -0.99,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                1e-10, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
+                1e-7,  /* ScMin, */  1e-24, /* DcMin, */   1e-16, /* PhMin, */
                 1e-5,  /* ICmin */   1e-11,  /* EPS */   1e-3,  /* IEPS */
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
             },
 { // Variant of strict settings for reactive mass transport (interim, 08.12.2009)
     1,  /* PC */  2,     /* PD */   3,   /* PRD */
-    1,  /* PSM  */ 300,  /* DP */   30,   /* DW */
-    -2, /* DT */     2000,   /* PLLG */   1,  /* PE */
+    1,  /* PSM  */ 30,  /* DP */   0,   /* DW */
+    0, /* DT */     2000,   /* PLLG */   1,  /* PE */
     2500,   /* IIM */
     1e-5, /* DG */   1e-12,  /* DHB */  1e-14,  /* DS */
-    7e-7,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+    1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
     1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
     1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
     1e-7, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
     0.07,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-    0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
+    1e-9, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
     1e-7,  /* ScMin, */  1e-24, /* DcMin, */   1e-14, /* PhMin, */
     1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-4,  /* IEPS */
     1e-7,  /* DKIN  */ 0,  /* tprn */
