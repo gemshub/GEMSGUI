@@ -698,22 +698,22 @@ FORCED_AIA:
     	multi->MultiCalcIterations(-1 );    // Calling main IPM2 sequence
     }
 
-    int NumPrecLoops = pmp->W1+pmp->K2-1;
-    int NumIterFIA = pmp->ITF;
-    int NumIterIPM = pmp->ITG;
+//    int NumPrecLoops = pmp->W1+pmp->K2-1;
+//    int NumIterFIA = pmp->ITF;
+//    int NumIterIPM = pmp->ITG;
+pmp->IT = pmp->ITG;
+//      if( IAstatus == true )
+//        goto FINISHED;  // Only pure phases - simplex solution is Ok
 
-    if( IAstatus == true )
-        goto FINISHED;  // Only pure phases - simplex solution is Ok
-
-    if( pmp->MK || pmp->PZ ) // no good solution
-        goto FINISHED;
+//    if( pmp->MK || pmp->PZ ) // Bad solution in AIA or SIA mode
+//        goto FINISHED;
 
         //    else //Show results   //if( wn[W_EQCALC].status )
     // aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
 
-    pmp->IT = pmp->ITG;   // This is to provide correct number of IPM iterations to upper levels
+//    pmp->IT = pmp->ITG;   // This is to provide correct number of IPM iterations to upper levels
 
-    if( pa.p.PRD < 0 && pa.p.PRD > -50 ) // max 50 loops
+/*    if( pa.p.PRD < 0 && pa.p.PRD > -50 ) // max 50 loops
     {  // Refinement loops for highly non-ideal systems. Added here by KD on 15.11.2007
        int pp, pNPo = pmp->pNP,  TotW1 = pmp->W1+pmp->K2-1,
 ITstart=10,            TotIT = pmp->IT;  // ITold = pmp->IT,
@@ -737,8 +737,8 @@ ITstart=10,            TotIT = pmp->IT;  // ITold = pmp->IT,
        NumPrecLoops = TotW1;
        NumIterFIA = pmp->ITF;
        NumIterIPM = pmp->ITG;
-    }
-FINISHED:
+    } */
+// FINISHED:
   	if( pmp->MK == 2 )
    	{	if( pmp->pNP )
              {
@@ -749,7 +749,7 @@ FINISHED:
         	else
         		Error( pmp->errorCode ,pmp->errorBuf );
    	}
-   if( pmp->MK || pmp->PZ ) // no good solution
+   if( pmp->MK || pmp->PZ ) // not a perfect solution released
    {
   	 testMulti( );
     //cout << "Iter"  << " MK " << pmp->MK << " PZ " << pmp->PZ << " " << pmp->errorCode << endl;

@@ -108,7 +108,7 @@ void TMulti::MultiRemake( const char *key )
     }
 
     pmp->Ec = pmp->K2 = pmp->MK = 0;
-    pmp->PZ = pa->p.DW; // IPM-2 default
+    pmp->PZ = 0; // IPM default
     pmp->W1 = 0;
     pmp->is = 0;
     pmp->js = 0;

@@ -732,11 +732,12 @@ FORCED_AIA:
    {
       multi->MultiCalcIterations(-1 );    // Calling main IPM2 sequence
    }
-   NumPrecLoops = pmp->W1+pmp->K2-1;
+
+//   NumPrecLoops = pmp->W1+pmp->K2-1;
    NumIterFIA = pmp->ITF;
    NumIterIPM = pmp->ITG;
-
-   if( IAstatus == true )
+pmp->IT = pmp->ITG;
+/*   if( IAstatus == true )
        goto FINISHED;  // Only pure phases - simplex solution is Ok
 
    if( pmp->MK || pmp->PZ ) // no good solution
@@ -770,7 +771,7 @@ ITstart = 10,        TotIT = pmp->IT;   // ITold = pmp->IT,
    }
 
 FINISHED:
-
+*/
    	if( pmp->MK == 2 )
    	{	if( pmp->pNP )
             {
