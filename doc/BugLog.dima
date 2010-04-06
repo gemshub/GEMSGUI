@@ -1,0 +1,477 @@
+
+05/05/01 Sporadic crashes in GtDemo calculations: after reading
+         and calculating one GtDemo record, an attempt to read
+         another record sometimes causes Eaccess crash.
+
+27/03/01 "Record" "Save As" and "Create" module commands
+         invoke "Choose database file to put a record" dialog,
+         in which "Cancel" button does not work (bad situation!).
+Fixed by
+KD 4.04.01
+
+07/03/01 SystemDialog: does not print MTparm (thermodynamic
+MTparam  data now! Other print buttons work, but do not skip
+print    species and phases that were switched off from the
+fixed    system definition.
+10.03.01 KD
+
+07/03/01 GtDemo sampling calculations for SysEq records:
+fixed    lga[j] for components of ideal solution phases (gas,
+10.03.01 solid) with Xa=0 are not recalculated, i.e. the same
+KD       number is put everywhere.
+
+01/03/01 Possibly error in ms_mupmph.cpp(420) -
+         pmp->G0[j] = tpp->G[jj]; //  /(RT) ? + ln P ? + ln 55.51 ?
+        /* Doubtful !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+         Either delete it or provide necessary conversions!
+         Brush up mess in the code with usage of pmp->G0 and
+         pmp->G vectors (the latter is used only in the IPM kernel)
+
+26/02/01 Problems with vfMessage() (visor_w.cpp): it displays
+         warning dialog and then causes crash in Win32 version.
+         Setting first parameter of QMessageBox::warning() to
+         zero also causes crash.
+
+26/02/01 Problems with TCellCheck::SetString() - in case if
+         a wrong checkbox value goes to module window, it
+         throws TError() exception. This is bad, better it
+         should issue a warning about the DOD name where it
+         happens and set a valid but "neutral" value, i.e.
+         space or Empty "'" symbol. The problem appeared on
+         attempt to remake a SysEq record where no xa_ vector
+         has been specified; inserting this resulted in wrong
+         (rubbish) values of the allocated XAun column
+         (maybe, a problem in calling TSyst::setDefData()).
+Worked   Workaround for now: space is set instead of the wrong
+around   checkbox values in TCellCheck::SetString() and no
+         messages or TError is generated.
+
+09/01/01 Occasionally, working on NT, I've got a hint,
+         why gems sometimes crashes on Win32 systems:
+         I opened a Performance window in NT Task Manager and
+         was quite surprised to see that, after exiting GEMS
+         in a normal way (i.e., using "Exit" button on Main
+         Dialog), it sometimes disappears from the desktop, but
+         not from the memory and the task list! Of course, when
+         I started GEMS next time, it did not launch another task,
+         but resumed the previous one, while the dialogs showed
+         up on desktop again. In such case, if I worked previously
+         with a profile different from the one saved in .conf file,
+         gems crashed when going into "Profile" mode. This does not
+         happen if I first kill gems on the tasklist and then
+         start it again. Could you, please, check what's going
+         on Exit from gems? Maybe, qtapplication is not shut down
+         properly under Win32? Or one should kill MainDialog window?
+
+         Another case of peculiar behavior: I added a Help button
+         to KeyProfile dialog, because this is a critical point
+         where the users need documentation to figure out what to
+         do with existing profiles or creation of new ones. Now,
+         if you press "Help", the gm_howto.html file appears in
+         helper window, as usual, but any attempt to scroll it or
+         click on a hyperlink jumps back to KeyProfile selection
+         list... Sometimes, if you just wait for a few seconds,
+         a small empty window appears itself (luckily, harmless).
+         It has something to do with Qt focuses, but I don't know
+         yet how to fix it.
+
+20/12/00   Persisting, nasty bug related to reading binary *.cfg
+Part.fixed files under Win32 (often reported by Kostya). Most
+(04.04.01: probably, path/filename lists for the database confi-
+fixed?)    guration are not written or read correctly.
+              After starting gems -d ... and exiting with
+           "Save configuration", next start in usual mode
+           gems -s -u works OK. But, if one opens any profile
+           and then exits gems with "Save configuration", upon
+           the next usual start, it crashes (EAccess) on pressing
+           "Calculation of Equilibria" button. Debugger shows that
+           stack is corrupt before the program really gets into
+           the "Open Profile mode".
+
+19/12/00   On re-opening profile after updating definitions of single-
+           component phases in database, the warning contains correct
+           phase key but wrong DComp key (the action itself is correct)
+
+12/12/00   Problems with calculation of gTP for minerals at elevated
+Fixed by   pressure, reported by Brad Bessinger on the basis of
+DK 12/15   comparison with SUPCRT92 calculations. Found that in
+           "constant molar volume" calculation mode, the VdP term
+           was not added to gTP and other functions. Workaround
+           was to use "E" switch (Holland-Powell calculation via
+           compressibility and expandability) and put these vals
+           zeros in DComp records.
+
+07/12/00    Attempt to debug problems with PeName contents on reading
+Fixed       the Proces records and similar problems with other modules
+by AR       (both Linux and Win32 versions). I discovered that this
+12/11/00    problem happens with the first data object field (usually
+            fixed-length static strings) on any module screen form:
+
+            Module    DOD label    Internal variable
+            IComp     ICname       ic[q].name
+            DComp     DCname       dc[q].name
+            ReacDC    RDname       rc[q].name
+            Phase     Phname       ph[q].name
+            Compos    BCname       bc[q].name
+            SDref     SDauth       auth
+            Proces    PeName       pe[q].name
+            GTdemo    GDname       gd[q].name
+
+            The simplest way to see the problem is to start gems -d
+            (to read the latest *.ini files) and exit with save
+            configuration. Then start gems as usual (without -d
+            and -s) and press "Thermodynamic database" and then
+            "Independent Components". You will see the IComp
+            module screen form with default values, e.g.
+            "Independent Component" in the ICname field. Press
+            "Load/Show" button and select "Ra:e:Radium" record.
+            You will now see correct data, but instead of
+            "Radium","Independent Component" still sticks in the
+            ICname field. Inspection with the debugger shows,
+            however, that icp->name contains correct information
+            "Radium" just read from the database file. Press the
+            "Load/Show" button again. A warning appears suggesting
+            to save modified database record contents, even though
+            we did not modified anything. Press "No" and again
+            select the "Ra:e:Radium" record. This time, ALL fields
+            of the screen form display correct data, INCLUDING
+            ICname ("Radium"). Press "Load/Save" button again.
+            NO message about saving the modified record appears!
+            Select any other record (e.g., "U:e:Uranium"). The
+            data change in the screen form, except ICname field,
+            which still shows "Radium" :( Press "Show" button,
+            warning about unsaved data appears, press "No", select
+            "Th:e:Thorium" - all is read correctly, ICname TOO
+            ("Thorium"). Press "Show" button, then select
+            "Am:e:Americium" - again problems - "Thorium" still
+            sits in the ICname field. To summarize, the bug appears
+            every second time when another record is selected.
+            If the ICname shows incorrect data, then the attempt
+            to read another record (even with the same key) causes
+            the message about modified data; pressing "Yes" to
+            that message causes wrong contents of ICname to be
+            correctly written into database file!
+
+            This bug certainly has nothing to do with reading
+            database files - it's only a matter of module::Update
+            implementation (see page_w.cpp, strange checks
+            in TCell::ObjectChanged() and related functions.
+            But this bug is potentially destructive or at least
+            misleading and (please, Andy!) must be fixed ASAP...
+
+01/12/00    Reading Proces records: still destroys PeName contents!
+Fixed by
+AR 12/10/00
+
+01/12/00    Found an interesting bug in visor (crash on scrolling
+Fixed by    fields sticked from below). From SystemDialog, press
+AR 12/10/00 "Details for experts" and "PhaseD" page. There is a
+            matrix bXa, sticked from below (with "-s+o" in
+            vis-cn.ini 985-987) as
+            ..........
+            #  Phases  dimension -Fis-
+            ICnam_  F_RECORD        14       5       -1      -b-h
+            bXa     F_FLOAT         14       5       10      -s+o
+            PHnam2  F_RECORD        20       1       10      -t-h
+            ..............
+            to the horisontal list of IC names ( ICnam_). If you
+            try to scroll bXa to the right, the program crashes in
+            page_w.cpp(773) (read on 00000000x address). To Andy:
+            fix the bug, please! (probably, we did not try vertically
+            and horisontally tied lists before). P.S. It does not
+            crash if third line for PHnam2 is fixed to ... -n-h ...
+
+30/11/00    BoundsChecker debugging sessions (see attached files)
+            I executed GEMS.EXE (Win32) under Windows-NT/4 SP6 from
+            BoundsChecker v.6.2 to record memory leaks. Results of
+            each session were sorted by location in source files,
+            saved into *.BCE files and also as PostScript files, and
+            converted into text files with GhostScript 6.0.
+            After each file name, I desribe a sequence of the
+            performed commands.
+
+            File
+            session1.txt: gems -d ...
+                          MainDialog: "Exit" button
+                          Save current configuration? "Yes" button
+
+            session2.txt: gems -c ...
+                          MainDialog: "Exit" button
+                          Save current configuration? "Yes" button
+
+            session3.txt: gems -c ...
+                          MainDialog: "Preferences"
+                          SettingsDialog: "Change font" to Lucida Sans Unicode 9
+                                          "Apply"
+                                          "Close"
+                          MainDialog: "Exit" button
+                          Save current configuration? "Yes" button
+
+            session4.txt: gems ...
+                          MainDialog: "Thermodynamic Database"
+                          DBdialog: "Dependent Components (DComp)"
+                          DComp module window: "Files" "Actualize Files"
+                          SelectDialog:  Selected the first line
+                          DComp module window: "Show" icon (showed Ra+2 ion)
+                                               "Page 2" button
+                                               "Page 1" button
+                                               "Calc" icon - error message
+                                                             "No" button
+                                                             "Rejected" message
+                                                             "OK" button
+                                               "Close" button
+                          DBdialog: "Back" button
+                          MainDialog: "Exit" button
+                          Save current configuration? "No" button
+
+            session5.txt: gems ...
+                          MainDialog: "Computation of Equilibria" button
+                          KeyProfile: selected "CZSH ..." and pressed "OK"
+                          EQDialog: "Single-system equilibria" button
+                          SystemDialog: "Create" button, changed SysEq rkey to
+                                         100 bar 5 deg C , then "Bypass" button
+                                        "IPM" button to calculate equilibrium
+                               ProgressDialog: "Accept" button
+                          SystemDialog: "Dual Solution ..." button, viewed pages,
+                                         scrolled lists, "Close" button
+                          SystemDialog: "Close"
+                          EQDialog: "Numerical Controls" button
+                          Profile module window: "Save" icon, then "Close"
+                          EQDialog: "Back" button
+                          MainDialog: "Exit" button
+                          Save current configuration? "Yes" button
+
+            I feel this is enough for the first time, next sessions
+            will be performed after fixing a lot of discovered
+            memory leaks :)
+
+27/11/00    No access to Proces records from the DBadvDialog
+            Process button! Needs to be fixed (DBAdvDialog.cpp ?)
+Fixed by
+DK 12/07/00
+
+27/11/00    Settings dialog: changing number of digits displayed
+Part.       for "real" does not affect float numbers in RTparm
+fix AR      module screen form (esp. Gv) See TODO.dima for the need
+            of major re-working of the RTparm module.
+
+27/11/00    RTparm module, GraphDialog: all four graphs are shown
+            on the same position on screen, there is no chance
+            now to see the next plot before you close the current
+            plot. Must be fixed upon the major remake of the
+            RTparm module.
+
+24/11/00    Problems with reading SDref records: during the
+Fixed ?     first load after opening the SDref module dialog,
+            some fields like SDauth remain empty, on second
+            attempt a message "record changed - save it?"
+            appears, I press "No", then the record contents
+            seem OK. Similar thing happens with the Proces
+            records. Probably, some calls for "Remake" mode
+            are dirty and initialize fields when it's not
+            necessary.
+
+24/11/00    Tooltips on DOD fields in module screenforms:
+Workaround  in case of multiline tooltips in vis_od.ini, the
+in od.ini   last character in each line is lost (i.e. not shown
+            in the tooltip, usually it is a right bracket or so).
+            Workaround for that is to add any extra character before
+            \LF, but it might be better to introduce a special symbol
+            character for this place (to mark a transition to the next
+            tooltip for multi-cell DOD), then we could ignore analysing
+            CR/LF in this place and avoid the need to run dos2unix or
+            unix2dos when transferring *.ini files between platforms.
+
+24/11/00    SelectDialog:  "Cancel" button does not work in some
+            cases (i.e., in "Record" "Save As" mode of module
+            dialogs when selecting a file where to put the record),
+            this makes a lot of trouble.
+
+Fixed       Also, Cancel does not work
+19.12 DAK   in Remake mode for ReacDC, Phase, Compos, GTdemo
+
+23/11/00    Built-in calculator does not perform binary operations
+Fixed ?     correctly or crash ( +, -, /, *). Needs to be fixed ASAP.
+            see bug descr of 16/11/00.
+
+23/11/00    Win32 version: often crashes when started in a normal
+Fixed?      mode (e.g. without -c or -d cline options). Suspect
+            memory corruption when reading *.CFG files (or bad
+            data written upon "Save CFG files").
+
+16/11/00    Win32 version: I change the font name or DoubleDigits
+Worked      in SettingsDialog and save gems CFG files (in gems -c mode).
+around      Then I start (gems -s ... -u ...) as usual and the program
+            crashes when pressing the "Calculation of Equilibria" button.
+            Possibly, there is a bug in TVisor::fromWinCFG() (visor.cpp)
+            causing memory corruption on its execution, or the
+            TVisor::toWinCFG() function does not save font info properly
+            into the .CFG file.
+
+19/07/00    Linux version: attempts to read *.ini files with ./gems -d
+Fixed?	    cause freesing of gems. Debugger shows stack corruption in
+	    v_object.cpp(908) when a TConfig object is created. Stack
+	    may probably be corrupted before that - creation of that object
+	    with new makes no difference.
+	    Win32 static version: gems -d crashes at the beginning of reading
+            vis_od.ini - obviously the same problem with stack corruption.
+            I feel that something wrong happens with TConfig class func-
+            tions (/libs/config.cpp) because BCB5 debugger shows EAccess
+            error at v_object.cpp(921) where cnf.getcStrings(5, astr);
+            is called. Before that, only cnf.getFirst() was called and
+            it appears reading the first meaningful string of vis_od.ini
+            correctly. On crash, the call stack contains:
+
+            TObjList::load(this=:007E8F1C, ....)
+            TVisor::load( this=:0012FD2C )           // must be 00BCA558
+            TVisor::setup( this=:00000002)        ?! // must be 00BCA558
+            TVisorImp::TVisorImp(this=:00BC8968, c=2, ...)  // OK
+            TIntegApp::InitMainWindow( .... )
+
+            Clearly, the problem is either with TConfig ctor or ::getFirst().
+            But I cannot yet understand what's going on, especially because
+            of heavy use of gstring there :(
+
+19/07/00    Win32 version: in Process screenform, when reading a record,
+Fixed       "*        *" appears instead of the first comment line
+	    (memory or initialization bug?)
+
+------------------------------------------------------------------------
+
+05/11/99    I've got an unexpected error message in the Proces script
+fixed       for the following line when trying to assign 10e-5 moles
+	    of iron to the bulk composition of the system:
+	         bi[\I{Fe}] =: 1e-5;
+	    Error: "Fe   e  *" icomp not found (although I could put
+	    it manually in the screenform).
+	    This must be fixed.
+
+05/11/99    On creation of a new system (SysEq) the SDref and SDval
+fixed       fields are not present in any window. However, I found them
+	    in packed SysEq record screenforms in database (Advanced)
+	    maintenance mode.
+	    Action: Make these fields accessible in one of the forms
+	    related to SystemDialog, or remove at all (to save space)
+	    on disk when many SysEq records are generated by Proces).
+
+05/11/99    The filter in SelectDialog is still lost! Again it appears
+fixed       as * when the dialog is invoked next time (i.e. to pick up
+	    next DCOMP record).
+
+----------------------
+
+03/11/99    On screen forms of records, the F button displays the list
+fixed       of actually linked database files. This list is usually
+	    unreadable because the line length is too short.
+	    Action: make the width of scroll list 2-3 times larger.
+
+03/11/99    A "Some b[i]<DB ..." warning message window should contain
+Fixed?      the packed SysEd record key in the status line.
+
+  More diagnostic messages should be displayed to inform the
+            user about different stages of Profile opening/updating.
+
+03/11/99    There are still errors on Profile update (after some phases
+            or components were added/deleted). For example, upon addition
+	    of solid phases, the numbers in gEx vector (and, maybe, in
+	    other SysEq vectors related to DCOMP) appear to be displaced.
+	    If "Sequential Reactor" systems (which refer to another SysEq
+	    record for calculation of vector b) are present in the database,
+	    a warning "Some b[i]<DB ..." appears on processing of each
+	    such record. When the user presses "Fill" button, such records
+	    get corrupt and do not function properly anymore.
+
+    On reading GTDemo records, a warning message appears on the
+     console "GDRkl Old length=64 New length=58". Maybe, problems with
+     dyn mem allocation?
+
+03/11/99    ColorDialog, OnlyColorDialog: The colors on square buttons
+Fixed       do not correspond to selected colors. Please, fix!
+
+03/11/99    In Progress Dialog, buttons "Accept" and "Discard" should
+            be restored. On "Accept", the SysEq record should be packed
+	    and saved to database, on "Discard" - NOT packed and saved.
+
+03/11/99    On creation of new SyStat records (New button in System
+Fixed       Dialog), an *:*:*:*:*:*:*:*: template always appears, and
+	    the user should always get the previous record key from
+	    the list. This is annoying.
+	    Action: Instead of "ANY" template, the current record key
+	    should appear!
+
+03/11/99    Unwanted Override for selection of DCOMP/REACDC still works
+Fixed       in the RTParm module calculation.
+	    Action: Override mode should not work in RTParm!
+
+03/11/99    Problems with remake GTDemo (comment line disappears, line
+            IDs are set default on first use of plotting) are not fixed!
+
+03/11/99    On pressing * button to get list of records and select one,
+Fixed       the dialog permits to set up a filter. Unfortunately, this
+	    filter template is not saved and has to be typed in every
+	    time when the next record should be selected.
+	    Action: The filter template should be saved and retained during
+	    the program session!
+
+
+===========================================================================
+
+05/10/99    The process example in profile "major" can run in a mode of
+	    real-time graphdemo plotting. But the window with the plots
+	    appears empty until the process calculation is finished. Could
+	    it be possible to optimize (for this mode, hide the small
+	    "running" status window away)?
+
+05/10/99    The small "running" window is not filled up during calculation
+            of the process (profile major), information appears only
+	    when the last equilibrium is finished. I propose to get rid
+	    of the LCD digits (print usual ones instead) and concentrate
+	    on a "bottle" image filled with layers of different colors:
+	    cyan for gas, blue for aqueous phase and brown for total solid
+	    phases. Thickness of layers should be proportional to fraction
+	    of mass of the respective phase relative to total mass of the
+	    system. At present, appearance of this window is ugly and can
+	    not be shown to serious users.
+
+05/10/99    Some windows for modules appear empty when open again with
+            another record (noticed on GTDEMO for major profile)
+
+========================================================================
+
+10/03/1999:
+	    IComp interpretation in formula parser:
+	    Nit2  (gas) -> Nit:e:*:
+	    Nit2@ (aq)  -> Nit:a:*:
+
+10/03/1999: Compos:  vector delCm is not reallocated according to vector flag
+
+10/03/1999: Compos:  Should we retain dialog questions about usage
+                     of DComp/Reacdc stoichiometries in remake/create mode?
+                     It looks like sufficient to set checkboxes!
+
+10/03/1999: Compos:  on remake, the previously selected (non-zero) elements
+                     should be marked on the IComp list!
+
+11/03/1999:  DComp:  in dSDref line, only 15 characters can be entered!
+                     Should be up to 32 characters!
+
+             DComp:  in "remake" mode (no clear all!), previous contents
+                     of dSDref line(s) are destroyed!
+
+19/03/1999:  Suggestion: On creation of a new Profile, it is desirable
+             to automatically create and link extension files for this
+	     profile in SDref, IComp, Compos, Reacdc, RTparm and Phase
+	     chains. The name of any of these extension database file
+	     should contain the profile name. For instance: if the
+	     profile name is "default" then database files with names
+	     "sd_extn_default", "ic_extn_default", ..., will be
+	     created and only these files should be accessible for
+	     user's additions and changes. Database files in Systat
+	     and higher chains should be simply created from the
+	     profile name, e.g. "systat_default", "proces_default"
+	     etc. This will finally help us to overcome the mess
+	     with file names, record keys and so on, and make it
+	     feather-light to calculate reasonable equilibria
+	     within an open profile.
+
+EOF

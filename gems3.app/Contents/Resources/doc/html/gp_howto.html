@@ -1,0 +1,519 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+                        
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+                        
+  <meta name="GENERATOR"
+ content="Mozilla/4.72 [en]C-BLUEWIN-CH20  (Win98; I) [Netscape]">
+  <title>GEMS projects HOWTO</title>
+                                  
+  <meta name="description" content="Version 2.0.0-PSI">
+</head>
+  <body>
+          
+<h1><img src="gems1.png" height="48" width="48" align="left">
+     <font size="+2"> </font><font color="#000066">GEM-Selektor version 2-PSI</font></h1>
+          
+<p><font size="+2"></font></p>
+       
+<h2>How to Manage Modelling Projects</h2>
+       
+<h2> </h2>
+         
+<hr width="100%" size="2">    
+<h3>Contents<tt><a href="#P3400"><br>
+    </a></tt></h3>
+       
+<p></p>
+       
+<ul>
+      <li>                    
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#WHATIS_PROJECT">What is a GEMS modelling project?</a></font></p>
+      </li>
+      <li>                    
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#MODE_SETUP">Project 
+ creation mode setup</a></font></p>
+      </li>
+      <li>                    
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#CREATE_PROJECT">Creating a new project </a></font></p>
+      </li>
+      <li>                    
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#FIRST_SYSTEM">Creating 
+ a first SysEq record in the project</a></font></p>
+      </li>
+      <li>                    
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#OPEN_PROJECT">Opening 
+ an existing project</a><br>
+       </font>     </p>
+      </li>
+      <li>                    
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#EXTEND_PROJECT">Upgrading an existing project using default database</a>&nbsp; 
+     </font></p>
+      </li>
+      <li>                    
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#USEFUL_HINTS">Some 
+ useful hints</a>&nbsp;</font> </p>
+      </li>
+       
+</ul>
+       
+<p>   </p>
+       
+<hr width="100%" size="2">    
+<h3><a name="WHATIS_PROJECT"></a>What is a GEMS modelling project?<br>
+    </h3>
+       
+<p>A modelling project is actually a sub-directory that contains a set of
+  GEMS database         files that &nbsp;keep a "template" definition of
+the   chemical system,     all    the necessary input thermodynamic and composition
+  data records,  as   well  as  (input and calculated) data for many particular
+  equilibrium  systems   with   optional Process Simulator and Graphic/tabulated
+  Data Sampler  records.   Any GEM   calculations of thermodynamic equilibria
+  can only be performed  in the  context   of a currently open modelling
+project.   To open or create a project, get into the "Modelling Projects"
+dialog by  pressing the "Computation     of Equilibria"   button on the Main
+Dialog.  <br>
+    </p>
+       
+<p>Location of the <tt>/projects</tt> directory (where all projects will
+be stored as subdirectories) is defined by the &nbsp;<tt>-u</tt> &nbsp;command
+  line parameter of gems2 executable file (you can see this location in the
+  <a href="gemsetup.html">Preferences Dialog</a>). For instance, <tt>"-u
+D:\GEMS2inst"</tt>   in the command line tells the program to look for existing
+projects and to  store a newly-created project <tt>"MyProject"</tt> in <tt>"D:\GEMS2inst\projects\MyProject"</tt>
+  directory. This new project is as a collection of database files, all containing
+  <tt>"MyProject"</tt> as a file name element. &nbsp; <br>
+    &nbsp;<br>
+    </p>
+       
+<h3><a name="MODE_SETUP"></a>Project creation mode setup<br>
+    </h3>
+       
+<p>When creating a new project, the program will use the Default database
+  files, located in the <tt>"/program/DB.default"</tt> directory. When gems2
+  executable code starts, it looks for the <tt>"/program"</tt> directory
+following   a specification by the &nbsp;<tt>-s</tt> command line parameter
+(you can  see this location in the <a href="gemsetup.html">Preferences Dialog</a>).
+ For instance, <tt>"-s D:\GEMS2inst\program"</tt> in the command line tells
+ that the Default database files are located in&nbsp; <tt>"D:\GEMS2inst\program\DB.default"</tt>
+  directory.<br>
+    </p>
+       
+<p>There are two main types of modelling projects (and, accordingly, two
+project setup modes) that can be selected in the<a href="gemsetup.html">
+Preferences Dialog</a>.&nbsp; <br>
+    </p>
+       
+<p><a name="PROJECT_LINKED"></a>One "linked" type (used in version 1 of GEM-Selector)
+  links selected default database files to the project during its whole lifetime.
+  When any equilibria are calculated, the input phase definitions and thermodynamic
+  data are collected directly from default database files; only records added
+  by the user (or created by modelling calculations) will be stored in the
+ project database files. <br>
+    </p>
+       
+<p><a name="PROJECT_INDEPENDENT"></a>Another "standalone" type (default and 
+ recommended in GEM-Selektor v.2-PSI) links default database files to project 
+ only at the stage of its creation or upgrade. The Default database is searched 
+ for all species and phases records conforming with the chosen list of Independent 
+ Components and other selection criteria in the <a href="elements.html">ElementsDialog</a>, 
+ and such records are immediately copied into the project database file. When
+ creation of the project is finished, all Default database files (except SDref
+ script and bibliography files) are disconnected &nbsp;and the project becomes
+ standalone, - <i>independent</i> of the Default database. During the project
+ lifetime, the user can change, delete or add any phase definition, PCO or
+ thermodynamic data records at her/his discretion. Such projects will not
+be affected by any future changes or extensions of the Default database and
+can be exchanged between different users. Another advantage is that the system
+ template in an independent project is relatively small and easier to observe
+ because it involves only part of the Default database. <br>
+    &nbsp;<br>
+    </p>
+         
+<h3> <a name="CREATE_PROJECT"></a>Creating a new project</h3>
+                                       To create a <a
+ href="#PROJECT_INDEPENDENT">standalone project</a>, get into the "Modelling
+  projects" dialog and click the "New  Project"     button. This will bring
+  you to a small "Enter a new record key" dialog. Type a short project name
+  instead of "MyWork" (or click "From List" to pick up one of existing Project
+  record keys and modify it); change the comment line (spaces are not allowed),
+  and press         "Ok".&nbsp;                                     
+<p>This will bring you to a large <a href="elements.html">Elements Dialog</a>
+  that looks like the Periodic Table. Select necessary elements (and other
+ Independent Components) and press "Ok" when ready. If GEM-Selektor asks
+you  about the <tt>DiscardedRecords.txt</tt>  file, tell it to overwrite
+   - this diagnostic file shows which multi-component phase definitions were
+not copied into the project database because some of their species failed
+to confirm with selection criteria. Next, a small "Select an aqueous activity
+model" dialog will appear; choose the appropriate model and then choose the
+gas mixture model in the next dialog. After a few seconds, you should see
+  the    "Gibbs  Energy Minimization Modelling Project" dialog, the same
+as   if you    would see just  after opening an existing project. This means
+that your new project&nbsp;     has been succesfully created; it can be closed
+ and opened  as any other  existing   project. To close, press the "Back"
+button to get  back to the GEM-Selektor   Main Dialog. Now you can click
+on "Computation of Equilibria", get to the "Modelling Projects" dialog, and
+open the newly-created project by selecting its name in the list and pressing
+"Ok" (or double-clicking on the list entry). <br>
+                   </p>
+                                                                        
+         
+<p> </p>
+         
+<p>It is less simple to create a new <a href="#PROJECT_LINKED">"linked" project</a> 
+ because in this case, you cannot use the ElementsDialog and you must know 
+ what is contained in various Default database files in order to make a proper 
+ selection. It is recommended to proceed in the following steps  creating 
+such a new project. </p>
+         
+<p>   </p>
+     
+<ol>
+     <li>               
+    <p> Define the list of independent components (IC) necessary for describing
+   stoichiometry of the system. Find out which IComp database files contain 
+ records for all required independent components. Define which phase types 
+ (aqueous, gas, solid (solutions), sorption)  must be included. Check which 
+ GEMS default  thermodynamic database files are to be linked to your new project.</p>
+     </li>
+     <li>               
+    <p>Start GEM-Selektor&nbsp;and go into "Computation of Equilibria" mode. 
+ Select a radio-button called "Make a new project by linking files from the 
+ default database", then click on the "New Project..." button to create a 
+new linked project.</p>
+     </li>
+     <li>               
+    <p>In the appearing small dialog, enter the new Project record key and 
+ press "Ok". Now, a "Database File Configuration for Modelling Project" dialog 
+ appears. Expand the "Database" entry and then expand the "Kernel" entry. 
+There, expand one-by-one the "sdref", "icomp", "dcomp", "compos", "reacdc" 
+and "phase" entries and in each of them, right-click necessary files to link 
+them to the project. Press "Ok" when finished, and confirm your file selection 
+by clicking on the "Yes/Proceed" button.&nbsp;</p>
+     </li>
+     <li>               
+    <p>In the appearing "Select an aqueous activity model" dialog, select 
+ the desired model; next, do so in the appearing "gas mixture model" dialog. 
+ You should see the&nbsp;"Gibbs  Energy Minimization Modelling Project" dialog; 
+ from now on, the project is created and you can create &nbsp;and model chemical 
+ systems equilibria and store them in SysEq records.&nbsp; </p>
+     </li>
+     
+</ol>
+     
+<p>    </p>
+     
+<p>    </p>
+     
+<p>    </p>
+     
+<p>    </p>
+     
+<p>        </p>
+     
+<h4><a name="NEW_PROJECT_SIDEBAR"></a>&lt;Sidebar to add&gt;<br>
+ </h4>
+<blockquote> What the program did when it created a new project? 
+  <p>Let us take a look at what the program has done. Switch to your favourite
+         file manager and find there the directory where you have installed
+  the    GEM-Selektor   (for instance, ~<tt>/gems2test</tt> ). In this directory,
+     find a <tt>~/gems2test/projects/Carbonat</tt>   subdirectory that has
+ just    been created for the "Carbonate" project files.   Dive into this
+directory    to see the following files (among others, number   is file length
+in bytes; may be different in the actual version):       <br>
+                    </p>
+</blockquote>
+                                                                        
+                                
+<blockquote>
+  <table cellpadding="2" cellspacing="2" border="1" width="100%">
+                      <tbody>
+                        <tr>
+                          <td valign="top">Project Input Database Files</td>
+                          <td valign="top">Project System Structure and Output
+   files            </td>
+                        </tr>
+                        <tr>
+                          <td valign="top"><tt>&nbsp;&nbsp; 471&nbsp; icomp.Carbonat.ndx<br>
+                   &nbsp;3'523&nbsp; icomp.Carbonat.pdb</tt><br>
+                          <tt>&nbsp;2'439&nbsp; dcomp.Carbonat.ndx<br>
+                   35'924&nbsp; dcomp.Carbonat.pdb</tt><br>
+                          <tt>&nbsp;&nbsp; 348&nbsp; reacdc.Carbonat.ndx<br>
+                  &nbsp;7'517&nbsp; reacdc.Carbonat.pdb</tt><br>
+                          <tt>&nbsp;&nbsp;&nbsp; 61&nbsp; rtparm.Carbonat.ndx<br>
+                   &nbsp;1'661&nbsp; rtparm.Carbonat.pdb</tt><br>
+                          <tt>&nbsp;&nbsp; 631&nbsp; phase.Carbonat.ndx<br>
+                   &nbsp;8'651&nbsp; phase.Carbonat.pdb</tt><br>
+                          <tt>&nbsp;&nbsp; 802&nbsp; compos.Carbonat.ndx<br>
+                   &nbsp;7'464&nbsp; compos.Carbonat.pdb</tt><br>
+                          </td>
+                          <td valign="top"><tt>&nbsp;&nbsp; 118&nbsp; projec.Carbonat.ndx<br>
+                   &nbsp;6'561&nbsp; projec.Carbonat.pdb</tt><br>
+                          <tt>&nbsp;&nbsp;&nbsp; 61&nbsp; syseq.Carbonat.ndx<br>
+                   &nbsp;1'661&nbsp; syseq.Carbonat.pdb</tt><br>
+                          <tt>&nbsp;&nbsp;&nbsp; 61&nbsp; proces.Carbonat.ndx<br>
+                   &nbsp;1'661&nbsp; proces.Carbonat.pdb</tt><br>
+                          <tt>&nbsp;&nbsp;&nbsp; 61&nbsp; gtdemo.Carbonat.ndx<br>
+                   &nbsp;1'661&nbsp; gtdemo.Carbonat.pdb</tt><br>
+                          <tt>&nbsp;&nbsp;&nbsp; 61&nbsp; sdref.Carbonat.ndx<br>
+                   &nbsp;1'661&nbsp; sdref.Carbonat.pdb</tt><br>
+                          </td>
+                        </tr>
+                                                                        
+                                
+    </tbody>                                                    
+  </table>
+  <p>The binary GEMS database file, as such, has a <tt>.pdb</tt> file name
+        extension; the file with the same name but a <tt>.ndx</tt> extension
+    contains     indexing information (record keys with references to record
+   location in   the    <tt>.pdb</tt> file) to speed up search in the database.
+   The second   element  of the file name is always the same as the profile
+  directory name   (<tt>Carbonat</tt>).  The first element of the file name
+  is a GEM-Selektor   module name that can  process the records stored in
+the  database file. In   the left column, all files keeping the project input
+ thermodynamic and composition   data are shown. In the right column, the
+file <tt>projec.Carbonat.pdb</tt>   keeps the project  system structure lists
+and configuration (one record   <tt>"Carbonat:My1stProject"</tt>    ); the
+file <tt>syseq.Carbonat.pdb</tt>&nbsp;will  collect all the calculated  
+ CSD and equilibrium state records (still empty).    <br>
+ </p>
+  <p>                 Files&nbsp;<tt>proces.Carbonat.pdb</tt> and <tt>gtdemo.Carbonat.pdb</tt>&nbsp;
+         will contain your Project Simulator and Graphic/table Demo Sampler
+  records,       respectively, and <tt>sdref.Carbonat.pdb</tt> file will
+keep   your SDref     records  with bibliographic data or customized scripts.
+These   files are   also  empty  at present. <br>
+                    </p>
+  <p>Note that all your work done on this modelling project will be stored
+        exclusively into <tt>.pdb</tt> files in the project directory, and
+  nowhere       else. Thus, you can backup your work any time simply by zipping
+  the whole      project directory; this zip file (e.g. <tt>Carbonat.zip</tt>)
+  can be sent     to your colleague with whom you would like to share your
+ models. You are    welcome to send it&nbsp; also to the developers of GEM-Selektor
+    in the case   of bug reporting or if you wish to contribute to the GEMS
+  Kernel   database,    test suite, or tutorials. <br>
+                    </p>
+  <p>As seen in the left column of the above table, <tt>icomp.*, dcomp.*,
+        reacdc.*, phase.*</tt> and <tt>compos.*</tt> files in the project
+directory        are not empty. During creation of the new project, GEM-Selektor
+used   the    list of selected independent components&nbsp;Ca, Mn, Fe, C,
+Na, Cl,   O, H,   Zz &nbsp;first to copy the respective IComp records to
+  <tt>icomp.Carbonat.pdb</tt>         file. Then the program searched the
+whole accessible part of default database for such Dependent       Components
+and compositions that would completely fit into this stoichiometry      
+basis; the conforming DComp, ReacDC, and Compos records were also copied
+     from default to project database files. Next, the program checked all
+the    Phase definitions available in the default database against the lists
+of  copied  DComp and ReacDC records and discarded all phases that contain
+at  least one  species not conformant with the project system stoichiometry
+basis.  The record  keys of discarded multi-component phases have been written
+to  the diagnostic&nbsp;<tt>DiscardedRecords.txt</tt>      file (located
+in the  directory from where you have started the program). This file   
+can be used for checking  which phase definitions can be copied later&nbsp;
+manually  to  the project and rebuilt  there (instead of creating them from
+scratch)  to extend the modelling systems.     <br>
+                    </p>
+                  Finally, the program has assembled the definitions of aqueous 
+ and   gas   phases    from the DComp and ReacDC records previously copied 
+ into  the project   database,    and attached all Phase record keys and all
+ the  DComp/ReacDC  record keys  referenced  from the phase definitions to
+ the project system  structure. Note  that those  records for Dependent Components
+ that were not  referenced in any Phase definition  copied into the project,
+ were not included  in the project  system. To activate  such Dependent Components
+  (e.g., minerals),   you will  have to create Phase  records for them in
+the  "Thermodynamic Database"   mode  and then open the project,  which will
+be  extended automatically. &nbsp;  &nbsp;  <br>
+  <br>
+                    In your new project directory, the program has created
+ several     empty    files (for <tt>rtparm, sdref, proces, gtdemo</tt> and
+   <tt>syseq</tt> modules) to  store  the   records that you are going to
+create when working in the modelling project.    Though   one database file
+per module is present in the project directory,    you always can   create
+new files (as described in the <a href="gems_gdb.html">Database   Management
+   manual</a>). In doing so, we would recommend  to add another part to the
+  file name, for   example,   <tt>reacdc.Carbonat.MySpecies.pdb</tt>  or
+  <tt>reacdc.Carbonat.MyPCO.pdb</tt>.      Note that records in these additional
+ files will not be visible to the   project   system definition until you
+  <a href="gemstart.html#GSM_EXTEND_PROJECT">reconfigure   the   project</a>.
+It would be wise  to have some additional thermodynamic   database   files
+never linked to the  project system definition, just kept   for some supplementary
+ data or calculations;  anyway, the files reside in  the project directory
+and  will not be lost during backups.&nbsp; <br>
+  <br>
+ &lt;Sidebar end&gt;<br>
+</blockquote>
+                                                                        
+                                                                        
+                                                                        
+                <a href="gemstart.html#GSM_CREATE_SYSTEM_1">Click on this
+link if you want to get back to the "Getting Started" manual</a>. <br>
+<br>
+     
+<h4>3.4.1. Extending the Project Thermodynamic Database</h4>
+      &nbsp;To add chemical species and phases to your project database 
+extension  files, first close the "Single Thermodynamic System" dialog and
+switch into  the "Thermodynamic Database" mode of GEM-Selektor. Bear in mind
+the following  recommendations. <br>
+     &nbsp;      
+<ul>
+      <li> It is always easier to use existing records from the default database 
+  (loaded with "Show" command) as templates for creating  new records with 
+ "Save As..." or "Create" menu commnads.</li>
+       <li> Create records in your profile database extension in the following 
+  order: <a href="gm_icomp.html">IComp</a>; <a href="gm_dcomp.html">DComp</a>; 
+     <a href="gm_reacdc.html">ReacDC</a>; <a href="gm_phase.html">Phase</a>; 
+     <a href="gm_compos.html">Compos</a>.</li>
+       <li> After remaking <a href="gm_dcomp.html">DComp</a>;&nbsp; <a
+ href="gm_reacdc.html">ReacDC,</a>  and <a href="gm_compos.html">Compos</a> 
+ records, it's advisable to re-calculate them.</li>
+       <li> Back-up your newly created or modified database records by exporting 
+ them into text files.</li>
+       <li> If you need to copy many records from default database to your
+ database   extension file, <a href="#P333L5">export</a> them first to a
+text  file. Then edit this text file for changing the last field of record
+keys  to avoid possible "duplicate record key" errors. Finally, <a
+ href="#P333F1">link</a> your profile extension file only and <a
+ href="#P333L6">import</a> records from the edited text file.</li>
+           
+</ul>
+            
+<h4><br>
+    </h4>
+     
+<h4>3.4.2. Configuring Database Files</h4>
+      The current configuration of link files for the entire database is
+saved    into a <tt>~/GEMS/gems.cfg </tt>file every time when&nbsp; <tt>Yes</tt>&nbsp;
+   button is pressed in the "Save current configuration?" dialog upon exiting
+   GEMS.&nbsp; The file configuration from&nbsp; <tt>~/GEMS/gems.cfg </tt>is
+   automatically activated at start of the next GEMS session. For each database
+   chain, all linked&nbsp; *.ndx&nbsp; files are opened and merged into one
+  index (alphabetic list of record keys), kept in the program memory until
+ any command from the "<a href="#P333F">Files</a>" menu is executed or a
+system   profile is opened (in both cases, all chain indexes are re-organized).
+The   file configuration specific to a system profile is stored in the Profile
+ record; the only requirement is that the profile file configuration is a
+subset of main (<tt>gems.cfg</tt>) configuration.      
+<p>What to do if you received an archived system profile developed by a colleague 
+  of yours and wish to work with it? First, unpack the whole profile directory 
+  into your&nbsp;&nbsp; <tt>~/GEMS/profiles</tt>&nbsp; directory. Then change 
+  owner of all files in this new directory to your login name (best is to 
+select  all files in the Midnight Commander panel and execute its "File" "Chown"
+menu command). Then change to your home directory and execute <tt>gems -c</tt>&nbsp;
+ from command line. Exit GEMS with saving file configuration. Start GEMS
+as  usual and select "Calculation of Equilibria" mode. You should see the
+system  profile of your colleague in the list&nbsp; - select it and continue
+to work.  <br>
+     &nbsp; </p>
+         
+<h4> <tt></tt></h4>
+     
+<p>&nbsp; <br>
+      </p>
+       
+<h3> <a name="FIRST_SYSTEM"></a>Creating a First SysEq Record in the Project</h3>
+       
+<p>  The last step to make a fully functional project is to create a first
+  CSD (chemical system definition) record of <a href="gm_syseq.html">SysEq</a>
+  type. In the "Gibbs        Energy Minimization Modelling Project" dialog
+ (where you get after creating or opening a project), press the button "Single-System
+        Equilibria (SysEq)". The program will show the&nbsp;"Single Thermodynamic
+  System" dialog and, if it detects that there are no SysEq records in the
+ project directory, it will automatically start creating a new record and
+you will see an <a
+ href="file:///C:/gems2html/program/doc/html/gemstart.html#GSM_ENKEY_DIALOG">"Enter
+  new key" dialog</a>. Check the CSD name, temperature and pressure there
+and  press "Ok" to proceed.&nbsp;You will see a "Remake Dialog" (will be
+replaced  by a System Remake Wizard in future GEMS versions).&nbsp;<small><font
+ size="+1"><small> the default flags are Ok and should be changed very seldomly. 
+  It is only advisable to enter two comment lines identifying your new system
+  and press "Ok" to continue. </small></font><font size="+1"
+ face="Helvetica, Arial, sans-serif"><small><br>
+     </small></font></small> </p>
+       
+<p><small><font size="+1"><small>This will allocate the dynamic memory objects
+  and display a <big><a href="gems_sys.html"><small>"Single Thermodynamic
+System"  Dialog</small></a> <small>- the main tool for setting up and configuring
+ a particular chemical system definition within a framework of the modelling
+  project. </small></big></small></font></small></p>
+       
+<p> </p>
+    <small><font size="+1"><small>In principle, the only thing you still
+have   to do in order to complete the chemical system definition is to specify
+a  "recipe" for the total bulk composition of the system. This can be done
+in  many ways, but the easiest one is to click on the "Bulk Composition"
+&nbsp;<img src="SetCompos.png" alt="SetComposButton" width="21"
+ height="22">
+      toolbar button. This will open the </small></font></small>"System"
+module   window, which serves for a detailed setup of the model chemical
+system. The  "Compos"  page <small><font size="+1"><small>offers you an 
+easiest way to  express your "recipe". This creative process is described
+in more detail in the <a href="gemstart.html">"GEMS Getting Started" manual</a>.
+After you have defined the chemical system, proceed to calculation of its
+total bulk composition </small></font></small>(click upon a "Calculate bulk
+composition" &nbsp;<img src="RunBCC.png" alt="RunBCC button" width="20"
+ height="20">
+         toolbar button) and, if the program does not complain, to computing
+  the equilibrium state (click on a "Calculate equilibrium" <img
+ src="RunIPM.png" alt="Run IPM button" width="20" height="20">
+        &nbsp; toolbar button). This will start the GEM IPM module, and display 
+   an IPM Progress Dialog. After IPM converges, press the "Accept" button 
+to save the complete SysEq record to project database.&nbsp;  <br>
+    &nbsp;<br>
+       
+<p> </p>
+       
+<h4> </h4>
+       
+<h3><a name="OPEN_PROJECT"></a>Opening an existing project<br>
+    </h3>
+       
+<p>In "Modelling projects" dialog, all existing projects are    listed  
+ in the upper part of the dialog window; below, some important   switches
+  and   buttons are located (see &nbsp;<a
+ href="file:///C:/gems2html/program/doc/html/gp_howto.html"><tt>gp_howto.html</tt></a>
+          &nbsp;file for details).&nbsp;<br>
+                     </p>
+                                      To open an existing project, just select
+  its <a
+ href="file:///C:/gems2html/program/doc/html/gdb_rkey.html#dbm_Project">record
+  key</a> in the list (for example,         "Testsuite:GEMS-PSIv2_0_0") and
+  double-click on it or press the "Open     Project"    button.  This (after
+  a few seconds) will get you in a Project     &lt;name&gt;    "Gibbs Energy
+  Minimization Modelling Project" dialog, where    &lt;name&gt;   of the
+project   (in this case, "Testsuite") is taken from  the  first field  of
+the Project   record key. The same name is given to the  project  directory
+ <tt>.../projects/&lt;name&gt;</tt>   and is part of any  file name  in this
+directory.  From this dialog, you  can proceed to GEM modelling  in  a single
+chemical system  or to simulation  of irreversible  chemical transfer   
+processes as sequences  of local/partial   equilibrium  states. <br>
+         
+<p> &nbsp; </p>
+         
+<h3> <a name="EXTEND_PROJECT"></a>Upgrading an existing project using Default
+  database</h3>
+      Under Construction. <br>
+   &lt;to be completed in version 2.1&gt;&nbsp; <br>
+     &nbsp; <br>
+       
+<h3><a name="USEFUL_HINTS"></a> Some useful hints&nbsp; </h3>
+    &lt; under construction &gt; <br>
+   <br>
+    &nbsp;    
+<hr width="100%" size="2">      
+<p><tt><a href="index.html">To Contents</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a
+ href="g_about.html">About GEM-Selektor</a>&nbsp;</tt></p>
+     
+<p><tt>end of file</tt> <br>
+     &nbsp; </p>
+     <br>
+     <br>
+    <br>
+   <br>
+  <br>
+ <br>
+</body>
+</html>

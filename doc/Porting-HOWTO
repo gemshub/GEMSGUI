@@ -1,0 +1,41 @@
+* This file contains some porting issues. *
+
+
+Attention:	there is a bug in GCC 2.95.x with causes compiler error on *DialogData.cpp
+     files wich contain 'QColor( QRgb(0) )' expressions.
+Workaround:	change  'QColor( QRgb(0) )' to  'QColor( (unsigned)QRgb(0) )' 
+Note:		problem seems to be gone with QTARCH 2.0 and/or gcc-2.96!!
+
+     
+Attention: 	there is a bug in C++ Builder 4 wich causes compiler error on *DialogData.cpp
+Temporary Workaround: change NULL parameter to (const char*) NULL 
+Workaround: 	should be gone with QTARCH 2.0 (may be with patch 1 or 2?)
+
+
+Attention: 	there is a bug MSVC 5/6 wich causes internal compiler errors
+Temporary Workaround:  play with order of includes of QT headers ;-\
+
+
+Linux:	works great !!! yahoo!!! :-)
+
+
+FreeBSD:
+    EGCS-1.1.2, GCC-2.95.x, works with BSD Make but GNU Make is preferrable
+    we have to simulate 'gcvt()' with 'sprintf()' in v_user.h, gcvt() is missing
+    from BSD libc :(
+    
+Solaris:
+    EGCS-1.1.2 or GCC-2.95.x, XPG4 Make or GNU Make
+    X windows headers are buggy for GNU C++
+    Makefile.common: add '-isystem /usr/openwin/include' to CCFLAGS
+    
+Windows:
+    use Borland C++ Builder 4 or MSVC 5/6, but BCB 4 is much better
+    anyway both 'make's are different so use special Makefiles 
+    for either Win32 system
+    Also you have to apply Patch 1 and 2 to BCB 4 to escape from some troubles
+    
+AIX:
+    see informal.txt
+
+1999-2000 (c) Andy Rysin <arysin@yahoo.com>

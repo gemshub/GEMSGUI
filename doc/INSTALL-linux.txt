@@ -1,0 +1,42 @@
+Installation procedure for Linux
+-----------------------------------------------------------------
+
+The distribution file  gems-2.1.2-rc3.i586.rpm  should istall
+on SuSE, Mandrake and Fedora Linux machines. You will need 
+root password for installing the rpm. 
+
+1. Copy or download  gems-2.1.2-rc3.i586.rpm into your home
+directory. To install, type
+
+  su
+  
+  and then the root password, when propmted.
+  
+  execute command: 
+  
+  rpm -Uvh ./gems-2.1.2-rc3.x86_64.rpm
+
+or, for 32 bit version, 
+
+  rpm -Uvh ./gems-2.1.2-rc3.i586.rpm
+
+The program with distribution directories will be installed in
+  /usr/share/gems2. 
+
+2. To start GEMS, click on the KDE desktop icon or select 
+the GEMS item in the start menu for applications. 
+
+At the very first start of gems2, the default project 
+   /projects/TryNPTDB (and other test projects, if provided) 
+will be copied to the user's home directory into
+  ~/.gems2/projects , where new user's projects will
+also be stored. 
+
+By default, GEMS is located in the following Linux directories: 
+
+    Program:	/usr/share/gems2 (for release version)
+    
+    User's data (\projects): in home directory	~/.gems2
+
+
+
