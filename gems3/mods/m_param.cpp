@@ -61,9 +61,9 @@ const double R_CONSTANT = 8.31451,
 SPP_SETTING pa_ = {
     "GEM-Selektor v3.0.0: Numerical flags, controls and thresholds",
     {   // Typical default set (interim, 25.03.2010)
-        1,  /* PC */  2,     /* PD */   3,   /* PRD */
+        1,  /* PC */  2,     /* PD */   -5,   /* PRD */
         1,  /* PSM  */ 30,  /* DP */   1,   /* DW */
-        1, /* DT */     20,   /* PLLG */   1,  /* PE */
+        0, /* DT */     20,   /* PLLG */   1,  /* PE */
         1000,   /* IIM */
         1e-5, /* DG */   1e-10,  /* DHB */  1e-12,  /* DS */
         1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
@@ -106,9 +106,9 @@ SPP_SETTING pa_ = {
 BASE_PARAM dfBase[5] =
 	{     // Added on 07.08.2009 to facilitate pre-setting in projects (SD,DK)
             { // Variant for aquatic systems with moderate non-ideality (interim, 08.12.2009)
-                1,  /* PC */  2,     /* PD */   3,   /* PRD */
+                1,  /* PC */  2,     /* PD */   -5,   /* PRD */
                 1,  /* PSM  */ 30,  /* DP */   1,   /* DW */
-                1, /* DT */     20,   /* PLLG */   1,  /* PE */
+                0, /* DT */     20,   /* PLLG */   1,  /* PE */
                 1000,   /* IIM */
                 1e-5, /* DG */   1e-10,  /* DHB */  1e-14,  /* DS */
                 1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
@@ -122,9 +122,9 @@ BASE_PARAM dfBase[5] =
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
 	    },
             { // Variant for aquatic systems with SCMs in sorption phases ((interim, 08.12.2009))
-                1,  /* PC */  2,     /* PD */   3,   /* PRD */
+                1,  /* PC */  2,     /* PD */   -5,   /* PRD */
                 1,  /* PSM  */ 30,  /* DP */  1,   /* DW */
-                1, /* DT */     20,   /* PLLG */   1,  /* PE */
+                0, /* DT */     20,   /* PLLG */   1,  /* PE */
                 1000,   /* IIM */
                 1e-5, /* DG */   1e-10,  /* DHB */  1e-14,  /* DS */
                 1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
@@ -138,9 +138,9 @@ BASE_PARAM dfBase[5] =
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
 	    },
             { // Variant for fluid-rock systems with highly non-ideal phases (interim, 08.12.2009)
-                1,  /* PC */  2,     /* PD */   3,   /* PRD */
+                1,  /* PC */  2,     /* PD */   -5,   /* PRD */
                 1,  /* PSM  */ 50,  /* DP */   1,   /* DW */
-                1, /* DT */     20,   /* PLLG */   1,  /* PE */
+                -10, /* DT */     20,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
                 1e-5, /* DG */   1e-10,  /* DHB */  1e-13,  /* DS */
                 1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
@@ -154,9 +154,9 @@ BASE_PARAM dfBase[5] =
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
 	    },
             { // Variant of strict settings for highest accuracy (may be slow) (interim, 08.12.2009)
-                1,  /* PC */  2,     /* PD */   3,   /* PRD */
+                1,  /* PC */  2,     /* PD */   -5,   /* PRD */
                 1,  /* PSM  */ 60,  /* DP */   1,   /* DW */
-                1, /* DT */     20,   /* PLLG */   1,  /* PE */
+                -12, /* DT */     20,   /* PLLG */   1,  /* PE */
 	        1000,   /* IIM */
                 1e-5, /* DG */   1e-13,  /* DHB */  1e-16,  /* DS */
                 1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
@@ -170,9 +170,9 @@ BASE_PARAM dfBase[5] =
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
             },
 { // Variant of strict settings for reactive mass transport (interim, 08.12.2009)
-    1,  /* PC */  2,     /* PD */   3,   /* PRD */
+    1,  /* PC */  2,     /* PD */   -5,   /* PRD */
     1,  /* PSM  */ 30,  /* DP */   1,   /* DW */
-    1, /* DT */     20,   /* PLLG */   1,  /* PE */
+    -10, /* DT */     20,   /* PLLG */   1,  /* PE */
     2500,   /* IIM */
     1e-5, /* DG */   1e-10,  /* DHB */  1e-10,  /* DS */
     1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */

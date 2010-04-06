@@ -147,10 +147,11 @@ FORCED_AIA:
         {
             multi->MultiCalcIterations(-1 );    // Calling main IPM2 sequence
         }
-        RefinLoops_ = pmp->W1+pmp->K2-1;
+//        RefinLoops_ = pmp->W1+pmp->K2-1;
         NumIterFIA_ = pmp->ITF;
         NumIterIPM_ = pmp->ITG;
-
+pmp->IT = pmp->ITG;
+/*
         if( IAstatus == true )
             goto FINISHED;  // Only pure phases - simplex solution is Ok
 
@@ -187,7 +188,7 @@ ITstart = 10,        TotIT = pmp->IT;  //  ITold = pmp->IT,
     }
 
 FINISHED:
-
+*/
 	if( pmp->MK == 2 )
 	{	if( pmp->pNP )
          {
@@ -209,7 +210,6 @@ FINISHED:
     	{
     	   	    Error( "Point1  -  After Finish calculation",pmp->errorBuf );
     	}
-
     }
     pmp->t_end = clock();
     pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
