@@ -842,7 +842,6 @@ gems2/vizor/visor.h svn_keywords=Author+Date+Id+Revision
 gems2/vizor/visor_w.cpp svn_keywords=Author+Date+Id+Revision
 gems2/vizor/visor_w.h svn_keywords=Author+Date+Id+Revision
 gems2/vizor/vizor.pri -text
-gems3/Makefile -text
 gems3/assistant.sh -text
 gems3/data/units.ini -text
 gems3/data/vis_cn.ini -text
