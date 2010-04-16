@@ -869,10 +869,13 @@ short TProfil::BAL_compare()
 
 // Test A - sizes and selectors
     if( pmp->N != syp->N || pmp->L != syp->L || pmp->Ls != syp->Ls || pmp->LO != syp->Lw
-            || pmp->PG != syp->Lg || pmp->E != syp->PE  // check of E added 08.02.2010 DK
+            || pmp->PG != syp->Lg // || pmp->E != syp->PE  // check of E added 08.02.2010 DK
             || pmp->PSOL != syp->Lhc || pmp->Lads != syp->Lsor
             || pmp->FI != syp->Fi || pmp->FIs != syp->Fis )
         return 0;
+    if( !((syp->PE != S_OFF && pmp->E == 1) || (syp->PE == S_OFF && pmp->E == 0))  )
+        return 0;
+
     if(( syp->DLLim == S_ON || syp->DULim == S_ON ) && pmp->PLIM != 1 )
         return 0;
     else if( syp->DLLim == S_OFF && syp->DULim == S_OFF && pmp->PLIM == 1 )
