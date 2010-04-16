@@ -174,7 +174,8 @@ void NewSystemDialog::defineResultList()
     afldsDC.append(FieldInfo( o_w_x, ftFloat, 16, false, NextP, eNo, stResult, 1, 1));
     afldsDC.append(FieldInfo( o_wd_yla, ftFloat, 17, false, NextP, eNo, stResult, 1, 1));
     afldsDC.append(FieldInfo( o_wo_wx, ftFloat, 16, false, NextP, eNo, stResult, 1, 1));
-    afldsDC.append(FieldInfo( o_wo_lngam, ftFloat, 16, false, NextP, eNo, stResult, 1, 1));
+    // afldsDC.append(FieldInfo( o_wo_lngam, ftFloat, 16, false, NextP, eNo, stResult, 1, 1));
+    afldsDC.append(FieldInfo( o_wd_gamma, ftFloat, 16, false, NextP, eNo, stResult, 1, 1)); // corrected 16.04.2010 (TW)
      
     QStringList header;
     header.append( tr("Phase/species name"));
