@@ -63,18 +63,18 @@ SPP_SETTING pa_ = {
     {   // Typical default set (interim, 08.04.2010)
         1,  /* PC */  2,     /* PD */   -6,   /* PRD */
         1,  /* PSM  */ 30,  /* DP */   1,   /* DW */
-        0, /* DT */     10,   /* PLLG */   1,  /* PE */
+        1, /* DT */     10,   /* PLLG */   1,  /* PE */
         1000,   /* IIM */
-        1e-6, /* DG */   1e-11,  /* DHB */  1e-12,  /* DS */
+        1e-6, /* DG */   1e-11,  /* DHB */  1e-23,  /* DS */
         1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
         1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
         1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
         1e-7, /* DFYs, */  1e-17,  /* DB */   -1.0,   /* AG */
-        -0.99,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-       1e-3, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
-        1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-12, /* PhMin, */
+        -0.98,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+       1e-4, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
+        1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-23, /* PhMin, */
         1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-        1e-7,  /* DKIN  */ 0,  /* tprn */
+        1e-9,  /* DKIN  */ 0,  /* tprn */
     },
     "CSC   ",   /* DCpct[6] */  "OjjbC+---",    /* DCpdc[9] */
     "+----M",   /* BCpc[6] */   "K3C   ",   /* REpct[6] */
@@ -108,16 +108,16 @@ BASE_PARAM dfBase[5] =
             { // Variant for aquatic systems with moderate non-ideality (interim, 08.12.2009)
                 1,  /* PC */  2,     /* PD */   -6,   /* PRD */
                 1,  /* PSM  */ 30,  /* DP */   1,   /* DW */
-                0, /* DT */     20,   /* PLLG */   1,  /* PE */
+                1, /* DT */     10,   /* PLLG */   1,  /* PE */
                 1000,   /* IIM */
-                1e-5, /* DG */   1e-11,  /* DHB */  1e-14,  /* DS */
+                1e-5, /* DG */   1e-11,  /* DHB */  1e-23,  /* DS */
                 1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
 	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
 	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
                 1e-7, /* DFYs, */  1e-17,  /* DB */   -1.0,   /* AG */
-                -0.99,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                -0.98,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
                1e-3, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
-                1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-14, /* PhMin, */
+                1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-23, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
 	    },
@@ -126,14 +126,14 @@ BASE_PARAM dfBase[5] =
                 1,  /* PSM  */ 30,  /* DP */  1,   /* DW */
                 0, /* DT */     20,   /* PLLG */   1,  /* PE */
                 1000,   /* IIM */
-                1e-6, /* DG */   1e-10,  /* DHB */  1e-14,  /* DS */
+                1e-6, /* DG */   1e-12,  /* DHB */  1e-14,  /* DS */
                 1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
 	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
 	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
 	        1e-7, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
                 -0.03,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
                 1e-3, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
-                1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-14, /* PhMin, */
+                1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-12, /* PhMin, */
                 3e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
 	    },
@@ -142,14 +142,14 @@ BASE_PARAM dfBase[5] =
                 1,  /* PSM  */ 30,  /* DP */   1,   /* DW */
                 1, /* DT */     20,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
-                1e-6, /* DG */   1e-10,  /* DHB */  1e-13,  /* DS */
+                1e-6, /* DG */   1e-10,  /* DHB */  1e-23,  /* DS */
                 1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
 	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
 	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
 	        1e-7, /* DFYs, */  1e-17,  /* DB */   -1.0,   /* AG */
-                -0.95,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                -0.98,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
                 1e-2, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
-                1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-13, /* PhMin, */
+                1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-23, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
 	    },
@@ -158,14 +158,14 @@ BASE_PARAM dfBase[5] =
                 1,  /* PSM  */ 60,  /* DP */   1,   /* DW */
                 -12, /* DT */     20,   /* PLLG */   1,  /* PE */
 	        1000,   /* IIM */
-                1e-6, /* DG */   1e-10,  /* DHB */  1e-16,  /* DS */
+                1e-6, /* DG */   1e-10,  /* DHB */  1e-23,  /* DS */
                 1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
 	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
 	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
                 1e-7, /* DFYs, */  1e-17,  /* DB */   -1,   /* AG */
                 -0.99,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
                 1e-3, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
-                1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-16, /* PhMin, */
+                1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-23, /* PhMin, */
                 1e-5,  /* ICmin */   1e-11,  /* EPS */   1e-3,  /* IEPS */
 	        1e-7,  /* DKIN  */ 0,  /* tprn */
             },
@@ -174,14 +174,14 @@ BASE_PARAM dfBase[5] =
     1,  /* PSM  */ 30,  /* DP */   1,   /* DW */
     1, /* DT */     20,   /* PLLG */   1,  /* PE */
     2500,   /* IIM */
-    1e-6, /* DG */   1e-11,  /* DHB */  1e-12,  /* DS */
+    1e-6, /* DG */   1e-11,  /* DHB */  1e-23,  /* DS */
     1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
     1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
     1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
     1e-7, /* DFYs, */  1e-17,  /* DB */   1,   /* AG */
     -0.98,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
     5e-2, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
-    1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-12, /* PhMin, */
+    1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-23, /* PhMin, */
     1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-4,  /* IEPS */
     1e-7,  /* DKIN  */ 0,  /* tprn */
 }
