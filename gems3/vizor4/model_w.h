@@ -135,7 +135,7 @@ class TObjectTable: public QTableView
         void focusOutEvent( QFocusEvent * event );
         void focusInEvent( QFocusEvent * event );
         void keyPressEvent(QKeyEvent* e);
-        bool edit( const QModelIndex & index, EditTrigger trigger, QEvent * event );
+    //    bool edit( const QModelIndex & index, EditTrigger trigger, QEvent * event );
 
         void updateStatus( const QModelIndex & current);
         QList<QAction*> itemActions( const QModelIndex & current);
@@ -150,7 +150,7 @@ class TObjectTable: public QTableView
  protected slots:
     void currentChanged( const QModelIndex& current, const QModelIndex& previous );
     void slotPopupContextMenu(const QPoint& pos);
-    void closeEditor( QWidget * editor, QAbstractItemDelegate::EndEditHint hint );
+  //  void closeEditor( QWidget * editor, QAbstractItemDelegate::EndEditHint hint );
 
  public slots:
     void CmHelp();
@@ -205,8 +205,8 @@ class TObjectDelegate: public QItemDelegate
     void setModelData(QWidget *editor, QAbstractItemModel *model,
 	                      const QModelIndex &index) const;
    // QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-   void updateEditorGeometry( QWidget * editor,
-               const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+   // void updateEditorGeometry( QWidget * editor,
+   //         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 // private slots:
 //	void commitAndCloseLineEditor();
 //	void commitAndCloseCheckEditor();
@@ -389,7 +389,7 @@ inline int wdF(eFieldType ft, int npos, eEdit edit )
 inline int htF(eFieldType ft, int ht)
 {
     if( ft==ftText ) {
-	return pVisorImp->getCharHeight()*ht/2;
+        return pVisorImp->getCharHeight()*ht/2+1;
     }
 /*    else if( ft == ftCheckBox ) {
 	int width = pVisorImp->getCharWidth();

@@ -192,45 +192,12 @@ QVariant TObjectModel::data( const QModelIndex& index, int role ) const
           case  Qt::SizeHintRole:
                 if(ii >= 0 )
                 { // scroling for TextEdit fields
-                  if( !(ii==0 && flds[ii].fType == ftText))
+                  //22/04/2010 if( !(ii==0 && flds[ii].fType == ftText))
                    return QSize( wdF(flds[ii].fType, flds[ii].npos, flds[ii].edit),
                                 htF(flds[ii].fType, flds[ii].maxN) );
                 }
          default: break;
         }
-/*
-       if( role == Qt::DisplayRole  || role == Qt::EditRole)
-	{
-	  getObjFromModel( index.row(), index.column(), nO, iN, iM);
-      if( nO == -1 )
-		 return QString("");	
-	 return  QString( visualizeEmpty(aObj[nO].GetStringEmpty( iN, iM )).c_str() );
-	  
-	} else
-		if( role == Qt::ToolTipRole || role == Qt::StatusTipRole )
-		{
-		  getObjFromModel( index.row(), index.column(), nO, iN, iM);
-		  if( nO >= 0 )
-		     return  getDescription(&aObj[nO], iN, iM );
-		}
-		else
-			if (role == Qt::TextAlignmentRole) {
-				if( flds[0].fType == ftText )
-				  return int(Qt::AlignLeft | Qt::AlignTop);
-				else
-                              return int(Qt::AlignRight | Qt::AlignVCenter);
-			} 	
-			else if( role == Qt::SizeHintRole  )
-		    {
-	    	  int ii = getObjFromModel( index.row(), index.column(), nO, iN, iM);
-	    	  if(ii >= 0 )
-                  { // scroling for TextEdit fields
-                          if( !(ii==0 && flds[ii].fType == ftText))
-	    		    return QSize( wdF(flds[ii].fType, flds[ii].npos, flds[ii].edit), 
-                                              htF(flds[ii].fType, flds[ii].maxN) );
-                  }
-
-               } */
         return QVariant();
 }
 
@@ -339,61 +306,6 @@ QVariant TObjectModel::headerData( int section, Qt::Orientation orientation, int
         break;
        }
 
-/*	if( role == Qt::DisplayRole  )
-	{
-	  if( orientation == Qt::Horizontal )
-      {  
-    	  ii = getObjFromModel( 0, section, nO, iN, iM);
-    	    if(ii >= 0 )
-    	    {  if( flds[ii].label && aObj[nO].GetNS() > 1  ) 
-    	      {  if(aObj[nO].GetMS() > 1 ) 
-    	        	 return QString( "%1[%2]").arg(aObj[nO].GetKeywd()).arg(iM);
-    	         else
-    	        	 return aObj[nO].GetKeywd();
-    	      }
-    	    }
-      }
-	  else
-      {  
-    	   ii = getObjFromModel(  section, 0, nO, iN, iM);
-    	    if(ii >= 0 )
-    	    {   if( flds[ii].label && iN == 0  && aObj[nO].GetNS() == 1) // only line objects
-    	    	   return aObj[nO].GetKeywd();
-    	        else 
-        	       if( aObj[nO].GetNS() > 1 ) // only multi
-                       return QVariant(iN);
-    	    }
-      }
-	} 
-	else if( role == Qt::SizeHintRole  )
-	    {
-	  if( orientation == Qt::Horizontal )
-      {  
-    	  ii = getObjFromModel( 0, section, nO, iN, iM);
-    	  if(ii >= 0 )
-    	  {
-                if( flds[ii].label && aObj[nO].GetNS() > 1 *&& iM == 0* )
-    	  	   return QSize( wdF(flds[ii].fType, flds[ii].npos, flds[ii].edit), 
-   	    			          htF(flds[ii].fType, 1 )+4 ); 
-            else 
-           	    return QSize( wdF(flds[ii].fType, flds[ii].npos, flds[ii].edit), 0);
-    	  }
-    	  else return QSize(0,0);
-      }
-	  else if( orientation == Qt::Vertical )
-       {
-       	  ii = getObjFromModel( section, 0, nO, iN, iM);
-       	  if(ii >= 0 )
-       	  {     if( flds[ii].label && iN == 0  && aObj[nO].GetNS() == 1) // only line objects
-                return QSize( wdF(ftString, 7, eNo ), htF(flds[ii].fType, flds[ii].maxN)); 
-       	       else
-        	       if( aObj[nO].GetNS() > 1 ) // only multi
-                       return QSize( wdF(ftString, 4, eNo ), htF(flds[ii].fType, flds[ii].maxN)); 
-        	       else        	    	   
-                       return QSize( 0, htF(flds[ii].fType, flds[ii].maxN));
-       	  } 
-      }
-        }*/
 	return QVariant();
 }
 
@@ -419,7 +331,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     verticalHeader()->setResizeMode( QHeaderView::ResizeToContents/*QHeaderView::Stretch*/ );
     horizontalHeader()->setResizeMode( QHeaderView::ResizeToContents/*QHeaderView::Stretch*/ );
-    setEditTriggers( QAbstractItemView::DoubleClicked|QAbstractItemView::AnyKeyPressed );
+    //setEditTriggers( QAbstractItemView::DoubleClicked|QAbstractItemView::AnyKeyPressed );
     setFocusPolicy(Qt::WheelFocus/*Qt::StrongFocus*/);
     setTabKeyNavigation( false );
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -428,11 +340,14 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
         {
             setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
             setHorizontalScrollMode( QAbstractItemView::ScrollPerPixel );
+            setEditTriggers( QAbstractItemView::SelectedClicked|
+                             QAbstractItemView::DoubleClicked|QAbstractItemView::AnyKeyPressed );
         }
         else
         {
             setVerticalScrollMode( QAbstractItemView::ScrollPerItem );
             setHorizontalScrollMode( QAbstractItemView::ScrollPerItem );
+            setEditTriggers( QAbstractItemView::DoubleClicked|QAbstractItemView::AnyKeyPressed );
         }
     
        connect( this, SIGNAL(customContextMenuRequested(QPoint)),
@@ -475,7 +390,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
 	 updateStatus( current );
      QTableView::currentChanged(current, previous ); 	 
  }
-
+/*22/04/2010
  bool TObjectTable::edit( const QModelIndex & index, EditTrigger trigger, QEvent * event )
  {
     vScroll =false, hScroll=false;
@@ -505,7 +420,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
     vScroll =false, hScroll=false;
     QAbstractItemView::closeEditor( editor, hint );
 }
-
+22/04/2010*/
 
  // return current size of object defined by Model
  void TObjectTable::getObjectSize( int& rowSize, int& colSize )
@@ -516,10 +431,11 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
         int ii, col_ii = 0, row_ii=0;
 
 // scroling for TextEdit fields
+       //22/04/2010
         if( flds[0].fType == ftText )
         { if(sizeN > 0 )
-          {      colSize =  wdF(flds[0].fType, flds[0].npos, flds[0].edit);
-                 rowSize  =  htF(flds[0].fType, flds[0].maxN );
+          {      colSize =  wdF(flds[0].fType, flds[0].npos, flds[0].edit)+1;
+                 rowSize  =  htF(flds[0].fType, flds[0].maxN )+1;
           }
             else colSize = rowSize =0;
         }
@@ -571,8 +487,8 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
  	}	
  	
  	if( fullrowSize > rowSize )
- 	{//	colSize += fontMetrics().width(' ');
- 		colSize += verticalScrollBar()->width();//szSBAR;
+        {	//colSize += fontMetrics().width(' ');
+                colSize += verticalScrollBar()->width();//szSBAR;
  	}	
  	
  	// for frame
@@ -1260,7 +1176,7 @@ void TObjectTable::CmCalc()
      emit closeEditor( editor );
  }
  */
-
+/*22/04/2010
 void TObjectDelegate::updateEditorGeometry( QWidget * editor,
      const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
@@ -1277,7 +1193,7 @@ void TObjectDelegate::updateEditorGeometry( QWidget * editor,
   if(fld.fType == ftText )
      editor->resize( wdF(fld.fType, fld.npos, fld.edit)+4, htF(fld.fType, fld.maxN )+4 );
 }
-
+*/
  // Editing QTableView for objects in TCPage
  QWidget *TObjectDelegate::createEditor(QWidget *parent,
          const QStyleOptionViewItem &option,
