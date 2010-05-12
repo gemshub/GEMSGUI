@@ -56,7 +56,7 @@ public:
     NewSystemDialog(QWidget* parent = NULL, const char* name = NULL);
     virtual ~NewSystemDialog();
 
-    void Update();
+//    void Update();
 
     void resetList()
     {
@@ -83,6 +83,7 @@ protected:
     
 public slots:
     void CmSelect();
+    void Update();
 
 protected slots:
     virtual void languageChange();

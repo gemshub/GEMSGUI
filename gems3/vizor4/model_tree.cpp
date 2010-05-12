@@ -280,6 +280,10 @@ QString TTreeModel::getObjValue( const QModelIndex& index, int nO, int iN ) cons
 	    else vl = 0.;
 	    res = QString("%1").arg(vl);
 		break;
+        case o_wo_falp:
+            vl = res.toDouble();
+            res = QString("%1").arg(vl, 0, 'g', 4);
+                break;
     default:
     	break;
 	}

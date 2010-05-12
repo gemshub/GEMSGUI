@@ -281,9 +281,10 @@ ProgressDialog::CalcFinished()
     pStepAccept->show();
     pClose->setText("&Discard");
     pClose->setToolTip( trUtf8( "Do not save IPM results to database" ) );
-
+    MULTI* pData = TProfil::pm->pmp;
     QString str;
-    str.sprintf("Converged at DK=%.2g", TProfil::pm->pa.p.DK);
+//    str.sprintf("Converged at DK=%.2g", TProfil::pm->pa.p.DK);
+    str.sprintf( "Converged at DK=%.2g", pData->DXM );
     setWindowTitle(str);
 }
 
@@ -372,8 +373,8 @@ ProgressDialog::Update(bool force)
     QString str;
     MULTI* pData = TProfil::pm->pmp;
 
-//    str.sprintf( "%*hu", 7, pData->IT );
-    str.sprintf( "%2lu:%4lu:%4lu ", pData->W1+pData->K2, pData->ITF, pData->ITG ); // pData->IT );
+//    str.sprintf( "%2lu:%4lu:%4lu ", pData->W1+pData->K2, pData->ITF, pData->ITG ); // pData->IT );
+    str.sprintf( "%2lu:%4lu:%4lu ", pData->K2, pData->ITF, pData->ITG ); // pData->IT );
     pIT->setText( str );
     str.sprintf( "%*g", 8, pData->pH );
     pPH->setText( str );

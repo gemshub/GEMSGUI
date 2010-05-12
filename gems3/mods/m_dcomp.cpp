@@ -265,7 +265,8 @@ void TDComp::dyn_new(int q)
     else
         dc[q].Vt = (float *)aObj[ o_dcvt].Alloc(MAXVTCOEF, 1, F_ );
 
-    if( CV == CPM_GAS  || CV == CPM_PRSV  || CV == CPM_SRK || CV == CPM_PR78 )  // PR78 added, 18.07.2009 (TW)
+    if( CV == CPM_GAS  || CV == CPM_PRSV  || CV == CPM_SRK || CV == CPM_PR78
+            || CV == CPM_CORK )  // CORK added, 02.05.2010 (TW)
         dc[q].CPg = (float *)aObj[ o_dccritpg].Alloc(MAXCRITPARAM, 1, F_ );
     else
         dc[q].CPg = (float *)aObj[ o_dccritpg ].Free();
@@ -734,22 +735,22 @@ TDComp::DCthermo( int q, int p )
         calc_tpcv( q, p, CE, CV );
         if( CV == CPM_GAS && ( aW.twp->P > 10. && aW.twp->TC > 100. ) )
         {
-        	// TFGLcalc aFGL;           Blocked 15.02.2007 by DK
+                // TFGLcalc myFGL;           Blocked 15.02.2007 by DK
             aW.twp->CPg = dcp->CPg;
             aW.twp->mwt = dcp->mwt;
             aW.twp->PdcC = dcp->PdcC;
-            // aFGL.calc_FGL( );
+            // myFGL.calc_FGL( );
             aW.twp->CPg = NULL;
         }
 
         else if( CV == CPM_EMP )  // Calculation of fugacity at (X=1) using CG EoS
         {
         	double FugProps[6];
-        	TCGFcalc aCGF( 1, (aW.twp->P), (aW.twp->TC+273.15) );
+                TCGFcalc myCGF( 1, (aW.twp->P), (aW.twp->TC+273.15) );
             aW.twp->Cemp = dcp->Cemp;
             aW.twp->PdcC = dcp->PdcC;
             aW.twp->TClow = dcp->TCint[0];
-            aCGF.CGcalcFugPure( (aW.twp->TClow+273.15), (aW.twp->Cemp), FugProps );
+            myCGF.CGcalcFugPure( (aW.twp->TClow+273.15), (aW.twp->Cemp), FugProps );
 
             // increment thermodynamic properties
             aW.twp->G += R_CONSTANT * (aW.twp->TC+273.15) * log( FugProps[0] );
@@ -763,12 +764,12 @@ TDComp::DCthermo( int q, int p )
         else if( CV == CPM_PRSV )  // Calculation of fugacity at (X=1) using PRSV EoS
         {
         	double FugProps[6];
-        	TPRSVcalc aPRSV( 1, (aW.twp->P), (aW.twp->TC+273.15) );
-        	// aPRSV.TPRSVcalc( 1, aW.twp->P, aW.twp->TC+273.15 );
+                TPRSVcalc myPRSV( 1, (aW.twp->P), (aW.twp->TC+273.15) );
+                // myPRSV.TPRSVcalc( 1, aW.twp->P, aW.twp->TC+273.15 );
         	aW.twp->CPg = dcp->CPg;
         	aW.twp->TClow = dcp->TCint[0];
-        	aPRSV.PRSVCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
-        	// aPRSV.~TPRSVcalc();
+                myPRSV.PRSVCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
+                // myPRSV.~TPRSVcalc();
 
             // increment thermodynamic properties
             aW.twp->G += R_CONSTANT * (aW.twp->TC+273.15) * log( FugProps[0] );
@@ -782,11 +783,11 @@ TDComp::DCthermo( int q, int p )
         else if( CV == CPM_SRK )  // Calculation of fugacity at (X=1) using SRK EoS
         {
         	double FugProps[6];
-        	TSRKcalc aSRK( 1, (aW.twp->P), (aW.twp->TC+273.15) );
+                TSRKcalc mySRK( 1, (aW.twp->P), (aW.twp->TC+273.15) );
         	aW.twp->CPg = dcp->CPg;
         	aW.twp->TClow = dcp->TCint[0];
-        	aSRK.SRKCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
-        	// aSRK.~TSRKcalc();
+                mySRK.SRKCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
+                // mySRK.~TSRKcalc();
 
         	// increment thermodynamic properties
         	aW.twp->G += R_CONSTANT * (aW.twp->TC+273.15) * log( FugProps[0] );
@@ -800,11 +801,11 @@ TDComp::DCthermo( int q, int p )
         else if( CV == CPM_PR78 )  // Calculation of fugacity at (X=1) using PR78 EoS
         {
         	double FugProps[6];
-        	TPR78calc aPR78( 1, (aW.twp->P), (aW.twp->TC+273.15) );
+                TPR78calc myPR78( 1, (aW.twp->P), (aW.twp->TC+273.15) );
         	aW.twp->CPg = dcp->CPg;
         	aW.twp->TClow = dcp->TCint[0];
-        	aPR78.PR78CalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
-        	// aPR78.~TPR78calc();
+                myPR78.PR78CalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
+                // myPR78.~TPR78calc();
 
         	// increment thermodynamic properties
         	aW.twp->G += R_CONSTANT * (aW.twp->TC+273.15) * log( FugProps[0] );
@@ -814,6 +815,28 @@ TDComp::DCthermo( int q, int p )
         	aW.twp->Fug = FugProps[0] * aW.twp->P;
         	aW.twp->CPg = NULL;
         }
+
+        else if( CV == CPM_CORK )  // Calculation of fugacity at (X=1) using CORK EoS
+        {
+                double FugProps[6];
+                char CCd[1];
+                CCd[0] = dcp->PdcC;
+                TCORKcalc myCORK( 1, (aW.twp->P), (aW.twp->TC+273.15), CCd );
+                aW.twp->CPg = dcp->CPg;
+                aW.twp->TClow = dcp->TCint[0];
+                myCORK.CORKCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
+                // myPR78.~TPR78calc();
+
+                // increment thermodynamic properties
+                aW.twp->G += R_CONSTANT * (aW.twp->TC+273.15) * log( FugProps[0] );
+                aW.twp->H += FugProps[2];
+                aW.twp->S += FugProps[3];
+                aW.twp->V = FugProps[4];
+                aW.twp->Fug = FugProps[0] * aW.twp->P;
+                aW.twp->CPg = NULL;
+        }
+
+
 
         else if( CV == CPM_AKI )
         {

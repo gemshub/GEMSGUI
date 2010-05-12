@@ -5,15 +5,15 @@
 ; and database into a directory that the user selects
 
 ; The name of the installer
-Name "GEMS2-PSI"
+Name "GEM-Selektor v3"
 Caption "GEM-Selektor Package"
-BrandingText "(C) 2000,2009, GEMS-PSI Team"
+BrandingText "(C) 2000,2010, GEM-Selector Development Team (PSI,ETHZ)"
 Icon "C:\GEMS3inst\program\img\gems3.ico"
 WindowIcon on
 
 ; The file to write
 ; OutFile "gems-w32-install.exe"
-OutFile "gems301rc1-1589-w32-install.exe"
+OutFile "gems300rc0-1607-w32-install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\GEMS3
@@ -22,7 +22,7 @@ InstallDir $PROGRAMFILES\GEMS3
 InstallDirRegKey HKLM SOFTWARE\GEMS3 "Install_Dir"
 
 ;License text
-LicenseText "Version to be installed: 3.0.1-PSI rc1 $\nLICENSE and DISCLAIMER"
+LicenseText "Version to be installed: 3.0.0-PSI r1607/428 $\nLICENSE and DISCLAIMER"
 LicenseData "C:\GEMS3inst\program\doc\txt\TermsOfUse.txt"
 
 ; The text to prompt the user to enter a directory

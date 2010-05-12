@@ -30,7 +30,7 @@ class AutoPhaseDialog : public QDialog, public Ui::AutoPhaseDialogData
     Q_OBJECT
 
 public slots:
-    void CmCheck();
+//    void CmCheck();
 
 public:
     AutoPhaseDialog(
@@ -59,6 +59,7 @@ private:
 protected slots:
     virtual void CmHelp();
     virtual void languageChange();
+    virtual void CmCheck();
 
 };
 

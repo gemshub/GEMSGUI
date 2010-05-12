@@ -119,7 +119,8 @@ void NewSystemDialog::defineInputList()
     afldsDC.append(FieldInfo( o_syrlc, ftCheckBox, 3, false, NextP, eYes, stIO, 1, 1)); 
      
     QStringList header;
-    header.append( tr("Phase/species name"));
+    // header.append( tr("Phase/species name"));
+    header.append( tr("Phase/species"));        // Ok
     header.append(  tr("L"));
     header.append(  tr("Type"));
     header.append(  tr("On/off"));
@@ -163,7 +164,8 @@ void NewSystemDialog::defineResultList()
     afldsPh.append(FieldInfo( o_wi_l1, ftNumeric, 4, false, NextP, eNo, stHelp, 1, 1));
     afldsPh.append(FieldInfo( o_wi_phc,ftCheckBox, 8, false,	NextP, eNo, stHelp, 1, 1));
     afldsPh.append(FieldInfo( o_w_xf, ftFloat, 16, false, NextP, eNo, stResult, 1, 1));
-    afldsPh.append(FieldInfo( -1, ftFloat, 17, false, NextP, eNo, stResult, 1, 1));
+    afldsPh.append(FieldInfo( o_wo_falp, ftFloat, 17, false, NextP, eNo, stResult, 1, 1));
+    // afldsPh.append(FieldInfo( -1, ftFloat, 17, false, NextP, eNo, stResult, 1, 1)); // Disagree DK
     afldsPh.append(FieldInfo( -1, ftFloat, 16, false, NextP, eNo, stResult, 1, 1));
     afldsPh.append(FieldInfo( -1, ftFloat, 16, false, NextP, eNo, stResult, 1, 1));
       
@@ -178,11 +180,14 @@ void NewSystemDialog::defineResultList()
     afldsDC.append(FieldInfo( o_wd_gamma, ftFloat, 16, false, NextP, eNo, stResult, 1, 1)); // corrected 16.04.2010 (TW)
      
     QStringList header;
-    header.append( tr("Phase/species name"));
+    // header.append( tr("Name of phase/species"));
+    header.append( tr("Phase/species"));        // Ok
     header.append(  tr("L"));
     header.append(  tr("Type"));
-    header.append(  tr("Amount x (mol)"));
-    header.append(  tr("Activity(DualTh)"));
+    // header.append(  tr("Amount n(x),mol"));  // Ok
+    header.append(  tr("Amount (mol)"));
+    header.append(  tr("logSI/Activity"));
+    // header.append(  tr("Activity (DualTh)"));  // Disagree DK
     header.append(  tr("Concentration"));
     header.append(  tr("Activity coeff."));
 

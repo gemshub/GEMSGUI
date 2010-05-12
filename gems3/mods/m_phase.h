@@ -200,7 +200,8 @@ enum solmod_switches { /* indexes of keys of model solution*/
     SM_WILSLIQ = 'W',	// built-in multi-component Wilson model for liquid solutions
     SM_CGFLUID = 'F',	// built-in multi-component Churakov-Gottschalk (CG) fluid EoS model
     SM_PRFLUID = 'P',	// built-in Peng-Robinson-Stryjek-Vera (PRSV) fluid EoS model
-    SM_PR78FL = '7',	// built-in Peng-Robinson (PR78) fluid EoS model (under construction)
+    SM_PR78FL = '7',	// built-in Peng-Robinson (PR78) fluid EoS model
+    SM_CORKFL = '8',    // built-in compensated Redlich-Kwong (CORK) fluid EoS model (under construction)
     SM_SRFLUID = 'E',	// built-in Soave-Redlich-Kwong (SRK) fluid EoS model
     SM_AQDAV = 'D',		// built-in Davies model (with 0.3) for aqueous electrolytes
     SM_AQDH1 = '1',		// built-in Debye-Hueckel limiting law for aqueous electrolytes

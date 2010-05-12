@@ -61,9 +61,20 @@ void TMulti::packData()
     short i,j;
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
 
+    if( pm.N != STat->stp->N  ) // crash if error in calculation System
+    {
+      STat->setCalcFlag( false );
+      return;
+    }
+
     for( i=0,j=0; j<pm.L; j++ )
         if( pm.X[j] >= fmin( pm.lowPosNum, pm.DcMinM ) )
         {
+            if( i>= STat->stp->L ) // crash if error in calculation System
+            {
+              STat->setCalcFlag( false );
+              return;
+            }
             STat->stp->llf[i] = pm.muj[j];
             STat->stp->Y[i] = pm.X[j];
             STat->stp->lnGam[i] = pm.lnGam[j];
@@ -71,6 +82,7 @@ void TMulti::packData()
         }
     for( i=0; i<pm.N; i++ )
     {
+
         STat->stp->nnf[i] = pm.mui[i];
         STat->stp->B[i] = pm.B[i];
         STat->stp->U[i] = pm.U[i];
@@ -79,9 +91,15 @@ void TMulti::packData()
     for( i=0, j=0; j<pm.FIs; j++ )
         if( pm.YF[j] > 1e-18 )
         {
+           if( i>= STat->stp->Fis ) // crash if error in calculation System
+           {
+              STat->setCalcFlag( false );
+              return;
+            }
+
             STat->stp->phf[i] = pm.muk[j];
             for( int k=0; k<pm.N; k++ )
-              *(STat->stp->Ba+i*pm.N+k) = *(pm.BF+j*pm.N+k);
+                *(STat->stp->Ba+i*pm.N+k) = *(pm.BF+j*pm.N+k);
             i++;
         }
 }
@@ -413,7 +431,7 @@ if(pmp->E && pmp->LO && pmp->Lads )  // Calling this only when sorption models a
 		       GouyChapman( jb, je, k );
 	   }
 	}
-//   GammaCalc( LINK_UX_MODE);
+   //GammaCalc( LINK_UX_MODE);
 }
 //   double FitVar3 = pmp->FitVar[3];  // Reset the smoothing factor
 //   pmp->FitVar[3] = 1.0;
@@ -430,9 +448,14 @@ if(pmp->E && pmp->LO && pmp->Lads )  // Calling this only when sorption models a
     // Calculate primal DC chemical potentials defined via g0_j, Wx_j and lnGam_j
     PrimalChemicalPotentials( pmp->F, pmp->X, pmp->XF, pmp->XFA );
 
-    //calculate Karpov phase stability criteria
-    f_alpha();
-
+    if( pa->p.PC == 1 )
+    {  //calculate Karpov phase stability criteria
+       f_alpha();
+    }
+    else if( pa->p.PC >= 2 )
+    {
+       StabilityIndexes( );
+    }
     // dynamic work arrays - loading initial data  (added 07.03.2008)
     for( k=0; k<pmp->FI; k++ )
     {
@@ -514,14 +537,14 @@ void TMulti::MultiCalcInit( const char *key )
     	{                           // cleaning work vectors
     		pmp->X[j] = pmp->Y[j] = pmp->lnGam[j] = pmp->lnGmo[j] = 0.0;
     		pmp->Gamma[j] = 1.0;
-                pmp->MU[j] = 0.;// SD 06/12/2009
-                pmp->XU[j] = 0.;// SD 06/12/2009
+                pmp->MU[j] = 0.; // SD 06/12/2009
+                pmp->XU[j] = 0.; // SD 06/12/2009
                 pmp->EMU[j] = 0.;// SD 06/12/2009
                 pmp->NMU[j] = 0.;// SD 06/12/2009
-                pmp->W[j] = 0.;// SD 06/12/2009
-                pmp->F[j] = 0.;// SD 06/12/2009
-                pmp->F0[j] = 0.;// SD 06/12/2009
-           }
+                pmp->W[j] = 0.;  // SD 06/12/2009
+                pmp->F[j] = 0.;  // SD 06/12/2009
+                pmp->F0[j] = 0.; // SD 06/12/2009
+        }
 //    	pmp->FitVar[4] = pa->p.AG;
 //        pmp->IT = 0;     // needed here to clean LINK_TP_MODE
     }
@@ -560,7 +583,7 @@ void TMulti::MultiCalcInit( const char *key )
                   }
                }
            }
-           //  GammaCalc( LINK_UX_MODE );
+          //  GammaCalc( LINK_UX_MODE );
        }
        //   double FitVar3 = pmp->FitVar[3];  // Reset the smoothing factor
        //   pmp->FitVar[3] = 1.0;

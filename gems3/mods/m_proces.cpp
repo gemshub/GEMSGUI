@@ -1189,15 +1189,22 @@ pep->ccTime = 0.0;
                      "Please, provide a name of an output file") )
                 text_fmt = 0;
            }
-         }
-        // no Graphic reprasentation in  Thread mode
-        if(  pep->Istat < P_MT_MODE && pep->PsGR != S_OFF && vfQuestion(window(),
-             GetName(), "Use graphic window?") )
-        {
-            RecordPlot( key );
-            pointShow = START_;
         }
-        else pointShow = -1;
+        // no Graphic reprasentation in  Thread mode
+       pointShow = -1;
+       if(  pep->Istat < P_MT_MODE && pep->PsGR != S_OFF  )
+        {
+            int res = vfQuestion3(window(),  GetName(),
+                      "Use graphic window?",
+                               "Yes", "No", "Cancel");
+            if( res == VF3_3 )
+                    return;
+            if( res == VF3_1 )
+            {
+               RecordPlot( key );
+               pointShow = START_;
+           }
+        }
         pe_initiate();
     }
 
@@ -1279,16 +1286,16 @@ TProcess::internalCalc()
        STEP_POINT2();
     }
     else
-     if( pointShow==-1 )
+    // if( pointShow==-1 )
        iRet = pVisor->Message( window(), GetName(),
                  "Calculating process; \n"
-                 "Please, wait...", pep->c_nrk, pep->NR1);
+                 "Please, wait...", pep->c_nrk, pep->NR1, pointShow!=-1);
 
 #else
-     if( pointShow==-1 )
+    // if( pointShow==-1 )
        iRet = pVisor->Message( window(), GetName(),
                  "Calculating process; \n"
-                 "Please, wait...", pep->c_nrk, pep->NR1);
+                 "Please, wait...", pep->c_nrk, pep->NR1, pointShow!=-1);
 #endif
          if( iRet )
            break;   //cancel process
@@ -1409,7 +1416,7 @@ TProcess::internalCalc()
 #ifdef Use_mt_mode
    if( pep->Istat < P_MT_MODE )
 #endif
-    if( pointShow == -1 )
+  //  if( pointShow == -1 )
         pVisor->CloseMessage();
 
   if( pep->Istat >=P_MT_MODE )

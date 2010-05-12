@@ -90,6 +90,12 @@ AutoPhaseDialog::AutoPhaseDialog (
         case 'I':
       default: gselI->setChecked( true ); break;
     }
+
+    connect(buttonHelp, SIGNAL(clicked()), this, SLOT(CmHelp()));
+    connect(buttonCheck, SIGNAL(clicked()), this, SLOT(CmCheck()));
+    connect(buttonOk, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(buttonCancel, SIGNAL(clicked()), this, SLOT(reject()));
+
 }
 
 AutoPhaseDialog::~AutoPhaseDialog()
@@ -235,7 +241,7 @@ AutoPhaseDialog::set_gkey( gstring& g_key )
 void
 AutoPhaseDialog::CmCheck()
 {
-  float par[4];
+  float par[16];
   gstring a_key = aqu_key;
   gstring g_key = gas_key;
 

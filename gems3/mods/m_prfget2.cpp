@@ -490,25 +490,33 @@ AGAIN:
     aSE->ods_link(0);
     for(uint i=0; i< aList.GetCount(); i++)
     {
-       //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
-        pVisor->Message( 0, "Loading modelling project",
+
+        //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
+      int iRet =  pVisor->Message( 0, "Loading modelling project",
            "Re-calculating and saving all equilibria", i, aList.GetCount() );
-       loadSystat( aList[i].c_str() );
+      if( iRet )
+        break;
+
+      loadSystat( aList[i].c_str() );
  	   if( makeDump == 2 ) //NEED_GEM_SIA
  		  pmp->pNP = 1;
       else
     	  pmp->pNP = 0; //  NEED_GEM_AIA;
 
- 	  try
+       bool goodCalc = true;
+      try
        {
  	   	showMss = 0L;
  	    ccTime += CalcEqstat( false);
- 	    }
- 	  catch( TError& xcpt )
- 	    {}
+        }
+        catch( TError& xcpt )
+        {
+            goodCalc = false;
+        }
        if( outFile )
  	      outMultiTxt( str_file.c_str(), true );
-       aSE->RecSave( aList[i].c_str(), true );
+       if( goodCalc )  // Comment out for testing saving bad results (BugIssue0018)
+           aSE->RecSave( aList[i].c_str(), true );
     }
 
 }

@@ -46,7 +46,7 @@
      <x>0</x>
      <y>0</y>
      <width>804</width>
-     <height>20</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuRecord">
@@ -325,7 +325,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>&amp;Precise</string>
+    <string>&amp;Cleanup</string>
    </property>
   </action>
   <action name="actionStepwise">

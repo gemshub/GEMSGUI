@@ -327,7 +327,7 @@ TPlotWin::paintGrid(QPainter& dc)
 	    int x_pos = (int)ROUND(offset.x() + gridX * ii);
         dc.drawLine( x_pos, 0,  x_pos, canvas.height() );
 	    QString str;
-	    str.sprintf("%.3g", x1 + (ii * (x2 - x1)) / gridCount);
+            str.sprintf("%.4g", x1 + (ii * (x2 - x1)) / gridCount);
 	    dc.drawText( x_pos + 2, canvas.height() - 17, str);
         }
 
@@ -337,7 +337,7 @@ TPlotWin::paintGrid(QPainter& dc)
 	    int y_pos = (int)ROUND(offset.y() + gridY * ii);
         dc.drawLine( 0, y_pos, canvas.width(), y_pos );
 	    QString str;
-	    str.sprintf("%.3g", y1 + ((gridCount - ii) * (y2 - y1)) / gridCount);
+            str.sprintf("%.4g", y1 + ((gridCount - ii) * (y2 - y1)) / gridCount);
 	    dc.drawText( 12, y_pos - 1, str);
         }
 }

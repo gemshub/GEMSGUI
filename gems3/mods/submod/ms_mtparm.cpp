@@ -419,6 +419,9 @@ if( P < 1e-5 )  // trial check  5.12.2006
         		// Back correction for the PR78 EoS model
         		if( mup->DCS[j] == SRC_DCOMP && aDC->dcp->pct[2] == CPM_PR78 )  // added 18.07.2009 (TW)
         			tp.G[j] -= R_CONSTANT * tp.TK * log( aW.twp->Fug/tp.P );
+                        // Back correction for the CORK EoS model
+                        if( mup->DCS[j] == SRC_DCOMP && aDC->dcp->pct[2] == CPM_CORK )  // added 02.05.2010 (TW)
+                                tp.G[j] -= R_CONSTANT * tp.TK * log( aW.twp->Fug/tp.P );
         	}
         }
 

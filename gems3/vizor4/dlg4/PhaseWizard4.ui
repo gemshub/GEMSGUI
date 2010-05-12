@@ -37,7 +37,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -183,6 +183,11 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
             <item>
              <property name="text">
               <string>7   Peng-Robinson (PR78) multicomponent fluid EoS model (buil-in)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>8   Compensated Redlich-Kwong (CORK) multicomponent fluid EoS model (built-in)</string>
              </property>
             </item>
             <item>

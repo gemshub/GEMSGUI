@@ -339,8 +339,9 @@ enum DC_CNTRL_CODES {
     CPM_PRSV = 'R',  /* Peng-Robinson-Stryjek-Vera (PRSV) EoS for fluids (nonelectrolytes) */
     CPM_EMP  = 'S',  /* Churakov-Gottschalk (CG) EoS for fluids (nonelectrolytes) */
     CPM_SRK  = 'T',  /* Soave-Redlich-Kwong (SRK) EoS for fluids (nonelectrolytes) */
-    CPM_PR78 = '7',	 /* Peng-Robinson (PR78) EoS for fluids (nonelectrolytes) */
-    CPM_HKF  = 'F',  /* account for pressure up to 5 kbar by HKF (Tanger,Helgeson,1988) */
+    CPM_PR78 = '7',  /* Peng-Robinson (PR78) EoS for fluids (nonelectrolytes) */
+    CPM_CORK = '8',  /* Compensated Redlich-Kwong (CORK) EoS for fluids (nonelectrolytes) */
+    CPM_HKF  = 'F',  /* account for pressure up to 5 kbar by HKF (Tanger and Helgeson, 1988) */
     CPM_AKI  = 'A',  /* calculation of partial molal volumes for aqueous nonelectrolyte species
                         using EOS (Akinfiev and Diamond, 2003) */
     CPM_PCR  = 'P',  /* PARCOR estimation of HKF EoS parameters 19.05.98 */

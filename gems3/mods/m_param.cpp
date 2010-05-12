@@ -60,19 +60,19 @@ const double R_CONSTANT = 8.31451,
 
 SPP_SETTING pa_ = {
     "GEM-Selektor v3.0.0: Numerical flags, controls and thresholds",
-    {   // Typical default set (interim, 28.04.2010)
-        1,  /* PC */  2,     /* PD */   -6,   /* PRD */
-        1,  /* PSM  */ 60,  /* DP */   1,   /* DW */
+    {   // Typical default set (interim, 04.05.2010) new PhaseSelection( logSI )
+        2,  /* PC */  2,     /* PD */   -5,   /* PRD */
+        1,  /* PSM  */ 90,  /* DP */   1,   /* DW */
         1, /* DT */     10,   /* PLLG */   1,  /* PE */
         1000,   /* IIM */
         1e-6, /* DG */   1e-11,  /* DHB */  1e-23,  /* DS */
-        1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+        1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
         1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
         1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
         1e-7, /* DFYs, */  1e-17,  /* DB */   -1.0,   /* AG */
         -0.98,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-        1e-4, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
-        1e-13,  /* ScMin, */  1e-30, /* DcMin, */   1e-23, /* PhMin, */
+        1e-3, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
+        1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-23, /* PhMin, */
         1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
         1e-9,  /* DKIN  */ 0,  /* tprn */
     },
@@ -106,84 +106,84 @@ SPP_SETTING pa_ = {
 BASE_PARAM dfBase[5] =
 	{     // Added on 07.08.2009 to facilitate pre-setting in projects (SD,DK)
             { // Variant for aquatic systems with moderate non-ideality (interim, 08.12.2009)
-                1,  /* PC */  2,     /* PD */   -6,   /* PRD */
-                1,  /* PSM  */ 30,  /* DP */   1,   /* DW */
+                2,  /* PC */  2,     /* PD */   -5,   /* PRD */
+                1,  /* PSM  */ 90,  /* DP */   1,   /* DW */
                 1, /* DT */     10,   /* PLLG */   1,  /* PE */
                 1000,   /* IIM */
-                1e-5, /* DG */   1e-11,  /* DHB */  1e-23,  /* DS */
-                1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+                1e-6, /* DG */   1e-11,  /* DHB */  1e-23,  /* DS */
+                1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
 	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
 	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
-                1e-7, /* DFYs, */  1e-17,  /* DB */   -1.0,   /* AG */
-                -0.98,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-               1e-3, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
-                1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-23, /* PhMin, */
+                1e-7, /* DFYs, */  1e-17,  /* DB */  1,   /* AG */
+                0,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                1e-3, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
+                1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-23, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-	        1e-7,  /* DKIN  */ 0,  /* tprn */
+                1e-9,  /* DKIN  */ 0,  /* tprn */
 	    },
             { // Variant for aquatic systems with SCMs in sorption phases ((interim, 08.12.2009))
-                1,  /* PC */  2,     /* PD */   -6,   /* PRD */
-                1,  /* PSM  */ 30,  /* DP */  1,   /* DW */
-                0, /* DT */     20,   /* PLLG */   1,  /* PE */
+                2,  /* PC */  2,     /* PD */   -5,   /* PRD */
+                1,  /* PSM  */ 90,  /* DP */  1,   /* DW */
+                1, /* DT */     10,   /* PLLG */   1,  /* PE */
                 1000,   /* IIM */
-                1e-6, /* DG */   1e-12,  /* DHB */  1e-14,  /* DS */
-                1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+                1e-6, /* DG */   1e-11,  /* DHB */  1e-23,  /* DS */
+                1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
 	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
 	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
 	        1e-7, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
-                -0.03,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-                1e-3, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
-                1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-12, /* PhMin, */
-                3e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-	        1e-7,  /* DKIN  */ 0,  /* tprn */
+                -0.001,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                1e-3, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
+                1e-11,  /* ScMin, */  1e-33, /* DcMin, */   1e-23, /* PhMin, */
+                1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
+                1e-9,  /* DKIN  */ 0,  /* tprn */
 	    },
             { // Variant for fluid-rock systems with highly non-ideal phases (interim, 08.12.2009)
-                1,  /* PC */  2,     /* PD */   -6,   /* PRD */
-                1,  /* PSM  */ 30,  /* DP */   1,   /* DW */
-                1, /* DT */     20,   /* PLLG */   1,  /* PE */
+                2,  /* PC */  2,     /* PD */   -5,   /* PRD */
+                1,  /* PSM  */ 90,  /* DP */   1,   /* DW */
+                1, /* DT */     10,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
                 1e-6, /* DG */   1e-10,  /* DHB */  1e-23,  /* DS */
-                1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+                1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
 	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
 	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
 	        1e-7, /* DFYs, */  1e-17,  /* DB */   -1.0,   /* AG */
-                -0.98,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-                1e-2, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
-                1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-23, /* PhMin, */
+                -0.3,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                1e-3, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
+                1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-23, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-	        1e-7,  /* DKIN  */ 0,  /* tprn */
+                1e-9,  /* DKIN  */ 0,  /* tprn */
 	    },
             { // Variant of strict settings for highest accuracy (interim, 08.04.2010)
-                1,  /* PC */  2,     /* PD */   -6,   /* PRD */
-                1,  /* PSM  */ 60,  /* DP */   1,   /* DW */
-                -12, /* DT */     20,   /* PLLG */   1,  /* PE */
-	        1000,   /* IIM */
+                2,  /* PC */  2,     /* PD */   -6,   /* PRD */
+                1,  /* PSM  */ 90,  /* DP */   1,   /* DW */
+                -12, /* DT */     10,   /* PLLG */   1,  /* PE */
+                7000,   /* IIM */
                 1e-6, /* DG */   1e-10,  /* DHB */  1e-23,  /* DS */
-                1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+                1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
 	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
 	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
                 1e-7, /* DFYs, */  1e-17,  /* DB */   -1,   /* AG */
-                -0.99,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-                1e-3, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
-                1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-23, /* PhMin, */
+                -0.97,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                1e-4, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
+                1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-23, /* PhMin, */
                 1e-5,  /* ICmin */   1e-11,  /* EPS */   1e-3,  /* IEPS */
-	        1e-7,  /* DKIN  */ 0,  /* tprn */
+                1e-9,  /* DKIN  */ 0,  /* tprn */
             },
 { // Variant of strict settings for reactive mass transport (interim, 08.12.2009)
-    1,  /* PC */  2,     /* PD */   -6,   /* PRD */
-    1,  /* PSM  */ 30,  /* DP */   1,   /* DW */
-    1, /* DT */     20,   /* PLLG */   1,  /* PE */
+    2,  /* PC */  2,     /* PD */   -5,   /* PRD */
+    1,  /* PSM  */ 90,  /* DP */   1,   /* DW */
+    1, /* DT */     10,   /* PLLG */   1,  /* PE */
     2500,   /* IIM */
-    1e-6, /* DG */   1e-11,  /* DHB */  1e-23,  /* DS */
-    1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+    1e-6, /* DG */   1e-10,  /* DHB */  1e-23,  /* DS */
+    1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
     1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
     1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
-    1e-7, /* DFYs, */  1e-17,  /* DB */   1,   /* AG */
-    -0.98,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-    5e-2, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
-    1e-7,  /* ScMin, */  1e-30, /* DcMin, */   1e-23, /* PhMin, */
+    1e-7, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
+    -0.001,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+    1e-4, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
+    1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-23, /* PhMin, */
     1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-4,  /* IEPS */
-    1e-7,  /* DKIN  */ 0,  /* tprn */
+    1e-9,  /* DKIN  */ 0,  /* tprn */
 }
 	    // More preset parameter structures can be added here
             // (if so, increase number of elements from 5 above and in dfBase() call below)
@@ -737,41 +737,7 @@ FORCED_AIA:
    NumIterFIA = pmp->ITF;
    NumIterIPM = pmp->ITG;
 pmp->IT = pmp->ITG;
-/*   if( IAstatus == true )
-       goto FINISHED;  // Only pure phases - simplex solution is Ok
 
-   if( pmp->MK || pmp->PZ ) // no good solution
-       goto FINISHED;
-   pmp->IT = pmp->ITG;   // This is to provide correct number of IPM iterations to upper levels
-
-   if( pa.p.PRD < 0 && pa.p.PRD > -50 ) // max 50 loops
-   {  // Test refinement loops for highly non-ideal systems Added here by KD on 15.11.2007
-      long int pp, pNPo = pmp->pNP,  TotW1 = pmp->W1+pmp->K2-1,
-ITstart = 10,        TotIT = pmp->IT;   // ITold = pmp->IT,
-      pmp->pNP = 1;
-      for( pp=0; pp < abs(pa.p.PRD); pp++ )
-      {
-         pmp->IT = ITstart; // Important for refinement in highly non-ideal systems!
-         if( multi->AutoInitialApprox( ) == false )
-         {
-            multi->MultiCalcIterations( pp );
-         }
-         TotIT += pmp->IT - ITstart;
-         TotW1 += pmp->W1+pmp->K2-1;
-         if( pmp->MK || pmp->PZ ) // no good solution
-             break;
-       } // end pp loop
-
-      pmp->pNP = pNPo;
-      pmp->IT = TotIT; // ITold;
-
-      NumPrecLoops = TotW1;
-      NumIterFIA = pmp->ITF;
-      NumIterIPM = pmp->ITG;
-   }
-
-FINISHED:
-*/
    	if( pmp->MK == 2 )
    	{	if( pmp->pNP )
             {
@@ -936,8 +902,8 @@ short TProfil::BAL_compare()
     if( j < je )
        return 1;
   }  // k
-    if( pmp->FIat > 0 )  //      Adsorption models - always
-       return 1;
+ //   if( pmp->FIat > 0 )  //      Adsorption models - always
+ //      return 1;
 
     for( k=0; k<pmp->FI; k++ )
     {

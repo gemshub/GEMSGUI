@@ -160,7 +160,7 @@ public:
     void OpenProgress(bool step=false);
     void CloseProgress();
     bool Message( QWidget* parent, const char* name,
-             const char* msg, int prog, int total);
+             const char* msg, int prog, int total, bool move);
     void CloseMessage();
     void ProcessProgress( QWidget* parent );
 

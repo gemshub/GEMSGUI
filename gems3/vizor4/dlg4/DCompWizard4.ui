@@ -423,6 +423,11 @@ p, li { white-space: pre-wrap; }
             </item>
             <item>
              <property name="text">
+              <string>8   Pressure correction for fluids using compensated Redlich-Kwong (CORK) EoS</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>F   Pressure correction using HKF EoS for aqueous electrolytes or HGK EoS for water</string>
              </property>
             </item>

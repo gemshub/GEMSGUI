@@ -87,7 +87,10 @@ NewSystemDialog::setActions()
    
     connect( actionPrevious, SIGNAL( triggered()), this, SLOT(CmPrevious()));
     connect( actionNext, SIGNAL( triggered()), this, SLOT(CmNext()));
- 
+
+    connect( TabWid, SIGNAL( currentChanged ( int ) ), this, SLOT(Update()));
+    actionPrecise->setChecked(TProfil::pm->pa.p.PRD);
+
  //
    pLine = new QLineEdit( toolBar_5 );
    pLine->setEnabled( TRUE );
@@ -432,18 +435,11 @@ void
 NewSystemDialog::CmRunIPM()
 {
     TProfil::pm->pmp->pNP =
-        (  actionSimplex->isChecked()) ? 0 : 1;
-//    if( pSimplexCheck->isChecked() )           KD 17.04.01
-//        pRaisedCheck->setChecked( TRUE );
-    if( actionPrecise->isChecked() && TProfil::pm->pa.p.DW )
-          TProfil::pm->pmp->PZ = TProfil::pm->pa.p.DW;
-    else  {
-            TProfil::pm->pmp->PZ = 0;
-            actionPrecise->setChecked( FALSE );
-          }
-//        TProfil::pm->pmp->pNP *= -1;
-//  New mode: PZ = 1 - Invocation of IPM-2 precision algorithm
-//            PZ = 0: IPM-2 disabled
+        ( actionSimplex->isChecked())? 0: 1;
+    if( actionPrecise->isChecked() && !TProfil::pm->pa.p.PRD )
+          TProfil::pm->pa.p.PRD = -5; // Changed
+    TProfil::pm->pa.p.PRD =
+        ( !actionPrecise->isChecked())? 0: TProfil::pm->pa.p.PRD;
     try
     {
      //  saveList1();

@@ -1090,9 +1090,9 @@ TVisor::ProcessProgress( QWidget* parent )
 // return true if canceled
 bool
 TVisor::Message( QWidget* parent, const char* name,
-             const char* msg, int prog, int total)
+             const char* msg, int prog, int total, bool move)
 {
-    return pVisorImp->Message( parent, name, msg, prog, total);
+    return pVisorImp->Message( parent, name, msg, prog, total, move);
 }
 
 void

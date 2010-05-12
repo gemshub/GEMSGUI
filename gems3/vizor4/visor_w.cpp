@@ -365,7 +365,7 @@ TVisorImp::CalcFinished()
 }*/
 
 bool TVisorImp::Message( QWidget* parent, const char* name,
-             const char* msg, int prog, int total)
+             const char* msg, int prog, int total, bool move )
 {
     if( LoadMessage::pDia )
      {  if( LoadMessage::pDia->wasCanceled() )
@@ -373,10 +373,14 @@ bool TVisorImp::Message( QWidget* parent, const char* name,
         LoadMessage::pDia->Update(msg, prog, total);
      }
     else
-        (new LoadMessage( parent, name, msg, prog, total))->show();
+    {  (new LoadMessage( parent, name, msg, prog, total))->show();
+        if( move && parent  )
+          LoadMessage::pDia->move(parent->x()+parent->width(), parent->y());
+    }
 
    return false;
 }
+
 
 void TVisorImp::CloseMessage()
 {
