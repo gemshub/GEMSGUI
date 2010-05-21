@@ -118,9 +118,14 @@ TProfil::initCalcMode()
         "Loading thermodynamic data", 80 );
 
     // Test MTparm
-
         mtparm->MTparmAlloc();
         mtparm->LoadMtparm( 25., 1. );
+        pmp->T = pmp->Tc = 25. + C_to_K;
+        pmp->TC = pmp->TCc = 25.;
+        pmp->P = pmp->Pc = 1.;
+        pmp->RT = R_CONSTANT * pmp->Tc;
+        pmp->FRT = F_CONSTANT/pmp->RT;
+
 
 
     // Start settins of SYSTEM
@@ -530,7 +535,7 @@ void TProfil::loadSystat( const char *key )
     PMtest( keyp.c_str() );
     pmp->pTPD = 0;   // workaround 26.02.2008  DK
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
-       multi->MultiRemake( keyp.c_str() );
+       multi->MultiInit(  );
     if( pmp->pESU )      // unpack old solution
     {
         multi->loadData( false );  // unpack syseq to multi
@@ -559,7 +564,7 @@ void TProfil::deriveSystat()
     PMtest( keyp.c_str() );
     pmp->pTPD = 0;   // workaround 26.02.2008  DK
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
-        multi->MultiRemake( keyp.c_str() );
+        multi->MultiInit(  );
     if( pmp->pESU )      // unpack old solution
     {
         multi->loadData( false );  // unpack syseq to multi
@@ -600,7 +605,7 @@ void TProfil::newSystat( int mode )
     PMtest( keyp.c_str() );
     pmp->pTPD = 0;   // workaround 26.02.2008  DK
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
-       multi->MultiRemake( keyp.c_str() );
+       multi->MultiInit(  );
 
     // SD 22/01/2010 bool
     systbcInput( window(), str.c_str() );
@@ -659,71 +664,26 @@ void TProfil::CalcBcc()
 double TProfil::CalcEqstat( bool /*prg*/)
 {
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+    long int NumIterFIA,  NumIterIPM, NumPrecLoops;
+
     STat->ods_link(0);
-
-    calcFinished = false;
     status = 0;
-
     syst->SyTest();
     if( !syst->BccCalculated() )
         Error( "System", "Please, specify bulk composition of the system!");
 
     gstring keyp = rt[RT_SYSEQ].UnpackKey();
     PMtest( keyp.c_str() );
-    //MultiCalc( keyp.c_str() );
-//non-mt    if( prg )
-pmp->t_start = clock();
-pmp->t_end = pmp->t_start;
-pmp->t_elap_sec = 0.0;
-pmp->ITF = 0; pmp->ITG = 0;
+
 #ifndef Use_mt_mode
      if( prg )
 	pVisorImp->OpenProgress();
 #endif
 
-FORCED_AIA:
-    multi->MultiCalcInit( keyp.c_str() );
-    if( pmp->pNP )
-    {
-	   if( pmp->ITaia <=30 )       // Foolproof
-		  pmp->IT = 30;
-	   else
-		  pmp->IT = pmp->ITaia;     // Setting number of iterations for the smoothing parameter
-    }
+   calcMulti( NumPrecLoops, NumIterFIA, NumIterIPM );
 
-    bool IAstatus;
-    IAstatus = multi->AutoInitialApprox( );
-    if( IAstatus == false )
-    {
-    	multi->MultiCalcIterations(-1 );    // Calling main IPM2 sequence
-    }
 
-    pmp->IT = pmp->ITG;
-
-  	if( pmp->MK == 2 )
-   	{	if( pmp->pNP )
-             {
-        	    pmp->pNP = 0;
-        	    pmp->MK = 0;
-        	    goto FORCED_AIA;  // Trying again with AIA set after bad SIA
-             }
-        	else
-        		Error( pmp->errorCode ,pmp->errorBuf );
-   	}
-   if( pmp->MK || pmp->PZ ) // not a perfect solution released
-   {
-  	 testMulti( );
-    //cout << "Iter"  << " MK " << pmp->MK << " PZ " << pmp->PZ << " " << pmp->errorCode << endl;
-   }
-    calcFinished = true;
-    pmp->t_end = clock();
-    pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
-//nmt    pVisor->Update();
-//nmt    pVisor->CalcFinished();
-    STat->setCalcFlag( true );
-    STat->CellChanged();
-
-    return pmp->t_elap_sec;
+   return pmp->t_elap_sec;
 }
 
 //add new Project structure

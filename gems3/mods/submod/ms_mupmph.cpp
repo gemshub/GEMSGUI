@@ -39,126 +39,68 @@
 // 5) Tests whether it is possible to take old primal (x, gamma) and dual
 //   (u) solutions as an initial approximation
 //
-void TMulti::MultiRemake( const char *key )
+
+// Load System data
+// Aseembling base GEM-IPM structure to calculate equilibrium states
+//
+// 1) Makes full  stoichiometry matrix A using the sy.Dcl list
+// 2) Looks through Phase records and loads data into mixing model arrays
+//    (optionally translating non-ideality Phase scripts)
+// 3) Continues looking through one-component Phases, to seek for
+//    specific surfaces and related surface parameters
+void TMulti::MultiSystemInit( )
 {
-    int i, N;
-    short ii;
-    vstr pkey(MAXRKEYLEN);
-    double VS;
-    SPP_SETTING *pa = &TProfil::pm->pa;
+  int i, N;
+  short ii;
 
-    memcpy( pmp->stkey, key, EQ_RKLEN );
-    pmp->stkey[EQ_RKLEN] = '\0';
-//  setting array sizes in MULTI data structure
-    pmp->PunE = tpp->PunE;
-    pmp->PunV = tpp->PunV;
-    pmp->PunP = tpp->PunP;
-    pmp->PunT = tpp->PunT;
-    pmp->N =    syp->N;
-    pmp->NR =    syp->N; // 20/02/2007
-    pmp->L =    syp->L;
-    pmp->Ls = syp->Ls;
-    pmp->LO =   syp->Lw/*-1*/;
-    pmp->PG =   syp->Lg;
-    pmp->PSOL = syp->Lhc;
-    pmp->Lads = syp->Lsor;
-    pmp->FI = syp->Fi;
-    pmp->FIs = syp->Fis;
+  pmp->N =     syp->N;
+  pmp->NR =    syp->N;
+  pmp->L =     syp->L;
+  pmp->Ls =   syp->Ls;
+  pmp->LO =   syp->Lw/*-1*/;
+  pmp->PG =   syp->Lg;
+  pmp->PSOL = syp->Lhc;
+  pmp->Lads = syp->Lsor;
+  pmp->FI = syp->Fi;
+  pmp->FIs = syp->Fis;
 //   pmp->FIa = syp->N;
-    pmp->FI1 = 0;
-    pmp->FI1s = 0;
-    pmp->FI1a = 0;
-    if( syp->DLLim == S_ON || syp->DULim == S_ON )
+
+   if( syp->DLLim == S_ON || syp->DULim == S_ON )
         pmp->PLIM = 1;
-    else pmp->PLIM = 0;
-//    pmp->IT = 0;     Debugging 12.03.2008 DK
-    pmp->ITF = 0; pmp->ITG = 0;
-    if( syp->PE != S_OFF )  
-        pmp->E = 1;
-    else pmp->E = 0;
-    if( syp->NsTm > 0 && syp->PNfsp != S_OFF )
-        pmp->FIat = MST;
-    else pmp->FIat = 0;
-    pmp->PD = abs(pa->p.PD);
+   else pmp->PLIM = 0;
 
-    pmp->T = pmp->Tc = tpp->T + C_to_K;
-    pmp->TC = pmp->TCc = tpp->T;
-    pmp->P = pmp->Pc = tpp->P;
-    pmp->T0 = 273.15;    // not used at present
-    pmp->MBX = syp->MBX;
-    pmp->FX = 7777777.;
-    pmp->pH = pmp->Eh = pmp->pe = 0.0;
-    pmp->GWAT = syp->Mwat;
-    pmp->YMET = 0;
-//    pmp->PCI = 0.0;
-    pmp->PCI = 1.0;
-// setting volume balance constraints, if necessary
-    memcpy( pkey, pmp->stkey+48-MAXSYWHAT, MAXPTN );
-    pkey[MAXPTN] = 0;
-    VS = atof( pkey );
-    if( VS <= 0 ) // no volume balance needed
-    {
-        pmp->VX_ = pmp->VXc = pmp->VE = 0.0;
-        pmp->PV = 0;
-    }
-    else
-    {  // volume of the system is given
-        pmp->VX_ = pmp->VXc = pmp->VE = VS;
-        pmp->PV = syp->PV;
-    }
+   if( syp->PE != S_OFF )
+       pmp->E = 1;
+   else pmp->E = 0;
 
-    pmp->Ec = pmp->K2 = pmp->MK = 0;
-    pmp->PZ = 0; // IPM default
-    pmp->W1 = 0;
-    pmp->is = 0;
-    pmp->js = 0;
-    pmp->next  = 0;
-    pmp->IC =  syp->Mbel;
-    pmp->FitVar[0] = pa->aqPar[0]; // setting T,P dependent b_gamma parameters
+   if( syp->NsTm > 0 && syp->PNfsp != S_OFF )
+       pmp->FIat = MST;
+   else pmp->FIat = 0;
 
-    pmp->denW[0] = tpp->RoW;
-    pmp->denW[1] = tpp->dRdTW;
-    pmp->denW[2] = tpp->d2RdT2W;
-    pmp->denW[3] = tpp->dRdPW;
-    pmp->denW[4] = tpp->d2RdP2W;
-    pmp->denWg[0] = tpp->RoV;
-    pmp->denWg[1] = tpp->dRdTV;
-    pmp->denWg[2] = tpp->d2RdT2V;
-    pmp->denWg[3] = tpp->dRdPV;
-    pmp->denWg[4] = tpp->d2RdP2V;
-    pmp->epsW[0] = tpp->EpsW;
-    pmp->epsW[1] = tpp->dEdTW;
-    pmp->epsW[2] = tpp->d2EdT2W;
-    pmp->epsW[3] = tpp->dEdPW;
-    pmp->epsW[4] = tpp->d2EdP2W;
-    pmp->epsWg[0] = tpp->EpsV;
-    pmp->epsWg[1] = tpp->dEdTV;
-    pmp->epsWg[2] = tpp->d2EdT2V;
-    pmp->epsWg[3] = tpp->dEdPV;
-    pmp->epsWg[4] = tpp->d2EdP2V;
+   pmp->MBX = syp->MBX;
+   pmp->GWAT = syp->Mwat;
+   pmp->IC =  syp->Mbel;
+   pmp->GWAT = syp->Mwat * H2O_mol_to_kg;   // constant corrected 30.08.2008
 
-    pmp->GWAT = syp->Mwat * H2O_mol_to_kg;   // constant corrected 30.08.2008
-    pmp->RT = tpp->RT;  // R_CONSTANT * pmp->Tc
-    pmp->FRT = F_CONSTANT/pmp->RT;
-    pmp->ln5551 = log( H2O_mol_to_kg );             // constant corrected 30.08.2008
-//    pmp->lowPosNum = pa->p.DcMin;   // obsolete
-    pmp->lowPosNum = Min_phys_amount;               // = 1.66e-24 mol
-    pmp->logXw = -16.;
-    pmp->logYFk = -9.;
-///    pmp->lnP = 0.;
-///    if( tpp->P != 1. )  // non-reference pressure
-///        pmp->lnP = log( tpp->P );
-    pmp->DXM = pa->p.DK;
-    RescaleToSize( true );  // Added to set default cutoffs/inserts 30.08.2009 DK
-    // Reallocating memory, if necessary
+   // copy intervals for minimizatiom
+   pmp->Pai[0] = syp->Pmin;
+   pmp->Pai[1] = syp->Pmax;
+   pmp->Pai[2] = syp->Pinc;
+   pmp->Pai[3] = 0.1;
+   pmp->Tai[0] = syp->Tmin;
+   pmp->Tai[1] = syp->Tmax;
+   pmp->Tai[2] = syp->Tinc;
+   pmp->Tai[3] = 0.1;
+
+   // Reallocating memory, if necessary
     if( !pmp->pBAL )
         dyn_new();
 
-    if( pmp->pBAL == 2 )
+   if( pmp->pBAL == 2 )
          goto NEXT2;
 
-    // loading parameters for ICs (independent components)
-    for( N=0, i=-1, ii=0; ii< mup->N; ii++ )
+   // loading parameters for ICs (independent components)
+   for( N=0, i=-1, ii=0; ii< mup->N; ii++ )
     {
         if( syp->Icl[ii] == S_OFF )
             continue;
@@ -172,17 +114,11 @@ void TMulti::MultiRemake( const char *key )
         memcpy( pmp->SB[i], mup->SB[ii], MAXICNAME+MAXSYMB );
         memcpy( pmp->SB1[i], mup->SB[ii], MAXICNAME  );
     }
-//    cout << "B[1]   " << setprecision(18) << scientific << syp->B[1] << endl;
-//    cout << "B[3]   " << setprecision(18) << scientific << syp->B[3] << endl;
-//    cout << "B[1]/2 " << setprecision(18) << scientific << syp->B[1]/2 << endl;
-//    cout << "B[3]*2 " << setprecision(18) << scientific << syp->B[3]*2 << endl;
 
-
-//   ErrorIf( N != pmp->N, "Multi", "Multi make error: N != pmp->N" );
     if( N != pmp->N )
         vfMessage( window(),
                    "Multi make error: N != pmp->N",
-		   "Please, press the BCC button first!" );
+                   "Please, press the BCC button first!" );
 NEXT2:
     // loading data for DCs (dependent components)
     multi_sys_dc();
@@ -193,12 +129,13 @@ NEXT2:
     if( pmp->pBAL < 2 )
         ConvertDCC(); // Loading generic species codes
 
-   if(  !pmp->pBAL || pmp->pTPD < 2)
-      CompG0Load();
+   if(  !pmp->pBAL )
+       pmp->pTPD = 1;//min(pmp->pTPD, 1); // CompG0Load();
 
     // Tests on integrity of CSD can be added here
      pmp->pBAL = 2;
 }
+
 
 //Load data for DC from Modelling Project definition to MULTI structure
 //
@@ -780,7 +717,7 @@ PARLOAD: if( k < syp->Fis )
 //            pmp->G0[j] = G;
 //        } /* j */
         // test of kinetic constraints (units of measurement!)
-        if( pmp->PLIM && k >= pmp->FIs /* pmp->PPHk != S_OFF */ )
+        if( pmp->PLIM && k >= pmp->FIs )
         { /* restrictions set! */
             /* one-component phases */
             if( syp->PLLim != S_OFF || syp->PULim != S_OFF )

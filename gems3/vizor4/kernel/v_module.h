@@ -119,8 +119,6 @@ public:
     {
         return state;
     }
-    virtual TCIntArray getDBObjectList( int )
-    { return 0;}
 };
 
 // --- Parametres of function GetKeyofRecord()
@@ -247,7 +245,6 @@ public:
     void RecOfTXT( );
     void RecExport( const char *pattern );
     void RecImport( );
-    virtual TCIntArray getDBObjectList( int );
 
     TCIntArray SelectFileList(int mode);
 

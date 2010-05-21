@@ -109,12 +109,15 @@ double vfGetDouble( QWidget * par, const char* title, const char* label,
 
 struct elmWindowData;
 struct setFiltersData;
+struct pagesSetupData;
+
 bool
 vfElements(QWidget* par, const char * prfName,
            elmWindowData& elm_data, setFiltersData& sf_data );
 
 bool  vfSystemInput(QWidget* par, const char * p_key,
-    TIArray<windowSetupData>& wnData, TIArray<tableSetupData>& tbData );
+    TIArray<windowSetupData>& wnData, TIArray<tableSetupData>& tbData,
+    TIArray<pagesSetupData>& scalarsList );
 
 bool
 vfProcessSet(QWidget* par, const char * p_key,

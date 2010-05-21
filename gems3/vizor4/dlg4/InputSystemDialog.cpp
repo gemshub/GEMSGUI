@@ -43,7 +43,8 @@ void InputSystemDialog::languageChange()
 
 
 InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
-      TIArray<windowSetupData>& awnData, TIArray<tableSetupData>& atbData ):
+      TIArray<windowSetupData>& awnData, TIArray<tableSetupData>& atbData,
+      TIArray<pagesSetupData>& scalarsList ):
         QDialog( parent )
 {
     uint ii, jj;
@@ -60,7 +61,7 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
             setWindowTitle( str );
 
     // define lists pages
-    for(  ii=0; ii<awnData.GetCount(); ii++ )
+    for(  ii=0; ii<awnData.GetCount()-1; ii++ )  // -1 all exept static window
     {
         wnData.Add( new windowSetupData(awnData[ii]));
         // insert to list
@@ -101,11 +102,38 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
         pLists.append(lstIndexes1);
     }
 
-    // define current page
-    curPage = 0;
-    keywdList->setCurrentItem(0);
-    keywdList->item(0)->setSelected(true);
-    changePage( curPage );
+    // add lists static
+    //wnData.Add( new windowSetupData( "Static", -1, 0, -1, -1, 0.,'_' ) );
+    ii = wnData.GetCount();
+    wnData.Add( new windowSetupData(awnData[ii]));
+    // insert to list
+    str = QString("%1").arg(  awnData[ii].pageName.c_str());
+    item1 = new QListWidgetItem( str,  keywdList);
+
+    // add page
+    page1 = new QWidget();
+    page1->setObjectName(str);
+    horizontalLayout1 = new QHBoxLayout(page1);
+    lstIndexes1 = new QListWidget(page1);
+    lstIndexes1->setWrapping( true );
+    lstIndexes1->setSelectionMode(QAbstractItemView::MultiSelection);
+    horizontalLayout1->addWidget(lstIndexes1);
+    winStac->addWidget(page1);
+
+    // insert items to list of indexes
+    for(  jj=0; jj<scalarsList.GetCount(); jj++ )
+    {
+      stData.Add( new pagesSetupData(scalarsList[jj]));
+      item1 = new QListWidgetItem( scalarsList[jj].pageName.c_str(),  lstIndexes1);
+      int nJ = scalarsList[jj].ndx;
+      if(nJ<0) nJ = 0;
+      int nO = scalarsList[jj].nObj;
+      if( aObj[nO].GetM() > 1 )
+       item1->setToolTip( aObj[nO].GetDescription(0,nJ).c_str() );
+      else
+       item1->setToolTip( aObj[nO].GetDescription(nJ,0).c_str() );
+    }
+    pLists.append(lstIndexes1);
 
     // define table
     recTable->setColumnWidth( 0, 50 );
@@ -118,17 +146,26 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
     for(  ii=0; ii<atbData.GetCount(); ii++ )
     {
         jj = atbData[ii].nIdx;
-        pLists[atbData[ii].nWin]->item(jj)->setSelected(true);
+        int iWin = atbData[ii].nWin;
+        int nO = atbData[ii].nObj;
+        if( iWin  >= wnData.GetCount()-1 ) // static list
+          jj = max(0,staticFindRow( nO, jj ));
+        pLists[iWin]->item(jj)->setSelected(true);
         atbData[ii].ndxName =
-            pLists[atbData[ii].nWin]->item(jj)->text().toLatin1().data();
+            pLists[iWin]->item(jj)->text().toLatin1().data();
         tableInsertRow( atbData[ii] );
     }
 
-    // define commands
-    for(int ii=0; ii<pLists.count(); ii++ )
-    {   QObject::connect( pLists[ii]->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
-           this, SLOT( changeTable( const QItemSelection&, const QItemSelection& )) );
-    }
+    // define current page
+    curPage = 0;
+    keywdList->setCurrentItem(0);
+    keywdList->item(0)->setSelected(true);
+    changePage( curPage );
+
+    //for(int ii=0; ii<pLists.count(); ii++ )
+    //{   QObject::connect( pLists[ii]->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
+    //       this, SLOT( changeTable( const QItemSelection&, const QItemSelection& )) );
+    //}
 
     QObject::connect( recTable, SIGNAL( cellChanged( int, int )  ),
                       this, SLOT( tablEdited( int, int ) ));
@@ -159,26 +196,48 @@ void InputSystemDialog::getTable( TIArray<tableSetupData>& tab ) const
 
 void InputSystemDialog::changePage( int nPage )
 {
+    QObject::disconnect( pLists[curPage]->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
+              this, SLOT( changeTable( const QItemSelection&, const QItemSelection& )) );
+
     curPage = nPage;
+
+    QObject::connect( pLists[curPage]->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
+              this, SLOT( changeTable( const QItemSelection&, const QItemSelection& )) );
+
     winStac->setCurrentIndex ( nPage );
-    lDesc->setText( aObj[wnData[nPage].nObj].GetDescription(0,0).c_str());
+    if( nPage < wnData.GetCount()-1 )
+      lDesc->setText( aObj[wnData[nPage].nObj].GetDescription(0,0).c_str());
+    else
+      lDesc->setText( "Other system recipe inputs (masses, volumes, T & P intervals)");
 }
 
 void InputSystemDialog::changeTable(const QItemSelection & selected, const QItemSelection & deselected)
 {
    QModelIndex  ndx;
-   int row;
+   int row, nO, ndx_row;
 
   // added selected
   foreach( ndx,  selected.indexes()  )
   {
     gstring stt = ndx.data(Qt::DisplayRole).toString().toLatin1().data();
-    tableInsertRow( wnData[curPage].nObj, ndx.row(), stt.c_str() );
+    nO = wnData[curPage].nObj;
+    ndx_row = ndx.row();
+    if( nO<0 || curPage >= wnData.GetCount()-1 )
+    { nO = stData[ndx_row].nObj;
+      ndx_row =  stData[ndx_row].ndx;
+    }
+    tableInsertRow( nO, ndx_row, stt.c_str() );
   }
   // delete deselected
   foreach( ndx,  deselected.indexes()  )
   {
-    row = tableFindRow( wnData[curPage].nObj, ndx.row());
+    nO = wnData[curPage].nObj;
+    ndx_row = ndx.row();
+    if( nO<0 || curPage >= wnData.GetCount()-1 )
+    { nO = stData[ndx_row].nObj;
+      ndx_row =  stData[ndx_row].ndx;
+    }
+    row = tableFindRow( nO, ndx_row );
     if( row >= 0)
        tableDeleteRow( row );
   }
@@ -256,6 +315,17 @@ int InputSystemDialog::tableFindRow( int nO, int ndx)
   for(uint ii=0; ii<tbData.GetCount(); ii++ )
   {
    if(tbData[ii].nObj == nO && tbData[ii].nIdx == ndx )
+      { nRow = ii; break; }
+  }
+  return nRow;
+}
+
+int InputSystemDialog::staticFindRow( int nO, int ndx)
+{
+  int nRow = -1;
+  for(uint ii=0; ii<stData.GetCount(); ii++ )
+  {
+   if(stData[ii].nObj == nO && stData[ii].ndx == ndx )
       { nRow = ii; break; }
   }
   return nRow;
@@ -450,18 +520,31 @@ QString InputSystemDialog::createHeader()
  void InputSystemDialog::DeleteRows()
  {
    QList<QTableWidgetSelectionRange> rec = recTable->selectedRanges();
+   int jj, nO, iWin, ndx;
+   int r_from = rec[0].bottomRow();
+   int r_to = rec[0].topRow();
+   if( r_from < r_to)
+   {
+      r_from = r_to;
+      r_to = rec[0].bottomRow();
+   }
 
    for( int row = rec[0].bottomRow(); row >= rec[0].topRow(); row-- )
     {
-       int jj = tbData[row].nIdx;
-       //int iWin = tbData[row].nWin;
-       int nO = tbData[row].nObj;
-       pLists[tbData[row].nWin]->item(jj)->setSelected(false);
-       // if( iWin != curWin )
-       //  tableDeleteRow( row );
-       int rw = tableFindRow( nO, jj);
-       if( rw >= 0)
+       ndx = jj = tbData[row].nIdx;
+       iWin = tbData[row].nWin;
+       nO = tbData[row].nObj;
+
+       if( iWin  >= wnData.GetCount()-1 ) // static list
+         jj = max(0,staticFindRow( nO, jj ));
+
+       pLists[iWin]->item(jj)->setSelected(false);
+       if( iWin != curPage )
+       {
+         int rw = tableFindRow( nO, ndx );
+         if( rw >= 0)
           tableDeleteRow( rw );
+       }
     }
 }
 
@@ -491,7 +574,7 @@ QString InputSystemDialog::createHeader()
 
 
 //-------------------------------------------------------------------------------------
-// TTreeDelegate -  individuak items in views are rendered and edited using delegates
+// TTreeDelegate -  individual items in views are rendered and edited using delegates
 //-------------------------------------------------------------------------------------
 
 TSystemDelegate::TSystemDelegate( QObject * parent ):

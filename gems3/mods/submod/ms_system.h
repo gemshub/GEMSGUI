@@ -26,9 +26,7 @@
 #ifdef Use_qd_real
 // QD_real is enabled only if the above compiler key is used (experimental)
 #include <qd/qd_real.h>
-#else
-typedef double qd_real;
-#define to_double (double)
+#include <qd/fpu.h>
 #endif
 
 
@@ -60,12 +58,13 @@ typedef struct
     PbIC,  // bi_ via IC quantities { + * - }
     PbDC,  // xd_ via DC quantities { + * - }
     PbAC,  // xa_ via COMPOS quantities { + * - }
-    PbPH,  //xp_ via quantities of phases from EQSTATe pointed by rkey in SyPhEQ
+    PbPH,  // xp_ use quantities of phases from another or current equilibrium state (cf. SyPhEQ)
     DLLim, // lower DC restrictions for x_j { + * - }
     PLLim, // pll_ lower restrictions for X_a (phases) { + * - } reserved
     DULim, // dul_ upper DC restrictions for x_j { + * - } reserved
     PULim, // pul_ upper restrictions for X_a (phases) { + * - } reserved
-    PPHk,  // Interprete pll_ as kinetically fixed quantities of phases? res.
+    PPHk,  // Flag to take from another system: total solid composition { + },
+           // phase compositions { - }, or both { * }, if possible
     PSATT, //PSATT_ to classify SAT calculation methods&allocation for sur DC
     PGEX,  // gEx_ excess free energies for (metastable) DC { + * - }
     PYOF,  // Yof_ metastability parameter for phases { + * - }
@@ -111,10 +110,10 @@ typedef struct
     Nr1;  /* Reserved */
 
     // Scalar parametres of state
-  float Pmin, Pmax, // Pmin,Pmax for parametric problems (reserved)
-    Tmin, Tmax, // Tmin,Tmax for parametric problems (reserved)
-    Vmin, Vmax, // Vmin,Vmax for parametric problems (reserved)
-    Hmin, Hmax, // Hmin,Hmax for parametric problems (reserved)
+  float
+    Pmin, Pmax, Pinc, // min, max, increment for the pressure interpolation
+    Tmin, Tmax, Tinc, // min, max, increment for the temperature interpolation
+    Tdev1, Tdev2,     // Target deviations for  minimization of thermodynamic potentials
     // Params of system
     Mbel, // Molality of reference electrolyte Mbel (FIA of ionic strength)
     Mwat, //Anticipated mass (kg) of water-solvent for calculation of molalities
@@ -123,11 +122,11 @@ typedef struct
     MBX,  // final total mass of the system (kg) calculated from b vector
     R1,  //NMS-total number of IC moles in the system (for mole %% calculations)
     Vsys, // Anticipated volume of the system (L), for volume concentrations
-    Vaq,  //Anticipated volume of aqueous phase (L) for calculation of molarities
+    Vaq,  // Anticipated volume Vaq  of aqueous phase (L) for molarities
     Time, // Tau - physical time (for PROCES) reserved
     KSI,  // Xi - current value of process extent variable (reserved)
     NU,   // Nu - current value of process extent variable (reserved)
-    Msolids; // Amount of total solids (g) from another equilibrium to add to B_ (provisional)
+    Msolids; // Total mass of solids (g) from another equilibrium (bXs object) to add to the recipe (B_)
 
   short *Ll;  // N of DC selected within each phase [0:mu.Fi-1]
   char
@@ -203,10 +202,11 @@ protected:
     void make_syst_sizes();
     void make_syst();
     void systbc_calc( int mode );
-    void PHbcalcSysEq( double *MsysC, double *MaqC, double *R1C,
-                  double *VaqC, double *VsysC, qd_real *BB );
-    void PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
-                  double *VaqC, double *VsysC, qd_real *BB );
+
+   void PHbcalcSysEq( double *MsysC, double *MaqC, double *R1C,
+                  double *VaqC, double *VsysC, double/*qd_real*/ *BB );
+   void PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
+                  double *VaqC, double *VsysC, double/*qd_real*/ *BB );
     void stbal( int N, int L, double *Smatr, double *DCstc, double *ICm );
     // mark data
     void mark_ic_to_bc();

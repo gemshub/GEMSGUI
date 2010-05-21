@@ -259,23 +259,7 @@ void GtDemoWizard::resetPageList( int newRT )
     }
 
     GetListsnRT( RT_GTDEMO, pgData,  scalarsList );
-   /* start version
 
-    TCIntArray arr = aMod[nRT].getDBObjectList(1);
-
-    // define lists pages
-    for(uint  ii=0; ii<arr.GetCount(); ii++ )
-    {
-       int nO = arr[ii];
-       if( !aObj[nO].IsDynamic() )
-       {
-           // insert to static list
-           staticKeys.Add(aObj[nO].GetKeywd() );
-           continue;
-       }
-       pgData.Add( new pagesSetupData( aObj[nO].GetKeywd(), nO));
-    }
-    */
 
     if( pageScript )
       pageScript->resetPageList( newRT, pgData, scalarsList );

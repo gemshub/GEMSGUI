@@ -36,6 +36,7 @@
 #include "m_compos.h"
 #include "m_phase.h"
 #include "m_reacdc.h"
+#include "EquatSetupWidget.h"
 
 
 // save old lists of keys to compare
@@ -448,10 +449,13 @@ void TProfil::CalcAllSystems( int makeDump )
 {
     double ccTime = 0.;
     vstr pkey(81);
+    vstr tbuf(150);
     gstring str_file;
 	TCStringArray aList;
     TCIntArray anR;
     bool outFile = true;
+    uint i, nbad;
+    int iRet;
 
     rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
@@ -488,12 +492,13 @@ AGAIN:
     pVisor->CloseMessage();
     TSysEq* aSE=(TSysEq *)(&aMod[RT_SYSEQ]);
     aSE->ods_link(0);
-    for(uint i=0; i< aList.GetCount(); i++)
+    for(nbad =0,  i=0; i< aList.GetCount(); i++)
     {
 
-        //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
-      int iRet =  pVisor->Message( 0, "Loading modelling project",
-           "Re-calculating and saving all equilibria", i, aList.GetCount() );
+      //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
+      //
+        sprintf( tbuf, "Project: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
+        iRet =  pVisor->Message( 0, "Re-calculating and saving all equilibria", tbuf.p, i, aList.GetCount() );
       if( iRet )
         break;
 
@@ -511,12 +516,19 @@ AGAIN:
         }
         catch( TError& xcpt )
         {
+            nbad++;
             goodCalc = false;
         }
        if( outFile )
  	      outMultiTxt( str_file.c_str(), true );
        if( goodCalc )  // Comment out for testing saving bad results (BugIssue0018)
            aSE->RecSave( aList[i].c_str(), true );
+    }
+    if( outFile )
+    {
+      fstream ff1(str_file.c_str(), ios::out|ios::app);
+      sprintf( tbuf, "\n\nProject: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
+      ff1 << tbuf.p << endl;
     }
 
 }
@@ -701,6 +713,8 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
     TIArray<windowSetupData> wnData;
     // define table
     TIArray<tableSetupData> tbData;
+    // define scalars
+    TIArray<pagesSetupData> scalarsList;
 
     // add bulk chemical composition from COMPOS
     if( syp->PbAC != S_OFF && mup->La )
@@ -793,8 +807,74 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
       }
     }
 
-    // change bulk chemical composition
-    if( !vfSystemInput( par, p_key, wnData, tbData ))
+    // add static list
+    wnData.Add( new windowSetupData( "Other Inputs", -1, 0, -1, -1, 0.,'_' ) );
+    // build scalar list
+    scalarsList.Add( new pagesSetupData("g Solids(MbXs)", o_symsolids)); // Total mass of solids (g) from another equilibrium (bXs object) to add to the recipe
+ //   scalarsList.Add( new pagesSetupData("Reserved", o_symass,0)); // Molality of reference electrolyte
+    scalarsList.Add( new pagesSetupData("kg H2O-solvent", o_symass,1)); // Anticipated mass (kg) of water-solvent
+    scalarsList.Add( new pagesSetupData("kg System", o_symass,2)); // Anticipated total mass of the system (kg)
+    scalarsList.Add( new pagesSetupData("kg Aqueous(Maq)", o_symass,3)); // Anticipated mass of aqueous phase Maq (kg)
+ //   scalarsList.Add( new pagesSetupData("kg Total (MBX)", o_symass,4)); // Final total mass of the system MBX (kg)_
+ //   scalarsList.Add( new pagesSetupData("Total IC moles (NMS)", o_symass,5)); // Total number of IC moles in the system NMS  (for mole %% calculations)
+    scalarsList.Add( new pagesSetupData("dm3 System(Vsys)", o_syvol,0)); // Anticipated volume Vsys of the system
+    scalarsList.Add( new pagesSetupData("dm3 Aqueous(Vaq)", o_syvol,1)); // Anticipated volume Vaq  of aqueous phase (L) for molarities
+    scalarsList.Add( new pagesSetupData("P_Min,bar", o_sypmm,0)); // min, max, increment for the pressure interpolation
+    scalarsList.Add( new pagesSetupData("P_Max,bar", o_sypmm,1));
+    scalarsList.Add( new pagesSetupData("P_Step,bar", o_sypmm,2));
+    scalarsList.Add( new pagesSetupData("T_Min,C", o_sytmm,0)); // min, max, increment for the temperature interpolation
+    scalarsList.Add( new pagesSetupData("T_Max,C", o_sytmm,1));
+    scalarsList.Add( new pagesSetupData("T_Step,C", o_sytmm,2));
+    // add static values for table
+    if(  fabs( syp->Msolids ) > 0  )
+     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symsolids,
+           aObj[o_symass].GetKeywd(), 0, "",  syp->Msolids, '_' ));
+//    if(  fabs( syp->Mbel ) > 0  )
+//     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
+//           aObj[o_symass].GetKeywd(), 0, "",  syp->Mbel, '_' ));
+    if(  fabs( syp->Mwat ) > 0  )
+     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
+           aObj[o_symass].GetKeywd(), 1, "",  syp->Mwat, '_' ));
+    if(  fabs( syp->Msys ) > 0  )
+     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
+           aObj[o_symass].GetKeywd(), 2, "",  syp->Msys, '_' ));
+    if(  fabs( syp->Maq ) > 0  )
+     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
+           aObj[o_symass].GetKeywd(), 3, "",  syp->Maq, '_' ));
+//   if(  fabs( syp->MBX ) > 0  )
+//     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
+//           aObj[o_symass].GetKeywd(), 4, "",  syp->MBX, '_' ));
+//    if(  fabs( syp->R1 ) > 0  )
+//    tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
+//          aObj[o_symass].GetKeywd(), 5, "",  syp->R1, '_' ));
+    if(  fabs( syp->Vsys ) > 0  )
+     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_syvol,
+           aObj[o_syvol].GetKeywd(), 0, "",  syp->Vsys, '_' ));
+    if(  fabs( syp->Vaq ) > 0  )
+     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_syvol,
+           aObj[o_syvol].GetKeywd(), 1, "",  syp->Vaq, '_' ));
+    if(  fabs( syp->Pmin ) > 0  )
+     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sypmm,
+           aObj[o_sypmm].GetKeywd(), 0, "",  syp->Pmin, '_' ));
+    if(  fabs( syp->Pmax ) > 0  )
+     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sypmm,
+           aObj[o_sypmm].GetKeywd(), 1, "",  syp->Pmax, '_' ));
+    if(  fabs( syp->Pinc ) > 0  )
+     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sypmm,
+           aObj[o_sypmm].GetKeywd(), 2, "",  syp->Pinc, '_' ));
+
+    if(  fabs( syp->Tmin ) > 0  )
+     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sytmm,
+           aObj[o_sytmm].GetKeywd(), 0, "",  syp->Tmin, '_' ));
+    if(  fabs( syp->Tmax ) > 0  )
+     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sytmm,
+           aObj[o_sytmm].GetKeywd(), 1, "",  syp->Tmax, '_' ));
+    if(  fabs( syp->Tinc ) > 0  )
+     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sytmm,
+           aObj[o_sytmm].GetKeywd(), 2, "",  syp->Tinc, '_' ));
+
+   // change bulk chemical composition
+    if( !vfSystemInput( par, p_key, wnData, tbData, scalarsList ))
         return;      // cancel
 
     // clear old values
@@ -831,15 +911,38 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
     if( syp->PGEX != S_OFF )
         fillValue( syp->GEX, float(0.), mup->L );
 
+    // clear static values
+    syp->Msolids = 0.;
+//    syp->Mbel = 0.;
+    syp->Mwat  = 0.;
+    syp->Msys = 0.;
+    syp->Maq = 0.;
+//    syp->MBX = 0.;
+//    syp->R1 = 0.;
+    syp->Vsys = 0.;
+    syp->Vaq = 0.;
+    syp->Pmin = 0.;
+    syp->Pmax = 0.;
+    syp->Pinc = 0.;
+    syp->Tmin = 0.;
+    syp->Tmax = 0.;
+    syp->Tinc = 0.;
+
     // inset data from tbData
     for(uint ii=0; ii< tbData.GetCount() ; ii++)
     {
-      aObj[ tbData[ii].nObj ].Put( tbData[ii].val, tbData[ii].nIdx, 0 );
-      int nOunit = wnData[ tbData[ii].nWin].nOunit;
-      if(nOunit >=0 )
+     int nO = tbData[ii].nObj;
+     if( aObj[nO].GetN() > 1 )
+         aObj[ nO ].Put( tbData[ii].val, tbData[ii].nIdx, 0 );
+     else
+         aObj[ nO ].Put( tbData[ii].val, 0, tbData[ii].nIdx );
+
+     int nOunit = wnData[ tbData[ii].nWin].nOunit;
+     if(nOunit >=0 )
         aObj[ nOunit ].SetString( &tbData[ii].unit, tbData[ii].nIdx, 0);
       int nOswitch = wnData[ tbData[ii].nWin].nSwitch;
-      aObj[ nOswitch ].SetString("+",tbData[ii].nIdx, 0);
+      if(nOswitch >=0 )
+        aObj[ nOswitch ].SetString("+",tbData[ii].nIdx, 0);
     }
 
     TSysEq::pm->CellChanged();

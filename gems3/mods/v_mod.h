@@ -137,7 +137,7 @@ o_nldcvs, o_nldchs, o_nlphv, o_nlphh, // new !!!
     // SYSTEM built-in
     o_syphst, o_syname, o_synotes, o_sypmod, o_sypvec,
     o_syn,   o_syl, o_syfi, o_sylbc,  o_sylns,
-    o_sypmm,  o_sytmm,  o_syvmm,  o_syhmm,  o_symass,
+    o_sypmm,  o_sytmm,  o_sytdev,  o_symsolids,  o_symass,
     o_syvol,  o_syproc, o_syl1,  o_syrlc,  o_syrsc,
     o_syrflc, o_syrfsc, o_syicl,  o_sydcl,  o_sypcl,
     o_syacl,  o_sybiun,  o_syxdun, o_syxaun, o_syxpun,
@@ -155,7 +155,7 @@ o_nldcvs, o_nldchs, o_nlphv, o_nlphh, // new !!!
     o_wi_ve, o_wi_mbx, o_wo_fx, o_wo_ic,  o_wd_ph,
     o_wd_pe, o_wd_eh, o_wi_mol,  o_wi_gwat,o_wi_ymet,
     o_wio_denw, o_wio_epsw, o_wo_psi, o_wo_lnp, o_wo_rt,
-    o_wo_frt,  o_wo_yw,  o_wio_cons,  o_wio_fitv, o_wd_sitn,
+    o_wo_frt,  o_wo_yw,  o_wio_cons,  o_wio_pmxs, o_wio_fitv, o_wd_sitn,
     o_wi_l1,        o_wi_ipxpm, // added 07.12.2006
     o_wi_lsmod,  o_wi_lsmdc,  o_wi_mui, o_wi_muk, o_wi_muj,
     o_wi_satndx, o_wi_dul,  o_wi_dll,  o_wi_gex,  o_wi_pul,

@@ -32,8 +32,10 @@ TMulti::TMulti( int nrt, SYSTEM* sy_, MTPARM *tp_, RMULTS *mu_ ):
     sizeN = 0;
     AA=0;
     BB=0;
+#ifdef Use_qd_real
     qdAA=0;
     qdBB=0;
+#endif
     arrL=0;
     arrAN=0;
     
@@ -67,8 +69,8 @@ aObj[ o_wo_it_ipm ].SetPtr( &pm.ITG ); /* pm.ITG */
     aObj[ o_wo_sx ].SetPtr( &pm.SX_ );   /*d 2*/
     aObj[ o_wo_cpx ].SetPtr( &pm.CpX_ ); /*d 2*/
     aObj[ o_wo_cvx ].SetPtr( &pm.CvX_ ); /*d 2*/
-    aObj[ o_wi_t0 ].SetPtr( &pm.T0 );
-    aObj[ o_wi_ve ].SetPtr( &pm.VE );
+    aObj[ o_wi_t0 ].SetPtr( &pm.TMols );
+    aObj[ o_wi_ve ].SetPtr( &pm.SMols );    /*VE*/
     aObj[ o_wi_mbx ].SetPtr( &pm.MBX );
     aObj[ o_wo_fx ].SetPtr( &pm.FX );
     aObj[ o_wo_ic ].SetPtr( &pm.IC );
@@ -86,7 +88,8 @@ aObj[ o_wo_it_ipm ].SetPtr( &pm.ITG ); /* pm.ITG */
     aObj[ o_wo_frt ].SetPtr( &pm.FRT );
     aObj[ o_wo_yw ].SetPtr( &pm.Yw );
     aObj[ o_wio_cons ].SetPtr(&pm.ln5551 );/*d 6*/
-    aObj[ o_wio_fitv ].SetPtr(pm.FitVar ); /*d 5*/
+    aObj[ o_wio_pmxs ].SetPtr(pm.FitVar ); /*d 1*/
+    aObj[ o_wio_fitv ].SetPtr(pm.FitVar+1 ); /*d 4*/
     aObj[ o_wd_sitn ].SetPtr(&pm.sitNcat );
 
     // dynamic DODs, part 1

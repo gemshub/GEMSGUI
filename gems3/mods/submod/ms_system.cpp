@@ -75,13 +75,13 @@ void TSyst::ods_link( int /*q*/)
     aObj[ o_syfi  ].SetPtr( &sy.Fi );   /*i 4*/
     aObj[ o_sylbc].SetPtr(  &sy.La );   /*i 4*/
     aObj[ o_sylns].SetPtr(  &sy.LO );   /*i 7*/
-    aObj[ o_sypmm].SetPtr(  &sy.Pmin ); /*f 2*/
-    aObj[ o_sytmm].SetPtr(  &sy.Tmin ); /*f 2*/
-    aObj[ o_syvmm].SetPtr(  &sy.Vmin ); /*f 2*/
-    aObj[ o_syhmm].SetPtr(  &sy.Hmin ); /*f 2*/
+    aObj[ o_sypmm].SetPtr(  &sy.Pmin ); /*f 3*/
+    aObj[ o_sytmm].SetPtr(  &sy.Tmin ); /*f 3*/
+    aObj[ o_sytdev].SetPtr(  &sy.Tdev1 ); /*f 2*/
+    aObj[ o_symsolids].SetPtr(  &sy.Msolids ); /*f 1*/
     aObj[ o_symass].SetPtr( &sy.Mbel ); /*f 6*/
     aObj[ o_syvol].SetPtr(  &sy.Vsys ); /*f 2*/
-    aObj[ o_syproc].SetPtr( &sy.Time ); /*f 4*/
+    aObj[ o_syproc].SetPtr( &sy.Time ); /*f 3*/
     aObj[ o_syl1].SetPtr(    sy.Ll );
     aObj[ o_syl1].SetDim( mup->Fi, 1 );
     aObj[ o_syrlc].SetPtr(   sy.RLC );
@@ -500,6 +500,7 @@ void TSyst::set_def( int /*q*/)
     memset( &sy.Pmin, 0, 20*sizeof(float));
     if( is_x )
         sy.NsTm = MNST;
+
 
     sy.Ll = 0;
     sy.RLC = 0;

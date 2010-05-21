@@ -31,6 +31,7 @@ const char *GEMS_PE_HTML = "gm_proces";
 #include "visor.h"
 #include "t_print.h"
 #include "stepwise.h"
+#include "num_methods.h"
 
 TProcess* TProcess::pm;
 
@@ -1054,8 +1055,14 @@ double TProcess::f_proc( double x )
     return( pep->c_Nu );
 }
 
+// calc function for Method of golden section
+double ff_proc( double x )
+{
+    return TProcess::pm->f_proc(x);
+}
 
-// Method of Gold Section ( PsPro != S_OFF)
+
+/* Method of Gold Section ( PsPro != S_OFF)
 void
 TProcess::proc_titr()
 {
@@ -1128,10 +1135,10 @@ DONE:
     pep->c_Eh = x1;
     CalcEquat();
 }
+*/
 
 //Recalc rpn structure
-void
-TProcess::CalcEquat(  )
+void TProcess::CalcEquat(  )
 {
     try
     {
@@ -1319,7 +1326,15 @@ TProcess::internalCalc()
                 rt[RT_SYSEQ].MakeKey( RT_PROCES,  pep->stkey, RT_PROCES, 0, RT_PROCES,1,
                                        RT_PROCES, 2, K_IMM, pep->timep, K_IMM, pep->Bnamep,
                                        K_IMM, pep->Pp, K_IMM, pep->TCp, K_IMM, pep->NVp, K_END );
-                proc_titr();
+                // proc_titr();
+                // test external functions SD 12/05/2010
+                double funct[2];
+                funct[0] = 0;
+                funct[1] = pep->Nui[1];
+                pep->c_Eh = GoldenSection( pep->pXii, funct, ff_proc);
+                pep->Loop = 2;
+                CalcEquat();
+
             }
             else
                 pe_next();
@@ -1333,16 +1348,16 @@ TProcess::internalCalc()
         // Stop Process from Andy Sveta
 
         // make system ( SyTest() always in CalcEqstat() )
-        if( pep->PsBC != S_OFF )
-        {
-            if( pep->PsGT != S_OFF ) // evaporation
-                memcpy( TSysEq::pm->ssp->PhmKey, pep->stkey, EQ_RKLEN );
+//        if( pep->PsBC != S_OFF )
+//        {
+//            if( pep->PsGT != S_OFF ) // evaporation
+//                memcpy( TSysEq::pm->ssp->PhmKey, pep->stkey, EQ_RKLEN );
             /*       if( pep->PsUX != S_OFF) // recalc system
                      if( pep->PsSY != S_OFF )
                        sprintf( sy[q].notes,"pXi = %15lg, Nu = %15lg",
                                               pep->c_pXi, pep->c_Nu);
              */
-        }
+//        }
 
         // new SyStat key
         rt[RT_SYSEQ].MakeKey( RT_PROCES,  pep->stkey, RT_PROCES, 0, RT_PROCES,1,

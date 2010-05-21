@@ -152,6 +152,7 @@ ProcessWizard::ProcessWizard( const char* pkey, char flgs[24], int size[6],
    subTypeButtons->addButton(sub1, 0);
    subTypeButtons->addButton(sub2, 1);
    subTypeButtons->addButton(sub3, 2);
+   subTypeButtons->addButton(sub4, 3);
    QObject::connect( subTypeButtons, SIGNAL(buttonClicked(int)), this, SLOT(setMode(int)));
 
    textEquat1->setText(calcScript.c_str());
@@ -513,7 +514,7 @@ ProcessWizard::help()
 }
 
 //=============================================================================
-// calcScript for diferent types of Processes
+// Setup of P_expr script for different types of Processes
 
 void ProcessWizard::defineWindow(char type)
 {
@@ -525,8 +526,8 @@ void ProcessWizard::defineWindow(char type)
   curType = type;
 
   // define object pages
-    pgData.Clear();
-    switch(type)
+  pgData.Clear();
+  switch(type)
     {
      case P_PVT:
             pgData.Add( new pagesSetupData("Phases", o_w_xf));
@@ -552,22 +553,20 @@ void ProcessWizard::defineWindow(char type)
           pgData.Add( new pagesSetupData("Molality",o_wd_ym ));
           pgData.Add( new pagesSetupData("Sorbed",o_w_x )); // x
           break;
-    case P_TITRSING:
-          {
+    case P_TITRSING:      
             pgData.Add( new pagesSetupData("Compos", o_syxea));
             pgData.Add( new pagesSetupData("DComp", o_syxed));
             pgData.Add( new pagesSetupData("IComp", o_sybi));
-            pgData.Add( new pagesSetupData("lga", o_wd_yla));
-          }
+            pgData.Add( new pagesSetupData("lga", o_wd_yla)); 
           break;
     case P_REACTORS:
-          pgData.Add( new pagesSetupData("Compos", o_syxea));
-          pgData.Add( new pagesSetupData("DComp", o_syxed));
-          pgData.Add( new pagesSetupData("IComp", o_sybi));
-          pgData.Add( new pagesSetupData("Phases", o_syphm)); // xp_
-          pgData.Add( new pagesSetupData("Kin-DC-low", o_sydll)); // dll_
-          pgData.Add( new pagesSetupData("Kin-DC-up", o_sydul));
-         break;
+           pgData.Add( new pagesSetupData("Compos", o_syxea)); // xa_
+           pgData.Add( new pagesSetupData("DComp", o_syxed));  // xd_
+           pgData.Add( new pagesSetupData("IComp", o_sybi));   // bi_
+           pgData.Add( new pagesSetupData("Phases", o_syphm)); // xp_
+           pgData.Add( new pagesSetupData("Kin-DC-low", o_sydll)); // dll_
+           pgData.Add( new pagesSetupData("Kin-DC-up", o_sydul)); // dul_
+           break;
 
      default: break;
      }
@@ -645,8 +644,9 @@ void ProcessWizard::defineWindow(char type)
 
     case P_TITRSING:
           {
-              lAbout->setText("then select one or more sorbed species from the Sorbed list, and skip the next wizard page");
-              sub1->setText("Inverse titration (single point)");
+              lAbout->setText("Please, select the titrant from Compos, DComp or IComp list; then select 'pH' in 'Other items',\n"
+                              "   set ipH[1] = 0, and skip the next wizard page. ");
+              sub1->setText("Inverse pH titration (single point)");
               sub1->setChecked(true);
               sub2->hide();
               sub3->hide();
@@ -656,8 +656,8 @@ void ProcessWizard::defineWindow(char type)
               TIArray<pagesSetupData> pgData1;
               GetListsnRT( MD_MULTI, pgData1,  scalarsList );
 
-              pgData.Add( new pagesSetupData("Functions", -1));
-              QListWidgetItem *item1 = new QListWidgetItem( "Functions",  listObj);
+              pgData.Add( new pagesSetupData("Other items", -1));
+              QListWidgetItem *item1 = new QListWidgetItem( "Other items",  listObj);
 
               // add page
               QWidget *page1 = new QWidget();
@@ -683,6 +683,23 @@ void ProcessWizard::defineWindow(char type)
               break;
 
    case P_REACTORS:
+              {
+                lAbout->setText("Please, choose the reactors mode above. 'Flushing' evolves the fluid and 'Leaching' changes the solid.\n"
+                                "In the case of Compos source of solid and fluid, respectively, select this first from the Compos list.\n"
+                                "In all cases, it may be necessary to clean the system recipe by removing all inputs that are already \n"
+                                "   covered in the fluid and solids compositions. Do this by selecting Compos, DComp, IComp inputs \n"
+                                "   that must be zeroed off (check the parent system, if necessary).\n"
+                                "When ready, proceed to the next wizard page to select what to plot depending on the process type\n "
+                                "   (in 'Flushing' mode, some properties of fluids; in 'Leaching' mode, properties of solid phases)." );
+                sub1->setText("Flushing, SysEq source");
+                sub2->setText("Flushing, Compos source");
+                sub3->setText("Leaching, SysEq source");
+                sub4->setText("Leaching, Compos source");
+                for(jj=0; jj<6; jj++ )
+                  QObject::connect( pLsts[jj], SIGNAL(itemSelectionChanged()),
+                                  this, SLOT(CmSetMode()));
+               }
+               break;
           break;
 
    default: break;
@@ -874,8 +891,9 @@ int  ProcessWizard::getNPV( char type, int subtype)   // get number of points
                ret = 1;
                i1 = getNPoints( 7 ); // iNu
                if( i1 == -1 )
-                  tIters->item(0, 7)->setText( QString::number( 0.01, 'g', 3 ));  // set iNu[0] to 0.01
-               i2 = getNPoints( 8 ); // ipXi
+                  tIters->item(0, 7)->setText( QString::number( 0.001, 'g', 3 ));  // set iNu[0] to 0.01
+//               tIters->item(1, 8)->setText( QString::number( 0, 'g', 3 ));  // set ipH[1] to 0
+               i2 = getNPoints( 8 ); // ipH
                if( i2 == -1 )
                {
                    setIterColumn( 8, 6., 0., 0.01 );
@@ -896,7 +914,12 @@ int  ProcessWizard::getNPV( char type, int subtype)   // get number of points
            // To be done
            break;
     case P_REACTORS:
-           // To be done
+           ret = getNPoints( 0 ); // iTm
+           if( ret <= 1 )
+           {
+               ret = 101;
+               setIterColumn( 0, 1000, 1100, 1 );
+           }
            break;
    default: break;
    }
@@ -1140,8 +1163,155 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                }
        break;
    case P_REACTORS:
-            break;
+       {  c_PsEqn->setChecked(true);
+          QString Aqg = "aq_gen";
+          QString xaName = "Selected_first";
 
+          lst = getSelected( "Phases" );
+          if( lst.count() > 0 )
+           Aqg = lst[0].trimmed();
+
+          if( subtype == 1 || subtype == 3  ) //xa select_first
+          {    lst = getSelected( "Compos" );
+              if( lst.count() > 0 )
+               xaName = lst[0].trimmed();
+          }
+          double from, until;
+          int iNu = 0, ipXi = 0;
+          from = tIters->item(0,7)->data(Qt::DisplayRole).toDouble();
+          until = tIters->item(1,7)->data(Qt::DisplayRole).toDouble();
+          if( fabs(from)>1e-30 ||  fabs(until)>1e-30 )
+              iNu = 1;
+          from = tIters->item(0,6)->data(Qt::DisplayRole).toDouble();
+          until = tIters->item(1,6)->data(Qt::DisplayRole).toDouble();
+          if( fabs(from)>1e-30 ||  fabs(until)>1e-30 )
+              ipXi = 1;
+
+          if( subtype == 0  )
+          {         // Flushing with SysEq source for solid composition
+            ret = QString("$ irreversible fluid-rock interaction (Flushing)\n");
+            if( iNu )
+              ret += QString( "xp_[{%1}] =: cNu;\n"
+                              "$ To use if iNu is not set\n"
+                              "$ xp_[{%1}] =: phM[{%1}];\n").arg(Aqg);
+            else
+              ret += QString( "$xp_[{%1}] =: cNu;\n"
+                              "$ To use if iNu is not set\n"
+                              "xp_[{%1}] =: phM[{%1}];\n").arg(Aqg);
+            ret += QString( "$ cXi is current solid/water mass ratio\n");
+            if( ipXi )
+              ret += QString( "MbXs =: cXi * xp_[{%1}];\n"
+                              "$ Take the current mass of solids if ipXi is not set\n"
+                              "$ MbXs =: pmXs;\n").arg(Aqg);
+            else
+              ret += QString( "$ MbXs =: cXi * xp_[{%1}];\n"
+                               "$ Take the current mass of solids if ipXi is not set\n"
+                               " MbXs =: pmXs;\n").arg(Aqg);
+           ret += QString( "$ Cumulative reacted solid/water ratio\n"
+                           "modC[J] =: (J>0? modC[J-1]+MbXs/xp_[{%1}]: MbXs/xp_[{%1}] );\n"
+                           "$ modC[J] =: pmXs;\n\n"
+                           "$ Clean up the rest of the system recipe\n").arg(Aqg);
+        }
+        if( subtype == 1 )
+        {          // Flushing with Compos source for solid composition
+            ret = QString("$ irreversible fluid-rock interaction (Flushing)\n");
+            if( iNu )
+              ret += QString( "xp_[{%1}] =: cNu;\n"
+                              "$ To use if iNu is not set\n"
+                              "$ xp_[{%1}] =: phM[{%1}];\n").arg(Aqg);
+            else
+              ret += QString( "$ xp_[{%1}] =: cNu;\n"
+                              "$ To use if iNu is not set\n"
+                              "xp_[{%1}] =: phM[{%1}];\n").arg(Aqg);
+            ret += QString( "$ cXi is current solid/water mass ratio\n");
+            if( ipXi )
+                ret += QString( " xa_[{%2}] =: cXi * xp_[{%1}];\n"
+                              "$ Take the current mass of solids if ipXi is not set\n"
+                              "$ xa_[{%2}] =: pmXs;").arg(Aqg,xaName);
+            else
+                ret += QString( "$ xa_[{%2}] =: cXi * xp_[{%1}];\n"
+                              "$ Take the current mass of solids if ipXi is not set\n"
+                              "xa_[{%2}] =: pmXs;").arg(Aqg,xaName);
+
+            ret += QString( "$ Cumulative reacted solid/water ratio\n"
+                           "modC[J] =: (J>0? modC[J-1]+xa_[{%2}]/xp_[{%1}]: xa_[{%2}]/xp_[{%1}] );\n"
+                           "$ modC[J] =: pmXs;\n\n"
+                           "$ Clean up the rest of the system recipe\n").arg(Aqg);
+
+       }
+        if( subtype == 2  )
+        {      // Leaching with SysEq source for fluid composition
+          ret = QString("$ irreversible fluid-rock interaction (Leaching)\n");
+          if( iNu )
+            ret += QString( " MbXs =: cNu;\n"
+                            "$ To use if iNu is not set\n"
+                            "$ MbXs =: pmXs;\n");
+          else
+              ret += QString( "$ MbXs =: cNu;\n"
+                              "$ To use if iNu is not set\n"
+                              " MbXs =: pmXs;\n");
+          ret += QString( "$ cXi is current water/solid ratio\n");
+          if( ipXi )
+            ret += QString( "xp_[{%1}] =: cXi*MbXs;\n"
+                            "$ Take the current mass of fluid if ipXi is not set\n"
+                            "$ xp_[{%1}] =: phM[{%1}]; \n").arg(Aqg);
+          else
+              ret += QString( "$ xp_[{%1}] =: cXi*MbXs;\n"
+                              "$ Take the current mass of fluid if ipXi is not set\n"
+                              "xp_[{%1}] =: phM[{%1}]; \n").arg(Aqg);
+         ret += QString( "$ Cumulative reacted water/solid ratio \n"
+                         "modC[J] =: (J>0? modC[J-1]+xp_[{%1}]/MbXs: xp_[{%1}]/MbXs);\n"
+                         "$ modC[J] =: phM[{%1}];\n"
+                         "\n"
+                         "$ Clean up the rest of the system recipe\n").arg(Aqg);
+      }
+       if( subtype == 3  )
+        {       // Leaching with Compos source for fluid composition
+          ret = QString("$ irreversible fluid-rock interaction (Leaching)\n");
+          if( iNu )
+            ret += QString( " MbXs =: cNu;\n"
+                            "$ To use if iNu is not set\n"
+                            "$ MbXs =: pmXs;\n");
+          else
+              ret += QString( "$ MbXs =: cNu;\n"
+                              "$ To use if iNu is not set\n"
+                              " MbXs =: pmXs;\n");
+          ret += QString( "$ cXi is current water/solid ratio\n");
+          if( ipXi )
+            ret += QString( " xa_[{%2}] =: cXi*MbXs;\n"
+                            "$ Take the current mass of fluid if ipXi is not set\n"
+                            "$ xa_[{%2}] =: phM[{%1}];\n").arg(Aqg,xaName);
+          else
+              ret += QString( "$ xa_[{%2}] =: cXi*MbXs;\n"
+                              "$ Take the current mass of fluid if ipXi is not set\n"
+                              " xa_[{%2}] =: phM[{%1}];\n").arg(Aqg,xaName);
+         ret += QString( "$ Cumulative reacted water/solid ratio \n"
+                         "modC[J] =: (J>0? modC[J-1]+xa_[{%2}]/MbXs: xa_[{%2]/MbXs);\n"
+                         "$ modC[J] =: phM[{%1}];\n"
+                         "\n"
+                         "$ Clean up the rest of the system recipe\n").arg(Aqg);
+     }
+        // Cleaning part for all submods
+        for(int jj=0; jj<6; jj++ )
+        {
+          int nO = pgData[jj].nObj;
+          lst = getSelected( jj );
+          gstring oName = aObj[nO].GetKeywd();
+
+          for(ii=0; ii<lst.count();ii++)
+          {
+            if( ii == 0 && nO == o_syphm ) // xp aq_gen;
+              continue;
+            if( ii == 0 && nO == o_syxea &&
+                (subtype == 1 || subtype == 3 ) ) //xa select_first
+              continue;
+           lst[ii] = lst[ii].trimmed();
+           ret  += QString("%1[{%2}] =: 0.;\n").arg(oName.c_str(), lst[ii]);
+          }
+
+        }
+     }
+     break;
      default: break;
      }
 
@@ -1394,12 +1564,13 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
                  ret = QString(
                          "xp[J] =: %2; \n"
                          "yp[J][0] =: %1;  \n"
-                         "yp[J][1] =: cpH; \n").arg(com, pH);
+                         "yp[J][1] =: pH - ipH[0]; \n").arg(com, pH);
                 pGraph->setValue( 2 );
                }
        break;
    case P_REACTORS:
-        default: break;
+        // No special script actions for now
+   default: break;
      }
 
    if( lineNames.GetCount() > 0)
@@ -1425,14 +1596,13 @@ void ProcessWizard::setMode(int subtype)
                 pLsts[0]->setDisabled(subtype!=2);
                 listObj->setDisabled(subtype!=2);
                 break;
+    case P_REACTORS:
     case P_TITRSING:
     case P_INV_TITR:
     case P_LIP:
     case P_SEQUENT: page1Changed = true;
                  setCalcScript( type, subtype );
                 break;
-    case P_REACTORS:
-         break;
     default : break;
     }
 }
@@ -1462,15 +1632,24 @@ void ProcessWizard::setupPages()
   QListWidget* lstIndexes1;
   TCStringArray lst;
 
+  sub1->setChecked(true);
+  sub1->setVisible(true);
+  sub2->setVisible(true);
+  sub3->setVisible(true);
+  sub4->setVisible(true);
+
   // clear old pages
     if( pageLists->count() > 0)
-    { for(jj=pageLists->count()-1; jj>0; jj--)
+    {
+       while(pageLists->count()>0)
+      //  for(jj=pageLists->count()-1; jj>0; jj--)
       {
-        pageLists->removeWidget( pageLists->widget(jj) );
+        pageLists->removeWidget( pageLists->widget(pageLists->count()-1/*jj*/) );
       }
     }
-    pLsts.clear();
+    pLsts.clear();  // and all connect
     listObj->clear();
+    listObj->setDisabled(false);
 
    // init new pages
    for(uint ii=0; ii<pgData.GetCount();ii++)
@@ -1540,8 +1719,11 @@ int  ProcessWizard::getNPoints( int col )
              nP = 1;            // changed by DK 25.02.10
          else nP = -1;
      }
-     else
-         nP  = (int)((until-from)/step)+1;
+     else {
+         if( fabs(until) > 1e-30 )
+             nP  = (int)((until-from)/step)+1;
+         else nP = -1;          // changed by DK 21.05.10
+     }
 
       if( (nP < 1 || nP > 9999) && nP != -1 )
       {

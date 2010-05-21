@@ -772,11 +772,11 @@ scalarsList.Add( new pagesSetupData("Fi_[3]",o_syfi,3)); // Number of phases wit
 // Number of phases with non-zero surface areas or metastability parameters in yOf vector (Fie)_
 // Number of sorption phases included in this CSD (Fia)_
 // Reserved "
-//o_sypmm   Pmm    F_  1 2   N "Pmin,Pmax pressure interval for parametric problems (reserved) "
-//o_sytmm   Tmm    F_  1 2   N "Tmin,Tmax temperature interval for parametric problems (reserved) "
-//o_syvmm   Vmm    F_  1 2   N "Vmin,Vmax volume interval for parametric problems (reserved) "
-//o_syhmm   Hmm    F_  1 2   N "Hmin,Hmax enthalpy interval for parametric problems (reserved) "
-//o_syproc  Procs  F_  1 4   N "Tau - physical time (for kinetic Process simulators) reserved_
+//o_sypmm   Pmm    F_  1 3   N "min, max, increment for the pressure interpolation"
+//o_sytmm   Tmm    F_  1 3   N "min, max, increment for the temperature interpolation "
+//o_sytdev  TDev   F_  1 2   N "Target deviations for  minimization of thermodynamic potentials"
+//o_symsolids  Msold  F_  1 1   N "Amount of total solids (g) from another equilibrium to add to B_ (provisional)"
+//o_syproc  Procs  F_  1 3   N "Tau - physical time (for kinetic Process simulators) reserved_
 // Xi - current value of process extent variable (reserved)_
 // Nu - current value of process extent variable (reserved)_
 // Reserved "

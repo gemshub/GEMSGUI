@@ -26,6 +26,7 @@
 #include "array.h"
 #include "filters_data.h"
 #include "model_w.h"
+#include "EquatSetupWidget.h"
 
 /*!
   \ class TSystemDelegate
@@ -54,6 +55,7 @@ class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
 
    TIArray<windowSetupData> wnData;
    TIArray<tableSetupData>  tbData;
+   TIArray<pagesSetupData> stData;
    int curPage;
 
    QList<QListWidget *> pLists;
@@ -68,12 +70,15 @@ class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
    // copy data
    QString createString();
    QString createHeader();
+   // working with static list
+   int staticFindRow( int nO, int ndx);
 
 
 public:
 
     InputSystemDialog( QWidget* parent, const char* pkey,
-       TIArray<windowSetupData>& wnData, TIArray<tableSetupData>& tbData  );
+       TIArray<windowSetupData>& wnData, TIArray<tableSetupData>& tbData,
+       TIArray<pagesSetupData>& scalarsList );
     virtual ~InputSystemDialog();
 
 

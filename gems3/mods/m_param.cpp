@@ -60,21 +60,20 @@ const double R_CONSTANT = 8.31451,
 
 SPP_SETTING pa_ = {
     "GEM-Selektor v3.0.0: Numerical flags, controls and thresholds",
-    {   // Typical default set (interim, 04.05.2010) new PhaseSelection( logSI )
-        2,  /* PC */  2,     /* PD */   -5,   /* PRD */
-        1,  /* PSM  */ 90,  /* DP */   1,   /* DW */
-        1, /* DT */     10,   /* PLLG */   1,  /* PE */
-        1000,   /* IIM */
-        1e-6, /* DG */   1e-11,  /* DHB */  1e-23,  /* DS */
-        1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
-        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
-        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
-        1e-7, /* DFYs, */  1e-17,  /* DB */   -1.0,   /* AG */
+    {   // Typical default set (16.05.2010) new PhaseSelection( logSI )
+        2,  /* PC */  2,     /* PD */   -4,   /* PRD */
+        1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
+        1, /* DT */     10,   /* PLLG */   1,  /* PE */  7000, /* IIM */
+        1000., /* DG */   1e-11,  /* DHB */  1e-20,  /* DS */
+        1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+        1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
+        1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
+        1e-6, /* DFYs, */  1e-17,  /* DB */   -1.,   /* AG */
         -0.98,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-        1e-3, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
-        1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-23, /* PhMin, */
+        1e-3, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
+        1e-11,  /* ScMin, */  1e-30, /* DcMin, */   1e-20, /* PhMin, */
         1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-        1e-9,  /* DKIN  */ 0,  /* tprn */
+        1e-8,  /* DKIN  */ 0,  /* tprn */
     },
     "CSC   ",   /* DCpct[6] */  "OjjbC+---",    /* DCpdc[9] */
     "+----M",   /* BCpc[6] */   "K3C   ",   /* REpct[6] */
@@ -105,86 +104,86 @@ SPP_SETTING pa_ = {
 
 BASE_PARAM dfBase[5] =
 	{     // Added on 07.08.2009 to facilitate pre-setting in projects (SD,DK)
-            { // Variant for aquatic systems with moderate non-ideality (interim, 08.12.2009)
-                2,  /* PC */  2,     /* PD */   -5,   /* PRD */
-                1,  /* PSM  */ 90,  /* DP */   1,   /* DW */
+            { // Variant for aquatic systems with moderate non-ideality
+                2,  /* PC */  2,     /* PD */   -4,   /* PRD */
+                1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
                 1, /* DT */     10,   /* PLLG */   1,  /* PE */
-                1000,   /* IIM */
-                1e-6, /* DG */   1e-11,  /* DHB */  1e-23,  /* DS */
-                1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
-	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
-	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
-                1e-7, /* DFYs, */  1e-17,  /* DB */  1,   /* AG */
-                0,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-                1e-3, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
-                1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-23, /* PhMin, */
+                7000,   /* IIM */
+                1000., /* DG */   1e-12,  /* DHB */  1e-20,  /* DS */
+                1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
+                1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
+                1e-6, /* DFYs, */  1e-17,  /* DB */   -1.,   /* AG */
+                -0.98,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                1e-3, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
+                1e-11,  /* ScMin, */  1e-30, /* DcMin, */   1e-20, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-                1e-9,  /* DKIN  */ 0,  /* tprn */
+                1e-8,  /* DKIN  */ 0,  /* tprn */
 	    },
-            { // Variant for aquatic systems with SCMs in sorption phases ((interim, 08.12.2009))
-                2,  /* PC */  2,     /* PD */   -5,   /* PRD */
-                1,  /* PSM  */ 90,  /* DP */  1,   /* DW */
+            { // Variant for aquatic systems with SCMs in sorption phases (16.05.2010)
+                2,  /* PC */  2,     /* PD */   -4,   /* PRD */
+                1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
                 1, /* DT */     10,   /* PLLG */   1,  /* PE */
-                1000,   /* IIM */
-                1e-6, /* DG */   1e-11,  /* DHB */  1e-23,  /* DS */
-                1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
-	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
-	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
-	        1e-7, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
+                7000,   /* IIM */
+                1000., /* DG */   1e-11,  /* DHB */  1e-20,  /* DS */
+                1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
+                1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
+                1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
                 -0.001,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-                1e-3, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
-                1e-11,  /* ScMin, */  1e-33, /* DcMin, */   1e-23, /* PhMin, */
+                1e-3, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
+                1e-11,  /* ScMin, */  1e-30, /* DcMin, */   1e-20, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-                1e-9,  /* DKIN  */ 0,  /* tprn */
+                1e-8,  /* DKIN  */ 0,  /* tprn */
 	    },
-            { // Variant for fluid-rock systems with highly non-ideal phases (interim, 08.12.2009)
-                2,  /* PC */  2,     /* PD */   -5,   /* PRD */
-                1,  /* PSM  */ 90,  /* DP */   1,   /* DW */
+            { // Variant for fluid-rock systems with highly non-ideal phases (16.05.2010)
+                2,  /* PC */  2,     /* PD */   -4,   /* PRD */
+                1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
                 1, /* DT */     10,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
-                1e-6, /* DG */   1e-10,  /* DHB */  1e-23,  /* DS */
-                1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
-	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
-	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
-	        1e-7, /* DFYs, */  1e-17,  /* DB */   -1.0,   /* AG */
-                -0.3,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-                1e-3, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
-                1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-23, /* PhMin, */
+                1000., /* DG */   1e-11,  /* DHB */  1e-20,  /* DS */
+                1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
+                1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
+                1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
+                0.01,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                1e-4, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
+                1e-11,  /* ScMin, */  1e-30, /* DcMin, */   1e-20, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-                1e-9,  /* DKIN  */ 0,  /* tprn */
+                1e-8,  /* DKIN  */ 0,  /* tprn */
 	    },
-            { // Variant of strict settings for highest accuracy (interim, 08.04.2010)
-                2,  /* PC */  2,     /* PD */   -6,   /* PRD */
-                1,  /* PSM  */ 90,  /* DP */   1,   /* DW */
-                -12, /* DT */     10,   /* PLLG */   1,  /* PE */
+            { // Variant of strict settings for highest accuracy (16.05.2010)
+                2,  /* PC */  2,     /* PD */   -4,   /* PRD */
+                1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
+                1, /* DT */     10,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
-                1e-6, /* DG */   1e-10,  /* DHB */  1e-23,  /* DS */
-                1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
-	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
-	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
-                1e-7, /* DFYs, */  1e-17,  /* DB */   -1,   /* AG */
-                -0.97,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-                1e-4, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
-                1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-23, /* PhMin, */
-                1e-5,  /* ICmin */   1e-11,  /* EPS */   1e-3,  /* IEPS */
-                1e-9,  /* DKIN  */ 0,  /* tprn */
+                1000., /* DG */   1e-12,  /* DHB */  1e-20,  /* DS */
+                3e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
+                1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
+                1e-6, /* DFYs, */  1e-17,  /* DB */   -1.,   /* AG */
+                -0.98,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                1e-4, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
+                1e-11,  /* ScMin, */  1e-30, /* DcMin, */   1e-20, /* PhMin, */
+                1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
+                1e-8,  /* DKIN  */ 0,  /* tprn */
             },
-{ // Variant of strict settings for reactive mass transport (interim, 08.12.2009)
-    2,  /* PC */  2,     /* PD */   -5,   /* PRD */
-    1,  /* PSM  */ 90,  /* DP */   1,   /* DW */
-    1, /* DT */     10,   /* PLLG */   1,  /* PE */
-    2500,   /* IIM */
-    1e-6, /* DG */   1e-10,  /* DHB */  1e-23,  /* DS */
-    1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
-    1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
-    1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
-    1e-7, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
-    -0.001,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-    1e-4, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
-    1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-23, /* PhMin, */
-    1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-4,  /* IEPS */
-    1e-9,  /* DKIN  */ 0,  /* tprn */
-}
+            { // Variant of strict settings for reactive mass transport (interim, 08.12.2009)
+                2,  /* PC */  2,     /* PD */   -4,   /* PRD */
+                1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
+                1, /* DT */     10,   /* PLLG */   1,  /* PE */
+                7000,   /* IIM */
+                1000., /* DG */   1e-12,  /* DHB */  1e-20,  /* DS */
+                1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
+                1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
+                1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
+                -0.001,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                1e-3, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
+                1e-11,  /* ScMin, */  1e-30, /* DcMin, */   1e-20, /* PhMin, */
+                1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
+                1e-8,  /* DKIN  */ 0,  /* tprn */
+            }
 	    // More preset parameter structures can be added here
             // (if so, increase number of elements from 5 above and in dfBase() call below)
 	};
@@ -312,6 +311,8 @@ void TProfil::ods_link( int )
     aObj[o_pape].SetPtr( &(pa.p.PE) );
     aObj[o_paiim].SetPtr( &(pa.p.IIM) );
     aObj[o_padg].SetPtr( &(pa.p.DG) );
+    if( pa.p.DG <1 )                     // SD 07/05/2010
+        pa.p.DG = 1e4;
     aObj[o_padhb].SetPtr( &(pa.p.DHB) );
     aObj[o_pads].SetPtr( &(pa.p.DS) );
     aObj[o_padk].SetPtr( &(pa.p.DK) );
@@ -578,13 +579,13 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
     }
 
     // get scaling to constant mass of internal system
-    float inMass = 1., scFactor =1.;
-    inMass = vfGetDouble( par, "Scaling to constant internal mass of the system",
-      "Internal mass (kg)", inMass, 1e-5, 1e5, 4 );
-    if( na->cMs() > 1e-20 )
-        scFactor = inMass / na->cMs();
+    //float inMass = 1., scFactor =1.;
+    //inMass = vfGetDouble( par, "Scaling to constant internal mass of the system",
+    //  "Internal mass (kg)", inMass, 1e-5, 1e5, 4 );
+    //if( na->cMs() > 1e-20 )
+    //    scFactor = inMass / na->cMs();
     // setup from dataBR to Multi
-    na->unpackDataBr( true, scFactor );
+    na->unpackDataBr( true );
     delete na;
 
     // We can get different results in GEMS than in GEMIPM2K
@@ -695,71 +696,65 @@ long int TProfil::testMulti()
   return 0L	;
 }
 
+// Load Thermodynamic data from Database
+void TProfil::CheckMtparam()
+{
+
+  if( fabs( tpp->T - pmp->TCc ) > 1.e-10 ||
+         fabs( tpp->P - pmp->Pc ) > 1.e-9 )
+   { // load new MTPARM on T or P
+      mtparm->LoadMtparm( pmp->TCc, pmp->Pc );
+      pmp->pTPD = 0;
+   }
+
+}
+
+
+/*// Load Thermodynamic data from Lookup Arrays
+void TProfil::CheckMtparamFromLookup()
+{
+
+  if( fabs( tpp->T - pmp->TCc ) > 1.e-10 ||
+      fabs( tpp->P - pmp->Pc ) > 1.e-9 )
+   { // load new MTPARM on T or P
+//      mtparm->LoadMtparmLookup( pmp->TCc, pmp->Pc );
+      pmp->pTPD = 0;
+   }
+
+}
+
+// Build Lookup Arrays internal data
+void TProfil::BuildLookupArrays( )
+{
+
+//  mtparm->LoadLookup( pmp->Tai, pmp->Pai );
+
+}
+*/
+
+
 // GEM IPM calculation of equilibrium state in MULTI
-// Modified on 10.09.2007 to return elapsed GEMIPM runtime in seconds
-// Modified on 15.11.2007 to return more detailed info on FIA and IPM iterations
-// and precision refinement loops
+// without test changings in system
 //
 double TProfil::calcMulti( long int& NumPrecLoops, long int& NumIterFIA, long int& NumIterIPM )
 {
   TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
   calcFinished = false;
 
-  if( fabs( tpp->curT - pmp->TCc ) > 1.e-10 ||
+  /*if( fabs( tpp->curT - pmp->TCc ) > 1.e-10 ||
          fabs( tpp->curP - pmp->Pc ) > 1.e-10 )
    { // load new MTPARM on T or P
       mtparm->LoadMtparm( pmp->TCc, pmp->Pc );
       pmp->pTPD = 0;
    }
-pmp->t_start = clock();     // Added 06.09.2007 by DK to check pure runtime
-pmp->t_end = pmp->t_start;
-pmp->t_elap_sec = 0.0;
-pmp->ITF = pmp->ITG = 0;
+  */
 
-FORCED_AIA:
-   multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
-	if( pmp->pNP )
-   {
-	   if( pmp->ITaia <=30 )       // Foolproof
-		  pmp->IT = 30;
-	   else
-		  pmp->IT = pmp->ITaia;     // Setting number of iterations for the smoothing parameter
-   }
+  multi->calcEqustat( 0, NumIterFIA, NumIterIPM );
 
-   bool IAstatus;
-   IAstatus = multi->AutoInitialApprox( );
-   if( IAstatus == false )
-   {
-      multi->MultiCalcIterations(-1 );    // Calling main IPM2 sequence
-   }
-
-//   NumPrecLoops = pmp->W1+pmp->K2-1;
-   NumIterFIA = pmp->ITF;
-   NumIterIPM = pmp->ITG;
-pmp->IT = pmp->ITG;
-
-   	if( pmp->MK == 2 )
-   	{	if( pmp->pNP )
-            {
-       	    pmp->pNP = 0;
-       	    pmp->MK = 0;
-       	    goto FORCED_AIA;  // Trying again with AIA set after bad SIA
-            }
-       	else
-       		Error( pmp->errorCode ,pmp->errorBuf );
-   	}
-
-   if( pmp->MK || pmp->PZ ) // no good solution
-   {
-    	 testMulti();
-   //cout << "Iter"  << " MK " << pmp->MK << " PZ " << pmp->PZ << " " << pmp->errorCode << endl;
-   }
-pmp->t_end = clock();
-pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
   calcFinished = true;
-
   STat->setCalcFlag( true );
   STat->CellChanged();
+
   return pmp->t_elap_sec;
 }
 
@@ -771,7 +766,7 @@ pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
 // pTPD, // State of reloading thermod data: 0- all    2 - no
 void TProfil::PMtest( const char *key )
 {
-    double V, T, P;
+    //double V, T, P;
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
     TProcess* Proc = (TProcess*)(&aMod[RT_PROCES]);
 
@@ -804,7 +799,8 @@ void TProfil::PMtest( const char *key )
             pmp->pNP = 1;
     }
 
-    // Get V, P and T from SysEq record key
+    multi->MultiKeyInit( key );
+    /* Get V, P and T from SysEq record key
     gstring s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME,MAXPTN);
     V = atof(s.c_str());
     s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);
@@ -812,14 +808,15 @@ void TProfil::PMtest( const char *key )
     s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN+MAXPTN,MAXPTN);
     T = atof(s.c_str());
 
-    if( fabs ( pmp->VE - V ) > 1.e-10 )
-        pmp->VE = V;
+    //if( fabs ( pmp->VE - V ) > 1.e-10 )
+    //    pmp->VE = V;
     if( fabs( tpp->curT - T ) > 1.e-10 ||
             fabs( tpp->curP - P ) > 1.e-10 )
     { // load new MTPARM on T or P
         mtparm->LoadMtparm( T, P );
         pmp->pTPD = 0;
     }
+    */
 }
 
 

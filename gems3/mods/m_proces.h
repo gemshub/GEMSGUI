@@ -189,8 +189,8 @@ protected:
     void pe_qekey();
     void pe_test();
     void pe_text_analyze();
-    void proc_titr();
-    double f_proc( double x );
+//    void proc_titr();
+//    double f_proc( double x );
     void keyTest( const char *key );
     void _pr_tab( const char *key );
     void CalcEquat();
@@ -239,6 +239,8 @@ public:
 
    class UserCancelException {};
     void internalCalc();
+
+   double f_proc( double x );
 
 };
 

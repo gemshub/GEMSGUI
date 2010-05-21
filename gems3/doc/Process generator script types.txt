@@ -64,8 +64,8 @@ To construct the T,P phase diagram, the pgExpr script below can be used:
 $ Plotting calculated grid as T,P diagram 
 xp[J] =: vT[J];
 $ Ordinates: Presence of the phase in equilibrium
-yp[J][0] =: (Xa[{Phase1}]>1e-8? vP[J]/10: empty());
-yp[J][1] =: (Xa[{Phase2}]>1e-8? vP[J]/10: empty());
+yp[J][0] =: (Xa[{Phase1}]>0? vP[J]/10: empty());
+yp[J][1] =: (Xa[{Phase2}]>0? vP[J]/10: empty());
 $ ...... more phase names
 
 Comments: The script uses values collected in the vT vector as an abscissa, 
@@ -317,8 +317,12 @@ must be replaced by cpH =: ipH[0]-pH;
 
 <Important: please debug process CaSrBaCS:G:TestInvT:1:0:1:25:0:SingleInvTit:T:>
 
-The pgExpr script may not be necessary in this case of process simulator. 
+The pgExpr script should display the amount of titrant to add to recipe for 
+obtaining equilibrium pH value prescribed in ipH[0]: 
 
+xp[J] =: pH;
+yp[J][0] =: xd_[{Titrant}]; 
+yp[J][1] =: pH - ipH[0];
 
 
 Batch inverse titration sequence (G) - typical for property-vs-pH diagrams  
@@ -441,7 +445,151 @@ in mol/g if SorbentMass is expressed in g), as well as the total isotherm
 and the Kd plot (the last statement). 
 
 
+<Added 20.05.2010>
+Sequential reactor (R) scheme (reciprocal, uses equilibrium compositions of some 
+(fluid) phases, as well as total stoichiometry of all solids) 
 
-Sequential reactor (R) scheme (reciprocal, uses equilibrium composition of some phases)
+There are two main types of such reaction-path simulations. 
+
+R-1 (Flushing). The aqueous solution (+gas phase optionally) moves from previous to 
+the next system after reacting with the same bulk solid composition taken from another 
+SysEq record or from a Compos record. This is controlled by solid/fluid ratio.
+Usually, the evolution of aqueous/fluid composition (e.g. pH, total dissolved 
+molalities, Eh, gas fugacities) is monitored as function of the process step 
+or of the cumulative solid/fluid mass ratio. In the parent system (remake), the 
+flags PbPH and PPHk must be on, and the SysEq record (to supply solids total 
+composition) must be already selected.   
+
+R-2 (Leaching). The solids are moved from previous to the next system after reacting 
+with the same bulk aqueous/fluid composition taken from another SysEq record or 
+from a Compos record. This is controlled by fluid/solid mass ratio.
+Usually, the evolution of amounts of solid phases and their composition is 
+monitored as function of the process step or of the cumulative fluid/solid ratio.
+In the parent system (remake), the flags PbPH must be on and PPHk must be off, 
+and the SysEq record (to supply the fluid composition) already selected.      
+
+The iterators should be set as shown below (there must be increment in iTm, 
+the increment in ipXi is optional, the iNu values are optional).
+
+iTm	iV	iP	iTC	iNv	iTau	ipXi	iNu	ipH	ipe
+111	0	1	25	0	0	-2.66	13900	0	0
+161	0	1	25	0	0	-2.76	13900	0	0
+1	0	0	0	0	0	-0.002	0	0	0
+
+The ipXi iterator sets the (logarithm of) solid/fluid ratio (type R-1) or 
+fluid/solid ratio (type R-2). The iNu may define the amount of fluids (type R-1)
+or solids (type R-2). If iNu is not set (contains zeros), the script will use
+the mass of fluid (R-1) or solids (R-2) in the current equilibrium state.
+  
+
+The P_expr script template, case R-1 (Flushing), 
+          solid composition from another SysEq record: 
+
+$ irreversible fluid-rock interaction (Flushing) 
+xp_[{aq_gen}] =: cNu;
+$ To use if iNu is not set
+$ xp_[{aq_gen}] =: phM[{aq_gen}];
+$ cXi is current solid/water mass ratio
+MbXs =: cXi * xp_[{aq_gen}];
+$ Take the current mass of solids if ipXi is not set
+$ MbXs =: pmXs;
+$ Cumulative reacted solid/water ratio 
+modC[J] =: (J>0? modC[J-1]+MbXs/xp_[{aq_gen}]: MbXs/xp_[{aq_gen}] ); 
+$ modC[J] =: pmXs;
+
+$ Clean the rest of the system recipe
+xa_[{Aqua}] =: 0; xa_[{HCl}] =: 0; xa_[{NaCl}] =: 0;
+xa_[{NaOH}] =: 0; xa_[{SiO2}] =: 0; ......
+
+
+The P_expr script template, case R-1 (Flushing), 
+   solid composition taken from a Compos record (selected first): 
+
+$ irreversible fluid-rock interaction (Flushing) 
+xp_[{aq_gen}] =: cNu;
+$ To use if iNu is not set
+$ xp_[{aq_gen}] =: phM[{aq_gen}];
+$ cXi is current solid/water mass ratio
+xa_[{Selected_first}] =: cXi * xp_[{aq_gen}];
+$ Always take the current mass of solids if ipXi is not set
+$ xa_[{Selected_first}] =: pmXs;
+$ Cumulative reacted solid/water ratio 
+modC[J] =: (J>0? modC[J-1]+xa_[{Selected_first}]/xp_[{aq_gen}]: 
+           xa_[{Selected_first}]/xp_[{aq_gen}] );
+$ modC[J] =: pmXs; 
+
+$ Clean the rest of the system recipe
+xa_[{Aqua}] =: 0; xa_[{HCl}] =: 0; xa_[{NaCl}] =: 0;
+xa_[{NaOH}] =: 0; xa_[{SiO2}] =: 0; ......
+
+
+The P_expr script template, case R-2 (Leaching), 
+         fluid composition from another SysEq record:
+
+$ irreversible fluid-rock interaction (Leaching) 
+ MbXs =: cNu; 
+$ To use if iNu is not set
+$ MbXs =: pmXs; 
+$ cXi is current water/solid ratio
+ xp_[{aq_gen}] =: cXi*MbXs;
+$ Take the current mass of fluid if ipXi is not set
+$ xp_[{aq_gen}] =: phM[{aq_gen}]; 
+$ Cumulative reacted water/solid ratio 
+modC[J] =: (J>0? modC[J-1]+xp_[{aq_gen}]/MbXs: xp_[{aq_gen}]/MbXs); 
+$ modC[J] =: phM[{aq_gen}];
+
+$ Clean the rest of the system recipe
+xa_[{CaCO3}] =: 0;  xa_[{CaSO4}] =: 0; xa_[{FeCO3}] =: 0; 
+xd_[{N2}] =: 0; ......
+
+
+The P_expr script template, case R-2 (Leaching), 
+    fluid composition taken from a Compos record (selected first): 
+
+$ irreversible fluid-rock interaction (Leaching) 
+ MbXs =: cNu; 
+$ To use if iNu is not set
+$ MbXs =: pmXs; 
+$ cXi is current water/solid ratio
+ xa_[{Selected_first}] =: cXi*MbXs;
+$ Take the current mass of fluid if ipXi is not set
+$ xa_[{Selected_first}] =: phM[{aq_gen}]; 
+$ Cumulative reacted water/solid ratio 
+modC[J] =: (J>0? modC[J-1]+xa_[{Selected_first}]/MbXs: 
+    xa_[{Selected_first}]/MbXs); 
+$ modC[J] =: phM[{aq_gen}];
+
+$ Clean the rest of the system recipe
+xa_[{CaCO3}] =: 0;  xa_[{CaSO4}] =: 0; xa_[{FeCO3}] =: 0; 
+xd_[{N2}] =: 0; ......
+
+
+In both R1 and R2 cases, it is important to clean the system recipe
+as shown above (i.e. remove all inputs that are already covered in 
+fluid and solids compositions). 
+
+The pgExpr script template (should be assembled using the selection dialog): 
+
+xp[J] =: modC[J];
+$ xp[J] =: cTm; 
+yp[J][0] =: lga[{Component1}];
+yp[J][1] =: (x[{Component2}]? lg(x[{Component2}]): empty());
+yp[J][2] =: (Xa[{Phase1}]? 1: empty{());
+yp[J][3] =: (Xa[{Phase2}]? 2: empty{());
+$ .... other feasible properties of the system, 
+$      any components and phases can be added
+
+The actual names of components and phases shall be taken from the usual output 
+selection lists for constructing the pgExpr script. 
+
+In R-1 type of the process, the properties to plot are usually related to 
+fuids. In R-2 process, the properties of solid phases and their end-members
+are usually collected and plotted.
+
+
+
+
+
+
 
 

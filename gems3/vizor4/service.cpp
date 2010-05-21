@@ -546,9 +546,10 @@ vfElements(QWidget* par, const char * prfName,
 
 bool
 vfSystemInput(QWidget* par, const char * p_key,
-  TIArray<windowSetupData>& wnData, TIArray<tableSetupData>& tbData )
+  TIArray<windowSetupData>& wnData, TIArray<tableSetupData>& tbData,
+  TIArray<pagesSetupData>& scalarsList )
 {
-     InputSystemDialog pdlg( par, p_key, wnData, tbData );
+     InputSystemDialog pdlg( par, p_key, wnData, tbData, scalarsList );
      if( !pdlg.exec() )
       return false;
 

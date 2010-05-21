@@ -365,7 +365,9 @@ struct tableSetupData
    tableSetupData( tableSetupData& d ):
            nWin(d.nWin), nObj(d.nObj), nIdx(d.nIdx), val(d.val), unit(d.unit),
            objName(d.objName), ndxName(d.ndxName)
-   { }
+   {
+       // cout << "nWin = " << nWin << " nObj = " << nObj << " nIdx = " << nIdx << endl;
+   }
 
 };
 

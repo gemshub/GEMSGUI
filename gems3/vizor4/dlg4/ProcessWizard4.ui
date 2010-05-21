@@ -269,7 +269,7 @@ p, li { white-space: pre-wrap; }
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Step 2 - Process Simulator equations</string>
+          <string>Step 2 - Process Simulator equations (click 'Next' to retain the old script)</string>
          </property>
         </widget>
        </item>
@@ -550,7 +550,7 @@ p, li { white-space: pre-wrap; }
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Step 3 - Selection of items to sample (click &quot;Next&quot; without selecting anything to retain the old script)</string>
+          <string>Step 3 - Selection of items to sample/plot (click &quot;Next&quot; without selecting anything to retain the old script)</string>
          </property>
         </widget>
        </item>

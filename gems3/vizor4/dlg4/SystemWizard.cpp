@@ -86,9 +86,6 @@ SystemWizard::SystemWizard( const char* pkey, char flgs[40],
     pName->setText(name.c_str());
     pComment->setText(comment.c_str());
 
-    if( flgs[13] != '-' )
-            pPbPh->setChecked( true );
-    else pPbPh->setChecked( false );
     if( flgs[15] != '-' || flgs[17] != '-')
             pPLim->setChecked( true );
     else pPLim->setChecked( false );
@@ -140,6 +137,16 @@ SystemWizard::SystemWizard( const char* pkey, char flgs[40],
 
 // Page 2
     pKey->setText(EQkey.c_str());
+    if( flgs[13] != '-' )
+            pPbPh->setChecked( true );
+    else pPbPh->setChecked( false );
+
+    if( flgs[18] == '+' )
+            r1->setChecked( true );
+    else if( flgs[18] == '-' )
+            r2->setChecked( true );
+         else
+            r3->setChecked( true );
 
 }
 
@@ -164,10 +171,19 @@ gstring SystemWizard::getEQkey(  )
 
 void SystemWizard::getFlags( char flgs[40] )
 {
-// Page 1 
+// Page 2
     if( pPbPh->isChecked() )
           flgs[13] = '+';
     else flgs[13] = '-';
+
+    if( r1->isChecked() )
+      flgs[18] = '+';
+    else  if( r2->isChecked() )
+          flgs[18] = '-';
+      else
+          flgs[18] = '*';
+
+// Page 1
 
     if( pPLim->isChecked() )
           flgs[15] = flgs[17] = '+';
@@ -216,6 +232,7 @@ void SystemWizard::getFlags( char flgs[40] )
     if( pPXlam->isChecked() )
           flgs[36] = '+';
     else flgs[36] = '-';
+
 
 }
 

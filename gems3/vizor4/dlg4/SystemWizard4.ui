@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>841</width>
-    <height>528</height>
+    <width>827</width>
+    <height>551</height>
    </rect>
   </property>
   <property name="font">
@@ -37,7 +37,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_3">
@@ -173,7 +173,7 @@ p, li { white-space: pre-wrap; }
           <item row="3" column="1">
            <widget class="QCheckBox" name="pPLim">
             <property name="text">
-             <string>Keep lower/upper restrictions for amounts of phases </string>
+             <string>Keep low/upp restrictions for amounts of phases (reserved) </string>
             </property>
            </widget>
           </item>
@@ -187,7 +187,7 @@ p, li { white-space: pre-wrap; }
           <item row="4" column="1">
            <widget class="QCheckBox" name="pPV">
             <property name="text">
-             <string>Set a constraint on total volume V of the system</string>
+             <string>Set a constraint on total volume V of the system (reserved)</string>
             </property>
            </widget>
           </item>
@@ -211,7 +211,7 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QLabel" name="label">
          <property name="sizePolicy">
@@ -221,7 +221,7 @@ p, li { white-space: pre-wrap; }
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Step 2 - Additional CSD configuration</string>
+          <string>Step 2 - Additional CSD configuration (for sequential reactor simulations)</string>
          </property>
         </widget>
        </item>
@@ -243,23 +243,24 @@ p, li { white-space: pre-wrap; }
          <property name="title">
           <string/>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
            <widget class="QCheckBox" name="pPbPh">
             <property name="text">
-             <string>Use the xp_ vector of the system recipe to set quantities of phases from another calculated equilibrium state</string>
+             <string>PbPH flag: Use xp_ or MbXs in the system recipe to add masses of phases from another or current equilibrium state</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item>
            <widget class="QLabel" name="label_4">
             <property name="text">
              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Composition of phase(s) referred to in the xp_ vector can be obtained either from another SysEq record with a key given in the field below; if nothing or '*' is given there, you will be asked to select one. &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;If you cancel selection of SysEq record key or type the &amp;quot;empty&amp;quot; value --- in the field below then, upon calculation of this SysEq record, the program will attempt getting compositions of phases from what is available in RAM from the previously read or calculated single thermodynamic system. This may be useful e.g. for various &amp;quot;sequential reactor&amp;quot; models.  &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Composition of phase(s) and total solids can be obtained from another SysEq record with a key selected into the field below; if nothing or '*' is given there, you will be asked to select one such record. &lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;If you cancel selection of SysEq record key or type &amp;quot;---&amp;quot; (&amp;quot;empty&amp;quot; value) in the field below, then, upon calculation of this SysEq record,  the resulting equilibrium compositions of phases will be available in cloning a new SysEq record. This simplifies setup of the &amp;quot;sequential reactor&amp;quot; models.  &lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;  &lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Key of SysEq record to be used in getting phase compositions for the xp_ recipe vector:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -271,8 +272,44 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item>
            <widget class="QLineEdit" name="pKey"/>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="grPPHk">
+            <property name="title">
+             <string>Phase compositions to be taken from another SysEq record with the above key: </string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QRadioButton" name="r2">
+               <property name="text">
+                <string>(fluid) phases bXa (R-1, Flush)</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="r1">
+               <property name="text">
+                <string>total solids bXs (R-2, Leaching) </string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="r3">
+               <property name="text">
+                <string>Both bXs and bXa</string>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -288,7 +325,7 @@ p, li { white-space: pre-wrap; }
          <property name="title">
           <string>What will happen after you click &quot;Finish&quot;</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QLabel" name="textLabel13">
             <property name="text">

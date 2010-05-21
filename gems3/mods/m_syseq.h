@@ -209,7 +209,6 @@ public:
     void RenameList( const char* newName, const char *oldName );
 
     bool MakeRecord( const char *key );
-    virtual TCIntArray getDBObjectList( int ); // added SD 26/01/2010
 
 };
 #endif   //   _m_syseq_h

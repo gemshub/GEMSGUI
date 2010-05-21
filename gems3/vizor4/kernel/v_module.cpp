@@ -1934,28 +1934,6 @@ TCModule::SelectFileList(int mode)
     return arr;
 }
 
-TCIntArray
-TCModule::getDBObjectList( int )
-{
-    TCIntArray arr;
-    int LastObj = db->GetObjFirst()+db->GetObjCount();
-    for( int i=db->GetObjFirst(); i<LastObj; i++ )
-    {
-      if( aObj[i].IsNull())
-       continue;
-      switch( aObj[i].GetType() )
-      {
-         case I_:  if( aObj[i].GetN() > 3 || aObj[i].GetM() >3 ) //
-                 continue;
-         case L_:
-         case D_:
-         case F_: arr.Add( i );
-         default: break;
-       }
-    }
-    return arr;
-}
-
 //========================================================
 
 // descructor for TModList for cleaning up Modules from memory
