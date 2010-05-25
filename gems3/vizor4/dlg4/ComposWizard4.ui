@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>633</width>
+    <width>688</width>
     <height>563</height>
    </rect>
   </property>
@@ -37,7 +37,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout">
@@ -76,12 +76,9 @@
           <enum>QFrame::Plain</enum>
          </property>
          <property name="text">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;Compos record keeps data for a Predefined Composition Objects (PCO). PCO can describe a salt, the air, a mineral, a rock, a natural water etc. which can be complex, but can be treated through record key as a single entity in setting up the recipe of chemical system. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt;The Compos record can be configured in the most convenient way, depending on the source data: as IC or DC amounts/concentrations; as user-defined formulae (UDF); or as a large formula entered into a text editor field.  Upon re-calculation, all such data will be converted into  into a single PCO vector as IC mole amounts, optionally scaled to a given total PCO mass. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Compos record keeps data for a Predefined Composition Objects (PCO). PCO can describe a salt, the air, a mineral, a rock, a natural water etc. which can be complex, but can be treated through record key as a single entity in setting up the recipe of chemical system. 
+
+The Compos record can be configured in the most convenient way, depending on the source data: as IC or DC amounts/concentrations; as user-defined formulae (UDF); or as a large formula entered into a text editor field.  Upon re-calculation, all such data will be converted into  into a single PCO vector as IC mole amounts, optionally scaled to a given total PCO mass. </string>
          </property>
          <property name="textFormat">
           <enum>Qt::AutoText</enum>
@@ -279,8 +276,8 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
      <widget class="QWidget" name="page_4">
-      <layout class="QGridLayout">
-       <item row="0" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
         <widget class="QLabel" name="label_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -293,14 +290,14 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item>
         <widget class="Line" name="line_4">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item>
         <widget class="QGroupBox" name="groupBox_5">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -351,13 +348,13 @@ p, li { white-space: pre-wrap; }
          </layout>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item>
         <widget class="QGroupBox" name="groupBox_6">
          <property name="title">
           <string>What will happen after you click &quot;Finish&quot;</string>
          </property>
-         <layout class="QGridLayout">
-          <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
            <widget class="QLabel" name="textLabel13">
             <property name="text">
              <string>(1) In a PCO definition via IC amounts, a list of available IComp records will be shown, asking you to mark necessary ones (use left mouse button to mark).</string>
@@ -370,7 +367,7 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item>
            <widget class="QLabel" name="textLabel12">
             <property name="text">
              <string>(2) In a PCO definition via DC formulae, a list of available ReacDC records will be shown, asking you to mark some. Then a list of DComp records will be shown to mark some. Minimum one (either DComp or ReacDC) must be marked at the end.</string>
@@ -383,10 +380,10 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item>
            <widget class="QLabel" name="textLabel14">
             <property name="text">
-             <string>(3) Page 1 of the &quot;Compos&quot; window appears. Fill out BCname field and (optionally) BCnote lines. Then enter data and formulae wherever needed, check units of amount/concentration.</string>
+             <string>(3) Page 1 of the 'Compos' window appears. Fill out BCname field and (optionally) BCnote lines. Then enter data and formulae wherever needed, check units of amount/concentration.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -396,14 +393,10 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item>
            <widget class="QLabel" name="textLabel15">
             <property name="text">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(4) Click on &amp;quot;Calculate&amp;quot; toolbar button to compute the PCO vector. Check or enter the normalization values in MasVol fields and calculate again, if needed. Setting MasVol[0] and MasVol[6] to zeros disables the normalization of PCO to the total mass or amount of moles, respectively. Save the record to database.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>(4) Click on 'Calculate' toolbar button to compute the PCO vector. Check or enter the normalization values in MasVol fields and calculate again, if needed. Setting MasVol[0] and MasVol[6] to zeros disables the normalization of PCO to the total mass or amount of moles, respectively. Save the record to database.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -475,7 +468,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>checkBox2_2_2</tabstop>
   <tabstop>comboBox1</tabstop>
   <tabstop>lineEdit1</tabstop>
-  <tabstop>pHelp</tabstop>
   <tabstop>pBack</tabstop>
   <tabstop>pNext</tabstop>
   <tabstop>pCancel</tabstop>

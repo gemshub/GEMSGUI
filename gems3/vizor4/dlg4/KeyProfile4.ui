@@ -26,7 +26,114 @@
    <string>GEM-Selektor v.2-PSI: Modelling Projects</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
+   <item row="6" column="0" colspan="2">
+    <layout class="QHBoxLayout">
+     <item>
+      <widget class="QPushButton" name="pGO_OKButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>This will open and load a selected Modelling Project</string>
+       </property>
+       <property name="text">
+        <string>&amp;Open Project</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pNewProfBtn">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>This will start the wizard for setting up a new Modelling Project</string>
+       </property>
+       <property name="text">
+        <string>&amp;New Project...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pHelpButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Learn about Modelling Project concept and project configuration</string>
+       </property>
+       <property name="text">
+        <string>&amp;Help</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pCancelButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>&amp;Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0">
     <widget class="QLabel" name="pLabel">
      <property name="text">
       <string>Please, &amp;select one GEM-Selektor modelling project </string>
@@ -135,16 +242,16 @@
    <item row="5" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>New projects only:</string>
+      <string>Make a new project:</string>
      </property>
-     <layout class="QVBoxLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QRadioButton" name="rbNewPrMode">
         <property name="toolTip">
          <string>Switch on to select elements and copy all related data from default database into new project</string>
         </property>
         <property name="text">
-         <string>Make a new &amp;project by copying records from the default database </string>
+         <string>by copying records from default database </string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -157,108 +264,12 @@
          <string>Switch on to select files from default database and link them to form a new project</string>
         </property>
         <property name="text">
-         <string>Make a new project by &amp;linking files from the default database</string>
+         <string>by &amp;linking files from the default database</string>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
-   </item>
-   <item row="6" column="0" colspan="2">
-    <layout class="QHBoxLayout">
-     <item>
-      <widget class="QPushButton" name="pGO_OKButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>This will open and load a selected Modelling Project</string>
-       </property>
-       <property name="text">
-        <string>&amp;Open Project</string>
-       </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pNewProfBtn">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>This will start the wizard for setting up a new Modelling Project</string>
-       </property>
-       <property name="text">
-        <string>&amp;New Project...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pHelpButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Learn about Modelling Project concept and project configuration</string>
-       </property>
-       <property name="text">
-        <string>&amp;Help</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pCancelButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>&amp;Cancel</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>
@@ -271,10 +282,7 @@
   <tabstop>CheckBox4</tabstop>
   <tabstop>pRe_runIA</tabstop>
   <tabstop>pRe_runSmart</tabstop>
-  <tabstop>rbNewPrMode</tabstop>
-  <tabstop>rbOldPrMode</tabstop>
   <tabstop>pGO_OKButton</tabstop>
-  <tabstop>pNewProfBtn</tabstop>
   <tabstop>pHelpButton</tabstop>
   <tabstop>pCancelButton</tabstop>
  </tabstops>

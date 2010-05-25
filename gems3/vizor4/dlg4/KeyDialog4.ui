@@ -121,12 +121,6 @@
    </item>
    <item row="2" column="0">
     <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
-     <property name="margin">
-      <number>0</number>
-     </property>
      <item>
       <widget class="QPushButton" name="PushButton1">
        <property name="sizePolicy">
@@ -140,13 +134,6 @@
          <width>100</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
        </property>
        <property name="text">
         <string>&amp;Ok</string>
@@ -183,13 +170,6 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
        <property name="toolTip">
         <string>Here you can specify a template to filter a large list of record keys</string>
        </property>
@@ -222,13 +202,6 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
        <property name="toolTip">
         <string>Here you can selected all list of record keys</string>
        </property>
@@ -260,13 +233,6 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
        </property>
        <property name="toolTip">
         <string>Here you can clearing all selection</string>
@@ -305,13 +271,6 @@
          <width>100</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
        </property>
        <property name="text">
         <string>&amp;Cancel</string>

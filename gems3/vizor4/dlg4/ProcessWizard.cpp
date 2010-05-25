@@ -596,10 +596,10 @@ void ProcessWizard::defineWindow(char type)
        break;
    case P_SEQUENT:
        {
-         lAbout->setText("Please, select items from Compos, DComp, IComp or Phase lists to change system composition;\n"
-                         " select items from Kin-DC-low or Kin-DC-up to change metastability constraints.\n "
-                         "To plot logarithmic Kd and sorption isotherms, select trace and host elements from the Sorbed list.\n "
-                         "To plot linear Kd, select trace and host end members from DComp list, then trace and host ions from Molality list.\n"
+         lAbout->setText("Please, select items from 'Compos', 'DComp', 'IComp' or 'Phase' lists to change the system composition; "
+                         " select items from 'Kin-DC-low' or 'Kin-DC-up to change metastability constraints.\n "
+                         "To plot logarithmic Kd and sorption isotherms, select trace and host elements from the 'Sorbed' list. "
+                         "To plot linear Kd, select trace and host end members from 'DComp' list, then trace and host ions from 'Molality' list. "
                          "In both Kd cases, skip the next wizard page. ");
          sub1->setText("iNu linear");
          sub2->setText("linear Kd");
@@ -613,10 +613,10 @@ void ProcessWizard::defineWindow(char type)
        break;
    case P_LIP:
        {
-         lAbout->setText("Please, select a binary solid solution in Phases;\n then select anion, cation1, "
-                         "cation2 in AqIons (classic variant)\n or anionic, cationic1, cationic2 elements "
-                         "in AqElements (variant with total dissolved concentrations).\n"
-                         "Skip the next wizard page.");
+         lAbout->setText("Please, select a binary solid solution in 'Phases'; then select anion, cation1, "
+                         "cation2 in 'AqIons (classic variant)\n or anionic, cationic1, cationic2 elements "
+                         "in 'AqElements' (variant with total dissolved concentrations). "
+                         "Then skip the next wizard page.");
          sub1->setText("Classic Lippmann diagram");
          sub2->setText("Variant with total dissolved concentrations");
          sub3->hide();
@@ -629,10 +629,10 @@ void ProcessWizard::defineWindow(char type)
    case P_INV_TITR:
          {
            lAbout->setText("Please, select acid and base from the AcidBase list and proceed to the next wizard page.\n"
-                           "To plot sorption isotherms:\n also select the trace element addition in AcidBase list and"
-                           "set the ipe iterator accordingly,\n "
-                           "then select aqueous species in the Molality list for the abscissa,\n"
-                           "then select one or more sorbed species from the Sorbed list, and skip the next wizard page");
+                           "To plot sorption isotherms: also select the trace element addition in 'AcidBase' list and "
+                           "set the ipe iterator accordingly, "
+                           "then select aqueous species in the 'Molality' list for the abscissa, "
+                           "then select one or more sorbed species from the 'Sorbed' list, and skip the next wizard page");
            sub1->setText("pH diagram");
            sub2->setText("Sorption isotherms at constant pH");
            sub3->hide();
@@ -644,7 +644,7 @@ void ProcessWizard::defineWindow(char type)
 
     case P_TITRSING:
           {
-              lAbout->setText("Please, select the titrant from Compos, DComp or IComp list; then select 'pH' in 'Other items',\n"
+              lAbout->setText("Please, select the titrant from 'Compos', 'DComp' or 'IComp' list; then select 'pH' in 'Other items', "
                               "   set ipH[1] = 0, and skip the next wizard page. ");
               sub1->setText("Inverse pH titration (single point)");
               sub1->setChecked(true);
@@ -1624,7 +1624,7 @@ void ProcessWizard::changePage( int nPage )
 
 void ProcessWizard::setupPages()
 {
-  int jj, nO;
+  int nO;
   QString str;
   QListWidgetItem* item1;
   QWidget* page1;

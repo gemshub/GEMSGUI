@@ -1,56 +1,57 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>LookupDialogData</class>
- <widget class="QDialog" name="LookupDialogData" >
-  <property name="geometry" >
+ <widget class="QDialog" name="LookupDialogData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>523</width>
-    <height>398</height>
+    <width>614</width>
+    <height>403</height>
    </rect>
   </property>
-  <property name="font" >
+  <property name="font">
    <font>
     <pointsize>10</pointsize>
    </font>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Setup for writing GEMIPM2K input files</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3" >
-   <item row="0" column="0" colspan="5" >
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0" colspan="5">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
       <string/>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout" >
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QCheckBox" name="chSelect" >
-        <property name="text" >
+       <widget class="QCheckBox" name="chSelect">
+        <property name="text">
          <string>Select ICs, DCs and phases to be exchanged via DATABR file (take all, if unchecked)</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="chMode" >
-        <property name="text" >
+       <widget class="QCheckBox" name="chMode">
+        <property name="text">
          <string>Write IPM, DCH and DBR files in binary mode</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="chAll" >
-        <property name="text" >
+       <widget class="QCheckBox" name="chAll">
+        <property name="text">
          <string>Do not write data items that contain only default values</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="chComment" >
-        <property name="text" >
+       <widget class="QCheckBox" name="chComment">
+        <property name="text">
          <string>Write files with comments for all data entries ( in text mode)</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
@@ -58,12 +59,12 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="2" >
-    <spacer name="verticalSpacer" >
-     <property name="orientation" >
+   <item row="1" column="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
        <height>0</height>
@@ -71,112 +72,112 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="0" colspan="5" >
-    <widget class="QGroupBox" name="groupBox_2" >
-     <property name="title" >
-      <string>Setup of lookup arrays with thermodynamic data in DCH file</string>
+   <item row="2" column="0" colspan="5">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Setup of DCH lookup arrays with thermodynamic data </string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout" >
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QGroupBox" name="groupBox_3" >
-        <property name="title" >
+       <widget class="QGroupBox" name="groupBox_3">
+        <property name="title">
          <string>Pressure P, bar</string>
         </property>
-        <layout class="QGridLayout" name="gridLayout" >
-         <item row="0" column="0" >
-          <widget class="QLabel" name="label" >
-           <property name="text" >
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
             <string>From</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1" >
-          <widget class="QDoubleSpinBox" name="pPfrom" >
-           <property name="layoutDirection" >
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="pPfrom">
+           <property name="layoutDirection">
             <enum>Qt::LeftToRight</enum>
            </property>
-           <property name="alignment" >
+           <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
-           <property name="decimals" >
+           <property name="decimals">
             <number>2</number>
            </property>
-           <property name="maximum" >
+           <property name="maximum">
             <double>10000.000000000000000</double>
            </property>
-           <property name="value" >
+           <property name="value">
             <double>1.000000000000000</double>
            </property>
           </widget>
          </item>
-         <item row="1" column="0" >
-          <widget class="QLabel" name="label_2" >
-           <property name="text" >
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
             <string>Until</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1" >
-          <widget class="QDoubleSpinBox" name="pPuntil" >
-           <property name="alignment" >
+         <item row="1" column="1">
+          <widget class="QDoubleSpinBox" name="pPuntil">
+           <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
-           <property name="decimals" >
+           <property name="decimals">
             <number>2</number>
            </property>
-           <property name="maximum" >
+           <property name="maximum">
             <double>10000.000000000000000</double>
            </property>
-           <property name="value" >
+           <property name="value">
             <double>1.000000000000000</double>
            </property>
           </widget>
          </item>
-         <item row="2" column="0" >
-          <widget class="QLabel" name="label_3" >
-           <property name="text" >
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
             <string>Step</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1" >
-          <widget class="QDoubleSpinBox" name="pPstep" >
-           <property name="alignment" >
+         <item row="2" column="1">
+          <widget class="QDoubleSpinBox" name="pPstep">
+           <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
-           <property name="decimals" >
+           <property name="decimals">
             <number>2</number>
            </property>
-           <property name="maximum" >
+           <property name="maximum">
             <double>1000.000000000000000</double>
            </property>
           </widget>
          </item>
-         <item row="3" column="0" >
-          <widget class="QLabel" name="label_4" >
-           <property name="text" >
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
             <string>Tolerance</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="1" >
-          <widget class="QDoubleSpinBox" name="pPtol" >
-           <property name="alignment" >
+         <item row="3" column="1">
+          <widget class="QDoubleSpinBox" name="pPtol">
+           <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
-           <property name="decimals" >
+           <property name="decimals">
             <number>2</number>
            </property>
-           <property name="minimum" >
+           <property name="minimum">
             <double>0.010000000000000</double>
            </property>
-           <property name="maximum" >
+           <property name="maximum">
             <double>10.000000000000000</double>
            </property>
-           <property name="singleStep" >
+           <property name="singleStep">
             <double>0.100000000000000</double>
            </property>
-           <property name="value" >
+           <property name="value">
             <double>0.500000000000000</double>
            </property>
           </widget>
@@ -185,105 +186,105 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox_4" >
-        <property name="title" >
+       <widget class="QGroupBox" name="groupBox_4">
+        <property name="title">
          <string>Temperature T, C</string>
         </property>
-        <layout class="QGridLayout" name="gridLayout_2" >
-         <item row="0" column="0" >
-          <widget class="QLabel" name="label_5" >
-           <property name="text" >
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
             <string>From</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1" >
-          <widget class="QDoubleSpinBox" name="pTfrom" >
-           <property name="alignment" >
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="pTfrom">
+           <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
-           <property name="decimals" >
+           <property name="decimals">
             <number>2</number>
            </property>
-           <property name="maximum" >
+           <property name="maximum">
             <double>2000.000000000000000</double>
            </property>
-           <property name="value" >
+           <property name="value">
             <double>25.000000000000000</double>
            </property>
           </widget>
          </item>
-         <item row="1" column="0" >
-          <widget class="QLabel" name="label_6" >
-           <property name="text" >
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
             <string>Until</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1" >
-          <widget class="QDoubleSpinBox" name="pTuntil" >
-           <property name="alignment" >
+         <item row="1" column="1">
+          <widget class="QDoubleSpinBox" name="pTuntil">
+           <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
-           <property name="decimals" >
+           <property name="decimals">
             <number>2</number>
            </property>
-           <property name="maximum" >
+           <property name="maximum">
             <double>2000.000000000000000</double>
            </property>
-           <property name="value" >
+           <property name="value">
             <double>25.000000000000000</double>
            </property>
           </widget>
          </item>
-         <item row="2" column="0" >
-          <widget class="QLabel" name="label_7" >
-           <property name="text" >
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
             <string>Step</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1" >
-          <widget class="QDoubleSpinBox" name="pTstep" >
-           <property name="alignment" >
+         <item row="2" column="1">
+          <widget class="QDoubleSpinBox" name="pTstep">
+           <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
-           <property name="decimals" >
+           <property name="decimals">
             <number>2</number>
            </property>
-           <property name="maximum" >
+           <property name="maximum">
             <double>200.000000000000000</double>
            </property>
-           <property name="value" >
+           <property name="value">
             <double>0.000000000000000</double>
            </property>
           </widget>
          </item>
-         <item row="3" column="0" >
-          <widget class="QLabel" name="label_8" >
-           <property name="text" >
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
             <string>Tolerance</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="1" >
-          <widget class="QDoubleSpinBox" name="pTtol" >
-           <property name="alignment" >
+         <item row="3" column="1">
+          <widget class="QDoubleSpinBox" name="pTtol">
+           <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
-           <property name="decimals" >
+           <property name="decimals">
             <number>2</number>
            </property>
-           <property name="minimum" >
+           <property name="minimum">
             <double>0.010000000000000</double>
            </property>
-           <property name="maximum" >
+           <property name="maximum">
             <double>10.000000000000000</double>
            </property>
-           <property name="singleStep" >
+           <property name="singleStep">
             <double>0.100000000000000</double>
            </property>
-           <property name="value" >
+           <property name="value">
             <double>1.000000000000000</double>
            </property>
           </widget>
@@ -294,12 +295,12 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0" colspan="5" >
-    <spacer name="verticalSpacer_2" >
-     <property name="orientation" >
+   <item row="3" column="0" colspan="5">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
        <height>52</height>
@@ -307,19 +308,19 @@
      </property>
     </spacer>
    </item>
-   <item row="4" column="0" >
-    <widget class="QPushButton" name="buttonHelp" >
-     <property name="text" >
+   <item row="4" column="0">
+    <widget class="QPushButton" name="buttonHelp">
+     <property name="text">
       <string>&amp;Help</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1" >
-    <spacer name="horizontalSpacer" >
-     <property name="orientation" >
+   <item row="4" column="1">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>218</width>
        <height>20</height>
@@ -327,16 +328,16 @@
      </property>
     </spacer>
    </item>
-   <item row="4" column="3" >
-    <widget class="QPushButton" name="buttonOK" >
-     <property name="text" >
+   <item row="4" column="3">
+    <widget class="QPushButton" name="buttonOK">
+     <property name="text">
       <string>&amp;Next</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="4" >
-    <widget class="QPushButton" name="buttonCancel" >
-     <property name="text" >
+   <item row="4" column="4">
+    <widget class="QPushButton" name="buttonCancel">
+     <property name="text">
       <string>&amp;Cancel</string>
      </property>
     </widget>

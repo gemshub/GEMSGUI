@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>797</width>
-    <height>565</height>
+    <width>784</width>
+    <height>590</height>
    </rect>
   </property>
   <property name="font">
@@ -18,8 +18,8 @@
   <property name="windowTitle">
    <string>GEM-Selektor Proces</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_4">
-   <item>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="mouseTracking">
       <bool>false</bool>
@@ -37,10 +37,10 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
         <widget class="QLabel" name="pageName">
          <property name="sizePolicy">
@@ -76,13 +76,11 @@
           <enum>QFrame::Plain</enum>
          </property>
          <property name="text">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Process Simulator is a tool for automation of &amp;quot;batch&amp;quot; calculation of many equilibrium states, as well as sampling and plotting of results. In this way, irreversible (geo)chemical processes (mixing, dissolution, hydration, titration, corrosion, weathering) can be simulated, and respective diagrams plotted.&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The Process record can be configured to perform specific scenarios. To tell it what input data to modify and what output data to sample and plot, two scripts, &lt;span style=&quot; font-weight:600;&quot;&gt;P_expr&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;pgExpr&lt;/span&gt;, respectively, are needed. Simple scripts can be easily produced using selection dialogs on the next pages of this wizard.&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Three main types of simulators are: (1) &lt;span style=&quot; font-weight:600;&quot;&gt;Sequential&lt;/span&gt;, where only input GEM parameters are modified; (2) &lt;span style=&quot; font-weight:600;&quot;&gt;Reciprocal&lt;/span&gt;, where the next step depends on some GEM output parameters (e.g. pH, concentrations) from previous step; (3) &lt;span style=&quot; font-weight:600;&quot;&gt;Inverse&lt;/span&gt;, where GEM input parameters must be automatically adjusted to obtain prescribed value(s) of GEM output parameter(s).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Process Simulator is a tool for automation of'batch' calculation of many equilibrium states, as well as sampling and plotting of results. In this way, irreversible (geo)chemical processes (mixing, dissolution, hydration, titration, corrosion, weathering) can be simulated, and respective diagrams plotted.
+
+The Process record can be configured to perform specific scenarios. To tell it what input data to modify and what output data to sample and plot, two scripts, 'P_expr' and 'pgExpr', respectively, are needed. Simple scripts can be easily produced using selection dialogs on the next pages of this wizard.
+
+Three main types of simulators are: (1) 'Sequential', where only input GEM parameters are modified; (2) 'Reciprocal', where the next step depends on some GEM output parameters (e.g. pH, concentrations) from previous step; (3) 'Inverse', where GEM input parameters must be automatically adjusted to obtain prescribed value(s) of GEM output parameter(s).</string>
          </property>
          <property name="textFormat">
           <enum>Qt::AutoText</enum>
@@ -100,6 +98,19 @@ p, li { white-space: pre-wrap; }
           <bool>false</bool>
          </property>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>12</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox">
@@ -228,7 +239,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <spacer name="spacer">
+           <spacer name="spacer_2">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
@@ -238,7 +249,7 @@ p, li { white-space: pre-wrap; }
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
-              <height>1</height>
+              <height>17</height>
              </size>
             </property>
            </spacer>
@@ -292,11 +303,6 @@ p, li { white-space: pre-wrap; }
            <width>16777215</width>
            <height>100</height>
           </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-          </font>
          </property>
          <property name="layoutDirection">
           <enum>Qt::LeftToRight</enum>
@@ -520,11 +526,6 @@ p, li { white-space: pre-wrap; }
            <height>16777215</height>
           </size>
          </property>
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
         </widget>
        </item>
        <item row="3" column="1">
@@ -587,11 +588,7 @@ p, li { white-space: pre-wrap; }
           </sizepolicy>
          </property>
          <property name="text">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Spin boxes below define the dynamic memory configuration of the process simulator.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>The spin boxes below define the dynamic memory configuration of the process simulator.</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignVCenter</set>
@@ -641,11 +638,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="1">
            <widget class="QLabel" name="TextLabel1">
             <property name="text">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-weight:600;&quot;&gt;nPV&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif';&quot;&gt; Number of &amp;amp;steps/systems (1 to 9999 ) to be generated in this simulation (default: 21)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>nPV - Number of steps/systems (1 to 9999 ) to be generated in this simulation (default: 21)</string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
@@ -724,11 +717,7 @@ p, li { white-space: pre-wrap; }
           <item row="2" column="1">
            <widget class="QLabel" name="TextLabel1_2">
             <property name="text">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Number of columns in the yp table (from 0 to 200) to sample simulated data via the pgExpr script for export or plotting; number of rows will be nPV. If this field is set to 1 or more, the pgExpr script editor field will be created.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>Number of columns in the yp table (from 0 to 200) to sample simulated data via the pgExpr script for export or plotting; number of rows will be nPV. If this field is set to 1 or more, the pgExpr script editor field will be created.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -832,11 +821,7 @@ p, li { white-space: pre-wrap; }
           </sizepolicy>
          </property>
          <property name="text">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Optional data vectors allocated below (of length nPV) correspond to process iterators and can be used in scripts (with J index) to accumulate respective values for all steps performed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Optional data vectors allocated below (of length nPV) correspond to process iterators and can be used in scripts (with J index) to accumulate respective values for all steps performed.</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignVCenter</set>
@@ -927,8 +912,8 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
      <widget class="QWidget" name="page_3">
-      <layout class="QGridLayout">
-       <item row="0" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
         <widget class="QLabel" name="label_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -941,14 +926,14 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item>
         <widget class="Line" name="line_3">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item>
         <widget class="QLabel" name="textLabel3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -964,7 +949,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item>
         <widget class="QGroupBox" name="groupBox_4">
          <property name="title">
           <string>Optional modes of operation </string>
@@ -1011,14 +996,7 @@ p, li { white-space: pre-wrap; }
          </layout>
         </widget>
        </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
+       <item>
         <widget class="QLabel" name="textLabel4">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1027,12 +1005,11 @@ p, li { white-space: pre-wrap; }
           </sizepolicy>
          </property>
          <property name="text">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The P_expr script must be used in most cases except trivial ones (e.g., if temperature is changed using an iterator, but the bulk composition of the system remains constant). &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;Saving process-generated SysEq records may dramatically increase the size of project database. Use it only if you plan to extract more data from generated systems e.g. using GtDemo samplers. This flag has no effect on reciprocal and inverse titration sequences, where optimized SysEq records will be always saved.&lt;br /&gt;&lt;br /&gt;Other three flags should be changed by advanced users only.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>The 'P_expr' script must be used in most cases except trivial ones (e.g., if temperature is changed using an iterator, but the bulk composition of the system remains constant). 
+
+Saving process-generated SysEq records may dramatically increase the size of project database. Use it only if you plan to extract more data from generated systems e.g. using GtDemo samplers. This flag has no effect on reciprocal and inverse titration sequences, where optimized SysEq records will be always saved.
+
+Other three flags should be changed by advanced users only.</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignVCenter</set>
@@ -1042,11 +1019,18 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page_4">
-      <layout class="QGridLayout">
-       <item row="0" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
         <widget class="QLabel" name="label_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1059,14 +1043,14 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item>
         <widget class="Line" name="line_4">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item>
         <widget class="QGroupBox" name="groupBox_5">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -1107,14 +1091,14 @@ p, li { white-space: pre-wrap; }
          </layout>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item>
         <widget class="QLabel" name="label_5">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item>
         <widget class="QGroupBox" name="groupBox_6">
          <property name="title">
           <string>What will happen after you click &quot;Finish&quot;</string>
@@ -1123,11 +1107,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0">
            <widget class="QLabel" name="textLabel12">
             <property name="text">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(1) Page 1 of the Process window will appear. There, check the process iterators - three-cell columns each specifying a start value, an end value, and an increment of a certain control parameter. From an iterator with zero increment, only the start (constant) value will be used. The first 5 iterators are used for generation of new SysEq record keys, thus, at least one of them must have a non-zero increment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>(1) Page 1 of the Process window will appear. There, check the process iterators - three-cell columns each specifying a start value, an end value, and an increment of a certain control parameter. From an iterator with zero increment, only the start (constant) value will be used. The first 5 iterators are used for generation of new SysEq record keys, thus, at least one of them must have a non-zero increment.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -1140,11 +1120,7 @@ p, li { white-space: pre-wrap; }
           <item row="1" column="0">
            <widget class="QLabel" name="textLabel14">
             <property name="text">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(2) Fill out PEname PEnote lines. If process or sampler scripts will be used then check them on Pages 1 and 2, respectively. Some example scripts are available via &amp;quot;Help&amp;quot; &amp;quot;Scripts&amp;quot; menu command.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>(2) Fill out PEname PEnote lines. If process or sampler scripts will be used then check them on Pages 1 and 2, respectively. Some example scripts are available via the 'Help' 'Scripts' menu command.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -1157,11 +1133,7 @@ p, li { white-space: pre-wrap; }
           <item row="2" column="0">
            <widget class="QLabel" name="textLabel15">
             <property name="text">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(3) Click on &amp;quot;Calculate&amp;quot; toolbar button to start the simulation (in case of error messages, fix the scripts or iterators and try calculation again). First time, do not use the graphic window. After the simulation has finished, check sampled results on the Graph page. Type in the axis and plot names, and cLick on the &amp;quot;Plot data&amp;quot; button to see customizable graphs.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>(3) Click on 'Calculate' toolbar button to start the simulation (in case of error messages, fix the scripts or iterators and try calculation again). First time, do not use the graphic window. After the simulation has finished, check sampled results on the Graph page. Type in the axis and plot names, and cLick on the 'Plot data' button to see customizable graphs.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -1174,11 +1146,7 @@ p, li { white-space: pre-wrap; }
           <item row="3" column="0">
            <widget class="QLabel" name="textLabel13_2">
             <property name="text">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(4) To plot experimental data over calculated results (e.g. for visual fitting), close the graph dialog, and enter data into xEp and yEp arrays on the &amp;quot;Graph&amp;quot; page. Then open the plot again and customise it.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>(4) To plot experimental data over calculated results (e.g. for visual fitting), close the graph dialog, and enter data into xEp and yEp arrays on the 'Graph' page. Then open the plot again and customise it.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -1195,7 +1163,7 @@ p, li { white-space: pre-wrap; }
      </widget>
     </widget>
    </item>
-   <item>
+   <item row="1" column="0">
     <layout class="QHBoxLayout">
      <item>
       <widget class="QPushButton" name="pHelp">

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>580</width>
+    <width>675</width>
     <height>428</height>
    </rect>
   </property>
@@ -25,7 +25,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="tpFiles">
       <attribute name="title">
@@ -55,6 +55,15 @@
          <attribute name="headerMinimumSectionSize">
           <number>200</number>
          </attribute>
+         <attribute name="headerCascadingSectionResizes">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="headerDefaultSectionSize">
+          <number>400</number>
+         </attribute>
+         <attribute name="headerMinimumSectionSize">
+          <number>200</number>
+         </attribute>
          <column>
           <property name="text">
            <string>Record type / File Keyword</string>
@@ -62,7 +71,7 @@
          </column>
          <column>
           <property name="text">
-           <string>File name (click toogles selection)</string>
+           <string>File name (click toggles selection)</string>
           </property>
          </column>
         </widget>
@@ -1270,13 +1279,6 @@ records
          <height>0</height>
         </size>
        </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
        <property name="text">
         <string>&amp;Ok</string>
        </property>
@@ -1292,13 +1294,6 @@ records
          <width>100</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
        </property>
        <property name="text">
         <string>&amp;Apply</string>
@@ -1319,13 +1314,6 @@ records
          <height>0</height>
         </size>
        </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
        <property name="text">
         <string>&amp;Cancel</string>
        </property>
@@ -1341,13 +1329,6 @@ records
          <width>100</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
        </property>
        <property name="text">
         <string>&amp;Reset</string>
@@ -1380,13 +1361,6 @@ records
          <width>100</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
        </property>
        <property name="text">
         <string>&amp;Help</string>

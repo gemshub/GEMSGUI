@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>796</width>
-    <height>467</height>
+    <width>822</width>
+    <height>477</height>
    </rect>
   </property>
   <property name="font">
@@ -546,13 +546,6 @@ the aqueous phase model</string>
          <height>0</height>
         </size>
        </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
        <property name="toolTip">
         <string>Click to accept selections and proceed with creating/opening the modelling project</string>
        </property>
@@ -577,13 +570,6 @@ the aqueous phase model</string>
          <width>100</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
        </property>
        <property name="text">
         <string>&amp;Cancel</string>
@@ -619,13 +605,6 @@ the aqueous phase model</string>
          <width>100</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
        </property>
        <property name="toolTip">
         <string>Click to see updated Phase record keys and parameters related to chosen models </string>
@@ -667,13 +646,6 @@ the aqueous phase model</string>
          <width>100</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
        </property>
        <property name="text">
         <string>&amp;Help</string>

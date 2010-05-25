@@ -17,6 +17,11 @@
     <height>400</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Database File Configuration for Modelling Project</string>
   </property>
@@ -39,6 +44,12 @@
      <property name="selectionMode">
       <enum>QAbstractItemView::MultiSelection</enum>
      </property>
+     <attribute name="headerCascadingSectionResizes">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="headerDefaultSectionSize">
+      <number>200</number>
+     </attribute>
      <attribute name="headerCascadingSectionResizes">
       <bool>true</bool>
      </attribute>
@@ -73,13 +84,6 @@
          <height>0</height>
         </size>
        </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
        <property name="toolTip">
         <string>Files selections is finisded OK</string>
        </property>
@@ -107,13 +111,6 @@
          <width>100</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
        </property>
        <property name="text">
         <string>&amp;Cancel</string>
@@ -152,13 +149,6 @@
          <width>100</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
        </property>
        <property name="toolTip">
         <string>Learn aboutModelling Project concept and project configuration</string>

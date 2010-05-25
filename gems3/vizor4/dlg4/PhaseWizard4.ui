@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>666</width>
-    <height>520</height>
+    <width>710</width>
+    <height>561</height>
    </rect>
   </property>
   <property name="font">
@@ -630,7 +630,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
           <string>Set items in this box only if this is a sorption phase  </string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0" colspan="4">
+          <item row="0" column="0" colspan="5">
            <widget class="QCheckBox" name="checkBoxSorption">
             <property name="text">
              <string>Check if surface complexation will be considered in this (sorption) phase</string>
@@ -656,7 +656,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
             </property>
            </widget>
           </item>
-          <item row="1" column="1" colspan="3">
+          <item row="1" column="1" colspan="4">
            <widget class="QLabel" name="textLabel3">
             <property name="text">
              <string>Set the number of surface types (minimum 1, maximum 6) to allocate surface complexes</string>
@@ -775,11 +775,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
           <item>
            <widget class="QLabel" name="textLabel13">
             <property name="text">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(1) The program will display a list of available ReacDC records; mark those to be the phase components (end-members). Proceed with selection of other components from the list of DComp records. At least one species (for a pure phase; two for a solution phase) must be marked.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>(1) The program will display a list of available ReacDC records; mark those to be the phase components (end-members). Proceed with selection of other components from the list of DComp records. At least one species (for a pure phase; two for a solution phase) must be marked.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -792,11 +788,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QLabel" name="textLabel12">
             <property name="text">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(2) In Page 1, fill out PhName and PhNote lines. You may need to enter numbers in DisPar array, DcEq and/or PhEq math scripts, or numbers in ipxT, ph_cf, dc_cf arrays on Pages 2 and 3.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>(2) In Page 1, fill out PhName and PhNote lines. You may need to enter numbers in DisPar array, DcEq and/or PhEq math scripts, or numbers in ipxT, ph_cf, dc_cf arrays on Pages 2 and 3.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -809,11 +801,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QLabel" name="textLabel14">
             <property name="text">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(3) Click on the &amp;quot;Calculate&amp;quot; toolbar button: necessary data and codes will be collected from ReacDC and/or DComp records. Check the PhDCC column on Page 1 and enter there correct codes (e.g. T for H+; W for H2O-solvent). In the case of sorption phase, fill out data objects on Pages 1 and 3. Save the Phase record to database.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>(3) Click on the 'Calculate' toolbar button: necessary data and codes will be collected from ReacDC and/or DComp records. Check the PhDCC column on Page 1 and enter there correct codes (e.g. T for H+; W for H2O-solvent). In the case of sorption phase, fill out data objects on Pages 1 and 3. Save the Phase record to database.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>

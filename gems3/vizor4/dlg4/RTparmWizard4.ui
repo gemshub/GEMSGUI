@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>641</width>
-    <height>509</height>
+    <width>669</width>
+    <height>527</height>
    </rect>
   </property>
   <property name="font">
@@ -18,8 +18,8 @@
   <property name="windowTitle">
    <string>GEM-Selektor Proces</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
-   <item>
+  <layout class="QGridLayout" name="gridLayout_4">
+   <item row="0" column="0">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="mouseTracking">
       <bool>false</bool>
@@ -76,15 +76,11 @@
           <enum>QFrame::Plain</enum>
          </property>
          <property name="text">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;RTParm is a tool for tabulating/plotting thermodynamic data for a DC against temperature T and/or pressure P. The source data are taken from a &amp;quot;parent&amp;quot; DComp or ReacDC record specified when this RTParm record was created.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Upon re-calculation, thermodynamic properties of interest will be collected for each T,P as specified in the tExpr math script into arrays on the &amp;quot;Tables&amp;quot; page. Then, the data can be plotted, exported into a text file, or copy-pasted into Excel or other spreadsheet program. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;A simple tExpr script can be created using the selection dialog on the next page of this wizard. A collection of example scripts is also provided under the &amp;quot;Help&amp;quot; &amp;quot;View Scripts...&amp;quot; menu command in the GtDemo window.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>RTParm is a tool for tabulating/plotting thermodynamic data for a DC against temperature T and/or pressure P. The source data are taken from a 'parent' DComp or ReacDC record specified when this RTParm record was created.
+
+Upon re-calculation, thermodynamic properties of interest will be collected for each T,P as specified in the tExpr math script into arrays on the 'Tables' page. Then, the data can be plotted, exported into a text file, or copy-pasted into Excel or other spreadsheet program. 
+
+A simple tExpr script can be created using the selection dialog on the next page of this wizard. A collection of example scripts is also provided under the 'Help' 'View Scripts...' menu command in the GtDemo window.</string>
          </property>
          <property name="textFormat">
           <enum>Qt::AutoText</enum>
@@ -153,7 +149,7 @@ p, li { white-space: pre-wrap; }
             <item>
              <widget class="QLabel" name="textLabel1_3">
               <property name="text">
-               <string>Select a Mode for generating and using  xP and xT arguments. Default mode: 2.</string>
+               <string>Select a Mode for  using  xP and xT arguments. Default mode: 2.</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignVCenter</set>
@@ -496,7 +492,7 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QLabel" name="label">
          <property name="sizePolicy">
@@ -1060,82 +1056,54 @@ p, li { white-space: pre-wrap; }
          <property name="title">
           <string>What happens after you click &quot;Finish&quot;</string>
          </property>
-         <widget class="QLabel" name="textLabel13">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>26</y>
-            <width>597</width>
-            <height>48</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(1) RTParm arrays will be allocated; &amp;quot;Scripts&amp;quot; page appears. Fill out &amp;quot;RTname&amp;quot; and &amp;quot;RTcom&amp;quot; lines. Edit the math script in &amp;quot;tExpr&amp;quot; field, if necessary. This script collects data from the objects visible on the &amp;quot;TPwork&amp;quot; page and puts it into xT, xP and yF array elements. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignVCenter</set>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QLabel" name="textLabel14">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>134</y>
-            <width>597</width>
-            <height>41</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(3) To plot experimental data over calculated results, close the graph dialog, type or paste the values into xTE, xPE and ytE arrays, open the plot again, and customise it, if necessary.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignVCenter</set>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QLabel" name="textLabel12">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>80</y>
-            <width>597</width>
-            <height>48</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(2) Click on &amp;quot;Calculate&amp;quot; toolbar button to run the tabulator (in case of error message, fix the script and try calculation again). Check sampled results on the &amp;quot;Tables&amp;quot; page. Enter names of axis and plots, and click on the &amp;quot;Plot data&amp;quot; button to see a customizable plot.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignVCenter</set>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-         </widget>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QLabel" name="textLabel13">
+            <property name="text">
+             <string>(1) RTParm arrays will be allocated; 'Scripts' page appears. Fill out 'RTname' and 'RTcom' lines. Edit the math script in 'tExpr'; field, if necessary. This script collects data from the objects visible on the 'TPwork'page and puts it into xT, xP and yF array elements. '</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="textLabel12">
+            <property name="text">
+             <string>'(2) Click on 'Calculate' toolbar button to run the tabulator (in case of error message, fix the script and try calculation again). Check sampled results on the 'Tables' page. Enter names of axis and plots, and click on the 'Plot data' button to see a customizable plot.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="textLabel14">
+            <property name="text">
+             <string>(3) To plot experimental data over calculated results, close the graph dialog, type or paste the values into xTE, xPE and ytE arrays, open the plot again, and customise it, if necessary.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
      </widget>
     </widget>
    </item>
-   <item>
+   <item row="1" column="0">
     <layout class="QHBoxLayout">
      <item>
       <widget class="QPushButton" name="pHelp">

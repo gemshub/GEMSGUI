@@ -16,6 +16,11 @@
     <height>460</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>NewProgressDialogData</string>
   </property>
@@ -135,9 +140,6 @@
    </item>
    <item row="4" column="1">
     <layout class="QGridLayout" name="laypout">
-     <property name="margin">
-      <number>0</number>
-     </property>
      <property name="spacing">
       <number>0</number>
      </property>
@@ -477,14 +479,6 @@
          <height>40</height>
         </size>
        </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>10</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
        <property name="toolTip">
         <string>Make next iteration in Stepwise mode</string>
        </property>
@@ -526,14 +520,6 @@
          <height>40</height>
         </size>
        </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>10</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
        <property name="toolTip">
         <string>Make all iteration in Stepwise mode</string>
        </property>
@@ -571,14 +557,6 @@
          <width>80</width>
          <height>40</height>
         </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>10</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
        </property>
        <property name="toolTip">
         <string>Do not save IPM results to database (or cancel IPM run in Stepwise mode)</string>
