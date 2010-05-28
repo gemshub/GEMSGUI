@@ -50,7 +50,7 @@ bool Helper::startAssistant()
 
     if (proc->state() != QProcess::Running) {
     	
-    	docPath = pVisor->docDir();
+        docPath = pVisor->docDir();
         // let's try to find resources by path of the executable
  //   QString app = "/home/gems/qt-4.5.2/bin/";//QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
        QString app;

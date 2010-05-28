@@ -13,7 +13,7 @@ WindowIcon on
 
 ; The file to write
 ; OutFile "gems-w32-install.exe"
-OutFile "gems300rc0-1645.450-w32-install.exe"
+OutFile "gems300rc0-1655.450-w32-install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\GEMS3
@@ -22,7 +22,7 @@ InstallDir $PROGRAMFILES\GEMS3
 InstallDirRegKey HKLM SOFTWARE\GEMS3 "Install_Dir"
 
 ;License text
-LicenseText "Version to be installed: 3.0.0 r1645.450 $\nLICENSE and DISCLAIMER"
+LicenseText "Version to be installed: 3.0.0 r1655.450 $\nLICENSE and DISCLAIMER"
 LicenseData "C:\GEMS3inst\program\doc\txt\TermsOfUse.txt"
 
 ; The text to prompt the user to enter a directory
@@ -46,8 +46,11 @@ Section "GEMS3 (required)"
  ; Set the right version of *.dll below
     File "C:\GEMS3inst\program\*.dll"
     File "C:\GEMS3inst\program\assistant.exe"
- ;   File "C:\GEMS3inst\program\assistant_adp.exe"
+    File "C:\GEMS3inst\program\qhelpconverter.exe"
+    File "C:\GEMS3inst\program\qcollectiongenerator.exe"
+    File "C:\GEMS3inst\program\qhelpgenerator.exe"
     File "C:\GEMS3inst\program\readme.txt"
+    File "C:\GEMS3inst\program\qt.conf"
   CreateDirectory "$INSTDIR\program\codecs"
   SetOutPath "$INSTDIR\program\codecs"
     File "C:\GEMS3inst\program\codecs\*.*"
@@ -153,7 +156,7 @@ ExecSkipped:
 SectionEnd
 
 ; uninstall stuff
-UninstallText "This will uninstall the GEM-Selektor v.3.0-PSI package. Your own modelling project subdirectories will not be removed. Hit 'Uninstall' to continue."
+UninstallText "This will uninstall the GEM-Selektor v.3 package. Your own modelling project subdirectories will not be removed. Hit 'Uninstall' to continue."
 
 ; special uninstall section.
 Section "Uninstall"
