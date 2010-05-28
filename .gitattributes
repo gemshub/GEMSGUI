@@ -971,7 +971,7 @@ gems3/gems3.app/Contents/Resources/img/fileprint.png -text
 gems3/gems3.app/Contents/Resources/img/filesave.png -text
 gems3/gems3.app/Contents/Resources/img/filesaveas.png -text
 gems3/gems3.app/Contents/Resources/img/gems1.png -text
-gems3/gems3.app/Contents/Resources/img/gems2.ico -text
+gems3/gems3.app/Contents/Resources/img/gems3.ico -text
 gems3/gems3.app/Contents/Resources/img/help.png -text
 gems3/gems3.app/Contents/Resources/img/iconclose.png -text
 gems3/gems3.app/Contents/Resources/img/kcalc.png -text
@@ -1045,6 +1045,7 @@ gems3/img/filesaveas.png -text
 gems3/img/forward.xpm -text
 gems3/img/gems1.png -text
 gems3/img/gems16.xpm -text
+gems3/img/gems3.ico -text
 gems3/img/gems32.xpm -text
 gems3/img/help.png -text
 gems3/img/home.xpm -text
@@ -1348,7 +1349,7 @@ gems3/shared/img/filesaveas.png -text
 gems3/shared/img/forward.xpm -text
 gems3/shared/img/gems1.png -text
 gems3/shared/img/gems16.xpm -text
-gems3/shared/img/gems2.ico -text
+gems3/shared/img/gems3.ico -text
 gems3/shared/img/gems32.xpm -text
 gems3/shared/img/graphics_section.xpm -text
 gems3/shared/img/help.png -text
