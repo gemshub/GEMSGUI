@@ -47,6 +47,9 @@ TIntegApp::TIntegApp(int& c, char** v):
       argv(v)
 {
     setStyle( new QWindowsStyle() );
+    QIcon icon;
+    icon.addFile(QString::fromUtf8(":/images/img/gems16.png"), QSize(), QIcon::Normal, QIcon::Off);
+    setWindowIcon(icon);
 }
 
 void

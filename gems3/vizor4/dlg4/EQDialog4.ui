@@ -60,7 +60,7 @@
         <enum>QFrame::Raised</enum>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../img.qrc">:/images/img/gems32.xpm</pixmap>
+        <pixmap resource="../../img.qrc">:/images/img/gems50.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -359,7 +359,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="../../img.qrc"/>
   <include location="../../img.qrc"/>
  </resources>
  <connections>

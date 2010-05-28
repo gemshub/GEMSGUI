@@ -1,5 +1,5 @@
 <RCC>
-  <qresource prefix="/graphics" >
+    <qresource prefix="/graphics">
     <file>img/p_circle.png</file>
     <file>img/p_crossdiag.png</file>
     <file>img/p_fillcircle.png</file>
@@ -11,10 +11,12 @@
     <file>img/p_star.png</file>
     <file>img/p_wye.png</file>
   </qresource>
-  <qresource prefix="/images" >
-    <file>img/gems32.xpm</file>
-  </qresource>
-  <qresource prefix="/toolbar" >
+    <qresource prefix="/images">
+        <file>img/gems1.png</file>
+        <file>img/gems50.png</file>
+        <file>img/gems16.png</file>
+    </qresource>
+    <qresource prefix="/toolbar">
     <file>img/RunBCC.png</file>
     <file>img/filesaveas.png</file>
     <file>img/RunIPM.png</file>
