@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>932</width>
-    <height>551</height>
+    <height>534</height>
    </rect>
   </property>
   <property name="font">
@@ -204,7 +204,7 @@ In this wizard, it is possible to (re)configure some optional CSD features (in m
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Step 2 - Additional CSD configuration (for sequential reactor simulations)</string>
+          <string>Step 2 - Additional CSD configuration (must be activated and set up for sequential reactor process simulations)</string>
          </property>
         </widget>
        </item>
@@ -237,9 +237,8 @@ In this wizard, it is possible to (re)configure some optional CSD features (in m
           <item>
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Composition of phase(s) and total solids can be obtained from another SysEq record with a key selected into the field below; if nothing or '*' is given there, you will be asked to select one such record. 
-
-If you cancel selection of SysEq record key or type '---' ('empty' value) in the field below, then, upon calculation of this SysEq record,  the resulting equilibrium compositions of phases will be available in cloning a new SysEq record. This simplifies setup of the 'sequential reactor' models. 
+             <string>Composition of phase(s) and total solids can be obtained from another SysEq record with a key selected into the field below; if nothing or '*' is given there, you will be asked to select one such record.
+     If you cancel selection of SysEq record key or type '---' ('empty' value) in the field below, then, upon calculation of this SysEq record,  the resulting equilibrium compositions of phases will be available in cloning a new SysEq record. This simplifies setup of R-type 'sequential reactor' processes. 
 
 Key of SysEq record to be used in getting phase compositions for the xp_ and MbXs recipe data objects:</string>
             </property>
@@ -257,13 +256,13 @@ Key of SysEq record to be used in getting phase compositions for the xp_ and MbX
           <item>
            <widget class="QGroupBox" name="grPPHk">
             <property name="title">
-             <string>Phase compositions to be taken from another SysEq record with the above key: </string>
+             <string>Constant-source phase compositions to be taken into this recipe from the SysEq record with the above key: </string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
               <widget class="QRadioButton" name="r2">
                <property name="text">
-                <string>(fluid) phases bXa (R-1, Flush)</string>
+                <string>(fluid) phases bXa (Leaching process)</string>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -273,7 +272,7 @@ Key of SysEq record to be used in getting phase compositions for the xp_ and MbX
              <item>
               <widget class="QRadioButton" name="r1">
                <property name="text">
-                <string>total solids bXs (R-2, Leaching) </string>
+                <string>total solids bXs ( Flushing process) </string>
                </property>
               </widget>
              </item>

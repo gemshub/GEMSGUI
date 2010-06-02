@@ -684,13 +684,14 @@ void ProcessWizard::defineWindow(char type)
 
    case P_REACTORS:
               {
-                lAbout->setText("Please, choose the reactors mode above. 'Flushing' evolves the fluid and 'Leaching' changes the solid.\n"
-                                "In the case of Compos source of solid and fluid, respectively, select this first from the Compos list.\n"
-                                "In all cases, it may be necessary to clean the system recipe by removing all inputs that are already \n"
-                                "   covered in the fluid and solids compositions. Do this by selecting Compos, DComp, IComp inputs \n"
-                                "   that must be zeroed off (check the parent system, if necessary).\n"
-                                "When ready, proceed to the next wizard page to select what to plot depending on the process type\n "
-                                "   (in 'Flushing' mode, some properties of fluids; in 'Leaching' mode, properties of solid phases)." );
+                lAbout->setText("Please, choose the reactors mode above. 'Flushing' evolves the fluid part reacted with the same solid part; 'Leaching' "
+                                "changes the solid in reaction with the same fluid part. In the case of Compos constant source of solid ('Flushing') "
+                                "or fluid ('Leaching'), respectively, select either from the Compos list first. In the case of other SysEq as constant "
+                                "source, check in SysEq remake if the respective mode is chosen correctly. In any case, it may be necessary to clean the "
+                                "system recipe by removing all inputs already covered in fluid and solids compositions. Do this by selecting Compos, DComp, "
+                                "IComp inputs that must be zeroed off (check the parent system, if necessary).\n"
+                                "When ready, proceed to the next wizard page to select what to plot depending on the process type "
+                                "(in 'Flushing' mode, usually some properties of fluids; in 'Leaching' mode, properties of solid phases)." );
                 sub1->setText("Flushing, SysEq source");
                 sub2->setText("Flushing, Compos source");
                 sub3->setText("Leaching, SysEq source");
