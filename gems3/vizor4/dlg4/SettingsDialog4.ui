@@ -372,6 +372,12 @@
          <height>0</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Ok</string>
        </property>
@@ -390,6 +396,12 @@
          <width>100</width>
          <height>0</height>
         </size>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="text">
         <string>&amp;Cancel</string>
@@ -419,6 +431,12 @@
          <width>100</width>
          <height>0</height>
         </size>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="text">
         <string>&amp;Help</string>

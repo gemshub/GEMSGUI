@@ -135,6 +135,12 @@
          <height>0</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Ok</string>
        </property>
@@ -170,6 +176,12 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="toolTip">
         <string>Here you can specify a template to filter a large list of record keys</string>
        </property>
@@ -202,6 +214,12 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="toolTip">
         <string>Here you can selected all list of record keys</string>
        </property>
@@ -233,6 +251,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="toolTip">
         <string>Here you can clearing all selection</string>
@@ -271,6 +295,12 @@
          <width>100</width>
          <height>0</height>
         </size>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="text">
         <string>&amp;Cancel</string>

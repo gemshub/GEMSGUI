@@ -37,7 +37,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout">
@@ -48,6 +48,12 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
          </property>
          <property name="text">
           <string>Step 1 - Generic tabulation and demonstration (GtDemo) configuration</string>
@@ -270,6 +276,12 @@ To tell GtDemo what data to sample, a math script must be provided in Gexpr fiel
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 2 - Selection of items to sample (click &quot;Next&quot; without selecting anything to retain the old script)</string>
          </property>
@@ -286,6 +298,12 @@ To tell GtDemo what data to sample, a math script must be provided in Gexpr fiel
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
          </property>
          <property name="text">
           <string>Step 3 - Important dimensions</string>
@@ -539,6 +557,12 @@ To tell GtDemo what data to sample, a math script must be provided in Gexpr fiel
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 4 - Useful hints</string>
          </property>
@@ -717,6 +741,12 @@ To tell GtDemo what data to sample, a math script must be provided in Gexpr fiel
     <layout class="QHBoxLayout">
      <item>
       <widget class="QPushButton" name="pHelp">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Help</string>
        </property>
@@ -737,6 +767,12 @@ To tell GtDemo what data to sample, a math script must be provided in Gexpr fiel
      </item>
      <item>
       <widget class="QPushButton" name="pBack">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&lt; &amp;Back</string>
        </property>
@@ -744,6 +780,12 @@ To tell GtDemo what data to sample, a math script must be provided in Gexpr fiel
      </item>
      <item>
       <widget class="QPushButton" name="pNext">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Next &gt;</string>
        </property>
@@ -751,6 +793,12 @@ To tell GtDemo what data to sample, a math script must be provided in Gexpr fiel
      </item>
      <item>
       <widget class="QPushButton" name="pCancel">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Cancel</string>
        </property>

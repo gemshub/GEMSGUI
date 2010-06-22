@@ -215,6 +215,12 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="pHelp">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Help</string>
        </property>
@@ -241,6 +247,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pPrint">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>Print</string>
        </property>
@@ -251,6 +263,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pOK">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;OK</string>
        </property>
@@ -261,6 +279,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pCancel">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Cancel</string>
        </property>

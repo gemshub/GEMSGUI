@@ -49,6 +49,12 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 1 - Thermodynaimc data tabulation (RTParm) configuration</string>
          </property>
@@ -203,7 +209,7 @@ A simple tExpr script can be created using the selection dialog on the next page
              <item row="1" column="0">
               <widget class="QLabel" name="label_9">
                <property name="text">
-                <string>From</string>
+                <string>Min.</string>
                </property>
               </widget>
              </item>
@@ -232,7 +238,7 @@ A simple tExpr script can be created using the selection dialog on the next page
              <item row="2" column="0">
               <widget class="QLabel" name="label_10">
                <property name="text">
-                <string>Until</string>
+                <string>Max.</string>
                </property>
               </widget>
              </item>
@@ -357,7 +363,7 @@ A simple tExpr script can be created using the selection dialog on the next page
              <item row="1" column="0">
               <widget class="QLabel" name="label_5">
                <property name="text">
-                <string>From</string>
+                <string>Min.</string>
                </property>
               </widget>
              </item>
@@ -395,7 +401,7 @@ A simple tExpr script can be created using the selection dialog on the next page
              <item row="2" column="0">
               <widget class="QLabel" name="label_6">
                <property name="text">
-                <string>Until</string>
+                <string>Max.</string>
                </property>
               </widget>
              </item>
@@ -484,6 +490,12 @@ A simple tExpr script can be created using the selection dialog on the next page
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 2 - Selection of items to sample (click &quot;Next&quot; without selecting anything to retain the old script)</string>
          </property>
@@ -500,6 +512,12 @@ A simple tExpr script can be created using the selection dialog on the next page
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
          </property>
          <property name="text">
           <string>Step 3 - Important dimensions</string>
@@ -983,6 +1001,12 @@ A simple tExpr script can be created using the selection dialog on the next page
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 4 - Useful hints</string>
          </property>
@@ -1107,6 +1131,12 @@ A simple tExpr script can be created using the selection dialog on the next page
     <layout class="QHBoxLayout">
      <item>
       <widget class="QPushButton" name="pHelp">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Help</string>
        </property>
@@ -1127,6 +1157,12 @@ A simple tExpr script can be created using the selection dialog on the next page
      </item>
      <item>
       <widget class="QPushButton" name="pBack">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&lt; &amp;Back</string>
        </property>
@@ -1134,6 +1170,12 @@ A simple tExpr script can be created using the selection dialog on the next page
      </item>
      <item>
       <widget class="QPushButton" name="pNext">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Next &gt;</string>
        </property>
@@ -1141,6 +1183,12 @@ A simple tExpr script can be created using the selection dialog on the next page
      </item>
      <item>
       <widget class="QPushButton" name="pCancel">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Cancel</string>
        </property>

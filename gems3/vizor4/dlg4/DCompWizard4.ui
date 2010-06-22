@@ -37,7 +37,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout">
@@ -48,6 +48,12 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
          </property>
          <property name="text">
           <string>Step 1 - Defining the dependent component (DC) type and the calculation method codes</string>
@@ -469,6 +475,12 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 2 - Specific dimensions and settings</string>
          </property>
@@ -840,6 +852,12 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 3 - Useful hints</string>
          </property>
@@ -959,6 +977,12 @@
     <layout class="QHBoxLayout">
      <item>
       <widget class="QPushButton" name="pHelp">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Help</string>
        </property>
@@ -979,6 +1003,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pBack">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&lt; &amp;Back</string>
        </property>
@@ -986,6 +1016,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pNext">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Next &gt;</string>
        </property>
@@ -993,6 +1029,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pCancel">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Cancel</string>
        </property>

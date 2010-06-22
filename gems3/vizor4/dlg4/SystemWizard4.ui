@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>932</width>
-    <height>534</height>
+    <width>836</width>
+    <height>589</height>
    </rect>
   </property>
   <property name="font">
@@ -367,6 +367,12 @@ Key of SysEq record to be used in getting phase compositions for the xp_ and MbX
     <layout class="QHBoxLayout">
      <item>
       <widget class="QPushButton" name="pHelp">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Help</string>
        </property>
@@ -387,6 +393,12 @@ Key of SysEq record to be used in getting phase compositions for the xp_ and MbX
      </item>
      <item>
       <widget class="QPushButton" name="pBack">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&lt; &amp;Back</string>
        </property>
@@ -394,6 +406,12 @@ Key of SysEq record to be used in getting phase compositions for the xp_ and MbX
      </item>
      <item>
       <widget class="QPushButton" name="pNext">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Next &gt;</string>
        </property>
@@ -401,6 +419,12 @@ Key of SysEq record to be used in getting phase compositions for the xp_ and MbX
      </item>
      <item>
       <widget class="QPushButton" name="pCancel">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Cancel</string>
        </property>

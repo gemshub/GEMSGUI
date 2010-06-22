@@ -103,6 +103,12 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="toolTip">
         <string>Closes the plot and goes back to the parent window</string>
        </property>
@@ -122,6 +128,12 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="toolTip">
         <string>Shows a fragment of the plot - set up size and position under Configure...</string>
        </property>
@@ -137,6 +149,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="toolTip">
         <string>Press to set up axii, colors, and graph legend symbols</string>
@@ -157,6 +175,12 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="toolTip">
         <string>Prints the plot and its legend (under construction)</string>
        </property>
@@ -167,6 +191,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="PushButton5">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>Save Image...</string>
        </property>

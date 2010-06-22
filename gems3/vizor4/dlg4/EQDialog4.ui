@@ -80,7 +80,7 @@
          <family>Arial</family>
          <pointsize>14</pointsize>
          <weight>75</weight>
-         <italic>true</italic>
+         <italic>false</italic>
          <bold>true</bold>
         </font>
        </property>
@@ -91,7 +91,7 @@
         <enum>QFrame::Raised</enum>
        </property>
        <property name="text">
-        <string>Gibbs Energy Minimization Modelling Project</string>
+        <string>Gibbs Energy Minimization Modeling Project</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -204,7 +204,7 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>12</pointsize>
+       <pointsize>11</pointsize>
       </font>
      </property>
      <property name="text">
@@ -222,6 +222,11 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
      </property>
      <property name="toolTip">
       <string/>
@@ -242,6 +247,11 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
      <property name="toolTip">
       <string/>
      </property>
@@ -260,6 +270,11 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
      </property>
      <property name="toolTip">
       <string/>
@@ -298,6 +313,13 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="toolTip">
         <string>Back to 'Thermodynamic database management' dialog</string>
        </property>
@@ -320,11 +342,18 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="toolTip">
         <string>Press to check/adjust controls of the numerical modules (saved in Project record)</string>
        </property>
        <property name="text">
-        <string>&amp;Numerical Controls...</string>
+        <string>&amp;Numerical Controls ...</string>
        </property>
        <property name="shortcut">
         <string>Alt+N</string>
@@ -338,6 +367,13 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="toolTip">
         <string>Learn about GEM chemical thermodynamic modelling technique</string>

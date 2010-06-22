@@ -80,7 +80,7 @@
          <family>Arial</family>
          <pointsize>14</pointsize>
          <weight>75</weight>
-         <italic>true</italic>
+         <italic>false</italic>
          <bold>true</bold>
         </font>
        </property>
@@ -276,6 +276,13 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="toolTip">
         <string>Returns to GEM-Selektor Main dialog</string>
        </property>
@@ -300,7 +307,9 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>12</pointsize>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="toolTip">
@@ -321,6 +330,13 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="toolTip">
         <string>Learn about structure and access mechanisms of thermodynamic database</string>

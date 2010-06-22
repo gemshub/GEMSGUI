@@ -61,7 +61,7 @@
     <enum>QFrame::Raised</enum>
    </property>
    <property name="pixmap">
-    <pixmap resource="../../img.qrc">:/images/img/gems32.xpm</pixmap>
+    <pixmap>:/images/img/gems32.xpm</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -97,6 +97,12 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
       <property name="toolTip">
        <string>Back to 'Thermodynamic database management' dialog</string>
       </property>
@@ -119,6 +125,12 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
       <property name="text">
        <string>&amp;Help</string>
       </property>
@@ -137,6 +149,12 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="toolTip">
        <string>Get descriptions of database and other file formats</string>
@@ -172,6 +190,11 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
       <property name="toolTip">
        <string/>
       </property>
@@ -191,6 +214,11 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
       <property name="toolTip">
        <string/>
       </property>
@@ -209,6 +237,11 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
       </property>
       <property name="toolTip">
        <string/>
@@ -270,6 +303,11 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
       </property>
       <property name="toolTip">
        <string>Some tables of constants used in thermodynamic calculations</string>
@@ -410,7 +448,7 @@
      <family>Arial</family>
      <pointsize>14</pointsize>
      <weight>75</weight>
-     <italic>true</italic>
+     <italic>false</italic>
      <bold>true</bold>
     </font>
    </property>
@@ -470,10 +508,7 @@
   <tabstop>pButtonHelp</tabstop>
   <tabstop>pButtonFormats</tabstop>
  </tabstops>
- <resources>
-  <include location="../../img.qrc"/>
-  <include location="../../img.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>pButtonBack</sender>

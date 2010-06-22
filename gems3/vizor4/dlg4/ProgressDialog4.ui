@@ -479,6 +479,12 @@
          <height>40</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="toolTip">
         <string>Make next iteration in Stepwise mode</string>
        </property>
@@ -520,6 +526,12 @@
          <height>40</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="toolTip">
         <string>Make all iteration in Stepwise mode</string>
        </property>
@@ -557,6 +569,12 @@
          <width>80</width>
          <height>40</height>
         </size>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="toolTip">
         <string>Do not save IPM results to database (or cancel IPM run in Stepwise mode)</string>

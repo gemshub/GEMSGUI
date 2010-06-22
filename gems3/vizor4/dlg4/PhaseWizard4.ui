@@ -49,6 +49,12 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 1 - Defining the Phase model</string>
          </property>
@@ -453,6 +459,12 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 2 - model-specific settings</string>
          </property>
@@ -707,6 +719,12 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 3 - Useful hints</string>
          </property>
@@ -822,6 +840,12 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
     <layout class="QHBoxLayout">
      <item>
       <widget class="QPushButton" name="pHelp">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Help</string>
        </property>
@@ -842,6 +866,12 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
      </item>
      <item>
       <widget class="QPushButton" name="pBack">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&lt; &amp;Back</string>
        </property>
@@ -849,6 +879,12 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
      </item>
      <item>
       <widget class="QPushButton" name="pNext">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Next &gt;</string>
        </property>
@@ -856,6 +892,12 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
      </item>
      <item>
       <widget class="QPushButton" name="pCancel">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Cancel</string>
        </property>

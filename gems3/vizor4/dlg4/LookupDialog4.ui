@@ -87,7 +87,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>From</string>
+            <string>Min.</string>
            </property>
           </widget>
          </item>
@@ -113,7 +113,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Until</string>
+            <string>Max.</string>
            </property>
           </widget>
          </item>
@@ -194,7 +194,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>From</string>
+            <string>Min.</string>
            </property>
           </widget>
          </item>
@@ -217,7 +217,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
-            <string>Until</string>
+            <string>Max.</string>
            </property>
           </widget>
          </item>
@@ -310,6 +310,12 @@
    </item>
    <item row="4" column="0">
     <widget class="QPushButton" name="buttonHelp">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text">
       <string>&amp;Help</string>
      </property>
@@ -330,6 +336,12 @@
    </item>
    <item row="4" column="3">
     <widget class="QPushButton" name="buttonOK">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text">
       <string>&amp;Next</string>
      </property>
@@ -337,6 +349,12 @@
    </item>
    <item row="4" column="4">
     <widget class="QPushButton" name="buttonCancel">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text">
       <string>&amp;Cancel</string>
      </property>

@@ -49,6 +49,12 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 1 - Process Simulator configuration</string>
          </property>
@@ -278,6 +284,12 @@ Three main types of simulators are: (1) 'Sequential', where only input GEM param
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
          </property>
          <property name="text">
           <string>Step 2 - Process Simulator equations (click 'Next' to retain the old script)</string>
@@ -550,6 +562,12 @@ Three main types of simulators are: (1) 'Sequential', where only input GEM param
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 3 - Selection of items to sample/plot (click &quot;Next&quot; without selecting anything to retain the old script)</string>
          </property>
@@ -566,6 +584,12 @@ Three main types of simulators are: (1) 'Sequential', where only input GEM param
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
          </property>
          <property name="text">
           <string>Step 4 - Important dimensions</string>
@@ -921,6 +945,12 @@ Three main types of simulators are: (1) 'Sequential', where only input GEM param
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 5 - Additional settings</string>
          </property>
@@ -1037,6 +1067,12 @@ Other three flags should be changed by advanced users only.</string>
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
          </property>
          <property name="text">
           <string>Step 6 - Useful hints</string>
@@ -1167,6 +1203,12 @@ Other three flags should be changed by advanced users only.</string>
     <layout class="QHBoxLayout">
      <item>
       <widget class="QPushButton" name="pHelp">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Help</string>
        </property>
@@ -1187,6 +1229,12 @@ Other three flags should be changed by advanced users only.</string>
      </item>
      <item>
       <widget class="QPushButton" name="pBack">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&lt; &amp;Back</string>
        </property>
@@ -1194,6 +1242,12 @@ Other three flags should be changed by advanced users only.</string>
      </item>
      <item>
       <widget class="QPushButton" name="pNext">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Next &gt;</string>
        </property>
@@ -1201,6 +1255,12 @@ Other three flags should be changed by advanced users only.</string>
      </item>
      <item>
       <widget class="QPushButton" name="pCancel">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Cancel</string>
        </property>

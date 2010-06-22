@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>675</width>
+    <width>677</width>
     <height>599</height>
    </rect>
   </property>
@@ -48,6 +48,12 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
          </property>
          <property name="text">
           <string>Step 1 - Dual-Thermodynamic Task Configuration</string>
@@ -375,6 +381,12 @@ The DualTh module and record can be configured to perform this task in a conveni
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
          </property>
          <property name="text">
           <string>Step 2 - Important dimensions</string>
@@ -793,6 +805,12 @@ Both bulk compositions can be set up later in amounts of IC (independent compone
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 3 - Additional settings</string>
          </property>
@@ -940,6 +958,12 @@ Deactivate the third checkbox if you do not provide formula units (e.g. NaHCO3, 
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Step 4 - Useful hints</string>
          </property>
@@ -1053,6 +1077,12 @@ Deactivate the third checkbox if you do not provide formula units (e.g. NaHCO3, 
     <layout class="QHBoxLayout">
      <item>
       <widget class="QPushButton" name="pHelp">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Help</string>
        </property>
@@ -1073,6 +1103,12 @@ Deactivate the third checkbox if you do not provide formula units (e.g. NaHCO3, 
      </item>
      <item>
       <widget class="QPushButton" name="pBack">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&lt; &amp;Back</string>
        </property>
@@ -1080,6 +1116,12 @@ Deactivate the third checkbox if you do not provide formula units (e.g. NaHCO3, 
      </item>
      <item>
       <widget class="QPushButton" name="pNext">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Next &gt;</string>
        </property>
@@ -1087,6 +1129,12 @@ Deactivate the third checkbox if you do not provide formula units (e.g. NaHCO3, 
      </item>
      <item>
       <widget class="QPushButton" name="pCancel">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>&amp;Cancel</string>
        </property>
