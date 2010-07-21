@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>784</width>
-    <height>590</height>
+    <width>806</width>
+    <height>613</height>
    </rect>
   </property>
   <property name="font">
@@ -37,7 +37,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -299,7 +299,7 @@ Three main types of simulators are: (1) 'Sequential', where only input GEM param
        <item row="1" column="0" colspan="3">
         <widget class="QTableWidget" name="tIters">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -333,18 +333,6 @@ Three main types of simulators are: (1) 'Sequential', where only input GEM param
          </attribute>
          <attribute name="verticalHeaderHighlightSections">
           <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderDefaultSectionSize">
-          <number>22</number>
-         </attribute>
-         <attribute name="horizontalHeaderMinimumSectionSize">
-          <number>10</number>
-         </attribute>
-         <attribute name="verticalHeaderHighlightSections">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>70</number>
          </attribute>
          <row>
           <property name="text">
