@@ -669,8 +669,8 @@ TCModule::CmCalc()
              ( nRT < RT_SYSEQ && nRT != RT_SDATA ) )
             Error( GetName(), "Please, do it in Database mode!");
 
-        if( ! MessageToSave() )
-	    return;
+      //  if( ! MessageToSave() ) //27/08/2010
+      //    return;
 
         gstring str=db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos
@@ -1194,9 +1194,14 @@ TCModule::CmAddFileToList()
         if( ! MessageToSave() )
 	    return;
 
-        gstring filename;
-        if( vfChooseFileOpen(window(), filename,
-       "Enter a new database file name", PDB_EXT ) == false )
+        gstring filename = db->GetKeywd();
+                filename += ".newname.";
+                filename +=  PDB_EXT;
+        gstring filter = "*.";
+                filter +=  PDB_EXT;
+
+        if( vfChooseFileSave(window(), filename,
+       "Enter a new database file name", filter.c_str() ) == false )
             return;
         // test Path Added Sveta 5/03/02
         // pdb extension, name must started db->GetKeywd()

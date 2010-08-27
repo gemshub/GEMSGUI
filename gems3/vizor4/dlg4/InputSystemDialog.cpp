@@ -60,6 +60,7 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
             str += pkey;
             setWindowTitle( str );
 
+    pTname->setText( QString(aObj[o_ssname].GetStringEmpty(0,0).c_str()));
     // define lists pages
     for(  ii=0; ii<awnData.GetCount()-1; ii++ )  // -1 all exept static window
     {
@@ -188,6 +189,13 @@ InputSystemDialog::~InputSystemDialog()
 
 void InputSystemDialog::getTable( TIArray<tableSetupData>& tab ) const
 {
+  gstring txt = pTname->text().toLatin1().data();
+
+  if( txt == emptiness || txt == short_emptiness )
+  aObj[o_ssname].SetString( S_EMPTY, 0, 0 );
+  else
+  aObj[o_ssname].SetString( txt.c_str(), 0, 0 );
+
   tab.Clear();
   for( uint ii=0; ii< tbData.GetCount(); ii++ )
     tab.Add( new tableSetupData(tbData[ii]) );

@@ -572,10 +572,11 @@ void TProfil::deriveSystat()
             pmp->X[j] = pmp->Y[j];
         multi->EqstatExpand( keyp.c_str() );
     }
+
     // SD 22/01/2010 bool
     systbcInput( window(), keyp.c_str() );
     pVisor->Update();
-//    pVisor->OpenModule(window(), MD_SYSTEM);
+    pVisor->OpenModule(window(), MD_SYSTEM);
 }
 
 
@@ -607,11 +608,11 @@ void TProfil::newSystat( int mode )
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
        multi->MultiInit(  );
 
+
     // SD 22/01/2010 bool
     systbcInput( window(), str.c_str() );
-
-    //pVisor->OpenModule(window(), MD_SYSTEM);
     pVisor->Update();
+    pVisor->OpenModule(window(), MD_SYSTEM);
 }
 
 
