@@ -576,7 +576,7 @@ void TProfil::deriveSystat()
     // SD 22/01/2010 bool
     systbcInput( window(), keyp.c_str() );
     pVisor->Update();
-    pVisor->OpenModule(window(), MD_SYSTEM);
+    //pVisor->OpenModule(window(), MD_SYSTEM);
 }
 
 
@@ -612,7 +612,7 @@ void TProfil::newSystat( int mode )
     // SD 22/01/2010 bool
     systbcInput( window(), str.c_str() );
     pVisor->Update();
-    pVisor->OpenModule(window(), MD_SYSTEM);
+    //pVisor->OpenModule(window(), MD_SYSTEM);
 }
 
 

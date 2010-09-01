@@ -359,7 +359,7 @@ NewSystemDialog::CmInsert_SYSTEM()
     gstring key_s = rt[RT_SYSEQ].PackKey();
     TProfil::pm->systbcInput( this, key_s.c_str() );
     pVisor->Update();
-    pVisor->OpenModule(this, MD_SYSTEM);
+   // pVisor->OpenModule(this, MD_SYSTEM);
 }
 
 void

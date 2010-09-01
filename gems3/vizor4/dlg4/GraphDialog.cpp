@@ -547,14 +547,14 @@ GraphDialog::CmSave()
     QString filter;
     QList<QByteArray> formatList = QImageWriter::supportedImageFormats ();  
 
-   if( formatList.contains("PNG") )
-	filter.append("PNG Files (*.png)");
+   if( formatList.contains("png") )
+        filter.append("png Files (*.png)");
 
    QListIterator<QByteArray> it( formatList );
 	while( it.hasNext() ) 
 	{
 	  QString str = it.next();
-	if( str == "PNG" )
+        if( str == "png" )
 	  continue;
 	if( !filter.isEmpty() )
 	    filter.append(";;");

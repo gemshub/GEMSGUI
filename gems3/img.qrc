@@ -1,37 +1,38 @@
 <RCC>
     <qresource prefix="/graphics">
-    <file>img/p_circle.png</file>
-    <file>img/p_crossdiag.png</file>
-    <file>img/p_fillcircle.png</file>
-    <file>img/p_fillrombbus.png</file>
-    <file>img/p_fillsquare.png</file>
-    <file>img/p_point.png</file>
-    <file>img/p_rombbus.png</file>
-    <file>img/p_square.png</file>
-    <file>img/p_star.png</file>
-    <file>img/p_wye.png</file>
-  </qresource>
+        <file>img/p_circle.png</file>
+        <file>img/p_crossdiag.png</file>
+        <file>img/p_fillcircle.png</file>
+        <file>img/p_fillrombbus.png</file>
+        <file>img/p_fillsquare.png</file>
+        <file>img/p_point.png</file>
+        <file>img/p_rombbus.png</file>
+        <file>img/p_square.png</file>
+        <file>img/p_star.png</file>
+        <file>img/p_wye.png</file>
+    </qresource>
     <qresource prefix="/images">
         <file>img/gems1.png</file>
         <file>img/gems50.png</file>
         <file>img/gems16.png</file>
     </qresource>
     <qresource prefix="/toolbar">
-    <file>img/RunBCC.png</file>
-    <file>img/filesaveas.png</file>
-    <file>img/RunIPM.png</file>
-    <file>img/SetCompos.png</file>
-    <file>img/arrow_left1.png</file>
-    <file>img/arrow_right1.png</file>
-    <file>img/fileopen.png</file>
-    <file>img/fileprint.png</file>
-    <file>img/filesave.png</file>
-    <file>img/help.png</file>
-    <file>img/iconclose.png</file>
-    <file>img/kcalc.png</file>
-    <file>img/ordertool.png</file>
-    <file>img/p_star.png</file>
-    <file>img/toolbutton.png</file>
-    <file>img/xpaint.png</file>
-  </qresource>
+        <file>img/RunBCC.png</file>
+        <file>img/filesaveas.png</file>
+        <file>img/RunIPM.png</file>
+        <file>img/SetCompos.png</file>
+        <file>img/arrow_left1.png</file>
+        <file>img/arrow_right1.png</file>
+        <file>img/fileopen.png</file>
+        <file>img/fileprint.png</file>
+        <file>img/filesave.png</file>
+        <file>img/help.png</file>
+        <file>img/iconclose.png</file>
+        <file>img/kcalc.png</file>
+        <file>img/ordertool.png</file>
+        <file>img/p_star.png</file>
+        <file>img/toolbutton.png</file>
+        <file>img/xpaint.png</file>
+        <file>img/ordertool1.png</file>
+    </qresource>
 </RCC>

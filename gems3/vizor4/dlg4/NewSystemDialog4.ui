@@ -142,6 +142,7 @@
    <addaction name="actionNew"/>
    <addaction name="separator"/>
    <addaction name="actionINSERT_SYSTEM"/>
+   <addaction name="actionOpen_SYSTEM_ICOMP"/>
    <addaction name="action_BCC"/>
    <addaction name="action_IPM"/>
    <addaction name="actionEQUSTAT_ICOMP"/>
@@ -265,11 +266,18 @@
    </property>
   </action>
   <action name="actionOpen_SYSTEM_ICOMP">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/ordertool1.png</normaloff>:/toolbar/img/ordertool1.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Bulk composition...</string>
    </property>
+   <property name="iconText">
+    <string>Detailed bulk composition...</string>
+   </property>
    <property name="toolTip">
-    <string>Press to set up bulk chemical composition (BCC) of the system</string>
+    <string>Press to set up detailed bulk chemical composition (BCC) of the system</string>
    </property>
   </action>
   <action name="actionOutMulti">
