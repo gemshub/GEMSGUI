@@ -46,7 +46,7 @@
      <x>0</x>
      <y>0</y>
      <width>804</width>
-     <height>20</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuRecord">
@@ -77,7 +77,7 @@
    </widget>
    <widget class="QMenu" name="menu_Calc">
     <property name="title">
-     <string>&amp;Calc</string>
+     <string>&amp;Calculate</string>
     </property>
     <addaction name="action_BCC"/>
     <addaction name="action_IPM"/>
@@ -181,7 +181,7 @@
     <string>&amp;New(Clone)...</string>
    </property>
    <property name="toolTip">
-    <string>Clone record</string>
+    <string>Press to clone a new system (SysEq record) from present one</string>
    </property>
   </action>
   <action name="actionDisplay">
@@ -271,13 +271,13 @@
      <normaloff>:/toolbar/img/ordertool1.png</normaloff>:/toolbar/img/ordertool1.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Bulk composition...</string>
+    <string>Detailed &amp;bulk composition...</string>
    </property>
    <property name="iconText">
     <string>Detailed bulk composition...</string>
    </property>
    <property name="toolTip">
-    <string>Press to set up detailed bulk chemical composition (BCC) of the system</string>
+    <string>Press for detailed setup of the system and its bulk chemical composition (BCC)</string>
    </property>
   </action>
   <action name="actionOutMulti">
@@ -296,10 +296,10 @@
      <normaloff>:/toolbar/img/RunBCC.png</normaloff>:/toolbar/img/RunBCC.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;BCC</string>
+    <string>&amp;BCC check</string>
    </property>
    <property name="toolTip">
-    <string>Press to check the system definition and calculate BCC</string>
+    <string>Press to check system definition and calculate bulk chemical composition (BCC)</string>
    </property>
   </action>
   <action name="action_IPM">
@@ -308,10 +308,10 @@
      <normaloff>:/toolbar/img/RunIPM.png</normaloff>:/toolbar/img/RunIPM.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;IPM</string>
+    <string>GEM &amp;IPM</string>
    </property>
    <property name="toolTip">
-    <string>Press to calculate the equilibrium state using GEM IPM</string>
+    <string>Press to calculate equilibrium state using GEM IPM</string>
    </property>
   </action>
   <action name="actionSimplex">
@@ -350,7 +350,7 @@
      <normaloff>:/toolbar/img/ordertool.png</normaloff>:/toolbar/img/ordertool.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Dual Solution etc...</string>
+    <string>GEM IPM &amp;dual solution etc...</string>
    </property>
    <property name="toolTip">
     <string>Press to explore detailed GEM IPM results</string>
@@ -460,7 +460,7 @@
     <string>&amp;Change Bulk Composition...</string>
    </property>
    <property name="toolTip">
-    <string>Press to set up bulk chemical composition (BCC) of the system</string>
+    <string>Press to open Recipe Wizard for bulk chemical composition (BCC) of the system</string>
    </property>
   </action>
  </widget>
