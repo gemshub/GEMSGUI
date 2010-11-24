@@ -36,16 +36,16 @@ TDualTh::TDualTh( int nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("l<10 Identifier of the parent modelling project <-Project");
-    aFldKeysHelp.Add("l<3  Symbol of thermodynamic potential to minimize <-SysEq");
-    aFldKeysHelp.Add("l<12 Identifier of the parent chemical system definition <-SysEq");
-    aFldKeysHelp.Add("l<5  CSD variant number <integer> <-SysEq");
-    aFldKeysHelp.Add("l<8  Volume V of the system (L) or 0 (no volume constraint) <float> <-SysEq");
-    aFldKeysHelp.Add("l<8  Pressure P, bar <float> or 0 (Psat H2O) <-SysEq");
-    aFldKeysHelp.Add("l<8  Temperature T, in Centigrade <float>  <-SysEq");
-    aFldKeysHelp.Add("l<4  Variant number of thermodynamic PT-data <integer> <-SysEq");
-    aFldKeysHelp.Add("l<18 Identifier of this DualTh calculation task");
-    aFldKeysHelp.Add("l<4  DualTh task code - one of { E P S } and one of { M G A X } ");
+    aFldKeysHelp.Add("Modelling project name");
+    aFldKeysHelp.Add("Thermodynamic potential to minimize {G}");
+    aFldKeysHelp.Add("Identifier of the parent chemical system definition");
+    aFldKeysHelp.Add("CSD variant number");
+    aFldKeysHelp.Add("Volume of the system (L) or 0 (no volume constraint)");
+    aFldKeysHelp.Add("Pressure in bar or 0 for Psat (H2O)");
+    aFldKeysHelp.Add("Temperature (deg. C)");
+    aFldKeysHelp.Add("Variant number of thermodynamic pressure-temperature data");
+    aFldKeysHelp.Add("Identifier of this DualThermo calculation task");
+    aFldKeysHelp.Add("DualThermo task code: one of { E P S } and one of { M G A X } ");
 
     dtp=&dt[0];
     set_def();

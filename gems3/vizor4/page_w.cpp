@@ -109,7 +109,8 @@ void TCPage::AddFields( bool info )
        cnt = 1;
        while( (ii+cnt) < getFieldCnt() && 
     		   ( rInfo.aFieldInfo[ii+cnt].place == Tied || 
-    			 rInfo.aFieldInfo[ii+cnt].place == Sticked ) )
+                     rInfo.aFieldInfo[ii+cnt].place == Sticked ||
+                     rInfo.aFieldInfo[ii+cnt].place == UndeTabl ) )
        {
            aFlds.append(rInfo.aFieldInfo[ii+cnt]);
     	   cnt++;
@@ -174,6 +175,8 @@ void TCPage::RedrawFields()
                       x += oldColSize;
                       x += wdFSPACE;
                       break;
+
+        case UndeTabl:
         case Sticked:
         case Down:
                       y += oldRowSize;
@@ -213,6 +216,7 @@ void TCPage::RedrawFields()
             rowSize = max(rowSize, oldRowSize );
             break;
         case Under:
+        case UndeTabl:
         case Sticked:
         case Down:
         case SkipLine:

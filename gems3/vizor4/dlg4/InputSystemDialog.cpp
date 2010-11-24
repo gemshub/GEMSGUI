@@ -147,8 +147,8 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
     for(  ii=0; ii<atbData.GetCount(); ii++ )
     {
         jj = atbData[ii].nIdx;
-        int iWin = atbData[ii].nWin;
-        int nO = atbData[ii].nObj;
+        uint iWin = atbData[ii].nWin;
+        uint nO = atbData[ii].nObj;
         if( iWin  >= wnData.GetCount()-1 ) // static list
           jj = max(0,staticFindRow( nO, jj ));
         pLists[iWin]->item(jj)->setSelected(true);
@@ -191,7 +191,7 @@ void InputSystemDialog::getTable( TIArray<tableSetupData>& tab ) const
 {
   gstring txt = pTname->text().toLatin1().data();
 
-  if( txt == emptiness || txt == short_emptiness )
+  if( txt == emptiness /*|| txt == short_emptiness*/ )
   aObj[o_ssname].SetString( S_EMPTY, 0, 0 );
   else
   aObj[o_ssname].SetString( txt.c_str(), 0, 0 );

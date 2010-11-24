@@ -357,7 +357,7 @@ struct tableSetupData
 
    tableSetupData( int aWin, int aobj, const char * oName,
                    int aIdx, const char * ndName,
-                   double aVal, double aUnit ):
+                   double aVal, char aUnit ):
            nWin(aWin), nObj(aobj), nIdx(aIdx), val(aVal), unit (aUnit),
            objName(oName), ndxName (ndName)
    { }

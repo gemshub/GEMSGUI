@@ -328,7 +328,7 @@ AGAIN:
 
         // load lists of ICOMP, COMPOS, PHASE and DCOMP&REACT recordc keys
         rt[RT_PARAM].SetKey( key_str.c_str() );
-        rmults->LoadRmults( true, true );
+        rmults->LoadRmults( !templ_key /*true*/, true );
 
    pVisor->Message( 0, "Loading Modelling Project",
          "Detecting changes in thermodynamic database", 40 );
@@ -468,7 +468,7 @@ AGAIN:
 
         // load lists of ICOMP, COMPOS, PHASE and DCOMP&REACT recordc keys
         rt[RT_PARAM].SetKey( key_str.c_str() );
-        rmults->LoadRmults( true, true );
+        rmults->LoadRmults( !templ_key /*true*/, true );
 
    pVisor->Message( 0, "Loading Modelling Project",
          "Detecting changes in thermodynamic database", 40 );

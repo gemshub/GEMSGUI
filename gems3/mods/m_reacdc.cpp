@@ -37,14 +37,10 @@ TReacDC::TReacDC( int nrt ):
         TCModule( nrt )
 {
     nQ =8;
-    aFldKeysHelp.Add(
-        "l<4  Phase state of new (reaction-defined) DC <-REACDC (<-DCOMP)");
-    aFldKeysHelp.Add(
-        "l<8  Identifier of (REAC)DC group  <-REACDC (<-DCOMP)");
-    aFldKeysHelp.Add(
-        "l<16 Name of new (reaction-defined) DC (compound) <-REACDC (<-DCOMP)");
-    aFldKeysHelp.Add(
-        "l<4  Code of thermodynamic dataset (file) <-REACDC (<-DCOMP)");
+    aFldKeysHelp.Add("Phase state of new (reaction-defined) Dependent Component");
+    aFldKeysHelp.Add("Group to which Dependent Component belongs");
+    aFldKeysHelp.Add("Name of new Dependent Component");
+    aFldKeysHelp.Add("Name of thermodynamic data subset (e.g. database)");
 
     for(int i=1; i<nQ; i++)
     {
@@ -53,7 +49,7 @@ TReacDC::TReacDC( int nrt ):
     }
     rcp=&rc[0];
     set_def();
-    start_title = " Reaction-defined format thermodynamic data for DC (species)";
+    start_title = " Reaction-defined data format for Dependent Components (species)";
 }
 
 // link values to objects

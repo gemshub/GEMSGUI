@@ -40,30 +40,38 @@ KeyFilter::KeyFilter(QWidget* win, int irt, const char* key,
         iRt(irt),
         allowTemplates(allowTempl)
 {
-	setWindowTitle(caption);
+    QLineEdit* pEdit;
+    QLabel* pLabel;
+
+    setWindowTitle(caption);
 
     TDBKey dbKey( rt[irt].GetDBKey() );
 
     if( key )
         dbKey.SetKey(key);
 
-    QVBoxLayout* editBox = new QVBoxLayout();
+    QGridLayout* editBox = new QGridLayout();
     
     for( int ii=0; ii<dbKey.KeyNumFlds(); ii++)
     {
-        QLineEdit* pEdit;
         aEdit.Add( pEdit = new QLineEdit(this) );
         QString str = ((TCModule*)&aMod[irt])->GetFldHelp(ii);
         pEdit->setToolTip( str);
         pEdit->setMaxLength( dbKey.FldLen(ii) );
+        pEdit->setMaximumWidth( (dbKey.FldLen(ii)+2) * pVisorImp->getCharWidth() );
+        pEdit->setMinimumWidth( (dbKey.FldLen(ii)+2) * pVisorImp->getCharWidth() );
         gstring s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
         StripLine(s);
         pEdit->setText( s.c_str() );
-        editBox->addWidget( pEdit);
+        connect( pEdit, SIGNAL(editingFinished ()), this, SLOT(setKeyLine()) );
+
+        editBox->addWidget( pEdit, ii, 0, Qt::AlignRight);
+        pLabel = new QLabel( str, this);
+        editBox->addWidget( pLabel, ii, 1);
     }
     aEdit[0].setFocus();
 
-    QVBoxLayout* buttonBox = new QVBoxLayout();
+    QHBoxLayout* buttonBox = new QHBoxLayout();
     QPushButton* btn;
 
     btn = new QPushButton(this);
@@ -85,19 +93,38 @@ KeyFilter::KeyFilter(QWidget* win, int irt, const char* key,
     buttonBox->addStretch();
 
     btn = new QPushButton(this);
+    btn->setText("&Help");
+    connect( btn, SIGNAL(clicked()), this, SLOT(CmHelp()) );
+    buttonBox->addWidget( btn );
+
+    btn = new QPushButton(this);
     btn->setText("&Cancel");
 // qt3to4    btn->setAccel( Qt::Key_Escape );
     connect( btn, SIGNAL(clicked()), this, SLOT(reject()) );
     buttonBox->addWidget( btn );
 
-    btn = new QPushButton(this);            
-    btn->setText("&Help");
-    connect( btn, SIGNAL(clicked()), this, SLOT(CmHelp()) );
-    buttonBox->addWidget( btn );
+    fullKey = new QLineEdit(this);
+    fullKey->setText(dbKey.PackKey());
+    fullKey->setFocusPolicy( Qt::ClickFocus );
+    fullKey->setReadOnly( TRUE );
 
-    QHBoxLayout* mainBox = new QHBoxLayout(this);
-    mainBox->addLayout(editBox);   
-    mainBox->addLayout(buttonBox);   
+    QFrame *line = new QFrame(this);
+    line->setObjectName(QString::fromUtf8("line_3"));
+    line->setFrameShape(QFrame::HLine);
+    line->setFrameShadow(QFrame::Sunken);
+
+    QVBoxLayout* mainBox = new QVBoxLayout(this);
+
+    mainBox->addWidget(fullKey);
+    mainBox->addWidget(line);
+    mainBox->addLayout(editBox);
+
+    line = new QFrame(this);
+    line->setObjectName(QString::fromUtf8("line"));
+    line->setFrameShape(QFrame::HLine);
+    line->setFrameShadow(QFrame::Sunken);
+    mainBox->addWidget(line);
+    mainBox->addLayout(buttonBox);
     // setLayout(mainBox);
 }
 
@@ -143,10 +170,17 @@ KeyFilter::SetKeyString()
 }
 
 void
+KeyFilter::setKeyLine()
+{
+    fullKey->setText(SetKeyString().c_str());
+}
+
+void
 KeyFilter::EvSetAll()
 {
     for( uint ii=0; ii<aEdit.GetCount(); ii++ )
         aEdit[ii].setText("*");
+    setKeyLine();
 }
 
 void
@@ -166,7 +200,7 @@ KeyFilter::EvGetList()
         StripLine(s);
         aEdit[ii].setText( s.c_str() );
     }
-
+    setKeyLine();
 }
 
 gstring

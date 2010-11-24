@@ -27,8 +27,8 @@ TConst::TConst( int nrt ):
         TCModule( nrt )
 {
     CA=0;
-    aFldKeysHelp.Add("l<8  Code of function using Table of Constants");
-    aFldKeysHelp.Add("l<24 Table of Constants ID and dimensions");
+    aFldKeysHelp.Add("Code of function using table of constants");
+    aFldKeysHelp.Add("Table of constants ID and dimensions");
     set_def();
     start_title = " Numerical Constants ";
 }

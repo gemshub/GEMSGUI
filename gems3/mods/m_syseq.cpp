@@ -27,15 +27,14 @@ TSysEq::TSysEq( int nrt ):
         TCModule( nrt )
 {
     nQ = 2;
-    aFldKeysHelp.Add(
-        "l<10 Identifier of root multisystem <-Modelling project name>");
-    aFldKeysHelp.Add("l<3 Symbol of potential to minimize {G GV}");
-    aFldKeysHelp.Add("l<12 Identifier of chemical system definition (CSD)");
-    aFldKeysHelp.Add("l<5 Variant number for bulk composition <integer>");
-    aFldKeysHelp.Add("l<8 Volume V of the system (L, 0: unconstrained) <float>");
-    aFldKeysHelp.Add("l<8 Pressure P, bar <float> or 0 (Psat H2O)");
-    aFldKeysHelp.Add("l<8 Temperature T, deg.C <float>");
-    aFldKeysHelp.Add("l<4 Variant number for CSD constraints <integer>");
+    aFldKeysHelp.Add("Modelling project name");
+    aFldKeysHelp.Add("Thermodynamic potential to minimize {G GV}");
+    aFldKeysHelp.Add("Name of chemical system definition (CSD)");
+    aFldKeysHelp.Add("Variant number for bulk composition <integer>");
+    aFldKeysHelp.Add("Volume of the system (L) or 0 (no volume constraint)");
+    aFldKeysHelp.Add("Pressure in bar or 0 for Psat (H2O)");
+    aFldKeysHelp.Add("Temperature (deg. C)");
+    aFldKeysHelp.Add("Variant number for CSD constraints");
 
     stp=&st[1];
     ssp=&ss[1];
@@ -59,23 +58,6 @@ void TSysEq::setCalcFlag( bool ifC )
     else stp->Flags =(stp->Flags&(0xF-0x1));
 }
 
-// Remake record in Calc Module
-bool TSysEq::MakeRecord( const char *key )
-{
-    // Get rekord key
-    gstring str = GetKeyofRecord( key, "Please, select a record key ", KEY_NEW );
-    if(  str.empty() )
-        Error( GetName(), "Operation cancelled!" );
-    keyTest( str.c_str() );
-    int Rnum = rt[RT_SYSEQ].Find( str.c_str() );
-    if( Rnum >= 0 )
-    {
-        rt[RT_SYSEQ].Get( Rnum ); // read record
-        dyn_set();
-    }
-    RecBuild( str.c_str() );  // Edit flags
-    return ( Rnum<0 );
-}
 
 // Input nessasery data and links objects
 void TSysEq::RecInput( const char *key )

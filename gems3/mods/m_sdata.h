@@ -73,6 +73,7 @@ public:
 
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecSave( const char *key, bool onOld ); // Added 09.04.03 KD
+    void RecordPrint( const char *key=0 ); //sddata key
 
     void CmHelp();                       // 05.01.01
     char *getAbstr() const

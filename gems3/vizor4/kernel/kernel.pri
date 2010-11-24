@@ -1,6 +1,8 @@
 
          HEADERS += $$KERNEL_H/v_vals.h \
 #                    $$KERNEL_H/v_user.h \
+                    $$KERNEL_H/array.h \
+                    $$KERNEL_H/gstring.h \
                     $$KERNEL_H/v_vals_impl.h \
                     $$KERNEL_H/v_object.h \
                     $$KERNEL_H/v_file.h  \
@@ -12,6 +14,7 @@
                     $$KERNEL_H/config.h
 
          SOURCES += $$KERNEL_CPP/v_user.cpp \
+                    $$KERNEL_CPP/gstring.cpp \
                     $$KERNEL_CPP/v_vals.cpp \
                     $$KERNEL_CPP/v_object.cpp \
                     $$KERNEL_CPP/v_file.cpp  \

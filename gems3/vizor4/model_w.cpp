@@ -60,7 +60,8 @@ int TObjectModel::rCount() const
    {
          if(  flds[ii].place == Tied )
                  sizeN = max( sizeN, flds[ii].pObj->GetNS() );
-         if(  flds[ii].place == Sticked )
+
+         if(  flds[ii].place == Sticked || flds[ii].place == UndeTabl )
          {    deltaN += sizeN;
               sizeN = flds[ii].pObj->GetNS();
          }
@@ -75,17 +76,22 @@ int TObjectModel::rowCount( const QModelIndex & /*parent*/ ) const
 
 int TObjectModel::cCount() const
 {
-   int ii, deltaM = 0, sizeM = flds[0].pObj->GetMS();
+   int ii, currentdeltaM = 0, deltaM = 0, sizeM = flds[0].pObj->GetMS();
    for(  ii=1; ii< flds.count(); ii++)
    {
-         if(  flds[ii].place == Sticked )
-                         sizeM = max( sizeM, flds[ii].pObj->GetMS() );
-    if(  flds[ii].place == Tied )
-        {    deltaM += sizeM;
+       if(  flds[ii].place == UndeTabl )
+       { deltaM = max(deltaM, currentdeltaM);
+         currentdeltaM = 0;
+         sizeM =0;
+       }
+       if(  flds[ii].place == Sticked || flds[ii].place == UndeTabl )
+            sizeM = max( sizeM, flds[ii].pObj->GetMS() );
+        if(  flds[ii].place == Tied )
+        {    currentdeltaM += sizeM;
                  sizeM = flds[ii].pObj->GetMS();
         }
   }
-  return deltaM + sizeM;
+  return max(deltaM, currentdeltaM)/*deltaM*/ + sizeM;
 }
 
 int TObjectModel::columnCount( const QModelIndex & /*parent*/ ) const
@@ -97,7 +103,7 @@ int TObjectModel::getObjFromModel( int row, int col,
 		int& nO, int& iN, int &iM, Selection* sel, int to_calc ) const
 {
   int deltaN = 0, sizeN = flds[0].pObj->GetNS();
-  int deltaM = 0, sizeM = flds[0].pObj->GetMS();
+  int fuldeltaM = 0, deltaM = 0,sizeM = flds[0].pObj->GetMS();
   
   nO = iN = iM = -1;
   
@@ -108,7 +114,13 @@ int TObjectModel::getObjFromModel( int row, int col,
 	    sizeM = flds[ii].pObj->GetMS();
         sizeN = max( sizeN, flds[ii].pObj->GetNS() );
     }
-    if( ii > 0 && flds[ii].place == Sticked )
+    if( flds[ii].place == UndeTabl )
+    {
+       fuldeltaM += deltaM;
+       deltaM = 0;
+       sizeM = 0;
+    }
+    if( ii > 0 && ( flds[ii].place == Sticked || flds[ii].place == UndeTabl ) )
     {
     	deltaN += sizeN;
     	sizeN = flds[ii].pObj->GetNS();
@@ -126,7 +138,8 @@ int TObjectModel::getObjFromModel( int row, int col,
 		 	 return -1; 
 		 }
 		 if( sel ) // get selection
-		 {
+                 {
+                    // deltaM += fuldeltaM;
 			   sel->N1 = max(deltaN, sel->N1 );
 			   sel->N2 = min(deltaN + flds[ii].pObj->GetNS()-1, sel->N2 );
 			   sel->M1 = max(deltaM, sel->M1 );
@@ -212,7 +225,7 @@ bool TObjectModel::setData( const QModelIndex &index, const QVariant &value, int
 	  {
 		gstring txt = QVariant(value).toString().toLatin1().data();
 	
-	      if( txt == emptiness || txt == short_emptiness )
+              if( txt == emptiness /*|| txt == short_emptiness*/ )
 	      aObj[nO].SetString( S_EMPTY, iN, iM );
 	    else
 	      aObj[nO].SetString( txt.c_str(), iN, iM );
@@ -368,8 +381,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
  static bool no_menu_in = true;
  void TObjectTable::focusOutEvent( QFocusEvent * event )
  {
-   cout << "focusOutEvent " <<  endl;
-         if( no_menu_out )
+        if( no_menu_out )
 	    clearSelection();
          no_menu_out = true;
 	 QTableView::focusOutEvent( event );
@@ -447,6 +459,9 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
  	fullcolSize = ( horizontalHeader()->sectionSize(0) *  sizeM  );
  	fullrowSize  = ( verticalHeader()->sectionSize(0) *  sizeN  );
  	
+        int maxColSize = colSize;
+        int maxfullcolSize = fullcolSize;
+
         for( ii=1; ii< flds.count(); ii++)
  	{
  		 if(  flds[ii].place == Tied )
@@ -463,14 +478,22 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
                         }
 
   		 } 
- 		 if(  flds[ii].place == Sticked )
+                 if( flds[ii].place == UndeTabl )
+                 {
+                     maxColSize = max( maxColSize, colSize);
+                     maxfullcolSize = max( maxfullcolSize, fullcolSize);
+                     col_ii=0;
+                     colSize = 0;
+                     fullcolSize =0;
+                 }
+                 if(  flds[ii].place == Sticked || flds[ii].place == UndeTabl )
  		 {
  			 sizeM = max( sizeM, flds[ii].pObj->GetMS() );
  			 row_ii += sizeN;
  			 sizeN = flds[ii].pObj->GetNS();
   	  		 rowSize += ( verticalHeader()->sectionSize( row_ii ) * min(abs(flds[ii].maxN), sizeN ) );
  	  		 fullrowSize += ( verticalHeader()->sectionSize( row_ii ) *  sizeN  );
-                       if(fullcolSize == 0) // first not empty
+                       if(fullcolSize == 0 && maxfullcolSize==0 ) // first not empty
                         {
                          colSize = ( horizontalHeader()->sectionSize(col_ii) * min(flds[ii].maxM, sizeM ) );
                          fullcolSize = ( horizontalHeader()->sectionSize(col_ii) *  sizeM  );
@@ -478,17 +501,20 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
               }
  	}	
  	
+        colSize = max( maxColSize, colSize);
+        fullcolSize = max( maxfullcolSize, fullcolSize);
+
  	if( fullcolSize > colSize )
- 	{	
- 		rowSize += fontMetrics().height()+1;
- 		//rowSize += horizontalScrollBar()->height();//szSBAR; (changed after update from 30 to 16 )
+        {
+                rowSize += fontMetrics().height()+1;
+                //rowSize += horizontalScrollBar()->height();//szSBAR; (changed after update from 30 to 16 )
   //	cout << "font metric" << QFontMetrics( pVisorImp->getCellFont() ).height() 
   //	<< "horizontalScrollBar()->height();" << horizontalScrollBar()->height() << endl;
  	}	
  	
  	if( fullrowSize > rowSize )
-        {	//colSize += fontMetrics().width(' ');
-                colSize += verticalScrollBar()->width();//szSBAR;
+        {	colSize += fontMetrics().width('M')*2+1;
+                //colSize += verticalScrollBar()->width();//szSBAR;
  	}	
  	
  	// for frame

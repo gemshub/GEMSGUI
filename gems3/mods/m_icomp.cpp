@@ -30,12 +30,9 @@ TIComp* TIComp::pm;
 TIComp::TIComp( int nrt ):
         TCModule( nrt )
 {
-    aFldKeysHelp.Add(
-"l<6  Symbol of Independent Component (IC) { U Mg Hum Lnta Vol Zz ... }_");
-    aFldKeysHelp.Add(
-        "l<4  Class of IC { e o h a i z v <integer> }_");
-    aFldKeysHelp.Add(
-        "l<22 Record Key Comment to IC definition_");
+    aFldKeysHelp.Add("Symbol of Independent Component (IC)");
+    aFldKeysHelp.Add("Class of Independent Component { e o h a i z v }");
+    aFldKeysHelp.Add("Comment to IC definition");
     icp=&ic[0];
     set_def();
     start_title = " Data for Independent Components ";

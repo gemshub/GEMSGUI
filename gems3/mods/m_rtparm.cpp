@@ -71,18 +71,12 @@ TRTParm::TRTParm( int nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add(
-        "l<4  Phase state of source Dependent Component <-ReacDC (<-DComp)");
-    aFldKeysHelp.Add(
-        "l<8  Identifier of source DC group <-ReacDC (<-DComp)");
-    aFldKeysHelp.Add(
-        "l<16 Name of source Dependent Component <-ReacDC (<-DComp)");
-    aFldKeysHelp.Add(
-        "l<4 Code of source thermodynamic data set <-ReacDC (<-DComp)");
-    aFldKeysHelp.Add(
-    "l<4 Source of input data for DC { r d }, r: <-ReacDC, d: <-DComp");
-    aFldKeysHelp.Add(
-        "l<12  Variant number of this RTParm task <integer>");
+    aFldKeysHelp.Add("Phase state of source Dependent Component (DComp or ReacDC)");
+    aFldKeysHelp.Add("Group to which source Dependent Component belongs");
+    aFldKeysHelp.Add("Name of source Dependent Component");
+    aFldKeysHelp.Add("Code of source thermodynamic data set");
+    aFldKeysHelp.Add("Source of input data for DC { r d }");
+    aFldKeysHelp.Add("Variant number of this RTParm calculation task <integer>");
     rpp=&rp[0];
     set_def();
     start_title = " Tabulation/plot of thermodynamic data for one DC (species)";
@@ -638,7 +632,7 @@ TRTParm::RecCalc( const char *key )
         }
         aW.twp->P = P_old = P /*rpp->P[j]*/;
         TC = rpp->T[j];
-        if( rpp->Ppun == 'K' )
+        if( rpp->Ptun == 'K' )
           TC = TC - C_to_K;
         aW.twp->TC = TC/*rpp->T[j]*/;
         aW.twp->T = aW.twp->TC + C_to_K;

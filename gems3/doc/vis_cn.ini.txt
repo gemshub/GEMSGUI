@@ -42,6 +42,7 @@ b:
  b - begin (skip line)
  t - tied (right + tied with previous cell for scrolling)
  s - sticked (down + tied with previous cell for scrolling)
+ l - under the first ( begin + tied with previous cell for scrolling)
  u - under (right under the last element)
 c:
  + 	read-write

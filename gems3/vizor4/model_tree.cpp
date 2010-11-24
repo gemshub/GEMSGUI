@@ -430,7 +430,7 @@ bool TTreeModel::setData( const QModelIndex& index, const QVariant& value, int r
                  childChanged( index, value, old_data);
              }
 
-            if( txt == emptiness || txt == short_emptiness )
+            if( txt == emptiness /*|| txt == short_emptiness*/ )
 	      aObj[nO].SetString( S_EMPTY, iN, iM );
              else
              {   if( index.column()== 7 )

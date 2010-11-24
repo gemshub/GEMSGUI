@@ -37,16 +37,11 @@ TPhase::TPhase( int nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add(
-        "l<4 Code of aggregate state of a phase { a g l h s d x }_");
-    aFldKeysHelp.Add(
-        "l<8 Symbol of this phase definition (letters, digits, _)");
-    aFldKeysHelp.Add(
-        "l<16 Name of this phase definition_");
-    aFldKeysHelp.Add(
-        "l<4 Phase class { c d l gm ss ssd ls aq xsa xc }_");
-    aFldKeysHelp.Add(
-        "l<16 Record key comment to phase definition_");
+    aFldKeysHelp.Add("Code of phase state { a g l h s d x }");
+    aFldKeysHelp.Add("Symbol of this phase definition (letters, digits)");
+    aFldKeysHelp.Add("Name of this phase definition");
+    aFldKeysHelp.Add("Phase class { c d l gm ss ssd ls aq xsa xc }");
+    aFldKeysHelp.Add("Comment to phase definition");
     php=&ph[0];
     set_def();
     start_title = " Definition of thermodynamic phase ";

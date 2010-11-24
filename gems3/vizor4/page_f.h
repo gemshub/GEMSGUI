@@ -50,7 +50,7 @@ enum ePlaceMode { First='*', Fixed='+',
                   Right='r', Down='d',
                   NextP='n', SkipLine='b',
                   Tied = 't', Sticked = 's',
-                  Under='u' };
+                  Under='u',  UndeTabl = 'l' };
 
 //===========================================
 // TField class

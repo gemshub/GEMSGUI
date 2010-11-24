@@ -37,12 +37,9 @@ TCompos* TCompos::pm;
 TCompos::TCompos( int nrt ):
         TCModule( nrt )
 {
-    aFldKeysHelp.Add(
-        "l<16 Identifier of Geochemical Composition Object (GCO)");
-    aFldKeysHelp.Add(
-        "l<4  Code of GCO type { AQ RO GA FL HC PM MIN }");
-    aFldKeysHelp.Add(
-        "l<28 Record Key Comment to GCO description");
+    aFldKeysHelp.Add("Name of predefined composition (PCO)");
+    aFldKeysHelp.Add("Code of PCO type { AQ RO GA FL HC PM MIN }");
+    aFldKeysHelp.Add("Comment to PCO description");
     bcp=&bc[0];
     set_def();
     start_title = " Predefined composition objects (PCO) ";

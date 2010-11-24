@@ -454,7 +454,7 @@ void TProfil::CalcAllSystems( int makeDump )
 	TCStringArray aList;
     TCIntArray anR;
     bool outFile = true;
-    uint i, nbad;
+    uint i=0, nbad=0;
     int iRet;
 
     rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,

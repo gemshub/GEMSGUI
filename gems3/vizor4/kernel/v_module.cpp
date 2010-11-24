@@ -235,8 +235,12 @@ TCModule::GetKeyofRecord( const char *oldKey, const char *strTitle,
     case KEY_NEW:
         return vfKeyTemplEdit(window(), str.c_str(), nRT, key.c_str(), false );
     case KEY_TEMP:
-        Filter = vfKeyTemplEdit(window(), str.c_str(), nRT, key.c_str() );
-        return Filter;
+         {
+          gstring stt = vfKeyTemplEdit(window(), str.c_str(), nRT, key.c_str() );
+          if( !stt.empty())
+            Filter = stt;
+          return Filter;
+        }
     }
     Error( str.c_str(), "Illegal record key editing mode");
     return "";
@@ -459,7 +463,7 @@ TCModule::CmFilter()
 
         gstring str = Filter;
         str = GetKeyofRecord( str.c_str(),
-                         "Please, give a key template", KEY_TEMP );
+                         "Please, give a record key template", KEY_TEMP );
         if(  str.empty() )
             return;
 
@@ -1031,7 +1035,7 @@ TCModule::CmPlot()
 }
 
 void
-TCModule::PrintSDref( const char* sd_key, char* text_fmt )
+TCModule::PrintSDref( const char* sd_key, const char* text_fmt )
 {
  // read sdref record with format prn
 /* TSData::pm->RecInput( sd_key );
@@ -1097,7 +1101,7 @@ TCModule::RecordPrint( const char* key )
      return;
 
   ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
-  char * text_fmt = (char *)aObj[o_sdabstr].GetPtr();
+  const char * text_fmt = (char *)aObj[o_sdabstr].GetPtr();
   if( !text_fmt )
        Error( sd_key.c_str(), "No print script in this record.");
 

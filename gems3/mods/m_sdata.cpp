@@ -34,11 +34,9 @@ TSData::TSData( int nrt ):
 {
     refs = 0;
     title = abstr = 0;
-    aFldKeysHelp.Add(
-        "l<20 Script name or author's name(s) for Data Source _");
-    aFldKeysHelp.Add("l<5 Script number or year of publication { 1990 }_");
-    aFldKeysHelp.Add(
-"l<7  Script module name { dcomp } or data source type { pap book chap }_");
+    aFldKeysHelp.Add("Script name or author's name for data source");
+    aFldKeysHelp.Add("Script number or year of publication { 1990 }");
+    aFldKeysHelp.Add("Script module name { DComp ReacDC } or data source type");
     set_def();
     start_title = " Scripts or Bibliographic References ";
 }
@@ -128,6 +126,27 @@ void
 TSData::CmHelp()
 {
     pVisor->OpenHelp( GEMS_SD_HTML );  //  05.01.01
+}
+
+
+// virtual callback for printing the record
+// should be redefined in subclasses (modules)
+// to make some plotting
+
+void TSData::RecordPrint( const char* key )
+{
+   gstring text_fmt = "line %s \"SDref record: \", %s rkey, %11s date, %6s time\n"
+                      "line %s \"\"\n"
+                      "line %s \"Authors: \", %s #SDauth\n"
+                      "line %s \"Title: \", %s #SDtitl\n"
+                      "line %s \"Edition: \", %s #SDedit\n"
+                      "line %s \"Year: \", %s #SDvoly, %s \"Pages: \", %s #SDpage \n"
+                      "line %s \"Comment\"\n"
+                      "line %s #SDnote\n"
+                      "line %s \"Abstract\"\n"
+                      "line %s #SDabst\n"
+                      "line %s \"------\"\n";
+    PrintSDref( "pscript-script:0000:sdref:", text_fmt.c_str() );
 }
 
 TSData* pmSData;

@@ -241,10 +241,8 @@ SPP_SETTING::read(GemDataStream& iss)
 TProfil::TProfil( int nrt ):
         TCModule( nrt )
 {
-    aFldKeysHelp.Add(
-        "l<10 Identifier of root modelling project definition");
-    aFldKeysHelp.Add(
-        "l<38 Record key comment to project definition");
+    aFldKeysHelp.Add("Modelling project name");
+    aFldKeysHelp.Add("Comment to project definition");
     start_title = " Numerical and Configuration Settings ";
     pa= pa_;
     pa.p.tprn=0;

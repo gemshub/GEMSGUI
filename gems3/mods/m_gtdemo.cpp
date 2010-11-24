@@ -41,11 +41,11 @@ TGtDemo::TGtDemo( int nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("l<10 Identifier of the parent Modelling Project");
-    aFldKeysHelp.Add("l<8  Top chain type for data sampling { PR SY PH RE...}");
-    aFldKeysHelp.Add("l<16 Identifier of this GtDemo sampler definition");
-    aFldKeysHelp.Add("l<4  Variant number of this GtDemo task <integer>");
-    aFldKeysHelp.Add("l<26 Record key comment to this GtDemo task");
+    aFldKeysHelp.Add("Modelling project name");
+    aFldKeysHelp.Add("Top database chain type for data sampling { PR SY PH RE }");
+    aFldKeysHelp.Add("Identifier of this data sampling definition");
+    aFldKeysHelp.Add("Variant number of this GtDemo task");
+    aFldKeysHelp.Add("Record key comment to this GtDemo task");
     gdp=&gd[0];
     set_def();
     start_title = " Definition of Data Sampler and Plotter ";

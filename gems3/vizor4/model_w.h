@@ -41,7 +41,7 @@ class QObject;
 class QPainter;
 
 const gstring emptiness("---");
-const gstring short_emptiness("---");
+//const gstring short_emptiness("---");
 
 struct Selection {
     int N1;

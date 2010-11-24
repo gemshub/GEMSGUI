@@ -25,6 +25,7 @@
 #include "MainDialog.h"
 
 #include <QApplication>
+#include <QSharedMemory>
 #include <QMainWindow>
 
 
@@ -36,27 +37,45 @@ class TIntegApp:  public QApplication
   int argc;
   char** argv;
 
+  bool _isRunning;
+  QSharedMemory shMemory;
+
 public:
     TIntegApp(int& c, char** v);
     void InitMainWindow();
+    bool isRunning()
+    { return _isRunning; }
 };
 
 TIntegApp::TIntegApp(int& c, char** v):
-	QApplication(c, v),
+        QApplication( c, v),
       argc(c),
       argv(v)
 {
-    setStyle( new QWindowsStyle() );
-    QIcon icon;
-    icon.addFile(QString::fromUtf8(":/images/img/gems16.png"), QSize(), QIcon::Normal, QIcon::Off);
-    setWindowIcon(icon);
+    shMemory.setKey("gems3");
+    if( shMemory.attach())
+    {
+        _isRunning = true;
+    }
+    else
+    {  _isRunning = false;
+       if( !shMemory.create(10))
+        {
+           return;
+         }
+
+       setStyle( new QWindowsStyle() );
+       QIcon icon;
+       icon.addFile(QString::fromUtf8(":/images/img/gems16.png"), QSize(), QIcon::Normal, QIcon::Off);
+       setWindowIcon(icon);
+   }
 }
 
 void
 TIntegApp::InitMainWindow()
 {
     pVisorImp = new TVisorImp(argc, argv);
-    MainDialog* window = new MainDialog(pVisorImp);;
+    MainDialog* window = new MainDialog(pVisorImp);
     pVisorImp->SetDialog( window);
     pVisorImp->show();
 }
@@ -65,6 +84,12 @@ int
 main(int argc, char* argv[])
 {
     TIntegApp IntegApp(argc, argv);
+
+    if(IntegApp.isRunning())
+    {
+       cerr << "gems3: Unable to create second instance." << endl;
+       return -2;
+    }
     try
     {
     	IntegApp.InitMainWindow();
@@ -89,8 +114,8 @@ main(int argc, char* argv[])
     }
     catch(...)
     {
-        return -1;
         cerr << "gems3: Unknown exception: program aborted" << endl;
+        return -1;
     }
     return 0;
 }

@@ -208,7 +208,6 @@ public:
                         TIArray<CompItem>&aDComp );
     void RenameList( const char* newName, const char *oldName );
 
-    bool MakeRecord( const char *key );
 
 };
 #endif   //   _m_syseq_h

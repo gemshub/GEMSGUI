@@ -44,6 +44,7 @@ class KeyFilter:   public QDialog
     Q_OBJECT
 
     TIArray<QLineEdit> aEdit;
+    QLineEdit *fullKey;
 
     int iRt;
     int iEd;
@@ -54,6 +55,7 @@ protected slots:
     void EvGetList();
     void CmOk();
     void CmHelp();    
+    void setKeyLine();
 
 protected:
     gstring SetKeyString();

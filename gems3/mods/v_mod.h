@@ -59,20 +59,6 @@ enum { RT_PARAM=2, RT_ICOMP=3, RT_DCOMP=4, RT_COMPOS=5,
        MD_MULTI=18, MD_EQCALC=19, MD_EQDEMO=20
      };
 
-//#define IsFloatEmpty( v ) ( v>0. && v <= FLOAT_EMPTY ? 1:0 )
-//#define IsDoubleEmpty( v ) ( v>0. && v <= DOUBLE_EMPTY ? 1:0 )
-//extern const float FLOAT_EMPTY;
-//extern const double DOUBLE_EMPTY;
-inline bool IsFloatEmpty( const float v )
-{
-    return ( v>0. && v <= FLOAT_EMPTY);
-}
-inline bool IsDoubleEmpty( const double v )
-{
-    return ( v>0. && v <= DOUBLE_EMPTY);
-}
-
-
 enum std_object{
     o_hpage = 0, o_hrkey, o_hemsg, o_hedbuf, o_hrkeys,
     o_constlab, o_constdim, o_const, o_sdnref, o_sdauth, o_sdyear,

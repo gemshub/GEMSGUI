@@ -159,7 +159,7 @@ protected:
 
     virtual void Setup();
     virtual bool EvClose();
-    void PrintSDref( const char* sd_key , char* text_fmt );
+    void PrintSDref( const char* sd_key , const char* text_fmt );
 
 public:	// moved to public to remove 'friend' for TCModuleImp
     //--- Manipulation files of Data Base   (Servis functions )

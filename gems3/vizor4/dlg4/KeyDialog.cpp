@@ -194,6 +194,7 @@ KeyDialog::CmFilter()
 {
     gstring str_name = "Template for ";
             str_name +=  rt[iRt].GetKeywd();
+            str_name += " record key";
     KeyFilter dbFilter(this, iRt, keyFilter.c_str(), str_name.c_str() );
     if( dbFilter.exec() )
     {
