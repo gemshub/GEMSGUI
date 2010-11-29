@@ -284,7 +284,7 @@ void IPNCalc::Variab( const char *str)
         err+= " is not known.";
         Error( "E06MSTran: ", err.c_str() );
     }
-    if( aObj[j].GetN() > 1 )
+    if( aObj[j].IsDynamic() || aObj[j].GetN() > 1  )
     {
         if( *input != '[' )
             Push( IT_C, 0);
@@ -295,7 +295,7 @@ void IPNCalc::Variab( const char *str)
         }
     }
     if( ( input=xblanc( input ) )==0 ) goto OSH;
-    if( aObj[j].GetM() > 1 )
+    if( aObj[j].IsDynamic() || aObj[j].GetM() > 1 )
     {
         if( *input != '[' )
             Push( IT_C, 0);
@@ -957,13 +957,13 @@ void IPNCalc::CalcEquat()
                 }
                 break;
             case IT_V :   // variable
-                if( aObj[ni].GetM()>1 )
+                if( aObj[ni].IsDynamic() || aObj[ni].GetM()>1 )
                 {
                     k2 = ROUND( StackEnd(0) );
                     StackDel();
                 }
                 else k2 = 0;
-                if( aObj[ni].GetN()>1 )
+                if( aObj[ni].IsDynamic() || aObj[ni].GetN()>1 )
                 {
                     k1 = ROUND( StackEnd(0) );
                     StackDel();

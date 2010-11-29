@@ -781,7 +781,7 @@ void TProfil::PMtest( const char *key )
 
    // test changes in the modified system relative to MULTI
    pmp->pBAL =  BAL_compare();
-   cout << "pmp->pBAL " << pmp->pBAL << "pmp->pTPD " << pmp->pTPD<< endl;
+   //cout << "pmp->pBAL " << pmp->pBAL << "pmp->pTPD " << pmp->pTPD<< endl;
 
    if( !pmp->pBAL ) // if some vectors were allocated or some dimensions changed
    {

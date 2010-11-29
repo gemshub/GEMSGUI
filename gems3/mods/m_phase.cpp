@@ -728,7 +728,7 @@ AGAINRC:
     {  // pre-proc. loop for SIT or Pitzer: determining number of cations and anions
        int pos;
        gstring spName;
-       for( i=0; i<php->nDC-1; i++ )
+       for( i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
        {
           if( i < iic )
             spName = gstring( aDclist[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
@@ -758,6 +758,7 @@ AGAINRC:
         php->nAn = nAn;
         php->nNs = nNs;
     }
+
 //---------------------------------------------------------------------
 
     /* insert coeff of model of solid and other data */
@@ -898,7 +899,7 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
    if( WorkCount )
    {   // pre-proc. loop: determining number of cations, anions and neutral species
       nAn=0, nCat=0, nNs=0;
-      for( i=0; i<php->nDC-1; i++ )
+      for( i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
       {
          spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
          spName.strip();
@@ -956,7 +957,7 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
 
    if( FillOut )
    {
-     for( i=0; i<php->nDC-1; i++ )
+     for( i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
      { // Determining if cation or anion
        spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
        spName.strip();
