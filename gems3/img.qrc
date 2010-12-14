@@ -34,5 +34,7 @@
         <file>img/toolbutton.png</file>
         <file>img/xpaint.png</file>
         <file>img/ordertool1.png</file>
+        <file>img/back.xpm</file>
+        <file>img/forward.xpm</file>
     </qresource>
 </RCC>

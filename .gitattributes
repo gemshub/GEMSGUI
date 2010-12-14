@@ -1163,7 +1163,6 @@ gems3/mods/submod/v_smodhand.h -text
 gems3/mods/v_ipnc.cpp -text
 gems3/mods/v_ipnc.h -text
 gems3/mods/v_mod.h -text
-gems3/qt.conf -text
 gems3/rungems.sh -text
 gems3/shared/DB.default/compos.complem.slop98.ndx -text
 gems3/shared/DB.default/compos.complem.slop98.pdb -text

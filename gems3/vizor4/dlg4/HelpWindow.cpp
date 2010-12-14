@@ -218,16 +218,22 @@ void HelpWindow::languageChange()
 
 void HelpWindow::helpVersion()
 {
-    QMessageBox::information(this, trUtf8("About Gems3:"),
-           trUtf8("The Simple Text Viewer enables the user to select and view existing\n"
-                  "files.\n\n"
-                  "HTML files is displayed using rich text, while other files are\n"
-                  "presented as plain text. The application provides a file dialog\n"
-                  "allowing the user to search for files using wildcard matching. The\n"
-                  "search is performed within in the specified directory, and the user is\n"
-                  "given an option to browse the existing file system to find the\n"
-                  "relevant directory.") );
-
+    QMessageBox::information(this,
+#ifdef __unix
+#ifdef __APPLE__
+trUtf8("GEMS3 (MacOS X 10.6 32/64) Version Stamp"),
+#else
+trUtf8("GEMS3 (Linux gcc4.4 KDE4 32/64) Version Stamp"),
+#endif
+#else
+trUtf8("GEMS3 (Windows XP/7 MinGW gcc4.4) Version Stamp"),
+#endif
+           trUtf8("This is GEM-Selektor 3 (GEMS3) program package   \n\n"
+                  "    development version 3.1,\n\n"
+                  "    rev. 1736 (December 14, 2010)\n\n"
+                  "    using GEMS3K rev. 512 (upgrade) \n\n\n"
+                  "For internal testing only - backup your projects!      \n\n"
+                  "(c) 2010, PSI-ETHZ GEMS Development Team\n") );
 }
 
 void HelpWindow::helpAbout()

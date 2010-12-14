@@ -50,16 +50,14 @@ using namespace std;
 const char* GEMS_LOGO_ICON = "img/gems1.png";
 const char* GEMS_SYS_ICON = "img/sciences_section.xpm";
 const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
+const char* GEMS_VERSION_STAMP = "GEM-Selektor 3 (GEMS3)";
 #ifdef __unix
 #ifdef __APPLE__
-const char* GEMS_VERSION_STAMP = "GEM-Selektor v3.0-1670.462 (MacOSX)";
 const int GEMS_DEFAULT_FONT_SIZE = 14;
 #else
-const char* GEMS_VERSION_STAMP = "GEM-Selektor v3.0-1670.462 (Linux)";
 const int GEMS_DEFAULT_FONT_SIZE = 11;
 #endif
 #else
-const char* GEMS_VERSION_STAMP = "GEM-Selektor v3.0-1670.462 (Windows)";
 const int GEMS_DEFAULT_FONT_SIZE = 10;
 #endif
 extern const char* GEMS_ABOUT_HTML;

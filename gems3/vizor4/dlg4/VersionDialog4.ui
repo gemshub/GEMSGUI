@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>440</width>
-    <height>508</height>
+    <width>644</width>
+    <height>578</height>
    </rect>
   </property>
   <property name="font">
@@ -49,9 +49,15 @@
    </item>
    <item row="0" column="1">
     <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text">
-      <string>About 
-Text Label</string>
+      <string>GEM-Selektor 3 (GEMS3) geochemical modelling package</string>
      </property>
     </widget>
    </item>
@@ -66,9 +72,17 @@ Text Label</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QLabel" name="labAbout">
-         <property name="text">
-          <string>Text About</string>
+        <widget class="QTextBrowser" name="textBrowser_2">
+         <property name="html">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GEM-Selektor is a Gibbs Energy Minimization program package for interactive thermodynamic modeling of heterogeneous aquatic (geo)chemical systems, especially those involving metastability and dispersity of mineral phases, solid solution - aqueous solution equilbria, and adsorption/ion exchange. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GEMS3 package Includes a built-in (default) thermodynamic database in both thermochemical and reaction formats. Processes of irreversible chemical mass transfer can be simulated from the principles of local and partial equilibrium. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;A standalone variant of GEM solver - GEMS3K - is provided separately for use in coupled reactive transport modeling and related applications. The same numerical kernel (enhanced with interpreter of GEMS Phase scripts) runs inside of the GEMS3 code.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GEM-Selektor 3 code is written in C/C++,  using the LGPL version of the Qt4.7 UI framework (http://qt.nokia.com) which makes GEMS3 a cross-platform software for all major Linux, Mac OS X and Windows systems.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The GEMS3K code (the numerical kernel of GEMS3) is a C++ program without any GUI, only with ASCII file I/O, but capable to be compuled and executed also on parallel architectures. Uses the JAMA TNT linear algebra C++ library (http://www.nist.gov).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -80,9 +94,13 @@ Text Label</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QLabel" name="labAuthors">
-         <property name="text">
-          <string>TextAuthors</string>
+        <widget class="QTextBrowser" name="textBrowser_3">
+         <property name="html">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Text Authors&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -94,9 +112,13 @@ Text Label</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QLabel" name="labThanks">
-         <property name="text">
-          <string>Text Thanks</string>
+        <widget class="QTextBrowser" name="textBrowser_4">
+         <property name="html">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Text Thanks&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -106,50 +128,26 @@ Text Label</string>
       <attribute name="title">
        <string>License</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="labLicense">
-         <property name="lineWidth">
-          <number>1</number>
-         </property>
-         <property name="text">
-          <string notr="true">&quot;The Simple Text Viewer enables the user to select and view existing
-&quot;
-                  &quot;files.
-
-&quot;
-                  &quot;HTML files is displayed using rich text, while other files are
-&quot;
-                  &quot;presented as plain text. The application provides a file dialog
-&quot;
-                  &quot;allowing the user to search for files using wildcard matching. The
-&quot;
-                  &quot;search is performed within in the specified directory, and the user is
-&quot;
-                  &quot;given an option to browse the existing file system to find the
-&quot;
-              ‎    &quot;relevant directory.&quot;) );</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::LogText</enum>
-         </property>
-         <property name="scaledContents">
-          <bool>true</bool>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <property name="indent">
-          <number>-1</number>
-         </property>
-         <property name="openExternalLinks">
-          <bool>true</bool>
-         </property>
-         <property name="textInteractionFlags">
-          <set>Qt::LinksAccessibleByMouse</set>
+        <widget class="QTextBrowser" name="textBrowser">
+         <property name="html">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:600;&quot;&gt;TERMS and CONDITIONS of USE &lt;/span&gt;&lt;/p&gt;
+&lt;hr width=&quot;100%&quot;/&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The software and related material (data and documentation), contained in or furnished in connection with GEM-Selektor version 2-PSI program package for geochemical modelling (and its subsequent versions), are made available by the Paul Scherrer Institute (PSI) to be used in the public interest and for the advancement of science.  Permission to use the GEM-Selektor software is granted free of charge for educational and research purposes only, provided and as long as these Terms and Conditions of Use are accepted. The GEM-Selektor software, with its supporting documentation and databases, can be used and copied subject to the following restrictions and understandings.&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The user may distribute copies of the software and related material provided that the recipients receive a copy of this notice and receive or can get a copy of the original distribution. Any modified file must include a notice clearly stating the modifications, the author, and date.  &lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;As the software is public property, the user has the right to obtain the source code, if desired.  Although this version (GEM-Selektor 3) comes with executable files only, the developers of GEM-Selektor are preparing the source code to be included into the forthcoming versions, foreseen to be released under the terms of LGPL (&lt;a href=&quot;http://www.gnu.org/licenses/lgpl.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GNU Lesser General Public License&lt;/span&gt;&lt;/a&gt;)  or similar license. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The user may charge fees for services provided in connection with the software or derivative works thereof, but not for distribution of the software. The name PSI can be used in any advertising or publicity to endorse or promote any product or commercial entity using this software only if specific written permission is obtained from the PSI.&lt;br /&gt;&lt;br /&gt;The user agrees to appropriately acknowledge the authors (&lt;a href=&quot;gm_about.html#DEVELOPERS&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GEMS-PSI Development Team&lt;/span&gt;&lt;/a&gt;) and the PSI in publications that result from the use of this software, or in products that include this software in whole or in part. &lt;br /&gt;&lt;br /&gt;Because the GEM-Selektor software and related material is free of charge (other than nominal materials and handling fees) and provided &amp;quot;as is&amp;quot;, the authors and the PSI have made no warranty, expressed or implied, as to the accuracy or completeness,  and are neither obligated to provide the user with any support, consulting, training or assistance of any kind with regard to the use, operation, and performance of this software, nor to supply the user with any updates, revisions, new versions or &amp;quot;bug fixes&amp;quot;. &lt;br /&gt;&lt;br /&gt;The user assumes all risk for any damages or losses whatsoever resulting from or in connection with the accessibility, use, quality, or performance of this software.&lt;br /&gt;&lt;/p&gt;
+&lt;hr width=&quot;100%&quot;/&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;Disclaimer&lt;/span&gt; &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The GEM-Selektor software package is produced and supported by the &lt;a href=&quot;gm_about.html#DEVELOPERS&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Development and Support Team&lt;/span&gt;&lt;/a&gt; at the Waste Management Laboratory of the Paul Scherrer Institute (PSI). Permission to use the GEM-Selektor software is hereby granted free of charge to non-profit educational and research institutions, for educational and research purposes only, subject to the Terms and Conditions of Use. &lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Please note that some information accessed through the GEM-Selektor web page or in runtime GEM-Selektor HTML documentation files, tests, and tutorial examples, may be preliminary in nature and presented prior to final review, quality assurance, endorsement and approval by the PSI or any related authorities. This information is provided with the understanding that it is not guaranteed to be correct or complete; any conclusions drawn from such information are the sole responsibility of the user.   &lt;/p&gt;
+&lt;hr width=&quot;100%&quot;/&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Last updated:  14 Dec. 2010&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -157,8 +155,27 @@ Text Label</string>
      </widget>
     </widget>
    </item>
+   <item row="2" column="0" colspan="2">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>537</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="2" column="2">
     <widget class="QPushButton" name="pushButton">
+     <property name="maximumSize">
+      <size>
+       <width>80</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="text">
       <string>&amp;Close</string>
      </property>

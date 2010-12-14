@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id: help.cpp 968 2007-12-13 13:23:32Z gems $
+// $Id: help.cpp 1720 2007-12-13 13:23:32Z gems $
 //
 // Implementation of HelpConfigurator class
 //
@@ -174,7 +174,7 @@ int HelpConfigurator::writeFile(const char *file)
     f_out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
     f_out << "<QtHelpProject version=\"1.0\">" << endl;
     f_out << "    <namespace>gems3</namespace>" << endl;
-    f_out << "    <virtualFolder>doc</virtualFolder>" << endl;
+    f_out << "    <virtualFolder>help</virtualFolder>" << endl;
     f_out << "    <filterSection>" << endl;
 
     writeContent( f_out);
