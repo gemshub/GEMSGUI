@@ -232,7 +232,7 @@ void PhaseWizard::getFlags( char flgs[12] )
 void
 PhaseWizard::help()
 {
-  pVisorImp->OpenHelp( PHASE_HTML, 0, this/*, true*/ );
+  pVisorImp->OpenHelp( PHASE_HTML, 0 );
 }
 
 //--------------------- End of PhaseWizard.cpp ---------------------------

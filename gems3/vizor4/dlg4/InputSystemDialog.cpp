@@ -314,7 +314,7 @@ void InputSystemDialog::CmPrint()
 void
 InputSystemDialog::help()
 {
-  pVisorImp->OpenHelp( SYSTEM_HTML, 0, this/*, true*/ );
+  pVisorImp->OpenHelp( SYSTEM_HTML, 0 );
 }
 
 int InputSystemDialog::tableFindRow( int nO, int ndx)

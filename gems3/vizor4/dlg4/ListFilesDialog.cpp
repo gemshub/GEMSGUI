@@ -125,8 +125,8 @@ void ListFilesDialog::languageChange()
 
 void ListFilesDialog::CmHelp()
 {
-//  pVisorImp->OpenHelp( GEMS_GP_HTML, 0, this );
-    pVisorImp->OpenHelp( GEMS_LF_HTML, 0, this, true );  
+//  pVisorImp->OpenHelp( GEMS_GP_HTML, 0 );
+    pVisorImp->OpenHelp( GEMS_LF_HTML, 0 );
 }
 
 /*! returns selection array

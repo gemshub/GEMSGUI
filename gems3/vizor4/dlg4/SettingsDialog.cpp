@@ -30,8 +30,12 @@ const char *GEMS_SETUP_HTML = "gemsetup";
 
 #include "SettingsDialog.h"
 
+#include "service.h"
 #include "visor_w.h"
 #include "visor.h"
+#include "help.h"
+#include "HelpWindow.h"
+
 
 SettingsDialog::SettingsDialog (QWidget* parent)
     : QDialog(parent )
@@ -45,9 +49,9 @@ SettingsDialog::SettingsDialog (QWidget* parent)
     pUpdateInterval->setValue( pVisorImp->updateInterval() );
 
     pLocalDocDir->setText(pVisor->localDocDir().c_str());
-    pRemoteDocURL->setText(pVisor->remoteDocURL().c_str());
-    pLocalDoc->setChecked(pVisor->localDoc());
-    pRemoteDoc->setChecked(!pVisor->localDoc());
+    pRemoteHTML->setText(pVisor->remoteHTML().c_str());
+    //pLocalDoc->setChecked(pVisor->localDoc());
+    //pRemoteDoc->setChecked(!pVisor->localDoc());
     pSysDBDir->setText(pVisor->sysGEMDir().c_str());
     pUserDBDir->setText(pVisor->userGEMDir().c_str());
     pFontRawName->setText(cellFont.toString());
@@ -64,6 +68,8 @@ SettingsDialog::SettingsDialog (QWidget* parent)
     {   rbNewPrMode->setChecked( false );
         rbOldPrMode->setChecked( true );
     }
+
+    connect(butGenerate, SIGNAL(clicked()), this, SLOT(CmHelpGenerate()));
 
     pFontRawName->setReadOnly(true);	// no meaning for Win32 (now)
 }
@@ -95,8 +101,8 @@ SettingsDialog::CmApply()
     pVisor->setElemPrMode(rbNewPrMode->isChecked());
 
     pVisor->setLocalDocDir(pLocalDocDir->text().toLatin1().data());
-    pVisor->setRemoteDocURL(pRemoteDocURL->text().toLatin1().data());
-    pVisor->setLocalDoc(pLocalDoc->isChecked());
+    pVisor->setRemoteHTML(pRemoteHTML->text().toLatin1().data());
+    //pVisor->setLocalDoc(pLocalDoc->isChecked());
 
     //pVisorImp->Update(true);
 }
@@ -105,8 +111,66 @@ SettingsDialog::CmApply()
 void
 SettingsDialog::CmHelp()
 {
-  pVisorImp->OpenHelp( GEMS_SETUP_HTML, 0, this, true );
+  pVisorImp->OpenHelp( GEMS_SETUP_HTML, 0 );
 }
+
+void SettingsDialog::CmHelpGenerate()
+{
+  try
+    {
+           QString qhpFile = pRemoteHTML->text()+"gems3helpconfig.qhp";
+             HelpConfigurator rr;
+             if( rr.readDir(pRemoteHTML->text().toLatin1().data()))
+                rr.writeFile(qhpFile.toLatin1().data());
+
+             //if( HelpWindow::pDia )
+             //{
+             //   HelpWindow::pDia->close();
+             //   delete HelpWindow::pDia;
+             //   build new file
+                if (!pVisorImp->proc)
+                    pVisorImp->proc = new QProcess();
+            
+                if (pVisorImp->proc->state() != QProcess::Running) 
+                {
+                    
+                   QString docPath =  pRemoteHTML->text();
+                   QString app;
+            #ifdef __unix
+            #ifdef __APPLE__
+                    app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/qcollectiongenerator");    // expected to work
+            #else
+                    app += QLatin1String("qcollectiongenerator");
+            #endif
+            #else    // windows
+                    app += QLatin1String("qcollectiongenerator.exe");
+            #endif        
+                    QStringList args;
+                    args << docPath + QLatin1String("gems3helpconfig.qhcp")
+                        << QLatin1String("-o")
+                        << docPath + QLatin1String("gems3help.qhc");
+                        ;
+
+                    pVisorImp->proc->start(app, args);
+                    cout << app.toLatin1().data() << endl;
+                    cout << args[2].toLatin1().data() << endl;
+            
+                    if (!pVisorImp->proc->waitForStarted()) 
+                    {
+                        Error( "Gems3", "Unable to launch qcollectiongenerator");
+                    }    
+                }
+             // open it
+             //   (new HelpWindow(  0  ));
+             // }
+
+   }
+   catch(TError& e)
+   {
+       vfMessage(this, e.title.c_str(), e.mess.c_str() );
+   }
+}
+
 
 void SettingsDialog::CmSysDBDirSelect()
 {

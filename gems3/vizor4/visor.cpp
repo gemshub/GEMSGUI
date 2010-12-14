@@ -115,7 +115,7 @@ TVisor::TVisor(int c, char *v[]):
         SysGEMDir = "./shared/";
 #endif
 	UserGEMDir += getenv("HOME");
-//        UserGEMDir += "/Library/gems3/";
+//         UserGEMDir += "/Library/gems3/";
         UserGEMDir += "/.gems3/";
 #endif // __unix
 #else // win
@@ -145,10 +145,6 @@ TVisor::TVisor(int c, char *v[]):
     DefProfDir = "projects/";
     UserProfDir = "projects/";
     ImgDir = "img/";
-
-    RemoteDocURL = "http://gems.web.psi.ch/doc/html/";
-    LocalDoc = true;
-
 
     // parsing options -s and -u if given
 
@@ -182,7 +178,12 @@ TVisor::TVisor(int c, char *v[]):
     }
 
     LocalDir = userGEMDir();
-    LocalDocDir = SysGEMDir + "doc/html/";
+    LocalDocDir = SysGEMDir + "help/";
+    //RemoteDocURL = "http://gems.web.psi.ch/doc/html/";
+    RemoteHTML = SysGEMDir + "doc/html/";
+    LocalDoc = true;
+
+
 #ifdef __unix
 #ifndef GEMS_RELEASE
 // added SD oct 2005
@@ -193,6 +194,7 @@ TVisor::TVisor(int c, char *v[]):
 	// let's try to find resources by path of the executable
 	getcwd(cur_dir, PATH_MAX);
 	LocalDocDir = gstring(cur_dir) + gstring(LocalDocDir,1);
+        RemoteHTML = gstring(cur_dir) + gstring(RemoteHTML,1);
      }
 #endif
 #endif
@@ -506,8 +508,8 @@ TVisor::toWinCFG()
 
     f_win_ini << "local_dir\t=\t\"" << LocalDir.c_str() << "\""  << endl;
     f_win_ini << "local_doc_dir\t=\t\"" << LocalDocDir.c_str() << "\""  << endl;
-    f_win_ini << "remote_doc_url\t=\t\"" << RemoteDocURL.c_str() << "\"" << endl;
-    f_win_ini << "local_doc\t=\t" << LocalDoc << endl;
+    f_win_ini << "remote_doc_url\t=\t\"" << RemoteHTML.c_str() << "\"" << endl;
+    f_win_ini << "local_doc\t=\t" << LocalDoc << endl;   // obsolete
     f_win_ini.close();
 
     // Window-specific settings
@@ -579,7 +581,7 @@ TVisor::fromWinCFG()
             	else if( name == "remote_doc_url" ) {
 				gstring gstr;
 				visor_conf.getcStr(gstr);
-				setRemoteDocURL(gstr);
+                                setRemoteHTML(gstr);
 			}
             	else if( name == "local_doc" ) {
 				setLocalDoc(visor_conf.getcInt());

@@ -203,7 +203,7 @@ void ProjectWizard::getFlags( char flgs[38] )
 void
 ProjectWizard::help()
 {
-  pVisorImp->OpenHelp( PROJECT_HTML, 0, this/*, true*/ );
+  pVisorImp->OpenHelp( PROJECT_HTML, 0 );
 }
 
 //--------------------- End of ProjectWizard.cpp ---------------------------

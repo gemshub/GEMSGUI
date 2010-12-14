@@ -361,7 +361,7 @@ void   UnSpaceWizard::getFlags( char flgs[38] )
 void
 UnSpaceWizard::help()
 {
-  pVisorImp->OpenHelp( UNSPACE_HTML, 0, this/*, true*/ );
+  pVisorImp->OpenHelp( UNSPACE_HTML, 0 );
 }
 
 //--------------------- End of UnSpaceWizard.cpp ---------------------------

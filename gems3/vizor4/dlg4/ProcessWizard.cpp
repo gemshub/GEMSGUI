@@ -510,7 +510,7 @@ void   ProcessWizard::getFlags( char flgs[24] )
 void
 ProcessWizard::help()
 {
-   pVisorImp->OpenHelp( PROCESS_HTML, 0, this/*, true*/ );
+   pVisorImp->OpenHelp( PROCESS_HTML, 0 );
 }
 
 //=============================================================================

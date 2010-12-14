@@ -27,6 +27,7 @@
 #include <QApplication>
 #include <QSharedMemory>
 #include <QMainWindow>
+#include <QSqlDatabase>
 
 
 class TIntegApp:  public QApplication
@@ -78,6 +79,8 @@ TIntegApp::InitMainWindow()
     MainDialog* window = new MainDialog(pVisorImp);
     pVisorImp->SetDialog( window);
     pVisorImp->show();
+// init Help Window
+    pVisorImp->GetHelp();
 }
 
 int
@@ -92,7 +95,9 @@ main(int argc, char* argv[])
     }
     try
     {
-    	IntegApp.InitMainWindow();
+        cout << "QSqlDatabase: available drivers: %s" <<
+              QSqlDatabase::drivers().join(QLatin1String(" ")).toLatin1().data() << endl;
+        IntegApp.InitMainWindow();
         int res = IntegApp.exec();
         // clear static arrays in our order because they're interdependent
         // and static variables are destructed at random order

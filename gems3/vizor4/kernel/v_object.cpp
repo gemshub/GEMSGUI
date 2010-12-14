@@ -129,6 +129,24 @@ TObject::GetFullName(int aN, int aM)
   return item;
 }
 
+gstring TObject::GetHelpLink(int aN, int aM)
+{
+  vstr v(15);
+  gstring item = GetKeywd();
+  if( !(N<=1 || Descr[0] == '|') )
+  {
+    sprintf(v, "_%u", aN );
+    item += v;
+  }
+  else
+    if( M > 1 && Type != S_ )
+    {
+      sprintf(v, "_%u", aM );
+      item += v;
+    }
+  return item;
+}
+
 // Gets description line from Ni line of DOD list
 //    e.g., for displaying a tooltip
 const gstring

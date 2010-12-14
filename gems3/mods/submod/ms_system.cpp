@@ -812,6 +812,18 @@ void TSyst::setDefData()
     // Sveta 17/05/99   set_aqu_gas_phase();
 }
 
+// Set default informations to arrays
+void TSyst::setDefCheck()
+{
+    if( mup->La && sy.PbAC != S_OFF )
+        memset( sy.Acl, S_ON, mup->La );
+    if( sy.PbIC != S_OFF )
+        memset( sy.Icl, S_ON, mup->N );
+    if( sy.PbDC != S_OFF )
+        memset( sy.Dcl, S_ON, mup->L );
+    memset( sy.Pcl, S_ON, mup->Fi );
+ }
+
 // Load default informations from phase records into arrays
 
 void TSyst::phase_data_load()

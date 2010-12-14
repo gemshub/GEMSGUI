@@ -135,7 +135,7 @@ KeyFilter::CmHelp()
    gstring dbName = GEMS_RKEY_HTML;
    dbName += "#dbm_";
    dbName += gstring(aMod[iRt].GetName());
-   pVisorImp->OpenHelp(  dbName.c_str(), 0, this/*, true*/ );
+   pVisorImp->OpenHelp(  dbName.c_str(), 0 );
 }
 
 void

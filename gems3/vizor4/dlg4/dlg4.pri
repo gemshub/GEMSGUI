@@ -36,6 +36,7 @@
  		  $$DLG4_H/LookupDialog.h \
                   $$DLG4_H/NewSystemDialog.h \
                   $$DLG4_H/EquatSetupWidget.h \
+                  $$DLG4_H/HelpWindow.h \
                   $$DLG4_H/InputSystemDialog.h
 
        SOURCES +=  $$DLG4_CPP/MainDialog.cpp \
@@ -77,6 +78,7 @@
                   $$DLG4_CPP/NewSystemDialog.cpp \
                   $$DLG4_CPP/EquatSetupWidget.cpp \
                   $$DLG4_CPP/InitEquat.cpp \
+                  $$DLG4_CPP/HelpWindow.cpp \
                   $$DLG4_CPP/InputSystemDialog.cpp
 
 
@@ -115,6 +117,8 @@
 		$$DLG4_CPP/ElementsDialog4.ui \
 		$$DLG4_CPP/NewSystemDialog4.ui \
                 $$DLG4_CPP/EquatSetupWidget4.ui \
+                $$DLG4_CPP/HelpWindow4.ui \
+                $$DLG4_CPP/VersionDialog4.ui \
                 $$DLG4_CPP/InputSystemDialog4.ui \
                 $$DLG4_CPP/ModuleDialog4.ui
 

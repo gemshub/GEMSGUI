@@ -163,7 +163,7 @@ void ReacDCWizard::getFlags( char flgs[12] )
 void
 ReacDCWizard::help()
 {
-  pVisorImp->OpenHelp( REACDC_HTML, 0, this/*, true*/ );
+  pVisorImp->OpenHelp( REACDC_HTML, 0 );
 }
 
 //--------------------- End of ReacDCWizard.cpp ---------------------------

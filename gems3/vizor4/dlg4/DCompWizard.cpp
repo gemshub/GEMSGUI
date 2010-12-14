@@ -185,7 +185,7 @@ void DCompWizard::getFlags( char flgs[15] )
 void
 DCompWizard::help()
 {
-  pVisorImp->OpenHelp( DCOMP_HTML, 0, this/*, true*/ );
+  pVisorImp->OpenHelp( DCOMP_HTML, 0 );
 }
 
 //--------------------- End of DCompWizard.cpp ---------------------------

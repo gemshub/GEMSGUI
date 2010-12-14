@@ -173,7 +173,7 @@ void ComposWizard::getFlags( char flgs[6] )
 void
 ComposWizard::help()
 {
-  pVisorImp->OpenHelp( COMPOS_HTML, 0, this/*, true*/ );
+  pVisorImp->OpenHelp( COMPOS_HTML, 0 );
 }
 
 //--------------------- End of ComposWizard.cpp ---------------------------

@@ -180,7 +180,7 @@ void TTreeModel::setGOcorr(const QModelIndex& index, QString& value, int nO, int
 {
 	char code = lineFromIndex( index )->UGval;
     double dat = value.toDouble();
-	double tK = TProfil::pm->tpp->TK;
+        double tK = TProfil::pm->pmp->T; //TProfil::pm->tpp->TK;
 	  
 	switch( code )
 	{
@@ -207,7 +207,7 @@ QString TTreeModel::getGOcorr( const QModelIndex& index, int nO, int iN ) const
 	QString res =  QString( visualizeEmpty(aObj[nO].GetStringEmpty( iN, 0 )).c_str() );
 	char code = lineFromIndex(index)->UGval;
 	double dat = res.toDouble();
-	double tK = TProfil::pm->tpp->TK;
+        double tK = TProfil::pm->pmp->T; //TProfil::pm->tpp->TK;
 	  
 	switch( code )
 	{
@@ -912,15 +912,9 @@ void TTreeView::printList( fstream& ff )
       if(iN == -1 || iM == -1 || fld.nO < 0 )
         	return;
         
-        gstring item = fld.pObj->GetFullName(iN,iM);
-        try
-        {
-            gstring item1 = item;
-            pVisorImp->OpenHelp( GEMS_OBJNDX_HTML, item.c_str(),  topLevelWidget()); 
-       }
-        catch(TError err) {
-            vfMessage(topLevelWidget(), "Help", err.mess, vfErr);
-        }
+      //gstring item = fld.pObj->GetFullName(iN,iM); // for old indexation
+      gstring item = fld.pObj->GetHelpLink(iN,iM);
+      pVisorImp->OpenHelp( GEMS_OBJNDX_HTML, item.c_str());
     }
   
 //---------------------- End of file  model_tree.cpp ---------------------------

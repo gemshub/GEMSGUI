@@ -42,8 +42,8 @@ class TVisor
     gstring LocalDir;
 
     gstring LocalDocDir;
-    gstring RemoteDocURL;
-    bool LocalDoc;
+    gstring RemoteHTML;
+    bool LocalDoc;         // obsolete
 
     gstring ImgDir;
 
@@ -109,19 +109,19 @@ public:
     }
 
     gstring docDir() const {
-	return (LocalDoc) ? LocalDocDir : RemoteDocURL;
-//        return SysGEMDir + DocDir;
+        return LocalDocDir;
+     //	return (LocalDoc) ? LocalDocDir : RemoteDocURL;
     }
 
     const gstring& localDocDir() const {
         return LocalDocDir;
     }
 
-    const gstring& remoteDocURL() const {
-        return RemoteDocURL;
+    const gstring& remoteHTML() const {
+        return RemoteHTML;
     }
 
-    bool localDoc() const {
+    bool localDoc() const { // obsolete
         return LocalDoc;
     }
 
@@ -133,11 +133,11 @@ public:
         LocalDocDir = localDir;
     }
 
-    void setRemoteDocURL(const gstring& remoteURL) {
-        RemoteDocURL = remoteURL;
+    void setRemoteHTML(const gstring& remoteURL) {
+        RemoteHTML = remoteURL;
     }
 
-    void setLocalDoc(bool local) {
+    void setLocalDoc(bool local) { // obsolete
         LocalDoc = local;
     }
 

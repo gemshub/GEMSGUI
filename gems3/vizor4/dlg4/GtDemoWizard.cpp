@@ -216,7 +216,7 @@ GtDemoWizard::getPrKey()
 
 void GtDemoWizard::help()
 {
-  pVisorImp->OpenHelp( GTDEMO_HTML, 0, this/*, true*/ );
+  pVisorImp->OpenHelp( GTDEMO_HTML, 0 );
 }
 
 //==============================================================================

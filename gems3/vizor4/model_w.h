@@ -82,7 +82,7 @@ class TObjectModel: public QAbstractTableModel
 	
   // get index flds and object coordinates from current item coordinate
   int getObjFromModel( int row, int col, int& nO, int& iN, int& iM, 
-		  Selection* sel=0, int to_calc = 0) const;
+                  Selection* sel=0 ) const;
   
   QString getDescription( TObject* pObj, int N, int M) const;
   int rCount() const;
@@ -101,10 +101,10 @@ class TObjectModel: public QAbstractTableModel
 	 Qt::ItemFlags flags ( const QModelIndex & index ) const;
 	
 	 FieldInfo& getInfo( int row, int col, int& iN, int& iM, 
-                         Selection* sel=0, int to_calc = 0)
+                         Selection* sel=0 )
 	 {
 		int nO, ii;
-                ii = getObjFromModel( row, col, nO, iN, iM, sel, to_calc );
+                ii = getObjFromModel( row, col, nO, iN, iM, sel );
                 if( ii>=0 )
 		   return flds[ii];
                 iN = iM = -1;

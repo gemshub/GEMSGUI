@@ -271,7 +271,7 @@ void   GEM2MTWizard::getFlags( char flgs[22] )
 void
 GEM2MTWizard::help()
 {
-  pVisorImp->OpenHelp( GEM2MT_HTML, 0, this/*, true*/ );
+  pVisorImp->OpenHelp( GEM2MT_HTML, 0 );
 }
 
 //--------------------- End of GEM2MTWizard.cpp ---------------------------

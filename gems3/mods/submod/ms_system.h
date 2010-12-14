@@ -250,6 +250,8 @@ public:
 
     void loadData( bool newRec, int reBuildType = 2 );
     void setDefData();
+    void setDefCheck();
+
 
     void mark_ph_to_dc();
     void SyTest();

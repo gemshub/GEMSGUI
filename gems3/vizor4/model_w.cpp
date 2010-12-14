@@ -100,7 +100,7 @@ int TObjectModel::columnCount( const QModelIndex & /*parent*/ ) const
 }	
 
 int TObjectModel::getObjFromModel( int row, int col, 
-		int& nO, int& iN, int &iM, Selection* sel, int to_calc ) const
+                int& nO, int& iN, int &iM, Selection* sel ) const
 {
   int deltaN = 0, sizeN = flds[0].pObj->GetNS();
   int fuldeltaM = 0, deltaM = 0,sizeM = flds[0].pObj->GetMS();
@@ -144,13 +144,13 @@ int TObjectModel::getObjFromModel( int row, int col,
 			   sel->N2 = min(deltaN + flds[ii].pObj->GetNS()-1, sel->N2 );
 			   sel->M1 = max(deltaM, sel->M1 );
 			   sel->M2 = min(deltaM + flds[ii].pObj->GetMS()-1, sel->M2 );
-			   if( to_calc == 1 )
+                           /*if( to_calc == 1 )
 			   {
 				 sel->N1 -= deltaN;
 				 sel->N2 -= deltaN;
 				 sel->M1 -= deltaM;
 				 sel->M2 -= deltaM;
-			   }
+                           }*/
 		 }
 		 return ii;
 	 }
@@ -760,18 +760,9 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
     if(iN == -1 || iM == -1 )
      	return;
      
-     gstring item = fld.pObj->GetFullName(iN,iM);
-     try
-     {
-         gstring item1 = item;
-         if( topLevelWidget()->inherits("QDialog") ) 
-             pVisorImp->OpenHelp( GEMS_OBJNDX_HTML, item.c_str(), NULL, topLevelWidget()); 
-         else
-             pVisorImp->OpenHelp( GEMS_OBJNDX_HTML, item.c_str() );
-     }
-     catch(TError err) {
-         vfMessage(topLevelWidget(), "Help", err.mess, vfErr);
-     }
+     //gstring item = fld.pObj->GetFullName(iN,iM); // for old indexation
+     gstring item = fld.pObj->GetHelpLink(iN,iM);
+     pVisorImp->OpenHelp( GEMS_OBJNDX_HTML, item.c_str());
  }
 
  // Show SDRef-Record on F2 pressed on data field
@@ -827,25 +818,30 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
 void TObjectTable::CmCalc()
 {
   QModelIndex index = currentIndex();
+  TObjectModel *  model = ((TObjectModel *)(currentIndex().model() ));
   Selection sel = getSelectionRange();
+  QModelIndex wIndex;
   
   int iN, iM;
   FieldInfo fld =  ((TObjectModel *)(index.model() ))->getInfo( 
-		  index.row(), index.column(), iN, iM, &sel, 1 );
+                  index.row(), index.column(), iN, iM, &sel );
   if(iN == -1 || iM == -1 || fld.edit != eYes )
 	   	return;
 
   if(  fld.fType == ftFloat || fld.fType == ftNumeric )
   {
-    CalcDialog calc(topLevelWidget(), fld.nO );
-    if( calc.exec() )
-     {
+      double res;
+      CalcDialog calc(topLevelWidget(), fld.nO );
+      if( calc.exec() )
+      {
           for(int nn=sel.N1; nn<=sel.N2; nn++)
              for(int mm=sel.M1; mm<=sel.M2; mm++ )
-            	 fld.pObj->Put(calc.fun(fld.pObj->Get(nn, mm)), nn, mm);
-       //    update();
-       // double res = calc.fun( index.data(Qt::EditRole).toDouble() );
-       // index.model()->setData(index, QVariant(res).toString()), Qt::EditRole);         
+              {
+ //     	 fld.pObj->Put(calc.fun(fld.pObj->Get(nn, mm)), nn, mm);
+                 wIndex = 	index.sibling( nn, mm );
+                 res = calc.fun( wIndex.data(Qt::EditRole).toDouble() );
+                 model->setData(wIndex, QVariant(res).toString(), Qt::EditRole);
+             }
      }
   }
   
@@ -859,8 +855,11 @@ void TObjectTable::CmCalc()
     {
       int ii = calc.fun();
       for(int nn=sel.N1; nn<=sel.N2; nn++)
-    	  fld.pObj->SetString( gstring(Vals, ii, 1).c_str(), nn, iM);
-      //update();
+      {
+          wIndex = 	index.sibling( nn, sel.M1 );
+          model->setData(wIndex, QString(gstring(Vals, ii, 1).c_str()), Qt::EditRole);
+        // fld.pObj->SetString( gstring(Vals, ii, 1).c_str(), nn, iM);
+      }
     }
   }
  }
@@ -1051,12 +1050,14 @@ void TObjectTable::CmCalc()
      if( str.isEmpty() )
   	    return;
   	
-  	const QStringList rows = str.split('\n', QString::KeepEmptyParts);
+     QModelIndex wIndex;
+     const QStringList rows = str.split('\n', QString::KeepEmptyParts);
 
-    int iN, iM, ii, jj; 
-  	int rowNum = sel.N1;
-  	const int nLimit = (transpose) ? (sel.N1 + sel.M2-sel.M1) : sel.N2;
-  	for( int it = 0; it < rows.count() && rowNum <= nLimit; it++, rowNum++) 
+     int iN, iM, ii, jj;
+     int rowNum = sel.N1;
+     const int nLimit = (transpose) ? (sel.N1 + sel.M2-sel.M1) : sel.N2;
+
+        for( int it = 0; it < rows.count() && rowNum <= nLimit; it++, rowNum++)
   	{
   	    //if( rows[it].isEmpty() ) sd 29/10/2008 
   		// continue;
@@ -1080,7 +1081,11 @@ void TObjectTable::CmCalc()
                      jj = cellNum;
   		   }
 
-		  FieldInfo fld =  model->getInfo( ii, jj, iN, iM);
+                   wIndex = 	currentIndex().sibling( ii, jj );
+                   model->setData(wIndex, QString(value.c_str()), Qt::EditRole);
+
+                   /*
+                FieldInfo fld =  model->getInfo( ii, jj, iN, iM);
                 if( iN == -1 || iM == -1 || fld.edit != eYes )
                 {
                  vstr err(200);
@@ -1094,7 +1099,7 @@ void TObjectTable::CmCalc()
   		    sprintf(err, "Invalid value for object %s[%d, %d]: '%.100s'!",
   		    		fld.pObj->GetKeywd(), iN, iM, value.c_str());
   		    throw TError("Object paste", err.p);
-  		  }
+                  } */
   		}
   	}
  }

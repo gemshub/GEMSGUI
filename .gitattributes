@@ -1261,8 +1261,8 @@ gems3/shared/doc/html/g_useref.html -text
 gems3/shared/doc/html/gdb_rkey.html -text
 gems3/shared/doc/html/ge_howto.html -text
 gems3/shared/doc/html/gems1.png -text
-gems3/shared/doc/html/gems3.qch -text
-gems3/shared/doc/html/gems3.qhc -text
+gems3/shared/doc/html/gems3help.qch -text
+gems3/shared/doc/html/gems3help.qhc -text
 gems3/shared/doc/html/gems_bcc.html -text
 gems3/shared/doc/html/gems_gui.html -text
 gems3/shared/doc/html/gems_ipm.html -text
@@ -1270,8 +1270,6 @@ gems3/shared/doc/html/gems_scm.html -text
 gems3/shared/doc/html/gems_sys.html -text
 gems3/shared/doc/html/gems_toc.html -text
 gems3/shared/doc/html/gemsetup.html -text
-gems3/shared/doc/html/gemshelp.qch -text
-gems3/shared/doc/html/gemshelp.qhc -text
 gems3/shared/doc/html/gemstar2.html -text
 gems3/shared/doc/html/gemstart-body.html -text
 gems3/shared/doc/html/gemstart.html -text
@@ -1338,6 +1336,8 @@ gems3/shared/doc/txt/INSTALL-linux.txt -text
 gems3/shared/doc/txt/INSTALL-mac.txt -text
 gems3/shared/doc/txt/ScriptLibrary.txt -text
 gems3/shared/doc/txt/TermsOfUse.txt -text
+gems3/shared/help/gems3help.qch -text
+gems3/shared/help/gems3help.qhc -text
 gems3/shared/img/RunBCC.png -text
 gems3/shared/img/RunIPM.png -text
 gems3/shared/img/SetCompos.png -text

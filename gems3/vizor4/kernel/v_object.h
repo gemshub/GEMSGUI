@@ -113,6 +113,8 @@ public:
         return Keywd;
     }
     gstring GetFullName(int aN, int aM);
+    gstring GetHelpLink(int aN, int aM);
+
     ObjType GetType() const
     {
         return Type;

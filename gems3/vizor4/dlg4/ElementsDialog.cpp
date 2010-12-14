@@ -235,7 +235,7 @@ void ElementsDialog::languageChange()
 void
 ElementsDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_EL_HTML, 0, this/*, true*/ );
+    pVisorImp->OpenHelp( GEMS_EL_HTML, 0);
 }
 
 void

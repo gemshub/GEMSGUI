@@ -239,7 +239,7 @@ void DualThWizard::getFlags( char flgs[20] )
 void
 DualThWizard::help()
 {
-  pVisorImp->OpenHelp( DUALTH_HTML, 0, this/*, true*/ );
+  pVisorImp->OpenHelp( DUALTH_HTML, 0 );
 }
 
 //--------------------- End of DualThWizard.cpp ---------------------------

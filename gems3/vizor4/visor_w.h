@@ -27,12 +27,19 @@
 #include <QWaitCondition>
 #include <QCloseEvent>
 #include <QPixmap>
+#include <QProcess>
 
 #include "v_vals.h"
 using namespace std;
 
 class TCModule;
-class Helper;
+// class Helper;
+
+#ifdef QT_NO_DEBUG
+
+#define GEMS_RELEASE
+
+#endif
 
 enum myThreadEvents { thMessage = 0, thQuestion, thQuestion3,
                       thChoice, thChoice2, thExcludeFillEdit  };
@@ -123,8 +130,8 @@ class TVisorImp:
 
     char TCpoint[32];  // Step point ID for stepwise mode
 
-    // help data
-    Helper /*QAssistantClient*/ *assistantClient;
+// old help data
+//    Helper *assistantClient;
 
 protected slots:
     void closeEvent( QCloseEvent* );
@@ -144,6 +151,7 @@ public slots:
     
 public:
     DThread thdata;
+    QProcess *proc;
 
     TVisorImp(int c, char** v);
     ~TVisorImp();
@@ -156,7 +164,8 @@ public:
     void SetDialog(QWidget* centralDialog);
 
     void OpenModule(QWidget* parent, int i, int page=0, bool viewmode=false, bool select=false);
-    void OpenHelp(const char* file, const char* item=0, QWidget* parent=0, bool modal=false);
+    void GetHelp();
+    void OpenHelp(const char* file, const char* item=0);
     void OpenProgress(bool step=false);
     void CloseProgress();
     bool Message( QWidget* parent, const char* name,

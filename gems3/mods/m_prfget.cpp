@@ -574,6 +574,10 @@ void TProfil::deriveSystat()
     }
 
     // SD 22/01/2010 bool
+    if( vfQuestion( window(), keyp.c_str(),
+      "    Would you like to activate (turn on )\n"
+      "all IComp, DComp/ReacDC and Phase entries?"))
+     syst->setDefCheck();
     systbcInput( window(), keyp.c_str() );
     pVisor->Update();
     //pVisor->OpenModule(window(), MD_SYSTEM);

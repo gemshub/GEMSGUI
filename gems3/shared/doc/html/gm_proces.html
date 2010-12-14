@@ -2016,10 +2016,10 @@ table of ordinate(s)&nbsp;   y</dt>
   <dd>Each column of the <span style="font-family: monospace;">yp</span>
 sampled data table will be plotted as a separate curve. &nbsp;Number of
 columns in the <span style="font-family: monospace;">yp</span> table
-can be set in the <a href="#pDimXY%5B1%5D"><span
+can be set in the <a href="#pDimXY_1"><span
  style="font-family: monospace;">pDimXY[1]</span></a> counter upon
 remake/create of the Process record. Number of rows is set from <a
- href="#pDimXY%5B0%5D"><span style="font-family: monospace;">pDimXY[0]</span></a>
+ href="#pDimXY_0"><span style="font-family: monospace;">pDimXY[0]</span></a>
 counter which, in turn, automatically equals <span
  style="font-family: monospace;">Ntxi[1]</span> counter. &nbsp; </dd>
   <dd> &nbsp;<br>
@@ -2035,7 +2035,7 @@ Vector-column of   abscissa for empirical data xE</dt>
 empirical (scattered) points on the graph. The number of elements in
 the <span style="font-family: monospace;">xEp</span> vector can be
 defined in the <span style="font-family: monospace;"><a
- href="#pDimEf%5B0%5D">pDimEf[0]</a> </span>counter on remake/create of
+ href="#pDimEf_0">pDimEf[0]</a> </span>counter on remake/create of
 the Process record. </dd>
 </dl>
 <dl>
@@ -2048,8 +2048,8 @@ Vector-column (or   table) of ordinate(s) for empirical data yE</dt>
   <dd>Here, the user can enter empirical (experimental) data to be used
 as   ordinate(s) for plotting empirical (scattered) points on the
 graph. The number  of lines (ordinates) can be defined in the <a
- href="#pDimEf%5B1%5D"><span style="font-family: monospace;">pDimEf[1]</span></a>
-counter and that of  points - in the <a href="#pDimEf%5B0%5D"><span
+ href="#pDimEf_1"><span style="font-family: monospace;">pDimEf[1]</span></a>
+counter and that of  points - in the <a href="#pDimEf_0"><span
  style="font-family: monospace;">pDimEf[0]</span></a> counter upon
 remake/create   of the Process record. </dd>
   <dd> &nbsp; <br>
@@ -2113,7 +2113,7 @@ counter.&nbsp; </dd>
   <dd>Enter here the name(s) of column(s) in the yEp array of empirical
 data.   Similar to names in the pLnam list, these will also be
 displayed on the graph  legend. Number of elements in this list is
-defined in the <a href="#pDimEf%5B1%5D"><span
+defined in the <a href="#pDimEf_1"><span
  style="font-family: monospace;">pDimEf[1]</span></a> counter.&nbsp;</dd>
   <dd> &nbsp;</dd>
   <dd><br>
@@ -2121,7 +2121,7 @@ defined in the <a href="#pDimEf%5B1%5D"><span
 </dl>
 <h3>The data fields described below can be changed only in remake mode.</h3>
 <dl>
-  <dt><a name="pDimXY[0]"></a><b><big><tt><big>pDimXY[0]</big> -</tt></big></b><big><tt> </tt></big>Number
+  <dt><a name="pDimXY_0"></a><b><big><tt><big>pDimXY[0]</big> -</tt></big></b><big><tt> </tt></big>Number
 of rows in xp, yp arrays (simulated points to be sampled)</dt>
   <dd>&nbsp; <br>
   </dd>
@@ -2137,7 +2137,7 @@ because it must be that <span style="font-family: monospace;">pDimXY[0]
   <dd>&nbsp;&nbsp;</dd>
   <dd> &nbsp;<br>
   </dd>
-  <dt> <a name="pDimXY[1]"></a><big><b><big><tt>pDimXY[1]</tt></big></b></big><b><i> </i></b>-
+  <dt> <a name="pDimXY_1"></a><big><b><big><tt>pDimXY[1]</tt></big></b></big><b><i> </i></b>-
 Number of columns in the yp table (plot lines)</dt>
   <dd>&nbsp; <br>
   </dd>
@@ -2153,7 +2153,7 @@ connected to this process simulation.&nbsp;</dd>
   <dd> &nbsp;</dd>
   <dd> <br>
   </dd>
-  <dt> <a name="pDimEf[0]"></a><big><b><big><tt>pDimEf[0]</tt></big></b></big>
+  <dt> <a name="pDimEf_0"></a><big><b><big><tt>pDimEf[0]</tt></big></b></big>
 - Number   of points&nbsp;of input empirical data (rows in <a
  href="#xEp"><span style="font-family: monospace;">xEp</span></a> and <a
  href="#yEp"><span style="font-family: monospace;">yEp</span></a>
@@ -2166,7 +2166,7 @@ simulated lines.&nbsp;<b><i> </i></b></dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd> <br>
   </dd>
-  <dt> <a name="pDimEf[1]"></a><big><b><big><tt>pDimEf[1]</tt></big></b></big>
+  <dt> <a name="pDimEf_1"></a><big><b><big><tt>pDimEf[1]</tt></big></b></big>
 - Number   of parameters in the input empirical data (columns in the <a
  href="#yEp"><span style="font-family: monospace;">yEp</span></a> array).</dt>
   <dd> &nbsp;<br>
@@ -2311,13 +2311,13 @@ sampling/plotting   mode of process simulation&nbsp; (+ -)? </dt>
   </dd>
   <dd> This flag activates the data sampling/plotting mode of the
 process   simulation. Default value is off ('-'). If this flag is set
-on ('+') then   you will have to enter (into <a href="#pDimXY%5B1%5D"><span
+on ('+') then   you will have to enter (into <a href="#pDimXY_1"><span
  style="font-family: monospace;">pDimXY[1]</span></a> counter) the
 number   of columns to be sampled into the <a href="#yp"><span
  style="font-family: monospace;">yp</span></a> table; optionally, the
-dimensionality   of empirical data arrays ( <a href="#pDimEf%5B0%5D"><span
+dimensionality   of empirical data arrays ( <a href="#pDimEf_0"><span
  style="font-family: monospace;">pDimEf[0]</span></a> and <a
- href="#pDimEf%5B1%5D"><span style="font-family: monospace;">pDimEf[1]</span></a>
+ href="#pDimEf_1"><span style="font-family: monospace;">pDimEf[1]</span></a>
 counters); and, after remake is finished, in any case type a data
 sampling   math scritpt into the <a href="#pgExpr"><span
  style="font-family: monospace;">pGexpr</span></a> text editor field.

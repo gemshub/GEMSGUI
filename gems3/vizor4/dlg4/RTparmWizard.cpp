@@ -230,7 +230,7 @@ void   RTparmWizard::getFloat( float val[6] )
 void
 RTparmWizard::help()
 {
-  pVisorImp->OpenHelp( RTPARM_HTML, 0, this/*, true*/ );
+  pVisorImp->OpenHelp( RTPARM_HTML, 0 );
 }
 
 

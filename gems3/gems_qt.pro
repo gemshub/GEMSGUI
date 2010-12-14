@@ -8,9 +8,11 @@ DEFINES         += Use_mt_mode
 #DEFINES         += Use_qd_real
 
 CONFIG		+= qt thread warn_on
+CONFIG		+= help
 #CONFIG		+= debug
 #CONFIG		+= qmake_cache
 QT += network
+QT += sql
 
 #LIBS	+= -lqd
 RESOURCES += img.qrc
@@ -38,7 +40,8 @@ NUMERICS_CPP     =  ./mods/numerics
 GEMIPM2K_CPP     =  ../standalone/GEMIPM2K
 
 VIZOR4_H      =  $$VIZOR4_CPP
-KERNEL_H     =  $$KERNEL_CPP
+KERNEL_H     =  $$KERNEL_CPP#CONFIG		+= debug
+
 DLG4_H        =  $$DLG4_CPP
 MODS_H       =  $$MODS_CPP
 SUBMOD_H     =  $$SUBMOD_CPP

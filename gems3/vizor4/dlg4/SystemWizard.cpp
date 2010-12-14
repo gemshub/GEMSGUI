@@ -239,7 +239,7 @@ void SystemWizard::getFlags( char flgs[40] )
 void
 SystemWizard::help()
 {
-  pVisorImp->OpenHelp( SYST_HTML, 0, this/*, true*/ );
+  pVisorImp->OpenHelp( SYST_HTML, 0 );
 }
 
 //--------------------- End of SystemWizard.cpp ---------------------------

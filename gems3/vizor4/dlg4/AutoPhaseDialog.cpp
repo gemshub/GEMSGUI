@@ -262,7 +262,7 @@ AutoPhaseDialog::CmCheck()
 void
 AutoPhaseDialog::CmHelp()
 {
-  pVisorImp->OpenHelp( AUTOPHASE_HTML, 0, this/*, true*/ );
+  pVisorImp->OpenHelp( AUTOPHASE_HTML, 0 );
 }
 
 //--------------------- End of ProcessDialog.cpp ---------------------------

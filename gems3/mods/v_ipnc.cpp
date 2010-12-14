@@ -286,7 +286,23 @@ void IPNCalc::Variab( const char *str)
     }
     if( aObj[j].IsDynamic() || aObj[j].GetN() > 1  )
     {
-        if( *input != '[' )
+      bool isLine = false;
+      if( aObj[j].GetN() <= 1 )
+      {
+
+        char *crnt = input;
+        if( *crnt=='[' )
+        {
+            if( ( crnt=strchr(crnt, ']' ) )==0 ) goto OSH;
+            crnt++;
+            if( ( crnt=xblanc( crnt ) )==0 ) goto OSH;
+            if( *crnt != '[' )
+               isLine = true;
+        }
+
+       }
+
+        if( *input != '[' || isLine )
             Push( IT_C, 0);
         else
         {

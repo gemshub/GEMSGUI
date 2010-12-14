@@ -1,4 +1,4 @@
-//-------------------------------------------------------------------
+//--------------------------------------------------------------------
 // $Id: visor_w.cpp 999 2008-01-17 13:34:35Z gems $
 //
 // Implementation of TVisorImp class and some GUI service functions
@@ -38,7 +38,6 @@ using namespace std;
 #include <QDesktopWidget>
 
 #include "service.h"
-#include "help.h"
 #include "visor_w.h"
 #include "visor.h"
 #include "module_w.h"
@@ -46,6 +45,7 @@ using namespace std;
 #include "ProgressDialog.h"
 #include "NewSystemDialog.h"
 #include "LoadMessage.h"
+#include "HelpWindow.h"
 
 const char* GEMS_LOGO_ICON = "img/gems1.png";
 const char* GEMS_SYS_ICON = "img/sciences_section.xpm";
@@ -74,14 +74,15 @@ TVisorImp::TVisorImp(int c, char** v):
         QMainWindow( 0 ),
         argc(c),
         argv(v),
-	configAutosave(false)
+        configAutosave(false),
+        proc(0)
 {
 // just in case
 	charWidth = 12;
 	charHeight = 18;
 
     pVisorImp = this;
-    assistantClient = new Helper();//0;
+//    assistantClient = new Helper();//0;
     
 #ifdef Use_mt_mode
     updateTime = 10; // centiseconds
@@ -121,8 +122,7 @@ TVisorImp::~TVisorImp()
     delete pixLogo;
     delete pixSys;
     delete pVisor;
-    //if( assistantClient )
-      delete assistantClient;
+//      delete assistantClient;
 }
 
 void TVisorImp::closeEvent ( QCloseEvent * ev )
@@ -132,6 +132,9 @@ void TVisorImp::closeEvent ( QCloseEvent * ev )
         for(uint ii=0; ii<aMod.GetCount(); ii++ )
             if( aMod[ii].pImp )
                 aMod[ii].pImp->close();
+
+        if( HelpWindow::pDia )
+          delete HelpWindow::pDia;
 
     QWidget* central = centralWidget();
 
@@ -407,42 +410,22 @@ void TVisorImp::ProcessProgress( QWidget* parent )
    be always overlapping it. For modal windows (and thus modal help) we need parent
 */
 
-void
-TVisorImp::OpenHelp(const char* file, const char* item1, QWidget* parent, bool modal)
+void TVisorImp::GetHelp( )
 {
-	assistantClient->showDocumentation( file, item1);
-	/*    gstring path(pVisor->docDir());
-    if( item1 )
-    {  
-    	cout << file << "  " << item1 << endl;
-        gstring item = item1;
-        checkForRef( path, file, item );
-        if( item.empty() )
-            Error("Help", item + ": No such item in HTML files!");
-        path += item;
-    }
-    else
-    {
-        path += file;
-        // adding ".html" if needed
-        if( path.rfind( "#" ) == path.npos )
-           if( gstring(path, path.length()-5, 5) != ".html" )
-              path += ".html"; 
-    }
-    QString path_str = path.c_str();
-    
-    if(!assistantClient )
-    {	
-      assistantClient = new QAssistantClient("", 0);
-      connect( assistantClient, SIGNAL(error ( const QString & message )),
-        			parent,  SLOT(objectChanged()) );
+        (new HelpWindow(  0  ));
+   //     HelpWindow::pDia->show();
+}
 
-      //QStringList arguments;
-      //arguments << "-profile" << QString("gems3.adp");
-      //assistantClient->setArguments(arguments);
+void
+TVisorImp::OpenHelp(const char* file, const char* item )
+{
+    if( HelpWindow::pDia )
+    {
+       HelpWindow::pDia->showDocumentation( file, item);
+       HelpWindow::pDia->show();
+       HelpWindow::pDia->raise();
     }
-    assistantClient->showPage(path_str);
-*/    
+   // old help assistantClient->showDocumentation( file, item);
 }
 
 //TCModuleImp*
