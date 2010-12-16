@@ -13,7 +13,7 @@ WindowIcon on
 
 ; The file to write
 ; OutFile "gems-w32-install.exe"
-OutFile "gems3.0-1732.510-w32-install.exe"
+OutFile "gems3.0-1742.516-w32-install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\GEMS3
@@ -22,7 +22,7 @@ InstallDir $PROGRAMFILES\GEMS3
 InstallDirRegKey HKLM SOFTWARE\GEMS3 "Install_Dir"
 
 ;License text
-LicenseText "Version to be installed: 3.0 (rev.1732.510) $\nLICENSE and DISCLAIMER"
+LicenseText "Version to be installed: 3.0 (rev.1742/516) $\nLICENSE and DISCLAIMER"
 LicenseData "C:\GEMS3inst\program\doc\txt\TermsOfUse.txt"
 
 ; The text to prompt the user to enter a directory

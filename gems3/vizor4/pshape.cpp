@@ -313,7 +313,7 @@ TPlotWin::paintGrid(QPainter& dc)
     font.setBold(false);
     dc.setFont(font);
 
-    QString cr("(c) GEMS");
+    QString cr("(c)GEMS3");
     int fontSize = font.pointSize();
     font.setPointSize(9);
     dc.setFont(font);
