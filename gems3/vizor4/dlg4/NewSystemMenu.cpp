@@ -159,7 +159,7 @@ NewSystemDialog::CmNew()
 	    return;
    
    TProfil::pm->newSystat( VF_BYPASS );
-   ListViewResult->resetList();
+   //ListViewResult->resetList();
       // Create...
    Update();
  }
@@ -180,7 +180,7 @@ NewSystemDialog::CmSelect()
            return;
     	
       TProfil::pm->loadSystat();
-      ListViewResult->resetList();
+      //ListViewResult->resetList();
       Update();
     }
     catch( TError& xcpt )
@@ -198,7 +198,7 @@ NewSystemDialog::CmRemake()
 	    return;
 	  
     TProfil::pm->deriveSystat();
-    ListViewResult->resetList();
+    //ListViewResult->resetList();
     Update();
    //  pVisor->OpenModule(this, MD_SYSTEM);
  }
@@ -285,7 +285,7 @@ NewSystemDialog::CmNext()
             }
         }
        TProfil::pm->loadSystat( aKey[i_next].c_str() );
-       ListViewResult->resetList();
+       //ListViewResult->resetList();
        Update();
     }
     catch( TError& xcpt )
@@ -329,7 +329,7 @@ NewSystemDialog::CmPrevious()
              }
         }
        TProfil::pm->loadSystat( aKey[i_next].c_str() );
-       ListViewResult->resetList();
+       //ListViewResult->resetList();
        Update();
     }
     catch( TError& xcpt )
@@ -406,7 +406,7 @@ NewSystemDialog::CmReadMulti()
         // Unpack the pmp->B vector (b) into syp->BI (BI_ vector).
         for( int i=0; i<TProfil::pm->pmp->N; i++ )
          TProfil::pm->syp->BI[TProfil::pm->pmp->mui[i]] = TProfil::pm->pmp->B[i];
-        ListViewResult->resetList(); //
+        //ListViewResult->resetList(); //
         Update();
     }
     catch( TError& xcpt )
@@ -424,7 +424,7 @@ NewSystemDialog::CmRunBCC()
  try
   {
    TProfil::pm->CalcBcc(); // Calc bulk composition
-   ListViewResult->resetList();
+   //ListViewResult->resetList();
    Update();
   }
     catch( TError& xcpt )
@@ -463,12 +463,12 @@ NewSystemDialog::CmRunIPM()
 //         Update();   Provisional
         }
 #endif
-        ListViewResult->resetList();
+        //ListViewResult->resetList();
         Update();
     }
     catch( TError& err)
     {
-        ListViewResult->resetList();
+        //ListViewResult->resetList();
         Update();
         vfMessage(this, err.title, err.mess);
     }

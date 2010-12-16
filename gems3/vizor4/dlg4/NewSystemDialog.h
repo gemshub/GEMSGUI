@@ -60,7 +60,7 @@ public:
 
     void resetList()
     {
-        ListViewResult->resetList();
+        //ListViewResult->resetList();
         Update();
     }
 

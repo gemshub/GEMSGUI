@@ -160,6 +160,7 @@ HelpWindow::HelpWindow( QWidget* parent):
     spl->setSizes(lst);
     //tab_->setMaximumWidth(350);
     //tab_->setMinimumWidth(200);
+   //wBrowser->setOpenExternalLinks(true);
 
   setActions();
 }
@@ -452,6 +453,9 @@ HelpBrowser::HelpBrowser(QHelpEngine *hEngine, QWidget *parent)
 
 QVariant HelpBrowser::loadResource(int type, const QUrl &name)
 {
+    if( name.toString().indexOf("qthelp") < 0 )
+        return QTextBrowser::loadResource( type, name);
+
     QByteArray ba;
     if (type < 4 && m_Engine) {
         QUrl url(name);

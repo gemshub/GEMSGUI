@@ -263,9 +263,12 @@ NewSystemDialog::Update()
     statusBar()->showMessage( msg );
 
     //    last_update = time(0);
-    update();
-    // this really updates window when CPU is heavyly loaded
-    qApp->processEvents();
+    if(ListViewResult)
+      ListViewResult->resetList();
+    ListViewInput->resetList();
+    //update();
+    //// this really updates window when CPU is heavyly loaded
+    //qApp->processEvents();
 }
 
 void

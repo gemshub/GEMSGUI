@@ -59,21 +59,21 @@ const double R_CONSTANT = 8.31451,
                                 Min_phys_amount = 1.66e-24;
 
 SPP_SETTING pa_ = {
-    "GEM-Selektor v3.0.0: Numerical flags, controls and thresholds",
-    {   // Typical default set (16.05.2010) new PhaseSelection( logSI )
+    "GEM-Selektor v3.0u-1707.496: Numerical controls & thresholds",
+    {   // Typical default set (29.11.2010) new PhaseSelection( logSI )
         2,  /* PC */  2,     /* PD */   -4,   /* PRD */
         1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
         1, /* DT */     10,   /* PLLG */   1,  /* PE */  7000, /* IIM */
         1000., /* DG */   1e-11,  /* DHB */  1e-20,  /* DS */
-        1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+        1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
         1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
         1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
         1e-6, /* DFYs, */  1e-17,  /* DB */   -1.,   /* AG */
         -0.98,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-        1e-3, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
+        1e-5, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
         1e-11,  /* ScMin, */  1e-30, /* DcMin, */   1e-20, /* PhMin, */
         1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-        1e-8,  /* DKIN  */ 0,  /* tprn */
+        1e-9,  /* DKIN  */ 0,  /* tprn */
     },
     "CSC   ",   /* DCpct[6] */  "OjjbC+---",    /* DCpdc[9] */
     "+----M",   /* BCpc[6] */   "K3C   ",   /* REpct[6] */
@@ -110,15 +110,15 @@ BASE_PARAM dfBase[5] =
                 1, /* DT */     10,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
                 1000., /* DG */   1e-12,  /* DHB */  1e-20,  /* DS */
-                1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
                 1e-6, /* DFYs, */  1e-17,  /* DB */   -1.,   /* AG */
                 -0.98,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-                1e-3, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
+                1e-5, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
                 1e-11,  /* ScMin, */  1e-30, /* DcMin, */   1e-20, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-                1e-8,  /* DKIN  */ 0,  /* tprn */
+                1e-9,  /* DKIN  */ 0,  /* tprn */
 	    },
             { // Variant for aquatic systems with SCMs in sorption phases (16.05.2010)
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
@@ -126,7 +126,7 @@ BASE_PARAM dfBase[5] =
                 1, /* DT */     10,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
                 1000., /* DG */   1e-11,  /* DHB */  1e-20,  /* DS */
-                1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                3e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
                 1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
@@ -134,7 +134,7 @@ BASE_PARAM dfBase[5] =
                 1e-3, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
                 1e-11,  /* ScMin, */  1e-30, /* DcMin, */   1e-20, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-                1e-8,  /* DKIN  */ 0,  /* tprn */
+                1e-9,  /* DKIN  */ 0,  /* tprn */
 	    },
             { // Variant for fluid-rock systems with highly non-ideal phases (16.05.2010)
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
@@ -142,15 +142,15 @@ BASE_PARAM dfBase[5] =
                 1, /* DT */     10,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
                 1000., /* DG */   1e-11,  /* DHB */  1e-20,  /* DS */
-                1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                2e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
                 1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
                 0.01,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-                1e-4, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
+                1e-5, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
                 1e-11,  /* ScMin, */  1e-30, /* DcMin, */   1e-20, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-                1e-8,  /* DKIN  */ 0,  /* tprn */
+                1e-9,  /* DKIN  */ 0,  /* tprn */
 	    },
             { // Variant of strict settings for highest accuracy (16.05.2010)
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
@@ -158,15 +158,15 @@ BASE_PARAM dfBase[5] =
                 1, /* DT */     10,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
                 1000., /* DG */   1e-12,  /* DHB */  1e-20,  /* DS */
-                3e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
                 1e-6, /* DFYs, */  1e-17,  /* DB */   -1.,   /* AG */
                 -0.98,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-                1e-4, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
+                1e-5, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
                 1e-11,  /* ScMin, */  1e-30, /* DcMin, */   1e-20, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-                1e-8,  /* DKIN  */ 0,  /* tprn */
+                1e-9,  /* DKIN  */ 0,  /* tprn */
             },
             { // Variant of strict settings for reactive mass transport (interim, 08.12.2009)
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
@@ -174,15 +174,15 @@ BASE_PARAM dfBase[5] =
                 1, /* DT */     10,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
                 1000., /* DG */   1e-12,  /* DHB */  1e-20,  /* DS */
-                1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
                 1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
                 -0.001,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-                1e-3, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
+                1e-5, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
                 1e-11,  /* ScMin, */  1e-30, /* DcMin, */   1e-20, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-                1e-8,  /* DKIN  */ 0,  /* tprn */
+                1e-9,  /* DKIN  */ 0,  /* tprn */
             }
 	    // More preset parameter structures can be added here
             // (if so, increase number of elements from 5 above and in dfBase() call below)
