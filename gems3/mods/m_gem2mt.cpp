@@ -973,7 +973,7 @@ TGEM2MT::RecCalc( const char * key )
      // open file to read
      else
        if( vfChooseFileOpen(window(), f_name,
-          "Please, enter the IPM work structure file name", "*.lst" ) == false )
+          "Please, edit the GEMIPM2K filelist name", "*.lst" ) == false )
        {        delete na;
                return;
        }
