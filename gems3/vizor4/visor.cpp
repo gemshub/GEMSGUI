@@ -22,7 +22,7 @@
 using namespace std;
 
 #include <qdir.h>
-#include <qstring.h>
+#include <QString>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <stdlib.h>
@@ -108,22 +108,32 @@ TVisor::TVisor(int c, char *v[]):
 #else
 #ifdef GEMS_RELEASE
         SysGEMDir = getenv("HOME");
-        SysGEMDir += "/GEM-Selektor/shared/";
+        SysGEMDir += "/Gems3-app/shared/";
+//        SysGEMDir += "/GEM-Selektor/shared/";
 //        SysGEMDir = "/usr/share/gems3/";
 #else
 //        SysGEMDir = getenv("HOME");
         SysGEMDir = "./shared/";
 #endif
 	UserGEMDir += getenv("HOME");
-//         UserGEMDir += "/Library/gems3/";
-        UserGEMDir += "/.gems3/";
+         UserGEMDir += "/Library/gems3/";
+  //      UserGEMDir += "/.gems3/";
 #endif // __unix
 #else // win
-    SysGEMDir = "c:/GEM-Selektor/program/";
-    UserGEMDir = "c:/GEMS-Selektor/";
+
+    QString dirExe = QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
+    SysGEMDir = dirExe.toLatin1().data();
+    QDir dirUp(dirExe);
+
+    if( dirUp.cdUp() )
+         dirExe = dirUp.path()
+    UserGEMDir = dirExe.toLatin1().data();
+//    SysGEMDir = "c:/GEM-Selektor/program/";
+//    UserGEMDir = "c:/GEMS-Selektor/";
 #endif // win
 
 
+/*
     char* env_s = getenv("GEMS_SYSDIR");
     if (env_s)
     {
@@ -140,7 +150,7 @@ TVisor::TVisor(int c, char *v[]):
             UserGEMDir += '/';
     }
 
-
+*/
     DefDBDir = "DB.default/";
     DefProfDir = "projects/";
     UserProfDir = "projects/";
@@ -258,6 +268,20 @@ TVisor::Setup()
         default_config = true;
         default_settings = true;
         pVisorImp->setConfigAutosave( true );
+
+#ifdef __unix
+         // build Lybrary
+        gstring dirUp = gstring( dir,0, dir.length()-1);
+        size_t pos = dirUp.rfind("/");
+        if( pos != gstring::npos )
+        {
+          dirUp = dirUp.substr(0,pos);
+          QDir userGEMUP(dirUp.c_str());
+          if(!userGEMUP.exists())
+              if( !userGEMUP.mkdir(dirUp.c_str()) )
+                  throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
+         }
+#endif
 
         // make home GEM directories
         if( !userGEM.mkdir(userGEMDir().c_str())
