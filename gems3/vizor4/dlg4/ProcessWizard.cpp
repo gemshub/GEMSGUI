@@ -98,7 +98,8 @@ void 	ProcessWizard::resetBackButton()
 
 ProcessWizard::ProcessWizard( const char* pkey, char flgs[24], int size[6],
                     short tabInt[6], double tabDoubl[24],
-            const char *acalcScript, const char *aoutScript, QWidget* parent):
+            const char *acalcScript, const char *aoutScript,
+            const char* aXname, const char* aYname, QWidget* parent):
         QDialog( parent ), curType('-'),
         calcScript(acalcScript), outScript(aoutScript), pageScript(0)
 {
@@ -279,7 +280,7 @@ for(int row=0; row<3; row++)
  }
 
 //Page3
-   resetPageList();
+   resetPageList(aXname, aYname);
 
 //Page4
     pPoints->setValue(size[0]);
@@ -1620,6 +1621,7 @@ void ProcessWizard::changePage( int nPage )
     pageLists->setCurrentIndex ( nPage );
   }
 
+
 // ==================================================================================
 // Internal functions
 
@@ -1773,7 +1775,7 @@ void  ProcessWizard::setIterColumn( int col, int from, int until, int step )
 equatSetupData eqPr( "xp", "yp", "J", "J" );
 
 // work with lists
-void ProcessWizard::resetPageList()
+void ProcessWizard::resetPageList(const char* aXname, const char* aYname)
 {
 
     TIArray<pagesSetupData> scalarsList;
@@ -1799,7 +1801,7 @@ void ProcessWizard::resetPageList()
 //    else
     {
       pageScript = new EquatSetup( page_5, eqPr,
-              RT_PROCES, pgData, scalarsList, outScript.c_str()  );
+              RT_PROCES, pgData, scalarsList, outScript.c_str(), aXname, aYname  );
       verticalLayout->addWidget(pageScript);
     }
 
@@ -1848,5 +1850,6 @@ QWidget *TProcesDelegate::createEditor(QWidget *parent,
    }
    return editor;
 }
+
 
 //--------------------- End of ProcessWizard.cpp ---------------------------

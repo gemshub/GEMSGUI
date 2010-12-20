@@ -561,10 +561,12 @@ vfSystemInput(QWidget* par, const char * p_key,
 bool
 vfProcessSet(QWidget* par, const char * p_key,
               char flgs[24], int size[6], short tabInt[6], double tabDoubl[24],
-              gstring& calcScript, gstring& outScript, TCStringArray& names )
+              gstring& calcScript, gstring& outScript, TCStringArray& names,
+              gstring& xName, gstring& yName )
 {
      ProcessWizard pdlg( p_key, flgs, size,  tabInt, tabDoubl,
-                 calcScript.c_str(), outScript.c_str(), par );
+                 calcScript.c_str(), outScript.c_str(),
+                 xName.c_str(), yName.c_str(), par );
      if( !pdlg.exec() )
       return false;
 
@@ -574,7 +576,7 @@ vfProcessSet(QWidget* par, const char * p_key,
 
     outScript = pdlg.getOutScript();
     calcScript = pdlg.getCalcScript();
-    names = pdlg.getNames();
+    names = pdlg.getNames( xName, yName );
 
     return true;
 }
@@ -608,15 +610,17 @@ vfUnSpaceSet(QWidget* par, const char * p_key,
 }
 
 bool vfGtDemoSet(QWidget* par, const char * p_key, int size[7],
-            gstring& prkey, gstring& script, TCStringArray& names )
+            gstring& prkey, gstring& script, TCStringArray& names,
+            gstring& xName, gstring& yName )
 {
-     GtDemoWizard cdlg( p_key, size, script.c_str(), prkey.c_str(),  par );
+     GtDemoWizard cdlg( p_key, size, script.c_str(), prkey.c_str(),
+                        xName.c_str(), yName.c_str(),  par );
      if( !cdlg.exec() )
        return false;
     cdlg.getSizes( size );
     prkey = cdlg.getPrKey();
     script = cdlg.getScript();
-    names = cdlg.getNames();
+    names = cdlg.getNames( xName, yName );
 
     return true;
 }
@@ -665,9 +669,12 @@ vfReacDCSet(QWidget* par, const char * p_key,
 bool
 vfRTparmSet(QWidget* par, const char * p_key,
             char flgs[10], int size[7], float val[6],
-            gstring& script, gstring& xName, TCStringArray& names   )
+            gstring& script, gstring& xName,  gstring& yName,
+            TCStringArray& names )
 {
-     RTparmWizard cdlg( p_key, flgs, size, val, script.c_str(), par );
+    gstring axName;
+    RTparmWizard cdlg( p_key, flgs, size, val, script.c_str(),
+                       xName.c_str(), yName.c_str(), par );
      if( !cdlg.exec() )
        return false;
     cdlg.getFlags( flgs, xName  );
@@ -675,7 +682,7 @@ vfRTparmSet(QWidget* par, const char * p_key,
     cdlg.getFloat( val );
 
     script = cdlg.getScript();
-    names = cdlg.getNames();
+    names = cdlg.getNames( axName, yName );
 
     return true;
 }

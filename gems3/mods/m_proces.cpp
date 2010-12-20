@@ -757,9 +757,11 @@ TProcess::MakeQuery()
      calcScript = pep->Expr;
     if( pep->gr_expr )
       outScript = pep->gr_expr;
+    gstring xName = pep->xNames;
+    gstring yName = pep->yNames;
 
     if( !vfProcessSet( window(), p_key, flgs, size, pep->tmi, pep->Pi,
-                       calcScript, outScript, namesLines ))
+                       calcScript, outScript, namesLines, xName, yName ))
          Error( p_key, "Process record configuration cancelled by the user!" );
      //  return;   // cancel
 
@@ -785,12 +787,13 @@ TProcess::MakeQuery()
      else
          pep->PvEF = S_ON;
 
-     // from scripts
+         // from scripts
      if( !outScript.empty() )
      {   if( !pep->gr_expr )
             pep->gr_expr = (char *)aObj[ o_pcexpr ].Alloc( 1, 2048, S_);
          aObj[o_pcexpr].SetString( outScript.c_str(),0,0);
      }
+
      if(namesLines.GetCount() > 0)
       {
          pep->lNam = (char (*)[MAXGRNAME])aObj[ o_pclnam ].Alloc( 1,
@@ -799,7 +802,10 @@ TProcess::MakeQuery()
          {
            strncpy(  pep->lNam[ii], namesLines[ii].c_str(), MAXGRNAME );
          }
-      }
+         strncpy(pep->xNames, xName.c_str(), MAXAXISNAME );
+         strncpy(pep->yNames, yName.c_str(), MAXAXISNAME );
+     }
+
      if( !calcScript.empty() )
      { if( !pep->Expr )
           pep->Expr = (char *)aObj[ o_peexpr].Alloc( 1, 2048, S_);

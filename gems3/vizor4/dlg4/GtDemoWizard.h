@@ -41,7 +41,8 @@ class GtDemoWizard : public QDialog, public Ui::GtDemoWizardData
 public:
 
     GtDemoWizard( const char* pkey, int sizes[7], const char *ascript,
-                  const char *proc_key, QWidget* parent = NULL);
+                  const char *proc_key, const char* aXname, const char* aYname,
+                  QWidget* parent = NULL);
     virtual ~GtDemoWizard();
 
 
@@ -49,14 +50,14 @@ public:
     gstring getPrKey();
     gstring getScript() const
     { return pageScript->getScript(); }
-    TCStringArray getNames() const
-    { return pageScript->getNames(); }
+    TCStringArray getNames( gstring& xName, gstring& yName ) const
+    { return pageScript->getNames(xName, yName); }
 
 protected slots:
     virtual void languageChange();
 
 public slots:
-    void resetPageList( int );
+    void resetPageList( int, const char* aXname=0, const char* aYname=0 );
     void help();
     void CmNext();
     void CmBack();

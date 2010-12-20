@@ -122,7 +122,8 @@ bool  vfSystemInput(QWidget* par, const char * p_key,
 bool
 vfProcessSet(QWidget* par, const char * p_key,
               char flds[24], int size[6], short tabInt[6], double tabDoubl[24],
-              gstring& calcScript, gstring& outScript, TCStringArray& names );
+              gstring& calcScript, gstring& outScript, TCStringArray& names,
+              gstring& xName, gstring& yName );
 bool
 vfGEM2MTSet(QWidget* par, const char * p_key,
               char flds[22], int size[17] );
@@ -131,7 +132,8 @@ vfUnSpaceSet(QWidget* par, const char * p_key,
               char flds[38], int size[10] );
 bool
 vfGtDemoSet(QWidget* par, const char * p_key, int size[7],
-            gstring& prkey, gstring& script, TCStringArray& names  );
+            gstring& prkey, gstring& script, TCStringArray& names,
+            gstring& xName, gstring& yName  );
 
 bool
 vfComposSet(QWidget* par, const char * p_key,
@@ -146,7 +148,7 @@ vfReacDCSet(QWidget* par, const char * p_key,
 bool
 vfRTparmSet(QWidget* par, const char * p_key,
             char flgs[10], int sizes[7], float val[6],
-            gstring& script, gstring& xName, TCStringArray& names  );
+            gstring& script, gstring& xName, gstring& yName, TCStringArray& names  );
 
 bool
 vfPhaseSet(QWidget* par, const char * p_key,

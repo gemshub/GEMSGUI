@@ -897,7 +897,7 @@ scalarsList.Add( new pagesSetupData("epsW[1][0]",o_wio_epsw,1)); // Dielectric c
 scalarsList.Add( new pagesSetupData("lnP",o_wo_lnp)); //"Natural logarithm of total pressure "
 scalarsList.Add( new pagesSetupData("RT",o_wo_rt)); //"Factor RT = 8.31451* T (J/mol), T is current temperature in Kelvins "
 scalarsList.Add( new pagesSetupData("F_RT",o_wo_frt)); //"Factor F/RT, where F= 96485 C/mol is the Faraday's constant "
-scalarsList.Add( new pagesSetupData("F_RT",o_wo_yw)); //N "Current number of moles of the solvent in aqueous phase "
+scalarsList.Add( new pagesSetupData("Xw",o_wo_yw)); //N "Current number of moles of the solvent in aqueous phase "
 
 // dynamic
 // primary output for ICs

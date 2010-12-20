@@ -81,7 +81,7 @@ void 	GtDemoWizard::resetBackButton()
 
 
 GtDemoWizard::GtDemoWizard( const char* pkey, int size[7], const char *ascript,
-                            const char *proc_key, QWidget* parent):
+                            const char *proc_key, const char* aXname, const char* aYname, QWidget* parent):
             QDialog( parent ), script(ascript), pageScript(0)
 {
     setupUi(this);
@@ -125,7 +125,7 @@ GtDemoWizard::GtDemoWizard( const char* pkey, int size[7], const char *ascript,
      case RT_GEM2MT: psTR->setChecked( true ); break;
    }
 //Page 2
-   resetPageList(size[0]);
+   resetPageList(size[0], aXname, aYname);
 
 //Page3
     pGraph->setValue(size[6]);
@@ -226,7 +226,7 @@ equatSetupData eqd( "x0", "y0", "jR", "jR" );
 
 
 // work with lists
-void GtDemoWizard::resetPageList( int newRT )
+void GtDemoWizard::resetPageList( int newRT,const char* aXname, const char* aYname )
 {
 
     TIArray<pagesSetupData> scalarsList;
@@ -265,7 +265,8 @@ void GtDemoWizard::resetPageList( int newRT )
       pageScript->resetPageList( newRT, pgData, scalarsList );
     else
     {
-      pageScript = new EquatSetup( page_3, eqd, nRT, pgData, scalarsList, script.c_str()  );
+      pageScript = new EquatSetup( page_3, eqd, nRT, pgData, scalarsList,
+                                   script.c_str(), aXname, aYname  );
       verticalLayout_2->addWidget(pageScript);
     }
 

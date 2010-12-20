@@ -105,6 +105,9 @@ class EquatSetup : public QWidget, public Ui_EquatWidgetForm
    bool useCalc;
 
    TCStringArray namLines;
+   gstring xNam;
+   gstring yNam;
+
 
    // internal functions
    int  tableFindRow( int nO, int ndx );
@@ -123,11 +126,11 @@ public:
 
     EquatSetup( QWidget* parent, equatSetupData aEqData,
        int nRT, TIArray<pagesSetupData>& wnData, TIArray<pagesSetupData>& scalarsList,
-       const char* script = 0  );
+       const char* script = 0, const char* aXname = 0, const char* aYname = 0  );
     virtual ~EquatSetup();
 
    gstring getScript() const;
-   TCStringArray getNames() const;
+   TCStringArray getNames( gstring& xName, gstring& yName ) const;
    void setNames(TCStringArray lst );
 
 

@@ -35,11 +35,11 @@ using namespace std;
 class TCModule;
 // class Helper;
 
-#ifdef QT_NO_DEBUG
+//#ifdef QT_NO_DEBUG
 
-#define GEMS_RELEASE
+//#define GEMS_RELEASE
 
-#endif
+//#endif
 
 enum myThreadEvents { thMessage = 0, thQuestion, thQuestion3,
                       thChoice, thChoice2, thExcludeFillEdit  };

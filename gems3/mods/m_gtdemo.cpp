@@ -292,6 +292,10 @@ TGtDemo::MakeQuery()
     if( gdp->expr )
      script = gdp->expr;
 
+    gstring xName = gdp->xNames;
+    gstring yName = gdp->yNames;
+
+
     // nRT from flags
     if( gdp->PsTR != S_OFF )
      nRT = RT_GEM2MT;
@@ -334,7 +338,7 @@ TGtDemo::MakeQuery()
     if( prkey.empty() || prkey == "`")
         prkey = "*";
 
-    if( !vfGtDemoSet( window(), p_key, size,  prkey, script, namesLines  ))
+    if( !vfGtDemoSet( window(), p_key, size,  prkey, script, namesLines, xName, yName  ))
          Error( p_key, "GtDemo record configuration cancelled by the user!" );
      //  return;   // cancel
 
@@ -350,9 +354,11 @@ TGtDemo::MakeQuery()
       prkey = "*";
     strncpy( gdp->prKey, prkey.c_str(), MAXRKEYLEN );
 
+
     if( !gdp->expr )
        gdp->expr = (char *)aObj[ o_gdexpr ].Alloc(1, 2048, S_);
     aObj[o_gdexpr].SetString( script.c_str(),0,0);
+
     if(namesLines.GetCount() > 0)
      {
         gdp->lNam0 = (char (*)[MAXGRNAME])aObj[ o_gdlnam ].Alloc( 1,
@@ -361,6 +367,8 @@ TGtDemo::MakeQuery()
         {
           strncpy( gdp->lNam0[ii], namesLines[ii].c_str(), MAXGRNAME );
         }
+        strncpy(gdp->xNames, xName.c_str(), MAXAXISNAME );
+        strncpy(gdp->yNames, yName.c_str(), MAXAXISNAME );
      }
 
  // setup flags

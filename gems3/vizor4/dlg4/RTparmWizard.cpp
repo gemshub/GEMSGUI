@@ -88,7 +88,8 @@ void 	RTparmWizard::resetBackButton()
 }
 
 RTparmWizard::RTparmWizard( const char* pkey, char flgs[10], int size[7],
-          float val[6],  const char *acalcScript,   QWidget* parent):
+          float val[6],  const char *acalcScript, const char* aXname, const char* aYname,
+          QWidget* parent):
     QDialog( parent ), calcScript(acalcScript), pageScript(0)
 {
     int ii;
@@ -135,7 +136,7 @@ RTparmWizard::RTparmWizard( const char* pkey, char flgs[10], int size[7],
     }
 
 //Page 2 equations
-     resetPageList();
+     resetPageList(aXname, aYname);
 
 
 // Page 3
@@ -294,7 +295,7 @@ equatSetupData eqT( "xT", "yF", "jTP", "twTC" );
 equatSetupData eqP( "xP", "yF", "jTP", "twP" );
 
 // work with lists
-void RTparmWizard::resetPageList()
+void RTparmWizard::resetPageList(const char* aXname, const char* aYname)
 {
 
     TIArray<pagesSetupData> scalarsList;
@@ -313,7 +314,7 @@ void RTparmWizard::resetPageList()
    }
 */
    pageScript = new EquatSetup( page_3, eq,
-             RT_PROCES, pgData, scalarsList, calcScript.c_str()  );
+             RT_PROCES, pgData, scalarsList, calcScript.c_str(), aXname, aYname  );
     verticalLayout_5->addWidget(pageScript);
 
 }

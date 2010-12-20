@@ -32,11 +32,20 @@ void EquatSetup::languageChange()
 
 EquatSetup::EquatSetup( QWidget* parent, equatSetupData aEqData,
  int nRT, TIArray<pagesSetupData>& wnData, TIArray<pagesSetupData>& scalarsList,
-                        const char* script ):
+                        const char* script, const char* aXname, const char* aYname ):
         QWidget( parent ), cPage(-1), cnRT(-1), eqData(aEqData), useCalc(false)
 {
 
     setupUi(this);
+
+    if( aXname )
+        xNam = aXname;
+    else
+        xNam = eqData.xName;
+    if( aYname )
+        yNam = aYname;
+    else
+        yNam = eqData.yName;
 
     listStatic->setWrapping( true );
     listStatic->setSelectionMode(QAbstractItemView::MultiSelection);
@@ -180,9 +189,12 @@ gstring EquatSetup::getScript() const
   return res;
 }
 
-TCStringArray EquatSetup::getNames() const
+TCStringArray EquatSetup::getNames(gstring& xName, gstring& yName) const
 {
-   return  namLines;
+    xName = xNam;
+    yName = yNam;
+
+    return  namLines;
 }
 
 void EquatSetup::setNames(TCStringArray lst )
@@ -295,12 +307,14 @@ void EquatSetup::tableInsertRow( int nO, int ndx, const char * andName )
      {  scriptData.Add( new scriptSetupData( cPage, nO, andName,
              ndx, andName, str.c_str() ));
         namLines.Add(andName);
+        yNam = andName;
      }
        else
         {
            scriptData.Add( new scriptSetupData( cPage, nO, aObj[nO].GetKeywd(),
              ndx, andName, str.c_str() ));
            namLines.Add(andName);
+           yNam = aObj[nO].GetKeywd();
        }
 
     scriptUpdate();
@@ -393,6 +407,10 @@ void EquatSetup::CmAbscissa()
     gstring str = ndx->data(Qt::DisplayRole).toString().toLatin1().data();
 
     eqData.abscissaEquat = getStringValue( nO, pLists[cPage]->currentRow(), str.c_str() );;
+    if(nO<0)
+      xNam = str;
+    else
+      xNam = aObj[nO].GetKeywd();
     scriptUpdate();
 }
 

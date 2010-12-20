@@ -41,7 +41,8 @@ class RTparmWizard : public QDialog, public Ui::RTparmWizardData
 public:
 
     RTparmWizard( const char* pkey, char flgs[10], int sizes[7], float val[6],
-                  const char *acalcScript, QWidget* parent = NULL);
+                  const char *acalcScript, const char* aXname, const char* aYname,
+                  QWidget* parent = NULL);
     virtual ~RTparmWizard();
 
     void   getSizes( int size[7] );
@@ -51,9 +52,8 @@ public:
     gstring getScript() const
     { return pageScript->getScript();
     }
-    TCStringArray getNames() const
-    { return pageScript->getNames();
-    }
+    TCStringArray getNames( gstring& xName, gstring& yName ) const
+    { return pageScript->getNames(xName, yName); }
 
 protected slots:
     virtual void languageChange();
@@ -63,7 +63,7 @@ protected slots:
     void help();
     void CmNext();
     void CmBack();
-    void resetPageList();
+    void resetPageList(const char* aXname, const char* aYname);
 
 };
 
