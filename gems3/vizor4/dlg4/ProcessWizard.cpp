@@ -1722,7 +1722,7 @@ int  ProcessWizard::getNPoints( int col )
      }
      else {
          if( fabs(until) > 1e-30 )
-             nP  = (int)((until-from)/step)+1;
+             nP  = (int)((until-from)/step+1.000001);
          else nP = -1;          // changed by DK 21.05.10
      }
 
