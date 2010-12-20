@@ -21,7 +21,7 @@
 #include <iostream>
 using namespace std;
 
-#include <QLibraryInfo>
+//#include <QCoreApplication>
 #include <qdir.h>
 #include <QString>
 #include <qfile.h>
@@ -122,13 +122,16 @@ TVisor::TVisor(int c, char *v[]):
 #endif // __unix
 #else // win
 
-    QString dirExe = QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
+    QString dirExe = QCoreApplication::applicationDirPath () + QDir::separator();
     SysGEMDir = dirExe.toLatin1().data();
     QDir dirUp(dirExe);
 
     if( dirUp.cdUp() )
-         dirExe = dirUp.path();
+         dirExe = dirUp.path()+ QDir::separator();
     UserGEMDir = dirExe.toLatin1().data();
+
+//    cout << SysGEMDir.c_str() << endl;
+//    cout << UserGEMDir.c_str() << endl;
 //    SysGEMDir = "c:/GEM-Selektor/program/";
 //    UserGEMDir = "c:/GEMS-Selektor/";
 #endif // win
