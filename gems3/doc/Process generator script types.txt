@@ -87,7 +87,7 @@ solid/water ratio or for simulating oxidation/reduction of the system.
 The second case is typical for reproducing e.g. trace element uptake 
 isotherms.  
 
-Variant with linear titration scale.
+Variant (1) with linear titration scale.
 
 Iterators (iTm should have the same number of steps as iNu)
  
@@ -128,7 +128,7 @@ The actual names of components and phases shall be taken from the usual output
 selection lists for constructing the pgExpr script. 
 
 
-Variant for plotting Kd and D for a non-ideal binary solid solution.
+Variant (2) for plotting Kd and D for a non-ideal binary solid solution.
 The iterator iNu defines the change in composition for sparingly soluble 
 solid phases (if the solubility is higher then increase all three values 
 proportionally).
@@ -160,38 +160,79 @@ $ yp[J][2] =: lg( Wxx[{BL}] / my[{B_ion}] / (Wxx[{CL}] / my[{C_ion}]) );
 yp[J][2] =: yp[J][1] - yp[J][0]; 
 $ Done
 
+Variant (3) with decimal logarithmic titration scale.
 
+Iterators (iTm should have the same number of steps as ipXi)
+ 
+iTm	iV	iP	iTC	iNv	iTau	ipXi	iNu	ipH	ipe
+2010	0	90	290	0	0	5.1	0	0	0
+2310	0	90	290	0	0	0.1	0	0	0
+10	0	0	0	0	0	-0.1	0	0	0
 
-Variant with the logarithmic titration scale.
+Here, the ipXi iterator sets the -log(addition of titrants) to the the bulk 
+composition of the process-generated system. 
+The work cell cpXi contains the current value of pXi internally calculated as 
+cpXi = ipXi[0] + J*ipXi[2]. The work cell cXi contains then the value 
+calculated internally as cXi = 10^(-cpXi) or cXi = 1/(10^cpXi).   
+
+P_expr script template: 
+
+modC[J] =: cpXi;
+xa_[{Titrant0}] =: cXi * Coeff0;
+xd_[{Titrant1}] =: cXi * Coeff1;
+bi_[{Titrant2}] =: cXi * Coeff2; 
+$ .... more titrants
+
+Here, titrants Titrant0, ... must be selected from Compos, DComp or IComp project 
+system name lists. Stoichiometric coefficients Coeff0, ... and units of measurement 
+for the respective xa_, xd_, and bi_ elements must be set consistently in the 
+parent system and in the above script. The same collection of objects should 
+be provided for selection as in the input system recipe dialog.   
+
+pgExpr script template (should be assembled using the selection dialog): 
+
+xp[J] =: modC[J];
+$ Abscissa can also be another property of the system
+yp[J][0] =: lga[{Component1}];
+yp[J][1] =: (x[{Component2}]? lg(x[{Component2}]): empty());
+yp[J][2] =: (Xa[{Phase1}]? 1: empty{());
+yp[J][3] =: (Xa[{Phase2}]? 2: empty{());
+$ .... other feasible properties of the system, 
+$      any components and phases can be added
+
+The actual names of components and phases shall be taken from the usual output 
+selection lists for constructing the pgExpr script.
+This script collects and shows data against the abscissa in negative-logarithmic 
+pXi process extent variable. To Produce plots in normal logarithmic scale, simply
+edit the first operator in the P_expr script to be modC[J] =: (-cpXi);   
+
+Variant (4) for plotting Kd and D in the logarithmic (abscissa) titration scale.
 Typical use - modeling of trace element uptake isotherms e.g. in a solid 
 solution. The iterators should look like this:
 
 iTm	iV	iP	iTC	iNv	iTau	ipXi	iNu	ipH	ipe
-1000	0	1	25	0	0	0.001	0	0	0
-1700	0	1	25	0	0	7.001	0	0	0
+1000	0	1	25	0	0	-7.001	0	0	0
+1700	0	1	25	0	0	-0.001	0	0	0
 2	0	0	0	0	0	0.02	0	0	0
 
-The ipXi iterator sets the logarithmic titration scale.
+The ipXi iterator sets the -log(addition of Trace) to the the bulk composition 
+of the process-generated system. The work cell cpXi contains the current value 
+of pXi, internally calculated as cpXi = ipXi[0] + J*ipXi[2]. The work cell cXi 
+contains the value calculated internally as cXi = 10^(-cpXi) or cXi = 1/(10^cpXi).
+
 In the P_expr script below, it is assumed that ipXi sets the pC scale where 
 p denotes -log10 (similar to pH). Also, the presence of Compos records for 
 setting up additions of trace and host stoichiometries in the bulk composition
-is assumed (the rest is defined in the parent system). The first statement
-converts from the pC into the "usual" scale.    
+is assumed (the rest is defined in the parent system). The 'Host' and 'HostEl' 
+should refer any major component present in the bulk of the solid part of the 
+system (e.g. Si).  
 
-cNu =: 1/cXi;
-xa_[{Trace}] =: cNu;
-xa_[{Host}] =: 1-cNu; 
-modC[J] =: cXi;
-
-Of course, it is possible to use the ipXi iterator setting the "usual" scale directly. 
-In this case, set ipXi[0] to -7.001 and ipXi[1] to -0.001 (do not set to 0 because this
-will cause the Host addition to zero). The P_expr script then takes the form: 
-
+modC[J] =: cpXi;
 xa_[{Trace}] =: cXi;
 xa_[{Host}] =: 1-cXi; 
 
 In the pgExpr script, the abscissa is usually the log of total aqueous dissolved 
-concentration of Trace El(ement), and ordinates can be concentration in the solid, 
+concentration of TraceEl (element), and ordinates can be concentration in the solid, 
 as well as partition (Kd) and distribution (D) coefficients: 
 
 $ Abscissa - log total molality of Trace element
@@ -204,13 +245,13 @@ $ lg(D) host-trace
 yp[J][2] =: yp[J][1] 
      - lg( bXs[{HostEl}]/( bXs[{TraceEl}]+ bXs[{HostEl}])/m_t[{HostEl}] );
 
-In the above script, concentration of trace or host elements in solid are given 
-using the bXs object - the bulk elemental composition of all solids in the system
-together. This is convenient e.g. for modeling bulk isotherms or Kds of trace 
-element in soil or rock aggregate. Actual element names (e.g. Sr, Ca) should be
-substituted for TraceEl and HostEl. If the solid of interest is a binary solid 
-solution only then the pgExpr script provided in previous section can be used
-as an alternative.
+In the above script, concentrations of trace or host elements in solid part of the 
+system are given using the bXs object - the bulk elemental composition (in moles) 
+of all solids in the system taken together. This is convenient e.g. for modeling 
+bulk isotherms or Kds of trace element in soil or rock aggregate. Actual element 
+names (e.g. Sr, Ca) should be substituted for TraceEl and HostEl. If the solid 
+of interest is a binary solid solution, then the pgExpr script provided in 
+variant (2) above can be used as an alternative.
 
 
 
@@ -276,7 +317,8 @@ One arbitrary inverse calculation (T) as defined in the P_expr script
 Suppose a process simulator should find how many moles of CO2 per 1 kg of water in equilibrium 
 with excess calcite CaCO3 (closed system) must be added to bring it to a prescribed equilibrium 
 pH=6.4±0.01. 
-This can be done using the following P_expr script (Titrant should be replaced by CO2@):
+This can be done using the following P_expr script (selection either from xa_ or from xd_; 
+'Titrant' should be replaced by CO2@):
 
 $ Finding amount of CO2 added to obtain a prescribed pH 
 $ Initialization 
@@ -284,6 +326,7 @@ $ Initialization
   begin 
      ipH[1]=:pH-ipH[0]; iNu[2]=:0; 
      cNu=:iNu[0]; iNu[1]=: xd_[{Titrant}]; 
+$    cNu=:iNu[0]; iNu[1]=: xa_[{Titrant}]; 
   end 
 $ Calculation of difference between given and computed pH 
   cpH =: pH-ipH[0]; 
@@ -293,6 +336,7 @@ $ Recalculation of a step in titrant molality
 $ Calculation of the amount of titrant 
   iNu[2] =: iNu[2] + cNu*sign(cpH); 
   xd_[{Titrant}] =: iNu[1]+iNu[2]; 
+$  xd_[{Titrant}] =: iNu[1]+iNu[2]; 
 $ Check of convergence 
   Next =: ( ( abs( cpH ) < ipH[2] ) ? 0 : 1); 
 $ Finish
@@ -322,6 +366,7 @@ obtaining equilibrium pH value prescribed in ipH[0]:
 
 xp[J] =: pH;
 yp[J][0] =: xd_[{Titrant}]; 
+$ yp[J][0] =: xa_[{Titrant}]; 
 yp[J][1] =: pH - ipH[0];
 
 
