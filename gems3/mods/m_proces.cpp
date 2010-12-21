@@ -678,7 +678,7 @@ void TProcess::pe_initiate()
     pep->c_TC = pep->Ti[START_]; pep->c_T = pep->c_TC + 273.15;
     pep->c_V = pep->Vi[START_];
     pep->c_Tau = pep->Taui[START_];
-    pep->c_pXi = pep->pXii[START_]; pep->c_Xi = pow(10., pep->c_pXi);
+    pep->c_pXi = pep->pXii[START_]; pep->c_Xi = pow(10., -pep->c_pXi);
     pep->c_Nu = pep->Nui[START_];
     pep->c_pH = pep->pHi[START_];
     pep->c_pe = pep->pei[START_]; // pep->c_Eh =
@@ -697,7 +697,7 @@ void TProcess::pe_reset()
     pep->c_P = pep->Pi[START_];
     pep->c_TC = pep->Ti[START_]; pep->c_T = pep->c_TC + 273.15;
     pep->c_V = pep->Vi[START_];
-    pep->c_pXi = pep->pXii[START_]; pep->c_Xi = pow(10., pep->c_pXi);
+    pep->c_pXi = pep->pXii[START_]; pep->c_Xi = pow(10., -pep->c_pXi);
     pep->c_Nu = pep->Nui[START_];
     pep->c_pH = pep->pHi[START_];
     pep->c_pe = pep->pei[START_];
@@ -718,7 +718,7 @@ void TProcess::pe_next()
     pep->c_TC += pep->Ti[STEP_]; pep->c_T = pep->c_TC + 273.15;
     pep->c_V += pep->Vi[STEP_];
     pep->c_Tau += pep->Taui[STEP_];
-    pep->c_pXi += pep->pXii[STEP_]; pep->c_Xi = pow(10., pep->c_pXi);
+    pep->c_pXi += pep->pXii[STEP_]; pep->c_Xi = pow(10., -pep->c_pXi);
     pep->c_Nu += pep->Nui[STEP_];
     pep->c_pH += pep->pHi[STEP_];
     pep->c_pe += pep->pei[STEP_];

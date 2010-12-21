@@ -185,90 +185,90 @@ tIters->setItem(2, 4, item);
 
 // iP
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[0], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[0], 'g', 5 ));
 tIters->setItem(0, 2, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[1], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[1], 'g', 5 ));
 tIters->setItem(1, 2, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[2], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[2], 'g', 5 ));
 tIters->setItem(2, 2, item);
 
 // iTC
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[3], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[3], 'g', 5 ));
 tIters->setItem(0, 3, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[4], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[4], 'g', 5 ));
 tIters->setItem(1, 3, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[5], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[5], 'g', 5 ));
 tIters->setItem(2, 3, item);
 
 // iV
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[6], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[6], 'g', 5 ));
 tIters->setItem(0, 1, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[7], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[7], 'g', 5 ));
 tIters->setItem(1, 1, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[8], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[8], 'g', 5 ));
 tIters->setItem(2, 1, item);
 
 // iTau
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[9], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[9], 'g', 5 ));
 tIters->setItem(0, 5, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[10], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[10], 'g', 5 ));
 tIters->setItem(1, 5, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[11], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[11], 'g', 5 ));
 tIters->setItem(2, 5, item);
 
 // ipXi
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[12], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[12], 'g', 5 ));
 tIters->setItem(0, 6, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[13], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[13], 'g', 5 ));
 tIters->setItem(1, 6, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[14], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[14], 'g', 5 ));
 tIters->setItem(2, 6, item);
 
 // iNu
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[15], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[15], 'g', 5 ));
 tIters->setItem(0, 7, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[16], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[16], 'g', 5 ));
 tIters->setItem(1, 7, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[17], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[17], 'g', 5 ));
 tIters->setItem(2, 7, item);
 
 // iPh
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[18], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[18], 'g', 5 ));
 tIters->setItem(0, 8, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[19], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[19], 'g', 5 ));
 tIters->setItem(1, 8, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[20], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[20], 'g', 5 ));
 tIters->setItem(2, 8, item);
 
 // ipe
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[21], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[21], 'g', 5 ));
 tIters->setItem(0, 9, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[22], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[22], 'g', 5 ));
 tIters->setItem(1, 9, item);
 item = new QTableWidgetItem();
-item->setText( QString::number (  tabDoubl[23], 'g', 3 ));
+item->setText( QString::number (  tabDoubl[23], 'g', 5 ));
 tIters->setItem(2, 9, item);
 
 for(int row=0; row<3; row++)
@@ -749,46 +749,46 @@ int  ProcessWizard::getNPV( char type, int subtype)   // get number of points
                         }
               }   // foolproof
              tIters->item(2, 0)->setText( QString::number( 0 ));  // set iTm[2] to 0
-             tIters->item(2, 1)->setText( QString::number( 0., 'g', 3 ));  // set iV[2] to 0
+             tIters->item(2, 1)->setText( QString::number( 0., 'g', 5 ));  // set iV[2] to 0
              tIters->item(2, 4)->setText( QString::number( 0 ));  // set iNv[2] to 0
-             tIters->item(2, 5)->setText( QString::number( 0., 'g', 3 ));  // set iTau[2] to 0
-             tIters->item(2, 6)->setText( QString::number( 0., 'g', 3 ));  // set ipXi[2] to 0
-             tIters->item(2, 7)->setText( QString::number( 0., 'g', 3 ));  // set iNu[2] to 0
-             tIters->item(2, 8)->setText( QString::number( 0., 'g', 3 ));  // set ipH[2] to 0
-             tIters->item(2, 9)->setText( QString::number( 0., 'g', 3 ));  // set ipe[2] to 0
+             tIters->item(2, 5)->setText( QString::number( 0., 'g', 5 ));  // set iTau[2] to 0
+             tIters->item(2, 6)->setText( QString::number( 0., 'g', 5 ));  // set ipXi[2] to 0
+             tIters->item(2, 7)->setText( QString::number( 0., 'g', 5 ));  // set iNu[2] to 0
+             tIters->item(2, 8)->setText( QString::number( 0., 'g', 5 ));  // set ipH[2] to 0
+             tIters->item(2, 9)->setText( QString::number( 0., 'g', 5 ));  // set ipe[2] to 0
             break;
    case P_SEQUENT:
-             if( subtype >= 2 )
+            if(subtype == 0 || subtype==1)
+            {
+
+                ret = getNPoints( 7 ); // iNu
+                if( ret == -1 )
+                {
+                    if( subtype == 0 )
+                    { setIterColumn( 7, 0.1, 3.1, 0.1 );
+                      ret = 31;
+                    }
+                    else
+                    { setIterColumn( 7, 0.001, 0.999, 0.01 );
+                      ret = 100;
+                    }
+                }
+
+            }
+             if( subtype == 2|| subtype==3 )
              {
                  ret = getNPoints( 6 ); // iPxi
                  if( ret == -1 )
                  {
-                     setIterColumn( 6, 0., 3., 0.1 );
-//                     tIters->item(0, 6)->setText( QString::number( 0., 'g', 3 ));  // set ipXi[0] to 0
-//                     tIters->item(1, 6)->setText( QString::number( 3., 'g', 3 ));  // set ipXi[1] to 3
-//                     tIters->item(2, 6)->setText( QString::number( 0.1, 'g', 3 ));  // set ipXi[2] to 0.1
-                     ret = 31;
+                     if( subtype == 2 )
+                     { setIterColumn( 6, 5.1, 0.1, -0.1 );
+                       ret = 51;
+                     }
+                     else
+                     { setIterColumn( 6, -7.001, -0.001, 0.02 );
+                       ret = 351;
+                     }
                  }
-             }
-             else {
-                 ret = getNPoints( 7 ); // iNu
-                 if( ret == -1 && subtype == 0 )
-                 {
-                     setIterColumn( 7, 0.1, 3.1, 0.1 );
-//                     tIters->item(0, 7)->setText( QString::number( 0.1, 'g', 3 ));  // set iNu[0] to 0.1
-//                     tIters->item(1, 7)->setText( QString::number( 3.1, 'g', 3 ));  // set iNu[1] to 3.1
-//                     tIters->item(2, 7)->setText( QString::number( 0.1, 'g', 3 ));  // set iNu[2] to 0.1
-                     ret = 31;
-                 }
-                 else if ( ret == -1 && subtype == 1 )
-                 {
-                     setIterColumn( 7, 0.001, 0.999, 0.01 );
-//                     tIters->item(0, 7)->setText( QString::number( 0.001, 'g', 4 ));  // set iNu[0] to 0.001
-//                     tIters->item(1, 7)->setText( QString::number( 0.999, 'g', 4 ));  // set iNu[1] to 0.999
-//                     tIters->item(2, 7)->setText( QString::number( 0.01, 'g', 3 ));  // set iNu[2] to 0.01
-                     ret = 100;
-                 }
-
              }
              i1 = getNPoints( 0 ); // iTm
              if( i1 < ret )
@@ -1035,7 +1035,23 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
            ret = QString("xd_[{%1}] =: cNu;\n"
                          "xd_[{%2}] =: 1-cNu;\n").arg(BL, CL);
          }
-         if( subtype >= 2 )
+         if( subtype == 2 )
+         {
+             ret = QString("modC[J] =: cpXi;\n");
+
+            for(int jj=0; jj<6; jj++ )
+            {
+              lst = getSelected( jj );
+              gstring oName = aObj[pgData[jj].nObj].GetKeywd();
+              for(ii=0; ii<lst.count();ii++)
+              {
+                 lst[ii] = lst[ii].trimmed();
+                 ret  += QString("%1[{%2}] =: cXi * 1.;\n").arg(oName.c_str(), lst[ii]);
+              }
+
+            }
+         }
+         if( subtype == 3 )
          {
            QString Trace = "Trace", Host = "Host";
            lst = getSelected( "Compos" );
@@ -1043,10 +1059,9 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
              Trace = lst[0].trimmed();
            if( lst.count() > 1 )
              Host = lst[1].trimmed();
-           ret = QString("cNu =: 1/cXi;\n"
-                         "xa_[{%1}] =: cNu;\n"
-                         "xa_[{%2}] =: 1-cNu;\n"
-                         "modC[J] =: cXi;\n").arg(Trace, Host);
+           ret = QString("modC[J] =: cpXi;\n"
+                         "xa_[{%1}] =: cXi;\n"
+                         "xa_[{%2}] =: 1-cXi;\n").arg(Trace, Host);
          }
      break;
      //-------------------------------------------------------------------------
@@ -1756,9 +1771,9 @@ int  ProcessWizard::isUndefined( int col )
 // set default data to column col
 void  ProcessWizard::setIterColumn( int col, double from, double until, double step )
  {
-    tIters->item(0,col)->setText( QString::number (  from, 'g', 4 ));
-    tIters->item(1,col)->setText( QString::number (  until, 'g', 4 ));
-    tIters->item(2,col)->setText( QString::number (  step, 'g', 4 ));
+    tIters->item(0,col)->setText( QString::number (  from, 'g', 5 ));
+    tIters->item(1,col)->setText( QString::number (  until, 'g', 5 ));
+    tIters->item(2,col)->setText( QString::number (  step, 'g', 5 ));
     tItersChanged = true;
  }
 
