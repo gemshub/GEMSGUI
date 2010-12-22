@@ -598,11 +598,12 @@ void ProcessWizard::defineWindow(char type)
    case P_SEQUENT:
        {
          lAbout->setText(
-   "Please, select items from 'Compos', 'DComp', 'IComp' or 'Phase' lists to change the system composition;\n "
-   "  select items from 'Kin-DC-low' or 'Kin-DC-up' to change metastability constraints.\n "
-   "To plot logKd and logD against linear x scale, select trace and host end members from the 'DComp' list,"
-   "  then trace and host ions from 'Molality' list. "
-   "To plot logKd and isotherms, against log(molality) scale, select trace and host elements from the 'Sorbed' list. "
+   "To set up titrations, select items from 'Compos', 'DComp', 'IComp' or 'Phase' lists to change the system\n"
+   "  composition, and/or select items from 'Kin-DC-low' or 'Kin-DC-up' to change metastability constraints.\n "
+   "To plot logKd and logD against the linear x scale, select trace and host end members from the 'DComp' list,"
+   "  then select trace and host ions from 'Molality' list. "
+   "To plot logKd and isotherms against the log(molality) scale, select trace and host compositions from the\n"
+   "'Compos' list, then select trace and host elements from the 'Sorbed' list.\n "
    "  In both logKd cases, skip the next wizard page. ");
          sub1->setText("Titration iNu linear");
          sub2->setText("Diagram logKd vs linear x");
@@ -689,14 +690,16 @@ void ProcessWizard::defineWindow(char type)
    case P_REACTORS:
               {
                 lAbout->setText(
-   "Please, choose the reactors mode above. 'Flushing' evolves the fluid part reacted with the same solid part; 'Leaching' "
-   "changes the solid in reaction with the same fluid part. In the case of Compos constant source of solid ('Flushing') "
-   "or fluid ('Leaching'), respectively, select either from the Compos list first. In the case of other SysEq as constant "
-   "source, check in SysEq remake if the respective mode is chosen correctly. In any case, it may be necessary to clean the "
-   "system recipe by removing all inputs already covered in fluid and solids compositions. Do this by selecting Compos, DComp, "
-   "IComp inputs that must be zeroed off (check the parent system, if necessary).\n"
-   "When ready, proceed to the next wizard page to select what to plot depending on the process type "
-   "(in 'Flushing' mode, usually some properties of fluids; in 'Leaching' mode, properties of solid phases)." );
+   " In the 'Flushing' sequence, the fluid part evolves while reacting with the constant solid part;\n"
+   " In the 'Leaching' sequence, the solid part changes while reacting with the constant fluid part.\n"
+   "To set a constant-composition source of solid ('Flushing') or fluid ('Leaching'),"
+   "select either from the Compos list. To use another SysEq record as a constant source,"
+   "first 'remake' the parent SysEq and check whether the link to another SysEq is set,"
+   " and 'xp_' array and 'MbXs' data object is allocated.\n"
+   "Next, if needed, clean up all recipe inputs already covered in source fluid or solid compositions"
+   " by selecting the respective Compos, DComp, IComp inputs that must be zeroed off.\n"
+   "When done, proceed to the next wizard page and select what to plot: in the 'Flushing' mode,"
+   " usually some properties of fluids; in the 'Leaching' mode, some properties of solid phases." );
                 sub1->setText("Flushing, SysEq source");
                 sub2->setText("Flushing, Compos source");
                 sub3->setText("Leaching, SysEq source");
@@ -1210,7 +1213,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
 
           if( subtype == 0  )
           {         // Flushing with SysEq source for solid composition
-            ret = QString("$ irreversible fluid-rock interaction (Flushing)\n");
+            ret = QString("$ Fluid-rock interaction (Flushing, SysEq source)\n");
             if( iNu )
               ret += QString( "xp_[{%1}] =: cNu;\n"
                               "$ To use if iNu is not set\n"
@@ -1229,13 +1232,13 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                                "$ Take the current mass of solids if ipXi is not set\n"
                                " MbXs =: pmXs;\n").arg(Aqg);
            ret += QString( "$ Cumulative reacted solid/water ratio\n"
-                           "modC[J] =: (J>0? modC[J-1]+MbXs/xp_[{%1}]: MbXs/xp_[{%1}] );\n"
+                           "modC[J] =: (J>0? modC[J-1]+MbXs/xp_[{%1}]:\n            MbXs/xp_[{%1}] );\n"
                            "$ modC[J] =: pmXs;\n\n"
-                           "$ Clean up the rest of the system recipe\n").arg(Aqg);
+                           "$ Clean up the rest of current system recipe\n").arg(Aqg);
         }
         if( subtype == 1 )
         {          // Flushing with Compos source for solid composition
-            ret = QString("$ irreversible fluid-rock interaction (Flushing)\n");
+            ret = QString("$ Fluid-rock interaction (Flushing, Compos source)\n");
             if( iNu )
               ret += QString( "xp_[{%1}] =: cNu;\n"
                               "$ To use if iNu is not set\n"
@@ -1252,17 +1255,17 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
             else
                 ret += QString( "$ xa_[{%2}] =: cXi * xp_[{%1}];\n"
                               "$ Take the current mass of solids if ipXi is not set\n"
-                              "xa_[{%2}] =: pmXs;").arg(Aqg,xaName);
+                              "xa_[{%2}] =: pmXs;\n").arg(Aqg,xaName);
 
             ret += QString( "$ Cumulative reacted solid/water ratio\n"
-                           "modC[J] =: (J>0? modC[J-1]+xa_[{%2}]/xp_[{%1}]: xa_[{%2}]/xp_[{%1}] );\n"
+                           "modC[J] =: (J>0? modC[J-1]+xa_[{%2}]/xp_[{%1}]:\n        xa_[{%2}]/xp_[{%1}] );\n"
                            "$ modC[J] =: pmXs;\n\n"
-                           "$ Clean up the rest of the system recipe\n").arg(Aqg);
+                           "$ Clean up the rest of current system recipe\n").arg(Aqg,xaName);
 
        }
         if( subtype == 2  )
         {      // Leaching with SysEq source for fluid composition
-          ret = QString("$ irreversible fluid-rock interaction (Leaching)\n");
+          ret = QString("$ Fluid-rock interaction (Leaching, SysEq source)\n");
           if( iNu )
             ret += QString( " MbXs =: cNu;\n"
                             "$ To use if iNu is not set\n"
@@ -1281,14 +1284,14 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                               "$ Take the current mass of fluid if ipXi is not set\n"
                               "xp_[{%1}] =: phM[{%1}]; \n").arg(Aqg);
          ret += QString( "$ Cumulative reacted water/solid ratio \n"
-                         "modC[J] =: (J>0? modC[J-1]+xp_[{%1}]/MbXs: xp_[{%1}]/MbXs);\n"
+                         "modC[J] =: (J>0? modC[J-1]+xp_[{%1}]/MbXs:\n     xp_[{%1}]/MbXs);\n"
                          "$ modC[J] =: phM[{%1}];\n"
                          "\n"
-                         "$ Clean up the rest of the system recipe\n").arg(Aqg);
+                         "$ Clean up the rest of current system recipe\n").arg(Aqg);
       }
        if( subtype == 3  )
         {       // Leaching with Compos source for fluid composition
-          ret = QString("$ irreversible fluid-rock interaction (Leaching)\n");
+          ret = QString("$ Fluid-rock interaction (Leaching, Compos source)\n");
           if( iNu )
             ret += QString( " MbXs =: cNu;\n"
                             "$ To use if iNu is not set\n"
@@ -1307,10 +1310,10 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                               "$ Take the current mass of fluid if ipXi is not set\n"
                               " xa_[{%2}] =: phM[{%1}];\n").arg(Aqg,xaName);
          ret += QString( "$ Cumulative reacted water/solid ratio \n"
-                         "modC[J] =: (J>0? modC[J-1]+xa_[{%2}]/MbXs: xa_[{%2]/MbXs);\n"
+                         "modC[J] =: (J>0? modC[J-1]+xa_[{%2}]/MbXs:\n          xa_[{%2}]/MbXs);\n"
                          "$ modC[J] =: phM[{%1}];\n"
                          "\n"
-                         "$ Clean up the rest of the system recipe\n").arg(Aqg);
+                         "$ Clean up the rest of current system recipe\n").arg(Aqg,xaName);
      }
         // Cleaning part for all submods
         for(int jj=0; jj<6; jj++ )

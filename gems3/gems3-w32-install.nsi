@@ -13,7 +13,7 @@ WindowIcon on
 
 ; The file to write
 ; OutFile "gems-w32-install.exe"
-OutFile "gems3.0-1742.516-w32-install.exe"
+OutFile "gems3.0-1760.521-w32-install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\GEMS3
@@ -22,7 +22,7 @@ InstallDir $PROGRAMFILES\GEMS3
 InstallDirRegKey HKLM SOFTWARE\GEMS3 "Install_Dir"
 
 ;License text
-LicenseText "Version to be installed: 3.0 (rev.1742/516) $\nLICENSE and DISCLAIMER"
+LicenseText "Version to be installed: 3.0 (rev.1760.521) $\nLICENSE and DISCLAIMER"
 LicenseData "C:\GEMS3inst\program\doc\txt\TermsOfUse.txt"
 
 ; The text to prompt the user to enter a directory
@@ -73,10 +73,10 @@ Section "GEMS3 (required)"
   SetOutPath "$INSTDIR\program\visor.data"
     File "C:\GEMS3inst\program\visor.data\visor.dat"
     File "C:\GEMS3inst\program\visor.data\visobj.dat"
-  CreateDirectory "$INSTDIR\program\img"
-  SetOutPath $INSTDIR\program\img
-   Delete "$INSTDIR\program\img\*.*"
-    File "C:\GEMS3inst\program\img\*.*"
+;  CreateDirectory "$INSTDIR\program\img"
+;  SetOutPath $INSTDIR\program\img
+;   Delete "$INSTDIR\program\img\*.*"
+;    File "C:\GEMS3inst\program\img\*.*"
   CreateDirectory "$INSTDIR\program\DB.default"
   SetOutPath "$INSTDIR\program\DB.default"
 ;   Delete "$INSTDIR\program\DB.default\*.*"

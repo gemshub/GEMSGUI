@@ -231,8 +231,8 @@ trUtf8("GEMS3 (Windows XP/7 MinGW gcc4.4) Version Stamp"),
 #endif
            trUtf8("This is GEM-Selektor 3 (GEMS3) program package   \n\n"
                   "    release candidate version 3.0,\n\n"
-                  "    rev. 1742 (December 16, 2010)\n\n"
-                  "    using GEMS3K rev. 516 (trunk) \n\n\n"
+                  "    rev. 1760 (December 22, 2010)\n\n"
+                  "    using GEMS3K rev. 521 (trunk) \n\n\n"
                   "For GEMS Wiki community      \n\n"
                   "(c) 2010, PSI-ETHZ GEMS Development Team\n") );
 }
