@@ -3,6 +3,9 @@
  <comment>Dialog for selecting profile record</comment>
  <class>KeyProfileData</class>
  <widget class="QDialog" name="KeyProfileData">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>

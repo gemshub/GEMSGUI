@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>GEM2MTWizardData</class>
  <widget class="QDialog" name="GEM2MTWizardData">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>

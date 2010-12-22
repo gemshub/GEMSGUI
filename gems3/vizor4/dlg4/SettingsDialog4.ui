@@ -3,6 +3,9 @@
  <comment>Dialog for configuring base GEMS parameters</comment>
  <class>SettingsDialogData</class>
  <widget class="QDialog" name="SettingsDialogData">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>

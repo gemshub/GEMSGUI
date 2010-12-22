@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>ProcessWizardData</class>
  <widget class="QDialog" name="ProcessWizardData">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -333,6 +336,18 @@ Three main types of simulators are: (1) 'Sequential', where only input GEM param
          </attribute>
          <attribute name="verticalHeaderHighlightSections">
           <bool>false</bool>
+         </attribute>
+         <attribute name="verticalHeaderDefaultSectionSize">
+          <number>22</number>
+         </attribute>
+         <attribute name="horizontalHeaderMinimumSectionSize">
+          <number>10</number>
+         </attribute>
+         <attribute name="verticalHeaderHighlightSections">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>70</number>
          </attribute>
          <row>
           <property name="text">

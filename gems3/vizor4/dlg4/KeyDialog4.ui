@@ -3,6 +3,9 @@
  <author>Andy Rysin &lt;arysin@yahoo.com&gt;</author>
  <class>KeyDialogData</class>
  <widget class="QDialog" name="KeyDialogData">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
