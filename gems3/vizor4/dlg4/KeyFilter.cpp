@@ -43,6 +43,7 @@ KeyFilter::KeyFilter(QWidget* win, int irt, const char* key,
     QLineEdit* pEdit;
     QLabel* pLabel;
 
+    setWindowModality(Qt::WindowModal);
     setWindowTitle(caption);
 
     TDBKey dbKey( rt[irt].GetDBKey() );
