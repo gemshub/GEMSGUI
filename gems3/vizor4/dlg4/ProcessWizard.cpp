@@ -633,7 +633,7 @@ void ProcessWizard::defineWindow(char type)
          {
            lAbout->setText(
  "To plot the pH diagram: please, select acid and base from the 'AcidBase' list, and go to the next wizard page.\n"
- "To plot constant-pH isotherms: in addition, select the trace element addition in the 'AcidBase' list, set the\n
+ "To plot constant-pH isotherms: in addition, select the trace element addition in the 'AcidBase' list, set the\n"
  "  'ipe' iterator accordingly, then select aqueous species in the 'Molality' list for the abscissa, then select \n"
  "  one or more sorbed species from the 'Sorbed' list, and then skip the next wizard page");
            sub1->setText("Property-vs-pH diagram");
