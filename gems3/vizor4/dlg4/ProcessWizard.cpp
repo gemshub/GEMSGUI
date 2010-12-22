@@ -1368,6 +1368,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
               ret  += QString("yp[J][%1] =: (Xa[{%2}]>1e-6? vP[J]/10: empty());\n").arg(
                     ii).arg( lst[ii]);
           }
+          pageScript->setXname("vT");
+          pageScript->setYname("vP");
           pGraph->setValue( lst.count() );
       }
 
@@ -1405,6 +1407,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
            lineNames.Add("log(Kd(B))");
            lineNames.Add("log(D)");
            pGraph->setValue( 3 );
+           pageScript->setXname("Wxx");
+           pageScript->setYname("logKd");
          }
          if( subtype == 3 )
          {
@@ -1429,6 +1433,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
            lineNames.Add("Kd");
            lineNames.Add("D");
            pGraph->setValue( 3 );
+           pageScript->setXname("logKd");
+           pageScript->setYname("log_m(Tr)");
          }
      break;
   //-------------------------------------------------------------------------
@@ -1463,6 +1469,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
        lineNames.Add("Solidus");
        lineNames.Add("Solutus");
        pGraph->setValue( 2 );
+       pageScript->setXname("log10");
+       pageScript->setYname("Wxx");
      }
      if( subtype == 1 )
      {
@@ -1495,6 +1503,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
          lineNames.Add("Solidus");
          lineNames.Add("Solutus");
          pGraph->setValue( 2 );
+         pageScript->setXname("log10");
+         pageScript->setYname("Wxx");
      }
      break;
   //-------------------------------------------------------------------------
@@ -1539,6 +1549,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           ret += QString( "yp[J][%1] =: ").arg(ii+1);
           ret += QString( " yp[J][%1]- xp[J];\n").arg(ii);
           pGraph->setValue( ii+2 );
+          pageScript->setXname("log_my");
+          pageScript->setYname("log_x");
         }
          break;
 //-------------------------------------------------------------------------
@@ -1583,6 +1595,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
                          "yp[J][0] =: %1;  \n"
                          "yp[J][1] =: pH - ipH[0]; \n").arg(com, pH);
                 pGraph->setValue( 2 );
+                pageScript->setXname("pH");
+                pageScript->setYname("com");
                }
        break;
    case P_REACTORS:

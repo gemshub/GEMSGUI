@@ -132,6 +132,14 @@ public:
    gstring getScript() const;
    TCStringArray getNames( gstring& xName, gstring& yName ) const;
    void setNames(TCStringArray lst );
+   void setXname( const char* name )
+   {
+      xNam =name;
+   }
+   void setYname( const char* name )
+   {
+      yNam =name;
+   }
 
 
    int getScriptLinesNum() const
