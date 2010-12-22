@@ -17,7 +17,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *PROCESS_HTML = "gm_proces";
+const char *PROCESS_WIZARD_HTML = "gm_proces";
 
 #include <qcheckbox.h>
 #include <qspinbox.h>
@@ -511,7 +511,7 @@ void   ProcessWizard::getFlags( char flgs[24] )
 void
 ProcessWizard::help()
 {
-   pVisorImp->OpenHelp( PROCESS_HTML, 0 );
+   pVisorImp->OpenHelp( PROCESS_WIZARD_HTML, 0 );
 }
 
 //=============================================================================
@@ -580,16 +580,16 @@ void ProcessWizard::defineWindow(char type)
    {
    case P_PVT:
        {
-           lAbout->setText("Please, set Step in iTm to 0 and check iP and iT iterators.\nFor PT phase diagram:"
-                           " select phases to plot and skip the next wizard page.");
+           lAbout->setText("Please, set Step in iTm to 0, and check iP and iT iterators.\n\nFor PT phase diagram:"
+                           " select phases to plot, and skip the next wizard page.");
          sub1->setText("No script");
-         sub2->setText("User defined script");
+         sub2->setText("User-defined script");
          sub3->setText("PT phase diagram");
          sub4->hide();
          if( c_PsEqn->isChecked() )
-           sub2->setChecked(true); // to left an old script
+           sub2->setChecked(true); // to keep the old script
          else
-           sub1->setChecked(true); // to left an old script
+           sub1->setChecked(true); // to keep the old script
 
          pLsts[0]->setDisabled(true);
          listObj->setDisabled(true);
@@ -597,15 +597,17 @@ void ProcessWizard::defineWindow(char type)
        break;
    case P_SEQUENT:
        {
-         lAbout->setText("Please, select items from 'Compos', 'DComp', 'IComp' or 'Phase' lists to change the system composition; "
-                         " select items from 'Kin-DC-low' or 'Kin-DC-up to change metastability constraints.\n "
-                         "To plot logarithmic Kd and sorption isotherms, select trace and host elements from the 'Sorbed' list. "
-                         "To plot linear Kd, select trace and host end members from 'DComp' list, then trace and host ions from 'Molality' list. "
-                         "In both Kd cases, skip the next wizard page. ");
-         sub1->setText("iNu linear");
-         sub2->setText("linear Kd");
-         sub3->setText("ipXi logarithmic");
-         sub4->setText("logarithmic Kd");
+         lAbout->setText(
+   "Please, select items from 'Compos', 'DComp', 'IComp' or 'Phase' lists to change the system composition;\n "
+   "  select items from 'Kin-DC-low' or 'Kin-DC-up' to change metastability constraints.\n "
+   "To plot logKd and logD against linear x scale, select trace and host end members from the 'DComp' list,"
+   "  then trace and host ions from 'Molality' list. "
+   "To plot logKd and isotherms, against log(molality) scale, select trace and host elements from the 'Sorbed' list. "
+   "  In both logKd cases, skip the next wizard page. ");
+         sub1->setText("Titration iNu linear");
+         sub2->setText("Diagram logKd vs linear x");
+         sub3->setText("Titration ipXi logarithmic");
+         sub4->setText("Diagram logKd vs log(m)");
 
          for(jj=0; jj<6; jj++ )
            QObject::connect( pLsts[jj], SIGNAL(itemSelectionChanged()),
@@ -615,11 +617,11 @@ void ProcessWizard::defineWindow(char type)
    case P_LIP:
        {
          lAbout->setText("Please, select a binary solid solution in 'Phases'; then select anion, cation1, "
-                         "cation2 in 'AqIons (classic variant)\n or anionic, cationic1, cationic2 elements "
-                         "in 'AqElements' (variant with total dissolved concentrations). "
+                         "cation2 in 'AqIons (classic variant),\n or anionic, cationic1, cationic2 elements "
+                         "in 'AqElements' (total-scale variant). "
                          "Then skip the next wizard page.");
          sub1->setText("Classic Lippmann diagram");
-         sub2->setText("Variant with total dissolved concentrations");
+         sub2->setText("Total-scale Lippmann diagram");
          sub3->hide();
          sub4->hide();
          sub1->setChecked(true);
@@ -629,13 +631,13 @@ void ProcessWizard::defineWindow(char type)
          break;
    case P_INV_TITR:
          {
-           lAbout->setText("Please, select acid and base from the AcidBase list and proceed to the next wizard page.\n"
-                           "To plot sorption isotherms: also select the trace element addition in 'AcidBase' list and "
-                           "set the ipe iterator accordingly, "
-                           "then select aqueous species in the 'Molality' list for the abscissa, "
-                           "then select one or more sorbed species from the 'Sorbed' list, and skip the next wizard page");
-           sub1->setText("pH diagram");
-           sub2->setText("Sorption isotherms at constant pH");
+           lAbout->setText(
+ "To plot the pH diagram: please, select acid and base from the 'AcidBase' list, and go to the next wizard page.\n"
+ "To plot constant-pH isotherms: in addition, select the trace element addition in the 'AcidBase' list, set the\n
+ "  'ipe' iterator accordingly, then select aqueous species in the 'Molality' list for the abscissa, then select \n"
+ "  one or more sorbed species from the 'Sorbed' list, and then skip the next wizard page");
+           sub1->setText("Property-vs-pH diagram");
+           sub2->setText("Constant-pH isotherm diagram");
            sub3->hide();
            sub4->hide();
            QObject::connect( pLsts[0], SIGNAL(itemSelectionChanged()),
@@ -645,9 +647,10 @@ void ProcessWizard::defineWindow(char type)
 
     case P_TITRSING:
           {
-              lAbout->setText("Please, select the titrant from 'Compos', 'DComp' or 'IComp' list; then select 'pH' in 'Other items', "
-                              "   set ipH[1] = 0, and skip the next wizard page. ");
-              sub1->setText("Inverse pH titration (single point)");
+              lAbout->setText(
+  "Please, select the titrant from 'Compos', 'DComp' or 'IComp' list; then select 'pH' in 'Other items',\n"
+  "   set ipH[1] = 0, and skip the next wizard page. ");
+              sub1->setText("Single-pH point inverse titration");
               sub1->setChecked(true);
               sub2->hide();
               sub3->hide();
@@ -685,14 +688,15 @@ void ProcessWizard::defineWindow(char type)
 
    case P_REACTORS:
               {
-                lAbout->setText("Please, choose the reactors mode above. 'Flushing' evolves the fluid part reacted with the same solid part; 'Leaching' "
-                                "changes the solid in reaction with the same fluid part. In the case of Compos constant source of solid ('Flushing') "
-                                "or fluid ('Leaching'), respectively, select either from the Compos list first. In the case of other SysEq as constant "
-                                "source, check in SysEq remake if the respective mode is chosen correctly. In any case, it may be necessary to clean the "
-                                "system recipe by removing all inputs already covered in fluid and solids compositions. Do this by selecting Compos, DComp, "
-                                "IComp inputs that must be zeroed off (check the parent system, if necessary).\n"
-                                "When ready, proceed to the next wizard page to select what to plot depending on the process type "
-                                "(in 'Flushing' mode, usually some properties of fluids; in 'Leaching' mode, properties of solid phases)." );
+                lAbout->setText(
+   "Please, choose the reactors mode above. 'Flushing' evolves the fluid part reacted with the same solid part; 'Leaching' "
+   "changes the solid in reaction with the same fluid part. In the case of Compos constant source of solid ('Flushing') "
+   "or fluid ('Leaching'), respectively, select either from the Compos list first. In the case of other SysEq as constant "
+   "source, check in SysEq remake if the respective mode is chosen correctly. In any case, it may be necessary to clean the "
+   "system recipe by removing all inputs already covered in fluid and solids compositions. Do this by selecting Compos, DComp, "
+   "IComp inputs that must be zeroed off (check the parent system, if necessary).\n"
+   "When ready, proceed to the next wizard page to select what to plot depending on the process type "
+   "(in 'Flushing' mode, usually some properties of fluids; in 'Leaching' mode, properties of solid phases)." );
                 sub1->setText("Flushing, SysEq source");
                 sub2->setText("Flushing, Compos source");
                 sub3->setText("Leaching, SysEq source");
@@ -785,7 +789,7 @@ int  ProcessWizard::getNPV( char type, int subtype)   // get number of points
                        ret = 51;
                      }
                      else
-                     { setIterColumn( 6, -7.001, -0.001, 0.02 );
+                     { setIterColumn( 6, 7.001, 0.001, -0.02 );
                        ret = 351;
                      }
                  }
@@ -1342,7 +1346,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
   int ii;
   QString ret = pageScript->textScript->toPlainText();
   QStringList lst;
-  TCStringArray lineNames;
+  TCStringArray rowNames;
   TCStringArray dclst;
 
   if( !page1Changed )
@@ -1364,7 +1368,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           for(ii=0; ii<lst.count();ii++)
           {
               lst[ii] = lst[ii].trimmed();
-              lineNames.Add(lst[ii].toLatin1().data());
+              rowNames.Add(lst[ii].toLatin1().data());
               ret  += QString("yp[J][%1] =: (Xa[{%2}]>1e-6? vP[J]/10: empty());\n").arg(
                     ii).arg( lst[ii]);
           }
@@ -1403,12 +1407,12 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             "$ yp[J][2] =: lg( Wxx[{%1}] / my[{%3}] / (Wxx[{%2}] / my[{%4}]) );\n"
             "yp[J][2] =: yp[J][1] - yp[J][0]; \n"
             "$ Done\n").arg(BL, CL, b_ion, c_ion);
-           lineNames.Add("log(Kd(C))");
-           lineNames.Add("log(Kd(B))");
-           lineNames.Add("log(D)");
+           rowNames.Add("log(Kd(C))");
+           rowNames.Add("log(Kd(B))");
+           rowNames.Add("log(D)");
            pGraph->setValue( 3 );
-           pageScript->setXname("Wxx");
-           pageScript->setYname("logKd");
+           pageScript->setXname("x(Trace)");
+           pageScript->setYname("logKd;logD");
          }
          if( subtype == 3 )
          {
@@ -1429,12 +1433,12 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             "$ lg(D) host-trace \n"
             "yp[J][2] =: yp[J][1]\n"
             "    - lg( bXs[{%2}]/( bXs[{%1}]+ bXs[{%2}])/m_t[{%2}] );\n").arg(TraceE1, HostE1);
-           lineNames.Add("x");
-           lineNames.Add("Kd");
-           lineNames.Add("D");
+           rowNames.Add("x");
+           rowNames.Add("Kd");
+           rowNames.Add("D");
            pGraph->setValue( 3 );
-           pageScript->setXname("logKd");
-           pageScript->setYname("log_m(Tr)");
+           pageScript->setXname("log_m(Tr)");
+           pageScript->setYname("logx;logKd");
          }
      break;
   //-------------------------------------------------------------------------
@@ -1466,11 +1470,11 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
         "yp[J][0] =: Wxx[{%1}]; \n"
         "$ Solutus \n"
         "yp[J][1] =: 10^lga[{%4}] / ( 10^lga[{%3}] + 10^lga[{%4}] );\n").arg(EM1, ComIon, EMion0, EMion1);
-       lineNames.Add("Solidus");
-       lineNames.Add("Solutus");
+       rowNames.Add("Solidus");
+       rowNames.Add("Solutus");
        pGraph->setValue( 2 );
-       pageScript->setXname("log10");
-       pageScript->setYname("Wxx");
+       pageScript->setXname("logPi");
+       pageScript->setYname("x(s);x(aq)");
      }
      if( subtype == 1 )
      {
@@ -1500,11 +1504,11 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           "$ Solutus\n"
           "yp[J][1] =: m_t[{%4}] / ( m_t[{%3}] + m_t[{%4}] ); \n"
           "$ Done\n").arg(EM1, ComIC, EM0IC, EM1IC);
-         lineNames.Add("Solidus");
-         lineNames.Add("Solutus");
+         rowNames.Add("Solidus");
+         rowNames.Add("Solutus");
          pGraph->setValue( 2 );
-         pageScript->setXname("log10");
-         pageScript->setYname("Wxx");
+         pageScript->setXname("logPi(tot)");
+         pageScript->setYname("x(s);x(aq)");
      }
      break;
   //-------------------------------------------------------------------------
@@ -1525,18 +1529,20 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           ret += QString (");\n");
 
           ret += QString("$ ... more aqueous complexes of M can be accounted for \n");
+          ret += QString("cTau =: 0.001;\n");
+          ret += QString("$ Change the above to assign a real sorbent mass in kg\n" );
           lst = getSelected( "Sorbed" );
           if( lst.count() <1  )
            return;
           for( ii=0; ii<lst.count(); ii++)
           {
              M_c1 = lst[ii].trimmed();
-             lineNames.Add(M_c1.toLatin1().data());
+             rowNames.Add(M_c1.toLatin1().data());
              ret += QString(" yp[J][%1]=: (x[{%2}]> 0? \n"
-                            "   lg(x[{%2}]/0.001) : empty() ); \n").arg( QString("%1").arg(ii),M_c1);
+                            "   lg(x[{%2}]/cTau) : empty() ); \n").arg( QString("%1").arg(ii),M_c1);
           }
           ret += QString("$ log total M sorbed \n");
-          lineNames.Add("log sorbed");
+          rowNames.Add("log sorbed");
           ret += QString( "yp[J][%1] =: lg((").arg(ii);
           for( ii=0; ii<lst.count(); ii++)
           {
@@ -1544,13 +1550,13 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
              if( ii > 0) ret += QString(" + ");
              ret += QString("x[{%1}]").arg( M_c1);
           }
-          ret += QString( ")/0.001); \n$ log Kd \n");
-          lineNames.Add("log Kd");
+          ret += QString( ")/cTau); \n$ log Kd \n");
+          rowNames.Add("log Kd");
           ret += QString( "yp[J][%1] =: ").arg(ii+1);
           ret += QString( " yp[J][%1]- xp[J];\n").arg(ii);
           pGraph->setValue( ii+2 );
-          pageScript->setXname("log_my");
-          pageScript->setYname("log_x");
+          pageScript->setXname("log_m");
+          pageScript->setYname("logC;logKd");
         }
          break;
 //-------------------------------------------------------------------------
@@ -1595,8 +1601,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
                          "yp[J][0] =: %1;  \n"
                          "yp[J][1] =: pH - ipH[0]; \n").arg(com, pH);
                 pGraph->setValue( 2 );
-                pageScript->setXname("pH");
-                pageScript->setYname("com");
+                pageScript->setXname(pH.toLatin1().data());
+                pageScript->setYname(com.toLatin1().data());
                }
        break;
    case P_REACTORS:
@@ -1604,8 +1610,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
    default: break;
      }
 
-   if( lineNames.GetCount() > 0)
-       pageScript->setNames(lineNames);
+   if( rowNames.GetCount() > 0)
+       pageScript->setNames(rowNames);
    pageScript->textScript->setText( ret );
  }
 

@@ -76,7 +76,7 @@ taken; otherwise, the empty() value is taken (invisible on the graph). On
 this graph, the line thicknesses should be set to 0.
 
 
-
+(corrected on 21.12.2010 by KD)
 Sequential (irreversible) change of bulk composition etc. (S), or direct titration 
 
 Can generate any regular change of bulk composition and/or kinetic 
@@ -311,7 +311,7 @@ yp[J][1] =: m_t[{EM1IC}] / ( m_t[{EM0IC}] + m_t[{EM1IC}] );
 $ Done
 
 
-
+(corrected on 21.12.2010 by KD)
 One arbitrary inverse calculation (T) as defined in the P_expr script
 
 Suppose a process simulator should find how many moles of CO2 per 1 kg of water in equilibrium 
@@ -336,7 +336,7 @@ $ Recalculation of a step in titrant molality
 $ Calculation of the amount of titrant 
   iNu[2] =: iNu[2] + cNu*sign(cpH); 
   xd_[{Titrant}] =: iNu[1]+iNu[2]; 
-$  xd_[{Titrant}] =: iNu[1]+iNu[2]; 
+$  xa_[{Titrant}] =: iNu[1]+iNu[2]; 
 $ Check of convergence 
   Next =: ( ( abs( cpH ) < ipH[2] ) ? 0 : 1); 
 $ Finish
@@ -345,7 +345,7 @@ The iterators should be set as follows:
 
 iTm	iV	iP	iTC	iNv	iTau	ipXi	iNu	ipH	ipe
 1000	0	1	25	0	0	0	0.01	6.4	0
-1000	0	1	25	0	0	0	0	0	0
+1000	0	1	25	0	0	0	0	6.41	0
 0	0	0	0	0	0	0	0	0.01	0
 
 The iNu[0] cell should contain an initial guess how much Titrant will be added; 
@@ -372,7 +372,7 @@ yp[J][1] =: pH - ipH[0];
 
 Batch inverse titration sequence (G) - typical for property-vs-pH diagrams  
 
-Typical variant: a sequence of equilibria with pH step is generated
+Typical variant (1): a sequence of equilibria with pH stepwise change.
 
 First step: select Acid and Base from the project Compos list (option for the 
 program: write it also into the PeNote field as e.g. Acid={HCl},Base={NaOH}).   
@@ -431,8 +431,8 @@ SysEq record, the additions of acid or base stored in the modC array can be
 used with the following simple P_expr script (set ipXi iterator fields to 0):
 
 cEh =: modC[J];
- xa_[{Base}] =: ((cEh < 0)? 1e-8: cEh); 
- xa_[{Acid}] =: ((0-cEh < 0)? 1e-8: 0-cEh);
+ xa_[{Base}] =: ((cEh < 0)? 1e-9: cEh); 
+ xa_[{Acid}] =: ((0-cEh < 0)? 1e-9: 0-cEh);
 
 The actual Compos names to substitute for Acid and Base can be taken from the 
 PeNote field (if stored there, of course). 
@@ -440,18 +440,20 @@ This process simulator runs about 10-15 times faster, but only for the same
 parent system. 
 
 
-Variant of inverse titration process setup to model sorption isotherms at constant pH.
+(corrected on 21.12.2010 by KD)
+Variant (2) inverse titration process setup to model sorption isotherms at constant pH.
 
 The iterators should be set as shown below (note that there is no increment in ipH). 
 
 iTm	iV	iP	iTC	iNv	iTau	ipXi	iNu	ipH	ipe
-1020	0	1	25	0	0	-0.03	0	6	-12
-1120	0	1	25	0	0	0.01	0.01	6	-2
-2	0	0	0	0	0	1e-010	0	0	0.2
+1020	0	1	25	0	0	-0.03	0	6	12
+1120	0	1	25	0	0	0.01	0.01	6	2
+2	0	0	0	0	0	1e-010	0	0	-0.2
 
-The ipe iterator sets logarithmic addition of a titrant TraceM (e.g. Ni(OH)2) assuming 
-that a Compos record TraceM exists in the project. Iterators ipXi and iNu are set as
-usual for the inverse titration sequence (see above). 
+The ipe iterator sets the negative decimal logarithmic addition of a titrant TraceM 
+(e.g. Ni(OH)2) in assuming that a Compos record TraceM exists in the project. 
+The iterators ipXi and iNu are set as usual for the inverse titration sequence 
+(see above). 
 
 The P_expr script is also the same as above, except that a line adding the TraceM  
 appears in the second begin-end block:
@@ -463,31 +465,33 @@ if (Next=2) begin
  xa_[{Base}] =: ((cEh < 0)? 1e-9: cEh); 
  xa_[{Acid}] =: ((0-cEh < 0)? 1e-9: 0-cEh);
  modC[J] =: cEh;
- xa_[{TraceM}] =: 10^cpe;   
+ xa_[{TraceM}] =: 10^(-cpe);   
 end
 
-This script is useful if the addition of TraceM can significantly change pH of the
+This script is useful, if the addition of TraceM can significantly change pH of the
 system (usually at relatively high additions exceeding 0.00001 mol/kgH2O). 
 
 pgExpr script template usually looks like this: 
 
 xp[J]=: lg(my[{M_ion}] + my[{M_c1}] + my[{M_c2}]);
 $ ... more aqueous complexes of M can be accounted for
+cTau =: 0.001; 
+$ Change the above to assign a real sorbent mass in kg 
 yp[J][0]=: (x[{M_s1}]> 0?
-	lg(x[{M_s1}]/SorbentMass) : empty() );
+	lg(x[{M_s1}]/cTau) : empty() );
 yp[J][1]=: (x[{M_s2}]> 0?
-	lg(x[{M_s2}]/SorbentMass) : empty() );
+	lg(x[{M_s2}]/cTau) : empty() );
 $ ... other sorbed species of M can be considered
 $ log total M sorbed
-yp[J][2] =: lg((x[{M_s1}]+x[{M_s2}])/SorbentMass);
+yp[J][2] =: lg((x[{M_s1}]+x[{M_s2}])/cTau);
 $ log Kd
 yp[J][3] =: yp[J][2] - xp[J];
 
 The abscissa in the above script is the log of total aqueous dissolved molality
 of TraceM (represented by species M_ion, M_c1, M_c2, ...). 
 The ordinates are concentrations of sorbed Trace M species in the solid (here 
-in mol/g if SorbentMass is expressed in g), as well as the total isotherm
-and the Kd plot (the last statement). 
+in mol/kg if cTau - mass of the sorbent - is expressed in kg), as well as the 
+total isotherm and the Kd plot (the last statement). 
 
 
 <Added 20.05.2010>
