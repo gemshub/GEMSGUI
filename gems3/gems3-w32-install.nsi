@@ -8,7 +8,7 @@
 Name "GEM-Selektor version 3.0"
 Caption "GEM-Selektor Geochemical Modelling Package"
 BrandingText "(C) 2000,2010, GEM-Selector Development Team (PSI,ETHZ)"
-Icon "C:\GEMS3inst\program\img\gems3.ico"
+Icon "C:\GEMS3inst\program\gems3.ico"
 WindowIcon on
 
 ; The file to write
