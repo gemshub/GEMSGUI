@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout">
@@ -286,7 +286,7 @@ To tell GtDemo what data to sample, a math script must be provided in Gexpr fiel
           </font>
          </property>
          <property name="text">
-          <string>Step 2 - Selection of items to sample (click &quot;Next&quot; without selecting anything to retain the old script)</string>
+          <string>Step 2 - Selection of items to sample (click 'Next' without selecting data to retain the old script)</string>
          </property>
         </widget>
        </item>

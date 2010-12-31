@@ -1128,7 +1128,7 @@ p, li { white-space: pre-wrap; }
           </font>
          </property>
          <property name="text">
-          <string>Step 4 - useful hints to proceed</string>
+          <string>Step 4 - Useful hints</string>
          </property>
         </widget>
        </item>

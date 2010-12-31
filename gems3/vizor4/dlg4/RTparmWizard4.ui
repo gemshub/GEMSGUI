@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>669</width>
+    <width>690</width>
     <height>527</height>
    </rect>
   </property>
@@ -59,7 +59,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 1 - Thermodynaimc data tabulation (RTParm) configuration</string>
+          <string>Step 1 - Thermodynamic data tabulation (RTParm) configuration</string>
          </property>
         </widget>
        </item>
@@ -500,7 +500,7 @@ A simple tExpr script can be created using the selection dialog on the next page
           </font>
          </property>
          <property name="text">
-          <string>Step 2 - Selection of items to sample (click &quot;Next&quot; without selecting anything to retain the old script)</string>
+          <string>Step 2 - Selection of items to sample (click 'Next' without selecting data to retain the old script)</string>
          </property>
         </widget>
        </item>

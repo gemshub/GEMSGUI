@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout">
@@ -52,8 +52,14 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
-          <string>Step 1 - Configuration of Chemical System Definition (SysEq record)</string>
+          <string>Step 1 - Configuration of Chemical System Definition</string>
          </property>
         </widget>
        </item>
@@ -206,8 +212,14 @@ In this wizard, it is possible to (re)configure some optional CSD features (in m
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
-          <string>Step 2 - Additional CSD configuration (must be activated and set up for sequential reactor process simulations)</string>
+          <string>Step 2 - Additional configuration (must be activated and set up for sequential reactor process simulations)</string>
          </property>
         </widget>
        </item>
