@@ -25,7 +25,8 @@ RESOURCES += img.qrc
 macx-g++ {
 #  DEFINES -= Use_qd_real
   DEFINES += __APPLE__
-#  INCLUDEPATH += /Library/Frameworks/QtCore.framework/Versions/4/Headers
+#  QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.4
+ QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5
   CONFIG -= warn_on
   CONFIG += warn_off
 # LIBS -= -lqd

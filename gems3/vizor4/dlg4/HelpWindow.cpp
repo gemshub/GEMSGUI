@@ -222,7 +222,7 @@ void HelpWindow::helpVersion()
     QMessageBox::information(this,
 #ifdef __unix
 #ifdef __APPLE__
-trUtf8("GEMS3 (MacOS X 10.6 32/64) Version Stamp"),
+trUtf8("GEMS3 (MacOS X 10.5, 10.6 32/64) Version Stamp"),
 #else
 trUtf8("GEMS3 (Linux gcc4.4 KDE4 32/64) Version Stamp"),
 #endif
@@ -231,7 +231,7 @@ trUtf8("GEMS3 (Windows XP/7 MinGW gcc4.4) Version Stamp"),
 #endif
            trUtf8("This is GEM-Selektor 3 (GEMS3) program package   \n\n"
                   "    release candidate version 3.0,\n\n"
-                  "    rev. 1760 (December 22, 2010)\n\n"
+                  "    rev. 1767 (December 31, 2010)\n\n"
                   "    using GEMS3K rev. 521 (trunk) \n\n\n"
                   "For GEMS Wiki community      \n\n"
                   "(c) 2010, PSI-ETHZ GEMS Development Team\n") );
