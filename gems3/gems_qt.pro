@@ -25,7 +25,6 @@ RESOURCES += img.qrc
 macx-g++ {
 #  DEFINES -= Use_qd_real
   DEFINES += __APPLE__
-#  QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.4
  QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5
   CONFIG -= warn_on
   CONFIG += warn_off

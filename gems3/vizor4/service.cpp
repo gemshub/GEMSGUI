@@ -85,16 +85,40 @@ bool vfQuestion(QWidget* par, const gstring& title, const gstring& mess)
          ThreadControl::wait();
          return pVisorImp->thdata.res;
      }
-    int rest = (QMessageBox::question(par, title.c_str(), mess.c_str(),
-                                     "&Yes", "&No") == 0);
+  QString titl, spac, messag;
+  titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
+
+  int rest = (QMessageBox::question(par,
+#ifdef __unix
+#ifdef __APPLE__
+         "Title", titl.append(spac+=messag),
+#else
+         titl, messag,
+#endif
+#else
+         titl, messag,
+#endif
+         "&Yes", "&No") == 0);
     return rest;
 }
 
 int vfQuestYesNoCancel(QWidget* par, const gstring& title, const gstring& mess)
 {
-    int result = QMessageBox::question(
-                par, title.c_str(), mess.c_str(), "&Yes", "&No", "&Cancel",
-                0, 2);
+    QString titl, spac, messag;
+    titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
+
+    int result = QMessageBox::question(par,
+#ifdef __unix
+#ifdef __APPLE__
+          "Title", titl.append(spac+=messag),
+#else
+       titl, messag,
+#endif
+#else
+       titl, messag,
+#endif
+       "&Yes", "&No", "&Cancel", 0, 2);
+
     switch( result )
     {
     case 0:
@@ -120,16 +144,49 @@ void vfMessage(QWidget* par, const gstring& title, const gstring& mess, WarnType
 	         ThreadControl::wait();
 	         return;
 	     }
+    QString titl, spac, messag;
+    titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
+
     switch( type )
     {
     case vfWarn:
-        QMessageBox::warning(par, title.c_str(), mess.c_str() );
+        QMessageBox::warning(par,
+#ifdef __unix
+#ifdef __APPLE__
+         "Title", titl.append(spac+=messag)
+#else
+          titl, messag
+#endif
+#else
+          titl, messag
+#endif
+                             );
         break;
     case vfErr:
-        QMessageBox::critical(par, title.c_str(), mess.c_str() );
+        QMessageBox::critical(par,
+#ifdef __unix
+#ifdef __APPLE__
+        "Title", titl.append(spac+=messag)
+#else
+        titl, messag
+#endif
+#else
+        titl, messag
+#endif
+                             );
         break;
     default:
-        QMessageBox::information(par, title.c_str(), mess.c_str() );
+        QMessageBox::information(par,
+ #ifdef __unix
+ #ifdef __APPLE__
+         "Title", titl.append(spac+=messag)
+ #else
+         titl, messag
+ #endif
+ #else
+         titl, messag
+ #endif
+                             );
     }
 }
 
@@ -148,7 +205,19 @@ int vfQuestion3(QWidget* par, const gstring& title, const gstring& mess, const g
     ThreadControl::wait();
     return pVisorImp->thdata.res;
   }
-	QMessageBox qm( title.c_str(), mess.c_str(),
+  QString titl, spac, messag;
+  titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
+
+         QMessageBox qm(
+#ifdef __unix
+#ifdef __APPLE__
+         "Title", titl.append(spac+=messag),
+#else
+          titl, messag,
+#endif
+#else
+          titl, messag,
+#endif
                     QMessageBox::Question,
                     QMessageBox::Yes | QMessageBox::Default,
                     (s3.empty()) ? (QMessageBox::No | QMessageBox::Escape) : QMessageBox::No,
