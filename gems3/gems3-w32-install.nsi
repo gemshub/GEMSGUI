@@ -7,13 +7,13 @@
 ; The name of the installer
 Name "GEM-Selektor version 3.0"
 Caption "GEM-Selektor Geochemical Modelling Package"
-BrandingText "(C) 2000,2010, GEM-Selector Development Team (PSI,ETHZ)"
+BrandingText "(C) 2000,2011, GEM-Selector Development Team (PSI,ETHZ)"
 Icon "C:\GEMS3inst\program\gems3.ico"
 WindowIcon on
 
 ; The file to write
 ; OutFile "gems-w32-install.exe"
-OutFile "gems3.0-1760.521-w32-install.exe"
+OutFile "gems3.0-1775.521-w32-install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\GEMS3
@@ -22,7 +22,7 @@ InstallDir $PROGRAMFILES\GEMS3
 InstallDirRegKey HKLM SOFTWARE\GEMS3 "Install_Dir"
 
 ;License text
-LicenseText "Version to be installed: 3.0 (rev.1760.521) $\nLICENSE and DISCLAIMER"
+LicenseText "Version to be installed: 3.0 (rev.1775.521) $\nLICENSE and DISCLAIMER"
 LicenseData "C:\GEMS3inst\program\doc\txt\TermsOfUse.txt"
 
 ; The text to prompt the user to enter a directory
@@ -51,6 +51,12 @@ Section "GEMS3 (required)"
     File "C:\GEMS3inst\program\qhelpgenerator.exe"
     File "C:\GEMS3inst\program\readme.txt"
     File "C:\GEMS3inst\program\qt.conf"
+  CreateDirectory "$INSTDIR\program\accessible"
+  SetOutPath "$INSTDIR\program\accessible"
+    File "C:\GEMS3inst\program\accessible\*.*"
+  CreateDirectory "$INSTDIR\program\bearer"
+  SetOutPath "$INSTDIR\program\bearer"
+    File "C:\GEMS3inst\program\bearer\*.*"
   CreateDirectory "$INSTDIR\program\codecs"
   SetOutPath "$INSTDIR\program\codecs"
     File "C:\GEMS3inst\program\codecs\*.*"
@@ -178,6 +184,8 @@ Section "Uninstall"
   Delete "$INSTDIR\program\doc\txt\*.*"
   Delete "$INSTDIR\program\doc\html\*.*"
   Delete "$INSTDIR\program\doc\pdf\*.*"
+   Delete "$INSTDIR\program\accessible\*.*" 
+   Delete "$INSTDIR\program\bearer\*.*" 
    Delete "$INSTDIR\program\codecs\*.*" 
    Delete "$INSTDIR\program\iconengines\*.*"
    Delete "$INSTDIR\program\imageformats\*.*"
@@ -185,8 +193,7 @@ Section "Uninstall"
 ;
   Delete "$INSTDIR\projects\*.*" 
   Delete "$INSTDIR\projects\TryNPTDB\*.*" 
-;  Delete "$INSTDIR\projects\Kaolinite\*.*" 
-;  Delete "$INSTDIR\projects\Solvus2\*.*" 
+;  Delete "$INSTDIR\projects\Kaolinite\*.*"  
 ;  Delete "$INSTDIR\projects\AragCalc\*.*"
 ;  Delete "$INSTDIR\projects\Ca-Sr-CO3\*.*"
 ;  Delete "$INSTDIR\projects\Kyanite\*.*"
@@ -207,6 +214,8 @@ Section "Uninstall"
   RMDir "$INSTDIR\program\doc\txt"
   RMDir "$INSTDIR\program\doc"
   RMDir "$INSTDIR\program\help"
+   RMDir "$INSTDIR\program\accessible" 
+   RMDir "$INSTDIR\program\bearer" 
    RMDir "$INSTDIR\program\codecs" 
    RMDir "$INSTDIR\program\iconengines"
    RMDir "$INSTDIR\program\imageformats"
@@ -214,8 +223,8 @@ Section "Uninstall"
   RMDir "$INSTDIR\program" 
 ;
   RMDir "$INSTDIR\projects\TryNPTDB" 
-;  RMDir "$INSTDIR\projects\Kaolinite" 
-;  RMDir "$INSTDIR\projects\Solvus2" 
+;  RMDir "$INSTDIR\projects\Kaolinite"
+;  RMDir "$INSTDIR\projects\Kyanite"   
 ;  RMDir "$INSTDIR\projects\AragCalc" 
 ;  RMDir "$INSTDIR\projects\Ca-Sr-CO3" 
 ;  RMDir "$INSTDIR\projects"
