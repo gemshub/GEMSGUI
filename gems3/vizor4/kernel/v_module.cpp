@@ -1258,7 +1258,7 @@ TCModule::CmAddOpenFile()
     }
 }
 
-// Rebild the list of opened files for the data base
+// Rebuild the list of opened files for the data base
 
 void
 TCModule::CmReOpenFileList()

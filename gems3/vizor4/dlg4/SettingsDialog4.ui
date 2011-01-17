@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>580</width>
-    <height>492</height>
+    <width>625</width>
+    <height>523</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -309,7 +309,7 @@
     </widget>
    </item>
    <item row="4" column="0">
-    <layout class="QHBoxLayout">
+    <layout class="QHBoxLayout" name="hboxLayout_1">
      <item>
       <widget class="QLabel" name="TextLabel1_3">
        <property name="text">
@@ -373,7 +373,7 @@
     </widget>
    </item>
    <item row="7" column="0">
-    <layout class="QHBoxLayout">
+    <layout class="QHBoxLayout" name="hboxLayout">
      <item>
       <widget class="QPushButton" name="pButtonOK">
        <property name="minimumSize">
@@ -422,7 +422,7 @@
       </widget>
      </item>
      <item>
-      <spacer>
+      <spacer name="spacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>

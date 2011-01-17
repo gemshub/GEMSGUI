@@ -177,8 +177,6 @@ void DCompWizard::getFlags( char flgs[15] )
     flgs[14] = '+';
   else
     flgs[14] = '-';
-
-
 }
 
 

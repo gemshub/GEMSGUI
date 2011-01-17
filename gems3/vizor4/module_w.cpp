@@ -214,7 +214,7 @@ void TCModuleImp::setActions( bool viewmode )
        connect( action_Export, SIGNAL( triggered()), this, SLOT(CmExport()));
        connect( action_Import, SIGNAL( triggered()), this, SLOT(CmImport()));
 
-	   connect( action_Configure, SIGNAL( triggered()), this, SLOT(CmReOpenFileList()));
+           connect( action_Selection, SIGNAL( triggered()), this, SLOT(CmReOpenFileList()));
        connect( action_Add_Link, SIGNAL( triggered()), this, SLOT(CmAddOpenFile()));
 	   connect( action_New_2, SIGNAL( triggered()), this, SLOT(CmAddFileToList()));
        connect( action_Compress, SIGNAL( triggered()), this, SLOT(CmRebildFile()));
