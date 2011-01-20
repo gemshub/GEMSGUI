@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id: SettingsDialog.cpp 968 2007-12-13 13:23:32Z gems $
+// $Id: LookupDialog.cpp 968 2007-12-13 13:23:32Z gems $
 //
 // Implementation of LookupDialog class
 //

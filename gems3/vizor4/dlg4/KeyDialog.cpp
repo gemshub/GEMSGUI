@@ -56,7 +56,7 @@ KeyDialog::KeyDialog(QWidget* win, int irt, const char* key,
 	yesFilter = true;
     }
 
-    gstring s = "Filter: ";
+    gstring s = "Please, select one record key. Filter: ";
     s +=  keyFilter;
     pLabel->setText(s.c_str());
 
@@ -132,7 +132,7 @@ KeyDialog::SetList()
     TCIntArray temp;
     TCStringArray keyList;
 
-    gstring s = "Filter: ";
+    gstring s = "Please, mark one or more record keys. Filter: ";
     s +=  keyFilter;
     pLabel->setText(s.c_str());
 

@@ -160,10 +160,10 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="0">
+   <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="pLabel">
      <property name="text">
-      <string>Please, &amp;select one GEM-Selektor modelling project </string>
+      <string>GEM-Selektor modelling projects: &amp;Select one to open, or click 'New Project...' to create </string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

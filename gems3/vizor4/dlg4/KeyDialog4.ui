@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>641</width>
+    <width>703</width>
     <height>475</height>
    </rect>
   </property>
@@ -32,7 +32,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="pLabel">
      <property name="text">
-      <string>Please, select one record key</string>
+      <string>Selection of GEMS database record keys</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -189,7 +189,7 @@
         <string>Here you can specify a template to filter a large list of record keys</string>
        </property>
        <property name="text">
-        <string>&amp;Filter...</string>
+        <string>Set &amp;Filter...</string>
        </property>
       </widget>
      </item>

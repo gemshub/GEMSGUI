@@ -32,7 +32,7 @@
    <item>
     <widget class="QLabel" name="pLabel">
      <property name="text">
-      <string>  Please, check files linked to the project:</string>
+      <string>  Please, check GEMS database files linked to this project:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -47,12 +47,6 @@
      <property name="selectionMode">
       <enum>QAbstractItemView::MultiSelection</enum>
      </property>
-     <attribute name="headerCascadingSectionResizes">
-      <bool>true</bool>
-     </attribute>
-     <attribute name="headerDefaultSectionSize">
-      <number>200</number>
-     </attribute>
      <attribute name="headerCascadingSectionResizes">
       <bool>true</bool>
      </attribute>

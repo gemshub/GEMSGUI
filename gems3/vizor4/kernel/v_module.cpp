@@ -1544,7 +1544,7 @@ void
 TCModule::KeysToTXT( const char *pattern )
 {
     TCStringArray aKey = vfMultiKeys( window(),
-       "Please, mark record keys to be listed in txt-file",
+       "Create record key list",
        nRT, pattern );
     if( aKey.GetCount() <1 )
         return;
@@ -1789,7 +1789,7 @@ void
 TCModule::DelList( const char *pattern )
 {
     TCStringArray aKey = vfMultiKeys( window(),
-       "Please, mark record keys to be deleted from database",
+       "Delete database records",
        nRT, pattern );
     int ichs = 1;
 
@@ -1824,7 +1824,7 @@ TCModule::Transfer( const char *pattern )
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
 
     TCStringArray aKey = vfMultiKeys( window(),
-       "Please, mark record keys to be moved",
+       "Move database records",
        nRT, pattern );
 
 
@@ -1854,9 +1854,9 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
     gstring str;
 
     if( if_rename )
-     str = "Please, mark record keys to be renamed";
+     str = "Rename GEMS database records";
     else
-     str = "Please, mark record keys to be copied";
+     str = "Copy records in another database file";
 
     TCStringArray aKey = vfMultiKeys( window(),
        str.c_str(), nRT, pattern );
@@ -1934,7 +1934,7 @@ TCModule::SelectFileList(int mode)
     db->GetFileList(mode, names, indx, sel);
 
     TCIntArray aSel = vfMultiChoiceSet(window(), names,
-         "Selection of files", sel);
+         "Selection of files linked to this database chain", sel);
 
     TCIntArray arr;
     for( uint i=0; i<aSel.GetCount(); i++ )
