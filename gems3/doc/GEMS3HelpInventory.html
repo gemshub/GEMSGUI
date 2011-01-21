@@ -1,0 +1,3599 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+
+
+
+
+
+
+<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>GEMS3 Help call points inventory</title></head><body>
+<h2>Inventory of GEMS3 Help connections&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Status 16.01.2011&nbsp;&nbsp; trunk</h2><br>
+<p><span style="font-family: Helvetica,Arial,sans-serif;">Existing
+connections are listed in black fonts; context-sensitive connections in
+<span style="color: rgb(51, 204, 0);">green fonts</span>. Necessary corrections or additions are shown in <span style="color: red;">red fonts</span>.&nbsp;
+Items to be removed are shown in <span style="color: rgb(51, 51, 255);">blue fonts</span>.<br>
+</span></p>
+<p><span style="font-family: Helvetica,Arial,sans-serif;">It is highly
+desirable to collect all help file name constants in a header visible
+from everywhere in GEMS3 GUI source code (SD: which header is
+suitable?)</span></p>
+<p><span style="font-family: Helvetica,Arial,sans-serif;">In HTML file
+anchors, the brackets &lt;&gt;&nbsp; must be substituted by a
+particular substring such as a module window page index, e.g. 1 for
+&lt;#&gt;.<br>
+</span></p>
+
+<p><span style="font-family: Helvetica,Arial,sans-serif;"></span></p>
+
+
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <h4>Dialog</h4>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <h4>Element (button, menu, ...)</h4>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <h4>Help file name constant</h4>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <h4>HTML file {#anchor}</h4>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <h4>File (line) in source code</h4>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>MainDialog</p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>What is GEMS?</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_ABOUT_HTML</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>g_about.html <span style="color: red;"><br>
+      </span></p>
+      <p><span style="color: red;">gems_about.html</span></p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>MainDialog.cpp (20), (97)</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>MainDialog
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Get Started&nbsp;&nbsp; <span style="color: red;">Tutorial...</span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      
+      <p>GEMS_GETST_HTML</p>
+
+      <span style="color: red;">GEMS_TUTOR_HTML</span>
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gemstart-body.html <br>
+</p>
+      <p><span style="color: red;">gems_tutorial.html</span><br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>MainDialog.cpp (21), (92)
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>SettingsDialog<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_SETUP_HTML<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      
+      <p>gemsetup.html <span style="color: red;"><br>
+      </span></p>
+      <p><span style="color: red;">gems_setup.html</span><br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>SettingsDialog.cpp (20), (114)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DBDialog<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_TD_HTML <br>
+</p>
+      <p><span style="color: red;">GEMS_TDBAS_HTML</span><br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gt_howto.html <br>
+</p>
+      <p><span style="color: red;">gems_tdbase.html</span><br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DBDialog.cpp (20), (105)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DBAdvDialog<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_MISC_HTML <br>
+</p>
+      <p><span style="color: red;">GEMS_MISCL_HTML</span><br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>g_miscel.html <br>
+</p>
+      <p><span style="color: red;">gems_miscel.html</span><br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DBAdvDialog.cpp (20), (57)
+      </p>
+      </td>
+    </tr><tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DBAdvDialog<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Formats<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_FORM_HTML <br>
+</p>
+      <p><span style="color: red;">GEMS_FORMT_HTML</span><br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>g_miscel.html <br>
+
+
+</p>
+      <p><span style="color: red;">gems_miscel.html#FORMATS</span></p>
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DBAdvDialog.cpp (21), (62)</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>KeyFilter<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_RKEY_HTML <br>
+
+
+</p>
+      <p><span style="color: red;">GEMS_REKEY_HTML</span></p>
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gdb_rkey.html#dbm_&lt;ModName&gt; <br>
+
+
+</p>
+      <p><span style="color: red;">gems_rekey.html#DBM_&lt;ModName&gt;</span></p>
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>KeyFilter.cpp (31), (136)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>Module window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; color: rgb(0, 153, 0);">
+      <p>F1 hotkey on any DOD field<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>GEMS_OBJNDX_HTML <br>
+
+
+
+
+</p>
+      <p><span style="color: red;">GEMS_OBJNX_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>g_objndx.html#&lt;DOD_link&gt;<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>page_w.cpp (29); <br>
+      </p>
+      <p>model_tree.cpp (30), (917)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>(Sub)Module window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; color: rgb(0, 153, 0);">
+      <p>F1 hotkey on any DOD field</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>GEMS_OBJNDX_HTML <br>
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GEMS_OBJNX_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>g_objndx.html#&lt;DOD_link&gt;</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>page_w.cpp (29);</p>
+      <p>model_w.cpp (33), (765)</p>
+      </td>
+    </tr>
+<tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>IComp window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents' <br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_IC_HTML <br>
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_ICOMP_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_icomp.html<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_icomp.cpp (20), (153)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>IComp window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button <br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_IC_HTML<br>
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_ICOMP_HTML</span></p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_icomp.html</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_icomp.cpp (20), (153)</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DComp window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents' </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_DC_HTML<br>
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_DCOMP_HTML</span></p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_dcomp.html<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_dcomp.cpp (20), (1173)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DComp window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>?' (Help Contents) TB button</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_DC_HTML<br>
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_DCOMP_HTML</span></p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_dcomp.html <br>
+</p>
+      <p><span style="color: red;">gm_dcomp.html#MWPAGE_&lt;#&gt;</span><br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_dcomp.cpp (20), (1173)</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DCompWizard <br>
+</p>
+      <p>(3 steps)<br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      
+      <p>Help (in Step #)</p>
+      <p><span style="color: red;">Learn more...</span><br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DCOMP_HTML</p>
+      <p><span style="color: red;">GM_DCOMP_WZ_HTML</span><br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_dcomp.html</p>
+      <p style="color: red;">gm_dcomp.html#WZSTEP_&lt;#&gt;
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DCompWizard.cpp (20), (188)<br>
+      </p>
+      </td>
+    </tr>
+    
+    
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ReacDC window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents'
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_RE_HTML<br>
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_REACDC_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_reacdc.html<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_reacdc.cpp (20), (1684)
+      </p>
+      </td>
+    </tr><tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ReacDC window</p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_RE_HTML<br>
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_REACDC_HTML</span></p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_reacdc.html <br>
+
+
+</p>
+      <p><span style="color: red;">gm_reacdc.html#MWPAGE_&lt;#&gt;</span></p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_reacdc.cpp (20), (1684)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ReacDCWizard <br>
+
+
+</p>
+      <p>(3 steps)</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help (in Step #)</p>
+      <p><span style="color: red;">Learn more...</span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>REACDC_HTML<br>
+      </p>
+      <p style="color: red;">GM_REACDC_WZ_HTML</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_reacdc.html
+      </p>
+      <p style="color: red;">gm_reacdc.html#WZSTEP_&lt;#&gt;
+      </p>
+
+      
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ReacDCWizard.cpp (20), (166)<br>
+      </p>
+      </td>
+    </tr>
+    
+    
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>RTparm window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents'</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_RTP_HTML<br>
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_RTPARM_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_rtparm.html<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_rtparm.cpp (21), (689)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>RTparm window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_RTP_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_RTPARM_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_rtparm.html <br>
+
+
+
+
+</p>
+      <p><span style="color: red;">gm_rtparm.html#MWPAGE_&lt;#&gt;</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_rtparm.cpp (21), (689)</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>RTparmWizard <br>
+
+
+
+
+</p>
+      <p>(4 steps)</p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help (in Step #)</p>
+
+      <p style="color: red;">Learn more...</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>RTPARM_HTML</p>
+      <p style="color: red;">GM_RTPARM_WZ_HTML</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_rtparm.html
+      </p>
+      <p style="color: red;">gm_rtparm.html#WZSTEP_&lt;#&gt;</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>RTparmWizard.cpp (20), (234)<br>
+      </p>
+      </td>
+    </tr>
+    
+    
+    
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Phase window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents'</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_PH_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_PHASE_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_phase.html<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_phase.cpp (20), (1680)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Phase window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_PH_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_PHASE_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_phase.html <br>
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">gm_phase.html#MWPAGE_&lt;#&gt;</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_phase.cpp (20), (1680)</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>PhaseWizard <br>
+
+
+
+
+
+
+</p>
+      <p>(3 steps)</p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help (in Step #)</p>
+
+
+
+      <p style="color: red;">Learn more...</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>PHASE_HTML</p>
+      <p><span style="color: red;">GM_PHASE_WZ_HTML</span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_phase.html</p>
+      <p><span style="color: red;">gm_phase.html#WZSTEP_&lt;#&gt;</span>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>PhaseWizard.cpp (20), (235)<br>
+      </p>
+      </td>
+    </tr>
+    
+    
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Compos window<br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents'</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_PCO_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_COMPOS_HTML</span></p>
+
+      <p>
+      </p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_compos.html<br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_compos.cpp (20), (953)<br>
+      </p>
+
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Compos window<br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_PCO_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_COMPOS_HTML</span></p>
+
+      <p>
+      </p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_compos.html <br>
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">gm_compos.html#MWPAGE_&lt;#&gt;</span></p>
+
+      <p>
+      </p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_compos.cpp (20), (953)</p>
+
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ComposWizard <br>
+
+
+
+
+
+
+
+
+</p>
+      <p>(2 steps)</p>
+
+      <p>
+      </p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help (in Step #)</p>
+
+
+
+
+
+      
+      <p style="color: red;">Learn more...</p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>COMPOS_HTML</p>
+      <p><span style="color: red;">GM_COMPOS_WZ_HTML</span><br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_compos.html
+      </p>
+      <p><span style="color: red;">gm_compos.html#WZSTEP_&lt;#&gt;</span>
+      </p>
+</td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ComposWizard.cpp (20), (176)</p>
+
+      </td>
+    </tr>
+    
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>SDref window<br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents'</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_SD_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_SDREF_HTML</span></p>
+
+      <p>
+      </p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_sdref.html<br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_sdata.cpp (20), (128)<br>
+      </p>
+
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>SDref window<br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_SD_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_SDREF_HTML</span></p>
+
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_sdref.html</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_sdata.cpp (20), (128)</p>
+
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Const window<br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents'</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_TOC_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_CONST_HTML</span></p>
+
+      <p>
+      </p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gems_toc.html <br>
+</p>
+      <p><span style="color: red;">gm_const.html</span><br>
+      </p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>v_module.cpp (20), (128)</p>
+      <p>visor_w.cpp (64), (304, 309)<br>
+      </p>
+
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Const window</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_TOC_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_CONST_HTML</span></p>
+
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gems_toc.html <br>
+
+
+</p>
+      <p><span style="color: red;">gm_const.html</span></p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>v_module.cpp (20), (128)</p>
+
+      <p>visor_w.cpp (64), (304, 309)</p>
+
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Project window<br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'menu 'Help'&nbsp; 'Help Contents'</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_SP_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_PROJECT_HTML</span></p>
+
+      <p>
+      </p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      
+      <p>gm_project.html<br>
+      </p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_param.cpp (20), (442)<br>
+      </p>
+
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Project window</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_SP_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_PROJECT_HTML</span></p>
+
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_project.html <br>
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">gm_project.html#MWPAGE_&lt;#&gt;</span></p>
+
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_param.cpp (20), (442)</p>
+
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ProjectWizard <br>
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p>(2 steps)</p>
+
+      <p>
+      </p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help (in Step #)</p>
+
+
+
+
+
+
+      
+      <p style="color: red;">Learn more...</p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>PROJECT_HTML</p>
+      <p>
+      <span style="color: red;">GM_PROJECT_WZ_HTML</span></p>
+</td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_project.html
+      
+</p>
+      <p><span style="color: red;">gm_project.html#WZSTEP_&lt;#&gt;</span>
+      </p>
+
+</td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ProjectWizard.cpp (20), (206)<br>
+      </p>
+
+      </td>
+    </tr>
+    
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>SysEq window<br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents'</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_TOC_HTML</p>
+      <p><span style="color: red;">GM_SYSEQ_HTML</span></p>
+
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gems_toc.html
+</p>
+      <p><span style="color: red;">gm_syseq.html</span></p>
+
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>v_module.cpp (20), (128)</p>
+
+      <p>visor_w.cpp (64), (304, 309)</p>
+
+      </td>
+    </tr><tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>SysEq window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_TOC_HTML
+</p>
+      <p><span style="color: red;">GM_SYSEQ_HTML</span></p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gems_toc.html
+
+</p>
+      <p><span style="color: red;">gm_syseq.html</span></p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>v_module.cpp (20), (128)</p>
+
+      <p>visor_w.cpp (64), (304, 309)</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>SystemWizard <br>
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p>(2 steps)</p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help (in Step #)</p>
+
+
+
+
+
+
+
+      
+      
+      <p style="color: red;">Learn more...</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>SYST_HTML
+
+      </p>
+      <p><span style="color: red;">GEMS_SYSTEM_WZ_HTML</span></p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gems_sys.html <br>
+      </p>
+      <p><span style="color: red;">gems_sys.html#</span><span style="color: red;">WZSTEP_&lt;#&gt;</span></p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>SystemWizard.cpp (20), (242)<br>
+      </p>
+      </td>
+    </tr>
+    
+<tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Proces window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents'</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_PE_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_PROCES_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      
+      <p>gm_proces.html<br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_proces.cpp (21), (1570)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Proces window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_PE_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_PROCES_HTML</span></p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_proces.html <br>
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">gm_proces.html#MWPAGE_&lt;#&gt;</span></p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_proces.cpp (21), (1570)</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ProcessWizard <br>
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p>(6 steps)</p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help (in Step #)</p>
+
+
+
+
+
+
+
+      
+      <p style="color: red;">Learn more...</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>PROCESS_WIZARD_HTML</p>
+      <p>
+      <span style="color: red;">GM_PROCES_WZ_HTML</span>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_proces.html</p>
+      <p><span style="color: red;">gm_proces.html#</span><span style="color: red;">WZSTEP_&lt;#&gt;</span></p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ProcessWizard.cpp (20), (514)<br>
+      </p>
+      </td>
+    </tr>
+    
+    
+    
+    
+    
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GtDemo window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents'</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_GTD_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_GTDEMO_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_gtdemo.html<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_gtdemo.html (20), (828)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GtDemo window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_GTD_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_GTDEMO_HTML</span></p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_gtdemo.html <br>
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">gm_gtdemo.html#MWPAGE_&lt;#&gt;</span></p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_gtdemo.html (20), (828)</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GtDemoWizard <br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p>(4 steps)</p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help (in Step #)</p>
+
+
+
+
+
+
+
+
+      
+      <p style="color: red;">Learn more...</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GTDEMO_HTML</p>
+      <p><span style="color: red;">GM_GTDEMO_WZ_HTML</span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_gtdemo.html</p>
+      <p style="color: red;">gm_gtdemo.html#<span style="color: red;">WZSTEP_&lt;#&gt;</span></p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GtDemoWizard.cpp (19), (219)<br>
+      </p>
+      </td>
+    </tr>
+    
+    
+    
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEM2MT window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents'</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_MT_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_GEM2MT_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_gem2mt.html<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_gem2mt.cpp (19), (1062)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEM2MT window</p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_MT_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_GEM2MT_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_gem2mt.html <br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">gm_gem2mt.html#MWPAGE_&lt;#&gt;</span></p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_gem2mt.cpp (19), (1062)</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEM2MTWizard <br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p>(4 steps)</p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help (in Step #)</p>
+
+
+
+
+
+
+
+
+
+      
+      <p style="color: red;">Learn more...</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEM2MT_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_GEM2MT_WZ_HTML</span></p>
+
+</td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_gem2mt.html</p>
+      <p style="color: red;">gm_gem2mt.html#<span style="color: red;">WZSTEP_&lt;#&gt;</span></p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEM2MTWizard.cpp (20), (274)<br>
+      </p>
+      </td>
+    </tr>
+    
+    
+    
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>UnSpace window</p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents'</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_USP_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_UNSPACE_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_unspace.html</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_unspace.cpp (21), (1194)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>UnSpace window</p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_USP_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_UNSPACE_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_unspace.html <br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">gm_unspace.html#MWPAGE_&lt;#&gt;</span></p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_unspace.cpp (21), (1194)<br>
+</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>UnSpaceWizard <br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p>(4 steps)</p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help (in Step # page)</p>
+
+
+
+
+
+
+
+
+
+
+      
+      <p style="color: red;">Learn more...</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      
+      <p>UNSPACE_HTML</p>
+
+
+
+      <span style="color: red;">GM_UNSPACE_WZ_HTML</span>
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_unspace.html</p>
+      <p><span style="color: red;">gm_unspace.html#</span><span style="color: red;">WZSTEP_&lt;#&gt;</span>
+
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>UnSpaceWizard.cpp (20), (364)<br>
+      </p>
+      </td>
+    </tr>
+    
+    
+    
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DualTh window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents'
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_DT_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_DUALTH_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_dualth.html<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_dualth.cpp (21), (809)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DualTh window<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_DT_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GM_DUALTH_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_dualth.html <br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">gm_dualth.html#MWPAGE_&lt;#&gt;</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_dualth.cpp (21), (809)
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DualThWizard <br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p>(4 steps)</p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      
+      <p>Help (in Step # page)</p>
+
+
+
+
+
+
+
+
+
+
+
+      
+      
+      <p style="color: red;">Learn more...</p>
+<p>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DUALTH_HTML</p>
+      <p><span style="color: red;">GM_DUALTH_WZ_HTML</span><br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_dualth.html<br>
+
+
+
+</p>
+      <p><span style="color: red;">gm_project.html#FILES</span></p>
+
+</td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>DualThWizard.cpp (20), (242)<br>
+      </p>
+      </td>
+    </tr>
+    
+    
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Modelling <br>
+      </p>
+      <p>Projects&nbsp;  <br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      
+
+      <p>Help<span style="color: red;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Learn more...</span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_GP_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GEMS_MPROJ_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gp_howto.html<br></p>
+      <p><span style="color: red;">gm_project.html#HOWTO</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>KeyProfile.cpp (19), (102)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ListFilesDialog<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p><big><span style="font-family: Helvetica,Arial,sans-serif;">Help</span></big><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      
+      <p>GEMS_LF_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </p>
+      <p><span style="color: red;">GEMS_MPROJ_LF_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>g_miscel.html<br>
+
+</p>
+      <p><span style="color: red;">gm_project.html#FILES</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ListFilesDialog.cpp (19), (129)<br>
+      </p>
+      </td>
+    </tr>
+<tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Single System</p>
+      <p>dialog<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help' <br>
+      </p>
+      
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_SYS_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">GEMS_ONESYS_HTML</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gems_sys.html</p>
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>NewSystemMenu.cpp (19), (618)<br>
+      </p>
+      <p><span style="color: rgb(51, 51, 255);">NewSystemDialog.cpp (19) ???</span><br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Single System</p>
+
+      dialog</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help) TB button <br>
+      </p>
+      <p><span style="color: red;">on Tab 'Input:' </span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_SYS_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </p>
+
+      <p><span style="color: red;">GEMS_ONESYS_HTML</span></p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gems_sys.html<br>
+
+
+
+
+
+      </p>
+      <p><span style="color: red;">gems_bcc.html#TAB_INPUT</span></p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>NewSystemMenu.cpp (19), (618)<br>
+      </p>
+
+      <span style="color: rgb(51, 51, 255);">NewSystemDialog.cpp (19) ???</span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Single System</p>
+
+
+      dialog</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help) TB button <br>
+      </p>
+
+      <p><span style="color: red;">on Tab 'Results:'</span></p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_SYS_HTML<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </p>
+
+
+      <p><span style="color: red;">GEMS_ONESYS_HTML</span></p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gems_sys.html<br>
+
+
+
+
+
+      </p>
+
+      <p><span style="color: red;">gems_sys.html#TAB_RESULTS</span></p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>NewSystemMenu.cpp (19), (618)<br>
+      </p>
+
+
+      <span style="color: rgb(51, 51, 255);">NewSystemDialog.cpp (19) ???</span></td>
+    </tr>
+<tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Single System</p>
+
+      <p>dialog<br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'How To'</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_HOWTO_HTML<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      
+      <p>ge_howto.html<br>
+
+
+
+
+
+
+
+      </p>
+      <p><span style="color: red;">gems_sys.html#HOWTO</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>NewSystemMenu.cpp (22), (637)<br>
+
+
+      </p>
+      <p style="color: rgb(51, 51, 255);">NewSystemDialog.cpp (22) ???</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Single System</p>
+
+
+      <p>dialog</p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'More about BCC'<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_BCC_HTML<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gems_bcc.html<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>NewSystemMenu.cpp (20), (624)<br>
+      </p>
+      <p><span style="color: rgb(51, 51, 255);">NewSystemDialog.cpp (20) ???</span><br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Single System</p>
+
+
+      <p>dialog</p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'More about IPM'<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_IPM_HTML<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gems_ipm.html<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>NewSystemMenu.cpp (21), (630)<br>
+      </p>
+      <p><span style="color: rgb(51, 51, 255);">NewSystemDialog.cpp (21) ???</span><br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Single System</p>
+
+
+
+      <p>dialog</p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'About' <br>
+      </p>
+      <p>(not shows up in Mac OS X)<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_ABOUT_HTML<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>g_about.html</p>
+      <p><span style="color: red;">gems_about.html</span>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>NewSystemMenu.cpp (86);</p>
+      <p>visor_w.cpp (297)<br>
+      </p>
+
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>Single System</p>
+
+
+
+
+      
+      <p>dialog</p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; color: rgb(0, 153, 0);">
+      <p>F1 hotkey on Tab 'Input' data<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>GEMS_OBJNDX_HTML</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>g_objndx.html#&lt;DOD_link&gt;</p>
+      <p>(gems_bcc.html#&lt;DOD&gt;)<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>page_w.cpp (29);</p>
+
+      
+      <p>model_tree.cpp (30), (917)</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>Single System</p>
+
+
+
+
+      
+      <p>dialog</p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; color: rgb(0, 153, 0);">
+      <p>F1 hotkey on Tab 'Results' data</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>GEMS_OBJNDX_HTML</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>g_objndx.html#&lt;DOD_link&gt;
+      </p>
+      <p>(gems_sys.html#&lt;DOD&gt;)</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace; color: rgb(0, 153, 0);">
+      <p>page_w.cpp (29);</p>
+
+      
+      <p>model_tree.cpp (30), (917)</p>
+      </td>
+    </tr>
+<tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>RecipeDialog<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      
+
+      <p>Help <span style="color: red;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+</span></p>
+      <p><span style="color: red;">Learn more...</span><br>
+      </p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_RECIPE_HTML<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gems_bcc.html
+</p>
+      <p><span style="color: red;">gems_bcc.html#RECIPE</span>
+      </p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>InputSystemDialog.cpp (20), (317)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Graph Dialog<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>N.a. <span style="color: red;">(add 'Help' button)</span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p><span style="color: red;">GEMS_GRAPH_HTML</span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p><span style="color: red;">gems_graph.html</span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GraphDialog.cpp, ~4.ui
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Customize Graph di.<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p><big><span style="font-family: Helvetica,Arial,sans-serif;">N.a. <span style="color: red;">(add 'Help' button)</span></span></big><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace; color: red;">
+      <p>GEMS_GRAPH_CUS_HTML</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace; color: red;">
+      <p>gems_graph.html#CUSTOMIZE</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>LegendDialog.cpp, ~4.ui</p>
+      </td>
+    </tr>
+<tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Missing IC <br>
+      </p>
+      <p>warning<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help <br>
+</p>
+      <p><span style="color: red;">What does it mean?</span><br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_FILL_HTML<br>
+</p>
+      <p style="color: red;">GEMS_MISSING_HTML
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>exclude_fill.html (n.a.)<br>
+</p>
+      <p><span style="color: red;">gems_bcc.html#MISSING</span>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ExcludeFillDialog.cpp (31), (174)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>EQDialog <br>
+      </p>
+      <p>(Modeling Project)<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      
+      <p>Help <span style="color: red;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Learn more...</span></p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      
+      <p>GEMS_EQ_HTML<br>
+
+
+      </p>
+      <p style="color: red;">GEMS_MODES_HTML
+      </p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ge_howto.html<br>
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">gems_sys.html#MODES</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>EQDialog.cpp (20), (93)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Project (Numerical</p>
+      <p>&amp; Conf. Settings)<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>menu 'Help'&nbsp; 'Help Contents'</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_SP_HTML<br>
+
+
+
+
+</p>
+      <p style="color: red;">GEMS_NUMSET_HTML
+      </p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_project.html<br>
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">gm_project.html#NUMSET</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_param.cpp (20), (442)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Project (Numerical</p>
+
+      <p>&amp; Conf. Settings)<br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>'?' (Help Contents) TB button</p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_SP_HTML<br>
+
+
+
+
+
+
+</p>
+      <p style="color: red;">GEMS_NUMSET_HTML
+      </p>
+
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gm_project.html <br>
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">gm_project.html#MWPAGE_&lt;#&gt;</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>m_param.cpp (20), (442)</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ElementsDialog<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: red;">More...</span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_EL_HTML<br>
+
+
+
+
+
+
+
+
+</p>
+      <p style="color: red;">GEMS_ELEMENTS_HTML
+      </p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>elements.html<br>
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">gems_elements.html</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ElementsDialog.cpp (19), (238)<br>
+      </p>
+      </td>
+    </tr><tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>SetFiltersDialog<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: red;">Learn more...</span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_SFD_HTML<br>
+
+
+
+
+
+
+
+
+</p>
+      <p style="color: red;">GEMS_SETFILT_HTML
+      </p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>elements.html<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">gems_elements.html#FILTERS</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>SetFiltersDialog.cpp (19), (104)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>AutoPhaseDialog<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: red;">Learn more...</span></p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>AUTOPHASE_HTML<br>
+
+
+
+
+
+
+
+
+</p>
+      <p style="color: red;">GEMS_APHSETUP_HTML
+      </p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>autophase_setup.html<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p><span style="color: red;">gems_aphsetup.html</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>AutoPhaseDialog.cpp (20), (265)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ChangeKeyDialog<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help (multiple 'rename')<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>GEMS_TEMPL_HTML<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>g_miscel.html <br>
+
+
+
+
+</p>
+      <p><span style="color: red;">gems_miscel.html#TEMPLATES</span></p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>ChangeKeyDialog.cpp (20), (61)<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>LookupDialog</p>
+      <p>(write IPM file)<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">
+      <p>Help (in Step 1 page)</p>
+      <p><span style="color: red;">Learn more...</span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>Lookup_HTML<br>
+
+
+
+
+
+
+
+
+
+
+</p>
+      <p style="color: red;">GEMS_WRIPMF_HTML
+      </p>
+
+      <p>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>gemIPM2k.html (n.a.) <br>
+      </p>
+      <p><span style="color: red;">gemsipm3k.html#WRITEIPMFILES</span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>LookupDialog.cpp (20), (118)<br>
+      </p>
+      </td>
+    </tr><tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>SelectDialog<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p><big><span style="font-family: Helvetica,Arial,sans-serif;">N.a. <span style="color: red;">(add Help)</span></span></big><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p><span style="color: red;">GEMS_MARK_HTML</span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p><span style="color: red;">gems_miscel.html#MARK</span><br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>SelectDialog.cpp, ~4.ui<br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>KeyDialog<br>
+      </p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p><big><span style="font-family: Helvetica,Arial,sans-serif;">N.a. <span style="color: red;">(add Help)</span></span></big></p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p><span style="color: red;">GEMS_SELECT_HTML</span><br>
+      </p>
+
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p><span style="color: red;">gems_miscel.html#SELECT</span></p>
+      </td>
+      <td style="vertical-align: top; font-family: monospace;">
+      <p>KeyDialog.cpp</p>
+      </td>
+    </tr>
+
+
+
+
+
+
+  </tbody>
+</table>
+<br>
+
+
+</body></html>
