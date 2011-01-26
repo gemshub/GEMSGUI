@@ -125,6 +125,7 @@ public:
 const int KEY_OLD = 1;
 const int KEY_NEW = 2;
 const int KEY_TEMP = 3;
+const int KEY_NEW_SAVEAS = 4;
 
 /// --- Parametres of function RecBuild()
 const int VF_UNDEF =   0;

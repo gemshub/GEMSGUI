@@ -117,7 +117,8 @@ int TIComp::RecBuild( const char *key, int mode  )
        bldType = vfQuestion3(window(), "Reallocation of data arrays ",
                               GetName()+ gstring(" : ") + key ,
                               "&Bypass", "&Remake", "&Clear all");
-    int retType = bldType;
+int retType = bldType;
+db->SetStatus(ONEF_);
 
     switch( bldType )
     {

@@ -233,6 +233,7 @@ TCModule::GetKeyofRecord( const char *oldKey, const char *strTitle,
     case KEY_OLD:
         return vfKeyEdit(window(), str.c_str(), nRT, key.c_str() );
     case KEY_NEW:
+    case KEY_NEW_SAVEAS:
         return vfKeyTemplEdit(window(), str.c_str(), nRT, key.c_str(), false );
     case KEY_TEMP:
          {
@@ -342,7 +343,7 @@ TCModule::CmSaveAs()
 
         gstring str=db->PackKey();
         str = GetKeyofRecord( str.c_str(),
-                 "Insert new record keyed ", KEY_NEW );
+                 "Insert new record keyed ", KEY_NEW_SAVEAS );
         if(  str.empty() )
             return ;
         RecSave( str.c_str(), false );
@@ -1138,8 +1139,15 @@ TCModule::CmScript()
     {
           // read sdref record with format prn
       gstring sd_key = "?script*:*:";
+
+      if( nRT < MD_RMULTS )
         sd_key += db->GetKeywd();
-        sd_key += ":";
+      else
+      {
+        sd_key += GetName();
+      }
+
+      sd_key += ":";
       sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
           sd_key.c_str(), "Please, select an appropriate script", KEY_OLD);
       if( sd_key.empty() )
