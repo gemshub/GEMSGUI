@@ -30,7 +30,7 @@
 #include "m_param.h"
 #include "CalcDialog.h"
 #include "CalcCheckDialog.h"
-extern const char *GEMS_OBJNDX_HTML;
+//extern const char *GEMS_OBJNDX_HTML;
 
 // temporary workaround to make empty value look better
 //const gstring emptiness("---");
@@ -762,7 +762,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
      
      //gstring item = fld.pObj->GetFullName(iN,iM); // for old indexation
      gstring item = fld.pObj->GetHelpLink(iN,iM);
-     pVisorImp->OpenHelp( GEMS_OBJNDX_HTML, item.c_str());
+     pVisorImp->OpenHelp( 0, item.c_str());
  }
 
  // Show SDRef-Record on F2 pressed on data field

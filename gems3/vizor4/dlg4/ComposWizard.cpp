@@ -17,8 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *COMPOS_HTML = "gm_compos";
-
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <qstring.h>
@@ -30,6 +28,7 @@ const char *COMPOS_HTML = "gm_compos";
 
 #include "ComposWizard.h"
 #include "visor_w.h"
+#include "service.h"
 
 void ComposWizard::languageChange()
 {
@@ -39,7 +38,7 @@ void ComposWizard::languageChange()
 void
 ComposWizard::CmBack()
 {
-	stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()-1 );
+    stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()-1 );
     resetNextButton();
     resetBackButton();
 }
@@ -173,7 +172,7 @@ void ComposWizard::getFlags( char flgs[6] )
 void
 ComposWizard::help()
 {
-  pVisorImp->OpenHelp( COMPOS_HTML, 0 );
+  pVisorImp->OpenHelp( GM_COMPOS_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
 }
 
 //--------------------- End of ComposWizard.cpp ---------------------------

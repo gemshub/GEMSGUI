@@ -165,7 +165,7 @@ public:
 
     void OpenModule(QWidget* parent, int i, int page=0, bool viewmode=false, bool select=false);
     void GetHelp();
-    void OpenHelp(const char* file, const char* item=0);
+    void OpenHelp(const char* file, const char* item=0, int page =-1);
     void OpenProgress(bool step=false);
     void CloseProgress();
     bool Message( QWidget* parent, const char* name,

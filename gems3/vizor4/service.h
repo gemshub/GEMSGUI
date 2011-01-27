@@ -174,5 +174,13 @@ bool vfLookupDialogSet(QWidget* wpar, char flags[4],
 //class TObject;
 //void vfObjToFile(QWidget* par, TObject* obj);
 
+//
+
+extern const char *WZSTEP;
+extern const char *MWPAGE;
+
+extern const char *GM_COMPOS_WZ_HTML; //ComposWizard
+extern const char *GM_COMPOS_HTML;    //m_compos.cpp
+
 #endif // _service_h
 

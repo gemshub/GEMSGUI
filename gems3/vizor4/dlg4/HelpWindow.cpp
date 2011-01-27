@@ -365,7 +365,7 @@ void HelpWindow::showDocumentation(const char* file, const char* item1)
     gstring path = "qthelp://gems3/doc/";
     QUrl path_str;
 
-    if( item1 )
+    if( !file/*item1*/ )
     {
        path_str = showHelpForKeyword( item1 );
     }
@@ -374,8 +374,13 @@ void HelpWindow::showDocumentation(const char* file, const char* item1)
         path += file;
         // adding ".html" if needed
         if( path.rfind( "#" ) == path.npos )
-           if( gstring(path, path.length()-5, 5) != ".html" )
+        {   if( gstring(path, path.length()-5, 5) != ".html" )
               path += ".html";
+            if( item1  )
+            {  path += "#";
+               path +=item1;
+             }
+        }
         path_str = QUrl(path.c_str());
     }
 
@@ -529,6 +534,15 @@ void VersionDialog::languageChange()
 {
     retranslateUi(this);
 }
+
+//
+const char *WZSTEP = "WZSTEP";
+const char *MWPAGE = "MWPAGE";
+
+const char *GM_COMPOS_WZ_HTML = "gm_compos";
+const char *GM_COMPOS_HTML = "gm_compos";
+
+
 
 //-------- End of file HelpWindow.cpp ----------------------------
 

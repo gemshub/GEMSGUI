@@ -17,7 +17,6 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-const char *GEMS_PCO_HTML = "gm_compos";
 
 #include <math.h>
 #include "service.h"
@@ -950,7 +949,7 @@ IC_FOUND:
 void
 TCompos::CmHelp()
 {
-    pVisor->OpenHelp( GEMS_PCO_HTML );  //  05.01.01
+    pVisor->OpenHelp( GM_COMPOS_HTML );
 }
 
 

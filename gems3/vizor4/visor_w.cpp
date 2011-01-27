@@ -28,6 +28,7 @@ using namespace std;
 //#endif
 
 #include <QCustomEvent>
+#include <QString>
 #include <QPixmap>
 #include <QCloseEvent>
 #include <qapplication.h>
@@ -415,11 +416,20 @@ void TVisorImp::GetHelp( )
 }
 
 void
-TVisorImp::OpenHelp(const char* file, const char* item )
+TVisorImp::OpenHelp(const char* file, const char* item1, int page )
 {
     if( HelpWindow::pDia )
     {
-       HelpWindow::pDia->showDocumentation( file, item);
+       if( item1 && page>=0 )
+       {
+          QString res = item1;
+          res += QString("_%1").arg(page);
+          gstring txt = res.toLatin1().data();
+          HelpWindow::pDia->showDocumentation( file, txt.c_str() );
+        }
+        else
+          HelpWindow::pDia->showDocumentation( file, item1 );
+
        HelpWindow::pDia->show();
        HelpWindow::pDia->raise();
     }

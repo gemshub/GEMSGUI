@@ -27,7 +27,7 @@
 #include "m_param.h"
 #include "CalcDialog.h"
 #include "CalcCheckDialog.h"
-extern const char *GEMS_OBJNDX_HTML;
+//extern const char *GEMS_OBJNDX_HTML;
 
 
 TreeLine::TreeLine(int aiPh, int aiDC, int aiDCPh):
@@ -914,7 +914,7 @@ void TTreeView::printList( fstream& ff )
         
       //gstring item = fld.pObj->GetFullName(iN,iM); // for old indexation
       gstring item = fld.pObj->GetHelpLink(iN,iM);
-      pVisorImp->OpenHelp( GEMS_OBJNDX_HTML, item.c_str());
+      pVisorImp->OpenHelp( 0, item.c_str());
     }
   
 //---------------------- End of file  model_tree.cpp ---------------------------
