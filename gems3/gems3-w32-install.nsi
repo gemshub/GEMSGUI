@@ -13,7 +13,7 @@ WindowIcon on
 
 ; The file to write
 ; OutFile "gems-w32-install.exe"
-OutFile "gems3.0-1775.521-w32-install.exe"
+OutFile "gems3.0-1783.521-w32-install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\GEMS3
@@ -22,7 +22,7 @@ InstallDir $PROGRAMFILES\GEMS3
 InstallDirRegKey HKLM SOFTWARE\GEMS3 "Install_Dir"
 
 ;License text
-LicenseText "Version to be installed: 3.0 (rev.1775.521) $\nLICENSE and DISCLAIMER"
+LicenseText "Version to be installed: 3.0 (rev.1783.521) $\nLICENSE and DISCLAIMER"
 LicenseData "C:\GEMS3inst\program\doc\txt\TermsOfUse.txt"
 
 ; The text to prompt the user to enter a directory
@@ -81,7 +81,7 @@ Section "GEMS3 (required)"
     File "C:\GEMS3inst\program\visor.data\visobj.dat"
 ;  CreateDirectory "$INSTDIR\program\img"
 ;  SetOutPath $INSTDIR\program\img
-;   Delete "$INSTDIR\program\img\*.*"
+   Delete "$INSTDIR\program\img\*.*"
 ;    File "C:\GEMS3inst\program\img\*.*"
   CreateDirectory "$INSTDIR\program\DB.default"
   SetOutPath "$INSTDIR\program\DB.default"
@@ -122,9 +122,9 @@ SectionEnd
 Section "Start Menu Shortcuts"
   CreateDirectory "$SMPROGRAMS\GEM-Selektor v3-PSI-ETHZ"
   CreateShortCut "$SMPROGRAMS\GEM-Selektor v3-PSI-ETHZ\Uninstall GEMS3.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
-  CreateShortCut "$SMPROGRAMS\GEM-Selektor v3-PSI-ETHZ\Run GEMS3.lnk" "$INSTDIR\program\gems3.exe" '-c -s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\img\gems3.ico" 0
-  CreateShortCut "$SMPROGRAMS\GEM-Selektor v3-PSI-ETHZ\Run GEMS3 with new projects.lnk" "$INSTDIR\program\gems3.exe" '-d -s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\img\gems3.ico" 0
-  CreateShortCut "$DESKTOP\Run GEMS3.lnk" "$INSTDIR\program\gems3.exe" '-c -s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\img\gems3.ico" 0
+  CreateShortCut "$SMPROGRAMS\GEM-Selektor v3-PSI-ETHZ\Run GEMS3.lnk" "$INSTDIR\program\gems3.exe" '-c -s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\gems3.ico" 0
+  CreateShortCut "$SMPROGRAMS\GEM-Selektor v3-PSI-ETHZ\Run GEMS3 with new projects.lnk" "$INSTDIR\program\gems3.exe" '-d -s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\gems3.ico" 0
+  CreateShortCut "$DESKTOP\Run GEMS3.lnk" "$INSTDIR\program\gems3.exe" '-c -s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\gems3.ico" 0
 SectionEnd
 
 ; optional section
