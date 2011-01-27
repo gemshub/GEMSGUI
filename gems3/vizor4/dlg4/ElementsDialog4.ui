@@ -533,9 +533,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>43</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_14">
       <property name="enabled">
@@ -554,9 +551,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>14</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_47">
@@ -577,9 +571,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>47</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_25">
       <property name="enabled">
@@ -599,9 +590,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>25</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_66">
       <property name="enabled">
@@ -620,9 +608,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>66</number>
       </property>
      </widget>
      <widget class="QLabel" name="tlEp_5">
@@ -661,9 +646,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>33</number>
       </property>
      </widget>
      <widget class="QLabel" name="tlEp_3">
@@ -741,9 +723,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>31</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_1">
       <property name="enabled">
@@ -762,9 +741,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>1</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_87">
@@ -785,9 +761,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>87</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_98">
       <property name="enabled">
@@ -807,9 +780,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>98</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_55">
       <property name="enabled">
@@ -828,9 +798,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>55</number>
       </property>
      </widget>
      <widget class="QLabel" name="tlEg_7">
@@ -889,9 +856,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>94</number>
-      </property>
      </widget>
      <widget class="QLabel" name="tlEg_1">
       <property name="geometry">
@@ -930,9 +894,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>17</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_54">
       <property name="enabled">
@@ -951,9 +912,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>54</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_52">
@@ -974,9 +932,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>52</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_35">
       <property name="enabled">
@@ -995,9 +950,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>35</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_32">
@@ -1018,9 +970,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>32</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_46">
       <property name="enabled">
@@ -1039,9 +988,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>46</number>
       </property>
      </widget>
      <widget class="QLabel" name="tlEg_4">
@@ -1081,9 +1027,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>61</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_60">
       <property name="enabled">
@@ -1103,9 +1046,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>60</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_84">
       <property name="enabled">
@@ -1124,9 +1064,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>84</number>
       </property>
      </widget>
      <widget class="QLabel" name="tlEg_3">
@@ -1166,9 +1103,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>58</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_65">
       <property name="enabled">
@@ -1187,9 +1121,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>65</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_86">
@@ -1210,9 +1141,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>86</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_91">
       <property name="enabled">
@@ -1232,9 +1160,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>91</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_28">
       <property name="enabled">
@@ -1253,9 +1178,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>28</number>
       </property>
      </widget>
      <widget class="QLabel" name="tlEp_6">
@@ -1295,9 +1217,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>11</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_72">
       <property name="enabled">
@@ -1316,9 +1235,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>72</number>
       </property>
      </widget>
      <widget class="QLabel" name="tlEp_4a">
@@ -1358,9 +1274,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>40</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_77">
       <property name="enabled">
@@ -1379,9 +1292,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>77</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_81">
@@ -1402,9 +1312,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>81</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_23">
       <property name="enabled">
@@ -1423,9 +1330,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>23</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_85">
@@ -1446,9 +1350,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>85</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_18">
       <property name="enabled">
@@ -1467,9 +1368,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>18</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_53">
@@ -1490,9 +1388,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>53</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_51">
       <property name="enabled">
@@ -1511,9 +1406,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>51</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_82">
@@ -1534,9 +1426,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>82</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_75">
       <property name="enabled">
@@ -1555,9 +1444,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>75</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_96">
@@ -1578,9 +1464,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>96</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_69">
       <property name="enabled">
@@ -1599,9 +1482,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>69</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_73">
@@ -1622,9 +1502,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>73</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_68">
       <property name="enabled">
@@ -1644,9 +1521,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>68</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_97">
       <property name="enabled">
@@ -1665,9 +1539,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>97</number>
       </property>
      </widget>
      <widget class="QLabel" name="pLogoImg">
@@ -1719,9 +1590,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>79</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_34">
       <property name="enabled">
@@ -1740,9 +1608,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>34</number>
       </property>
      </widget>
      <widget class="QLabel" name="tlEp_4">
@@ -1782,9 +1647,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>39</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_88">
       <property name="enabled">
@@ -1803,9 +1665,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>88</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_74">
@@ -1826,9 +1685,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>74</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_37">
       <property name="enabled">
@@ -1847,9 +1703,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>37</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_4">
@@ -1870,9 +1723,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>4</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_29">
       <property name="enabled">
@@ -1892,9 +1742,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>29</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_92">
       <property name="enabled">
@@ -1913,9 +1760,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>92</number>
       </property>
      </widget>
      <widget class="QLabel" name="tlEp_2">
@@ -1955,9 +1799,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>78</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_24">
       <property name="enabled">
@@ -1976,9 +1817,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>24</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_70">
@@ -1999,9 +1837,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>70</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_10">
       <property name="enabled">
@@ -2020,9 +1855,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>10</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_21">
@@ -2043,9 +1875,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>21</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_101">
       <property name="geometry">
@@ -2061,9 +1890,6 @@
       </property>
       <property name="text">
        <string>ACT</string>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>101</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_62">
@@ -2084,9 +1910,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>62</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_50">
       <property name="enabled">
@@ -2105,9 +1928,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>50</number>
       </property>
      </widget>
      <widget class="QLabel" name="tlEg_2">
@@ -2147,9 +1967,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>59</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_41">
       <property name="enabled">
@@ -2169,9 +1986,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>41</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_44">
       <property name="enabled">
@@ -2190,9 +2004,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>44</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_0">
@@ -2219,9 +2030,6 @@
       <property name="checked">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>0</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_22">
       <property name="enabled">
@@ -2240,9 +2048,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>22</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_36">
@@ -2263,9 +2068,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>36</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_49">
       <property name="enabled">
@@ -2284,9 +2086,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>49</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_2">
@@ -2307,9 +2106,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>2</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_100">
       <property name="geometry">
@@ -2328,9 +2124,6 @@
       </property>
       <property name="checkable">
        <bool>false</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>100</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_16">
@@ -2351,9 +2144,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>16</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_38">
       <property name="enabled">
@@ -2372,9 +2162,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>38</number>
       </property>
      </widget>
      <widget class="QLabel" name="tlEp_7">
@@ -2414,9 +2201,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>57</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_89">
       <property name="enabled">
@@ -2435,9 +2219,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>89</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_26">
@@ -2458,9 +2239,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>26</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_95">
       <property name="enabled">
@@ -2479,9 +2257,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>95</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_13">
@@ -2502,9 +2277,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>13</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_42">
       <property name="enabled">
@@ -2523,9 +2295,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>42</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_45">
@@ -2546,9 +2315,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>45</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_64">
       <property name="enabled">
@@ -2567,9 +2333,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>64</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_83">
@@ -2590,9 +2353,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>83</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_5">
       <property name="enabled">
@@ -2611,9 +2371,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>5</number>
       </property>
      </widget>
      <widget class="QLabel" name="tlEp_6a">
@@ -2653,9 +2410,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>63</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_8">
       <property name="enabled">
@@ -2674,9 +2428,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>8</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_76">
@@ -2697,9 +2448,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>76</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_7">
       <property name="enabled">
@@ -2718,9 +2466,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>7</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_80">
@@ -2741,9 +2486,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>80</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_30">
       <property name="enabled">
@@ -2762,9 +2504,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>30</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_3">
@@ -2785,9 +2524,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>3</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_9">
       <property name="enabled">
@@ -2806,9 +2542,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>9</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_12">
@@ -2829,9 +2562,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>12</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_48">
       <property name="enabled">
@@ -2850,9 +2580,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>48</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_27">
@@ -2873,9 +2600,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>27</number>
-      </property>
      </widget>
      <widget class="QCheckBox" name="cbIsotopes">
       <property name="geometry">
@@ -2891,9 +2615,6 @@
       </property>
       <property name="text">
        <string>Isotopes</string>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>300</number>
       </property>
      </widget>
      <widget class="QLabel" name="tlEg_6">
@@ -2933,9 +2654,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>15</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_20">
       <property name="enabled">
@@ -2954,9 +2672,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>20</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_93">
@@ -2977,9 +2692,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>93</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_19">
       <property name="enabled">
@@ -2998,9 +2710,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>19</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbE_67">
@@ -3021,9 +2730,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>67</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_71">
       <property name="enabled">
@@ -3042,9 +2748,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>71</number>
       </property>
      </widget>
      <widget class="QLabel" name="tlEg_5">
@@ -3084,9 +2787,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>56</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_6">
       <property name="enabled">
@@ -3106,9 +2806,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>6</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbE_90">
       <property name="enabled">
@@ -3127,9 +2824,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>90</number>
       </property>
      </widget>
     </widget>
@@ -3200,9 +2894,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>2</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbA_9">
       <property name="enabled">
@@ -3221,9 +2912,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>9</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbA_4">
@@ -3244,9 +2932,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>4</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbA_10">
       <property name="enabled">
@@ -3265,9 +2950,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>10</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbA_6">
@@ -3288,9 +2970,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>6</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbA_3">
       <property name="enabled">
@@ -3310,9 +2989,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>3</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbA_5">
       <property name="enabled">
@@ -3331,9 +3007,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>5</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbA_0">
@@ -3799,9 +3472,6 @@
       <property name="checked">
        <bool>false</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>0</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbA_12">
       <property name="enabled">
@@ -3820,9 +3490,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>12</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbA_7">
@@ -3843,9 +3510,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>7</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbA_8">
       <property name="enabled">
@@ -3864,9 +3528,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>8</number>
       </property>
      </widget>
      <widget class="QPushButton" name="pbA_1">
@@ -3887,9 +3548,6 @@
       <property name="checkable">
        <bool>true</bool>
       </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>1</number>
-      </property>
      </widget>
      <widget class="QPushButton" name="pbA_11">
       <property name="enabled">
@@ -3908,9 +3566,6 @@
       </property>
       <property name="checkable">
        <bool>true</bool>
-      </property>
-      <property name="buttonGroupId" stdset="0">
-       <number>11</number>
       </property>
      </widget>
     </widget>
@@ -4072,7 +3727,7 @@
         <string>Check to collect data from the kernel chemical  thermodynamic data base (Nagra-PSI 01/01)  </string>
        </property>
        <property name="text">
-        <string>Kernel (Nagra-PSI)  </string>
+        <string>Kernel (NaPSI)   </string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -4088,7 +3743,7 @@
         <string>Check to collect data also from the complementary (Slop98/Supcrt92) data base (inorganic part) </string>
        </property>
        <property name="text">
-        <string>Complem.(Slop98)     </string>
+        <string>Complem.(S98)  </string>
        </property>
        <property name="checked">
         <bool>false</bool>
@@ -4101,10 +3756,10 @@
      <item>
       <widget class="QRadioButton" name="rbOrganic">
        <property name="toolTip">
-        <string>Check to collect data also for organic species from Slop98 and RPS data bases</string>
+        <string>Check to collect also data of 'supplemental'  type for 'Kernel', or for organic species for 'Complem.' data base </string>
        </property>
        <property name="text">
-        <string>Organic</string>
+        <string>Supplem.  </string>
        </property>
        <property name="checked">
         <bool>false</bool>
@@ -4120,7 +3775,7 @@
         <string>Check to collect thermodynamic data also from the specific extension data base(s)</string>
        </property>
        <property name="text">
-        <string>Specific  </string>
+        <string>Specific     </string>
        </property>
        <property name="checked">
         <bool>false</bool>

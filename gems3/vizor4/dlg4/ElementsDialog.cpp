@@ -235,7 +235,7 @@ void ElementsDialog::languageChange()
 void
 ElementsDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_EL_HTML, 0);
+    pVisorImp->OpenHelp( GEMS_EL_HTML, 0 );
 }
 
 void
@@ -387,8 +387,9 @@ void ElementsDialog::openFiles( TCStringArray& names )
    names.Add(".specific.");
 }
 
-// 0 no changed (no kernel, specific, organic or complementary)
-// 1 to open, 2 to close
+// Returns; 0 no change in DB file configuration for new project
+// (no kernel, specific, supplemental, or complementary selected)
+// 1 to open DB file;  2 to close DB file
 int ElementsDialog::isOpenFile( gstring& name )
 {
    int iret=0;
@@ -398,7 +399,7 @@ int ElementsDialog::isOpenFile( gstring& name )
          else
            iret = 2;
    }
-   else  if(  name.find( ".organic." ) != gstring::npos )
+   else  if(  name.find( ".supplem." ) != gstring::npos )
          {    if(rbOrganic->isChecked())
                  iret = 1;
               else
