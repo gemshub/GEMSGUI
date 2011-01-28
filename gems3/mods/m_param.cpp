@@ -436,10 +436,9 @@ void TProfil::MakeQuery()
 }
 
 // Help on Modelling Project module ( ? button )
-void
-TProfil::CmHelp()
+const char* TProfil::GetHtml()
 {
-    pVisor->OpenHelp( GEMS_SP_HTML );  //  05.01.01
+   return GEMS_SP_HTML;
 }
 
 void TProfil::outMulti( GemDataStream& ff, gstring& path  )

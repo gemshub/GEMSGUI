@@ -822,10 +822,9 @@ TGtDemo::SaveGraphData( GraphData *gr )
     return true;
 }
 
-void
-TGtDemo::CmHelp()
+const char* TGtDemo::GetHtml()
 {
-    pVisor->OpenHelp( GEMS_GTD_HTML );  //  05.01.01
+   return GEMS_GTD_HTML;
 }
 
 //-----------------------------------------------------------------------

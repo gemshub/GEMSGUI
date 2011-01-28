@@ -281,7 +281,8 @@ public:
     void MakeQuery();
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
-    void CmHelp();
+    //void CmHelp();
+    const char* GetHtml();
 
     void InsertChanges( TIArray<CompItem>& aIComp );
 };

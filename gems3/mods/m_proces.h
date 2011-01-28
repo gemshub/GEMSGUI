@@ -233,7 +233,8 @@ public:
     void RecordPlot( const char *key );
     bool SaveGraphData( GraphData* graph );
 
-    void CmHelp();
+    //void CmHelp();
+    const char* GetHtml();
     bool NoSave() const
     { return ( pep->PsSY == S_OFF ); }
 

@@ -121,12 +121,20 @@ TSubModule::Show(QWidget* parent,  const char *str, bool viewmode )
 
 // Callback for 'Help' command
 
-void
-TSubModule::CmHelp()
+const char* TSubModule::GetHtml()
 {
-//    pVisorImp->OpenHelp("GEMS-Linux-index");
-    pVisorImp->OpenHelp( GEMS_TOC_HTML );    // 05.01.01
+   return GEMS_TOC_HTML;
 
+}
+
+void TSubModule::CmHelp()
+{
+    pVisorImp->OpenHelp( GetHtml() );
+}
+
+void TSubModule::CmHelp2()
+{
+   pVisorImp->OpenHelp( GetHtml(), MWPAGE, pImp->curPage()+1 );
 }
 
 

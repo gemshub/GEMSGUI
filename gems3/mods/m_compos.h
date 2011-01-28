@@ -125,9 +125,10 @@ public:
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
     double Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
-     double R1, double Msys, double Mwat, double Vaq, double Maq, double Vsys);
+    double R1, double Msys, double Mwat, double Vaq, double Maq, double Vsys);
     double MolWeight( int N, double *ICaw, double *Smline );
-    void CmHelp();
+    //void CmHelp();
+    const char* GetHtml();
 
     void CopyRecords( const char * prfName, TCStringArray& aCMnoused,
                      elmWindowData el_data, cmSetupData st_data );

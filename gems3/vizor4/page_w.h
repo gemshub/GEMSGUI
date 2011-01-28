@@ -134,6 +134,9 @@ public:
     ~TCWindow();
 
     void Update();
+
+    int curPage()
+    { return iCurPage; }
 };
 
 //===========================================

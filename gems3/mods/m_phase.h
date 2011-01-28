@@ -146,7 +146,8 @@ public:
     void MakeQuery();
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
-    void CmHelp();
+    //void CmHelp();
+    const char* GetHtml();
     // added by KD on 21.11.04 for SIT
     void MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut );
     // make new aq and/or gas phases (re-written by KD 30.07.03)

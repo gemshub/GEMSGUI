@@ -54,7 +54,7 @@ protected:
 
 public/* protected*/ slots:
     
-	void CloseWin()
+    void CloseWin()
     {  close();  }
     
     void setActions(bool viewmode);
@@ -98,6 +98,7 @@ public/* protected*/ slots:
     void CmImport();
 
     void CmHelp();
+    void CmHelp2();
     void CmScript();
 
 public:
@@ -135,6 +136,8 @@ public:
     {
         statusBar()->showMessage(s);
     }
+
+    int curPage();
 };
 
 #endif   // _module_w_h

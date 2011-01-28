@@ -136,7 +136,8 @@ public:
     virtual gstring  GetKeyofRecord( const char *oldKey,
        const char *strTitle, int keyType );
 
-    void CmHelp();
+    //void CmHelp();
+    const char* GetHtml();
     bool SaveGraphData( GraphData* graph );
 };
 

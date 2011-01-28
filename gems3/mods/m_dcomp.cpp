@@ -1166,12 +1166,12 @@ void TDComp::ParCor(  )
 }
 
 // Help on DComp module ( ? button )
-void
-TDComp::CmHelp()
+const char* TDComp::GetHtml()
 {
-//    pVisor->OpenHelp("GEMS-Linux-HOWTO", "P33D3");
-    pVisor->OpenHelp( GEMS_DC_HTML );  //  05.01.01
+   return GEMS_DC_HTML;
+
 }
+
 
 // Test record with key
 void

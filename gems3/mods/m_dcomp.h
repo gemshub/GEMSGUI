@@ -194,7 +194,8 @@ public:
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
     void TryRecInp( const char *key, time_t& time_s, int q );
-    void CmHelp();
+    //void CmHelp();
+    const char* GetHtml();
 
     // necessary new command in menu
     void DCthermo( int q, int p);

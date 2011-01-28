@@ -82,7 +82,8 @@ public:
 
     void RecInput( const char *key );
     int RecBuild( const char *key, int mode = VF_UNDEF );
-    void CmHelp();                        
+    //void CmHelp();
+    const char* GetHtml();
     //void RecBild( const char *key );
     //void RecCalc( const char *key );
 

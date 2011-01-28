@@ -1055,12 +1055,11 @@ TGEM2MT::RecCalc( const char * key )
   }
 }
 
-
-void
-TGEM2MT::CmHelp()
+const char* TGEM2MT::GetHtml()
 {
-    pVisor->OpenHelp( GEMS_MT_HTML );
+   return GEMS_MT_HTML;
 }
+
 
 void TGEM2MT::RecordPrint( const char* key )
 {

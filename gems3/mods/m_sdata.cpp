@@ -122,11 +122,11 @@ void TSData::RecSave( const char *key, bool onOld )
     TCModule::RecSave( key, onOld );
 }
 
-void
-TSData::CmHelp()
+const char* TSData::GetHtml()
 {
-    pVisor->OpenHelp( GEMS_SD_HTML );  //  05.01.01
+   return GEMS_SD_HTML;
 }
+
 
 
 // virtual callback for printing the record

@@ -365,8 +365,8 @@ public:
     void RecordPrint( const char *key=0 ); //sddata key
     void RecordPlot( const char *key );
     bool SaveGraphData( GraphData* graph );
-
-    void CmHelp();
+    //void CmHelp();
+    const char* GetHtml();
 
    void InsertChanges( TIArray<CompItem>& aIComp,
           TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp );

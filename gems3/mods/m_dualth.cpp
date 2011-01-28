@@ -803,11 +803,11 @@ TDualTh::RecCalc( const char *key )
   TCModule::RecCalc(key);
 }
 
-void
-TDualTh::CmHelp()
+const char* TDualTh::GetHtml()
 {
-    pVisor->OpenHelp( GEMS_DT_HTML );
+   return GEMS_DT_HTML;
 }
+
 
 // insert changes in Project to TDualTh
 void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )

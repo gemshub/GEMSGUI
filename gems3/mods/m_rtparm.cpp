@@ -683,10 +683,9 @@ TRTParm::RecCalc( const char *key )
     pVisor->Update();
 }
 
-void
-TRTParm::CmHelp()
+const char* TRTParm::GetHtml()
 {
-    pVisor->OpenHelp( GEMS_RTP_HTML );  //  05.01.01
+   return GEMS_RTP_HTML;
 }
 
 

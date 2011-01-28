@@ -61,13 +61,10 @@ protected:
 public:
     virtual void Setup();
     virtual bool EvClose();
-    virtual void CmHelp();
-/*    gstring GetString()
-    {
-        return state;
-    }
-*/
-public:
+    void CmHelp();
+    void CmHelp2();
+
+ public:
     TCModuleImp* pImp;		// for visor implementation
     QWidget* window();
 
@@ -78,6 +75,7 @@ public:
     {
         return true;
     }
+
     virtual void SetTitle()
     {}
 
@@ -101,6 +99,9 @@ public:
     {
         return nRT;
     }
+
+    virtual const char* GetHtml();
+
     virtual const char* GetName() const = 0;
     virtual void ods_link( int i=0 )=0;   // link values to objects
     virtual void dyn_set( int i=0 )=0;    // set dynamic objects ptr to values

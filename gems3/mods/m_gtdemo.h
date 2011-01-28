@@ -172,8 +172,9 @@ public:
     }
 
     bool SaveGraphData( GraphData* graph );
+    //void CmHelp();
+    const char* GetHtml();
 
-    void CmHelp();
     const gstring& GetString();
 
 };

@@ -1563,11 +1563,9 @@ TProcess::SaveGraphData( GraphData *gr )
     return true;
 }
 
-
-void
-TProcess::CmHelp()
+const char* TProcess::GetHtml()
 {
-    pVisor->OpenHelp( GEMS_PE_HTML );  //  05.01.01
+   return GEMS_PE_HTML;
 }
 
 

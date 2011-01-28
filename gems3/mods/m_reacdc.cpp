@@ -1678,11 +1678,11 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
 
 
 // Help on ReacDC module ( ? button )
-void
-TReacDC::CmHelp()
+const char* TReacDC::GetHtml()
 {
-    pVisor->OpenHelp( GEMS_RE_HTML );  //  05.01.01
+   return GEMS_RE_HTML;
 }
+
 
 // Test record with key
 void

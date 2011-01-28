@@ -148,10 +148,9 @@ TIComp::RecInput( const char *key )
     TCModule::RecInput( key );
 }
 
-void
-TIComp::CmHelp()
+const char* TIComp::GetHtml()
 {
-    pVisor->OpenHelp( GEMS_IC_HTML );
+   return GEMS_IC_HTML;
 }
 
 void

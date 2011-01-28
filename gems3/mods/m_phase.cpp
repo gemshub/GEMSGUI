@@ -1673,11 +1673,9 @@ else if( param[2] && !param[3] )
 		// contentsChanged = false;
 }
 
-
-void
-TPhase::CmHelp()
+const char* TPhase::GetHtml()
 {
-    pVisor->OpenHelp( GEMS_PH_HTML );  // 05.01.2001
+   return GEMS_PH_HTML;
 }
 
 void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,

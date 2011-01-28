@@ -76,6 +76,10 @@ TCModuleImp::TCModuleImp(int irt, int page, bool viewmode):
 TCModuleImp::~TCModuleImp()
 {}
 
+ int TCModuleImp::curPage()
+ {
+     return pWin->curPage();
+ }
 
 void TCModuleImp::closeEvent(QCloseEvent* e)
 {
@@ -159,6 +163,7 @@ void TCModuleImp::setActions( bool viewmode )
     connect( action_Help, SIGNAL( triggered()), this, SLOT(CmHelp()));
     connect( actionView_Scripts, SIGNAL( triggered()), this, SLOT(CmScript()));
     connect( action_About_GEMS, SIGNAL( triggered()), pVisorImp, SLOT(CmHelpAbout()));
+    connect( action_Help_2, SIGNAL( triggered()), this, SLOT(CmHelp2()));
 
 	if( viewmode || IsSubModule() ) // no menu
 	{
@@ -174,13 +179,14 @@ void TCModuleImp::setActions( bool viewmode )
         return;
 	}
 
+
 // Records and help menu	
     connect( action_Remake, SIGNAL( triggered()), this, SLOT(CmDerive()));
     connect( action_Calculate, SIGNAL( triggered()), this, SLOT(CmCalc()));
     connect( action_Save, SIGNAL( triggered()), this, SLOT(CmSave()));
     connect( actionSave_As, SIGNAL( triggered()), this, SLOT(CmSaveAs()));
     connect( action_Delete, SIGNAL( triggered()), this, SLOT(CmDelete()));
-	connect( action_Plot, SIGNAL( triggered()), this, SLOT(CmPlot()));
+    connect( action_Plot, SIGNAL( triggered()), this, SLOT(CmPlot()));
     connect( action_Print, SIGNAL( triggered()), this, SLOT(CmPrint()));
     connect( action_Close, SIGNAL( triggered()), this, SLOT(CloseWin()));
 
@@ -200,11 +206,11 @@ void TCModuleImp::setActions( bool viewmode )
 	}	
     else
     {    
-	   connect( action_Create, SIGNAL( triggered()), this, SLOT(CmCreate()));
+       connect( action_Create, SIGNAL( triggered()), this, SLOT(CmCreate()));
        connect( action_New, SIGNAL( triggered()), this, SLOT(CmNew()));
        connect( action_Display, SIGNAL( triggered()), this, SLOT(CmShow()));
     
-	   connect( action_Copy, SIGNAL( triggered()), this, SLOT(CmCopyList()));
+       connect( action_Copy, SIGNAL( triggered()), this, SLOT(CmCopyList()));
        connect( action_Rename, SIGNAL( triggered()), this, SLOT(CmRenameList()));
        connect( action_Move, SIGNAL( triggered()), this, SLOT(CmTransferList()));
 	   connect( action_Delete_list, SIGNAL( triggered()), this, SLOT(CmDeleteList()));
@@ -296,7 +302,8 @@ TCM_EV_COMMAND(CM_11, CmLoadinProfile);
 TCM_EV_COMMAND(CM_12, CmNewinProfile);
 TCM_EV_COMMAND(CM_121, CmCreateinProfile);
 
-TCM_EV_COMMAND(CM_PRINT, CmHelp);
+TCM_EV_COMMAND(CM_HELP, CmHelp);
+TCM_EV_COMMAND(CM_HELP2, CmHelp2);
 
 // -------------- End of file module_w.cpp ----------------------
 

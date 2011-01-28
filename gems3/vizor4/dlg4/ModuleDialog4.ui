@@ -26,7 +26,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Record">
@@ -125,8 +125,6 @@
    <addaction name="separator"/>
    <addaction name="action_Plot"/>
    <addaction name="action_Print"/>
-   <addaction name="separator"/>
-   <addaction name="action_Help"/>
   </widget>
   <widget class="QToolBar" name="toolBar_4">
    <property name="windowTitle">
@@ -138,6 +136,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="action_Help_2"/>
   </widget>
   <action name="action_Create">
    <property name="text">
@@ -377,6 +376,15 @@
    </property>
    <property name="toolTip">
     <string>Set filter for record keys</string>
+   </property>
+  </action>
+  <action name="action_Help_2">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/help.png</normaloff>:/toolbar/img/help.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Help Contents</string>
    </property>
   </action>
  </widget>

@@ -946,10 +946,10 @@ IC_FOUND:
 }
 
 // Help on Compos module  ( ? button )
-void
-TCompos::CmHelp()
+const char* TCompos::GetHtml()
 {
-    pVisor->OpenHelp( GM_COMPOS_HTML );
+   return GM_COMPOS_HTML;
+
 }
 
 

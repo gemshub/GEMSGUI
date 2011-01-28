@@ -1188,10 +1188,9 @@ TUnSpace::RecCalc( const char *key )
   TCModule::RecCalc(key);
 }
 
-void
-TUnSpace::CmHelp()
+const char* TUnSpace::GetHtml()
 {
-    pVisor->OpenHelp( GEMS_USP_HTML );  //  05.01.01
+   return GEMS_USP_HTML;
 }
 
 void
