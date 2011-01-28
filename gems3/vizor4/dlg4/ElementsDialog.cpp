@@ -387,6 +387,7 @@ void ElementsDialog::openFiles( TCStringArray& names )
    names.Add(".specific.");
 }
 
+/*
 // Returns; 0 no change in DB file configuration for new project
 // (no kernel, specific, supplemental, or complementary selected)
 // 1 to open DB file;  2 to close DB file
@@ -420,7 +421,49 @@ int ElementsDialog::isOpenFile( gstring& name )
 
   return iret;
 }
+*/
+// Returns; boolean true if a keyword was found in the file name, false otherwise
+//    for each of five keywords;
+// function value: 0 if no change in DB file configuration for new project
+// is required;  1 to attach this DB file 'name';  2 to detach this DB file
+//
+int ElementsDialog::isOpenFile( gstring& name  )
+{
+   bool checked_kernel = rbKernel->isChecked();
+   bool checked_complem = rbComplem->isChecked();
+   bool checked_supplem = rbOrganic->isChecked(); // provisorial - change later
+   bool checked_organic = rbOrganic->isChecked();
+   bool checked_specific = rbSpecific->isChecked();
+   bool is_kernel, is_complem, is_supplem, is_specific, is_organic;
 
+   if(  name.find( ".kernel." ) != gstring::npos )
+       is_kernel = true;
+   else is_kernel = false;
+   if(  name.find( ".complem." ) != gstring::npos )
+       is_complem = true;
+   else is_complem = false;
+   if(  name.find( ".supplem." ) != gstring::npos )
+       is_supplem = true;
+   else is_supplem = false;
+   if(  name.find( ".specific." ) != gstring::npos )
+       is_specific = true;
+   else is_specific = false;
+   if(  name.find( ".organic." ) != gstring::npos )
+       is_organic = true;
+   else is_organic = false;
+   // ......
+
+   int iret = 0;
+   if( checked_kernel && is_kernel || checked_complem && is_complem ||
+           checked_specific && is_specific )
+       iret = 1; // select all checked, disregarding 'Supplem' and 'Organic'
+   if( (is_kernel && !checked_kernel) || (is_complem && !checked_complem) ||
+       (is_supplem && !checked_supplem) || (is_specific && !checked_specific) )
+       // || (is_organic && !checked_organic) )
+       iret = 2; // This file should be detached, even if has 'supplem',
+                 // but 'Supplem' was not checked
+   return iret;
+}
 
 void
 ElementsDialog::SetICompList()
@@ -620,24 +663,27 @@ void
 ElementsDialog::resetFilesSelection()
 {
   TCStringArray newSelKeywds;   // list of selected files
-  TCIntArray    newSelCnt;      // count of selected files  for type
+  TCIntArray    newSelCnt;      // count of newly selected files for type
    int cnt=0;
    int cnt2=0;
 
- //files_data
-
-   for(uint i=0; i<files_data.flCnt.GetCount(); i++ )
+   //files_data
+   // This logic has to be revised!
+    for(uint i=0; i<files_data.flCnt.GetCount(); i++ )
     {
         int cnt_sel = 0;
-        for(int ii=0; ii<files_data.flCnt[i]; ii++ )
+        for(uint ii=0; ii<files_data.flCnt[i]; ii++ )
         {
           switch( isOpenFile( files_data.flNames[cnt+ii] ) )
           {
-            case 2: break;
-            case 1: newSelKeywds.Add( files_data.flKeywds[cnt+ii] );
+            case 2: // 2 to close DB file
+                    break;
+            case 1: // 1 to open DB file
+                    newSelKeywds.Add( files_data.flKeywds[cnt+ii] );
                     cnt_sel++;
                     break;
-            case 0: for(int jj=0; jj<files_data.selCnt[i]; jj++ )
+            case 0: // 0 no change in DB file configuration for new project
+                    for(int jj=0; jj<files_data.selCnt[i]; jj++ )
                       if(  files_data.flKeywds[cnt+ii] ==
                            files_data.selKeywds[cnt2+jj] )
                       {
@@ -646,18 +692,17 @@ ElementsDialog::resetFilesSelection()
                       }
                     break;
            }
-          }
+        }
         cnt += files_data.flCnt[i];
         cnt2 += files_data.selCnt[i];
-       newSelCnt.Add( cnt_sel );
+        newSelCnt.Add( cnt_sel );
     }
-
     files_data.selKeywds.Clear();
     files_data.selCnt.Clear();
     for(uint ii=0; ii<newSelCnt.GetCount(); ii++ )
-     files_data.selCnt.Add( newSelCnt[ii] );
+       files_data.selCnt.Add( newSelCnt[ii] );
     for(uint ii=0; ii<newSelKeywds.GetCount(); ii++ )
-     files_data.selKeywds.Add( newSelKeywds[ii] );
+       files_data.selKeywds.Add( newSelKeywds[ii] );
 }
 
 void
