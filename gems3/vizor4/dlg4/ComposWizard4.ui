@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout">
@@ -356,7 +356,7 @@ The Compos record can be configured in the most convenient way, depending on the
           <item row="1" column="0" colspan="2">
            <widget class="QCheckBox" name="checkBox8">
             <property name="text">
-             <string>Create the vector of uncertainties for this PCO) definition  (unchecked by default)</string>
+             <string>Create the vector of uncertainties for this PCO definition  (unchecked by default)</string>
             </property>
            </widget>
           </item>
@@ -439,7 +439,7 @@ The Compos record can be configured in the most convenient way, depending on the
         </font>
        </property>
        <property name="text">
-        <string>&amp;Help</string>
+        <string>&amp;Learn more...</string>
        </property>
       </widget>
      </item>
