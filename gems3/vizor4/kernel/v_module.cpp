@@ -1908,7 +1908,7 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
         {
           str= aKey[i];
           str = GetKeyofRecord( str.c_str(),
-                 "Insert new record key", KEY_NEW );
+                 "Insert new record key", KEY_NEW_SAVEAS );
           if(  str.empty() )
             return ;
         }
