@@ -337,18 +337,6 @@ Three main types of simulators are: (1) 'Sequential', where only input GEM param
          <attribute name="verticalHeaderHighlightSections">
           <bool>false</bool>
          </attribute>
-         <attribute name="verticalHeaderDefaultSectionSize">
-          <number>22</number>
-         </attribute>
-         <attribute name="horizontalHeaderMinimumSectionSize">
-          <number>10</number>
-         </attribute>
-         <attribute name="verticalHeaderHighlightSections">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>70</number>
-         </attribute>
          <row>
           <property name="text">
            <string>From</string>
@@ -1213,7 +1201,7 @@ Other three flags should be changed by advanced users only.</string>
         </font>
        </property>
        <property name="text">
-        <string>&amp;Help</string>
+        <string>&amp;Learn more...</string>
        </property>
       </widget>
      </item>

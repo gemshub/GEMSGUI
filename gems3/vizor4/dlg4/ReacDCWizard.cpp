@@ -17,8 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *REACDC_HTML = "gm_reacdc";
-
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <qstring.h>
@@ -29,6 +27,7 @@ const char *REACDC_HTML = "gm_reacdc";
 
 #include "ReacDCWizard.h"
 #include "visor_w.h"
+#include "service.h"
 
 void ReacDCWizard::languageChange()
 {
@@ -163,7 +162,7 @@ void ReacDCWizard::getFlags( char flgs[12] )
 void
 ReacDCWizard::help()
 {
-  pVisorImp->OpenHelp( REACDC_HTML, 0 );
+  pVisorImp->OpenHelp( GM_REACDC_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
 }
 
 //--------------------- End of ReacDCWizard.cpp ---------------------------

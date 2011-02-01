@@ -18,8 +18,6 @@
 //-------------------------------------------------------------------
 //
 
-const char *GEMS_PE_HTML = "gm_proces";
-
 #include <math.h>
 #include <stdio.h>
 
@@ -1565,7 +1563,7 @@ TProcess::SaveGraphData( GraphData *gr )
 
 const char* TProcess::GetHtml()
 {
-   return GEMS_PE_HTML;
+   return GM_PROCES_HTML;
 }
 
 

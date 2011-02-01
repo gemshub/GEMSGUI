@@ -17,8 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *GEMS_SETUP_HTML = "gemsetup";
-
 #include <qfontdialog.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>

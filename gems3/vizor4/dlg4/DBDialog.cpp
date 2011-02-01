@@ -17,12 +17,9 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *GEMS_TD_HTML = "gt_howto";
-
 #include <qlabel.h>
 #include <qvariant.h>
 #include <QCloseEvent>
-
 
 #include "DBDialog.h"
 #include "v_mod.h"
@@ -30,8 +27,7 @@ const char *GEMS_TD_HTML = "gt_howto";
 #include "visor_w.h"
 #include "MainDialog.h"
 #include "DBAdvDialog.h"
-
-
+#include "service.h"
 
 DBDialog::DBDialog(QWidget* parent, const char* name)
     : QWidget(parent)
@@ -102,7 +98,7 @@ DBDialog::CmAdvanced()
 void
 DBDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_TD_HTML );
+    pVisorImp->OpenHelp( GEMS_TDBAS_HTML );
 }
 
 void

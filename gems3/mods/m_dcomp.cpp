@@ -17,7 +17,6 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-const char *GEMS_DC_HTML = "gm_dcomp";
 
 #include <stdio.h>
 #include <math.h>
@@ -1168,7 +1167,7 @@ void TDComp::ParCor(  )
 // Help on DComp module ( ? button )
 const char* TDComp::GetHtml()
 {
-   return GEMS_DC_HTML;
+   return GM_DCOMP_HTML;
 
 }
 

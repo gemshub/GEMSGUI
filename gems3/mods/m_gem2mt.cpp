@@ -16,7 +16,6 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-const char *GEMS_MT_HTML = "gm_gem2mt";
 
 #include <math.h>
 #include <stdio.h>
@@ -1057,7 +1056,7 @@ TGEM2MT::RecCalc( const char * key )
 
 const char* TGEM2MT::GetHtml()
 {
-   return GEMS_MT_HTML;
+   return GM_GEM2MT_HTML;
 }
 
 

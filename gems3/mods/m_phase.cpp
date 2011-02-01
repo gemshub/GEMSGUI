@@ -17,8 +17,6 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-const char *GEMS_PH_HTML = "gm_phase";
-
 #include <math.h>
 
 #include "v_object.h"
@@ -1675,7 +1673,7 @@ else if( param[2] && !param[3] )
 
 const char* TPhase::GetHtml()
 {
-   return GEMS_PH_HTML;
+   return GM_PHASE_HTML;
 }
 
 void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,

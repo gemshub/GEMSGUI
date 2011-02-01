@@ -17,8 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *PHASE_HTML = "gm_phase";
-
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <qstring.h>
@@ -27,9 +25,9 @@ const char *PHASE_HTML = "gm_phase";
 #include <qcombobox.h>
 #include <qvariant.h>
 
-
 #include "PhaseWizard.h"
 #include "visor_w.h"
+#include "service.h"
 
 void PhaseWizard::languageChange()
 {
@@ -232,7 +230,7 @@ void PhaseWizard::getFlags( char flgs[12] )
 void
 PhaseWizard::help()
 {
-  pVisorImp->OpenHelp( PHASE_HTML, 0 );
+  pVisorImp->OpenHelp( GM_PHASE_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
 }
 
 //--------------------- End of PhaseWizard.cpp ---------------------------

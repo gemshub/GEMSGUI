@@ -17,12 +17,11 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *SYST_HTML = "gems_sys";
-
 #include <qcheckbox.h>
 
 #include "SystemWizard.h"
 #include "visor_w.h"
+#include "service.h"
 
 void SystemWizard::languageChange()
 {
@@ -239,7 +238,7 @@ void SystemWizard::getFlags( char flgs[40] )
 void
 SystemWizard::help()
 {
-  pVisorImp->OpenHelp( SYST_HTML, 0 );
+  pVisorImp->OpenHelp( GEMS_SYSTEM_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
 }
 
 //--------------------- End of SystemWizard.cpp ---------------------------

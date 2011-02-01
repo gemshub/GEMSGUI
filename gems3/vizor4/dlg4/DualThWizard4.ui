@@ -1087,7 +1087,7 @@ Deactivate the third checkbox if you do not provide formula units (e.g. NaHCO3, 
         </font>
        </property>
        <property name="text">
-        <string>&amp;Help</string>
+        <string>&amp;Learn more...</string>
        </property>
       </widget>
      </item>

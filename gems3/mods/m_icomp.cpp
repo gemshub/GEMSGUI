@@ -17,7 +17,6 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-const char *GEMS_IC_HTML = "gm_icomp";
 
 #include "m_icomp.h"
 #include "v_object.h"
@@ -150,7 +149,7 @@ TIComp::RecInput( const char *key )
 
 const char* TIComp::GetHtml()
 {
-   return GEMS_IC_HTML;
+   return GM_ICOMP_HTML;
 }
 
 void

@@ -174,13 +174,45 @@ bool vfLookupDialogSet(QWidget* wpar, char flags[4],
 //class TObject;
 //void vfObjToFile(QWidget* par, TObject* obj);
 
-//
+//----------------------------------------------------------------
+// Help file name constant
 
 extern const char *WZSTEP;
 extern const char *MWPAGE;
 
+// modules
 extern const char *GM_COMPOS_WZ_HTML; //ComposWizard
 extern const char *GM_COMPOS_HTML;    //m_compos.cpp
+extern const char *GM_ICOMP_HTML;     // m_icomp.cpp
+extern const char *GM_DCOMP_HTML;     //m_dcomp.cpp
+extern const char *GM_DCOMP_WZ_HTML;  //DCompWizard
+extern const char *GM_REACDC_HTML;    //m_reacdc.cpp
+extern const char *GM_REACDC_WZ_HTML; //ReacDCWizard
+extern const char *GM_RTPARM_HTML;    //m_rtparm.cpp
+extern const char *GM_RTPARM_WZ_HTML; //RTparmWizard
+extern const char *GM_PHASE_HTML;     //m_phase.cpp
+extern const char *GM_PHASE_WZ_HTML;  //PhaseWizard
+extern const char *GM_SDREF_HTML;     //m_sdata.cpp
+extern const char *GM_PROJECT_HTML;   //m_param.cpp
+extern const char *GM_PROJECT_WZ_HTML;//ProjectWizard
+extern const char *GEMS_SYSTEM_WZ_HTML;//SystemWizard
+extern const char *GM_PROCES_HTML;     //m_proces.cpp
+extern const char *GM_PROCES_WZ_HTML;  //ProcesWizard
+extern const char *GM_GTDEMO_HTML;     //m_gtdemo.cpp
+extern const char *GM_GTDEMO_WZ_HTML;  //GtDemoWizard
+extern const char *GM_GEM2MT_HTML;     //m_gem2mt.cpp
+extern const char *GM_GEM2MT_WZ_HTML;  //GEM2MTWizard
+extern const char *GM_UNSPACE_HTML;    //m_unspace.cpp
+extern const char *GM_UNSPACE_WZ_HTML; //UnSpaceWizard
+extern const char *GM_DUALTH_HTML;     //m_dualth.cpp
+extern const char *GM_DUALTH_WZ_HTML;  //DualThWizard
+
+// dialogs
+extern const char *GEMS_ABOUT_HTML;    // MainDialog
+extern const char *GEMS_TUTOR_HTML;    // MainDialog
+extern const char *GEMS_SETUP_HTML;    // SettingsDialog
+extern const char *GEMS_TDBAS_HTML;    // DBDialog
+extern const char *GEMS_MISCL_HTML;     // DBAdvDialog
 
 #endif // _service_h
 

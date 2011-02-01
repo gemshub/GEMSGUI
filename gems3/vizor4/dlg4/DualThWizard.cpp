@@ -17,8 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *DUALTH_HTML = "gm_dualth";
-
 #include <qspinbox.h>
 #include <qstring.h>
 #include <qvalidator.h>
@@ -26,9 +24,9 @@ const char *DUALTH_HTML = "gm_dualth";
 #include <qcheckbox.h>
 #include <qvariant.h>
 
-
 #include "DualThWizard.h"
 #include "visor_w.h"
+#include "service.h"
 
 void DualThWizard::languageChange()
 {
@@ -239,7 +237,7 @@ void DualThWizard::getFlags( char flgs[20] )
 void
 DualThWizard::help()
 {
-  pVisorImp->OpenHelp( DUALTH_HTML, 0 );
+  pVisorImp->OpenHelp( GM_DUALTH_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
 }
 
 //--------------------- End of DualThWizard.cpp ---------------------------

@@ -535,13 +535,45 @@ void VersionDialog::languageChange()
     retranslateUi(this);
 }
 
-//
+//----------------------------------------------------------------
+// Help file name constant
+
 const char *WZSTEP = "WZSTEP";
 const char *MWPAGE = "MWPAGE";
 
+// modules
 const char *GM_COMPOS_WZ_HTML = "gm_compos";
 const char *GM_COMPOS_HTML = "gm_compos";
+const char *GM_ICOMP_HTML = "gm_icomp";          //m_icomp.cpp
+const char *GM_DCOMP_HTML = "gm_dcomp";          //m_dcomp.cpp
+const char *GM_DCOMP_WZ_HTML = "gm_dcomp";       //DCompWizard
+const char *GM_REACDC_HTML = "gm_reacdc";        //m_reacdc.cpp
+const char *GM_REACDC_WZ_HTML = "gm_reacdc";     //ReacDCWizard
+const char *GM_RTPARM_HTML = "gm_rtparm";        //m_rtparm.cpp
+const char *GM_RTPARM_WZ_HTML = "gm_rtparm";     //RTparmWizard
+const char *GM_PHASE_HTML = "gm_phase";          //m_phase.cpp
+const char *GM_PHASE_WZ_HTML = "gm_phase";       //PhaseWizard
+const char *GM_SDREF_HTML = "gm_sdref";          //m_sdata.cpp
+const char *GM_PROJECT_HTML = "gm_project";      //m_param.cpp
+const char *GM_PROJECT_WZ_HTML = "gm_project";   //ProjectWizard
+const char *GEMS_SYSTEM_WZ_HTML = "gems_sys";    //SystemWizard
+const char *GM_PROCES_HTML = "gm_proces";        //m_proces.cpp
+const char *GM_PROCES_WZ_HTML = "gm_proces";     //ProcesWizard
+const char *GM_GTDEMO_HTML = "gm_gtdemo";        //m_gtdemo.cpp
+const char *GM_GTDEMO_WZ_HTML = "gm_gtdemo";     //GtDemoWizard
+const char *GM_GEM2MT_HTML = "gm_gem2mt";        //m_gem2mt.cpp
+const char *GM_GEM2MT_WZ_HTML = "gm_gem2mt";     //GEM2MTWizard
+const char *GM_UNSPACE_HTML = "gm_unspace";      //m_unspace.cpp
+const char *GM_UNSPACE_WZ_HTML = "gm_unspace";   //UnSpaceWizard
+const char *GM_DUALTH_HTML = "gm_dualth";        //m_dualth.cpp
+const char *GM_DUALTH_WZ_HTML = "gm_dualth";     //DualThWizard
 
+// dialogs
+const char *GEMS_ABOUT_HTML = "gems_about";       // MainDialog
+const char *GEMS_TUTOR_HTML = "gems_tutorial";    // MainDialog
+const char *GEMS_SETUP_HTML = "gems_setup";       // SettingsDialog
+const char *GEMS_TDBAS_HTML = "gems_tdbase";      // DBDialog
+const char *GEMS_MISCL_HTML = "gems_miscel";      // DBAdvDialog
 
 
 //-------- End of file HelpWindow.cpp ----------------------------

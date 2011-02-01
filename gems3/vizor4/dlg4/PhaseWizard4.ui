@@ -850,7 +850,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
         </font>
        </property>
        <property name="text">
-        <string>&amp;Help</string>
+        <string>&amp;Learn more...</string>
        </property>
       </widget>
      </item>

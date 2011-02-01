@@ -264,7 +264,7 @@
        <string>Press, if you are new to GEM-Selektor </string>
       </property>
       <property name="text">
-       <string>&amp;Get Started</string>
+       <string>&amp;Tutorial...</string>
       </property>
       <property name="shortcut">
        <string>Alt+S</string>

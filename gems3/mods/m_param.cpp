@@ -17,7 +17,6 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-const char *GEMS_SP_HTML = "gm_project";
 
 #ifdef __unix
 #include <unistd.h>
@@ -27,11 +26,6 @@ const char *GEMS_SP_HTML = "gm_project";
 #include "m_unspace.h"
 #include "m_gtdemo.h"
 #include "m_syseq.h"
-//#include "m_dcomp.h"
-//#include "m_icomp.h"
-//#include "m_compos.h"
-//#include "m_phase.h"
-//#include "m_reacdc.h"
 #include "m_proces.h"
 #include "m_dualth.h"
 #include "m_param.h"
@@ -438,7 +432,7 @@ void TProfil::MakeQuery()
 // Help on Modelling Project module ( ? button )
 const char* TProfil::GetHtml()
 {
-   return GEMS_SP_HTML;
+   return GM_PROJECT_HTML;
 }
 
 void TProfil::outMulti( GemDataStream& ff, gstring& path  )

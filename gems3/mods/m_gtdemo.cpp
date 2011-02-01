@@ -17,7 +17,6 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-const char *GEMS_GTD_HTML = "gm_gtdemo";
 
 #include <math.h>
 #include <stdio.h>
@@ -824,7 +823,7 @@ TGtDemo::SaveGraphData( GraphData *gr )
 
 const char* TGtDemo::GetHtml()
 {
-   return GEMS_GTD_HTML;
+   return GM_GTDEMO_HTML;
 }
 
 //-----------------------------------------------------------------------

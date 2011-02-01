@@ -17,12 +17,11 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *PROJECT_HTML = "gm_project";
-
 #include <qcheckbox.h>
 
 #include "ProjectWizard.h"
 #include "visor_w.h"
+#include "service.h"
 
 void ProjectWizard::languageChange()
 {
@@ -203,7 +202,7 @@ void ProjectWizard::getFlags( char flgs[38] )
 void
 ProjectWizard::help()
 {
-  pVisorImp->OpenHelp( PROJECT_HTML, 0 );
+  pVisorImp->OpenHelp( GM_PROJECT_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
 }
 
 //--------------------- End of ProjectWizard.cpp ---------------------------

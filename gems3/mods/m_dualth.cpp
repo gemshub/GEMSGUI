@@ -18,10 +18,7 @@
 //-------------------------------------------------------------------
 //
 
-const char *GEMS_DT_HTML = "gm_dualth";
-
 #include <math.h>
-//#include <stdio.h>
 
 #include "m_dualth.h"
 #include "m_syseq.h"
@@ -805,7 +802,7 @@ TDualTh::RecCalc( const char *key )
 
 const char* TDualTh::GetHtml()
 {
-   return GEMS_DT_HTML;
+   return GM_DUALTH_HTML;
 }
 
 

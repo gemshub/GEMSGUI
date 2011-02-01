@@ -17,15 +17,12 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-const char *GEMS_SD_HTML = "gm_sdref";
 
 #include "m_sdata.h"
 #include "v_object.h"
 #include "v_mod.h"
 #include "service.h"
 #include "visor.h"
-
-
 
 TSData* TSData::pm;
 
@@ -124,10 +121,8 @@ void TSData::RecSave( const char *key, bool onOld )
 
 const char* TSData::GetHtml()
 {
-   return GEMS_SD_HTML;
+   return GM_SDREF_HTML;
 }
-
-
 
 // virtual callback for printing the record
 // should be redefined in subclasses (modules)

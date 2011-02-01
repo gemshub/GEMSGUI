@@ -18,8 +18,6 @@
 //-------------------------------------------------------------------
 //
 
-const char *GEMS_USP_HTML = "gm_unspace";
-
 #include <math.h>
 #include <stdio.h>
 
@@ -1190,7 +1188,7 @@ TUnSpace::RecCalc( const char *key )
 
 const char* TUnSpace::GetHtml()
 {
-   return GEMS_USP_HTML;
+   return GM_UNSPACE_HTML;
 }
 
 void

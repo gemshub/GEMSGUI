@@ -751,7 +751,7 @@ To tell GtDemo what data to sample, a math script must be provided in Gexpr fiel
         </font>
        </property>
        <property name="text">
-        <string>&amp;Help</string>
+        <string>&amp;Learn more...</string>
        </property>
       </widget>
      </item>

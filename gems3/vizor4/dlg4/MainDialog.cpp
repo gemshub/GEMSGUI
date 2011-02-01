@@ -17,9 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *GEMS_ABOUT_HTML = "g_about";
-const char *GEMS_GETST_HTML = "gemstart-body";
-
 #include <qlabel.h>
 #include <qvariant.h>
 
@@ -28,11 +25,8 @@ const char *GEMS_GETST_HTML = "gemstart-body";
 #include "EQDialog.h"
 #include "SettingsDialog.h"
 
-//#include "visor.h"
 #include "service.h"
 #include "visor_w.h"
-//#include "verror.h"
-
 
 MainDialog::MainDialog(QWidget* parent):
     QWidget(parent )
@@ -89,7 +83,7 @@ void MainDialog::CmExit()
 
 void MainDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_GETST_HTML );  
+    pVisorImp->OpenHelp( GEMS_TUTOR_HTML );
 }
 
 void MainDialog::CmAbout()

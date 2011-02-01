@@ -16,8 +16,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *GTDEMO_HTML = "gm_gtdemo";
-
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
@@ -25,10 +23,9 @@ const char *GTDEMO_HTML = "gm_gtdemo";
 #include <qvariant.h>
 
 #include "GtDemoWizard.h"
-//#include "gstring.h"
 #include "visor_w.h"
 #include "m_param.h"
-
+#include "service.h"
 
 void GtDemoWizard::languageChange()
 {
@@ -216,7 +213,7 @@ GtDemoWizard::getPrKey()
 
 void GtDemoWizard::help()
 {
-  pVisorImp->OpenHelp( GTDEMO_HTML, 0 );
+  pVisorImp->OpenHelp( GM_GTDEMO_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
 }
 
 //==============================================================================

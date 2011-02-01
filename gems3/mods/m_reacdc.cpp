@@ -17,7 +17,6 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-const char *GEMS_RE_HTML = "gm_reacdc";
 
 #include <math.h>
 
@@ -1680,7 +1679,7 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
 // Help on ReacDC module ( ? button )
 const char* TReacDC::GetHtml()
 {
-   return GEMS_RE_HTML;
+   return GM_REACDC_HTML;
 }
 
 

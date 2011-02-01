@@ -17,8 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *RTPARM_HTML = "gm_rtparm";
-
 #include <math.h>
 #include <qspinbox.h>
 #include <qstring.h>
@@ -231,7 +229,7 @@ void   RTparmWizard::getFloat( float val[6] )
 void
 RTparmWizard::help()
 {
-  pVisorImp->OpenHelp( RTPARM_HTML, 0 );
+  pVisorImp->OpenHelp( GM_RTPARM_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
 }
 
 

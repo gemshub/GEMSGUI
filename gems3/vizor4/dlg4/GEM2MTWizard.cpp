@@ -17,8 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *GEM2MT_HTML = "gm_gem2mt";
-
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
@@ -28,6 +26,7 @@ const char *GEM2MT_HTML = "gm_gem2mt";
 #include "GEM2MTWizard.h"
 #include "gstring.h"
 #include "visor_w.h"
+#include "service.h"
 
 void GEM2MTWizard::languageChange()
 {
@@ -271,7 +270,7 @@ void   GEM2MTWizard::getFlags( char flgs[22] )
 void
 GEM2MTWizard::help()
 {
-  pVisorImp->OpenHelp( GEM2MT_HTML, 0 );
+  pVisorImp->OpenHelp( GM_GEM2MT_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
 }
 
 //--------------------- End of GEM2MTWizard.cpp ---------------------------

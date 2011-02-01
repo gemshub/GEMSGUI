@@ -17,19 +17,16 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *UNSPACE_HTML = "gm_unspace";
-
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
 #include <qvariant.h>
 
-
 #include "UnSpaceWizard.h"
 #include "gstring.h"
 #include "visor_w.h"
-
+#include "service.h"
 
 void UnSpaceWizard::languageChange()
 {
@@ -361,7 +358,7 @@ void   UnSpaceWizard::getFlags( char flgs[38] )
 void
 UnSpaceWizard::help()
 {
-  pVisorImp->OpenHelp( UNSPACE_HTML, 0 );
+  pVisorImp->OpenHelp( GM_UNSPACE_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
 }
 
 //--------------------- End of UnSpaceWizard.cpp ---------------------------

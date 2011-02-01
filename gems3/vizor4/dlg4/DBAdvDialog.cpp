@@ -17,9 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *GEMS_MISC_HTML = "g_miscel";
-const char *GEMS_FORM_HTML = "g_miscel";
-
 #include <qlabel.h>
 #include <qvariant.h>
 #include <QCloseEvent>
@@ -29,6 +26,7 @@ const char *GEMS_FORM_HTML = "g_miscel";
 #include "v_mod.h"
 #include "module_w.h"
 #include "visor_w.h"
+#include "service.h"
 
 DBAdvDialog::DBAdvDialog(QWidget* parent, const char* name)
     : QWidget(parent)
@@ -54,12 +52,12 @@ void DBAdvDialog::CmBack()
 
 void DBAdvDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_MISC_HTML );
+    pVisorImp->OpenHelp( GEMS_MISCL_HTML );
 }
 
 void DBAdvDialog::CmFormats()
 {
-    pVisorImp->OpenHelp( GEMS_FORM_HTML );
+    pVisorImp->OpenHelp( GEMS_MISCL_HTML, "FORMATS" );
 }
 
 void DBAdvDialog::CmOpen_PROBE()

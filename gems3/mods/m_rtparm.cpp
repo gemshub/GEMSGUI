@@ -18,8 +18,6 @@
 //-------------------------------------------------------------------
 //
 
-const char *GEMS_RTP_HTML = "gm_rtparm";
-
 #include <math.h>
 #include <stdio.h>
 
@@ -685,7 +683,7 @@ TRTParm::RecCalc( const char *key )
 
 const char* TRTParm::GetHtml()
 {
-   return GEMS_RTP_HTML;
+   return GM_RTPARM_HTML;
 }
 
 

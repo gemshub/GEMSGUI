@@ -17,8 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *PROCESS_WIZARD_HTML = "gm_proces";
-
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
@@ -511,7 +509,7 @@ void   ProcessWizard::getFlags( char flgs[24] )
 void
 ProcessWizard::help()
 {
-   pVisorImp->OpenHelp( PROCESS_WIZARD_HTML, 0 );
+   pVisorImp->OpenHelp( GM_PROCES_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
 }
 
 //=============================================================================

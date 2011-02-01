@@ -17,8 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *DCOMP_HTML = "gm_dcomp";
-
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <qstring.h>
@@ -30,6 +28,7 @@ const char *DCOMP_HTML = "gm_dcomp";
 
 #include "DCompWizard.h"
 #include "visor_w.h"
+#include "service.h"
 
 void DCompWizard::languageChange()
 {
@@ -183,7 +182,7 @@ void DCompWizard::getFlags( char flgs[15] )
 void
 DCompWizard::help()
 {
-  pVisorImp->OpenHelp( DCOMP_HTML, 0 );
+   pVisorImp->OpenHelp( GM_DCOMP_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
 }
 
 //--------------------- End of DCompWizard.cpp ---------------------------
