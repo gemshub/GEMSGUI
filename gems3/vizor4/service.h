@@ -193,8 +193,10 @@ extern const char *GM_RTPARM_WZ_HTML; //RTparmWizard
 extern const char *GM_PHASE_HTML;     //m_phase.cpp
 extern const char *GM_PHASE_WZ_HTML;  //PhaseWizard
 extern const char *GM_SDREF_HTML;     //m_sdata.cpp
+extern const char *GM_CONST_HTML;     //m_const.cpp
 extern const char *GM_PROJECT_HTML;   //m_param.cpp
 extern const char *GM_PROJECT_WZ_HTML;//ProjectWizard
+extern const char *GM_SYSEQ_HTML;        //m_syseq.cpp
 extern const char *GEMS_SYSTEM_WZ_HTML;//SystemWizard
 extern const char *GM_PROCES_HTML;     //m_proces.cpp
 extern const char *GM_PROCES_WZ_HTML;  //ProcesWizard

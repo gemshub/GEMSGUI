@@ -814,7 +814,11 @@ void TSysEq::RenameList( const char* newName,
     }
 }
 
-
+// Help on module  ( ? button )
+const char* TSysEq::GetHtml()
+{
+   return GM_SYSEQ_HTML;
+}
 
 
 //--------------------- End of m_syseq.cpp ---------------------------

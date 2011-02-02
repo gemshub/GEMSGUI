@@ -52,6 +52,7 @@ public:
     void dyn_kill( int i=0);
     void dyn_new( int i=0);
     void set_def( int i=0);
+    const char* GetHtml();
     void *CA;
 
 };

@@ -17,9 +17,11 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
+
 #include "m_const.h"
 #include "v_object.h"
 #include "v_mod.h"
+#include "service.h"
 
 TConst* TConst::pm;
 
@@ -70,6 +72,12 @@ void TConst::dyn_kill(int)
 void TConst::dyn_new(int)
 {
     CA = aObj[o_const].Alloc( Dim[0]*Dim[1], Dim[2], Dim[3] );
+}
+
+// Help on Compos module  ( ? button )
+const char* TConst::GetHtml()
+{
+   return GM_CONST_HTML;
 }
 
 

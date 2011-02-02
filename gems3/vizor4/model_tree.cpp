@@ -21,13 +21,11 @@
 #include "units.h"
 
 #include "visor_w.h"
-//#include "module_w.h"
 #include "service.h"
-//#include "m_sdata.h"
 #include "m_param.h"
 #include "CalcDialog.h"
 #include "CalcCheckDialog.h"
-//extern const char *GEMS_OBJNDX_HTML;
+
 
 
 TreeLine::TreeLine(int aiPh, int aiDC, int aiDCPh):

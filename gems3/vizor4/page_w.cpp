@@ -26,8 +26,6 @@
 #include "module_w.h"
 #include "page_w.h"
 
-//const char *GEMS_OBJNDX_HTML = "g_objndx.html";
-
 const int wdSPACE = 8;
 const int htSPACE = 2;
 const int wdFSPACE = wdSPACE;

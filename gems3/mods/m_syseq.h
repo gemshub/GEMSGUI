@@ -197,6 +197,7 @@ public:
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
     void RecSave( const char *key, bool onOld );
+    const char* GetHtml();
 
     // set to 1 if have been calculated equation state for this record
     bool ifCalcFlag();
