@@ -26,15 +26,14 @@
 
 #include "v_user.h"
 #include "visor_w.h"
+#include "service.h"
 
-
-const char* GEMS_FILL_HTML = "exclude_fill";
 
 ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
       TCStringArray& aICkeys, double fill_data ):
         QDialog(win )
 {
-    //resize( 629, 421 );
+   setWindowModality(Qt::WindowModal);
     
 	setWindowTitle( trUtf8( caption ) );
     // qt3to4 setSizeGripEnabled( TRUE );
@@ -112,7 +111,7 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
     buttonBox->addStretch();
 
     buttonHelp = new QPushButton( this );
-    buttonHelp->setText( trUtf8( "&Help" ) );
+    buttonHelp->setText( trUtf8( "&What does\n it mean?" ) );
     buttonHelp->setAutoDefault( TRUE );
     buttonBox->addWidget( buttonHelp );
 
@@ -171,7 +170,7 @@ ExcludeFillDialog::~ExcludeFillDialog()
 void
 ExcludeFillDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_FILL_HTML, 0 );
+    pVisorImp->OpenHelp( GEMS_MISSING_HTML, "MISSING" );
 }
 
 

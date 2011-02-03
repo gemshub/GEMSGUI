@@ -16,10 +16,6 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-//const char *GEMS_SYS_HTML = "gems_sys";
-//const char *GEMS_BCC_HTML = "gems_bcc";
-//const char *GEMS_IPM_HTML = "gems_ipm";
-//const char *GEMS_HOWTO_HTML = "ge_howto";
 
 #include <math.h>
 
@@ -29,7 +25,6 @@
 #include <QCloseEvent>
 
 #include "NewSystemDialog.h"
-//#include "ProgressDialog.h"
 #include "v_mod.h"
 #include "service.h"
 #include "visor.h"

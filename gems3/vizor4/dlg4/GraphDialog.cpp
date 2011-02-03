@@ -33,7 +33,7 @@
 #include "visor_w.h"
 #include "v_object.h"
 #include "visor.h"
-//#include "service.h"
+#include "service.h"
 
 /*! Empric function to select new color for every new plotting line
 */
@@ -161,6 +161,8 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
 
     plot->setGridCount(gr_data.axisType);
     plot->setAxisTitles(gr_data.xName.c_str(), gr_data.yName.c_str());
+
+    QObject::connect(pHelp, SIGNAL(clicked()), this, SLOT(CmHelp()));
 
     // Insert labels in legend box
     if( gr_data.graphType != ISOLINES )
@@ -649,6 +651,10 @@ GraphDialog::getBackgrColor()
     return  plot->palette().color(QPalette::Window/*QPalette::Background*/); //backgroundColor();
 }
 
+void GraphDialog::CmHelp()
+{
+    pVisorImp->OpenHelp( GEMS_GRAPH_HTML );
+}
 
 //*************************************************
 //--------- PlotTypeBtn -------

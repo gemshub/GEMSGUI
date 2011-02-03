@@ -124,6 +124,7 @@ protected slots:
      void CmPrResults();
 
     void CmHelp();
+    void CmHelp2();
     void CmMoreBCC();
     void CmMoreIPM();
     void CmHowto();

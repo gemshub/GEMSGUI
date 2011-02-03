@@ -101,6 +101,7 @@ protected slots:
     virtual void CmLegend();
     virtual void CmPrint();
     virtual void CmSave();
+    virtual void CmHelp();
 
 protected:
     void resizeEvent(QResizeEvent* qpev);

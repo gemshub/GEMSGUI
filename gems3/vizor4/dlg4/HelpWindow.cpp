@@ -540,6 +540,7 @@ void VersionDialog::languageChange()
 
 const char *WZSTEP = "WZSTEP";
 const char *MWPAGE = "MWPAGE";
+const char *DBM = "DBM";
 
 // modules
 const char *GM_COMPOS_WZ_HTML = "gm_compos";
@@ -554,7 +555,7 @@ const char *GM_RTPARM_WZ_HTML = "gm_rtparm";     //RTparmWizard
 const char *GM_PHASE_HTML = "gm_phase";          //m_phase.cpp
 const char *GM_PHASE_WZ_HTML = "gm_phase";       //PhaseWizard
 const char *GM_SDREF_HTML = "gm_sdref";          //m_sdata.cpp
-const char *GM_CONST_HTML = "gm_sdref";          //m_const.cpp
+const char *GM_CONST_HTML = "gm_const";          //m_const.cpp
 const char *GM_PROJECT_HTML = "gm_project";      //m_param.cpp
 const char *GM_PROJECT_WZ_HTML = "gm_project";   //ProjectWizard
 const char *GM_SYSEQ_HTML = "gm_syseq";        //m_syseq.cpp
@@ -576,6 +577,16 @@ const char *GEMS_TUTOR_HTML = "gems_tutorial";    // MainDialog
 const char *GEMS_SETUP_HTML = "gems_setup";       // SettingsDialog
 const char *GEMS_TDBAS_HTML = "gems_tdbase";      // DBDialog
 const char *GEMS_MISCL_HTML = "gems_miscel";      // DBAdvDialog
+const char* GEMS_REKEY_HTML = "gems_rekey";       // KeyFilter
+const char *GEMS_MPROJ_HTML = "gm_project";       // KeyProfile
+const char *GEMS_MPROJ_LF_HTML = "gm_project";    // ListFilesDialog
+const char *GEMS_ONESYS_HTML = "gems_sys";        // NewSystemDialog
+const char *GEMS_BCC_HTML = "gems_bcc";
+const char *GEMS_IPM_HTML = "gems_ipm";
+const char *GEMS_RECIPE_HTML = "gems_bcc";     // InputSystemDialog
+const char *GEMS_GRAPH_HTML = "gems_graph"; // GraphDialog&LegendDialog
+const char* GEMS_MISSING_HTML = "gems_bcc";    // ExcludeFillDialog
+
 
 
 //-------- End of file HelpWindow.cpp ----------------------------

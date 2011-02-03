@@ -58,6 +58,7 @@ public:
 
 protected slots:
     virtual void CmApply();
+    void CmHelp();
     virtual void SetLine(int);
     virtual void accept();
     virtual void CmBackground();

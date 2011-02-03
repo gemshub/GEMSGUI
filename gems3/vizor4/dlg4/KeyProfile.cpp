@@ -16,7 +16,6 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-const char *GEMS_GP_HTML = "gp_howto";
 
 #include <QListWidget>
 #include <qcheckbox.h>
@@ -27,7 +26,7 @@ const char *GEMS_GP_HTML = "gp_howto";
 #include "KeyProfile.h"
 #include "visor_w.h"
 #include "visor.h"
-
+#include "service.h"
 
 KeyProfile::KeyProfile( QWidget* win, int irt, const char* caption):
         QDialog( win),
@@ -106,7 +105,7 @@ void KeyProfile::CmNew()
 
 void KeyProfile::CmHelp()
 {
-  pVisorImp->OpenHelp( GEMS_GP_HTML, 0 );
+  pVisorImp->OpenHelp( GEMS_MPROJ_HTML, "HOWTO" );
 }
 
 bool

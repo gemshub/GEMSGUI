@@ -17,8 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *SYSTEM_HTML = "gems_bcc";
-
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <qstring.h>
@@ -314,7 +312,7 @@ void InputSystemDialog::CmPrint()
 void
 InputSystemDialog::help()
 {
-  pVisorImp->OpenHelp( SYSTEM_HTML, 0 );
+  pVisorImp->OpenHelp( GEMS_RECIPE_HTML, "RECIPE" );
 }
 
 int InputSystemDialog::tableFindRow( int nO, int ndx)

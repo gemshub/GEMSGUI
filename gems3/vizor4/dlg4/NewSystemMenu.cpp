@@ -16,10 +16,6 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-const char *GEMS_SYS_HTML = "gems_sys";
-const char *GEMS_BCC_HTML = "gems_bcc";
-const char *GEMS_IPM_HTML = "gems_ipm";
-const char *GEMS_HOWTO_HTML = "ge_howto";
 
 #include <math.h>
 
@@ -87,6 +83,7 @@ NewSystemDialog::setActions()
    
     connect( actionPrevious, SIGNAL( triggered()), this, SLOT(CmPrevious()));
     connect( actionNext, SIGNAL( triggered()), this, SLOT(CmNext()));
+    connect( actionHelp_2, SIGNAL( triggered()), this, SLOT(CmHelp2()));
 
     connect( TabWid, SIGNAL( currentChanged ( int ) ), this, SLOT(Update()));
     actionPrecise->setChecked(TProfil::pm->pa.p.PRD);
@@ -615,7 +612,16 @@ NewSystemDialog::CmPrInput()
 void
 NewSystemDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_SYS_HTML );
+    pVisorImp->OpenHelp( GEMS_ONESYS_HTML );
+}
+
+void
+NewSystemDialog::CmHelp2()
+{
+    if( TabWid->currentIndex() == 0 )
+       pVisorImp->OpenHelp( GEMS_BCC_HTML, "TAB_INPUT");
+    else
+       pVisorImp->OpenHelp( GEMS_ONESYS_HTML, "TAB_RESULTS" );
 }
 
 void
@@ -634,7 +640,7 @@ NewSystemDialog::CmMoreIPM()
 void
 NewSystemDialog::CmHowto()
 {
-    pVisorImp->OpenHelp( GEMS_HOWTO_HTML );
+    pVisorImp->OpenHelp( GEMS_ONESYS_HTML, "HOWTO" );
 }
 
 void

@@ -16,9 +16,6 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-const char *GEMS_LF_HTML = "g_miscel";
-
-
 
 #include <QTreeWidget>
 #include <qlabel.h>
@@ -28,7 +25,7 @@ const char *GEMS_LF_HTML = "g_miscel";
 #include "visor.h"
 #include "visor_w.h"
 #include "v_module.h"
-
+#include "service.h"
 
 ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const char* /*caption*/ )
     : QDialog(parent )
@@ -125,8 +122,7 @@ void ListFilesDialog::languageChange()
 
 void ListFilesDialog::CmHelp()
 {
-//  pVisorImp->OpenHelp( GEMS_GP_HTML, 0 );
-    pVisorImp->OpenHelp( GEMS_LF_HTML, 0 );
+    pVisorImp->OpenHelp( GEMS_MPROJ_LF_HTML, "FILES" );
 }
 
 /*! returns selection array

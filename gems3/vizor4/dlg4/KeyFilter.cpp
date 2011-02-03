@@ -133,10 +133,10 @@ KeyFilter::KeyFilter(QWidget* win, int irt, const char* key,
 void
 KeyFilter::CmHelp()
 {                               
-   gstring dbName = GEMS_RKEY_HTML;
-   dbName += "#dbm_";
+   gstring dbName =  DBM;
+   dbName +="_";
    dbName += gstring(aMod[iRt].GetName());
-   pVisorImp->OpenHelp(  dbName.c_str(), 0 );
+   pVisorImp->OpenHelp(  GEMS_REKEY_HTML, dbName.c_str() );
 }
 
 void

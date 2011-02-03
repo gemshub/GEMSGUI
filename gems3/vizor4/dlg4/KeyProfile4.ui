@@ -122,7 +122,7 @@
         <string>Learn about Modelling Project concept and project configuration</string>
        </property>
        <property name="text">
-        <string>&amp;Help</string>
+        <string>&amp;Learn more...</string>
        </property>
       </widget>
      </item>

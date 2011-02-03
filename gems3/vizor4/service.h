@@ -179,6 +179,7 @@ bool vfLookupDialogSet(QWidget* wpar, char flags[4],
 
 extern const char *WZSTEP;
 extern const char *MWPAGE;
+extern const char *DBM;
 
 // modules
 extern const char *GM_COMPOS_WZ_HTML; //ComposWizard
@@ -215,6 +216,17 @@ extern const char *GEMS_TUTOR_HTML;    // MainDialog
 extern const char *GEMS_SETUP_HTML;    // SettingsDialog
 extern const char *GEMS_TDBAS_HTML;    // DBDialog
 extern const char *GEMS_MISCL_HTML;     // DBAdvDialog
+extern const char* GEMS_REKEY_HTML;      // KeyFilter
+extern const char *GEMS_MPROJ_HTML;      // KeyProfile
+extern const char *GEMS_MPROJ_LF_HTML;   // ListFilesDialog
+extern const char *GEMS_MPROJ_LF_HTML;   // ListFilesDialog
+extern const char *GEMS_ONESYS_HTML;     // NewSystemDialog
+extern const char *GEMS_BCC_HTML;
+extern const char *GEMS_IPM_HTML;
+extern const char *GEMS_RECIPE_HTML;    // InputSystemDialog
+extern const char *GEMS_GRAPH_HTML; // GraphDialog&LegendDialog
+extern const char* GEMS_MISSING_HTML;    // ExcludeFillDialog
+
 
 #endif // _service_h
 

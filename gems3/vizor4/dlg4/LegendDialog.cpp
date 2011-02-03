@@ -83,7 +83,8 @@ LegendDialog::LegendDialog( GraphDialog * aGraph ):
    /// Qt 4 
     B_2 = new QButtonGroup( plotsLst );
     connect( B_2, SIGNAL(buttonClicked(int)), this, SLOT(SetLine(int)) );
-    
+    connect(pHelp, SIGNAL(clicked()), this, SLOT(CmHelp()));
+
     plotLayout = new QGridLayout( plotsLst );
     plotLayout->setHorizontalSpacing( 10 );
     plotLayout->setVerticalSpacing(0);
@@ -357,6 +358,10 @@ void LegendDialog::CmChangeLabelFont()
     }
 }
 
+void LegendDialog::CmHelp()
+{
+    pVisorImp->OpenHelp( GEMS_GRAPH_HTML, "CUSTOMIZE" );
+}
 
 //--------------------- End of LegendDialog.cpp ---------------------------
 
