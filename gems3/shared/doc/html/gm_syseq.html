@@ -1,34 +1,42 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-  <meta http-equiv="Content-Type"
- content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR"
- content="Mozilla/4.72 [en]C-BLUEWIN-CH20  (Win98; I) [Netscape]">
-  <title>GEMS SysEq Module Manual</title>
+<html><head>
+  
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+  
+  <meta name="GENERATOR" content="Mozilla/4.72 [en]C-BLUEWIN-CH20  (Win98; I) [Netscape]">
+  <title>GEMS3 SysEq Module</title>
+
+  
+  
   <meta name="description" content="Version 2.0.0-PSI">
-</head>
-<body>
-<h1><img src="gems1.png" align="left" height="48" width="48"> <font
- color="#000066"> GEM-Selektor version 2-PSI</font></h1>
+
+</head><body>
+<h1><img src="gems1.png" align="left" height="48" width="48"> <font color="#000066"> GEM-Selektor version 3<br>
+</font></h1>
+
 <h2>SysEq&nbsp; Module and Data Objects </h2>
+
 <hr size="2" width="100%">
 <h3>Contents</h3>
+
 <p><font face="Helvetica, Arial, sans-serif"><a href="#SYSEQ_INTRO">1.
 SysEq:
 Packed CSD and GEM results for equilibrium state</a></font><br>
 </p>
+
 <p><br>
 <br>
 </p>
+
 <hr size="2" width="100%">
 <h2><a name="SYSEQ_INTRO"></a>1. SysEq: Packed CSD and GEM results for
 equilibrium state </h2>
+
 <p>The main purpose of SysEq module to keep in SysEq database records
 only that part of information about CSD and GEM IPM calculated
 equilibrium speciation, which differs from that kept in the lists and
-vectors of the Project System data structure (stored in a <a
- href="gm_project.html">Project</a> record). By default, all species,
+vectors of the Project System data structure (stored in a <a href="gm_project.html">Project</a> record). By default, all species,
 phases and compositions involved in the project
 system are considered as "switched on". The default vector of bulk
 composition
@@ -37,6 +45,7 @@ where
 the equilibrium&nbsp; speciation and chemical potentials are to be
 placed
 after the GEM IPM calculation. </p>
+
 <p>For a particular chemical system definition to be stored in a SysEq
 record, one has to specify its label (name), bulk composition variant
 number ,
@@ -54,6 +63,7 @@ Thermodynamic
 System" dialog (see more in <a href="gems_sys.html">gems_sys.html</a>
 manual).&nbsp;
 </p>
+
 When the system definition is done and the equilibrium state is
 computed, another task of SysEq record is to store the results in a
 maximally economic form. This is especially important for
@@ -73,6 +83,7 @@ template for "cloning" new SysEq records (this is automatically done by
 the <a href="file:///C:/gems2html/program/doc/html/gp_howto.html#P3270">Process
 simulator</a>).
 <h4> <tt>3.4.5. Configuring Lists of Species and Phases</tt></h4>
+
 &nbsp;After you have pressed the "Clear All" button in "Reorganization
 of data fields" dialog,&nbsp; you will get into a "SysEq: Remake
 Parameters" window. This window contains many switches and flags, and
@@ -89,8 +100,7 @@ xa_ column to define bulk composition of the system. If the GCO list
 which
 you see on this screen is insufficient for specifying all the bulk
 composition, press "Dcomp" button and put appropriate numbers into xd_
-column there (take care about <a
- href="file:///C:/gems2html/program/doc/html/GEMS-Linux-USREF.html#P6104">units
+column there (take care about <a href="file:///C:/gems2html/program/doc/html/GEMS-Linux-USREF.html#P6104">units
 of measurement</a>). Press&nbsp; "Phase" button and check out phases
 which you will definitely not consider in your modeling (don't check
 out most of solid phases as you may loose the advantages of GEM
@@ -99,19 +109,21 @@ complete defining bulk composition of the system by putting numbers
 into the bi_ column, if necessary.
 <p><br>
 </p>
+
 <p>Now, select the <tt>SysEq dialog</tt> window and press a big&nbsp;
 "BCC" button (Bulk Composition Calculation) in the upper left corner.
 In most cases, you will get a warning like this: </p>
-<p><img src="file:///C:/gems2html/program/doc/html/BCC_wrn.png"
- height="138" width="431"> </p>
-<p>This warning is very important. DB is a <a
- href="file:///C:/gems2html/program/doc/html/gp_howto.html#P3211">numerical
+
+<p><img src="file:///C:/gems2html/program/doc/html/BCC_wrn.png" height="138" width="431"> </p>
+
+<p>This warning is very important. DB is a <a href="file:///C:/gems2html/program/doc/html/gp_howto.html#P3211">numerical
 threshold</a> of the IPM algorithm defining a minimum possible number
 of moles of an independent component in bulk composition of the system.
 So, the first line of this warning means that there are some chemical
 elements for which calculation of the bulk composition results in zero,
 too small positive,
 or negative value. </p>
+
 <p>One possibility is that you&nbsp; do not have data for these
 elements and
 do not want to consider them in your calculations. If so, press a "<tt>Switch
@@ -127,6 +139,7 @@ again).
 Examine the first column in either of System:: Icomp, Phase and Dcomp
 screen
 forms to see what exactly has been switched off. </p>
+
 <p>Another possibility is that you did something wrong when specifying
 the bulk composition (entered too small value, or missed to put in
 correct
@@ -148,6 +161,7 @@ turn
 scores of them on after they have been automatically excluded by
 mistake.
 </p>
+
 <p>Sometimes on pressing the "BCC" or the "GEM IPM" buttons, the
 program issues
 another warning that "Charge imbalance in calculated bulk composition.
@@ -159,15 +173,18 @@ to set total charge (Zz) to zero in the B_ vector and proceed with
 calculations, or "<tt>No</tt>"&nbsp; to see how big is charge
 imbalance, find and correct the bug, and re-calculate the bulk
 composition. </p>
+
 <p>Now you a ready to proceed with calculation of equilibrium in the
 newly-defined system; close the "System" window to speed the program
 up. Press "Save" button (optionally). <br>
 &nbsp; </p>
+
 <p><br>
 &nbsp; <br>
 &nbsp; <br>
 3. SysEq Data Entries <br>
 </p>
+
 <p>&nbsp;These data entries can appear on pages of SysEq window that
 can be
 opened in the "Database Maintenance" mode of GEM-Selektor. Most of
@@ -175,7 +192,9 @@ these data
 objects are automatically expanded when the SysEq record is loaded from
 the
 database in"Calculation of Equilibria" mode. &nbsp;</p>
+
 <dl>
+
   <dd><br>
   </dd>
   <dt> <a name="tPx"></a><big><b><tt>tPx</tt></b></big> - Internal
@@ -288,8 +307,7 @@ vector&nbsp;</dt>
   <dd>&nbsp;<br>
   </dd>
   <dt> <a name="tBCu_"></a><big><b><tt>tBCu_</tt></b></big> - Scales
-of IC quantity/concentration (packed together with the <a
- href="gems_bcc.html#bi_"><tt>bi_</tt></a> vector)</dt>
+of IC quantity/concentration (packed together with the <a href="gems_bcc.html#bi_"><tt>bi_</tt></a> vector)</dt>
   <dd> &nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
@@ -600,16 +618,23 @@ reserved</dd>
   <dd><br>
   </dd>
   <dd style="color: rgb(255, 0, 0);">&lt;Under construction&gt;&nbsp;</dd>
-  <dd style="color: rgb(255, 0, 0);">To be completed in version 2.2&nbsp;
-  </dd>
+  <dd style="color: rgb(255, 0, 0);">To be completed in version
+2.2&nbsp; </dd>
 </dl>
+
 <hr style="color: rgb(255, 0, 0);" size="2" width="100%"><tt><br>
 end of file</tt> <br>
+
 &nbsp; <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
-</body>
-</html>
+
+</body></html>

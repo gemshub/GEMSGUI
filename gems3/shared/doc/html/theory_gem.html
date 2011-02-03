@@ -1,20 +1,27 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-  <meta http-equiv="Content-Type"
- content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR"
- content="Mozilla/4.72 [en]C-BLUEWIN-CH20  (Win98; I) [Netscape]">
-  <title>GEM-Selektor Theor GEM Manual</title>
-</head>
-<body>
+<html><head>
+  
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+  
+  <meta name="GENERATOR" content="Mozilla/4.72 [en]C-BLUEWIN-CH20  (Win98; I) [Netscape]">
+  <title>GEMS3 Theoretical Issues</title>
+
+  
+</head><body>
 <h1><img src="gems1.png" align="left" height="48" width="48">
-GEM-Selektor version 2-PSI </h1>
+GEM-Selektor version 3<br>
+</h1>
+
 <h2>Theoretical issues of GEM equilibria calculations&nbsp; </h2>
+
 <p> </p>
+
 <hr size="2" width="100%">
 <h2> </h2>
+
 <h3>Contents&nbsp; </h3>
+
 <blockquote>
   <p><font face="Helvetica, Arial, sans-serif"><a href="#CONVEX_PROG">1.
 The
@@ -25,11 +32,9 @@ Karpov
 &nbsp; </font></p>
   <p><font face="Helvetica, Arial, sans-serif"><a href="#IPM_ALGORITHM">3.
 The Interior Points Method (IPM) algorithm</a> </font></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a
- href="#ACTIVITY_COEFFICIENTS">4. Calculation of activity coefficients
+  <p><font face="Helvetica, Arial, sans-serif"><a href="#ACTIVITY_COEFFICIENTS">4. Calculation of activity coefficients
 in non-ideal mixed phases</a>&nbsp; </font></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a
- href="#IRREVERSIBLE_PROCESS">5. Simulation of irreversible
+  <p><font face="Helvetica, Arial, sans-serif"><a href="#IRREVERSIBLE_PROCESS">5. Simulation of irreversible
 mass-transfer processes</a>&nbsp; </font></p>
   <p><font face="Helvetica, Arial, sans-serif"><a href="#DUAL_THERMO">6.
 Dual-Thermodynamic
@@ -37,33 +42,32 @@ calculations (under construction)</a></font></p>
   <p><font face="Helvetica, Arial, sans-serif"><a href="#UNCERT_SPACE">7.
 Uncertainty Space calculations (under construction)</a>&nbsp;</font></p>
 </blockquote>
+
 <p><br>
 </p>
+
 <hr size="2" width="100%">
 <h2><a name="CONVEX_PROG"></a>1. The convex programming approach to
 chemical equilibria </h2>
+
 <p> GEM-Selektor is an implementation of a convex programming approach
 to
-Gibbs energy minimization calculations of chemical equilibria ([<a
- href="g_litref.html#%5B1981KAR%5D">1981KAR</a>]; [<a
- href="g_litref.html#%5B1997KAR/CHU%5D">1997KAR/CHU</a>]; [<a
- href="g_litref.html#%5B2000KUL%5D">2000KUL</a>]; [<a
- href="g_litref.html#%5B2001KAR/CHU%5D">2001KAR/CHU</a>]; [<a
- href="g_litref.html#%5B2002KUL%5D">2002KUL</a>]). In brief, <small><font
- size="+1"><small>this approach is an advanced numerical technique for
+Gibbs energy minimization calculations of chemical equilibria ([<a href="g_litref.html#%5B1981KAR%5D">1981KAR</a>]; [<a href="g_litref.html#%5B1997KAR/CHU%5D">1997KAR/CHU</a>]; [<a href="g_litref.html#%5B2000KUL%5D">2000KUL</a>]; [<a href="g_litref.html#%5B2001KAR/CHU%5D">2001KAR/CHU</a>]; [<a href="g_litref.html#%5B2002KUL%5D">2002KUL</a>]). In brief, <small><font size="+1"><small>this approach is an advanced numerical technique for
 thermodynamic modeling of heterogeneous aquatic (geo)chemical systems,
 especially
 those involving metastability and dispersity of mineral phases, solid
 solution - aqueous solution equilbria, and adsorption/ion exchange</small></font></small>.
 More details can also be found in the <span style="font-weight: bold;">TM-44-02-06
 PSI
-Technical report</span> (available as pdf files in the<span
- style="font-family: monospace;"> /program/doc/pdf/</span>&nbsp; or
+Technical report</span> (available as pdf files in the<span style="font-family: monospace;"> /program/doc/pdf/</span>&nbsp; or
 from the GEMS-PSI web page). </p>
+
 <br>
+
 <h2><a name="KUHN_TUCKER"></a>2. Karpov (Kuhn-Tucker) conditions,
 primal and
 dual GEM solutions&nbsp; &nbsp; </h2>
+
 <p>The Convex Programming approach uses the Kuhn-Tucker conditions and
 the
 Duality Theorem (details in Karpov, Chudnenko and Kulik 1997, <i>Amer.J.Sci</i>.
@@ -78,12 +82,14 @@ vector <i>u</i> (chemical potentials of stoichiometry units). A
 detailed
 description can also be found in <span style="font-weight: bold;">TM-44-02-06
 PSI
-Technical report</span> (available as Appendix in the pdf file in<span
- style="font-family: monospace;"> /program/doc/pdf/</span>&nbsp; or
+Technical report</span> (available as Appendix in the pdf file in<span style="font-family: monospace;"> /program/doc/pdf/</span>&nbsp; or
 from the GEMS-PSI web page). </p>
+
 <br>
+
 <h2><a name="IPM_ALGORITHM"></a>3. The Interior Points Method (IPM)
 algorithm </h2>
+
 <p>GEMS numerical kernel is an<b><i> Interior Points Method</i></b>
 (IPM) module for non-linear minimization of total Gibbs energy of the
 heterogeneous multi-phase chemical system. The IPM uses internally the
@@ -100,30 +106,34 @@ disposal
 or in aquatic geochemistry. Theoretical description with some examples
 can
 be found in the<span style="font-weight: bold;"> TM-44-02-06 PSI
-Technical report</span> (available as&nbsp; pdf files in<span
- style="font-family: monospace;"> /program/doc/pdf/</span>&nbsp;
+Technical report</span> (available as&nbsp; pdf files in<span style="font-family: monospace;"> /program/doc/pdf/</span>&nbsp;
 directory or from the GEMS-PSI web page). </p>
+
 <p>&nbsp;<br>
 </p>
+
 <h2><a name="ACTIVITY_COEFFICIENTS"></a>4. Calculation of activity
 coefficients in non-ideal mixed phases&nbsp; </h2>
+
 <p>On each iteration of the IPM algorithm, activity coefficients of
 chemical
 species in non-ideal multi-component phases must be calculated. For
 some
 common activity models, several built-in functions are available in
 GEM-selector
-code (see the&nbsp; <span
- style="font-weight: bold; font-family: monospace; text-decoration: underline;">Activity-Coeffs.pdf&nbsp;</span>
+code (see the&nbsp; <span style="font-weight: bold; font-family: monospace; text-decoration: underline;">Activity-Coeffs.pdf&nbsp;</span>
 manual.). If the required model
 is not available as a built-in fucntion, the user can always create
 his/her
 own equations for activity coefficients as <a href="gmscript.html">math
 scripts</a>
 in <a href="gm_phase.html">Phase</a> definition records. </p>
+
 <br>
+
 <h2><a name="IRREVERSIBLE_PROCESS"></a>5. Simulation of irreversible
 mass-transfer processes&nbsp; </h2>
+
 <p>GEM-Selektor module "<a href="gm_proces.html">Process</a>" can
 generate
 and plot large sequences of chemical equilibrium states to simulate the
@@ -139,9 +149,12 @@ to mole amount of any chemical species in the system.&nbsp;<br>
 <span style="font-family: monospace; text-decoration: underline;">Theorkin.html
 </span>&lt;under construction&gt;<br>
 </p>
+
 <br>
+
 <h2><a name="DUAL_THERMO"></a>6. Dual-Thermodynamic calculations (under
 construction)</h2>
+
 <p>The Karpov (Kuhn-Tucker) necessary and sufficient conditions of
 chemical
 equilibrium lead to the dual solution of GEM &nbsp;problem and thus -
@@ -166,14 +179,18 @@ stoichiometry
 and retrieve uncertainty intervals of <i>G</i><sup>*</sup> or activity
 coefficient
 estimates. </p>
+
 <p>To facilitate such calculations and help the users to do it
 efficiently,
 the DualTh module of GEM-Selektor is now under construction. It will be
 available
 in GEM-Selektor v.3-PSI. </p>
+
 <br>
+
 <h2><a name="UNCERT_SPACE"></a>7. Uncertainty Space calculations (under
 construction)</h2>
+
 <p>In geochemical modelling, all the input data are usually treated as
 deterministic,
 though in reality, neither the standard molar Gibbs energy of
@@ -188,8 +205,8 @@ work on a new approach to geochemical modelling under uncertainty of
 input
 data initiated by a paper [Karpov I.K. et al., <i>Russ. Geol. Geophys.</i>
 1999, v.<b>40</b>, p. 971-978]. </p>
-<p>Briefly, (more in <span
- style="font-family: monospace; text-decoration: underline;">Theoruns.html</span>
+
+<p>Briefly, (more in <span style="font-family: monospace; text-decoration: underline;">Theoruns.html</span>
 &lt;under
 construction&gt;) the new "uncetrtainty" approach combines (i) Gibbs
 energy
@@ -216,6 +233,7 @@ because
 the a priori correct phase assemblage (or experimental concentration)
 may
 not be the most frequent one(s) among sampled results.&nbsp;&nbsp; </p>
+
 The pilot studies performed so far [Chudnenko K.V. et al., PSI Bericht
 in
 preparation] shows that the new simulation technique indeed reveals
@@ -233,25 +251,38 @@ makes
 the GEM modelling results much more robust and their interpretation -
 more
 reliable. <br>
+
 <br>
+
 To facilitate GEM modelling under uncertainty and enhance modelling
 productivity,
 the UnSpace module of GEM-Selektor is under construction. It is
 supposed
 to be available in GEM-Selektor v.3-PSI. <br>
+
 <br>
+
 <br>
+
 <br>
+
 <span style="color: rgb(255, 0, 0);">To be extended in Version 2.2</span><br>
+
 <br>
+
 <hr size="2" width="100%">
 <p><tt><a href="index.html"> To Contents</a> &nbsp; &nbsp; &nbsp;
 &nbsp; &nbsp;<a href="g_about.html">About GEM-Selektor</a> </tt> </p>
+
 <p><tt>end of file</tt> <br>
 &nbsp; </p>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
-</body>
-</html>
+
+</body></html>

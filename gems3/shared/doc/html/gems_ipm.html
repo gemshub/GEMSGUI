@@ -1,20 +1,27 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-  <meta http-equiv="Content-Type"
- content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR"
- content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
-  <title>GEMS IPM Submodule Manual</title>
+<html><head>
+  
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+  
+  <meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
+  <title>GEMS3 IPM Submodule Manual</title>
+
+  
+  
   <meta name="description" content="Version 2.0.0-PSI">
-</head>
-<body>
-<h1><img src="gems1.png" align="left" height="48" width="48"> <font
- color="#000066"> GEM-Selektor version 2-PSI</font></h1>
+
+</head><body>
+<h1><img src="gems1.png" align="left" height="48" width="48"> <font color="#000066"> GEM-Selektor version 3<br>
+</font></h1>
+
 <p> </p>
-<h2> GEM IPM-2 Kernel Submodule Manual</h2>
+
+<h2> GEM IPM Kernel Submodule Manual</h2>
+
 <hr size="2" width="100%">
 <h3>Contents </h3>
+
 <blockquote>
   <p><font face="Helvetica, Arial, sans-serif"><a href="#MULTI_INTRO">1.
 The MULTI data structure and GEM IPM calculation of equilibrium states</a>
@@ -26,73 +33,77 @@ Numerical Settings&nbsp; to Control GEM IPM-2 Kernel Operation</font></a></p>
   <p><a href="#IPM_ERRORS"><font face="Helvetica, Arial, sans-serif">4.
 Warnings and Error Messages</font></a>&nbsp;</p>
 </blockquote>
+
 <hr size="2" width="100%">
 <p> </p>
+
 <h2><a name="MULTI_INTRO"></a>1. The MULTI data structure and GEM IPM
 calculation of equilibrium states<br>
 </h2>
+
 <br>
+
 This data structure is not stored in database; it is automatically
 created in the dynamic program memory when you press a "GEM IPM" button
-on the "Single Thermodynamic System" dialog or start a <a
- href="gm_proces.html">Process simulation</a> calculation. In
+on the "Single Thermodynamic System" dialog or start a <a href="gm_proces.html">Process simulation</a> calculation. In
 standalone GEMIPM2K program, the MULTI data structure is created and
 filled out by reading DCH and IPM input data files; then it remains
 intact during the whole runtime of GEMIPM2K instance. <br>
+
 <br>
+
 In GEM-Selektor, the MULTI
-structure is filled out using data and configuration flags from the <a
- href="gm_project.html">Project System data structure</a>. First,
+structure is filled out using data and configuration flags from the <a href="gm_project.html">Project System data structure</a>. First,
 thermodynamic data are recalcuated for the whole system profile if
 temperature or pressure have changed. Second, the program goes through
-the component and species selection switches in the <a
- href="gems_bcc.html">Project System CSD part</a>&nbsp;and
+the component and species selection switches in the <a href="gems_bcc.html">Project System CSD part</a>&nbsp;and
 takes into the MULTI structure only phases and species that were not
 switched off. Third, math scripts for the involved non-ideal phases
 are pre-processed, translated and stored into work arrays.
-Thermodynamic data are normalized and copied into MULTI vectors <a
- href="gems_sys.html#g0"><tt>g0</tt></a> and <tt><a
- href="gems_sys.html#v0">v0</a></tt> according to selected species
+Thermodynamic data are normalized and copied into MULTI vectors <a href="gems_sys.html#g0"><tt>g0</tt></a> and <tt><a href="gems_sys.html#v0">v0</a></tt> according to selected species
 only.. If the equilibrium state for this system has already been
 calculated then the respective SysEq record will be unpacked&nbsp; into
-the <a href="gems_sys.html#x"><tt>x</tt></a> and <a
- href="gems_sys.html#lnGam"><tt>lnGam </tt></a>vectors to be
+the <a href="gems_sys.html#x"><tt>x</tt></a> and <a href="gems_sys.html#lnGam"><tt>lnGam </tt></a>vectors to be
 (optionally) used as a "smart initial approximation" for the GEM
 IPM-2 algorithm.&nbsp; If sorption phases are present in the system
 then all necessary conversions of surface type parameters are
 performed as well. <br>
+
 <br>
+
 When the MULTI data structure is completely loaded, the GEM IPM-2
 calculation will be performed, as described in detail in publications
 [Karpov et al., 1997; 2001] and in the unpublished report TM-44-04-01
 available as a PDF file on the GEM-Selektor&nbsp; web site.
 This manual (see below) describes the data objects that control
 operation of GEM IPM-2 enhanced-accuracy algorithm. The output
-(equilibrium speciation etc.) data objects are described in the <a
- href="gems_sys.html">gems-sys.html</a> and<a href="gems_scm.html">
+(equilibrium speciation etc.) data objects are described in the <a href="gems_sys.html">gems-sys.html</a> and<a href="gems_scm.html">
 gems_scm.html</a> files.&nbsp;
 <p><br>
 </p>
+
 <hr size="2" width="100%">
 <h2><a name="GEM_IPM_INTRO"></a> 2. The GEM IPM-2 Algorithm </h2>
+
 <p>In short, operation of the GEM IPM-2 module proceeds as follows. <br>
 </p>
+
 <p>The Simplex initial approximation is computed (if specified e.g. in
 the "Calculate" "Simplex" menu command of the Single Thermodynamic
 System dialog). There are two controls - <a href="#Pa_EPS_0"><tt>Pa_EPS[0]</tt></a>
-and <a href="#Pa_GAN_0"><tt></tt></a><tt><a href="#Pa_GAN_1">Pa_GAN[1]</a></tt>
+and <tt><a href="#Pa_GAN_1">Pa_GAN[1]</a></tt>
 - that influence precision
 and result of the Simplex calculation, respectively. <br>
 </p>
+
 <p>Next, the EnterFeasibleDomain() procedure is
 executed for adjusting some elements of primal solution approximation
 for consistency with mass balance constraints and metastability
 restriction.
-This step is most sensitive to several controls - <tt><a href="#Pa_DHB">Pa_DHB</a>,<a
- href="#Pa_DFY_0"> Pa_DFY</a>, <a href="#Pa_GAN_2">Pa_GAN[2]</a>, <a
- href="#Pa_DPV_0">Pa_DPV</a></tt> - which also define the accuracy of
+This step is most sensitive to several controls - <tt><a href="#Pa_DHB">Pa_DHB</a>,<a href="#Pa_DFY_0"> Pa_DFY</a>, <a href="#Pa_GAN_2">Pa_GAN[2]</a>, <a href="#Pa_DPV_0">Pa_DPV</a></tt> - which also define the accuracy of
 GEM IPM
 results.&nbsp;</p>
+
 <p>Upon successful return from EnterFeasibleDomain(), the main loops of
 IPM
 iterations begin; the minimization problem is considered as solved when
@@ -105,17 +116,16 @@ executed to update DC activity coefficients (and Coulombic terms for
 electrostatic sorption models) in multicomponent phases. If math
 scripts are used in some phase
 definitions, they are calculated within the GammaCalc() procedure,
-which is controlled by <tt><a href="#Pa_AG">Pa_AG</a>, <a
- href="#Pa_DGC">Pa_DGC</a>, <a href="#Pa_PRD_0">Pa_PRD</a></tt>
+which is controlled by <tt><a href="#Pa_AG">Pa_AG</a>, <a href="#Pa_DGC">Pa_DGC</a>, <a href="#Pa_PRD_0">Pa_PRD</a></tt>
 values.
 In the course of IPM iterations, some phases and components can be
 eliminated if their quantities become smaller than the respective
-thresholds in <a href="#Pa_DS"><tt>Pa_DS</tt></a> and <a
- href="#Pa_XMI_0"><tt>Pa_XMI</tt></a> fields. Changing these fields can
+thresholds in <a href="#Pa_DS"><tt>Pa_DS</tt></a> and <a href="#Pa_XMI_0"><tt>Pa_XMI</tt></a> fields. Changing these fields can
 greatly affect convergence and final result of GEM IPM calculations,
 and
 therefore is not recommended for beginners. <br>
 </p>
+
 <p>After convergence of the main IPM descent, the control goes to
 PhaseSelect() (formerly Selekt2()) procedure that calculates Karpov's
 stability
@@ -123,16 +133,15 @@ criteria for all species and phases, including eliminated ones, and
 checks if some phases have been lost and must be restored in the x and
 Xa vectors. If this is the case, the control will go back to
 EnterFeasibleDomain() up
-to three times. Behavior of PhaseSelect() depends on the <a
- href="#Pa_PC"><tt>Pa_PC</tt></a> and <a href="#Pa_DF_0"><tt>Pa_DF</tt></a>
+to three times. Behavior of PhaseSelect() depends on the <a href="#Pa_PC"><tt>Pa_PC</tt></a> and <a href="#Pa_DF_0"><tt>Pa_DF</tt></a>
 controls. In addition, at this step, the mass balance accuracy of the
-IPM result is analyzed using the <tt><a href="#Pa_DHB">Pa_DHB</a>, <a
- href="#Pa_GAN_0">Pa_GAN</a>, <a href="#Pa_DPV_0">Pa_DPV</a></tt>
+IPM result is analyzed using the <tt><a href="#Pa_DHB">Pa_DHB</a>, <a href="#Pa_GAN_0">Pa_GAN</a>, <a href="#Pa_DPV_0">Pa_DPV</a></tt>
 controls; if necessary, the
 tolerances for EnterFeasibleDomain() are corrected and the control sent
 back
 to it up to 15 times. <br>
 </p>
+
 <p>When the whole GEM IPM-2 sequence has converged and the GEM-Selektor
 user has pressed
 "Accept" button, the MULTI structure remains intact in the memory, only
@@ -146,11 +155,13 @@ approximation mode" SIA. The operation mode can be set in GEM-Selektor
 main system dialog (menu "Calculate") and in Process and GEM2MT
 wizards. In GEMIPM2K, it can be set before every call of GEM
 calculation.&nbsp;</p>
+
 <p>The AIA mode always uses Simplex() procedure to get initial
 approximation of GEM IPM primal solution. In this mode, the program
 does more iterations, but requires no a priori information about the
 stable phase assemblage and equilibrium speciation in the system. <br>
 </p>
+
 <p>The SIA mode needs a previous GEM IPM solution for the same setup of
 chemical system because it avoids the Simplex() step. In most cases,
 GEM IPM converges rapidly in this mode with up to 10 times gain in
@@ -169,10 +180,12 @@ already AIA, the IPM calculation is stopped and an error message is
 generated. <br>
 <br>
 </p>
+
 <hr size="2" width="100%">
 <h2><a name="IPM_CONTROLS"></a>3. Numerical Settings to Control GEM
 IPM-2 Kernel
 Operation</h2>
+
 <p> The data objects listed below control the operation of enhanced GEM
 IPM-2 module. They are saved in GEMS database as part of the modelling
 project record and can be changed any time in the "Calculation of
@@ -186,10 +199,12 @@ will be lost). If you wish the changes to persist then save the Project
 record to database by clicking on the "Save" toolbar button (or
 "Record" "Save" menu command).<br>
 </p>
+
 <p>In GEMIPM2K program, the numerical settings are part of the IPM
 input file and can be changed there, if necessary. They remain valid
 for the whole existence of GEMIPM2K instance in computer memory. <br>
 </p>
+
 <p><b>Note that in most cases, there is no need to change default
 values of any of parameters listed below because these were found from
 an immense computational experience. Many numerical controls slightly
@@ -201,8 +216,11 @@ their values beyond the indicated intervals of possible values, may
 cause the program to crash, freese or produce meaningless
 results. <br>
 </b></p>
+
 <br>
+
 <dl>
+
   <dt> <a name="Pa_DB"></a><big><b><big><tt>Pa_DB</tt></big></b></big>
 -
 Cutoff minimum mole amount of Independent Component in the
@@ -220,8 +238,7 @@ Component <i>b<sub>i</sub></i>
 excluded from the system definition which will be compressed
 accordingly. In GEMIPM2K program, any element of input b vector must be
 greater
-than Pa_DB, otherwise it will be set to Pa_DB moles, a warning <a
- href="#E20IPM">W20IPM</a> is issued, and calculations will be
+than Pa_DB, otherwise it will be set to Pa_DB moles, a warning <a href="#E20IPM">W20IPM</a> is issued, and calculations will be
 continued.&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
@@ -260,7 +277,9 @@ default is 1e-12 mol.</dd>
     <a href="#E13IPM">E13IPM</a>. <br>
   </dd>
 </dl>
+
 <dl>
+
   <dd>The IPM elimination criteria for special cases (multicomponent
 phases of different kinds and their species) are given in the <tt>Pa_XMI</tt>&nbsp;
 fields described below.</dd>
@@ -351,8 +370,7 @@ Simplex()-&gt;EnterFeasibleDomain()
 bridge { 1e-6 }</dt>
   <dd>&nbsp; &nbsp;&nbsp;</dd>
   <dd>This and following controls are used in a "fill-out" procedure
-converting the Simplex initial approximation of the primal vector <big><span
- style="font-family: monospace;">y</span></big>
+converting the Simplex initial approximation of the primal vector <big><span style="font-family: monospace;">y</span></big>
 into a "raw" feasible approximation to be improved by the
 EnterFeasibleDomain()
 procedure. This must be done because in Simplex() solution, each
@@ -369,8 +387,7 @@ special debugging purposes. The magnitudes of these insertion values
 have a major impact on the mass balance accuracy of the whole GEM IPM-2
 result. Too low values may lead to missing solution phases and
 incorrect solution of the chemical equilibrium problem. Too large
-values may&nbsp; cause persistent&nbsp; error&nbsp; condition&nbsp; <a
- href="#E04IPM">E04IPM</a> or <a href="#E05IPM">E05IPM</a>. <br>
+values may&nbsp; cause persistent&nbsp; error&nbsp; condition&nbsp; <a href="#E04IPM">E04IPM</a> or <a href="#E05IPM">E05IPM</a>. <br>
   </dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
@@ -538,8 +555,7 @@ Controls.</dd>
   <dd> &nbsp;</dd>
   <dd>This control (DP in the source code) defines a maximum number of
 EntryFeasibleDomain() iterations. If the procedure did not converge
-until this control has been reached, the error condition <a
- href="#E04IPM">E04IPM</a> is activated which declares that the IPM
+until this control has been reached, the error condition <a href="#E04IPM">E04IPM</a> is activated which declares that the IPM
 feasible domain cannot be entered at the requested mass balance
 accuracy as defined by the <big><a href="#Pa_DHB"><tt>Pa_DHB</tt></a></big>
 (DHBM) threshold. Most chemical systems require 1 to 6 iterations,
@@ -563,6 +579,7 @@ loops {
 of IPM-2 mass balance accuracy
 improvement can be executed. Possible values:&nbsp;</dd>
 </dl>
+
 <blockquote>
   <dl>
     <dd>0 - &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;disables the IPM-2
@@ -571,7 +588,9 @@ mass balance accuracy improvement;&nbsp;</dd>
 improvement. &nbsp;</dd>
   </dl>
 </blockquote>
+
 <dl>
+
   <dd><span style="text-decoration: underline;">Default value</span>:
 15 (i.e. 1 initial and up to 14 improvement&nbsp; IPM-2
 loops).&nbsp;</dd>
@@ -598,12 +617,10 @@ dual solution vector u { -3 }</dt>
   <dd><br>
   </dd>
   <dd>This control (DT in the source code) defines the cutoff amount of
-species (DC) in the primal solution vector x.<span
- style="font-family: monospace;"></span> The cutoff amount is
+species (DC) in the primal solution vector x.<span style="font-family: monospace;"></span> The cutoff amount is
 calculated as DHBM*10^DT (for example, if DHBM = 1e-7 and DT = -2 then
 the cutoff amount will be 1e-9) and used only in the Mol_u() function
-called in mass balance accuracy improvement loops (see <a
- href="#Pa_DPV_1">Pa_DPV[1]</a>). The Mol_u() function calculates a DC
+called in mass balance accuracy improvement loops (see <a href="#Pa_DPV_1">Pa_DPV[1]</a>). The Mol_u() function calculates a DC
 mole amount vector XU from current amounts of phases and dual solution
 (vector u) as described in the report TM-44-02-06 (see pdf
 documentation on GEMS web site). This procedure helps improving the
@@ -623,8 +640,7 @@ from -6 to +3 relative to DHBM value. Default exponent is
 -2.<br>
   </dd>
   <dd><span style="text-decoration: underline;">Related error conditions</span>:
-    <a href="gems_ipm.html#W09IPM">W09IPM</a>; <a
- href="gems_ipm.html#E10IPM">E10IPM</a>; <a href="#E15IPM">E15IPM</a>
+    <a href="gems_ipm.html#W09IPM">W09IPM</a>; <a href="gems_ipm.html#E10IPM">E10IPM</a>; <a href="#E15IPM">E15IPM</a>
 (especially probable when&nbsp; positive&nbsp; values of the cutoff
 exponent were selected). <br>
   </dd>
@@ -660,6 +676,7 @@ chemical system needs to be re-considered. <br>
   </dd>
   <dd style="text-decoration: underline;">Possible values:</dd>
 </dl>
+
 <blockquote>
   <dl>
     <dd>0 - no check of change in dual solution (is set internally to
@@ -678,7 +695,9 @@ solution vector u will be restored from its copy uc. &nbsp; &nbsp; <br>
     </dd>
   </dl>
 </blockquote>
+
 <dl>
+
   <dd>Default value: 0 (or 32000). <br>
   </dd>
   <dd>&nbsp;&nbsp;</dd>
@@ -710,7 +729,9 @@ in the input thermodynamic data.</dd>
 &gt; 0 (phase is unstable but present in the mass balance). &nbsp; <br>
   </dd>
 </dl>
+
 <dl>
+
   <dd>Hence, the Pa_DF[0] threshold defines the maximum tolerance for
 the case (1). If this is the case and the phase dependent component has
 trivial metastability constraints (DLL = 0 from below and DUL =1e6 from
@@ -731,8 +752,7 @@ added there. <br>
   <dd>Recommended value: 0.01. In many consistent and non-stiff
 systems, tighter tolerance of 0.001 can be used. <br>
   </dd>
-  <dd>Related error conditions: <a href="#W08IPM">W08IPM</a>; <a
- href="#E04IPM">E04IPM</a>.<br>
+  <dd>Related error conditions: <a href="#W08IPM">W08IPM</a>; <a href="#E04IPM">E04IPM</a>.<br>
   </dd>
   <dd><br>
   </dd>
@@ -776,8 +796,7 @@ phase.Thus modified GEM primal solution will be used as a new initial
 approximation for the next IPM loop. Up to 3 such loops can be
 performed. If the situation persists then the stability and/or
 stoichiometry of this phase has to be checked and eventually corrected.
-Sometimes it may be sufficient to set a smaller <a
- style="font-family: monospace;" href="#Pa_DS">Pa_DS</a>
+Sometimes it may be sufficient to set a smaller <a style="font-family: monospace;" href="#Pa_DS">Pa_DS</a>
 threshold. Elimination of a phase with significant amount Xa may cause
 error <a href="#E04IPM">E04IPM</a> in the EnterFeasibleDomain()
 procedure.&nbsp; <br>
@@ -898,19 +917,22 @@ value.</dd>
 recommended. Default value is 0.7. Too high or to low values may cause
 non-convergence of GEM IPM in highly non-ideal systems.</dd>
 </dl>
+
 <dl>
+
   <dd>Two new variants of smoothing functions were added in April
 2009; both work well on various systems except those with sorption
 phases. <br>
   </dd>
   <dd>One smoothing function uses the logarithmic distance between the
 current index of IPM
-iteration and the maximum allowed number set in <a href="#Pa_IIM"><big><span
- style="font-family: monospace;">Pa_IIM</span></big></a>. This function
+iteration and the maximum allowed number set in <a href="#Pa_IIM"><big><span style="font-family: monospace;">Pa_IIM</span></big></a>. This function
 has the form <br>
   </dd>
 </dl>
+
 <dl>
+
   <dd>SF= DGC + ( AG - DGC ) / ( 1. + exp( log(1/IIM) - log(1/IT ) /
 DGC ) + exp( log( 1. - AG ) + log(1/IT) ). <br>
   </dd>
@@ -922,11 +944,12 @@ DGC ) + exp( log( 1. - AG ) + log(1/IT) ). <br>
 Example: set Pa_AG to -1 and Pa_DGC to 0.7. <br>
   </dd>
 </dl>
+
 <dl>
+
   <dd>Another new smoothing function uses the logarithmic distance
 between the current Dikin criterion of IPM (CD) and the convergence
-threshold given in <a href="#Pa_DK"><big><span
- style="font-family: monospace;">Pa_DK</span></big></a>.</dd>
+threshold given in <a href="#Pa_DK"><big><span style="font-family: monospace;">Pa_DK</span></big></a>.</dd>
   <dd><br>
   </dd>
   <dd>SF = DGC + ( AG - DGC ) / ( 1. + exp( log(DK) - log(CD) ) / DGC )
@@ -938,8 +961,7 @@ function is invoked when both Pa_AG and Pa_DGK are set less than
 -0.0001 (internally, both will have the sign inverted to positive).
 Example: set Pa_AG to -1 and Pa_DGC to -0.7; this gives very good
 convergence of IPM in systems containing&nbsp; highly non-ideal solid
-solutions, even without global IPM refinement loops (see <a
- href="#Pa_PRD_1"><span style="font-family: monospace;">Pa_PRD[1]</span></a>).
+solutions, even without global IPM refinement loops (see <a href="#Pa_PRD_1"><span style="font-family: monospace;">Pa_PRD[1]</span></a>).
     <br>
   </dd>
   <dd><br>
@@ -967,6 +989,7 @@ will be decreased as function of the number of
 performed IPM
 descent iterations. Possible values:&nbsp;</dd>
 </dl>
+
 <blockquote>
   <dl>
     <dd>0 (smoothing is disabled if also <tt>Pa_AG</tt> is set to 1);<br>
@@ -974,20 +997,19 @@ descent iterations. Possible values:&nbsp;</dd>
     <dd>0.01 to 0.1 to enable smoothing.&nbsp;</dd>
   </dl>
 </blockquote>
+
 <dl>
+
   <dd>Default value: 0.07. Too high or to low values may cause
 non-convergence of GEM IPM in highly non-ideal systems and especially
 in systems with sorption phases.</dd>
   <dd><br>
   </dd>
-  <dd>In new smoothing functions (see<a href="#Pa_AG"><big><span
- style="font-family: monospace;"> Pa_AG</span></big></a> above), the
+  <dd>In new smoothing functions (see<a href="#Pa_AG"><big><span style="font-family: monospace;"> Pa_AG</span></big></a> above), the
 DGC parameter defines the smallest value of the smoothing factor SF
-reached when the IPM Dikin criterion CD becomes equal to <a
- href="#Pa_DK"><big><span style="font-family: monospace;">Pa_DK</span></big></a>,
+reached when the IPM Dikin criterion CD becomes equal to <a href="#Pa_DK"><big><span style="font-family: monospace;">Pa_DK</span></big></a>,
 or the number
-of IPM iterations IT approaches <a href="#Pa_IIM"><big><span
- style="font-family: monospace;">Pa_IIM</span></big></a>. <br>
+of IPM iterations IT approaches <a href="#Pa_IIM"><big><span style="font-family: monospace;">Pa_IIM</span></big></a>. <br>
   </dd>
   <dd><br>
   </dd>
@@ -1126,24 +1148,27 @@ DKI.</dd>
   <dd><span style="text-decoration: underline;">Possible values:</span>
 1e-3 to 1e-8.</dd>
   <dd>Recommended empirical value: 1e-7 (may be changed in future).</dd>
-  <dd><span style="text-decoration: underline;">Related errors:</span> <a
- href="#E11IPM">E11IPM</a>; <a href="#E12IPM">E12IPM</a>; <a
- href="#E16IPM">E16IPM</a>; <a href="#E17IPM">E17IPM</a>. <br>
+  <dd><span style="text-decoration: underline;">Related errors:</span> <a href="#E11IPM">E11IPM</a>; <a href="#E12IPM">E12IPM</a>; <a href="#E16IPM">E16IPM</a>; <a href="#E17IPM">E17IPM</a>. <br>
   </dd>
 </dl>
+
 <tt><br>
 <br>
 </tt>
 <hr size="2" width="100%"><tt><br>
 </tt>
 <h2><a name="IPM_ERRORS"></a>4. Warnings and Error Messages</h2>
+
 <p>Warnings (indicated by 'W') mean that the result of GEM IPM
 calculation is conditionally valid, but not of the best quality, hence
 it must be used with precautions. <br>
 </p>
+
 <p>Most GEM-IPM error messages (indicated by 'E') have one of the
 following reasons:</p>
+
 <ul>
+
   <li>Bulk composition vector b is not well (charge) balanced</li>
   <li>Some DC stoichiometries are in error </li>
   <li>Some standard-state thermodynamic data for DCs are inconsistent</li>
@@ -1154,47 +1179,56 @@ definition</li>
   <li>The system is too small or too large (numerical settings are
 optimized for ca. 1 kg or 60 moles in total) &nbsp;&nbsp;&nbsp; </li>
 </ul>
+
 <p>We recommend checking these issues before proceeding with further
 calculations.<br>
 <br>
 </p>
+
 <p><a name="E00IPM"></a><big style="font-weight: bold;">E00IPM:</big>
 Simplex()&nbsp;&nbsp;&nbsp; Inconsistent LP problem (negative UP[J]
 value(s) in START()) <br>
 </p>
+
 <p style="margin-left: 40px;">Very rare error, may happen when some DLL
 metastability restrictions for DCs are incompatible with the system
 bulk composition.<br>
 &nbsp;<br>
 </p>
+
 <p><a name="E01IPM"></a><big style="font-weight: bold;">E01IPM:</big>
 Simplex()&nbsp;&nbsp;&nbsp; LP solution cannot be obtained with
 sufficient precision</p>
-<p style="margin-left: 40px;">This rare error shows that the <a
- href="#Pa_EPS_0">Pa_EPS[0]</a> tolerance is too low. Increase and try
+
+<p style="margin-left: 40px;">This rare error shows that the <a href="#Pa_EPS_0">Pa_EPS[0]</a> tolerance is too low. Increase and try
 again. If this tolerance is already 1e-6 or greater then there is an
 incompatibility in the system setup; probably, invalid stoichiometry of
 some DCs. <br>
 <br>
 </p>
+
 <p><a name="E02IPM"></a><big style="font-weight: bold;">E02IPM:</big>
 IPM-main()&nbsp;&nbsp;&nbsp; Mass balance broken on iteration
 &lt;It&gt; for independent components &lt;IC1&gt; {, &lt;IC2&gt;, ... }<br>
 </p>
+
 <p style="margin-left: 40px;">Severe error which means that no GEM
 solution can be obtained for a given system defiition. Some relevant
 phases or DCs may be missing or present in amounts that violate the
 mass balance. <br>
 <br>
 </p>
+
 <p><a name="E03IPM"></a><big style="font-weight: bold;">E03IPM: </big>EnterFeasibleDomain()&nbsp;&nbsp;&nbsp;
 Too small LM step size - cannot converge (check <a href="#Pa_DG">Pa_DG</a>).</p>
+
 <p><br>
 <a name="E04IPM"></a><big style="font-weight: bold;">E04IPM:</big>
 EnterFeasibleDomain()&nbsp;&nbsp;&nbsp; Maximum allowed number of
 EnterFeasibleDomain() iterations
 exceeded! <br>
 </p>
+
 <p style="margin-left: 40px;">This error declares that the IPM
 feasible domain cannot be entered at the requested mass balance
 precision as defined by the <big><a href="gems_ipm.html#Pa_DHB"><tt>Pa_DHB</tt></a></big>
@@ -1204,31 +1238,35 @@ inappropriate as initial approximation for this run; if so the program
 automatically tries Simplex() initial approximation. Other possible
 reasons: <br>
 </p>
+
 <div style="margin-left: 80px;">Too low <a href="#Pa_DHB">Pa_DHB</a>
 tolerance for mass balance residuals (check, set higher, and try
 again); <br>
 Too low <a href="#Pa_DPV_0">Pa_DPV[0]</a> control (set twice larger
 and try again). <br>
 </div>
+
 <p style="margin-left: 40px;"><br>
 </p>
+
 <p><big style="font-weight: bold;"><a name="E05IPM"></a>E05IPM:</big>
 EnterFeasibleDomain()&nbsp;&nbsp;&nbsp; Degeneration in R matrix (fault
 in the linearized system solver). Invalid initial approximation, cannot
 start IPM.</p>
+
 <p style="margin-left: 40px;">Indicates problematic setup of chemical
 system definition or corrupt input data. Check input data or reconsider
 setup of the system.<br>
 .<br>
 </p>
+
 <p><a name="E06IPM"></a><big style="font-weight: bold;">E06IPM:</big>
 IPM-main()&nbsp;&nbsp;&nbsp; IPM convergence criterion tolerance
-(<a href="#Pa_DK">Pa_DK</a>) could not be reached (more than <a
- href="#Pa_IIM">Pa_IIM</a> iterations done)</p>
+(<a href="#Pa_DK">Pa_DK</a>) could not be reached (more than <a href="#Pa_IIM">Pa_IIM</a> iterations done)</p>
+
 <p style="margin-left: 40px;">This error indicates that the GEM IPM is
 bad because the Dikin criterion tolerance has not been reached. In
-automatic (simplex) initial approximation mode, try increasing <a
- href="#Pa_DK">Pa_DK</a> and/or <a href="#Pa_IIM">Pa_IIM</a> and run
+automatic (simplex) initial approximation mode, try increasing <a href="#Pa_DK">Pa_DK</a> and/or <a href="#Pa_IIM">Pa_IIM</a> and run
 the GEM IPM task again. If this does not help then reconsider chemical
 system definition (or look for bugs in the input thermodynamic data).
 In smart initial approximation mode, this error condition causes the
@@ -1236,21 +1274,25 @@ program to try automatically again in the automatic (simplex) initial
 approximation mode (failed too if you see this errror message).<br>
 &nbsp;<br>
 </p>
+
 <p><a name="E07IPM"></a><big style="font-weight: bold;">E07IPM:</big>
 IPM-main()&nbsp;&nbsp;&nbsp; Degeneration in R matrix (fault in the
 linearized system solver). It is not possible to obtain a valid GEMIPM
 solution.&nbsp;&nbsp;&nbsp;<br>
 </p>
+
 <p style="margin-left: 40px;">Indicates problematic setup of chemical
 system definition or corrupt input data. Check input data or reconsider
 CSD setup.<br>
 <br>
 </p>
+
 <p><a name="W08IPM"></a><big style="font-weight: bold;">W08IPM: </big>PhaseSelect()&nbsp;&nbsp;&nbsp;
 The computed phase assemblage remains inconsistent after 3
 PhaseSelect() loops. Problematic phase(s):&nbsp; &lt;Ph1&gt;
 {,&lt;Ph2&gt;, ...}<br>
 </p>
+
 <p style="margin-left: 40px;">PhaseSelect() has found violations of
 Karpov phase stability criteria which persist after 3 IPM refinement
 loops for indicated phases. The GEM IPM result can be used with
@@ -1268,103 +1310,106 @@ approximation because PhaseSelect() is not allowed to insert
 multicomponent phases. <br>
 <br>
 </p>
+
 <p><a name="W09IPM"></a><big style="font-weight: bold;">W09IPM:</big>
 IPM-main()&nbsp;&nbsp;&nbsp; Prescribed mass balance accuracy cannot be
 reached for trace independent components:&nbsp; &lt;IC1&gt; {,
 &lt;IC2&gt;, ... }<br>
 </p>
+
 <div style="margin-left: 40px;">This warning is issued when all the
-mass balance improvement loops (set in <a href="#Pa_DPV_1"><big><span
- style="font-family: monospace;">Pa_DPV[1]</span></big></a>) have been
+mass balance improvement loops (set in <a href="#Pa_DPV_1"><big><span style="font-family: monospace;">Pa_DPV[1]</span></big></a>) have been
 executed, but the mass balance residual(s) for indicated trace IC(s)
-still exceed the level(s) set by <a href="#Pa_DHB"><big><span
- style="font-family: monospace;">Pa_DHB</span></big></a> and <a
- href="#Pa_GAN_2"><big><span style="font-family: monospace;">Pa_GAN[2]</span></big></a>
+still exceed the level(s) set by <a href="#Pa_DHB"><big><span style="font-family: monospace;">Pa_DHB</span></big></a> and <a href="#Pa_GAN_2"><big><span style="font-family: monospace;">Pa_GAN[2]</span></big></a>
 controls. Trace ICs are those present in the vector b of bulk
-composition of the system in amounts less than <a
- href="gems_ipm.html#Pa_DHB"><big><span style="font-family: monospace;">Pa_DHB</span></big></a>
+composition of the system in amounts less than <a href="gems_ipm.html#Pa_DHB"><big><span style="font-family: monospace;">Pa_DHB</span></big></a>
 mol/kg. The GEM IPM result is in principle valid, but must be used
-carefully. This warning&nbsp; may&nbsp; point to the too low <a
- href="gems_ipm.html#Pa_DHB"><big><span style="font-family: monospace;">Pa_DHB</span></big></a>
-and <a href="gems_ipm.html#Pa_GAN_2"><big><span
- style="font-family: monospace;">Pa_GAN[2]</span></big></a> controls,
+carefully. This warning&nbsp; may&nbsp; point to the too low <a href="gems_ipm.html#Pa_DHB"><big><span style="font-family: monospace;">Pa_DHB</span></big></a>
+and <a href="gems_ipm.html#Pa_GAN_2"><big><span style="font-family: monospace;">Pa_GAN[2]</span></big></a> controls,
 or to inconsistencies in the input thermodynamic data. Sometimes, a
-higher value of the <a href="gems_ipm.html#Pa_DPV_1"><big><span
- style="font-family: monospace;">Pa_DPV[1]</span></big></a> counter may
+higher value of the <a href="gems_ipm.html#Pa_DPV_1"><big><span style="font-family: monospace;">Pa_DPV[1]</span></big></a> counter may
 be necessary. <br>
 &nbsp;<br>
 </div>
+
 <p><a name="E10IPM"></a><big style="font-weight: bold;">E10IPM: </big>IPM-main()&nbsp;&nbsp;&nbsp;
 Inconsistent GEM solution: Inaccurate mass balance for some major
 independent components</p>
+
 <p style="margin-left: 40px;">This error indicates that at least for
-one non-trace independent component (present in amount greater than <a
- href="gems_ipm.html#Pa_DHB"><big><span style="font-family: monospace;">Pa_DHB</span></big></a>
-mol/kg) the mass balance residual exceeds the level prescribed in the <a
- href="gems_ipm.html#Pa_DHB"><big><span style="font-family: monospace;">Pa_DHB</span></big></a>
-tolerance after all mass balance improvement loops (set in <a
- href="gems_ipm.html#Pa_DPV_1"><big><span
- style="font-family: monospace;">Pa_DPV[1]</span></big></a>) have been
-executed. If this error persists after re-calculation with <a
- href="gems_ipm.html#Pa_DHB"><big><span style="font-family: monospace;">Pa_DHB</span></big></a>
+one non-trace independent component (present in amount greater than <a href="gems_ipm.html#Pa_DHB"><big><span style="font-family: monospace;">Pa_DHB</span></big></a>
+mol/kg) the mass balance residual exceeds the level prescribed in the <a href="gems_ipm.html#Pa_DHB"><big><span style="font-family: monospace;">Pa_DHB</span></big></a>
+tolerance after all mass balance improvement loops (set in <a href="gems_ipm.html#Pa_DPV_1"><big><span style="font-family: monospace;">Pa_DPV[1]</span></big></a>) have been
+executed. If this error persists after re-calculation with <a href="gems_ipm.html#Pa_DHB"><big><span style="font-family: monospace;">Pa_DHB</span></big></a>
 tolerance higher than 1e-6 mol then the definition of chemical system
-must be reconsidered. Sometimes, a higher value of the <a
- href="gems_ipm.html#Pa_DPV_1"><big><span
- style="font-family: monospace;">Pa_DPV[1]</span></big></a> counter may
+must be reconsidered. Sometimes, a higher value of the <a href="gems_ipm.html#Pa_DPV_1"><big><span style="font-family: monospace;">Pa_DPV[1]</span></big></a> counter may
 be necessary. <br>
 <br>
 <a href="gems_ipm.html#Pa_DHB"> </a></p>
+
 <p><a name="E11IPM"></a><big style="font-weight: bold;">E11IPM:</big>
 Set_DC_limits()&nbsp;&nbsp;&nbsp; Inconsistent upper DC metastability
 limits &lt;j&gt;&nbsp; &lt;k&gt; XU= &lt;value&gt; XFU=&lt;value&gt;</p>
+
 <p style="margin-left: 40px;">Under construction.<br>
 <br>
 </p>
+
 <p><a name="E12IPM"></a><big style="font-weight: bold;">E12IPM:</big>
 Set_DC_limits()&nbsp;&nbsp;&nbsp; Inconsistent lower DC metastability
 limits &lt;j&gt;&nbsp; &lt;k&gt; XL= &lt;value&gt; XFL=&lt;value&gt;</p>
+
 <p style="margin-left: 40px;">Under construction.<br>
 <br>
 </p>
+
 <p><a name="E13IPM"></a><big style="font-weight: bold;">E13IPM:</big>
 PrimalChemicalPotentials()&nbsp;&nbsp;&nbsp; Broken phase amount from
 primal approximation: Phase &lt;Ph&gt; Yf= &lt;value&gt;</p>
+
 <p><br>
 <a name="W14IPM"></a><big style="font-weight: bold;">W14IPM: </big>IPM-main()&nbsp;&nbsp;&nbsp;
 Dual solution (vector u) has changed too much in a refinement loop
 &lt;It1&gt;:&lt;It2&gt; for IC &lt;IC1&gt; {, &lt;IC2&gt;, ... }<br>
 </p>
+
 <p style="margin-left: 40px;">This warning indicates stiff behavior of
-the chemical system in global GEM refinement loops (see <a
- href="#Pa_LLG">Pa_LLG</a> and <a href="#Pa_PRD_1">Pa_PRD[1]</a>)
+the chemical system in global GEM refinement loops (see <a href="#Pa_LLG">Pa_LLG</a> and <a href="#Pa_PRD_1">Pa_PRD[1]</a>)
 manifested in large changes of chemical potentials of indicated
 independent components. The GEM IPM-2 solution can be used with
 precautions. At best, the chemical system definition should be
 re-considered.<br>
 <br>
 </p>
+
 <p><a name="E15IPM"></a><big style="font-weight: bold;">E15IPM: </big>IPM-main()&nbsp;&nbsp;&nbsp;
 Mass balance broken on iteration &lt;It&gt; in DualTh recover of amount
 x[j] for DC|RC &lt;DC&gt;</p>
-<p style="margin-left: 40px;">This error may occur when <a
- href="#Pa_LLG">Pa_LLG</a> and&nbsp; <a href="gems_ipm.html#Pa_DPV_2">Pa_DPV[2]</a>
+
+<p style="margin-left: 40px;">This error may occur when <a href="#Pa_LLG">Pa_LLG</a> and&nbsp; <a href="gems_ipm.html#Pa_DPV_2">Pa_DPV[2]</a>
 controls are set too high and the chemical system happens to be very
 stiff. <br>
 <br>
 </p>
+
 <p><a name="E16IPM"></a><big style="font-weight: bold;">E16IPM:</big>
 IPM-main()&nbsp;&nbsp;&nbsp; Error in codes of some DC metastability
 constraints</p>
+
 <p style="margin-left: 40px;">Under construction<br>
 </p>
+
 <p><a name="E17IPM"></a><big style="font-weight: bold;">E17IPM:</big>
 EnterFeasibleDomain()&nbsp;&nbsp;&nbsp; Invalid initial Lagrange
 multiplier for metastability-constrained DC &lt;DC&gt;</p>
+
 <p style="margin-left: 40px;">Under construction.<br>
 <br>
 </p>
+
 <p><a name="E18IPM"></a><big><span style="font-weight: bold;">E18IPM:</span></big>
 IPM-main()&nbsp;&nbsp;&nbsp; Bad GammaCalc() status in SIA mode</p>
+
 <p style="margin-left: 40px;">Error code returned by GammaCalc() -
 problem with calculation of activity coefficients. Incompatible system
 used as initial approximation? <br>
@@ -1372,12 +1417,15 @@ Reconfigure the system definition and restart it with the Simplex()
 initial approximation.<br>
 <br>
 </p>
+
 <p><a name="E19IPM"></a><big style="font-weight: bold;">E19IPM:</big>
 ConvertDCC()&nbsp;&nbsp;&nbsp; Invalid DC class code. Memory corruption?</p>
+
 <p><br>
 <a name="E20IPM"></a><big style="font-weight: bold;">W20IPM: </big>IPM-main()&nbsp;&nbsp;&nbsp;
 Too small input amount of independent component &lt;IC1&gt; {,
 &lt;IC2&gt;, ... }</p>
+
 <div style="margin-left: 40px;">This warning means that at least one
 independent component&nbsp; in the bulk composition of the system
 (except charge) has been provided in an amount less than Pa_DB&nbsp;
@@ -1388,20 +1436,28 @@ the input bulk composition of the system has been defined when GEMIPM2K
 is used from the mass transport modeling algorithm. <br>
 <br>
 </div>
+
 <tt><br>
 </tt>
 <hr size="2" width="100%"><tt><br>
 </tt> &nbsp;&nbsp; <tt><a href="index.html">To Contents</a> &nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp;<a href="g_about.html">About GEM-Selektor</a>
 &nbsp;&nbsp; &nbsp;&nbsp; About GEMIPM2K</tt><br>
+
 <tt><br>
 </tt><tt><br>
 end of file</tt> <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
-</body>
-</html>
+
+</body></html>

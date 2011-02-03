@@ -1,40 +1,31 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-  <meta http-equiv="Content-Type"
- content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR"
- content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
-  <title>GEMS MathScript Manual</title>
-  <meta name="description" content="Version 2.0.0-PSI">
-</head>
-<body>
-<h1><img src="gems1.png" align="left" height="48" width="48"> <big><font
- size="+2"><big> GEM-Selektor version 2-PSI</big></font></big> </h1>
+<html><head>
+
+
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]"><title>GEMS MathScript Manual</title>
+  
+  <meta name="description" content="Version 2.0.0-PSI"></head><body>
+<h1><img src="gems1.png" align="left" height="48" width="48"> <big><font size="+2"><big> GEM-Selektor version 3</big></font></big> </h1>
 <h2>&nbsp;Mathematical Script Interpreter Manual</h2>
 <hr size="2" width="100%">
 <h3>Contents</h3>
 <h2> </h2>
 <ul>
   <li><big> </big>
-    <p><big><font face="Helvetica, Arial, sans-serif"><a
- href="#MS_INTRO">1.
+    <p><big><font face="Helvetica, Arial, sans-serif"><a href="#MS_INTRO">1.
 Introduction - Why Math Scripts?</a></font></big></p>
     <big> </big></li>
   <li>
-    <p><font face="Helvetica, Arial, sans-serif"><a
- href="#MS_INTERPRETER"><big>2. GEM-Selector Built-In Math Script
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#MS_INTERPRETER"><big>2. GEM-Selector Built-In Math Script
 Interpreter</big> </a></font></p>
   </li>
-  <li> <font face="Helvetica, Arial, sans-serif"><a
- href="#MS_DOD_LABELS"> 2.1. Data Object Types and Labels in
+  <li> <font face="Helvetica, Arial, sans-serif"><a href="#MS_DOD_LABELS"> 2.1. Data Object Types and Labels in
 GEM-Selektor</a> </font> </li>
-  <li> <font face="Helvetica, Arial, sans-serif"><a
- href="#MS_WHERE_TO_USE"> 2.2. Where Math Scripts Can be Used</a> </font>
+  <li> <font face="Helvetica, Arial, sans-serif"><a href="#MS_WHERE_TO_USE"> 2.2. Where Math Scripts Can be Used</a> </font>
   </li>
   <li><big> </big>
-    <p><big><font face="Helvetica, Arial, sans-serif"><a
- href="#MS_SYNTAX">3. Math Script Syntax, Operators and Constants</a> </font></big></p>
+    <p><big><font face="Helvetica, Arial, sans-serif"><a href="#MS_SYNTAX">3. Math Script Syntax, Operators and Constants</a> </font></big></p>
     <big> </big></li>
   <li><a href="#MS_AREX"><font face="Helvetica, Arial, sans-serif">3.1.
 Arithmetic Expressions</font></a></li>
@@ -47,39 +38,32 @@ Logical Expressions</font></a></li>
   <li><a href="#MS_COND"><font face="Helvetica, Arial, sans-serif">3.5.
 Conditional Operator, Block
 and Cycle Operator</font></a></li>
-  <li><a href="#MS_OP_PRIORITY"><font
- face="Helvetica, Arial, sans-serif">3.6. Priority of Operations</font></a></li>
+  <li><a href="#MS_OP_PRIORITY"><font face="Helvetica, Arial, sans-serif">3.6. Priority of Operations</font></a></li>
   <li><a href="#MS_CONST"><font face="Helvetica, Arial, sans-serif">3.7.
 Constants</font></a><br>
   </li>
   <li><big> </big>
-    <p><big><font face="Helvetica, Arial, sans-serif"><a
- href="#MS_BUILTIN_FUNCTIONS">4. Math Script Built-In Functions</a> </font></big></p>
+    <p><big><font face="Helvetica, Arial, sans-serif"><a href="#MS_BUILTIN_FUNCTIONS">4. Math Script Built-In Functions</a> </font></big></p>
     <big> </big></li>
   <li><a href="#MS_BF_ARITHM"><font face="Helvetica, Arial, sans-serif">4.1.
 Functions with Arithmetic
 Expressions as Arguments</font></a></li>
-  <li><a href="#MS_BF_INTERVAL"><font
- face="Helvetica, Arial, sans-serif">4.2. Functions with Intervals as
+  <li><a href="#MS_BF_INTERVAL"><font face="Helvetica, Arial, sans-serif">4.2. Functions with Intervals as
 Arguments</font></a></li>
-  <li><a href="#MS_BF_CHEMICAL"><font
- face="Helvetica, Arial, sans-serif">4.3. Chemical Built-In Functions
+  <li><a href="#MS_BF_CHEMICAL"><font face="Helvetica, Arial, sans-serif">4.3. Chemical Built-In Functions
 (under construction)</font></a><br>
     <p> </p>
   </li>
   <li><big> </big>
-    <p><big><font face="Helvetica, Arial, sans-serif"><a
- href="#MS_PREPROC">5. Indexation in GEM-Selektor Lists and Math Script
+    <p><big><font face="Helvetica, Arial, sans-serif"><a href="#MS_PREPROC">5. Indexation in GEM-Selektor Lists and Math Script
 Preprocessing</a> </font></big></p>
     <big> </big></li>
   <li>
-    <p><font face="Helvetica, Arial, sans-serif"><big><a
- href="#MS_LIBRARY">6.
+    <p><font face="Helvetica, Arial, sans-serif"><big><a href="#MS_LIBRARY">6.
 Template Math Script Library in Kernel Database </a></big>&nbsp;</font></p>
   </li>
   <li>
-    <p><a href="#MS_ERROR_MESSAGES"><font
- face="Helvetica, Arial, sans-serif">7. Error Messages</font></a></p>
+    <p><a href="#MS_ERROR_MESSAGES"><font face="Helvetica, Arial, sans-serif">7. Error Messages</font></a></p>
   </li>
 </ul>
 <p>&nbsp;<br>
@@ -94,8 +78,7 @@ ideas. This also applies to <a href="glossary.html#DT_geochemical">geochemical
 modelling</a> program packages such as<a href="gm_about.html">
 GEM-Selektor</a>. The main <a href="glossary.html#DT_IPM">GEM IPM
 algorithm</a> is hard-coded for the best
-performance, as well as the most common techniques for <a
- href="theortdb.html">temperature/pressure corrections</a> of
+performance, as well as the most common techniques for <a href="theortdb.html">temperature/pressure corrections</a> of
 thermodynamic data and <a href="glossary.html#DT_Debye_Hueckel">ionic
 strength corrections</a> for aqueous species. Any addition or change in
 the hard-coded methods requires re-compilation and re-linking of the
@@ -103,9 +86,7 @@ code; this is not always an easy job for developers, but far more
 difficult and time consuming for
 the majority of end-users. <br>
 </p>
-<p> For instance, there is a variety of possible <a
- href="glossary.html#DT_mixture">mixing models</a> for the <a
- href="glossary.html#DT_phase_multi">multi-component phases</a> and it
+<p> For instance, there is a variety of possible <a href="glossary.html#DT_mixture">mixing models</a> for the <a href="glossary.html#DT_phase_multi">multi-component phases</a> and it
 makes no sense in hard-coding all them; besides, new equations still
 appear in literature. Instead, the user must have a possibility to
 encode in a simple way, right in the database records, the most
@@ -120,21 +101,17 @@ possible meaningful
 of
 interest to (geo)chemists. Hence, in the GEM-Selektor code, simulation
 of
-any irreversible process (as a series of local/partial <a
- href="glossary.html#DT_equilibrium">equilibrium states</a>) can be
-defined as a <a href="#MS_SYNTAX">Math Script</a> (part of the <a
- href="gm_proces.html">Process</a> record) where the user writes what
+any irreversible process (as a series of local/partial <a href="glossary.html#DT_equilibrium">equilibrium states</a>) can be
+defined as a <a href="#MS_SYNTAX">Math Script</a> (part of the <a href="gm_proces.html">Process</a> record) where the user writes what
 exactly and where should be changed in the <a href="gems_sys.html">system
 definition</a> (stored as <a href="gm_syseq.html">SysEq</a> records)
-to produce the next step of the simulated sequence of <a
- href="gems_ipm.html">equilibria</a>. <br>
+to produce the next step of the simulated sequence of <a href="gems_ipm.html">equilibria</a>. <br>
 </p>
 <p>To &nbsp;watch what has been actually calculated, the user must also
 be able to tell the program what output data to collect,&nbsp; display
 (ideally, in comparison with some experimental points) and print. Math
 scripts are very helpful in accomplishing also this need; the "data
-sampling" <a href="glossary.html#DT_script_math">math scripts</a> (in <a
- href="gm_rtparm.html">RTparm</a>, <a href="gm_proces.html">Proces</a>
+sampling" <a href="glossary.html#DT_script_math">math scripts</a> (in <a href="gm_rtparm.html">RTparm</a>, <a href="gm_proces.html">Proces</a>
 and <a href="gm_gtdemo.html">GtDemo</a> records) provide maximum
 flexibility and performance in collecting only relevant results, thus
 saving a lot of time - especially if many modeled points are generated
@@ -181,8 +158,7 @@ labels
 (up to 6 characters long) are allowed in math scripts; in other words,
 the math script interpreter cannot create new names of variables
 (although
-it can create any number of numerical or logical constants). Many <a
- href="#MS_BUILTIN_FUNCTIONS">built-in mathematical functions </a>are
+it can create any number of numerical or logical constants). Many <a href="#MS_BUILTIN_FUNCTIONS">built-in mathematical functions </a>are
 available within math scripts. An extension of the list of built-in
 functions is
 expected in future versions of GEM-Selektor code, mainly for the
@@ -243,8 +219,7 @@ and dynamic. Static data have the same location, type and size during
 the whole program execution, while dynamic data can be resized, moved
 in memory, and even converted to another data cell type. The latter can
 be numerical (integer, float, double), fixed- and variable-size
-strings, and one-byte type. This information can be obtained from the <a
- href="dod_labels.html">DOD label lists</a> that can be used in writing
+strings, and one-byte type. This information can be obtained from the <a href="dod_labels.html">DOD label lists</a> that can be used in writing
 scripts.
 <br>
 </p>
@@ -266,19 +241,15 @@ valid memory location). &nbsp; </p>
 <h3> <a name="MS_WHERE_TO_USE"></a>2.2. Where Math Scripts Can be Used</h3>
 <p> Math Scripts can (and should) be used in definitions of the
 non-ideal multicomponent phases (<a href="gm_phase.html">Phase</a>
-records, <tt><a href="gm_phase.html#DcEq">DcEq</a><a
- href="gm_phase.html#PhEq"> </a>and
+records, <tt><a href="gm_phase.html#DcEq">DcEq</a><a href="gm_phase.html#PhEq"> </a>and
 <a href="gm_phase.html#PhEq">PhEq</a></tt>&nbsp; fields), process
-simulators (<a href="gm_proces.html">Process</a> records, <tt><a
- href="gm_proces.html#P_expr">P_expr</a></tt> and &nbsp;<tt><a
- href="gm_proces.html#pgExpr">pgExpr</a></tt> fields),&nbsp;
+simulators (<a href="gm_proces.html">Process</a> records, <tt><a href="gm_proces.html#P_expr">P_expr</a></tt> and &nbsp;<tt><a href="gm_proces.html#pgExpr">pgExpr</a></tt> fields),&nbsp;
 graphic/table demo samplers (<a href="gm_gtdemo.html">GtDemo</a>
 records, <tt><a href="gm_gtdemo.html#gExpr">gExpr</a></tt> field), and
 thermodynamic data tabulators (<a href="gm_rtparm.html">RTparm</a>
 records, <tt><a href="gm_rtparm.html#tExpr">tExpr</a></tt> field).
 These record types embrace the most versatile data in thermodynamic
-modeling. In addition, math scripts can be embedded within the <a
- href="pe_script.html">print-</a>, <a href="pe_script.html">export-</a>
+modeling. In addition, math scripts can be embedded within the <a href="pe_script.html">print-</a>, <a href="pe_script.html">export-</a>
 and <a href="i_script.html">import</a> format scripts.&nbsp; </p>
 <p>Like any programming, writing math scripts requires some experience,
 understanding of principles of operation, and some care to avoid
@@ -319,9 +290,7 @@ are case sensitive.<br>
 <h3><a name="MS_AREX"></a>3.1. Arithmetic Expressions</h3>
 <p> To specify an expression, the <a href="#MS_VAR">variables</a>
 (identified using <a href="dod_labels.html">data object labels</a>
-only), <a href="#MS_CONST">constants</a>,&nbsp; <a
- href="#MS_BUILTIN_FUNCTIONS">built-in functions</a> and <a
- href="#MS_OP_PRIORITY">operations</a> can be used. Brackets <tt>( ) </tt>serve
+only), <a href="#MS_CONST">constants</a>,&nbsp; <a href="#MS_BUILTIN_FUNCTIONS">built-in functions</a> and <a href="#MS_OP_PRIORITY">operations</a> can be used. Brackets <tt>( ) </tt>serve
 for changing the default priorities of operations. </p>
 <p>Syntax of a math script arithmetic expression (in BNF recursive
 notation, \ \ &nbsp;contain alternatives separated by | symbol "or",
@@ -401,8 +370,7 @@ math scripts: </p>
   </li>
 </ul>
 <p> </p>
-<p> Data types are automatically defined from the <a
- href="#MS_DOD_LABELS">data object descriptors</a>. Formal syntax in
+<p> Data types are automatically defined from the <a href="#MS_DOD_LABELS">data object descriptors</a>. Formal syntax in
 BNF notation is: </p>
 <blockquote>
   <p><tt>&lt; variable &gt; ::= &lt; identifier &gt; | &lt; identifier
@@ -428,11 +396,9 @@ in C language. Absence of an&nbsp; <tt>index</tt>&nbsp; is regarded as
 zero absolute index, that is, the variable refers to the first cell of
 the data object. </p>
 <h3> <a name="MS_FUNCTIONS"></a>3.3. Functions</h3>
-<p> The Math Script interpreter permits usage of <a
- href="#MS_BUILTIN_FUNCTIONS"><b>built-in functions</b></a> in all
+<p> The Math Script interpreter permits usage of <a href="#MS_BUILTIN_FUNCTIONS"><b>built-in functions</b></a> in all
 expressions.
-As arguments, either <a href="#MS_AREX">arithmetic expressions</a> or <a
- href="#MS_BF_INTERVAL"><b>intervals</b></a> can be specified. </p>
+As arguments, either <a href="#MS_AREX">arithmetic expressions</a> or <a href="#MS_BF_INTERVAL"><b>intervals</b></a> can be specified. </p>
 <p><tt>Interval</tt> &nbsp;is a construction of the form &nbsp;<tt>x[ib:ie]</tt>,
 which tells the function to process all cells of a vector or matrix
 with indices fitting inside of &nbsp; <tt>ib:ie</tt>&nbsp; interval,
@@ -465,8 +431,7 @@ current dimensions in the data object descriptor referenced by the <tt>identifie
 <p>Internal predefined constants&nbsp; <tt>ONE_</tt>&nbsp; (true)
 and&nbsp; <tt>NUL_</tt>&nbsp; (false) are used for logical values in
 math scripts. Logical value <tt>NUL_</tt> is equal to the numerical
-value 0.0. Any other value (greater than 1e-34) is considered as <span
- style="font-family: monospace;">ONE_</span>.&nbsp; </p>
+value 0.0. Any other value (greater than 1e-34) is considered as <span style="font-family: monospace;">ONE_</span>.&nbsp; </p>
 <p>When a <b>logical expression</b> is calculated, any result
 different from&nbsp;&nbsp; <tt>NUL_</tt>&nbsp;&nbsp; is considered as <tt>ONE_</tt>
 (true). The syntax is: </p>
@@ -655,8 +620,7 @@ in <a href="#MS_SYNTAX">assignment</a> and <a href="#MS_COMPOP">comparison</a>
 operators. <br>
 </p>
 <p>Internal logical constants:&nbsp; <tt>NUL_</tt>&nbsp;
-(false)&nbsp;&nbsp; <tt>ONE_</tt>&nbsp; (true).&nbsp; <span
- style="font-family: monospace;">NUL_</span> can be entered directly as
+(false)&nbsp;&nbsp; <tt>ONE_</tt>&nbsp; (true).&nbsp; <span style="font-family: monospace;">NUL_</span> can be entered directly as
 0;&nbsp; <span style="font-family: monospace;">ONE_</span> as 1.<br>
 </p>
 <p>&lt;Under construction&gt;&nbsp; - symbolic constants. <br>
@@ -687,8 +651,7 @@ hard-coded, some of them can also be called from within the source
 code. More (chemical) built-in functions are under construction. There
 are three classes of functions: &nbsp;those <a href="#MS_BF_ARITHM">with
 arithmetic arguments</a>; with <a href="#MS_BF_INTERVAL">interval
-arguments</a>; and with index or without arguments (mainly <a
- href="#MS_BF_CHEMICAL">chemically-specific functions</a>).&nbsp; </p>
+arguments</a>; and with index or without arguments (mainly <a href="#MS_BF_CHEMICAL">chemically-specific functions</a>).&nbsp; </p>
 <p>During execution of math scripts, such common functions as
 logarithms (<tt>
 ln, lg</tt> ) or square root &nbsp;(<tt> sqrt )</tt> are called
@@ -850,8 +813,7 @@ round(y)</td>
 <h3> <a name="MS_BF_CHEMICAL"></a>4.3. Functions Without Arguments and
 Chemical Functions</h3>
 <br>
-<table style="width: 843px; height: 48px;" border="1" cellpadding="2"
- cellspacing="2">
+<table style="width: 843px; height: 48px;" border="1" cellpadding="2" cellspacing="2">
   <tbody>
     <tr>
       <td><b><tt>empty( )</tt></b></td>
@@ -910,8 +872,7 @@ structures of GEM-Selektor. One system is defined by the full lists of
 Independent
 Components, Dependent Components, Phases, and PCO for the currently
 open
-<a href="gems_sys.html">System definition</a> in the <a
- href="gm_project.html">Project</a> data structure. This indexation is
+<a href="gems_sys.html">System definition</a> in the <a href="gm_project.html">Project</a> data structure. This indexation is
 used also in the vectors for thermodynamic data and system
 configuration. </p>
 <p>Usually, some elements, species and/or phases are switched off and
@@ -930,8 +891,7 @@ data sampling.&nbsp;<br>
 condensed
 (<a href="gems_ipm.html">Multi</a>) indexation systems are connected by
 three special data objects&nbsp; <tt><a href="gems_ipm.html#mui">mui</a></tt>,
-<tt><a href="gems_ipm.html#muj">muj</a></tt> and <tt><a
- href="gems_ipm.html#mup">mup</a></tt> that belong to the IPM runtime
+<tt><a href="gems_ipm.html#muj">muj</a></tt> and <tt><a href="gems_ipm.html#mup">mup</a></tt> that belong to the IPM runtime
 (Multi) data structure. Given that<tt> i, j</tt> and <tt>k</tt> are
 indexes of
 an Independent Component, a Dependent Component and a Phase,
@@ -993,10 +953,8 @@ off.
 </h4>
 <h3>Separation of Groups of Expressions</h3>
 <p>A special preprocessing may be performed for math scripts the DcEq
-field of Phase window. This is controlled by a switch&nbsp; <tt><a
- href="gm_phase.html#p_solt_4">p_solt[0,4]</a></tt> in<tt> </tt>Phase
-records.&nbsp; If this switch is set in a <a
- href="g_useref.html#P_SOLT4">"private" mode</a> then a &nbsp;separate
+field of Phase window. This is controlled by a switch&nbsp; <tt><a href="gm_phase.html#p_solt_4">p_solt[0,4]</a></tt> in<tt> </tt>Phase
+records.&nbsp; If this switch is set in a <a href="g_useref.html#P_SOLT4">"private" mode</a> then a &nbsp;separate
 group of math script expressions must be written for every phase
 end-member. Each group is closed by <tt>"\@"</tt> characters that must
 directly follow the <tt>";"</tt> symbol of the last operator in the
@@ -1291,8 +1249,7 @@ missing. Correct the script and try again.&nbsp;</dd>
   </dd>
   <dt><b>E02MSTran:</b> &nbsp;Function &lt;function name&gt; is not
 defined.</dt>
-  <dd>Wrong function name, check it in the <a
- href="#MS_BUILTIN_FUNCTIONS">functions list</a> (case sensitive),
+  <dd>Wrong function name, check it in the <a href="#MS_BUILTIN_FUNCTIONS">functions list</a> (case sensitive),
 correct the script and try again.&nbsp;</dd>
   <dd><br>
   </dd>
@@ -1563,11 +1520,9 @@ developers. <br>
 </dl>
 <hr size="2" width="100%">
 <p><br>
-&nbsp;&nbsp; <tt><a
- href="file:///C:/GEMS2test/program/doc/html/index.html">To Contents</a>
+&nbsp;&nbsp; <tt><a href="file:///C:/GEMS2test/program/doc/html/index.html">To Contents</a>
 &nbsp;
-&nbsp; &nbsp; &nbsp; &nbsp;<a
- href="file:///C:/GEMS2test/program/doc/html/g_about.html">About
+&nbsp; &nbsp; &nbsp; &nbsp;<a href="file:///C:/GEMS2test/program/doc/html/g_about.html">About
 GEM-Selektor</a> </tt><br>
 </p>
 <p><tt><br>
@@ -1582,5 +1537,4 @@ end of file</tt> <br>
 <br>
 <br>
 <br>
-</body>
-</html>
+</body></html>

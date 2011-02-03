@@ -1,17 +1,14 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-  <meta http-equiv="Content-Type"
- content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR"
- content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
-  <title>Autophase Setup Wizard</title>
+<html><head>
+
+
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]"><title>Autophase Setup Wizard</title>
+  
   <meta name="author" content="GEMS-PSI Development Team">
-  <meta name="description" content="Small help page for AutoPhaseDialog">
-</head>
-<body>
+  <meta name="description" content="Small help page for AutoPhaseDialog"></head><body>
 <h1><img src="gems1.png" align="left" height="48" width="48">
-GEM-Selektor version 2-PSI</h1>
+GEM-Selektor version 3</h1>
 <h2>Automatic Setup of Aqueous and Gas/Fluid Phases</h2>
 <hr style="width: 100%; height: 2px;">
 <h2> </h2>
@@ -43,7 +40,7 @@ aqueous activity functions which are described below.<br>
 </p>
 <p>Most of the aqueous activity coefficient models that are currently
 supported by GEM-Selektor code belong to the class of extended
-Debye-H&uuml;ckel (EDH) models (see document Activity-Coeffs.pdf for
+Debye-Hückel (EDH) models (see document Activity-Coeffs.pdf for
 details about the underlying theory and references). In these models,
 the extended term (b_gamma) can be a function of pressure and
 temperature or a constant value. In the select box "b_gamma(P,T) mode"
@@ -63,7 +60,7 @@ project you mainly deal with NaCl-rich fluids (the most common case),
 you
 should then choose the NaCl model. Note that the T-P-dependent b_gamma
 functions should be used in conjunction with the extended
-Debeye-H&uuml;ckel model after Helgeson and coworkers (Oelkers and
+Debeye-Hückel model after Helgeson and coworkers (Oelkers and
 Helgeson 1990; Pokrovski and Helgeson 1995; 1997a; 1997b), the second
 model in the list which has the code letter "H", because of
 thermodynamic consistency. If a T-P dependent b_gamma model is
@@ -81,25 +78,45 @@ electrolytes are:<br>
   <table style="width: 900px;" border="1" cols="7">
     <tbody>
       <tr>
-        <td><span style="font-weight: bold;">Background electrolyte</span><br>
+        <td>
+        <p><span style="font-weight: bold;">Background electrolyte</span></p>
+
         </td>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaCl<br>
+        <td>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaCl</p>
+
         </td>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KCl<br>
+        <td>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KCl</p>
+
         </td>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaOH</td>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KOH<br>
+        <td>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaOH</p>
+</td>
+        <td>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KOH</p>
+
         </td>
       </tr>
       <tr>
-        <td style="font-weight: bold;">a0 value<br>
+        <td style="font-weight: bold;">
+        <p>a0 value</p>
+
         </td>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.72<br>
+        <td>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.72</p>
+
         </td>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4.08<br>
+        <td>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4.08</p>
+
         </td>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.31</td>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.67</td>
+        <td>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.31</p>
+</td>
+        <td>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.67</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -126,53 +143,40 @@ The currently used number codes are:<br>
         <td><span style="font-weight: bold;">Activity coeff. of neutral
 species</span><br>
         </td>
-        <td style="vertical-align: top;"><span
- style="font-weight: bold;">Activity coeff. of H<sub>2</sub>O solvent<br>
+        <td style="vertical-align: top;"><span style="font-weight: bold;">Activity coeff. of H<sub>2</sub>O solvent<br>
         </span></td>
       </tr>
       <tr>
-        <td style="font-weight: bold;"><span
- style="font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -2</span><span
- style="font-style: italic;"></span><br>
+        <td style="font-weight: bold;"><span style="font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -2</span><span style="font-style: italic;"></span><br>
         </td>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.0<span
- style="font-weight: normal;"></span><span style="font-weight: normal;"></span><br>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.0<span style="font-weight: normal;"></span><span style="font-weight: normal;"></span><br>
         </td>
         <td style="vertical-align: top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 1.0<span style="font-weight: normal;"></span></td>
       </tr>
       <tr>
-        <td style="font-weight: bold;"><span
- style="font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -1</span><span
- style="font-style: italic;"></span><br>
+        <td style="font-weight: bold;"><span style="font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -1</span><span style="font-style: italic;"></span><br>
         </td>
         <td style="vertical-align: top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-1.0<span style="font-weight: normal;"></span><span
- style="font-weight: normal;"></span><br>
+1.0<span style="font-weight: normal;"></span><span style="font-weight: normal;"></span><br>
         </td>
         <td style="vertical-align: top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 calculated<span style="font-weight: normal;"></span></td>
       </tr>
       <tr>
-        <td style="font-weight: bold;"><span
- style="font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0</span><span
- style="font-style: italic;"></span><br>
+        <td style="font-weight: bold;"><span style="font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0</span><span style="font-style: italic;"></span><br>
         </td>
         <td style="vertical-align: top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 b_gamma * IS<span style="font-weight: normal;"></span></td>
         <td style="vertical-align: top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-calculated<span style="font-weight: normal;"></span><span
- style="font-weight: normal;"></span><br>
+calculated<span style="font-weight: normal;"></span><span style="font-weight: normal;"></span><br>
         </td>
       </tr>
       <tr>
-        <td style="font-weight: bold;"><span
- style="font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1</span><span
- style="font-style: italic;"></span><br>
+        <td style="font-weight: bold;"><span style="font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1</span><span style="font-style: italic;"></span><br>
         </td>
         <td style="vertical-align: top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-b_gamma * IS<span style="font-weight: normal;"></span><span
- style="font-weight: normal;"></span><span style="font-weight: normal;"></span><br>
+b_gamma * IS<span style="font-weight: normal;"></span><span style="font-weight: normal;"></span><span style="font-weight: normal;"></span><br>
         </td>
         <td style="vertical-align: top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 1.0<span style="font-weight: normal;"></span></td>
@@ -189,15 +193,12 @@ calculation of activity coefficients for neutral species and water
 solvent). Because of thermodynamic consistency, those options (from the
 table above) that explicitly calculate the activity coefficient of
 water solvent
-should only be used with the extended Debeye-H&uuml;ckel model after
+should only be used with the extended Debeye-Hückel model after
 Helgeson and coworkers.<br>
 <br>
-Clicking on the "Check" button displays a record key of the <a
- href="gm_phase.html">Phase record</a> to be automatically generated;
+Clicking on the "Check" button displays a record key of the <a href="gm_phase.html">Phase record</a> to be automatically generated;
 &nbsp;the
-chosen model and its parameters will be identified in the <a
- href="gm_phase.html#PhName"><b><tt>PhName</tt></b></a> and <a
- href="gm_phase.html#PhNote"><b><tt>PhNote</tt></b></a> fields. You can
+chosen model and its parameters will be identified in the <a href="gm_phase.html#PhName"><b><tt>PhName</tt></b></a> and <a href="gm_phase.html#PhNote"><b><tt>PhNote</tt></b></a> fields. You can
 check
 them later when you open the "Phase" page of the "System" window from
 the
@@ -220,8 +221,7 @@ mixtures that is also implemented in the GEM-Selektor code requires
 that first a specific <a href="gm_phase.html">Phase record</a> (in
 database management mode) is created. The gas species that
 are included in the gas mixture need to be selected and binary
-interaction parameters can be entered into the <a
- href="gm_phase.html#ph_cf">ph_cf</a> table. If a phase
+interaction parameters can be entered into the <a href="gm_phase.html#ph_cf">ph_cf</a> table. If a phase
 record is prepared in this way, it can then be selected in the Setup of
 Aqueous and Gas/Fluid Phase wizard by chosing the option "Do not
 generate; select a user-defined Phase record from database,U". After
@@ -241,11 +241,8 @@ selecting
 in
 the list an exitsting project to be opened. <br>
 </p>
-<hr style="width: 100%; height: 2px;"><span
- style="font-family: helvetica,arial,sans-serif;"><br>
-<a href="gm_project.html">To Project Module Manual</a></span><a
- href="gm_phase.html"><span
- style="font-family: helvetica,arial,sans-serif;"><br>
+<hr style="width: 100%; height: 2px;"><span style="font-family: helvetica,arial,sans-serif;"><br>
+<a href="gm_project.html">To Project Module Manual</a></span><a href="gm_phase.html"><span style="font-family: helvetica,arial,sans-serif;"><br>
 To Phase Module Manual</span></a><br>
 <tt><a href="index.html"><br>
 To Contents</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="g_about.html">About
@@ -257,5 +254,4 @@ end of file</tt>
 <br>
 <br>
 <br>
-</body>
-</html>
+</body></html>

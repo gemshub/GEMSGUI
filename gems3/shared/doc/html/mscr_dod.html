@@ -1,33 +1,50 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-  <meta http-equiv="Content-Type"
- content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR"
- content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
+<html><head>
+  
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+  
+  <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
+
+  
   <meta name="Author" content="DIA Kulik">
-  <title>GEMS DOD Reference</title>
+  <title>GEMS3 Script DOD Reference</title>
+
+  
+  
   <meta name="description" content="Version 2.0.0-PSI">
-</head>
-<body>
+
+</head><body>
 <h1><img src="gems1.png" align="left" height="48" width="48">
-GEM-Selektor version 2-PSI </h1>
-<h2>Data Objects User's Reference</h2>
+GEM-Selektor version 3<br>
+</h1>
+
+<h2>Math Script Data Objects Reference</h2>
+
 <hr size="2" width="100%"><br>
+
 Contents<br>
+
 <br>
-<span style="color: rgb(255, 0, 0);">&lt;under construction&gt;</span><br
- style="color: rgb(255, 0, 0);">
+
+<span style="color: rgb(255, 0, 0);">&lt;under construction&gt;</span><br style="color: rgb(255, 0, 0);">
+
 <br style="color: rgb(255, 0, 0);">
+
 <span style="color: rgb(255, 0, 0);">To be completed in Version 2.2</span><br>
+
 <br>
+
 <hr size="2" width="100%">
 <h3>DOD lists (for Math Scripts)<br>
 </h3>
-<h3></h3>
+
+
 <p> </p>
+
 <h3> <a name="MATH_SCRIPT_DODNAMES"></a><tt>8. List of Data Object
 Labels (usable as Math Script Variables)</tt></h3>
+
 <b><i>Data Object Descriptors (DOD)</i></b>: In GEMS, the DOD array
 makes a bridge between the users interface, the internal data
 structures, the database
@@ -47,6 +64,7 @@ math
 scripts are highlighted in red.
 <h4> <a name="PHASEDEF_DODS"></a>8.1. Data objects for non-ideality
 expressions in phase definitions only</h4>
+
 The data object descriptors listed below are automatically updated by
 GammaCalc() subroutine for each multicomponent phase. They can be
 addressed
@@ -105,6 +123,7 @@ moles of the solvent or sorbent</tt> <br>
 <tt>XalpS&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; 1
 6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total
 moles of sorbates at each surface type</tt> </p>
+
 <p><tt>Ez&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; Ndc
 1&nbsp;&nbsp; js&nbsp;&nbsp;&nbsp;&nbsp;
 Formula charge of species</tt> <br>
@@ -152,12 +171,15 @@ for the species-related expressions</font></tt> <br>
 <tt>-----------------------------------------------------------------------</tt>
 <br>
 &nbsp; </p>
+
 <h4> <a name="GEMIPM_DODS"></a>8.2. Labels of data objects used during
 GEM IPM minimization</h4>
+
 The data objects listed below are accessible in GTDEMO, PROCES, and
 PHASE Math Scripts. Indexed identifiers of these data objects can be
 preprocessed using \i, \j, and \a switches for ICOMP, DCONP, and PHASE
 names, respectively. <br>
+
 Data types: I_ integer; F_ float; D_ double.
 <p><tt>L1. Scalar and static data objects</tt> <br>
 <tt>----------------------------------------------------------------------</tt>
@@ -216,7 +238,9 @@ IPM convergence threshold DX (default 1e-5)</tt> <br>
 <br>
 <tt>----------------------------------------------------------------------</tt>
 </p>
+
 <p><tt>L2. Dynamic data objects used in IPM calculations</tt> </p>
+
 <p><a name="ICOMP_DODS"></a><tt>L2.1.Independent components (IC; \i
 preprocessor switch)</tt> <br>
 <tt>----------------------------------------------------------------------</tt>
@@ -252,6 +276,7 @@ O&nbsp;&nbsp; IC mass-balance residuals (moles)</tt> <br>
 O&nbsp;&nbsp; Total dissolved IC concentrations in g/kg_soln</tt> <br>
 <tt>----------------------------------------------------------------------</tt>
 </p>
+
 <p><a name="DCOMP_DODS"></a><tt>L2.2.Dependent components (DC, species;
 \j preprocessor switch)</tt> <br>
 <tt>----------------------------------------------------------------------</tt>
@@ -314,6 +339,7 @@ index for assignment to carrier end-member</tt> <br>
 site density for non-competing</tt> <br>
 <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 sorbates, 1/nm2; 1 for competing sorbates</tt> </p>
+
 <p><tt><u>Gases </u>(not available to Math Script preprocessing)</tt> <br>
 <tt>Gfug&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; Lg 1&nbsp; O&nbsp;&nbsp;
 Partial fugacities of gases</tt> <br>
@@ -321,6 +347,7 @@ Partial fugacities of gases</tt> <br>
 O&nbsp;&nbsp; Log partial fugacities of gases</font></tt> <br>
 <tt>lgPpG&nbsp; F_&nbsp;&nbsp;&nbsp; Lg 1&nbsp; O&nbsp;&nbsp; Log
 partial pressures of gases</tt> </p>
+
 <p><tt><u>Other</u></tt> <br>
 <tt>A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; L
 N&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DC stoichiometry matrix A</tt> <br>
@@ -329,6 +356,7 @@ D_&nbsp;&nbsp;&nbsp; 1 20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Work array for
 Math Scripts</font></tt> <br>
 <tt>----------------------------------------------------------------------</tt>
 </p>
+
 <p><a name="PHASE_DODS"></a><tt>L2.3. Phase definitions (\a
 preprocessor switch)</tt> <br>
 <tt>----------------------------------------------------------------------</tt>
@@ -395,12 +423,16 @@ N&nbsp;&nbsp;&nbsp;&nbsp; Bulk compositions of multi-component phases</tt>
 <tt>---------------------------------------------------------------------</tt>
 <br>
 &nbsp; </p>
+
 <h4> <a name="PROCES_GTDEMO_DODS"></a>8.3. Labels of data objects
 accessible in PROCES and GTDEMO Math Scripts</h4>
+
 The labels of dynamic vectors from this list in most cases can be
 preprocessed <br>
+
 using \I, \J, \A and \K switches for ICOMP, DCOMP,&nbsp; Compos and
 PHASE names, <br>
+
 respectively. Data types: I_ integer; F_ float; D_ double.
 <p><tt>----------------------------------------------------------------------</tt>
 <br>
@@ -419,6 +451,7 @@ IC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \I</tt>
 <tt>M_a&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; N
 1&nbsp;&nbsp;&nbsp;&nbsp; Vector of IC atomic (molar) masses,
 g/mole)&nbsp; \I</tt> </p>
+
 <p><tt><u>Thermodynamic data (all vectors can be preprocessed with \J
 switch)</u></tt> <br>
 <tt><font color="#cc0000">T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -446,6 +479,7 @@ J/mole</font></tt>
 1&nbsp;&nbsp;&nbsp;&nbsp; Uncertainty of V0(TP)</tt> <br>
 <tt>-----------------------------------------------------------------------</tt>
 </p>
+
 <p><tt>System formulation input data</tt> <br>
 <tt>----------------------------------------------------------------------</tt>
 <br>
@@ -492,6 +526,7 @@ initial DC activity coefficients&nbsp;&nbsp; \J</tt> <br>
 1&nbsp;&nbsp;&nbsp;&nbsp; DC partial pressures,
 bar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 \J</tt> </p>
+
 <p><tt><u>Adsorption and dispersity parameters</u></tt> <br>
 <tt>MaSdj_&nbsp; F_&nbsp;&nbsp; Ls 1&nbsp;&nbsp;&nbsp; Maximum site
 density (non-competitive),1/nm2 \J</tt> <br>
@@ -520,9 +555,11 @@ density (CEC) ,mkeq/g&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \A</tt>
 <tt>----------------------------------------------------------------------</tt>
 <br>
 &nbsp; </p>
+
 <h4> <a name="PROCESONLY_DODS"></a>8.4. Data oblect labels applicable
 to
 PROCES math scripts only</h4>
+
 Labels&nbsp; in this list can not be used for preprocessing ICOMP,
 DCOMP , COMPOS and PHASE names.
 <p><tt>----------------------------------------------------------------------</tt>
@@ -627,6 +664,7 @@ D_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Current pe</font></tt>
 <tt><font color="#cc0000">cEh&nbsp;&nbsp;&nbsp;&nbsp;
 D_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Current Eh</font></tt>
 </p>
+
 <p><tt><u>Optional vectors (can be used if allocated, Nr is number of
 records</u></tt> <br>
 <tt><u>to be generated by the process simulation run)</u></tt> <br>
@@ -653,8 +691,10 @@ Nr 1&nbsp;&nbsp;&nbsp; Array of empirical parameters</font></tt> <br>
 <tt>--------------------------------------------------------------------</tt>
 <br>
 &nbsp; </p>
+
 <h4> <a name="GTDEMOONLY_DODS"></a>8.5. Data objects accessible in
 GTDEMO Math Script expressions</h4>
+
 List of labels accessible in the Data Sampler and Plotter (GTDEMO) Math
 Scripts (objects from the PROCES structure can also be used if this
 GTDEMO record is attached to a PROCES record). Arrays in this list can
@@ -710,13 +750,19 @@ NwN, NwM, Nqp, Nxe and NyE dimensions of orptional dynamic objects must
 be specified when the GTDEMO record is rebuild. <br>
 &nbsp; <br>
 &nbsp;</p>
+
 <hr size="2" width="100%">
 <p> </p>
+
 <h3> </h3>
+
 <p>End of Document <br>
 &nbsp; </p>
+
 <br>
+
 <br>
+
 <br>
-</body>
-</html>
+
+</body></html>

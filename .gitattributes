@@ -1391,8 +1391,6 @@ gems3/shared/doc/html/g_mscript.html -text
 gems3/shared/doc/html/g_objndx.html -text
 gems3/shared/doc/html/g_tutor.html -text
 gems3/shared/doc/html/g_useref.html -text
-gems3/shared/doc/html/ge_howto.html -text
-gems3/shared/doc/html/gems-specs.html -text
 gems3/shared/doc/html/gems1.png -text
 gems3/shared/doc/html/gems3help.qch -text
 gems3/shared/doc/html/gems3help.qhc -text
@@ -1414,8 +1412,6 @@ gems3/shared/doc/html/gems_team.html -text
 gems3/shared/doc/html/gems_tests.html -text
 gems3/shared/doc/html/gems_tutorial.html -text
 gems3/shared/doc/html/gems_workflow.html -text
-gems3/shared/doc/html/gemstar2.html -text
-gems3/shared/doc/html/gemstdbm.html -text
 gems3/shared/doc/html/gm_compos.html -text
 gems3/shared/doc/html/gm_dcomp.html -text
 gems3/shared/doc/html/gm_dualth.html -text
@@ -1430,7 +1426,6 @@ gems3/shared/doc/html/gm_rtparm.html -text
 gems3/shared/doc/html/gm_sdref.html -text
 gems3/shared/doc/html/gm_syseq.html -text
 gems3/shared/doc/html/gm_unspace.html -text
-gems3/shared/doc/html/gp_howto.html -text
 gems3/shared/doc/html/help.png -text
 gems3/shared/doc/html/iconclose.png -text
 gems3/shared/doc/html/kcalc.png -text
@@ -1449,7 +1444,6 @@ gems3/shared/doc/html/setup.png -text
 gems3/shared/doc/html/simbtype.png -text
 gems3/shared/doc/html/syseqkey.png -text
 gems3/shared/doc/html/syseqrem.png -text
-gems3/shared/doc/html/terms-of-use.html -text
 gems3/shared/doc/html/theory_gem.html -text
 gems3/shared/doc/html/theory_kin.html -text
 gems3/shared/doc/html/theory_scm.html -text
