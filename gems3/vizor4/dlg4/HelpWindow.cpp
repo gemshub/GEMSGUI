@@ -222,17 +222,17 @@ void HelpWindow::helpVersion()
     QMessageBox::information(this,
 #ifdef __unix
 #ifdef __APPLE__
-trUtf8("Title"), trUtf8("GEMS3 (MacOS X 10.6 SL)\n\n")+
+trUtf8("Title"), trUtf8("GEMS3 (MacOS X SL 10.6)\n\n")+
 #else
-trUtf8("GEMS3 (Linux gcc4.4 KDE4 32/64)"),
+trUtf8("GEMS3 (Linux KDE4 32/64 gcc4.4)"),
 #endif
 #else
 trUtf8("GEMS3 (Windows XP/7 MinGW gcc4.4)"),
 #endif
            trUtf8("This is GEM-Selektor 3 (GEMS3) program package   \n\n"
                   "    release candidate version 3.0,\n\n"
-                  "    rev. 1783 (January 27, 2010)\n\n"
-                  "    using GEMS3K rev. 521 (trunk) \n\n\n"
+                  "    rev. 1796 (February 7, 2010)\n\n"
+                  "    using GEMS3K rev. 523 (trunk) \n\n\n"
                   "For GEMS Wiki community of geochemical modellers \n\n"
                   "(c) 2011, PSI-ETHZ GEMS Development Team\n") );
 }
@@ -536,7 +536,7 @@ void VersionDialog::languageChange()
 }
 
 //----------------------------------------------------------------
-// Help file name constant
+// Help file entry point constants
 
 const char *WZSTEP = "WZSTEP";
 const char *MWPAGE = "MWPAGE";
