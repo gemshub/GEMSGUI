@@ -40,6 +40,12 @@ TMTparm::TMTparm( int nrt, RMULTS* mu_ ):
     set_def();
 }
 
+const char* TMTparm::GetHtml()
+{
+   return GSM_MTPARM_HTML;
+
+}
+
 // link values to objects
 void TMTparm::ods_link( int /*q*/)
 {

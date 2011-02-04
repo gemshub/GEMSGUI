@@ -360,7 +360,7 @@ void LegendDialog::CmChangeLabelFont()
 
 void LegendDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_GRAPH_HTML, "CUSTOMIZE" );
+    pVisorImp->OpenHelp( GEMS_GRAPH_CUS_HTML );
 }
 
 //--------------------- End of LegendDialog.cpp ---------------------------

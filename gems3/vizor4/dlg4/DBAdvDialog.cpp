@@ -57,7 +57,7 @@ void DBAdvDialog::CmHelp()
 
 void DBAdvDialog::CmFormats()
 {
-    pVisorImp->OpenHelp( GEMS_MISCL_HTML, "FORMATS" );
+    pVisorImp->OpenHelp( GEMS_FORMT_HTML );
 }
 
 void DBAdvDialog::CmOpen_PROBE()

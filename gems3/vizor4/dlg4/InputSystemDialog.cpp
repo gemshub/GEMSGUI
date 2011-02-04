@@ -312,7 +312,7 @@ void InputSystemDialog::CmPrint()
 void
 InputSystemDialog::help()
 {
-  pVisorImp->OpenHelp( GEMS_RECIPE_HTML, "RECIPE" );
+  pVisorImp->OpenHelp( GEMS_RECIPE_HTML );
 }
 
 int InputSystemDialog::tableFindRow( int nO, int ndx)

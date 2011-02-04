@@ -170,7 +170,7 @@ ExcludeFillDialog::~ExcludeFillDialog()
 void
 ExcludeFillDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_MISSING_HTML, "MISSING" );
+    pVisorImp->OpenHelp( GEMS_MISSING_HTML );
 }
 
 

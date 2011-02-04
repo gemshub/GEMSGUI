@@ -27,6 +27,13 @@
 
 const char A_EMPTY='`';
 
+const char* TSyst::GetHtml()
+{
+   return GSM_SYSTEM_HTML;
+
+}
+
+
 TSyst::TSyst( int nrt, RMULTS* mu_ ):
         TSubModule( nrt ), mup(mu_)
 {

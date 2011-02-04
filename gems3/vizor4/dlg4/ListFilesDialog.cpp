@@ -122,7 +122,7 @@ void ListFilesDialog::languageChange()
 
 void ListFilesDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_MPROJ_LF_HTML, "FILES" );
+    pVisorImp->OpenHelp( GEMS_MPROJ_LF_HTML );
 }
 
 /*! returns selection array

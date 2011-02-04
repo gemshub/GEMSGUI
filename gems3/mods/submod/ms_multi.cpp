@@ -20,6 +20,7 @@
 #include "m_param.h"
 #include "v_object.h"
 #include "visor.h"
+#include "service.h"
 
 // Constructor
 //
@@ -42,6 +43,11 @@ TMulti::TMulti( int nrt, SYSTEM* sy_, MTPARM *tp_, RMULTS *mu_ ):
     sizeFIs = 0;
     phSolMod = 0;
 }
+
+    const char* TMulti::GetHtml()
+    {
+       return GSM_MULTI_HTML;
+    }
 
 // link values to objects
 void TMulti::ods_link( int )

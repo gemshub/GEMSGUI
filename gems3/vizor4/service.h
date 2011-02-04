@@ -209,23 +209,29 @@ extern const char *GM_UNSPACE_HTML;    //m_unspace.cpp
 extern const char *GM_UNSPACE_WZ_HTML; //UnSpaceWizard
 extern const char *GM_DUALTH_HTML;     //m_dualth.cpp
 extern const char *GM_DUALTH_WZ_HTML;  //DualThWizard
-
+extern const char *GSM_SYSTEM_HTML;    //ms_system.cpp
+extern const char *GSM_MTPARM_HTML;    //ms_mtparm.cpp
+extern const char *GSM_EQDEMO_HTML;    //ms_calc.h
+extern const char *GSM_MULTI_HTML;     //ms_calc.h
 // dialogs
 extern const char *GEMS_ABOUT_HTML;    // MainDialog
 extern const char *GEMS_TUTOR_HTML;    // MainDialog
 extern const char *GEMS_SETUP_HTML;    // SettingsDialog
 extern const char *GEMS_TDBAS_HTML;    // DBDialog
 extern const char *GEMS_MISCL_HTML;     // DBAdvDialog
+extern const char *GEMS_FORMT_HTML;     // DBAdvDialog
 extern const char* GEMS_REKEY_HTML;      // KeyFilter
 extern const char *GEMS_MPROJ_HTML;      // KeyProfile
 extern const char *GEMS_MPROJ_LF_HTML;   // ListFilesDialog
 extern const char *GEMS_MPROJ_LF_HTML;   // ListFilesDialog
 extern const char *GEMS_ONESYS_HTML;     // NewSystemDialog
+extern const char *GEMS_HOWTO_HTML;
 extern const char *GEMS_BCC_HTML;
 extern const char *GEMS_IPM_HTML;
 extern const char *GEMS_RECIPE_HTML;    // InputSystemDialog
-extern const char *GEMS_GRAPH_HTML; // GraphDialog&LegendDialog
-extern const char* GEMS_MISSING_HTML;    // ExcludeFillDialog
+extern const char *GEMS_GRAPH_HTML;     // GraphDialog
+extern const char *GEMS_GRAPH_CUS_HTML; // LegendDialog
+extern const char* GEMS_MISSING_HTML;   // ExcludeFillDialog
 
 
 #endif // _service_h

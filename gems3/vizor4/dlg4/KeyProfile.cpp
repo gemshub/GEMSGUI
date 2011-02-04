@@ -105,7 +105,7 @@ void KeyProfile::CmNew()
 
 void KeyProfile::CmHelp()
 {
-  pVisorImp->OpenHelp( GEMS_MPROJ_HTML, "HOWTO" );
+  pVisorImp->OpenHelp( GEMS_MPROJ_HTML );
 }
 
 bool

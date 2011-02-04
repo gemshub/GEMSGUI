@@ -20,6 +20,7 @@
 #define _ms_calc_h_
 
 #include "v_mod.h"
+#include "service.h"
 
 // Data of EQUSTAT calc
 class TEQCalc :
@@ -53,6 +54,10 @@ public:
     void set_def( int /*i*/=0)
     {}
 
+    const char* GetHtml()
+    {
+       return GSM_EQDEMO_HTML;
+    }
 
 };
 
@@ -97,6 +102,10 @@ public:
      return titler;
     }
 
+    const char* GetHtml()
+    {
+       return GSM_EQDEMO_HTML;
+    }
 
 };
 

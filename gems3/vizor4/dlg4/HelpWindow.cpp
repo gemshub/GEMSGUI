@@ -571,21 +571,29 @@ const char *GM_UNSPACE_WZ_HTML = "gm_unspace";   //UnSpaceWizard
 const char *GM_DUALTH_HTML = "gm_dualth";        //m_dualth.cpp
 const char *GM_DUALTH_WZ_HTML = "gm_dualth";     //DualThWizard
 
+const char *GSM_SYSTEM_HTML = "gems_bcc";        //ms_system.cpp
+const char *GSM_MTPARM_HTML = "gems_systd";      //ms_mtparm.cpp
+const char *GSM_EQDEMO_HTML = "gems_sys";        //ms_calc.h
+const char *GSM_MULTI_HTML =  "gems_ipm";        //ms_calc.h
+
 // dialogs
 const char *GEMS_ABOUT_HTML = "gems_about";       // MainDialog
 const char *GEMS_TUTOR_HTML = "gems_tutorial";    // MainDialog
 const char *GEMS_SETUP_HTML = "gems_setup";       // SettingsDialog
 const char *GEMS_TDBAS_HTML = "gems_tdbase";      // DBDialog
 const char *GEMS_MISCL_HTML = "gems_miscel";      // DBAdvDialog
+const char *GEMS_FORMT_HTML = "gems_miscel.html#FORMATS";   // DBAdvDialog
 const char* GEMS_REKEY_HTML = "gems_rekey";       // KeyFilter
-const char *GEMS_MPROJ_HTML = "gm_project";       // KeyProfile
-const char *GEMS_MPROJ_LF_HTML = "gm_project";    // ListFilesDialog
+const char *GEMS_MPROJ_HTML = "gm_project.html#HOWTO";    // KeyProfile
+const char *GEMS_MPROJ_LF_HTML = "gm_project.html#FILES"; // ListFilesDialog
 const char *GEMS_ONESYS_HTML = "gems_sys";        // NewSystemDialog
+const char *GEMS_HOWTO_HTML = "gems_sys.html#HOWTO";
 const char *GEMS_BCC_HTML = "gems_bcc";
 const char *GEMS_IPM_HTML = "gems_ipm";
-const char *GEMS_RECIPE_HTML = "gems_bcc";     // InputSystemDialog
-const char *GEMS_GRAPH_HTML = "gems_graph"; // GraphDialog&LegendDialog
-const char* GEMS_MISSING_HTML = "gems_bcc";    // ExcludeFillDialog
+const char *GEMS_RECIPE_HTML = "gems_bcc.html#RECIPE"; // InputSystemDialog
+const char *GEMS_GRAPH_HTML = "gems_graph"; // GraphDialog
+const char *GEMS_GRAPH_CUS_HTML = "gems_graph.html#CUSTOMIZE"; // LegendDialog
+const char* GEMS_MISSING_HTML = "gems_bcc.html#MISSING";  // ExcludeFillDialog
 
 
 

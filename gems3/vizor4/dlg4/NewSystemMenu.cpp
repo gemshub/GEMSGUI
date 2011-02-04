@@ -640,7 +640,7 @@ NewSystemDialog::CmMoreIPM()
 void
 NewSystemDialog::CmHowto()
 {
-    pVisorImp->OpenHelp( GEMS_ONESYS_HTML, "HOWTO" );
+    pVisorImp->OpenHelp( GEMS_HOWTO_HTML );
 }
 
 void
