@@ -382,7 +382,7 @@
         <string>Learn about GEM chemical thermodynamic modelling technique</string>
        </property>
        <property name="text">
-        <string>&amp;Help</string>
+        <string>&amp;Learn more..</string>
        </property>
        <property name="shortcut">
         <string>Alt+H</string>

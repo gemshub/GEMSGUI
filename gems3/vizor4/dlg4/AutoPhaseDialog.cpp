@@ -17,7 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *AUTOPHASE_HTML = "autophase_setup";
 const char * dfAqKeyD =  "a   AQELIA  aq_gen          aq  Davies          ";
 const char * dfAqKeyH =  "a   AQELIA  aq_gen          aq  EDH_H           ";
 const char * dfAqKey3 =  "a   AQELIA  aq_gen          aq  EDH_K           ";
@@ -52,6 +51,7 @@ const double dfImaxU = 9.9;
 
 #include "AutoPhaseDialog.h"
 #include "visor_w.h"
+#include "service.h"
 
 
 AutoPhaseDialog::AutoPhaseDialog (
@@ -262,7 +262,7 @@ AutoPhaseDialog::CmCheck()
 void
 AutoPhaseDialog::CmHelp()
 {
-  pVisorImp->OpenHelp( AUTOPHASE_HTML, 0 );
+  pVisorImp->OpenHelp( GEMS_APHSETUP_HTML );
 }
 
 //--------------------- End of ProcessDialog.cpp ---------------------------

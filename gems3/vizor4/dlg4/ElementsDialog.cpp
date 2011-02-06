@@ -16,21 +16,17 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-const char *GEMS_EL_HTML = "elements";
-
 
 #include <qlabel.h>
 
 #include "ElementsDialog.h"
 #include "SetFiltersDialog.h"
 #include <qbuttongroup.h>
-//nclude <qpushbutton.h>
-//nclude <qradiobutton.h>
-//nclude <qcheckbox.h>
+#include "service.h"
 #include "visor.h"
 #include "visor_w.h"
 #include "m_icomp.h"
- #include "m_param.h"
+#include "m_param.h"
 
 ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
            const char* /*caption*/):
@@ -235,7 +231,7 @@ void ElementsDialog::languageChange()
 void
 ElementsDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_EL_HTML, 0 );
+    pVisorImp->OpenHelp( GEMS_ELEMENTS_HTML );
 }
 
 void

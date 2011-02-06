@@ -58,15 +58,6 @@
          <attribute name="headerMinimumSectionSize">
           <number>200</number>
          </attribute>
-         <attribute name="headerCascadingSectionResizes">
-          <bool>true</bool>
-         </attribute>
-         <attribute name="headerDefaultSectionSize">
-          <number>400</number>
-         </attribute>
-         <attribute name="headerMinimumSectionSize">
-          <number>200</number>
-         </attribute>
          <column>
           <property name="text">
            <string>Record type / File Keyword</string>
@@ -1396,7 +1387,7 @@ records
         </font>
        </property>
        <property name="text">
-        <string>&amp;Help</string>
+        <string>&amp;Learn more...</string>
        </property>
        <property name="shortcut">
         <string>Alt+H</string>

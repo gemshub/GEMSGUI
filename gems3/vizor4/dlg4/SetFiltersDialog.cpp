@@ -16,8 +16,6 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-const char *GEMS_SFD_HTML = "elements";
-
 
 #include <qlabel.h>
 
@@ -25,6 +23,7 @@ const char *GEMS_SFD_HTML = "elements";
 
 #include "visor_w.h"
 #include "v_dbm.h"
+#include "service.h"
 
 
 SetFiltersDialog::SetFiltersDialog(QWidget* win,
@@ -101,7 +100,7 @@ void SetFiltersDialog::languageChange()
 void
 SetFiltersDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_SFD_HTML, 0 );
+    pVisorImp->OpenHelp( GEMS_SETFILT_HTML );
 }
 
 void

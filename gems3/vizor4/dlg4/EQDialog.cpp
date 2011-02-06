@@ -17,8 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *GEMS_EQ_HTML = "ge_howto";
-
 #include <QCloseEvent>
 #include <qlabel.h>
 #include <qvariant.h>
@@ -26,8 +24,6 @@ const char *GEMS_EQ_HTML = "ge_howto";
 #include "EQDialog.h"
 #include "NewSystemDialog.h"
 #include "MainDialog.h"
-//#include "HLresDialog.h"
-//#include "HLinpDialog.h"
 
 #include "service.h"
 #include "visor.h"
@@ -90,7 +86,7 @@ void EQDialog::CmAdvanced()
 
 void EQDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_EQ_HTML );
+    pVisorImp->OpenHelp( GEMS_MODES_HTML );
 }
 
 void EQDialog::CmOpen_PROBE()

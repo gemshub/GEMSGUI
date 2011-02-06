@@ -3709,7 +3709,7 @@
       <string>Click here to learn more about this dialog and creation of independent modelling projects</string>
      </property>
      <property name="text">
-      <string>&amp;Help</string>
+      <string>&amp;More...</string>
      </property>
      <property name="shortcut">
       <string>Alt+H</string>

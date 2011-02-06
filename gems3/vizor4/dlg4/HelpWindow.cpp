@@ -583,7 +583,7 @@ const char *GEMS_SETUP_HTML = "gems_setup";       // SettingsDialog
 const char *GEMS_TDBAS_HTML = "gems_tdbase";      // DBDialog
 const char *GEMS_MISCL_HTML = "gems_miscel";      // DBAdvDialog
 const char *GEMS_FORMT_HTML = "gems_miscel.html#FORMATS";   // DBAdvDialog
-const char* GEMS_REKEY_HTML = "gems_rekey";       // KeyFilter
+const char *GEMS_REKEY_HTML = "gems_rekey";       // KeyFilter
 const char *GEMS_MPROJ_HTML = "gm_project.html#HOWTO";    // KeyProfile
 const char *GEMS_MPROJ_LF_HTML = "gm_project.html#FILES"; // ListFilesDialog
 const char *GEMS_ONESYS_HTML = "gems_sys";        // NewSystemDialog
@@ -593,9 +593,13 @@ const char *GEMS_IPM_HTML = "gems_ipm";
 const char *GEMS_RECIPE_HTML = "gems_bcc.html#RECIPE"; // InputSystemDialog
 const char *GEMS_GRAPH_HTML = "gems_graph"; // GraphDialog
 const char *GEMS_GRAPH_CUS_HTML = "gems_graph.html#CUSTOMIZE"; // LegendDialog
-const char* GEMS_MISSING_HTML = "gems_bcc.html#MISSING";  // ExcludeFillDialog
-
-
+const char *GEMS_MISSING_HTML = "gems_bcc.html#MISSING";  // ExcludeFillDialog
+const char *GEMS_MODES_HTML = "gems_sys.html#MODES";   //EQDialog
+const char *GEMS_ELEMENTS_HTML = "gems_elements"; // ElementsDialog
+const char *GEMS_SETFILT_HTML = "gems_elements.html#FILTERS"; // SetFiltersDialog
+const char *GEMS_APHSETUP_HTML = "gems_aphsetup"; // AutoPhaseDialog
+const char *GEMS_TEMPL_HTML = "gems_miscel.html#TEMPLATES";  // ChangeKeyDialog
+const char *GEMS_WRIPMF_HTML = "gems_ipm.html#WRITEIPMFILES"; // LookupDialog
 
 //-------- End of file HelpWindow.cpp ----------------------------
 

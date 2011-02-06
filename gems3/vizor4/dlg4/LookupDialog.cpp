@@ -17,8 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *Lookup_HTML = "gemIPM2k";
-
 #include <qvalidator.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
@@ -27,6 +25,7 @@ const char *Lookup_HTML = "gemIPM2k";
 
 #include "LookupDialog.h"
 #include "visor_w.h"
+#include "service.h"
 
 #define Inherited LookupDialogData
 
@@ -115,7 +114,7 @@ void   LookupDialog::getFlags( char flgs[4] )
 
 void LookupDialog::CmHelp()
 {
-  pVisorImp->OpenHelp( Lookup_HTML );
+  pVisorImp->OpenHelp( GEMS_WRIPMF_HTML );
 }
 
 

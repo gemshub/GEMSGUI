@@ -220,7 +220,7 @@ extern const char *GEMS_SETUP_HTML;    // SettingsDialog
 extern const char *GEMS_TDBAS_HTML;    // DBDialog
 extern const char *GEMS_MISCL_HTML;     // DBAdvDialog
 extern const char *GEMS_FORMT_HTML;     // DBAdvDialog
-extern const char* GEMS_REKEY_HTML;      // KeyFilter
+extern const char *GEMS_REKEY_HTML;      // KeyFilter
 extern const char *GEMS_MPROJ_HTML;      // KeyProfile
 extern const char *GEMS_MPROJ_LF_HTML;   // ListFilesDialog
 extern const char *GEMS_MPROJ_LF_HTML;   // ListFilesDialog
@@ -231,8 +231,13 @@ extern const char *GEMS_IPM_HTML;
 extern const char *GEMS_RECIPE_HTML;    // InputSystemDialog
 extern const char *GEMS_GRAPH_HTML;     // GraphDialog
 extern const char *GEMS_GRAPH_CUS_HTML; // LegendDialog
-extern const char* GEMS_MISSING_HTML;   // ExcludeFillDialog
-
+extern const char *GEMS_MISSING_HTML;   // ExcludeFillDialog
+extern const char *GEMS_MODES_HTML;     // EQDialog
+extern const char *GEMS_ELEMENTS_HTML;  // ElementsDialog
+extern const char *GEMS_SETFILT_HTML;   // SetFiltersDialog
+extern const char *GEMS_APHSETUP_HTML;  // AutoPhaseDialog
+extern const char *GEMS_TEMPL_HTML;     // ChangeKeyDialog
+extern const char *GEMS_WRIPMF_HTML;    // LookupDialog
 
 #endif // _service_h
 

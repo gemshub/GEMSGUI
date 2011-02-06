@@ -17,11 +17,10 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *GEMS_TEMPL_HTML = "g_miscel";
-
 #include <qcombobox.h>
 #include <qvariant.h>
 #include "visor_w.h"
+#include "service.h"
 #include "ChangeKeyDialog.h"
 
 
@@ -58,7 +57,7 @@ ChangeKeyDialog::getTemplTo()
 
 void ChangeKeyDialog::CmHelp()
 {
-   pVisorImp->OpenHelp( GEMS_TEMPL_HTML, 0 );
+   pVisorImp->OpenHelp( GEMS_TEMPL_HTML );
 }
 
 
