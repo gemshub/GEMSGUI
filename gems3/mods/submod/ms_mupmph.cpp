@@ -188,9 +188,17 @@ void TMulti::multi_sys_dc()
             if( j < syp->Ls && j >= syp->Ls - syp->Lsor)
             {   // assembling DC name list for sorption surface species
                 ja = (short)(j-(syp->Ls-syp->Lsor));
-                memcpy( pmp->SM3[ja], mup->SM[jj]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
-               // surface species DC class code (usage will be obsolete)
-                pmp->DCC3[ja] = mup->DCC[jj];
+                if(!(pmp->SM3 && pmp->DCC3))
+                {  // Here a workaround of crash detected on 7.02.2011
+                   char buf[32];
+                   strncpy( buf, mup->SM[jj], MAXSYMB+MAXDRGROUP+MAXDCNAME ); buf[MAXSYMB+MAXDRGROUP+MAXDCNAME] = 0;
+                   vfMessage(  window(), "Multi make error: Lsor != pmp->Lads, DC:", buf );
+                }
+                else {
+                   memcpy( pmp->SM3[ja], mup->SM[jj]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+                   // surface species DC class code (usage will be obsolete)
+                   pmp->DCC3[ja] = mup->DCC[jj];
+                }
             }
             mm = 0.0;
             for( ii=0; ii<pmp->N; ii++ ) // compressing the stoichiometry matrix
