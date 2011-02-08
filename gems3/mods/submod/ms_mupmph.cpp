@@ -192,7 +192,8 @@ void TMulti::multi_sys_dc()
                 {  // Here a workaround of crash detected on 7.02.2011
                    char buf[32];
                    strncpy( buf, mup->SM[jj], MAXSYMB+MAXDRGROUP+MAXDCNAME ); buf[MAXSYMB+MAXDRGROUP+MAXDCNAME] = 0;
-                   vfMessage(  window(), "Multi make error: Lsor != pmp->Lads, DC:", buf );
+                   vfMessage( window(),
+                              "Multi make error: Lsor != pmp->Lads, DC:", buf );
                 }
                 else {
                    memcpy( pmp->SM3[ja], mup->SM[jj]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
@@ -213,7 +214,8 @@ void TMulti::multi_sys_dc()
         // A = 0;
 //     ErrorIf( L != pmp->L, "Multi", "Multi make error: L != pmp->L" );
         if( L != pmp->L )
-            vfMessage(  window(), "Multi make error: L != pmp->L", "Please, press BCC!" );
+            vfMessage( window(),
+                        "Multi make error: L != pmp->L", "Please, press BCC!" );
 
     }
 
@@ -223,7 +225,7 @@ void TMulti::multi_sys_dc()
             if( pmp->ICC[ii] == IC_CHARGE )
                 goto CH_FOUND;
         // error no charge
-        if( vfQuestion(window(), "Multi", "No DC with formula charge are included:\n"
+        if( vfQuestion( window(), "Multi", "No DC with formula charge are included:\n"
                        "Proceed (Y), Cancel (N)?"  ))
         {    pmp->E = 0;
              syp->PE=S_OFF;  // Change Sveta 14/10/2002
@@ -456,6 +458,7 @@ bool TMulti::CompressPhaseIpxt( int kPH )
 void TMulti::multi_sys_ph()
 {
     int k, i;
+    bool non_sorption_phase, is_ss;
     short kk, j, je, jb, ja=0;
     vstr pkey(MAXRKEYLEN);
     time_t crt;
@@ -525,6 +528,7 @@ void TMulti::multi_sys_ph()
             }
 PARLOAD: if( k < syp->Fis )
              pmp->Ls += pmp->L1[k];
+        non_sorption_phase = true;
         switch( pmp->PHC[k] )
         { // loading necessary parameters
         case PH_AQUEL:
@@ -544,7 +548,7 @@ PARLOAD: if( k < syp->Fis )
             break;
         case PH_POLYEL:
         case PH_SORPTION:
-            pmp->FIa++;
+            pmp->FIa++; non_sorption_phase = false;
             ph_sur_param( k, kk );
             for(i=0; i<32; i++ )
                 car_l[i]=-1;
@@ -594,10 +598,11 @@ PARLOAD: if( k < syp->Fis )
         // Loop over DCs in Phase, calculation of phase mean mol. mass
         for( j=jb; j<je; j++ )
         {
+            is_ss = true;
             switch( pmp->DCC[j] )
             {
             case DC_AQ_SOLVENT:
-                pmp->LO = j;
+                pmp->LO = j; is_ss = false;
                 PMM = pmp->MM[j];
                 break;
             case DC_PEL_CARRIER:
@@ -682,13 +687,31 @@ PARLOAD: if( k < syp->Fis )
             case DC_SOL_MAJOR:
                 Cjs = j;
             case DC_SOL_MINOR:
-                PMM += pmp->MM[j];
+                PMM += pmp->MM[j]; is_ss = false;
                 break;
             default: /* if( isdigit( pmp->DCC[j] ))
-                                    pmp->Lads++;
-                                  else */
+                                    pmp->Lads++; else */
+                is_ss = false;
                 PMM += pmp->MM[j]/pmp->L1[k]; /* test it last change 4.12.2006 */
                 break;
+            }
+ // Inserted 08.02.2011 by DK to prevent crashes on inconsistent phases
+            if( non_sorption_phase && is_ss )
+            {
+                char buf[128];
+                sprintf(buf, ": %d %2.16s %c  ( DC: %d  %2.16s %c ) ",
+                        k, pmp->SF[k],  pmp->PHC[k], j, pmp->SM[j], pmp->DCC[j] );
+                vfMessage( window(),
+                           "Inconsistent DC in non-sorption phase", buf );
+                pmp->Lads--;
+            }
+            if( !non_sorption_phase && !is_ss )
+            {
+                char buf[128];
+                sprintf(buf, ": %d %2.16s %c  ( DC: %d  %2.16s %c ) ",
+                        k, pmp->SF[k],  pmp->PHC[k], j, pmp->SM[j], pmp->DCC[j] );
+                vfMessage( window(),
+                           "Inconsistent DC in sorption phase", buf );
             }
         }  /* j */
 
