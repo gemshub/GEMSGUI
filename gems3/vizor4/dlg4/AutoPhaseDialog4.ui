@@ -678,7 +678,7 @@ the aqueous phase model</string>
         <string>&amp;Learn more...</string>
        </property>
        <property name="shortcut">
-        <string>Alt+H</string>
+        <string>F1</string>
        </property>
        <property name="autoDefault">
         <bool>true</bool>

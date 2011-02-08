@@ -1203,6 +1203,9 @@ Other three flags should be changed by advanced users only.</string>
        <property name="text">
         <string>&amp;Learn more...</string>
        </property>
+       <property name="shortcut">
+        <string>F1</string>
+       </property>
       </widget>
      </item>
      <item>

@@ -141,9 +141,8 @@ public slots:
     bool SetProfileMode();
     bool SetGeneralMode();
     void CmExit();
-    void CmHelp();
+    //void CmHelp();
     void CmHelpAbout();
-    void CmHelpMenuItem(); //  Added 05.01.01
     void CalcMulti();
     void SaveSystem();
     void Update(bool force);

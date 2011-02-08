@@ -61,8 +61,6 @@ const int GEMS_DEFAULT_FONT_SIZE = 11;
 #else
 const int GEMS_DEFAULT_FONT_SIZE = 10;
 #endif
-extern const char* GEMS_ABOUT_HTML;
-extern const char* GEMS_TOC_HTML;
 TVisorImp* pVisorImp;
 
 //----------------------------------------------------------------
@@ -297,18 +295,15 @@ const char* TVisorImp::getGEMTitle()
 
 void TVisorImp::CmHelpAbout()
 {
-    OpenHelp( GEMS_ABOUT_HTML );  
+    VersionDialog dlg;
+    dlg.exec();
+//    OpenHelp( GEMS_ABOUT_HTML );
 }
 
-void TVisorImp::CmHelpMenuItem()
+/*void TVisorImp::CmHelp()
 {
     OpenHelp( GEMS_TOC_HTML );  
-}
-
-void TVisorImp::CmHelp()
-{
-    OpenHelp( GEMS_TOC_HTML );  
-}
+}*/
 
 void TVisorImp::setCellFont(const QFont& newCellFont)
 {

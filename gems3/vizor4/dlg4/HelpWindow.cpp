@@ -541,6 +541,7 @@ void VersionDialog::languageChange()
 const char *WZSTEP = "WZSTEP";
 const char *MWPAGE = "MWPAGE";
 const char *DBM = "DBM";
+const char *NUMSET = "NUMSET";
 
 // modules
 const char *GM_COMPOS_WZ_HTML = "gm_compos";
@@ -558,7 +559,8 @@ const char *GM_SDREF_HTML = "gm_sdref";          //m_sdata.cpp
 const char *GM_CONST_HTML = "gm_const";          //m_const.cpp
 const char *GM_PROJECT_HTML = "gm_project";      //m_param.cpp
 const char *GM_PROJECT_WZ_HTML = "gm_project";   //ProjectWizard
-const char *GM_SYSEQ_HTML = "gm_syseq";        //m_syseq.cpp
+const char *GEMS_NUMSET_HTML = "gm_project";     //m_param.cpp
+const char *GM_SYSEQ_HTML = "gm_syseq";          //m_syseq.cpp
 const char *GEMS_SYSTEM_WZ_HTML = "gems_sys";    //SystemWizard
 const char *GM_PROCES_HTML = "gm_proces";        //m_proces.cpp
 const char *GM_PROCES_WZ_HTML = "gm_proces";     //ProcesWizard
@@ -600,6 +602,11 @@ const char *GEMS_SETFILT_HTML = "gems_elements.html#FILTERS"; // SetFiltersDialo
 const char *GEMS_APHSETUP_HTML = "gems_aphsetup"; // AutoPhaseDialog
 const char *GEMS_TEMPL_HTML = "gems_miscel.html#TEMPLATES";  // ChangeKeyDialog
 const char *GEMS_WRIPMF_HTML = "gems_ipm.html#WRITEIPMFILES"; // LookupDialog
+const char *GEMS_MARK_HTML = "gems_miscel.html#MARK"; // SelectDialog
+const char *GEMS_SELECT_HTML = "gems_miscel.html#SELECT"; // KeyDialog
+
+// old
+const char *GEMS_TOC_HTML = "gems_toc"; // default for modules
 
 //-------- End of file HelpWindow.cpp ----------------------------
 

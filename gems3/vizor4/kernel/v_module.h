@@ -61,8 +61,8 @@ protected:
 public:
     virtual void Setup();
     virtual bool EvClose();
-    void CmHelp();
-    void CmHelp2();
+    virtual void CmHelp();
+    virtual void CmHelp2();
 
  public:
     TCModuleImp* pImp;		// for visor implementation

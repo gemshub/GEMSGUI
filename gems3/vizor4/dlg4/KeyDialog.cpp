@@ -20,9 +20,9 @@
 #include <QListWidget>
 #include <qvariant.h>
 
-
 #include "v_dbm.h"
 #include "v_module.h"
+#include "service.h"
 #include "KeyDialog.h"
 #include "KeyFilter.h"
 
@@ -77,6 +77,8 @@ KeyDialog::KeyDialog(QWidget* win, int irt, const char* key,
     pList->setCurrentRow(sel); // pList->setSelected(sel, true);
     pButton3->hide();
     pButton2->hide();
+    QObject::connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
+
 
     pList->setFocus();
 
@@ -105,6 +107,7 @@ KeyDialog::KeyDialog(QWidget* win, int irt, TCStringArray& sel,
     pList->setFont( pVisorImp->getCellFont() );
     pList->setSelectionMode(QAbstractItemView::MultiSelection);  // pList->setMultiSelection(true);
     setWindowTitle( caption );
+    QObject::connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
 
     ErrorIf(!key, "KeyDialog", "pkey is null");
     if( strpbrk(key, "*?") == 0 )
@@ -120,6 +123,11 @@ KeyDialog::KeyDialog(QWidget* win, int irt, TCStringArray& sel,
 
 KeyDialog::~KeyDialog()
 {}
+
+void KeyDialog::CmHelp()
+{
+  pVisorImp->OpenHelp( GEMS_SELECT_HTML );
+}
 
 void KeyDialog::languageChange()
 {

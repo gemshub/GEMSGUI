@@ -441,6 +441,9 @@ The Compos record can be configured in the most convenient way, depending on the
        <property name="text">
         <string>&amp;Learn more...</string>
        </property>
+       <property name="shortcut">
+        <string>F1</string>
+       </property>
       </widget>
      </item>
      <item>

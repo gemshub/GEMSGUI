@@ -1143,6 +1143,9 @@ A simple tExpr script can be created using the selection dialog on the next page
        <property name="text">
         <string>&amp;Learn more...</string>
        </property>
+       <property name="shortcut">
+        <string>F1</string>
+       </property>
       </widget>
      </item>
      <item>

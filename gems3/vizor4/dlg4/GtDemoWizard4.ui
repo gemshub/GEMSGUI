@@ -753,6 +753,9 @@ To tell GtDemo what data to sample, a math script must be provided in Gexpr fiel
        <property name="text">
         <string>&amp;Learn more...</string>
        </property>
+       <property name="shortcut">
+        <string>F1</string>
+       </property>
       </widget>
      </item>
      <item>

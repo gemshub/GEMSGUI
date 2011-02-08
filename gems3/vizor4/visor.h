@@ -147,7 +147,7 @@ public:
     void makeDBDir(const char *dir);
     TCStringArray readPDBDir(const char *dir, const char *filter );
 
-    void OpenHelp(const char* file, const char* item=0, int page =-1 );
+    //void OpenHelp(const char* file, const char* item=0, int page =-1 );
     void OpenModule(QWidget* parent, int i, int page=0, bool viewmode=false, bool select=false);
     void OpenProgress(bool step=false);
     void CloseProgress();

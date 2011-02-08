@@ -852,6 +852,9 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
        <property name="text">
         <string>&amp;Learn more...</string>
        </property>
+       <property name="shortcut">
+        <string>F1</string>
+       </property>
       </widget>
      </item>
      <item>

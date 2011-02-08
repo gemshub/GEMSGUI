@@ -180,6 +180,7 @@ bool vfLookupDialogSet(QWidget* wpar, char flags[4],
 extern const char *WZSTEP;
 extern const char *MWPAGE;
 extern const char *DBM;
+extern const char *NUMSET;
 
 // modules
 extern const char *GM_COMPOS_WZ_HTML; //ComposWizard
@@ -197,6 +198,7 @@ extern const char *GM_SDREF_HTML;     //m_sdata.cpp
 extern const char *GM_CONST_HTML;     //m_const.cpp
 extern const char *GM_PROJECT_HTML;   //m_param.cpp
 extern const char *GM_PROJECT_WZ_HTML;//ProjectWizard
+extern const char *GEMS_NUMSET_HTML;     //m_param.cpp
 extern const char *GM_SYSEQ_HTML;        //m_syseq.cpp
 extern const char *GEMS_SYSTEM_WZ_HTML;//SystemWizard
 extern const char *GM_PROCES_HTML;     //m_proces.cpp
@@ -238,6 +240,11 @@ extern const char *GEMS_SETFILT_HTML;   // SetFiltersDialog
 extern const char *GEMS_APHSETUP_HTML;  // AutoPhaseDialog
 extern const char *GEMS_TEMPL_HTML;     // ChangeKeyDialog
 extern const char *GEMS_WRIPMF_HTML;    // LookupDialog
+extern const char *GEMS_MARK_HTML;      // SelectDialog
+extern const char *GEMS_SELECT_HTML;    // KeyDialog
+
+// old
+extern const char *GEMS_TOC_HTML; // default for modules
 
 #endif // _service_h
 

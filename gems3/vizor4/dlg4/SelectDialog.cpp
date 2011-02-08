@@ -24,6 +24,7 @@
 
 #include "SelectDialog.h"
 #include "visor_w.h"
+#include "service.h"
 
 
 SelectDialog::SelectDialog( QWidget* parent, const char* title,
@@ -50,6 +51,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
 
     pButton3->hide();
     pButton2->hide();
+    QObject::connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
 
     pList->setFocus();
     if( lens > 70 ) lens = 70;
@@ -81,6 +83,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
 
     pButton3->hide();
     pButton2->setText( tr( "Ok to &All"  ) );
+    QObject::connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
 
     pList->setFocus();
     if( lens > 70 ) lens = 70;
@@ -109,6 +112,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     //  pList->setCurrentRow(0);
     for( uint jj=0; jj<sel.GetCount(); jj++ )
         pList->item(sel[jj])->setSelected( true);
+    QObject::connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
 
     pList->setFocus();
     if( lens > 70 ) lens = 70;
@@ -166,6 +170,10 @@ void SelectDialog::languageChange()
     retranslateUi(this);
 }
 
+void SelectDialog::CmHelp()
+{
+  pVisorImp->OpenHelp( GEMS_MARK_HTML );
+}
 
 //--------------------- End of SelectDialog.cpp ---------------------------
 

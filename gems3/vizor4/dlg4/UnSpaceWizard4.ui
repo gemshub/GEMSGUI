@@ -1614,6 +1614,9 @@ p, li { white-space: pre-wrap; }
        <property name="text">
         <string>&amp;Learn more...</string>
        </property>
+       <property name="shortcut">
+        <string>F1</string>
+       </property>
       </widget>
      </item>
      <item>

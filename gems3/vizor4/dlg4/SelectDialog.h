@@ -36,7 +36,7 @@ class SelectDialog : public QDialog, public Ui::SelectDialogData
 
 protected slots:
     virtual void languageChange();
-
+    void CmHelp();
     virtual void CmSelectAll();
     virtual void CmClearAll();
 

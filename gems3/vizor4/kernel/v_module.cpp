@@ -17,8 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *GEMS_TOC_HTML = "gems_toc";
-
 #ifndef __unix
 #include <io.h>
 #endif
@@ -129,7 +127,10 @@ const char* TSubModule::GetHtml()
 
 void TSubModule::CmHelp()
 {
-    pVisorImp->OpenHelp( GetHtml() );
+    if(pVisor->ProfileMode == true && nRT==RT_PARAM)
+         pVisorImp->OpenHelp( GetHtml(), NUMSET );
+    else
+         pVisorImp->OpenHelp( GetHtml() );
 }
 
 void TSubModule::CmHelp2()

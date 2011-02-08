@@ -292,7 +292,7 @@
        <string>&amp;What is GEMS?</string>
       </property>
       <property name="shortcut">
-       <string>Alt+A</string>
+       <string>F1</string>
       </property>
       <property name="default">
        <bool>false</bool>

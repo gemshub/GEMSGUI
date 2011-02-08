@@ -1087,11 +1087,11 @@ TCStringArray TVisor::readPDBDir(const char *dir, const char *filter )
 }
 
 // added Sveta 14/08/2001
-void
-TVisor::OpenHelp(const char* file, const char* item, int page)
-{
-    pVisorImp->OpenHelp( file );
-}
+//void
+//TVisor::OpenHelp(const char* file, const char* item, int page)
+//{
+//    pVisorImp->OpenHelp( file );
+//}
 
 void
 TVisor::OpenModule(QWidget* parent, int i, int page, bool viewmode, bool select)

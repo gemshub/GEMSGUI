@@ -43,6 +43,7 @@ protected slots:
     virtual void CmClearAll();
     virtual void languageChange();
     virtual void CmFilter();
+    void CmHelp();
 
 
 public:

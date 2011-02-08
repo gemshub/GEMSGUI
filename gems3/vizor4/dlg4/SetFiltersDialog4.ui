@@ -1390,7 +1390,7 @@ records
         <string>&amp;Learn more...</string>
        </property>
        <property name="shortcut">
-        <string>Alt+H</string>
+        <string>F1</string>
        </property>
       </widget>
      </item>
