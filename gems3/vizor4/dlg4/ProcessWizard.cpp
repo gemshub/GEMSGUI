@@ -1096,7 +1096,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                     "  end \n"
                     " if(cXi > 2) begin \n"
                     "  xd_[{%1}] =: 1/cXi; xd_[{%2}] =: 1-1/cXi; \n"
-                    "  modC[J] =: 1/cXi;\n"
+                    "  modC[J] =: 1-1/cXi;\n"
                     " end  \n").arg(EM0, EM1);
       }
       break;
