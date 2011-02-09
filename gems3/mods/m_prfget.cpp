@@ -23,6 +23,7 @@
 #include "v_object.h"
 #include "service.h"
 #include "visor.h"
+#include "visor_w.h"
 extern const char * dfAqKeyD ;
 extern const char * dfAqKeyH ;
 extern const char * dfAqKey3 ;
@@ -93,7 +94,7 @@ TProfil::initCalcMode()
          remakeRec = false;
     int  makeDump = 0;
     gstring key_templ;
-    gstring str = vfKeyProfile( window(), "Modelling projects",
+    gstring str = vfKeyProfile( pVisorImp/*window()*/, "Modelling projects",
           nRT, changeAqGas, addfiles, remakeRec, makeDump, key_templ );
 
     if( str.empty() ) // cancel command

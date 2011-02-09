@@ -620,7 +620,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 //    bool aAqueous, aGaseous, aSorption;
 //    if( !vfElements(window(), prfName, ICkeys,
 //            dbNames, aAqueous, aGaseous, aSorption ))
-    if( !vfElements(window(), prfName, elm_data, sf_data ))
+    if( !vfElements(0/*window()*/, prfName, elm_data, sf_data ))
       return false;
 
 //    elm_data.flNames.Add(prfName);
