@@ -1,98 +1,94 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html><head>
-  
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-
-  
-  <meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
+<html>
+<head>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR"
+ content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
   <title>GEMS3 RTParm Module</title>
-
-  
-  
   <meta name="description" content="Version 2.0.0-PSI">
-
-</head><body>
+</head>
+<body>
 <h1><img src="gems1.png" height="48" width="48"> GEM-Selektor version 3<br>
 </h1>
-
 <h2>Temperature-Pressure Tabulation (RTParm) Module<br>
 </h2>
-
 <hr size="2" width="100%">
 <h2> </h2>
-
 <h3>Contents<br>
 </h3>
-
 <blockquote>
-  <p><a href="#RTPARM_INTRO"><font face="Helvetica, Arial, sans-serif">1.
-RTParm module operation</font></a></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#RTPARM_CREATE">1.1.
-Creating and Modifying RTParm records</a><br>
+  <p><a href="#INTRO"><font face="Helvetica, Arial, sans-serif">1.
+Introduction (What is RTParm)</font></a></p>
+  <p><a href="#MWIZARD"><font face="Helvetica, Arial, sans-serif">2.
+RTParm Create/Remake Wizard</font></a></p>
+  <p><a href="#WZSTEP_1"><font face="Helvetica, Arial, sans-serif">2.1.
+RTParm Wizard Step 1</font></a></p>
+  <p><a href="#WZSTEP_2"><font face="Helvetica, Arial, sans-serif">2.2.
+RTParm Wizard Step 2</font></a></p>
+  <p><a href="#WZSTEP_3"><font face="Helvetica, Arial, sans-serif">2.3.
+RTParm Wizard Step 3</font></a></p>
+  <p><a href="#WZSTEP_4"><font face="Helvetica, Arial, sans-serif">2.4.
+RTParm Wizard Step 4</font></a></p>
+  <p><a href="#MWINDOW"><font face="Helvetica, Arial, sans-serif">3.
+RTParm Module Window</font></a></p>
+  <p><font face="Helvetica, Arial, sans-serif"><a href="#MWPAGE_1">3.1.
+RTParm Window Scripts Page</a><br>
   </font></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#RTPARM_ITERATORS">1.2. Setting up the RTParm iterators</a><br>
+  <p><font face="Helvetica, Arial, sans-serif"><a href="#MWPAGE_2">3.2.
+RTParm Window Tables Page</a><br>
   </font></p>
-  <p><a href="#RTPARM_SAMPLE_SCRIPTS"><font face="Helvetica, Arial, sans-serif">1.3. Writing RTparm data sampling
-math scritps</font></a></p>
-  <p><a href="#RTPARM_RUN"><font face="Helvetica, Arial, sans-serif">1.4.
-Running RTParm calculations</font></a></p>
-  <p><a href="#RTPARM_PLOT"><font face="Helvetica, Arial, sans-serif">1.5.
-Plotting and exporting results</font></a> </p>
-  <p><a href="#RTPARM_SPECIAL"><font face="Helvetica, Arial, sans-serif">1.6.
-Special cases of &nbsp;RTParm calculations</font></a></p>
-  <p><a href="#RTPARM_DATA_ENTRIES"><font face="Helvetica, Arial, sans-serif">2. Description of data entries</font></a></p>
-  <p><a href="#RTPARM_DOD_REMAKE"><font face="Helvetica, Arial, sans-serif">2.1. Data objects accessible on
-create/remake only</font></a> <br>
+  <p><font face="Helvetica, Arial, sans-serif"><a href="#MWPAGE_3">3.3.
+RTParm Window TPwork Page</a><br>
+  </font></p>
+  <p><a href="#MWPAGE_4"><font face="Helvetica, Arial, sans-serif">3.4.
+RTParm Window Setup Page</font></a><a href="#RTPARM_INTRO"><font
+ face="Helvetica, Arial, sans-serif"><br>
+  </font></a></p>
+  <p><a href="#RTPARM_OPERATION"><font
+ face="Helvetica, Arial, sans-serif">4.
+RTParm Module Operation</font></a></p>
+  <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#RTPARM_ITERATORS">4.1. Setting up RTParm Iterators</a><br>
+  </font></p>
+  <p><a href="#RTPARM_SAMPLE_SCRIPTS"><font
+ face="Helvetica, Arial, sans-serif">4.2. Writing RTparm Data Sampling
+Math Scritps</font></a></p>
+  <p><a href="#RTPARM_RUN"><font face="Helvetica, Arial, sans-serif">4.3.
+Running RTParm Calculations</font></a></p>
+  <p><a href="#RTPARM_PLOT"><font face="Helvetica, Arial, sans-serif">4.4.
+Plotting and Exporting Results</font></a> </p>
+  <p><a href="#RTPARM_SPECIAL"><font face="Helvetica, Arial, sans-serif">4.5.
+Special Cases of &nbsp;RTParm Calculations</font></a></p>
+  <p><a href="#RTPARM_DATA_ENTRIES"><font
+ face="Helvetica, Arial, sans-serif">5. Description of RTParm Data
+Entries</font></a></p>
+  <p><a href="#RTPARM_DOD_REMAKE"><font
+ face="Helvetica, Arial, sans-serif">5.1. Data objects accessible
+through
+create/remake wizard only</font></a> <br>
   </p>
-  <p><a href="#RTPARM_TPWORK"><font face="Helvetica, Arial, sans-serif">2.2.
+  <p><a href="#RTPARM_TPWORK"><font face="Helvetica, Arial, sans-serif">5.2.
 Data Objects on TPwork page</font></a><br>
   </p>
-  <p><a href="#RTPARM_ERRORS"><font face="Helvetica, Arial, sans-serif">3.
+  <p><a href="#RTPARM_ERRORS"><font face="Helvetica, Arial, sans-serif">6.
 Warnings and error messages</font></a></p>
+  <p><br>
+  </p>
 </blockquote>
-
+<p><a href="#RTPARM_ERRORS"> </a></p>
 <hr size="2" width="100%">
 <p> </p>
-
-<h2><a name="RTPARM_INTRO"></a>1. RTParm module operation</h2>
-
-<p>When thermodynamic data are entered into <a href="gm_dcomp.html">DComp</a>
-records, or new <a href="gm_reacdc.html">ReacDC</a> definitions are
-constructed, misprints and errors can be introduced. Some of them are
-automatically detected in DComp / ReacDC subroutines, i.e. such errors
-as incomplete or inconsistent standard state molar data, wrong formula
-stoichiometry, incorrect charge; the corresponding diagnostic messages
-are then issued. Some other errors can be detected only when a series
-of thermodynamic data for varying <i>T,P</i>&nbsp; is computed and
-plotted on graphs. Thus, the RTParm data structure and (graphic) screen
-forms are provided for facilitating the process of "debugging"&nbsp;
-thermodynamic data and their <i>T,P</i> dependencies for individual
-species. The RTParm module takes the input data from DComp or ReacDC
-record having a key with the same first four fields as in the <a href="gdb_rkey.html#dbm_RTParm">RTParm record key</a>. Note that the <a href="gemstdbm.html#OVERRIDE">override mechanism</a> does not apply to
-RTParm module operation. <br>
-&nbsp; </p>
-
-<p>Several RTParm records can be created for one DComp or one ReacDC
-record. The RTParm function, taken together with flexibility of DComp
-and ReacDC definitions
-implemented in the GEMS code, provides a substantial help for matching
-thermodynamic
-data and extending the project thermodynamic database. Since the same
-DCthermo()
-and RCthermo() routines are used in both RTParm and <a href="gm_project.html">System Project</a> calculations, the tests done
-by
-RTParm will make you confident that nothing unexpected can happen with
-thermodynamic
-data during calculation of equilibria at non-ambient temperatures and
-pressures.
-</p>
-
-<p><font face="Helvetica, Arial, sans-serif"><br>
-</font></p>
-
-<h3><a name="RTPARM_CREATE"></a>1.1. Creating and Modifying RTParm
+<h2><a name="INTRO"></a>1. Introduction (What is RTParm)<br>
+</h2>
+<br>
+<br>
+<br>
+<hr size="2" width="100%"><br>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="MWIZARD"></a>2.
+RTParm Create/Remake Wizard</font></h3>
+<h3>&lt;to be revised&gt;&nbsp; Creating and Modifying RTParm
 records</h3>
-
 <p>To create a new RTParm record, first make sure that the source DComp
 or ReacDC record has already been created, calculated and saved in the
 database. Then switch to the "RTParm" window and select the "Record"
@@ -107,7 +103,6 @@ of calculation variant (more then one RTParm record can be created for
 the same source DComp or ReacDC record). Enter "1", "2", or any small
 integer you like, and press "Ok" when ready. <br>
 </p>
-
 <p>Now, you should see a "RTParm: Remake dialog..." window with some
 default settings. For the first time, just press "Ok" to proceed - by
 default, the
@@ -116,11 +111,11 @@ energy
 function) at temperatures from 0 to 350 <sup>o</sup>C at step 25 <sup>o</sup>C
 and at <i>P</i><sub>SAT</sub> (saturated H<sub>2</sub>O vapor
 pressure).
-You can now immediately <a href="#RTPARM_RUN">calculate</a>
+You can now immediately <a href="gm_rtparm.html#RTPARM_RUN">calculate</a>
 &nbsp;RTParm
-and then <a href="#RTPARM_PLOT">plot the results</a>.&nbsp; <br>
+and then <a href="gm_rtparm.html#RTPARM_PLOT">plot the results</a>.&nbsp;
+<br>
 </p>
-
 <p>If you need more than one parameter or another number of points to
 be
 calculated, or the configuration of this RTParm record to be changed
@@ -130,20 +125,125 @@ record
 in the <big><tt>RTname</tt></big> field and a comment to it into the <big><tt>RTcom</tt></big>
 field. Check other flags and dimensions (at least, put number of
 columns
-in<tt> <a href="#rDimXY_1">rDimXY[0,1]</a></tt> field, if necessary)
+in<tt> <a href="gm_rtparm.html#rDimXY_1">rDimXY[0,1]</a></tt> field,
+if necessary)
 and
 press "Ok" to proceed. The "Scripts" page of RTParm window now appears
 again;
 you should set up the iterators, edit the math script or enter another
 one,
 and perform the calculation as described below.&nbsp; </p>
-
-<p> <br>
+<p></p>
+<hr size="2" width="100%"><tt><br>
+</tt><tt><a href="index.html"><br>
+</a></tt>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="WZSTEP_1"></a>2.1.
+RTParm Wizard Step 1</font></h3>
+<p><br>
 </p>
-
-<h3><a name="RTPARM_ITERATORS"></a>1.2. Setting up the RTParm iterators<br>
+<hr size="2" width="100%"><tt><br>
+</tt><tt><a href="index.html"><br>
+</a></tt>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="WZSTEP_2"></a>2.2.
+RTParm Wizard Step 2</font></h3>
+<p><br>
+</p>
+<hr size="2" width="100%"><tt><br>
+</tt><tt><a href="index.html"><br>
+</a></tt>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="WZSTEP_3"></a>2.3.
+RTParm Wizard Step 3</font></h3>
+<p><br>
+</p>
+<hr size="2" width="100%"><tt><br>
+</tt><tt><a href="index.html"><br>
+</a></tt>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="WZSTEP_4"></a>2.4.
+RTParm Wizard Step 4</font></h3>
+<p><br>
+</p>
+<hr size="2" width="100%"><tt><br>
+</tt><tt><a href="index.html"><br>
+</a></tt>
+<h2><font face="Helvetica, Arial, sans-serif"><a name="MWINDOW"></a>3.
+RTParm Module Window</font></h2>
+<p><br>
+</p>
+<hr size="2" width="100%"><tt><br>
+</tt><tt><a href="index.html"><br>
+</a></tt>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_1"></a>3.1.
+RTParm Window Scripts Page</font></h3>
+<p><br>
+</p>
+<hr size="2" width="100%"><tt><br>
+</tt><tt><a href="index.html"><br>
+</a></tt>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_2"></a>3.2.
+RTParm Window Tables Page</font></h3>
+<p><br>
+</p>
+<hr size="2" width="100%"><tt><br>
+</tt><tt><a href="index.html"><br>
+</a></tt>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_3"></a>3.3.
+RTParm Window TPwork Page</font></h3>
+<p><br>
+</p>
+<hr size="2" width="100%"><tt><br>
+</tt><tt><a href="index.html"><br>
+</a></tt>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_4"></a>3.4.
+RTParm Window Setup Page</font></h3>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<br>
+<br>
+<br>
+<br>
+<blockquote></blockquote>
+<hr size="2" width="100%">
+<p> </p>
+<h2><a name="RTPARM_OPERATION"></a>4. RTParm module operation</h2>
+<p>When thermodynamic data are entered into <a href="gm_dcomp.html">DComp</a>
+records, or new <a href="gm_reacdc.html">ReacDC</a> definitions are
+constructed, misprints and errors can be introduced. Some of them are
+automatically detected in DComp / ReacDC subroutines, i.e. such errors
+as incomplete or inconsistent standard state molar data, wrong formula
+stoichiometry, incorrect charge; the corresponding diagnostic messages
+are then issued. Some other errors can be detected only when a series
+of thermodynamic data for varying <i>T,P</i>&nbsp; is computed and
+plotted on graphs. Thus, the RTParm data structure and (graphic) screen
+forms are provided for facilitating the process of "debugging"&nbsp;
+thermodynamic data and their <i>T,P</i> dependencies for individual
+species. The RTParm module takes the input data from DComp or ReacDC
+record having a key with the same first four fields as in the <a
+ href="gdb_rkey.html#dbm_RTParm">RTParm record key</a>. Note that the <a
+ href="gemstdbm.html#OVERRIDE">override mechanism</a> does not apply to
+RTParm module operation. <br>
+&nbsp; </p>
+<p>Several RTParm records can be created for one DComp or one ReacDC
+record. The RTParm function, taken together with flexibility of DComp
+and ReacDC definitions
+implemented in the GEMS code, provides a substantial help for matching
+thermodynamic
+data and extending the project thermodynamic database. Since the same
+DCthermo()
+and RCthermo() routines are used in both RTParm and <a
+ href="gm_project.html">System Project</a> calculations, the tests done
+by
+RTParm will make you confident that nothing unexpected can happen with
+thermodynamic
+data during calculation of equilibria at non-ambient temperatures and
+pressures.
+</p>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<p><br>
+</p>
+<hr size="2" width="100%">
+<h3><a name="RTPARM_ITERATORS"></a>4.1. Setting up the RTParm iterators<br>
 </h3>
-
 <p>On the "Scripts" page of RTParm window, you can see two iterators
 (three-cell
 columns) <small><a href="#rpPi_0"><big><tt>rpPi</tt></big></a></small>
@@ -167,14 +267,15 @@ on
 values.
 <br>
 </p>
-
 <p><br>
 </p>
-
-<h3><a name="RTPARM_SAMPLE_SCRIPTS"></a>1.3. Writing RTparm data
+<hr size="2" width="100%"><tt><br>
+</tt><tt><a href="index.html"><br>
+</a></tt>
+<p></p>
+<h3><a name="RTPARM_SAMPLE_SCRIPTS"></a>4.2. Writing RTparm data
 sampling math scritps<br>
 </h3>
-
 <p>The data calculated at each <i>P,T</i> &nbsp;point are put by the
 program
 into data fields visible in the "TPwork" page of the RTParm window. A
@@ -184,7 +285,8 @@ field
 on the "Scripts" page) is needed to copy (or re-calculate) the
 necessary
 values and store them into <big><tt><small><a href="#xT">xT</a></small>,
-<small><a href="#xP">xP</a></small></tt></big> &nbsp;and &nbsp; <a href="#yF"><tt>yF</tt></a> &nbsp;arrays (visible on the "Tables"
+<small><a href="#xP">xP</a></small></tt></big> &nbsp;and &nbsp; <a
+ href="#yF"><tt>yF</tt></a> &nbsp;arrays (visible on the "Tables"
 page).
 The template scripts can be found in the SDref database (e.g.&nbsp;
 "mscript:0001:rtparm:" record key) after you have pressed the <big><tt>F3</tt></big>
@@ -197,45 +299,47 @@ whole
 sequence of <i>T,P&nbsp;</i> points after the "Record" "Calculate"
 menu
 command is executed or the "Calculate" toolbar button is pressed.</p>
-
 <p><br>
 </p>
-
-<h3><a name="RTPARM_RUN"></a>1.4. Running RTParm calculations<br>
+<hr size="2" width="100%"><tt><br>
+</tt><tt><a href="index.html"><br>
+</a></tt>
+<p></p>
+<h3><a name="RTPARM_RUN"></a>4.3. Running RTParm calculations<br>
 </h3>
-
 <p>Calculations are performed&nbsp; with "Record" "Calculate" command
 or
 "Calculate" toolbar button. It is advisable to save the RTParm record
 to
 database when the program will ask for that.&nbsp; </p>
-
 <p><br>
 </p>
-
-<h3><a name="RTPARM_PLOT"></a>1.5. Plotting and exporting results<br>
+<hr size="2" width="100%"><tt><br>
+</tt><tt><a href="index.html"><br>
+</a></tt>
+<p></p>
+<h3><a name="RTPARM_PLOT"></a>4.4. Plotting and exporting results<br>
 </h3>
-
 <p>When calculations are finished, the results can be displayed
 graphically
 upon execution of the <tt>"Record" "Plot"</tt> menu command (or
 toolbar
 button) and can be <a href="gm_gtdemo.html#GTDEMO_PLOT">customized</a>
 in
-the same way as in the <a href="gm_proces.html">Process</a> or <a href="gm_gtdemo.html#">GtDemo</a> record. <br>
+the same way as in the <a href="gm_proces.html">Process</a> or <a
+ href="gm_gtdemo.html#">GtDemo</a> record. <br>
 </p>
-
 <p> The calculated data can also be printed into a text file using a <tt>"Record"
 "Print"</tt>command using a default (<tt>"pscript:0000:rtparm"</tt>) or
 used-defined (as SDref record beginning with <tt>"pscript:..."</tt>)
 printing
 script. <br>
-<br>
 </p>
-
-<h3><a name="RTPARM_SPECIAL"></a>1.6. Special cases of &nbsp;RTParm
+<p><br>
+</p>
+<hr size="2" width="100%"><br>
+<h3><a name="RTPARM_SPECIAL"></a>4.5. Special cases of &nbsp;RTParm
 calculations</h3>
-
 <p>If you have a few experimental (or otherwise derived empirical) data
 points,
 you can plot them over the calculated curve(s). To do it, first remake
@@ -256,24 +360,18 @@ size
 8 or 10, to represent experimental data as large scattered
 symbols.&nbsp; <br>
 </p>
-
 <p>Now, you can perform fitting of temperature (or pressure) correction
 parameters
 against experimental data by changing them in the "parent" DComp (or
 ReacDC)
 record and then repeating the RTParm calculation and plotting. <br>
 </p>
-
 <p>&lt;to be continued&gt;<br>
 &nbsp;</p>
-
 <hr size="2" width="100%">
 <p> </p>
-
-<h2><a name="RTPARM_DATA_ENTRIES"></a>2. Description of Data Entries</h2>
-
+<h2><a name="RTPARM_DATA_ENTRIES"></a>5. Description of Data Entries</h2>
 <dl>
-
   <dt> <a name="RTname"></a><b><tt><font size="+2">RTname</font></tt></b>
 - Comment line for the full name of this RTParm data sampler definition</dt>
   <dd>&nbsp; &nbsp;<br>
@@ -297,17 +395,21 @@ identification of the RTParm sampler.</dd>
 - List of SDref record keys referencing literature, as well as template
 math and print scripts.</dt>
   <dd> &nbsp;&nbsp;</dd>
-  <dd>This list can contain one or more <a href="file:///C:/gems2html/program/doc/html/gdb_rkey.html#dbm_SDref">SDref
+  <dd>This list can contain one or more <a
+ href="file:///C:/gems2html/program/doc/html/gdb_rkey.html#dbm_SDref">SDref
 record keys</a> (in packed format) referencing to bibliography or your
-comments to this RTParm sampler. Allocated if the&nbsp; <span style="font-family: monospace;">RpSize[0]</span> counter is set to a
+comments to this RTParm sampler. Allocated if the&nbsp; <span
+ style="font-family: monospace;">RpSize[0]</span> counter is set to a
 positive number upon remake or create. &nbsp;</dd>
   <dd>&nbsp;</dd>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
   <dt> <a name="rtSDvl"></a><b><tt><font size="+2">rtSDvl</font></tt></b>
 - User's comments to SDref record keys in the rtSDrf list.</dt>
   <dd> &nbsp;</dd>
-  <dd>This list of comments is allocated if the <span style="font-family: monospace;">RpSize[0]</span> counter is set to a
-positive number of lines in the <a href="#rtSDrf"><span style="font-family: monospace;">rtSDrf</span></a> list.</dd>
+  <dd>This list of comments is allocated if the <span
+ style="font-family: monospace;">RpSize[0]</span> counter is set to a
+positive number of lines in the <a href="#rtSDrf"><span
+ style="font-family: monospace;">rtSDrf</span></a> list.</dd>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dt> <a name="rpPi_0"></a><b><tt><font size="+2">rpPi[0]</font></tt></b>
@@ -319,10 +421,14 @@ cell) will be changed in RTParm calculations. This cell contains start
 pressure (0 or positive real number in bars).&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dd>If you wish to keep the pressure P constant then set &nbsp;<span style="font-family: monospace;">rpPi[0] =</span> P; <span style="font-family: monospace;">rpPi[1] =</span> P;<span style="font-family: monospace;"> rpPi[2] =</span> 0. </dd>
+  <dd>If you wish to keep the pressure P constant then set &nbsp;<span
+ style="font-family: monospace;">rpPi[0] =</span> P; <span
+ style="font-family: monospace;">rpPi[1] =</span> P;<span
+ style="font-family: monospace;"> rpPi[2] =</span> 0. </dd>
   <dd> &nbsp; <br>
   </dd>
-  <dd>At the beginning of RTParm calculation, <span style="font-family: monospace;">twP</span> is automatically set equal
+  <dd>At the beginning of RTParm calculation, <span
+ style="font-family: monospace;">twP</span> is automatically set equal
 to <span style="font-family: monospace;">rpPi[0]</span>.</dd>
   <dd>&nbsp; &nbsp;</dd>
   <dd>&nbsp; <br>
@@ -331,7 +437,10 @@ to <span style="font-family: monospace;">rpPi[0]</span>.</dd>
 - Pressure P, bar: end value of the iterator</dt>
   <dd> &nbsp; &nbsp;&nbsp;</dd>
   <dd>This real non-negative value defines the end point of RTParm
-calculation, which continues as long as <tt>twP</tt><span style="font-family: monospace;"> &lt;= rpPi[1]</span> <span style="font-family: monospace;">and <a href="#jTP">jTP</a> &lt; <a href="#rpNpT_2">rpNpT[2]</a>.</span>&nbsp; &nbsp;<br>
+calculation, which continues as long as <tt>twP</tt><span
+ style="font-family: monospace;"> &lt;= rpPi[1]</span> <span
+ style="font-family: monospace;">and <a href="#jTP">jTP</a> &lt; <a
+ href="#rpNpT_2">rpNpT[2]</a>.</span>&nbsp; &nbsp;<br>
 &nbsp; &nbsp;&nbsp;</dd>
   <dd>&nbsp;&nbsp; &nbsp;<br>
   </dd>
@@ -340,7 +449,8 @@ calculation, which continues as long as <tt>twP</tt><span style="font-family: mo
   <dd> &nbsp;&nbsp;</dd>
   <dd> This real value defines how pressure will be (linearly)
 incremented in the process simulation. Default is 0 (constant
-pressure); otherwise the program will change the <span style="font-family: monospace;">twP</span> cell according to a given
+pressure); otherwise the program will change the <span
+ style="font-family: monospace;">twP</span> cell according to a given
 non-zero value.&nbsp;</dd>
   <dd><br>
   </dd>
@@ -361,8 +471,11 @@ pressure <tt>twP</tt> constant.&nbsp;</dd>
 Current pressure of interest P (bar).</dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd>Current pressure P in RTParm calculation<span style="font-family: monospace;"></span>. Automatic Initialization: <span style="font-family: monospace;">twP =: rpPi[0]</span>. Can be
-incremented explicitly in the <span style="font-family: monospace;"><a href="#tExpr">tExpr</a> </span>math script expressions; if this is
+  <dd>Current pressure P in RTParm calculation<span
+ style="font-family: monospace;"></span>. Automatic Initialization: <span
+ style="font-family: monospace;">twP =: rpPi[0]</span>. Can be
+incremented explicitly in the <span style="font-family: monospace;"><a
+ href="#tExpr">tExpr</a> </span>math script expressions; if this is
 not done not and <span style="font-family: monospace;">rpPi[2]
 &lt;&gt; 0</span> then <tt>twP</tt> will be automatically incremented
 as&nbsp; <span style="font-family: monospace;">twP = rpPi[0] +
@@ -379,9 +492,13 @@ changed in RTParm calculations. This cell contains the start (real
 non-negative) value of temperature.&nbsp;</dd>
   <dd><br>
   </dd>
-  <dd>If you wish to keep temperature TC constant then set <span style="font-family: monospace;">rpTi[0] =: </span>TC; <span style="font-family: monospace;">rpTi[1] =:</span> TC; <span style="font-family: monospace;">rpTi[2] =:</span> 0.</dd>
+  <dd>If you wish to keep temperature TC constant then set <span
+ style="font-family: monospace;">rpTi[0] =: </span>TC; <span
+ style="font-family: monospace;">rpTi[1] =:</span> TC; <span
+ style="font-family: monospace;">rpTi[2] =:</span> 0.</dd>
   <dd>&nbsp;&nbsp; &nbsp; </dd>
-  <dd>At the beginning of RTParm calculation, <span style="font-family: monospace;">twTC</span> is automatically set equal
+  <dd>At the beginning of RTParm calculation, <span
+ style="font-family: monospace;">twTC</span> is automatically set equal
 to <span style="font-family: monospace;">rpTi[0] and twTK is set to
 twTC + 273.15.&nbsp;</span></dd>
   <dd>&nbsp;<br>
@@ -391,7 +508,10 @@ twTC + 273.15.&nbsp;</span></dd>
 -&nbsp;Temperature TC, end value of the iterator</dt>
   <dd> &nbsp;&nbsp;</dd>
   <dd>This real non-negative value defines the end point of RTParm
-calculation, which continues as long as <tt>twTC</tt><span style="font-family: monospace;"> &lt;= rpTi[1]</span> <span style="font-family: monospace;">and <a href="#jTP">jTP</a> &lt; <a href="#rpNpT_2">rpNpT[2]</a>.</span>&nbsp; &nbsp;<br>
+calculation, which continues as long as <tt>twTC</tt><span
+ style="font-family: monospace;"> &lt;= rpTi[1]</span> <span
+ style="font-family: monospace;">and <a href="#jTP">jTP</a> &lt; <a
+ href="#rpNpT_2">rpNpT[2]</a>.</span>&nbsp; &nbsp;<br>
 &nbsp;<br>
   </dd>
   <dd>&nbsp; &nbsp; <br>
@@ -401,7 +521,8 @@ calculation, which continues as long as <tt>twTC</tt><span style="font-family: m
   <dd> &nbsp; &nbsp;</dd>
   <dd> This real value defines how temperature will be (linearly)
 incremented in the process simulation. Default is 0 (constant
-temperature); otherwise the program will change the <span style="font-family: monospace;">twTC</span> and <tt>twTK</tt> cells
+temperature); otherwise the program will change the <span
+ style="font-family: monospace;">twTC</span> and <tt>twTK</tt> cells
 according to a given non-zero value.&nbsp;</dd>
   <dd><br>
   </dd>
@@ -421,8 +542,11 @@ temperature <tt>twTC (twTK)</tt> constant.&nbsp;</dd>
   <dt> <a name="twTC"></a><big><big><b><tt>twTC</tt></b></big></big> -
 TC - current temperature, centigrade</dt>
   <dd> &nbsp;&nbsp;&nbsp;</dd>
-  <dd>Current pressure TC in RTParm calculation<span style="font-family: monospace;"></span>. Automatic initialization: <span style="font-family: monospace;">twTC =: rpTi[0]</span>. Can be
-incremented explicitly in the <span style="font-family: monospace;"><a href="#tExpr">tExpr</a> </span>math script expressions; if this is
+  <dd>Current pressure TC in RTParm calculation<span
+ style="font-family: monospace;"></span>. Automatic initialization: <span
+ style="font-family: monospace;">twTC =: rpTi[0]</span>. Can be
+incremented explicitly in the <span style="font-family: monospace;"><a
+ href="#tExpr">tExpr</a> </span>math script expressions; if this is
 not done not and <span style="font-family: monospace;">rpTi[2]
 &lt;&gt; 0</span> then <tt>twTC</tt> will be automatically incremented
 as&nbsp; <span style="font-family: monospace;">twTC = rpTi[0] +
@@ -436,8 +560,10 @@ jTP*rpTi[2]</span> .<br>
 T
 - current temperature, Kelvins</dt>
   <dd> &nbsp;&nbsp;</dd>
-  <dd>This work cell is automatically calculated as &nbsp;<span style="font-family: monospace;">twTK =: twTC + 273.15 </span>&nbsp;at
-each RTParm calculation step in order to facilitate writing of <a href="#tExpr"><span style="font-family: monospace;">tExpr</span></a>&nbsp;
+  <dd>This work cell is automatically calculated as &nbsp;<span
+ style="font-family: monospace;">twTK =: twTC + 273.15 </span>&nbsp;at
+each RTParm calculation step in order to facilitate writing of <a
+ href="#tExpr"><span style="font-family: monospace;">tExpr</span></a>&nbsp;
 math scripts.</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp;&nbsp;<br>
@@ -446,7 +572,8 @@ math scripts.</dd>
 Abscissa name (to be shown on the graph legend)<dd>&nbsp;</dd>
   <dd>&nbsp;Here, the user should type a short name (up to 8
 characters) for
-the abscissa axis that will be shown on the graph. Typical example: <span style="font-family: monospace;">"T,C; P,bar".</span></dd>
+the abscissa axis that will be shown on the graph. Typical example: <span
+ style="font-family: monospace;">"T,C; P,bar".</span></dd>
   <dd>&nbsp; &nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
@@ -466,11 +593,14 @@ list.&nbsp;</dd>
 -&nbsp; Names of the <tt>yF</tt> columns (and plot lines)</dt>
   <dd> &nbsp;&nbsp;</dd>
   <dd>Here, the user should enter names of columns (plot lines)
-corresponding to columns in the <a href="#yF"><span style="font-family: monospace;">yF</span></a> (sampled data) table.
+corresponding to columns in the <a href="#yF"><span
+ style="font-family: monospace;">yF</span></a> (sampled data) table.
 The names must not exceed 6 characters. They will be displayed on the
 graph legend together with coloured symbols and plot lines. From there,
-you can drag-and-drop the names onto the graph field (see also the <a href="#RTPARM_PLOT">"Plotting and exporting results" chapter</a>).
-Number of elements in this list is defined in the <a href="#rDimXY_1"><span style="font-family: monospace;">rDimXY[1]</span></a> counter.&nbsp;</dd>
+you can drag-and-drop the names onto the graph field (see also the <a
+ href="#RTPARM_PLOT">"Plotting and exporting results" chapter</a>).
+Number of elements in this list is defined in the <a href="#rDimXY_1"><span
+ style="font-family: monospace;">rDimXY[1]</span></a> counter.&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd><br>
   </dd>
@@ -480,7 +610,8 @@ Number of elements in this list is defined in the <a href="#rDimXY_1"><span styl
   <dd>Enter here the name(s) of column(s) in the <a href="#ytE"><tt>ytE</tt></a>
 array of empirical data. Similar to names in the <tt>tLnam</tt> list,
 these will also be displayed on the graph legend. Number of elements in
-this list is defined in the <a href="#rDimEf_1"><span style="font-family: monospace;">rDimEf[1]</span></a> counter.&nbsp;</dd>
+this list is defined in the <a href="#rDimEf_1"><span
+ style="font-family: monospace;">rDimEf[1]</span></a> counter.&nbsp;</dd>
   <dd>&nbsp;</dd>
   <dd>&nbsp;&nbsp;<br>
   </dd>
@@ -488,14 +619,17 @@ this list is defined in the <a href="#rDimEf_1"><span style="font-family: monosp
 - RTParm data sampling math script</dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd><a href="gmscript.html">Math script</a> text to sample data to <a href="#yF"><tt>yF</tt></a> (optionally <a href="#xT"><tt>xT</tt></a>,
-    <a href="#xP"><tt>xP</tt></a>) arrays from the data objects (<a href="#twTK"><tt>twTK</tt></a>, <a href="#twG"><tt>twG</tt></a> etc.)
+  <dd><a href="gmscript.html">Math script</a> text to sample data to <a
+ href="#yF"><tt>yF</tt></a> (optionally <a href="#xT"><tt>xT</tt></a>,
+    <a href="#xP"><tt>xP</tt></a>) arrays from the data objects (<a
+ href="#twTK"><tt>twTK</tt></a>, <a href="#twG"><tt>twG</tt></a> etc.)
 shown on the<a href="#RTPARM_TPWORK"> TPwork page</a> of the RTparm
 window.&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
   <dd>The scripts must use an internal index <a href="#jTP"><tt>jTP</tt></a>
-for the indexation of&nbsp; <tt><a href="#yF">yF</a>, <a href="#xT">xT</a>,<a href="#xP">xP</a></tt> &nbsp;elements. The <tt>jTP</tt> index is
+for the indexation of&nbsp; <tt><a href="#yF">yF</a>, <a href="#xT">xT</a>,<a
+ href="#xP">xP</a></tt> &nbsp;elements. The <tt>jTP</tt> index is
 automatically incremented by the program at each <i>T,P</i>
 &nbsp;point during RTParm calculations.</dd>
   <dd>&nbsp;&nbsp;</dd>
@@ -504,10 +638,10 @@ script library is provided (see <a href="#RTPARM_SAMPLE_SCRIPTS">"Writing
 Process Simulation Math Scripts"</a> chapter).<br>
   </dd>
   <dd> &nbsp;</dd>
-  <dd> The minimum possible set of <span style="font-family: monospace;">&nbsp;tExpr</span> &nbsp;math script
+  <dd> The minimum possible set of <span
+ style="font-family: monospace;">&nbsp;tExpr</span> &nbsp;math script
 expressions for data sampling has the following form: </dd>
 </dl>
-
 <blockquote>
   <dl>
     <dd><samp><tt>yF[jTP][0] =: &lt;expression&gt;;</tt></samp></dd>
@@ -515,19 +649,17 @@ expressions for data sampling has the following form: </dd>
     <dd><samp><tt>yF[jTP][n] =: &lt;expression&gt;;</tt></samp></dd>
   </dl>
 </blockquote>
-
 <dl>
-
   <dd> here, &nbsp;<span style="font-family: monospace;">n</span>
 stands
-for the last valid index of columns in the data sampling array <a href="#yF"><span style="font-family: monospace;">yF</span></a>; &nbsp;<span style="font-family: monospace;">&lt;expression&gt;</span> must contain
+for the last valid index of columns in the data sampling array <a
+ href="#yF"><span style="font-family: monospace;">yF</span></a>; &nbsp;<span
+ style="font-family: monospace;">&lt;expression&gt;</span> must contain
 some labels of data objects visible on the TPwork or Tables pages of
 the RTParm window. Arbitrary expressions for intermediate calculations
 can also be specified.&nbsp;</dd>
 </dl>
-
 <dl>
-
   <dd>&nbsp; &nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
@@ -567,7 +699,8 @@ parameter.</dd>
 from <a href="#xT"><tt>xT</tt></a> and <a href="#xP"><tt>xP</tt></a>
 vectors, and sampled by the math script (<tt><a href="#tExpr">tExpr</a></tt>
 data field).
-Number of columns must be specified by the user in the <tt><a href="#rDimXY_1">rDimXY[1]</a></tt> cell.</dd>
+Number of columns must be specified by the user in the <tt><a
+ href="#rDimXY_1">rDimXY[1]</a></tt> cell.</dd>
   <dd> &nbsp;&nbsp;</dd>
   <dd> &nbsp;&nbsp;</dd>
   <dt> &nbsp;&nbsp;<a name="xTE"></a><b><tt><font size="+2">xTE</font></tt></b>
@@ -592,7 +725,9 @@ RTParm input table of empirical data (optional)&nbsp;</dt>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
   <dd>Table of empirical (independently known) thermodynamic properties
 to plot together with calculated properties. Usually entered by the
-user. Numbers of rows and columns must be specified in the <a href="#rDimEf_0"><tt>rDimEf[0</tt><tt>]</tt></a> and <a href="#rDimEf_1"><tt>rDimEf[1]</tt></a> cells.</dd>
+user. Numbers of rows and columns must be specified in the <a
+ href="#rDimEf_0"><tt>rDimEf[0</tt><tt>]</tt></a> and <a
+ href="#rDimEf_1"><tt>rDimEf[1]</tt></a> cells.</dd>
   <dd> &nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
@@ -606,13 +741,11 @@ graph dialog legend is customized by the user.&nbsp;</dd>
   <h4><br>
   </h4>
 </dl>
-
-<h3><a name="RTPARM_DOD_REMAKE"></a>2.1. Data objects accessible on
-create/remake only <br>
+<h3><a name="RTPARM_DOD_REMAKE"></a>5.1. Data objects accessible
+through
+create/remake wizard only <br>
 </h3>
-
 <dl>
-
   <dd>&nbsp;<br>
   </dd>
   <dt> <a name="rpUn_0"></a><b><tt><font size="+2">rpUn[0]</font></tt></b>
@@ -656,7 +789,8 @@ Reference</a>. Don't change this default code in this version of GEMS.</dd>
 - Units of pressure P (also for molar volume)</dt>
   <dd> &nbsp;</dd>
   <dd> Default:<tt> "b" </tt>- bar; 1 bar = 10^5 Pa.</dd>
-  <dd> See also <a href="file:///C:/gems2html/program/doc/html/g_useref.html#UNITS_PRESS_CODES">User's
+  <dd> See also <a
+ href="file:///C:/gems2html/program/doc/html/g_useref.html#UNITS_PRESS_CODES">User's
 Reference</a>. Don't change this default code in this version of GEMS.</dd>
   <dd>&nbsp;&nbsp; &nbsp;</dd>
   <dd>&nbsp; <br>
@@ -677,7 +811,8 @@ necessary.</dd>
 - Flag for plotting experimental data { + - }</dt>
   <dd> &nbsp;&nbsp;</dd>
   <dd> Default value: off '-' (no empirical data are to be entered). If
-this flag is set to on '+' then dimensions of the <a href="#ytE"><span style="font-family: monospace;">ytE</span></a> array must also be
+this flag is set to on '+' then dimensions of the <a href="#ytE"><span
+ style="font-family: monospace;">ytE</span></a> array must also be
 entered into <a href="#rDimEf_0"><span style="font-family: monospace;">rDimEf[0]</span></a>
 and <a href="#rDimEf_1"><span style="font-family: monospace;">rDimEf[1]</span></a>
 cells.&nbsp;</dd>
@@ -687,8 +822,10 @@ cells.&nbsp;</dd>
   <dt> <a name="rpUn_6"></a><b><tt><font size="+2">rpUn[6]</font></tt></b>
 - Value used as an abscissa oh the graph { T P }</dt>
   <dd> &nbsp;&nbsp;</dd>
-  <dd> Default value: 'T' -temperature (will be taken from the <a href="#xT"><span style="font-family: monospace;">xT</span></a> vector).<br>
-Another possible flag: 'P' - pressure (data will be taken from the <a href="#xP"><span style="font-family: monospace;">xP</span></a> vector
+  <dd> Default value: 'T' -temperature (will be taken from the <a
+ href="#xT"><span style="font-family: monospace;">xT</span></a> vector).<br>
+Another possible flag: 'P' - pressure (data will be taken from the <a
+ href="#xP"><span style="font-family: monospace;">xP</span></a> vector
 instead).&nbsp;</dd>
   <dd> &nbsp; &nbsp;</dd>
   <dd>&nbsp;<br>
@@ -717,7 +854,9 @@ Default:&nbsp; 'K' (Kelvins). Another possible flag: 'C' (centigrade).</dd>
 and
 print- scripts).</dt>
   <dd> &nbsp;&nbsp;</dd>
-  <dd> Default value 0 means that the lists <a href="#rtSDrf"><span style="font-family: monospace;">rtSDrf</span></a> and &nbsp;<a href="#rtSDvl"><span style="font-family: monospace;">rtSDvl</span></a>
+  <dd> Default value 0 means that the lists <a href="#rtSDrf"><span
+ style="font-family: monospace;">rtSDrf</span></a> and &nbsp;<a
+ href="#rtSDvl"><span style="font-family: monospace;">rtSDvl</span></a>
 &nbsp;will not be allocated, and no references will be accessible on
 the RTParm window.&nbsp;</dd>
   <dd> &nbsp;&nbsp;</dd>
@@ -729,7 +868,9 @@ reserved</dt>
   <dd>&nbsp;</dd>
   <dd>&nbsp;</dd>
   <dt> <a name="rDimXY_0"></a><b><tt><font size="+2">rDimXY[0]</font></tt></b>-
-Total number of T,P points (i.e. rows in the&nbsp; <span style="font-family: monospace;"><a href="#xT">xT</a>, <a href="#xP">xP</a>,<a href="#yF">yF</a></span> &nbsp;arrays).</dt>
+Total number of T,P points (i.e. rows in the&nbsp; <span
+ style="font-family: monospace;"><a href="#xT">xT</a>, <a href="#xP">xP</a>,<a
+ href="#yF">yF</a></span> &nbsp;arrays).</dt>
   <dd> &nbsp; </dd>
   <dd>This number needs not to be specified on remake - it will be
 copied automatically from <a href="#rpNpT_2"><tt>rpNpT[2]</tt></a>.&nbsp;</dd>
@@ -751,9 +892,11 @@ as a single line on the plot.&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="rDimEf_0"></a><b><tt><font size="+2">rDimEf[0]</font></tt></b>
-- Input number of experimental points (rows in the<tt> <a href="#xTE">xTE</a>,<a href="#xPE">xPE</a>, <a href="#ytE">ytE</a> </tt>arrays)</dt>
+- Input number of experimental points (rows in the<tt> <a href="#xTE">xTE</a>,<a
+ href="#xPE">xPE</a>, <a href="#ytE">ytE</a> </tt>arrays)</dt>
   <dd> &nbsp;&nbsp;</dd>
-  <dd> Must be entered if the empirical data will be plotted (<a href="#rpUn_5"><tt>rpUn[5]</tt></a> flag is switched on)</dd>
+  <dd> Must be entered if the empirical data will be plotted (<a
+ href="#rpUn_5"><tt>rpUn[5]</tt></a> flag is switched on)</dd>
   <dd> &nbsp; &nbsp;</dd>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
   <dt> <a name="rDimEf_1"></a><b><tt><font size="+2">rDimEf[1]</font></tt></b>
@@ -768,7 +911,8 @@ calculated and saved to the database, but not yet plotted!</dd>
   <dt> <a name="rpNpT_0"></a><b><tt><font size="+2">rpNpT[0]</font></tt></b>
 - Input number of tabulation points along pressure P</dt>
   <dd> &nbsp;&nbsp;</dd>
-  <dd> This number must be set by the user in agreement with the <a href="#rpMode"><span style="font-family: monospace;">rpMode</span></a>
+  <dd> This number must be set by the user in agreement with the <a
+ href="#rpMode"><span style="font-family: monospace;">rpMode</span></a>
 parameter.</dd>
   <dd> &nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
@@ -776,7 +920,8 @@ parameter.</dd>
   <dt> <a name="rpNpT_1"></a><b><tt><font size="+2">rpNpT[1]</font></tt></b>
 - Input number of tabulation points along temperature T</dt>
   <dd>&nbsp; </dd>
-  <dd>This number must be set by the user in accord with the <a href="#rpMode"><span style="font-family: monospace;">rpMode</span></a>
+  <dd>This number must be set by the user in accord with the <a
+ href="#rpMode"><span style="font-family: monospace;">rpMode</span></a>
 parameter.</dd>
   <dd> &nbsp;&nbsp;</dd>
   <dd> <br>
@@ -785,8 +930,11 @@ parameter.</dd>
 - Total number of temperature-pressure T,P tabulation points</dt>
   <dd> &nbsp; </dd>
   <dd>There is no need to enter this number - it will be automatically
-calculated from <a href="#rpNpT_0"><span style="font-family: monospace;">rpNpT[0]</span></a> and <a href="#rpNpT_1"><span style="font-family: monospace;">rpNpT[1]</span></a>
-values&nbsp; according to the <a href="#rpMode"><span style="font-family: monospace;">rpMode</span></a> parameter.</dd>
+calculated from <a href="#rpNpT_0"><span
+ style="font-family: monospace;">rpNpT[0]</span></a> and <a
+ href="#rpNpT_1"><span style="font-family: monospace;">rpNpT[1]</span></a>
+values&nbsp; according to the <a href="#rpMode"><span
+ style="font-family: monospace;">rpMode</span></a> parameter.</dd>
   <dd> &nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
@@ -801,34 +949,40 @@ and temperatures are automatically generated from intervals and
 increments
 in <a href="#rpTi_0"><span style="font-family: monospace;">rpTi</span></a>
 and <a href="#rpPi_0"><span style="font-family: monospace;">rpPi </span></a>&nbsp;iterator
-fields and placed in <a href="#xT"><span style="font-family: monospace;">xT</span></a> and <a href="#xP"><span style="font-family: monospace;">xP</span></a> vectors. <br>
-The mode 0 permits to enter manually any desired pairs of T and P into <span style="font-family: monospace;">xT</span> and <span style="font-family: monospace;">xP</span> vectors, respectively. </dd>
+fields and placed in <a href="#xT"><span
+ style="font-family: monospace;">xT</span></a> and <a href="#xP"><span
+ style="font-family: monospace;">xP</span></a> vectors. <br>
+The mode 0 permits to enter manually any desired pairs of T and P into <span
+ style="font-family: monospace;">xT</span> and <span
+ style="font-family: monospace;">xP</span> vectors, respectively. </dd>
   <dd>&nbsp; <br>
 Possible codes: &nbsp; <br>
   </dd>
-  <dd>0 - the user must enter all P and T values in <span style="font-family: monospace;">xP</span> and <span style="font-family: monospace;">xT</span> vectors. <span style="font-family: monospace;">rpNpT[2] = rpNpT[1] = rpNpT[0]</span>.
+  <dd>0 - the user must enter all P and T values in <span
+ style="font-family: monospace;">xP</span> and <span
+ style="font-family: monospace;">xT</span> vectors. <span
+ style="font-family: monospace;">rpNpT[2] = rpNpT[1] = rpNpT[0]</span>.
     <br>
-1- increments in cycle on P nested into cycle on T. <span style="font-family: monospace;">rpNpT[2] = rpNpT[1] * rpNpT[0].</span></dd>
-  <dd> 2- increments in cycle on T nested into cycle on P (default). <span style="font-family: monospace;">rpNpT[2] = rpNpT[1] * rpNpT[0].&nbsp;</span></dd>
-  <dd> 3- increment of T and P in one cycle. <span style="font-family: monospace;">rpNpT[2] = rpNpT[1] = rpNpT[0]</span>.&nbsp;</dd>
+1- increments in cycle on P nested into cycle on T. <span
+ style="font-family: monospace;">rpNpT[2] = rpNpT[1] * rpNpT[0].</span></dd>
+  <dd> 2- increments in cycle on T nested into cycle on P (default). <span
+ style="font-family: monospace;">rpNpT[2] = rpNpT[1] * rpNpT[0].&nbsp;</span></dd>
+  <dd> 3- increment of T and P in one cycle. <span
+ style="font-family: monospace;">rpNpT[2] = rpNpT[1] = rpNpT[0]</span>.&nbsp;</dd>
   <dd> &nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
 </dl>
-
-<h3><a name="RTPARM_TPWORK"></a>2.2. Data Objects on TPwork page</h3>
-
+<h3><a name="RTPARM_TPWORK"></a>5.2. Data Objects on TPwork page</h3>
 These data objects are mainly work cells internally used by
 GEM-Selektor to keep thermodynamic data calculated in DCthermo() or
 RCthermo() subroutines at P,T of interest for a given Dependent
 Component (described either in DComp or in ReacDC record). Almost all
-data from this TPwork structure can (and should) be used in the <a href="#tExpr"><span style="font-family: monospace;">tExpr</span></a>
+data from this TPwork structure can (and should) be used in the <a
+ href="#tExpr"><span style="font-family: monospace;">tExpr</span></a>
 data sampling math script. <br>
-
 <br>
-
 <dl>
-
   <dt> <a name="DRkey_0"></a><big><b><tt>DRkey</tt></b></big>&nbsp; -
 DComp or ReacDC key of record with source data (obsolete?)</dt>
   <dd> &nbsp; <br>
@@ -916,14 +1070,16 @@ DComp or ReacDC record. <br>
   <dt> <a name="twTK"></a><big><b><tt>twTK</tt></b></big> - T,
 temperature of interest, K</dt>
   <dd> &nbsp;&nbsp;</dd>
-  <dd> Temperature of &nbsp;interest calculated automatically as <span style="font-family: monospace;"><a href="#twTC">twTC</a> + 273.15</span>.<br>
+  <dd> Temperature of &nbsp;interest calculated automatically as <span
+ style="font-family: monospace;"><a href="#twTC">twTC</a> + 273.15</span>.<br>
 &nbsp; <br>
 &nbsp;<br>
   </dd>
   <dt> <a name="twTKr"></a><b><big><tt>twTKr</tt></big></b>&nbsp; -
 Tr, reference temperature, K</dt>
   <dd> &nbsp;&nbsp;</dd>
-  <dd> Reference temperature calculated automatically as <span style="font-family: monospace;"><a href="#twTCr">twTCr</a> + 273.15</span>.<br>
+  <dd> Reference temperature calculated automatically as <span
+ style="font-family: monospace;"><a href="#twTCr">twTCr</a> + 273.15</span>.<br>
 &nbsp; <br>
 &nbsp; <br>
   </dd>
@@ -1118,7 +1274,8 @@ value.&nbsp;</dd>
 constant of H2O fluid at T,P of interest</dt>
   <dd>&nbsp; &nbsp;&nbsp;</dd>
   <dd> Automatically calculated for aqueous species with HKF EoS
-parameters together with density in <span style="font-family: monospace;">twRow</span> field.<br>
+parameters together with density in <span
+ style="font-family: monospace;">twRow</span> field.<br>
 &nbsp;&nbsp;</dd>
   <dd> <br>
   </dd>
@@ -1144,7 +1301,8 @@ as&nbsp; <span style="font-family: monospace;">tw[0], tw[1],</span>
   </dd>
   <dt> <a name="jTP"></a><big><b><tt>jTP</tt></b></big> - Internal
 cycle
-index for writing the <a href="#tExpr"><span style="font-family: monospace;">tExpr</span></a> math script.
+index for writing the <a href="#tExpr"><span
+ style="font-family: monospace;">tExpr</span></a> math script.
 Automatically
 incremented at each T,P point.</dt>
   <dd>&nbsp;&nbsp;</dd>
@@ -1191,27 +1349,27 @@ TP (reserved)</dt>
   <dt> <br>
   </dt>
 </dl>
-
 <hr size="2" width="100%">
-<h2><a name="RTPARM_ERRORS"></a>3. Warnings and error messages</h2>
-
+<h2><a name="RTPARM_ERRORS"></a>6. Warnings and error messages</h2>
 &lt;under construction&gt;<br>
-
 <br>
-
 <dl>
-
   <dt><big><span style="font-family: monospace; font-weight: bold;">E00RTrem:</span></big>
 Illegal link q&gt;nQ.</dt>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E01RTrem:</span></big> Illegal access
+  <dt><big style="font-weight: bold;"><span
+ style="font-family: monospace;">E01RTrem:</span></big> Illegal access
 to rp in dyn_set().</dt>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E02RTrem:</span></big> Illegal access
+  <dt><big style="font-weight: bold;"><span
+ style="font-family: monospace;">E02RTrem:</span></big> Illegal access
 to rp in dyn_kill().</dt>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E03RTrem:</span></big> Illegal access
+  <dt><big style="font-weight: bold;"><span
+ style="font-family: monospace;">E03RTrem:</span></big> Illegal access
 to rp in dyn_new().</dt>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E04RTrem:</span></big> Total N of
+  <dt><big style="font-weight: bold;"><span
+ style="font-family: monospace;">E04RTrem:</span></big> Total N of
 points (rp[q].NV) &lt; 1.</dt>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E04RTrem:</span></big> Illegal access
+  <dt><big style="font-weight: bold;"><span
+ style="font-family: monospace;">E04RTrem:</span></big> Illegal access
 to rp in set_def().<br>
   </dt>
   <dd>&nbsp;<br>
@@ -1222,11 +1380,13 @@ Action: Restart GEMS and try the same work again. If the message
 appears, please, send a bug report.<br>
 &nbsp; <br>
 &nbsp;&nbsp;</dd>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">W05RTrem:</span></big> Invalid mode of
+  <dt><big style="font-weight: bold;"><span
+ style="font-family: monospace;">W05RTrem:</span></big> Invalid mode of
 calculation of P and T arrays, or wrong number of TP points! Change?</dt>
   <dd> &nbsp; </dd>
   <dd>&nbsp;</dd>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E06RTrem:</span></big> Invalid mode of
+  <dt><big style="font-weight: bold;"><span
+ style="font-family: monospace;">E06RTrem:</span></big> Invalid mode of
 calculation - bailing out...</dt>
   <dd> &nbsp;</dd>
   <dd>Confirmation that the user has pressed "No" or "cancel in
@@ -1234,7 +1394,8 @@ responce to
 warning W05RTrem.<br>
 &nbsp; <br>
 &nbsp;&nbsp;</dd>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">W07RTrem:</span></big> Wrong
+  <dt><big style="font-weight: bold;"><span
+ style="font-family: monospace;">W07RTrem:</span></big> Wrong
 dimensions
 set for the empirical data array ytE!</dt>
   <dd> &nbsp;</dd>
@@ -1249,30 +1410,20 @@ Error in translation of RTParm math script: &nbsp;&lt;name&gt;
   <dd> &nbsp;</dd>
   <dd> &nbsp;</dd>
 </dl>
-
-&lt;To be completed in Version 2.2&gt;<br>
-
+&lt;To be completed in Version 3.1&gt;<br>
 <br>
-
 <hr size="2" width="100%"><tt><br>
 </tt><tt><a href="index.html"><br>
 To Contents</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="g_about.html">About
 GEM-Selektor</a> </tt><br>
-
 <tt><br>
 </tt><tt><br>
 end of file</tt> <br>
-
 &nbsp; <br>
-
 <br>
-
 <br>
-
 <br>
-
 <br>
-
 <br>
-
-</body></html>
+</body>
+</html>

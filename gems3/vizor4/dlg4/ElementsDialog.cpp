@@ -40,7 +40,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
          str +=  gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));;
          setWindowTitle( trUtf8(str.c_str()) );
 
-    pLogoImg->setPixmap(pVisorImp->getLogo());
+//    pLogoImg->setPixmap(pVisorImp->getLogo());
 
    // build IComp list from template database
     TCIntArray aIndMT;
@@ -450,13 +450,13 @@ int ElementsDialog::isOpenFile( gstring& name  )
    // ......
 
    int iret = 0;
-   if( checked_kernel && is_kernel || checked_complem && is_complem ||
-           checked_specific && is_specific )
+   if( (checked_kernel && is_kernel) || (checked_complem && is_complem) ||
+           (checked_specific && is_specific) )
        iret = 1; // select all checked, disregarding 'Supplem' and 'Organic'
    if( (is_kernel && !checked_kernel) || (is_complem && !checked_complem) ||
        (is_supplem && !checked_supplem) || (is_specific && !checked_specific) )
        // || (is_organic && !checked_organic) )
-       iret = 2; // This file should be detached, even if has 'supplem',
+       iret = 2; // This file should be detached, even if has '.supplem.',
                  // but 'Supplem' was not checked
    return iret;
 }
@@ -664,11 +664,10 @@ ElementsDialog::resetFilesSelection()
    int cnt2=0;
 
    //files_data
-   // This logic has to be revised!
     for(uint i=0; i<files_data.flCnt.GetCount(); i++ )
     {
         int cnt_sel = 0;
-        for(uint ii=0; ii<files_data.flCnt[i]; ii++ )
+        for(int ii=0; ii<files_data.flCnt[i]; ii++ )
         {
           switch( isOpenFile( files_data.flNames[cnt+ii] ) )
           {

@@ -513,7 +513,7 @@
       </font>
      </property>
      <property name="title">
-      <string> Select chemical elements (not available if shown in gray color)  </string>
+      <string> Select chemical elements (not available if shown in light gray color)  </string>
      </property>
      <widget class="QPushButton" name="pbE_43">
       <property name="enabled">
@@ -1561,6 +1561,9 @@
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="../../img.qrc">:/images/img/gems50.png</pixmap>
       </property>
       <property name="scaledContents">
        <bool>false</bool>
@@ -3582,7 +3585,7 @@
       <string>Click here to customize filters for copying records from default databases into the new modelling project</string>
      </property>
      <property name="text">
-      <string>Set &amp;Filters</string>
+      <string>Set &amp;filters</string>
      </property>
      <property name="shortcut">
       <string>Alt+F</string>
@@ -3600,8 +3603,8 @@
         <string>Select phases to be included into the new project in checkboxes to the right; and source default database files - using radoubuttions in the row below</string>
        </property>
        <property name="text">
-        <string>  Phases:
-  Data: </string>
+        <string>Phases-&gt;   
+Dataset: </string>
        </property>
        <property name="wordWrap">
         <bool>false</bool>
@@ -3630,7 +3633,7 @@
         <string>Check to include the aqueous electrolyte phase</string>
        </property>
        <property name="text">
-        <string>&amp;Aqueous</string>
+        <string>&amp;Aqueous  </string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -3643,7 +3646,7 @@
         <string>Check to include solid (optionally, liquid) single-component phases  </string>
        </property>
        <property name="text">
-        <string>Soli&amp;ds</string>
+        <string>Soli&amp;ds  </string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -3656,7 +3659,7 @@
         <string>Check to include solid (optionally, liquid) multi-component (solution) phases</string>
        </property>
        <property name="text">
-        <string>&amp;Solutions</string>
+        <string>&amp;Solutions  </string>
        </property>
       </widget>
      </item>
@@ -3666,7 +3669,7 @@
         <string>Check to include sorption phase(s) with surface complexes at the mineral-water interface</string>
        </property>
        <property name="text">
-        <string>So&amp;rption</string>
+        <string>So&amp;rption  </string>
        </property>
        <property name="shortcut">
         <string>Alt+R</string>
@@ -3709,7 +3712,7 @@
       <string>Click here to learn more about this dialog and creation of independent modelling projects</string>
      </property>
      <property name="text">
-      <string>&amp;More...</string>
+      <string>Learn &amp;more...</string>
      </property>
      <property name="shortcut">
       <string>F1</string>
@@ -3727,7 +3730,7 @@
         <string>Check to collect data from the kernel chemical  thermodynamic data base (Nagra-PSI 01/01)  </string>
        </property>
        <property name="text">
-        <string>Kernel (NaPSI)   </string>
+        <string>Kernel (NagraPSI) </string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -3743,7 +3746,7 @@
         <string>Check to collect data also from the complementary (Slop98/Supcrt92) data base (inorganic part) </string>
        </property>
        <property name="text">
-        <string>Complem.(S98)  </string>
+        <string>Complem.(SUPCRT) </string>
        </property>
        <property name="checked">
         <bool>false</bool>
@@ -3775,7 +3778,7 @@
         <string>Check to collect thermodynamic data also from the specific extension data base(s)</string>
        </property>
        <property name="text">
-        <string>Specific     </string>
+        <string>Specific   </string>
        </property>
        <property name="checked">
         <bool>false</bool>
@@ -3945,7 +3948,9 @@
   <tabstop>pbA_12</tabstop>
   <tabstop>pbA_0</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../../img.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>bNext</sender>

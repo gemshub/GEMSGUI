@@ -1,40 +1,43 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html><head>
-  
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-
-  
-  <meta name="GENERATOR" content="Mozilla/4.75 [en] (Win95; U) [Netscape]">
+<html>
+<head>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR"
+ content="Mozilla/4.75 [en] (Win95; U) [Netscape]">
   <title>GEMS3 IComp Module</title>
-
-  
-  
   <meta name="description" content="Version 2.0.0-PSI">
-
-</head><body>
-<h1><img src="gems1.png" align="left" height="48" width="48"> <font color="#000066">GEM-Selektor version 3<br>
+</head>
+<body>
+<h1><img src="gems1.png" align="left" height="48" width="48"> <font
+ color="#000066">GEM-Selektor version 3<br>
 </font></h1>
-
-<h2> Independent&nbsp; Components&nbsp; (IComp) Module<br>
-</h2>
-
+<h2> Independent&nbsp; Components&nbsp; (IComp) Module</h2>
+<h4>Contents<br>
+</h4>
+<h4>1. <a href="#INTRODUCTION">Independent Components (Stoichiometry
+Units)</a></h4>
+<h4>1.1. <a href="#REMAKE">Creating/Remaking IComp records</a></h4>
+<h4>2. <a href="#MWPAGE_1">IComp Module Window</a></h4>
+<h4>3. <a href="#INPUT_DATA">IComp Input Data Fields</a></h4>
+<br>
 <hr size="2" width="100%">
-<h2>Independent Components (Stoichiometry Units)<br>
+<h2><a name="INTRODUCTION"></a>Independent Components (Stoichiometry
+Units)<br>
 </h2>
-
-<p> The IComp database chain contains records defining the <a href="glossary.html#DT_independent_component">Independent Components</a>
+<p> The IComp database chain contains records defining the <a
+ href="glossary.html#DT_independent_component">Independent Components</a>
 (IC), or stoichiometry units, forming the stoichiometry basis in which
 composition of <a href="glossary.html#DT_system_chemical">chemical
 systems</a> and species can be expressed using stoichiometry
 coefficients. </p>
-
 <p>The IComp symbols (mainly chemical elements) are used in writing
 stoichiometric <a href="g_useref.html#FORMULA">chemical formulae</a>&nbsp;
 of&nbsp; thermodynamic&nbsp; species&nbsp; (Dependent Components, DC,
-stored in&nbsp; <a href="gm_dcomp.html">DComp</a>&nbsp; or&nbsp; <a href="gm_reacdc.html">ReacDC</a>&nbsp; database records), as well as
+stored in&nbsp; <a href="gm_dcomp.html">DComp</a>&nbsp; or&nbsp; <a
+ href="gm_reacdc.html">ReacDC</a>&nbsp; database records), as well as
 in the Predefined Composition Object (PCO) definitions (stored in&nbsp;
 <a href="gm_compos.html">Compos</a>&nbsp; database records). </p>
-
 <p>The IC symbols, together with DC chemical formulae and PCO bulk
 vectors, can be used in many ways to specify the bulk composition of
 the chemical system (vector&nbsp; <b><i>b</i></b>&nbsp; ) - the main
@@ -43,7 +46,6 @@ algorithm.&nbsp; In all cases, chemical composition of the system will
 be reduced to the vector <b><i>b</i></b>&nbsp; consisting of&nbsp; <i>n
 </i>(<i>N </i>)&nbsp; elements - total numbers
 of moles of <i>N</i>&nbsp; Independent Components involved. </p>
-
 <p>Chemical formulae of species are automatically parsed and assembled
 into the stoichiometry matrix&nbsp; <b><i>A</i></b>&nbsp; before
 calculation of&nbsp; chemical equilibria. This matrix consists of&nbsp;
@@ -53,7 +55,6 @@ containing numbers of moles of&nbsp; IC. In
 other words, any line of the <b><i>A</i></b>&nbsp; matrix contains an
 expanded
 chemical formula of a species. </p>
-
 <p>The main use of the <b><i>A</i></b>&nbsp; matrix consists in
 setting up
 the mass-balance constraints for the whole chemical system: numbers of
@@ -65,7 +66,6 @@ Expanded (parsed) chemical formulae are also checked for charge balance
 and used in consistency recalculations of thermodynamic data in
 DComp&nbsp; and ReacDC modules. In all cases, some of the numbers
 stored in IComp records are exploited. </p>
-
 <p>IC definitions are kept in the IComp&nbsp; database module using a
 three-field&nbsp; <a href="gdb_rkey.html#dbm_IComp">record key</a>&nbsp;
 format. All available IComp database records are loaded into GEMS
@@ -74,9 +74,7 @@ or constructing the System Profile and also - on creating/remaking the
 Compos, ReacDC and DComp records. <br>
 &nbsp; <br>
 &nbsp; </p>
-
-<h3> Creating/Remaking&nbsp; IComp records</h3>
-
+<h3><a name="REMAKE"></a>1.1. Creating/Remaking&nbsp; IComp records</h3>
 <p><br>
 As <a href="gdb_rkey.html#dbm_IComp">IComp record format</a> contains
 no dynamic data fields, no Remake wizard is necessary. All you have to
@@ -86,7 +84,6 @@ then save the record to database. When creating a new IComp record,
 take care that the new record key&nbsp; is unique relative to the whole
 database, and the <a href="gdb_rkey.html#dbm_IComp_0">IC symbol</a> is
 unique within your current System Profile. </p>
-
 <p>Please, remember that deletion of IC record(s) will make unusable
 all
 the DComp, ReacDC, and Compos records which refer to it via chemical
@@ -95,15 +92,17 @@ except when
 a new System Profile is created using Elements Dialog). <br>
 &nbsp; <br>
 &nbsp;</p>
-
 <hr size="2" width="100%">
 <p> </p>
-
-<h2> Input Data Fields of the IComp Module Window</h2>
-
+<br>
+<h2><a name="MWPAGE_1"></a>2. IComp Module Window</h2>
 &nbsp;
+<br>
+<br>
+<br>
+<h2><a name="INPUT_DATA"></a> 3. IComp Input Data Fields <br>
+</h2>
 <dl>
-
   <dt> <a name="ICname"></a><b><tt><font size="+2">ICname - </font></tt></b>Name
 of this Independent Component</dt>
   <dd> &nbsp;</dd>
@@ -178,7 +177,9 @@ be entered by the user when a new IComp record for isotope is created.</dd>
   <dd> &nbsp;</dd>
   <dd> The <tt><font size="+1">IXi</font></tt> number is used by the
 program (RCthermo() submodule) for calculation of thermodynamic data
-for isotopic forms of compounds using Grichuk's method (<a href="g_litref.html#%5B1987GRI%5D">[1987GRI]</a>; <a href="g_litref.html#%5B1998SHI/KUL%5D">[1998SHI/KUL]</a>).</dd>
+for isotopic forms of compounds using Grichuk's method (<a
+ href="g_litref.html#%5B1987GRI%5D">[1987GRI]</a>; <a
+ href="g_litref.html#%5B1998SHI/KUL%5D">[1998SHI/KUL]</a>).</dd>
   <dd> &nbsp;</dd>
   <dd> &nbsp;</dd>
   <dt> <a name="ICform"></a><b><tt><font size="+2">ICform - </font></tt></b>Chemical
@@ -242,7 +243,8 @@ ligands).</dd>
   <dt> &nbsp;<a name="IC_DC"></a><b><tt><font size="+1">IC_DC - </font></tt></b>Reference
 DComp record key (reserved)</dt>
   <dd> &nbsp;</dd>
-  <dd> For chemical elements, this field may contain a packed <a href="gdb_rkey.html#dbm_DComp">DComp record key</a> pointing to a full
+  <dd> For chemical elements, this field may contain a packed <a
+ href="gdb_rkey.html#dbm_DComp">DComp record key</a> pointing to a full
 set of thermochemical data for this element at standard state.</dd>
   <dd> &nbsp;</dd>
   <dd> To be used in future versions of GEM-Selektor, for calculation
@@ -292,21 +294,15 @@ algorithms in future versions of GEM-Selektor package.&nbsp;
   <dd> <br>
   </dd>
 </dl>
-
 <hr size="2" width="100%"><tt><br>
 </tt> &nbsp;&nbsp; <tt><a href="index.html">To Contents</a> &nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp;<a href="g_about.html">About GEM-Selektor</a>
 </tt><br>
-
 <tt><br>
 end of file</tt> <br>
-
 &nbsp; <br>
-
 <br>
-
 <br>
-
 <br>
-
-</body></html>
+</body>
+</html>

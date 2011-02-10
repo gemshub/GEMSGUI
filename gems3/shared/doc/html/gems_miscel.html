@@ -1,52 +1,84 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html><head>
-  
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-
-  
-  <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
+<html>
+<head>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR"
+ content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
   <title>GEMS3 Miscellaneous Topics</title>
-
-  
-</head><body>
+</head>
+<body>
 <h1><img src="gems1.png" align="left" height="48" width="48">
 GEM-Selektor version 3<br>
 </h1>
-
 <h2>Miscellaneous Topics and HowTo</h2>
-
 <hr size="2" width="100%">
 <p>Contents<br>
 </p>
-
-<p>1. FORMATS - binary and text file formats for GEMS database records <br>
-</p>
-
+<h4><a href="#FORMATS">1. Binary and text file formats for GEMS
+database records </a><br>
+</h4>
 <p>2. LISTFILES - file list configuration in GEMS database</p>
-
 <p>3. TEMPLKEY - record key templates in GEMS database</p>
-
-<p>4. GEMS Database Maintenance menu commands and functions<br>
+<h4><a href="#MARK">4. Marking items in multiple selection list dialogs</a></h4>
+<h4><a href="#SELECT">5. Selecting an item from a selection list dialog</a><br>
+</h4>
+<p>5. GEMS Database Maintenance menu commands and functions<br>
 </p>
-
-<p>5. Data objects for configuring GEM-Selektor<br>
+<p>6. Data objects for configuring GEM-Selektor<br>
 </p>
-
 <p><br>
 </p>
-
 <p>&lt;under construction&gt;<br>
 </p>
-
 <p>To be provided in Version 2.2<br>
 </p>
-
 <hr size="2" width="100%">
-<p>&nbsp; </p>
-
+<p>&nbsp;</p>
+<h3><a name="FORMATS"></a>1. Binary and text file formats for GEMS
+database records</h3>
+<p><br>
+</p>
+<br>
+<p><br>
+</p>
+<br>
+<p><br>
+</p>
+<hr size="2" width="100%">
+<p>&nbsp;</p>
+<h3><a name="MARK"></a>4. Marking/selecting items in selection list
+dialogs</h3>
+<br>
+<p><br>
+</p>
+<br>
+<p><br>
+</p>
+<p><br>
+</p>
+<p><br>
+</p>
+<hr size="2" width="100%">
+<p>&nbsp;</p>
+<h3><a name="SELECT"></a>5. SELECT - selecting an item from a selection
+list dialog<br>
+</h3>
+<br>
+<p><br>
+</p>
+<br>
+<p><br>
+</p>
+<p><br>
+</p>
+<p><br>
+</p>
+<hr size="2" width="100%">
+<p>&nbsp;</p>
+<p> </p>
 <h4> <a name="P3330"></a><tt>3.3.3. Database Maintenance Functions (an
 Overview)</tt></h4>
-
 From the "<tt>Thermodynamic database</tt>" dialog window, press any of
 the
 buttons for data types (e.g. <tt>Dependent Components (Thermochemical)</tt>).&nbsp;
@@ -68,7 +100,6 @@ from the pop-up menus.
 for
 processing data in a single record; these commands are briefly
 described below. </p>
-
 <p><a name="P333R1"></a><b><i>Show</i></b> <br>
 Permits to select a single record from database and display it in the
 screen
@@ -103,7 +134,6 @@ warning
 messages if you try to load another record from the database before
 contents
 of the modified record had been saved. </p>
-
 <p><a name="P333R2"></a><b><i>Remake</i></b> <br>
 Re-structurises and rebuilds the currently selected record. This
 function is highly specific for record types and is the most
@@ -122,14 +152,14 @@ In most cases, these flags refer to dynamic data objects, allocated if
 the
 flag is set to "*" or "+" and deleted if the flag is set to "-".&nbsp;
 Other
-flags contain codes for various calculation modes (<a href="GEMS-Linux-USREF.html#P6500">more for DCOMP and REACDC</a>).
+flags contain codes for various calculation modes (<a
+ href="GEMS-Linux-USREF.html#P6500">more for DCOMP and REACDC</a>).
 Please,
 note that these configuration flags can be changed only in the "Remake"
 mode
 to prevent possible crashes of the dynamic memory because of mismatches
 caused
 by changing the flags at runtime. </p>
-
 <p><a name="P333R3"></a><b><i>Create</i></b> <br>
 Creates a new database record (this is a main tool for "cloning"
 records of
@@ -144,7 +174,6 @@ if
 the record with the same key as you have specified exists in the
 database. When the new record is created, the command execution will
 proceed exactly as the Remake command. </p>
-
 <p><a name="P333R4"></a><b><i>Calculate</i></b> <br>
 Many record types (COMPOS, DCOMP, REACDC, RTPARM, PHASE) are tied with
 various
@@ -157,11 +186,9 @@ the
 record type. The calculated data are not saved automatically to the
 database;
 this has to be done using "Save" or "Save as" commands. </p>
-
 <p><a name="P333R5"></a><b><i>Save</i></b> <br>
 Saves current record to the database file from where it has been
 loaded. </p>
-
 <p><a name="P333R6"></a><b><i>Save as</i></b> <br>
 Permits to save contents of the data record under another record key
 (works
@@ -176,7 +203,6 @@ database
 files are write-protected, so normally you should choose only between
 files
 existing in your own system profile directories. </p>
-
 <p><a name="P333R7"></a><b><i>Delete</i></b> <br>
 Deletes currently displayed record from the database chain. The
 contents of
@@ -184,13 +210,11 @@ the record remain loaded into memory and in principle can be saved
 using "Save
 As" or "Create" commands. This operation will not work on
 write-protected files from the default GEMS database. </p>
-
 <p><a name="P333R8"></a><b><i>Plot</i></b> <br>
 This function works only in RTPARM and GTDEMO screen forms. After
 calculation, it will display four graphs (one in GTDEMO) to examine
 temperature and /
 or pressure change of selected thermodynamic properties. </p>
-
 <p><a name="P333R9"></a><b><i>Print</i></b> <br>
 This function is still under construction. For some data types (e.g.,
 RTPARM
@@ -199,18 +223,14 @@ numbers
 into a text file. A typical "File Selection" dialog appears to let you
 choose
 the file name and path. </p>
-
 <p><b><i>Demo</i></b> <br>
 Under construction. </p>
-
 <p><b><i>Close</i></b> <br>
 Closes the screen form and returns to "Thermodynamic Database" dialog. <br>
 &nbsp; </p>
-
 <p>The&nbsp;<a name="P333L"></a>"<b>Record List</b>" menu provides
 commands for processing multiple records; a brief description of its
 its commands follows. </p>
-
 <p><a name="P333L1"></a><b><i>Browse</i></b> <br>
 This command permits to scan one-by-one all or some records in the
 database
@@ -228,7 +248,6 @@ sequence
 of selected records; "Select" button will change the program to "Show
 record"
 mode. </p>
-
 <p><a name="P333L2"></a><b><i>Move</i></b> <br>
 Moves one or several records (with record keys that fit the template)
 into
@@ -241,7 +260,6 @@ to
 records kept in the users's extension files, but not in the default
 database
 files. </p>
-
 <p><a name="P333L3"></a><b><i>Delete</i></b> <br>
 Deletes several records from the (user extension) database files.
 First, it
@@ -261,10 +279,10 @@ the next record is inserted it can overwrite part of this space. Since
 the
 size of PDB file header is limited, it may happen that stack of deleted
 records
-will overflow, with the respective warning message. In this case, <a href="#P333F4">compression of database file</a> should be performed. A
+will overflow, with the respective warning message. In this case, <a
+ href="#P333F4">compression of database file</a> should be performed. A
 good
 rule of thumb is not to delete more than 20-30 records at once. </p>
-
 <p><a name="P333L4"></a><b><i>List</i></b> <br>
 Creates a text file with alphabetic list of record keys in the database
 chain.
@@ -272,7 +290,6 @@ First, this command shows "Get Key Template" dialog to&nbsp; do a
 (multiple)
 selection of record keys, and then displays the "File Selection
 Dialog". </p>
-
 <p><a name="P333L5"></a><b><i>Export...</i></b> <br>
 Unloads records from database chain into GEMS backup format text files.
 First,
@@ -289,7 +306,6 @@ profile
 database files. The unloaded text files can be edited with any text
 editor
 and imported back into GEMS database extension files. </p>
-
 <p><a name="P333L6"></a><b><i>Import...</i></b> <br>
 Loads records from a (previously exported) GEMS backup format text file
 to
@@ -304,7 +320,6 @@ each
 imported record before deciding whether to put it into the database
 file. <br>
 &nbsp; </p>
-
 <p>The&nbsp;<a name="P333F"></a>"<b>Files</b>"&nbsp; menu&nbsp;
 contains commands
 for manipulation with GEMS database files. Each database chain for a
@@ -324,7 +339,6 @@ execution
 of&nbsp; "<a href="#P333F4">Rebuild Index</a>" command (this may take a
 few
 minutes). </p>
-
 <p><a name="P333F1"></a><b><i>Actualize Files</i></b> <br>
 Permits the user to alter the current configuration of files linked to
 the
@@ -337,19 +351,16 @@ All
 linked files will open automatically and .ndx indices will merge into
 the
 chain record key index in the program memory. </p>
-
 <p><a name="P333F2"></a><b><i>Link File</i></b> <br>
 Links a file (not yet selected) to the database chain; previously
 linked files
 remain linked too.&nbsp; Works similar to "Actualize" command. </p>
-
 <p><a name="P333F3"></a><b><i>Add Files</i></b> <br>
 Adds&nbsp; GEMS database files to file configuration or creates empty
 database
 files. Proceeds from the "File Selection Dialog".&nbsp; For developers
 or
 experienced user's only! </p>
-
 <p><a name="P333F4"></a><b><i>Rebuild Index</i></b> <br>
 This database support function compresses a selected database file to
 eliminate
@@ -373,16 +384,13 @@ delete it to create a new empty file and load the records from
 previously unloaded text format); then start GEMS and resume operation.
 <br>
 &nbsp; </p>
-
 <p>The "<b>Help</b>" menu provides access to HTML pages describing
 structure of this screenform and how to work with it (under
 construction). <br>
 &nbsp; <br>
 &nbsp; </p>
-
 <h4> <a name="P3301"></a><tt>3.3.10. Advanced Database Maintenance
 Dialog</tt></h4>
-
 What to do if you decided to type in some bibliographic references, or
 delete
 some SysEq records because you do not need them anymore, or compress
@@ -414,139 +422,81 @@ and algorithms are under construction and not available in this version
 of
 GEMS. Press "<tt>Back</tt>" or "<tt>Basic</tt>" buttons to get back to "<tt>Thermodynamic
 Database</tt>" dialog. <br>
-
 &nbsp;
 <h4> <a name="P3311"></a><tt>3.3.11. Some Recommendations</tt></h4>
-
 &nbsp;
 <p>&nbsp; </p>
-
 <p><default configurations=""> </default></p>
-
 <h4> <a name="PaTprn"></a>PaTprn internal</h4>
-
 <h4> <a name="Pa_SPP"></a>Pa_SPP Version &amp; Copyright</h4>
-
 <h4> <a name="pDCpct"></a>pDCpct Default DComp flags and codes</h4>
-
 <h4> <a name="pDCpdc"></a>pDCpdc Default DComp class and units</h4>
-
 <h4> <a name="pBCpc"></a>pBCpc Default Compos configuration</h4>
-
 <h4> <a name="pREpct"></a>pREpct Default ReacDC flags and codes</h4>
-
 <h4> <a name="pREpdc"></a>pREpdc Default ReacDC class and units</h4>
-
 <h4> <a name="pREpvc"></a>pREpvc Default ReacDC configuration</h4>
-
 <h4> <a name="pRPpdc"></a>pRPpdc Default RTparm flags and codes</h4>
-
 <h4> <a name="pRPpvc"></a>pRPpvc Default RTparm configuration</h4>
-
 <h4> <a name="pPHsol"></a>pPHsol Default Phase model codes</h4>
-
 <h4> <a name="pPHpvc"></a>pPHpvc Default Phase configuration</h4>
-
 <h4> <a name="pMUpmv"></a>pMUpmv Default Profile configuration</h4>
-
 <h4> <a name="pTPpdc"></a>pTPpdc Default class and units for MTParm (I)</h4>
-
 <h4> <a name="pTPpd2"></a>pTPpd2 Default class and units for MTParm
 (II)</h4>
-
 <h4> <a name="pTPpvc"></a>pTPpvc Default MTParm configuration</h4>
-
 <h4> <a name="pSYppc"></a>pSYppc Default class and flags for SysEq</h4>
-
 <h4> <a name="pSYpvc"></a>pSYpvc Default SysEq confifuration</h4>
-
 <h4> <a name="pUTppc"></a>pUTppc Default DUTerm class and flags</h4>
-
 <h4> <a name="pPEpsc"></a>pPEpsc Default Process class and flags</h4>
-
 <h4> <a name="pPEpvc"></a>pPEpvc Default Process configuration</h4>
-
 <h4> <a name="pGDcod"></a>pGDcod Default names of screen and graphs in
 GtDemo</h4>
-
 <h4> <a name="pGDpsc"></a>pGDpsc Default names of lines on GtDemo
 graphs</h4>
-
 <h4> <a name="pGDpcc"></a>pGDpcc Default axis names for GtDemo</h4>
-
 <h4> <a name="pGDptc"></a>pGDptc Default GtDemo configuration</h4>
-
 <h4> <a name="pGDpgw"></a>pGDpgw Default setup of graphs in GtDemo</h4>
-
 <h4> <a name="pRPnpv_0"></a>pRPnpv[0]Default N of points (RTParm): P</h4>
-
 <h4> <a name="pRPnpv_1"></a>pRPnpv[1] T</h4>
-
 <h4> <a name="pRPnpv_2"></a>pRPnpv[2] reserved</h4>
-
 <h4> <a name="pRPmod"></a>pRPmod Default indexation mode RTParm</h4>
-
 <h4> <a name="pRP_Pi"></a>pRP_Pi Default interval for pressure</h4>
-
 <h4> <a name="pRP_Ti"></a>pRP_Ti Default interval for temperature, C</h4>
-
 <h4> <a name="pRP_Vi"></a>pRP_Vi Default interval for volume, cm3</h4>
-
 <h4> <a name="pDRptr"></a>pDRptr Default Pr, Tr for DComp &amp; ReacDC</h4>
-
 <h4> <a name="pPMnum_0"></a>pPMnum[0] Cutoff moles of DC (Ls set) {
 1e-19
 };</h4>
-
 <h4> <a name="pPMnum_1"></a>pPMnum[1] log(1e-16);</h4>
-
 <h4> <a name="pPMnum_2"></a>pPMnum[2] log(1e-9)</h4>
-
 <h4> H_page<a name="H_page"></a> Record # in Advice database</h4>
-
 <h4> H_key<a name="H_key"></a> Record key in Advice database</h4>
-
 <h4> Briefp<a name="Briefp"></a> Page Title</h4>
-
 <h4> H_text<a name="H_text"></a> Advice Page</h4>
-
 <h4> Contxt<a name="Contxt"></a> Context Reference line</h4>
-
 <h4> ConLab<a name="ConLab"></a> Label of array of constants</h4>
-
 <h4> ConDim<a name="ConDim"></a> Dimension of array K, I, J; type (I_
 F_
 D_)</h4>
-
 <h4> Const<a name="Const"></a> Array of constants</h4>
-
 <h4> DSitem<a name="DSitem"></a> Specify Data Record key</h4>
-
 <h4> k_<a name="k_"></a> Work param fo calculate ipnc</h4>
-
 <h4> RTkey<a name="RTkey"></a> Key of currently loaded record from PDB</h4>
-
 The following data structure present on this screenform is stored <br>
-
 in database under the record key appearing in this field
 <p><i>See also:</i> </p>
-
 <h4> RTtime<a name="RTtime"></a> Date and time of last modification of
 record in PDB chain</h4>
-
 The date and time of last re-save of this record to PDB.
 <p>If the PDB chain was unloaded to TXT file then information <br>
 about modification date and time will be lost and replaced <br>
 with date and time when the records are loaded again into PDB files. </p>
-
 <p><i>See also:</i> <br>
 &nbsp; <br>
 &nbsp; </p>
-
 <p><tt>end of file</tt> <br>
 &nbsp; </p>
-
 <br>
-
 <br>
-</body></html>
+</body>
+</html>
