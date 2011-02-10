@@ -166,6 +166,7 @@ public:
         isElementsProfileMode = newData;
     }
 
+    QWidget* window();
 };
 
 extern TVisor* pVisor;

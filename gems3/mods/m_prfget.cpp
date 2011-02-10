@@ -23,7 +23,7 @@
 #include "v_object.h"
 #include "service.h"
 #include "visor.h"
-#include "visor_w.h"
+//#include "visor_w.h"
 extern const char * dfAqKeyD ;
 extern const char * dfAqKeyH ;
 extern const char * dfAqKey3 ;
@@ -94,7 +94,7 @@ TProfil::initCalcMode()
          remakeRec = false;
     int  makeDump = 0;
     gstring key_templ;
-    gstring str = vfKeyProfile( pVisorImp/*window()*/, "Modelling projects",
+    gstring str = vfKeyProfile( pVisor->window()/*window()*/, "Modelling projects",
           nRT, changeAqGas, addfiles, remakeRec, makeDump, key_templ );
 
     if( str.empty() ) // cancel command
@@ -794,7 +794,7 @@ bool TProfil::GetFN( const char * prfName, bool show_dlg )
 
     TCStringArray aFls;
     TCIntArray aCnt;
-    if( ! vfListFiles(window(), show_dlg, prfName, aFls, aCnt ))
+    if( ! vfListFiles(pVisor->window()/*window()*/, show_dlg, prfName, aFls, aCnt ))
       return false;
 
     memset(mup->Nfl, 0, MAXNUMCHAINS*sizeof(short));

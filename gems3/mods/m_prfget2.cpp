@@ -37,7 +37,7 @@
 #include "m_phase.h"
 #include "m_reacdc.h"
 #include "EquatSetupWidget.h"
-
+//#include "visor_w.h"
 
 // save old lists of keys to compare
 void TProfil::SaveOldList()
@@ -620,7 +620,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 //    bool aAqueous, aGaseous, aSorption;
 //    if( !vfElements(window(), prfName, ICkeys,
 //            dbNames, aAqueous, aGaseous, aSorption ))
-    if( !vfElements(0/*window()*/, prfName, elm_data, sf_data ))
+    if( !vfElements(pVisorImp/*window()*/, prfName, elm_data, sf_data ))
       return false;
 
 //    elm_data.flNames.Add(prfName);

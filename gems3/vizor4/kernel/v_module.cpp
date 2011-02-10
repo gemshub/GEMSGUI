@@ -237,16 +237,20 @@ TCModule::GetKeyofRecord( const char *oldKey, const char *strTitle,
     }
     else key = oldKey;
 
+    QWidget* par = window();
+    if(!par)
+     par =   pVisor->window();
+
     switch( keyType )
     {
     case KEY_OLD:
-        return vfKeyEdit(window(), str.c_str(), nRT, key.c_str() );
+        return vfKeyEdit(par/*window()*/, str.c_str(), nRT, key.c_str() );
     case KEY_NEW:
     case KEY_NEW_SAVEAS:
-        return vfKeyTemplEdit(window(), str.c_str(), nRT, key.c_str(), false );
+        return vfKeyTemplEdit(par/*window()*/, str.c_str(), nRT, key.c_str(), false );
     case KEY_TEMP:
          {
-          gstring stt = vfKeyTemplEdit(window(), str.c_str(), nRT, key.c_str() );
+          gstring stt = vfKeyTemplEdit(par/*window()*/, str.c_str(), nRT, key.c_str() );
           if( !stt.empty())
             Filter = stt;
           return Filter;

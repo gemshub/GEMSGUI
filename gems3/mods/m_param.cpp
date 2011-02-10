@@ -419,7 +419,7 @@ void TProfil::MakeQuery()
     memcpy( flgs+10, &tpp->PtvG, 20);
     memcpy( flgs+30, &tpp->PunE, 8);
 
-    if( !vfProjectSet( window(), p_key, flgs, tasktype ))
+    if( !vfProjectSet( pVisor->window()/*window()*/, p_key, flgs, tasktype ))
          Error( p_key, "Project record configuration cancelled by the user!" );
 
     memcpy( &mup->PmvSA, flgs,    10);

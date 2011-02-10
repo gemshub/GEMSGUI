@@ -217,6 +217,9 @@ TVisor::TVisor(int c, char *v[]):
 TVisor::~TVisor()
 {}
 
+QWidget* TVisor::window()
+{ return pVisorImp;
+}
 
 void
 TVisor::Setup()
