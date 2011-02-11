@@ -1,69 +1,113 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html><head>
-  
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-
-  
-  <meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
+<html>
+<head>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR"
+ content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
   <title>GEMS3 Phase Module</title>
-
-  
-  
   <meta name="description" content="Version 2.0.0-PSI">
-
-</head><body>
-<h1><img src="gems1.png" align="left" height="48" width="48"> <span style="color: rgb(0, 0, 102);"> GEM-Selektor version 3<br>
+</head>
+<body>
+<h1><img src="gems1.png" align="left" height="48" width="48"> <span
+ style="color: rgb(0, 0, 102);"> GEM-Selektor version 3<br>
 </span></h1>
-
 <h2>Phase Definitions (Phase) Module<br>
 </h2>
-
 <hr style="width: 100%; height: 2px;">
 <h3>Contents </h3>
-
 <blockquote>
-  <p><a href="#PHASE_INTRO"><font face="Helvetica, Arial, sans-serif">1.
+  <p><font face="Helvetica, Arial, sans-serif"><a href="#PHASE_INTRO">1.
+Introduction</a><br>
+  </font></p>
+  <p><a href="#PHASE_FORMAT"><font face="Helvetica, Arial, sans-serif">1.1.
 Phase Definition data format</font></a></p>
-  <p><a href="#PHASE_CREATE"><font face="Helvetica, Arial, sans-serif">1.1.
-Creating new Phase records</font></a></p>
-  <p><a href="#PHASE_MATH_SCRIPTS"><font face="Helvetica, Arial, sans-serif">1.2. Math Scripts for definition
-of
-non-ideal solutions</font></a> <br>
+  <p><font face="Helvetica, Arial, sans-serif"><a href="#PHASE_BUILTIN">1.2.
+Built-in models of (non)ideal mixing</a><br>
+  </font></p>
+  <p><a href="#PHASE_SCRIPTED"><font face="Helvetica, Arial, sans-serif">1.3.
+Scripted customary
+models of non-ideal mixing</font></a><br>
   <font face="Helvetica, Arial, sans-serif"> </font></p>
-  <p><a href="#PHASE_CALC"><font face="Helvetica, Arial, sans-serif">1.3.
+  <p><a href="#PHASE_CALC"><font face="Helvetica, Arial, sans-serif">1.4.
 Phase module calculations</font></a></p>
-  <p><a href="#PHASE_SORPTION"><font face="Helvetica, Arial, sans-serif">1.4.
-Definition of sorption phases</font></a><br>
+  <p><font face="Helvetica, Arial, sans-serif"><a href="#PHASE_INTPAR">1.5.
+TSolMod rules for interaction parameters</a><br>
+  </font></p>
+  <p><a href="#PHASE_MWIZARD"><font face="Helvetica, Arial, sans-serif">2.
+Phase Create/Remake Wizard</font></a></p>
+  <p><a href="#WZSTEP_1"><font face="Helvetica, Arial, sans-serif">2.1.
+Phase Wizard Step 1</font></a></p>
+  <p><a href="#WZSTEP_2"><font face="Helvetica, Arial, sans-serif">2.2.
+Phase Wizard Step 2</font></a></p>
+  <p><a href="#WZSTEP_3"><font face="Helvetica, Arial, sans-serif">2.3.
+Phase Wizard Step 3</font></a></p>
+  <p><a href="#PHASE_MWINDOW"><font face="Helvetica, Arial, sans-serif">3.
+Phase Module Window</font></a></p>
+  <p><a href="#MWPAGE_1"><font face="Helvetica, Arial, sans-serif">3.1.
+Phase Window Page 1</font></a></p>
+  <font face="Helvetica, Arial, sans-serif"><a href="#MWPAGE_2">3.2.
+Phase Window Page 2</a><br>
+  <br>
+  <a href="#MWPAGE_3">3.3. Phase Window Page 3</a><br>
+  </font>
+  <p><font face="Helvetica, Arial, sans-serif"><a href="#PHASE_TYPES">4.
+Types of Multicomponent Phases</a><br>
+  </font></p>
+  <p><a href="#PHASE_AQUEOUS"><font face="Helvetica, Arial, sans-serif">4.1.
+Aqueous electrolyte</font></a></p>
+  <p><a href="#PHASE_GASFLUID"><font face="Helvetica, Arial, sans-serif">4.2.
+Gas mixture and non-ideal fluids</font></a></p>
+  <p><font face="Helvetica, Arial, sans-serif"><a href="#PHASE_SOLSOL">4.3.
+Solid and liquid non-electrolyte solutions</a><br>
+  </font></p>
+  <p><a href="#PHASE_SORPTION"><font face="Helvetica, Arial, sans-serif">4.4.
+Sorption and Surface Complexation</font></a><br>
   </p>
-  <p><a href="#PHASE_EXAMPLES"><font face="Helvetica, Arial, sans-serif">1.5.
+  <p><a href="#PHASE_EXAMPLES"><font face="Helvetica, Arial, sans-serif">4.5.
 Examples and special cases</font></a></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#PHASE_DATA_ENTRIES"> 2.
+  <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#PHASE_DATA_ENTRIES"> 5.
 Data Entries on Phase Window Pages</a> </font></p>
   <p><font face="Helvetica, Arial, sans-serif"> </font></p>
-  <p><a href="#PHASE_DOD_REMAKE"><font face="Helvetica, Arial, sans-serif">2.1. Data objects that can be
-modified during remake/create only</font></a></p>
-  <p><a href="#PHASE_DOD_RESERVED"><font face="Helvetica, Arial, sans-serif">2.2. Reserved and obsolete data
+  <p><a href="#PHASE_DOD_REMAKE"><font
+ face="Helvetica, Arial, sans-serif">5.1. Data objects that can be
+modified through remake/create wizard only</font></a></p>
+  <p><a href="#PHASE_DOD_RESERVED"><font
+ face="Helvetica, Arial, sans-serif">5.2. Reserved and obsolete data
 objects</font></a></p>
-  <p><a href="#PHASE_DOD_HIDDEN"><font face="Helvetica, Arial, sans-serif">2.3. Hidden data objects for use
+  <p><a href="#PHASE_DOD_HIDDEN"><font
+ face="Helvetica, Arial, sans-serif">5.3. Hidden data objects for use
 in
 Phase math scripts</font></a><br>
   </p>
-  <p><a href="#PHASE_ERRORS"><font face="Helvetica, Arial, sans-serif">3.
+  <p><a href="#PHASE_ERRORS"><font face="Helvetica, Arial, sans-serif">6.
 Warnings and error messages</font></a></p>
 </blockquote>
-
+<p><a href="#PHASE_ERRORS"><font face="Helvetica, Arial, sans-serif"><br>
+</font></a></p>
+<blockquote></blockquote>
 <hr style="width: 100%; height: 2px;"><br>
-
-<h2><a name="PHASE_INTRO"></a> 1. Phase Definition data format</h2>
-
+<h2><a name="PHASE_INTRO"></a>1. Introduction<br>
+</h2>
+<p><a href="gm_phase.html#PHASE_ERRORS"><font
+ face="Helvetica, Arial, sans-serif"><br>
+</font></a></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;"><br>
+<br>
+<h3>&nbsp;<a name="PHASE_FORMAT"></a>1.1. Phase Definition data format</h3>
 <p><br>
 In order to be taken into GEM-Selektor <a href="gm_project.html">modelling
 projects</a> for <a href="gems_bcc.html">calculation of chemical
-equilibria</a>, each (even a single-component) <a href="glossary.html#DT_phase_thermodynamic">thermodynamic phase</a>
+equilibria</a>, each (even a single-component) <a
+ href="glossary.html#DT_phase_thermodynamic">thermodynamic phase</a>
 must
 be defined in a separate Phase record having a unique (within a
 modelling
-project) phase name that appears in the third field of <a href="gdb_rkey.html#dbm_Phase">Phase record key</a>. This is required
+project) phase name that appears in the third field of <a
+ href="gdb_rkey.html#dbm_Phase">Phase record key</a>. This is required
 because
 <a href="gm_dcomp.html">DComp</a> or <a href="gm_reacdc.html">ReacDC</a>
 definitions of chemical species do not contain all parameters needed to
@@ -87,16 +131,17 @@ long
 as there are no Phase definitions that point to those dependent
 components.&nbsp;
 </p>
-
 <p>Far the simplest one is a definition of single-component condensed
 (solid
 or liquid) phase, e.g. a mineral. The only obligatory data there
 comprise
 a link to the respective source DComp or ReacDC record, visible on Page
 1
-of the Phase window in <a href="#PhDCS"><tt>PhDCS</tt></a> and <a href="#pDC_v_"><tt>pDC_v_</tt></a> fields. Note that, if several DComp
+of the Phase window in <a href="#PhDCS"><tt>PhDCS</tt></a> and <a
+ href="#pDC_v_"><tt>pDC_v_</tt></a> fields. Note that, if several DComp
 (or
-several ReacDC) records are available and their <a href="gdb_rkey.html#dbm_DComp">record keys</a> are identical but the
+several ReacDC) records are available and their <a
+ href="gdb_rkey.html#dbm_DComp">record keys</a> are identical but the
 last
 field, the program will automatically take only the alphanumerically
 first
@@ -107,7 +152,8 @@ users, this "override mechanism" is a convenient tool to substitute
 alternative
 thermodynamic data into otherwise identical project- and phase
 definitions.
-Optionally, you can also enter the specific surface area (<a href="#DisPar_0"><tt>DisPar[0]</tt></a> field) and specific surface
+Optionally, you can also enter the specific surface area (<a
+ href="#DisPar_0"><tt>DisPar[0]</tt></a> field) and specific surface
 free
 energy in water ( <a href="#DisPar_1"><tt>DisPar[1]</tt></a> field);
 in this
@@ -116,19 +162,20 @@ phase
 according to the&nbsp;<a href="glossary.html#DT_Freundlich_Ostwald">Freundlich-Ostwald
 equation</a>.<br>
 </p>
-
 <p>The next level of complexity in Phase definitions is comprised by an
 ideal (Raoultian) <a href="glossary.html#DT_mixture">solution</a>. The
 only difference from the single-component phases is that now the phase
 is composed of two,
 three or more end-members (species), so the&nbsp; <a href="#PhDCS"><tt>PhDCS</tt></a>
 and <a href="#pDC_v_"><tt>pDC_v_</tt></a> fields will appear as
-lists&nbsp;on the Page 1 of&nbsp; Phase window. In addition, the <a href="#PhDCC"><tt>PhDCC</tt></a>
+lists&nbsp;on the Page 1 of&nbsp; Phase window. In addition, the <a
+ href="#PhDCC"><tt>PhDCC</tt></a>
 column shows codes of the solution species (<tt>"M"</tt>, <tt>"J"</tt>
 or
 <tt>"I"</tt>), telling the program how to account for their mixing
 properties.
-Raoultian ideal mixing set by the <tt>'I'</tt> code in the <a href="#p_solt_0"><tt>p_solt[0]</tt></a> field is the simplest case,
+Raoultian ideal mixing set by the <tt>'I'</tt> code in the <a
+ href="#p_solt_0"><tt>p_solt[0]</tt></a> field is the simplest case,
 when
 activity of an end-member equals its mole fraction in the phase.
 Various
@@ -155,7 +202,6 @@ surface
 species, you can find&nbsp; in the <a href="theorscm.html"><tt>theorscm.html</tt></a>,
 <b><tt>SCM-corrections.pdf</tt></b> and <b><tt>Activity-coeffs.pdf</tt></b>
 manuals.</p>
-
 <p>Natural minerals are usually multi-component mixtures, although just
 a
 few of them behave as ideal solid solutions. In addition to two, three,
@@ -174,7 +220,8 @@ to provide the built-in subroutines for all aqueous or solid solution
 models
 which may be potentially be requested by the users, even though several
 such
-subroutines are built into the GEM-Selektor code (more in the <a href="theorgem.html"><tt>theorgem.html</tt></a> and <b><tt>Activity-coeffs.pdf
+subroutines are built into the GEM-Selektor code (more in the <a
+ href="theorgem.html"><tt>theorgem.html</tt></a> and <b><tt>Activity-coeffs.pdf
 </tt></b>manuals). The built-in calculations can be used by setting
 proper
 codes in the <a href="gm_phase.html#p_solt_0"><tt>p_solt[0]</tt></a>
@@ -182,7 +229,6 @@ field
 and the <tt>'S'</tt> code in <a href="gm_phase.html#p_solt_3"><tt>p_solt[3]</tt></a>
 field.<br>
 </p>
-
 <p>For those reasons, GEM-Selektor allows the user to write almost any
 non-ideality model as a <a href="gmscript.html">Math Script</a> text
 stored in the Phase definition record. This text should contain
@@ -199,13 +245,12 @@ procedure to provide new values of activity coefficients from values of
 mole fractions and other parameters of the non-ideal phases obtained at
 the previous IPM iteration. <br>
 </p>
-
-<p>To simplify writing of math scripts in Phase definitions, a <a href="#PHASE_DOD_HIDDEN">special set of data object labels</a> is
+<p>To simplify writing of math scripts in Phase definitions, a <a
+ href="#PHASE_DOD_HIDDEN">special set of data object labels</a> is
 available; the dimensions and pointers of them will be reset separately
 for each phase at every IPM iteration. Such calculations are controlled
 by <a href="#p_solt_0">special codes</a> that can be set up and
 changed during create/remake of a Phase record.</p>
-
 <p>Phase records for sorption phases, in principle, are organized
 similarly to those for multicomponent solid solutions, but, by
 necessity, more surface-related default information (total and maximum
@@ -216,86 +261,51 @@ the System definition, e.g. for model fitting purposes. Details
 on GEM SCM calculations are given in the <b><tt>SCM-corrections.pdf</tt></b>
 document.<br>
 </p>
-
-<p><a href="#P333R3"><br>
-</a></p>
-
-<h3><a name="PHASE_CREATE"></a> 1.1. Creating new Phase records</h3>
-
-<p>To construct a new phase definition record, close your <a href="gm_project.html">modelling project</a> and switch to
-"Thermodynamic Database" mode of GEM-Selektor. There, open the
-"Thermodynamic Phases&nbsp; (Phase)" module window and execute the
-"Record" "Create" menu command. In the appearing "Phase:: Insert a new
-record key" dialog, make a new <a href="gdb_rkey.html#dbm_Phase">Phase
-record key</a> (at best selecting one of existing keys "From List" and
-modifying it), and press "Ok". A small "Phase: Remake Dialog ..." will
-appear. You can read the tooltips on all the configuration fields and
-flags, or click on any of them and press
-<tt>F1</tt> to read help pages (available <a href="#PHASE_DOD_REMAKE">below
-in this manual</a>). &nbsp;Two fields require special attention if a
-multi-component
-phase is to be defined: the <a href="gm_phase.html#p_solt_0"><tt>p_solt[0]</tt></a>
-field and the <a href="gm_phase.html#p_solt_3"><tt>p_solt[3]</tt></a>
-field
-because these codes determine calculations of mixing properties in this
-phase. In the case of built-in models (<tt>'S'</tt> code in the <a href="gm_phase.html#p_solt_3"><tt>p_solt[3]</tt></a> field ), the
-necessary
-optional data fields for model parameters will be allocated
-automatically;
-otherwise, you have to select needed flags and dimensions here. After
-the
-configuration is set up, press "Ok" to proceed (note that for
-single-component or ideal solution phases, there is no need to make any
-changes in the default Phase record configuration).<br>
+<p><br>
 </p>
-
-The program now will display a list of available ReacDC records, asking
-you to mark the species you wish to include in your phase definition.
-Using
-the left mouse button, mark one or more keys, or click "Clear All" if
-you are not going to use ReacDC links in defining a new Phase. Press
-"Ok"
-to proceed. Next, the program will ask you to mark the species to be
-included into the phase from the list of DComp records. Mark one or
-more necessary keys and press "Ok" (if nothing is selected from both
-ReacDC and DComp
-record chains, you will see a warning dialog and will be able to repeat
-the whole selection procedure).&nbsp;
-<p>Now, Page 1 of the "Phase" window appears on the desktop. Enter the
-full phase name into the <a href="#PhName"><span style="font-family: monospace;">PhName</span></a> field and
-(optionally)
-a comment into the <a href="#PhNote"><span style="font-family: monospace;">PhNote</span></a>&nbsp; line.
-Depending
-on the configuration, you may need to enter some numbers (e.g. specific
-surface
-area in <a href="#DisPar_0"><span style="font-family: monospace;">DisPar[0]</span></a>
-), math scripts,&nbsp;or optional parameters on Page 2 and Page 3. When
-finished,
-save the Phase record to database. <a href="#P333R3"><br>
-</a></p>
-
-<p>&nbsp;</p>
-
-<h3><a name="PHASE_MATH_SCRIPTS"></a>1.2. Math Scripts for definition
-of
-non-ideal solutions<br>
-</h3>
-
+<p><a href="gm_phase.html#PHASE_ERRORS"><font
+ face="Helvetica, Arial, sans-serif"><br>
+</font></a></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;"><br>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="PHASE_BUILTIN"></a>1.2.
+Built-in models of (non)ideal mixing</font></h3>
+<p><a href="gm_phase.html#PHASE_ERRORS"><font
+ face="Helvetica, Arial, sans-serif"><br>
+</font></a></p>
+<p><a href="gm_phase.html#PHASE_ERRORS"><font
+ face="Helvetica, Arial, sans-serif">&lt;Default: Single-site simple
+mixing model&gt;<br>
+</font></a></p>
+<p><a href="gm_phase.html#PHASE_ERRORS"><font
+ face="Helvetica, Arial, sans-serif">&lt;about TSolMod models&gt;<br>
+</font></a></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;"><br>
+<h3><a name="PHASE_SCRIPTED"></a><font
+ face="Helvetica, Arial, sans-serif">1.3. </font><font
+ face="Helvetica, Arial, sans-serif">Scripted customary
+models of non-ideal mixing</font></h3>
 <p>If, upon create/remake of the multicomponent Phase record, you have
-specified some codes of non-ideal mixing in the <a href="#p_solt_0"><span style="font-family: monospace;">p_solt</span></a> flags that will not
+specified some codes of non-ideal mixing in the <a
+ href="gm_phase.html#p_solt_0"><span style="font-family: monospace;">p_solt</span></a>
+flags that will not
 use
 built-in calculation of activity coefficients,&nbsp; you will usually
 find
-a <a href="#DcEq"><span style="font-family: monospace;">DcEq</span></a>
+a <a href="gm_phase.html#DcEq"><span style="font-family: monospace;">DcEq</span></a>
 text
-editor field on Page 2 and sometimes, a <a href="#PhEq"><span style="font-family: monospace;">PhEq</span></a> text editor field on
+editor field on Page 2 and sometimes, a <a href="gm_phase.html#PhEq"><span
+ style="font-family: monospace;">PhEq</span></a> text editor field on
 Page
 3 of the Phase window.<br>
 </p>
-
 <p>Definition of non-ideal mixtures requires some work - first,
 allocation of optional arrays for coefficients of the non-ideal
-solution model, and second - entering and debugging <a href="gmscript.html">Math Scritps</a>
+solution model, and second - entering and debugging <a
+ href="gmscript.html">Math Scritps</a>
 with equations for calculation of the activity coefficients of species
 included into the phase. To facilitate writing of scripts, some
 frequently used ones can be found in the template script library (press
@@ -306,7 +316,6 @@ translated and executed
 only during the <a href="gems_sys.html">calculation of equilibrium
 state</a>
 (with some error messages if something goes wrong). </p>
-
 <p>The (non-ideal) aqueous solution phase must always be present in any
 aquatic system. In GEM-Selektor, many Phase records defining aqueous
 solutions
@@ -330,14 +339,15 @@ records. The default gas mixture is considered as an ideal mixture of
 ideal
 gases. <br>
 </p>
-
 <p>Definitions of default aqueous and gaseous phases are automatically
 assembled every time when the users opens a modelling project from all
 available DComp and ReacDC records of suitable phase state (<tt>"a"</tt>
 and <tt>"g"</tt>
 or <tt>"p"</tt>, respectively) according to the "override mechanism"
-of GEMS database. Namely, if there are two or more <a href="gm_dcomp.html">DComp</a>
-records for the same species to be included into the phase and their<a href="gdb_rkey.html#dbm_DComp"> record keys</a> differ only in the
+of GEMS database. Namely, if there are two or more <a
+ href="gm_dcomp.html">DComp</a>
+records for the same species to be included into the phase and their<a
+ href="gdb_rkey.html#dbm_DComp"> record keys</a> differ only in the
 last
 field then only an alphanumerically the first one will actually be
 taken
@@ -361,7 +371,6 @@ project
 can
 be done <i>between</i> DComp and ReacDC database chains.&nbsp;<br>
 </p>
-
 <p>When the user closes a modelling project, both default Phase records
 for aqueous electrolyte (<tt>"aq_gen"</tt>) and gas mixture (<tt>"gas_gen"</tt>)
 will be automatically deleted and created again when the project will
@@ -374,7 +383,8 @@ coefficients) and then force the program to create projects by taking
 this
 definition instead of&nbsp; the generic default one. Make sure that in
 the
-<a href="#PhDCC">Species Class</a> list, the water-solvent is assigned <tt>"W"</tt>,
+<a href="gm_phase.html#PhDCC">Species Class</a> list, the water-solvent
+is assigned <tt>"W"</tt>,
 hydrogen ion <tt>"T"</tt> and all other species <tt>"S"</tt> codes.
 In a
 similar way, the default ideal gas mixture phase can be replaced with a
@@ -385,20 +395,23 @@ Phase containing equations of state and for calculation of fugacity
 coefficients
 to describe the (non-)ideal mixing of real gases.&nbsp;<br>
 </p>
-
 <p>&lt;Examples - to be added later&gt;<br>
 </p>
-
 <p><br>
 </p>
-
-<h3><a name="PHASE_CALC"></a>1.3. Phase module calculations</h3>
-
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;"><br>
+<p> <font face="Helvetica, Arial, sans-serif"> </font></p>
+<h3><a name="PHASE_CALC"></a><font face="Helvetica, Arial, sans-serif">1.4.
+Phase module calculations</font></h3>
 <p>If you execute the "Record" "Calculate" menu command or toolbar icon
 on the "Phase" window then the currently loaded Phase record will be
 "recalculated". Doing this kind of diagnostics is useful in order to
-check if the DComp/ReacDC records referenced in the <a href="#PhDCS"><tt>PhDCS</tt></a>
-and <a href="#pDC_v_"><tt>pDC_v_</tt></a> &nbsp;lists are indeed
+check if the DComp/ReacDC records referenced in the <a
+ href="gm_phase.html#PhDCS"><tt>PhDCS</tt></a>
+and <a href="gm_phase.html#pDC_v_"><tt>pDC_v_</tt></a> &nbsp;lists are
+indeed
 present in the project database (especially after you &nbsp;have added,
 renamed or deleted some records). In addition, some data like
 Kielland's effective ionic radii will be collected &nbsp;from the
@@ -410,18 +423,177 @@ modelling project, otherwise the latter will not be opened properly or
 the program
 may crash. <font face="Helvetica, Arial, sans-serif"><br>
 </font></p>
-
 <p><font face="Helvetica, Arial, sans-serif"><br>
 </font></p>
-
-<h3><a name="PHASE_SORPTION"></a>1.4. Definition of sorption phases<br>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;"><br>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="PHASE_INTPAR"></a>1.5.
+TSolMod rules for interaction parameters</font></h3>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<p><a href="gm_phase.html#PHASE_ERRORS"><font
+ face="Helvetica, Arial, sans-serif"><br>
+</font></a></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;">
+<p><a href="#P333R3"></a></p>
+<h2><a name="PHASE_MWIZARD"></a> <font
+ face="Helvetica, Arial, sans-serif">2. Phase Create/Remake Wizard</font></h2>
+<p>To construct a new phase definition record, close your <a
+ href="gm_project.html">modelling project</a> and switch to
+"Thermodynamic Database" mode of GEM-Selektor. There, open the
+"Thermodynamic Phases&nbsp; (Phase)" module window and execute the
+"Record" "Create" menu command. In the appearing "Phase:: Insert a new
+record key" dialog, make a new <a href="gdb_rkey.html#dbm_Phase">Phase
+record key</a> (at best selecting one of existing keys "From List" and
+modifying it), and press "Ok". A small "Phase: Remake Dialog ..." will
+appear. You can read the tooltips on all the configuration fields and
+flags, or click on any of them and press
+<tt>F1</tt> to read help pages (available <a href="#PHASE_DOD_REMAKE">below
+in this manual</a>). &nbsp;Two fields require special attention if a
+multi-component
+phase is to be defined: the <a href="gm_phase.html#p_solt_0"><tt>p_solt[0]</tt></a>
+field and the <a href="gm_phase.html#p_solt_3"><tt>p_solt[3]</tt></a>
+field
+because these codes determine calculations of mixing properties in this
+phase. In the case of built-in models (<tt>'S'</tt> code in the <a
+ href="gm_phase.html#p_solt_3"><tt>p_solt[3]</tt></a> field ), the
+necessary
+optional data fields for model parameters will be allocated
+automatically;
+otherwise, you have to select needed flags and dimensions here. After
+the
+configuration is set up, press "Ok" to proceed (note that for
+single-component or ideal solution phases, there is no need to make any
+changes in the default Phase record configuration).<br>
+</p>
+The program now will display a list of available ReacDC records, asking
+you to mark the species you wish to include in your phase definition.
+Using
+the left mouse button, mark one or more keys, or click "Clear All" if
+you are not going to use ReacDC links in defining a new Phase. Press
+"Ok"
+to proceed. Next, the program will ask you to mark the species to be
+included into the phase from the list of DComp records. Mark one or
+more necessary keys and press "Ok" (if nothing is selected from both
+ReacDC and DComp
+record chains, you will see a warning dialog and will be able to repeat
+the whole selection procedure).&nbsp;
+<p>Now, Page 1 of the "Phase" window appears on the desktop. Enter the
+full phase name into the <a href="#PhName"><span
+ style="font-family: monospace;">PhName</span></a> field and
+(optionally)
+a comment into the <a href="#PhNote"><span
+ style="font-family: monospace;">PhNote</span></a>&nbsp; line.
+Depending
+on the configuration, you may need to enter some numbers (e.g. specific
+surface
+area in <a href="#DisPar_0"><span style="font-family: monospace;">DisPar[0]</span></a>
+), math scripts,&nbsp;or optional parameters on Page 2 and Page 3. When
+finished,
+save the Phase record to database. <a href="#P333R3"><br>
+</a></p>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;">
+<p>&nbsp;</p>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="WZSTEP_1"></a>2.1.
+Phase Wizard Step 1</font></h3>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;">
+<h3><font face="Helvetica, Arial, sans-serif"><a name="WZSTEP_2"></a>2.2.
+Phase Wizard Step 2</font></h3>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;">
+<h3><font face="Helvetica, Arial, sans-serif"><a name="WZSTEP_3"></a>2.3.
+Phase Wizard Step 3</font></h3>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;">
+<h2><font face="Helvetica, Arial, sans-serif"><a name="PHASE_MWINDOW"></a>3.
+Phase Module Window</font></h2>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;">
+<h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_1"></a>3.1.
+Phase Window Page 1</font></h3>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;">
+<h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_2"></a>3.2.
+Phase Window Page 2</font></h3>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;"><font
+ face="Helvetica, Arial, sans-serif">
+<br>
+</font>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_3"></a>3.3.
+Phase Window Page 3</font></h3>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;">
+<h2><font face="Helvetica, Arial, sans-serif"><a name="PHASE_TYPES"></a>4.
+Types of Multicomponent Phases</font><br>
+</h2>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;">
+<h3><font face="Helvetica, Arial, sans-serif"><a name="PHASE_AQUEOUS"></a>4.1.
+Aqueous electrolyte</font></h3>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;">
+<h3><font face="Helvetica, Arial, sans-serif"><a name="PHASE_GASFLUID"></a>4.2.
+Gas mixture and non-ideal fluids</font></h3>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;">
+<h3><font face="Helvetica, Arial, sans-serif"><a name="PHASE_SOLSOL"></a>4.3.
+Solid and liquid non-electrolyte solutions</font></h3>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;">
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<h3><a name="PHASE_SORPTION"></a><font
+ face="Helvetica, Arial, sans-serif">4.4. Sorption and Surface
+Complexation</font><br>
 </h3>
-
 <p>Phase definition for a sorption phase, in principle, is organized
 similar to aqueous electrolyte or solid solution, with a difference
 that some more information about surface species and surface types has
 to be provided (see
-details in the<a href="gems_scm.html"><tt> gems_scm.html </tt></a>and <a href="theorscm.html"><tt>theorscm.html</tt></a>&nbsp; manuals). Upon
+details in the<a href="gems_scm.html"><tt> gems_scm.html </tt></a>and <a
+ href="theorscm.html"><tt>theorscm.html</tt></a>&nbsp; manuals). Upon
 create/remake
 of a sorption phase, first of all, the number of surface types must be
 set
@@ -431,7 +603,8 @@ optional arrays for keeping input adsorption parameters (area fractions
 of surface types, maximum site density, capacitance parameters, SAT
 model codes) must also be allocated.After selecting the suface species
 from the ReacDC list and the sorbent end-member(s) from DComp or ReacDC
-lists, make sure that proper codes are given&nbsp; in the <a href="g_useref.html#DCCLASSCODES">"Species Class"</a> list for inner-
+lists, make sure that proper codes are given&nbsp; in the <a
+ href="g_useref.html#DCCLASSCODES">"Species Class"</a> list for inner-
 and outer-sphere surface complexes and sorbent end-members. Check also
 that
 the <a href="g_useref.html#SCM_CODES">EDL model codes</a> are properly
@@ -441,26 +614,24 @@ definition</a>, if necessary).&nbsp; Theoretical aspects of GEM
 sorption modeling are given in publications (Kulik, 2000, 2002a,b) or,
 in a condensed form, in the <b><tt>SCM-corrections.pdf</tt></b>&nbsp;
 manual.&nbsp;</p>
-
-<p> <br>
-</p>
-
-<h3><a name="PHASE_EXAMPLES"></a> 1.5. Examples and special cases</h3>
-
+<p> </p>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<blockquote>
+</blockquote>
+<hr style="width: 100%; height: 2px;">
+<p></p>
+<h3><a name="PHASE_EXAMPLES"></a> 4.5. Examples and special cases</h3>
 <p>&lt;to be added later&gt;<br>
 </p>
-
 <p> <br>
 &nbsp; </p>
-
 <h2> </h2>
-
 <hr style="width: 100%; height: 2px;">
-<h2><a name="PHASE_DATA_ENTRIES"></a><font face="Helvetica, Arial, sans-serif"> </font>2. Data Entries on Phase
+<h2><a name="PHASE_DATA_ENTRIES"></a><font
+ face="Helvetica, Arial, sans-serif"> </font>5. Data Entries on Phase
 Window Pages&nbsp; </h2>
-
 <dl>
-
   <dt><br>
   </dt>
   <dt><a name="PhName"></a><big><b><big><tt>PhName</tt></big></b></big>
@@ -478,9 +649,7 @@ window pages or in printouts. Not used in any calculations.<br>
 -
 Input comment to <b><tt>PhName </tt></b>(optional) </dt>
 </dl>
-
 <dl>
-
   <dd>This string up to 70 characters long may be entered by the user
 for identification purposes.</dd>
   <dd><br>
@@ -488,9 +657,7 @@ for identification purposes.</dd>
   <dd><br>
   </dd>
 </dl>
-
 <dl>
-
   <dt> <a name="DisPar_0"></a><big><big><b><tt>DisPar[0]</tt></b></big></big>
 - <i>A</i> &nbsp;(input specific surface area, m2/g) </dt>
   <dd>&nbsp; <br>
@@ -498,7 +665,8 @@ The positive value of specific surface area <i>A</i> (in m2/g) must be
 entered
 by the user for dispersed or sortion phases (in the latter case, A
 applies
-to the sorbent part only). This value is automatically copied into the <a href="gems_bcc.html">project system definition</a> and can be edited
+to the sorbent part only). This value is automatically copied into the <a
+ href="gems_bcc.html">project system definition</a> and can be edited
 there
 if necessary. Default value is 0.&nbsp;</dd>
   <dd>&nbsp;</dd>
@@ -624,9 +792,12 @@ classes of species included into this phase &nbsp;{ S T W O I M J 0 1 2
   </dt>
   <dd> &nbsp; <br>
   </dd>
-  <dd>This list is automatically compiled from <a href="g_useref.html#DCCLASSCODES">DC Class codes</a> specified in
-source <a href="gm_dcomp.html">DComp</a> (<a href="gm_dcomp.html#DC_set_0"><tt>DC_set[0]</tt></a>
-&nbsp;field) or <a href="gm_reacdc.html">ReacDC</a> (<a href="gm_reacdc.html#RE_set_0"><tt>RE_set[0]</tt></a> &nbsp;
+  <dd>This list is automatically compiled from <a
+ href="g_useref.html#DCCLASSCODES">DC Class codes</a> specified in
+source <a href="gm_dcomp.html">DComp</a> (<a
+ href="gm_dcomp.html#DC_set_0"><tt>DC_set[0]</tt></a>
+&nbsp;field) or <a href="gm_reacdc.html">ReacDC</a> (<a
+ href="gm_reacdc.html#RE_set_0"><tt>RE_set[0]</tt></a> &nbsp;
 &nbsp;field) records. The codes may be changed here in <tt>PhDCC</tt>
 column, from where they will be taken into the modelling project system
 definition (can be
@@ -671,7 +842,8 @@ this phase <br>
   <dd>&nbsp; <br>
   </dd>
   <dd>This list contains records keys of the species involved into this
-phase. The keys are interpreted according to codes in the <a href="#PhDCS"><tt>PhDCS</tt></a>
+phase. The keys are interpreted according to codes in the <a
+ href="#PhDCS"><tt>PhDCS</tt></a>
 column. This list is created or updated automatically during
 remake/create of the Phase record, when the user selects species from
 ReacDC and/or DCcomp record key lists.&nbsp;</dd>
@@ -685,7 +857,8 @@ first record with matching first three fields will be taken and others
 this is done separately within DComp or
 ReacDC chains, i.e. no cross-overriding between DComp and ReacDC
 records
-is possible even if they have identical first three fields of their <a href="gdb_rkey.html#dbm_DComp">record keys</a>.&nbsp; <br>
+is possible even if they have identical first three fields of their <a
+ href="gdb_rkey.html#dbm_DComp">record keys</a>.&nbsp; <br>
 &nbsp; &nbsp;</dd>
   <dd> &nbsp; &nbsp; </dd>
   <dt> <a name="SAT_C_0"></a><big><big><b><tt>SAT_C[0]</tt></b></big></big>
@@ -695,7 +868,8 @@ Q 1 2 3 4 F R N I } and obsolete SAT calculation { C S }<br>
   <dd>&nbsp; <br>
   </dd>
   <dd> This input column contains <a href="g_useref.html#SACT_CODES">SACT
-codes for surface species</a>, used in calculation of&nbsp; the <a href="glossary.html#DT_SAT">surface activity coefficient terms</a>
+codes for surface species</a>, used in calculation of&nbsp; the <a
+ href="glossary.html#DT_SAT">surface activity coefficient terms</a>
 (SACT). The
 values must be entered by the user here because they cannot be
 collected from DComp or ReacDC records. For the sorbent (end members),
@@ -705,7 +879,9 @@ must be used.&nbsp;</dd>
   </dd>
   <dd>&nbsp;The SACT codes will be automatically copied into the
 modelling project. Some of new method codes require other parameters to
-be set appropriately in the <a style="font-family: monospace;" href="#MaSDj_0"><big>MaSDj</big></a><span style="font-family: monospace;"> </span>table, first of all, the site
+be set appropriately in the <a style="font-family: monospace;"
+ href="#MaSDj_0"><big>MaSDj</big></a><span
+ style="font-family: monospace;"> </span>table, first of all, the site
 density parameter.&nbsp; Recommended&nbsp; value in this column is "L"
 (competitive Langmuir SACT) which produces effects similar to the site
 balance in LMA SCMs. Competition takes place when more than one surface
@@ -722,7 +898,8 @@ recommended.<span style="font-style: italic;"></span><br>
   </dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd> This input column contains the <a href="g_useref.html#SURFDC_ALLOC_CODES">allocation codes</a> assigning
+  <dd> This input column contains the <a
+ href="g_useref.html#SURFDC_ALLOC_CODES">allocation codes</a> assigning
 a surface species to the whole solid carrier (<tt>"V"</tt> code;
 default)
 or one of its end-members (<tt>&lt;digit&gt;</tt>). The codes must be
@@ -767,13 +944,17 @@ plane&nbsp; { 0&nbsp; 1 b&nbsp; 2 d&nbsp; 3 c } <br>
   </dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd> This input column contains the <a href="g_useref.html#SURFDC_ALLOC_CODES">allocation codes</a> assigning
+  <dd> This input column contains the <a
+ href="g_useref.html#SURFDC_ALLOC_CODES">allocation codes</a> assigning
 an outer portion of the formula charge of a surface species to a
 certain EIL
-model plane. The respective charge should be given in the <big><a style="font-family: monospace;" href="#MaSDj_2">MaSDj[][2]</a></big>
-column. The charge given in <a href="#MaSDj_1"><big><span style="font-family: monospace;">MaSDj[][1]</span></big></a>
+model plane. The respective charge should be given in the <big><a
+ style="font-family: monospace;" href="#MaSDj_2">MaSDj[][2]</a></big>
+column. The charge given in <a href="#MaSDj_1"><big><span
+ style="font-family: monospace;">MaSDj[][1]</span></big></a>
 column ("inner charge") will be always assigned to the 0 EIL plane. The
-associated EIL model (for this surface type) is encoded in the <a href="#SCM_C"><big><span style="font-family: monospace;">SCM_C</span></big></a>
+associated EIL model (for this surface type) is encoded in the <a
+ href="#SCM_C"><big><span style="font-family: monospace;">SCM_C</span></big></a>
 field on Page 3 of the Phase window.<br>
   </dd>
   <dd><br>
@@ -781,7 +962,8 @@ field on Page 3 of the Phase window.<br>
   <dd>Default allocation code is 0 (zero plane), which means that the
 whole charge of surface species is located on the sorbent surface
 directly (as in NEM, DLM, CCM, inner-sphere species in TLM, BSM and
-3LM). Any non-zero charge given in the <big><a style="font-family: monospace;" href="gm_phase.html#MaSDj_2">MaSDj[][2]</a></big>
+3LM). Any non-zero charge given in the <big><a
+ style="font-family: monospace;" href="gm_phase.html#MaSDj_2">MaSDj[][2]</a></big>
 column will be ignored in this case. <br>
   </dd>
   <dd><br>
@@ -821,7 +1003,8 @@ indexed from 0 (default) to 5. <br>
 patch will potentially compete for these sites if a competitive SACT is
 used (e.g. 'L'). All such competing species must be given the same
 value of site
-density parameter (complete coverage site density) in the <a href="#MaSDj_0"><big><span style="font-family: monospace;">MaSDj[][0]</span></big></a>
+density parameter (complete coverage site density) in the <a
+ href="#MaSDj_0"><big><span style="font-family: monospace;">MaSDj[][0]</span></big></a>
 column. <br>
   </dd>
   <dd><br>
@@ -858,10 +1041,13 @@ densities for&nbsp; surface species, expressed in
   <dd><br>
   </dd>
   <dd><b style="text-decoration: underline;">Attention: </b>All
-surface species allocated to the same site type&nbsp; (<big><a style="font-family: monospace;" href="#SAT_C_4">SAT_C[][4]</a></big>
-column) on the same surface type (<big><a style="font-family: monospace;" href="#SAT_C_2">SAT_C[][,2]</a></big>
+surface species allocated to the same site type&nbsp; (<big><a
+ style="font-family: monospace;" href="#SAT_C_4">SAT_C[][4]</a></big>
+column) on the same surface type (<big><a
+ style="font-family: monospace;" href="#SAT_C_2">SAT_C[][,2]</a></big>
 column)&nbsp; must have the same density parameter value if they are
-assigned with a competitive SACT code in <big><a style="font-family: monospace;" href="#SAT_C_0">SAT_C[][0]</a></big>
+assigned with a competitive SACT code in <big><a
+ style="font-family: monospace;" href="#SAT_C_0">SAT_C[][0]</a></big>
 column).<br>
   </dd>
   <dd>&nbsp;</dd>
@@ -900,9 +1086,7 @@ there, if necessary. </dd>
   <dd><br>
   </dd>
 </dl>
-
 <dl>
-
   <dt> <a name="MaSDj_2"></a><big><big><b><tt>MaSDj[2]</tt></b></big></big>
 - Effective part of the formula unit charge of surface species
 allocated to 1
@@ -940,9 +1124,7 @@ there, if necessary.</dd>
   <dd><br>
   </dd>
 </dl>
-
 <dl>
-
   <dt> <a name="MaSDj_3"></a><big><big><b><tt>MaSDj[3]</tt></b></big></big>
 - SACT isotherm parameter 1 (e.g. interaction parameter a<sub>F</sub>&nbsp;
 in Frumkin SACT)<br>
@@ -987,11 +1169,8 @@ coordination number
 modelling <a href="gems_scm.html">project system</a> and can be edited
 there, if necessary.</dd>
 </dl>
-
 <br>
-
 <dl>
-
   <dt> <a name="MaSDj_5"></a><big><big><b><tt>MaSDj[5]</tt></b></big></big>
 - SACT isotherm parameter 3 (reserved for future development of SACT
 equations) <br>
@@ -1005,14 +1184,10 @@ used in&nbsp; SACT equations added in future.&nbsp;</dd>
 modelling <a href="gems_scm.html">project system</a> and can be edited
 there, if necessary. </dd>
 </dl>
-
 <dl>
-
   <dd>&nbsp; </dd>
 </dl>
-
 <dl>
-
   <dt> <a name="DcEq"></a><b><big><big><tt>DcEq</tt></big></big></b> -
 Math script related to phase species concentrations (optional, for
 user-defined
@@ -1022,7 +1197,8 @@ non-ideal mixing models) <br>
   </dd>
   <dd>Use this multiline editor field to create an
 equilibrium-state-dependent <a href="gmscript.html">math script</a>
-for calculation of species' <a href="glossary.html#DT_activity_coefficient">activity coefficients</a>
+for calculation of species' <a
+ href="glossary.html#DT_activity_coefficient">activity coefficients</a>
 in
 the non-ideal multi-component phase. In this script, it is recommended
 to use special <a href="#PHASE_DOD_HIDDEN">hidden data objects</a>
@@ -1041,11 +1217,11 @@ definition).&nbsp; </dd>
   <dd><br>
   </dd>
   <dd>To facilitate writing of this math script, we provide a template
-script library, accessible by pressing <span style="font-family: monospace;">F3</span>
+script library, accessible by pressing <span
+ style="font-family: monospace;">F3</span>
 or executing the "Help" "Scripts" menu command. One of the library
 scripts ("<tt>mscript-2-Margules:0001:phase</tt>") looks like this:</dd>
 </dl>
-
 <blockquote>
   <dl>
     <dd><tt>$ Calculation of the activity coefficients (Margules
@@ -1056,9 +1232,7 @@ $ end<br>
       </tt></dd>
   </dl>
 </blockquote>
-
 <dl>
-
   <dd>This script, as any other script in the&nbsp; <tt>DcEq</tt>
 &nbsp;field,
 will be calculated at every iteration of the GEM IPM algorithm. Two end
@@ -1086,7 +1260,8 @@ multicomponent phases (where provided) according to the mode flag in
 the <a href="#p_solt_1"><tt>p_solt[1]</tt></a>
 field. There are two different relations between equations in the DcEq
 script and the components of the non-ideal solution phase, defined by
-the <a href="g_useref.html#P_SOLT4">linking code</a> in the <a href="#p_solt_4"><tt>p_solt[4]</tt></a> field. The above example
+the <a href="g_useref.html#P_SOLT4">linking code</a> in the <a
+ href="#p_solt_4"><tt>p_solt[4]</tt></a> field. The above example
 corresponds to the "private" linking, where each species has its own
 group of equations in the math script (separated by the<tt> \@</tt>
 symbols).&nbsp; There are also non-ideality models in which the same
@@ -1127,8 +1302,10 @@ in <a href="gmscript.html">math script</a> equations for calculation
 of
 activity coefficients typed in the <a href="#DcEq"><tt>DcEq</tt></a>
 field,
-where they are accessible at the GEM IPM runtime using the <big><a href="#dCm"><tt>dCm</tt></a></big> hidden data object. To access a
-cell, two indexes must be provided after <big><span style="font-family: monospace;">dCm</span></big>&nbsp; identifier, for
+where they are accessible at the GEM IPM runtime using the <big><a
+ href="#dCm"><tt>dCm</tt></a></big> hidden data object. To access a
+cell, two indexes must be provided after <big><span
+ style="font-family: monospace;">dCm</span></big>&nbsp; identifier, for
 instance, as <big><span style="font-family: monospace;">dCm[1][2]</span></big>&nbsp;
 or <big><span style="font-family: monospace;">dCm[js][1]</span></big>&nbsp;
 or <big><span style="font-family: monospace;">dCm[js][is]</span></big>.
@@ -1147,9 +1324,7 @@ correct usage of this data in calculation of activity coefficients.</dd>
   <dd>&nbsp; <br>
   </dd>
 </dl>
-
 <dl>
-
   <dd>&nbsp; &nbsp;&nbsp; </dd>
   <dt> <a name="PhEq"></a><big><big><b><tt>PhEq</tt></b></big></big>
 -&nbsp;Math
@@ -1159,7 +1334,8 @@ mixing models) <br>
   </dt>
   <dd>&nbsp; &nbsp; <br>
   </dd>
-  <dd>This multiline editor field can be used to create an auxiliary <a href="gmscript.html">math script</a> for preparing some temperature-,
+  <dd>This multiline editor field can be used to create an auxiliary <a
+ href="gmscript.html">math script</a> for preparing some temperature-,
 pressure- or composition-dependent coefficients to be used in
 calculation of species' <a href="glossary.html#DT_activity_coefficient">activity
 coefficients</a> in the non-ideal multi-component phase as defined in
@@ -1179,7 +1355,6 @@ executing the "Help" "Scripts" menu command. The library script ("<tt>mscript-2-
 contains the following script to be placed into the <tt>PhEq</tt>
 field:&nbsp;</dd>
 </dl>
-
 <blockquote>
   <dl>
     <dd><tt>&nbsp;$ Margules parameters W/(RT):<br>
@@ -1188,20 +1363,21 @@ field:&nbsp;</dd>
 &nbsp;$ end</tt><tt> </tt></dd>
   </dl>
 </blockquote>
-
 <dl>
-
   <dd>This script will be calculated only once before entering the GEM
 IPM algorithm, because the Margules interaction parameters depend on <i>T,
 P</i>
 but not on the phase composition. The calculated Margules parameters
 are
-assigned to&nbsp; an optional vector <a href="file:///C:/gems2html/program/doc/html/gm_phase.html#Qd"><tt>Qd</tt></a>
+assigned to&nbsp; an optional vector <a
+ href="file:///C:/gems2html/program/doc/html/gm_phase.html#Qd"><tt>Qd</tt></a>
 &nbsp;from where, in turn, they will be taken into equations for
-calculation of activity coefficients as specified in the <a href="#DcEq"><tt>DcEq</tt></a>
+calculation of activity coefficients as specified in the <a
+ href="#DcEq"><tt>DcEq</tt></a>
 field (see above). &nbsp;Note that the same binary Margules model is
 implemented
-as a built-in option (<tt>'M'</tt> code set in the <a href="gm_phase.html#p_solt_0"><tt>p_solt[0,0]</tt></a> cell and <tt>'S'</tt>
+as a built-in option (<tt>'M'</tt> code set in the <a
+ href="gm_phase.html#p_solt_0"><tt>p_solt[0,0]</tt></a> cell and <tt>'S'</tt>
 code in <a href="#p_solt_3"><tt>p_solt[0,3]</tt></a> cell), in which
 case
 no Math Script are needed; the <i>W</i> coefficients should be entered
@@ -1218,7 +1394,8 @@ each iteration of IPM minimization algorithm, will recalculate the
 built-in
 subroutines and/or expressions in <tt>PhEq</tt> math scripts for all
 multicomponent
-phases (where provided) according to the mode flag in the <a href="#p_solt_2"><tt>p_solt[2]</tt></a> field.<br>
+phases (where provided) according to the mode flag in the <a
+ href="#p_solt_2"><tt>p_solt[2]</tt></a> field.<br>
   </dd>
   <dd>&nbsp;<br>
   </dd>
@@ -1229,9 +1406,7 @@ allocated upon create/remake of the Phase record. &nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
 </dl>
-
 <dl>
-
   <dd>&nbsp; &nbsp; </dd>
   <dt> <a name="ph_cf"></a><big><big><b><tt>ph_cf</tt></b></big></big>
 - Array
@@ -1287,7 +1462,6 @@ for the second end-member (in J/mol, J/K/mol and J/bar) as
 can be represented by the following (PhEq script on the right
 side):&nbsp;</dd>
 </dl>
-
 <blockquote>
   <dl>
     <dd><i>W</i><sub>1</sub> = <i>W<sub>U</sub></i><sub>,1</sub> - <i>W<sub>S</sub></i><sub>,1</sub>*<i>T</i>
@@ -1300,9 +1474,7 @@ Qp[2] = pCv[1][0]</tt>
 - <tt>pCv[1][1]</tt>*<i>T</i>_ + <tt>pCv[1,2]</tt>*<i>P</i>_.&nbsp;</dd>
   </dl>
 </blockquote>
-
 <dl>
-
   <dd>Unknown coefficients in <tt>ph_cf</tt> array must be set to
 zero. For
 example, if you wish to have activity coefficients to be independent of
@@ -1320,7 +1492,6 @@ reduce it to the ideal mixture. <br>
 requires
 four rows each of three coefficients:</dd>
 </dl>
-
 <blockquote>
   <blockquote><i>W</i><sub>12</sub> = <i>W<sub>U</sub></i><sub>,12</sub>
 - <i>W<sub>S</sub></i><sub>,12</sub>*<i>T</i> + <i>W<sub>V</sub></i><sub>,12</sub>*<i>P</i>
@@ -1336,9 +1507,7 @@ four rows each of three coefficients:</dd>
 + <i>W<sub>V</sub></i><sub>,123</sub>*<i>P</i> =&nbsp; <tt>pCv[3][0]</tt>
 - <tt>pCv[3][1]</tt>*<i>T</i> + <tt>pCv[3][2]</tt>*<i>P_</i>.&nbsp;</blockquote>
 </blockquote>
-
 <dl>
-
   <dd>The binary Guggenheim (Redlich - Kister) mixing model needs only
 three
 coefficients that (in the present implementation) should be entered in
@@ -1359,7 +1528,8 @@ manual.&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
   <dd><br>
   </dd>
   <dt><a name="ipxT"></a><big><big><b><tt>ipxT </tt></b><small>- <small>Table
-of indexation of interaction parameters of mixing models given in the <big><span style="font-family: monospace;">ph_cf</span></big> array</small></small></big></big>
+of indexation of interaction parameters of mixing models given in the <big><span
+ style="font-family: monospace;">ph_cf</span></big> array</small></small></big></big>
   </dt>
   <dd><br>
   </dd>
@@ -1371,7 +1541,8 @@ Redlich-Kister and so on.</dd>
   </dd>
   <dd>The <big><tt>ipxT</tt></big>
 array has the numbers of rows equal to the number of (non-default)
-interaction parameters (set in <a href="#Ph_ncp_0"><big><span style="font-family: monospace;">Ph_ncp[0]</span></big></a> upon
+interaction parameters (set in <a href="#Ph_ncp_0"><big><span
+ style="font-family: monospace;">Ph_ncp[0]</span></big></a> upon
 remake) and columns equal to the maximum order of interaction parameter
 (set in <a href="#Ph_npx"><big><span style="font-family: monospace;">Ph_npx</span></big></a>
 upon remake), as defined by the user or set up
@@ -1379,16 +1550,18 @@ automatically by the built-in mixing model.&nbsp;<br>
   </dd>
   <dd><br>
   </dd>
-  <dd>The index in each row of&nbsp; <span style="font-family: monospace;">ipxT</span> table should correspond to
-the interaction parameter&nbsp; in the respective&nbsp; row of the <span style="font-family: monospace;">ph_cf</span> array. For example, the
-ternary Margules model shown above (see description of&nbsp; <a href="#ph_cf"><big><span style="font-family: monospace;">ph_cf</span></big></a>
-array) would require the following <span style="font-family: monospace;">ipxT</span> table:</dd>
+  <dd>The index in each row of&nbsp; <span
+ style="font-family: monospace;">ipxT</span> table should correspond to
+the interaction parameter&nbsp; in the respective&nbsp; row of the <span
+ style="font-family: monospace;">ph_cf</span> array. For example, the
+ternary Margules model shown above (see description of&nbsp; <a
+ href="#ph_cf"><big><span style="font-family: monospace;">ph_cf</span></big></a>
+array) would require the following <span
+ style="font-family: monospace;">ipxT</span> table:</dd>
   <dd><br>
   </dd>
 </dl>
-
 <dl style="margin-left: 40px;">
-
   <dd style="font-family: monospace;"><big>0&nbsp;&nbsp; 1&nbsp;&nbsp;
 -1</big></dd>
   <dd style="font-family: monospace;"><big>0&nbsp;&nbsp; 2&nbsp;&nbsp;
@@ -1399,12 +1572,15 @@ array) would require the following <span style="font-family: monospace;">ipxT</s
 &nbsp; 2</span></big><br>
   </dd>
 </dl>
-
 <dl>
-
   <dd><br>
   </dd>
-  <dd>As the interaction coefficients are symmetric (<span style="font-style: italic;">W</span><sub>12</sub> = <span style="font-style: italic;">W</span><sub>21</sub>; <span style="font-style: italic;">W</span><sub>123</sub> = <span style="font-style: italic;">W</span><sub>231</sub> = <span style="font-style: italic;">W</span><sub>312</sub> etc.) in such
+  <dd>As the interaction coefficients are symmetric (<span
+ style="font-style: italic;">W</span><sub>12</sub> = <span
+ style="font-style: italic;">W</span><sub>21</sub>; <span
+ style="font-style: italic;">W</span><sub>123</sub> = <span
+ style="font-style: italic;">W</span><sub>231</sub> = <span
+ style="font-style: italic;">W</span><sub>312</sub> etc.) in such
 mixing models, it is sufficient to index only one of them, as done
 above. The index -1 in the last column means that this interaction
 parameter is not full-order (i.e. binary in a ternary system). For
@@ -1416,18 +1592,20 @@ table. <br>
   <dd><br>
   </dd>
   <dd>Note that the new built-in functions assume that if some index
-combinations are missing from the&nbsp; <span style="font-family: monospace;">ipxT</span>&nbsp; and&nbsp; <span style="font-family: monospace;">ph_cf</span> arrays, the respective
+combinations are missing from the&nbsp; <span
+ style="font-family: monospace;">ipxT</span>&nbsp; and&nbsp; <span
+ style="font-family: monospace;">ph_cf</span> arrays, the respective
 interactions are assumed ideal and take default values of interaction
 coefficients (usually 0). This makes the setup of multicomponent mixing
 models easier. For instance, if in the above example coefficients W<sub>123</sub>
 and W<sub>13</sub> are not known or assumed to be zero then the
-respective lines (second and the last) could be omitted from <span style="font-family: monospace;">ipxT</span> and <span style="font-family: monospace;">ph_cf</span> arrays, which would have
+respective lines (second and the last) could be omitted from <span
+ style="font-family: monospace;">ipxT</span> and <span
+ style="font-family: monospace;">ph_cf</span> arrays, which would have
 then only two rows each. <br>
   </dd>
 </dl>
-
 <dl>
-
   <dd>&nbsp;&nbsp; <br>
   </dd>
   <dd> &nbsp;&nbsp; </dd>
@@ -1437,12 +1615,14 @@ of SCM applied to surface types {&nbsp; D C S T 3 M I N&nbsp; } <br>
   </dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd> This input data object object contains the <a href="g_useref.html#SCM_CODES">SCM codes</a> for each surface type on
+  <dd> This input data object object contains the <a
+ href="g_useref.html#SCM_CODES">SCM codes</a> for each surface type on
 a sorption phase. The codes must be entered by user.&nbsp; <br>
   </dd>
   <dd>&nbsp;<br>
   </dd>
-  <dd>SCM codes will be automatically copied into the modelling <a href="gems_scm.html">project system</a> and can be edited there, if
+  <dd>SCM codes will be automatically copied into the modelling <a
+ href="gems_scm.html">project system</a> and can be edited there, if
 necessary. <br>
 &nbsp;&nbsp;</dd>
   <dd>&nbsp; &nbsp; </dd>
@@ -1477,7 +1657,8 @@ of surface complexes
 (marked
 as "C" in the <a href="#SAT_C_0"><tt>SAT_C[0]</tt></a> column) that
 compete for sites of the same type on the same surface patch (type).
-These maximum densities will be used in calculation of <a href="glossary.html#DT_SAT">competitive SAT</a>.&nbsp;</dd>
+These maximum densities will be used in calculation of <a
+ href="glossary.html#DT_SAT">competitive SAT</a>.&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Common maximum densities will be automatically copied into the
 modelling <a href="gems_scm.html">project system</a> and can be edited
@@ -1506,7 +1687,8 @@ F/m2 for TLM, BSM and CCM for each surface type. The numbers must be
 entered by user; default is 1 F/m2.&nbsp;</dd>
   <dd><br>
   </dd>
-  <dd>Values of C1 will be automatically copied into the modelling <a href="gems_scm.html">project system</a> and can be edited there, if
+  <dd>Values of C1 will be automatically copied into the modelling <a
+ href="gems_scm.html">project system</a> and can be edited there, if
 necessary. <br>
 &nbsp;&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
@@ -1522,7 +1704,8 @@ entered by user; default is 0.2 F/m2 for TLM and 0 for other SCMs.
 &nbsp;</dd>
   <dd><br>
   </dd>
-  <dd>Values of C2 will be automatically copied into the modelling <a href="gems_scm.html">project system</a> and can be edited there, if
+  <dd>Values of C2 will be automatically copied into the modelling <a
+ href="gems_scm.html">project system</a> and can be edited there, if
 necessary. <br>
   </dd>
   <dd>&nbsp; &nbsp; <br>
@@ -1551,14 +1734,10 @@ be edited there, if necessary. <br>
   <dd>&nbsp;<br>
   </dd>
 </dl>
-
-<h3><a name="PHASE_DOD_REMAKE"></a>2.1. Data objects that can be
-modified during remake/create only</h3>
-
+<h3><a name="PHASE_DOD_REMAKE"></a>5.1. Data objects that can be
+modified through remake/create wizard only</h3>
 <p><font face="Helvetica, Arial, sans-serif"> </font></p>
-
 <dl>
-
   <dt> <a name="p_solt_0"></a><b><tt><font size="+2">p_solt[0]</font></tt></b>
 Code of the type of mixing and method of calculation of mixing
 properties { I D ... } </dt>
@@ -1584,12 +1763,14 @@ and <a href="file:///C:/gems2html/program/doc/html/gm_phase.html#DcEq">DcEq</a>
   </dd>
   <dd> &nbsp; <br>
 &nbsp;&nbsp;</dd>
-  <dt><b> <a name="p_solt_1"></a></b><tt style="font-weight: bold;"><font size="+2">p_solt[1]</font></tt> - Mode of calculation of the <tt>DcEq</tt>
+  <dt><b> <a name="p_solt_1"></a></b><tt style="font-weight: bold;"><font
+ size="+2">p_solt[1]</font></tt> - Mode of calculation of the <tt>DcEq</tt>
 math script for end members { N T X } </dt>
   <dd> &nbsp;&nbsp; </dd>
   <dd> This code defines how the math script expressions written by the
 user in the <tt><a href="#DcEq">DcEq</a></tt> field (Page 2 of Phase
-window) depend on <i>T,P</i> and/or current speciation (vector <tt><a href="gems_ipm.html#x">x</a></tt>) along the <a href="gems_ipm.html">GEM
+window) depend on <i>T,P</i> and/or current speciation (vector <tt><a
+ href="gems_ipm.html#x">x</a></tt>) along the <a href="gems_ipm.html">GEM
 IPM</a> iterations, and when the program should calculate the script
 while solving for the chemical equilibrium state. Possible code values:
     <a href="g_useref.html#P_SOLT1">see User's Reference</a>.&nbsp;</dd>
@@ -1602,7 +1783,8 @@ This is the case e.g. if a built-in mixing model was specified in the <tt>p_solt
 code.</dd>
   <dd>&nbsp; &nbsp;<br>
 &nbsp; &nbsp; </dd>
-  <dt> <a name="p_solt_2"></a><b><big><big><span style="font-family: monospace;">p_solt[2]</span></big></big></b> -
+  <dt> <a name="p_solt_2"></a><b><big><big><span
+ style="font-family: monospace;">p_solt[2]</span></big></big></b> -
 Mode of
 calculation of the <tt>PhEq</tt> math script for the whole phase { N T
 X
@@ -1611,9 +1793,12 @@ X
   </dd>
   <dd>This code defines how the math script expressions written by the
 user in the <tt><a href="#PhEq">PhEq</a></tt> field (Page 3 of Phase
-window) depend on <i>T,P</i> and/or current speciation (vector <tt><a href="gems_ipm.html#x">x</a></tt>) along the <a href="glossary.html#DT_IPM">GEM IPM</a> iterations, and when the
+window) depend on <i>T,P</i> and/or current speciation (vector <tt><a
+ href="gems_ipm.html#x">x</a></tt>) along the <a
+ href="glossary.html#DT_IPM">GEM IPM</a> iterations, and when the
 program should calculate the script while solving for the chemical
-equilibrium state. Possible code values: <a href="g_useref.html#P_SOLT2">see User's Reference</a>. </dd>
+equilibrium state. Possible code values: <a
+ href="g_useref.html#P_SOLT2">see User's Reference</a>. </dd>
   <dd><br>
   </dd>
   <dd>If the math script is not needed and the<tt> PhEq</tt>
@@ -1653,13 +1838,15 @@ value.&nbsp; <br>
   <dd>This code defines how the math script expressions specified by
 the user in the <a href="#DcEq"><tt>DcEq</tt></a> text field (Page 2
 of the "Phase" window) will be linked to the end-members and their
-non-ideality parameters. Please, consult the <tt><a href="gm_sdref.html">SDref</a></tt>
+non-ideality parameters. Please, consult the <tt><a
+ href="gm_sdref.html">SDref</a></tt>
 library of template math scripts for Phase records to learn about the
 typical examples. Possible values: <a href="g_useref.html#P_SOLT4">see
 User's Reference</a>.</dd>
   <dd><br>
   </dd>
-  <dd>Attention: If <a href="file:///C:/gems2html/program/doc/html/gm_phase.html#p_solt_0"><tt>p_solt[0]</tt></a>
+  <dd>Attention: If <a
+ href="file:///C:/gems2html/program/doc/html/gm_phase.html#p_solt_0"><tt>p_solt[0]</tt></a>
 is set to <tt>"I"</tt> and <a href="#p_solt_1"><tt>p_solt[1]</tt></a>
 set
 to <tt>"N"</tt> then this code mist be also set to <tt>"N"</tt>
@@ -1673,7 +1860,8 @@ phase <br>
   <dd>&nbsp; &nbsp; &nbsp;&nbsp;</dd>
   <dd>This code defines how densities of surface complexes will depend
 on the EDL structure, charge density and electrostatic potential of the
-soild-aqueous interface. Possible values: <a href="g_useref.html#P_SOLT5">see User's Reference</a>.</dd>
+soild-aqueous interface. Possible values: <a
+ href="g_useref.html#P_SOLT5">see User's Reference</a>.</dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>As different <a href="g_useref.html#SCM_SAT_CODES">EDL model
@@ -1694,7 +1882,8 @@ This code defines the standard state and the reference scale of
 concentrations for dependent components in a phase.&nbsp; It is used by
 many <a href="gems_ipm.html">IPM module subroutines</a> during
 calculation
-of equilibrium states. Possible values: <a href="g_useref.html#PHASESTATECODES">see User's Reference.</a><br>
+of equilibrium states. Possible values: <a
+ href="g_useref.html#PHASESTATECODES">see User's Reference.</a><br>
 &nbsp; <br>
 &nbsp; </dd>
   <dt> <a name="Ph_Ps_1"></a><big><big><b><tt>Ph_Ps[1]</tt></b></big></big>
@@ -1703,7 +1892,8 @@ and <a href="#ipxT"><span style="font-family: monospace;">ipxT</span></a>
 table for interaction parameters { + * - } <br>
   </dt>
   <dd>&nbsp;&nbsp; <br>
-This flag controls allocation an optional dynamic array <a href="#ph_cf"><tt>ph_cf</tt></a> &nbsp;for keeping coefficients
+This flag controls allocation an optional dynamic array <a
+ href="#ph_cf"><tt>ph_cf</tt></a> &nbsp;for keeping coefficients
 related to the whole phase (e.g., calculation of A and B parameters of
 the Debye-Hueckel equation). Corresponding equations are usually
 provided in the math script in <a href="#PhEq"><tt>PhEq</tt></a> text
@@ -1713,7 +1903,8 @@ flag
 is off <tt>'-'.</tt></dd>
   <dd>&nbsp; <br>
   </dd>
-  <dd>Dimensions of the <tt>ph_cf</tt> array must be set in the <a href="#Ph_ncp"><tt>Ph_ncp</tt></a> cells. If both N and M dimensions
+  <dd>Dimensions of the <tt>ph_cf</tt> array must be set in the <a
+ href="#Ph_ncp"><tt>Ph_ncp</tt></a> cells. If both N and M dimensions
 there are positive integers then this flag will beautomatically set to
 + (on),
 otherwise the flag will be set to - (off). The user must enter the data
@@ -1729,15 +1920,18 @@ for species-related
 parameters { + * - } <br>
   </dt>
   <dd>&nbsp;<br>
-This flag controls allocation of an optional dynamic array <a href="#dc_cf"><tt>dc_cf</tt></a> &nbsp;for keeping coefficients
+This flag controls allocation of an optional dynamic array <a
+ href="#dc_cf"><tt>dc_cf</tt></a> &nbsp;for keeping coefficients
 related to calculation &nbsp;of activity coefficients of individual
 species (e.g., Kielland's ion-size parameters <tt>a@</tt> in the
 Debye-Hueckel equation). Corresponding equations are usually provided
-in the math scripts in <a href="#DcEq"><tt>DcEq</tt></a> or <a href="#PhEq"><tt>PhEq</tt></a> fields.&nbsp;</dd>
+in the math scripts in <a href="#DcEq"><tt>DcEq</tt></a> or <a
+ href="#PhEq"><tt>PhEq</tt></a> fields.&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>Dimensions of the <a href="#dc_cf"><tt>dc_cf</tt></a> array
-(only number of coefficients per species M) must be set up in the <a href="#Ph_nsc"><tt>Ph_nsc</tt></a>
+(only number of coefficients per species M) must be set up in the <a
+ href="#Ph_nsc"><tt>Ph_nsc</tt></a>
 field. If M&gt;0 then this flag will be automatically set to + (on),
 otherwise the flag will be set to - (off). The user must enter the data
 in dc_cf array if this array is created, or assign data there in the
@@ -1763,7 +1957,8 @@ for the whole phase. Default flag is off <tt>'-'</tt>.<br>
 &nbsp; <br>
 &nbsp; </dd>
   <dt> <a name="Ph_Ps_4"></a><tt><big><big><b>Ph_Ps[4]</b></big></big></tt>
-- Allocation flag for the species-concentration-related math script <a href="#DcEq"><tt>DcEq</tt></a>
+- Allocation flag for the species-concentration-related math script <a
+ href="#DcEq"><tt>DcEq</tt></a>
 field { + * - } <br>
   </dt>
   <dd>&nbsp;<br>
@@ -1780,7 +1975,9 @@ calculation of species activity coefficients. Default flag is off <tt>'-'</tt>.<
   <dd>&nbsp;<br>
 This flag must always be set on ( + or * ) in definitions of sorption
 phases
-with surface species. If the flag is on then <tt><a href="#SCM_C">SCM_C</a>,<a href="#FSI_t">FSI_t</a>, <a href="#MsDt_0">MsDT</a>, <a href="#Cap_t_0">Cap_t</a> </tt>and <a href="#XfIEC"><tt>XfIEC</tt></a>
+with surface species. If the flag is on then <tt><a href="#SCM_C">SCM_C</a>,<a
+ href="#FSI_t">FSI_t</a>, <a href="#MsDt_0">MsDT</a>, <a
+ href="#Cap_t_0">Cap_t</a> </tt>and <a href="#XfIEC"><tt>XfIEC</tt></a>
 data objects (visible on
 Page 3 of the "Phase" window) will be allocated. Each of these objects
 will
@@ -1806,7 +2003,8 @@ is no need to enter anything into this counter. <br>
   </dt>
   <dd>&nbsp; <br>
 Enter here a number of references to data sources if you want to
-allocate optional lists <a href="#pSDref"><tt>pDSref</tt></a> and <a href="#pSDval"><tt>pSDval</tt></a>.&nbsp;</dd>
+allocate optional lists <a href="#pSDref"><tt>pDSref</tt></a> and <a
+ href="#pSDval"><tt>pSDval</tt></a>.&nbsp;</dd>
   <dd><br>
   </dd>
   <dd>Default value is 0 (the lists will not be available). <br>
@@ -1815,7 +2013,8 @@ allocate optional lists <a href="#pSDref"><tt>pDSref</tt></a> and <a href="#pSDv
   <dt> <a name="Ph_ncp"></a><big><b><big><tt>Ph_ncp</tt></big></b></big>
 -
 Dimensions of the <a href="#ph_cf"><tt>ph_cf</tt></a> optional data
-array and number of rows in the <a href="#ipxT"><span style="font-family: monospace;">ipxT</span></a> optional array. <br>
+array and number of rows in the <a href="#ipxT"><span
+ style="font-family: monospace;">ipxT</span></a> optional array. <br>
   </dt>
   <dd><br>
 Set here the number of rows (first cell) and columns (second cell) of
@@ -1826,8 +2025,10 @@ flag
 must be also set on. In some built - in calculation modes, these
 dimensions
 will be set automatically, depending on the code in <a href="#p_solt_0"><tt>&nbsp;p_solt[0]</tt></a>
-field.&nbsp; The number of rows&nbsp; in <span style="font-family: monospace;">ph_cf</span>&nbsp; array is also the
-number of&nbsp; rows in the <a href="#ipxT"><span style="font-family: monospace;">ipxT</span></a> array. <br>
+field.&nbsp; The number of rows&nbsp; in <span
+ style="font-family: monospace;">ph_cf</span>&nbsp; array is also the
+number of&nbsp; rows in the <a href="#ipxT"><span
+ style="font-family: monospace;">ipxT</span></a> array. <br>
   </dd>
   <dd>&nbsp; <br>
   </dd>
@@ -1839,15 +2040,18 @@ will not be available). <br>
   </dd>
   <dd>&nbsp; </dd>
   <dt> <a name="Ph_npx"></a><big><big><b><tt>Ph_npx</tt></b></big>&nbsp;
-    </big>-&nbsp; Number of columns (maximum parameter order) in the<a href="#ipxT"><span style="font-family: monospace;"> ipxT</span></a>
+    </big>-&nbsp; Number of columns (maximum parameter order) in the<a
+ href="#ipxT"><span style="font-family: monospace;"> ipxT</span></a>
 parameter indexation array </dt>
   <dd><br>
   </dd>
-  <dd> Set here the number of columns in the <a href="#ipxT"><span style="font-family: monospace;">ipxT</span></a> table for parameter
+  <dd> Set here the number of columns in the <a href="#ipxT"><span
+ style="font-family: monospace;">ipxT</span></a> table for parameter
 indexation, which corresponds to the maximum order of used parameters.
 For instance, set 2 if only binary parameters are used in the
 multi-component mixing model. Some built-in mixing models set this
-dimension automatically. The number of rows in the <a href="#ipxT"><span style="font-family: monospace;">ipxT</span></a> table is the same as
+dimension automatically. The number of rows in the <a href="#ipxT"><span
+ style="font-family: monospace;">ipxT</span></a> table is the same as
 in the <a href="#ph_cf"><span style="font-family: monospace;">ph_cf</span></a>
 array (set in <a href="#Ph_ncp"><span style="font-family: monospace;">Ph_ncp</span></a>[1]
 cell upon remake). <br>
@@ -1858,7 +2062,8 @@ array will not be available, except certain built-in mixing models).<br>
 &nbsp; &nbsp;</dd>
   <dd>&nbsp;&nbsp; </dd>
   <dt> <a name="Ph_nsc"></a><big><big><b><tt>Ph_nsc</tt></b></big></big>
-- Number of columns (coefficients per end member) in the <a href="#dc_cf"><tt>dc_cf</tt></a> optional
+- Number of columns (coefficients per end member) in the <a
+ href="#dc_cf"><tt>dc_cf</tt></a> optional
 array <br>
   </dt>
   <dd><br>
@@ -1866,7 +2071,8 @@ array <br>
   <dd>Set here the number of columns of the optional <a href="#dc_cf"><tt>dc_cf</tt></a>
 array (the <a href="#Ph_Ps_2"><tt>Ph_Ps[2]</tt></a> flag must
 be also
-set on). The number of rows in <tt>dc_cf</tt> is given in the <a href="#Ph_Nc_0"><tt>Ph_Nc[0]</tt></a> cell. In some built - in
+set on). The number of rows in <tt>dc_cf</tt> is given in the <a
+ href="#Ph_Nc_0"><tt>Ph_Nc[0]</tt></a> cell. In some built - in
 calculation modes, these dimensions will
 be set
 automatically, depending on the code in &nbsp;<a href="#p_solt_0"><tt>p_solt[0]</tt></a>
@@ -1883,7 +2089,10 @@ array will not be available). </dd>
   <dd><br>
 Number of surface site types (minimum 1, maximum 6) defines how many
 surface
-types will be considered (and how many lines will be allocated in <tt><a href="#SCM_C">SCM_C</a>, <a href="#FSI_t">FSI_t</a>, <a href="#MsDt_0">MsDT</a>, <a href="#Cap_t_0">Cap_t</a> </tt>and <a href="#XfIEC"><tt>XfIEC</tt></a>
+types will be considered (and how many lines will be allocated in <tt><a
+ href="#SCM_C">SCM_C</a>, <a href="#FSI_t">FSI_t</a>, <a
+ href="#MsDt_0">MsDT</a>, <a href="#Cap_t_0">Cap_t</a> </tt>and <a
+ href="#XfIEC"><tt>XfIEC</tt></a>
 data objects). The <a href="#Ph_Ps_5"><tt>Ph_Ps[5]</tt></a> flag must
 also be set on in the case of sorption phase with surface
 complexation.&nbsp;</dd>
@@ -1898,34 +2107,25 @@ complexation.&nbsp;</dd>
   <dd>&nbsp;. <br>
   </dd>
 </dl>
-
 <br>
-
-<h3><a name="PHASE_DOD_RESERVED"></a>2.2. Reserved and obsolete data
+<h3><a name="PHASE_DOD_RESERVED"></a>5.2. Reserved and obsolete data
 objects</h3>
-
 <dl>
-
   <dt><br>
   </dt>
 </dl>
-
 <dl>
-
   <dt><a name="PHtprn"></a><big><b><tt>PHtprn</tt></b></big> </dt>
   <dd> Internal </dd>
   <dd> <br>
   </dd>
 </dl>
-
 <h3 style="font-weight: normal;"><br>
 </h3>
-
-<h3><a name="PHASE_DOD_HIDDEN"></a>2.3. Hidden data objects for usage
+<h3><a name="PHASE_DOD_HIDDEN"></a>5.3. Hidden data objects for usage
 in
 Phase math scripts<br>
 </h3>
-
 The data objects listed below cannot be seen on Phase window pages
 because these data exist in the runtime IPM data structure and are
 automatically
@@ -1937,20 +2137,15 @@ no need to care about location of this phase and its species in the
 whole chemical system definition, which is hard to know in advance,
 before the
 project system is assembled. <br>
-
 <br>
-
 <big><b><tt>Attention!</tt></b></big> Most of the data objects listed
 below are marked as "read only". This means that their values are
 automatically set or changed during GEM IPM calculations. Using these
 "read only" objects on the left side of math script operators (i.e.
 writing into them) may cause incorrect results, unpredictable behaviour
 or the program crash. <br>
-
 <br>
-
 <dl>
-
   <dt> <a name="Ps_mod"></a><big><b><tt>Ps_mod</tt></b></big> -
 reserved </dt>
   <dd> &nbsp; <br>
@@ -1975,7 +2170,9 @@ molal ionic strength of aqueous electrolyte (scalar, read only) </dt>
   <dd> &nbsp; </dd>
   <dd> &nbsp; </dd>
   <dt> <a name="is"></a><big><b><tt>is</tt></b></big> - internal index
-of a column (e.g. in <a href="#dCm"><big><span style="font-family: monospace;">dCm</span></big></a> or <a href="#pCv"><big><span style="font-family: monospace;">pCv</span></big></a> arrays),&nbsp;
+of a column (e.g. in <a href="#dCm"><big><span
+ style="font-family: monospace;">dCm</span></big></a> or <a href="#pCv"><big><span
+ style="font-family: monospace;">pCv</span></big></a> arrays),&nbsp;
 scalar&nbsp; </dt>
   <dd> &nbsp;&nbsp;</dd>
   <dd>This index is not set automatically and can be changed e.g. in a
@@ -1987,7 +2184,8 @@ script "do begin ... end" loop.</dd>
   <dt> <a name="js"></a><b><big><tt>js</tt></big></b> - internal index
 of a species in this phase (scalar) </dt>
   <dd> &nbsp;&nbsp;</dd>
-  <dd>This index can be used to access <a href="#dCm"><big><span style="font-family: monospace;">dCm</span></big></a> array cells. <br>
+  <dd>This index can be used to access <a href="#dCm"><big><span
+ style="font-family: monospace;">dCm</span></big></a> array cells. <br>
   </dd>
   <dd>In "public" mode, this index is automatically changed in the
 GammaCalc() from 0 to <tt>Ndc-1</tt>, where <a href="#Ndc"><tt>Ndc</tt></a>
@@ -2011,7 +2209,8 @@ can be changed in a math script operator.</dd>
 work cells
 assigned to this phase (scalar, read only) </dt>
   <dd> &nbsp;</dd>
-  <dd>This counter contains total number of elements in the <a href="#pCv"><tt>pCv</tt></a> data object or zero if <a href="#pCv"><tt>pCv</tt></a>
+  <dd>This counter contains total number of elements in the <a
+ href="#pCv"><tt>pCv</tt></a> data object or zero if <a href="#pCv"><tt>pCv</tt></a>
 cannot be used.</dd>
   <dd>&nbsp; <br>
   </dd>
@@ -2101,7 +2300,8 @@ species-related
 coefficients of the non-ideality model </dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>This optional array of species-related coefficients
-&nbsp;has&nbsp;&nbsp; <a href="file:///C:/gems2html/program/doc/html/gm_phase.html#Ncp"><tt>Ncd</tt></a>
+&nbsp;has&nbsp;&nbsp; <a
+ href="file:///C:/gems2html/program/doc/html/gm_phase.html#Ncp"><tt>Ncd</tt></a>
 columns and <a href="#Ndc"><tt>Ndc</tt></a> rows that can be used as
 numeric
 variables in Phase math scripts (indexed using <a href="#is"><tt>is</tt></a>
@@ -2152,7 +2352,8 @@ mode)&nbsp; or <tt>mGo[0]</tt> &nbsp;(<tt>mGo[1]</tt> ...) in
 corrections to standard molar Gibbs energy for a phase component
 (length <a href="#Ndc"><tt>Ndc</tt></a>). </dt>
   <dd> &nbsp; </dd>
-  <dd>Units of measurement: normalized (J/(RT)/mol), correspond to <span style="font-family: monospace;">ln_gam</span> units. <br>
+  <dd>Units of measurement: normalized (J/(RT)/mol), correspond to <span
+ style="font-family: monospace;">ln_gam</span> units. <br>
   </dd>
   <dd>Mapped to a block of the&nbsp; <tt>gEx</tt>&nbsp; vector
 belonging to
@@ -2220,7 +2421,8 @@ will be automatically assigned<tt> exp(ln_gam[js])</tt> value.<br>
   <dd> &nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dt> <a name="ipxt"></a><big><span style="font-family: monospace;"><span style="font-weight: bold;">ipxt</span></span></big> - table of
+  <dt> <a name="ipxt"></a><big><span style="font-family: monospace;"><span
+ style="font-weight: bold;">ipxt</span></span></big> - table of
 indexation for the interaction parameters (new, instead of Un),&nbsp;
 read only<br>
   </dt>
@@ -2237,16 +2439,19 @@ number of end members. <br>
   <dd>Values in this table are indexes of the end members or -1 if this
 parameter is less than higher-order. Rules for setting up the
 indexation and interaction parameter coefficients for built-in
-functions are provided in the description of&nbsp; <a href="#ph_cf"><big><span style="font-family: monospace;">ph_cf</span></big></a>&nbsp; table. <br>
+functions are provided in the description of&nbsp; <a href="#ph_cf"><big><span
+ style="font-family: monospace;">ph_cf</span></big></a>&nbsp; table. <br>
   </dd>
   <dd><br>
   </dd>
-  <dd>For example, in a binary solution phase, the <big><span style="font-family: monospace;">ipxt</span></big> table will have two
+  <dd>For example, in a binary solution phase, the <big><span
+ style="font-family: monospace;">ipxt</span></big> table will have two
 columns and two rows for a subregular mixing model. A multicomponent
 Van Laar model will require two columns because it only considers
 binary interaction parameters; the number of rows depends on how many
 non-zero interaction parameters are known. Any binary interaction
-parameter which is not listed in the <big><span style="font-family: monospace;">ipxt </span></big>table will receive
+parameter which is not listed in the <big><span
+ style="font-family: monospace;">ipxt </span></big>table will receive
 its default (usually zero) value in built-in subroutines for
 calculation of activity coefficients.<br>
   </dd>
@@ -2351,7 +2556,8 @@ coefficients of end-members in non-ideal solid solutions.&nbsp;</dd>
   <dd> &nbsp; </dd>
   <dt> <a name="fMu"></a><big><b><tt>fMu</tt></b></big> - vector of
 normalized
-chemical potentials of species involved in this phase (length <a href="#Ndc"><tt>Ndc</tt></a>, read only) </dt>
+chemical potentials of species involved in this phase (length <a
+ href="#Ndc"><tt>Ndc</tt></a>, read only) </dt>
   <dd> &nbsp; </dd>
   <dd> &nbsp;Mapped to a block of the v &nbsp;vector belonging to this
 phase
@@ -2364,7 +2570,8 @@ in the GEM IPM data structure.</dd>
 work cells for use in math scripts for this phase. &nbsp; </dt>
   <dd><br>
   </dd>
-  <dd>These work cells are initialized to zeros before the <a href="#PhEq"><tt>PhEq</tt></a> math script is executed.</dd>
+  <dd>These work cells are initialized to zeros before the <a
+ href="#PhEq"><tt>PhEq</tt></a> math script is executed.</dd>
   <dd>&nbsp;&nbsp; </dd>
   <dd> &nbsp;&nbsp; </dd>
   <dt> <a name="Qd"></a><big><b><tt>Qd</tt></b></big> - array of 20
@@ -2378,27 +2585,20 @@ off before the next (js) species is processed. </dd>
   <dd>&nbsp;</dd>
   <dd>&nbsp;&nbsp; </dd>
 </dl>
-
 <dl>
-
   <dt> <a name="wEqTxt"></a><big><b><tt>wEqTxt</tt></b></big> &nbsp;-
 reserved
 for future versions<b><b><b> </b> </b></b></dt>
 </dl>
-
 <dl>
-
   <dd><b><b><b><br>
     </b> </b></b></dd>
   <dd><b><b><b><br>
     </b> </b></b></dd>
 </dl>
-
 <hr style="width: 100%; height: 2px;">
-<h2><a name="PHASE_ERRORS"></a>3. Warnings and error messages</h2>
-
+<h2><a name="PHASE_ERRORS"></a>6. Warnings and error messages</h2>
 <dl>
-
   <dt><big><b><tt>E00PHrem</tt></b></big>: Illegal link q&gt;nQ</dt>
   <dt><big><b><tt>E01PHrem:</tt></b></big> Illegal access to ph in
 dyn_set()</dt>
@@ -2482,11 +2682,8 @@ from (Kielland 1936), from (Helgeson ea 1981) or</dt>
   <dd>&nbsp;<br>
   </dd>
 </dl>
-
 <br>
-
 <br>
-
 <hr style="width: 100%; height: 2px;"><b><b><b><tt><br>
 </tt> &nbsp;&nbsp; <tt><a href="index.html">To Contents</a> &nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp;<a href="g_about.html">About GEM-Selektor</a>
@@ -2496,21 +2693,13 @@ from (Kielland 1936), from (Helgeson ea 1981) or</dt>
 <tt>end of file</tt> <br>
 &nbsp; <br>
 </b> </b></b> <br>
-
 <br>
-
 <br>
-
 <br>
-
 <br>
-
 <br>
-
 <br>
-
 <br>
-
 <br>
-
-</body></html>
+</body>
+</html>
