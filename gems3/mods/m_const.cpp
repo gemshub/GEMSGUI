@@ -31,6 +31,7 @@ TConst::TConst( int nrt ):
     CA=0;
     aFldKeysHelp.Add("Code of function using table of constants");
     aFldKeysHelp.Add("Table of constants ID and dimensions");
+    //setKeyEditField(0);
     set_def();
     start_title = " Numerical Constants ";
 }

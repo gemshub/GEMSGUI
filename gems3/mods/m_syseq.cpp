@@ -35,6 +35,7 @@ TSysEq::TSysEq( int nrt ):
     aFldKeysHelp.Add("Pressure in bar or 0 for Psat (H2O)");
     aFldKeysHelp.Add("Temperature (deg. C)");
     aFldKeysHelp.Add("Variant number for CSD constraints");
+    setKeyEditField(1);
 
     stp=&st[1];
     ssp=&ss[1];

@@ -48,6 +48,7 @@ private:
 
 protected:
     int nRT;
+    int startKeyEdit;
     bool contentsChanged;     // needs to save
 
     // Events part
@@ -120,6 +121,13 @@ public:
     {
         return state;
     }
+
+    int keyEditField();
+    void  setKeyEditField( int fld )
+    {
+       startKeyEdit = fld;
+    }
+
 };
 
 // --- Parametres of function GetKeyofRecord()
@@ -287,7 +295,7 @@ public:
         Filter = filt;
     }
 
-};
+ };
 
 
 // TSubModule and TCModule container

@@ -40,6 +40,7 @@ TReacDC::TReacDC( int nrt ):
     aFldKeysHelp.Add("Group to which Dependent Component belongs");
     aFldKeysHelp.Add("Name of new Dependent Component");
     aFldKeysHelp.Add("Name of thermodynamic data subset (e.g. database)");
+    //startKeyEdit = 0;
 
     for(int i=1; i<nQ; i++)
     {

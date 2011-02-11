@@ -47,6 +47,7 @@ TUnSpace::TUnSpace( int nrt ):
     aFldKeysHelp.Add("Variant number of thermodynamic pressure-temperature data");
     aFldKeysHelp.Add("Identifier of this UnSpace calculation task");
     aFldKeysHelp.Add("Payoff matrix function type code, optional {A, B, C, D, E, F}");
+    setKeyEditField(8);
 
     usp=&us[1];
     set_def(1);

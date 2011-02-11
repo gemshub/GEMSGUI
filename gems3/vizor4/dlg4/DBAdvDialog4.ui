@@ -61,7 +61,7 @@
     <enum>QFrame::Raised</enum>
    </property>
    <property name="pixmap">
-    <pixmap>:/images/img/gems32.xpm</pixmap>
+    <pixmap resource="../../img.qrc">:/images/img/gems50.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -508,7 +508,9 @@
   <tabstop>pButtonHelp</tabstop>
   <tabstop>pButtonFormats</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../../img.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pButtonBack</sender>

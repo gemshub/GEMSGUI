@@ -47,7 +47,7 @@ TProcess::TProcess( int nrt ):
     aFldKeysHelp.Add("Variant number of thermodynamic pressure-temperature data");
     aFldKeysHelp.Add("Identifier of this Process Simulator calculation task");
     aFldKeysHelp.Add("Batch simulation type {P, S, L, G, T, R}");
-
+    setKeyEditField(8);
     pep=&pe[0];
     set_def();
     gd_gr = 0;

@@ -51,6 +51,7 @@ TDComp::TDComp( int nrt ):
     aFldKeysHelp.Add("Group to which Dependent Component belongs");
     aFldKeysHelp.Add("Name of Dependent Component");
     aFldKeysHelp.Add("Name of thermodynamic data subset (e.g. database)");
+    //startKeyEdit = 0;
     dcp=&dc[1];
     set_def(1);
     dcp=&dc[0];

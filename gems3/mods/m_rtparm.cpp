@@ -75,6 +75,7 @@ TRTParm::TRTParm( int nrt ):
     aFldKeysHelp.Add("Code of source thermodynamic data set");
     aFldKeysHelp.Add("Source of input data for DC { r d }");
     aFldKeysHelp.Add("Variant number of this RTParm calculation task <integer>");
+    setKeyEditField(5);
     rpp=&rp[0];
     set_def();
     start_title = " Tabulation/plot of thermodynamic data for one DC (species)";

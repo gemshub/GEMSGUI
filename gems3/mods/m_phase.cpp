@@ -40,6 +40,7 @@ TPhase::TPhase( int nrt ):
     aFldKeysHelp.Add("Name of this phase definition");
     aFldKeysHelp.Add("Phase class { c d l gm ss ssd ls aq xsa xc }");
     aFldKeysHelp.Add("Comment to phase definition");
+   // startKeyEdit = 0;
     php=&ph[0];
     set_def();
     start_title = " Definition of thermodynamic phase ";

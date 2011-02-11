@@ -237,6 +237,7 @@ TProfil::TProfil( int nrt ):
 {
     aFldKeysHelp.Add("Modelling project name");
     aFldKeysHelp.Add("Comment to project definition");
+    //startKeyEdit = 0;
     start_title = " Numerical and Configuration Settings ";
     pa= pa_;
     pa.p.tprn=0;

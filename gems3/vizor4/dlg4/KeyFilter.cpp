@@ -52,7 +52,8 @@ KeyFilter::KeyFilter(QWidget* win, int irt, const char* key,
         dbKey.SetKey(key);
 
     QGridLayout* editBox = new QGridLayout();
-    
+    int editLine = aMod[iRt].keyEditField();
+
     for( int ii=0; ii<dbKey.KeyNumFlds(); ii++)
     {
         aEdit.Add( pEdit = new QLineEdit(this) );
@@ -69,6 +70,9 @@ KeyFilter::KeyFilter(QWidget* win, int irt, const char* key,
         editBox->addWidget( pEdit, ii, 0, Qt::AlignRight);
         pLabel = new QLabel( str, this);
         editBox->addWidget( pLabel, ii, 1);
+
+        if(ii < editLine )
+            pEdit->setEnabled(false);
     }
     aEdit[0].setFocus();
 

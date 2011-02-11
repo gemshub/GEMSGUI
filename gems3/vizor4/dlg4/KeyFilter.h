@@ -47,7 +47,7 @@ class KeyFilter:   public QDialog
     QLineEdit *fullKey;
 
     int iRt;
-    int iEd;
+ //   int iEd;
     bool allowTemplates;
 
 protected slots:

@@ -32,6 +32,7 @@ TIComp::TIComp( int nrt ):
     aFldKeysHelp.Add("Symbol of Independent Component (IC)");
     aFldKeysHelp.Add("Class of Independent Component { e o h a i z v }");
     aFldKeysHelp.Add("Comment to IC definition");
+    //startKeyEdit = 0;
     icp=&ic[0];
     set_def();
     start_title = " Data for Independent Components ";

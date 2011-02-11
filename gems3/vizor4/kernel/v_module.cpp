@@ -43,12 +43,20 @@ TSubModule::TSubModule( int nrt ):
         contentsChanged(false),
         //   sBw(600), sBh(460),
         pImp(NULL)
-{}
+{
+    startKeyEdit = 0;
+}
 
 
 TSubModule::~TSubModule()
 {}
 
+int TSubModule::keyEditField()
+{
+    if( nRT == RT_RTPARM || pVisor->ProfileMode == true )
+        return startKeyEdit;
+    else return 0;
+}
 
 // (supposed to be :) Called from TModuleImp right when
 // window is created
@@ -149,7 +157,7 @@ TCModule::TCModule( int nrt ):
         TSubModule( nrt ),
         db(&rt[nrt]),
         nQ(1), Filter(ALLKEY), start_title(" ")
-{}
+{  }
 // start_title = " Access to database record without remake/recalculation"
 
 

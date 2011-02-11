@@ -34,6 +34,7 @@ TSData::TSData( int nrt ):
     aFldKeysHelp.Add("Script name or author's name for data source");
     aFldKeysHelp.Add("Script number or year of publication { 1990 }");
     aFldKeysHelp.Add("Script module name { DComp ReacDC } or data source type");
+    //startKeyEdit = 0;
     set_def();
     start_title = " Scripts or Bibliographic References ";
 }

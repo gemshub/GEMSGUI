@@ -467,7 +467,7 @@ GraphDialog::Apply()
     delete pGrpLegend;  // must be deleted all children widgets
     pGrpLegend = new QGroupBox( this );
     pGrpLegend->setTitle(QApplication::translate("GraphDialogData", "Legend", 0, QApplication::UnicodeUTF8));
-    gridLayout->addWidget(pGrpLegend, 0, 1, 1, 1);
+    gridLayout->addWidget(pGrpLegend, 0, 6, 1, 3);
     
     // Insert labels in legend box
     if( gr_data.graphType != ISOLINES )

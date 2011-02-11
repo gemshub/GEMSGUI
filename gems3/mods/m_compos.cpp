@@ -39,6 +39,7 @@ TCompos::TCompos( int nrt ):
     aFldKeysHelp.Add("Name of predefined composition (PCO)");
     aFldKeysHelp.Add("Code of PCO type { AQ RO GA FL HC PM MIN }");
     aFldKeysHelp.Add("Comment to PCO description");
+    //setKeyEditField(0);
     bcp=&bc[0];
     set_def();
     start_title = " Predefined composition objects (PCO) ";

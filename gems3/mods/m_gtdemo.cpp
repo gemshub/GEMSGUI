@@ -45,6 +45,7 @@ TGtDemo::TGtDemo( int nrt ):
     aFldKeysHelp.Add("Identifier of this data sampling definition");
     aFldKeysHelp.Add("Variant number of this GtDemo task");
     aFldKeysHelp.Add("Record key comment to this GtDemo task");
+    setKeyEditField(1);
     gdp=&gd[0];
     set_def();
     start_title = " Definition of Data Sampler and Plotter ";

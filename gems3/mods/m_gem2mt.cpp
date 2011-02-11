@@ -50,6 +50,7 @@ TGEM2MT::TGEM2MT( int nrt ):
     aFldKeysHelp.Add("Variant number of thermodynamic pressure-temperature data");
     aFldKeysHelp.Add("Identifier of this coupled model simulator definition");
     aFldKeysHelp.Add("Batch simulator type code, a combination of {}");
+    setKeyEditField(8);
 
     mtp=&mt[0];
     set_def();

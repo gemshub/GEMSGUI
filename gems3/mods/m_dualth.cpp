@@ -43,7 +43,7 @@ TDualTh::TDualTh( int nrt ):
     aFldKeysHelp.Add("Variant number of thermodynamic pressure-temperature data");
     aFldKeysHelp.Add("Identifier of this DualThermo calculation task");
     aFldKeysHelp.Add("DualThermo task code: one of { E P S } and one of { M G A X } ");
-
+    setKeyEditField(8);
     dtp=&dt[0];
     set_def();
     start_title =
