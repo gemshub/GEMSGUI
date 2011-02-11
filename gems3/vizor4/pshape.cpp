@@ -307,7 +307,8 @@ TPlotWin::paintGrid(QPainter& dc)
 
     dc.drawText( (width() - fm.width(xTitle))/2, height() - 7, xTitle);
     dc.rotate(-90);
-    dc.drawText( -(width() - fm.width(yTitle))/2, QFontMetrics(font).xHeight()*2+7, yTitle);
+dc.drawText( -(height() + fm.width(yTitle))/2, QFontMetrics(font).xHeight()*2+7, yTitle);
+//dc.drawText( -(width() - fm.width(yTitle))/2, QFontMetrics(font).xHeight()/**2*/+7, yTitle);
 //    dc.drawText( dc.xForm(QPoint(7, (height() - fm.width(yTitle))/2)), yTitle);
     dc.rotate(90);
     font.setBold(false);

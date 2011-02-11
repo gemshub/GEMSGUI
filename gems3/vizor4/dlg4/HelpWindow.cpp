@@ -26,16 +26,14 @@
 #include <QtHelp/QHelpSearchEngine>
 #include <QtHelp/QHelpSearchQueryWidget>
 #include <QtHelp/QHelpSearchResultWidget>
-//#include <QtCore/QLibraryInfo>
-//#include <QtGui/QApplication>
 #include <QtCore>
 #include <QtGui>
-
 
 #include "HelpWindow.h"
 #include "visor_w.h"
 #include "visor.h"
 
+const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
 
 HelpWindow* HelpWindow::pDia = 0;
 
@@ -177,6 +175,7 @@ void HelpWindow::setActions()
 
     connect( action_About, SIGNAL( triggered()), this, SLOT(helpAbout()));
     connect( actionVersion, SIGNAL( triggered()), this, SLOT(helpVersion()));
+    connect( actionHelp_on_Help, SIGNAL( triggered()), this, SLOT(helpOnHelp()));
     connect( action_Print, SIGNAL( triggered()), this, SLOT(helpPrint()));
 
     connect( action_Find, SIGNAL( triggered()), this, SLOT(actionFind()));
@@ -239,8 +238,13 @@ trUtf8("GEMS3 (Windows XP/7 MinGW gcc4.4)"),
 
 void HelpWindow::helpAbout()
 {
-    VersionDialog dlg;
+    AboutDialog dlg;
     dlg.exec();
+}
+
+void HelpWindow::helpOnHelp()
+{
+   showDocumentation( GEMS_HOWHELP_HTML, 0 );
 }
 
 void HelpWindow::helpPrint()
@@ -518,19 +522,19 @@ void SearchWidget::searchingFinished(int hits)
 
 //---------------------------------------------------------------
 
-VersionDialog::VersionDialog( QWidget* parent):
+AboutDialog::AboutDialog( QWidget* parent):
         QDialog( parent )
 {
    setupUi(this);
    gstring titl = pVisorImp->getGEMTitle();
-           titl+= " : Version Viewer ";
+           titl+= " : About the program package ";
    setWindowTitle( trUtf8(titl.c_str()) );
 }
 
-VersionDialog::~VersionDialog()
+AboutDialog::~AboutDialog()
 {}
 
-void VersionDialog::languageChange()
+void AboutDialog::languageChange()
 {
     retranslateUi(this);
 }

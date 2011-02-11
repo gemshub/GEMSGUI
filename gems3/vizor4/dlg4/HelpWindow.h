@@ -24,7 +24,7 @@
 #include <QTextBrowser>
 
 #include "ui_HelpWindow4.h"
-#include "ui_VersionDialog4.h"
+#include "ui_AboutDialog4.h"
 
 QT_BEGIN_NAMESPACE
 class QHelpEngineCore;
@@ -121,6 +121,7 @@ protected slots:
     void helpAbout();
     void helpVersion();
     void helpPrint();
+    void helpOnHelp();
     void actionFind();
     void actionFindNext();
     void actionFindPrevious();
@@ -129,14 +130,14 @@ protected slots:
     void showFind();
 };
 
-class VersionDialog : public QDialog, public Ui::VersionDialogData
+class AboutDialog : public QDialog, public Ui::AboutDialogData
 {
     Q_OBJECT
 
 public:
 
-    VersionDialog( QWidget* parent = NULL );
-    virtual ~VersionDialog();
+    AboutDialog( QWidget* parent = NULL );
+    virtual ~AboutDialog();
 
 
 protected slots:

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>VersionDialogData</class>
- <widget class="QDialog" name="VersionDialogData">
+ <class>AboutDialogData</class>
+ <widget class="QDialog" name="AboutDialogData">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -284,7 +284,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>
-   <receiver>VersionDialogData</receiver>
+   <receiver>AboutDialogData</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">

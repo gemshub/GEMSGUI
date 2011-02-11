@@ -295,7 +295,7 @@ const char* TVisorImp::getGEMTitle()
 
 void TVisorImp::CmHelpAbout()
 {
-    VersionDialog dlg;
+    AboutDialog dlg;
     dlg.exec();
 //    OpenHelp( GEMS_ABOUT_HTML );
 }

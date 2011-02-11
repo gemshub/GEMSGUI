@@ -118,7 +118,7 @@
 		$$DLG4_CPP/NewSystemDialog4.ui \
                 $$DLG4_CPP/EquatSetupWidget4.ui \
                 $$DLG4_CPP/HelpWindow4.ui \
-                $$DLG4_CPP/VersionDialog4.ui \
+                $$DLG4_CPP/AboutDialog4.ui \
                 $$DLG4_CPP/InputSystemDialog4.ui \
                 $$DLG4_CPP/ModuleDialog4.ui
 

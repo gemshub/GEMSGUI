@@ -28,7 +28,7 @@
      <x>0</x>
      <y>0</y>
      <width>983</width>
-     <height>23</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuGo">
@@ -46,6 +46,7 @@
     </property>
     <addaction name="action_About"/>
     <addaction name="actionVersion"/>
+    <addaction name="actionHelp_on_Help"/>
    </widget>
    <widget class="QMenu" name="menu_File">
     <property name="title">
@@ -94,6 +95,7 @@
    <addaction name="actionForward"/>
    <addaction name="actionHome"/>
    <addaction name="separator"/>
+   <addaction name="actionHelp_on_Help"/>
   </widget>
   <widget class="QToolBar" name="toolFind">
    <property name="windowTitle">
@@ -228,6 +230,15 @@
    </property>
    <property name="shortcut">
     <string>-</string>
+   </property>
+  </action>
+  <action name="actionHelp_on_Help">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/help.png</normaloff>:/toolbar/img/help.png</iconset>
+   </property>
+   <property name="text">
+    <string>Help on Help</string>
    </property>
   </action>
  </widget>
