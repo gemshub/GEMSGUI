@@ -71,7 +71,7 @@ KeyFilter::KeyFilter(QWidget* win, int irt, const char* key,
         pLabel = new QLabel( str, this);
         editBox->addWidget( pLabel, ii, 1);
 
-        if(ii < editLine )
+        if( !allowTemplates && ii < editLine )
             pEdit->setEnabled(false);
     }
     aEdit[0].setFocus();
