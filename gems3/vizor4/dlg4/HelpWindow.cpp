@@ -230,7 +230,7 @@ trUtf8("GEMS3 (Windows XP/7 MinGW gcc4.4)"),
 #endif
            trUtf8("This is GEM-Selektor 3 (GEMS3) program package   \n\n"
                   "    release candidate version 3.0,\n\n"
-                  "    rev. 1814 (February 14, 2010)\n\n"
+                  "    rev. 1816 (February 16, 2010)\n\n"
                   "    using GEMS3K rev. 524 (trunk) \n\n\n"
                   "For GEMS Wiki community of geochemical modellers \n\n"
                   "(c) 2011, PSI-ETHZ GEMS Development Team\n") );
@@ -594,13 +594,13 @@ const char *GEMS_MPROJ_HTML = "gm_project.html#HOWTO";    // KeyProfile
 const char *GEMS_MPROJ_LF_HTML = "gm_project.html#FILES"; // ListFilesDialog
 const char *GEMS_ONESYS_HTML = "gems_sys";        // NewSystemDialog
 const char *GEMS_HOWTO_HTML = "gems_sys.html#HOWTO";
-const char *GEMS_BCC_HTML = "gems_bcc";
+const char *GEMS_BCC_HTML = "gems_bcc#HOWTO";
 const char *GEMS_IPM_HTML = "gems_ipm";
 const char *GEMS_RECIPE_HTML = "gems_bcc.html#RECIPE"; // InputSystemDialog
 const char *GEMS_GRAPH_HTML = "gems_graph"; // GraphDialog
 const char *GEMS_GRAPH_CUS_HTML = "gems_graph.html#CUSTOMIZE"; // LegendDialog
 const char *GEMS_MISSING_HTML = "gems_bcc.html#MISSING";  // ExcludeFillDialog
-const char *GEMS_MODES_HTML = "gems_sys.html#MODES";   //EQDialog
+const char *GEMS_MODES_HTML = "gm_project.html#MODES";   //EQDialog
 const char *GEMS_ELEMENTS_HTML = "gems_elements"; // ElementsDialog
 const char *GEMS_SETFILT_HTML = "gems_elements.html#FILTERS"; // SetFiltersDialog
 const char *GEMS_APHSETUP_HTML = "gems_aphsetup"; // AutoPhaseDialog

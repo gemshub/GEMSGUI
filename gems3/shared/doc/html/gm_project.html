@@ -22,13 +22,16 @@
   <p><font face="Helvetica, Arial, sans-serif"><a href="#PROJECT_INTRO">1.
 Introduction: Project structure and record</a> <br>
   </font></p>
+  <p><font face="Helvetica, Arial, sans-serif"><a href="#MODES">1.1.
+Modes of Geochemical Modelling within a Project</a><br>
+  </font></p>
   <p><font face="Helvetica, Arial, sans-serif"><a
- href="gm_project.html#PROJECT_CREATE">1.1.
+ href="gm_project.html#PROJECT_CREATE">1.2.
 Creating a new GEMS modelling project</a></font></p>
 </blockquote>
 <p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><font
  face="Helvetica, Arial, sans-serif"><a
- href="gm_project.html#PROJECT_MODIFY">1.2.
+ href="gm_project.html#PROJECT_MODIFY">1.3.
 Modifying existing GEMS modelling projects</a></font></p>
 <p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
  href="#PROJECT_MWIZARD">2. Project Remake Wizard</a></p>
@@ -57,21 +60,26 @@ Page</a><br>
   <font face="Helvetica, Arial, sans-serif"><a
  href="#PROJECT_DATA_ENTRIES">4. Project Module Data Entries</a></font>
   <p><font face="Helvetica, Arial, sans-serif"><a
- href="#PROJECT_CONFIG_DOD">4.1. Data entries for project configuration
+ href="#PROJECT_CONFIG_DOD">4.1. Data entries for Project Configuration
 (accessible via Create / Remake)<br>
   </a></font></p>
   <p><font face="Helvetica, Arial, sans-serif"><a
  href="#PROJECT_LISTS_DOD">4.2. Lists of phases, components and
-compositions<br>
+compositions</a></font></p>
+  <p><font face="Helvetica, Arial, sans-serif"><a href="#NUMSET">4.3.
+GEM IPM3 Numerical Settings</a></font></p>
+  <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#PROJECT_DEFCONF_DATA">4.4. GEM-Selektor Default Configuration
+Data</a><a href="#PROJECT_LISTS_DOD"><br>
   </a></font></p>
   <p><font face="Helvetica, Arial, sans-serif"><a href="#PROJECT_ERRORS">5.
 Warnings and error messages</a></font></p>
 </blockquote>
-<h4><font face="Helvetica, Arial, sans-serif">HowTo Manual<br>
+<h4><font face="Helvetica, Arial, sans-serif">HowTo Manuals<br>
 </font></h4>
 <blockquote>
   <p><a href="#HOWTO"><font face="Helvetica, Arial, sans-serif">6. How
-to Create or Update a Modelling Project</font></a></p>
+to Create, Open or Update a Modelling Project</font></a></p>
   <p><font face="Helvetica, Arial, sans-serif"><a href="#HOWTO_CREATE">6.1.
 Main Settings to Create a Project</a><br>
   </font></p>
@@ -89,9 +97,17 @@ Opening and re-configuration of an existing Project</font></a></p>
 Cloning a New (Expanded) Project from the Existing One</font></a></p>
   <p><a href="#HOWTO_OTHER"><font face="Helvetica, Arial, sans-serif">6.7.
 Other Issues about GEMS Modelling Projects</font></a></p>
-  <p><font face="Helvetica, Arial, sans-serif"><br>
-  </font></p>
 </blockquote>
+<h4><span style="font-family: Helvetica,Arial,sans-serif;">Configuration
+of Project and Default Database Files<br>
+</span></h4>
+<p style="margin-left: 40px;"><a href="#FILES"><span
+ style="font-family: Helvetica,Arial,sans-serif;">7. Project File
+Configuration Dialog</span></a></p>
+<p style="margin-left: 40px;"><span
+ style="font-family: Helvetica,Arial,sans-serif;"></span><br>
+</p>
+<blockquote></blockquote>
 <hr size="2" width="100%"><br>
 <h2><a name="PROJECT_INTRO"></a>1. Introduction: Project structure and
 record </h2>
@@ -171,11 +187,19 @@ be kept without further re-calculation during the whole modelling
 project session, or until different temperature of pressure will be
 specified for a currently loaded SysEq
 record (usually just by reading it from the database). &nbsp;<br>
+</p>
 <br>
 <br>
+<hr style="width: 100%; height: 2px;">
+<h3><span style="font-family: Helvetica,Arial,sans-serif;"><a
+ name="MODES"></a></span>1.1. Modes of Geochemical Modelling within a
+Project</h3>
+<p><br>
+</p>
+<p><br>
 </p>
 <hr size="2" width="100%">
-<h3><a name="PROJECT_CREATE"></a>1.1. Creating a new modelling project<br>
+<h3><a name="PROJECT_CREATE"></a>1.2. Creating a new modelling project<br>
 </h3>
 <p> To create a <a href="gp_howto.html#PROJECT_INDEPENDENT">standalone
 project</a>, get into the "Modelling projects" dialog and click the
@@ -837,9 +861,29 @@ DC
   <dd>&nbsp;</dd>
   <dd><br>
   </dd>
-  <dd><br>
-  </dd>
 </dl>
+<br>
+<hr style="width: 100%; height: 2px;">
+<h3><font face="Helvetica, Arial, sans-serif"><a name="NUMSET"></a>4.3.
+Project-Specific GEM IPM3 Numerical Settings</font></h3>
+<br>
+<br>
+<span style="font-family: Helvetica,Arial,sans-serif;">See <a
+ href="gems_ipm.html#GEMIPM3_CONTROLS">explanation of specific
+numerical settings in gems_ipm.html file</a>.</span><br>
+<br>
+<br>
+<br>
+<br>
+<hr style="width: 100%; height: 2px;">
+<h3><font face="Helvetica, Arial, sans-serif"><a
+ name="PROJECT_DEFCONF_DATA"></a>4.4. GEM-Selektor Default
+Configuration Data</font></h3>
+<br>
+<span style="font-family: Helvetica,Arial,sans-serif;">See <a
+ href="gems_miscel.html#DEFAULTCONFIG_DATA">explanations in
+gems_miscel.html file</a></span><br>
+<br>
 <hr size="2" width="100%">
 <h2><a name="PROJECT_ERRORS"></a>5. Warnings and error messages<br>
 </h2>
@@ -848,7 +892,7 @@ DC
 <p><tt><br>
 </tt></p>
 <hr size="2" width="100%">
-<br>
+<h1>HowTo Manuals</h1>
 <h2><font face="Helvetica, Arial, sans-serif"><a name="HOWTO"></a>6.
 How to Create, Open&nbsp; or Update a Modelling Project</font></h2>
 <p>A modelling project is actually a sub-directory that contains a set
@@ -1265,7 +1309,7 @@ and will not be lost during backups.&nbsp; <br>
 <br>
 &lt;Sidebar end&gt;<br>
 <br>
-<h4>3.4.1. Extending the Project Thermodynamic Database</h4>
+<h4>6.7.1. Extending the Project Thermodynamic Database</h4>
 &nbsp;To add chemical species and phases to your project database
 extension files, first close the "Single Thermodynamic System" dialog
 and
@@ -1296,6 +1340,16 @@ keys to avoid possible "duplicate record key" errors. Finally, <a
 and <a href="gp_howto.html#P333L6">import</a> records from the edited
 text file.</li>
 </ul>
+<h4><br>
+</h4>
+<hr style="width: 100%; height: 2px;">
+<h1><span style="font-family: Helvetica,Arial,sans-serif;">Configuration
+of Project and Default Database Files</span></h1>
+<h4></h4>
+<h2><span style="font-family: Helvetica,Arial,sans-serif;"><a
+ name="FILES"></a>7. Project File Configuration Dialog</span></h2>
+<h4><br>
+</h4>
 <h4>3.4.2. Configuring Database Files</h4>
 The current configuration of link files for the entire database is
 saved into a <tt>~/GEMS/gems.cfg </tt>file every time when&nbsp; <tt>Yes</tt>&nbsp;

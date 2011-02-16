@@ -1,9 +1,13 @@
   <toc>
-    <section title="Methods of calculations used in GEM-Selektor" ref="theorgem.html">
-      <section title="Theoretical issues of GEM calculations" ref="theorgem.html"> </section>
-      <section title="Thermodynamic Data Calculations" ref="theortdb.html"></section>
-      <section title="Default (Kernel) Database" ref="kernel_db.html"></section>
-      <section title="Extensions for Surface Complexation" ref="theorscm.html"></section>
+    <section title="Methods used in GEM-Selektor" ref="theory_gem.html">
+      <section title="Theoretical issues of GEM" ref="theory_gem.html"> </section>
+      <section title="Models of phases-solutions" ref="theory_sol.html"></section>
+      <section title="Thermodynamic data calculations" ref="theory_tdb.html"></section>
+      <section title="Default (Kernel) Database" ref="gems_ctdb.html"></section>
+      <section title="Sorption and Surface Complexation" ref="theory_scm.html"></section>
+      <section title="Simulations of Metastability and Kinetics" ref="theory_kin.html"></section>
+      <section title="Reactive Mass Transport Simulations" ref="theory_rmt.html"></section>
+      <section title="Inverse Problems, Uncertainty and Sensitivity" ref="theory_uns.html"></section>
     </section>
     <section title="Single Thermodynamic System" ref="gm_syseq.html">
       <section title="CSD Setup Submodule" ref="gems_bcc.html">
@@ -54,3 +58,4 @@
       <section title="Getting Started Manual" ref="gemstart-body.html"></section>
    </section>
   </toc>
+
