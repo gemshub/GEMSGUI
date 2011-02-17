@@ -1,147 +1,116 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html><head>
-  
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-
-  
-  <meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
+<html>
+<head>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR"
+ content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
   <title>GEMS3 Installation and Setup</title>
-
-  
-  
   <meta name="description" content="Version 2.0.0-PSI">
-
-</head><body>
-<h1><img src="gems1.png" align="left" height="48" width="48"> <font color="#000066"> GEM-Selektor version 3<br>
+</head>
+<body>
+<h1><img src="gems1.png" align="left" height="48" width="48"> <font
+ color="#000066"> GEM-Selektor version 3<br>
 </font></h1>
-
 <p> </p>
-
 <h2><font face="Helvetica, Arial, sans-serif"> Installation,
-Configuration and Setup Manual</font></h2>
-
+Configuration and Setup<br>
+</font></h2>
 <font face="Helvetica, Arial, sans-serif">(Under construction)</font>
 <hr size="2" width="100%">
 <h3>Contents</h3>
-
 <ul>
-
   <li>
     <p><font face="Helvetica, Arial, sans-serif"><a href="#INSTALL_W32">Installing
 GEMS under Win32</a></font></p>
   </li>
   <li>
-    <p><font face="Helvetica, Arial, sans-serif"><a href="#INSTALL_LINUX">Installing GEMS under Linux&nbsp;</a></font></p>
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#INSTALL_LINUX">Installing GEMS under Linux&nbsp;</a></font></p>
   </li>
   <li>
-    <p><font face="Helvetica, Arial, sans-serif"><a href="#COMLINE_PARAM">GEMS Command-line parameters</a></font></p>
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#COMLINE_PARAM">GEMS Command-line parameters</a></font></p>
   </li>
   <li>
-    <p><font face="Helvetica, Arial, sans-serif"><a href="#PREFERENCES_DIALOG">GEMS Preferences Dialog</a></font></p>
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#PREFERENCES_DIALOG">GEMS Preferences Dialog</a></font></p>
   </li>
   <li>
-    <p><font face="Helvetica, Arial, sans-serif"><a href="#TROUBLES_WINDOWS">Troubleshooting (Windows)</a></font></p>
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#TROUBLES_WINDOWS">Troubleshooting (Windows)</a></font></p>
   </li>
   <li>
-    <p><font face="Helvetica, Arial, sans-serif"><a href="#TROUBLES_LINUX">Troubleshooting (Linux)</a></font></p>
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#TROUBLES_LINUX">Troubleshooting (Linux)</a></font></p>
   </li>
 </ul>
-
 <hr size="2" width="100%">
 <p> </p>
-
 <h3> </h3>
-
 <h3> <a name="INSTALL_W32"></a>Installing GEMS under Win32</h3>
-
 This is a provisional installator, simply a self-extracting zip
 archive. <br>
-
 <br>
-
 Just execute GEMsetup.exe. It will ask you for a directory path where
 to unpack all the directories and files. If you tell it C:\gemsetup\
 then you can start GEMS immediately, without editing the rungems.bat
 file. Otherwise, first edit rungems.bat as described in README1.TXT and
 then start GEMS.
 <br>
-
 <br>
-
 To everybody who sees the program for the first time: Press the "Get
 Started" button on the GEMS main dialog and work through the "Getting
 Started" manual. Then try the Tutorial, beginning from Part 1. We hope,
 &nbsp;you will quickly grasp how to work with GEMS!<br>
-
 <br>
-
 You have unpacked the program into a directory that you just have
 specified. Before you can start GEMS2 for the first time, please edit
 the file RUNGEMS2.BAT as described below.<br>
-
 <br>
-
 Suppose that you created the directory D:\MYGEMS and unpacked the
 GEMSETUP.EXE archive there. Now, open RUNGEMS2.BAT with Notepad or any
 other simple ASCII editor and change it as shown on the example below: <br>
-
 <br>
-
 Before editing:<br>
-
 &nbsp;&nbsp; rem New file configuration if /projects dir changed<br>
-
 &nbsp;&nbsp; gems2.exe -c -s c:\Gems2inst\program -u c:\Gems2inst <br>
-
 &nbsp;&nbsp; <br>
-
 After editing:<br>
-
 &nbsp;&nbsp; rem New file configuration if /projects dir changed<br>
-
 &nbsp;&nbsp; gems2.exe -c -s d:\mygems\program -u d:\mygems <br>
-
 <br>
-
 Apply the same changes to other (commented out) command lines and save
 RUNGEMS2.BAT. The program files are located in the mygems\program
 subdirectory;
 your modelling projects will be created in the mygems\projects
 subdirectory.
 <br>
-
 <br>
-
 You can start GEMS2 now by executing RUNGEMS2.BAT from a command line.
 Or, better, create a Windows shortcut icon to start GEMS2, set a work
 directory "d:\mygems", and enter the command line <br>
-
 "d:\mygems\program\gems2.exe -c -s d:\mygems\program -u d:\mygems".<br>
-
 <br>
-
 If you install GEMS2 under Windows 2000, Windows 98, and Windows ME, it
 may not work properly because of problems with the imm32.dll file. This
 file is necessary to run GEMS under Windows 95 and some Windows NT
 version older than 4 SP 5. If, under newer versions of Windows, error
 messages will appear when you try to start the <br>
-
 program, simply delete the imm32.dll file from the \program directory
 where gems2.exe file is located.<br>
-
 <br>
-
 <h3><a name="INSTALL_LINUX"></a>Installing GEMS under Linux</h3>
-
 This test version of GEMS program package has been developed under
 Linux paltform using <a href="http://www.redhat.com/">RedHat Linux 6.1</a>
-distribution. The program can also run under <a href="http://www.suse.de/">S.u.S.E. Linux 6.3</a> or later. We did not
-try, but expect that GEMS will run under the latest <a href="http://www.delix.de/">DLD Linux</a> <font color="#000000">Mandrake,
+distribution. The program can also run under <a
+ href="http://www.suse.de/">S.u.S.E. Linux 6.3</a> or later. We did not
+try, but expect that GEMS will run under the latest <a
+ href="http://www.delix.de/">DLD Linux</a> <font color="#000000">Mandrake,
 EasyLinux 1.2 and other installations similar</font> to RedHat. Basic
 information
 about Linux can be found on the following web sites:
 <ol>
-
   <a href="http://www.linux.org">http://www.linux.org</a> - main info
 on Linux (worth looking for the first time) <br>
   <a href="http://www.linux.org/books/index.html">http://www.linux.org/books/index.html
@@ -157,13 +126,11 @@ application news <br>
   <a href="http://linuxtoday.org">http://linuxtoday.org/</a> - Linux
 (and not only) news
 </ol>
-
 GEMS v. 0.99b comes as a&nbsp;<tt> gems-0.99b-4.i386.rpm&nbsp; </tt>archive
 file. It should be installed using the <a href="http://www.rpm.org/">RedHat
 Package Manager</a> <tt>(rpm) </tt>program version 2.5 or later,
 available in all recent Linux distributions mentioned above.
 <h3> <a name="P2100"></a><tt>2.1. Requirements for Linux Configuration</tt></h3>
-
 Installation, generic configuration and shell commands of Linux are
 described within a specific distribution package (<a href="#P2000">see
 Section
@@ -173,7 +140,6 @@ hard disk. GEMS v.0.99a code requires the following packages to be
 already
 installed in your Linux system:
 <ul>
-
   <li> Xwindows X11R6(XFree86) server, version 3.3 or later (usage of
 the latest version is preferable because it contains more drivers for
 recent videocards and it is easier to install it). Making XFree86
@@ -185,7 +151,6 @@ libc.so, libm.so (glibc-2.1.2),&nbsp; libX11.so, libXext.so (XFree-3.3)</font></
   <li> <a href="http://www.troll.no/">Qt 2.0</a> or later run-time
 library (libqt.so.2).</li>
 </ul>
-
 Although GEMS can work with any Xwindow manager - KDE, kwm,
 GNOME/Enlightment, IceWM, AfterStep etc.- we strongly advice you to use
 <a href="http://www.kde.org/">KDE 1.1</a> or later. This popular
@@ -195,11 +160,9 @@ start the <a href="ftp://ftp.gnome.org/pub/">Midnight Commander</a><tt>(mc)</tt>
 in a KDE terminal window and have it open all the time for managing
 your files and sending them to/from the MS-DOS (Windows) partitions on
 your hard disk or diskettes. <br>
-
 &nbsp;
 <h3> <a name="P2200"></a><tt>2.2. Installing GEMS Package from rpm
 archive</tt></h3>
-
 Log in as <tt>root</tt> and mount the GEMS installation diskette (if
 in doubt, type a&nbsp; <tt>man mount</tt>&nbsp; shell command).
 Typically, there is a <tt>/mnt/floppy</tt>&nbsp; directory&nbsp;
@@ -208,7 +171,6 @@ present and one just types&nbsp;<font color="#000000"> <tt>mount
 if the superuser&nbsp; have created a <tt>/dos/a </tt>directory (e.g.
 using Midnight Commander) <font color="#000000">and added a string</font>
 <br>
-
 <font color="#000000">'/dev/fd0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 /dos/a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vfat
 noauto,user&nbsp;&nbsp;&nbsp;&nbsp; 0 0'&nbsp;&nbsp;&nbsp;&nbsp; to <b>/etc/fstab</b>&nbsp;
@@ -218,7 +180,6 @@ You should see the file <tt>gems-0.99b-4.i386.rpm</tt>&nbsp; there.
 Copy this file (or download it from ftp site) into <tt>/usr/src/redhat/RPMS/i386
 </tt>directory (this directory exists at least in RedHat and S.u.S.E
 Linux distributions).</font> </p>
-
 <p><font color="#000000">Type a shell command: <tt>rpm -U
 gems-0.99b-4.i386.rpm&nbsp;</tt> and press <tt>Enter</tt> (You can do
 it also right from diskette). The
@@ -237,32 +198,30 @@ is placed in the <tt>/usr/bin</tt>&nbsp; directory, and also the
 default
 database directory <tt>/usr/lib/gems&nbsp;</tt> is present. This
 directory
-contains the <tt>DB.default/ </tt>subdirectory with the <a href="#P3320">core thermodynamic database files</a> which can be used
+contains the <tt>DB.default/ </tt>subdirectory with the <a
+ href="#P3320">core thermodynamic database files</a> which can be used
 but cannot be modified by GEMS users. You will also find a <tt>profile/
 </tt>subdirectory with a default system profile extension files,
-automatically copied into the user's home directory when <a href="#P2500">GEMS is run for the first time</a> in file configuration
+automatically copied into the user's home directory when <a
+ href="#P2500">GEMS is run for the first time</a> in file configuration
 mode. The&nbsp; <tt>/doc&nbsp;</tt> subdirectory contains
 documentation files (including this one). The <tt>/img&nbsp;</tt> and <tt>/visor.data</tt>
 subdirectories contain GEMS GUI configuration
 files. <br>
 &nbsp; </p>
-
 <h3> <a name="P2300"></a><tt>2.3. Configuring Linux for GEMS
 Installation</tt></h3>
-
 Before installing GEMS, you must log in as root and create one or more
 users belonging to a <tt>gems_user</tt>&nbsp; group for persons
 supposed to work with GEMS. The simplest way to do it is typing the
 following Unix shell commands:
 <ol>
-
   <li> To create a new user, type:&nbsp;&nbsp; <tt>useradd -m -g
 gems_user &lt;username&gt;&nbsp; Enter</tt>;</li>
   <li> To assign password to the user, type:&nbsp; <tt>passwd
 &lt;username&gt;&nbsp; Enter</tt>&nbsp; and then type and re-type the
 password.</li>
 </ol>
-
 The same can also be done using more sophisticated (and convenient)
 interactive tools such as YaST (S.u.S.E. Linux), available in all
 recent Linux distributions. Refer to the related documentation for
@@ -271,44 +230,33 @@ details.
 find&nbsp;&nbsp;<tt> /etc/fstab</tt>&nbsp; file.&nbsp; Use text viewer
 or editor ( <tt>F3</tt> or <tt>F4</tt> ) to check contents of this
 file (usually like this): </p>
-
 <p><tt>/dev/hda6 / ext2 defaults 1 1</tt> <br>
 <tt>/dev/hda7 swap swap defaults 0 0</tt> <br>
 <tt>/dev/cdrom /mnt/cdrom iso9660 noauto,ro,user 0 0</tt> <br>
 <tt>/dev/fd0 /mnt/floppy ext2 noauto,user 0 0</tt> <br>
 <tt>none /proc proc defaults 0 0 none</tt> <br>
 <tt>/dev/pts devpts gid=5,mode=620 0 0</tt> </p>
-
 <p>The first two lines describe Linux partitions on hard disk. Third
 line makes it possible to mount CD ROM device assigning it to <tt>/mnt/cdrom&nbsp;</tt>
 directory. Fourth line assigns a Linux diskette in the floppy drive to
 <tt>/mnt/floppy</tt>&nbsp; directory.&nbsp; If you wish to read/write
 files
 to your Windows/95 hard disk drive, add a line like this: </p>
-
 <p><tt>/dev/hda1 /dos/c vfat auto,user 0 0</tt> </p>
-
 <p>Adding the line below will make it possible to mount a DOS-formatted
 diskette and write/read files with long names: </p>
-
 <p><tt>/dev/fd0 /dos/a vfat noauto,user 0 0</tt> </p>
-
 <p>If you did the recommended changes and saved the /etc/fstab file to
 disk, make sure that you also have created empty directories<tt> /dos/c
 </tt>and<tt> /dos/a </tt>and reboot Linux to make changes effective. </p>
-
 <p>Now you can log out from <tt>root </tt>(and it is always a good
 idea not to work as the superuser, whenever possible!).<br>
 </p>
-
 <hr size="2" width="100%">
 <p> </p>
-
 <h3> <a name="COMLINE_PARAM"></a>GEMS command line parameters</h3>
-
 Log in as a normal GEMS user (from now on, we assume that the user's
 name is <tt>modeller</tt>). <br>
-
 Try to start GEMS as described in the <a href="#P2500">next section</a>.
 If the program does not start properly, the reason might be that it
 cannot find its system directory. If this happens, proceed as follows.
@@ -322,7 +270,6 @@ letting GEMS program know where to find its default database directory.
 The&nbsp; <tt>~/.bash_profile</tt>&nbsp; script&nbsp; is automatically
 executed when the user logs in. The newly-created&nbsp; <tt>~/.bash_profile</tt>&nbsp;&nbsp;
 file typically looks like this: </p>
-
 <p><tt># Get the aliases and functions</tt> <br>
 <tt>if [ -f ~/.bashrc ];</tt> <br>
 <tt>then . ~/.bashrc fi</tt> <br>
@@ -331,16 +278,12 @@ file typically looks like this: </p>
 <tt>BASH_ENV=$HOME/.bashrc</tt> <br>
 <tt>USERNAME=""</tt> <br>
 <tt>export USERNAME BASH_ENV PATH</tt> </p>
-
 <p>Modify the script replacing the last line with two lines below, and
 save the file (press <tt>F2 Esc</tt>): </p>
-
 <p><tt>GEMS_DIR=/usr/lib/gems/</tt> <br>
 <tt>export USERNAME BASH_ENV PATH GEMS_DIR</tt> <br>
 &nbsp; </p>
-
 <h3> <a name="PREFERENCES_DIALOG"></a>GEMS Preferences Dialog</h3>
-
 From your home directory (<tt>/home/modeller</tt> in our example),
 type <tt>startx&nbsp; Enter</tt>&nbsp; to launch&nbsp; Xwindows server
 and KDE. When you will see the desktop, open a terminal emulation
@@ -354,11 +297,10 @@ Equilibria</a>"&nbsp; and&nbsp; "<a href="#P3300">Thermodynamic Database</a>"
 .
 <p><font size="+1"><b><br>
 </b></font></p>
-
-<p><font size="+1"><b><img src="PrefDialog.jpg" alt="Preferences Dialog image" height="400" width="531"> <br>
+<p><font size="+1"><b><img src="PrefDialog.jpg"
+ alt="Preferences Dialog image" height="400" width="531"> <br>
 <br>
 </b></font></p>
-
 <p><font size="+1"><b>Important!</b>: Do not press </font>either of
 these large buttons when GEMS is started for the first time in your
 home directory! Just press&nbsp; the&nbsp; <tt>Exit</tt>&nbsp;
@@ -373,12 +315,9 @@ directory with a&nbsp; <tt>~/GEMS/profiles </tt>subdirectory and two
 configuration
 files, which have been created&nbsp; during this first work session. <br>
 </p>
-
 <hr size="2" width="100%">
 <p> </p>
-
 <h3> <a name="TROUBLES_WINDOWS"></a>Troubleshooting (Windows)</h3>
-
 If you have forgotten to save the file configuration after the first
 GEMS session but can see the&nbsp; <tt>~/GEMS</tt> directory, just
 start <tt>gems -c&nbsp; </tt>from the terminal emulation window.
@@ -395,28 +334,23 @@ all cases, do not forget to save configuration upon exit!
 your not-RedHat Linux but rpm does not install GEMS complaining that
 the Qt2 dependence is missing, try to start&nbsp; <tt>rpm</tt>&nbsp;
 as follows: </p>
-
 <p><tt><font color="#000000">rpm -U --nodeps gems-0.99b-4.i386.rpm</font></tt>
 </p>
-
 <p>The --nodeps option tells rpm to avoid checking dependencies for
 shared libraries. </p>
-
 <p><a href="GEMS-Linux-USREF.html#P8000">Contact us</a> if GEMS will
 not
 install or will not start properly from the user home directory. <br>
 </p>
-
 <p><br>
 </p>
-
 <p>A small GEM-Selektor Exit dialog appears. Press<tt> "Yes"</tt> to
 exit normally, without saving file/window configuration, or <tt>"Cancel"</tt>
 to continue the work session. The <tt>"No"</tt> button should be
 pressed only in some special cases when the database file configuration
-setup has changed (<a href="file:///C:/GEMS2test/program/doc/html/gemsetup.html">more about
+setup has changed (<a
+ href="file:///C:/GEMS2test/program/doc/html/gemsetup.html">more about
 GEMS configuration</a>).&nbsp;</p>
-
 <p> Start GEMS again and click on the <tt>"Preferences"</tt> button
 that opens a GEM-Selektor Settings and Preferences dialog. There are
 two useful possible adjustments. A checkbox in the lower left corner,
@@ -424,7 +358,8 @@ if checked,
 forces the program to save configuration on exit, so the GEM-Selektor
 Exit
 Dialog will not appear; the program can be started resuming the saved
-configuration (<a href="file:///C:/GEMS2test/program/doc/html/gemsetup.html">more</a>).
+configuration (<a
+ href="file:///C:/GEMS2test/program/doc/html/gemsetup.html">more</a>).
 A "Documentation Base" radiobutton group in the upper part controls
 where the GEMS Helpwindow browser looks for HTML files. If the "Local
 directory" button is selected (default), the files will be read using
@@ -440,33 +375,20 @@ the next version will be officially released. <br>
 &nbsp;<br>
 <br>
 </p>
-
 <h3><a name="TROUBLES_LINUX"></a>Troubleshooting (Linux)</h3>
-
 <h3> </h3>
-
 &lt;To be provided in version 2.0.2&gt;<br>
-
 <br>
-
 <br>
-
 <br>
-
 <hr size="2" width="100%">
 <p><tt>end of file</tt> <br>
 &nbsp; </p>
-
 <br>
-
 <br>
-
 <br>
-
 <br>
-
 <br>
-
 <br>
-
-</body></html>
+</body>
+</html>
