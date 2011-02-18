@@ -13,7 +13,7 @@ WindowIcon on
 
 ; The file to write
 ; OutFile "gems-w32-install.exe"
-OutFile "gems3.0-1816.524-w32-install.exe"
+OutFile "gems3.0-1820.524-w32-install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\GEMS3
@@ -22,7 +22,7 @@ InstallDir $PROGRAMFILES\GEMS3
 InstallDirRegKey HKLM SOFTWARE\GEMS3 "Install_Dir"
 
 ;License text
-LicenseText "Version to be installed: 3.0 (rev.1816.524) $\nLICENSE and DISCLAIMER"
+LicenseText "Version to be installed: 3.0 (rev.1820.524) $\nLICENSE and DISCLAIMER"
 LicenseData "C:\GEMS3inst\program\doc\txt\TermsOfUse.txt"
 
 ; The text to prompt the user to enter a directory
@@ -46,9 +46,9 @@ Section "GEMS3 (required)"
  ; Set the right version of *.dll below
     File "C:\GEMS3inst\program\*.dll"
  ;   File "C:\GEMS3inst\program\assistant.exe"
-    File "C:\GEMS3inst\program\qhelpconverter.exe"
-    File "C:\GEMS3inst\program\qcollectiongenerator.exe"
-    File "C:\GEMS3inst\program\qhelpgenerator.exe"
+ ;   File "C:\GEMS3inst\program\qhelpconverter.exe"
+ ;   File "C:\GEMS3inst\program\qcollectiongenerator.exe"
+ ;   File "C:\GEMS3inst\program\qhelpgenerator.exe"
     File "C:\GEMS3inst\program\readme.txt"
     File "C:\GEMS3inst\program\qt.conf"
   CreateDirectory "$INSTDIR\program\accessible"
