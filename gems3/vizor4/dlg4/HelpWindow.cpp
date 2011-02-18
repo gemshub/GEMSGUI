@@ -366,7 +366,7 @@ void HelpWindow::showDocumentation(const char* file, const char* item1)
    if (!hEngine)
        return;
 
-    gstring path = "qthelp://gems3/doc/";
+    gstring path = "qthelp://gems3/help/";
     QUrl path_str;
 
     if( !file/*item1*/ )
