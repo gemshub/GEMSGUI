@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout">
@@ -751,7 +751,7 @@ To tell GtDemo what data to sample, a math script must be provided in Gexpr fiel
         </font>
        </property>
        <property name="text">
-        <string>&amp;Learn more...</string>
+        <string>&amp;Learn more</string>
        </property>
        <property name="shortcut">
         <string>F1</string>

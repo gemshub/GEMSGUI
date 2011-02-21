@@ -200,7 +200,7 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Change preconfigured variant of GEM IPM numerical controls</string>
+          <string>Change preconfigured GEM IPM numerical controls</string>
          </property>
         </widget>
        </item>
@@ -559,7 +559,7 @@
         </font>
        </property>
        <property name="text">
-        <string>&amp;Learn more...</string>
+        <string>&amp;Learn more</string>
        </property>
        <property name="shortcut">
         <string>F1</string>

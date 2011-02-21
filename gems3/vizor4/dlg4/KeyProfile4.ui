@@ -87,7 +87,7 @@
         <string>This will start the wizard for setting up a new Modelling Project</string>
        </property>
        <property name="text">
-        <string>&amp;New Project...</string>
+        <string>&amp;New Project</string>
        </property>
       </widget>
      </item>
@@ -122,7 +122,7 @@
         <string>Learn about Modelling Project concept and project configuration</string>
        </property>
        <property name="text">
-        <string>&amp;Learn more...</string>
+        <string>&amp;Learn more</string>
        </property>
        <property name="shortcut">
         <string>F1</string>

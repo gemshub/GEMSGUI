@@ -389,7 +389,7 @@ Key of SysEq record to be used in getting phase compositions for the xp_ and MbX
         </font>
        </property>
        <property name="text">
-        <string>&amp;Learn more...</string>
+        <string>&amp;Learn more</string>
        </property>
       </widget>
      </item>

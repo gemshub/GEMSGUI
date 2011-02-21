@@ -356,7 +356,7 @@
         <string>Press to check/adjust controls of the numerical modules (saved in Project record)</string>
        </property>
        <property name="text">
-        <string>&amp;Numerical Controls ...</string>
+        <string>&amp;Numerical Controls</string>
        </property>
        <property name="shortcut">
         <string>Alt+N</string>
@@ -382,7 +382,7 @@
         <string>Learn about GEM chemical thermodynamic modelling technique</string>
        </property>
        <property name="text">
-        <string>&amp;Learn more..</string>
+        <string>&amp;Help</string>
        </property>
        <property name="shortcut">
         <string>F1</string>

@@ -171,7 +171,7 @@
       <string>Here you can specify a template to filter a large list of record keys</string>
      </property>
      <property name="text">
-      <string>Set &amp;Filter...</string>
+      <string>Set &amp;Filter</string>
      </property>
     </widget>
    </item>

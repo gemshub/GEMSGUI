@@ -415,7 +415,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
           <item>
            <widget class="QLabel" name="SCM_codeLabel">
             <property name="text">
-             <string>Select specific mixing rules for EoS models:</string>
+             <string>Select specific mixing rules (temperature corrections) for EoS and activity models:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignBottom</set>
@@ -850,7 +850,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
         </font>
        </property>
        <property name="text">
-        <string>&amp;Learn more...</string>
+        <string>&amp;Learn more</string>
        </property>
        <property name="shortcut">
         <string>F1</string>

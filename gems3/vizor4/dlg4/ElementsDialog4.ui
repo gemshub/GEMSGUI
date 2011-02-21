@@ -3712,7 +3712,7 @@ Dataset: </string>
       <string>Click here to learn more about this dialog and creation of independent modelling projects</string>
      </property>
      <property name="text">
-      <string>Learn &amp;more...</string>
+      <string>Learn &amp;more</string>
      </property>
      <property name="shortcut">
       <string>F1</string>

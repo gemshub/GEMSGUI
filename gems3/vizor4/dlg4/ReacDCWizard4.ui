@@ -998,7 +998,7 @@
         </font>
        </property>
        <property name="text">
-        <string>&amp;Learn more...</string>
+        <string>&amp;Learn more</string>
        </property>
        <property name="shortcut">
         <string>F1</string>

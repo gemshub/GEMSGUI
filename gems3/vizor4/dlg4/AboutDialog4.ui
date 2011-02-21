@@ -67,7 +67,7 @@
    <item row="1" column="0" colspan="3">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -226,8 +226,7 @@ p, li { white-space: pre-wrap; }
 &lt;table border=&quot;0&quot; style=&quot;-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;&quot;&gt;
 &lt;tr&gt;
 &lt;td style=&quot;border: none;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TERMS and CONDITIONS of USE&lt;/span&gt; &lt;/p&gt;
-&lt;hr width=&quot;100%&quot;/&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Terms and Conditions of Use&lt;/span&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The software and related material (data and documentation), contained in or furnished in connection with GEM-Selektor version 3 program package for geochemical modelling (and its subsequent versions), are made available by the Paul Scherrer Institute (PSI) to be used in the public interest and for the advancement of science.  Permission to use the GEM-Selektor software is granted free of charge for educational and research purposes only, provided and as long as these Terms and Conditions of Use are accepted. By downloading the GEM-Selektor software, with its supporting documentation and databases, the user accepts these Terms and Conditions and agrees that the software can be used and copied subject to the following restrictions and understandings.&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The user may distribute copies of the software and related material provided that the recipients receive a copy of this notice and receive or can get a copy of the original distribution. Any modified file must include a notice clearly stating the modifications, the author, and the date.  &lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;As the software belongs to public domain, the user has the right to request parts of the source code.  Although this version (GEM-Selektor 3) comes with executable files only, the developers are preparing the source code of its numerical kernel GEMS3K to be released under the terms of LGPL (&lt;a href=&quot;http://www.gnu.org/licenses/lgpl.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GNU Lesser General Public License&lt;/span&gt;&lt;/a&gt;) or similar license.&lt;/p&gt;

@@ -180,7 +180,7 @@
       <string>Press to set up axii, colors, and graph legend symbols</string>
      </property>
      <property name="text">
-      <string>&amp;Customize...</string>
+      <string>&amp;Customize</string>
      </property>
      <property name="checkable">
       <bool>false</bool>
@@ -221,7 +221,7 @@
       <string>Prints the plot and its legend (under construction)</string>
      </property>
      <property name="text">
-      <string>&amp;Print...</string>
+      <string>&amp;Print</string>
      </property>
      <attribute name="buttonGroup">
       <string>buttonGroup</string>
@@ -237,7 +237,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Save Image...</string>
+      <string>Save Image</string>
      </property>
      <attribute name="buttonGroup">
       <string>buttonGroup</string>

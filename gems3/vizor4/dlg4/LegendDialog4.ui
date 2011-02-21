@@ -300,7 +300,7 @@
         <string>Set background color of the graph area</string>
        </property>
        <property name="text">
-        <string>&amp;Background...</string>
+        <string>&amp;Background</string>
        </property>
       </widget>
      </item>
