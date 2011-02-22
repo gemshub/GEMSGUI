@@ -239,7 +239,7 @@
        <string>Press to adjust fonts on screen forms and set work directories</string>
       </property>
       <property name="text">
-       <string>&amp;Preferences</string>
+       <string>&amp;Preferences...</string>
       </property>
       <property name="shortcut">
        <string>Alt+P</string>
