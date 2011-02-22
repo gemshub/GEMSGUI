@@ -627,7 +627,7 @@ NewSystemDialog::CmHelp2()
 void
 NewSystemDialog::CmMoreBCC()
 {                        // Create this HTML file
-    pVisorImp->OpenHelp( GEMS_BCC_HTML );
+    pVisorImp->OpenHelp( GEMS_HOWTOB_HTML );
 }
 
 void

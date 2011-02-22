@@ -228,6 +228,7 @@ extern const char *GEMS_MPROJ_LF_HTML;   // ListFilesDialog
 extern const char *GEMS_MPROJ_LF_HTML;   // ListFilesDialog
 extern const char *GEMS_ONESYS_HTML;     // NewSystemDialog
 extern const char *GEMS_HOWTO_HTML;
+extern const char *GEMS_HOWTOB_HTML;
 extern const char *GEMS_BCC_HTML;
 extern const char *GEMS_IPM_HTML;
 extern const char *GEMS_RECIPE_HTML;    // InputSystemDialog

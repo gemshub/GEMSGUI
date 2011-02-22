@@ -230,7 +230,7 @@ trUtf8("GEMS3 (Windows XP/7 MinGW gcc4.4)"),
 #endif
            trUtf8("This is GEM-Selektor 3 (GEMS3) program package   \n\n"
                   "    release candidate version 3.0,\n\n"
-                  "    rev. 1824 (February 22, 2010)\n\n"
+                  "    rev. 1826 (February 22, 2010)\n\n"
                   "    using GEMS3K rev. 524 (trunk) \n\n\n"
                   "For GEMS Wiki community of geochemical modellers \n\n"
                   "(c) 2011, PSI-ETHZ GEMS Development Team\n") );
@@ -594,7 +594,8 @@ const char *GEMS_MPROJ_HTML = "gm_project.html#HOWTO";    // KeyProfile
 const char *GEMS_MPROJ_LF_HTML = "gm_project.html#FILES"; // ListFilesDialog
 const char *GEMS_ONESYS_HTML = "gems_sys";        // NewSystemDialog
 const char *GEMS_HOWTO_HTML = "gems_sys.html#HOWTO";
-const char *GEMS_BCC_HTML = "gems_bcc#HOWTO";
+const char *GEMS_BCC_HTML = "gems_bcc";
+const char *GEMS_HOWTOB_HTML = "gems_bcc.html#HOWTO";
 const char *GEMS_IPM_HTML = "gems_ipm";
 const char *GEMS_RECIPE_HTML = "gems_bcc.html#RECIPE"; // InputSystemDialog
 const char *GEMS_GRAPH_HTML = "gems_graph"; // GraphDialog
