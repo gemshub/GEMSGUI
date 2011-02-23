@@ -136,7 +136,8 @@ void SettingsDialog::CmHelpGenerate()
                    QString app;
             #ifdef __unix
             #ifdef __APPLE__
-                    app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/qcollectiongenerator");    // expected to work
+//                    app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/qcollectiongenerator");    // expected to work
+                    app += QLatin1String("qcollectiongenerator");
             #else
                     app += QLatin1String("qcollectiongenerator");
             #endif

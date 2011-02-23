@@ -28,7 +28,7 @@
       <section title="GEMS3 Suite of Test Projects" ref="gems_tests.html"> </section>
    </section>
 
-   <section title="Single Thermodynamic System" ref="gems_sys.html#TAB_INPUT">
+   <section title="Single Thermodynamic System Mode" ref="gems_sys.html#TAB_INPUT">
       <section title="System Recipe (Composition/Constraints)" ref="gems_bcc.html"></section>
       <section title="Solution Phases and Models of Mixing" ref="gems_solmod.html"></section>
       <section title="Extensions for Sorption Phases" ref="gems_scm.html"></section>
