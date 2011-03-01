@@ -1,12 +1,16 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html><head>
-
-
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR" content="Mozilla/4.75 [en] (Win95; U) [Netscape]"><title>GEMS3 DComp Module</title>
-  
-  <meta name="description" content="Version 2.0.0-PSI"></head><body>
-<h1><img src="gems1.png" align="left" height="48" width="48"> <font color="#000066"> GEM-Selektor version 3</font> </h1>
+<html>
+<head>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR"
+ content="Mozilla/4.75 [en] (Win95; U) [Netscape]">
+  <title>GEMS3 DComp Module</title>
+  <meta name="description" content="Version 2.0.0-PSI">
+</head>
+<body>
+<h1><img src="gems1.png" align="left" height="48" width="48"> <font
+ color="#000066"> GEM-Selektor version 3</font> </h1>
 <h2><font size="+3">Dependent Components (DComp) Module&nbsp;</font></h2>
 <hr size="2" width="100%">
 <h3>Contents<br>
@@ -14,7 +18,8 @@
 <blockquote>
   <p><font face="Helvetica, Arial, sans-serif"><a href="#DC_DATA_FORMAT">1.
 Thermochemical data format</a></font> </p>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#DC_CALCULATIONS">1.1. DComp module calculations</a></font></p>
+  <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#DC_CALCULATIONS">1.1. DComp module calculations</a></font></p>
   <p><a href="#DC_MWIZARD"><font face="Helvetica, Arial, sans-serif">2.
 DComp Create/Remake Wizard</font></a></p>
   <p><a href="#WZSTEP_1"><font face="Helvetica, Arial, sans-serif">2.1.
@@ -30,19 +35,24 @@ DComp Window Page 1</font></a></p>
   <p><font face="Helvetica, Arial, sans-serif"><a href="#MWPAGE_2">3.2.
 DComp Window Page 2</a><br>
   </font></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#DC_DATA_OBJECTS">4. Description of input data objects and fields</a></font></p>
+  <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#DC_DATA_OBJECTS">4. Description of input data objects and fields</a></font></p>
   <p><font face="Helvetica, Arial, sans-serif"><a href="#CPFT_COEFF">4.1.
 Empirical coefficients of Cp = f(T) equation</a></font></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#HKF_COEFF"><small><big>4.2.</big><font size="+1"><small>Empirical coefficients of&nbsp; the revised&nbsp;
+  <p><font face="Helvetica, Arial, sans-serif"><a href="#HKF_COEFF"><small><big>4.2.</big><font
+ size="+1"><small>Empirical coefficients of&nbsp; the revised&nbsp;
 HKF equation of state</small></font></small></a></font></p>
   <p><font face="Helvetica, Arial, sans-serif"><a href="#MOL_VOL_DEP">4.3.
 Molar volume dependence</a></font></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#DC_PROTECTED_DATA">4.4.
+  <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#DC_PROTECTED_DATA">4.4.
 Data entries accessible through create/remake wizard only</a></font></p>
   <p><font face="Helvetica, Arial, sans-serif"><a href="#DC_ERRORS">5.
 Warnings, errors and troubleshooting<br>
   </a></font></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#DCOMP_FORMULA_ERRORS">5.1.Error messages from the Formula Parser</a><a href="#DC_ERRORS"><br>
+  <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#DCOMP_FORMULA_ERRORS">5.1.Error messages from the Formula Parser</a><a
+ href="#DC_ERRORS"><br>
   </a></font></p>
 </blockquote>
 <br>
@@ -62,8 +72,10 @@ records. <br>
 <p>Minimal information about a species in a DComp record includes: </p>
 <ul>
   <li> phase (standard and reference) state;</li>
-  <li> name (identifier), also short name in the <a href="gdb_rkey.html#dbm_DComp">DComp record key</a>;</li>
-  <li> stoichiometry (chemical formula, expressed in <a href="gdb_rkey.html#dbm_IComp_0">IC symbols</a>);</li>
+  <li> name (identifier), also short name in the <a
+ href="gdb_rkey.html#dbm_DComp">DComp record key</a>;</li>
+  <li> stoichiometry (chemical formula, expressed in <a
+ href="gdb_rkey.html#dbm_IComp_0">IC symbols</a>);</li>
   <li> <a href="#DCset_0">Default type of species</a>;</li>
   <li> standard molar (partial molal) Gibbs energy of formation <i>G<sup>0</sup></i><sub>Tr,Pr</sub>&nbsp;
 from IC at reference <i>Tr, Pr&nbsp; </i>;</li>
@@ -73,7 +85,8 @@ at <i>Tr, Pr </i>.</li>
 <p><br>
 DComp records may contain several optional data vectors holding
 coefficients for various <i>T,P</i> dependencies of thermodynamic
-properties or equations of state, used in the different <a href="theortdb.html">methods of temperature - pressure extrapolation</a>.
+properties or equations of state, used in the different <a
+ href="theortdb.html">methods of temperature - pressure extrapolation</a>.
 <br>
 &nbsp; </p>
 <p>DComp database module (as any other in GEM-Selektor database)
@@ -86,13 +99,16 @@ whole "internally consistent" thermodynamic dataset. In this version of
 GEM-Selektor kernel database, two published datasets are incorporated:
 the <a href="http://zonvark.wustl.edu/geopig/">SUPCRT98</a> database
 for aqueous species and gases [<a href="g_litref.html#%5B1997SHO/SAS%5D">1997SHO/SAS</a>
-and references therein], and the <a href="http://www.usgs.gov/tech-transfer/factsheets/94-061.html">USGS
-thermochemical database for minerals</a> [<a href="g_litref.html#%5B1995ROB/HEM%5D">1995ROB/HEM</a>]. This does not
+and references therein], and the <a
+ href="http://www.usgs.gov/tech-transfer/factsheets/94-061.html">USGS
+thermochemical database for minerals</a> [<a
+ href="g_litref.html#%5B1995ROB/HEM%5D">1995ROB/HEM</a>]. This does not
 imply that thermodynamic data are always consistent between different
 datasets! The user should be careful in using different datasets
 together and, in general, should avoid mixing of the data from the
 alternative datasets (e.g., [<a href="g_litref.html#%5B1988BER%5D">1988BER</a>]
-and [<a href="g_litref.html#%5B1990HOL/POW%5D">1990HOL/POW</a>] in <a href="gm_phase.html">Phase</a>, <a href="gm_profil.html">Profile</a>
+and [<a href="g_litref.html#%5B1990HOL/POW%5D">1990HOL/POW</a>] in <a
+ href="gm_phase.html">Phase</a>, <a href="gm_profil.html">Profile</a>
 and
 <a href="gm_syseq.html">SysEq</a> definitions, wherever possible. <br>
 &nbsp; </p>
@@ -104,7 +120,8 @@ data and stoichiometry of the species, whereas <tt>Page 2</tt> shows
 configuration flags and optional arrays with empirical coefficients.
 Icon buttons and menu commands in "DComp" window are the same as in
 other
-module windows (see <a href="g_miscel.html">g_miscel.html</a> and <a href="gt_howto.html">gt_howto.html</a>). They provide all
+module windows (see <a href="g_miscel.html">g_miscel.html</a> and <a
+ href="gt_howto.html">gt_howto.html</a>). They provide all
 functionality
 necessary for maintaining, cleaning and extending the database. <br>
 &nbsp; </p>
@@ -120,7 +137,8 @@ in the data field). <br>
 &nbsp; </p>
 <p>Please, note that 0 (zero) is a meaningful number in GEM-Selektor
 thermodynamic database. If data is not known then an "Empty" value has
-to be entered (back apostrophe ` in this version). The <tt><a href="#PrTr_0">PrTr</a></tt>
+to be entered (back apostrophe ` in this version). The <tt><a
+ href="#PrTr_0">PrTr</a></tt>
 field contains reference pressure and temperature (1 bar and 25 <sup>o</sup>C
 by default). One or more bibliographic references to sources of data
 are usually specified in <tt><a href="#dSDref">dSDref</a></tt> list;
@@ -139,13 +157,16 @@ field shows temperature range (in centigrade) of applicability of&nbsp;
 <tt><a href="#aiCpT_0">aiCpT</a>&nbsp;</tt> coefficients. The first
 three non-zero coefficients correspond to Majer-Kelly equation,&nbsp;
 the first five non-zero coefficients - to Haas-Fisher equation,
-together covering most of published databases [see <a href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>]. More than one
+together covering most of published databases [see <a
+ href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>]. More than one
 equation can be specified for one mineral having phase transitions;
 then
 on remake of DComp record, one has to provide a required number of
 columns
-to be created in the <tt><a href="#aiCpT_0">aiCpT</a> </tt>and<tt><a href="#TC_int_0">TCint</a></tt> data objects. Compressibility /
-expandability data can also be entered, either directly into&nbsp; <tt><a href="#BetAlp_0">BetAlp</a>&nbsp;</tt> fields, or as optional
+to be created in the <tt><a href="#aiCpT_0">aiCpT</a> </tt>and<tt><a
+ href="#TC_int_0">TCint</a></tt> data objects. Compressibility /
+expandability data can also be entered, either directly into&nbsp; <tt><a
+ href="#BetAlp_0">BetAlp</a>&nbsp;</tt> fields, or as optional
 coefficients of&nbsp; <i>V<sup>0&nbsp;</sup></i> = <i>f&nbsp; </i>(<i>T,
 P&nbsp; </i>)&nbsp; equation (<tt><a href="#ai_Vtp_0">ai_Vtp</a></tt>
 data object). <br>
@@ -154,7 +175,8 @@ data object). <br>
 thermodynamic calculations, is defined by the <tt><a href="#TPcMod_0">TPcMod</a></tt>
 codes (see <tt>Page 2</tt>&nbsp; of the "DComp" window) set up during
 remake/create of a DComp record.&nbsp; For instance, the <tt>"CSC"</tt>
-method codes (most common for minerals) tell that the <a href="theortdb.html">standard integration</a> over temperature
+method codes (most common for minerals) tell that the <a
+ href="theortdb.html">standard integration</a> over temperature
 interval <i>Tr&nbsp;&nbsp; </i>to<i>&nbsp; T</i>&nbsp;&nbsp; using <i>Cp<sup>0</sup>&nbsp;</i>
 = <i>f&nbsp; </i>(<i>T</i>) equation coefficients will be performed
 while keeping standard molar volume
@@ -176,7 +198,8 @@ differences, however. First, molar volume of an ideal gas changes
 strongly with temperature and pressure according to <i>PV&nbsp;</i> = <i>nRT</i>&nbsp;
 equation. Second, at pressures greater than a few bars, most gases do
 not behave
-ideally and at elevated <i>T, P</i>&nbsp; do not mix ideally (see [<a href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>] for more
+ideally and at elevated <i>T, P</i>&nbsp; do not mix ideally (see [<a
+ href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>] for more
 detail).&nbsp; In Selektor codes, a reasonable compromise is achieved
 by applying the "Correspondent States Theory" to calculate fugacities
 of individual pure gases a&nbsp; <i>T,P</i>&nbsp;&nbsp; of interest
@@ -191,21 +214,27 @@ is created automatically upon opening the <a href="gm_profil.html">system
 profile</a>. <br>
 &nbsp; </p>
 <p>A third form of DComp data format is used for aqueous ions and
-complexes from SUPCRT92-98 datasets [<a href="g_litref.html#%5B1992JOH/OEL%5D">1992JOH/OEL</a>;
+complexes from SUPCRT92-98 datasets [<a
+ href="g_litref.html#%5B1992JOH/OEL%5D">1992JOH/OEL</a>;
 <a href="g_litref.html#%5B1997SHO/SAS%5D">1997SHO/SAS</a>]. The
 increments to standard-reference partial molal properties for aqueous
 species are calculated from <i>Tr, Pr</i>&nbsp;&nbsp;&nbsp; to
 elevated <i>T</i>&nbsp; &lt; 1000 <sup>o</sup>C and <i>P</i>&nbsp;
 &lt; 5000 bar using revised HKF
-EoS (Helgeson-Kirkham-Flowers equation of state, [<a href="g_litref.html#%5B1981HEL/KIR%5D">1981HEL/KIR</a>;<a href="g_litref.html#%5B1997SHO/SAS%5D">1997SHO/SAS</a>; <a href="g_litref.html#%5B1992BOR/SHV%5D">1992BOR/SHV</a>] ). All the
-necessary subroutines from the published SUPCRT92 source code [<a href="g_litref.html#%5B1992JOH/OEL%5D">1992JOH/OEL</a>] were
+EoS (Helgeson-Kirkham-Flowers equation of state, [<a
+ href="g_litref.html#%5B1981HEL/KIR%5D">1981HEL/KIR</a>;<a
+ href="g_litref.html#%5B1997SHO/SAS%5D">1997SHO/SAS</a>; <a
+ href="g_litref.html#%5B1992BOR/SHV%5D">1992BOR/SHV</a>] ). All the
+necessary subroutines from the published SUPCRT92 source code [<a
+ href="g_litref.html#%5B1992JOH/OEL%5D">1992JOH/OEL</a>] were
 translated
 from fortran to C/C++ and built into the Selektor-A and then the
 GEM-Selektor
 code. In addition to input standard-state properties <i>G<sup>0</sup></i>,<i>H<sup>0</sup></i>
 and <i>S<sup>0</sup></i> at <i>Tr, Pr </i>,&nbsp; calculations with
 the HKF
-EoS require as input seven empirical coefficients kept in the <tt><a href="#aiHKF_0">ai_HKF</a></tt> optional vector (allocated when the
+EoS require as input seven empirical coefficients kept in the <tt><a
+ href="#aiHKF_0">ai_HKF</a></tt> optional vector (allocated when the
 first
 three of&nbsp; <tt><a href="#TPcMod_0">TPcMod</a></tt> codes are set
 to <tt>"HKF"</tt>
@@ -213,13 +242,18 @@ on remake, see <tt>Page 2</tt> of the "DComp" window). <br>
 &nbsp; </p>
 <p>As an example, pick up a DComp record keyed <tt>"a:WS+6:SO4-2:sa0:"</tt>
 which keeps the standard partial molal thermodynamic properties of
-sulfate ion. On<tt> Page 2 </tt>of "DComp" window, the <tt><a href="#aiHKF_0">ai_HKF</a></tt> vector contains <a href="theortdb.html">empirical parameters of HKF EoS</a>. SUPCRT92
+sulfate ion. On<tt> Page 2 </tt>of "DComp" window, the <tt><a
+ href="#aiHKF_0">ai_HKF</a></tt> vector contains <a
+ href="theortdb.html">empirical parameters of HKF EoS</a>. SUPCRT92
 data, taken as kernel database in
 GEM-Selektor, are consistent with the three-term Debye-Hueckel activity
-model of aqueous electrolyte [more in <a href="g_litref.html#%5B1997LAN%5D">1997LAN</a>; <a href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>]. This model
+model of aqueous electrolyte [more in <a
+ href="g_litref.html#%5B1997LAN%5D">1997LAN</a>; <a
+ href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>]. This model
 uses either common or individual (Kielland) ion size parameter(s) of
 aqueous species, which can be entered ino the <tt><a href="#ab_0">ab[0]</a></tt>
-field. Calculation of aqueous activity coefficients with <a href="theortdb.html">Debye-Hueckel equation</a> with a common third
+field. Calculation of aqueous activity coefficients with <a
+ href="theortdb.html">Debye-Hueckel equation</a> with a common third
 parameter is built into GEM-Selektor code (see <a href="gm_phase.html">Phase
 definition</a>); in this case, definition of aqueous phase is created
 automatically upon opening of the <a href="gm_profil.html">system
@@ -229,7 +263,8 @@ set explicitly in Phase records for aqueous electrolyte phase. <br>
 &nbsp; <br>
 In all cases, the stoichiometry of a dependent component is critically
 important and must be entered into the <tt><a href="#DCform">DCform</a></tt>
-field on Page 1 of "DComp" window according to <a href="g_useref.html#FORMULASYNTAX">chemical formula syntax</a>. <br>
+field on Page 1 of "DComp" window according to <a
+ href="g_useref.html#FORMULASYNTAX">chemical formula syntax</a>. <br>
 </p>
 <p>&nbsp; </p>
 <h3><a name="DC_CALCULATIONS"></a><font size="+3">1.1. DComp module
@@ -279,7 +314,8 @@ Change
 necessary fields and press "Ok" to proceed. &nbsp; <br>
 </p>
 <p> Now, you should see Page 1 of the DComp module window. The third
-record key field (species name) appears in the <a href="gm_dcomp.html#DCname"><tt>DCname</tt></a>
+record key field (species name) appears in the <a
+ href="gm_dcomp.html#DCname"><tt>DCname</tt></a>
 field; you can enhance this comment line (recommended). The second line
 (<a href="gm_dcomp.html#DCform"><tt>DCform</tt></a>) is still empty,
 but it is
@@ -287,13 +323,18 @@ obligatory to enter there the <a href="g_useref.html#FORMULA">chemical
 formula</a>
 of the new species.&nbsp; <br>
 </p>
-<p>Now, you must set up the standard molar properties in <a href="gm_dcomp.html#V0d_0"><tt>V0d[0]</tt></a>; <a href="gm_dcomp.html#G0d_0"><tt>G0d[0]</tt></a>;<a href="gm_dcomp.html#S0d_0"><tt>S0d[0]</tt></a> or&nbsp; <a href="gm_dcomp.html#H0d_0"><tt>H0d[0]</tt></a>
+<p>Now, you must set up the standard molar properties in <a
+ href="gm_dcomp.html#V0d_0"><tt>V0d[0]</tt></a>; <a
+ href="gm_dcomp.html#G0d_0"><tt>G0d[0]</tt></a>;<a
+ href="gm_dcomp.html#S0d_0"><tt>S0d[0]</tt></a> or&nbsp; <a
+ href="gm_dcomp.html#H0d_0"><tt>H0d[0]</tt></a>
 cells. Zeros are valid quantities here, and any cell with unknown data
 must be set as an EMPTY value (<tt>"---"</tt> or <tt>"`"</tt>).&nbsp;
 You
 can enter values into&nbsp; <tt><a href="gm_dcomp.html#G0d_0">G0d[0]</a></tt>
 &nbsp;and
-either <a href="gm_dcomp.html#S0d_0"><tt>S0r[0]</tt></a> or <a href="gm_dcomp.html#H0d_0"><tt>H0r[0]</tt></a>
+either <a href="gm_dcomp.html#S0d_0"><tt>S0r[0]</tt></a> or <a
+ href="gm_dcomp.html#H0d_0"><tt>H0r[0]</tt></a>
 (another must be set EMPTY and will be restored in the calculation). In
 any
 case, at least two of three parameters must be given non-EMPTY values.
@@ -347,29 +388,30 @@ Step 2 - Specific dimensions and settings<br>
 coefficients are available for more than one temperature interval.
 Default is 1, maximum 5 intervals.</li>
 </ul>
-
 <ul>
   <li>Number of &amp;phase transitions can be changed here, if
 necessary (usually one less than the number of Cp=f(T) equations).
 Default is 0, maximal 4.</li>
 </ul>
-
 <ul>
   <li>Number of &amp;EoS coefficients can be set here if certain EoS
 models for fluids will be used (default: 0). The coefficients will be
 collected automatically into Phase record.</li>
 </ul>
-&nbsp;&nbsp;&nbsp; Check here to allocate the Vm=f(P, T) vector of coefficients (reserved)<br>
+&nbsp;&nbsp;&nbsp; Check here to allocate the Vm=f(P, T) vector of
+coefficients (reserved)<br>
 <br>
 <h3><a name="WZSTEP_3"></a>2.3. DComp Wizard Step 3<br>
 </h3>
 <ul>
-  <li>Set here the number of links to bibliography SDref records (default 0)</li>
+  <li>Set here the number of links to bibliography SDref records
+(default 0)</li>
 </ul>
 <br>
 What will happen after you click "Finish"<br>
 <br>
-(1) Page 1 of the "DComp" window appears on the desktop. Fill out DCname field and enter the DC formula into DCform field.<br>
+(1) Page 1 of the "DComp" window appears on the desktop. Fill out
+DCname field and enter the DC formula into DCform field.<br>
 <br>
 (2) Enter the standard molar properties of the substance into V0d, G0d,
 H0d, S0d, Cp0d cells. If some of them are unknown (e.g. H0d), enter the
@@ -508,7 +550,8 @@ non-integer) to be entered by the user. For aqueous and surface species
 it is set
 automatically (upon clicking on "Calculate" icon or "Record"
 "Calculate"
-menu item) using the default- or explicitly specified <a href="gm_icomp.html#Valen">valences</a> of <a href="gm_icomp.html">independent
+menu item) using the default- or explicitly specified <a
+ href="gm_icomp.html#Valen">valences</a> of <a href="gm_icomp.html">independent
 components</a>. The following default valences are used for some common
 multivalent elements (see the respective IComp records):</dd>
   <dd> &nbsp;</dd>
@@ -527,7 +570,8 @@ fields in <a href="gm_icomp.html">IComp</a> records. There is no need
 to enter data into this field, but if you already know gram-formula
 mass of the
 species, to compare it with calculated <b><tt><font size="+1">M0</font></tt></b>
-value would be a good test of correctness for the <a href="g_useref.html#FORMULA">chemical formula</a> that you have just
+value would be a good test of correctness for the <a
+ href="g_useref.html#FORMULA">chemical formula</a> that you have just
 typed into the <tt><font size="+1"><a href="#DCform">DCform</a></font></tt>
 field.&nbsp;</dd>
   <dd> &nbsp; &nbsp;</dd>
@@ -558,7 +602,8 @@ EoS).</dd>
   <dt> <a name="V0d_1"></a><b><tt><font size="+2">V0d[1]</font></tt></b>-
 Uncertainty of standard molar (partial molal) volume</dt>
   <dd> &nbsp;</dd>
-  <dd> Absolute uncertainty of <i>V<sup>0</sup></i>&nbsp; value (see <tt><font size="+1"><a href="#V0d_0">V0d[0]</a></font></tt> cell),&nbsp; if
+  <dd> Absolute uncertainty of <i>V<sup>0</sup></i>&nbsp; value (see <tt><font
+ size="+1"><a href="#V0d_0">V0d[0]</a></font></tt> cell),&nbsp; if
 known, must be entered by user in the same units of measurement
 as&nbsp; <i>V<sup>0</sup></i>&nbsp; . If unknown, put an EMPTY value
 ("---").</dd>
@@ -573,20 +618,25 @@ uncertainty propagation that will be available in the next version.</dd>
 molar (partial molal) Gibbs energy of formation of DC from IC at <i>Tr</i>
 and <i>Pr</i>.</dt>
   <dd> &nbsp;</dd>
-  <dd> The Gibbs energy&nbsp; <i>G<sup>0</sup></i>&nbsp; at <a href="#PrTr_0">reference</a> pressure&nbsp; <i>P<sub>r</sub></i>&nbsp;
+  <dd> The Gibbs energy&nbsp; <i>G<sup>0</sup></i>&nbsp; at <a
+ href="#PrTr_0">reference</a> pressure&nbsp; <i>P<sub>r</sub></i>&nbsp;
 and temperature&nbsp; <i>T<sub>r</sub></i>&nbsp;&nbsp; must always be
-entered by the user in units of measurement defined by the code in <tt><font size="+1"><a href="#DCset_1">DCset[1]</a></font></tt> cell, if one of
+entered by the user in units of measurement defined by the code in <tt><font
+ size="+1"><a href="#DCset_1">DCset[1]</a></font></tt> cell, if one of
 the two related values - either&nbsp; <i>H<sup>0&nbsp;&nbsp;</sup></i>
 or&nbsp; <i>S<sup>0&nbsp;&nbsp; </sup></i>-&nbsp; is unknown (i.e.
-the <tt><font size="+1"><a href="#H0d_0">H0d[0]</a></font></tt> or <tt><font size="+1"><a href="#S0d_0">S0d[0]</a></font></tt> field will contain
+the <tt><font size="+1"><a href="#H0d_0">H0d[0]</a></font></tt> or <tt><font
+ size="+1"><a href="#S0d_0">S0d[0]</a></font></tt> field will contain
 "Empty value"). Remember that 0 (zero) is regarded as a valid
 (non-empty) value for thermodynamic properties!</dd>
   <dd> &nbsp;</dd>
   <dd> If both <i>H<sup>0&nbsp;&nbsp;</sup></i> and&nbsp; <i>S<sup>0&nbsp;</sup></i>values
-are known (non-empty) and you entered&nbsp; "Empty value" into this (<tt><font size="+1">G0d[0]</font></tt>) field then (upon clicking on "Calculate"
+are known (non-empty) and you entered&nbsp; "Empty value" into this (<tt><font
+ size="+1">G0d[0]</font></tt>) field then (upon clicking on "Calculate"
 icon or "Record" "Calculate" menu item) the value of <i>G<sup>0</sup></i>&nbsp;
 will be calculated automatically from <i>H<sup>0&nbsp;&nbsp;</sup></i>
-and&nbsp; <i>S<sup>0&nbsp; </sup></i>using the&nbsp; <a href="theortdb.html#GHS_DC">GHS_DC()</a>&nbsp; algorithm.</dd>
+and&nbsp; <i>S<sup>0&nbsp; </sup></i>using the&nbsp; <a
+ href="theortdb.html#GHS_DC">GHS_DC()</a>&nbsp; algorithm.</dd>
   <dd> &nbsp;</dd>
   <dd> If all three valid numbers&nbsp; <i>G<sup>0</sup></i>&nbsp; <i>H<sup>0</sup></i>&nbsp;
 and <i>S<sup>0</sup></i>&nbsp; were entered then (upon clicking on
@@ -597,7 +647,8 @@ algorithm and compared to <i>H<sup>0 </sup></i>. You will get a
 warning message that three values are inconsistent, if absolute
 difference&nbsp; ¦<i>H*</i> -&nbsp; <i>H<sup>0&nbsp;</sup></i>
 ¦&nbsp; exceeds&nbsp; 40&nbsp; J/mol. If this happens, check all
-three entered values - maybe one of them is misprinted, and check also <a href="g_useref.html#FORMULA">chemical formula</a>
+three entered values - maybe one of them is misprinted, and check also <a
+ href="g_useref.html#FORMULA">chemical formula</a>
 (<tt><font size="+1"><a href="#DCform">DCform</a></font></tt> field)
 for stoichiometry coefficients, valences (default or explicit), and
 unit formula charge (<tt><font size="+1"><a href="#Zz">Zz</a></font></tt>
@@ -609,7 +660,8 @@ field).</dd>
 -
 Uncertainty of standard molar (partial molal) Gibbs energy of formation</dt>
   <dd> &nbsp;</dd>
-  <dd> Absolute uncertainty of <i>G<sup>0</sup></i>&nbsp; value (see <tt><font size="+1"><a href="#G0d_0">G0d[0]</a></font></tt> cell),&nbsp; if
+  <dd> Absolute uncertainty of <i>G<sup>0</sup></i>&nbsp; value (see <tt><font
+ size="+1"><a href="#G0d_0">G0d[0]</a></font></tt> cell),&nbsp; if
 known, must be entered by the user in the same units of measurement
 as&nbsp; <i>G<sup>0</sup></i>&nbsp; . If unknown, put an "Empty value"
 (`)
@@ -627,16 +679,21 @@ that will be available in the next version.</dd>
 Molar (partial molal) enthalpy of formation of DC from IC at standard
 state and Tr, Pr</dt>
   <dd> &nbsp;</dd>
-  <dd> The enthalpy&nbsp; <i>H<sup>0</sup></i>&nbsp; at <a href="#PrTr_0">reference</a> pressure&nbsp; <i>P<sub>r</sub></i>&nbsp;
+  <dd> The enthalpy&nbsp; <i>H<sup>0</sup></i>&nbsp; at <a
+ href="#PrTr_0">reference</a> pressure&nbsp; <i>P<sub>r</sub></i>&nbsp;
 and temperature&nbsp; <i>T<sub>r</sub></i>&nbsp;&nbsp; must always be
-entered by the user in units of measurement defined by the code in <tt><font size="+1"><a href="#DCset_1">DCset[1]</a></font></tt> cell (e.g.,
+entered by the user in units of measurement defined by the code in <tt><font
+ size="+1"><a href="#DCset_1">DCset[1]</a></font></tt> cell (e.g.,
 J/mol), if one of the two related values - either&nbsp; <i>G<sup>0&nbsp;&nbsp;</sup></i>
-or&nbsp; <i>S<sup>0&nbsp;&nbsp; </sup></i>-&nbsp; is unknown (i.e. the<tt><font size="+1"><a href="#G0d_0">G0d[0]</a></font></tt> or <tt><font size="+1"><a href="#S0d_0">S0d[0]</a></font></tt> field will contain
+or&nbsp; <i>S<sup>0&nbsp;&nbsp; </sup></i>-&nbsp; is unknown (i.e. the<tt><font
+ size="+1"><a href="#G0d_0">G0d[0]</a></font></tt> or <tt><font
+ size="+1"><a href="#S0d_0">S0d[0]</a></font></tt> field will contain
 "Empty value"). Remember that 0 (zero) is regarded as a valid
 (non-empty) value for thermodynamic properties!</dd>
   <dd> &nbsp;</dd>
   <dd> If both <i>G<sup>0&nbsp;&nbsp;</sup></i> and&nbsp; <i>S<sup>0&nbsp;</sup></i>values
-are known (non-empty) and you entered&nbsp; "Empty value" into this (<tt><font size="+1">H0d[0]</font></tt>) field then (upon clicking on "Calculate"
+are known (non-empty) and you entered&nbsp; "Empty value" into this (<tt><font
+ size="+1">H0d[0]</font></tt>) field then (upon clicking on "Calculate"
 icon) the value of&nbsp; <i>H<sup>0</sup></i>&nbsp; will be calculated
 automatically from G<i><sup>0&nbsp;&nbsp;</sup></i> and <i>S<sup>0&nbsp;</sup></i>using
 the&nbsp; <a href="theortdb.html#GHS_DC">GHS_DC()</a>&nbsp; algorithm.</dd>
@@ -645,7 +702,8 @@ the&nbsp; <a href="theortdb.html#GHS_DC">GHS_DC()</a>&nbsp; algorithm.</dd>
     <i>H<sup>0</sup></i>&nbsp; and <i>S<sup>0</sup></i>&nbsp; have
 been entered then (upon clicking on "Calculate" icon), the enthalpy
 value <i>H*</i>&nbsp; will be found from <i>G<sup>0</sup></i>&nbsp;
-and <i>S<sup>0</sup></i>&nbsp; using the <a href="theortdb.html#GHS_DC">GHS_DC()</a>&nbsp; algorithm and compared
+and <i>S<sup>0</sup></i>&nbsp; using the <a
+ href="theortdb.html#GHS_DC">GHS_DC()</a>&nbsp; algorithm and compared
 to <i>H<sup>0 </sup></i>. You will get a warning message that three
 values are inconsistent, if absolute difference&nbsp; ¦<i>H*</i>
 - <i>H<sup>0&nbsp;</sup></i> ¦&nbsp; exceeds&nbsp; 40&nbsp;
@@ -661,7 +719,8 @@ field).</dd>
 -
 Uncertainty of standard molar (partial molal) enthalpy of formation</dt>
   <dd> &nbsp;</dd>
-  <dd> Absolute uncertainty of <i>H<sup>0</sup></i>&nbsp; value (see <tt><font size="+1"><a href="#H0d_0">H0d[0]</a></font></tt> cell),&nbsp; if
+  <dd> Absolute uncertainty of <i>H<sup>0</sup></i>&nbsp; value (see <tt><font
+ size="+1"><a href="#H0d_0">H0d[0]</a></font></tt> cell),&nbsp; if
 known, must be entered by the user in the same units of measurement
 as&nbsp; <i>H<sup>0</sup></i>&nbsp; . If unknown, put the EMPTY value
 ("`"
@@ -678,11 +737,15 @@ that will be available in the next version.</dd>
 Absolute molar (partial molal) entropy of Dependent Component at the
 standard state</dt>
   <dd> &nbsp;</dd>
-  <dd> Third-law entropy&nbsp; <i>S<sup>0</sup></i>&nbsp; at <a href="#PrTr_0">reference</a> pressure&nbsp; <i>P<sub>r</sub></i>&nbsp;
+  <dd> Third-law entropy&nbsp; <i>S<sup>0</sup></i>&nbsp; at <a
+ href="#PrTr_0">reference</a> pressure&nbsp; <i>P<sub>r</sub></i>&nbsp;
 and temperature&nbsp; <i>T<sub>r</sub></i>&nbsp;&nbsp; must always be
-entered by the user in units of measurement defined by the code in <tt><font size="+1"><a href="#DCset_1">DCset[1]</a></font></tt> cell (e.g.,
+entered by the user in units of measurement defined by the code in <tt><font
+ size="+1"><a href="#DCset_1">DCset[1]</a></font></tt> cell (e.g.,
 J/K/mol), if one of the two related values - either&nbsp; <i>G<sup>0&nbsp;&nbsp;</sup></i>
-or&nbsp; <i>H<sup>0&nbsp;&nbsp; </sup></i>-&nbsp; is unknown (i.e. the<tt><font size="+1"><a href="#G0d_0">G0d[0]</a></font></tt> or <tt><font size="+1"><a href="#H0d_0">H0d[0]</a></font></tt> field will contain
+or&nbsp; <i>H<sup>0&nbsp;&nbsp; </sup></i>-&nbsp; is unknown (i.e. the<tt><font
+ size="+1"><a href="#G0d_0">G0d[0]</a></font></tt> or <tt><font
+ size="+1"><a href="#H0d_0">H0d[0]</a></font></tt> field will contain
 "Empty value"). Remember that 0 (zero) is regarded as a valid
 (non-empty) value for thermodynamic properties!</dd>
   <dd> &nbsp;</dd>
@@ -693,7 +756,8 @@ sure that you enter&nbsp; <i>S<sup>0</sup></i>&nbsp; value into this
 field!</dd>
   <dd> &nbsp;</dd>
   <dd> If both <i>G<sup>0&nbsp;&nbsp;</sup></i> and&nbsp; <i>H<sup>0&nbsp;</sup></i>values
-are known (non-empty) and you entered&nbsp; "Empty value" into this (<tt><font size="+1">S0d[0]</font></tt>) field then (upon clicking on "Calculate"
+are known (non-empty) and you entered&nbsp; "Empty value" into this (<tt><font
+ size="+1">S0d[0]</font></tt>) field then (upon clicking on "Calculate"
 icon) the value of&nbsp; <i>S<sup>0</sup></i>&nbsp; will be calculated
 automatically from G<i><sup>0&nbsp;&nbsp;</sup></i> and <i>H<sup>0&nbsp;</sup></i>using
 the&nbsp; <a href="theortdb.html#GHS_DC">GHS_DC()</a>&nbsp; algorithm.</dd>
@@ -702,7 +766,8 @@ the&nbsp; <a href="theortdb.html#GHS_DC">GHS_DC()</a>&nbsp; algorithm.</dd>
     <i>H<sup>0</sup></i>&nbsp; and <i>S<sup>0</sup></i>&nbsp; have
 been entered then (upon clicking on "Calculate" icon), the enthalpy
 value <i>H*</i>&nbsp; will be found from <i>G<sup>0</sup></i>&nbsp;
-and <i>S<sup>0</sup></i>&nbsp; using the <a href="theortdb.html#GHS_DC">GHS_DC()</a>&nbsp; algorithm and compared
+and <i>S<sup>0</sup></i>&nbsp; using the <a
+ href="theortdb.html#GHS_DC">GHS_DC()</a>&nbsp; algorithm and compared
 to <i>H<sup>0 </sup></i>. You will get a warning message that three
 values are inconsistent, if absolute difference&nbsp; ¦<i>H*</i>
 - <i>H<sup>0&nbsp;</sup></i> ¦&nbsp; exceeds&nbsp; 40&nbsp;
@@ -720,7 +785,8 @@ field).</dd>
 Uncertainty of standard molar (partial molal) absolute entropy of
 formation</dt>
   <dd> &nbsp;</dd>
-  <dd> Absolute uncertainty of <i>S<sup>0</sup></i>&nbsp; value (see <tt><font size="+1"><a href="#S0d_0">S0d[0]</a></font></tt> cell),&nbsp; if
+  <dd> Absolute uncertainty of <i>S<sup>0</sup></i>&nbsp; value (see <tt><font
+ size="+1"><a href="#S0d_0">S0d[0]</a></font></tt> cell),&nbsp; if
 known, must be entered by the user in the same units of measurement
 as&nbsp; <i>S<sup>0</sup></i>&nbsp; . If unknown, put an EMPTY value
 ("`" or "---") here.</dd>
@@ -740,7 +806,8 @@ of DC at standard state and reference <i>Tr, Pr</i>.</dt>
 into this cell only in cases when no coefficients for <i>Cp</i> = <i>f(T)&nbsp;</i>
 equation or equation of state are allocated. Otherwise, <i>Cp<sup>0</sup></i>&nbsp;
 value at<i> T<sub>r </sub>, P<sub>r</sub>&nbsp;</i> will be calculated
-automatically upon clicking on "Calculate" icon from the&nbsp; <a href="#CPFT_COEFF"><i>Cp</i>
+automatically upon clicking on "Calculate" icon from the&nbsp; <a
+ href="#CPFT_COEFF"><i>Cp</i>
 = <i>f(T)&nbsp; </i>coefficients</a>.</dd>
   <dd> &nbsp;</dd>
   <dd> Units of measurement: the same as for <i>S<sup>0&nbsp;</sup></i>
@@ -769,7 +836,8 @@ G<sup>0</sup>,&nbsp; H<sup>0</sup>,&nbsp; S<sup>0</sup>,&nbsp; Cp<sup>0</sup></i
 of a Dependent Component. When a new DComp record is created, <i>P<sub>r</sub></i>&nbsp;&nbsp;
 is set to a default value 1 bar.</dd>
   <dd> &nbsp;</dd>
-  <dd> Units of measurement: defined by a code in <tt><font size="+1"><a href="#DCset_3">DCset[3]</a></font></tt>.</dd>
+  <dd> Units of measurement: defined by a code in <tt><font size="+1"><a
+ href="#DCset_3">DCset[3]</a></font></tt>.</dd>
   <dd> &nbsp;&nbsp;</dd>
   <dd> &nbsp;&nbsp;</dd>
   <dt> <a name="PrTr_1"></a><b><tt><font size="+2">PrTr[1]</font></tt></b>
@@ -781,7 +849,8 @@ G<sup>0</sup>,&nbsp; H<sup>0</sup>,&nbsp; S<sup>0</sup>,&nbsp; Cp<sup>0</sup></i
 of a Dependent Component. When a new DComp record is created, <i>T<sub>r</sub></i>&nbsp;&nbsp;
 is set to a default value 25 <sup>o</sup>C (298.15 K).</dd>
   <dd> &nbsp;</dd>
-  <dd> Units of measurement: defined by a code in <tt><font size="+1"><a href="#DCset_4">DCset[4]</a></font></tt>.</dd>
+  <dd> Units of measurement: defined by a code in <tt><font size="+1"><a
+ href="#DCset_4">DCset[4]</a></font></tt>.</dd>
   <dd>&nbsp; &nbsp;</dd>
   <dd> &nbsp;&nbsp;</dd>
   <dt> <a name="BetAlp_0"></a><b><tt><font size="+2">BetAlp[0]</font></tt></b>
@@ -794,7 +863,8 @@ modulus at 298 K)</font></dt>
 of a mineral compound at <i>Tr</i>&nbsp; can be entered by the user
 into this field if a <a href="theortdb.html">method of calculation</a>
 of&nbsp; <i>V<sup>0</sup></i>&nbsp;&nbsp; increment from <i>P<sub>r</sub></i>&nbsp;&nbsp;
-to&nbsp; <i>P&nbsp;&nbsp;</i> is specified ( <tt>'E'</tt> in&nbsp; <tt><a href="#TPcMod_2">TPcMod[2]</a></tt> field).</dd>
+to&nbsp; <i>P&nbsp;&nbsp;</i> is specified ( <tt>'E'</tt> in&nbsp; <tt><a
+ href="#TPcMod_2">TPcMod[2]</a></tt> field).</dd>
   <dd>Note that this version calculates compressibility for minerals
 using
 the Birch-Murnaghan EoS according to [Holland and Powell, 1998]; in
@@ -811,7 +881,8 @@ K (in kbar).&nbsp; <br>
 - Coefficient of isobaric thermal expansion <font face="Symbol">a</font></dt>
   <dd> &nbsp;</dd>
   <dd> Isobaric expansibility <font face="Symbol">a</font> (alpha) at <i>P<sub>r</sub></i>&nbsp;
-of a mineral compound can be entered by the user if a <a href="theortdb.html">method of calculation</a> of&nbsp; <i>V<sup>0</sup></i>&nbsp;&nbsp;
+of a mineral compound can be entered by the user if a <a
+ href="theortdb.html">method of calculation</a> of&nbsp; <i>V<sup>0</sup></i>&nbsp;&nbsp;
 increment from <i>T<sub>r</sub></i>&nbsp;&nbsp; to&nbsp; <i>T</i>&nbsp;
 and <i>P<sub>r</sub></i>&nbsp;&nbsp; to&nbsp; <i>P&nbsp;&nbsp;</i> is
 specified ( <tt>'E'</tt> in&nbsp; <tt><a href="#TPcMod_2">TPcMod[2]</a></tt>
@@ -838,13 +909,15 @@ equations for calculation of activity coefficients of aqueous species.
 Units of measurement: Angstroems (A).</dd>
   <dd> &nbsp;</dd>
   <dd> This value will copied into a <a href="gm_phase.html#dc_cf"><tt>dc_cf</tt></a>
-array of non-ideality parameters in the aqueous phase definition (<a href="gm_phase.html">Phase </a>record) and may be edited there if
+array of non-ideality parameters in the aqueous phase definition (<a
+ href="gm_phase.html">Phase </a>record) and may be edited there if
 aqueous
 electrolyte phase is explicitly defined. The <i>a<sup>o&nbsp;</sup></i>
 value
 from this cell will be automatically used in calculations of chemical
 equilibria,
-if the default aqueous phase is specified in the <a href="gm_project.html">modelling project</a>.</dd>
+if the default aqueous phase is specified in the <a
+ href="gm_project.html">modelling project</a>.</dd>
   <dd> &nbsp;</dd>
 </dl>
 <div style="margin-left: 40px;"> If absent from the Kielland (1936)
@@ -918,7 +991,9 @@ Holland and Powell (1998).</dd>
 parameter b (optional)</dt>
   <dd> &nbsp;</dd>
   <dd> Individual parameter b can be used in a linear term of the
-Truesdell-Jones modification or 3-term Debye- Hueckel equation (see [<a href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>] or [<a href="g_litref.html#%5B1997LAN%5D">1997LAN</a>]).</dd>
+Truesdell-Jones modification or 3-term Debye- Hueckel equation (see [<a
+ href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>] or [<a
+ href="g_litref.html#%5B1997LAN%5D">1997LAN</a>]).</dd>
   <dd> &nbsp;</dd>
   <dd> To be used, requires an explicit definition of aqueous
 electrolyte phase. If unknown, set "Empty value" here.</dd>
@@ -974,7 +1049,8 @@ boundary (in centigrade) of the respective&nbsp; <i>Cp</i>&nbsp; = <i>f</i>
 previous temperature interval must be the same as the lower boundary of
 the next interval.</dd>
   <dd> &nbsp;</dd>
-  <dd> Units of measurement: defined by the code in&nbsp; <tt><a href="#DCset_4">DCset[4]</a></tt>.</dd>
+  <dd> Units of measurement: defined by the code in&nbsp; <tt><a
+ href="#DCset_4">DCset[4]</a></tt>.</dd>
   <dd> &nbsp;</dd>
   <dd> If, during <a href="theortdb.html">thermodynamic calculations</a>,&nbsp;
 current temperature <i>T</i>&nbsp; goes outside all of the temperature
@@ -1004,7 +1080,8 @@ boundary (in centigrade) of the respective&nbsp; <i>Cp</i>&nbsp; = <i>f</i>
 previous temperature interval must be the same as the lower boundary of
 the next interval.</dd>
   <dd> &nbsp;</dd>
-  <dd> Units of measurement: defined by the code in&nbsp; <tt><a href="#DCset_4">DCset[4]</a></tt>.</dd>
+  <dd> Units of measurement: defined by the code in&nbsp; <tt><a
+ href="#DCset_4">DCset[4]</a></tt>.</dd>
   <dt> <b><i>&nbsp;</i></b></dt>
   <dt>&nbsp; <b><i><br>
     </i></b></dt>
@@ -1061,7 +1138,8 @@ and gases) then some of the <i>Cp</i> coeffcients have been entered
 incorrectly and need to be fixed.</dd>
   <dd> &nbsp;</dd>
   <dt> <a name="aiCpT_0"></a><b><tt><font size="+2">aiCpT[0]</font></tt></b>
-- Free term coefficient <i>a<sub>0&nbsp; </sub></i>of <a href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i> (<i>T</i>&nbsp;
+- Free term coefficient <i>a<sub>0&nbsp; </sub></i>of <a
+ href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i> (<i>T</i>&nbsp;
 )&nbsp; equation</a></dt>
   <dd>&nbsp; <br>
   </dd>
@@ -1159,7 +1237,8 @@ term&nbsp; of&nbsp; <a href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i>
   </dt>
 </dl>
 <dl style="margin-left: 40px;">
-  <dt>Coefficient <i>a<sub>10&nbsp; </sub></i>of&nbsp; <a href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i> (<i>T</i>&nbsp;
+  <dt>Coefficient <i>a<sub>10&nbsp; </sub></i>of&nbsp; <a
+ href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i> (<i>T</i>&nbsp;
 )&nbsp; equation</a> &nbsp;(reserved
 for future use)</dt>
 </dl>
@@ -1194,7 +1273,8 @@ http://epsc.wustl.edu/geopig]. In this version of GEMS database, units
 of measurement and order of
 the coefficients follows the original data sources:</p>
 &nbsp;
-<table style="margin-left: 40px;" border="3" cellpadding="3" cellspacing="3" width="42%">
+<table style="margin-left: 40px;" border="3" cellpadding="3"
+ cellspacing="3" width="42%">
   <tbody>
     <tr>
       <td>
@@ -1354,43 +1434,52 @@ Angstrom (reserved)
 <div style="margin-left: 40px;"><br>
 </div>
 <p style="margin-left: 40px;"> Please, note that HKF parameters must be
-entered into the fields
-below after multiplication by scale factor, for instance: c2 from
-SPRONS.DAT as follows: c2 *10^-4. </p>
+entered into the DComp fields
+below after <span style="font-weight: bold;">dividing</span> them by
+the scale factor from the above table. For instance: c2 from
+SLOP98.DAT as follows: c2 <span style="font-weight: bold;">/</span>10^-4.
+</p>
 <dl>
   <dt> <a name="aiHKF_0"></a><b><tt><font size="+2">aiHKF[0]</font></tt></b></dt>
 </dl>
-<div style="margin-left: 40px;">Empirical coefficient a1 of the <a href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+<div style="margin-left: 40px;">Empirical coefficient a1 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
 cal/bar/mol</div>
 <dl>
   <dt> <a name="aiHKF_1"></a><b><tt><font size="+2">aiHKF[1]</font></tt></b></dt>
 </dl>
-<div style="margin-left: 40px;">Empirical coefficient a2 of the <a href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+<div style="margin-left: 40px;">Empirical coefficient a2 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
 cal/mol</div>
 <dl>
   <dt> <a name="aiHKF_2"></a><b><tt><font size="+2">aiHKF[2]</font></tt></b></dt>
 </dl>
-<div style="margin-left: 40px;">Empirical coefficient a3 of the <a href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+<div style="margin-left: 40px;">Empirical coefficient a3 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
 cal*K/bar/mol</div>
 <dl>
   <dt> <a name="aiHKF_3"></a><b><tt><font size="+2">aiHKF[3]</font></tt></b></dt>
 </dl>
-<div style="margin-left: 40px;">Empirical coefficient a4 of the <a href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+<div style="margin-left: 40px;">Empirical coefficient a4 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
 cal*K/mol</div>
 <dl>
   <dt> <a name="aiHKF_4"></a><b><tt><font size="+2">aiHKF[4]</font></tt></b></dt>
 </dl>
-<div style="margin-left: 40px;">Empirical coefficient c1 of the <a href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+<div style="margin-left: 40px;">Empirical coefficient c1 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
 cal/K/mol</div>
 <dl>
   <dt> <a name="aiHKF_5"></a><b><tt><font size="+2">aiHKF[5]</font></tt></b></dt>
 </dl>
-<div style="margin-left: 40px;">Empirical coefficient c2 of the <a href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+<div style="margin-left: 40px;">Empirical coefficient c2 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
 cal*K/mol</div>
 <dl>
   <dt> <a name="aiHKF_6"></a><b><tt><font size="+2">aiHKF[6]</font></tt></b></dt>
 </dl>
-<div style="margin-left: 40px;">wB Born factor&nbsp; of the <a href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>: cal/mol</div>
+<div style="margin-left: 40px;">wB Born factor&nbsp; of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>: cal/mol</div>
 <dl>
   <dt> <a name="aiHKF_7"></a><b><tt><font size="+2">aiHKF[7]</font></tt></b></dt>
 </dl>
@@ -1414,7 +1503,8 @@ However, this parameter is currently not used in any calculations.</div>
 <dl>
   <dd>&nbsp; <br>
   </dd>
-  <dt> <font size="+3"><b><tt>aiVTP</tt></b></font><b><tt><font size="+2"> -</font></tt></b><b><font size="+1"> array of empirical
+  <dt> <font size="+3"><b><tt>aiVTP</tt></b></font><b><tt><font
+ size="+2"> -</font></tt></b><b><font size="+1"> array of empirical
 coefficients for calculating molar volume at P and T of interest<br>
     </font></b></dt>
   <dl>
@@ -1525,7 +1615,8 @@ first-order phase
 transition. The number of phase transitions has to be set in the
 counter <a href="gm_dcomp.html#DC_cnt_1">DC_cnt[1]</a> on page 2 of
 the PhaseWizard and has to be less than the number of discrete Cp
-equations that is set in the counter&nbsp;<a href="gm_dcomp.html#DC_cnt_2">DC_cnt [1]</a>.<br>
+equations that is set in the counter&nbsp;<a
+ href="gm_dcomp.html#DC_cnt_2">DC_cnt [1]</a>.<br>
   </dd>
 </dl>
 <dl>
@@ -1570,7 +1661,9 @@ curve&nbsp;of the phase transition.</dd>
   <br>
   <dt> <br>
   </dt>
-  <dt> <a name="CRIT_PAR_GAS"></a><font size="+3"><b><tt>CritPg</tt></b></font><b><font size="+1"> </font></b><font size="+1">- </font><font style="font-weight: bold;" size="+1">critical and equation of state
+  <dt> <a name="CRIT_PAR_GAS"></a><font size="+3"><b><tt>CritPg</tt></b></font><b><font
+ size="+1"> </font></b><font size="+1">- </font><font
+ style="font-weight: bold;" size="+1">critical and equation of state
 paramters of gases and fluid</font><span style="font-weight: bold;">s</span><br>
   </dt>
 </dl>
@@ -1621,7 +1714,8 @@ model.</dd>
   </dd>
   <br>
   <br>
-  <dt> <a name="Cemp_s"></a><font size="+3"><b><tt>Cemp_s</tt></b></font><b><font size="+1"> </font></b><font style="font-weight: bold;" size="+1">-
+  <dt> <a name="Cemp_s"></a><font size="+3"><b><tt>Cemp_s</tt></b></font><b><font
+ size="+1"> </font></b><font style="font-weight: bold;" size="+1">-
 empirical equation of state paramters of gases and fluids</font><br>
   </dt>
 </dl>
@@ -1671,32 +1765,38 @@ Churakov-Gottschalk fluid model, currently only used for CO2.<br>
 &nbsp; <br>
   </dd>
   <dt> <a name="Cemp_s_6"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[6]</tt></b></font></dt>
-  <dd>Additional T,P dependence parameter <span style="font-style: italic;">eps</span><i>1</i> of the
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">eps</span><i>1</i> of the
 Churakov-Gottschalk fluid model, currently only used for CO2.<br>
 &nbsp; <br>
   </dd>
   <dt> <a name="Cemp_s_7"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[7]</tt></b></font></dt>
-  <dd>Additional T,P dependence parameter <span style="font-style: italic;">eps2</span> of the Churakov-Gottschalk
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">eps2</span> of the Churakov-Gottschalk
 fluid model, currently only used for CO2.<br>
 &nbsp; <br>
   </dd>
   <dt> <a name="Cemp_s_8"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[8]</tt></b></font></dt>
-  <dd>Additional T,P dependence parameter <span style="font-style: italic;">mu1</span> of the Churakov-Gottschalk
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">mu1</span> of the Churakov-Gottschalk
 fluid model, currently only used for H2O.<br>
 &nbsp; <br>
   </dd>
   <dt> <a name="Cemp_s_9"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[9]</tt></b></font></dt>
-  <dd>Additional T,P dependence parameter <span style="font-style: italic;">mu2</span> of the Churakov-Gottschalk
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">mu2</span> of the Churakov-Gottschalk
 fluid model, currently only used for H2O.<br>
 &nbsp; <br>
   </dd>
   <dt> <a name="Cemp_s_10"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[10]</tt></b></font></dt>
-  <dd>Additional T,P dependence parameter <span style="font-style: italic;">alpha1</span> of the Churakov-Gottschalk
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">alpha1</span> of the Churakov-Gottschalk
 fluid model, currently only used for H2O.<br>
 &nbsp; <br>
   </dd>
   <dt> <a name="Cemp_s_11"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[11]</tt></b></font></dt>
-  <dd>Additional T,P dependence parameter <span style="font-style: italic;">alpha2</span> of the Churakov-Gottschalk
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">alpha2</span> of the Churakov-Gottschalk
 fluid model, currently only used for H2O.</dd>
   <dd>&nbsp; <br>
   </dd>
@@ -1736,7 +1836,8 @@ fluid model, currently only used for H2O.</dd>
 <br>
 <br>
 <dl>
-  <dt> <a name="aiNEs"></a><font size="+3"><b><tt>aiNEs</tt></b></font><b><font size="+1"> </font></b><font style="font-weight: bold;" size="+1">-
+  <dt> <a name="aiNEs"></a><font size="+3"><b><tt>aiNEs</tt></b></font><b><font
+ size="+1"> </font></b><font style="font-weight: bold;" size="+1">-
 empirical coefficients describing hydration properties of aqueous
 nonelectrolyte species</font><br>
   </dt>
@@ -1763,14 +1864,16 @@ model. This parameter describes how different the volumetric behavior
 of the aqueous nonelectrolyte species is from the pure water solvent
 (Akinfiev and Diamond 2003).</dd>
   <dd> &nbsp;</dd>
-  <dt> <a name="aiNEs_1"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font size="+2"><b><tt>[1]</tt></b></font></dt>
+  <dt> <a name="aiNEs_1"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font
+ size="+2"><b><tt>[1]</tt></b></font></dt>
   <dd>Nonelectrolyte parameter a to be used for the Akinfiev-Diamond
 model. This parameter is the constant term in the empirical function
 that describes the difference in second virial coefficient between the
 aqueous nonelectrolyte species and the water solvent. </dd>
   <dt> <br>
   </dt>
-  <dt> <a name="aiNEs_2"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font size="+2"><b><tt>[2]</tt></b></font></dt>
+  <dt> <a name="aiNEs_2"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font
+ size="+2"><b><tt>[2]</tt></b></font></dt>
   <dd>Nonelectrolyte parameter a to be used for the Akinfiev-Diamond
 model. his parameter is the temperature dependent term in the empirical
 function that
@@ -1778,16 +1881,20 @@ describes the difference in second virial coefficient between the
 aqueous nonelectrolyte species and the water solvent.</dd>
   <dt> <br>
   </dt>
-  <dt> <a name="aiNEs_3"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font size="+2"><b><tt>[3]</tt></b></font></dt>
+  <dt> <a name="aiNEs_3"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font
+ size="+2"><b><tt>[3]</tt></b></font></dt>
   <dd>(reserved)</dd>
   <dd> &nbsp;</dd>
-  <dt> <a name="aiNEs_4"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font size="+2"><b><tt>[4]</tt></b></font></dt>
+  <dt> <a name="aiNEs_4"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font
+ size="+2"><b><tt>[4]</tt></b></font></dt>
   <dd>(reserved)<br>
 &nbsp;&nbsp;</dd>
-  <dt> <a name="aiNEs_5"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font size="+2"><b><tt>[5]</tt></b></font></dt>
+  <dt> <a name="aiNEs_5"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font
+ size="+2"><b><tt>[5]</tt></b></font></dt>
   <dd>(reserved)<br>
 &nbsp;&nbsp;</dd>
-  <dt> <a name="aiNEs_6"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font size="+2"><b><tt>[6]</tt></b></font></dt>
+  <dt> <a name="aiNEs_6"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font
+ size="+2"><b><tt>[6]</tt></b></font></dt>
   <dd>(reserved)<br>
   </dd>
 </dl>
@@ -1795,7 +1902,8 @@ aqueous nonelectrolyte species and the water solvent.</dd>
   <br>
   <br>
   <br>
-  <dt> <a name="aiODc"></a><font size="+3"><b><tt>aiODc</tt></b></font><b><font size="+1"> </font></b><font style="font-weight: bold;" size="+1">-
+  <dt> <a name="aiODc"></a><font size="+3"><b><tt>aiODc</tt></b></font><b><font
+ size="+1"> </font></b><font style="font-weight: bold;" size="+1">-
 Birch-Murnaghan equation of state parameters for describing temperature
 and pressure dependence of molar volumes</font><br>
   </dt>
@@ -1817,33 +1925,41 @@ kpp.<br>
   <dd>Birch-Murnaghan equation of state parameter a1.<br>
   </dd>
   <dd> &nbsp;</dd>
-  <dt> <a name="aiODc_1"></a><font size="+2"><b><tt>aiODc</tt></b></font><font size="+2"><b><tt>[1]</tt></b></font></dt>
+  <dt> <a name="aiODc_1"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[1]</tt></b></font></dt>
   <dd>Birch-Murnaghan equation of state parameter a2. </dd>
   <dt> <br>
   </dt>
-  <dt> <a name="aiODc_2"></a><font size="+2"><b><tt>aiODc</tt></b></font><font size="+2"><b><tt>[2]</tt></b></font></dt>
+  <dt> <a name="aiODc_2"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[2]</tt></b></font></dt>
   <dd>Birch-Murnaghan equation of state parameter a3.</dd>
   <dt> <br>
   </dt>
-  <dt> <a name="aiODc_3"></a><font size="+2"><b><tt>aiODc</tt></b></font><font size="+2"><b><tt>[3]</tt></b></font></dt>
+  <dt> <a name="aiODc_3"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[3]</tt></b></font></dt>
   <dd>Birch-Murnaghan equation of state parameter a4 (reseved for
 future development of the EoS).<br>
   </dd>
   <dd> &nbsp;</dd>
-  <dt> <a name="aiODc_4"></a><font size="+2"><b><tt>aiODc</tt></b></font><font size="+2"><b><tt>[4]</tt></b></font></dt>
+  <dt> <a name="aiODc_4"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[4]</tt></b></font></dt>
   <dd>Birch-Murnaghan equation of state parameter a5 (reserved for
 future development of the EoS).<br>
 &nbsp;&nbsp;</dd>
-  <dt> <a name="aiODc_5"></a><font size="+2"><b><tt>aiODc</tt></b></font><font size="+2"><b><tt>[5]</tt></b></font></dt>
+  <dt> <a name="aiODc_5"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[5]</tt></b></font></dt>
   <dd>Birch-Murnaghan equation of state parameter kt00.<br>
 &nbsp;&nbsp;</dd>
-  <dt> <a name="aiODc_6"></a><font size="+2"><b><tt>aiODc</tt></b></font><font size="+2"><b><tt>[6]</tt></b></font></dt>
+  <dt> <a name="aiODc_6"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[6]</tt></b></font></dt>
   <dd>Birch-Murnaghan equation of state parameter dkdt.</dd>
   <dd>&nbsp;&nbsp;</dd>
-  <dt> <a name="aiODc_7"></a><font size="+2"><b><tt>aiODc</tt></b></font><font size="+2"><b><tt>[7]</tt></b></font></dt>
+  <dt> <a name="aiODc_7"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[7]</tt></b></font></dt>
   <dd>Birch-Murnaghan equation of state parameter kp.</dd>
   <dd>&nbsp;&nbsp;</dd>
-  <dt> <a name="aiODc_8"></a><font size="+2"><b><tt>aiODc</tt></b></font><font size="+2"><b><tt>[8]</tt></b></font></dt>
+  <dt> <a name="aiODc_8"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[8]</tt></b></font></dt>
   <dd>Birch-Murnaghan equation of state parameter kpp.</dd>
   <dd>&nbsp; <br>
   </dd>
@@ -1915,7 +2031,8 @@ calculation using Equation of State (EoS)</dt>
   <dd> &nbsp;</dd>
   <dd> Class code of the dependent component (DC) (taken as default
 into Phase,
-Project and SysEq definitions). Possible values: see <a href="g_useref.html#DCCLASSCODES">User's Reference</a>.</dd>
+Project and SysEq definitions). Possible values: see <a
+ href="g_useref.html#DCCLASSCODES">User's Reference</a>.</dd>
   <dd> <br>
   </dd>
   <dd> It is quite important to set DC class code correctly because the
@@ -1974,7 +2091,8 @@ of dynamic data in DCOMP record</i></b> </h3>
 optional dynamic arrays where the user can put some empirical
 coefficients or
 parameters used in various recalculations of the thermodynamic data at
-T and P different from reference Tr, Pr. <a href="g_useref.html#REMFLAGS">Possible values</a>: <br>
+T and P different from reference Tr, Pr. <a
+ href="g_useref.html#REMFLAGS">Possible values</a>: <br>
 &nbsp; </p>
   <dl>
 *&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allocate and
@@ -2007,7 +2125,8 @@ calculation of molar properties at elevated temperatures.&nbsp;</dd>
   <dd> <br>
   </dd>
   <dd> <tt><a href="#DC_cnt_1">DC_cnt[1]</a></tt> value must be set to
-number of phase transitions (and respective columns in the optional <a href="#FT_p"><tt>Ft_p</tt> array</a>), usually one less than the
+number of phase transitions (and respective columns in the optional <a
+ href="#FT_p"><tt>Ft_p</tt> array</a>), usually one less than the
 number
 of heat capacity equations <tt><a href="#DC_cnt_0">DC_cnt[0]</a></tt>.</dd>
   <dd> &nbsp;</dd>
@@ -2016,7 +2135,8 @@ of heat capacity equations <tt><a href="#DC_cnt_0">DC_cnt[0]</a></tt>.</dd>
 - Allocation flag of vector of HKF EoS coefficients (+ -)</dt>
   <dd> <br>
   </dd>
-  <dd> This flag, if switched on, will allocate the <a href="#HKF_COEFF"><tt>aiHKF</tt></a> vector.&nbsp;</dd>
+  <dd> This flag, if switched on, will allocate the <a
+ href="#HKF_COEFF"><tt>aiHKF</tt></a> vector.&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <dd> &nbsp;<br>
@@ -2148,7 +2268,8 @@ they may cause memory corruption and program crash.&nbsp; &nbsp;</dd>
 record key!</dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd>The first field of newly-created DComp record key (or the <a href="#DCset_0"><tt>DC_set[0]</tt></a> field ) contains a character
+  <dd>The first field of newly-created DComp record key (or the <a
+ href="#DCset_0"><tt>DC_set[0]</tt></a> field ) contains a character
 that
 is not one of the <a href="g_useref.html#DCPSTATECODES">phase state
 codes</a>.
@@ -2193,7 +2314,8 @@ S0 or G0 -&gt; &nbsp;&lt;value&gt;</dt>
   <dd><big><tt>&nbsp;</tt></big></dd>
   <dd>This message appears after calculation of the DComp record if all
 three
-non-empty values have been entered into <tt><a href="#G0d_0">G0d[0]</a>,<a href="#H0d_0">H0d[0]</a></tt> and <tt><a href="#S0d_0">S0d[0]</a></tt>
+non-empty values have been entered into <tt><a href="#G0d_0">G0d[0]</a>,<a
+ href="#H0d_0">H0d[0]</a></tt> and <tt><a href="#S0d_0">S0d[0]</a></tt>
 cells,
 but these are inconsistent. The -&gt; &lt;value&gt; suggests a
 consistent
@@ -2452,7 +2574,8 @@ send a bug report.&nbsp;</dd>
 messages from the
 Formula
 Parser</font></h3>
-<p>These error messages may appear during processing of <a href="g_useref.html#FORMULA">chemical formulae</a> in calculations of
+<p>These error messages may appear during processing of <a
+ href="g_useref.html#FORMULA">chemical formulae</a> in calculations of
 DComp,
 ReacDC, Compos records, as well as during creation or opening of
 modelling
@@ -2618,4 +2741,5 @@ is corrupt or needs to be remade.</dd>
 <br>
 <br>
 <br>
-</body></html>
+</body>
+</html>
