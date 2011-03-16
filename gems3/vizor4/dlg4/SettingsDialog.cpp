@@ -139,7 +139,8 @@ void SettingsDialog::CmHelpGenerate()
 //                    app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/qcollectiongenerator");    // expected to work
                     app += QLatin1String("qcollectiongenerator");
             #else
-                    app += QLatin1String("qcollectiongenerator");
+                   app = QLatin1String(getenv("HOME"));
+                   app += QLatin1String("/Gems3-app/qcollectiongenerator");
             #endif
             #else    // windows
                     app += QLatin1String("qcollectiongenerator.exe");
