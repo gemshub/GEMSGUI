@@ -333,21 +333,21 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
           switch( RetCode )
           {
                 case BAD_GEM_AIA:
-                      err_msg += "Bad GEM result using simplex IA";
+                      err_msg += "Bad GEM result using LPP AIA";
                       break;
                 case  ERR_GEM_AIA:
-                      err_msg += "GEM calculation error using simplex IA";
+                      err_msg += "GEM calculation error using LPP AIA";
                       break;
                 case  BAD_GEM_SIA:
-                      err_msg += "Bad GEM result using previous solution IA";
+                      err_msg += "Bad GEM result using SIA";
                       break;
                 case  ERR_GEM_SIA:
-                      err_msg += "GEM calculation error using previous solution IA";
+                      err_msg += "GEM calculation error using SIA";
                       break;
-               case  T_ERROR_GEM:  err_msg +=  "Terminal error in GEMIPM2 module";
+               case  T_ERROR_GEM:  err_msg +=  "Terminal error in GEMS3K module";
           }
           if( mtp->PvMO != S_OFF && diffile )
-          {  fprintf( diffile, "\nError reported from GEMIPM2 module\n%s\n",
+          {  fprintf( diffile, "\nError reported from GEMS3K module\n%s\n",
                     err_msg.c_str() );
           }
 #ifndef IPMGEMPLUGIN
@@ -579,7 +579,7 @@ mtp->TimeGEM = 0.0;
      }
 //
    // Calculation of chemical equilibria in all nodes at the beginning
-   // with the Simplex initial approximation
+   // with the LPP AIA
      CalcIPM( NEED_GEM_AIA, nStart, nEnd, diffile );
    }
    mtp->iStat = AS_READY;

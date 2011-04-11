@@ -54,7 +54,7 @@ const double R_CONSTANT = 8.31451,
 
 SPP_SETTING pa_ = {
     "GEM-Selektor v3.0u-1707.496: Numerical controls & thresholds",
-    {   // Typical default set (29.11.2010) new PhaseSelection( logSI )
+    {   // Typical default set (29.11.2010) new PSSC( logSI )
         2,  /* PC */  2,     /* PD */   -4,   /* PRD */
         1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
         1, /* DT */     10,   /* PLLG */   1,  /* PE */  7000, /* IIM */
@@ -573,13 +573,6 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
           break;
     }
 
-    // get scaling to constant mass of internal system
-    //float inMass = 1., scFactor =1.;
-    //inMass = vfGetDouble( par, "Scaling to constant internal mass of the system",
-    //  "Internal mass (kg)", inMass, 1e-5, 1e5, 4 );
-    //if( na->cMs() > 1e-20 )
-    //    scFactor = inMass / na->cMs();
-    // setup from dataBR to Multi
     na->unpackDataBr( true );
     delete na;
 
@@ -646,14 +639,6 @@ TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
     for( i=0; i< aList.GetCount(); i++)
         TDualTh::pm->DeleteRecord(aList[i].c_str());
 
-    /*   aList.Clear();    //MASTRANSP
-       anR.Clear();
-       rt[RT_].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-               K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-       rt[RT_].GetKeyList( pkey, aList, anR );
-       for( i=0; i< aList.GetCount(); i++)
-        aMod[RT_].DeleteRecord(aList[i].c_str());
-    */
     rt[nRT].Del( Rnum );
 }
 
@@ -704,47 +689,16 @@ void TProfil::CheckMtparam()
 
 }
 
-
-/*// Load Thermodynamic data from Lookup Arrays
-void TProfil::CheckMtparamFromLookup()
-{
-
-  if( fabs( tpp->T - pmp->TCc ) > 1.e-10 ||
-      fabs( tpp->P - pmp->Pc ) > 1.e-9 )
-   { // load new MTPARM on T or P
-//      mtparm->LoadMtparmLookup( pmp->TCc, pmp->Pc );
-      pmp->pTPD = 0;
-   }
-
-}
-
-// Build Lookup Arrays internal data
-void TProfil::BuildLookupArrays( )
-{
-
-//  mtparm->LoadLookup( pmp->Tai, pmp->Pai );
-
-}
-*/
-
-
 // GEM IPM calculation of equilibrium state in MULTI
-// without test changings in system
+// without testing changes in system definition
 //
-double TProfil::calcMulti( long int& NumPrecLoops, long int& NumIterFIA, long int& NumIterIPM )
+double
+TProfil::ComputeEquilibriumState( long int& NumPrecLoops, long int& NumIterFIA, long int& NumIterIPM )
 {
   TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
   calcFinished = false;
 
-  /*if( fabs( tpp->curT - pmp->TCc ) > 1.e-10 ||
-         fabs( tpp->curP - pmp->Pc ) > 1.e-10 )
-   { // load new MTPARM on T or P
-      mtparm->LoadMtparm( pmp->TCc, pmp->Pc );
-      pmp->pTPD = 0;
-   }
-  */
-
-  multi->calcEqustat( 0, NumIterFIA, NumIterIPM );
+  multi->CalculateEquilibriumState( 0, NumIterFIA, NumIterIPM );
 
   calcFinished = true;
   STat->setCalcFlag( true );
@@ -754,7 +708,7 @@ double TProfil::calcMulti( long int& NumPrecLoops, long int& NumIterFIA, long in
 }
 
 // Setup of flags for MULTY remake
-// pNP,  //Mode of FIA selection: 0-auto-SIMPLEX,1-old eqstate,-1-user's choice
+// pNP,  //Mode of FIA selection: 0-LPP AIA, 1-old eqstate, -1-user's choice
 // pESU, // Unpack old eqstate from EQSTAT record?  0-no 1-yes
 // pIPN, // State of IPN-arrays:  0-create; 1-available; -1 remake
 // pBAL, // State of reloading CSD:  1- BAL only; 0-whole CSD
@@ -772,7 +726,7 @@ void TProfil::PMtest( const char *key )
     }
     else pmp->pESU = 0;
 
-   // no old solution => must be simplex
+   // no old solution => must be LPP AIA
    if( pmp->pESU == 0 )
         pmp->pNP = 0;
 
@@ -797,23 +751,7 @@ void TProfil::PMtest( const char *key )
     }
 
     multi->MultiKeyInit( key );
-    /* Get V, P and T from SysEq record key
-    gstring s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME,MAXPTN);
-    V = atof(s.c_str());
-    s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);
-    P = atof(s.c_str());
-    s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN+MAXPTN,MAXPTN);
-    T = atof(s.c_str());
 
-    //if( fabs ( pmp->VE - V ) > 1.e-10 )
-    //    pmp->VE = V;
-    if( fabs( tpp->curT - T ) > 1.e-10 ||
-            fabs( tpp->curP - P ) > 1.e-10 )
-    { // load new MTPARM on T or P
-        mtparm->LoadMtparm( T, P );
-        pmp->pTPD = 0;
-    }
-    */
 }
 
 
@@ -869,10 +807,10 @@ short TProfil::BAL_compare()
            Gg = syp->Guns[jj];    // User-set increment to G0 from project system
        if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
            Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK
-       pGo = multi->Cj_init_calc( Go+Gg+Ge, j, k );
+       pGo = multi->DC_ConvertGj_toUniform_cj( Go+Gg+Ge, j, k );
        if( fabs( pGo - pmp->G0[j] )* pmp->RT >= 0.001 )
        {
-           pmp->pTPD = 1;   // Fixed here to invoke CompG0Load() DK 16.05.2008
+           pmp->pTPD = 1;   // Fixed here to invoke DC_LoadThermodynamicData() DK 16.05.2008
     	   break;   // GEX or Guns has changed for this DC in the system definition
        }
  //      if( syp->PGEX != S_OFF )
@@ -896,8 +834,6 @@ short TProfil::BAL_compare()
     if( j < je )
        return 1;
   }  // k
- //   if( pmp->FIat > 0 )  //      Adsorption models - always
- //      return 1;
 
     for( k=0; k<pmp->FI; k++ )
     {

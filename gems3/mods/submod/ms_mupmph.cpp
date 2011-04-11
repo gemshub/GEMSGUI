@@ -130,7 +130,7 @@ NEXT2:
         ConvertDCC(); // Loading generic species codes
 
    if(  !pmp->pBAL )
-       pmp->pTPD = 1;//min(pmp->pTPD, 1); // CompG0Load();
+       pmp->pTPD = 1; // DC_LoadThermodynamicData();
 
     // Tests on integrity of CSD can be added here
      pmp->pBAL = 2;
@@ -741,12 +741,6 @@ PARLOAD: if( k < syp->Fis )
             }
         else pmp->YOF[k] = 0.0;
 
-//        for( j=jb; j<je; j++ )
-//        {
-//            G = Cj_init_calc( pmp->G0[j], j, k );   // Commented out 07.08.2008 DK
-//             Calculation of normalized values of G0 function
-//            pmp->G0[j] = G;
-//        } /* j */
         // test of kinetic constraints (units of measurement!)
         if( pmp->PLIM && k >= pmp->FIs )
         { /* restrictions set! */

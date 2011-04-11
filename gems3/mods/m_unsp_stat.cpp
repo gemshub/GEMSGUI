@@ -63,7 +63,7 @@ void TUnSpace::unsp_eqkey()
      pmu->TCc = usp->Tc;
      pmu->Pc = usp->Pc;
          
-     calculation_time = TProfil::pm->calcMulti( NumPrecLoops, NumIterFIA, NumIterIPM );
+     calculation_time = TProfil::pm->ComputeEquilibriumState( NumPrecLoops, NumIterFIA, NumIterIPM );
     //TProfil::pm->CalcEqstat( false ); // 16/02/2007
 // Later: to implement account for calculation time and numbers of iterations/loops
 
@@ -83,7 +83,7 @@ void TUnSpace::unsp_eqkey()
        if( syu->Guns )  // This is used mainly in UnSpace calculations
            Gg = syu->Guns[jj];    // Increment to G0 set by UnSpace
 // Here we determine what was the initial syp->GEX[jj] increment
-       pGo = TProfil::pm->pmulti->Cj_init_calc( Go+Gg, j, k );
+       pGo = TProfil::pm->pmulti->DC_ConvertGj_toUniform_cj( Go+Gg, j, k );
        Ge = ( pmu->G0[j] - pGo )* pmu->RT; 
        if( TProfil::pm->syp->GEX ) // Setting Gg + Ge to syp->GEX[jj]
     	   TProfil::pm->syp->GEX[jj] = Gg + Ge;   // Ge is part of pmp->G0 since 07.03.2008 (DK)  
@@ -108,7 +108,7 @@ void TUnSpace::unsp_eqkey()
          if( syu->Guns )  // This is used mainly in UnSpace calculations
              Gg = syu->Guns[jj];    // Increment to G0 set by UnSpace
   // Here we determine what was the initial syp->GEX[jj] increment
-         pGo = TProfil::pm->pmulti->Cj_init_calc( Go+Gg, j, k );
+         pGo = TProfil::pm->pmulti->DC_ConvertGj_toUniform_cj( Go+Gg, j, k );
          Ge = ( pmu->G0[j] - pGo ) * pmu->RT; 
          if( TProfil::pm->syp->GEX ) // Setting Gg + Ge to syp->GEX[jj]
       	   TProfil::pm->syp->GEX[jj] = Ge;   

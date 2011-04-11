@@ -252,26 +252,26 @@ o_pads    Pa_DS  D_ 1 1    N "Cutoff min. amount of stable phase in GEM IPM prim
 o_padk    Pa_DK  D_ 1 1    N "Tolerance threshold for the Dikin's criterion of IPM convergence { default 5e-7; 1e-7 to 1e-5 }"
 o_padf    Pa_DF  D_ 1 2    N "Tolerance DF for Karpov's criterion (Fa > DF) for a lost stable phase to be inserted { 0.01 }_
  Tolerance for Karpov's criterion (Fa < -DFM) for a present unstable phase to be eliminated { 0.1 } "
-o_padfy   Pa_DFY D_ 1 7    N "Insertion mole amount for water-solvent at Simplex()->EnterFeasibleDomain() bridge { 1e-6 }_
- Insertion mole amount for aqueous species at Simplex()->EnterFeasibleDomain() bridge { 1e-6 }_
- Insertion mole amount for species of ideal solutions at Simplex()->EnterFeasibleDomain() bridge { 1e-6 }_
- Insertion mole amount for a major species in a solution at Simplex()->EnterFeasibleDomain()bridge { 1e-6 }_
- Insertion mole amount for a junior species in a solution at Simplex()->EnterFeasibleDomain() bridge{ 1e-6 }_
- Insertion mole amount for a single-component phase at Simplex()->EnterFeasibleDomain() bridge { 1e-6 }_
- Insertion mole amount for a single-component phase in PhaseSelect() { 1e-7 } "
+o_padfy   Pa_DFY D_ 1 7    N "Insertion mole amount for water-solvent at Simplex()->MBR() bridge { 1e-6 }_
+ Insertion mole amount for aqueous species at Simplex()->MBR() bridge { 1e-6 }_
+ Insertion mole amount for species of ideal solutions at Simplex()->MBR() bridge { 1e-6 }_
+ Insertion mole amount for a major species in a solution at Simplex()->MBR() bridge { 1e-6 }_
+ Insertion mole amount for a junior species in a solution at Simplex()->MBR() bridge{ 1e-6 }_
+ Insertion mole amount for a single-component phase at Simplex()->MBR() bridge { 1e-6 }_
+ Insertion mole amount for a single-component phase in PhaseSelection() { 1e-7 } "
 o_padb    Pa_DB  D_ 1 1    N "Cutoff minimum mole amount of Independent Component in the b vector { 1e-17 } "
 o_paag    Pa_AG  D_ 1 1    N "Smoothing parameter 1 for non-ideal primal chemical potential increments { default 1.0; -1 to +1 } "
 o_padgc   Pa_DGC D_ 1 1    N "Smoothing parameter 2 (exponent in smoothing function for non-ideal potentials { default -0.5 or 0.07; -1 to +1 } "
-o_pagan   Pa_GAN D_ 1 3    N "Initial activity coefficient value for major species in a solution phase at Simplex()  { 1 }_
- Initial activity coefficient value for minor species in a solution phase at Simplex() { 1000 }_
- IPM-2 mass balance accuracy factor in EnterFeasibleDomain()  { 0.001 } "
+o_pagan   Pa_GAN D_ 1 3    N "Initial activity coefficient value for major species in a solution phase at LPP AIA  { 1 }_
+ Initial activity coefficient value for minor species in a solution phase at LPP AIA { 1000 }_
+ IPM-2 mass balance accuracy factor in MassBalanceRefinement()  { 0.001 } "
 o_padns   Pa_DNS D_  1 1   N "Default reference density of surface species at standard state { 12.05 nm-2 } "
 o_paxmin  Pa_XMI D_  1 5   N "Cutoff mole amount of water-solvent for aqueous phase elimination{ 1e-5 }_
  Cutoff mole amount of solid sorbent for sorption phase elimination { 1e-7 }_
  Cutoff mole amount for elimination of solute (sorbate) species { 1e-24 }_
  Cutoff mole amount for elimination of solution phases other than aqueous { default 1e-14, usually set the same as as Pa_DS }_
  Cutoff value of effective molal ionic strength to disable aq-gamma calculation { default 3e-5; 1e-6 to 1e-3 } "
-o_paeps   Pa_EPS D_  1 2   N "Tolerance of the Simplex() LP solver convergence{ default 1e-10; 1e-6 to 1e-11 }_
+o_paeps   Pa_EPS D_  1 2   N "Tolerance of the SolveSimplexLPP() convergence { default 1e-10; 1e-6 to 1e-11 }_
  Tolerance for calculation of surface activity coefficient terms for surface species { default 1e-3; 1e-6 to 1e-2 } "
 o_padkin  Pa_DKI D_  1 1   N "Tolerance for non-trivial metastability restrictions on amounts of dependent components, moles { 1e-7 } "
 # Default numeric parameters
@@ -794,7 +794,7 @@ wnData.Add( new pagesSetupData("xp_", o_syphm)); // A "Input quantities or conce
 //o_sypul   pul_   F_  -3 1  A "Vector of upper metastability restrictions to quantities of phases (reserved) "
 //o_sypll   pll_   F_  -3 1  A "Vector of lower metastability restrictions to quantities of phases (reserved) "
 wnData.Add( new pagesSetupData("Yof_", o_syyof)); // A "Input Phase - aqueous interface energy parameter, J/g "
-//o_sylngmf lnGmf_ F_  -3 1  J "DC activity coefficients for Simplex initial approximation (in ln scale) "
+//o_sylngmf lnGmf_ F_  -3 1  J "DC activity coefficient constants for LPP AIA (in ln scale) "
 wnData.Add( new pagesSetupData("Aalp_", o_syaalp)); // A "Specific surface area A of phase, m2/g "
 wnData.Add( new pagesSetupData("L1_", o_syl1)); //"Number of Dependent Components selected within each phase "
 // adsorption
@@ -846,7 +846,7 @@ wnData.Add( new pagesSetupData("Sigm_[][1]", o_sysigm,1)); //| Specific surface 
     //o_wi_t0   T0     D_  1 1   N "reserved"
     //o_wi_ve   Vexpl  D_  1 1   N "reserved"
     scalarsList.Add( new pagesSetupData("It",o_wo_it)); //o_wo_it   It     L_ 1 1    N "Number of completed IPM algorithm iterations "
-    scalarsList.Add( new pagesSetupData("ItEfd", o_wo_it_efd)); // "Number of performed iterations in  EnterFeasibleDomain()"
+    scalarsList.Add( new pagesSetupData("ItEfd", o_wo_it_efd)); // "Number of performed iterations in  MassBalanceRefinement()"
     scalarsList.Add( new pagesSetupData("ItIpm", o_wo_it_ipm)); // "Number of performed iterations in  main IPM descent algorithm"
     scalarsList.Add( new pagesSetupData("Psi_DK[0]",o_wo_psi,0)); // "Current value for the Dikin's criterion of IPM convergence (CD)_
     scalarsList.Add( new pagesSetupData("Psi_DK[1]",o_wo_psi,1)); // Threshold value for the Dikin's criterion of IPM convergence (T_CD) "
@@ -867,13 +867,13 @@ scalarsList.Add( new pagesSetupData("FI[1]",o_wo_fdim,1)); // Number of multi-co
 scalarsList.Add( new pagesSetupData("FI[2]",o_wo_fdim,2)); // Number of sorption phases present in non-zero quantities at equilibrium state "
 
 //o_wi_mode pm_Mod L_ 1 4    N "PE - flag of electroneutrality constraint { 0 1 }_
-// PD - mode of calling GammaCalc() { 0 1 2 3 4 }_
+// PD - mode of calling CalculateActivityCoefficients() { 0 1 2 3 4 }_
 // PV - flag of system volume constraint { 0 1 }_
 // PU - flag of kinetic restrictions to DC quantities x_j { 0 1 }"
-//o_wo_ipar pmIpar L_  1 17  N "GammaCalc() return code: 0 (OK) or 1 (error)_
+//o_wo_ipar pmIpar L_  1 17  N "CalculateActivityCoefficients() return code: 0 (OK) or 1 (error)_
 // Number of Selekt2() procedure loops_
 // Indicator of the same second assignment in Selekt2()_
-// Mode of FIADE() operation: 0-auto-SIMPLEX, 1-old IPM result, -1-raised old IPM result_
+// Mode of FIADE() operation: 0-LPP AIA, 1-old speciation SIA, -1-raised old speciation SIA_
 // Flag to expand the currently loaded SysEq record into Multi data structure_
 // Flag to control binary data for Phase math script calculations_
 // Flag to control re-loading CSD data into Multi_
@@ -884,9 +884,9 @@ scalarsList.Add( new pagesSetupData("FI[2]",o_wo_fdim,2)); // Number of sorption
 // Max. number of surface types on sorption phase ( 6 )_
 // IPM return code: 0 - continue;  1 - converged_
 // internal DebyeHueckel3() indicator_
-// is - index of IC for Phase math scripts ( GammaCalc() )_
-// js - index of DC for Phase math scripts ( GammaCalc() )_
-// Next - continue variable for Phase math scripts ( GammaCalc() )"
+// is - index of IC for Phase math scripts ( CalculateActivityCoefficients() )_
+// js - index of DC for Phase math scripts ( CalculateActivityCoefficients() )_
+// Next - continue variable for Phase math scripts ( CalculateActivityCoefficients() )"
 //o_wi_mol  bMol   D_  1 1   N "reserved"
 //o_wi_gwat wMol   D_  1 1   N "reserved"
 //o_wi_ymet yMet   D_  1 1   N "reserved"
@@ -973,7 +973,7 @@ wnData.Add( new pagesSetupData("vol", o_wio_vol)); //o_wio_vol vol    D_  -3 1  
 //o_wio_cp0 cp0    D_  -3 1  j "DC molar Cp, reserved"
 //o_wio_cv0 cv0    D_  -3 1  j "DC molar Cv, reserved"
 // wnData.Add( new pagesSetupData("Pparc", o_wi_pparc)); //  j "Partial pressure constraints for DC, bar (total P by default)"
-//o_wi_lngmf lngmf D_  -3 1  j "Ln activity coefficients for Simplex initial approximation only "
+//o_wi_lngmf lngmf D_  -3 1  j "Ln activity coefficient constants for LPP AIA only "
 //o_wio_lngmm lngmm D_ -3 1  j "ln of DC metastability coefficients (reserved)"
 wnData.Add( new pagesSetupData("mmDC", o_wi_mm)); // j "Molar (gram-formula) masses of Dependent Components (g/mol) "
 wnData.Add( new pagesSetupData("ez", o_wi_ez)); //o_wi_ez   ez     D_  -3 1  j "Formula charges of Dependent Components "

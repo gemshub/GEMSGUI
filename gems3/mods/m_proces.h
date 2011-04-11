@@ -70,7 +70,7 @@ typedef struct
     PvNu,  // process extent Nu (+ - *)
     PvKin, // kinetic parameters vKin (+ - *)
     PvModc,// empirical parameters modC (+ - *)
-    PvR1,  // Use previous EQSTAT result (+) or SIMPLEX initial approximation(+-)
+    PvR1,  // Use previous speciation SIA (+) or LPP AIA (+-)
     PvEF   // Use empirical data for graphics
     ;
   short  // N of points controled parameters of process

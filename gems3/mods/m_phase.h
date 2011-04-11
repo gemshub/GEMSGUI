@@ -172,11 +172,10 @@ enum solmod_switches { /* indexes of keys of model solution*/
     DCE_LINK,
     MIX_TYP,
 
-    // Link state of GammaCalc() calculation of activity coefficients
+    // Link state of CalculateActivityCoefficients()
     LINK_UX_MODE,
     LINK_TP_MODE,
-    LINK_FIA_MODE,
-    LINK_PHP_MODE,
+    LINK_PP_MODE,  // LINK_PHP_MODE,
 
     // Posible modes of calculation of activity coefficients (private, public)
     SM_UNDEF = 'N',

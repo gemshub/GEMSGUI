@@ -686,7 +686,7 @@ double TProfil::CalcEqstat( bool /*prg*/)
 	pVisorImp->OpenProgress();
 #endif
 
-   calcMulti( NumPrecLoops, NumIterFIA, NumIterIPM );
+   ComputeEquilibriumState( NumPrecLoops, NumIterFIA, NumIterIPM );
 
 
    return pmp->t_elap_sec;

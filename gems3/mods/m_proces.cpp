@@ -466,7 +466,7 @@ void TProcess::set_def( int q)
 
     set_type_flags( rt[rtNum()].FldKey(9)[0] );
     memcpy( &pe[q].Pvtm, aPa->pa.PEpvc, 12 );
-pe[q].PvR1 = '-';    // simplex on   KD: temporary for process create
+pe[q].PvR1 = '-';    // AIA on:   KD: temporary for process create
     strcpy( pe[q].name,  "`" );   // Fixed for debugging
     strcpy( pe[q].notes, "`" );
 

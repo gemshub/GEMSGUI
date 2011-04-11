@@ -1,4 +1,3 @@
-
 TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems3
@@ -13,6 +12,7 @@ CONFIG		+= help
 #CONFIG		+= qmake_cache
 QT += network
 QT += sql
+QT += xml
 
 #LIBS	+= -lqd
 RESOURCES += img.qrc

@@ -234,7 +234,7 @@ void TMulti::loadData( bool newRec )
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 // Load Thermodynamic Data from MTPARM to MULTI
-void TMulti::CompG0Load()
+void TMulti::DC_LoadThermodynamicData()
 {
     long int j, jj, k, jb, je=0;
     double Go, Gg=0., Ge=0., Vv = 0.;
@@ -298,14 +298,14 @@ void TMulti::CompG0Load()
             for( j=jb; j<je; j++ )
             {
                 jj = pmp->muj[j];
-   // loading G0  - re-furbished 07.03.2008  DK
+
                 Go = tpp->G[jj]; //  G0(T,P) value taken from MTPARM
                 if( syp->Guns )  // This is used mainly in UnSpace calculations
                     Gg = syp->Guns[jj];    // User-set increment to G0 from project system
                 if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
                  	Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK
   	// !!!!!!! Insert here a case that checks units of measurement for the G0 increment
-                pmp->G0[j] = Cj_init_calc( Go+Gg+Ge, j, k );
+                pmp->G0[j] = DC_ConvertGj_toUniform_cj( Go+Gg+Ge, j, k );
                 Vv = 0.;
                 //  loading Vol
                 if( tpp->PtvVm == S_ON )
@@ -418,7 +418,7 @@ void TMulti::EqstatExpand( const char *key )
         if( pmp->L1[k] > 1 )
             AllPhasesPure = false;
 
-    TotalPhases( pmp->X, pmp->XF, pmp->XFA );
+    TotalPhasesAmounts( pmp->X, pmp->XF, pmp->XFA );
     for( j=0; j<pmp->L; j++ )
         pmp->Y[j] = pmp->X[j];
 
@@ -429,7 +429,7 @@ void TMulti::EqstatExpand( const char *key )
             pmp->YFA[k] = pmp->XFA[k];
     }
     // calculate DC (species) concentrations and activities
-    ConCalc( pmp->X, pmp->XF, pmp->XFA);
+    CalculateConcentrations( pmp->X, pmp->XF, pmp->XFA);
 
     // recalculate kinetic restrictions for DC
     if( pmp->pULR && pmp->PLIM )
@@ -483,11 +483,11 @@ void TMulti::EqstatExpand( const char *key )
         }
     	pmp->pIPN = 1;
 
-        //   double FitVar3 = pmp->FitVar[3];  // Reset the smoothing factor
+        //   double FitVar3 = pmp->FitVar[3];  // Debugging: Reset the smoothing factor
         //   pmp->FitVar[3] = 1.0;
-               GammaCalc( LINK_TP_MODE);   // Computing DQF, FugPure and G wherever necessary
-                                           // Activity coeffs are restored from lnGmo
-        //   pmp->FitVar[3]=FitVar3;
+        CalculateActivityCoefficients( LINK_TP_MODE);
+       // Computing DQF, FugPure and G wherever necessary; Activity coeffs are restored from lnGmo
+        //   pmp->FitVar[3]=FitVar3;  // Debugging
         if(pmp->E && pmp->LO && pmp->Lads )  // Calling this only when sorption models are present
         {
             jb = 0;
@@ -502,9 +502,9 @@ void TMulti::EqstatExpand( const char *key )
 		       GouyChapman( jb, je, k );
                }
             }
-            //GammaCalc( LINK_UX_MODE );
+            //CalculateActivityCoefficients( LINK_UX_MODE );
         }
-        GammaCalc( LINK_UX_MODE );
+        CalculateActivityCoefficients( LINK_UX_MODE );
     }
     else {  // no multi-component phases
         pmp->PD = 0;
@@ -517,7 +517,7 @@ void TMulti::EqstatExpand( const char *key )
 
     if( pa->p.PC == 1 )
     {  //calculate Karpov phase stability criteria
-       f_alpha();
+       KarpovCriterionPH();
     }
     else if( pa->p.PC >= 2 )
     {

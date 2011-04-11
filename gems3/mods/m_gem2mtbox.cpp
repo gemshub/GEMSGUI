@@ -308,7 +308,7 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
  
 // Calculate new reservoir states at tcur	
 // Calculation of chemical equilibria in all nodes at the beginning
-// with the Simplex initial approximation
+// with the LPP initial approximation
  if( mtp->PvSIA != S_ON )  
      CalcIPM( NEED_GEM_AIA, 0, mtp->nC, diffile );
  else 
@@ -418,7 +418,7 @@ bool TGEM2MT::CalcBoxModel( char mode )
 
   // calculate inital states
   // Calculation of chemical equilibria in all nodes at the beginning
-  // with the Simplex initial approximation
+  // with the LPP initial approximation
   CalcNewStates( -1,  0, mtp->cTau, mtp->dTau );  
      
   // calc part  
