@@ -244,10 +244,6 @@ void TMulti::DC_LoadThermodynamicData()
     pmp->PunP = tpp->PunP;
     pmp->PunT = tpp->PunT;
 
- //cout << "pmp->pTPD " << pmp->pTPD << endl;
- //cout << "pmp->P " << pmp->P << endl;
- //cout << "pmp->T " << pmp->T << endl;
-
 // ->pTPD state of reload t/d data 0-all, 1 G0, Vol, 2 do not load
 //    if( pmp->pTPD < 1 )
 //    {
@@ -257,7 +253,6 @@ void TMulti::DC_LoadThermodynamicData()
             pmp->P = pmp->Pc = tpp->P;
         else
         	pmp->P = pmp->Pc = 1e-9;
-//        pmp->FitVar[0] = TProfil::pm->pa.aqPar[0];
         pmp->RT =  R_CONSTANT * pmp->Tc; // tpp->RT; // test 07/12/2007
         pmp->FRT = F_CONSTANT/pmp->RT;
         pmp->lnP = log( pmp->P );
@@ -305,7 +300,7 @@ void TMulti::DC_LoadThermodynamicData()
                 if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
                  	Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK
   	// !!!!!!! Insert here a case that checks units of measurement for the G0 increment
-                pmp->G0[j] = DC_ConvertGj_toUniform_cj( Go+Gg+Ge, j, k );
+                pmp->G0[j] = ConvertGj_toUniformStandardState( Go+Gg+Ge, j, k );
                 Vv = 0.;
                 //  loading Vol
                 if( tpp->PtvVm == S_ON )
@@ -333,8 +328,6 @@ void TMulti::DC_LoadThermodynamicData()
             }
         }
    // }
-  //cout << "2pmp->P " << pmp->P << endl;
-  //cout << "2pmp->T " << pmp->T << endl;
 
   //Alloc_internal(); // performance optimization 08/02/2007
   pmp->pTPD = 2;
@@ -517,7 +510,7 @@ void TMulti::EqstatExpand( const char *key )
 
     if( pa->p.PC == 1 )
     {  //calculate Karpov phase stability criteria
-       KarpovCriterionPH();
+       KarpovsPhaseStabilityCriteria();
     }
     else if( pa->p.PC >= 2 )
     {

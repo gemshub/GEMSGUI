@@ -3,7 +3,7 @@
 //
 // Implementation of ProcessWizard class
 //
-// Copyright (C) 2005-2007  S.Dmytriyeva
+// Copyright (C) 2005-2011  S.Dmytriyeva, D.Kulik
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Vizor library which uses the
@@ -154,7 +154,8 @@ ProcessWizard::ProcessWizard( const char* pkey, char flgs[24], int size[6],
    subTypeButtons->addButton(sub4, 3);
    QObject::connect( subTypeButtons, SIGNAL(buttonClicked(int)), this, SLOT(setMode(int)));
 
-   textEquat1->setText(calcScript.c_str());
+   if( flgs[10] =='+' )
+     textEquat1->setPlainText(calcScript.c_str());
 
    TProcesDelegate * deleg = new TProcesDelegate( this );
    tIters->setItemDelegate(deleg);

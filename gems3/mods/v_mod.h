@@ -1,9 +1,9 @@
 //-------------------------------------------------------------------
 // $Id: v_mod.h 1374 2009-07-23 16:18:58Z gems $
 //
-// Declaration of internak constants: objnumbers, sizes, codes ....
+// Declaration of internal constants: objnumbers, sizes, codes ....
 //
-// Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
+// Copyright (C) 1995,2010 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -223,9 +223,9 @@ typedef enum {  /* classes of IC*/
     IC_LIGAND   =  'l',  // ligand (anion), reserved
     IC_ADDIT    =  'a',  // IC with unknown stoichiometry (eg: Hum, humic acid)
     IC_ISOTOPE  =  'i',  // isotope of chemical element from 1 to 250
-    IC_OXYGEN16 =  'q',  // q  - oxygen 16O (reserved)
-    IC_OXYGEN18 =  'r',  //  r  - oxygen 18O (reserved)
-    IC_CHARGE   =  'z',  // z  - electrical charge
+    IC_OXYGEN16 =  'q',  // q: oxygen 16O (reserved)
+    IC_OXYGEN18 =  'r',  // r: oxygen 18O (reserved)
+    IC_CHARGE   =  'z',  // z: electrical charge
     IC_VOLUME   =  'v'   // volume
 } IC_CLASSES;
 
@@ -256,55 +256,35 @@ enum dcomp_objects {                  // work objects
 
 enum DC_CNTRL_CODES {
     // General codes for methods of calculation of DC thermodynamic parameters
-    CTPM_CPT = 'C',  /* on the basis of empirical heat capacity equation Cp=f(T),
-                        used for DComp and ReacDC definitions (solid, liquid, gaseous
-                        substances and aqueous species) */
-    CTPM_HKF = 'H',  /* on the basis of Helgeson-Kirkham-Flowers equation of state
-                        (HKF EOS), used for aqueous species (DCOMP) or for reactions
-                         bwtween them (ReacDC) */
-    CTPM_REA = 'K',  /* calculation of logK of reactions as they depend functionally
-                        on T and P, used only for ReacDC definitions of all phase
-                        types of substances. */
-    CTPM_EOS = 'S',  /* calculations via general equations of state (reserved) */
-    CTPM_ISO = 'I',  /* calculation of parameters for isotopic forms of compounds
-                        from fractionation constants and their dependency on T
-                        (after Grichuk,1988) - ReacDC only */
-    CTPM_SOR = 'X',  /* calculations via adsorption or ion exchange constants, using
-                        LFER correlations (Sverjensky 1993,1994) - ReacDC only (reserved). */
+    CTPM_CPT = 'C',  // integration of empirical heat capacity equation Cp=f(T); DComp and ReacDC
+    CTPM_HKF = 'H',  // Helgeson-Kirkham-Flowers (HKF) equation of state for aqueous species
+    CTPM_REA = 'K',  // calculation of logK of reactions as they depend functionally on T and P; ReacDC
+    CTPM_EOS = 'S',  // calculations via general equations of state (reserved)
+    CTPM_ISO = 'I',  // calculation of parameters for isotopic forms of compounds (Grichuk, 1988); ReacDC
+    CTPM_SOR = 'X',  // calculations via adsorption or ion exchange constants, using LFER correlations; ReacDC (reserved)
 
     //Codes for temperature corrections of thermodynamic properties
-    CTM_CST = 'S',   /* calculation of ordinary integral using 11-term Cp=f(T) equations
-                        (up to 3 phase transitions or up to 3 Cp=f(T) equations for DComp) */
-    CTM_CHP = 'H',   /* the same with modifications by Holland and Powell (1998) (minerals); */
-    CTM_BER = 'B',   /* the same with modifications by Berman (1988) (minerals) */
-    CTM_FEI = 'F',   /* Cp=f(T) equation by Fei and Saxena (1986) (reserved) */
-    CTM_LGX = 'X',   /* REACDC: calculation of reaction properties from empirical
-                        function lgK=f(T) in 7-term form obtained from 5-term Cp(T) */
-    CTM_HKF = 'K',   /* calculation with HKF EOS (for aqueous species) as in SUPCRT92 */
-    CTM_WAT = 'W',   /* calculation of H2O water(steam) properties from HGK and LVS
-                        equations of state (also using subroutines of SUPCRT92) */
-    CTM_WAS = 'V',   /* calculation of H2O water (steam) properties from IAPWS-95
-                        equation of state (reserved) */
-    CTM_LGK = 'L',   /* calculation from empirical function lgK=f(T) in 7-term form
-                       (Nordstrom and Munoz, 1988) - ReacDC only */
-    CTM_EK0 = '0',   /* one-term extrapolation at dHr = 0 and logK = const added 15.07.03 */
-    CTM_EK1 = '1',   /* one-term extrapolation (Gu et al.,1994), dGr(T)= const */
-    CTM_EK2 = '2',   /* two-term extrapolation Vant Hoff) - ReacDC only */
-    CTM_EK3 = '3',   /* three-term extrapolation (dCpr = const) - ReacDC only */
-    CTM_IKZ = 'Z',   /* calculation using Lagrange polynomial interpolation over the
-                        array of lgK for several fixed T (P) points (ReacDC only). */
-    CTM_DKR = 'R',   /* calculation of lgK of dissociation reactions at elevated TP
-                        from density equation (Marshall and Franck, 1978) - ReacDC only*/
-    CTM_PPE = 'E',   /* Prediction of standard state properties of aqueous hydroxide complexes
-                        (dissociation reactions) using Pronsprep-OH algorithm (Shock et al. 1997)
-                        added 28.03.2008 */
-    CTM_MRB = 'Y',   /* Calculation of deltaR with modified Ryzhenko-Bryzgalin
-                        model (added by TW and DK on 03.08.2007 */
-    CTM_CPG = 'C',   /* reserved (FGL) */
-    CTM_IFG = 'G',   /* calculation of G0 for isotopic forms from equations (Grichuk,
-                      1 988) - ReacDC only */
-    CTM_KAS = 'K',   /* reserved */
-    CTM_DAS = 'D',   /* reserved */
+    CTM_CST = 'S',   // calculation of ordinary integral using 11-term Cp=f(T) equations (up to 3 phase transitions)
+    CTM_CHP = 'H',   // modifications for Landau phase transitions (Holland and Powell, 1998)
+    CTM_BER = 'B',   // modifications for Landau phase transitions (Berman, 1988) (reserved)
+    CTM_FEI = 'F',   // Cp=f(T) equation by Fei and Saxena (1986) (reserved)
+    CTM_LGX = 'X',   // calculation of reaction properties from empirical from 5-term Cp(T); ReacDC
+    CTM_HKF = 'K',   // calculation with HKF EOS (for aqueous species) as in SUPCRT92
+    CTM_WAT = 'W',   // calculation of H2O water(steam) properties from HGK and LVS equations of state
+    CTM_WAS = 'V',   // calculation of H2O water (steam) properties from IAPWS-95 equation of state (reserved)
+    CTM_LGK = 'L',   // calculation from empirical function logK=f(T) (Nordstrom and Munoz, 1988); ReacDC only
+    CTM_EK0 = '0',   // one-term extrapolation assuming dHr=0 and logK=const; ReacDC
+    CTM_EK1 = '1',   // one-term extrapolation assuming dGr=const (Gu et al., 1994); ReacDC
+    CTM_EK2 = '2',   // two-term extrapolation; ReacDC only
+    CTM_EK3 = '3',   // three-term extrapolation assuming dCpr=const; ReacDC
+    CTM_IKZ = 'Z',   // Lagrange polynomial interpolation over logK(TP) array; ReacDC
+    CTM_DKR = 'R',   // calculation of logK=f(T,P) from density equation (Marshall and Franck, 1978); ReacDC
+    CTM_PPE = 'E',   // prediction of properties of aqueous hydroxides using Pronsprep-OH (Shock et al. 1997)
+    CTM_MRB = 'Y',   // calculation of logK=f(T,P) with modified Ryzhenko-Bryzgalin model
+    CTM_CPG = 'C',   // reserved (FGL)
+    CTM_IFG = 'G',   // calculation of parameters for isotopic forms of compounds (Grichuk, 1988); ReacDC
+    CTM_KAS = 'K',   // reserved
+    CTM_DAS = 'D',   // reserved
 
     // Codes for pressure corrections of thermodynamic properties
     CPM_OFF  = 'N',  /* no account for pressure dependence */

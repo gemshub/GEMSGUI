@@ -363,10 +363,27 @@ TCModule::CmSaveAs()
             Error( GetName(), "Please, do it in Database mode!");
 
         gstring str=db->PackKey();
-        str = GetKeyofRecord( str.c_str(),
-                 "Insert new record keyed ", KEY_NEW_SAVEAS );
+        int  Rnum;
+
+    AGN:
+        str = GetKeyofRecord( str.c_str(),"Insert new record key ", KEY_NEW_SAVEAS );
         if(  str.empty() )
-            return ;
+             return;
+
+        Rnum = db->Find( str.c_str() );
+        if( Rnum>=0 ) // name of exist record
+        {
+
+           switch( vfQuestion3( window(), str.c_str(),
+                "This record already exists! What to do?",
+                "&Replace", "Re&name", "&Cancel") )
+           {
+            case VF3_2: goto AGN;
+            case VF3_1: break;
+            case VF3_3: return;
+           }
+       }
+
         RecSave( str.c_str(), false );
         pVisor->Update( true );
     }
@@ -748,12 +765,22 @@ TCModule::CmNew()
         if( ! MessageToSave() )
 	    return;
 
-        gstring str = GetKeyofRecord( db->PackKey(),
-                             "Insert a new record key, please ", KEY_NEW);
-        if(  str.empty() )
+       gstring dlgName = "Please, set a new record key ";
+       gstring str = db->PackKey();
+       int  Rnum;
+
+   AGN:
+       str = GetKeyofRecord( str.c_str(), dlgName.c_str(), KEY_NEW);
+       if(  str.empty() )
             return;
-        int  Rnum = db->Find( str.c_str() );
-        ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
+
+       Rnum = db->Find( str.c_str() );
+       if( Rnum>=0 ) // name of exist record
+       {
+          dlgName = "This record already exists! Please, enter another name.";
+          goto AGN;
+       } // ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
+
         str = gstring( db->UnpackKey(), 0, db->KeyLen() );
         check_input( str.c_str(), 0 ); // SD 18/11/2008
         RecBuild( str. c_str(), VF_REMAKE );
@@ -780,12 +807,23 @@ TCModule::CmCreate()
         if( ! MessageToSave() )
 	    return;
 
-        gstring str = GetKeyofRecord( db->PackKey(),
-                             "Insert a new record key, please ", KEY_NEW);
+        gstring dlgName = "Please, set a new record key ";
+        gstring str = db->PackKey();
+        int  Rnum;
+
+    AGN:
+        str = GetKeyofRecord( str.c_str(), dlgName.c_str(), KEY_NEW);
         if(  str.empty() )
-            return;
-        int  Rnum = db->Find( str.c_str() );
-        ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
+             return;
+
+        Rnum = db->Find( str.c_str() );
+        if( Rnum>=0 ) // name of exist record
+        {
+           dlgName = "This record already exists! Please, enter another name.";
+           goto AGN;
+        } // ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
+
+
         str = gstring( db->UnpackKey(), 0, db->KeyLen() );
         check_input( str.c_str() , 0 ); // SD 18/11/2008
         RecBuild( str.c_str(), VF_CLEARALL );
@@ -867,7 +905,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
 
             if( str.find_first_of("*?" ) != gstring::npos)  // pattern
                 str = GetKeyofRecord( str.c_str(),
-                       "Insert a new record key, please ", KEY_NEW);
+                       "Please, set a new record key ", KEY_NEW);
             if(  str.empty() )
                 Error( GetName(), "Record creation rejected!");
             int  Rnum = db->Find( str.c_str() );
@@ -966,11 +1004,22 @@ TCModule::CmNewinProfile()
         str += ":"; //04/09/01 ????
         for( int i=1; i<db->KeyNumFlds(); i++)
             str += "*:";
-        str = GetKeyofRecord( str.c_str(), "Please, enter a new record key", KEY_NEW );
+
+        gstring dlgName = "Please, set a new record key ";
+        int  Rnum;
+
+    AGN:
+        str = GetKeyofRecord( str.c_str(), dlgName.c_str(), KEY_NEW);
         if(  str.empty() )
-            return;
-        int  Rnum = db->Find( str.c_str() );
-        ErrorIf( Rnum>=0, GetName(), "This record alredy exists!");
+             return;
+
+        Rnum = db->Find( str.c_str() );
+        if( Rnum>=0 ) // name of exist record
+        {
+           dlgName = "This record already exists! Please, enter another name.";
+           goto AGN;
+        } // ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
+
         check_input( str.c_str(), 0 );
         RecBuild( str.c_str(), VF_REMAKE );
         SetString("Remake of the new record finished OK. "
@@ -1000,11 +1049,22 @@ TCModule::CmCreateinProfile()
         str += ":"; //04/09/01 ????
         for( int i=1; i<db->KeyNumFlds(); i++)
             str += "*:";
-        str = GetKeyofRecord( str.c_str(), "Please, enter a new record key ", KEY_NEW );
+
+        gstring dlgName = "Please, set a new record key ";
+        int  Rnum;
+
+    AGN:
+        str = GetKeyofRecord( str.c_str(), dlgName.c_str(), KEY_NEW);
         if(  str.empty() )
-            return;
-        int  Rnum = db->Find( str.c_str() );
-        ErrorIf( Rnum>=0, GetName(), "This record alredy exists!");
+             return;
+
+        Rnum = db->Find( str.c_str() );
+        if( Rnum>=0 ) // name of exist record
+        {
+           dlgName = "This record already exists! Please, enter another name.";
+           goto AGN;
+        } // ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
+
         check_input( str.c_str(), 0 );
         RecBuild( str.c_str(), VF_CLEARALL );
         SetString("Remake of the new record finished OK. "
@@ -1567,13 +1627,33 @@ TCModule::AddRecord(const char* key, int& fnum )
        fnum = - 2;
 }
 
+// Test unique keys name before add the record(s)
+int TCModule::AddRecordTest(const char* key, int& fnum )
+{
+    int  Rnum;
+    gstring str = key;
+
+AGN: Rnum = db->Find( str.c_str() );
+     if( Rnum>=0 ) // name of exist record
+     {
+        str=db->PackKey();
+        str = GetKeyofRecord( str.c_str(),
+              "This key record already exists! Replace please?", KEY_NEW );
+        if(  str.empty() )
+               return 0;
+        goto AGN;
+      }
+     AddRecord( str.c_str(), fnum );
+     return 1;
+}
+
 // Unloades Data Record keys to txt-file
 
 void
 TCModule::KeysToTXT( const char *pattern )
 {
     TCStringArray aKey = vfMultiKeys( window(),
-       "Create record key list",
+       "Please, mark record keys to be listed in txt-file",
        nRT, pattern );
     if( aKey.GetCount() <1 )
         return;
@@ -1818,7 +1898,7 @@ void
 TCModule::DelList( const char *pattern )
 {
     TCStringArray aKey = vfMultiKeys( window(),
-       "Delete database records",
+       "Please, mark record keys to be deleted from database",
        nRT, pattern );
     int ichs = 1;
 
@@ -1853,7 +1933,7 @@ TCModule::Transfer( const char *pattern )
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
 
     TCStringArray aKey = vfMultiKeys( window(),
-       "Move database records",
+       "Please, mark record keys to be moved",
        nRT, pattern );
 
 
@@ -1883,9 +1963,9 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
     gstring str;
 
     if( if_rename )
-     str = "Rename GEMS database records";
+     str = "Please, mark record keys to be renamed";
     else
-     str = "Copy records in another database file";
+     str = "Please, mark record keys to be copied";
 
     TCStringArray aKey = vfMultiKeys( window(),
        str.c_str(), nRT, pattern );
@@ -1942,11 +2022,15 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
        {
          fnum = db->fNum;
          db->Del( nrec );
-         db->AddRecordToFile( str.c_str(), fnum );
+         //Point SaveRecord
+         if( !AddRecordTest( str.c_str(), fnum ))
+          db->AddRecordToFile( aKey[i].c_str(), fnum );
+         //db->AddRecordToFile( str.c_str(), fnum );
        }
        else
        {
-         AddRecord( str.c_str(), fnum );
+         //Point SaveRecord
+         AddRecordTest( str.c_str(), fnum );
          if( fnum == -2 )
              break;
        }
@@ -1963,7 +2047,7 @@ TCModule::SelectFileList(int mode)
     db->GetFileList(mode, names, indx, sel);
 
     TCIntArray aSel = vfMultiChoiceSet(window(), names,
-         "Selection of files linked to this database chain", sel);
+         "Selection of files", sel);
 
     TCIntArray arr;
     for( uint i=0; i<aSel.GetCount(); i++ )

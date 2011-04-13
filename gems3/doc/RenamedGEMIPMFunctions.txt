@@ -1,7 +1,12 @@
 List of functions and other names in GEMS3K (GEMIPM2K) renamed for consistence with GEMS3K paper
 DK April 2011
 
+Functions in GEMS3K renamed on 11-13 April 2011 for consistency with 'official' paper/report
+and better readability of the source code (DK)
+
 Old name                                                    New name
+
+MultiInit()						    InitalizeGEM_IPM_Data()
 
 calcMulti()                                                 ComputeEquilibriumState()
 
@@ -11,19 +16,21 @@ GibbsMinimization()                                         GibbsEnergyMinimizat
 
 MultiCalcMain()                                             GEM_IPM()
 
-MultiCalcInit()                                             GEM_IPM_Init()
+MultiCalcInit()                                             GEM_IPM_Initialize()
 
 AutoInitialApprox()                                         GEM_IPM_InitialApproximation()
 
-SimplexInitialApproximation()                               LPP_InitialApproximation()
+SimplexInitialApproximation()                               AutoInitialApproximation()   !!!!!
 
-Simplex()                                                   SolveSimplexLPP()
+Simplex()                                                   SolveSimplex()    		!!!!
 
 EnterFeasibleDomain()                                       MassBalanceRefinement()
 
 PhaseSelection()                                            PhaseSelectionSpeciationCleanup()
 
-f_alpha()                                                   KarpovCriterionPH()
+CleanupSpeciation()					    SpeciationCleanup()     !!!!
+
+f_alpha()                                                   KarpovsPhaseStabilityCriteria()    !!!!
 
 ZeroDCsOff()                                                DC_ZeroOff()
 
@@ -41,13 +48,13 @@ FreeEnergyIncr()                                            DC_GibbsEnergyContri
 
 ConCalc()                                                   CalculateConcentrations()
 
-ConCalcDC()                                                 PH_CalculateConcentrations()
+ConCalcDC()                                                 PH_CalculateConcentrations() InPhase
 
 TotalPhases()                                               TotalPhasesAmounts()
 
 GammaCalc()                                                 CalculateActivityCoefficients()
 
-SolverLinearEquations()                                     MakeAndSolveSLE()
+SolverLinearEquations()                                     MakeAndSolveSLE() SystemOfLinearEquations
 
 calcDikin()                                                 DikinsCriterion()
 
@@ -57,12 +64,12 @@ LMD()                                                       OptimizeStepSize()
 
 calcTotalMoles()                                            SystemTotalMolesIC()
 
-ScaleMulti()                                                NormalizeSystemToInternal()
+ScaleMulti()                                       	    ScaleSystemToInternal()   !!!!
 
-RescaleMulti()                                              RenormalizeSystemFromInternal()
+RescaleMulti()                                     	    RescaleSystemFromInternal()  !!!!
 
 CompG0Load()                                                DC_LoadThermodynamicData()
 
-Cj_init_calc()                                              DC_ConvertGj_toUniform_cj()
+Cj_init_calc()                                              ConvertGj_toUniformStandardState() !!!!
 
 

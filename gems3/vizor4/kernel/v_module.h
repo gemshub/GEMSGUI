@@ -128,6 +128,12 @@ public:
        startKeyEdit = fld;
     }
 
+
+    //-- Module manipulation
+    virtual gstring  GetKeyofRecord( const char */*oldKey*/, const char */*strTitle*/,
+                                     int /*keyType*/ )
+    { return"";}
+
 };
 
 // --- Parametres of function GetKeyofRecord()
@@ -242,6 +248,7 @@ public:
     virtual void TryRecInp( const char *key, time_t& time, int q );
     virtual void AddRecord(const char* key);
     virtual void AddRecord(const char* key, int& fnum );
+    virtual int AddRecordTest(const char* key, int& fnum );
     virtual void DeleteRecord( const char *key, bool errifNo = true  );
     virtual void RecordPrint( const char *key=0 ); //sddata key
     virtual void RecordPlot( const char *key );

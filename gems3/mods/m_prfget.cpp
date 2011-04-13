@@ -534,9 +534,9 @@ void TProfil::loadSystat( const char *key )
     pmp->pESU = 0;  //  new record was readed
     gstring keyp = gstring( rt[RT_SYSEQ].UnpackKey(), 0, rt[RT_SYSEQ].KeyLen() );
     PMtest( keyp.c_str() );
-    pmp->pTPD = 0;   // workaround 26.02.2008  DK
-    if( pmp->pBAL < 2 || pmp->pTPD < 2)
-       multi->MultiInit(  );
+    //pmp->pTPD = 0;   // workaround 26.02.2008  DK SD 24/05/2010
+    //if( pmp->pBAL < 2 || pmp->pTPD < 2)
+       multi->InitalizeGEM_IPM_Data(  );
     if( pmp->pESU )      // unpack old solution
     {
         multi->loadData( false );  // unpack syseq to multi
@@ -563,9 +563,9 @@ void TProfil::deriveSystat()
     // Test MULTY for change (if new System cfg or T, P - new)
     pmp->pESU = 0;  //  new record was readed
     PMtest( keyp.c_str() );
-    pmp->pTPD = 0;   // workaround 26.02.2008  DK
-    if( pmp->pBAL < 2 || pmp->pTPD < 2)
-        multi->MultiInit(  );
+    //pmp->pTPD = 0;   // workaround 26.02.2008  DK 24/05/2010
+    //if( pmp->pBAL < 2 || pmp->pTPD < 2)
+        multi->InitalizeGEM_IPM_Data(  );
     if( pmp->pESU )      // unpack old solution
     {
         multi->loadData( false );  // unpack syseq to multi
@@ -597,21 +597,28 @@ void TProfil::newSystat( int mode )
         key_str.strip();
         key_str += ":G:MySystem:0:0:1:25:0:";
     }
-    gstring str = TSysEq::pm->GetKeyofRecord( key_str.c_str() ,
-                  "Please, enter a new key: ", KEY_NEW );
+    gstring str = key_str;
+    gstring capName = "Please, enter a new record key: ";
+
+AGAIN:
+    str = TSysEq::pm->GetKeyofRecord( str.c_str(),  capName.c_str(), KEY_NEW );
     if( str.empty() )
         return;
     if( rt[RT_SYSEQ].Find( str.c_str() ) >= 0 )
-        Error("SyStat", "This record already exists!");
+    {
+        capName = "This record already exists! Please, enter another name.";
+        goto AGAIN;
+        //Error("SyStat", "This record already exists!");
+    }
 
     int ret = TSysEq::pm->RecBuild( str.c_str(), mode );
     syst->loadData( true, ret ); // set def and unpack syseq to system
     // Test MULTY for change (if new System cfg or T, P - new)
     gstring keyp = rt[RT_SYSEQ].UnpackKey();
     PMtest( keyp.c_str() );
-    pmp->pTPD = 0;   // workaround 26.02.2008  DK
-    if( pmp->pBAL < 2 || pmp->pTPD < 2)
-       multi->MultiInit(  );
+    //pmp->pTPD = 0;   // workaround 26.02.2008  DK
+    //if( pmp->pBAL < 2 || pmp->pTPD < 2)
+       multi->InitalizeGEM_IPM_Data(  );
 
 
     // SD 22/01/2010 bool

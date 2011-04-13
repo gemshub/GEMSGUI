@@ -369,12 +369,12 @@ void TProcess::dyn_new(int q)
     if( pe[q].PsEqn != S_OFF )
     {
         pe[q].Expr = (char *)aObj[ o_peexpr].Alloc( 1, 2048, S_);
-        pe[q].tprn = (char *)aObj[ o_petprn].Alloc( 1, 2048, S_);
+    //    pe[q].tprn = (char *)aObj[ o_petprn].Alloc( 1, 2048, S_);
     }
     else
     {
         pe[q].Expr = (char *)aObj[ o_peexpr ].Free();
-        pe[q].tprn = (char *)aObj[ o_petprn ].Free();
+    //    pe[q].tprn = (char *)aObj[ o_petprn ].Free();
     }
 
     if( pe[q].Nsd > 0 )
@@ -412,6 +412,13 @@ void TProcess::dyn_new(int q)
       pe[q].dimXY[1] = 0;
       plot  = (TPlotLine *)aObj[ o_pcplline ].Free();
    }
+    if( pe[q].PsEqn != S_OFF || pe[q].PsGR != S_OFF )
+        pe[q].tprn = (char *)aObj[ o_petprn].Alloc( 1, 2048, S_);
+    else
+       pe[q].tprn = (char *)aObj[ o_petprn ].Free();
+
+
+
     if( pe[q].PvEF == S_OFF )
     {
        pe[q].lNamE = (char (*)[MAXGRNAME])aObj[ o_pclname ].Free();
@@ -749,8 +756,8 @@ TProcess::MakeQuery()
 
     // for scripts
     TCStringArray namesLines;
-    gstring calcScript;
-    gstring outScript;
+    gstring calcScript="";
+    gstring outScript="";
     if( pep->Expr )
      calcScript = pep->Expr;
     if( pep->gr_expr )
@@ -1060,7 +1067,7 @@ double TProcess::f_proc( double x )
 }
 
 // calc function for Method of golden section
-double ff_proc( double x )
+double ff_proc( double x, double )
 {
     return TProcess::pm->f_proc(x);
 }
@@ -1332,10 +1339,8 @@ TProcess::internalCalc()
                                        K_IMM, pep->Pp, K_IMM, pep->TCp, K_IMM, pep->NVp, K_END );
                 // proc_titr();
                 // test external functions SD 12/05/2010
-                double funct[2];
-                funct[0] = 0;
-                funct[1] = pep->Nui[1];
-                pep->c_Eh = GoldenSection( pep->pXii, funct, ff_proc);
+                GoldenSelection gsData( pep->pXii[0], pep->pXii[1], pep->pXii[2], pep->Nui[1], ff_proc);
+                pep->c_Eh = gsData.getMinimum();
                 pep->Loop = 2;
                 CalcEquat();
 

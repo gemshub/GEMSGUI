@@ -30,7 +30,7 @@ const int MAXPHSYMB =      8,
                                                QDSIZE = 60;
 
 typedef struct
-{// Description  PHASE
+{// Description of PHASE
   char pst[MAXSYMB],       // Phase aggregate state
     symb[MAXPHSYMB],    // Symbol of phase definition
     nam[MAXPHNAME],     // Name of phase
@@ -228,7 +228,7 @@ enum solmod_switches { /* indexes of keys of model solution*/
 // for components of this phase. It is used by many subroutines
 // during calculations of equilibrium states
 enum PH_CLASSES{  /* Possible values */
-	PH_AQUEL = 'a',  	// aqueous electrolyte
+    PH_AQUEL = 'a',  	// aqueous electrolyte
     PH_GASMIX = 'g',  	// mixture of gases
     PH_FLUID = 'f',  	// fluid phase
     PH_PLASMA = 'p',  	// plasma

@@ -271,7 +271,7 @@ o_paxmin  Pa_XMI D_  1 5   N "Cutoff mole amount of water-solvent for aqueous ph
  Cutoff mole amount for elimination of solute (sorbate) species { 1e-24 }_
  Cutoff mole amount for elimination of solution phases other than aqueous { default 1e-14, usually set the same as as Pa_DS }_
  Cutoff value of effective molal ionic strength to disable aq-gamma calculation { default 3e-5; 1e-6 to 1e-3 } "
-o_paeps   Pa_EPS D_  1 2   N "Tolerance of the SolveSimplexLPP() convergence { default 1e-10; 1e-6 to 1e-11 }_
+o_paeps   Pa_EPS D_  1 2   N "Tolerance of the SolveSimplex() convergence { default 1e-10; 1e-6 to 1e-11 }_
  Tolerance for calculation of surface activity coefficient terms for surface species { default 1e-3; 1e-6 to 1e-2 } "
 o_padkin  Pa_DKI D_  1 1   N "Tolerance for non-trivial metastability restrictions on amounts of dependent components, moles { 1e-7 } "
 # Default numeric parameters

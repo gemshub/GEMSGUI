@@ -807,7 +807,7 @@ short TProfil::BAL_compare()
            Gg = syp->Guns[jj];    // User-set increment to G0 from project system
        if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
            Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK
-       pGo = multi->DC_ConvertGj_toUniform_cj( Go+Gg+Ge, j, k );
+       pGo = multi->ConvertGj_toUniformStandardState( Go+Gg+Ge, j, k );
        if( fabs( pGo - pmp->G0[j] )* pmp->RT >= 0.001 )
        {
            pmp->pTPD = 1;   // Fixed here to invoke DC_LoadThermodynamicData() DK 16.05.2008
