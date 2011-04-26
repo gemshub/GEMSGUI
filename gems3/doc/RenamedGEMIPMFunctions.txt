@@ -20,17 +20,17 @@ MultiCalcInit()                                             GEM_IPM_Initialize()
 
 AutoInitialApprox()                                         GEM_IPM_InitialApproximation()
 
-SimplexInitialApproximation()                               AutoInitialApproximation()   !!!!!
+SimplexInitialApproximation()                               AutoInitialApproximation() 
 
-Simplex()                                                   SolveSimplex()    		!!!!
+Simplex()                                                   SolveSimplex()    	
 
 EnterFeasibleDomain()                                       MassBalanceRefinement()
 
 PhaseSelection()                                            PhaseSelectionSpeciationCleanup()
 
-CleanupSpeciation()					    SpeciationCleanup()     !!!!
+CleanupSpeciation()					    SpeciationCleanup()  
 
-f_alpha()                                                   KarpovsPhaseStabilityCriteria()    !!!!
+f_alpha()                                                   KarpovsPhaseStabilityCriteria()
 
 ZeroDCsOff()                                                DC_ZeroOff()
 
@@ -48,13 +48,13 @@ FreeEnergyIncr()                                            DC_GibbsEnergyContri
 
 ConCalc()                                                   CalculateConcentrations()
 
-ConCalcDC()                                                 PH_CalculateConcentrations() InPhase
+ConCalcDC()                                                 CalculateConcentrationsInPhase()      
 
 TotalPhases()                                               TotalPhasesAmounts()
 
 GammaCalc()                                                 CalculateActivityCoefficients()
 
-SolverLinearEquations()                                     MakeAndSolveSLE() SystemOfLinearEquations
+SolverLinearEquations()                                     MakeAndSolveSystemOfLinearEquations() 
 
 calcDikin()                                                 DikinsCriterion()
 
@@ -64,9 +64,9 @@ LMD()                                                       OptimizeStepSize()
 
 calcTotalMoles()                                            SystemTotalMolesIC()
 
-ScaleMulti()                                       	    ScaleSystemToInternal()   !!!!
+ScaleMulti()                                       	    ScaleSystemToInternal() 
 
-RescaleMulti()                                     	    RescaleSystemFromInternal()  !!!!
+RescaleMulti()                                     	    RescaleSystemFromInternal() 
 
 CompG0Load()                                                DC_LoadThermodynamicData()
 

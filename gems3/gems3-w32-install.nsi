@@ -46,7 +46,7 @@ Section "GEMS3 (required)"
  ; Set the right version of *.dll below
     File "C:\GEMS3inst\program\*.dll"
  ;   File "C:\GEMS3inst\program\assistant.exe"
-    File "C:\GEMS3inst\program\qhelpconverter.exe"
+ ;   File "C:\GEMS3inst\program\qhelpconverter.exe"
     File "C:\GEMS3inst\program\qcollectiongenerator.exe"
     File "C:\GEMS3inst\program\qhelpgenerator.exe"
     File "C:\GEMS3inst\program\readme.txt"
