@@ -823,7 +823,7 @@ void TObject::toTXT( fstream& to )
                 strcpy(sbuf, GetString(i,j).c_str() );
                 if( Type > 0 )
                     to << "\"";
-                else switch( *sbuf )
+                /*else */switch( *sbuf )
                     {
                     case 0:
                         sbuf[0] = '`';

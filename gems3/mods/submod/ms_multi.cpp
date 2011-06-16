@@ -119,7 +119,7 @@ aObj[ o_wi_lsmod ].SetDim( pm.FIs, 3 ); // 3 columns
     aObj[ o_wi_dul ].SetDim( pm.L, 1 );
     aObj[ o_wi_dll ].SetPtr( pm.DLL );
     aObj[ o_wi_dll ].SetDim( pm.L, 1 );
-    aObj[ o_wi_gex ].SetPtr( pm.GEX );
+    aObj[ o_wi_gex ].SetPtr( pm.fDQF );
     aObj[ o_wi_gex ].SetDim( pm.L, 1 );
     aObj[ o_wi_pul ].SetPtr( pm.PUL );
     aObj[ o_wi_pul ].SetDim( pm.FIs, 1 );
@@ -418,7 +418,7 @@ void TMulti::dyn_set(int /*q*/)
     pm.SATX =(long int (*)[4])aObj[ o_wi_satndx ].GetPtr();
     pm.DUL   = (double *)aObj[ o_wi_dul ].GetPtr();
     pm.DLL   = (double *)aObj[ o_wi_dll ].GetPtr();
-    pm.GEX   = (double *)aObj[ o_wi_gex ].GetPtr();
+    pm.fDQF   = (double *)aObj[ o_wi_gex ].GetPtr();
     pm.PUL   = (double *)aObj[ o_wi_pul ].GetPtr();
     pm.PLL   = (double *)aObj[ o_wi_pll ].GetPtr();
     pm.YOF   = (double *)aObj[ o_wi_yof ].GetPtr();
@@ -569,7 +569,7 @@ void TMulti::dyn_kill(int /*q*/)
     pm.SATX =(long int (*)[4])aObj[ o_wi_satndx ].Free();
     pm.DUL   = (double *)aObj[ o_wi_dul ].Free();
     pm.DLL   = (double *)aObj[ o_wi_dll ].Free();
-    pm.GEX   = (double *)aObj[ o_wi_gex ].Free();
+    pm.fDQF   = (double *)aObj[ o_wi_gex ].Free();
     pm.PUL   = (double *)aObj[ o_wi_pul ].Free();
     pm.PLL   = (double *)aObj[ o_wi_pll ].Free();
     pm.YOF   = (double *)aObj[ o_wi_yof ].Free();
@@ -774,7 +774,7 @@ void TMulti::dyn_new(int /*q*/)
                 pm.N, 1, MAXICNAME+MAXSYMB );
     pm.SB1 = (char (*)[MAXICNAME])aObj[ o_w_sbh].Alloc( 1, pm.N, MAXICNAME );
 
-    // Error in free memory
+    // Error in freeing memory
     //aObj[ o_w_sbh].SetPtr( pm.SB ); aObj[ o_w_sbh ].SetDim( pm.N, 1 );
     pm.SFs = (char (*)[MAXPHNAME+MAXSYMB])aObj[ o_wd_sfs].Alloc(
                  pm.FI, 1, MAXPHNAME+MAXSYMB );
@@ -793,7 +793,7 @@ void TMulti::dyn_new(int /*q*/)
     pm.DCCW = (char *)aObj[ o_wi_dccw].Alloc( pm.L, 1, A_ );
 
     pm.lnGmM = (double *)aObj[ o_wio_lngmm].Alloc( pm.L, 1, D_ );
-    pm.GEX = (double *)aObj[ o_wi_gex].Alloc( pm.L, 1, D_ );
+    pm.fDQF = (double *)aObj[ o_wi_gex].Alloc( pm.L, 1, D_ );
     pm.FVOL = (double *)aObj[ o_wd_fvol].Alloc( pm.FI, 1, D_ );
     pm.FWGT = (double *)aObj[ o_wd_fwgt].Alloc( pm.FI, 1, D_ );
     pm.BFC = (double *)aObj[ o_wo_bfc].Alloc( 1, pm.N, D_ );  // Bugfix 11.03.2010 DK

@@ -788,52 +788,75 @@ short TProfil::BAL_compare()
     for( k=0; k<pmp->FI; k++ )
         if( syp->Pcl[pmp->muk[k]] == S_OFF )
             return 0;
-// lists of components didn't change
-// test B - recipes and constraints
-    for( i=0; i<pmp->N; i++ )
-        if( fabs( syp->B[pmp->mui[i]] - pmp->B[i] ) >= pa.p.DB )
-            return 1;
-    // test other settings for DCs
+
+
+  // test other settings for G0
   for( k = 0; k < pmp->FI; k++ )
   {
 	jb = je;
 	je += pmp->L1[k];
-	for( j=jb; j<je; j++ )
+    for( j=jb; j<je; j++ )
     {
        Gg = Ge = 0.0;    //   This part had to be changed after integrating Ge into pmp->G0
        jj = pmp->muj[j]; //        DK    07.03.2008,  16.05.2008
+
        Go = tpp->G[jj]; //  G0(T,P) value taken from MTPARM
        if( syp->Guns )  // This is used mainly in UnSpace calculations
            Gg = syp->Guns[jj];    // User-set increment to G0 from project system
        if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
            Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK
        pGo = multi->ConvertGj_toUniformStandardState( Go+Gg+Ge, j, k );
+
        if( fabs( pGo - pmp->G0[j] )* pmp->RT >= 0.001 )
        {
-           pmp->pTPD = 1;   // Fixed here to invoke DC_LoadThermodynamicData() DK 16.05.2008
-    	   break;   // GEX or Guns has changed for this DC in the system definition
+           break;   // GEX or Guns has changed for this DC in the system definition
        }
- //      if( syp->PGEX != S_OFF )
- //           if( fabs( syp->GEX[pmp->muj[j]] - pmp->GEX[j]*pmp->RT ) >= 0.001 )
- //               break;
-        if(( syp->DLLim != S_OFF ) && pmp->PLIM == 1 )
-//            if( fabs( (double)syp->DLL[jj] - pmp->DLL[j] ) >= 1e-19 )
-              if( syp->DLL[jj] != (float)pmp->DLL[j]  )   //SD 22/01/2009
-                break;
-        if(( syp->DULim != S_OFF ) && pmp->PLIM == 1 )
-//            if( fabs( (double)syp->DUL[jj] - pmp->DUL[j] ) >= 1e-19 )
-              if( syp->DUL[jj] != (float)pmp->DUL[j] )   //SD 22/01/2009
-              break;
-        if( syp->DULim != S_OFF || syp->DLLim != S_OFF )
-        {  if( pmp->RLC[j] != syp->RLC[jj] )
-             break;
-           if( pmp->RSC[j] != syp->RSC[jj] )
-             break;
-        }
     }  // j
     if( j < je )
-       return 1;
+       return 0;
   }  // k
+
+
+  // lists of components didn't change
+  // test B - recipes and constraints
+      for( i=0; i<pmp->N; i++ )
+          if( pmp->B[i] != 0. )
+          { if( fabs( syp->B[pmp->mui[i]] /pmp->B[i] - 1. ) > pa.p.DHB   )
+              return 1;
+          }
+          else
+          { if( syp->B[pmp->mui[i]]  !=  0.   )
+              return 1;
+          }
+
+    je = 0;
+      // test other settings for DCs
+    for( k = 0; k < pmp->FI; k++ )
+    {
+          jb = je;
+          je += pmp->L1[k];
+      for( j=jb; j<je; j++ )
+      {
+         jj = pmp->muj[j]; //        DK    07.03.2008,  16.05.2008
+
+          if(( syp->DLLim != S_OFF ) && pmp->PLIM == 1 )
+  //            if( fabs( (double)syp->DLL[jj] - pmp->DLL[j] ) >= 1e-19 )
+                if( syp->DLL[jj] != (float)pmp->DLL[j]  )   //SD 22/01/2009
+                  break;
+          if(( syp->DULim != S_OFF ) && pmp->PLIM == 1 )
+  //            if( fabs( (double)syp->DUL[jj] - pmp->DUL[j] ) >= 1e-19 )
+                if( syp->DUL[jj] != (float)pmp->DUL[j] )   //SD 22/01/2009
+                break;
+          if( syp->DULim != S_OFF || syp->DLLim != S_OFF )
+          {  if( pmp->RLC[j] != syp->RLC[jj] )
+               break;
+             if( pmp->RSC[j] != syp->RSC[jj] )
+               break;
+          }
+      }  // j
+      if( j < je )
+         return 1;
+    }  // k
 
     for( k=0; k<pmp->FI; k++ )
     {

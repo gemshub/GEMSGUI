@@ -288,7 +288,7 @@ CH_FOUND:
             pmp->DLL[j] = 0.0;
         }
         // additional data
-       	pmp->GEX[j] = 0.0;  // Molar constant excess free energy increments zeroed off
+        pmp->fDQF[j] = 0.0;  // DQF parameters or pure-gas fugacities zeroed off
 
         if( syp->PParc != S_OFF )
             pmp->Pparc[j] = syp->Pparc[jj];

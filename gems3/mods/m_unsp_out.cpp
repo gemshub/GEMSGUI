@@ -454,8 +454,8 @@ void TUnSpace::adapt_nPG( int line, double new_val, double new_int )
              if( pmu->muj[jj] == j )
              {
 #ifndef IPMGEMPLUGIN
-                 pmu->GEX[jj] = (usp->Gs[j][0]-
-                  float(TProfil::pm->tpp->G[j]))/pmu->RT;
+                 pmu->fDQF[jj] = (usp->Gs[j][0]-  // not used after 16/07/2011 must be changed
+                  float(TProfil::pm->tpp->G[j]))/pmu->RT; // tpp->G may not be at this T,P
 #else
                   pmu->GEX[jj] = (usp->Gs[j][0]-
                    float(pmu->tpp_G[j]))/pmu->RT;
