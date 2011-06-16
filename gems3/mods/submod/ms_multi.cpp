@@ -40,6 +40,12 @@ TMulti::TMulti( int nrt, SYSTEM* sy_, MTPARM *tp_, RMULTS *mu_ ):
     arrL=0;
     arrAN=0;
     
+U_mean = 0;
+U_M2 = 0;
+U_CVo = 0;
+U_CV = 0;
+ICNud = 0;
+
     sizeFIs = 0;
     phSolMod = 0;
 }
@@ -238,7 +244,7 @@ aObj[ o_wi_lsmod ].SetDim( pm.FIs, 3 ); // 3 columns
     aObj[ o_wo_u].SetPtr( pm.U );
     aObj[ o_wo_u ].SetDim( pm.N, 1 );
     aObj[ o_wd_uc].SetPtr( pm.Uc );
-    aObj[ o_wd_uc ].SetDim( pm.N, 1 );
+    aObj[ o_wd_uc ].SetDim( pm.N, 2 );
     aObj[ o_wd_uefd].SetPtr( pm.Uefd );
     aObj[ o_wd_uefd ].SetDim( pm.N, 1 );
     aObj[ o_wd_ur].SetPtr( pm.U_r );
@@ -393,15 +399,6 @@ aObj[ o_wo_aph].SetPtr( pm.APh );
 aObj[ o_wo_aph ].SetDim( pm.FIs, MIXPHPROPS );
 aObj[ o_wo_uph].SetPtr( pm.UPh );
 aObj[ o_wo_uph ].SetDim( pm.FIs, MIXPHPROPS );
-/*
-//  Added 16.11.2004 by Sveta
-    aObj[ o_wd_sitxcat ].SetPtr( pm.sitXcat );
-    aObj[ o_wd_sitxcat ].SetDim( pm.sitNcat, 1 );
-    aObj[ o_wd_sitxan ].SetPtr( pm.sitXan );
-    aObj[ o_wd_sitxan ].SetDim( 1, pm.sitNan );
-    aObj[ o_wd_site ].SetPtr( pm.sitE );
-    aObj[ o_wd_site ].SetDim( pm.sitNcat, pm.sitNan );
-*/
 }
 
 // set dynamic Objects ptr to values
@@ -484,7 +481,7 @@ void TMulti::dyn_set(int /*q*/)
 //    pm.lnSAT = (double *)aObj[ o_wo_lnsat ].GetPtr();
     pm.B     = (double *)aObj[ o_wi_b ].GetPtr();
     pm.U     = (double *)aObj[ o_wo_u ].GetPtr();
-    pm.Uc   = (double *)aObj[ o_wd_uc ].GetPtr();
+    pm.Uc   = (double (*)[2])aObj[ o_wd_uc ].GetPtr();
     pm.Uefd   = (double *)aObj[ o_wd_uefd ].GetPtr();
     pm.U_r   = (double *)aObj[ o_wd_ur ].GetPtr();
     pm.C     = (double *)aObj[ o_wo_c ].GetPtr();
@@ -635,7 +632,7 @@ void TMulti::dyn_kill(int /*q*/)
     pm.lnSAC = (double (*)[4])aObj[ o_wo_lnsat ].Free();
     pm.B     = (double *)aObj[ o_wi_b ].Free();
     pm.U     = (double *)aObj[ o_wo_u ].Free();
-    pm.Uc   = (double *)aObj[ o_wd_uc ].Free();
+    pm.Uc   = (double (*)[2])aObj[ o_wd_uc ].Free();
     pm.Uefd   = (double *)aObj[ o_wd_uefd ].Free();
     pm.U_r   = (double *)aObj[ o_wd_ur ].Free();
     pm.C     = (double *)aObj[ o_wo_c ].Free();
@@ -698,34 +695,10 @@ void TMulti::dyn_kill(int /*q*/)
     pm.CPh = (double (*)[MIXPHPROPS])aObj[ o_wo_cph].Free();
     pm.APh = (double (*)[MIXPHPROPS])aObj[ o_wo_aph].Free();
     pm.UPh = (double (*)[MIXPHPROPS])aObj[ o_wo_uph].Free();
-    
+
     Free_TSolMod();
-/*
-//  Added 16.11.2004 by Sveta
-    pm.sitXcat = (long int *)aObj[ o_wd_sitxcat ].Free();
-    pm.sitXan = (long int *)aObj[ o_wd_sitxan ].Free();
-    pm.sitE = (double *)aObj[ o_wd_site ].Free();
-*/
 }
 
-/*
-void TMulti::sit_dyn_new()
-{
-//  Added 16.11.2004 by SD
-   if( pm.sitNcat*pm.sitNan )
-     pm.sitE = (double *)aObj[ o_wd_site].Alloc(pm.sitNcat, pm.sitNan, D_);
-   else
-     pm.sitE = (double *)aObj[ o_wd_site].Free();
-   if( pm.sitNcat )
-     pm.sitXcat = (long int *)aObj[ o_wd_sitxcat].Alloc( pm.sitNcat, 1, L_ );
-   else
-     pm.sitXcat = (long int *)aObj[ o_wd_sitxcat].Free();
-   if( pm.sitNan )
-     pm.sitXan = (long int *)aObj[ o_wd_sitxan].Alloc( 1, pm.sitNan, L_ );
-   else
-     pm.sitXan = (long int *)aObj[ o_wd_sitxan].Free();
-}
-*/
 // reallocation of dynamic memory
 void TMulti::dyn_new(int /*q*/)
 {
@@ -752,7 +725,7 @@ void TMulti::dyn_new(int /*q*/)
     pm.lnGmo = (double *)aObj[ o_w_lngmo].Alloc( pm.L, 1, D_);
     pm.B = (double *)aObj[ o_wi_b].Alloc( pm.N, 1, D_ );
     pm.U = (double *)aObj[ o_wo_u].Alloc( pm.N, 1, D_ );
-    pm.Uc = (double *)aObj[ o_wd_uc].Alloc( pm.N, 1, D_ );
+    pm.Uc = (double (*)[2])aObj[ o_wd_uc].Alloc( pm.N, 2, D_ );
     pm.Uefd = (double *)aObj[ o_wd_uefd].Alloc( pm.N, 1, D_ );
     pm.U_r = (double *)aObj[ o_wd_ur].Alloc( pm.N, 1, D_ );
     pm.C = (double *)aObj[ o_wo_c].Alloc( pm.N, 1, D_ );
@@ -859,7 +832,6 @@ void TMulti::dyn_new(int /*q*/)
         pm.RFLC  = (char *)aObj[ o_wi_rflc ].Free();
         pm.RFSC  = (char *)aObj[ o_wi_rfsc ].Free();
     }
-
     if( pm.LO > 1 )
     {
         pm.Y_m = (double *)aObj[ o_wd_ym].Alloc( pm.L, 1, D_ );
@@ -1016,14 +988,12 @@ void TMulti::dyn_new(int /*q*/)
         pm.CPh = (double (*)[MIXPHPROPS])aObj[ o_wo_cph].Alloc(pm.FIs,MIXPHPROPS, D_);
         pm.APh = (double (*)[MIXPHPROPS])aObj[ o_wo_aph].Alloc(pm.FIs,MIXPHPROPS, D_);
         pm.UPh = (double (*)[MIXPHPROPS])aObj[ o_wo_uph].Alloc(pm.FIs,MIXPHPROPS, D_);
-           
+
+
     Alloc_TSolMod( pm.FIs );
 
     /* pm.R = (double *)aObj[ o_w_r].Alloc( pm.N, pm.N+1, D_ ); */
 //    sit_dyn_new();
 }
-
-
-
 
 //--------------------- End of ms_multi.cpp ---------------------------

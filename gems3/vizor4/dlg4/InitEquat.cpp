@@ -964,7 +964,7 @@ wnData.Add( new pagesSetupData("dul", o_wi_dul)); //"Upper metastability restric
 wnData.Add( new pagesSetupData("dll", o_wi_dll)); //"Lower metastability restrictions for DC mole quantities x at equilibrium state "
 wnData.Add( new pagesSetupData("c", o_wo_g)); //"Normalized energy function of Dependent Components, mol/mol "
 wnData.Add( new pagesSetupData("g0", o_wi_g0)); // j "Molar (molal) standard Gibbs energy functions of Dependent Components at T,P of interest "
-wnData.Add( new pagesSetupData("gEx", o_wi_gex)); // j "Optional additions to input g(T,P) values for Dependent Components "
+wnData.Add( new pagesSetupData("fDQF", o_wi_gex)); // j "Optional DQF parameters or pure gas fugacities for Dependent Components "
 wnData.Add( new pagesSetupData("vol", o_wio_vol)); //o_wio_vol vol    D_  -3 1  j "Molar (partial molal) volumes of Dependent Components (in cm3/mol) at T,P of interest "
 //o_wio_h0  h0     D_  -3 1  j "DC molar enthalpies, reserved"
 //o_wio_a0  f0     D_  -3 1  j "DC molar Helmholtz energies, reserved"
