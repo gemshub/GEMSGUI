@@ -230,8 +230,8 @@ trUtf8("GEMS3 (Windows XP/7 MinGW gcc4.4)"),
 #endif
            trUtf8("This is GEM-Selektor 3 (GEMS3) program package   \n\n"
                   "    release candidate 3.0,\n\n"
-                  "    rev. 1858 (June 16, 2011)\n\n"
-                  "    using GEMS3K rev. 546 (trunk) \n\n\n"
+                  "    rev. 1860 (June 17, 2011)\n\n"
+                  "    using GEMS3K rev. 550 (trunk) \n\n\n"
                   "For GEMS Wiki community of geochemical modellers \n\n"
                   "(c) 2011, PSI-ETHZ GEMS Development Team\n") );
 }
