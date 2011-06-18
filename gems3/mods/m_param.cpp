@@ -821,8 +821,10 @@ short TProfil::BAL_compare()
   // test B - recipes and constraints
       for( i=0; i<pmp->N; i++ )
           if( pmp->B[i] != 0. )
-          { if( fabs( syp->B[pmp->mui[i]] /pmp->B[i] - 1. ) > pa.p.DHB   )
-              return 1;
+          {
+//              if( fabs( syp->B[pmp->mui[i]] /pmp->B[i] - 1. ) > pa.p.DHB * 0.001   )
+              if( fabs( log10( syp->B[pmp->mui[i]] /pmp->B[i] ) > -23. ) ) // log10( pa.p.DB ) ) )
+                  return 1;
           }
           else
           { if( syp->B[pmp->mui[i]]  !=  0.   )
