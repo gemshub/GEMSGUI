@@ -53,11 +53,11 @@ const double R_CONSTANT = 8.31451,
                                 Min_phys_amount = 1.66e-24;
 
 SPP_SETTING pa_ = {
-    "GEM-Selektor v3.0u-1858.546: Numerical controls & thresholds",
-    {   // Typical default set (16.06.2011) new PSSC( logSI ) & uDD
+    "GEM-Selektor v3.0u-1864.550: Numerical controls & thresholds",
+    {   // Typical default set (20.06.2011) new PSSC( logSI ) & uD3
         2,  /* PC */  2,     /* PD */   -4,   /* PRD */
         1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
-        1, /* DT */     0,   /* PLLG */   1,  /* PE */  7000, /* IIM */
+        1, /* DT */     3000,   /* PLLG */   1,  /* PE */  7000, /* IIM */
         1000., /* DG */   1e-11,  /* DHB */  1e-20,  /* DS */
         1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
         1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
@@ -149,10 +149,10 @@ BASE_PARAM dfBase[5] =
             { // Variant of strict settings for highest accuracy (16.05.2010)
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
                 1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
-                1, /* DT */     3000,   /* PLLG */   1,  /* PE */
+                0, /* DT */     3000,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
-                1000., /* DG */   1e-12,  /* DHB */  1e-20,  /* DS */
-                1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                1000., /* DG */   1e-14,  /* DHB */  1e-20,  /* DS */
+                3e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
                 1e-6, /* DFYs, */  1e-17,  /* DB */   -1.,   /* AG */
