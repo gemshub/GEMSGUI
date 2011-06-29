@@ -1971,19 +1971,23 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
        str.c_str(), nRT, pattern );
 
     int rn_type = 0;
-    switch (vfQuestYesNoCancel(window(),
+
+    if( aKey.GetCount() < 2)
+      rn_type = 1;
+    else
+     {  switch (vfQuestYesNoCancel(window(),
         "How to rename records",
         "Each key separately (Yes) \n"
         "All records using template (No)" ))
-    {
-    case VF_YES:
-        rn_type = 1;
-    case VF_NO:
-         break;
-    case VF_CANCEL:
-        return;
+        {
+          case VF_YES:
+                      rn_type = 1;
+          case VF_NO:
+                      break;
+          case VF_CANCEL:
+                     return;
+         }
     }
-
     gstring from_t;
     gstring to_t;
     if( rn_type == 0 )

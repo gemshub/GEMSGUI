@@ -71,7 +71,14 @@
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QStackedWidget" name="winStac"/>
+          <widget class="QStackedWidget" name="winStac">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -121,12 +128,12 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>280</width>
+          <width>360</width>
           <height>0</height>
          </size>
         </property>
         <attribute name="horizontalHeaderDefaultSectionSize">
-         <number>90</number>
+         <number>100</number>
         </attribute>
         <attribute name="horizontalHeaderMinimumSectionSize">
          <number>25</number>

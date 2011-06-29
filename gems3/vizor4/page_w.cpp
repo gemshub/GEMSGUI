@@ -309,7 +309,7 @@ TCWindow::TCWindow(TCModuleImp* pImp, CWinInfo& i, int page):
             p->setAutoExclusive(true);
             p->setCheckable( true );
             p->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-            p->setMaximumWidth( 50 );
+            //p->setMaximumWidth( 50 );
             pTab->addButton(p, ii);
             buttonBox->addWidget( p);
             if(ii == iCurPage)
@@ -324,7 +324,7 @@ TCWindow::TCWindow(TCModuleImp* pImp, CWinInfo& i, int page):
         pFilesBut->setToolTip( "Show open database files" );
         pFilesBut->setText("Files");
         pFilesBut->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        pFilesBut->setMaximumWidth( 40 );
+        //pFilesBut->setMaximumWidth( 40 );
         connect( pFilesBut, SIGNAL(clicked()), SLOT(EvFileDown()) );
         buttonBox->addWidget( pFilesBut );
     }

@@ -135,10 +135,10 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
     pLists.append(lstIndexes1);
 
     // define table
-    recTable->setColumnWidth( 0, 50 );
-    recTable->setColumnWidth( 1, 80 );
-    recTable->setColumnWidth( 2, 70 );
-    recTable->setColumnWidth( 3, 40 );
+    recTable->setColumnWidth( 0, 70 );
+    recTable->setColumnWidth( 1, 90 );
+    recTable->setColumnWidth( 2, 100 );
+    //recTable->setColumnWidth( 3, 50 );
     TSystemDelegate * deleg = new TSystemDelegate( this );
     recTable->setItemDelegate(deleg);
     // setup from atbData
