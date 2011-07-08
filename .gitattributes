@@ -1172,6 +1172,7 @@ gems3/gems3.app/Contents/Resources/projects/TryNPTDB/syseq.TryNPTDB.pdb -text
 gems3/gems3.app/Contents/Resources/visor.data/visobj.dat -text
 gems3/gems3.app/Contents/Resources/visor.data/visor.dat -text
 gems3/gems3.sh -text
+gems3/gems3_qt.pro -text
 gems3/gems_qt.pro -text
 gems3/img.qrc -text
 gems3/img/RunBCC.png -text
