@@ -1337,6 +1337,7 @@ TCModule::CmAddOpenFile()
 
         db->AddOpenFile(SelectFileList(closef));
         db->SetKey( ALLKEY );
+        dyn_set();
         //        SetString("Command finished OK");
         pVisor->Update(); // no objecs change, only title
     }
@@ -1368,6 +1369,7 @@ TCModule::CmReOpenFileList()
         db->Open( true, UPDATE_DBV, arr );
         db->SetKey( ALLKEY );
         //       SetString("Command finished OK");
+        dyn_set();
         pVisor->Update(); // no objecs change, only title
     }
 

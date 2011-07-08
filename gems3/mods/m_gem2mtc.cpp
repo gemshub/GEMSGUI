@@ -581,7 +581,8 @@ void TGEM2MT::outMulti()
    showMss = 1L;
    for( mtp->kv = 0; mtp->kv < mtp->nIV; mtp->kv++ )
    {
-     pVisor->Message( window(), GetName(),
+     mtp->qc = mtp->kv;
+      pVisor->Message( window(), GetName(),
       "Generation of EqStat records\n"
            "Please, wait...", mtp->kv, mtp->nIV);
 

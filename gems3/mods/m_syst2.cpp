@@ -580,7 +580,7 @@ void TSysEq::dyn_new( int q )
     st[q].lnGam = (double *)aObj[ o_stgam ].Alloc( st[q].L, 1, D_ );
     st[q].Ba = (double *)aObj[ o_stba ].Alloc( st[q].Fis, st[q].N, D_ );
     st[q].VM = (double (*)[5])aObj[ o_stvm ].Alloc( st[q].Fis, 5, D_ );
-    st[q].DIC = (double (*)[2])aObj[ o_stdic ].Alloc( st[q].Fis, 2, D_ );
+    st[q].DIC = (double (*)[2])aObj[ o_stdic ].Alloc( st[q].N, 2, D_ );
     // st[q].SBp = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_stsbp ].Alloc( st[q].N, 1,
     //                                                            MAXICNAME+MAXSYMB);
     // st[q].SMp = (char (*)[MAXDCNAME])aObj[ o_stsmp ].Alloc( st[q].L, 1, MAXDCNAME);

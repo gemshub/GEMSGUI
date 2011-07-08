@@ -229,6 +229,7 @@ void TSysEq::InsertChanges( TIArray<CompItem>& aIComp,
     // insert changes to IComp
     if(aIComp.GetCount()<1)
         goto COMPOS_TEST;
+
     for( i=0, j1=0, j2=0, j3=0; i<aIComp.GetCount(); i++)
     {
         if( ssp->nnc )
@@ -315,6 +316,7 @@ PHASE_TEST:
     delta = 0;
     if(aPhase.GetCount()<1)
         goto DCOMP_TEST;
+
     for( i=0, j1=0, j2=0, j3=0, j4=0, j5=0, j6=0; i<aPhase.GetCount(); i++)
     {
         if( ssp->phc )
@@ -384,7 +386,7 @@ PHASE_TEST:
                 }
             }
         }
-        if( stp->phf )  // PROJECT indices of multicomp. phases in eqstate [Fis]
+       if( stp->phf )  // PROJECT indices of multicomp. phases in eqstate [Fis]
         {
             while( (stp->phf[j6] < aPhase[i].line) && (j6<stp->Fis) )
                 stp->phf[j6++] += delta;
@@ -414,15 +416,19 @@ PHASE_TEST:
     if( ssp->phe )
         for(; j5<ssp->DM[19]; j5++)
             ssp->phe[j5] += delta;
+
     if( stp->phf )
         for(; j6<stp->Fis; j6++)
             stp->phf[j6] += delta;
 
     // insert changes to Dcomp
 DCOMP_TEST:
+
     delta = 0;
     if(aDComp.GetCount()<1)
         goto EXIT_TEST;
+
+
     for( i=0, j1=0, j2=0, j3=0, j4=0, j5=0, j6=0; i<aDComp.GetCount(); i++)
     {
         if( ssp->dcc ) // DC     on  in  XeD[]     [sy.Lb]
@@ -524,7 +530,6 @@ DCOMP_TEST:
         for(; j6<stp->L; j6++)
             stp->llf[j6] += delta;
 
-
     // realloc memory if delete records
 EXIT_TEST:
     if( ifRealloc )
@@ -582,6 +587,7 @@ void TSysEq::newSizeifChange()
             j++;
         }
     stp->N = j;
+
 
     // delete COMPOS records
     for( i=0, j=0; i<ssp->DM[11]; i++ )      // System llc
@@ -707,6 +713,7 @@ void TSysEq::newSizeifChange()
             j++;
         }
     ssp->DM[23] = j;
+
 
     for( i=0, j=0; i<ssp->DM[4]; i++ )      // System dca
         if( ssp->dca[i] >= 0 ) // no delete num

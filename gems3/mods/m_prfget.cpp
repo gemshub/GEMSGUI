@@ -852,6 +852,7 @@ void TProfil::SetFN()
 
         if( !rt[aMod[i].rtNum()].SetNewOpenFileList( aFls ))
             allOpend = false;
+        aMod[i].dyn_set();
     }
     if( !allOpend )
     {
