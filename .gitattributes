@@ -843,10 +843,6 @@ gems2/vizor/visor_w.cpp svn_keywords=Author+Date+Id+Revision
 gems2/vizor/visor_w.h svn_keywords=Author+Date+Id+Revision
 gems2/vizor/vizor.pri -text
 gems3/assistant.sh -text
-gems3/data/units.ini -text
-gems3/data/vis_cn.ini -text
-gems3/data/vis_od.ini -text
-gems3/data/viz_cndoc.txt -text
 gems3/doc/Descriptions/Activity-Coeffs.doc -text
 gems3/doc/Descriptions/P-corrections.doc -text
 gems3/doc/Descriptions/T-corrections-Reac.doc -text
