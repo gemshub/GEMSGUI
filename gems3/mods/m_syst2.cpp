@@ -598,6 +598,7 @@ void TSysEq::set_def( int q)
     strcpy( ss[q].name, "`");
     strcpy( ss[q].notes, "`");
     memset( ss[q].PhmKey, 0, EQ_RKLEN );
+    memset( ss[q].PhmKey, '-', 3 );  // Fix for default, DK 23.10.2011
     bool is_a = false;
     bool is_x = false;
     bool is_g = false;

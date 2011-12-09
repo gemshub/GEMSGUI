@@ -633,6 +633,11 @@ TCModule::RecBuild( const char *key, int mode  )
         retType = VF3_1;
         dyn_kill();
         set_def(); // set default data or zero if necessary
+        if( nRT == RT_SYSEQ ) // no remake wizard if "Create"
+                {
+                  contentsChanged = true;
+                  break;
+                }
     case VF3_2:
         //if( !pImp )
         //{    Show(pVisorImp, "Remaking...");

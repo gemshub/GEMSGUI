@@ -87,6 +87,7 @@ TDualTh::GetKeyofRecord( const char *oldKey, const char *strTitle,
     if(  str.empty() )
         return str;
     rt[RT_DUALTH].SetKey(str.c_str());
+    if( keyType != KEY_TEMP )
     keyTest( str.c_str() );
     return str;
 }

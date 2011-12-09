@@ -21,6 +21,7 @@
 #include <qvariant.h>
 
 #include "v_dbm.h"
+#include "v_mod.h"
 #include "v_module.h"
 #include "service.h"
 #include "KeyDialog.h"
@@ -234,6 +235,168 @@ KeyDialog::CmClearAll()
 
 TCStringArray
 KeyDialog::allSelectedKeys()
+{
+    TCStringArray arr;
+
+    if( !result() )
+        return arr;
+
+    for( int ii=0; ii<pList->count(); ii++ )
+        if( pList->item(ii)->isSelected() )
+        {
+         gstring s = pList->item(ii)->text().toLatin1().data();;
+         arr.Add(s.c_str());
+        }
+    return arr;
+}
+
+
+//------------------------------------------------------
+// RDKeyDialog - work with ReacDC&DComp keys lists
+RDKeyDialog::RDKeyDialog(QWidget* win, TCStringArray& sel,
+              const char* key, const char* caption, short aNsiT):
+        QDialog( win), NsiT(aNsiT)
+{
+    setupUi(this);
+    old_sel.clear();
+
+    for(uint ii=0; ii<sel.GetCount(); ii++)
+    {   if( strchr( sel[ii].c_str(), ':' ))  // key in packed form
+        {
+          if( sel[ii][0] == SRC_REACDC )
+          {  rt[RT_REACDC].SetKey( sel[ii].c_str()+2 );
+             old_sel.append( makeKey( SRC_REACDC, rt[RT_REACDC].UnpackKey()));
+          }
+          else
+          {  rt[RT_DCOMP].SetKey( sel[ii].c_str()+2 );
+             old_sel.append( makeKey( SRC_DCOMP, rt[RT_DCOMP].UnpackKey()));
+          }
+        }
+        else
+          old_sel.append( sel[ii].c_str() );
+    }
+
+    pList->setFont( pVisorImp->getCellFont() );
+    pList->setSelectionMode(QAbstractItemView::MultiSelection);
+    setWindowTitle( caption );
+    QObject::connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
+
+    ErrorIf(!key, "KeyDialog", "pkey is null");
+    if( strpbrk(key, "*?") == 0 )
+        keyFilter = "*";
+    else
+       keyFilter = key;
+
+    SetList();
+    pList->setFocus();
+}
+
+
+RDKeyDialog::~RDKeyDialog()
+{}
+
+void RDKeyDialog::CmHelp()
+{
+  pVisorImp->OpenHelp( GEMS_SELECT_HTML );
+}
+
+void RDKeyDialog::languageChange()
+{
+    retranslateUi(this);
+}
+
+QString RDKeyDialog::makeKey( char type, const char *key )
+{
+   QString str = QString(type);
+           str += ' ';
+           str += key;
+   return str;
+}
+
+void RDKeyDialog::SetList()
+{
+    TCIntArray temp;
+    TCStringArray keyList;
+    uint jj=0;
+    int ii;
+
+    gstring s = "Please, mark one or more record keys. Filter: ";
+    s +=  keyFilter;
+
+    // ReacDC list
+    if( NsiT > 0 )  // template for adsorption
+        keyFilter[0] = CP_SSPC;
+    int n = rt[RT_REACDC].GetKeyList( keyFilter.c_str(), keyList, temp);
+
+    for( int ii=0; ii<n; ii++ )
+       pList->addItem( makeKey( SRC_REACDC, keyList[ii].c_str()));
+
+    // Dcomp list
+    if( NsiT > 0 )  // template for adsorption
+    {    keyFilter[0] = CP_SOLID;
+         s+= "\\";
+         s+= keyFilter;
+    }
+
+    n = rt[RT_DCOMP].GetKeyList( keyFilter.c_str(), keyList, temp);
+
+    for( int ii=0; ii<n; ii++ )
+       pList->addItem( makeKey( SRC_DCOMP, keyList[ii].c_str()));
+
+   for( jj=0; jj<old_sel.count(); jj++)
+    {
+       QString str = old_sel[jj];
+       int pos = str.indexOf('*', 0);
+       if( pos > 0 )
+        str.truncate ( pos );
+       for( ii=0; ii<pList->count(); ii++ )
+        {
+            // comparing parts before '*' for overwrite dcomp, reacdc ....
+            if( pList->item(ii)->text().contains(str/*old_sel[jj]*/) )
+            {
+              pList->item(ii)->setSelected( true); //pList->setSelected(ii, true);
+              break;
+            }
+        }
+   }
+   pLabel->setText(s.c_str());
+ }
+
+
+void RDKeyDialog::CmFilter()
+{
+    gstring str_name = "Template for ";
+            str_name +=  rt[RT_REACDC].GetKeywd();
+            str_name +=  "&";
+            str_name +=  rt[RT_DCOMP].GetKeywd();
+            str_name += " record key";
+    KeyFilter dbFilter(this, RT_DCOMP, keyFilter.c_str(), str_name.c_str() );
+    if( dbFilter.exec() )
+    {
+        keyFilter = dbFilter.getFilter();
+        pList->clear();
+        SetList();
+        pList->setCurrentRow(0);
+     }
+}
+
+void RDKeyDialog::CmSelectAll()
+{
+    // select all gstrings
+    for( int ii=0; ii<pList->count(); ii++ )
+        pList->item(ii)->setSelected( true);
+}
+
+
+void RDKeyDialog::CmClearAll()
+{
+    pList->clearSelection();
+}
+
+/*! returns selection array
+    array is empty if nothing is selected
+*/
+TCStringArray RDKeyDialog::allSelectedKeys()
 {
     TCStringArray arr;
 

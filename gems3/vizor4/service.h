@@ -74,6 +74,8 @@ vfMultiKeys(QWidget* par, const char* caption,
 TCStringArray
 vfMultiKeysSet(QWidget* par, const char* caption,
         int iRt, const char* key, TCStringArray& sel );
+TCStringArray vfRDMultiKeysSet(QWidget* par, const char* caption,
+         const char* key, TCStringArray& sel, short NsiT=0 );
 
 bool
 vfListFiles(QWidget* par, bool show_dlg, const char * prfName,

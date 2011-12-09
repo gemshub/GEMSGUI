@@ -283,8 +283,8 @@ ProgressDialog::CalcFinished()
     pClose->setToolTip( trUtf8( "Do not save IPM results to database" ) );
     MULTI* pData = TProfil::pm->pmp;
     QString str;
-//    str.sprintf("Converged at DK=%.2g", TProfil::pm->pa.p.DK);
-    str.sprintf( "Converged at DK=%.2g", pData->DXM );
+      str.sprintf( "Converged at DK=%.3g", pData->PCI );
+//    str.sprintf( "Converged at DK=%.2g", pData->DXM );
     setWindowTitle(str);
 }
 
@@ -298,6 +298,7 @@ ProgressDialog::CmAccept()
     try
     {
         pVisorImp->SaveSystem();
+        //pVisorImp->CmSave();
         close();
     }
     catch( TError& err)
@@ -351,6 +352,9 @@ ProgressDialog::paintEvent(QPaintEvent* ev)
   r.setHeight(ht_a );
   p.fillRect(r, QBrush(Qt::blue));
   r.setY( r.y()+ ht_a );
+  r.setHeight(ht_l);
+  p.fillRect(r, QBrush(Qt::green));
+  r.setY( r.y()+ ht_l );
   r.setHeight(ht_s);
   p.fillRect(r, QBrush(Qt::black));
 
@@ -386,22 +390,26 @@ ProgressDialog::Update(bool force)
     pKey->setText(rt[RT_SYSEQ].PackKey());
 
 
-    float g=0, a=0, s=0;
+    float g=0, a=0, s=0, l=0;
     for( int ii=0; ii<pData->FI; ii++ )
     {
         /// check if '+'
         switch( pData->PHC[ii] )
         {
-        case 'g':
+        case 'g': case 'p':
         case 'f':
             g += pData->FWGT[ii];
             break;
         case 'a':
             a += pData->FWGT[ii];
             break;
-        case 'x':
-        case 's':
+        case 'x': case 'd':
+        case 's': case 'y':
             s += pData->FWGT[ii];
+            break;
+        case 'l': case 'h':
+        case 'm':
+            l += pData->FWGT[ii];
             break;
         }
     }
@@ -410,30 +418,36 @@ ProgressDialog::Update(bool force)
     pGas->setText( str );
     str.sprintf( "%*g", 8, a );
     pWater->setText( str );
+    str.sprintf( "%*g", 8, l );
+    pLiquid->setText( str );
     str.sprintf( "%*g", 8, s );
     pSolid->setText( str );
 
 
     int ht = pBottle->height();
-    float all = g + a + s;
+    float all = g + a + s +l;
     ht_g = (all!=0) ? int(ceil(g * ht / all)) :0;
     ht_a = (all!=0) ? int(ceil(a * ht / all)) :0;
+    ht_l = (all!=0) ? int(ceil(l * ht / all)) :0;
     ht_s = (all!=0) ? int(ceil(s * ht / all)) :0;
 
-    pProgress->setMaximum(7); //pProgress->setTotalSteps(7);
-
-    int progr = (pData->DXM!=0) ? 7 - int(ceil(log10(fabs(pData->PCI/pData->DXM)+.1))) : 0;
-    if (progr > 7)
-        progr = 7;
+    int progr = 24;
+    pProgress->setMaximum(progr);
+    double dist = (double)progr/6.;
+    if( pData->PCI >0. && pData->DXM >0.)
+            dist = log10( pData->PCI/ pData->DXM );
+    progr -= int(floor(dist*6.));
+    if(progr < 0 )
+        progr = 0;
+    if(progr > 24 )
+        progr = 24;
     pProgress->setValue(progr);//pProgress->setProgress(progr);
 
 //    clock_t t_end = clock();
 //    clock_t dtime = ( t_end- t_start );
-    str.sprintf("GEM IPM Minimization (pure run time: %lg s).",
+    str.sprintf("GEM IPM Minimization (run time: %lg s).",
        pData->t_elap_sec );   //  (double)dtime/(double)CLOCKS_PER_SEC);
     TextLabel1->setText(str);
-
-
 //    last_update = time(0);
     update();
     // this really updates window when CPU is heavyly loaded

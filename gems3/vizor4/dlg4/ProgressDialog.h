@@ -37,6 +37,7 @@ class ProgressDialog : public QDialog, public Ui::ProgressDialogData
     int ht_g;
     int ht_a;
     int ht_s;
+    int ht_l;
     time_t last_update;
     CalcThread* calcThread;
     QTimer* timer;

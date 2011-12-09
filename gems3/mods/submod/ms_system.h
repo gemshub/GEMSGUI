@@ -63,8 +63,8 @@ typedef struct
     PLLim, // pll_ lower restrictions for X_a (phases) { + * - } reserved
     DULim, // dul_ upper DC restrictions for x_j { + * - } reserved
     PULim, // pul_ upper restrictions for X_a (phases) { + * - } reserved
-    PPHk,  // Flag to take from another system: total solid composition { + },
-           // phase compositions { - }, or both { * }, if possible
+    PPHk,  // Flag to take from another system: total solid composition
+           // and phase compositions - now always both { * }
     PSATT, //PSATT_ to classify SAT calculation methods&allocation for sur DC
     PGEX,  // gEx_ excess free energies for (metastable) DC { + * - }
     PYOF,  // Yof_ metastability parameter for phases { + * - }
@@ -83,7 +83,7 @@ typedef struct
     PParc,  // Pparc_ partial pressures for DC { + * - }
     PdelB,  // delB_  uncertainties of bulk composition (vector b) elements
     PXlam,  // Xlam_ EDL discretness parameter for surface types, >0, <1,
-    Plref;  // sSDref, sSDval  references to data sources { + * - }
+    Pask;   // Would you like to activate (turn on) all IComp, DComp/ReacDC and Phase entries? { + * - }
     // at all 38 A_
     /* Fact size of arrays */
   short N,  // N of IC selected into system <= mu.N

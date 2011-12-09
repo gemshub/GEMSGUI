@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout">
@@ -268,40 +268,20 @@ Key of SysEq record to be used in getting phase compositions for the xp_ and MbX
           <item>
            <widget class="QLineEdit" name="pKey"/>
           </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="grPPHk">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QGroupBox" name="grPPHk">
-            <property name="title">
-             <string>Constant-source phase compositions to be taken into this recipe from the SysEq record with the above key: </string>
+           <widget class="QCheckBox" name="pPask">
+            <property name="text">
+             <string>Would you like to activate (turn on ) all IComp, DComp/ReacDC and Phase entries?</string>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout">
-             <item>
-              <widget class="QRadioButton" name="r2">
-               <property name="text">
-                <string>(fluid) phases bXa (Leaching process)</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="r1">
-               <property name="text">
-                <string>total solids bXs ( Flushing process) </string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="r3">
-               <property name="text">
-                <string>Both bXs and bXa</string>
-               </property>
-               <property name="checked">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
            </widget>
           </item>
          </layout>

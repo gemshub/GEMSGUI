@@ -396,10 +396,10 @@ TCompos::RecBuild( const char *key, int mode  )
     gstring str;
     TCStringArray aIclist;
     TCStringArray aDclist;
-    TCStringArray aRclist;
+    //TCStringArray aRclist;
     TCStringArray aIclist_old;
     TCStringArray aDclist_old;
-    TCStringArray aRclist_old;
+    //TCStringArray aRclist_old;
 
 //AGAIN_MOD:
     if( bcp->PcIC != S_OFF  ) oldIC = bcp->N;
@@ -471,6 +471,8 @@ LOOP_MARKIC:
     }
     rt[RT_DCOMP].MakeKey( RT_COMPOS, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     aDclist_old.Clear();
+
+    /*
     for( i=0; i<oldDC; i++ )
       if( bcp->DCS[i]  == SRC_DCOMP )
       {
@@ -503,16 +505,45 @@ LOOP_MARKDC:
         {
         case VF3_1:
             goto LOOP_MARKDC;
-        case VF3_2:   /*if( Nc )*/
+        case VF3_2:   *if( Nc )*
             break;
         case VF3_3:
             Error( GetName(),
                 " < 1 ReacDC records selected for PCO definition");
         }
 
+    */
+     for( i=0; i<oldDC; i++ )
+     {  str  = gstring(1, bcp->DCS[i]);
+        str += ' ';
+        str += gstring( bcp->SM[i], 0, DC_RKLEN );
+        aDclist_old.Add( str );
+     }
+LOOP_MARKDC:
+    aDclist = vfRDMultiKeysSet( window(),
+       " Please, mark ReacDC&DComp keys for use in PCO definition",
+       pkey, aDclist_old );
+
+    if( aDclist.GetCount() < 1 )
+        switch ( vfQuestion3( window(), GetName(),
+                  " < 1 ReacDC&DComp keys marked for PCO.\n"
+                  " Repeat marking,  \n"
+                  "Proceed to defining composition in different ways or\n"
+                  "Cancel assembling PCO definition?", "&Repeat", "&Proceed" ))
+        {
+        case VF3_1:
+            goto LOOP_MARKDC;
+        case VF3_2:   /*if( Nc )*/
+            break;
+        case VF3_3:
+            Error( GetName(),
+                " < 1 ReacDC&DComp records selected for PCO definition");
+        }
+
+
 COMP_COUNT:
 
-    bcp->Ld = (short)(aRclist.GetCount()+aDclist.GetCount());
+    bcp->Ld = (short)(/*aRclist.GetCount()+*/aDclist.GetCount());
     if( bcp->Ld < 1 )
         bcp->PcDC = S_OFF;
     else bcp->PcDC = S_ON;
@@ -532,7 +563,7 @@ COMP_COUNT:
                 bcp->CIcl[l] = QUAN_MOL;
         }
 
-    if( bcp->PcDC != S_OFF )
+   /* if( bcp->PcDC != S_OFF )
         for( i=0; i<bcp->Ld; i++ )
         {
           int Nr = aRclist.GetCount();
@@ -550,6 +581,15 @@ COMP_COUNT:
                 if( !bcp->CDcl[i] || bcp->CDcl[i]==A_NUL)
                     bcp->CDcl[i] = QUAN_MOL;
             }
+        }
+   */
+    if( bcp->PcDC != S_OFF )
+        for( i=0; i<bcp->Ld; i++ )
+        {
+           memcpy( bcp->SM[i], aDclist[i].c_str()+2, DC_RKLEN );
+           bcp->DCS[i] = aDclist[i].c_str()[0];
+           if( !bcp->CDcl[i] || bcp->CDcl[i]==A_NUL)
+            bcp->CDcl[i] = QUAN_MOL;
         }
 
     if( bcp->PcAU != S_OFF )

@@ -412,15 +412,15 @@ TPhase::MakeQuery()
 int
 TPhase::RecBuild( const char *key, int mode  )
 {
-    int iic, i;
+    int /*iic,*/ i;
     short nCat, nAn, nNs;
-    vstr pkeydc(81);
+    //vstr pkeydc(81);
     vstr pkeyrd(81);
 
     TCStringArray aDclist;
-    TCStringArray aRclist;
+    //TCStringArray aRclist;
     TCStringArray aDclist_old;
-    TCStringArray aRclist_old;
+    //TCStringArray aRclist_old;
 
     gstring str;
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
@@ -653,23 +653,26 @@ AGAIN_SETUP:
     SetString("PH_make   Remaking Phase definition");
     pVisor->Update();
 
-    //DCOMP keypart
+    /*DCOMP keypart
     rt[RT_DCOMP].MakeKey( RT_PHASE, pkeydc, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END);
-    if( pkeydc[1] != ':') pkeydc[1] = '*';
-if( php->NsiT > 0 )  // template for adsorption
-  pkeydc[0] = CP_SOLID; // added by KD 25.10.2004
+    if( pkeydc[1] != ':')
+        pkeydc[1] = '*';
+    if( php->NsiT > 0 )  // template for adsorption
+        pkeydc[0] = CP_SOLID; // added by KD 25.10.2004
+    */
 
     //REACDC  keypart
     rt[RT_REACDC].MakeKey( RT_PHASE, pkeyrd, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END );
-    if( pkeyrd[1] != ':') pkeyrd[1] = '*';
-if( php->NsiT > 0 )  // template for adsorption
-  pkeyrd[0] = CP_SSPC;  // added by KD 25.10.2004
+    if( pkeyrd[1] != ':')
+        pkeyrd[1] = '*';
+    if( php->NsiT > 0 )  // template for adsorption
+        pkeyrd[0] = CP_SSPC;  // added by KD 25.10.2004
 
     if( php->nDC && php->SM )
     {
         /* Build old selections DCOMP and REACDC */
         aDclist_old.Clear();
-        aRclist_old.Clear();
+        //aRclist_old.Clear();
         for( i=0; i<php->nDC; i++ )
         {
           gstring key_dr = gstring( php->SM[i], 0, DC_RKLEN );
@@ -677,28 +680,38 @@ if( php->NsiT > 0 )  // template for adsorption
           {
               rt[RT_DCOMP].SetKey( key_dr.c_str() );
               rt[RT_DCOMP].SetFldKey( 3, "*" );
-              aDclist_old.Add( rt[RT_DCOMP].UnpackKey() );
+              key_dr  = gstring(1, php->DCS[i]);
+              key_dr += ' ';
+              key_dr += rt[RT_DCOMP].UnpackKey();
+              //aDclist_old.Add( rt[RT_DCOMP].UnpackKey() );
           }
             else
                 if( php->DCS[i] == SRC_REACDC )
                 {
                   rt[RT_REACDC].SetKey( key_dr.c_str() );
                   rt[RT_REACDC].SetFldKey( 3, "*" );
-                  aRclist_old.Add( rt[RT_REACDC].UnpackKey() );
+                  key_dr  = gstring(1, php->DCS[i]);
+                  key_dr += ' ';
+                  key_dr += rt[RT_REACDC].UnpackKey();
+                  //aRclist_old.Add( rt[RT_REACDC].UnpackKey() );
                 }
+          aDclist_old.Add( key_dr );
         }
     }
 
 AGAINRC:
-    aRclist = vfMultiKeysSet( window(),
+    /*aRclist = vfMultiKeysSet( window(),
        "Please, mark ReacDC keys to be included into the Phase",
        RT_REACDC, pkeyrd, aRclist_old );
     aDclist = vfMultiKeysSet( window(),
        "Please, mark DComp keys to be included into the Phase",
        RT_DCOMP, pkeydc, aDclist_old );
+    */
+    aDclist = vfRDMultiKeysSet( window(),
+       "Please, mark ReacDC/DComp keys to be included into the Phase",
+       pkeyrd, aDclist_old, php->NsiT  );
 
-
-    if( aRclist.GetCount() < 1 && aDclist.GetCount() < 1 )
+    if( /*aRclist.GetCount() < 1 &&*/ aDclist.GetCount() < 1 )
     {
        switch ( vfQuestion3(window(), GetName(),
             "W08PHrem: Number of selected ReacDC/DComp keys < 1.\n"
@@ -715,9 +728,8 @@ AGAINRC:
        }
     }
 
-    php->nDC = (short)(aDclist.GetCount() + aRclist.GetCount());
-//    php->NR1 = aRclist.GetCount();   comm.out by KD on 25.10.2004
-    iic = aDclist.GetCount();
+    php->nDC = (short)(aDclist.GetCount()/* + aRclist.GetCount()*/);
+    //--iic = aDclist.GetCount();
 
 //-------------------------------------------------------
     nCat = 0; nAn = 0; nNs = 0;
@@ -729,10 +741,10 @@ AGAINRC:
        gstring spName;
        for( i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
        {
-          if( i < iic )
-            spName = gstring( aDclist[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
-         else
-            spName = gstring( aRclist[i-iic], MAXSYMB+MAXDRGROUP, MAXDCNAME);
+          //if( i < iic )
+            spName = gstring( aDclist[i], MAXSYMB+MAXDRGROUP+2, MAXDCNAME);
+         //else
+         //   spName = gstring( aRclist[i-iic], MAXSYMB+MAXDRGROUP, MAXDCNAME);
 
          spName.strip();
          pos = spName.length()-1;
@@ -779,16 +791,8 @@ AGAINRC:
     /* Get list of components : add aMcv and aMrv */
     for( i=0; i<php->nDC; i++ )
     {
-        if( i < iic )
-        {
-            memcpy( php->SM[i], aDclist[i].c_str(), DC_RKLEN );
-            php->SM[i][DC_RKLEN-1] = SRC_DCOMP;
-        }
-        else
-        {
-            memcpy( php->SM[i], aRclist[i-iic].c_str(), DC_RKLEN );
-            php->SM[i][DC_RKLEN-1] = SRC_REACDC;
-        }
+        memcpy( php->SM[i], aDclist[i].c_str()+2, DC_RKLEN );
+        php->SM[i][DC_RKLEN-1] = aDclist[i].c_str()[0];
     }
     // Sorting the list of dependent components
     if( php->nDC >= 2 )         // >= may change behavior !
@@ -1279,7 +1283,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
 {
 //    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     const char *part;
-    char nbuf[MAXFORMULA], neutbuf[16], H2Obuf[16], tempdbuf[16];
+    char nbuf[500], neutbuf[16], H2Obuf[16], tempdbuf[16];
     gstring Name = "Auto-set ";
 
 //  Setup of aqueous phase
@@ -1375,8 +1379,8 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
        case 'S': // SIT - under testing
                  goto MAKE_GAS_PHASE;
     }
-    strcpy( php->name, Name.c_str() );
-    strcpy( php->notes, nbuf );
+    strncpy( php->name, Name.c_str(),MAXFORMULA );
+    strncpy( php->notes, nbuf, MAXFORMULA );
     part = "a:*:*:*:";
 
     // Call assembling of the aqueous phase
@@ -1397,9 +1401,9 @@ MAKE_GAS_PHASE:
               php->nscM = 0;
               php->npxM = 0;
               Name += "Ideal mixture of ideal or real gases";
-              strcpy( php->name, Name.c_str() );
-              strcpy( php->notes,
-            		  "Applicable only at low P and elevated T" );
+              strncpy( php->name, Name.c_str(),MAXFORMULA );
+              strncpy( php->notes,
+                          "Applicable only at low P and elevated T",MAXFORMULA );
               break;
       case 'F':  // CG fluid EoS model
               memcpy( php->sol_t, "FNNSNN", 6 );
@@ -1409,9 +1413,9 @@ MAKE_GAS_PHASE:
               php->nscM = 12; // last changed 12.12.2008 (TW)
               php->npxM = 0;
               Name += "Churakov-Gottschalk (CG) EoS model";
-              strcpy( php->name, Name.c_str() );
-              strcpy( php->notes,
-            		  "Applicable at high P and moderate T" );
+              strncpy( php->name, Name.c_str(), MAXFORMULA );
+              strncpy( php->notes,
+                          "Applicable at high P and moderate T",MAXFORMULA );
               break;
       case 'P':  // PRSV fluid EoS model
               memcpy( php->sol_t, "PNNSNN", 6 );
@@ -1425,9 +1429,9 @@ MAKE_GAS_PHASE:
               php->nscM = 7;
               php->npxM = 2;
               Name += "Peng-Robinson-Stryjek-Vera (PRSV) EoS model";
-              strcpy( php->name, Name.c_str() );
-              strcpy( php->notes,
-            		  "Applicable at moderate P and moderate T" );
+              strncpy( php->name, Name.c_str(),MAXFORMULA );
+              strncpy( php->notes,
+                          "Applicable at moderate P and moderate T",MAXFORMULA );
               break;
       case 'E':  // SRK fluid EoS model
               memcpy( php->sol_t, "ENNSNN", 6 );
@@ -1441,9 +1445,9 @@ MAKE_GAS_PHASE:
               php->nscM = 7;
               php->npxM = 2;
               Name += "Soave-Redlich-Kwong (SRK) EoS model";
-              strcpy( php->name, Name.c_str() );
-              strcpy( php->notes,
-            		  "Applicable at moderate P and moderate T" );
+              strncpy( php->name, Name.c_str(),MAXFORMULA );
+              strncpy( php->notes,
+                          "Applicable at moderate P and moderate T",MAXFORMULA );
               break;
       case '7':  // PR78 fluid EoS model
               memcpy( php->sol_t, "7NNSNN", 6 );
@@ -1457,9 +1461,9 @@ MAKE_GAS_PHASE:
               php->nscM = 7;
               php->npxM = 2;
               Name += "Peng-Rosinson (PR78) EoS model";
-              strcpy( php->name, Name.c_str() );
-              strcpy( php->notes,
-            		  "Applicable at moderate P and moderate T" );
+              strncpy( php->name, Name.c_str(),MAXFORMULA );
+              strncpy( php->notes,
+                          "Applicable at moderate P and moderate T",MAXFORMULA );
               break;
       default:  // unrecognized code
               goto DONE;

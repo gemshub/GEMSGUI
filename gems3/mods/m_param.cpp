@@ -78,7 +78,7 @@ SPP_SETTING pa_ = {
     "INNINN",   /* PHsol_t[6] */  "s-----",   /* PHpvc[6] */
     "++++-+-+++", /* MUpmv[10] */ "jjbC++0+", /* TPpdc[8] */
     "*-*-*-*-*-----------", /* TPpvc[20] */ "+-+-+-----", /* SYppc[10] */
-    "*****-*---**-***-----------*", /* SYpvc[28]*/  "-+++----ME", /* UTppc[10] */
+    "*****-*-*-**-***-----------*", /* SYpvc[28]*/  "-+++----ME", /* UTppc[10] */
     "0*-------P--", /* PEpsc[12]  */  "------------", /* PEpvc[12] */
     { "GTDEMO task name   ", "Graphic screen # " } ,   /* GDcode[2][20] */
     "Plot ",                  /* GDpsc[7] */
@@ -824,7 +824,7 @@ short TProfil::BAL_compare()
           if( pmp->B[i] != 0. )
           {
 //              if( fabs( syp->B[pmp->mui[i]] /pmp->B[i] - 1. ) > pa.p.DHB * 0.001   )
-              if( fabs( log10( syp->B[pmp->mui[i]] /pmp->B[i] ) > -23. ) ) // log10( pa.p.DB ) ) )
+              if( fabs( log10( syp->B[pmp->mui[i]] /pmp->B[i] )) > 1e-13  ) // log10( pa.p.DB ) ) )
                   return 1;
           }
           else

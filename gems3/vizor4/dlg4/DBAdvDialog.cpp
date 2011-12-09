@@ -34,6 +34,7 @@ DBAdvDialog::DBAdvDialog(QWidget* parent, const char* name)
     setupUi(this);
     setWindowTitle(name);
     // pLogoImg->setPixmap (pVisorImp->getLogo ());
+    QObject::connect(pButtonInteg, SIGNAL(clicked()), this, SLOT(CmOpen_INTEG()));
 }
 
 DBAdvDialog::~DBAdvDialog()

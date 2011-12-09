@@ -140,13 +140,13 @@ SystemWizard::SystemWizard( const char* pkey, char flgs[40],
             pPbPh->setChecked( true );
     else pPbPh->setChecked( false );
 
-    if( flgs[18] == '+' )
+   /* if( flgs[18] == '+' )
             r1->setChecked( true );
     else if( flgs[18] == '-' )
             r2->setChecked( true );
          else
             r3->setChecked( true );
-
+   */
 }
 
 SystemWizard::~SystemWizard()
@@ -175,11 +175,11 @@ void SystemWizard::getFlags( char flgs[40] )
           flgs[13] = '+';
     else flgs[13] = '-';
 
-    if( r1->isChecked() )
-      flgs[18] = '+';
-    else  if( r2->isChecked() )
-          flgs[18] = '-';
-      else
+    //if( r1->isChecked() )
+    //  flgs[18] = '+';
+    //else  if( r2->isChecked() )
+    //      flgs[18] = '-';
+    //  else
           flgs[18] = '*';
 
 // Page 1
@@ -232,7 +232,9 @@ void SystemWizard::getFlags( char flgs[40] )
           flgs[36] = '+';
     else flgs[36] = '-';
 
-
+    if( pPask->isChecked() )
+          flgs[37] = '+';
+    else flgs[37] = '-';
 }
 
 void

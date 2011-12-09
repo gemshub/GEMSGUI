@@ -60,5 +60,32 @@ public:
     gstring getKey();
 };
 
+// work with ReacDC&DComp keys lists
+class RDKeyDialog : public QDialog, public Ui::KeyDialogData
+{
+    Q_OBJECT
+
+    gstring keyFilter;
+    QStringList old_sel;
+    short NsiT;     // N of surface site types (to set up on remake)
+    void SetList();
+    QString makeKey( char type, const char *key );
+
+protected slots:
+    virtual void CmSelectAll();
+    virtual void CmClearAll();
+    virtual void languageChange();
+    virtual void CmFilter();
+    void CmHelp();
+
+public:
+
+    RDKeyDialog(QWidget* win, TCStringArray& sel,
+              const char* key = "*", const char* caption = 0, short NsiT=0 );
+    virtual ~RDKeyDialog();
+    TCStringArray allSelectedKeys();
+//    gstring getKey();
+};
+
 
 #endif // KeyDialog_included

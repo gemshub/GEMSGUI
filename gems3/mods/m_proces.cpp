@@ -105,9 +105,11 @@ TProcess::GetKeyofRecord( const char *oldKey, const char *strTitle,
     if(  str.empty() )
         return str;
     rt[RT_PROCES].SetKey(str.c_str());
-    keyTest( str.c_str() );
+     if( keyType != KEY_TEMP )
+         keyTest( str.c_str() );
     return str;
 }
+
 
 // test Process key to calc mode
 void TProcess::keyTest( const char *key )

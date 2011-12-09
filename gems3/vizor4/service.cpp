@@ -341,6 +341,13 @@ TCStringArray vfMultiKeysSet(QWidget* par, const char* caption,
     return dbk.allSelectedKeys();
 }
 
+TCStringArray vfRDMultiKeysSet(QWidget* par, const char* caption,
+                    const char* key, TCStringArray& sel, short NsiT )
+{
+    RDKeyDialog dbk(par, sel, key, caption, NsiT);
+    dbk.exec();
+    return dbk.allSelectedKeys();
+}
 
 //----------------------------------------------------------------
 // System remake dialog

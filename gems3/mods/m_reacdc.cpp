@@ -388,9 +388,9 @@ int TReacDC::RecBuild( const char *key, int mode  )
     //short oldnDC = rcp->nDC/*, newnDC*/;
 
     TCStringArray aDclist;
-    TCStringArray aRclist;
+    //TCStringArray aRclist;
     TCStringArray aDclist_old;
-    TCStringArray aRclist_old;
+    //TCStringArray aRclist_old;
 
 AGAIN_MOD:
     int ret = TCModule::RecBuild( key, mode );
@@ -514,29 +514,43 @@ AGAIN_MOD:
     {
         /* Build old selections DCOMP and REACDC */
         aDclist_old.Clear();
-        aRclist_old.Clear();
+        //aRclist_old.Clear();
+        gstring key_dr;
 
         for( i=0; i<rcp->nDC; i++ )
         {
+          if( rcp->rDC[i] == SRC_DCOMP || rcp->rDC[i] == SRC_REACDC )
+          {
+              key_dr  = gstring(1, rcp->rDC[i]);
+              key_dr += ' ';
+              key_dr += gstring( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB );
+              aDclist_old.Add( key_dr.c_str() );
+          }
+          /*
           gstring key_dr = gstring( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB ); // SD 18/11/2008
           if( rcp->rDC[i] == SRC_DCOMP )
               aDclist_old.Add( key_dr.c_str() );
           else
              if( rcp->rDC[i] == SRC_REACDC )
                 aRclist_old.Add( key_dr.c_str() );
-        }
+         */
+      }
     }
 
 AGAINRC:
-    aRclist = vfMultiKeysSet( window(),
+    /*aRclist = vfMultiKeysSet( window(),
        "Please, mark ReacDC keys to be included",
        RT_REACDC, pkey, aRclist_old );
     aDclist = vfMultiKeysSet( window(),
        "Please, mark DComp keys to be included",
        RT_DCOMP, pkey, aDclist_old );
+    */
+   aDclist = vfRDMultiKeysSet( window(),
+       "Please, mark ReacDC/DComp keys to be included",
+        pkey, aDclist_old );
 
 
-    if( aRclist.GetCount() < 1 && aDclist.GetCount() < 1 )
+    if( /*aRclist.GetCount() < 1 &&*/ aDclist.GetCount() < 1 )
     {
        switch ( vfQuestion3(window(), GetName(),
             "W09RErem: Number of selected ReacDC/DComp keys < 1.\n"
@@ -554,7 +568,7 @@ AGAINRC:
     }
 
     /*================================*/
-    rcp->nDC =(short)( aDclist.GetCount()+aRclist.GetCount()+Nn1+Nf1);
+    rcp->nDC =(short)( aDclist.GetCount()/*+aRclist.GetCount()*/+Nn1+Nf1);
     // ???? 28/02/02 Sveta
     // if( (oldnDC != newnDC) && (newnDC != rcp->nDC) )
     //    rcp->nDC = newnDC;
@@ -566,7 +580,7 @@ AGAINRC:
     {
         if( !rcp->scDC[i] )
             rcp->scDC[i] = 1;
-        if( i < (int)aRclist.GetCount() )
+        /*if( i < (int)aRclist.GetCount() )
         {
             memcpy( rcp->DCk[i], aRclist[i].c_str(), DC_RKLEN );
             rcp->rDC[i] = SRC_REACDC;
@@ -576,6 +590,11 @@ AGAINRC:
         {
             memcpy( rcp->DCk[i], aDclist[i-iir].c_str(), DC_RKLEN );
             rcp->rDC[i] = SRC_DCOMP;
+        }*/
+        if( i< (int)(aDclist.GetCount()) )
+        {
+            memcpy( rcp->DCk[i], aDclist[i].c_str()+2, DC_RKLEN );
+            rcp->rDC[i] = aDclist[i].c_str()[0];
         }
         else
         {
