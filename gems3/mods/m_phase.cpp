@@ -270,7 +270,7 @@ ph[q].scoef = (float *)aObj[ o_phscoef].Alloc( ph[q].nDC, ph[q].nscM, F_ );
         if( ph[q].PpEq != S_OFF && !ph[q].pEq )
         {
             ph[q].pEq  =  (char *)aObj[ o_phpeq ].Alloc( 1, MAXFORMULA, S_);
-            *ph[q].pEq = '`';
+            //*ph[q].pEq = '`';
         }
     if( ph[q].dEq && ph[q].PdEq == S_OFF )
         ph[q].dEq =   (char *)aObj[ o_phdeq ].Free();
@@ -278,7 +278,7 @@ ph[q].scoef = (float *)aObj[ o_phscoef].Alloc( ph[q].nDC, ph[q].nscM, F_ );
         if( ph[q].PdEq != S_OFF && !ph[q].dEq )
         {
             ph[q].dEq  =  (char *)aObj[ o_phdeq ].Alloc( 1, MAXFORMULA, S_);
-            *ph[q].dEq = '`';
+            //*ph[q].dEq = '`';
         }
 
 // Work objects for SIT, Pitzer, EUNIQUAC aqueous model
@@ -881,6 +881,13 @@ AGAINRC:
            MakeCatAnLists( false, false, true);
     }
 //--------------------------------------------------------------
+
+
+    if( php->PpEq != S_OFF && php->pEq && !*php->pEq )
+        strcpy( php->pEq, "---" );
+    if( php->PdEq != S_OFF && php->dEq && !*php->dEq)
+        strcpy( php->dEq, "---" );
+
     SetString("PH_make   Remake of Phase definition OK");
     pVisor->Update();
     return ret;

@@ -384,12 +384,15 @@ void TMulti::MultiKeyInit( const char*key )
    if( V <= 0 ) // no volume balance needed
        {
            pmp->VX_ = pmp->VXc = 0.0;
-           pmp->PV = 0;
+           pmp->PV = VOL_CALC;
        }
     else
        {  // volume of the system is given
            pmp->VX_ = pmp->VXc = V;
-           pmp->PV = syp->PV;
+           if(syp->PV == S_ON )
+              pmp->PV = VOL_CONSTR;
+           else
+              pmp->PV = VOL_UNDEF;
        }
 }
 

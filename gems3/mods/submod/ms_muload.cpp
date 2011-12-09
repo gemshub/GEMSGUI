@@ -29,8 +29,6 @@
 #include "m_unspace.h"
 #include "s_formula.h"
 #include "service.h"
-//#include "visor.h"
-//#include "visor_w.h"
 #include "stepwise.h"
 
 enum translat_codes { // codes for translations of math script equations
@@ -493,7 +491,7 @@ int TMulti::find_icnum( char *name, int LNmode )
 int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
 {
     int j, jf[20], ii=0, len, jj;
-    vstr pbuf(164);
+    //vstr pbuf(164);
 
     len = strlen( name );
     if( LNmode == 1 )
@@ -538,9 +536,13 @@ int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
     if( ii == 1 )
         return( jf[0] );
 
-    sprintf( pbuf, "Please, select DC index for the DC name %s\n in the first script statement below %s", name, stmt );
+    gstring pbuf = "Please, select DC index for the DC name ";
+            pbuf += name;
+            pbuf += "\n in the first script statement below \n";
+            pbuf += stmt;
+    //sprintf( pbuf, "Please, select DC index for the DC name %s\n in the first script statement below %s", name, stmt );
 
-   j = vfChoice( window(),  "W20MSPrep: ", pbuf.p, ii, jf);
+   j = vfChoice( window(),  "W20MSPrep: ", pbuf.c_str(), ii, jf);
    if( j<0 )
         Error( "E20MSPrep:", "Preprocessing cancelled by the user..." );
 
@@ -576,10 +578,19 @@ int TMulti::find_phnum( char *name, int LNmode )
     if( ii == 1 )
         return( kf[0] );
     /* more then one useful index */
-    vstr pbuf(164);
-    sprintf( pbuf, "%d of Phase indices found for the phase name %s (->%d) \n"
-             "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
-    if( !vfQuestion(window(), "W21MSPrep: ", /*(const char *)*/pbuf.p ))
+    vstr pbuf_(164);
+    gstring pbuf;
+    sprintf( pbuf_, "%d", ii);
+    pbuf = pbuf_;
+    pbuf += " of Phase indices found for the phase name ";
+    pbuf += name;
+    sprintf( pbuf_, "(->%d) \n", LNmode);
+    pbuf += pbuf_;
+    pbuf +="Take the first one and continue (Y) or cancel (N)?";
+
+    //sprintf( pbuf_, "%d of Phase indices found for the phase name %s (->%d) \n"
+    //         "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
+    if( !vfQuestion(window(), "W21MSPrep: ", pbuf.c_str() ))
         Error( "E21MSPrep: ", "Preprocessing cancelled by the user..." );
 
     return( kf[0] );
@@ -605,10 +616,20 @@ int TMulti::find_acnum( char *name, int LNmode )
     if( ii == 1 )
         return( jf[0] );
     /* more then one matching index */
-    vstr pbuf(164);
-    sprintf( pbuf, "%d of PCO indices found for the PCO name %s (->%d) \n"
-             "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
-    if( !vfQuestion(window(), "W08MSPrep: ", /*(const char *)*/pbuf.p ))
+    //vstr pbuf(164);
+    //sprintf( pbuf, "%d of PCO indices found for the PCO name %s (->%d) \n"
+    //         "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
+    vstr pbuf_(164);
+    gstring pbuf;
+    sprintf( pbuf_, "%d", ii);
+    pbuf = pbuf_;
+    pbuf += " of PCO indices found for the PCO name ";
+    pbuf += name;
+    sprintf( pbuf_, "(->%d) \n", LNmode);
+    pbuf += pbuf_;
+    pbuf +="Take the first one and continue (Y) or cancel (N)?";
+
+    if( !vfQuestion(window(), "W08MSPrep: ", pbuf.c_str() ))
         Error( "E08MSPrep: ", "Preprocessing cancelled by the user..." );
 
     return( jf[0] );
@@ -634,7 +655,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
     int i=0, ii, pj, LNplace=1, Xplace=0, nO=0;
     char cstate, cc, *etext, *pexpr, *ecur, *cur, *next, *end,
       *prev, *last, *stmt, iCode, odlab[MAXKEYWD+2];
-    vstr name(64), nbuf(64);
+    vstr name(164), nbuf(164);
 
     etext = (char *)aObj[ nOet ].GetPtr();
     if( etext )
@@ -646,8 +667,10 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
     if( !ls )
       return;
     end = pexpr+ls;
-    if( ls+1 > eLen )
-        etext = (char *)aObj[ nOet ].Alloc( 1, ls+ls/6, S_ );
+    //if( ls+1 > eLen )
+    //    etext = (char *)aObj[ nOet ].Alloc( 1, ls+ls/6, S_ );
+    aObj[ nOet ].Free();
+    etext = (char *)aObj[ nOet ].Alloc( 1, ls+ls/6, S_ );
     ecur = etext;
     cur = pexpr;
     next = cur;

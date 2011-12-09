@@ -460,7 +460,7 @@ void TMulti::multi_sys_ph()
     int k, i;
     bool non_sorption_phase, is_ss;
     short kk, j, je, jb, ja=0;
-    vstr pkey(MAXRKEYLEN);
+    //vstr pkey(MAXRKEYLEN);
     time_t crt;
 //    double G;
     double PMM;  // Phase mean mol. mass

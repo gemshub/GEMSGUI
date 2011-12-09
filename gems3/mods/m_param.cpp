@@ -916,6 +916,7 @@ void TProfil::LoadFromMtparm(double T, double P,double *G0,  double *V0,
         mtparm->LoadMtparm( T, P );
         pmp->pTPD = 0;
     }
+
     denW[0] = tpp->RoW;
     denW[1] = tpp->dRdTW;
     denW[2] = tpp->d2RdT2W;
