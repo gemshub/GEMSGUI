@@ -282,9 +282,11 @@ void TProfil::InitSubModules()
         syst->ods_link();
         syp = syst->GetSY();
         aMod.Add( multi = new TMulti( MD_MULTI, syp, tpp, mup ) );
-pmulti = multi;
+        pmulti = multi;
         multi->ods_link();
         pmp = multi->GetPM();
+        multi->setProfil( this );
+
         aMod.Add( new TEQCalc( MD_EQCALC ) );
         aMod.Add( new TEQDemo( MD_EQDEMO ) );
     }
@@ -541,9 +543,9 @@ void TProfil::readMulti( GemDataStream& ff )
 }
 
 // Reading structure MULTI (GEM IPM work structure)
-void TProfil::readMulti( const char* path )
+void TProfil::readMulti(  TNode *na, const char* path )
 {
-      multi->from_text_file_gemipm( path);
+      multi->from_text_file_gemipm( na, path);
 }
 
 // Reading structure MULTI (GEM IPM work structure)
