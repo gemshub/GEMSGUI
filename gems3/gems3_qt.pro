@@ -8,8 +8,6 @@ DEFINES         += Use_mt_mode
 
 CONFIG		+= qt thread warn_on
 CONFIG		+= help
-#CONFIG		+= debug
-#CONFIG		+= qmake_cache
 QT += network
 QT += sql
 QT += xml
@@ -25,7 +23,7 @@ RESOURCES += img.qrc
 macx-g++ {
 #  DEFINES -= Use_qd_real
   DEFINES += __APPLE__
-# QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5
+macx:QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.6.sdk
   CONFIG -= warn_on
   CONFIG += warn_off
 # LIBS -= -lqd
