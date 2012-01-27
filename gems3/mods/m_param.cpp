@@ -64,7 +64,7 @@ SPP_SETTING pa_ = {
         1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
         1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
         1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
-        1.,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+        0.,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
         1e-5, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
         1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-20, /* PhMin, */
         1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
@@ -157,7 +157,7 @@ BASE_PARAM dfBase[5] =
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
                 1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
-                1.,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                0.,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
                 1e-5, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
                 1e-13,  /* ScMin, */  1e-40, /* DcMin, */   1e-30, /* PhMin, */
                 1e-7,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
