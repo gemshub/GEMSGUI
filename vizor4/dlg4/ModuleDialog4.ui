@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ModuleDialogData</class>
+ <widget class="QMainWindow" name="ModuleDialogData">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_Record">
+    <property name="title">
+     <string>&amp;Record</string>
+    </property>
+    <addaction name="action_Create"/>
+    <addaction name="action_New"/>
+    <addaction name="separator"/>
+    <addaction name="action_Display"/>
+    <addaction name="action_Remake"/>
+    <addaction name="action_Calculate"/>
+    <addaction name="separator"/>
+    <addaction name="action_Save"/>
+    <addaction name="actionSave_As"/>
+    <addaction name="action_Delete"/>
+    <addaction name="separator"/>
+    <addaction name="action_Plot"/>
+    <addaction name="action_Print"/>
+    <addaction name="separator"/>
+    <addaction name="action_Close"/>
+   </widget>
+   <widget class="QMenu" name="menuRecord_List">
+    <property name="title">
+     <string>Record &amp;List</string>
+    </property>
+    <addaction name="action_Copy"/>
+    <addaction name="action_Rename"/>
+    <addaction name="action_Move"/>
+    <addaction name="action_Delete_list"/>
+    <addaction name="separator"/>
+    <addaction name="action_List"/>
+    <addaction name="action_Backup"/>
+    <addaction name="action_Restore"/>
+    <addaction name="separator"/>
+    <addaction name="action_Export"/>
+    <addaction name="action_Import"/>
+   </widget>
+   <widget class="QMenu" name="menu_Database_Files">
+    <property name="title">
+     <string>&amp;Database Files</string>
+    </property>
+    <addaction name="action_Selection"/>
+    <addaction name="action_Add_Link"/>
+    <addaction name="action_New_2"/>
+    <addaction name="separator"/>
+    <addaction name="action_Compress"/>
+   </widget>
+   <widget class="QMenu" name="menu_Help">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="action_Help"/>
+    <addaction name="actionView_Scripts"/>
+    <addaction name="separator"/>
+    <addaction name="action_About_GEMS"/>
+   </widget>
+   <addaction name="menu_Record"/>
+   <addaction name="menuRecord_List"/>
+   <addaction name="menu_Database_Files"/>
+   <addaction name="menu_Help"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QToolBar" name="toolBar_2">
+   <property name="windowTitle">
+    <string>toolBar_2</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_Display"/>
+   <addaction name="action_Save"/>
+   <addaction name="actionPrevious"/>
+   <addaction name="actionNext"/>
+   <addaction name="actionFilter"/>
+   <addaction name="separator"/>
+   <addaction name="action_New"/>
+   <addaction name="action_Remake"/>
+   <addaction name="action_Calculate"/>
+   <addaction name="separator"/>
+   <addaction name="action_Delete"/>
+   <addaction name="separator"/>
+   <addaction name="action_Plot"/>
+   <addaction name="action_Print"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar_4">
+   <property name="windowTitle">
+    <string>toolBar_4</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_Help_2"/>
+  </widget>
+  <action name="action_Create">
+   <property name="text">
+    <string>&amp;Create...</string>
+   </property>
+  </action>
+  <action name="action_New">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/filesaveas.png</normaloff>:/toolbar/img/filesaveas.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;New(Clone)...</string>
+   </property>
+  </action>
+  <action name="action_Display">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/fileopen.png</normaloff>:/toolbar/img/fileopen.png</iconset>
+   </property>
+   <property name="text">
+    <string>D&amp;isplay</string>
+   </property>
+   <property name="toolTip">
+    <string>Display selected record</string>
+   </property>
+   <property name="shortcut">
+    <string>F6</string>
+   </property>
+  </action>
+  <action name="action_Remake">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/toolbutton.png</normaloff>:/toolbar/img/toolbutton.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Remake...</string>
+   </property>
+   <property name="toolTip">
+    <string>Remake record data structure</string>
+   </property>
+  </action>
+  <action name="action_Calculate">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/kcalc.png</normaloff>:/toolbar/img/kcalc.png</iconset>
+   </property>
+   <property name="text">
+    <string>Calculat&amp;e</string>
+   </property>
+   <property name="toolTip">
+    <string>Calculate record data</string>
+   </property>
+   <property name="shortcut">
+    <string>F9</string>
+   </property>
+  </action>
+  <action name="action_Save">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/filesave.png</normaloff>:/toolbar/img/filesave.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save current record</string>
+   </property>
+  </action>
+  <action name="actionSave_As">
+   <property name="text">
+    <string>Save &amp;As...</string>
+   </property>
+  </action>
+  <action name="action_Delete">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/iconclose.png</normaloff>:/toolbar/img/iconclose.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Delete</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete current record</string>
+   </property>
+  </action>
+  <action name="action_Plot">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/xpaint.png</normaloff>:/toolbar/img/xpaint.png</iconset>
+   </property>
+   <property name="text">
+    <string>Plo&amp;t</string>
+   </property>
+   <property name="toolTip">
+    <string>Plot data on graph dialog</string>
+   </property>
+  </action>
+  <action name="action_Print">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/fileprint.png</normaloff>:/toolbar/img/fileprint.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Print...</string>
+   </property>
+   <property name="toolTip">
+    <string>Print data to ASCII file</string>
+   </property>
+  </action>
+  <action name="action_Close">
+   <property name="text">
+    <string>C&amp;lose</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+F4</string>
+   </property>
+  </action>
+  <action name="action_Copy">
+   <property name="text">
+    <string>&amp;Copy...</string>
+   </property>
+  </action>
+  <action name="action_Rename">
+   <property name="text">
+    <string>&amp;Rename...</string>
+   </property>
+  </action>
+  <action name="action_Move">
+   <property name="text">
+    <string>&amp;Move...</string>
+   </property>
+  </action>
+  <action name="action_Delete_list">
+   <property name="text">
+    <string>&amp;Delete...</string>
+   </property>
+  </action>
+  <action name="action_List">
+   <property name="text">
+    <string>&amp;List...</string>
+   </property>
+  </action>
+  <action name="action_Backup">
+   <property name="text">
+    <string>&amp;Backup...</string>
+   </property>
+  </action>
+  <action name="action_Restore">
+   <property name="text">
+    <string>Re&amp;store...</string>
+   </property>
+  </action>
+  <action name="action_Export">
+   <property name="text">
+    <string>&amp;Export...</string>
+   </property>
+  </action>
+  <action name="action_Import">
+   <property name="text">
+    <string>&amp;Import...</string>
+   </property>
+  </action>
+  <action name="action_Selection">
+   <property name="text">
+    <string>&amp;Selection...</string>
+   </property>
+  </action>
+  <action name="action_Add_Link">
+   <property name="text">
+    <string>&amp;Add Link...</string>
+   </property>
+  </action>
+  <action name="action_New_2">
+   <property name="text">
+    <string>&amp;New File...</string>
+   </property>
+  </action>
+  <action name="action_Compress">
+   <property name="text">
+    <string>C&amp;ompress...</string>
+   </property>
+  </action>
+  <action name="action_Help">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/help.png</normaloff>:/toolbar/img/help.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Help Contents</string>
+   </property>
+  </action>
+  <action name="actionView_Scripts">
+   <property name="text">
+    <string>View &amp;Scripts...</string>
+   </property>
+   <property name="shortcut">
+    <string>F3</string>
+   </property>
+  </action>
+  <action name="action_About_GEMS">
+   <property name="text">
+    <string>&amp;About GEMS</string>
+   </property>
+  </action>
+  <action name="actionNext">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/arrow_right1.png</normaloff>:/toolbar/img/arrow_right1.png</iconset>
+   </property>
+   <property name="text">
+    <string>Next</string>
+   </property>
+   <property name="toolTip">
+    <string>Display next record</string>
+   </property>
+  </action>
+  <action name="actionPrevious">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/arrow_left1.png</normaloff>:/toolbar/img/arrow_left1.png</iconset>
+   </property>
+   <property name="text">
+    <string>Previous</string>
+   </property>
+   <property name="toolTip">
+    <string>Display previous record</string>
+   </property>
+  </action>
+  <action name="actionFilter">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/p_star.png</normaloff>:/toolbar/img/p_star.png</iconset>
+   </property>
+   <property name="text">
+    <string>Filter</string>
+   </property>
+   <property name="toolTip">
+    <string>Set filter for record keys</string>
+   </property>
+  </action>
+  <action name="action_Help_2">
+   <property name="icon">
+    <iconset resource="../../img.qrc">
+     <normaloff>:/toolbar/img/help.png</normaloff>:/toolbar/img/help.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Help Contents</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../../img.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,320 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR"
+ content="Mozilla/4.75 [en] (Win95; U) [Netscape]">
+  <title>GEMS3 IComp Module</title>
+  <meta name="description" content="Version 2.0.0-PSI">
+</head>
+<body>
+<h1><img src="gems1.png" align="left" height="48" width="48"> <font
+ color="#000066">GEM-Selektor version 3<br>
+</font></h1>
+<h2> Independent&nbsp; Components&nbsp; (IComp) Module</h2>
+<h3>Contents<br>
+</h3>
+<p style="font-family: Helvetica,Arial,sans-serif; margin-left: 40px;">1.
+<a href="#ICOMP_INTRO">Independent Components (Stoichiometry
+Units)</a></p>
+<p style="font-family: Helvetica,Arial,sans-serif; margin-left: 40px;">1.1.
+<a href="#ICOMP_REMAKE">Creating/Remaking IComp records</a></p>
+<p style="font-family: Helvetica,Arial,sans-serif; margin-left: 40px;">2.
+<a href="#ICOMP_MWINDOW">IComp Module Window</a></p>
+<p style="font-family: Helvetica,Arial,sans-serif; margin-left: 40px;">3.
+<a href="#ICOMP_DATA">IComp Input Data Fields</a></p>
+<br>
+<hr size="2" width="100%">
+<h2><a name="ICOMP_INTRO"></a>1. Independent Components (Stoichiometry
+Units)<br>
+</h2>
+<p> The IComp database chain contains records defining the <a
+ href="glossary.html#DT_independent_component">Independent Components</a>
+(IC), or stoichiometry units, forming the stoichiometry basis in which
+composition of <a href="glossary.html#DT_system_chemical">chemical
+systems</a> and species can be expressed using stoichiometry
+coefficients. </p>
+<p>The IComp symbols (mainly chemical elements) are used in writing
+stoichiometric <a href="g_useref.html#FORMULA">chemical formulae</a>&nbsp;
+of&nbsp; thermodynamic&nbsp; species&nbsp; (Dependent Components, DC,
+stored in&nbsp; <a href="gm_dcomp.html">DComp</a>&nbsp; or&nbsp; <a
+ href="gm_reacdc.html">ReacDC</a>&nbsp; database records), as well as
+in the Predefined Composition Object (PCO) definitions (stored in&nbsp;
+<a href="gm_compos.html">Compos</a>&nbsp; database records). </p>
+<p>The IC symbols, together with DC chemical formulae and PCO bulk
+vectors, can be used in many ways to specify the bulk composition of
+the chemical system (vector&nbsp; <b><i>b</i></b>&nbsp; ) - the main
+input data for calculation of equilibrium states using the GEM IPM
+algorithm.&nbsp; In all cases, chemical composition of the system will
+be reduced to the vector <b><i>b</i></b>&nbsp; consisting of&nbsp; <i>n
+</i>(<i>N </i>)&nbsp; elements - total numbers
+of moles of <i>N</i>&nbsp; Independent Components involved. </p>
+<p>Chemical formulae of species are automatically parsed and assembled
+into the stoichiometry matrix&nbsp; <b><i>A</i></b>&nbsp; before
+calculation of&nbsp; chemical equilibria. This matrix consists of&nbsp;
+<i>n</i> (<i>L</i> )&nbsp; lines, each corresponding to a Dependent
+Component (DC, species), with&nbsp; <i>n</i> (<i>N</i> ) columns
+containing numbers of moles of&nbsp; IC. In
+other words, any line of the <b><i>A</i></b>&nbsp; matrix contains an
+expanded
+chemical formula of a species. </p>
+<p>The main use of the <b><i>A</i></b>&nbsp; matrix consists in
+setting up
+the mass-balance constraints for the whole chemical system: numbers of
+moles of species at equilibrium state, vector&nbsp; <b><i>x</i></b> ,
+must conform to&nbsp; a condition&nbsp; <b><i>A</i></b> <b><i>x</i></b>&nbsp;
+=&nbsp; <b><i>b</i></b> .&nbsp; Lines of the <b><i>A</i></b>&nbsp;
+matrix can also be used for calculation of molar masses of species.
+Expanded (parsed) chemical formulae are also checked for charge balance
+and used in consistency recalculations of thermodynamic data in
+DComp&nbsp; and ReacDC modules. In all cases, some of the numbers
+stored in IComp records are exploited. </p>
+<p>IC definitions are kept in the IComp&nbsp; database module using a
+three-field&nbsp; <a href="gdb_rkey.html#dbm_IComp">record key</a>&nbsp;
+format. All available IComp database records are loaded into GEMS
+program memory upon opening
+or constructing the System Profile and also - on creating/remaking the
+Compos, ReacDC and DComp records. <br>
+&nbsp; <br>
+&nbsp;</p>
+<hr style="width: 100%; height: 2px;">
+<p> </p>
+<h3><a name="ICOMP_REMAKE"></a>1.1. Creating/Remaking&nbsp; IComp
+records</h3>
+<p><br>
+As <a href="gdb_rkey.html#dbm_IComp">IComp record format</a> contains
+no dynamic data fields, no Remake wizard is necessary. All you have to
+do
+is simply to edit (your own) IComp data fields on the screen form and
+then save the record to database. When creating a new IComp record,
+take care that the new record key&nbsp; is unique relative to the whole
+database, and the <a href="gdb_rkey.html#dbm_IComp_0">IC symbol</a> is
+unique within your current System Profile. </p>
+<p>Please, remember that deletion of IC record(s) will make unusable
+all
+the DComp, ReacDC, and Compos records which refer to it via chemical
+formulae (GEMS does no automatic checks for this kind of consistency
+except when
+a new System Profile is created using Elements Dialog). <br>
+&nbsp; <br>
+&nbsp;</p>
+<hr size="2" width="100%">
+<p> </p>
+<br>
+<h2><a name="ICOMP_MWINDOW"></a>2. IComp Module Window</h2>
+&nbsp;
+<br>
+<p><a name="MWPAGE_1"></a> Page<br>
+</p>
+<br>
+<hr style="width: 100%; height: 2px;"><br>
+<h2><a name="ICOMP_DATA"></a> 3. IComp Input Data Fields <br>
+</h2>
+<dl>
+  <dt> <a name="ICname"></a><b><tt><font size="+2">ICname - </font></tt></b>Name
+of this Independent Component</dt>
+  <dd> &nbsp;</dd>
+  <dd> This comment string up to 40 characters long serves for
+identification of IC definition. It is&nbsp; not analyzed by the
+program and may be used also for references to data source.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="M0i"></a><b><tt><font size="+2">M0i - </font></tt></b>Atomic
+(molar) mass of Independent Component</dt>
+  <dd> &nbsp;</dd>
+  <dd> Units of measurement: g/atom (g/mol).</dd>
+  <dd> This value must always be entered at creation of any new IComp
+record!</dd>
+  <dd> It must contain 0 for volume (Vol) and electrical charge (Zz).</dd>
+  <dd> &nbsp;</dd>
+  <dd> The&nbsp; <tt><font size="+1">M0i</font></tt>&nbsp; number is
+heavily used for calculation of gram-formula masses of species, as well
+as masses (concentrations) of the system and its phases.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="S0i"></a><b><tt><font size="+2">S0i - </font></tt></b>Standard-state
+absolute entropy&nbsp; <i>S<sup>0</sup></i>&nbsp; per g/atom</dt>
+  <dd> &nbsp;</dd>
+  <dd> Units of measurement:&nbsp; J/K/mol.</dd>
+  <dd> Value of <i>S<sup>0</sup></i>&nbsp; (at <i>P<sub>r</sub></i>&nbsp;
+= 1 bar, <i>T<sub>r</sub></i>&nbsp; = 25 C) must be entered for
+chemical elements and electrical charge. For di-atomic gases at
+standard state (e.g., H<sub>2</sub>, O<sub>2</sub>), <i>S<sup>0</sup></i>&nbsp;
+must be equal to 1/2 of <i>S<sup>0 </sup></i>(gas) at <i>P<sub>r </sub></i>,
+    <i>T<sub>r </sub></i>.&nbsp; For electrical charge (Zz),&nbsp; <i>S<sup>0</sup></i>&nbsp;
+must equal -0.5 <i>S<sup>0</sup></i>&nbsp; of&nbsp; hydrogen gas H<sub>2</sub>.</dd>
+  <dd> &nbsp;</dd>
+  <dd> <tt><font size="+1">S0i</font></tt> value is used by the
+program for consistent recalculations between <i>G<sup>0</sup></i>,&nbsp;
+    <i>H<sup>0</sup></i>&nbsp; and <i>S<sup>0</sup></i>&nbsp; values
+of dependent components at <i>P<sub>r</sub></i>, <i>T<sub>r</sub></i>&nbsp;&nbsp;
+(see DComp module).</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="Valen"></a><b><tt><font size="+2">Valen - </font></tt></b>Default
+valence number (formula charge) of IC in compounds</dt>
+  <dd> &nbsp;</dd>
+  <dd> Valence number must be always entered by the user into this
+field when
+a new IComp record is created. For chemical elements, this is the most
+common
+valence number in compounds considered in aquatic systems.</dd>
+  <dd> &nbsp;</dd>
+  <dd> The <tt><font size="+1">Valen</font></tt> data object is used
+by GEMS program when processing <a href="g_useref.html#FORMULA">chemical
+formulae</a>&nbsp; for any IC entries where the valence numer is not
+given explicitly.</dd>
+  <dd> The valence numbers are then used together with stoichiometry
+coefficients for calculation of the formula charge balance. For charge
+(Zz), <tt><font size="+1">Valen</font></tt> must be +1.</dd>
+  <dd> &nbsp;</dd>
+  <dd> Example: Default valence is 2 for IComp Fe (iron).</dd>
+  <dd> Chemical formulae:</dd>
+  <dd> <tt><font size="+1">&nbsp;FeCO3</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(siderite, uses default valences 2 for Fe, -2 for O, +4 for C);</dd>
+  <dd> <tt><font size="+1">&nbsp;Fe|3|2O3</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;
+(hematite, an explicit valence 3 used for Fe).</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="IXi"></a><b><tt><font size="+2">IXi - </font></tt></b>Relative
+isotope abundance (1 for chemical elements)</dt>
+  <dd> &nbsp;</dd>
+  <dd> The fractional isotope abundance (in natural mixture of
+isotopes) must
+be entered by the user when a new IComp record for isotope is created.</dd>
+  <dd> &nbsp;</dd>
+  <dd> The <tt><font size="+1">IXi</font></tt> number is used by the
+program (RCthermo() submodule) for calculation of thermodynamic data
+for isotopic forms of compounds using Grichuk's method (<a
+ href="g_litref.html#%5B1987GRI%5D">[1987GRI]</a>; <a
+ href="g_litref.html#%5B1998SHI/KUL%5D">[1998SHI/KUL]</a>).</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="ICform"></a><b><tt><font size="+2">ICform - </font></tt></b>Chemical
+formula of this Independent Component</dt>
+  <dd> &nbsp;</dd>
+  <dd> This string up to 40 characters long&nbsp; may contain an
+elemental chemical formula of an IC such as petrogenic oxide Al<sub>2</sub>O<sub>3</sub>
+which itself is a chemical compound.</dd>
+  <dd> &nbsp;</dd>
+  <dd> <tt><font size="+1">ICform</font></tt> field is not processed
+in this version of GEM-Selektor. However, for future compatibility, we
+recommend that for chemical elements, this field contains the same
+symbol as in the IC_symbol field of <a href="gdb_rkey.html#dbm_IComp">IComp
+record key</a>, or "Empty" symbol if the formula cannot be written
+(e.g., for humate ligand).</dd>
+  <dd> <br>
+  </dd>
+  <dd> <br>
+  </dd>
+  <dt> <a name="indMT"></a><b><tt><font size="+1">indMT - </font></tt></b>Index
+in Periodical (Mendeleev's) Table of chemical elements</dt>
+  <dd> &nbsp;</dd>
+  <dd> This data item must contain atomic index for all chemical
+elements or isotopes (e.g. 1 for hydrogen and its isotopes, 92 for
+uranium). In GEMS version 2, this index is used only in the Elements
+Dialog when a new System Profile is created. Special index 0 must be
+given for electric charge (Zz), 99 for Nit (atmospheric nitrogen) and
+100 for Vol (volume) Independent Components. All additional IC are
+assigned consecutive indices 101, 102, ... up to
+112.&nbsp;&nbsp;&nbsp;</dd>
+  <dd> <br>
+  </dd>
+  <dd> Other usages of this index may be implemented in future versions
+of the GEM-Selektor package.</dd>
+  <dd><br>
+  </dd>
+  <dd> &nbsp;</dd>
+  <br>
+</dl>
+<hr style="width: 100%; height: 2px;">
+<dl>
+  <b><tt><u><font size="+1">Data Items Reserved for Future Versions</font></u></tt></b><br>
+&nbsp;<br>
+&nbsp;<dt> <a name="StdSt"></a><b><tt><font size="+1">StdSt - </font></tt></b>Code
+of standard
+aggregate state (reserved)</dt>
+  <dd> &nbsp;</dd>
+  <dd> Identifies the standard phase state in which a pure chemical
+element (IC) exists at reference Tr = 25 C and P = 1 bar. To be used in
+calculations in future versions.</dd>
+  <dd> Possible values:</dd>
+  <dd> &nbsp;</dd>
+  <dl>
+    <dl>
+      <dd> g&nbsp;&nbsp;&nbsp;&nbsp; gaseous;</dd>
+      <dd> s&nbsp;&nbsp;&nbsp;&nbsp; crystalline solid;</dd>
+      <dd> l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; liquid;</dd>
+      <dd> u&nbsp;&nbsp;&nbsp;&nbsp; indefinite (e.g., for organic
+ligands).</dd>
+    </dl>
+  </dl>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> &nbsp;<a name="IC_DC"></a><b><tt><font size="+1">IC_DC - </font></tt></b>Reference
+DComp record key (reserved)</dt>
+  <dd> &nbsp;</dd>
+  <dd> For chemical elements, this field may contain a packed <a
+ href="gdb_rkey.html#dbm_DComp">DComp record key</a> pointing to a full
+set of thermochemical data for this element at standard state.</dd>
+  <dd> &nbsp;</dd>
+  <dd> To be used in future versions of GEM-Selektor, for calculation
+of standard-state
+Gibbs energy of formation values at elevated temperatures and
+pressures.&nbsp;
+"Empty"&nbsp; value is default.</dd>
+  <dd><br>
+  </dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="Cp0i"></a><b><tt><font size="+1">Cp0i - </font></tt></b>Standard-state
+absolute heat capacity&nbsp; <i>Cp<sup>0</sup></i>&nbsp; per g/atom
+(reserved)</dt>
+  <dd> &nbsp;</dd>
+  <dd> Units of measurement: J/K/mol. Not used in this version of
+GEM-Selektor.</dd>
+  <dd> This field may (optionally) be entered for future prediction of
+heat capacities of dependent components. Otherwise, put "Empty" value
+there.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="V0i"></a><b><tt><font size="+1">V0i - </font></tt></b>Standard
+state volume <i>V<sup>0</sup></i><sup>&nbsp;</sup> per g/atom
+(reserved)</dt>
+  <dd> &nbsp;</dd>
+  <dd> Units of measurement: cm<sup>3</sup>/mol. Not used in this
+version of GEM-Selektor.</dd>
+  <dd> This field may (optionally) be entered for future prediction of
+molar volumes of dependent components. Otherwise, put "Empty" value
+there.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="Ri"></a><b><tt><font size="+1">Ri - </font></tt></b>Ionic
+radius, Angstrom (reserved)</dt>
+  <dd> &nbsp;</dd>
+  <dd> This data item is reserved for development of prediction
+algorithms in future versions of GEM-Selektor package.&nbsp;
+"Empty"&nbsp; value is default.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="Zi"></a><b><tt><font size="+1">Zi - </font></tt></b>Default
+coordination number in compounds (reserved)</dt>
+  <dd> &nbsp;</dd>
+  <dd> This data item is reserved for development of prediction
+algorithms in future versions of GEM-Selektor package.&nbsp;
+"Empty"&nbsp; value is default.</dd>
+  <dd> <br>
+  </dd>
+</dl>
+<hr size="2" width="100%"><tt><br>
+</tt> &nbsp;&nbsp; <tt><a href="index.html">To Contents</a> &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp;<a href="g_about.html">About GEM-Selektor</a>
+</tt><br>
+<tt><br>
+end of file</tt> <br>
+&nbsp; <br>
+<br>
+<br>
+<br>
+</body>
+</html>

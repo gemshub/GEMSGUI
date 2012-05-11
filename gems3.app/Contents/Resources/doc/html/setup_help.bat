@@ -1,0 +1,1 @@
+..\..\qcollectiongenerator gems3.qhcp -o gemshelp.qhc

@@ -1,0 +1,3578 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR"
+ content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
+  <title>GEMS3 UnSpace Module</title>
+  <meta name="description" content="Version 3.0.0-PSI">
+</head>
+<body>
+<h1><img src="gems1.png" align="left" height="48" width="48"> <font
+ color="#000066"> GEM-Selektor version 3</font> </h1>
+<h2>Sensitivity Analysis (UnSpace) Module <br>
+</h2>
+<hr size="2" width="100%">
+<p style="color: rgb(255, 0, 0);"> </p>
+<h3>Contents</h3>
+<blockquote>
+  <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#UNSPACE_OPERATION">1. UnSpace module operation</a></font></p>
+  <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#UNSPACE_CONCEPTS">1.1. UnSpace concepts</a></font></p>
+</blockquote>
+<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
+ href="#UNSPACE_MWIZARD">2.
+UnSpace Create/Remake Wizard</a></p>
+<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
+ href="#WZSTEP_1">2.1.
+UnSpace Wizard Step 1</a></p>
+<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
+ href="#WZSTEP_2">2.2.
+UnSpace Wizard Step 2</a></p>
+<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
+ href="#WZSTEP_3">2.3.
+UnSpace Wizard Step 3</a><br>
+</p>
+<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
+ href="#WZSTEP_4">2.4.
+UnSpace Wizard Step 4</a></p>
+<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
+ href="#WZSTEP_5">2.5.
+UnSpace Wizard Step 5</a><br>
+</p>
+<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
+ href="#UNSPACE_MWINDOW">3.
+UnSpace Module Window</a></p>
+<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
+ href="#MWPAGE_1">3.1.
+UnSpace Window Page 1</a></p>
+<blockquote>
+  <p style="font-family: Helvetica,Arial,sans-serif;"><a
+ href="#MWPAGE_2">3.2. UnSpace
+Window Page 2</a></p>
+</blockquote>
+<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
+ href="#MWPAGE_3">3.3.
+UnSpace Window Page 3</a><br>
+</p>
+<blockquote>
+  <p style="font-family: Helvetica,Arial,sans-serif;"><a
+ href="#MWPAGE_4">3.4. UnSpace
+Window Page 4</a><br>
+  </p>
+</blockquote>
+<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
+ href="#MWPAGE_5">3.5.
+UnSpace Window Page 5</a></p>
+<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
+ href="#MWPAGE_6">3.6.
+UnSpace Window Page 6</a><br>
+</p>
+<blockquote>
+  <p><font face="Helvetica, Arial, sans-serif"><a href="#UNSPACE_DATA">4.
+Description of data entries</a></font></p>
+  <p><font face="Helvetica, Arial, sans-serif"><a href="UNSPACE_ERRORS">5.
+Warnings and error messages</a></font></p>
+</blockquote>
+&nbsp;<br>
+<hr size="2" width="100%"><br>
+<h2><a name="UNSPACE_OPERATION"></a>1. UnSpace Module Operation</h2>
+<p><span style="font-size: 12pt;" lang="DE-CH">In (geo)chemical
+thermodynamic modelling, the input
+parameters are usually treated in a deterministic way, as fixed certain
+values. However, in reality,
+neither thermodynamic data (stability constants, activity coefficients)
+nor variables
+of state (bulk composition of the system, temperature, pressure) can be
+exactly
+known. By ignoring the impact of these inherent uncertainties onto
+calculated
+results, the modeller risks wrong interpretations or conclusions. <br>
+</span></p>
+<p><span style="font-size: 12pt;" lang="DE-CH">Reasonable uncertainty
+intervals can be obtained from analytical error estimates
+or from a critical compilation of thermodynamic constants. In this
+case, the sensitivity
+and robustness of a particular (geo)chemical model can be assessed by
+Monte
+Carlo-type simulations that, from the variation of uncertain input
+parameters,
+generate many &#8220;sample variants&#8221; and treat them statistically. <br>
+</span></p>
+<p><span style="font-size: 12pt;" lang="DE-CH">However,
+the main problem lies not in generation, but in the interpretation of
+sampled
+variants because, at a large uncertainty of many input parameters, the <i
+ style="">a priori</i> correct result may not be the
+most frequent one among the sampled variants. A new method to solve
+this problem is a combination of: (i)&nbsp; sampling of chemical
+equilibria calculations in the
+multi-dimensional &#8220;uncertainty space&#8221; over a uniform grid</span><span
+ style="font-size: 12pt;" lang="DE-CH"> using the GEM IPM algorithm</span><span
+ style="font-size: 12pt;" lang="DE-CH">; and (ii) advanced
+analysis combining &#8220;dual thermodynamics&#8221; with the &#8220;decision-making&#8221;
+statistical
+criteria projected from the game theory. This method can be especially
+efficient when some independent information can be
+used for &#8220;filtering&#8221; the sampled variants after application of
+(quantile) decision-making
+criteria, which allows for a stepwise reduction of the initially
+applied
+uncertainty intervals. The <i>UnSpace</i> module of GEM-Selektor
+comprises an implementation of the approach to sensitivity studies
+outlined above. Details about the approach and the terminology used can
+be found in &lt;TM-44-04-01.pdf&gt;.</span><br>
+</p>
+<p><span style="font-size: 12pt;" lang="EN-GB">The <i style="">UnSpace</i>
+module performs the
+uniform multi-dimensional grid sampling in the normalized &#8220;uncertainty
+space&#8221;;
+convolution of sample GEM calculations into the dual-solution based
+&#8220;payoff
+matrix&#8221; (with optional filtering using available experimental data);
+and
+application of the Laplace- and other decision-making statistical
+criteria to find "optimally consistent" variant(s) of input data. This
+is normally done according to the following schematic algorithm: <br>
+</span></p>
+<ol>
+  <li>
+    <p>Formulation
+of the<span style=""> </span>problem and the modelling scenario</p>
+  </li>
+  <li>
+    <p>Preparation of the "parent" deterministic CSD and calculation
+of the equilibrium state</p>
+  </li>
+  <li>
+    <p>Creation and confiduration of a new UnSpace record (sample
+size nQ,&nbsp; dimensionality of uncertainty space etc.) </p>
+  </li>
+  <li>
+    <p>Specification of<span style=""> </span>uncertainty
+intervals, input parameter groups and selection of the payoff
+function/matrix type </p>
+  </li>
+  <li>
+    <p>Incorporation of<span style=""> </span>available experimental
+constraints into "filters" on GEM output parameters</p>
+  </li>
+  <li>
+    <p>GEM calculations of sample equilibria - "probing" the
+Uncertianty Space, with storing the newly generated SysEq records to
+database</p>
+  </li>
+  <li>
+    <p>Calculation of the "payoff" matrix containing values of
+"dual-thermodynamic distance" between variants of input and output GEM
+data</p>
+  </li>
+  <li>
+    <p>Statistical and decision-making ranking of sampled variants
+(and, optionally, phase groups) using the Laplace and other criteria</p>
+  </li>
+  <li>
+    <p>Filtering of sampled variants (optional) </p>
+  </li>
+  <li>
+    <p>Choice of a dominant phase group<span
+ style="position: relative; top: 7pt;"></span> (optional)</p>
+  </li>
+  <li>
+    <p>Correction of boundaries of uncertainty intervals and of
+location of their centre</p>
+  </li>
+  <li>
+    <p>If the initial uncertainty intervals have been significantly
+decreased then go to item (6), otherwise go to the next item&nbsp; (13)</p>
+  </li>
+  <li>
+    <p>Refined statistical analysis of the sampled GEM solutions
+(eventually, DualTh calculations)</p>
+  </li>
+  <li>
+    <p>Incorporation of additional restrictions, if necessary (in
+this case, go to item 6)</p>
+  </li>
+  <li>
+    <p>Final choice and acceptance of an "optimally consistent"
+variant with improved <span style=""></span>input parameters and
+smaller uncertainty intervals</p>
+  </li>
+</ol>
+<br>
+<hr style="width: 100%; height: 2px;">
+<h3><a name="UNSPACE_CONCEPTS"></a>1.1. UnSpace Concepts</h3>
+<p></p>
+<br>
+<h3><a name="UNCERTAINTY_SPACE"></a>Uncertainty Space</h3>
+<p>&lt;To be written&gt;<br>
+Groups (coordinates)<br>
+<br>
+</p>
+<h3><a name="SAMPLING"></a>Sampling UnSpace</h3>
+<p>&lt;To be written&gt;<br>
+Belov grid <br>
+Monte-Carlo<br>
+<br>
+</p>
+<h3><a name="PHASE_ASSEMBLAGE"></a>Phase Assemblage <br>
+</h3>
+<p>&lt;To be written&gt;<br>
+<br>
+</p>
+<h3><a name="PAYOFF_MATRIX"></a>Payoff Matrix <br>
+</h3>
+<p>&lt;To be written&gt;<br>
+<br>
+<span style="font-size: 12pt;" lang="EN-GB"></span></p>
+<h3><span style="font-size: 12pt;" lang="EN-GB"><big><a name="FILTERING"></a>Filtering
+</big><br>
+</span></h3>
+<p>&lt;To be written&gt;<br>
+<br>
+</p>
+<h3><a name="LAPLACE_CRIT"></a>Laplace Criterion<br>
+</h3>
+<p>&lt;To be written&gt;<br>
+<br>
+</p>
+<h3><a name="QUANTILE"></a>Quantile Variant of Criteria</h3>
+<p><span style="font-size: 12pt;" lang="EN-GB"> </span><span
+ style="font-size: 12pt;" lang="DE-CH"></span> </p>
+<p>&lt;To be written&gt;<br>
+</p>
+<p><br>
+</p>
+<h3><a name="ADAPTIVE"></a>Adaptive Refinement of Uncertainty
+Intervals</h3>
+<p>&lt;To be written&gt;<br>
+</p>
+<p><br>
+</p>
+<p></p>
+<br>
+<br>
+<hr style="width: 100%; height: 2px;">
+<h2><a name="UNSPACE_MWIZARD"></a>2. UnSpace
+Create/Remake Wizard</h2>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<h3><a name="WZSTEP_1"></a>2.1. UnSpace Wizard
+Step 1</h3>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<h3><a name="WZSTEP_2"></a>2.2. UnSpace Wizard
+Step 2</h3>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<h3><a name="WZSTEP_3"></a>2.3. UnSpace Wizard
+Step 3</h3>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<h3><a name="WZSTEP_4"></a>2.4. UnSpace Wizard
+Step 4</h3>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<h3><a name="WZSTEP_5"></a>2.5. UnSpace Wizard
+Step 5</h3>
+<br>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<br>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<hr style="width: 100%; height: 2px;">
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<h2><a name="UNSPACE_MWINDOW"></a>3. UnSpace Module
+Window</h2>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<h3><a name="MWPAGE_1"></a>3.1. UnSpace Window
+Page 1</h3>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<h3><a name="MWPAGE_2"></a>3.2. UnSpace Window
+Page 2</h3>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<h3><a name="MWPAGE_3"></a>3.3. UnSpace Window
+Page 3</h3>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<h3><a name="MWPAGE_4"></a>3.4. UnSpace Window
+Page 4</h3>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<h3><a name="MWPAGE_5"></a>3.5. UnSpace Window
+Page 5</h3>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<h3><a name="MWPAGE_6"></a>3.6. UnSpace Window
+Page 6</h3>
+<p><br>
+</p>
+<br>
+<p><br>
+</p>
+<br>
+<hr size="2" width="100%">
+<h2><a name="UNSPACE_DATA"></a>4. Description of Data Entries</h2>
+<dl>
+</dl>
+<a name="Tu_0"></a><big><b><big><tt>Tu[0]</tt></big></b></big>
+Adapted value of temperature T (C)
+<dl>
+  <dd>This cell contains the adapted value of temperature
+(in Centigrade). If no adaptive loops are specified in the flag <a
+ href="#unPafl_6"><big><tt>unPafl[6]</tt></big></a>&nbsp; then the
+value in this cell will be automatically set equal to that in the
+cell&nbsp; <big><span style="font-family: monospace;">Tu[1]</span></big>.<br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+<a name="Tu_1"></a><big><b><big><tt>Tu[1]</tt></big></b></big>
+Input initial (deterministic)
+value of temperature T (C)
+<dl>
+  <dd>This input cell contains the initial deterministic value of
+temperature
+(in Centigrade). If the initial half-interval (<big><span
+ style="font-family: monospace;">Tu[3]</span></big>) is set to zero
+then
+all sample equilibria will be calculated with this (deterministic)
+temperature. Default
+value is 25. </dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="Tu_2"></a><big><b><big><tt>Tu[2]</tt></big></b></big>
+Adapted uncertainty
+half-interval for temperature T (C) or 0 (default)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>The adapted uncertainty half-interval for temperature (in
+Centigrade). If no adaptive loops are specified in the flag <a
+ href="#unPafl_6"><big><tt>unPafl[6]</tt></big></a>&nbsp; then the
+value in this cell will be automatically set equal to that in the
+cell&nbsp; <big><span style="font-family: monospace;">Tu[3]</span></big>.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="Tu_3"></a><big><b><big><tt>Tu[3]</tt></big></b></big>
+Input initial uncertainty
+half-interval for temperature T (C) or 0 (default)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>The input uncertainty half-interval for temperature (in
+Centigrade). If this cell is set to zero then
+all sample equilibria will be calculated with the constant
+(deterministic) temperature given in <big><span
+ style="font-family: monospace;">Tu[1]</span></big>. Default value is 0.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="Tu_4"></a><big><b><big><tt>Tu[4]</tt></big></b></big>
+Current
+value of temperature (during generation of sample variants)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This cell contains the current value of temperature during
+UnSpace generation of sampled variants. Can be used for troubleshooting
+purposes.</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="Pu_0"></a><big><b><big><tt>Pu[0]</tt></big></b></big>
+Adapted
+value of pressure P (bar) </dt>
+  <dd><br>
+  </dd>
+  <dd>This cell contains the adapted value of pressure
+(in bars). If no adaptive loops are specified in the flag <a
+ href="#unPafl_6"><big><tt>unPafl[6]</tt></big></a>&nbsp; then the
+value in this cell will be automatically set equal to that in the
+cell&nbsp; <big><span style="font-family: monospace;">Pu[1]</span></big>.</dd>
+</dl>
+<br>
+<dl>
+  <dt> <a name="Pu_1"></a><big><b><big><tt>Pu[1]</tt></big></b></big>
+Input initial (deterministic)
+value of pressure P (bar) </dt>
+  <dd><br>
+  </dd>
+  <dd>This input cell contains the initial (deterministic) value of
+pressure
+(in bars). If the half-interval (<big><span
+ style="font-family: monospace;">Pu[3]</span></big>) is set to zero
+then all
+sample equilibria will be calculated with this pressure. Default
+value is 1.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="Pu_2"></a><big><b><big><tt>Pu[2]</tt></big></b></big>
+Adapted uncertainty
+half-interval for pressure P (bar)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>The adapted uncertainty half-interval for pressure (in bars).
+If no adaptive loops are specified in the flag <a href="#unPafl_6"><big><tt>unPafl[6]</tt></big></a>&nbsp;
+then the value in this cell will be automatically set equal to that in
+the cell&nbsp; <big><span style="font-family: monospace;">Pu[3]</span></big>.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="Pu_3"></a><big><b><big><tt>Pu[3]</tt></big></b></big>
+Input initial uncertainty
+half-interval for pressure P (bar) or 0 (default)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>The input uncertainty half-interval for pressure (in bars). If
+this cell is set to zero then
+all sample equilibria will be calculated with the constant
+(deterministic) pressure given in <big><span
+ style="font-family: monospace;">Pu[1]</span></big>. Default value is 0.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="Pu_4"></a><big><b><big><tt>Pu[4]</tt></big></b></big>
+Current
+value of pressure (during generation of sample variants) </dt>
+  <dd><br>
+  </dd>
+  <dd>This cell contains the current value of pressure during UnSpace
+generation of sampled variants. Can be used for troubleshooting
+purposes.</dd>
+  <dd> <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="Vu_0"></a><big><b><big><tt>Vu[0]</tt></big></b></big>
+Adapted
+value of
+constrained volume V of the system (in&nbsp; cm^3, reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>Reserved for future versions; default value 0.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="Vu_1"></a><big><b><big><tt>Vu[1]</tt></big></b></big>
+Input initial (deterministic)
+value of
+constrained volume V of the system (in&nbsp; cm^3, reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>Reserved for future versions; default value 0.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="Vu_2"></a><big><b><big><tt>Vu[2]</tt></big></b></big>
+Adapted uncertainty
+half-interval for the constrained volume of the system (in cm^3,
+reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>Reserved for future versions; default 0.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="Vu_3"></a><big><b><big><tt>Vu[3]</tt></big></b></big>
+Input initial uncertainty
+half-interval for volume of the system (in cm^3, reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>Reserved for future versions; default 0.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="Vu_4"></a><big><b><big><tt>Vu[4]</tt></big></b></big>
+Current
+value of constrained volume V of the system&nbsp; (reserved)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>Reserved for future versions; default 0.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="pHf_0"></a><big><b><big><tt>pHf[0]</tt></big></b></big>
+Input lower filter
+limit for pH (default 0) </dt>
+  <dd><br>
+  </dd>
+  <dd>This filter can be adjusted if independent experimental pH
+values are available for this system. During <a href="#FILTERING">filtering</a>,
+the calculated pH values in UnSpace sample variants will be compared
+with the lower and upper limits and the variants fitting within the
+limits declared as passed through the filter.</dd>
+  <dd><br>
+  </dd>
+  <dd>Default value: 0.</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="pHf_1"></a><big><b><big><tt>pHf[1]</tt></big></b></big>
+Input upper filter
+limit for pH (default 14) </dt>
+  <dd><br>
+  </dd>
+  <dd>This filter can be adjusted if independent experimental pH
+values
+are available for this system. During <a href="#FILTERING">filtering</a>,
+the calculated pH values in UnSpace
+sample variants will be compared with the lower and upper limits, and
+the variants fitting within the limits declared as passed through the
+filter.</dd>
+  <dd><br>
+  </dd>
+  <dd>Default value: 14. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="Ehf_0"></a><big><b><big><tt>Ehf[0]</tt></big></b></big>
+Input lower filter
+limit for Eh (Volts, default -1) </dt>
+  <dd><br>
+  </dd>
+  <dd>This filter can be adjusted if independent experimental Eh
+values
+are available for this system. During <a href="#FILTERING">filtering</a>,
+the calculated Eh values in UnSpace
+sample variants will be compared with the lower and upper limits, and
+the variants fitting within the limits declared as passed through the
+filter.</dd>
+  <dd><br>
+  </dd>
+  <dd>Default value: -1 V. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="Ehf_1"></a><big><b><big><tt>Ehf[1]</tt></big></b></big>
+Input upper filter
+limit for Eh (Volts, default 1) </dt>
+  <dd><br>
+  </dd>
+  <dd>This filter can be adjusted if independent experimental Eh
+values
+are available for this system. During <a href="#FILTERING">filtering</a>,
+the calculated Eh values in UnSpace
+sample variants will be compared with the lower and upper limits, and
+the variants fitting within the limits declared as passed through the
+filter.</dd>
+  <dd><br>
+  </dd>
+  <dd>Default value: +1 V.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="ICf_0"></a><big><b><big><tt>ICf[0]</tt></big></b></big>
+Input lower
+filter limit for ionic
+strength (molal, default: 0) </dt>
+  <dd><br>
+  </dd>
+  <dd>This filter can be adjusted if independent experimental values
+of effective ionic strength I are available for this system. During <a
+ href="#FILTERING">filtering</a>, the calculated I values in UnSpace
+sample variants will be compared with the lower and upper limits, and
+the variants fitting within the limits declared as passed through the
+filter.</dd>
+  <dd>&nbsp;</dd>
+  <dd>Default value: 0.</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="ICf_1"></a><big><b><big><tt>ICf[1]</tt></big></b></big>
+Input upper
+filter limit for ionic
+strength (molal, default: 3) </dt>
+  <dd><br>
+  </dd>
+  <dd>This filter can be adjusted if independent experimental values
+of
+effective ionic strength I are available for this system. During <a
+ href="#FILTERING">filtering</a>, the
+calculated I values in UnSpace
+sample variants will be compared with the lower and upper limits, and
+the variants fitting within the limits declared as passed through the
+filter.</dd>
+  <dd>&nbsp;</dd>
+  <dd>Default value: 3.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="qLev"></a><big><b><big><tt>qLev</tt></big></b></big>&nbsp;
+Input: quantile
+level (default
+0.05) </dt>
+  <dd><br>
+  </dd>
+  <dd>The standard criteria (Laplace etc.) select a single sample
+variant as "optimal". An option is to select a fraction of variants
+(defined by this <a href="#QUANTILE">quantile</a> level) such that
+fall closest to the "optimal" value of criterion or criteria. The
+"quantile criterion" value and its coordinates can then be found by
+averaging.</dd>
+  <dd><br>
+  </dd>
+  <dd>Default value: 0.05 (or 5%).</dd>
+  <dd>&nbsp;&nbsp; <br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="unName"></a><big><b><big><tt>unName</tt></big></b></big>
+Full
+name of this UnSpace task (input)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This string (up to 70 characters) should be entered by the user
+for identification of this UnSpace record, best during creation or
+remake.&nbsp;It will appear on the plot and in the text printouts.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unNote"></a><big><b><big><tt>unNote</tt></big></b></big>
+Comment
+line for
+optional enhancement of the unName line (input)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>Here you can enhance the comment entered into the <big><span
+ style="font-family: monospace;">unName</span></big> line, if needed.</dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp;&nbsp;<br>
+  </dd>
+  <dt> <a name="unGCv"></a><big><b><big><tt>unGCv</tt></big></b></big>&nbsp;
+Input: [nG]&nbsp; generation codes
+for UnSpace groups: 0- Belov; 1-uniform; 2-normal </dt>
+  <dd><br>
+  </dd>
+  <dd>This input vector of&nbsp; <a href="#unG_0"><big><span
+ style="font-family: monospace;">unG[0]</span></big></a>&nbsp; elements
+contains codes that control the generation of sample variant
+coordinates along each of <a href="#UNCERTAINTY_SPACE">UnSpace</a>
+dimensions (groups). Possible values:</dd>
+  <dd>&nbsp;</dd>
+  <dd>0:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sample ccordinates generated
+using Belov's regular uniform grid algorithm:;</dd>
+  <dd>1: &nbsp; &nbsp;&nbsp; Sample coordinates generated by
+Monte-Carlo method with uniform distribution;</dd>
+  <dd>2: &nbsp; &nbsp;&nbsp; Sample coordinates generated by
+Monte-Carlo method with normal distribution.</dd>
+  <dd><br>
+  </dd>
+  <dd>Default value: 0.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unGvG"></a><big><b><big><tt>unGvG</tt></big></b></big>&nbsp;
+Input:&nbsp; 0-deterministic
+DC; value &gt;0 is an index
+of a group of varying G0 to which this DC is assigned </dt>
+  <dd><br>
+  </dd>
+  <dd>This input vector assigns which dependent component (DC) in the
+system will be taken as deterministic, i.e. with certain constant molar
+Gibbs energy function G0 value, and which will be considered as
+uncertain and allocated to an <a href="#SAMPLING">UnSpace group</a>.
+The respective cell content for the uncertain DC is the index of that
+UnSpace group ( &gt; 0&nbsp; and &lt;= <a href="#unG_0"><big><span
+ style="font-family: monospace;">unG[0]</span></big></a> ).&nbsp; All
+deterministic DCs must be given the group index 0 (the so-called <span
+ style="font-style: italic;">deterministic group</span>) <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>Default value: 0&nbsp; (deterministic).</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unGvP"></a><big><b><big><tt>unGvP</tt></big></b></big>&nbsp;
+Input: [Ls]
+0-deterministic
+DC; value &gt;0 is an
+index of a group varying gamma params (reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>Reserved for future versions. In this version must be filled
+with zeros. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unGvS"></a><big><b><big><tt>unGvS</tt></big></b></big>&nbsp;
+Input: [L] 0-deterministic
+DC; value &gt;0 is an index of a group varying S (reserved)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>Reserved for future versions. In this version must be filled
+with zeros.</dd>
+  <dd> <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unGvV"></a><big><b><big><tt>unGvV</tt></big></b></big>&nbsp;
+Input:&nbsp;
+0-deterministic
+DC; value &gt;0 is an index of a group varying V </dt>
+  <dd><br>
+  </dd>
+  <dd>This input vector assigns which dependent component (DC) in the
+system will be taken as deterministic, i.e. with certain constant molar
+volumes V0, and which will be considered as
+uncertain and allocated to an UnSpace group. The respective cell
+content for the uncertain DC is the index of that UnSpace group ( &gt;
+0&nbsp; and &lt;= <a href="#unG_0"><big><span
+ style="font-family: monospace;">unG[0]</span></big></a> ).&nbsp; All
+deterministic DCs must be given the group index 0 (the so-called <span
+ style="font-style: italic;">deterministic group</span>) <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>Default value: 0&nbsp; (deterministic).</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unGvB"></a><big><b><big><tt>unGvB</tt></big></b></big>&nbsp;
+Input:&nbsp;
+0-deterministic IC; value &gt;0 is an index
+of a group varying <span style="font-style: italic;">b,</span> to
+which this IC is assigned </dt>
+  <dd><br>
+  </dd>
+  <dd>This input vector assigns which independent component (IC) in
+the
+system will be taken as deterministic, i.e. with certain constant
+amount in the bulk composition vector <span style="font-style: italic;">b</span>,
+and which will be considered as
+uncertain and allocated to an UnSpace group. The respective cell
+content for the uncertain IC is the index of that UnSpace group ( &gt;
+0&nbsp; and &lt;= <a href="#unG_0"><big><span
+ style="font-family: monospace;">unG[0]</span></big></a> ).&nbsp; All
+deterministic ICs must be given the group index 0 (the so-called <span
+ style="font-style: italic;">deterministic group</span>) <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>Default value: 0&nbsp; (deterministic).</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="PhAf"></a><big><b><big><tt>PhAf</tt></big></b></big>
+Input phase indexes
+of known equilibrium
+phase assemblage for a primary filter&nbsp;<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This input vector of dimensionality <a href="#unSiz_0"><big><tt>unSiz[0]</tt></big></a>&nbsp;
+is allocated when the flag&nbsp; <big><tt><a href="#unPafl_0">unPafl[0]</a>
+    </tt></big>is turned on. Enter in the <big><span
+ style="font-family: monospace;">PhAf</span></big> vector indices of
+phases (according to indexation of the system definition) belonging to
+a priori known equilibrium phase assemblage. The remaining cells should
+contain negative or EMPTY values "---". The aqueous phase usually has
+index 0, the gas phase (in presence of aqeuous) has index 1, and so on.</dd>
+  <dd><br>
+  </dd>
+  <dd>When provided, the phase indexes in <big><span
+ style="font-family: monospace;">PhAf</span></big> will be used as a <a
+ href="#FILTERING">primary filter</a>&nbsp; to screen the calculated <a
+ href="#SAMPLING">sample variants</a>, discarding all that have
+different <a href="#PHASE_ASSEMBLAGE">phase assemblages</a>. If other
+kinds of filters are used then they will be applied according to the
+"logical AND" rule.</dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp;</dd>
+</dl>
+<a name="intG0_0"></a><big><b><big><tt>intG0[0]</tt></big></b></big>
+Adapted
+uncertainty
+half-intervals for G0 (DC molar Gibbs energies) variation (0 -
+deterministic)
+<dl>
+  <dd><br>
+  </dd>
+  <dd>This&nbsp; column will contain the adapted (optimized) absolute
+uncertainty half-intervals of standard molar Gibbs energy G0 for those
+dependent components (DC) that have been declared uncertain in
+the&nbsp; <a href="#unGvG"><big><tt>unGvG</tt></big></a>&nbsp; vector.
+For deterministic DCs, the respective cells in the <big><span
+ style="font-family: monospace;">intG0</span></big>[0] vector will be
+ignored (assumed zeros). The units of measurement are defined by the <a
+ href="#unStat_1"><big><tt>unStat[1]</tt></big></a> code (default:
+J/bar). The scale depends on the&nbsp; <a href="#unPsfl_0"><big><tt>unPsfl[0]</tt></big></a>
+code (% of deterministic value or absolute).</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="intG0_1"></a><big><b><big><tt>intG0[1]</tt></big></b></big>
+Input initial
+uncertainty
+half-intervals for G0 (DC molar Gibbs energies) variation (0 -
+deterministic) </dt>
+  <dd><br>
+  </dd>
+  <dd>This input column must contain initial absolute
+uncertainty half-intervals of standard molar Gibbs energy G0 for those
+dependent components (DC) that have been declared uncertain in
+the&nbsp; <a href="#unGvG"><big><tt>unGvG</tt></big></a>&nbsp; vector.
+For deterministic DCs, the respective cells in the <big><span
+ style="font-family: monospace;">intG0</span></big>[1] column will be
+ignored (assumed zeros). The units of measurement are defined by the <a
+ href="#unStat_1"><big><tt>unStat[1]</tt></big></a> code (default:
+J/bar). The scale depends on the&nbsp; <a href="#unPsfl_0"><big><tt>unPsfl[0]</tt></big></a>
+code (% of deterministic value or absolute). <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>In future versions of GEMS, the contents of this vector will be
+collected from thermodynamic database once upon creation of the new
+UnSpace record and can be modified later on.</dd>
+  <dd><br>
+  </dd>
+  <dd>If the analysis of UnSpace is performed in <a href="#ADAPTIVE">adaptive
+loops</a>, the initial uncertainty half-inetrvals may significantly
+decrease and the "optimal" G0 values (i.e. in the <a href="#uGc"><big><tt>uGc</tt></big></a>
+table for the "optimal" sample variant) may differ from the original
+ones (visible in the <a href="#un_Gs"><big><tt>un_Gs</tt></big></a>
+vector). The corrected half-intervals can be found in the <a
+ href="#intG0_0"><big><tt>intGc</tt></big>[0]</a> column after each
+adaptive
+(re)calculation. <br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="intGam_0"></a><big><b><big><tt>intGam[0]</tt></big></b></big>&nbsp;
+Adapted
+uncertainty
+half-intervals for non-ideal interaction parameters (reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>This data object is reserved for future development.</dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="intGam_1"></a><big><b><big><tt>intGam[1]</tt></big></b></big>&nbsp;
+Initial
+uncertainty
+half-intervals for non-ideal interaction parameters (reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>This data object is reserved for future development.</dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+<br>
+<dl>
+  <dt> <a name="intS_0"></a><big><b><big><tt>intS[0]</tt></big></b></big>
+Adapted
+uncertainty
+half-intervals for absolute entropies S0 of DC&nbsp; (reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>This data object is reserved for future development.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="intS_1"></a><big><b><big><tt>intS[1]</tt></big></b></big>&nbsp;
+Input initial
+uncertainty
+half-intervals for absolute entropies S0 of DC&nbsp; (reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>This data object is reserved for future development.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="intV_0"></a><big><b><big><tt>intV[0]</tt></big></b></big>&nbsp;
+Adapted
+uncertainty
+half-intervals for the DC molar volume V0
+variation </dt>
+  <dd><br>
+  </dd>
+  <dd>This column contais the adapted absolute
+uncertainty
+half-intervals of the molar volume V0 for those dependent
+components (DC) that have been declared uncertain in the&nbsp; <a
+ href="#unGvV"><big><tt>unGvV</tt></big></a>&nbsp; vector. For
+deterministic DCs, the respective cells in the <big><span
+ style="font-family: monospace;">intV[0]</span></big> vector will be
+ignored (assumed zeros). The units of measurement are defined by the <a
+ href="#unStat_0"><big><tt>unStat[0]</tt></big></a> code
+(default: J/bar). The scale depends on the&nbsp; <a href="unPsfl_0"><big><tt>unPsfl[0]</tt></big></a>
+code (% of deterministic value or absolute). </dd>
+  <dd><br>
+  </dd>
+  <dd>In future versions of GEMS, the contents of this vector will be
+collected from thermodynamic database once upon creation of the new
+UnSpace record and can be modified later on.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="intV_1"></a><big><b><big><tt>intV[1]</tt></big></b></big>&nbsp;
+Input (initial)
+uncertainty
+half-intervals for the DC molar volume V0
+variation (0- deterministic) </dt>
+  <dd><br>
+  </dd>
+  <dd>This input data column contains the initial absolute
+uncertainty
+half-intervals of the molar volume V0 for those dependent
+components (DC) that have been declared uncertain in the&nbsp; <a
+ href="#unGvV"><big><tt>unGvV</tt></big></a>&nbsp; vector. For
+deterministic DCs, the respective cells in the <big><span
+ style="font-family: monospace;">intV</span></big>[1] column will be
+ignored (assumed zeros). The units of measurement are defined by the <a
+ href="gm_unspace.html#unStat_0"><big><tt>unStat[0]</tt></big></a> code
+(default: J/bar). The scale depends on the&nbsp; <a href="unPsfl_0"><big><tt>unPsfl[0]</tt></big></a>
+code (% of deterministic value or absolute). </dd>
+  <dd><br>
+  </dd>
+  <dd>In future versions of GEMS, the contents of this vector will be
+collected from thermodynamic database once upon creation of the new
+UnSpace record and can be modified later on.</dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="intB_0"></a><big><b><big><tt>intB[0]</tt></big></b></big>&nbsp;
+Adapted
+uncertainty
+half-intervals for b
+variation (flag PsUnInB defines units) </dt>
+  <dd><br>
+  </dd>
+  <dd>This data column contains the adapted absolute
+uncertainty
+half-intervals for the amounts (total moles in the system bi)&nbsp; for
+those independent
+components (IC) that have been declared uncertain in the&nbsp; <a
+ href="#unGvB"><big><tt>unGvB</tt></big></a>&nbsp; vector. For
+deterministic ICs, the respective cells in the <big><span
+ style="font-family: monospace;">intB</span></big>[0] vector will be
+ignored (assumed zeros). The units of measurement is: moles. The scale
+depends on the&nbsp; <a href="#unPsfl_1"><big><tt>unPsfl[1]</tt></big></a>
+code (either linear or logarithmic). In linear scale (incl. % of
+deterministic value), default value is 0; in logaritmic scale, default
+value is -20. </dd>
+  <dd><br>
+  </dd>
+  <dd>In future versions of GEMS, the contents of this vector will be
+collected from thermodynamic database once upon creation of the new
+UnSpace record and can be modified later on.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="intB_1"></a><big><b><big><tt>intB[1]</tt></big></b></big>&nbsp;
+Initial
+uncertainty
+half-intervals for b
+variation (0- deterministic, flag PsUnInB defines units) </dt>
+  <dd><br>
+  </dd>
+  <dd>This input data column contains initial absolute
+uncertainty
+half-intervals for the amounts (total moles in the system bi)&nbsp; for
+those independent
+components (IC) that have been declared uncertain in the&nbsp; <a
+ href="#unGvB"><big><tt>unGvB</tt></big></a>&nbsp; vector. For
+deterministic ICs, the respective cells in the <big><span
+ style="font-family: monospace;">intB</span></big> vector will be
+ignored (assumed zeros). The units of measurement is: moles. The scale
+depends on the&nbsp; <a href="#unPsfl_1"><big><tt>unPsfl[1]</tt></big></a>
+code (either linear or logarithmic). In linear scale (incl. % of
+deterministic value), default value is 0; in logaritmic scale, default
+value is -20. </dd>
+  <dd><br>
+  </dd>
+  <dd>In future versions of GEMS, the contents of this vector will be
+collected from thermodynamic database once upon creation of the new
+UnSpace record and can be modified later on.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="m_t_lo"></a><big><b><big><tt>m_t_lo</tt></big></b></big>
+Total
+IC molality
+filter - lower limits
+(default 0 (linear scale) or -20 (log scale))&nbsp;<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This input vector contains the (a priori known)&nbsp; lower
+limits of total dissolved molality for all independent components of
+the system of interest.The scale depends on the&nbsp; <a
+ href="#unPsfl_2"><big><tt>unPsfl[2]</tt></big></a> code (either linear
+or logarithmic). In linear scale, default value is 0; in logaritmic
+scale, default value is -20. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>When provided, the values in&nbsp; <big><span
+ style="font-family: monospace;">m_t_lo</span></big>&nbsp; /&nbsp;<big><span
+ style="font-family: monospace;"> m_t_up</span></big>&nbsp; will be
+used as a <a href="#FILTERING">filter</a>&nbsp; to screen the
+calculated <a href="#SAMPLING">sample variants</a>, discarding all
+those that have total dissolved molality of at least one independent
+component below the lower limit or above the upper limit. If other
+kinds of filters are used then they will be also applied according to
+the "logical AND" rule.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="m_t_up"></a><big><b><big><tt>m_t_up</tt></big></b></big>
+Total
+IC molality
+filter - upper limits (default 10 (linear scale) or +1 (log scale)) </dt>
+  <dd><br>
+  </dd>
+  <dd>This input vector contains the (a priori known)&nbsp; upper
+limits of
+total dissolved molality for all independent components of the system
+of interest.The scale depends on the&nbsp; <a href="#unPsfl_2"><big><tt>unPsfl[2]</tt></big></a>
+code (either linear or logarithmic). In linear scale, default value is
+10; in logaritmic scale, default value is +1. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>When provided, the values in&nbsp; <big><span
+ style="font-family: monospace;">m_t_lo</span></big>&nbsp; /&nbsp;<big><span
+ style="font-family: monospace;"> m_t_up</span></big>&nbsp; will be
+used as a <a href="#FILTERING">filter</a>&nbsp; to screen the
+calculated <a href="#SAMPLING">sample variants</a>,
+discarding all those that have total dissolved molality of at least one
+independent component below the lower limit or above the upper limit.
+If other kinds of filters are used then they will be also applied
+according to the "logical AND" rule.</dd>
+  <dd> <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="fug_lo"></a><big><b><big><tt>fug_lo</tt></big></b></big>&nbsp;
+Fugacity/activity
+filter - lower limits (default 0 (linear scale) or -90 (log scale)) </dt>
+  <dd><br>
+  </dd>
+  <dd>This input vector contains the (a priori known)&nbsp; lower
+limits of activity for dependent components in all multicomponent
+phases. The scale depends on the&nbsp; <a href="#unPsfl_3"><big><tt>unPsfl[3]</tt></big></a>
+code (either linear or logarithmic). In linear scale, default value is
+0; in logaritmic scale, default value is -90. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>When provided, the values in&nbsp; <big><span
+ style="font-family: monospace;">fug_lo</span></big>&nbsp; /&nbsp;<big><span
+ style="font-family: monospace;"> fug_up</span></big>&nbsp; will be
+used as a <a href="#FILTERING">filter</a>&nbsp; to screen the
+calculated <a href="#SAMPLING">sample variants</a>,
+discarding all those that have the activity of at least one dependent
+component below the lower limit or above the upper limit. If other
+kinds of filters are used then they will be also applied according to
+the "logical AND" rule.</dd>
+  <dd> <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="fug_up"></a><big><b><big><tt>fug_up</tt></big></b></big>&nbsp;
+Fugacity/activity
+filter - upper limits (default 1000 (linear scale) or 3 (log scale)) </dt>
+  <dd><br>
+  </dd>
+  <dd>This input vector contains the (a priori known)&nbsp; upper
+limits of
+activity for dependent components in all multicomponent phases. The
+scale depends on the&nbsp; <a href="#unPsfl_3"><big><tt>unPsfl[3]</tt></big></a>
+code (either linear or logarithmic). In linear scale, default value is
+1000; in logaritmic scale, default value is +3. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>When provided, the values in&nbsp; <big><span
+ style="font-family: monospace;">fug_lo</span></big>&nbsp; /&nbsp;<big><span
+ style="font-family: monospace;"> fug_up</span></big>&nbsp; will be
+used as a <a href="#FILTERING">filter</a>&nbsp; to screen the
+calculated <a href="#SAMPLING">sample variants</a>,
+discarding all those that have the activity of at least one dependent
+component below the lower limit or above the upper limit. If other
+kinds of filters are used then they will be also applied according to
+the "logical AND" rule.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="un_Gs_0"></a><big><b><big><tt>un_Gs[0]</tt></big></b></big>
+Adapted
+values of G<sup>o</sup><sub>298</sub> for DCs </dt>
+  <dd><br>
+  </dd>
+  <dd>This column contains the adapted (optimized) values of standard
+molar
+Gibbs energy G<sup>o</sup><sub>298</sub> for all dependent components.
+The values are copied from the parent modelling project definition. <br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="un_Gs_1"></a><big><b><big><tt>un_Gs[1]</tt></big></b></big>
+Input (deterministic)
+values of G<sup>o</sup><sub>298</sub> for DCs </dt>
+  <dd><br>
+  </dd>
+  <dd>This input data column contains deterministic values of
+standard molar
+Gibbs energy G<sup>o</sup><sub>298</sub> for all dependent components.
+The values are copied from the parent modelling project definition. The
+    <big><span style="font-family: monospace;">un_Gs[1]</span></big>
+column can be used e.g. for comparisons with the adapted values of G<sup>o</sup><sub>298</sub>&nbsp;
+in the un_Gs[0] column.<br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="un_Ss_0"></a><big><b><big><tt>un_Ss[0]</tt></big></b></big>
+Adapted values of So298 for DCs (reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>Reserved for future versions.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="un_Ss_1"></a><big><b><big><tt>un_Ss[1]</tt></big></b></big>
+Input initial (deterministic)
+values of So298 for DCs (reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>Reserved for future versions.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="un_Vs_0"></a><big><b><big><tt>un_Vs[0]</tt></big></b></big>
+Adapted
+values of Vo298 for DCs </dt>
+  <dd><br>
+  </dd>
+  <dd>This column contains the adapted (optimized) values of molar
+volume V<sup>o</sup><sub>298</sub>
+for all dependent components. The values are copied from the parent
+modelling project definition.</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="un_Vs_1"></a><big><b><big><tt>un_Vs[1]</tt></big></b></big>
+Input (deterministic)
+values of Vo298 for DCs </dt>
+  <dd><br>
+  </dd>
+  <dd>This input data column contains deterministic values of molar
+volume V<sup>o</sup><sub>298</sub>
+for all dependent components. The values are copied from the parent
+modelling project definition.</dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="unGAMs_0"></a><big><b><big><tt>unGAMs[0]</tt></big></b></big>
+Adapted non-ideal interaction parameters (reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>Reserved for future versions.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="unGAMs_1"></a><big><b><big><tt>unGAMs[1]</tt></big></b></big>
+Input (deterministic) non-ideal interaction parameters (reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>Reserved for future versions.</dd>
+</dl>
+<br>
+<dl>
+  <dt> <a name="un_Bs_0"></a><big><b><big><tt>un_Bs[0]</tt></big></b></big>
+Adapted amounts from the bulk composition vector b </dt>
+  <dd><br>
+  </dd>
+  <dd>This column contains the adapted amounts of independent
+components - the bulk composition vestor <span
+ style="font-style: italic;">b</span>. The values are copied from the
+parent chemical system definition.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="un_Bs_1"></a><big><b><big><tt>un_Bs[1]</tt></big></b></big>
+Input (deterministic)
+values of the bulk composition vector b </dt>
+  <dd><br>
+  </dd>
+  <dd>This input data column contains deterministic amounts of
+independent
+components - the bulk composition vestor <span
+ style="font-style: italic;">b</span>. The values are copied from the
+parent chemical system definition.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="uncp"></a><big><b><big><tt>uncp</tt></big></b></big>
+Table of
+normalised coordinates of
+sample points in uncertainty space (&gt;= 0 &lt;= 1) </dt>
+  <dd><br>
+  </dd>
+  <dd>This table with nQ (<a href="#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; rows and
+nG (<a href="#unG_0"><big><tt>unG[0]</tt></big></a>)&nbsp; columns
+contains the coordinates of all <a href="#SAMPLING">sample variants</a>
+in the normalized <a href="#UNCERTAINTY_SPACE">uncertainty space</a>.
+"Normalized" means that for each coordinate or UnSpace group (of input
+parameters), the uncertainty interval has been re-scaled into the [0,1]
+interval with the deterministic value at 0.5.</dd>
+  <dd><br>
+  </dd>
+  <dd>The data from this table can be used e.g. for plotting 2D
+projections of criterion values in the normalized space. This is
+especially important when the involved UnSpace groups have different
+units of measurement.</dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="uTc"></a><big><b><big><tt>uTc</tt></big></b></big>
+Vector of temperatures TC
+(C) from sample input data variants (index q) </dt>
+  <dd><br>
+  </dd>
+  <dd>This vector-column of nQ (<a href="gm_unspace.html#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; cells
+contains values of temperature (C) used as input in all UnSpace sample
+variants. One cell&nbsp; corresponds to a q-th variant of the system
+input data. This vector can be used for plotting projections of the
+UnSpace to coordinate planes that involve uncertain temperature. </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="uPc"></a><big><b><big><tt>uPc</tt></big></b></big>
+Vector of pressures
+P (bar) from sample input data variants (index q) </dt>
+  <dd><br>
+  </dd>
+  <dd>This vector-column of nQ (<a href="#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp;
+cells contains values of pressure (bar) used as input in all UnSpace
+sample variants. One cell&nbsp; corresponds to a q-th variant of the
+system
+input data. This vector can be used for plotting projections of the
+UnSpace to coordinate planes that involve uncertain pressure. </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="uVc"></a><big><b><big><tt>uVc</tt></big></b></big>
+Vector of system volumes V (cm3) from sample input data variants (index
+q) </dt>
+  <dd><br>
+  </dd>
+  <dd>This vector-column of nQ (<a href="gm_unspace.html#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp;
+cells contains values of pressure (bar) used as input in all UnSpace
+sample variants. One cell&nbsp; corresponds to a q-th variant of the
+system
+input data. This vector can be used for plotting projections of the
+UnSpace to coordinate planes that involve uncertain pressure. </dd>
+</dl>
+<dl>
+  <dd>&nbsp;&nbsp; <br>
+  </dd>
+  <dt> <a name="uGc"></a><big><b><big><tt>uGc</tt></big></b></big>
+Molar Gibbs energy G<sup>o</sup><sub>298</sub>
+values of DC used as input in UnSpace sample variants (indexes q j) </dt>
+  <dd><br>
+  </dd>
+  <dd>This table of nQ (<a href="gm_unspace.html#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; rows and
+nL (<a href="#unSiz_1"><big><tt>unSiz[1]</tt></big></a>) columns
+contains the G<sup>o</sup><sub>298</sub> values used as input in all
+UnSpace sample variants. One row in this table corresponds to a q-th
+variant of the system input data, and one column - to a j-th dependent
+component, indexed according to the list&nbsp; <big><span
+ style="font-family: monospace;">DCvp</span></big>&nbsp; visible on the
+"UnSpace" page. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>This table is used in calculations of payoff matrix from
+functions A and B. It can also be used for plotting projections of the
+UnSpace to coordinate planes that involve uncertain G<sup>o</sup><sub>298&nbsp;
+    </sub>parameters. <br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="uYc"></a><big><b><big><tt>uYc</tt></big></b></big> X
+(DC mole amounts) from
+sample GEM solution variants (indexes t j) </dt>
+  <dd><br>
+  </dd>
+  <dd>This table of nQ (<a href="gm_unspace.html#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; rows and
+nL (<a href="gm_unspace.html#unSiz_1"><big><tt>unSiz[1]</tt></big></a>)
+columns contains amounts (moles) of dependent components
+from calculated equilibria in all UnSpace sample variants. One row in
+this table corresponds to a t-th sample equilibrium calculation, and
+one column - to
+a j-th dependent component, indexed according to the list&nbsp; <big><span
+ style="font-family: monospace;">DCvp</span></big>&nbsp; visible on the
+"UnSpace" page.&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>This table is used in calculations of payoff matrix from
+functions A and B. It can also be used in filtering sample variants. <br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="uFugc"></a><big><b><big><tt>uFugc</tt></big></b></big>&nbsp;
+log10
+fugacity/activity values from sample GEM solution variants (indexes t
+j) </dt>
+  <dd><br>
+  </dd>
+  <dd>This table of nQ (<a href="gm_unspace.html#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; rows and
+nLs (<a href="gm_unspace.html#unSiz_1"><big><tt>unSiz[2]</tt></big></a>)
+columns contains decimal logarithms of activity (fugacity for gases) of
+dependent components
+from calculated equilibria in all UnSpace sample variants. One row in
+this table corresponds to a t-th sample equilibrium calculation, and
+one column - to
+a j-th dependent component, indexed according to the list&nbsp; <big><span
+ style="font-family: monospace;">DCvp</span></big>&nbsp; visible on the
+"UnSpace" page.</dd>
+  <dd><br>
+  </dd>
+  <dd>This table is used in calculations of payoff matrix from
+functions A and B. It can also be used in filtering sample variants. </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="uGamc"></a><big><b><big><tt>uGamc</tt></big></b></big>&nbsp;
+ln(Gamma)
+values for DC
+from sample GEM solution variants (indexes t j) </dt>
+  <dd><br>
+  </dd>
+  <dd>This table of nQ (<a href="#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; rows and
+nLs (<a href="#unSiz_2"><big><tt>unSiz[2]</tt></big></a>) columns
+contains natural logarithms of activity coefficients of dependent
+components in multicomponent phases
+from calculated equilibria in all UnSpace sample variants. One row in
+this table corresponds to a t-th sample equilibrium calculation, and
+one column - to
+a j-th dependent component, indexed according to the list&nbsp; <big><span
+ style="font-family: monospace;">DCvp</span></big>&nbsp; visible on the
+"UnSpace" page.</dd>
+  <dd><br>
+  </dd>
+  <dd>This table is used in calculations of payoff matrix from
+functions A and B. It can also be used in filtering sample variants. </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="uYFc"></a><big><b><big><tt>uYFc</tt></big></b></big>
+Phase mole amounts
+from sample GEM solution variants (indexes t k) </dt>
+  <dd><br>
+  </dd>
+  <dd>This table of nQ (<a href="gm_unspace.html#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; rows and
+nF (<a href="gm_unspace.html#unSiz_3"><big><tt>unSiz[3]</tt></big></a>)
+columns contains amounts (moles) of phases
+from calculated equilibria in all UnSpace sample variants. One row in
+this table corresponds to a t-th sample equilibrium calculation, and
+one column - to
+a k-th phase, indexed according to the list&nbsp; <big><span
+ style="font-family: monospace;">PHvp</span></big>&nbsp; visible on the
+"FSetup" page.&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>This table is used in classifying phase assemblages and in
+filtering sample variants. </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="um_tc"></a><big><b><big><tt>um_tc</tt></big></b></big>
+Values of total
+IC molality m_t from sample GEM solution variants (indexes t i) </dt>
+  <dd><br>
+  </dd>
+  <dd>This table of nQ (<a href="gm_unspace.html#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; rows and
+nN (<a href="gm_unspace.html#unSiz_3"><big><tt>unSiz[0]</tt></big></a>)
+columns contains total dissolved molalities of independent components
+(usually chemical elements)
+from calculated equilibria in all UnSpace sample variants. One row in
+this table corresponds to a t-th sample equilibrium calculation, and
+one column - to
+an i-th independent component, indexed according to the list&nbsp; <big><span
+ style="font-family: monospace;">ICvp</span></big>&nbsp; visible on the
+"UnSpace" page.&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>This table can be used&nbsp; in filtering sample variants.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="uUc"></a><big><b><big><tt>uUc</tt></big></b></big>
+Values of dual chemical
+potentials u from sample GEM solution variants (indexes t i) </dt>
+  <dd><br>
+  </dd>
+  <dd>This table of nQ (<a href="gm_unspace.html#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; rows and
+nN (<a href="gm_unspace.html#unSiz_3"><big><tt>unSiz[0]</tt></big></a>)
+columns contains dual chemical potentials of independent components
+(usually chemical elements)
+from calculated equilibria in all UnSpace sample variants. One row in
+this table corresponds to a t-th sample equilibrium calculation, and
+one column - to
+an i-th independent component, indexed according to the list&nbsp; <big><span
+ style="font-family: monospace;">ICvp</span></big>&nbsp; visible on the
+"UnSpace" page.&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>This table is used in calculations of payoff matrix from
+functions C, D, E and F.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="upHc_0"></a><big><b><big><tt>upHc[0]</tt></big></b></big>
+Vector of pH values
+from sample GEM solution variants (index t) </dt>
+  <dd><br>
+  </dd>
+  <dd>This vector-column of nQ (<a href="gm_unspace.html#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; cells
+contains values of pH from calculated equilibria in all UnSpace sample
+variants. One cell in
+this vector corresponds to a t-th sample equilibrium calculation. This
+vector can be used&nbsp; in filtering sample variants.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="upHc_1"></a><big><b><big><tt>upHc[1]</tt></big></b></big>
+Vector of Eh values from sample GEM solution variants (index t) </dt>
+  <dd><br>
+  </dd>
+  <dd>This vector-column of nQ (<a href="gm_unspace.html#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; cells
+contains values of Eh from calculated equilibria in all UnSpace sample
+variants. One cell in
+this vector corresponds to a t-th sample equilibrium calculation. This
+vector can be used&nbsp; in filtering sample variants.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="upHc_2"></a><big><b><big><tt>upHc[2]</tt></big></b></big>
+Vector of IS values
+from sample GEM solution variants (index t) </dt>
+  <dd><br>
+  </dd>
+  <dd>This vector-column of nQ (<a href="gm_unspace.html#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; cells
+contains values of IS from calculated equilibria in all UnSpace sample
+variants. One cell in
+this vector corresponds to a t-th sample equilibrium calculation. This
+vector can be used&nbsp; in filtering sample variants.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="OVB"></a><big><b><big><tt>OVB</tt></big></b></big>
+Pseudo-random
+numbers for
+Belov algorithm </dt>
+  <dd><br>
+  </dd>
+  <dd>This work object contains pseudo-random numbers for the Belov
+sampling algorithm.</dd>
+  <dd>.<br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="OVR"></a><big><b><big><tt>OVR</tt></big></b></big>
+Pseudo-random
+numbers by
+Monte Carlo with uniform distribution </dt>
+  <dd><br>
+  </dd>
+  <dd>This work object contains pseudo-random numbers for the Monte
+Carlo algorithm with uniform distribution.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="OVN"></a><big><b><big><tt>OVN</tt></big></b></big>
+Pseudo-random
+numbers by
+Monte Carlo with normal distribution </dt>
+  <dd><br>
+  </dd>
+  <dd>This work object contains pseudo-random numbers for the Monte
+Carlo algorithm with uniform distribution.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="unPhA"></a><big><b><big><tt>unPhA</tt></big></b></big>
+Output number
+of different
+phase assemblages found in all sample variants </dt>
+  <dd><br>
+  </dd>
+  <dd>This counter (set automatically after the UnSpace calculation)
+shows how many different phase assemblages have been detected when
+scanning through all calculated sample variant equilibria. The detected
+assemblages are numbered consecutively starting from 1 and are visible
+in the&nbsp; <a href="#uPhsv"><big><span
+ style="font-family: monospace;">uPhsv</span></big></a>&nbsp; vector on
+the "SamVar" page. The phase will count for the phase assemblage when
+its (mole) amount is greater than zero (see the&nbsp; <a href="#uYFc"><big><span
+ style="font-family: monospace;">uYFc</span></big></a>&nbsp; table on
+the same page). Appearance of some single-component phases present in
+very small amounts (&lt; 10<sup>-9</sup> mol) may be influenced by the
+selected value of a numerical threshold&nbsp; <big><span
+ style="font-family: monospace;">Pa_DS</span></big> (see "Project::
+Numerical Configuration and Settings" dialog window). For UnSpace
+calculations, it is recommended that this threshold is set to 1e-9. <br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="unOV_0"></a><big><b><big><tt>unOV[0]</tt></big></b></big>
+Index
+of optimal
+sampled variant selected by the Laplace criterion (within 0 to nQ-1) </dt>
+  <dd><br>
+  </dd>
+  <dd>This cell contains the index of an "optimal"&nbsp; sample
+variants selected by the single-value Laplace criterion. The respective
+criterion value can be found in the <a href="#un_CrV_0"><big><tt>un_CrV[0]</tt></big></a>
+cell. The respective phase assemblage can be seen in the&nbsp; <a
+ href="#uYFc"><big><span style="font-family: monospace;">uYFc</span></big></a>&nbsp;
+table on the "SamVar" page, and other properties of the optimal variant
+- in other tables on that page. The total number of variants having the
+same phase assemblage as that in the selected variant is given in
+the&nbsp;<small> </small><a href="#unNSV_0"><big><tt>unNSV[0]</tt></big></a>
+cell.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unOV_1"></a><big><b><big><tt>unOV[1]</tt></big></b></big>
+Index
+of optimal
+sampled variant selected by the Hurvitz criterion&nbsp; (within 0 to
+nQ-1)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This cell contains the index of an "optimal"&nbsp; sample
+variants
+selected by the single-value Hurvitz criterion. The respective
+criterion value can be found in the <a href="#un_CrV_1"><big><tt>un_CrV[1]</tt></big></a>
+cell. The respective phase assemblage can be seen in the&nbsp; <a
+ href="#uYFc"><big><span style="font-family: monospace;">uYFc</span></big></a>&nbsp;
+table on the "SamVar" page, and other properties of the optimal variant
+- in other tables on that page. The total number of variants having
+the same phase assemblage as that in the selected variant is given in
+the&nbsp;<small> </small><a href="#unNSV_1"><big><tt>unNSV[1]</tt></big></a>
+cell.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unOV_2"></a><big><b><big><tt>unOV[2]</tt></big></b></big>
+Index
+of optimal
+sampled variant selected by the Wald criterion (within 0 to nQ-1)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This cell contains the index of an "optimal"&nbsp; sample
+variants
+selected by the single-value Wald criterion. The respective
+criterion value can be found in the <a href="#un_CrV_2"><big><tt>un_CrV[2]</tt></big></a>
+cell. The respective phase assemblage can be seen in the&nbsp; <a
+ href="#uYFc"><big><span style="font-family: monospace;">uYFc</span></big></a>&nbsp;
+table on the "SamVar" page, and other properties of the optimal variant
+- in other tables on that page. The total number of variants having
+the same phase assemblage as that in the selected variant is given in
+the&nbsp;<small> </small><a href="#unNSV_2"><big><tt>unNSV[2]</tt></big></a>
+cell.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unOV_3"></a><big><b><big><tt>unOV[3]</tt></big></b></big>
+Index
+of optimal
+sampled variant selected by the Homeniuk criterion (within 0 to nQ-1)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This cell contains the index of an "optimal"&nbsp; sample
+variants
+selected by the single-value Homeniuk criterion. The respective
+criterion value can be found in the <a href="#un_CrV_3"><big><tt>un_CrV[3]</tt></big></a>
+cell. The respective phase assemblage can be seen in the&nbsp; <a
+ href="#uYFc"><big><span style="font-family: monospace;">uYFc</span></big></a>&nbsp;
+table on the "SamVar" page, and other properties of the optimal variant
+- in other tables on that page. The total number of variants having
+the same phase assemblage as that in the selected variant is given in
+the&nbsp;<small> </small><a href="#unNSV_3"><big><tt>unNSV[3]</tt></big></a>
+cell.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unNSV_0"></a><big><b><big><tt>unNSV[0]</tt></big></b></big>
+Number
+of
+sampled variants with the same phase assemblage as that selected by the
+Laplace criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>This number, divided by the total number of sample variants
+(nQ), shows the fraction of variants having the same phase assemblage
+as that in the variant selected by the single-value Laplace criterion.
+In adaptive calculations, the number in this cell is expected to
+increase with each adaptive loop (might eventually reach 100%).</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unNSV_1"></a><big><b><big><tt>unNSV[1]</tt></big></b></big>
+Number
+of
+sampled variants with the same phase assemblage as that selected by the
+Hurtvitz criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>This number, divided by the total number of sample variants
+(nQ),
+shows the fraction of variants having the same phase assemblage as that
+in the variant selected by the single-value Hurvitz criterion. In
+adaptive calculations, the number in this cell is expected to increase
+with each adaptive loop (might eventually reach 100%).</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unNSV_2"></a><big><b><big><tt>unNSV[2]</tt></big></b></big>
+Number
+of
+sampled variants with the same phase assemblage as that selected by the
+Wald criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>This number, divided by the total number of sample variants
+(nQ),
+shows the fraction of variants having the same phase assemblage as that
+in the variant selected by the single-value Wald criterion. In
+adaptive calculations, the number in this cell is expected to increase
+with each adaptive loop (might eventually reach 100%).</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unNSV_3"></a><big><b><big><tt>unNSV[3]</tt></big></b></big>
+Number
+of
+sampled variants with the same phase assemblage as that selected by the
+Homeniuk criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>This number, divided by the total number of sample variants
+(nQ),
+shows the fraction of variants having the same phase assemblage as that
+in the variant selected by the single-value Homeniuk criterion. In
+adaptive calculations, the number in this cell is expected to increase
+with each adaptive loop (might eventually reach 100%).</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="un_CrV_0"></a><big><b><big><tt>un_CrV[0]</tt></big></b></big>
+Laplace
+single
+criterion value<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This Laplace criterion value (taken from&nbsp; <a href="#Zcp"><big><span
+ style="font-family: monospace;">Zcp</span></big></a>&nbsp;
+vector)&nbsp; corresponds to the "optimal" selected sample variant with
+the index <a href="#unOV_0"><big><tt>unOV[0]</tt></big></a> . Through
+this index, all properties of the selected variant can be found in
+vectors and tables on "SamVar" and "Criteria" pages.</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="un_CrV_1"></a><big><b><big><tt>un_CrV[1]</tt></big></b></big>
+Hurtvitz
+single criterion value <br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This Hurvitz criterion value (taken from&nbsp; <a href="#Zmin"><big><span
+ style="font-family: monospace;">Zmin</span></big></a>&nbsp; and&nbsp; <a
+ href="#Zmax"><big><span style="font-family: monospace;">Zmax</span></big></a>&nbsp;
+vectors)&nbsp; corresponds to the "optimal" selected sample variant
+with the index <a href="#unOV_1"><big><tt>unOV[1]</tt></big></a>
+. Through this index, all properties of the selected variant can be
+found in vectors and tables on "SamVar" and "Criteria" pages.</dd>
+  <dd>&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="un_CrV_2"></a><big><b><big><tt>un_CrV[2]</tt></big></b></big>
+Wald
+single
+criterion value <br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This Wald criterion value (taken from&nbsp; <a href="#ZmaxAb"><big><span
+ style="font-family: monospace;">ZmaxAb</span></big></a>&nbsp;
+vector)&nbsp; corresponds to the "optimal" selected sample variant with
+the index <a href="#unOV_2"><big><tt>unOV[2]</tt></big></a>
+. Through this index, all properties of the selected variant can be
+found in vectors and tables on "SamVar" and "Criteria" pages.</dd>
+  <dd>&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="un_CrV_3"></a><big><b><big><tt>un_CrV[3]</tt></big></b></big>
+Homeniuk
+single
+criterion value <br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This Homeniuk criterion value (taken from&nbsp; <a href="#Hom"><big><span
+ style="font-family: monospace;">Hom</span></big></a>&nbsp;
+vector)&nbsp; corresponds to the "optimal" selected sample variant with
+the index <a href="#unOV_3"><big><tt>unOV[3]</tt></big></a>
+. Through this index, all properties of the selected variant can be
+found in vectors and tables on "SamVar" and "Criteria" pages.</dd>
+  <dd>&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="quOV_0"></a><big><b><big><tt>quOV[0]</tt></big></b></big>
+Indices
+of sample GEM
+variants taken into quantile Laplace criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>This column contains indexes of&nbsp; "optimal"&nbsp; sample
+variants selected by the quantile Laplace criterion. The respective
+criterion values can be found in the <a href="#quCrV_0"><big><tt>quCrV[0]</tt></big></a>
+column. The respective phase assemblage can be seen in the&nbsp; <a
+ href="#uYFc"><big><span style="font-family: monospace;">uYFc</span></big></a>&nbsp;
+table on the "SamVar" page, and other properties of the optimal variant
+- in other tables on that page.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="quOV_1"></a><big><b><big><tt>quOV[1]</tt></big></b></big>
+Indices
+of sample GEM
+variants taken into quantile Hurvitz criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>This column contains indexes of&nbsp; "optimal"&nbsp; sample
+variants selected by the quantile Hurvitz criterion. The respective
+criterion values can be found in the <a href="#quCrV_1"><big><tt>quCrV[1]</tt></big></a>
+column. The respective phase assemblage can be seen in the&nbsp; <a
+ href="#uYFc"><big><span style="font-family: monospace;">uYFc</span></big></a>&nbsp;
+table on the "SamVar" page, and other properties of the optimal variant
+- in other tables on that page.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="quOV_2"></a><big><b><big><tt>quOV[2]</tt></big></b></big>
+Indices
+of sample GEM
+variants taken into quantile Wald criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>This column contains indexes of&nbsp; "optimal"&nbsp; sample
+variants selected by the quantile Wald criterion. The respective
+criterion values can be found in the <a href="#quCrV_2"><big><tt>quCrV[2]</tt></big></a>
+column. The respective phase assemblage can be seen in the&nbsp; <a
+ href="#uYFc"><big><span style="font-family: monospace;">uYFc</span></big></a>&nbsp;
+table on the "SamVar" page, and other properties of the optimal variant
+- in other tables on that page.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="quOV_3"></a><big><b><big><tt>quOV[3]</tt></big></b></big>
+Indices
+of sample GEM
+variants taken into quantile Homeniuk criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>This column contains indexes of&nbsp; "optimal"&nbsp; sample
+variants selected by the quantile Homeniuk criterion. The respective
+criterion values can be found in the <a href="#quCrV_3"><big><tt>quCrV[3]</tt></big></a>
+column. The respective phase assemblage can be seen in the&nbsp; <a
+ href="#uYFc"><big><span style="font-family: monospace;">uYFc</span></big></a>&nbsp;
+table on the "SamVar" page, and other properties of the optimal variant
+- in other tables on that page.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="quCrV_0"></a><big><b><big><tt>quCrV[0]</tt></big></b></big>
+Values of the quantile Laplace criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>These Laplace criterion values (taken from the&nbsp; <a
+ href="#Zcp"><big><span style="font-family: monospace;">Zcp</span></big></a>&nbsp;
+vector)&nbsp; correspond to the "optimal" selected sample variants with
+the index <a href="#unOV_0"><big><tt>unOV[0]</tt></big></a> . Through
+this index, all properties of the selected variants can be found in
+vectors and tables on "SamVar" and "Criteria" pages.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="quCrV_1"></a><big><b><big><tt>quCrV[1]</tt></big></b></big>
+Values of the quantile Hurvitz criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>These Hurvitz criterion values&nbsp; correspond to the
+"optimal" selected sample variants with
+the index <a href="#unOV_1"><big><tt>unOV[1]</tt></big></a> . Through
+this index, all properties of the selected variants can be found in
+vectors and tables on "SamVar" and "Criteria" pages.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="quCrV_2"></a><big><b><big><tt>quCrV[2]</tt></big></b></big>
+Values of the quantile Wald criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>These Wald criterion values&nbsp; correspond to the "optimal"
+selected sample variants with
+the index <a href="#unOV_2"><big><tt>unOV[2]</tt></big></a> . Through
+this index, all properties of the selected variants can be found in
+vectors and tables on "SamVar" and "Criteria" pages.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="quCrV_3"></a><big><b><big><tt>quCrV[3]</tt></big></b></big>
+Values of the quantile Homeniuk criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>These Homeniuk criterion values&nbsp; correspond to the
+"optimal" selected sample variants with
+the index <a href="#unOV_3"><big><tt>unOV[3]</tt></big></a> . Through
+this index, all properties of the selected variants can be found in
+vectors and tables on "SamVar" and "Criteria" pages.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnICn"></a><big><b><big><tt>UnICn</tt></big></b></big>
+Names
+of columns for
+output array UnIC </dt>
+  <dd><br>
+  </dd>
+  <dd>This work list contains column names that should help you in
+reading the output data in the <a href="#UnIC"><big><span
+ style="font-family: monospace;">UnIC</span></big></a> table. You can
+edit the column names, if you like. Edited names will be saved in the
+UnSpace record and&nbsp; not lost. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="UgDCn"></a><big><b><big><tt>UgDCn</tt></big></b></big>
+Names
+of columns for
+output array UgDC </dt>
+  <dd><br>
+  </dd>
+  <dd>This work list contains column names that should help you in
+reading the output data in the <a href="#UgDC"><big><span
+ style="font-family: monospace;">UgDC</span></big></a> table. You can
+edit the column names, if you like. Edited names will be saved in the
+UnSpace record and&nbsp; not lost.</dd>
+  <dd><br>
+  </dd>
+  <dd>. <br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="UaDCn"></a><big><b><big><tt>UaDCn</tt></big></b></big>
+Names
+of columns for
+output array UaDc </dt>
+  <dd><br>
+  </dd>
+  <dd>This work list contains column names that should help you in
+reading the output data in the <a href="#UaDC"><big><span
+ style="font-family: monospace;">UaDc</span></big></a> table. You can
+edit the column names, if you like. Edited names will be saved in the
+UnSpace record and&nbsp; not lost.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnDCAn"></a><big><b><big><tt>UnDCAn</tt></big></b></big>
+Names
+of columns
+for output array UnDCA </dt>
+  <dd><br>
+  </dd>
+  <dd>This work list contains column names that should help you in
+reading the output data in the <a href="#UnDCA"><big><span
+ style="font-family: monospace;">UnDCA</span></big></a> table. You can
+edit the column names, if you like. Edited names will be saved in the
+UnSpace record and&nbsp; not lost.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnIC_0"></a><big><b><big><tt>UnIC[0]</tt></big></b></big>
+Total dissolved IC molalities m_i for the deterministic variant
+(results)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This column contains total dissolved (in aqueous phase)
+concentrations of independent components (molal) for the initial
+(deterministic) variant of input data and sample equilibrium. Serves
+for comparison with other results in this table. <br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnIC_1"></a><big><b><big><tt>UnIC[1]</tt></big></b></big>
+m_i averages for all sample variants that have passed through filters
+(results)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This column contains average total molalities of dissolved
+independent components, computed over all sample variants that have
+passed through filters, ir any. If no filters were imposed, all sample
+variants will be taken into calculation of mean values.<br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnIC_2"></a><big><b><big><tt>UnIC[2]</tt></big></b></big>
+2-sigma deviations for the averages in (previous) column 1 (results)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>Results in this column (twice standard deviations) can be taken
+as uncertainty half-intervals for averages in the previous column (<big><span
+ style="font-family: monospace;">UnIC[1]</span></big>). <br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnIC_3"></a><big><b><big><tt>UnIC[3]</tt></big></b></big>
+m_i averages for sample variants with dominant phase assemblage
+(results)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This column contains average total molalities of dissolved
+independent
+components, computed over all sample variants with the dominant phase
+assemblage, i.e. the one with the highest fraction in the <a
+ href="#PAfreg"><big><span style="font-family: monospace;">PAfreg</span></big></a>
+column. </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnIC_4"></a><big><b><big><tt>UnIC[4]</tt></big></b></big>
+2-sigma deviations for the averages in (previous) column 3 </dt>
+  <dd><br>
+  </dd>
+  <dd>Results in this column (twice standard deviations) can be taken
+as
+uncertainty half-intervals for averages in the previous column (<big><span
+ style="font-family: monospace;">UnIC[3]</span></big>). </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnIC_5"></a><big><b><big><tt>UnIC[5]</tt></big></b></big>
+m_i averages over sample variants selected by quantile Laplace
+criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>This column of results contains average total molalities of
+dissolved independent
+components, computed over all sample variants that were selected into
+the quantile Laplace criterion (i.e. those with q indexes from <a
+ href="#quOV_0"><big><span style="font-family: monospace;">quOV[0]</span></big></a>
+column on "Criteria" page). <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>If no quantile criteria were specified the values in this
+column will be taken from a sample variant selected by a single-value
+Laplace criterion (q index in the <a href="#unOV_0"><big><span
+ style="font-family: monospace;">unOV[0]</span></big></a> cell). </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnIC_6"></a><big><b><big><tt>UnIC[6]</tt></big></b></big>
+m_i averages over sample variants selected by quantile Hurvitz
+criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>This column of results contains average total molalities of
+dissolved
+independent
+components, computed over all sample variants that were selected into
+the quantile Hurvitz criterion (i.e. those with q indexes from <a
+ href="#quOV_1"><big><span style="font-family: monospace;">quOV[1]</span></big></a>
+column on "Criteria" page). <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>If no quantile criteria were specified the values in this
+column
+will be taken from a sample variant selected by a single-value Hurvitz
+criterion (q index in the <a href="#unOV_1"><big><span
+ style="font-family: monospace;">unOV[1]</span></big></a> cell). </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnIC_7"></a><big><b><big><tt>UnIC[7]</tt></big></b></big>
+m_i averages over sample variants selected by quantile Wald criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>This column of results contains average total molalities of
+dissolved
+independent
+components, computed over all sample variants that were selected into
+the quantile Wald criterion (i.e. those with q indexes from <a
+ href="#quOV_2"><big><span style="font-family: monospace;">quOV[2]</span></big></a>
+column on "Criteria" page). <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>If no quantile criteria were specified the values in this
+column
+will be taken from a sample variant selected by a single-value Wald
+criterion (q index in the <a href="#unOV_2"><big><span
+ style="font-family: monospace;">unOV[2]</span></big></a> cell).</dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnIC_8"></a><big><b><big><tt>UnIC[8]</tt></big></b></big>
+m_i averages over sample variants selected by quantile Homeniuk
+criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>This column of results contains average total molalities of
+dissolved
+independent
+components, computed over all sample variants that were selected into
+the quantile Homeniuk criterion (i.e. those with q indexes from <a
+ href="#quOV_3"><big><span style="font-family: monospace;">quOV[3]</span></big></a>
+column on "Criteria" page). <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>If no quantile criteria were specified the values in this
+column
+will be taken from a sample variant selected by a single-value Homeniuk
+criterion (q index in the <a href="#unOV_3"><big><span
+ style="font-family: monospace;">unOV[3]</span></big></a> cell).</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnIC_9"></a><big><b><big><tt>UnIC[9]</tt></big></b></big>
+reserved column </dt>
+  <dd><br>
+  </dd>
+  <dd>Reserved for future use.<br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="UgDC_0"></a><big><b><big><tt>UgDC[0]</tt></big></b></big>
+Uncertain input parameter (UIP) values for the deterministic variant </dt>
+  <dd><br>
+  </dd>
+  <dd>This column of results contains the UIP (uncertain input
+parameters) values as used for the initial (deterministic)
+variant of GEM input data. The rows in this column (and other columns
+of this table) correspond to input parameters of various kinds (see
+more in description of the <a href="#uPName"><big><span
+ style="font-family: monospace;">uPName</span></big></a> list). Serves
+for comparison
+with other results in this table. </dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="UgDC_1"></a><big><b><big><tt>UgDC[1]</tt></big></b></big>
+Average UIP values over all sample variants that have passed through
+filter(s) </dt>
+  <dd><br>
+  </dd>
+  <dd>This column of results contains average UIP (uncertain input
+parameters) values, computed over input data for all sample variants
+that have passed through
+filters. If no filters were imposed, all sample variants will
+be taken into calculation of mean values.</dd>
+  <dd> <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="UgDC_2"></a><big><b><big><tt>UgDC[2]</tt></big></b></big>
+2-sigma deviations for the averages in (previous) column 1&nbsp;<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>Results in this column (twice standard deviations) can be taken
+as uncertainty half-intervals for averages in the previous column (<big><span
+ style="font-family: monospace;">UgDC[1]</span></big>). <br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="UgDC_3"></a><big><b><big><tt>UgDC[3]</tt></big></b></big>
+Average UIP values over all sample variants with the dominant phase
+assemblage </dt>
+  <dd>.</dd>
+  <dd>description<br>
+  </dd>
+  <dd>.</dd>
+  <dt> <a name="UgDC_4"></a><big><b><big><tt>UgDC[4]</tt></big></b></big>
+2-sigma deviations for the averages in (previous) column 3 </dt>
+  <dd>.</dd>
+  <dd>description<br>
+  </dd>
+  <dd>.</dd>
+  <dt> <a name="UgDC_5"></a><big><b><big><tt>UgDC[5]</tt></big></b></big>
+Average UIP values over sample variants selected by quantile Laplace
+criterion&nbsp;<br>
+  </dt>
+  <dd>.</dd>
+  <dd>description<br>
+  </dd>
+  <dd>.</dd>
+  <dt> <a name="UgDC_6"></a><big><b><big><tt>UgDC[6]</tt></big></b></big>
+Average UIP values over sample variants selected by quantile Hurvitz
+criterion </dt>
+  <dd>.</dd>
+  <dd>description<br>
+  </dd>
+  <dd>.</dd>
+  <dt> <a name="UgDC_7"></a><big><b><big><tt>UgDC[7]</tt></big></b></big>
+Average UIP values over sample variants selected by quantile Wald
+criterion </dt>
+  <dd>.</dd>
+  <dd>description<br>
+  </dd>
+  <dd>.</dd>
+  <dt> <a name="UgDC_8"></a><big><b><big><tt>UgDC[8]</tt></big></b></big>
+Average UIP values over sample variants selected by quantile Homeniuk
+criterion </dt>
+  <dd>.</dd>
+  <dd>description<br>
+  </dd>
+  <dd>.</dd>
+  <dt> <a name="UgDC_9"></a><big><b><big><tt>UgDC[9]</tt></big></b></big>
+2-sigma deviations for the averages related to the criterion used in
+adaptive loops (see unPafl[8]) </dt>
+  <dd>.</dd>
+  <dd>description<br>
+  </dd>
+  <dd>.</dd>
+</dl>
+<a name="UaDC_0"></a><big><b><big><tt>UaDC[0]</tt></big></b></big> DC
+activities (fugacities for gases) for the deterministic variant
+<dl>
+  <dd>description.</dd>
+  <dd>.<br>
+  </dd>
+</dl>
+<a name="UaDC_1"></a><big><b><big><tt>UaDC[1]</tt></big></b></big>
+average DC activities for all sample variants that have passed
+through filters
+<dl>
+  <dd>description.</dd>
+  <dd>.<br>
+  </dd>
+</dl>
+<a name="UaDC_2"></a><big><b><big><tt>UaDC[2]</tt></big></b></big>2-sigma
+deviations for the averages in (previous) column 1
+<dl>
+  <dd>description.</dd>
+  <dd>.<br>
+  </dd>
+</dl>
+<a name="UaDC_3"></a><big><b><big><tt>UaDC[3]</tt></big></b></big>
+average DC activities for sample variants with dominant phase
+assemblage
+<dl>
+  <dd>description.</dd>
+  <dd>.<br>
+  </dd>
+</dl>
+<a name="UaDC_4"></a><big><b><big><tt>UaDC[4]</tt></big></b></big>
+2-sigma deviations for the averages in (previous) column 3
+<dl>
+  <dd>description.</dd>
+  <dd>.<br>
+  </dd>
+</dl>
+<a name="UaDC_5"></a><big><b><big><tt>UaDC[5]</tt></big></b></big>
+average DC activities over sample variants selected by quantile
+Laplace criterion
+<dl>
+  <dd>description.</dd>
+  <dd>.<br>
+  </dd>
+</dl>
+<a name="UaDC_6"></a><big><b><big><tt>UaDC[6]</tt></big></b></big>
+average DC activities over sample variants selected by quantile
+Hurvitz criterion
+<dl>
+  <dd>description.</dd>
+  <dd>.<br>
+  </dd>
+</dl>
+<a name="UaDC_7"></a><big><b><big><tt>UaDC[7]</tt></big></b></big>
+average DC activities over sample variants selected by quantile
+Wald criterion
+<dl>
+  <dd>description.</dd>
+  <dd>.<br>
+  </dd>
+</dl>
+<a name="UaDC_8"></a><big><b><big><tt>UaDC[8]</tt></big></b></big>
+average DC activities over sample variants selected by quantile
+Homeniuk criterion
+<dl>
+  <dd>description.</dd>
+  <dd>.<br>
+  </dd>
+</dl>
+<a name="UaDC_9"></a><big><b><big><tt>UaDC[9]</tt></big></b></big>
+reserved column
+<dl>
+  <dd>description<br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnDCA_0"></a><big><b><big><tt>UnDCA[0]</tt></big></b></big>
+Adaptively optimized UIP values </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+</dl>
+<dl>
+  <dt> <a name="UnDCA_1"></a><big><b><big><tt>UnDCA[1]</tt></big></b></big>
+Adaptively optimized uncertainty half-intervals for the optimized UIP
+values </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd>.</dd>
+</dl>
+<dl>
+  <dt> <a name="UnDCA_2"></a><big><b><big><tt>UnDCA[2]</tt></big></b></big>
+Minimum observed UIP values after adaptive loops </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="UnDCA_3"></a><big><b><big><tt>UnDCA[3]</tt></big></b></big>
+Maximum observed UIP values after adaptive loops </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="UnDCA_4"></a><big><b><big><tt>UnDCA[4]</tt></big></b></big>
+Average for UIP values over sample variants that have passed through
+filters at the last adaptive loop </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="UnDCA_5"></a><big><b><big><tt>UnDCA[5]</tt></big></b></big>
+Uncertainty half-intervals (2-sigma) for the averages in (previous)
+column 5 </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="UnDCA_6"></a><big><b><big><tt>UnDCA[6]</tt></big></b></big>
+reserved </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="UnDCA_7"></a><big><b><big><tt>UnDCA[7]</tt></big></b></big>
+reserved</dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="unSGp"></a><big><b><big><tt>unSGp</tt></big></b></big>
+Input list
+of UnSpace group
+names </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="U_expr"></a><big><b><big><tt>U_expr</tt></big></b></big>
+Text
+with math
+script equations (params for activity coeffs ??? reserved ) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnStl"></a><big><b><big><tt>UnStl</tt></big></b></big>
+List
+of generated
+SysEq record keys </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unSDrf"></a><big><b><big><tt>unSDrf</tt></big></b></big>
+List
+of SDref keys
+to data sources </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unSDvl"></a><big><b><big><tt>unSDvl</tt></big></b></big>
+List
+of short
+comments to SDref keys in the PSDref list </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="uEQkey"></a><big><b><big><tt>uEQkey</tt></big></b></big>
+Current
+SysEq
+record key </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="uX_Nam"></a><big><b><big><tt>uX_Nam</tt></big></b></big>
+Abscissa
+name (for
+the graph) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="uY_Nam"></a><big><b><big><tt>uY_Nam</tt></big></b></big>
+Ordinate
+name (for
+the graph) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="uDaxis"></a><big><b><big><tt>uDaxis</tt></big></b></big>
+Axis
+Type (plot
+setup), background color, internal </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="upSize"></a><big><b><big><tt>upSize</tt></big></b></big>
+Plot
+axis scale,
+internal </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="uLnam"></a><big><b><big><tt>uLnam</tt></big></b></big>&nbsp;
+List of names of columns in the yC array </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="uPName"></a><big><b><big><tt>uPName</tt></big></b></big>&nbsp;
+List of names of uncertain input parameters (created automatically by
+the program)<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This list consists of strings of 20 character length. The
+number of strings corresponds to the total number of uncertain input
+parameters in the UnSpace task formulation (see&nbsp; <a
+ href="#unSiz_4"><big><span style="font-family: monospace;">unSiz[4]</span></big></a>&nbsp;
+).&nbsp; The format&nbsp; of list element is as follows:&nbsp;
+(example: "<span style="font-family: monospace;">02G0 Portlandite</span>&nbsp;&nbsp;&nbsp;&nbsp;
+" ):</dd>
+</dl>
+<dl style="margin-left: 40px;">
+  <dd>First 2 characters: UnSpace group (coordinate) index; <br>
+  </dd>
+  <dd>Next 2 characters: Type of input data: one of the codes&nbsp; <big><span
+ style="font-family: monospace;">T_ P_ V_ b_ G0 S0 V0 GP</span></big>.</dd>
+  <dd>Last 16 characters: Name of the uncertain parameter. <br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="uG_Exp"></a><big><b><big><tt>uG_Exp</tt></big></b></big>&nbsp;
+Math Script expressions for data sampling of UnSpace simulation </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="xA"></a><big><b><big><tt>xA</tt></big></b></big>&nbsp;
+Vector-column of filter and phase assemblage classification (supplied
+by the execution of uG_Expr script) </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="yC_0"></a><big><b><big><tt>yC[0]</tt></big></b></big>
+Data x coordinate (supplied by the execution of uG_Expr script) </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+</dl>
+<br>
+<dl>
+  <dt> <a name="yC_1"></a><big><b><big><tt>yC[1]</tt></big></b></big>
+Data y coordinate (supplied by the execution of uG_Expr script) </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+</dl>
+<br>
+<dl>
+  <dt> <a name="yC_2"></a><big><b><big><tt>yC[2]</tt></big></b></big>
+Data z coordinate (supplied by the execution of uG_Expr script) </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="xS"></a><big><b><big><tt>xS</tt></big></b></big>
+Vector-column of abscissa for scale data (reserved for future versions)
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="yS_0"></a><big><b><big><tt>yS[0]</tt></big></b></big>
+Lower boundaries for z-scale intervals </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+</dl>
+<dl>
+  <dt> <a name="yS_1"></a><big><b><big><tt>yS[1]</tt></big></b></big>
+Upper boundaries for z-scale intervals </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="yS_2"></a><big><b><big><tt>yS[2]</tt></big></b></big>
+Amount of red (RGB) color (0-255) for z-scale intervals </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="yS_3"></a><big><b><big><tt>yS[3]</tt></big></b></big>
+Amount of green (RGB) color (0-255) for z-scale intervals</dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="yS_4"></a><big><b><big><tt>yS[4]</tt></big></b></big>
+Amount of blue (RGB) color (0-255) for z-scale intervals </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="PhAndx"></a><big><b><big><tt>PhAndx</tt></big></b></big>
+Table
+of system
+indices of phases to identify Phase Assemblages </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="uPhsv"></a><big><b><big><tt>uPhsv</tt></big></b></big>
+Indices
+of Phase
+Assemblage ids in sampled variants (PhAndx) </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="PAnum"></a><big><b><big><tt>PAnum</tt></big></b></big>
+Vector
+of number of
+sample GEM solution variants containing a phase association </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="PhAID"></a><big><b><big><tt>PhAID</tt></big></b></big>
+List
+of phase
+assemblage ID names (def. 0001 0002 ... ) </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="PhAlst"></a><big><b><big><tt>PhAlst</tt></big></b></big>
+List
+of phase
+assemblage titles (made of Phase names) </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="PAfreg"></a><big><b><big><tt>PAfreg</tt></big></b></big>
+Frequency
+of sample
+GEM solution variants
+containing a phase association (PhNum*100/Q) </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="pmr"></a><big><b><big><tt>pmr</tt></big></b></big>
+Pointer
+to the beginning
+of current line in payoff matrix ( PvROM/PvPOR ) </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="POM"></a><big><b><big><tt>POM</tt></big></b></big>
+Payoff
+matrix optional
+(see PvPOM flag) </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="POR"></a><big><b><big><tt>POR</tt></big></b></big>
+Payoff
+matrix row
+optional (see PvPOR flag) </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unA"></a><big><b><big><tt>unA</tt></big></b></big>
+Work
+stoichiometry matrix
+in project/system indexation </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="Zcp"></a><big><b><big><tt>Zcp</tt></big></b></big>
+Mean
+over rows of pay-off
+matrix for Laplace criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="Zmin"></a><big><b><big><tt>Zmin</tt></big></b></big>
+Minima
+in rows of
+pay-off matrix for Hurwitz criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="Zmax"></a><big><b><big><tt>Zmax</tt></big></b></big>
+Maxima
+in rows row
+pay-off matrix for Hurwitz criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="ZmaxAb"></a><big><b><big><tt>ZmaxAb</tt></big></b></big>
+abs(max)values
+in
+rows of pay-off matrix for Wald criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="Hom"></a><big><b><big><tt>Hom</tt></big></b></big>
+Array
+of calculated
+values for Homenyuk criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="Prob"></a><big><b><big><tt>Prob</tt></big></b></big>
+Array
+of probabilities
+for calculating Homenuk criterion </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="uTprn"></a><big><b><big><tt>uTprn</tt></big></b></big>
+internal </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+</dl>
+<br>
+<br>
+<br>
+<h3>4.2. Data objects that can be modified only on Create/Remake</h3>
+<dl>
+  <br>
+  <dt><br>
+  </dt>
+  <dt> <a name="unStat_0"></a><big><b><big><tt>unStat[0]</tt></big></b></big>
+Units of energy for thermodynamic values in this UnSpace record<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd> Default:&nbsp; <tt>"j"</tt> - Joules (J/mole); <span
+ style="font-style: italic;">R</span> = 8.3145 J/mole/K</dd>
+  <dd> See also <a href="g_useref.html#UNITS_ENERGY_CODES">User's
+Reference</a>. Don't change this default code in this version of GEMS.</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unStat_1"></a><big><b><big><tt>unStat[1]</tt></big></b></big>
+Units of molar volume for thermodynamic values in this UnSpace&nbsp;
+record</dt>
+  <dd><br>
+  </dd>
+  <dd> Default:<tt> "j" </tt>- J/bar, 10 cm3/mole = 1 J/bar.</dd>
+  <dd> See also <a href="g_useref.html#UNITS_MEAS_CODES">User's
+Reference</a>. Don't change this default code in this version of GEMS.</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unStat_2"></a><big><b><big><tt>unStat[2]</tt></big></b></big>
+Units
+of
+pressure P (also for molar volume)</dt>
+  <dd><br>
+  </dd>
+  <dd> Default:<tt> "b" </tt>- bar; 1 bar = 10^5 Pa.</dd>
+  <dd> See also <a href="g_useref.html#UNITS_PRESS_CODES">User's
+Reference</a>. Don't change this default code in this version of GEMS.</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unStat_3"></a><big><b><big><tt>unStat[3]</tt></big></b></big>
+Units
+of
+temperature T</dt>
+  <dd><br>
+  </dd>
+  <dd>Default: <tt>"C"</tt> - degrees Celsius (C)</dd>
+  <dd> See also <a href="g_useref.html#UNITS_TEMP_CODES">User's
+Reference</a>. Don't change this default code in this version of GEMS -
+centigrade values are automatically converted into Kelvins where
+necessary.</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unStat_4"></a><big><b><big><tt>unStat[4]</tt></big></b></big>
+UnSpace
+generation status:<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>0&nbsp; indefinite; <br>
+  </dd>
+  <dd>1&nbsp; on-going generation run; <br>
+  </dd>
+  <dd>2&nbsp; done generation run; <br>
+  </dd>
+  <dd>3 generation run error (code)</dd>
+  <dd><br>
+  </dd>
+  <dd>This flag shows the status of UnSpace sampling process which
+consists in scanning the multidimensional "uncertainty space" using the
+Belov algorithm. For each point of the Belov's grid, a q-th combination
+of input parameter values is generated, the corresponding SysEq record
+is created, and the equilibrium state is calculated and saved in the
+project database. Before this process starts, the status flag has vaule
+of 0 or 2 (if the whole sampling process has been completed at least
+once). During sampling, the flag is set to 1. If an error occurred, the
+flag is turned to 3 and error message with the respective error code is
+dispalyed. <br>
+  </dd>
+  <dd>&nbsp; &nbsp; <br>
+  </dd>
+  <dd>&nbsp;</dd>
+  <dt> <a name="unStat_5"></a><big><b><big><tt>unStat[5]</tt></big></b></big>
+UnSpace
+analysis status: 0 - indefinite; 1 ready for analysis; 2 - analysis
+run; 3 - analysis done; ()</dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPsfl_0"></a><big><b><big><tt>unPsfl[0]</tt></big></b></big>
+Scale
+of
+uncertainty intervals for G S V: % or 0 - in %; A or 1- absolute </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPsfl_1"></a><big><b><big><tt>unPsfl[1]</tt></big></b></big>
+Scale
+for
+uncertainty intervals
+of B (% or 0 - in %; A or 1 - abs; L or 2 - log10) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPsfl_2"></a><big><b><big><tt>unPsfl[2]</tt></big></b></big>
+Scale
+for IC
+molality interval filters (A absolute, L log scale) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPsfl_3"></a><big><b><big><tt>unPsfl[3]</tt></big></b></big>
+Scale
+for DC
+activity/fugacity
+interval filters (A absolute, L log scale C mol fraction) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPsfl_4"></a><big><b><big><tt>unPsfl[4]</tt></big></b></big>
+Probing
+UnSpace over G0 coordinate(s) (+ 1 on; - 0 off ) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPsfl_5"></a><big><b><big><tt>unPsfl[5]</tt></big></b></big>
+Probing
+UnSpace over S0 coordinate(s) (+ 1 on; - 0 off ) (reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPsfl_6"></a><big><b><big><tt>unPsfl[6]</tt></big></b></big>
+Probing
+UnSpace over b
+coordinate(s) (+ 1 on; - 0 off ) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPsfl_7"></a><big><b><big><tt>unPsfl[7]</tt></big></b></big>
+Probing
+UnSpace over T
+coordinate (+ 1 on; - 0 off ) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPsfl_8"></a><big><b><big><tt>unPsfl[8]</tt></big></b></big>
+Probing
+UnSpace over P
+coordinate (+ 1 on; - 0 off ) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPsfl_9"></a><big><b><big><tt>unPsfl[9]</tt></big></b></big>
+Probing
+UnSpace over V
+coordinate (+ 1 on; - 0 off ) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPsfl_10"></a><big><b><big><tt>unPsfl[10]</tt></big></b></big>
+Probing
+UnSpace over pGam
+coordinate(s) (+ 1 on; - 0 off ) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPsfl_11"></a><big><b><big><tt>unPsfl[11]</tt></big></b></big>
+Save
+generated SysEq records to data base (+ -) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPsfl_12"></a><big><b><big><tt>unPsfl[12]</tt></big></b></big>
+Will
+math
+script be used in this UnSpace definition? (+ -) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPsfl_13"></a><big><b><big><tt>unPsfl[13]</tt></big></b></big>
+Will graphics be specified in this UnSpace definition? (+ -)&nbsp;<br>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPafl_0"></a><big><b><big><tt>unPafl[0]</tt></big></b></big>
+Flag
+of input
+for the filter on phase association (+ -) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPafl_1"></a><big><b><big><tt>unPafl[1]</tt></big></b></big>
+Flag
+of input
+for filters on total IC molality (+ -) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPafl_2"></a><big><b><big><tt>unPafl[2]</tt></big></b></big>
+Flag
+of input
+for filters on fugacity/activity (+ -) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPafl_3"></a><big><b><big><tt>unPafl[3]</tt></big></b></big>
+Flag
+of input
+for filters on mole fraction (+ -) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPafl_4"></a><big><b><big><tt>unPafl[4]</tt></big></b></big>
+Flag
+of input
+for filters on pH (+ -) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPafl_5"></a><big><b><big><tt>unPafl[5]</tt></big></b></big>
+Flag
+of input
+for filters on Eh (+ -) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPafl_6"></a><big><b><big><tt>unPafl[6]</tt></big></b></big>
+Control
+code for
+adaptive loops for G(298): 0-no; &gt;=1-yes (max number of loops) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPafl_7"></a><big><b><big><tt>unPafl[7]</tt></big></b></big>
+Control
+code
+of a function to construct the payoff matrix (A and B now) (A; B; C D E
+F) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPafl_8"></a><big><b><big><tt>unPafl[8]</tt></big></b></big>
+Adaptive loop
+criterion
+flag: 0- PA frequency statistics, 1- Laplace(quant), 2-Hurvitz(quant)
+3-Wald(quant), 4-Homenuk (quant) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPafl_9"></a><big><b><big><tt>unPafl[9]</tt></big></b></big>
+Control
+code
+for the Laplace
+function calculation: + mean of abs.values; - abs. mean of values </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPvfl_0"></a><big><b><big><tt>unPvfl[0]</tt></big></b></big>
+Allocation
+flag for payoff matrix (if Q &lt;= 1001) (+ -) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPvfl_1"></a><big><b><big><tt>unPvfl[1]</tt></big></b></big>
+Allocation
+flag for payoff matrix row (if Q &gt; 1001) (- +) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPvfl_2"></a><big><b><big><tt>unPvfl[2]</tt></big></b></big>
+Allocation
+flag for G0-related vectors (+ -) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPvfl_3"></a><big><b><big><tt>unPvfl[3]</tt></big></b></big>
+Allocation
+flag for S0-related vectors (+ -) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPvfl_4"></a><big><b><big><tt>unPvfl[4]</tt></big></b></big>
+Allocation
+flag for V0-related vectors (+ -) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPvfl_5"></a><big><b><big><tt>unPvfl[5]</tt></big></b></big>
+Allocation
+flag for ParGamma-related vectors (reserved) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPvfl_6"></a><big><b><big><tt>unPvfl[6]</tt></big></b></big>
+Flag of mode of calculation of chemical potentials in the payoff
+functions A or B (+ -) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unPvfl_7"></a><big><b><big><tt>unPvfl[7]</tt></big></b></big>
+reserved </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unSiz_0"></a><big><b><big><tt>unSiz[0]</tt></big></b></big>
+Number
+of
+independent components (from mup-&gt;N) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unSiz_1"></a><big><b><big><tt>unSiz[1]</tt></big></b></big>
+Number
+of
+dependent components (from mup-&gt;L) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unSiz_2"></a><big><b><big><tt>unSiz[2]</tt></big></b></big>
+Total
+number of
+DC in multi-component phases (from mup-&gt;Ls) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unSiz_3"></a><big><b><big><tt>unSiz[3]</tt></big></b></big>
+Number
+of phases
+(from mup-&gt;Fi) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unSiz_4"></a><big><b><big><tt>unSiz[4]</tt></big></b></big>
+Number
+of multi-
+component phases (from mup-&gt;Fis) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unSiz_5"></a><big><b><big><tt>unSiz[5]</tt></big></b></big>
+Number
+of data
+source references (default 0) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="nQ_0"></a><big><b><big><tt>nQ[0]</tt></big></b></big>
+0 &lt; Q &lt; 1001 input number of sample GEM calculations to be
+generated </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+</dl>
+<a name="nQ_1"></a><big><b><big><tt>nQ[1]</tt></big></b></big>
+Number of sample points in the quantile part
+<dl>
+  <dd><br>
+  </dd>
+  <dd>description <br>
+  </dd>
+  <dd>(description)&nbsp; <br>
+  </dd>
+</dl>
+<a name="uOB"></a><big><b><big><tt>uOB</tt></big></b></big>
+Number
+of solutions (as
+optimal) that went through superposition of all filters
+<dl>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unG_0"></a><big><b><big><tt>unG[0]</tt></big></b></big>
+Total
+number of
+UnSpace groups (coordinates, nGB + nGN + nGR, calc. automatically) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unG_1"></a><big><b><big><tt>unG[1]</tt></big></b></big>
+Number
+of UnSpace
+groups used in generation by Belov algorithm </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unG_2"></a><big><b><big><tt>unG[2]</tt></big></b></big>
+Number
+of UnSpace
+groups used in Monte Carlo with normal distribution </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="unG_3"></a><big><b><big><tt>unG[3]</tt></big></b></big>
+Number
+of UnSpace
+groups used in Monte Carlo with uniform distribution </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnTPV_0"></a><big><b><big><tt>UnTPV[0]</tt></big></b></big>
+Unspace
+group
+index for uncertain temperature T; 0- T is not uncertain </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnTPV_1"></a><big><b><big><tt>UnTPV[1]</tt></big></b></big>
+Unspace
+group
+index for uncertain pressure P; 0- P not uncertain </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="UnTPV_2"></a><big><b><big><tt>UnTPV[2]</tt></big></b></big>
+Unspace
+group
+index for uncertain volume constraint V, 0 - V not uncertain (reserved)
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>description.</dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="tu"></a><big><b><big><tt>tu</tt></big></b></big>
+Current
+index t of payoff
+matrix row (calculated sampled point) &lt; nQ </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="qu"></a><big><b><big><tt>qu</tt></big></b></big>
+Current
+index q of
+payoff matrix column (input data variant) &lt; nQ </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="gu"></a><big><b><big><tt>gu</tt></big></b></big>
+Current
+index g of unspace
+group (&lt; nG) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="iu"></a><big><b><big><tt>iu</tt></big></b></big>
+Current
+index i of
+independent component ( &lt; N ) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="ju"></a><big><b><big><tt>ju</tt></big></b></big>
+Current
+index j of
+dependent component ( &lt; L ) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="ku"></a><big><b><big><tt>ku</tt></big></b></big>
+Current
+index k of phase (
+&lt; Fi ) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="kau"></a><big><b><big><tt>kau</tt></big></b></big>
+Current
+index ka of phase
+assemblage ( &lt; nPhA ) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="uDimXY_0"></a><big><b><big><tt>uDimXY[0]</tt></big></b></big>
+Number of rows in xA, yC arrays (sample variants) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="uDimXY_1"></a><big><b><big><tt>uDimXY[1]</tt></big></b></big>
+Number of columns in the yC table (plot coordinate x, y, z values)
+(&gt;=3) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="uDimSc_0"></a><big><b><big><tt>uDimSc[0]</tt></big></b></big>
+Number of numeric intervals for&nbsp; the z-scale (rows in xS and yS
+arrays) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="uDimSc_1"></a><big><b><big><tt>uDimSc[1]</tt></big></b></big>
+Number of graphic parameters for the z-scale (columns in the yS array)
+(&gt;=5) </dt>
+  <dd><br>
+  </dd>
+  <dd>description</dd>
+  <dd><br>
+  </dd>
+</dl>
+<hr size="2" width="100%"><br>
+<br>
+<h2><a name="UNSPACE_ERRORS"></a>5. Warnings and error messages<br>
+</h2>
+(under construction)<br>
+<br>
+<dl>
+  <dt><br>
+  </dt>
+  <dt><br>
+  </dt>
+  <dt><b><big><tt>E00USrem: </tt>Invalid dimensions in
+Process data structure! </big></b></dt>
+&nbsp; &nbsp;Some counters are set inconsistently. Remake the
+Process
+record and check the counters.<br>
+&nbsp;<br>
+&nbsp; <br>
+  <br>
+</dl>
+<hr size="2" width="100%"><tt></tt><br>
+<tt>end of file</tt> <br>
+&nbsp; <br>
+&nbsp; <br>
+<br>
+<blockquote> <br>
+</blockquote>
+</body>
+</html>

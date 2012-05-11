@@ -1,0 +1,2 @@
+Please, copy here the (edited) files from shared/doc/html in order to generate a new help database
+ 

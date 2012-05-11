@@ -1,0 +1,10 @@
+# bash script for setting environment for development qt3 programs
+# under SuSE 10.2 where qt4 is already default
+
+QTDIR=/home/gems/qt3
+#QTDIR=/usr/lib/qt3
+PATH=$QTDIR/bin:$PATH
+MANPATH=$QTDIR/doc/man:$MANPATH
+LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+
+export QTDIR PATH MANPATH LD_LIBRARY_PATH

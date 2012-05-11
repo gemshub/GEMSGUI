@@ -1,0 +1,32 @@
+Installation procedure for MacOS version of GEMS-PSI
+
+-----------------------------------------------------------------
+
+1. To install on Mac G3, G4 or G5 with MacOS X 10.2 or later, 
+   drop the distribution file to your user's desktop and double-click 
+   on the icon. The file will be unzipped into the bundle
+     /Applications/gems2.app.
+
+2. To start GEMS-PSI, double-click on its icon now appearing 
+on the desktop. 
+
+At the first start of gems2, the default project(s) will be 
+automatically copied into your user's home directory.
+
+  Default directories on Mac OS X:
+    Program:	                ./gems2.app/Contents/Resources
+    User's data (projects):	~/Library/gems2
+    
+NOTE: the application bundle on MacOS desktop should be called 'gems2',
+otherwise it will not be able to find the gems program files.
+
+3. To upgrade the already installed GEMS2 package:
+
+  First, drag the start gems2 icon to Trash, or, using Finder, 
+  find the whole GEMS2 program bundle /gems2.app in the 
+  Applications directory and delete it. 
+ 
+  Proceed with the new release zip file of GEMS2, as described 
+  above. Your user's data (modelling projects) in your home 
+  directory will remain unchanged. 
+    
