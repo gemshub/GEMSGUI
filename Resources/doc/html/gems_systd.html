@@ -1,0 +1,726 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR"
+ content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
+  <title>GEMS3 MTParm Manual</title>
+  <meta name="description" content="Version 2.0.0-PSI">
+</head>
+<body>
+<h1><img src="gems1.png" align="left" height="48" width="48"> <font
+ color="#000066"> GEM-Selektor version 3<br>
+</font></h1>
+<h2>MTParm Submodule Manual<br>
+</h2>
+<hr size="2" width="100%">
+<h3>Contents </h3>
+<p style="font-family: Helvetica,Arial,sans-serif; margin-left: 40px;"><a
+ href="#MTPARM_INTRO">1. The Project System MTParm
+Submodule</a></p>
+<p style="font-family: Helvetica,Arial,sans-serif; margin-left: 40px;"><a
+ href="#MTPARM_CALCULATIONS">1.1. MTParm Calculations of T-P Corrected
+Thermodynamic Data</a></p>
+<p style="font-family: Helvetica,Arial,sans-serif; margin-left: 40px;"><a
+ href="#MTPARM_MWINDOW">2. MTParm Submodule Window</a> <br>
+</p>
+<p style="font-family: Helvetica,Arial,sans-serif; margin-left: 40px;"><a
+ href="#MWPAGE_1">2.1. MTParm Window Page 1</a><br>
+</p>
+<p style="font-family: Helvetica,Arial,sans-serif; margin-left: 40px;"><a
+ href="#MWPAGE_2">2.1. MTParm Window Page 2</a><br>
+</p>
+<p style="font-family: Helvetica,Arial,sans-serif; margin-left: 40px;"><a
+ href="#MTPARM_DATA">3. MTParm Submodule Data</a>&nbsp;</p>
+<p style="font-family: Helvetica,Arial,sans-serif; margin-left: 40px;"><a
+ href="#MTPARM_DATA_PROTECTED">3.1. Data objects accessible on
+Project Remake only</a> <br>
+</p>
+<p style="font-family: Helvetica,Arial,sans-serif; margin-left: 40px;"><a
+ href="gems_systd.html#MTPARM_ERRORS">4. Warnings and Error Messages</a></p>
+See also: <br>
+<ul style="font-family: helvetica,arial,sans-serif;">
+</ul>
+<hr size="2" width="100%">
+<h2><a name="MTPARM_INTRO"></a>1. The Project System MTParm
+Submodule</h2>
+Introduction <br>
+<br>
+(coming soon)<br>
+<br>
+<br>
+<hr style="width: 100%; height: 2px;"><br>
+<h3><a name="MTPARM_CALCULATIONS"></a>1.1. MTParm Calculations of T-P
+Corrected Thermodynamic Data</h3>
+<br>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<hr style="width: 100%; height: 2px;">
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<h2><a name="MTPARM_MWINDOW"></a>2. MTParm Submodule Window</h2>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<hr style="width: 100%; height: 2px;">
+<p style="font-family: Helvetica,Arial,sans-serif;"> <br>
+</p>
+<h3><a name="MWPAGE_1"></a>2.1. MTParm Window Page 1</h3>
+<br>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<hr style="width: 100%; height: 2px;">
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<h3><a name="MWPAGE_2"></a>2.1. MTParm Window Page 2<br>
+</h3>
+<br>
+<br>
+<br>
+<br>
+<hr size="2" width="100%">
+<dl>
+  <h2><a name="MTPARM_DATA"></a>3.MTParm Submodule Data<br>
+  </h2>
+  <br>
+  <br>
+  <dt> <a name="TPun_0"></a><big><big><b><tt>TPun[0]</tt></b></big></big>
+&nbsp;- Code of units of measurement of molar energy values { j }</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This code defines in which <a
+ href="g_useref.html#UNITS_ENERGY_CODES">units of measurement of energy</a>
+the values in <a href="#gTP"><tt>gTP</tt></a> and other MTparm data
+objects are dispalyed.&nbsp;</dd>
+  <dd><font color="#990000"><b>Attention!</b></font> Only <tt>"j"</tt>
+(J/mol) code can be used in this version of GEM-Selektor. </dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;&nbsp; <br>
+  </dd>
+  <dt> <a name="TPun_1"></a><big><b><big><tt>TPun[1]</tt></big></b></big>&nbsp;
+- Code of units of measurement of molar volumes { j }</dt>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;This code defines in which <a
+ href="g_useref.html#UNITS_VOLUME_CODES">units of measurement of volume</a>
+the values in the <a href="#VTP"><tt>VTP</tt></a> data object are
+dispalyed.</dd>
+  <dd><font color="#990000"><b>Attention!</b></font> Only <tt>"j"</tt>
+(J/bar) code can be used in this version of GEM-Selektor. </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="TPun_2"></a><big><b><big><tt>TPun[2]</tt></big></b></big>&nbsp;
+- Code of units of measurement of pressure { b }</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>This code defines in which <a
+ href="g_useref.html#UNITS_PRESS_CODES">units of measurement of pressure</a>
+the values in the MTparm objects are dispalyed.</dd>
+  <dd><font color="#990000"><b>Attention!</b></font> Only <tt>"b"</tt>
+(bars) code can be used in this version of GEM-Selektor. </dd>
+  <dd>&nbsp; &nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="TPun_3"></a><b><big><tt>TPun[3]</tt></big></b> - Code
+of
+units of measurement of temperature { C }</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This code defines in which <a
+ href="g_useref.html#UNITS_TEMP_CODES">units of measurement of
+temperature</a> the values in the MTparm objects are dispalyed.</dd>
+  <dd><font color="#990000"><b>Attention!</b></font> Only <tt>"C"</tt>
+(Centigrade, deg. Celsius) code can be used in this version of
+GEM-Selektor. </dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+<dl>
+  <dt><a name="T"></a><big><b><big><tt>T</tt></big></b></big> - Current
+temperature of interest (T)</dt>
+  <dd><br>
+  </dd>
+  <dd>This cell contains temperature (in units defined by <a
+ href="#TPun_3"><tt>TPun[3]</tt></a> code) for which thermodynamic data
+in <tt><a href="#gTP">gTP</a>, <a href="#VTP">VTP</a></tt> and other
+vectors are displayed.These data are automatically computed for all
+species included in the project system list from the standard
+properties and temperature corrections provided in thermodynamic
+database (<a href="gm_dcomp.html">DComp</a> and <a
+ href="gm_reacdc.html">ReacDC</a>
+records) for the temperature value taken from the <a
+ href="gdb_rkey.html#dbm_SysEq">SysEq record key</a>. When another
+SysEq record key is created with different temperature, all the data in
+MTparm module will be automatically re-computed.&nbsp;</dd>
+  <dd>Default value is Tr = 25 <sup>o</sup>C (298.15 K).&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp;&nbsp; <br>
+  </dd>
+  <dt> <a name="P"></a><big><big><b><tt>P</tt></b></big></big> -
+Current
+pressure of interest (P)</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This cell contains pressture (in units defined by <a
+ href="gems_bcc.html#TPun_2"><tt>TPun[2]</tt></a> code) for which
+thermodynamic data in <tt><a href="gems_bcc.html#gTP">gTP</a>, <a
+ href="gems_bcc.html#VTP">VTP</a></tt> and other vectors are
+displayed.These data are automatically computed for all species
+included
+in the project system list from the standard properties and pressure
+corrections provided in thermodynamic database (<a href="gm_dcomp.html">DComp</a>
+and <a href="gm_reacdc.html">ReacDC</a> records) for the pressure
+value
+taken from the <a href="gdb_rkey.html#dbm_SysEq">SysEq record key</a>.
+If 0 is specified there ("Saturated Vapor Curve") then the current
+pressure P is first calculated from temperature using a SUPCRT92
+subroutine.&nbsp; When another SysEq record key is created for a
+different pressure, all the data in MTparm module will be
+automatically re-computed.&nbsp;</dd>
+  <dd>Default value is Pr = 1 bar (1e5 Pa).&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;&nbsp; &nbsp;<br>
+  </dd>
+  <dt> <a name="RTf"></a><big><b><big><tt>RTf</tt></big></b></big> -
+Current RT factor (J/mol)&nbsp;</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This cell displays current value of RT product, where R=8.31451
+J/mole/K is the universal gas constant and <a href="#T"><tt>T</tt></a>
+is converted to Kelvins.&nbsp;</dd>
+  <dd>Default value (for 25 C): 2478.97 J/mol.</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp; &nbsp;<br>
+  </dd>
+  <dt> <a name="RoW"></a><big><b><big><tt>RoW</tt></big></b></big> -
+Current densities of liquid water and steam (in g/cm3)</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> Densities are calculated for current <a href="#T"><tt>T</tt></a>
+and <tt><a href="#P">P</a></tt> values using SUPCRT92 subroutines, if
+aqueous phase is present in the project system definition. These
+properties are used in <a href="theortdb.html">HKF EoS calculations</a>
+of <a href="#VTP"><tt>VTP</tt></a> and <a href="#gTP"><tt>gTP</tt></a>
+values for aqueous species.&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="EpsW"></a><big><b><big><tt>EpsW</tt></big></b></big> -
+Current dielectric constants of liquid water and steam&nbsp;</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> Dielectric constants are calculated for current <a
+ href="gems_bcc.html#T"><tt>T</tt></a> and <tt><a
+ href="gems_bcc.html#P">P</a></tt>
+values using SUPCRT92 subroutines, if aqueous phase is present in the
+project system definition.&nbsp;These properties are used in <a
+ href="theortdb.html">HKF EoS calculations</a> of <a href="#VTP"><tt>VTP</tt></a>
+and <a href="#gTP"><tt>gTP</tt></a> values for aqueous species.&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp;&nbsp; <br>
+  </dd>
+  <dt> <a name="VisW"></a><big><b><big><tt>VisW</tt></big></b> </big>-
+Current dynamic viscosities of liquid water and steam (in kg/m*sec)</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>Dynamic viscosities are calculated for current <a
+ href="gems_bcc.html#T"><tt>T</tt></a> and <tt><a
+ href="gems_bcc.html#P">P</a></tt>
+values using SUPCRT92 subroutines, if aqueous phase is present in the
+project system definition.&nbsp;These properties are used in <a
+ href="theortdb.html">HKF EoS calculations</a> of <a href="#VTP"><tt>VTP</tt></a>
+and <a href="#gTP"><tt>gTP</tt></a> values for aqueous species.&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="TPmark"></a><big><b><big><tt>TPmark</tt></big></b></big>
+- Quality codes for temperature and pressure corrections { + - e }</dt>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>Codes in this column show for each Dependent Component, whether
+the corrections to the current&nbsp;temperature and pressure have been
+successful. In most techniques, for instance Cp=f(T) integration,
+temperature corrections are only valid within the temperature interval
+where the coefficients were originally fitted (these intervals are
+given in DComp or ReacDC records). Beyond this interval, the
+extrapolated corrections are usually not reliable and may contain large
+errors, and even be not applicable at all. The program sets the
+quality code to inform you about possible problems related to
+this.&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>Possible values (separate for each Dependent Component): :&nbsp;</dd>
+</dl>
+<blockquote>
+  <dl>
+    <dd>+ &nbsp;Corrections for current T,P were within the
+applicability intervals.&nbsp; &nbsp;</dd>
+    <dd>e &nbsp; Correction for T was extrapolated beyond the
+applicability interval for this species.&nbsp;</dd>
+    <dd>- &nbsp; &nbsp;Correction at these T,P cannot be done and the
+species has to be excluded from CSD.&nbsp;</dd>
+  </dl>
+</blockquote>
+<dl>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp; &nbsp;<br>
+  </dd>
+  <dt> <a name="gTP"></a><big><b><big><tt>gTP</tt></big></b></big> -
+Molar (molal) standard Gibbs energy functions of Dependent Components
+at T,P of interest&nbsp;</dt>
+  <dd> <br>
+  </dd>
+  <dd> This vector contains the main input data for the <a
+ href="theorgem.html">GEM IPM problem</a> - the values of molar
+(partial
+molal for aqueous and surface species) Gibbs energy function corrected
+to temperature <a href="#T"><tt>T</tt></a> and pressure <a href="#P"><tt>P</tt></a>
+of interest separately for each <a
+ href="glossary.html#DT_dependent_component">Dependent Component</a>,
+as prescribed in the respective source data records (<a
+ href="gm_dcomp.html">DComp</a> or <a href="gm_reacdc.html">ReacDC</a>).&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>The units of measurement are defined by the TPun[0] code. If the
+corrected gTP cell value could not be calculated, this cell will
+contain
+7777777 (J/mol) and the respective species will be effectively
+eliminated from equilbrium speciation.&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp; &nbsp;<br>
+  </dd>
+  <dt> <a name="gUns"></a><big><b><big><tt>gUns</tt></big></b></big> -
+work vector of uncertainty space increments to tp-&gt;G +
+sy-&gt;GEX(J/mol) </dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="gTPuns"></a><b><big><tt>gTPuns</tt></big></b> -
+Uncertainties of <a href="#gTP"><tt>gTP</tt></a> values (reserved for
+future versions)</dt>
+  <dd><br>
+  </dd>
+  <dd>This vector will contain (automatically propagated) uncertainties
+of g(TP) values, to be used in the "Uncertainty Space" algorithm
+calculations, to be implemented in Version 3 of GEMS-PSI code.</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp; &nbsp;<br>
+  </dd>
+  <dt> <a name="hTP"></a><big><b><big><tt>hTP</tt></big></b></big> -
+Molar (molal) standard enthalpy functions of Dependent Components at
+T,P of interest &nbsp;</dt>
+  <dd><br>
+  </dd>
+  <dd> This vector contains molar (partial molal for aqueous and
+surface
+species) enthalpy functions h(TP) (in J/mol),&nbsp;corrected to
+temperature <a href="gems_bcc.html#T"><tt>T</tt></a> and pressure <a
+ href="gems_bcc.html#P"><tt>P</tt></a> of interest separately for each <a
+ href="glossary.html#DT_dependent_component">Dependent Component</a>,
+as prescribed in the respective source data records (<a
+ href="gm_dcomp.html">DComp</a> or <a href="gm_reacdc.html">ReacDC</a>).&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;To be used in future versions of GEMS code, e.g. for
+minimization of other than G(x) thermodynamic potentials [<a
+ href="g_litref.html#2002KAR/CHU">2002KAR/CHU</a>].&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="hTPuns"></a><b><big><tt>hTPuns</tt></big></b> -
+Uncertainties of <a href="gems_bcc.html#hTP"><tt>hTP</tt></a> values
+(reserved for future versions)</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="STP"></a><big><b><big><tt>STP</tt></big></b></big> -
+Molar (molal) entropies of Dependent Components at T,P of interest&nbsp;</dt>
+  <dd> <br>
+  </dd>
+  <dd> This vector contains molar (partial molal for aqueous and
+surface
+species) entropies S(TP) ( in J/K/mol ),&nbsp;corrected to temperature <a
+ href="gems_bcc.html#T"><tt>T</tt></a> and pressure <a
+ href="gems_bcc.html#P"><tt>P</tt></a> of interest separately for each <a
+ href="glossary.html#DT_dependent_component">Dependent Component</a>,
+as prescribed in the respective source data records (<a
+ href="gm_dcomp.html">DComp</a> or <a href="gm_reacdc.html">ReacDC</a>).&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;To be used in future versions of GEMS code, e.g. for
+minimization of other than G(x) thermodynamic potentials [<a
+ href="g_litref.html#2002KAR/CHU">2002KAR/CHU</a>].&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="STPuns"></a><b><big><tt>STPuns</tt></big></b> -
+Uncertainties of <a href="gems_bcc.html#STP"><tt>STP</tt></a> values
+(reserved for future versions)</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="CpTP"></a><big><b><big><tt>CpTP</tt></big></b> </big>-
+Molar (molal) standard entropies of Dependent Components at T, P of
+interest&nbsp; </dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> This vector contains molar (partial molal for aqueous and
+surface
+species) heat capacities Cp(TP) at constant pressure (in
+J/K/mol),&nbsp;corrected to temperature <a href="gems_bcc.html#T"><tt>T</tt></a>
+and pressure <a href="gems_bcc.html#P"><tt>P</tt></a> of interest
+separately for each <a href="glossary.html#DT_dependent_component">Dependent
+Component</a>, as prescribed in the respective source data records (<a
+ href="gm_dcomp.html">DComp</a> or <a href="gm_reacdc.html">ReacDC</a>).&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>To be used in future versions of GEMS code.</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="CTPuns"></a><b><big><tt>CTPuns</tt></big></b> -
+Uncertainties of <a href="gems_bcc.html#CpTP"><tt>CpTP</tt></a> values
+(reserved for future versions)</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="VTP"></a><big><b><big><tt>VTP</tt></big></b></big> -
+Molar (molal) volumes of Dependent Components at T,P of interest &nbsp;</dt>
+  <dd>&nbsp;</dd>
+  <dd> This vector contains molar (partial molal for aqueous and
+surface
+species) volumes V(TP) ( in J/bar ),&nbsp;corrected to temperature <a
+ href="gems_bcc.html#T"><tt>T</tt></a> and pressure <a
+ href="gems_bcc.html#P"><tt>P</tt></a> of interest separately for each <a
+ href="glossary.html#DT_dependent_component">Dependent Component</a>,
+as prescribed in the respective source data records (<a
+ href="gm_dcomp.html">DComp</a> or <a href="gm_reacdc.html">ReacDC</a>).
+&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>The molar volumes of species are used in GEM calculations to
+determine the volume of phases and the whole chemical system at
+equilibrium state, and can be also copied into the stoichiometry martix
+a if the <tt>"Vol"</tt>&nbsp; Independent Component (volume balance
+constraint) is included in the system stoichiometry basis.&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>The molar volumes will also be used in future versions of GEMS
+code, e.g. for minimization of other than G(x) thermodynamic potentials
+[<a href="g_litref.html#2002KAR/CHU">2002KAR/CHU</a>].&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp; &nbsp;<br>
+  </dd>
+  <dt> <a name="vUns"></a><big><b><big><tt>vUns</tt></big></b></big> -
+work vector of uncertainty space increments to tp-&gt;Vm (J/mol) </dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp;&nbsp;<br>
+  </dd>
+  <dt> <a name="VTPuns"></a><b><big><tt>VTPuns</tt></big></b> -
+Uncertainties of <a href="gems_bcc.html#VTP"><tt>VTP</tt></a> values
+(reserved for future versions)</dt>
+  <dd><br>
+  </dd>
+  <dd>&nbsp;&nbsp;</dd>
+</dl>
+<h4>Data Objects Reserved for Development of Future Versions </h4>
+<dl>
+  <dt> <a name="F"></a><b><tt>F</tt></b></dt>
+  <dd> Helmholtz energy F(T) of Dependent Components (reserved)</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="U"></a><b><tt>U</tt></b></dt>
+  <dd> Internal energy U(T) of Dependent Components (reserved)</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="Cv"></a><b><tt>Cv</tt></b></dt>
+  <dd> Heat capacity Cv(T) of Dependent Components (reserved)</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="alpha"></a><b><tt>alpha</tt></b></dt>
+  <dd> Compressibilities of Dependent Components (reserved)</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="beta"></a><b><tt>beta</tt></b></dt>
+  <dd> Expansibilities&nbsp; of Dependent Components (reserved)</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="Wborn"></a><b><tt>Wborn</tt></b></dt>
+  <dd> Born factors, relative for aqueous and surface species (reserved)</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="Wrad"></a><b><tt>Wrad</tt></b></dt>
+  <dd> Effective solvation radii (HKF) (reserved)</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="Fug"></a><b><tt>Fug</tt></b></dt>
+  <dd> Fugacities of Dependent Components (FGL, reserved)</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="dVg"></a><b><tt>dVg</tt></b></dt>
+  <dd> Increments of Vm0 from TrPr to TP (FGL) (reserved)</dd>
+</dl>
+<p><br>
+<br>
+</p>
+<h3><a name="MTPARM_DATA_PROTECTED"></a>3.1. Data objects accessible on
+Project Remake only&nbsp;</h3>
+&nbsp;
+<dl>
+  <dt> <a name="TPsv_0"></a><big><b><big><tt>TPsv[0]</tt></big></b></big>
+- Flag for calculation of H<sub>2</sub>O properties using EoS
+subroutines from SUPCRT92&nbsp;{ + - }</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This flag (if turned on, +) activates SUPCRT92 subroutines to
+calculate thermodynamic properties of H<sub>2</sub>O at T,P of
+interest.&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Default values: + if aqueous electrolyte is present in the
+project system, - otherwise.&nbsp; <br>
+  </dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="TPsv_1"></a><big><b><big><tt>TPsv[1]</tt></big></b></big>&nbsp;-
+Flag for calculation of thermodynamic properties of aqueous species
+using HKF EoS { + - }</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This flag (if turned on, +) activates SUPCRT92 subroutines to
+calculate thermodynamic properties of aqueous species at T,P of
+interest
+using HKF EoS coefficients and standard state data from DComp
+records.&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Default values: + if aqueous electrolyte is present in the
+project system, - otherwise.&nbsp; <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="TPsv_2"></a><b><big><tt>TPsv[2]</tt></big></b> - Flag
+for calculation of properties of gases at high T,P using the FGL module
+(reserved)</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> Reserved for future versions. Default value: - &nbsp;(not
+accessible in this version).&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp; &nbsp;<br>
+  </dd>
+  <dt> <a name="TPsv_3"></a><big><b><big><tt>TPsv[3]</tt></big></b></big>
+- Allocation flag for the <a href="#TPmark"><tt>TPmark</tt></a> vector
+{ + - }</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Default value: +&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="TPptv_0"></a><big><b><big><tt>TPptv[0]</tt></big></b></big>
+- Allocation flag for the <a href="gems_bcc.html#gTP"><tt>gTP</tt></a>
+vector of DC molar Gibbs energy functions g(TP) { + - }</dt>
+  <dd><br>
+  </dd>
+  <dd>This flag must always be turned on. </dd>
+  <dd>Default value: +&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="TPptv_1"></a><b><big><tt>TPptv[1]</tt></big></b> -
+Allocation flag for the <a href="#gTPuns"><tt>gTPuns</tt></a> vector
+of
+g(TP) uncertainties { + - }</dt>
+  <dd><br>
+  </dd>
+  <dd>Default value: - &nbsp;(off, reserved for use in future versions).</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="TPptv_2"></a><big><b><big><tt>TPptv[2]</tt></big></b></big>
+- Allocation flag for the <a href="gems_bcc.html#hTP"><tt>hTP</tt></a>
+vector of DC molar enthalpy functions h(TP) { + - }</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Default value: - &nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="TPptv_3"></a><b><big><tt>TPptv[3]</tt></big></b> -
+Allocation flag for the&nbsp; <a href="#hTPuns"><tt>hTPuns</tt></a>
+&nbsp;vector of h(TP) uncertainties { + - }</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Default value: - &nbsp;(off, reserved for use in future versions).</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="TPptv_4"></a><big><big><b><tt>TPptv[4]</tt></b></big></big>
+- Allocation flag for the <a href="gems_bcc.html#STP"><tt>STP</tt></a>
+vector of DC molar entropies S(TP) { + - }</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Default value: -</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;&nbsp; <br>
+  </dd>
+  <dt> <a name="TPptv_5"></a><b><big><tt>TPptv[5]</tt></big></b>-
+Allocation flag for the&nbsp; <a href="#STPuns"><tt>STPuns</tt></a>
+&nbsp;vector of S(TP) uncertainties { + - }</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Default value: - &nbsp;(off, reserved for use in future versions).</dd>
+  <dd> &nbsp;<br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="TPptv_6"></a><big><b><big><tt>TPptv[6]</tt></big></b></big>
+- Allocation flag for the <a href="gems_bcc.html#CpTP"><tt>CpTP</tt></a>
+vector of DC molar constant-pressure heat capacities Cp(TP) { + - }</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Default value: -</dd>
+  <dd> &nbsp;<br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="TPptv_7"></a><b><big><tt>TPptv[7]</tt></big></b>-
+Allocation flag for the&nbsp; <a href="#CTPuns"><tt>CTPuns</tt></a>
+&nbsp;vector of Cp(TP) uncertainties { + - }</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Default value: - &nbsp;(off, reserved for use in future versions).</dd>
+  <dd> &nbsp;<br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="TPptv_8"></a><b><big><tt>TPptv[8]</tt></big></b> -
+Allocation flag for the <a href="gems_bcc.html#VTP"><tt>VTP</tt></a>
+vector of DC molar volumes V(TP) { + - }</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This flag must always be turned on. </dd>
+  <dd>Default value: +&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp;&nbsp; <br>
+  </dd>
+  <dt> <a name="TPptv_9"></a><big><b><tt>TPptv[9]</tt></b></big>-
+Allocation flag for the&nbsp; <a href="#VTPuns"><tt>VTPuns</tt></a>
+&nbsp;vector of &nbsp;V(TP) uncertainties { + - }</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Default value: - &nbsp;(off, reserved for use in future versions).</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<h4>Allocation flags that must always be turned off (reserved for
+future versions)&nbsp;</h4>
+<dl>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="TPptv_10"></a><b><tt>TPptv[10]</tt></b></dt>
+  <dd><a href="#F"><tt> F</tt></a> vector ? { + * - } (reserved)</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="TPptv_11"></a><b><tt>TPptv[11]</tt></b></dt>
+  <dd><a href="#U"><tt> U</tt></a> vector ? { + * - } (reserved)</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="TPptv_12"></a><b><tt>TPptv[12]</tt></b></dt>
+  <dd><a href="#Cv"><tt> Cv</tt></a> vector? { + * - } (reserved)</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="TPptv_13"></a><b><tt>TPptv[13]</tt></b></dt>
+  <dd><a href="#alpha"><tt> alpha</tt></a> vector ? { + * - } (reserved)</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="TPptv_14"></a><b><tt>TPptv[14]</tt></b></dt>
+  <dd><a href="#beta"><tt> beta</tt></a> vector? { + * - } (reserved)</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="TPptv_15"></a><b><tt>TPptv[15]</tt></b></dt>
+  <dd><a href="#Wborn"><tt> Wborn</tt></a> vector? { + * - } (reserved)</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="TPptv_16"></a><b><tt>TPptv[16]</tt></b></dt>
+  <dd><a href="#Wrad"><tt> Wrad</tt></a> vector? { + * - } (reserved)</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="TPptv_17"></a><tt><b>TPptv[17]</b></tt></dt>
+  <dd><a href="#Fug"><tt> Fug</tt></a> vector? { + * - } (reserved)</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="TPptv_18"></a><b><tt>TPptv[18]</tt></b></dt>
+  <dd><a href="#dVg"><tt> dVg </tt></a>vector? { + * - } (reserved)</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="TPptv_19"></a><b><tt>TPptv[19]</tt></b></dt>
+  <dd> reserved</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <br>
+  </dt>
+</dl>
+<p><br>
+</p>
+<hr size="2" width="100%">
+<h2><a name="MTPARM_ERRORS"></a>4. Warnings and Error Messages</h2>
+<p><tt><br>
+</tt></p>
+<p><tt>Under Construction<br>
+</tt></p>
+<p><tt><br>
+</tt></p>
+<hr size="2" width="100%">
+<p><tt>end of file</tt> <br>
+&nbsp; </p>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

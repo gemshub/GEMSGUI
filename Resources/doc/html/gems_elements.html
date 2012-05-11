@@ -1,0 +1,464 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+  
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+  
+<meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
+
+  
+<title>GEM-Selektor Elements Dialog</title>
+
+  
+<meta name="description" content="Version 2.0.0-PSI">
+
+</head>
+<body>
+<h1> <img src="gems1.png" align="left" height="48" width="48">&nbsp; <font color="#000066"><big><font size="+2"><big>GEM-Selektor version 3<br>
+</big></font></big></font></h1>
+
+<h2>Project Stoichiometry
+Basis Configuration (Elements Dialog)<br>
+</h2>
+
+<hr size="2" width="100%">
+<h3>Contents<br>
+
+</h3>
+
+<p style="margin-left: 40px;"><a href="#ELEMENTS_INTRO">1. Introduction to Elements Selection
+Dialog</a> </p>
+
+
+<p style="margin-left: 40px;"><a href="#ELEMENTS_PROJ_SETUP">2. Setting up the Project Stoichiometry Basis using
+Elements Dialog</a></p>
+
+
+<p style="margin-left: 40px;"><a href="#FILTERS">3. Advanced Configuration: Set Filters Dialog</a></p>
+
+
+<p style="margin-left: 40px;"><a href="#DISCARDED_PHASES">4. List of Discarded Records<br>
+  </a></p>
+<a href="#DISCARDED_PHASES"><br>
+</a>
+
+
+<hr style="width: 100%; height: 2px; color: rgb(255, 0, 0);">
+<h2><a name="ELEMENTS_INTRO"></a>1. Introduction to Elements
+Selection Dialog </h2>
+
+<p>The &nbsp;Elements Dialog appears when an independent modelling
+project (<a href="gm_project.html">more...</a>) is created or extended. 
+This dialog should facilitate
+collection of necessary data from GEMS default database and copying
+it&nbsp; into the user's project database, when and where appropriate.
+The main basis for
+the data selection is the system stoichiometry basis, i.e. the list of 
+chemical elements (and additional Independent Components, <a href="gm_icomp.html">more...</a>).&nbsp;</p>
+
+
+<p>The Elements Dialog resembles a Periodic Table composed of
+buttons with
+chemical element symbols. The program automatically checks all IComp
+records
+accessible when opening of the dialog, and makes the
+buttons
+of all available elements clickable with their symbols dark. The same
+happens
+with additional Independent Components, which (if present) will be
+shown
+on buttons in the "Other" column on the right side.</p>
+
+
+<p>Before clicking on the elements buttons to select them into the
+stoichiometry basis of the project system, it may be necessary to
+change some of the options visible at the bottom of the
+Elements Dialog (shown below): <br>
+</p>
+<p><img style=" width: 585px; height: 85px;" alt="ElementsDialog-Options.png" src="ElementsDialog-Options.png"><br>
+</p>
+
+
+<p>The "Set Filters" button opens up a separate Set Filters Dialog (<a href="#FILTERS">more...</a>).&nbsp; The "Learn more" button opens this help page.<br>
+</p>
+<p>To the right of "Set Filters" button, checkboxes in the
+upper
+row called "Phases-&gt;" configure, which types of phases will be taken
+into
+the project system (i.e. which Phase records will be copied into the project database from the GEMS default database):</p>
+
+
+<table border="1" cellpadding="2" cellspacing="2" width="100%">
+
+  <tbody>
+    <tr>
+      <td valign="top">Checkbox name<br>
+      </td>
+      <td valign="top">Default value<br>
+      </td>
+      <td valign="top">Defines whether 
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Gas <br>
+      </font></td>
+      <td valign="top">On<br>
+      </td>
+      <td valign="top">gaseous phase will be copied into or created in
+the project database<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Aqueous<br>
+      </font></td>
+      <td valign="top">On<br>
+      </td>
+      <td valign="top">aqueous electrolyte phase will
+be copied into or created in the project database </td>
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Solids<br>
+      </font></td>
+      <td valign="top">On<br>
+      </td>
+      <td valign="top">single-component solid (or
+liquid)
+phases will be copied into the project database <br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Solutions<br>
+      </font></td>
+      <td valign="top">Off<br>
+      </td>
+      <td valign="top">non-electrolyte liquid- or
+solid-solution
+phases will be copied into the project database<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Sorption<br>
+      </font></td>
+      <td valign="top">Off<br>
+      </td>
+      <td valign="top">Defines whether sorption phases will be copied
+into the project database<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>If some phases (e.g. pure solids) are not needed in the
+project,
+they can be easily removed later (in "Thermodynamic Database" mode). 
+Note that Solutions and Sorption may not be present in the actual 
+version of the default database (or in Specific parts), in which case 
+activating respective options will have no effect. <br>
+</p>
+
+<p>A&nbsp;"data selection" row of checkboxes (called "Dataset:") defines
+ in which "layers" of the default database the program should look for 
+the
+available
+data to build this modeling project. These "layers" are identified by 
+keywords in default database file names (located in the Gems3 
+application "/Resources/DB.default" folder).<br>
+</p>
+
+<table border="1" cellpadding="2" cellspacing="2" width="100%">
+
+  <tbody>
+    <tr>
+      <td valign="top">Checkbox name<br>
+      </td>
+      <td valign="top">Default value<br>
+      </td>
+      <td valign="top">Which files from "/Resources/DB.default" will be accessible (On) or not accessible (Off)&nbsp; <br>
+      </td><td style="vertical-align: top;">Contents of Default database layer in this version of GEMS<br>
+  </td>
+
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Kernel
+(NagraPSI)<br>
+      </font></td>
+      <td valign="top">On<br>
+      </td>
+      <td valign="top">All files containing a keyword <tt>"kernel"</tt>
+in the file name. <br>
+      </td><td style="vertical-align: top;">Kernel part contains data imported from the Nagra/PSI data base, version 01/01.</td>
+
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Complem.
+(SUPCRT)<br>
+      </font></td>
+      <td valign="top">Off<br>
+      </td>
+      <td valign="top">All files containing a keyword <tt>"complem"</tt>
+in the file name. <br>
+      </td><td style="vertical-align: top;">Complementary part
+contains data imported from SUPCRT92 (Slop98.dat) data file, inorganic part (<a href="http://geopig.asu.edu">http://geopig.asu.edu</a>)<br>
+  </td>
+
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Supplem.<br>
+      </font></td>
+      <td valign="top">Off<br>
+      </td>
+      <td valign="top">All files containing a keyword <tt>"supplem"</tt>
+in the file name.<br>
+      </td><td style="vertical-align: top;">Supplementary part&nbsp;
+contains data imported from SUPCRT92 (Slop98.dat) data file, organics part<br>
+  </td>
+
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Specific<br>
+      </font></td>
+      <td valign="top">Off<br>
+      </td>
+      <td valign="top">All files containing a keyword <tt>"specific"</tt>
+in the file name.<br>
+      </td><td style="vertical-align: top;">Third-party database in GEMS format, for instance<br>
+Cemdata'07 (<a href="http://www.empa.ch/cemdata">http://www.empa.ch/cemdata</a>); <br>
+Heracles v. 0.2 (<a href="http://www.psi.ch/heracles/gems-specific-heracles-database">http://www.psi.ch/heracles</a>).<br>
+  </td>
+
+    </tr>
+  </tbody>
+</table>
+
+<p>This is a simple but efficient way of maintaining a "layered"
+structure of the default thermodynamic database. Contents of the
+respective database layers are described in the <a href="gems_ctdb.html">default database documentation</a>. <br>
+</p>
+<p>Note that only one Specific database file set can be present in one 
+"/Resources/DB.default" folder (i.e. not both Cemdata and Heracles 
+databases). The reason is that some of these databases are built on top 
+of the Kernel (Cemdata) or Complem database, while other are completely 
+independent of Kernel or Complem layers. If you need to use this or that
+ Specific database on the same PC, the safest way is to install GEMS in 
+two different places and then add one Specific database per 
+"/Resources/DB.default" directory. The /projects subdirectories must 
+also have different locations (these can be set as command-line 
+parameters for one of Gems3 executable files). &nbsp; &nbsp;
+</p>
+<span style="color: rgb(255, 0, 0);"><br>
+</span>
+<p><span style="color: rgb(255, 0, 0);"></span></p>
+
+<hr style="width: 100%; height: 2px;">
+<h2><a name="ELEMENTS_PROJ_SETUP"></a>2. Setting up the
+Project Stoichiometry Basis using Elements Dialog<br>
+</h2>
+
+<p>(1). We recommend to begin with a list of chemical elements (and 
+optional additional Independent Components) that cover the compositions 
+to be considered in the prospective applications of the newly-created 
+modeling project. Also, consult the the <a href="gems_ctdb.html">default database documentation</a>
+ for pressure and temperature ranges, and decide which database layer to
+ use (e.g. Kernel for low-temperature waste-repository systems, or 
+Complem for hydrothermal systems). If Specific database is needed, check
+ that its files are already copied into the currently used 
+"/Resources/DB.default" folder (you can check its location in the <a href="gems_setup.html#PREFERENCES_DIALOG">Preferences Dialog</a>); if necessary, exit GEMS, copy the Specific files over, start GEMS and proceed. <br>
+</p>
+<p>(2). Make necessary selections of "Dataset:" and "Phases" types. <span style="font-weight: bold;">Important!</span> After any of checkboxes in the "Data:" group were changed, or the "Set
+Filters" dialog was accessed, the selection of buttons for chemical
+elements and additional IC will be reset. For this reason, first (if
+necessary) change the filtering settings, and only then select Independent
+Components to be taken into the project system basis (see the next step).<span style="font-family: Helvetica,Arial,sans-serif;"> </span><font face="Helvetica, Arial, sans-serif"><br>
+  </font></p>
+<p>(3) After that, click on "active" (not gray) buttons representing 
+elements or, on the right-hand side, "Other" (additional) Independent 
+Components. If aqueous systems will be modeled, make sure that H, O and 
+e(Zz) buttons are selected. For using "atmospheric air" compositions 
+(with non-reactive nitrogen gas), select "Nit" (in "Others"; it is 
+possible to select it when N (reactive nitrogen) is selected). When 
+done, click "Ok" to proceed.&nbsp;</p>
+<p>(4). In the appearing "Setup of aqueous and gas phases" wizard, 
+select desired automatic or specific models for aqueous electrolyte and 
+gas/fluid mixture (<a href="gems_aphsetup.html">more...</a>), and click "Ok" to proceed. This should bring you into "Equilibria Calculation" mode where you can create the first SysEq record key and proceed <a href="gm_project.html#HOWTO_1ST_SYSTEM">as decribed here</a>. 
+Note that even if you press "Cancel" at this step and will exit without 
+defining the first system and calculating equilibrium state, you can do 
+it any time later when you start GEMS again and simply open this 
+newly-created project. <br>
+</p>
+
+
+<p style="font-family: Helvetica,Arial,sans-serif;">
+</p>
+
+<p>If any error message appears before you see the SysEq record key 
+dialog to create the first system, exit GEMS and check for the subfolder
+ with this (failed) project name in the active "/projects" folder (you 
+can check its location in the <a href="gems_setup.html#PREFERENCES_DIALOG">Preferences Dialog</a>).
+ If you find it there, delete the subfolder, start GEMS and try again. 
+The most frequent reason for such a failure is that different versions 
+of default database or more than one Specific database are mixed in the 
+active "/Resources/DB.default" folder. </p>
+<br>
+
+
+<hr style="width: 100%; height: 2px;">
+<h2><a name="FILTERS"></a>3. Advanced Configuration: Set Filters Dialog<br>
+</h2>
+
+<p>Advanced users can use this dialog for "fine-grained" control on 
+choosing default database files as source of data records for the 
+newly-created or extended modeling project, and setting rules for 
+re-naming database records by copying them into project database. This renaming is necessary because in GEMS database, two records with
+ the same key are not allowed to exist. Re-naming always occurs in the 
+last field of the record key (record key formats are described <a href="gems_rekey.html">here...</a>).<br>
+
+
+</p>
+<p>In future versions of GEM-Selektor, optional filter scripts are 
+foreseen in this dialog that would make even more control possible on 
+selecting DComp, ReacDC and Compos records to be taken into the modeling
+ project. <br>
+</p>
+<h3>Database Files Tab<br>
+</h3>
+<p>This tab shows a tree-like view of the files available in DB.default 
+database chains. Highlighted are files that will be used for selecting 
+records to be copied into modeling project according to "Phases" and 
+"Dataset" options in the Elements Dialog (<a href="#ELEMENTS_INTRO">more...</a>).&nbsp;
+ The selection can be changed by clicking on file name rows in each 
+chain. In principle, this option even allows having more than one 
+"specific" database file set in the "/Resources/DB.default" folder because the proper files can be selected here. &nbsp; </p>
+<h3>IComp Tab<br>
+</h3>
+<p>This tab shows two lists of IComp records: one for currently selected
+ in the Elements Dialog, and another (only for project made by extension
+ of an existing project) showing Independent Components in the "parent" 
+existing project. Taken together, these lists form the major filter for 
+all Compos, DComp and ReacDC records in the accessible part of the 
+default database. Any record whose formula contains at least one 
+Independent Component not in this filter will be discarded and not taken
+ over into the modeling project.&nbsp; <br>
+</p>
+<p>In the upper part of this tab, there are two drop-down lists that can
+ be used to control how IComp records will be renamed by copying them 
+from default to project database. The upper selection defines what 
+character(s) to locate in the last field of the record key, and the 
+lower selection defines the replacement character(s). Templates are described here... .
+ By default, copying of an IComp record to project database adds 
+underscore '_' after the last non-space character of the third field of 
+IComp record key, for example "Iron" -&gt; "Iron_".&nbsp; <br>
+</p>
+<h3>Compos Tab<br>
+</h3>
+<p>In the upper part, this tab contains two drop-down lists that can be 
+used to control how Compos records will be renamed by copying them from 
+default to project database. The upper selection defines what 
+character(s) to locate in the last field of the record key, and the 
+lower selection defines the replacement character(s). Templates are described here... .
+ By default, copying of a Compos record to project database adds 
+underscore '_' after the last non-space character of the last field of Compos record key.&nbsp; <br>
+</p>
+<p>By default, any Compos record whose stoichiometry contains at least 
+one Independent Component not from the list selected in the Elements 
+Dialog for this project, will be discarded, and its record key added to 
+the "DiscardedRecords.txt" file (<a href="#DISCARDED_PHASES">more...</a>).<br>
+</p>
+<h3>DComp Tab<br>
+</h3>
+
+<p>In the upper part, this tab contains two drop-down lists that can be 
+used to control how DComp records will be renamed by copying them from 
+default to project database. The upper selection defines what 
+character(s) to locate in the last field of the record key, and the 
+lower selection defines the replacement character(s). Templates are described here... .
+ By default, copying of a DComp record to project database replaces the last non-space character with the 
+underscore '_' in the fourth record key field, for example "s98" -&gt; "s9_".&nbsp; <br>
+</p>
+<h3>ReacDC Tab<br>
+</h3>
+
+<p>In the upper part, this tab contains two drop-down lists that can be 
+used to control how ReacDC records will be renamed by copying them from 
+default to project database. The upper selection defines what 
+character(s) to locate in the last field of the record key, and the 
+lower selection defines the replacement character(s). Templates are described here... .
+ By default, copying of a ReacDC record to project database replaces the last non-space character with the 
+underscore '_' in the fourth record key field.&nbsp; </p>
+<h3>Phases Tab<span style="font-family: Helvetica,Arial,sans-serif;"></span></h3>
+<p><span style="font-family: Helvetica,Arial,sans-serif;"></span></p>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span>
+<p>In the upper part, this tab contains two drop-down lists that can be 
+used to control how Phase records will be renamed by copying them from 
+default to project database. The upper selection defines what 
+character(s) to locate in the last field of the record key, and the 
+lower selection defines the replacement character(s). Templates are described here... .
+ By default, copying of a Phase record to project database adds 
+underscore '_' after the last non-space character of the last field of Phase record key. </p>
+<p>This tab also contains several options in addition to "Phases" options in the Elements Dialog (<a href="#ELEMENTS_INTRO">more...</a>). Text on options is self-explanatory. Options 1, 3, 4, 5 are "On" and 2, 6 "Off" by default. When option 3 is "On", the list of discarded phases will be written in a text file "DiscardedRecords.txt", described below. <br>
+</p>
+<span style="font-family: Helvetica,Arial,sans-serif;">
+<br>
+</span>
+<hr style="width: 100%; height: 2px;">
+<h2><span style="font-family: Helvetica,Arial,sans-serif;"><a name="DISCARDED_PHASES"></a><span style="font-family: Times New Roman,Times,serif;">4. List of Discarded Records</span></span></h2>
+
+<p>During creation (extension) the modeling project, come Compos and 
+Phase records may be discarded from copying into the project database, 
+although such records can be potentially useful in the modeling 
+application context. <br>
+</p>
+<p>For example, a Compos record may contain a complex rock composition 
+expressed in 8 major and 6 minor elements. If a project stoichiometry 
+basis does not contain some of those major elements then this rock 
+composition will be most probably unusable in the newly-created project.
+ However, if all 8 major elements are included in the project basis and 
+only some minor elements are not, the rock composition can be perhaps 
+easily modified (by removing entries for missing minor components) for 
+use in the new project. This cannot be done automatically, so the 
+program leaves it for the user's discretion and will not copy the Compos
+ record into project database, but add it record key to a section "Discarded Compos records" of the "DiscardedRecords.txt" file. <br>
+
+</p>
+
+<p>If a record for phase-solution has been encountered in the default 
+database, and some components (species, end members) in the phase were 
+not copied into the modeling project due to a mismatch with the 
+stoichiometry basis, such phase definition will normally not be copied into project database, and its record key added to the "Discarded Phase records" of the "DiscardedRecords.txt" file. 
+</p>
+The "DiscardedRecords.txt" file, if present, can be found in the same 
+folder where the GEMS executable file exists (typically, in Gems3-app 
+subfolder; in Mac OS, in the "/Applications" folder at the same level 
+where gems3.app is located). This file is over-written every time when a
+ new project is created or expanded.<br>
+<br>
+If it is easier to utilize some discarded records than create similar 
+ones from scratch, the user can find the "DiscardedRecords.txt" file, 
+identify records there, start GEMS, open the project, then close it, 
+find the records in the default database, manually copy them into the 
+project database, and remake/edit there to make them consistent with the
+ project stoichiometry basis.<br>
+&nbsp;&nbsp; 
+<hr size="2" width="100%">
+<p> </p>
+
+<p> <tt><a href="index.html">Last change: 23 Feb. 2012<br>
+</a></tt></p>
+
+<p><tt>DK<br>
+</tt></p>
+<p><tt>end of file</tt> <br>
+&nbsp; </p>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+
+
+</body></html>

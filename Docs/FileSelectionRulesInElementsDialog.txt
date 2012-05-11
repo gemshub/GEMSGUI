@@ -1,0 +1,14 @@
+28.01.2011 DK
+
+ElementsDialog.cpp (456-464)   
+
+ int iret = 0;
+   if( checked_kernel && is_kernel || checked_complem && is_complem ||
+           checked_specific && is_specific )
+       iret = 1; // select all checked, disregarding 'Supplem' and 'Organic'
+
+   if( (is_kernel && !checked_kernel) || (is_complem && !checked_complem) ||
+       (is_supplem && !checked_supplem) || (is_specific && !checked_specific) )
+       // || (is_organic && !checked_organic) )
+       iret = 2; // This file name should be detached, even if has 'supplem', 
+                 // but 'Supplem' was not checked

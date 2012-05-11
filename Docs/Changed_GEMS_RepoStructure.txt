@@ -1,0 +1,113 @@
+Rearrangement of GEMS3 svn repository (23.Apr.2010)
+
+r413: 
+svn+ssh://gems@les-svn.psi.ch/srv/svn/repos/GEMIPM2K/upgrade/GEMIPM2K  (development variant)
+was merged into r414:
+svn+ssh://gems@les-svn.psi.ch/srv/svn/repos/GEMIPM2K/trunk/GEMIPM2K  (official variant)
+
+r1589:
+svn+ssh://gems@les-svn.psi.ch/srv/svn/repos/GEMS-PSI/trunk/gems3 
+was merged into r1590:
+svn+ssh://gems@les-svn.psi.ch/srv/svn/repos/GEMS-PSI/upgrade/gems3
+
+From now on, development should be performed in worked copies connected to 
+GEMIPM2K/upgrade/GEMIPM2K
+and
+GEMS-PSI/upgrade/gems3
+
+After testing, the accepted revision (for release) will be simultaneously merged from 
+GEMIPM2K/upgrade/GEMIPM2K  into GEMIPM2K/trunk/GEMIPM2K
+and 
+GEMS-PSI/upgrade/gems3 into GEMS-PSI/trunk/gems3
+
+-------------------------------------------------------------------------------------------
+
+Step 1: checkout of svn HEAD repository modules (starting from revisions 1590 and 414)
+
+GEMIPM2K program URLs: 
+
+svn+ssh://gems@les-svn.psi.ch/srv/svn/repos/GEMIPM2K/trunk/GEMIPM2K  (official variant)
+
+svn+ssh://gems@les-svn.psi.ch/srv/svn/repos/GEMIPM2K/upgrade/GEMIPM2K  (development variant)
+
+Checkout it (either from "trunk" or from "upgrade" URL) into ...\<work>\standalone\GEMIPM2K
+
+You should get ...\<work>\standalone\GEMIPM2K\*.* where *.* are source code files or test 
+data subdirectories. 
+
+
+GEMS3 GUI Shell + Database Maintenance URLs:
+
+svn+ssh://gems@les-svn.psi.ch/srv/svn/repos/GEMS-PSI/trunk/gems3 (official variant)
+
+svn+ssh://gems@les-svn.psi.ch/srv/svn/repos/GEMS-PSI/upgrade/gems3 (official variant)
+
+Checkout it into ...\<work>\gems3
+
+You should get ...\<work>\gems3\*.* where *.* are make files or source code subdirectories
+such as mods\, kernel\, ... 
+
+
+Step 2: Building standalone GEMIPM2K program (the list of files did not change): 
+
+as usual before, go into ...\<work>\standalone\GEMIPM2K and 
+
+make -f <Makefile_for_your_platform> 
+
+Those who have Qt4 installed, can produce actual Makefiles by executing in the same directory:
+
+qmake GEMIPM2K.pro
+
+This will produce two makefiles: Makefile.Debug and Makefile.Release. Run for example  
+
+make -f Makefile.Release
+
+Executable file and object files will be created in ...\<work>\standalone\GEMIPM2K\Release\
+
+ 
+Step 3: Building GEMS3:
+
+If you have a gems_qt.pro.user file, copy it from your old gems3 directory into a newly 
+checked-out one. Start Qt-Creator and open project gems_qt.pro in the new gems3 directory.
+
+Build GEMS3 as usual (debug or release variants)
+
+Essential requirement: the \gems3 and \standalone\GEMIPM2K working copy directories must be 
+in the same directory \<work>  (where <work> can be any directory name)
+
+  
+Step 4: to build GEMS3 with the development GEMIPM2K variant instead of the official one:
+
+rename ...\<work>\standalone\GEMIPM2K into e.g.  ...\<work>\standalone-trunk\GEMIPM2K
+
+Checkout GEMIPM2K from (see details in Step 1) URL: 
+
+svn+ssh://gems@les-svn.psi.ch/srv/svn/repos/GEMIPM2K/upgrade/GEMIPM2K
+ 
+into   ...\<work>\standalone\GEMIPM2K
+
+rename ...\<work>\gems3 into e.g.  ...\<work>\gems3-trunk
+
+Checkout GEMS3 from (see details in Step 2) URL: 
+
+svn+ssh://gems@les-svn.psi.ch/srv/svn/repos/GEMS-PSI/upgrade/gems3
+ 
+into   ...\<work>\gems3
+
+Run qmake gems_qt.pro
+
+Run make
+
+Or better start QtCreator and re-build project gems_qt.pro
+
+--------------------------------------------------------------
+
+Working copies  ...\<work>\standalone\GEMIPM2K and ...\<work>\gems3 can be 
+changed any time from 'upgrade' to 'trunk' variants or back by executing the 
+'switch' SVN command on each directory. In this case, there is no need to 
+rename subdirectories as described in Step 4. It is important that this 'switch' 
+was applied to both working copies. 
+
+ 
+
+

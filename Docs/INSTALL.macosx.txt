@@ -1,0 +1,19 @@
+To install GEMS3.1 on Mac OS X Snow Leopard or Lion: 
+
+1. Click on the installer dmg file to mount it. A window appears with the application gems3.app. 
+
+2. Drag gems3.app from that window to the /Applications folder. The gems3.app contains program 
+   and resource files, including help database and /DB.default folder with the thermodynamic database.   
+
+3. Start GEMS by clicking on gems3.app in /Applications folder. This will create a subfolder 
+   ~/Library/Gems3/projects in your user home directory, where modeling projects will be stored. 
+
+4. You can add your old projects folders into /Library/gems3/projects/. Backup of modeling 
+   projects is strongly recommended at least once per day. 
+
+5. To add GEMS3.1 icon to Dock, start GEMS, right-click on its icon in the dock, and select 
+   "Keep in Dock". 
+
+To update GEMS: move gems3.app from /Applications to Trash, and proceed with step 1. Only files in 
+gems3-app will be replaced; your modeling projects in /Library/gems3/projects/ will not be affected.    
+ 

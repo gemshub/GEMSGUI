@@ -1,0 +1,36 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1138\cocoasubrtf320
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 ArialMT;}
+{\colortbl;\red255\green255\blue255;\red26\green26\blue26;\red38\green93\blue108;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f0\fs24 \cf0 To prevent writing mac stuff on non-mac disks:\
+kulik$ defaults write com.apple.desktopservices DSDontWriteNetworkStores true\
+\
+To see ~/Library in Finder: \
+kulik$ chflags nohidden ~/Library/\
+\
+From\
+\pard\pardeftab720
+
+\f1\b\fs26 \cf2 \kerning1\expnd-4\expndtw-20
+http://computersight.com/computers/mac-make-terminal-commands-execute-on-login-mac-2/\
+\
+Ever wanted a terminal command to execute on login without you having to do ANYTHING at all? This guide will show you how to make it a fully \'93automated\'94 process. Yes, that pun was intended.\
+\pard\pardeftab720
+
+\b0\fs24 \cf0 \kerning1\expnd0\expndtw0 Originally Posted on Hackforums by myself, Mr__Destruction\
+\
+Okay, so in my last little \cf3 \ul \ulc3 guide\cf0 \ulnone  on \'93My top 10 Mac \cf3 \ul programs\cf0 \ulnone /widgets!\'94, I mentioned a few terminal codes in there, one that will allow \cf3 \ul you to\cf0 \ulnone  have a \cf3 \ul moving\cf0 \ulnone  \cf3 \ul background\cf0 \ulnone . There was a response saying that when you close terminal, the background stops. This can be inconvenient, as this means you would have to save the command, or memorize it, and enter it each time you want it. Anyways, to the point, this little tutorial is going to show you how to use the Automator application to turn your command into a script, and then run it on login! Let\'92s get started.\
+\pard\pardeftab720
+\cf0 \
+Step 1) Open the Automator \cf3 \ul \ulc3 program\cf0 \ulnone  by \cf3 \ul searching\cf0 \ulnone  for it in spotlight, and create a \'91Custom\'92 workflow.\
+Step 2) Scroll down to \'91Utilities\'92 and drag \'91Run Shell Script\'92 in to the workflow.\'a0\
+Step 3) Type/Paste the command you want executed in to the \'91Run Shell Script\'92 window. Save the workflow as \'91Background\'92.\
+Step 4) Go into System Preferences>System>Accounts and choose your account.\'a0\
+Step 5) There will be a tab that says \'91Login Items\'92, enter that and at the bottom, hit the \'91+\'92, browse for the \'91Background\'92 file, and hit \'91Add\'92.\
+Step 6) Check the box that says \'91Background\'92, log out, and log back in.\'a0\
+\
+There you have it, your background is always running. \'a0\
+Peace \
+}
