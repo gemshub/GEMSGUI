@@ -1,0 +1,1143 @@
+//-------------------------------------------------------------------
+// $Id$
+//
+// Implementation of config and basic methods of TProfile class
+//
+// Rewritten from C to C++ by S.Dmytriyeva
+// Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
+//
+// This file is part of a GEM-Selektor library for thermodynamic
+// modelling by Gibbs energy minimization
+// Uses: GEM-Vizor GUI DBMS library, gems/lib/gemvizor.lib
+//
+// This file may be distributed under the terms of the GEMS-PSI
+// QA Licence (GEMSPSI.QAL)
+//
+// See http://gems.web.psi.ch/ for more information
+// E-mail: gems2.support@psi.ch
+//-------------------------------------------------------------------
+//
+const char *GEMS_SP_HTML = "gm_project";
+
+#ifdef __unix
+#include <unistd.h>
+#endif
+
+#include <math.h>
+#include "m_unspace.h"
+#include "m_gtdemo.h"
+#include "m_syseq.h"
+#include "m_dcomp.h"
+#include "m_icomp.h"
+#include "m_compos.h"
+#include "m_phase.h"
+#include "m_reacdc.h"
+#include "m_proces.h"
+#include "m_dualth.h"
+#include "m_param.h"
+#include "v_object.h"
+#include "visor.h"
+#include "v_mod.h"
+#include "service.h"
+#include "gdatastream.h"
+
+#include "nodearray.h"
+
+TProfil* TProfil::pm;
+
+const double R_CONSTANT = 8.31451,
+              NA_CONSTANT = 6.0221367e23,
+                F_CONSTANT = 96485.309,
+                  e_CONSTANT = 1.60217733e-19,
+                    k_CONSTANT = 1.380658e-23,
+// Conversion factors
+                      cal_to_J = 4.184,
+                        C_to_K = 273.15,
+                          lg_to_ln = 2.302585093,
+                            ln_to_lg = 0.434294481;
+
+SPP_SETTING pa_ = {
+    "GEMS-PSI v2.3.1: Controls and defaults for numeric modules",
+    {
+        1,  /* PC */  3,     /* PD */   3,   /* PRD */
+        1,  /* PSM  */ 150,  /* DP */   15,   /* DW */
+        -3, /* DT */     200,   /* PLLG */   1,  /* PE */
+        500,   /* IIM */
+        1e-5, /* DG */   1e-8,  /* DHB */  1e-12,  /* DS */
+        1e-4,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
+        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
+        1e-7, /* DFYs, */  1e-17,  /* DB */   -1.0,   /* AG */
+        -0.8,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+        0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
+        1e-7,  /* ScMin, */  1e-20, /* DcMin, */   1e-10, /* PhMin, */
+        3e-5,  /* ICmin */   1e-7,  /* EPS */   1e-3,  /* IEPS */
+        1e-7,  /* DKIN  */ 0,  /* tprn */
+    },
+    "CSC   ",   /* DCpct[6] */  "OjjbC+---",    /* DCpdc[9] */
+    "+----M",   /* BCpc[6] */   "K3C   ",   /* REpct[6] */
+    "SjjbC ",   /* REpdc[6]*/  "+-------", /* REpvc[8]  */
+    "rjjbC-TK--",   /* RPpdc[10]  */
+    "++*-1-23----------4-------------", /* RPpvc[32] reserved free */
+    "INNINN",   /* PHsol_t[6] */  "s-----",   /* PHpvc[6] */
+    "++++-+-+++", /* MUpmv[10] */ "jjbC++0+", /* TPpdc[8] */
+    "*-*-*-*-*-----------", /* TPpvc[20] */ "+-+-+-----", /* SYppc[10] */
+    "***-*-*---**-***-----------*", /* SYpvc[28]*/  "-+++----ME", /* UTppc[10] */
+    "0*----------", /* PEpsc[12]  */  "------------", /* PEpvc[12] */
+    { "GTDEMO task name   ", "Graphic screen # " } ,   /* GDcode[2][20] */
+    "Plot ",                  /* GDpsc[7] */
+    { "Abscissa","Ordinate"},    /* GDpcc[2][9] */
+    "++++-+",   /* GDptc[6] */  "++++--",   /* GDpgw[6] */
+    "*",   /* sdrefkey 32*/  "",   /* Reserv [50-32] */
+    /* RTPARM */
+    1, 15, 0,   /* P T V */  2,  /* Mode */
+    { 1, 2, 3, 4, 5, },  /* ResShort */
+    /* RTPARM */
+    {0., 10000., 1000.}, /* Pi[3]*/  {0.0, 374., 25.}, /* Ti[3] */
+    {0., 0., 0.},   /* Vi[3] */
+    1., 25.,      /* Pr, Tr */
+    /* MULTI */
+    (float)1e-19, /* lowPosNum, */  (float)1e-16, /* logXw, */   (float)1e-9,  /* logYFk */
+    { (float)0.064, (float)3.72, 0., 0., 0. },  // Defaults for aqueous auto-phase models
+}; /* SPP_SETTING */
+
+BASE_PARAM dfBase[4] =
+	{     // Added on 07.08.2009 to facilitate pre-setting in projects (SD,DK)
+	    { // Variant for aquatic systems with moderate non-ideality
+	        1,  /* PC */  3,     /* PD */   3,   /* PRD */
+	        1,  /* PSM  */ 150,  /* DP */   15,   /* DW */
+	        -3, /* DT */     200,   /* PLLG */   1,  /* PE */
+	        500,   /* IIM */
+	        1e-5, /* DG */   1e-9,  /* DHB */  1e-12,  /* DS */
+	        5e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
+	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
+	        1e-7, /* DFYs, */  1e-17,  /* DB */   1.0,   /* AG */
+	        -0.5,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+	        0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
+	        1e-7,  /* ScMin, */  1e-20, /* DcMin, */   1e-10, /* PhMin, */
+	        3e-5,  /* ICmin */   1e-7,  /* EPS */   1e-3,  /* IEPS */
+	        1e-7,  /* DKIN  */ 0,  /* tprn */
+	    },
+	    { // Variant for aquatic systems with SCMs in sorption phases
+	        1,  /* PC */  3,     /* PD */   3,   /* PRD */
+	        1,  /* PSM  */ 150,  /* DP */   15,   /* DW */
+	        -3, /* DT */     200,   /* PLLG */   1,  /* PE */
+	        500,   /* IIM */
+	        1e-5, /* DG */   1e-8,  /* DHB */  1e-12,  /* DS */
+	        1e-4,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
+	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
+	        1e-7, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
+	        0.07,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+	        0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
+	        1e-7,  /* ScMin, */  1e-20, /* DcMin, */   1e-10, /* PhMin, */
+	        3e-5,  /* ICmin */   1e-7,  /* EPS */   1e-3,  /* IEPS */
+	        1e-7,  /* DKIN  */ 0,  /* tprn */
+	    },
+	    { // Variant for fluid-rock systems with highly non-ideal phases
+	        1,  /* PC */  3,     /* PD */   3,   /* PRD */
+	        1,  /* PSM  */ 500,  /* DP */   15,   /* DW */
+	        -3, /* DT */     200,   /* PLLG */   1,  /* PE */
+	        1000,   /* IIM */
+	        1e-5, /* DG */   1e-8,  /* DHB */  1e-12,  /* DS */
+	        7e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
+	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
+	        1e-7, /* DFYs, */  1e-17,  /* DB */   -1.0,   /* AG */
+	        -0.8,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+	        0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
+	        1e-7,  /* ScMin, */  1e-20, /* DcMin, */   1e-10, /* PhMin, */
+	        3e-5,  /* ICmin */   1e-7,  /* EPS */   1e-3,  /* IEPS */
+	        1e-7,  /* DKIN  */ 0,  /* tprn */
+	    },
+	    { // Variant of strict settings for highest accuracy (may be slow)
+	        1,  /* PC */  3,     /* PD */   -3,   /* PRD */
+	        1,  /* PSM  */ 150,  /* DP */   15,   /* DW */
+	        -3, /* DT */     200,   /* PLLG */   1,  /* PE */
+	        1000,   /* IIM */
+	        1e-5, /* DG */   1e-9,  /* DHB */  1e-12,  /* DS */
+	        1e-5,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
+	        1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
+	        1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
+	        1e-7, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
+	        0.07,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+	        0.001, /* GAS */   12.05,  /* DNS */   1e-9,  /* XwMin, */
+	        1e-7,  /* ScMin, */  1e-20, /* DcMin, */   1e-10, /* PhMin, */
+	        3e-5,  /* ICmin */   1e-7,  /* EPS */   1e-3,  /* IEPS */
+	        1e-7,  /* DKIN  */ 0,  /* tprn */
+	    }
+	    // More preset parameter structures can be added here
+	    // (if so, increase number of elements from 4 above and in dfBase() call below)
+	};
+
+// Setup one of 5 default IPM numerical settings
+void TProfil::ChangeSettings(int nSettings)
+{
+	if( nSettings == 0  )
+	 return;
+	else if( nSettings == 1 )
+		    pa.p = pa_.p;
+	     else
+	        pa.p = dfBase[min(nSettings-2,4)];
+}
+
+void
+BASE_PARAM::write(GemDataStream& oss)
+{
+    oss.writeArray( &PC, 10 );
+    oss.writeArray( &DG, 28 );
+    oss.writeArray( "0000", 4 );
+}
+
+void
+BASE_PARAM::read(GemDataStream& iss)
+{
+    char tmp[4];
+    iss.readArray( &PC, 10 );
+    iss.readArray( &DG, 28 );
+    iss.readArray( tmp, 4 );
+}
+
+
+void
+SPP_SETTING::write(GemDataStream& oss)
+{
+    oss.writeArray( ver, TDBVERSION );
+    p.write( oss );
+    oss.writeArray( DCpct, 352 );
+    oss.writeArray( &NP, 9 );
+    oss.writeArray( Pi, 19 );
+}
+
+void
+SPP_SETTING::read(GemDataStream& iss)
+{
+    iss.readArray( ver, TDBVERSION );
+    p.read( iss );
+    iss.readArray( DCpct, 352 );
+    iss.readArray( &NP, 9 );
+    iss.readArray( Pi, 19 );
+}
+
+
+TProfil::TProfil( int nrt ):
+        TCModule( nrt )
+{
+    aFldKeysHelp.Add(
+        "l<10 Identifier of root modelling project definition");
+    aFldKeysHelp.Add(
+        "l<38 Record key comment to project definition");
+    start_title = " Numerical and Configuration Settings ";
+    pa= pa_;
+    pa.p.tprn=0;
+
+    rmults = 0;
+    mtparm =  0;
+    syst = 0;
+    multi =0;
+
+    mup = 0;
+    tpp = 0;
+    syp = 0;
+    pmp = 0;
+
+    SFold = 0;
+    SMold = 0;
+    SAold = 0;
+    SBold = 0;
+    Llold =0;
+
+    userCancel = false;
+    stepWise = false;
+    calcFinished = false;
+    fStopCalc = false;
+    comp_change_all = false;
+
+}
+
+// init submodules to calc module
+void TProfil::InitSubModules()
+{
+    if( !rmults /*aMod.GetCount() < MD_RMULTS*/ )
+    {
+        aMod.Add( rmults = new TRMults( MD_RMULTS ) );
+        rmults->ods_link();
+        mup = rmults->GetMU();
+        aMod.Add( mtparm = new TMTparm( MD_MTPARM, mup ) );
+        mtparm->ods_link();
+        tpp = mtparm->GetTP();
+        aMod.Add( syst = new TSyst( MD_SYSTEM, mup ) );
+        syst->ods_link();
+        syp = syst->GetSY();
+        aMod.Add( multi = new TMulti( MD_MULTI, syp, tpp, mup ) );
+pmulti = multi;
+        multi->ods_link();
+        pmp = multi->GetPM();
+        aMod.Add( new TEQCalc( MD_EQCALC ) );
+        aMod.Add( new TEQDemo( MD_EQDEMO ) );
+    }
+}
+
+// link values to objects
+void TProfil::ods_link( int )
+{
+    /* rmults->ods_link();
+     mtparm->ods_link();
+     syst->ods_link();
+     multi->ods_link();*/
+    aObj[o_paver].SetPtr( pa.ver );
+    aObj[o_papc].SetPtr( &(pa.p.PC) );
+    aObj[o_paprd].SetPtr(&(pa.p.PD) );
+    aObj[o_padpwt].SetPtr( &(pa.p.DP));
+    aObj[o_papllg].SetPtr( &(pa.p.PLLG));
+    aObj[o_pape].SetPtr( &(pa.p.PE) );
+    aObj[o_paiim].SetPtr( &(pa.p.IIM) );
+    aObj[o_padg].SetPtr( &(pa.p.DG) );
+    aObj[o_padhb].SetPtr( &(pa.p.DHB) );
+    aObj[o_pads].SetPtr( &(pa.p.DS) );
+    aObj[o_padk].SetPtr( &(pa.p.DK) );
+    aObj[ o_padf].SetPtr(   &(pa.p.DF));
+    aObj[ o_padfy].SetPtr(  &(pa.p.DFYw));
+    aObj[ o_padb].SetPtr(   &(pa.p.DB));
+    aObj[ o_paag].SetPtr(   &(pa.p.AG));
+    aObj[ o_padgc].SetPtr(  &(pa.p.DGC));
+    aObj[ o_pagan].SetPtr(  &(pa.p.GAR));
+    aObj[ o_padns].SetPtr(  &(pa.p.DNS));
+    aObj[ o_paxmin].SetPtr( &(pa.p.XwMin));
+    aObj[ o_paeps].SetPtr(  &(pa.p.EPS));
+    aObj[ o_padkin].SetPtr( &(pa.p.DKIN));
+    aObj[ o_patprn].SetPtr( pa.p.tprn );
+    aObj[ o_padcpct].SetPtr(pa.DCpct );
+    aObj[ o_padcpdc].SetPtr(pa.DCpdc );
+    aObj[ o_parepct].SetPtr(pa.REpct );
+    aObj[ o_parepdc].SetPtr(pa.REpdc );
+    aObj[ o_parepvc].SetPtr(pa.REpvc );
+    aObj[ o_parppdc].SetPtr(pa.RPpdc );
+    aObj[ o_parppvc].SetPtr(pa.RPpvc );
+    aObj[ o_paphsol_t].SetPtr(pa.PHsol_t );
+    aObj[ o_paphpvc].SetPtr(pa.PHpvc );
+    aObj[ o_pamupmv].SetPtr(pa.MUpmv );
+    aObj[ o_patppdc].SetPtr(pa.TPpdc );
+    aObj[ o_patppvc].SetPtr(pa.TPpvc );
+    aObj[ o_pasyppc].SetPtr(pa.SYppc );
+    aObj[ o_pasypvc].SetPtr(pa.SYpvc );
+    aObj[ o_pautppc].SetPtr(pa.UTppc );
+    aObj[ o_papepsc].SetPtr(pa.PEpsc );
+    aObj[ o_papepvc].SetPtr(pa.PEpvc );
+    aObj[ o_pagdcode].SetPtr(&pa.GDcode[0][0] );
+    aObj[ o_pagdpsc].SetPtr(pa.GDpsc );
+    aObj[ o_pagdpcc].SetPtr(&pa.GDpcc[0][0] );
+    aObj[ o_pagdptc].SetPtr(pa.GDptc );
+    aObj[ o_parpnptv].SetPtr(&pa.NP );
+    aObj[ o_parpmode].SetPtr(&pa.Mode );
+    aObj[ o_partpi].SetPtr(   pa.Pi );
+    aObj[ o_partti].SetPtr(   pa.Ti );
+    aObj[ o_partvi].SetPtr(   pa.Vi );
+    aObj[ o_padrprtr].SetPtr(&pa.DRpst );
+    aObj[ o_papmnum].SetPtr( &pa.lowPosNum );
+
+    aObj[ o_pabcpc].SetPtr(  pa.BCpc );
+    aObj[ o_pagdpgw].SetPtr(  pa.GDpgw );
+    aObj[ o_pasdref].SetPtr(  pa.SDrefKey );
+
+    aObj[ o_spppar].SetPtr(  (void *)&pa );
+    aObj[ o_spppar].SetM( sizeof( SPP_SETTING ) );
+    //   aObj[ o_sppconst].SetPtr( sc_ );
+    //   ob[o_sppconst].dim_M = sizeof( SPP_CONST );
+    //   aObj[ o_sppdatac].SetPtr( &nQ );
+    //   ob[o_sppdatac].dim_M = sizeof( DATACOUNT );
+}
+
+// set dynamic Objects ptr to values
+
+void TProfil::dyn_set(int )
+{
+    pa.p.tprn= (char *)aObj[o_patprn].GetPtr();
+    if( rmults ) rmults->dyn_set();
+    if( mtparm ) mtparm->dyn_set();
+    if( syst ) syst->dyn_set();
+    if( multi ) multi->dyn_set();
+}
+
+// free dynamic memory in objects and values
+void TProfil::dyn_kill(int )
+{
+    pa.p.tprn = (char *)aObj[o_patprn].Free();
+    if( rmults ) rmults->dyn_kill();
+    if( mtparm ) mtparm->dyn_kill();
+    if( syst ) syst->dyn_kill();
+    if( multi ) multi->dyn_kill();
+}
+
+// realloc dynamic memory
+void TProfil::dyn_new(int )
+{
+    /*  rmults->dyn_new();
+      mtparm->dyn_new();
+      syst->dyn_new();
+      multi->dyn_new();
+    */
+    // if( pa.p.tprn == 0 )
+    //   pa.p.tprn = (char *)aObj[o_patprn].Alloc( 1, 256, S_ );
+}
+
+
+//set default information
+
+void TProfil::set_def( int )
+{
+    pa = pa_;
+    if( rmults ) rmults->set_def();
+    if( mtparm ) mtparm->set_def();
+    if( syst ) syst->set_def();
+    if( multi ) multi->set_def();
+}
+
+/* opens window with 'Remake record' parameters
+*/
+void TProfil::MakeQuery()
+{
+    const char * p_key;
+    char flgs[38];
+    int tasktype = 0;
+
+    p_key  = db->PackKey();
+    // flgs 0-9 MSpmv, 10-29 TPptv, 30-33  TPun, 34-37 TPsv
+    memcpy( flgs, &mup->PmvSA, 10);
+    memcpy( flgs+10, &tpp->PtvG, 20);
+    memcpy( flgs+30, &tpp->PunE, 8);
+
+    if( !vfProjectSet( window(), p_key, flgs, tasktype ))
+         Error( p_key, "Project record configuration cancelled by the user!" );
+
+    memcpy( &mup->PmvSA, flgs,    10);
+    memcpy( &tpp->PtvG,  flgs+10, 20);
+    memcpy( &tpp->PunE,  flgs+30, 8);
+    // SD 07/08/2009 set BASE_PARAM from default
+    ChangeSettings(tasktype);
+}
+
+// Help on Modelling Project module ( ? button )
+void
+TProfil::CmHelp()
+{
+    pVisor->OpenHelp( GEMS_SP_HTML );  //  05.01.01
+}
+
+void TProfil::outMulti( GemDataStream& ff, gstring& path  )
+{
+    ff.writeArray( &pa.p.PC, 10 );
+    ff.writeArray( &pa.p.DG, 28 );
+    multi->to_file( ff/*, path*/ );
+}
+
+// outpu MULTI to txt format
+// brief_mode - Do not write data items that contain only default values
+// with_comments -Write files with comments for all data entries ( in text mode)
+// addMui - Print internal indices in RMULTS to IPM file for reading into Gems back
+void TProfil::outMulti( gstring& path, bool addMui, bool with_comments, bool brief_mode )
+{
+    multi->to_text_file_gemipm( path.c_str(), addMui, with_comments, brief_mode );
+}
+
+void TProfil::outMultiTxt( const char *path, bool append  )
+{
+    multi->to_text_file( path, append );
+}
+
+void TProfil::makeGEM2MTFiles(QWidget* par )
+{
+    TNodeArray* na = 0;
+    float* Tval = 0;
+    float* Pval = 0;
+
+    try
+	 {
+      // set default data and realloc arrays
+      char flags[4];
+      int ii, nT, nP;
+      float Tai[4], Pai[4];
+
+      if( !vfLookupDialogSet(window(), flags, nT, nP, Tai, Pai ) )// ask constants
+        	return;
+      //  define setup arrays
+ 	  float cT = Tai[START_];
+ 	  float cP = Pai[START_];
+       Tval = new float[nT];
+       Pval = new float[nP];
+
+ 	 for( ii=0; ii<nT; ii++ )
+ 	 {
+ 	     Tval[ii] = cT;
+ 	     cT += Tai[STEP_];
+ 	 }
+
+ 	 for( ii=0; ii<nP; ii++ )
+ 	 {
+ 	     Pval[ii] = cP;
+ 	     cP += Pai[STEP_];
+ 	 }
+
+     na = new TNodeArray( 1, TProfil::pm->pmp/*multi->GetPM()*/ );
+
+    // realloc and setup data for dataCH and DataBr structures
+    na->MakeNodeStructures( par, ( flags[0] == S_OFF ) ,
+		    Tval, Pval, nT, nP, Tai[3], Pai[3]  );
+
+    // setup dataBR and NodeT0 data
+   //na->packDataBr();
+   na->MoveWorkNodeToArray( 0, 1, na->pNodT0() );
+   // make  all files
+   na->PutGEM2MTFiles( par, 1,  ( flags[1] == S_ON ), ( flags[2] == S_ON ),
+		   ( flags[3] == S_ON ), false, true );// addMui, to txt
+   }
+    catch( TError& xcpt )
+    {
+      if( na )
+       delete na;
+      na = 0;
+      if( Tval )
+       delete[] Tval;
+      Tval = 0;
+      if( Pval )
+       delete[] Pval;
+      Pval = 0;
+       Error(  xcpt.title.c_str(), xcpt.mess.c_str() );
+    }
+    if( na )
+     delete na;
+    na = 0;
+    if( Tval )
+     delete[] Tval;
+    Tval = 0;
+    if( Pval )
+     delete[] Pval;
+    Pval = 0;
+}
+
+// Reading structure MULTI (GEM IPM work structure)
+void TProfil::readMulti( GemDataStream& ff )
+{
+
+      ff.readArray( &pa.p.PC, 10 );
+      ff.readArray( &pa.p.DG, 28 );
+      multi->from_file( ff );
+}
+
+// Reading structure MULTI (GEM IPM work structure)
+void TProfil::readMulti( const char* path )
+{
+      multi->from_text_file_gemipm( path);
+}
+
+// Reading structure MULTI (GEM IPM work structure)
+void TProfil::CmReadMulti( const char* path )
+{
+
+    TNodeArray* na = new TNodeArray( 1, TProfil::pm->pmp/*multi->GetPM()*/ );
+    if( na->GEM_init( path ) )
+    {
+      Error( path , "Chemical system definition files listed in this file \n"
+   		                     " cannot be found or are corrupt");
+    }
+    // setup from dataBR to Multi
+    na->unpackDataBr( true );
+   delete na;
+}
+
+
+//Delete record with key
+void
+TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
+{
+    TCStringArray aList;
+    TCIntArray anR;
+    vstr pkey(81);
+    uint i;
+
+    int  Rnum = rt[nRT].Find( key );
+    ErrorIf( Rnum<0, GetName(), "Record to delete not found!");
+    rt[RT_PARAM].Get( Rnum ); // read record
+    dyn_set();
+    SetFN();                  // reopen files of data base
+    rt[nRT].SetKey( key);
+
+    // Delete all records connected to project
+    aList.Clear();    //SYSEQ
+    anR.Clear();
+    rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+                           K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
+    for( i=0; i< aList.GetCount(); i++)
+        TSysEq::pm->DeleteRecord(aList[i].c_str());
+
+    aList.Clear();    //PROCES
+    anR.Clear();
+    rt[RT_PROCES].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    rt[RT_PROCES].GetKeyList( pkey, aList, anR );
+    for( i=0; i< aList.GetCount(); i++)
+        TProcess::pm->DeleteRecord(aList[i].c_str());
+
+    aList.Clear();    //UNSPACE
+    anR.Clear();
+    rt[RT_UNSPACE].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+      K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    rt[RT_UNSPACE].GetKeyList( pkey, aList, anR );
+    for( i=0; i< aList.GetCount(); i++)
+        TUnSpace::pm->DeleteRecord(aList[i].c_str());
+
+    aList.Clear();    //GTDEMO
+    anR.Clear();
+    rt[RT_GTDEMO].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+                            K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    rt[RT_GTDEMO].GetKeyList( pkey, aList, anR );
+    for( i=0; i< aList.GetCount(); i++)
+        TGtDemo::pm->DeleteRecord(aList[i].c_str());
+
+    aList.Clear();    //DUALTH
+    anR.Clear();
+    rt[RT_DUALTH].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    rt[RT_DUALTH].GetKeyList( pkey, aList, anR );
+    for( i=0; i< aList.GetCount(); i++)
+        TDualTh::pm->DeleteRecord(aList[i].c_str());
+
+    /*   aList.Clear();    //MASTRANSP
+       anR.Clear();
+       rt[RT_].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+               K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+       rt[RT_].GetKeyList( pkey, aList, anR );
+       for( i=0; i< aList.GetCount(); i++)
+        aMod[RT_].DeleteRecord(aList[i].c_str());
+    */
+    rt[nRT].Del( Rnum );
+}
+
+//Show IComp, DComp or other reactions from list
+void TProfil::ShowDBWindow( const char *objName, int nLine )
+{
+    gstring s;
+    time_t tr;
+    const char* title = "Demonstrate in calculate Mode.";
+
+    switch( *objName )
+    {
+    case 'I': // Icomp : IC_v__ or ICnam
+        if( strncmp(objName, aObj[o_musb].GetKeywd(), MAXKEYWD)==0)
+            s = gstring( mup->SB[nLine], 0, IC_RKLEN );
+        else  if( strncmp(objName, aObj[o_wd_sb].GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_w_sbh].GetKeywd(), MAXKEYWD)==0 )
+            s = gstring( mup->SB[pmp->mui[nLine]], 0, IC_RKLEN );
+        else break;
+        TIComp::pm->RecInput( s.c_str() );
+        TIComp::pm->Show(window(), title, true);
+        break;
+    case 'C': // Compod : CC_v__
+        if( strncmp(objName, aObj[o_musa].GetKeywd(), MAXKEYWD)==0)
+            s = gstring( mup->SA[nLine], 0, BC_RKLEN );
+        else break;
+        TCompos::pm->RecInput( s.c_str() );
+        TCompos::pm->Show(window(), title, true);
+        break;
+    case 'P': // Phase : Ph_v__ or Ph_v2 or Phnam or Phnam2
+        if( strncmp(objName, aObj[o_musf].GetKeywd(), MAXKEYWD)==0 ||
+                strncmp(objName, aObj[o_musf2].GetKeywd(), MAXKEYWD)==0 )
+            s = gstring( mup->SF[nLine], 0, PH_RKLEN );
+        else  if( strncmp(objName, aObj[o_wd_sf].GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_wd_sf2].GetKeywd(), MAXKEYWD)==0 )
+            s = gstring( mup->SF[pmp->muk[nLine]], 0, PH_RKLEN );
+        else break;
+        TPhase::pm->RecInput( s.c_str() );
+        TPhase::pm->Show(window(), title, true);
+        break;
+    case 'D': // Phase : DC_v__ or DC_v2 or DCnam or DCnam2
+        if( strncmp(objName, aObj[o_musm].GetKeywd(), MAXKEYWD)==0 ||
+                strncmp(objName, aObj[o_musm2].GetKeywd(), MAXKEYWD)==0 )
+            s = gstring( mup->SM[nLine], 0, DC_RKLEN );
+        else  if( strncmp(objName, aObj[o_wd_sm].GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_wd_sm2].GetKeywd(), MAXKEYWD)==0 )
+        {
+            nLine = pmp->muj[nLine];
+            s = gstring( mup->SM[nLine], 0, DC_RKLEN );
+        }
+        else break;
+        if( mup->DCS[nLine] == SRC_DCOMP )
+        {
+            //        TDComp::pm->RecInput( s.c_str() );
+            TDComp::pm->TryRecInp( s.c_str(), tr, 0 );
+            TDComp::pm->Show(window(), title, true);
+        }
+        else
+        {
+            //              TReacDC::pm->RecInput( s.c_str() );
+            TReacDC::pm->TryRecInp( s.c_str(), tr, 0 );
+            TReacDC::pm->Show(window(), title, true);
+        }
+        break;
+    }
+}
+
+#include "filters_data.h"
+// Save file configuration to Project structure
+bool TProfil::rCopyFilterProfile( const char * prfName )
+{
+
+    uint ii;
+    setFiltersData sf_data;
+    elmWindowData  elm_data;
+
+//    Save list of phases from template profile:
+    TCStringArray names1;
+    names1.Add(prfName);
+    rt[RT_ICOMP].OpenOnlyFromList(names1);
+    rt[RT_PHASE].OpenOnlyFromList(names1);
+
+   TCStringArray PHkeys;
+   TCIntArray    ICcnt;
+   rt[RT_PHASE].GetKeyList( "*:*:*:*:*:", PHkeys, ICcnt );
+
+//    TCStringArray dbNames;
+//    bool aAqueous, aGaseous, aSorption;
+//    if( !vfElements(window(), prfName, ICkeys,
+//            dbNames, aAqueous, aGaseous, aSorption ))
+    if( !vfElements(window(), prfName, elm_data, sf_data ))
+      return false;
+
+//    elm_data.flNames.Add(prfName);
+    pVisor->Message( 0, "Loading Modelling Project",
+"Copying Kernel database records to Modelling Project;\n Please, wait...", 10  );
+
+    // added to project file icomp.kernel.prfname
+    // and copy to it selected records
+    // add to last key field first symbol from prfname
+    // close all kernel files
+    TIComp* aICdata=(TIComp *)(&aMod[RT_ICOMP]);
+    aICdata->CopyElements( prfName, elm_data, sf_data.ic_d );
+    ICcnt.Clear();
+    for( ii=0; ii<elm_data.ICrds.GetCount(); ii++ )
+       ICcnt.Add(0);
+
+    //compos
+    TCompos* aCOdata=(TCompos *)(&aMod[RT_COMPOS]);
+    TCStringArray aCMnoused;
+    aCOdata->CopyRecords( prfName, aCMnoused, elm_data, sf_data.cm_d );
+
+    //dcomp
+    TDComp* aDCdata=(TDComp *)(&aMod[RT_DCOMP]);
+    aDCdata->CopyRecords( prfName, ICcnt, elm_data, sf_data.dc_d );
+
+    //reacds
+    TReacDC* aRDdata=(TReacDC *)(&aMod[RT_REACDC]);
+    aRDdata->CopyRecords( prfName, ICcnt, elm_data, sf_data.rd_d );
+
+    //phase
+    TPhase* aPHdata=(TPhase *)(&aMod[RT_PHASE]);
+    TCStringArray aPHnoused;
+    aPHdata->CopyRecords( prfName, aPHnoused, PHkeys, elm_data, sf_data.ph_d );
+
+    //show errors
+    TCStringArray aICnoused;
+    for( ii=0; ii<elm_data.ICrds.GetCount(); ii++ )
+       if( ICcnt[ii] == 0 )
+         aICnoused.Add(elm_data.ICrds[ii]);
+
+    if( aICnoused.GetCount() > 0 )
+      vfChoice(  window(), aICnoused, "List of unused Independent Components" );
+
+    if( aPHnoused.GetCount() > 0 || aCMnoused.GetCount() > 0)
+    {  // List of Phases or Compos with some species discarded
+        ios::openmode mod = ios::out;
+        const char *filename = "DiscardedRecords.txt";
+// This question is not needed anymore  DK 27.10.2005
+/*      if( !(::access( filename, 0 )) ) //file exists
+            switch( vfQuestion3( window(), filename,
+                                 "This file exists! What to do?",
+                                 "&Append", "&Overwrite", "&Cancel") )
+            {
+            case VF3_2:
+                mod = ios::out;
+                break;
+            case VF3_1:
+                mod = ios::out|ios::app;
+                break;
+            case VF3_3:
+                return true;LoadMtparm
+            }
+*/
+        fstream f( filename, mod );
+        ErrorIf( !f.good() , filename, "Fileopen error");
+        f <<   "Discarded Phase records\n";
+        for( ii=0; ii<aPHnoused.GetCount(); ii++ )
+             f << aPHnoused[ii].c_str() <<  "\n";
+        f <<   "\n\nDiscarded Compos records\n";
+        for( ii=0; ii<aCMnoused.GetCount(); ii++ )
+             f << aCMnoused[ii].c_str() <<  "\n";
+        f <<   "\n";
+        ErrorIf( !f.good() , filename, "Writefile error");
+   }
+
+    useAqPhase = elm_data.flags[cbAqueous_];
+    useGasPhase = elm_data.flags[cbGaseous_];
+    return true;
+}
+
+long int showMss = 1L;
+// test result GEM IPM calculation of equilibrium state in MULTI
+long int TProfil::testMulti()
+{
+  if( pmp->MK || pmp->PZ )
+  {
+   if( pa.p.PSM == 2 )
+   {
+     fstream f_log("ipmlog.txt", ios::out|ios::app );
+     f_log << "Warning " << pmp->stkey << ": " <<  pmp->errorCode << ":" << endl;
+     f_log << pmp->errorBuf << endl;
+   }
+   if( showMss )
+   {
+	   multi->addErrorMessage(" \nContinue?");
+      switch( vfQuestion3(0, pmp->errorCode, pmp->errorBuf,
+                           "&Yes", "&No", "&Yes to All" ))
+       {
+       case VF3_3:
+    	   showMss=0l;
+       case VF3_1:
+           break;
+       case VF3_2:
+    	   Error(pmp->errorCode, pmp->errorBuf);
+       }
+   }
+
+   return 1L;
+  }
+
+  return 0L	;
+}
+
+// GEM IPM calculation of equilibrium state in MULTI
+// Modified on 10.09.2007 to return elapsed GEMIPM runtime in seconds
+// Modified on 15.11.2007 to return more detailed info on FIA and IPM iterations
+// and precision refinement loops
+//
+double TProfil::calcMulti( long int& NumPrecLoops, long int& NumIterFIA, long int& NumIterIPM )
+{
+  TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+  calcFinished = false;
+
+  if( fabs( tpp->curT - pmp->TCc ) > 1.e-10 ||
+         fabs( tpp->curP - pmp->Pc ) > 1.e-10 )
+   { // load new MTPARM on T or P
+      mtparm->LoadMtparm( pmp->TCc, pmp->Pc );
+      pmp->pTPD = 0;
+   }
+pmp->t_start = clock();     // Added 06.09.2007 by DK to check pure runtime
+pmp->t_end = pmp->t_start;
+pmp->t_elap_sec = 0.0;
+pmp->ITF = pmp->ITG = 0;
+
+FORCED_AIA:
+   multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
+	if( pmp->pNP )
+   {
+	   if( pmp->ITaia <=30 )       // Foolproof
+		  pmp->IT = 30;
+	   else
+		  pmp->IT = pmp->ITaia;     // Setting number of iterations for the smoothing parameter
+   }
+   if( multi->AutoInitialApprox( ) == false )
+   {
+	   multi->MultiCalcIterations( -1 );
+   }
+if( pmp->MK || pmp->PZ ) // no good solution
+   	goto FINISHED;
+
+NumPrecLoops = pmp->W1+pmp->K2-1;
+NumIterFIA = pmp->ITF;
+NumIterIPM = pmp->ITG;
+pmp->IT = pmp->ITG;   // This is to provide correct number of IPM iterations to upper levels
+
+   if( pa.p.PRD < 0 && pa.p.PRD > -50 ) // max 50 loops
+   {  // Test refinement loops for highly non-ideal systems Added here by KD on 15.11.2007
+      long int pp, pNPo = pmp->pNP,  TotW1 = pmp->W1+pmp->K2-1,
+ITstart = 10,        TotIT = pmp->IT;   // ITold = pmp->IT,
+      pmp->pNP = 1;
+      for( pp=0; pp < abs(pa.p.PRD); pp++ )
+      {
+         pmp->IT = ITstart; // 0  Important for refinement in highly non-ideal systems!
+         if( multi->AutoInitialApprox( ) == false )
+         {
+            multi->MultiCalcIterations( pp );
+         }
+         TotIT += pmp->IT - ITstart;
+         TotW1 += pmp->W1+pmp->K2-1;
+         if( pmp->MK || pmp->PZ ) // no good solution
+             break;
+       } // end pp loop
+
+      pmp->pNP = pNPo;
+      pmp->IT = TotIT; // ITold;
+
+      NumPrecLoops = TotW1;
+      NumIterFIA = pmp->ITF;
+      NumIterIPM = pmp->ITG;
+   }
+
+FINISHED:
+
+   	if( pmp->MK == 2 )
+   	{	if( pmp->pNP )
+            {
+       	    pmp->pNP = 0;
+       	    pmp->MK = 0;
+       	    goto FORCED_AIA;  // Trying again with AIA set after bad SIA
+            }
+       	else
+       		Error( pmp->errorCode ,pmp->errorBuf );
+   	}
+
+   if( pmp->MK || pmp->PZ ) // no good solution
+   {
+    	 testMulti();
+   //cout << "Iter"  << " MK " << pmp->MK << " PZ " << pmp->PZ << " " << pmp->errorCode << endl;
+   }
+pmp->t_end = clock();
+pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
+  calcFinished = true;
+
+  STat->setCalcFlag( true );
+  STat->CellChanged();
+  return pmp->t_elap_sec;
+}
+
+// Setup of flags for MULTY remake
+// pNP,  //Mode of FIA selection: 0-auto-SIMPLEX,1-old eqstate,-1-user's choice
+// pESU, // Unpack old eqstate from EQSTAT record?  0-no 1-yes
+// pIPN, // State of IPN-arrays:  0-create; 1-available; -1 remake
+// pBAL, // State of reloading CSD:  1- BAL only; 0-whole CSD
+// pTPD, // State of reloading thermod data: 0- all    2 - no
+void TProfil::PMtest( const char *key )
+{
+    double T, P;
+    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+    TProcess* Proc = (TProcess*)(&aMod[RT_PROCES]);
+
+    // test for available old solution
+    if( STat->ifCalcFlag())
+    { if( !pmp->pESU )      // if pESU == 2 (task loaded before), left value
+          pmp->pESU = 1;
+    }
+    else pmp->pESU = 0;
+
+   // no old solution => must be simplex
+   if( pmp->pESU == 0 )
+        pmp->pNP = 0;
+
+   // test changes in the modified system relative to MULTI
+   pmp->pBAL =  BAL_compare();
+   if( !pmp->pBAL ) // if some vectors were allocated or some dimensions changed
+   {
+       pmp->pIPN = 0;
+       pmp->pTPD = 1; // reload Go, Vol
+   }
+
+    // special setup from process simulator
+    if( Proc->pep->Istat == P_EXECUTE ||
+        Proc->pep->Istat == P_MT_EXECUTE )
+    {
+        if(Proc->pep->PvR1 == S_OFF )
+            pmp->pNP = 0;
+        else
+            pmp->pNP = 1;
+    }
+
+    // Get P and T from key
+    gstring s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);
+    P = atof(s.c_str());
+    s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN+MAXPTN,MAXPTN);
+    T = atof(s.c_str());
+
+    if( fabs( tpp->curT - T ) > 1.e-10 ||
+            fabs( tpp->curP - P ) > 1.e-10 )
+    { // load new MTPARM on T or P
+        mtparm->LoadMtparm( T, P );
+        pmp->pTPD = 0;
+    }
+}
+
+void TProfil::LoadFromMtparm(double T, double P,double *G0,  double *V0,
+		double *H0, double *S0, double *Cp0, double *A0, double *U0,
+		double denW[5], double epsW[5], double denWg[5], double epsWg[5], int* tp_mark_ )
+{
+    if( fabs( tpp->curT - T ) > 1.e-10 ||
+            fabs( tpp->curP - P ) > 1.e-10 )
+    { // load new MTPARM on T or P
+        mtparm->LoadMtparm( T, P );
+        pmp->pTPD = 0;
+    }
+    denW[0] = tpp->RoW;
+    denW[1] = tpp->dRdTW;
+    denW[2] = tpp->d2RdT2W;
+    denW[3] = tpp->dRdPW;
+    denW[4] = tpp->d2RdP2W;
+    denWg[0] = tpp->RoV;
+    denWg[1] = tpp->dRdTV;
+    denWg[2] = tpp->d2RdT2V;
+    denWg[3] = tpp->dRdPV;
+    denWg[4] = tpp->d2RdP2V;
+    epsW[0] = tpp->EpsW;
+    epsW[1] = tpp->dEdTW;
+    epsW[2] = tpp->d2EdT2W;
+    epsW[3] = tpp->dEdPW;
+    epsW[4] = tpp->d2EdP2W;
+    epsWg[0] = tpp->EpsV;
+    epsWg[1] = tpp->dEdTV;
+    epsWg[2] = tpp->d2EdT2V;
+    epsWg[3] = tpp->dEdPV;
+    epsWg[4] = tpp->d2EdP2V;
+    for( int jj=0; jj<mup->L; jj++ )
+    {
+      if( tpp->mark[jj] == 'e'/*CP_NOT_VALID*/ )
+    	  tp_mark_[jj] = 1;
+      G0[jj] =  tpp->G[jj]+syp->GEX[jj];
+      V0[jj] =  tpp->Vm[jj];
+      if( H0 )
+      { if( tpp->H )
+           H0[jj] =  tpp->H[jj];
+        else
+           H0[jj] = 0.;
+      }
+      if( S0 )
+      {	 if( tpp->S )
+            S0[jj] =  tpp->S[jj];
+         else
+           	S0[jj] = 0.;
+      }
+      if( Cp0 )
+      {	  if( tpp->Cp )
+             Cp0[jj] =  tpp->Cp[jj];
+          else
+             Cp0[jj] =  0.;
+      }
+      if( A0 )
+      {	 if( tpp->F )
+            A0[jj] =  tpp->F[jj];
+         else
+           	A0[jj] = 0.;
+      }
+      if( U0 )
+      {	 if( tpp->U )
+            U0[jj] =  tpp->U[jj];
+         else
+            U0[jj] = 0.;
+      }
+    }
+}
+
+// -------------------------------------------------------------------
+// Compare changes in the modified system relative to MULTI
+// if some vectors were allocated or some dimensions changed - return 0;
+// else if bulk composition or some constraints has changed - return 1;
+// else if nothing has changed - return 2.
+short TProfil::BAL_compare()
+{
+    int i,j,k, jj, jb, je=0;
+    double Go, Gg, Ge, pGo;
+
+// Test A - sizes and selectors
+    if( pmp->N != syp->N || pmp->L != syp->L || pmp->Ls != syp->Ls
+            || pmp->LO != syp->Lw || pmp->PG != syp->Lg
+            || pmp->PSOL != syp->Lhc || pmp->Lads != syp->Lsor
+            || pmp->FI != syp->Fi || pmp->FIs != syp->Fis )
+        return 0;
+    if(( syp->DLLim == S_ON || syp->DULim == S_ON ) && pmp->PLIM != 1 )
+        return 0;
+    else if( syp->DLLim == S_OFF && syp->DULim == S_OFF && pmp->PLIM == 1 )
+        return 0;
+// test selectors
+    for( i=0; i<pmp->N; i++ )
+        if( syp->Icl[pmp->mui[i]] == S_OFF )
+            return 0;
+    for( j=0; j<pmp->L; j++ )
+        if( syp->Dcl[pmp->muj[j]] == S_OFF )
+            return 0;
+    for( k=0; k<pmp->FI; k++ )
+        if( syp->Pcl[pmp->muk[k]] == S_OFF )
+            return 0;
+// lists of components didn't change
+// test B - recipes and constraints
+    for( i=0; i<pmp->N; i++ )
+        if( fabs( syp->B[pmp->mui[i]] - pmp->B[i] ) >= pa.p.DB )
+            return 1;
+    // test other settings for DCs
+  for( k = 0; k < pmp->FI; k++ )
+  {
+	jb = je;
+	je += pmp->L1[k];
+	for( j=jb; j<je; j++ )
+    {
+       Gg = Ge = 0.0;    //   This part had to be changed after integrating Ge into pmp->G0
+       jj = pmp->muj[j]; //        DK    07.03.2008,  16.05.2008
+       Go = tpp->G[jj]; //  G0(T,P) value taken from MTPARM
+       if( syp->Guns )  // This is used mainly in UnSpace calculations
+           Gg = syp->Guns[jj];    // User-set increment to G0 from project system
+       if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
+           Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK
+       pGo = multi->Cj_init_calc( Go+Gg+Ge, j, k );
+       if( fabs( pGo - pmp->G0[j] )* pmp->RT >= 0.001 )
+       {
+           pmp->pTPD = 1;   // Fixed here to invoke CompG0Load() DK 16.05.2008
+    	   break;   // GEX or Guns has changed for this DC in the system definition
+       }
+ //      if( syp->PGEX != S_OFF )
+ //           if( fabs( syp->GEX[pmp->muj[j]] - pmp->GEX[j]*pmp->RT ) >= 0.001 )
+ //               break;
+        if(( syp->DLLim != S_OFF ) && pmp->PLIM == 1 )
+//            if( fabs( (double)syp->DLL[jj] - pmp->DLL[j] ) >= 1e-19 )
+              if( syp->DLL[jj] != (float)pmp->DLL[j]  )   //SD 22/01/2009
+                break;
+        if(( syp->DULim != S_OFF ) && pmp->PLIM == 1 )
+//            if( fabs( (double)syp->DUL[jj] - pmp->DUL[j] ) >= 1e-19 )
+              if( syp->DUL[jj] != (float)pmp->DUL[j] )   //SD 22/01/2009
+              break;
+        if( syp->DULim != S_OFF || syp->DLLim != S_OFF )
+        {  if( pmp->RLC[j] != syp->RLC[jj] )
+             break;
+           if( pmp->RSC[j] != syp->RSC[jj] )
+             break;
+        }
+    }  // j
+    if( j < je )
+       return 1;
+  }  // k
+    if( pmp->FIat > 0 )  //      Adsorption models - always
+       return 1;
+
+    for( k=0; k<pmp->FI; k++ )
+    {
+      int kk = pmp->muk[k];
+      if( syp->PSigm != S_OFF )
+      {
+         if( fabs( pmp->Sigw[k] - syp->Sigm[kk][0]) > 1e-19 )
+           break;
+         if( fabs( pmp->Sigg[k] - syp->Sigm[kk][1]) > 1e-19 )
+           break;
+      }
+      if( syp->PAalp != S_OFF )
+        if( fabs( pmp->Aalp[k] - syp->Aalp[kk]) > 1e-19 )
+         break;
+    }
+
+    if( k < pmp->FI )
+        return 1;
+
+    // bulk chem. compos. and constraints unchanged
+    return 2;
+}
+
+// ------------------ End of m_param.cpp -----------------------
+
+
+
+

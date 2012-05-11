@@ -1,0 +1,659 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>DBAdvDialogData</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>DBAdvDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>451</width>
+            <height>519</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>3</hsizetype>
+            <vsizetype>3</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>420</width>
+            <height>500</height>
+        </size>
+    </property>
+    <property name="baseSize">
+        <size>
+            <width>0</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>DBAdvDialogData</string>
+    </property>
+    <property name="toolTip" stdset="0">
+        <string>Get miscellaneous information about maintaining databases</string>
+    </property>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>pLogoImg</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>60</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="frameShape">
+            <enum>Panel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Raised</enum>
+        </property>
+        <property name="scaledContents">
+            <bool>true</bool>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+        <property name="hAlign" stdset="0">
+        </property>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout20</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>470</y>
+                <width>430</width>
+                <height>37</height>
+            </rect>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonBack</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>3</hsizetype>
+                        <vsizetype>3</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>10</pointsize>
+                        <bold>1</bold>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Back</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+B</string>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Back to 'Thermodynamic database management' dialog</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonHelp</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>3</hsizetype>
+                        <vsizetype>3</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <bold>1</bold>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Help</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+H</string>
+                </property>
+                <property name="default">
+                    <bool>false</bool>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonFormats</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>3</hsizetype>
+                        <vsizetype>3</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Formats</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Get descriptions of database and other file formats</string>
+                </property>
+            </widget>
+        </hbox>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>vbox2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>30</x>
+                <y>350</y>
+                <width>390</width>
+                <height>100</height>
+            </rect>
+        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>0</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonDUTerm</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Du&amp;al Thermodynamics (DualTh)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+A</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string></string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonAdProbe</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Sensitivity Studies (&amp;UnSpace)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+U</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string></string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonInteg</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Coupled Fluid-&amp;Mass Transport (GEM2MT)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+M</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string></string>
+                </property>
+            </widget>
+        </vbox>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>vbox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>80</y>
+                <width>430</width>
+                <height>240</height>
+            </rect>
+        </property>
+        <property name="layoutSpacing" stdset="0">
+        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>0</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonSDref</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>12</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>B&amp;ibliography and Scripts (SDref)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+I</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Full references (opt. abstracts) to sources of input data</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonConst</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>12</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Numerical &amp;Constants (Const)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+C</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Some tables of constants used in thermodynamic calculations</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonProfile</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>12</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Modelling P&amp;roject (Project)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+R</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Modeling application project of database files, phases and species</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonSysEq</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>12</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Single Chemical Sys&amp;tems (SysEq)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+T</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Definitions of chemical systems and equilibrium states</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonProcess</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>12</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Process Simulators (Process)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+P</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Definitions of process simulators (batch GEM calculations)</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonGTdemo</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>12</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Data &amp;Samplers and Plotters (GtDemo)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+S</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Definitions of data samplers and graphics</string>
+                </property>
+            </widget>
+        </vbox>
+    </widget>
+    <widget class="Line">
+        <property name="name">
+            <cstring>Line1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>450</y>
+                <width>430</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>HLine</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Sunken</enum>
+        </property>
+        <property name="orientation">
+            <enum>Horizontal</enum>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>tlTitle</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>80</x>
+                <y>10</y>
+                <width>360</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Arial</family>
+                <pointsize>14</pointsize>
+                <bold>1</bold>
+                <italic>1</italic>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>Panel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Raised</enum>
+        </property>
+        <property name="text">
+            <string>GEMS Database Management</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+        <property name="hAlign" stdset="0">
+        </property>
+        <property name="wordwrap" stdset="0">
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>30</x>
+                <y>328</y>
+                <width>160</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>System</family>
+                <pointsize>10</pointsize>
+                <bold>1</bold>
+            </font>
+        </property>
+        <property name="text">
+            <string>Under Construction:</string>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>pButtonBack</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmBack()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonHelp</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmHelp()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonFormats</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmFormats()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonSDref</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_SData()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonConst</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_Const()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonProfile</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_PROFILE()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonSysEq</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmThermoSystem()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonProcess</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_PROCESS()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonGTdemo</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_GTDEMO()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonDUTerm</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_DUTERM()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonAdProbe</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_PROBE()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonInteg</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_INTEG()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot access="protected">CmBack()</slot>
+    <slot access="protected">CmHelp()</slot>
+    <slot access="protected">CmFormats()</slot>
+    <slot access="protected">CmOpen_PROCESS()</slot>
+    <slot access="protected">CmOpen_Const()</slot>
+    <slot access="protected">CmOpen_DUTERM()</slot>
+    <slot access="protected">CmOpen_GTDEMO()</slot>
+    <slot access="protected">CmOpen_INTEG()</slot>
+    <slot access="protected">CmOpen_PROBE()</slot>
+    <slot access="protected">CmOpen_PROFILE()</slot>
+    <slot access="protected">CmOpen_SData()</slot>
+    <slot access="protected">CmThermoSystem()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

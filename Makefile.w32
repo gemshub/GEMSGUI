@@ -1,0 +1,118 @@
+# Makefile for Borland C++ Builder 5 (bcc32 5.5.1)
+
+!if !$d(BCB)
+BCB = $(MAKEDIR)\..
+!endif
+
+MAKE = make -f Makefile.w32
+
+subdirs	= vizor/libs vizor/kernel vizor mods mods/submod vizor/dlg
+cleandirs	= vizor/libs vizor/kernel vizor mods mods/submod vizor/dlg
+backupfiles	= doc data lib mods vizor Makefile*.* *.spec
+
+LIBS    = import32.lib cw32mti.lib qtmain.lib qtmt334.lib
+NOQTLIBS  = import32.lib cw32mti.lib lib\qtmain.lib lib\qtmt334.lib
+
+
+GEMS_L  = lib\gemviz.lib lib\gemsel.lib
+GEMS_L_DBG  = lib\gemsel.lib
+
+TARGET		= gems2.exe
+
+MAKE	= make
+
+.PHONY: subdirs_mk
+
+all:	subdirs_mk link
+
+subdirs_mk:
+	cd mods
+	$(MAKE) -f Makefile.w32 RELEASE=$(RELEASE) all
+	cd ..\vizor
+	$(MAKE) -f Makefile.w32 RELEASE=$(RELEASE) all
+	cd ..
+
+noqt:	mods_mk noqt_link
+
+mods_mk:
+	cd mods
+	$(MAKE) -f Makefile.w32 RELEASE=$(RELEASE) all
+	cd ..
+
+link:
+        ilink32 -v -c -x -Gn -aa -Tpe c0w32.obj -L$(BCB)\lib -L$(QTDIR)\lib \
+                 , $(TARGET), , $(GEMS_L) $(LIBS)
+
+noqt_link:
+        ilink32 -v -c -x -Gn -aa -Tpe c0w32.obj -L$(BCB)\lib \
+                 , $(TARGET), , $(GEMS_L) $(NOQTLIBS)
+
+linkdbg:
+        ilink32 -v -c -Gn -aa -Tpe c0w32.obj -L$(BCB)\lib -L$(QTDIR) \
+vizor\libs\config.obj vizor\libs\gstring.obj vizor\libs\gdatastream.obj \
+vizor\kernel\v_user.obj vizor\kernel\v_vals.obj vizor\kernel\v_object.obj \
+vizor\kernel\v_file.obj vizor\kernel\v_dbm1.obj vizor\kernel\v_dbm2.obj \
+vizor\kernel\t_print.obj vizor\kernel\v_module.obj vizor\page_f.obj \
+vizor\visor.obj vizor\main.obj vizor\visor_w.obj vizor\module_w.obj \
+vizor\page_w.obj vizor\pshape.obj vizor\help.obj vizor\units.obj \
+vizor\helpwindow.obj vizor\tmp\moc_visor_w.obj vizor\tmp\moc_module_w.obj \
+vizor\tmp\moc_page_w.obj vizor\page_win_w.obj vizor\graph.obj \
+vizor\tmp\moc_query_w.obj vizor\tmp\moc_page_win_w.obj vizor\tmp\moc_helpwindow.obj \
+vizor\dlg\MainDialog.obj vizor\dlg\MainDialogData.obj vizor\dlg\DBDialog.obj \
+vizor\dlg\DBDialogData.obj vizor\dlg\ProcessWizard.obj vizor\dlg\ProcessWizardData.obj \
+vizor\dlg\GtDemoWizard.obj vizor\dlg\GtDemoWizardData.obj  \
+vizor\dlg\RTparmWizard.obj vizor\dlg\RTparmWizardData.obj  \
+vizor\dlg\ReacDCWizard.obj vizor\dlg\ReacDCWizardData.obj  \
+vizor\dlg\DCompWizard.obj vizor\dlg\DCompWizardData.obj  \
+vizor\dlg\DualThWizard.obj vizor\dlg\DualThWizardData.obj  \
+vizor\dlg\ComposWizard.obj vizor\dlg\ComposWizardData.obj vizor\dlg\PhaseWizard.obj \
+vizor\dlg\PhaseWizardData.obj vizor\dlg\EQDialog.obj vizor\dlg\EQDialogData.obj \
+vizor\dlg\NewSystemDialog.obj vizor\dlg\NewSystemDialogData.obj \
+vizor\dlg\ProgressDialog.obj vizor\dlg\ProgressDialogData.obj \
+vizor\dlg\KeyDialog.obj vizor\dlg\ChangeKeyDialog.obj vizor\dlg\KeyDialogData.obj \
+vizor\dlg\ChangeKeyDialogData.obj vizor\dlg\KeyProfile.obj vizor\dlg\KeyProfileData.obj \
+vizor\dlg\KeyFilter.obj vizor\dlg\ExcludeFillDialog.obj vizor\dlg\SettingsDialog.obj \
+vizor\dlg\SettingsDialogData.obj vizor\dlg\SelectDialog.obj vizor\dlg\SelectDialogData.obj \
+vizor\dlg\CalcDialog.obj vizor\dlg\CalcDialogData.obj vizor\dlg\CalcCheckDialog.obj \
+vizor\dlg\CalcCheckDialogData.obj vizor\dlg\DBAdvDialog.obj vizor\dlg\DBAdvDialogData.obj \
+vizor\dlg\ColorDialog.obj  vizor\dlg\ColorDialogData.obj vizor\dlg\GraphDialog.obj  \
+vizor\dlg\GraphDialogData.obj vizor\dlg\LegendDialog.obj  vizor\dlg\LegendDialogData.obj \
+vizor\dlg\ListFilesDialog.obj vizor\dlg\ListFilesDialogData.obj vizor\dlg\AutoPhaseDialog.obj \
+vizor\dlg\AutoPhaseDialogData.obj vizor\dlg\LoadMessage.obj vizor\tmp\moc_MainDialog.obj \
+vizor\tmp\moc_MainDialogData.obj vizor\tmp\moc_DBDialog.obj \
+vizor\tmp\moc_DBDialogData.obj vizor\tmp\moc_ProcessWizard.obj vizor\tmp\moc_ProcessWizardData.obj \
+vizor\tmp\moc_ComposWizard.obj vizor\tmp\moc_ComposWizardData.obj \
+vizor\tmp\moc_DualThWizard.obj vizor\tmp\moc_DualThWizardData.obj \
+vizor\tmp\moc_DCompWizard.obj vizor\tmp\moc_DCompWizardData.obj \
+vizor\tmp\moc_ReacDCWizard.obj vizor\tmp\moc_ReacDCWizardData.obj \
+vizor\tmp\moc_RTparmWizard.obj vizor\tmp\moc_RTparmWizardData.obj \
+vizor\tmp\moc_GtDemoWizard.obj vizor\tmp\moc_GtDemoWizardData.obj \
+vizor\tmp\moc_PhaseWizard.obj vizor\tmp\moc_PhaseWizardData.obj \
+vizor\tmp\moc_EQDialog.obj vizor\tmp\moc_EQDialogData.obj vizor\tmp\moc_NewSystemDialog.obj \
+vizor\tmp\moc_NewSystemDialogData.obj vizor\tmp\moc_ProgressDialog.obj \
+vizor\tmp\moc_ProgressDialogData.obj vizor\tmp\moc_KeyDialog.obj \
+vizor\tmp\moc_ChangeKeyDialog.obj vizor\tmp\moc_KeyDialogData.obj \
+vizor\tmp\moc_ChangeKeyDialogData.obj vizor\tmp\moc_KeyProfile.obj \
+vizor\tmp\moc_KeyProfileData.obj vizor\tmp\moc_KeyFilter.obj \
+vizor\tmp\moc_ExcludeFillDialog.obj vizor\tmp\moc_SettingsDialog.obj \
+vizor\tmp\moc_SettingsDialogData.obj vizor\tmp\moc_SelectDialog.obj \
+vizor\tmp\moc_SelectDialogData.obj vizor\tmp\moc_CalcDialog.obj \
+vizor\tmp\moc_CalcDialogData.obj vizor\tmp\moc_CalcCheckDialog.obj \
+vizor\tmp\moc_CalcCheckDialogData.obj vizor\tmp\moc_DBAdvDialog.obj \
+vizor\tmp\moc_DBAdvDialogData.obj vizor\tmp\moc_ColorDialog.obj \
+vizor\tmp\moc_ColorDialogData.obj vizor\tmp\moc_GraphDialog.obj \
+vizor\tmp\moc_GraphDialogData.obj vizor\tmp\moc_LegendDialog.obj \
+vizor\tmp\moc_LegendDialogData.obj vizor\tmp\moc_ListFilesDialog.obj \
+vizor\tmp\moc_ListFilesDialogData.obj vizor\tmp\moc_LoadMessage.obj \
+vizor\tmp\moc_AutoPhaseDialog.obj vizor\tmp\moc_AutoPhaseDialogData.obj
+                 , $(TARGET), , $(GEMS_L_DBG) $(LIBS)
+
+clean:
+	cd lib
+        del *.lib
+        cd ..
+        cd mods
+        $(MAKE) -f Makefile.w32 clean
+	cd ..\vizor
+        $(MAKE) -f Makefile.w32 clean
+	cd ..

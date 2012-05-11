@@ -1,0 +1,1627 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>UnSpaceWizardData</class>
+<widget class="QWizard">
+    <property name="name">
+        <cstring>UnSpaceWizardData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>802</width>
+            <height>639</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>GEM-Selektor UnSpace Wizard</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>false</bool>
+    </property>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage1</cstring>
+        </property>
+        <attribute name="title">
+            <string>Step 1 - Uncertainty Space Task Configuration</string>
+        </attribute>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout40</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>1</x>
+                    <y>3</y>
+                    <width>680</width>
+                    <height>520</height>
+                </rect>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel10_2</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Plain</enum>
+                    </property>
+                    <property name="text">
+                        <string>&lt;p&gt;The UnSpace module is a tool for sensitivity studies of a GEM chemical thermodynamic model relative to uncertainty of its  input data. This data can be T, P, elements of Go vector, elements of bulk composition vector b and so on. &lt;/p&gt;
+&lt;p&gt;To tell the program which input parameters of the system are considered uncertain, which additional experimental data can be used as "filters", and which statistical criteria should be applied, select appropriate operation modes below.&lt;/p&gt;</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer16_3_2_3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>16</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>MixingModelGroup_2</cstring>
+                    </property>
+                    <property name="title">
+                        <string></string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>AC_modeLabel_2</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string>Code of function type used in construction of the criterial (payoff) matrix:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignBottom</set>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>A   Equation A (default)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>B   Equation B</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>C    equation C</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>D   Equation D</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>E    Equation E</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>F    Equation F</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>p_Mode</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>DcEqModeLabel_2</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string>Code of the OSP (optimal sample point) statistical criterion:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignBottom</set>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>0    Frequency statistics for phase association</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>1    Laplace quantile criterion (default) </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>2    Homeniuk quantile criterion </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>3    Laplace single-point criterion </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>4    Homeniuk single-point criterion</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>5    Hurwich criterion (reserved)</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>p_St</cstring>
+                            </property>
+                            <property name="currentItem">
+                                <number>1</number>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer16_3_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>16</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>The sum of nGB, nGN and nGR dimensions (to be set below) will define internally the total number of UnSpace coordinates. The qlp level defines the number of sample points selected by the quantile.</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer31</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>40</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>buttonGroup7</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Dimensions</string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout208</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QSpinBox">
+                                    <property name="name">
+                                        <cstring>pnQ</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>10001</number>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>111</number>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>TextLabel1</cstring>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>NoFrame</enum>
+                                    </property>
+                                    <property name="frameShadow">
+                                        <enum>Plain</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>&lt;b&gt;Q&lt;/b&gt;   - input (prime) number of sample GEM calculations to be generated</string>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout207</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QSpinBox">
+                                    <property name="name">
+                                        <cstring>pnM</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>99</number>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>5</number>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>TextLabel2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&lt;b&gt;qlp&lt;/b&gt;  - Quantile (percentile) level in % for statistical criteria (default: 5%)</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>WordBreak|AlignVCenter</set>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer16_3_2_2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>16</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout206</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QSpinBox">
+                                    <property name="name">
+                                        <cstring>pnP</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>100</number>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>1</number>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>TextLabel1_2</cstring>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>NoFrame</enum>
+                                    </property>
+                                    <property name="frameShadow">
+                                        <enum>Plain</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>&lt;b&gt;nGB&lt;/b&gt;  -   number of UnSpace coordinates (groups)   sampled by Belov's grid (default mode)</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>WordBreak|AlignVCenter</set>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout205</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QSpinBox">
+                                    <property name="name">
+                                        <cstring>pLb</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>100</number>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>0</number>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>TextLabel1_2_2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&lt;b&gt;nGN&lt;/b&gt;  -   number of UnSpace coordinates sampled by Monte Carlo with normal distribution</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>WordBreak|AlignVCenter</set>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout205_2</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QSpinBox">
+                                    <property name="name">
+                                        <cstring>pLb_2</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>100</number>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>0</number>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>TextLabel1_2_2_2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&lt;b&gt;nGR&lt;/b&gt;  -   number of UnSpace coordinates sampled by Monte Carlo with uniform distribution</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>WordBreak|AlignVCenter</set>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+            </vbox>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Step 2 - Configuration switches</string>
+        </attribute>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout42</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>10</y>
+                    <width>640</width>
+                    <height>478</height>
+                </rect>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>MixingModelGroup_2_2</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Here you can select scales in which uncertainty intervals will be treated</string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>AC_modeLabel_2_2</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string>Scale of uncertainty intervals for G0 S0 V0  (thermodynamic data):</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignBottom</set>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>%    in percent (default)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>0    in percent (as %)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>A     absolute value</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>1   Absolute value (as A)</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>p_PsUnInt</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>DcEqModeLabel_2_2</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string>Scale of uncertainty intervals for B (composition):</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignBottom</set>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>%    in percent (default)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>0    in percent (as %)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>A     absolute value</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>1   Absolute value (as A)</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>p_PsUnInB</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>DcEqModeLabel_2_2_2_2</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string>Scale for IC dissolved molality interval filters:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignBottom</set>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>A   absolute (default)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>L    logarithmic (decimal) </string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>p_PsUnFltI</cstring>
+                            </property>
+                            <property name="currentItem">
+                                <number>0</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>DcEqModeLabel_2_2_2</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string>Scale for DC activity/fugacity interval filters:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignBottom</set>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>A   absolute (default)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>L    logarithmic (decimal) </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>C    mole fraction</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>p_PsUnFltD</cstring>
+                            </property>
+                            <property name="currentItem">
+                                <number>0</number>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer8</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>16</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>buttonGroup11_3</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Flags for probing uncertainties on input:</string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QCheckBox" row="1" column="1">
+                            <property name="name">
+                                <cstring>c_PsGen5</cstring>
+                            </property>
+                            <property name="text">
+                                <string>P  (pressure)</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="1" column="2">
+                            <property name="name">
+                                <cstring>c_PsGen6</cstring>
+                            </property>
+                            <property name="text">
+                                <string>V0  (volume) values</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="0" column="2">
+                            <property name="name">
+                                <cstring>c_PsGen3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>B vector elements</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="0" column="1">
+                            <property name="name">
+                                <cstring>c_PsGen2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>S0 values</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="1" column="0">
+                            <property name="name">
+                                <cstring>c_PsGen4</cstring>
+                            </property>
+                            <property name="text">
+                                <string>T  (temperature)</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="3">
+                            <property name="name">
+                                <cstring>c_PsGen7</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Non-ideality parameters (reserved)</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="0" column="0">
+                            <property name="name">
+                                <cstring>c_PsGen1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>G0 values</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer9</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>16</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>buttonGroup11</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Flags for input/usage of filters:</string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QCheckBox" row="0" column="2">
+                            <property name="name">
+                                <cstring>c_Pa_f3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>on fugacity/activity</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="0" column="0">
+                            <property name="name">
+                                <cstring>c_Pa_f1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>on phase association</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="1" column="0">
+                            <property name="name">
+                                <cstring>c_Pa_f4</cstring>
+                            </property>
+                            <property name="text">
+                                <string>on mole fraction</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="1" column="1">
+                            <property name="name">
+                                <cstring>c_Pa_f5</cstring>
+                            </property>
+                            <property name="text">
+                                <string>on calculated pH</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="0" column="1">
+                            <property name="name">
+                                <cstring>c_Pa_f2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>on total IC molality</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="1" column="2">
+                            <property name="name">
+                                <cstring>c_Pa_f6</cstring>
+                            </property>
+                            <property name="text">
+                                <string>on calculated Eh</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </vbox>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Step 3 - Additional settings</string>
+        </attribute>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout43</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>21</x>
+                    <y>11</y>
+                    <width>640</width>
+                    <height>470</height>
+                </rect>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>On this page, some modes of operation can be changed in specific cases.</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer13</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>buttonGroup18_2</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Number of loops to optimize uncertainty intervals</string>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QSpinBox">
+                            <property name="name">
+                                <cstring>p_Pa_Adapt</cstring>
+                            </property>
+                            <property name="maxValue">
+                                <number>10</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel11_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Set here the number ofadaptive loops  (default 0)                                         _</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer11</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>buttonGroup9</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Optional modes of operation </string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QCheckBox" row="0" column="0">
+                            <property name="name">
+                                <cstring>c_PsEqn</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Use math script uG_Expr in this UnSpace modeling task (optional)</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="1" column="0">
+                            <property name="name">
+                                <cstring>c_PsGraph</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Use graphical output in this UnSpace modeling task (desirable)</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="2" column="0">
+                            <property name="name">
+                                <cstring>c_Pa_Zcp</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Laplace function (payoff matrix row average): of absolute values (on) or of real values (off)</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="3" column="0">
+                            <property name="name">
+                                <cstring>c_PvSi</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Extended calculation of primal chemical potentials in payoff functions</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="4" column="0">
+                            <property name="name">
+                                <cstring>c_PsSy</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Save generated SysEq records to data base</string>
+                            </property>
+                            <property name="checked">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer12</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>buttonGroup11_2</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Allocation of data objects</string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QCheckBox" row="0" column="2">
+                            <property name="name">
+                                <cstring>c_PvVs</cstring>
+                            </property>
+                            <property name="text">
+                                <string>V0-related vectors</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="0" column="0">
+                            <property name="name">
+                                <cstring>c_PvGs</cstring>
+                            </property>
+                            <property name="text">
+                                <string>G0-related vectors</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="1" column="0">
+                            <property name="name">
+                                <cstring>c_PvPgam</cstring>
+                            </property>
+                            <property name="text">
+                                <string>ParGamma vectors</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="1" column="1">
+                            <property name="name">
+                                <cstring>c_PvPOM</cstring>
+                            </property>
+                            <property name="text">
+                                <string>payoff matrix (if Q &lt;= 1001)</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="0" column="1">
+                            <property name="name">
+                                <cstring>c_PvSs</cstring>
+                            </property>
+                            <property name="text">
+                                <string>S0-related vectors</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="1" column="2">
+                            <property name="name">
+                                <cstring>c_PvPOR</cstring>
+                            </property>
+                            <property name="text">
+                                <string>payoff matrix row (if Q &gt; 1001)</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer14</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel3_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>On this page, some modes of operation can be changed in specific cases.</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Step 4 - useful hints to proceed</string>
+        </attribute>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout45</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>7</x>
+                    <y>10</y>
+                    <width>680</width>
+                    <height>550</height>
+                </rect>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>buttonGroup18</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Optional</string>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QSpinBox">
+                            <property name="name">
+                                <cstring>p_Nsd</cstring>
+                            </property>
+                            <property name="maxValue">
+                                <number>4</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel11</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Set here the number of links to SDref bibliography records (default 0)</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer32</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>40</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>buttonGroup7_2</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Dimensions for graphical output</string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout206_2</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QSpinBox">
+                                    <property name="name">
+                                        <cstring>pGraph</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>20</number>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>3</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>3</number>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>TextLabel1_2_3</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Number of columns in the yC table to plot projections of UnSpace (default 3); number of rows in yC will be automatically set to Q (number of sample equilibria to generate).</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>WordBreak|AlignVCenter</set>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout205_3</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QSpinBox">
+                                    <property name="name">
+                                        <cstring>pELine</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>100</number>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>2</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>10</number>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>TextLabel1_2_2_3</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Number of rows (legend intervals) in the xS, yS arrays for keeping the legend data (default 10 )</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>WordBreak|AlignVCenter</set>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout204</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QSpinBox">
+                                    <property name="name">
+                                        <cstring>pECol</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>10</number>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>5</number>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>TextLabel1_2_2_2_2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Number of columns in the yS array for legend data (default 5)</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>WordBreak|AlignVCenter</set>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer33</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>40</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>buttonGroup19</cstring>
+                    </property>
+                    <property name="title">
+                        <string>What will happen after you click "Finish"</string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel13</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;p&gt;(1) The necessary arrays will be allocated, and the Page 1 of the UnSpace module window will appear.&lt;/p&gt;
+&lt;p&gt;(2) Enter the full UnSpace task name into the USname field and (optionally) a comment into the USnote line. If math scripts will be used then type them on Page 3. Use template scripts accessible through "Help" "Scripts" menu command.&lt;/p&gt;
+&lt;p&gt;(3) On the "UnSpace" page, enter or change the uncertainty intervals, space group names and indexes.  &lt;/p&gt;
+&lt;p&gt;(4) Click on the "Calculate" toolbar button to start calculation of equilibria that sample the uncertainty space.  &lt;/p&gt;
+&lt;p&gt;(5) Click the "Calculate" button again to perform the sampling of GEM-calculated results and calculation of statistical criteria. &lt;/p&gt;
+&lt;p&gt;[6] On the "Graph" page, check the plot labels, plot the graph and customize it, if desired. &lt;/p&gt;</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignVCenter</set>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer34</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>40</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>ButtonGroup1</cstring>
+                    </property>
+                    <property name="title">
+                        <string>No need to change in this version of GEMS-PSI </string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox" row="0" column="0">
+                            <item>
+                                <property name="text">
+                                    <string>j     J/mol(/K) </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>c    cal/mol(/K)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>J     kJ/mol(/K)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>C    kcal/mol(/K)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>N   Normalized</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>pPunE</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="1">
+                            <property name="name">
+                                <cstring>textLabel1_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Units of measurement of energy (default: j)</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="1" column="0">
+                            <item>
+                                <property name="text">
+                                    <string>j    J/bar  = 0.1 cm3/mol</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>a   cal/bar</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>m   cm3/mol</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>pPunV</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="1">
+                            <property name="name">
+                                <cstring>textLabel1_2_3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Units of measurement of volume  (default:  j)</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="1">
+                            <property name="name">
+                                <cstring>textLabel1_2_3_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Units of measurement of pressure (default: b)</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="2" column="0">
+                            <item>
+                                <property name="text">
+                                    <string>b    bar  = 10^5 Pa</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>B    kbar (kilobar)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>p    Pa  (Pascal)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>P    MPa  = 10^6 Pa  </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>A    atm (=1.013 bar)</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>pPunP</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="3" column="0">
+                            <item>
+                                <property name="text">
+                                    <string>C   Celsius  </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>K   Kelvin</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>F   Fahrenheit</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>pPunT</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="3" column="1">
+                            <property name="name">
+                                <cstring>textLabel1_2_3_2_2</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string>Units of measurement of temperature  (default: C)</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </vbox>
+        </widget>
+    </widget>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -1,0 +1,567 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>ProgressDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>ProgressDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>359</width>
+            <height>468</height>
+        </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>310</width>
+            <height>460</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>NewProgressDialogData</string>
+    </property>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>330</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>IPM Minimization Progress</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel3_3</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>70</y>
+                <width>130</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>System: </string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>pKey</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>90</y>
+                <width>330</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>1</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="frameShape">
+            <enum>StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Sunken</enum>
+        </property>
+        <property name="text">
+            <string>:</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Key of the currently processed SysEq database record</string>
+        </property>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout5</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>410</y>
+                <width>330</width>
+                <height>40</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Arial</family>
+                <bold>1</bold>
+            </font>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pStepAccept</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Step</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+S</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Make next iteration in Stepwise mode</string>
+                </property>
+            </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>Spacer1</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>20</width>
+                        <height>0</height>
+                    </size>
+                </property>
+            </spacer>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pResume</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Resume</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Make all iteration in Stepwise mode</string>
+                </property>
+            </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>Spacer1_2</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>20</width>
+                        <height>0</height>
+                    </size>
+                </property>
+            </spacer>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pClose</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Cancel</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+C</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Do not save IPM results to database (or cancel IPM run in Stepwise mode)</string>
+                </property>
+            </widget>
+        </hbox>
+    </widget>
+    <widget class="QProgressBar">
+        <property name="name">
+            <cstring>pProgress</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>30</y>
+                <width>330</width>
+                <height>31</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>1</hsizetype>
+                <vsizetype>1</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="totalSteps">
+            <number>7</number>
+        </property>
+        <property name="progress">
+            <number>1</number>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Shows how far the GEM IPM proceeded from FIA to G(x) minimum</string>
+        </property>
+    </widget>
+    <widget class="Line">
+        <property name="name">
+            <cstring>Line1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>390</y>
+                <width>330</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>HLine</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Sunken</enum>
+        </property>
+        <property name="orientation">
+            <enum>Horizontal</enum>
+        </property>
+    </widget>
+    <widget class="QFrame">
+        <property name="name">
+            <cstring>pBottle</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>130</y>
+                <width>80</width>
+                <height>260</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Raised</enum>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Shows current mass ratio of gas (white), liquid (blue) and solid (black) phases </string>
+        </property>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>vbox</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>90</x>
+                <y>130</y>
+                <width>250</width>
+                <height>261</height>
+            </rect>
+        </property>
+        <property name="layoutSpacing" stdset="0">
+        </property>
+        <grid>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>0</number>
+            </property>
+            <widget class="QLabel" row="5" column="0">
+                <property name="name">
+                    <cstring>TextLabel3_2_2_3</cstring>
+                </property>
+                <property name="text">
+                    <string>pe  </string>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+            </widget>
+            <widget class="QLabel" row="1" column="0">
+                <property name="name">
+                    <cstring>TextLabel3_2</cstring>
+                </property>
+                <property name="text">
+                    <string>Gas  </string>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+            </widget>
+            <widget class="QLabel" row="3" column="1">
+                <property name="name">
+                    <cstring>pSolid</cstring>
+                </property>
+                <property name="frameShape">
+                    <enum>Box</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Total mass of solid phases in the system (g)</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="5" column="1">
+                <property name="name">
+                    <cstring>pPE</cstring>
+                </property>
+                <property name="frameShape">
+                    <enum>Box</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>pe value of aqueous electrolyte, molal</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="4" column="0">
+                <property name="name">
+                    <cstring>TextLabel3_2_3</cstring>
+                </property>
+                <property name="text">
+                    <string>pH  </string>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+            </widget>
+            <widget class="QLabel" row="1" column="1">
+                <property name="name">
+                    <cstring>pGas</cstring>
+                </property>
+                <property name="frameShape">
+                    <enum>Box</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Mass of gas (in grams) in the system</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="2" column="1">
+                <property name="name">
+                    <cstring>pWater</cstring>
+                </property>
+                <property name="frameShape">
+                    <enum>Box</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Total mass of liquid phases in the system (g)</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="6" column="0">
+                <property name="name">
+                    <cstring>TextLabel3_2_2_2_2</cstring>
+                </property>
+                <property name="text">
+                    <string>IS  </string>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+            </widget>
+            <widget class="QLabel" row="0" column="1">
+                <property name="name">
+                    <cstring>pIT</cstring>
+                </property>
+                <property name="frameShape">
+                    <enum>Box</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Number of IPM iterations performed until the last update of dialog fields</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="4" column="1">
+                <property name="name">
+                    <cstring>pPH</cstring>
+                </property>
+                <property name="frameShape">
+                    <enum>Box</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>pH value of aqueous electrolyte, molal (activity scale)</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="6" column="1">
+                <property name="name">
+                    <cstring>pIC</cstring>
+                </property>
+                <property name="frameShape">
+                    <enum>Box</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Effective ionic strength of aqueous electrolyte, molal</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="3" column="0">
+                <property name="name">
+                    <cstring>TextLabel3_2_2_2</cstring>
+                </property>
+                <property name="text">
+                    <string>Solid  </string>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+            </widget>
+            <widget class="QLabel" row="2" column="0">
+                <property name="name">
+                    <cstring>TextLabel3_2_2</cstring>
+                </property>
+                <property name="text">
+                    <string>Liquid  </string>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+            </widget>
+            <widget class="QLabel" row="0" column="0">
+                <property name="name">
+                    <cstring>TextLabel3</cstring>
+                </property>
+                <property name="text">
+                    <string>Iter  </string>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+            </widget>
+        </grid>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>pClose</sender>
+        <signal>clicked()</signal>
+        <receiver>ProgressDialogData</receiver>
+        <slot>CmClose()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot access="protected">CmAccept()</slot>
+    <slot access="protected">CmClose()</slot>
+    <slot access="protected">CmStep()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

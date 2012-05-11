@@ -1,0 +1,563 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>NewSystemDialogData</class>
+<widget class="QMainWindow">
+    <property name="name">
+        <cstring>NewSystemDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>816</width>
+            <height>585</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>GEM-Selektor v.2-PSI:    Single Chemical Thermodynamic System</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QTabWidget">
+            <property name="name">
+                <cstring>TabWid</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Two tab windows giving overviews of input system definition and GEM calculation results</string>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Input: System Definition</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QListView" row="0" column="0">
+                        <column>
+                            <property name="text">
+                                <string>Phase/species name</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>L</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Type</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>On/off</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>UC</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>false</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Add to BC</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>UG</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>G0 corr.</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>UK</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Lower_KC</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Upper_KC</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>KC type</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                    <item>
+                        <property name="text">
+                            <string>System</string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                    </item>
+                        <property name="name">
+                            <cstring>ListView1</cstring>
+                        </property>
+                        <property name="focusPolicy">
+                            <enum>ClickFocus</enum>
+                        </property>
+                        <property name="acceptDrops">
+                            <bool>false</bool>
+                        </property>
+                        <property name="frameShape">
+                            <enum>StyledPanel</enum>
+                        </property>
+                        <property name="margin">
+                            <number>2</number>
+                        </property>
+                        <property name="midLineWidth">
+                            <number>2</number>
+                        </property>
+                        <property name="resizePolicy">
+                            <enum>Manual</enum>
+                        </property>
+                        <property name="selectionMode">
+                            <enum>Single</enum>
+                        </property>
+                        <property name="allColumnsShowFocus">
+                            <bool>true</bool>
+                        </property>
+                        <property name="showSortIndicator">
+                            <bool>true</bool>
+                        </property>
+                        <property name="itemMargin">
+                            <number>2</number>
+                        </property>
+                        <property name="rootIsDecorated">
+                            <bool>true</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Overview of the input chemical system definition (CSD), cells in some columns can be edited</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>&lt;h2&gt;Overview of the input chemical system definition (CSD)&lt;/h2&gt;
+&lt;p&gt;Cick on the '+' left to the phase name to see its dependent components (DCs).&lt;/p&gt;
+&lt;p&gt;Cells in columns '&lt;tt&gt;On/off&lt;/tt&gt;', '&lt;tt&gt;UC&lt;/tt&gt;', &lt;tt&gt;'Add to BC&lt;/tt&gt;', '&lt;tt&gt;UG&lt;/tt&gt;', &lt;tt&gt;'G0 corr.&lt;/tt&gt;',  '&lt;tt&gt;Lower_KC&lt;/tt&gt;', '&lt;tt&gt;Upper_KC&lt;/tt&gt;', '&lt;tt&gt;KC type&lt;/tt&gt;'
+ can be edited. 
+To edit, double-click or right-click on the cell; enter or select the value 
+and press &lt;tt&gt;Enter&lt;/tt&gt; or click on another cell. &lt;/p&gt;
+&lt;p&gt;Column '&lt;tt&gt;L&lt;/tt&gt;' contains the number of DCs in each phase. 
+'&lt;tt&gt;Type&lt;/tt&gt;' is the phase or component type code (e.g. '&lt;tt&gt;a&lt;/tt&gt;' - aqueous, '&lt;tt&gt;s&lt;/tt&gt;' - solid. etc.)&lt;/p&gt;
+&lt;p&gt;'&lt;tt&gt;On/Off&lt;/tt&gt;' shows which phases or components will be taken into GEMIPM calculation 
+('&lt;tt&gt;+&lt;/tt&gt;') or not ('&lt;tt&gt;-&lt;/tt&gt;'). You can select/deselect phases/components here or in the 'Data' windows.&lt;/p&gt; 
+&lt;p&gt;'&lt;tt&gt;UC&lt;/tt&gt;' sets codes of units in which the amount of DC stoichiometry is expressed in the 
+'&lt;tt&gt;Add to BC&lt;/tt&gt;' column. The code and value entered there will be copied in the '&lt;tt&gt;XDun_&lt;/tt&gt;' and '&lt;tt&gt;xd_&lt;/tt&gt;' 
+vectors, respectively. Frequently used codes: '&lt;tt&gt;M&lt;/tt&gt;' - moles. '&lt;tt&gt;g&lt;/tt&gt;' - grams. &lt;/p&gt; 
+&lt;p&gt;'&lt;tt&gt;UG&lt;/tt&gt;' sets code of units in which the '&lt;tt&gt;G0 corr&lt;/tt&gt;' is given for the standard molar &lt;tt&gt;gTP&lt;/tt&gt; value of the DC. 
+Default is '&lt;tt&gt;J&lt;/tt&gt;' - joule/mol. Other codes: '&lt;tt&gt;k&lt;/tt&gt;' - kJ/mol; '&lt;tt&gt;p&lt;/tt&gt;' - pK unit; '&lt;tt&gt;l&lt;/tt&gt;' - logK unit; '&lt;tt&gt;n&lt;/tt&gt;' - lnK unit; 
+'&lt;tt&gt;m&lt;/tt&gt;' - mol/mol unit. Upon leaving this dialog, the values given in '&lt;tt&gt;G0 corr&lt;/tt&gt;' for dependent components will be automatically converted into J/mol and stored in the '&lt;tt&gt;gEx_&lt;/tt&gt;' data vector. The values given for phases will be converted to J/g and stored in the '&lt;tt&gt;Yof_&lt;/tt&gt;' vector. &lt;/p&gt;
+&lt;p&gt;'&lt;tt&gt;UK&lt;/tt&gt;' column contains units code for setting up kinetic constraints for the amount of DC in primal GEM solution in '&lt;tt&gt;Lower_KC&lt;/tt&gt;' and '&lt;tt&gt;Upper_KC&lt;/tt&gt;' columns. Currently, only '&lt;tt&gt;M&lt;/tt&gt;' - moles are supported. The '&lt;tt&gt;Lower_KC&lt;/tt&gt;' values (trivially 0) will be copied into the '&lt;tt&gt;dll_&lt;/tt&gt;' vector of constraints from below (usually used for simulating mineral dissolution kinetics). '&lt;tt&gt;Upper_KC&lt;/tt&gt;' values (trivially 1e6 moles) will be copied to the '&lt;tt&gt;dul_&lt;/tt&gt;' vector of constraints from above, usually used for simulation of precipitation kinetics. The '&lt;tt&gt;KC type&lt;/tt&gt;' column should normally contain '&lt;tt&gt;B&lt;/tt&gt;' code, applicable for both cases at the same time.&lt;/p&gt;</string>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Results: Equilibrium State</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QListView" row="0" column="0">
+                        <column>
+                            <property name="text">
+                                <string>Phase/species name</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>L</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Type</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Amount x (mol)</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Activity (DualTh)</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Concentration</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Activity coeff.</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                    <item>
+                        <property name="text">
+                            <string>Equilibrium</string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                    </item>
+                        <property name="name">
+                            <cstring>ListView2</cstring>
+                        </property>
+                        <property name="focusPolicy">
+                            <enum>ClickFocus</enum>
+                        </property>
+                        <property name="acceptDrops">
+                            <bool>false</bool>
+                        </property>
+                        <property name="frameShape">
+                            <enum>StyledPanel</enum>
+                        </property>
+                        <property name="margin">
+                            <number>2</number>
+                        </property>
+                        <property name="midLineWidth">
+                            <number>2</number>
+                        </property>
+                        <property name="resizePolicy">
+                            <enum>Manual</enum>
+                        </property>
+                        <property name="selectionMode">
+                            <enum>Single</enum>
+                        </property>
+                        <property name="allColumnsShowFocus">
+                            <bool>true</bool>
+                        </property>
+                        <property name="showSortIndicator">
+                            <bool>true</bool>
+                        </property>
+                        <property name="itemMargin">
+                            <number>2</number>
+                        </property>
+                        <property name="rootIsDecorated">
+                            <bool>true</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Overview of primal solution - the GEMIPM result (not editable)</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>&lt;h2&gt;Overview of primal solution - the GEMIPM result&lt;/h2&gt;
+&lt;p&gt;Click on '&lt;tt&gt;+&lt;/tt&gt;' left to phase name to see dependent components (species) belonging to this phase.&lt;/p&gt;
+&lt;p&gt;'&lt;tt&gt;L&lt;/tt&gt;' column shows how many components belong to the phase. Only phases and components selected into this particular chemical system definition (CSD) are shown.&lt;/p&gt; 
+&lt;p&gt;
+'&lt;tt&gt;Amount x(mol)&lt;/tt&gt;' shows mole amounts of DCs in equilibrium state - the GEM primal solution.&lt;/p&gt;
+&lt;p&gt;'&lt;tt&gt;Activity IDualTh)&lt;/tt&gt;' column contains values of activity for each DC, obtained from internal DualTh calculation. These activities are related separately to each phase. For a component of pure (single-component) phases with L=1, thus calculated number is actually a &lt;i&gt;saturation index&lt;/i&gt; (1 if the phase is stable, less than 1 - the phase is unstable, and more than 1 - the system is 
+oversaturated to this phase (only happens for phases with kinetic constraint from above).&lt;/p&gt;
+&lt;p&gt;'&lt;tt&gt;Concentration&lt;/tt&gt;' is expressed in separate units for each multicomponent phase (molal for aqueous species, mole fraction for non-electrolyte solutions and gases, etc.). &lt;/p&gt;
+&lt;p&gt;
+&lt;tt&gt;Activity coefficients&lt;/tt&gt; are also valid for each phase separately; they are calculated using the models of choice in the respective Phase definition records. Default is 1 (simple ideal mixing 
+or pure phase).&lt;/p&gt;</string>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+        </widget>
+    </vbox>
+</widget>
+<menubar>
+    <property name="name">
+        <cstring>menubar</cstring>
+    </property>
+    <item text="Record" name="PopupMenu_2">
+    </item>
+    <item text="Data" name="PopupMenu_3">
+    </item>
+    <item text="View" name="PopupMenu_5">
+    </item>
+    <item text="Calculate" name="PopupMenu_4">
+    </item>
+    <item text="Print" name="PopupMenu_6">
+    </item>
+    <item text="Help" name="PopupMenu_7">
+    </item>
+</menubar>
+<toolbars>
+</toolbars>
+<connections>
+    <connection>
+        <sender>NewSystemDialogData</sender>
+        <signal>toolBarPositionChanged(QToolBar*)</signal>
+        <receiver>NewSystemDialogData</receiver>
+        <slot>Form1_toolBarPositionChanged(QToolBar*)</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>fileNew()</slot>
+    <slot>fileOpen()</slot>
+    <slot>fileSave()</slot>
+    <slot>fileSaveAs()</slot>
+    <slot>filePrint()</slot>
+    <slot>fileExit()</slot>
+    <slot>editUndo()</slot>
+    <slot>editRedo()</slot>
+    <slot>editCut()</slot>
+    <slot>editCopy()</slot>
+    <slot>editPaste()</slot>
+    <slot>editFind()</slot>
+    <slot>helpIndex()</slot>
+    <slot>helpContents()</slot>
+    <slot>helpAbout()</slot>
+    <slot>Form1_toolBarPositionChanged( QToolBar * )</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

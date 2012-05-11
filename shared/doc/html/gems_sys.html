@@ -1,0 +1,1790 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR"
+ content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
+  <title>GEMS EqDemo (Multi) Manual</title>
+  <meta name="description" content="Version 2.0.0-PSI">
+</head>
+<body>
+<h1><img src="gems1.png" height="48" width="48" align="left"> <font
+ color="#000066"> GEM-Selektor version 2-PSI</font></h1>
+<h2> EqDemo Submodule Manual (GEM IPM Results and Input Data) </h2>
+<h3> Contents</h3>
+<ul style="font-family: helvetica,arial,sans-serif;">
+  <li>
+    <p><a href="#MULTI_DATA">1. The GEM IPM ("Multi") Data Structure</a> </p>
+  </li>
+  <li>
+    <p><a href="#INPUT_DATA_OBJECTS">2. Input Data Objects for a GEM
+IPM run</a></p>
+  </li>
+  <li>
+    <p><a href="#OUTPUT_DATA_OBJECTS">3. Output Data Objects</a></p>
+  </li>
+  <li><a href="#WORK_DATA_OBJECTS">4. Other (Work) Data Objects</a><br>
+  </li>
+  <li>
+    <p><a href="#WARNINGS_ERRORS">5. Warnings and Error Messages</a></p>
+  </li>
+</ul>
+&nbsp;&nbsp;
+<hr width="100%" size="2">
+<h2>&nbsp;<a name="MULTI_DATA"></a>1. The GEM IPM ("Multi") Data
+Structure </h2>
+<p>Introduction &nbsp;</p>
+<p> &nbsp;Coming soon...</p>
+<p><br>
+</p>
+<hr width="100%" size="2">
+<h2><a name="INPUT_DATA_OBJECTS"></a>2. Input Data Objects for a GEM
+IPM run</h2>
+The data objects listed below are automatically filled out with  the  
+GEM  IPM input data, as specified in the <a href="glossary.html#DT_CSD">CSD</a>
+(see <a href="gems_bcc.html"><tt>gems_bcc.html</tt></a> &nbsp;and &nbsp;<a
+ href="gems_scm.html"><tt>gems_scm.html</tt></a>&nbsp; manuals). In
+this process, necessary conversions are performed, e.g. values of the
+molar Gibbs energy function for DC g(TP) are scaled to mol/mol units
+and further on - into a uniform rational concentration scale (see&nbsp; <a
+ href="theorgem.html"><tt>theorgem.html</tt></a> &nbsp;manual for
+details).&nbsp; <br>
+<p> </p>
+<p> </p>
+<p>For the "Multi" data objects used in surface  complexation models,
+see <a href="gems_scm.html"><tt>gems_scm.html</tt></a> manual.<br>
+&nbsp;&nbsp;<br>
+</p>
+<h3>Scalars</h3>
+<dl>
+  <dt> <a name="_nnr_0"></a><b><big><tt>_nnr[0]</tt></big></b> - Number
+of     Independent Components in the IPM problem n(N)</dt>
+  <dd> &nbsp;<br>
+  </dd>
+  <dd>&nbsp;&nbsp;&nbsp;</dd>
+  <dt> <a name="L_0"></a><big><b><tt>L[0]</tt></b></big> - Number of
+Dependent     Components in the IPM problem n(L)</dt>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="L_1"></a><b><big><tt>L[1] </tt></big></b>- Number of
+Dependent     Components included into&nbsp; multicomponent phases
+n(Ls)</dt>
+  <dd> &nbsp;<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="L_2"></a><b><big><tt>L[2]</tt></big></b> - Index of
+water-solvent     LO, equals number of aqueous species n(Laq) </dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>This index is kept separately in order to locate quickly the
+water-solvent     H2O, which must be the last species in the aqueous
+phase. If aqueous phase     is not included then this index contains
+-1.&nbsp;</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="L_3"></a><b><big><tt>L[3]</tt></big></b> - Number of
+Dependent     Components included in the gas phase PG = n(Lg)</dt>
+  <dd> &nbsp;<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="L_4"></a><b><big><tt>L[4] </tt></big></b>- Number of
+Dependent     Components in the liquid hydrocarbon phase PSOL
+(reserved)</dt>
+  <dd>&nbsp; &nbsp;<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="L_5"></a><tt><b><big>L[5]</big></b> </tt>- Number of
+Dependent     Components included in sorption phases n(Lads) </dt>
+  <dd> &nbsp;<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="Fi_0"></a><b><big><tt>Fi[0]</tt></big></b> - Number of
+Phases     included in the IPM problem n(Fi)</dt>
+  <dd> &nbsp; <br>
+  </dd>
+  <dd> &nbsp; &nbsp;</dd>
+  <dt> <a name="Fi_1"></a><b><big><tt>Fi[1]</tt></big></b>&nbsp; -
+Number     of multi-component phases n(Fis)</dt>
+  <dd> <br>
+  </dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="Fi_2"></a><b><big><tt>Fi[2]</tt></big></b>&nbsp; -
+Number     of sorption multi-component phases n(Fia)</dt>
+  <dd> &nbsp;<br>
+  </dd>
+  <dd>&nbsp;&nbsp;&nbsp;</dd>
+  <dt> <a name="TC"></a><big><b><big><tt>TC</tt></big></b></big> -
+Temperature (C) of     interest (min-max interval for parametric
+problems)&nbsp;</dt>
+  <dd> &nbsp;</dd>
+  <dd>In a usual GEM IPM run, both cells contain the same value of
+temperature     of interest.&nbsp;</dd>
+  <dd>&nbsp; &nbsp;</dd>
+  <dd>&nbsp;&nbsp; &nbsp;</dd>
+  <dt> <a name="TK"></a><big><b><big><tt>TK</tt></big></b></big> -
+Temperature (K) of     interest T (min-max interval for parametric
+problems)&nbsp;</dt>
+  <dd> &nbsp;<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="PG"></a><big><b><big><tt>PG</tt></big></b></big> -
+General pressure P (bars), min.-max. for parametric problems</dt>
+  <dd>&nbsp;</dd>
+  <dd>In a usual GEM IPM run, both cells contain the same value of
+pressure     of interest.&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;&nbsp;&nbsp;</dd>
+  <dt> <a name="Vx"></a><big><b><big><tt>Vx</tt></big></b></big> -
+&nbsp;Initial V and     calculated V(x) volume of the system (cm3)</dt>
+  <dd> &nbsp;<br>
+  </dd>
+  <dd>&nbsp;&nbsp; <br>
+  </dd>
+  <dt><a name="Gx"></a><big><b><big><tt>Gx</tt></big></b></big> - Gibbs
+potential of     the system in J (min.-max. for parametric
+problems)&nbsp;</dt>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;Reserved for usage in future versions.</dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp;&nbsp;&nbsp; &nbsp;</dd>
+  <dt> <a name="Mbx"></a><big><b><big><tt>Mbx</tt></big></b></big> -
+Total mass of the     system, kg</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>Caclulated automatically from the bulk composition (vector b)<br>
+  </dd>
+  <br>
+&nbsp;
+</dl>
+<h3>Vectors and matrices</h3>
+<br>
+<dl>
+  <dt> <a name="L1"></a><big><b><big><tt>L1</tt></big></b></big> -
+Number of Dependent     Components included into each phase (l-alpha
+vector).</dt>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>This input vector of <a href="#Fi_0">n(Fi)</a> length contains
+numbers     of DC (species) included into each phase.Multicomponent
+phases always stay    in the beginning of the phase list <a
+ href="#PHnam">PHnam</a>. Aqueous  phase,   if present, is always the
+first phase. Gas phase is always the next  to aqueous   phase.</dd>
+  <dd>See also comments to the <a href="gems_bcc.html#L1_"><tt>L1_</tt></a>
+data object. &nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <p> </p>
+  <dt> <a name="Lsmod"></a><b><big><tt>Lsmod</tt></big></b> - Number of
+non-ideality     coeffs per multicomponent phase</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This input vector of <a href="#Fi_1">n(Fis)</a> length defines
+how many coefficients are assigned to each phase. The coefficients are
+provided in the <a href="#pmc"><tt>pmc</tt></a> vector.</dd>
+  <dd>&nbsp;&nbsp;<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="Lsmdc"></a><b><big><tt>Lsmdc</tt></big></b> - Number of
+non-ideality     coefficients per one DC in multicomponent phases</dt>
+  <dd><br>
+  </dd>
+  <dd>This input vector of <a href="#Fi_1">n(Fis)</a> length defines
+how many coefficients are assigned to DC in each phase.<br>
+  </dd>
+  <dd> The coefficients are provided in the <a href="#dmc"><tt>dmc</tt></a>
+vector.</dd>
+  <dd>&nbsp; <br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="pmc"></a><b><big><tt>pmc</tt></big></b> - Vector of
+non-ideality     coefficients for multi-component phases</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> This input vector has total length <a href="#Fi_1">n(Fis)</a>*sum(of<a
+ href="#Lsmod"><tt>Lsmod</tt></a> elements). The coefficients are  
+automatically  collected from <a href="gm_phase.html">Phase</a> records
+and  stored in the  same order as phases in the <a href="#PHnam"><tt>PHnam</tt></a>
+list, Lsmod(k)  coefficients per k-th phase. These coefficients are used
+in the GammaCalc()  function that calculates activity coefficients of
+species   from math scripts  or built-in functions.&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dt> <a name="dmc"></a><b><big><tt>dmc</tt></big></b> - Vector of
+non-ideality     coefficients for species in multi-component phases</dt>
+  <dd>&nbsp;</dd>
+  <dd> This input vector has total length <a
+ href="file:///C:/GEMS2test/program/doc/html/gems_sys.html#Fi_1">n(Fis)</a>*sum(of<a
+ href="#Lsmdc"><tt>Lsmdc</tt></a> * <a href="#L1"><tt>L1</tt></a>
+elements). The coefficients are automatically collected from <a
+ href="file:///C:/GEMS2test/program/doc/html/gm_phase.html">Phase</a>
+records and stored in the same order as phases in the <a
+ href="file:///C:/GEMS2test/program/doc/html/gems_sys.html#PHnam"><tt>PHnam</tt></a>
+list, Lsmdc(k)*L1(k) coefficients per k-th phase, in the same order as  
+species  in <a href="#DCnam"><tt>DCnam</tt></a> list, Lsmdc(k)
+coefficients   per species.  These coefficients are used in the
+GammaCalc() function that   calculates activity  coefficients of
+species from math scripts or built-in   functions.</dd>
+  <dd>&nbsp; <br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="dll"></a><big><b><big><tt>dll</tt></big></b></big> -
+Lower metastability       restrictions for DC mole quantities &nbsp;<a
+ href="#x"><tt>x</tt></a>&nbsp;       at equilibrium state</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>Input vector (of length n(L)) of lower restrictions (moles)
+contains     metastability restrictions from  below to the sought-for
+mole quantities    x(j) of Dependent Components at equilibrium  state.
+The <a href="theorgem.html">GEM IPM algorithm</a> will keep these
+quantities greater     or equal to the prescribed restrictions.
+Default (trivial) value is 0 moles.</dd>
+  <dd>See also comments to the <a href="gems_bcc.html#dll_"><tt>dll_</tt></a>
+data object.</dd>
+  <dd>&nbsp;&nbsp;&nbsp;</dd>
+  <dd>&nbsp; &nbsp; &nbsp;</dd>
+  <dt> <a name="dul"></a><b><big><tt><big>dul</big>&nbsp;</tt></big></b>-
+Upper metastability       restrictions for DC mole quantities &nbsp;<a
+ href="#x"><tt>x</tt></a>&nbsp;       at equilibrium state</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>Input vector (of length n(L)) of upper restrictions (moles)
+contains     metastability  restrictions from above to the sought-for
+mole quantities    x(j) of Dependent Components  at equilibrium state.
+The <a href="theorgem.html">GEM IPM algorithm</a> will  keep these
+quantities lower     or equal to the prescribed restrictions. Default 
+(trivial) value is 1e6    moles.</dd>
+  <dd>See also comments to the <a href="gems_bcc.html#dul_"><tt>dul_</tt></a>
+data object.</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> &nbsp;&nbsp;&nbsp;</dd>
+  <dt> <a name="gEx"></a><big><b><big><tt>gEx</tt></big></b></big>
+&nbsp;- Optional  additions to input g(T,P) values for <a
+ href="file:///C:/GEMS2test/program/doc/html/glossary.html#DT_dependent_component">Dependent
+Components</a></dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> Input increments to Gibbs energies of DC provided in the <a
+ href="#g0"><tt>g0</tt></a> vector (in mol/mol or lnK units). These
+increments     are automatically added to g0 data when the elements of
+&nbsp;<a href="#c"><tt>c</tt></a> &nbsp;vector are calculated. Default
+value of the     gEx elements is 0. Length of this vector is
+n(L).&nbsp;</dd>
+  <dd>See also comments to the <a href="gems_bcc.html#gEx_"><tt>gEx_</tt></a>
+data object.&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dt> <a name="Yof"></a><big><b><big><tt>Yof</tt></big></b></big> -
+Optional phase metastability parameters (in J/g)&nbsp;</dt>
+  <dd><br>
+  </dd>
+  <dd>Input values from this vector (of n(Fi) length) of metastability
+parameters     are added to <a href="#g0"><tt>g0</tt></a> of each
+species in this phase    after multiplication by the species (phase?)
+molar mass upon calculation   of the elements of&nbsp; <a href="#c"><tt>c</tt></a>
+&nbsp;vector. Default   value of Yof elements is 0. <br>
+  </dd>
+  <dd>See also comments to the <a href="gems_bcc.html#Yof_"><tt>Yof_</tt></a>
+data object.<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="vol"></a><big><b><big><tt>vol</tt></big></b></big>
+-&nbsp;Molar (molal)     volumes of Dependent Components (in cm3/mol)
+at&nbsp; T,P of interest </dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> This input vector of n(L) length contains DC molar (partial molal
+for aqueous and surface species) volumes V(TP) corrected to T,P of
+interest and converted to cm3/mol. Contents of this vector represent a
+(compressed) <a href="gems_bcc.html#VTP"><tt>VTP</tt></a> vector.
+Molar volumes are used in calculation of volumes of phases as v(k) =
+sum(vol(j)*x(j) (<a href="#phVol"><tt>phVol</tt></a> object) and volume
+of the whole system V(x) = sum(v(k)) (<tt><a href="#Vx">Vx</a>[1]</tt>
+data object cell) at IPM iterations and equilibrium state. <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dt> <a name="mmDC"></a><big><b><big><tt>mmDC</tt></big></b></big> -
+Molar (gram-formula)     masses of Dependent Components (g/mol)</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Input DC molar masses are used in calculation of masses of phases
+(<a href="#phM"><tt>phM</tt></a> vector) and mass-unit concentrations (<a
+ href="#wy"><tt>wy</tt></a> &nbsp;and&nbsp; <a href="#w_t"><tt>w_t</tt></a>
+&nbsp;vectors). Length of this vector is n(L).&nbsp;</dd>
+  <dd>&nbsp;&nbsp;&nbsp; &nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="lngmf"></a><b><big><tt><big>lngmf</big> </tt></big></b>
+- DC activity       coefficients for Simplex initial approximation (in
+ln scale)&nbsp;</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> This vector (length n(Ls)) contains ln of DC activity
+coefficients     to be used in Simplex initial approximation only.
+These corrections may   be  inavoidable for the systems containing
+solid  solution phases with miscibility     gaps, or when   an  initial
+approximation  can not be obtained otherwise    (for some sorption
+phases).&nbsp;</dd>
+  <dd>Default value is zero.</dd>
+  <dd>See also comments to the <a href="gems_bcc.html#lnGmf_"><tt>lnGmf_</tt></a>
+data object.<br>
+  </dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dt> <a name="ez"></a><big><big><b><tt>ez</tt></b></big></big> -
+Formula charges of     Dependent Components</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This input vector (length n(L)) contains negative, positive or
+zero     formula charges of DC, obtained automatically from chemical
+formula list    together with the <a href="#A"><tt>A</tt></a>
+stoichiometry matrix. Used   in calculation of activity coefficients
+and Coulombic correction factors  for aqueous and surface
+species.&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dt> <a name="g0"></a><big><b><big><tt>g0</tt></big></b></big>&nbsp;
+- Molar (molal)     standard  Gibbs energy functions of Dependent
+Components at T,P of interest&nbsp;</dt>
+  <dd> <br>
+  </dd>
+  <dd> This vector contains the main input data for the <a
+ href="theorgem.html">GEM IPM problem</a> - the values of molar (partial
+molal for aqueous and surface species) Gibbs energy function g<sup>o</sup>(T,P)
+corrected to temperature <a
+ href="file:///C:/GEMS2test/program/doc/html/gems_bcc.html#T"><tt>T</tt></a>
+and pressure <a
+ href="file:///C:/GEMS2test/program/doc/html/gems_bcc.html#P"><tt>P</tt></a>
+of interest and normalized into mol/mol (lnK) units.&nbsp;</dd>
+  <dd>See also comments to the <a href="gems_bcc.html#gTP"><tt>gTP</tt></a>
+data object.</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+</dl>
+<dl>
+  <dt><a name="icM"></a><big><b><big><tt>icM</tt></big></b></big> -
+Input &nbsp;atomic     (molar) masses of Independent Components, g/mol</dt>
+  <dd>&nbsp;</dd>
+  <dd>This vector is used in calculation of mass quantities, such as
+the mass of the whole system <a href="#Mbx"><tt>Mbx</tt></a> or masses
+of phases <a href="#phM"><tt>phM</tt></a>, as well as total
+dissolved mass concentrations <a href="#w_t"><tt>w_t</tt></a>.</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="b"></a><big><b><big><tt>b</tt></big></b></big>&nbsp;-
+Input bulk composition       of the system (moles of Independent
+Components)</dt>
+  <dd><br>
+  </dd>
+  <dd>This vector defines stoichiometry of the whole system and sets
+the mass balance constraint equations Ax = b (see more in <a
+ href="theorgem.html"><tt>theorgem.html</tt></a> manual).&nbsp;</dd>
+</dl>
+<dl>
+  <dd>&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="A"></a><big><b><big><tt>A</tt></big></b></big> - Input
+stoichiometry     matrix of Dependent Components&nbsp;</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> Each row of the stoichiometry matrix A corresponds to one <a
+ href="glossary.html#DT_dependent_component">Dependent Component </a>(species).
+Columns of this matrix correspond to <a
+ href="glossary.html#DT_independent_component">Independent Components</a>.
+The matrix element a(ji) is a mole quantity of i-th Independent
+Component     in one mole of j-th Dependent Component.&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>The matrix A is used in numerical GEM IPM algorithms (see
+theorgem.html)     and in calculation of mass balance residuals <a
+ href="#Cb"><tt>Cb</tt></a>.     The matrix is automatically created
+from the list of chemical formulae  of   Dependent Components kept in
+the <a href="gm_project.html">Project</a> data   structure. &nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="ICnam"></a><big><b><big><tt>ICnam</tt></big></b></big> -
+List of all     names of Independent Components included into the
+system definition</dt>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>This list (of n(N) entries) serves for identification purposes on
+EqDemo    submodule window pages and printouts, and it is used in <a
+ href="gmscript.html#MS_PREPROC">pre-processing the math scripts</a>
+that contain names of Independent Components. <br>
+  </dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="DCnam"></a><big><b><big><tt>DCnam</tt></big></b></big> -
+List of all     names of Dependent Components (species) included into
+the system definition</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This list (of n(L) entries)&nbsp;serves for identification
+purposes    on EqDemo submodule window pages and printouts, and it is
+used in <a href="gmscript.html#MS_PREPROC">pre-processing the math
+scripts</a> that     contain names of Dependent Components. <br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp;&nbsp;<br>
+  </dd>
+  <dt> <a name="PHnam"></a><big><b><big><tt>PHnam</tt></big></b></big> -
+List of all     names of Phases included into the system definition</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>This list (of n(Fi) entries) serves for identification purposes
+on EqDemo submodule window pages and printouts, and it is used in <a
+ href="gmscript.html#MS_PREPROC">pre-processing the math scripts</a>
+that contain names of Phases. <br>
+  </dd>
+  <dd>&nbsp;&nbsp;<br>
+  </dd>
+  <dd>&nbsp;&nbsp; <br>
+  </dd>
+  <dt> <a name="smod"></a><b><big><tt>smod</tt></big></b> - Codes of
+models    of multicomponent phases</dt>
+  <dd>&nbsp;</dd>
+  <dd>This matrix contains six <a href="g_useref.html#NONIDTYPES">type
+codes</a> &nbsp;per each multicomponent phase, collected from the
+respective Phase   records (<a href="gm_phase.html#p_solt_0"><tt>p_solt</tt></a>
+field). The   codes are used in GammaCalc() and other procedures to
+control calculation   of activity coefficients or EDL Coulombic
+corrections for surface species. <br>
+  </dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;&nbsp;<br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="RLC"></a><big><b><big><tt>RLC</tt></big></b></big> -
+Type codes for   DC metastability restrictions given in the &nbsp;<a
+ href="gems_sys.html#dll"><tt>dll</tt></a> &nbsp;and&nbsp; <a
+ href="gems_sys.html#dul"><tt>dul</tt></a> &nbsp;vectors</dt>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>This code, for each line of the dll and dul vectors, defines how
+the    sought-for mole quantity<a href="gems_sys.html#x"><tt> x</tt></a>
+of the   respective Dependent Component    in the <a
+ href="glossary.html#DT_prime_solution">prime solution</a> will   be
+restricted   by the IPM algorithm.&nbsp;</dd>
+  <dd>Possible codes:&nbsp; see comments to the <a
+ href="gems_bcc.html#RLC_"><tt>RLC_</tt></a> data object.</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="RSC"></a><big><b><big><tt>RSC</tt></big></b></big>&nbsp;
+- Codes of concentration/quantity    for DC metastability restrictions
+in&nbsp; <a href="gems_sys.html#dll"><tt>dll</tt></a> &nbsp;and <a
+ href="gems_sys.html#dul"><tt>dul</tt></a> &nbsp;vectors</dt>
+  <dd>&nbsp;&nbsp; &nbsp;</dd>
+  <dd>These codes define <a href="g_useref.html#QUANCONCUNITS">quantity/concentration
+units</a> in which the restrictions in dll and dul vectors are
+specified.&nbsp;</dd>
+  <dd>Possible codes:&nbsp; see comments to the <a
+ href="gems_bcc.html#RSC_"><tt>RSC_</tt></a> data object.</dd>
+  <dd><br>
+  </dd>
+  <dd> &nbsp;<br>
+  </dd>
+  <dt> <a name="ICC"></a><big><b><big><tt>ICC</tt></big></b></big> -
+Classifier of Independent    Components&nbsp;{ e o h a z v i [int]}</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This vector (of n(N) length, created automatically) contains <a
+ href="g_useref.html#ICOMP_TYPES">types  of IC</a> included in this GEM
+system    definition. The codes are used internally to select
+computation procedures.&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="DCC"></a><big><b><big><tt>DCC</tt></big></b></big> -
+Classifier of Dependent    Components&nbsp;</dt>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>This vector (of n(L) length, created automatically) contains<a
+ href="g_useref.html#DCCLASSCODES"> types of DC</a> included in this GEM
+system definition. The codes are used internally to select computation
+procedures,&nbsp; <a
+ href="file:///C:/GEMS2test/program/doc/html/gems_sys.html#g0"><tt>g0</tt></a>
+to <a href="file:///C:/GEMS2test/program/doc/html/gems_sys.html#c"><tt>c</tt></a>
+normalizations, or allocation of surface species to surface types and
+EDL    planes.&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="PHC"></a><big><b><big><tt>PHC</tt></big></b></big> -
+Classifier of Phases    included in the system&nbsp;</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This vector (of n(Fi) length, created automatically) contains the <a
+ href="g_useref.html#PHASESTATECODES">phase state codes</a> used
+internally    in selection of computation procedures and <a href="#g0"><tt>g0</tt></a>
+to <a href="#c"><tt>c</tt></a> normalizations. &nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <p><br>
+  </p>
+</dl>
+<hr width="100%" size="2">
+<h2><a name="OUTPUT_DATA_OBJECTS"></a>3. Output Data Objects </h2>
+<h4> Scalars</h4>
+<dl>
+  <dt> <a name="FI_0"></a><b><big><tt>FI[0]</tt></big></b> - Number of
+phases    present in non-zero quantities at equilibrium state</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="FI_1"></a><b><big><tt>FI[1]</tt></big></b> - Number of
+multi-component    phases present in non-zero quantities at
+equilibrium state</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="FI_2"></a><b><big><tt>FI[2]</tt></big></b> - Number of
+sorption    phases present in non-zero quantities at equilibrium state</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="It"></a><b><big><tt><big>It</big> </tt></big></b>-
+Number of completed    IPM algorithm iterations</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp;Current number of completed iterations in EFD, IPM and
+IPM-2 &nbsp;blocks (cumulative).&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="GX"></a><big><b><big><tt>GX</tt></big></b></big> - Total
+equilibrium    Gibbs potential of the system, in moles</dt>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>This value is updated (as an approximation) on iterations of the
+IPM    algorithm; after the convergence is achieved, GX contains the
+G(x) potential    at equilibrium state.&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="IS"></a><big><b><big><tt>IS</tt></big></b></big> -
+Effective molal ionic    strength of aqueous electrolyte</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This value is calculated in &nbsp;GammaCalc() procedure at each
+IPM    iteration (as an approximation); after the&nbsp; IPM algorithm
+has converged,    IS is an equilibrium value. If aqueous phase is not
+included, this cell  contains  0 or EMPTY values.&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;&nbsp; </dd>
+  <dt> <a name="pH"></a><big><b><big><tt>pH</tt></big></b></big> - pH of
+aqueous solution    (in molal activity scale)</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> pH of aqueous solution (-log a(H+) ) is calculated (as an
+approximation)    from dual chemical potentials of hydrogen u(H) and
+charge u(Zz) on each  IPM  iteration, if the aqueous phase is
+included. Otherwise this cell contains    0 or EMPTY value. &nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp; &nbsp; </dd>
+  <dt> <a name="pe"></a><big><b><big><tt>pe</tt></big></b></big> - pe of
+aqueous solution    (in molal activity scale)</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> pe of aqueous solution (-log a(e-) ) is calculated (as an
+approximation)     from dual chemical potential of charge u(Zz) on each
+IPM iteration, if  the  aqueous phase is included. Otherwise this cell
+contains 0 or EMPTY value.    &nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="Eh"></a><big><b><big><tt>Eh</tt></big></b></big> - Eh of
+aqueous solution,    Volts</dt>
+  <dd>&nbsp;</dd>
+  <dd>This value is calculated from pe on each IPM iteration, if the
+aqueous    phase is included. Otherwise, contains 0 or EMPTY value.</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+</dl>
+<h4>Vectors </h4>
+<dl>
+  <dt> <a name="phM"></a><big><b><big><tt>phM</tt></big></b></big> -
+Masses of phases    (in grams)</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> This vector (of n(Fi) length) contains masses of phases
+calculated    from their bulk compositions at equilibrium state (<a
+ href="#bXa"><tt>bXa</tt></a> matrix). &nbsp;<br>
+  </dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="phVol"></a><big><b><big><tt>phVol</tt></big></b></big> -
+Volumes of phases (in cm3)&nbsp;</dt>
+  <dd>&nbsp;</dd>
+  <dd> This vector (of n(Fi) length) contains masses of phases
+calculated    from their speciation at equilibrium state (<a href="#x"><tt>x</tt></a>
+vector) and DC molar volumes (<a href="#vol"><tt>vol</tt></a>
+&nbsp;vector). &nbsp;<br>
+  </dd>
+  <dd><b><font color="#660000">Attention!</font></b> Volumes of phases
+may    contain large errors if molar volumes of some species are
+missing in the   project thermodynamic database or are incorrectly
+extrapolated to P,T of  interest.&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp; &nbsp;<br>
+  </dd>
+  <dt> <a name="Xa"></a><big><b><big><tt>Xa</tt></big></b></big> -
+Output total mole    quantities of phases</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This vector (of n(Fi) length) contains the total number of moles
+of    species in each phase at equilibrium state, calculated from the
+"prime solution"   vector<tt> <a href="#x">x</a> </tt>using a vector of
+number of species in   phases &nbsp;<a href="#L1"><tt>L1</tt></a>.
+&nbsp;In turn, the Xa vector  elements are used for calculation of
+mole-fraction-based concentrations and  activities within each
+multicomponent phase.</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="bXa"></a><big><b><big><tt>bXa</tt></big></b></big> -
+Output bulk compositions    of multicomponent phases (in moles of
+Independent Components)</dt>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>Each row of this matrix corresponds to one <a
+ href="glossary.html#DT_phase">phase</a>; columns correspond to <a
+ href="glossary.html#DT_independent_component">Independent Components</a>.
+The matrix element is a mole quantity of i-th Independent Component in
+the k-th (multi-component) phase. The size of the matrix is n(Fis) *
+n(N).&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dt> <a name="Xwa"></a><big><b><big><tt>Xwa</tt></big></b></big> -
+Output mole quantities    of the solvent (sorbent) in multi-component
+phases</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>This vector (of n(Fis) length) contains the mole quantities of
+water-solvent   (for aqueous phase) or sorbent (sorption phases).
+These quantities are computed   from the&nbsp;the "prime solution"
+vector<tt> <a href="gems_sys.html#x">x</a> </tt>and are also used in
+calculation of activities and concentrations   in "practical" scales
+inside of the IPM algorithm.</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="Fa"></a><big><b><big><tt>Fa</tt></big></b></big> -
+Values of the phase   stability criterion f(alpha)</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This diagnostic vector (of n(Fi) length) contains the values of
+Karpov   phase stability criteria based on the Kuhn-Tucker necessary
+and sufficient   conditions of chemical equilibrium (see more in <a
+ href="theorgem.html"><tt>theorgem.html</tt></a> manual).&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>A stable phase present in non-zero quantity (in the <a href="#Xa"><tt>Xa</tt></a>
+vector) normally has a close-to-zero value of Karpov criterion
+(numerically,   |f(alpha)| &lt; 0.01). Larger values point to
+inconsistent input g(TP) values   for some species in the phase or
+problems with chemical system definition   (insufficient list of
+species and phases for a given Independent Component,   in which case,
+some species are unstable but cannot be dropped because of   the mass
+balance constraints).&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>Another case when f(alpha) values strongly deviate from zero
+occurs   when some species in the phase are subject to non-trivial
+metastability restrictions  (given in dll and dul vectors).&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>Values of f(alpha) criterion for phases whose mole quantities (in
+the <a
+ href="file:///C:/GEMS2test/program/doc/html/gems_sys.html#Xa"><tt>Xa</tt></a>
+vector) have been zeroed off are meaningless and are also zeroed
+off.&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>Note that correct f(alpha) values are displayed only immediately
+after   the IPM calculation, because they are not stored in the SysEq
+records.&nbsp;&nbsp;</dd>
+  <dd>&nbsp;&nbsp; &nbsp; &nbsp;</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="x"></a><big><b><big><tt>x</tt></big></b></big> &nbsp;-
+Output mole quantities   of Dependent Components (species) at
+equilibrium state ("primal GEM solution")&nbsp;</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This vector (of n(L) length) contains the "prime solution" output
+of   the <a href="theorgem.html">GEM IPM algorithm</a> - mole
+quantities of all   speices at equilibrium state. Quality of this
+solution can be characterized   by the mass balance residuals (<a
+ href="#Cb"><tt>Cb</tt></a> vector) and  the phase stability criteria (<a
+ href="#Fa">Fa</a> vector). The <tt>x</tt> vector is the basis for
+calculation of quantities of phases and concentrations  of species in
+various scales.&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dt> <a name="v"></a><big><b><big><tt>v</tt></big></b></big> - Primal
+chemical potentials   of Dependent Components (in mol/mol)</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> This output vector (of n(L) length) contains chemical potentials
+of   DC (species), defined in a usual way via the standard molar Gibbs
+energy  function <a href="#g0"><tt>g0</tt></a>, mole quantity <a
+ href="#x"><tt>x</tt></a> (prime IPM solution), phase mole quantity <a
+ href="#Xa"><tt>Xa</tt></a> or  that of the carrier <a href="#Xwa"><tt>Xwa</tt></a>,&nbsp;
+activity coefficient <a href="#lnGam"><tt>lnGam</tt></a>, and
+scaling factors. For charged   surface species and electrostatic SCM,
+the "prime" potential includes the   Coulombic term and is therefore an
+electrochemical potential. See more in <a href="theorgem.html"><tt>theorgem.html</tt></a>
+and <a href="theorscm.html"><tt>theorscm.html</tt></a> manuals. &nbsp;
+&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>The chemical potentials in the&nbsp; <tt>v</tt> &nbsp;vector can
+be   converted into J/mol units multiplying them by <a href="#RT"><tt>RT</tt></a>
+. &nbsp; &nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt><a name="fx"></a><big><b><big><tt>fx</tt></big></b></big> - Dual
+chemical potentials   of Dependent Components (in J/mol)</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>This output vector (of n(Ls) length) contains values of chemical
+potential   of DC (species), defined via chemical potentials of
+Independent Components <a href="#u"><tt>u</tt></a> (dual IPM
+solution) and species stoichiometry   (respective j-th line of the
+matrix <a href="#A"><tt>A</tt></a>).&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> For all species (with trivial metastability restrictions) present
+in non-zero quantity at equilibrium state, the value from the <tt>fx</tt>
+vector should be (almost) equal to that from the <a href="#v"><tt>v</tt></a>
+vector (times <a href="#RT"><tt>RT</tt></a>). For species affected by
+non-trivial   restrictions, the difference v(j)*RT - fx(j) would show a
+level of induced   metastability.&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;&nbsp;<br>
+  </dd>
+  <dt><a name="lnGam"></a><big><b><big><tt>lnGam</tt></big></b></big> -
+Calculated &nbsp;ln    of DC activity coefficients in phases </dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> This output vector (of n(L) length) contains natural logarithms
+of   species activity coefficients, calculated in the GammaCalc()
+procedure upon   iterations of the GEM IPM algorithm. The <tt>lnGam</tt>
+vector is part of   the <a href="theorgem.html">GEM IPM primal solution</a>
+(together with the <a href="#x"><tt>x</tt></a> vector). The
+activity coefficients are computed   either using built-in functions
+(e.g. Debye-Hueckel or Davies equations for  activity coefficients of
+aqueous species) or Phase record math scripts. Both  can use also input
+data from the <tt><a href="#Lsmod">Lsmod</a>, <a href="#Lsmdc">Lsmdc</a>,<a
+ href="#pmc">pmc</a></tt> and <a href="#dmc"><tt>dmc</tt></a>
+objects.&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>The activity coefficients are referenced to the same standard
+concentration   scale as the respective <a href="#g0"><tt>g0</tt></a>
+values (e.g. molal  for aqueous and surface species, mole fraction for
+solids and gases). For  the species in ideal multicomponent phases, as
+well as in single-component  phases, the <tt>lnGam</tt> values are set
+to 0.&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;&nbsp; </dd>
+  <dt> <a name="gamma"></a><b><big><tt><big>gamma</big> </tt></big></b>-
+Activity coefficients   of Dependent Components &nbsp;(species)</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> This output vector (of n(L) length) contains natural logarithms
+of   species activity coefficients DC activity coefficients, calculated
+from the  elements of lnGam vector, mainly for demonstration
+purposes.&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>In future versions of the code, the <tt>gamma</tt> vector is
+likely   to be replaced by a built-in function gamma() (also usable in
+math scripts).   &nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="vEx"></a><big><b><big><tt>vEx</tt></big></b></big> -
+Excess molar Gibbs   energy of Dependent Components, mol/mol</dt>
+  <dd>&nbsp; &nbsp;</dd>
+  <dd>This diagnostic vector (of n(L) length) is calculated at each IPM
+iteration   from <a href="#lnGam"><tt>lnGam</tt></a> and (for surface
+species in electrostatic   SCMs) from Coulombic terms. For any ideal
+species (also in single-component   condensed phases), the <tt>vEx</tt>
+vector cells contain 0. <br>
+  </dd>
+  <dd>&nbsp; &nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt><a name="c"></a><big><b><big><tt>c</tt></big></b></big> -
+&nbsp;Normalized energy   function of Dependent Components, mol/mol</dt>
+  <dd>&nbsp; &nbsp;</dd>
+  <dd>This diagnostic vector (of n(L) length) is re-calculated at each
+IPM   iteration from <a href="#g0"><tt>g0</tt></a> and <a href="#vEx"><tt>vEx</tt></a>
+vectors and used in the main linearization process of the IPM algorithm
+(see <a href="theorgem.html"><tt>theorgem.html</tt></a>). <br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="lga"></a><big><b><big><tt>lga</tt></big></b></big> -
+Decimal logarithms   of activity (fugacity) of Dependent Components at
+equilibrium state</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> This output vector (of n(L) length) contains decimal logarithms
+of   activity of Dependent Components (in the appropriate
+standard-state concentration   scales). These values are computed from
+dual DC chemical potentials as 0.4343*(fx(j)/RT   - g0(j)) and include
+Coulombic corrections for charged surface species in   electrostatic
+SCMs.&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>For all species present in non-zero quantities at equilibrium,
+the <tt>lga</tt> values should be (almost) equal to the logarithms
+of activities   calculated from the prime DC chemical potentials (<a
+ href="#v"><tt>v</tt></a> vector).&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dd>For species of multi-component phases that are present at too
+small   concentrations and have been zeroed off by the IPM algorithm,
+the <tt>lga</tt> values are still valid even if they are very negative
+(i.e. refer to physically   meaningless concentration).&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>For single-component condensed phases (e.g. minerals): the <tt>lga</tt>
+value is equivalent to decimal logarithm of the saturation index (not
+necessarily   in aqueous solution). At trivial metastability
+constrants, this number is   always negative (undersaturation) if the
+mineral is present in zero mole  quantity, or close to zero (if the
+mineral is present in non-zero quantity).  At non-trivial restrictions
+in the <a href="#dll"><tt>dll</tt></a> and/or <a href="#dul"><tt>dul</tt></a>
+vectors, the mineral will be present in non-zero quantity but its <tt>lga</tt>
+value will be far from zero (positive  in case of oversaturation,
+negative at undersaturation) and will show, in  fact, the level of
+imposed metastability. <br>
+  </dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>In future versions of the code, the <tt>lga</tt> vector is likely
+to   be replaced by a built-in function lga() (also usable in math
+scripts). &nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="wy"></a><big><b><big><tt>wy</tt></big></b></big> - Mass
+concentrations   of DC in multi-component phases, % (ppm in aqueous
+phase)</dt>
+  <dd> &nbsp;<br>
+  </dd>
+  <dd>This output vector (of n(Ls) length) contains mass concentrations
+of   Dependent Components related to total mass of the respective
+multicomponent   phase.&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>In future versions of the code, the <tt>wy</tt> vector is likely
+to   be replaced by a built-in function wy() alias mconc() (also usable
+in math  scripts). &nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="Wxx"></a><big><b><big><tt>Wxx</tt></big></b></big> -
+Mole fractions of Dependent Components&nbsp; in multi-component
+phases&nbsp;</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This output vector (of n(Ls) length) contains mole fractions of
+species&nbsp;   in multicomponent    phases. It is not used directly in
+IPM calculations  but may be used in Phase, Process or GtDemo math
+scripts.&nbsp;&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dd>In future versions of the code, the <tt>Wxx</tt> vector is likely
+to   be replaced by a built-in function Wx() alias molfr() (also usable
+in math  scripts). &nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp;&nbsp;<br>
+  </dd>
+  <dt><a name="my"></a><big><b><big><tt>my</tt></big></b></big> -
+Molality concentrations   of Dependent Components (in mol per kg H<sub>2</sub>O)</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This output vector (of n(L) length) contains molalities of all
+species   except water-solvent, calculated if aqueous electrolyte phase
+is present  at equilibrium state; otherwise, this vector contains
+zeros.&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>In future versions of the code, the <tt>my</tt> vector is likely
+to   be replaced by a built-in function my() alias molal() (also usable
+in math  scripts). &nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dt> <a name="u"></a><big><b><big><tt>u</tt></big></b></big> -
+Chemical potentials  of Independent Components at equilibrium state
+(mol/mol)</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This vector (of n(N) length) contains the "dual solution" output
+of   the <a href="theorgem.html">GEM IPM algorithm</a> - chemical
+potentials of IC (stoichiometry units) at equilibrium state.
+&nbsp;These numbers are used for checking the Kuhn-Tucker necessary
+and sufficient conditions of equilibrium, calculation of Karpov phase
+stability criteria Fa, dual chemical potentials of species fx and other
+output parameters.&nbsp;&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="ue"></a><big><b><big><tt>ue</tt></big></b></big> -
+Chemical potentials  of Independent Components at equilibrium state
+(J/mol)</dt>
+  <dd><br>
+  </dd>
+  <dd>This output vector (of n(N) length) contains the "dual solution"
+(IC  chemical potentials) converted from the u vector into (J/mole)
+units by RT  multiplication.&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>In future versions of the code, the <tt>ue</tt> vector is likely
+to   be replaced by a built-in function ue() (also usable in math
+scripts). &nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="Cb"></a><big><b><big><tt>Cb</tt></big></b></big> - Mass
+balance residuals  for Independent Components (at IPM convergence)</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This output vector (of n(N) length) contains mass-balance
+deviations  (in moles) that characterize quality of the prime IPM
+solution (vector <a href="#x"><tt>x</tt></a>) as compared to the input
+bulk chemical composition  of the system (vector <a href="#b"><tt>b</tt></a>).
+The <tt>Cb</tt> vector  is calculated using the stoichiometry matrix <a
+ href="#A"><tt>A</tt></a>&nbsp;  as b - A<tt><sup>T</sup></tt>x
+&nbsp;(in vector-matrix form, <tt>T</tt> stands  for transpose
+operation) and therefore <tt>Cb</tt> it is not stored in <a
+ href="gm_syseq.html">SysEq</a> records (i.e. Cb is recalculated every
+time when a SysEq record is loaded from the database).&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dd>The Cb vector is calculated several times on each iteration of
+the <a href="theorgem.html">IPM algorithm </a>eiher to enter the
+feasible domain or to find the direction of descent and the step size.
+The mass-balance precision (i.e. maximum absolute mass balance
+residual) of the "standard" IPM algorithm is usually better than 1e-7
+moles. The IPM-2 algorithm loop (active by default if some elements of
+the b vector are below 1e-5 mol) improves the precision separately to
+better than 1/1000 of the respective total mole quantity of such
+"trace" element, often yielding residuals of 1e-17 mol or less.</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>If&nbsp; the required precision cannot be achieved in 14 loops of
+the  IPM-2 algorithm, this indicates serious inconsistencies in the
+input thermodynamic  data, chemical system definition, or equations
+(parameters) for activity coefficients.&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="m_t"></a><big><b><big><tt>m_t</tt></big></b></big> -
+Output total dissolved  molalities of Independent Components at
+equilibrium state</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>This output vector (of n(N) length) is calculated from the bulk
+composition  of aqueous phase and the mole quantity of water-solvent 
+if aqueous phase  is present at the equilibrium state. An m_t(i) value
+is a total mole quantity  of i-th IC per 1 kg of H<sub>2</sub>O-solvent;
+for H and O, the moles of these elements contained in water are
+excluded.&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>In future versions of the code, the <tt>m_t</tt> vector is likely
+to   be replaced by a built-in function m_t() alias tmolal() (also
+usable in math scripts). &nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="lgm_t"></a><big><b><big><tt>lgm_t</tt></big></b></big> -
+Decimal logarithms  of total dissolved molalities of Independent
+Components at equilibrium state</dt>
+  <dd><br>
+  </dd>
+  <dd>This output vector (of n(N) length) contains decimal logarithms
+of total dissolved molalities, calculated from the m_t vector.&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>In future versions of the code, the <tt>lgm_t</tt> vector is
+likely  to  be replaced by a built-in function lgm_t() alias lgtmolal()
+(also usable  in math scripts). &nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <p> </p>
+  <dt> <a name="w_t"></a><big><b><big><tt>w_t</tt></big></b></big>&nbsp;-
+Output total  dissolved mass concentrations of Independent Components
+at equilibrium state</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>This output vector (of n(N) length) contains total dissolved mass
+concentrations  of Independent Components in grams per 1 kg of solution
+(salinity in per mil). It is calculated if aqueous phase is present at
+the equilibrium state; the mass of the solvent H2O is not included in
+calculation of values for H and O.&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>In future versions of the code, the <tt>w_t</tt> vector is likely
+to   be replaced by a built-in function w_t() alias salinity() (also
+usable in  math scripts). &nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;&nbsp; <br>
+  </dd>
+  <dt> <a name="Gfug"></a><b><big><tt>Gfug</tt></big></b> - Partial
+fugacities of gases (in mole fraction scale)</dt>
+  <dd>&nbsp;</dd>
+  <dd>Calculated partial fugacities of gases&nbsp;(normalized to 1 bar
+total pressure). At the state of interest, fugacities can be found
+from multiplication by the total pressure <a href="#PG"><tt>PG</tt></a>.&nbsp;&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp; &nbsp;<br>
+  </dd>
+  <dt> <a name="lgFug"></a><b><big><tt>lgFug</tt></big></b> - Decimal
+logarithms of partial fugacities of gases</dt>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>Calculated logarithms of partial fugacities of
+gases&nbsp;(normalized to 1 bar total pressure). At the state of
+interest, log(fugacities) of gases can be found in the respective
+cells of the <a href="#lga"><tt>lga</tt></a> &nbsp;vector. The
+difference between the two values equals&nbsp; log PG (where <a
+ href="#PG"><tt>PG</tt></a> &nbsp;is total pressure in bars).&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="lgPpG"></a><b><big><tt>lgPpG</tt></big></b> - Decimal
+logaritms of partial pressures of gases</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>Calculated logarithms of partial pressures of gases. For j-th
+gas, they are related to partial fugacity as:</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>&nbsp; &nbsp; &nbsp;<a href="#lgFug"><tt>lgFug</tt></a>(j) + lg(<a
+ href="#PG"><tt>PG</tt></a>) = lgPpG(j) + 0.4343*lnGam(j)</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>where <a href="#lnGam"><tt>lnGam</tt></a> contains logarithms of
+fugacity (activity) coefficients. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd> &nbsp;</dd>
+</dl>
+<br>
+<hr width="100%" size="2">
+<h2><a name="WORK_DATA_OBJECTS"></a>4. Other (Work) Data Objects</h2>
+<br>
+<h3> Codes for units of measurement</h3>
+<dl>
+  <dt> <a name="_pun_0"></a><big><b><tt>_pun[0]</tt></b></big> - Units
+of energy { j; &nbsp;J c C N reserved }</dt>
+  <dd>&nbsp;</dd>
+  <dd>Only "j" code (Joules) can be used in this version of
+GEM-Selektor; other codes are reserved for future use.</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="_pun_1"></a><b><big><tt>_pun[1]</tt></big></b> - Units
+of volume { j; &nbsp;c L a reserved }</dt>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>Only "j" code (J/bar) can be used in this version of
+GEM-Selektor; other codes are reserved for future use.</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;&nbsp;&nbsp;</dd>
+  <dt> <a name="_pun_2"></a><b><big><tt>_pun[2]</tt></big></b> - Units
+of pressure { b; &nbsp;B p P A reserved }</dt>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>Only "b" code (bars) can be used in this version of GEM-Selektor;
+other codes are reserved for future use.</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp; &nbsp;</dd>
+  <dt> <a name="_pun_3"></a><b><big><tt>_pun[3]</tt></big></b> - Units
+of temperature { C; &nbsp;K F reserved }</dt>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>Only "C" code (centigrade) can be used in this version of
+GEM-Selektor; other codes are reserved for future use.</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+<h3> Flags controlling calculation of the equilibrium state </h3>
+<dl>
+  <p> &nbsp; <br>
+  </p>
+  <dt> <a name="pm_Mod_0"></a><b><big><tt>pm_Mod[0]</tt></big></b></dt>
+  <dd> PE - flag of electroneutrality constraint { 0 1 }</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp; &nbsp; </dd>
+  <dt> <a name="pm_Mod_1"></a><b><big><tt>pm_Mod[1]</tt></big></b></dt>
+  <dd> PD - mode of calling GammaCalc() { 0 1 2 3 4 }</dd>
+  <dd> &nbsp; &nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="pm_Mod_2"></a><b><big><tt>pm_Mod[2]</tt></big></b></dt>
+  <dd> PV - flag of additional system volume constraint { 0 1 }</dd>
+  <dd> &nbsp; &nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="pm_Mod_3"></a><b><big><tt>pm_Mod[3]</tt></big></b></dt>
+  <dd> PU - flag of non-trivial DC/phase metastability restrictions { 0
+1 }</dd>
+  <dd> &nbsp; &nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="pmIpar_0"></a><b><big><tt>pmIpar[0]</tt></big></b> -
+GammaCalc() return code: 0 (OK) or 1 (error)</dt>
+  <dd>&nbsp; &nbsp; &nbsp;</dd>
+  <dd>Possible values:&nbsp;</dd>
+  <dd>&nbsp; &nbsp; &nbsp;0 &nbsp;Ok&nbsp;</dd>
+  <dd>&nbsp; &nbsp; &nbsp;1 &nbsp; Failure</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <p> </p>
+  <dt> <a name="pmIpar_1"></a><b><big><tt>pmIpar[1]</tt></big></b></dt>
+  <dd> Number of performed Selekt2() loops</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="pmIpar_2"></a><b><big><tt>pmIpar[2]</tt></big></b></dt>
+  <dd> Indicator of the same second assignment in Selekt2() procedure</dd>
+  <dd>&nbsp;</dd>
+  <dd>Value 1 forces IPM to finish.</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="pmIpar_3"></a><b><big><tt>pmIpar[3]</tt></big></b> -
+Mode of FIADE procedure operation&nbsp;</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Possible values: <br>
+  </dd>
+  <dd>&nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp;SIMPLEX automatic initial
+approximation (default);&nbsp;</dd>
+  <dd>&nbsp; &nbsp; &nbsp; &nbsp; 1 &nbsp;take previous x vector as
+initial approximation;&nbsp;</dd>
+  <dd>&nbsp; &nbsp; &nbsp; &nbsp;-1 &nbsp;ask the user.</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="pmIpar_4"></a><b><big><tt>pmIpar[4]</tt></big></b> -
+Flag to expand the currently loaded SysEq record into "Multi" data
+structure</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Possible values: <br>
+  </dd>
+  <dd>&nbsp; &nbsp; &nbsp; 0 &nbsp; no &nbsp;(default)</dd>
+  <dd>&nbsp; &nbsp; &nbsp; 1 &nbsp; yes</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp; &nbsp;</dd>
+  <dt> <a name="pmIpar_5"></a><b><big><tt>pmIpar[5]</tt></big></b> -
+Flag to control binary data for Phase math script calculations</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> Possible values:&nbsp;</dd>
+  <dd>&nbsp; &nbsp; 0 &nbsp; create new IPM arrays in the Multi data
+structure;&nbsp;</dd>
+  <dd>&nbsp; &nbsp; 1 &nbsp; IPM arrays are already created;&nbsp;</dd>
+  <dd>&nbsp; &nbsp;-1 &nbsp;IPM arrays are outdated - remake them.</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="pmIpar_6"></a><b><big><tt>pmIpar[6]</tt></big></b> -
+Flag to control re-loading CSD data into Multi</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>Possible values:&nbsp;</dd>
+  <dd>&nbsp; &nbsp; 1 &nbsp;reload BAL (bulk composition and additional
+constraints) only;&nbsp;</dd>
+  <dd>&nbsp; &nbsp; 0 &nbsp;reload the whole CSD including phases and
+components lists</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="pmIpar_7"></a><b><big><tt>pmIpar[7]</tt></big></b> -
+Flag to control loading of activity coefficients for initial
+approximation&nbsp;</dt>
+  <dd>&nbsp; &nbsp;<br>
+  </dd>
+  <dd> Possible values:&nbsp;</dd>
+  <dd>&nbsp; &nbsp;0 &nbsp;set all lnGam values to 0 (default);</dd>
+  <dd>&nbsp; &nbsp;1 &nbsp;calculate from Mbel (initial ionic strength,
+for aqueous species only)&nbsp;</dd>
+  <dd>&nbsp; &nbsp;2 &nbsp;take lnGam values from &nbsp;lnGmf
+&nbsp;vector;&nbsp;</dd>
+  <dd>&nbsp; -1 &nbsp;reserved (for sorption models)</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="pmIpar_8"></a><b><big><tt>pmIpar[8]</tt></big></b> -
+Flag to control re-loading thermodynamic data into Multi</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>Possible values:&nbsp;</dd>
+  <dd>&nbsp; &nbsp; 0 &nbsp; reload all thermodynamic data;&nbsp;</dd>
+  <dd>&nbsp; &nbsp; 1 &nbsp; reload G0 values only;</dd>
+  <dd>&nbsp; &nbsp; 2 &nbsp; do not reload.&nbsp;</dd>
+  <dd>&nbsp;&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;&nbsp;</dd>
+  <dt> <a name="pmIpar_9"></a><b><tt>pmIpar[9]</tt></b></dt>
+  <dd> internal &nbsp;</dd>
+  <dd> &nbsp; &nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="pmIpar_10"></a><b><tt>pmIpar[10]</tt></b></dt>
+  <dd> internal</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="pmIpar_11"></a><b><tt>pmIpar[11]</tt></b></dt>
+  <dd> max. number of surface types (6 in this version of GEMS)</dd>
+  <dd> &nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dt> <a name="pmIpar_12"></a><b><big><tt>pmIpar[12]</tt></big></b></dt>
+  <dd> IPM module return code: 0 - continues; 1 - converged</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="pmIpar_13"></a><b><tt>pmIpar[13]</tt></b></dt>
+  <dd> internal DHH() indicator</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="pmIpar_14"></a><b><big><tt>pmIpar[14]</tt></big></b></dt>
+  <dd> is - index of IC for Phase math script equations ( GammaCalc() )</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="pmIpar_15"></a><b><big><tt>pmIpar[15]</tt></big></b></dt>
+  <dd> js - index of DC for Phase math script equations ( GammaCalc() )</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="pmIpar_16"></a><b><big><tt>pmIpar[16]</tt></big></b></dt>
+  <dd> Next - continue variable for Phase math script equations (
+GammaCalc() )</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="denW"></a><b><big><tt>denW</tt></big></b> - Density of
+H2O(l) (first cell) and steam (second cell) at T, P of interest</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>This object is used if aqueous phase is present in the IPM
+problem. &nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp;&nbsp;<br>
+  </dd>
+  <dt> <a name="epsW"></a><b><big><tt>epsW</tt></big></b> - Dielectric
+constant of H2O(l) and steam (second cell) at &nbsp;T, P of interest</dt>
+  <dd><br>
+  </dd>
+  <dd>This object is used if aqueous phase is present in the IPM
+problem. &nbsp;</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="_nnr_1"></a><b><tt>_nnr[1]</tt></b>&nbsp;</dt>
+  <dd> NR - dimensionality of the R matrix</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="Psi_DK_0"></a><b><big><tt>Psi_DK[0] - </tt></big></b>Current
+value for the Dikin's criterion of IPM convergence (CD)</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> The IPM Main Descent algorithm will loop until Dikin's criterion
+remains above the convergence threshold, or&nbsp; CD &gt;= T_CD.&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="Psi_DK_1"></a><b><big><tt>Psi_DK[1] </tt></big></b><b><big><tt>-</tt></big></b>Threshold
+value for the Dikin's criterion of IPM convergence (T_CD)</dt>
+  <dd>&nbsp;</dd>
+  <dd>Convergence of IPM is achieved when CD &lt; T_CD.&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="lnP"></a><b><tt>lnP</tt></b></dt>
+  <dd>Natural logarithm of the total pressure (bar).</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="RT"></a><b><big><tt>RT</tt></big></b></dt>
+  <dd> Factor RT = 8.31451* T (J/mol), T is current temperature in
+Kelvins.</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="F_RT"></a><b><tt>F_RT</tt></b></dt>
+  <dd>Factor F/RT, where F= 96485 C/mol is the Faraday's constant.</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="Xw"></a><b><big><tt>Xw</tt></big></b></dt>
+  <dd> Current number of moles of the solvent in the aqueous phase.&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="pmCnst_0"></a><b><tt>pmCnst[0]</tt></b></dt>
+  <dd>Contains the molality/mole fraction conversion term &nbsp;
+ln(55.50837) = 4.016534&nbsp; (to speed up calculations)</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dt> <a name="pmCnst_1"></a><b><tt>pmCnst[1]</tt></b></dt>
+  <dd> Contains current asymmetry correction factor 1- Xw<i> / </i>Xa
+&nbsp;for aqueous species (to speed up calculations)</dd>
+  <dd>&nbsp;&nbsp;&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="pmCnst_2"></a><b><tt>pmCnst[2]</tt></b></dt>
+  <dd> Minimum DC mole quantity to define the Ls set (1e-21 by default)</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="pmCnst_3"></a><b><tt>pmCnst[3]</tt></b></dt>
+  <dd> internal&nbsp;</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="pmCnst_4"></a><b><tt>pmCnst[4]</tt></b></dt>
+  <dd> internal<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="pmCnst_5"></a><b><tt>pmCnst[5]</tt></b></dt>
+  <dd> Current number of moles in a multicomponent phase (in GammaCalc()
+loop)</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="pmFitv"></a><b><tt>pmFitv</tt></b></dt>
+  <dd> internal smoothing variables (for highly non-ideal systems)</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd> &nbsp;<br>
+  </dd>
+</dl>
+<h3> Vectors</h3>
+<dl>
+  <dt> <a name="mui"></a><b><big><tt><big>mui</big> -</tt></big></b> IC
+indices in the Project System</dt>
+  <dd>&nbsp;&nbsp;&nbsp;</dd>
+  <dd>This vector of IC indices connects data for Independent
+Components (packed into the "Multi" IPM structure) with the same data
+within the expanded <a href="gems_bcc.html">project system data
+structure</a>. Indices start from 0.&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>The <tt>mui</tt> vector&nbsp; is automatically created within the
+"Multi" structure because some Independent Components can be excluded
+from <a href="glossary.html#DT_CSD">CSD</a> and hence will not be taken
+into the IPM problem. The<tt> mui</tt> vector can be used in<a
+ href="gmscript.html"> math scritps</a>.&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Example: the total mole quantity of i-th IC is <tt><a href="#b">b</a>[i]</tt>
+in the Multi structure and <tt><a href="gems_bcc.html#B_">B_</a>[mui[i]]</tt>
+in the project system structure. <br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="muk"></a><big><b><big><tt>muk</tt></big></b></big> <b><big><tt>-</tt></big></b>
+Phase indices in the Project System</dt>
+  <dd> <br>
+  </dd>
+  <dd>This vector of Phase indices connects data for phases (packed
+into the "Multi" IPM structure) with the same data within the expanded <a
+ href="gems_bcc.html">project system data structure</a>.&nbsp;Indices
+start from 0.</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>The <tt>muk</tt> vector&nbsp; is automatically created within the
+"Multi" structure because some phases can be excluded from <a
+ href="glossary.html#DT_CSD">CSD</a> and hence will not be taken into
+the IPM problem. The <tt>muk</tt> vector can be used in <a
+ href="gmscript.html">math scritps</a>.&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Example: the specific surface area of k-th phase is <tt><a
+ href="gems_scm.html#Aalp">Aalp</a>[k]</tt> in the Multi structure and <tt><a
+ href="gems_scm.html#Aalp_">Aalp_</a>[muk[k]]</tt> in the project system
+structure. <br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="muj"></a><big><b><big><tt>muj</tt></big></b></big><b><big><tt>
+-</tt></big></b> DC indices in the Project System</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>This vector of DC indices connects data for Dependent Components
+(packed into the "Multi" IPM structure) with the same data within the
+expanded <a href="gems_bcc.html">project system data structure</a>.&nbsp;Indices
+start from 0.</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>The <tt>muj</tt> vector&nbsp; is automatically created within the
+"Multi" structure because some Dependent Components (species) can be
+excluded from <a href="glossary.html#DT_CSD">CSD</a> and hence will
+not be taken into the IPM problem. The <tt>muj</tt> vector can be used
+in <a href="gmscript.html">math scritps</a>.&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>Example: the upper mole quantity restriction of j-th DC is <tt><a
+ href="#dul">dul</a>[j]</tt> in the Multi structure and <tt><a
+ href="gems_bcc.html#dul_">dul_</a>[muj[j]]</tt> in the project system
+structure. <br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="Xao"></a><b><tt>Xao</tt></b></dt>
+  <dd>Work copy of the <a href="#Xa"><tt>Xa</tt></a> &nbsp;vector from
+previous IPM iteration</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="Xwao"></a><b><tt>Xwao</tt></b></dt>
+  <dd> Work copy of &nbsp;the <a href="#Xwa"><tt>Xwa</tt></a>
+&nbsp;vector from previous IPM iteration</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="y"></a><b><tt>y</tt></b></dt>
+  <dd> Work copy of &nbsp;the &nbsp;<a href="#x"><tt>x</tt></a>
+&nbsp;vector from previous IPM iteration</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="xy"></a><b><tt>xy</tt></b></dt>
+  <dd>Work copy of &nbsp;the&nbsp; <a href="#x"><tt>x</tt></a> vector
+from previous loop of Selekt2() procedure</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="qp"></a><b><big><tt>qp</tt></big></b></dt>
+  <dd> Work cells for execution of built-in functions or math scripts
+for non-ideal phases&nbsp;</dd>
+  <dd>&nbsp;&nbsp;&nbsp;</dd>
+  <dd>Array of work cells for calculation of the non-ideal solution
+models (20 cells per multi-component phase), organized in one row per
+phase. Can be used in Phase math scripts. &nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="qd"></a><b><big><tt>qd</tt></big></b></dt>
+  <dd> Work cells for execution of built-in functions or math scripts
+referring to a DC (species) in a non-ideal phase</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;Array of work cells for calculation of DC parameters in
+the&nbsp;  non-ideal    solution models (20 cells). This vector is
+zeroed off at entering the next phase in GammaCalc(). Can be used in
+math scripts. &nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <p> </p>
+  <dt> <a name="mu"></a><b><big><tt>mu</tt></big></b> &nbsp;- IPM vector
+Delta (direction of descent)&nbsp;&nbsp;</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>This work vector contains values of Delta(x) applied on previous
+iteration of IPM for correction of the primal solution (x vector). <br>
+  </dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="emu"></a><b><tt>emu</tt></b></dt>
+  <dd> Exponent of DC increments to Karpov's phase stability criteria</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="nmu"></a><b><tt>nmu</tt></b></dt>
+  <dd> DC increments to&nbsp;to Karpov's phase stability criteria</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="W"></a><b><big><tt>W</tt></big></b></dt>
+  <dd> Weight multipliers for DC (incl. metastability restrictions) at
+IPM iteration</dd>
+  <dd> </dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="lnGmo"></a><b><tt>lnGmo</tt></b></dt>
+  <dd> Copy of the <a href="#lnGam"><tt>lnGam</tt></a> vector from
+previous IPM iteration&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="Dres"></a><b><tt>Dres</tt></b></dt>
+  <dd> Residual deviations between the primal <a href="#y"><tt>y</tt></a>
+vector and the DT-restored <a href="#x"><tt>x</tt></a> vector (in IPM-2
+procedures)</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="PHnam_"></a><b><tt>PHnam_</tt></b></dt>
+  <dd> List of phases currently present in non-zero quantities at IPM
+iteration (likely to be removed in future versions)</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="DCnam2"></a><b><tt>DCnam2</tt></b></dt>
+  <dd> List of DC names involved in multicomponent phases only</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;<br>
+  </dd>
+  <dt> <a name="PHnam2"></a><b><tt>PHnam2</tt></b></dt>
+  <dd> List of names of multicomponent phases in the system</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;<br>
+  </dd>
+  <dt> <a name="EQbuf"></a><b><tt>EQbuf</tt></b></dt>
+  <dd>Internal</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dt> <a name="XFs"></a><b><tt>XFs</tt></b></dt>
+  <dd> Current non-zero quantities of phases Xa at IPM iteration (likely
+to be removed in future versions)</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="Fas"></a><b><tt>Fas</tt></b></dt>
+  <dd> Current Karpov criteria of phase stability Fa for phases present
+in non-zero quantities&nbsp;(likely to be removed in future versions)</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="DCCW"></a><b><big><tt>DCCW</tt></big></b></dt>
+  <dd>Internal classifier of dependent components (for IPM Descent
+calculations only)</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="R"></a><big><b><tt>R</tt></b></big></dt>
+  <dd> R matrix of IPM linear equations</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="R1"></a><b><tt>R1</tt></b></dt>
+  <dd>Internal copy of R matrix</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="ICnam_"></a><b><big><tt>ICnam_</tt></big></b></dt>
+  <dd> List of IC symbols</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="Gases"></a><b><tt>Gases</tt></b></dt>
+  <dd> List of names of gases (to be displayed with &nbsp;<tt><a
+ href="#Gfug">Gfug</a>, <a href="#lgFug">lgFug</a></tt> and <a
+ href="#lgPpG"><tt>lgPpG</tt></a> vectors)</dd>
+  <dd>&nbsp;&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <p> </p>
+  <dt> <a name="EqTxt"></a><b><tt>EqTxt</tt></b></dt>
+  <dd>Internal (for pre-processing and compilation of Phase math
+scripts)</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="Fx"></a><b><tt>Fx</tt></b></dt>
+  <dd> Total Helmholtz potential of the system F(X), reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="Ux"></a><b><tt>Ux</tt></b></dt>
+  <dd>Total internal energy of the system U(X), reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="Hx"></a><b><tt>Hx</tt></b></dt>
+  <dd> Total enthalpy of the system H(X), reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="Sx"></a><b><tt>Sx</tt></b></dt>
+  <dd> Total negative entropy of the system -S(X), reserved</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="Cpx"></a><b><tt>Cpx</tt></b></dt>
+  <dd> reserved for future versions</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="Cvx"></a><b><tt>Cvx</tt></b></dt>
+  <dd> reserved</dd>
+  <dd> &nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="T0"></a><b><tt>T0</tt></b></dt>
+  <dd> reserved</dd>
+  <dd> &nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="Vexpl"></a><b><tt>Vexpl</tt></b></dt>
+  <dd> reserved</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="bMol"></a><b><tt>bMol</tt></b></dt>
+  <dd> reserved</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="wMol"></a><b><tt>wMol</tt></b></dt>
+  <dd> reserved</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;</dd>
+  <dt> <a name="yMet"></a><b><tt>yMet</tt></b></dt>
+  <dd> reserved</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="hym"></a><b><tt>hym</tt></b></dt>
+  <dd> reserved</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="h0"></a><b><tt>h0</tt></b></dt>
+  <dd> DC molar enthalpies, reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="f0"></a><b><tt>f0</tt></b></dt>
+  <dd> reserved</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dt> <a name="u0"></a><b><tt>u0</tt></b></dt>
+  <dd> reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="s0"></a><b><tt>s0</tt></b></dt>
+  <dd> DC molar entropies, reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="cp0"></a><b><tt>cp0</tt></b></dt>
+  <dd> DC molar Cp, reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="cv0"></a><b><tt>cv0</tt></b></dt>
+  <dd> reserved</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="wB"></a><b><tt>wB</tt></b></dt>
+  <dd> (HKF, reserved)</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dt> <a name="wAbs"></a><b><tt>wAbs</tt></b></dt>
+  <dd> (HKF, reserved)</dd>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dt> <a name="rIon"></a><b><tt>rIon</tt></b></dt>
+  <dd> reserved</dd>
+  <dd>&nbsp; &nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="pul"></a><b><tt>pul</tt></b></dt>
+  <dd> Vector of upper restrictions to Xa (reserved)</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dt> <a name="pll"></a><b><tt>pll</tt></b></dt>
+  <dd> Vector of lower restrictions to Xa (reserved)</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="Pparc"></a><b><tt>Pparc</tt></b>&nbsp;</dt>
+  <dd> Input DC partial pressures, bar (Pc by default)</dd>
+  <dd> &nbsp; &nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="lngmm"></a><b><tt>lngmm</tt></b></dt>
+  <dd> ln of DC metastability coefficients (reserved)</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="RFLC"></a><b><tt>RFLC</tt></b></dt>
+  <dd> Classifier of restriction types for Xa (reserved)</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="RFSC"></a><b><tt>RFSC</tt></b></dt>
+  <dd> Classifier of restriction scales for Xa (reserved)</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+&nbsp;<br>
+<br>
+<hr width="100%" size="2">
+<h2><a name="WARNINGS_ERRORS"></a>5. Warnings and Error Messages</h2>
+<br>
+Under construction<br>
+<br>
+<hr width="100%" size="2"><br>
+<tt><a href="index.html">To Contents</a> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp;<a href="g_about.html">About GEM-Selektor</a> </tt><br>
+<tt><br>
+end of file</tt> <br>
+&nbsp; <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

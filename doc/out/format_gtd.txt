@@ -1,0 +1,13 @@
+
+line  %s 'Data Sampling, Tabulation and Graphic Demonstration'
+line  %s '   Keywd: ',   %s rkey
+line  %s <GDname>
+line  %s <GDcom>,  %s  '\n\n'
+line
+     %14.7s  <gX_Nam>,  %14.7s all <gLnam>,  %s  "Data Set Key Name"
+list
+     <x0>  %14.7e  <x0>, %14.7e all <y0> ,    %s   <GD_rkl[25,33]>
+
+line  %14.7s  <gX_Nam>,  %14.7s all <gLnamE>
+list <xE>  %14.7e  <xE>, %14.7e all <yE>
+

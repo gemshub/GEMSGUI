@@ -1,0 +1,66 @@
+Information for checkout of standalone coupled FMT-GEM modules from 
+PSI LES SVN repository. 
+
+Pre-requisites: 
+
+1. You must be able to login via SSH as a user <myuser> belonging to the 
+group "svn" on the server les-svn.psi.ch. 
+
+2. On your PC, create a (home) directory <work> (e.g. D:\mywork)
+
+3. Use TortoiseSVN (on Win32 or Win64) or esvn (on Linux) client 
+to checkout a necessary module from SVN repository. You need to 
+know URL to this module (written below in TortoiseSVN format). 
+Before checkout, create an empty directory <work>/<ToDir>, where
+<ToDir> is one of four module directory names given below. 
+
+
+Module "node-GEM" - example of the simplest batch GEM calculation
+
+URL:
+svn+ssh://<myuser>@les-svn.psi.ch/srv/svn/repos/GEMIPM2K/trunk/node-gem/
+
+Checkout into:
+<work>/node-gem/
+
+
+Module "nodearray-GEM" - example of fully-functional nodearray class 
+for efficient implementation of coupled FMT algorithms in C++
+
+URL:
+svn+ssh://<myuser>@les-svn.psi.ch/srv/svn/repos/GEMIPM2K/trunk/nodearray-gem/
+
+Checkout into:
+<work>/nodearray-gem/
+
+
+Module "Coupled ROCKFLOW-GEM" 
+
+URL:
+svn+ssh://<myuser>@les-svn.psi.ch/srv/svn/repos/GEMIPM2K/trunk/rockflow-gem/
+
+Checkout into:
+<work>/rockflow-gem/
+
+
+Module "Coupled MCOTAC-GEM"
+
+URL:
+svn+ssh://<myuser>@les-svn.psi.ch/srv/svn/repos/GEMIPM2K/trunk/mcotac-gem/
+
+Checkout into:
+<work>/mcotac-gem/
+
+During checkout, you will be requested to type your password for login to 
+<myuser> up to three times. 
+
+
+Note: 
+All four repository modules can be checked out at once using 
+
+URL:
+svn+ssh://<myuser>@les-svn.psi.ch/srv/svn/repos/GEMIPM2K/trunk/
+
+Checkout into directory:
+<work>
+

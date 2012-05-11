@@ -1,0 +1,129 @@
+25/07/2001:    Fixed a warning in ms_muload.cpp; many messages and
+               comments in v_ipnc.cpp
+
+24/07/2001:    Fixed a zerodivide bug in ipm_gamma.cpp (adsorption)
+               Fixed a type mismatch (F_ to D_) for "Ez" and related
+               data objects in vis_od.ini
+
+26/06/2001:    Fixed a bug in MAKEFILE.common for multithread
+               compilation (thanks to Andy); blocked cout and
+               cerr for Win32 version - caused crash; configs
+               now work Ok, also when saved after each session :)
+               Tried multithread version with Stepwise IPM mode
+               (works, with some drawbacks, to be fixed by AR)
+
+10-22/06/01:   Worked with Sveta on bugs and extensions (see
+               Changelog.Sveta). Improved file selection for
+               profiles, new modes and buttons for DBMS etc.
+
+04/04/2001:    Fixed several TODO items and bugs mentioned in
+               E.Curti' comments
+
+02/04/2001:    Got rid of the \J, \j, .... switches in math
+               scripts - the switches are not necessary anymore
+               but will be ignored in the text for compatibility
+               with previous versions
+
+30/03/2001:    Reimplemented parts of ET_translate() for
+               simplifying usage of DC, IC and phase names
+               in math scripts
+
+29/03/2001:    Updated gemstart.html from E.Curti comments.
+
+10/03/2001:    Fixed bugs in SystemDialog.* - it did not print
+               thermodynamic data (MtParam)
+               Fixed sampling of lga() for GtDemo
+
+02/03/2001:    Fixed some bugs preventing BCC and GEM IPM
+               calculations in water-free systems (incl.
+               TCellCheck() error message for component codes)
+
+28/02/2001:    Wrote most of the "kickstart" help HTML file
+               (gemstart.html, more than 50 pages).
+
+25/01/2001:    Goodbye item.html! Contents of this file (300 K)
+               distributed over new files in GEM-Selektor on-line
+               HTML documentation. See /doc/Helpfiles-chart.txt.
+               Changed KeyFilter.cpp and KeyFilter.h to add Help
+               button (access to gdb_rkey.html#dbm_IComp etc.)
+
+16/01/2001:    Re-organization of HTML help framework.
+               Two files with fixes of the on-line help access to
+               indexed DOD labels (help_w.cpp, page_w.cpp)
+
+08/01/2001:    Re-organization of HTML help framework.
+		   Added "Help" buttons to more dialogs, "Get Started"
+               button to main dialog. Created a new file
+               /doc/Helpfiles-chart.txt with a list of HTML
+		   online doc files and points from where they
+               should be called.
+
+05/01/2001:    Re-organized calls for HTML help files (as described
+               in TODO.dima 04.Jan.2001). Numerous changes in string
+               constants and serious update of /visor/help.cpp to
+               facilitate redirection of F1 help requests on data
+               object fields. Added empty print functions to IComp,
+               Compos, Phase and some other modules (content of these
+               print functions still has to be written).
+
+04/01/2001:    Fixed for BCB compile errors in visor.cpp(554)
+               and page_f.cpp(132); fixed gems.cfg write/read
+               bug in v_file.cpp(50) and some error messages.
+
+21/12/2000:    Renamed some more DODs. Moved gEx_ (g0 increments)
+               from System:DComp to MTParm module window
+               (this is more logical when playing with thermod.
+               data).
+
+20/12/2000:    Renamed some DODs in vis_od.ini and vis_cn.ini
+               to get rid of '~' in DOD labels and make them
+               more natural to thermodynamic data. Old labels
+               are left commented in *.ini files. 
+
+19/12/2000:    Fixed messages and "Cancel" bugs in Remake record
+               selectors for Compos, ReacDC, Phase, RTparm, GTdemo
+               Workaround in TQueryWindow::AddFields() to avoid
+               EAccessViolation 
+
+15/12/2000:    Further polishing of vis_cn.ini, made a screenshot
+               gallery for win32 (png, HTML/DOC files). 
+
+14/12/2000:    Fixed calculation of gTP for minerals at elevated
+               pressure, bugs reported by Brad Bessinger on the
+               basis of comparison with SUPCRT92 calculations.
+               Now "C" key works OK, if molar volume is given. 
+
+07/12/2000:    Fixed a bug in DBAdvDialog.ui (did not display
+               Process records). Many cosmetic changes in
+               error messages, comments, etc. in modules
+               and v_module.cpp. Debugging problems with
+               displaying contents of the first data field
+               on the module screenforms. 
+
+01/12/2000:    A lot of changes to SysEq, Profile, Multi
+               modules in vis_cn.ini and vis_od.ini.
+               Ideas for improvements of MathScript
+               interpretation and setup of sorption models.
+               Trimming visor.cpp and visor_w.cpp files.
+
+27/11/2000:    A lot of changes to RTparm, SysEq, Proces,
+               GTdemo modules in vis_cn.ini and vis_od.ini.
+               Ideas for major re-organization of RTParm and
+               some improvements for GTdemo.
+
+24/11/2000:    A lot of changes in vis_cn.ini and vis_od.ini
+               files for SDref, IComp, DComp, Compos, ReacDC
+               and Phase module windows and tooltips
+               Changed default cell font to "Courier 9" in
+               visor_w.cpp
+
+10-23/11/2000: A lot of changes to new *.ui dialogs,
+               fonts, tooltips, several bugfixes; especially
+               remodeled SystemDialog.ui (needs more work
+               for implementation of HLinp & HLres ListView
+               dialogs (based on QListView widget).
+               Work through *.ini files to simplify module dialogs
+
+20/07/2000:    Merged Linux and Win32 GEMS source code trees
+
+---------------------------------------------------------------

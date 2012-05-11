@@ -1,0 +1,855 @@
+21/08/2009
+Added ProjectWizard to gems2 program
+ 
+07/08/2009
+Changed BASE_PARAM default values
+Added to AutoPhaseDialog selector for numerical settings
+Fixed all warnings  in IPM
+
+06/08/2009
+Added new functions for TNode class and edited html documentation
+
+24/07/2009
+Fixed bug in comparing when calculate "Compos" (double=>float lost digits af) 
+Change all float in MTPARM structure to double
+
+22/07/2009
+Added function  "NormDoubleRound" for norms double values mantissa to fixed digits(13)
+Norms sy.B(13), tp.G(13), bcp->C(6)
+Changed all work arrays COMPOS from float to double  
+
+21/07/2009
+Changed in s_formula.cpp(.h) and near internal values from float to double 
+Changed mtp->Ae, mtp->An, usp->A object types from float to double 
+Changed sizes of edit for some objects on DComp window
+
+20/07/2009
+Changed gemipm and tnode examples as in documentation
+
+
+17/07/2009
+Added temporary function  "void TProfil::test_G0_V0_H0_Cp0_DD_arrays( long int nT, long int nP )"
+for test "Load Thermodynamic Data from DATACH to MULTI using Lagrangian Interpolator"
+
+15/07/2009
+Added to AutoPhaseDialog 
+  -"built-in Peng-Robinson-Stryjek-Vera (PRSV) fluid EOS model" type equation.
+  - "built-in Soave-Redlich-Kwong (SRK) fluid EOS model"
+
+14/07/2009
+Show message about "Quality codes for temperature and pressure corrections"
+
+14/07/2009
+Allocate S0, Cp0, H0, A0, U0 for all tasks (Multi and DataCH)
+Changed size for denWg, epsWg
+F and U is showed on MTPARM window, but not calculated
+Zero off the properties of H+ using the T species class code
+
+
+
+13/07/2009
+Changed the first position for start Gems window
+other windows are remain positions
+
+13/07/2009
+Added Remake mode when "Open project"
+Checked units for PmvAq and PmvGas values on screen 
+Changed in LookupDialogData from "points" to "step"
+Added interpolation for H0, S0, Cp0, A0, U0, denW, denWg, epsW, epsWg to gemipm2k
+
+10/07/2009
+Changed DATACH structure
+ renamed field   roW to denW
+ added   fields denWg, epsWd, A0, U0
+ changed size of denW, epsW to 5 rows
+Inserted changes to functions 
+  for loading lookup arrays (G0, H0, S0, Cp0, A0, U0, denW, epsW )
+Changed default values for TPpvc (added H,S,Cp in new project as default )   
+
+09/07/200
+When writing IPM, DCH and DBR files to text format added brief_mode 
+"Do not write data items that contain only default values"
+Inserted changes to TPrintArrays class
+
+08/07/2009
+Added to Gems2 LookupDialogData "Setup for writing GEMIPM2K input files " 
+
+07/07/2009
+Added to AutoPhaseDialog 
+  -"IA with extended Debye-Hueckel equation, common b_gamma and a0, &Y" type equation.
+  - "molality conversion" selector that returns float (0,1,2,3) into  php->pnc[5]
+
+10/02/2009
+Bugfix in math script interpreter 
+Added pow function for mathscript
+Added "Read IPM files structure" to Gems2 (as in gemipm2k)
+ (Fixed error in command "Read IPM files")
+
+09/02/2009
+Bugfix to infinite loop by calculation of lambda in LMD()
+
+07/02/2009
+Make file - ParamMulti.dat.txt - description of all parameters in Implementation 
+ of parts of the Interior Points Method (IPM)  
+
+04/02/2009
+Added new  check and support of system errors/warnings in Implementation 
+ of parts of the Interior Points Method (IPM) 
+Added new diagnostic information in IPM and objects "XU" and "uc" 
+Fixed  some errors in this case. 
+
+
+23/01/2009
+Fixes error in Simplex method with upper bounded variabels
+
+22/01/2009
+Fixed errors
+- No calculate without Simplex, if using metastability restrictions (data conversions float-double )
+- In function Adjustment of primal approximation according to kinetic constraints for small metastability restrictions segment (<1e-8)  
+
+21/01/2009
+Avoid unnecessary allocations of TSolMod classes in Process and other calculations 
+
+20/01/2009
+Fixed errors
+- In RTparam added calculation with different 
+  units of measurement of temperature for the abscissa  { C K }  
+
+- If database file was not found in the project or default database user 
+can continue work without this file  or cancel
+
+- If phase remake user can increase rows in ph_cf to nDC*nDC
+
+12/12/2008
+Insert new changes in as in gems2 to CalcDialog and AutophaseDialog
+
+12/12/2008
+Changed AutoPhaseDialog, added editable comboboxes for b_gamma and a0
+and comboboxes for selection mode of calculation gammas neutral sp. and H2O
+( results sets in aPa->pa.aqPar and php->pnc[7] = param[2] )
+
+11/12/2008
+Copy changes from gems2 to standalone ( TSolMod class, and other models)
+Added new files to projects s_fgl1.cpp, s_fgl3.cpp and s_fgl4.cpp
+Change all *.pro files and all Makefiles for Linux-GNU, Linux-PGI and CRAYXT3-catamount
+
+11/12/2008
+Insert changes into CalcDialog
+Changed Pitzer calculation
+Fixed error: Select all records with the same key (without last fild) on remake
+
+10/12/2008
+Renamed file s_fglbred.cpp into s_fgl1.cpp and added 2 empty files s_fgl3.cpp and s_fgl4.cpp 
+Changed all *.pro files and Makefile.gcc files SD
+
+09/12/2008
+Impemented PureSpecies() function  into TCGFcalc class 
+Isolated  creation of an instance of the class and calculation of TP corrected
+
+05/12/2008
+Rewrited Churakov-Gottschalk (2004) multicomponent fluid mixin model 
+as class TCGFcalc  inherited from TSolMod class (SD)
+
+04/12/2008
+Rewrited PRSV EOS calculations for fluids model as class TPRSVcalc  inherited from TSolMod class (SD)
+
+03/12/2008
+Rewrited SIT model as class TSIT inherited from TSolMod class (SD)
+
+02/12/2008
+Added  Pitzer model calculations using TPitzer class  (SD)
+Rewrited models Van Larr, Regular, Redlich-Kister, NRTL and Wilson
+as classes TVanLaar, TRegular, TRedlichKister, TNRTL and TWilson
+inherited from TSolMod class (SD)
+
+ 
+25/11/2008
+Changed float to double, short to long int, int to long int types throughout in GEMIPM2K 
+and in the respective parts of GEMS-PSI (with DODs for MULTI data objects); 
+replaced outdated calls (like memset(), memcpy() etc.) with loops, 
+all this to improve compatibility with parallel architectures (SD)
+
+20/11/2008
+Fixed error in QT4 interfase part: error in calc sizes of objectTables
+if using horizontal scrolling.
+
+20/11/2008
+Replaced  all memset() and memcpy() functions in code files from GEMIPM2K part
+to internal functions fillValue(), copyValues() and other program text
+
+19/11/2008
+Transfer of Gex corrections when dumping G0 to GEMIPM2K
+
+18/11/2008
+Fixbug in Remake/Create modes in ReacDC module when one of records mentioned in the 
+current list in ReacDC is absent in the database chain.
+Fixbug in Remake/Create modes in ReacDC module for set up old selection compare only first
+three key fields, not full key. 
+//-------------------------------------------------------------------
+
+30/08/2007
+ Fixed error in function gstring::gstring(const char* s, size_t pos, size_t len)
+
+14/08/2007
+ In functions finding index C by Name check
+ full names for DComp, IComp, PHase in node.cpp
+ (IC_name_to_x, DC_name_to_x, PH_name_to_x)
+
+21/02/2007
+ Added to out multi ipm arrays mui, muk,mij by flag addMui
+
+20/02/2007
+ Fixed error in mode reading ipm text format files:
+  pmp->IPx, pmp->PMc, pmp->DMc arrays reading and allocation error
+
+20/02/2007
+ Fixed error! In MultiRemake() set up     pmp->N =    syp->N;
+  but  pmp->NR left old value (may be more then pmp->N )
+
+
+19/02/2007
+  Added output of  time calculation for modules
+
+19/02/2007
+  To make separate Unspace
+   1. Unload DataCH and DataBR using Gem2mt module type 'S' or 'U'
+   2. Unload inital Unspace using pscript
+   3. Rewrite calcMulti() from ms_param.cpp, add part MultiInit
+
+16/02/2007
+  In Unspace module
+     - Use  TProfil::pm->calcMulti();instead of
+       TProfil::pm->CalcEqstat( false ); // 16/02/2007
+     - added internal points for MULTY and SYSTEM structures
+       syu = TProfil::pm->syp;
+       pmu = TProfil::pm->pmp;
+     - added new file m_unspace_out.cpp and put here output functions;
+       change location of some functions. m_unspace_stat.cpp,
+       m_unspace_out.cpp only calc functions
+     - changed syp->B for pmp->B, syp->GEX for pmp->GEX in this files
+        (comented in NexT )
+
+16/02/2007
+  Changed internal function calcMulti() for changin thermodynamic
+  if change T,P.
+  Set up all flags and initializations as in CalcEqstat().
+
+15/02/2007
+  Changed in DataBr structure T to TC temperature C
+  Changed in DataCh structure Tval to TCval
+  Added to TNode class functions
+   // Converts the Phase DCH index into the DC DCH index (1-st)
+   // returns into nDCinPh number of DC included into Phx phase
+    int  PhtoDC_DCH( const int Phx, int& nDCinPh );
+
+   // Converts the Phase DBR index into the DC DBR index (1-st selected )
+   // returns into nDCinPh number of DC selected into Phx phase
+    int  PhtoDC_DBR( const int Phx, int& nDCinPh );
+
+    // Access to interpolated thermodynamic data from DCH structure
+    // Test Tc and P as grid point for the interpolation of thermodynamic data
+    // Return index in grid matrix or -1
+     int  check_grid_TP(  double& Tc, double& P );
+    // Access to interpolated G0 from DCH structure ( xCH the DC DCH index)
+     double  DC_G0_TP( const int xCH, double& Tc, double& P );
+    // Access to interpolated V0 from DCH structure ( xCH the DC DCH index)
+     double  DC_V0_TP( const int xCH, double& Tc, double& P );
+
+     // Retrieval of Phase Volume ( xBR the Ph DBR index)
+      double  Ph_Volume( const int xBR );
+     // Retrieval of Phase mass ( xBR the Ph DBR index)
+      double  Ph_Mass( const int xBR );
+     // Retrieval of Phase composition ( xBR the Ph DBR index)
+      void  Ph_BC( const int xBR, double *ARout=0 );
+
+    Changed function CompG0Load() for separete module, use check_grid_TP() . (ms_param.cpp)
+
+
+13/02/2007
+ Fixed error Ls in calculation into System
+
+13/20/2007
+ Checked Multi load functions and flags:
+  -  Setup of flags for MULTI remake
+    ( void TProfil::PMtest( const char *key ) (m_param.cpp ) )
+  - Load Thermodynamic Data from MTPARM to MULTI
+    ( void TMulti::CompG0Load()(ms_muleq.cpp) )
+
+  Deleted/comented (///) the same rows in MultiRemake() and multi_sys_dc()
+    as in CompG0Load() and call CompG0Load() from MultiRemake()
+
+  Checked flags in functions: EqstatExpand(); MultiCalcInit(); loadSystat();
+            deriveSystat(); newSystat();
+
+12/02/2007
+ Fixed error, reloading thermodynamic, if State of reloading CSD 0 (pmp->pBAL).
+
+12/02/2007
+ changed memcpy(), memset() to loops into node.cpp, ms_multi_format.cpp,
+    ipm_chemical.cpp,  ipm_chemical2.cpp
+
+ deleted memset() from ipm_chemical.cpp
+
+11/02/2007
+ TESTED pVisor->Update() into PackSystat function (output by process)
+
+11/02/2007
+ deleted into ipm_simpelx.cpp memset functions or changed to loops if nessasary
+ changed memcpy(), memset() to loops into ipm_main.cpp
+
+09/02/2007
+ Added function int TMulti::getXvolume() - for getting index of volume,
+ end fixed errors for saving volums into pmp->A
+
+09/02/2007
+  Added functions for building/deleted index list of non 0 elements
+  for matrix pmp->A ( Build_compressed_xAN(),  Free_compressed_xAN();)
+  and added changes into loops in functions:
+   - SolverLinearEquations
+   - DualChemPot
+   - ConCalcDC
+   - MassBalanceDeviations
+   - phase_bcs
+   - phase_bfc
+ ( large system calculated up to ten times faster)
+
+08/02/2007
+  Fixed error in macros
+  #define  a(j,i) ((double)(*(pmp->A+(i)+(j)*Na)))
+  //#define  a(j,i) ((double)(*(pmp->A+(i)+(j)*N)))
+
+07/02/2007
+ For optimize function int TMulti::SolverLinearEquations( int N, bool initAppr )
+  - chanche order of loops for dependent and undependent components; (15% speed)
+  - allocate memory for work arrays before calculation; (10%)
+    ( add functions: Alloc_A_B( int newN ) and Free_A_B() )
+
+ For optimize function double TMulti::DualChemPot( double U[], float AL[], int N )
+  - deleted check before calculating
+//    Nu += AL[i]? U[i]*(double)(AL[i]): 0.0;
+    Nu += U[i]*(double)(AL[i]);
+
+ Optimize function
+
+06/02/2007
+ Fixed error
+ In function AssemblePhase: Assembling the phase (automatically generated aq or gas/fluid)
+ set as default zeros for php->pnc array
+
+05/02/2007
+ In Graph mode, deleted error message, if
+  showing only one point as graph line
+
+//=====================================================
+05/03/2002
+ Changed Copy List command: making new keys using template
+ Added Rename List command
+
+
+05/03/2002
+ Delete list: Added button "Delete All"
+
+
+05/03/2002
+ Added defaults for "File/New..." commamd
+ ( <mod_name>.<newfile_name>.pdb )
+
+05/03/2002
+ Changed activiti if  "Two records with the same key" error
+ (new message and open all files selected before error )
+
+
+04/03/2002
+ Added Import command
+
+01/03/2002
+ Writed Import scrips translater
+
+28/02/2002
+ Changed menus, Added diferent types of making new records
+
+27/02/2002
+ Added dialogs for MultiKeysSelection, and
+ inserted it to text
+
+//==================================================
+25/01/2002
+  Finalised ElementsDialog, SetFiltersDialog, implementation
+  of two alternative modes of assembling system profiles.
+
+25/01/2002
+  Fixed pop-up of the EqDemo List View after calculation of
+  a single equilibrium state.
+
+24/12/2001
+  Added functions for changed key by templates
+
+19/12/2001
+  Added  selection mode of making new Profile to
+  SettingsDialog
+
+19/12/2001
+  Using old direktori to make new Profile, if this directory
+  empty.
+
+08/12/2001
+  In mode  "Select Elements" type to make new Profile , maked
+  statistic of no used IComps and no selected Phases to list
+  and files.
+
+
+08/12/2001
+ Added checking of new Profile name (first field of key)
+ for duplicating it.
+
+08/12/2001
+ Added posibility to select values from list in editing mode
+  in HLimpDialog:
+   signal: rightButtonPressed
+  end change selections of DComp/ReactDC if Phase selections change
+
+01/12/2001
+  Added new "Select Elements" type to make new Profile
+
+16/11/2001
+ Added for class TPrintData ( formating output records )
+ condition output : ## <math script> ##
+
+
+08/11/2001
+ Added posibility to edit data in HLimpDialog:
+   signal: rightButtonPressed
+
+
+02/11/2001
+ Setted in mode "make new Profile without template"
+ default data to structure Param
+ (All buttons in remake equal "Clear all" )
+
+
+-----------------------------------------------------
+11/08/2001
+  Assemble&test the instalation packages of GEM-Selektor v.2 PSI
+  executable code for Linux operation system.
+
+10/08/2001
+  Assemble&test the instalation packages of GEM-Selektor v.2 PSI
+  executable code for Windows95/98/NT operation systems.
+
+09/08/2001
+ Changed same icons
+
+09/08/2001
+ Added mt mode as #ifdef Use_mt_mode,
+ use setthread.h for set mt mode
+ (for mt mode use ProgressDialogData_mt, instead ProgressDialogData
+ in make files, To Andi ask difference )
+ In Linux error link, lost last makefile?
+
+08/08/2001
+ Setted new headers for all .cpp and .h files
+
+07/08/2001
+  Remaked all Makefiles for Linux system as in Windows,
+  rebuild rpm make, change same errors
+
+05/09/2001
+  Writted default scripts for Mtparm, System and Multi
+
+05/09/2001
+  Changed packed key algorism: add ':' in all case,
+  not only if field whith ' '.
+
+04/09/2001
+  Changed Process and Getedemo keys structure
+  (maked more longe fields, MAXRKEYLEN = 80 )
+  => changed internal
+  strukture of Process and Getedemo records
+  (key pointers from one to other)
+  => reloaded all process and gtdemo records
+
+
+04/09/2001
+  Fixed error: maked equal file keywds for diferrent Profiles,
+  if Profiles names more than 10 simbols long and different at last
+  simbols.
+
+03/09/2001
+  Re-writed the RTparam module, provided it also with math
+  scripts, improved on plotting functionality. The record
+  format was been changed.
+  Done:
+  One graphdialog is sufficient, with a possibility to
+  plot also experimental data (for fitting).
+  Major re-arrangement is needed for the RTparm module and record
+  structure: (a) convert "float" to "double" for calculated vectors,
+  add TK vector for temperature in Kelvins and vectors for the empi-
+  rical T,P data; (b) introduce MATH SCRIPT for supporting calculations,
+  similar to GTDemo module, make DCthermo() and RCthermo() applicable
+  to a given TP pair via the calls;
+  (c) add into record the information for setup of graphs (four of them,
+  or for one graph similar to GTdemo record), don't forget saving the
+  background color; (d) write a "print" slot for printing-exporting
+  the tabulated data to text files (again similar to GTdemo);
+
+30/08/2001
+  Fixed a crash after reloading smole syseq after bigger:
+
+
+29/08/2001
+    Implemented "Listview" access windows for examining
+     system definitions
+
+29/08/2001
+   Setted default information for grapd dialog:
+    line color - dark blue, line size - 2,
+    axis type - 5, loading inserted graph lines names
+
+28/08/2001
+    Implemented "Listview" access windows for examining the IPM results
+
+27/08/2001
+ For all modules maked function RecordPrint, that printed
+ data into user format, that putting into Sdref record
+
+
+24/08/2001
+ Added posibility for saving-making SDref record in Profile mode
+ Added SDref key to Profile record
+
+24/08/2001
+ Insert changes for NewProfile dialog.
+
+24/08/2001
+ Fixed a crash after reopening modules:
+  no setted zero points for rInfo.aFieldInfo[ii].pField, after
+  close window.
+
+23/08/2001
+ Writed class TPrintData for formating output records
+
+22/08/2001
+ Process module: debug and re-implement connection to
+  GtDemo sampler/plotter. Checked stepwise plotting
+  during Process calculation.
+ Add posibility to make GtDemo records in Procees remake
+ mode.
+
+
+21/08/2001
+ Add Plot command to Process module
+
+21/08/2001
+  No showing Progress message in Process calculation, when
+   Using graphic window .
+
+21/08/2001
+ Implement LoadMessage to Loading Profile
+
+21/08/2001
+ Implement LoadMessage to Rebild index task
+
+21/08/2001
+ Implement LoadMessage to calc GtDemo process
+
+21/08/2001
+ Written  class LoadMessage for messagin long processes
+
+21/08/2001
+  Closed Progress message after Process calculation finished.
+
+21/08/2001
+  Inserted mode, when all data base files, exept IComp, Dcomp, ReacDC
+  and compos,  closed after reading.
+
+20/08/2001
+ Make utility to reload all GtDemo records from old formats
+ to new.
+
+20/08/2001
+ Changed GTDemo records:
+     - change arrays (x0, y0, xe, ye, wc,qp ) to double precision;
+     - implement saving of the background color for the graph into
+        GTdemo record
+     -  create a "Math script library" links in GTDemo
+
+
+19/08/2001
+ Added posibility: copy substrings from readonly fields
+
+18/08/2001
+ Seted selections of current database key in key List window
+
+17/08/2001
+  Delete reading start SysEq records when loading Profile
+
+17/08/2001
+  Remaked all Makefiles to separate calculated and
+  vizor parts
+
+17/08/2001
+   Removed bug: fix "create/init" mode window size of SDref
+
+15/08/2001
+     Done:
+     - Re-think the sequence of steps for creation of new
+     System profiles ("New Profile" from KeyProfile dialog).
+     Implement a new function of copying files from one
+     of existing user profile directories as a basis for
+     a newly-created profile.
+
+----------------------------------------------------------------
+23/07/2001
+   Remove all    references for QT library in
+   files from   /core, /mods, /mods/submods files.
+
+
+23/07/2001
+    added to class TVisor functions:
+      - void CopyF( const char * fName, const char* fTempl );
+        copy data from file fTempl to file fName
+      - void makeDBDir(const char *dir);
+        make new data base directori
+
+23/07/2001
+   Added to class gstring function replace
+
+22/07/2001
+  Change string
+      "GEM-Selektor v1.93b-PSI: Controls & defaults for numeric modules",
+  to
+      "GEM-Selektor v1.93b-PSI: Controls&defaults for numeric modules",
+  in Linux version was Error massage about limited size.
+
+06/07/2001
+      Fixed a bug:
+   On re-opening profile after updating definitions of single-
+   component phases in database, the warning contains correct
+   phase key but wrong DComp key (the action itself is correct)
+   Error cheking dcomp keys in single-component phases.
+
+06/07/2001
+      Fixed a bug:
+         After starting gems -d ... and exiting with
+           "Save configuration", next start in usual mode
+           gems -s -u works OK. But, if one opens any profile
+           and then exits gems with "Save configuration", upon
+           the next usual start, it crashes (EAccess) on pressing
+           "Calculation of Equilibria" button. Debugger shows that
+           stack is corrupt before the program really gets into
+           the "Open Profile mode".
+
+19/06/2001
+   In function of File selection (vfChooseFileSave)
+   change current directory to userGEMDir directory
+
+19/06/2001
+    Implement a File Selection Listview dialog (for the
+     kernel database) appearing on creation of new profiles,
+     to avoid a time-consuming step of opening Icomp, Dcomp,
+     .... modules for linking necessary database files.
+     Cross-referencing between different user-created
+     system profile directories must be avoided.
+
+19/06/2001
+    Implement linking of a database file into existing
+     profile (the file must exist inside of the profile
+     directory).
+
+
+18/06/2001
+ changin module screen form dialogs in Profile Mode: add icons for "Browse"
+  mode:  "Next record" (arrow up), "Previous record" (arrow down),
+  and "Set filter" for browsing through a subset of records.
+  Add new buttons and commands: "Delete"; "Remake", "Plot" and "Print"
+
+
+18/06/2001
+ GTdemo: Fix a crash after calculation (or related to reading
+  next record and opening the GraphDialog)
+  Fixin?
+
+
+15/06/2001
+   Done:
+   Implement "Copy" command in "Record list" with
+         a possibility of editing record keys before inserting
+         records (ask where to insert at the beginning)
+  Module screen form dialogs: in menu "Record List", change
+  "Browse" to "Copy". This menu item should work similar to
+  "Move", but (i) let the user modify record key, then select
+  the file where to put it for each copied record; (ii) do
+  not delete the original record.
+
+
+15/06/2001
+    FileSelection dialog: implemented "Ok to all" button for
+         multiple insertions
+    ("Move", "Import" and "copy" commands in  "Record List"):
+  ( In SelectDialog, added a "Ok to All" button and implemented it
+  for "Record List" "Move", "Import" or new "Copy" modes, so that all
+  the selected records would go into the same file.
+
+15/06/2001
+ SelectDialog "Cancel" button does not work in some
+            cases (i.e., in "Record" "Save As" mode of module
+            dialogs when selecting a file where to put the record),
+            this makes a lot of trouble.
+  Done. Needs testing
+
+15/06/2001
+  Change SelectDialog. Add mode with button "Ok to All".
+
+
+
+14/06/2001
+      - Brush up SDref module (remove bugs, fix "create/init" mode
+     Debug window size of SDref
+  Error in reading first comment line from file windows.conf.
+
+14/06/2001
+- changin module screen form dialogs: add icons for "Browse" mode:
+  "Next record" (arrow up), "Previous record" (arrow down),
+  and "Set filter" for browsing through a subset of records.
+  Remove BrowseDialog and attach its functionality to the
+  module screen form dialogs.
+
+
+13/06/2001
+    Remove memory leaks! Change arrays:
+         TOArray<TDataBase *> to TIArray<TDataBase>
+         TOArray<TSubModule *> to TIArray<TSubModule>
+         TOArray<QLineEdit *> to TIArray<QLineEdit>
+         TOArray<PlotTypeBtn *> to TIArray<PlotTypeBtn>
+         TOArray<TPlot *> to TIArray<TPlot>
+
+12/06/2001
+    Insert start titles for all Modules in constructor.
+    To reimplement start title for window use SetTitle() function.
+
+12/06/2001
+    Add new buttons: Buttons for browsing and "Delete" instead of "X"
+         "Remake", "Plot" and "Print"
+
+
+----------------------------------------------------------------------------
+08/12/99
+   - add z_sp_config mode for Profile (make short record lists for
+Phases
+     and DComp/ReactDC in System )
+
+
+
+
+19/11/99
+
+   -( v_dbm.h, v_dbm2.cpp ) add function DilFile() to delete file from
+      data base file list
+   -( visor.h, visor.cpp )  add function deleteDBDir() to delete
+     directory of GEMS/Profiles/name with deleting file names in data
+base
+     files lists
+   -(m_prfget.cpp) if error new profile building, we delete all new
+Profile
+    directori
+
+============================================================================
+
+18/11/99
+  -(m_prfget.cpp, LoadMessages) more diagnostic about different stages
+       of Profile opening/updating
+         (it is prototype, write you remark)
+
+  -(v_module.h) current record key is appear, if "Create" command
+        in profile mode
+
+============================================================================
+
+17/11/99 (BudLog.dima 05/11/99)
+   -(viz_cn.ini) show SDref/SDval fields on System/Compos window
+     (to remove at all we must change all records SysEq, created
+before)
+   -(KeyDialog.cpp) lost for 04/11
+   -(ms_muload.cpp/find_icnum) set MAXICNAME(=6) to compare (MAXKEYWD=7
+=> error)
+        bi_[\I{Fe}] translate error
+
+          (BudLog.dima 10/03/99 )
+  - vector delCm is reallocated, if set flag PcdC to '+'
+  - (m_compos.cpp) no ask DCOMP/REACTDC selections, use only flag
+PcDC(1)
+  - (SelectDialog.cpp) in multi selection mode no select always first
+line
+  - DComp: SDref line, can be entered 33 symbols in my test;
+           on remake mode no errors, may be your use break data to 34
+size
+
+
+===========================================================================
+02/11/99
+  -(m_prfget.cpp) changes to dcomp lists in profile, if add phase+dcomp
+  -(v_module.cpp) "Save as" current db key
+  -(m_phase.cpp)  owerate mehanizm to default Aq and gas phases
+
+04/11/99
+   -(m_prosess.cpp, m_gtdemo.cpp ) error put "'" to "name" field if
+"Remake"
+   -(v_module.h) setFilter(const char *filt)
+   -(KeyDialog.cpp) save last filter in Module if OK
+   -(KeyDialog.cpp) change error in selecting start key in list
+   -(v_module.cpp) use last Filter in "Show" command
+   -(v_module.cpp) RecOfTXT and RecToTXT messages with current key...
+   -(ms_sysbc.cpp) load second copy syseq and go back to inital (must
+work)
+       may be error in PHbcalc() p.584: sy.Phm[k] use before
+initialization
+
+11/11/99 (BudLog.dima 03/11/99)
+
+   -(ms_sysbc.cpp) put packed SysEq key to msg "Some b[i]<DB ..."
+
+
+   -Colordialog, OnlyColorDialog work on my computer (remake all)  (NO
+ERROR!)
+
+   -(m_prfget.cpp ) appear current record key if "New" SysEq
+
+   -(ProgressDialog.cpp) save system and close progress window, if
+"Accept"
+                         if "Discard" only close
+                         fStopCalc not used
+
+   - for object GD_rkl(o_gdrkey) in GTDEMO record type are setted as
+            samplad PDB record key len (diferent for different Modules
+)
+         ( 64 default len, 58 SysEq key len)                     (NO ERROR!)
+
+
+   - (m_rtparm.cpp) Override mode not work in RTParm
+
+   - use last filter (see changes of 04/11/99, if not work write me)
+
+   - (viz_cn.ini) show base PROCESS key in GTDEMO window
+
+   - (m_gtdemo.cpp) use base PROCESS/PROBE key in GTDEMO remake,
+
+
+
+12/11/99
+
+  - (v_dbm.h, v_dbm2.cpp, v_module.cpp ) "File|Actualize"
+      get old selection befor comand
+
+
+16/11/99
+  - ( m_reacdc.cpp, ms_sysbc.cpp ) return to inial record(key+link),
+     if error  in calculation/unpacking
+
+  - ( v_module.cpp, m_prfget.cpp, m_dcomp.cpp ....) save old
+     db->UnpackKey. Before it may be lost as pointer (see REACDC error)
+
+
+  - (ms_system.h, ms_system.cpp, m_prfget.cpp) insert SyTestSizes()
+     instead of SyTest() on Profile update.
+     Recalc only sizes of system vectors. Bulk composition mast bee
+     recalculated togethe with equlibrium state to all records.
