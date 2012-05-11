@@ -1,5 +1,0 @@
-Compiled on AIX with GCC
-major problems:
-- need GNU make
-- be careful about type sizes when writing/reading files
-    size_t is 64 bits in AIX

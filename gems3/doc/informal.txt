@@ -1,6 +1,0 @@
-Compiled on AIX 4.3.1 with GCC 2.95.2
-major problems:
-- we need GNU make, otherwise a lot of tweaking with *.moc files compiling
-- be careful about type sizes when writing/reading files
-    size_t is 64 bits in AIX on RS/6000 as opposite to 32 bits on 
-    IA32 Linux/Win32 
