@@ -1,7 +1,0 @@
-On SuSE Linux v.10.2, the KDE desktop is built using Qt4 and not Qt3  For this reason, if QTDIR and other environment variables in the user .profile or .bashrc files point to a commercially installed qt3 directory, the KDE environment may not start correctly. However, if these exported environmental variables are disabled, then KDE starts correctly but OTDIR points to qt4 and makefiles are not produced right and compilation of gems fails. 
-
-To work around this problem, a new shell script is added to this directory - a file called .qt3rc. After the KDE desktop is loaded Ok, this script can be copied to home directory and executed from there using the following command:
-
-source .qt3rc
-
-After that, the *.pro and makefiles in gems2 directory seem to work fine. If you have qt3 installed in this home directory then uncomment the respective line in .qt3rc and comment out the QTDIR line that points to /usr/lib/qt3.  
