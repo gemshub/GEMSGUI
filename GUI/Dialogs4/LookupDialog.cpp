@@ -321,7 +321,7 @@ void   LookupDialog::getPdata( double Pai[4] )
    Pai[3] = pPtol->text().toDouble();
 }
 
-void   LookupDialog::getFlags( char flgs[5] )
+void   LookupDialog::getFlags( char flgs[6] )
 {
    if( chSelect->isChecked() )
        flgs[0] = '+';
@@ -342,6 +342,10 @@ void   LookupDialog::getFlags( char flgs[5] )
     if( chInterp->isChecked() )
         flgs[4] = '+';
      else flgs[4] = '-';
+
+    if( chNoNodearray->isChecked() )
+        flgs[5] = '+';
+     else flgs[5] = '-';
 }
 
 void LookupDialog::CmHelp()

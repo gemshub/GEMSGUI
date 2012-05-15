@@ -909,7 +909,7 @@ if( acode == 'S' )
 }
 
 // call to LookupDialog  added 2009
-bool vfLookupDialogSet(QWidget* wpar, char flags[5],
+bool vfLookupDialogSet(QWidget* wpar, char flags[6],
                 double Tai[4], double Pai[4] )
 {
 	LookupDialog apdlg( wpar );

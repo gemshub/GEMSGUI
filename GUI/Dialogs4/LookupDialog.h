@@ -47,7 +47,7 @@ public:
 
     void   getTdata( double Tai[4] );
     void   getPdata( double Pai[4] );
-    void   getFlags( char flgs[5] );
+    void   getFlags( char flgs[6] );
 
 protected slots:
     void CmHelp();

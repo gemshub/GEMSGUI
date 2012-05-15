@@ -66,6 +66,16 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QCheckBox" name="chNoNodearray">
+            <property name="text">
+             <string>Include transport properties in DBR file</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>

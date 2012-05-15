@@ -173,7 +173,7 @@ bool
  vfAutoPhaseSet(QWidget* par, const char* pr_key, gstring& a_key, gstring& g_key,
         char& acode, char& gcode, float apar[8]);
 
-bool vfLookupDialogSet(QWidget* wpar, char flags[5], double Tai[4], double Pai[4] );
+bool vfLookupDialogSet(QWidget* wpar, char flags[6], double Tai[4], double Pai[4] );
 
 //class TObject;
 //void vfObjToFile(QWidget* par, TObject* obj);

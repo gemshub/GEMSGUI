@@ -454,7 +454,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
     try
 	 {
       // set default data and realloc arrays
-      char flags[5];
+      char flags[6];
       double Tai[4], Pai[4];
       short nTp_, nPp_;
       float *arT, *arP;
@@ -483,6 +483,8 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
    //na->packDataBr();
    na->MoveWorkNodeToArray( 0, 1, na->pNodT0() );
    // make  all files
+   if(flags[5] == S_OFF )
+      na->pNodT0()[0]->NodeStatusFMT = No_nodearray;
    na->PutGEM2MTFiles( par, 1,  ( flags[1] == S_ON ), ( flags[2] == S_ON ),
 		   ( flags[3] == S_ON ), false, true );// addMui, to txt
    }
