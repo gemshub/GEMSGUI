@@ -18,6 +18,8 @@
         <file>Icons/UnSpaceModuleIcon.png</file>
         <file>Icons/ModelingProjectIcon.png</file>
         <file>Icons/SDrefModuleIcon.png</file>
+        <file>Icons/PhaseDiagramModuleIcon.png</file>
+        <file>Icons/FitSpaceModuleIcon.png</file>
     </qresource>
     <qresource prefix="/menu">
         <file>Icons/NewCloneRecordIcon.png</file>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1115</width>
-    <height>679</height>
+    <width>1121</width>
+    <height>759</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,8 +27,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1115</width>
-     <height>21</height>
+     <width>1121</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Record">
@@ -333,6 +333,9 @@
    <property name="toolTip">
     <string>Create a new record from scratch</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="action_New">
    <property name="icon">
@@ -344,6 +347,9 @@
    </property>
    <property name="toolTip">
     <string>Clone a new record from this one</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="action_Display">
@@ -360,6 +366,9 @@
    <property name="shortcut">
     <string>F6</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="action_Remake">
    <property name="icon">
@@ -371,6 +380,9 @@
    </property>
    <property name="toolTip">
     <string>Remake record data structure</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="action_Calculate">
@@ -387,6 +399,9 @@
    <property name="shortcut">
     <string>F9</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="action_Save">
    <property name="icon">
@@ -398,6 +413,9 @@
    </property>
    <property name="toolTip">
     <string>Save this record to database</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionSave_As">
@@ -419,6 +437,9 @@
    <property name="toolTip">
     <string>Delete this record from database</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="action_Plot">
    <property name="icon">
@@ -431,6 +452,9 @@
    <property name="toolTip">
     <string>Plot data on Graph dialog</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="action_Print">
    <property name="icon">
@@ -442,6 +466,9 @@
    </property>
    <property name="toolTip">
     <string>Print data to (formatted) text file</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="action_Copy">
@@ -547,6 +574,9 @@
    <property name="toolTip">
     <string>Show help contents</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionView_Scripts">
    <property name="text">
@@ -578,6 +608,9 @@
    <property name="toolTip">
     <string>Display next record</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionPrevious">
    <property name="icon">
@@ -589,6 +622,9 @@
    </property>
    <property name="toolTip">
     <string>Display previous record</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionFilter">
@@ -602,6 +638,9 @@
    <property name="toolTip">
     <string>Set filter for record keys</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="action_Help_2">
    <property name="icon">
@@ -613,6 +652,9 @@
    </property>
    <property name="toolTip">
     <string>Help contents</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actClose">
@@ -679,6 +721,9 @@
    <property name="toolTip">
     <string>Open System window (detailed input recipe)</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="sactionOutMulti">
    <property name="text">
@@ -707,6 +752,9 @@
    <property name="toolTip">
     <string>Calculate BCC and check it for conflicts</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="saction_IPM">
    <property name="icon">
@@ -718,6 +766,9 @@
    </property>
    <property name="toolTip">
     <string>Calculate equilibrium with GEM</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="sactionSimplex">
@@ -770,6 +821,9 @@
    <property name="toolTip">
     <string>Open EqDemo window (GEM task results)</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="sactionOpenMULTI">
    <property name="text">
@@ -815,6 +869,9 @@
    <property name="toolTip">
     <string>Print GEM task results</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="sactionPrInput">
    <property name="text">
@@ -845,6 +902,9 @@
    </property>
    <property name="toolTip">
     <string>Show related Help contents</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="sactionHowto">
@@ -895,6 +955,9 @@
    <property name="toolTip">
     <string>Open Recipe dialog to set BCC</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionIComp">
    <property name="icon">
@@ -922,6 +985,9 @@
    <property name="toolTip">
     <string>Dependent Components (DComp)</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionReacDC">
    <property name="icon">
@@ -933,6 +999,9 @@
    </property>
    <property name="toolTip">
     <string>Dependent Components (ReacDC)</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionRTparm">
@@ -946,6 +1015,9 @@
    <property name="toolTip">
     <string>T/P Tabulations and Plots (RTparm)</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionPhase">
    <property name="icon">
@@ -957,6 +1029,9 @@
    </property>
    <property name="toolTip">
     <string>Thermodynamic Phases (Phase)</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionCompos">
@@ -970,6 +1045,9 @@
    <property name="toolTip">
     <string>Predefined Compositions (Compos)</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionSysEq">
    <property name="icon">
@@ -981,6 +1059,9 @@
    </property>
    <property name="toolTip">
     <string>Single Chemical Systems (SysEq)</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionProcess">
@@ -994,6 +1075,9 @@
    <property name="toolTip">
     <string>Process Simulators (Process)</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionGEM2MT">
    <property name="icon">
@@ -1005,6 +1089,9 @@
    </property>
    <property name="toolTip">
     <string>Coupled Fluid-Mass Transport (GEM2MT)</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionGtDemo">
@@ -1018,8 +1105,14 @@
    <property name="toolTip">
     <string>Data Samplers and Plotters (GtDemo)</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionDualTh">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../GUI.qrc">
      <normaloff>:/modules/Icons/DualThModuleIcon.png</normaloff>:/modules/Icons/DualThModuleIcon.png</iconset>
@@ -1029,6 +1122,9 @@
    </property>
    <property name="toolTip">
     <string>Dual Thermodynamics (DualTh)</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
    </property>
   </action>
   <action name="actionUnSpace">
@@ -1042,6 +1138,9 @@
    <property name="toolTip">
     <string>Sensitivity Studies (UnSpace)</string>
    </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionProject">
    <property name="icon">
@@ -1054,6 +1153,9 @@
    <property name="toolTip">
     <string>Modelling Project (Project)</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionSDref">
    <property name="icon">
@@ -1065,6 +1167,9 @@
    </property>
    <property name="toolTip">
     <string>Bibliography and Scripts (SDref)</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionConst">
@@ -1094,6 +1199,9 @@
    <property name="toolTip">
     <string>Currently open database files </string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="action_calcMode">
    <property name="checkable">
@@ -1109,6 +1217,9 @@
    <property name="toolTip">
     <string>Equilibria Calculation Mode</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionDataBaseMode">
    <property name="checkable">
@@ -1123,6 +1234,9 @@
    </property>
    <property name="toolTip">
     <string>Database Management Mode</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
  </widget>
