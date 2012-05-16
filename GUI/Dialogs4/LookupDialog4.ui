@@ -45,7 +45,7 @@
           <item>
            <widget class="QCheckBox" name="chMode">
             <property name="text">
-             <string>Write IPM, DCH and DBR files in binary mode</string>
+             <string>Write IPM, DCH and DBR files in binary mode (text mode, if unchecked)</string>
             </property>
            </widget>
           </item>
@@ -59,7 +59,7 @@
           <item>
            <widget class="QCheckBox" name="chComment">
             <property name="text">
-             <string>Write files with comments for all data entries ( in text mode)</string>
+             <string>Write files with comments for all data entries (in text mode)</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -69,7 +69,7 @@
           <item>
            <widget class="QCheckBox" name="chNoNodearray">
             <property name="text">
-             <string>Include transport properties in DBR file</string>
+             <string>Include node transport properties into DBR file</string>
             </property>
             <property name="checked">
              <bool>false</bool>
