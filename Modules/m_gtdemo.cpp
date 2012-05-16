@@ -43,7 +43,7 @@ TGtDemo::TGtDemo( int nrt ):
     aFldKeysHelp.Add("Name of this GtDemo data sampling task");
     aFldKeysHelp.Add("Variant number of this GtDemo task");
     aFldKeysHelp.Add("Record key comment to this GtDemo task");
-    setKeyEditField(0);
+    setKeyEditField(1);
     gdp=&gd[0];
     set_def();
     start_title = " Definition of Data Sampling and Plotting Task ";
@@ -57,6 +57,52 @@ TGtDemo::GetString()
     titler += " : ";
     titler += TSubModule::GetString();
     return titler;
+}
+
+// get key of record
+gstring
+TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
+                          int keyType )
+{
+    gstring str;
+
+    if( oldKey == 0 )
+    {
+        if(Filter.empty())
+            str = ALLKEY;
+        else str = Filter;
+    }
+    else str = oldKey;
+
+    if( keyType==KEY_NEW  )
+    { // Get key of Project
+        gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        StripLine(prfKey);
+        str = prfKey;
+        str+= ":*:*:*:*:";
+    }
+    str = TCModule::GetKeyofRecord( str.c_str(), strTitle, keyType );
+    if(  str.empty() )
+        return str;
+    rt[RT_GTDEMO].SetKey(str.c_str());
+     if( keyType != KEY_TEMP )
+         keyTest( str.c_str() );
+    return str;
+}
+
+
+// test TGtDemo key to calc mode
+void TGtDemo::keyTest( const char *key )
+{
+    if( pVisor->ProfileMode == true )
+    { // test project key
+        gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        StripLine(prfKey);
+        int k = prfKey.length();
+        if( memcmp(key, prfKey.c_str(), k ) ||
+                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
+            Error( key, "E08PErem: Wrong TGtDemo record key (another Modelling Project)!");
+     }
 }
 
 // link values to objects

@@ -140,6 +140,7 @@ protected:
     void gd_rec_read( int nI );
 //    void elst(int N,double *U,double *par);
 //    void probe_stat( const char *key );
+    void keyTest( const char *key );
 
 public:
 
@@ -158,6 +159,8 @@ public:
     void dyn_kill( int i=0);
     void dyn_new( int i=0);
     void set_def( int i=0);
+    gstring   GetKeyofRecord( const char *oldKey, const char *strTitle,
+                              int keyType );
 
     void RecInput( const char *key );
     void MakeQuery();
