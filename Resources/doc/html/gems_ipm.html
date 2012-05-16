@@ -2746,24 +2746,29 @@ in is <a href="#HOWTO_READ_IN">described here</a>.<br>
 record. Then click on "Data" "Export GEMS3K files..." menu command. This
  opens the "Setup for writing GEMS3K input files" dialog, which by default looks like this:</p>
 <br>
-<p> <img style=" width: 580px; height: 547px;" alt="SetupWritingGEMS3KfilesDialog.png" src="SetupWritingGEMS3KfilesDialog.png"><br>
-</p>
+ <img style=" width: 576px; height: 569px;" alt="SetupWritingGEMS3KfilesDialog.png" src="SetupWritingGEMS3KfilesDialog.png"><br>
+
+
 <br>
+
 <p>In the upper group, you have a choice to write GEMS3K files in text 
 mode (default) or in binary mode. Activating the "Do not write data 
 items that contain only default values" will result in much smaller IPM 
 and DBR files because only data and numerical settings that differ from 
-default values will be written (by reading these files, GEMS3K will 
+default values will be written; by reading these files, GEMS3K will 
 assume default values for all data objects that are not present in the 
-input files). Note that this makes sense to do if you are sure that you 
+input files. Note that this makes sense to do if you are sure that you 
 work with the same GEMS3K version in both GEM-Selektor and the coupled 
 code. The next option ("Write files with comments..."), if deactivated, 
-results in much smaller, though less human-readable text input files. <br>
-</p>
-<p>The topmost option "Select ICs, DCs, and phases to be exchanged via 
-DATABR file...",&nbsp; if activated, can be used for setting up much 
-more compact DBR files that only contain items that will change in 
-standalone or coupled calculations (<span style="color: rgb(204, 0, 0);">more about this here ...</span>); normally, just leave it unchecked. &nbsp; <br>
+results in much more compact though less human-readable text input files. The
+ last option ("Include node transport properties into DBR file") should 
+be unchecked (default) when exporting files for coupled codes such as 
+OGS-GEMS where all such information is kept in the transport part of the
+ code. The topmost option "Select ICs, DCs, and phases to be exchanged 
+via 
+DATABR file...",&nbsp; if activated, can be used for setting up very 
+compact DBR files that only contain items that will change in 
+standalone or coupled calculations (<span style="color: rgb(204, 0, 0);">yet untested; more about this here ...</span>); normally, just leave it unchecked (default). &nbsp; <br>
 </p>
 <p>The middle group can be used to set up the lookup arrays with 
 thermodynamic data (to be written at the end of the DCH file). This 
@@ -2900,9 +2905,13 @@ example), and click "Open".&nbsp; <br>
 <p>You should see now the "Enter record key" dialog with fields 
 corresponding to SysEq record key from the imported IPM file. Edit 
 fields as you like, to make sure that no such SysEq record already 
-exists in the project, and click Ok. The program reads GEMS3K files, and replaces the previous recipe by the bulk composition from DBR file taken over 
-into the bi_ data object (input mole amounts of Independent Components),&nbsp; as 
-well as metastability constraints and selection of components from the imported IPM and DCH files. &nbsp; &nbsp; &nbsp; </p>
+exists in the project, and click Ok. The program reads GEMS3K files, and
+ replaces the previous recipe by the bulk composition from DBR file 
+taken over 
+into the bi_ data object (input mole amounts of Independent 
+Components),&nbsp; as 
+well as metastability constraints and selection of components from the 
+imported IPM and DCH files. &nbsp; &nbsp; &nbsp; </p>
 <p>In the appearing "Input Recipe" dialog, you should see now the bulk 
 system composition from the imported DBR file, given as bi_ values. 
 Click "Ok" to proceed.&nbsp; Now, click "Open EqDemo window..." toolbar 
