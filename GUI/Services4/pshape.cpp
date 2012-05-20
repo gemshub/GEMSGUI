@@ -170,11 +170,6 @@ PText::setPosition(QPoint screenPoint)
 
 /* TPlotWin class is responcible for plotting area (lines, points, grid, labels..)
 */
-const int bottomGap = 30;
-const int topGap = 20;
-const int leftGap = 30;
-const int rightGap = 30;
-
 TPlotWin::TPlotWin(QWidget* p, FPoint pt1, FPoint pt2, const char* title_):
         QWidget(p),
         x1(pt1.x), y1(pt1.y), x2(pt2.x), y2(pt2.y),
@@ -182,11 +177,8 @@ TPlotWin::TPlotWin(QWidget* p, FPoint pt1, FPoint pt2, const char* title_):
 {
     setAcceptDrops(true);
     setAutoFillBackground( true); 
-//    QSizePolicy mySize( QSizePolicy::Expanding, QSizePolicy::Expanding );
-//    setSizePolicy(mySize);
-
+    setGap();
     setPlotBounds(pt1, pt2);
-    //show();
 }
 
 TPlotWin::~TPlotWin()
@@ -221,6 +213,17 @@ TPlotWin::setPlotBounds(FPoint pt1, FPoint pt2)
 }
 
 void
+TPlotWin::setGap()
+{
+    QFont font = pVisorImp->getAxisLabelFont();
+    int fontSize = font.pointSize();
+    topGap = fontSize*3;
+    bottomGap = fontSize*3;
+    leftGap = fontSize+8 + QFontMetrics(font).width("-0.000");//fontSize*4;
+    rightGap = fontSize;
+}
+
+void
 TPlotWin::setGridCount(int numGrids)
 {
     gridCount = numGrids;
@@ -239,9 +242,6 @@ TPlotWin::setAxisTitles(const char* xTitle_, const char* yTitle_)
 void
 TPlotWin::resizeEvent(QResizeEvent* qpev)
 {
-//    QRect rect = parentWidget()->geometry();
-//    setGeometry(2, 2, rect.width()-4, rect.height()-4);
-//    update();
     QWidget::resizeEvent(qpev);
 }
 
@@ -261,15 +261,13 @@ void TPlotWin::paintEvent(QPaintEvent* qpev)
 */
 void TPlotWin::PaintToDC(QPainter& dc)
 {
-//    QFont font = dc.font();
-    QFont font = pVisorImp->getAxisLabelFont();
-    //qt3to4 dc.setClipRect(0, 0, width(), height(), QPainter::CoordPainter);
-    dc.setClipRect( geometry() );
+    //QFont font = pVisorImp->getAxisLabelFont();
 
+    dc.setClipRect( geometry() );
     paintGrid(dc);
 
     int txtWidth = dc.fontMetrics().width(title);
-    QPoint point((/*dc.window().*/width() - txtWidth)/2, QFontMetrics(font).xHeight()*2+7/*13*/);
+    QPoint point((width() - txtWidth)/2, topGap*2/3 /*QFontMetrics(font).xHeight()*2+7*/);
     dc.drawText(point, title);
 
     for( uint ii=0; ii<shapes.GetCount(); ii++ )
@@ -281,10 +279,10 @@ void TPlotWin::paintGrid(QPainter& dc)
 {
     if( gridCount <= 0 || gridCount > 20 )
         return;
-    //  dc.SetBkMode(TRANSPARENT);
 
-    QRect canvas = geometry(); //this->getCanvasRect();
-    QPoint offset(leftGap, topGap);
+    QRect canvas = geometry();
+    canvas.setWidth(width()-rightGap);
+    canvas.setHeight(height()-bottomGap);
 
     QPen pen( Qt::black, 1 );
     pen.setStyle( Qt::DotLine );
@@ -292,50 +290,53 @@ void TPlotWin::paintGrid(QPainter& dc)
 
     // need float grid interval to make it precise
     float gridX = (float(width()-leftGap-rightGap) / gridCount);
-    float gridY = (float(height()-bottomGap-topGap) / gridCount);
+    float gridY = (float(height()-topGap-bottomGap) / gridCount);
 
-    QFontMetrics fm(dc.fontMetrics());
-
-//    QFont fn = dc.font();
     QFont font = pVisorImp->getAxisLabelFont();
-    font.setBold(true);
-    dc.setFont(font);
-
-    dc.drawText( (width() - fm.width(xTitle))/2, height() - 7, xTitle);
-    dc.rotate(-90);
-    dc.drawText( -(height() + fm.width(yTitle))/2, QFontMetrics(font).xHeight()*2+7, yTitle);
-//dc.drawText( -(width() - fm.width(yTitle))/2, QFontMetrics(font).xHeight()/**2*/+7, yTitle);
-//    dc.drawText( dc.xForm(QPoint(7, (height() - fm.width(yTitle))/2)), yTitle);
-    dc.rotate(90);
-    font.setBold(false);
-    dc.setFont(font);
 
     QString cr("(c) GEMS");
     int fontSize = font.pointSize();
     font.setPointSize(9);
     dc.setFont(font);
-    dc.drawText( width() - QFontMetrics(font).width(cr) - 2, height() - 5, cr);
+    dc.drawText( width() - QFontMetrics(font).width(cr) - 2, height() - 4, cr);
+
     font.setPointSize(fontSize);
+    font.setBold(true);
     dc.setFont(font);
+    QFontMetrics fm(dc.fontMetrics());
+    dc.drawText( (width() - fm.width(xTitle))/2, height()-6, xTitle);
+    dc.rotate(-90);
+    dc.drawText( -(height() + fm.width(yTitle))/2, fontSize+4, yTitle);
+    dc.rotate(90);
+
+    font.setBold(false);
+    dc.setFont(font);
+
+    int txtWidth;
+    QString str;
+    int x_pos = 0;
+    int y_pos = canvas.height()+fontSize+4;
 
     if( gridX )
         for( int ii=0; ii<=gridCount ; ii++ )
         {
-	    int x_pos = (int)ROUND(offset.x() + gridX * ii);
-        dc.drawLine( x_pos, 0,  x_pos, canvas.height() );
-	    QString str;
-            str.sprintf("%.4g", x1 + (ii * (x2 - x1)) / gridCount);
-	    dc.drawText( x_pos + 2, canvas.height() - 17, str);
+         x_pos = (int)ROUND(leftGap + gridX * ii);
+         dc.drawLine( x_pos, topGap,  x_pos, canvas.height() );
+         str.sprintf("%.4g", x1 + (ii * (x2 - x1)) / gridCount);
+         txtWidth = dc.fontMetrics().width(str);
+         dc.drawText( x_pos-txtWidth/2, y_pos, str);
         }
 
+    x_pos = 12;
     if( gridY )
         for( int ii=0; ii<=gridCount ; ii++ )
         {
-	    int y_pos = (int)ROUND(offset.y() + gridY * ii);
-        dc.drawLine( 0, y_pos, canvas.width(), y_pos );
-	    QString str;
-            str.sprintf("%.4g", y1 + ((gridCount - ii) * (y2 - y1)) / gridCount);
-	    dc.drawText( 12, y_pos - 1, str);
+        y_pos = (int)ROUND(topGap + gridY * ii);
+        dc.drawLine( leftGap, y_pos, canvas.width(), y_pos );
+        str.sprintf("%.4g", y1 + ((gridCount - ii) * (y2 - y1)) / gridCount);
+        txtWidth = dc.fontMetrics().width(str);
+        x_pos = leftGap-2-txtWidth;
+        dc.drawText( x_pos, y_pos, str);
         }
 }
 

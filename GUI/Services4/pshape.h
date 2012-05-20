@@ -203,6 +203,11 @@ class TPlotWin:
     TIArray<PShape> shapes;
     int gridCount;
 
+    int bottomGap;
+    int topGap;
+    int leftGap;
+    int rightGap;
+
 protected:
     virtual void paintEvent(QPaintEvent* qpev);
     virtual void resizeEvent(QResizeEvent* qpev);
@@ -212,6 +217,7 @@ public:
     TPlotWin(QWidget* p, FPoint pt1, FPoint pt2, const char* title);
     ~TPlotWin();
 
+    void setGap();
     void setPlotBounds(FPoint pt1, FPoint pt2);
     void setGridCount(int numGrids);
     void setAxisTitles(const char* xTitle, const char* yTitle);
@@ -223,13 +229,11 @@ public:
     }
 
     int Add(PShape* p) {
-//        p->ConvertCoordinates();
         return shapes.Add(p);
     }
-//    void mul(const FPoint& f, QPoint& to);
+
     QPoint RealToVisible(const FPoint& real);
     FPoint VisibleToReal(const QPoint& screen);
-//    const QRect& getCanvasRect() { return canvasRect; }
 
     void dragEnterEvent(QDragEnterEvent* event);
     void dragMoveEvent(QDragMoveEvent *event);

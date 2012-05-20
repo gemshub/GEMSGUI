@@ -306,7 +306,7 @@ void GraphDialog::Show()
     			Qt::white /*backgroundColor().dark(110)*/ );
 
     plot->setPalette(pl);
-
+    plot->setGap();
     plot->setPlotBounds( FPoint(minX, minY),
                    FPoint(maxX, maxY));
 
