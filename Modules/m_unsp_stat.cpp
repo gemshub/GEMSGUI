@@ -56,7 +56,7 @@ void TUnSpace::unsp_eqkey()
    rt[RT_SYSEQ].MakeKey( RT_UNSPACE,  usp->stkey, RT_UNSPACE, 0, RT_UNSPACE,1,
         RT_UNSPACE, 2, RT_UNSPACE, 3, K_IMM, usp->Bnamep,
         K_IMM, usp->Pp, K_IMM, usp->TCp, K_IMM, usp->timep, K_END );
-   rt[RT_SYSEQ].Find(usp->stkey);
+   rt[RT_SYSEQ].SetKey(usp->stkey);
 
 // calc current SyStat 16/02/2007
      pmu->TCc = usp->Tc;

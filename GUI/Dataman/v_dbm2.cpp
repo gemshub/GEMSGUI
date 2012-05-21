@@ -539,7 +539,16 @@ time_t TDataBase::GetTime( int i )
 // Returns -1 no record.
 int TDataBase::Find( const char *pkey)
 {
-    status = UNDF_;
+    if( !KeyTest( pkey ) )
+         status = UNDF_;
+    return ind.findx( pkey );
+}
+
+//Seach record index with key pkey.
+// Returns -1 no record.
+// No change status of record
+int TDataBase::FindCurrent( const char *pkey)
+{
     return ind.findx( pkey );
 }
 

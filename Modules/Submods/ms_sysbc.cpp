@@ -626,7 +626,7 @@ void TSyst::systbc_calc( int mode )
             {
                // return to first record
                 aSE->ods_link(0);
-                rt[RT_SYSEQ].Find( pkey.c_str() ); // Set back the initial record key
+                rt[RT_SYSEQ].SetKey( pkey.c_str() ); // Set back the initial record key
                 Error( pkey.c_str() , xcpt.mess );
             }
 
@@ -637,7 +637,7 @@ void TSyst::systbc_calc( int mode )
                  memcpy( aSE->ssp->PhmKey, skey.c_str(), EQ_RKLEN );
              sy.PbPH = S_ON;
               	// Set back the initial record key
-             rt[RT_SYSEQ].Find( pkey.c_str() );
+             rt[RT_SYSEQ].SetKey( pkey.c_str() );
         }
         else  // another SysEq record not provided or inaccessible
             sy.PbPH = S_REM;

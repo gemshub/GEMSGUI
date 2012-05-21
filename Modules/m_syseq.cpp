@@ -143,7 +143,7 @@ TSysEq::RecBuild( const char *key, int mode  )
            if( skey.empty() || skey[0] == '\0' || skey[0] == ' ' )
               skey = "*";
            else
-              rt[RT_SYSEQ].Find( skey.c_str() );
+              rt[RT_SYSEQ].SetKey( skey.c_str() ); //Find( skey.c_str() );
 
           skey = vfKeyEdit( window(),
                "Please, select one SysEq record",  nRT,  skey.c_str() );
@@ -152,7 +152,7 @@ TSysEq::RecBuild( const char *key, int mode  )
           else
                memcpy( ssp->PhmKey, skey.c_str(), EQ_RKLEN );
 
-          rt[RT_SYSEQ].Find( key );  // DAK fixed 27.10.99
+          rt[RT_SYSEQ].SetKey( key ); // DAK fixed 27.10.99
        }
     }
     // Check flags to alloc data

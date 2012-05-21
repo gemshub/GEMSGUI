@@ -280,14 +280,17 @@ public:
     {
         ind.RecKey(i,kbuf);
     }
+
     const char *PackKey()
     {
         return ind.PackKey();
     }
+
     const char *UnpackKey()
     {
         return ind.UnpackKey();
     }
+
     time_t Rtime() const
     {
         return crt;
@@ -372,6 +375,7 @@ public:
     void Del( int i);
     void Get( int i);
     int Find( const char *key);
+    int FindCurrent( const char *key);
     RecStatus Rtest( const char *key, int mode = 1);
     bool FindPart( const char *key_, int field );
     //  RecStatus TryRec( RecStatus rs, char *key, int mode = 1);

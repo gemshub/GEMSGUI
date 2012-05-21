@@ -308,7 +308,7 @@ void TReacDC::Recalc( int q, const char *key  )
     if( rShift )
     {
         ods_link( q );
-        db->Find(key);/*rShift = 0;*/
+        db->SetKey(key);/*rShift = 0;*/
     }
 
     //AGAINF:  Edit fields of record ?? vRet = Vaccess( W_REACDC, msg(cp_rcomp) );

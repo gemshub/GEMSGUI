@@ -329,11 +329,11 @@ bool TReacDC::check_input( const char *key, int Level )
     catch( TError& xcpt )
     {
         ods_link(q);
-        rt[nRT].Find(key);
+        rt[nRT].SetKey(key);
         Error( key/*xcpt.title.c_str()*/, xcpt.mess.c_str());
     }
     ods_link(q);
-    rt[nRT].Find(key); //   RecInput( key );
+    rt[nRT].SetKey(key); //   RecInput( key );
     return iRet;
 }
 
@@ -629,7 +629,7 @@ TReacDC::RecCalc( const char* key )
         if( rcp != rc+q )
         {
             ods_link( q );
-            db->Find(key);
+            db->SetKey(key);
         }
         w_dyn_kill();
         Error(  key , xcpt.mess.c_str() );

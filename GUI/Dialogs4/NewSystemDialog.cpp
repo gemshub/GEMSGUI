@@ -549,7 +549,7 @@ void NewSystemDialog::CmSave()
     if( TSysEq::pm->ifCalcFlag()== false )
     {
       gstring key_s = rt[RT_SYSEQ].PackKey();
-      if( rt[RT_SYSEQ].Find( key_s.c_str()  ) < 0)
+      if( rt[RT_SYSEQ].Find( key_s.c_str()  ) < 0) // FindCurrent
       { vfMessage( this, key_s.c_str(),
         "Please, calculate the equilibrium state before saving this record!");
             return;
