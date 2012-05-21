@@ -197,6 +197,7 @@ class TPlotWin:
     float	x1, y1, x2, y2;
     float	ax, ay;
     int		bx, by;
+
     QString	title;
     QString	xTitle;
     QString	yTitle;

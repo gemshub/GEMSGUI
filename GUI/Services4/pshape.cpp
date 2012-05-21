@@ -83,6 +83,7 @@ PPolygon::paint(QPainter& dc)
     QPoint p2 = par->RealToVisible(fp2);
     QPoint p3 = par->RealToVisible(fp3);
     QPoint p4 = par->RealToVisible(fp4);
+
     QPolygon  a(4);
     a.setPoint(0, p1 );
     a.setPoint(1, p2 );
@@ -114,9 +115,9 @@ void
 PPoint::paint(QPainter& dc)
 {
     QPoint point = par->RealToVisible(fp);
+
     dc.setPen( QPen(color, 2) );
     dc.setBrush( Qt::NoBrush );
-
     drawSymbol(&dc, point, type, size, color, 2);
 }
 
@@ -220,7 +221,7 @@ TPlotWin::setGap()
     topGap = fontSize*3;
     bottomGap = fontSize*3;
     leftGap = fontSize+8 + QFontMetrics(font).width("-0.000");//fontSize*4;
-    rightGap = fontSize;
+    rightGap = fontSize*2;
 }
 
 void
@@ -261,14 +262,19 @@ void TPlotWin::paintEvent(QPaintEvent* qpev)
 */
 void TPlotWin::PaintToDC(QPainter& dc)
 {
-    //QFont font = pVisorImp->getAxisLabelFont();
-
     dc.setClipRect( geometry() );
     paintGrid(dc);
 
     int txtWidth = dc.fontMetrics().width(title);
-    QPoint point((width() - txtWidth)/2, topGap*2/3 /*QFontMetrics(font).xHeight()*2+7*/);
+    QPoint point((width() - txtWidth)/2, topGap*2/3-3 /*QFontMetrics(font).xHeight()*2+7*/);
     dc.drawText(point, title);
+
+    QRect canvas;
+    canvas.setTop(topGap);
+    canvas.setLeft(leftGap);
+    canvas.setRight(width()-rightGap);
+    canvas.setBottom(height()-bottomGap);
+    dc.setClipRect( canvas );
 
     for( uint ii=0; ii<shapes.GetCount(); ii++ )
         shapes[ii].paint(dc);
@@ -279,8 +285,7 @@ void TPlotWin::paintGrid(QPainter& dc)
 {
     if( gridCount <= 0 || gridCount > 20 )
         return;
-
-    QRect canvas = geometry();
+    QRect canvas =geometry();
     canvas.setWidth(width()-rightGap);
     canvas.setHeight(height()-bottomGap);
 
