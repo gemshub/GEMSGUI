@@ -509,7 +509,7 @@ extern bool _comment;
 
 void TUnSpace::to_text_file( fstream& ff, bool with_comments )
 {
-  _comment = with_comments;
+  bool _comment = with_comments;
   
   TPrintArrays  prar(0, 0, ff);
 
@@ -775,7 +775,7 @@ void TUnSpace::to_text_file( fstream& ff, bool with_comments )
 
 void TUnSpace::result_to_text_file( fstream& ff, bool with_comments )
 {
-  _comment = with_comments;
+  bool _comment = with_comments;
   
   TPrintArrays  prar(0, 0, ff);
 

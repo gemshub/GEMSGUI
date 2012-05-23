@@ -286,6 +286,7 @@ void TProfil::InitSubModules()
         //syp = syst->GetSY();
         aMod.Add( multi = new TMulti( MD_MULTI ) );
         TMulti::sm = multi;
+        multi->setPa(this);
         //pmulti = multi;
         multi->ods_link();
         //pmp = multi->GetPM();
@@ -926,7 +927,7 @@ void TProfil::LoadFromMtparm( QWidget* par, DATACH *CSD , bool no_interpolat)
 
 
 long int showMss = 1L;
-// test result GEM IPM calculation of equilibrium state in MULTI
+/* test result GEM IPM calculation of equilibrium state in MULTI
 long int TProfil::testMulti()
 {
   MULTI *pmp = multi->GetPM();
@@ -958,7 +959,7 @@ long int TProfil::testMulti()
 
   return 0L	;
 }
-
+moved to TMulti*/
 
 // GEM IPM calculation of equilibrium state in MULTI
 // without testing changes in the system

@@ -1184,11 +1184,10 @@ l100:
     goto l30;
 }
 //====================================================================
-extern bool _comment;
 
 void TGEM2MT::to_text_file( fstream& ff, bool with_comments )
 {
-  _comment = with_comments;
+  bool _comment = with_comments;
   
   TPrintArrays  prar(0, 0, ff);
 
