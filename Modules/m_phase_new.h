@@ -46,7 +46,7 @@ sol_t[8], // Phase (solution) type { IGMTVKRLWFPED123HYSQZAUOX } or { N }
 // new:    Type of sorption/ionex/polyelectrolyte isotherm model { N  }
 // new:    Type of sorption EIL model { N   }
 
-kin_t[4], // new:    Type of kinetic rate model { NTW... }
+kin_t[4], // new:    Type of kinetic rate model { N T W ... }
 // new:    Type of splitting model for dissolution { N TBD }
 // new:    Type of splitting model for precipitation { N TBD }
 // new:    Type of the model for trace element uptake { N TBD }
@@ -91,10 +91,10 @@ ndqf,  // new: number of DQF parameter coefficients per end member, default 3.
 nrcp,  // new: number of reciprocal parameter coefficients per end member, default 3.
 iRes1, // new: reserved
  // TKinMet stuff
+nFaces,// new: number of kinetically different faces (on solid phase surface), default 1, up to 6.
 nReg,  // new: number of kinetic regions (and catalyzing aqueous species)
 nrpC,  // new: number of kinetic rate constants and coefficients
 numpC, // new: number of uptake model parameter coefficients (per end member)
-iRes2, // new: reserved
 // TSorpMod stuff EIL model
 nEIl,  // new: number of electrostatic model layers (default: 0, maximum 4)
 nEIp,  // new: number of electrostatic model parameters (per layer, default 1, max 4)
@@ -108,8 +108,9 @@ iRes4, // new: reserved
 ;
 short *ipxt,  // Table of indexation for interaction parameters [ncpN][npxM]
               // takes over from PXres
-*sDiS, // new: denticity (default 1) and indexes of surface sites to which the
-       // surface species DC is attached (default 0, -1 means no binding) [nDC][mDe+1]
+*xSmD, // new: denticity of surface species per surface site (site allocation) [nDC][NsiT]
+       // (default 0, -1 means no binding) [nDC][mDe+1]
+*xFaces, // new: indexes of faces per set of kinetic region parameters [nReg*nFaces], default 0.
 ;
 float Asur,  // Specific surface area of (carrier) phase, m2/g (new: of this tile) default: 0.
     Sigma0, // Standard mean surface energy of solid-aqueous interface, J/m2
@@ -121,7 +122,7 @@ float Asur,  // Specific surface area of (carrier) phase, m2/g (new: of this til
     Rsp1,   // Default maximum surface density, 1/nm2 (reserved)
 //
 Vpor,  // new: Specific pore volume of (carrier) phase, m3/g (default: 0)
-fSA,   // new: fraction of surface area of the sorbent (ref. in lPh) occupied by this surface tile (def. 1)
+fSAs,   // new: fraction of surface area of the sorbent (ref. in lPh) occupied by this surface tile (def. 1)
 fPV,   // new: fraction of phase pore volume occupied by this Donnan electrolyte (def. 1)
 fRes1, // new: reserved
 //
@@ -144,8 +145,9 @@ fRes2, // new: reserved
 *IsoS, // new: array of isotherm parameter coefficients per surface site [NsiT][nIsoS]
        // here site density etc.
 // TKinMet stuff
-*rpCon,   // new: Array of kinetic rate constants [nReg][nrpC]
-*umpCon,  // new: Array of uptake model parameters [nDC][numpC]
+*fSAk,   // new: fractions of surface area of the solid occupied by different faces [nFaces]
+*rpCon,  // new: Array of kinetic rate constants for faces and regions [nReg*nFaces][nrpC]
+*umpCon, // new: Array of uptake model parameters [nDC][numpC]
 ;
 // Old sorption model stuff
   float (*MSDT)[2]; // SAT: Max & min density of reacted species, 1/nm2 [NsiT]
@@ -158,7 +160,7 @@ fRes2, // new: reserved
 // new stuff (TKinMet, TSorpMod)
 char (*lPh)[PH_RKLEN];    // new: list of record keys of linked phases [nlPh]
 char (*lDC)[DC_RKLEN];    // new: list of record keys of aq, gas or surface catalyzing
-                          // species for rate regions, or species in homogen. reactions [nReg]
+                          // species for rate regions, or species in homogen. reactions [nReg*nFaces]
 //
 char (*dcpcl)[MAXDCNAME]; // new: DC parameter coefficients comment list [nscM]
 char (*ipicl)[MAXDCNAME]; // new: interaction parameter indexes comment list [ncpN]
