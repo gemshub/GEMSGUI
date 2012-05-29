@@ -43,8 +43,8 @@ sol_t[8], // Phase (solution) type { IGMTVKRLWFPED123HYSQZAUOX } or { N }
              //         Mode of calculation of DC activity coefficients { NSI }
              //	  One group of equations for all DC {U},one group per DC {P},no {N}
              //         Type of mixing rule in EoS models { WCT } or of sorption model {}
-// new:    Type of sorption/ionex/polyelectrolyte model { N }
-// new:    Reserved
+// new:    Type of sorption/ionex/polyelectrolyte isotherm model { N  }
+// new:    Type of sorption EIL model { N   }
 
 kin_t[4], // new:    Type of kinetic rate model { NTW... }
 // new:    Type of splitting model for dissolution { N TBD }
