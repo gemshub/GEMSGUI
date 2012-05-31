@@ -332,7 +332,7 @@ void NewSystemDialog::CmReadMulti()
  // Clone current record
  //       TProfil::pm->newSystat( VF_BYPASS );
         // Clear syp->XeD, syp->XeA, syp->Phm
-        TProfil::pm->Clear_XeA_XeD_Phm_BIun();
+         TProfil::pm->Clear_XeA_XeD_Phm_BIun();
 
         //ListViewResult->resetList();
         //Update();
@@ -345,12 +345,12 @@ void NewSystemDialog::CmReadMulti()
         TProfil::pm->CmReadMulti( this, filename.c_str() );
 
         // Set SysEq record key as read
-        rt[RT_SYSEQ].SetKey( TMulti::sm->GetPM()->stkey );
+        //rt[RT_SYSEQ].SetKey( TMulti::sm->GetPM()->stkey );
 
         // Clone current record   Moved here by DK on 10.04.2012
-        TProfil::pm->newSystat( VF_BYPASS );
+        //TProfil::pm->newSystat( VF_BYPASS );
 
-        ListViewResult->resetList();
+        //ListViewResult->resetList();
         Update();
     }
     catch( TError& xcpt )

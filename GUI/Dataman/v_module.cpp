@@ -335,7 +335,10 @@ TCModule::RecSave( const char *key, bool onOld )
 {
     int  Rnum = db->Find( key );
     if( Rnum<0 )
-        AddRecord( key );
+    {
+       AddRecord( key );
+       pVisorImp->defineModuleKeysList( nRT );
+    }
     else
         if( onOld == true || vfQuestion(window(), key,
                  "This data record already exists! Replace?") )

@@ -622,7 +622,7 @@ void TVisorImp::CmSave()
   NewSystemDialog *wn = activeNewSystemCommand();
   if( wn )
   {   wn->CmSave();
-      defineModuleKeysList( RT_SYSEQ );
+      //defineModuleKeysList( RT_SYSEQ );
   }
   else
   {
@@ -630,7 +630,7 @@ void TVisorImp::CmSave()
     if( actwin )
     {
       ((TCModule*)&aMod[actwin->rtNumRecord()])->CmSaveM();
-       defineModuleKeysList( actwin->rtNumRecord() );
+      // defineModuleKeysList( actwin->rtNumRecord() );
     }
   }
 }
@@ -641,7 +641,7 @@ void TVisorImp::CmSaveAs()
   NewSystemDialog *wn = activeNewSystemCommand();
   if( wn )
   {   wn->CmSaveAs();
-      defineModuleKeysList( RT_SYSEQ );
+      //defineModuleKeysList( RT_SYSEQ );
   }
   else
   {
@@ -649,7 +649,7 @@ void TVisorImp::CmSaveAs()
     if( actwin )
     {
        ((TCModule*)&aMod[actwin->rtNumRecord()])->CmSaveAs();
-        defineModuleKeysList( actwin->rtNumRecord() );
+        // defineModuleKeysList( actwin->rtNumRecord() );
     }
   }
 }

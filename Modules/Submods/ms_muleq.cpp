@@ -378,7 +378,6 @@ void TMulti::MultiKeyInit( const char*key )
        pmp->pTPD = 0;
    }
 
-   
    if( V <= 0 ) // no volume balance needed
        {
            pmp->VX_ = pmp->VXc = 0.0;
@@ -462,6 +461,7 @@ void TMulti::EqstatExpand( const char *key, bool calcActivityModels )
                else pmp->Gamma[j] = 1.0;
            } // j
         }  // k
+
       if( calcActivityModels )  // added 10.04.2012  DK
       {
     	if( pmp->pIPN <=0 )  // mixing models finalized
@@ -493,8 +493,37 @@ void TMulti::EqstatExpand( const char *key, bool calcActivityModels )
             }
             //CalculateActivityCoefficients( LINK_UX_MODE );
         }
+
         CalculateActivityCoefficients( LINK_UX_MODE );
       }
+      else
+      {   double  LnGam = 0.;
+          je =0;
+          for( k=0; k<pm.FI; k++ )
+          { // loop on phases
+              jb = je;
+              je += pm.L1[k];
+             // Real mode for activity coefficients
+             double lnGamG;
+             for( j=jb; j<je; j++ )
+             {
+               if( pm.DCC[j] == DC_AQ_SURCOMP )  // Workaround for aqueous surface complexes DK 22.07.09
+                  pm.lnGam[j] = 0.0;
+               lnGamG = PhaseSpecificGamma( j, jb, je, k, 1 );
+               LnGam = pm.lnGam[j];
+               if( fabs( lnGamG ) > 1e-9 )
+                  LnGam += lnGamG;
+               pm.lnGmo[j] = LnGam;
+               if( fabs( LnGam ) < 84. )   // before 26.02.08: < 42.
+                      pm.Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );
+               else pm.Gamma[j] = 1.0;
+
+               pm.F0[j] = DC_PrimalChemicalPotentialUpdate( j, k );
+               pm.G[j] = pm.G0[j] + pm.fDQF[j] + pm.F0[j];
+             }
+          }
+      }
+
     }
     else {  // no multi-component phases
         pmp->PD = 0;

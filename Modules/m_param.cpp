@@ -513,10 +513,42 @@ bool TProfil::CompareProjectName( const char* SysKey )
 //project_name[len] = '\0';
 //cout << len << " proj: " << project_name << " read: " << SysKey << endl;
     if( memcmp( SysKey, proj_key, len ) )
-      return true;
+        return true;
     else
       return false;
 }
+
+// Change the key read from GEMS3K I/O files
+// Copy T and P from DATABR
+void TProfil::ChangeTPinKey( double T, double P )
+{
+    MULTI* pmp = multi->GetPM();
+    char bT[40];
+    char bP[40];
+
+    Gcvt( T, 6, bT );
+    Gcvt( P, 6, bP );
+    rt[RT_SYSEQ].SetKey( pmp->stkey );
+    rt[RT_SYSEQ].MakeKey( RT_SYSEQ, pmp->stkey, RT_SYSEQ, 0, RT_SYSEQ, 1,
+                           RT_SYSEQ, 2, RT_SYSEQ, 3, RT_SYSEQ, 4,
+                           K_IMM, bP, K_IMM, bT, RT_SYSEQ, 7, K_END);
+
+    gstring str = pmp->stkey;
+    gstring capName = "Change the key read from GEMS3K I/O files";
+AGAIN:
+    str = TSysEq::pm->GetKeyofRecord( str.c_str(),capName.c_str(), KEY_NEW );
+    if( str.empty() )
+         Error( GetName(), "Record creation rejected!");
+    if( rt[RT_SYSEQ].FindCurrent( str.c_str() ) >= 0 )
+    {
+        capName = "This record already exists! Please, enter another name.";
+        goto AGAIN;
+    }
+    rt[RT_SYSEQ].SetKey( str.c_str() );
+}
+
+
+
 
 //  This function sets the system/SysEq switches for components and phases
 //       according to mui, muj, mup index lists in MULTI that were read in.
@@ -526,6 +558,10 @@ void TProfil::SetSysSwitchesFromMulti( )
      RMULTS* mup = rmults->GetMU();
      SYSTEM* syp = syst->GetSY();
      int i, ii, j, jj, k, kk;
+
+
+     // Set default informations to arrays
+     syst->setDefData();
 
      // ICs
      for( ii=0; ii < mup->N; ii++ )
@@ -540,15 +576,15 @@ void TProfil::SetSysSwitchesFromMulti( )
      for( jj=0; jj < mup->L; jj++ )
      {
          syp->Dcl[jj] = S_OFF;
-         syp->DLL[jj] = 0.;
-         syp->DUL[jj] = 1e6;
+     //    syp->DLL[jj] = 0.;
+     //    syp->DUL[jj] = 1e6;
      }
      for( j=0; j < pmp->L; j++ )
      {
         jj = pmp->muj[j];
         syp->Dcl[jj] = S_ON;
-        syp->DLL[jj] = pmp->DLL[j];
-        syp->DUL[jj] = pmp->DUL[j];
+     //   syp->DLL[jj] = pmp->DLL[j];
+     //   syp->DUL[jj] = pmp->DUL[j];
      }
      syp->L = pmp->L;
      syp->Ls = pmp->Ls;
@@ -571,18 +607,26 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
     TNodeArray* na = new TNodeArray( 1, multi->GetPM() );
     MULTI* pmp = multi->GetPM();
     SYSTEM* syp = syst->GetSY();
+    gstring key = pmp->stkey;
+
     if( na->GEM_init( path ) )
     {
       Error( path, "GEMS3K Init() error: \n"
              "Some GEMS3K input files are corrupt or cannot be found.");
     }
     multi->dyn_set();
+    outMultiTxt( "IPM_Load.txt"  );
+
     // Here to compare the modelling project name; error when from a different project.
     if( CompareProjectName( pmp->stkey ) )
     {
         delete na;
         Error( pmp->stkey, "E15IPM: Wrong project name by reading GEMS3K I/O files ");
     }
+
+    // Set T and P  for key from DataBr
+    ChangeTPinKey( pmp->TC, pmp->P );
+
     // Unpacking the actual contents of DBR file including speciation
     na->unpackDataBr( true );
     for( int j=0; j < pmp->L; j++ )
@@ -591,6 +635,9 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
     pmp->T =  pmp->Tc;
     pmp->P =  pmp->Pc;
     pmp->VX_ = pmp->VXc; // from cm3 to m3
+
+    pmp->pESU = 2;  // SysEq unpack flag set
+
     // Test sizes and flags
     // my be diffirent compared to internal system (do not test):
     // syp->PAalp, syp->PSigm, pmp->FIat, pmp->E
@@ -615,15 +662,33 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
        default:
           break;
     }
+
+    multi->DC_LoadThermodynamicData( na );
+
     // Unpack the pmp->B vector (b) into syp->BI and syp->BI (BI_ vector).
     for( int i=0; i < pmp->N; i++ )
         syp->BI[pmp->mui[i]] = syp->B[pmp->mui[i]] = pmp->B[i];
+
+    for( int jj, j=0; j < pmp->L; j++ )
+    {
+       jj = pmp->muj[j];
+       syp->DLL[jj] = pmp->DLL[j];
+       syp->DUL[jj] = pmp->DUL[j];
+    }
+    TSysEq::pm->CellChanged();
+
+    // calculate mass of the system
+     pmp->MBX = 0.0;
+    for(int i=0; i<pmp->N; i++ )
+     pmp->MBX += pmp->B[i] * pmp->Awt[i];
+     pmp->MBX /= 1000.;
 
     // Restoring the rest of MULTI contents from primal and dual solution
     pmp->pIPN =0;
     multi->Alloc_internal();
     multi->EqstatExpand( pmp->stkey, false );
-//    multi->Free_internal();
+    outMultiTxt( "IPM_EqstatExpand.txt"  );
+    //    multi->Free_internal();
     //    na->unpackDataBr( true );
     delete na;
     // We can get different results in GEMS than in GEMS3K
