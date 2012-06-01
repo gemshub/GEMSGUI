@@ -687,7 +687,7 @@ void TGEM2MT::outMulti()
    {
      mtp->qc = mtp->kv;
       pVisor->Message( window(), GetName(),
-      "Calculation of equilibria in nodes \n"
+      "Calculation of equilibria in nodes. "
            "Please, wait...", mtp->kv, mtp->nIV);
 
      // Make new Systat record & calculate it

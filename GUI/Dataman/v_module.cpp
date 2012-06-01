@@ -1294,7 +1294,7 @@ TCModule::CmRebildFile()
         if( ! MessageToSave() )
 	    return;
 
-        pVisor->Message( window(), GetName(), "Compressing database file(s) \n"
+        pVisor->Message( window(), GetName(), "Compressing database file(s). "
          "Please, wait...", 0, 100 );
 
         db->RebildFile(SelectFileList(closef|openf));

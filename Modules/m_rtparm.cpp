@@ -608,7 +608,7 @@ TRTParm::RecCalc( const char *key )
     {
         rpp->jTP = j;
         pVisor->Message( window(), GetName(),
-           "Sampling the xT, xP, yF data \n"
+           "Sampling the xT, xP, yF data. "
                  "Please, wait...", j, rpp->NV );
         // rpp->RT[j] = R_CONSTANT * ( rpp->T[j] + C_to_K );
          aW.ods_link( 0 );

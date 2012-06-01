@@ -659,7 +659,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 
 //    elm_data.flNames.Add(prfName);
     pVisor->Message( 0, "Loading Modelling Project",
-"Copying Kernel database records to Modelling Project;\n Please, wait...", 10  );
+"Copying Kernel database records to Modelling Project. Please, wait...", 10  );
 
     // added to project file icomp.kernel.prfname
     // and copy to it selected records

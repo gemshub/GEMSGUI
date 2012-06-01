@@ -1021,7 +1021,7 @@ int TDataBase::scanfile( int nF, int& fPos, int& fLen,
 
         nRec++;
 
-        pVisor->Message( 0, 0, "Compressing database file\n"
+        pVisor->Message( 0, 0, "Compressing database file. "
         		"Please, wait...", (int)fPos, (int)fLen);
     }
     fLen = fEnd;

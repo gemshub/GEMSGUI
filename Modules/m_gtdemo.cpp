@@ -732,7 +732,7 @@ TGtDemo::RecCalc( const char *key )
     for( gdp->jR = 0; gdp->jR< gdp->Nlrk; gdp->jR++ )
     {
         pVisor->Message( window(), GetName(),
-                 "Sampling the results into GtDemo x0, y0 arrays \n"
+                 "Sampling the results into GtDemo x0, y0 arrays. "
                  "Please, wait...", gdp->jR, gdp->Nlrk);
         gd_rec_read( gdp->jR );
         if( strcmp( gdp->SYS_key, rt[RT_SYSEQ].UnpackKey() ))

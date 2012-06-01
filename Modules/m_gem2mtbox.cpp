@@ -532,9 +532,9 @@ TGEM2MT::BoxEqStatesUpdate(  int Ni, int pr, double tcur, double step )
       char buf[300];
       //gstring Vmessage;
       sprintf(buf, "   step %d; time %lg; dtime %lg  ", mtp->ct, mtp->cTau, mtp->dTau );
-      Vmessage = "Calculating Reactive Mass Transport Box-Flux Simulation ";
+      Vmessage = "Calculating Reactive Transport Box-Flux Simulation: ";
       Vmessage += buf;
-      Vmessage += "\nPlease, wait (may take long)...";
+      Vmessage += ". Please, wait (may take long)...";
 
 #ifdef Use_mt_mode
     if( mtp->PsSmode != S_OFF  )
@@ -750,9 +750,9 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
 #ifndef IPMGEMPLUGIN
 
       sprintf(buf, "   step %d; time %lg; dtime %lg  ", mtp->ct, mtp->cTau, mtp->dTau );
-      Vmessage = "Calculating Transport through Sequential Reactors ";
+      Vmessage = "Calculating Transport through Sequential Reactors: ";
       Vmessage += buf;
-      Vmessage += "\nPlease, wait (may take long)...";
+      Vmessage += ". Please, wait (may take long)...";
 
 #ifdef Use_mt_mode
     if( mtp->PsSmode != S_OFF  )
@@ -899,7 +899,7 @@ bool TGEM2MT::CalcBoxFluxModel( char mode )
    
 #ifndef IPMGEMPLUGIN
        iRet = pVisor->Message( window(), GetName(),
-           "Calculating Reactive Mass Transport (RMT)\n"
+           "Calculating Reactive Mass Transport (RMT). "
            "Please, wait (may take long)...", nstep, mtp->ntM, UseGraphMonitoring );
        if( iRet )
         Error("GEM2MT generic box-flux model", "Cancel by user");

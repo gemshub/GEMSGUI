@@ -1311,9 +1311,9 @@ TProcess::internalCalc()
     while( pep->Loop ) // main cycle of process
     {
         sprintf(buf, " step %d (%s)", pep->c_nrk, pep->stkey );
-        Vmessage = "Process simulation ";
+        Vmessage = "Process simulation: ";
         Vmessage += buf;
-        Vmessage += ". Please, wait (it may take long)...";
+        Vmessage += ". Please, wait (may take long)...";
 
 
 #ifdef Use_mt_mode

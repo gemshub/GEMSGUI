@@ -99,7 +99,7 @@ void  TGEM2MT::NewNodeArray()
      mtp->qc = (short)q;
 
      pVisor->Message( window(), GetName(),
-        "Initial calculation of equilibria in nodes\n"
+        "Initial calculation of equilibria in nodes. "
              "Please, wait...", nit, mtp->nC);
 
      if( mtp->DiCp[q][0] == mtp->kv  )
@@ -663,9 +663,9 @@ if( mtp->PsVTK != S_OFF )
 
 #ifndef IPMGEMPLUGIN
        sprintf(buf, "   time %lg; step %d ", mtp->cTau, mtp->ct );
-       Vmessage = "Calculating Reactive Mass Transport (RMT)";
+       Vmessage = "Calculating Reactive Mass Transport (RMT): ";
        Vmessage += buf;
-       Vmessage += "\nPlease, wait (may take long)...";
+       Vmessage += ". Please, wait (may take long)...";
 
 #ifdef Use_mt_mode
     if( mtp->PsSmode != S_OFF  )
