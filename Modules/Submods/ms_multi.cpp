@@ -1002,6 +1002,7 @@ pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].Alloc( pm.L, 1, 6 );
         pm.UPh = (double (*)[MIXPHPROPS])aObj[ o_wo_uph].Alloc(pm.FIs,MIXPHPROPS, D_);
 
 
+    Free_TSolMod(); //Bugfix SD 01/06/12
     Alloc_TSolMod( pm.FIs );
 
     /* pm.R = (double *)aObj[ o_w_r].Alloc( pm.N, pm.N+1, D_ ); */

@@ -338,7 +338,7 @@ bool TGEM2MT::CalcIPM_Node( char mode, int ii, FILE* diffile )
 
     if( NeedGEM )
      {
-         RetCode = na->RunGEM( ii, Mode );
+        RetCode = na->RunGEM( ii, Mode );
         // Returns GEMIPM2 calculation time in sec after the last call to GEM_run()
         mtp->TimeGEM +=	na->GEM_CalcTime();
         // checking RetCode from GEM IPM calculation
@@ -439,6 +439,7 @@ void TGEM2MT::MassTransParticleStart()
     // mtp->cTau = 0;
     mtp->ct = 0;
     pa->setUpCounters();
+
 }
 
 

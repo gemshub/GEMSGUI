@@ -1106,8 +1106,15 @@ TGEM2MT::RecCalc( const char * key )
        {       //FreeNa();
                return;
        }
+     //TMulti::sm->Free_TSolMod();
      na->GEM_init( f_name.c_str(), 0, true );
-   }
+     CalcIPM( NEED_GEM_AIA, 0, mtp->nC, 0 );
+     if( mtp->PsMode == RMT_MODE_W  )
+     {
+          pa->ParticleArrayInit();
+          pa->setUpCounters();
+     }
+    }
 
    if( mtp->PvMSt != S_OFF )
         Expr_analyze( o_mttexpr );

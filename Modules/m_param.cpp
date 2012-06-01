@@ -607,7 +607,7 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
     TNodeArray* na = new TNodeArray( 1, multi->GetPM() );
     MULTI* pmp = multi->GetPM();
     SYSTEM* syp = syst->GetSY();
-    gstring key = pmp->stkey;
+    //gstring key = pmp->stkey;
 
     if( na->GEM_init( path ) )
     {
@@ -615,7 +615,6 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
              "Some GEMS3K input files are corrupt or cannot be found.");
     }
     multi->dyn_set();
-    outMultiTxt( "IPM_Load.txt"  );
 
     // Here to compare the modelling project name; error when from a different project.
     if( CompareProjectName( pmp->stkey ) )
@@ -663,6 +662,8 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
           break;
     }
 
+    // for loading GEX to System
+    CheckMtparam();
     multi->DC_LoadThermodynamicData( na );
 
     // Unpack the pmp->B vector (b) into syp->BI and syp->BI (BI_ vector).
@@ -674,7 +675,11 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
        jj = pmp->muj[j];
        syp->DLL[jj] = pmp->DLL[j];
        syp->DUL[jj] = pmp->DUL[j];
+       syp->GEX[jj] = na->DC_G0(j, pmp->Pc*bar_to_Pa, pmp->Tc, false) - mtparm->GetTP()->G[jj];
     }
+
+// !!! We cannot restore to System  for adsorbtion must be done
+
     TSysEq::pm->CellChanged();
 
     // calculate mass of the system

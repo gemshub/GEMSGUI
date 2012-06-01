@@ -194,7 +194,7 @@ TVisorImp::TVisorImp(int c, char** v):
     layout2->setContentsMargins( 0, 0, 0, 0 );
     layout2->setSpacing(0);
     itemWidget2->setLayout(layout2);
-    messageText = new QLabel("\n\n\n");
+    messageText = new QLabel("\n");
     layout2->addWidget(messageText);
     splV->addWidget(itemWidget2);
 
@@ -288,6 +288,8 @@ void TVisorImp::defineModuleKeysList( int nRT )
   QTableWidgetItem *item, *curItem=0;
   gstring oldKey = rt[nRT].UnpackKey();
 
+  if(currentNrt != nRT)
+    return;
 
   // define tbKeys
   tbKeys->clear();
@@ -369,6 +371,7 @@ void TVisorImp::changeModulesKeys( int nRT )
     if( currentNrt == nRT )
         return;
 
+    currentNrt = nRT;
     if( nRT < 0)
     {
         tbKeys->clear();
@@ -381,7 +384,7 @@ void TVisorImp::changeModulesKeys( int nRT )
     {    pFilterKey->setText(((TCModule*)&aMod[nRT])->getFilter());
          defineModuleKeysList( nRT );
     }
-   currentNrt = nRT;
+   // currentNrt = nRT;
 }
 
 

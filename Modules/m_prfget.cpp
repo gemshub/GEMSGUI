@@ -532,8 +532,6 @@ void TProfil::loadSystat( const char *key )
     // unpack to SYSTEM structure
     syst->loadData( false );  // set def and unpack syseq to system
 
-    outMultiTxt( "GEM_systLoad.txt"  );
-
     // Test MULTY for change (if new System cfg or T, P - new)
     pmp->pESU = 0;  //  new record was readed
     gstring keyp = gstring( rt[RT_SYSEQ].UnpackKey(), 0, rt[RT_SYSEQ].KeyLen() );
@@ -550,6 +548,7 @@ void TProfil::loadSystat( const char *key )
         multi->EqstatExpand( keyp.c_str(), true );
         outMultiTxt( "GEM_EqstatExpand.txt"  );
     }
+
     pVisor->Update();
 }
 
