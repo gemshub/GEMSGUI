@@ -345,6 +345,7 @@ protected:
 
     void  copyNodeArrays();
     void  NewNodeArray();
+    void  putHydP( DATABRPTR* C0 );
     void  LinkNode0(  int nNode );
     void  LinkNode1(  int nNode );
     void  LinkCSD(  int nNode );

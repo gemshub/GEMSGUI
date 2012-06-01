@@ -58,6 +58,27 @@ void  TGEM2MT::copyNodeArrays()
    }  // ii    end of node iteration loop
 }
 
+// put HydP
+void  TGEM2MT::putHydP( DATABRPTR* C0 )
+{
+  for( int jj=0; jj<mtp->nC; jj ++)
+  {
+       C0[jj]->NodeTypeHY = mtp->DiCp[jj][1];
+#ifdef NODEARRAYLEVEL
+     if( mtp->HydP )
+     { C0[jj]->Vt = mtp->HydP[jj][0];
+       C0[jj]->vp = mtp->HydP[jj][1];
+       C0[jj]->eps = mtp->HydP[jj][2];
+       C0[jj]->Km = mtp->HydP[jj][3];
+       C0[jj]->al = mtp->HydP[jj][4];
+       C0[jj]->Dif = mtp->HydP[jj][5];
+       C0[jj]->hDl = C0[jj]->al*C0[jj]->vp+C0[jj]->Dif;
+       C0[jj]->nto = mtp->HydP[jj][6];
+     }
+#endif
+  }
+}
+
 #ifndef IPMGEMPLUGIN
 
 //-------------------------------------------------------------------
@@ -139,24 +160,9 @@ void  TGEM2MT::NewNodeArray()
       Error( "NewNodeArray() error:" ," Undefined boundary condition!" );
 
  // put HydP
-  for( int jj=0; jj<mtp->nC; jj ++)
-   {
-        C0[jj]->NodeTypeHY = mtp->DiCp[jj][1];
-#ifdef NODEARRAYLEVEL
-      if( mtp->HydP )
-      { C0[jj]->Vt = mtp->HydP[jj][0];
-        C0[jj]->vp = mtp->HydP[jj][1];
-        C0[jj]->eps = mtp->HydP[jj][2];
-        C0[jj]->Km = mtp->HydP[jj][3];
-        C0[jj]->al = mtp->HydP[jj][4];
-        C0[jj]->Dif = mtp->HydP[jj][5];
-        C0[jj]->hDl = C0[jj]->al*C0[jj]->vp+C0[jj]->Dif;
-        C0[jj]->nto = mtp->HydP[jj][6];
-      }
-#endif
-   }
+ putHydP( C0 );
 
-  for (int ii=0; ii<mtp->nC; ii++)    // node iteration
+ for (int ii=0; ii<mtp->nC; ii++)    // node iteration
    {
        na->CopyNodeFromTo( ii, mtp->nC, C0, na->pNodT1() );
    }  // ii    end of node iteration loop
@@ -449,6 +455,7 @@ void TGEM2MT::MassTransParticleStep( bool CompMode )
    mtp->ct += 1;
    mtp->oTau = mtp->cTau;
    mtp->cTau += mtp->dTau;
+
    pa->GEMPARTRACK( mtp->PsMode, CompMode, mtp->oTau, mtp->cTau );
 }
 
@@ -684,7 +691,7 @@ if( mtp->PsVTK != S_OFF )
        if( iRet )
          break;
 
-        //  the mass transport iteration time step
+         //  the mass transport iteration time step
          switch( mtp->PsMode )
          {
           case RMT_MODE_A: MassTransAdvecStep( CompMode );

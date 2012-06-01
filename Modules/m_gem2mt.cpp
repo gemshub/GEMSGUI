@@ -1111,8 +1111,9 @@ TGEM2MT::RecCalc( const char * key )
      CalcIPM( NEED_GEM_AIA, 0, mtp->nC, 0 );
      if( mtp->PsMode == RMT_MODE_W  )
      {
-          pa->ParticleArrayInit();
-          pa->setUpCounters();
+      putHydP( na->pNodT0() );
+      putHydP( na->pNodT1() );
+      pa->setUpCounters();
      }
     }
 

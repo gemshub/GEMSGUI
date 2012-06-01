@@ -268,7 +268,6 @@ long int TParticleArray::DisplaceParticle( long int px, double /*t0*/, double /*
          ParT1[px].xyz.x += vp*dt + ds;
                         break;
    }
-
   return 0;
 }
 
@@ -370,12 +369,12 @@ long int TParticleArray::RandomWalkIteration( long int /*Mode*/, bool CompMode, 
        m_ = nodes->GetNodeMass( iNode, (char)iType,
             ParTD[iType].tcode, ParTD[iType].ips );
        mass[iNode*anPTypes+iType] = m_/ NPnum[iNode*anPTypes+iType];
-    }
+  }
   for( cpx=0; cpx < anParts; cpx++ )
     ParT1[cpx].m_v = mass[ParT1[cpx].node*anPTypes+ParT1[cpx].ptype];
   delete[] mass;
 
-// new  particle position xyz
+ // new  particle position xyz
   for( cpx=0; cpx < anParts; cpx++ )
      iRet = DisplaceParticle( cpx, t0, t1 );
 
@@ -419,6 +418,7 @@ long int TParticleArray::GEMPARTRACK( long int Mode, bool ComponentMode, double 
   t0 = t0_;
   t1 = t1_;
   dt = (t1-t0);
+
   switch( Mode )
   {
    case 'W':  iRet = RandomWalkIteration( Mode, ComponentMode, t0, t1 );
