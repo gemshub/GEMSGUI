@@ -34,7 +34,7 @@
 #include "visor.h"
 
 const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
-const char *_GEMS_version_stamp = " GEMS-GUI v.3.1 r.2150 (rc) ";
+const char *_GEMS_version_stamp = " GEMS-GUI v.3.1 r.2160 (rc) ";
 extern const char *_GEMIPM_version_stamp;
 
 HelpWindow* HelpWindow::pDia = 0;

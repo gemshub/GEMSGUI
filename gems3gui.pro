@@ -2,10 +2,11 @@
 TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems3
-##VERSION         = 3.1.0
+#VERSION         = 3.1.0
 
 DEFINES         += Use_mt_mode
 DEFINES         += NODEARRAYLEVEL
+#DEFINES         += NOMUPNONLOGTERM
 
 CONFIG -= warn_on
 CONFIG += warn_off
@@ -15,7 +16,6 @@ QT += network
 QT += sql
 QT += xml
 
-#LIBS	+= -lqd
 #RESOURCES += img.qrc
 
 !win32 {
