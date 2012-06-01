@@ -623,10 +623,7 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
         Error( pmp->stkey, "E15IPM: Wrong project name by reading GEMS3K I/O files ");
     }
 
-    // Set T and P  for key from DataBr
-    ChangeTPinKey( pmp->TC, pmp->P );
-
-    // Unpacking the actual contents of DBR file including speciation
+     // Unpacking the actual contents of DBR file including speciation
     na->unpackDataBr( true );
     for( int j=0; j < pmp->L; j++ )
         pmp->X[j] = pmp->Y[j];
@@ -634,6 +631,9 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
     pmp->T =  pmp->Tc;
     pmp->P =  pmp->Pc;
     pmp->VX_ = pmp->VXc; // from cm3 to m3
+
+    // Set T and P  for key from DataBr
+    ChangeTPinKey( pmp->TC, pmp->P );
 
     pmp->pESU = 2;  // SysEq unpack flag set
 
