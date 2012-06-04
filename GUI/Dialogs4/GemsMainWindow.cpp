@@ -762,12 +762,6 @@ void TVisorImp::OpenHelp(const char* file, const char* item1, int page )
    // old help assistantClient->showDocumentation( file, item);
 }
 
-void TVisorImp::CmHelpAbout()
-{
-    AboutDialog dlg(this);
-    dlg.exec();
-}
-
 void TVisorImp::CmHelp2()
 {
   TCModuleImp *actwin = activeMdiChild();
@@ -779,11 +773,12 @@ void TVisorImp::CmHelp2()
      if( wn )
           wn->CmHelp2();
      else
-        if(pVisor->ProfileMode == MDD_DATABASE)
+        OpenHelp( GEMS_HOWTOSTART_HTML );
+        /*if(pVisor->ProfileMode == MDD_DATABASE)
         {
           HowToStartDialog dlg(this);
           dlg.exec();
-        }
+        }*/
   }
 }
 

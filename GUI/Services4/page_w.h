@@ -125,6 +125,7 @@ class TCWindow: public QWidget
 
 protected:
     void closeEvent(QCloseEvent* evt);
+    void showEvent( QShowEvent * event );
 
 public slots:
     void EvTabSelChange(int);

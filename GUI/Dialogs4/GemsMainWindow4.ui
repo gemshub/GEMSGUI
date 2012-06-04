@@ -28,7 +28,7 @@
      <x>0</x>
      <y>0</y>
      <width>1121</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Record">
@@ -140,6 +140,9 @@
     <addaction name="sactionMoreIPM"/>
     <addaction name="separator"/>
     <addaction name="sactionAbout"/>
+    <addaction name="actionAuthors"/>
+    <addaction name="actionThanks"/>
+    <addaction name="actionLicense"/>
    </widget>
    <widget class="QMenu" name="menu_Modules">
     <property name="tearOffEnabled">
@@ -1237,6 +1240,21 @@
    </property>
    <property name="iconVisibleInMenu">
     <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionAuthors">
+   <property name="text">
+    <string>Authors</string>
+   </property>
+  </action>
+  <action name="actionThanks">
+   <property name="text">
+    <string>Thanks</string>
+   </property>
+  </action>
+  <action name="actionLicense">
+   <property name="text">
+    <string>License</string>
    </property>
   </action>
  </widget>

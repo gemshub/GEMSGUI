@@ -142,14 +142,14 @@ CWinInfo::fromWinCFG(istream & win_cfg)
 // TCPage
 //----------------------------------------------------------------
 
-PageInfo::PageInfo(const CWinInfo & wi, istream & is):
+PageInfo::PageInfo(/*const */CWinInfo & wi, istream & is):
         rWinInfo(wi)/*, pPage(0)*/
 {
     fromDAT(is);
 }
 
 
-PageInfo::PageInfo(const CWinInfo & wi, TConfig & cnf, gstring s):
+PageInfo::PageInfo(/*const */CWinInfo & wi, TConfig & cnf, gstring s):
         rWinInfo(wi), /*pPage(0),*/ name(s)
 {
     load(cnf);

@@ -51,7 +51,7 @@ TCModuleImp::TCModuleImp(int irt, int page, int aviewmode):
 
     // size is set up from TCWindow
     //  resize(rInfo.init_width, rInfo.init_height);
-    setMinimumSize( 300, 200 );
+    //setMinimumSize( 300, 200 );
 
     //--setActions( viewmode );
     //--statusBar()->show();
@@ -61,7 +61,6 @@ TCModuleImp::TCModuleImp(int irt, int page, int aviewmode):
     //setCentralWidget(pWin);
     QVBoxLayout* mainBox = new QVBoxLayout(this);
     mainBox->addWidget( pWin );
-
     rMod.Setup();
 }
 

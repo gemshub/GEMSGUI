@@ -344,6 +344,9 @@ public slots:
     bool SetProfileMode();
     bool SetGeneralMode();
     void CmHelpAbout();
+    void CmHelpAuthors();
+    void CmHelpThanks();
+    void CmHelpLicense();
     void CalcMulti();
 //    void SaveSystem();
     void Update(bool force);

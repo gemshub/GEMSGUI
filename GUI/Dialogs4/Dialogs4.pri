@@ -81,8 +81,8 @@ SOURCES += $$DIALOGS4_CPP/GemsMainWindow.cpp \
 FORMS += $$DIALOGS4_CPP/GemsMainWindow4.ui \
          $$DIALOGS4_CPP/NewSystemDialog4.ui \
          $$DIALOGS4_CPP/HelpWindow4.ui \
-         $$DIALOGS4_CPP/HowToStartDialog4.ui \
-         $$DIALOGS4_CPP/AboutDialog4.ui \
+         #$$DIALOGS4_CPP/HowToStartDialog4.ui \
+         #$$DIALOGS4_CPP/AboutDialog4.ui \
          $$DIALOGS4_CPP/GraphDialog4.ui \
          $$DIALOGS4_CPP/LegendDialog4.ui \
          $$DIALOGS4_CPP/SymbolDialog4.ui \

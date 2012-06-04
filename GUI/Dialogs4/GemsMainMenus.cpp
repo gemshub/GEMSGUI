@@ -283,6 +283,9 @@ void TVisorImp::setActions()
     connect( sactionMoreBCC, SIGNAL( triggered()), this, SLOT(CmMoreBCC()));
     connect( sactionMoreIPM, SIGNAL( triggered()), this, SLOT(CmMoreIPM()));
     connect( sactionAbout, SIGNAL( triggered()), this, SLOT(CmHelpAbout()));
+    connect( actionAuthors, SIGNAL( triggered()), this, SLOT(CmHelpAuthors()));
+    connect( actionThanks, SIGNAL( triggered()), this, SLOT(CmHelpThanks()));
+    connect( actionLicense, SIGNAL( triggered()), this, SLOT(CmHelpLicense()));
 
     connect( action_Help_2, SIGNAL( triggered()), this, SLOT(CmHelp2()));
     connect( action_Preferences, SIGNAL( triggered()), this, SLOT(CmSettingth()));
@@ -503,6 +506,28 @@ void TVisorImp::CmMoreIPM()
 void TVisorImp::CmHowto()
 {
     OpenHelp( GEMS_HOWTO_HTML );
+}
+
+void TVisorImp::CmHelpAbout()
+{
+    OpenHelp( GEMS_ABOUT_HTML );
+    //AboutDialog dlg(this);
+    //dlg.exec();
+}
+
+void TVisorImp::CmHelpAuthors()
+{
+    OpenHelp( GEMS_AUTHORS_HTML );
+}
+
+void TVisorImp::CmHelpThanks()
+{
+    OpenHelp( GEMS_THANKS_HTML );
+}
+
+void TVisorImp::CmHelpLicense()
+{
+    OpenHelp( GEMS_LICENSE_HTML );
 }
 
 //TCM_EV_COMMAND(CM_SCRIPT, CmScript);

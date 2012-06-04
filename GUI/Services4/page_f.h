@@ -93,7 +93,7 @@ struct FieldInfo
 //===========================================
 struct PageInfo
 {
-    const CWinInfo& rWinInfo;
+    /*const */CWinInfo& rWinInfo;
 //    TCPage* pPage;
 
     TIArray<FieldInfo> aFieldInfo;
@@ -103,8 +103,8 @@ struct PageInfo
 
     TCWindow& GetWin();
 
-    PageInfo(const CWinInfo& wi, istream& is);
-    PageInfo(const CWinInfo& wi, TConfig& cnf, gstring name);
+    PageInfo(/*const */CWinInfo& wi, istream& is);
+    PageInfo(/*const */CWinInfo& wi, TConfig& cnf, gstring name);
     void load(TConfig& c);
 
     void toDAT(ostream& os);
@@ -143,8 +143,8 @@ struct CWinInfo
     void fromWinCFG(istream& is);
 
 private:
-    CWinInfo(const CWinInfo&);
-    const CWinInfo& operator=(const CWinInfo&);
+    //CWinInfo(const CWinInfo&);
+    //const CWinInfo& operator=(const CWinInfo&);
 };
 
 inline TCWindow&

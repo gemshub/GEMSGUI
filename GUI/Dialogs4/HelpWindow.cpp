@@ -34,6 +34,7 @@
 #include "visor.h"
 
 const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
+const char *GEMS_ABOUT_HTML = "gems_about.html#PAGE_ABOUT";
 const char *_GEMS_version_stamp = " GEMS-GUI v.3.1 r.2160 (rc) ";
 extern const char *_GEMIPM_version_stamp;
 
@@ -239,8 +240,9 @@ void HelpWindow::helpVersion()
 
 void HelpWindow::helpAbout()
 {
-    AboutDialog dlg;
-    dlg.exec();
+    showDocumentation( GEMS_ABOUT_HTML, 0 );
+    //AboutDialog dlg;
+    //dlg.exec();
 }
 
 void HelpWindow::helpOnHelp()
@@ -521,7 +523,7 @@ void SearchWidget::searchingFinished(int hits)
     qApp->restoreOverrideCursor();
 }
 
-//---------------------------------------------------------------
+/*---------------------------------------------------------------
 
 AboutDialog::AboutDialog( QWidget* parent):
         QDialog( parent )
@@ -556,7 +558,7 @@ void HowToStartDialog::languageChange()
 {
     retranslateUi(this);
 }
-
+*/
 //----------------------------------------------------------------
 // Help file entry point constants
 
@@ -601,7 +603,7 @@ const char *GSM_EQDEMO_HTML = "gems_sys";        //ms_calc.h
 const char *GSM_MULTI_HTML =  "gems_ipm";        //ms_calc.h
 
 // dialogs
-const char *GEMS_ABOUT_HTML = "gems_about";       // MainDialog
+//const char *GEMS_ABOUT_HTML = "gems_about";       // MainDialog
 const char *GEMS_TUTOR_HTML = "gems_tutorial";    // MainDialog
 const char *GEMS_SETUP_HTML = "gems_setup";       // SettingsDialog
 const char *GEMS_TDBAS_HTML = "gems_tdbase";      // DBDialog
@@ -627,7 +629,12 @@ const char *GEMS_TEMPL_HTML = "gems_miscel.html#TEMPLATES";  // ChangeKeyDialog
 const char *GEMS_WRIPMF_HTML = "gems_ipm.html#WRITEIPMFILES"; // LookupDialog
 const char *GEMS_MARK_HTML = "gems_miscel.html#MARK"; // SelectDialog
 const char *GEMS_SELECT_HTML = "gems_miscel.html#SELECT"; // KeyDialog
-
+// MainDialog
+const char *GEMS_HOWTOSTART_HTML = "gems_about.html#PAGE_HOWTOSTART";
+//const char *GEMS_ABOUT_HTML = "gems_about.html#PAGE_ABOUT";
+const char *GEMS_AUTHORS_HTML = "gems_about.html#PAGE_AUTHORS";
+const char *GEMS_THANKS_HTML = "gems_about.html#PAGE_THANKS";
+const char *GEMS_LICENSE_HTML = "gems_about.html#PAGE_LICENSE";
 // old
 const char *GEMS_TOC_HTML = "gems_toc"; // default for modules
 

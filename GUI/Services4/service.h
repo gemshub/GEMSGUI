@@ -248,6 +248,12 @@ extern const char *GEMS_WRIPMF_HTML;    // LookupDialog
 extern const char *GEMS_MARK_HTML;      // SelectDialog
 extern const char *GEMS_SELECT_HTML;    // KeyDialog
 
+extern const char *GEMS_HOWTOSTART_HTML; // MainDialog
+extern const char *GEMS_ABOUT_HTML;      // MainDialog
+extern const char *GEMS_AUTHORS_HTML;    // MainDialog
+extern const char *GEMS_THANKS_HTML;     // MainDialog
+extern const char *GEMS_LICENSE_HTML;    // MainDialog
+
 // old
 extern const char *GEMS_TOC_HTML; // default for modules
 
