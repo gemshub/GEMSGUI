@@ -44,10 +44,10 @@ void  TGEM2MT::copyNodeArrays()
   DATABRPTR* C1 = na->pNodT1();  // nodes at previous time point
   double dc;
 
-  for (int ii=1; ii<mtp->nC; ii++)    // node iteration
+  for (long int ii=1; ii<mtp->nC; ii++)    // node iteration
    {
      bool NeedCopy = false;
-     for(int ic=0; ic < CH->nICb-1; ic++) // do not check charge
+     for(long int ic=0; ic < CH->nICb-1; ic++) // do not check charge
      {
         dc = C0[ii]->bIC[ic] - C1[ii]->bIC[ic];
         if( fabs( dc ) > min( mtp->cdv, (C1[ii]->bIC[ic] * 1e-3)))
@@ -61,7 +61,7 @@ void  TGEM2MT::copyNodeArrays()
 // put HydP
 void  TGEM2MT::putHydP( DATABRPTR* C0 )
 {
-  for( int jj=0; jj<mtp->nC; jj ++)
+  for( long int jj=0; jj<mtp->nC; jj ++)
   {
        C0[jj]->NodeTypeHY = mtp->DiCp[jj][1];
 #ifdef NODEARRAYLEVEL
@@ -88,7 +88,7 @@ void  TGEM2MT::putHydP( DATABRPTR* C0 )
 //
 void  TGEM2MT::NewNodeArray()
 {
-    int nit;
+    long int nit;
 
  // generate Tval&Pval arrays
  if( mtp->PsTPai != S_OFF )
@@ -102,7 +102,7 @@ void  TGEM2MT::NewNodeArray()
 
  // put DDc
  if( data_CH->DD && mtp->DDc )
-  for( int jj=0; jj<data_CH->nDCs; jj ++)
+  for( long int jj=0; jj<data_CH->nDCs; jj ++)
       data_CH->DD[jj*data_CH->nPp*data_CH->nTp] = mtp->DDc[jj];
 
  // Distribute data from initial systems into nodes as prescribed in DiCp[*][0]
@@ -115,9 +115,9 @@ void  TGEM2MT::NewNodeArray()
       //  TProfil::pm->pmp->pTPD = 0;
       calc_eqstat( true );
 
-   for( int q=0; q<mtp->nC; q++)
+   for( long int q=0; q<mtp->nC; q++)
    {
-     mtp->qc = (short)q;
+     mtp->qc = q;
 
      pVisor->Message( window(), GetName(),
         "Initial calculation of equilibria in nodes. "
@@ -138,7 +138,7 @@ void  TGEM2MT::NewNodeArray()
              DATABR* data_BR = na->pCNode();
              data_BR->TK = TMulti::sm->GetPM()->TCc+C_to_K; //25
              data_BR->P = TMulti::sm->GetPM()->Pc*bar_to_Pa; //1
-             for(int i1=0; i1<mtp->nICb; i1++ )
+             for(long int i1=0; i1<mtp->nICb; i1++ )
                data_BR->bIC[i1] = TMulti::sm->GetPM()->B[ mtp->xIC[i1] ];
          }
          else // Save databr
@@ -155,14 +155,14 @@ void  TGEM2MT::NewNodeArray()
  pVisor->CloseMessage();
 
  DATABRPTR* C0 = na->pNodT0();  // nodes at current time point
- for( int ii=0; ii<mtp->nC; ii++)
+ for( long int ii=0; ii<mtp->nC; ii++)
       if(  C0[ii] == 0 )
       Error( "NewNodeArray() error:" ," Undefined boundary condition!" );
 
  // put HydP
  putHydP( C0 );
 
- for (int ii=0; ii<mtp->nC; ii++)    // node iteration
+ for (long int ii=0; ii<mtp->nC; ii++)    // node iteration
    {
        na->CopyNodeFromTo( ii, mtp->nC, C0, na->pNodT1() );
    }  // ii    end of node iteration loop
@@ -181,26 +181,26 @@ void  TGEM2MT::NewNodeArray()
 // neighbors from each side, are set to AIA. Other nodes are set to PIA.
 // returns: Number of nodes set to AIA
 //
-int TGEM2MT::CheckPIAinNodes1D( char IAmode, int start_node, int end_node )
+long int TGEM2MT::CheckPIAinNodes1D( char IAmode, long int start_node, long int end_node )
 {
-       int nSetAIA = 0;
+       long int nSetAIA = 0;
        // Getting direct access to data
        DATACH* CH = na->pCSD();       // DataCH structure
        DATABRPTR* C0 = na->pNodT0();  // nodes at previous time point
 //       DATABRPTR* C1 = na->pNodT1();  // nodes at current time point
        bool* iaN = na->piaNode();      // indicators for IA in the nodes
 
-	   start_node = max( start_node, 0 );
-       end_node = min( end_node, (int)mtp->nC-1 );
+       start_node = max( start_node, 0L );
+       end_node = min( end_node, mtp->nC-1 );
 
        // Initializing iaNode vector
        if( IAmode == NEED_GEM_SIA && CH->nDCb == CH->nDC )
        {
-    	  for( int ii = start_node; ii<= end_node; ii++ )
+          for( long int ii = start_node; ii<= end_node; ii++ )
     		 iaN[ii] = false;    // potentially need PIA
        }
        else { // setting all nodes to AIA GEM calculations
-     	  for( int ii = 0; ii< (int)mtp->nC; ii++ )
+          for( long int ii = 0; ii< mtp->nC; ii++ )
      	  {
      		  iaN[ii] = true;
      		  nSetAIA++;
@@ -210,9 +210,9 @@ int TGEM2MT::CheckPIAinNodes1D( char IAmode, int start_node, int end_node )
 
        // This is done only if PIA mode is requested!
        // First variant: 1-neighbour algorithm
-       for( int ii = start_node; ii<= end_node; ii++) // node iteration
+       for( long int ii = start_node; ii<= end_node; ii++) // node iteration
 	   {
-    	 // mtp->qc = (short)ii;
+         // mtp->qc = ii;
 	      switch( C0[ii]->NodeTypeMT )
 	     {
 	        case normal: // normal node
@@ -232,7 +232,7 @@ int TGEM2MT::CheckPIAinNodes1D( char IAmode, int start_node, int end_node )
 	        			nSetAIA++;
 	        			continue;
 	     }
-	     if( (ii == 0 || ii == (int)mtp->nC-1 ) ) // &&
+         if( (ii == 0 || ii == mtp->nC-1 ) ) // &&
 //	    	 (C0[ii]->NodeTypeMT == normal || C0[ii]->NodeTypeMT == NBC1source) )
 //	     {
 //	     	iaN[ii] = true;
@@ -240,7 +240,7 @@ int TGEM2MT::CheckPIAinNodes1D( char IAmode, int start_node, int end_node )
 	     	continue;
 //	     }
 	     // checking pair of adjacent nodes for phase assemblage differences
-	     for( int kk=0; kk<CH->nPHb; kk++ )
+         for( long int kk=0; kk<CH->nPHb; kk++ )
 	     {
 	    	if( C0[ii]->xPH[kk] == 0.0 && C0[ii-1]->xPH[kk] == 0.0 )
 	    		continue;    // Phase kk is absent in both node systems
@@ -286,9 +286,9 @@ DIFFERENT:
 //   return code   true   Ok
 //                 false  Error in GEMipm calculation part
 //
-bool TGEM2MT::CalcIPM_Node( char mode, int ii, FILE* diffile )
+bool TGEM2MT::CalcIPM_Node( char mode, long int ii, FILE* diffile )
 {
-   int Mode, ic, RetCode=OK_GEM_AIA;
+   long int Mode, ic, RetCode=OK_GEM_AIA;
    bool NeedGEM = false;
    bool iRet = true;
    double dc; // difference (decrement) to concentration/amount
@@ -304,7 +304,7 @@ bool TGEM2MT::CalcIPM_Node( char mode, int ii, FILE* diffile )
    else
       iaN[ii] = false;
 
-   mtp->qc = (short)ii;
+   mtp->qc = ii;
 
    if(mtp->PsSIA == S_OFF )
         NeedGEM = true;
@@ -401,14 +401,14 @@ bool TGEM2MT::CalcIPM_Node( char mode, int ii, FILE* diffile )
 //   return code   true   Ok
 //                 false  Error in GEMipm calculation part
 //
-bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
+bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node, FILE* diffile )
 {
     bool iRet = true;
 
-    start_node = max( start_node, 0 );
-    end_node = min( end_node, (int)mtp->nC-1 );
+    start_node = max( start_node, 0L );
+    end_node = min( end_node, mtp->nC-1 );
 
-   for( int ii = start_node; ii<= end_node; ii++) // node iteration
+   for( long int ii = start_node; ii<= end_node; ii++) // node iteration
    {
      if( !CalcIPM_Node(  mode, ii,  diffile ) )
        iRet = false;
@@ -468,7 +468,7 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
 {
  double c0, c1, cm1,  cm2, /*cmax,*/ c12, cm12,
         charge, /*c0new,*/ dc, cr, aji, fmolal;      // some help variables
- int ii, ic, jc;
+ long int ii, ic, jc;
 
  //  Getting direct access to TNodeArray class data
  DATACH* CH = na->pCSD();       // DataCH structure
@@ -481,7 +481,7 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
 
    for( ii = 2; ii< mtp->nC-1; ii++) // node iteration, -1 the right boundary is open ....
    {
-     mtp->qc = (short)ii;
+     mtp->qc = ii;
      if( CompMode == true )
      {  // Advective mass transport over DC gradients in Aq phase
          fmolal = 55.5084/node1_xDC( ii, CH->nDCinPH[0]-1 );
@@ -580,8 +580,8 @@ bool TGEM2MT::Trans1D( char mode )
 {
   bool iRet = false;
   bool CompMode = false;   // Component transport mode: true: DC; false: IC
-  int nStart = 0, nEnd = mtp->nC;
-  // int NodesSetToAIA;
+  long int nStart = 0, nEnd = mtp->nC;
+  // long int NodesSetToAIA;
  bool UseGraphMonitoring = false;
  char buf[300];
 // gstring Vmessage;
@@ -770,9 +770,9 @@ fclose( diffile );
 
 // plotting the record -------------------------------------------------
 //Added one point to graph
-clock_t TGEM2MT::PrintPoint( int nPoint, FILE* diffile, FILE* logfile, FILE* ph_file )
+clock_t TGEM2MT::PrintPoint( long int nPoint, FILE* diffile, FILE* logfile, FILE* ph_file )
 {
-    int evrt =10;
+    long int evrt =10;
     clock_t t_out, t_out2;
     t_out = clock();
 

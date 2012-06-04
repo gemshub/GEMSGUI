@@ -52,7 +52,7 @@
 #define H(f, i)    ( mtp->BSF[ (f) * mtp->Nf + ( i )] )
 
 
-inline double TGEM2MT::MassICinMGP( int q, int f, int i )
+inline double TGEM2MT::MassICinMGP( long int q, long int f, long int i )
 {
     double MassIC=0.;
     if(f >= 0)
@@ -61,13 +61,13 @@ inline double TGEM2MT::MassICinMGP( int q, int f, int i )
 }
 
 // Calculation of mass of f-th MGP in q-th box (in kg)
-double TGEM2MT::MassMGP( int q, int f  )
+double TGEM2MT::MassMGP( long int q, long int f  )
 {
     double Mass = 0.0;
     if ( f < 0 )
        Mass = 0.0;
     else {
-       for(int i=0; i<mtp->Nf; i++ )
+       for(long int i=0; i<mtp->Nf; i++ )
           Mass += y(q,f,i) * na->ICmm( i );
     }  // Mass /= 1000.;
 //    fstream f_log("ipmlog.txt", ios::out|ios::app );
@@ -77,7 +77,7 @@ double TGEM2MT::MassMGP( int q, int f  )
 
 //   Increment to mass differential for i-th IC in q-th box using rate
 //
-inline void TGEM2MT::dMBfluxDir( int q, int i, double *dm, double fRate, double sign )
+inline void TGEM2MT::dMBfluxDir( long int q, long int i, double *dm, double fRate, double sign )
 {
     switch(mtp->DiCp[q][1])
     {                  // boundary condition node
@@ -99,11 +99,11 @@ inline void TGEM2MT::dMBfluxDir( int q, int i, double *dm, double fRate, double 
 // calculate kk-th flux between boxes with indexes in FDLi[kk]
 //  !!!!!!!!!!!!!!!!!!!!!!!!! To be checked and revised!
 //
-void TGEM2MT::dMBflux( int kk, double *m, double *dm, double t )
+void TGEM2MT::dMBflux( long int kk, double *m, double *dm, double t )
 {
-  int  q, p, f, fe=-1, i;
+  long int  q, p, f, fe=-1, i;
   char FLXid[MAXSYMB+1], MGPid[MAXSYMB+1];
-  int FLXorder/*, FLXtype*/;
+  long int FLXorder/*, FLXtype*/;
   double nbIC, fRate, fRateS, MGPo=0., MGPi=0., vkk=1., mqfi, gqfi, Hfei, MBqi, MBpi;
   bool sinkOut=false;
 
@@ -266,7 +266,7 @@ void TGEM2MT::dMBflux( int kk, double *m, double *dm, double t )
 // Cleaning up the table of IC mass differentials in boxes/nodes
 void TGEM2MT::dMBZeroOff(  double *dm )
 {
-  int q, i;
+  long int q, i;
   // Zeroing IC mass differentials off
   for( q=0; q <mtp->nC; q++ )
         for(i =0; i< mtp->Nf; i++ )
@@ -276,7 +276,7 @@ void TGEM2MT::dMBZeroOff(  double *dm )
 // calculate transport step at time cTau using the table of fluxes
 void TGEM2MT::Solut( double *m, double *dm, double tau )
 { 
-  int kk;
+  long int kk;
 
   // Zeroing IC mass differentials off
   dMBZeroOff(  dm );
@@ -294,9 +294,9 @@ void TGEM2MT::Solut( double *m, double *dm, double tau )
 #define dMb( q, i)  (mtp->dMB[(q)*mtp->Nf + (i)])
 
 // change bulk composition in the box q using changes dM*dTau over time step
-void TGEM2MT::BoxComposUpdate( int q )
+void TGEM2MT::BoxComposUpdate( long int q )
 {
-   int i;
+   long int i;
  double n1bICo, n1bICn=0., dMbqi, ICmm, dTau;  // for debugging
 
    for(i =0; i< mtp->Nf; i++ )
@@ -321,7 +321,7 @@ void TGEM2MT::BoxComposUpdate( int q )
 // Update all box compositions at cTau using time step dTau
 void TGEM2MT::BoxesBCupdate()
 {
-  int q;
+  long int q;
   for( q=0; q <mtp->nC; q++ )
   {
      BoxComposUpdate( q );
@@ -331,9 +331,9 @@ void TGEM2MT::BoxesBCupdate()
 // Calculation of q-th box reactive IC masses in kg
 // returns total mass of the box in kg
 //
-double TGEM2MT::BoxMasses( int q )
+double TGEM2MT::BoxMasses( long int q )
 {
-   int i;
+   long int i;
    double BoxMass = 0., Mbqi = 0.;
    for(i=0; i<mtp->Nf; i++ )
    {
@@ -350,12 +350,12 @@ Mbqi = Mb(q,i);    // debugging
 //     1 'M' means the whole source amount (of aq, gas or solid phase) for S models
 //     and just mole amount of phase for B models
 //
-void TGEM2MT::ComposMGPinBox( int q  )
+void TGEM2MT::ComposMGPinBox( long int q  )
 {
     double PhFract=0., Xincr=1., Xe, PHmw, Vm=1., R1=1., Msys=1.,
             Mwat=1., Vaq=1., Maq=1., Vsys=1., Mph=0., Mgas=0.;
     char UNITP = 'M';
-    int f, i, k, x_aq=-1, x_gf=-1, naqgf=0;
+    long int f, i, k, x_aq=-1, x_gf=-1, naqgf=0;
 
     for(f=0; f<mtp->nPG; f++ )
           for(i=0; i<mtp->Nf; i++ )
@@ -502,7 +502,7 @@ void TGEM2MT::ComposMGPinBox( int q  )
 //
 void TGEM2MT::CalcMGPdata()
 {
-  int q;
+  long int q;
     // Calculation of current box reactive IC masses in kg
        for( q=0; q <mtp->nC; q++ )
            BoxMasses( q );
@@ -518,7 +518,7 @@ void TGEM2MT::CalcMGPdata()
 //  step - current time step
 //
 bool
-TGEM2MT::BoxEqStatesUpdate(  int Ni, int pr, double tcur, double step )
+TGEM2MT::BoxEqStatesUpdate(  long int Ni, long int pr, double tcur, double step )
 {
   bool iRet = true;
   FILE* diffile = NULL;
@@ -616,7 +616,7 @@ void TGEM2MT::BoxFluxTransportStart()
         delete[] mtp->tt;
     mtp->tt = new double[mtp->nC * mtp->Nf][9];
  #endif
-    int q, f, i;
+    long int q, f, i;
        for( q=0; q <mtp->nC; q++ )
              for(i=0; i<mtp->Nf; i++ )
                  Mb( q, i) = 0.;
@@ -642,12 +642,12 @@ void TGEM2MT::FlowThroughBoxFluxStep()
 
 // Returns MGP index from MGP identifier MGPid
 //   or -1 if the identifier was not found in the MGP id list
-int TGEM2MT::LookUpXMGP( const char* MGPid )
+long int TGEM2MT::LookUpXMGP( const char* MGPid )
 {
-        int found = -1;
+        long int found = -1;
         // Check if the first character is 0 1 2 3 4 5 6 7 8 9
         // If so, this is index of elemental flux with composition from BSF table
-        for( int f=0; f < mtp->nPG; f++ )
+        for( long int f=0; f < mtp->nPG; f++ )
         {
             if( strncmp( mtp->MGPid[f], MGPid, MAXSYMB ) )
                 continue;
@@ -669,7 +669,7 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
   try {
     char buf[300];
     //gstring Vmessage;
-    int p, i, kk, x_aq=-1, x_gf=-1, naqgf=1, lastp=0;
+    long int p, i, kk, x_aq=-1, x_gf=-1, naqgf=1, lastp=0;
     bool iRet = false;
     clock_t outp_time = (clock_t)0;
     bool UseGraphMonitoring = false;
@@ -785,7 +785,7 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
                if( mtp->ct > 0 ) // don't remove anything at 0-th wave!
                {
                   // Removing all this MGP from the p box first
-                  int oldp = mtp->FDLi[kk+1][1];
+                  long int oldp = mtp->FDLi[kk+1][1];
                   mtp->FDLi[kk+1][1] = -1;
                   dMBflux( kk+1, mtp->MB, mtp->dMB, mtp->cTau );
                   mtp->FDLi[kk+1][1] = oldp;
@@ -935,8 +935,8 @@ bool TGEM2MT::CalcBoxFluxModel( char mode )
 //--------------------------------------------------------------------
 // Integration process
 
-const int NMAX = 800;
-const int KM = 8;
+const long int NMAX = 800;
+const long int KM = 8;
 const double UROUND = 1.73e-18;
 const double FAC1 = 2.e-2;
 const double FAC2 = 4.0;
@@ -956,16 +956,16 @@ static double hh[9];
 static double w[9];
 static double err;
 static double epsd4;
-static int    nj[9]={2,4,6,8,10,12,14,16,18};
+static long int    nj[9]={2,4,6,8,10,12,14,16,18};
 static double a1[9]={3.0,7.0,13.0,21.0,31.0,43.0,57.0,73.0,91.0};
 
 
 // internal point j calculation
-void TGEM2MT::MIDEX( int j, double t, double h )
+void TGEM2MT::MIDEX( long int j, double t, double h )
 {
     double *z1=0, *z2=0, *dz=0;
     double hj, scal, fac, facmin, expo, ys, v1, v2;
-    int i,m,mm,l,n;
+    long int i,m,mm,l,n;
     try
     {
         n = mtp->nC*mtp->Nf;
@@ -1058,7 +1058,7 @@ void
 TGEM2MT::INTEG( double eps, double& step, double t_begin, double t_end )
 {
     double  t, h1, h, v1;
-    int     j,i,reject,last,kc=0,kopt,k;
+    long int     j,i,reject,last,kc=0,kopt,k;
 
     x = mtp->MB;
     dx = mtp->dMB;
@@ -1068,7 +1068,7 @@ TGEM2MT::INTEG( double eps, double& step, double t_begin, double t_end )
     epsd4 = eps * SAFE1;
     v1 = -log10(eps)*.6+1.5;
     v1 = min( 8.0, v1 );
-    k = (int)max( 3.0, v1 ) - 1;
+    k = (long int)max( 3.0, v1 ) - 1;
     t = t_begin;
     h1 = t_end-t;
     v1 = min( MAXSTEP, h1/2. );
@@ -1303,7 +1303,7 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments )
       {
           if( _comment )
             ff << "\n# Array of grid point locations";
-          prar.writeArray(  "grid", mtp->grid[0], mtp->nC*3, 3 );
+          prar.writeArray(  "grid", mtp->grid[0], mtp->nC*3, 3L );
       }
    }     
    if( mtp->PsMode == RMT_MODE_S || mtp->PsMode == RMT_MODE_F || mtp->PsMode == RMT_MODE_B )
@@ -1315,7 +1315,7 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments )
         prar.writeArray(  "FDLi", mtp->FDLi[0], mtp->nFD*2, 2 );
  	   if( _comment )
         ff << "\n# Part of the flux defnition list (flux order, flux rate, MGP quantities)";
-        prar.writeArray(  "FDLf", mtp->FDLf[0], mtp->nFD*4, 4 );
+        prar.writeArray(  "FDLf", mtp->FDLf[0], mtp->nFD*4, 4L );
  	   if( _comment )
         ff << "\n# ID of fluxes";
         prar.writeArray(  "FDLid", mtp->FDLid[0], mtp->nFD, MAXSYMB );
@@ -1330,7 +1330,7 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments )
 	{
 	  if( _comment )
         ff << "\n# Units for setting phase quantities in MGP";
-      prar.writeArray(  "UMGP", mtp->UMGP, mtp->FIf, 1 );
+      prar.writeArray(  "UMGP", mtp->UMGP, mtp->FIf, 1L );
 	  if( _comment )
          ff << "\n# Quantities of phases in MGP ";
 	  prar.writeArray(  "PGT", mtp->PGT, mtp->FIf*mtp->nPG, mtp->nPG );

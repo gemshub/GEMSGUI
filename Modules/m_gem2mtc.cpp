@@ -118,7 +118,7 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
   TCIntArray aSelIC;
   TCIntArray aSelDC;
   TCIntArray aSelPH;
-  int ii;
+  long int ii;
   uint jj;
 
   if( !select_all ) // use old selections
@@ -169,9 +169,9 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
          aSelPH);
 
 // These dimensionalities define sizes of dynamic data in DATABR structure
-  mtp->nICb = (short)aSelIC.GetCount();
-  mtp->nDCb = (short)aSelDC.GetCount();
-  mtp->nPHb = (short)aSelPH.GetCount();
+  mtp->nICb = aSelIC.GetCount();
+  mtp->nDCb = aSelDC.GetCount();
+  mtp->nPHb = aSelPH.GetCount();
   //int nPSb = 0;
   //for( jj=0; jj< aSelPH.GetCount(); jj++, nPSb++ )
   // if( aSelPH[jj] >= mult->FIs )
@@ -185,11 +185,11 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
 
 // set dynamic data
   for( jj=0; jj< aSelIC.GetCount(); jj++ )
-    mtp->xIC[jj] = (short)aSelIC[jj];
+    mtp->xIC[jj] = aSelIC[jj];
   for( jj=0; jj< aSelDC.GetCount(); jj++ )
-    mtp->xDC[jj] = (short)aSelDC[jj];
+    mtp->xDC[jj] = aSelDC[jj];
   for( jj=0; jj< aSelPH.GetCount(); jj++ )
-    mtp->xPH[jj] = (short)aSelPH[jj];
+    mtp->xPH[jj] = aSelPH[jj];
 }
 
 
@@ -219,7 +219,7 @@ void TGEM2MT::init_arrays( bool mode )
 
 // set data to SBM (IComp names)
     if( mtp->SBM )
-      for(int ii=0; ii< mtp->Nb; ii++ )
+      for(long int ii=0; ii< mtp->Nb; ii++ )
         memcpy( mtp->SBM[ii], TRMults::sm->GetMU()->SB[ii], MAXICNAME/*+MAXSYMB*/  );
 
 // setup flags and counters
@@ -229,7 +229,7 @@ void TGEM2MT::init_arrays( bool mode )
 
   if( mode )
   {
-    int ii;
+    long int ii;
     double cT =  TMulti::sm->GetPM()->TCc;
     double cP =  TMulti::sm->GetPM()->Pc;
 
@@ -275,7 +275,7 @@ void TGEM2MT::init_arrays( bool mode )
         mtp->NPmean[ii] = 500;
         mtp->nPmin[ii] = 100;
         mtp->nPmax[ii] = 1000;
-        mtp->ParTD[ii][0] = (short)ii;
+        mtp->ParTD[ii][0] = ii;
         mtp->ParTD[ii][1] = MOBILE_C_MASS;
         mtp->ParTD[ii][2] = DISSOLVED;
         mtp->ParTD[ii][3] = 0;
@@ -286,15 +286,15 @@ void TGEM2MT::init_arrays( bool mode )
 
  // setup default graphiks lines
    if( mtp->PvEF != S_OFF  )
-        for(int i=0; i<mtp->nYE; i++ )
+        for(long int i=0; i<mtp->nYE; i++ )
         {
-            sprintf( tbuf, "%s%d", TProfil::pm->pa.GDpsc, i+1 );
+            sprintf( tbuf, "%s%ld", TProfil::pm->pa.GDpsc, i+1 );
             if( !*mtp->lNamE[i] || *mtp->lNamE[i] == ' ' )
                 strncpy( mtp->lNamE[i], tbuf,  MAXGRNAME );
         }
    /* remake script setup
       if( mtp->PvMSg != S_OFF  )
-         for(int j=0; j< mtp->nYS; j++ )
+         for(long int j=0; j< mtp->nYS; j++ )
          {
             sprintf( tbuf, "%s%d", TProfil::pm->pa.GDpsc, j+1 );
             if( !*mtp->lNam[j]|| *mtp->lNam[j] == ' ' )
@@ -305,7 +305,7 @@ void TGEM2MT::init_arrays( bool mode )
 
   if( mtp->PsMode == RMT_MODE_S || mtp->PsMode == RMT_MODE_F || mtp->PsMode == RMT_MODE_B )
   {
-     int ii;
+     long int ii;
      gstring phName = "0";
      double xaq= 0.;
      double xgas = 0.;
@@ -334,7 +334,7 @@ void TGEM2MT::init_arrays( bool mode )
      {
         if( !*mtp->MGPid[ii] || *mtp->MGPid[ii] == ' ' || *mtp->MGPid[ii] == '`' )
             strcpy( mtp->MGPid[ii], phName.c_str() );
-        for(int k=0; k<mtp->FIf; k++ )
+        for(long int k=0; k<mtp->FIf; k++ )
         {
              char  PHC_ = TMulti::sm->GetPM()->PHC[mtp->xPH[k]];
 
@@ -369,19 +369,19 @@ void TGEM2MT::init_arrays( bool mode )
 // generate Tval and Pval arrays
 void TGEM2MT::gen_TPval()
 {
-  int ii;
+  long int ii;
   mtp->cT = mtp->Tai[START_];
   mtp->cP = mtp->Pai[START_];
 
   for( ii=0; ii<mtp->nTai; ii++ )
   {
-    mtp->Tval[ii] = (float)mtp->cT;
+    mtp->Tval[ii] = mtp->cT;
     mtp->cT += mtp->Tai[STEP_];
   }
 
   for( ii=0; ii<mtp->nPai; ii++ )
   {
-    mtp->Pval[ii] = (float)mtp->cP;
+    mtp->Pval[ii] = mtp->cP;
     mtp->cP += mtp->Pai[STEP_];
   }
 }
@@ -439,7 +439,7 @@ void TGEM2MT::calc_eqstat( bool startSys )
            //TK =  pmp->TC+C_to_K;
            TMulti::sm->GetPM()->Pc= mtp->cP;
            // loading parameters for ICs (independent components)
-           for( int i=-1, ii=0; ii< mtp->Nb; ii++ )
+           for( long int i=-1, ii=0; ii< mtp->Nb; ii++ )
            {
               if( TSyst::sm->GetSY()->Icl[ii] == S_OFF )
                 continue;
@@ -466,12 +466,12 @@ void TGEM2MT::calc_eqstat( bool startSys )
 }
 
 //make matrix An  As Bb_Calc in Dualth
-void TGEM2MT::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
+void TGEM2MT::make_A( long int siz_, char (*for_)[MAXFORMUNITDT] )
 {
   // Get full matrix A
   TIArray<TFormula> aFo;
   gstring form;
-  int ii;
+  long int ii;
 
   if( !siz_ )
   { mtp->An = (double *)aObj[ o_mtan ].Free();
@@ -500,7 +500,7 @@ void TGEM2MT::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
 void
 TGEM2MT::Bn_Calc()
 {
-    int i, j;
+    long int i, j;
     double Msysb_bk, Tmolb_bk;
     double MsysC = 0., R1C = 0.;
     double Xincr, ICmw, DCmw;
@@ -536,7 +536,7 @@ TGEM2MT::Bn_Calc()
   Msysb_bk = mtp->Msysb;
   Tmolb_bk = mtp->Tmolb;
 
-  for( int ii=0; ii< mtp->nIV; ii++ )
+  for( long int ii=0; ii< mtp->nIV; ii++ )
   {
     // set line in Bb to zeros
     memset( mtp->Bn + ii*mtp->Nb, 0, mtp->Nb*sizeof(double) );
@@ -646,7 +646,7 @@ TGEM2MT::Bn_Calc()
 //
 void TGEM2MT::gen_task( bool startSys )
 {
-    int i=0, kv = mtp->kv, qc = mtp->qc, Nb = mtp->Nb;
+    long int i=0, kv = mtp->kv, qc = mtp->qc, Nb = mtp->Nb;
     double ScalingFactor = 1., Bi = 0., Bis = 0.;
 
     if( startSys )
@@ -731,10 +731,10 @@ void TGEM2MT::CalcGraph()
 //    gd_gr->Show();
 
 // LinkCSD(0);
- for( int ii=0; ii<mtp->nC; ii++)
+ for( long int ii=0; ii<mtp->nC; ii++)
  {
-   mtp->jt = (short)min( ii, (mtp->nC-1));
-   mtp->qc = (short)ii;
+   mtp->jt = min( ii, (mtp->nC-1));
+   mtp->qc = ii;
    LinkNode0(ii);
    LinkNode1(ii);
    rpn[1].CalcEquat();
@@ -758,10 +758,10 @@ void TGEM2MT::CalcStartScript()
     return;
 
   // generate Ti, Pi, Vi, DiCp, HydP  arrays
-    for( int ii=0; ii< max( mtp->nC, mtp->nFD ); ii++)
+    for( long int ii=0; ii< max( mtp->nC, mtp->nFD ); ii++)
     {
-      mtp->jt = (short)min( ii, (mtp->nC-1));
-      mtp->qc = (short)ii;
+      mtp->jt = min( ii, (mtp->nC-1));
+      mtp->qc = ii;
       rpn[0].CalcEquat();
     }
 
@@ -770,16 +770,16 @@ void TGEM2MT::CalcStartScript()
 // working with scripts --------------------------------------------
 // Translate, analyze and unpack equations (o_mttexpr or o_mtgexpr)
 
-int get_ndx_( int i, int nO, int Xplace )
+int get_ndx_(  int i,  int nO,  int Xplace )
 {
-  int ii, jj=i;
+   int ii, jj=i;
 
   if( nO ==o_n0_bps || nO == o_n1_bps )
    if( Xplace )
       nO = o_n0_bic;
 
   int N=0, type = 0;
-  short *arr=0;
+  long int *arr=0;
 
   switch( nO )
   {
@@ -791,13 +791,13 @@ int get_ndx_( int i, int nO, int Xplace )
     case o_n1_gam:
     case o_n1_dul:
     case o_n1_dll: N = aObj[o_mt_xdc].GetN();
-                   arr = (short *)aObj[o_mt_xdc].GetPtr();
+                   arr = (long int *)aObj[o_mt_xdc].GetPtr();
                    type = 2;
                    break;
      case o_n1_xph:
      case o_n0_xph: //CH->nPHb
                     N = aObj[o_mt_xph].GetN();
-                    arr = (short *)aObj[o_mt_xph].GetPtr();
+                    arr = (long int *)aObj[o_mt_xph].GetPtr();
                     type = 3;
                     break;
     case  o_n0_vps:  // CH->nPSb
@@ -809,7 +809,7 @@ int get_ndx_( int i, int nO, int Xplace )
     case  o_n1_xpa:
     case  o_n1_bps:
                     N = (int)aObj[o_mtchbr].Get(0);
-                    arr = (short *)aObj[o_mt_xph].GetPtr();
+                    arr = (long int *)aObj[o_mt_xph].GetPtr();
                     type = 4;
                     break;
      case o_n0_bic:  //CH->nICb
@@ -821,7 +821,7 @@ int get_ndx_( int i, int nO, int Xplace )
      case o_n1_uic:
      case o_n1_bsp:
                     N = aObj[o_mt_xic].GetN();
-                    arr = (short *)aObj[o_mt_xic].GetPtr();
+                    arr = (long int *)aObj[o_mt_xic].GetPtr();
                     type = 1;
                     break;
   }
@@ -1001,9 +1001,9 @@ TGEM2MT::SaveGraphData( GraphData *gr )
 
 // Link na->pNodT0()[nNode] for internal object list
 // nNode < 0 set up NULL pointers  gfor objects
-void  TGEM2MT::LinkNode0(  int nNode )
+void  TGEM2MT::LinkNode0( long int nNode )
 {
-  int ii;
+  long int ii;
   DATABR* BR;
 
   if( nNode >= 0   )
@@ -1109,10 +1109,10 @@ aObj[o_n0_ts].SetM( 2 );
 
 // Link na->pNodT1()[nNode] for internal object list
 // nNode < 0 set up NULL pointers  for objects
-void  TGEM2MT::LinkNode1(  int nNode )
+void  TGEM2MT::LinkNode1(  long int nNode )
 {
   DATABR* BR;
-  int ii;
+  long int ii;
 
   if( nNode >= 0   )
   {  BR = na->pNodT1()[nNode];
@@ -1217,7 +1217,7 @@ aObj[o_n1_ts].SetM( 2 );
 
 // Link na->pCSD() structure for internal object list
 // nNode < 0 set up NULL pointers  for objects
-void  TGEM2MT::LinkCSD(  int nNode )
+void  TGEM2MT::LinkCSD(  long int nNode )
 {
   if( nNode >= 0   )
   {

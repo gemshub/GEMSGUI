@@ -738,9 +738,9 @@ enum gem2mt_objects {
   o_mtpufl = o_dttprn+1, o_mtpvfl, o_mtpsfl, o_mtnc, o_mtnv,
   o_mtnfd, o_mtnsfd, o_mtnmgp,
   o_mtcipf, o_mtszt, o_mtnsne, o_mtptai, o_mtchbr, o_mttmi,  o_mtnvi,
-  o_mtaxis, o_mtpai,  o_mttai,  o_mttau,  o_mtsizelc,
-// DBase 66
-  o_mtname, o_mtnotes, o_mtflag, o_mtshort, o_mtworks,
+  /*o_mtaxis,*/ o_mtpai,  o_mttai,  o_mttau,  o_mtsizelc,
+// DBase 67
+  o_mtname, o_mtnotes, o_mtflag, o_mtshort, o_mtaxis, o_mtworks,
   o_mtworkf, o_mtdoudl, o_mtadpar, o_mtfloat, o_mtsize,
   o_mtxnames, o_mtynames, o_mtlnam, o_mtlname, o_mttexpr,
   o_mtgexpr, o_mtsdref, o_mtsdval, o_mtdicp, o_mt_xic,

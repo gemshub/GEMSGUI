@@ -457,8 +457,8 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       // set default data and realloc arrays
       char flags[6];
       double Tai[4], Pai[4];
-      short nTp_, nPp_;
-      float *arT, *arP;
+      long int nTp_, nPp_;
+      double *arT, *arP;
 
       Tai[0] = pmp->TCc; Tai[1] = pmp->TCc;
       Pai[0] = pmp->Pc; Pai[1] = pmp->Pc;
@@ -467,9 +467,9 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
         	return;
 
       //internal objects for lookup arrays data
-      arT = (float *) aObj[ o_w_tval].GetPtr();
+      arT = (double *) aObj[ o_w_tval].GetPtr();
       nTp_ = aObj[ o_w_tval].GetN();
-      arP = (float *) aObj[ o_w_pval].GetPtr();
+      arP = (double *) aObj[ o_w_pval].GetPtr();
       nPp_ = aObj[ o_w_pval].GetN();
 
 

@@ -24,8 +24,8 @@
 #include "graph.h"
 #include "particlearray.h"
 
-const int MT_RKLEN = 80;
-#define SIZE_HYDP 7
+const long int MT_RKLEN = 80,
+               SIZE_HYDP = 7;
 
 typedef struct
 { // Description of GEM2MT data structure (prototype of 04 Dec. 2007)
@@ -75,7 +75,7 @@ PvDIc,  //  Use diffusion coefficients for IC - DIc vector (+ -)
    notes[MAXFORMULA];  //  Comments
 
 
-  short  // input I (30)
+  long int  // input L (32+6)
    nC,   // nQ - number of local equilibrium compartments (nodes, boxes, volumes)
    // xC, yC, zC  numbers of nodes along x, y, z coordinates
    nIV,  // number of initial variants of the chemical system, nIV <= nC
@@ -116,8 +116,8 @@ nRes3,  //   reserved
 
 // iterators for generating syseq record keys for initial system variants
    tmi[3],   // SYSTEM CSD definition #: start, end, step (initial)
-   NVi[3],    // Restrictions variant #: start, end, step
-   axisType[6];  // axis graph type, background(3), graph type, reserved
+   NVi[3]; // Restrictions variant #: start, end, step
+  short  axisType[6];  // axis graph type, background(3), graph type, reserved
 
   double
   // Input for compositions of initial systems
@@ -156,7 +156,7 @@ nRes3,  //   reserved
 
 
   // Inital systems
-  short
+  long int
   // These lists of indices connect the DATABR arrays with this structure
      *xIC,   // ICNL indices in DATABR IC vectors [nICb]
      *xDC,   // DCNL indices in DATABR DC list [nDCb]
@@ -164,7 +164,7 @@ nRes3,  //   reserved
      *NPmean,       // array of initial mean particle type numbers per node ( size: nPTypes )
      *nPmin,        // minimum average total number of particles of each type per one node nPTypes
      *nPmax; // maximum average total number of particles of each type per one node nPTypes
-  short  (*xVTKfld)[2];     //  list of selected fields to VTK format
+  long int  (*xVTKfld)[2];     //  list of selected fields to VTK format
 
   double (*PTVm)[5];// Pressure P, bar for initial systems (values within Pai range) [nV]
                     // Temperature T, C for initial systems (values within Pai range)
@@ -174,15 +174,14 @@ nRes3,  //   reserved
    double
      *Bn,    //  [nIV][Nb] Table of bulk compositions of initial systems
      *CIb,   // [nIV][Nb] Table of quantity/concentration of IC in initial systems
-     *CAb    // [nIV][Lbi] Table of quantity/concentration of formulae for initial systems
-     ;
-   float
+     *CAb,    // [nIV][Lbi] Table of quantity/concentration of formulae for initial systems
+
      *Tval,   // discrete values of T [nTai] in grid arrays in DataCH
      *Pval;   // discrete values of P [nPai]
 
   // Init of nodes
-    short (*DiCp)[2];     // array of indexes of initial system variants for distributing to nodes [nC]
-    short (*ParTD)[6];  // array of particle type definitions at t0 or after interruption nPTypes
+    long int (*DiCp)[2];     // array of indexes of initial system variants for distributing to nodes [nC]
+    long int (*ParTD)[6];  // array of particle type definitions at t0 or after interruption nPTypes
     double  (*HydP)[SIZE_HYDP]; // [nC][6] hydraulic parameters for nodes in mass transport model
                                  //  value order to be described
     double (*StaP)[4]; // [nC][4] Pressure P, bar for nodes (values within Pai range)
@@ -192,7 +191,7 @@ nRes3,  //   reserved
     double (*grid)[3];  // Array of grid point locations, size is nC
 
   // Fluxes
-    short (*FDLi)[2]; //[nFD][2] Indexes of nodes where this flux begins and ends
+    long int (*FDLi)[2]; //[nFD][2] Indexes of nodes where this flux begins and ends
               // negative value means one-side flux (source or sink)
              // for source fluxes, -2 means "source flux stoichiometry with index 1
              // line in the BSF table", and so on
@@ -269,7 +268,7 @@ double  (*FDLf)[4]; // [nFD][4] Part of the flux defnition list (flux order, flu
    *tprn;              // internal
 
  //work data
- short
+ long int
    ctm,    // current CSD #
    cnv,    //  current restriction variant #
    qc,     // current index of the compartment ( 1 to nC )
@@ -338,7 +337,7 @@ protected:
     void mt_next();
     void mt_reset();
     void gen_task( bool startSys );
-    void make_A( int siz_, char (*for_)[MAXFORMUNITDT] );
+    void make_A( long int siz_, char (*for_)[MAXFORMUNITDT] );
     void Bn_Calc();
     void gen_TPval();
     void CalcStartScript();
@@ -346,18 +345,18 @@ protected:
     void  copyNodeArrays();
     void  NewNodeArray();
     void  putHydP( DATABRPTR* C0 );
-    void  LinkNode0(  int nNode );
-    void  LinkNode1(  int nNode );
-    void  LinkCSD(  int nNode );
+    void  LinkNode0(  long int nNode );
+    void  LinkNode1(  long int nNode );
+    void  LinkCSD(  long int nNode );
     void  allocNodeWork();
     void  freeNodeWork();
 
     void  CalcGraph();
-int CheckPIAinNodes1D( char mode, int start_node = 0, int end_node = 1000 );
+long int CheckPIAinNodes1D( char mode, long int start_node = 0, long int end_node = 1000 );
 
-     bool CalcIPM_Node( char mode, int ii, FILE* diffile = NULL);
-     bool  CalcIPM( char mode, int start_node = 0,
-         int end_node = 1000, FILE* diffile = NULL );
+     bool CalcIPM_Node( char mode, long int ii, FILE* diffile = NULL);
+     bool  CalcIPM( char mode, long int start_node = 0,
+         long int end_node = 1000, FILE* diffile = NULL );
 
     void  MassTransAdvecStart();
     void  MassTransAdvecStep( bool ComponentMode = true );
@@ -366,7 +365,7 @@ int CheckPIAinNodes1D( char mode, int start_node = 0, int end_node = 1000 );
     bool Trans1D( char mode  );  // return true if canceled
 
    // for box flux model with variable time step (TBD)
-    int MaxIter,  // max number of iterations
+    long int MaxIter,  // max number of iterations
          nfcn,      // number of functional estimates
          nstep,     // number of steps
          naccept,   // number of permissible steps
@@ -379,34 +378,34 @@ int CheckPIAinNodes1D( char mode, int start_node = 0, int end_node = 1000 );
     void  BoxFluxTransportStart();
     void  FlowThroughBoxFluxStep();
 
-    double BoxMasses( int q );
-    void ComposMGPinBox( int q );
-//    void DisCoefMGPinBox( int q );
+    double BoxMasses( long int q );
+    void ComposMGPinBox( long int q );
+//    void DisCoefMGPinBox( long int q );
     void  dMBZeroOff(  double *dm );
-    inline double MassICinMGP(int q, int f, int i);
-    double MassMGP( int q, int f  );
-    inline void dMBfluxDir( int q, int i, double *dm, double fRate, double sign=1.);
-    int   LookUpXMGP( const char* MGPid );
-    void  dMBflux( int kk, double *m, double *dm, double t );
+    inline double MassICinMGP( long int q, long int f, long int i);
+    double MassMGP(long int q, long int f  );
+    inline void dMBfluxDir( long int q, long int i, double *dm, double fRate, double sign=1.);
+    long int   LookUpXMGP( const char* MGPid );
+    void  dMBflux( long int kk, double *m, double *dm, double t );
     // calculate 1-step from system of equation
     void Solut( double *m, double *dm, double t );
 
-    void  BoxComposUpdate( int q );
+    void  BoxComposUpdate( long int q );
     void  BoxesBCupdate();  // was CalcNodeFlux()
     void  CalcMGPdata();
     // Calculate new box states for tcur = x
-    bool BoxEqStatesUpdate( int Ni,int pr, double x, double step );
+    bool BoxEqStatesUpdate( long int Ni,long int pr, double x, double step );
     bool CalcSeqReacModel( char mode ); // Calculation of S-mode sequential reactors model
     bool CalcBoxFluxModel( char mode ); // integrate boxes with fluxes of Mobile Groups of Phases
 
     // internal point j calculation
-    void MIDEX( int j, double t, double h );
+    void MIDEX( long int j, double t, double h );
     void INTEG( double eps, double& step, double t_begin, double t_end );
 
     // for separate
     void to_text_file( fstream& ff, bool with_comments );
 
-    clock_t PrintPoint( int nPoint, FILE* diffile = NULL, FILE* logfile = NULL, FILE* ph_file = NULL);
+    clock_t PrintPoint( long int nPoint, FILE* diffile = NULL, FILE* logfile = NULL, FILE* ph_file = NULL);
     
 public:
 

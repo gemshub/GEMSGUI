@@ -145,9 +145,9 @@ class TParticleArray
 
 public:
 
-   TParticleArray( short nPTypes, short nProps,
-           short *aNPmean, short (*aParTD)[6],
-           short *anPmin, short *anPmax, TNodeArray* aNodes );
+   TParticleArray( long int nPTypes, long int nProps,
+           long int *aNPmean, long int (*aParTD)[6],
+           long int *anPmin, long int *anPmax, TNodeArray* aNodes );
 // destructor
   ~TParticleArray();
 

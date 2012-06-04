@@ -104,7 +104,7 @@ void LookupDialog::definePArray()
    int nPs, nPi, nP, ii;
    double  cP;
    double Pai[4];
-   float *arP;
+   double *arP;
 
    nPs = pPPoints->value();
    if( nPs == 1 )
@@ -118,7 +118,7 @@ void LookupDialog::definePArray()
   //init P array
    double stepP = getStep( Pai, nP );
    cP = Pai[0];
-   arP = (float *) aObj[ o_w_pval].Alloc( nP, 1, F_);
+   arP = (double *) aObj[ o_w_pval].Alloc( nP, 1, D_);
    if( PTable == 0)
     for( ii=0; ii<nP; ii++ )
     {
@@ -172,7 +172,7 @@ void LookupDialog::defineTArray()
    int nT, nTs, nTi, ii;
    double cT;
    double Tai[4];
-   float  *arT;
+   double  *arT;
 
    if(chInterp->isChecked())
    {
@@ -193,7 +193,7 @@ void LookupDialog::defineTArray()
    //init T array
    double stepT = getStep( Tai, nT );
    cT = Tai[0];
-   arT = (float *) aObj[ o_w_tval].Alloc( nT, 1, F_);
+   arT = (double *) aObj[ o_w_tval].Alloc( nT, 1, D_);
    if( PTable == 0)
     for( ii=0; ii<nT; ii++ )
     {
@@ -251,12 +251,12 @@ void LookupDialog::setupPTArrays()
    int nT, nP, ii;
    double cT, cP;
    double Pai[4], Tai[4];
-   float  *arT, *arP;
+   double  *arT, *arP;
 
    //init P array
    getPdata( Pai );
    nP = getNpoints( Pai );
-   arP = (float *) aObj[ o_w_pval].Alloc( nP, 1, F_);
+   arP = (double *) aObj[ o_w_pval].Alloc( nP, 1, D_);
    cP = Pai[START_];
    for( ii=0; ii<nP; ii++ )
    {
@@ -267,7 +267,7 @@ void LookupDialog::setupPTArrays()
    //init T array
    getTdata( Tai );
    nT = getNpoints( Tai );
-   arT = (float *) aObj[ o_w_tval].Alloc( nT, 1, F_);
+   arT = (double *) aObj[ o_w_tval].Alloc( nT, 1, D_);
    cT = Tai[START_];
    for( ii=0; ii<nT; ii++ )
    {

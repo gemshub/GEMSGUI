@@ -25,10 +25,10 @@ static double Rand = -1;
 TParticleArray* TParticleArray::pa;
 
 
-TParticleArray::TParticleArray( short nPTypes, short nProps,
-           short *aNPmean,
-           short (*aParTD)[6],
-           short *anPmin, short *anPmax,
+TParticleArray::TParticleArray( long int nPTypes, long int nProps,
+           long int *aNPmean,
+           long int (*aParTD)[6],
+           long int *anPmin, long int *anPmax,
            TNodeArray* aNodes ):
   ParT0(0), ParT1(0), anParts(0),
   anPTypes(nPTypes), anProps(nProps), nodes(aNodes)
