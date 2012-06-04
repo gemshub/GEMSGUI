@@ -133,6 +133,8 @@
         <file>theory_tdb.html</file>
         <file>theory_uns.html</file>
         <file>BCC_wrn.png</file>
+        <file>CalculateGEMIcon24.png</file>
+        <file>DatabaseModeIcon24.png</file>
         <file>ElementsDialog-Options.png</file>
         <file>EquilibriaCalculationModeToolbarFragment.png</file>
         <file>EquilibriumModeIcon24.png</file>
@@ -166,6 +168,7 @@
         <file>SetupWritingGEMS3KfilesDialog.png</file>
         <file>SetupWritingGEMS3KfilesPage2grid.png</file>
         <file>SetupWritingGEMS3KfilesPage2pairs.png</file>
+        <file>ShowHelpWindowIcon24.png</file>
         <file>TabRightClickMenu.png</file>
         <file>WhichAqModel.png</file>
         <file>WhichGasModel.png</file>
