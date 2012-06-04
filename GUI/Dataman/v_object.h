@@ -58,7 +58,7 @@ class TObject
     char IndexationCode;
     char Keywd[MAXKEYWD];
 
-    void* GetCellPtr(int N = 0, int M = 0);
+    //void* GetCellPtr(int N = 0, int M = 0);
     TValBase* BuildVal(ObjType t, int M);
 
     TObject (const TObject& );	// forbidden

@@ -663,5 +663,24 @@ void TPlotLine::write(GemDataStream& stream)
     stream.writeArray(name, sizeof(name));
 }
 
+void TPlotLine::read(fstream& stream)
+{
+    stream >> type;
+    stream >> size;
+    stream >> line_size;
+    stream >> red >> green >> blue;
+    stream.get( name, 16, '\n');
+ }
+
+void TPlotLine::write(fstream& stream)
+{
+    stream << type << " ";
+    stream << size << " ";
+    stream << line_size << " ";
+    stream << red << " " << green << " " << blue << " ";
+    stream << name;
+    stream << endl;
+}
+
 
 //--------------------- End of graph.cpp ---------------------------

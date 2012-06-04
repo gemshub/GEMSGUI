@@ -329,7 +329,7 @@ inline
 bool
 TVal<unsigned char>::SetString(const char* s, size_t ndx)
 {
-    ((unsigned char*)ptr)[ndx] = *s;
+    ((unsigned char*)ptr)[ndx] = (unsigned char)*s;
     return true;
 }
 

@@ -810,6 +810,14 @@ void TObject::toTXT( fstream& to )
             to << "~\n";
             return;
         }
+
+    if( strcmp(Keywd+2, "plt") == 0 )
+    {
+        for(int ii=0; ii<GetN(); ii++)
+            ((TPlotLine*)GetPtr() + ii)->write(to);
+         return;
+    }
+
     if( Type == S_ ) // text
     {  //*((char*)(char*)GetPtr()+M-1) = 0;
 
@@ -823,8 +831,8 @@ void TObject::toTXT( fstream& to )
                 strcpy(sbuf, GetString(i,j).c_str() );
                 if( Type > 0 )
                     to << "\"";
-                /*else */switch( *sbuf )
-                    {
+                 switch( *sbuf )
+                 {
                     case 0:
                         sbuf[0] = '`';
                         sbuf[1] = 0;
@@ -835,15 +843,16 @@ void TObject::toTXT( fstream& to )
                         break;
                     default:
                         break;
-                    }
-                to << sbuf;
-                if( Type > 0 )
+                  }
+                  to << sbuf;
+                  if( Type > 0 )
                     to << "\"";
-                else to << " ";
-            }
-            to << "\n";
+                  else
+                     to << " ";
+             }
+              to << "\n";
         }
-}
+ }
 
 //Gets data object from backup format TXT file
 void TObject::ofTXT( fstream& of )
@@ -877,7 +886,7 @@ void TObject::ofTXT( fstream& of )
         ObjType  rOtype = r_otype;
         Alloc( rdimN, rdimM, rOtype );
         check();
-    }
+     }
     else
     {
         if( *sbuf == '~' )
@@ -885,6 +894,13 @@ void TObject::ofTXT( fstream& of )
         check();
         of.putback( *sbuf );
     }
+
+    if( strcmp(Keywd+2, "plt") == 0 )
+    { for(int ii=0; ii<GetN(); ii++)
+            ((TPlotLine*)GetPtr() + ii)->read(of);
+      return;
+    }
+
     if( Type == S_ )
     {
         do
@@ -940,9 +956,10 @@ void TObject::ofTXT( fstream& of )
                         Error(GetKeywd(),
                               "TObject:E16 Bad format or character when reading text object from TXT");
                 }
+                else
+                   of >> sbuf.p;
 
-                else of >> sbuf.p;
-                if( Type == A_ )
+                if( Type == A_ || Type == B_ )
                     switch( *sbuf )
                     {
                     case '`':
@@ -956,6 +973,7 @@ void TObject::ofTXT( fstream& of )
                     default:
                         break;
                     }
+
                 SetString( sbuf, i, j );
             }
     }

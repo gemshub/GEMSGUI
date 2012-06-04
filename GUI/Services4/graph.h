@@ -114,6 +114,8 @@ public:
     
     void read(GemDataStream& stream);
     void write(GemDataStream& stream);
+    void read(fstream& stream);
+    void write(fstream& stream);
 };
 
 
