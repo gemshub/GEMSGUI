@@ -64,6 +64,10 @@ void NewSystemDialog::languageChange()
     retranslateUi(this);
 }
 
+QSize NewSystemDialog::sizeHint() const
+{
+    return QSize(aWinInfo[RT_SYSEQ].init_width, aWinInfo[RT_SYSEQ].init_height);
+}
 void NewSystemDialog::objectChanged()
 {
 	TSysEq::pm->CellChanged();
@@ -257,6 +261,12 @@ void NewSystemDialog::Update()
 
 void NewSystemDialog::closeEvent(QCloseEvent* ev)
 {
+    if( !(windowState() & Qt::WindowMaximized) )
+    {
+        aWinInfo[RT_SYSEQ].init_width = parentWidget()->width();
+        aWinInfo[RT_SYSEQ].init_height = parentWidget()->height();
+    }
+
     // close module
     if( MessageToSave() )
     {

@@ -60,6 +60,8 @@ public:
        TabWid->setCurrentIndex(ii);
     }
 
+    QSize sizeHint() const;
+
 protected:
 
       void closeEvent(QCloseEvent* ev);

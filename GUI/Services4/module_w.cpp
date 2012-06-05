@@ -100,6 +100,12 @@ void TCModuleImp::closeEvent(QCloseEvent* e)
     //    qApp->focusWidget()->clearFocus();
     // save state for user window
 
+    if( !(windowState() & Qt::WindowMaximized) )
+    {
+        aWinInfo[iMod].init_width = parentWidget()->width();
+        aWinInfo[iMod].init_height = parentWidget()->height();
+    }
+
     // close module
     if( rMod.EvClose() ) 
     {

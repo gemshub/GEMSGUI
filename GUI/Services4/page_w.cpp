@@ -370,10 +370,8 @@ TCWindow::~TCWindow()
 
 void TCWindow::closeEvent(QCloseEvent* evt)
 {
-    rInfo.init_width = parentWidget()->width();
-    rInfo.init_height = parentWidget()->height();
-    //cout << "close init_width " << rInfo.init_width << " rInfo.init_height " <<rInfo.init_height << endl;
-
+    //rInfo.init_width = parentWidget()->width();
+    //rInfo.init_height = parentWidget()->height();
     QWidget::closeEvent(evt);
 }
 
