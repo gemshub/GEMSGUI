@@ -692,7 +692,7 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
     pmp->pIPN =0;
     multi->Alloc_internal();
     multi->EqstatExpand( pmp->stkey, false );
-    outMultiTxt( "IPM_EqstatExpand.txt"  );
+//    outMultiTxt( "IPM_EqstatExpand.txt"  );
     //    multi->Free_internal();
     //    na->unpackDataBr( true );
     delete na;

@@ -546,7 +546,7 @@ void TProfil::loadSystat( const char *key )
         for(short j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
         multi->EqstatExpand( keyp.c_str(), true );
-        outMultiTxt( "GEM_EqstatExpand.txt"  );
+//        outMultiTxt( "GEM_EqstatExpand.txt"  );
     }
 
     pVisor->Update();
