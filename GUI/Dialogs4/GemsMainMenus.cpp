@@ -595,7 +595,9 @@ void TVisorImp::CmShow( const char * key )
 {
   NewSystemDialog *wn = activeNewSystemCommand();
   if( wn )
-         wn->CmSelect( key );
+  {       wn->CmSelect( key );
+          defineModuleKeysList( RT_SYSEQ );
+  }
   else
   {
     TCModuleImp *actwin = activeMdiChild();
@@ -605,6 +607,8 @@ void TVisorImp::CmShow( const char * key )
        ((TCModule*)&aMod[actwin->rtNumRecord()])->CmShow( key );
       else
        ((TCModule*)&aMod[actwin->rtNumRecord()])->CmLoadinProfile( key );
+
+      defineModuleKeysList( actwin->rtNumRecord() );
       QMdiSubWindow * grDlg = findMdiGraph(actwin->moduleName().c_str());
       if( grDlg )
       {

@@ -291,6 +291,8 @@ void TVisorImp::defineModuleKeysList( int nRT )
   if(currentNrt != nRT)
     return;
 
+  pFilterKey->setText(((TCModule*)&aMod[nRT])->getFilter());
+
   // define tbKeys
   tbKeys->clear();
   tbKeys->setSortingEnabled ( false );
@@ -381,7 +383,7 @@ void TVisorImp::changeModulesKeys( int nRT )
 
     }
     else
-    {    pFilterKey->setText(((TCModule*)&aMod[nRT])->getFilter());
+    {    //pFilterKey->setText(((TCModule*)&aMod[nRT])->getFilter());
          defineModuleKeysList( nRT );
     }
    // currentNrt = nRT;
