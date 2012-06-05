@@ -57,50 +57,6 @@ public/* protected*/ slots:
     void CloseWin()
     {  close();  }
     
-    //--void setActions(bool viewmode);
-
-    //--void CmNext();
-    //--void CmPrevious();
-    //--void CmFilter();  // set Data Record filter
-
-    //--- Manipulation current record
-
-    //--void CmCreate();
-    //--void CmNew();
-    //--void CmShow();  //Demonstrate (show) Data Record
-    //--void CmDerive();
-    //--void CmCalc();  //Calculate or create Data Record
-    //--void CmSave();
-    //--void CmSaveAs();
-    //--void CmDelete();
-    //--void CmPrint();
-    //--void CmPlot();
-
-    //--void CmNewinProfile();
-    //--void CmCreateinProfile();
-    //--void CmLoadinProfile();
-    
-    //--- Manipulation files of Data Base   (Servis functions )
-    //--void CmRebildFile();
-    //--void CmAddFileToList();
-    //--void CmAddOpenFile();
-    //--void CmReOpenFileList();
-
-    //--- Manipulation list of records
-    //--void CmCopyList();
-    //--void CmRenameList();
-    //--void CmTransferList();
-    //--void CmDeleteList();
-    //--void CmKeysToTXT();
-    //--void CmBackup();
-    //--void CmRestore();
-    //--void CmExport();
-    //--void CmImport();
-
-    //--void CmHelp();
-    //--void CmHelp2();
-    //--void CmScript();
-
 public:
     TCModuleImp(int iMod, int page=0, int viewmode=0);
     virtual ~TCModuleImp();
@@ -117,8 +73,9 @@ public:
     gstring iconFile() const;
 
     void Update(bool force=true);
-    
-    /*! Shows the window or raises 'page' if it exists */
+    QSize sizeHint() const;
+
+    /* Shows the window or raises 'page' if it exists */
     //--void Raise(int page=0);
     void SelectStart();
 
@@ -127,15 +84,10 @@ public:
     void CellChanged()
     {   rMod.CellChanged();  }
 
-    //  const gstring& GetString() { return state; }
     /*! Sets the caption of the module */
     void SetCaption(const char* mess)
     { 	setWindowTitle(mess);   }
     
-    /*! Sets the status of the module (in the statusbar) */
-    //--void SetStatus( const char* s )
-    //{   statusBar()->showMessage(s);    }
-
     void setViewMode( int mode )
     { viewmode = mode; }
 
