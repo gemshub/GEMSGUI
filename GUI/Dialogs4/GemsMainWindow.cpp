@@ -697,6 +697,7 @@ bool TVisorImp::SetProfileMode()
     //action_calcMode->setToolTip("Go to Database Management");
     //pModeName->setText(" E");
     actionDataBaseMode->setChecked(false);
+    setActionPrecise();
     CmSysEq();
     return true;
 }

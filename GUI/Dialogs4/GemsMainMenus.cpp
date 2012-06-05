@@ -866,6 +866,12 @@ void TVisorImp::CmRunBCC()
         wn->CmRunBCC();
 }
 
+
+void TVisorImp::setActionPrecise()
+{
+   sactionPrecise->setChecked( TProfil::pm->pa.p.PRD );
+}
+
 void TVisorImp::CmRunIPM()
 {
     TMulti::sm->GetPM()->pNP =

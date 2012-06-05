@@ -246,6 +246,8 @@ public:
     void setTCpoint( const char* str )
         {  memcpy( TCpoint, str, 15 );   }
 
+    void setActionPrecise();
+
     // functions for threaded calculation
     QWaitCondition& getWaitProgress();
     QWaitCondition& getWaitCalc();
