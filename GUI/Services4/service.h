@@ -157,7 +157,7 @@ vfRTparmSet(QWidget* par, const char * p_key,
 
 bool
 vfPhaseSet(QWidget* par, const char * p_key,
-            char flgs[13], int sizes[6], double& r2 );
+            char flgs[33], int sizes[22], double& r2 );
 
 bool
 vfDualThSet(QWidget* par, const char * p_key,

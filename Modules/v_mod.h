@@ -534,6 +534,9 @@ enum phase_objects {   // PHASE
     //o_phpst,   o_phsymb,  o_phnam,  o_phcls,  o_phgrp,
     o_phsolt = o_rttext+1,  o_phps,   /*a 6*/   o_phndc,  /*i 2*/
     o_phpncp, /*i 2*/   o_phnpx, /*i 1*/ o_phnsc, /*i 1*/  o_phnsit, /*i 3*/
+//new fields
+    o_phkin_t, o_phpdqf, o_phpeipc, o_phprpcon, o_phnlph,
+    o_phnumpc, o_phnei1, o_phnisoc, o_phvpor,  o_phpsdc,
     /* Record 22 fields */
     o_phstr,     o_phname,     o_phnotes,     o_phdim,   /*i 8*/
     o_phdisep,  /*f 8*/ o_phscmc, o_phxfiec, o_phmsdt,
@@ -542,9 +545,18 @@ enum phase_objects {   // PHASE
     o_phsm,    /*s dyn*/  o_phdcc,   /*a dyn*/   o_phdcs,   /*a dyn*/
     o_phpeq,   /* txt */  o_phdeq,   /* txt */   o_phsdref, /*s dyn*/
     o_phsdval, /*s dyn*/
+//new record (3+26)
+    o_phstr2, o_phdim2,  o_phfloat2,
+    o_phxsmd,  o_phxfaces, o_phlphc1, o_phdqfc, o_phrcpc,
+    o_pheipc, o_phcdc, o_phisop, o_phisos, o_phfsac,
+    o_phrpcon, o_phumpcon, o_phlph, o_phldc,  o_phdcpcl ,
+    o_phipicl, o_phipccl,  o_phrpkcl, o_phrprcl, o_phumpcl,
+    o_phsmcdl, o_phsmcsl,  o_pheimpl, o_pheimll, o_phlphc2,
+    o_phisoc,
+// work
 o_ph_w_lsc, o_ph_w_lsa, o_ph_w_lsn, o_ph_w_nxc, o_ph_w_nxa, o_ph_w_nxn, // new work dyn objects
 o_ph_nsub,  o_ph_lsform, o_ph_lsmoi, o_ph_ocpn, o_ph_nxsub, // added for multi-site mixin models implementation
-o_phtprn, /*txt*/
+o_phtprn /*txt*/
 };
 
 

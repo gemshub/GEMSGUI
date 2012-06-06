@@ -826,7 +826,7 @@ vfRTparmSet(QWidget* par, const char * p_key,
 
 bool
 vfPhaseSet(QWidget* par, const char * p_key,
-            char flgs[13], int size[6], double& r2  )
+            char flgs[33], int size[22], double& r2  )
 {
      PhaseWizard cdlg( p_key, flgs, size, r2, par );
      if( !cdlg.exec() )

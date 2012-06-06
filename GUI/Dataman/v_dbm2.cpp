@@ -319,7 +319,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     rh.read (f);
     if( strncmp( rh.bgm, MARKRECHEAD, 2 ) ||
             strncmp( rh.endm, MARKRECHEAD, 2 ) ||
-            (rh.Nobj != nOD && (nOD+frstOD-1) != o_tpstr  ) )
+            (rh.Nobj != nOD && (nOD+frstOD-1) != o_tpstr  && (rh.Nobj+frstOD-1) != o_phsdval ) )
         Error( GetKeywd(),"Record header format error");
     f.getline( key, KeyLen()+KeyNumFlds(), MARKRKEY);
     ErrorIf( f.gcount()>=(KeyLen()+KeyNumFlds()), GetKeywd(),
@@ -329,7 +329,11 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     bool flag_spppar = false;
     for( j=0; j<nOD; j++ )   // get objects from file
     {
-       if ( j+frstOD == o_tpstr )
+        if ( j+frstOD == o_phstr2  )
+            if( StillLen < sizeof(short)*16 )     // old record of phase
+               break;
+
+       if ( j+frstOD == o_tpstr  )
           if( StillLen < 28 )
              continue;
         StillLen -= aObj[j+frstOD].ofDB(f);

@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -727,6 +727,463 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="page_3">
+      <layout class="QVBoxLayout" name="verticalLayout_8">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Step 3 - sorption model settings</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0">
+           <widget class="QComboBox" name="kin_t0">
+            <item>
+             <property name="text">
+              <string>N</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Type of sorption/ionex/polyelectrolyte isotherm model { N  }</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QComboBox" name="kin_t1">
+            <item>
+             <property name="text">
+              <string>N</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Type of sorption EIL model { N   }</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QCheckBox" name="Pdqf">
+            <property name="text">
+             <string>flag for dqfp array for DC-related DQF parameter coefficients</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QCheckBox" name="Prcp">
+            <property name="text">
+             <string>flag for rcpp array for DC-related reciprocal parameter coefficients</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QCheckBox" name="PlPhl">
+            <property name="text">
+             <string>flag for list of record keys of linked phases, cf. lPh, lPhC</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="2">
+           <widget class="QCheckBox" name="PEIpc">
+            <property name="text">
+             <string>flag for EIpc array of EIL model parameter coefficients</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0" colspan="2">
+           <widget class="QCheckBox" name="PCDc">
+            <property name="text">
+             <string>flag for CDc array of CD model parameter coefficients</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0" colspan="2">
+           <widget class="QCheckBox" name="PIsoC">
+            <property name="text">
+             <string>flag for IsoC array of isotherm parameter coefficients per DC</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0" colspan="2">
+           <widget class="QCheckBox" name="PIsoS">
+            <property name="text">
+             <string>flag for IsoS array of isotherm parameter coefficients per surface site</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0" colspan="2">
+           <widget class="QCheckBox" name="PsDiS">
+            <property name="text">
+             <string>flag for sDiS array of denticity and surface site indexes</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_10">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="nlPh"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>number of linked phases (cf. PlPhl, lPh)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QSpinBox" name="nEIl"/>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>number of electrostatic model layers </string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="nlPc"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>number of parameters per linked phase</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QSpinBox" name="nEIp"/>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>number of electrostatic model parameters</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QSpinBox" name="ndqf"/>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>number of DQF parameter coeff. </string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QSpinBox" name="nCDc"/>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLabel" name="label_17">
+            <property name="text">
+             <string>number of charge distribution coeff. </string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QSpinBox" name="nrcp"/>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>number of reciprocal parameter coefficients</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_5">
+      <layout class="QVBoxLayout" name="verticalLayout_9">
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Step 4 - kinetic model settings</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_8">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_2">
+          <item row="0" column="0">
+           <widget class="QComboBox" name="kin_t2">
+            <item>
+             <property name="text">
+              <string>N</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>T</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>W</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Type of kinetic rate model { N T W ... }</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QComboBox" name="kin_t3">
+            <item>
+             <property name="text">
+              <string>N</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>T</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>B</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>D</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Type of splitting model for dissolution { N TBD }l</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QComboBox" name="kin_t4">
+            <item>
+             <property name="text">
+              <string>N</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>T</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>D</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>B</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Type of splitting model for precipitation { N TBD }</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QComboBox" name="kin_t5">
+            <item>
+             <property name="text">
+              <string>N</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>T</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>D</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>B</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Type of the model for trace element uptake { N TBD }</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QCheckBox" name="PrpCon">
+            <property name="text">
+             <string>flag for rpCon array of kinetic rate constants</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="2">
+           <widget class="QCheckBox" name="PumpCon">
+            <property name="text">
+             <string>flag for umpCon array of uptake model parameters</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_9">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="nFaces"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>number of kinetically different faces</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QSpinBox" name="nIsoC"/>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>number of isotherm par. coeff. per surface species DC </string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="nReg"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>number of kinetic regions</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QSpinBox" name="nIsoS"/>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLabel" name="label_23">
+            <property name="text">
+             <string>number of isotherm par. coeff. per surface site</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QSpinBox" name="nrpC"/>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_20">
+            <property name="text">
+             <string>number of kinetic rate constants</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QSpinBox" name="mDe"/>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLabel" name="label_24">
+            <property name="text">
+             <string>maximum denticity number for surface species</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QSpinBox" name="numpC"/>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>number of uptake model parameter</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="page_4">
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
@@ -744,7 +1201,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
           </font>
          </property>
          <property name="text">
-          <string>Step 3 - Useful hints</string>
+          <string>Step 5 - Useful hints</string>
          </property>
         </widget>
        </item>

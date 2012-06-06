@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id: m_phase.h 1366 2009-07-18 20:54:59Z wagner $
+// $Id: m_phase.h 2115 2012-05-10 20:54:59Z kulik $
 //
 // Declaration of TPhase class, config and calculation functions
 //
@@ -28,21 +28,22 @@ const int MAXPHSYMB =      8,
                            MAXPNCOEF =  8192,
                                       QPSIZE = 180, // earlier 20, 40 SD oct 2005
                                                QDSIZE = 60;
-
 typedef struct
-{// Description of PHASE
+{// Description of PHASE record (old part)
   char pst[MAXSYMB],       // Phase aggregate state
     symb[MAXPHSYMB],    // Symbol of phase definition
     nam[MAXPHNAME],     // Name of phase
     cls[MAXSYMB],       // Class of phase
     grp[MAXPHGROUP],    // Record key comment to phase definition
 
-    sol_t[6], // Phase (solution) type { IGMTVKRLWFPED123HYSQZAUOX } or { N }
+//  old:  sol_t[6],
+   sol_t[6], // Phase (solution) type { IGMTVKRLWFPED123HYSQZAUOX } or { N }
              //         Mode of calculation of DC non-ideality parameters { NTX }
              //         Mode of calculation of phase non-ideality parameters { NTX }
              //         Mode of calculation of DC activity coefficients { NSI }
              //	  One group of equations for all DC {U},one group per DC {P},no {N}
              //         Type of mixing rule in EoS models { WCT } or of sorption model {}
+
     PphC, // Default class of phase in the system {agpmlsxdh} layered {}
     Ppnc, // Flag for 'ph_cf' array for phase-related input parameters {+*-}
     Psco, // Flag for 'dc_cf' array for DC-related parameters {+*-}
@@ -50,58 +51,155 @@ typedef struct
     PdEq, // Flag for text field for DC-related equations 'DcEq' {+*-}
     PFsiT,// Flag for vector of surface type fractions 'PFsiT' {+*-}
     Pinternal1,  // Extract parameters from DComp/ReacDC records and refresh DC class codes?
+                 // not saved to DB
+Pdqf, // new: flag for dqfp array for DC-related DQF parameter coefficients {+*-}
+Prcp, // new: flag for rcpp array for DC-related reciprocal parameter coefficients {+*-}
+PlPhl,// new: flag for list of record keys of linked phases, cf. lPh, lPhC {+*-}
+Pres1,// new: reserved
+// TSorpMod stuff
+PEIpc,  // new: flag for EIpc array of EIL model parameter coefficients {+*-}
+PCDc,   // new: flag for CDc array of CD model parameter coefficients {+*-}
+PIsoC,  // new: flag for IsoC array of isotherm parameter coefficients per DC {+*-}
+PIsoS,  // new: flag for IsoS array of isotherm parameter coefficients per surface site {+*-}
+PsDiS,  // new: flag for sDiS array of denticity and surface site indexes {+*-}
+Pres2,  // new: reserved
+// TKinMet stuff
+PrpCon, // new: flag for rpCon array of kinetic rate constants {+*-}
+PumpCon,// new: flag for umpCon array of uptake model parameters {+*-}
+PRes3,  // new: reserved
+PRes4,  // new: reserved
+
+kin_t[6],
+  // new:    Type of sorption/ionex/polyelectrolyte isotherm model { N  }
+  // new:    Type of sorption EIL model { N   }
+  // new:    Type of kinetic rate model { N T W ... }
+  // new:    Type of splitting model for dissolution { N TBD }
+  // new:    Type of splitting model for precipitation { N TBD }
+  // new:    Type of the model for trace element uptake { N TBD }
+
     name[MAXFORMULA],   // Full name of phase
     notes[MAXFORMULA]  // Comments
-//    carrier[MAXFORMULA]  // Record key of 'carrier' phase definition (used when PFsiT == '+')
-                        // or second comment line (backward compatibility)
     ;
  short nDC,      // N of DC in phase definition >= 1
     Nsd,        //  N of references to Data Sources  <= 4
-    // changed 07.12.2006 KD
     ncpN,    // Number of interaction parameters (rows in pnc and ipx tables)
     ncpM,    // Number of coefficients per IP (cols in pnc table)
     npxM,    // Maximum order of interaction parameters (cols in ipx, to set up on remake)
     nscM,    // Number of parameters per solution phase species (cols in scoef table)
+    NsiT,     // N of (surface) site types (to set up on remake)
+    nMoi,     // Number of different substituent moieties in multi-site mixing model (0: simple mixing)
+//
+nlPh,  // new: number of linked phases (cf. PlPhl, lPh), default 0.
+nlPc,  // new: number of parameters per linked phase, default 0.
+ndqf,  // new: number of DQF parameter coefficients per end member, default 3.
+nrcp,  // new: number of reciprocal parameter coefficients per end member, default 3.
 
-    NsiT,     // N of surface site types (to set up on remake)
-
-    nMoi;     // Number of different substituent moieties in multi-site mixing model (0: simple mixing)
-//    NR1;      // Number of elements per species in MaSdj array (1: old 6: new)
-
-short *ipxt;  // Table of indexation for interaction parameters ncpN x npxM
+ // TKinMet stuff
+nFaces,// new: number of kinetically different faces (on solid phase surface), default 1, up to 6.
+nReg,  // new: number of kinetic regions (and catalyzing aqueous species)
+nrpC,  // new: number of kinetic rate constants and coefficients
+numpC, // new: number of uptake model parameter coefficients (per end member)
+// TSorpMod stuff EIL model
+nEIl,  // new: number of electrostatic model layers (default: 0, maximum 4)
+nEIp,  // new: number of electrostatic model parameters (per layer, default 1, max 4)
+nCDc,  // new: number of charge distribution coefficients per surface species (default 0 or nEIl)
+iRes3, // new: reserved
+// non-EIL model
+nIsoC, // new: number of isotherm parameter coefficients per surface species DC (default 0)
+nIsoS, // new: number of isotherm parameter coefficients per surface site (default 0)
+mDe,   // new: maximum denticity number for surface species (default 1)
+iRes4, // new: reserved
+;
+short *ipxt,  // Table of indexation for interaction parameters [ncpN][npxM]
               // takes over from PXres
- float Asur,  // Specific surface area of (carrier) phase, m2/g
-    Sigma0,// Standard mean surface energy of solid-aqueous interface, J/m2
-    SigmaG,// Standard mean surface energy of gas-aqueous interface, J/m2
-    R0p,   // Mean radius r0 for (spherical or cylindrical) particles, nm (reserved)
-    h0p,   // Mean thickness h0 for cylindrical or 0 for spherical particles, nm (reserved)
-    Eps,   // Dielectric constant for solid carrier at Tr (reserved)
-    Cond,  // Specific conductivity at Tr, Sm/m/cm2 (reserved)
-    Rsp1,  // Default maximum surface density, 1/nm2"
-    *FsiT,    //Fraction of surface type relative to carrier (components)[0:NsiT-1]
+*xSmD, // new: denticity of surface species per surface site (site allocation) [nDC][NsiT]
+       // (default 0, -1 means no binding) [nDC][mDe+1]
+*xFaces, // new: indexes of faces per set of kinetic region parameters [nReg*nFaces], default 0.
+;
+float Asur,  // Specific surface area of (carrier) phase, m2/g (new: of this tile) default: 0.
+    Sigma0, // Standard mean surface energy of solid-aqueous interface, J/m2
+    SigmaG, // Standard mean surface energy of gas-aqueous interface, J/m2
+    R0p,    // Mean radius r0 for (spherical or cylindrical) particles, nm (reserved)
+    h0p,    // Mean thickness h0 for cylindrical or 0 for spherical particles, nm (reserved)
+    Eps,    // Dielectric constant for solid carrier at Tr (reserved)
+    Cond,   // Specific conductivity at Tr, Sm/m/cm2 (reserved)
+    Rsp1,   // Default maximum surface density, 1/nm2 (reserved)
+//
+Vpor,  // new: Specific pore volume of (carrier) phase, m3/g (default: 0)
+fSAs,   // new: fraction of surface area of the sorbent (ref. in lPh) occupied by this surface tile (def. 1)
+fPV,   // new: fraction of phase pore volume occupied by this Donnan electrolyte (def. 1)
+fRes1, // new: reserved
+//
+psdC,  // new: permanent surface charge density (eq/m2), default: 0
+pvdC, // new: permanent Donnan volume charge density (eq/m3), default: 0
+IEC,  // new: ion exchange capacity (eg/g), default: 0
+fRes2, // new: reserved
+//
+    // old stuff for sorption models
+    *FsiT,    //Fraction of surface type relative to carrier (components)[NsiT]
     *XfIEC,   // Constant surface charge density or IEC, mkeq/g   [NsiT]
-// *PXres, // Reserved
-    *pnc, //Array of phase-related coefficients of non-ideality model [ncpN][ncpM]
-    *scoef;//Array of DC-related coefficients of non-ideality model[nDC][nscM]
+    // TSolMod stuff
+    *pnc,   //Array of phase-related coefficients of non-ideality model [ncpN][ncpM]
+    *scoef, //Array of DC-related coefficients of non-ideality model[nDC][nscM]
 
+// new: TSolMod stuff
+*lPhc,  // new: array of phase link parameters [nlPh*nlPc]
+*DQFc,  // new: array of DQF parameters for DCs in phases [nDC*ndqf]
+*rcpc,  // new: array of reciprocal parameters for DCs in phases [nDC*nrcp]
+
+//new: TSorpMod stuff
+*EIpc, // new: Array of electrostatic model parameter coefficients per EI layer [nEIl][nEIp]
+*CDc,  // new: Array of electrost. model coefficients per surface species [nDC][nCDc]
+*IsoP, // new: array of isotherm parameter coefficients per surface species [nDC][nIsoC]
+*IsoS, // new: array of isotherm parameter coefficients per surface site [NsiT][nIsoS]
+       // here site density etc.
+
+// TKinMet stuff
+*fSAk,   // new: fractions of surface area of the solid occupied by different faces [nFaces]
+*rpCon,  // new: Array of kinetic rate constants for faces and regions [nReg*nFaces][nrpC]
+*umpCon, // new: Array of uptake model parameters [nDC][numpC]
+;
+// Old sorption model stuff
   float (*MSDT)[2]; // SAT: Max & min density of reacted species, 1/nm2 [NsiT]
   float (*CapT)[2]; // Inner EDL capacitance density, F/m2 (TLM, CCM)
   float (*MaSdj)[DFCN]; // Max. density, CD-music and isotherm params [nDC][NR1]
                 // Outer EDL capacitance density, F/m2 (TLM)  [NsiT]
   char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [nDC][DFCN]
-  char (*SM)[DC_RKLEN]; // List of DC record keys included into phase[0:nDC-1]
+// DC list
+  char (*SM)[DC_RKLEN]; // List of DC record keys included into phase[nDC]
+// new stuff (TKinMet, TSorpMod)
+char (*lPh)[PH_RKLEN];    // new: list of record keys of linked phases [nlPh]
+char (*lDC)[DC_RKLEN];    // new: list of record keys of aq, gas or surface catalyzing
+                          // species for rate regions, or species in homogen. reactions [nReg*nFaces]
+//
+char (*dcpcl)[MAXDCNAME]; // new: DC parameter coefficients comment list [nscM]
+char (*ipicl)[MAXDCNAME]; // new: interaction parameter indexes comment list [ncpN]
+char (*ipccl)[MAXDCNAME]; // new: interaction parameter coefficients comment list [ncpM]
+//
+char (*rpkcl)[MAXDCNAME]; // new: kinetic rate constants comment list [nrpC]
+char (*rprcl)[MAXDCNAME]; // new: kinetic regions/catalysis species comment list [nReg]
+char (*umpcl)[MAXDCNAME]; // new: uptake kinetic model parameters comment list [numpC]
+//
+char (*smcDl)[MAXDCNAME]; // new: sorption model parameters comment list per DC [nIsoC]
+char (*smcSl)[MAXDCNAME]; // new: sorption model parameters comment list per site [nIsoS]
+char (*eimPl)[MAXDCNAME]; // new: EIL model CD parameters comment list per DC [nCDc]
+char (*eimLl)[MAXDCNAME]; // new: EIL model parameters comment list per layer [nEIp]
+//
   char
-    *DCC,   // DC classes { TESKWL GVCHNI JMFD QPR <0-9>  AB  XYZ O }[0:nDC-1]
-    *DCS,   // Source of input data for DC { r d }.d-DCOMP r-REACT[0:nDC-1]
-    *SCMC,  // Class.of EIL models for surface types [0:NsiT-1]
+    *DCC,   // DC classes { TESKWL GVCHNI JMFD QPR <0-9>  AB  XYZ O } [nDC]
+    *DCS,   // Source of input data for DC { r d }.d-DCOMP r-REACT    [nDC]
+    *SCMC,  // Class.of EIL models for surface types (old sorption phases) [NsiT]
     *pEq,   // Text of IPN equations related to the whole phase (IIPN syntax)
     *dEq,   // Text of IPN equations related to phase components (IIPN syntax)
-    *tprn;               // internal
-
+    *tprn,               // internal
+// TSorpMod stuff
+*lPhC, // new: Phase linkage type codes [nlPh] { TBA  }
+*IsoC, // new: isotherm/SATC code for this surface site type 2*[NsiT] { L Q M F B ... }
+  ;
   char (*sdref)[V_SD_RKLEN]; // List of Data Sources SDref keys
   char (*sdval)[V_SD_VALEN];  // Comments to Data Sources
-
-  // Work data (SIT, Pitzer, EUNIQUAC, ...)
+// ---------------------------------------------------------------------------------------
+// Work data (SIT, Pitzer, EUNIQUAC, ...)
   char (*lsCat)[MAXDCNAME];       // work object - vector of names of cations
   char (*lsAn)[MAXDCNAME];        // work object - vector of names of anions
   char (*lsNs)[MAXDCNAME];        // work object - names of neutral species except H2O
@@ -125,6 +223,7 @@ short *ipxt;  // Table of indexation for interaction parameters ncpN x npxM
 
 }
 PHASE;
+
 
 struct elmWindowData;
 struct phSetupData;
@@ -185,13 +284,15 @@ public:
 }
 ;
 
-enum solmod_switches { /* indexes of keys of model solution*/
+enum solmod_switches { // indexes of keys of phase (solution, sorption, kinetic) models
     SPHAS_TYP,
     DCOMP_DEP,
     SPHAS_DEP,
     SGM_MODE,
     DCE_LINK,
     MIX_TYP,
+SORP_MOD,  // new, see also enum sorption_control
+KINR_MOD,  // new, see also enum kinmet_controls
 
     // Link state of CalculateActivityCoefficients()
     LINK_UX_MODE,
@@ -258,7 +359,7 @@ enum solmod_switches { /* indexes of keys of model solution*/
 // This code defines standard state and reference scale of concentrations
 // for components of this phase. It is used by many subroutines
 // during calculations of equilibrium states
-enum PH_CLASSES{  /* Possible values */
+enum PH_CLASSES{  // Possible values
     PH_AQUEL = 'a',  	// aqueous electrolyte
     PH_GASMIX = 'g',  	// mixture of gases
     PH_FLUID = 'f',  	// fluid phase
@@ -302,6 +403,11 @@ enum sorption_control {
 
     // Column indices of MaSdj table of adsorption parameters
     PI_DEN=0, PI_CD0, PI_CDB, PI_P1, PI_P2, PI_P3
+};
+
+enum kinmet_controls {
+// new: codes to control kinetic rate models
+// TBA
 };
 
 enum volume_code {  /* Codes of volume parameter ??? */

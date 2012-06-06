@@ -71,7 +71,7 @@ void 	PhaseWizard::resetBackButton()
 	pBack->setEnabled( stackedWidget->currentIndex() > 0 );
 }
 
-PhaseWizard::PhaseWizard( const char* pkey, char flgs[13], int size[6],
+PhaseWizard::PhaseWizard( const char* pkey, char flgs[33], int size[22],
                             double r2, QWidget* parent):
         QDialog( parent )
 {
@@ -140,6 +140,56 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[13], int size[6],
     lineEdit_surfArea->setText( str.setNum(r2) );
 
 //Page3
+    ii = kin_t0->findText(QChar(flgs[27]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+      if( ii >= 0  )
+          kin_t0->setCurrentIndex(ii);
+    ii = kin_t1->findText(QChar(flgs[28]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+        if( ii >= 0  )
+            kin_t1->setCurrentIndex(ii);
+
+    Pdqf->setChecked(flgs[13] == '+');
+    Prcp->setChecked(flgs[14] == '+');
+    PlPhl->setChecked(flgs[15] == '+');
+    PEIpc->setChecked(flgs[17] == '+');
+    PCDc->setChecked(flgs[18] == '+');
+    PIsoC->setChecked(flgs[19] == '+');
+    PIsoS->setChecked(flgs[20] == '+');
+    PsDiS->setChecked(flgs[21] == '+');
+
+    nlPh->setValue(size[6]);
+    nEIl->setValue(size[14]);
+    nlPc->setValue(size[7]);
+    nEIp->setValue(size[15]);
+    ndqf->setValue(size[8]);
+    nCDc->setValue(size[16]);
+    nrcp->setValue(size[9]);
+
+//Page4
+    ii = kin_t2->findText(QChar(flgs[29]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    if( ii >= 0  )
+        kin_t2->setCurrentIndex(ii);
+    ii = kin_t3->findText(QChar(flgs[30]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    if( ii >= 0  )
+        kin_t3->setCurrentIndex(ii);
+    ii = kin_t4->findText(QChar(flgs[31]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    if( ii >= 0  )
+        kin_t4->setCurrentIndex(ii);
+    ii = kin_t5->findText(QChar(flgs[32]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+        if( ii >= 0  )
+            kin_t5->setCurrentIndex(ii);
+
+    PrpCon->setChecked(flgs[23] == '+');
+    PumpCon->setChecked(flgs[24] == '+');
+
+    nFaces->setValue(size[10]);
+    nIsoC->setValue(size[18]);
+    nReg->setValue(size[11]);
+    nIsoS->setValue(size[19]);
+    nrpC->setValue(size[12]);
+    mDe->setValue(size[20]);
+    numpC->setValue(size[13]);
+
+//Page5
     spinBoxSDrefLnk->setValue(size[0]);
 }
 
@@ -147,7 +197,7 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[13], int size[6],
 PhaseWizard::~PhaseWizard()
 {}
 
-void   PhaseWizard::getSizes( int size[6] )
+void   PhaseWizard::getSizes( int size[22] )
 {
     size[0]= spinBoxSDrefLnk->value();
     size[1]= spinBox_ph_cf_N->value();
@@ -159,6 +209,20 @@ void   PhaseWizard::getSizes( int size[6] )
     if( SCM_code->currentText()[0] != QChar('N') )
       if( size[5] == 0 ) size[5] = 1;
 
+    size[6]= nlPh->value();
+    size[14]= nEIl->value();
+    size[7]= nlPc->value();
+    size[15]= nEIp->value();
+    size[8]= ndqf->value();
+    size[16]= nCDc->value();
+    size[9]= nrcp->value();
+    size[10]= nFaces->value();
+    size[18]= nIsoC->value();
+    size[11]= nReg->value();
+    size[19]= nIsoS->value();
+    size[12]= nrpC->value();
+    size[20]= mDe->value();
+    size[13]= numpC->value();
 }
 
 double   PhaseWizard::getR2()
@@ -171,7 +235,7 @@ double   PhaseWizard::getR2()
 }
 
 
-void PhaseWizard::getFlags( char flgs[13] )
+void PhaseWizard::getFlags( char flgs[33] )
 {
   QString str;
 
@@ -230,7 +294,53 @@ void PhaseWizard::getFlags( char flgs[13] )
   else
       flgs[12] = '-';
 
+  str = kin_t0->currentText();
+  flgs[27] = str[0].toLatin1();
+  str = kin_t1->currentText();
+  flgs[28] = str[0].toLatin1();
+  str = kin_t2->currentText();
+  flgs[29] = str[0].toLatin1();
+  str = kin_t3->currentText();
+  flgs[30] = str[0].toLatin1();
+  str = kin_t4->currentText();
+  flgs[31] = str[0].toLatin1();
+  str = kin_t5->currentText();
+  flgs[32] = str[0].toLatin1();
+
+  if( Pdqf->isChecked() )
+      flgs[13] = '+';
+   else flgs[13] = '-';
+  if( Prcp->isChecked() )
+      flgs[14] = '+';
+   else flgs[14] = '-';
+  if( PlPhl->isChecked() )
+      flgs[15] = '+';
+   else flgs[15] = '-';
+  if( PEIpc->isChecked() )
+      flgs[17] = '+';
+   else flgs[17] = '-';
+  if( PCDc->isChecked() )
+      flgs[18] = '+';
+   else flgs[18] = '-';
+  if( PIsoC->isChecked() )
+      flgs[19] = '+';
+   else flgs[19] = '-';
+  if( PIsoS->isChecked() )
+      flgs[20] = '+';
+   else flgs[20] = '-';
+  if( PsDiS->isChecked() )
+      flgs[21] = '+';
+   else flgs[21] = '-';
+  if( PrpCon->isChecked() )
+      flgs[23] = '+';
+   else flgs[23] = '-';
+  if( PumpCon->isChecked() )
+      flgs[24] = '+';
+   else flgs[24] = '-';
+
 }
+
+
 
 
 void
