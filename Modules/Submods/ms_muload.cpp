@@ -93,6 +93,8 @@ if( pmp->pIPN >= 1 )           //SD 29/11/2006
         // selecting type of the model
         memcpy( modT, aPH->php->sol_t, MAXKEYWD );
         memcpy( pmp->sMod[k], modT, MAXKEYWD );
+        pmp->sMod[k][6] = aPH->php->kin_t[0];
+        pmp->sMod[k][7] = aPH->php->kin_t[1];
         sMod = pmp->sMod[k];
 
         // 16/11/2010 added for multi-site mixed moodels

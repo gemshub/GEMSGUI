@@ -137,7 +137,7 @@ o_nldcvs, o_nldchs, o_nlphv, o_nlphh, // new !!!
     o_wi_pun,  o_wi_nnr, o_wi_ldim, o_wi_fdim, o_wo_fdim,
     o_wo_it, o_wi_mode, o_wo_ipar, o_wio_tc, o_wio_t,
     o_wio_p,  o_wo_vx, o_wo_gx, o_wo_ax, o_wo_ux,
-    o_wo_hx,   o_wo_sx, o_wo_cpx, o_wo_cvx,   o_wi_t0,
+    o_wo_hx,   o_wo_sx, o_wo_cpx, o_wo_cvx, o_wi_ktau2,  o_wi_t0,
     o_wi_ve, o_wi_mbx, o_wo_fx, o_wo_ic,  o_wd_ph,
     o_wd_pe, o_wd_eh, o_wi_mol,  o_wi_gwat,o_wi_ymet,
     o_wio_denw, o_wio_epsw, o_wo_psi, o_wo_lnp, o_wo_rt,
@@ -176,6 +176,20 @@ o_wi_dcc3, // new
     o_w_r, o_w_r1,
 o_wo_it_efd,  o_wo_it_ipm,    //   o_wd_sitxcat, o_wd_sitxan,
     o_wd_site, o_w_sbh, o_w_tprn, o_w_tval,  o_w_pval,
+// New phase stuff 06/06/12
+o_wi_lsmdc2, o_wi_lsphl,o_wi_phlin,
+// TSolMod stuff
+o_wi_lphc, o_wi_dqfc, o_wi_rcpc, o_wi_lndqft, o_wi_lnrcpt,
+o_wi_lnext, o_wi_lncnft,
+//TSorpMod & TKinMet stuff
+o_wi_sormc,
+// TSorpMod stuff
+o_wi_lsesmo, o_wi_lsismo, o_wi_xsmd, o_wi_eimc, o_wi_mcdc,
+o_wi_isopc, o_wi_isosc, o_wi_lnscal, o_wi_lnsact, o_wi_lngamf,
+o_wi_cterms, o_wi_isoct,
+// TKinMet stuff
+o_wi_lskin, o_wi_lsupt, o_wi_jcrdc, o_wi_xfaces, o_wi_fsac,
+o_wi_krpc, o_wi_umpc, o_wi_kmod,
     // CalculateActivityCoefficients() - adjustable DOD
     o_neqtxt,  o_nsmod,  o_ntc,  o_ntk,  o_np ,
     o_nis, o_ni,  o_njs,  o_nnext, o_nncp ,

@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>710</width>
-    <height>561</height>
+    <width>738</width>
+    <height>603</height>
    </rect>
   </property>
   <property name="font">
@@ -21,7 +21,7 @@
   <property name="windowTitle">
    <string>GEM-Selektor Proces</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QVBoxLayout" name="verticalLayout_11">
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="mouseTracking">
@@ -40,10 +40,10 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_10">
        <item>
         <widget class="QLabel" name="pageName">
          <property name="sizePolicy">
@@ -465,10 +465,51 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
          </layout>
         </widget>
        </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_11">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>Type of sorption/ionex/polyelectrolyte isotherm model { N  }</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="kin_t0">
+            <item>
+             <property name="text">
+              <string>N</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>Type of sorption EIL model { N   }</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="kin_t1">
+            <item>
+             <property name="text">
+              <string>N</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">
-      <layout class="QVBoxLayout" name="verticalLayout_4">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QLabel" name="label">
          <property name="sizePolicy">
@@ -484,7 +525,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
           </font>
          </property>
          <property name="text">
-          <string>Step 2 - model-specific settings</string>
+          <string>Step 2 - Phase and solution model settings</string>
          </property>
         </widget>
        </item>
@@ -506,7 +547,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
          <property name="title">
           <string>Optional dimensions to set when built-in functions or scripts for the mixing model shall be used </string>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QFormLayout" name="formLayout_3">
           <item row="0" column="0" colspan="2">
            <widget class="QLabel" name="textLabel2">
             <property name="text">
@@ -553,6 +594,26 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
            </widget>
           </item>
           <item row="2" column="0">
+           <widget class="QSpinBox" name="ndqf"/>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>number of DQF parameter coeff. </string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QSpinBox" name="nrcp"/>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>number of reciprocal parameter coefficients</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
            <widget class="QSpinBox" name="spinBox_ph_cf_N">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -571,7 +632,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="4" column="1">
            <widget class="QLabel" name="textLabel1_3">
             <property name="text">
              <string>ipxT and &amp;ph_cf arrays: number of rows (interaction parameters) for the non-ideal mixing model.</string>
@@ -587,7 +648,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item row="5" column="0">
            <widget class="QSpinBox" name="spinBox_ph_px_M">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -603,7 +664,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
+          <item row="5" column="1">
            <widget class="QLabel" name="textLabel1_2">
             <property name="text">
              <string>&amp;ipxT array for indexation of interaction parameters: set here the maximum order of a parameter (e.g. 3 if binary and ternary parameters will be used).</string>
@@ -619,7 +680,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
+          <item row="6" column="0">
            <widget class="QSpinBox" name="spinBox_ph_cf_M">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -635,7 +696,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item row="6" column="1">
            <widget class="QLabel" name="textLabel1_3_2">
             <property name="text">
              <string>ph_c&amp;f array of interaction parameter coefficients: number of columns (max. number of coefficients per parameter).</string>
@@ -654,10 +715,138 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
          </layout>
         </widget>
        </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_3">
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Step 3 - sorption model settings</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+          </property>
+          <item row="0" column="0" colspan="2">
+           <widget class="QCheckBox" name="PsDiS">
+            <property name="text">
+             <string>flag for sDiS array of denticity and surface site indexes</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_10">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_5">
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="nEIl"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>number of electrostatic model layers </string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="nEIp"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>number of electrostatic model parameters</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QSpinBox" name="nCDc"/>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_17">
+            <property name="text">
+             <string>number of charge distribution coeff. </string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QSpinBox" name="nIsoC"/>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_28">
+            <property name="text">
+             <string>number of isotherm par. coeff. per surface species DC </string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QSpinBox" name="nIsoS"/>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="label_30">
+            <property name="text">
+             <string>number of isotherm par. coeff. per surface site</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QSpinBox" name="mDe"/>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="label_31">
+            <property name="text">
+             <string>maximum denticity number for surface species</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Attention! ForTSolMod built-in mixing models that use dc_cf and/or ipxT, pc_cf data objects, the appropriate dimensions will usually be allocated automatically. Otherwise, the array will be allocated only if all its dimensions are not zeros. </string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Set items in this box only if this is a sorption phase  </string>
+          <string>Set items in this box only if this is a old style sorption phase  </string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0" colspan="5">
@@ -727,212 +916,6 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_3">
-      <layout class="QVBoxLayout" name="verticalLayout_8">
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Step 3 - sorption model settings</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="Line" name="line_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_4">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-         <layout class="QFormLayout" name="formLayout">
-          <item row="0" column="0">
-           <widget class="QComboBox" name="kin_t0">
-            <item>
-             <property name="text">
-              <string>N</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>Type of sorption/ionex/polyelectrolyte isotherm model { N  }</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QComboBox" name="kin_t1">
-            <item>
-             <property name="text">
-              <string>N</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>Type of sorption EIL model { N   }</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QCheckBox" name="Pdqf">
-            <property name="text">
-             <string>flag for dqfp array for DC-related DQF parameter coefficients</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="2">
-           <widget class="QCheckBox" name="Prcp">
-            <property name="text">
-             <string>flag for rcpp array for DC-related reciprocal parameter coefficients</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0" colspan="2">
-           <widget class="QCheckBox" name="PlPhl">
-            <property name="text">
-             <string>flag for list of record keys of linked phases, cf. lPh, lPhC</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0" colspan="2">
-           <widget class="QCheckBox" name="PEIpc">
-            <property name="text">
-             <string>flag for EIpc array of EIL model parameter coefficients</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0" colspan="2">
-           <widget class="QCheckBox" name="PCDc">
-            <property name="text">
-             <string>flag for CDc array of CD model parameter coefficients</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0" colspan="2">
-           <widget class="QCheckBox" name="PIsoC">
-            <property name="text">
-             <string>flag for IsoC array of isotherm parameter coefficients per DC</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="0" colspan="2">
-           <widget class="QCheckBox" name="PIsoS">
-            <property name="text">
-             <string>flag for IsoS array of isotherm parameter coefficients per surface site</string>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="0" colspan="2">
-           <widget class="QCheckBox" name="PsDiS">
-            <property name="text">
-             <string>flag for sDiS array of denticity and surface site indexes</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_10">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <widget class="QSpinBox" name="nlPh"/>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>number of linked phases (cf. PlPhl, lPh)</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QSpinBox" name="nEIl"/>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_15">
-            <property name="text">
-             <string>number of electrostatic model layers </string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QSpinBox" name="nlPc"/>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>number of parameters per linked phase</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QSpinBox" name="nEIp"/>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLabel" name="label_16">
-            <property name="text">
-             <string>number of electrostatic model parameters</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QSpinBox" name="ndqf"/>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string>number of DQF parameter coeff. </string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QSpinBox" name="nCDc"/>
-          </item>
-          <item row="2" column="3">
-           <widget class="QLabel" name="label_17">
-            <property name="text">
-             <string>number of charge distribution coeff. </string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QSpinBox" name="nrcp"/>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLabel" name="label_14">
-            <property name="text">
-             <string>number of reciprocal parameter coefficients</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="page_5">
       <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
@@ -966,8 +949,15 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
          <property name="title">
           <string>GroupBox</string>
          </property>
-         <layout class="QFormLayout" name="formLayout_2">
-          <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Type of kinetic rate model { N T W ... }</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QComboBox" name="kin_t2">
             <item>
              <property name="text">
@@ -986,14 +976,14 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
             </item>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label_7">
+          <item>
+           <widget class="QLabel" name="label_8">
             <property name="text">
-             <string>Type of kinetic rate model { N T W ... }</string>
+             <string>Type of splitting model for dissolution { N TBD }l</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item>
            <widget class="QComboBox" name="kin_t3">
             <item>
              <property name="text">
@@ -1017,14 +1007,14 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
             </item>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="label_8">
+          <item>
+           <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>Type of splitting model for dissolution { N TBD }l</string>
+             <string>Type of splitting model for precipitation { N TBD }</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item>
            <widget class="QComboBox" name="kin_t4">
             <item>
              <property name="text">
@@ -1048,14 +1038,14 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
             </item>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="label_9">
+          <item>
+           <widget class="QLabel" name="label_10">
             <property name="text">
-             <string>Type of splitting model for precipitation { N TBD }</string>
+             <string>Type of the model for trace element uptake { N TBD }</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item>
            <widget class="QComboBox" name="kin_t5">
             <item>
              <property name="text">
@@ -1079,28 +1069,17 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
             </item>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>Type of the model for trace element uptake { N TBD }</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0" colspan="2">
-           <widget class="QCheckBox" name="PrpCon">
-            <property name="text">
-             <string>flag for rpCon array of kinetic rate constants</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0" colspan="2">
-           <widget class="QCheckBox" name="PumpCon">
-            <property name="text">
-             <string>flag for umpCon array of uptake model parameters</string>
-            </property>
-           </widget>
-          </item>
          </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Attention! ForTSolMod built-in mixing models that use dc_cf and/or ipxT, pc_cf data objects, the appropriate dimensions will usually be allocated automatically. Otherwise, the array will be allocated only if all its dimensions are not zeros. </string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -1108,7 +1087,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
          <property name="title">
           <string>GroupBox</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_4">
+         <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="0">
            <widget class="QSpinBox" name="nFaces"/>
           </item>
@@ -1116,16 +1095,6 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
            <widget class="QLabel" name="label_18">
             <property name="text">
              <string>number of kinetically different faces</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QSpinBox" name="nIsoC"/>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_22">
-            <property name="text">
-             <string>number of isotherm par. coeff. per surface species DC </string>
             </property>
            </widget>
           </item>
@@ -1139,16 +1108,6 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
-           <widget class="QSpinBox" name="nIsoS"/>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLabel" name="label_23">
-            <property name="text">
-             <string>number of isotherm par. coeff. per surface site</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="0">
            <widget class="QSpinBox" name="nrpC"/>
           </item>
@@ -1156,16 +1115,6 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
            <widget class="QLabel" name="label_20">
             <property name="text">
              <string>number of kinetic rate constants</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QSpinBox" name="mDe"/>
-          </item>
-          <item row="2" column="3">
-           <widget class="QLabel" name="label_24">
-            <property name="text">
-             <string>maximum denticity number for surface species</string>
             </property>
            </widget>
           </item>
@@ -1185,7 +1134,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
       </layout>
      </widget>
      <widget class="QWidget" name="page_4">
-      <layout class="QVBoxLayout" name="verticalLayout_6">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QLabel" name="label_3">
          <property name="sizePolicy">
@@ -1201,7 +1150,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
           </font>
          </property>
          <property name="text">
-          <string>Step 5 - Useful hints</string>
+          <string>Step 5 - Phase link pages </string>
          </property>
         </widget>
        </item>
@@ -1210,6 +1159,35 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_12">
+         <property name="title">
+          <string>GroupBox</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_4">
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="nlPh"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>number of linked phases (cf. PlPhl, lPh)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="nlPc"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_29">
+            <property name="text">
+             <string>number of parameters per linked phase</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
@@ -1413,9 +1391,6 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
   <tabstop>spinBox_ph_cf_N</tabstop>
   <tabstop>spinBox_ph_px_M</tabstop>
   <tabstop>spinBox_ph_cf_M</tabstop>
-  <tabstop>checkBoxSorption</tabstop>
-  <tabstop>spinBox_SurTypes_N</tabstop>
-  <tabstop>lineEdit_surfArea</tabstop>
   <tabstop>spinBoxSDrefLnk</tabstop>
   <tabstop>pHelp</tabstop>
   <tabstop>pBack</tabstop>

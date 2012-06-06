@@ -147,13 +147,6 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[33], int size[22],
         if( ii >= 0  )
             kin_t1->setCurrentIndex(ii);
 
-    Pdqf->setChecked(flgs[13] == '+');
-    Prcp->setChecked(flgs[14] == '+');
-    PlPhl->setChecked(flgs[15] == '+');
-    PEIpc->setChecked(flgs[17] == '+');
-    PCDc->setChecked(flgs[18] == '+');
-    PIsoC->setChecked(flgs[19] == '+');
-    PIsoS->setChecked(flgs[20] == '+');
     PsDiS->setChecked(flgs[21] == '+');
 
     nlPh->setValue(size[6]);
@@ -177,9 +170,6 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[33], int size[22],
     ii = kin_t5->findText(QChar(flgs[32]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
         if( ii >= 0  )
             kin_t5->setCurrentIndex(ii);
-
-    PrpCon->setChecked(flgs[23] == '+');
-    PumpCon->setChecked(flgs[24] == '+');
 
     nFaces->setValue(size[10]);
     nIsoC->setValue(size[18]);
@@ -307,34 +297,34 @@ void PhaseWizard::getFlags( char flgs[33] )
   str = kin_t5->currentText();
   flgs[32] = str[0].toLatin1();
 
-  if( Pdqf->isChecked() )
+  if( ndqf->value() > 0  )
       flgs[13] = '+';
    else flgs[13] = '-';
-  if( Prcp->isChecked() )
+  if( nrcp->value() > 0  )
       flgs[14] = '+';
    else flgs[14] = '-';
-  if( PlPhl->isChecked() )
+  if( nlPh->value() > 0 )
       flgs[15] = '+';
    else flgs[15] = '-';
-  if( PEIpc->isChecked() )
+  if( nEIl->value() > 0 )
       flgs[17] = '+';
    else flgs[17] = '-';
-  if( PCDc->isChecked() )
+  if( nCDc->value() > 0 )
       flgs[18] = '+';
    else flgs[18] = '-';
-  if( PIsoC->isChecked() )
+  if( nIsoC->value() > 0 )
       flgs[19] = '+';
    else flgs[19] = '-';
-  if( PIsoS->isChecked() )
+  if( nIsoS->value() > 0 )
       flgs[20] = '+';
    else flgs[20] = '-';
   if( PsDiS->isChecked() )
       flgs[21] = '+';
    else flgs[21] = '-';
-  if( PrpCon->isChecked() )
+  if( nFaces->value() > 0 && nReg->value() > 0 )
       flgs[23] = '+';
    else flgs[23] = '-';
-  if( PumpCon->isChecked() )
+  if( numpC->value() > 0 )
       flgs[24] = '+';
    else flgs[24] = '-';
 

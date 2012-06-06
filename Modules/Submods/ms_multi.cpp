@@ -77,6 +77,7 @@ aObj[ o_wo_it_ipm ].SetPtr( &pm.ITG ); /* pm.ITG */
     aObj[ o_wo_sx ].SetPtr( &pm.SX_ );   /*d 2*/
     aObj[ o_wo_cpx ].SetPtr( &pm.CpX_ ); /*d 2*/
     aObj[ o_wo_cvx ].SetPtr( &pm.CvX_ ); /*d 2*/
+    aObj[ o_wi_ktau2 ].SetPtr( &pm.kTau );
     aObj[ o_wi_t0 ].SetPtr( &pm.TMols );
     aObj[ o_wi_ve ].SetPtr( &pm.SMols );    /*VE*/
     aObj[ o_wi_mbx ].SetPtr( &pm.MBX );
@@ -517,7 +518,7 @@ void TMulti::dyn_set(int /*q*/)
     pm.D     = (double (*)[MST])aObj[ o_w_d ].GetPtr();
 //    pm.R     = (double *)aObj[ o_w_r ].GetPtr();
 //    pm.R1    = (double *)aObj[ o_w_r1 ].GetPtr();
-    pm.sMod  = (char (*)[6])aObj[ o_wi_smod ].GetPtr();
+    pm.sMod  = (char (*)[8])aObj[ o_wi_smod ].GetPtr();
  pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].GetPtr();
     pm.SB    = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_wd_sb ].GetPtr();
     pm.SB1    = (char (*)[MAXICNAME])aObj[ o_w_sbh ].GetPtr();
@@ -671,7 +672,7 @@ void TMulti::dyn_kill(int /*q*/)
     pm.D     = (double (*)[MST])aObj[ o_w_d ].Free();
 //    pm.R     = (double *)aObj[ o_w_r ].Free();
 //    pm.R1    = (double *)aObj[ o_w_r1 ].Free();
-    pm.sMod  = (char (*)[6])aObj[ o_wi_smod ].Free();
+    pm.sMod  = (char (*)[8])aObj[ o_wi_smod ].Free();
 pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].Free();
     pm.SB    = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_wd_sb ].Free();
     pm.SB1   = (char (*)[MAXICNAME])aObj[ o_w_sbh ].Free();
@@ -820,7 +821,7 @@ pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].Alloc( pm.L, 1, 6 );
         pm.PUL = (double *)aObj[ o_wi_pul].Alloc( pm.FIs, 1, D_);
         pm.PLL = (double *)aObj[ o_wi_pll].Alloc( pm.FIs, 1, D_);
         //     pm.YOF = (double *)aObj[ o_wi_yof].Alloc( pm.FI, 1, D_ );
-        pm.sMod = (char (*)[6])aObj[ o_wi_smod].Alloc( pm.FIs, 1, 6 );
+        pm.sMod = (char (*)[8])aObj[ o_wi_smod].Alloc( pm.FIs, 1, 8 );
         pm.RFLC = (char *)aObj[ o_wi_rflc].Alloc( pm.FIs, 1, A_ );
         pm.RFSC = (char *)aObj[ o_wi_rfsc].Alloc( pm.FIs, 1, A_ );
     }
@@ -840,7 +841,7 @@ pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].Alloc( pm.L, 1, 6 );
         pm.DMc   = (double *)aObj[ o_wi_dmc ].Free();
         pm.MoiSN  = (double *)aObj[ o_wi_moisn ].Free();
         pm.SitFr  = (double *)aObj[ o_wo_sitfr ].Free();
-        pm.sMod  = (char (*)[6])aObj[ o_wi_smod ].Free();
+        pm.sMod  = (char (*)[8])aObj[ o_wi_smod ].Free();
         pm.RFLC  = (char *)aObj[ o_wi_rflc ].Free();
         pm.RFSC  = (char *)aObj[ o_wi_rfsc ].Free();
     }

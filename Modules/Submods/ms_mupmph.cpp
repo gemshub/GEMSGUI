@@ -534,6 +534,8 @@ void TMulti::multi_sys_ph()
             aPH->TryRecInp( mup->SF[kk], crt, 0 );
             // read informations from phase-solution
             memcpy( pmp->sMod[k], aPH->php->sol_t, 6 );
+            pmp->sMod[k][6] = aPH->php->kin_t[0];
+            pmp->sMod[k][7] = aPH->php->kin_t[1];
             // Added SD 20/01/2010
             if( aPH->php->Ppnc == S_ON && aPH->php->npxM > 0 )
                 CompressPhaseIpxt( kk );
@@ -555,7 +557,7 @@ void TMulti::multi_sys_ph()
                 pmp->LsMod[k*3+1] = 0;
                 pmp->LsMod[k*3+2] = 0;
                 pmp->LsMdc[k*3] = 0L;
-                memset( pmp->sMod[k], ' ', 6 );
+                memset( pmp->sMod[k], ' ', 8 );
             }
 PARLOAD: if( k < syp->Fis )
              pmp->Ls += pmp->L1[k];
