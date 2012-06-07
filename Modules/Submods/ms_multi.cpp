@@ -46,10 +46,10 @@ ICNud = 0;
     phSolMod = 0;
 }
 
-    const char* TMulti::GetHtml()
-    {
+const char* TMulti::GetHtml()
+{
        return GSM_MULTI_HTML;
-    }
+}
 
 // link values to objects
 void TMulti::ods_link( int )
@@ -62,8 +62,8 @@ void TMulti::ods_link( int )
     aObj[ o_wi_fdim ].SetPtr( &pm.FI );  /*l 3*/
     aObj[ o_wo_fdim ].SetPtr( &pm.FI1 ); /*l 3*/
     aObj[ o_wo_it ].SetPtr( &pm.IT );
-aObj[ o_wo_it_efd ].SetPtr( &pm.ITF ); /* pm.ITF */
-aObj[ o_wo_it_ipm ].SetPtr( &pm.ITG ); /* pm.ITG */
+    aObj[ o_wo_it_efd ].SetPtr( &pm.ITF ); /* pm.ITF */
+    aObj[ o_wo_it_ipm ].SetPtr( &pm.ITG ); /* pm.ITG */
     aObj[ o_wi_mode ].SetPtr( &pm.E );   /*l 4*/
     aObj[ o_wo_ipar ].SetPtr( &pm.Ec );  /*l 17*/
     aObj[ o_wio_tc ].SetPtr( &pm.TC );   /*d 2*/
@@ -104,12 +104,12 @@ aObj[ o_wo_it_ipm ].SetPtr( &pm.ITG ); /* pm.ITG */
     // dynamic DODs, part 1
     aObj[ o_wi_l1 ].SetPtr( pm.L1 );
     aObj[ o_wi_l1 ].SetDim( pm.FI, 1 );
-//  Added 07.12.2006 - new object for solution models  KD
-aObj[ o_wi_ipxpm ].SetPtr( pm.IPx );
-//  Dimension is calculated on MULTI loading
+    //  Added 07.12.2006 - new object for solution models  KD
+    aObj[ o_wi_ipxpm ].SetPtr( pm.IPx );
+    //   Dimension is calculated on MULTI loading
     aObj[ o_wi_lsmod ].SetPtr(pm.LsMod );
-// aObj[ o_wi_lsmod ].SetDim( pm.FIs, 1 );  changed 07.12.2006  KD
-aObj[ o_wi_lsmod ].SetDim( pm.FIs, 3 ); // 3 columns
+   // aObj[ o_wi_lsmod ].SetDim( pm.FIs, 1 );  changed 07.12.2006  KD
+    aObj[ o_wi_lsmod ].SetDim( pm.FIs, 3 ); // 3 columns
     aObj[ o_wi_lsmdc ].SetPtr(pm.LsMdc );
     aObj[ o_wi_lsmdc ].SetDim( pm.FIs, 3 );
     aObj[ o_wi_mui ].SetPtr( pm.mui );
@@ -266,8 +266,8 @@ aObj[ o_wi_lsmod ].SetDim( pm.FIs, 3 ); // 3 columns
 //    aObj[ o_wo_masdj ].SetDim( pm.Ls, 1 );
     aObj[ o_wo_bf].SetPtr( pm.BF );
     aObj[ o_wo_bf ].SetDim( pm.FIs, pm.N );
-aObj[ o_wo_bfc].SetPtr( pm.BFC );
-aObj[ o_wo_bfc ].SetDim( 1, pm.N );
+    aObj[ o_wo_bfc].SetPtr( pm.BFC );
+    aObj[ o_wo_bfc ].SetDim( 1, pm.N );
     aObj[ o_w_xf].SetPtr( pm.XF );
     aObj[ o_w_xf ].SetDim( pm.FI, 1 );
     aObj[ o_wo_yf].SetPtr( pm.YF );
@@ -282,8 +282,8 @@ aObj[ o_wo_bfc ].SetDim( 1, pm.N );
     aObj[ o_w_xetaa].SetDim(pm.FIs,pm.FIat);
     aObj[ o_w_xetab].SetPtr( pm.XetaB );
     aObj[ o_w_xetab].SetDim(pm.FIs,pm.FIat);
-aObj[ o_w_xetad].SetPtr( pm.XetaD );    // Added 12.09.05 KD
-aObj[ o_w_xetad].SetDim(pm.FIs,pm.FIat);
+    aObj[ o_w_xetad].SetPtr( pm.XetaD );    // Added 12.09.05 KD
+    aObj[ o_w_xetad].SetDim(pm.FIs,pm.FIat);
     aObj[ o_w_x].SetPtr( pm.X );
     aObj[ o_w_x ].SetDim( pm.L, 1 );
     aObj[ o_wo_y].SetPtr( pm.Y );
@@ -310,19 +310,13 @@ aObj[ o_w_xetad].SetDim(pm.FIs,pm.FIat);
     aObj[ o_wo_f ].SetDim( pm.L, 1 );
     aObj[ o_w_f0].SetPtr( pm.F0 );
     aObj[ o_w_f0 ].SetDim( pm.L, 1 );
-// Changed for CD MUSIC 27.10.2004 KD
+    // Changed for CD MUSIC 27.10.2004 KD
     aObj[ o_w_d ].SetPtr( pm.D );
     aObj[ o_w_d ].SetDim( MST, MST );
-//    aObj[ o_w_d].SetPtr( pm.D );
-//    aObj[ o_w_d ].SetDim( pm.L, 1 );
-//    aObj[ o_w_r].SetPtr( pm.R );
-//    aObj[ o_w_r ].SetDim( pm.NR, pm.NR+1 );
-//    aObj[ o_w_r1].SetPtr( pm.R1 );
-//    aObj[ o_w_r1 ].SetDim( pm.NR, pm.NR+1 );
     aObj[ o_wi_smod ].SetPtr( pm.sMod );
     aObj[ o_wi_smod ].SetDim( pm.FIs, 1 );
- aObj[ o_wi_dcmod ].SetPtr( pm.dcMod );
- aObj[ o_wi_dcmod ].SetDim( pm.L, 1 );
+    aObj[ o_wi_dcmod ].SetPtr( pm.dcMod );
+    aObj[ o_wi_dcmod ].SetDim( pm.L, 1 );
     aObj[ o_wd_sb ].SetPtr( pm.SB );
     aObj[ o_wd_sb ].SetDim( pm.N, 1 );
     aObj[ o_w_sbh ].SetPtr( pm.SB1 );
@@ -382,8 +376,8 @@ aObj[ o_w_xetad].SetDim(pm.FIs,pm.FIat);
     aObj[ o_wi_rion ].SetDim( pm.Ls, 1 );
 //    aObj[ o_wo_lnsat].SetPtr( pm.lnSAT );
 //    aObj[ o_wo_lnsat ].SetDim( pm.Ls, 1 );
-aObj[ o_wo_lnsat].SetPtr( pm.lnSAC );
-aObj[ o_wo_lnsat ].SetDim( pm.Lads, 4 );
+    aObj[ o_wo_lnsat].SetPtr( pm.lnSAC );
+    aObj[ o_wo_lnsat ].SetDim( pm.Lads, 4 );
 
 // 11/02/2009
 aObj[ o_wo_vph].SetPtr( pm.VPh );
@@ -400,6 +394,59 @@ aObj[ o_wo_aph].SetPtr( pm.APh );
 aObj[ o_wo_aph ].SetDim( pm.FIs, MIXPHPROPS );
 aObj[ o_wo_uph].SetPtr( pm.UPh );
 aObj[ o_wo_uph ].SetDim( pm.FIs, MIXPHPROPS );
+
+// New phase stuff 06/06/12
+     aObj[ o_wi_lsmdc2].SetPtr( pm.LsMdc2 );
+     aObj[ o_wi_lsmdc2 ].SetDim( pm.FIs, 3 );
+     aObj[ o_wi_lsphl].SetPtr( pm.LsPhl);
+     aObj[ o_wi_lsphl ].SetDim( pm.FI, 2 );
+     aObj[ o_wi_phlin].SetPtr( pm.PhLin ); //FI
+// TSolMod stuff
+     aObj[ o_wi_lphc].SetPtr( pm.lPhc );
+     aObj[ o_wi_dqfc].SetPtr( pm.DQFc );
+     aObj[ o_wi_rcpc].SetPtr( pm.rcpc );
+     aObj[ o_wi_lndqft].SetPtr( pm.lnDQFt );
+     aObj[ o_wi_lndqft].SetDim( pm.Ls, 1 );
+     aObj[ o_wi_lnrcpt].SetPtr( pm.lnRcpt );
+     aObj[ o_wi_lnrcpt].SetDim( pm.Ls, 1 );
+     aObj[ o_wi_lnext].SetPtr( pm.lnEXt );
+     aObj[ o_wi_lnext].SetDim( pm.Ls, 1 );
+     aObj[ o_wi_lncnft].SetPtr( pm.lnCnft );
+     aObj[ o_wi_lncnft].SetDim( pm.Ls, 1 );
+//TSorpMod & TKinMet stuff
+     aObj[ o_wi_sormc].SetPtr( pm.SorMc );
+     aObj[ o_wi_sormc].SetDim( pm.FIs, 16 );
+// TSorpMod stuff
+     aObj[ o_wi_lsesmo].SetPtr( pm.LsESmo );
+     aObj[ o_wi_lsesmo].SetDim( pm.FIs, 4 );
+     aObj[ o_wi_lsismo].SetPtr( pm.LsISmo );
+     aObj[ o_wi_lsismo].SetDim( pm.FIs, 4 );
+     aObj[ o_wi_xsmd].SetPtr( pm.xSMd );
+     aObj[ o_wi_eimc].SetPtr( pm.EImc );
+     aObj[ o_wi_mcdc].SetPtr( pm.mCDc );
+     aObj[ o_wi_isopc].SetPtr( pm.IsoPc );
+     aObj[ o_wi_isosc].SetPtr( pm.IsoSc );
+     aObj[ o_wi_lnscal].SetPtr( pm.lnScalT );
+     aObj[ o_wi_lnscal].SetDim( pm.Ls, 1 );
+     aObj[ o_wi_lnsact].SetPtr( pm.lnSACT );
+     aObj[ o_wi_lnsact].SetDim( pm.Ls, 1 );
+     aObj[ o_wi_lngamf].SetPtr( pm.lnGammF );
+     aObj[ o_wi_lngamf].SetDim( pm.Ls, 1 );
+     aObj[ o_wi_cterms].SetPtr( pm.CTerms );
+     aObj[ o_wi_cterms].SetDim( pm.Ls, 1 );
+     aObj[ o_wi_isoct].SetPtr( pm.IsoCt );
+// TKinMet stuff
+        aObj[ o_wi_lskin].SetPtr( pm.LsKin );
+        aObj[ o_wi_lskin].SetDim( pm.FI, 4 );
+        aObj[ o_wi_lsupt].SetPtr( pm.LsUpt );
+        aObj[ o_wi_lsupt].SetDim( pm.FIs, 2 );
+        aObj[ o_wi_jcrdc].SetPtr( pm.jCrDC );
+        aObj[ o_wi_xfaces].SetPtr( pm.xfaces );
+        aObj[ o_wi_fsac].SetPtr( pm.fSak );
+        aObj[ o_wi_krpc].SetPtr( pm.Krpc );
+        aObj[ o_wi_umpc].SetPtr( pm.UMpc );
+        aObj[ o_wi_kmod].SetPtr( pm. kMod);
+        aObj[ o_wi_kmod].SetDim( pm.FI, 1 );
 }
 
 // set dynamic Objects ptr to values
@@ -519,7 +566,7 @@ void TMulti::dyn_set(int /*q*/)
 //    pm.R     = (double *)aObj[ o_w_r ].GetPtr();
 //    pm.R1    = (double *)aObj[ o_w_r1 ].GetPtr();
     pm.sMod  = (char (*)[8])aObj[ o_wi_smod ].GetPtr();
- pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].GetPtr();
+    pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].GetPtr();
     pm.SB    = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_wd_sb ].GetPtr();
     pm.SB1    = (char (*)[MAXICNAME])aObj[ o_w_sbh ].GetPtr();
     pm.SM    = (char (*)[MAXDCNAME])aObj[ o_wd_sm ].GetPtr();
@@ -548,12 +595,42 @@ void TMulti::dyn_set(int /*q*/)
     pm.CPh = (double (*)[MIXPHPROPS])aObj[ o_wo_cph].GetPtr();
     pm.APh = (double (*)[MIXPHPROPS])aObj[ o_wo_aph].GetPtr();
     pm.UPh = (double (*)[MIXPHPROPS])aObj[ o_wo_uph].GetPtr();
-/*
-//  Added 16.11.2004 by Sveta
-    pm.sitXcat = (long int *)aObj[ o_wd_sitxcat ].GetPtr();
-    pm.sitXan = (long int *)aObj[ o_wd_sitxan ].GetPtr();
-    pm.sitE = (double *)aObj[ o_wd_site ].GetPtr();
-*/
+    // New phase stuff 06/06/12
+    pm.LsMdc2  = (long int *)aObj[ o_wi_lsmdc2].GetPtr();
+    pm.LsPhl   = (long int *)aObj[ o_wi_lsphl].GetPtr();
+    pm.PhLin   = (long int *)aObj[ o_wi_phlin].GetPtr();
+    // TSolMod stuff
+    pm.lPhc   = (double *)aObj[ o_wi_lphc].GetPtr();
+    pm.DQFc   = (double *)aObj[ o_wi_dqfc].GetPtr();
+    pm.rcpc   = (double *)aObj[ o_wi_rcpc].GetPtr();
+    pm.lnDQFt   = (double *)aObj[ o_wi_lndqft].GetPtr();
+    pm.lnRcpt   = (double *)aObj[ o_wi_lnrcpt].GetPtr();
+    pm.lnEXt   = (double *)aObj[ o_wi_lnext].GetPtr();
+    pm.lnCnft   = (double *)aObj[ o_wi_lncnft].GetPtr();
+    //TSorpMod & TKinMet stuff
+    pm.SorMc   = (double *)aObj[ o_wi_sormc].GetPtr();
+    // TSorpMod stuff
+    pm.LsESmo   = (long int *)aObj[ o_wi_lsesmo].GetPtr();
+    pm.LsISmo   = (long int *)aObj[ o_wi_lsismo].GetPtr();
+    pm.xSMd   = (long int *)aObj[ o_wi_xsmd].GetPtr();
+    pm.EImc   = (double *)aObj[ o_wi_eimc].GetPtr();
+    pm.mCDc   = (double *)aObj[ o_wi_mcdc].GetPtr();
+    pm.IsoPc   = (double *)aObj[ o_wi_isopc].GetPtr();
+    pm.IsoSc   = (double *)aObj[ o_wi_isosc].GetPtr();
+    pm.lnScalT   = (double *)aObj[ o_wi_lnscal].GetPtr();
+    pm.lnSACT   = (double *)aObj[ o_wi_lnsact].GetPtr();
+    pm.lnGammF   = (double *)aObj[ o_wi_lngamf].GetPtr();
+    pm.CTerms   = (double *)aObj[ o_wi_cterms].GetPtr();
+    pm.IsoCt   = (char *)aObj[ o_wi_isoct].GetPtr();
+    // TKinMet stuff
+    pm.LsKin   = (long int *)aObj[ o_wi_lskin].GetPtr();
+    pm.LsUpt   = (long int *)aObj[ o_wi_lsupt].GetPtr();
+    pm.jCrDC   = (long int *)aObj[ o_wi_jcrdc].GetPtr();
+    pm.xfaces   = (long int *)aObj[ o_wi_xfaces].GetPtr();
+    pm.fSak   = (double *)aObj[ o_wi_fsac].GetPtr();
+    pm.Krpc   = (double *)aObj[ o_wi_krpc].GetPtr();
+    pm.UMpc   = (double *)aObj[ o_wi_umpc].GetPtr();
+    pm.kMod   = (char(*)[4])aObj[ o_wi_kmod].GetPtr();
 }
 
 
@@ -673,7 +750,7 @@ void TMulti::dyn_kill(int /*q*/)
 //    pm.R     = (double *)aObj[ o_w_r ].Free();
 //    pm.R1    = (double *)aObj[ o_w_r1 ].Free();
     pm.sMod  = (char (*)[8])aObj[ o_wi_smod ].Free();
-pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].Free();
+    pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].Free();
     pm.SB    = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_wd_sb ].Free();
     pm.SB1   = (char (*)[MAXICNAME])aObj[ o_w_sbh ].Free();
     pm.SM    = (char (*)[MAXDCNAME])aObj[ o_wd_sm ].Free();
@@ -702,6 +779,42 @@ pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].Free();
     pm.CPh = (double (*)[MIXPHPROPS])aObj[ o_wo_cph].Free();
     pm.APh = (double (*)[MIXPHPROPS])aObj[ o_wo_aph].Free();
     pm.UPh = (double (*)[MIXPHPROPS])aObj[ o_wo_uph].Free();
+    // New phase stuff 06/06/12
+    pm.LsMdc2  = (long int *)aObj[ o_wi_lsmdc2].Free();
+    pm.LsPhl   = (long int *)aObj[ o_wi_lsphl].Free();
+    pm.PhLin   = (long int *)aObj[ o_wi_phlin].Free();
+    // TSolMod stuff
+    pm.lPhc   = (double *)aObj[ o_wi_lphc].Free();
+    pm.DQFc   = (double *)aObj[ o_wi_dqfc].Free();
+    pm.rcpc   = (double *)aObj[ o_wi_rcpc].Free();
+    pm.lnDQFt   = (double *)aObj[ o_wi_lndqft].Free();
+    pm.lnRcpt   = (double *)aObj[ o_wi_lnrcpt].Free();
+    pm.lnEXt   = (double *)aObj[ o_wi_lnext].Free();
+    pm.lnCnft   = (double *)aObj[ o_wi_lncnft].Free();
+    //TSorpMod & TKinMet stuff
+    pm.SorMc   = (double *)aObj[ o_wi_sormc].Free();
+    // TSorpMod stuff
+    pm.LsESmo   = (long int *)aObj[ o_wi_lsesmo].Free();
+    pm.LsISmo   = (long int *)aObj[ o_wi_lsismo].Free();
+    pm.xSMd   = (long int *)aObj[ o_wi_xsmd].Free();
+    pm.EImc   = (double *)aObj[ o_wi_eimc].Free();
+    pm.mCDc   = (double *)aObj[ o_wi_mcdc].Free();
+    pm.IsoPc   = (double *)aObj[ o_wi_isopc].Free();
+    pm.IsoSc   = (double *)aObj[ o_wi_isosc].Free();
+    pm.lnScalT   = (double *)aObj[ o_wi_lnscal].Free();
+    pm.lnSACT   = (double *)aObj[ o_wi_lnsact].Free();
+    pm.lnGammF   = (double *)aObj[ o_wi_lngamf].Free();
+    pm.CTerms   = (double *)aObj[ o_wi_cterms].Free();
+    pm.IsoCt   = (char *)aObj[ o_wi_isoct].Free();
+    // TKinMet stuff
+    pm.LsKin   = (long int *)aObj[ o_wi_lskin].Free();
+    pm.LsUpt   = (long int *)aObj[ o_wi_lsupt].Free();
+    pm.jCrDC   = (long int *)aObj[ o_wi_jcrdc].Free();
+    pm.xfaces   = (long int *)aObj[ o_wi_xfaces].Free();
+    pm.fSak   = (double *)aObj[ o_wi_fsac].Free();
+    pm.Krpc   = (double *)aObj[ o_wi_krpc].Free();
+    pm.UMpc   = (double *)aObj[ o_wi_umpc].Free();
+    pm.kMod   = (char(*)[4])aObj[ o_wi_kmod].Free();
 
     Free_TSolMod();
 }
@@ -778,7 +891,7 @@ void TMulti::dyn_new(int /*q*/)
     pm.FWGT = (double *)aObj[ o_wd_fwgt].Alloc( pm.FI, 1, D_ );
     pm.BFC = (double *)aObj[ o_wo_bfc].Alloc( 1, pm.N, D_ );  // Bugfix 11.03.2010 DK
 
-pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].Alloc( pm.L, 1, 6 );
+   pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].Alloc( pm.L, 1, 6 );
 
     if( pm.L > 0 )
     {
@@ -1002,12 +1115,46 @@ pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].Alloc( pm.L, 1, 6 );
         pm.APh = (double (*)[MIXPHPROPS])aObj[ o_wo_aph].Alloc(pm.FIs,MIXPHPROPS, D_);
         pm.UPh = (double (*)[MIXPHPROPS])aObj[ o_wo_uph].Alloc(pm.FIs,MIXPHPROPS, D_);
 
+        // New phase stuff 06/06/12
+        pm.LsMdc2  = (long int *)aObj[ o_wi_lsmdc2].Alloc( pm.FIs, 3, L_ );
+        pm.LsPhl   = (long int *)aObj[ o_wi_lsphl].Alloc( pm.FI, 2, L_ );
+        //pm.PhLin   = (long int *)aObj[ o_wi_phlin].Alloc( pm.FI*2, 1, L_ );
+        // TSolMod stuff
+        //pm.lPhc   = (double *)aObj[ o_wi_lphc].Alloc( pm.FI*2, 1, D_ );
+        //pm.DQFc   = (double *)aObj[ o_wi_dqfc].Alloc( pm.FIs, 1, D_ );
+        //pm.rcpc   = (double *)aObj[ o_wi_rcpc].Alloc( pm.FIs, 1, D_ );
+        pm.lnDQFt   = (double *)aObj[ o_wi_lndqft].Alloc( pm.Ls, 1, D_ );
+        pm.lnRcpt   = (double *)aObj[ o_wi_lnrcpt].Alloc( pm.Ls, 1, D_ );
+        pm.lnEXt   = (double *)aObj[ o_wi_lnext].Alloc( pm.Ls, 1, D_ );
+        pm.lnCnft   = (double *)aObj[ o_wi_lncnft].Alloc( pm.Ls, 1, D_ );
+        //TSorpMod & TKinMet stuff
+        pm.SorMc   = (double *)aObj[ o_wi_sormc].Alloc( pm.FIs, 16, D_ );
+        // TSorpMod stuff
+        pm.LsESmo   = (long int *)aObj[ o_wi_lsesmo].Alloc( pm.FIs, 4, L_ );
+        pm.LsISmo   = (long int *)aObj[ o_wi_lsismo].Alloc( pm.FIs, 4, L_ );
+        //pm.xSMd   = (long int *)aObj[ o_wi_xsmd].Alloc( pm.FIs, 1, D_ );
+        //pm.EImc   = (double *)aObj[ o_wi_eimc].Alloc( pm.FIs, 1, D_ );
+        //pm.mCDc   = (double *)aObj[ o_wi_mcdc].Alloc( pm.FIs, 1, D_ );
+        //pm.IsoPc   = (double *)aObj[ o_wi_isopc].Alloc( pm.Fs, 1, D_ );
+        //pm.IsoSc   = (double *)aObj[ o_wi_isosc].Alloc( pm.Fs, 1, D_ );
+        pm.lnScalT   = (double *)aObj[ o_wi_lnscal].Alloc( pm.Ls, 1, D_ );
+        pm.lnSACT   = (double *)aObj[ o_wi_lnsact].Alloc( pm.Ls, 1, D_ );
+        pm.lnGammF   = (double *)aObj[ o_wi_lngamf].Alloc( pm.Ls, 1, D_ );
+        pm.CTerms   = (double *)aObj[ o_wi_cterms].Alloc( pm.Ls, 1, D_ );
+        //pm.IsoCt   = (char *)aObj[ o_wi_isoct].Alloc( pm.FIs, 1, A_ );
+        // TKinMet stuff
+        pm.LsKin   = (long int *)aObj[ o_wi_lskin].Alloc( pm.FI, 4, L_ );
+        pm.LsUpt   = (long int *)aObj[ o_wi_lsupt].Alloc( pm.FIs, 2, L_ );
+        //pm.jCrDC   = (long int *)aObj[ o_wi_jcrdc].Alloc( pm.FI, 1, L_ );
+        //pm.xfaces   = (long int *)aObj[ o_wi_xfaces].Alloc( pm.FI, 1, L_ );
+        //pm.fSak   = (double *)aObj[ o_wi_fsac].Alloc( pm.FI, 1, D_ );
+        //pm.Krpc   = (double *)aObj[ o_wi_krpc].Alloc( pm.FI, 1, D_ );
+        //pm.UMpc   = (double *)aObj[ o_wi_umpc].Alloc( pm.FIs, 1, D_ );
+        pm.kMod   = (char(*)[4])aObj[ o_wi_kmod].Alloc( pm.FI, 1, 4 );
 
     Free_TSolMod(); //Bugfix SD 01/06/12
     Alloc_TSolMod( pm.FIs );
 
-    /* pm.R = (double *)aObj[ o_w_r].Alloc( pm.N, pm.N+1, D_ ); */
-//    sit_dyn_new();
 }
 
 //--------------------- End of ms_multi.cpp ---------------------------
