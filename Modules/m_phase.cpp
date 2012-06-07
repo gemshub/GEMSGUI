@@ -2306,6 +2306,20 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
     php->DCC[nDCnew] = php->DCC[ii];;
     if( php->Psco == S_ON )
       copyValues( php->scoef+nDCnew*php->nscM, php->scoef+ii*php->nscM, php->nscM );
+
+    if( php->PCDc == S_ON )
+      copyValues( php->CDc+nDCnew*php->nCDc, php->CDc+ii*php->nCDc, php->nCDc );
+    if( php->PIsoC == S_ON )
+      copyValues( php->IsoP+nDCnew*php->nIsoC, php->IsoP+ii*php->nIsoC, php->nIsoC );
+    if( php->PsDiS == S_ON )
+      copyValues( php->xSmD+nDCnew*php->NsiT, php->xSmD+ii*php->NsiT, php->NsiT );
+    if( php->PumpCon == S_ON )
+      copyValues( php->umpCon+nDCnew*php->numpC, php->umpCon+ii*php->numpC, php->numpC );
+    if( php->Pdqf == S_ON )
+      copyValues( php->DQFc+nDCnew*php->ndqf, php->DQFc+ii*php->ndqf, php->ndqf );
+    if( php->Pdqf == S_ON )
+      copyValues( php->rcpc+nDCnew*php->nrcp, php->rcpc+ii*php->nrcp, php->nrcp );
+
     if( php->PFsiT != S_OFF )
     {
        copyValues( php->SATC[nDCnew], php->SATC[ii], MCAS );
@@ -2326,6 +2340,18 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
       php->SATC =  (char (*)[MCAS])aObj[ o_phsatc ].Alloc( php->nDC, MCAS, A_);
       php->MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].Alloc( php->nDC, DFCN, F_);
    }
+   if( php->PCDc == S_ON )
+     php->CDc =  (float *)aObj[ o_phcdc].Alloc( php->nDC, php->nCDc, F_ );
+   if( php->PIsoC == S_ON )
+     php->IsoP =  (float *)aObj[ o_phisop].Alloc( php->nDC, php->nIsoC, F_ );
+   if( php->PsDiS == S_ON )
+       php->xSmD =  (short *)aObj[  o_phxsmd ].Alloc( php->nDC, php->NsiT, I_ );
+   if( php->PumpCon == S_ON )
+     php->umpCon =  (float *)aObj[ o_phumpcon].Alloc( php->nDC, php->numpC, F_ );
+   if( php->Pdqf == S_ON )
+    php->DQFc =  (float *)aObj[ o_phdqfc].Alloc( php->nDC, php->ndqf, F_ );
+   if( php->Pdqf == S_ON )
+     php->rcpc =  (float *)aObj[ o_phrcpc].Alloc( php->nDC, php->nrcp, F_ );
 
  }
 

@@ -49,6 +49,7 @@ void TMulti::SolModLoad( )
 {
     int kk, k, j, jj, jp, jkd,
     JB, JE=0, jb, je=0, kc, kd, kce=0, kde=0, kx, kxe=0, ksn = 0, ksf=0, Type=0;
+    long int jphl=0, jlphc=0, jdqfc=0,  jrcpc=0;
     //vstr pkey(MAXRKEYLEN);
     vstr modT(164);
     char *sMod;
@@ -331,14 +332,109 @@ LOAD_NIDMCOEF:
           }
           else pmp->LsMdc[k*3] = 0; // no DC coefficients
         }
+        // Load new fields from Phase
+
+        pmp->LsPhl[k*2] = aPH->php->nlPh;
+        pmp->LsPhl[k*2+1] = aPH->php->nlPc;
+        pmp->LsMdc2[k*3] = aPH->php->ndqf;
+        pmp->LsMdc2[k*3+1] = aPH->php->nrcp;
+
+
+        if( pmp->LsMdc2[k*3] )
+        {   // coefficients for of DQF parameters for DCs in phases
+          if( aPH->php->DQFc )
+          {
+            if( jdqfc+pmp->LsMdc2[k*3]*pmp->L1[k]
+                 > (int)(sizeof( pmp->DQFc )/sizeof(double)))
+                pmp->DQFc = (double *) aObj[ o_wi_dqfc ].Alloc(
+                   jdqfc+pmp->LsMdc2[k*3]*pmp->L1[k], 1, D_ );
+            ErrorIf( pmp->DQFc == NULL, "SolModLoad",
+                    "Error in reallocating memory for pmp->DQFc." );
+            for( jj=jb, j=JB, jkd=0; j < JE; j++ )
+            { // set indexes of components - eliminating those switched off
+                if( syp->Dcl[j] == S_OFF )
+                    continue;
+                jp = mup->Pl[j]; // mup->Pl[pmp->muj[j]];
+                copyValues( pmp->DQFc+jdqfc+jkd, aPH->php->DQFc+jp*pmp->LsMdc2[k*3],
+                        pmp->LsMdc2[k*3]);
+                jkd += pmp->LsMdc2[k*3]; jj++;
+            } /* j */
+          }
+          else pmp->LsMdc2[k*3] = 0; // no DC coefficients
+        }
+
+        if( pmp->LsMdc2[k*3+1] )
+        {   // coefficients of reciprocal parameters for DCs in phases
+          if( aPH->php->rcpc )
+          {
+            if( jrcpc+pmp->LsMdc2[k*3+1]*pmp->L1[k]
+                 > (int)(sizeof( pmp->rcpc )/sizeof(double)))
+                pmp->rcpc = (double *) aObj[ o_wi_rcpc ].Alloc(
+                   jrcpc+pmp->LsMdc2[k*3+1]*pmp->L1[k], 1, D_ );
+            ErrorIf( pmp->rcpc == NULL, "SolModLoad",
+                    "Error in reallocating memory for pmp->rcpc." );
+            for( jj=jb, j=JB, jkd=0; j < JE; j++ )
+            { // set indexes of components - eliminating those switched off
+                if( syp->Dcl[j] == S_OFF )
+                    continue;
+                jp = mup->Pl[j]; // mup->Pl[pmp->muj[j]];
+                copyValues( pmp->rcpc+jrcpc+jkd, aPH->php->rcpc+jp*pmp->LsMdc2[k*3+1],
+                        pmp->LsMdc2[k*3+1]);
+                jkd += pmp->LsMdc2[k*3+1]; jj++;
+            } /* j */
+          }
+          else pmp->LsMdc2[k*3+1] = 0; // no DC coefficients
+        }
+
+        // !!!!! must be for FI
+        int dphl = 0;
+        if( pmp->LsPhl[k*2+1] && pmp->LsPhl[k*2+1] )
+        {   // coefficients of reciprocal parameters for DCs in phases
+          if( aPH->php->lPhc && aPH->php->IsoC )
+          {
+            if( jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1]
+                 > (int)(sizeof( pmp->lPhc )/sizeof(double)))
+                pmp->lPhc = (double *) aObj[ o_wi_lphc ].Alloc(
+                   jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1], 1, D_ );
+            ErrorIf( pmp->lPhc == NULL, "SolModLoad",
+                    "Error in reallocating memory for pmp->lPhc." );
+            if( jphl+pm.LsPhl[k*2]*2
+                 > (int)(sizeof( pmp->PhLin )/sizeof(double)))
+                pmp->PhLin = (long int *) aObj[ o_wi_phlin ].Alloc(
+                   jphl+pm.LsPhl[k*2]*2, 1, L_ );
+            ErrorIf( pmp->PhLin == NULL, "SolModLoad",
+                    "Error in reallocating memory for pmp->PhLin." );
+            for( jj=0; jj<aPH->php->nlPh; jj++ )
+            {
+                gstring Pname = gstring(aPH->php->lPh[jj], PH_RKLEN );
+                int phInd = -1;//finde(Pname);
+                if( phInd >0 )
+                {
+                    pmp->PhLin[jphl+dphl*2] = phInd;
+                    pmp->PhLin[jphl+dphl*2+1] = (long int)aPH->php->lPhC[jj];
+                    copyValues( pmp->lPhc+jlphc+dphl*pmp->LsPhl[k*2+1],
+                         aPH->php->lPhc+jj*pmp->LsPhl[k*2+1], pmp->LsPhl[k*2+1]);
+                    dphl++;
+                }
+            }
+          }
+          else
+          {    pmp->LsPhl[k*2+1] = 0; // no DC coefficients
+          }
+          pmp->LsPhl[k*2] = dphl;
+        }
+        // move pointers
+        jphl  += (pm.LsPhl[k*2]*2);
+        jlphc += (pm.LsPhl[k*2]*pm.LsPhl[k*2+1]);
+        jdqfc += (pm.LsMdc2[k*3]*pm.L1[k]);
+        jrcpc += (pm.LsMdc2[k*3+1]*pm.L1[k]);
+
         kxe += pmp->LsMod[k*3]*pmp->LsMod[k*3+1];
         kce += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];  // Changed 10.12.2006  by KD&SD
         kde += pmp->LsMdc[k*3]*pmp->L1[k];
         ksn += pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2]*pmp->L1[k];
         ksf += pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2];
      } // k
-//    if( ksn<=0 )
-//      pm.MoiSN  = (double *)aObj[ o_wi_moisn ].Free();
 
     pmp->pIPN = 1;
  }
