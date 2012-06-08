@@ -549,6 +549,12 @@ void TMulti::multi_sys_ph()
             if( aPH->php->Psco == S_ON )
                 pmp->LsMdc[k*3] = aPH->php->nscM;
             else pmp->LsMdc[k*3] = 0;
+
+            pmp->LsPhl[k*2] = aPH->php->nlPh;
+            pmp->LsPhl[k*2+1] = aPH->php->nlPc;
+            pmp->LsMdc2[k*3] = aPH->php->ndqf;
+            pmp->LsMdc2[k*3+1] = aPH->php->nrcp;
+
         }
         else  // nothing to read in the Phase record
             if( k<pmp->FIs )
@@ -558,7 +564,13 @@ void TMulti::multi_sys_ph()
                 pmp->LsMod[k*3+2] = 0;
                 pmp->LsMdc[k*3] = 0L;
                 memset( pmp->sMod[k], ' ', 8 );
+                pmp->LsPhl[k*2] = 0;
+                pmp->LsPhl[k*2+1] = 0;
+                pmp->LsMdc2[k*3] = 0;
+                pmp->LsMdc2[k*3+1] = 0;
             }
+
+
 PARLOAD: if( k < syp->Fis )
              pmp->Ls += pmp->L1[k];
         non_sorption_phase = true;

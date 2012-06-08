@@ -388,7 +388,7 @@ LOAD_NIDMCOEF:
 
         // !!!!! must be for FI
         int dphl = 0;
-        if( pmp->LsPhl[k*2+1] && pmp->LsPhl[k*2+1] )
+        if( pmp->LsPhl[k*2] && pmp->LsPhl[k*2+1] )
         {   // coefficients of reciprocal parameters for DCs in phases
           if( aPH->php->lPhc && aPH->php->IsoC )
           {
@@ -407,7 +407,7 @@ LOAD_NIDMCOEF:
             for( jj=0; jj<aPH->php->nlPh; jj++ )
             {
                 gstring Pname = gstring(aPH->php->lPh[jj], PH_RKLEN );
-                int phInd = -1;//finde(Pname);
+                int phInd = find_phnum_multi(Pname.c_str());
                 if( phInd >0 )
                 {
                     pmp->PhLin[jphl+dphl*2] = phInd;
@@ -703,6 +703,21 @@ int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
         Error( "E20MSPrep:", "Preprocessing cancelled by the user..." );
 
    return( j );
+}
+
+/// Search of phase index by name ( *name )
+/// Find index in lists MULTI;  pmp->SF
+///  \return index >=0 or -1
+//
+int TMulti::find_phnum_multi( const char *name)
+{
+    int k, len;
+
+    len = strlen( name );
+    for( k=0; k < pmp->FI; k++ )
+      if( !memcmp(name, pmp->SF[k], min(len,(int)(MAXPHNAME+MAXSYMB))))
+                return k;
+    return -1;
 }
 
 // Search of phase index by name ( *name )
