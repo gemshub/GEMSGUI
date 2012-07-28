@@ -289,8 +289,7 @@ void TPlotWin::paintGrid(QPainter& dc)
     canvas.setWidth(width()-rightGap);
     canvas.setHeight(height()-bottomGap);
 
-    QPen pen( Qt::black, 1 );
-    pen.setStyle( Qt::DotLine );
+    QPen pen(Qt::black, 1, Qt::DotLine, Qt::FlatCap, Qt::RoundJoin );
     dc.setPen( pen );
 
     // need float grid interval to make it precise
