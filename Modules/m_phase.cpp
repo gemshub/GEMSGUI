@@ -735,6 +735,7 @@ AGAIN_SETUP:
             goto AGAIN_SETUP;
         else   Error( GetName(), "E07PHrem: The user cancelled remaking Phase definition !");
     }
+    php->nSub = 0;
     SetString("PH_make   Remaking Phase definition");
     pVisor->Update();
 
@@ -870,7 +871,10 @@ AGAINRC:
     else php->PdEq = S_ON;
     if( php->sol_t[SPHAS_DEP] == SM_UNDEF ) php->PpEq = S_OFF;
     else php->PpEq = S_ON;
-
+if( (php->NsiT != S_OFF) && php->sol_t[SPHAS_TYP] == SM_SURCOM )
+{
+  php->nMoi = 0; php->nSub = 0;
+}
     dyn_new(0);  // reallocation of memory
 
     /* Get list of components : add aMcv and aMrv */
@@ -925,7 +929,7 @@ AGAINRC:
     memset( dcn, 0, MAXRKEYLEN );
     for( i=0; i<php->nDC; i++ )
     {
-        php->DCS[i] = php->SM[i][DC_RKLEN-1]; /* cod istochnic */
+        php->DCS[i] = php->SM[i][DC_RKLEN-1]; // species class code
         php->SM[i][DC_RKLEN-1] = ' ';
 
         /*Get key */
