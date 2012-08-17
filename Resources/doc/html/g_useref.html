@@ -1994,10 +1994,9 @@ sorbent end-member mole quantity only (reserved for future versions)</td>
     </tbody>
   </table>
   <br>
-  <tt></tt></blockquote>
-<ol>
-&nbsp;
-</ol>
+  &nbsp;
+</blockquote>
+
 <h3> <a name="NONIDTYPES"></a>4.4. Codes for the (Non-Ideal) Models of
 Multi-Component Phases</h3>
 <p>In GEM context, the chemical
@@ -2054,8 +2053,8 @@ and <tt>Activity-coeffs.pdf</tt> manual files.
 If the system contains only phases that use built-in models of mixing, 
 it can be exported into GEMS3K input files and used in standalone 
 reactive transport or parameter fitting calculations.&nbsp; &nbsp; </p>
-<p> <br>
-</p>
+ 
+
 <h4><a name="P_SOLT0"></a><big>4.4.1. Type of Mixing and Method of
 Calculation of the Properties of Mixing</big></h4>
 <h3> </h3>
@@ -2066,7 +2065,7 @@ coefficients.
 Possible values:</p>
 <p>
 </p>
-<table border="1" cellpadding="2" cellspacing="2" width="90%">
+<table border="1" cellpadding="2" cellspacing="2" width="100%">
 
 
   <tbody>
@@ -2406,13 +2405,13 @@ are available.</p>
 <p>More codes for built-in phase models may be added in future versions of
 GEM-Selektor/GEMS3K.
 Available to date built-in models are described in <a href="theorgem.html"><b><tt>theorgem.html</tt></b></a>
-and <b><tt>Activity-coeffs.pdf</tt></b> &nbsp;manual files.<br>
-</p>
+and <b><tt>Activity-coeffs.pdf</tt></b> &nbsp;manual files.</p>
 
-<p></p>
-<span style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;"></span>
-<p>To use a built-in non-ideal model in GEM IPM calculations, the <b><tt>'<big>S</big>'</tt></b>
-<a href="#P_SOLT3">mode of calculation of activity coefficients</a>
+
+
+<p><span style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;"></span>
+To use a built-in non-ideal model in GEM IPM calculations, the <b><tt>'<big>S</big>'</tt></b>
+  <a href="#P_SOLT3">mode of calculation of activity coefficients</a>
 must
 be set in the&nbsp; <tt><a href="gm_phase.html#p_solt_3">p_solt[3]</a></tt>
 cell. If that mode is set to <b><tt>'N'</tt></b> then the program will
@@ -2420,8 +2419,9 @@ ignore
 the built-in functions and try to execute your own Phase record
 scripts,
 thus overriding the built-in calculations with the user-defined
-equations.<br>
-</p>
+equations.</p>
+
+
 <p>Note that models for gas/fluid and aqueous electrolyte phases that
 use
 built-in calculations of activity coefficients can be selected and
@@ -2429,14 +2429,15 @@ automatically
 built upon creating or remaking the user's <a href="gm_project.html">modelling
 project</a> using an <a href="gems_aphsetup.html">AutoPhase setup
 dialog</a>.
+
 </p>
-<p><br>
-</p>
+
+
 <h4><a name="P_SOLT3"></a><big>4.4.2. </big>Mode of calculation of activity coefficients of end members<br>
 
 
 </h4>
-<table border="1" cellpadding="2" cellspacing="2" width="90%">
+<table border="1" cellpadding="2" cellspacing="2" width="100%">
 
   <tbody>
     <tr>
@@ -2478,19 +2479,25 @@ dialog</a>.
 <p><br>
 </p>
 
-<h4><a name="P_SOLT5"></a><big>4.4.3.&nbsp; </big>Specific mixing rules (temperature corrections) for EoS and activity models
+<h4><a name="P_SOLT5"></a><big>4.4.3.&nbsp; </big>Specific mixing rules (or forms of temperature correction) for EoS and activity models
 
 
 </h4>
-<table border="1" cellpadding="2" cellspacing="2" width="90%">
+<table border="1" cellpadding="2" cellspacing="2" width="100%">
 
   <tbody>
     <tr>
-      <td align="center" valign="top"><b>Code<br>
-        </b></td>
-      <td valign="top">Displayed message<br>
+      <td align="center" valign="top">
+<p><b>Code<br>
+        </b></p>
+</td>
+      <td valign="top">
+<p>Displayed message</p>
+
       </td>
-      <td valign="top">Comment<br>
+      <td valign="top">
+<p>Comment</p>
+
       </td>
     </tr>
     <tr>
@@ -2522,13 +2529,13 @@ model</td>
         </b></td>
       <td valign="top">Temperature-dependent one-term binary interaction parameter <i>k</i><sub><i>ij</i></sub><br>
       </td>
-      <td valign="top">Two coefficients per interaction parameter <font color="#cc0000">(</font><i>A<sub>ij</sub></i> and <i>B<sub>ij</sub></i> <font color="#cc0000"><i></i>? TW please specify)</font> to be entered into <a href="file:///Users/kulik/DevGEMS/trunk/gems-gui/Resources/doc/html/gm_phase.html#ph_cf"><tt>ph_cf</tt></a> array</td>
+      <td valign="top">Two coefficients per interaction parameter (<i>A<sub>ij</sub></i> and <i>B<sub>ij</sub></i> <font color="#cc0000"><i></i></font>) to be entered into <a href="file:///Users/kulik/DevGEMS/trunk/gems-gui/Resources/doc/html/gm_phase.html#ph_cf"><tt>ph_cf</tt></a> array</td>
     </tr><tr>
   <td align="center" valign="top"><b>5</b><br>
   </td>
   <td valign="top">5-term Pitzer model parameter temperature dependence<br>
   </td>
-  <td valign="top">Five coefficients <i>a,b,c,d,e</i> of the temperature dependence&nbsp; <i>a</i> + <i>b</i>(1/<i>T</i>&#8722;1/298.15) +<i> c</i> ln(<i>T</i>/298.15) + <i>d</i>(<i>T</i>&#8722;298.15) <font color="#cc0000">+ <i>e</i>(<i>T</i>&#8722;298.15)<sup>2</sup></font>. Used also in TOUGHREACT software.<br>
+  <td valign="top">Five coefficients <i>a,b,c,d,e</i> of the temperature dependence&nbsp; <i>a</i> + <i>b</i> (1/<i>T</i>&#8722;1/298.15) +<i> c</i> ln(<i>T</i>/298.15) + <i>d </i>(<i>T</i>&#8722;298.15) <font color="#cc0000">+ <i>e</i> (<i>T</i>&#8722;298.15)<sup>2</sup></font>. First four terms are used also in the TOUGHREACT software.<br>
   </td>
 </tr>
 <tr>
@@ -2542,7 +2549,7 @@ model</td>
   <td align="center" valign="top"><b>8</b><br>
   </td>
   <td valign="top">8-term Pitzer model parameter temperature dependence</td>
-  <td valign="top">under construction<br>
+  <td valign="top">Original HMW variant (under construction)<br>
   </td>
 </tr>
 
