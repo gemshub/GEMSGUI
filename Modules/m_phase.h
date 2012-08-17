@@ -245,6 +245,7 @@ enum solmod_switches { /* indexes of keys of model solution*/
     SM_OTHER = 'O',	// other built-in phase-specific models of non-ideal solutions (selected by phase name)
 
     // Codes to identify specific mixing rules and temperature functions in EoS and activity models
+    MR_UNDEF = 'N', // Default mixing rule or form of interaction parameter coefficients
     MR_WAAL = 'W',	// Basic Van der Waals mixing rules in cubic EoS models
     MR_CONST = 'C',	// Constant one-term interaction parameter kij
     MR_TEMP = 'T',	// Temperature-dependent one-term interaction parameter kij (Jaubert et al. 2005)
