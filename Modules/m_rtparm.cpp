@@ -83,7 +83,7 @@ TRTParm::TRTParm( int nrt ):
 void TRTParm::ods_link( int q)
 {
     ErrorIf( q > nQ, GetName(), "E00RTrem: Illegal link q>nQ.");
-    // static objects
+    // 3 objects
     aObj[ o_rpunit].SetPtr( &rp[q].What );    /*10*/
     aObj[ o_rpdim].SetPtr(  &rp[q].NP );      /*i3*/
     aObj[ o_rpmode].SetPtr( &rp[q].Mode );
@@ -666,7 +666,8 @@ TRTParm::RecCalc( const char *key )
 //        aW.ods_link(0);
         if( P_old < 1.00001e-5 && rpp->P[j] < 1.00001e-5 )
         {  // Set calculated pressure if it was zero in RTparam record 
-            rpp->P[j] = aW.twp->P;  // ???????
+            rpp->P[j] = aW.twp->P + 3e-5;  //Adding 3 Pa to make sure that
+                          // the next calculations are in liquid H2O field!
         }
         // calculate equations of  data
         rpn[0].CalcEquat();

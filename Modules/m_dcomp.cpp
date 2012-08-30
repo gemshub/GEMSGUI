@@ -692,7 +692,7 @@ void TDComp::DCthermo( int q, int p )
     		aSta.Temp = aW.twp->TC;
     		if( aSta.Temp < 0.01 && aSta.Temp >= 0.0 ) // Deg. C!
     			aSta.Temp = 0.01;
-    		if( aW.twp->P < 6.1e-3 ) // 6.1e-3 is P_sat at triple point of H2O
+            if( aW.twp->P < 6.11732e-3 ) // 6.11732e-3 is P_sat at triple point of H2O
                 // At lower pressures HKF/HGK runs unstable or crashes
     			aSta.Pres = 0.0;  // 06.12.2006  DK
     		else
@@ -700,8 +700,8 @@ void TDComp::DCthermo( int q, int p )
 
     		TSupcrt supCrt;
             supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres );
-            if( aW.twp->P < 6.1e-3 )   // 06.12.2006  DK
-            	aW.twp->P = aSta.Pres;
+            if( aW.twp->P < 6.11732e-3 )   // 06.12.2006  DK
+                aW.twp->P = aSta.Pres;
 
             // pull water properties from WATERPARAM
             rho = aSta.Dens[aSpc.isat];

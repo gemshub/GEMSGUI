@@ -215,7 +215,7 @@ void EquatSetup::changePage( int nPage )
     if(nJ<0) nJ = 0;
 
     if( cPage <= 0 )
-     lDesc->setText( "Static Objects List (see tooltips on object names)");
+     lDesc->setText( "List of static data objects (see tooltip on each object name)");
     else
       lDesc->setText( aObj[pgData[nPage].nObj].GetDescription(0,nJ).c_str());
 }
