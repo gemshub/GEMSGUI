@@ -471,7 +471,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
                         }
 
   		 } 
-                 if( flds[ii].place == UndeTabl )
+         if( flds[ii].place == UndeTabl )
                  {
                      maxColSize = max( maxColSize, colSize);
                      maxfullcolSize = max( maxfullcolSize, fullcolSize);
@@ -479,19 +479,19 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
                      colSize = 0;
                      fullcolSize =0;
                  }
-                 if(  flds[ii].place == Sticked || flds[ii].place == UndeTabl )
+         if(  flds[ii].place == Sticked || flds[ii].place == UndeTabl )
  		 {
  			 sizeM = max( sizeM, flds[ii].pObj->GetMS() );
  			 row_ii += sizeN;
  			 sizeN = flds[ii].pObj->GetNS();
   	  		 rowSize += ( verticalHeader()->sectionSize( row_ii ) * min(abs(flds[ii].maxN), sizeN ) );
  	  		 fullrowSize += ( verticalHeader()->sectionSize( row_ii ) *  sizeN  );
-                       if(fullcolSize == 0 && maxfullcolSize==0 ) // first not empty
-                        {
-                         colSize = ( horizontalHeader()->sectionSize(col_ii) * min(flds[ii].maxM, sizeM ) );
-                         fullcolSize = ( horizontalHeader()->sectionSize(col_ii) *  sizeM  );
-                        }
-              }
+             if(fullcolSize == 0 /*&& maxfullcolSize==0*/ ) // first not empty
+             {
+               colSize = ( horizontalHeader()->sectionSize(col_ii) * min(flds[ii].maxM, sizeM ) );
+               fullcolSize = ( horizontalHeader()->sectionSize(col_ii) *  sizeM  );
+             }
+         }
  	}	
  	
         colSize = max( maxColSize, colSize);
