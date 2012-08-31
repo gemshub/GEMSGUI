@@ -101,6 +101,7 @@ Warnings and error messages</a></p>
 </a><hr size="2" width="100%">
 <h2><a name="RTPARM_INTRO"></a>1. Introduction<br>
 </h2>
+<p>
 
 When thermodynamic data are entered into <a href="gm_dcomp.html">DComp</a>
 records, or new <a href="gm_reacdc.html">ReacDC</a> definitions are
@@ -115,7 +116,44 @@ forms and graphics are provided for facilitating the process of "debugging"&nbsp
 thermodynamic data and their <i>T,P</i> dependencies for individual
 species. The RTParm module takes the input data from DComp or ReacDC
 record having a key with the same first four fields as in the <a href="gems_rekey.html#dbm_RTParm">RTParm record key</a>. Note that the <a href="gems_tdb.html#OVERRIDE">override mechanism</a> does not apply to
-RTParm module operation. <br>
+RTParm module operation. </p>
+<p>RTParm module workflow consists of three basic steps.<br>
+
+
+
+</p>
+<p><b>Create/remake for a given DComp or ReacDC record. </b>RTParm 
+Wizard appears to configure the calculations. After the wizard is 
+finished, RTParm arrays will be allocated, and the 'Scripts' page 
+appears. There, the user can fill out
+ the RTname and RTcom comment lines; edit the math script in tExpr 
+field, 
+if necessary. This script will collect data from the objects visible on 
+the 
+TPwork page and puts it into xT, xP and yF array elements. <br>
+</p>
+
+<p><b>Calculation.</b> Clicking on 'Calculate' toolbar button runs the 
+RTParm tabulator. This calculator iterates through T,P pairs as geven in
+ xT and xP vectors. For each T,P, thermodynamic properties are 
+calculated and put into fields seen in TPWork page, from where they are 
+sampled by tExpr script into the xF table accessible in the 'Tables' 
+page. On that page, the user can edit there the names of axis and plots,
+ and
+ click on the 'Plot data' button to see a customizable plot. <br>
+</p>
+
+<p>Plotting experimental data over calculated results is an option. To 
+do this, the necessary number of experimental points and parameters per 
+point must be set in RTParm wizard in beforehand. The user can type or 
+paste the values into xTE, xPE and ytE arrays (appearing on Setup page),
+ and even optionally re-scale them upon RTParm calculation by entering 
+the script into tExprE field. 
+open the plot again, and customise it, if necessary.</p>
+
+<p>The RTParm record can always be re-configured by clicking on Remake 
+toolbar button, or cloned for the same or different DComp or ReacDC 
+record.</p>
 <br>
 <br>
 <hr size="2" width="100%"><h3><a name="RTPARM_MWIZARD"></a>2.
@@ -138,48 +176,11 @@ to enter only the last field (shown as the asterisk), usually a
 calculation variant because more then one RTParm record can be created 
 for
 the same source DComp or ReacDC record. Enter "1", "2", or any small
-integer you like, and press "Ok" when ready. This will bring you into the RTParm Wizard (see below). 
+integer you like, and press "Ok" when ready. This will bring you into 
+the RTParm Wizard (see below). <br>
 </p>
-
-<p><br>
-</p>
-<p><br>
-</p>
-<p>Now, you should see a "RTParm: Remake dialog..." window with some
-default settings. For the first time, just press "Ok" to proceed - by
-default, the
-RTparm module will calculate and plot values of <i>g0</i> (molar Gibbs
-energy
-function) at temperatures from 0 to 350 <sup>o</sup>C at step 25 <sup>o</sup>C
-and at <i>P</i><sub>SAT</sub> (saturated H<sub>2</sub>O vapor
-pressure).
-You can now immediately <a href="gm_rtparm.html#RTPARM_RUN">calculate</a>
-&nbsp;RTParm
-and then <a href="gm_rtparm.html#RTPARM_PLOT">plot the results</a>.&nbsp;
 <br>
-</p>
 
-<p>If you need more than one parameter or another number of points to
-be
-calculated, or the configuration of this RTParm record to be changed
-otherwise,
-then (in the "RTParm: Remake dialog...") change the full name of RTParm
-record
-in the <big><tt>RTname</tt></big> field and a comment to it into the <big><tt>RTcom</tt></big>
-field. Check other flags and dimensions (at least, put number of
-columns
-in<tt> <a href="gm_rtparm.html#rDimXY_1">rDimXY[0,1]</a></tt> field,
-if necessary)
-and
-press "Ok" to proceed. <br>
-</p>
-<p>The "Scripts" page of RTParm window now appears
-again;
-you should set up the iterators, edit the math script or enter another
-one,
-and perform the calculation as described below.&nbsp;</p>
-<p><br>
-</p>
 
 <p>
  </p>
@@ -224,10 +225,10 @@ can be edited on the next wizard page or later in the Tables page of the
       </td>
       <td valign="top">xP and xT vectors will be allocated for the 
 product of numbers of points given in temperature or pressure iterators 
-on this wizard page. The number of points is automatically computed from values given in the iterator. 
-The values of T and P will be automatically generated upon calculation 
-of the RTParm record from iterators, first incrementing P values, then T
- values. </td>
+on this wizard page. The number of points is automatically computed from values given in the iterator. The
+ values of T and P will be automatically generated upon calculation of 
+the RTParm record from iterators, first incrementing P values, then T 
+values. </td>
     </tr>
     <tr>
       <td align="center" valign="top"><b>2<br>
@@ -359,56 +360,73 @@ open the plot again, and customise it, if necessary.</p>
 <hr size="2" width="100%"><h2><a name="RTPARM_MWINDOW"></a>3.
 RTParm Module Window</h2>
 <p>RTParm is a tool for tabulating and plotting thermodynamic data against 
-temperature <i>T</i> and/or pressure <i>P</i>. The input is taken from a DComp or 
+temperature <i>T</i> and/or pressure <i>P</i>. The input is taken from a
+ DComp or 
 ReacDC record specified in this RTParm record key. Upon calculation, 
-results will be tabulated on the 'Tables' page, as specified in 'tExpr' 
+the results will be tabulated in yF table on the 'Tables' page, as 
+specified in 'tExpr' 
 math script. Results can be plotted, exported into text files, or 
-copy-pasted to other programs. Simple 'tExpr' scripts can be created
- using a selection dialog on the next page of this wizard. Example 
-scripts are also provided under 'Help' 'View Scripts...' menu command in
- the RTParm window.<br>
+copy-pasted to other programs. Simple 'tExpr' scripts that extract 
+calculated results into the yF table can be edited on "Scripts" page. <br>
 
 
 </p>
-<p><br>
-</p>
-<p><br>
-</p>
+
+<br>
+
+
 
 <hr size="2" width="100%"><h3><a name="MWPAGE_1"></a>3.1.
-RTParm Window Scripts Page</h3>
-<p><br>
+RTParm Window 'Scripts' Page</h3>
+<p>This page provides access to comment lines that identify this RTParm 
+calculation; the pressure and temperature iterators (usually set in the 
+RTParm wizard); and the tExpr text editor field, where the RTParm script
+ to sample calculated data can be modified or enhanced. <br>
 </p>
-<p><br>
-</p>
-<p><br>
-</p>
+
+<br>
+
+
 
 <hr size="2" width="100%"><h3><a name="MWPAGE_2"></a>3.2.
-RTParm Window Tables Page</h3>
-<p><br>
+RTParm Window 'Tables' Page</h3>
+<p>This page contains a composite table made of xT, xP and yF data 
+objects. After RTParm calculation, the table will contain T,P values and
+ thermodynamic properties, arranged in a row per T,P pair. The tXName 
+and tLnam fields contain table headers (also shown on the plots), these 
+can be edited at any time. The contents of yF table can be plotted 
+against the selected abscissa (xT or xP) upon clicking on the "Plot Data..." toolbar button. These contents can also be selected, copied to clipboard, or pasted from the clipboard using the right-click menu. <br>
 </p>
-<p><br>
-</p>
-<p><br>
-</p>
+
+<br>
+
+
 
 <hr size="2" width="100%"><h3><a name="MWPAGE_3"></a>3.3.
-RTParm Window TPwork Page</h3>
-<p><br>
+RTParm Window 'TPwork' Page</h3>
+<p>This page gives access to contents of the TPwork data structure where
+ the thermodynamic properties calculation results are placed at every 
+step (i.e. each T,P pair) and from where they are picked up by the tExpr
+ script. Not all fields are used when calculations are done for the 
+DComp record, then data fields for reaction properties (tdSr, tdGr, twK,
+ tlogK, tdHr, tdCpr, tdVr) are not updated. The uncertainty properties 
+(tdevS, ...) are also not updated in this version of GEM-Selektor.&nbsp;
+ <br>
 </p>
-<p><br>
-</p>
-<p><br>
-</p>
+<br>
+
+
+
 
 <hr size="2" width="100%"><h3><a name="MWPAGE_4"></a>3.4.
-RTParm Window Setup Page</h3>
-<p><font face="Helvetica, Arial, sans-serif"><br>
+RTParm Window 'Setup' Page</h3>
+<p>This page shows the summary of RTParm record setup. Optionally, it 
+also provides access to xTE, xPE, ytE arrays with empirical 
+(experimental) thermodynamic properties that can be plotted over the 
+calculated results from yF table. The yTE values can also be calculated 
+(rescaled) if a valid script is entered in tExprE text editor field. <font face="Helvetica, Arial, sans-serif"><br>
 </font></p>
-<br>
-<br>
-<br>
+
 <br>
 <blockquote></blockquote>
 <hr size="2" width="100%">
@@ -429,10 +447,10 @@ thermodynamic
 data during calculation of equilibria at non-ambient temperatures and
 pressures.
 </p>
-<p><font face="Helvetica, Arial, sans-serif"><br>
-</font></p>
-<p><br>
-</p>
+
+<br>
+
+
 <hr size="2" width="100%">
 <h3><a name="RTPARM_ITERATORS"></a>4.1. Setting up the RTParm iterators<br>
 </h3>
@@ -459,10 +477,10 @@ on
 values.
 <br>
 </p>
-<p><br>
-</p>
-<p><br>
-</p>
+
+<br>
+
+
 
 <hr size="2" width="100%"><p></p>
 <h3><a name="RTPARM_SAMPLE_SCRIPTS"></a>4.2. Writing RTparm data
@@ -490,8 +508,9 @@ whole
 sequence of <i>T,P&nbsp;</i> points after the "Record" "Calculate"
 menu
 command is executed or the "Calculate" toolbar button is pressed.</p>
-<p><br>
-</p>
+<br>
+
+
 <hr size="2" width="100%"><p></p>
 <h3><a name="RTPARM_RUN"></a>4.3. Running RTParm calculations<br>
 </h3>
@@ -499,9 +518,11 @@ command is executed or the "Calculate" toolbar button is pressed.</p>
 or
 "Calculate" toolbar button. It is advisable to save the RTParm record
 to
-database when the program will ask for that.&nbsp; </p>
-<p><br>
+database when the program will ask for that. The results will be collected in xT, xP and yF arrays visible in Tables window.<br>
 </p>
+<br>
+
+
 <hr size="2" width="100%"><p></p>
 <h3><a name="RTPARM_PLOT"></a>4.4. Plotting and exporting results<br>
 </h3>
@@ -517,21 +538,18 @@ the same way as in the <a href="gm_proces.html">Process</a> or <a href="gm_gtdem
 "Print"</tt>command using a default (<tt>"pscript:0000:rtparm"</tt>) or
 used-defined (as SDref record beginning with <tt>"pscript:..."</tt>)
 printing
-script. <br>
+script.&nbsp; The user can also copy-paste the data into another program using the right-click menu.<br>
 </p>
-<p><br>
-</p>
+<br>
+
+
 <hr size="2" width="100%"><h3><a name="RTPARM_SPECIAL"></a>4.5. Special cases of &nbsp;RTParm
 calculations</h3>
 <p>If you have a few experimental (or otherwise derived empirical) data
 points,
 you can plot them over the calculated curve(s). To do it, first remake
 this
-RTParm record; in the "RTParm: Remake dialog...", enter positive
-numbers
-into both <a href="#rDimEf_0"><tt>rDimEf </tt></a>&nbsp;fields and
-press
-"Ok". Then switch to the "Tables" page of the RTParm window. There you
+RTParm record; in the RTParm wizard, select number of experimental points and number of parameters per points. Then switch to the Setup page of the RTParm window. There you
 will
 see new data objects <tt><a href="#xTE">xTE</a>, <a href="#xPE">xPE</a></tt>
 (abscissas) and <a href="#ytE"><tt>yTE</tt></a> (ordinate(s)). Enter
@@ -543,14 +561,14 @@ size
 8 or 10, to represent experimental data as large scattered
 symbols.&nbsp; <br>
 </p>
-<p>Now, you can perform fitting of temperature (or pressure) correction
+<p>Now, you can perform simple trial-and-error fitting of temperature (or pressure) correction
 parameters
 against experimental data by changing them in the "parent" DComp (or
 ReacDC)
 record and then repeating the RTParm calculation and plotting. <br>
 </p>
-<p>&lt;to be continued&gt;<br>
-&nbsp;</p>
+<br>
+
 <hr size="2" width="100%">
 <p> </p>
 <h2><a name="RTPARM_DATA_ENTRIES"></a>5. Description of Data Entries</h2>
@@ -1519,7 +1537,7 @@ Error in translation of RTParm math script: &nbsp;&lt;name&gt;
 &lt;To be completed in Version 3.1&gt;<br>
 <br>
 <hr size="2" width="100%"><tt><br>
-</tt>Last updated: 27.08.2012&nbsp; DK<br>
+</tt>Last updated: 31.08.2012&nbsp; DK<br>
 <tt><br>
 </tt><tt><br>
 end of file</tt> <br>
