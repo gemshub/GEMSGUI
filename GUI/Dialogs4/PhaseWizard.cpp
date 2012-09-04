@@ -114,6 +114,10 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[13], int size[6],
     if( ii >= 0  )
     	SCM_code->setCurrentIndex(ii);
 
+    ii = pPhPs_0->findText(QChar(flgs[6]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+     if( ii >= 0  )
+         pPhPs_0->setCurrentIndex(ii);
+
  //Page 2
     spinBox_dc_sc_M->setValue(size[3]);
     spinBox_ph_px_M->setValue(size[4]);
@@ -188,6 +192,9 @@ void PhaseWizard::getFlags( char flgs[13] )
      str = SCM_code->currentText();
   flgs[5] = str[0].toLatin1();
   // flgs[6] getting from key
+  str = pPhPs_0->currentText();
+  flgs[6] = str[0].toLatin1();
+
   if( spinBox_ph_cf_N->value() > 0 &&
       spinBox_ph_cf_M->value() > 0 )
     flgs[7] = '+';

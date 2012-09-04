@@ -31,11 +31,11 @@ const int MAXPHSYMB =      8,
 
 typedef struct
 {// Description of PHASE
-  char pst[MAXSYMB],       // Phase aggregate state
-    symb[MAXPHSYMB],    // Symbol of phase definition
-    nam[MAXPHNAME],     // Name of phase
-    cls[MAXSYMB],       // Class of phase
-    grp[MAXPHGROUP],    // Record key comment to phase definition
+  char pst_[MAXSYMB],       // Phase aggregate state
+    symb_[MAXPHSYMB],    // Symbol of phase definition
+    nam_[MAXPHNAME],     // Name of phase
+    cls_[MAXSYMB],       // Class of phase
+    grp_[MAXPHGROUP],    // Record key comment to phase definition
 
     sol_t[6], // Phase (solution) type { IGMTVKRLWFPED123HYSQZAUOX } or { N }
              //         Mode of calculation of DC non-ideality parameters { NTX }

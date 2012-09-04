@@ -21,8 +21,8 @@
   <property name="windowTitle">
    <string>GEM-Selektor Proces</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
-   <item>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="mouseTracking">
       <bool>false</bool>
@@ -110,6 +110,76 @@
           <string/>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QLabel" name="ModelCodeLabel_2">
+            <property name="text">
+             <string>Select a code of the phase aggregate state:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignBottom</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>ModelCode</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="pPhPs_0">
+            <item>
+             <property name="text">
+              <string>a   aqueous electrolyte solution</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>g   gaseous or fluid mixture</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>f   fluid mixture (ideal or non-ideal)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>p   plasma (ionized gas mixture)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>l   non-electrolyte liquid (melt), also multi-component</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>m   silicate (magmatic) melt or non-aqueous electrolyte</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>h   liquid hydrocarbon phase, also multi-component</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>s   condensed solid phase, also multi-component solid solution</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>d   dispersed (particulate or porous) solid phase, also solid solution</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>x   sorption phase in aqueous electrolyte</string>
+             </property>
+            </item>
+           </widget>
+          </item>
           <item>
            <widget class="QLabel" name="ModelCodeLabel">
             <property name="text">
@@ -889,7 +959,7 @@
      </widget>
     </widget>
    </item>
-   <item>
+   <item row="1" column="0">
     <layout class="QHBoxLayout">
      <item>
       <widget class="QPushButton" name="pHelp">

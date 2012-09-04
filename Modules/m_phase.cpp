@@ -149,7 +149,7 @@ void TPhase::dyn_set(int q)
 {
     ErrorIf( php!=&ph[q], GetName(),
              "E01PHrem: Illegal access to ph in dyn_set()");
-    memcpy( php->pst, rt[nRT].UnpackKey(), PH_RKLEN );
+    memcpy( php->pst_, rt[nRT].UnpackKey(), PH_RKLEN );
     ph[q].SCMC =  (char *)aObj[ o_phscmc ].GetPtr();
     ph[q].FsiT =  (float *)aObj[ o_phfsit ].GetPtr();
     ph[q].XfIEC = (float *)aObj[ o_phxfiec ].GetPtr();
@@ -481,10 +481,9 @@ TPhase::RecBuild( const char *key, int mode  )
 
     gstring str;
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
-    php->PphC = php->pst[0];
+    php->PphC = php->pst_[0];
     if( php->PphC == PH_FLUID /* && php->sol_t[SPHAS_TYP] == SM_OTHER */ )
     {
-//        php->nscN = 1; php->nscM = MAXEOSPARAM;  changed 07.12.2006 KD
         php->nscM = MAXEOSPARAM;
     }
 
@@ -492,8 +491,11 @@ AGAIN_SETUP:
     int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL  &&!( !php->PphC || php->PphC == ' '))
         return ret;
-    memcpy( php->pst, rt[nRT].UnpackKey(), PH_RKLEN );
-     if( ret == VF3_1 )
+    // Change Phase key
+    memcpy( php->pst_, rt[nRT].UnpackKey(), PH_RKLEN );
+    php->pst_[0] = php->PphC;
+    db->SetKey(php->pst_);
+    if( ret == VF3_1 )
     {
         strncpy( php->name, db->FldKey(2), db->FldLen(2));
         php->name[db->FldLen(2)] = '\0';
@@ -887,8 +889,8 @@ if( (php->NsiT != S_OFF) && php->sol_t[SPHAS_TYP] == SM_SURCOM )
     if( php->nDC >= 2 )         // >= may change behavior !
         qsort( php->SM[0], (size_t)php->nDC, DC_RKLEN, rkeycmp );
 
-    switch( php->pst[0] )
-    { /* Set type of phase */
+    /*switch( php->pst[0] )
+    { /* Set type of phase *
     case CP_AQU:
         php->PphC = PH_AQUEL;
         break;
@@ -905,7 +907,7 @@ if( (php->NsiT != S_OFF) && php->sol_t[SPHAS_TYP] == SM_SURCOM )
     case CP_LIQID:
         php->PphC = PH_LIQUID;
         break;
-    case CP_SOLID: /* if( php->nDC == 1 ) Fixed 23.10.99 by DAK */
+    case CP_SOLID: /* if( php->nDC == 1 ) Fixed 23.10.99 by DAK *
         php->PphC = PH_SINCOND;
         break;
         //
@@ -919,6 +921,7 @@ if( (php->NsiT != S_OFF) && php->sol_t[SPHAS_TYP] == SM_SURCOM )
     default:
         php->PphC = '?';
     }
+    */
 
     vstr dcn(MAXRKEYLEN);
     char Ctype;
