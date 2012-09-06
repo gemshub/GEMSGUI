@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -59,7 +59,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 1 - Defining the Phase and the Mode of Mixing</string>
+          <string>Step 1 - Defining the Phase and the Model of Mixing</string>
          </property>
         </widget>
        </item>
@@ -113,7 +113,7 @@
           <item>
            <widget class="QLabel" name="ModelCodeLabel_2">
             <property name="text">
-             <string>Select a code of the phase aggregate state:</string>
+             <string>Phase aggregate state code:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignBottom</set>
@@ -130,52 +130,52 @@
            <widget class="QComboBox" name="pPhPs_0">
             <item>
              <property name="text">
-              <string>a   aqueous electrolyte solution</string>
+              <string>a    Aqueous electrolyte solution</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>g   gaseous or fluid mixture</string>
+              <string>g    Gaseous or fluid non-electrolyte mixture</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>f   fluid mixture (ideal or non-ideal)</string>
+              <string>f     Fluid non-electrolyte mixture (ideal or non-ideal)</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>p   plasma (ionized gas mixture)</string>
+              <string>p    Plasma (ionized gas mixture)</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>l   non-electrolyte liquid (melt), also multi-component</string>
+              <string>l     Liquid non-electrolyte (melt), also multi-component</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>m   silicate (magmatic) melt or non-aqueous electrolyte</string>
+              <string>m   Magmatic silicate melt or other non-aqueous electrolyte</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>h   liquid hydrocarbon phase, also multi-component</string>
+              <string>h    Liquid hydrocarbon phase, also multi-component</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>s   condensed solid phase, also multi-component solid solution</string>
+              <string>s     Condensed solid phase, also multi-component solid solution</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>d   dispersed (particulate or porous) solid phase, also solid solution</string>
+              <string>d    Dispersed (particulate or porous) solid phase, also solid solution</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>x   sorption phase in aqueous electrolyte</string>
+              <string>x     Sorption phase in aqueous electrolyte</string>
              </property>
             </item>
            </widget>
@@ -599,7 +599,7 @@
           <item row="0" column="0" colspan="2">
            <widget class="QLabel" name="textLabel2">
             <property name="text">
-             <string>Attention! ForTSolMod built-in mixing models that use dc_cf and/or ipxT, pc_cf data objects, the appropriate dimensions will usually be allocated automatically. Otherwise, the array will be allocated only if all its dimensions are not zeros. </string>
+             <string>Attention! For TSolMod built-in mixing models that use dc_cf and/or ipxT, pc_cf data objects, relevant dimensions will be allocated automatically. Any array will be allocated only if all its dimensions are not zeros. </string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -727,7 +727,7 @@
           <item row="4" column="1">
            <widget class="QLabel" name="textLabel1_3_2">
             <property name="text">
-             <string>ph_c&amp;f array of interaction parameter coefficients: number of columns (max. number of coefficients per parameter).</string>
+             <string>ph_c&amp;f array of interaction parameter coefficients: number of columns (coefficients per parameter).</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
