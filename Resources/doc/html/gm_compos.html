@@ -48,35 +48,35 @@ editing through Create/Remake wizard only</a></p>
 </p>
 <hr style="width: 100%; height: 2px;">
 <h2><a name="COMPOS_INTRO"></a>1. Introduction&nbsp;</h2>
-<p> This chain of GEMS database records contains (optional) definitions
+<p> This chain of GEMS database records contains definitions
 of&nbsp; Predefined Composition Objects (PCO) such as rocks, ores,
-waters, fluids etc. All PCO input data are automatically converted into
-a single stoichiometry vector containing number of moles of all
-involved independent components (<a href="gm_icomp.html">IComp</a>). </p>
-<p>PCO are accessible through the list of&nbsp; Compos record keys in
-the "System" "Compos" window, very convenient for setting up the bulk
-elemental composition of a complex chemical system. Since each PCO is
-referred to as a single entity, you can specify any desired number of
-grams, moles etc. of it to be added to the bulk chemical composition
-vector&nbsp; <i>b</i>&nbsp; - the main input data in GEM calculation
-of equilibria in chemical systems.. If complex ingredients are
-involved, such as rocks or sea-salt, this possibility may save you a
+waters, fluids etc. Compos records are very versatile in the choice of 
+forms in which the compositions can be entered. Upon calculation of 
+Compos record, all input data will be automatically converted into
+a single PCO vector containing number of moles of all
+involved Independent Components (<a href="gm_icomp.html">IComp</a>). </p>
+<p>PCOs are accessible through the list of&nbsp; Compos record keys in
+the "System" "Compos" window, very convenient for setting up the <a href="gems_bcc.html">bulk
+elemental composition </a>of a complex chemical system. Since each PCO is
+referred to as a single entity, the user can specify any desired number of
+grams, moles etc. of it in the system recipe, to be added to the bulk chemical composition
+vector&nbsp; <i>n<sup>(b)</sup></i>&nbsp; - the main input data in GEM calculation
+of equilibria in chemical systems. If complex ingredients are
+involved, such as rocks or sea-salt, this functionality may save users a
 lot of&nbsp; time. </p>
 <p>Addressing Compos names in the <a href="gm_proces.html">Process
-Simulator </a><a href="gmscript.html">math scripts</a> will also
-permit
-you to simulate various mixing processes in batch calculations in a
+Simulator </a><a href="gmscript.html">scripts</a> will also let the user to simulate various mixing processes in batch calculations in a
 quite simple and efficient way, as well as to define the "process
-extent" models with changing rock/water or rock/fluid ratios,
+extent" reaction-path models with changing rock/water or rock/fluid ratios,
 evaporation, weathering etc. </p>
-<p>Each PCO has a unique name (identifier) in the first field of the <a href="gdb_rkey.html#dbm_Compos">record key</a> and, regardless of the
-particular specifications, contains numbers of moles of <a href="gm_icomp.html">independent components</a>. Upon creation of
-Compos records, the GEMS code offers several flexible and efficient <a href="#QUANCON">methods for specification</a> of GCO compositions via
+<p>Each PCO has a unique name (identifier) in the first field of the <a href="gems_rekey.html#DBM_Compos">record key</a> and, regardless of the
+particular specification, contains numbers of moles of <a href="gm_icomp.html">Independent Components</a>. Upon creation of
+Compos records, the GEM-Selektor code offers several flexible and efficient <a href="#QUANCON">methods for specification</a> of GCO compositions via
 molar, mass, volume fractions, molality or molarity units, and absolute
 masses or number of moles of IC, DC or user-defined stoichiometries.
 Virtually any published composition can be represented close to its
-original appearance by <a href="#P3381">creating a Compos record</a>. </p>
-<p>As usual in GEMS, the easiest way to create a new PCO (in addition
+original appearance by creating a Compos record. </p>
+<p>As usual in GEM-Selektor, the easiest way to create a new PCO (in addition
 to some provided in the Default database) is to "clone" existing Compos
 records with "Record" "Create" or "Record" "Save As" menu commands,
 then remake and re-calculate the new records whenever appropriate. The
@@ -174,24 +174,86 @@ formula units (an exercise). <br>
 <hr style="width: 100%; height: 2px;">
 
 <h2><a name="COMPOS_MWIZARD"></a>2. Compos Create/Remake Wizard</h2>
+<p>This wizard appears when a new Compos record is created or cloned, or a remake is executed for an existing record. </p>
+<p>When a new record is created/cloned, the "set a new record key" 
+dialog appears first. There, three fields must be specified, as shown 
+below for an example of simplified haplogranite composition:</p>
 <br>
+<img alt="Compos-Record-Key.png" src="Compos-Record-Key.png" height="205" width="510"><br>
+<br>
+Of these three fields, the first one is the most important because it 
+appears in the Project system definition list that can be used for <a href="gems_bcc.html">creating a system recipe</a>. <br>
 <p style="font-family: Helvetica,Arial,sans-serif;"><br>
 </p>
 <hr style="width: 100%; height: 2px;">
 
 <h3><a name="WZSTEP_1"></a>2.1. Compos Wizard Step 1</h3>
+<p>Compos record contains data for a Predefined Composition Object 
+(PCO), which describes a salt, the air, a mineral, a rock, a natural 
+water, etc., treated&nbsp; as a single named entity in the chemical 
+system recipe.</p>
+<p>PCO can be configured according to the source data: as IC or DC 
+amounts/concentrations; as user-defined formulae (UDF); or as a large 
+formula entered into a text field.</p>
+<p>Upon re-calculation, all given quantities will be added into a single
+ IC mole amounts PCO vector, optionally scaled to a given total mass (in
+ kg) or total number of moles. </p>
+
+
+<p><br>
+</p>
+<p>PCO input data configuration<br>
+</p>
+Use amounts of Independent Components (IComp) in this PCO definition (default)?<br>
+<br>
+Use formulae of Dependent Components (from DComp/ReacDC records) in this PCO?<br>
+<br>
+Set number of user-defined formula units for this PCO definition (0 by default)
 <p style="font-family: Helvetica,Arial,sans-serif;"><br>
 </p>
+<p>Optional: Input formula text</p>
+<p>Use a user-defined formula (UDF) text for this PCO definition?</p>
+<p>Select units of measurement for the UDF quantity&nbsp; (default: M)</p>
+<p>Enter the UDF quantity here (default: 1)</p>
 <p style="font-family: Helvetica,Arial,sans-serif;"><br>
 </p>
+
 
 <hr style="width: 100%; height: 2px;">
 
 <h3><a name="WZSTEP_2"></a>2.2. Compos Wizard Step 2</h3>
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+Options:<br>
+<br>
+Set here the number of links to SDref bibliography records (default 0)<br>
+<br>
+Use a vector of data uncertainties in this PCO definition<br>
+<br>
+<br>
+What will happen after you click "Finish"?<br>
+<p>(1) For a PCO definition using IComp amounts, a list of available 
+IComp records will be shown, asking you to mark the desired ones.</p>
+<p>(2) In a PCO definition using DC formulae, a list of available 
+ReacDC/DComp records will be shown, asking you to mark the desired ones.
+ <br>
+</p>
+<p>(3) Page 1 of the 'Compos' window appears. Fill out the BCname 
+comment and (optionally) BCnote line. Then enter data and formulae 
+wherever needed; check units of amount/concentration.</p>
+
+
+<p>(4) Click on 'Calculate' toolbar button to compute the PCO vector. 
+Check or enter the normalization values in MasVol[0] and MasVol[6] 
+fields and calculate again, if needed. Setting both fields to zero 
+disables the normalization of PCO to the total mass or total amount of 
+moles, respectively. <br>
+</p>
+<p>(5) When done, save the Compos record to the project database. It 
+will be taken into chemical system definition when the project is open 
+next time. <br>
 </p>
 <p style="font-family: Helvetica,Arial,sans-serif;"><br>
 </p>
+
 
 <hr style="width: 100%; height: 2px;">
 

@@ -6,7 +6,7 @@
   <meta name="description" content="Version 2.0.0-PSI">
 </head>
 <body>
-<h1><img src="gems1.png" align="left" width="48" height="48"> <big><b><font color="#000099"><font size="+2"><big>GEM-Selektor version 3</big></font></font></b></big>
+<h1><img src="gems1.png" align="left" height="48" width="48"> <big><b><font color="#000099"><font size="+2"><big>GEM-Selektor version 3</big></font></font></b></big>
 </h1>
 <h2>Database Record Key Formats</h2>
 <hr style="width: 100%; height: 2px;">
@@ -17,84 +17,66 @@
 
   </li>
   <li>
-    <p><a href="#dbm_SDref"><b>SDref</b>
+    <p><a href="#DBM_SDref"><b>SDref</b>
 - Script- and Data Reference Record Key&nbsp;</a></p>
  
   </li>
   <li>
-    <p><a href="#dbm_IComp"><b>IComp</b>
+    <p><a href="#DBM_IComp"><b>IComp</b>
 - Independent Component (IC) Record Key</a></p>
 
   </li>
   <li>
-    <p><a href="#dbm_DComp"><b>DComp</b>
+    <p><a href="#DBM_DComp"><b>DComp</b>
 - Dependent Component (DC, Species) Record Key</a></p>
 
   </li>
   <li>
-    <p><a href="#dbm_ReacDC"><b>ReacDC</b>
+    <p><a href="#DBM_ReacDC"><b>ReacDC</b>
 - Reaction-Defined DC (Species) Record Key</a></p>
 
   </li>
   <li>
-    <p><a href="#dbm_RTParm"><b>RTParm</b>
+    <p><a href="#DBM_RTParm"><b>RTParm</b>
 - Thermodynamic DataTabulator/Plotter Record Key</a></p>
 
   </li>
   <li>
-    <p><a href="#dbm_Phase"><b>Phase</b>
+    <p><a href="#DBM_Phase"><b>Phase</b>
 Definition Record Key</a></p>
 
   </li>
   <li>
-    <p><a href="#dbm_Compos"><b>Compos</b>
+    <p><a href="#DBM_Compos"><b>Compos</b>
 - Predefined Composition Object (PCO) Record Key</a></p>
 
   </li>
   <li>
-    <p><a href="#dbm_Project"><b>Project</b>&nbsp;
+    <p><a href="#DBM_Project"><b>Project</b>&nbsp;
 - Modelling Project Definition Record Key</a></p>
 
   </li>
   <li>
-    <p><a href="#dbm_SysEq"><b>SysEq</b>
+    <p><a href="#DBM_SysEq"><b>SysEq</b>
 - Chemical System Definition (CSD) and Equilibrium Record Key</a></p>
 
   </li>
   <li>
-    <p><a href="#dbm_Process"><b>Process</b>
+    <p><a href="#DBM_Process"><b>Process</b>
 Simulator Definition Record Key</a></p>
 
   </li>
   <li>
-    <p><a href="#dbm_GtDemo"><b>GtDemo</b>
+    <p><a href="#DBM_GtDemo"><b>GtDemo</b>
 - Generic Data Tabulator/Plotter Record Key</a></p>
 
   </li>
   <li>
-    <p><a href="#dbm_GEM2MT"><font><span style="font-weight: bold;">GEM2MT</span>
+    <p><a href="#DBM_GEM2MT"><font><span style="font-weight: bold;">GEM2MT</span>
 - </font>Reactive Mass Transport Simulation Definition Record Key</a></p>
 
     
-  </li>
-  <li>
-    <p><a href="#dbm_UnSpace"><font><span style="font-weight: bold;">UnSpace</span>
-    </font>- Uncertainty Space Problem
-Definition Record Ke</a>y
-  </p>
-  </li>
-  <li>
-    <p><a href="#dbm_DualTh"><font><span style="font-weight: bold;">DualTh</span>
-    </font>- Dual Thermodynamic
-Calculation Record Key</a></p>
-
-    
-  </li>
-  <li>
-    <p><a href="#dbm_Const"><font><span style="font-weight: bold;">Const</span>
-- </font>Constants Record Key</a></p>
-  </li>
-</ol>
+  </li></ol>
 
     
     
@@ -131,14 +113,16 @@ Calculation Record Key</a></p>
 <hr size="2" width="100%">
 <h2><a name="dbm_introduction"></a>1. Introduction&nbsp; <br>
 </h2>
-<p>The GEM-Selektor database consists of&nbsp; 16 chains, each
+<p>The GEM-Selektor database consists of several chains, each
 containing records of certain type and structure. Each record is stored
 under a unique record key that consists of several (alphanumeric or
 numeric) fields containing the most relevant information about the
 record contents. The program automatically sorts record key lists and
 can filter them to select subsets of record keys using templates (i.e. <tt>"?"</tt>
-or <tt>"*"</tt> characters in some record key fields). &nbsp;More
-about that is written in <a href="gemstdbm.html">GEM-Selektor database
+or <tt>"*"</tt> characters in some record key fields).&nbsp; One or more
+ database files (containing records of the same type) can be linked to a
+ record chain. More
+about that is written in <a href="gems_tdbase.html">GEM-Selektor database
 manual</a>. <br>
 </p>
 <p>The GUI (graphical user's interface) of GEM-Selektor can display
@@ -178,7 +162,7 @@ within the "Key Filter" dialogs. <br>
 &nbsp; </p>
 <h2> </h2>
 <hr size="2" width="100%">
-<h2><a name="dbm_SDref"></a>2. SDref - Script- and Data Reference
+<h2><a name="DBM_SDref"></a>2. SDref - Script- and Data Reference
 Record Key</h2>
 &nbsp;
 <table border="3" cellpadding="3" cellspacing="3" width="48%">
@@ -258,20 +242,32 @@ related to GEM IPM calculations. <br>
 &nbsp; </p>
 <h2> </h2>
 <hr size="2" width="100%">
-<h2><a name="dbm_IComp"></a>3. IComp - Independent Component (IC)
+<h2><a name="DBM_IComp"></a>3. IComp - Independent Component (IC)
 Record Key</h2>
 &nbsp;
 <table border="3" cellpadding="3" cellspacing="3" width="48%">
   <tbody>
     <tr>
-      <td><tt><a href="#dbm_IComp_0">IC_symbol</a></tt></td>
-      <td><tt><a href="#dbm_IComp_1">IC_type</a></tt></td>
-      <td><tt><a href="#dbm_IComp_2">IC_comment</a></tt></td>
+      <td>
+<p><tt><a href="#dbm_IComp_0">IC_symbol</a></tt></p>
+</td>
+      <td>
+<p><tt><a href="#dbm_IComp_1">IC_type</a></tt></p>
+</td>
+      <td>
+<p><tt><a href="#dbm_IComp_2">IC_comment</a></tt></p>
+</td>
     </tr>
     <tr>
-      <td><tt>str[6]</tt></td>
-      <td><tt>str[4]</tt></td>
-      <td><tt>str[22]</tt></td>
+      <td>
+<p><tt>str[6]</tt></p>
+</td>
+      <td>
+<p><tt>str[4]</tt></p>
+</td>
+      <td>
+<p><tt>str[22]</tt></p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -285,12 +281,14 @@ compositions.&nbsp; Examples: </p>
 silicon</li>
   <li> <tt>H</tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 hydrogen</li>
-  <li> <tt>Cit_</tt>&nbsp;&nbsp;&nbsp;&nbsp; citrate ligand</li>
+  <li> <tt>Cit&nbsp;</tt> &nbsp;&nbsp;&nbsp; citrate ligand</li>
   <li> <tt>Alo</tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Al<sub>2</sub>O<sub>3</sub>
 oxide unit</li>
-  <li> <tt>Vol</tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; volume constraint</li>
+  <li> <tt>Vol</tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; volume constraint<br>
+</li>
   <li> <tt>Zz</tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (formula)
-charge</li>
+charge<br>
+</li>
 </ul>
 <p><br>
 <a name="dbm_IComp_1"></a><b>IC_type</b>&nbsp; field contains isotopic
@@ -326,11 +324,11 @@ thermodynamic database. </p>
 analyzed by the program and serves for better readability of IComp
 record key lists. Spaces are not allowed inside of the comment (only
 underscores can be used). See examples above. </p>
-<p>&nbsp; <br>
-&nbsp; </p>
+&nbsp;<br>
+
 <h2> </h2>
 <hr size="2" width="100%">
-<h2><a name="dbm_DComp"></a>4. DComp - Dependent Component (DC,
+<h2><a name="DBM_DComp"></a>4. DComp - Dependent Component (DC,
 Species) Record Key</h2>
 &nbsp;
 <table border="3" cellpadding="3" cellspacing="3">
@@ -370,7 +368,7 @@ a Dependent Component entity. This name must be a string up to 16
 characters long (letters, digits, <tt>"-", "+", "@"</tt> and <tt>"_ "</tt>
 &nbsp;characters are allowed, but no spaces). The species name must be
 unique at least within a <a href="gm_phase.html#pDC_v_">phase species
-list</a>. In the <a href="kernel_db.html">kernel (default) GEMS
+list</a>. In the <a href="gems_ctdb.html">kernel (default) GEMS
 database</a>, &nbsp;species names
 &nbsp;look like chemical formulae for gases, aqueous and surface
 species, e.g. <tt>Ca+2, CaSO4@</tt>&nbsp;or <tt>CO2</tt>. Names of
@@ -382,8 +380,8 @@ but
 they are less readable than full mineral names. <br>
 </p>
 <p>This record key field is copied into the species lists in the <a href="gems_ipm.html">GEM IPM</a> work structure (Multi). The species
-names are also analyzed during <a href="gmscript.html#MS_PREPROC">preprocessing</a>
-of <a href="gmscript.html">math scripts</a>. <br>
+names are also analyzed during <a href="g_mscript.html#MS_PREPROC">preprocessing</a>
+of <a href="g_mscript.html">scripts</a>. <br>
 </p>
 <p> </p>
 <p><a name="dbm_dcomp_3"></a><b>TDS_code</b> &nbsp;(up to four letters,
@@ -391,7 +389,7 @@ digits, <tt>"-", "+", "@"</tt> and <tt>"_ "</tt>
 &nbsp;characters&nbsp;) serves
 for identification of a consistent subset of thermodynamic data. Some
 codes
-are used in&nbsp;the <a href="file:///C:/gems2html/program/doc/html/kernel_db.html">kernel
+are used in&nbsp;the <a href="gems_ctdb.html">kernel
 (default) GEMS database.</a> The user must invent his own codes&nbsp;
 when adding
 new DComp or ReacDC records in his project databases.&nbsp;<br>
@@ -400,13 +398,13 @@ new DComp or ReacDC records in his project databases.&nbsp;<br>
 multiple copying of database records is performed, also in creation of
 new modelling projects. This is necessary in order to avoid possible
 database search
-conflicts: the <a href="gemstdbm.html">GEMS database</a> cannot
+conflicts: the <a href="gems_tdbase.html">GEMS database</a> cannot
 contain
-two records with identical keys. See <a href="elements.html#advanced_copy">more</a>about how the user can
+two records with identical keys. See <a href="elements.html#advanced_copy">more</a> about how the user can
 control
 modification of the last field of DComp or ReacDC record keys during
 copying.&nbsp;</p>
-<p>TDS_code is also checked by the GEM-Selektor <a href="gemstdbm.html#override_data">data override mechanism</a>. In
+<p>TDS_code is also checked by the GEM-Selektor <a href="gems_tdbase.html#override_data">data override mechanism</a>. In
 brief, if several <a href="gm_dcomp.html">DComp</a> records exist in
 the project database with only different TDS_code fields (i.e. the
 first three record key fields are identical) then an alphabetically the
@@ -420,7 +418,7 @@ calculations of equilibria with her own data. &nbsp; &nbsp; <br>
 <p>&nbsp; &nbsp; </p>
 <h2> </h2>
 <hr size="2" width="100%">
-<h2><a name="dbm_ReacDC"></a>5. ReacDC - Reaction-Defined DC (Species)
+<h2><a name="DBM_ReacDC"></a>5. ReacDC - Reaction-Defined DC (Species)
 Record Key</h2>
 <table border="3" cellpadding="3" cellspacing="3">
   <tbody>
@@ -445,16 +443,15 @@ Record Key</h2>
 same as that of <a href="gm_dcomp.html">DComp</a> record keys (see
 above).&nbsp;</p>
 <p>The Species_name field refers to the name of a newly-defined species
-in this ReacDC record. The <a href="gemstdbm.html#override_data">data
+in this ReacDC record. The <a href="gems_tdbase.html#override_data">data
 override mechanism</a> applies, except that to ReacDC or DComp record
 keys in the <a href="gm_reacdc.html#REsDC"><tt>REsDC</tt></a> list. <br>
 </p>
-<p><br>
-&nbsp; </p>
+<br>
 <h2> </h2>
 <hr size="2" width="100%">
-<h2><a name="dbm_RTParm"></a>6. RTParm - Thermodynamic
-DataTabulator/Plotter Record Key</h2>
+<h2><a name="DBM_RTParm"></a>6. RTParm - Thermodynamic
+Data Tabulator/Plotter Record Key</h2>
 <table border="3" cellpadding="3" cellspacing="3" width="85%">
   <tbody>
     <tr>
@@ -477,11 +474,11 @@ DataTabulator/Plotter Record Key</h2>
 </table>
 <p><br>
 Structure of the first four fields of RTparam record keys is identical
-to that of <a href="file:///C:/GEMS2test/program/doc/html/gm_reacdc.html">ReacDC</a>
-or <a href="file:///C:/GEMS2test/program/doc/html/gm_dcomp.html">DComp</a>
+to that of <a href="gm_reacdc.html">ReacDC</a>
+or <a href="gm_dcomp.html">DComp</a>
 record keys (see above). These first four fields simply point to a
 record with input thermodynamic data that must be tabulated or plotted.
-The <a href="gemstdbm.html#override_data">data override mechanism</a>
+The <a href="gems_tdbase.html#override_data">data override mechanism</a>
 does not apply
 in this case, i.e. the source record with exactly the same TDS_code
 field
@@ -505,7 +502,7 @@ record). This must be an aplhanumeric string up to 12 characters long
 <p>&nbsp; </p>
 <h2> </h2>
 <hr size="2" width="100%">
-<h2><a name="dbm_Phase"></a>7. Phase Definition Record Key</h2>
+<h2><a name="DBM_Phase"></a>7. Phase Definition Record Key</h2>
 <table border="3" cellpadding="3" cellspacing="3">
   <tbody>
     <tr>
@@ -527,7 +524,10 @@ record). This must be an aplhanumeric string up to 12 characters long
 <br>
 <p> <a name="dbm_phase_0"></a><b>Ph_state</b> &nbsp;field must contain
 the <a href="g_useref.html#PHASESTATECODES">phase aggregate state code</a>
-(one lowercase Latin letter).&nbsp;</p>
+(one lowercase Latin letter). Correct setting of this code is very 
+important, as it defines the way how this phase will be treated in GEM 
+IPM calculations of equilibrium states.<br>
+</p>
 <p><a name="dbm_phase_1"></a><b>Group_id</b> &nbsp;field identifies a
 group of related phases, for instance, <tt>"FeO"</tt> for various iron
 oxides. This field of <a href="gm_phase.html">Phase</a> record key is
@@ -554,41 +554,40 @@ module ("<tt>aq_gen"</tt> and <tt>"gas_gen"</tt>, respectively). Names
 of mineral phases are &nbsp;to be written beginning with an upper-case
 letter.&nbsp;</p>
 <p> This record key field is copied into the phase name lists in the <a href="gems_ipm.html">GEM IPM</a> work structure (Multi). Phase names
-are also analyzed during <a href="gmscript.html#MS_PREPROC">preprocessing</a>
-of <a href="gmscript.html">math scripts</a>. <br>
-<br>
+are also analyzed during <a href="g_mscript.html#MS_PREPROC">preprocessing</a>
+of <a href="g_mscript.html">math scripts</a>. <br>
 </p>
 <p><a name="dbm_phase_3"></a><b>Ph_class</b> field must contain an <a href="g_useref.html#PHASETYPECODES">extended phase class code</a>, to
 enhance readability of <a href="gm_phase.html">Phase</a> record key
-lists. <br>
+lists (not specifically processed by this version of GEM-Selektor).<br>
 </p>
 <p><a name="dbm_phase_4"></a><b>Ph_comment</b> &nbsp;field should
 contain an alphanumeric string commenting this phase definition (to
 make the Phase record keys better readable and to affect their order in
 record key lists). <br>
 </p>
-<p>Ph_comment field can be automatically modified by the program when
+<p>The <tt>Ph_comment</tt> field can be automatically modified by the program when
 multiple copying of database records is performed, also in creation of
-new <a href="gp_howto.html">modelling projects</a>. This is necessary
+new <a href="gm_project.html">modelling projects</a>. This is necessary
 in order to
-avoid possible database search conflicts: the <a href="gemstdbm.html">GEMS
+avoid possible database search conflicts: the <a href="gems_tdbase.html">GEMS
 database</a> cannot contain two records with identical keys. See <a href="elements.html#advanced_copy">more</a> &nbsp;about how the user
 can control modification of the last field of Phase record keys during
 multiple copying.&nbsp;</p>
-<p>Ph_comment field is also checked by the GEM-Selektor <a href="gemstdbm.html#override_data">data override mechanism</a>. In
+<p>The <tt>Ph_comment</tt> field is also checked by the GEM-Selektor <a href="gems_tdbase.html#override_data">data override mechanism</a>. In
 brief, if several <a href="gm_phase.html">Phase</a> records exist in
-the project database with only different Ph_comment fields (i.e. the
+the project database with only different <tt>Ph_comment</tt> fields (i.e. the
 first four record key fields are identical) then&nbsp; alphabetically
 the first record key will be selected into the <a href="gems_sys.html">System
 definition</a>, and other records will be silently ignored. The same
 also applies to DComp and ReacDC records (but not to a mixture of DComp
-and ReacDC keys). In this way, the user can retain the original data
+and ReacDC keys) referenced within this phase definition. In this way, the user can retain the original data
 from the GEMS default database and replace it in calculations of
 equilibria with her own data. &nbsp; &nbsp; </p>
-<p>&nbsp; </p>
+&nbsp; 
 <h2> </h2>
 <hr size="2" width="100%">
-<h2><a name="dbm_Compos"></a>8. Compos - Predefined Composition Object
+<h2><a name="DBM_Compos"></a>8. Compos - Predefined Composition Object
 (PCO) Record Key</h2>
 <table border="3" cellpadding="3" cellspacing="3" width="49%">
   <tbody>
@@ -610,7 +609,7 @@ contain a unique identifier (name) of&nbsp; the PCO: a string up to 16
 characters long (letters, digits, <tt>"-", "+", "@"</tt> and <tt>"_ "</tt>
 &nbsp;characters are allowed, but no spaces). This record key field is
 copied into the PCO name list in the <a href="gems_ipm.html">GEM IPM</a>
-work structure (Multi). PCO names are also analyzed during <a href="gmscript.html#MS_PREPROC">preprocessing</a> of <a href="gmscript.html">math scripts</a>. <br>
+work structure (Multi). PCO names are also analyzed during <a href="g_mscript.html#MS_PREPROC">preprocessing</a> of <a href="g_mscript.html">scripts</a>. <br>
 &nbsp; <br>
 <a name="dbm_Compos_1"></a><b>PCO_type</b> &nbsp;field enhances
 readability of the <a href="gm_compos.html">Compos</a> record key
@@ -623,23 +622,22 @@ better readability of <a href="gm_compos.html">Compos</a> record key
 lists. Spaces are not
 allowed inside of the comment (only underscores can be used). The
 GEM-Selektor
-<a href="gemstdbm.html#override_data">data override mechanism</a> does
+<a href="gems_tdbase.html#override_data">data override mechanism</a> does
 not
 apply for the <a href="gm_compos.html">Compos</a> record keys.<br>
 </p>
 <p>PCO_comment field can be automatically modified by the program when
 multiple copying of database records is performed, also in creation of
-new <a href="gp_howto.html">modelling projects</a>. This is necessary
+new <a href="gm_project.html">modelling projects</a>. This is necessary
 in order to
-avoid possible database search conflicts: the <a href="gemstdbm.html">GEMS
+avoid possible database search conflicts: the <a href="gems_tdbase.html">GEMS
 database</a> cannot contain two records with identical keys. See <a href="elements.html#advanced_copy">more</a> &nbsp;about how the user
 can control modification of the last field of Compos record keys during
 multiple copying.&nbsp;</p>
-<p><br>
-&nbsp; </p>
+<br>
 <h2> </h2>
 <hr size="2" width="100%">
-<h2><a name="dbm_Project"></a>9. Project - Modelling Project Definition
+<h2><a name="DBM_Project"></a>9. Project - Modelling Project Definition
 Record
 Key&nbsp;</h2>
 <table border="3" cellpadding="3" cellspacing="3" width="49%">
@@ -658,7 +656,7 @@ Key&nbsp;</h2>
 <p>&nbsp; <br>
 &nbsp;<a name="dbm_projec_0"></a><b>Pr_name</b> identifies this <a href="gm_project.html">modelling project</a>. This unique name
 (alphanumeric, no spaces, up to 10 characters long) must be given by
-the user when a <a href="gp_howto.html">new project</a> is created.
+the user when a <a href="gems_elements.html">new project</a> is created.
 The name is analyzed by the program to check that all the available <a href="gm_syseq.html">SysEq</a> and <a href="gm_proces.html">Process</a>
 records belong to this project because mixing of such records from
 different projects is not allowed. <br>
@@ -669,9 +667,9 @@ that comments Pr_name. Must also be given by the user when a new
 project is
 created. This field is not analyzed by the program. <br>
 </p>
-<p><br>
 <br>
-</p>
+
+
 <h2> </h2>
 <hr size="2" width="100%">
 <h2><a name="DBM_SysEq"></a>10. SysEq - Chemical System Definition
@@ -709,8 +707,8 @@ automatically sets this field identical to the <a href="#dbm_projec_0">Pr_name</
 record key field in the currently loaded <a href="gm_project.html">Project</a>
 record.&nbsp;</p>
 <p><a name="dbm_syseq_1"></a><b>PotMin</b> &nbsp;field encodes which of
-six <a href="glossary.html#DT_thermo_potential">thermodynamic
-potentials</a> is to be minimized when calculating equilibrium state in
+six thermodynamic
+potentials is to be minimized when calculating equilibrium state in
 this chemical system using the <a href="gems_ipm.html">GEM IPM</a>
 algorithm. Only total Gibbs energy G(x) (<tt>"G"</tt> code) can be
 minimized in this version of GEM-Selektor; minimization of other
@@ -851,7 +849,7 @@ default <tt>"S"</tt> mode. <br>
 </p>
 <h2> </h2>
 <hr size="2" width="100%">
-<h2><a name="dbm_GtDemo"></a>12. GtDemo - Generic Data
+<h2><a name="DBM_GtDemo"></a>12. GtDemo - Generic Data
 Tabulator/Plotter Record Key&nbsp;</h2>
 <p>
 <table border="3" cellpadding="3" cellspacing="3">
@@ -921,61 +919,38 @@ be entered as an alphanumeric string (up to 26 characters, no spaces). <br>
 </p>
 <hr size="2" width="100%">
 <p><br>
-<b>Under Construction (to be provided in Version 3.0 and above)</b><br>
-&nbsp;
+<b>Under Construction (to be provided in Version 3.2 and above)</b>&nbsp;
 <br>
 </p>
-<p><br>
-</p>
+
 <p> </p>
-<h2><a name="dbm_GEM2MT"></a>13. GEM2MT - Reactive Mass Transport
+<h2><a name="DBM_GEM2MT"></a>13. GEM2MT - Reactive Mass Transport
 Problem Definition Record Key </h2>
 &nbsp; <br>
-<p>&nbsp; <br>
-</p>
+
 <hr size="2" width="100%">
-<br>
-<br>
 <h2><a name="dbm_UnSpace"></a>14. UnSpace - Uncertainty Space Problem
-Definition Record Key </h2>
-<p> &nbsp; <br>
-<br>
-</p>
-&nbsp;<br>
-<p>&nbsp; <br>
-</p>
+Definition Record Key&nbsp; <br>
+
+
+</h2>
 <hr size="2" width="100%">
-<br>
-<br>
 <p> </p>
 <h2><a name="dbm_DualTh"></a> 15. DualTh - Dual Thermodynamic
-Calculation Record Key </h2>
-&nbsp; <br>
-&nbsp;&nbsp; <br>
-<hr size="2" width="100%">
-<p> &nbsp; <br>
-</p>
-<br>
+Calculation Record Key&nbsp;&nbsp; <br>
+
+</h2><hr size="2" width="100%">
+
+
 <p> </p>
-<h2><a name="dbm_Const"></a> 16. Const - Constants Record Key </h2>
-&nbsp;
-<p>&nbsp; <br>
-</p>
-<hr size="2" width="100%">
-<br>
-<br>
-<p><br>
-</p>
-<p>&nbsp; <br>
-</p>
-<hr size="2" width="100%">
-<br>
-<br>
-<p> </p>
-<p><tt><a href="index.html">To Contents</a> &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp;<a href="g_about.html">About GEM-Selektor</a> <br>
-</tt></p>
-<p><tt>End of file</tt> <br>
+<h2><a name="dbm_Const"></a> 16. Const - Constants Record Key&nbsp; <br>
+
+
+</h2><hr size="2" width="100%">
+<tt><br>
+Last updated: </tt>06.09.2012 DK<br>
+<p> </p><tt>End of file</tt> <br>
+<p>
 &nbsp; </p>
 <br>
 <br>
