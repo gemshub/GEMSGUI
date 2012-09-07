@@ -1057,7 +1057,7 @@ void TProcess::pe_text_analyze()
         char *erscan = (char *)aObj[o_pcexpr].GetPtr();
         vfMessage(window(), xcpt.title, xcpt.mess);
         TProcess::pm->CheckEqText(  erscan,
-  "E94MSTran: Error in analyzing Process sampling math script: " );
+  "E94MSTran: Error in analyzing Process data sampling script: " );
         Error(  GetName() , xcpt.mess.c_str() );
     }
 }

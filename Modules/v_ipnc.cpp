@@ -859,7 +859,7 @@ void IPNCalc::CalcEquat()
         ni = aItm[i].num;
         if( ci == IT_W )  // conditional jump to equation
         {
-            ErrorIf( ni<ieq, "E01MSExec", "Illegal conditional goto command");
+            ErrorIf( ni<ieq, "E01MSExec", "Invalid conditional goto command");
             if( fabs( aObj[o_k_].Get() ) < 1e-34 )
                 ieq = ni;
             else ieq++;
@@ -868,7 +868,7 @@ void IPNCalc::CalcEquat()
         if( ci == IT_B ) // unconditional jump to equation
         {
             ErrorIf( ni > aEq.GetCount()+1, "E02MSExec",
-                     "Illegal unconditional goto command");
+                     "Invalid unconditional goto command");
             ieq =ni;
             continue;
         }
@@ -957,7 +957,7 @@ void IPNCalc::CalcEquat()
                     StackDel();
                     break;
                 default:
-                    Error("E05MSExec","Illegal binary operator code.");
+                    Error("E05MSExec","Invalid binary operator code.");
                 }
                 break;
             case IT_U :
@@ -969,7 +969,7 @@ void IPNCalc::CalcEquat()
                     StackEnd(0) = - StackEnd(0);
                     break;
                 default:
-                    Error("E06MSExec","Illegal unary operator code.");
+                    Error("E06MSExec","Invalid unary operator code.");
                 }
                 break;
             case IT_V :   // variable
@@ -1095,7 +1095,7 @@ void IPNCalc::CalcEquat()
                     StackDel();
                     break;
                 default:
-                    Error("E00MSExec","Illegal function code");
+                    Error("E00MSExec","Invalid function code");
                 }
                 break;
             case IT_I :    // interval
@@ -1174,7 +1174,7 @@ void IPNCalc::CalcEquat()
                             aObj[ni].Put( 1., j1, j2 );
                     break;
                 default  :
-                    Error("E20MSExec","Illegal function code");
+                    Error("E20MSExec","Invalid function code");
                 }
                 break;
             case IT_T :

@@ -62,7 +62,7 @@ TPrintData::TPrintData(const char *sd_key,
               count = 1;
        }
        else
-           {  gstring str_err = "Illegal command: \n";
+           {  gstring str_err = "Invalid command: \n";
               str_err += input;
               Error( key_format.c_str(), str_err.c_str() );
             }
@@ -79,7 +79,7 @@ TPrintData::TPrintData(const char *sd_key,
                pose = strchr( pose+1, '#');
             }
             if( !pose )
-            {  gstring str_err = "Illegal condition: \n";
+            {  gstring str_err = "Invalid condition: \n";
                str_err += input;
                Error( key_format.c_str(), str_err.c_str() );
             }
@@ -297,7 +297,7 @@ TPrintData::getToken( int& ii, int& jj )
         }
         skipSpace();
         if( *input != ']')
-        {  gstring str_err = "Illegal format: \n";
+        {  gstring str_err = "Invalid format: \n";
                str_err += input;
             Error( key_format, str_err.c_str() );
         }
@@ -334,7 +334,7 @@ TPrintData::getToken( int& ii, int& jj )
     str = gstring( input, 0, i );
     data = aObj.Find( str.c_str() );
     if( data < 0 )
-    {  gstring str_err = "Illegal object name: \n";
+    {  gstring str_err = "Invalid object name: \n";
            str_err += str;
        if( i==0 )
            str_err += input;
@@ -364,7 +364,7 @@ TPrintData::getToken( int& ii, int& jj )
        }
      skipSpace();
      if( *input != ']')
-     {  gstring str_err = "Illegal format: \n";
+     {  gstring str_err = "Invalid format: \n";
            str_err += input;
        Error( key_format, str_err.c_str() );
      }

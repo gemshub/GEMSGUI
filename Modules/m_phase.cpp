@@ -35,9 +35,9 @@ TPhase::TPhase( int nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("Code of phase state { a g l h s d x }");
-    aFldKeysHelp.Add("Symbol of this phase definition (letters, digits)");
-    aFldKeysHelp.Add("Name of this phase definition");
+    aFldKeysHelp.Add("Code of phase state { a g f p l m h s d x }");
+    aFldKeysHelp.Add("Group identifier for such phases (letters, digits)");
+    aFldKeysHelp.Add("Name of this phase definition (letters, digits)");
     aFldKeysHelp.Add("Phase class { c d l gm ss ssd ls aq xsa xc }");
     aFldKeysHelp.Add("Comment to phase definition");
     php=&ph[0];
@@ -49,7 +49,7 @@ TPhase::TPhase( int nrt ):
 // link values to objects
 void TPhase::ods_link( int q)
 {
-    ErrorIf( q > nQ, GetName(), "E00PHrem: Illegal link q>nQ");
+    ErrorIf( q > nQ, GetName(), "E00PHrem: Invalid link q>nQ");
     //aObj[ o_phpst].SetPtr(  ph[q].pst );
     //aObj[ o_phsymb].SetPtr( ph[q].symb );
     //aObj[ o_phnam].SetPtr(  ph[q].nam );
@@ -148,7 +148,7 @@ aObj[o_ph_nxsub].SetDim( ph[q].nDC, ph[q].nMoi );
 void TPhase::dyn_set(int q)
 {
     ErrorIf( php!=&ph[q], GetName(),
-             "E01PHrem: Illegal access to ph in dyn_set()");
+             "E01PHrem: Invalid access to ph in dyn_set()");
     memcpy( php->pst_, rt[nRT].UnpackKey(), PH_RKLEN );
     ph[q].SCMC =  (char *)aObj[ o_phscmc ].GetPtr();
     ph[q].FsiT =  (float *)aObj[ o_phfsit ].GetPtr();
@@ -190,7 +190,7 @@ moiety_new( ph[q].nDC, ph[q].nMoi, true );
 // free dynamic memory in objects and values
 void TPhase::dyn_kill(int q)
 {
-    ErrorIf( php!=&ph[q], GetName(), "E02PHrem: Illegal access to ph in dyn_kill()");
+    ErrorIf( php!=&ph[q], GetName(), "E02PHrem: Invalid access to ph in dyn_kill()");
     ph[q].SCMC =  (char *)aObj[ o_phscmc ].Free();
     ph[q].FsiT =  (float *)aObj[ o_phfsit ].Free();
     ph[q].XfIEC = (float *)aObj[ o_phxfiec ].Free();
@@ -228,7 +228,7 @@ ph[q].nxSub = (short *)aObj[o_ph_nxsub].Free();
 // realloc dynamic memory
 void TPhase::dyn_new(int q)
 {
-    ErrorIf( php!=&ph[q], GetName(), "E03PHrem: Illegal access to ph in dyn_new()");
+    ErrorIf( php!=&ph[q], GetName(), "E03PHrem: Invalid access to ph in dyn_new()");
     ErrorIf( ph[q].nDC <= 0, GetName(), "E04PHrem: Number of DC in the phase definition <= 0");
     ph[q].SM = (char (*)[DC_RKLEN])aObj[ o_phsm ].Alloc( ph[q].nDC, 1, DC_RKLEN );
     ph[q].DCS = (char *)aObj[ o_phdcs ].Alloc( ph[q].nDC, 1, A_ );
@@ -361,7 +361,7 @@ void TPhase::moiety_new( int nDC, int nMoi, bool setDefault )
 //set default information
 void TPhase::set_def( int q)
 {
-    ErrorIf( php!=&ph[q], GetName(), "E05PHrem: Illegal access to ph in set_def()");
+    ErrorIf( php!=&ph[q], GetName(), "E05PHrem: Invalid access to ph in set_def()");
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     memcpy( ph[q].sol_t, aPa->pa.PHsol_t, 6 );
     memcpy( &ph[q].PphC, aPa->pa.PHpvc, 6 );

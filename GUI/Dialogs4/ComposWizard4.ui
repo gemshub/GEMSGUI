@@ -85,9 +85,11 @@
           <enum>QFrame::Plain</enum>
          </property>
          <property name="text">
-          <string>Compos record keeps data for a Predefined Composition Objects (PCO). PCO can describe a salt, the air, a mineral, a rock, a natural water etc. which can be complex, but can be treated through record key as a single entity in setting up the recipe of chemical system. 
+          <string>Compos record contains data for a Predefined Composition Object (PCO), which describes a salt, the air, a mineral, a rock, a natural water, etc., treated  as a single named entity in the chemical system recipe.
 
-The Compos record can be configured in the most convenient way, depending on the source data: as IC or DC amounts/concentrations; as user-defined formulae (UDF); or as a large formula entered into a text editor field.  Upon re-calculation, all such data will be converted into  into a single PCO vector as IC mole amounts, optionally scaled to a given total PCO mass. </string>
+PCO can be configured according to the source data: as IC or DC amounts/concentrations; as user-defined formulae (UDF); or as a large formula entered into a text field.
+
+Upon re-calculation, all given quantities will be added into a single IC mole amounts PCO vector, optionally scaled to a given total mass (in kg) or total number of moles. </string>
          </property>
          <property name="textFormat">
           <enum>Qt::AutoText</enum>
@@ -109,14 +111,13 @@ The Compos record can be configured in the most convenient way, depending on the
        <item row="3" column="0">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Configuration</string>
+          <string>PCO input data configuration</string>
          </property>
          <layout class="QGridLayout">
           <item row="0" column="0" colspan="2">
            <widget class="QCheckBox" name="checkBox2">
             <property name="text">
-             <string>Use &amp;amounts of Independent Components (IComp) in defining the PCO?
- (checked by default)</string>
+             <string>Use &amp;amounts of Independent Components (IComp) in this PCO definition (default)?</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -132,8 +133,7 @@ The Compos record can be configured in the most convenient way, depending on the
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Use &amp;Dependent Components formulae (DComp/ReacDC) in defining the PCO?
- (unchecked by default)</string>
+             <string>Use formulae of &amp;Dependent Components (from DComp/ReacDC records) in this PCO?</string>
             </property>
            </widget>
           </item>
@@ -159,7 +159,7 @@ The Compos record can be configured in the most convenient way, depending on the
              </sizepolicy>
             </property>
             <property name="text">
-             <string>&amp;Set number of entries in the user-defined formula list for this PCO definition (0 by default)</string>
+             <string>&amp;Set number of user-defined formula units for this PCO definition (0 by default)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -178,13 +178,13 @@ The Compos record can be configured in the most convenient way, depending on the
        <item row="4" column="0">
         <widget class="QGroupBox" name="groupBox_7">
          <property name="title">
-          <string>Optional</string>
+          <string>Optional: Input formula text</string>
          </property>
          <layout class="QGridLayout">
           <item row="0" column="0" colspan="2">
            <widget class="QCheckBox" name="checkBox2_2_2">
             <property name="text">
-             <string>Create a large &amp;user-defined formula text for defining this PCO? (unchecked by default)</string>
+             <string>Use a &amp;user-defined formula (UDF) text for this PCO definition?</string>
             </property>
            </widget>
           </item>
@@ -237,7 +237,7 @@ The Compos record can be configured in the most convenient way, depending on the
           <item row="1" column="1">
            <widget class="QLabel" name="textLabel1_2">
             <property name="text">
-             <string>S&amp;elect a code for units of measurement  (default: M)</string>
+             <string>S&amp;elect units of measurement for the UDF quantity  (default: M)</string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
@@ -269,7 +269,7 @@ The Compos record can be configured in the most convenient way, depending on the
           <item row="2" column="1">
            <widget class="QLabel" name="textLabel2_2">
             <property name="text">
-             <string>&amp;Enter the amount of the formula text stoichiometry (default: 1)</string>
+             <string>&amp;Enter the UDF quantity here (default: 1)</string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
@@ -356,7 +356,7 @@ The Compos record can be configured in the most convenient way, depending on the
           <item row="1" column="0" colspan="2">
            <widget class="QCheckBox" name="checkBox8">
             <property name="text">
-             <string>Create the vector of uncertainties for this PCO definition  (unchecked by default)</string>
+             <string>Use a vector of data uncertainties in this PCO definition</string>
             </property>
            </widget>
           </item>
@@ -372,7 +372,7 @@ The Compos record can be configured in the most convenient way, depending on the
           <item>
            <widget class="QLabel" name="textLabel13">
             <property name="text">
-             <string>(1) In a PCO definition via IC amounts, a list of available IComp records will be shown, asking you to mark necessary ones (use left mouse button to mark).</string>
+             <string>(1) For a PCO definition using IComp amounts, a list of available IComp records will be shown, asking you to mark the desired ones.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -385,7 +385,7 @@ The Compos record can be configured in the most convenient way, depending on the
           <item>
            <widget class="QLabel" name="textLabel12">
             <property name="text">
-             <string>(2) In a PCO definition via DC formulae, a list of available ReacDC records will be shown, asking you to mark some. Then a list of DComp records will be shown to mark some. Minimum one (either DComp or ReacDC) must be marked at the end.</string>
+             <string>(2) In a PCO definition using DC formulae, a list of available ReacDC/DComp records will be shown, asking you to mark the desired ones. </string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -411,7 +411,7 @@ The Compos record can be configured in the most convenient way, depending on the
           <item>
            <widget class="QLabel" name="textLabel15">
             <property name="text">
-             <string>(4) Click on 'Calculate' toolbar button to compute the PCO vector. Check or enter the normalization values in MasVol fields and calculate again, if needed. Setting MasVol[0] and MasVol[6] to zeros disables the normalization of PCO to the total mass or amount of moles, respectively. Save the record to database.</string>
+             <string>(4) Click on 'Calculate' toolbar button to compute the PCO vector. Check or enter the normalization values in MasVol[0] and MasVol[6] fields and calculate again, if needed. Setting both fields to zero disables the normalization of PCO to the total mass or total amount of moles, respectively. </string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>

@@ -80,7 +80,7 @@ TPlot::TPlot( int aObjX, int aObjY ):
         dY1=dNy;
     } /* put graph by gstring */
 
-    ErrorIf( dX!=dY, "Graphics demo", "Illegal size of objects.");
+    ErrorIf( dX!=dY, "Graphics demo", "Invalid size of objects.");
 
 }
 
@@ -475,7 +475,7 @@ bool GraphData::goodIsolineStructure( int aGraphType )
         plots[1].getLinesNumber() >= 5
         ) )
    {
-     gstring str = "Illegal sizes of graphic arrays:";
+     gstring str = "Invalid sizes of graphic arrays:";
      if(plots.GetCount() >= 1)
              str += aObj[ plots[0].getObjY()].GetKeywd();
      else

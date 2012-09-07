@@ -1094,7 +1094,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
       {   gstring phname = lst[0].trimmed().toLatin1().data();
 
           dclst = TProfil::pm->DCNamesforPh( phname.c_str() , true );
-          // Here may be message if illegal phase
+          // Here may be message if Invalid phase
           if( dclst.GetCount() > 0 )
              EM0 = dclst[0].c_str();
           if( dclst.GetCount()  > 1 )

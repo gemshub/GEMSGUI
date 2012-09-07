@@ -108,12 +108,12 @@ void TUnSpace::keyTest( const char *key )
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
-            Error( key, "E08PErem: Illegal record key (another Modelling Project)!");
+            Error( key, "E08PErem: Invalid record key (another Modelling Project)!");
         rt[RT_SYSEQ].MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
                                RT_UNSPACE, 2, RT_UNSPACE, 3, RT_UNSPACE, 4,
                                RT_UNSPACE, 5, RT_UNSPACE, 6, RT_UNSPACE, 7, K_END);
         if( rt[RT_SYSEQ].Find(pkey) <0 )
-            Error( key, "E07PErem: Illegal record key (no system)!");
+            Error( key, "E07PErem: Invalid record key (no system)!");
     }
 }
 
@@ -352,7 +352,7 @@ void TUnSpace::ods_link( int q)
 void TUnSpace::dyn_set(int q)
 {
     ErrorIf( usp!=&us[q], GetName(),
-             "Illegal access to us in dyn_set.");
+             "Invalid access to us in dyn_set.");
 
     usp->UnICn = (char (*)[NAME_SIZE])aObj[ o_ununicn ].GetPtr();
     usp->UgDCn = (char (*)[NAME_SIZE])aObj[ o_unugdcn ].GetPtr();
@@ -463,7 +463,7 @@ void TUnSpace::dyn_set(int q)
 void TUnSpace::dyn_kill(int q)
 {
     ErrorIf( usp!=&us[q], GetName(),
-             "Illegal access to us in dyn_kill.");
+             "Invalid access to us in dyn_kill.");
 
     usp->UnICn = (char (*)[NAME_SIZE])aObj[ o_ununicn ].Free();
     usp->UgDCn = (char (*)[NAME_SIZE])aObj[ o_unugdcn ].Free();
@@ -675,7 +675,7 @@ void TUnSpace::nG_dyn_new()
 void TUnSpace::dyn_new(int q)
 {
   ErrorIf( usp!=&us[q], GetName(),
-             "Illegal access to us in dyn_new.");
+             "Invalid access to us in dyn_new.");
 
     usp->UnICn = (char (*)[NAME_SIZE])aObj[ o_ununicn ].Alloc(
        1, UNSP_SIZE1, NAME_SIZE );
@@ -884,7 +884,7 @@ void TUnSpace::dyn_new(int q)
 void TUnSpace::set_def( int q)
 {
     ErrorIf( usp!=&us[q], GetName(),
-             "Illegal access to us in set_def.");
+             "Invalid access to us in set_def.");
 
    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
 

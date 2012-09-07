@@ -51,7 +51,7 @@ TReacDC::TReacDC( int nrt ):
 // link values to objects
 void TReacDC::ods_link( int q)
 {
-    ErrorIf( q >= nQ, GetName(), "E00RErem: Illegal link (q>=8)!" );
+    ErrorIf( q >= nQ, GetName(), "E00RErem: Invalid link (q>=8)!" );
 
     // static
     //aObj[ o_repst].SetPtr( rc[q].pstate );
@@ -125,7 +125,7 @@ void TReacDC::ods_link( int q)
 // set dynamic Objects ptr to values
 void TReacDC::dyn_set(int q)
 {
-    ErrorIf( rcp!=&rc[q], GetName(), "E01RErem: Illegal access to rc in dyn_set()");
+    ErrorIf( rcp!=&rc[q], GetName(), "E01RErem: Invalid access to rc in dyn_set()");
     memcpy( rcp->pstate, rt[nRT].UnpackKey(), RE_RKLEN );
     rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ].GetPtr();
     rc[q].rDC =   (char *)aObj[ o_rerdc ].GetPtr();
@@ -147,7 +147,7 @@ void TReacDC::dyn_set(int q)
 // free dynamic memory in objects and values
 void TReacDC::dyn_kill(int q)
 {
-    ErrorIf( rcp!=&rc[q], GetName(), "E02RErem: Illegal access to rc in dyn_kill()");
+    ErrorIf( rcp!=&rc[q], GetName(), "E02RErem: Invalid access to rc in dyn_kill()");
     rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ].Free();
     rc[q].rDC =   (char *)aObj[ o_rerdc ].Free();
     rc[q].scDC =  (double *)aObj[ o_rescdc ].Free();
@@ -176,7 +176,7 @@ void TReacDC::w_dyn_kill()
 // realloc dynamic memory
 void TReacDC::dyn_new(int q)
 {
-    ErrorIf( rcp!=&rc[q], GetName(), "E03RErem: Illegal access to rc in dyn_new()");
+    ErrorIf( rcp!=&rc[q], GetName(), "E03RErem: Invalid access to rc in dyn_new()");
     short nTp, nPp;
     ErrorIf( rc[q].nDC < 1, GetName(), "E04RErem: Number of DC in reaction is < 1" );
 
@@ -245,7 +245,7 @@ void TReacDC::w_dyn_new()
 //set default information
 void TReacDC::set_def( int q)
 {
-    ErrorIf( rcp!=&rc[q], GetName(), "E05RErem: Illegal access to rc in set_def()");
+    ErrorIf( rcp!=&rc[q], GetName(), "E05RErem: Invalid access to rc in set_def()");
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
 
     //memset( rc[q].pct, 0, sizeof( REACDC )-DC_RKLEN );
@@ -867,7 +867,7 @@ CALCULATE_DELTA_R:
         calc_exion_r( q, p );
         break;
     default:
-        {  /* Illegal code method of calculation?*/
+        {  /* Invalid code method of calculation?*/
             gstring msg = "W14RErun: Invalid CM method flag!";
             msg += dckey;
             msg += "'.\n Change the record?";

@@ -1243,7 +1243,7 @@ TDataBase&
 DataBaseList::operator[](uint ii) const
 {
     ErrorIf( ii > GetCount(),
-             "DataBaseList","Illegal chain index.");
+             "DataBaseList","Invalid chain index.");
     return TIArray<TDataBase>::elem(ii);
 }
 

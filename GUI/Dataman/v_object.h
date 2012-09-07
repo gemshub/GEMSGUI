@@ -78,7 +78,7 @@ protected:
     }
     void check_type(ObjType typ) const
     {
-        ErrorIf(typ > 126 || typ < N_TYPE_, GetKeywd(), "Illegal object type");
+        ErrorIf(typ > 126 || typ < N_TYPE_, GetKeywd(), "Invalid object type");
     }
     void write(ostream & os);
     void read(istream & os);

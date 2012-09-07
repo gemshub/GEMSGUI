@@ -110,7 +110,7 @@ void TCompos::ods_link( int q)
 // set dynamic Objects ptr to values
 void TCompos::dyn_set(int q)
 {
-    ErrorIf( bcp!=&bc[q], GetName(), "Illegal access to bc in dyn_set.");
+    ErrorIf( bcp!=&bc[q], GetName(), "Invalid access to bc in dyn_set.");
     bc[q].C = (double *)aObj[ o_bccv ].GetPtr();
     bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ].GetPtr();
     bc[q].CIcl = (char *)aObj[ o_bccicl ].GetPtr();
@@ -132,7 +132,7 @@ void TCompos::dyn_set(int q)
 // free dynamic memory in objects and values
 void TCompos::dyn_kill(int q)
 {
-    ErrorIf( bcp!=&bc[q], GetName(), "Illegal access to bc in dyn_kill.");
+    ErrorIf( bcp!=&bc[q], GetName(), "Invalid access to bc in dyn_kill.");
     bc[q].C = (double *)aObj[ o_bccv ].Free();
     bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ].Free();
     bc[q].CIcl = (char *)aObj[ o_bccicl ].Free();
@@ -154,7 +154,7 @@ void TCompos::dyn_kill(int q)
 // realloc dynamic memory
 void TCompos::dyn_new(int q)
 {
-    ErrorIf( bcp!=&bc[q], GetName(), "Illegal access to bc in dyn_new.");
+    ErrorIf( bcp!=&bc[q], GetName(), "Invalid access to bc in dyn_new.");
     //  ErrorIf( bc[q].Nmax < 1, GetName(), "bc[q].Nmax < 1" ); DAK
     ErrorIf( (bc[q].N < 1)&&(bc[q].Nmax < 1), GetName(), "bc[q].N,Nmax < 1" );
 
@@ -238,7 +238,7 @@ void TCompos::dyn_new(int q)
 
 void TCompos::set_def( int q)
 {
-    ErrorIf( bcp!=&bc[q], GetName(), "Illegal access to bc in set_def.");
+    ErrorIf( bcp!=&bc[q], GetName(), "Invalid access to bc in set_def.");
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     memcpy( &bc[q].PcIC, aPa->pa.BCpc, 6 );
     memcpy( bc[q].name, "element", 7 ); bc[q].name[7] = 0;

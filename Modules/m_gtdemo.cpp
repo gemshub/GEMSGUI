@@ -662,7 +662,7 @@ void TGtDemo::gd_EF_calc()
         vfMessage(window(), xcpt.title, xcpt.mess);
         /*bool   iRet = */
         CheckEqText(  erscan,
-    "E92MSTran: Error in analyzing the GtDemo math script for empirical data: " );
+    "E92MSTran: Error in analyzing the GtDemo script for empirical data: " );
         Error(  GetName() , xcpt.mess.c_str() );
     }
     // calc equations

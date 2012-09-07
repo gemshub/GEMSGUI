@@ -64,7 +64,7 @@ void TIComp::ods_link( int q)
 void TIComp::dyn_set(int q)
 {
     ErrorIf( icp!=&ic[q], GetName(),
-             "Illegal access to ic in dyn_set.");
+             "Invalid access to ic in dyn_set.");
     ic[q].tprn= (char *)aObj[o_ictprn].GetPtr();
 }
 
@@ -72,7 +72,7 @@ void TIComp::dyn_set(int q)
 void TIComp::dyn_kill(int q)
 {
     ErrorIf( icp!=&ic[q], GetName(),
-             "Illegal access to ic in dyn_kill.");
+             "Invalid access to ic in dyn_kill.");
     ic[q].tprn = (char *)aObj[o_ictprn].Free();
 }
 
@@ -89,7 +89,7 @@ void TIComp::dyn_new(int /*q*/)
 
 void TIComp::set_def( int q)
 {
-    ErrorIf( icp!=&ic[q], GetName(), "Illegal access to IC in set_def()");
+    ErrorIf( icp!=&ic[q], GetName(), "Invalid access to IC in set_def()");
     strcpy( ic[q].sst, "s" );
     strcpy( ic[q].name, "Independent Component");
     strncpy( ic[q].form, rt[rtNum()].FldKey(0), MAXICNAME );

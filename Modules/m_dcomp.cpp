@@ -134,7 +134,7 @@ void TDComp::ods_link( int q)
 void TDComp::dyn_set(int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
-             "E00DCrem: Illegal access to dc in dyn_set()");
+             "E00DCrem: Invalid access to dc in dyn_set()");
     memcpy( dcp->pstate, rt[nRT].UnpackKey(), DC_RKLEN );
     dc[q].TCint= (float *)aObj[ o_dccpint ].GetPtr();
     dc[q].Cp =   (float *)aObj[ o_dccp ].GetPtr();
@@ -151,22 +151,22 @@ void TDComp::dyn_set(int q)
     dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ].GetPtr();
 
     if( dc[q].Cp && aObj[ o_dccp ].GetN() != MAXCPCOEF )
-        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size ai_Cp (Remake needed)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_Cp (remake needed)" );
 
     if( dc[q].CpFS && aObj[ o_dccpfs ].GetN() != MAXCPFSCOEF )
-        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size aiCpFS (Remake needed)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of aiCpFS (remake needed)" );
 
     if( dc[q].HKFc && aObj[ o_dchkf ].GetN() != MAXHKFCOEF )
-        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size ai_HKF (Remake needed)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_HKF (remake needed)" );
 
     if( dc[q].Vt && aObj[ o_dcvt ].GetN() != MAXVTCOEF )
-        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size ai_Vtp (Remake needed)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_Vtp (remake needed)" );
 
     if( dc[q].CPg && aObj[ o_dccritpg ].GetN() != MAXCRITPARAM )
-        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size CritPg (Remake needed)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of CritPg (remake needed)" );
 
     if( dc[q].ODc && aObj[ o_dcodc ].GetN() != MAXODCOEF )
-        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size ai_ODc (Remake needed)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_ODc (remake needed)" );
 
 }
 
@@ -175,7 +175,7 @@ void TDComp::dyn_set(int q)
 void TDComp::dyn_kill(int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
-             "E02DCrem: Illegal access to dc in dyn_kill()");
+             "E02DCrem: Invalid access to dc in dyn_kill()");
     dc[q].TCint= (float *)aObj[ o_dccpint ].Free();
     dc[q].Cp =    (float *)aObj[ o_dccp ].Free();
     dc[q].CpFS =  (float *)aObj[ o_dccpfs ].Free();
@@ -198,7 +198,7 @@ void TDComp::dyn_new(int q)
 {
     int CM,CE,CV;
     ErrorIf( dcp!=&dc[q], GetName(),
-             "E03DCrem: Illegal access to dc in dyn_new()");
+             "E03DCrem: Invalid access to dc in dyn_new()");
 
     CM = toupper( dc[q].pct[0] );
     CE = toupper( dc[q].pct[1] );
@@ -287,7 +287,7 @@ void TDComp::dyn_new(int q)
 void TDComp::set_def( int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
-             "E04DCrem: Illegal access to dc in set_def()");
+             "E04DCrem: Invalid access to dc in set_def()");
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     memcpy( dc[q].pct, aPa->pa.DCpct, 6 );
     memcpy( &dc[q].PdcC, aPa->pa.DCpdc, 9 );

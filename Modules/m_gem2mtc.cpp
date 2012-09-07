@@ -486,7 +486,7 @@ void TGEM2MT::make_A( long int siz_, char (*for_)[MAXFORMUNITDT] )
   }
 
   ErrorIf( mtp->Nb != TRMults::sm->GetMU()->N, GetName(),
-               "Illegal data in mtp->Nb ");
+               "Invalid data in mtp->Nb ");
 
   mtp->An = (double *)aObj[ o_mtan ].Alloc( siz_, mtp->Nb, D_ );
   fillValue(mtp->An, 0., (siz_*mtp->Nb) );
@@ -832,7 +832,7 @@ int get_ndx_(  int i,  int nO,  int Xplace )
               jj = ii;
               break;
          }
-     ErrorIf( ii == N, "Illegal component name for DataBr",
+     ErrorIf( ii == N, "Invalid component name for DataBr",
            "E95MSTran: Error in translation of GEM2MT math script ");
    }
 
