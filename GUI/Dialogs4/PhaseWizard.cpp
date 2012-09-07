@@ -45,7 +45,15 @@ PhaseWizard::CmBack()
 void
 PhaseWizard::CmNext()
 {
-	stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()+1 );
+    int ndx = stackedWidget->currentIndex();
+
+    if( ndx == 0 && ndxInPhPs_0 != pPhPs_0->currentIndex())
+    {
+        vfMessage(this, "PhaseWizard",
+        "Key of Phase record will be changed");
+    }
+
+    stackedWidget->setCurrentIndex ( ndx+1 );
     resetNextButton();
     resetBackButton();
 }
@@ -115,8 +123,9 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[13], int size[6],
     	SCM_code->setCurrentIndex(ii);
 
     ii = pPhPs_0->findText(QChar(flgs[6]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
-     if( ii >= 0  )
-         pPhPs_0->setCurrentIndex(ii);
+    if( ii >= 0  )
+       pPhPs_0->setCurrentIndex(ii);
+    ndxInPhPs_0 = pPhPs_0->currentIndex();
 
  //Page 2
     spinBox_dc_sc_M->setValue(size[3]);
