@@ -1107,7 +1107,7 @@ TConfig cnf(f_obj,' ');
 		     indexationCode, astr[5]) );
         par = cnf.getNext();
     }
-
+    cnf.close();
 }
 
 //--------------------- End of v_object.cpp ---------------------------

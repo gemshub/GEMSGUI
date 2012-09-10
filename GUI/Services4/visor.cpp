@@ -372,8 +372,8 @@ TVisor::load()
     for (uint ii = 0; ii < aMod.GetCount(); ii++)
      aWinInfo.Add(new CWinInfo(aMod[ii], cnf));
 
+    cnf.close(); // close vis_cn.dat file after reading it
     toDAT();
-
     toModCFG();
     toWinCFG();
 }

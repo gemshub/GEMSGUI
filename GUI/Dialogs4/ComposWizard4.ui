@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout">
@@ -59,7 +59,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 1 - Predefined Composition Object (Compos) configuration</string>
+          <string>Step 1 - Predefined Composition Object (PCO) configuration</string>
          </property>
         </widget>
        </item>
@@ -87,7 +87,7 @@
          <property name="text">
           <string>Compos record contains data for a Predefined Composition Object (PCO), which describes a salt, the air, a mineral, a rock, a natural water, etc., treated  as a single named entity in the chemical system recipe.
 
-PCO can be configured according to the source data: as IC or DC amounts/concentrations; as user-defined formulae (UDF); or as a large formula entered into a text field.
+PCO can be configured according to the source data: as IC or DC amounts/concentrations; as user-defined formula (UDF) units; or as a large UDF entered into a text field.
 
 Upon re-calculation, all given quantities will be added into a single IC mole amounts PCO vector, optionally scaled to a given total mass (in kg) or total number of moles. </string>
          </property>
@@ -178,13 +178,13 @@ Upon re-calculation, all given quantities will be added into a single IC mole am
        <item row="4" column="0">
         <widget class="QGroupBox" name="groupBox_7">
          <property name="title">
-          <string>Optional: Input formula text</string>
+          <string>Optional: Input user-defined formula (UDF) text</string>
          </property>
          <layout class="QGridLayout">
           <item row="0" column="0" colspan="2">
            <widget class="QCheckBox" name="checkBox2_2_2">
             <property name="text">
-             <string>Use a &amp;user-defined formula (UDF) text for this PCO definition?</string>
+             <string>Use a &amp;user-defined formula text input field for this PCO definition?</string>
             </property>
            </widget>
           </item>
@@ -237,7 +237,7 @@ Upon re-calculation, all given quantities will be added into a single IC mole am
           <item row="1" column="1">
            <widget class="QLabel" name="textLabel1_2">
             <property name="text">
-             <string>S&amp;elect units of measurement for the UDF quantity  (default: M)</string>
+             <string>S&amp;elect units of measurement for this UDF quantity  (default: M)</string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
@@ -269,7 +269,7 @@ Upon re-calculation, all given quantities will be added into a single IC mole am
           <item row="2" column="1">
            <widget class="QLabel" name="textLabel2_2">
             <property name="text">
-             <string>&amp;Enter the UDF quantity here (default: 1)</string>
+             <string>&amp;Enter here the UDF quantity or amount in selected units (default: 1)</string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
@@ -301,7 +301,7 @@ Upon re-calculation, all given quantities will be added into a single IC mole am
           </font>
          </property>
          <property name="text">
-          <string>Step 2 - Useful hints</string>
+          <string>Step 2 - Additional settings and next actions</string>
          </property>
         </widget>
        </item>

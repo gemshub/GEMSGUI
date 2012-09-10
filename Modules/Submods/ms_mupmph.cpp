@@ -219,7 +219,7 @@ void TMulti::multi_sys_dc()
                    char buf[32];
                    memcpy( buf, mup->SM[jj], MAXSYMB+MAXDRGROUP+MAXDCNAME ); buf[MAXSYMB+MAXDRGROUP+MAXDCNAME] = 0;
                    vfMessage( window(),
-                              "Multi make error: Lsor != pmp->Lads, DC:", buf );
+                              "Multi make warning: Lsor != pmp->Lads, DC:", buf );
                 }
                 else {
                    memcpy( pmp->SM3[ja], mup->SM[jj]+MAXSYMB+MAXDRGROUP, MAXDCNAME );

@@ -131,7 +131,10 @@ Simple 'tExpr' scripts can be created using a selection dialog on the next page 
                </size>
               </property>
               <property name="currentIndex">
-               <number>0</number>
+               <number>2</number>
+              </property>
+              <property name="maxCount">
+               <number>4</number>
               </property>
               <item>
                <property name="text">
@@ -642,13 +645,13 @@ Simple 'tExpr' scripts can be created using a selection dialog on the next page 
              </size>
             </property>
             <property name="minimum">
-             <number>0</number>
+             <number>1</number>
             </property>
             <property name="maximum">
              <number>20</number>
             </property>
             <property name="value">
-             <number>0</number>
+             <number>1</number>
             </property>
            </widget>
           </item>
@@ -717,7 +720,7 @@ Default: 0 (arrays not provided).</string>
              </size>
             </property>
             <property name="minimum">
-             <number>0</number>
+             <number>1</number>
             </property>
             <property name="maximum">
              <number>10</number>
