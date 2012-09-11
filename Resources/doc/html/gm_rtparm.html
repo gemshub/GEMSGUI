@@ -28,11 +28,12 @@ RTParm Create/Remake Wizard</a>
   <p><a href="#WZSTEP_1">2.1.
 RTParm Wizard Step 1 - Thermodynamic data tabulator (RTParm) configuration</a></p>
   <p><a href="#WZSTEP_2">2.2.
-RTParm Wizard Step 2</a></p>
+RTParm Wizard Step 2 - Selection of items to sample</a></p>
   <p><a href="#WZSTEP_3">2.3.
-RTParm Wizard Step 3</a></p>
+RTParm Wizard Step 3 - Important dimensions</a></p>
   <p><a href="#WZSTEP_4">2.4.
-RTParm Wizard Step 4</a></p>
+RTParm Wizard Step 4 - Workflow suggestions <br>
+</a></p>
 </blockquote>
 
   
@@ -235,9 +236,13 @@ values. </td>
         </b></td>
       <td valign="top">T then P increments<br>
       </td>
-      <td valign="top">xP and xT vectors will be allocated for the product of numbers of points
- given in temperature or pressure iterators on this wizard page. The number of points is automatically computed from values given in the iterator. The 
-values of T and P will be automatically generated upon calculation of the 
+      <td valign="top">xP and xT vectors will be allocated for the 
+product of numbers of points
+ given in temperature or pressure iterators on this wizard page. The 
+number of points is automatically computed from values given in the 
+iterator. The 
+values of T and P will be automatically generated upon calculation of 
+the 
 RTParm record from iterators, first incrementing T values, then P 
 values. This is the default mode.<br>
       </td>
@@ -261,7 +266,8 @@ values in parallel.The maximal value in the iterator with smaller number of poin
 </p>
 <p>Below the drop-down list, there are two iterator areas - one for 
 temperature T, another for pressure P. Each area contains a selector for
- unit of measurement (in which the results will be tabulated) followed by an iterator where minimal, maximal, step values and number of steps 
+ unit of measurement (in which the results will be tabulated) followed 
+by an iterator where minimal, maximal, step values and number of steps 
 can be set. The user can choose the abscissa for plotting results in the
  Graph Dialog, either temperature xT (default) or pressure xP, by 
 clicking on the respective radio-button.<br>
@@ -325,7 +331,11 @@ directly by editing the script. The number of rows (T-P pairs) in yF,
 xP, xT arrays will be set automatically.<br>
 </p>
 
-<p>(2) Optional: Number of rows in xTE, xPE, ytE arrays for experimental data. Default: 0 (these arrays are not provided). Set here (if any) the number of&nbsp; data points that should be plotted over the calculated curves. If this dimension is set to a positive number then another script editor <a href="#tExprE"><tt>tExprE</tt></a> will appear, where an optional script for re-scaling experimental values in ytE table can be entered.&nbsp; <br>
+<p>(2) Optional: Number of rows in xTE, xPE, ytE arrays for experimental
+ data. Default: 0 (these arrays are not provided). Set here (if any) the
+ number of&nbsp; data points that should be plotted over the calculated 
+curves. If this dimension is set to a positive number then another 
+script editor <a href="#tExprE"><tt>tExprE</tt></a> will appear, where an optional script for re-scaling experimental values in ytE table can be entered.&nbsp; <br>
 </p>
 <p>(3) Optional: Number of columns in the ytE array for experimental 
 data. Default: 1. Change this if more than one number per experimental 
@@ -395,7 +405,9 @@ objects. After RTParm calculation, the table will contain T,P values and
  thermodynamic properties, arranged in a row per T,P pair. The tXName 
 and tLnam fields contain table headers (also shown on the plots), these 
 can be edited at any time. The contents of yF table can be plotted 
-against the selected abscissa (xT or xP) upon clicking on the "Plot Data..." toolbar button. These contents can also be selected, copied to clipboard, or pasted from the clipboard using the right-click menu. <br>
+against the selected abscissa (xT or xP) upon clicking on the "Plot 
+Data..." toolbar button. These contents can also be selected, copied to 
+clipboard, or pasted from the clipboard using the right-click menu. <br>
 </p>
 
 <br>
@@ -549,7 +561,9 @@ calculations</h3>
 points,
 you can plot them over the calculated curve(s). To do it, first remake
 this
-RTParm record; in the RTParm wizard, select number of experimental points and number of parameters per points. Then switch to the Setup page of the RTParm window. There you
+RTParm record; in the RTParm wizard, select number of experimental 
+points and number of parameters per points. Then switch to the Setup 
+page of the RTParm window. There you
 will
 see new data objects <tt><a href="#xTE">xTE</a>, <a href="#xPE">xPE</a></tt>
 (abscissas) and <a href="#ytE"><tt>yTE</tt></a> (ordinate(s)). Enter
@@ -1486,55 +1500,72 @@ TP (reserved)</dt>
 &lt;under construction&gt;<br>
 <br>
 <dl>
-  <dt><big><span style="font-family: monospace; font-weight: bold;">E00RTrem:</span></big>
-Illegal link q&gt;nQ.</dt>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E01RTrem:</span></big> Illegal access
-to rp in dyn_set().</dt>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E02RTrem:</span></big> Illegal access
-to rp in dyn_kill().</dt>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E03RTrem:</span></big> Illegal access
-to rp in dyn_new().</dt>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E04RTrem:</span></big> Total N of
-points (rp[q].NV) &lt; 1.</dt>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E04RTrem:</span></big> Illegal access
-to rp in set_def().<br>
-  </dt>
-  <dd>&nbsp;<br>
+  <dt><big><span style="font-family: monospace; font-weight: bold;">E00RTrem:</span></big> Attempt to access corrupt dynamic memory.</dt>
+  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E01RTrem:</span></big> Attempt to allocate corrupt dynamic memory.</dt>
+  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E02RTrem:</span></big> Attempt to free corrupt dynamic memory.</dt>
+  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E03RTrem:</span></big> Attempt to allocate corrupt dynamic memory.</dt>
+  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E04RTrem:</span></big> Dynamic memory corruption in RTParm data structure</dt>
+  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E05RTrem:</span></big> Dynamic memory corruption in RTParm data structure.<br>
+</dt>
+  <dd>
+<p>
 One of these error messages indicates a dynamic memory corruption.
-&nbsp; &nbsp;</dd>
-  <dd>&nbsp; &nbsp;<br>
+&nbsp; &nbsp;<br>
+</p>
+</dd>
+  <dd>
+<p>
 Action: Restart GEMS and try the same work again. If the message
-appears, please, send a bug report.<br>
-&nbsp; <br>
-&nbsp;&nbsp;</dd>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">W05RTrem:</span></big> Invalid mode of
-calculation of P and T arrays, or wrong number of TP points! Change?</dt>
-  <dd> &nbsp; </dd>
-  <dd>&nbsp;</dd>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E06RTrem:</span></big> Invalid mode of
-calculation - bailing out...</dt>
-  <dd> &nbsp;</dd>
-  <dd>Confirmation that the user has pressed "No" or "cancel in
-responce to
-warning W05RTrem.<br>
-&nbsp; <br>
-&nbsp;&nbsp;</dd>
-  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">W07RTrem:</span></big> Wrong
-dimensions
-set for the empirical data array ytE!</dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt><big><span style="font-family: monospace; font-weight: bold;">W08RTrem:</span></big>
-Wrong dimensions set for the data array yF!</dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt><big><span style="font-family: monospace; font-weight: bold;">E95MSTran:</span></big>
-Error in translation of RTParm math script: &nbsp;&lt;name&gt;
-&lt;text&gt; </dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
+appears again, send a bug report.&nbsp; <br>
+</p>
+</dd>
+  </dl>
+<dl>
+<dt><big style="font-weight: bold;"><span style="font-family: monospace;">E06RTrem:</span></big> RTParm record configuration cancelled by the user!</dt><dd>
+  <p>Confirmation that the user has cancelled the RTParm Wizard.<br>
+  </p>
+</dd><dd><br>
+  </dd>
 </dl>
-&lt;To be completed in Version 3.1&gt;<br>
+<dl>
+<dt><big style="font-weight: bold;"><span style="font-family: monospace;">W07RTrem:</span></big> Invalid mode of
+calculation of P and T arrays, or wrong number of TP points! Change?</dt>
+  <dd>
+  <p> Upon calculation of RTParm, inconsistency between the P and T 
+iterators, tabulation mode, and dimensions of data tables has been 
+found.</p>
+</dd><dd>
+    <p>Action: Remake the record, check settings in the RTParm wizard, and try calculation again. &nbsp; </p>
+  </dd>
+
+  <dd>&nbsp;</dd>
+  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">E08RTrem:</span></big> Invalid mode of
+calculation - bailing out...</dt>
+  
+  <dd>
+  <p>Confirmation that the user has pressed "No" or "cancel in
+responce to
+warning W07RTrem.&nbsp; &nbsp;&nbsp;</p>
+</dd><dd> &nbsp;</dd>
+  <dt><big><span style="font-family: monospace; font-weight: bold;">E95MSTran:</span></big>
+Error in translation of RTParm sampling script: &nbsp;&lt;name&gt;
+&lt;text&gt; </dt>
+  
+  <dd>
+  <p>&nbsp; Check the script, fix misprints and try calculation again.<br>
+  </p>
+</dd>
+</dl>
+
+<dl>
+<dt><big><span style="font-family: monospace; font-weight: bold;">E96MSTran:</span></big>
+Error in translation of RTParm script for experimental data: &nbsp;&lt;name&gt;
+&lt;text&gt; </dt><dd>
+<p>Check the script, fix it and try calculation again. If no calculation
+ of experimental data are necessary, make sure that the Empty value 
+"---" is present as the text of the script. </p>
+
+</dd></dl>
 <br>
 <hr size="2" width="100%"><tt><br>
 </tt>Last updated: 31.08.2012&nbsp; DK<br>

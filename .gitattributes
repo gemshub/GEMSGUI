@@ -309,7 +309,9 @@ Resources/data/vis_cn.ini eol=lf
 Resources/data/vis_od.ini eol=lf
 Resources/data/viz_cndoc.txt eol=lf
 Resources/doc/html/CalculateGEMIcon24.png -text
+Resources/doc/html/Compos-PCO-Page1.png -text
 Resources/doc/html/Compos-Record-Key.png -text
+Resources/doc/html/ComposSettingsPage1.png -text
 Resources/doc/html/DatabaseModeIcon24.png -text
 Resources/doc/html/ElementsDialog-Options.png -text
 Resources/doc/html/EquilibriaCalculationModeToolbarFragment.png -text
