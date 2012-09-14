@@ -77,7 +77,7 @@ int TObjectModel::cCount() const
    for(  ii=1; ii< flds.count(); ii++)
    {
        if(  flds[ii].place == UndeTabl )
-       { deltaM = max(deltaM, currentdeltaM);
+       { deltaM = max(deltaM, currentdeltaM + sizeM);
          currentdeltaM = 0;
          sizeM =0;
        }
@@ -85,10 +85,10 @@ int TObjectModel::cCount() const
             sizeM = max( sizeM, flds[ii].pObj->GetMS() );
         if(  flds[ii].place == Tied )
         {    currentdeltaM += sizeM;
-                 sizeM = flds[ii].pObj->GetMS();
+             sizeM = flds[ii].pObj->GetMS();
         }
   }
-  return max(deltaM, currentdeltaM)/*deltaM*/ + sizeM;
+  return max(deltaM, currentdeltaM+sizeM );
 }
 
 int TObjectModel::columnCount( const QModelIndex & /*parent*/ ) const
@@ -455,47 +455,58 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
         int maxColSize = colSize;
         int maxfullcolSize = fullcolSize;
 
-        for( ii=1; ii< flds.count(); ii++)
+    for( ii=1; ii< flds.count(); ii++)
  	{
- 		 if(  flds[ii].place == Tied )
+        if(  flds[ii].place == Tied )
  		 {
- 			sizeN = max( sizeN, flds[ii].pObj->GetNS() );
-                        col_ii += sizeM;
+            sizeN = max( sizeN, flds[ii].pObj->GetNS() );
+            col_ii += sizeM;
  			sizeM = flds[ii].pObj->GetMS();
- 			colSize += ( horizontalHeader()->sectionSize(col_ii) * min(abs(flds[ii].maxM), sizeM ) );
- 			fullcolSize += ( horizontalHeader()->sectionSize(col_ii) * sizeM  );
-                        if(fullrowSize == 0) // first not empty
-                        {
-                         rowSize  = ( verticalHeader()->sectionSize(row_ii) * min(flds[ii].maxN, sizeN ) );
-                         fullrowSize  = ( verticalHeader()->sectionSize(row_ii) *  sizeN  );
-                        }
 
-  		 } 
+            if(flds[ii].pObj->GetNS() == 0 ||sizeM ==0 )
+              continue;
+
+            if(fullrowSize == 0 || fullcolSize == 0) // first not empty
+            {
+              rowSize  += ( verticalHeader()->sectionSize(row_ii) * min(flds[ii].maxN, sizeN ) );
+              fullrowSize  += ( verticalHeader()->sectionSize(row_ii) *  sizeN  );
+            }
+
+            colSize += ( horizontalHeader()->sectionSize(col_ii) * min(abs(flds[ii].maxM), sizeM ) );
+ 			fullcolSize += ( horizontalHeader()->sectionSize(col_ii) * sizeM  );
+         }
+
          if( flds[ii].place == UndeTabl )
-                 {
+         {
                      maxColSize = max( maxColSize, colSize);
                      maxfullcolSize = max( maxfullcolSize, fullcolSize);
                      col_ii=0;
                      colSize = 0;
                      fullcolSize =0;
-                 }
+                     sizeM = 0;
+         }
+
          if(  flds[ii].place == Sticked || flds[ii].place == UndeTabl )
  		 {
  			 sizeM = max( sizeM, flds[ii].pObj->GetMS() );
  			 row_ii += sizeN;
  			 sizeN = flds[ii].pObj->GetNS();
-  	  		 rowSize += ( verticalHeader()->sectionSize( row_ii ) * min(abs(flds[ii].maxN), sizeN ) );
+
+             if( flds[ii].pObj->GetMS() == 0 || sizeN ==0 )
+               continue;
+
+             rowSize += ( verticalHeader()->sectionSize( row_ii ) * min(abs(flds[ii].maxN), sizeN ) );
  	  		 fullrowSize += ( verticalHeader()->sectionSize( row_ii ) *  sizeN  );
              if(fullcolSize == 0 /*&& maxfullcolSize==0*/ ) // first not empty
              {
                colSize = ( horizontalHeader()->sectionSize(col_ii) * min(flds[ii].maxM, sizeM ) );
                fullcolSize = ( horizontalHeader()->sectionSize(col_ii) *  sizeM  );
              }
-         }
+          }
  	}	
  	
-        colSize = max( maxColSize, colSize);
-        fullcolSize = max( maxfullcolSize, fullcolSize);
+    colSize = max( maxColSize, colSize);
+    fullcolSize = max( maxfullcolSize, fullcolSize);
 
  	if( fullcolSize > colSize )
         {
