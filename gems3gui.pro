@@ -25,7 +25,7 @@ QT += xml
 
 macx-g++ {
   DEFINES += __APPLE__
-macx:QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.6.sdk
+# macx:QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.6.sdk
   CONFIG -= warn_on
   CONFIG += warn_off
 }
