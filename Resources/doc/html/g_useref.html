@@ -2,18 +2,31 @@
 <html><head>
 
 
-  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
-  <meta name="Author" content="DIA Kulik"><title>GEMS User's Reference</title>
   
-  <meta name="description" content="Version 2-PSI, file g_useref.html"></head><body>
-<h1><img src="gems1.png" align="left" height="48" width="48">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+  
+<meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
+
+  
+<meta name="Author" content="DIA Kulik">
+<title>GEMS3 User's Reference</title>
+
+  
+  
+<meta name="description" content="Version 2-PSI, file g_useref.html">
+</head><body>
+<h1><img src="gems1.png" height="48" align="left" width="48">
 GEM-Selektor version 3</h1>
+
 <h2> User's Reference</h2>
+
 <hr style="width: 100%; height: 2px;">
 <h3>Contents</h3>
+
 <p><a href="#UR_GenTopics">1. General Topics</a>
      </p>
+
 <blockquote>
   <p><a href="#ICOMP_TYPES">1.1. Types of Independent Components (IC)</a>
      </p>
@@ -26,9 +39,11 @@ Formula (stoichiometry) of a Dependent Component (species, DC)</a>
   <p><a href="#REMFLAGS">1.4.
 Remake Flags</a></p>
 </blockquote>
+
 <p><a href="#UNITS_MEAS_CODES">2. Units of Measurement Codes and
 Thermodynamic Constants</a>
      </p>
+
 <blockquote>
   <p><a href="#UNITS_PRESS_CODES">2.1. Pressure and Volume</a>
      </p>
@@ -41,8 +56,10 @@ Thermodynamic Constants</a>
   <p><a href="#PHYSCHEMCONST">2.5. Physicochemical Constants used in GEM-Selektor<br>
     </a></p>
 </blockquote>
+
 <p><a href="#SPECIESCODES">3. Species Type Codes</a>
      </p>
+
 <blockquote>
   <p><a href="#DCCLASSCODES">3.1. Class Codes of Dependent Component (DC)</a>
      </p>
@@ -52,8 +69,10 @@ Thermodynamic Constants</a>
   <p><a href="#TDC_METHODS_CODES">3.3. Codes for Methods of Calculation of
 Thermodynamic Data</a></p>
 </blockquote>
+
 <p><a href="#PHASETYPECODES">4. Phase Type Codes</a>
     </p>
+
 <blockquote>
   <p><a href="file:///C:/GEMS2test/program/doc/html/g_useref.html#PHASESTATECODES">4.1.
 Codes of Phase State in Chemical System</a> 
@@ -66,14 +85,19 @@ Codes for Surface Complexation Models and Surface Activity Terms</a></p>
   <p><a href="#NONIDTYPES">4.4.
 Codes for the (Non-Ideal) Models of Multi-Component Phases</a></p>
 </blockquote>
+
 <p><a href="#P6900">5.
 GUI Text Editor and Calculator Commands</a>
    
-    </p><p><a href="#LICENCE_DISCLAIMERS">6. License and Disclaimers</a></p>
+    </p>
+<p><a href="#LICENCE_DISCLAIMERS">6. License and Disclaimers</a></p>
+
 <p><a href="#REFERENCES">7. References</a></p>
+
 
 <hr style="width: 100%; height: 2px;">
 <h2> <a name="UR_GenTopics"></a>1. General Topics</h2>
+
 <p>This document provides the codes, flags, and data object labels that
 control the operation of GEM-Selektor modules, as well as the syntax of
 chemical
@@ -85,11 +109,14 @@ HTML files because of the file size limitations. This file (<tt>g_useref.html</t
 provides only a minimum of information necessary for remaking records
 and running the GEM-Selektor and GEMS3K codes.<br>
 </p>
+
 <p> Note that all codes described below and all data object descriptor
 (DOD) labels are <b>case-sensitive</b>. <br>
 </p>
+
 <h3> <a name="ICOMP_TYPES"></a>1.1. Types of <a href="gm_icomp.html">Independent
 Components (IC)</a></h3>
+
 <p>Codes of IC types listed below appear in the second field (<a href="gems_rekey.html#dbm_IComp_1">IC_type</a>) of <a href="gems_rekey.html#dbm_IComp">IComp record keys</a>. One of the codes
 must be entered in this field upon creation of a new <a href="gm_icomp.html#ICname">IComp</a> record. The codes below are
 internally used by several GEM-Selektor modules for interpretation of
@@ -98,7 +125,9 @@ Components (species,
 contained in <a href="gm_dcomp.html">DComp</a> and <a href="gm_reacdc.html">ReacDC</a> records) or Predefined Composition
 Objects
 (PCO, defined in <a href="gm_compos.html">Compos</a> records).</p>
-<ol><table border="3" cellpadding="3" cellspacing="3">
+
+<ol>
+<table border="3" cellpadding="3" cellspacing="3">
     <tbody>
       <tr>
         <td>
@@ -145,15 +174,19 @@ Objects
   </table>
   <p>&nbsp;</p>
 </ol>
+
 <h3> <a name="PCO_TYPES"></a>1.2 Types of <a href="gm_compos.html">Predefined
 Composition Objects</a> (PCO)</h3>
+
 <p>The PCO type codes appear in the second field of <a href="gems_rekey.html#dbm_Compos">Compos record keys</a>. They are not
 directly used by GEM-Selektor modules and serve only for organizing the
 PCO name
 lists (names are contained in the first field of Compos record key).
 Recommended values:&nbsp;
   </p>
-<ol><table border="3" cellpadding="3" cellspacing="3">
+
+<ol>
+<table border="3" cellpadding="3" cellspacing="3">
     <tbody>
       <tr>
         <td>
@@ -202,9 +235,12 @@ Recommended values:&nbsp;
     </tbody>
   </table>
 </ol>
+
 <p><br>
 </p>
+
 <h3><a name="FORMULA"></a>1.3. Formula (stoichiometry) of a <a href="gm_dcomp.html">Dependent Component</a> (species) </h3>
+
 <p>Chemical formulae define elemental stoichiometry of <a href="gm_dcomp.html">dependent components</a> (species) and should be
 specified in each <a href="gm_dcomp.html#DCform">DComp</a> or <a href="gm_reacdc.html#RDform">ReacDC</a> record. Optionally, chemical
 formulae can also be used in PCO (<a href="gm_compos.html#formU">Compos</a>)
@@ -215,12 +251,14 @@ of molar masses, in phase/species compatibility checks etc.&nbsp;
 GEM-Selektor formula parser works with a simple and convenient <a href="g_useref.html#FORMULASYNTAX">formula syntax</a>, very close to
 the conventional chemical notation.<br>
 </p>
+
 <p>Formula is a string of text, maximum 70 characters long. Only <a href="gems_rekey.html#dbm_IComp_0">symbols of Independent Components</a>
 (IC) from currently available <a href="gm_icomp.html">IComp</a>
 records can be used. Each IC symbol begins with an upper-case Latin
 letter, followed by
 zero to four lower-case Latin letters or _ (underscore) characters. <br>
 </p>
+
 <p>Explicit<a href="gm_icomp.html#Valen"> valence of IC</a> can be
 specified within vertical bars <tt>|| </tt>immediately after the <a href="gm_icomp.html#dbm_IComp_0">IC symbol</a>, e.g. <tt>H2S|-2|</tt>
 (hydrogen sulfide). If no explicit valence is specified then the
@@ -229,6 +267,7 @@ valence</a> number for
 calculating charge balance in the formula and setting charge in the
 stoichiometry
 matrix line.&nbsp; &nbsp; </p>
+
 <p>IC symbols with stoichiometry coefficients can be grouped in
 brackets <tt>()</tt>
 or braces <tt>[]</tt> followed by a common stoichiometry coefficient,
@@ -245,6 +284,7 @@ allowed,
 e.g. 2.67). Absence of the formula stoichiometry coefficient after the <a href="gdb_rkey.html#dbm_IComp_0">IC symbol</a> or the right bracket
 means that this coefficient equals 1. <br>
 </p>
+
 <p>Atomic <a href="gdb_rkey.html#dbm_IComp_1">mass of an isotope </a>must
 be specified as an integer value in slashes<tt> //</tt> immediately
 before the <a href="gdb_rkey.html#dbm_IComp_0">IC symbol</a>, for
@@ -254,8 +294,10 @@ complexes. Charge can also be non-integer, and it is always assigned to
 the <tt>Zz</tt>&nbsp; independent component
 (charge). <br>
 </p>
+
 <h4><a name="FORMULASYNTAX"></a>Chemical formula are parsed in
 GEM-Selektor modules using the following syntax: </h4>
+
 <blockquote>
   <p><tt>&lt;formula&gt; ::= &lt;fterm&gt; | &lt;fterm&gt; &lt;charge&gt; <br>
 &lt;fterm&gt;&nbsp;&nbsp; ::= &lt;icterm&gt; | &lt;fterm&gt; &lt;icterm&gt; |<br>
@@ -280,12 +322,14 @@ GEM-Selektor modules using the following syntax: </h4>
 &lt;num&gt;&nbsp;&nbsp;&nbsp;&nbsp; ::= &lt;digit&gt; | &lt;num&gt;&lt;digit&gt; <br>
 &lt;digit&gt;&nbsp;&nbsp; ::= 0 |&nbsp; 1 |&nbsp; 2 |&nbsp; 3 |&nbsp; 4 |&nbsp; 5 |&nbsp; 6 |&nbsp; 7 |&nbsp; 8 |&nbsp; 9 <br>
 &lt;real&gt;&nbsp;&nbsp;&nbsp; ::= &lt;num&gt;.&lt;num&gt; | &lt;num&gt;. | .&lt;num&gt; | &lt;num&gt;<br>
-</tt><tt></tt> </p>
+</tt> </p>
 </blockquote>
+
 <p>In the <tt>&lt;elem&gt;</tt> term, up to three levels of nesting is
 allowed. The vertical bar <tt>"|"</tt> means "or", i.e. one selection
 from several possible values or terms.&nbsp; <br>
 </p>
+
 <p>The &#8220;<tt>Va</tt>&#8221; in <tt>&lt;icsymb&gt;</tt> means &#8220;vacancy&#8221; and 
 should be ignored everywhere, except where the substituting moieties and
  sites terms are analyzed. Each moiety, including vacancy <tt>Va</tt>, is taken in the <tt>{}</tt>
@@ -300,14 +344,18 @@ braces with the attached sublattice index (e.g. [Ni]0, [Fe]0, [Ni]1,
 the moiety-sublattice stoichiometry coefficients table, wherever 
 necessary.<br>&nbsp;&nbsp; </p>
 
+
 <h3> <a name="REMFLAGS"></a>1.4 Remake Flags</h3>
+
 <p>The remake flags are used for configuration of dynamic data fields
 (vectors, lists, matrices) in most of GEM-Selektor record types. Some
 modules automatically change "allocate" to "keep" code upon completion
 of remake of the record. Changing such codes is normally allowed only
 in Create/Remake modes. Possible values:&nbsp;
   </p>
-<ol><table border="3" cellpadding="3" cellspacing="3">
+
+<ol>
+<table border="3" cellpadding="3" cellspacing="3">
     <tbody>
       <tr>
         <td>
@@ -332,15 +380,21 @@ in Create/Remake modes. Possible values:&nbsp;
     </tbody>
   </table>
 </ol>
+
 <p><br>
 </p>
+
 <hr style="width: 100%; height: 2px;">
 <h2><a name="UNITS_MEAS_CODES"></a>2. Units of Measurement Codes and
 Thermodynamic Constants</h2>
+
 <h3><b>2.1 Pressure and Volume</b></h3>
+
 <h4><a name="UNITS_PRESS_CODES"></a>Codes for pressure:<br>
 </h4>
-<ol><table border="3" cellpadding="3" cellspacing="3" height="190" width="417">
+
+<ol>
+<table height="190" border="3" cellpadding="3" cellspacing="3" width="417">
     <tbody>
       <tr>
         <td>
@@ -373,14 +427,18 @@ Thermodynamic Constants</h2>
     </tbody>
   </table>
 </ol>
+
 <p><b><i>Attention</i></b>: Only <tt>"b"</tt> code (pressure in bars)
 can be used for data input in this version of GEM-Selektor. Other codes
 will
 be activated in future versions.<br>
 </p>
+
 <h4><a name="UNITS_VOLUME_CODES"></a>Codes for volume: &nbsp;
   </h4>
-<ol><table border="3" cellpadding="3" cellspacing="3" height="175" width="417">
+
+<ol>
+<table height="175" border="3" cellpadding="3" cellspacing="3" width="417">
     <tbody>
       <tr>
         <td>
@@ -414,12 +472,16 @@ be activated in future versions.<br>
     </tbody>
   </table>
 </ol>
+
 <p><b><i>Attention</i></b>: Only <tt>"j"</tt> code (J/bar) can be used
 for data input in this version of GEM-Selektor. Other codes will be
 activated in future versions.<br>
-</p><h3><a name="UNITS_TEMP_CODES"></a><b>2.2 Temperature</b><br>
+</p>
+<h3><a name="UNITS_TEMP_CODES"></a><b>2.2 Temperature</b><br>
 </h3>
-<ol><table border="3" cellpadding="3" cellspacing="3" height="138" width="415">
+
+<ol>
+<table height="138" border="3" cellpadding="3" cellspacing="3" width="415">
     <tbody>
       <tr>
         <td>
@@ -444,12 +506,16 @@ activated in future versions.<br>
     </tbody>
   </table>
 </ol>
+
 <p><b><i>Attention:</i></b> Only <tt>C</tt> code (degrees Celsius) can
 be used for data input in this version of GEM-Selektor. Other codes
 will be
-activated in future versions. </p><h3><a name="UNITS_ENERGY_CODES"></a><b>2.3 Energy</b><br>
+activated in future versions. </p>
+<h3><a name="UNITS_ENERGY_CODES"></a><b>2.3 Energy</b><br>
 </h3>
-<ol><table border="3" cellpadding="3" cellspacing="3" height="190" width="409">
+
+<ol>
+<table height="190" border="3" cellpadding="3" cellspacing="3" width="409">
     <tbody>
       <tr>
         <td>
@@ -487,16 +553,20 @@ activated in future versions. </p><h3><a name="UNITS_ENERGY_CODES"></a><b>2.3 En
     </tbody>
   </table>
 </ol>
+
 <p><b><i>Attention:</i></b> Only '<tt>j</tt>' code (Joules, J/mol,
 J/K/mol) can be used for data input in DComp and ReacDC records in this
 version of GEM-Selektor! Other codes will be activated in future
 versions.<br>
-</p><h3><a name="QUANCONCUNITS"></a><b>2.4 Quantities and Concentrations</b>
+</p>
+<h3><a name="QUANCONCUNITS"></a><b>2.4 Quantities and Concentrations</b>
 </h3>
+
 <p>&nbsp;The code of quantity or concentration is one Latin letter
 (case sensitive)
 or a&nbsp; "<tt>%</tt>" character. Upper-case letters are shown as e.g. '<span style="text-decoration: underline; font-family: monospace;">P</span>'. <br>
 </p>
+
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="90%">
     <tbody>
@@ -628,12 +698,16 @@ CONCENTRATION</a>:</tt> </p>
 
 
 
+
 <br>
+
 <h4><a name="QUANCONCRULES"></a><b><i>Rules of using
 concentrations&nbsp;</i></b></h4>
 
+
 The rules below apply to concentration codes in the <a href="gems_bcc.html">System</a> submodule (<tt><a href="gems_bcc.html#XAun_">XAun_</a>, <a href="gems_bcc.html#XDun_">XDun_</a>,<a href="gems_bcc.html#XPun_">XPun_</a>, <a href="gems_bcc.html#BCun_">BCun_</a></tt>
 vectors) and the <a href="gm_compos.html">Compos</a> module (<tt><a href="gm_compos.html#CIcl">CIcl</a>, <a href="gm_compos.html#AUcl">AUcl</a>,<a href="gm_compos.html#CDcl">CDcl</a></tt> &nbsp;vectors).<br>
+
 
 
 <p><a name="VOLFRACT_RULE"></a><u>VOLUME FRACTION</u> needs an input
@@ -650,6 +724,7 @@ module window, <i>Vs</i> &nbsp; number is to be entered into the <tt><a href="gm
 1</tt>. By default, <i>&nbsp;Vsys</i>&nbsp; = 1.&nbsp;&nbsp; </p>
 
 
+
 <p><a name="MOLFRACT_RULE"></a><u>MOLE FRACTION</u> needs an input
 a non-zero anticipated total number of moles <i>NMS</i>&nbsp; as a multiplier to
 convert
@@ -659,6 +734,7 @@ can be entered into the <tt><a href="gems_bcc.html#Masses_5">Masses</a>[0,5]</tt
 cell. In the <a href="gm_compos.html">Compos</a> module window (Page
 1),<i> NMS</i> can be entered into <tt>the <a href="gm_compos.html#MasVol_6">MasVol</a>[0,6]</tt> field.&nbsp;By
 default, <i>&nbsp;NMS</i>&nbsp; = 0.</p>
+
 
 
 <p><a name="MASSFRACT_RULE"></a><u>MASS FRACTION</u> requires at
@@ -674,6 +750,7 @@ cell. In the <a href="gm_compos.html">Compos</a> module window (Page
 default, <i>&nbsp;Msys</i>&nbsp; = 1.&nbsp;</p>
 
 
+
 <p><a name="MOLALITY_RULE"></a><u>MOLALITY</u> can be entered when
 the anticipated mass of water-solvent <i>Mwat</i>&nbsp; (in kg) is provided as
 a
@@ -683,6 +760,7 @@ can be entered into the <tt><a href="gems_bcc.html#Masses_1">Masses</a>[0,1]</tt
 cell. In the <a href="gm_compos.html">Compos</a> module window (Page
 1), <i>Mwat</i>&nbsp; can be entered into <tt>the <a href="gm_compos.html#MasVol_2">MasVol</a>[0,2]</tt> field.&nbsp;By
 default, <i>&nbsp;Mwat</i>&nbsp; = 1.</p>
+
 
 
 <p><a name="MOLARITY_RULE"></a><u>MOLARITY</u> requires an anticipated
@@ -698,6 +776,7 @@ cell. In the <a href="gm_compos.html">Compos</a> module window (Page
 default, <i>&nbsp;Vaq</i> &nbsp;= 1.</p>
 
 
+
 <p><a name="VOLCONC_RULE"></a><u>VOLUME CONCENTRATION</u> requires
 an anticipated non-zero volume of aqueous phase <i>Vaq</i> &nbsp;(in L)
 &nbsp;as a multiplier to convert concentrations into masses and then
@@ -708,6 +787,7 @@ into the&nbsp; <tt><a href="gems_bcc.html#Volums_1">Volums</a>[0,1]</tt>
 cell. In the <a href="gm_compos.html">Compos</a> module window (Page
 1), <i>Vaq</i> &nbsp;can be entered into <tt>the <a href="gm_compos.html#MasVol_4">MasVol</a>[0,4]</tt> field.&nbsp;By
 default, <i>&nbsp;Vaq</i> &nbsp;= 1.</p>
+
 
 <a name="MASSCONC_RULE"></a><u>MASS CONCENTRATION</u> requires an
 anticipted non-zero mass of aqueous solution <i>Maq</i> (in kg) as a
@@ -729,10 +809,12 @@ and
 volume of the aqueous phase and that of&nbsp; the whole system may be
 different
 from the anticipated totals used in BCC (and Compos) calculations. <br>
-</p>&nbsp;
+</p>
+&nbsp;
 
 
-<h3><a name="PHYSCHEMCONST"></a><b>2.5 Physicochemical Constants used in GEM-Selektor</b> </h3><blockquote>
+<h3><a name="PHYSCHEMCONST"></a><b>2.5 Physicochemical Constants used in GEM-Selektor</b> </h3>
+<blockquote>
   <table border="3" cellpadding="3" cellspacing="3">
     <tbody>
       <tr>
@@ -792,18 +874,25 @@ from the anticipated totals used in BCC (and Compos) calculations. <br>
     </tbody>
   </table>
 </blockquote>
+
 <p>&nbsp;
 
 Source: NEA TDB Project (I.Grenthe and I.Puigdomenech (editors)
 1997, Modelling in Aquatic Chemistry, NEA OECD Paris).</p>
 
+
 &nbsp; <br>
+
 <h2> </h2>
+
 <hr style="width: 100%; height: 2px;">
 <h2><a name="SPECIESCODES"></a>3. Species Type Codes</h2>
+
 <br>
+
 <h3><a name="DCCLASSCODES"></a><b>3.1 Class Code of Dependent Component
 (DC)</b> </h3>
+
 
 <p>The DC class codes (one uppercase Latin letter or one digit) are used in
 the <a href="gems_ipm.html">GEM IPM module</a> for selection of
@@ -819,9 +908,13 @@ modified at any time if necessary (do not forget to save the Phase
 record
 after modifications). <u><br>
 </u></p>
+
 <h4><u>DC in single-component phases:</u> </h4>
+
 <ol>
+
 </ol>
+
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
     <tbody>
@@ -832,9 +925,13 @@ after modifications). <u><br>
     </tbody>
   </table>
 </blockquote>
+
 <h4><u>DC in aqueous electrolyte phase:</u> </h4>
+
 <ol>
+
 </ol>
+
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
     <tbody>
@@ -869,11 +966,17 @@ after modifications). <u><br>
     </tbody>
   </table>
 </blockquote>
+
 <ol>
+
 </ol>
+
 <h4><u>DC in gas phase:</u></h4>
+
 <ol>
+
 </ol>
+
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
     <tbody>
@@ -908,9 +1011,13 @@ after modifications). <u><br>
     </tbody>
   </table>
 </blockquote>
+
 <h4><u>DC in condensed non-electrolyte multi-component phases:</u></h4>
+
 <ol>
+
 </ol>
+
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
     <tbody>
@@ -939,8 +1046,11 @@ after modifications). <u><br>
     </tbody>
   </table>
 </blockquote>
+
 <ol>
+
 </ol>
+
 <p><b>Comment</b>: Dependent Components marked with&nbsp; <b><tt>J</tt></b>
 &nbsp;code will be taken into the <a href="gems_ipm.html">automatic
 simplex initial approximation</a> with an activity coefficient by
@@ -950,9 +1060,13 @@ to 1000 (default value can be changed in the <a href="gems_ipm.html#Pa_GAN_1"><t
 miscibility gap. If no miscibility gap is expected then 'M' code can be 
 set for all end members.&nbsp; <br>
 </p>
+
 <h4><u><a name="DCCLASSCODES_SORPTION"></a>DC in sorption phases:</u> </h4>
+
 <ol>
+
 </ol>
+
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
     <tbody>
@@ -991,20 +1105,26 @@ respectively&nbsp; (obsolete since version 2.1)<br>
     </tbody>
   </table>
 </blockquote>
+
 <p><b> Comment:</b> Interpretation of the DC class codes for surface
 species depends on selection of a particular surface complexation model
 for a given surface type. See more in <a href="gems_scm.html"><tt>gems_scm.html</tt></a>. There will be changes in interpretation of these codes in new TSorpMod class library models for sorption (under construction).<br>
 </p>
 
+
 <h3><a name="DCPSTATECODES"></a><b>3.2 Phase State Code of Dependent
 Component (DC)</b> </h3>
+
 <p>Code of phase state is a lower-case letter which appears in the
 first field
 of <a href="gems_rekey.html#dbm_DComp">DC record key</a> and is used also for
 sorting
 DC record keys in <a href="gm_dcomp.html">DComp</a> and <a href="gm_reacdc.html">ReacDC</a> database lists. </p>
+
 <ol>
+
 </ol>
+
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
     <tbody>
@@ -1072,13 +1192,19 @@ sorption phase</td>
     </tbody>
   </table>
 </blockquote>
+
 <p> </p>
+
 <ol>
+
   <br>
 </ol>
+
 <p> </p>
+
 <h2>&nbsp;<a name="TDC_METHODS_CODES"></a>3.3. Codes for Methods of
 Calculation of Thermodynamic Data</h2>
+
 <p>In GEM-Selektor program package, the standard-state thermodynamic data for
 chemical
 species are kept in two formats: "thermochemical" (<a href="gm_dcomp.html">DComp</a> records) and "reaction-defined" (<a href="gm_reacdc.html">ReacDC</a> records). These records are organized
@@ -1095,6 +1221,7 @@ when in create/clone/remake wizards for DComp or ReacDC records (the codes are v
 respectively); they also control the allocation of some optional input data
 vectors in those record types. <br>
 </p>
+
 <p>The program can extract the standard molar Gibbs energies at <i>T,P</i>
 &nbsp;of interest for calculation of chemical equilibria&nbsp; derived from
 from both DComp and ReacDC data; for this purpose (and also when
@@ -1102,16 +1229,21 @@ processing ReacDC data), the data source codes given below will be
 analyzed. <br>
 <br>
 </p>
+
 <h4> <a name="TD_SRC_CODES"></a><big>3.3.1. Sources of Thermodynamic
 Data</big></h4>
+
 <p>Standard molar thermodynamic
 data and stoichiometries of chemical
 species are primarily kept in the database
 records of either <a href="gm_dcomp.html">DComp</a> or <a href="gm_reacdc.html">ReacDC</a> types, which have the same format of<a href="gems_rekey.html#dbm_DComp"> record keys</a>. Both kinds of records
 can be referred to by their keys from lists in ReacDC, RTparm, Phase,
 System, and GtDemo records, according to the following codes: </p>
+
 <ol>
+
 </ol>
+
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
     <tbody>
@@ -1140,20 +1272,30 @@ construction)</td>
     </tbody>
   </table>
 </blockquote>
+
 <ol>
+
 </ol>
+
 <ol>
+
 </ol>
+
 <p>Thermodynamic properties of a species marked <tt>"n"</tt>&nbsp; or <tt>"i"</tt> in
 the <a href="gm_reacdc.html#REsDC"><small><tt><font size="+2"><small>REsDC</small></font></tt></small></a>&nbsp;
 list of a ReacDC record will be calculated from properties of this
 reaction and other involved species. Properties of a fictive species,
 i.e. not described in any existing DComp or ReacDC records, must be
 entered by the user directly into the ReacDC structure (under
-construction).</p><br>
- <p> </p>
+construction).</p>
+<br>
+
+ 
+<p> </p>
+
 <h4> <a name="TCALCMETHODCODE"></a><big>3.3.2. Codes for Methods of
 Temperature and Pressure Corrections</big></h4>
+
 <p>
 This version of GEM-Selektor supports several methods of temperature
 and pressure corrections, to be selected within&nbsp; each <a href="gm_dcomp.html">DComp</a> and <a href="gm_reacdc.html">ReacDC</a>
@@ -1166,7 +1308,9 @@ or
 Page
 2, respectively.
 </p>
+
 <dl>
+
   <dt> <b><tt><font size="+1">C</font></tt></b></dt>
   <dd>Calculation on the basis of <a href="theortdb.html">standard <i>S<sup>o</sup></i>&nbsp;
 and <i>Cp<sup>o</sup></i>&nbsp; integration</a> using <a href="#CPFT_COEFFS">empirical coefficients of the heat capacity
@@ -1196,8 +1340,10 @@ database).&nbsp;</dd>
   <dd> <br>
   </dd>
 </dl>
+
 <h4> <a name="TDEPCALCCODE"></a><big>3.3.3. Codes for Temperature
 Corrections of Standard-State Properties</big></h4>
+
 This version of GEM-Selektor supports the following codes for
 calculation of temperature correctrions, to be entered in the <a href="gm_dcomp.html#TPcMod_1"><tt>TPcMod[0,1]</tt></a> or <a href="gm_reacdc.html#REcMod_1"><tt>REcMod[0,1]</tt></a> fields. The
 corresponding <a href="g_useref.html#TCALCMETHODCODE">method code</a>&nbsp;
@@ -1205,6 +1351,7 @@ indicated
 in brackets must be set in the&nbsp; the <a href="gm_dcomp.html#TPcMod_0"><tt>TPcMod[0,0]</tt></a> or <a href="gm_reacdc.html#REcMod_0"><tt>REcMod[0,0]</tt></a> fields of <a href="gm_dcomp.html">DComp</a> or <a href="gm_reacdc.html">ReacDC</a>
 records, respectively.
 <dl>
+
   <dt> <b><tt><font color="#000000"><font size="+1">(C)S</font></font></tt></b></dt>
   <dd> Calculation of <i>g<sup>o</sup><sub>T </sub></i>, <i>h<sup>o</sup><sub>T</sub></i>,<i>S<sup>o</sup><sub>T&nbsp;</sub></i>
 from <a href="theortdb.html#ST_CP_INTEGRATION">standard entropy
@@ -1247,22 +1394,30 @@ from <a href="theortdb.html#HGK_LVS">HGK and LVS equations of state</a>
     <a href="gm_dcomp.html">DComp</a> only.</dd>
   <dd> &nbsp;&nbsp;</dd>
 </dl>
+
 <p>Note that at temperature of interest <i>T</i>, identical
 calculations
 will be performed under the (C)X and (K)L method codes. </p>
+
 <dl>
+
 &nbsp;<br>
 </dl>
+
 <h5><big><big><b>Specific cases of temperature extrapolations for
 reactions (<a href="gm_reacdc.html">ReacDC</a> records only)</b></big></big></h5>
+
 The following four special cases of simple one- to three-term
 temperature extrapolations can be set by creating new ReacDC records
 without a need
 to enter <i>dCpr </i>= <i>f</i> (<i>T</i> ) or log<i>K</i> = <i>f</i>
 (<i>T</i> ) coefficients that will be computed automatically wherever
 necessary. . <br>
+
 <br>
+
 <dl>
+
   <dt> <b><tt><font size="+1">(K)0</font></tt></b></dt>
   <dd> One-term extrapolation of log<i>K (T )&nbsp;</i> assuming log<i>K
 (T
@@ -1307,14 +1462,18 @@ contain [empty]). Then re-calculate and save the record.&nbsp; Use this
 code combination also for the <a href="gt_howto.html#PRONSPREP">PRONSPREP
 calculation</a>.</dd>
 </dl>
+
 <dl>
+
   <dt> <b><tt><font size="+1">(K)E</font></tt></b></dt>
   <dd> <span style="text-decoration: underline;">The same as (K)3
 above, but only to be used as 'KEP' to set a PRONSPREP-OH instead
 of&nbsp;</span> <a href="gt_howto.html#PRONSPREP">PRONSPREP
 calculation</a>.</dd>
 </dl>
+
 <dl>
+
   <dd> &nbsp;</dd>
   <dt> <b><tt><font size="+1">(K)L</font></tt></b></dt>
   <dd> Calculation of log<i>K<sub>T&nbsp;</sub>&nbsp;</i> for reactions
@@ -1338,9 +1497,11 @@ table on Page 2 of ReacDC window, the respective <i>Tf </i>&nbsp;and&nbsp;
 and <tt><a href="gm_reacdc.html#P_int">P_int</a></tt> vectors. <br>
   </dd>
 </dl>
+
 <dl>
+
   <dt><b><tt><font size="+1">(K)R</font></tt></b></dt>
-  <dd>Calculation of log<i>K (P,T )</i><i><sub></sub></i> for reactions
+  <dd>Calculation of log<i>K (P,T )</i> for reactions
 using the Marshall-Franck density model. Coefficients a, b, c, d, e, f
 and g must be entered into <a href="gm_reacdc.html#la_dST"><tt>a_dST</tt></a>&nbsp;
 array on Page 2 of ReacDC window, the temperature-pressure range of
@@ -1357,7 +1518,9 @@ applicability into the <a href="gm_reacdc.html#TCint_"><tt>TCint</tt></a>
 and <tt><a href="gm_reacdc.html#P_int">P_int</a></tt> vectors. <br>
   </dd>
 </dl>
+
 <dl>
+
   <dt> <b><tt><font size="+1">(I)G</font></tt></b></dt>
   <dd> Calculation of standard Gibbs energy function <i>g<sup>o</sup><sub>T&nbsp;</sub></i>
 &nbsp;for isotopic forms of compounds from <i>T</i> - dependence
@@ -1368,17 +1531,22 @@ thermodynamic database).</dd>
   <dd> <br>
   </dd>
 </dl>
+
 <h4> <a name="PDEPCALCCODE"></a><big>3.3.4. Codes for&nbsp; pressure
 corrections and special functions</big></h4>
+
 <p>Several techniques are provided for calculation of <a href="theortdb.html#PRESSURE">pressure corrections</a>, to be encoded
 in the <a href="gm_dcomp.html#TPcMod_2"><tt>TPcMod[0,2]</tt></a> or <a href="gm_reacdc.html#REcMod_2"><tt>REcMod[0,2]</tt></a> fields of <a href="gm_dcomp.html">DComp</a> or <a href="gm_reacdc.html">ReacDC</a>
 records, respectively.<br>
 <br>
 </p>
+
 <h5><big><big>Codes valid for any combination of the method - and <i>T</i>-dependence
 codes: </big></big></h5>
+
 <b><tt><font size="+1">N</font></tt></b>
 <dl>
+
   <dd> No pressure correction to be done (be careful - this will cause
 errors in standard properties of minerals when&nbsp; calculated for
 elevated pressures).</dd>
@@ -1397,9 +1565,12 @@ used for minerals up to a 1-2 kbar pressures at low-to-moderate
 temperatures).</dd>
   <dd> &nbsp;</dd>
 </dl>
+
 <h5><big><big> Codes valid for calculations based on <i>Cp = f (T )</i>
 equation (<a href="gm_dcomp.html">DComp</a> records for minerals). </big></big></h5>
+
 <dl>
+
   <dt><big> <b><tt>(CS)K</tt></b></big></dt>
   <dd> Molar volume is calculated from 5 empirical coefficients of the
 equation <i>V = f (T,P )</i> &nbsp;( Dorogokupets et.al., 1988). The
@@ -1436,7 +1607,9 @@ k2 and k3 (k2 and k3 are optional for higher precision of vapor
 pressure data) have to be entered into the <a href="gm_dcomp.html#CRIT_PAR_GAS">CritPg</a> vector. <br>
   </dd>
 </dl>
+
 <dl>
+
   <dt><big><b><tt>(CS)S</tt></b></big><br>
   </dt>
   <dd>Molar volume of gases and fluids is corrected using the
@@ -1446,8 +1619,11 @@ polarizability alpha0 have to be entered into the <a href="gm_dcomp.html#Cemp_s"
   <dd><br>
   </dd>
 </dl>
+
 <h5><big><big> Codes to be used together with calculations by the <a href="theortdb.html#HKF_EOS">revised HKF EoS</a>: </big></big></h5>
+
 <dl>
+
   <dt><big> <b><tt>(HK)F</tt></b></big></dt>
   <dd> Pressure corrections up to 5 kbar will be calculated by the HKF
 EoS (<a href="theortdb.html#SUPCRT92">SUPCRT92</a> built-in
@@ -1476,8 +1652,11 @@ coefficients, and save the record to database. <br>
   </dd>
   <dd> &nbsp;</dd>
 </dl>
+
 <h5><big><big> Codes for pressure corrections based on <a href="gm_reacdc.html">ReacDC</a> data: </big></big></h5>
+
 <dl>
+
   <dt><big> <b><tt>(KZ)Z</tt></b></big></dt>
   <dd> Lagrange polynomial interpolation of log<i>K (P,T ) </i>values
 over the array of log<i>K<sub>Pf,Tf</sub></i>&nbsp; &nbsp;for several
@@ -1516,20 +1695,26 @@ ReacDC configuration is turned on.</dd>
   </dd>
 &nbsp;
 </dl>
+
 <h4> <a name="CPFT_COEFFS"></a><big>3.3.5. Format of <i>Cp = f (T )</i>
 &nbsp;Coefficients</big></h4>
+
 <p> Coefficients at powers of temperature in the isobaric heat capacity
 <i>Cp = f (T )</i> &nbsp;equation of the following form: </p>
+
 <blockquote>
   <p>Cp(T) = a0 + a1*T + a2/T^2 + a3/T^0.5 + a4*T^2 </p>
 </blockquote>
+
 <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp; &nbsp;
 &nbsp;+ a5*T^3 + a6*T^4 + a7/T^3 + a8/T + a9*T^(0.5). </p>
+
 <p>Units of measurement: Joules, Kelvins. Coefficients must be entered
 in the <a href="gm_dcomp.html#ai_Cp"><tt>ai_Cp</tt></a> vector (Page 2
 on <a href="gm_dcomp.html">DComp</a> window). Unspecified coefficients
 must be set to zeros. </p>
+
 <p>This format permits to utilize most of the published chemical
 thermodynamic data. The first three coefficients correspond to the
 Majer-Kelly equation (with a plus sign at the second term); the first
@@ -1541,16 +1726,20 @@ calculations</a> for the solid or liquid (from <i>Tr &nbsp;</i>to<i> T</i>
 at <i>Pr </i>), and aqueous (from <i>Tr &nbsp;</i>to<i> T</i> at <i>Psat</i>)
 species. <br>
 &nbsp; </p>
+
 <h4> <a name="LOGKT_COEFFS"></a><big>3.3.6. Format of log<i>K</i>
 &nbsp;= <i>f (T )</i> coefficients</big></h4>
+
 <p> For any reaction, the following form of &nbsp; log<i>K = f (T ) </i>&nbsp;equation
 can be applied: </p>
+
 <blockquote>
   <p>log<i>K</i> = <i>A</i><sub>0</sub> + <i>A</i><sub>1</sub>*<i>T</i>
 + <i>A</i><sub>2</sub>/<i>T</i> + <i>A</i><sub>3</sub>*ln<i>T</i> + <i>A</i><sub>4</sub>/<i>T</i>^2
 + <i>A</i><sub>5</sub>*<i>T</i>^2 + <i>A</i><sub>6</sub>/<i>T</i>^0.5
   </p>
 </blockquote>
+
 <p>where <i>A</i><sub>0</sub>, ..., <i>A</i><sub>7</sub> are
 empirical coefficients functionally related to <i>dGr,&nbsp;
 dHr,&nbsp; dSr,&nbsp; dCpr&nbsp; =&nbsp; f (T )</i> &nbsp;of the
@@ -1562,8 +1751,10 @@ calculated from the <i>dGr, dSr</i>, and <i>&nbsp;dCpr</i>
 &nbsp;values at <i>Tr</i> &nbsp;entered by the user. Otherwise, the
 user must enter the necessary coefficients (or zeros) into the <a href="gm_reacdc.html#aiLgKr"><tt>aiLgKr</tt></a> vector on Page 2 of <a href="gm_reacdc.html">ReacDC</a> window. <br>
 &nbsp; </p>
+
 <h4>&nbsp;<a name="HKFEOS_COEFFS"></a><big>3.3.7. Parameters of the
 Revised <a href="theortdb.html#HKF_EOS">HKF EoS</a> (DComp)</big> </h4>
+
 <p>Empirical parameters of the revised Helgeson-Kirkham-Flowers
 equation of
 state for calculation of standard partial molal properties of aqueous
@@ -1578,8 +1769,11 @@ the DComp
 window) follow that from the original data sources (but multiplied with
 the
 respective factors): </p>
+
 <ol>
+
 </ol>
+
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
     <tbody>
@@ -1640,8 +1834,11 @@ respective factors): </p>
     </tbody>
   </table>
 </blockquote>
+
 <ol>
+
 </ol>
+
 <p> These coefficients are used in the built-in <a href="theortdb.html#SUPCRT92">SUPCRT92</a> subroutines for calculation
 of standard partial molal properties of aqueous species by the revised <a href="theortdb.html#HKF_EOS">HKF EoS</a>. Note that, despite SI units
 of
@@ -1650,12 +1847,17 @@ units
 and multiplication factors were retained for the HKF EoS coefficients
 (see
 Table above). </p>
+
 <p>&nbsp;&nbsp; &nbsp; </p>
+
 <h2> </h2>
+
 <hr style="width: 100%; height: 2px;">
 <h2><a name="PHASETYPES"></a>4. Phase Type Codes</h2>
+
 <h3><a name="PHASESTATECODES"></a><b>4.1. Code of Phase Aggregate State
 in Chemical System</b> </h3>
+
 <p>This code defines the standard state and the reference scale of
 concentrations for dependent components in a phase.&nbsp; It is used by
 many <a href="gems_ipm.html">IPM module subroutines</a> during
@@ -1665,13 +1867,16 @@ records in <a href="gm_phase.html#Ph_Ps_0"><tt>Ph_Ps[0,0]</tt></a>
 field on Page 3 of the
 Phase window. Possible values: <br>
 </p>
+
 <blockquote>
   </blockquote>
 
 
 
 
+
 <table border="1" cellpadding="2" cellspacing="2" width="100%">
+
 
 
 
@@ -1791,29 +1996,39 @@ Phase window. Possible values: <br>
 
 
 
+
 <blockquote>
 </blockquote>
+
 <p>
 The same code should also appear in the first field of <a href="gems_rekey.html#dbm_Phase">Phase
 record key</a> where it will be used for sorting <a href="gm_phase.html">Phase</a> record keys in the database lists. </p>
 
 
 
+
 <ol>
+
   <tt><br>
   </tt>
 </ol>
+
 <h3><a name="PHASETYPECODES"></a><b>4.2. Extended Phase Class Code </b>(still
 under construction) </h3>
+
 <p>These codes are to be set in the 4th &nbsp;(<a href="gems_rekey.html#dbm_phase_3"><tt>Ph_class</tt></a>) field of the <a href="gems_rekey.html#dbm_phase">Phase record key</a> to enhance its
 readability. <br>
 The code may consist of up to 4 lower-case Latin letters (no spaces
 allowed). So far, this code is not analyzed by the program (this is
 foreseen in future versions). Recommended values (the list may be
 extended): </p>
+
 <h4><a href="glossary.html#DT_phase_single">Single-component phases</a>:</h4>
+
 <ol>
+
 </ol>
+
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
     <tbody>
@@ -1832,12 +2047,18 @@ extended): </p>
     </tbody>
   </table>
 </blockquote>
+
 <ol>
+
   <br>
 </ol>
+
 <h4><a href="glossary.html#DT_phase_multi"> Multicomponent</a> <a href="glossary.html#DT_phase_symmetric">symmetric phases</a>: </h4>
+
 <ol>
+
 </ol>
+
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
     <tbody>
@@ -1861,12 +2082,18 @@ surface area)</td>
     </tbody>
   </table>
 </blockquote>
+
 <ol>
+
   <br>
 </ol>
+
 <h4><a href="glossary.html#DT_phase_multi"> Multicomponent</a> <a href="glossary.html#DT_phase_asymmetric">asymmetric phases</a>: </h4>
+
 <ol>
+
 </ol>
+
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
     <tbody>
@@ -1886,15 +2113,20 @@ electrolyte</td>
     </tbody>
   </table>
 </blockquote>
+
 <ol>
+
   <tt><br>
   </tt><br>
 </ol>
+
 <h3><a name="SCM_SAT_CODES"></a>4.3. Codes for Surface Complexation
 Models and Surface Activity Terms </h3>
+
 <p> The codes refer to surface types or surface species in
 sorption phases only. &nbsp;<br>
 </p>
+
 <p>The SCM code defines which surface
 complexation model will be used to represent charge-potential
 relationships and provide Coulombic corrections for concentrations of
@@ -1913,8 +2145,10 @@ will be shut down). Details about calculations performed for a given
 SCM can
 be found in&nbsp;
 <b><big><tt>SCM-corrections.pdf</tt></big></b> manual file. &nbsp; </p>
+
 <h4><a name="SCM_CODES"></a>SCM Codes (refer to surface types on a
 sorption phase) </h4>
+
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
     <tbody>
@@ -1937,7 +2171,9 @@ corrections </td>
   </table>
   <tt><br>
   </tt></blockquote>
+
 <h4><tt><a name="SCM_EDL_CODES"></a></tt>Electrostatic (EDL) models: </h4>
+
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
     <tbody>
@@ -1985,6 +2221,7 @@ surfaces (XBSM)<br>
   </table>
   <tt><br>
   </tt></blockquote>
+
 <p>The SAT code applies to each surface species and defines how the surface activity correction terms will be
 calculated. This code (one upper-case Latin letter) must be set during
 remake of a <a href="gm_phase.html">Phase </a>record for each surface
@@ -2001,7 +2238,7 @@ modified
 only temporarily, for the time of the current <a href="gm_project.html">Project
 session</a> (i.e. until another project will be loaded or the program
 will
-be shut down). See also <a href="theorscm.html"><tt><b></b></tt></a><b><big><tt>SCM-corrections.pdf</tt></big></b>
+be shut down). See also <b><big><tt>SCM-corrections.pdf</tt></big></b>
  manuals for
 calculation
 details and theoretical background of SAT. Please, note that the SAT
@@ -2013,11 +2250,13 @@ codes are listed below; the respective modes
 of calculations are still under testing and conversion into built-in 
 methods in TSorpMod class library (under construction).&nbsp; <br>
 </p>
+
 <blockquote>
   <h4><a name="SAT_CODES"></a>SAT Codes (refer to calculation of activity
 coefficient terms for surface species only)<br>
   </h4>
 </blockquote>
+
 
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
@@ -2138,11 +2377,13 @@ isotherm (reserved)<br>
     </tbody>
   </table>
   <br>
-  <tt></tt></blockquote>
+  </blockquote>
+
 <blockquote>
   <h4><a name="SURFDC_ALLOC_CODES"></a>Allocation Codes (refer to surface
 species)</h4>
 </blockquote>
+
 
 <blockquote>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
@@ -2168,11 +2409,13 @@ sorbent end-member mole quantity only (reserved for future versions)</td>
     </tbody>
   </table>
   <br></blockquote>
+
   &nbsp;
 
 
 <h3> <a name="NONIDTYPES"></a>4.4. Codes for the (Non-Ideal) Models of
 Multi-Component Phases</h3>
+
 <p>In GEM context, the chemical
 thermodynamic system is made of phases;
 a condensed phase that includes one species (Dependent Component) is 
@@ -2196,6 +2439,7 @@ the species activity
 coefficients is necessary to describe the stability and composition of a
  solution phase correctly (relative to experimental data). <br>
 </p>
+
 <p>In the case of aqueous
 electrolyte phase, the Davies
 or Debye-Hueckel
@@ -2204,7 +2448,7 @@ coefficients of aqueous species as function of the effective molal ionic
  strength and common (Debye-Hueckel) or individual (Kjelland) ion-size 
 parameters.
 These equations are built-in&nbsp; in GEMS3K and GEM-Selektor
-code<a href="glossary.html#DT_project"></a>. Many other models of ideal 
+code. Many other models of ideal 
 or non-ideal mixing are also built in (see section 4.4.1). It is also 
 possible to implement other models
 for calculation of activity coefficients in aqueous, gaseous, liquid
@@ -2213,6 +2457,7 @@ solid mixtures by creating Phase definitions and writing there <a href="g_mscrip
 necessary
 equations. <br>
 </p>
+
 <p>The model codes described below control execution of the built-in
 &nbsp;subroutines or scripted equations for calculation of activity
 coefficients in any kind of a multi-component phase, as well as
@@ -2225,21 +2470,28 @@ built-in calculation
 of activity coefficients can be found in the&nbsp; <tt>Activity-coeffs.pdf</tt>&nbsp; manual files.
 If the system contains only phases that use built-in models of mixing, 
 it can be exported into GEMS3K input files and used in standalone 
-reactive transport or parameter fitting calculations.</p><br>
+reactive transport or parameter fitting calculations.</p>
+<br>
+
 
  
 
 <h4><a name="P_SOLT0"></a><big>4.4.1. Type of Mixing and Method of
 Calculation of the Properties of Mixing</big></h4>
+
 <h3> </h3>
+
 <p>This code (initially set in the <tt><a href="gm_phase.html#p_solt_0">p_solt[0]</a></tt>
 cell in Phase record) defines the type of mixing between the phase species (endmembers)
 and&nbsp; method of calculation of mixing properties and activity
 coefficients.
 Possible values:</p>
+
 <p>
 </p>
+
 <table border="1" cellpadding="2" cellspacing="2" width="100%">
+
 
 
   <tbody>
@@ -2578,13 +2830,16 @@ respective row of the <a href="gm_phase.html#ph_cf"><tt>ph_cf</tt></a> table. Th
 </table>
 
 
+
 <p>Notes: TSM = TSolMod parameter convention: + used; - not used. 
 Appendix 4.1, 4.2, 4.3 refers to the "Activity-Coeffs.pdf" document 
 where model equations, required parameters, and literature references 
 are available.</p>
+
 <p>More codes for built-in phase models may be added in future versions of
 GEM-Selektor/GEMS3K.
-Available to date built-in models are described in the&nbsp;<a href="theorgem.html"><b><tt></tt></b></a> <b><tt>Activity-coeffs.pdf</tt></b> &nbsp;manual files.</p>
+Available to date built-in models are described in the&nbsp; <b><tt>Activity-coeffs.pdf</tt></b> &nbsp;manual files.</p>
+
 
 
 
@@ -2601,6 +2856,7 @@ thus overriding the built-in calculations with the user-defined
 equations.</p>
 
 
+
 <p>Note that models for gas/fluid and aqueous electrolyte phases that
 use
 built-in calculations of activity coefficients can be selected and
@@ -2608,7 +2864,9 @@ automatically
 built upon creating or remaking the user's <a href="gm_project.html">modelling
 project</a> using an <a href="gems_aphsetup.html">AutoPhase setup
 dialog</a>. <br>
-</p><br>
+</p>
+<br>
+
 
 
 
@@ -2616,7 +2874,9 @@ dialog</a>. <br>
 
 
 </h4>
+
 <table border="1" cellpadding="2" cellspacing="2" width="100%">
+
 
   <tbody>
     <tr>
@@ -2654,15 +2914,20 @@ dialog</a>. <br>
   </tbody>
 </table>
 
+
 <p>Note: The 'N' mode cannot be used in standalone code calculations with GEMS3K kernel.&nbsp;&nbsp;</p>
+
 <p><br>
 </p>
+
 
 <h4><a name="P_SOLT5"></a><big>4.4.3.&nbsp; </big>Specific mixing rules (or forms of temperature correction) for EoS and activity models
 
 
 </h4>
+
 <table border="1" cellpadding="2" cellspacing="2" width="100%">
+
 
   <tbody>
     <tr>
@@ -2739,28 +3004,39 @@ model</td>
   </tbody>
 </table>
 
+
 <p>Note: Applicable only to non-ideal fluid models 'P', 'E', '7', also 
 in standalone GEMS3K calculations. Codes 'C' and 'T' require entering 
 non-zero parameter coefficients into <a href="gm_phase.html#ipxT"><tt>ipxT</tt></a> and <tt><a href="gm_phase.html#ph_cf">ph_cf</a></tt> arrays in TSolMod convention; therefore, a Phase record must be created before GEM calculations.&nbsp; 
 </p>
 
+
 <ol>
+
   <p>&nbsp; <br>
   </p>
 </ol>
+
 <hr style="width: 100%; height: 2px;">
 <h2><a name="EDIT_CALC_COMMANDS"></a>5. GUI Text Editor and Calculator
 Commands</h2>
+
 <p>Here is a link to <a href="gems_gui.html">GEMS-Vizor Graphical
 User's Interface
 Manual</a>, where a systematic description is to be provided. <br>
 </p>
+
 <p>Below, you can find a list of the most frequently used hot keys, most of which are also available in right-click
 menu commands. <br>
 </p>
+
 <h3><a name="EDITOR_COMMANDS"></a>5.1. Text editor (Qedit) hot keys:</h3>
+
 <ol>
-  </ol>
+
+  
+</ol>
+
 <blockquote>
   <p><tt>Home:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move cursor
 to the beginning of line</tt></p>
@@ -2861,9 +3137,12 @@ marked text fragment</tt></p>
   <p><tt>Tab:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Go to
 next edit field (single-line only)</tt></p>
 </blockquote>
+
 <ol>
 
+
 </ol>
+
 
 <p> Attention: As Qt application, GEM-Selektor uses the system clipboard, which makes it possible to copy and paste between GEMS
 screen forms and various text editors
@@ -2872,19 +3151,30 @@ Write, Word etc.), as well as Excel or similar spreadsheets. <br>
 <br>
 <br>
 </p>
+
 <h3><a name="CALCULATOR_COMMANDS"></a>5.2. Built-in calculator</h3>
+
 &lt;under construction&gt; <br>
+
 <br>
+
 <br>
-&nbsp; <br><br>
+
+&nbsp; <br>
+<br>
+
 <hr style="width: 100%; height: 2px;">
 <h2><a name="LICENSE_DISCLAIMERS"></a>6. License and Disclaimer</h2>
+
 <p>&lt;under construction&gt;&nbsp;</p>
+
 <h3>&nbsp;<br>
 </h3>
+
 <hr style="width: 100%; height: 2px;"><tt><br>
 </tt>
 <h2><a name="REFERENCES"></a>7. References</h2>
+
 <tt><br>
 </tt>
 <hr size="2" width="100%"><tt><br><br>
@@ -2893,27 +3183,51 @@ Last updated: 22.08.2012 DK<br>
 </tt>
 <p>End of Document <br>
 &nbsp; </p>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 <br>
+
 </body></html>

@@ -1,16 +1,13 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;
-      charset=ISO-8859-1">
+<html><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I)
       [Netscape]">
     <title>GEM Task Data and IPM-3 Kernel Manual</title>
     <meta name="description" content="Version 2.0.0-PSI">
   </head>
   <body>
-    <h1><img src="gems1.png" align="left" height="48" width="48"> <font
-        color="#000066"> GEM-Selektor version 3<br>
+    <h1><img src="gems1.png" height="48" align="left" width="48"> <font color="#000066"> GEM-Selektor version 3<br>
       </font></h1>
     <p> </p>
     <h2> GEM Task Data Structure and IPM-3 Kernel Program<br>
@@ -64,13 +61,11 @@ How
     <p>The GEM Task ("Multi") data structure is dynamically allocated in
       computer memory and keeps all scalars and arrays containing input,
       work
-      and output data of the GEM IPM-3 algorithm (<a
-        href="theory_gem.html">more...</a>)
+      and output data of the GEM IPM-3 algorithm (<a href="theory_gem.html">more...</a>)
       used
       in calculation of an equilibrium state. Contents of the Multi
       structure can also be exported into GEMS3K input files and used in
-      standalone coupled code calculations (<a
-        href="gems_sys.html#MULTI_INTRO">more...</a>). In
+      standalone coupled code calculations (<a href="gems_sys.html#MULTI_INTRO">more...</a>). In
       a standalone GEMS3K program, the Multi data structure is created
       and
       filled out by reading DCH and IPM input data files; it remains
@@ -79,12 +74,10 @@ How
       IPM-3
       kernel program, the main work data in the Multi structure
       accessible in
-      Multi: window pages, and describes the <a
-        href="#GEMIPM3_CONTROLS">numerical
+      Multi: window pages, and describes the <a href="#GEMIPM3_CONTROLS">numerical
         settings</a> that control
       the operation of the GEM IPM-3 algorithm. The output
-      (equilibrium speciation etc.) data is described in detail <a
-        href="gems_sys.html">elsewhere</a>.&nbsp;&nbsp; </p>
+      (equilibrium speciation etc.) data is described in detail <a href="gems_sys.html">elsewhere</a>.&nbsp;&nbsp; </p>
     <p>After the whole GEM IPM-3 algorithm sequence has converged, and
       the
       GEM-Selektor
@@ -146,9 +139,12 @@ How
       Program<br>
     </h2>
     <p>The operation of GEM IPM-3 module proceeds in four (AIA mode) or
-      three (SIA mode) main stages, as shown on the flow chart (<span
-        style="color: rgb(204, 0, 0);">Kulik et al., 2012</span>)
-      below.&nbsp;</p>
+      three (SIA mode) main stages, as shown on the flow chart below 
+(from Kulik D.A., Wagner T., Dmytrieva S.V., Kosakowski G., Hingerl
+F.F., Chudnenko K.V., Berner U. (2012): GEM-Selektor geochemical
+modeling package: Numerical kernel GEMS3K for coupled simulation codes.
+    <span style="font-style: italic;">Computational Geosciences</span>
+(in press), <a href="http://dx.doi.org/10.1007/s10596-012-9310-6" target="_blank">http://dx.doi.org/10.1007/s10596-012-9310-6</a>).&nbsp;</p>
     <p>To start calculations, the Multi data structure must be correctly
       filled out with input data (<a href="gems_bcc.html">BCC etc.</a>),
       including a feasible initial approximation (FIA) of the GEM primal
@@ -171,9 +167,7 @@ How
       Approximation
       (AIA) mode. &nbsp; &nbsp; </p>
     <br>
-    <p><img style="width: 640px; height: 780px;"
-        alt="FlowChartOfIPM-3-Algorithm.png"
-        src="FlowChartOfIPM-3-Algorithm.png"><br>
+    <p><img style="width: 640px; height: 780px;" alt="FlowChartOfIPM-3-Algorithm.png" src="FlowChartOfIPM-3-Algorithm.png"><br>
     </p>
     <h3><a name="PROCEDURE_AIA"></a>Stage 1: AIA Procedure<br>
     </h3>
@@ -261,8 +255,7 @@ does
     <p>Optionally, after each IPM iteration, the dual solution
       approximation (vector <span style="font-style: italic;">u</span>)
       can
-      be checked for divergence (as controlled by <a
-        style="font-family: monospace;" href="#Pa_LLG">Pa_LLG</a>
+      be checked for divergence (as controlled by <a style="font-family: monospace;" href="#Pa_LLG">Pa_LLG</a>
       tolerance).
       This check actually compares how chemical potentials of ICs vary
       between IPM iterations. In well-posed chemical systems, such
@@ -285,15 +278,12 @@ does
       is not yet exceeded. At each IPM iteration, the
       CalculateActivityCoefficients() subroutine is called to update DC
       activity coefficients (and optionally electrostatic terms) in
-      multi-component phases. This calculation&nbsp; is controlled by <tt><a
-          href="#Pa_AG">Pa_AG</a>, <a href="#Pa_DGC">Pa_DGC</a>, <a
-          href="#Pa_PRD_0">Pa_PRD</a></tt> settings.
+      multi-component phases. This calculation&nbsp; is controlled by <tt><a href="#Pa_AG">Pa_AG</a>, <a href="#Pa_DGC">Pa_DGC</a>, <a href="#Pa_PRD_0">Pa_PRD</a></tt> settings.
       In the course of IPM iterations, some phases and components can be
       eliminated (zeroed-off), if their quantities become smaller than
       the
       respective
-      tolerances in <a href="#Pa_DS"><tt>Pa_DS</tt></a> and <a
-        href="#Pa_XMI_0"><tt>Pa_XMI</tt></a> fields. Changing these
+      tolerances in <a href="#Pa_DS"><tt>Pa_DS</tt></a> and <a href="#Pa_XMI_0"><tt>Pa_XMI</tt></a> fields. Changing these
       tolerances
       beyond recommended limits can strongly affect IPM convergence and
       precision of GEM IPM calculation results. <br>
@@ -322,26 +312,21 @@ does
       the amount of each DC with trivial metastability constraints is
       checked
       for consistency with dual solution (see <a style="font-family:
-        monospace;" href="#Pa_GAN_2">Pa_GAN[2]</a> and <a
-        style="font-family: monospace;" href="#Pa_PRD_1">Pa_PRD[1]</a>
+        monospace;" href="#Pa_GAN_2">Pa_GAN[2]</a> and <a style="font-family: monospace;" href="#Pa_PRD_1">Pa_PRD[1]</a>
       tolerances). If an inconsistency is found, it will be corrected
       and, if
-      the correction is too strong, the control goes to <a
-        href="#PROCEDURE_MBR">MBR Procedure</a> again.</p>
+      the correction is too strong, the control goes to <a href="#PROCEDURE_MBR">MBR Procedure</a> again.</p>
     <br>
     <hr style="width: 100%; height: 2px;">
-    <h2><font face="Helvetica, Arial, sans-serif"><a
-          name="MULTI_MWINDOW"></a>3.
+    <h2><font face="Helvetica, Arial, sans-serif"><a name="MULTI_MWINDOW"></a></font>3.
         MULTI
         (Details
-        for Experts) Submodule Window</font></h2>
+        for Experts) Submodule Window</h2>
     <p>This window can be opened in Equilibria Calculation mode from the
       Single System (SysEq) dialog, using "View" "Details for
       experts..."
       menu commands. The purpose of this window is to provide a detailed
-      access to some Multi data in addition to the <a
-        href="gems_sys.html#EQDEMO_MWINDOW">EqDemo window</a> and <a
-        href="gems_sys.html#TAB_RESULTS">"Results:" tab</a>. For
+      access to some Multi data in addition to the <a href="gems_sys.html#EQDEMO_MWINDOW">EqDemo window</a> and <a href="gems_sys.html#TAB_RESULTS">"Results:" tab</a>. For
       example, such
       access can be necessary in case of problems with calculation of
       activity coefficients, or when GEM IPM does not converge, or by
@@ -353,21 +338,19 @@ does
       Basis - shortly summarized below.</p>
     <br>
     <hr style="width: 100%; height: 2px;">
-    <h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_1"></a>3.1.
+    <h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_1"></a></font>3.1.
 MULTI
 Window
 "Gamma"
-        Page</font></h3>
+        Page</h3>
     <p>This page shows a table with the list of Dependent Component
-      names (<a href="gems_sys.html#DCnam">DCnam</a>), their charges (<a
-        href="gems_sys.html#ez">ez</a>),&nbsp; DQF constant/pure
+      names (<a href="gems_sys.html#DCnam">DCnam</a>), their charges (<a href="gems_sys.html#ez">ez</a>),&nbsp; DQF constant/pure
       fugacity
       values (<a href="gems_sys.html#fDQF">fDQF</a>), as well as
       currently
       available molar excess Gibbs energies (<a href="gems_sys.html#vEx">vEx</a>),
       internal
-      (<a href="gems_sys.html#lnGam">lnGam</a>) and external (<a
-        href="gems_sys.html#gamma">gamma</a>) activity coefficients.
+      (<a href="gems_sys.html#lnGam">lnGam</a>) and external (<a href="gems_sys.html#gamma">gamma</a>) activity coefficients.
       Note that
       vEx and lnGam values may differ significantly in the case if
       (strong)
@@ -386,12 +369,8 @@ Window
     </p>
     <p>The next table below shows phase names (PHnam2) with model codes
       (<a href="gems_sys.html#smod">smod</a>) and their parameter
-      dimensionalities (<a href="gems_sys.html#Lsmod">Lsmod</a> and <a
-        href="gems_sys.html#Lsmdc">Lsmdc</a>). Below, the arrays <a
-        href="gems_sys.html#MoiSN">MoiSN</a>, <a
-        href="gems_sys.html#SitFr">SitFr</a>,
-      <a href="gems_sys.html#dmc">dmc</a>, <a
-        href="gems_sys.html#IPxPM">IPxPM,</a>
+      dimensionalities (<a href="gems_sys.html#Lsmod">Lsmod</a> and <a href="gems_sys.html#Lsmdc">Lsmdc</a>). Below, the arrays <a href="gems_sys.html#MoiSN">MoiSN</a>, <a href="gems_sys.html#SitFr">SitFr</a>,
+      <a href="gems_sys.html#dmc">dmc</a>, <a href="gems_sys.html#IPxPM">IPxPM,</a>
       and <a href="gems_sys.html#pmc">pmc</a> appear that contain all
       data
       necessary for models of mixing in multi-component phases, arranged
@@ -399,26 +378,22 @@ Window
     </p>
     <br>
     <hr style="width: 100%; height: 2px;">
-    <h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_2"></a>3.2.
-      </font><font face="Helvetica, Arial, sans-serif">MULTI Window
+    <h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_2"></a></font>3.2.
+      MULTI Window
         "Phases"
-        Page</font></h3>
+        Page</h3>
     <p>This page shows details and some intermediate and output
       properties
-      of multi-component phases. The first two tables (<a
-        href="gems_sys.html#denW">denW</a> and <a
-        href="gems_sys.html#epsW">epsW</a>)
+      of multi-component phases. The first two tables (<a href="gems_sys.html#denW">denW</a> and <a href="gems_sys.html#epsW">epsW</a>)
       contain
       density and dielectric constants (and their derivatives) of H<sub>2</sub>O
       at
       T,P of interest, if the aqueous phase is included in the GEM task.
       <br>
     </p>
-    <p>Next, the table shows the list of phase names <a
-        href="gems_sys.html#PHnam">PHnam</a>, the numbers of DCs in each
+    <p>Next, the table shows the list of phase names <a href="gems_sys.html#PHnam">PHnam</a>, the numbers of DCs in each
       phase
-      <a href="gems_sys.html#L1">L1</a>, the amounts of phases <a
-        href="gems_sys.html#Xa">Xa</a>, amounts of solvent/sorbent in
+      <a href="gems_sys.html#L1">L1</a>, the amounts of phases <a href="gems_sys.html#Xa">Xa</a>, amounts of solvent/sorbent in
       asymmetric phases <a href="gems_sys.html#Xwa">Xwa</a>, specific
       surface areas of phases <a href="gems_sys.html#Aalp">Aalp</a>,
       and
@@ -440,35 +415,29 @@ the
     </p>
     <br>
     <hr style="width: 100%; height: 2px;">
-    <h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_3"></a>3.3.
-      </font><font face="Helvetica, Arial, sans-serif">MULTI Window
+    <h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_3"></a></font>3.3.
+      MULTI Window
         "Species"
-        Page</font></h3>
+        Page</h3>
     <p>This page shows the list <a href="gems_sys.html#DCnam">DCnam</a>
       of
       Dependent Component (DCs) names included in this GEM task. To the
       left (<a href="gems_sys.html#muj">muj</a>) , the indexes of DCs in
       the project
-      basis system can be seen. To the right, the primal solution (<a
-        href="gems_sys.html#x">x</a>), its initial approximation (<a
-        href="gems_sys.html#y">y</a>), and DC amounts restored using the
+      basis system can be seen. To the right, the primal solution (<a href="gems_sys.html#x">x</a>), its initial approximation (<a href="gems_sys.html#y">y</a>), and DC amounts restored using the
       dual
       solution (<a href="gems_sys.html#XU">XU</a>) can be seen, followed
       by
-      lower- and upper metastability constraints (<a
-        href="gems_sys.html#dll">dll</a>,
+      lower- and upper metastability constraints (<a href="gems_sys.html#dll">dll</a>,
       <a href="gems_sys.html#dul">dul</a>). &nbsp; <br>
     </p>
     <p>Next table (below) provides (in normalized scale, at T,P of
-      interest): the standard Gibbs energy functions of DCs (<a
-        href="gems_sys.html#g0">g0</a>);&nbsp; the sum of g0, smoothed
-      excess <a href="gems_sys.html#vEx">vEx</a>, and <a
-        href="gems_sys.html#gDQF">gDQF</a>
+      interest): the standard Gibbs energy functions of DCs (<a href="gems_sys.html#g0">g0</a>);&nbsp; the sum of g0, smoothed
+      excess <a href="gems_sys.html#vEx">vEx</a>, and <a href="gems_sys.html#gDQF">gDQF</a>
       terms of primal chemical potentials (<a href="gems_sys.html#c">c</a>);&nbsp;
 the
 primal
-      (<a href="gems_sys.html#v">v</a>) and dual (<a
-        href="gems_sys.html#fx">fx</a>) chemical potentials of DCs, as
+      (<a href="gems_sys.html#v">v</a>) and dual (<a href="gems_sys.html#fx">fx</a>) chemical potentials of DCs, as
       well as
       the IPM direction of descent vector (<a href="gems_sys.html#mu">mu</a>)
       and DC weight multipliers (<a href="gems_sys.html#W">W</a>). This
@@ -478,20 +447,17 @@ primal
     </p>
     <br>
     <hr style="width: 100%; height: 2px;">
-    <h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_4"></a>3.4.
-      </font><font face="Helvetica, Arial, sans-serif">MULTI Window
+    <h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_4"></a></font>3.4.
+      MULTI Window
         "Basis"
-        Page</font></h3>
+        Page</h3>
     <p>This page consists of two tables. The upper table presents some
       data
-      for Independent Components: their names and types (<a
-        href="gems_sys.html#ICnam">ICnam</a>), atomic/molar masses (<a
-        href="gems_sys.html#icM">icM</a>), the input bulk composition of
+      for Independent Components: their names and types (<a href="gems_sys.html#ICnam">ICnam</a>), atomic/molar masses (<a href="gems_sys.html#icM">icM</a>), the input bulk composition of
       the
       system (<a href="gems_sys.html#b">b</a>), the mass balance
       deviations.
-      Three columns that follow (<a href="gems_sys.html#u">u</a>, <a
-        href="gems_sys.html#uc">uc</a>[0], uc[1]) represent the dual
+      Three columns that follow (<a href="gems_sys.html#u">u</a>, <a href="gems_sys.html#uc">uc</a>[0], uc[1]) represent the dual
       solution
       values (Lagrange multipliers) from this and two earlier IPM
       iterations.
@@ -551,13 +517,12 @@ well
       for the whole duration of GEMS3K instance in computer memory. Only
       numerical settings that differ from defaults may be exported to
       IPM
-      file (<span style="color: rgb(204, 0, 0);">more ...</span>). <br>
+      file (<a href="#WRITEIPMFILES">more ...</a>). <br>
     </p>
     <p>Note that usually, there is no need to change default numerical
       settings. The default values below
       correspond to aqueous systems of 1000 total moles
-      of independent components in the internal Multi <span
-        style="font-style: italic;">b</span> vector; re-scaling from-to
+      of independent components in the internal Multi <span style="font-style: italic;">b</span> vector; re-scaling from-to
       actual
       BCC occurs automatically within the IPM-3 kernel program. Ad-hoc
       changes of the IPM-3 numerical
@@ -578,8 +543,7 @@ well
       <dd>&nbsp;&nbsp;</dd>
       <dd>This cutoff number of moles of IC is used in calculation of
         the
-        input bulk chemical composition BCC (vector <a
-          href="gems_sys.html#b"><tt>b</tt></a>)
+        input bulk chemical composition BCC (vector <a href="gems_sys.html#b"><tt>b</tt></a>)
         of
         the
         chemical system to be solved for the equilibrium state the using
@@ -661,8 +625,7 @@ described
       </dd>
       <dd>The aqueous electrolyte phase will be eliminated (zeroed off)
         if
-        the amount of water-solvent goes below this tolerance.&nbsp; <span
-          style="text-decoration: underline;">Possible
+        the amount of water-solvent goes below this tolerance.&nbsp; <span style="text-decoration: underline;">Possible
           range</span>: 1e-8 to 1e-30 mol.<br>
       </dd>
       <dd>&nbsp; <br>
@@ -673,8 +636,7 @@ described
       <dd>&nbsp;</dd>
       <dd>The sorption phase will be eliminated (zeroed off), if the
         amount
-        of solid sorbent goes below this tolerance. <span
-          style="text-decoration: underline;">Possible range</span>:
+        of solid sorbent goes below this tolerance. <span style="text-decoration: underline;">Possible range</span>:
         1e-8 to
         1e-30 mol.</dd>
       <dd>&nbsp; <br>
@@ -721,8 +683,7 @@ described
       </dd>
       <dd>This value defines, which non-aqueous multi-component phases
         will
-        be excluded from the mass balance if their amounts in the <a
-          href="gems_sys.html#Xa">Xa</a> vector fall below this
+        be excluded from the mass balance if their amounts in the <a href="gems_sys.html#Xa">Xa</a> vector fall below this
         tolerance after
         some IPM Main Descent iteration.</dd>
       <dd><span style="text-decoration: underline;">Possible range</span>:
@@ -739,8 +700,7 @@ described
       <dd>&nbsp;&nbsp;</dd>
       <dd>Calculation of activity coefficients of aqueous species is
         performed only when the effective molal ionic
-        strength <span style="font-style: italic;"><a
-            href="gems_sys.html#IS">IS</a> </span>is not less than this
+        strength <span style="font-style: italic;"><a href="gems_sys.html#IS">IS</a> </span>is not less than this
         value. <br>
       </dd>
       <dd>Otherwise, the internal activity coefficients will be set to
@@ -766,24 +726,21 @@ described
         convergence
         criterion of the MBR algorithm for entering the feasible domain
         of the
-        initial approximation of GEM primal solution (<span
-          style="color: rgb(204, 0, 0);">more...</span>)&nbsp; <br>
+        initial approximation of GEM primal solution (<span style="color: rgb(204, 0, 0);">more...</span>)&nbsp; <br>
       </dd>
       <dd><span style="text-decoration: underline;">Possible values</span>:
         1e-10 to 1e-15, default is 1e-13 (for a system of 1000 total
         moles in
         BCC).&nbsp;</dd>
       <dd><span style="text-decoration: underline;">Related error
-          conditions</span>: <a href="#E02IPM">E02IPM</a>;&nbsp; <a
-          href="#W09IPM">W09IPM</a>;&nbsp; <a href="#E10IPM">E10IPM</a>.</dd>
+          conditions</span>: <a href="#E02IPM">E02IPM</a>;&nbsp; <a href="#W09IPM">W09IPM</a>;&nbsp; <a href="#E10IPM">E10IPM</a>.</dd>
       <dd>&nbsp;Exact application of this tolerance within the MBR
         procedure depends on the <a href="#Pa_DPV_2">Pa_DPV[2]</a>
         control
         parameter. Maximum allowed number of MBR iterations can be set
         in <a href="#Pa_DPV_0">Pa_DPV[0]</a>; reaction of the program
         on reaching
-        this number of iterations is defined by a flag in <a
-          href="#Pa_DPV_1">Pa_DPV[1]</a>.&nbsp;&nbsp;&nbsp; <br>
+        this number of iterations is defined by a flag in <a href="#Pa_DPV_1">Pa_DPV[1]</a>.&nbsp;&nbsp;&nbsp; <br>
       </dd>
       <dd><br>
       </dd>
@@ -841,8 +798,7 @@ described
       </dd>
       <dd>Too large
         Pa_DFY values may prevent MBR algorithm convergence and cause
-        persistent&nbsp; errors&nbsp; <a href="#E04IPM">E04IPM</a> or <a
-          href="#E05IPM">E05IPM</a>. <br>
+        persistent&nbsp; errors&nbsp; <a href="#E04IPM">E04IPM</a> or <a href="#E05IPM">E05IPM</a>. <br>
       </dd>
       <dd><span style="text-decoration: underline;">Possible values</span>:
         1e-4 to 1e-7, default is 1e-5 (for a system of 1000 total moles
@@ -894,10 +850,8 @@ described
       <dd>&nbsp;</dd>
       <dd>In the Phase Selection procedure (<span style="color: rgb(204,
           0, 0);">more...</span>), a phase can be
-        detected that is not present in positive amount in <a
-          href="gems_sys.html#Xa">Xa</a> vector, but shows a significant
-        positive value of the phase stability criterion in the <a
-          href="gems_sys.html#Fa">Fa</a> vector.&nbsp; In this case, the
+        detected that is not present in positive amount in <a href="gems_sys.html#Xa">Xa</a> vector, but shows a significant
+        positive value of the phase stability criterion in the <a href="gems_sys.html#Fa">Fa</a> vector.&nbsp; In this case, the
         amounts
         of all DCs components will be set to this insertion value, and
         the
@@ -962,8 +916,7 @@ described
         only in AIA LP simplex calculation&nbsp; { 1 }</dt>
       <dd>&nbsp; <br>
       </dd>
-      <dd>This value can usually be set to 1.&nbsp;<span
-          style="text-decoration: underline;"></span></dd>
+      <dd>This value can usually be set to 1.&nbsp;<span style="text-decoration: underline;"></span></dd>
       <dd><span style="text-decoration: underline;">Possible values</span>:
         0.0001
         to 1. <br>
@@ -1009,8 +962,7 @@ for
         should not be suppressed - as "major" 'M'.
         These codes result in automatic insertion of&nbsp; ln(PA_GAN[1])
         for
-        'J' and&nbsp; ln(PA_GAN[0]) for 'M' end members into <a
-          href="gems_bcc.html#lngmf_">lngmf_</a> input data vector, then
+        'J' and&nbsp; ln(PA_GAN[0]) for 'M' end members into <a href="gems_bcc.html#lngmf_">lngmf_</a> input data vector, then
         copied
         into the <a href="gems_sys.html#lngmf">lngmf</a> input data
         vector in
@@ -1020,8 +972,7 @@ for
         Gibbs
         energy
         values G0 (in dimensionless ln a scale) of DCs are automatically
-        corrected by adding the respective <a
-          href="gems_sys.html#lngmf">lngmf</a>
+        corrected by adding the respective <a href="gems_sys.html#lngmf">lngmf</a>
         values. These
         corrections are automatically removed after the LP simplex
         calculation
@@ -1048,9 +999,7 @@ for
         positive amounts, the Speciation Cleanup procedure compares the
         amounts
         of DCs in the primal solution vector <a href="gems_sys.html#x">x</a>
-        with their amounts restored using the dual solution vector <a
-          href="gems_sys.html#u">u</a> and DC chemical formula (<span
-          style="color: rgb(204, 0, 0);">more...</span>).&nbsp; The
+        with their amounts restored using the dual solution vector <a href="gems_sys.html#u">u</a> and DC chemical formula (<span style="color: rgb(204, 0, 0);">more...</span>).&nbsp; The
         comparison
         is done by calculating the difference of primal (v) and dual
         (Fx)
@@ -1119,8 +1068,7 @@ for
       <dd>This setting defines a maximum number of MBR iterations. <br>
       </dd>
       <dd>If the procedure did not converge
-        until this control has been reached, the error condition <a
-          href="#E04IPM">E04IPM</a> is activated, which declares that
+        until this control has been reached, the error condition <a href="#E04IPM">E04IPM</a> is activated, which declares that
         the IPM
         feasible domain cannot be entered at the requested mass balance
         accuracy, as defined by the <big><a href="#Pa_DHB"><tt>Pa_DHB</tt></a></big>&nbsp;
@@ -1148,8 +1096,7 @@ threshold.
       <dd> <br>
       </dd>
       <dd>&nbsp;If the error condition is activated (set to 1), and MBR
-        procedure did not converge in Pa_DPV[0] iterations, the error <a
-          href="#E04IPM">E04IPM</a> is
+        procedure did not converge in Pa_DPV[0] iterations, the error <a href="#E04IPM">E04IPM</a> is
         issued and the GEM task calculation stopped, declared as failed.</dd>
       <dd>If the error condition is disabled (set to 0) then the control
         goes to IPM Main Descent procedure, even if the MBR procedure
@@ -1207,8 +1154,7 @@ threshold.
         chemical potentials are not well constrained by physically
         significant amounts
         of relevant chemical species. This leads to indefinite values of
-        some IC chemical potentials in the dual solution vector <a
-          href="gems_sys.html#u">u</a> and numerically stiff behavior in
+        some IC chemical potentials in the dual solution vector <a href="gems_sys.html#u">u</a> and numerically stiff behavior in
         GEM IPM iterations. The resulting IPM solution may strongly
         depend on the chosen
         values of numerical tolerances and on the parameters of
@@ -1218,8 +1164,7 @@ threshold.
         system. The detection is performed within the Check-uDD
         algorithm, starting from 2nd IPM Main Descent iteration. The
         Check_uDD procedure actually monitors how strongly chemical
-        potentials of ICs change between IPM iterations (<span
-          style="color: rgb(204, 0, 0);">more...</span>) by means of
+        potentials of ICs change between IPM iterations (<span style="color: rgb(204, 0, 0);">more...</span>) by means of
         calculating moving averages of u<sub>i</sub> values over 3 IPM
         iterations for each i-th IC (see <a href="gems_sys.html#uc">uc</a>).
         <br>
@@ -1269,8 +1214,7 @@ threshold.
         absent from the system mass balance. A k-th phase is declared
         stable, if all its components have only trivial metastability
         constraints; its amount <a href="gems_sys.html#Xa">Xa</a>[k] is
-        greater than or equal to 0; its stability index <a
-          href="gems_sys.html#Fa">Fa</a>[k] is greater than 0 but less
+        greater than or equal to 0; its stability index <a href="gems_sys.html#Fa">Fa</a>[k] is greater than 0 but less
         than or equal to Pa_DF[0]. <br>
       </dd>
       <dd>If a phase has Xa[k] = 0 and Fa[k] &gt; Pa_DF[0], this means
@@ -1296,8 +1240,7 @@ threshold.
         stability of all
         phases present in the system mass balance. A k-th phase is
         declared stable, if all its components have only trivial
-        metastability constraints; its amount <a
-          href="gems_sys.html#Xa">Xa</a>[k] equals to 0; its stability
+        metastability constraints; its amount <a href="gems_sys.html#Xa">Xa</a>[k] equals to 0; its stability
         index <a href="gems_sys.html#Fa">Fa</a>[k] is less than
         -Pa_DF[1]. <br>
       </dd>
@@ -1334,8 +1277,7 @@ threshold.
         }</dt>
       <dd>&nbsp;&nbsp;</dd>
       <dd>This tolerance (copied to <a href="gems_sys.html#Psi_DK_1">Psi_DK[1]</a>)
-        is compared with the current value of Dikin criterion (<a
-          href="gems_sys.html#Psi_DK_0">Psi_DK[0]</a>) at each IPM
+        is compared with the current value of Dikin criterion (<a href="gems_sys.html#Psi_DK_0">Psi_DK[0]</a>) at each IPM
         iteration in order to decide whether the IPM Main Descent
         minimization procedure has converged (<a href="theory_gem.html">more...</a>).<br>
       </dd>
@@ -1434,11 +1376,9 @@ threshold.
         Example: set Pa_AG to -1 and Pa_DGC to 0.7. <br>
       </dd>
       <dd>Another smoothing function uses the logarithmic distance
-        between the current Dikin criterion CD (<a
-          href="gems_sys.html#Psi_DK_0">Psi_DK[0]</a>) and the
+        between the current Dikin criterion CD (<a href="gems_sys.html#Psi_DK_0">Psi_DK[0]</a>) and the
         convergence
-        threshold given in <a href="#Pa_DK"><big><span
-              style="font-family: monospace;">Pa_DK</span></big></a>.</dd>
+        threshold given in <a href="#Pa_DK"><big><span style="font-family: monospace;">Pa_DK</span></big></a>.</dd>
       <dd>&nbsp; &nbsp; &nbsp;&nbsp; SF = DGC + ( AG - DGC ) / ( 1. +
         exp( log(DK) - log(CD) ) / DGC )
         + exp( log( 1. - AG ) + log(CD) ).</dd>
@@ -1450,8 +1390,7 @@ threshold.
         good
         convergence of IPM in systems containing&nbsp; highly non-ideal
         solid
-        solutions, even without global IPM refinement loops (see <a
-          href="#Pa_PRD_1"><span style="font-family: monospace;">Pa_PRD[1]</span></a>).
+        solutions, even without global IPM refinement loops (see <a href="#Pa_PRD_1"><span style="font-family: monospace;">Pa_PRD[1]</span></a>).
 
 
 
@@ -1507,18 +1446,15 @@ threshold.
         non-convergence of GEM IPM in highly non-ideal systems and
         especially
         in systems with sorption phases.</dd>
-      <dd>In some smoothing functions (see<a href="#Pa_AG"><big><span
-              style="font-family: monospace;"> Pa_AG</span></big></a>
+      <dd>In some smoothing functions (see<a href="#Pa_AG"><big><span style="font-family: monospace;"> Pa_AG</span></big></a>
         above), the
         DGC parameter defines the smallest value of the smoothing factor
         SF
-        reached when the IPM Dikin criterion CD becomes equal to <a
-          href="#Pa_DK"><big><span style="font-family: monospace;">Pa_DK</span></big></a>,
+        reached when the IPM Dikin criterion CD becomes equal to <a href="#Pa_DK"><big><span style="font-family: monospace;">Pa_DK</span></big></a>,
         or
         the
         number
-        of IPM iterations IT approaches <a href="#Pa_IIM"><big><span
-              style="font-family: monospace;">Pa_IIM</span></big></a>. <br>
+        of IPM iterations IT approaches <a href="#Pa_IIM"><big><span style="font-family: monospace;">Pa_IIM</span></big></a>. <br>
       </dd>
       <dd>In these cases, DGC should be set (in absolute value) between
         0.0001
@@ -1560,17 +1496,14 @@ threshold.
         variants&nbsp; { 2 }</dt>
       <dd>&nbsp; <br>
       </dd>
-      <dd>This flag defines the behavior of Phase Selection procedure (<a
-          href="theory_gem.html">more...</a>) (disabled when this flag
+      <dd>This flag defines the behavior of Phase Selection procedure (<a href="theory_gem.html">more...</a>) (disabled when this flag
         is set to 0). <br>
       </dd>
       <dd>&nbsp;&nbsp;&nbsp;&nbsp; The new Phase Selection algorithm
-        uses stability (saturation) indexes of phases (see also <a
-          href="#Pa_DF_0">Pa_DF[0]</a> and <a href="#Pa_DF_1">Pa_DF[1]</a>)
+        uses stability (saturation) indexes of phases (see also <a href="#Pa_DF_0">Pa_DF[0]</a> and <a href="#Pa_DF_1">Pa_DF[1]</a>)
         to check for consistency. <br>
       </dd>
-      <dd>&nbsp;&nbsp;&nbsp;&nbsp; The old mode uses Karpov <span
-          style="font-style: italic;">f<sub>alpha</sub></span> phase
+      <dd>&nbsp;&nbsp;&nbsp;&nbsp; The old mode uses Karpov <span style="font-style: italic;">f<sub>alpha</sub></span> phase
         stability criteria to check phases for consistency (if Pa_PC is
         set to 1). <br>
       </dd>
@@ -1603,8 +1536,7 @@ threshold.
         positive amounts, the Speciation Cleanup procedure compares the
         amounts
         of DCs in the primal solution vector <a href="gems_sys.html#x">x</a>
-        with their amounts restored using the dual solution vector <a
-          href="gems_sys.html#u">u</a> and DC chemical formula (see also
+        with their amounts restored using the dual solution vector <a href="gems_sys.html#u">u</a> and DC chemical formula (see also
         <a href="#Pa_GAN_2">Pa_GAN[2]</a>). In the case of discrepancy,
         the x<sub>j</sub> value is
         replaced by that <a href="gems_sys.html#XU">XU</a><sub>j</sub>
@@ -1615,8 +1547,7 @@ threshold.
         replaced by 10<sup>Pa_PRD[1]</sup>. <br>
       </dd>
       <dd>This tolerance is especially useful if the detection of
-        divergence in the dual GEM solution is disabled (see <a
-          href="#Pa_LLG">Pa_LLG</a>). <br>
+        divergence in the dual GEM solution is disabled (see <a href="#Pa_LLG">Pa_LLG</a>). <br>
       </dd>
       <dd><span style="text-decoration: underline;">Possible values</span>:
         from -7 to -3; default exponent is
@@ -1686,8 +1617,7 @@ threshold.
         1e-8 to 1e-11.</dd>
       <dd>Recommended value: 1e-10.</dd>
       <dd><span style="text-decoration: underline;">Related errors:</span>
-        <a href="#E11IPM">E11IPM</a>; <a href="#E12IPM">E12IPM</a>; <a
-          href="#E16IPM">E16IPM</a>; <a href="#E17IPM">E17IPM</a>. <br>
+        <a href="#E11IPM">E11IPM</a>; <a href="#E12IPM">E12IPM</a>; <a href="#E16IPM">E16IPM</a>; <a href="#E17IPM">E17IPM</a>. <br>
       </dd>
     </dl>
     <tt><br>
@@ -1712,8 +1642,7 @@ threshold.
       <li>Some metastability constraints on DC are inconsistent</li>
       <li>Some numerical thresholds or tolerances are too tight</li>
       <li>The system is too small or too large (numerical settings are
-        optimized for ca. 1000 moles in total in the BCC <a
-          href="gems_sys.html#b">b</a> vector) &nbsp;&nbsp;&nbsp; </li>
+        optimized for ca. 1000 moles in total in the BCC <a href="gems_sys.html#b">b</a> vector) &nbsp;&nbsp;&nbsp; </li>
     </ul>
     <p>We recommend checking these issues before proceeding with further
       calculations.<br>
@@ -1763,8 +1692,7 @@ threshold.
       approximation (see <a href="#Pa_LLG">Pa_LLG</a>), and run GEM
       calculation again. If the <a href="#W14IPM">W14IPM</a> warning
       appears, this means that the system or bulk composition definition
-      must be revised to ensure robust redox and alkalinity states (<span
-        style="color: rgb(204, 0, 0);">more...</span>).<br>
+      must be revised to ensure robust redox and alkalinity states (<span style="color: rgb(204, 0, 0);">more...</span>).<br>
       <br>
     </p>
     <p><a name="E03IPM"></a><big style="font-weight: bold;">E03IPM: </big>Mass
@@ -1805,8 +1733,7 @@ threshold.
     <div style="margin-left: 80px;">Too low <a href="#Pa_DHB">Pa_DHB</a>
       tolerance for mass balance residuals (check, set higher, and try
       again); <br>
-      Too small maximum number of MBR iterations in&nbsp; <a
-        href="#Pa_DPV_0">Pa_DPV[0]</a> control (increase
+      Too small maximum number of MBR iterations in&nbsp; <a href="#Pa_DPV_0">Pa_DPV[0]</a> control (increase
       and try again). <br>
       <br>
     </div>
@@ -1836,8 +1763,7 @@ threshold.
     </p>
     <p><a name="E06IPM"></a><big style="font-weight: bold;">E06IPM:</big>
       IPM Main Descent: &nbsp;&nbsp; IPM convergence criterion tolerance
-      (<a href="#Pa_DK">Pa_DK</a>) could not be reached (more than <a
-        href="#Pa_IIM">Pa_IIM</a> iterations done)</p>
+      (<a href="#Pa_DK">Pa_DK</a>) could not be reached (more than <a href="#Pa_IIM">Pa_IIM</a> iterations done)</p>
     <p style="margin-left: 40px;">This error indicates that the GEM task
       solution is incomplete because the Dikin criterion tolerance has
       not been reached. This can occur in some highly no-ideal systems
@@ -1958,8 +1884,7 @@ or
     <p style="margin-left: 40px;">This warning indicates a stiff
       behavior of
       the chemical system, manifested in detected divergence of dual
-      solution values (vector u) between IPM iterations (see <a
-        href="#Pa_LLG">Pa_LLG</a>). Usually, some ui values will be
+      solution values (vector u) between IPM iterations (see <a href="#Pa_LLG">Pa_LLG</a>). Usually, some ui values will be
       unrealistically large. <br>
     </p>
     <p style="margin-left: 40px;">At best, the chemical system
@@ -2046,8 +1971,7 @@ or
       designed for
       coupling the GEM chemical solver with
       the existing and new reactive mass transport (RMT)
-      codes on the basis of the "operator-splitting" approach (more in <a
-        href="gems3k-manual.html">GEMS3K documentation</a>). The idea
+      codes on the basis of the "operator-splitting" approach (more in <a href="gems3k-manual.html">GEMS3K documentation</a>). The idea
       behind GEMS3K was to keep the code implementation and handling of
       input/output data as simple as possible, which is the prerequisite
       for compiling the coupled RMT-GEM program on any computer
@@ -2077,8 +2001,7 @@ or
     <p>&nbsp;As no GUI is available in standalone or coupled GEMS3K
       code, the only way to exchange input and output data with the GEM
       IPM kernel is by using the TNode class functions that use DATACH
-      and DATABR structures, either in computer memory (<a
-        href="gems3k-useref.html">more ...</a>), or by reading/writing
+      and DATABR structures, either in computer memory (<a href="gems3k-useref.html">more ...</a>), or by reading/writing
       the DCH, IPM and DBR input files (<a href="gems3k-iofiles.html">more
         ...</a>). These files contain the whole GEM task and, in
       principle, can be prepared "by hand" with help of a simple text
@@ -2121,9 +2044,7 @@ to
       command. This opens the "Setup for writing GEMS3K input files"
       dialog, which by default looks like this:</p>
     <br>
-    <img style=" width: 576px; height: 569px;"
-      alt="SetupWritingGEMS3KfilesDialog.png"
-      src="SetupWritingGEMS3KfilesDialog.png"><br>
+    <img style=" width: 576px; height: 569px;" alt="SetupWritingGEMS3KfilesDialog.png" src="SetupWritingGEMS3KfilesDialog.png"><br>
     <br>
     <p>In the upper group, you have a choice to write GEMS3K files in
       text mode (default) or in binary mode. Activating the "Do not
@@ -2215,9 +2136,7 @@ to
       among which the interpolation in P,T space takes place. <br>
     </p>
     <br>
-    <p><img style=" width: 558px; height: 542px;"
-        alt="SetupWritingGEMS3KfilesPage2grid.png"
-        src="SetupWritingGEMS3KfilesPage2grid.png"><br>
+    <p><img style=" width: 558px; height: 542px;" alt="SetupWritingGEMS3KfilesPage2grid.png" src="SetupWritingGEMS3KfilesPage2grid.png"><br>
     </p>
     <br>
     <p>If both the "Enter pressure ..." checkbox and the "Disable
@@ -2225,9 +2144,7 @@ to
       previous example will take the following shape: <br>
     </p>
     <br>
-    <p><img style=" width: 558px; height: 542px;"
-        alt="SetupWritingGEMS3KfilesPage2pairs.png"
-        src="SetupWritingGEMS3KfilesPage2pairs.png">&nbsp; </p>
+    <p><img style=" width: 558px; height: 542px;" alt="SetupWritingGEMS3KfilesPage2pairs.png" src="SetupWritingGEMS3KfilesPage2pairs.png">&nbsp; </p>
     <br>
     <p>In this case, the number of (T,P) pairs was determined from the
       Pressure iterator and applied to the whole interval given in the
@@ -2329,12 +2246,15 @@ to
     </tt> <tt><br>
     </tt>
     <hr style="width: 100%; height: 2px;"><tt><br>
-      end of file</tt> <br>
-    <br>
-    Last change: DK, April 11, 2012<br>
-    <br>
-    <br>
+      </tt>Last change: 28.09.2012&nbsp; DK<br>
+<br>
+<tt>end of file</tt> <br>
     <br>
     <br>
-  </body>
-</html>
+    <br>
+    <br>
+    <br>
+    <br>
+  
+
+</body></html>
