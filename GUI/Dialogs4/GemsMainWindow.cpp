@@ -235,9 +235,35 @@ TVisorImp::TVisorImp(int c, char** v):
 
     // Use database mode as start mode
     //actionDataBaseMode->setChecked(true);
-    CmDataBaseMode();
-    toolProject->hide();
-    //pModeName->setText(" D");
+
+    if( MDD_DATABASE == pVisor->ProfileMode )
+    {
+        SetGeneralMode();
+        actionDataBaseMode->setChecked(true);
+        //CmDataBaseMode();
+        //toolProject->hide();
+    }
+    else
+    {
+
+        // Open calc mode and load last project
+        if( !SetProfileMode(pVisor->lastProjectKey.c_str()))
+        {
+            //action_calcMode->setChecked( false );
+            SetGeneralMode();
+            actionDataBaseMode->setChecked(true);
+         }
+        else
+        {
+           action_calcMode->setChecked(true);
+           // load last system
+           if( rt[RT_SYSEQ].Find( pVisor->lastSystemKey.c_str()) >= 0 )
+           CmShow( pVisor->lastSystemKey.c_str() );
+           //NewSystemDialog::pDia->CmSelect( pVisor->lastSystemKey.c_str());
+        }
+     }
+
+    moveToolBar();
     updateMenus();
  }
 
@@ -667,12 +693,12 @@ void TVisorImp::CmDataBaseMode()
 
 
 // Calc part functions
-bool TVisorImp::SetProfileMode()
+bool TVisorImp::SetProfileMode(const char * profileKey )
 {
     try
     {
         pVisor->ProfileMode = MDD_SYSTEM;
-        if( !TProfil::pm->initCalcMode() )
+        if( !TProfil::pm->initCalcMode(profileKey) )
         {
             pVisor->ProfileMode = MDD_DATABASE;
             return false;

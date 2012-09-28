@@ -551,6 +551,9 @@ TVisor::toWinCFG()
     f_win_ini << "local_doc_dir\t=\t\"" << LocalDocDir.c_str() << "\""  << endl;
     f_win_ini << "remote_doc_url\t=\t\"" << RemoteHTML.c_str() << "\"" << endl;
     f_win_ini << "local_doc\t=\t" << LocalDoc << endl;   // obsolete
+    f_win_ini << "current_mode\t=\t" << ProfileMode << endl;
+    f_win_ini << "current_project\t=\t\"" << rt[RT_PARAM].PackKey() << "\""  << endl;
+    f_win_ini << "current_system\t=\t\"" << rt[RT_SYSEQ].PackKey() << "\""  << endl;
     f_win_ini.close();
 
     // Window-specific settings
@@ -627,6 +630,15 @@ TVisor::fromWinCFG()
             	else if( name == "local_doc" ) {
 				setLocalDoc(visor_conf.getcInt());
 			}
+            else if( name == "current_mode" ) {
+               ProfileMode = visor_conf.getcInt();
+        }
+            else if( name == "current_project" ) {
+               visor_conf.getcStr(lastProjectKey );
+        }
+            else if( name == "current_system" ) {
+               visor_conf.getcStr(lastSystemKey );
+        }
 
         name = visor_conf.getNext();
     }

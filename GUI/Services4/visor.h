@@ -32,12 +32,14 @@ class TVisor
     int argc;
     char** argv;
 
+    gstring lastProjectKey;
+    gstring lastSystemKey;
+
     gstring SysGEMDir;
     gstring DefDBDir;
     gstring DefProfDir;
     gstring UserGEMDir;
     gstring UserProfDir;
-
     gstring LocalDir;
 
     gstring LocalDocDir;
