@@ -1,40 +1,49 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-  <meta http-equiv="Content-Type"
- content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR"
- content="Mozilla/4.72 [en]C-BLUEWIN-CH20  (Win98; I) [Netscape]">
+<html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta name="GENERATOR" content="Mozilla/4.72 [en]C-BLUEWIN-CH20  (Win98; I) [Netscape]">
   <title>GEMS3 Theory TD Calculations</title>
   <meta name="description" content="Version 2.0.0-PSI">
 </head>
 <body>
-<h1><img src="gems1.png" align="left" height="48" width="48"> <big><font
- size="+2"><big> GEM-Selektor version 3<br>
+<h1><img src="gems1.png" height="48" align="left" width="48"> <big><font size="+2"><big> GEM-Selektor version 3<br>
 </big></font></big></h1>
-<h1>Thermodynamic Database Calculations</h1>
+<h2>Thermodynamic Database Calculations</h2>
+
 <hr size="2" width="100%">
 <h3>Contents<br>
 </h3>
-<p><font face="Helvetica, Arial, sans-serif"><a href="#GHS-DEF">1.
+<p><a href="#GHS-DEF">1.
 Standard molar thermodynamic functions of substances (dependent
-components)</a></font></p>
-<p><a href="#GHS_CROSS_CHECK"><font face="Helvetica, Arial, sans-serif">1.1.
-Cross-Checking Procedure for </font>G<sup>o</sup><sub>Tr</sub> , H<sup>o</sup><sub>Tr</sub>
-<font face="Helvetica, Arial, sans-serif">and</font> S<sup>o</sup><sub>Tr</sub></a></p>
-<p><font face="Helvetica, Arial, sans-serif"><a href="#TP-CORR-DEF">2.
-Temperature and pressure corrections (DComp data format)</a></font></p>
-<p><font face="Helvetica, Arial, sans-serif"><a href="#TPCORR-COMMON">2.1.
-Common techniques for condensed substances and ideal gases</a></font></p>
-<p><font face="Helvetica, Arial, sans-serif"><a href="#TPCORR-ADVANCED">2.2.
-Advanced techniques (aqueous species, gases) </a></font></p>
-<p><font face="Helvetica, Arial, sans-serif"><a href="#REACDC-DEF">3.
+components)</a>
+</p>
+<blockquote>
+  <p><a href="#GHS_CROSS_CHECK">1.1.
+Cross-Checking Procedure for GoTr , HoTr
+and SoTr</a></p>
+</blockquote>
+
+<p><a href="#TP-CORR-DEF">2.
+Temperature and pressure corrections (DComp data format)</a>
+</p>
+<blockquote>
+  <p><a href="#TPCORR-COMMON">2.1.
+Common techniques for condensed substances and ideal gases</a></p>
+  <p><a href="#TPCORR-ADVANCED">2.2.
+Advanced techniques (aqueous species, gases) </a></p>
+</blockquote>
+
+
+<p><a href="#REACDC-DEF">3.
 Calculation of molar properties of substances via reactions (ReacDC
-data format)</a></font></p>
-<p><font face="Helvetica, Arial, sans-serif"><a href="#TPCORR-REACDC">4.
+data format)</a>
+</p>
+<p><a href="#TPCORR-REACDC">4.
 Calculation
-of T,P corrected molar properties for ReacDC -defined chemical species</a></font></p>
-<p><font face="Helvetica, Arial, sans-serif"><a href="#REFS">References</a></font></p>
+of T,P corrected molar properties for ReacDC -defined chemical species</a>
+</p>
+<p><a href="#REFS">5. References</a></p>
+
 <h4> </h4>
 <hr size="2" width="100%">
 <h3><a name="GHS-DEF"></a>1. Standard molar thermodynamic functions of
@@ -44,9 +53,7 @@ substances (dependent components)<br>
 kinds of input data for each dependent component included into the
 definition of chemical system. (i) Main input is the formal (elemental)
 stoichiometry, expressed as a&nbsp; <a href="g_useref.html#FORMULA">formula</a>
-in either <a href="gm_dcomp.html#DCform"><tt>DCform</tt></a> or <a
- href="gm_reacdc.html#RDform"><tt>RDform</tt></a> fields of <a
- href="gm_dcomp.html">DComp</a> or <a href="gm_reacdc.html">ReacDC</a>
+in either <a href="gm_dcomp.html#DCform"><tt>DCform</tt></a> or <a href="gm_reacdc.html#RDform"><tt>RDform</tt></a> fields of <a href="gm_dcomp.html">DComp</a> or <a href="gm_reacdc.html">ReacDC</a>
 window, respectively. (ii) The molar (partial molal) apparent Gibbs
 energy function g<sub>(T,P) </sub>at temperature and pressure of
 interest. Optionally, the molar (partial molal) volume V<sub>(T,P) </sub>&nbsp;is
@@ -96,13 +103,15 @@ whereas the entropy of formation S<sup>o</sup><sub>f,Tr</sub>&nbsp;
 is&nbsp; </p>
 <p>G<sup>o</sup><sub>f,Tr</sub> = H<sup>o</sup><sub>f,Tr</sub> -
 Tr&nbsp; S<sup>o</sup><sub>f,Tr</sub>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp; (1). </p>
+&nbsp;
+ (1). </p>
 <p>Absolute entropy is related to the entropy of formation by </p>
 <p>S<sup>o</sup><sub>f,Tr</sub> = S<sup>o</sup><sub>a,Tr</sub> - <b>sum</b><sub>i</sub>(ai
 S<sup>o</sup><sub>a,i</sub>)
 , i =
 1,...,N&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-(2), </p>
+(2),
+ </p>
 <p>where S<sup>o</sup><sub>a,i</sub> stands for the absolute entropy of
 i-th chemical element in standard state at Tr, ai is a stoichiometry
 coefficient of i-th element in the formula of the compound (i.e. ai is
@@ -121,7 +130,8 @@ enthalpy is calculated as &nbsp;<br>
 ) ), i = 1,
 ...
 ,N&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;(3). </p>
+&nbsp;(3).
+ </p>
 <p>This equation is also used in cross-checking procedure that can be
 executed in the GEMS program when thermodynamic data for gases, solids,
 or aqueous species are entered or imported into <a href="gm_dcomp.html">DComp</a>
@@ -131,9 +141,11 @@ calculated from the above equation (3) and compared to the input H<sup>o</sup><s
 value: </p>
 <p><b>dev(</b>H<sup>o</sup>) = | H<sup>o</sup><sub>Tr</sub>(input) - H<sup>o</sup><sub>Tr</sub>(calculated)
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp; &nbsp; &nbsp;
+&nbsp;
+ &nbsp; &nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-(4). </p>
+(4).
+ </p>
 <p>The program will issue a warning message if <b>dev</b>(H<sup>o</sup>)
 &gt;
 57 J mol<sup>-1</sup> and give the user a choice - either to accept
@@ -152,8 +164,7 @@ equilibria. Depending on the phase state and nature of dependent
 components, such corrections can be performed using different
 techniques, each with its own additional input data. Some common
 methods are implemented and incorporated into the GEMS code. They
-will be selected and executed automatically according to the <a
- href="gm_dcomp.html#TPcMod_0">method codes</a> set during creation or
+will be selected and executed automatically according to the <a href="gm_dcomp.html#TPcMod_0">method codes</a> set during creation or
 re-making of a <a href="gm_dcomp.html">DComp</a> record. &nbsp; </p>
 &nbsp;<br>
 <h4><a name="TPCORR-COMMON"></a> 2.1. Common techniques for condensed
@@ -172,13 +183,10 @@ should not be used in calculation of chemical equilibria as large
 errors may be introduced. The GEMS code will automatically mark such
 "extrapolated" data with an <big><tt>'e'</tt></big> character, visible
 in the <a href="gems_bcc.html#TPmark"><tt>TPmark</tt></a> column
-on the "Thermodynamic Data" window, which is accessible through the <a
- href="gems_bcc.html">"Single Equilibrium System" dialog.</a>&nbsp;&nbsp;
+on the "Thermodynamic Data" window, which is accessible through the <a href="gems_bcc.html">"Single Equilibrium System" dialog.</a>&nbsp;&nbsp;
 </p>
 <p>Details on temperature corrections using&nbsp;Cp = f(T) dependences
-can be found in the file&nbsp; <span
- style="font-family: monospace; font-weight: bold;"><span
- style="text-decoration: underline;">T-corrections.pdf</span>.</span>&nbsp;
+can be found in the file&nbsp; <span style="font-family: monospace; font-weight: bold;"><span style="text-decoration: underline;">T-corrections.pdf</span>.</span>&nbsp;
 &nbsp; </p>
 <p>At elevated pressures, thermodynamic data (g<sup>o</sup><sub>T</sub>
 values) must be corrected from the reference pressure Pr = 1 bar to
@@ -192,8 +200,7 @@ variable molar volume V<sub>(T,P)</sub> = f(T,P). Simpler techniques,
 based on empirical coefficients of the V = f(T,P) dependence, &nbsp;are
 being replaced at present by an extrapolatable method based on the
 Birch-Murnaghan equation of state. </p>
-<p>In the file&nbsp; <span
- style="font-family: monospace; font-weight: bold; text-decoration: underline;">P-corrections.pdf</span>,
+<p>In the file&nbsp; <span style="font-family: monospace; font-weight: bold; text-decoration: underline;">P-corrections.pdf</span>,
 you can find details on pressure corrections as implemented in the GEMS
 code. The pressure corrections related to data for minerals from a
 companion M.Gottschalk's database will be described in a separate
@@ -218,9 +225,7 @@ can be calculated for any temperature of interest T. </p>
 <p>At present, the most widespread and practical method of
 temperature/pressure corrections of partial molal properties of aqueous
 species is based on the revised Helgeson-Kirkham-Flowers equation of
-state (HKF EoS) and the database of its coefficients, provided in the <a
- href="http://eps.wustl.edu/geopig/">SLOP98</a> data file [<a
- href="g_litref.html#%5B1997SHO/SAS%5D">1997SHO/SAS</a> and references
+state (HKF EoS) and the database of its coefficients, provided in the <a href="http://eps.wustl.edu/geopig/">SLOP98</a> data file [<a href="g_litref.html#%5B1997SHO/SAS%5D">1997SHO/SAS</a> and references
 therein]. All the necessary subroutines from the SUPCRT92 code
 [1992JOH/OEL] have been added to the GEM-Selektor code to perform T,P
 corrections using the HKF EoS coefficients kept in the DComp record
@@ -271,11 +276,9 @@ have been developed, also capable of predicting mixing properties of
 multi-component fluids. Such a "perturbation theory based" EoS
 [Churakov and Gottschalk, 2003a,b] is implemented in the GEM-Selektor
 code as a third-party contribution in connection with the companion
-chemical thermodynamic database of M.Gottshalk (<span
- style="font-family: monospace;">http://www.gfz-potsdam.de/pb4/pg1/dataset/index.html</span>).
+chemical thermodynamic database of M.Gottshalk (<span style="font-family: monospace;">http://www.gfz-potsdam.de/pb4/pg1/dataset/index.html</span>).
 Details about these calculations are given in a separate document&nbsp;
-<span
- style="font-family: monospace; font-weight: bold; text-decoration: underline;">TPX-corrections-CG-EoS.pdf</span>
+<span style="font-family: monospace; font-weight: bold; text-decoration: underline;">TPX-corrections-CG-EoS.pdf</span>
 .</p>
 &nbsp;<br>
 <h3><a name="REACDC-DEF"></a>3. Calculation of standard molar
@@ -295,8 +298,7 @@ of such DCs can be obtained even in cases when only
 logK of reaction is known at 25 <sup>o</sup>C. </p>
 <p>Simple algebraic calculations required for this purpose are
 described
-in the file&nbsp; <span
- style="font-family: monospace; font-weight: bold; text-decoration: underline;">T-corrections-Reac.pdf</span>.
+in the file&nbsp; <span style="font-family: monospace; font-weight: bold; text-decoration: underline;">T-corrections-Reac.pdf</span>.
 The ReacDC format can also be used for the fast retrieval of properies
 of arbitrary reactions (in 3-term extrapolation) between chemical
 species already presented in GEMS database as DComp and/or ReacDC
@@ -311,8 +313,7 @@ molar properties for ReacDC -defined chemical species</h3>
 <p>Details on temperature corrections for thermodynamic properties of
 reactions and molar properties of the "new" reaction-defined species,
 as well as
-simple pressure corrections, can be found in the file&nbsp;<span
- style="font-family: monospace; font-weight: bold; text-decoration: underline;">
+simple pressure corrections, can be found in the file&nbsp;<span style="font-family: monospace; font-weight: bold; text-decoration: underline;">
 T-corrections-Reac.pdf</span>.&nbsp;&nbsp; This way of representing
 thermodynamic properties is especially useful for some aqueous
 complexes and for surface species, which cannot be described using
@@ -357,5 +358,6 @@ To be completed in Version 2. 2</span><br>
 <br>
 <br>
 <br>
-</body>
-</html>
+
+
+</body></html>
