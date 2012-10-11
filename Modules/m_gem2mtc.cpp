@@ -1275,18 +1275,19 @@ void  TGEM2MT::LinkCSD(  long int nNode )
 // alloc memory for work arrays for nodes na->pNodT0() and na->pNodT1()
 void  TGEM2MT::allocNodeWork()
 {
-  aObj[o_n0w_mps].Alloc( mtp->nPHb, 1, D_);
-  aObj[o_n1w_mps].Alloc( mtp->nPHb, 1, D_);
-  aObj[o_n0w_vps].Alloc( mtp->nPHb, 1, D_);
-  aObj[o_n1w_vps].Alloc( mtp->nPHb, 1, D_);
-  aObj[o_n0w_m_t].Alloc( mtp->nICb, 1, D_);
-  aObj[o_n1w_m_t].Alloc( mtp->nICb, 1, D_);
-  aObj[o_n0w_con].Alloc( mtp->nDCb, 1, D_);
-  aObj[o_n1w_con].Alloc( mtp->nDCb, 1, D_);
-  aObj[o_n0w_mju].Alloc( mtp->nDCb, 1, D_);
-  aObj[o_n1w_mju].Alloc( mtp->nDCb, 1, D_);
-  aObj[o_n0w_lga].Alloc( mtp->nDCb, 1, D_);
-  aObj[o_n1w_lga].Alloc( mtp->nDCb, 1, D_);
+  DATACH* CH = na->pCSD();
+  aObj[o_n0w_mps].Alloc( CH->nPHb, 1, D_);
+  aObj[o_n1w_mps].Alloc( CH->nPHb, 1, D_);
+  aObj[o_n0w_vps].Alloc( CH->nPHb, 1, D_);
+  aObj[o_n1w_vps].Alloc( CH->nPHb, 1, D_);
+  aObj[o_n0w_m_t].Alloc( CH->nICb, 1, D_);
+  aObj[o_n1w_m_t].Alloc( CH->nICb, 1, D_);
+  aObj[o_n0w_con].Alloc( CH->nDCb, 1, D_);
+  aObj[o_n1w_con].Alloc( CH->nDCb, 1, D_);
+  aObj[o_n0w_mju].Alloc( CH->nDCb, 1, D_);
+  aObj[o_n1w_mju].Alloc( CH->nDCb, 1, D_);
+  aObj[o_n0w_lga].Alloc( CH->nDCb, 1, D_);
+  aObj[o_n1w_lga].Alloc( CH->nDCb, 1, D_);
 }
 
 void  TGEM2MT::freeNodeWork()

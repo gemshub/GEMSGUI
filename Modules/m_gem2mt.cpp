@@ -855,6 +855,24 @@ TGEM2MT::MakeQuery()
     char flgs[32];
     int size[20];
 
+    // set up for mathscripts
+    double Tai[4], Pai[4];
+
+    FreeNa();
+    na = new TNodeArray( 1, TMulti::sm->GetPM() );
+    // realloc and setup data for dataCH and DataBr structures
+    na->MakeNodeStructures( 0, true , Tai, Pai  );
+
+    // setup dataBR and NodeT0 data
+    //na->packDataBr();
+    na->MoveWorkNodeToArray( 0, 1, na->pNodT0() );
+    na->CopyNodeFromTo( 0, 1, na->pNodT0(), na->pNodT1() );
+
+    allocNodeWork();
+    LinkCSD(0);
+    LinkNode0(0);
+    LinkNode1(0);
+
     p_key  = db->PackKey();
     memcpy( flgs, &mtp->PunE, 32);
     size[0] = mtp->nC;
@@ -974,7 +992,7 @@ TGEM2MT::RecBuild( const char *key, int mode )
 
     bool setdef = false;
 
-    // set up for mathscripts
+    /* set up for mathscripts
     double Tai[4], Pai[4];
 
     FreeNa();
@@ -991,7 +1009,7 @@ TGEM2MT::RecBuild( const char *key, int mode )
     LinkCSD(0);
     LinkNode0(0);
     LinkNode1(0);
-
+ */
 AGAIN:
     int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL )
