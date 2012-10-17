@@ -56,10 +56,7 @@ struct TVal:
     }
 
     // returns size of the cell
-    size_t cSize() const
-    {
-        return sizeof(T);
-    }
+    size_t cSize() const;
 
     /* allocates memory for given object
 	Note: IsDynamic() verified in TObject
@@ -109,10 +106,10 @@ struct TVal:
     bool SetString(const char* s, size_t ndx);
 
     void write(GemDataStream& s, size_t size) {
-	s.writeArray((T*)ptr, size/sizeof(T));
+    s.writeArray((T*)ptr, size/cSize());
     }
     void read(GemDataStream& s, size_t size) {
-	s.readArray((T*)ptr, size/sizeof(T));
+    s.readArray((T*)ptr, size/cSize());
     }
 };
 
@@ -368,6 +365,21 @@ TVal<double>::Put(double v, size_t ndx)
     ((double*)ptr)[ndx] = v;
 }
 
+// returns size of the cell
+template<class T>
+inline
+size_t TVal<T>::cSize() const
+{
+    return sizeof(T);
+}
+
+// returns size of the cell (17/10/2012 using only from GemDataStream )
+template<>
+inline
+size_t TVal<long>::cSize() const
+{
+    return sizeof(int32_t);
+}
 
 /*
 template<class T>

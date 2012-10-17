@@ -203,7 +203,7 @@ TObject::read( istream& is )
     u_getline( is, Descr, '@' );
 }
 
-// Determines size of one cell
+// Determines size of one cell (17/10/2012 using only from GemDataStream )
 size_t
 TObject::GetCellSize() const
 {
@@ -213,7 +213,7 @@ TObject::GetCellSize() const
     return pV->cSize();
 }
 
-// Determines size of the whole data object
+// Determines size of the whole data object (17/10/2012 using only from GemDataStream )
 size_t
 TObject::GetSize() const
 {
@@ -237,6 +237,7 @@ TObject::BuildVal(ObjType type, int m)
         break;
     case L_:
         p = new TVal<long>(Dynamic);
+        //p = new TVal<int>(Dynamic);
         break;
     case X_:
         p = new TVal<unsigned long>(Dynamic);
