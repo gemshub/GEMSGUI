@@ -78,6 +78,14 @@
       <files>
         <file>g_mscript.html</file>
         <file>g_useref.html</file>
+        <file>gems3k-about.html</file>
+        <file>gems3k-iofiles.html</file>
+        <file>gems3k-manual.html</file>
+        <file>gems3k-nodearray.html</file>
+        <file>gems3k-nodelev.html</file>
+        <file>gems3k-tests.html</file>
+        <file>gems3k-tsolmod.html</file>
+        <file>gems3k-useref.html</file>
         <file>gems_about.html</file>
         <file>gems_aphsetup.html</file>
         <file>gems_bcc.html</file>
@@ -140,6 +148,7 @@
         <file>GtDemoRecordKeyDialog1.png</file>
         <file>Help.png</file>
         <file>MissingICsConflictWarning.png</file>
+        <file>Pitzer_Phase_page3.png</file>
         <file>PreferencesDialog.png</file>
         <file>ProcessRecordKeyDialog1.png</file>
         <file>ProcessWizardStep2IteratorsTmode1.png</file>
@@ -156,6 +165,9 @@
         <file>RTParmWizard-ItemsSelectionStep.png</file>
         <file>RunBCC.png</file>
         <file>RunIPM.png</file>
+        <file>SIT-Phase-page3.png</file>
+        <file>Screen-Calcite-Col-BC-0000.png</file>
+        <file>Screen-Calcite-Column-0001.png</file>
         <file>SetCompos.png</file>
         <file>SetProjectKey.png</file>
         <file>SetSystemKey.png</file>
@@ -538,6 +550,7 @@
         <keyword name="Masses_5" ref="gems_bcc.html#Masses_5"/>
         <keyword name="MbXs" ref="gems_bcc.html#MbXs"/>
         <keyword name="Mbx" ref="gems_sys.html#Mbx"/>
+        <keyword name="MoiSN" ref="gems_sys.html#MoiSN"/>
         <keyword name="MsDt_0" ref="gm_phase.html#MsDt_0"/>
         <keyword name="MsDt_1" ref="gm_phase.html#MsDt_1"/>
         <keyword name="N_" ref="gems_bcc.html#N_"/>
