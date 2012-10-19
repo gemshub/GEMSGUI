@@ -1,5 +1,7 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
+
+
   
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
@@ -9,7 +11,7 @@
 
 
   
-<meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
+<meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]"><title>GEMS3 System (EqDemo) Manual</title>
 
 
 
@@ -17,7 +19,7 @@
 
 
   
-<title>GEMS3 System (EqDemo) Manual</title>
+
 
 
 
@@ -25,15 +27,7 @@
 
 
   
-<meta name="description" content="Version 2.0.0-PSI">
-
-
-
-
-
-
-</head>
-<body>
+<meta name="description" content="Version 2.0.0-PSI"></head><body>
 <h1><img src="gems1.png" align="left" height="48" width="48"> <font color="#000066"> GEM-Selektor version 3<br>
 </font></h1>
 
@@ -653,7 +647,7 @@ converged. <br>
 
 
 <span style="font-weight: bold;"><br>
-<img style=" width: 326px; height: 496px;" alt="GEMTaskProgressDialogNormal.png" src="GEMTaskProgressDialogNormal.png"><br>
+<img style="width: 326px; height: 496px;" alt="GEMTaskProgressDialogNormal.png" src="GEMTaskProgressDialogNormal.png"><br>
 <br>
 </span><span style="font-weight: bold;"></span>
 
@@ -737,7 +731,7 @@ green and black, respectively).<br>
 
 
 
-<img style=" width: 326px; height: 496px;" alt="GEMTaskProgressDialogStepwise.png" src="GEMTaskProgressDialogStepwise.png"><br>
+<img style="width: 326px; height: 496px;" alt="GEMTaskProgressDialogStepwise.png" src="GEMTaskProgressDialogStepwise.png"><br>
 
 
 
@@ -967,7 +961,7 @@ spreadsheet program using the right-click menu (below) that appears upon
 
 
 
-<img style=" width: 195px; height: 173px;" alt="TabRightClickMenu.png" src="TabRightClickMenu.png">&nbsp;<br>
+<img style="width: 195px; height: 173px;" alt="TabRightClickMenu.png" src="TabRightClickMenu.png">&nbsp;<br>
 
 
 
@@ -1504,66 +1498,93 @@ first phase. Gas phase is always the next to the aqueous phase.</dd>
   <dd>See also comments to the <a href="gems_bcc.html#L1_"><tt>L1_</tt></a>
 data object. &nbsp;</dd>
   <dd>&nbsp; <br>
-  </dd><dt> <a name="Lsmod"></a><b><big><tt>Lsmod</tt></big></b> - Number
-of
-non-ideality coefficients per multi-component phase</dt>
+  </dd><dt> <a name="Lsmod"></a><b><big><tt>Lsmod</tt></big></b> - Dimensions of <span style="font-family: monospace;">IPxPM</span> and <span style="font-family: monospace;">pmc</span> arrays - three per multicomponent phase</dt>
   <dd>&nbsp;<br>
   </dd>
-  <dd>This input vector of <a href="#Fi_1">n(Fis)</a> length defines
-how many coefficients are assigned to each phase. The coefficients are
-provided in the <a href="#pmc"><tt>pmc</tt></a> vector.</dd>
+  <dd>This input array has <a href="#Fi_1">n(Fis)</a> rows and three columns. In each row:</dd><dd>The
+first number is the number of parameters of non-ideal mixing model per
+this multicomponent phase (i.e. number of&nbsp; rows in the respective
+blocks of I<span style="font-family: monospace;">PxPM</span> and <span style="font-family: monospace;">pmc</span> arrays). <br>
+  </dd>
+  <dd>The second number is the number of columns in the respective block of the <span style="font-family: monospace;">IPxPM</span> array, i.e. the maximum order of interaction parameter. <br>
+  </dd>
+  <dd>The third number is the number of&nbsp; columns in the respective block of the <span style="font-family: monospace;">pmc</span> array, i.e. the number of&nbsp; P,T coefficients per interaction parameter.</dd>
+
   <dd>&nbsp;&nbsp;<br>
-  </dd><dt> <a name="Lsmdc"></a><b><big><tt>Lsmdc</tt></big></b> - Number
-of
-non-ideality coefficients per one DC in multi-component phases</dt>
+  </dd><dt> <a name="Lsmdc"></a><b><big><tt>Lsmdc</tt></big></b> - Dimensions of <span style="font-family: monospace;">dmc</span> and <span style="font-family: monospace;">MoiSN</span> tables - three per multicomponent phase</dt>
   <dd><br>
   </dd>
-  <dd>This input vector of <a href="#Fi_1">n(Fis)</a> length defines
-how many coefficients are assigned per DC in each phase.<br>
+  <dd>The Lsmdc array has <a href="#Fi_1">n(Fis)</a>&nbsp; rows and 3 colums. In each row: <br>
+</dd><dd>The first number is the number of parameters/coefficients per
+component in the respective block of the dmc array, which usually
+depends on the mixing model code in the <a href="#smod"><span style="font-family: monospace;">smod</span></a> row. <br>
   </dd>
-  <dd> The coefficients are provided in the <a href="#dmc"><tt>dmc</tt></a>
-vector.</dd>
-  <dd>&nbsp; <br>
+  <dd>The second and third numbers for simple mixing are zeros or, for
+multi-site mixing phase models: the second number is the number of
+sublattices (site types); the third number is the total number of
+different moieties acting on all sublattice sites (moieties having the
+same formula, but acting on different sites, are considered as
+different moieties!).</dd>
+<dd>&nbsp; <br>
   </dd>
 
-<dt> <a name="IPxPM"></a><b><big><tt>IPxPM</tt></big></b> - Array of indexes for assigning interaction parameter coefficients in specific interaction models<br>
+<dt> <a name="IPxPM"></a><b><big><tt>IPxPM</tt></big></b> - Collected array of indexation tables for interaction parameters of non-ideal solutions
 </dt>
 <dd><br>
 </dd>
-<dd>This input array of indexes (arranged as defined by contents of <a href="#Lsmod">Lsmod</a> ) defines
-how many coefficients are assigned per DC in each phase.<br>
-</dd>
-<dd> The interaction parameter coefficients are provided in the <a href="#pmc"><tt>pmc</tt></a>
-vector.</dd>
+
+<dd>Number of interaction parameters used by k-th phase model is given in <span style="font-family: monospace;">Lsmod[k][0]</span>, and their maximum order (number of&nbsp; components or moieties involved in the interaction) is given in <span style="font-family: monospace;">Lsmod[k][1]</span>.
+Elements contain indexes (within each phase) of DCs that are involved
+in each interaction. If the order of the interaction parameter is less
+than <span style="font-family: monospace;">Lsmod[k][1]</span>, the
+remaining elements in the table row should be filled with -1 (except
+the Pitzer model where the last element in the row indicates the type
+of interaction coefficient). The respective values of interaction
+parameter coefficients should be provided in the <span style="font-family: monospace;">pmc</span> array k-th block. The
+indexation table for each phase will be transferred to a TSolMod
+library function that calculates activity coefficients of phase species
+(<a href="gems_solmod.html">more...</a>).</dd>
 <dd>&nbsp; <br>
 </dd>
 
-  <dt> <a name="pmc"></a><b><big><tt>pmc</tt></big></b> - Vector of
-non-ideality coefficients for multi-component phases</dt>
+  <dt> <a name="pmc"></a><b><big><tt>pmc</tt></big></b> - Collected array of interaction parameter coefficients for multi-component phases</dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd> This input vector has total length <a href="#Fi_1">n(Fis)</a>*sum(of <a href="#Lsmod"><tt>Lsmod</tt></a> elements). The coefficients are
+  <dd> This input vector has total length of sum(of <a href="#Lsmod"><tt>Lsmod</tt></a><span style="font-family: monospace;">[k][0]*Lsmod[k][2]</span> elements) over <a href="#Fi_1">n(Fis)</a>. The coefficients are
 automatically collected from the <a href="gm_phase.html">Phase</a> records
 and stored in the same order as phases in the <a href="#PHnam"><tt>PHnam</tt></a>
-list, Lsmod(k) coefficients per k-th phase. These coefficients are used
-in the GammaCalc() function that calculates activity coefficients of
-species from math scripts or built-in functions (<a href="gems_solmod.html">more...</a>).&nbsp;</dd>
+list, <span style="font-family: monospace;">Lsmod[k][2]</span>
+coefficients per k-th phase. These coefficients are are transferred to
+a phase script or a TSolMod library function that calculates activity
+coefficients of
+species (<a href="gems_solmod.html">more...</a>).&nbsp;</dd>
   
   <dd>&nbsp; <br>
 </dd>
   <dt> <a name="dmc"></a><b><big><tt>dmc</tt></big></b> - Vector of
 non-ideality coefficients for species in multi-component phases</dt>
   <dd>&nbsp;</dd>
-  <dd> This input vector has total length <a href="#Fi_1">n(Fis)</a>*sum(of<a href="#Lsmdc"><tt>Lsmdc</tt></a> * <a href="#L1"><tt>L1</tt></a>
-elements). The coefficients are automatically collected from <a href="gm_phase.html">Phase</a>
+  <dd> This input vector has total length of sum(of<a href="#Lsmdc"><tt> Lsmdc</tt></a><tt>[k][0]</tt><span style="font-family: monospace;">*</span><a href="#L1"><tt>L1</tt></a><span style="font-family: monospace;">[k]</span>
+elements) over <a href="gems_sys.html#Fi_1">n(Fis)</a>. The coefficients are automatically collected from <a href="gm_phase.html">Phase</a>
 records and stored in the same order as phases in the <a href="#PHnam"><tt>PHnam</tt></a>
-list, Lsmdc(k)*L1(k) coefficients per k-th phase, in the same order as
-species in <a href="#DCnam"><tt>DCnam</tt></a> list, Lsmdc(k)
-coefficients per species. These coefficients are used in the
-GammaCalc() function that calculates activity coefficients of
-species from math scripts or built-in functions (<a href="gems_solmod.html">more...</a>).</dd>
-  <dd>&nbsp; <br>
+list, <span style="font-family: monospace;">Lsmdc[k][0]*L1[k]</span> coefficients per k-th phase, in the same order as
+species in <a href="#DCnam"><tt>DCnam</tt></a> list, <span style="font-family: monospace;">Lsmdc[k][0]</span>
+coefficients per species. These coefficients are transferred to a phase
+script or a TSolMod library function that calculates activity
+coefficients of
+phase species (<a href="gems_solmod.html">more...</a>).</dd><dd>&nbsp; <br>
   </dd>
+  <dt> <a name="MoiSN"></a><b><big><tt>MoiSN</tt></big></b> - Collected array of end member moiety- site multiplicity numbers in multi-site SS models</dt>
+  <dd>&nbsp;</dd>
+  <dd> This input vector has total length of sum(of <tt>L1[k]*</tt><a href="#Lsmdc"><tt>Lsmdc</tt></a><span style="font-family: monospace;">[k][1]*Lsmdc[k][2]</span> elements) over <a href="gems_sys.html#Fi_1">n(Fis)</a>. The coefficients are automatically collected from <a href="gm_phase.html">Phase</a>
+records and stored in the same order as the phases are listed in the <a href="#PHnam"><tt>PHnam</tt></a>
+list, <span style="font-family: monospace;">L1[k] </span>tables each with <a href="#Lsmdc"><tt>Lsmdc</tt></a><span style="font-family: monospace;">[k][1]*Lsmdc[k][2]</span> occupancy numbers
+per k-th phase component. Upon GEM IPM run, the sub-array for&nbsp;
+each phase is transferred to a TSolMod library function that calculates
+activity coefficients of phase species (<a href="gems_solmod.html">more...</a>).</dd>
+  <dd>&nbsp;</dd>
+
+  
   <dt> <a name="dll"></a><big><b><big><tt>dll</tt></big></b></big> -
 Lower metastability restrictions for DC mole quantities &nbsp;<a href="#x"><tt>x</tt></a>&nbsp; at equilibrium state</dt>
   <dd>&nbsp; <br>
