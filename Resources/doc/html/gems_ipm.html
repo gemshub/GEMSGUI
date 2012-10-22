@@ -1,9 +1,5 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html><head>
-  <title>GEM Task Data and IPM-3 Kernel Manual</title>
-
-  
-</head><body>
+<html><head><title>GEM Task Data and IPM-3 Kernel Manual</title></head><body>
 <h1><img src="gems1.png" align="left" height="48" width="48"> <font color="#000066"> GEM-Selektor version 3<br>
 </font></h1>
 
@@ -421,9 +417,13 @@ button (or "Record" "Save" menu command). <br>
 exported as part of the IPM input file and can be edited there, if
 necessary. They remain valid for the whole duration of GEMS3K instance
 in computer memory. Only numerical settings that differ from defaults
-may be exported to IPM file (<a href="#WRITEIPMFILES">more ...</a>). <br>
+may be exported to IPM file (<a href="#WRITEIPMFILES">more ...</a>). The default numerical controls and tolerances are shown om the following screenshot:</p>
+<p><img style="width: 690px; height: 331px;" alt="Default-GEMIPM3-Num-Controls.png" src="Default-GEMIPM3-Num-Controls.png"><br>
 </p>
 
+
+<p><br>
+</p>
 <p>Note that usually, there is no need to change default numerical
 settings. The default values below correspond to aqueous systems of
 1000 total moles of independent components in the internal Multi <span style="font-style: italic;">b</span> vector; re-scaling from-to actual
@@ -433,6 +433,7 @@ the indicated validity intervals, may cause the program to crash,
 freeze, or produce meaningless results. However, some controls must be
 adjusted for certain types of systems.<b> <br>
 </b></p>
+
 
 <br>
 
@@ -569,8 +570,8 @@ Components { 1e-13 }</dt>
 for all independent components that must be reached in the Mass Balance
 Refinement (MBR) step and maintained by the Main IPM Descent step of
 the GEM algorithm. Actually, this is the tolerance for the convergence
-criterion of the MBR algorithm for entering the feasible domain of the
-initial approximation of GEM primal solution (<span style="color: rgb(204, 0, 0);">more...</span>)&nbsp; <br>
+criterion of the MBR algorithm for entering the feasible domain of
+initial approximation of GEM primal solution.<span style="color: rgb(204, 0, 0);"></span>  <br>
   </dd>
   <dd><span style="text-decoration: underline;">Possible values</span>:
 1e-10 to 1e-15, default is 1e-13 (for a system of 1000 total moles in
@@ -663,7 +664,7 @@ procedure { 1e-5 }</dt>
   </dd>
   <dt> <a name="Pa_DFY_6"></a><b><big><tt>Pa_DFY[6]</tt></big></b>
 -&nbsp;Insertion mole amount for a single-component phase in the
-PhaseSelection procedure { 1e-7 }</dt>
+PhaseSelection procedure { 1e-6 }</dt>
   <dd>&nbsp;</dd>
   <dd>In the Phase Selection procedure (<span style="color: rgb(204, 0, 0);">more...</span>), a phase can be
 detected that is not present in positive amount in <a href="gems_sys.html#Xa">Xa</a> vector, but shows a significant
@@ -885,7 +886,7 @@ integer, 0 (default); +1, -1 to +12, -12.<br>
   </dd>
   <dt> <a name="Pa_LLG"></a><big><big><b><tt>Pa_LLG</tt></b></big></big>
 - Tolerance for checking divergence in the GEM dual solution between
-IPM iterations { 13000 or 0 (disable) }</dt>
+IPM iterations { 30000 or 0 (disable) }</dt>
   <dd>&nbsp; <br>
   </dd>
   <dd> In certain chemical systems, some chemical potentials are not
@@ -930,7 +931,7 @@ IPM iterations at <a href="#Pa_PRD_2">Pa_PRD[2]</a> = 3); <br>
 32000 or -1 and -32000 enable the divergence detection and warning
 W14IPM. <br>
   </dd>
-  <dd>Default value: 13000. &nbsp; &nbsp; <br>
+  <dd>Default value: 30000. &nbsp; &nbsp; <br>
   </dd>
   <dd>&nbsp; <br>
   </dd>
@@ -953,7 +954,7 @@ balance. DCs in this phase will be inserted in Pa_DFY[6] amounts; after
 checking of all phases is finished, the MBR + IPM loop will be repeated
 up to 5 times. If the situation persists then the stability and/or
 stoichiometry of this phase has to be checked.</dd>
-  <dd><span style="text-decoration: underline;">Recommended value</span>:
+  <dd>Recommended value:
 0.01. In many internally consistent and non-stiff systems, a tighter
 tolerance of 0.001 can be used. </dd>
   <dd>Related error conditions: <a href="gems_ipm.html#W08IPM">W08IPM</a>;
@@ -998,7 +999,7 @@ and/or stoichiometry of this phase has to be checked.&nbsp;&nbsp; <br>
   <dd>This tolerance (copied to <a href="gems_sys.html#Psi_DK_1">Psi_DK[1]</a>)
 is compared with the current value of Dikin criterion (<a href="gems_sys.html#Psi_DK_0">Psi_DK[0]</a>) at each IPM iteration in
 order to decide whether the IPM Main Descent minimization procedure has
-converged (<a href="theory_gem.html">more...</a>).<br>
+converged (<a href="theory_gem.html">more...</a>). Default value: 1e-6 (for Pa_DG = 1000). <br>
   </dd>
   <dd><span style="text-decoration: underline;">Possible values</span>:
 1e-3 to 1e-9; values between 1e-7 and 1e-5 are recommended in most
@@ -1118,13 +1119,13 @@ Default value of Pa_AG is 1.0. <br>
   <dd>This empirical parameter controls how strongly the smoothing
 parameter (<a href="#Pa_AG"><big><span style="font-family: monospace;">Pa_AG</span></big></a>)
 will be decreased as function of the number of performed IPM descent
-iterations. Possible values:&nbsp;</dd>
+iterations. Default value is 0. Possible values:&nbsp;</dd>
   <dd>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 (smoothing is disabled if also <tt>Pa_AG</tt>
 is set to 1);<br>
   </dd>
   <dd>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0001 to 0.9999 (or -0.9999 to
 -0.0001) to enable smoothing.&nbsp;</dd>
-  <dd>Default value: 0. Too high or to low values may cause
+  <dd>Too high or to low values may cause
 non-convergence of GEM IPM in highly non-ideal systems and especially
 in systems with sorption phases.</dd>
   <dd>In some smoothing functions (see<a href="#Pa_AG"><big><span style="font-family: monospace;"> Pa_AG</span></big></a> above), the
@@ -1146,7 +1147,7 @@ smoothing function with Pa_AG = 0.7 and Pa_DGC = 0.07 must be used.</dd>
   <dt> <a name="Pa_PE"></a><big><big><b><tt>Pa_PE</tt></b></big></big>
 - Include electroneutrality condition? { 1 }</dt>
   <dd>&nbsp;&nbsp;</dd>
-  <dd>Possible values: <br>
+  <dd>Default value is 1. Possible values: <br>
   </dd>
   <dd>&nbsp;&nbsp; &nbsp;&nbsp; 1 - electroneutrality balance equation
 is included (required for systems containing aqueous electrolyte,
@@ -1187,7 +1188,7 @@ Mode of calculation of activity coefficients and metastability factors
 iteration;</dd>
   <dd>&nbsp;&nbsp;&nbsp;&nbsp; 3 - reserved.</dd>
   <dd>This mode should be fixed to 2 in the present version of
-GEM-Selektor. <br>
+GEMS3K and GEM-Selektor. <br>
   </dd>
   <dd><br>
   </dd>
@@ -1204,7 +1205,7 @@ with their amounts restored using the dual solution vector <a href="gems_sys.htm
 value is replaced by that <a href="gems_sys.html#XU">XU</a><sub>j</sub>
 restored from the dual solution, if the correction is not going to be
 too large, i.e. log10(|XU<sub>j</sub> - x<sub>j</sub>|) does not exceed
-the Pa_PRD[1] threshold. If ir does then x<sub>j</sub> value is
+the Pa_PRD[1] threshold. If it does then x<sub>j</sub> value is
 replaced by 10<sup>Pa_PRD[1]</sup>. <br>
   </dd>
   <dd>This tolerance is especially useful if the detection of
@@ -1264,7 +1265,7 @@ Pa_DKI then the primal solution amount x<sub>j</sub> will be less than
 or equal to Pa_DKI. <br>
   </dd>
   <dd><span style="text-decoration: underline;">Possible values:</span>
-1e-8 to 1e-11.</dd>
+1e-8 to 1e-12.</dd>
   <dd>Recommended value: 1e-10.</dd>
   <dd><span style="text-decoration: underline;">Related errors:</span> <a href="#E11IPM">E11IPM</a>; <a href="#E12IPM">E12IPM</a>; <a href="#E16IPM">E16IPM</a>; <a href="#E17IPM">E17IPM</a>. <br>
   </dd>
