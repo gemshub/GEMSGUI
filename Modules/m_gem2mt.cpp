@@ -858,6 +858,11 @@ TGEM2MT::MakeQuery()
     // set up for mathscripts
     double Tai[4], Pai[4];
 
+    Tai[0] = Tai[1] = TMulti::sm->GetPM()->TCc;
+    Pai[0] = Pai[1] = TMulti::sm->GetPM()->Pc;
+    Tai[2] = Pai[2] = 0.;
+    Tai[3] = Pai[3] = 0.1;
+
     FreeNa();
     na = new TNodeArray( 1, TMulti::sm->GetPM() );
     // realloc and setup data for dataCH and DataBr structures
