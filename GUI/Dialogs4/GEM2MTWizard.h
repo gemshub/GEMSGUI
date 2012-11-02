@@ -21,6 +21,7 @@
 
 #include "ui_GEM2MTWizard4.h"
 #include "EquatSetupWidget.h"
+#include "model_w.h"
 
 class GEM2MTWizard : public QDialog, public Ui::GEM2MTWizardData
 {
@@ -45,6 +46,16 @@ class GEM2MTWizard : public QDialog, public Ui::GEM2MTWizardData
     void resetBackButton();
     void resetVTKList();
     inline int findVTKarr( int vtk1  );
+
+    TObjectTable* PTable;
+    TObjectTable* TTable;
+
+    void setupPTArrays();
+    void defineTArray();
+    void definePArray();
+    void initPTable();
+    void initTTable();
+    void showPTTable();
 
     // internal functions
     int  tableFindRow( int nO, int ndx );
@@ -99,6 +110,7 @@ protected slots:
     void changePage( int nPage );
     void changeTable(const QItemSelection & selected, const QItemSelection & deselected);
     void disableVTK();
+    void objectChanged();
 
 
 private slots:

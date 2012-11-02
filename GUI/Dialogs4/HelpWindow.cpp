@@ -156,7 +156,7 @@ HelpWindow::HelpWindow( QWidget* parent):
     tab_->setSizePolicy(sizePolicy1);
     spl->setStretchFactor(1,2);
     QList<int> lst;
-    lst.append(200);
+    lst.append(300);
     lst.append(800);
     spl->setSizes(lst);
     //tab_->setMaximumWidth(350);
