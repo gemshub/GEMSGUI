@@ -384,7 +384,6 @@ void TProfil::TestChangeProfile()
          aMT->InsertChanges( aIComp, aPhase, aDComp  );
          aMT->RecSave( aList[i].c_str(), true );
        }
-
     }
 
     aList.Clear();

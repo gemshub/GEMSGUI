@@ -72,7 +72,8 @@ TVisorImp::TVisorImp(int c, char** v):
         last_update( 0 ),
         configAutosave(false),
         proc(0),
-    currentNrt(-2)
+    currentNrt(-2),
+    settedCureentKeyIntotbKeys(false)
 {
     setupUi(this);
     (void)statusBar();
@@ -313,6 +314,7 @@ void TVisorImp::defineModuleKeysList( int nRT )
   gstring keyfld;
   QTableWidgetItem *item, *curItem=0;
   gstring oldKey = rt[nRT].UnpackKey();
+  settedCureentKeyIntotbKeys = false;
 
   if(currentNrt != nRT)
     return;
@@ -354,7 +356,9 @@ void TVisorImp::defineModuleKeysList( int nRT )
           tbKeys->setItem(ii, jj, item );
        }
       if( oldKey == keyList[ii] )
-          curItem = tbKeys->item(ii,0);
+      {    curItem = tbKeys->item(ii,0);
+           settedCureentKeyIntotbKeys = true;
+      }
 
   }
   for(jj=0; jj<rt[nRT].KeyNumFlds(); jj++)
@@ -420,6 +424,8 @@ void TVisorImp::openRecordKey( int row, int    )
 {
     gstring currentKey ="";
 
+    if( row >= tbKeys->rowCount())
+        return;
 
     for(int jj=0; jj<tbKeys->columnCount(); jj++)
     {
@@ -458,6 +464,8 @@ void TVisorImp::OpenModule(QWidget* /*par*/, int irt, int page, int viewmode, bo
            openMdiChild( NewSystemDialog::pDia, true );
            //mdiArea->addSubWindow(NewSystemDialog::pDia);
            //NewSystemDialog::pDia->showMaximized();//show();
+           if( !settedCureentKeyIntotbKeys )
+               openRecordKey(0,0);
         }
         else
          {
@@ -478,6 +486,8 @@ void TVisorImp::OpenModule(QWidget* /*par*/, int irt, int page, int viewmode, bo
             openMdiChild( p );
             //mdiArea->addSubWindow(p);
             //p->show();
+            if( !settedCureentKeyIntotbKeys )
+                openRecordKey(0,0);
           }
           else
           {

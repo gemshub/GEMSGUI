@@ -387,6 +387,7 @@ private slots:
 
  // main window fields
     int currentNrt;
+    bool settedCureentKeyIntotbKeys;
     //QIcon iconDatabase;
     //QIcon iconSystem;
 

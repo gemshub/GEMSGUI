@@ -611,7 +611,7 @@ TDBKey::SetKey( const char *key )
         unpack( sp );
     else
         pack( sp );
-}
+ }
 
 // Change i-th field of DBkey to key
 void
@@ -1083,7 +1083,7 @@ TDBKeyList::GetKeyList_i(int nF, int nRec, GemDataStream& f)
         int indRec = addndx( nF, re_.len, key);
         re[indRec].pos = re_.pos;
     }
-
+    SetKey(ALLKEY); // bugfix: current key for not readed record
     ErrorIf( !f.good(), "TDBKeyList", "Index file read error.");
 }
 
