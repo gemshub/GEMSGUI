@@ -462,6 +462,11 @@ void TVisorImp::OpenModule(QWidget* /*par*/, int irt, int page, int viewmode, bo
            //----if( select )
            //----   NewSystemDialog::pDia->CmSelect();
            openMdiChild( NewSystemDialog::pDia, true );
+
+           // Create, if no syseq is present in the project
+           if( rt[RT_SYSEQ].RecCount() <= 0)
+               NewSystemDialog::pDia->CmCreate();
+
            //mdiArea->addSubWindow(NewSystemDialog::pDia);
            //NewSystemDialog::pDia->showMaximized();//show();
            if( !settedCureentKeyIntotbKeys )
