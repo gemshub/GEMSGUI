@@ -138,6 +138,10 @@ protected:
 
     void CalcPhaseRecord( bool getDCC  );
     void moiety_new( int nDC, int nMoi, bool setDefault );
+    void Set_DC_Phase_coef();
+    void makeReacDCompList(TCStringArray& aDclist);
+    void DetNumbCatAn(TCStringArray& aDclist);
+    void LoadDCC();
 
 public:
 

@@ -154,6 +154,11 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[13], int size[6],
 
 //Page3
     spinBoxSDrefLnk->setValue(size[0]);
+
+    if( flgs[12] == '+' )
+     getDCC->setChecked(true);
+    else
+     getDCC->setChecked(false);
 }
 
 
