@@ -87,9 +87,10 @@ void TProfil::Push( TIArray<CompItem>& aList, int aLine,
        else stt += " record to be inserted into project database. Action?";
 
        switch( vfQuestion3(window(), dbKeywd, stt.c_str(),
-              "&Do it", "Do it for &All", "&Skip it" ))
+              "&Do it", "Do it for &All", "&Cancel" ))
        {
        case VF3_3:   // Skip: now skipping, as the user wants
+                    Error( dbKeywd, "Comparison error!" );
                     break;
        case VF3_2:  // Do it for all
                     comp_change_all = true;
@@ -99,14 +100,6 @@ void TProfil::Push( TIArray<CompItem>& aList, int aLine,
    }
    else
        aList.Add( new CompItem( aLine, aDelta));
- //     {
- //    case VF3_3:
- //          Error( dbKeywd, "Comparison error!" );
- //    case VF3_2:
- //               comp_change_all = true;
- //    case VF3_1:   ;
- //    }
- //   aList.Add( new CompItem( aLine, aDelta));
 }
 
 
