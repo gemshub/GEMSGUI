@@ -1120,18 +1120,23 @@ TGEM2MT::RecCalc( const char * key )
    }
    else
    {
-     gstring f_name;
+       gstring lst_f_name;
+       gstring dbr_lst_f_name;
      if( mtp->notes[0] == '@' )
-        f_name = gstring( mtp->notes, 1, MAXFORMULA-1 );
-     // open file to read
+     {   lst_f_name = gstring( mtp->notes, 1, MAXFORMULA-1 );
+         dbr_lst_f_name = lst_f_name;
+         dbr_lst_f_name = dbr_lst_f_name.replace("-dat","-dbr");
+      } // open file to read
      else
-       if( vfChooseFileOpen(window(), f_name,
+     {  if( vfChooseFileOpen(window(), lst_f_name,
           "Please, edit the GEMS3K filelist name", "*.lst" ) == false )
-       {       //FreeNa();
-               return;
-       }
+            return;
+        if( vfChooseFileOpen(window(), dbr_lst_f_name,
+                   "Please, edit the GEMS3K filelist name", "*.lst" ) == false )
+             return;
+      }
      //TMulti::sm->Free_TSolMod();
-     na->GEM_init( f_name.c_str(), 0, true );
+     na->GEM_init( lst_f_name.c_str(), dbr_lst_f_name.c_str(), 0, true );
      CalcIPM( NEED_GEM_AIA, 0, mtp->nC, 0 );
      if( mtp->PsMode == RMT_MODE_W  )
      {
