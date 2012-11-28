@@ -1,17 +1,18 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
+
   
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
 
 
   
-<meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
+<meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]"><title>GEMS3 Phase Module</title>
 
 
 
   
-<title>GEMS3 Phase Module</title>
+
 
 
 
@@ -20,8 +21,7 @@
 
 
 
-</head>
-<body>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"></head><body>
 <h1><img src="gems1.png" align="left" height="48" width="48"> <span style="color: rgb(0, 0, 102);"> GEM-Selektor version 3<br>
 </span></h1>
 
@@ -536,7 +536,7 @@ provided in the description of <a href="#PHASE_MWIZARD">Phase wizard</a> and <a 
 
 
 <p>(1) For the ion-association model of aqueous electrolyte, there are 
-several variants of the Debye-H&uuml;ckel calculation of activity 
+several variants of the Debye-Hückel calculation of activity 
 coefficients that account for the excess Gibbs energy of the long-range 
 electrostatic interactions between charged aqueous species as function 
 of the effective molal ionic strength. Since no specific interaction 
@@ -552,7 +552,7 @@ of aqueous electrolyte phase. <br>
 
 <p>(2) In specific ion-interaction models of aqueous electrolyte 
 (currently SIT, Pitzer, and Extended UNIQUAC), in addition to the 
-Debye-H&uuml;ckel term, also excess energies due to specific ion-ion 
+Debye-Hückel term, also excess energies due to specific ion-ion 
 interactions are accounted for. Therefore, such Phase definitions cannot
  be assembled automatically and must be created in the (project) 
 database before creating the modeling project chemical system 
@@ -1849,42 +1849,61 @@ Phase Wizard Step 2 - Phase model-specific settings<font face="Helvetica, Arial,
 
 
 
-<p>Attention! For TSolMod built-in mixing models that use dc_cf and/or 
-ipxT, pc_cf data objects, the numbers of columns will usually be 
+<p>Attention! For TSolMod built-in mixing models that use <span style="font-family: monospace;">dc_cf</span> and/or 
+<span style="font-family: monospace;">ipxT, pc_cf</span> data objects, the numbers of columns will usually be 
 allocated automatically, depending on the model of choice. Explicit 
-corrections in these fields may be done upon remake of the Phase record.
+corrections in these fields may be done upon remake of the Phase record.</p>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">Counter<br>
+      </td>
+      <td style="vertical-align: top;">Displayed message<br>
+      </td>
+      <td style="vertical-align: top;">Comment<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-family: monospace;">dc_cf<br>
+      </span>(columns)<span style="font-family: monospace;"><br>
+      </span></td>
+      <td style="vertical-align: top;"><a href="#dc_cf"><span style="font-family: monospace;">dc_cf</span></a> array: number of columns (coefficients per phase end member)</td>
+      <td style="vertical-align: top;">In certain models of mixing<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-family: monospace;">ipxT, ph_cf <br>
+      </span>(rows)<br>
+      </td>
+      <td style="vertical-align: top;"><a href="#ipxT"><span style="font-family: monospace;">ipxT</span></a> and <a href="#ph_cf"><span style="font-family: monospace;">ph_cf</span></a> arrays: number of rows (non-zero 
+interaction parameters) for the non-ideal mixing model</td>
+      <td style="vertical-align: top;">Must always be given by the user (typically 1 for a binary solution; 3 or less for a ternary solution, etc.)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-family: monospace;">ipxT<br>
+      </span>(columns)<br>
+      </td>
+      <td style="vertical-align: top;"><a href="#ipxT"><span style="font-family: monospace;">ipxT</span></a> array for indexation of interaction parameters: 
+set here the maximum order of a parameter</td>
+      <td style="vertical-align: top;">e.g. 2 for binary parameters
+only; 3 if binary and ternary parameters will be used (then the last
+index for a binary interaction parameter must be set to -1)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-family: monospace;">ph_cf</span><br>
+(columns)<br>
+      </td>
+      <td style="vertical-align: top;"><a href="#ipxT">ph_cf</a> array of interaction parameter coefficients: number of columns (max. number of coefficients per parameter)</td>
+      <td style="vertical-align: top;">Depends on the model of mixing, usually will be set automatically<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>
  <br>
-</p>
-
-
-
-<blockquote>
-  
-  <p>Counter:&nbsp; dc_cf array: number of columns (coefficients per phase end member).</p>
-
-  
-  
-  <p>Counter: ipxT and ph_cf arrays: number of rows (non-zero 
-interaction parameters) for the non-ideal mixing model. Must be given by
- the user.</p>
-
-  
-  
-  <p>Counter: ipxT array for indexation of interaction parameters: 
-set here the maximum order of a parameter (e.g. 3 if binary and ternary 
-parameters will be used).
-  </p>
-  <p>Counter: ph_cf array of interaction parameter coefficients: number of columns (max. number of coefficients per parameter).</p>
-
-</blockquote>
-
-
-
-
-
-
-
-<p>The group box below is used only if this is a sorption phase. In this case:&nbsp; </p>
+The group box below is used only if this is a sorption phase. In this case:&nbsp; </p>
 
 
 
@@ -1897,6 +1916,9 @@ parameters will be used).
   <p>Set the number of surface types/patches (minimum 1, maximum 6) to allocate surface complexes
   </p>
   <p>Enter here the specific surface area A of the sorbent (in m<sup>2</sup> per gram), A&gt;0</p>
+  <p>&lt;under re-construction, will be replaced by a new wizard step for TSorpMod settings&gt;<br>
+  </p>
+
 
 </blockquote>
 
@@ -1920,8 +1942,18 @@ Phase Wizard Step 3 - Final settings and hints<font face="Helvetica, Arial, sans
 
 
 
-<p>Counter:&nbsp; Set here the number of links to SDref bibliography records (default 0)<br>
+<p>Counter:&nbsp; Set here the number of links to SDref bibliography records (default 0)</p>
+<p style="margin-left: 40px;">Here, you can optionally set the number
+of references to sources of data such as interaction parameter
+coefficients. The respective fields will appear on Page 1 of Phase
+window. In a SDref field, enter a new reference in the format
+&lt;Author&gt;:&lt;Year&gt;:&lt;Type&gt;: (e.g. <span style="font-family: monospace;">"Einstein:1922:pap:"</span>);
+if this reference does not exist yet in the modeling project then press
+F2 to create a new SDref record with that key; otherwise press F1 to
+view the reference record. In the respective SDval field, enter a short
+comment on e.g. what data were taken from this reference. <br>
 </p>
+
 
 
 
@@ -1953,16 +1985,19 @@ and unmark unnecessary ones.<br>
   <p>(2) In Phase window, do not forget to fill out <tt>PhName</tt> and <tt>PhNote</tt> comments. Depending 
 on setup, enter numbers in <tt>DisPar</tt> array, text in <tt>DcEq</tt> and/or <tt>PhEq</tt> script fields, and parameter 
 coefficients in <tt>ipxT</tt>, <tt>ph_cf</tt>, <tt>dc_cf</tt> arrays on Phase window pages.</p>
+  
   <p>(3) Click on 'Calculate' toolbar button to refresh DC properties 
 collected in the Phase definition (works only if the above checkbox is 
 set on). Attention! Previous properties and codes will be lost! After 
 this operation, look at the <a href="#PhDCC"><tt>PhDCC</tt></a> 
-column, and correct DC codes there, if needed ('T' for H+; 'W' for H2O-solvent; 
+column, and correct DC codes there, if needed ('T' for H+; 'W' for H<sub>2</sub>O-solvent; 
 'M','J',or 'I' for solid-solution end members). <br>
-  </p>
-  <p>Last but not least, save the Phase record to 
+</p></blockquote>
+<p>Last but not least, save the Phase record to 
 the modeling project database.</p>
+<blockquote>
 </blockquote>
+
 
 
 
@@ -2005,7 +2040,9 @@ Wizard and DC selection list upon Create/Remake of the Phase record. <br>
 <p>In forthcoming versions of GEM-Selektor, both Phase Wizard and Phase 
 Window will be extended in order to accommodate a range of new 
 adsorption and dissolution/precipitation kinetics models. <br>
-</p>
+</p><br>
+
+
 
 
 
@@ -2039,7 +2076,9 @@ belongs.&nbsp;&nbsp;</p>
 table has one or several rows, each corresponding to a surface patch 
 (type). In each row, relevant parameters for the surface patch and 
 electrostatic model assigned to it can be entered. <br>
-</p>
+</p><br>
+
+
 
 
 
@@ -2098,7 +2137,8 @@ be entered into <tt><a href="#dc_cf">dc_cf</a> </tt>array for the Phase model of
 <p>For a sorption model, the DC list is enhanced with <a href="#SAT_C_0"><tt>SAT_C</tt></a> and <a href="#MaSDj_0"><tt>MaSDj</tt></a> tables, where 
 the surface species can be assigned to surface patches, electrostatic 
 model planes, and site types, as well as the maximum site densities and 
-charge distribution (CD) parameters can be specified. </p>
+charge distribution (CD) parameters can be specified.</p><br>
+ 
 
 
 
@@ -2142,8 +2182,10 @@ end members or moieties whose indices (in this Phase DC record list <a href="gm_
 model of choice. The number of rows must be set in Phase Wizard upon 
 remake. Rows for default (zero) interaction parameters are not needed; 
 parameters can follow in any order. <br>
+</p><br>
 
-</p>
+
+
 
 
 
@@ -2280,7 +2322,9 @@ manual. </p>
 
 
 <p>This part is currently under construction due to on-going 
-re-implementation of sorption models into TSorpMod class library.&nbsp;</p>
+re-implementation of sorption models into TSorpMod class library. <br>
+</p><br>
+
 
 
 
@@ -4377,7 +4421,7 @@ mode)&nbsp; or <tt>mGo[0]</tt> &nbsp;(<tt>mGo[1]</tt> ...) in
   
   <dt> <a name="gDQF"></a><big><b><tt>gDQF</tt></b></big> - Constant correction to end member <i>g</i>0 from Darken formalism or pure-state fugacity (length <a href="#Ndc"><tt>Ndc</tt></a>)
 
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"></dt>
+</dt>
 </dl>
 
 

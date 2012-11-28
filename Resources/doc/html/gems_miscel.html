@@ -1,63 +1,99 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-  <meta http-equiv="Content-Type"
- content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR"
- content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
-  <title>GEMS3 Miscellaneous Topics</title>
-</head>
-<body>
+<html><head>
+
+
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]"><title>GEMS3 Miscellaneous Topics</title></head><body>
 <h1><img src="gems1.png" align="left" height="48" width="48">
 GEM-Selektor version 3<br>
 </h1>
-<h2>Miscellaneous Topics and HowTo</h2>
+<h2>Miscellaneous Topics and HOWTOs<br>
+</h2>
 <hr size="2" width="100%">
-<h4>Contents</h4>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#HOWHELP">1. How to Use GEM-Selektor Help System</a><br>
+<h3>Contents</h3>
+
+<div style="margin-left: 40px;">
+<p><a href="#HOWHELP">1. How to Use GEM-Selektor Help System</a></p>
+<p><a href="#FORMATS">2. Binary and text file formats for GEMS
+database records </a></p>
+<p><a href="#TEMPLATES">3. Record key templates in GEMS database</a>
 </p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#FORMATS">2. Binary and text file formats for GEMS
-database records </a><br>
+<p><a href="#MARK">4. Marking items in multiple selection list dialogs</a>
 </p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#TEMPLATES">3. Record key templates in GEMS database</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#MARK">4. Marking items in multiple selection list dialogs</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#MARK_FILES">4.1. GEMS Database Chain File List and Selection of
-Files Linked to it</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#SELECT">5. Selecting an item from a selection list dialog</a><br>
+<p><a href="#MARK_FILES">4.1. GEMS Database Chain File List and Selection of
+Files Linked to it</a>
 </p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#MAINTAIN">6. GEMS Database Maintenance menu commands and
-functions</a><br>
-</p>
-<p style="margin-left: 40px;"><a href="#DEFAULTCONFIG_DATA"><span
- style="font-family: Helvetica,Arial,sans-serif;">7. Data Objects for
-Default Configuration of GEM-Selektor</span></a><br>
-</p>
-<p><br>
-</p>
+<p><a href="#SELECT">5. Selecting an item from a selection list dialog</a></p>
+<p><a href="#MAINTAIN">6. GEMS Database Maintenance menu commands and
+functions</a></p>
+<p><a href="#DEFAULTCONFIG_DATA">7. Data Objects for
+Default Configuration of GEM-Selektor</a></p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
 <p>&lt;under construction&gt;<br>
 </p>
-<p>To be provided in Version 3</p>
+
 <br>
 <hr style="width: 100%; height: 2px;">
 <h2><a name="HOWHELP"></a>1. How to Use GEM-Selektor Help System</h2>
-<br>
-<p><br>
+<p>The GEM-Selektor v3 code is equipped with an up-to-date HelpViewer
+based on Qt4 Toolkit functionality. The HelpViewer window can be kept
+open during the whole GEMS3 work session; it is especially convenient
+to put it on a second monitor (if available). Hovering the mouse cursor
+over the control elements shows tooltips about them.<br>
 </p>
-<br>
-<p><br>
+<p>The HelpViewer can be called from the main GEMS3 frame: <br>
 </p>
-<p><br>
+<ul>
+  <li>by clicking on the Help '<big><big><big><span style="font-family: Helvetica,Arial,sans-serif;">?</span></big></big></big>' toolbar button;</li>
+  <li>by selecting entries in the 'Help' menu;</li>
+  <li>by clicking on a data object field on any module window page and
+pressing F1 key, or selecting 'Help' from the right-click pop-up menu; </li>
+  <li>by clicking the 'Learn more' button on (almost) any wizard or pop-up dialog; </li>
+</ul>
+<p>Clicking the 'Help on help' '<big><big><big><span style="font-family: Helvetica,Arial,sans-serif;">?</span></big></big></big>' toolbar button in the Help Viewer&nbsp; window will opens this help page.</p>
+<p>The HelpViewer allows the user to browse help pages and follow
+hypertext links in them, as well as navigate using 'Back', 'Forward'
+and 'Home' toolbar buttons (or the respective items in the 'Go' menu). <br>
 </p>
-<hr size="2" width="100%">
-<p>&nbsp;</p>
-<h2><a name="FORMATS"></a>2. Binary and text file formats for GEMS
+<p>The displayed content can be zoomed in or zoomed out using the
+'View' menu. The content can be selected by mouse-dragging and printed
+using the 'File' 'Print' menu command (further choices in the appearing
+Print Dialog). <br>
+</p>
+<p>The help contents can also be accessed via tree-like headings in the 'Contents' tab.</p>
+<p>The 'Index' tab allows the user to jump to a description (if
+available) of any data object by clicking on the respective label in
+the scrollable list. To reduce the size of the list, some characters
+can be entered into 'TextLabel' field. <br>
+</p>
+<p>The 'Search' tab allows to find all help pages containing a given
+keyword. The list of pages (files) appears in the list below; click on
+a file link opens the respective help file. The keyword will
+automatically appear in the&nbsp; 'Find' toolbar field;&nbsp; exact
+locations within the help file can be followed by clicking 'Find next'
+or 'Find previous' toolbar buttons. <br>
+</p>
+<p>The 'Find' function (within currently open help file) can be used separately, also using the 'Find' menu commands.</p>
+<p>Executing the 'Help' 'Version' menu command in HelpViewer window
+opens a small window with information about revision numbers and OS
+platform of the currently installed GEM-Selektor code.<br>
+</p>
+<p>Taken together, this functionality makes the GEMS3 HelpViewer a rewarding experience.<br>
+</p>
+<p> </p>
+<p></p><br>
+<hr size="2" width="100%"> <h2><a name="FORMATS"></a>2. Binary and text file formats for GEMS
 database records</h2>
 <p><br>
 </p>
@@ -72,7 +108,7 @@ database records</h2>
 <p><br>
 </p>
 <hr size="2" width="100%">
-<p>&nbsp;</p>
+
 <h2><a name="MARK"></a>4. Marking/selecting items in selection list
 dialogs</h2>
 <br>
@@ -91,7 +127,7 @@ Selection of Files Linked to it</h3>
 <p><br>
 </p>
 <hr size="2" width="100%">
-<p>&nbsp;</p>
+
 <h2><a name="SELECT"></a>5. Choosing an Item from a Selection List
 Dialog<br>
 </h2>
@@ -106,122 +142,138 @@ Dialog<br>
 <p><br>
 </p>
 <hr size="2" width="100%">
-<h2>&nbsp;<a name="MAINTAIN"></a>6. GEMS Database Maintenance menu
+<h2>&nbsp;<a name="MAINTAIN"></a>6. GEMS3 Database Mode menu
 commands and functions</h2>
 <p> </p>
-<h4> <br>
-<tt></tt></h4>
-From the "<tt>Thermodynamic database</tt>" dialog window, press any of
-the
-buttons for data types (e.g. <tt>Dependent Components (Thermochemical)</tt>).&nbsp;
-A sreenform will appear ("<tt>DComp</tt>" in this case) with some data
-fields,
-a menu bar, buttons and pictograms, common for all screenforms
-accessible
-in the <i>database maintenance</i> mode. On screenforms, the key of
-the record
-currently visible in the screen form is shown, with date and time of
-the
-last modification. Some screenforms consist of more than one page; in
-this
-case, you will see two or more buttons labeled "<tt>Page1</tt>", "<tt>Page2</tt>",
-... The buttons with pictograms just duplicate the most frequently used
-options
-from the pop-up menus.
+<p> In the Database Mode of GEM-Selektor, any module window (IComp,
+DComp, ...) can be opened by clicking the respective button in the left
+pane, or using the 'Modules' menu. Regardless of which module window is
+open, the main GEMS3 frame will show the same menu bar and toolbar buttons, followed by the record key field. Toolbar buttons largely duplicate the most frequently used
+menu commands.
+</p>
 <p>The&nbsp;<a name="P333R"></a>"<b>Record</b>" menu provides commands
 for
-processing data in a single record; these commands are briefly
-described below. </p>
-<p><a name="P333R1"></a><b><i>Show</i></b> <br>
-Permits to select a single record from database and display it in the
-screen
-form. When this command is executed, a "<tt>Select data record key</tt>"
+processing data in a single record using commands that are briefly
+described below.</p>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">Menu command<br>
+      </td>
+      <td style="vertical-align: top;">Hotkey<br>
+      </td>
+      <td style="vertical-align: top;">Explanation<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><b><i>Create</i></b><span style="font-style: italic; font-weight: bold;">(New)</span> </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">Creates a new database record
+from scratch. When invoked, it first displays a
+"Please, set a new record key" dialog with a disassembled key of the
+currently loaded
+record (or default key fields if no record yet exists in the module
+database chain). Enter at least one of the fields
+and
+press "Ok" (remember that the record key must be unique within the
+database chain). At the next step, the respective Remake Wizard will
+appear. <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><b><i>New</i></b><span style="font-style: italic; font-weight: bold;">(Clone) </span></td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">
+Creates a new database record by "cloning"
+the currently loaded record. When invoked, it first displays a
+"Please, set a new record key" dialog with a disassembled key of the currently loaded
+record. Change at list one character in one of the fields
+and
+press "Ok"(remember that the record key must be unique within the database chain). At the next step, the respective Remake Wizard will appear. </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-style: italic;"><span style="font-weight: bold;">Display</span></span></td>
+      <td style="vertical-align: top;">F6<br>
+      </td>
+      <td style="vertical-align: top;">Permits to select a single
+record, load it from database, and display it in the module window.
+When this command is executed, a "<tt>Select data record key</tt>"
 dialog
 appears with a scroll list of record keys (in alphabetic order). Select
 the
-one you need by mouse-click and press the "<tt>OK</tt>" button. The
+one you need by mouse-click and press the "<tt>Ok</tt>" button. The
 lists
-in DCOMP or REACDC chains may be quite long and you can display only
+in DComp or ReacDC chains may be quite long; you can display only
 part
-of record keys by using the "<tt>Filter...</tt>" button.&nbsp; If you
-press
-it, a small "Template" dialog appears with record key fields usually
+of record keys by using the "<tt>Set Filter...</tt>"
+button to set the filter template.&nbsp; If you click on the "Set
+Filter" button, a small "Template ..." dialog appears with record key
+fields usually
 containing
 asterisks (meaning that any string fits to the template). You can edit
 some
-fields by putting letters in them; for instance (if you work with DCOMP
+fields by putting letters in them; for instance (if you work with DComp
 records),
-putting "a" in the first field and "Fe*" in the second one creates a
-template
-which will display only aqueous species of iron. Press OK when
+putting <span style="font-family: monospace;">"a"</span> in the first field and <span style="font-family: monospace;">"Fe*"</span> in the second one creates a
+template,
+which will display only aqueous species of iron. Press Ok when
 finished;
-the template is retained until another template is specified, "Select
-All"
-button restores the default template (fits with any record key).&nbsp;
-Most
-of data fields can be edited in this mode. The program usually detects
-that
-some data objects have been modified by the user and will display
-warning
-messages if you try to load another record from the database before
-contents
-of the modified record had been saved. </p>
-<p><a name="P333R2"></a><b><i>Remake</i></b> <br>
-Re-structurises and rebuilds the currently selected record. This
+the template is retained until another template is specified; "Reset"
+button restores the default template (fits with any record key). <br>
+Alternatively, in the GEMS3 main frame, any record of selected type
+(e.g. DComp) can be loaded and dispalyed simply by clicking on its
+record key in the list visible on the left side. Above this list, a
+filter template is visible; it can be edited directly or field-by-field
+after clicking on the "Filter" button to the left of template.<br>
+ </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><b><i>Remake...</i></b> </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">Re-configures and rebuilds the
+currently selected record. This
 function is highly specific for record types and is the most
 sophisticated tool for
-handling data in GEMS. In general, after the "Remake" button is
-pressed, a
-small "Reorganization of data fields" dialog appears with three
-options: "Clear
-all" (restores an empty default configuration of data structure);
-"Remake"
-and "Bypass" (leaves the data structure unchanged). The first two
-options
-will get you in a "Configuration dialog", sometimes with many flags and
-switches.
-In most cases, these flags refer to dynamic data objects, allocated if
-the
-flag is set to "*" or "+" and deleted if the flag is set to "-".&nbsp;
-Other
-flags contain codes for various calculation modes (<a
- href="GEMS-Linux-USREF.html#P6500">more for DCOMP and REACDC</a>).
-Please,
-note that these configuration flags can be changed only in the "Remake"
-mode
-to prevent possible crashes of the dynamic memory because of mismatches
-caused
-by changing the flags at runtime. </p>
-<p><a name="P333R3"></a><b><i>Create</i></b> <br>
-Creates a new database record (this is a main tool for "cloning"
-records of
-the same structure in GEMS database). When invoked, it first displays a
-"Insert
-new database record" dialog with a disassembled key of the currently
-loaded
-record. You should change at list one character in one of the fields
-and
-press "OK". The record key must be unique! An error message will occur
-if
-the record with the same key as you have specified exists in the
-database. When the new record is created, the command execution will
-proceed exactly as the Remake command. </p>
-<p><a name="P333R4"></a><b><i>Calculate</i></b> <br>
-Many record types (COMPOS, DCOMP, REACDC, RTPARM, PHASE) are tied with
+handling data in GEMS3. In general, after the "Remake" button or menu
+comand is activated, a Remake Wizard appears for the respective record
+type. After the remake wizard is finished, the record will not be saved
+automatically; to save the re-configured record, use "Save" or "Save
+as" command.&nbsp;</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold; font-style: italic;">Calculate</span><br>
+      </td>
+      <td style="vertical-align: top;">F9<br>
+      </td>
+      <td style="vertical-align: top;">
+Many record types (Compos, DComp, ReacDC, RTparm, Phase) are tied with
 various
 subroutines which perform cross-checking of the data, restore missing
 values,
-or do other calculations. These subroutines of GEMS are executed upon
+or do other calculations. These subroutines of GEMS3 are executed upon
 "Calculate"
 command. They can issue a variety of warnings depending on the data and
 the
 record type. The calculated data are not saved automatically to the
 database;
-this has to be done using "Save" or "Save as" commands. </p>
-<p><a name="P333R5"></a><b><i>Save</i></b> <br>
-Saves current record to the database file from where it has been
-loaded. </p>
-<p><a name="P333R6"></a><b><i>Save as</i></b> <br>
+this has to be done using "Save" or "Save as" commands.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><b><i>Save</i></b></td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">
+Saves current record to the database file under the same key and from where it has been
+loaded.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><b><i>Save as</i></b> ...</td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">
 Permits to save contents of the data record under another record key
 (works
 as "Create" command except that no re-organization of the data
@@ -234,32 +286,49 @@ a file where to put the record. Please, remember that the default GEMS
 database
 files are write-protected, so normally you should choose only between
 files
-existing in your own system profile directories. </p>
-<p><a name="P333R7"></a><b><i>Delete</i></b> <br>
+existing in your own system profile directories.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><b><i>Delete</i></b></td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">
 Deletes currently displayed record from the database chain. The
 contents of
 the record remain loaded into memory and in principle can be saved
 using "Save
 As" or "Create" commands. This operation will not work on
-write-protected files from the default GEMS database. </p>
-<p><a name="P333R8"></a><b><i>Plot</i></b> <br>
+write-protected files from the default GEMS database.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold; font-style: italic;">Plot data</span><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">
 This function works only in RTPARM and GTDEMO screen forms. After
 calculation, it will display four graphs (one in GTDEMO) to examine
 temperature and /
-or pressure change of selected thermodynamic properties. </p>
-<p><a name="P333R9"></a><b><i>Print</i></b> <br>
+or pressure change of selected thermodynamic properties.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold; font-style: italic;">Print</td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">
 This function is still under construction. For some data types (e.g.,
 RTPARM
 or PHASE), it can print tabulated data or download them as columns of
 numbers
 into a text file. A typical "File Selection" dialog appears to let you
 choose
-the file name and path. </p>
-<p><b><i>Demo</i></b> <br>
-Under construction. </p>
-<p><b><i>Close</i></b> <br>
-Closes the screen form and returns to "Thermodynamic Database" dialog. <br>
-&nbsp; </p>
+the file name and path.</td>
+    </tr>
+  </tbody>
+</table>
+<p><br>
+ </p>
+
 <p>The&nbsp;<a name="P333L"></a>"<b>Record List</b>" menu provides
 commands for processing multiple records; a brief description of its
 its commands follows. </p>
@@ -311,8 +380,7 @@ the next record is inserted it can overwrite part of this space. Since
 the
 size of PDB file header is limited, it may happen that stack of deleted
 records
-will overflow, with the respective warning message. In this case, <a
- href="#P333F4">compression of database file</a> should be performed. A
+will overflow, with the respective warning message. In this case, <a href="#P333F4">compression of database file</a> should be performed. A
 good
 rule of thumb is not to delete more than 20-30 records at once. </p>
 <p><a name="P333L4"></a><b><i>List</i></b> <br>
@@ -460,8 +528,7 @@ Database</tt>" dialog. <br>
 <tt></tt></h4>
 <hr style="width: 100%; height: 2px;">&nbsp;
 <br>
-<h2><span style="font-family: Helvetica,Arial,sans-serif;"><a
- name="DEFAULTCONFIG_DATA"></a>7. Data Objects for Default
+<h2><span style="font-family: Helvetica,Arial,sans-serif;"><a name="DEFAULTCONFIG_DATA"></a>7. Data Objects for Default
 Configuration of GEM-Selektor</span><br>
 </h2>
 <span style="font-family: Helvetica,Arial,sans-serif;"><br>
@@ -552,10 +619,14 @@ with date and time when the records are loaded again into PDB files. </p>
 &nbsp; <br>
 </p>
 <hr style="width: 100%; height: 2px;">
-<p>&nbsp; </p>
-<p><tt>end of file</tt> <br>
+
+<p>Copyright (c) 2012 GEMS Development Team</p>
+<p>Last change: 27.11.2012</p>
+<p>
+<br>
 &nbsp; </p>
+
 <br>
 <br>
-</body>
-</html>
+
+</body></html>
