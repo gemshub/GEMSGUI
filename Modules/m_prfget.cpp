@@ -838,11 +838,15 @@ bool TProfil::GetFN( const char * prfName, bool show_dlg )
 void TProfil::SetFN()
 {
     bool allOpend = true;
-
 	unsigned i, nx=0;
     short j, k=0;
     TCStringArray aFls;
     gstring s;
+
+    vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
+    gstring fstKeyFld(_fstKeyFld);
+    StripLine(fstKeyFld);
+
     for( i=0; i<aMod.GetCount(); i++)
     {
         if( aMod[i].IsSubModule() )
@@ -870,11 +874,7 @@ void TProfil::SetFN()
     }
     if( !allOpend )
     {
-        vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
-        gstring fstKeyFld(_fstKeyFld);
-        StripLine(fstKeyFld);
-
-    	GetFN( fstKeyFld.c_str(), false );
+       GetFN( fstKeyFld.c_str(), false );
     }
 }
 

@@ -772,6 +772,7 @@ TVisor::Exit()
         aObj[ o_nldcvs].SetPtr(0);
         aObj[ o_nldchs].SetPtr(0);
         aObj[ o_nlphh].SetPtr(0);
+        TGEM2MT::pm->dyn_kill();
 
     }
     catch(TError & xcpt)
