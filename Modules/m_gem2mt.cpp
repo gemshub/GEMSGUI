@@ -1148,7 +1148,7 @@ void TGEM2MT::RecordPrint( const char* key )
 		        if( !vfQuestion( window(), filename.c_str(),
 		        		"This file exists! Overwrite?") )
                    return;
-            mtp->PsScom=S_OFF;
+            //mtp->PsScom=S_OFF;
             fstream ff( filename.c_str(), ios::out );
 	        ErrorIf( !ff.good() , filename.c_str(), "Fileopen error");
             to_text_file( ff,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF, filename.c_str() );
