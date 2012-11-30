@@ -193,25 +193,6 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
 }
 
 
-
-// reset mt counters
-void TGEM2MT::mt_reset()
-{
-// setup  counters
-//  mtp->cT = mtp->Tai[START_];
-//  mtp->cP = mtp->Pai[START_];
-  mtp->cV = 0.;
-  mtp->cTau = mtp->Tau[START_];
-  mtp->ctm = mtp->tmi[START_];
-  mtp->cnv = mtp->NVi[START_];
-  mtp->qc = 0;
-  mtp->kv = 0;
-  mtp->jt = 0;
-  mtp->cT = mtp->PTVm[START_][1];
-  mtp->cP = mtp->PTVm[START_][0];
-  mtp->ct = 0;
-}
-
 // setup begin initalization
 void TGEM2MT::init_arrays( bool mode )
 {

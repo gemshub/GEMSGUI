@@ -33,8 +33,7 @@
 #else
 
 #include <ctime>
-#include "ms_gem2mt.h"
-// #include "m_compos.h"  check this with SD!
+#include "m_gem2mt.h"
 #include "nodearray.h"
 
 #endif
@@ -404,8 +403,13 @@ void TGEM2MT::ComposMGPinBox( long int q  )
           }
 
           // Converting quantity Xe into amount (moles)
+#ifndef IPMGEMPLUGIN
           Xincr = TCompos::pm->Reduce_Conc( UNITP, Xe, PHmw, Vm, R1, Msys,
                   Mwat, Vaq, Maq, Vsys );
+#else
+          Xincr = Reduce_Conc( UNITP, Xe, PHmw, Vm, R1, Msys,
+                  Mwat, Vaq, Maq, Vsys );
+#endif
 
           PhFract = 0.; // Initial fraction of real phase amount
           naqgf = 0;
@@ -744,10 +748,11 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
 
   //  This loop contains the overall transport time step (wave)
   do {
-      if( mtp->ct > 0)
-        CalcStartScript();
 
 #ifndef IPMGEMPLUGIN
+
+        if( mtp->ct > 0)
+          CalcStartScript();
 
       sprintf(buf, "   step %d; time %lg; dtime %lg  ", mtp->ct, mtp->cTau, mtp->dTau );
       Vmessage = "Calculating Transport through Sequential Reactors: ";
@@ -1183,171 +1188,6 @@ l100:
     reject = 1;
     goto l30;
 }
-//====================================================================
-
-void TGEM2MT::to_text_file( fstream& ff, bool with_comments )
-{
-  bool _comment = with_comments;
-  
-  TPrintArrays  prar(0, 0, ff);
-
-   if( _comment )
-   {  ff << "# GEMS3K v. 2.2.4" << endl;
-      ff << "# Prototype 11.07.2008" << endl;
-      ff << "# Comments can be marked with # $ ;" << endl << endl;
-      ff << "# Template for the Gem2mt data file" << endl;
-      ff << "# (should be read before the DATACH, the IPM-DAT and DATABR files)" << endl << endl;
-      ff << "#Section (scalar): Controls and dimensionalities of the Gem2mt operation" << endl;
-   }
-   if( _comment )
-      ff << "# Code of GEM2MT mode of operation { S F A D T V W }" << endl;
-   ff << left << setw(17) << "<Mode> " << "\'"<<  mtp->PsMode << "\'"<< endl;
-   if( _comment )
-        ff << "# number of nodes nC (1D mass-transport or box-flux models only)" << endl;
-   ff << left << setw(7) << "<Size> " <<   mtp->nC /* << " 1" << " 1" */ << endl;
-   if( _comment )
-       ff << "# Maximum allowed number of time iteration steps (default 1000)" << endl;
-   ff << left << setw(7) << "<MaxSteps> " <<   mtp->ntM << endl;
-   if( _comment )
-        ff << "# Physical time iterator";
-   prar.writeArray(  "Tau", mtp->Tau, 3 );
-   ff << endl;
-   
-   if( mtp->PsMode == RMT_MODE_S || mtp->PsMode == RMT_MODE_F || mtp->PsMode == RMT_MODE_B )
-   {  if( _comment )
-       ff << "# Use phase groups definitions, flux definition list & source fluxes and elemental stoichiometries";
-      prar.writeArray(  "PvFDL", &mtp->PvPGD, 3, 1 );
-      if( _comment )
-        ff << "\n#  number of MGP flux definitions (0 or >1)" <<  endl;
-      ff << left << setw(7) << "<nFD> " <<   mtp->nFD << endl;
-      if( _comment )
-        ff << "# number of mobile phase groups (0 or >1)" << endl;
-      ff << left << setw(7) << "<nPG> " << mtp->nPG <<  endl;
-      if( _comment )
-        ff << "# number of source flux definitions (0 or < nFD )" << endl;
-      ff << left << setw(7) << "<nSFD> " << mtp->nSFD <<  endl;
-      if( _comment )
-        ff << "# nICb number of ICs in  (DATABR) for setting box-fluxes" << endl;
-      ff << left << setw(7) << "<Nf> " << mtp->Nf <<  endl;
-      if( _comment )
-        ff << "# nPHb number of phases in (DATABR) for setting box-fluxes" << endl;
-      ff << left << setw(7) << "<FIf> " << mtp->FIf <<  endl;
-   }     
-
-   if( mtp->PsMode == RMT_MODE_W  )
-   {  if( _comment )
-       ff << "# Use array of grid point locations? (+ -)" << endl;
-       ff << left << setw(17) << "<PvGrid> " << "\'"<<  mtp->PvGrid << "\'"<< endl;
-       if( _comment )
-        ff << "# res Number of allocated particle types (< 20 ? )" << endl;
-       ff << left << setw(7) << "<nPTypes> " << mtp->nSFD <<  endl;
-       if( _comment )
-         ff << "# res Number of particle statistic properties (for monitoring) >= anPTypes" << endl;
-       ff << left << setw(7) << "<nProps> " << mtp->nProps <<  endl;
-       if( _comment )
-         ff << "# spatial dimensions of the medium defines topology of nodes";
-      prar.writeArray(  "LSize", mtp->sizeLc, 3 );
-      ff << endl;
-   }     
-
-   if( _comment )
-    ff << "# Advection/diffusion mass transport: initial fluid advection velocity (m/sec)" << endl;
-   ff << left << setw(7) << "<fVel> " << mtp->fVel <<  endl;
-   if( _comment )
-    ff << "# initial total node volume (m3)" << endl;
-   ff << left << setw(7) << "<cvol> " << mtp->vol_in <<  endl;  // was "<cLen>"
-   if( _comment )
-    ff << "# time step reduction factor" << endl;
-   ff << left << setw(7) << "<tf> " << mtp->tf <<  endl;
-   if( _comment )
-    ff << "# cutoff factor for differences (1e-9)" << endl;
-   ff << left << setw(7) << "<cdv> " << mtp->cdv <<  endl;
-   if( _comment )
-    ff << "# cutoff factor for minimal amounts of IC in node bulk compositions (1e-12)" << endl;
-   ff << left << setw(7) << "<cez> " << mtp->cez <<  endl;
-   if( _comment )
-    ff << "# initial value of longitudinal dispersivity (m), usually 1e-3" << endl;
-   ff << left << setw(7) << "<al_in> " << mtp->al_in <<  endl;
-   if( _comment )
-    ff << "# initial general diffusivity (m2/sec), usually 1e-9" << endl;
-   ff << left << setw(7) << "<Dif_in> " << mtp->Dif_in <<  endl;
-        
-   ff<< "\n<END_DIM>\n";
-
- // dynamic arrays - must follow static data
-   if( _comment )
-   {   ff << "\n## Task configuration section ";
-       ff << "\n#  Array of indexes of initial system variants for distributing to nodes";
-   }
-   prar.writeArray(  "DiCp", mtp->DiCp[0], mtp->nC*2, 2);
-
-   if( !(mtp->PsMode == RMT_MODE_S || mtp->PsMode == RMT_MODE_F || mtp->PsMode == RMT_MODE_B) )
-   {  if( _comment )
-       ff << "\n# Hydraulic parameters for nodes in mass transport model";
-      prar.writeArray(  "HydP", mtp->HydP[0], mtp->nC*SIZE_HYDP, SIZE_HYDP);
-   }
-   if( mtp->PsMode == RMT_MODE_W  )
-   {  if( _comment )
-       ff << "\n# Array of initial mean particle type numbers per node";
-       prar.writeArray(  "NPmean", mtp->NPmean, mtp->nPTypes );
-       if( _comment )
-        ff << "\n# Minimum average total number of particles of each type per one node";
-       prar.writeArray(  "nPmin", mtp->nPmin, mtp->nPTypes );
-        if( _comment )
-         ff << "\n# Maximum average total number of particles of each type per one node";
-       prar.writeArray(  "nPmax", mtp->nPmax, mtp->nPTypes );
-       if( _comment )
-         ff << "\n# Array of particle type definitions at t0 or after interruption";
-       prar.writeArray(  "ParTD", mtp->ParTD[0], mtp->nPTypes*6, 6 );
-      if( mtp->PvGrid != S_OFF )
-      {
-          if( _comment )
-            ff << "\n# Array of grid point locations";
-          prar.writeArray(  "grid", mtp->grid[0], mtp->nC*3, 3L );
-      }
-   }     
-   if( mtp->PsMode == RMT_MODE_S || mtp->PsMode == RMT_MODE_F || mtp->PsMode == RMT_MODE_B )
-   {  
-    if( mtp->PvFDL != S_OFF )
-    {
- 	   if( _comment )
-        ff << "\n# Indexes of nodes where this flux begins and ends";
-        prar.writeArray(  "FDLi", mtp->FDLi[0], mtp->nFD*2, 2 );
- 	   if( _comment )
-        ff << "\n# Part of the flux defnition list (flux order, flux rate, MGP quantities)";
-        prar.writeArray(  "FDLf", mtp->FDLf[0], mtp->nFD*4, 4L );
- 	   if( _comment )
-        ff << "\n# ID of fluxes";
-        prar.writeArray(  "FDLid", mtp->FDLid[0], mtp->nFD, MAXSYMB );
- 	   if( _comment )
-        ff << "\n# Operation codes (letters) flux type codes";
-        prar.writeArray(  "FDLop", mtp->FDLop[0],  mtp->nFD, MAXSYMB  );
- 	   if( _comment )
-        ff << "\n# ID of MGP to move in this flux";
-        prar.writeArray(  "FDLmp", mtp->FDLmp[0], mtp->nFD, MAXSYMB  );
-    }
-	if( mtp->PvPGD != S_OFF )
-	{
-	  if( _comment )
-        ff << "\n# Units for setting phase quantities in MGP";
-      prar.writeArray(  "UMGP", mtp->UMGP, mtp->FIf, 1L );
-	  if( _comment )
-         ff << "\n# Quantities of phases in MGP ";
-	  prar.writeArray(  "PGT", mtp->PGT, mtp->FIf*mtp->nPG, mtp->nPG );
-	  if( _comment )
-	     ff << "\n# ID list of mobile phase groups";
-          prar.writeArray(  "MGPid", mtp->MGPid[0], mtp->nPG, MAXSYMB );
-	}
-   if( mtp->PvSFL != S_OFF )
-   {
-	  if( _comment )
-	     ff << "\n# Table of bulk compositions of source fluxes";
-      prar.writeArray(  "BSF", mtp->BSF, mtp->nSFD*mtp->Nf, mtp->Nf );
-   }
- }     
-   if( _comment )
-     ff << "\n\n# End of file"<< endl;
- }
 
 // --------------------- end of m_gem2mtbox.cpp ---------------------------
 

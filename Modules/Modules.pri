@@ -31,6 +31,7 @@
                      $$MODULES_CPP/m_gem2mtc.cpp \
                      $$MODULES_CPP/m_gem2mtt.cpp \
                      $$MODULES_CPP/m_gem2mtbox.cpp \
+                     $$MODULES_CPP/m_gem2mtfor.cpp \
                      $$MODULES_CPP/m_param.cpp \
                      $$MODULES_CPP/m_icomp.cpp \
                      $$MODULES_CPP/v_ipnc.cpp \
