@@ -1,6 +1,8 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
 
+
+
   
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
@@ -2204,13 +2206,17 @@ Types of Multicomponent Phases<br>
 
 
 
-<p>&lt;TBD&gt;<br>
-</p>
+<p>This section covers specific issues and limitations for certain
+types of multicomponent phases. It also contains suggestions concerning
+the preferable work flow with regard to creating and modifying such
+phase definitions. <br>
+</p><br>
 
 
 
-<p><font face="Helvetica, Arial, sans-serif"><br>
-  </font></p>
+
+
+
 
 
 
@@ -2226,8 +2232,42 @@ Aqueous electrolyte</h3>
 
 
 
-<p>&lt;TBD&gt;<br>
+<p>Most aqueous activity coefficient models that are currently
+supported by the GEMS3 code belong to extended Debye-Hückel (EDH)
+models (see document "/Resources/doc/pdf/Activity-Coeffs.pdf" for
+details and references). As there is no specific interaction parameters
+in EDH-based aqueous ion-association models, such phases are
+automatically assembled from available DComp and/or ReacDC records upon
+opening or creating a GEMS3 modelling project, as defined in the <a href="gems_aphsetup.html">Autophase Setup wizard</a>. <br>
 </p>
+<p>Contrary to ion-association models, any "specific interaction"
+non-ideal model of aqueous electrolyte contains interaction parameters
+between aqueous species. Hence, such phase definitions cannot be
+composed in the automatic mode; they must be already present in the
+project database as specific <a href="gm_phase.html">Phase definition records</a>. Such a definition typically contains a list of included chemical species, and an array of
+interaction parameter coefficients entered into the <a style="font-family: monospace;" href="gm_phase.html#ph_cf">ph_cf</a>
+ table, with indices of aqueous species provided in the <a href="gm_phase.html#ipxT"><span style="font-family: monospace;">ipxT</span></a>
+list. The appropriate specific-interaction Phase definition must be
+specified in the Autophase Setup wizard, which disables the automatic
+assembling of the EDH-based aqueous phase. <br>
+</p>
+<p>In this GEM-Selektor version, the specific ion interaction aqueous
+phase definitions can be automatically compressed in two steps.
+Firstly, if an extensive Phase for SIT, Pitzer or EUNIQUAC model is
+provided in the default database (DB.default) then it will be
+compressed during creation of a new modeling project. Namely, if in
+this phase definition, a dependent component is found that contains an
+independent component not included into the project IComp file, then
+this dependent component will be skipped along with all interaction
+parameters (rows in <span style="font-family: monospace;">ph_cf</span> table) that refer to this dependent component by index in the <span style="font-family: monospace;">ipxT</span>
+list. Secondly, such aqueous phase definition will be compressed in a
+similar way if some aqueous species are turned off in the chemical
+system definition. This provides an unmatched flexibility also in
+handling of specific interaction phase models in GEMS3 code and
+database.<br>
+
+</p>
+
 
 
 
@@ -2244,17 +2284,55 @@ Aqueous electrolyte</h3>
 
 <hr style="width: 100%; height: 2px;">
 <h3><font face="Helvetica, Arial, sans-serif"><a name="PHASE_GASFLUID"></a></font>4.2.
-Gas mixture and non-ideal fluids</h3>
-
-
-
-<p>&lt;TBD&gt;<br>
+Gas mixture and non-ideal fluids</h3><p>There
+is a typical workflow in how such phases are created. Initially, in a
+new modeling project, a non-ideal gas/fluid phase is created via the <a href="gems_aphsetup.html">Autophase Wizard</a>,
+because it is not known in beforehand what non-ideal gase species
+(DComps) would be available according to the selected list of
+Independent Components in the new project system.<br>
+<br>
+Because the interaction parameters of mixing (if needed) cannot be
+entered into the autophase-created fluid/gas phase, the way to enhance
+the fluid phase definition with interaction parameters would be to save
+it under a modified name from the project system (after selecting the
+key of this phase in the System Phase window page and pressing F7, then
+"Record" "Save as" menu command). Then to modify the saved Phase record
+in the Database mode of GEMS by adding the interaction parameters into
+the <span style="font-family: monospace;">ph_cf</span> table (and indexes of interacting fluid/gas components into the <span style="font-family: monospace;">ipxT</span> list).<br>
 </p>
-
-
-
-<p><font face="Helvetica, Arial, sans-serif"><br>
-  </font></p>
+<p>Next time, when opening this modeling project, one should uncheck
+the "Retain setup of aqueous (and gas/fluid) phases", then select the
+second tab in the Autophase Dialog, and disable the automatic setup of
+fluid/gas phase by selecting a "... user-defined Phase record from
+database, U". The user-prepared phase that was enhanced with
+interaction parameters will be selected (automatically, or from the
+appearing list, if there are two or more of such phases). When the
+project opens next time, the edited phase definition will be taken into
+the system.<br>
+<br>
+The autophase wizard can only create non-ideal fluid/gas phases without
+interaction parameters; as long as they are not needed, it is the
+fastest and most efficient way to create a fluid phase and keep it
+consistent with currently available DComp records for fluid components.
+Whenever new DComp fuid/gas species are added to the project, their
+nonideality coefficients will be automatically collected from DComp
+records. <br>
+</p>
+<p>Note that, if the user-modified Phase record for gas/fluid mixture
+has the same key as the automatically created Phase, and the project is
+reset from using the user-prepared phase back into the autophase mode,
+this automatic phase is created correctly, but temporarily writes over
+the user provided fluid phase record. In this way, the interaction
+parameters will be lost. If the user-prepared phase has a different
+record key, then upon&nbsp; switching from using the prepared phase to
+the automatic phase, both phases will appear in the system definition.
+Sometimes it actually is good that two fluid/gas phases are taken in
+the system, if for example you want to calculate a solvus in CO2-H2O
+system for example. In any case, it will do no harm if the
+user-provided phase is turned off in the single-system definition. <br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><br>
+  </font>
 
 
 
@@ -4871,9 +4949,10 @@ from (Kielland 1936), from (Helgeson ea 1981) or</dt>
 
 
 <hr style="width: 100%; height: 2px;"><b><b><b><br>
-<tt>Last update: 22.08.2012 DK<br>
+</b></b></b>Copyright (c) 2003-2012 GEMS Develoment Team<br>
+<br>
+Last update: 2.12.2012 DK<b><b><b><tt><br>
 </tt><br>
-<tt>end of file</tt> <br>
 &nbsp; <br>
 </b> </b></b> <br>
 

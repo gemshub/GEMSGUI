@@ -1,12 +1,11 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
+
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <meta name="GENERATOR" content="Mozilla/4.75 [en] (Win95; U) [Netscape]">
-  <title>GEMS3 DComp Module</title>
-  <meta name="description" content="Version 2.0.0-PSI">
-</head>
-<body>
-<h1><img src="gems1.png" height="48" align="left" width="48"> <font color="#000066"> GEM-Selektor version 3</font> </h1>
+  <meta name="GENERATOR" content="Mozilla/4.75 [en] (Win95; U) [Netscape]"><title>GEMS3 DComp Module</title>
+  
+  <meta name="description" content="Version 2.0.0-PSI"></head><body>
+<h1><img src="gems1.png" align="left" height="48" width="48"> <font color="#000066"> GEM-Selektor version 3</font> </h1>
 <h2><font size="+3">Dependent Components (DComp) Module&nbsp;</font></h2>
 <hr size="2" width="100%">
 <h3>Contents<br>
@@ -73,61 +72,53 @@ Warnings, errors and troubleshooting</a></p>
 <hr size="2" width="100%"><h2>1. Thermochemical Data
 Format</h2>
 <p>DComp records contain the standard state thermodynamic properties of
-species (Dependent Components, DC) in a "thermochemical" format&nbsp;
--&nbsp; molar properties of formation from chemical elements at
-standard states (Independent Components, IC), rather than properties of
-reaction with
+species (Dependent Components, DC) in a "thermochemical" format, that
+is,&nbsp; the standard properties per mole of DC, rather than
+properties of
+its reaction with
 other species. Thermodynamic data for reactions are kept in GEMS
-database in a special<a href="gm_reacdc.html"> ReacDC </a>format
+database in a specialized <a href="gm_reacdc.html">ReacDC </a>format
 records. &nbsp; </p>
-<p>Minimal information about a species in a DComp record includes: </p>
+<p>Minimal information about a chemical species (compound) in a DComp record includes: </p>
 <ul>
-  <li> phase (standard and reference) state;</li>
-  <li> name (identifier), also short name in the <a href="gdb_rkey.html#dbm_DComp">DComp record key</a>;</li>
-  <li> stoichiometry (chemical formula, expressed in <a href="gdb_rkey.html#dbm_IComp_0">IC symbols</a>);</li>
-  <li> <a href="#DCset_0">Default type of species</a>;</li>
+  <li> standard state;</li>
+  <li> name (identifier), also a short name in the <a href="gems_rekey.html#dbm_DComp">DComp record key</a>;</li>
+  <li> stoichiometry (chemical formula, expressed in <a href="gems_rekey.html#dbm_IComp_0">IC symbols</a>);</li>
+  <li> <a href="#DCset_0">Default class code of species (compound)</a>;</li>
   <li> standard molar (partial molal) Gibbs energy of formation <i>G<sup>0</sup></i><sub>Tr,Pr</sub>&nbsp;
-from IC at reference <i>Tr, Pr&nbsp; </i>;</li>
-  <li> standard molar (partial molal) volume, entropy and heat capacity
-at <i>Tr, Pr </i>.</li>
+from IC at reference <i>Tr, Pr&nbsp; </i>(usually <i>Tr</i> = 298.15 K; <i>Pr</i> = 1 bar);</li>
+  <li> standard molar (partial molal) volume, absolute entropy, and heat capacity
+at <i>Tr, Pr</i>.</li>
 </ul>
 <p>DComp records may contain several optional data vectors holding
 coefficients for various <i>T,P</i> dependencies of thermodynamic
-properties or equations of state, used in the different <a href="theortdb.html">methods of temperature - pressure extrapolation</a>.
+properties or equations of state, used in various <a href="theory_tdb.html">methods of temperature - pressure extrapolation</a>.
 <br>
 </p>
-<p>DComp database module (as any other in GEM-Selektor database)
+<p>The DComp database chain (as any other chain in GEMS database)
 consists of several files which can be anytime linked or unlinked by
 the user
-through the "Files" menu entry in the "DComp" window. Each file belongs
-either to the "kernel database" or to the user's profile extension, and
+through the "Database Files" menu entry in the "DComp" window. Each file belongs
+either to the "kernel database" or to the user's project database, and
 normally contains a number of DComp records comprizing a subset of the
 whole "internally consistent" thermodynamic dataset. In this version of
-GEM-Selektor kernel database, two published datasets are incorporated:
-the <a href="http://zonvark.wustl.edu/geopig/">SUPCRT98</a> database
+GEM-Selektor default database, two published datasets are incorporated: <br>
+</p>
+<ul>
+  <li>"kernel" Nagra-PSI database in GEMS adaptartion (Thoenen and Kulik, 2003);</li>
+  <li>"complementary" SUPCRT98 database
 for aqueous species and gases [<a href="g_litref.html#%5B1997SHO/SAS%5D">1997SHO/SAS</a>
-and references therein], and the <a href="http://www.usgs.gov/tech-transfer/factsheets/94-061.html">USGS
-thermochemical database for minerals</a> [<a href="g_litref.html#%5B1995ROB/HEM%5D">1995ROB/HEM</a>]. This does not
-imply that thermodynamic data are always consistent between different
-datasets! The user should be careful in using different datasets
-together and, in general, should avoid mixing of the data from the
-alternative datasets (e.g., [<a href="g_litref.html#%5B1988BER%5D">1988BER</a>]
-and [<a href="g_litref.html#%5B1990HOL/POW%5D">1990HOL/POW</a>] in <a href="gm_phase.html">Phase</a>, <a href="gm_profil.html">Profile</a>
-and
-<a href="gm_syseq.html">SysEq</a> definitions, wherever possible. <br>
+and references therein]. </li>
+</ul>
+<p>Third-party "specific" databases in GEMS format are available from
+their vendor web sites. Thermodynamic data is not always consistent
+between different
+datasets! The user, in general, should avoid mixing of thermodynamic
+data from the
+alternative datasets, wherever possible. <br>
 </p>
-<p>Clicking on a "Dependent Components (DComp)" button in the
-"Thermodynamic Database Management" dialog opens a "DComp" window with
-two pages. <tt>Page 1</tt> provides a screen form access to standard
-state thermodynamic
-data and stoichiometry of the species, whereas <tt>Page 2</tt> shows
-configuration flags and optional arrays with empirical coefficients.
-Icon buttons and menu commands in "DComp" window are the same as in
-other
-module windows (see <a href="g_miscel.html">g_miscel.html</a> and <a href="gt_howto.html">gt_howto.html</a>). They provide all
-functionality
-necessary for maintaining, cleaning and extending the database. <br>
-</p>
+
+
 <p>Available DComp records can be browsed ("Record List" "Browse" menu
 or "Forward" and "Backward" icon buttons in the toolbar) until one is
 selected. You can also "Load", i.e. directly select one record from the
@@ -138,42 +129,12 @@ mouse) can then be edited immediately (just click with left mouse
 button
 in the data field). <br>
 </p>
-<p>Please, note that 0 (zero) is a meaningful number in GEM-Selektor
-thermodynamic database. If data is not known then an "Empty" value has
-to be entered (back apostrophe ` in this version). The <tt><a href="#PrTr_0">PrTr</a></tt>
-field contains reference pressure and temperature (1 bar and 25 <sup>o</sup>C
-by default). One or more bibliographic references to sources of data
-are usually specified in <tt><a href="#dSDref">dSDref</a></tt> list;
-clicking on any of these and pressing <tt>F2</tt> opens a "SDref"
-window
-with full contents of the reference - <a href="gm_sdref.html">SDref</a>
-record. <br>
-</p>
-<p>Two optional vector-columns are usually present on&nbsp; <tt>Page 2</tt>&nbsp;
-of the DComp window. The <tt><a href="#aiCpT_0">aiCpT</a></tt> data
-object contains up to 11 empirical coefficients of temperature
-dependence of
-<a href="theortdb.html">heat capacity function</a> <i>Cp<sup>0</sup>&nbsp;</i>
-= <i>f&nbsp; </i>(<i>T </i>), and the&nbsp; <tt><a href="#TC_int_0">TCint</a></tt>&nbsp;
-field shows temperature range (in centigrade) of applicability of&nbsp;
-<tt><a href="#aiCpT_0">aiCpT</a>&nbsp;</tt> coefficients. The first
-three non-zero coefficients correspond to Majer-Kelly equation,&nbsp;
-the first five non-zero coefficients - to Haas-Fisher equation,
-together covering most of published databases [see <a href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>]. More than one
-equation can be specified for one mineral having phase transitions;
-then
-on remake of DComp record, one has to provide a required number of
-columns
-to be created in the <tt><a href="#aiCpT_0">aiCpT</a> </tt>and<tt><a href="#TC_int_0">TCint</a></tt> data objects. Compressibility /
-expandability data can also be entered, either directly into&nbsp; <tt><a href="#BetAlp_0">BetAlp</a>&nbsp;</tt> fields, or as optional
-coefficients of&nbsp; <i>V<sup>0&nbsp;</sup></i> = <i>f&nbsp; </i>(<i>T,
-P&nbsp; </i>)&nbsp; equation (<tt><a href="#ai_Vtp_0">ai_Vtp</a></tt>
-data object). <br>
-</p>
+
+
 <p>What optional data must be entered and how they will be used in
 thermodynamic calculations, is defined by the <tt><a href="#TPcMod_0">TPcMod</a></tt>
 codes (see <tt>Page 2</tt>&nbsp; of the "DComp" window) set up during
-remake/create of a DComp record.&nbsp; For instance, the <tt>"CSC"</tt>
+remake/create of a DComp record using a <a href="#DC_MWIZARD">DComp Wizard</a>.&nbsp; For instance, the <tt>"CSC"</tt>
 method codes (most common for minerals) tell that the <a href="theortdb.html">standard integration</a> over temperature
 interval <i>Tr&nbsp;&nbsp; </i>to<i>&nbsp; T</i>&nbsp;&nbsp; using <i>Cp<sup>0</sup>&nbsp;</i>
 = <i>f&nbsp; </i>(<i>T</i>) equation coefficients will be performed
@@ -246,13 +207,8 @@ automatically upon opening of the <a href="gm_profil.html">system
 profile</a>. Other calculations (e.g. <a href="theortdb.html">Davies,
 SIT, Pitzer models</a>) should be
 set explicitly in Phase records for aqueous electrolyte phase. <br>
-&nbsp; <br>
-In all cases, the stoichiometry of a dependent component is critically
-important and must be entered into the <tt><a href="#DCform">DCform</a></tt>
-field on Page 1 of "DComp" window according to <a href="g_useref.html#FORMULASYNTAX">chemical formula syntax</a>. <br>
 </p>
-<p><br>
-</p><br>
+<br>
 <hr size="2" width="100%">
 <h3><a name="DC_CALCULATIONS"></a>1.1. DComp module
 calculations<br>
@@ -279,6 +235,18 @@ until all the input data becomes consistent. <br>
 <h2><a name="DC_MWIZARD"></a> 2. DComp Create/Remake
 Wizard<font size="+3"><br>
 </font></h2>
+<p>This wizard appears when a new DComp record is created or cloned, or
+a remake command is executed for an existing record (only in the
+Database mode of GEM-Selektor). <br>
+ </p>
+
+<p>When a new record is created/cloned, the "set a new record key" 
+dialog appears first. There, four fields must be specified, as shown 
+below for an example of a mineral compound:</p>
+<p><br>
+</p>
+<p><br>
+</p>
 <p>To construct a DComp record, close your <a href="gm_project.html">modelling
 project</a> and switch to the "Thermodynamic Database" mode of
 GEM-Selektor.
@@ -299,6 +267,7 @@ or click on any of them and press <tt>F1</tt> to read help pages
 Change
 necessary fields and press "Ok" to proceed. &nbsp; <br>
 </p>
+
 <p> Now, you should see Page 1 of the DComp module window. The third
 record key field (species name) appears in the <a href="gm_dcomp.html#DCname"><tt>DCname</tt></a>
 field; you can enhance this comment line (recommended). The second line
@@ -372,15 +341,64 @@ calculated from HKF EoS data.&nbsp;</p>
 <p> </p>
 <h2><a name="DC_MWINDOW"></a> 3. DComp Module Window<font size="+3"><br>
 </font></h2>
-<h3><br>
-</h3>
+<p>This window consists of two pages. <br>
+</p>
+<p>Clicking on a "Dependent Components (DComp)" button in the
+"Thermodynamic Database Management" dialog opens a "DComp" window with
+two pages. <tt>Page 1</tt> provides a screen form access to standard
+state thermodynamic
+data and stoichiometry of the species, whereas <tt>Page 2</tt> shows
+configuration flags and optional arrays with empirical coefficients.
+Icon buttons and menu commands in "DComp" window are the same as in
+other
+module windows (see <a href="g_miscel.html">g_miscel.html</a> and <a href="gt_howto.html">gt_howto.html</a>). They provide all
+functionality
+necessary for maintaining, cleaning and extending the database. <br>
+</p>
+<p>Please, note that 0 (zero) is a meaningful number in GEM-Selektor
+thermodynamic database. If data is not known then an "Empty" value has
+to be entered (back apostrophe ` in this version). The <tt><a href="gm_dcomp.html#PrTr_0">PrTr</a></tt>
+field contains reference pressure and temperature (1 bar and 25 <sup>o</sup>C
+by default). One or more bibliographic references to sources of data
+are usually specified in <tt><a href="gm_dcomp.html#dSDref">dSDref</a></tt> list;
+clicking on any of these and pressing <tt>F2</tt> opens a "SDref"
+window
+with full contents of the reference - <a href="gm_sdref.html">SDref</a>
+record. <br>
+</p>
+<p><br>
+
+</p>
+
 <hr size="2" width="100%">
 <h3><a name="MWPAGE_1"></a>3.1. DComp Window Page 1</h3>
-<br>
+
+In all cases, the stoichiometry of a dependent component is critically
+important and must be entered into the <tt><a href="gm_dcomp.html#DCform">DCform</a></tt>
+field on Page 1 of "DComp" window according to the <a href="g_useref.html#FORMULASYNTAX">chemical formula syntax</a>. <br>
 <br>
 <br>
 <hr size="2" width="100%"><h3><a name="MWPAGE_2"></a>3.2. DComp Window Page 2</h3>
-<br>
+Two optional vector-columns are usually present on&nbsp; <tt>Page 2</tt>&nbsp;
+of the DComp window. The <tt><a href="gm_dcomp.html#aiCpT_0">aiCpT</a></tt> data
+object contains up to 11 empirical coefficients of temperature
+dependence of
+<a href="theortdb.html">heat capacity function</a> <i>Cp<sup>0</sup>&nbsp;</i>
+= <i>f&nbsp; </i>(<i>T </i>), and the&nbsp; <tt><a href="gm_dcomp.html#TC_int_0">TCint</a></tt>&nbsp;
+field shows temperature range (in centigrade) of applicability of&nbsp;
+<tt><a href="gm_dcomp.html#aiCpT_0">aiCpT</a>&nbsp;</tt> coefficients. The first
+three non-zero coefficients correspond to Majer-Kelly equation,&nbsp;
+the first five non-zero coefficients - to Haas-Fisher equation,
+together covering most of published databases [see <a href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>]. More than one
+equation can be specified for one mineral having phase transitions;
+then
+on remake of DComp record, one has to provide a required number of
+columns
+to be created in the <tt><a href="gm_dcomp.html#aiCpT_0">aiCpT</a> </tt>and<tt><a href="gm_dcomp.html#TC_int_0">TCint</a></tt> data objects. Compressibility /
+expandability data can also be entered, either directly into&nbsp; <tt><a href="gm_dcomp.html#BetAlp_0">BetAlp</a>&nbsp;</tt> fields, or as optional
+coefficients of&nbsp; <i>V<sup>0&nbsp;</sup></i> = <i>f&nbsp; </i>(<i>T,
+P&nbsp; </i>)&nbsp; equation (<tt><a href="gm_dcomp.html#ai_Vtp_0">ai_Vtp</a></tt>
+data object). <br>
 <br>
 <br>
 <br>
@@ -463,8 +481,7 @@ quarts, minnesotaite</dd>
     <dd> <tt>Fe|3|2O3&nbsp;&nbsp;&nbsp;&nbsp;</tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 hematite</dd>
     <dd> <tt>/3/H2/18/O</tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-isotopic
- form of water</dd>
+isotopic form of water</dd>
     <dd> &nbsp;</dd>
   </dl>
   <dd> The DCform field is processed when you click on "Calculate" icon
@@ -573,8 +590,8 @@ from&nbsp; <i>G<sup>0</sup></i>&nbsp; and <i>S<sup>0</sup></i>&nbsp;
 using the&nbsp; <a href="theortdb.html#GHS_DC">GHS_DC()</a>&nbsp;
 algorithm and compared to <i>H<sup>0 </sup></i>. You will get a
 warning message that three values are inconsistent, if absolute
-difference&nbsp; &brvbar;<i>H*</i> -&nbsp; <i>H<sup>0&nbsp;</sup></i>
-&brvbar;&nbsp; exceeds&nbsp; 40&nbsp; J/mol. If this happens, check all
+difference&nbsp; ¦<i>H*</i> -&nbsp; <i>H<sup>0&nbsp;</sup></i>
+¦&nbsp; exceeds&nbsp; 40&nbsp; J/mol. If this happens, check all
 three entered values - maybe one of them is misprinted, and check also <a href="g_useref.html#FORMULA">chemical formula</a>
 (<tt><font size="+1"><a href="#DCform">DCform</a></font></tt> field)
 for stoichiometry coefficients, valences (default or explicit), and
@@ -625,8 +642,8 @@ been entered then (upon clicking on "Calculate" icon), the enthalpy
 value <i>H*</i>&nbsp; will be found from <i>G<sup>0</sup></i>&nbsp;
 and <i>S<sup>0</sup></i>&nbsp; using the <a href="theortdb.html#GHS_DC">GHS_DC()</a>&nbsp; algorithm and compared
 to <i>H<sup>0 </sup></i>. You will get a warning message that three
-values are inconsistent, if absolute difference&nbsp; &brvbar;<i>H*</i>
-- <i>H<sup>0&nbsp;</sup></i> &brvbar;&nbsp; exceeds&nbsp; 40&nbsp;
+values are inconsistent, if absolute difference&nbsp; ¦<i>H*</i>
+- <i>H<sup>0&nbsp;</sup></i> ¦&nbsp; exceeds&nbsp; 40&nbsp;
 J/mol. If this happens, check all three entered values - maybe one of
 them is misprinted, and check also <a href="g_useref.html#FORMULA">chemical
 formula</a> (<tt><font size="+1"><a href="#DCform">DCform</a></font></tt>
@@ -682,8 +699,8 @@ been entered then (upon clicking on "Calculate" icon), the enthalpy
 value <i>H*</i>&nbsp; will be found from <i>G<sup>0</sup></i>&nbsp;
 and <i>S<sup>0</sup></i>&nbsp; using the <a href="theortdb.html#GHS_DC">GHS_DC()</a>&nbsp; algorithm and compared
 to <i>H<sup>0 </sup></i>. You will get a warning message that three
-values are inconsistent, if absolute difference&nbsp; &brvbar;<i>H*</i>
-- <i>H<sup>0&nbsp;</sup></i> &brvbar;&nbsp; exceeds&nbsp; 40&nbsp;
+values are inconsistent, if absolute difference&nbsp; ¦<i>H*</i>
+- <i>H<sup>0&nbsp;</sup></i> ¦&nbsp; exceeds&nbsp; 40&nbsp;
 J/mol. If this happens, check all three entered values - maybe one of
 them is misprinted, and check also <a href="g_useref.html#FORMULA">chemical
 formula</a> (<tt><font size="+1"><a href="#DCform">DCform</a></font></tt>
@@ -832,7 +849,7 @@ default
 values can be used:</div>
 <dl style="margin-left: 40px;">
   <dd> &nbsp;</dd>
-  <table cols="7" border="1" width="93%">
+  <table border="1" cols="7" width="93%">
     <tbody>
       <tr>
         <td>Charge</td>
@@ -2422,11 +2439,7 @@ send a bug report.&nbsp;</dd>
   <dd><br>
   </dd>
   <dt><br>
-</dt></dl><br>
-<dl>
-  <dt><br>
-  </dt>
-</dl>
+</dt></dl>
 <hr size="2" width="100%">
 <h3><a name="DCOMP_FORMULA_ERRORS"></a>5.1. Error
 messages from the
