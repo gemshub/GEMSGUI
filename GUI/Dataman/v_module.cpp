@@ -400,7 +400,7 @@ TCModule::CmSaveAs()
     try
     {
         if( pVisor->ProfileMode == true &&
-           ( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA ) )
+           ( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA && nRT != RT_PHASE) )
             Error( GetName(), "Please, do it in Database mode!");
 
         gstring str=db->PackKey();

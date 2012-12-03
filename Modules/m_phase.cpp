@@ -1408,6 +1408,8 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
     char nbuf[MAXFORMULA*2], neutbuf[16], H2Obuf[16], tempdbuf[16];
     gstring Name = "Auto-set ";
 
+
+    cout << akey << "  " << gkey << endl;
 //  Setup of aqueous phase
     if( !apar[2] )
     	strcpy(neutbuf, "1.0");
@@ -1541,7 +1543,7 @@ MAKE_GAS_PHASE:
               break;
       case 'P':  // PRSV fluid EoS model
               memcpy( php->sol_t, "PNNSNN", 6 );
-              memcpy( &php->PphC, "g++---", 6 );
+              memcpy( &php->PphC, "f++---", 6 );
               if( php->ncpN < 1 ) // NPar
             	  php->ncpN = 1;
               if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
@@ -1557,7 +1559,7 @@ MAKE_GAS_PHASE:
               break;
       case 'E':  // SRK fluid EoS model
               memcpy( php->sol_t, "ENNSNN", 6 );
-              memcpy( &php->PphC, "g++---", 6 );
+              memcpy( &php->PphC, "f++---", 6 );
               if( php->ncpN < 1 ) // NPar
             	  php->ncpN = 1;
               if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
@@ -1573,7 +1575,7 @@ MAKE_GAS_PHASE:
               break;
       case '7':  // PR78 fluid EoS model
               memcpy( php->sol_t, "7NNSNN", 6 );
-              memcpy( &php->PphC, "g++---", 6 );
+              memcpy( &php->PphC, "f++---", 6 );
               if( php->ncpN < 1 ) // NPar
             	  php->ncpN = 1;
               if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
@@ -1779,8 +1781,14 @@ TPhase::AssemblePhase( const char* key, const char* part, float* param,
     if( Rnum<0 )
         db->AddRecordToFile( key, file );
     else
+      {
+        gstring mess = key;
+        mess += "\n";
+        mess+=  "This record exists! Overwrite?";
+        if( !vfQuestion( window(), "Automatically generated aq or gas/fluid",mess.c_str()) )
+            Error( key, "Cancel automatically generated aq or gas/fluid!");
         db->Rep( Rnum );
-
+       }
 		// contentsChanged = false;
 }
 

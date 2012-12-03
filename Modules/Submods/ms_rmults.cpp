@@ -338,10 +338,10 @@ mu.nlPHv  = 0;
 
 // Make list of DComp and React record keys on PHases
 
-void TRMults::DCListLoad(  gstring& AqKey, gstring& GasKey,
+void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
                            bool useLst, TCStringArray lst )
 {
-    uint k;
+    uint k, jj;
     int j, kk;
     time_t tim;
     int SPHP=1;  /* at first test phases-solutions */
@@ -355,16 +355,36 @@ void TRMults::DCListLoad(  gstring& AqKey, gstring& GasKey,
         uint ii=0;
         while( ii < aPhaseList.GetCount() )
         {
-            if( *aPhaseList[ii].c_str() == 'a' && aPhaseList[ii] !=  AqKey )
+            if( *aPhaseList[ii].c_str() == 'a' )
             {
-                aPhaseList.Remove(ii);
-                anRPhase.Remove(ii);
+
+                for(jj=0; jj<AqKey.GetCount(); jj++)
+                {
+                    if( aPhaseList[ii] ==  AqKey[jj])
+                     break;
+                }
+                if( jj>=AqKey.GetCount() )
+                {
+                  aPhaseList.Remove(ii);
+                  anRPhase.Remove(ii);
+                }
+               else ii++;
             }
             else
-                if( *aPhaseList[ii].c_str() == 'g' && aPhaseList[ii] !=  GasKey )
-                    /*memcmp( aPhaseList[ii], GasKey.c_str(), PH_RKLEN ))*/
-                { aPhaseList.Remove(ii);
-                    anRPhase.Remove(ii);
+                if( *aPhaseList[ii].c_str() == 'g' || *aPhaseList[ii].c_str() == 'f' )
+                {
+
+                    for(jj=0; jj<GasKey.GetCount(); jj++)
+                    {
+                        if(aPhaseList[ii] ==  GasKey[jj])
+                         break;
+                    }
+                    if( jj>=GasKey.GetCount() )
+                    {
+                      aPhaseList.Remove(ii);
+                      anRPhase.Remove(ii);
+                    }
+                   else ii++;
                 }
                 else
                 { //Sveta 21/09/99 Compare first 4 fields delete last
@@ -445,7 +465,7 @@ TEST2:
 }
 
 //Make record of base Rmults from files
-void TRMults::MakeRecordLists( gstring& AqKey, gstring& GasKey )
+void TRMults::MakeRecordLists( TCStringArray AqKey, TCStringArray GasKey )
 {
     uint i;
     // Get all records of IComp
@@ -636,10 +656,11 @@ void TRMults::PHmake()
 void TRMults::LoadRmults( bool NewRec, bool changePhases )
 {
     int file;
-    gstring AqKey("a:*:*:*:*:");
-    gstring PrKey("g:*:*:*:*:");
-    gstring GasKey;
-    gstring FluKey;
+    //gstring AqKey("a:*:*:*:*:");
+    TCStringArray AqKey;
+    //gstring PrKey("g:*:*:*:*:");
+    TCStringArray GasKey;
+    //gstring FluKey;
     char amod = SM_AQDAV;    // Added KD 25.01.02
     char gmod = SM_IDEAL;    // Added KD 16.06.03
     float aparam[8]/*, gparam[4]*/;
@@ -664,34 +685,54 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
         amod = mu.PmvAq;
         if( mu.nAq >= 0)
         {
-            AqKey = gstring( mu.SF[mu.nAq], 0, PH_RKLEN );
+            //AqKey.Add( gstring( mu.SF[mu.nAq], 0, PH_RKLEN ));
             if( amod == SM_AQDH3 && aparam[0] < 1e-9 )
             {  // To use aq models from old versions
                aparam[0] = 0.064;
                aparam[3] = 0.7;
             }
         }
-        else {
-             AqKey == "";
-        }
+        //else {
+        //     AqKey.Clear();// == "";
+        //}
         gmod = mu.PmvGas;
-        if( mu.nGas >= 0 )
+        /*if( mu.nGas >= 0 )
         {
-            GasKey = gstring( mu.SF[mu.nGas], 0, PH_RKLEN );
+            GasKey.Add( gstring( mu.SF[mu.nGas], 0, PH_RKLEN ) );
         }
         else {
-             GasKey ="";
+             GasKey.Clear();// ="";
+        }*/
+        for(short kk=0; kk<mu.Fi; kk++ ) // phase list
+        {
+            //aqueous phase
+            if(  mu.SF[kk][0] =='a' )
+                AqKey.Add( gstring(mu.SF[kk], 0, PH_RKLEN));
+            //gaseous phase
+            else if(  mu.SF[kk][0] =='g' || mu.SF[kk][0] =='f' )
+                 GasKey.Add( gstring(mu.SF[kk], 0, PH_RKLEN));
+                 else break;
         }
+
     }
     gstring prfName = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
     StripLine( prfName );
 
-NEW_PHASE_AGAIN:
     if( changePhases || mu.PmvAq == S_ON || mu.PmvGas == S_ON )
     {
+        gstring  AqKey1 = "a:*:*:*:*:";
+        if(AqKey.GetCount()>0)
+           AqKey1 = AqKey[0];
+
+        gstring  GasKey1 = "g:*:*:*:*:";
+        if(GasKey.GetCount()>0)
+           GasKey1 = GasKey[0];
+
+NEW_PHASE_AGAIN:
+
 // Calling the wizard to set generated aq and gas phases
        if( !vfAutoPhaseSet( pVisor->window()/*window()*/, prfName.c_str(),
-                            AqKey, GasKey, amod, gmod, aparam ) )
+                            AqKey1, GasKey1, amod, gmod, aparam ) )
        {
           if( vfQuestion( window(), "Project: Attempt to cancel setup of phases",
             "Are you really sure?\n Repeat phase setup (Yes) or\nCancel creating the project (No)?" ))
@@ -699,13 +740,15 @@ NEW_PHASE_AGAIN:
           else
             Error( GetName(), "Project creation aborted by the user - bailing out..." );
        }
-// aparam[4] = resp;
+
        tpp->Pbg = (int)aparam[4]+'0'; // resp+'0';  to check in TSolMod implementation
+
+
+       // define Aq phase lists
        if( amod == '-' )
        {
-//       TProfil::pm->useAqPhase = false;
           mu.PmvAq = S_OFF;
-          AqKey = "";
+          AqKey.Clear();
        }
        else { // Setting control parameters for the auto aq model
             mu.PmvAq = amod;
@@ -714,37 +757,48 @@ NEW_PHASE_AGAIN:
             aPa->pa.aqPar[2] = aparam[2];
             aPa->pa.aqPar[3] = aparam[3];
             aPa->pa.aqPar[4] = aparam[4];
+
+            if( mu.PmvAq == 'U' )
+            {   SelectAqGasPhase( 0,  AqKey ); // Select aqueous phase from list
+                  if( mu.PmvAq == S_ON ) // No phase to select from list or not selected - make default
+                    goto NEW_PHASE_AGAIN;
+            }
+            else
+            {
+              AqKey.Clear();
+              AqKey.Add(AqKey1);
+            }
        }
+
+       // define gas/fluid phase
        if( gmod == '-' )
        {
-//       TProfil::pm->useGasPhase == false;
             mu.PmvGas = S_OFF;
-            GasKey = "";
+            GasKey.Clear();
        }
        else {
            mu.PmvGas = gmod;
-//           aPa->pa.ResFloat = gparam[0];
+
+           if( mu.PmvGas == 'U')
+           {  SelectAqGasPhase( 1, GasKey ); // Select gaseous phase def
+              if( mu.PmvGas == S_ON )    // No phase to select from list or not selected - make default
+                goto NEW_PHASE_AGAIN;
+            }
+           else
+           {
+             GasKey.Clear();
+             GasKey.Add(GasKey1);
+           }
        }
 
-       if( mu.PmvAq == 'U' )
-             AqKey = SelectAqPhase( AqKey.c_str()); // Select aqueous phase from list
-       if( mu.PmvAq == S_ON ) // No phase to select from list or not selected - make default
-             goto NEW_PHASE_AGAIN;
-
-        if( mu.PmvGas == 'U')
-          GasKey = SelectGasPhase(GasKey.c_str()); // Select gaseous phase def
-        if( mu.PmvGas == S_ON )
-        // No phase to select from list or not selected - make default
-            goto NEW_PHASE_AGAIN;
     }
-//    gstring prfName = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
-//    StripLine( prfName );
+
     file =rt[RT_PHASE].GetOpenFileNum( prfName.c_str() );
 
-    // Creating automatic aq and/or gas phases
-    TPhase::pm->newAqGasPhase( AqKey.c_str(), GasKey.c_str(), file,
+    // Creating automatic aq and/or gas phases (automatic phase only one )
+    TPhase::pm->newAqGasPhase( AqKey[0].c_str(), GasKey[0].c_str(), file,
         amod, gmod, aparam );
-// cout << "LoadRmults Project: " << prfName.c_str() << endl;
+
     MakeRecordLists( AqKey, GasKey ); // build records lists and calc size of arrays
 
     dyn_new();         // alloc memory to structure RMULTS
@@ -775,12 +829,112 @@ NEW_PHASE_AGAIN:
     TestIComp();
 
     // Set nAq and nGas
-    SetAqGas( AqKey.c_str() , GasKey.c_str() );
+    SetAqGas( AqKey[0].c_str() , GasKey[0].c_str() );
 
 }
 
-//extern const char * dfAqKeyD ;
-//extern const char * dfGasKey ;
+
+// Select aqueous (type = 0) or gas/fluid ( type = 1 ) phase from available or make default
+// AqGasKey - input old selection, return new selection
+void TRMults::SelectAqGasPhase( char AqGasType, TCStringArray& AqGasKey )
+{
+    int ii, jj;
+    gstring typePhase, msg1, msg2;
+    TCStringArray aPhaseType;
+    TCStringArray aKeysList;
+    TCStringArray aPhaseList;
+    TCIntArray anRPhase;
+
+    if( AqGasType == 0 )
+     {
+        typePhase = " aqueous phase";
+        aPhaseType.Add("a:*:*:*:*:");
+     }
+    else
+     {
+        typePhase = " gas/fluid phase";
+        aPhaseType.Add("g:*:*:*:*:");
+        aPhaseType.Add("f:*:*:*:*:");
+     }
+
+     // Get all records of Phase for type
+    for(ii=0; ii<aPhaseType.GetCount(); ii++ )
+    {
+        rt[RT_PHASE].GetKeyList( aPhaseType[ii].c_str(), aPhaseList, anRPhase );
+        for( jj=0; jj<aPhaseList.GetCount(); jj++ )
+            aKeysList.Add( aPhaseList[jj]);
+    }
+
+    if( aKeysList.GetCount()<1 ) //no type phase in open data base files
+    {
+        msg1 = "Project: Choice of";
+        msg1 += typePhase;
+        msg2 = "No definitions of";
+        msg2 += typePhase;
+        msg2 += " available!\n Make default(Yes) or remove (No)?";
+
+        if( vfQuestion( window(), msg1,msg2))
+        {
+           if(AqGasType )
+            mu.PmvAq = S_ON;
+           else mu.PmvGas = S_ON;
+           return;
+        }
+        else {
+               if(AqGasType )
+                 mu.PmvAq = S_OFF;
+               else mu.PmvGas = S_OFF;
+               return;
+        }
+     }
+
+    if( aKeysList.GetCount()==1 )
+    {
+        AqGasKey.Clear();
+        AqGasKey.Add( aKeysList[0] );
+    }
+    else
+    {
+       anRPhase.Clear();
+       // get selected phase  added Sveta 18/06/04
+       for(ii=0; ii <aKeysList.GetCount(); ii++)
+       {
+         for( jj=0; jj<AqGasKey.GetCount(); jj++ )
+            if( AqGasKey[jj] == aKeysList[ii] )
+              anRPhase.Add(ii);
+       }
+       msg1 = "Please, choose an";
+       msg1+= typePhase +".";
+
+AGAIN:  anRPhase = vfMultiChoiceSet(window(), aKeysList, msg1.c_str(), anRPhase );
+
+    if( anRPhase.GetCount() < 1 )
+    {
+      msg1 = "Project: What";
+      msg1 += typePhase+"?";
+      msg2 = "No definitions of";
+      msg2 += typePhase+" selected!\n Choose again (Yes) or remove (No)?";
+
+      if( vfQuestion( window(), msg1,msg2 ))
+         goto AGAIN;
+      else
+      {
+         if(AqGasType )
+            mu.PmvAq = S_OFF;
+          else mu.PmvGas = S_OFF;
+          mu.PmvAq = S_OFF;
+      }
+    }
+    else
+    {
+      AqGasKey.Clear();
+      for(ii=0; ii <anRPhase.GetCount(); ii++)
+          AqGasKey.Add( aKeysList[anRPhase[ii]] );
+    }
+  }
+ }
+
+/*
 // Select aqueous phase from available or make default
 gstring TRMults::SelectAqPhase(const char * dfKey )
 {
@@ -876,6 +1030,8 @@ gstring TRMults::SelectGasPhase(const char * dfKey )
     while( i<0 );
     return  aPhaseList[i];
 }
+
+*/
 
 //Set indexes of selected aqueous and gaseous phase
 void TRMults::SetAqGas( const char* AqKey, const char* GasKey )
