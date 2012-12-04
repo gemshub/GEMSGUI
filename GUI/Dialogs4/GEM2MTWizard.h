@@ -23,6 +23,19 @@
 #include "EquatSetupWidget.h"
 #include "model_w.h"
 
+
+enum gem2mt_remake_pages {
+    mode_RMT = 0,
+    size_RMT,
+    gems3k_exchange,
+    T_P_lookup,
+    fluxes_transport,
+    auto_script,
+    graphic_script,
+    vtk_format,
+    other_options
+};
+
 class GEM2MTWizard : public QDialog, public Ui::GEM2MTWizardData
 {
     Q_OBJECT

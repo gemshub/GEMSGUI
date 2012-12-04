@@ -1408,8 +1408,6 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
     char nbuf[MAXFORMULA*2], neutbuf[16], H2Obuf[16], tempdbuf[16];
     gstring Name = "Auto-set ";
 
-
-    cout << akey << "  " << gkey << endl;
 //  Setup of aqueous phase
     if( !apar[2] )
     	strcpy(neutbuf, "1.0");

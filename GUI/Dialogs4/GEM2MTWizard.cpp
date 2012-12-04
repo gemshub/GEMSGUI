@@ -41,7 +41,7 @@ GEM2MTWizard::CmBack()
     bool chk = pselS->isChecked()||pselF->isChecked()||pselB->isChecked();  // F mode
     int ndx = stackedWidget->currentIndex();
 
-    if( ndx == 6)
+    if( ndx == graphic_script)
     {
         int nLines = pageScript->getScriptLinesNum();
         if( nLines > 0)
@@ -50,24 +50,18 @@ GEM2MTWizard::CmBack()
 
     ndx--;
 
-    if( ndx == 7 && !c_PsVTK->isChecked() )
+    if( ndx == vtk_format && !c_PsVTK->isChecked() )
         ndx--;
-    if( ndx == 6 && !c_PvMSg->isChecked() )
+    if( ndx == graphic_script && !c_PvMSg->isChecked() )
         ndx--;
-    if( ndx == 5 && !c_PvMSt->isChecked() )
+    if( ndx == auto_script && !c_PvMSt->isChecked() )
         ndx--;
-    if( ndx == 4 && !chk )
+    if( ndx == fluxes_transport && !chk )
         ndx--;
-    if( ndx == 3 )
-    { if( pselS->isChecked() || pselF->isChecked() || pselB->isChecked()  )
-      {    ndx--;
-           ndx--; // T P lists
-        } else if(!checkArrays->isChecked())
+    if( ndx == T_P_lookup )
+    {  if(!checkArrays->isChecked()|| !pTPInput->isEnabled())
             ndx--; // T P lists
     }
-
-
-
 
     stackedWidget->setCurrentIndex ( ndx );
     resetNextButton();
@@ -82,7 +76,7 @@ GEM2MTWizard::CmNext()
 
     int ndx = stackedWidget->currentIndex();
 
-    if( ndx == 0 )
+    if( ndx == mode_RMT )
      {
          for( int ii=7; ii<14; ii++)
          {
@@ -101,13 +95,13 @@ GEM2MTWizard::CmNext()
        }
     }
 
-    if( ndx == 4 )
+    if( ndx == fluxes_transport )
     {
       if( pselS->isChecked() || pselF->isChecked() || pselB->isChecked() )
            pnFD->setValue( pnC->value() + pnSFD->value() );
     }
 
-    if( ndx == 6 )
+    if( ndx == graphic_script )
     {
         int nLines = pageScript->getScriptLinesNum();
         if( nLines > 0)
@@ -116,18 +110,27 @@ GEM2MTWizard::CmNext()
 
     ndx++;
 
-    if( ndx == 2 && ( pselS->isChecked()|| pselF->isChecked() ) )
-    {
-         checkArrays->setChecked(true);
-         chInterp->setChecked(true);
-         pPPoints->setValue( pnC->value() );
-         pTPoints->setValue( pnC->value() );
-         ndx++;
-         ndx++; // T P lists
-    }
+    if( ndx == gems3k_exchange )
+        if( pselS->isChecked()|| pselF->isChecked()  )
+        {
+            checkArrays->setChecked(true);
+            chInterp->setChecked(true);
+            pPPoints->setValue( pnC->value() );
+            pTPoints->setValue( pnC->value() );
+            pTPInput->setEnabled(false);
+            pTPlookup->setEnabled(false);
+            //ndx++;
+            //ndx++; // T P lists
+        }
+        else
+        {
+            pTPInput->setEnabled(true);
+            pTPlookup->setEnabled(true);
+         }
 
-    if(   ndx == 3 )
-     { if( !checkArrays->isChecked())
+
+    if(   ndx == T_P_lookup )
+     { if( !checkArrays->isChecked() || !pTPInput->isEnabled() )
        {
        // internal setup arrays
          // setupPTArrays();
@@ -143,7 +146,7 @@ GEM2MTWizard::CmNext()
           }
     }
 
-    if( ndx == 4 && !chk )
+    if( ndx == fluxes_transport && !chk )
         ndx++;
     else
     {
@@ -158,13 +161,13 @@ GEM2MTWizard::CmNext()
 //      pnSFD->setEnabled( !( pselS->isChecked() || pselF->isChecked() ));
     }
 
-    if( ndx == 5 && !c_PvMSt->isChecked() )
+    if( ndx == auto_script && !c_PvMSt->isChecked() )
         ndx++;
 
-    if( ndx == 6 && !c_PvMSg->isChecked() )
+    if( ndx == graphic_script && !c_PvMSg->isChecked() )
         ndx++;
 
-    if( ndx == 7 && !c_PsVTK->isChecked() )
+    if( ndx == vtk_format && !c_PsVTK->isChecked() )
         ndx++;
 
    stackedWidget->setCurrentIndex ( ndx );

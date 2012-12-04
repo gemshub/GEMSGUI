@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>765</width>
-    <height>609</height>
+    <height>619</height>
    </rect>
   </property>
   <property name="font">
@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -754,7 +754,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_11">
+        <widget class="QGroupBox" name="pTPInput">
          <property name="title">
           <string>Automatic setup of GEMS3K look-up arrays with thermodynamic data </string>
          </property>
@@ -977,7 +977,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_14">
+        <widget class="QGroupBox" name="pTPlookup">
          <property name="title">
           <string> T and P grid values for look-up arrays</string>
          </property>
