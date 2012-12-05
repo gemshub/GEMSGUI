@@ -3,7 +3,7 @@
 //
 // Implementation of HelpWindow class
 //
-// Copyright (C) 2010,2011 S.Dmytriyeva
+// Copyright (C) 2010,2012 S.Dmytriyeva
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
@@ -35,7 +35,7 @@
 
 const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
 const char *GEMS_ABOUT_HTML = "gems_about.html#PAGE_ABOUT";
-const char *_GEMS_version_stamp = " GEMS-GUI v.3.1 r.2242 (rc) ";
+const char *_GEMS_version_stamp = " GEMS-GUI v.3.1 r.2248 (rc) ";
 extern const char *_GEMIPM_version_stamp;
 
 HelpWindow* HelpWindow::pDia = 0;
