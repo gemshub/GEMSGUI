@@ -3,6 +3,8 @@
 
 
 
+
+
   
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
@@ -136,12 +138,12 @@ Types of Multicomponent Phases</a></p>
 Aqueous electrolyte</a>
   </p>
   <p><a href="#PHASE_GASFLUID">4.2.
-Gas mixture and non-ideal fluids</a>
+Gas mixture and non-ideal mixed fluids</a>
   </p>
   <p><a href="#PHASE_SOLSOL">4.3.
 Solid and liquid non-electrolyte solutions</a></p>
   <p><a href="#PHASE_SORPTION">4.4.
-Sorption and Surface Complexation</a></p>
+Sorption and surface complexation</a></p>
   <a href="#PHASE_EXAMPLES">4.5.
 Examples and special cases</a></blockquote>
 
@@ -1870,7 +1872,7 @@ corrections in these fields may be done upon remake of the Phase record.</p>
       </span>(columns)<span style="font-family: monospace;"><br>
       </span></td>
       <td style="vertical-align: top;"><a href="#dc_cf"><span style="font-family: monospace;">dc_cf</span></a> array: number of columns (coefficients per phase end member)</td>
-      <td style="vertical-align: top;">In certain models of mixing<br>
+      <td style="vertical-align: top;">In certain models of mixing where properties of individual components are used<br>
       </td>
     </tr>
     <tr>
@@ -1898,7 +1900,7 @@ index for a binary interaction parameter must be set to -1)<br>
 (columns)<br>
       </td>
       <td style="vertical-align: top;"><a href="#ipxT">ph_cf</a> array of interaction parameter coefficients: number of columns (max. number of coefficients per parameter)</td>
-      <td style="vertical-align: top;">Depends on the model of mixing, usually will be set automatically<br>
+      <td style="vertical-align: top;">Depends on the model of mixing, usually set automatically<br>
       </td>
     </tr>
   </tbody>
@@ -2208,7 +2210,7 @@ Types of Multicomponent Phases<br>
 
 <p>This section covers specific issues and limitations for certain
 types of multicomponent phases. It also contains suggestions concerning
-the preferable work flow with regard to creating and modifying such
+the preferable workflow with regard to creating and modifying such
 phase definitions. <br>
 </p><br>
 
@@ -2263,7 +2265,7 @@ parameters (rows in <span style="font-family: monospace;">ph_cf</span> table) th
 list. Secondly, such aqueous phase definition will be compressed in a
 similar way if some aqueous species are turned off in the chemical
 system definition. This provides an unmatched flexibility also in
-handling of specific interaction phase models in GEMS3 code and
+handling specific interaction phase models in GEMS3 code and
 database.<br>
 
 </p>
@@ -2284,54 +2286,81 @@ database.<br>
 
 <hr style="width: 100%; height: 2px;">
 <h3><font face="Helvetica, Arial, sans-serif"><a name="PHASE_GASFLUID"></a></font>4.2.
-Gas mixture and non-ideal fluids</h3><p>There
-is a typical workflow in how such phases are created. Initially, in a
+Gas mixture and non-ideal mixed fluids</h3><p>There
+is a typical workflow for such phases. Initially, in a
 new modeling project, a non-ideal gas/fluid phase is created via the <a href="gems_aphsetup.html">Autophase Wizard</a>,
-because it is not known in beforehand what non-ideal gase species
+because it may not be known in beforehand what non-ideal gase species
 (DComps) would be available according to the selected list of
 Independent Components in the new project system.<br>
 <br>
 Because the interaction parameters of mixing (if needed) cannot be
-entered into the autophase-created fluid/gas phase, the way to enhance
-the fluid phase definition with interaction parameters would be to save
-it under a modified name from the project system (after selecting the
-key of this phase in the System Phase window page and pressing F7, then
-"Record" "Save as" menu command). Then to modify the saved Phase record
-in the Database mode of GEMS by adding the interaction parameters into
-the <span style="font-family: monospace;">ph_cf</span> table (and indexes of interacting fluid/gas components into the <span style="font-family: monospace;">ipxT</span> list).<br>
+entered into the autophase-created fluid/gas phase, the right way to enhance
+the fluid phase definition with specific interaction parameters would be to save
+it first under a modified name. To do so: <br>
 </p>
-<p>Next time, when opening this modeling project, one should uncheck
-the "Retain setup of aqueous (and gas/fluid) phases", then select the
+<ul>
+  <li>In Equilibria calculation mode, open any system (SysEq) in the modeling project. <br>
+  </li>
+  <li>In "Modules" drop-down menu, select "Phase". <br>
+  </li>
+  <li>In the list of Phase record keys, select a phase named "<span style="font-family: monospace;">fluid_gen</span>" in third record key field to see contents in the Phase window.<br>
+  </li>
+  <li>Alternatively, open the System window (Phase page), click on the
+"<span style="font-family: monospace;">fluid_gen</span>" phase key, and press F7 to see the Phase window. <br>
+  </li>
+  <li>In the
+"Record" drop-down menu, select "Save as" command, then modify the name in 3rd record key field to e.g. "<span style="font-family: monospace;">my_fluid</span>".</li>
+</ul>
+
+<p>Now, switch to Database mode of GEM-Selektor, open the Phase window,
+find the just-saved Phase record, and modify it by adding the
+interaction parameters into
+the <a href="m_phase.html#ph_cf"><span style="font-family: monospace;">ph_cf</span></a> table, and indexes of interacting fluid/gas components into the <a href="m_phase.html#ipxT"><span style="font-family: monospace;">ipxT</span></a> list. If necessary, remake the Phase record and set more interaction parameters (rows in <span style="font-family: monospace;">ipxT</span> and <span style="font-family: monospace;">ph_cf</span> tables), and enter more values into these tables. Save the Phase record. <br>
+</p>
+<p>When opening the modeling project next time, uncheck
+the "Retain setup of aqueous (and gas/fluid) phases" checkbox, then
+select the
 second tab in the Autophase Dialog, and disable the automatic setup of
 fluid/gas phase by selecting a "... user-defined Phase record from
 database, U". The user-prepared phase that was enhanced with
 interaction parameters will be selected (automatically, or from the
-appearing list, if there are two or more of such phases). When the
-project opens next time, the edited phase definition will be taken into
-the system.<br>
-<br>
-The autophase wizard can only create non-ideal fluid/gas phases without
-interaction parameters; as long as they are not needed, it is the
-fastest and most efficient way to create a fluid phase and keep it
+appearing list, if there are two or more of such phases; in the latter
+case, one or two pre-defined fluid phases can be selected). Click "Do
+it for all" if the message about deletion/insertion of phases appears.
+When the
+project opens, the selected phase(s) will be visible in the system.
+Sometimes is good that two fluid/gas phases in
+the system, if for example you want to calculate a solvus in CO <sub>2</sub>-H<sub>2</sub>O
+system. Such phases will be automatically compressed for GEM
+calculations if some components are turned off in the system
+definition.&nbsp;
+ </p>
+<p>If you switch the project back to create the autophase for
+gas/fluid, the modified Phase definition(s) will not be taken into the
+system, but will remain available in this project in Database mode. <br>
+</p>
+<p>The Autophase wizard can only create one ideal or non-ideal
+automatic fluid/gas phase without
+interaction parameters per project by collecting parameters from all
+available 'f' DComp records. As long as specific interactions are not
+needed, it is the
+fast and efficient way to keep the fluid phase
 consistent with currently available DComp records for fluid components.
-Whenever new DComp fuid/gas species are added to the project, their
-nonideality coefficients will be automatically collected from DComp
+Whatever new DComp fuid/gas species are added to the project, they will
+be included to the automatic phase, with their
+nonideality coefficients automatically collected from DComp
 records. <br>
 </p>
+
 <p>Note that, if the user-modified Phase record for gas/fluid mixture
 has the same key as the automatically created Phase, and the project is
 reset from using the user-prepared phase back into the autophase mode,
-this automatic phase is created correctly, but temporarily writes over
-the user provided fluid phase record. In this way, the interaction
-parameters will be lost. If the user-prepared phase has a different
-record key, then upon&nbsp; switching from using the prepared phase to
-the automatic phase, both phases will appear in the system definition.
-Sometimes it actually is good that two fluid/gas phases are taken in
-the system, if for example you want to calculate a solvus in CO2-H2O
-system for example. In any case, it will do no harm if the
-user-provided phase is turned off in the single-system definition. <br>
+this automatic phase is created correctly, but writes over
+the user-provided fluid phase record. In this way, the interaction
+parameters will be lost.&nbsp;</p>
+<p><br>
 </p>
-<font face="Helvetica, Arial, sans-serif"><br>
+<font face="Helvetica, Arial, sans-serif">
   </font>
 
 
@@ -2365,8 +2394,7 @@ Solid and liquid non-electrolyte solutions</h3>
 
 
 <hr style="width: 100%; height: 2px;">
-<h3><a name="PHASE_SORPTION"></a>4.4. Sorption and Surface
-Complexation<br>
+<h3><a name="PHASE_SORPTION"></a>4.4. Sorption and surface complexation<br>
 </h3>
 
 
@@ -2399,7 +2427,7 @@ manual. </p>
 
 
 
-<p>This part is currently under construction due to on-going 
+<p>This part is currently under construction due to the on-going 
 re-implementation of sorption models into TSorpMod class library. <br>
 </p><br>
 
@@ -4951,7 +4979,7 @@ from (Kielland 1936), from (Helgeson ea 1981) or</dt>
 <hr style="width: 100%; height: 2px;"><b><b><b><br>
 </b></b></b>Copyright (c) 2003-2012 GEMS Develoment Team<br>
 <br>
-Last update: 2.12.2012 DK<b><b><b><tt><br>
+Last update: 5.12.2012 DK<b><b><b><tt><br>
 </tt><br>
 &nbsp; <br>
 </b> </b></b> <br>

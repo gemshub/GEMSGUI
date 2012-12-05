@@ -4,6 +4,7 @@
 
 
 
+
   
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
@@ -46,7 +47,7 @@ template chemical system definition in this modeling project. </p>
 
 
 
-<p>The first tab "Select Aqueous Electrolyte Model" lets you define a
+<p><span style="font-weight: bold;">The first tab "Select Aqueous Electrolyte Model"</span> lets you define a
 built-in
 function for calculating activity coefficients of individual aqueous
 species.
@@ -96,7 +97,7 @@ KOH variant can be chosen. </p>
   
 
 
-<p>Note that because of
+<p>Note that for internal
 thermodynamic consistency, T-P-dependent b_gamma
 functions should be used in conjunction with the extended
 Debye-Hückel model after <a href="#HELGESON_REFS">Helgeson and coworkers</a>,
@@ -217,7 +218,7 @@ generated again without displaying this setup dialog.
 
 
 </p>
-<p>The second tab "Select Gas/Fluid Mixture Model" defines the
+<p><span style="font-weight: bold;">The second tab "Select Gas/Fluid Mixture Model"</span> defines the
 automatically
 generated Phase record for the gas or fluid mixture. It functions in a way
 similar
@@ -240,48 +241,64 @@ versions. Note that interaction parameters of mixing between fluid
 components cannot be entered into the atomatic fluid phase; instead, a
 user-prepared Phase record must be selected. <br>
 </p>
-<p>The use of the 
-automatically-generated definition of gas/fluid mixture implies that: <br>
-</p>
+<p>The use of automatically generated definition of an ideal mixture of ideal gases ('I', default) implies that:</p>
 <ul>
-  <li>consistent parameters are provided in DComp records available in the 
-project database ;<br>
- </li>
-  <li>these DComp record keys start with the <span style="font-family: monospace;">'f'</span> (fluid) phase state code instead of <span style="font-family: monospace;">'g'</span> (gaseous) phase state code. </li>
+  <li>DComp records for gases with keys starting with <span style="font-family: monospace;">'g'</span> (gaseous) phase state code are available in the project database;</li>
+  <li>All such records will be taken into one automatically generated Phase record with key beginning with 'g'.<br>
+  </li>
 </ul>
-<p>Note that no additional options for
+<p>The use of the 
+automatically generated definition of a non-ideal gas/fluid mixture implies that: <br>
+</p>
+
+<ul>
+  <li>consistent parameters such as <a href="gm_dcomp.html#CritPg"><span style="font-family: monospace;">CritPg</span></a> vector are provided in <a href="gm_dcomp.html">DComp</a> records available in the 
+project database;<br>
+ </li>
+  <li>these DComp record keys start with the <span style="font-family: monospace;">'f'</span> (fluid) phase state code instead of <span style="font-family: monospace;">'g'</span> (gaseous) phase state code;</li>
+  <li>All such records will be taken into one automatically generated Phase record with key beginning with 'f'.<br>
+  </li>
+
+</ul>
+<p>No additional options for
 the gas/fluid
-mixture (right-hand side of the wizard tab) are used in this version of
+mixture (right-hand side of the wizard tab) are available in this version of
 GEM-Selektor.
 
 
 
 </p>
-<p>Any "specific interaction" non-ideal model of aqueous electrolyte or gas (fluid)
-mixture cannot be composed in the automatic mode and must be first created (prepared by the user) in
+<p><span style="font-weight: bold;">Any "specific interaction" non-ideal model</span> of aqueous electrolyte or gas (fluid)
+mixture cannot be composed in the automatic mode and must be previosly created (prepared by the user) in
 GEMS3 Database Mode as a specific <a href="gm_phase.html">Phase definition record</a>. Such a definition typically contains a list of included chemical species, and an array of
 interaction parameter coefficients entered into the <a style="font-family: monospace;" href="gm_phase.html#ph_cf">ph_cf</a>
- table. Such Phase
-record can then be selected in this wizard by choosing the option "Do 
-not
-generate; select a user-defined Phase record from database, U" present 
-on both tabs. After
-selecting this option, a list of suitable Phase records will be 
-displayed, from which one record must be selected. Note that, if there 
-is only one suitable record available in the project database, the list 
-will not appear and this record will be taken automatically. By clicking
- "Check" button, you can see which record has been chosen in the "Phase 
-record key" field.&nbsp; </p>
+ table. <br>
+</p>
+<p>One or more available Phase
+record can be selected by choosing the option "Do not
+generate; select a user-defined Phase record from database, U" (present
+on both tabs). After
+selecting this option, a list of suitable Phase records will be
+displayed, from which one record must be selected (one or more for the
+fluid/gas phases). If only one suitable record is available in the
+project database, the list will not appear, and this record will be
+taken automatically. By clicking the "Check" button, you can see which
+record has been chosen in the "Phase record key" field.&nbsp; </p>
+
 
 
 
 
 <p>The setup of automatically generated or selected Phase records for aqueous and
 gas
-phases can be changed any time upon opening the modelling project. To
+phases can be changed any time only upon opening the modelling project. To
 change, deactivate the "Retain setup of aqueous (and gas) phases" option in
 the <a href="gm_project.html#HOWTO">"Modelling Projects" dialog</a> before
-selecting an existing project to be opened.&nbsp;</p>
+selecting an existing project to be opened. <br>
+</p>
+<p>An easy way to prepare a Phase definition e.g. for non-ideal fluid with specific interaction coefficients is described in the <a href="gm_phase#PHASE_GASFLUID">Phase help file</a>.<br>
+</p>
+
 
 
 
@@ -317,7 +334,7 @@ pressures and temperatures: The system Al<sub>2</sub>O<sub>3</sub>-H<sub>2</sub>
 
 <hr style="width: 100%; height: 2px;">Copyright (c) 2010-2012 GEMS Development Team<br>
 <br>
-Last change: 2 Dec. 2012 DK<br>
+Last change: 4 Dec. 2012 DK<br>
 
 <br>
 
