@@ -23,6 +23,7 @@
 #include <QDialog>
 #include <QButtonGroup>
 
+
 #include "ui_ElementsDialog4.h"
 #include "filters_data.h"
 
@@ -65,6 +66,9 @@ class ElementsDialog : public QDialog, public Ui::ElementsDialogData
     bool isSolution() const ;
     bool isSorption() const ;
 
+    void 	resetNextButton();
+    void 	resetBackButton();
+
     QButtonGroup* bgElem;
     QButtonGroup* bgOther;
 
@@ -74,6 +78,8 @@ protected slots:
 //    void CmReset();
 //    void CmPrevious();
     void CmSetFilters();
+    void CmNext();
+    void CmBack();
 
     void SetAqueous();
     void SetGaseous();

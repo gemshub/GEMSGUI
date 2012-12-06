@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>677</width>
+    <width>763</width>
     <height>599</height>
    </rect>
   </property>
@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout">
@@ -433,7 +433,7 @@ The DualTh module and record can be configured to perform this task in a conveni
          <property name="title">
           <string>Dimensions</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="gridLayou1">
           <item row="0" column="0">
            <widget class="QSpinBox" name="pnQ">
             <property name="sizePolicy">
@@ -1077,7 +1077,7 @@ Deactivate the third checkbox if you do not provide formula units (e.g. NaHCO3, 
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout">
+    <layout class="QHBoxLayout" name="layout_21">
      <item>
       <widget class="QPushButton" name="pHelp">
        <property name="font">
@@ -1092,7 +1092,7 @@ Deactivate the third checkbox if you do not provide formula units (e.g. NaHCO3, 
       </widget>
      </item>
      <item>
-      <spacer>
+      <spacer name="sp_1">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>

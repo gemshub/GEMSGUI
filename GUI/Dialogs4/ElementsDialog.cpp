@@ -28,6 +28,45 @@
 #include "m_icomp.h"
 #include "m_param.h"
 
+
+void ElementsDialog::CmBack()
+{
+    stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()-1 );
+    resetNextButton();
+    resetBackButton();
+}
+
+void ElementsDialog::CmNext()
+{
+    if(stackedWidget->currentIndex()==0)
+     SetFiles();
+    stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()+1 );
+    resetNextButton();
+    resetBackButton();
+}
+
+void 	ElementsDialog::resetNextButton()
+{
+    if( stackedWidget->currentIndex() == stackedWidget->count() - 1 )
+    {
+        bNext->disconnect();
+        connect( bNext, SIGNAL(clicked()), this, SLOT(CmOk()) );
+        //pNext->setText("&Finish");
+    }
+    else
+    {
+        bNext->disconnect();
+        connect( bNext, SIGNAL(clicked()), this, SLOT(CmNext()) );
+        //pNext->setText("&Next>");
+    }
+}
+
+void 	ElementsDialog::resetBackButton()
+{
+    bBack->setEnabled( stackedWidget->currentIndex() > 0 );
+}
+
+
 ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
            const char* /*caption*/):
         QDialog( win ),
@@ -39,6 +78,11 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
           "Selection of Independent Components into Modelling Project   ";
          str +=  gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));;
          setWindowTitle( trUtf8(str.c_str()) );
+
+         QObject::connect( bBack, SIGNAL(clicked()), this, SLOT(CmBack()));
+         stackedWidget->setCurrentIndex (0);
+         resetNextButton();
+         resetBackButton();
 
 //    pLogoImg->setPixmap(pVisorImp->getLogo());
 
@@ -200,22 +244,19 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
 
     // signals and slots connections
     connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
-    connect( bNext, SIGNAL( clicked() ), this, SLOT( CmOk() ) );
     connect( bReset, SIGNAL( clicked() ), this, SLOT( CmSetFilters() ) );
-//  connect( bCancel, SIGNAL( clicked() ), this, SLOT( CmCancel() ) );
-//  connect( bPrevious, SIGNAL( clicked() ), this, SLOT( CmPrevious() ) );
 
     connect( cbGas, SIGNAL( clicked() ), this, SLOT( SetGaseous() ) );
     connect( cbAqueous, SIGNAL( clicked() ), this, SLOT( SetAqueous() ) );
     connect( cbSolids, SIGNAL( clicked() ), this, SLOT( SetSolids() ) );
     connect( cbSolutions, SIGNAL( clicked() ), this, SLOT( SetSolutions() ) );
     connect( cbSorption, SIGNAL( clicked() ),this, SLOT( SetSorption() ) );
-    connect( cbIsotopes, SIGNAL( clicked() ),this, SLOT( SetFiles() ) );
+//    connect( cbIsotopes, SIGNAL( clicked() ),this, SLOT( SetFiles() ) );
 
-    connect( rbKernel, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
-    connect( rbComplem, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
-    connect( rbOrganic, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
-    connect( rbSpecific, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
+//    connect( rbKernel, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
+//    connect( rbComplem, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
+//    connect( rbOrganic, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
+//    connect( rbSpecific, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
 
    
 }
