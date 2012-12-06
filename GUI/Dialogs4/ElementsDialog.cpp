@@ -75,7 +75,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
 	setupUi(this);
 
     gstring str =
-          "Selection of Independent Components into Modelling Project   ";
+          "Configuration of a new Modeling Project  ";
          str +=  gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));;
          setWindowTitle( trUtf8(str.c_str()) );
 
@@ -228,7 +228,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
      bgOther->addButton(pbA_9, 9);
      bgOther->addButton(pbA_10, 10);
      bgOther->addButton(pbA_11, 11);
-     bgOther->addButton(pbA_12, 12);
+//     bgOther->addButton(pbA_12, 12);
      bgOther->addButton(pbA_0, 0);
 
      EmptyData();
