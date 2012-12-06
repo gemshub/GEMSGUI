@@ -1,6 +1,8 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
 
+
+
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <meta name="GENERATOR" content="Mozilla/4.75 [en] (Win95; U) [Netscape]"><title>GEMS3 DComp Module</title>
   
@@ -111,132 +113,110 @@ for aqueous species and gases [<a href="g_litref.html#%5B1997SHO/SAS%5D">1997SHO
 and references therein]. </li>
 </ul>
 <p>Third-party "specific" databases in GEMS format are available from
-their vendor web sites. Thermodynamic data is not always consistent
+their vendor web sites (see links in http://gems.web.psi.ch). Thermodynamic data is not always consistent
 between different
 datasets! The user, in general, should avoid mixing of thermodynamic
 data from the
-alternative datasets, wherever possible. <br>
+alternative datasets, wherever possible, and check such data for consistency otherwise.<br>
 </p>
 
 
-<p>Available DComp records can be browsed ("Record List" "Browse" menu
-or "Forward" and "Backward" icon buttons in the toolbar) until one is
-selected. You can also "Load", i.e. directly select one record from the
-list of
-available record keys, by pressing the "Show" icon button or "Record"
-"Show" item. The data fields (each displays a tooltip when pointed with
-mouse) can then be edited immediately (just click with left mouse
-button
-in the data field). <br>
+<p>In the Database mode of GEMS3, available DComp records can be looked for in the record key list (on the left side) until one is
+found, selected and opened to see its contents in the DComp module window.
+The contents of different records can be browsed one-by-one using
+"Display next record" and "Display previous record" toolbar buttons.
+The data fields (each displays a tooltip when pointed with
+mouse) can then be edited immediately. <br>
 </p>
 
 
-<p>What optional data must be entered and how they will be used in
+<p>What optional data must be entered and how it will be used in
 thermodynamic calculations, is defined by the <tt><a href="#TPcMod_0">TPcMod</a></tt>
 codes (see <tt>Page 2</tt>&nbsp; of the "DComp" window) set up during
 remake/create of a DComp record using a <a href="#DC_MWIZARD">DComp Wizard</a>.&nbsp; For instance, the <tt>"CSC"</tt>
-method codes (most common for minerals) tell that the <a href="theortdb.html">standard integration</a> over temperature
+method codes (most common for minerals) tell that the <a href="theory-tdb.html">standard integration</a> over temperature
 interval <i>Tr&nbsp;&nbsp; </i>to<i>&nbsp; T</i>&nbsp;&nbsp; using <i>Cp<sup>0</sup>&nbsp;</i>
-= <i>f&nbsp; </i>(<i>T</i>) equation coefficients will be performed
+= <i>f </i>(<i>T</i>) equation coefficients will be performed
 while keeping standard molar volume
 constant. This way, the standard molar properties of the mineral (<i>G<sup>0</sup></i>,
 <i>H<sup>0</sup></i>, <i>S<sup>0</sup></i>,&nbsp; and <i>Cp<sup>0</sup></i>&nbsp;
 ) are automatically computed by GEM-Selektor for any given&nbsp; <i>T,
 P&nbsp;
-</i>of interest within the interval of temperature defined in <tt>TCint</tt>&nbsp;
-. Calculations will be also performed for temperatures above the upper
-limit
-in <tt>TCint</tt>, although one must keep in mind that, in most cases,
-empirical
-coeffcients of <i>Cp<sup>0</sup>&nbsp;</i> = <i>f&nbsp;</i>(<i>T</i>)
-equation
-are not suitable for extrapolation. <br>
+</i>of interest within the specified interval.&nbsp; <br>
 </p>
 <p>The same thermochemical format is used for gases. There are some
 differences, however. First, molar volume of an ideal gas changes
-strongly with temperature and pressure according to <i>PV&nbsp;</i> = <i>nRT</i>&nbsp;
+strongly with temperature and pressure according to the <i>PV&nbsp;</i> = <i>nRT</i>&nbsp;
 equation. Second, at pressures greater than a few bars, most gases do
 not behave
-ideally and at elevated <i>T, P</i>&nbsp; do not mix ideally (see [<a href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>] for more
-detail).&nbsp; In Selektor codes, a reasonable compromise is achieved
-by applying the "Correspondent States Theory" to calculate fugacities
+ideally and at elevated <i>T, P</i>&nbsp;
+do not mix ideally. To account for this, the models of non-ideal fluids
+must be used, several of which are implemented in the TSolMod library
+of <a href="gm_phase.html">phase models</a>. Most such models are based on the "Correspondent States Theory" to calculate fugacities
 of individual pure gases a&nbsp; <i>T,P</i>&nbsp;&nbsp; of interest
-and then consider the gas phase as an ideal mixture of real gases. For
-that, an optional&nbsp; <tt><a href="#CritPg_0">CritPg</a></tt>&nbsp;
-vector can be specified for keeping critical parameters for individual
-gases, needed for the correspondent-state theory calculations (under
-construction). This version of GEM-Selektor
+and then consider the gas phase as an ideal or non-ideal mixture of real gases. To implement such models, an optional&nbsp; <tt><a href="#CritPg_0">CritPg</a></tt>&nbsp;
+vector can be specified in DComp records for keeping critical parameters for individual
+gases. This version of GEM-Selektor
 treats gas phase at low temperatures and pressures as an ideal mixture
 of ideal gases; the respective <a href="gm_phase.html">phase definition</a>
-is created automatically upon opening the <a href="gm_profil.html">system
-profile</a>. <br>
+is created automatically upon opening the <a href="gems_aphsetup.html">modeling project</a>. <br>
 </p>
 <p>A third form of DComp data format is used for aqueous ions and
-complexes from SUPCRT92-98 datasets [<a href="g_litref.html#%5B1992JOH/OEL%5D">1992JOH/OEL</a>;
-<a href="g_litref.html#%5B1997SHO/SAS%5D">1997SHO/SAS</a>]. The
+complexes from SUPCRT92 and younger datasets [<a href="gems_litref.html">Johnson et al., 1992</a>;
+<a href="gems_litref.html">Shock et al., 1997</a>]. The
 increments to standard-reference partial molal properties for aqueous
 species are calculated from <i>Tr, Pr</i>&nbsp;&nbsp;&nbsp; to
 elevated <i>T</i>&nbsp; &lt; 1000 <sup>o</sup>C and <i>P</i>&nbsp;
-&lt; 5000 bar using revised HKF
-EoS (Helgeson-Kirkham-Flowers equation of state, [<a href="g_litref.html#%5B1981HEL/KIR%5D">1981HEL/KIR</a>;<a href="g_litref.html#%5B1997SHO/SAS%5D">1997SHO/SAS</a>; <a href="g_litref.html#%5B1992BOR/SHV%5D">1992BOR/SHV</a>] ). All the
-necessary subroutines from the published SUPCRT92 source code [<a href="g_litref.html#%5B1992JOH/OEL%5D">1992JOH/OEL</a>] were
+&lt; 5000 bar using the revised HKF
+EoS (Helgeson-Kirkham-Flowers equation of state, [<a href="gems_litref.html">Helgeson et al., 1981</a>;<a href="gems_litref.html"> Shock et al., 1997</a>; <a href="gems_litref.html">Borisov &amp; Shvarov, 1992</a>; <a href="gems_litref.html">Anderson, 2005</a> ). All the
+necessary subroutines from the published SUPCRT92 source code [<a href="gems_litref.html">Johnson et al., 1992</a>] were
 translated
 from fortran to C/C++ and built into the Selektor-A and then the
 GEM-Selektor
 code. In addition to input standard-state properties <i>G<sup>0</sup></i>,<i>H<sup>0</sup></i>
 and <i>S<sup>0</sup></i> at <i>Tr, Pr </i>,&nbsp; calculations with
 the HKF
-EoS require as input seven empirical coefficients kept in the <tt><a href="#aiHKF_0">ai_HKF</a></tt> optional vector (allocated when the
-first
-three of&nbsp; <tt><a href="#TPcMod_0">TPcMod</a></tt> codes are set
-to <tt>"HKF"</tt>
-on remake, see <tt>Page 2</tt> of the "DComp" window). <br>
-</p>
-<p>As an example, pick up a DComp record keyed <tt>"a:WS+6:SO4-2:sa0:"</tt>
-which keeps the standard partial molal thermodynamic properties of
-sulfate ion. On<tt> Page 2 </tt>of "DComp" window, the <tt><a href="#aiHKF_0">ai_HKF</a></tt> vector contains <a href="theortdb.html">empirical parameters of HKF EoS</a>. SUPCRT92
-data, taken as kernel database in
-GEM-Selektor, are consistent with the three-term Debye-Hueckel activity
-model of aqueous electrolyte [more in <a href="g_litref.html#%5B1997LAN%5D">1997LAN</a>; <a href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>]. This model
-uses either common or individual (Kielland) ion size parameter(s) of
-aqueous species, which can be entered ino the <tt><a href="#ab_0">ab[0]</a></tt>
-field. Calculation of aqueous activity coefficients with <a href="theortdb.html">Debye-Hueckel equation</a> with a common third
-parameter is built into GEM-Selektor code (see <a href="gm_phase.html">Phase
-definition</a>); in this case, definition of aqueous phase is created
-automatically upon opening of the <a href="gm_profil.html">system
-profile</a>. Other calculations (e.g. <a href="theortdb.html">Davies,
-SIT, Pitzer models</a>) should be
-set explicitly in Phase records for aqueous electrolyte phase. <br>
-</p>
+EoS require as input up to seven empirical coefficients kept in the <tt><a href="#aiHKF_0">ai_HKF</a></tt> optional vector. <br>
+</p>To reduce on typing errors, many text files with thermodynamic data
+can be imported into GEMS DComp database chain using import scripts
+that can be customized or written by the users. For instance, SUPCRT
+data were imported in this way. Multiple DComp records can be also
+exported to text files using export scripts, also editable by the user
+(e.g. for data tabulation purposes, or conversion to other database
+formats). <br>
+<br>
 <br>
 <hr size="2" width="100%">
 <h3><a name="DC_CALCULATIONS"></a>1.1. DComp module
 calculations<br>
 </h3>
-<p>When the <a href="#P333R4">Calculate</a> button (or menu command,
-or <tt>F9</tt> hot key) is clicked from the "DComp" window,
+<p>When the <a href="#P333R4">"Re-Calculate"</a> button (or menu command,
+or <tt>F9</tt> hot key) is clicked from the DComp window,
 GEM-Selektor will parse and check
-the DC <a href="#DCform">chemical formula</a> , calculate gram-formula
-mass and charge, perform <a href="theortdb.html">cross-checking</a> of
+the DC <a href="#DCform">chemical formula</a>, calculate gram-formula
+mass and charge, perform <a href="theory-tdb.html">cross-checking</a> of
 standard molar properties, and (optionally) calculate heat capacity and
 molar volume at reference temperature and pressure. If any problems are
 encountered, various diagnostic messages will be displayed and, after
 fixing the problem, recalculation of the DComp record must be repeated
 until all the input data becomes consistent. <br>
-&nbsp; <br>
 </p>
-<p>&nbsp;
-<br>
-</p>
-<p><br>
-</p>
-<hr size="2" width="100%">
+<p>When entering thermodynamic data, it is important to realize that&nbsp; 
+out of three main properties (<i>G<sup>0</sup></i>,<i>H<sup>0</sup></i>
+and <i>S<sup>0</sup></i>)
+of the Dependent Component, only two are sufficient, because the third
+one can be calculated out of them in a consistent way. In some
+literature sources, <i>H<sup>0</sup></i>
+and <i>S<sup>0</sup></i> are provided, in others <i>G<sup>0</sup></i> and <i>S<sup>0</sup>.&nbsp; </i>The molar <span style="font-style: italic;">Cp<sup>0</sup></span> values are usually automatically calculated from entered <i>Cp<sup>0</sup>&nbsp;</i>
+= <i>f </i>(<i>T</i>) coefficients or from the HKF EoS coefficients (in the latter case, also standard partial molal volume <span style="font-style: italic;">V<sup>0</sup></span> will be calculated).&nbsp; &nbsp;<br>
+&nbsp;
+</p><hr size="2" width="100%">
 <p> </p>
 <h2><a name="DC_MWIZARD"></a> 2. DComp Create/Remake
 Wizard<font size="+3"><br>
 </font></h2>
 <p>This wizard appears when a new DComp record is created or cloned, or
-a remake command is executed for an existing record (only in the
+a remake command is executed for an existing DComp record (only in the
 Database mode of GEM-Selektor). <br>
  </p>
 
@@ -323,16 +303,437 @@ calculated from HKF EoS data.&nbsp;</p>
 <hr size="2" width="100%">
 <h3> </h3>
 <h3><a name="WZSTEP_1"></a>2.1. DComp Wizard Step 1</h3>
+This step defines the Dependent Component (DC) type and thermodynamic calculation method codes. <br>
+<br>
+In the drop-down list below, select here to which class this Dependent Component belongs. This <a href="g_useref.html#DCCLASSCODES">class code</a>, as a default for this DC, will be copied into the newly-created Phase definition, if this DC is included there.<br>
+<br>
+<table style="text-align: left; width: 724px; height: 610px;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">O<br>
+      </td>
+      <td style="vertical-align: top;">Dependent Component of a single-component condensed phase<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">T<br>
+      </td>
+      <td style="vertical-align: top;">Hydrogen ion H+ in aqueous electrolyte<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">E<br>
+      </td>
+      <td style="vertical-align: top;">Electron (aqueous), fictive species<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">S<br>
+      </td>
+      <td style="vertical-align: top;">Other aqueous species (ions, complexes and ion pairs)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">K<br>
+      </td>
+      <td style="vertical-align: top;">Aqueous-surface species (in adsorption site-ligand models)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">W<br>
+      </td>
+      <td style="vertical-align: top;">Water H<sub>2</sub>O - solvent in aqueous electrolyte phase<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">L<br>
+      </td>
+      <td style="vertical-align: top;">Liquid solvent component of the aqueous phase<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">G<br>
+      </td>
+      <td style="vertical-align: top;">Gas substance, a component of gas or fluid mixture<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">V<br>
+      </td>
+      <td style="vertical-align: top;">H<sub>2</sub>O (steam) gas (fluid) component<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">C<br>
+      </td>
+      <td style="vertical-align: top;">CO<sub>2</sub> (carbon dioxide) gas (fluid) component<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">I<br>
+      </td>
+      <td style="vertical-align: top;">Ideal solution end-member (symmetric ideal mixing, Raoult's law)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">M<br>
+      </td>
+      <td style="vertical-align: top;">Major solution independent end-member (solvent)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">J<br>
+      </td>
+      <td style="vertical-align: top;">Junior solution independent end-member (solute)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">D<br>
+      </td>
+      <td style="vertical-align: top;">Major solution dependent end member (solvent)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">F<br>
+      </td>
+      <td style="vertical-align: top;">Junior solution dependent end member (solute)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">X<br>
+      </td>
+      <td style="vertical-align: top;">Neutral surface OH functional group<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">Y<br>
+      </td>
+      <td style="vertical-align: top;">Inner-sphere surface complex<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">Z<br>
+      </td>
+      <td style="vertical-align: top;">Outer-sphere surface complex <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">Q<br>
+      </td>
+      <td style="vertical-align: top;">Sorbent (or major end-member of sorbent solid solution)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">P<br>
+      </td>
+      <td style="vertical-align: top;">Minor end-member of the sorbent solid solution<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">R<br>
+      </td>
+      <td style="vertical-align: top;">Solid carrier of poly(oligo)electrolyte, reserved<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">A<br>
+      </td>
+      <td style="vertical-align: top;">Strong exchange ion (constant charge, 0 plane)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">B<br>
+      </td>
+      <td style="vertical-align: top;">Weak exchange ion (constant charge, beta-plane)<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+The <a href="g_useref.html#TDC_METHODS_CODES">method codes</a> selected
+in drop-down lists below will configure the DComp record data fields,
+and tell the program how thermodynamic properties of this DC (per mole)
+will be corrected for T and P of interest.<br>
+<br>
+<h4>General method code for T (temperature) corrections of thermodynamic properties:</h4>
+<table style="text-align: left; width: 727px; height: 60px;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">C<br>
+      </td>
+      <td style="vertical-align: top;">Calculation on the basis of standard S0&nbsp; and Cp0&nbsp; integration (default)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">H<br>
+      </td>
+      <td style="vertical-align: top;">Calculation on the basis of the revised HKF EoS<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
 <br>
 <br>
 <br>
-<hr size="2" width="100%"><h3><a name="WZSTEP_2"></a>2.2. DComp Wizard Step 2</h3>
+<h4>Method variant code for EoS T (temperature) corrections of thermodynamic properties:</h4>
+<table style="text-align: left; width: 727px; height: 110px;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">S<br>
+      </td>
+      <td style="vertical-align: top;">Calculation of g0T, h0T, S0T&nbsp; from standard entropy integration (default)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">H<br>
+      </td>
+      <td style="vertical-align: top;">Calculation using Landau contribution to Cp(T) (Holland and Powell 1998)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">W<br>
+      </td>
+      <td style="vertical-align: top;">Calculation of properties of H2O liquid and vapor using HGK EoS <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">K<br>
+      </td>
+      <td style="vertical-align: top;">Calculation of partial molal properties using HKF EoS coefficients<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<h4>Method code for P (pressure) corrections of thermodynamic properties:</h4>
+<table style="text-align: left; width: 730px; height: 388px;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">C<br>
+      </td>
+      <td style="vertical-align: top;">Pressure correction assuming constant molar volume V0 (default)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">E<br>
+      </td>
+      <td style="vertical-align: top;">Pressure correction using dV (T,P) from Birch-Murnaghan EoS (Holland and Powell 1998)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">B<br>
+      </td>
+      <td style="vertical-align: top;">Pressure correction using dV (T,P) from Birch-Murnaghan EoS (Gottschalk 1997)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">K<br>
+      </td>
+      <td style="vertical-align: top;">Pressure correction using dV (T,P) calculated from 5 empirical coefficients<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">S<br>
+      </td>
+      <td style="vertical-align: top;">Pressure correction for fluids using Churakov-Gottschalk (CG) EoS<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">R<br>
+      </td>
+      <td style="vertical-align: top;">Pressure correction for fluids using Peng-Robinson-Stryjek-Vera (PRSV) EoS<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">T<br>
+      </td>
+      <td style="vertical-align: top;">Pressure correction for fluids using Soave-Redlich-Kwong (SRK) EoS<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">6<br>
+      </td>
+      <td style="vertical-align: top;">Pressure correction for fluids using Sterner-Pitzer (STP) EoS (reserved)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">7<br>
+      </td>
+      <td style="vertical-align: top;">Pressure correction for fluids using Peng-Robinson (PR78) EoS<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">8<br>
+      </td>
+      <td style="vertical-align: top;">Pressure correction for fluids using compensated Redlich-Kwong (CORK) EoS<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">F<br>
+      </td>
+      <td style="vertical-align: top;">Pressure correction using HKF EoS for aqueous electrolytes or HGK EoS for water<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">G<br>
+      </td>
+      <td style="vertical-align: top;">Pressure/temperature corrections for H2O vapor from HGK EoS<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">A<br>
+      </td>
+      <td style="vertical-align: top;">Pressure correction for aqueous nonelectrolytes (Akinfiev and Diamond 2003)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">P<br>
+      </td>
+      <td style="vertical-align: top;">Application of Parcor algorithm (Pronsprep97) to retrieve HKF EoS coefficients<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">N<br>
+      </td>
+      <td style="vertical-align: top;">No pressure correction to be done (not recommended)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">0<br>
+      </td>
+      <td style="vertical-align: top;">Account for pressure corrections is inherent in the specified model (e.g. the EoS)<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<h4>Codes for species-dependent EoS (Equation-of-State) subroutines:</h4>
+<table style="text-align: left; width: 731px; height: 268px;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">N<br>
+      </td>
+      <td style="vertical-align: top;">No fluid model routine (default)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">G<br>
+      </td>
+      <td style="vertical-align: top;">G&nbsp;&nbsp; Generic fluid model routine<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">V<br>
+      </td>
+      <td style="vertical-align: top;">V&nbsp;&nbsp; Subroutine for H2O fluid<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">C<br>
+      </td>
+      <td style="vertical-align: top;">C&nbsp;&nbsp; Subroutine for CO2 fluid<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">M<br>
+      </td>
+      <td style="vertical-align: top;">M&nbsp;&nbsp; Subroutine for CH4 fluid<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">T<br>
+      </td>
+      <td style="vertical-align: top;">T&nbsp;&nbsp; Subroutine for N2 fluid<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">H<br>
+      </td>
+      <td style="vertical-align: top;">H&nbsp;&nbsp; Subroutine for H2 fluid<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">O<br>
+      </td>
+      <td style="vertical-align: top;">O&nbsp;&nbsp; Subroutine for O2 fluid<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">A<br>
+      </td>
+      <td style="vertical-align: top;">A&nbsp;&nbsp; Subroutine for Ar fluid<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">P<br>
+      </td>
+      <td style="vertical-align: top;">P&nbsp;&nbsp; Subroutine for polar fluids<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">Q<br>
+      </td>
+      <td style="vertical-align: top;">Q&nbsp; Subroutine for nonpolar fluids<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<br>
+<br>
+<hr size="2" width="100%"><h3><a name="WZSTEP_2"></a>2.2. DComp Wizard Step 2 - Specific dimensions and settings<br>
+</h3>
+<p>These dimensions should be changed only in special cases.</p>
+<br>
+<div style="margin-left: 40px;">Spinbox: Number of sets of coefficients
+of Cp=f(T) &amp;equation can be changed here, if available for several
+temperature intervals. Default is 1, maximum 5 sets (intervals).<br>
+<br>
+Spinbox: Number of phase transitions can be changed here, if necessary
+(usually one less than the number of sets of Cp=f(T) coefficients).
+Default is 0, maximum 4.<br>
+<br>
+Spinbox: Number of EoS coefficients can be set here if certain EoS
+models for fluids will be used (default: 0). Coefficients will be
+collected automatically into Phase record.<br>
+<br>
+&nbsp;Checkbox: Check here to allocate the Vm=f(P, T) vector of coefficients (reserved)<br>
+</div>
 <br>
 <br>
 <br>
 <hr size="2" width="100%"><h3><a name="WZSTEP_3"></a>2.3. DComp Wizard Step 3<br>
 </h3>
+Optional:&nbsp; in the spinbox, set the number of links to bibliography
+SDref records (default 0). Setting at least one link is recommended for
+the data traceability (the respective fields <span style="font-family: monospace;">dSDref</span> and <span style="font-family: monospace;">dSDval</span> will appear on Page 1 of the DComp window). <br>
 <br>
+What will happen after you click "Finish":<br>
+<br>
+(1) Page 1 of the "DComp" window appears on the desktop. Fill out the <span style="font-family: monospace;">DCname</span> comment field and (essential!) enter the <a href="g_useref.html#FORMULA">DC formula</a> into the <a href="#DCform"><span style="font-family: monospace;">DCform</span></a> field.<br>
+<br>
+(2) Enter the standard molar properties of the substance into <span style="font-family: monospace;">V0d[0], G0d[0], H0d[0], S0d[0], Cp0d[0]</span>
+cells. If some of them are unknown (e.g. H0), enter the 'empty' value
+('---').&nbsp; Any two of three values G0, H0 and S0 should be entered
+- the third one (if given as 'empty') will be retrieved upon
+re-calculation. Note that 0 (zero) is a non-empty value. If all three
+non-empty values are given then the program will check them for
+consistensy and issue a warning, if necessary. <br>
+<br>
+(3) Switch to Page 2&nbsp; and enter values into <span style="font-family: monospace;">TCint, ai_Cp</span> or <span style="font-family: monospace;">aiHKF</span>
+arrays, whatever appropriate. In some cases, fluid EoS coefficients,
+critical parameters, or V(T,P) coefficients may need to be entered.
+Unknown coefficients should be given as zeros (default). <br>
+<br>
+(4) Go to Page 1 and click on 'Calculate' toolbar button. For unknown
+DC properties (e.g. H0), non-empty values will appear. If Cp=f(T) (or
+HKF) coefficients were entered, the Cp0 (and V0) values will also be
+calculated. Save the record to database. To test the T,P corrections,
+create a <a href="gm_rtparm.html">RTParm tabulator</a> for this DComp record.<br>
 <br>
 <br>
 <p>
@@ -341,30 +742,15 @@ calculated from HKF EoS data.&nbsp;</p>
 <p> </p>
 <h2><a name="DC_MWINDOW"></a> 3. DComp Module Window<font size="+3"><br>
 </font></h2>
-<p>This window consists of two pages. <br>
-</p>
-<p>Clicking on a "Dependent Components (DComp)" button in the
-"Thermodynamic Database Management" dialog opens a "DComp" window with
-two pages. <tt>Page 1</tt> provides a screen form access to standard
+
+<p>This window consists of two pages.&nbsp; <tt>Page 1</tt> provides a screen form access to standard
 state thermodynamic
 data and stoichiometry of the species, whereas <tt>Page 2</tt> shows
-configuration flags and optional arrays with empirical coefficients.
-Icon buttons and menu commands in "DComp" window are the same as in
-other
-module windows (see <a href="g_miscel.html">g_miscel.html</a> and <a href="gt_howto.html">gt_howto.html</a>). They provide all
-functionality
-necessary for maintaining, cleaning and extending the database. <br>
+configuration flags and optional arrays with empirical coefficients.<br>
 </p>
 <p>Please, note that 0 (zero) is a meaningful number in GEM-Selektor
-thermodynamic database. If data is not known then an "Empty" value has
-to be entered (back apostrophe ` in this version). The <tt><a href="gm_dcomp.html#PrTr_0">PrTr</a></tt>
-field contains reference pressure and temperature (1 bar and 25 <sup>o</sup>C
-by default). One or more bibliographic references to sources of data
-are usually specified in <tt><a href="gm_dcomp.html#dSDref">dSDref</a></tt> list;
-clicking on any of these and pressing <tt>F2</tt> opens a "SDref"
-window
-with full contents of the reference - <a href="gm_sdref.html">SDref</a>
-record. <br>
+thermodynamic database. If the data item is not known then an Empty value&nbsp; '---' has
+to be entered. <br>
 </p>
 <p><br>
 
@@ -372,35 +758,89 @@ record. <br>
 
 <hr size="2" width="100%">
 <h3><a name="MWPAGE_1"></a>3.1. DComp Window Page 1</h3>
+<p>This simple page starts with a <span style="font-family: monospace;">DCname</span> comment line where a detailed name of this DC should be typed, i.e. "CaSO4 neutral aqueous complex". <br>
+</p>
+<p>The stoichiometry of any Dependent Component is its main property, which must be entered into the <tt><a href="gm_dcomp.html#DCform">DCform</a></tt>
+field according to the <a href="g_useref.html#FORMULASYNTAX">chemical formula syntax</a>. For instance, as "CaSO4@" for the CaSO4 neutral aqueous complex. <br>
+</p>
+<p>In the next row, the molar mass <span style="font-family: monospace;">M0</span> and formula charge <span style="font-family: monospace;">Zz</span> of this DC are visible (calculated from the chemical formula).&nbsp; In the <span style="font-family: monospace;">ab</span> field,  optional parameters for aqueous complexes can be entered. <br>
+</p>
+<p>Below, the <span style="font-family: monospace;">V0d, G0d, H0d, S0d, Cp0d</span>&nbsp;
+data fields are seen that contain the standard molar (or partial molal)
+properties of this DC at reference temperature and pressure. Each field
+consists of two cells. The first one (e.g. <span style="font-family: monospace;">G0d[0]</span>) contains the property, and the second (e.g. <span style="font-family: monospace;">G0d[1]</span>) may contain the uncertainty of this property or Empty value '---' as default. <br>
+  </p>
+<p>The <tt><a href="gm_dcomp.html#PrTr_0">PrTr</a></tt>
+field below contains reference pressure and temperature (1 bar and 25 <sup>o</sup>C
+by default). <br>
+</p>
+<p>The <span style="font-family: monospace;">LamST</span> and <span style="font-family: monospace;">BetAlp</span> data fields may contain non-empty values for certain mineral compounds or surface species. <br>
+</p>
+<p>One or more bibliographic references to sources of data
+are usually specified in <tt><a href="gm_dcomp.html#dSDref">dSDref</a></tt> list;
+clicking on any of these and pressing <tt>F2</tt> opens a SDref
+window
+with full contents of the reference located in <a href="gm_sdref.html">SDref</a>record.
+If SDref record with this key (in dSDref field) does not exist, the
+user can enter the bibliographic data (and optionally the abstract) and
+save this SDref data to project database. <br>
+ </p>
 
-In all cases, the stoichiometry of a dependent component is critically
-important and must be entered into the <tt><a href="gm_dcomp.html#DCform">DCform</a></tt>
-field on Page 1 of "DComp" window according to the <a href="g_useref.html#FORMULASYNTAX">chemical formula syntax</a>. <br>
-<br>
 <br>
 <hr size="2" width="100%"><h3><a name="MWPAGE_2"></a>3.2. DComp Window Page 2</h3>
-Two optional vector-columns are usually present on&nbsp; <tt>Page 2</tt>&nbsp;
+<p>In the upper part of this page, the <span style="font-family: monospace;">TPcMod</span>
+data object shows the selected method codes for calculation of T,P
+corrections of thermodynamic data, along with configuration flags, the
+date of record creation, and dimensions of optional data vectors. All
+this can only be changed within the DComp Wizard by re-making the DComp
+record.&nbsp; </p>
+For DCs such as gases, fluids, minerals, and non-electrolyte liquids, two data objects are usually present on&nbsp; <tt>Page 2</tt>&nbsp;
 of the DComp window. The <tt><a href="gm_dcomp.html#aiCpT_0">aiCpT</a></tt> data
 object contains up to 11 empirical coefficients of temperature
-dependence of
-<a href="theortdb.html">heat capacity function</a> <i>Cp<sup>0</sup>&nbsp;</i>
+dependence of the
+<a href="theory_tdb.html">heat capacity function</a> <i>Cp<sup>0</sup>&nbsp;</i>
 = <i>f&nbsp; </i>(<i>T </i>), and the&nbsp; <tt><a href="gm_dcomp.html#TC_int_0">TCint</a></tt>&nbsp;
-field shows temperature range (in centigrade) of applicability of&nbsp;
+field shows the temperature range (in centigrade) of applicability of&nbsp;
 <tt><a href="gm_dcomp.html#aiCpT_0">aiCpT</a>&nbsp;</tt> coefficients. The first
 three non-zero coefficients correspond to Majer-Kelly equation,&nbsp;
 the first five non-zero coefficients - to Haas-Fisher equation,
-together covering most of published databases [see <a href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>]. More than one
+together covering most of published databases [see <a href="gems_litref.html">Nordstrom and Munoz, 1994</a>]. More than one
 equation can be specified for one mineral having phase transitions;
 then
 on remake of DComp record, one has to provide a required number of
 columns
-to be created in the <tt><a href="gm_dcomp.html#aiCpT_0">aiCpT</a> </tt>and<tt><a href="gm_dcomp.html#TC_int_0">TCint</a></tt> data objects. Compressibility /
+to be created in the <tt><a href="gm_dcomp.html#aiCpT_0">aiCpT</a> </tt>and <tt><a href="gm_dcomp.html#TC_int_0">TCint</a></tt> data objects. <br>
+<br>
+Compressibility /
 expandability data can also be entered, either directly into&nbsp; <tt><a href="gm_dcomp.html#BetAlp_0">BetAlp</a>&nbsp;</tt> fields, or as optional
 coefficients of&nbsp; <i>V<sup>0&nbsp;</sup></i> = <i>f&nbsp; </i>(<i>T,
 P&nbsp; </i>)&nbsp; equation (<tt><a href="gm_dcomp.html#ai_Vtp_0">ai_Vtp</a></tt>
 data object). <br>
 <br>
-<br>
+<p>HKF
+EoS requires as input up to seven empirical coefficients kept in the <tt><a href="gm_dcomp.html#aiHKF_0">ai_HKF</a></tt> optional vector (allocated when the
+first
+three of&nbsp; <tt><a href="gm_dcomp.html#TPcMod_0">TPcMod</a></tt> codes are set
+to <tt>"HKF"</tt>
+on remake, see <tt>Page 2</tt> of the "DComp" window). <br>
+</p>
+
+
+As an example, pick up a DComp record keyed <tt>"a:WS+6:SO4-2:sa0:"</tt>
+which keeps the standard partial molal thermodynamic properties of
+sulfate ion. On<tt> Page 2 </tt>of "DComp" window, the <tt><a href="gm_dcomp.html#aiHKF_0">ai_HKF</a></tt> vector contains <a href="theortdb.html">empirical parameters of HKF EoS</a>. SUPCRT92
+data, taken as kernel database in
+GEM-Selektor, are consistent with the three-term Debye-Hueckel activity
+model of aqueous electrolyte [more in <a href="g_litref.html#%5B1997LAN%5D">1997LAN</a>; <a href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>]. This model
+uses either common or individual (Kielland) ion size parameter(s) of
+aqueous species, which can be entered ino the <tt><a href="gm_dcomp.html#ab_0">ab[0]</a></tt>
+field. Calculation of aqueous activity coefficients with <a href="theortdb.html">Debye-Hueckel equation</a> with a common third
+parameter is built into GEM-Selektor code (see <a href="gm_phase.html">Phase
+definition</a>); in this case, definition of aqueous phase is created
+automatically upon opening of the <a href="gm_profil.html">system
+profile</a>. Other calculations (e.g. <a href="theortdb.html">Davies,
+SIT, Pitzer models</a>) should be
+set explicitly in Phase records for aqueous electrolyte phase. <br>
 <br>
 <hr size="2" width="100%">
 <p> </p>

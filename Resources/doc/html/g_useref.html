@@ -1,12 +1,8 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
-<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 
-  
-<title>GEMS3 User's Reference</title>
-
-</head><body>
-<h1><img src="gems1.png" height="48" align="left" width="48">
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"><title>GEMS3 User's Reference</title></head><body>
+<h1><img src="gems1.png" align="left" height="48" width="48">
 GEM-Selektor version 3</h1>
 
 <h2> User's Reference</h2>
@@ -430,7 +426,7 @@ Thermodynamic Constants</h2>
 <ol>
 
 
-  <table height="190" border="3" cellpadding="3" cellspacing="3" width="417">
+  <table border="3" cellpadding="3" cellspacing="3" height="190" width="417">
     <tbody>
       <tr>
         <td>
@@ -478,7 +474,7 @@ be activated in future versions.<br>
 <ol>
 
 
-  <table height="175" border="3" cellpadding="3" cellspacing="3" width="417">
+  <table border="3" cellpadding="3" cellspacing="3" height="175" width="417">
     <tbody>
       <tr>
         <td>
@@ -527,7 +523,7 @@ activated in future versions.<br>
 <ol>
 
 
-  <table height="138" border="3" cellpadding="3" cellspacing="3" width="415">
+  <table border="3" cellpadding="3" cellspacing="3" height="138" width="415">
     <tbody>
       <tr>
         <td>
@@ -567,7 +563,7 @@ activated in future versions. </p>
 <ol>
 
 
-  <table height="190" border="3" cellpadding="3" cellspacing="3" width="409">
+  <table border="3" cellpadding="3" cellspacing="3" height="190" width="409">
     <tbody>
       <tr>
         <td>
@@ -1138,7 +1134,25 @@ respectively&nbsp; (obsolete since version 2.1)<br>
       <tr>
         <td><big><tt><b>P</b></tt> </big></td>
         <td> Other (minor) end-member of the sorbent solid solution</td>
+      </tr><tr>
+        <td style="vertical-align: top; font-family: monospace; font-weight: bold;"><big>R<br>
+        </big></td>
+        <td style="vertical-align: top;">Solid carrier of poly(oligo)electrolyte, reserved<br>
+        </td>
       </tr>
+      <tr>
+        <td style="vertical-align: top; font-family: monospace; font-weight: bold;"><big>A<br>
+        </big></td>
+        <td style="vertical-align: top;">Strong exchange ion (constant charge, 0 plane)<br>
+        </td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top; font-family: monospace; font-weight: bold;"><big>B<br>
+        </big></td>
+        <td style="vertical-align: top;">Weak exchange ion (constant charge, beta-plane)<br>
+        </td>
+      </tr>
+
     </tbody>
   </table>
 </blockquote>
@@ -1184,7 +1198,8 @@ DC record keys in <a href="gm_dcomp.html">DComp</a> and <a href="gm_reacdc.html"
       </tr>
       <tr>
         <td><big><b><tt>g</tt></b> </big></td>
-        <td> gaseous species</td>
+        <td> gaseous species (ideal gas)<br>
+</td>
       </tr>
       <tr>
         <td valign="top"><big><b><tt>p<br>
@@ -1195,13 +1210,12 @@ DC record keys in <a href="gm_dcomp.html">DComp</a> and <a href="gm_reacdc.html"
       <tr>
         <td valign="top"><big><b><tt>f<br>
         </tt></b></big></td>
-        <td valign="top">component of fluid<br>
+        <td valign="top">component of non-ideal fluid (selected into non-ideal fluid/gas phase)<br>
         </td>
       </tr>
       <tr>
         <td><big><b><tt>s</tt></b></big></td>
-        <td> component of a condensed solid phase or sorbent in s
-sorption phase</td>
+        <td> component of a condensed solid phase or solid sorbent in sorption phase</td>
       </tr>
       <tr>
         <td><big><b><tt>l</tt></b> </big></td>
@@ -1210,7 +1224,7 @@ sorption phase</td>
       <tr>
         <td valign="top"><big><b><tt>m<br>
         </tt></b></big></td>
-        <td valign="top">non-aqueous electrolyte species (eq., in
+        <td valign="top">non-aqueous electrolyte species (e.g., in
 molten salt or in magmatic melt)<br>
         </td>
       </tr>
@@ -2995,7 +3009,7 @@ cation-anion pair <i>i,k</i> (whose indexes <i>i</i> and <i>j</i>
 must be entered into the respective row of the <tt><a href="gm_phase.html#ipxT">ipxT</a></tt> field) to be entered into <a href="gm_phase.html#ph_cf"><tt>ph_cf</tt></a> array of Phase record.
 Only non-zero interaction parameters must be entered. The SIT
 interaction parameter has the form: <i>eps</i>(<i>i,k</i>) = <i>e<sub>1</sub></i>
-+ <i>e<sub>2</sub></i>&middot;log<sub>10</sub><i>I</i>&nbsp; where <i>I</i>
++ <i>e<sub>2</sub></i>·log<sub>10</sub><i>I</i>&nbsp; where <i>I</i>
 is the molal ionic strength (computed automatically in GEM IPM). </td>
     </tr>
     <tr>
