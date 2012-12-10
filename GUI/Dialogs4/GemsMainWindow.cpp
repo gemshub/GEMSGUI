@@ -122,6 +122,7 @@ TVisorImp::TVisorImp(int c, char** v):
        toolDataBase->addAction(actionRTparm);
        toolDataBase->addAction(actionPhase);
        toolDataBase->addAction(actionCompos);
+       toolDataBase->setWindowTitle("toolDataBase");
 
        toolProject = new QToolBar(this);
        toolProject->setObjectName(QString::fromUtf8("toolProject"));
@@ -136,6 +137,7 @@ TVisorImp::TVisorImp(int c, char** v):
        //toolProject->addAction(actionDualTh);
        //toolProject->addAction(actionUnSpace);
        toolProject->addAction(actionProject);
+       toolProject->setWindowTitle("toolProject");
 
 
     // Define internal area
