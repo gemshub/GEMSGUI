@@ -501,7 +501,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 1 - Selection of databases, subsets, phase types</string>
+          <string>Step 1 - Selection of databases, data subsets, phase type filters</string>
          </property>
         </widget>
        </item>
@@ -524,7 +524,7 @@
              <string>Check to include the aqueous electrolyte phase</string>
             </property>
             <property name="text">
-             <string>&amp;Aqueous  </string>
+             <string>&amp;Aqueous electrolyte</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -537,7 +537,7 @@
              <string>Check to include the gaseous  phase </string>
             </property>
             <property name="text">
-             <string>&amp;Gas</string>
+             <string>&amp;Gas mixture</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -550,7 +550,7 @@
              <string>Check to include the fluid phase </string>
             </property>
             <property name="text">
-             <string>&amp;Fluid</string>
+             <string>&amp;Non-ideal fluids</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -573,7 +573,7 @@
              <string>Check to include condenced solid phases  </string>
             </property>
             <property name="text">
-             <string>&amp;Condenced Solids  </string>
+             <string>&amp;Crystalline solids  </string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -586,7 +586,7 @@
              <string>Check to include dispersed solid phases  </string>
             </property>
             <property name="text">
-             <string>&amp;Dispersed Solids  </string>
+             <string>&amp;Dispersed solids  </string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -599,7 +599,7 @@
              <string>Check to include non-electrolyte liquid phases  </string>
             </property>
             <property name="text">
-             <string>&amp;Liquid  </string>
+             <string>&amp;Liquids, glasses  </string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -612,7 +612,7 @@
              <string>Check to include silicate (magmatic) melt or non-aqueous electrolyte phases</string>
             </property>
             <property name="text">
-             <string>&amp;Silicate Melt  </string>
+             <string>&amp;Silicate melts</string>
             </property>
            </widget>
           </item>
@@ -622,7 +622,7 @@
              <string>Check to include sorption phase(s) with surface complexes at the mineral-water interface</string>
             </property>
             <property name="text">
-             <string>So&amp;rption  </string>
+             <string>So&amp;rption, Ion exchange </string>
             </property>
            </widget>
           </item>
@@ -632,7 +632,7 @@
              <string>Check to include colloidal poly- (oligo)electrolyte phases</string>
             </property>
             <property name="text">
-             <string>Poly-&amp;electrolyte</string>
+             <string>Polyelectrolytes</string>
             </property>
            </widget>
           </item>
@@ -642,7 +642,7 @@
              <string>Check to include mixture of condensed hydrocarbons</string>
             </property>
             <property name="text">
-             <string>&amp;Hydrocarbons</string>
+             <string>Liquid &amp;hydrocarbons</string>
             </property>
            </widget>
           </item>
@@ -659,7 +659,7 @@
              <string>Check to include multi-component (solution) phases</string>
             </property>
             <property name="text">
-             <string>&amp;Multi-component  Phase</string>
+             <string>Include phases-solutions</string>
             </property>
            </widget>
           </item>
@@ -676,7 +676,7 @@
              <string>Check to include Isotopes x isotopic compounds</string>
             </property>
             <property name="text">
-             <string>&amp;Isotopes</string>
+             <string>Include &amp;isotopes</string>
             </property>
            </widget>
           </item>

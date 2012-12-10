@@ -462,7 +462,7 @@ ElementsDialog::~ElementsDialog()
 void ElementsDialog::setOpenFilesAsDefault()
 {
   selNames.Clear();
-  selNames.Add(".kernel");
+  selNames.Add(".nagra-psi");
 }
 
 void ElementsDialog::languageChange()
@@ -651,7 +651,7 @@ void ElementsDialog::SetICompList()
        if( name != "Vol" )
        {
          ErrorIf( nmbOther>12, aIC[ii].c_str(),
-                       "Additional elements more than 12!");
+                       "More than 11 additional Independent Components!");
          bb = bgOther->button(nmbOther);
          bb->setText( tr( name.c_str() ) );
          bb->setEnabled( true );
@@ -903,7 +903,7 @@ void ElementsDialog::setTreeWidget()
     QStandardItemModel *standardModel = new QStandardItemModel;
     connect( standardModel, SIGNAL( itemChanged( QStandardItem * ) ),this, SLOT( changeCheck( QStandardItem * ) ) );
     pkern = standardModel->invisibleRootItem();
-    standardModel->setHorizontalHeaderLabels( QStringList() <<  "Built-in Dtabases"   <<  "Version");
+    standardModel->setHorizontalHeaderLabels( QStringList() <<  "Built-in Database"   <<  "Version");
 
     int ii, jj;
     QStandardItem* pdb;
@@ -924,7 +924,7 @@ void ElementsDialog::setTreeWidget()
         fname = fname.substr( 0, pos1+1 );
 
         // get version
-        pos1 = fname.find(".Ver");
+        pos1 = fname.find(".ver");
         if( pos1 != gstring::npos )
         {
             vers = fname.substr(pos1+1);
@@ -933,7 +933,7 @@ void ElementsDialog::setTreeWidget()
             vers = vers.substr(0, pos2);
         }
         else
-            vers = "Ver1.0.0";
+            vers = "not versioned";
 
         // first tag name of chain
         pos1 = fname.find(".");

@@ -46,15 +46,15 @@ TDComp::TDComp( int nrt ):
         TCModule( nrt )
 {
     nQ = 2;
-    aFldKeysHelp.Add("Phase state of Dependent Component (species) { a g s l h x c }");
-    aFldKeysHelp.Add("Group to which Dependent Component belongs");
-    aFldKeysHelp.Add("Name of Dependent Component");
-    aFldKeysHelp.Add("Name of thermodynamic data subset (e.g. database)");
+    aFldKeysHelp.Add("Phase state code of Dependent Component { a g f p s l m c x y h }");
+    aFldKeysHelp.Add("ID of a group to which this Dependent Component belongs");
+    aFldKeysHelp.Add("Name of this Dependent Component (chemical species)");
+    aFldKeysHelp.Add("Thermodynamic data subset (TDS) code (e.g. database ID)");
     dcp=&dc[1];
     set_def(1);
     dcp=&dc[0];
     set_def();
-    start_title = " Thermochemical/EOS data format for Dependent Components (species) ";
+    start_title = " Thermochemical/EoS data format for Dependent Components ";
 }
 
 

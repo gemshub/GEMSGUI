@@ -33,10 +33,11 @@ TReacDC::TReacDC( int nrt ):
         TCModule( nrt )
 {
     nQ =8;
-    aFldKeysHelp.Add("Phase state of new (reaction-defined) Dependent Component");
-    aFldKeysHelp.Add("Group to which Dependent Component belongs");
-    aFldKeysHelp.Add("Name of new Dependent Component");
-    aFldKeysHelp.Add("Name of thermodynamic data subset (e.g. database)");
+
+    aFldKeysHelp.Add("Phase state code of new Dependent Component { a g f p s l m c x y h }");
+    aFldKeysHelp.Add("ID of a group to which this new Dependent Component belongs");
+    aFldKeysHelp.Add("Name of this new reaction-defined Dependent Component (chemical species)");
+    aFldKeysHelp.Add("Thermodynamic data subset (TDS) code (e.g. database ID)");
 
     for(int i=1; i<nQ; i++)
     {
