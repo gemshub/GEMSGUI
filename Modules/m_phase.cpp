@@ -1838,8 +1838,8 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
      pKey4 = aPHkey[ii].c_str()+(MAXSYMB+MAXPHSYMB+MAXPHNAME)*sizeof(char);
 
 // Copy phase record for aqueous and/or gas (fluid) phases
-     if( !st_data.flags[PHcopyA_] && ( pKey1[0] == 'a' || pKey1[0] == 'g' ))
-       continue;
+//     if( !st_data.flags[PHcopyA_] && ( pKey1[0] == 'a' || pKey1[0] == 'g' ))
+//       continue;
 
 // Phase Filters
      if( !el_data.flags[cbAqueous_] && pKey1[0] == 'a' )
@@ -1865,12 +1865,10 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
      if( !el_data.flags[cbHcarbl_] && ( pKey1[0] == 'h') )
         continue;
 
-//     if( !st_data.flags[PHcopyY_] && aPHkey[ii][0] == '?' )
-//       continue;
 
 // copy liquid phases together with solid ones
-     if( !st_data.flags[PHcopyL_] && ( pKey1[0] == 'l' || pKey1[0] == 'h' ))
-       continue;
+//     if( !st_data.flags[PHcopyL_] && ( pKey1[0] == 'l' || pKey1[0] == 'h' ))
+//       continue;
 
     // test the same component (overload) 30/11/2006
     gstring stt = aPHkey[ii].substr(0,MAXSYMB+MAXPHSYMB+MAXPHNAME+MAXSYMB);
@@ -1892,9 +1890,9 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
            continue;
 
  // Copy non-ideal phases?
-     if( !st_data.flags[PHcopyN_] && php->nDC > 1 &&
-         php->sol_t[0] != 'N' && php->sol_t[0] !='I'  )
-       continue;
+ //    if( !st_data.flags[PHcopyN_] && php->nDC > 1 &&
+ //        php->sol_t[0] != 'N' && php->sol_t[0] !='I'  )
+ //      continue;
 
 // Test existence of DComp/ReacDC records
      aDCused.Clear();

@@ -21,7 +21,6 @@
 
 #include "SetFiltersDialog.h"
 #include "GemsMainWindow.h"
-//#include "v_dbm.h"
 #include "service.h"
 
 
@@ -36,6 +35,14 @@ SetFiltersDialog::SetFiltersDialog(QWidget* win,
 {
 	
 	setupUi(this);
+
+    // functionaliti moved to Elements dialog Phase/DC filters
+    cbPHcopyL->hide();
+    cbPHcopyN->hide();
+    cbPHcopyA->hide();
+    cbPHcopyY->hide();
+
+
     el_data->changed = false;
     tvIClistP->setFont( pVisorImp->getCellFont() );
     tvIClistD->setFont( pVisorImp->getCellFont() );
@@ -167,12 +174,12 @@ void SetFiltersDialog::setData()
     cbPHsearch->setEditText( tr(data->ph_d.from_templ.c_str()));
     cbPHreplace->setEditText( tr(data->ph_d.to_templ.c_str()));
 
-    cbPHcopyL->setChecked( data->ph_d.flags[PHcopyL_] );
+    //cbPHcopyL->setChecked( data->ph_d.flags[PHcopyL_] );
     cbPHcopyF->setChecked( data->ph_d.flags[PHcopyF_] );
     cbPHcopyD->setChecked( data->ph_d.flags[PHcopyD_] );
-    cbPHcopyN->setChecked( data->ph_d.flags[PHcopyN_] );
-    cbPHcopyA->setChecked( data->ph_d.flags[PHcopyA_] );
-    cbPHcopyY->setChecked( data->ph_d.flags[PHcopyY_] );
+    //cbPHcopyN->setChecked( data->ph_d.flags[PHcopyN_] );
+    //cbPHcopyA->setChecked( data->ph_d.flags[PHcopyA_] );
+    //cbPHcopyY->setChecked( data->ph_d.flags[PHcopyY_] );
 
   // set Compos
     cbPCOsearch->setEditText( tr(data->cm_d.from_templ.c_str()));
@@ -213,12 +220,12 @@ void SetFiltersDialog::getData()
     data->ph_d.from_templ = (const char*)cbPHsearch->currentText().toLatin1().data();
     data->ph_d.to_templ = (const char*)cbPHreplace->currentText().toLatin1().data();
 
-    data->ph_d.flags[PHcopyL_] = cbPHcopyL->isChecked();
+    //data->ph_d.flags[PHcopyL_] = cbPHcopyL->isChecked();
     data->ph_d.flags[PHcopyF_] = cbPHcopyF->isChecked();
     data->ph_d.flags[PHcopyD_] = cbPHcopyD->isChecked();
-    data->ph_d.flags[PHcopyN_] = cbPHcopyN->isChecked();
-    data->ph_d.flags[PHcopyA_] = cbPHcopyA->isChecked();
-    data->ph_d.flags[PHcopyY_] = cbPHcopyY->isChecked();
+    //data->ph_d.flags[PHcopyN_] = cbPHcopyN->isChecked();
+    //data->ph_d.flags[PHcopyA_] = cbPHcopyA->isChecked();
+    //data->ph_d.flags[PHcopyY_] = cbPHcopyY->isChecked();
 
    // set Compos
     data->cm_d.from_templ = (const char*)cbPCOsearch->currentText().toLatin1().data();

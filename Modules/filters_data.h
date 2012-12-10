@@ -273,12 +273,12 @@ struct cmSetupData
 };
 
 // Checkboxes in Phases page of SetFiltersDialog
-enum copyFlagX { PHcopyL_ = 0,
-                 PHcopyF_,
-                 PHcopyD_,
-                 PHcopyN_,
-                 PHcopyA_,
-                 PHcopyY_
+enum copyFlagX { PHcopyL__ = 0, // (deleted!) Copy Phase records for &liquid (glass, hydrocarbon, melt) phases
+                 PHcopyF_,     // Copy only Phase records &that retain all species after filtering
+                 PHcopyD_,     // Create a list of discarded, but partially &usable Phase records
+                 PHcopyN__,     // (deleted!) Copy also Phase records for non-&ideal solution phases
+                 PHcopyA__,     // (deleted!) Copy Phase records for aqueous &electrolyte and/or gas phase
+                 PHcopyY__      // (deleted!) Copy Phase records for &non-aqueous adsorption phases
                  };
 
 struct phSetupData
