@@ -17,8 +17,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <qlabel.h>
-#include <qbuttongroup.h>
+#include <QtGui>
 
 #include "ElementsDialog.h"
 #include "SetFiltersDialog.h"
@@ -28,6 +27,212 @@
 #include "m_icomp.h"
 #include "m_param.h"
 
+/*
+TreeFileLine::TreeFileLine(int aRow, gstring aTag, gstring aVer, TreeFileLine* aParent)
+{
+    row = aRow;
+    tag = aTag;
+    ver = aVer;
+    parent = aParent;
+}
+
+TreeFileLine::~TreeFileLine()
+{
+    qDeleteAll(children);
+}
+
+
+void TreeFileLine::printTest()
+{
+    cout << tag.c_str() << endl;
+    for(int ii=0; ii<children.count(); ii++)
+        children[ii]->printTest();
+
+}
+
+
+
+//--------------------------------------------------------------------------------------
+//  class TTreeModel
+//  class for represents the data set and is responsible for fetchin
+//  the data is neaded for viewing and for writing back any changes.
+//  Reading/writing data from/to TObject and TObjList classes
+//---------------------------------------------------------------------------------------
+FileNamesTreeModel::FileNamesTreeModel( TCStringArray aFilesData,
+                        QObject * parent ):
+        QStandardItemModel(parent)
+{
+  rootNode = 0;
+  setupModelData(aFilesData);
+}
+
+FileNamesTreeModel::~FileNamesTreeModel()
+{
+  if(rootNode )
+     delete rootNode;
+}
+
+TreeFileLine *FileNamesTreeModel::lineFromIndex(const QModelIndex &index) const
+{
+    if (index.isValid()) {
+        return static_cast<TreeFileLine *>(index.internalPointer());
+    } else {
+        return rootNode;
+    }
+}
+
+
+void FileNamesTreeModel::setupModelData(TCStringArray aFilesData)
+{
+    if(rootNode )
+      delete rootNode;
+
+    rootNode = new TreeFileLine(0, "default", "", 0);
+
+    int ii, jj;
+    TreeFileLine* pdb;
+    TreeFileLine* pdb_child;
+    gstring fname, tag, vers="";
+    size_t pos1, pos2;
+
+    for( ii=0; ii<aFilesData.GetCount(); ii++ )
+    {
+        fnamesData.Add( aFilesData[ii]);
+        pdb = rootNode;
+        fname = aFilesData[ii];
+
+        //scip extension
+        pos1 = fname.rfind(".");
+        fname = fname.substr( 0, pos1+1 );
+
+        // get version
+        pos1 = fname.find(".Ver");
+        if( pos1 != gstring::npos )
+        {
+            vers = fname.substr(pos1+1);
+            fname = fname.substr(0, pos1+1 );
+            pos2 = vers.find(".");
+            vers = vers.substr(0, pos2);
+        }
+        else
+            vers = "";
+
+        // first tag name of chain
+        pos1 = fname.find(".");
+        pos2 = fname.find(".", pos1+1);
+        while( pos2 != gstring::npos )
+        {
+          tag = fname.substr(pos1+1, pos2-pos1-1);
+          pdb_child = 0;
+
+          // test used tag before
+          for( jj=0; jj<pdb->children.count(); jj++ )
+          {
+              if( tag == pdb->children[jj]->tag )
+              {
+                  pdb_child = pdb->children[jj];
+                  break;
+              }
+          }
+          if( !pdb_child )
+          {
+            pdb_child = new TreeFileLine( pdb->children.count(), tag, vers, pdb );
+            pdb->children.append(pdb_child);
+
+          }
+          pos1=pos2;
+          pos2 = fname.find(".", pos1+1);
+          pdb = pdb_child;
+        }
+
+    }
+   reset();
+}
+
+
+
+void FileNamesTreeModel::printTest()
+{
+    if (!rootNode)
+        return;
+    rootNode->printTest();
+}
+
+QModelIndex FileNamesTreeModel::index(int row, int column, const QModelIndex &parent) const
+{
+    if (!rootNode)
+        return QModelIndex();
+    TreeFileLine *parentItem = lineFromIndex( parent );
+    return createIndex(row, column, parentItem->children[row]);
+}
+
+
+QModelIndex FileNamesTreeModel::parent(const QModelIndex& child) const
+{
+    if (!child.isValid())
+        return QModelIndex();
+
+    TreeFileLine *childItem = lineFromIndex(child);
+    TreeFileLine *parentItem = childItem->parent;
+    if (parentItem == rootNode )
+        return QModelIndex();
+    return createIndex(parentItem->row, 0, parentItem);
+}
+
+int FileNamesTreeModel::rowCount( const QModelIndex& parent ) const
+{
+   if (!rootNode)
+       return 0;
+  if (parent.column() > 0)
+      return 10;
+  TreeFileLine *parentItem = lineFromIndex( parent );
+  return parentItem->children.count();
+}
+
+int FileNamesTreeModel::columnCount( const QModelIndex& parent ) const
+{
+  return 2;
+}
+
+QVariant FileNamesTreeModel::headerData( int section, Qt::Orientation orientation, int role ) const
+{
+ if( role == Qt::DisplayRole  && orientation == Qt::Horizontal )
+     if( section == 0 )
+         return "Database Names";
+     else
+         return "Version";
+
+  return QVariant();
+}
+
+
+QVariant FileNamesTreeModel::data( const QModelIndex& index, int role ) const
+{
+   if(!index.isValid())
+     return QVariant();
+
+   switch( role )
+   { case Qt::DisplayRole:
+     case Qt::EditRole:
+             {   QString res;
+                 if( index.column() == 0 )
+                     res = QString( lineFromIndex(index)->tag.c_str() );
+                  else
+                     res = QString( lineFromIndex(index)->tag.c_str() );
+                 cout << index.row() << res.toLatin1().data()<< endl;
+                 return  res;
+             }
+      case Qt::ToolTipRole:
+      case Qt::StatusTipRole:
+      default: break;
+   }
+
+  return QVariant();
+}
+
+*/
+
+//------------------------------------------------------------------------
 
 void ElementsDialog::CmBack()
 {
@@ -50,12 +255,14 @@ void 	ElementsDialog::resetNextButton()
     if( stackedWidget->currentIndex() == stackedWidget->count() - 1 )
     {
         bNext->disconnect();
+        bReset->show();
         connect( bNext, SIGNAL(clicked()), this, SLOT(CmOk()) );
         //pNext->setText("&Finish");
     }
     else
     {
         bNext->disconnect();
+        bReset->hide();
         connect( bNext, SIGNAL(clicked()), this, SLOT(CmNext()) );
         //pNext->setText("&Next>");
     }
@@ -65,7 +272,6 @@ void 	ElementsDialog::resetBackButton()
 {
     bBack->setEnabled( stackedWidget->currentIndex() > 0 );
 }
-
 
 ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
            const char* /*caption*/):
@@ -83,8 +289,6 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
          stackedWidget->setCurrentIndex (0);
          resetNextButton();
          resetBackButton();
-
-//    pLogoImg->setPixmap(pVisorImp->getLogo());
 
    // build IComp list from template database
     TCIntArray aIndMT;
@@ -213,8 +417,6 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
     bgElem->addButton(pbE_100, 100);
     bgElem->addButton(pbE_101, 101);
 
-
-
     bgOther = new QButtonGroup( bgOtherBox);
     bgOther->setExclusive(false);
      bgOther->addButton(pbA_1, 1);
@@ -232,12 +434,16 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
      bgOther->addButton(pbA_0, 0);
 
      EmptyData();
-    rbKernel->setChecked( true );
-    rbComplem->setChecked( false );
-    rbOrganic->setChecked( false );
-    rbSpecific->setChecked( false );
-    cbIsotopes->setChecked( false );
+
+    // define page 1
+
+    // set up default Open files names
+    setOpenFilesAsDefault(); // <.kernel.> now, start define selNames
+    // define list of files in DefaultDB (files_data)
     setFilesList();
+    // define FTreeWidget with DefaultDB files names  files_data.flNames
+    setTreeWidget();
+    setSelectionTreeWidget();  // set up selection in wiget use selNames
 
     SetICompList();
     SetAqueous();
@@ -246,39 +452,33 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
     connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
     connect( bReset, SIGNAL( clicked() ), this, SLOT( CmSetFilters() ) );
 
-    connect( cbGas, SIGNAL( clicked() ), this, SLOT( SetGaseous() ) );
     connect( cbAqueous, SIGNAL( clicked() ), this, SLOT( SetAqueous() ) );
-    connect( cbSolids, SIGNAL( clicked() ), this, SLOT( SetSolids() ) );
-    connect( cbSolutions, SIGNAL( clicked() ), this, SLOT( SetSolutions() ) );
     connect( cbSorption, SIGNAL( clicked() ),this, SLOT( SetSorption() ) );
-//    connect( cbIsotopes, SIGNAL( clicked() ),this, SLOT( SetFiles() ) );
-
-//    connect( rbKernel, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
-//    connect( rbComplem, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
-//    connect( rbOrganic, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
-//    connect( rbSpecific, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
-
-   
 }
 
 ElementsDialog::~ElementsDialog()
 {}
+
+void ElementsDialog::setOpenFilesAsDefault()
+{
+  selNames.Clear();
+  selNames.Add(".kernel");
+}
 
 void ElementsDialog::languageChange()
 {
     retranslateUi(this);
 }
 
-void
-ElementsDialog::CmHelp()
+void ElementsDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_ELEMENTS_HTML );
+    pVisorImp->OpenHelp( GEMS_ELEMENTS_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
 }
 
-void
-ElementsDialog::CmSetFilters()
+void ElementsDialog::CmSetFilters()
 {
     // Here to call SetFiltersDialog !!
+    openFilesSelection();
     SetData();
     sf_data.ic_d.newIComps.Clear();
     for(uint jj, ii=0; ii<el_data.ICrds.GetCount(); ii++ )
@@ -295,15 +495,15 @@ ElementsDialog::CmSetFilters()
     dlg.exec();
 
    if(  files_data.changed  )  // we changed file cnf for icomp
-   {  ResetData();
+   {
+      ResetData();
       EmptyData();
       SetICompList();
       SetAqueous();
    }
 }
 
-void
-ElementsDialog::CmOk()
+void ElementsDialog::CmOk()
 {
        TProfil::pm->useAqPhase = el_data.flags[cbAqueous_];  // Added 16.06.03 
        TProfil::pm->useGasPhase = el_data.flags[cbGaseous_];
@@ -320,31 +520,31 @@ void ElementsDialog::EmptyData()
  for( ii=0; ii<99/*bgElem->buttons()->count()-1*/; ii++ ) // we have not 99
       bgElem->button(ii)->setEnabled( false );
 
-  cbGas->setChecked( true );
-  cbAqueous->setChecked( true );
-  cbSolids->setChecked( true );
-  cbSolutions->setChecked( false );
-  cbSorption->setChecked( false );
+ cbAqueous->setChecked( true);
+ cbGaseous->setChecked( true);
+ cbFluid->setChecked( true);
+ cbPlasma->setChecked( false);
+ cbSolids->setChecked( true);
+ cbSindis->setChecked( true);
+ cbLiquid->setChecked( true);
+ cbSimelt->setChecked( false);
+ cbSorption->setChecked( false);
+ cbPolyel->setChecked( false);
+ cbHcarbl->setChecked( false);
+ cbSolutions->setChecked( false);
+ cbIsotopes->setChecked( false);
+ //el_data.flags[cbRes_] = false;
 }
 
 
 void ElementsDialog::ResetData()
 {
  int ii;
-/* for( ii=0; ii<bgOther->count(); ii++ )
-  if( bgOther->find(ii)->isOn() )
-      bgOther->find(ii)->toggle();
- for( ii=0; ii<99 *bgElem->count()-1*; ii++ )
-  if( bgElem->find(ii)->isOn() )
-      bgElem->find(ii)->toggle();
-*/
-
  for( ii=0; ii<bgOther->buttons().count(); ii++ )
    bgOther->button(ii)->setChecked ( false );
  for( ii=1; ii<99/*bgElem->buttons()->count()-1*/; ii++ ) // 0 always
       bgElem->button(ii)->setChecked ( false );
 }
-
 
 bool ElementsDialog::isAqueous() const
 {
@@ -361,15 +561,6 @@ void ElementsDialog::SetAqueous()
  }
 }
 
-bool ElementsDialog::isSolution() const
-{
- return cbSolutions->isChecked();
-}
-
-void ElementsDialog::SetSolutions()
-{
-}
-
 bool ElementsDialog::isSorption() const
 {
  return cbSorption->isChecked();
@@ -384,22 +575,46 @@ void ElementsDialog::SetSorption()
  }
 }
 
-bool ElementsDialog::isGaseous() const
+void ElementsDialog::changeCheck( QStandardItem *pdb )
 {
- return cbGas->isChecked();
-}
+   int jj;
+   if( pdb == pkern )
+       return;
 
-void ElementsDialog::SetGaseous()
-{
-}
+   QStandardItem *parent = pdb->parent();
+   if( parent && parent != pkern )
+   {
+       if( ( parent->checkState() == Qt::Unchecked && pdb->checkState() == Qt::PartiallyChecked )
+        || ( parent->checkState() == Qt::Checked &&  pdb->checkState() == Qt::PartiallyChecked ))
+           parent->setCheckState(Qt::PartiallyChecked);
+      else
+      { if( ( parent->checkState() == Qt::Unchecked || parent->checkState() == Qt::PartiallyChecked ) &&  pdb->checkState() == Qt::Checked  )
+        {
+           for( jj=0; jj<parent->rowCount(); jj++ )
+               if(  parent->child(jj)->checkState() != Qt::Checked )
+                   break;
+           if(jj<parent->rowCount() )
+             parent->setCheckState(Qt::PartiallyChecked);
+           else
+            parent->setCheckState(Qt::Checked);
+       }
 
-bool ElementsDialog::isSolids() const
-{
- return cbSolids->isChecked();
-}
-
-void ElementsDialog::SetSolids()
-{
+       if( ( parent->checkState() == Qt::Checked || parent->checkState() == Qt::PartiallyChecked ) &&  pdb->checkState() == Qt::Unchecked  )
+        {
+           for( jj=0; jj<parent->rowCount(); jj++ )
+               if(  parent->child(jj)->checkState() != Qt::Unchecked )
+                   break;
+           if(jj<parent->rowCount() )
+             parent->setCheckState(Qt::PartiallyChecked);
+           else
+            parent->setCheckState(Qt::Unchecked);
+       }
+      }
+    }
+    if( pdb->checkState() != Qt::PartiallyChecked )
+    { for(int jj=0; jj<pdb->rowCount(); jj++ )
+         pdb->child(jj)->setCheckState(pdb->checkState());
+    }
 }
 
 void ElementsDialog::SetFiles()
@@ -411,113 +626,19 @@ void ElementsDialog::SetFiles()
   SetAqueous();
 }
 
-void ElementsDialog::openFiles( TCStringArray& names )
-{
-  names.Clear();
-  if(rbKernel->isChecked())
-   names.Add(".kernel.");
-  if(rbComplem->isChecked())
-   names.Add(".complem.");
-  if(rbOrganic->isChecked())
-   names.Add(".organic.");
-  if(rbSpecific->isChecked())
-   names.Add(".specific.");
-}
-
-/*
-// Returns; 0 no change in DB file configuration for new project
-// (no kernel, specific, supplemental, or complementary selected)
-// 1 to open DB file;  2 to close DB file
-int ElementsDialog::isOpenFile( gstring& name )
-{
-   int iret=0;
-   if(  name.find( ".kernel." ) != gstring::npos )
-   {    if(rbKernel->isChecked())
-           iret = 1;
-         else
-           iret = 2;
-   }
-   else  if(  name.find( ".supplem." ) != gstring::npos )
-         {    if(rbOrganic->isChecked())
-                 iret = 1;
-              else
-                 iret = 2;
-          }
-          else   if(  name.find( ".specific." ) != gstring::npos )
-                {    if(rbSpecific->isChecked())
-                          iret = 1;
-                     else
-                           iret = 2;
-                 }
-                 else   if(  name.find( ".complem." ) != gstring::npos )
-                       {    if(rbComplem->isChecked())
-                              iret = 1;
-                            else
-                              iret = 2;
-                       }
-
-  return iret;
-}
-*/
-// Returns; boolean true if a keyword was found in the file name, false otherwise
-//    for each of five keywords;
-// function value: 0 if no change in DB file configuration for new project
-// is required;  1 to attach this DB file 'name';  2 to detach this DB file
-//
-int ElementsDialog::isOpenFile( gstring& name  )
-{
-   bool checked_kernel = rbKernel->isChecked();
-   bool checked_complem = rbComplem->isChecked();
-   bool checked_supplem = rbOrganic->isChecked(); // provisorial - change later
-   bool checked_organic = rbOrganic->isChecked();
-   bool checked_specific = rbSpecific->isChecked();
-   bool is_kernel, is_complem, is_supplem, is_specific, is_organic;
-
-   if(  name.find( ".kernel." ) != gstring::npos )
-       is_kernel = true;
-   else is_kernel = false;
-   if(  name.find( ".complem." ) != gstring::npos )
-       is_complem = true;
-   else is_complem = false;
-   if(  name.find( ".supplem." ) != gstring::npos )
-       is_supplem = true;
-   else is_supplem = false;
-   if(  name.find( ".specific." ) != gstring::npos )
-       is_specific = true;
-   else is_specific = false;
-   if(  name.find( ".organic." ) != gstring::npos )
-       is_organic = true;
-   else is_organic = false;
-   // ......
-
-   int iret = 0;
-   if( (checked_kernel && is_kernel) || (checked_complem && is_complem) ||
-           (checked_specific && is_specific) )
-       iret = 1; // select all checked, disregarding 'Supplem' and 'Organic'
-   if( (is_kernel && !checked_kernel) || (is_complem && !checked_complem) ||
-       (is_supplem && !checked_supplem) || (is_specific && !checked_specific) )
-       // || (is_organic && !checked_organic) )
-       iret = 2; // This file should be detached, even if has '.supplem.',
-                 // but 'Supplem' was not checked
-   return iret;
-}
-
-void
-ElementsDialog::SetICompList()
+void ElementsDialog::SetICompList()
 {
     TCIntArray aIndMT;
     TCStringArray aIC;
     QAbstractButton* bb;
     int nmbOther=1;
-//    TCStringArray names;
 
     aBtmId1.Clear();
     aICkey1.Clear();
     aBtmId2.Clear();
     aICkey2.Clear();
 
-    //openFiles( names );
-    openFilesICOMP();
+     openFilesICOMP();
    // select all IComp keys and indMT (set indMT to -1 for additional)
     TIComp* aICdata=(TIComp *)(&aMod[RT_ICOMP]);
     aICdata->GetElements( cbIsotopes->isChecked(), aIC, aIndMT );
@@ -593,23 +714,15 @@ ElementsDialog::SetICompList()
          nmbOther ++;
        }
   }
-
-
 }
 
 /*! returns selection array  (IComp record keys )
     array is empty if nothing is selected
 */
-
-void
-ElementsDialog::allSelected( TCStringArray& aICkeys )
+void ElementsDialog::allSelected( TCStringArray& aICkeys )
 {
-
     uint ii;
     aICkeys.Clear();
-
-//    if( !result() )
-//        return;
 
     SetSorption();
     SetAqueous();
@@ -641,26 +754,32 @@ ElementsDialog::getData()
  return  el_data;
 }
 
-void
-ElementsDialog::SetData()
+void ElementsDialog::SetData()
 {
- el_data.flags[cbAqueous_] =  cbAqueous->isChecked();
-  el_data.flags[cbSolids_] = cbSolids->isChecked();
- el_data.flags[cbGaseous_] =  cbGas->isChecked();
-  el_data.flags[cbSolutions_] =  cbSolutions->isChecked();
- el_data.flags[cbSorption_] = cbSorption->isChecked();
- el_data.flags[cbIsotopes_] = cbIsotopes->isChecked();
 
- //openFiles( el_data.flNames );
- allSelected( el_data.ICrds );
+    el_data.flags[cbAqueous_] = cbAqueous->isChecked();
+    el_data.flags[cbGaseous_] =cbGaseous->isChecked();
+    el_data.flags[cbFluid_] = cbFluid->isChecked();
+    el_data.flags[cbPlasma_] = cbPlasma->isChecked();
+    el_data.flags[cbSolids_] = cbSolids->isChecked();
+    el_data.flags[cbSindis_] = cbSindis->isChecked();
+    el_data.flags[cbLiquid_] = cbLiquid->isChecked();
+    el_data.flags[cbSimelt_] = cbSimelt->isChecked();
+    el_data.flags[cbSorption_] = cbSorption->isChecked();
+    el_data.flags[cbPolyel_] = cbPolyel->isChecked();
+    el_data.flags[cbHcarbl_] = cbHcarbl->isChecked();
+    el_data.flags[cbSolutions_] = cbSolutions->isChecked();
+    el_data.flags[cbIsotopes_] = cbIsotopes->isChecked();
+    el_data.flags[cbRes_] = false;
+  allSelected( el_data.ICrds );
 }
 
-void
-ElementsDialog::setFilesList()
+/// Set up files_data  (lists of all kernel files names and  opened kernel files )
+void ElementsDialog::setFilesList()
 {
    size_t pos1, pos2;
    int cnt, cnt_sel, ind;
- //files_data
+
    for(int i=RT_SDATA; i<=RT_PHASE; i++ )
     {
         if( aMod[i].IsSubModule() )
@@ -693,46 +812,35 @@ ElementsDialog::setFilesList()
         files_data.flCnt.Add( cnt );
         files_data.selCnt.Add( cnt_sel );
     }
-
 }
 
-void
-ElementsDialog::resetFilesSelection()
+/// Reset list of opened kernel files
+void ElementsDialog::resetFilesSelection()
 {
   TCStringArray newSelKeywds;   // list of selected files
   TCIntArray    newSelCnt;      // count of newly selected files for type
    int cnt=0;
    int cnt2=0;
 
-   //files_data
-    for(uint i=0; i<files_data.flCnt.GetCount(); i++ )
+   //get new selection
+   getSelectionTreeWidget();
+
+   for(uint i=0; i<files_data.flCnt.GetCount(); i++ )
     {
         int cnt_sel = 0;
         for(int ii=0; ii<files_data.flCnt[i]; ii++ )
         {
-          switch( isOpenFile( files_data.flNames[cnt+ii] ) )
+          if( isOpenFile( files_data.flNames[cnt+ii] ) )
           {
-            case 2: // 2 to close DB file
-                    break;
-            case 1: // 1 to open DB file
-                    newSelKeywds.Add( files_data.flKeywds[cnt+ii] );
-                    cnt_sel++;
-                    break;
-            case 0: // 0 no change in DB file configuration for new project
-                    for(int jj=0; jj<files_data.selCnt[i]; jj++ )
-                      if(  files_data.flKeywds[cnt+ii] ==
-                           files_data.selKeywds[cnt2+jj] )
-                      {
-                        newSelKeywds.Add( files_data.flKeywds[cnt+ii] );
-                        cnt_sel++;
-                      }
-                    break;
-           }
+             newSelKeywds.Add( files_data.flKeywds[cnt+ii] );
+             cnt_sel++;
+          }
         }
         cnt += files_data.flCnt[i];
         cnt2 += files_data.selCnt[i];
         newSelCnt.Add( cnt_sel );
     }
+
     files_data.selKeywds.Clear();
     files_data.selCnt.Clear();
     for(uint ii=0; ii<newSelCnt.GetCount(); ii++ )
@@ -741,8 +849,8 @@ ElementsDialog::resetFilesSelection()
        files_data.selKeywds.Add( newSelKeywds[ii] );
 }
 
-void
-ElementsDialog::openFilesSelection()
+// Open files as difine in files_data selection
+void ElementsDialog::openFilesSelection()
 {
   TCStringArray newSelKeywds;   // list of selected files
   int cnt=0;
@@ -764,8 +872,8 @@ ElementsDialog::openFilesSelection()
     }
 }
 
-void
-ElementsDialog::openFilesICOMP()
+/// Open only IComp files as define in files_data selection
+void ElementsDialog::openFilesICOMP()
 {
   TCStringArray newSelKeywds;   // list of selected files
   int cnt=0;
@@ -784,6 +892,170 @@ ElementsDialog::openFilesICOMP()
    }
 }
 
+void ElementsDialog::setTreeWidget()
+{
+    FtreeView->setFont( pVisorImp->getCellFont() );
+    FtreeView->setSelectionMode(QAbstractItemView::MultiSelection);    //setMultiSelection(true);
+    FtreeView->setSortingEnabled( false );                            //setSorting(-1);
+    FtreeView->setRootIsDecorated(true);
+    FtreeView->setAllColumnsShowFocus(true);
+
+    QStandardItemModel *standardModel = new QStandardItemModel;
+    connect( standardModel, SIGNAL( itemChanged( QStandardItem * ) ),this, SLOT( changeCheck( QStandardItem * ) ) );
+    pkern = standardModel->invisibleRootItem();
+    standardModel->setHorizontalHeaderLabels( QStringList() <<  "Built-in Dtabases"   <<  "Version");
+
+    int ii, jj;
+    QStandardItem* pdb;
+    QStandardItem* pdb_child;
+    QList<QStandardItem *> rowItems;
+
+    QString aTag, aVer;
+    gstring fname, tag, vers="";
+    size_t pos1, pos2, pos3;
+
+    for( ii=0; ii<files_data.flNames.GetCount(); ii++ )
+    {
+        pdb = pkern;
+        fname = files_data.flNames[ii];
+
+        //scip extension
+        pos1 = fname.rfind(".");
+        fname = fname.substr( 0, pos1+1 );
+
+        // get version
+        pos1 = fname.find(".Ver");
+        if( pos1 != gstring::npos )
+        {
+            vers = fname.substr(pos1+1);
+            fname = fname.substr(0, pos1+1 );
+            pos2 = vers.find(".");
+            vers = vers.substr(0, pos2);
+        }
+        else
+            vers = "Ver1.0.0";
+
+        // first tag name of chain
+        pos1 = fname.find(".");
+        pos2 = fname.find(".", pos1+1);
+        while( pos2 != gstring::npos )
+        {
+          tag = fname.substr(pos1+1, pos2-pos1-1);
+          aTag = tag.c_str();
+          pdb_child = 0;
+          pos3 = fname.find(".", pos2+1);
+          if( pos3 != gstring::npos)
+              aVer = "";
+          else aVer = vers.c_str();
+
+          // test used tag before
+          for( jj=0; jj<pdb->rowCount(); jj++ )
+          {
+              if( aTag == pdb->child(jj)->text() )
+              {
+                  pdb_child = pdb->child(jj);
+                  break;
+              }
+          }
+          if( !pdb_child )
+          {
+            pdb_child = new QStandardItem( aTag );
+            pdb_child->setCheckable( true );
+            pdb_child->setTristate( true );
+            rowItems.clear();
+            rowItems << pdb_child;
+            rowItems << new QStandardItem(aVer);
+            pdb->appendRow(rowItems);
+
+          }
+          pos1=pos2;
+          pos2 = fname.find(".", pos1+1);
+          pdb = pdb_child;
+       }
+   }
+
+    FtreeView->setModel(standardModel);
+    FtreeView->expandAll();
+}
+
+
+void ElementsDialog::getSelectionTreeWidget()
+{
+  selNames.Clear();
+  // get names from FTreeWidget
+  gstring tag = ".";
+  for(int jj=0; jj<pkern->rowCount(); jj++ )
+      getTag( tag, pkern->child(jj));
+
+  for(int ii=0; ii<selNames.GetCount(); ii++ )
+      cout << selNames[ii].c_str() << endl;
+}
+
+void ElementsDialog::getTag( gstring tag, QStandardItem* pdb)
+{
+    if( !pdb )
+      return;
+
+    gstring tag1 = pdb->text().toLatin1().data();
+    tag += tag1;
+
+    if( pdb->checkState() == Qt::Checked)
+        selNames.Add( tag );
+    else
+    {
+        tag += ".";
+        for(int jj=0; jj<pdb->rowCount(); jj++ )
+            getTag( tag, pdb->child(jj));
+    }
+}
+
+void ElementsDialog::setSelectionTreeWidget()
+{
+  // clear all check in ftreeWidget ??!!
+
+ gstring name;
+ for(int ii=0; ii<selNames.GetCount(); ii++ )
+     for(int jj=0; jj<pkern->rowCount(); jj++ )
+     {
+         name = selNames[ii];
+         setTag( name, pkern->child(jj));
+     }
+}
+
+void ElementsDialog::setTag( gstring fname, QStandardItem* pdb)
+{
+    if( !pdb )
+      return;
+
+    size_t pos1 = fname.find(".");
+    size_t pos2 = fname.find(".", pos1+1);
+    gstring tag = fname.substr(pos1+1, pos2-pos1-1);
+    QString aTag = tag.c_str();
+
+    if( aTag == pdb->text() )
+    {
+        if(pos2 == gstring::npos )
+           pdb->setCheckState( Qt::Checked );
+        else
+        {
+           for(int jj=0; jj<pdb->rowCount(); jj++ )
+           {
+             tag = fname.substr(pos2);
+             setTag( tag, pdb->child(jj));
+           }
+        }
+    }
+}
+
+/// Returns; boolean true if a keyword was found in the file name, false otherwise
+///    for each of open file keywords;
+int ElementsDialog::isOpenFile( gstring& name  )
+{
+    for(int ii=0; ii < selNames.GetCount(); ii++ )
+        if(  name.find( selNames[ii] ) != gstring::npos )
+            return 1;
+    return 0;
+}
 
 // --------------------- End ElementsDialog.cpp -------------------------
 

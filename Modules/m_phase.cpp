@@ -1841,17 +1841,30 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
      if( !st_data.flags[PHcopyA_] && ( pKey1[0] == 'a' || pKey1[0] == 'g' ))
        continue;
 
-// cbGaseous
-     if( !el_data.flags[cbGaseous_] && pKey1[0] == 'g' )
+// Phase Filters
+     if( !el_data.flags[cbAqueous_] && pKey1[0] == 'a' )
        continue;
+     if( !el_data.flags[cbGaseous_] && ( pKey1[0] == 'g') )
+         continue;
+     if( !el_data.flags[cbFluid_] && ( pKey1[0] == 'f') )
+          continue;
+     if( !el_data.flags[cbPlasma_] && ( pKey1[0] == 'p') )
+        continue;
+     if( !el_data.flags[cbSolids_] && ( pKey1[0] == 's') )
+        continue;
+     if( !el_data.flags[cbSindis_] && ( pKey1[0] == 'd') )
+        continue;
+     if( !el_data.flags[cbLiquid_] && ( pKey1[0] == 'l') )
+        continue;
+     if( !el_data.flags[cbSimelt_] && ( pKey1[0] == 'm') )
+        continue;
+     if( !el_data.flags[cbSorption_] && ( pKey1[0] == 'x') )
+        continue;
+     if( !el_data.flags[cbPolyel_] && ( pKey1[0] == 'y') )
+        continue;
+     if( !el_data.flags[cbHcarbl_] && ( pKey1[0] == 'h') )
+        continue;
 
-// cbAqueous
-     if( !el_data.flags[cbAqueous_] && ( pKey1[0] == 'a' || pKey1[0] == 'x' ))
-       continue;
-
-// cbSorption
-     if( !el_data.flags[cbSorption_] && pKey1[0] == 'x' )
-       continue;
 //     if( !st_data.flags[PHcopyY_] && aPHkey[ii][0] == '?' )
 //       continue;
 
@@ -1859,34 +1872,26 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
      if( !st_data.flags[PHcopyL_] && ( pKey1[0] == 'l' || pKey1[0] == 'h' ))
        continue;
 
-// cbSolids  - single-component
-     if( !el_data.flags[cbSolids_] && ( pKey1[0] == 's' ||
-          pKey1[0] == 'd' || pKey1[0] == 'l' || pKey1[0] == 'h' )
-			  // && ( pKey4[0] == 'c' && pKey4[1] == ' ' ||
-			  // pKey4[0] == 'd' && pKey4[1] == ' ' ||
-			  // pKey4[0] == 'l' && pKey4[1] == ' ' ))
-          && pKey4[1] == ' ' )
-        continue;
-
-// cbSolutions - multi-component, non-gas, non-electrolyte
-     if( !el_data.flags[cbSolutions_] && ( pKey1[0] == 's'
-        || pKey1[0] == 'l' || pKey1[0] == 'd' || pKey1[0] == 'h' )
-			// &&  !( pKey4[0] == 'c' || pKey4[0] == 'd' || pKey4[0] == 'l' ))
-          && pKey4[1] != ' ' )
-        continue;
-
-       // test the same component (overload) 30/11/2006
-       gstring stt = aPHkey[ii].substr(0,MAXSYMB+MAXPHSYMB+MAXPHNAME+MAXSYMB);
-       for( j=0; j<aICkey_new.GetCount(); j++ )
-          if( stt ==  aICkey_new[j])
+    // test the same component (overload) 30/11/2006
+    gstring stt = aPHkey[ii].substr(0,MAXSYMB+MAXPHSYMB+MAXPHNAME+MAXSYMB);
+    for( j=0; j<aICkey_new.GetCount(); j++ )
+       if( stt ==  aICkey_new[j])
               break;
-       if( j<aICkey_new.GetCount() )
+     if( j<aICkey_new.GetCount() )
             continue;
 
 // Read the record here
      RecInput( aPHkey[ii].c_str() );
 
-// Copy non-ideal phases?
+
+// cbSolutions - multi-component, non-gas, non-electrolyte
+     if( !el_data.flags[cbSolutions_] && ( pKey1[0] != 'a'
+        && pKey1[0] != 'g' && pKey1[0] != 'f'
+        && pKey1[0] != 'p' && pKey1[0] != 'x' && pKey1[0] != 'h' ) )
+         if( php->nDC > 1 )
+           continue;
+
+ // Copy non-ideal phases?
      if( !st_data.flags[PHcopyN_] && php->nDC > 1 &&
          php->sol_t[0] != 'N' && php->sol_t[0] !='I'  )
        continue;

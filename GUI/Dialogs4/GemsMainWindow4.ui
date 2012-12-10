@@ -28,7 +28,7 @@
      <x>0</x>
      <y>0</y>
      <width>1121</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Record">
@@ -187,7 +187,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>GEMS3ModeTB</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -288,7 +288,7 @@
   </widget>
   <widget class="QToolBar" name="toolBar_5">
    <property name="windowTitle">
-    <string>toolBar_5</string>
+    <string>PlotGraphTB</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -304,7 +304,6 @@
    </attribute>
    <addaction name="separator"/>
    <addaction name="action_Plot"/>
-   <addaction name="action_Print"/>
   </widget>
   <widget class="QToolBar" name="toolBar_6">
    <property name="windowTitle">
@@ -322,6 +321,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="action_Print"/>
    <addaction name="action_Help_2"/>
    <addaction name="separator"/>
   </widget>

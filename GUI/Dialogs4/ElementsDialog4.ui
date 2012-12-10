@@ -472,7 +472,7 @@
   <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="sizePolicy">
@@ -482,41 +482,42 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0" rowspan="3">
-        <widget class="QTreeWidget" name="treeWidget">
-         <column>
-          <property name="text">
-           <string notr="true">1</string>
-          </property>
-         </column>
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="pageName">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Step 1 - Selection of databases, subsets, phase types</string>
+         </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item row="1" column="0" colspan="2">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Step 1: Phases and Datasets </string>
+          <string>Phase/DC/IC Filters</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QCheckBox" name="cbGas">
-            <property name="toolTip">
-             <string>Check to include the gaseous  (fluid) phase </string>
-            </property>
-            <property name="text">
-             <string>&amp;Gas</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+G</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
           <item>
            <widget class="QCheckBox" name="cbAqueous">
             <property name="toolTip">
@@ -531,12 +532,12 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="cbSolids">
+           <widget class="QCheckBox" name="cbGaseous">
             <property name="toolTip">
-             <string>Check to include solid (optionally, liquid) single-component phases  </string>
+             <string>Check to include the gaseous  phase </string>
             </property>
             <property name="text">
-             <string>Soli&amp;ds  </string>
+             <string>&amp;Gas</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -544,12 +545,74 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="cbSolutions">
+           <widget class="QCheckBox" name="cbFluid">
             <property name="toolTip">
-             <string>Check to include solid (optionally, liquid) multi-component (solution) phases</string>
+             <string>Check to include the fluid phase </string>
             </property>
             <property name="text">
-             <string>&amp;Solutions  </string>
+             <string>&amp;Fluid</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cbPlasma">
+            <property name="toolTip">
+             <string>Check to include the plasma phase </string>
+            </property>
+            <property name="text">
+             <string>&amp;Plasma</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cbSolids">
+            <property name="toolTip">
+             <string>Check to include condenced solid phases  </string>
+            </property>
+            <property name="text">
+             <string>&amp;Condenced Solids  </string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cbSindis">
+            <property name="toolTip">
+             <string>Check to include dispersed solid phases  </string>
+            </property>
+            <property name="text">
+             <string>&amp;Dispersed Solids  </string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cbLiquid">
+            <property name="toolTip">
+             <string>Check to include non-electrolyte liquid phases  </string>
+            </property>
+            <property name="text">
+             <string>&amp;Liquid  </string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cbSimelt">
+            <property name="toolTip">
+             <string>Check to include silicate (magmatic) melt or non-aqueous electrolyte phases</string>
+            </property>
+            <property name="text">
+             <string>&amp;Silicate Melt  </string>
             </property>
            </widget>
           </item>
@@ -561,81 +624,59 @@
             <property name="text">
              <string>So&amp;rption  </string>
             </property>
-            <property name="shortcut">
-             <string>Alt+R</string>
-            </property>
            </widget>
           </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QGroupBox" name="groupBox_2">
-         <property name="title">
-          <string>GroupBox</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QRadioButton" name="rbKernel">
+           <widget class="QCheckBox" name="cbPolyel">
             <property name="toolTip">
-             <string>Check to collect data from the kernel chemical  thermodynamic data base (Nagra-PSI 01/01)  </string>
+             <string>Check to include colloidal poly- (oligo)electrolyte phases</string>
             </property>
             <property name="text">
-             <string>Kernel (NagraPSI) </string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-            <property name="autoExclusive">
-             <bool>false</bool>
+             <string>Poly-&amp;electrolyte</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="rbComplem">
+           <widget class="QCheckBox" name="cbHcarbl">
             <property name="toolTip">
-             <string>Check to collect data also from the complementary (Slop98/Supcrt92) data base (inorganic part) </string>
+             <string>Check to include mixture of condensed hydrocarbons</string>
             </property>
             <property name="text">
-             <string>Complem.(SUPCRT) </string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-            <property name="autoExclusive">
-             <bool>false</bool>
+             <string>&amp;Hydrocarbons</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="rbOrganic">
-            <property name="toolTip">
-             <string>Check to collect also data of 'supplemental'  type for 'Kernel', or for organic species for 'Complem.' data base </string>
-            </property>
-            <property name="text">
-             <string>Supplem.  </string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-            <property name="autoExclusive">
-             <bool>false</bool>
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="rbSpecific">
+           <widget class="QCheckBox" name="cbSolutions">
             <property name="toolTip">
-             <string>Check to collect thermodynamic data also from the specific extension data base(s)</string>
+             <string>Check to include multi-component (solution) phases</string>
             </property>
             <property name="text">
-             <string>Specific   </string>
+             <string>&amp;Multi-component  Phase</string>
             </property>
-            <property name="checked">
-             <bool>false</bool>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="line_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
-            <property name="autoExclusive">
-             <bool>false</bool>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cbSolutions_2">
+            <property name="toolTip">
+             <string>Check to include Isotopes x isotopic compounds</string>
+            </property>
+            <property name="text">
+             <string>&amp;Isotopes</string>
             </property>
            </widget>
           </item>
@@ -643,25 +684,25 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QPushButton" name="bReset">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
+        <widget class="QTreeView" name="FtreeView">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
          </property>
-         <property name="toolTip">
-          <string>Click here to customize filters for copying records from default databases into the new modelling project</string>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::NoSelection</enum>
          </property>
-         <property name="text">
-          <string>Set &amp;Filters</string>
+         <property name="autoExpandDelay">
+          <number>2</number>
          </property>
-         <property name="shortcut">
-          <string>Alt+F</string>
+         <property name="rootIsDecorated">
+          <bool>false</bool>
          </property>
-         <property name="autoDefault">
-          <bool>true</bool>
+         <property name="sortingEnabled">
+          <bool>false</bool>
          </property>
+         <attribute name="headerDefaultSectionSize">
+          <number>200</number>
+         </attribute>
         </widget>
        </item>
       </layout>
@@ -3274,6 +3315,28 @@
        </property>
        <property name="shortcut">
         <string>F1</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bReset">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Click here to customize filters for copying records from default databases into the new modelling project</string>
+       </property>
+       <property name="text">
+        <string>Set &amp;Filters</string>
+       </property>
+       <property name="shortcut">
+        <string>Alt+F</string>
+       </property>
+       <property name="autoDefault">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

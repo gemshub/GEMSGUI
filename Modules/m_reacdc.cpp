@@ -1798,13 +1798,30 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
 
     for(uint ii=0; ii<aDCkey.GetCount(); ii++ )
     {
-     if( !el_data.flags[cbAqueous_] &&
-         ( aDCkey[ii][0]== 'a' || aDCkey[ii][0]== 'x' ))
-       continue;
-     if( !el_data.flags[cbGaseous_] && aDCkey[ii][0] == 'g' )
-       continue;
-     if( !el_data.flags[cbSorption_] && aDCkey[ii][0] == 'c' )
-       continue;
+
+        // Phase Filters
+         if( !el_data.flags[cbAqueous_] && aDCkey[ii][0] == 'a' )
+           continue;
+         if( !el_data.flags[cbGaseous_] && ( aDCkey[ii][0] == 'g') )
+          continue;
+         if( !el_data.flags[cbFluid_] && ( aDCkey[ii][0] == 'f') )
+           continue;
+         if( !el_data.flags[cbPlasma_] && ( aDCkey[ii][0] == 'p') )
+         continue;
+         if( !el_data.flags[cbSolids_] && ( aDCkey[ii][0] == 's') )
+         continue;
+         //if( !el_data.flags[cbSindis_] && ( aDCkey[ii][0] == 'd') )
+         //   continue;
+         if( !el_data.flags[cbLiquid_] && ( aDCkey[ii][0] == 'l') )
+         continue;
+         if( !el_data.flags[cbSimelt_] && ( aDCkey[ii][0] == 'm') )
+         continue;
+         if( !el_data.flags[cbSorption_] && ( aDCkey[ii][0] == 'x' || aDCkey[ii][0] == 'c' ) )
+         continue;
+         if( !el_data.flags[cbPolyel_] && (aDCkey[ii][0] == 'y') )
+         continue;
+         if( !el_data.flags[cbHcarbl_] && ( aDCkey[ii][0] == 'h') )
+         continue;
 
      // test the same component (overload) 30/11/2006
      gstring stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);

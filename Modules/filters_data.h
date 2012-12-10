@@ -26,13 +26,24 @@
 //-----------------------------------------------------------------------
 // Structures for SetFiltersDialog
 
-enum selectType { cbAqueous_ = 0,
-                  cbGaseous_,
-                  cbSorption_,
-                  cbIsotopes_,
-                 cbSolids_,
-                 cbSolutions_
-                 };
+
+enum selectType{
+    cbAqueous_ = 0,   //  PH_AQUEL = 'a', aqueous electrolyte
+    cbGaseous_,       //  PH_GASMIX = 'g', mixture of gases
+    cbFluid_,         //  PH_FLUID = 'f', fluid phase
+    cbPlasma_,        //  PH_PLASMA = 'p', plasma
+    cbSolids_,        //  PH_SINCOND = 's', condenced solid phase, also multicomponent
+    cbSindis_,        //  PH_SINDIS = 'd',  dispersed solid phase, also multicomponent
+    cbLiquid_,        //  PH_LIQUID = 'l', non-electrolyte liquid (melt)
+    cbSimelt_,        //  PH_SIMELT = 'm', silicate (magmatic) melt or non-aqueous electrolyte
+    cbSorption_,      //  PH_SORPTION = 'x', dilspersed solid with adsorption (ion exchange) in aqueous
+    cbPolyel_,        //  PH_POLYEL = 'y',  colloidal poly- (oligo)electrolyte
+    cbHcarbl_,        //  PH_HCARBL = 'h'   mixture of condensed hydrocarbons
+    cbSolutions_,     // Check to include multi-component (solution) phases (non-aqueous)
+    cbIsotopes_,      // Isotopes x isotopic compounds
+    cbRes_
+};
+
 
 struct elmWindowData
 {
@@ -40,22 +51,30 @@ struct elmWindowData
    TCStringArray oldIComps; // list from parent project
 //   TCStringArray flNames; // kernel, uncertain, specific
 
-   bool flags[6];         // selectType
+   bool flags[14];         // selectType
 
    elmWindowData()
    {
-     flags[0] = true;
-     flags[1] = true;
-     flags[2] = false;
-     flags[3] = false;
-     flags[4] = false;
-     flags[5] = false;
+     flags[cbAqueous_] = true;
+     flags[cbGaseous_] = true;
+     flags[cbFluid_] = true;
+     flags[cbPlasma_] = false;
+     flags[cbSolids_] = true;
+     flags[cbSindis_] = true;
+     flags[cbLiquid_] = true;
+     flags[cbSimelt_] = false;
+     flags[cbSorption_] = false;
+     flags[cbPolyel_] = false;
+     flags[cbHcarbl_] = false;
+     flags[cbSolutions_] = false;
+     flags[cbIsotopes_] = false;
+     flags[cbRes_] = false;
    }
 
   elmWindowData( elmWindowData& d )
   {
     uint ii;
-    for( ii=0; ii<6; ii++ )
+    for( ii=0; ii<14; ii++ )
      flags[ii] = d.flags[ii];
     for( ii=0; ii<d.ICrds.GetCount(); ii++ )
      ICrds.Add(d.ICrds[ii]);
@@ -68,7 +87,7 @@ struct elmWindowData
   const elmWindowData& operator=( const elmWindowData& d)
   {
     uint ii;
-    for( ii=0; ii<6; ii++ )
+    for( ii=0; ii<14; ii++ )
      flags[ii] = d.flags[ii];
     for( ii=0; ii<d.ICrds.GetCount(); ii++ )
      ICrds.Add(d.ICrds[ii]);
