@@ -1,11 +1,10 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
+
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
-  <title>GEMS3 Database Record Keys</title>
-  <meta name="description" content="Version 2.0.0-PSI">
-</head>
-<body>
+  <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]"><title>GEMS3 Database Record Keys</title>
+  
+  <meta name="description" content="Version 2.0.0-PSI"></head><body>
 <h1><img src="gems1.png" align="left" height="48" width="48"> <big><b><font color="#000099"><font size="+2"><big>GEM-Selektor version 3</big></font></font></b></big>
 </h1>
 <h2>Database Record Key Formats</h2>
@@ -361,7 +360,7 @@ facilitate keeping related species together in the alphabetically
 sorted lists. Any sequence of up to 8 capital letters, digits, <tt>"-",
 "+", "@"</tt> and <tt>"_"</tt> characters is allowed (but no spaces).
 This field is not analyzed by the
-program (except alphabetical sorting of record keys). <br>
+program, except alphabetical sorting of record keys. <br>
 </p>
 <p>&nbsp;<a name="dbm_dcomp_2"></a><b>Species_name</b>&nbsp; identifies
 a Dependent Component entity. This name must be a string up to 16
@@ -389,8 +388,8 @@ digits, <tt>"-", "+", "@"</tt> and <tt>"_ "</tt>
 &nbsp;characters&nbsp;) serves
 for identification of a consistent subset of thermodynamic data. Some
 codes
-are used in&nbsp;the <a href="gems_ctdb.html">kernel
-(default) GEMS database.</a> The user must invent his own codes&nbsp;
+are used in&nbsp;the <a href="gems_ctdb.html">built-in
+(default) GEMS database.</a> The user must invent his own codes
 when adding
 new DComp or ReacDC records in his project databases.&nbsp;<br>
 </p>
@@ -400,7 +399,7 @@ new modelling projects. This is necessary in order to avoid possible
 database search
 conflicts: the <a href="gems_tdbase.html">GEMS database</a> cannot
 contain
-two records with identical keys. See <a href="elements.html#advanced_copy">more</a> about how the user can
+two records with identical keys. See <a href="gems_elements.html#advanced_copy">more</a> about how the user can
 control
 modification of the last field of DComp or ReacDC record keys during
 copying.&nbsp;</p>
@@ -444,7 +443,7 @@ same as that of <a href="gm_dcomp.html">DComp</a> record keys (see
 above).&nbsp;</p>
 <p>The Species_name field refers to the name of a newly-defined species
 in this ReacDC record. The <a href="gems_tdbase.html#override_data">data
-override mechanism</a> applies, except that to ReacDC or DComp record
+override mechanism</a> applies, except that to processing ReacDC or DComp record
 keys in the <a href="gm_reacdc.html#REsDC"><tt>REsDC</tt></a> list. <br>
 </p>
 <br>
