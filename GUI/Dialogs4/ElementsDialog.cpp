@@ -27,213 +27,6 @@
 #include "m_icomp.h"
 #include "m_param.h"
 
-/*
-TreeFileLine::TreeFileLine(int aRow, gstring aTag, gstring aVer, TreeFileLine* aParent)
-{
-    row = aRow;
-    tag = aTag;
-    ver = aVer;
-    parent = aParent;
-}
-
-TreeFileLine::~TreeFileLine()
-{
-    qDeleteAll(children);
-}
-
-
-void TreeFileLine::printTest()
-{
-    cout << tag.c_str() << endl;
-    for(int ii=0; ii<children.count(); ii++)
-        children[ii]->printTest();
-
-}
-
-
-
-//--------------------------------------------------------------------------------------
-//  class TTreeModel
-//  class for represents the data set and is responsible for fetchin
-//  the data is neaded for viewing and for writing back any changes.
-//  Reading/writing data from/to TObject and TObjList classes
-//---------------------------------------------------------------------------------------
-FileNamesTreeModel::FileNamesTreeModel( TCStringArray aFilesData,
-                        QObject * parent ):
-        QStandardItemModel(parent)
-{
-  rootNode = 0;
-  setupModelData(aFilesData);
-}
-
-FileNamesTreeModel::~FileNamesTreeModel()
-{
-  if(rootNode )
-     delete rootNode;
-}
-
-TreeFileLine *FileNamesTreeModel::lineFromIndex(const QModelIndex &index) const
-{
-    if (index.isValid()) {
-        return static_cast<TreeFileLine *>(index.internalPointer());
-    } else {
-        return rootNode;
-    }
-}
-
-
-void FileNamesTreeModel::setupModelData(TCStringArray aFilesData)
-{
-    if(rootNode )
-      delete rootNode;
-
-    rootNode = new TreeFileLine(0, "default", "", 0);
-
-    int ii, jj;
-    TreeFileLine* pdb;
-    TreeFileLine* pdb_child;
-    gstring fname, tag, vers="";
-    size_t pos1, pos2;
-
-    for( ii=0; ii<aFilesData.GetCount(); ii++ )
-    {
-        fnamesData.Add( aFilesData[ii]);
-        pdb = rootNode;
-        fname = aFilesData[ii];
-
-        //scip extension
-        pos1 = fname.rfind(".");
-        fname = fname.substr( 0, pos1+1 );
-
-        // get version
-        pos1 = fname.find(".Ver");
-        if( pos1 != gstring::npos )
-        {
-            vers = fname.substr(pos1+1);
-            fname = fname.substr(0, pos1+1 );
-            pos2 = vers.find(".");
-            vers = vers.substr(0, pos2);
-        }
-        else
-            vers = "";
-
-        // first tag name of chain
-        pos1 = fname.find(".");
-        pos2 = fname.find(".", pos1+1);
-        while( pos2 != gstring::npos )
-        {
-          tag = fname.substr(pos1+1, pos2-pos1-1);
-          pdb_child = 0;
-
-          // test used tag before
-          for( jj=0; jj<pdb->children.count(); jj++ )
-          {
-              if( tag == pdb->children[jj]->tag )
-              {
-                  pdb_child = pdb->children[jj];
-                  break;
-              }
-          }
-          if( !pdb_child )
-          {
-            pdb_child = new TreeFileLine( pdb->children.count(), tag, vers, pdb );
-            pdb->children.append(pdb_child);
-
-          }
-          pos1=pos2;
-          pos2 = fname.find(".", pos1+1);
-          pdb = pdb_child;
-        }
-
-    }
-   reset();
-}
-
-
-
-void FileNamesTreeModel::printTest()
-{
-    if (!rootNode)
-        return;
-    rootNode->printTest();
-}
-
-QModelIndex FileNamesTreeModel::index(int row, int column, const QModelIndex &parent) const
-{
-    if (!rootNode)
-        return QModelIndex();
-    TreeFileLine *parentItem = lineFromIndex( parent );
-    return createIndex(row, column, parentItem->children[row]);
-}
-
-
-QModelIndex FileNamesTreeModel::parent(const QModelIndex& child) const
-{
-    if (!child.isValid())
-        return QModelIndex();
-
-    TreeFileLine *childItem = lineFromIndex(child);
-    TreeFileLine *parentItem = childItem->parent;
-    if (parentItem == rootNode )
-        return QModelIndex();
-    return createIndex(parentItem->row, 0, parentItem);
-}
-
-int FileNamesTreeModel::rowCount( const QModelIndex& parent ) const
-{
-   if (!rootNode)
-       return 0;
-  if (parent.column() > 0)
-      return 10;
-  TreeFileLine *parentItem = lineFromIndex( parent );
-  return parentItem->children.count();
-}
-
-int FileNamesTreeModel::columnCount( const QModelIndex& parent ) const
-{
-  return 2;
-}
-
-QVariant FileNamesTreeModel::headerData( int section, Qt::Orientation orientation, int role ) const
-{
- if( role == Qt::DisplayRole  && orientation == Qt::Horizontal )
-     if( section == 0 )
-         return "Database Names";
-     else
-         return "Version";
-
-  return QVariant();
-}
-
-
-QVariant FileNamesTreeModel::data( const QModelIndex& index, int role ) const
-{
-   if(!index.isValid())
-     return QVariant();
-
-   switch( role )
-   { case Qt::DisplayRole:
-     case Qt::EditRole:
-             {   QString res;
-                 if( index.column() == 0 )
-                     res = QString( lineFromIndex(index)->tag.c_str() );
-                  else
-                     res = QString( lineFromIndex(index)->tag.c_str() );
-                 cout << index.row() << res.toLatin1().data()<< endl;
-                 return  res;
-             }
-      case Qt::ToolTipRole:
-      case Qt::StatusTipRole:
-      default: break;
-   }
-
-  return QVariant();
-}
-
-*/
-
-//------------------------------------------------------------------------
-
 void ElementsDialog::CmBack()
 {
     stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()-1 );
@@ -921,16 +714,16 @@ void ElementsDialog::setTreeWidget()
 
         //scip extension
         pos1 = fname.rfind(".");
-        fname = fname.substr( 0, pos1+1 );
+        fname = fname.substr( 0, pos1 );
 
         // get version
         pos1 = fname.find(".ver");
         if( pos1 != gstring::npos )
         {
-            vers = fname.substr(pos1+1);
+            vers = fname.substr(pos1+1+3);
             fname = fname.substr(0, pos1+1 );
-            pos2 = vers.find(".");
-            vers = vers.substr(0, pos2);
+            //pos2 = vers.find(".");
+            //vers = vers.substr(0, pos2);
         }
         else
             vers = "not versioned";
@@ -1056,6 +849,212 @@ int ElementsDialog::isOpenFile( gstring& name  )
             return 1;
     return 0;
 }
+
+/*
+TreeFileLine::TreeFileLine(int aRow, gstring aTag, gstring aVer, TreeFileLine* aParent)
+{
+    row = aRow;
+    tag = aTag;
+    ver = aVer;
+    parent = aParent;
+}
+
+TreeFileLine::~TreeFileLine()
+{
+    qDeleteAll(children);
+}
+
+
+void TreeFileLine::printTest()
+{
+    cout << tag.c_str() << endl;
+    for(int ii=0; ii<children.count(); ii++)
+        children[ii]->printTest();
+
+}
+
+
+
+//--------------------------------------------------------------------------------------
+//  class TTreeModel
+//  class for represents the data set and is responsible for fetchin
+//  the data is neaded for viewing and for writing back any changes.
+//  Reading/writing data from/to TObject and TObjList classes
+//---------------------------------------------------------------------------------------
+FileNamesTreeModel::FileNamesTreeModel( TCStringArray aFilesData,
+                        QObject * parent ):
+        QStandardItemModel(parent)
+{
+  rootNode = 0;
+  setupModelData(aFilesData);
+}
+
+FileNamesTreeModel::~FileNamesTreeModel()
+{
+  if(rootNode )
+     delete rootNode;
+}
+
+TreeFileLine *FileNamesTreeModel::lineFromIndex(const QModelIndex &index) const
+{
+    if (index.isValid()) {
+        return static_cast<TreeFileLine *>(index.internalPointer());
+    } else {
+        return rootNode;
+    }
+}
+
+
+void FileNamesTreeModel::setupModelData(TCStringArray aFilesData)
+{
+    if(rootNode )
+      delete rootNode;
+
+    rootNode = new TreeFileLine(0, "default", "", 0);
+
+    int ii, jj;
+    TreeFileLine* pdb;
+    TreeFileLine* pdb_child;
+    gstring fname, tag, vers="";
+    size_t pos1, pos2;
+
+    for( ii=0; ii<aFilesData.GetCount(); ii++ )
+    {
+        fnamesData.Add( aFilesData[ii]);
+        pdb = rootNode;
+        fname = aFilesData[ii];
+
+        //scip extension
+        pos1 = fname.rfind(".");
+        fname = fname.substr( 0, pos1+1 );
+
+        // get version
+        pos1 = fname.find(".Ver");
+        if( pos1 != gstring::npos )
+        {
+            vers = fname.substr(pos1+1);
+            fname = fname.substr(0, pos1+1 );
+            pos2 = vers.find(".");
+            vers = vers.substr(0, pos2);
+        }
+        else
+            vers = "";
+
+        // first tag name of chain
+        pos1 = fname.find(".");
+        pos2 = fname.find(".", pos1+1);
+        while( pos2 != gstring::npos )
+        {
+          tag = fname.substr(pos1+1, pos2-pos1-1);
+          pdb_child = 0;
+
+          // test used tag before
+          for( jj=0; jj<pdb->children.count(); jj++ )
+          {
+              if( tag == pdb->children[jj]->tag )
+              {
+                  pdb_child = pdb->children[jj];
+                  break;
+              }
+          }
+          if( !pdb_child )
+          {
+            pdb_child = new TreeFileLine( pdb->children.count(), tag, vers, pdb );
+            pdb->children.append(pdb_child);
+
+          }
+          pos1=pos2;
+          pos2 = fname.find(".", pos1+1);
+          pdb = pdb_child;
+        }
+
+    }
+   reset();
+}
+
+
+
+void FileNamesTreeModel::printTest()
+{
+    if (!rootNode)
+        return;
+    rootNode->printTest();
+}
+
+QModelIndex FileNamesTreeModel::index(int row, int column, const QModelIndex &parent) const
+{
+    if (!rootNode)
+        return QModelIndex();
+    TreeFileLine *parentItem = lineFromIndex( parent );
+    return createIndex(row, column, parentItem->children[row]);
+}
+
+
+QModelIndex FileNamesTreeModel::parent(const QModelIndex& child) const
+{
+    if (!child.isValid())
+        return QModelIndex();
+
+    TreeFileLine *childItem = lineFromIndex(child);
+    TreeFileLine *parentItem = childItem->parent;
+    if (parentItem == rootNode )
+        return QModelIndex();
+    return createIndex(parentItem->row, 0, parentItem);
+}
+
+int FileNamesTreeModel::rowCount( const QModelIndex& parent ) const
+{
+   if (!rootNode)
+       return 0;
+  if (parent.column() > 0)
+      return 10;
+  TreeFileLine *parentItem = lineFromIndex( parent );
+  return parentItem->children.count();
+}
+
+int FileNamesTreeModel::columnCount( const QModelIndex& parent ) const
+{
+  return 2;
+}
+
+QVariant FileNamesTreeModel::headerData( int section, Qt::Orientation orientation, int role ) const
+{
+ if( role == Qt::DisplayRole  && orientation == Qt::Horizontal )
+     if( section == 0 )
+         return "Database Names";
+     else
+         return "Version";
+
+  return QVariant();
+}
+
+
+QVariant FileNamesTreeModel::data( const QModelIndex& index, int role ) const
+{
+   if(!index.isValid())
+     return QVariant();
+
+   switch( role )
+   { case Qt::DisplayRole:
+     case Qt::EditRole:
+             {   QString res;
+                 if( index.column() == 0 )
+                     res = QString( lineFromIndex(index)->tag.c_str() );
+                  else
+                     res = QString( lineFromIndex(index)->tag.c_str() );
+                 cout << index.row() << res.toLatin1().data()<< endl;
+                 return  res;
+             }
+      case Qt::ToolTipRole:
+      case Qt::StatusTipRole:
+      default: break;
+   }
+
+  return QVariant();
+}
+
+*/
+
 
 // --------------------- End ElementsDialog.cpp -------------------------
 

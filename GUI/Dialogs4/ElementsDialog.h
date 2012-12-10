@@ -23,59 +23,9 @@
 #include <QDialog>
 #include <QButtonGroup>
 #include <QStandardItemModel>
-#include <QTreeWidgetItem>
 
 #include "ui_ElementsDialog4.h"
 #include "filters_data.h"
-
-/*
-class TreeFileLine
-{
-public:
-
-    TreeFileLine(int aRow,gstring aTag, gstring aVer, TreeFileLine* aParent);
-    ~TreeFileLine();
-    void printTest();
-
-    int row;
-    gstring tag;
-    gstring ver;
-
-    TreeFileLine *parent;
-    QList<TreeFileLine *> children;
-};
-
-
-// class FileNamesTreeModel
-class FileNamesTreeModel: public QStandardItemModel
-{
-    Q_OBJECT
-
-  TCStringArray fnamesData;
-
-  TreeFileLine* rootNode;
-
-  TreeFileLine* lineFromIndex(const QModelIndex& index) const;
-
-public:
-
-  FileNamesTreeModel( TCStringArray aFilesData,   QObject* parent = 0 );
-  ~FileNamesTreeModel();
-
-  QModelIndex index(int row, int column, const QModelIndex& parent) const;
-  QModelIndex parent(const QModelIndex& child) const;
-  int rowCount ( const QModelIndex & parent ) const;     //ok
-  int columnCount ( const QModelIndex & parent  ) const; // ok
-  QVariant data ( const QModelIndex & index, int role ) const;
-  //bool setData ( const QModelIndex & index, const QVariant & value, int role );
-  QVariant headerData ( int section, Qt::Orientation orientation, int role ) const;
-  //Qt::ItemFlags flags ( const QModelIndex & index ) const;
-
-  void setupModelData(TCStringArray aFilesData);
-  void printTest();
-};
-
-*/
 
 class ElementsDialog : public QDialog, public Ui::ElementsDialogData
 {
@@ -151,6 +101,54 @@ public:
     const elmWindowData&   getData();
 
 };
+
+/*
+class TreeFileLine
+{
+public:
+
+    TreeFileLine(int aRow,gstring aTag, gstring aVer, TreeFileLine* aParent);
+    ~TreeFileLine();
+    void printTest();
+
+    int row;
+    gstring tag;
+    gstring ver;
+
+    TreeFileLine *parent;
+    QList<TreeFileLine *> children;
+};
+
+
+// class FileNamesTreeModel
+class FileNamesTreeModel: public QStandardItemModel
+{
+    Q_OBJECT
+
+  TCStringArray fnamesData;
+
+  TreeFileLine* rootNode;
+
+  TreeFileLine* lineFromIndex(const QModelIndex& index) const;
+
+public:
+
+  FileNamesTreeModel( TCStringArray aFilesData,   QObject* parent = 0 );
+  ~FileNamesTreeModel();
+
+  QModelIndex index(int row, int column, const QModelIndex& parent) const;
+  QModelIndex parent(const QModelIndex& child) const;
+  int rowCount ( const QModelIndex & parent ) const;     //ok
+  int columnCount ( const QModelIndex & parent  ) const; // ok
+  QVariant data ( const QModelIndex & index, int role ) const;
+  //bool setData ( const QModelIndex & index, const QVariant & value, int role );
+  QVariant headerData ( int section, Qt::Orientation orientation, int role ) const;
+  //Qt::ItemFlags flags ( const QModelIndex & index ) const;
+
+  void setupModelData(TCStringArray aFilesData);
+  void printTest();
+};
+*/
 
 #endif // ElementsDialog_included
 
