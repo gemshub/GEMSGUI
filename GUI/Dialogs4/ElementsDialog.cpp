@@ -229,6 +229,20 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
      EmptyData();
 
     // define page 1
+     cbAqueous->setChecked( true);
+     cbGaseous->setChecked( true);
+     cbFluid->setChecked( true);
+     cbPlasma->setChecked( false);
+     cbSolids->setChecked( true);
+     cbSindis->setChecked( true);
+     cbLiquid->setChecked( true);
+     cbSimelt->setChecked( false);
+     cbSorption->setChecked( false);
+     cbPolyel->setChecked( false);
+     cbHcarbl->setChecked( false);
+     cbSolutions->setChecked( false);
+     cbIsotopes->setChecked( false);
+     //el_data.flags[cbRes_] = false;
 
     // set up default Open files names
     setOpenFilesAsDefault(); // <.kernel.> now, start define selNames
@@ -312,21 +326,6 @@ void ElementsDialog::EmptyData()
  }
  for( ii=0; ii<99/*bgElem->buttons()->count()-1*/; ii++ ) // we have not 99
       bgElem->button(ii)->setEnabled( false );
-
- cbAqueous->setChecked( true);
- cbGaseous->setChecked( true);
- cbFluid->setChecked( true);
- cbPlasma->setChecked( false);
- cbSolids->setChecked( true);
- cbSindis->setChecked( true);
- cbLiquid->setChecked( true);
- cbSimelt->setChecked( false);
- cbSorption->setChecked( false);
- cbPolyel->setChecked( false);
- cbHcarbl->setChecked( false);
- cbSolutions->setChecked( false);
- cbIsotopes->setChecked( false);
- //el_data.flags[cbRes_] = false;
 }
 
 
@@ -570,6 +569,11 @@ void ElementsDialog::SetData()
     el_data.flags[cbSolutions_] = cbSolutions->isChecked();
     el_data.flags[cbIsotopes_] = cbIsotopes->isChecked();
     el_data.flags[cbRes_] = false;
+
+   for(int ii=0; ii<14; ii++)
+        cout <<  " " <<  el_data.flags[ii];
+   cout << endl;
+
   allSelected( el_data.ICrds );
 }
 
@@ -771,7 +775,7 @@ void ElementsDialog::setTreeWidget()
           pos2 = fname.find(".", pos1+1);
           pdb = pdb_child;
        }
-        aTag = "main";
+        aTag = "...";
         if( pdb->rowCount()<1 ||  aTag != pdb->child(0)->text() )
         {  pdb_child = new QStandardItem( aTag );
            pdb_child->setCheckable( true );
@@ -780,7 +784,7 @@ void ElementsDialog::setTreeWidget()
         }
     }
 
-    // delete las "main"
+    // delete last "main"
 
 
     FtreeView->setModel(standardModel);

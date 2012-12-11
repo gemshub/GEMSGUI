@@ -1881,7 +1881,6 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
 // Read the record here
      RecInput( aPHkey[ii].c_str() );
 
-
 // cbSolutions - multi-component, non-gas, non-electrolyte
      if( !el_data.flags[cbSolutions_] && ( pKey1[0] != 'a'
         && pKey1[0] != 'g' && pKey1[0] != 'f'

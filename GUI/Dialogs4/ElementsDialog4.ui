@@ -663,23 +663,6 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="Line" name="line_3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="cbSolutions_2">
-            <property name="toolTip">
-             <string>Check to include Isotopes x isotopic compounds</string>
-            </property>
-            <property name="text">
-             <string>Include &amp;isotopes</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>
