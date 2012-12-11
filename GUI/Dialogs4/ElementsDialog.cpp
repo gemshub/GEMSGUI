@@ -784,11 +784,26 @@ void ElementsDialog::setTreeWidget()
         }
     }
 
-    // delete last "main"
-
+    // delete last "..."
+    aTag = "...";
+    deleteTag( aTag, pkern);
 
     FtreeView->setModel(standardModel);
-    FtreeView->expandAll();
+    FtreeView->collapseAll ();  //expandAll();
+}
+
+void ElementsDialog::deleteTag( QString aTag, QStandardItem* pdb)
+{
+    if( !pdb )
+      return;
+
+    if( pdb->rowCount() == 1 &&  aTag == pdb->child(0)->text() )
+          pdb->removeRow(0);
+    else
+    {
+        for(int jj=0; jj<pdb->rowCount(); jj++ )
+            deleteTag( aTag, pdb->child(jj));
+    }
 }
 
 

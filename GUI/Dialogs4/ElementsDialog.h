@@ -59,6 +59,7 @@ class ElementsDialog : public QDialog, public Ui::ElementsDialogData
     void getSelectionTreeWidget();
     void getTag( gstring tag, QStandardItem* pdb);
     void setTag( gstring fname, QStandardItem* pdb);
+    void deleteTag( QString aTag, QStandardItem* pdb);
 
     // working with elements buttoms
     void EmptyData();
