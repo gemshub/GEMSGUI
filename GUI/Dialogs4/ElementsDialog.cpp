@@ -261,6 +261,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
 
     connect( cbAqueous, SIGNAL( clicked() ), this, SLOT( SetAqueous() ) );
     connect( cbSorption, SIGNAL( clicked() ),this, SLOT( SetSorption() ) );
+    connect( cbIsotopes, SIGNAL( clicked() ),this, SLOT( SetIsotopes() ) );
 }
 
 ElementsDialog::~ElementsDialog()
@@ -365,6 +366,14 @@ void ElementsDialog::SetSorption()
   cbAqueous->setChecked( true );
   SetAqueous();
  }
+}
+
+void ElementsDialog::SetIsotopes()
+{
+    ResetData();
+    EmptyData();
+    SetICompList();
+    SetAqueous();
 }
 
 void ElementsDialog::changeCheck( QStandardItem *pdb )
@@ -570,9 +579,9 @@ void ElementsDialog::SetData()
     el_data.flags[cbIsotopes_] = cbIsotopes->isChecked();
     el_data.flags[cbRes_] = false;
 
-   for(int ii=0; ii<14; ii++)
-        cout <<  " " <<  el_data.flags[ii];
-   cout << endl;
+   //for(int ii=0; ii<14; ii++)
+   //     cout <<  " " <<  el_data.flags[ii];
+   //cout << endl;
 
   allSelected( el_data.ICrds );
 }
@@ -724,7 +733,7 @@ void ElementsDialog::setTreeWidget()
 
         //scip extension
         pos1 = fname.rfind(".");
-        fname = fname.substr( 0, pos1 );
+        fname = fname.substr( 0, pos1+1 );
 
         // get version
         pos1 = fname.find(".ver");
@@ -732,8 +741,8 @@ void ElementsDialog::setTreeWidget()
         {
             vers = fname.substr(pos1+1+3);
             fname = fname.substr(0, pos1+1 );
-            //pos2 = vers.find(".");
-            //vers = vers.substr(0, pos2);
+            pos2 = vers.rfind(".");
+            vers = vers.substr(0, pos2);
         }
         else
             vers = "not versioned";

@@ -89,6 +89,8 @@ protected slots:
     void changeCheck( QStandardItem *item );
     void SetAqueous();
     void SetSorption();
+    void SetIsotopes();
+
     void SetFiles();
     virtual void languageChange();
     
