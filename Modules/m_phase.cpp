@@ -1882,7 +1882,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
      RecInput( aPHkey[ii].c_str() );
 
 // cbSolutions - multi-component, non-gas, non-electrolyte
-     if( !el_data.flags[cbSolutions_] && ( pKey1[0] != 'a'
+     if( el_data.flags[cbSolutions_] && ( pKey1[0] != 'a'
         && pKey1[0] != 'g' && pKey1[0] != 'f'
         && pKey1[0] != 'p' && pKey1[0] != 'x' && pKey1[0] != 'h' ) )
          if( php->nDC > 1 )

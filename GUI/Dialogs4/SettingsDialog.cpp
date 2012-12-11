@@ -64,6 +64,7 @@ SettingsDialog::SettingsDialog (QWidget* parent)
     {   rbNewPrMode->setChecked( false );
         rbOldPrMode->setChecked( true );
     }
+    pBuiltinTDB->setText(pVisor->defaultBuiltinTDBL().c_str());
 
     connect(butGenerate, SIGNAL(clicked()), this, SLOT(CmHelpGenerate()));
 
@@ -98,6 +99,9 @@ SettingsDialog::CmApply()
 
     pVisor->setLocalDocDir(pLocalDocDir->text().toLatin1().data());
     pVisor->setRemoteHTML(pRemoteHTML->text().toLatin1().data());
+
+    pVisor->setDefaultBuiltinTDB(pBuiltinTDB->text().toLatin1().data());
+
     //pVisor->setLocalDoc(pLocalDoc->isChecked());
 
     //pVisorImp->Update(true);

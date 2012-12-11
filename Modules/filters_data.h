@@ -39,7 +39,7 @@ enum selectType{
     cbSorption_,      //  PH_SORPTION = 'x', dilspersed solid with adsorption (ion exchange) in aqueous
     cbPolyel_,        //  PH_POLYEL = 'y',  colloidal poly- (oligo)electrolyte
     cbHcarbl_,        //  PH_HCARBL = 'h'   mixture of condensed hydrocarbons
-    cbSolutions_,     // Check to include multi-component (solution) phases (non-aqueous)
+    cbSolutions_,     // Check to skip non-aqueous condensed multi-component (solution) Phases
     cbIsotopes_,      // Isotopes x isotopic compounds
     cbRes_
 };

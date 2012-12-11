@@ -270,7 +270,9 @@ ElementsDialog::~ElementsDialog()
 void ElementsDialog::setOpenFilesAsDefault()
 {
   selNames.Clear();
-  selNames.Add(".nagra-psi");
+  gstring defName = ".";
+          defName += pVisor->defaultBuiltinTDBL();
+  selNames.Add(defName);
 }
 
 void ElementsDialog::languageChange()

@@ -49,6 +49,7 @@ class TVisor
     gstring ImgDir;
 
     bool isElementsProfileMode;
+    gstring DefaultBuiltinTDB;
     bool dbChangeMode;
 
 
@@ -166,6 +167,14 @@ public:
     {
         isElementsProfileMode = newData;
     }
+
+    const gstring& defaultBuiltinTDBL() const {
+        return DefaultBuiltinTDB;
+    }
+    void setDefaultBuiltinTDB(const gstring& aDefaultBuiltinTDB) {
+        DefaultBuiltinTDB = aDefaultBuiltinTDB;
+    }
+
 
     QWidget* window();
 };

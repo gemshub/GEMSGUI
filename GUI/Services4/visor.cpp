@@ -174,6 +174,7 @@ TVisor::TVisor(int c, char *v[]):
     //RemoteDocURL = "http://gems.web.psi.ch/doc/html/";
     RemoteHTML = SysGEMDir + HELP_SRC_DIR;
     LocalDoc = true;
+    DefaultBuiltinTDB = "nagra-psi";
 // For debugging the directories
 // cout << "Local    : " << LocalDir.c_str() << endl;
 // cout << "SysGEM   : " << SysGEMDir.c_str() << endl;
@@ -552,6 +553,7 @@ TVisor::toWinCFG()
     f_win_ini << "remote_doc_url\t=\t\"" << RemoteHTML.c_str() << "\"" << endl;
     f_win_ini << "local_doc\t=\t" << LocalDoc << endl;   // obsolete
     f_win_ini << "current_mode\t=\t" << ProfileMode << endl;
+    f_win_ini << "default_built_in_TDB\t=\t\"" << DefaultBuiltinTDB.c_str() << "\"" << endl;
     f_win_ini << "current_project\t=\t\"" << rt[RT_PARAM].PackKey() << "\""  << endl;
     f_win_ini << "current_system\t=\t\"" << rt[RT_SYSEQ].PackKey() << "\""  << endl;
     f_win_ini.close();
@@ -632,13 +634,18 @@ TVisor::fromWinCFG()
 			}
             else if( name == "current_mode" ) {
                ProfileMode = visor_conf.getcInt();
-        }
+            }
+            else if( name == "default_built_in_TDB" ) {
+                gstring gstr;
+                visor_conf.getcStr(gstr);
+                setDefaultBuiltinTDB(gstr);
+            }
             else if( name == "current_project" ) {
                visor_conf.getcStr(lastProjectKey );
-        }
+            }
             else if( name == "current_system" ) {
                visor_conf.getcStr(lastSystemKey );
-        }
+            }
 
         name = visor_conf.getNext();
     }
