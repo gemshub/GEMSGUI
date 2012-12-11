@@ -784,7 +784,7 @@ void ElementsDialog::setTreeWidget()
           pos2 = fname.find(".", pos1+1);
           pdb = pdb_child;
        }
-        aTag = "...";
+        aTag = ".";
         if( pdb->rowCount()<1 ||  aTag != pdb->child(0)->text() )
         {  pdb_child = new QStandardItem( aTag );
            pdb_child->setCheckable( true );
@@ -793,8 +793,8 @@ void ElementsDialog::setTreeWidget()
         }
     }
 
-    // delete last "..."
-    aTag = "...";
+    // delete last "."
+    aTag = ".";
     deleteTag( aTag, pkern);
 
     FtreeView->setModel(standardModel);

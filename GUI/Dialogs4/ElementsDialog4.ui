@@ -515,7 +515,7 @@
        <item row="2" column="0">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Phase/DC/IC Filters</string>
+          <string>Phase/DC Filters</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
@@ -656,10 +656,10 @@
           <item>
            <widget class="QCheckBox" name="cbSolutions">
             <property name="toolTip">
-             <string>Check to include multi-component (solution) phases</string>
+             <string>Check to skip non-aqueous condensed multi-component (solution) Phases</string>
             </property>
             <property name="text">
-             <string>Include phases-solutions</string>
+             <string>Skip condensed solutions</string>
             </property>
            </widget>
           </item>
