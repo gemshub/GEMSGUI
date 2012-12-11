@@ -377,6 +377,12 @@ void ElementsDialog::changeCheck( QStandardItem *pdb )
    QStandardItem *parent = pdb->parent();
    if( parent && parent != pkern )
    {
+       /*if( ( parent->checkState() == Qt::Unchecked &&
+             ( pdb->checkState() == Qt::PartiallyChecked || pdb->checkState() == Qt::Checked ) )
+               || ( parent->checkState() == Qt::Checked && (
+                 pdb->checkState() == Qt::PartiallyChecked || pdb->checkState() == Qt::Unchecked )))
+                  parent->setCheckState(Qt::PartiallyChecked);
+        */
        if( ( parent->checkState() == Qt::Unchecked && pdb->checkState() == Qt::PartiallyChecked )
         || ( parent->checkState() == Qt::Checked &&  pdb->checkState() == Qt::PartiallyChecked ))
            parent->setCheckState(Qt::PartiallyChecked);
@@ -765,7 +771,17 @@ void ElementsDialog::setTreeWidget()
           pos2 = fname.find(".", pos1+1);
           pdb = pdb_child;
        }
-   }
+        aTag = "main";
+        if( pdb->rowCount()<1 ||  aTag != pdb->child(0)->text() )
+        {  pdb_child = new QStandardItem( aTag );
+           pdb_child->setCheckable( true );
+           pdb_child->setTristate( true );
+           pdb->insertRow(0, pdb_child);
+        }
+    }
+
+    // delete las "main"
+
 
     FtreeView->setModel(standardModel);
     FtreeView->expandAll();
@@ -844,9 +860,31 @@ void ElementsDialog::setTag( gstring fname, QStandardItem* pdb)
 ///    for each of open file keywords;
 int ElementsDialog::isOpenFile( gstring& name  )
 {
+
+    gstring fname = name;
+
+    //scip extension
+    size_t pos1 = fname.rfind(".");
+    fname = fname.substr( 0, pos1 );
+    // scip version
+    pos1 = fname.find(".ver");
+    if( pos1 != gstring::npos )
+      fname = fname.substr(0, pos1 );
+
+    // first tag name of chain
+    pos1 = fname.find(".");
+    fname = fname.substr( pos1+1 );
+
+    // cout << "Test name" << fname.c_str() << endl;
+
     for(int ii=0; ii < selNames.GetCount(); ii++ )
+    {
         if(  name.find( selNames[ii] ) != gstring::npos )
             return 1;
+
+        if(  selNames[ii].find(fname) != gstring::npos )
+            return 1;
+    }
     return 0;
 }
 
