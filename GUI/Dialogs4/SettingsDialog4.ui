@@ -28,6 +28,9 @@
   <property name="windowTitle">
    <string>Set GEM-Selektor preferences</string>
   </property>
+  <property name="modal">
+   <bool>false</bool>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">

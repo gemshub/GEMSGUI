@@ -28,6 +28,9 @@
   <property name="windowTitle">
    <string>Database File Configuration for Modelling Project</string>
   </property>
+  <property name="modal">
+   <bool>false</bool>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="pLabel">
@@ -47,12 +50,6 @@
      <property name="selectionMode">
       <enum>QAbstractItemView::MultiSelection</enum>
      </property>
-     <attribute name="headerCascadingSectionResizes">
-      <bool>true</bool>
-     </attribute>
-     <attribute name="headerDefaultSectionSize">
-      <number>200</number>
-     </attribute>
      <attribute name="headerCascadingSectionResizes">
       <bool>true</bool>
      </attribute>

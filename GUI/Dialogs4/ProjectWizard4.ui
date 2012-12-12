@@ -21,6 +21,9 @@
   <property name="windowTitle">
    <string>GEM-Selektor Project</string>
   </property>
+  <property name="modal">
+   <bool>false</bool>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <widget class="QStackedWidget" name="stackedWidget">

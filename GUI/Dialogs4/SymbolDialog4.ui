@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>457</width>
+    <width>467</width>
     <height>173</height>
    </rect>
   </property>
@@ -19,6 +19,9 @@
   </property>
   <property name="windowTitle">
    <string>ColorDialogData</string>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
   </property>
   <layout class="QHBoxLayout">
    <item>
@@ -36,9 +39,6 @@
        <layout class="QHBoxLayout" name="layout">
         <property name="spacing">
          <number>15</number>
-        </property>
-        <property name="margin">
-         <number>0</number>
         </property>
         <item>
          <widget class="QLabel" name="TextLabel1">

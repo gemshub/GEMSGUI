@@ -21,6 +21,9 @@
   <property name="windowTitle">
    <string>GEM-Selektor Proces</string>
   </property>
+  <property name="modal">
+   <bool>false</bool>
+  </property>
   <layout class="QGridLayout">
    <item row="0" column="0">
     <widget class="QStackedWidget" name="stackedWidget">

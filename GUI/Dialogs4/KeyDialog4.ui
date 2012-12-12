@@ -28,6 +28,12 @@
   <property name="windowTitle">
    <string>List of GEMS database record keys</string>
   </property>
+  <property name="sizeGripEnabled">
+   <bool>false</bool>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="3">
     <widget class="QLabel" name="pLabel">
