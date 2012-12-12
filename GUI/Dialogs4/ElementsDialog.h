@@ -96,7 +96,7 @@ protected slots:
     
 public:
 
-    ElementsDialog(QWidget* win, const char * prfName,
+    ElementsDialog(QWidget* win, const char * prfName, elmWindowData  data,
          const char* caption = 0 );
     virtual ~ElementsDialog();
 

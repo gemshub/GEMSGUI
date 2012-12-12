@@ -801,7 +801,7 @@ TVisor::defaultCFG()
     // RT_PROFIL default
     unsigned char param_rkfrm[2] = { MAXMUNAME, MAXMUGROUP };
     rt.Add(new TDataBase(rt.GetCount(), "projec", true, true,
-                         o_spppar, 14, 0, 2, param_rkfrm));
+                         o_spppar, 15, 0, 2, param_rkfrm));      // 12.12.12 added new object to Project record
 
     // RT_ICOMP default
     unsigned char icomp_rkfrm[3] = { MAXICNAME, MAXSYMB, MAXICGROUP };

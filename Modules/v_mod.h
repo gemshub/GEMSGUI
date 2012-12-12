@@ -189,7 +189,8 @@ o_ngte, o_nhte, o_nste, o_nvte, o_ncpte, o_nate, o_nute,
     o_spppar,   // Params
     o_mupmv, o_muname, o_munotes, o_mudim, o_munfl, // Rmults
     o_mul1,  o_musf, o_musm,  o_musa,  o_musb,  o_mufn, o_mudcs,
-    o_tpstr,                                        // MTPARM
+    o_tpstr,                                 // MTPARM
+    o_sptext,    // added 12.12.12 As internal setup of Elements Dialog
     o_sppconst, o_sppdatac
 };
 

@@ -49,7 +49,8 @@ struct elmWindowData
 {
    TCStringArray ICrds;   // list of selected IComp
    TCStringArray oldIComps; // list from parent project
-//   TCStringArray flNames; // kernel, uncertain, specific
+   gstring aSelNames;  // names of selected grups of files
+   //   TCStringArray flNames; // kernel, uncertain, specific
 
    bool flags[14];         // selectType
 
@@ -69,6 +70,7 @@ struct elmWindowData
      flags[cbSolutions_] = false;
      flags[cbIsotopes_] = false;
      flags[cbRes_] = false;
+     aSelNames = "";
    }
 
   elmWindowData( elmWindowData& d )
@@ -80,6 +82,7 @@ struct elmWindowData
      ICrds.Add(d.ICrds[ii]);
     for( ii=0; ii<d.oldIComps.GetCount(); ii++ )
      oldIComps.Add(d.oldIComps[ii]);
+    aSelNames = d.aSelNames;
 //    for( ii=0; ii<d.flNames.GetCount(); ii++ )
 //     flNames.Add(d.flNames[ii]);
   }
@@ -93,11 +96,37 @@ struct elmWindowData
      ICrds.Add(d.ICrds[ii]);
     for( ii=0; ii<d.oldIComps.GetCount(); ii++ )
      oldIComps.Add(d.oldIComps[ii]);
+    aSelNames = d.aSelNames;
 //    for( ii=0; ii<d.flNames.GetCount(); ii++ )
 //     flNames.Add(d.flNames[ii]);
 
     return *this;
   }
+
+  void setFlags( gstring strBuf)  //"<TDBflags> = "
+  {
+      size_t  pos1 =  strBuf.find( "<TDBflags> = " ); //13
+      if( pos1 != gstring::npos )
+      {
+         pos1 += 13;
+         size_t pos2 = strBuf.find( ";", pos1 );
+         if( pos2-pos1 >= 14 )
+           for(int ii=0; ii<14; ii++ )
+             flags[ii] = (strBuf[ii+pos1] =='+');
+      }
+  }
+
+  gstring getFlags()
+  {
+      gstring strBuf =  "<TDBflags> = "; //+13
+      for(int ii=0; ii<14; ii++ )
+          if( flags[ii] )
+              strBuf +='+';
+          else
+              strBuf +='-';
+      strBuf += ";\n";
+      return strBuf;
+   }
 
 };
 

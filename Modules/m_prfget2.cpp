@@ -642,12 +642,22 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
    TCIntArray    ICcnt;
    rt[RT_PHASE].GetKeyList( "*:*:*:*:*:", PHkeys, ICcnt );
 
+
+   // get template project configuration
+   if( internalBufer )
+      elm_data.aSelNames =  internalBufer;
+
 //    TCStringArray dbNames;
 //    bool aAqueous, aGaseous, aSorption;
 //    if( !vfElements(window(), prfName, ICkeys,
 //            dbNames, aAqueous, aGaseous, aSorption ))
     if( !vfElements(pVisorImp/*window()*/, prfName, elm_data, sf_data ))
       return false;
+
+// save built-in default configuration
+     internalBufer = (char *)aObj[ o_sptext].Alloc( 1, elm_data.aSelNames.length()+10, S_);
+     aObj[o_sptext].SetString( elm_data.aSelNames.c_str(),0,0);
+
 
 //    elm_data.flNames.Add(prfName);
     pVisor->Message( 0, "Loading Modelling Project",

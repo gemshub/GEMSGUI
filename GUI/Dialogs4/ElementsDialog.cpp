@@ -67,9 +67,10 @@ void 	ElementsDialog::resetBackButton()
 }
 
 ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
-           const char* /*caption*/):
+        elmWindowData  data,   const char* /*caption*/):
         QDialog( win ),
-        prf_name ( prfName )
+        prf_name ( prfName ),
+        el_data( data )
 {
 	setupUi(this);
 
@@ -229,23 +230,24 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
      EmptyData();
 
     // define page 1
-     cbAqueous->setChecked( true);
-     cbGaseous->setChecked( true);
-     cbFluid->setChecked( true);
-     cbPlasma->setChecked( false);
-     cbSolids->setChecked( true);
-     cbSindis->setChecked( true);
-     cbLiquid->setChecked( true);
-     cbSimelt->setChecked( false);
-     cbSorption->setChecked( false);
-     cbPolyel->setChecked( false);
-     cbHcarbl->setChecked( false);
-     cbSolutions->setChecked( false);
-     cbIsotopes->setChecked( false);
-     //el_data.flags[cbRes_] = false;
 
     // set up default Open files names
     setOpenFilesAsDefault(); // <.kernel.> now, start define selNames
+    cbAqueous->setChecked( el_data.flags[cbAqueous_] );
+    cbGaseous->setChecked( el_data.flags[cbGaseous_]);
+    cbFluid->setChecked( el_data.flags[cbFluid_]);
+    cbPlasma->setChecked( el_data.flags[cbPlasma_]);
+    cbSolids->setChecked( el_data.flags[cbSolids_]);
+    cbSindis->setChecked( el_data.flags[cbSindis_]);
+    cbLiquid->setChecked( el_data.flags[cbLiquid_]);
+    cbSimelt->setChecked( el_data.flags[cbSimelt_]);
+    cbSorption->setChecked( el_data.flags[cbSorption_]);
+    cbPolyel->setChecked( el_data.flags[cbPolyel_]);
+    cbHcarbl->setChecked( el_data.flags[cbHcarbl_]);
+    cbSolutions->setChecked( el_data.flags[cbSolutions_]);
+    cbIsotopes->setChecked( el_data.flags[cbIsotopes_]);
+    //el_data.flags[cbRes_] = false;
+
     // define list of files in DefaultDB (files_data)
     setFilesList();
     // define FTreeWidget with DefaultDB files names  files_data.flNames
@@ -270,9 +272,38 @@ ElementsDialog::~ElementsDialog()
 void ElementsDialog::setOpenFilesAsDefault()
 {
   selNames.Clear();
-  gstring defName = ".";
-          defName += pVisor->defaultBuiltinTDBL();
-  selNames.Add(defName);
+  gstring defName;
+
+  if( el_data.aSelNames.empty() )
+  {  defName = ".";
+     defName += pVisor->defaultBuiltinTDBL();
+     selNames.Add(defName);
+  }
+  else  // get from template project
+  {
+      size_t pos1, pos2;
+
+      el_data.setFlags( el_data.aSelNames);
+
+      pos1 =  el_data.aSelNames.find( "<TDBfilters> = " ); //15
+      if( pos1 == gstring::npos )
+      {
+         defName = ".";
+         defName += pVisor->defaultBuiltinTDBL();
+         selNames.Add(defName);
+         return;
+      }
+      pos1 += 15;
+      pos2 = el_data.aSelNames.find_first_of(",;", pos1 );
+      while( pos2 != gstring::npos  )
+      {
+          defName = el_data.aSelNames.substr(pos1, pos2-pos1);
+          defName.strip();
+          selNames.Add(defName);
+          pos1 = pos2+1;
+          pos2 = el_data.aSelNames.find_first_of(",;", pos1);
+      }
+  }
 }
 
 void ElementsDialog::languageChange()
@@ -585,7 +616,17 @@ void ElementsDialog::SetData()
    //     cout <<  " " <<  el_data.flags[ii];
    //cout << endl;
 
-  allSelected( el_data.ICrds );
+    el_data.aSelNames = el_data.getFlags();
+    el_data.aSelNames += "<TDBfilters> = ";
+    for( int ii=0; ii<selNames.GetCount(); ii++)
+    {
+        el_data.aSelNames += selNames[ii];
+        if( ii<selNames.GetCount()-1 )
+            el_data.aSelNames += ",\n";
+    }
+    el_data.aSelNames += ";\n";
+
+    allSelected( el_data.ICrds );
 }
 
 /// Set up files_data  (lists of all kernel files names and  opened kernel files )
@@ -868,6 +909,8 @@ void ElementsDialog::setTag( gstring fname, QStandardItem* pdb)
 
     size_t pos1 = fname.find(".");
     size_t pos2 = fname.find(".", pos1+1);
+    if( pos2 == pos1+1 )
+        pos2 = fname.find(".", pos2+1);
     gstring tag = fname.substr(pos1+1, pos2-pos1-1);
     QString aTag = tag.c_str();
 

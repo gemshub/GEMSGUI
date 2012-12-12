@@ -103,7 +103,7 @@ public:
     size_t find(const char* s, size_t pos = 0) const;
     size_t find(const gstring& s, size_t pos = 0) const;
     size_t find(const char ch, size_t pos = 0) const;
-    size_t find_first_of(const char* s) const;
+    size_t find_first_of(const char* s, size_t pos = 0) const;
 
     // reverse find
     size_t rfind(const char* s) const;

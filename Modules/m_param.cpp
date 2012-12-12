@@ -264,7 +264,7 @@ TProfil::TProfil( int nrt ):
     calcFinished = false;
     fStopCalc = false;
     comp_change_all = false;
-
+    internalBufer = 0;
 }
 
 // init submodules to calc module
@@ -362,6 +362,7 @@ void TProfil::ods_link( int )
 
     aObj[ o_spppar].SetPtr(  (void *)&pa );
     aObj[ o_spppar].SetM( sizeof( SPP_SETTING ) );
+aObj[ o_sptext].SetPtr(  internalBufer );
     //   aObj[ o_sppconst].SetPtr( sc_ );
     //   ob[o_sppconst].dim_M = sizeof( SPP_CONST );
     //   aObj[ o_sppdatac].SetPtr( &nQ );
@@ -373,6 +374,7 @@ void TProfil::ods_link( int )
 void TProfil::dyn_set(int )
 {
     pa.p.tprn= (char *)aObj[o_patprn].GetPtr();
+internalBufer = (char *)aObj[ o_sptext].GetPtr();
     if( rmults ) rmults->dyn_set();
     if( mtparm ) mtparm->dyn_set();
     if( syst ) syst->dyn_set();
@@ -383,6 +385,7 @@ void TProfil::dyn_set(int )
 void TProfil::dyn_kill(int )
 {
     pa.p.tprn = (char *)aObj[o_patprn].Free();
+internalBufer = (char *)aObj[ o_sptext].Free();
     if( rmults ) rmults->dyn_kill();
     if( mtparm ) mtparm->dyn_kill();
     if( syst ) syst->dyn_kill();
@@ -407,6 +410,7 @@ void TProfil::dyn_new(int )
 void TProfil::set_def( int )
 {
     pa = pa_;
+    internalBufer = 0;
     if( rmults ) rmults->set_def();
     if( mtparm ) mtparm->set_def();
     if( syst ) syst->set_def();
