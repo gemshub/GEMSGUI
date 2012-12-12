@@ -75,7 +75,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
 	setupUi(this);
 
     gstring str =
-          "Configuration of a new Modeling Project  ";
+          "Basis configuration of a new Modelling Project  ";
          str +=  gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));;
          setWindowTitle( trUtf8(str.c_str()) );
 

@@ -524,7 +524,7 @@
           <item>
            <widget class="QCheckBox" name="cbAqueous">
             <property name="toolTip">
-             <string>Check to include the aqueous electrolyte phase</string>
+             <string>Check to include ions and complexes that form the aqueous electrolyte phase</string>
             </property>
             <property name="text">
              <string>&amp;Aqueous electrolyte</string>
@@ -537,7 +537,7 @@
           <item>
            <widget class="QCheckBox" name="cbGaseous">
             <property name="toolTip">
-             <string>Check to include the gaseous  phase </string>
+             <string>Check to include gases that form the ideal gaseous phase</string>
             </property>
             <property name="text">
              <string>&amp;Gas mixture</string>
@@ -550,7 +550,7 @@
           <item>
            <widget class="QCheckBox" name="cbFluid">
             <property name="toolTip">
-             <string>Check to include the fluid phase </string>
+             <string>Check to include the non-ideal gas/fluid phase(s) </string>
             </property>
             <property name="text">
              <string>&amp;Non-ideal fluids</string>
@@ -563,7 +563,7 @@
           <item>
            <widget class="QCheckBox" name="cbPlasma">
             <property name="toolTip">
-             <string>Check to include the plasma phase </string>
+             <string>Check to include gaseous species that form the plasma phase</string>
             </property>
             <property name="text">
              <string>&amp;Plasma</string>
@@ -573,7 +573,7 @@
           <item>
            <widget class="QCheckBox" name="cbSolids">
             <property name="toolTip">
-             <string>Check to include condenced solid phases  </string>
+             <string>Check to include crystalline solid phases  </string>
             </property>
             <property name="text">
              <string>&amp;Crystalline solids  </string>
@@ -586,7 +586,7 @@
           <item>
            <widget class="QCheckBox" name="cbSindis">
             <property name="toolTip">
-             <string>Check to include dispersed solid phases  </string>
+             <string>Check to include dispersed solid phases (having significant specific surface)  </string>
             </property>
             <property name="text">
              <string>&amp;Dispersed solids  </string>
@@ -632,7 +632,7 @@
           <item>
            <widget class="QCheckBox" name="cbPolyel">
             <property name="toolTip">
-             <string>Check to include colloidal poly- (oligo)electrolyte phases</string>
+             <string>Check to include colloidal poly-(oligo)electrolyte phases (under construction)</string>
             </property>
             <property name="text">
              <string>Polyelectrolytes</string>
@@ -642,7 +642,7 @@
           <item>
            <widget class="QCheckBox" name="cbHcarbl">
             <property name="toolTip">
-             <string>Check to include mixture of condensed hydrocarbons</string>
+             <string>Check to include the mixture of condensed hydrocarbons</string>
             </property>
             <property name="text">
              <string>Liquid &amp;hydrocarbons</string>
@@ -659,10 +659,10 @@
           <item>
            <widget class="QCheckBox" name="cbSolutions">
             <property name="toolTip">
-             <string>Check to skip non-aqueous condensed multi-component (solution) Phases</string>
+             <string>Check this to skip solid solutions and other non-aqueous condensed multi-component phases</string>
             </property>
             <property name="text">
-             <string>Skip condensed solutions</string>
+             <string>Skip solid solutions</string>
             </property>
            </widget>
           </item>
@@ -3297,7 +3297,7 @@
         </font>
        </property>
        <property name="text">
-        <string>&amp;Learn more</string>
+        <string>   &amp;Learn more   </string>
        </property>
        <property name="shortcut">
         <string>F1</string>
@@ -3316,7 +3316,7 @@
         <string>Click here to customize filters for copying records from default databases into the new modelling project</string>
        </property>
        <property name="text">
-        <string>Set &amp;Filters</string>
+        <string>   Set &amp;Filters   </string>
        </property>
        <property name="shortcut">
         <string>Alt+F</string>
@@ -3374,7 +3374,7 @@
         </font>
        </property>
        <property name="text">
-        <string>&amp;Cancel</string>
+        <string> &amp;Cancel </string>
        </property>
       </widget>
      </item>

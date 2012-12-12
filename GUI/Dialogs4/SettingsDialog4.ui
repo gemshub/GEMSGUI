@@ -183,13 +183,13 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Creation/Upgrade of Modelling Projects</string>
+      <string>Creation/Extension of Modelling Projects</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0" colspan="2">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Keyword of default built-in TDB</string>
+         <string>          Keyword of default built-in TDB</string>
         </property>
        </widget>
       </item>
@@ -201,38 +201,31 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="toolTip">
+         <string>Here, type a TDB name that will be used by default when a new independent project is created</string>
+        </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QRadioButton" name="rbNewPrMode">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
         <property name="toolTip">
          <string>Switch on to select elements and copy all related data from default database into new project</string>
         </property>
         <property name="text">
-         <string>&amp;Make an independent project</string>
+         <string>&amp;Make an independent project         </string>
         </property>
         <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2">
+      <item row="1" column="2">
        <widget class="QRadioButton" name="rbOldPrMode">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
         <property name="toolTip">
          <string>Switch on to select files from default database and link them to form a new project</string>
         </property>
         <property name="text">
-         <string>Make project with linked built-in TDB files</string>
+         <string>Make a project with &amp;linked built-in TDB files</string>
         </property>
        </widget>
       </item>
@@ -280,7 +273,7 @@
       <item row="0" column="2">
        <widget class="QLabel" name="TextLabel1_4">
         <property name="text">
-         <string>digits in 'real'</string>
+         <string>digits in 'real' numbers</string>
         </property>
         <property name="wordWrap">
          <bool>false</bool>
@@ -337,7 +330,7 @@
      <item>
       <widget class="QLabel" name="TextLabel1_3">
        <property name="text">
-        <string>Font in Data fields</string>
+        <string>Font in data fields</string>
        </property>
        <property name="wordWrap">
         <bool>false</bool>
