@@ -33,10 +33,11 @@ TReacDC::TReacDC( int nrt ):
         TCModule( nrt )
 {
     nQ =8;
-    aFldKeysHelp.Add("Phase state of new (reaction-defined) Dependent Component");
-    aFldKeysHelp.Add("Group to which Dependent Component belongs");
-    aFldKeysHelp.Add("Name of new Dependent Component");
-    aFldKeysHelp.Add("Name of thermodynamic data subset (e.g. database)");
+
+    aFldKeysHelp.Add("Phase state code of new Dependent Component { a g f p s l m c x y h }");
+    aFldKeysHelp.Add("ID of a group to which this new Dependent Component belongs");
+    aFldKeysHelp.Add("Name of this new reaction-defined Dependent Component (chemical species)");
+    aFldKeysHelp.Add("Thermodynamic data subset (TDS) code (e.g. database ID)");
 
     for(int i=1; i<nQ; i++)
     {
@@ -51,7 +52,7 @@ TReacDC::TReacDC( int nrt ):
 // link values to objects
 void TReacDC::ods_link( int q)
 {
-    ErrorIf( q >= nQ, GetName(), "E00RErem: Illegal link (q>=8)!" );
+    ErrorIf( q >= nQ, GetName(), "E00RErem: Invalid link (q>=8)!" );
 
     // static
     //aObj[ o_repst].SetPtr( rc[q].pstate );
@@ -125,7 +126,7 @@ void TReacDC::ods_link( int q)
 // set dynamic Objects ptr to values
 void TReacDC::dyn_set(int q)
 {
-    ErrorIf( rcp!=&rc[q], GetName(), "E01RErem: Illegal access to rc in dyn_set()");
+    ErrorIf( rcp!=&rc[q], GetName(), "E01RErem: Invalid access to rc in dyn_set()");
     memcpy( rcp->pstate, rt[nRT].UnpackKey(), RE_RKLEN );
     rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ].GetPtr();
     rc[q].rDC =   (char *)aObj[ o_rerdc ].GetPtr();
@@ -147,7 +148,7 @@ void TReacDC::dyn_set(int q)
 // free dynamic memory in objects and values
 void TReacDC::dyn_kill(int q)
 {
-    ErrorIf( rcp!=&rc[q], GetName(), "E02RErem: Illegal access to rc in dyn_kill()");
+    ErrorIf( rcp!=&rc[q], GetName(), "E02RErem: Invalid access to rc in dyn_kill()");
     rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ].Free();
     rc[q].rDC =   (char *)aObj[ o_rerdc ].Free();
     rc[q].scDC =  (double *)aObj[ o_rescdc ].Free();
@@ -176,7 +177,7 @@ void TReacDC::w_dyn_kill()
 // realloc dynamic memory
 void TReacDC::dyn_new(int q)
 {
-    ErrorIf( rcp!=&rc[q], GetName(), "E03RErem: Illegal access to rc in dyn_new()");
+    ErrorIf( rcp!=&rc[q], GetName(), "E03RErem: Invalid access to rc in dyn_new()");
     short nTp, nPp;
     ErrorIf( rc[q].nDC < 1, GetName(), "E04RErem: Number of DC in reaction is < 1" );
 
@@ -245,7 +246,7 @@ void TReacDC::w_dyn_new()
 //set default information
 void TReacDC::set_def( int q)
 {
-    ErrorIf( rcp!=&rc[q], GetName(), "E05RErem: Illegal access to rc in set_def()");
+    ErrorIf( rcp!=&rc[q], GetName(), "E05RErem: Invalid access to rc in set_def()");
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
 
     //memset( rc[q].pct, 0, sizeof( REACDC )-DC_RKLEN );
@@ -867,7 +868,7 @@ CALCULATE_DELTA_R:
         calc_exion_r( q, p );
         break;
     default:
-        {  /* Illegal code method of calculation?*/
+        {  /* Invalid code method of calculation?*/
             gstring msg = "W14RErun: Invalid CM method flag!";
             msg += dckey;
             msg += "'.\n Change the record?";
@@ -1798,13 +1799,30 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
 
     for(uint ii=0; ii<aDCkey.GetCount(); ii++ )
     {
-     if( !el_data.flags[cbAqueous_] &&
-         ( aDCkey[ii][0]== 'a' || aDCkey[ii][0]== 'x' ))
-       continue;
-     if( !el_data.flags[cbGaseous_] && aDCkey[ii][0] == 'g' )
-       continue;
-     if( !el_data.flags[cbSorption_] && aDCkey[ii][0] == 'c' )
-       continue;
+
+        // Phase Filters
+         if( !el_data.flags[cbAqueous_] && aDCkey[ii][0] == 'a' )
+           continue;
+         if( !el_data.flags[cbGaseous_] && ( aDCkey[ii][0] == 'g') )
+          continue;
+         if( !el_data.flags[cbFluid_] && ( aDCkey[ii][0] == 'f') )
+           continue;
+         if( !el_data.flags[cbPlasma_] && ( aDCkey[ii][0] == 'p') )
+         continue;
+         if( !el_data.flags[cbSolids_] && ( aDCkey[ii][0] == 's') )
+         continue;
+         //if( !el_data.flags[cbSindis_] && ( aDCkey[ii][0] == 'd') )
+         //   continue;
+         if( !el_data.flags[cbLiquid_] && ( aDCkey[ii][0] == 'l') )
+         continue;
+         if( !el_data.flags[cbSimelt_] && ( aDCkey[ii][0] == 'm') )
+         continue;
+         if( !el_data.flags[cbSorption_] && ( aDCkey[ii][0] == 'x' || aDCkey[ii][0] == 'c' ) )
+         continue;
+         if( !el_data.flags[cbPolyel_] && (aDCkey[ii][0] == 'y') )
+         continue;
+         if( !el_data.flags[cbHcarbl_] && ( aDCkey[ii][0] == 'h') )
+         continue;
 
      // test the same component (overload) 30/11/2006
      gstring stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);

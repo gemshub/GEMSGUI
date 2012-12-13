@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>599</width>
-    <height>510</height>
+    <width>659</width>
+    <height>520</height>
    </rect>
   </property>
   <property name="font">
@@ -20,6 +20,9 @@
   </property>
   <property name="windowTitle">
    <string>GEM-Selektor Proces</string>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
@@ -40,7 +43,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -59,7 +62,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 1 - Thermodynamic data tabulation (RTParm) configuration</string>
+          <string>Step 1 - Thermodynamic data tabulator (RTParm) configuration</string>
          </property>
         </widget>
        </item>
@@ -85,11 +88,11 @@
           <enum>QFrame::Plain</enum>
          </property>
          <property name="text">
-          <string>RTParm is a tool for tabulating/plotting thermodynamic data for a DC against temperature T and/or pressure P. The source data are taken from a 'parent' DComp or ReacDC record specified when this RTParm record was created.
+          <string>This is a tool for tabulating and plotting thermodynamic data against temperature T and/or pressure P. The input is taken from a DComp or ReacDC record specified in this RTParm record key.
 
-Upon re-calculation, thermodynamic properties of interest will be collected for each T,P as specified in the tExpr math script into arrays on the 'Tables' page. Then, the data can be plotted, exported into a text file, or copy-pasted into Excel or other spreadsheet program. 
+Upon calculation, results will be tabulated on the 'Tables' page, as specified in 'tExpr' math script. Results can be plotted, exported into text files, or copy-pasted to other programs. 
 
-A simple tExpr script can be created using the selection dialog on the next page of this wizard. A collection of example scripts is also provided under the 'Help' 'View Scripts...' menu command in the GtDemo window.</string>
+Simple 'tExpr' scripts can be created using a selection dialog on the next page of this wizard. Example scripts are also provided under 'Help' 'View Scripts...' menu command in the RTParm window.</string>
          </property>
          <property name="textFormat">
           <enum>Qt::AutoText</enum>
@@ -133,6 +136,9 @@ A simple tExpr script can be created using the selection dialog on the next page
               <property name="currentIndex">
                <number>2</number>
               </property>
+              <property name="maxCount">
+               <number>4</number>
+              </property>
               <item>
                <property name="text">
                 <string>0   Pairwise given T and P  </string>
@@ -140,12 +146,12 @@ A simple tExpr script can be created using the selection dialog on the next page
               </item>
               <item>
                <property name="text">
-                <string>1   P, then T increments</string>
+                <string>1   P then T increments</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>2   T, then P increments</string>
+                <string>2   T then P increments</string>
                </property>
               </item>
               <item>
@@ -158,7 +164,7 @@ A simple tExpr script can be created using the selection dialog on the next page
             <item>
              <widget class="QLabel" name="textLabel1_3">
               <property name="text">
-               <string>Select a Mode for  using  xP and xT arguments. Default mode: 2.</string>
+               <string>Select mode for iterating xP and xT arguments. Default mode: 2.</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignVCenter</set>
@@ -212,7 +218,7 @@ A simple tExpr script can be created using the selection dialog on the next page
              <item row="1" column="0">
               <widget class="QLabel" name="label_9">
                <property name="text">
-                <string>Min.</string>
+                <string>Minimal</string>
                </property>
               </widget>
              </item>
@@ -241,7 +247,7 @@ A simple tExpr script can be created using the selection dialog on the next page
              <item row="2" column="0">
               <widget class="QLabel" name="label_10">
                <property name="text">
-                <string>Max.</string>
+                <string>Maximal</string>
                </property>
               </widget>
              </item>
@@ -292,14 +298,14 @@ A simple tExpr script can be created using the selection dialog on the next page
                 <double>200.000000000000000</double>
                </property>
                <property name="value">
-                <double>5.000000000000000</double>
+                <double>25.000000000000000</double>
                </property>
               </widget>
              </item>
              <item row="4" column="0">
               <widget class="QLabel" name="TextLabel1_3">
                <property name="text">
-                <string>Number of points </string>
+                <string>Number of points</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignVCenter</set>
@@ -337,7 +343,7 @@ A simple tExpr script can be created using the selection dialog on the next page
              <item row="5" column="0" colspan="2">
               <widget class="QRadioButton" name="butT">
                <property name="text">
-                <string>Use as &amp;abscissa xT</string>
+                <string>Plot as &amp;abscissa xT</string>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -404,7 +410,7 @@ A simple tExpr script can be created using the selection dialog on the next page
              <item row="1" column="0">
               <widget class="QLabel" name="label_5">
                <property name="text">
-                <string>Min.</string>
+                <string>Minimal</string>
                </property>
               </widget>
              </item>
@@ -442,7 +448,7 @@ A simple tExpr script can be created using the selection dialog on the next page
              <item row="2" column="0">
               <widget class="QLabel" name="label_6">
                <property name="text">
-                <string>Max.</string>
+                <string>Maximal</string>
                </property>
               </widget>
              </item>
@@ -547,7 +553,7 @@ A simple tExpr script can be created using the selection dialog on the next page
              <item row="5" column="0" colspan="2">
               <widget class="QRadioButton" name="butP">
                <property name="text">
-                <string>Use as a&amp;bscissa xP </string>
+                <string>Plot as a&amp;bscissa xP </string>
                </property>
               </widget>
              </item>
@@ -587,7 +593,7 @@ A simple tExpr script can be created using the selection dialog on the next page
           </font>
          </property>
          <property name="text">
-          <string>Step 2 - Selection of items to sample (click 'Next' without selecting data to retain the old script)</string>
+          <string>Step 2 - Selection of items to sample (to retain the old script, just click 'Next &gt;')</string>
          </property>
         </widget>
        </item>
@@ -624,7 +630,7 @@ A simple tExpr script can be created using the selection dialog on the next page
        <item>
         <widget class="QGroupBox" name="groupBox_4">
          <property name="title">
-          <string>Setup of dimensions of data arrays</string>
+          <string>Setup of dimensions for data tabulation arrays</string>
          </property>
          <layout class="QGridLayout">
           <item row="0" column="0">
@@ -642,20 +648,21 @@ A simple tExpr script can be created using the selection dialog on the next page
              </size>
             </property>
             <property name="minimum">
-             <number>0</number>
+             <number>1</number>
             </property>
             <property name="maximum">
              <number>20</number>
             </property>
             <property name="value">
-             <number>0</number>
+             <number>1</number>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
            <widget class="QLabel" name="TextLabel2">
             <property name="text">
-             <string>Number of columns in the yF table (plot lines), 1 to 10. Default: 1. Number of rows (T-P pairs) in yF, xP, xT arrays will be set automatically.</string>
+             <string>Number of columns in the yF table (plot curves), 1 to 10. Default: 1. 
+Number of rows (T,P pairs) in yF, xP, xT arrays will be set automatically.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -690,7 +697,8 @@ A simple tExpr script can be created using the selection dialog on the next page
           <item row="1" column="1">
            <widget class="QLabel" name="TextLabel1_2_2">
             <property name="text">
-             <string>Optional: Number of rows in xTE, xPE, ytE arrays for experimental data. Default: 0 (not provided).</string>
+             <string>Optional: Number of rows in xTE, xPE, ytE arrays for experimental data. 
+Default: 0 (arrays not provided).</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -715,7 +723,7 @@ A simple tExpr script can be created using the selection dialog on the next page
              </size>
             </property>
             <property name="minimum">
-             <number>0</number>
+             <number>1</number>
             </property>
             <property name="maximum">
              <number>10</number>
@@ -728,7 +736,7 @@ A simple tExpr script can be created using the selection dialog on the next page
           <item row="2" column="1">
            <widget class="QLabel" name="TextLabel1_2_2_2">
             <property name="text">
-             <string>Optional: Number of columns in the ytE array for experimental data. Default: 1.</string>
+             <string>Optional: Number of columns in ytE array for experimental data. Default: 1.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -750,7 +758,7 @@ A simple tExpr script can be created using the selection dialog on the next page
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Codes that cannot be changed in this version of GEMS </string>
+          <string>These codes cannot be changed in this version of GEM-Selektor </string>
          </property>
          <layout class="QGridLayout" name="_2">
           <item row="0" column="0">
@@ -1022,7 +1030,7 @@ A simple tExpr script can be created using the selection dialog on the next page
           </font>
          </property>
          <property name="text">
-          <string>Step 4 - Useful hints</string>
+          <string>Step 4 - Workflow suggestions</string>
          </property>
         </widget>
        </item>
@@ -1092,13 +1100,13 @@ A simple tExpr script can be created using the selection dialog on the next page
           </sizepolicy>
          </property>
          <property name="title">
-          <string>What happens after you click &quot;Finish&quot;</string>
+          <string>After you click 'Finish':</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
            <widget class="QLabel" name="textLabel13">
             <property name="text">
-             <string>(1) RTParm arrays will be allocated; 'Scripts' page appears. Fill out 'RTname' and 'RTcom' lines. Edit the math script in 'tExpr'; field, if necessary. This script collects data from the objects visible on the 'TPwork'page and puts it into xT, xP and yF array elements. '</string>
+             <string>(1) RTParm arrays will be allocated; 'Scripts' page appears. Fill out 'RTname' and 'RTcom' lines. Edit the math script in 'tExpr'; field, if necessary. This script collects data from the objects visible on the 'TPwork' page and puts it into 'xT', 'xP' and 'yF' array elements.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -1124,7 +1132,7 @@ A simple tExpr script can be created using the selection dialog on the next page
           <item>
            <widget class="QLabel" name="textLabel14">
             <property name="text">
-             <string>(3) To plot experimental data over calculated results, close the graph dialog, type or paste the values into xTE, xPE and ytE arrays, open the plot again, and customise it, if necessary.</string>
+             <string>(3) To plot experimental data over calculated results, close the graph dialog, type or paste the values into 'xTE', 'xPE' and 'ytE' arrays, open the plot again, and customise it, if necessary.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>

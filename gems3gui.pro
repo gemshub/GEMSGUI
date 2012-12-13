@@ -20,12 +20,15 @@ QT += xml
 
 !win32 {
   DEFINES += __unix
-#  DEFINES += GEMS_RELEASE
+  CONFIG( release ) {
+    QMAKE_CFLAGS_RELEASE = -O3
+    QMAKE_CXXFLAGS_RELEASE = -O3
+  }
 }
 
 macx-g++ {
   DEFINES += __APPLE__
-macx:QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.6.sdk
+# macx:QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.6.sdk
   CONFIG -= warn_on
   CONFIG += warn_off
 }

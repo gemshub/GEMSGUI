@@ -19,10 +19,50 @@
 #ifndef _m_gem2mt_h_
 #define _m_gem2mt_h_
 
+
 #include "m_param.h"
+#include "particlearray.h"
+class TRWArrays;
+
+#ifndef IPMGEMPLUGIN
+
 #include "v_ipnc.h"
 #include "graph.h"
-#include "particlearray.h"
+
+#else
+// internal
+enum grr_constants { // gstring len for graph
+    MAXAXISNAME = 9,
+    MAXGSNAME = 70,
+    MAXGRNAME = 7
+};
+
+const unsigned int  MAXFORMULA =     81,
+                    V_SD_RKLEN = 32,
+                    V_SD_VALEN = 24;
+const int  MAXIDNAME = 12;
+const   int MAXFORMUNITDT=     40;
+
+enum pe_valind { /* index control */
+    START_, STOP_, STEP_
+};
+
+typedef enum {
+
+    GS_INDEF   = '0',
+    GS_GOING    = '1',
+    GS_DONE    = '2',
+    GS_ERR     = '3',
+
+    AS_INDEF   = '0',
+    AS_READY   = '1',
+    AS_RUN     = '2',
+    AS_DONE    = '3'
+
+
+} GS_AS_CLASSES;
+
+#endif
 
 const long int MT_RKLEN = 80,
                SIZE_HYDP = 7;
@@ -304,15 +344,20 @@ GEM2MT;
 // They are located in MULTI
 
 // Current GEM2MT
-class TGEM2MT : public TCModule
+class TGEM2MT
+#ifndef IPMGEMPLUGIN
+        : public TCModule
+#endif
 {
     GEM2MT mt[1];
 
+#ifndef IPMGEMPLUGIN
     IPNCalc rpn[2];      // IPN
 
     GraphWindow* gd_gr;
     TPlotLine* plot;
     gstring title;           // changed titler to title
+#endif
 
   TNodeArray* na;       // pointer to nodearray class instance
   TParticleArray* pa;       // pointer to TParticleArray class instance
@@ -324,7 +369,6 @@ class TGEM2MT : public TCModule
 protected:
 
     void AllocNa();
-    void FreeNa();
 
     void keyTest( const char *key );
     void Expr_analyze( int obj_num );
@@ -352,7 +396,8 @@ protected:
     void  freeNodeWork();
 
     void  CalcGraph();
-long int CheckPIAinNodes1D( char mode, long int start_node = 0, long int end_node = 1000 );
+    long int CheckPIAinNodes1D( char mode,
+              long int start_node = 0, long int end_node = 1000 );
 
      bool CalcIPM_Node( char mode, long int ii, FILE* diffile = NULL);
      bool  CalcIPM( char mode, long int start_node = 0,
@@ -402,9 +447,6 @@ long int CheckPIAinNodes1D( char mode, long int start_node = 0, long int end_nod
     void MIDEX( long int j, double t, double h );
     void INTEG( double eps, double& step, double t_begin, double t_end );
 
-    // for separate
-    void to_text_file( fstream& ff, bool with_comments );
-
     clock_t PrintPoint( long int nPoint, FILE* diffile = NULL, FILE* logfile = NULL, FILE* ph_file = NULL);
     
 public:
@@ -419,6 +461,8 @@ public:
     {
         return "GEM2MT";
     }
+
+#ifndef IPMGEMPLUGIN
 
     void ods_link( int i=0);
     void dyn_set( int i=0);
@@ -441,6 +485,32 @@ public:
 
    void InsertChanges( TIArray<CompItem>& aIComp,
           TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp );
+   void FreeNa();
+
+#else
+    ~TGEM2MT();
+
+    void set_def(int q);
+    void mem_kill(int q);
+    void mem_new(int q);
+
+  double Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
+        double R1, double Msys, double Mwat, double Vaq, double Maq, double Vsys );
+
+
+    // write/read gem2mt structure
+    int ReadTask( const char *gem2mt_in1, const char *vtk_dir );
+    int WriteTask( const char *unsp_in1 );
+
+    int MassTransInit( const char *lst_f_name, const char *dbr_lst_f_name );
+    void RecCalc( );
+
+#endif
+
+    // for separate
+    void checkAlws(TRWArrays&  prar1, TRWArrays&  prar);
+    void to_text_file( fstream& ff, bool with_comments, bool brief_mode, const char* path );
+    void from_text_file(fstream& ff);
 
     bool userCancel;
     bool stepWise;
@@ -472,5 +542,29 @@ enum gem2mt_inernal {
    MGP_TT_SOLID = '4'   // Total solid only (dialysis bags)
 
 };
+
+typedef enum {  /// Field index into outField structure
+     f_PvPGD=0,  f_PvFDL,  f_PvSFL,   f_PvGrid,  f_PvDDc,
+     f_PvDIc,  f_PvnVTK, f_PsMode,  f_PsSIA,  f_PsSdat,
+     f_PsSdef, f_PsScom,  f_PsMO,   f_PsVTK,   f_PsMPh,
+     f_nC, f_nIV,  f_nMGP,  f_nFD, f_nSFD,
+     f_nEl, f_nPTypes, f_nProps, f_Nsd, f_bTau,
+     f_ntM, f_nVTKfld, f_nPai, f_nTai, f_Lsf,
+     f_Nf, f_FIf, f_Tau, f_sizeLc,   f_InpSys,
+    f_Vsysb,  f_Mwatb,  f_Maqb,  f_Vaqb,  f_Pgb,
+    f_Tmolb,  f_WmCb,  f_Asur,  ff_tf,  ff_Vt,
+    ff_vp,  ff_eps,  ff_Km,  ff_al,  ff_Dif,
+    ff_nto, ff_cdv,  ff_cez, f_Name, f_Note,
+    f_mtWrkS, f_mtWrkF
+} GEM2MT_STATIC_FIELDS;
+
+typedef enum {  /// Field index into outField structure
+     f_SDref=0, f__SDval, f__DiCp, f__FDLi, f__xFlds,
+     f__mDDc,  f__mDIc,  f__mDEl,  f__HydP,   f__BSF,
+     f__MB,   f__dMB, f__FDLf,   f__PGT, f__nam_i,
+     f__for_e,   f__FDLid,  f__FDLop,  f__FDLmp,  f__MGPid,
+     f__UMGP,  f__mGrid,  f__NPmean,  f__nPmin,  f__nPmax,
+    f__ParTD
+} GEM2MT_DYNAMIC_FIELDS;
 
 #endif //_m_gem2mt_h_

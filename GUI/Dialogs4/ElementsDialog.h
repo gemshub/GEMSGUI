@@ -22,6 +22,7 @@
 
 #include <QDialog>
 #include <QButtonGroup>
+#include <QStandardItemModel>
 
 #include "ui_ElementsDialog4.h"
 #include "filters_data.h"
@@ -32,6 +33,7 @@ class ElementsDialog : public QDialog, public Ui::ElementsDialogData
     setFiltersData sf_data;
     elmWindowData  el_data;
     elmFilesConfData files_data;
+    TCStringArray selNames;  // names of selected grups of files
 
     Q_OBJECT
 
@@ -44,49 +46,57 @@ class ElementsDialog : public QDialog, public Ui::ElementsDialogData
     TCIntArray aBtmId1_sel;  // lists from template bgElem
     TCStringArray aICkey2_sel;  // lists from template bgOther
 
-    void EmptyData();
-    void ResetData();
-    void SetICompList();
-
-    // 0 no changed (no kernel, specifik or uncertain)
-    // 1 to open, 2 to close
+    // working with open files
     int  isOpenFile( gstring& name );
     void setFilesList();
     void resetFilesSelection();
     void openFilesSelection();
     void openFilesICOMP();
 
+    void setOpenFilesAsDefault();
+    void setTreeWidget();
+    void setSelectionTreeWidget();  // set up selection in wiget use selNames
+    void getSelectionTreeWidget();
+    void getTag( gstring tag, QStandardItem* pdb);
+    void setTag( gstring fname, QStandardItem* pdb);
+    void deleteTag( QString aTag, QStandardItem* pdb);
+
+    // working with elements buttoms
+    void EmptyData();
+    void ResetData();
+    void SetICompList();
     void SetData();
     void allSelected( TCStringArray& aICkeys );
-    void openFiles( TCStringArray& names );
+
     bool isAqueous() const ;
-    bool isGaseous() const ;
-    bool isSolids() const ;
-    bool isSolution() const ;
     bool isSorption() const ;
+
+    void 	resetNextButton();
+    void 	resetBackButton();
 
     QButtonGroup* bgElem;
     QButtonGroup* bgOther;
+    QStandardItem* pkern;
+    //FileNamesTreeModel* fileModel;
 
 protected slots:
+
     void CmHelp();
     void CmOk();
-//    void CmReset();
-//    void CmPrevious();
     void CmSetFilters();
-
+    void CmNext();
+    void CmBack();
+    void changeCheck( QStandardItem *item );
     void SetAqueous();
-    void SetGaseous();
-    void SetSolids();
-    void SetSolutions();
     void SetSorption();
+    void SetIsotopes();
+
     void SetFiles();
     virtual void languageChange();
     
-
 public:
 
-    ElementsDialog(QWidget* win, const char * prfName,
+    ElementsDialog(QWidget* win, const char * prfName, elmWindowData  data,
          const char* caption = 0 );
     virtual ~ElementsDialog();
 
@@ -94,6 +104,54 @@ public:
     const elmWindowData&   getData();
 
 };
+
+/*
+class TreeFileLine
+{
+public:
+
+    TreeFileLine(int aRow,gstring aTag, gstring aVer, TreeFileLine* aParent);
+    ~TreeFileLine();
+    void printTest();
+
+    int row;
+    gstring tag;
+    gstring ver;
+
+    TreeFileLine *parent;
+    QList<TreeFileLine *> children;
+};
+
+
+// class FileNamesTreeModel
+class FileNamesTreeModel: public QStandardItemModel
+{
+    Q_OBJECT
+
+  TCStringArray fnamesData;
+
+  TreeFileLine* rootNode;
+
+  TreeFileLine* lineFromIndex(const QModelIndex& index) const;
+
+public:
+
+  FileNamesTreeModel( TCStringArray aFilesData,   QObject* parent = 0 );
+  ~FileNamesTreeModel();
+
+  QModelIndex index(int row, int column, const QModelIndex& parent) const;
+  QModelIndex parent(const QModelIndex& child) const;
+  int rowCount ( const QModelIndex & parent ) const;     //ok
+  int columnCount ( const QModelIndex & parent  ) const; // ok
+  QVariant data ( const QModelIndex & index, int role ) const;
+  //bool setData ( const QModelIndex & index, const QVariant & value, int role );
+  QVariant headerData ( int section, Qt::Orientation orientation, int role ) const;
+  //Qt::ItemFlags flags ( const QModelIndex & index ) const;
+
+  void setupModelData(TCStringArray aFilesData);
+  void printTest();
+};
+*/
 
 #endif // ElementsDialog_included
 

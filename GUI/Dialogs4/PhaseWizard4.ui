@@ -59,7 +59,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 1 - Defining the Phase model</string>
+          <string>Step 1 - Defining the Phase and the Model of Mixing</string>
          </property>
         </widget>
        </item>
@@ -85,8 +85,7 @@
           <enum>QFrame::Plain</enum>
          </property>
          <property name="text">
-          <string>By setting the codes below, you will configure the Phase record and tell the program 
-what kind of mixed phase and non-ideality model should be used, and how it should be calculated.</string>
+        <string>Selection of the codes below will configure the Phase record and tell the program what kind of phase and which model of (non-ideal) mixing should be used, and how it should be calculated.</string>
          </property>
          <property name="textFormat">
           <enum>Qt::AutoText</enum>
@@ -115,6 +114,85 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
            <widget class="QLabel" name="ModelCodeLabel">
             <property name="text">
              <string>&amp;Select a mixing model for this phase:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignBottom</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>ModelCode</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+         <widget class="QComboBox" name="pPhPs_0">
+            <item>
+             <property name="text">
+              <string>a    Aqueous electrolyte solution</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>g    Gaseous or fluid non-electrolyte mixture</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>f     Fluid non-electrolyte mixture (ideal or non-ideal)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>p    Plasma (ionized gas mixture)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>l     Liquid non-electrolyte (melt), also multi-component</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>m   Magmatic silicate melt or other non-aqueous electrolyte</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>h    Liquid hydrocarbon phase, also multi-component</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>s     Condensed solid phase, also multi-component solid solution</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>d    Dispersed (particulate or porous) solid phase, also solid solution</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>x     Sorption phase in aqueous electrolyte</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_7">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="ModelCodeLabel">
+            <property name="text">
+             <string>&amp;Select a model of mixing for this phase:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignBottom</set>
@@ -307,7 +385,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
            <widget class="QComboBox" name="AC_modeCode">
             <item>
              <property name="text">
-              <string>I   Activity coefficients will be set to 1 (ideal, default)</string>
+              <string>I    Activity coefficients will be set to 1 (pure phase, simple ideal mixing), default</string>
              </property>
             </item>
             <item>
@@ -360,7 +438,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
           <item>
            <widget class="QLabel" name="PhEqModeLabel">
             <property name="text">
-             <string>Select a mode of execution of &amp;PhEq user-defined script for the mixture:</string>
+             <string>Select a mode of execution of &amp;PhEq user-defined script for the whole phase:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignBottom</set>
@@ -412,7 +490,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
            <widget class="QComboBox" name="DcEqLinkMode">
             <item>
              <property name="text">
-              <string>N   No DcEq script will be provided (built-in or ideal model) (default)</string>
+              <string>N   No DcEq script will be provided (pure phase, built-in or ideal model), default</string>
              </property>
             </item>
             <item>
@@ -447,7 +525,12 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
            <widget class="QComboBox" name="SCM_code">
             <item>
              <property name="text">
-              <string>N   Basic Van der Waals mixing rules in cubic EoS models (default)</string>
+         <string>N   Default mixing rule or form of interaction parameter coefficients  </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>W   Basic Van der Waals mixing rules in cubic EoS models</string>
              </property>
             </item>
             <item>
@@ -459,7 +542,20 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
              <property name="text">
               <string>T   Temperature-dependent one-term binary interaction parameter kij</string>
              </property>
+            </item>            
+            <item>
+             <property name="text">
+              <string>5     Five-term Pitzer model parameter temperature dependence</string>
+             </property>
             </item>
+            <item>
+             <property name="text">
+              <string>6     Six-term Pitzer model parameter temperature dependence</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>8    Eight-term Pitzer model parameters temperature dependence</string>
            </widget>
           </item>
          </layout>
@@ -525,7 +621,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
           </font>
          </property>
          <property name="text">
-          <string>Step 2 - Phase and solution model settings</string>
+          <string>Step 2 - Phase Model-Specific Settings</string>
          </property>
         </widget>
        </item>
@@ -1246,7 +1342,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
           <item>
            <widget class="QCheckBox" name="getDCC">
             <property name="text">
-             <string>Extract parameters from DComp/ReacDC records and refresh DC class codes?</string>
+             <string>Extract parameters from DComp/ReacDC records and refresh DC class codes upon 'Calculate'?</string>
             </property>
            </widget>
           </item>
@@ -1262,7 +1358,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
           <item>
            <widget class="QLabel" name="textLabel13">
             <property name="text">
-             <string>(1) The program will display a list of available ReacDC records; mark those to be the phase components (end-members). Proceed with selection of other components from the list of DComp records. At least one species (for a pure phase; two for a solution phase) must be marked.</string>
+             <string>(1) A list of available ReacDC ('r') and DComp ('d') records will appear; mark those to be the phase components (end-members). At least one species for a pure phase, or two for a solution phase must be marked.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -1275,7 +1371,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
           <item>
            <widget class="QLabel" name="textLabel12">
             <property name="text">
-             <string>(2) In Page 1, fill out PhName and PhNote lines. You may need to enter numbers in DisPar array, DcEq and/or PhEq math scripts, or numbers in ipxT, ph_cf, dc_cf arrays on Pages 2 and 3.</string>
+             <string>(2) In Phase window, fill out PhName and PhNote comments. Depending on setup, enter numbers in DisPar, text in DcEq and/or PhEq, parameter coefficients in ipxT, ph_cf, dc_cf arrays on Phase window pages.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -1288,7 +1384,7 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
           <item>
            <widget class="QLabel" name="textLabel14">
             <property name="text">
-             <string>(3) Click on the 'Calculate' toolbar button: necessary data and codes will be collected from ReacDC and/or DComp records. Check the PhDCC column on Page 1 and enter there correct codes (e.g. T for H+; W for H2O-solvent). In the case of sorption phase, fill out data objects on Pages 1 and 3. Save the Phase record to database.</string>
+             <string>(3) Click on 'Calculate' toolbar button, then look at the PhDCC column; correct DC codes, if needed ('T' for H+; 'W' for H2O-solvent; 'M','J',or 'I' for solid-solution end members). Save Phase record to project database.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -1391,6 +1487,9 @@ what kind of mixed phase and non-ideality model should be used, and how it shoul
   <tabstop>spinBox_ph_cf_N</tabstop>
   <tabstop>spinBox_ph_px_M</tabstop>
   <tabstop>spinBox_ph_cf_M</tabstop>
+  <tabstop>checkBoxSorption</tabstop>
+  <tabstop>spinBox_SurTypes_N</tabstop>
+  <tabstop>lineEdit_surfArea</tabstop>
   <tabstop>spinBoxSDrefLnk</tabstop>
   <tabstop>pHelp</tabstop>
   <tabstop>pBack</tabstop>

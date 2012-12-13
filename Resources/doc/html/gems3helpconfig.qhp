@@ -79,6 +79,7 @@
         <file>g_mscript.html</file>
         <file>g_useref.html</file>
         <file>gems3k-about.html</file>
+        <file>gems3k-index.html</file>
         <file>gems3k-iofiles.html</file>
         <file>gems3k-manual.html</file>
         <file>gems3k-nodearray.html</file>
@@ -134,8 +135,16 @@
         <file>theory_uns.html</file>
         <file>BCC_wrn.png</file>
         <file>CalculateGEMIcon24.png</file>
+        <file>Compos-PCO-Page1.png</file>
+        <file>Compos-Record-Key.png</file>
+        <file>ComposSettingsPage1.png</file>
+        <file>DComp-Page2-Cp-FT-Hem.png</file>
+        <file>DComp-Page2-HKF-sulfate-ion.png</file>
+        <file>DComp-Record-Key.png</file>
         <file>DatabaseModeIcon24.png</file>
-        <file>ElementsDialog-Options.png</file>
+        <file>Default-GEMIPM3-Num-Controls.png</file>
+        <file>ElementsWizardStep1.png</file>
+        <file>ElementsWizardStep2.png</file>
         <file>EquilibriaCalculationModeToolbarFragment.png</file>
         <file>EquilibriumModeIcon24.png</file>
         <file>Filesave.png</file>
@@ -146,7 +155,7 @@
         <file>Help.png</file>
         <file>MissingICsConflictWarning.png</file>
         <file>Pitzer_Phase_page3.png</file>
-        <file>PrefDialog.jpg</file>
+        <file>PreferencesDialog.png</file>
         <file>ProcessRecordKeyDialog1.png</file>
         <file>ProcessWizardStep2IteratorsTmode1.png</file>
         <file>ProcessWizardStepIteratorsGmode1.png</file>
@@ -159,9 +168,12 @@
         <file>ProcessWizardStepIteratorsPmode7.png</file>
         <file>ProjectWindowControlsPage.png</file>
         <file>RKeyFieldsDialog-NewSysEq.png</file>
+        <file>RTParmWizard-ItemsSelectionStep.png</file>
         <file>RunBCC.png</file>
         <file>RunIPM.png</file>
         <file>SIT-Phase-page3.png</file>
+        <file>Screen-Calcite-Col-BC-0000.png</file>
+        <file>Screen-Calcite-Column-0001.png</file>
         <file>SetCompos.png</file>
         <file>SetProjectKey.png</file>
         <file>SetSystemKey.png</file>
@@ -170,6 +182,8 @@
         <file>SetupWritingGEMS3KfilesPage2pairs.png</file>
         <file>ShowHelpWindowIcon24.png</file>
         <file>TabRightClickMenu.png</file>
+        <file>TsolMod-EU-example-dc_cf-page.png</file>
+        <file>TsolMod-EU-example-ph_cf-page.png</file>
         <file>WhichAqModel.png</file>
         <file>WhichGasModel.png</file>
         <file>arrow_left1.png</file>
@@ -542,6 +556,7 @@
         <keyword name="Masses_5" ref="gems_bcc.html#Masses_5"/>
         <keyword name="MbXs" ref="gems_bcc.html#MbXs"/>
         <keyword name="Mbx" ref="gems_sys.html#Mbx"/>
+        <keyword name="MoiSN" ref="gems_sys.html#MoiSN"/>
         <keyword name="MsDt_0" ref="gm_phase.html#MsDt_0"/>
         <keyword name="MsDt_1" ref="gm_phase.html#MsDt_1"/>
         <keyword name="N_" ref="gems_bcc.html#N_"/>
@@ -1059,6 +1074,7 @@
         <keyword name="_pun_1" ref="gems_sys.html#_pun_1"/>
         <keyword name="_pun_2" ref="gems_sys.html#_pun_2"/>
         <keyword name="_pun_3" ref="gems_sys.html#_pun_3"/>
+        <keyword name="aE" ref="gm_phase.html#aE"/>
         <keyword name="a_dST" ref="gm_reacdc.html#a_dST"/>
         <keyword name="a_dST_0" ref="gm_reacdc.html#a_dST_0"/>
         <keyword name="a_dST_1" ref="gm_reacdc.html#a_dST_1"/>
@@ -1183,6 +1199,7 @@
         <keyword name="chi" ref="gm_gem2mt.html#chi"/>
         <keyword name="chi" ref="gm_dualth.html#chi"/>
         <keyword name="cp0" ref="gems_sys.html#cp0"/>
+        <keyword name="cpE" ref="gm_phase.html#cpE"/>
         <keyword name="cpH" ref="gm_proces.html#cpH"/>
         <keyword name="cpXi" ref="gm_proces.html#cpXi"/>
         <keyword name="cpe" ref="gm_proces.html#cpe"/>
@@ -1336,6 +1353,7 @@
         <keyword name="gDQF" ref="gm_phase.html#gDQF"/>
         <keyword name="gDimEf" ref="gm_gtdemo.html#gDimEf"/>
         <keyword name="gDimXY" ref="gm_gtdemo.html#gDimXY"/>
+        <keyword name="gE" ref="gm_phase.html#gE"/>
         <keyword name="gEx_" ref="gems_bcc.html#gEx_"/>
         <keyword name="gExpr" ref="gm_gtdemo.html#gExpr"/>
         <keyword name="gExprE" ref="gm_gtdemo.html#gExprE"/>
@@ -1367,6 +1385,7 @@
         <keyword name="gwTab" ref="gm_gtdemo.html#gwTab"/>
         <keyword name="gwTxt" ref="gm_gtdemo.html#gwTxt"/>
         <keyword name="h0" ref="gems_sys.html#h0"/>
+        <keyword name="hE" ref="gm_phase.html#hE"/>
         <keyword name="hTP" ref="gems_systd.html#hTP"/>
         <keyword name="hTPuns" ref="gems_systd.html#hTPuns"/>
         <keyword name="hym" ref="gems_sys.html#hym"/>
@@ -1651,6 +1670,7 @@
         <keyword name="rtSDvl" ref="gm_rtparm.html#rtSDvl"/>
         <keyword name="rtSize_0" ref="gm_rtparm.html#rtSize_0"/>
         <keyword name="s0" ref="gems_sys.html#s0"/>
+        <keyword name="sE" ref="gm_phase.html#sE"/>
         <keyword name="sati_0" ref="gems_scm.html#sati_0"/>
         <keyword name="sati_1" ref="gems_scm.html#sati_1"/>
         <keyword name="sdpar" ref="gm_gem2mt.html#sdpar"/>
@@ -1856,6 +1876,7 @@
         <keyword name="uDimSc_1" ref="gm_unspace.html#uDimSc_1"/>
         <keyword name="uDimXY_0" ref="gm_unspace.html#uDimXY_0"/>
         <keyword name="uDimXY_1" ref="gm_unspace.html#uDimXY_1"/>
+        <keyword name="uE" ref="gm_phase.html#uE"/>
         <keyword name="uEQkey" ref="gm_unspace.html#uEQkey"/>
         <keyword name="uFugc" ref="gm_unspace.html#uFugc"/>
         <keyword name="uG_Exp" ref="gm_unspace.html#uG_Exp"/>
@@ -1968,6 +1989,7 @@
         <keyword name="upHc_2" ref="gm_unspace.html#upHc_2"/>
         <keyword name="upSize" ref="gm_unspace.html#upSize"/>
         <keyword name="v" ref="gems_sys.html#v"/>
+        <keyword name="vE" ref="gm_phase.html#vE"/>
         <keyword name="vEx" ref="gems_sys.html#vEx"/>
         <keyword name="vKin" ref="gm_proces.html#vKin"/>
         <keyword name="vNV" ref="gm_proces.html#vNV"/>

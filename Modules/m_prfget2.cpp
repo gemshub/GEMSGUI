@@ -87,9 +87,10 @@ void TProfil::Push( TIArray<CompItem>& aList, int aLine,
        else stt += " record to be inserted into project database. Action?";
 
        switch( vfQuestion3(window(), dbKeywd, stt.c_str(),
-              "&Do it", "Do it for &All", "&Skip it" ))
+              "&Do it", "Do it for &All", "&Cancel" ))
        {
        case VF3_3:   // Skip: now skipping, as the user wants
+                    Error( dbKeywd, "Comparison error!" );
                     break;
        case VF3_2:  // Do it for all
                     comp_change_all = true;
@@ -99,14 +100,6 @@ void TProfil::Push( TIArray<CompItem>& aList, int aLine,
    }
    else
        aList.Add( new CompItem( aLine, aDelta));
- //     {
- //    case VF3_3:
- //          Error( dbKeywd, "Comparison error!" );
- //    case VF3_2:
- //               comp_change_all = true;
- //    case VF3_1:   ;
- //    }
- //   aList.Add( new CompItem( aLine, aDelta));
 }
 
 
@@ -384,7 +377,6 @@ void TProfil::TestChangeProfile()
          aMT->InsertChanges( aIComp, aPhase, aDComp  );
          aMT->RecSave( aList[i].c_str(), true );
        }
-
     }
 
     aList.Clear();
@@ -650,12 +642,22 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
    TCIntArray    ICcnt;
    rt[RT_PHASE].GetKeyList( "*:*:*:*:*:", PHkeys, ICcnt );
 
+
+   // get template project configuration
+   if( internalBufer )
+      elm_data.aSelNames =  internalBufer;
+
 //    TCStringArray dbNames;
 //    bool aAqueous, aGaseous, aSorption;
 //    if( !vfElements(window(), prfName, ICkeys,
 //            dbNames, aAqueous, aGaseous, aSorption ))
     if( !vfElements(pVisorImp/*window()*/, prfName, elm_data, sf_data ))
       return false;
+
+// save built-in default configuration
+     internalBufer = (char *)aObj[ o_sptext].Alloc( 1, elm_data.aSelNames.length()+10, S_);
+     aObj[o_sptext].SetString( elm_data.aSelNames.c_str(),0,0);
+
 
 //    elm_data.flNames.Add(prfName);
     pVisor->Message( 0, "Loading Modelling Project",

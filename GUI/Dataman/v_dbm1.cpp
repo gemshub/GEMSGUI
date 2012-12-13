@@ -295,7 +295,7 @@ TDBFile::v_PDBtry( GemDataStream& fdb )
     getHead( fdb );
     // check version
     //  if( strncmp( dh->VerP, TFile::VV(), 8 ))
-    //      Error( GetPath(), "Illegal version in PDB file.");
+    //      Error( GetPath(), "Invalid version in PDB file.");
     fdb.seekg(0l, ios::end);
     FPosFree = fdb.tellg();
 }
@@ -611,13 +611,13 @@ TDBKey::SetKey( const char *key )
         unpack( sp );
     else
         pack( sp );
-}
+ }
 
 // Change i-th field of DBkey to key
 void
 TDBKey::SetFldKey( int i, const char *key )
 {
-    ErrorIf( i>= rkFlds, key, "Illegal key field number");
+    ErrorIf( i>= rkFlds, key, "Invalid key field number");
 
     memset( uKey+rkInd[i], ' ' , rkLen[i] );
     strncpy( uKey+rkInd[i], key, rkLen[i] );
@@ -647,7 +647,7 @@ TDBKey::unpack( char *key )
                 if( strncmp( sp, S_ANY, 1 ))
                 {
                     ln = strlen( sp );
-                    ErrorIf( ln==0, key, "Illegal packed record key.");
+                    ErrorIf( ln==0, key, "Invalid packed record key.");
                 }
                 else
                 { // end '*'
@@ -692,7 +692,7 @@ TDBKey::unpack( char *key )
                 if( strncmp( sp, S_ANY, 1 ))
                 {
                     ln = strlen( sp );
-                    ErrorIf( ln==0, key, "Illegal packed record key.");
+                    ErrorIf( ln==0, key, "Invalid packed record key.");
                 }
                 else
                 { // end '*'
@@ -872,7 +872,7 @@ void
 TDBKeyList::check_i(int i)
 {
     if( i<0||i>recInDB )
-        Error( "TDBMKeyList","Illegal record index in the chain.");
+        Error( "TDBMKeyList","Invalid record index in the chain.");
 }
 
 //initialization of DB keys list state
@@ -1083,7 +1083,7 @@ TDBKeyList::GetKeyList_i(int nF, int nRec, GemDataStream& f)
         int indRec = addndx( nF, re_.len, key);
         re[indRec].pos = re_.pos;
     }
-
+    SetKey(ALLKEY); // bugfix: current key for not readed record
     ErrorIf( !f.good(), "TDBKeyList", "Index file read error.");
 }
 

@@ -101,12 +101,12 @@ void TDualTh::keyTest( const char *key )
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
-            Error( key, "E08PErem: Illegal record key (another Modelling Project)!");
+            Error( key, "E08PErem: Invalid record key (another Modelling Project)!");
         rt[RT_SYSEQ].MakeKey( RT_DUALTH, pkey, RT_DUALTH, 0, RT_DUALTH, 1,
                                RT_DUALTH, 2, RT_DUALTH, 3, RT_DUALTH, 4,
                                RT_DUALTH, 5, RT_DUALTH, 6, RT_DUALTH, 7, K_END);
         if( rt[RT_SYSEQ].Find(pkey) <0 )
-            Error( key, "E07PErem: Illegal record key (no system)!");
+            Error( key, "E07PErem: Invalid record key (no system)!");
     }
 }
 
@@ -261,7 +261,7 @@ void TDualTh::ods_link( int q)
 void TDualTh::dyn_set(int q)
 {
     ErrorIf( dtp!=&dt[q], GetName(),
-      "E06DTrem: Illegal access to dt in dyn_set");
+      "E06DTrem: Invalid access to dt in dyn_set");
 // dynamic
     dtp->Bb = (double *)aObj[ o_dtbb ].GetPtr();
     dtp->Bn = (double *)aObj[ o_dtbn ].GetPtr();
@@ -333,7 +333,7 @@ void TDualTh::dyn_set(int q)
 void TDualTh::dyn_kill(int q)
 {
     ErrorIf( dtp!=&dt[q], GetName(),
-       "E05DTrem: Illegal access to dt in dyn_kill");
+       "E05DTrem: Invalid access to dt in dyn_kill");
 // dynamic
     dtp->Bb = (double *)aObj[ o_dtbb ].Free();
     dtp->Bn = (double *)aObj[ o_dtbn ].Free();
@@ -428,7 +428,7 @@ void TDualTh::lmfit_new()
 void TDualTh::dyn_new(int q)
 {
     ErrorIf( dtp!=&dt[q], GetName(),
-      "E04DTrem: Illegal access to dt in dyn_new.");
+      "E04DTrem: Invalid access to dt in dyn_new.");
 
 // dynamic
     dtp->Bb = (double *)aObj[ o_dtbb ].Alloc( dtp->nQ, dtp->Nb, D_ );
@@ -579,7 +579,7 @@ lmfit_new();
 void TDualTh::set_def( int q)
 {
     ErrorIf( dtp!=&dt[q], GetName(),
-        "E03DTrem: Illegal access to dt in set_def");
+        "E03DTrem: Invalid access to dt in set_def");
 
     TProfil *aPa= TProfil::pm;
 

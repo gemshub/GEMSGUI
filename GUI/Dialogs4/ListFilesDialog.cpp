@@ -33,7 +33,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
     setupUi(this);
 
     //setWindowTitle(prfName);
-    gstring label = "Please, check files linked to Modelling project ";
+    gstring label = "Please, check database files to be linked to Modeling Project ";
              label += prfName;
     pLabel->setText( tr(label.c_str()) );
 
@@ -47,7 +47,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
     QTreeWidgetItem* pdb = new QTreeWidgetItem( pListFiles );
     pdb->setText(0,"Database");
     pkern = new QTreeWidgetItem( pdb );
-    pkern->setText(0,"Kernel" );
+    pkern->setText(0,"Built-in" );
     pprf = new QTreeWidgetItem( pdb );
     pprf->setText(0,prfName );
 

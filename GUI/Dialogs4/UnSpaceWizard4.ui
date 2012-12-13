@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>624</width>
+    <width>644</width>
     <height>631</height>
    </rect>
   </property>
@@ -20,6 +20,9 @@
   </property>
   <property name="windowTitle">
    <string>GEM-Selektor Proces</string>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0">

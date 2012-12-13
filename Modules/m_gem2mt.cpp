@@ -726,118 +726,6 @@ bool TGEM2MT::check_input( const char * /*key*/, int /*Level*/ )
 }
 
 
-//set default information
-void TGEM2MT::set_def(int q)
-{
-    ErrorIf( mtp!=&mt[q], GetName(),
-        "E03GTrem: Attempt to access corrupted dynamic memory.");
-
-//    TProfil *aPa= TProfil::pm;
-    memcpy( &mtp->PunE, "jjbC", 4 );
-    memcpy( &mtp->PvICi, "++------------S00--+-++-----", 28 );
-    strcpy( mtp->name,  "`" );
-    strcpy( mtp->notes, "`" );
-    strcpy( mtp->xNames, "X" );
-    strcpy( mtp->yNames, "Y" );
-    memset( &mtp->nC, 0, sizeof(long int)*32 );
-    memset( &mtp->Msysb, 0, sizeof(double)*20 );
-    memset( mtp->size[0], 0, sizeof(float)*8 );
-    memset( mtp->sizeLc, 0, sizeof(double)*3 );
-    memset( mtp->sykey, 0, sizeof(char)*(EQ_RKLEN+10) );
-    mtp->nC = 21;
-    mtp->nIV =2;
-    mtp->ntM =1000;
-    mtp->cdv = 1e-9;
-    mtp->cez = 1e-12; 
-    mtp->nYS =0;
-    mtp->nYE =1;
-    mtp->nPai =1;
-    mtp->nTai =1;
-    mtp->tmi[START_] = 1000;
-    mtp->tmi[STOP_] = 1200;
-    mtp->tmi[STEP_] = 1;
-    mtp->NVi[START_] = 0;
-    mtp->NVi[STOP_] = 0;
-    mtp->NVi[STEP_] = 0;
-    mtp->Pai[START_] = 1.;
-    mtp->Pai[STOP_] = 1.;
-    mtp->Pai[STEP_] = 0.;
-    mtp->Pai[3] = .5;      //Ptol
-    mtp->Tai[START_] = 25.;
-    mtp->Tai[STOP_] = 25.;
-    mtp->Tai[STEP_] = 0.;
-    mtp->Tai[3] = 1.;     //Ttol
-    mtp->Tau[START_] = 0.;
-    mtp->Tau[STOP_] = 1000.;
-    mtp->Tau[STEP_] = 1.;
-// pointers
-    mtp->lNam = NULL;
-    mtp->lNamE = NULL;
-    mtp->tExpr = 0;
-    mtp->gExpr = 0;
-    mtp->sdref = 0;
-    mtp->sdval = 0;
-    mtp->DiCp = 0;
-    mtp->FDLi = 0;
-    mtp->PTVm = 0;
-    mtp->StaP = 0;
-    mtp->xVTKfld = 0;
-    mtp->xEt = 0;
-    mtp->yEt = 0;
-    mtp->Bn = 0;
-    mtp->HydP = 0;
-    mtp->qpi = 0;
-    mtp->qpc = 0;
-    mtp->xt = 0;
-    mtp->yt = 0;
-    mtp->CIb = 0;
-    mtp->CAb = 0;
-    mtp->FDLf = 0;
-    mtp->PGT = 0;
-    mtp->Tval = 0;
-    mtp->Pval = 0;
-    mtp->nam_i = 0;
-    mtp->for_i = 0;
-    mtp->stld = 0;
-    mtp->CIclb = 0;
-    mtp->AUcln = 0;
-    mtp->FDLid = 0;
-    mtp->FDLop = 0;
-    mtp->FDLmp = 0;
-    mtp->MGPid = 0;
-    mtp->UMGP = 0;
-    mtp->SBM = 0;
-    plot = 0;
-    mtp->BSF = 0;
-    mtp->MB = 0;
-    mtp->dMB = 0;
-    mtp->DDc = 0;
-    mtp->DIc = 0;
-    mtp->DEl = 0;
-    mtp->for_e = 0;
-    mtp->xIC = 0;
-    mtp->xDC = 0;
-    mtp->xPH = 0;
-    mtp->grid = 0;
-    mtp->NPmean = 0;
-    mtp->nPmin = 0;
-    mtp->nPmax = 0;
-    mtp->ParTD = 0;
-    mtp->arr1 = 0;
-    mtp->arr2 = 0;
-
-// work
-    mtp->An = 0;
-    mtp->Ae = 0;
-    mtp->gfc = 0;
-    mtp->yfb = 0;
-    mtp->tt = 0;
-    mtp->etext = 0;
-    mtp->tprn = 0;
-    na = 0;
-    pa = 0;
-}
-
 // Input nessasery data and links objects
 void TGEM2MT::RecInput( const char *key )
 {
@@ -854,6 +742,29 @@ TGEM2MT::MakeQuery()
     const char * p_key;
     char flgs[32];
     int size[20];
+
+    // set up for mathscripts
+    double Tai[4], Pai[4];
+
+    Tai[0] = Tai[1] = TMulti::sm->GetPM()->TCc;
+    Pai[0] = Pai[1] = TMulti::sm->GetPM()->Pc;
+    Tai[2] = Pai[2] = 0.;
+    Tai[3] = Pai[3] = 0.1;
+
+    FreeNa();
+    na = new TNodeArray( 1, TMulti::sm->GetPM() );
+    // realloc and setup data for dataCH and DataBr structures
+    na->MakeNodeStructures( 0, true , Tai, Pai  );
+
+    // setup dataBR and NodeT0 data
+    //na->packDataBr();
+    na->MoveWorkNodeToArray( 0, 1, na->pNodT0() );
+    na->CopyNodeFromTo( 0, 1, na->pNodT0(), na->pNodT1() );
+
+    allocNodeWork();
+    LinkCSD(0);
+    LinkNode0(0);
+    LinkNode1(0);
 
     p_key  = db->PackKey();
     memcpy( flgs, &mtp->PunE, 32);
@@ -974,7 +885,7 @@ TGEM2MT::RecBuild( const char *key, int mode )
 
     bool setdef = false;
 
-    // set up for mathscripts
+    /* set up for mathscripts
     double Tai[4], Pai[4];
 
     FreeNa();
@@ -991,7 +902,7 @@ TGEM2MT::RecBuild( const char *key, int mode )
     LinkCSD(0);
     LinkNode0(0);
     LinkNode1(0);
-
+ */
 AGAIN:
     int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL )
@@ -1097,18 +1008,23 @@ TGEM2MT::RecCalc( const char * key )
    }
    else
    {
-     gstring f_name;
+       gstring lst_f_name;
+       gstring dbr_lst_f_name;
      if( mtp->notes[0] == '@' )
-        f_name = gstring( mtp->notes, 1, MAXFORMULA-1 );
-     // open file to read
+     {   lst_f_name = gstring( mtp->notes, 1, MAXFORMULA-1 );
+         dbr_lst_f_name = lst_f_name;
+         dbr_lst_f_name = dbr_lst_f_name.replace("-dat","-dbr");
+      } // open file to read
      else
-       if( vfChooseFileOpen(window(), f_name,
+     {  if( vfChooseFileOpen(window(), lst_f_name,
           "Please, edit the GEMS3K filelist name", "*.lst" ) == false )
-       {       //FreeNa();
-               return;
-       }
+            return;
+        if( vfChooseFileOpen(window(), dbr_lst_f_name,
+                   "Please, edit the GEMS3K filelist name", "*.lst" ) == false )
+             return;
+      }
      //TMulti::sm->Free_TSolMod();
-     na->GEM_init( f_name.c_str(), 0, true );
+     na->GEM_init( lst_f_name.c_str(), dbr_lst_f_name.c_str(), 0, true );
      CalcIPM( NEED_GEM_AIA, 0, mtp->nC, 0 );
      if( mtp->PsMode == RMT_MODE_W  )
      {
@@ -1189,24 +1105,6 @@ TGEM2MT::RecCalc( const char * key )
   }
 }
 
-
-//internal calc record structure
-bool TGEM2MT::internalCalc()
-{
-     bool iRet = 0;
-     calcFinished = false;
-
-     if( mtp->PsMode == RMT_MODE_B ) // Flux-box RMT scoping model
-       iRet = CalcBoxFluxModel( NEED_GEM_SIA );
-     else  if( mtp->PsMode == RMT_MODE_S )
-                iRet = CalcSeqReacModel( NEED_GEM_SIA );
-          else
-             iRet =  Trans1D( NEED_GEM_SIA );  // here A,W,D and also F modes
-
-    calcFinished = true;
-    return iRet;
-}
-
 void TGEM2MT::savePoint( )
 {
     // canceled calculations
@@ -1250,9 +1148,10 @@ void TGEM2MT::RecordPrint( const char* key )
 		        if( !vfQuestion( window(), filename.c_str(),
 		        		"This file exists! Overwrite?") )
                    return;
+            //mtp->PsScom=S_OFF;
             fstream ff( filename.c_str(), ios::out );
 	        ErrorIf( !ff.good() , filename.c_str(), "Fileopen error");
-	        to_text_file( ff, true );
+            to_text_file( ff,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF, filename.c_str() );
 
 		}
     na = new TNodeArray( mtp->nC, TMulti::sm->GetPM() );

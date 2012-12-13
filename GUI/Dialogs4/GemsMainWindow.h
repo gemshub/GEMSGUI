@@ -343,7 +343,7 @@ public slots:
 
 // Top level dialog
 
-    bool SetProfileMode();
+    bool SetProfileMode( const char * profileKey = 0);
     bool SetGeneralMode();
     void CmHelpAbout();
     void CmHelpAuthors();
@@ -387,6 +387,7 @@ private slots:
 
  // main window fields
     int currentNrt;
+    bool settedCureentKeyIntotbKeys;
     //QIcon iconDatabase;
     //QIcon iconSystem;
 

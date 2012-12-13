@@ -1,394 +1,669 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-  <meta http-equiv="Content-Type"
- content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR"
- content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
-  <title>GEMS3 Installation and Setup</title>
-  <meta name="description" content="Version 2.0.0-PSI">
-</head>
-<body>
-<h1><img src="gems1.png" align="left" height="48" width="48"> <font
- color="#000066"> GEM-Selektor version 3<br>
-</font></h1>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+  
+<title>GEMS3 Installation and Setup</title>
+
+</head><body>
+<h1><img src="gems1.png" height="48" align="left" width="48"> GEM-Selektor version 3
+</h1>
+
 <p> </p>
-<h2><font face="Helvetica, Arial, sans-serif"> Installation,
-Configuration and Setup<br>
+
+<h2><font face="Helvetica, Arial, sans-serif"> </font>Installation,
+Configuration and Setup<font face="Helvetica, Arial, sans-serif"><br>
 </font></h2>
-<font face="Helvetica, Arial, sans-serif">(Under construction)</font>
+
 <hr size="2" width="100%">
 <h3>Contents</h3>
+
 <ul>
+
+
   <li>
-    <p><font face="Helvetica, Arial, sans-serif"><a href="#INSTALL_W32">Installing
-GEMS under Win32</a></font></p>
+    <p><a href="#INSTALL_W32">Installing
+and launching GEMS3 on Windows XP/7/8</a></p>
+    <p><a href="#INSTALL_W32"> </a><a href="#INSTALL_MACOSX">Installing
+and launching GEMS3 on Mac OS X </a></p>
   </li>
   <li>
-    <p><font face="Helvetica, Arial, sans-serif"><a
- href="#INSTALL_LINUX">Installing GEMS under Linux&nbsp;</a></font></p>
+    <p><a href="#INSTALL_MACOSX"> </a><a href="gems_setup.html#INSTALL_LINUX">Installing and launching GEMS3 on
+Linux&nbsp;</a></p>
   </li>
   <li>
-    <p><font face="Helvetica, Arial, sans-serif"><a
- href="#COMLINE_PARAM">GEMS Command-line parameters</a></font></p>
+    <p><a href="#COMLINE_PARAM">GEMS Command-line parameters</a></p>
   </li>
   <li>
-    <p><font face="Helvetica, Arial, sans-serif"><a
- href="#PREFERENCES_DIALOG">GEMS Preferences Dialog</a></font></p>
+    <p><a href="#PREFERENCES_DIALOG">GEMS Preferences Dialog</a></p>
   </li>
   <li>
-    <p><font face="Helvetica, Arial, sans-serif"><a
- href="#TROUBLES_WINDOWS">Troubleshooting (Windows)</a></font></p>
-  </li>
-  <li>
-    <p><font face="Helvetica, Arial, sans-serif"><a
- href="#TROUBLES_LINUX">Troubleshooting (Linux)</a></font></p>
+    <p><a href="#TROUBLES_WINDOWS">Troubleshooting</a></p>
   </li>
 </ul>
+
+
+<br>
+
+
 <hr size="2" width="100%">
 <p> </p>
+
+
 <h3> </h3>
-<h3> <a name="INSTALL_W32"></a>Installing GEMS under Win32</h3>
-This is a provisional installator, simply a self-extracting zip
-archive. <br>
+
+
+<h3> <a name="INSTALL_W32"></a>Installing and starting GEMS3 on
+Windows XP/7/8<br>
+</h3>
+
+
+<p>
+GEM-Selektor v.3 package comes as a self-extracting installer file with
+the
+name</p>
+
+
+<div style="margin-left: 40px;">&nbsp; <span style="font-family: monospace;">Gems&lt;ver&gt;-&lt;revGUI&gt;.&lt;revG3K&gt;-win32-install.sfx.exe</span>&nbsp;
 <br>
-Just execute GEMsetup.exe. It will ask you for a directory path where
-to unpack all the directories and files. If you tell it C:\gemsetup\
-then you can start GEMS immediately, without editing the rungems.bat
-file. Otherwise, first edit rungems.bat as described in README1.TXT and
-then start GEMS.
+</div>
+
+
+<p>where&nbsp; <span style="font-family: monospace;">&lt;ver&gt;</span>&nbsp;
+stands for
+version number (e.g. 3.1), <span style="font-family: monospace;">&lt;revGUI&gt;</span>
+is the revision number for the GEMS-Vizor part, and <span style="font-family: monospace;">&lt;revG3K&gt;</span> is the
+revision number for the GEMS3K code part. The installer (ca. 13 Mb
+size) contains a compressed folder <span style="font-family: monospace;">Gems3-app</span> and files <span style="font-family: monospace;">INSTALL.windows.txt</span>,<span style="font-family: monospace;"> rungems3.bat</span> and <span style="font-family: monospace;">Readme3.txt</span>. The <span style="font-family: monospace;">INSTALL.windows.txt</span> file
+describes the installation process, as also given below.</p>
+
+
+<!--StartFragment--><!--EndFragment-->
+<p><span style="font-family: Helvetica,Arial,sans-serif;"></span></p>
+
+
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">
+      <p>1. Download or copy the installer file into a temporary
+location on hard disk and
+execute
+it.&nbsp; </p>
+      <p>2. The installer will ask where to install/update, showing "<span style="font-family: monospace;">C:\Selektor</span>" as a suggestion.
+If you accept this, the program will be located in "<span style="font-family: monospace;">C:\Selektor\Gems3-app\</span>". This
+folder contains program and resource files, including help database and
+the "<span style="font-family: monospace;">\DB.default\</span>" folder
+with the thermodynamic database. Upon the first start, a folder "<span style="font-family: monospace;">C:\Selektor\Library\Gems3\projects\</span>"
+will be created, where your modeling projects will be stored. The
+folder will initially contain some test projects. </p>
+      <p>3. Alternatively, you can type or select another location ("<span style="font-family: monospace;">\Program Files</span>" is not
+recommended), for example "<span style="font-family: monospace;">D:\MyWork\Modeling</span>".
+In this case, the program will be located in "<span style="font-family: monospace;">D:\MyWork\Modeling\Gems3-app\</span>"
+and the modeling projects- in "<span style="font-family: monospace;">D:\MyWork\Modeling\Library\Gems3\projects\</span>".</p>
+      <p>4. After extracting files, GEM-Selektor will start
+automatically; you
+can exit it and look for a GEMS v3 icon on your desktop, to be used
+further on for staring GEM-Selektor.&nbsp; At a first-time
+installation, the
+"....\<span style="font-family: monospace;">Library\Gems3\projects\</span>"
+folder will be created and test projects copied in there from the "....<span style="font-family: monospace;">\Gems3-app\Resources\projects\</span>"
+folder. If the installer is executed for update/upgrade, the test
+projects will not be copied even they were updated in the "Resources"
+location. To refresh or reset a test project, please use any suitable
+file manager to copy the project subfolder over. </p>
+      <p>5. You can also use any file manager to add your existing old
+projects
+folders into the "<span style="font-family: monospace;">....\Library\gems3\projects\</span>".
+Backup of modeling projects from this folder is strongly recommended at
+least once per day. </p>
+      <p>6. To update GEM-Selektor, start the installer and browse to
+the
+location where GEMS3 is installed, for example, to "<span style="font-family: monospace;">D:\MyWork\Modeling\</span>". Only
+files in the "<span style="font-family: monospace;">\Gems3-app\</span>"
+subfolder will be replaced; your existing modeling and test projects in
+"<span style="font-family: monospace;">....\Library\gems3\projects\</span>"
+will not be changed.&nbsp;&nbsp;&nbsp; </p>
+      <p>7. To remove GEM-Selektor from your computer:&nbsp; use a file
+manager
+to locate the installation folder (e.g. "<span style="font-family: monospace;">D:\MyWork\Modeling\</span>")&nbsp;
+and delete it. Find the "GEMS3" icon on your desktop and drag it into
+the Recycle Bin. The GEMS3 installer does not change any Windows
+Registry entries. </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<p>The <span style="font-family: monospace;">rungems3.bat</span> can
+be used for launching GEMS3 program from the command line with certain
+specific options described here. Before launching GEMS3 from command
+line, the <span style="font-family: monospace;">rungems3.bat</span>
+file must be edited (with any simple text editor) in order to ensure
+that GEMS3 command line parameters point to correct locations of the
+program resources and of modeling projects. </p>
+
+
+<p>
+Suppose that you have installed GEMS3 in "<span style="font-family: monospace;">D:\MyWork\Modeling</span>\". Open the <span style="font-family: monospace;">rungems3.bat</span> file in text
+editor; the file begins with the following lines:</p>
+
+
+<table border="1" cellpadding="2" cellspacing="2" width="100%">
+
+
+  <tbody>
+    <tr>
+      <td valign="top"><tt>echo off</tt><tt><br>
+      </tt><tt>rem&nbsp; Change the path to the actual location of
+GEMS3 executable and Resources</tt><tt><br>
+      </tt><tt>cd C:\Selektor\Gems3-app<br>
+...<br>
+      </tt></td>
+    </tr>
+  </tbody>
+</table>
+
+
+<p>Now, edit the cd (change directory) command argument in the third
+line to point to the actual location: </p>
+
+
+<table border="1" cellpadding="2" cellspacing="2" width="100%">
+
+
+  <tbody>
+    <tr>
+      <td valign="top"><tt>echo off</tt><tt><br>
+      </tt><tt>rem&nbsp; Change the path to the actual location of
+GEMS3 executable and Resources</tt><tt><br>
+      </tt><tt>cd </tt><tt><span style="font-family: monospace;">D:\MyWork\Modeling</span>\Gems3-app<br>
+...<br>
+      </tt></td>
+    </tr>
+  </tbody>
+</table>
+
+
+<p>Then leave one of the launch commands (they all contain <tt>gems3.exe)</tt>
+without "rem" at the beginning, and close other commands with "rem".
+Save the batch file. </p>
+
+
+To create a Windows desktop shortcut to launch GEMS3 from this
+location, right-click on the desktop; choose "New" "Shortcut", and set
+there the path to gems3.exe file: "<tt><span style="font-family: monospace;">D:\MyWork\Modeling</span>\Gems3-app\gems3.exe
+-c</tt>", and finish. To add the icon and command line parameters,
+right-click on the new shortcut icon, select "Properties", append the
+command-line parameters (such as in the rungems3.bat) into "Target"
+field, then click "Change icon", and browse to <br>
+
+
+<tt><span style="font-family: monospace;">"D:\MyWork\Modeling</span>\Gems3-app\Resources\Gems3.ico"</tt>.
+You should see now the GEMS icon; click "Ok". The shortcut will now
+appear as a GEMS icon, double-click on it to start the program. <br>
+
+
 <br>
-<br>
-To everybody who sees the program for the first time: Press the "Get
-Started" button on the GEMS main dialog and work through the "Getting
-Started" manual. Then try the Tutorial, beginning from Part 1. We hope,
-&nbsp;you will quickly grasp how to work with GEMS!<br>
-<br>
-You have unpacked the program into a directory that you just have
-specified. Before you can start GEMS2 for the first time, please edit
-the file RUNGEMS2.BAT as described below.<br>
-<br>
-Suppose that you created the directory D:\MYGEMS and unpacked the
-GEMSETUP.EXE archive there. Now, open RUNGEMS2.BAT with Notepad or any
-other simple ASCII editor and change it as shown on the example below: <br>
-<br>
-Before editing:<br>
-&nbsp;&nbsp; rem New file configuration if /projects dir changed<br>
-&nbsp;&nbsp; gems2.exe -c -s c:\Gems2inst\program -u c:\Gems2inst <br>
-&nbsp;&nbsp; <br>
-After editing:<br>
-&nbsp;&nbsp; rem New file configuration if /projects dir changed<br>
-&nbsp;&nbsp; gems2.exe -c -s d:\mygems\program -u d:\mygems <br>
-<br>
-Apply the same changes to other (commented out) command lines and save
-RUNGEMS2.BAT. The program files are located in the mygems\program
-subdirectory;
-your modelling projects will be created in the mygems\projects
-subdirectory.
-<br>
-<br>
-You can start GEMS2 now by executing RUNGEMS2.BAT from a command line.
-Or, better, create a Windows shortcut icon to start GEMS2, set a work
-directory "d:\mygems", and enter the command line <br>
-"d:\mygems\program\gems2.exe -c -s d:\mygems\program -u d:\mygems".<br>
-<br>
-If you install GEMS2 under Windows 2000, Windows 98, and Windows ME, it
-may not work properly because of problems with the imm32.dll file. This
-file is necessary to run GEMS under Windows 95 and some Windows NT
-version older than 4 SP 5. If, under newer versions of Windows, error
-messages will appear when you try to start the <br>
-program, simply delete the imm32.dll file from the \program directory
-where gems2.exe file is located.<br>
-<br>
-<h3><a name="INSTALL_LINUX"></a>Installing GEMS under Linux</h3>
-This test version of GEMS program package has been developed under
-Linux paltform using <a href="http://www.redhat.com/">RedHat Linux 6.1</a>
-distribution. The program can also run under <a
- href="http://www.suse.de/">S.u.S.E. Linux 6.3</a> or later. We did not
-try, but expect that GEMS will run under the latest <a
- href="http://www.delix.de/">DLD Linux</a> <font color="#000000">Mandrake,
-EasyLinux 1.2 and other installations similar</font> to RedHat. Basic
-information
-about Linux can be found on the following web sites:
-<ol>
-  <a href="http://www.linux.org">http://www.linux.org</a> - main info
-on Linux (worth looking for the first time) <br>
-  <a href="http://www.linux.org/books/index.html">http://www.linux.org/books/index.html
-  </a>- books <br>
-  <a href="http://www.linux.org/dist/index.html">http://www.linux.org/dist/index.html
-  </a>- distributions <br>
-  <a href="http://www.linux.com">http://www.linux.com</a> - some useful
-information <br>
-  <a href="http://linuxnewbie.org">http://linuxnewbie.org/</a> - for
-people new to Linux and Unix <br>
-  <a href="http://freshmeat.net">http://freshmeat.net/ </a>-
-application news <br>
-  <a href="http://linuxtoday.org">http://linuxtoday.org/</a> - Linux
-(and not only) news
-</ol>
-GEMS v. 0.99b comes as a&nbsp;<tt> gems-0.99b-4.i386.rpm&nbsp; </tt>archive
-file. It should be installed using the <a href="http://www.rpm.org/">RedHat
-Package Manager</a> <tt>(rpm) </tt>program version 2.5 or later,
-available in all recent Linux distributions mentioned above.
-<h3> <a name="P2100"></a><tt>2.1. Requirements for Linux Configuration</tt></h3>
-Installation, generic configuration and shell commands of Linux are
-described within a specific distribution package (<a href="#P2000">see
-Section
-2</a>). Please ensure that there is at least 10 Mb free space on your
-/usr
-hard disk. GEMS v.0.99a code requires the following packages to be
-already
-installed in your Linux system:
-<ul>
-  <li> Xwindows X11R6(XFree86) server, version 3.3 or later (usage of
-the latest version is preferable because it contains more drivers for
-recent videocards and it is easier to install it). Making XFree86
-running is usually (the most tricky, especially for laptops) part of
-Linux installation.</li>
-  <li> The following shared <a href="http://www.gnu.org/">GNU and egcs</a>
-run-time libraries: <font color="#000000">libstdc++.so (2.9.0),
-libc.so, libm.so (glibc-2.1.2),&nbsp; libX11.so, libXext.so (XFree-3.3)</font></li>
-  <li> <a href="http://www.troll.no/">Qt 2.0</a> or later run-time
-library (libqt.so.2).</li>
-</ul>
-Although GEMS can work with any Xwindow manager - KDE, kwm,
-GNOME/Enlightment, IceWM, AfterStep etc.- we strongly advice you to use
-<a href="http://www.kde.org/">KDE 1.1</a> or later. This popular
-graphic desktop for Linux also contains several useful applications
-such as <tt>kwrite</tt> and<tt> ksnapshot</tt>. It is convenient to
-start the <a href="ftp://ftp.gnome.org/pub/">Midnight Commander</a><tt>(mc)</tt>
-in a KDE terminal window and have it open all the time for managing
-your files and sending them to/from the MS-DOS (Windows) partitions on
-your hard disk or diskettes. <br>
-&nbsp;
-<h3> <a name="P2200"></a><tt>2.2. Installing GEMS Package from rpm
-archive</tt></h3>
-Log in as <tt>root</tt> and mount the GEMS installation diskette (if
-in doubt, type a&nbsp; <tt>man mount</tt>&nbsp; shell command).
-Typically, there is a <tt>/mnt/floppy</tt>&nbsp; directory&nbsp;
-present and one just types&nbsp;<font color="#000000"> <tt>mount
-/dev/fd0 /mnt/floppy -t vfat</tt></font><tt> Enter</tt>. Alternatively,
-if the superuser&nbsp; have created a <tt>/dos/a </tt>directory (e.g.
-using Midnight Commander) <font color="#000000">and added a string</font>
-<br>
-<font color="#000000">'/dev/fd0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-/dos/a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vfat
-noauto,user&nbsp;&nbsp;&nbsp;&nbsp; 0 0'&nbsp;&nbsp;&nbsp;&nbsp; to <b>/etc/fstab</b>&nbsp;
-file&nbsp; then you can type:&nbsp; <tt>mount /dos/a&nbsp; Enter</tt>.</font>
-<p><font color="#000000">Use Midnight Commander to go in the diskette.
-You should see the file <tt>gems-0.99b-4.i386.rpm</tt>&nbsp; there.
-Copy this file (or download it from ftp site) into <tt>/usr/src/redhat/RPMS/i386
-</tt>directory (this directory exists at least in RedHat and S.u.S.E
-Linux distributions).</font> </p>
-<p><font color="#000000">Type a shell command: <tt>rpm -U
-gems-0.99b-4.i386.rpm&nbsp;</tt> and press <tt>Enter</tt> (You can do
-it also right from diskette). The
-<tt>rpm</tt> program will create GEMS directories, the <tt>gems_admin</tt>
-and </font><tt>gems_user</tt> groups (if they do not exist), and tell
-you
-if some runtime libraries are missing (in this case, you will have to
-download
-and install their <tt>.rpm </tt>archives before trying to install
-GEMS
-again). If no error messages occurred then GEMS package is installed
-and
-you can check that the <tt>*gems</tt> executable file (about 2 Mb
-size)
-is placed in the <tt>/usr/bin</tt>&nbsp; directory, and also the
-default
-database directory <tt>/usr/lib/gems&nbsp;</tt> is present. This
-directory
-contains the <tt>DB.default/ </tt>subdirectory with the <a
- href="#P3320">core thermodynamic database files</a> which can be used
-but cannot be modified by GEMS users. You will also find a <tt>profile/
-</tt>subdirectory with a default system profile extension files,
-automatically copied into the user's home directory when <a
- href="#P2500">GEMS is run for the first time</a> in file configuration
-mode. The&nbsp; <tt>/doc&nbsp;</tt> subdirectory contains
-documentation files (including this one). The <tt>/img&nbsp;</tt> and <tt>/visor.data</tt>
-subdirectories contain GEMS GUI configuration
-files. <br>
-&nbsp; </p>
-<h3> <a name="P2300"></a><tt>2.3. Configuring Linux for GEMS
-Installation</tt></h3>
-Before installing GEMS, you must log in as root and create one or more
-users belonging to a <tt>gems_user</tt>&nbsp; group for persons
-supposed to work with GEMS. The simplest way to do it is typing the
-following Unix shell commands:
-<ol>
-  <li> To create a new user, type:&nbsp;&nbsp; <tt>useradd -m -g
-gems_user &lt;username&gt;&nbsp; Enter</tt>;</li>
-  <li> To assign password to the user, type:&nbsp; <tt>passwd
-&lt;username&gt;&nbsp; Enter</tt>&nbsp; and then type and re-type the
-password.</li>
-</ol>
-The same can also be done using more sophisticated (and convenient)
-interactive tools such as YaST (S.u.S.E. Linux), available in all
-recent Linux distributions. Refer to the related documentation for
-details.
-<p>Start Midnight Commander&nbsp; (<tt>mc Enter</tt>) and
-find&nbsp;&nbsp;<tt> /etc/fstab</tt>&nbsp; file.&nbsp; Use text viewer
-or editor ( <tt>F3</tt> or <tt>F4</tt> ) to check contents of this
-file (usually like this): </p>
-<p><tt>/dev/hda6 / ext2 defaults 1 1</tt> <br>
-<tt>/dev/hda7 swap swap defaults 0 0</tt> <br>
-<tt>/dev/cdrom /mnt/cdrom iso9660 noauto,ro,user 0 0</tt> <br>
-<tt>/dev/fd0 /mnt/floppy ext2 noauto,user 0 0</tt> <br>
-<tt>none /proc proc defaults 0 0 none</tt> <br>
-<tt>/dev/pts devpts gid=5,mode=620 0 0</tt> </p>
-<p>The first two lines describe Linux partitions on hard disk. Third
-line makes it possible to mount CD ROM device assigning it to <tt>/mnt/cdrom&nbsp;</tt>
-directory. Fourth line assigns a Linux diskette in the floppy drive to
-<tt>/mnt/floppy</tt>&nbsp; directory.&nbsp; If you wish to read/write
-files
-to your Windows/95 hard disk drive, add a line like this: </p>
-<p><tt>/dev/hda1 /dos/c vfat auto,user 0 0</tt> </p>
-<p>Adding the line below will make it possible to mount a DOS-formatted
-diskette and write/read files with long names: </p>
-<p><tt>/dev/fd0 /dos/a vfat noauto,user 0 0</tt> </p>
-<p>If you did the recommended changes and saved the /etc/fstab file to
-disk, make sure that you also have created empty directories<tt> /dos/c
-</tt>and<tt> /dos/a </tt>and reboot Linux to make changes effective. </p>
-<p>Now you can log out from <tt>root </tt>(and it is always a good
-idea not to work as the superuser, whenever possible!).<br>
-</p>
+
+
 <hr size="2" width="100%">
-<p> </p>
-<h3> <a name="COMLINE_PARAM"></a>GEMS command line parameters</h3>
-Log in as a normal GEMS user (from now on, we assume that the user's
-name is <tt>modeller</tt>). <br>
-Try to start GEMS as described in the <a href="#P2500">next section</a>.
-If the program does not start properly, the reason might be that it
-cannot find its system directory. If this happens, proceed as follows.
-<p>Type&nbsp; <tt>mc Enter</tt>&nbsp; to start the Midnight Commander.
-You should find yourself in the <tt>/home/modeller</tt> directory
-(further abbreviated as <tt>~/</tt>). Find a&nbsp; <tt>~/.bash_profile</tt>&nbsp;&nbsp;
-file
-and press&nbsp; <tt>F4</tt>&nbsp; to edit it.&nbsp; This is necessary
-for
-letting GEMS program know where to find its default database directory.
-The&nbsp; <tt>~/.bash_profile</tt>&nbsp; script&nbsp; is automatically
-executed when the user logs in. The newly-created&nbsp; <tt>~/.bash_profile</tt>&nbsp;&nbsp;
-file typically looks like this: </p>
-<p><tt># Get the aliases and functions</tt> <br>
-<tt>if [ -f ~/.bashrc ];</tt> <br>
-<tt>then . ~/.bashrc fi</tt> <br>
-<tt># User specific environment and startup programs</tt> <br>
-<tt>PATH=$PATH:$HOME/bin</tt> <br>
-<tt>BASH_ENV=$HOME/.bashrc</tt> <br>
-<tt>USERNAME=""</tt> <br>
-<tt>export USERNAME BASH_ENV PATH</tt> </p>
-<p>Modify the script replacing the last line with two lines below, and
-save the file (press <tt>F2 Esc</tt>): </p>
-<p><tt>GEMS_DIR=/usr/lib/gems/</tt> <br>
-<tt>export USERNAME BASH_ENV PATH GEMS_DIR</tt> <br>
-&nbsp; </p>
-<h3> <a name="PREFERENCES_DIALOG"></a>GEMS Preferences Dialog</h3>
-From your home directory (<tt>/home/modeller</tt> in our example),
-type <tt>startx&nbsp; Enter</tt>&nbsp; to launch&nbsp; Xwindows server
-and KDE. When you will see the desktop, open a terminal emulation
+<h3><a name="INSTALL_MACOSX"></a>Installing and starting GEMS3 on Mac
+OS X<br>
+</h3>
+
+
+<p style="font-family: Helvetica,Arial,sans-serif;">GEMS3 comes as a
+disk
+image file having the
+name</p>
+
+
+<div style="margin-left: 40px;">&nbsp; <span style="font-family: monospace;">Gems&lt;ver&gt;-&lt;revGUI&gt;.&lt;revG3K&gt;-OSX-x86-64.dmg</span>&nbsp;
+<br>
+</div>
+
+
+<p>where&nbsp;
+<span style="font-family: monospace;">&lt;ver&gt;</span>&nbsp;
+stands for
+version number (e.g. 3.1), <span style="font-family: monospace;">&lt;revGUI&gt;</span>
+is the SVN trunk
+revision number for the GEMS-Vizor part, and <span style="font-family: monospace;">&lt;revG3K&gt;</span> is the SVN trunk
+revision number for the GEMS3K code part. The<span style="font-family: Helvetica,Arial,sans-serif;"> </span><span style="font-family: monospace;">gems3.app</span> application has
+the usual folder structure as required by OS X. The <span style="font-family: monospace;">/Applications/gems3.app/Contents/Resources/</span>
+contains a file
+<span style="font-family: monospace;">INSTALL.macosx.txt</span> that
+describes the installation process as given below.</p>
+
+
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">
+      <p>1. Double-click on the installer .dmg file to mount it. A
 window
-by pressing an icon in the bottom KDE menu line. In the terminal, type
-<tt>gems&nbsp; Enter. </tt>After some delay (a few seconds), the
-GEM-Selektor
-main window should appear with&nbsp; two large buttons corresponding to
-two main modes of operation:&nbsp; "<a href="#P3200">Computation of
-Equilibria</a>"&nbsp; and&nbsp; "<a href="#P3300">Thermodynamic Database</a>"
-.
-<p><font size="+1"><b><br>
-</b></font></p>
-<p><font size="+1"><b><img src="PrefDialog.jpg"
- alt="Preferences Dialog image" height="400" width="531"> <br>
-<br>
-</b></font></p>
-<p><font size="+1"><b>Important!</b>: Do not press </font>either of
-these large buttons when GEMS is started for the first time in your
-home directory! Just press&nbsp; the&nbsp; <tt>Exit</tt>&nbsp;
-button;&nbsp; a&nbsp; small dialog window "Save current configuration?"
-appears;&nbsp; press <tt>Yes</tt>&nbsp; button&nbsp; to save the
-newly-created configuration of your own GEMS
-extension database.&nbsp; Go back to the terminal emulation window and
-type <tt>mc</tt>&nbsp;<tt> Enter</tt>&nbsp;&nbsp; to start Midnight
-Commander
-there.&nbsp; You should find a&nbsp;&nbsp; <tt>~/GEMS</tt>&nbsp;&nbsp;
-directory with a&nbsp; <tt>~/GEMS/profiles </tt>subdirectory and two
-configuration
-files, which have been created&nbsp; during this first work session. <br>
+appears with the application Gems3.app. </p>
+      <p>2. Drag Gems3.app from that window to the "<span style="font-family: monospace;">/Applications/</span>" folder. The
+Gems3.app contains the program and the resource files, including the
+help database and a "<span style="font-family: monospace;">/DB.default/</span>"
+folder with built-in thermodynamic database.&nbsp;&nbsp; </p>
+      <p>3. Start GEMS3 by clicking on Gems3.app in "<span style="font-family: monospace;">/Applications/</span>" folder. This
+will create a subfolder&nbsp; "<span style="font-family: monospace;">~/Library/Gems3/projects/</span>"
+in your user home directory, where the modeling projects will be
+stored. </p>
+      <p>4. You can add third-party or your old project folders into "<span style="font-family: monospace;">~/Library/Gems3/projects/</span>".
+Backup of modeling projects is strongly recommended at least once per
+day. To see this folder in Finder: open the Terminal; <span style="font-family: monospace;">cd</span> to your user's directory,
+and
+run a command:</p>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-family: monospace;">chflags nohidden ~/Library/</span></p>
+      <p>This command will have effect until the next reboot or
+logout/login. </p>
+      <p>5. To add the GEMS3 icon to Dock: start Gems3.app, right-click
+on its icon in the dock, and select "Keep in Dock". </p>
+      <p>6. To update GEMS3: just move Gems3.app from "<span style="font-family: monospace;">/Applications/</span>" to Trash, and
+proceed with step 1. Only files in Gems3.app will be replaced; your
+modeling projects in "<span style="font-family: monospace;">~/Library/Gems3/projects/</span>"
+will remain unaffected.</p>
+      <p>7. To remove GEMS3 from your PC:&nbsp; drag the Gems3.app from
+"<span style="font-family: monospace;">/Applications/</span>" to Trash;
+cd in <span style="font-family: monospace;">~/Library/</span> and
+delete the <span style="font-family: monospace;">Gems3/</span>
+subfolder recursively.&nbsp; &nbsp; </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!--StartFragment--><!--EndFragment--><br>
+
+
+<h4>How to start GEMS3 from OS X terminal</h4>
+
+
+<p>To use special command line options (<a href="#COMLINE_PARAM">more...</a>),
+the GEMS3 executable must be started from the Terminal command line
+(sudo or root privileges are not needed). For instance, to initialize
+configuration files, open the Terminal and execute the following two
+commands:&nbsp; <br>
 </p>
+
+
+<blockquote><tt>cd /Applications/Gems3.app/Contents/MacOS</tt><br>
+  <tt>/Applications/Gems3.app/Contents/MacOS/gems3 -d</tt><br>
+</blockquote>
+
+
+<p>This will refer to default locations of the Resources and user
+modeling project files. To work in non-default location e.g.
+"~/Documents/GEMMOD/projects/", start GEMS3 with the following
+commands: <br>
+</p>
+
+
+<blockquote>
+  <p><tt>cd /Applications/Gems3.app/Contents/MacOS</tt><br>
+  <tt>/Applications/Gems3.app/Contents/MacOS/gems3 -c -u
+~/Documents/GEMMOD</tt></p>
+</blockquote>
+
+
+<p> </p>
+
+
+<p>You can check currently active paths to Resources and user projects
+in the <a href="#PREFERENCES_DIALOG">Preferences dialog</a>.</p>
+
+
+<br>
+
+
+<hr size="2" width="100%">
+<h3><a name="INSTALL_LINUX"></a>Installing and starting GEMS3 on Linux</h3>
+
+
+<p><span style="font-family: Helvetica,Arial,sans-serif;">GEMS3
+installer comes as a tar.gzip (tgz) archive file having
+the
+name</span>
+</p>
+
+
+<div style="margin-left: 40px;">&nbsp; <span style="font-family: monospace;">Gems&lt;ver&gt;-&lt;revGUI&gt;.&lt;revG3K&gt;-linux-x86-&lt;bits&gt;.tgz</span>
+<br>
+</div>
+
+
+<p>where<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;</span>
+<span style="font-family: monospace;">&lt;ver&gt;</span>&nbsp;<span style="font-family: Helvetica,Arial,sans-serif;">
+</span>stands for version number (e.g. 3.1), <span style="font-family: monospace;">&lt;revGUI&gt;</span><span style="font-family: Helvetica,Arial,sans-serif;"> </span>is the SVN
+trunk
+revision number for the GEMS-Vizor part, <span style="font-family: monospace;">&lt;revG3K&gt;</span> is the SVN trunk
+revision number for the GEMS3K code part, and <span style="font-family: monospace;">&lt;bits&gt;</span> stands for 32 or
+64
+depending on the linux distribution.<span style="font-family: Helvetica,Arial,sans-serif;"> </span>The archive
+contains a
+folder "<span style="font-family: monospace;">~/Gems3-app/</span>" <span style="font-family: Helvetica,Arial,sans-serif;">t</span>hat contains
+the "<span style="font-family: monospace;">Resources/</span>"
+subfolder, gems3
+executable, and binary Qt4 libraries and plugins used by gems3. The
+folder also contains the <span style="font-family: monospace;">gems3.bash</span>
+and<span style="font-family: Helvetica,Arial,sans-serif;"> </span><span style="font-family: monospace;">gems3.sh</span> batch files for
+launching GEMS3 program, and the<span style="font-family: Helvetica,Arial,sans-serif;"> </span><span style="font-family: monospace;">INSTALL.linux.txt</span><span style="font-family: monospace;"></span> file that describes the
+installation process as
+shown below.</p>
+
+
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">
+      <p>1. Copy the installer file into your home directory ~/ ("<span style="font-family: monospace;">/home/&lt;your-user-name&gt;/</span>").</p>
+      <p>2. Unpack the installer to your home directory. This will
+create a folder "<span style="font-family: monospace;">~/Gems3-app/</span>"
+that contains program and resource files, including help database and "<span style="font-family: monospace;">/DB.default/</span>" folder with
+thermodynamic database. </p>
+      <p>3. Optionally, you can now create in your home directory a
+folder like "<span style="font-family: monospace;">~/MYGEMS</span>/"
+and move the folder "<span style="font-family: monospace;">~/Gems3-app/</span>"
+in there. </p>
+      <p>4. In terminal, cd into "<span style="font-family: monospace;">/Gems3-app/</span>"
+wherever it is installed, and execute a command:&nbsp;<span style="font-family: monospace;"> ./gems3.bash -d</span>&nbsp;&nbsp;&nbsp;
+(or <span style="font-family: monospace;">./gems3.sh -d</span>). The
+GEMS3 program should launch; after you exit it, a folder ".<span style="font-family: monospace;">..../Library/Gems3/projects/</span>"
+with several test modeling projects will be available at the same level
+as the ".<span style="font-family: monospace;">..../Gems3-app/</span>"
+folder. </p>
+      <p>5. You can add existing third-party projects, or your old
+project folders into "<span style="font-family: monospace;">..../Library/gems3/projects/</span>".&nbsp;
+Backup of modeling projects is strongly recommended at list once a day.</p>
+      <p>6. To create a desktop shortcut for starting GEMS3: copy the
+file <span style="font-family: monospace;">GEMSv3.&lt;x&gt;.desktop</span>
+from "<span style="font-family: monospace;">..../Gems3-App/ToDesktop/</span>"
+to the "<span style="font-family: monospace;">~/Desktop/</span>"
+folder; right-click on the GEMSv3 icon on your desktop and check the
+actual location of the program in the command line (e.g. <span style="font-family: monospace;">/home/&lt;your-user-name&gt;/Gems3-app/gems3.bash
+-c</span>) and location of the GEMS3 icon (e.g. <span style="font-family: monospace;">/home/&lt;your-user-name&gt;/Gems3-app/gems3.png</span>),
+and save. </p>
+      <p>7. Start GEMS3 by clicking on the desktop icon. If it does not
+start then check the path in the icon again, or try <span style="font-family: monospace;">gems3.sh</span> instead of <span style="font-family: monospace;">gems3.bash</span> (depends on the
+linux installation). </p>
+      <p>8. To update GEMS3, unpack the installer archive and replace
+with it the existing "<span style="font-family: monospace;">.../Gems3-app/</span>"
+folder only (your projects will remain intact in the "<span style="font-family: monospace;">.../Library/Gems3/projects</span>"
+folder). </p>
+      <p>9. To remove GEMS3 from your PC, simply delete both "<span style="font-family: monospace;">.../Gems3-app/</span>" and "<span style="font-family: monospace;">.../Library/Gems3/</span>" folders in
+your home directory. </p>
+      <p>All operations described above do not require sudo or root
+privileges.
+&nbsp; </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!--StartFragment--><!--EndFragment--><br>
+
+
+<p>The GEMS3 code is built on Ubuntu linux 12.04 LTS (32 or 64 bit). It
+is known to run without rebuilding also on Ubuntu &gt;= 10.4; fedora
+&gt;= 15; kubuntu &gt;= 10.4; and OpenSuSE
+&gt;=12.0. On some linuxes, the <tt>gems3.bash</tt> script does not
+work; then the <tt>gems3.sh</tt> script must be used instead for
+launching the GEMS3 code. In terminal commands, both scripts let the
+GEMS3 command-line parameters through, if e.g. the projects are not in
+standard location. </p>
+
+
+<br>
+
+
 <hr size="2" width="100%">
 <p> </p>
-<h3> <a name="TROUBLES_WINDOWS"></a>Troubleshooting (Windows)</h3>
-If you have forgotten to save the file configuration after the first
-GEMS session but can see the&nbsp; <tt>~/GEMS</tt> directory, just
-start <tt>gems -c&nbsp; </tt>from the terminal emulation window.
-Proceed as
-described above in <a href="#P2500">Section 2.5</a>. The -c command
-line
-option forces GEMS to re-read the whole&nbsp; <tt>~/GEMS</tt> and <tt>/usr/lib/GEMS.sys</tt>
-directory trees and create a new file configuration. GEMS must be
-called in this mode every time when you add a new system profile
-directory (for instance, obtained from another geochemist - your good
-friend) or you have erased some files or system profile directories. In
-all cases, do not forget to save configuration upon exit!
-<p>If you have Qt-2.0.x&nbsp; runtime library (libqt.so.2) installed in
-your not-RedHat Linux but rpm does not install GEMS complaining that
-the Qt2 dependence is missing, try to start&nbsp; <tt>rpm</tt>&nbsp;
-as follows: </p>
-<p><tt><font color="#000000">rpm -U --nodeps gems-0.99b-4.i386.rpm</font></tt>
+
+
+<h3> <a name="COMLINE_PARAM"></a>GEMS3 command line parameters</h3>
+
+
+<p>
+The GEMS3 executable file accepts several command-line arguments, all
+optional (as shown by [] brackets). The general command line syntax is:
 </p>
-<p>The --nodeps option tells rpm to avoid checking dependencies for
-shared libraries. </p>
-<p><a href="GEMS-Linux-USREF.html#P8000">Contact us</a> if GEMS will
-not
-install or will not start properly from the user home directory. <br>
+
+
+&lt;<span style="font-family: monospace;">Gems-exe-path&gt; [-c]|[-d]
+[-f] [-s &lt;Gems-inst-dir&gt;] [-u &lt;User-proj-dir&gt;] [&gt;
+&lt;cons-o-log&gt;]</span>
+<br>
+
+
+<p>Explanations:</p>
+
+
+<table border="1" cellpadding="2" cellspacing="2" width="100%">
+
+
+  <tbody>
+    <tr>
+      <td valign="top">Element of command line<br>
+      </td>
+      <td valign="top">Meaning<br>
+      </td>
+      <td valign="top">Example (default on Windows)<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">&lt;<span style="font-family: monospace;">Gems-exe-path&gt;</span></td>
+      <td valign="top">Path to the GEMS3 executable file<br>
+      </td>
+      <td valign="top"><tt>C:\Selektor\Gems3-app\gems3.exe</tt><br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><span style="font-family: monospace;">-c</span></td>
+      <td valign="top">Tells GEMS3 to re-read the list of available
+modeling projects <br>
+      </td>
+      <td valign="top"><br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><span style="font-family: monospace;">-d</span></td>
+      <td valign="top">Tells GEMS3 to re-read configuration text files
+in "Resources/data/", write binary configuration files, re-read the
+list of available modeling projects, and reset Preferences <br>
+      </td>
+      <td valign="top"><br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><span style="font-family: monospace;">-f</span></td>
+      <td valign="top">If present, allows GEMS3 to modify database
+files in "<tt>Resources/DB.default/</tt>" directory (should not be used
+in normal work)<br>
+      </td>
+      <td valign="top"><br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><span style="font-family: monospace;">-s</span></td>
+      <td valign="top">Specifies a non-standard GEMS3 installation
+location given by <span style="font-family: monospace;">&lt;Gems-inst-dir&gt;</span></td>
+      <td valign="top"><br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><span style="font-family: monospace;">-u</span></td>
+      <td valign="top">Specifies a non-standard location of user's
+modeling projects, given by <span style="font-family: monospace;">&lt;User-proj-dir&gt;</span></td>
+      <td valign="top"><br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><span style="font-family: monospace;">&lt;Gems-inst-dir&gt;</span></td>
+      <td valign="top">Path to directory where "<tt>Resources/</tt>", "<tt>help/</tt>"
+and "<tt>DB.default/</tt>" folders are located<br>
+      </td>
+      <td valign="top"><tt>C:\Selektor\Gems3-app</tt></td>
+    </tr>
+    <tr>
+      <td valign="top"><span style="font-family: monospace;"></span><span style="font-family: monospace;">&lt;User-proj-dir&gt;</span></td>
+      <td valign="top">Path to directory where "<tt>projects/</tt>"
+folder with user's project subfolders is located<br>
+      </td>
+      <td valign="top"><tt>C:\Selektor\Library\Gems3</tt></td>
+    </tr>
+    <tr>
+      <td valign="top"><span style="font-family: monospace;">&lt;cons-o-log&gt;</span></td>
+      <td valign="top">Name of a text file, to where the GEMS3 console
+output will be redirected (if not a full path, the file will be created
+in the current work directory, usually <tt>&lt;Gems-inst-dir&gt;</tt>)<br>
+      </td>
+      <td valign="top"><tt>gems3.log</tt><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<p>Only one of -c or -d options can be present in the command line. <br>
 </p>
-<p><br>
-</p>
-<p>A small GEM-Selektor Exit dialog appears. Press<tt> "Yes"</tt> to
-exit normally, without saving file/window configuration, or <tt>"Cancel"</tt>
-to continue the work session. The <tt>"No"</tt> button should be
-pressed only in some special cases when the database file configuration
-setup has changed (<a
- href="file:///C:/GEMS2test/program/doc/html/gemsetup.html">more about
-GEMS configuration</a>).&nbsp;</p>
-<p> Start GEMS again and click on the <tt>"Preferences"</tt> button
-that opens a GEM-Selektor Settings and Preferences dialog. There are
-two useful possible adjustments. A checkbox in the lower left corner,
-if checked,
-forces the program to save configuration on exit, so the GEM-Selektor
-Exit
-Dialog will not appear; the program can be started resuming the saved
-configuration (<a
- href="file:///C:/GEMS2test/program/doc/html/gemsetup.html">more</a>).
-A "Documentation Base" radiobutton group in the upper part controls
-where the GEMS Helpwindow browser looks for HTML files. If the "Local
-directory" button is selected (default), the files will be read using
-the specified directory path on your PC. However, if you switch to the
-"Remote URL" &nbsp;button, the program will access the most recent
-version of GEMS documentation posted on the specified web site (make
-sure that your internet connection is active!). We recommend the later
-choice for everybody who has a LAN or DSL&nbsp; permanent connection,
-as the documentation will be constantly corrected, improved
-and extended, and direct internet access is the only way to get it
-before
-the next version will be officially released. <br>
-&nbsp;<br>
-<br>
-</p>
-<h3><a name="TROUBLES_LINUX"></a>Troubleshooting (Linux)</h3>
-<h3> </h3>
-&lt;To be provided in version 2.0.2&gt;<br>
-<br>
-<br>
-<br>
+
+
+<p>&nbsp; </p>
+
+
 <hr size="2" width="100%">
-<p><tt>end of file</tt> <br>
+<h3> <a name="PREFERENCES_DIALOG"></a>GEMS Preferences Dialog</h3>
+
+
+<p>
+Folders with which GEMS3 currently operates can be checked in the
+Preferences dialog, shown below.</p>
+
+
+<p><font size="+1"><b><img alt="Preferences-Dialog.png" src="PreferencesDialog.png" height="528" width="596">&nbsp;<br>
+<br>
+</b></font></p>
+
+
+<p>To open this dialog in Windows or Linux variant of GEMS3, select
+"Help" "Preferences..." menu command; in the Mac OSX variant, select
+"Gems3" "Preferences..." menu command instead.</p>
+
+
+<p>In the Preferences dialog, you can change the default method of
+creation of new modeling projects. The usual method is to make an
+independent project, i.e. copy records for all relevant components and
+phases from default database into the project database. Any further
+changes in default database will not affect this modeling project,
+unless the user explicitly copies the records with changed data. If
+necessary, the default database files will be linked to the modeling
+project, so only newly-created data records will be stored in the
+project database. This makes the project system large, but any updates
+in the default database will affect the project systems when the
+project will be opened next time. <br>
+</p>
+
+
+<p>Is is also possible to change the appearance of data fields
+including the font and the number of significant digits in real
+numbers. For power-users who work on help contents, the dialog provides
+a button to generate new help database from html and image files
+provided as source (source html/image files are not available in
+standard GEMS3 installers).&nbsp; <br>
+</p>
+
+
+&nbsp;
+<hr size="2" width="100%">
+<p> </p>
+
+
+<h3> <a name="TROUBLES_WINDOWS"></a> Troubleshooting<br>
+</h3>
+
+
+<p>
+If GEMS3 does not start properly: </p>
+
+
+<ul>
+
+
+  <li>
+    <p>Check that the paths to executable and Resources are correct in
+the shortcut or in the command-line batch file. </p>
+  </li>
+  <li>
+    <p>Try again starting GEMS3 with -d command line key to
+re-initialize configuration files. </p>
+  </li>
+  <li>
+    <p>On Linux, check that you installed a compatible variant, e.g.
+32-bit on 32-bit linux. Re-install, if necessary. </p>
+  </li>
+  <li>
+    <p>Only one instance of GEMS3 can run in the computer memory. Kill
+the previous instance and start GEMS again.&nbsp; </p>
+  </li>
+</ul>
+
+
+<p>If GEMS3 crashes when the user tries to open a modeling project:<br>
+</p>
+
+
+<ul>
+
+
+  <li>Restore two files with names containing "projec" from the backup
+of project database folder.</li>
+</ul>
+
+
+<p>If this does not help, please contact the GEMS Development Team.</p>
+
+
+<br>
+
+
+<hr size="2" width="100%">
+<p><tt>Last modified 21.09.2012 DK<br>
+</tt></p>
+
+
+<p><tt>Copyright (c) 2012 <a href="gems_team.html">GEMS Development
+Team</a></tt><br>
 &nbsp; </p>
+
+
 <br>
+
+
 <br>
+
+
 <br>
+
+
 <br>
+
+
 <br>
+
+
 <br>
-</body>
-</html>
+
+
+</body></html>

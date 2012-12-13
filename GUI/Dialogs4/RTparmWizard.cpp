@@ -63,7 +63,7 @@ void RTparmWizard::CmNext()
     }
 
     int nLines = pageScript->getScriptLinesNum();
-    if( ndx == 1 && nLines > 0)
+    if( ndx == 2 && nLines > 0)
         pdimY->setValue( nLines );
 
     stackedWidget->setCurrentIndex ( ndx+1 );
@@ -109,6 +109,7 @@ RTparmWizard::RTparmWizard( const char* pkey, char flgs[10], int size[7],
     gstring str1= "GEM-Selektor RTparm Setup:  ";
             str1 += pkey;
     setWindowTitle( str1.c_str() );
+    stackedWidget->setCurrentIndex (0);
     resetNextButton();
     resetBackButton();
 

@@ -337,9 +337,9 @@ long int TParticleArray::MoveParticleBetweenNodes( long int px, bool CompMode, d
 
   if( new_node == -1 )
   {
-    vstr buff(300);
+    char buff[300];
     sprintf( buff, " pxOld=%ld npxNew=%ld",  old_node, new_node  );
-    Error("W003RWM",buff.p);
+    Error("W003RWM",buff);
   }
   else
   {
@@ -388,11 +388,11 @@ long int TParticleArray::RandomWalkIteration( long int /*Mode*/, bool CompMode, 
     {
       if( NPnum[iNode*anPTypes+iType] < nPmin[iType] )
       {
-        vstr buff(300);
+        char buff[300];
 
         sprintf( buff, " Node=%ld npNum=%ld npMin=%ld ",
         iNode, NPnum[iNode*anPTypes+iType], nPmin[iType] );
-        Error("W005RWM",buff.p);
+        Error("W005RWM",buff);
       // or  alternative
       // reset = true;   ParticleArrayInit - reset all particles
      }

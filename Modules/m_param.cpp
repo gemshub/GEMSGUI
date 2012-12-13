@@ -49,11 +49,11 @@ const double R_CONSTANT = 8.31451,
 extern char *_GEMS_version_stamp;
 extern char *_GEMIPM_version_stamp;
 SPP_SETTING pa_ = {
-    " GEMS-GUI v.3.1 r.2150 (rc) " " GEMS3K v.3.1 r.690 (rc) ",
-    {   // Typical default set (03.04.2012) new PSSC( logSI ) & uDD()
+    " GEMS-GUI v.3.1 r.2184 (rc) " " GEMS3K v.3.1 r.710 (rc) ",
+    {   // Typical default set (28.08.2012) new PSSC( logSI ) & uDD()
         2,  /* PC */  2,     /* PD */   -5,   /* PRD */
         1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
-        0, /* DT */     13000,   /* PLLG */   1,  /* PE */  7000, /* IIM */
+        0, /* DT */     30000,   /* PLLG */   1,  /* PE */  7000, /* IIM */
         1000., /* DG */   1e-13,  /* DHB */  1e-20,  /* DS */
         1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
         1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
@@ -84,7 +84,7 @@ SPP_SETTING pa_ = {
     1, 15, 0,   /* P T V */  2,  /* Mode */
     { 1, 2, 3, 4, 5, },  /* ResShort */
     /* RTPARM */
-    {1., 1., 0.}, /* Pi[3]*/  {0.0, 375., 25.}, /* Ti[3] */
+    {0., 1., 0.}, /* Pi[3]*/  {0.0, 350., 25.}, /* Ti[3] */
     {0., 0., 0.},   /* Vi[3] */
     1., 25.,      /* Pr, Tr */
     /* MULTI */
@@ -97,7 +97,7 @@ BASE_PARAM dfBase[5] =
             { // Variant for aquatic systems with moderate non-ideality
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
                 1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
-                0, /* DT */     13000,   /* PLLG */   1,  /* PE */
+                0, /* DT */     30000,   /* PLLG */   1,  /* PE */
                 1000,   /* IIM */
                 1000., /* DG */   1e-13,  /* DHB */  1e-20,  /* DS */
                 1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
@@ -113,30 +113,30 @@ BASE_PARAM dfBase[5] =
             { // Variant for aquatic systems with SCMs in sorption phases
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
                 1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
-                0, /* DT */     -3000,   /* PLLG */   1,  /* PE */
+                0, /* DT */     -30000,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
                 1000., /* DG */   1e-13,  /* DHB */  1e-20,  /* DS */
                 3e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
-                1e-6, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
-                0.07,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                1e-6, /* DFYs, */  1e-17,  /* DB */   1.0,   /* AG */
+                -0.01,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
                 1e-3, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
                 1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-20, /* PhMin, */
-                1e-5,  /* ICmin */   1e-10,  /* EPS */   6e-4,  /* IEPS */
+                1e-5,  /* ICmin */   1e-10,  /* EPS */   5e-3,  /* IEPS */
                 1e-10,  /* DKIN  */ 0,  /* tprn */
 	    },
             { // Variant for fluid-rock systems with highly non-ideal phases
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
                 1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
-                1, /* DT */     13000,   /* PLLG */   1,  /* PE */
+                1, /* DT */     30000,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
                 1000., /* DG */   1e-11,  /* DHB */  1e-20,  /* DS */
-                2e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                1e-5,  /* DK */  0.01,  /* DF */  0.001,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
                 1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
-                0.01,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
+                -0.001,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
                 1e-3, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
                 1e-11,  /* ScMin, */  1e-30, /* DcMin, */   1e-20, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
@@ -145,10 +145,10 @@ BASE_PARAM dfBase[5] =
             { // Variant of strict settings for highest accuracy
                 2,  /* PC */  2,     /* PD */   -5,   /* PRD */
                 1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
-                0, /* DT */     13000,   /* PLLG */   1,  /* PE */
+                0, /* DT */     30000,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
                 1000., /* DG */   1e-14,  /* DHB */  1e-20,  /* DS */
-                1e-7,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                1e-7,  /* DK */  0.01,  /* DF */  0.001,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
                 1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
@@ -161,7 +161,7 @@ BASE_PARAM dfBase[5] =
             { // Variant of strict settings for reactive mass transport (with sorption)
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
                 1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
-                0, /* DT */     13000,   /* PLLG */   1,  /* PE */
+                0, /* DT */     30000,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
                 1000., /* DG */   1e-14,  /* DHB */  1e-20,  /* DS */
                 1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
@@ -264,7 +264,7 @@ TProfil::TProfil( int nrt ):
     calcFinished = false;
     fStopCalc = false;
     comp_change_all = false;
-
+    internalBufer = 0;
 }
 
 // init submodules to calc module
@@ -362,6 +362,7 @@ void TProfil::ods_link( int )
 
     aObj[ o_spppar].SetPtr(  (void *)&pa );
     aObj[ o_spppar].SetM( sizeof( SPP_SETTING ) );
+aObj[ o_sptext].SetPtr(  internalBufer );
     //   aObj[ o_sppconst].SetPtr( sc_ );
     //   ob[o_sppconst].dim_M = sizeof( SPP_CONST );
     //   aObj[ o_sppdatac].SetPtr( &nQ );
@@ -373,6 +374,7 @@ void TProfil::ods_link( int )
 void TProfil::dyn_set(int )
 {
     pa.p.tprn= (char *)aObj[o_patprn].GetPtr();
+internalBufer = (char *)aObj[ o_sptext].GetPtr();
     if( rmults ) rmults->dyn_set();
     if( mtparm ) mtparm->dyn_set();
     if( syst ) syst->dyn_set();
@@ -383,6 +385,7 @@ void TProfil::dyn_set(int )
 void TProfil::dyn_kill(int )
 {
     pa.p.tprn = (char *)aObj[o_patprn].Free();
+internalBufer = (char *)aObj[ o_sptext].Free();
     if( rmults ) rmults->dyn_kill();
     if( mtparm ) mtparm->dyn_kill();
     if( syst ) syst->dyn_kill();
@@ -407,6 +410,7 @@ void TProfil::dyn_new(int )
 void TProfil::set_def( int )
 {
     pa = pa_;
+    internalBufer = 0;
     if( rmults ) rmults->set_def();
     if( mtparm ) mtparm->set_def();
     if( syst ) syst->set_def();

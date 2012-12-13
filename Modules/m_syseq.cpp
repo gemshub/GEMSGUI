@@ -89,7 +89,7 @@ void TSysEq::keyTest( const char *key )
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
-            Error( GetName(), "Illegal key!");
+            Error( GetName(), "Invalid key!");
     }
 }
 
@@ -120,7 +120,7 @@ int
 TSysEq::RecBuild( const char *key, int mode  )
 {
     if( pVisor->ProfileMode != true )
-        Error( GetName(), "Illegal mode!");
+        Error( GetName(), "Invalid mode!");
 
 
     if( !ssp->DM[0] || !ssp->DM[1] )
@@ -209,7 +209,7 @@ void
 TSysEq::RecCalc( const char *key )
 {
     if( pVisor->ProfileMode != true )
-        Error( GetName(), "Illegal mode!");
+        Error( GetName(), "Invalid mode!");
     TCModule::RecCalc(key);
 }
 

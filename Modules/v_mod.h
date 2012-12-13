@@ -159,7 +159,7 @@ o_nldcvs, o_nldchs, o_nlphv, o_nlphh, // new !!!
     o_wi_g0,  o_wo_lngam,  o_w_lngmo,  o_wo_lnsat,  o_wi_b,
     o_wo_u,   o_wd_uc,  o_wd_uefd, o_wd_ur, o_wo_c,  o_wd_icm,  o_wd_iclcm ,
     o_wd_icwm,  o_wo_bf, o_wo_bfc, o_w_xf ,  o_wo_yf,  o_ww_xfa,
-    o_ww_yfa,  o_wo_falp,
+    o_ww_yfa,  o_wo_falp,  o_wo_gamfs,
     o_wo_vph, o_wo_gph, o_wo_hph , o_wo_sph,  o_wo_cph,  o_wo_aph,   o_wo_uph,
     o_w_xetaa,  o_w_xetab, o_w_xetad, o_w_xfts,
     o_w_x,  o_wo_y, o_w_xy ,  o_w_xu ,o_wi_qp, o_wi_qd,
@@ -203,7 +203,8 @@ o_ngte, o_nhte, o_nste, o_nvte, o_ncpte, o_nate, o_nute,
     o_spppar,   // Params
     o_mupmv, o_muname, o_munotes, o_mudim, o_munfl, // Rmults
     o_mul1,  o_musf, o_musm,  o_musa,  o_musb,  o_mufn, o_mudcs,
-    o_tpstr,                                        // MTPARM
+    o_tpstr,                                 // MTPARM
+    o_sptext,    // added 12.12.12 As internal setup of Elements Dialog
     o_sppconst, o_sppdatac
 };
 

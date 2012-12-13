@@ -28,7 +28,7 @@
      <x>0</x>
      <y>0</y>
      <width>1121</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Record">
@@ -187,7 +187,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>GEMS3ModeTB</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -203,7 +203,7 @@
   </widget>
   <widget class="QToolBar" name="toolModule">
    <property name="windowTitle">
-    <string>toolBar_7</string>
+    <string>ModuleList</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -217,7 +217,7 @@
   </widget>
   <widget class="QToolBar" name="toolBar_2">
    <property name="windowTitle">
-    <string>toolBar_2</string>
+    <string>RecordTool</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -244,7 +244,7 @@
   </widget>
   <widget class="QToolBar" name="toolBar_4">
    <property name="windowTitle">
-    <string>toolBar_4</string>
+    <string>ModuleCalc</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -264,7 +264,7 @@
   </widget>
   <widget class="QToolBar" name="toolBar_3">
    <property name="windowTitle">
-    <string>toolBar_3</string>
+    <string>SystemSetCalc</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -288,7 +288,7 @@
   </widget>
   <widget class="QToolBar" name="toolBar_5">
    <property name="windowTitle">
-    <string>toolBar_5</string>
+    <string>PlotGraphTB</string>
    </property>
    <property name="movable">
     <bool>false</bool>
@@ -302,13 +302,13 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="separator"/>
    <addaction name="action_Plot"/>
    <addaction name="action_Print"/>
+   <addaction name="separator"/>
   </widget>
   <widget class="QToolBar" name="toolBar_6">
    <property name="windowTitle">
-    <string>toolBar_6</string>
+    <string>Help</string>
    </property>
    <property name="movable">
     <bool>false</bool>

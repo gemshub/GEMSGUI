@@ -21,6 +21,9 @@
   <property name="windowTitle">
    <string>Setup of files and filters to create/extend an independent modelling project</string>
   </property>
+  <property name="modal">
+   <bool>false</bool>
+  </property>
   <layout class="QGridLayout" name="gridLayout_6">
    <item row="0" column="0" colspan="6">
     <widget class="QTabWidget" name="twSetFilters">

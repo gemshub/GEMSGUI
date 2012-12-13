@@ -51,9 +51,9 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* /*name*/):
     //--setActions();
     Update();
 
-    // 07/08/2002 Sveta   Create, if no syseq is present in the project
-    if( rt[RT_SYSEQ].RecCount() <= 0)
-        CmCreate();
+    // moved    Create, if no syseq is present in the project
+    //if( rt[RT_SYSEQ].RecCount() <= 0)
+      //  CmCreate();
 }
 
 NewSystemDialog::~NewSystemDialog()

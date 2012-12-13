@@ -234,10 +234,10 @@ gstring::find(const char ch, size_t pos) const
 }
 
 size_t
-gstring::find_first_of(const char* s) const
+gstring::find_first_of(const char* s, size_t pos) const
 {
     int s_ln = strlen(s);
-    for(size_t kk=0; kk<length(); kk++)
+    for(size_t kk=pos; kk<length(); kk++)
         for(int ii=0; ii<s_ln; ii++)
             if( ps->elem(kk) == s[ii] )
                 return kk;

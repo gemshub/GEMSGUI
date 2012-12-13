@@ -58,7 +58,7 @@ TReadData::TReadData(const char *sd_key,
                pose = strchr( pose+1, '#');
             }
             if( !pose )
-            {  gstring str_err = "Illegal condition: \n";
+            {  gstring str_err = "Invalid condition: \n";
                str_err += input;
                Error( key_format.c_str(), str_err.c_str() );
             }
@@ -95,7 +95,7 @@ TReadData::getFormat()
        while( isdigit(input[i]))
                i++;
        if( input[i] != 's' )
-       {  gstring str_err = "Illegal format (must be '%nns'): \n";
+       {  gstring str_err = "Invalid format (must be '%nns'): \n";
                 str_err += input;
          Error( key_format.c_str(), str_err.c_str() );
        }
@@ -114,7 +114,7 @@ TReadData::getFormat()
          aFmts.Add( new RFormat( irec_r, 0, "" ));
          input+=4;
        } else
-       {gstring str_err = "Illegal format (must be IREC): \n";
+       {gstring str_err = "Invalid format (must be IREC): \n";
                 str_err += input;
          Error( key_format.c_str(), str_err.c_str() );
        }
@@ -125,7 +125,7 @@ TReadData::getFormat()
          aFmts.Add( new RFormat( empty_r, 0, S_EMPTY ));
          input+=5;
        } else
-         { gstring str_err = "Illegal format (must be EMPTY): \n";
+         { gstring str_err = "Invalid format (must be EMPTY): \n";
                 str_err += input;
            Error( key_format.c_str(), str_err.c_str() );
           }
@@ -141,7 +141,7 @@ TReadData::getFormat()
         gstring str = gstring( input, 0, i );
         int data = aObj.Find( str.c_str() );
         if( data == -1 )
-        {  gstring str_err = "Illegal object name: \n";
+        {  gstring str_err = "Invalid object name: \n";
             str_err += str;
            Error( key_format.c_str(), str_err.c_str() );
         }
@@ -171,7 +171,7 @@ TReadData::getFormat()
           }
           skipSpace();
           if( *input != ']')
-           {  gstring str_err = "Illegal format (left ']'): \n";
+           {  gstring str_err = "Invalid format (left ']'): \n";
                str_err += input;
               Error( key_format, str_err.c_str() );
             }
@@ -184,7 +184,7 @@ TReadData::getFormat()
        input++;
        char* pose = strchr( input, '\"');
        if( !pose )
-       {  gstring str_err = "Illegal string ( left simbol '\"'): \n";
+       {  gstring str_err = "Invalid string ( left simbol '\"'): \n";
               str_err += input;
           Error( key_format.c_str(), str_err.c_str() );
        }
@@ -194,7 +194,7 @@ TReadData::getFormat()
        }
        break;
    default:
-      {  gstring str_err = "Illegal format: \n";
+      {  gstring str_err = "Invalid format: \n";
          str_err += input;
          Error( key_format.c_str(), str_err.c_str() );
       }
@@ -251,7 +251,7 @@ TReadData::getData( bool isList )
         data = skip_s;
       else data = aObj.Find( str.c_str() );
  if( data == -1 )
- {  gstring str_err = "Illegal object name: \n";
+ {  gstring str_err = "Invalid object name: \n";
            str_err += str;
        Error( key_format.c_str(), str_err.c_str() );
  }
@@ -279,7 +279,7 @@ TReadData::getData( bool isList )
        }
      skipSpace();
      if( *input != ']')
-     {  gstring str_err = "Illegal format: \n";
+     {  gstring str_err = "Invalid format: \n";
            str_err += input;
        Error( key_format, str_err.c_str() );
      }

@@ -28,6 +28,7 @@ class PhaseWizard : public QDialog, public Ui::PhaseWizardData
 {
     Q_OBJECT
 
+    int ndxInPhPs_0;
     void 	resetNextButton();
     void 	resetBackButton();
 

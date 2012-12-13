@@ -193,25 +193,6 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
 }
 
 
-
-// reset mt counters
-void TGEM2MT::mt_reset()
-{
-// setup  counters
-//  mtp->cT = mtp->Tai[START_];
-//  mtp->cP = mtp->Pai[START_];
-  mtp->cV = 0.;
-  mtp->cTau = mtp->Tau[START_];
-  mtp->ctm = mtp->tmi[START_];
-  mtp->cnv = mtp->NVi[START_];
-  mtp->qc = 0;
-  mtp->kv = 0;
-  mtp->jt = 0;
-  mtp->cT = mtp->PTVm[START_][1];
-  mtp->cP = mtp->PTVm[START_][0];
-  mtp->ct = 0;
-}
-
 // setup begin initalization
 void TGEM2MT::init_arrays( bool mode )
 {
@@ -486,7 +467,7 @@ void TGEM2MT::make_A( long int siz_, char (*for_)[MAXFORMUNITDT] )
   }
 
   ErrorIf( mtp->Nb != TRMults::sm->GetMU()->N, GetName(),
-               "Illegal data in mtp->Nb ");
+               "Invalid data in mtp->Nb ");
 
   mtp->An = (double *)aObj[ o_mtan ].Alloc( siz_, mtp->Nb, D_ );
   fillValue(mtp->An, 0., (siz_*mtp->Nb) );
@@ -832,7 +813,7 @@ int get_ndx_(  int i,  int nO,  int Xplace )
               jj = ii;
               break;
          }
-     ErrorIf( ii == N, "Illegal component name for DataBr",
+     ErrorIf( ii == N, "Invalid component name for DataBr",
            "E95MSTran: Error in translation of GEM2MT math script ");
    }
 
@@ -1275,18 +1256,19 @@ void  TGEM2MT::LinkCSD(  long int nNode )
 // alloc memory for work arrays for nodes na->pNodT0() and na->pNodT1()
 void  TGEM2MT::allocNodeWork()
 {
-  aObj[o_n0w_mps].Alloc( mtp->nPHb, 1, D_);
-  aObj[o_n1w_mps].Alloc( mtp->nPHb, 1, D_);
-  aObj[o_n0w_vps].Alloc( mtp->nPHb, 1, D_);
-  aObj[o_n1w_vps].Alloc( mtp->nPHb, 1, D_);
-  aObj[o_n0w_m_t].Alloc( mtp->nICb, 1, D_);
-  aObj[o_n1w_m_t].Alloc( mtp->nICb, 1, D_);
-  aObj[o_n0w_con].Alloc( mtp->nDCb, 1, D_);
-  aObj[o_n1w_con].Alloc( mtp->nDCb, 1, D_);
-  aObj[o_n0w_mju].Alloc( mtp->nDCb, 1, D_);
-  aObj[o_n1w_mju].Alloc( mtp->nDCb, 1, D_);
-  aObj[o_n0w_lga].Alloc( mtp->nDCb, 1, D_);
-  aObj[o_n1w_lga].Alloc( mtp->nDCb, 1, D_);
+  DATACH* CH = na->pCSD();
+  aObj[o_n0w_mps].Alloc( CH->nPHb, 1, D_);
+  aObj[o_n1w_mps].Alloc( CH->nPHb, 1, D_);
+  aObj[o_n0w_vps].Alloc( CH->nPHb, 1, D_);
+  aObj[o_n1w_vps].Alloc( CH->nPHb, 1, D_);
+  aObj[o_n0w_m_t].Alloc( CH->nICb, 1, D_);
+  aObj[o_n1w_m_t].Alloc( CH->nICb, 1, D_);
+  aObj[o_n0w_con].Alloc( CH->nDCb, 1, D_);
+  aObj[o_n1w_con].Alloc( CH->nDCb, 1, D_);
+  aObj[o_n0w_mju].Alloc( CH->nDCb, 1, D_);
+  aObj[o_n1w_mju].Alloc( CH->nDCb, 1, D_);
+  aObj[o_n0w_lga].Alloc( CH->nDCb, 1, D_);
+  aObj[o_n1w_lga].Alloc( CH->nDCb, 1, D_);
 }
 
 void  TGEM2MT::freeNodeWork()

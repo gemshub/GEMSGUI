@@ -278,6 +278,8 @@ void TMulti::ods_link( int )
     aObj[ o_ww_yfa ].SetDim( pm.FIs, 1 );
     aObj[ o_wo_falp].SetPtr( pm.Falp );
     aObj[ o_wo_falp ].SetDim( pm.FI, 1 );
+    aObj[ o_wo_gamfs].SetPtr( pm.GamFs );
+    aObj[ o_wo_gamfs].SetDim( pm.L, 1 );
     aObj[ o_w_xetaa].SetPtr( pm.XetaA );
     aObj[ o_w_xetaa].SetDim(pm.FIs,pm.FIat);
     aObj[ o_w_xetab].SetPtr( pm.XetaB );
@@ -545,6 +547,7 @@ void TMulti::dyn_set(int /*q*/)
     pm.XFA   = (double *)aObj[ o_ww_xfa ].GetPtr();
     pm.YFA   = (double *)aObj[ o_ww_yfa ].GetPtr();
     pm.Falp  = (double *)aObj[ o_wo_falp ].GetPtr();
+pm.GamFs  = (double *)aObj[ o_wo_gamfs ].GetPtr();
     pm.XetaA = (double (*)[MST])aObj[ o_w_xetaa ].GetPtr();
     pm.XetaB = (double (*)[MST])aObj[ o_w_xetab ].GetPtr();
     pm.XetaD = (double (*)[MST])aObj[ o_w_xetad ].GetPtr(); // added 12.09.05 KD
@@ -729,6 +732,7 @@ void TMulti::dyn_kill(int /*q*/)
     pm.XFA   = (double *)aObj[ o_ww_xfa ].Free();
     pm.YFA   = (double *)aObj[ o_ww_yfa ].Free();
     pm.Falp  = (double *)aObj[ o_wo_falp ].Free();
+pm.GamFs  = (double *)aObj[ o_wo_gamfs ].Free();
     pm.XetaA = (double (*)[MST])aObj[ o_w_xetaa ].Free();
     pm.XetaB = (double (*)[MST])aObj[ o_w_xetab ].Free();
     pm.XetaD = (double (*)[MST])aObj[ o_w_xetad ].Free();
@@ -852,6 +856,7 @@ void TMulti::dyn_new(int /*q*/)
     pm.XF = (double *)aObj[ o_w_xf].Alloc( pm.FI, 1, D_ );
     pm.YF = (double *)aObj[ o_wo_yf].Alloc( pm.FI, 1, D_ );
     pm.Falp = (double *)aObj[ o_wo_falp].Alloc( pm.FI, 1, D_ );
+pm.GamFs = (double *)aObj[ o_wo_gamfs].Alloc( pm.L, 1, D_);
     pm.X = (double *)aObj[ o_w_x].Alloc( pm.L, 1, D_);
     pm.Y = (double *)aObj[ o_wo_y].Alloc( pm.L, 1, D_);
     pm.XY = (double *)aObj[ o_w_xy].Alloc( pm.L, 1, D_);

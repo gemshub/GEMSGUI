@@ -184,7 +184,7 @@ void TSysEq::dyn_set(int q)
 {
     // System  ------------------------------------------------------------------
     ErrorIf( ssp!=&ss[q]||stp!=&st[q], GetName(),
-             "Illegal access to ss in dyn_set.");
+             "Invalid access to ss in dyn_set.");
     ss[q].nnc = (short *)aObj[o_ssnnc].GetPtr();
     ss[q].llc = (short *)aObj[o_ssllc].GetPtr();
     ss[q].phc = (short *)aObj[o_ssphc].GetPtr();
@@ -261,7 +261,7 @@ void TSysEq::dyn_kill(int q)
 {
     // System ------------------------------------------------------------------
     ErrorIf( ssp!=&ss[q]||stp!=&st[q], GetName(),
-             "Illegal access to ss in dyn_kill.");
+             "Invalid access to ss in dyn_kill.");
     ss[q].nnc = (short *)aObj[ o_ssnnc ].Free();
     ss[q].llc = (short *)aObj[ o_ssllc ].Free();
     ss[q].phc = (short *)aObj[ o_ssphc ].Free();
@@ -337,7 +337,7 @@ void TSysEq::dyn_kill(int q)
 void TSysEq::dyn_new( int q )
 {
     ErrorIf( ssp!=&ss[q]||stp!=&st[q], GetName(),
-             "Illegal access to ss in dyn_new.");
+             "Invalid access to ss in dyn_new.");
     // System ------------------------------------------------------------------
     //ErrorIf( mup->L < 2, GetName(), "mup->L < 2");
 
@@ -591,7 +591,7 @@ void TSysEq::dyn_new( int q )
 void TSysEq::set_def( int q)
 {
     ErrorIf( ssp!=&ss[q]||stp!=&st[q], GetName(),
-             "Illegal access to ss in set_def.");
+             "Invalid access to ss in set_def.");
     // System ------------------------------------------------------------------
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     strcpy( ss[q].name, "`");

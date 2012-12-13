@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>765</width>
-    <height>609</height>
+    <width>763</width>
+    <height>619</height>
    </rect>
   </property>
   <property name="font">
@@ -20,6 +20,12 @@
   </property>
   <property name="windowTitle">
    <string>GEM-Selektor Proces</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_14">
    <item>
@@ -40,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>7</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -88,16 +94,16 @@
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The GEM2MT module is a tool for automation of simple reactive mass transport simulations coupled with GEM calculation of equilibrium states in spatially distributed nodes (boxes, volumes) over time steps. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;It is possible to perform 1D advection-diffusion numerical reactive transport modeling, as well as various sequential and flow-trough reactor sequences or generic box-flux (reservoir) dynamics. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Changes of species concentrations or amounts of phases through the node profile with time can be graphically monitored or logged to disk files in VTK format.  &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt; &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;GEM2MT module is a tool for automation of simple reactive mass transport simulations coupled with GEM calculation of equilibrium states in spatially distributed nodes (boxes, volumes) over time steps. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;1D advection-diffusion numerical reactive transport simuations can be performed, as well as the evolution of various sequential and flow-trough reactor sequences or generic box-flux (reservoir) dynamics can be modeled. I/O files for standalone GEMS3K calculations can be exported for multiple initial node recipes.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;Changes of species concentrations or amounts of phases through the node profile with time can be graphically monitored or logged to files in VTK format. As a special option, I/O files for standalone GEMS3K calculations can be exported for multiple initial node recipes. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="textFormat">
-          <enum>Qt::RichText</enum>
+          <enum>Qt::AutoText</enum>
          </property>
          <property name="scaledContents">
           <bool>false</bool>
@@ -128,7 +134,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QRadioButton" name="pselS">
             <property name="text">
-             <string>&amp;S     Sequential equilibration reactors (with moving fluids or solids )</string>
+             <string>&amp;S     Stepwise evolution of sequential equilibration reactors (with moving fluids or solids)</string>
             </property>
             <property name="shortcut">
              <string>Alt+T</string>
@@ -157,7 +163,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QRadioButton" name="pselF">
             <property name="text">
-             <string>&amp;F     Flow-through reactors ( simultaneous transport followed by equilibration)</string>
+             <string>&amp;F     Evolution of flow-through reactors ( simultaneous transport followed by equilibration)</string>
             </property>
             <property name="shortcut">
              <string>Alt+V</string>
@@ -183,7 +189,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QRadioButton" name="pselB">
             <property name="text">
-             <string>&amp;B     Box-flux megasystem (with time-step integration of MPG fluxes)</string>
+             <string>&amp;B     Box-flux megasystem evolution (with time-step integration of MPG fluxes)</string>
             </property>
             <property name="shortcut">
              <string>Alt+F</string>
@@ -209,7 +215,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QRadioButton" name="pselA">
             <property name="text">
-             <string>&amp;A     1D finite-difference (advection) Reactive Mass Transport</string>
+             <string>&amp;A     1D finite-difference (advection) reactive mass transport simulation</string>
             </property>
             <property name="shortcut">
              <string>Alt+A</string>
@@ -238,7 +244,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QRadioButton" name="pselD">
             <property name="text">
-             <string>&amp;D     1D finite-volume advection-diffusion Reactive Mass Transport</string>
+             <string>&amp;D     1D finite-volume advection-diffusion reactive mass transport simulation</string>
             </property>
             <property name="shortcut">
              <string>Alt+D</string>
@@ -264,7 +270,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QRadioButton" name="pselW">
             <property name="text">
-             <string>&amp;W    1D  random-walk advection-diffusion Reactive Mass Transport</string>
+             <string>&amp;W    1D  random-walk advection-diffusion reactive mass transport simulation</string>
             </property>
             <property name="shortcut">
              <string>Alt+W</string>
@@ -290,7 +296,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QRadioButton" name="pselT">
             <property name="text">
-             <string>&amp;T      Preparation of GEMS3K .csd, .ipm and .dbr input files for external coupled codes</string>
+             <string>&amp;T      Export of .DCH, .IPM and multiple initial .DBR GEMS3K I/O files for standalone codes</string>
             </property>
             <property name="shortcut">
              <string>Alt+S</string>
@@ -322,7 +328,7 @@ p, li { white-space: pre-wrap; }
           </font>
          </property>
          <property name="text">
-          <string>Step 2 -Dimensions for transport model and initial chemical systems</string>
+          <string>Step 2 -Dimensions for the reactive transport model and initial chemical systems</string>
          </property>
         </widget>
        </item>
@@ -345,9 +351,11 @@ p, li { white-space: pre-wrap; }
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Set here the number of local-equilibrium nodes (boxes, volumes) for the transport model (except T mode), and the number of system definitions for initialization of nodes or for export to GEMS3K input files. You can set also some options related to usage of math scripts and file output of simulation results.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;Set here the number of local-equilibrium nodes (boxes, volumes) for the transport model (except T mode), and the number of system definitions for initialization of nodes, or for the export to GEMS3K I/O files in T mode. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;Some options related to math scripts and file output of simulation results can also be configured.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignVCenter</set>
@@ -553,7 +561,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="1">
            <widget class="QLabel" name="TextLabel1_3">
             <property name="text">
-             <string>nIV - Number of initial chemical system definitions, must not exceed nC</string>
+             <string>nIV - Number of initial chemical system recipes, must not exceed nC</string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
@@ -591,7 +599,7 @@ p, li { white-space: pre-wrap; }
           <item row="2" column="0" colspan="2">
            <widget class="QCheckBox" name="c_PvICi">
             <property name="text">
-             <string>Use quantities of Independent Components to set compositions in  initial systems</string>
+             <string>Use quantities of Independent Components to set compositions in  initial recipes</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -608,7 +616,7 @@ p, li { white-space: pre-wrap; }
           <item row="1" column="1">
            <widget class="QLabel" name="TextLabel1_2_">
             <property name="text">
-             <string>Lb - Number of user-defined formula units for setting compositions in initial systems</string>
+             <string>Lb - Number of user-defined formula units for setting compositions in initial recipes</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -700,7 +708,7 @@ p, li { white-space: pre-wrap; }
           </font>
          </property>
          <property name="text">
-          <string>Step 3 -  Settings for GEMS3K data exchange interface</string>
+          <string>Step 3 -  Settings for the GEMS3K data exchange interface</string>
          </property>
         </widget>
        </item>
@@ -714,13 +722,13 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QGroupBox" name="groupBox_10">
          <property name="title">
-          <string>GEMS3K memory and file data exchange</string>
+          <string>GEMS3K memory and I/O file data exchange</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
            <widget class="QCheckBox" name="chSelect">
             <property name="text">
-             <string>Select ICs, DCs and phases to be exchanged via DATABR (take all, if unchecked)</string>
+             <string>Select ICs, DCs and phases to be exchanged via DBR files and DATABR structure (take all, if unchecked)</string>
             </property>
            </widget>
           </item>
@@ -741,7 +749,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QCheckBox" name="chComment">
             <property name="text">
-             <string>Write .dch, .ipm, .dbr files with comments for all data entries (text mode only)</string>
+             <string>Write .DCH, .IPM, .DBR I/O files with comments for all data entries (text mode only)</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -752,9 +760,9 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_11">
+        <widget class="QGroupBox" name="pTPInput">
          <property name="title">
-          <string>Automatic setup of GEMS3K lookup arrays with thermodynamic data </string>
+          <string>Automatic setup of GEMS3K look-up arrays with thermodynamic data </string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
@@ -975,9 +983,9 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_14">
+        <widget class="QGroupBox" name="pTPlookup">
          <property name="title">
-          <string> T and P grid values for lookup arrays</string>
+          <string> T and P grid values for look-up arrays</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_7">
           <item row="0" column="0" colspan="3">
@@ -1000,7 +1008,7 @@ p, li { white-space: pre-wrap; }
           <item row="2" column="0">
            <widget class="QLabel" name="label_17">
             <property name="text">
-             <string>Number of P points or pairs</string>
+             <string>Number of P points or TP pairs</string>
             </property>
            </widget>
           </item>
@@ -1020,7 +1028,7 @@ p, li { white-space: pre-wrap; }
           <item row="2" column="2">
            <widget class="QLabel" name="label_18">
             <property name="text">
-             <string>Number of T points</string>
+             <string>    Number of T points</string>
             </property>
            </widget>
           </item>
@@ -1038,6 +1046,50 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
          </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_10">
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_25">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Step 3b -  T and P values for GEMS3K look-up arrays of thermodynamic data</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="Line" name="line_10">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="label_27">
+         <property name="text">
+          <string>Temperature T, C</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_26">
+         <property name="text">
+          <string>Pressure P, bar</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -1280,7 +1332,7 @@ The number of boxes nC has already been defined at Step 2.
           </font>
          </property>
          <property name="text">
-          <string>Step 5 - Create a script for nodes / boxes initialization and time change ('Next &gt;' to keep old script)</string>
+          <string>Step 5 - Auto-script for nodes / boxes initialization and time change ('Next &gt;' to keep old script)</string>
          </property>
         </widget>
        </item>
@@ -1486,7 +1538,7 @@ The number of boxes nC has already been defined at Step 2.
           </font>
          </property>
          <property name="text">
-          <string>Step 6 - Create a script for graphical monitoring of simulations ('Next &gt;'  to keep the old script)</string>
+          <string>Step 6 - Script for graphical monitoring of simulations ('Next &gt;'  to keep the old script)</string>
          </property>
         </widget>
        </item>
@@ -1711,7 +1763,7 @@ The number of boxes nC has already been defined at Step 2.
        <item>
         <widget class="QCheckBox" name="c_PvnVTK">
          <property name="text">
-          <string>Select data fields to VTK output (if unchecked, use all VTK output data fields) </string>
+          <string>Select data fields for VTK output (if unchecked, use all output data fields) </string>
          </property>
         </widget>
        </item>
@@ -1870,7 +1922,7 @@ The number of boxes nC has already been defined at Step 2.
        <item>
         <widget class="QGroupBox" name="groupBox_17">
          <property name="title">
-          <string>Random-walk transport model (W mode)</string>
+          <string>Random-walk transport model (W mode) only</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
@@ -1971,7 +2023,7 @@ The number of boxes nC has already been defined at Step 2.
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Diffusion (TBD)</string>
+          <string>Diffusion (under construction)</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_8">
           <item row="0" column="0" colspan="2">
@@ -2064,7 +2116,7 @@ The number of boxes nC has already been defined at Step 2.
           <item row="0" column="0">
            <widget class="QLabel" name="textLabel13">
             <property name="text">
-             <string>(1)  Page 1 of the GEM2MT module window will appear. Enter simulator name / comment.</string>
+             <string>(1)  Page 1 of the GEM2MT module window will appear. Enter the simulator name / comment.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -2077,7 +2129,7 @@ The number of boxes nC has already been defined at Step 2.
           <item row="1" column="0">
            <widget class="QLabel" name="textLabel12">
             <property name="text">
-             <string>(2) There, set up the compositions and ID names of initial chemical systems. </string>
+             <string>(2) There, set up the compositions and ID names of initial chemical system recipes. </string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -2103,7 +2155,7 @@ The number of boxes nC has already been defined at Step 2.
           <item row="4" column="0">
            <widget class="QLabel" name="textLabel13_2">
             <property name="text">
-             <string>(5) Click 'Calculate', and watch graphical monitoring of the node profiles.</string>
+             <string>(5) Click 'Calculate', and watch graphical monitoring of the node profiles, if appropriate.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>

@@ -21,6 +21,9 @@
   <property name="windowTitle">
    <string>GEMS Data Object Cell Calculator</string>
   </property>
+  <property name="modal">
+   <bool>false</bool>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QComboBox" name="pValue">
@@ -188,9 +191,6 @@
         <property name="checkable">
          <bool>true</bool>
         </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>0</number>
-        </property>
        </widget>
       </item>
       <item row="0" column="2" colspan="2">
@@ -239,9 +239,6 @@
         <property name="checkable">
          <bool>true</bool>
         </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>1</number>
-        </property>
        </widget>
       </item>
       <item row="1" column="1" colspan="2">
@@ -257,9 +254,6 @@
         </property>
         <property name="checkable">
          <bool>true</bool>
-        </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>2</number>
         </property>
        </widget>
       </item>
@@ -282,9 +276,6 @@
         <property name="checkable">
          <bool>true</bool>
         </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>3</number>
-        </property>
        </widget>
       </item>
       <item row="1" column="4">
@@ -300,9 +291,6 @@
         </property>
         <property name="checkable">
          <bool>true</bool>
-        </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>4</number>
         </property>
        </widget>
       </item>
@@ -320,9 +308,6 @@
         <property name="checkable">
          <bool>true</bool>
         </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>5</number>
-        </property>
        </widget>
       </item>
       <item row="2" column="1" colspan="2">
@@ -338,9 +323,6 @@
         </property>
         <property name="checkable">
          <bool>true</bool>
-        </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>6</number>
         </property>
        </widget>
       </item>
@@ -374,9 +356,6 @@
         <property name="checkable">
          <bool>true</bool>
         </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>7</number>
-        </property>
        </widget>
       </item>
       <item row="3" column="0">
@@ -392,9 +371,6 @@
         </property>
         <property name="checkable">
          <bool>true</bool>
-        </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>8</number>
         </property>
        </widget>
       </item>
@@ -412,9 +388,6 @@
         <property name="checkable">
          <bool>true</bool>
         </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>9</number>
-        </property>
        </widget>
       </item>
       <item row="3" column="3">
@@ -430,9 +403,6 @@
         </property>
         <property name="checkable">
          <bool>true</bool>
-        </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>10</number>
         </property>
        </widget>
       </item>
@@ -450,9 +420,6 @@
         <property name="checkable">
          <bool>true</bool>
         </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>11</number>
-        </property>
        </widget>
       </item>
       <item row="4" column="0">
@@ -468,9 +435,6 @@
         </property>
         <property name="checkable">
          <bool>true</bool>
-        </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>12</number>
         </property>
        </widget>
       </item>
@@ -488,9 +452,6 @@
         <property name="checkable">
          <bool>true</bool>
         </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>13</number>
-        </property>
        </widget>
       </item>
       <item row="4" column="3">
@@ -506,9 +467,6 @@
         </property>
         <property name="checkable">
          <bool>true</bool>
-        </property>
-        <property name="buttonGroupId" stdset="0">
-         <number>14</number>
         </property>
        </widget>
       </item>

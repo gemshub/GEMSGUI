@@ -45,7 +45,15 @@ PhaseWizard::CmBack()
 void
 PhaseWizard::CmNext()
 {
-	stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()+1 );
+    int ndx = stackedWidget->currentIndex();
+
+    if( ndx == 0 && ndxInPhPs_0 != pPhPs_0->currentIndex())
+    {
+        vfMessage(this, "PhaseWizard",
+        "Key of Phase record will be changed");
+    }
+
+    stackedWidget->setCurrentIndex ( ndx+1 );
     resetNextButton();
     resetBackButton();
 }
@@ -114,6 +122,11 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[33], int size[22],
     if( ii >= 0  )
     	SCM_code->setCurrentIndex(ii);
 
+    ii = pPhPs_0->findText(QChar(flgs[6]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    if( ii >= 0  )
+       pPhPs_0->setCurrentIndex(ii);
+    ndxInPhPs_0 = pPhPs_0->currentIndex();
+
  //Page 2
     spinBox_dc_sc_M->setValue(size[3]);
     spinBox_ph_px_M->setValue(size[4]);
@@ -181,6 +194,11 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[33], int size[22],
 
 //Page5
     spinBoxSDrefLnk->setValue(size[0]);
+
+    if( flgs[12] == '+' )
+     getDCC->setChecked(true);
+    else
+     getDCC->setChecked(false);
 }
 
 
@@ -242,6 +260,9 @@ void PhaseWizard::getFlags( char flgs[33] )
      str = SCM_code->currentText();
   flgs[5] = str[0].toLatin1();
   // flgs[6] getting from key
+  str = pPhPs_0->currentText();
+  flgs[6] = str[0].toLatin1();
+
   if( spinBox_ph_cf_N->value() > 0 &&
       spinBox_ph_cf_M->value() > 0 )
     flgs[7] = '+';

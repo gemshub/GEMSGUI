@@ -443,7 +443,7 @@ void TMulti::EqstatExpand( const char *key, bool calcActivityModels )
     WeightMultipliers( false );
 
     // test multicomponent phases and load data for mixing models
-    // Added experimentally 07.03.2008   by DK
+    //
     if( pmp->FIs && AllPhasesPure == false )   // bugfix DK 11.03.2010
     {
       int k, jb, je=0;
@@ -474,7 +474,7 @@ void TMulti::EqstatExpand( const char *key, bool calcActivityModels )
 
         //   double FitVar3 = pmp->FitVar[3];  // Debugging: Reset the smoothing factor
         //   pmp->FitVar[3] = 1.0;
-        CalculateActivityCoefficients( LINK_TP_MODE);
+        CalculateActivityCoefficients( LINK_TP_MODE );
        // Computing DQF, FugPure and G wherever necessary; Activity coeffs are restored from lnGmo
         //   pmp->FitVar[3]=FitVar3;  // Debugging
         if(pmp->E && pmp->LO && pmp->Lads )  // Calling this only when sorption models are present
@@ -493,7 +493,6 @@ void TMulti::EqstatExpand( const char *key, bool calcActivityModels )
             }
             //CalculateActivityCoefficients( LINK_UX_MODE );
         }
-
         CalculateActivityCoefficients( LINK_UX_MODE );
       }
       else

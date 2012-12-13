@@ -26,41 +26,63 @@
 //-----------------------------------------------------------------------
 // Structures for SetFiltersDialog
 
-enum selectType { cbAqueous_ = 0,
-                  cbGaseous_,
-                  cbSorption_,
-                  cbIsotopes_,
-                 cbSolids_,
-                 cbSolutions_
-                 };
+
+enum selectType{
+    cbAqueous_ = 0,   //  PH_AQUEL = 'a', aqueous electrolyte
+    cbGaseous_,       //  PH_GASMIX = 'g', mixture of gases
+    cbFluid_,         //  PH_FLUID = 'f', fluid phase
+    cbPlasma_,        //  PH_PLASMA = 'p', plasma
+    cbSolids_,        //  PH_SINCOND = 's', condenced solid phase, also multicomponent
+    cbSindis_,        //  PH_SINDIS = 'd',  dispersed solid phase, also multicomponent
+    cbLiquid_,        //  PH_LIQUID = 'l', non-electrolyte liquid (melt)
+    cbSimelt_,        //  PH_SIMELT = 'm', silicate (magmatic) melt or non-aqueous electrolyte
+    cbSorption_,      //  PH_SORPTION = 'x', dilspersed solid with adsorption (ion exchange) in aqueous
+    cbPolyel_,        //  PH_POLYEL = 'y',  colloidal poly- (oligo)electrolyte
+    cbHcarbl_,        //  PH_HCARBL = 'h'   mixture of condensed hydrocarbons
+    cbSolutions_,     // Check to skip non-aqueous condensed multi-component (solution) Phases
+    cbIsotopes_,      // Isotopes x isotopic compounds
+    cbRes_
+};
+
 
 struct elmWindowData
 {
    TCStringArray ICrds;   // list of selected IComp
    TCStringArray oldIComps; // list from parent project
-//   TCStringArray flNames; // kernel, uncertain, specific
+   gstring aSelNames;  // names of selected grups of files
+   //   TCStringArray flNames; // kernel, uncertain, specific
 
-   bool flags[6];         // selectType
+   bool flags[14];         // selectType
 
    elmWindowData()
    {
-     flags[0] = true;
-     flags[1] = true;
-     flags[2] = false;
-     flags[3] = false;
-     flags[4] = false;
-     flags[5] = false;
+     flags[cbAqueous_] = true;
+     flags[cbGaseous_] = true;
+     flags[cbFluid_] = true;
+     flags[cbPlasma_] = false;
+     flags[cbSolids_] = true;
+     flags[cbSindis_] = true;
+     flags[cbLiquid_] = true;
+     flags[cbSimelt_] = false;
+     flags[cbSorption_] = false;
+     flags[cbPolyel_] = false;
+     flags[cbHcarbl_] = false;
+     flags[cbSolutions_] = false;
+     flags[cbIsotopes_] = false;
+     flags[cbRes_] = false;
+     aSelNames = "";
    }
 
   elmWindowData( elmWindowData& d )
   {
     uint ii;
-    for( ii=0; ii<6; ii++ )
+    for( ii=0; ii<14; ii++ )
      flags[ii] = d.flags[ii];
     for( ii=0; ii<d.ICrds.GetCount(); ii++ )
      ICrds.Add(d.ICrds[ii]);
     for( ii=0; ii<d.oldIComps.GetCount(); ii++ )
      oldIComps.Add(d.oldIComps[ii]);
+    aSelNames = d.aSelNames;
 //    for( ii=0; ii<d.flNames.GetCount(); ii++ )
 //     flNames.Add(d.flNames[ii]);
   }
@@ -68,17 +90,43 @@ struct elmWindowData
   const elmWindowData& operator=( const elmWindowData& d)
   {
     uint ii;
-    for( ii=0; ii<6; ii++ )
+    for( ii=0; ii<14; ii++ )
      flags[ii] = d.flags[ii];
     for( ii=0; ii<d.ICrds.GetCount(); ii++ )
      ICrds.Add(d.ICrds[ii]);
     for( ii=0; ii<d.oldIComps.GetCount(); ii++ )
      oldIComps.Add(d.oldIComps[ii]);
+    aSelNames = d.aSelNames;
 //    for( ii=0; ii<d.flNames.GetCount(); ii++ )
 //     flNames.Add(d.flNames[ii]);
 
     return *this;
   }
+
+  void setFlags( gstring strBuf)  //"<TDBflags> = "
+  {
+      size_t  pos1 =  strBuf.find( "<TDBflags> = " ); //13
+      if( pos1 != gstring::npos )
+      {
+         pos1 += 13;
+         size_t pos2 = strBuf.find( ";", pos1 );
+         if( pos2-pos1 >= 14 )
+           for(int ii=0; ii<14; ii++ )
+             flags[ii] = (strBuf[ii+pos1] =='+');
+      }
+  }
+
+  gstring getFlags()
+  {
+      gstring strBuf =  "<TDBflags> = "; //+13
+      for(int ii=0; ii<14; ii++ )
+          if( flags[ii] )
+              strBuf +='+';
+          else
+              strBuf +='-';
+      strBuf += ";\n";
+      return strBuf;
+   }
 
 };
 
@@ -254,12 +302,12 @@ struct cmSetupData
 };
 
 // Checkboxes in Phases page of SetFiltersDialog
-enum copyFlagX { PHcopyL_ = 0,
-                 PHcopyF_,
-                 PHcopyD_,
-                 PHcopyN_,
-                 PHcopyA_,
-                 PHcopyY_
+enum copyFlagX { PHcopyL__ = 0, // (deleted!) Copy Phase records for &liquid (glass, hydrocarbon, melt) phases
+                 PHcopyF_,     // Copy only Phase records &that retain all species after filtering
+                 PHcopyD_,     // Create a list of discarded, but partially &usable Phase records
+                 PHcopyN__,     // (deleted!) Copy also Phase records for non-&ideal solution phases
+                 PHcopyA__,     // (deleted!) Copy Phase records for aqueous &electrolyte and/or gas phase
+                 PHcopyY__      // (deleted!) Copy Phase records for &non-aqueous adsorption phases
                  };
 
 struct phSetupData

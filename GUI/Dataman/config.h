@@ -71,7 +71,10 @@ public:
     bool SetSection(const gstring& s);
     gstring getFirst();
     gstring getNext();
-
+    void close()
+    {
+      ini.close();  // close vis_cn.ini after reading it
+    }
     // get current values ( after getNext() )
     // no errors are verified
     int getcInt();

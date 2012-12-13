@@ -28,7 +28,7 @@
 #else
 
 #include <ctime>
-#include "ms_gem2mt.h"
+#include "m_gem2mt.h"
 #include "nodearray.h"
 
 #endif
@@ -58,6 +58,7 @@ void  TGEM2MT::copyNodeArrays()
    }  // ii    end of node iteration loop
 }
 
+
 // put HydP
 void  TGEM2MT::putHydP( DATABRPTR* C0 )
 {
@@ -80,6 +81,7 @@ void  TGEM2MT::putHydP( DATABRPTR* C0 )
 }
 
 #ifndef IPMGEMPLUGIN
+
 
 //-------------------------------------------------------------------
 // NewNodeArray()  makes work DATACH structure
@@ -665,10 +667,11 @@ if( mtp->PsVTK != S_OFF )
 //  This loop contains the mass transport iteration time step
      do {   // time iteration step
 
-          if( mtp->ct > 0)
+#ifndef IPMGEMPLUGIN
+
+       if( mtp->ct > 0)
             CalcStartScript();
 
-#ifndef IPMGEMPLUGIN
        sprintf(buf, "   time %lg; step %d ", mtp->cTau, mtp->ct );
        Vmessage = "Calculating Reactive Mass Transport (RMT): ";
        Vmessage += buf;
@@ -813,10 +816,16 @@ clock_t TGEM2MT::PrintPoint( long int nPoint, FILE* diffile, FILE* logfile, FILE
 
        sprintf( buf, "%05d", mtp->ct);
        gstring name = buf;
-       name.strip();
+
+#ifdef IPMGEMPLUGIN
+    strip(name);
+#else
+    name.strip();
+#endif
        name += ".vtk";
 
        name = pathVTK + prefixVTK + name;
+
        fstream out_br(name.c_str(), ios::out );
        ErrorIf( !out_br.good() , name, "VTK text make error");
        na->databr_to_vtk(out_br, nameVTK.c_str(), mtp->cTau, mtp->ct, mtp->nVTKfld, mtp->xVTKfld );

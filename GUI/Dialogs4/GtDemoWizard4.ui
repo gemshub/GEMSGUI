@@ -21,6 +21,9 @@
   <property name="windowTitle">
    <string>GEM-Selektor Proces</string>
   </property>
+  <property name="modal">
+   <bool>false</bool>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
@@ -40,7 +43,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout">
@@ -71,7 +74,7 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <layout class="QHBoxLayout">
+        <layout class="QHBoxLayout" name="layout41">
          <item>
           <widget class="QLabel" name="textLabel10">
            <property name="sizePolicy">
@@ -297,7 +300,7 @@ To tell the GtDemo module what data to sample, a script must be provided in the 
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">
-      <layout class="QGridLayout" name="gridLayout">
+      <layout class="QGridLayout" name="gridLayout12">
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="sizePolicy">
@@ -749,7 +752,7 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout">
+    <layout class="QHBoxLayout" name="gridLayout21">
      <item>
       <widget class="QPushButton" name="pHelp">
        <property name="font">
@@ -767,7 +770,7 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
       </widget>
      </item>
      <item>
-      <spacer>
+      <spacer name="sp_1">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>

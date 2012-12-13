@@ -1,61 +1,83 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-  <meta http-equiv="Content-Type"
- content="text/html; charset=iso-8859-1">
+<html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <meta name="GENERATOR" content="Mozilla/4.7 [Netscape]">
   <title>GEMS3 ReacDC Module</title>
   <meta name="description" content="Version 2.0.0-PSI">
 </head>
 <body>
-<h1><img src="gems1.png" align="left" height="48" width="48"> <font
- color="#000066"> GEM-Selektor version 3</font> </h1>
-<h2><font size="+3">Reaction-defined Components (ReacDC) Module</font>&nbsp;
-</h2>
+<h1><img src="gems1.png" height="48" align="left" width="48"> <font color="#000066"> GEM-Selektor version 3</font> </h1>
+<h1>Reaction-defined Components (ReacDC) Module&nbsp;
+</h1>
+
 <hr size="2" width="100%">
 <h3>Contents</h3>
 <blockquote>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#REACDC_FORMAT">1.
-Reaction-Defined Data Format for Dependent Components</a></font></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a
- href="#REACDC_CALCULATE"> 1.1. ReacDC Module Calculations</a></font></p>
-  <p><a href="#REACDC_CALCULATE"><font
- face="Helvetica, Arial, sans-serif"></font></a><font
- face="Helvetica, Arial, sans-serif"><a href="#REACDC_CASES">1.2.
-Examples and special cases</a></font></p>
-  <p><a href="#REACDC_MWIZARD"><font face="Helvetica, Arial, sans-serif">2.
-ReacDC Create/Remake Wizard</font></a></p>
-  <p><a href="#WZSTEP_1"><font face="Helvetica, Arial, sans-serif">2.1.
-ReacDC Wizard Step 1</font></a></p>
-  <p><a href="#WZSTEP_2"><font face="Helvetica, Arial, sans-serif">2.2.
-ReacDC Wizard Step 2</font></a></p>
-  <p><a href="#WZSTEP_3"><font face="Helvetica, Arial, sans-serif">2.3.
-ReacDC Wizard Step 3</font></a></p>
-  <p><a href="#REACDC_MWINDOW"><font face="Helvetica, Arial, sans-serif">3.
-ReacDC Module Window</font></a></p>
-  <p><a href="#MWPAGE_1"><font face="Helvetica, Arial, sans-serif">3.1.
-ReacDC Window Page 1</font></a></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#MWPAGE_2">3.2.
-ReacDC Window Page 2</a><br>
-  </font></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a
- href="#REACDC_DATA_OBJECTS"> 4. Data Entries on ReacDC Window Pages</a>
-  </font></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#RE_LOGK_FT">4.1.
-Coefficients of logK = f(T) equation</a></font></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a
- href="#REACDC_PROTECTED"> 4.2. Data objects that can be modified
-through
-remake/create wizard only</a></font></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a
- href="#REACDC_DOD_OBSOLETE">4.3. Reserved and obsolete data objects</a></font></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#REACDC_ERRORS">5.
-Warnings and error messages</a></font></p>
+  <blockquote>
+  </blockquote>
 </blockquote>
+<p><a href="#REACDC_FORMAT">1.
+Reaction-Defined Data Format for Dependent Components</a>
+  </p>
+<blockquote>
+  <p><a href="#REACDC_CALCULATE"> 1.1. ReacDC Module Calculations</a></p>
+  <p><a href="#REACDC_CASES">1.2.
+Examples and special cases</a></p>
+</blockquote>
+
+  
+  
+<p><a href="#REACDC_MWIZARD">2.
+ReacDC Create/Remake Wizard</a>
+  </p>
+<blockquote>
+  <p><a href="#WZSTEP_1">2.1.
+ReacDC Wizard Step 1</a></p>
+  <p><a href="#WZSTEP_2">2.2.
+ReacDC Wizard Step 2</a></p>
+  <p><a href="#WZSTEP_3">2.3.
+ReacDC Wizard Step 3</a></p>
+</blockquote>
+
+  
+  
+  
+<p><a href="#REACDC_MWINDOW">3.
+ReacDC Module Window</a>
+  </p>
+<blockquote>
+  <p><a href="#MWPAGE_1">3.1.
+ReacDC Window Page 1</a></p>
+  <p><a href="#MWPAGE_2">3.2.
+ReacDC Window Page 2</a></p>
+</blockquote>
+
+  
+  
+  
+<p><a href="#REACDC_DATA_OBJECTS"> 4. Data Entries on ReacDC Window Pages</a>
+  
+  </p>
+<blockquote>
+  <p><a href="#RE_LOGK_FT">4.1.
+Coefficients of log<i>K</i> = <i>f</i>(<i>T</i>) equation</a></p>
+  <p><a href="#REACDC_PROTECTED"> 4.2. Data objects that can be modified
+through
+remake/create wizard only</a></p>
+  <p><a href="#REACDC_DOD_OBSOLETE">4.3. Reserved and obsolete data objects</a></p>
+</blockquote>
+
+  
+  
+  
+<p><a href="#REACDC_ERRORS">5.
+Warnings and error messages</a>
+</p>
+
 <br>
 <hr size="2" width="100%">
-<h2><a name="REACDC_FORMAT"></a><font size="+3">1. Reaction-Defined
-Data Format for Dependent Components</font><br>
+<h2><a name="REACDC_FORMAT"></a>1. Reaction-Defined
+Data Format for Dependent Components<br>
 </h2>
 <p>ReacDC records can be used for defining thermodynamic properties of
 aqueous
@@ -67,8 +89,7 @@ of the dissolution, association or surface complexation reaction is
 usually
 known at 25 <sup>o</sup>C or other temperatures. <br>
 </p>
-<p>A&nbsp;ReacDC record describes a reaction between <a
- href="glossary.html#DT_dependent_component">dependent components</a>
+<p>A&nbsp;ReacDC record describes a reaction between <a href="glossary.html#DT_dependent_component">dependent components</a>
 (species)
 with stoichiometry coefficients and standard molar properties (dGr,
 dHr,
@@ -86,8 +107,7 @@ are computed from standard molar properties of the reaction and those
 of all
 other species involved in the reaction. The "new", reaction-defined
 species,
-actually, gives a name to the reaction in the form of <a
- href="gdb_rkey.html#dbm_ReacDC">ReacDC record key</a>. Thermodynamic
+actually, gives a name to the reaction in the form of <a href="gdb_rkey.html#dbm_ReacDC">ReacDC record key</a>. Thermodynamic
 properties
 of the new species will be automatically maintained consistent to those
 of
@@ -98,8 +118,7 @@ of thermodynamic properties of reaction-defined species at elevated <i>T,P</i>.<
 </p>
 <p>When a ReacDC record for a "new" species is created, the "involved"
 species
-must already exist in the project database as either <a
- href="gm_dcomp.html">DComp</a> or ReacDC records. Any reaction defined
+must already exist in the project database as either <a href="gm_dcomp.html">DComp</a> or ReacDC records. Any reaction defined
 in
 a ReacDC record can refer to other ReacDC records, thus forming a
 "reaction
@@ -158,13 +177,10 @@ cancel
 out. <br>
 </p>
 <br>
-<h3><br>
-</h3>
-<br>
 <hr style="width: 100%; height: 2px;">
-<h3><a name="REACDC_CALCULATE"></a><small><font size="+3"><small>1.1.
+<h3><a name="REACDC_CALCULATE"></a>1.1.
 ReacDC module
-calculations</small></font></small></h3>
+calculations</h3>
 <p>After you have entered the standard effects of the reaction (and
 EMPTY
 values where necessary), click on the "Calculate..." toolbar button or
@@ -175,8 +191,7 @@ may ask you to save the ReacDC record first (always a good idea if the
 record
 is just created). Which exactly calculations are to be performed and
 what
-input data will be used, is defined by the <a
- href="g_useref.html#TCALCMETHODCODE">method codes</a> which can be
+input data will be used, is defined by the <a href="g_useref.html#TCALCMETHODCODE">method codes</a> which can be
 changed
 in <a href="#REACDC_DOD_REMAKE">Remake</a> mode only.</p>
 <p>In a moment, you will see a complete set of standard
@@ -189,11 +204,9 @@ case, stay on the safe side and reject insertion of calculated values,
 then
 check the input values and try calculation again. After successful
 calculation,
-you can see on Page 2 the coefficients of logK = f(T) equation (in the <a
- href="#RE_LOGK_FT"><tt>aiLgKr</tt></a> vector), computed from standard
+you can see on Page 2 the coefficients of logK = f(T) equation (in the <a href="#RE_LOGK_FT"><tt>aiLgKr</tt></a> vector), computed from standard
 properties
-of the reaction. In the <a href="#TCint_"><tt>TCint_</tt></a> and <a
- href="#P_int"><tt>P_int</tt></a> fields to the left, enter the ranges
+of the reaction. In the <a href="#TCint_"><tt>TCint_</tt></a> and <a href="#P_int"><tt>P_int</tt></a> fields to the left, enter the ranges
 of
 applicability of the obtained temperature/ pressure extrapolation
 (usually
@@ -204,26 +217,24 @@ save the record to database. Now, you can browse other records or
 to create a new ReacDC record. </p>
 <br>
 <br>
-<hr style="width: 100%; height: 2px;"><br>
-<h3><a name="REACDC_CASES"></a><small><font size="+3"><small>1.2.
+<hr style="width: 100%; height: 2px;"><h3><a name="REACDC_CASES"></a>1.2.
 Examples and
-special cases</small></font></small></h3>
+special cases</h3>
 &lt;to be added&gt;<br>
 <br>
-<hr style="width: 100%; height: 2px;"><br>
-<h3><font size="+3"><a name="REACDC_MWIZARD"></a>2. ReacDC
-Create/Remake Wizard<br>
-</font></h3>
+<hr style="width: 100%; height: 2px;">
+<h2><a name="REACDC_MWIZARD"></a>2. ReacDC
+Create/Remake Wizard<font size="+3"><br>
+  </font></h2>
+
 <p><font face="Helvetica, Arial, sans-serif">&lt;to be revised&gt;</font></p>
-<p>To construct a reaction in ReacDC record, close your <a
- href="gm_project.html">modelling project</a> and switch to
+<p>To construct a reaction in ReacDC record, close your <a href="gm_project.html">modelling project</a> and switch to
 "Thermodynamic
 Database" mode of GEM-Selektor. There, open the "Dependent Components
 (ReacDC)"
 module window and execute the "Record" "Create" menu command. In the
 appearing
-"ReacDC: Insert a new record key" dialog, make a new <a
- href="gdb_rkey.html#dbm_ReacDC">ReacDC record key</a> (at best
+"ReacDC: Insert a new record key" dialog, make a new <a href="gdb_rkey.html#dbm_ReacDC">ReacDC record key</a> (at best
 selecting
 one of existing keys "From List" and modifying it), and press "Ok".
 This
@@ -233,8 +244,7 @@ ReacDC record.&nbsp; A small "ReacDC: Remake Dialog ..." will appear.
 You
 can read the tooltips on all the configuration fields and flags, or
 click
-on any of them and press <tt>F1</tt> to read help pages (available <a
- href="gm_reacdc.html#REACDC_DOD_REMAKE">below in this manual</a>).
+on any of them and press <tt>F1</tt> to read help pages (available <a href="gm_reacdc.html#REACDC_DOD_REMAKE">below in this manual</a>).
 Change necessary
 fields
 and press "Ok" to proceed. <br>
@@ -265,8 +275,7 @@ but it is
 obligatory
 to enter there the <a href="g_useref.html#FORMULA">chemical formula</a>
 of
-the "new" species. When ready, fill out a vector &nbsp;<a
- href="gm_reacdc.html#SC_DC"><tt>SC_DC</tt></a>
+the "new" species. When ready, fill out a vector &nbsp;<a href="gm_reacdc.html#SC_DC"><tt>SC_DC</tt></a>
 of the stoichiometry coefficients of all species involved in the
 reaction
 (the species names in the form of DComp/ReacDC record keys are visible
@@ -285,12 +294,9 @@ are -1, -1, +1 and +2, respectively.<br>
 </p>
 <p>After the reaction has been formulated, you must set up its standard
 properties
-in <a href="gm_reacdc.html#V0r_0"><tt>V0r[0]</tt></a>; <a
- href="gm_reacdc.html#G0r_0"><tt>G0r[0]</tt></a>
-or <a href="gm_reacdc.html#logKr_0"><tt>logKr[0]</tt></a> or <a
- href="gm_reacdc.html#logKr_1"><tt>logKr[1]</tt></a>;
-<a href="gm_reacdc.html#S0r_0"><tt>S0r[0]</tt></a> or <a
- href="gm_reacdc.html#H0r_0"><tt>H0r[0]</tt></a>;
+in <a href="gm_reacdc.html#V0r_0"><tt>V0r[0]</tt></a>; <a href="gm_reacdc.html#G0r_0"><tt>G0r[0]</tt></a>
+or <a href="gm_reacdc.html#logKr_0"><tt>logKr[0]</tt></a> or <a href="gm_reacdc.html#logKr_1"><tt>logKr[1]</tt></a>;
+<a href="gm_reacdc.html#S0r_0"><tt>S0r[0]</tt></a> or <a href="gm_reacdc.html#H0r_0"><tt>H0r[0]</tt></a>;
 and <a href="gm_reacdc.html#Cp0r_0"><tt>Cp0r[0]</tt></a> cells. Zeros
 are valid
 quantities
@@ -306,8 +312,7 @@ cell),
 you can use only one, and two other must be filled with EMPTY values
 (they
 will be automatically calculated later). Likewise, you can enter either
-<a href="gm_reacdc.html#S0r_0"><tt>S0r[0]</tt></a> or <a
- href="gm_reacdc.html#H0r_0"><tt>H0r[0]</tt></a>
+<a href="gm_reacdc.html#S0r_0"><tt>S0r[0]</tt></a> or <a href="gm_reacdc.html#H0r_0"><tt>H0r[0]</tt></a>
 but another must be set EMPTY. <br>
 </p>
 <p>In most cases (by default), ReacDC records are set to define the
@@ -332,51 +337,61 @@ non-zero dS0.&nbsp; &nbsp; <br>
 <br>
 <br>
 <hr style="width: 100%; height: 2px;">
-<p><font face="Helvetica, Arial, sans-serif"><br>
-</font></p>
-<h3><font face="Helvetica, Arial, sans-serif"><a name="WZSTEP_1"></a>2.1.
-ReacDC Wizard Step 1</font></h3>
+
+<h3><a name="WZSTEP_1"></a>2.1.
+ReacDC Wizard Step 1</h3>
 <p><br>
 </p>
-<hr style="width: 100%; height: 2px;">
-<p><font face="Helvetica, Arial, sans-serif"><br>
-</font></p>
-<h3><font face="Helvetica, Arial, sans-serif"><a name="WZSTEP_2"></a>2.2.
-ReacDC Wizard Step 2</font></h3>
 <p><br>
 </p>
+
 <hr style="width: 100%; height: 2px;">
-<p><font face="Helvetica, Arial, sans-serif"><br>
-</font></p>
-<h3><font face="Helvetica, Arial, sans-serif"><a name="WZSTEP_3"></a>2.3.
-ReacDC Wizard Step 3</font></h3>
+
+<h3><a name="WZSTEP_2"></a>2.2.
+ReacDC Wizard Step 2</h3>
 <p><br>
 </p>
-<hr style="width: 100%; height: 2px;">
-<p><font face="Helvetica, Arial, sans-serif"><br>
-</font></p>
-<h2><font face="Helvetica, Arial, sans-serif"><a name="REACDC_MWINDOW"></a>3.
-ReacDC Module Window</font></h2>
 <p><br>
 </p>
+
 <hr style="width: 100%; height: 2px;">
-<p><font face="Helvetica, Arial, sans-serif"><br>
-</font></p>
-<h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_1"></a>3.1.
-ReacDC Window Page 1</font></h3>
+
+<h3><a name="WZSTEP_3"></a>2.3.
+ReacDC Wizard Step 3</h3>
 <p><br>
 </p>
+<p><br>
+</p>
+
 <hr style="width: 100%; height: 2px;">
-<p><font face="Helvetica, Arial, sans-serif"><br>
-</font></p>
-<h3><font face="Helvetica, Arial, sans-serif"><a name="MWPAGE_2"></a>3.2.
-ReacDC Window Page 2</font></h3>
+
+<h2><a name="REACDC_MWINDOW"></a>3.
+ReacDC Module Window</h2>
+<p><br>
+</p>
+<p><br>
+</p>
+
+<hr style="width: 100%; height: 2px;">
+
+<h3><a name="MWPAGE_1"></a>3.1.
+ReacDC Window Page 1</h3>
+<p><br>
+</p>
+<p><br>
+</p>
+
+<hr style="width: 100%; height: 2px;">
+
+<h3><a name="MWPAGE_2"></a>3.2.
+ReacDC Window Page 2</h3>
+<br>
 <br>
 <br>
 <hr size="2" width="100%">
-<h2><a name="REACDC_DATA_OBJECTS"></a><font size="+3">4. Data Entries
+<h2><a name="REACDC_DATA_OBJECTS"></a>4. Data Entries
 on ReacDC Window
-Pages</font>
+Pages
 </h2>
 <dl>
   <dt> <br>
@@ -469,7 +484,8 @@ aqueous or surface species</dd>
 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp;hematite</dd>
     <dd> <tt>/3/H2/18/O</tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; isotopic form of water</dd>
+&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; isotopic form of water</dd>
   </blockquote>
   <dd>&nbsp;The <tt>RDform</tt> field is processed when you click on
 "Calculate"
@@ -491,8 +507,7 @@ of DC record keys (species names) involved in the reaction</dt>
   <dd>&nbsp;&nbsp; &nbsp;&nbsp;</dd>
   <dd>This list contains DC keys with names of the species involved
 into
-the reaction. The keys are interpreted according to codes in the <a
- href="#REmDC"><tt>REmDC</tt></a> column. This list is created or
+the reaction. The keys are interpreted according to codes in the <a href="#REmDC"><tt>REmDC</tt></a> column. This list is created or
 updated
 automatically during remake/create of the ReacDC record., when the user
 selects
@@ -621,8 +636,7 @@ measurement are defined bu the code in <a href="#RE_set_1"><tt>RE_set[1]</tt></a
 properties
 of a reaction-defined species. If j-th DC is referred to a DComp or
 ReacDC
-record (i.e. marked with <tt>"d"</tt> or <tt>"r"</tt> in the <a
- href="#REmDC"><tt>REmDC</tt></a> column) then this record is loaded
+record (i.e. marked with <tt>"d"</tt> or <tt>"r"</tt> in the <a href="#REmDC"><tt>REmDC</tt></a> column) then this record is loaded
 into
 memory and the standard molar properties are copied into a j-th row of <tt>Par_DC</tt>
 table. If the species is marked as <tt>"n"</tt> or <tt>"i"</tt> then
@@ -681,8 +695,7 @@ Uncertainty
 of <i>V<sup>0</sup></i> &nbsp;dev(<i>V<sup>0</sup></i>) (J/bar)</dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd> Absolute uncertainty of <i>V<sup>0</sup></i>&nbsp; value (see <tt><font
- size="+1"><a href="#V0r_1">V0r[1]</a></font></tt> cell),&nbsp; if
+  <dd> Absolute uncertainty of <i>V<sup>0</sup></i>&nbsp; value (see <tt><font size="+1"><a href="#V0r_1">V0r[1]</a></font></tt> cell),&nbsp; if
 known,
 must be entered by the user in the same units of measurement as&nbsp; <i>V<sup>0</sup></i>&nbsp;
 . If unknown, put a default EMPTY value "---".</dd>
@@ -749,8 +762,7 @@ also
 the <tt>H0r[0]</tt> cell) and calculation repeated again.&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
-  <dd>For an isotopic form (marked as <tt>"i"</tt> in the <a
- href="#REmDC"><tt>REmDC</tt></a> column), this cell contains a value
+  <dd>For an isotopic form (marked as <tt>"i"</tt> in the <a href="#REmDC"><tt>REmDC</tt></a> column), this cell contains a value
 1000*ln(K"),
 where K" stands for a fractionation constant of an isotope between this
 compound
@@ -824,8 +836,7 @@ recalculation.&nbsp;</dd>
   </dd>
   <dt> <a name="G0r_1"></a><big><big><b><tt>G0r[1]</tt></b></big></big>
 -&nbsp;Standard
-molar (partial molal) Gibbs energy of formation <span
- style="font-style: italic;">G<sup>0</sup></span> of "new" DC from IC
+molar (partial molal) Gibbs energy of formation <span style="font-style: italic;">G<sup>0</sup></span> of "new" DC from IC
 at <i>Tr</i> and <i>Pr</i> (J/mol)</dt>
   <dd>&nbsp;&nbsp; &nbsp;</dd>
   <dd>The standard molar (partial molal) Gibbs energy of formation <i>G<sup>0</sup></i>&nbsp;
@@ -848,8 +859,7 @@ log<i>K</i> or <i>K</i> or <i>dGr</i> value has been given.</dd>
 Uncertainty
 of&nbsp;<i>G<sup>0</sup></i>,&nbsp; dev(<i>G<sup>0</sup></i>) (J/mol)</dt>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
-  <dd> Absolute uncertainty of <i>G<sup>0</sup></i>&nbsp; value (see <tt><font
- size="+1"><a href="#G0r_1">G0r[1]</a></font></tt> cell),&nbsp; if
+  <dd> Absolute uncertainty of <i>G<sup>0</sup></i>&nbsp; value (see <tt><font size="+1"><a href="#G0r_1">G0r[1]</a></font></tt> cell),&nbsp; if
 known,
 must be entered by the user in the same units of measurement as&nbsp; <i>G<sup>0</sup></i>&nbsp;
 . If unknown, put here a default EMPTY value "---".</dd>
@@ -884,16 +894,14 @@ the
 user; in this case, d<i>Gr</i> and <i>K</i> and log<i>K</i>&nbsp; or d<i>Sr</i>
 must be set to EMPTY values because they will be calculated from d<i>Hr</i>.&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
-  <dd>Units of measurement are defined by the code in <a
- href="#RE_set_1"><tt>RE_set[1]</tt></a>. Default value of d<i>Hr</i>
+  <dd>Units of measurement are defined by the code in <a href="#RE_set_1"><tt>RE_set[1]</tt></a>. Default value of d<i>Hr</i>
 is EMPTY
 "---".&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="H0r_1"></a><big><big><b><tt>H0r[1]</tt></b></big></big>
 -&nbsp;Standard
-molar (partial molal) enthalpy of formation <span
- style="font-style: italic;">H</span><sup>0</sup> of the "new" DC from
+molar (partial molal) enthalpy of formation <span style="font-style: italic;">H</span><sup>0</sup> of the "new" DC from
 IC
 at <i>Tr</i> and <i>Pr</i> (J/mol)</dt>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
@@ -915,8 +923,7 @@ cell. There is no need to enter this value.</dd>
 Uncertainty
 of <i>H<sup>0</sup></i>, dev(<i>H<sup>0</sup></i>) (J/mol)</dt>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
-  <dd> Absolute uncertainty of <i>H<sup>0</sup></i>&nbsp; value (see <tt><font
- size="+1"><a href="#H0r_1">H0r[1]</a></font></tt> cell),&nbsp; if
+  <dd> Absolute uncertainty of <i>H<sup>0</sup></i>&nbsp; value (see <tt><font size="+1"><a href="#H0r_1">H0r[1]</a></font></tt> cell),&nbsp; if
 known,
 must be entered by the user in the same units of measurement as&nbsp; <i>H<sup>0</sup></i>&nbsp;
 . If unknown, put here a default EMPTY value "---".</dd>
@@ -946,8 +953,7 @@ equation:&nbsp;</dd>
     </dd>
   </blockquote>
   <dd>d<i>Sr</i> will also be calculated algebraically from <i>S<sup>0</sup></i>
-(absolute entropy) values if no "new" species were specified in the <a
- href="#REmDC"><tt>REmDC</tt></a> column.</dd>
+(absolute entropy) values if no "new" species were specified in the <a href="#REmDC"><tt>REmDC</tt></a> column.</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Alternatively, the non-empty d<i>Sr</i> value can be entered by
 the
@@ -957,16 +963,14 @@ d<i>Hr</i> must be set to EMPTY values because they will be calculated
 from
 d<i>Sr</i>.&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
-  <dd>Units of measurement are defined by the code in <a
- href="#RE_set_1"><tt>RE_set[1]</tt></a>. Default value of d<i>Sr</i>
+  <dd>Units of measurement are defined by the code in <a href="#RE_set_1"><tt>RE_set[1]</tt></a>. Default value of d<i>Sr</i>
 is EMPTY
 "---".</dd>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dt> <a name="S0r_1"></a><big><big><b><tt>S0r[1]</tt></b></big></big>
 -
-Absolute molar (partial molal) entropy <span
- style="font-style: italic;">S<sup>0</sup></span>
+Absolute molar (partial molal) entropy <span style="font-style: italic;">S<sup>0</sup></span>
 of &nbsp;the "new" DC at standard state (J/K/mol)</dt>
   <dd>&nbsp;&nbsp; &nbsp;</dd>
   <dd>The absolute (third-law) standard molar (partial molal) entropy <i>S<sup>0</sup></i>
@@ -974,8 +978,7 @@ at reference pressure <i>Pr</i> &nbsp;and temperature <i>Tr</i>
 &nbsp;will
 be automatically calculated from d<i>Sr</i> &nbsp;of reaction and <i>S<sup>0</sup></i>
 values of other species for the last species in the <a href="#REsDC"><tt>REsDC</tt></a>
-list. Units of measurement are defined by the code in <a
- href="#RE_set_1"><tt>REset[1]</tt></a>. There is no need to enter this
+list. Units of measurement are defined by the code in <a href="#RE_set_1"><tt>REset[1]</tt></a>. There is no need to enter this
 value.&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp;</dd>
@@ -984,8 +987,7 @@ value.&nbsp;</dd>
 Uncertainty
 of <i>S<sup>0</sup></i>, dev(<i>S<sup>0</sup></i>) (J/K/mol)</dt>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
-  <dd> Absolute uncertainty of <i>S<sup>0</sup></i>&nbsp; value (see <tt><font
- size="+1"><a href="#S0r_1">S0r[1]</a></font></tt> cell),&nbsp; if
+  <dd> Absolute uncertainty of <i>S<sup>0</sup></i>&nbsp; value (see <tt><font size="+1"><a href="#S0r_1">S0r[1]</a></font></tt> cell),&nbsp; if
 known,
 must be entered by the user in the same units of measurement as&nbsp; <i>S<sup>0</sup></i>.
 If unknown, put here a default EMPTY value "---".</dd>
@@ -1017,8 +1019,7 @@ column; in this case, any previously entered value will be lost.&nbsp;</dd>
   </dd>
   <dd>&nbsp;&nbsp;</dd>
   <dt> <a name="Cp0r_1"></a><big><big><b><tt>Cp0r[1]</tt></b></big></big>
-- Absolute molar (partial molal) isobaric heat capacity <span
- style="font-style: italic;">Cp<sup>0</sup></span> of &nbsp;the "new"
+- Absolute molar (partial molal) isobaric heat capacity <span style="font-style: italic;">Cp<sup>0</sup></span> of &nbsp;the "new"
 DC
 at standard state (J/K/mol)</dt>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
@@ -1041,8 +1042,7 @@ no need to enter this value.&nbsp;</dd>
 Uncertainty
 of <i>Cp<sup>0</sup></i>, dev(<i>Cp<sup>0</sup></i>) (J/K/mol)</dt>
   <dd>&nbsp;&nbsp; &nbsp;</dd>
-  <dd> Absolute uncertainty of <i>Cp<sup>0</sup></i> value (see <tt><font
- size="+1"><a href="#Cp0r_1">Cp0r[1]</a></font></tt> cell),&nbsp; if
+  <dd> Absolute uncertainty of <i>Cp<sup>0</sup></i> value (see <tt><font size="+1"><a href="#Cp0r_1">Cp0r[1]</a></font></tt> cell),&nbsp; if
 known,
 must be entered by the user in the same units of measurement as&nbsp; <i>Cp<sup>0</sup></i>.
 If unknown, put here a default EMPTY value "---".</dd>
@@ -1155,8 +1155,7 @@ to be entered by the user. For aqueous and surface species, it is set
 automatically
 (upon clicking on the "Calculate" icon or "Record" "Calculate" menu
 item)
-using the default- or explicitly specified <a
- href="gm_icomp.html#Valen">valences</a>
+using the default- or explicitly specified <a href="gm_icomp.html#Valen">valences</a>
 of <a href="gm_icomp.html">independent components</a>. The following
 default
 valences are used for some common multivalent elements (see the
@@ -1182,19 +1181,15 @@ measurement:
 Angstroems (A).</dd>
   <dd> &nbsp;</dd>
   <dd> This value will copied into a <a href="gm_phase.html#dc_cf"><tt>dc_cf</tt></a>
-array of non-ideality parameters in the aqueous phase definition (<a
- href="gm_phase.html">Phase </a>record) and may be edited there if
+array of non-ideality parameters in the aqueous phase definition (<a href="gm_phase.html">Phase </a>record) and may be edited there if
 aqueous
 electrolyte phase is explicitly defined. The <i>a<sup>o&nbsp;</sup></i>
 value
 from this cell will be automatically used in calculations of chemical
 equilibria,
-if the default aqueous phase is specified in the <a
- href="gm_project.html">modelling project</a>.</dd>
+if the default aqueous phase is specified in the <a href="gm_project.html">modelling project</a>.</dd>
   <dd> &nbsp;</dd>
-  <dd> If absent from the Kielland (1936) table (see [<a
- href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>] or [<a
- href="g_litref.html#%5B1997LAN%5D">1997LAN</a>]), the following
+  <dd> If absent from the Kielland (1936) table (see [<a href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>] or [<a href="g_litref.html#%5B1997LAN%5D">1997LAN</a>]), the following
 default
 values can be used:</dd>
 </dl>
@@ -1202,7 +1197,7 @@ values can be used:</dd>
 </dl>
 <dl style="margin-left: 40px;">
   <dd> &nbsp;</dd>
-  <table border="1" cols="7" width="93%">
+  <table cols="7" border="1" width="93%">
     <tbody>
       <tr>
         <td>Charge</td>
@@ -1258,15 +1253,11 @@ calculation
 has been chosen. <i><br>
     </i></dd>
   <dd> &nbsp;</dd>
-  <dd>For surface species, this field may contain an input value of <span
- style="font-style: italic;">cN</span> (number of nearest neighbors)
-used in the Frumkin isotherm exponent as a product <span
- style="font-style: italic;">cN</span>*<span style="font-style: italic;">Fi</span>
+  <dd>For surface species, this field may contain an input value of <span style="font-style: italic;">cN</span> (number of nearest neighbors)
+used in the Frumkin isotherm exponent as a product <span style="font-style: italic;">cN</span>*<span style="font-style: italic;">Fi</span>
 , where <span style="font-style: italic;">Fi</span> is the mean field
 parameter per interaction. The <span style="font-style: italic;">Fi</span>
-parameter can be entered into the <big><span
- style="font-family: monospace;">ab_[1]</span></big> cell<span
- style="font-style: italic;">.&nbsp; <br>
+parameter can be entered into the <big><span style="font-family: monospace;">ab_[1]</span></big> cell<span style="font-style: italic;">.&nbsp; <br>
     </span></dd>
   <dd>The <span style="font-style: italic;">cN</span> value may be
 non-integer, but must be positive in the interval from 1 to 10, or 1 if
@@ -1284,9 +1275,7 @@ parameter <br>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
   <dd> Individual parameter b can be used in a linear term of the
 Truesdell-Jones
-modification or 3-term Debye- Hueckel equation (see [<a
- href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>] or [<a
- href="g_litref.html#%5B1997LAN%5D">1997LAN</a>]).</dd>
+modification or 3-term Debye- Hueckel equation (see [<a href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>] or [<a href="g_litref.html#%5B1997LAN%5D">1997LAN</a>]).</dd>
   <dd> &nbsp;</dd>
   <dd> To be used, requires an explicit definition of aqueous
 electrolyte
@@ -1295,13 +1284,9 @@ phase.</dd>
   <dd> If unknown, set "Empty value" here.</dd>
   <dd>&nbsp;&nbsp; <br>
   </dd>
-  <dd>For surface species, this field may contain an input value of <span
- style="font-style: italic;">Fi</span> - the mean field per interaction
-parameter - used in the Frumkin isotherm exponent as a product <span
- style="font-style: italic;">cN * Fi</span> , where <span
- style="font-style: italic;">cN</span> is the number of
-nearest-neighbor (lateral) interations for this surface species. The <span
- style="font-style: italic;">cN</span> parameter should be entered into
+  <dd>For surface species, this field may contain an input value of <span style="font-style: italic;">Fi</span> - the mean field per interaction
+parameter - used in the Frumkin isotherm exponent as a product <span style="font-style: italic;">cN * Fi</span> , where <span style="font-style: italic;">cN</span> is the number of
+nearest-neighbor (lateral) interations for this surface species. The <span style="font-style: italic;">cN</span> parameter should be entered into
 the <big><span style="font-family: monospace;">ab_[0]</span></big>
 cell. The Fi value may be positive (repulsion), negative (attraction)
 or 0 (no lateral interaction) <span style="font-style: italic;">&lt;under
@@ -1377,11 +1362,9 @@ be
 incorrect.&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dd>In the case of logK interpolation, the user must enter <a
- href="#RE_dim_5"><tt>nT</tt></a> &gt; 2 temperature values (in the
+  <dd>In the case of logK interpolation, the user must enter <a href="#RE_dim_5"><tt>nT</tt></a> &gt; 2 temperature values (in the
 increasing
-order), for which discrete logK values will be specified in the <a
- href="#logKTP"><tt>logKTP</tt></a> table.&nbsp;</dd>
+order), for which discrete logK values will be specified in the <a href="#logKTP"><tt>logKTP</tt></a> table.&nbsp;</dd>
   <dd>&nbsp; &nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
@@ -1402,11 +1385,9 @@ calculated thermodynamic data are extrapolated and can be
 incorrect.&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dd>In the case of logK interpolation, the user must enter <a
- href="#RE_dim_6"><tt>nP</tt></a> &gt; 2 pressure values (in the
+  <dd>In the case of logK interpolation, the user must enter <a href="#RE_dim_6"><tt>nP</tt></a> &gt; 2 pressure values (in the
 increasing
-order), for which discrete logK values will be specified in the <a
- href="#logKTP"><tt>logKTP</tt></a> table.&nbsp;</dd>
+order), for which discrete logK values will be specified in the <a href="#logKTP"><tt>logKTP</tt></a> table.&nbsp;</dd>
   <dd><i>&nbsp;</i> <br>
   </dd>
   <dd>&nbsp;&nbsp;<br>
@@ -1423,8 +1404,7 @@ and nT counters. The<tt> logKTP</tt> array has <a href="#RE_dim_5"><tt>nP</tt></
 columns, each for a specific pressure (as given in the <a href="#P_int"><tt>P_int</tt></a>
 vector); <a href="#RE_dim_6"><tt>nT</tt></a> values of logK must be
 entered
-by user into each column for discrete temperatures (given in the <a
- href="#TCint_"><tt>TCint_</tt></a> vector). &nbsp;</dd>
+by user into each column for discrete temperatures (given in the <a href="#TCint_"><tt>TCint_</tt></a> vector). &nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>Calculation of logK of reaction for the P and T of interest is
@@ -1464,11 +1444,7 @@ the flag <a href="#RE_arr_0"><tt>RE_arr[0]</tt></a> is turned on. <br>
 <tt>"1", "2", "3"</tt> or <tt>"L"</tt> in the <a href="#REcMod_1"><tt>REcMod[1]</tt></a>
 cell), the following form of logK=f(T) equation is applied: <br>
 </div>
-<blockquote style="margin-left: 40px;"><big><tt>logK = <a
- href="#aiLgKr_0">a0</a> + <a href="#aiLgKr_1">a1</a>*T + <a
- href="#aiLgKr_2">a2</a>/T + <a href="#aiLgKr_5">a3</a>*lnT + <a
- href="#aiLgKr_4">a4</a>/T^2 + <a href="#aiLgKr_5">a5</a>*T^2 + <a
- href="#aiLgKr_6">a6</a>/T^0.5</tt></big> <br>
+<blockquote style="margin-left: 40px;"><big><tt>logK = <a href="#aiLgKr_0">a0</a> + <a href="#aiLgKr_1">a1</a>*T + <a href="#aiLgKr_2">a2</a>/T + <a href="#aiLgKr_5">a3</a>*lnT + <a href="#aiLgKr_4">a4</a>/T^2 + <a href="#aiLgKr_5">a5</a>*T^2 + <a href="#aiLgKr_6">a6</a>/T^0.5</tt></big> <br>
 </blockquote>
 <div style="margin-left: 40px;">where T is absolute temperature (K),
 and &nbsp;<tt>a0, ..., a6</tt>
@@ -1485,10 +1461,7 @@ code set in the <a href="#REcMod_1"><tt>REcMod[1]</tt></a> cell ),
 another
 form of lnK" = f(T) equation will be applied: <br>
 </div>
-<blockquote style="margin-left: 40px;"><tt>1000*lnK" = <a
- href="#aiLgKr_1">a0</a> + <a href="#aiLgKr_2">a1</a>/T + <a
- href="#aiLgKr_2">a2</a>/T^2 + <a href="#aiLgKr_3">a3</a>/T^3 + <a
- href="#aiLgKr_5">a4</a>/T^4</tt><br>
+<blockquote style="margin-left: 40px;"><tt>1000*lnK" = <a href="#aiLgKr_1">a0</a> + <a href="#aiLgKr_2">a1</a>/T + <a href="#aiLgKr_2">a2</a>/T^2 + <a href="#aiLgKr_3">a3</a>/T^3 + <a href="#aiLgKr_5">a4</a>/T^4</tt><br>
 </blockquote>
 <div style="margin-left: 40px;">where K" stands for a fractionation
 constant of an isotope between
@@ -1598,11 +1571,9 @@ reactions. The
 first
 three coefficients correspond to Majer-Kelley equation, the first 5
 coefficients
-- to Haas-Fisher equation (cf. [<a
- href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>]). ReacDC
+- to Haas-Fisher equation (cf. [<a href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>]). ReacDC
 module automatically coverts input dCpr coefficients into 7
-coefficients of the logK = f(T) equation, <tt><a
- href="gm_reacdc.html#RE_LOGK_FT">aiLgKr</a>.</tt> Unspecified
+coefficients of the logK = f(T) equation, <tt><a href="gm_reacdc.html#RE_LOGK_FT">aiLgKr</a>.</tt> Unspecified
 coefficients must be set to zeros. Non-zero
 coefficients
 (except a0) permit to consider more than 3-term temperature
@@ -1618,12 +1589,10 @@ at <i>T<sub>r</sub></i>&nbsp; = 25
 C&nbsp;
 will be computed from the above equation coefficients every time when
 this
-ReacDC record is recalculated, and the result placed into&nbsp; <tt><a
- href="gm_reacdc.html#Cp0r_0">Cp0r[0]</a></tt> field. This is a good
+ReacDC record is recalculated, and the result placed into&nbsp; <tt><a href="gm_reacdc.html#Cp0r_0">Cp0r[0]</a></tt> field. This is a good
 test for
 correctness
-of input - if calculated number appearing in <tt><a
- href="gm_reacdc.html#Cp0r_0">Cp0r[0]</a></tt>&nbsp; is not within the
+of input - if calculated number appearing in <tt><a href="gm_reacdc.html#Cp0r_0">Cp0r[0]</a></tt>&nbsp; is not within the
 typical range
 (a
 few hundred J/K/mol) then some of the <i>Cp</i> coeffcients have been
@@ -1673,8 +1642,7 @@ the <tt>"Y"</tt>
 (modified Ryzhenko-Bryzgalin model) or <tt>"R"</tt> (Marshall-Franck
 density model) code is entered in <tt><a href="gm_reacdc.html#REcMod_1"><tt>REcMod[1]</tt></a></tt>
 cell.
-In both cases, the code for pressure correction in the <tt><a
- href="gm_reacdc.html#REcMod_2"><tt>REcMod[2]</tt></a></tt> cell has to
+In both cases, the code for pressure correction in the <tt><a href="gm_reacdc.html#REcMod_2"><tt>REcMod[2]</tt></a></tt> cell has to
 be set to the <tt>"0" </tt><tt>value </tt>(pressure correction
 inherently accounted for by the chosen model). The array contain
 empirical coefficient that allow the extrapolation of equilibrium
@@ -1736,8 +1704,7 @@ Marshall-Franck model coefficient c can be entered here.&nbsp; </dd>
 </dl>
 <br>
 <dl>
-  <dt> <a name="adVTP"></a><font size="+3"><b><tt>adVTP</tt></b></font><b><tt><font
- size="+2"> -</font></tt></b><b><font size="+1"> array of empirical
+  <dt> <a name="adVTP"></a><font size="+3"><b><tt>adVTP</tt></b></font><b><tt><font size="+2"> -</font></tt></b><b><font size="+1"> array of empirical
 coefficients for calculating molar volume of reaction at P and T of
 interest<br>
     </font></b></dt>
@@ -1807,44 +1774,37 @@ SPRONS.DAT as follows: c2 *10^-4. </p>
 <dl>
   <dt> <a name="adHKF_0"></a><b><tt><font size="+2">adHKF[0]</font></tt></b></dt>
 </dl>
-<div style="margin-left: 40px;">Empirical coefficient a1 of the <a
- href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+<div style="margin-left: 40px;">Empirical coefficient a1 of the <a href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
 cal/bar/mol</div>
 <dl>
   <dt> <a name="adHKF_1"></a><b><tt><font size="+2">adHKF[1]</font></tt></b></dt>
 </dl>
-<div style="margin-left: 40px;">Empirical coefficient a2 of the <a
- href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+<div style="margin-left: 40px;">Empirical coefficient a2 of the <a href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
 cal/mol</div>
 <dl>
   <dt> <a name="adHKF_2"></a><b><tt><font size="+2">adHKF[2]</font></tt></b></dt>
 </dl>
-<div style="margin-left: 40px;">Empirical coefficient a3 of the <a
- href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+<div style="margin-left: 40px;">Empirical coefficient a3 of the <a href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
 cal*K/bar/mol</div>
 <dl>
   <dt> <a name="adHKF_3"></a><b><tt><font size="+2">adHKF[3]</font></tt></b></dt>
 </dl>
-<div style="margin-left: 40px;">Empirical coefficient a4 of the <a
- href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+<div style="margin-left: 40px;">Empirical coefficient a4 of the <a href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
 cal*K/mol</div>
 <dl>
   <dt> <a name="adHKF_4"></a><b><tt><font size="+2">adHKF[4]</font></tt></b></dt>
 </dl>
-<div style="margin-left: 40px;">Empirical coefficient c1 of the <a
- href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+<div style="margin-left: 40px;">Empirical coefficient c1 of the <a href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
 cal/K/mol</div>
 <dl>
   <dt> <a name="adHKF_5"></a><b><tt><font size="+2">adHKF[5]</font></tt></b></dt>
 </dl>
-<div style="margin-left: 40px;">Empirical coefficient c2 of the <a
- href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+<div style="margin-left: 40px;">Empirical coefficient c2 of the <a href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
 cal*K/mol</div>
 <dl>
   <dt> <a name="adHKF_6"></a><b><tt><font size="+2">adHKF[6]</font></tt></b></dt>
 </dl>
-<div style="margin-left: 40px;">wB Born factor&nbsp; of the <a
- href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>: cal/mol</div>
+<div style="margin-left: 40px;">wB Born factor&nbsp; of the <a href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>: cal/mol</div>
 <dl>
   <dt> <a name="adHKF_7"></a><b><tt><font size="+2">adHKF[7]</font></tt></b></dt>
 </dl>
@@ -1880,8 +1840,7 @@ letter) defines the <a href="theortdb.html">technique</a> to be used
 for
 calculation of standard molar (molal) thermodynamic properties of this
 reaction
-and its "new" Dependent Component at temperature T different from <a
- href="#PrTr__1">Tr</a>.</dd>
+and its "new" Dependent Component at temperature T different from <a href="#PrTr__1">Tr</a>.</dd>
   <dd> Possible codes: see <a href="g_useref.html#TCALCMETHODCODE">User's
 Reference</a>.</dd>
   <dd><br>
@@ -1929,8 +1888,7 @@ of (partial) molar volume and other properties&nbsp;(dGr, dHr, dSr,
 dCpr)
 of this reaction and that of its "new" DC at T,P of interest.</dd>
   <dd> Possible codes: see <a href="g_useref.html#PDEPCALCCODE">User's
-Reference</a>.&nbsp; Setting this code to "P" will invoke the built-in <a
- href="gt_howto.html#PRONSPREP">PRONSPREP procedure</a>. <br>
+Reference</a>.&nbsp; Setting this code to "P" will invoke the built-in <a href="gt_howto.html#PRONSPREP">PRONSPREP procedure</a>. <br>
   </dd>
   <dd>&nbsp;<br>
   </dd>
@@ -1951,8 +1909,7 @@ of routine for calculation using Equation of State (EoS)</dt>
   </dd>
   <dd> Class code of the dependent component (DC) (taken as default
 into Phase,
-Project and SysEq definitions). Possible values: see <a
- href="g_useref.html#DCCLASSCODES">User's Reference</a>.</dd>
+Project and SysEq definitions). Possible values: see <a href="g_useref.html#DCCLASSCODES">User's Reference</a>.</dd>
   <dd> <br>
   </dd>
   <dd> It is quite important to set DC class code correctly because the
@@ -2076,8 +2033,7 @@ interest.&nbsp;</dd>
   <dd>&nbsp;</dd>
   <dd>&nbsp; &nbsp;<br>
   </dd>
-  <dt> <a name="RE_arr_2"></a><font size="+2"><tt
- style="font-weight: bold;">RE_arr[2]</tt></font> - Flag for
+  <dt> <a name="RE_arr_2"></a><font size="+2"><tt style="font-weight: bold;">RE_arr[2]</tt></font> - Flag for
 coefficients of
 electrostatic models (reserved)</dt>
   <dd>&nbsp; <br>
@@ -2087,8 +2043,7 @@ code.</dd>
   <dd>&nbsp;</dd>
   <dd>&nbsp;&nbsp;<br>
   </dd>
-  <dt> <a name="RE_arr_3"></a><font style="font-weight: bold;"
- size="+2"><tt>RE_arr[3]</tt></font> - Flag for dVr=f(P,T)
+  <dt> <a name="RE_arr_3"></a><font style="font-weight: bold;" size="+2"><tt>RE_arr[3]</tt></font> - Flag for dVr=f(P,T)
 coefficients
 (reserved)</dt>
   <dd>&nbsp; <br>
@@ -2099,8 +2054,7 @@ coefficients (reserved for future versions of GEM-Selektor).</dd>
   <dd>&nbsp;</dd>
   <dd>&nbsp; &nbsp;<br>
   </dd>
-  <dt> <a name="RE_arr_4"></a><font style="font-weight: bold;"
- size="+2"><tt>RE_arr[4]</tt></font> - Flag for dCpr=f(T)
+  <dt> <a name="RE_arr_4"></a><font style="font-weight: bold;" size="+2"><tt>RE_arr[4]</tt></font> - Flag for dCpr=f(T)
 coefficients
 (reserved)</dt>
   <dd>&nbsp; <br>
@@ -2112,9 +2066,7 @@ empirical coefficients (reserved for future versions of GEM-Selektor).</dd>
   </dd>
   <dd>&nbsp; &nbsp;&nbsp;<br>
   </dd>
-  <dt> <a name="RE_arr_5"></a><font style="font-weight: bold;"
- size="+2"><tt>RE_arr[5]</tt></font><font style="font-weight: bold;"
- size="+2"> </font>- Will TP vary along SVC curve
+  <dt> <a name="RE_arr_5"></a><font style="font-weight: bold;" size="+2"><tt>RE_arr[5]</tt></font><font style="font-weight: bold;" size="+2"> </font>- Will TP vary along SVC curve
 only?
 { + - } (reserved)</dt>
   <dd>&nbsp; <br>
@@ -2123,8 +2075,7 @@ only?
   <dd>&nbsp;&nbsp; &nbsp;&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
-  <dt> <a name="RE_arr_6"></a><font style="font-weight: bold;"
- size="+2"><tt>RE_arr[6]</tt></font> - Flag for coefficients
+  <dt> <a name="RE_arr_6"></a><font style="font-weight: bold;" size="+2"><tt>RE_arr[6]</tt></font> - Flag for coefficients
 of
 HKF EOS { + - } (reserved)</dt>
   <dd>&nbsp;&nbsp; &nbsp;</dd>
@@ -2132,8 +2083,7 @@ HKF EOS { + - } (reserved)</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dt> <a name="RE_arr_7"></a><font style="font-weight: bold;"
- size="+2"><tt>RE_arr[7]</tt></font> -
+  <dt> <a name="RE_arr_7"></a><font style="font-weight: bold;" size="+2"><tt>RE_arr[7]</tt></font> -
 Is the
 "new" reaction-defined an isotope form species? { + - }</dt>
   <dd>&nbsp; <br>
@@ -2230,8 +2180,7 @@ of a mineral compound at <i>Tr</i>&nbsp; can be entered by the user
 into
 this field if a <a href="theortdb.html">method of calculation</a>
 of&nbsp; <i>V<sup>0</sup></i>&nbsp;&nbsp; increment from <i>P<sub>r</sub></i>&nbsp;&nbsp;
-to&nbsp; <i>P&nbsp;&nbsp;</i> is specified ( <tt>'E'</tt> in&nbsp; <tt><a
- href="#REcMod_2">REcMod[2]</a></tt> field).</dd>
+to&nbsp; <i>P&nbsp;&nbsp;</i> is specified ( <tt>'E'</tt> in&nbsp; <tt><a href="#REcMod_2">REcMod[2]</a></tt> field).</dd>
   <dd> &nbsp;</dd>
   <dd> Units of measurement: (1/kbar).</dd>
   <dd><i>&nbsp;&nbsp;</i></dd>
@@ -2243,8 +2192,7 @@ of isobaric expansibility a of the "new" species defined in this
 reaction</dt>
   <dd>&nbsp;&nbsp; &nbsp;</dd>
   <dd> Isobaric expansibility <font face="Symbol">a</font> (alpha) at <i>P<sub>r</sub></i>&nbsp;
-of a mineral compound can be entered by the user if a <a
- href="theortdb.html">method of calculation</a> of&nbsp; <i>V<sup>0</sup></i>&nbsp;&nbsp;
+of a mineral compound can be entered by the user if a <a href="theortdb.html">method of calculation</a> of&nbsp; <i>V<sup>0</sup></i>&nbsp;&nbsp;
 increment from <i>T<sub>r</sub></i>&nbsp;&nbsp; to&nbsp; <i>T</i>&nbsp;
 and <i>P<sub>r</sub></i>&nbsp;&nbsp; to&nbsp; <i>P&nbsp;&nbsp;</i> is
 specified
@@ -2257,16 +2205,14 @@ field).</dd>
   </dd>
 </dl>
 <dl>
-  <dt> <a name="REtprn"></a><font size="+1"><tt
- style="font-weight: bold;">REtprn</tt></font></dt>
+  <dt> <a name="REtprn"></a><font size="+1"><tt style="font-weight: bold;">REtprn</tt></font></dt>
   <dd> Internal</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
 </dl>
-<hr size="2" width="100%"><br>
-<h2><a name="REACDC_ERRORS"></a><font size="+3">5. Warnings and error
-messages</font></h2>
+<hr size="2" width="100%"><h2><a name="REACDC_ERRORS"></a>5. Warnings and error
+messages</h2>
 <p>For error messages from the <a href="g_useref.html#FORMULA">Formula</a>
 Parser or calculation of temperature corrections for linked DComp
 records,
@@ -2339,8 +2285,7 @@ warning <tt>&nbsp;<big>W06RErem</big></tt>.</dd>
   <dt><big><b><tt> E08RErem:</tt></b></big> Invalid reaction species
 code!</dt>
   <dd>&nbsp;</dd>
-  <dd>&nbsp;The first field of newly-created ReacDC record key (or the <a
- href="#RE_set_0"><tt>RE_set[0]</tt></a> field ) contains a character
+  <dd>&nbsp;The first field of newly-created ReacDC record key (or the <a href="#RE_set_0"><tt>RE_set[0]</tt></a> field ) contains a character
 that
 is not one of the <a href="g_useref.html#DCPSTATECODES">phase state
 codes</a>
@@ -2462,8 +2407,7 @@ more than 4 (monovalent) ligands per cation.&nbsp;</dd>
 for
 a symbol of IC -maybe, a proper IComp database file is not linked.<br>
   </dd>
-  <dd>(b) During calculation of temperature/pressure corrections (<a
- href="gm_rtparm.html">RTParm</a>, <a href="gems_bcc.html">System</a>
+  <dd>(b) During calculation of temperature/pressure corrections (<a href="gm_rtparm.html">RTParm</a>, <a href="gems_bcc.html">System</a>
 modules),
 one of DComp or ReacDC records referenced in this ReacDC record could
 not
@@ -2559,8 +2503,7 @@ with calculated values (Y) or keep the previous values (N)?</dt>
   <dd>&nbsp;</dd>
   <dd>This message appears after calculation of the DComp record if all
 three
-non-empty values have been entered into <tt><a href="#G0r_0">G0r[0]</a>,<a
- href="#H0r_0">H0r[0]</a></tt> and<tt> <a href="#S0r_0">S0r[0]</a> </tt>cells,
+non-empty values have been entered into <tt><a href="#G0r_0">G0r[0]</a>,<a href="#H0r_0">H0r[0]</a></tt> and<tt> <a href="#S0r_0">S0r[0]</a> </tt>cells,
 but these were inconsistent. The Hr &lt;value&gt; suggests a consistent
 Hr
 value assuming that dGr and dSr values are correct. If you agree with
@@ -2715,8 +2658,7 @@ calc_r_interp()</dt>
 of
 current T (or P) goes out of the temperature - pressure intervals for
 the
-input table of logK(T,P) values for Lagrange polinomial interpolation (<a
- href="#lgK_T"><tt>lgK_T</tt></a> data object).</dd>
+input table of logK(T,P) values for Lagrange polinomial interpolation (<a href="#lgK_T"><tt>lgK_T</tt></a> data object).</dd>
   <dd>&nbsp;<br>
   </dd>
   <dd>&nbsp;<br>
@@ -2731,10 +2673,7 @@ leading to the <big><tt>E33RErun</tt></big> message.&nbsp;</dd>
   </dd>
 </dl>
 <br>
-<hr size="2" width="100%"><tt><br>
-</tt> <tt><a href="index.html"><br>
-To Contents</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="g_about.html">About
-GEM-Selektor</a> </tt><br>
+<hr size="2" width="100%"><tt>Last updated: 30.08.2012 DK</tt><br>
 <br>
 <tt>end of file</tt> <br>
 &nbsp; <br>
@@ -2749,5 +2688,6 @@ GEM-Selektor</a> </tt><br>
 <br>
 <br>
 <br>
-</body>
-</html>
+
+
+</body></html>

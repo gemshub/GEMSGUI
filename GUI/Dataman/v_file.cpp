@@ -123,15 +123,22 @@ TFile::makeKeyword()
     if( name.empty() )
         return;
 
-    key = gstring(name, 0, 2);
+    // ignoring version and after
+    // get version
+    gstring fname = name;
+    size_t pos1 = fname.find(".ver");
+    if( pos1 != gstring::npos )
+       fname = fname.substr(0, pos1 );
+
+    key = gstring(fname, 0, 2);
     size_t npos = 0;
-    size_t npos2 = name.find(".", npos);
+    size_t npos2 = fname.find(".", npos);
     while( npos2 != gstring::npos )
     {   npos = npos2+1;
-        key += gstring(name, npos, 2);
-        npos2 = name.find(".", npos);
+        key += gstring(fname, npos, 2);
+        npos2 = fname.find(".", npos);
     }
-    key += gstring(name, npos+2);
+    key += gstring(fname, npos+2);
 
     strncpy( Keywd, key.c_str(), MAX_FILENAME_LEN);
     Keywd[MAX_FILENAME_LEN]='\0';

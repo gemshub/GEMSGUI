@@ -30,11 +30,11 @@ const int MAXPHSYMB =      8,
                                                QDSIZE = 60;
 typedef struct
 {// Description of PHASE record (old part)
-  char pst[MAXSYMB],       // Phase aggregate state
-    symb[MAXPHSYMB],    // Symbol of phase definition
-    nam[MAXPHNAME],     // Name of phase
-    cls[MAXSYMB],       // Class of phase
-    grp[MAXPHGROUP],    // Record key comment to phase definition
+  char pst_[MAXSYMB],       // Phase aggregate state
+    symb_[MAXPHSYMB],    // Symbol of phase definition
+    nam_[MAXPHNAME],     // Name of phase
+    cls_[MAXSYMB],       // Class of phase
+    grp_[MAXPHGROUP],    // Record key comment to phase definition
 
 //  old:  sol_t[6],
    sol_t[6], // Phase (solution) type { IGMTVKRLWFPED123HYSQZAUOX } or { N }
@@ -237,6 +237,10 @@ protected:
 
     void CalcPhaseRecord( bool getDCC  );
     void moiety_new( int nDC, int nMoi, bool setDefault );
+    void Set_DC_Phase_coef();
+    void makeReacDCompList(TCStringArray& aDclist);
+    void DetNumbCatAn(TCStringArray& aDclist);
+    void LoadDCC();
 
 public:
 
@@ -346,6 +350,7 @@ KINR_MOD,  // new, see also enum kinmet_controls
     SM_OTHER = 'O',	// other built-in phase-specific models of non-ideal solutions (selected by phase name)
 
     // Codes to identify specific mixing rules and temperature functions in EoS and activity models
+    MR_UNDEF = 'N', // Default mixing rule or form of interaction parameter coefficients
     MR_WAAL = 'W',	// Basic Van der Waals mixing rules in cubic EoS models
     MR_CONST = 'C',	// Constant one-term interaction parameter kij
     MR_TEMP = 'T',	// Temperature-dependent one-term interaction parameter kij (Jaubert et al. 2005)

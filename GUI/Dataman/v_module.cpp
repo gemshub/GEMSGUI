@@ -260,7 +260,7 @@ TCModule::GetKeyofRecord( const char *oldKey, const char *strTitle,
           return Filter;
         }
     }
-    Error( str.c_str(), "Illegal record key editing mode");
+    Error( str.c_str(), "Invalid record key editing mode");
     return "";
 }
 
@@ -310,7 +310,7 @@ TCModule::CheckEqText( const char *erscan, const char *msg )
 {
     gstring msger;
     if( msg==0 )
-        msger = "E90MSTran: Error in translation of Math Script:\n ";
+        msger = "E90MSTran: Error in translation of script:\n ";
     else
         msger = gstring(msg);
     msger += erscan;
@@ -400,7 +400,7 @@ TCModule::CmSaveAs()
     try
     {
         if( pVisor->ProfileMode == true &&
-           ( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA ) )
+           ( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA && nRT != RT_PHASE) )
             Error( GetName(), "Please, do it in Database mode!");
 
         gstring str=db->PackKey();
@@ -510,7 +510,7 @@ TCModule::CmShow( const char *key )
     {
         if( pVisor->ProfileMode == true &&
                 ( nRT >= RT_SYSEQ || nRT == RT_PARAM )  )
-            Error( GetName(), "Illegal command in Project mode!");
+            Error( GetName(), "Invalid command in Project mode!");
 
         if( !MessageToSave() )
 	    return;

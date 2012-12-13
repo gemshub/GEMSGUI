@@ -46,15 +46,15 @@ TDComp::TDComp( int nrt ):
         TCModule( nrt )
 {
     nQ = 2;
-    aFldKeysHelp.Add("Phase state of Dependent Component (species) { a g s l h x c }");
-    aFldKeysHelp.Add("Group to which Dependent Component belongs");
-    aFldKeysHelp.Add("Name of Dependent Component");
-    aFldKeysHelp.Add("Name of thermodynamic data subset (e.g. database)");
+    aFldKeysHelp.Add("Phase state code of Dependent Component { a g f p s l m c x y h }");
+    aFldKeysHelp.Add("ID of a group to which this Dependent Component belongs");
+    aFldKeysHelp.Add("Name of this Dependent Component (chemical species)");
+    aFldKeysHelp.Add("Thermodynamic data subset (TDS) code (e.g. database ID)");
     dcp=&dc[1];
     set_def(1);
     dcp=&dc[0];
     set_def();
-    start_title = " Thermochemical/EOS data format for Dependent Components (species) ";
+    start_title = " Thermochemical/EoS data format for Dependent Components ";
 }
 
 
@@ -134,7 +134,7 @@ void TDComp::ods_link( int q)
 void TDComp::dyn_set(int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
-             "E00DCrem: Illegal access to dc in dyn_set()");
+             "E00DCrem: Invalid access to dc in dyn_set()");
     memcpy( dcp->pstate, rt[nRT].UnpackKey(), DC_RKLEN );
     dc[q].TCint= (float *)aObj[ o_dccpint ].GetPtr();
     dc[q].Cp =   (float *)aObj[ o_dccp ].GetPtr();
@@ -151,22 +151,22 @@ void TDComp::dyn_set(int q)
     dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ].GetPtr();
 
     if( dc[q].Cp && aObj[ o_dccp ].GetN() != MAXCPCOEF )
-        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size ai_Cp (Remake needed)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_Cp (remake needed)" );
 
     if( dc[q].CpFS && aObj[ o_dccpfs ].GetN() != MAXCPFSCOEF )
-        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size aiCpFS (Remake needed)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of aiCpFS (remake needed)" );
 
     if( dc[q].HKFc && aObj[ o_dchkf ].GetN() != MAXHKFCOEF )
-        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size ai_HKF (Remake needed)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_HKF (remake needed)" );
 
     if( dc[q].Vt && aObj[ o_dcvt ].GetN() != MAXVTCOEF )
-        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size ai_Vtp (Remake needed)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_Vtp (remake needed)" );
 
     if( dc[q].CPg && aObj[ o_dccritpg ].GetN() != MAXCRITPARAM )
-        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size CritPg (Remake needed)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of CritPg (remake needed)" );
 
     if( dc[q].ODc && aObj[ o_dcodc ].GetN() != MAXODCOEF )
-        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size ai_ODc (Remake needed)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_ODc (remake needed)" );
 
 }
 
@@ -175,7 +175,7 @@ void TDComp::dyn_set(int q)
 void TDComp::dyn_kill(int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
-             "E02DCrem: Illegal access to dc in dyn_kill()");
+             "E02DCrem: Invalid access to dc in dyn_kill()");
     dc[q].TCint= (float *)aObj[ o_dccpint ].Free();
     dc[q].Cp =    (float *)aObj[ o_dccp ].Free();
     dc[q].CpFS =  (float *)aObj[ o_dccpfs ].Free();
@@ -198,7 +198,7 @@ void TDComp::dyn_new(int q)
 {
     int CM,CE,CV;
     ErrorIf( dcp!=&dc[q], GetName(),
-             "E03DCrem: Illegal access to dc in dyn_new()");
+             "E03DCrem: Invalid access to dc in dyn_new()");
 
     CM = toupper( dc[q].pct[0] );
     CE = toupper( dc[q].pct[1] );
@@ -287,7 +287,7 @@ void TDComp::dyn_new(int q)
 void TDComp::set_def( int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
-             "E04DCrem: Illegal access to dc in set_def()");
+             "E04DCrem: Invalid access to dc in set_def()");
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     memcpy( dc[q].pct, aPa->pa.DCpct, 6 );
     memcpy( &dc[q].PdcC, aPa->pa.DCpdc, 9 );
@@ -692,7 +692,7 @@ void TDComp::DCthermo( int q, int p )
     		aSta.Temp = aW.twp->TC;
     		if( aSta.Temp < 0.01 && aSta.Temp >= 0.0 ) // Deg. C!
     			aSta.Temp = 0.01;
-    		if( aW.twp->P < 6.1e-3 ) // 6.1e-3 is P_sat at triple point of H2O
+            if( aW.twp->P < 6.11732e-3 ) // 6.11732e-3 is P_sat at triple point of H2O
                 // At lower pressures HKF/HGK runs unstable or crashes
     			aSta.Pres = 0.0;  // 06.12.2006  DK
     		else
@@ -700,8 +700,8 @@ void TDComp::DCthermo( int q, int p )
 
     		TSupcrt supCrt;
             supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres );
-            if( aW.twp->P < 6.1e-3 )   // 06.12.2006  DK
-            	aW.twp->P = aSta.Pres;
+            if( aW.twp->P < 6.11732e-3 )   // 06.12.2006  DK
+                aW.twp->P = aSta.Pres;
 
             // pull water properties from WATERPARAM
             rho = aSta.Dens[aSpc.isat];
@@ -1249,13 +1249,30 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
 
     for(uint ii=0; ii<aDCkey.GetCount(); ii++ )
     {
-     if( !el_data.flags[cbAqueous_] &&
-         ( aDCkey[ii][0] == 'a' || aDCkey[ii][0] == 'x' ))
+
+     // Phase Filters
+      if( !el_data.flags[cbAqueous_] && aDCkey[ii][0] == 'a' )
+        continue;
+      if( !el_data.flags[cbGaseous_] && ( aDCkey[ii][0] == 'g') )
        continue;
-     if( !el_data.flags[cbGaseous_] && aDCkey[ii][0] == 'g' )
-       continue;
-     if( !el_data.flags[cbSorption_] && aDCkey[ii][0] == 'c' )
-       continue;
+      if( !el_data.flags[cbFluid_] && ( aDCkey[ii][0] == 'f') )
+        continue;
+      if( !el_data.flags[cbPlasma_] && ( aDCkey[ii][0] == 'p') )
+      continue;
+      if( !el_data.flags[cbSolids_] && ( aDCkey[ii][0] == 's') )
+      continue;
+      //if( !el_data.flags[cbSindis_] && ( aDCkey[ii][0] == 'd') )
+      //   continue;
+      if( !el_data.flags[cbLiquid_] && ( aDCkey[ii][0] == 'l') )
+      continue;
+      if( !el_data.flags[cbSimelt_] && ( aDCkey[ii][0] == 'm') )
+      continue;
+      if( !el_data.flags[cbSorption_] && ( aDCkey[ii][0] == 'x' || aDCkey[ii][0] == 'c' ) )
+      continue;
+      if( !el_data.flags[cbPolyel_] && (aDCkey[ii][0] == 'y') )
+      continue;
+      if( !el_data.flags[cbHcarbl_] && ( aDCkey[ii][0] == 'h') )
+      continue;
 
       // test the same component (overload) 30/11/2006
       gstring stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);

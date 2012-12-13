@@ -32,12 +32,14 @@ class TVisor
     int argc;
     char** argv;
 
+    gstring lastProjectKey;
+    gstring lastSystemKey;
+
     gstring SysGEMDir;
     gstring DefDBDir;
     gstring DefProfDir;
     gstring UserGEMDir;
     gstring UserProfDir;
-
     gstring LocalDir;
 
     gstring LocalDocDir;
@@ -47,6 +49,7 @@ class TVisor
     gstring ImgDir;
 
     bool isElementsProfileMode;
+    gstring DefaultBuiltinTDB;
     bool dbChangeMode;
 
 
@@ -164,6 +167,14 @@ public:
     {
         isElementsProfileMode = newData;
     }
+
+    const gstring& defaultBuiltinTDBL() const {
+        return DefaultBuiltinTDB;
+    }
+    void setDefaultBuiltinTDB(const gstring& aDefaultBuiltinTDB) {
+        DefaultBuiltinTDB = aDefaultBuiltinTDB;
+    }
+
 
     QWidget* window();
 };

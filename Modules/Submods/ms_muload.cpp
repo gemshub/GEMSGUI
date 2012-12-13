@@ -480,7 +480,7 @@ void TMulti::sm_text_analyze( int nph, int Type,
         vfMessage(window(), xcpt.title, xcpt.mess);
         /*bool   iRet = */
         TPhase::pm->CheckEqText(  erscan,
-           "E97MSTran: Error in Phase non-ideality model math scripts: " );
+           "E97MSTran: Error in Phase non-ideality mixing model scripts: " );
         /*  if( iRet )  goto AGAIN;  */
         Error(  "SolModLoad", xcpt.mess.c_str() );
     }
@@ -621,7 +621,7 @@ int TMulti::find_icnum( char *name, int LNmode )
             if( !memcmp( ICs, pmp->SB[i], MAXICNAME/*+MAXSYMB*/ ))
                 return i;
         }
-        Error( ICs.p, "E04MSPrep: IC name cannot be found in Multi lists..." );
+        Error( ICs.p, "E04MSPrep: IC name cannot be found in GEM IPM work data lists..." );
     }
     if( LNmode == 0 )
     {
@@ -631,7 +631,7 @@ int TMulti::find_icnum( char *name, int LNmode )
             if( !memcmp( ICs, mup->SB[i], MAXICNAME+MAXSYMB ))
                 return i;
         }
-        Error( ICs.p, "E14MSPrep: IC name cannot be found in Project lists..." );
+        Error( ICs.p, "E14MSPrep: IC name cannot be found in Project system definition lists..." );
     }
     Error( ICs.p, "E09MSPrep: Invalid IC search mode parameter..." );
     return -1;
@@ -655,7 +655,7 @@ int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
             if(!memcmp(name, pmp->SM[j], min(len,MAXDCNAME)))
                 jf[ii++] = j;
         if( !ii )
-            Error( name, "E05MSPrep: DC name cannot be found in Multi lists..." );
+            Error( name, "E05MSPrep: DC name cannot be found in GEM IPM work data lists..." );
     }
     if( LNmode == 0 )
     {
@@ -664,7 +664,7 @@ int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
                        min(len,MAXDCNAME)))
                 jf[ii++] = j;
         if( !ii )
-            Error( name, "E15MSPrep: DC name cannot be found in Project lists..." );
+            Error( name, "E15MSPrep: DC name cannot be found in Project system definition lists..." );
     }
 
     /* more then one index found */
@@ -736,7 +736,7 @@ int TMulti::find_phnum( char *name, int LNmode )
             if( !memcmp(name, pmp->SF[k]+MAXSYMB, min(len,MAXPHNAME)))
                 kf[ii++] = k;
         if( !ii )
-          Error( name, "E06MSPrep: Phase name cannot be found in Multi lists..." );
+          Error( name, "E06MSPrep: Phase name cannot be found in GEM IPM work data lists..." );
     }
     if( LNmode == 0 )
     {
@@ -745,7 +745,7 @@ int TMulti::find_phnum( char *name, int LNmode )
             if( !memcmp(name, mup->SF[k]+MAXSYMB+MAXPHSYMB, min(len,MAXPHNAME)))
                 kf[ii++] = k;
         if( !ii )
-          Error( name, "E16MSPrep: Phase name cannot be found in Project lists..." );
+          Error( name, "E16MSPrep: Phase name cannot be found in Project system definition lists..." );
     }
     if( ii == 1 )
         return( kf[0] );
@@ -785,7 +785,7 @@ int TMulti::find_acnum( char *name, int LNmode )
         if( !memcmp(name, mup->SA[j], min(len,MAXCMPNAME)))
             jf[ii++]=j;
     if( !ii )
-        Error( name, "E07MSPrep: PCO name cannot be found in Project lists..." );
+        Error( name, "E07MSPrep: PCO name cannot be found in Project system definition lists..." );
     if( ii == 1 )
         return( jf[0] );
     /* more then one matching index */

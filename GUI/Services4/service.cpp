@@ -659,7 +659,7 @@ bool
 vfElements(QWidget* par, const char * prfName,
             elmWindowData& elm_data, setFiltersData& sf_data )
 {
-     ElementsDialog eldlg( par, prfName );
+     ElementsDialog eldlg( par, prfName, elm_data );
      if( !eldlg.exec() )
       return false;
 

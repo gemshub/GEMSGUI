@@ -17,6 +17,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
+//#include <QtGui>
 #include <QtGui/QApplication>
 #include <QSqlDatabase>
 #include <QSharedMemory>
@@ -26,8 +27,6 @@
 
 #include "visor.h"
 #include "GemsMainWindow.h"
-
-
 
 class TIntegApp:  public QApplication
 {

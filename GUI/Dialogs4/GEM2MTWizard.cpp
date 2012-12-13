@@ -41,7 +41,7 @@ GEM2MTWizard::CmBack()
     bool chk = pselS->isChecked()||pselF->isChecked()||pselB->isChecked();  // F mode
     int ndx = stackedWidget->currentIndex();
 
-    if( ndx == 5)
+    if( ndx == graphic_script)
     {
         int nLines = pageScript->getScriptLinesNum();
         if( nLines > 0)
@@ -50,16 +50,18 @@ GEM2MTWizard::CmBack()
 
     ndx--;
 
-    if( ndx == 6 && !c_PsVTK->isChecked() )
+    if( ndx == vtk_format && !c_PsVTK->isChecked() )
         ndx--;
-    if( ndx == 5 && !c_PvMSg->isChecked() )
+    if( ndx == graphic_script && !c_PvMSg->isChecked() )
         ndx--;
-    if( ndx == 4 && !c_PvMSt->isChecked() )
+    if( ndx == auto_script && !c_PvMSt->isChecked() )
         ndx--;
-    if( ndx == 3 && !chk )
+    if( ndx == fluxes_transport && !chk )
         ndx--;
-    if( ndx == 2 && ( pselS->isChecked() || pselF->isChecked() || pselB->isChecked() ) )
-        ndx--;
+    if( ndx == T_P_lookup )
+    {  if(!checkArrays->isChecked()|| !pTPInput->isEnabled())
+            ndx--; // T P lists
+    }
 
     stackedWidget->setCurrentIndex ( ndx );
     resetNextButton();
@@ -74,7 +76,7 @@ GEM2MTWizard::CmNext()
 
     int ndx = stackedWidget->currentIndex();
 
-    if( ndx == 0 )
+    if( ndx == mode_RMT )
      {
          for( int ii=7; ii<14; ii++)
          {
@@ -93,13 +95,13 @@ GEM2MTWizard::CmNext()
        }
     }
 
-    if( ndx == 3 )
+    if( ndx == fluxes_transport )
     {
       if( pselS->isChecked() || pselF->isChecked() || pselB->isChecked() )
            pnFD->setValue( pnC->value() + pnSFD->value() );
     }
 
-    if( ndx == 5 )
+    if( ndx == graphic_script )
     {
         int nLines = pageScript->getScriptLinesNum();
         if( nLines > 0)
@@ -108,16 +110,43 @@ GEM2MTWizard::CmNext()
 
     ndx++;
 
-    if( ndx == 2 && ( pselS->isChecked()|| pselF->isChecked() ) )
-    {
-         checkArrays->setChecked(true);
-         chInterp->setChecked(true);
-         pPPoints->setValue( pnC->value() );
-         pTPoints->setValue( pnC->value() );
-         ndx++;
+    if( ndx == gems3k_exchange )
+        if( pselS->isChecked()|| pselF->isChecked()  )
+        {
+            checkArrays->setChecked(true);
+            chInterp->setChecked(true);
+            pPPoints->setValue( pnC->value() );
+            pTPoints->setValue( pnC->value() );
+            pTPInput->setEnabled(false);
+            pTPlookup->setEnabled(false);
+            //ndx++;
+            //ndx++; // T P lists
+        }
+        else
+        {
+            pTPInput->setEnabled(true);
+            pTPlookup->setEnabled(true);
+         }
+
+
+    if(   ndx == T_P_lookup )
+     { if( !checkArrays->isChecked() || !pTPInput->isEnabled() )
+       {
+       // internal setup arrays
+         // setupPTArrays();
+          ndx++;
+       }
+       else
+         {
+           definePArray();
+           defineTArray();
+           initPTable();
+           initTTable();
+           showPTTable();
+          }
     }
 
-    if( ndx == 3 && !chk )
+    if( ndx == fluxes_transport && !chk )
         ndx++;
     else
     {
@@ -132,13 +161,13 @@ GEM2MTWizard::CmNext()
 //      pnSFD->setEnabled( !( pselS->isChecked() || pselF->isChecked() ));
     }
 
-    if( ndx == 4 && !c_PvMSt->isChecked() )
+    if( ndx == auto_script && !c_PvMSt->isChecked() )
         ndx++;
 
-    if( ndx == 5 && !c_PvMSg->isChecked() )
+    if( ndx == graphic_script && !c_PvMSg->isChecked() )
         ndx++;
 
-    if( ndx == 6 && !c_PsVTK->isChecked() )
+    if( ndx == vtk_format && !c_PsVTK->isChecked() )
         ndx++;
 
    stackedWidget->setCurrentIndex ( ndx );
@@ -176,7 +205,9 @@ GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[32],
           QDialog( parent ),  calcScript(acalcScript), outScript(aoutScript), pageScript(0)
 {
 
-//    setFinishEnabled( WizardPage2, true);
+    PTable = 0;
+    TTable = 0;
+   //    setFinishEnabled( WizardPage2, true);
     setupUi(this);
     gstring str1= "GEM-Selektor GEM2MT Setup:  ";
             str1 += pkey;
@@ -269,6 +300,8 @@ pTaustep->setValue(Tau[2]);
         if( flgs[26] != '-' )
           checkArrays->setChecked( false );
         else checkArrays->setChecked( true );
+        arrayChecked(flgs[26] == '-');
+
         if( flgs[27] != '-' )
           chInterp->setChecked( true );
         else chInterp->setChecked( false );
@@ -385,6 +418,8 @@ void GEM2MTWizard::arrayChecked( bool check )
   pPPoints->setEnabled ( check );
   pTPoints->setEnabled ( check );
   chInterp->setEnabled ( check );
+  if(!check )
+   chInterp->setChecked(false);
 }
 
 void GEM2MTWizard::UnCheckSolid( bool check )
@@ -1007,6 +1042,179 @@ void GEM2MTWizard::getVTK( TCIntArray& vtk1, TCIntArray& vtk2  )
         vtk2.Add( 0 );
       }
   }
+
+}
+
+void GEM2MTWizard::setupPTArrays()
+{
+   int nT, nP, ii;
+   double cT, cP;
+   double Pai[4], Tai[4];
+   double  *arT, *arP;
+
+   //init P array
+   getPdata( Pai );
+   nP = getNpoints( Pai );
+   arP = (double *) aObj[ o_mtpval].Alloc( nP, 1, D_);
+   cP = Pai[START_];
+   for( ii=0; ii<nP; ii++ )
+   {
+     arP[ii] = cP;
+     cP+= Pai[2];
+   }
+
+   //init T array
+   getTdata( Tai );
+   nT = getNpoints( Tai );
+   arT = (double *) aObj[ o_mtpval].Alloc( nT, 1, D_);
+   cT = Tai[START_];
+   for( ii=0; ii<nT; ii++ )
+   {
+     arT[ii] = cT;
+     cT+= Tai[2];
+   }
+
+}
+
+void GEM2MTWizard::definePArray()
+{
+   int nPs, nP, ii;
+   double Pai[4];
+   double *arP;
+
+   nP = pPPoints->value();
+  //init P array
+   nPs = aObj[ o_mtpval].GetN();
+   arP = (double *) aObj[ o_mtpval].Alloc( nP, 1, D_);
+
+   if( nPs==1 && nP>1 )
+   {
+     double stepP = getStep( Pai, nP );
+     double cP = Pai[0];
+     for( ii=0; ii<nP; ii++ )
+     {
+      arP[ii] = cP;
+      cP += stepP;
+     }
+   }
+}
+
+void GEM2MTWizard::initPTable()
+ {
+    // init table
+   TObjectModel* model;
+   QList<FieldInfo>	aFlds;
+
+   if( PTable )
+   {   formLayout->removeWidget(PTable);
+       delete PTable; //????
+   }
+
+   aFlds.clear();
+   aFlds.append(FieldInfo( o_mtpval, ftFloat, 15, false, First, eYes, stIO, 20, 1));
+
+   if(chInterp->isChecked())
+       aFlds.append(FieldInfo( o_mttval, ftFloat, 15, false, Tied, eYes, stIO, 20, 1));
+   model = new TObjectModel( aFlds, this );
+
+   PTable =  new TObjectTable( aFlds, this );
+   TObjectDelegate *deleg = new TObjectDelegate( PTable, this);
+   PTable->setItemDelegate(deleg);
+   PTable->setModel(model);
+
+    QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    sizePolicy1.setHorizontalStretch(0);
+    sizePolicy1.setVerticalStretch(0);
+    PTable->setSizePolicy(sizePolicy1);
+
+   int rowSize =0, colSize=0;
+   PTable->getObjectSize(rowSize, colSize);
+   PTable->setMaximumSize(QSize(colSize, 16777215));
+
+//   if(!chInterp->isChecked())
+//     formLayout->setWidget(3, QFormLayout::LabelRole,PTable/*, 3, 0, 1, 1*/);
+//   else
+//     formLayout->setWidget(3, QFormLayout::SpanningRole,PTable/*, 3, 0, 1, 2*/);
+
+}
+
+void GEM2MTWizard::defineTArray()
+{
+   int nT, nTs, ii;
+   double Tai[4];
+   double  *arT;
+
+   getTdata( Tai );
+
+   if(chInterp->isChecked())
+       nT = pPPoints->value();
+   else
+       nT = pTPoints->value();
+
+   //init T array
+   nTs =aObj[ o_mttval].GetN();
+   arT = (double *) aObj[ o_mttval].Alloc( nT, 1, D_);
+
+   if( nTs == 1 && nT >1 )
+   {
+       double stepT = getStep( Tai, nT );
+       double cT = Tai[0];
+       for( ii=0; ii<nT; ii++ )
+       {
+          arT[ii] = cT;
+          cT += stepT;
+       }
+   }
+
+}
+
+void GEM2MTWizard::initTTable()
+ {
+   // init table
+   TObjectModel* model;
+   QList<FieldInfo>	aFlds;
+
+   if( TTable )
+   {   formLayout->removeWidget(TTable);
+       delete TTable; //????
+       TTable = 0;
+   }
+
+   if(chInterp->isChecked())  // only one table
+           return;
+
+   aFlds.clear();
+   aFlds.append(FieldInfo( o_mttval, ftFloat, 15, false, First, eYes, stIO, 20, 1));
+   model = new TObjectModel( aFlds, this );
+
+   TTable =  new TObjectTable( aFlds, this );
+   TObjectDelegate *deleg = new TObjectDelegate( TTable, this);
+   TTable->setItemDelegate(deleg);
+   TTable->setModel(model);
+
+   QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Expanding);
+   sizePolicy1.setHorizontalStretch(0);
+   sizePolicy1.setVerticalStretch(0);
+   TTable->setSizePolicy(sizePolicy1);
+
+   int rowSize =0, colSize=0;
+   TTable->getObjectSize(rowSize, colSize);
+   TTable->setMaximumSize(QSize(colSize, 16777215));
+
+   //formLayout->setWidget(3, QFormLayout::FieldRole,TTable/*, 3, 1, 1, 1*/);
+
+}
+
+void GEM2MTWizard::showPTTable()
+{
+  if(!chInterp->isChecked())
+     formLayout->insertRow(3, PTable ,TTable );
+  else
+    formLayout->insertRow(3, PTable );
+}
+
+void GEM2MTWizard::objectChanged()
+{
 
 }
 

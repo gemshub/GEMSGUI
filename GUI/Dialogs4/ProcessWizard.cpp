@@ -1094,7 +1094,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
       {   gstring phname = lst[0].trimmed().toLatin1().data();
 
           dclst = TProfil::pm->DCNamesforPh( phname.c_str() , true );
-          // Here may be message if illegal phase
+          // Here may be message if Invalid phase
           if( dclst.GetCount() > 0 )
              EM0 = dclst[0].c_str();
           if( dclst.GetCount()  > 1 )
@@ -1391,24 +1391,24 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
              return;
            b_ion = lst[0].trimmed();
            c_ion = lst[1].trimmed();
-
+           // The script below corrected on 13.11.2012 by DK
            ret = QString(
-            "$ Abscissa - mole fraction of BL in solid solution\n"
+            "$ Abscissa - mole fraction of ML in solid solution\n"
             "xp[J] =: Wxx[{%1}];\n"
-            "$ log(Kd(Minor)) in kgH2O\n"
-            "yp[J][0] =: lg( Wxx[{%2}] / my[{%4}] );\n"
             "$ log(Kd(Host)) in kgH2O\n"
+            "yp[J][0] =: lg( Wxx[{%2}] / my[{%4}] );\n"
+            "$ log(Kd(Minor)) in kgH2O\n"
             "yp[J][1] =: lg( Wxx[{%1}] / my[{%3}] );\n"
             "$ log(D), dimensionless\n"
             "$ yp[J][2] =: lg( Wxx[{%1}] / my[{%3}] / (Wxx[{%2}] / my[{%4}]) );\n"
             "yp[J][2] =: yp[J][1] - yp[J][0]; \n"
             "$ Done\n").arg(BL, CL, b_ion, c_ion);
-           rowNames.Add("log(Kd(M))");
            rowNames.Add("log(Kd(H))");
-           rowNames.Add("log(D)");
+           rowNames.Add("log(Kd(M))");
+           rowNames.Add("log(D_MH)");
            pGraph->setValue( 3 );
            pageScript->setXname("x(Minor)");
-           pageScript->setYname("logKd;logD");
+           pageScript->setYname("log10");
          }
          if( subtype == 3 )
          {
@@ -1435,7 +1435,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
            rowNames.Add("D(Trace)");
            pGraph->setValue( 3 );
            pageScript->setXname("log_m(Tr)");
-           pageScript->setYname("logx;logKd");
+           pageScript->setYname("log10");
          }
      break;
   //-------------------------------------------------------------------------

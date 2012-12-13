@@ -174,6 +174,7 @@ TVisor::TVisor(int c, char *v[]):
     //RemoteDocURL = "http://gems.web.psi.ch/doc/html/";
     RemoteHTML = SysGEMDir + HELP_SRC_DIR;
     LocalDoc = true;
+    DefaultBuiltinTDB = "nagra-psi";
 // For debugging the directories
 // cout << "Local    : " << LocalDir.c_str() << endl;
 // cout << "SysGEM   : " << SysGEMDir.c_str() << endl;
@@ -372,8 +373,8 @@ TVisor::load()
     for (uint ii = 0; ii < aMod.GetCount(); ii++)
      aWinInfo.Add(new CWinInfo(aMod[ii], cnf));
 
+    cnf.close(); // close vis_cn.dat file after reading it
     toDAT();
-
     toModCFG();
     toWinCFG();
 }
@@ -551,6 +552,10 @@ TVisor::toWinCFG()
     f_win_ini << "local_doc_dir\t=\t\"" << LocalDocDir.c_str() << "\""  << endl;
     f_win_ini << "remote_doc_url\t=\t\"" << RemoteHTML.c_str() << "\"" << endl;
     f_win_ini << "local_doc\t=\t" << LocalDoc << endl;   // obsolete
+    f_win_ini << "current_mode\t=\t" << ProfileMode << endl;
+    f_win_ini << "default_built_in_TDB\t=\t\"" << DefaultBuiltinTDB.c_str() << "\"" << endl;
+    f_win_ini << "current_project\t=\t\"" << rt[RT_PARAM].PackKey() << "\""  << endl;
+    f_win_ini << "current_system\t=\t\"" << rt[RT_SYSEQ].PackKey() << "\""  << endl;
     f_win_ini.close();
 
     // Window-specific settings
@@ -627,6 +632,20 @@ TVisor::fromWinCFG()
             	else if( name == "local_doc" ) {
 				setLocalDoc(visor_conf.getcInt());
 			}
+            else if( name == "current_mode" ) {
+               ProfileMode = visor_conf.getcInt();
+            }
+            else if( name == "default_built_in_TDB" ) {
+                gstring gstr;
+                visor_conf.getcStr(gstr);
+                setDefaultBuiltinTDB(gstr);
+            }
+            else if( name == "current_project" ) {
+               visor_conf.getcStr(lastProjectKey );
+            }
+            else if( name == "current_system" ) {
+               visor_conf.getcStr(lastSystemKey );
+            }
 
         name = visor_conf.getNext();
     }
@@ -760,6 +779,7 @@ TVisor::Exit()
         aObj[ o_nldcvs].SetPtr(0);
         aObj[ o_nldchs].SetPtr(0);
         aObj[ o_nlphh].SetPtr(0);
+        TGEM2MT::pm->FreeNa();
 
     }
     catch(TError & xcpt)
@@ -781,7 +801,7 @@ TVisor::defaultCFG()
     // RT_PROFIL default
     unsigned char param_rkfrm[2] = { MAXMUNAME, MAXMUGROUP };
     rt.Add(new TDataBase(rt.GetCount(), "projec", true, true,
-                         o_spppar, 14, 0, 2, param_rkfrm));
+                         o_spppar, 15, 0, 2, param_rkfrm));      // 12.12.12 added new object to Project record
 
     // RT_ICOMP default
     unsigned char icomp_rkfrm[3] = { MAXICNAME, MAXSYMB, MAXICGROUP };

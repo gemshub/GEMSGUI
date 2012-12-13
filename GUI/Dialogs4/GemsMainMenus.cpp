@@ -70,6 +70,13 @@ void TVisorImp::updateMenus()
              toolBar_2->show();
              toolBar_4->show();
              toolBar_5->show();
+             if( mdwin->rtNum() ==  RT_RTPARM ||  mdwin->rtNum() ==  RT_PROCES ||
+                 mdwin->rtNum() ==  RT_UNSPACE ||  mdwin->rtNum() ==  RT_GTDEMO ||
+                     mdwin->rtNum() ==  RT_GEM2MT )
+                 action_Plot->setEnabled(true);
+             else
+                 action_Plot->setEnabled(false);
+
              if( pVisor->ProfileMode == MDD_DATABASE)
              {
                menubar->addAction(menuRecord_List->menuAction());

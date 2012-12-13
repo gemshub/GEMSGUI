@@ -34,7 +34,7 @@ TCompos* TCompos::pm;
 TCompos::TCompos( int nrt ):
         TCModule( nrt )
 {
-    aFldKeysHelp.Add("Name of predefined composition (PCO)");
+    aFldKeysHelp.Add("Name of predefined composition object (PCO)");
     aFldKeysHelp.Add("Code of PCO type { AQ RO GA FL HC PM MIN }");
     aFldKeysHelp.Add("Comment to PCO description");
     bcp=&bc[0];
@@ -110,7 +110,7 @@ void TCompos::ods_link( int q)
 // set dynamic Objects ptr to values
 void TCompos::dyn_set(int q)
 {
-    ErrorIf( bcp!=&bc[q], GetName(), "Illegal access to bc in dyn_set.");
+    ErrorIf( bcp!=&bc[q], GetName(), "E00BCrem: Attempt to access corrupt dynamic memory.");
     bc[q].C = (double *)aObj[ o_bccv ].GetPtr();
     bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ].GetPtr();
     bc[q].CIcl = (char *)aObj[ o_bccicl ].GetPtr();
@@ -132,7 +132,7 @@ void TCompos::dyn_set(int q)
 // free dynamic memory in objects and values
 void TCompos::dyn_kill(int q)
 {
-    ErrorIf( bcp!=&bc[q], GetName(), "Illegal access to bc in dyn_kill.");
+    ErrorIf( bcp!=&bc[q], GetName(), "E01BCrem: Attempt to free corrupt dynamic memory.");
     bc[q].C = (double *)aObj[ o_bccv ].Free();
     bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ].Free();
     bc[q].CIcl = (char *)aObj[ o_bccicl ].Free();
@@ -154,9 +154,9 @@ void TCompos::dyn_kill(int q)
 // realloc dynamic memory
 void TCompos::dyn_new(int q)
 {
-    ErrorIf( bcp!=&bc[q], GetName(), "Illegal access to bc in dyn_new.");
+    ErrorIf( bcp!=&bc[q], GetName(), "E02BCrem: Attempt to allocate corrupt dynamic memory.");
     //  ErrorIf( bc[q].Nmax < 1, GetName(), "bc[q].Nmax < 1" ); DAK
-    ErrorIf( (bc[q].N < 1)&&(bc[q].Nmax < 1), GetName(), "bc[q].N,Nmax < 1" );
+    ErrorIf( (bc[q].N < 1)&&(bc[q].Nmax < 1), GetName(), "E03BCrem: No Independent Components selected (bc[q].N,Nmax < 1)" );
 
     // bc[q].C = (double *)aObj[ o_bccv].Alloc( bc[q].Nmax, 1, D_ );  DAK
     if( bc[q].N > 0 )
@@ -238,7 +238,7 @@ void TCompos::dyn_new(int q)
 
 void TCompos::set_def( int q)
 {
-    ErrorIf( bcp!=&bc[q], GetName(), "Illegal access to bc in set_def.");
+    ErrorIf( bcp!=&bc[q], GetName(), "E04BCrem: Dynamic memory corruption in Compos data structure.");
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     memcpy( &bc[q].PcIC, aPa->pa.BCpc, 6 );
     memcpy( bc[q].name, "element", 7 ); bc[q].name[7] = 0;
@@ -295,7 +295,7 @@ void TCompos::bc_work_dyn_new()
         TCIntArray anR;
         int Nic = rt[RT_ICOMP].GetKeyList( "*:*:*:", aKey, anR );
         ErrorIf( Nic<1, GetName(),
-                 "ICOMP data record keys are not selected \n"
+                 "W05BCrem: ICOMP data record keys are not selected \n"
                  "(maybe, some PDB chain files are not linked)");
         bcp->Nmax = (short)Nic;
         bcp->SB1 = (char (*)[IC_RKLEN])aObj[ o_bcsb1 ].Alloc(bcp->Nmax, 1, IC_RKLEN);
@@ -372,7 +372,7 @@ TCompos::MakeQuery()
     size[1] = bcp->Nsd;
 
     if( !vfComposSet( window(), p_key, flgs, size, r2 ))
-         Error( p_key, "Compos record configuration cancelled by the user!" );
+         Error( p_key, "E06BCrem: Compos record configuration cancelled by the user" );
      //  return;   // cancel
 
     memcpy( &bcp->PcIC, flgs, 6);
@@ -440,7 +440,7 @@ LOOP_MARKIC:
     bcp->PcIC = S_REM;
     if( aIclist.GetCount() < 1 )
         switch ( vfQuestion3( window(), GetName(),
-         " < 1 IComp keys marked for PCO definition\n"
+         "W07BCrem: < 1 IComp keys marked for PCO definition\n"
          "Repeat marking, Proceed to defining PCO in different ways, or\n"
          " Cancel assembling PCO definition?", "&Repeat", "&Proceed" ))
         {
@@ -451,7 +451,7 @@ LOOP_MARKIC:
             goto LOOP_MARKIC;
         case VF3_3:
             Error( GetName(),
-            " < 1 IComp keys selected for PCO definition...");
+            "E08BCrem: < 1 IComp keys selected for PCO definition...");
         }
     else
      {    bcp->PcIC = S_ON;
@@ -523,7 +523,7 @@ LOOP_MARKDC:
 
     if( aDclist.GetCount() < 1 )
         switch ( vfQuestion3( window(), GetName(),
-                  " < 1 ReacDC&DComp keys marked for PCO.\n"
+                  "W09BCrem: < 1 ReacDC&DComp keys marked for PCO.\n"
                   " Repeat marking,  \n"
                   "Proceed to defining composition in different ways or\n"
                   "Cancel assembling PCO definition?", "&Repeat", "&Proceed" ))
@@ -534,7 +534,7 @@ LOOP_MARKDC:
             break;
         case VF3_3:
             Error( GetName(),
-                " < 1 ReacDC&DComp records selected for PCO definition");
+                "E09BCrem: < 1 ReacDC&DComp records selected for PCO definition");
         }
 
 
@@ -799,7 +799,7 @@ SPECIFY_C:
             for( im=0; im<bcp->Nmax; im++ )
                 if( !memcmp( bcp->SB1[im], bcp->SB[i], (MAXICNAME+MAXSYMB)-1 ))
                     goto IC_FOUND;
-            Error( GetName(), "No get index im!");
+            Error( GetName(), "E10BCrem: Wrong index of Independent Component");
 IC_FOUND:
             CI[im] = (double)bcp->CI[i];
             CIcl[im] = bcp->CIcl[i];

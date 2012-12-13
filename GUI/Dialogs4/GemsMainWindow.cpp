@@ -72,7 +72,8 @@ TVisorImp::TVisorImp(int c, char** v):
         last_update( 0 ),
         configAutosave(false),
         proc(0),
-    currentNrt(-2)
+    currentNrt(-2),
+    settedCureentKeyIntotbKeys(false)
 {
     setupUi(this);
     (void)statusBar();
@@ -121,6 +122,7 @@ TVisorImp::TVisorImp(int c, char** v):
        toolDataBase->addAction(actionRTparm);
        toolDataBase->addAction(actionPhase);
        toolDataBase->addAction(actionCompos);
+       toolDataBase->setWindowTitle("toolDataBase");
 
        toolProject = new QToolBar(this);
        toolProject->setObjectName(QString::fromUtf8("toolProject"));
@@ -135,6 +137,7 @@ TVisorImp::TVisorImp(int c, char** v):
        //toolProject->addAction(actionDualTh);
        //toolProject->addAction(actionUnSpace);
        toolProject->addAction(actionProject);
+       toolProject->setWindowTitle("toolProject");
 
 
     // Define internal area
@@ -235,9 +238,35 @@ TVisorImp::TVisorImp(int c, char** v):
 
     // Use database mode as start mode
     //actionDataBaseMode->setChecked(true);
-    CmDataBaseMode();
-    toolProject->hide();
-    //pModeName->setText(" D");
+
+    if( MDD_DATABASE == pVisor->ProfileMode )
+    {
+        SetGeneralMode();
+        actionDataBaseMode->setChecked(true);
+        //CmDataBaseMode();
+        //toolProject->hide();
+    }
+    else
+    {
+
+        // Open calc mode and load last project
+        if( !SetProfileMode(pVisor->lastProjectKey.c_str()))
+        {
+            //action_calcMode->setChecked( false );
+            SetGeneralMode();
+            actionDataBaseMode->setChecked(true);
+         }
+        else
+        {
+           action_calcMode->setChecked(true);
+           // load last system
+           if( rt[RT_SYSEQ].Find( pVisor->lastSystemKey.c_str()) >= 0 )
+           CmShow( pVisor->lastSystemKey.c_str() );
+           //NewSystemDialog::pDia->CmSelect( pVisor->lastSystemKey.c_str());
+        }
+     }
+
+    moveToolBar();
     updateMenus();
  }
 
@@ -287,6 +316,7 @@ void TVisorImp::defineModuleKeysList( int nRT )
   gstring keyfld;
   QTableWidgetItem *item, *curItem=0;
   gstring oldKey = rt[nRT].UnpackKey();
+  settedCureentKeyIntotbKeys = false;
 
   if(currentNrt != nRT)
     return;
@@ -328,7 +358,9 @@ void TVisorImp::defineModuleKeysList( int nRT )
           tbKeys->setItem(ii, jj, item );
        }
       if( oldKey == keyList[ii] )
-          curItem = tbKeys->item(ii,0);
+      {    curItem = tbKeys->item(ii,0);
+           settedCureentKeyIntotbKeys = true;
+      }
 
   }
   for(jj=0; jj<rt[nRT].KeyNumFlds(); jj++)
@@ -394,6 +426,8 @@ void TVisorImp::openRecordKey( int row, int    )
 {
     gstring currentKey ="";
 
+    if( row >= tbKeys->rowCount())
+        return;
 
     for(int jj=0; jj<tbKeys->columnCount(); jj++)
     {
@@ -430,8 +464,15 @@ void TVisorImp::OpenModule(QWidget* /*par*/, int irt, int page, int viewmode, bo
            //----if( select )
            //----   NewSystemDialog::pDia->CmSelect();
            openMdiChild( NewSystemDialog::pDia, true );
+
+           // Create, if no syseq is present in the project
+           if( rt[RT_SYSEQ].RecCount() <= 0)
+               NewSystemDialog::pDia->CmCreate();
+
            //mdiArea->addSubWindow(NewSystemDialog::pDia);
            //NewSystemDialog::pDia->showMaximized();//show();
+           if( !settedCureentKeyIntotbKeys )
+               openRecordKey(0,0);
         }
         else
          {
@@ -452,6 +493,8 @@ void TVisorImp::OpenModule(QWidget* /*par*/, int irt, int page, int viewmode, bo
             openMdiChild( p );
             //mdiArea->addSubWindow(p);
             //p->show();
+            if( !settedCureentKeyIntotbKeys )
+                openRecordKey(0,0);
           }
           else
           {
@@ -667,12 +710,12 @@ void TVisorImp::CmDataBaseMode()
 
 
 // Calc part functions
-bool TVisorImp::SetProfileMode()
+bool TVisorImp::SetProfileMode(const char * profileKey )
 {
     try
     {
         pVisor->ProfileMode = MDD_SYSTEM;
-        if( !TProfil::pm->initCalcMode() )
+        if( !TProfil::pm->initCalcMode(profileKey) )
         {
             pVisor->ProfileMode = MDD_DATABASE;
             return false;

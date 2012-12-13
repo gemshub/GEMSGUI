@@ -35,9 +35,9 @@ TPhase::TPhase( int nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("Code of phase state { a g l h s d x }");
-    aFldKeysHelp.Add("Symbol of this phase definition (letters, digits)");
-    aFldKeysHelp.Add("Name of this phase definition");
+    aFldKeysHelp.Add("Code of phase state { a g f p l m h s d x }");
+    aFldKeysHelp.Add("Group identifier for such phases (letters, digits)");
+    aFldKeysHelp.Add("Name of this phase definition (letters, digits)");
     aFldKeysHelp.Add("Phase class { c d l gm ss ssd ls aq xsa xc }");
     aFldKeysHelp.Add("Comment to phase definition");
     php=&ph[0];
@@ -49,7 +49,7 @@ TPhase::TPhase( int nrt ):
 // link values to objects
 void TPhase::ods_link( int q)
 {
-    ErrorIf( q > nQ, GetName(), "E00PHrem: Illegal link q>nQ");
+    ErrorIf( q > nQ, GetName(), "E00PHrem: Invalid link q>nQ");
 
     aObj[ o_phsolt].SetPtr( ph[q].sol_t );
     aObj[ o_phps].SetPtr(  &ph[q].PphC );  // a 6
@@ -219,8 +219,8 @@ aObj[ o_phisoc].SetDim( 2, ph[q].NsiT );
 void TPhase::dyn_set(int q)
 {
     ErrorIf( php!=&ph[q], GetName(),
-             "E01PHrem: Illegal access to ph in dyn_set()");
-    memcpy( php->pst, rt[nRT].UnpackKey(), PH_RKLEN );
+             "E01PHrem: Invalid access to ph in dyn_set()");
+    memcpy( php->pst_, rt[nRT].UnpackKey(), PH_RKLEN );
     ph[q].SCMC =  (char *)aObj[ o_phscmc ].GetPtr();
     ph[q].FsiT =  (float *)aObj[ o_phfsit ].GetPtr();
     ph[q].XfIEC = (float *)aObj[ o_phxfiec ].GetPtr();
@@ -285,7 +285,7 @@ if(!ph[q].ipxt )
 // free dynamic memory in objects and values
 void TPhase::dyn_kill(int q)
 {
-    ErrorIf( php!=&ph[q], GetName(), "E02PHrem: Illegal access to ph in dyn_kill()");
+    ErrorIf( php!=&ph[q], GetName(), "E02PHrem: Invalid access to ph in dyn_kill()");
     ph[q].SCMC =  (char *)aObj[ o_phscmc ].Free();
     ph[q].FsiT =  (float *)aObj[ o_phfsit ].Free();
     ph[q].XfIEC = (float *)aObj[ o_phxfiec ].Free();
@@ -350,7 +350,7 @@ void TPhase::dyn_kill(int q)
 // realloc dynamic memory
 void TPhase::dyn_new(int q)
 {
-    ErrorIf( php!=&ph[q], GetName(), "E03PHrem: Illegal access to ph in dyn_new()");
+    ErrorIf( php!=&ph[q], GetName(), "E03PHrem: Invalid access to ph in dyn_new()");
     ErrorIf( ph[q].nDC <= 0, GetName(), "E04PHrem: Number of DC in the phase definition <= 0");
     ph[q].SM = (char (*)[DC_RKLEN])aObj[ o_phsm ].Alloc( ph[q].nDC, 1, DC_RKLEN );
     ph[q].DCS = (char *)aObj[ o_phdcs ].Alloc( ph[q].nDC, 1, A_ );
@@ -598,7 +598,7 @@ void TPhase::moiety_new( int nDC, int nMoi, bool setDefault )
 //set default information
 void TPhase::set_def( int q)
 {
-    ErrorIf( php!=&ph[q], GetName(), "E05PHrem: Illegal access to ph in set_def()");
+    ErrorIf( php!=&ph[q], GetName(), "E05PHrem: Invalid access to ph in set_def()");
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     memcpy( ph[q].sol_t, aPa->pa.PHsol_t, 6 );
     memcpy( &ph[q].PphC, aPa->pa.PHpvc, 6 );
@@ -792,268 +792,402 @@ TPhase::MakeQuery()
     php->Asur = r2;
 }
 
+// Setting up the DC/phase coeffs depending on the
+// built-in activity coeff model
+void TPhase::Set_DC_Phase_coef()
+{
+   php->sol_t[DCOMP_DEP] = SM_UNDEF;
+   php->sol_t[SPHAS_DEP] = SM_UNDEF;
+   php->sol_t[DCE_LINK] = SM_UNDEF;
+
+   switch(php->sol_t[SPHAS_TYP])
+   {
+       case SM_OTHER:   // Customized hardcoded solid-solution models
+                      php->nscM = 0;   // NP_DC
+                      php->npxM = 0;   // MaxOrd
+                      php->ncpN = 0;   // NPar
+                      php->ncpM = 0;   // NPcoef
+                      break;
+       case SM_BERMAN:   // Sublattice microscopic intra-site interaction model (multicomponent)
+                      php->nscM = 1;  // NP_DC
+                      php->npxM = 4;  // MaxOrd
+                      if( php->ncpN < 1 ) // NPar
+                          php->ncpN = 1;
+                      if( php->ncpN > (php->nDC * php->nDC * 4. ))
+                          php->ncpN = php->nDC * php->nDC * 4.;   // Check max N of parameters!
+                      php->ncpM = 3;  // NPcoef
+                      break;
+       case SM_VANLAAR:   // Van Laar model (multicomponent)
+                      php->nscM = 1;  // NP_DC
+                      php->npxM = 2;  // MaxOrd
+                      if( php->ncpN < 1 ) // NPar
+                          php->ncpN = 1;
+                      if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+                          php->ncpN = (php->nDC*(php->nDC-1)/2);
+                      php->ncpM = 3;  // NPcoef
+                      break;
+       case SM_REGULAR:   // Regular model (multicomponent)
+                      php->nscM = 0;  // NP_DC
+                      php->npxM = 2;  // MaxOrd
+                      if( php->ncpN < 1 ) // NPar
+                          php->ncpN = 1;
+                      if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+                          php->ncpN = (php->nDC*(php->nDC-1)/2);
+                      php->ncpM = 3;  // NPcoef
+                      break;
+       case SM_GUGGENM:   // Redlich-Kister model (multicomponent)
+                      php->nscM = 0;  // NP_DC
+                      php->npxM = 2;  // MaxOrd
+                      if( php->ncpN < 1 ) // NPar
+                          php->ncpN = 1;
+                      if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+                          php->ncpN = (php->nDC*(php->nDC-1)/2);
+                      php->ncpM = 16;  // NPcoef
+                      break;
+      case SM_NRTLLIQ:   // NRTL liquid model (multicomponent), added 03.06.2008 (TW)
+                      php->nscM = 0;  // NP_DC
+                      php->npxM = 2;  // MaxOrd
+                      if( php->ncpN < 1 ) // NPar
+                          php->ncpN = 1;
+                      if( php->ncpN > (php->nDC*(php->nDC-1)) )
+                          php->ncpN = (php->nDC*(php->nDC-1));
+                      php->ncpM = 6;  // NPcoef
+                      break;
+      case SM_WILSLIQ:   // Wilson liquid model (multicomponent), added 09.06.2008 (TW)
+                      php->nscM = 0;  // NP_DC
+                      php->npxM = 2;  // MaxOrd
+                      if( php->ncpN < 1 ) // NPar
+                          php->ncpN = 1;
+                      if( php->ncpN > (php->nDC*(php->nDC-1)) )
+                          php->ncpN = (php->nDC*(php->nDC-1));
+                      php->ncpM = 4;  // NPcoef
+                      break;
+      case SM_REDKIS:   // Redlich-Kister model (binary)
+                      php->nscM = 0;
+                      php->npxM = 0;
+                      php->ncpN = 1; php->ncpM = 3;
+                      break;
+      case SM_MARGB:  // Margules subregular model (binary)
+                      php->nscM = 0;
+                      php->npxM = 0;
+                      php->ncpN = 2; php->ncpM = 3;
+                      break;
+      case SM_MARGT:  // Margules regular model (ternary)
+                      php->nscM = 0;
+                      php->npxM = 0;
+                      php->ncpN = 4; php->ncpM = 3;
+                      break;
+      case SM_CGFLUID:  // Churakov-Gottschalk (CG) EoS
+                      php->ncpN = 0;
+                      php->ncpM = 0;
+                      php->nscM = 12; // last changed 12.12.2008 (TW)
+                      php->npxM = 0;
+                      // php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
+                      break;
+      case SM_PRFLUID:  // Peng-Robinson-Stryjek-Vera (PRSV) EoS, one binary interaction parameter
+                      if( php->ncpN < 1 ) // NPar
+                          php->ncpN = 1;
+                      if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+                          php->ncpN = (php->nDC*(php->nDC-1)/2);
+                      php->ncpM = 2;  // NPcoef
+                      php->nscM = 7;  // set to 7 to pull all parameters from CPg
+                      php->npxM = 2;
+                      break;
+      case SM_SRFLUID:  // Soave-Redlich-Kwong (SRK) EoS, one binary interaction parameter
+                      if( php->ncpN < 1 ) // NPar
+                          php->ncpN = 1;
+                      if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+                          php->ncpN = (php->nDC*(php->nDC-1)/2);
+                      php->ncpM = 2;  // NPcoef
+                      php->nscM = 7;  // set to 7 to pull all parameters from CPg
+                      php->npxM = 2;
+                      break;
+      case SM_PR78FL:  // Peng-Robinson (PR78) EoS, one binary interaction parameter
+                      if( php->ncpN < 1 ) // NPar
+                          php->ncpN = 1;
+                      if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+                          php->ncpN = (php->nDC*(php->nDC-1)/2);
+                      php->ncpM = 2;  // NPcoef
+                      php->nscM = 7;  // set to 7 to pull all parameters from CPg
+                      php->npxM = 2;
+                      break;
+      case SM_CORKFL:  // compensated Redlich-Kwong (CORK) EoS, one binary interaction parameter
+                      if( php->ncpN < 1 ) // NPar
+                          php->ncpN = 1;
+                      if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+                          php->ncpN = (php->nDC*(php->nDC-1)/2);
+                      php->ncpM = 1;  // NPcoef
+                      php->nscM = 7;  // set to 7 to pull all parameters from CPg
+                      php->npxM = 2;  // MaxOrd
+                      break;
+      case SM_STFLUID:  // Sterner-Pitzer (STP) EoS, one binary interaction parameter
+                      if( php->ncpN < 1 ) // NPar
+                          php->ncpN = 1;
+                      if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+                          php->ncpN = (php->nDC*(php->nDC-1)/2);
+                      php->ncpM = 1;  // NPcoef
+                      php->nscM = 7;  // set to 7 to pull all parameters from CPg
+                      php->npxM = 2;  // MaxOrd
+                      break;
+      case SM_AQDAV:  // aqueous Davies
+                      // php->ncpN = php->ncpM = 0;
+                      php->ncpN = 2;
+                      php->ncpM = 4; // changed 10.07.2008 DK
+                      php->nscM = 0;
+                      php->npxM = 0;
+                      php->PphC = PH_AQUEL;
+                      break;
+      case SM_AQDH1:  // aqueous DH limiting law
+                      php->ncpN = 2;
+                      php->ncpM = 4;
+                      php->nscM = 0;
+                      php->npxM = 0;
+                      php->PphC = PH_AQUEL;
+                      break;
+      case SM_AQDH2:  // aqueous DH, individual a0, individual bg
+                      php->ncpN = 2;
+                      php->ncpM = 4;
+                      php->nscM = 2;
+                      php->npxM = 0;
+                      php->PphC = PH_AQUEL;
+                      break;
+      case SM_AQDH3:  // aqueous EDH Karpov, individual a0, common bg
+                      php->ncpN = 2;
+                      php->ncpM = 4;
+                      php->nscM = 2;
+                      php->npxM = 0;
+                      php->PphC = PH_AQUEL;
+                      break;
+      case SM_AQDHH:  // aqueous EDH Helgeson, common a0 and bg
+                      php->ncpN = 2;
+                      php->ncpM = 4;
+                      php->nscM = 0;
+                      php->npxM = 0;
+                      php->PphC = PH_AQUEL;
+                      break;
+      case SM_AQDHS:  // aqueous EDH Shvarov, common a0 and bg
+                      php->ncpN = 2;
+                      php->ncpM = 4;
+                      php->nscM = 2;
+                      php->npxM = 0;
+                      php->PphC = PH_AQUEL;
+                      break;
+      case SM_AQSIT:  // SIT model in NEA variant - new implementation
+                      php->nscM = 0;  // NP_DC
+                      php->npxM = 2;  // MaxOrd
+                      if( php->ncpN < 1 ) // NPar
+                          php->ncpN = 1;
+                      if( php->ncpN > (php->nDC*php->nDC/2) )
+                          php->ncpN = (php->nDC*php->nDC/2);
+                      php->ncpM = 2;  // NPcoef - changed from 1 to 2 on 13.05.09 (DK)
+                      php->PphC = PH_AQUEL;
+                      break;
+      case SM_AQEXUQ: // built-in EUNIQUAC model for aqueous activity coeffs, changed 18.01.2009 (TW)
+                      php->nscM = 2;  // NP_DC
+                      php->npxM = 2;  // MaxOrd
+                      if( php->ncpN < 1 ) // NPar
+                          php->ncpN = 1;
+                      if( php->ncpN > (php->nDC*(php->nDC-1)/2+php->nDC) )
+                          php->ncpN = (php->nDC*(php->nDC-1)/2+php->nDC);
+                       php->ncpM = 2;  // NPcoef
+                       php->PphC = PH_AQUEL;
+                       break;
+      case SM_AQPITZ: // built-in Pitzer HMW aqueous activity coefficient model
+                       php->nscM = 0;  // NP_DC
+                       php->npxM = 4;  // MaxOrd
+                       if( php->ncpN < 1 ) // NPar
+                           php->ncpN = 1;
+                       if( php->ncpN > (php->nDC*php->nDC) )
+                           php->ncpN = (php->nDC*php->nDC);
+                       if( php->ncpM <= 5 )
+                           php->ncpM = 5;  // NPcoef
+                       if( php->ncpM >= 8 )
+                           php->ncpM = 8;
+                       // php->nscN = 0;
+                       php->PphC = PH_AQUEL;
+                       break;
+      case SM_AQELVIS:  // built-in ELVIS model for aqueous electrolytes
+                       php->nscM = 8;                       // NP_DC  = cols of aDCc (rows of aDCc = NComp)
+                       php->npxM = 2;                       // MaxOrd = cols of aIPx
+                       if( php->ncpN < 1 )                  // NPar   = rows of aIPx and aIPc
+                           php->ncpN = 1;
+                       if( php->ncpN > (php->nDC*php->nDC) )
+                           php->ncpN = (php->nDC*php->nDC);
+                       php->ncpM = 8;                       // NPcoef = rows of aIPc
+                       php->PphC = PH_AQUEL;
+                       break;
+      default:  // other models
+                       break;
+   }
+}
+
+// Build ReacDC/DComp keys (aDclist) to be included into the Phase
+void TPhase::makeReacDCompList(TCStringArray& aDclist)
+{
+    int i;
+    vstr pkeyrd(81);
+    TCStringArray aDclist_old;
+
+    aDclist.Clear();
+
+    //REACDC&DCOMP  keypart
+    rt[RT_REACDC].MakeKey( RT_PHASE, pkeyrd, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END );
+   if( pkeyrd[1] != ':')
+       pkeyrd[1] = '*';
+   if( php->NsiT > 0 )  // template for adsorption
+       pkeyrd[0] = CP_SSPC;  // added by KD 25.10.2004
+
+    if( php->nDC && php->SM )
+    {
+      // Build old selections DCOMP and REACDC
+       aDclist_old.Clear();
+       for( i=0; i<php->nDC; i++ )
+       {
+          gstring key_dr = gstring( php->SM[i], 0, DC_RKLEN );
+          if( php->DCS[i] == SRC_DCOMP )
+          {
+            rt[RT_DCOMP].SetKey( key_dr.c_str() );
+            rt[RT_DCOMP].SetFldKey( 3, "*" );
+            key_dr  = gstring(1, php->DCS[i]);
+            key_dr += ' ';
+            key_dr += rt[RT_DCOMP].UnpackKey();
+          }
+          else
+            if( php->DCS[i] == SRC_REACDC )
+            {
+              rt[RT_REACDC].SetKey( key_dr.c_str() );
+              rt[RT_REACDC].SetFldKey( 3, "*" );
+              key_dr  = gstring(1, php->DCS[i]);
+              key_dr += ' ';
+              key_dr += rt[RT_REACDC].UnpackKey();
+            }
+         aDclist_old.Add( key_dr );
+      }
+    }
+
+AGAINRC:
+     aDclist = vfRDMultiKeysSet( window(),
+          "Please, mark ReacDC/DComp keys to be included into the Phase",
+                  pkeyrd, aDclist_old, php->NsiT  );
+
+     if( aDclist.GetCount() < 1 )
+     {
+        switch ( vfQuestion3(window(), GetName(),
+        "W08PHrem: Number of selected ReacDC/DComp keys < 1.\n"
+        " Mark again, proceed without ReacDC/DComp or Cancel?",
+        "&Repeat", "&Proceed"))
+        {
+          case VF3_1:
+            goto AGAINRC;
+            ;
+          case VF3_2:
+            break;
+          case VF3_3:  Error( GetName(),
+             "E09PHrem: No ReacDC/DComp records selected into Phase...");
+        }
+      }
+
+      php->nDC = (short)(aDclist.GetCount());
+}
+
+
+// Load DC classes from records and set to DCC
+void TPhase::LoadDCC()
+{
+    vstr dcn(MAXRKEYLEN);
+    char Ctype;
+    time_t crt;
+    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+    TReacDC* aRDC=(TReacDC *)(&aMod[RT_REACDC]);
+    memset( dcn, 0, MAXRKEYLEN );
+
+    for(int i=0; i<php->nDC; i++ )
+    {
+
+      php->DCS[i] = php->SM[i][DC_RKLEN-1]; // species class code
+      php->SM[i][DC_RKLEN-1] = ' ';
+
+      // Get key
+       memcpy( dcn, php->SM[i], DC_RKLEN );
+       dcn[DC_RKLEN]=0;
+       Ctype = A_NUL;
+      // Read record and extract data
+      if( php->DCS[i] == SRC_DCOMP )
+      {
+         aDC->TryRecInp( dcn, crt, 0 );
+         Ctype = aDC->dcp->PdcC;
+      }
+      else
+        if( php->DCS[i] == SRC_REACDC )
+        {
+            aRDC->TryRecInp( dcn, crt, 0 );
+            Ctype = aRDC->rcp->PreC;
+        }
+
+      // test model and types of components
+      if( php->Pinternal1 == S_ON || php->DCC[i] == A_NUL || php->DCC[i] == '`')
+      {
+        if( Ctype == DC_SCP_CONDEN && php->nDC >=2 &&
+            !( php->PphC == PH_AQUEL || php->PphC == PH_GASMIX || php->PphC == PH_SORPTION ))
+           Ctype = DC_SOL_MAJOR;
+         php->DCC[i] = Ctype;
+      }
+    }  // i
+}
 
 //Rebuild record structure before calc
 int
 TPhase::RecBuild( const char *key, int mode  )
 {
-    int /*iic,*/ i;
-    short nCat, nAn, nNs;
-    //vstr pkeydc(81);
-    vstr pkeyrd(81);
-
+    int  i;
     TCStringArray aDclist;
-    //TCStringArray aRclist;
-    TCStringArray aDclist_old;
-    //TCStringArray aRclist_old;
-
     gstring str;
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
-    php->PphC = php->pst[0];
+
+    php->PphC = php->pst_[0];
     if( php->PphC == PH_FLUID /* && php->sol_t[SPHAS_TYP] == SM_OTHER */ )
     {
-//        php->nscN = 1; php->nscM = MAXEOSPARAM;  changed 07.12.2006 KD
         php->nscM = MAXEOSPARAM;
     }
+
+    php->Pinternal1 = S_OFF;
+    if( db->FindCurrent(key) < 0 )
+       php->Pinternal1 = S_ON;      // refresh DC codes if new record
 
 AGAIN_SETUP:
     int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL  &&!( !php->PphC || php->PphC == ' '))
         return ret;
-    memcpy( php->pst, rt[nRT].UnpackKey(), PH_RKLEN );
-     if( ret == VF3_1 )
+
+    // Change Phase key
+    memcpy( php->pst_, rt[nRT].UnpackKey(), PH_RKLEN );
+    php->pst_[0] = php->PphC;
+    db->SetKey(php->pst_);
+
+    if( ret == VF3_1 )
     {
         strncpy( php->name, db->FldKey(2), db->FldLen(2));
         php->name[db->FldLen(2)] = '\0';
     }
+
+    //---------------------------------------------------------------------------------
+        php->nSub = 0;
+        SetString("PH_make   Remaking Phase definition");
+        pVisor->Update();
+
+        // mark ReacDC/DComp keys to be included into the Phase
+        makeReacDCompList( aDclist );
+        // Pre-proc. loop for SIT or Pitzer: determining number of cations and anion
+        DetNumbCatAn(aDclist);
+
+    //---------------------------------------------------------------------
+
     // Setting up the DC/phase coeffs depending on the
     // built-in activity coeff model
     if( php->sol_t[SGM_MODE] == SM_STNGAM )
-    {
-       php->sol_t[DCOMP_DEP] = SM_UNDEF;
-       php->sol_t[SPHAS_DEP] = SM_UNDEF;
-       php->sol_t[DCE_LINK] = SM_UNDEF;
+       Set_DC_Phase_coef();
 
-       switch(php->sol_t[SPHAS_TYP])
-       {
-           case SM_OTHER:   // Customized hardcoded solid-solution models
-                          php->nscM = 0;   // NP_DC
-                          php->npxM = 0;   // MaxOrd
-                          php->ncpN = 0;   // NPar
-                          php->ncpM = 0;   // NPcoef
-                          break;
-           case SM_BERMAN:   // Sublattice microscopic intra-site interaction model (multicomponent)
-                          php->nscM = 1;  // NP_DC
-                          php->npxM = 4;  // MaxOrd
-                          if( php->ncpN < 1 ) // NPar
-                              php->ncpN = 1;
-                          if( php->ncpN > (php->nDC * php->nDC * 4. ))
-                              php->ncpN = php->nDC * php->nDC * 4.;   // Check max N of parameters!
-                          php->ncpM = 3;  // NPcoef
-                          break;
-           case SM_VANLAAR:   // Van Laar model (multicomponent)
-                          php->nscM = 1;  // NP_DC
-                          php->npxM = 2;  // MaxOrd
-                          if( php->ncpN < 1 ) // NPar
-                              php->ncpN = 1;
-                          if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
-                              php->ncpN = (php->nDC*(php->nDC-1)/2);
-                          php->ncpM = 3;  // NPcoef
-                          break;
-           case SM_REGULAR:   // Regular model (multicomponent)
-                          php->nscM = 0;  // NP_DC
-                          php->npxM = 2;  // MaxOrd
-                          if( php->ncpN < 1 ) // NPar
-                              php->ncpN = 1;
-                          if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
-                              php->ncpN = (php->nDC*(php->nDC-1)/2);
-                          php->ncpM = 3;  // NPcoef
-                          break;
-           case SM_GUGGENM:   // Redlich-Kister model (multicomponent)
-                          php->nscM = 0;  // NP_DC
-                          php->npxM = 2;  // MaxOrd
-                          if( php->ncpN < 1 ) // NPar
-                              php->ncpN = 1;
-                          if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
-                              php->ncpN = (php->nDC*(php->nDC-1)/2);
-                          php->ncpM = 16;  // NPcoef
-                          break;
-          case SM_NRTLLIQ:   // NRTL liquid model (multicomponent), added 03.06.2008 (TW)
-                          php->nscM = 0;  // NP_DC
-                          php->npxM = 2;  // MaxOrd
-                          if( php->ncpN < 1 ) // NPar
-                              php->ncpN = 1;
-                          if( php->ncpN > (php->nDC*(php->nDC-1)) )
-                              php->ncpN = (php->nDC*(php->nDC-1));
-                          php->ncpM = 6;  // NPcoef
-                          break;
-          case SM_WILSLIQ:   // Wilson liquid model (multicomponent), added 09.06.2008 (TW)
-                          php->nscM = 0;  // NP_DC
-                          php->npxM = 2;  // MaxOrd
-                          if( php->ncpN < 1 ) // NPar
-                              php->ncpN = 1;
-                          if( php->ncpN > (php->nDC*(php->nDC-1)) )
-                              php->ncpN = (php->nDC*(php->nDC-1));
-                          php->ncpM = 4;  // NPcoef
-                          break;
-          case SM_REDKIS:   // Redlich-Kister model (binary)
-                          php->nscM = 0;
-                          php->npxM = 0;
-                          php->ncpN = 1; php->ncpM = 3;
-                          break;
-          case SM_MARGB:  // Margules subregular model (binary)
-                          php->nscM = 0;
-                          php->npxM = 0;
-                          php->ncpN = 2; php->ncpM = 3;
-                          break;
-          case SM_MARGT:  // Margules regular model (ternary)
-                          php->nscM = 0;
-                          php->npxM = 0;
-                          php->ncpN = 4; php->ncpM = 3;
-                          break;
-          case SM_CGFLUID:  // Churakov-Gottschalk (CG) EoS
-                          php->ncpN = 0;
-                          php->ncpM = 0;
-                          php->nscM = 12; // last changed 12.12.2008 (TW)
-                          php->npxM = 0;
-                          // php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
-                          break;
-          case SM_PRFLUID:  // Peng-Robinson-Stryjek-Vera (PRSV) EoS, one binary interaction parameter
-                          if( php->ncpN < 1 ) // NPar
-                              php->ncpN = 1;
-                          if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
-                              php->ncpN = (php->nDC*(php->nDC-1)/2);
-                          php->ncpM = 2;  // NPcoef
-                          php->nscM = 7;  // set to 7 to pull all parameters from CPg
-                          php->npxM = 2;
-                          break;
-          case SM_SRFLUID:  // Soave-Redlich-Kwong (SRK) EoS, one binary interaction parameter
-                          if( php->ncpN < 1 ) // NPar
-                              php->ncpN = 1;
-                          if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
-                              php->ncpN = (php->nDC*(php->nDC-1)/2);
-                          php->ncpM = 2;  // NPcoef
-                          php->nscM = 7;  // set to 7 to pull all parameters from CPg
-                          php->npxM = 2;
-                          break;
-          case SM_PR78FL:  // Peng-Robinson (PR78) EoS, one binary interaction parameter
-                          if( php->ncpN < 1 ) // NPar
-                              php->ncpN = 1;
-                          if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
-                              php->ncpN = (php->nDC*(php->nDC-1)/2);
-                          php->ncpM = 2;  // NPcoef
-                          php->nscM = 7;  // set to 7 to pull all parameters from CPg
-                          php->npxM = 2;
-                          break;
-          case SM_CORKFL:  // compensated Redlich-Kwong (CORK) EoS, one binary interaction parameter
-                          if( php->ncpN < 1 ) // NPar
-                              php->ncpN = 1;
-                          if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
-                              php->ncpN = (php->nDC*(php->nDC-1)/2);
-                          php->ncpM = 1;  // NPcoef
-                          php->nscM = 7;  // set to 7 to pull all parameters from CPg
-                          php->npxM = 2;  // MaxOrd
-                          break;
-          case SM_STFLUID:  // Sterner-Pitzer (STP) EoS, one binary interaction parameter
-                          if( php->ncpN < 1 ) // NPar
-                              php->ncpN = 1;
-                          if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
-                              php->ncpN = (php->nDC*(php->nDC-1)/2);
-                          php->ncpM = 1;  // NPcoef
-                          php->nscM = 7;  // set to 7 to pull all parameters from CPg
-                          php->npxM = 2;  // MaxOrd
-                          break;
-          case SM_AQDAV:  // aqueous Davies
-                          // php->ncpN = php->ncpM = 0;
-                          php->ncpN = 2;
-                          php->ncpM = 4; // changed 10.07.2008 DK
-                          php->nscM = 0;
-                          php->npxM = 0;
-                          php->PphC = PH_AQUEL;
-                          break;
-          case SM_AQDH1:  // aqueous DH limiting law
-                          php->ncpN = 2;
-                          php->ncpM = 4;
-                          php->nscM = 0;
-                          php->npxM = 0;
-                          php->PphC = PH_AQUEL;
-                          break;
-          case SM_AQDH2:  // aqueous DH, individual a0, individual bg
-                          php->ncpN = 2;
-                          php->ncpM = 4;
-                          php->nscM = 2;
-                          php->npxM = 0;
-                          php->PphC = PH_AQUEL;
-                          break;
-          case SM_AQDH3:  // aqueous EDH Karpov, individual a0, common bg
-                          php->ncpN = 2;
-                          php->ncpM = 4;
-                          php->nscM = 2;
-                          php->npxM = 0;
-                          php->PphC = PH_AQUEL;
-                          break;
-          case SM_AQDHH:  // aqueous EDH Helgeson, common a0 and bg
-                          php->ncpN = 2;
-                          php->ncpM = 4;
-                          php->nscM = 0;
-                          php->npxM = 0;
-                          php->PphC = PH_AQUEL;
-                          break;
-          case SM_AQDHS:  // aqueous EDH Shvarov, common a0 and bg
-                          php->ncpN = 2;
-                          php->ncpM = 4;
-                          php->nscM = 2;
-                          php->npxM = 0;
-                          php->PphC = PH_AQUEL;
-                          break;
-          case SM_AQSIT:  // SIT model in NEA variant - new implementation
-                          php->nscM = 0;  // NP_DC
-                          php->npxM = 2;  // MaxOrd
-                          if( php->ncpN < 1 ) // NPar
-                              php->ncpN = 1;
-                          if( php->ncpN > (php->nDC*php->nDC/2) )
-                              php->ncpN = (php->nDC*php->nDC/2);
-                          php->ncpM = 2;  // NPcoef - changed from 1 to 2 on 13.05.09 (DK)
-                          php->PphC = PH_AQUEL;
-                          break;
-          case SM_AQEXUQ: // built-in EUNIQUAC model for aqueous activity coeffs, changed 18.01.2009 (TW)
-                          php->nscM = 2;  // NP_DC
-                          php->npxM = 2;  // MaxOrd
-                          if( php->ncpN < 1 ) // NPar
-                              php->ncpN = 1;
-                          if( php->ncpN > (php->nDC*(php->nDC-1)/2+php->nDC) )
-                              php->ncpN = (php->nDC*(php->nDC-1)/2+php->nDC);
-                           php->ncpM = 2;  // NPcoef
-                           php->PphC = PH_AQUEL;
-                           break;
-          case SM_AQPITZ: // built-in Pitzer HMW aqueous activity coefficient model
-                           php->nscM = 0;  // NP_DC
-                           php->npxM = 4;  // MaxOrd
-                           if( php->ncpN < 1 ) // NPar
-                               php->ncpN = 1;
-                           if( php->ncpN > (php->nDC*php->nDC) )
-                               php->ncpN = (php->nDC*php->nDC);
-                           if( php->ncpM <= 5 )
-                               php->ncpM = 5;  // NPcoef
-                           if( php->ncpM >= 8 )
-                               php->ncpM = 8;
-                           // php->nscN = 0;
-                           php->PphC = PH_AQUEL;
-                           break;
-          case SM_AQELVIS:  // built-in ELVIS model for aqueous electrolytes
-                           php->nscM = 8;                       // NP_DC  = cols of aDCc (rows of aDCc = NComp)
-                           php->npxM = 2;                       // MaxOrd = cols of aIPx
-                           if( php->ncpN < 1 )                  // NPar   = rows of aIPx and aIPc
-                               php->ncpN = 1;
-                           if( php->ncpN > (php->nDC*php->nDC) )
-                               php->ncpN = (php->nDC*php->nDC);
-                           php->ncpM = 8;                       // NPcoef = rows of aIPc
-                           php->PphC = PH_AQUEL;
-                           break;
-          default:  // other models
-                           break;
-       }
-    }
+    // test sizes
     if( php->nscM < 0 || php->npxM < 0 || php->ncpN < 0 || php->ncpM < 0 ||
             php->ncpN*php->ncpM > MAXPNCOEF || php->Nsd < 0 || php->Nsd > 16 ||
             php->NsiT < 0 || php->NsiT > 6 )
@@ -1063,145 +1197,30 @@ AGAIN_SETUP:
             goto AGAIN_SETUP;
         else   Error( GetName(), "E07PHrem: The user cancelled remaking Phase definition !");
     }
-    SetString("PH_make   Remaking Phase definition");
-    pVisor->Update();
 
-    /*DCOMP keypart
-    rt[RT_DCOMP].MakeKey( RT_PHASE, pkeydc, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END);
-    if( pkeydc[1] != ':')
-        pkeydc[1] = '*';
-    if( php->NsiT > 0 )  // template for adsorption
-        pkeydc[0] = CP_SOLID; // added by KD 25.10.2004
-    */
-
-    //REACDC  keypart
-    rt[RT_REACDC].MakeKey( RT_PHASE, pkeyrd, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END );
-    if( pkeyrd[1] != ':')
-        pkeyrd[1] = '*';
-    if( php->NsiT > 0 )  // template for adsorption
-        pkeyrd[0] = CP_SSPC;  // added by KD 25.10.2004
-
-    if( php->nDC && php->SM )
-    {
-        /* Build old selections DCOMP and REACDC */
-        aDclist_old.Clear();
-        //aRclist_old.Clear();
-        for( i=0; i<php->nDC; i++ )
-        {
-          gstring key_dr = gstring( php->SM[i], 0, DC_RKLEN );
-          if( php->DCS[i] == SRC_DCOMP )
-          {
-              rt[RT_DCOMP].SetKey( key_dr.c_str() );
-              rt[RT_DCOMP].SetFldKey( 3, "*" );
-              key_dr  = gstring(1, php->DCS[i]);
-              key_dr += ' ';
-              key_dr += rt[RT_DCOMP].UnpackKey();
-              //aDclist_old.Add( rt[RT_DCOMP].UnpackKey() );
-          }
-            else
-                if( php->DCS[i] == SRC_REACDC )
-                {
-                  rt[RT_REACDC].SetKey( key_dr.c_str() );
-                  rt[RT_REACDC].SetFldKey( 3, "*" );
-                  key_dr  = gstring(1, php->DCS[i]);
-                  key_dr += ' ';
-                  key_dr += rt[RT_REACDC].UnpackKey();
-                  //aRclist_old.Add( rt[RT_REACDC].UnpackKey() );
-                }
-          aDclist_old.Add( key_dr );
-        }
-    }
-
-AGAINRC:
-    /*aRclist = vfMultiKeysSet( window(),
-       "Please, mark ReacDC keys to be included into the Phase",
-       RT_REACDC, pkeyrd, aRclist_old );
-    aDclist = vfMultiKeysSet( window(),
-       "Please, mark DComp keys to be included into the Phase",
-       RT_DCOMP, pkeydc, aDclist_old );
-    */
-    aDclist = vfRDMultiKeysSet( window(),
-       "Please, mark ReacDC/DComp keys to be included into the Phase",
-       pkeyrd, aDclist_old, php->NsiT  );
-
-    if( /*aRclist.GetCount() < 1 &&*/ aDclist.GetCount() < 1 )
-    {
-       switch ( vfQuestion3(window(), GetName(),
-            "W08PHrem: Number of selected ReacDC/DComp keys < 1.\n"
-            " Mark again, proceed without ReacDC/DComp or Cancel?",
-            "&Repeat", "&Proceed"))
-       {
-         case VF3_1:
-                goto AGAINRC;
-                ;
-         case VF3_2:
-                break;
-         case VF3_3:  Error( GetName(),
-                 "E09PHrem: No ReacDC/DComp records selected into Phase...");
-       }
-    }
-
-    php->nDC = (short)(aDclist.GetCount()/* + aRclist.GetCount()*/);
-    //--iic = aDclist.GetCount();
-
-//-------------------------------------------------------
-    nCat = 0; nAn = 0; nNs = 0;
-
-    if( php->PphC == PH_AQUEL &&
-    	( php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ ))
-    {  // pre-proc. loop for SIT or Pitzer: determining number of cations and anions
-       int pos;
-       gstring spName;
-       for( i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
-       {
-          //if( i < iic )
-            spName = gstring( aDclist[i], MAXSYMB+MAXDRGROUP+2, MAXDCNAME);
-         //else
-         //   spName = gstring( aRclist[i-iic], MAXSYMB+MAXDRGROUP, MAXDCNAME);
-
-         spName.strip();
-         pos = spName.length()-1;
-         while( pos>0 && spName[pos] <=  '9' && spName[pos] >= '0' )
-             pos--;
-         switch( spName[pos] )
-         {
-           case '-': nAn++;
-                     break;
-           case '+': nCat++;
-                     break;
-           case '@': nNs++;   // neutral species except H2O
-        	         break;
-           default:
-                     break;
-         }
-       }
-       if( nCat <=0 || nCat >= php->nDC || nAn <=0 || nCat >= php->nDC )
-            Error( GetName(),
-              "E39PHrem: No cations or no anions - SIT model cannot be applied...");
-        php->nCat = nCat;
-        php->nAn = nAn;
-        php->nNs = nNs;
-    }
-
-//---------------------------------------------------------------------
-
-    /* insert coeff of model of solid and other data */
-    if( php->nscM ) php->Psco = S_ON;
-    else  php->Psco = S_OFF;
-        // if( php->npxM ) php->Psco = S_ON;   07.12.2006  KD   Check later!
-        // else  php->Psco = S_OFF;
-    if( php->ncpN * php->ncpM ) php->Ppnc = S_ON;
-    else php->Ppnc = S_OFF;
+    // insert coeff of model of solid and other data
+    if( php->nscM )
+        php->Psco = S_ON;
+      else  php->Psco = S_OFF;
+    if( php->ncpN * php->ncpM )
+        php->Ppnc = S_ON;
+      else php->Ppnc = S_OFF;
     if( !php->NsiT )
-         php->PFsiT = S_OFF;
-    if( php->sol_t[DCOMP_DEP] == SM_UNDEF ) php->PdEq = S_OFF;
-    else php->PdEq = S_ON;
-    if( php->sol_t[SPHAS_DEP] == SM_UNDEF ) php->PpEq = S_OFF;
-    else php->PpEq = S_ON;
+       php->PFsiT = S_OFF;
+    if( php->sol_t[DCOMP_DEP] == SM_UNDEF )
+        php->PdEq = S_OFF;
+      else php->PdEq = S_ON;
+    if( php->sol_t[SPHAS_DEP] == SM_UNDEF )
+        php->PpEq = S_OFF;
+      else php->PpEq = S_ON;
+    if( (php->NsiT != S_OFF) && php->sol_t[SPHAS_TYP] == SM_SURCOM )
+    {
+       php->nMoi = 0; php->nSub = 0;
+    }
 
     dyn_new(0);  // reallocation of memory
 
-    /* Get list of components : add aMcv and aMrv */
+    // Get list of components : add aMcv and aMrv
     for( i=0; i<php->nDC; i++ )
     {
         memcpy( php->SM[i], aDclist[i].c_str()+2, DC_RKLEN );
@@ -1211,78 +1230,11 @@ AGAINRC:
     if( php->nDC >= 2 )         // >= may change behavior !
         qsort( php->SM[0], (size_t)php->nDC, DC_RKLEN, rkeycmp );
 
-    switch( php->pst[0] )
-    { /* Set type of phase */
-    case CP_AQU:
-        php->PphC = PH_AQUEL;
-        break;
-    case CP_GASI:
-        php->PphC = PH_PLASMA;
-        break;
-    case CP_GAS:
-        php->PphC = PH_GASMIX;
-        break;
-   case CP_FLUID:
-        php->PphC = PH_FLUID;
-        break;
-        //
-    case CP_LIQID:
-        php->PphC = PH_LIQUID;
-        break;
-    case CP_SOLID: /* if( php->nDC == 1 ) Fixed 23.10.99 by DAK */
-        php->PphC = PH_SINCOND;
-        break;
-        //
-    case CP_HCARB:
-        php->PphC = PH_HCARBL;
-        break;
-    case CP_SSPC:
-    case CP_SORB:
-        php->PphC = PH_SORPTION;
-        break;
-    default:
-        php->PphC = '?';
-    }
+    // Load DC classes from records and set to DCC
+    LoadDCC();
 
-    vstr dcn(MAXRKEYLEN);
-    char Ctype;
-    time_t crt;
-    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
-    TReacDC* aRDC=(TReacDC *)(&aMod[RT_REACDC]);
-
-    memset( dcn, 0, MAXRKEYLEN );
-    for( i=0; i<php->nDC; i++ )
-    {
-        php->DCS[i] = php->SM[i][DC_RKLEN-1]; /* cod istochnic */
-        php->SM[i][DC_RKLEN-1] = ' ';
-
-        /*Get key */
-        memcpy( dcn, php->SM[i], DC_RKLEN );
-        dcn[DC_RKLEN]=0;
-        Ctype = A_NUL;
-        /* Read record and extract data */
-        if( php->DCS[i] == SRC_DCOMP )
-        {
-           aDC->TryRecInp( dcn, crt, 0 );
-           Ctype = aDC->dcp->PdcC;
-        }
-        else
-            if( php->DCS[i] == SRC_REACDC )
-            {
-                aRDC->TryRecInp( dcn, crt, 0 );
-                Ctype = aRDC->rcp->PreC;
-            }
-
-        /* test model and types of components */
-        if( php->Pinternal1 == S_ON || php->DCC[i] == A_NUL || php->DCC[i] == '`')
-        {
-            if( Ctype == DC_SCP_CONDEN && php->nDC >=2 &&
-                !( php->PphC == PH_AQUEL || php->PphC == PH_GASMIX || php->PphC == PH_SORPTION ))
-               Ctype = DC_SOL_MAJOR;
-            php->DCC[i] = Ctype;
-        }
-    }  // i
-
+//---------------------------------------------------------------------
+// old  part
     if( php->NsiT > 0 && (php->PFsiT == S_REM || php->PFsiT == S_ON  ))
     {  /* Setup of default values */
         php->PphC = PH_SORPTION;
@@ -1315,14 +1267,12 @@ AGAINRC:
         }
         php->PFsiT = S_ON;
     }
-        // if( php->NsiT > 0 && php->PFsiT == S_ON )
-        // php->NR1 = DFCN; // Added for CD-MUSIC by KD on 25.10.2004
 
 //---------------------------------------------------------------------
     if( php->PphC == PH_AQUEL &&
     		( php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ ) )
     {  // Filling out name and index lists for cations and anions
-       if( !php->lsCat )                      // Crash fix 11.05.07 KD
+       if( !php->lsCat )
        {
            php->Ppnc = S_ON;
            MakeCatAnLists( true, true, true );
@@ -1332,7 +1282,6 @@ AGAINRC:
     }
 //--------------------------------------------------------------
 
-
     if( php->PpEq != S_OFF && php->pEq && !*php->pEq )
         strcpy( php->pEq, "---" );
     if( php->PdEq != S_OFF && php->dEq && !*php->dEq)
@@ -1341,6 +1290,47 @@ AGAINRC:
     SetString("PH_make   Remake of Phase definition OK");
     pVisor->Update();
     return ret;
+}
+
+
+// Pre-proc. loop for SIT or Pitzer: determining number of cations and anion
+// in aDclist
+void TPhase::DetNumbCatAn(TCStringArray& aDclist)
+{
+  short nCat = 0, nAn = 0, nNs = 0;
+
+ if( php->PphC == PH_AQUEL &&
+     ( php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ ))
+ {
+    int pos;
+    gstring spName;
+    for(int i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
+    {
+      spName = gstring( aDclist[i], MAXSYMB+MAXDRGROUP+2, MAXDCNAME);
+
+      spName.strip();
+      pos = spName.length()-1;
+      while( pos>0 && spName[pos] <=  '9' && spName[pos] >= '0' )
+          pos--;
+      switch( spName[pos] )
+      {
+        case '-': nAn++;
+                  break;
+        case '+': nCat++;
+                  break;
+        case '@': nNs++;   // neutral species except H2O
+                  break;
+        default:
+                  break;
+      }
+    }
+
+    if( nCat <=0 || nCat >= php->nDC || nAn <=0 || nCat >= php->nDC )
+         Error( GetName(), "E39PHrem: No cations or no anions - SIT model cannot be applied...");
+     php->nCat = nCat;
+     php->nAn = nAn;
+     php->nNs = nNs;
+  }
 }
 
 
@@ -1879,7 +1869,7 @@ MAKE_GAS_PHASE:
               break;
       case 'P':  // PRSV fluid EoS model
               memcpy( php->sol_t, "PNNSNN", 6 );
-              memcpy( &php->PphC, "g++---", 6 );
+              memcpy( &php->PphC, "f++---", 6 );
               if( php->ncpN < 1 ) // NPar
             	  php->ncpN = 1;
               if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
@@ -1895,7 +1885,7 @@ MAKE_GAS_PHASE:
               break;
       case 'E':  // SRK fluid EoS model
               memcpy( php->sol_t, "ENNSNN", 6 );
-              memcpy( &php->PphC, "g++---", 6 );
+              memcpy( &php->PphC, "f++---", 6 );
               if( php->ncpN < 1 ) // NPar
             	  php->ncpN = 1;
               if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
@@ -1911,7 +1901,7 @@ MAKE_GAS_PHASE:
               break;
       case '7':  // PR78 fluid EoS model
               memcpy( php->sol_t, "7NNSNN", 6 );
-              memcpy( &php->PphC, "g++---", 6 );
+              memcpy( &php->PphC, "f++---", 6 );
               if( php->ncpN < 1 ) // NPar
             	  php->ncpN = 1;
               if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
@@ -2117,8 +2107,14 @@ TPhase::AssemblePhase( const char* key, const char* part, float* param,
     if( Rnum<0 )
         db->AddRecordToFile( key, file );
     else
+      {
+        gstring mess = key;
+        mess += "\n";
+        mess+=  "This record exists! Overwrite?";
+        if( !vfQuestion( window(), "Automatically generated aq or gas/fluid",mess.c_str()) )
+            Error( key, "Cancel automatically generated aq or gas/fluid!");
         db->Rep( Rnum );
-
+       }
 		// contentsChanged = false;
 }
 
@@ -2170,58 +2166,60 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
      pKey4 = aPHkey[ii].c_str()+(MAXSYMB+MAXPHSYMB+MAXPHNAME)*sizeof(char);
 
 // Copy phase record for aqueous and/or gas (fluid) phases
-     if( !st_data.flags[PHcopyA_] && ( pKey1[0] == 'a' || pKey1[0] == 'g' ))
-       continue;
-
-// cbGaseous
-     if( !el_data.flags[cbGaseous_] && pKey1[0] == 'g' )
-       continue;
-
-// cbAqueous
-     if( !el_data.flags[cbAqueous_] && ( pKey1[0] == 'a' || pKey1[0] == 'x' ))
-       continue;
-
-// cbSorption
-     if( !el_data.flags[cbSorption_] && pKey1[0] == 'x' )
-       continue;
-//     if( !st_data.flags[PHcopyY_] && aPHkey[ii][0] == '?' )
+//     if( !st_data.flags[PHcopyA_] && ( pKey1[0] == 'a' || pKey1[0] == 'g' ))
 //       continue;
 
-// copy liquid phases together with solid ones
-     if( !st_data.flags[PHcopyL_] && ( pKey1[0] == 'l' || pKey1[0] == 'h' ))
+// Phase Filters
+     if( !el_data.flags[cbAqueous_] && pKey1[0] == 'a' )
        continue;
-
-// cbSolids  - single-component
-     if( !el_data.flags[cbSolids_] && ( pKey1[0] == 's' ||
-          pKey1[0] == 'd' || pKey1[0] == 'l' || pKey1[0] == 'h' )
-			  // && ( pKey4[0] == 'c' && pKey4[1] == ' ' ||
-			  // pKey4[0] == 'd' && pKey4[1] == ' ' ||
-			  // pKey4[0] == 'l' && pKey4[1] == ' ' ))
-          && pKey4[1] == ' ' )
+     if( !el_data.flags[cbGaseous_] && ( pKey1[0] == 'g') )
+         continue;
+     if( !el_data.flags[cbFluid_] && ( pKey1[0] == 'f') )
+          continue;
+     if( !el_data.flags[cbPlasma_] && ( pKey1[0] == 'p') )
+        continue;
+     if( !el_data.flags[cbSolids_] && ( pKey1[0] == 's') )
+        continue;
+     if( !el_data.flags[cbSindis_] && ( pKey1[0] == 'd') )
+        continue;
+     if( !el_data.flags[cbLiquid_] && ( pKey1[0] == 'l') )
+        continue;
+     if( !el_data.flags[cbSimelt_] && ( pKey1[0] == 'm') )
+        continue;
+     if( !el_data.flags[cbSorption_] && ( pKey1[0] == 'x') )
+        continue;
+     if( !el_data.flags[cbPolyel_] && ( pKey1[0] == 'y') )
+        continue;
+     if( !el_data.flags[cbHcarbl_] && ( pKey1[0] == 'h') )
         continue;
 
-// cbSolutions - multi-component, non-gas, non-electrolyte
-     if( !el_data.flags[cbSolutions_] && ( pKey1[0] == 's'
-        || pKey1[0] == 'l' || pKey1[0] == 'd' || pKey1[0] == 'h' )
-			// &&  !( pKey4[0] == 'c' || pKey4[0] == 'd' || pKey4[0] == 'l' ))
-          && pKey4[1] != ' ' )
-        continue;
 
-       // test the same component (overload) 30/11/2006
-       gstring stt = aPHkey[ii].substr(0,MAXSYMB+MAXPHSYMB+MAXPHNAME+MAXSYMB);
-       for( j=0; j<aICkey_new.GetCount(); j++ )
-          if( stt ==  aICkey_new[j])
+// copy liquid phases together with solid ones
+//     if( !st_data.flags[PHcopyL_] && ( pKey1[0] == 'l' || pKey1[0] == 'h' ))
+//       continue;
+
+    // test the same component (overload) 30/11/2006
+    gstring stt = aPHkey[ii].substr(0,MAXSYMB+MAXPHSYMB+MAXPHNAME+MAXSYMB);
+    for( j=0; j<aICkey_new.GetCount(); j++ )
+       if( stt ==  aICkey_new[j])
               break;
-       if( j<aICkey_new.GetCount() )
+     if( j<aICkey_new.GetCount() )
             continue;
 
 // Read the record here
      RecInput( aPHkey[ii].c_str() );
 
-// Copy non-ideal phases?
-     if( !st_data.flags[PHcopyN_] && php->nDC > 1 &&
-         php->sol_t[0] != 'N' && php->sol_t[0] !='I'  )
-       continue;
+// cbSolutions - multi-component, non-gas, non-electrolyte
+     if( el_data.flags[cbSolutions_] && ( pKey1[0] != 'a'
+        && pKey1[0] != 'g' && pKey1[0] != 'f'
+        && pKey1[0] != 'p' && pKey1[0] != 'x' && pKey1[0] != 'h' ) )
+         if( php->nDC > 1 )
+           continue;
+
+ // Copy non-ideal phases?
+ //    if( !st_data.flags[PHcopyN_] && php->nDC > 1 &&
+ //        php->sol_t[0] != 'N' && php->sol_t[0] !='I'  )
+ //      continue;
 
 // Test existence of DComp/ReacDC records
      aDCused.Clear();

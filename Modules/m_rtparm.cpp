@@ -82,8 +82,8 @@ TRTParm::TRTParm( int nrt ):
 // link values to objects
 void TRTParm::ods_link( int q)
 {
-    ErrorIf( q > nQ, GetName(), "E00RTrem: Illegal link q>nQ.");
-    // static objects
+    ErrorIf( q > nQ, GetName(), "E00RTrem: Attempt to access corrupt dynamic memory.");
+    // 3 objects
     aObj[ o_rpunit].SetPtr( &rp[q].What );    /*10*/
     aObj[ o_rpdim].SetPtr(  &rp[q].NP );      /*i3*/
     aObj[ o_rpmode].SetPtr( &rp[q].Mode );
@@ -137,7 +137,7 @@ void TRTParm::ods_link( int q)
 void TRTParm::dyn_set(int q)
 {
     ErrorIf( rpp!=&rp[q], GetName(),
-             "E01RTrem: Illegal access to rp in dyn_set().");
+             "E01RTrem: Attempt to allocate corrupt dynamic memory.");
 //    memcpy( rpp->pstate, rt[nRT].UnpackKey(), RP_RKLEN-MAXSYMB-1 );
 //    rpp->nvch = 0;
     // Change MAXGRNAME from 7 to 16
@@ -173,7 +173,7 @@ void TRTParm::dyn_set(int q)
 void TRTParm::dyn_kill(int q)
 {
     ErrorIf( rpp!=&rp[q], GetName(),
-             "E02RTrem: Illegal access to rp in dyn_kill().");
+             "E02RTrem: Attempt to free corrupt dynamic memory.");
     rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].Free();
     rpp->lNamE = (char (*)[MAXGRNAME])aObj[ o_rtlname ].Free();
     rpp->expr = (char *)aObj[ o_rtexpr ].Free();
@@ -193,8 +193,8 @@ void TRTParm::dyn_kill(int q)
 // realloc dynamic memory
 void TRTParm::dyn_new(int q)
 {
-    ErrorIf( rpp!=&rp[q], GetName(), "E03RTrem: Illegal access to rp in dyn_new().");
-    ErrorIf( rp[q].NV < 1, GetName(), "E04RTrem: Total N of points (rp[q].NV) < 1.");
+    ErrorIf( rpp!=&rp[q], GetName(), "E03RTrem: Attempt to allocate corrupt dynamic memory.");
+    ErrorIf( rp[q].NV < 1, GetName(), "E04RTrem: Dynamic memory corruption in RTParm data structure");
 
     rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].Alloc( 1,
                  rpp->dimXY[1], MAXGRNAME);
@@ -242,7 +242,7 @@ void TRTParm::dyn_new(int q)
 //set default information - streamlined on Apr.1,2003 by KD
 void TRTParm::set_def( int q)
 {
-    ErrorIf( rpp!=&rp[q], GetName(), "E04RTrem: Illegal access to rp in set_def().");
+    ErrorIf( rpp!=&rp[q], GetName(), "E05RTrem: Dynamic memory corruption in RTParm data structure.");
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
 
     memcpy( &rp[q].What, aPa->pa.RPpdc, 10 );
@@ -380,7 +380,7 @@ TRTParm::MakeQuery()
     gstring yName = rpp->yNames;
 
     if( !vfRTparmSet( window(), p_key, flgs, size, val, calcScript, xName, yName, namesLines ))
-         Error( p_key, "RTparm record configuration cancelled by the user!" );
+         Error( p_key, "E06RTrem: RTParm record configuration cancelled by the user!" );
      //  return;   // cancel
 
     memcpy( &rpp->What, flgs, 10);
@@ -457,10 +457,10 @@ AGAIN_SETUP:
     if( rpp->NV < 1 || rpp->NV > 4192 )
     {
         if(vfQuestion(window(), GetName(),
-                 "W05RTrem: Invalid mode of calculation of P and T arrays,\n"
+                 "W07RTrem: Invalid mode of calculation of P and T arrays,\n"
                  "or wrong number of TP points! Change?"))
             goto AGAIN_SETUP;
-        else   Error( GetName(), "E06RTrem: Invalid mode of calculation - bailing out...");
+        else   Error( GetName(), "E08RTrem: Invalid mode of calculation - bailing out...");
     }
 
     if( rpp->Pplot == S_OFF )
@@ -519,7 +519,7 @@ void TRTParm::expr_analyze()
         char *erscan = (char *)aObj[o_rtexpr].GetPtr();
         vfMessage(window(), xcpt.title, xcpt.mess);
         CheckEqText(  erscan,
-              "E95MSTran: Error in translation of RTParm math script: " );
+              "E95MSTran: Error in translation of RTParm script: " );
         Error(  GetName() , xcpt.mess.c_str() );
     }
 }
@@ -666,7 +666,8 @@ TRTParm::RecCalc( const char *key )
 //        aW.ods_link(0);
         if( P_old < 1.00001e-5 && rpp->P[j] < 1.00001e-5 )
         {  // Set calculated pressure if it was zero in RTparam record 
-            rpp->P[j] = aW.twp->P;  // ???????
+            rpp->P[j] = aW.twp->P + 3e-5;  //Adding 3 Pa to make sure that
+                          // the next calculations are in liquid H2O field!
         }
         // calculate equations of  data
         rpn[0].CalcEquat();

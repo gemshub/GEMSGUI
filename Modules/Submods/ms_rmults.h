@@ -108,7 +108,7 @@ class TRMults :
 
 protected:
 
-    void MakeRecordLists( gstring& AqKey, gstring& GasKey );
+    void MakeRecordLists( TCStringArray AqKey, TCStringArray GasKey );
 
 public:
     static TRMults* sm;
@@ -131,14 +131,15 @@ public:
     void dyn_new( int i=0);
     void set_def( int i=0);
 
-    void DCListLoad( gstring& AqKey, gstring& GasKey,
+    void DCListLoad( TCStringArray AqKey, TCStringArray GasKey,
                      bool useLst = false, TCStringArray lst = 0 );
     void ICmake();
     void PHmake();
     void TestIComp();
     void LoadRmults( bool NewRec, bool changePhases );
-    gstring SelectAqPhase(const char * dfKey );
-    gstring SelectGasPhase(const char * dfKey );
+    void SelectAqGasPhase( char AqGasType, TCStringArray& AqGasKey );
+    //void SelectAqPhase(TCStringArray dfKey );
+    //void SelectGasPhase(TCStringArray dfKey );
     void SetAqGas( const char* AqKey, const char* GasKey );
 };
 

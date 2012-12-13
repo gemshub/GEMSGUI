@@ -116,7 +116,7 @@ void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
   }
 
   ErrorIf( dtp->Nb != TRMults::sm->GetMU()->N, GetName(),
-               "Illegal data in dtp->Nb ");
+               "Invalid data in dtp->Nb ");
 
   dtp->An = (float *)aObj[ o_dtan ].Alloc( siz_, dtp->Nb, F_ );
   dtp->Asiz = (short)siz_;
