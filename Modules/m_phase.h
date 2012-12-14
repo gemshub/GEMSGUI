@@ -55,7 +55,11 @@ typedef struct
 Pdqf, // new: flag for dqfp array for DC-related DQF parameter coefficients {+*-}
 Prcp, // new: flag for rcpp array for DC-related reciprocal parameter coefficients {+*-}
 PlPhl,// new: flag for list of record keys of linked phases, cf. lPh, lPhC {+*-}
+Psol, /// TW new: flag for solvent interaction coefficients
+Pdiel, /// TW new: flag for dielectric constant coefficients
+Pdh, /// TW new: flag for generic DH coefficients
 Pres1,// new: reserved
+
 // TSorpMod stuff
 PEIpc,  // new: flag for EIpc array of EIL model parameter coefficients {+*-}
 PCDc,   // new: flag for CDc array of CD model parameter coefficients {+*-}
@@ -63,6 +67,7 @@ PIsoC,  // new: flag for IsoC array of isotherm parameter coefficients per DC {+
 PIsoS,  // new: flag for IsoS array of isotherm parameter coefficients per surface site {+*-}
 PsDiS,  // new: flag for sDiS array of denticity and surface site indexes {+*-}
 Pres2,  // new: reserved
+
 // TKinMet stuff
 PrpCon, // new: flag for rpCon array of kinetic rate constants {+*-}
 PumpCon,// new: flag for umpCon array of uptake model parameters {+*-}
@@ -93,29 +98,38 @@ nlPh,  // new: number of linked phases (cf. PlPhl, lPh), default 0.
 nlPc,  // new: number of parameters per linked phase, default 0.
 ndqf,  // new: number of DQF parameter coefficients per end member, default 3.
 nrcp,  // new: number of reciprocal parameter coefficients per end member, default 3.
+ncsolv, /// TW new: number of solvent parameter coefficients (columns in solvc array)
+nsolv,  /// TW new: number of solvent interaction parameters (rows in solvc array)
+ncdiel, /// TW new: number of dielectric constant coefficients (colums in dielc array)
+ndiel,  /// TW new: number of dielectric constant parameters (rows in dielc array)
+ndh,    /// TW new: number of generic DH coefficients (rows in dhc array)
 
  // TKinMet stuff
-nFaces,// new: number of kinetically different faces (on solid phase surface), default 1, up to 6.
+nFaces, // new: number of kinetically different faces (on solid phase surface), default 1, up to 6.
 nReg,  // new: number of kinetic regions (and catalyzing aqueous species)
 nrpC,  // new: number of kinetic rate constants and coefficients
 numpC, // new: number of uptake model parameter coefficients (per end member)
+
 // TSorpMod stuff EIL model
 nEIl,  // new: number of electrostatic model layers (default: 0, maximum 4)
 nEIp,  // new: number of electrostatic model parameters (per layer, default 1, max 4)
 nCDc,  // new: number of charge distribution coefficients per surface species (default 0 or nEIl)
 iRes3, // new: reserved
+
 // non-EIL model
 nIsoC, // new: number of isotherm parameter coefficients per surface species DC (default 0)
 nIsoS, // new: number of isotherm parameter coefficients per surface site (default 0)
 mDe,   // new: maximum denticity number for surface species (default 1)
 iRes4, // new: reserved
 ;
+
 short *ipxt,  // Table of indexation for interaction parameters [ncpN][npxM]
               // takes over from PXres
 *xSmD, // new: denticity of surface species per surface site (site allocation) [nDC][NsiT]
        // (default 0, -1 means no binding) [nDC][mDe+1]
 *xFaces, // new: indexes of faces per set of kinetic region parameters [nReg*nFaces], default 0.
 ;
+
 float Asur,  // Specific surface area of (carrier) phase, m2/g (new: of this tile) default: 0.
     Sigma0, // Standard mean surface energy of solid-aqueous interface, J/m2
     SigmaG, // Standard mean surface energy of gas-aqueous interface, J/m2
@@ -124,17 +138,17 @@ float Asur,  // Specific surface area of (carrier) phase, m2/g (new: of this til
     Eps,    // Dielectric constant for solid carrier at Tr (reserved)
     Cond,   // Specific conductivity at Tr, Sm/m/cm2 (reserved)
     Rsp1,   // Default maximum surface density, 1/nm2 (reserved)
-//
+
 Vpor,  // new: Specific pore volume of (carrier) phase, m3/g (default: 0)
 fSAs,   // new: fraction of surface area of the sorbent (ref. in lPh) occupied by this surface tile (def. 1)
 fPV,   // new: fraction of phase pore volume occupied by this Donnan electrolyte (def. 1)
 fRes1, // new: reserved
-//
+
 psdC,  // new: permanent surface charge density (eq/m2), default: 0
 pvdC, // new: permanent Donnan volume charge density (eq/m3), default: 0
 IEC,  // new: ion exchange capacity (eg/g), default: 0
 fRes2, // new: reserved
-//
+
     // old stuff for sorption models
     *FsiT,    //Fraction of surface type relative to carrier (components)[NsiT]
     *XfIEC,   // Constant surface charge density or IEC, mkeq/g   [NsiT]
@@ -146,6 +160,9 @@ fRes2, // new: reserved
 *lPhc,  // new: array of phase link parameters [nlPh*nlPc]
 *DQFc,  // new: array of DQF parameters for DCs in phases [nDC*ndqf]
 *rcpc,  // new: array of reciprocal parameters for DCs in phases [nDC*nrcp]
+*solvc, /// TW new: array of solvent interaction parameters [ncsolv*nsolv]
+*dielc, /// TW new: array of dielectric constant parameters [ncdiel*ndiel]
+*dhc,   /// TW new: array of generic DH parameters [ndh]
 
 //new: TSorpMod stuff
 *EIpc, // new: Array of electrostatic model parameter coefficients per EI layer [nEIl][nEIp]
