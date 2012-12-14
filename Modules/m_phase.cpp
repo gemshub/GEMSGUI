@@ -1910,12 +1910,35 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
           aDCused.Add(-1);
      } // i
 
-     if( cnt < php->nDC && !( !st_data.flags[PHcopyF_] && cnt > 1  ))
+     if( cnt < php->nDC && !( !st_data.flags[PHcopyF_] && cnt > 1  )) // copy  that retain full
      {
        if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
          aPHnoused.Add( aPHkey[ii] );
        continue;
      }
+     if( cnt < php->nDC ) // added 14/12/12 test for scripts
+     {
+         switch( php->sol_t[SGM_MODE] )
+         {
+         case SM_IDEAL: break;  //I
+         case SM_STNGAM:
+             if( php->sol_t[SPHAS_TYP] == SM_USERDEF /* || php->sol_t[SPHAS_TYP] == '...' */ )  // Must be inserted by DK
+              {
+               if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
+                   aPHnoused.Add( aPHkey[ii] );
+               continue;
+             }
+             break;  //S
+         case SM_NOSTGAM:
+             if( php->sol_t[DCOMP_DEP] != 'N' || php->sol_t[SPHAS_DEP] != 'N' )
+             {
+               if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
+                   aPHnoused.Add( aPHkey[ii] );
+               continue;
+             }
+             break;  //N
+         }
+        }
 
      // !!! changing record key
     gstring str= gstring(db->FldKey( 4 ), 0, db->FldLen( 4 ));

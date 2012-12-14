@@ -29,7 +29,7 @@
    <string>GEM-Selektor v.2-PSI: Modelling Projects</string>
   </property>
   <property name="modal">
-   <bool>false</bool>
+   <bool>true</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="6" column="0" colspan="2">
