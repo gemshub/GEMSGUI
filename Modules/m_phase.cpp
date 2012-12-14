@@ -1916,27 +1916,62 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
          aPHnoused.Add( aPHkey[ii] );
        continue;
      }
-     if( cnt < php->nDC ) // added 14/12/12 test for scripts
+     if( cnt < php->nDC ) // added 14/12/12 test for skipping incompressible phases-solutions
      {
          switch( php->sol_t[SGM_MODE] )
          {
          case SM_IDEAL: break;  //I
-         case SM_STNGAM:
-             if( php->sol_t[SPHAS_TYP] == SM_USERDEF /* || php->sol_t[SPHAS_TYP] == '...' */ )  // Must be inserted by DK
-              {
-               if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
-                   aPHnoused.Add( aPHkey[ii] );
-               continue;
-             }
-             break;  //S
-         case SM_NOSTGAM:
+         case SM_STNGAM: // S
+           switch( php->sol_t[SPHAS_TYP] )
+           {
+             case SM_IDEAL: // =  'I',	// ideal solution or single-component phase
+//             case SM_BERMAN: // = 'B',    // built-in multicomponent microscopic (a)symmetric solid-solution model (reserved)
+//             case SM_REDKIS: // = 'G', 	// built-in binary Guggenheim (Redlich-Kister) solid-solution model
+//             case SM_MARGB: // = 'M',	// built-in binary Margules solid-solutions (subregular)
+//             case SM_MARGT: // = 'T',	// built-in ternary Margules solid-solution (regular)
+             case SM_VANLAAR: // = 'V',	// built-in multi-component Van Laar solid-solution model
+             case SM_GUGGENM: // = 'K',	// built-in multi-component Guggenheim solid-solution model
+             case SM_REGULAR: // = 'R',	// built-in multi-component Regular solid-solution model
+             case SM_NRTLLIQ: // = 'L',	// built-in multi-component NRTL model for liquid solutions
+             case SM_WILSLIQ: // = 'W',	// built-in multi-component Wilson model for liquid solutions
+             case SM_CGFLUID: // = 'F',	// built-in multi-component Churakov-Gottschalk (CG) fluid EoS model
+             case SM_PRFLUID: // = 'P',	// built-in Peng-Robinson-Stryjek-Vera (PRSV) fluid EoS model
+//             case SM_PCFLUID: // = '5',   // built-in perturbed-chain statistical-association (PCSAFT) fluid EoS model (reserved)
+             case SM_STFLUID: // = '6',   // built-in Sterner-Pitzer (STP) fluid EoS model
+             case SM_PR78FL: // = '7',	// built-in Peng-Robinson (PR78) fluid EoS model
+             case SM_CORKFL: // = '8',    // built-in compensated Redlich-Kwong (CORK) fluid EoS model
+//             case SM_REFLUID: // = '9',   // built-in reference EoS fluid model (reserved)
+             case SM_SRFLUID: // = 'E',	// built-in Soave-Redlich-Kwong (SRK) fluid EoS model
+             case SM_AQDAV: // = 'D',	// built-in Davies model (with 0.3) for aqueous electrolytes
+             case SM_AQDH1: // = '1',	// built-in Debye-Hueckel limiting law for aqueous electrolytes
+             case SM_AQDH2: // = '2',	// built-in 2-term Debye-Hueckel model for aqueous electrolytes
+             case SM_AQDH3: // = '3',	// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Karpov version)
+             case SM_AQDHH: // = 'H',	// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Helgeson version)
+             case SM_AQDHS: // = 'Y',	// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Shvarov version)
+             case SM_AQSIT: // = 'S',	// built-in SIT model for aqueous electrolytes
+             case SM_AQEXUQ: // = 'Q',    // built-in extended UNIQUAC model for aqueous electrolytes
+             case SM_AQPITZ: // = 'Z',    // built-in Pitzer HMW model for aqueous electrolytes
+//             case SM_AQMIX: // = 'C',     // built-in mixed-solvent aqueous Debye-Hueckel model (reserved)
+//             case SM_AQELVIS: // = 'J',   // built-in modified extended UNIQUAC model (ELVIS) for aqueous electrolytes (reserved)
+//             case SM_IONEX: // = 'X',     // ion exchange (Donnan, Nikolskii) (reserved)
+//             case SM_SURCOM: // = 'A',	// models of surface complexation at solid-aqueous interface
+//             case SM_USERDEF: // = 'U',	// user-defined mixing model (scripts in Phase record)
+//             case SM_OTHER: // = 'O',	// other built-in phase-specific models of non-ideal solutions (selected by phase name)
+                  break;
+             default:
+                 if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
+                     aPHnoused.Add( aPHkey[ii] );
+                 continue;
+            }
+            break;
+         case SM_NOSTGAM: // N
              if( php->sol_t[DCOMP_DEP] != 'N' || php->sol_t[SPHAS_DEP] != 'N' )
              {
                if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
                    aPHnoused.Add( aPHkey[ii] );
                continue;
              }
-             break;  //N
+             break;
          }
         }
 
