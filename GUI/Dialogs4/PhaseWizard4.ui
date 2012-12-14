@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>738</width>
-    <height>603</height>
+    <width>691</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="font">
@@ -21,7 +21,7 @@
   <property name="windowTitle">
    <string>GEM-Selektor Proces</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_11">
+  <layout class="QVBoxLayout" name="verticalLayout_12">
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="mouseTracking">
@@ -40,10 +40,10 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
-      <layout class="QVBoxLayout" name="verticalLayout_10">
+      <layout class="QVBoxLayout" name="verticalLayout_11">
        <item>
         <widget class="QLabel" name="pageName">
          <property name="sizePolicy">
@@ -85,7 +85,7 @@
           <enum>QFrame::Plain</enum>
          </property>
          <property name="text">
-        <string>Selection of the codes below will configure the Phase record and tell the program what kind of phase and which model of (non-ideal) mixing should be used, and how it should be calculated.</string>
+          <string>Selection of the codes below will configure the Phase record and tell the program what kind of phase and which model of (non-ideal) mixing should be used, and how it should be calculated.</string>
          </property>
          <property name="textFormat">
           <enum>Qt::AutoText</enum>
@@ -105,15 +105,15 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_7">
+        <widget class="QGroupBox" name="groupBox_13">
          <property name="title">
           <string/>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
+         <layout class="QVBoxLayout" name="verticalLayout_10">
           <item>
-           <widget class="QLabel" name="ModelCodeLabel">
+           <widget class="QLabel" name="ModelCodeLabel_2">
             <property name="text">
-             <string>&amp;Select a mixing model for this phase:</string>
+             <string>Phase aggregate state code:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignBottom</set>
@@ -127,7 +127,7 @@
            </widget>
           </item>
           <item>
-         <widget class="QComboBox" name="pPhPs_0">
+           <widget class="QComboBox" name="pPhPs_0">
             <item>
              <property name="text">
               <string>a    Aqueous electrolyte solution</string>
@@ -188,7 +188,7 @@
          <property name="title">
           <string/>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QLabel" name="ModelCodeLabel">
             <property name="text">
@@ -516,16 +516,13 @@
             <property name="wordWrap">
              <bool>true</bool>
             </property>
-            <property name="buddy">
-             <cstring>SCM_code</cstring>
-            </property>
            </widget>
           </item>
           <item>
            <widget class="QComboBox" name="SCM_code">
             <item>
              <property name="text">
-         <string>N   Default mixing rule or form of interaction parameter coefficients  </string>
+              <string>N   Default mixing rule or form of interaction parameter coefficients  </string>
              </property>
             </item>
             <item>
@@ -540,9 +537,9 @@
             </item>
             <item>
              <property name="text">
-              <string>T   Temperature-dependent one-term binary interaction parameter kij</string>
+              <string>T    Temperature-dependent one-term binary interaction parameter kij</string>
              </property>
-            </item>            
+            </item>
             <item>
              <property name="text">
               <string>5     Five-term Pitzer model parameter temperature dependence</string>
@@ -556,6 +553,8 @@
             <item>
              <property name="text">
               <string>8    Eight-term Pitzer model parameters temperature dependence</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>
@@ -641,13 +640,13 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Optional dimensions to set when built-in functions or scripts for the mixing model shall be used </string>
+          <string>Optional dimensions to set when built-in functions or scripts for the mixing model shall be used. </string>
          </property>
          <layout class="QFormLayout" name="formLayout_3">
           <item row="0" column="0" colspan="2">
            <widget class="QLabel" name="textLabel2">
             <property name="text">
-             <string>Attention! ForTSolMod built-in mixing models that use dc_cf and/or ipxT, pc_cf data objects, the appropriate dimensions will usually be allocated automatically. Otherwise, the array will be allocated only if all its dimensions are not zeros. </string>
+             <string>Attention! For TSolMod built-in mixing models that use dc_cf and/or ipxT, pc_cf data objects, relevant dimensions will be allocated automatically. Any array will be allocated only if all its dimensions are not zeros. </string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -1246,7 +1245,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 5 - Phase link pages </string>
+          <string>Step 5 - Final Settings and Hints</string>
          </property>
         </widget>
        </item>
@@ -1482,14 +1481,10 @@
   <tabstop>DcEqModeCode</tabstop>
   <tabstop>PhEqModeCode</tabstop>
   <tabstop>DcEqLinkMode</tabstop>
-  <tabstop>SCM_code</tabstop>
   <tabstop>spinBox_dc_sc_M</tabstop>
   <tabstop>spinBox_ph_cf_N</tabstop>
   <tabstop>spinBox_ph_px_M</tabstop>
   <tabstop>spinBox_ph_cf_M</tabstop>
-  <tabstop>checkBoxSorption</tabstop>
-  <tabstop>spinBox_SurTypes_N</tabstop>
-  <tabstop>lineEdit_surfArea</tabstop>
   <tabstop>spinBoxSDrefLnk</tabstop>
   <tabstop>pHelp</tabstop>
   <tabstop>pBack</tabstop>
