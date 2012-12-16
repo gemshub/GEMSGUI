@@ -254,7 +254,7 @@ NEXT:
 // Updated and bugfixed by DAK on 14 Dec 2000  PSI
 void TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
 {
-    double a, T, Vst, Tst, Pst, P, P_Pst, T_Tst, Ts2, VP, VT,
+    double /*a,*/ T, Vst, Tst, Pst, P, P_Pst, T_Tst, Ts2, VP, VT,
           aC, aE, kap, T05, Tst05, Vt, PP, a0, k0, dg, ds, dh, dv, dcp;
     double vc[5];
     float a1;

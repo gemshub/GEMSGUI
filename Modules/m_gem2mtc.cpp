@@ -227,7 +227,7 @@ void TGEM2MT::init_arrays( bool mode )
 
     for( ii=0; ii<mtp->nIV; ii++)
     {
-     sprintf( tbuf, "System%d", ii );
+     sprintf( tbuf, "System%ld", ii );
      strncpy( mtp->nam_i[ii], tbuf, MAXIDNAME );
      mtp->PTVm[ii][0] = cP;
      mtp->PTVm[ii][1] = cT;
@@ -399,10 +399,10 @@ void TGEM2MT::calc_eqstat( bool startSys )
 //            return; // system not changed  !!!! this is doubtful... DK 4.12.2011
     }
 
-    sprintf(buf, "%.4d", mtp->ctm);
+    sprintf(buf, "%.4ld", mtp->ctm);
     memset(mtp->timep, 0, 5 );
     strncpy(mtp->timep, buf, 4 );
-    sprintf(buf, "%.3d", mtp->cnv);
+    sprintf(buf, "%.3ld", mtp->cnv);
     memset( mtp->NVp, 0, 4 );
     strncpy( mtp->NVp, buf, 3 );
     Gcvt( mtp->cT, 6, mtp->TCp );
@@ -727,7 +727,7 @@ void TGEM2MT::CalcGraph()
  // show graphic
  // use refresh if needed
  char buf[300];
- sprintf(buf, "  ( time %lg; step %d )", mtp->cTau, mtp->ct );
+ sprintf(buf, "  ( time %lg; step %ld )", mtp->cTau, mtp->ct );
   if( gd_gr )
     gd_gr->Show( buf);
 }

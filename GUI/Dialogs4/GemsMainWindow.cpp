@@ -1202,10 +1202,10 @@ void TVisorImp::defineButtonsList()
     //lst.clear();
     //lst << mdList[ii].name;
     //item = new  QTreeWidgetItem( thermoData,
-    //             lst, /*ii*mdList[ii].nRT);
+    //             lst, *ii*mdList[ii].nRT);
     //item->setToolTip( 0, mdList[ii].toolTip);
 
-    dataBaseButton = new QToolButton(/*itemWidget1*);
+    dataBaseButton = new QToolButton(*itemWidget1*);
     dataBaseButton->setCheckable(true);
 
     QFont fnt = dataBaseButton->font();
@@ -1234,7 +1234,7 @@ void TVisorImp::defineButtonsList()
     //lst.clear();
     //lst << mdList[ii].name;
     //item = new  QTreeWidgetItem( projectData,
-    //            lst, /*ii*mdList[ii].nRT);
+    //            lst, *ii*mdList[ii].nRT);
     //item->setToolTip( 0, mdList[ii].toolTip);
   }
 
@@ -1244,7 +1244,7 @@ void TVisorImp::defineButtonsList()
     //lst.clear();
     //lst << mdList[ii].name;
     //item = new  QTreeWidgetItem( otherData,
-    //             lst, /*ii*mdList[ii].nRT);
+    //             lst, *ii*mdList[ii].nRT);
     //item->setToolTip(0, mdList[ii].toolTip);
   }
 

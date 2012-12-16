@@ -316,7 +316,7 @@ void RDKeyDialog::SetList()
 {
     TCIntArray temp;
     TCStringArray keyList;
-    uint jj=0;
+    int jj=0;
     int ii;
 
     gstring s = "Please, mark one or more record keys. Filter: ";

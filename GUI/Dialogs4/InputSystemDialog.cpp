@@ -200,8 +200,9 @@ void InputSystemDialog::getTable( TIArray<tableSetupData>& tab ) const
 
 }
 
-void InputSystemDialog::changePage( int nPage )
+void InputSystemDialog::changePage( int nPage_ )
 {
+    uint nPage = nPage_;
     QObject::disconnect( pLists[curPage]->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
               this, SLOT( changeTable( const QItemSelection&, const QItemSelection& )) );
 
@@ -526,7 +527,8 @@ QString InputSystemDialog::createHeader()
  void InputSystemDialog::DeleteRows()
  {
    QList<QTableWidgetSelectionRange> rec = recTable->selectedRanges();
-   int jj, nO, iWin, ndx;
+   int jj, nO, ndx;
+   uint iWin;
    int r_from = rec[0].bottomRow();
    int r_to = rec[0].topRow();
    if( r_from < r_to)

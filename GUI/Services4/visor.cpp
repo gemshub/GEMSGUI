@@ -117,7 +117,8 @@ TVisor::TVisor(int c, char *v[]):
     UserGEMDir = localDir() + DEFAULT_USER_DIR;
 #endif // __unix
 
-#else // windows - in any non-system directory on C:\ or D:\
+#else
+      // windows - in any non-system directory on C:/ or D:/
       // By default: /Resources in the same dir as the exe file;
       //       /Library/gems3/projects on the same level as the /Gems3-app dir.
     QString dirExe = QCoreApplication::applicationDirPath();

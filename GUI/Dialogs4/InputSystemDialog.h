@@ -53,7 +53,7 @@ class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
    TIArray<windowSetupData> wnData;
    TIArray<tableSetupData>  tbData;
    TIArray<pagesSetupData> stData;
-   int curPage;
+   uint curPage;
 
    QList<QListWidget *> pLists;
 

@@ -1047,7 +1047,7 @@ void TObjectTable::CmCalc()
      QModelIndex wIndex;
      const QStringList rows = str.split('\n', QString::KeepEmptyParts);
 
-     int iN, iM, ii, jj;
+     int ii, jj;
      int rowNum = sel.N1;
      const int nLimit = (transpose) ? (sel.N1 + sel.M2-sel.M1) : sel.N2;
 

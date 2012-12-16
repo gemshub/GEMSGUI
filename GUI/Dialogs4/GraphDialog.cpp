@@ -213,7 +213,7 @@ void GraphDialog::ShowLegend()
 
     tbLegend->clear();
     tbLegend->setRowCount(gr_data.lines.GetCount());
-    for(int ii=0; ii<gr_data.lines.GetCount(); ii++ )
+    for(uint ii=0; ii<gr_data.lines.GetCount(); ii++ )
     {
         tbLegend->setRowHeight(ii, htF(ftString, 0)+4);
 
@@ -253,7 +253,7 @@ void GraphDialog::ShowIsolineLegend()
 
     tbLegend->clear();
     tbLegend->setRowCount(gr_data.scale.GetCount());
-    for(int ii=0; ii<gr_data.scale.GetCount(); ii++ )
+    for(uint ii=0; ii<gr_data.scale.GetCount(); ii++ )
     {
         tbLegend->setRowHeight(ii, htF(ftString, 0)+4);
 
@@ -791,6 +791,7 @@ QWidget *LabelDelegate::createEditor(QWidget *parent,
        return editor;
        //return QItemDelegate::createEditor( parent, option,  index );
     }
+    return 0;
 }
 
 //--------------------- End of GraphDialog.cpp ---------------------------
