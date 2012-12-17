@@ -175,7 +175,8 @@ TVisor::TVisor(int c, char *v[]):
     //RemoteDocURL = "http://gems.web.psi.ch/doc/html/";
     RemoteHTML = SysGEMDir + HELP_SRC_DIR;
     LocalDoc = true;
-    DefaultBuiltinTDB = "nagra-psi";
+    DefaultBuiltinTDB = "kernel";   // temporary for using old Nagra-PSI (2003) dataset
+//    DefaultBuiltinTDB = "psinagra";  // To be used after update to PSI-Nagra 2012
 // For debugging the directories
 // cout << "Local    : " << LocalDir.c_str() << endl;
 // cout << "SysGEM   : " << SysGEMDir.c_str() << endl;
