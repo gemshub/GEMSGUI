@@ -61,11 +61,11 @@ void TPhase::ods_link( int q)
 
 // new 06/06/12
     aObj[ o_phkin_t].SetPtr(  ph[q].kin_t );  // a 6
-    aObj[ o_phpdqf].SetPtr(  &ph[q].Pdqf );  // a 4
+    aObj[ o_phpdqf].SetPtr(  &ph[q].Pdqf );  // a 7
     aObj[ o_phpeipc].SetPtr(  &ph[q].PEIpc );  // a 6
     aObj[ o_phprpcon].SetPtr(  &ph[q].PrpCon );  // a 4
-    aObj[ o_phnlph].SetPtr(  &ph[q].nlPh );  // i 4
-    aObj[ o_phnumpc].SetPtr(  &ph[q].nPRk );  // i 4
+    aObj[ o_phnlph].SetPtr(  &ph[q].nlPh );  // i 9
+    aObj[ o_phnumpc].SetPtr(  &ph[q].nPRk );  // i 5
     aObj[ o_phnei1].SetPtr(  &ph[q].nEIl );  // i 4
     aObj[ o_phnisoc].SetPtr(  &ph[q].nIsoC );  // i 4
     aObj[ o_phvpor].SetPtr(  &ph[q].Vpor );  // f 4
@@ -148,8 +148,8 @@ aObj[o_ph_nxsub].SetDim( ph[q].nDC, ph[q].nMoi );
 //    aObj[ o_phtprn].SetDim( 1,strlen(ph[q].tprn));
 
 // new record 06/06/12
-aObj[ o_phstr2].SetPtr(  &ph[q].Pdqf ); // a 20
-aObj[ o_phdim2].SetPtr( &ph[q].nlPh );   // i 16
+aObj[ o_phstr2].SetPtr(  &ph[q].Pdqf ); // a 23
+aObj[ o_phdim2].SetPtr( &ph[q].nlPh );   // i 22
 aObj[ o_phfloat2].SetPtr(&ph[q].Vpor );  // f 8
 
 //dynamic
@@ -211,7 +211,21 @@ aObj[ o_phlphc2].SetDim( ph[q].nlPh, 1 );
 aObj[ o_phisoc].SetPtr(  ph[q].IsoC );
 aObj[ o_phisoc].SetDim( 2, ph[q].NsiT );
 
-    php=&ph[q];
+// added 17/12/12
+aObj[ o_phixsolv].SetPtr(  ph[q].ixsolv );
+aObj[ o_phixsolv].SetDim( 2, ph[q].nsolv );
+aObj[ o_phixdiel].SetPtr(  ph[q].ixdiel );
+aObj[ o_phixdiel].SetDim( 2, ph[q].ndiel );
+aObj[ o_phsolvc].SetPtr(  ph[q].solvc );
+aObj[ o_phsolvc].SetDim( ph[q].ncsolv, ph[q].nsolv );
+aObj[ o_phdielc].SetPtr(  ph[q].dielc );
+aObj[ o_phdielc].SetDim( ph[q].ncdiel, ph[q].ndiel);
+aObj[ o_phdhc].SetPtr(  ph[q].dhc );
+aObj[ o_phdhc].SetDim( 1, ph[q].ndh );
+aObj[ o_phapcon].SetPtr(  ph[q].apCon );
+aObj[ o_phapcon].SetDim( ph[q].nPRk, ph[q].nSkr* ph[q].naptC );
+
+ php=&ph[q];
 }
 
 
@@ -279,6 +293,13 @@ if(!ph[q].ipxt )
     ph[q].eimLl =  (char (*)[MAXDCNAME])aObj[ o_pheimll].GetPtr( );
     ph[q].lPhC =  (char *)aObj[ o_phlphc2].GetPtr( );
     ph[q].IsoC =  (char *)aObj[ o_phisoc].GetPtr( );
+    // added 17/12/12
+    ph[q].ixsolv =  (short *)aObj[ o_phixsolv].GetPtr();
+    ph[q].ixdiel =  (short *)aObj[ o_phixdiel].GetPtr();
+    ph[q].solvc =  (float *)aObj[ o_phsolvc].GetPtr();
+    ph[q].dielc =  (float *)aObj[ o_phdielc].GetPtr();
+    ph[q].dhc  =  (float *)aObj[ o_phdhc].GetPtr();
+    ph[q].apCon =  (float *)aObj[ o_phapcon].GetPtr();
 }
 
 
@@ -343,7 +364,13 @@ void TPhase::dyn_kill(int q)
     ph[q].eimLl =  (char (*)[MAXDCNAME])aObj[ o_pheimll].Free( );
     ph[q].lPhC =  (char *)aObj[ o_phlphc2].Free( );
     ph[q].IsoC =  (char *)aObj[ o_phisoc].Free( );
-
+    // added 17/12/12
+    ph[q].ixsolv =  (short *)aObj[ o_phixsolv].Free();
+    ph[q].ixdiel =  (short *)aObj[ o_phixdiel].Free();
+    ph[q].solvc =  (float *)aObj[ o_phsolvc].Free();
+    ph[q].dielc =  (float *)aObj[ o_phdielc].Free();
+    ph[q].dhc  =  (float *)aObj[ o_phdhc].Free();
+    ph[q].apCon =  (float *)aObj[ o_phapcon].Free();
 }
 
 
@@ -516,7 +543,7 @@ void TPhase::dyn_new(int q)
     if( ph[q].PrpCon == S_ON )
     {
       ph[q].rpCon =  (float *)aObj[ o_phrpcon].Alloc( ph[q].nPRk, ph[q].nrpC, F_ );
-      ph[q].lDCr =  (char (*)[DC_RKLEN])aObj[ o_phldc].Alloc( ph[q].nSkr, 1, DC_RKLEN );
+      //ph[q].lDCr =  (char (*)[DC_RKLEN])aObj[ o_phldc].Alloc( ph[q].nSkr, 1, DC_RKLEN );
       ph[q].feSAr =  (float *)aObj[ o_phfsac].Alloc( ph[q].nPRk, 1, F_ );
       ph[q].ocPRk =  (short *)aObj[ o_phxfaces ].Alloc( ph[q].nPRk, 1, I_ );
       ph[q].rpkcl =  (char (*)[MAXDCNAME])aObj[ o_phrpkcl].Alloc( 1, ph[q].nrpC, MAXDCNAME );
@@ -525,12 +552,23 @@ void TPhase::dyn_new(int q)
     else
     {
         ph[q].rpCon =  (float *)aObj[ o_phrpcon].Free( );
-        ph[q].lDCr =  (char (*)[DC_RKLEN])aObj[ o_phldc].Free( );
+        //ph[q].lDCr =  (char (*)[DC_RKLEN])aObj[ o_phldc].Free( );
         ph[q].feSAr =  (float *)aObj[ o_phfsac].Free( );
         ph[q].ocPRk =  (short *)aObj[ o_phxfaces ].Free();
         ph[q].rpkcl =  (char (*)[MAXDCNAME])aObj[ o_phrpkcl].Free( );
         ph[q].rprcl =  (char (*)[MAXDCNAME])aObj[ o_phrprcl].Free( );
     }
+    if( ph[q].PapCon == S_ON )
+    {
+      ph[q].lDCr =  (char (*)[DC_RKLEN])aObj[ o_phldc].Alloc( ph[q].nSkr, 1, DC_RKLEN );
+      ph[q].apCon =  (float *)aObj[ o_phapcon].Alloc( ph[q].nPRk, ph[q].nSkr* ph[q].naptC, F_ );
+    }
+    else
+    {
+        ph[q].lDCr =  (char (*)[DC_RKLEN])aObj[ o_phldc].Free( );
+        ph[q].apCon =  (float *)aObj[ o_phapcon].Free();
+    }
+
     if( ph[q].PumpCon == S_ON )
     {
       ph[q].umpCon =  (float *)aObj[ o_phumpcon].Alloc( ph[q].nDC, ph[q].numpC, F_ );
@@ -563,7 +601,35 @@ void TPhase::dyn_new(int q)
       ph[q].rcpc =  (float *)aObj[ o_phrcpc].Alloc( ph[q].nDC, ph[q].nrcp, F_ );
     else
       ph[q].rcpc =  (float *)aObj[ o_phrcpc].Free();
- }
+
+
+
+    // added 17/12/12
+    if( ph[q].Psol == S_ON )
+    {
+        ph[q].ixsolv =  (short *)aObj[ o_phixsolv].Alloc( 2, ph[q].nsolv, I_ );
+        ph[q].solvc =  (float *)aObj[ o_phsolvc].Alloc( ph[q].ncsolv, ph[q].nsolv, F_ );
+    }
+    else
+    {
+        ph[q].ixsolv =  (short *)aObj[ o_phixsolv].Free();
+        ph[q].solvc =  (float *)aObj[ o_phsolvc].Free();
+    }
+    if( ph[q].Pdiel == S_ON )
+    {
+        ph[q].ixdiel =  (short *)aObj[ o_phixdiel].Alloc( 2, ph[q].ndiel, I_ );
+        ph[q].dielc =  (float *)aObj[ o_phdielc].Alloc( ph[q].ncdiel, ph[q].ndiel, F_ );
+    }
+    else
+    {
+        ph[q].ixdiel =  (short *)aObj[ o_phixdiel].Free();
+        ph[q].dielc =  (float *)aObj[ o_phdielc].Free();
+    }
+    if( ph[q].Pdh == S_ON )
+        ph[q].dhc =  (float *)aObj[ o_phdhc].Alloc( 1, ph[q].ndh, F_ );
+    else
+        ph[q].dhc =  (float *)aObj[ o_phdhc].Free();
+}
 
 
 // realloc dynamic memory
@@ -652,16 +718,23 @@ void TPhase::set_def( int q)
 
     // new record 06/06/12
     memcpy( ph[q].kin_t, "NNNNNN", 6 );
-    memcpy( &ph[q].Pdqf, "---------------", 14 );
+    memcpy( &ph[q].Pdqf, "------------------", 17 );
 
     //short
     ph[q].nlPh = 0;
     ph[q].nlPc = 0;
     ph[q].ndqf=  3;
     ph[q].nrcp=  3;
+    ph[q].ncsolv = 0;
+    ph[q].nsolv = 0;
+    ph[q].ncdiel = 0;
+    ph[q].ndiel = 0;
+    ph[q].ndh = 0;
+
     ph[q].nPRk = 0;
     ph[q].nSkr = 0;
     ph[q].nrpC = 0;
+    ph[q].naptC = 0;
     ph[q].numpC = 0;
     ph[q].nEIl = 0;
     ph[q].nEIp = 1;
@@ -707,6 +780,13 @@ void TPhase::set_def( int q)
     ph[q].eimLl = 0;
     ph[q].lPhC = 0;
     ph[q].IsoC = 0;
+    // added 17/12/12
+    ph[q].ixsolv = 0;
+    ph[q].ixdiel = 0;
+    ph[q].solvc =  0;
+    ph[q].dielc = 0;
+    ph[q].dhc  =  0;
+    ph[q].apCon = 0;
 }
 
 

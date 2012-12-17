@@ -129,6 +129,8 @@ short *ipxt,  // Table of indexation for interaction parameters [ncpN][npxM]
 *xSmD, // new: denticity of surface species per surface site (site allocation) [nDC][NsiT]
        // (default 0, -1 means no binding) [nDC][mDe+1]
 *ocPRk, // new KinMet: Operation codes for kinetic parallel reaction terms [nPRk]
+*ixsolv, /// new: array of indexes of solvent interaction parameters [nsolv*2]
+*ixdiel /// new: array of indexes of dielectric interaction parameters [ndiel*2]
 ;
 
 float Asur,  // Specific surface area of (carrier) phase, m2/g (new: of this tile) default: 0.

@@ -682,5 +682,69 @@ void TPlotLine::write(fstream& stream)
     stream << endl;
 }
 
+/* for future using
+
+QMap<int, QVector<QPointF> > curveMap;
+QVector<PlotSettings>       plStac;
+
+painter.drawPrimitive(...);
+painter.drawRect(rect.adjusted(0,0,-1,-1));
+
+
+void Plotter::drawCurves(QPainter *painter)
+{
+    QRect rect(Margin, Margin, width()-Margin*2, heiht()-Margin*2);
+    if(!rect.isValid())
+        return;
+    painter->setClipRect(rect.adjusted(+1,+1,-1,-1));
+    QMapIterator< int, QVector<QPointF> > i(curveMap);
+    while( i.hasNext())
+    {
+        i.next();
+        int id = i.key();
+        constQVector,PointF> &data = i.value();
+        QPolygonF polyline(data.count());
+
+        for(int j=0; j<data.count(); j++ )
+        {
+            double dx = data[j].x()-settings.MinX;
+            double dy = data[j].y()-settings.MinY;
+            double x = rect.left() + ( dx* (rect.width()-1)/settingts.spanX());
+            double y = rect.bottom() + ( dy* (rect.height()-1)/settingts.spanY());
+            polyline[j] = QPointF(x,y);
+        }
+        painter->setPen(...color);
+        painter->drawPolyline(polyline);
+      }
+}
+
+void PlotSettings::adjast()
+{
+    adjustAxis(minX, maxX, numXtics);
+    adjustAxis(minY, maxY, numYtics);
+
+ }
+
+void  adjustAxis(double& min,double& max,double& numTicks)
+{
+    const int minTicks = 4;
+    double grossStep = (max-min)/minTicks;
+    double step = pow(10. , floor(log10(grossStep)));
+
+    if(5*step < grossStep )
+    {
+        step *=5;
+    }else if(2*step < grossStep )
+           step *=2;
+
+    numTics = int(ceil(max/step)-floor(min/step));
+    if( numTicks < minTicks)
+       numTicks = minTicks;
+    min = floor(min/step)*step;
+    max = ceil(max/step)*step;
+}
+
+*/
+
 
 //--------------------- End of graph.cpp ---------------------------

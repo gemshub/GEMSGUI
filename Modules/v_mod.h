@@ -189,7 +189,7 @@ o_wi_isopc, o_wi_isosc, o_wi_lnscal, o_wi_lnsact, o_wi_lngamf,
 o_wi_cterms, o_wi_isoct,
 // TKinMet stuff
 o_wi_lskin, o_wi_lsupt, o_wi_jcrdc, o_wi_xfaces, o_wi_fsac,
-o_wi_krpc, o_wi_umpc, o_wi_kmod,
+o_wi_krpc, o_wi_apconc, o_wi_umpc, o_wi_kmod,
     // CalculateActivityCoefficients() - adjustable DOD
     o_neqtxt,  o_nsmod,  o_ntc,  o_ntk,  o_np ,
     o_nis, o_ni,  o_njs,  o_nnext, o_nncp ,
@@ -560,7 +560,7 @@ enum phase_objects {   // PHASE
     o_phsm,    /*s dyn*/  o_phdcc,   /*a dyn*/   o_phdcs,   /*a dyn*/
     o_phpeq,   /* txt */  o_phdeq,   /* txt */   o_phsdref, /*s dyn*/
     o_phsdval, /*s dyn*/
-//new record (3+26)
+//new record (3+26+6)
     o_phstr2, o_phdim2,  o_phfloat2,
     o_phxsmd,  o_phxfaces, o_phlphc1, o_phdqfc, o_phrcpc,
     o_pheipc, o_phcdc, o_phisop, o_phisos, o_phfsac,
@@ -568,6 +568,9 @@ enum phase_objects {   // PHASE
     o_phipicl, o_phipccl,  o_phrpkcl, o_phrprcl, o_phumpcl,
     o_phsmcdl, o_phsmcsl,  o_pheimpl, o_pheimll, o_phlphc2,
     o_phisoc,
+    o_phixsolv, o_phixdiel, o_phsolvc, o_phdielc,  o_phdhc,  //added 17/13/12
+    o_phapcon,
+
 // work
 o_ph_w_lsc, o_ph_w_lsa, o_ph_w_lsn, o_ph_w_nxc, o_ph_w_nxa, o_ph_w_nxn, // new work dyn objects
 o_ph_nsub,  o_ph_lsform, o_ph_lsmoi, o_ph_ocpn, o_ph_nxsub, // added for multi-site mixin models implementation
