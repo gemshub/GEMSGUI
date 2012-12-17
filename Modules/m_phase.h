@@ -69,18 +69,18 @@ PsDiS,  // new: flag for sDiS array of denticity and surface site indexes {+*-}
 Pres2,  // new: reserved
 
 // TKinMet stuff
-PrpCon, // new: flag for rpCon array of kinetic rate constants {+*-}
+PrpCon, // new: flag for rpCon array of kinetic rate constants, feSAr, ocPRk arrays {+*-}
 PumpCon,// new: flag for umpCon array of uptake model parameters {+*-}
-PRes3,  // new: reserved
+PapCon,  /// new: flag for lDCr and apCon arrays for parameters of species involved in activity product terms
 PRes4,  // new: reserved
 
 kin_t[6],
-  // new:    Type of sorption/ionex/polyelectrolyte isotherm model { N  }
-  // new:    Type of sorption EIL model { N   }
-  // new:    Type of kinetic rate model { N T W ... }
-  // new:    Type of splitting model for dissolution { N TBD }
-  // new:    Type of splitting model for precipitation { N TBD }
-  // new:    Type of the model for trace element uptake { N TBD }
+  // new:    Type of sorption/ionex/polyelectrolyte isotherm model { N ... }
+  // new:    Type of sorption EIL model { N ...  }
+  /// new:    Type of mineral-aqueous/gas reaction kinetics rate model:  { N T W ... TBD }
+  /// new:    Direction of the kinetic process to which the rate model refers { N D P G B ... TBD }
+  /// new:    Type of the uptake kinetics model { N E M ... TBD }
+  /// new:    Type of metastability links of this phase to other phases { N S P ... TBD }
 
     name[MAXFORMULA],   // Full name of phase
     notes[MAXFORMULA]  // Comments
@@ -105,9 +105,10 @@ ndiel,  /// TW new: number of dielectric constant parameters (rows in dielc arra
 ndh,    /// TW new: number of generic DH coefficients (rows in dhc array)
 
  // TKinMet stuff
-nFaces, // new: number of kinetically different faces (on solid phase surface), default 1, up to 6.
-nReg,  // new: number of kinetic regions (and catalyzing aqueous species)
-nrpC,  // new: number of kinetic rate constants and coefficients
+nPRk, // nFaces, new: number of «parallel reactions» that affect amount constraints for k-th phase (1, 2, 3, …), 1 by default
+nSkr, // nReg,  new: number of (aqueous or gaseous or surface) species from other reacting phases involved
+nrpC,  // new: number of parameter (coefficients) involved in “parallel reaction” terms (0 or 12 + 3res.)
+naptC, /// new: number of parameter (coefficients) per species involved in “activity product” terms (0 or 1)
 numpC, // new: number of uptake model parameter coefficients (per end member)
 
 // TSorpMod stuff EIL model
@@ -127,7 +128,7 @@ short *ipxt,  // Table of indexation for interaction parameters [ncpN][npxM]
               // takes over from PXres
 *xSmD, // new: denticity of surface species per surface site (site allocation) [nDC][NsiT]
        // (default 0, -1 means no binding) [nDC][mDe+1]
-*xFaces, // new: indexes of faces per set of kinetic region parameters [nReg*nFaces], default 0.
+*ocPRk, // new KinMet: Operation codes for kinetic parallel reaction terms [nPRk]
 ;
 
 float Asur,  // Specific surface area of (carrier) phase, m2/g (new: of this tile) default: 0.
@@ -140,7 +141,7 @@ float Asur,  // Specific surface area of (carrier) phase, m2/g (new: of this til
     Rsp1,   // Default maximum surface density, 1/nm2 (reserved)
 
 Vpor,  // new: Specific pore volume of (carrier) phase, m3/g (default: 0)
-fSAs,   // new: fraction of surface area of the sorbent (ref. in lPh) occupied by this surface tile (def. 1)
+fSAs,  // new: fraction of surface area of the sorbent (ref. in lPh) occupied by this surface tile (def. 1)
 fPV,   // new: fraction of phase pore volume occupied by this Donnan electrolyte (def. 1)
 fRes1, // new: reserved
 
@@ -172,8 +173,9 @@ fRes2, // new: reserved
        // here site density etc.
 
 // TKinMet stuff
-*fSAk,   // new: fractions of surface area of the solid occupied by different faces [nFaces]
-*rpCon,  // new: Array of kinetic rate constants for faces and regions [nReg*nFaces][nrpC]
+*feSAr,  // new: fractions of surface area of the solid related to different parallel reactions [nPRk]
+*rpCon,  // new: Array of kinetic rate constants for faces and regions [nPRk][nrpC]
+*apCon, /// new: Array of parameters per species involved in “activity product” terms [nPRk][nSkr][naptC]
 *umpCon, // new: Array of uptake model parameters [nDC][numpC]
 ;
 // Old sorption model stuff
@@ -183,18 +185,17 @@ fRes2, // new: reserved
                 // Outer EDL capacitance density, F/m2 (TLM)  [NsiT]
   char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [nDC][DFCN]
 // DC list
-  char (*SM)[DC_RKLEN]; // List of DC record keys included into phase[nDC]
+  char (*SM)[DC_RKLEN]; // List of DC record keys included into this phase[nDC]
 // new stuff (TKinMet, TSorpMod)
 char (*lPh)[PH_RKLEN];    // new: list of record keys of linked phases [nlPh]
-char (*lDC)[DC_RKLEN];    // new: list of record keys of aq, gas or surface catalyzing
-                          // species for rate regions, or species in homogen. reactions [nReg*nFaces]
-//
+char (*lDCr)[DC_RKLEN];   /// new: list of record keys (names?) of aq, gas or surface catalyzing
+                          /// or inhibiting species for parallel reactions [nSkr]
 char (*dcpcl)[MAXDCNAME]; // new: DC parameter coefficients comment list [nscM]
 char (*ipicl)[MAXDCNAME]; // new: interaction parameter indexes comment list [ncpN]
 char (*ipccl)[MAXDCNAME]; // new: interaction parameter coefficients comment list [ncpM]
 //
 char (*rpkcl)[MAXDCNAME]; // new: kinetic rate constants comment list [nrpC]
-char (*rprcl)[MAXDCNAME]; // new: kinetic regions/catalysis species comment list [nReg]
+char (*rprcl)[MAXDCNAME]; // new: kinetic parallel reactions regions comment list [nPRk]
 char (*umpcl)[MAXDCNAME]; // new: uptake kinetic model parameters comment list [numpC]
 //
 char (*smcDl)[MAXDCNAME]; // new: sorption model parameters comment list per DC [nIsoC]

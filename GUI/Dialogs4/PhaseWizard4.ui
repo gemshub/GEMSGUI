@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>691</width>
-    <height>600</height>
+    <height>689</height>
    </rect>
   </property>
   <property name="font">
@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1028,7 +1028,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 4 - kinetic model settings</string>
+          <string>Step 4 - Metastability and kinetics model settings</string>
          </property>
         </widget>
        </item>
@@ -1042,13 +1042,13 @@
        <item>
         <widget class="QGroupBox" name="groupBox_8">
          <property name="title">
-          <string>GroupBox</string>
+          <string>Selection of KinMet models</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
            <widget class="QLabel" name="label_7">
             <property name="text">
-             <string>Type of kinetic rate model { N T W ... }</string>
+             <string>Type of mineral-aqueous/gas reaction kinetics rate model</string>
             </property>
            </widget>
           </item>
@@ -1074,7 +1074,7 @@
           <item>
            <widget class="QLabel" name="label_8">
             <property name="text">
-             <string>Type of splitting model for dissolution { N TBD }l</string>
+             <string>Direction of the kinetic process</string>
             </property>
            </widget>
           </item>
@@ -1105,7 +1105,7 @@
           <item>
            <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>Type of splitting model for precipitation { N TBD }</string>
+             <string>Type of the uptake kinetics model</string>
             </property>
            </widget>
           </item>
@@ -1136,7 +1136,7 @@
           <item>
            <widget class="QLabel" name="label_10">
             <property name="text">
-             <string>Type of the model for trace element uptake { N TBD }</string>
+             <string>Type of metastability links of this phase to other phases</string>
             </property>
            </widget>
           </item>
@@ -1170,7 +1170,7 @@
        <item>
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>Attention! ForTSolMod built-in mixing models that use dc_cf and/or ipxT, pc_cf data objects, the appropriate dimensions will usually be allocated automatically. Otherwise, the array will be allocated only if all its dimensions are not zeros. </string>
+          <string>Attention! For TSorpMod and TKinMet built-in models, the appropriate dimensions will usually be allocated automatically. Otherwise, the arrays will be allocated only if all its dimensions are not zeros. </string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -1180,26 +1180,26 @@
        <item>
         <widget class="QGroupBox" name="groupBox_9">
          <property name="title">
-          <string>GroupBox</string>
+          <string>Dimensions of KinMet model parameter coefficient tables</string>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="0">
-           <widget class="QSpinBox" name="nFaces"/>
+           <widget class="QSpinBox" name="nPRk"/>
           </item>
           <item row="0" column="1">
            <widget class="QLabel" name="label_18">
             <property name="text">
-             <string>number of kinetically different faces</string>
+             <string>number of «parallel reactions» that will affect amount constraints for components of this phase</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QSpinBox" name="nReg"/>
+           <widget class="QSpinBox" name="nSkr"/>
           </item>
           <item row="1" column="1">
            <widget class="QLabel" name="label_19">
             <property name="text">
-             <string>number of kinetic regions</string>
+             <string>number of reacting (aqueous or gaseous or surface) species involved in the activity product term </string>
             </property>
            </widget>
           </item>
@@ -1209,7 +1209,7 @@
           <item row="2" column="1">
            <widget class="QLabel" name="label_20">
             <property name="text">
-             <string>number of kinetic rate constants</string>
+             <string>number of kinetic rate parameter coefficients</string>
             </property>
            </widget>
           </item>
@@ -1219,7 +1219,7 @@
           <item row="3" column="1">
            <widget class="QLabel" name="label_21">
             <property name="text">
-             <string>number of uptake model parameter</string>
+             <string>number of uptake model parameter coefficients </string>
             </property>
            </widget>
           </item>

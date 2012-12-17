@@ -184,9 +184,9 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[33], int size[22],
         if( ii >= 0  )
             kin_t5->setCurrentIndex(ii);
 
-    nFaces->setValue(size[10]);
+    nPRk->setValue(size[10]);
     nIsoC->setValue(size[18]);
-    nReg->setValue(size[11]);
+    nSkr->setValue(size[11]);
     nIsoS->setValue(size[19]);
     nrpC->setValue(size[12]);
     mDe->setValue(size[20]);
@@ -224,13 +224,13 @@ void   PhaseWizard::getSizes( int size[22] )
     size[8]= ndqf->value();
     size[16]= nCDc->value();
     size[9]= nrcp->value();
-    size[10]= nFaces->value();
-    size[18]= nIsoC->value();
-    size[11]= nReg->value();
+    size[10]= nPRk->value();
     size[19]= nIsoS->value();
     size[12]= nrpC->value();
     size[20]= mDe->value();
     size[13]= numpC->value();
+    size[18]= nIsoC->value();
+    size[11]= nSkr->value();
 }
 
 double   PhaseWizard::getR2()
@@ -342,7 +342,7 @@ void PhaseWizard::getFlags( char flgs[33] )
   if( PsDiS->isChecked() )
       flgs[21] = '+';
    else flgs[21] = '-';
-  if( nFaces->value() > 0 && nReg->value() > 0 )
+  if( nPRk->value() > 0 ) // && nSkr->value() > 0 )
       flgs[23] = '+';
    else flgs[23] = '-';
   if( numpC->value() > 0 )
