@@ -1,20 +1,18 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
+
     
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
     
 <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I)
-      [Netscape]">
+      [Netscape]"><title>GEMS3 Project Module</title>
 
     
-<title>GEMS3 Project Module</title>
+
 
     
-<meta name="description" content="Version 2.0.0-PSI">
-
-  </head>
-  <body>
+<meta name="description" content="Version 2.0.0-PSI"></head><body>
     
 <h1><img style="width: 48px; height: 48px;" alt="gems1.png" src="gems1.png" align="left"> <font color="#000066">&nbsp;
         GEM-Selektor version 3</font> </h1>
@@ -248,8 +246,7 @@
       until different temperature of pressure will be specified for a
       currently loaded SysEq record (usually just by reading it from the
       database). In the Project Wizard, you can allocate some additional
-      arrays (e.g. molar absolute entropy <span style="font-family:
-        Calibri;">sTP</span>, molar heat capacity <span style="font-family: Calibri;">CpTP</span>, molar enthalpy <span style="font-family: Calibri;">hTP</span>), if
+      arrays (e.g. molar absolute entropy <span style="font-family: Calibri;">sTP</span>, molar heat capacity <span style="font-family: Calibri;">CpTP</span>, molar enthalpy <span style="font-family: Calibri;">hTP</span>), if
       necessary.&nbsp;&nbsp;</p>
 
     
@@ -273,8 +270,7 @@
       upper-level folder under Windows or in user's home directory under
       Linux). In the Mac OS X variant, the default location of
       executable is "<span style="font-family: monospace;">/Applications/Gems3.app/Contents/MacOS</span>"
-      and that of user's projects - "<span style="font-family:
-        monospace;">/Users/&lt;user&gt;/Library/gems3</span>". <br>
+      and that of user's projects - "<span style="font-family: monospace;">/Users/&lt;user&gt;/Library/gems3</span>". <br>
     </p>
 
     
@@ -284,8 +280,7 @@
       contains this help database) is installed inside of the "<span style="font-family: monospace;">/Gems3-app</span>" folder at the
       same level as the gems3 executable file. In Mac OS X variant of
       GEMS, the folder "<span style="font-family: monospace;">/Resources</span>"
-      is part of the Gems3 application, i.e. "<span style="font-family:
-        monospace;">/Applications/Gems3.app/Contents/Resources</span>".
+      is part of the Gems3 application, i.e. "<span style="font-family: monospace;">/Applications/Gems3.app/Contents/Resources</span>".
       A different location of the folder in which the executable file
       and "<span style="font-family: monospace;">/Resources</span>" are
       found (you can see this location in the <a href="gems_setup.html">Preferences
@@ -482,8 +477,7 @@
 <p>Within the group "Allocation flags for optional DC thermodynamic
       data arrays",&nbsp; activation of one or several check-boxes will
       result in allocation and calculation of selected thermodynamic
-      properties of Dependent Components. <span style="font-family:
-        Calibri;">gTP</span> (molar Gibbs energy function) and <span style="font-family: Calibri;">vTP</span> (molar volume) are
+      properties of Dependent Components. <span style="font-family: Calibri;">gTP</span> (molar Gibbs energy function) and <span style="font-family: Calibri;">vTP</span> (molar volume) are
       always allocated and used by default in calculations of equilibria
       by IPM3 algorithm and, for this reason, do not appear in this
       list. Arrays marked as 'reserved' are not yet implemented in this
@@ -496,7 +490,7 @@
     </p>
 
     
-<table style=" text-align: left; width: 80%;" border="1" cellpadding="2" cellspacing="2">
+<table style="text-align: left; width: 80%;" border="1" cellpadding="2" cellspacing="2">
 
       <tbody>
         <tr>
@@ -748,7 +742,7 @@
     </p>
 
     
-<p><img style=" width: 719px; height: 383px;" alt="ProjectWindowControlsPage.png" src="ProjectWindowControlsPage.png"><br>
+<p><img style="width: 719px; height: 383px;" alt="ProjectWindowControlsPage.png" src="ProjectWindowControlsPage.png"><br>
     </p>
 
     
@@ -1362,8 +1356,7 @@ Project-Specific
     
 <p><span style="text-decoration: underline;">To access modeling
         projects</span>, switch into "Computation of equilibria" mode by
-      clicking the Equilibrium Mode&nbsp;<img style=" width: 24px;
-        height: 24px;" alt="EquilibriumModeIcon24.png" src="EquilibriumModeIcon24.png">&nbsp; button (or select the
+      clicking the Equilibrium Mode&nbsp;<img style="width: 24px; height: 24px;" alt="EquilibriumModeIcon24.png" src="EquilibriumModeIcon24.png">&nbsp; button (or select the
       "Modules" "Change Mode" menu command). This opens a "Modelling
       Projects" dialog, which usually shows a list of accessible
       existing projects. Each project (record) has a key that consists
@@ -1389,9 +1382,11 @@ Project-Specific
 <p><span style="text-decoration: underline;">To create a new
         modeling project</span>, click on a "New Project" button, enter
       the name and the comment into the appearing record key dialog, and
-      click "Ok" (<a href="#HOWTO_CREATE">more...</a>). In the appearing
-      Elements Dialog, select elements (Independent Components) to form
-      the system (<a href="gems_elements.html">more...</a>) and click
+      click "Ok" (<a href="#HOWTO_CREATE">more...</a>).
+In the appearing Step 1 page of the wizard, check the selection of
+Phase/component filters and the selection of source
+database/subdatabase. In the appearing next Step 2 page "Elements
+Dialog", select elements (Independent Components) to form the system (<a href="gems_elements.html">more...</a>) and click
       "Ok". In the appearing "Setup of aqueous and gas phases" dialog,
       optionally change settings and click "Ok" (<a href="gems_aphsetup.html">more...</a>). This brings GEMS into
       the Equilibrium Calculations mode; the SysEq record key dialog
@@ -1408,12 +1403,13 @@ Project-Specific
 
     
 <p><span style="text-decoration: underline;">To expand (clone) a
-        project into a new one</span>: activate the option "Create a new
-      project using the selected one..."; select the project in the
-      list; and click the "New Project" button. In the appearing record
-      key dialog, enter a new project name and a comment, click "Ok"; in
-      the Elements Dialog, if necessary, select additional elements, and
-      proceed as by creating a brand new project (<a href="#HOWTO_EXPAND">more...</a>). &nbsp; <br>
+        project into a new one</span>:
+activate the option "Create a new project using the selected one...";
+select the project in the list; and click the "New Project" button. In
+the appearing record key dialog, enter a new project name and a
+comment, click "Ok"; in the Elements Wizard Step 1, if necessary, check
+selection of source database/subdatabase, then at Step 2 select
+additional elements, and proceed as by creating a brand new project (<a href="#HOWTO_EXPAND">more...</a>). &nbsp; <br>
     </p>
 
     
@@ -1455,9 +1451,11 @@ Main
       record key" dialog. Type a short project name instead of "MyWork"
       (or click "From List" to pick up one of existing Project record
       keys and modify it); change the comment line (spaces are not
-      allowed), and press "Ok". This will bring you to a large <a href="gems_elements.html">Elements Dialog</a> that looks like
-      the Periodic Table; see the next section (also for the comments on
-      how to create a <a href="#PROJECT_LINKED">"linked" project</a>
+      allowed), and press "Ok". This will bring you to a large <a href="gems_elements.html">Elements Wizard</a>
+that has two steps, one for checking the selection of source built-in
+database or sub-database and/or Phase/component filters, and another
+showing a dialog that looks like the Periodic Table; see the next
+section (also for the comments on how to create a <a href="#PROJECT_LINKED">"linked" project</a>
       without using the Elements Dialog).&nbsp;</p>
 
     <br>
@@ -1469,16 +1467,16 @@ Main
         from the Default Database</font></h3>
 
     
-<p>In this dialog, you can select elements (and other Independent
+<p>In this dialog (Step 2 of the Elements Wizard), you can select elements (and other Independent
       Components) to form the stoichiometry basis of the modeling
       project. By default, the program will look through default
-      (kernel) database files, find all dependent components, phases and
+      (selected at Step 1) database/subdatabase files, find all dependent components, phases and
       compositions that are consistent with the chosen list of
       Independent Components, and copy these records into respective
-      files of the project database. When finished, the default database
-      files will be disconnected; the user can modify and extend the
+      files of the project database. When finished, the built-in database
+      files will be disconnected. The user can then modify and extend the
       project database, but this will have no effect on the default
-      database; if any changes occurred in the default database after
+      database; if any changes occurred in the built-in database after
       the program package upgrade, this will also have no effect on the
       project database. This kind of <a href="#PROJECT_INDEPENDENT">'independent'
 
@@ -1590,12 +1588,11 @@ Main
 <p>After a new modeling project folder is created, the program
       switches into the Equilibrium Calculations mode; immediately, the
       SysEq record key dialog appears for the first system to be created
-      in the project, for example <span style="font-family:
-        Helvetica,Arial,sans-serif;"><br>
+      in the project, for example <span style="font-family: Helvetica,Arial,sans-serif;"><br>
       </span></p>
 
     
-<p><span style="font-family: Helvetica,Arial,sans-serif;"><img style=" width: 447px; height: 335px;" alt="RKeyFieldsDialog-NewSysEq.png" src="RKeyFieldsDialog-NewSysEq.png"> <br>
+<p><span style="font-family: Helvetica,Arial,sans-serif;"><img style="width: 447px; height: 335px;" alt="RKeyFieldsDialog-NewSysEq.png" src="RKeyFieldsDialog-NewSysEq.png"> <br>
       </span></p>
 
     
@@ -1652,26 +1649,20 @@ Opening
 
       <tbody>
         <tr>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Option<br>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Option<br>
           </td>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Default state<br>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Default state<br>
           </td>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Explanations<br>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Explanations<br>
           </td>
         </tr>
         <tr>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Retain setup of aqueous (and
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Retain setup of aqueous (and
             gas/fluid) phases<br>
           </td>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">On<br>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">On<br>
           </td>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Set this option to "Off" if you
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Set this option to "Off" if you
             need to change the activity model of aqueous electrolyte
             and/or gas (fluid) mixture phase in the "Setup of aqueous
             and gas phases" dialog (<a href="#HOWTO_AUTOPHASE">more...</a>);
@@ -1686,15 +1677,12 @@ this
           </td>
         </tr>
         <tr>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Change file configuration of
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Change file configuration of
             the selected project<br>
           </td>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Off<br>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Off<br>
           </td>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Set this option to "On" if you
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Set this option to "On" if you
             need to change file configuration in the "Database File
             Configuration" dialog (<a href="#FILES">more...</a>),
             otherwise the same set of project files will be used as
@@ -1702,29 +1690,23 @@ this
           </td>
         </tr>
         <tr>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Activate Project Remake wizard<br>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Activate Project Remake wizard<br>
           </td>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Off<br>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Off<br>
           </td>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Set this option to "On" in
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Set this option to "On" in
             order to open the "Project Setup" wizard (<a href="#PROJECT_MWIZARD">more...</a>), for instance, to
             reset GEM IPM numerical settings for this project.
             Otherwise, the same setup as previously will be used. <br>
           </td>
         </tr>
         <tr>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Re-calculate and save all
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Re-calculate and save all
             equilibria (SysEq) using:<br>
           </td>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Off<br>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Off<br>
           </td>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">This option can be activated
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">This option can be activated
             (one of its sub-options set to "On") for testing the project
             after changes in project thermodynamic database or after the
             GEM-Selektor installation upgrade. Sub-options are to
@@ -1738,15 +1720,12 @@ this
           </td>
         </tr>
         <tr>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Create a new project using the
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Create a new project using the
             selected one as template<br>
           </td>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">Off<br>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Off<br>
           </td>
-          <td style="vertical-align: top; font-family:
-            Helvetica,Arial,sans-serif;">To expand a modeling project,
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">To expand a modeling project,
             select it in the list and set this option to "On". In this
             mode, the project will be cloned, optionally expanded, and
             saved under a different name (<a href="#HOWTO_EXPAND">more...</a>).&nbsp;
@@ -1888,7 +1867,7 @@ Other
 <blockquote> </blockquote>
 
     
-<table style=" width: 70%;" border="1" cellpadding="2" cellspacing="2">
+<table style="width: 70%;" border="1" cellpadding="2" cellspacing="2">
 
       <tbody>
         <tr>
@@ -2163,17 +2142,9 @@ of
 <p> </p>
 
     
-<p>Last change: Feb.23, 2012</p>
-
-    
-<p>DK<br>
-    </p>
-
-    
-<p><span style="font-family: monospace;">End of File</span> <br>
-    </p>
-
-    &nbsp; <br>
+<p>Last change: 17.12.2012 DK<br>
+</p>Copyright (c) 2003-2012, GEMS Development Team<span style="font-family: monospace;"><br>
+</span>&nbsp; <br>
 
     <br>
 
