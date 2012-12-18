@@ -34,13 +34,13 @@ class PhaseWizard : public QDialog, public Ui::PhaseWizardData
 
 public:
 
-    PhaseWizard( const char* pkey, char flgs[33], int size[22],
+    PhaseWizard( const char* pkey, char flgs[37], int size[30],
                   double r2, QWidget* parent = NULL);
     virtual ~PhaseWizard();
 
 
-    void   getSizes( int size[22] );
-    void   getFlags( char flgs[33] );
+    void   getSizes( int size[30] );
+    void   getFlags( char flgs[37] );
     double   getR2();
 
 protected slots:

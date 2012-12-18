@@ -560,7 +560,7 @@ enum phase_objects {   // PHASE
     o_phsm,    /*s dyn*/  o_phdcc,   /*a dyn*/   o_phdcs,   /*a dyn*/
     o_phpeq,   /* txt */  o_phdeq,   /* txt */   o_phsdref, /*s dyn*/
     o_phsdval, /*s dyn*/
-//new record (3+26+6)
+//new record (3+26+7)
     o_phstr2, o_phdim2,  o_phfloat2,
     o_phxsmd,  o_phxfaces, o_phlphc1, o_phdqfc, o_phrcpc,
     o_pheipc, o_phcdc, o_phisop, o_phisos, o_phfsac,
@@ -569,7 +569,7 @@ enum phase_objects {   // PHASE
     o_phsmcdl, o_phsmcsl,  o_pheimpl, o_pheimll, o_phlphc2,
     o_phisoc,
     o_phixsolv, o_phixdiel, o_phsolvc, o_phdielc,  o_phdhc,  //added 17/13/12
-    o_phapcon,
+    o_phapcon, o_phascp,
 
 // work
 o_ph_w_lsc, o_ph_w_lsa, o_ph_w_lsn, o_ph_w_nxc, o_ph_w_nxa, o_ph_w_nxn, // new work dyn objects

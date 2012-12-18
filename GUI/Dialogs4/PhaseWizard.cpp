@@ -79,7 +79,7 @@ void 	PhaseWizard::resetBackButton()
 	pBack->setEnabled( stackedWidget->currentIndex() > 0 );
 }
 
-PhaseWizard::PhaseWizard( const char* pkey, char flgs[33], int size[22],
+PhaseWizard::PhaseWizard( const char* pkey, char flgs[37], int size[30],
                             double r2, QWidget* parent):
         QDialog( parent )
 {
@@ -128,10 +128,34 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[33], int size[22],
     ndxInPhPs_0 = pPhPs_0->currentIndex();
 
  //Page 2
-    spinBox_dc_sc_M->setValue(size[3]);
-    spinBox_ph_px_M->setValue(size[4]);
-    spinBox_ph_cf_N->setValue(size[1]);
-    spinBox_ph_cf_M->setValue(size[2]);
+    pnscM->setValue(size[3]);
+    pnpxM->setValue(size[4]);
+    pNcpN->setValue(size[1]);
+    pNcpM->setValue(size[2]);
+
+    ndqf->setValue(size[8]);
+    nrcp->setValue(size[9]);
+    pncsolv->setValue(size[22]);
+    pcsolv->setValue(size[23]);
+    pncdicl->setValue(size[24]);
+    pndicl->setValue(size[25]);
+    pndh->setValue(size[26]);
+
+// page3
+    ii = kin_t0->findText(QChar(flgs[29]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    if( ii >= 0  )
+       kin_t0->setCurrentIndex(ii);
+    ii = kin_t1->findText(QChar(flgs[30]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    if( ii >= 0  )
+       kin_t1->setCurrentIndex(ii);
+
+    nEIl->setValue(size[14]);
+    nEIp->setValue(size[15]);
+    nCDc->setValue(size[16]);
+    nSiT->setValue(size[29]);
+    nIsoC->setValue(size[18]);
+    nIsoS->setValue(size[19]);
+    mDe->setValue(size[20]);
 
     if( flgs[5] != 'N' )
     {
@@ -146,53 +170,39 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[33], int size[22],
     else
      checkBoxSorption->setChecked(false);
 
-
     spinBox_SurTypes_N->setValue(size[5]);
     QString str;
     lineEdit_surfArea->setValidator( new QDoubleValidator( lineEdit_surfArea ));
     lineEdit_surfArea->setText( str.setNum(r2) );
 
-//Page3
-    ii = kin_t0->findText(QChar(flgs[27]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
-      if( ii >= 0  )
-          kin_t0->setCurrentIndex(ii);
-    ii = kin_t1->findText(QChar(flgs[28]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
-        if( ii >= 0  )
-            kin_t1->setCurrentIndex(ii);
-
-    PsDiS->setChecked(flgs[21] == '+');
-
-    nlPh->setValue(size[6]);
-    nEIl->setValue(size[14]);
-    nlPc->setValue(size[7]);
-    nEIp->setValue(size[15]);
-    ndqf->setValue(size[8]);
-    nCDc->setValue(size[16]);
-    nrcp->setValue(size[9]);
-
-//Page4
-    ii = kin_t2->findText(QChar(flgs[29]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+//page4
+    ii = kin_t2->findText(QChar(flgs[31]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
         kin_t2->setCurrentIndex(ii);
-    ii = kin_t3->findText(QChar(flgs[30]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    ii = kin_t3->findText(QChar(flgs[32]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
         kin_t3->setCurrentIndex(ii);
-    ii = kin_t4->findText(QChar(flgs[31]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    ii = kin_t4->findText(QChar(flgs[33]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
         kin_t4->setCurrentIndex(ii);
-    ii = kin_t5->findText(QChar(flgs[32]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    ii = kin_t5->findText(QChar(flgs[34]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
         if( ii >= 0  )
             kin_t5->setCurrentIndex(ii);
+   ii = kin_t6->findText(QChar(flgs[35]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+            if( ii >= 0  )
+                kin_t6->setCurrentIndex(ii);
 
     nPRk->setValue(size[10]);
-    nIsoC->setValue(size[18]);
     nSkr->setValue(size[11]);
-    nIsoS->setValue(size[19]);
     nrpC->setValue(size[12]);
-    mDe->setValue(size[20]);
     numpC->setValue(size[13]);
+    pnaptC->setValue(size[27]);
+    pnAscC->setValue(size[28]);
 
 //Page5
+
+    nlPh->setValue(size[6]);
+    nlPc->setValue(size[7]);
     spinBoxSDrefLnk->setValue(size[0]);
 
     if( flgs[12] == '+' )
@@ -205,13 +215,13 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[33], int size[22],
 PhaseWizard::~PhaseWizard()
 {}
 
-void   PhaseWizard::getSizes( int size[22] )
+void   PhaseWizard::getSizes( int size[30] )
 {
     size[0]= spinBoxSDrefLnk->value();
-    size[1]= spinBox_ph_cf_N->value();
-    size[2]= spinBox_ph_cf_M->value();
-    size[3]= spinBox_dc_sc_M->value();
-    size[4]= spinBox_ph_px_M->value();
+    size[1]= pNcpN->value();
+    size[2]= pNcpM->value();
+    size[3]= pnscM->value();
+    size[4]= pnpxM->value();
     size[5]= spinBox_SurTypes_N->value();
 
     if( SCM_code->currentText()[0] != QChar('N') )
@@ -231,6 +241,17 @@ void   PhaseWizard::getSizes( int size[22] )
     size[13]= numpC->value();
     size[18]= nIsoC->value();
     size[11]= nSkr->value();
+
+    size[22]= pncsolv->value();
+    size[23]= pcsolv->value();
+    size[24]= pncdicl->value();
+    size[25]= pndicl->value();
+    size[26]= pndh->value();
+    size[29]= nSiT->value();
+    size[27]= pnaptC->value();
+    size[28]= pnAscC->value();
+
+    // 17, 21 reserved
 }
 
 double   PhaseWizard::getR2()
@@ -243,7 +264,7 @@ double   PhaseWizard::getR2()
 }
 
 
-void PhaseWizard::getFlags( char flgs[33] )
+void PhaseWizard::getFlags( char flgs[37] )
 {
   QString str;
 
@@ -263,13 +284,13 @@ void PhaseWizard::getFlags( char flgs[33] )
   str = pPhPs_0->currentText();
   flgs[6] = str[0].toLatin1();
 
-  if( spinBox_ph_cf_N->value() > 0 &&
-      spinBox_ph_cf_M->value() > 0 )
+  if( pNcpN->value() > 0 &&
+      pNcpM->value() > 0 )
     flgs[7] = '+';
   else flgs[7] = '-';
 
-  if( spinBox_dc_sc_M->value() > 0 /*&&
-      spinBox_ph_px_M->value() > 0*/ )
+  if( pnscM->value() > 0 /*&&
+      pnpxM->value() > 0*/ )
     flgs[8] = '+';
   else flgs[8] = '-';
 
@@ -306,17 +327,19 @@ void PhaseWizard::getFlags( char flgs[33] )
       flgs[12] = '-';
 
   str = kin_t0->currentText();
-  flgs[27] = str[0].toLatin1();
-  str = kin_t1->currentText();
-  flgs[28] = str[0].toLatin1();
-  str = kin_t2->currentText();
   flgs[29] = str[0].toLatin1();
-  str = kin_t3->currentText();
+  str = kin_t1->currentText();
   flgs[30] = str[0].toLatin1();
-  str = kin_t4->currentText();
+  str = kin_t2->currentText();
   flgs[31] = str[0].toLatin1();
-  str = kin_t5->currentText();
+  str = kin_t3->currentText();
   flgs[32] = str[0].toLatin1();
+  str = kin_t4->currentText();
+  flgs[33] = str[0].toLatin1();
+  str = kin_t5->currentText();
+  flgs[34] = str[0].toLatin1();
+  str = kin_t5->currentText();
+  flgs[35] = str[0].toLatin1();
 
   if( ndqf->value() > 0  )
       flgs[13] = '+';
@@ -328,30 +351,43 @@ void PhaseWizard::getFlags( char flgs[33] )
       flgs[15] = '+';
    else flgs[15] = '-';
   if( nEIl->value() > 0 )
-      flgs[17] = '+';
-   else flgs[17] = '-';
-  if( nCDc->value() > 0 )
-      flgs[18] = '+';
-   else flgs[18] = '-';
-  if( nIsoC->value() > 0 )
-      flgs[19] = '+';
-   else flgs[19] = '-';
-  if( nIsoS->value() > 0 )
       flgs[20] = '+';
    else flgs[20] = '-';
-  if( PsDiS->isChecked() )
+  if( nCDc->value() > 0 )
       flgs[21] = '+';
    else flgs[21] = '-';
-  if( nPRk->value() > 0 ) // && nSkr->value() > 0 )
+  if( nIsoC->value() > 0 )
+      flgs[22] = '+';
+   else flgs[22] = '-';
+  if( nIsoS->value() > 0 )
       flgs[23] = '+';
    else flgs[23] = '-';
+  if( nPRk->value() > 0 ) // && nSkr->value() > 0 )
+      flgs[26] = '+';
+   else flgs[26] = '-';
   if( numpC->value() > 0 )
+      flgs[27] = '+';
+   else flgs[27] = '-';
+
+//---------------------------------------------------
+  if( pncsolv->value() > 0 && pcsolv->value() > 0 )
+      flgs[16] = '+';
+   else flgs[16] = '-';
+  if( pndicl->value() > 0 && pncdicl->value() > 0 )
+      flgs[17] = '+';
+   else flgs[17] = '-';
+  if( pndh->value() > 0  )
+      flgs[18] = '+';
+   else flgs[18] = '-';
+  if( nSiT->value() > 0  )
       flgs[24] = '+';
    else flgs[24] = '-';
+  if( pnaptC->value() > 0  )
+      flgs[28] = '+';
+   else flgs[28] = '-';
+// 19, 25, 36 reserved
 
 }
-
-
 
 
 void

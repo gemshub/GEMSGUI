@@ -60,14 +60,14 @@ void TPhase::ods_link( int q)
     aObj[ o_phnsit].SetPtr(&ph[q].NsuT );  // i 2
 
 // new 06/06/12
-    aObj[ o_phkin_t].SetPtr(  ph[q].kin_t );  // a 6
+    aObj[ o_phkin_t].SetPtr(  ph[q].kin_t );  // a 8
     aObj[ o_phpdqf].SetPtr(  &ph[q].Pdqf );  // a 7
     aObj[ o_phpeipc].SetPtr(  &ph[q].PEIpc );  // a 6
-    aObj[ o_phprpcon].SetPtr(  &ph[q].PrpCon );  // a 4
+    aObj[ o_phprpcon].SetPtr(  &ph[q].PrpCon );  // a 3
     aObj[ o_phnlph].SetPtr(  &ph[q].nlPh );  // i 9
-    aObj[ o_phnumpc].SetPtr(  &ph[q].nPRk );  // i 5
+    aObj[ o_phnumpc].SetPtr(  &ph[q].nPRk );  // i 6
     aObj[ o_phnei1].SetPtr(  &ph[q].nEIl );  // i 4
-    aObj[ o_phnisoc].SetPtr(  &ph[q].nIsoC );  // i 4
+    aObj[ o_phnisoc].SetPtr(  &ph[q].nIsoC );  // i 5
     aObj[ o_phvpor].SetPtr(  &ph[q].Vpor );  // f 4
     aObj[ o_phpsdc].SetPtr(  &ph[q].psdC );  // f 4
 
@@ -148,8 +148,8 @@ aObj[o_ph_nxsub].SetDim( ph[q].nDC, ph[q].nMoi );
 //    aObj[ o_phtprn].SetDim( 1,strlen(ph[q].tprn));
 
 // new record 06/06/12
-aObj[ o_phstr2].SetPtr(  &ph[q].Pdqf ); // a 23
-aObj[ o_phdim2].SetPtr( &ph[q].nlPh );   // i 22
+aObj[ o_phstr2].SetPtr(  &ph[q].Pdqf ); // a 24
+aObj[ o_phdim2].SetPtr( &ph[q].nlPh );   // i 24
 aObj[ o_phfloat2].SetPtr(&ph[q].Vpor );  // f 8
 
 //dynamic
@@ -224,6 +224,8 @@ aObj[ o_phdhc].SetPtr(  ph[q].dhc );
 aObj[ o_phdhc].SetDim( 1, ph[q].ndh );
 aObj[ o_phapcon].SetPtr(  ph[q].apCon );
 aObj[ o_phapcon].SetDim( ph[q].nPRk, ph[q].nSkr* ph[q].naptC );
+aObj[ o_phascp].SetPtr(  ph[q].Ascp );
+aObj[ o_phascp].SetDim( 1, ph[q].nAscC );
 
  php=&ph[q];
 }
@@ -300,6 +302,7 @@ if(!ph[q].ipxt )
     ph[q].dielc =  (float *)aObj[ o_phdielc].GetPtr();
     ph[q].dhc  =  (float *)aObj[ o_phdhc].GetPtr();
     ph[q].apCon =  (float *)aObj[ o_phapcon].GetPtr();
+    ph[q].Ascp =  (float *)aObj[ o_phascp].GetPtr();
 }
 
 
@@ -371,6 +374,7 @@ void TPhase::dyn_kill(int q)
     ph[q].dielc =  (float *)aObj[ o_phdielc].Free();
     ph[q].dhc  =  (float *)aObj[ o_phdhc].Free();
     ph[q].apCon =  (float *)aObj[ o_phapcon].Free();
+    ph[q].Ascp =  (float *)aObj[ o_phascp].Free();
 }
 
 
@@ -569,6 +573,11 @@ void TPhase::dyn_new(int q)
         ph[q].apCon =  (float *)aObj[ o_phapcon].Free();
     }
 
+    if( ph[q].PapCon > 0 )
+      ph[q].Ascp =  (float *)aObj[ o_phascp].Alloc( 1, ph[q].nAscC, F_ );
+    else
+        ph[q].Ascp =  (float *)aObj[ o_phascp].Free();
+
     if( ph[q].PumpCon == S_ON )
     {
       ph[q].umpCon =  (float *)aObj[ o_phumpcon].Alloc( ph[q].nDC, ph[q].numpC, F_ );
@@ -597,12 +606,10 @@ void TPhase::dyn_new(int q)
     else
      ph[q].DQFc =  (float *)aObj[ o_phdqfc].Free();
 
-    if( ph[q].Pdqf == S_ON )
+    if( ph[q].Prcp == S_ON )
       ph[q].rcpc =  (float *)aObj[ o_phrcpc].Alloc( ph[q].nDC, ph[q].nrcp, F_ );
     else
       ph[q].rcpc =  (float *)aObj[ o_phrcpc].Free();
-
-
 
     // added 17/12/12
     if( ph[q].Psol == S_ON )
@@ -717,7 +724,7 @@ void TPhase::set_def( int q)
     ph[q].nxSub = 0;
 
     // new record 06/06/12
-    memcpy( ph[q].kin_t, "NNNNNN", 6 );
+    memcpy( ph[q].kin_t, "NNNNNNNN", 8 );
     memcpy( &ph[q].Pdqf, "------------------", 17 );
 
     //short
@@ -736,6 +743,7 @@ void TPhase::set_def( int q)
     ph[q].nrpC = 0;
     ph[q].naptC = 0;
     ph[q].numpC = 0;
+    ph[q].nAscC = 0;
     ph[q].nEIl = 0;
     ph[q].nEIp = 1;
     ph[q].nCDc = 0;
@@ -811,12 +819,12 @@ TPhase::MakeQuery()
 {
 //    pImp->MakeQuery();   Preparing for calling Phase Wizard
     const char * p_key;
-    char flgs[33];
-    int size[22];
+    char flgs[37];
+    int size[30];
     double r2 = php->Asur;
 
     p_key  = db->PackKey();
-    memcpy( flgs, php->sol_t, 33);
+    memcpy( flgs, php->sol_t, 37);
     size[0] = php->Nsd;
     size[1] = php->ncpN;
     size[2] = php->ncpM;
@@ -840,12 +848,22 @@ TPhase::MakeQuery()
     size[19] = php->nIsoS;
     size[20] = php->mDe;
     size[21] = php->iRes4;
+    // added 18/12/12
+    size[22] = php->ncsolv;
+    size[23] = php->nsolv;
+    size[24] = php->ncdiel;
+    size[25] = php->ndiel;
+    size[26] = php->ndh;
+    size[27] = php->naptC;
+    size[28] = php->nAscC;
+    size[29] = php->nSiT;
+
 
     if( !vfPhaseSet( window(), p_key, flgs, size, r2 ))
          Error( p_key, "Phase record configuration cancelled by the user!" );
      //  return;   // cancel
 
-    memcpy( php->sol_t, flgs, 33);
+    memcpy( php->sol_t, flgs, 37);
     php->Nsd = (short)size[0];
     php->ncpN = (short)size[1];
     php->ncpM = (short)size[2];
@@ -868,6 +886,15 @@ TPhase::MakeQuery()
     php->nIsoS = (short)size[19];
     php->mDe = (short)size[20];
     php->iRes4 = (short)size[21];
+    // added 18/12/12
+    php->ncsolv = (short)size[22];
+    php->nsolv = (short)size[23];
+    php->ncdiel= (short)size[24];
+    php->ndiel= (short)size[25];
+    php->ndh= (short)size[26];
+    php->naptC= (short)size[27];
+    php->nAscC= (short)size[28];
+    php->nSiT= (short)size[29];
 
     php->Asur = r2;
 }

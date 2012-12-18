@@ -72,15 +72,16 @@ Pres2,  // new: reserved
 PrpCon, // new: flag for rpCon array of kinetic rate constants, feSAr, ocPRk arrays {+*-}
 PumpCon,// new: flag for umpCon array of uptake model parameters {+*-}
 PapCon,  /// new: flag for lDCr and apCon arrays for parameters of species involved in activity product terms
-PRes4,  // new: reserved
 
-kin_t[6],
+kin_t[8],    // was 6 now 8!
   // new:    Type of sorption/ionex/polyelectrolyte isotherm model { N ... }
   // new:    Type of sorption EIL model { N ...  }
-  /// new:    Type of mineral-aqueous/gas reaction kinetics rate model:  { N T W ... TBD }
-  /// new:    Direction of the kinetic process to which the rate model refers { N D P G B ... TBD }
-  /// new:    Type of the uptake kinetics model { N E M ... TBD }
-  /// new:    Type of metastability links of this phase to other phases { N S P ... TBD }
+  // new:    Type of mineral-aqueous/gas reaction kinetics rate model:  { N T W ... TBD }
+  // new:    Direction of the kinetic process to which the rate model refers { N D P G B ... TBD }
+  // new:    Type of the uptake kinetics model { N E M ... TBD }
+  // new:    Type of metastability links of this phase to other phases { N S P ... TBD }
+  /// new:   Type of particle/pore size distribution and specific surface area correction { N U B ... }
+  /// new:   Reserved { N }
 
     name[MAXFORMULA],   // Full name of phase
     notes[MAXFORMULA]  // Comments
@@ -108,9 +109,9 @@ ndh,    /// TW new: number of generic DH coefficients (rows in dhc array)
 nPRk, // nFaces, new: number of «parallel reactions» that affect amount constraints for k-th phase (1, 2, 3, …), 1 by default
 nSkr, // nReg,  new: number of (aqueous or gaseous or surface) species from other reacting phases involved
 nrpC,  // new: number of parameter (coefficients) involved in “parallel reaction” terms (0 or 12 + 3res.)
-naptC, /// new: number of parameter (coefficients) per species involved in “activity product” terms (0 or 1)
+naptC, // new: number of parameter (coefficients) per species involved in “activity product” terms (0 or 1)
 numpC, // new: number of uptake model parameter coefficients (per end member)
-iRes2, /// new: reserved
+nAscC, /// new: number of parameter coefficients in specific surface area correction equation ( 0 to 5 )
 
 // TSorpMod stuff EIL model
 nEIl,  // new: number of electrostatic model layers (default: 0, maximum 4)
@@ -179,8 +180,9 @@ fRes2, // new: reserved
 // TKinMet stuff
 *feSAr,  // new: fractions of surface area of the solid related to different parallel reactions [nPRk]
 *rpCon,  // new: Array of kinetic rate constants for faces and regions [nPRk][nrpC]
-*apCon, /// new: Array of parameters per species involved in “activity product” terms [nPRk][nSkr][naptC]
+*apCon,  // new: Array of parameters per species involved in “activity product” terms [nPRk][nSkr][naptC]
 *umpCon, // new: Array of uptake model parameters [nDC][numpC]
+*Ascp,   /// new: parameter coefficients of equation for correction of specific surface area [nAscC]
 ;
 // Old sorption model stuff
   float (*MSDT)[2]; // SAT: Max & min density of reacted species, 1/nm2 [NsuT]
