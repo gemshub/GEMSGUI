@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>827</width>
-    <height>593</height>
+    <width>761</width>
+    <height>644</height>
    </rect>
   </property>
   <property name="font">
@@ -21,7 +21,7 @@
   <property name="windowTitle">
    <string>GEM-Selektor Proces</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_6">
+  <layout class="QVBoxLayout" name="verticalLayout_9">
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="mouseTracking">
@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -953,10 +953,23 @@
          </layout>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="textLabel2_2">
+         <property name="text">
+          <string>Attention! For TSolMod built-in mixing models that use dc_cf and/or ipxT, pc_cf data objects</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignVCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page_3">
-      <layout class="QVBoxLayout" name="verticalLayout_9">
+      <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
         <widget class="QLabel" name="label_2">
          <property name="sizePolicy">
@@ -1171,7 +1184,7 @@
           <item row="2" column="2">
            <widget class="QLabel" name="textLabel4">
             <property name="text">
-             <string>Enter here the specific surface area A of the sorbent (in m2 per gram), A&gt;0</string>
+             <string>Enter here the specific surface area A of the sorbent (in m2 per gram), A&gt;0                    </string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
