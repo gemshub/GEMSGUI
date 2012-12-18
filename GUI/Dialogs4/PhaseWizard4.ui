@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>751</width>
-    <height>715</height>
+    <width>827</width>
+    <height>593</height>
    </rect>
   </property>
   <property name="font">
@@ -40,10 +40,10 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page">
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QLabel" name="pageName">
          <property name="sizePolicy">
@@ -107,25 +107,9 @@
        <item>
         <widget class="QGroupBox" name="groupBox_13">
          <property name="title">
-          <string/>
+          <string>Phase aggregate state code:</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QLabel" name="ModelCodeLabel_2">
-            <property name="text">
-             <string>Phase aggregate state code:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignBottom</set>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-            <property name="buddy">
-             <cstring>ModelCode</cstring>
-            </property>
-           </widget>
-          </item>
           <item>
            <widget class="QComboBox" name="pPhPs_0">
             <item>
@@ -560,10 +544,44 @@
          </layout>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="textLabel10_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="text">
+          <string>Selection of the codes below will configure the Phase record and tell the program what kind of phase.</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::AutoText</enum>
+         </property>
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <property name="openExternalLinks">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">
-      <layout class="QVBoxLayout" name="verticalLayout_4">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QLabel" name="label">
          <property name="sizePolicy">
@@ -591,21 +609,216 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="QLabel" name="textLabel2">
+         <property name="text">
+          <string>Attention! For TSolMod built-in mixing models that use dc_cf and/or ipxT, pc_cf data objects, relevant dimensions will be allocated automatically. Any array will be allocated only if all its dimensions are not zeros. </string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignVCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="group1">
          <property name="title">
-          <string>Optional dimensions to set when built-in functions or scripts for the mixing model shall be used. </string>
+          <string>Group 1</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout90">
-          <item>
-           <widget class="QLabel" name="textLabel2">
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="pnscM">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="textLabel1">
             <property name="text">
-             <string>Attention! For TSolMod built-in mixing models that use dc_cf and/or ipxT, pc_cf data objects, relevant dimensions will be allocated automatically. Any array will be allocated only if all its dimensions are not zeros. </string>
+             <string>Number of parameters per solution phase species (cols in scoef table)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>pnscM</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="ndqf"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>number of DQF parameter coefficients per end member</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QSpinBox" name="nrcp"/>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>number of reciprocal parameter coefficients per end member</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="group2">
+         <property name="title">
+          <string>Group 2</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="pNcpN">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximum">
+             <number>999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="textLabel1_3">
+            <property name="text">
+             <string>Number of interaction parameters (rows in pnc and ipx tables)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>pNcpN</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="pnpxM">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="textLabel1_2">
+            <property name="text">
+             <string>Maximum order of interaction parameters (cols in ipx, to set up on remake)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>pnpxM</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QSpinBox" name="pNcpM">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="textLabel1_3_2">
+            <property name="text">
+             <string> Number of coefficients per IP (cols in pnc table)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>pNcpM</cstring>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="group3">
+         <property name="title">
+          <string>Group 3</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="pncsolv">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximum">
+             <number>99</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="textLabel1_4">
+            <property name="text">
+             <string>number of solvent parameter coefficients (columns in solvc array)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -615,351 +828,126 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QGroupBox" name="group1">
-            <property name="title">
-             <string>Group 1</string>
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="pcsolv">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <layout class="QGridLayout" name="gridLayout">
-             <item row="0" column="0">
-              <widget class="QSpinBox" name="pnscM">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>50</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="textLabel1">
-               <property name="text">
-                <string>Number of parameters per solution phase species (cols in scoef table)</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignVCenter</set>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
-               </property>
-               <property name="buddy">
-                <cstring>pnscM</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QSpinBox" name="ndqf"/>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLabel" name="label_13">
-               <property name="text">
-                <string>number of DQF parameter coefficients per end member</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QSpinBox" name="nrcp"/>
-             </item>
-             <item row="2" column="1">
-              <widget class="QLabel" name="label_14">
-               <property name="text">
-                <string>number of reciprocal parameter coefficients per end member</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
            </widget>
           </item>
-          <item>
-           <widget class="QGroupBox" name="group2">
-            <property name="title">
-             <string>Group 2</string>
+          <item row="1" column="1">
+           <widget class="QLabel" name="textLabel1_5">
+            <property name="text">
+             <string>number of solvent interaction parameters (rows in solvc array)</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout_2">
-             <item row="0" column="0">
-              <widget class="QSpinBox" name="pNcpN">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>50</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximum">
-                <number>999</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="textLabel1_3">
-               <property name="text">
-                <string>Number of interaction parameters (rows in pnc and ipx tables)</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignVCenter</set>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
-               </property>
-               <property name="buddy">
-                <cstring>pNcpN</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QSpinBox" name="pnpxM">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>50</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLabel" name="textLabel1_2">
-               <property name="text">
-                <string>Maximum order of interaction parameters (cols in ipx, to set up on remake)</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignVCenter</set>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
-               </property>
-               <property name="buddy">
-                <cstring>pnpxM</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QSpinBox" name="pNcpM">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>50</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QLabel" name="textLabel1_3_2">
-               <property name="text">
-                <string> Number of coefficients per IP (cols in pnc table)</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignVCenter</set>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
-               </property>
-               <property name="buddy">
-                <cstring>pNcpM</cstring>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
-          <item>
-           <widget class="QGroupBox" name="group3">
-            <property name="title">
-             <string>Group 3</string>
+          <item row="2" column="0">
+           <widget class="QSpinBox" name="pncdicl">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <layout class="QGridLayout" name="gridLayout_3">
-             <item row="0" column="0">
-              <widget class="QSpinBox" name="pncsolv">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>50</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximum">
-                <number>99</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="textLabel1_4">
-               <property name="text">
-                <string>number of solvent parameter coefficients (columns in solvc array)</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignVCenter</set>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
-               </property>
-               <property name="buddy">
-                <cstring>pNcpN</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QSpinBox" name="pcsolv">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>50</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLabel" name="textLabel1_5">
-               <property name="text">
-                <string>number of solvent interaction parameters (rows in solvc array)</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignVCenter</set>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
-               </property>
-               <property name="buddy">
-                <cstring>pnpxM</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QSpinBox" name="pncdicl">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>50</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QLabel" name="textLabel1_3_3">
-               <property name="text">
-                <string>number of dielectric constant coefficients (colums in dielc array)</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignVCenter</set>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
-               </property>
-               <property name="buddy">
-                <cstring>pNcpM</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QSpinBox" name="pndicl">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>50</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximum">
-                <number>99</number>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QLabel" name="textLabel1_3_4">
-               <property name="text">
-                <string>number of dielectric constant parameters (rows in dielc array)</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignVCenter</set>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
-               </property>
-               <property name="buddy">
-                <cstring>pNcpM</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="QSpinBox" name="pndh">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>50</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximum">
-                <number>99</number>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QLabel" name="textLabel1_3_5">
-               <property name="text">
-                <string>number of generic DH coefficients (rows in dhc array)</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignVCenter</set>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
-               </property>
-               <property name="buddy">
-                <cstring>pNcpM</cstring>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="textLabel1_3_3">
+            <property name="text">
+             <string>number of dielectric constant coefficients (colums in dielc array)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QSpinBox" name="pndicl">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximum">
+             <number>99</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="textLabel1_3_4">
+            <property name="text">
+             <string>number of dielectric constant parameters (rows in dielc array)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QSpinBox" name="pndh">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximum">
+             <number>99</number>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="textLabel1_3_5">
+            <property name="text">
+             <string>number of generic DH coefficients (rows in dhc array)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
          </layout>
@@ -1713,10 +1701,6 @@
   <tabstop>DcEqModeCode</tabstop>
   <tabstop>PhEqModeCode</tabstop>
   <tabstop>DcEqLinkMode</tabstop>
-  <tabstop>pnscM</tabstop>
-  <tabstop>pNcpN</tabstop>
-  <tabstop>pnpxM</tabstop>
-  <tabstop>pNcpM</tabstop>
   <tabstop>spinBoxSDrefLnk</tabstop>
   <tabstop>pHelp</tabstop>
   <tabstop>pBack</tabstop>

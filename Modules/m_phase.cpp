@@ -573,7 +573,7 @@ void TPhase::dyn_new(int q)
         ph[q].apCon =  (float *)aObj[ o_phapcon].Free();
     }
 
-    if( ph[q].PapCon > 0 )
+    if( ph[q].nAscC > 0 )
       ph[q].Ascp =  (float *)aObj[ o_phascp].Alloc( 1, ph[q].nAscC, F_ );
     else
         ph[q].Ascp =  (float *)aObj[ o_phascp].Free();
