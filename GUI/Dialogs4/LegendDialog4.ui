@@ -22,7 +22,7 @@
    <string>Legend and Configuration for: </string>
   </property>
   <property name="modal">
-   <bool>false</bool>
+   <bool>true</bool>
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0">

@@ -838,7 +838,7 @@ NEW_PHASE_AGAIN:
 // AqGasKey - input old selection, return new selection
 void TRMults::SelectAqGasPhase( char AqGasType, TCStringArray& AqGasKey )
 {
-    int ii, jj;
+    uint ii, jj;
     gstring typePhase, msg1, msg2;
     TCStringArray aPhaseType;
     TCStringArray aKeysList;

@@ -22,7 +22,7 @@
    <string>GEMS Data Object Cell Calculator</string>
   </property>
   <property name="modal">
-   <bool>false</bool>
+   <bool>true</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">

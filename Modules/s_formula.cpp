@@ -136,7 +136,7 @@ void Formuan::xblanc( string& str )
 {
     if(str.empty())
       return;
-    int ti = str.find_first_not_of(BLANK_SYMBOLS);
+    size_t ti = str.find_first_not_of(BLANK_SYMBOLS);
     if( ti == string::npos ) // no charge token
        str = "";
     else
@@ -151,11 +151,11 @@ void Formuan::xblanc( string& str )
 
 void Formuan::scanCharge( )
 {
-  int ti = form_str.find_last_of(CHARGE_TOK );
+  size_t ti = form_str.find_last_of(CHARGE_TOK );
   if( ti == string::npos ) // no charge token
      return;
 
-  int pp = form_str.find( B_VALENT, ti);
+  size_t pp = form_str.find( B_VALENT, ti);
   if( pp != string::npos )   // no charge (this is valence)
       return;
 
@@ -285,7 +285,7 @@ void Formuan::getReal( double& valReal, string& cur)
     if( cur.empty() )
         return;
 
-    int ti = cur.find_first_not_of(FLOAT_DIGITS);
+    size_t ti = cur.find_first_not_of(FLOAT_DIGITS);
     if(ti == 0)
       return;  // next token no real
 
@@ -314,7 +314,7 @@ void Formuan::scanValence( int& val, string& cur)
     if(cur.empty())
         Error( cur.c_str(),  "Term valence scan error");
 
-    int ti = cur.find_first_of(B_VALENT);
+    size_t ti = cur.find_first_of(B_VALENT);
     if( ti >= 3 || ti==string::npos )
         Error( cur.c_str(),  "Term valence scan error");
 
@@ -338,7 +338,7 @@ void Formuan::scanIsotope( string& isotop, string& cur)
     if(cur.empty())
         Error( cur.c_str(),  "Term isotope scan error");
 
-    int ti = cur.find_first_of(B_ISOTOPE);
+    size_t ti = cur.find_first_of(B_ISOTOPE);
     if( ti >= MAXICNAME || ti==string::npos )
         Error( cur.c_str(),  "Term isotope scan error");
 
@@ -373,7 +373,7 @@ void Formuan::scanICsymb( string& icName, string& cur)
 int Formuan::scanMoiety( TIArray<MOITERM>& moit_ )
 {
   string cur_ = form_str;
-  int endmoi;
+  size_t endmoi;
   string moiName;
   double nj;          // moiety-site occupancy.
   moit_.Clear();

@@ -618,7 +618,7 @@ void ElementsDialog::SetData()
 
     el_data.aSelNames = el_data.getFlags();
     el_data.aSelNames += "<TDBfilters> = ";
-    for( int ii=0; ii<selNames.GetCount(); ii++)
+    for( uint ii=0; ii<selNames.GetCount(); ii++)
     {
         el_data.aSelNames += selNames[ii];
         if( ii<selNames.GetCount()-1 )
@@ -760,7 +760,8 @@ void ElementsDialog::setTreeWidget()
     pkern = standardModel->invisibleRootItem();
     standardModel->setHorizontalHeaderLabels( QStringList() <<  "Built-in Database"   <<  "Version");
 
-    int ii, jj;
+    uint ii;
+    int jj;
     QStandardItem* pdb;
     QStandardItem* pdb_child;
     QList<QStandardItem *> rowItems;
@@ -867,7 +868,7 @@ void ElementsDialog::getSelectionTreeWidget()
   for(int jj=0; jj<pkern->rowCount(); jj++ )
       getTag( tag, pkern->child(jj));
 
-  for(int ii=0; ii<selNames.GetCount(); ii++ )
+  for(uint ii=0; ii<selNames.GetCount(); ii++ )
       cout << selNames[ii].c_str() << endl;
 }
 
@@ -894,7 +895,7 @@ void ElementsDialog::setSelectionTreeWidget()
   // clear all check in ftreeWidget ??!!
 
  gstring name;
- for(int ii=0; ii<selNames.GetCount(); ii++ )
+ for(uint ii=0; ii<selNames.GetCount(); ii++ )
      for(int jj=0; jj<pkern->rowCount(); jj++ )
      {
          name = selNames[ii];
@@ -950,7 +951,7 @@ int ElementsDialog::isOpenFile( gstring& name  )
 
     // cout << "Test name" << fname.c_str() << endl;
 
-    for(int ii=0; ii < selNames.GetCount(); ii++ )
+    for(uint ii=0; ii < selNames.GetCount(); ii++ )
     {
         if(  name.find( selNames[ii] ) != gstring::npos )
             return 1;

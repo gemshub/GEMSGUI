@@ -111,7 +111,7 @@ GEM2MTWizard::CmNext()
     ndx++;
 
     if( ndx == gems3k_exchange )
-        if( pselS->isChecked()|| pselF->isChecked()  )
+    {    if( pselS->isChecked()|| pselF->isChecked()  )
         {
             checkArrays->setChecked(true);
             chInterp->setChecked(true);
@@ -127,7 +127,7 @@ GEM2MTWizard::CmNext()
             pTPInput->setEnabled(true);
             pTPlookup->setEnabled(true);
          }
-
+    }
 
     if(   ndx == T_P_lookup )
      { if( !checkArrays->isChecked() || !pTPInput->isEnabled() )
@@ -967,7 +967,7 @@ inline int GEM2MTWizard::findVTKarr( int vtk1  )
   //if( vtk1 == f_bPS )
   // return po strokam
 
-  for( int ii=0; ii<pNdx.GetCount(); ii++ )
+  for( uint ii=0; ii<pNdx.GetCount(); ii++ )
    if( pNdx[ii] == vtk1 )
      return ii+1;
 
@@ -1009,7 +1009,8 @@ void GEM2MTWizard::setVTK( TCIntArray vtk1, TCIntArray vtk2  )
 
 void GEM2MTWizard::getVTK( TCIntArray& vtk1, TCIntArray& vtk2  )
 {
-  int page_, vt_1;
+  uint page_;
+  int vt_1;
   vtk1.Clear();
   vtk2.Clear();
   if( !c_PvnVTK->isChecked() )
