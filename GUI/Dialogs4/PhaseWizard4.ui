@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -107,7 +107,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_13">
          <property name="title">
-          <string>Phase aggregate state code:</string>
+          <string>Select a phase aggregate state code:</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
@@ -559,7 +559,7 @@
           <enum>QFrame::Plain</enum>
          </property>
          <property name="text">
-          <string>Selection of the codes below will configure the Phase record and tell the program what kind of phase.</string>
+          <string>To set up a sorption, layer- or a kinetically-controlled phase, please proceed to next wizard pages.</string>
          </property>
          <property name="textFormat">
           <enum>Qt::AutoText</enum>
@@ -597,7 +597,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 2 - Phase Model-Specific Settings</string>
+          <string>Step 2 - Phase Model-of-Mixing Specific Dimensions</string>
          </property>
         </widget>
        </item>
@@ -611,7 +611,7 @@
        <item>
         <widget class="QLabel" name="textLabel2">
          <property name="text">
-          <string>Attention! For TSolMod built-in mixing models that use dc_cf and/or ipxT, pc_cf data objects, relevant dimensions will be allocated automatically. Any array will be allocated only if all its dimensions are not zeros. </string>
+          <string>For TSolMod built-in non-ideal mixing models that use dc_cf and/or ipxT, pc_cf data objects, please set the number of interaction parameters; other relevant dimensions will be allocated automatically. </string>
          </property>
          <property name="alignment">
           <set>Qt::AlignVCenter</set>
@@ -624,7 +624,7 @@
        <item>
         <widget class="QGroupBox" name="group1">
          <property name="title">
-          <string>Group 1</string>
+          <string>Parameters and coefficients related to a Dependent Component</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
@@ -685,7 +685,7 @@
        <item>
         <widget class="QGroupBox" name="group2">
          <property name="title">
-          <string>Group 2</string>
+          <string>Interaction parameters, coefficients, and indexes related to mixing in the whole phase</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
@@ -710,7 +710,7 @@
           <item row="0" column="1">
            <widget class="QLabel" name="textLabel1_3">
             <property name="text">
-             <string>Number of interaction parameters (rows in pnc and ipx tables)</string>
+             <string>Number of interaction parameters (rows in ph_cf and ipxT tables)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -742,7 +742,7 @@
           <item row="1" column="1">
            <widget class="QLabel" name="textLabel1_2">
             <property name="text">
-             <string>Maximum order of interaction parameters (cols in ipx, to set up on remake)</string>
+             <string>Maximum order of interaction parameters (columns in ipxT list)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -774,7 +774,7 @@
           <item row="2" column="1">
            <widget class="QLabel" name="textLabel1_3_2">
             <property name="text">
-             <string> Number of coefficients per IP (cols in pnc table)</string>
+             <string> Number of coefficients per interaction parameter (columns in ph_cf table)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -793,7 +793,7 @@
        <item>
         <widget class="QGroupBox" name="group3">
          <property name="title">
-          <string>Group 3</string>
+          <string>Parameters and coefficients related to multi-solvent aqueous electrolyte models (under construction)</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">
@@ -956,7 +956,7 @@
        <item>
         <widget class="QLabel" name="textLabel2_2">
          <property name="text">
-          <string>Attention! For TSolMod built-in mixing models that use dc_cf and/or ipxT, pc_cf data objects</string>
+          <string>Any parameter coefficients array will be allocated only if all its dimensions are not zeros. </string>
          </property>
          <property name="alignment">
           <set>Qt::AlignVCenter</set>
@@ -985,7 +985,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 3 - sorption model settings</string>
+          <string>Step 3 - Sorption Phase Model Settings</string>
          </property>
         </widget>
        </item>
@@ -1005,7 +1005,7 @@
           <item>
            <widget class="QLabel" name="label_25">
             <property name="text">
-             <string>Type of sorption/ionex/polyelectrolyte isotherm model { N  }</string>
+             <string>Select a type of (ad)sorption/ ion exchange/ polyelectrolyte isotherm model, or leave 'N' and go to next wizard step</string>
             </property>
            </widget>
           </item>
@@ -1021,7 +1021,7 @@
           <item>
            <widget class="QLabel" name="label_26">
             <property name="text">
-             <string>Type of sorption EIL model { N   }</string>
+             <string>Select a type of EIL (Electrified Interface Layer) model for this sorption phase {  N   }</string>
             </property>
            </widget>
           </item>
@@ -1040,7 +1040,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_10">
          <property name="title">
-          <string>Dimensions related to adsorption models</string>
+          <string>Dimensions related to sorption models</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0">
@@ -1056,7 +1056,7 @@
           <item row="0" column="1">
            <widget class="QLabel" name="label_15">
             <property name="text">
-             <string>number of electrostatic model layers </string>
+             <string>number of EIL model layers { 0 1 2 3 }</string>
             </property>
            </widget>
           </item>
@@ -1066,7 +1066,7 @@
           <item row="1" column="1">
            <widget class="QLabel" name="label_16">
             <property name="text">
-             <string>number of electrostatic model parameters</string>
+             <string>number of EIL model parameters</string>
             </property>
            </widget>
           </item>
@@ -1076,7 +1076,7 @@
           <item row="2" column="1">
            <widget class="QLabel" name="label_17">
             <property name="text">
-             <string>number of charge distribution coeff. </string>
+             <string>number of charge distribution coefficients</string>
             </property>
            </widget>
           </item>
@@ -1086,7 +1086,7 @@
           <item row="3" column="1">
            <widget class="QLabel" name="label_22">
             <property name="text">
-             <string>number of site types (to set up on remake)</string>
+             <string>number of (ad)sorption site types { 0 1 2 3 ... 10 }</string>
             </property>
            </widget>
           </item>
@@ -1096,7 +1096,7 @@
           <item row="4" column="1">
            <widget class="QLabel" name="label_28">
             <property name="text">
-             <string>number of isotherm par. coeff. per surface species DC </string>
+             <string>number of (ad)sorption isotherm parameter coefficients per DC ( surface species) </string>
             </property>
            </widget>
           </item>
@@ -1106,7 +1106,7 @@
           <item row="5" column="1">
            <widget class="QLabel" name="label_30">
             <property name="text">
-             <string>number of isotherm par. coeff. per surface site</string>
+             <string>number of (ad)sorption isotherm parameter coefficients per surface site</string>
             </property>
            </widget>
           </item>
@@ -1116,7 +1116,7 @@
           <item row="6" column="1">
            <widget class="QLabel" name="label_31">
             <property name="text">
-             <string>maximum denticity number for surface species</string>
+             <string>maximum denticity number for surface species { 0 1 2 3 4 5 6 }</string>
             </property>
            </widget>
           </item>
@@ -1126,13 +1126,13 @@
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Set items in this box only if this is a old style sorption phase  </string>
+          <string>Set items in this box only if this phase is an old-style sorption phase, or leave unchanged </string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="0" column="0" colspan="3">
            <widget class="QCheckBox" name="checkBoxSorption">
             <property name="text">
-             <string>Check if surface complexation will be considered in this (sorption) phase</string>
+             <string>Check if surface complexation needs to be considered in this (sorption) phase</string>
             </property>
            </widget>
           </item>
@@ -1184,7 +1184,7 @@
           <item row="2" column="2">
            <widget class="QLabel" name="textLabel4">
             <property name="text">
-             <string>Enter here the specific surface area A of the sorbent (in m2 per gram), A&gt;0                    </string>
+             <string>Enter here the specific surface area A of the sorbent (in m2 per gram), A&gt;0                            </string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
@@ -1213,7 +1213,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 4 - Metastability and kinetics model settings</string>
+          <string>Step 4 - Phase Metastability and Kinetic Model Settings</string>
          </property>
         </widget>
        </item>
@@ -1227,13 +1227,13 @@
        <item>
         <widget class="QGroupBox" name="groupBox_8">
          <property name="title">
-          <string>Selection of KinMet models</string>
+          <string>Select here the codes defining the KinMet model, or leave 'N' in all places and go to next wizard step </string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_10">
           <item>
            <widget class="QLabel" name="label_7">
             <property name="text">
-             <string>Type of mineral-aqueous/gas reaction kinetics rate model</string>
+             <string>Set a type of mineral-fluid reaction kinetic rate model</string>
             </property>
            </widget>
           </item>
@@ -1259,7 +1259,7 @@
           <item>
            <widget class="QLabel" name="label_8">
             <property name="text">
-             <string>Direction of the kinetic process to which the rate model refers</string>
+             <string>Choose a code of direction of the kinetically controlled process</string>
             </property>
            </widget>
           </item>
@@ -1295,7 +1295,7 @@
           <item>
            <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>Type of the uptake kinetics model</string>
+             <string>Select a type of the minor/trace element uptake kinetics model</string>
             </property>
            </widget>
           </item>
@@ -1321,7 +1321,7 @@
           <item>
            <widget class="QLabel" name="label_10">
             <property name="text">
-             <string>Type of metastability links of this phase to other phases</string>
+             <string>Set a type of metastability links of this phase to other phases</string>
             </property>
            </widget>
           </item>
@@ -1347,7 +1347,7 @@
           <item>
            <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>Type of particle/pore size distribution and specific surface area correction</string>
+             <string>Select a type of particle/pore size distribution and specific surface area correction</string>
             </property>
            </widget>
           </item>
@@ -1376,7 +1376,8 @@
        <item>
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>Attention! For TSorpMod and TKinMet built-in models, the appropriate dimensions will usually be allocated automatically. Otherwise, the arrays will be allocated only if all its dimensions are not zeros. </string>
+          <string>For built-in TKinMet models, appropriate dimensions will usually be allocated automatically.
+Any data array will be allocated only if all its dimensions are not zeros. </string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -1395,7 +1396,7 @@
           <item row="0" column="1">
            <widget class="QLabel" name="label_18">
             <property name="text">
-             <string>number of parallel reactions that affect amount constraints for k-th phase (1, 2, 3, ), 1 by default</string>
+             <string>number of parallel reactions that affect amount constraints for this phase { 0 1 2 3 ... }</string>
             </property>
            </widget>
           </item>
@@ -1405,7 +1406,7 @@
           <item row="1" column="1">
            <widget class="QLabel" name="label_19">
             <property name="text">
-             <string>number of (aqueous or gaseous or surface) species from other reacting phases involved</string>
+             <string>number of fluid or surface species from other phases involved in reactions { 0 1 2 3 ... }</string>
             </property>
            </widget>
           </item>
@@ -1415,7 +1416,7 @@
           <item row="2" column="1">
            <widget class="QLabel" name="label_20">
             <property name="text">
-             <string>number of parameter (coefficients) involved in parallel reaction terms (0 or 12 + 3res.)</string>
+             <string>number of parameter coefficients involved in parallel reaction terms { 0 12 15 }</string>
             </property>
            </widget>
           </item>
@@ -1425,7 +1426,7 @@
           <item row="3" column="1">
            <widget class="QLabel" name="label_23">
             <property name="text">
-             <string>number of parameter (coefficients) per species involved in activity product terms (0 or 1)</string>
+             <string>number of parameter (coefficients) per species involved in activity product terms { 0 1 }                                 </string>
             </property>
            </widget>
           </item>
@@ -1435,7 +1436,7 @@
           <item row="4" column="1">
            <widget class="QLabel" name="label_21">
             <property name="text">
-             <string>number of uptake model parameter coefficients (per end member)</string>
+             <string>number of minor/trace element uptake kinetics model parameter coefficients (per end member)</string>
             </property>
            </widget>
           </item>
@@ -1445,7 +1446,7 @@
           <item row="5" column="1">
            <widget class="QLabel" name="label_24">
             <property name="text">
-             <string>number of parameter coefficients in specific surface area correction equation ( 0 to 5 )</string>
+             <string>number of parameter coefficients used in the specific surface area correction equation { 0 1 3 5 }</string>
             </property>
            </widget>
           </item>
@@ -1471,7 +1472,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 5 - Final Settings and Hints</string>
+          <string>Step 5 - Other Settings and Comments</string>
          </property>
         </widget>
        </item>
@@ -1485,7 +1486,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_12">
          <property name="title">
-          <string>GroupBox</string>
+          <string>Dimensions related to metastability linkages between this and other phases (leave zeros if no links)</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
           <item row="0" column="0">
@@ -1501,7 +1502,7 @@
           <item row="0" column="1">
            <widget class="QLabel" name="label_27">
             <property name="text">
-             <string>number of linked phases (cf. PlPhl, lPh)</string>
+             <string>number of phases linked to this phase ( 0 if no links )</string>
             </property>
            </widget>
           </item>
@@ -1511,7 +1512,7 @@
           <item row="1" column="1">
            <widget class="QLabel" name="label_29">
             <property name="text">
-             <string>number of parameters per linked phase</string>
+             <string>number of parameters per link to another phase</string>
             </property>
            </widget>
           </item>
@@ -1527,7 +1528,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Optional</string>
+          <string>Optional settings</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
@@ -1644,7 +1645,7 @@
         </font>
        </property>
        <property name="text">
-        <string>&amp;Learn more</string>
+        <string>  &amp;Learn more  </string>
        </property>
        <property name="shortcut">
         <string>F1</string>
