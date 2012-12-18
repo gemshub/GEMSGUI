@@ -915,7 +915,7 @@ void TSyst::sorption_data_load( TPhase* aPH, int k )
 
     for( ist=0; ist<sy.NsTm; ist++ )
     {
-        if( ist < aPH->php->NsiT )
+        if( ist < aPH->php->NsuT )
         {
             if( sy.PNfsp != S_OFF )
             {

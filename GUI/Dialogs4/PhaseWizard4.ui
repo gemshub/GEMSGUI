@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -694,7 +694,7 @@
           <item row="2" column="1">
            <widget class="QLabel" name="label_13">
             <property name="text">
-             <string>number of DQF parameter coeff. </string>
+             <string>number of DQF parameter coefficients per end member</string>
             </property>
            </widget>
           </item>
@@ -704,7 +704,7 @@
           <item row="3" column="1">
            <widget class="QLabel" name="label_14">
             <property name="text">
-             <string>number of reciprocal parameter coefficients</string>
+             <string>number of reciprocal parameter coefficients per end member</string>
             </property>
            </widget>
           </item>
@@ -862,7 +862,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_10">
          <property name="title">
-          <string>GroupBox</string>
+          <string>Dimensions related to adsorption models</string>
          </property>
          <layout class="QFormLayout" name="formLayout_5">
           <item row="0" column="0">

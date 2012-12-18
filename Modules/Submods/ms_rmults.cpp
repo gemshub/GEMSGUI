@@ -445,7 +445,7 @@ TEST2:
         {
             mu.Ls += mu.Ll[kk];
             mu.Fis++;
-            if( aPH->php->NsiT > 0 && aPH->php->NsiT < 5 )
+            if( aPH->php->NsuT > 0 && aPH->php->NsuT < 5 )
                mu.Lads += mu.Ll[kk];
         }
     } /* k */

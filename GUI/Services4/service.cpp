@@ -343,9 +343,9 @@ TCStringArray vfMultiKeysSet(QWidget* par, const char* caption,
 }
 
 TCStringArray vfRDMultiKeysSet(QWidget* par, const char* caption,
-                    const char* key, TCStringArray& sel, short NsiT )
+                    const char* key, TCStringArray& sel, short NsuT )
 {
-    RDKeyDialog dbk(par, sel, key, caption, NsiT);
+    RDKeyDialog dbk(par, sel, key, caption, NsuT);
     dbk.exec();
     return dbk.allSelectedKeys();
 }

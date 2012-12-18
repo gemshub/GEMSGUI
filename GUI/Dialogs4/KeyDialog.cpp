@@ -253,8 +253,8 @@ KeyDialog::allSelectedKeys()
 //------------------------------------------------------
 // RDKeyDialog - work with ReacDC&DComp keys lists
 RDKeyDialog::RDKeyDialog(QWidget* win, TCStringArray& sel,
-              const char* key, const char* caption, short aNsiT):
-        QDialog( win), NsiT(aNsiT)
+              const char* key, const char* caption, short aNsuT):
+        QDialog( win), NsuT(aNsuT)
 {
     setupUi(this);
     old_sel.clear();
@@ -323,7 +323,7 @@ void RDKeyDialog::SetList()
     s +=  keyFilter;
 
     // ReacDC list
-    if( NsiT > 0 )  // template for adsorption
+    if( NsuT > 0 )  // template for adsorption
         keyFilter[0] = CP_SSPC;
     int n = rt[RT_REACDC].GetKeyList( keyFilter.c_str(), keyList, temp);
 
@@ -331,7 +331,7 @@ void RDKeyDialog::SetList()
        pList->addItem( makeKey( SRC_REACDC, keyList[ii].c_str()));
 
     // Dcomp list
-    if( NsiT > 0 )  // template for adsorption
+    if( NsuT > 0 )  // template for adsorption
     {    keyFilter[0] = CP_SOLID;
          s+= "\\";
          s+= keyFilter;

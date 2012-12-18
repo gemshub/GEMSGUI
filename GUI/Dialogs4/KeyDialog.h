@@ -67,7 +67,7 @@ class RDKeyDialog : public QDialog, public Ui::KeyDialogData
 
     gstring keyFilter;
     QStringList old_sel;
-    short NsiT;     // N of surface site types (to set up on remake)
+    short NsuT;     // N of surface site types (to set up on remake)
     void SetList();
     QString makeKey( char type, const char *key );
 
@@ -81,7 +81,7 @@ protected slots:
 public:
 
     RDKeyDialog(QWidget* win, TCStringArray& sel,
-              const char* key = "*", const char* caption = 0, short NsiT=0 );
+              const char* key = "*", const char* caption = 0, short NsuT=0 );
     virtual ~RDKeyDialog();
     TCStringArray allSelectedKeys();
 //    gstring getKey();

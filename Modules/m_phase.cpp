@@ -57,7 +57,7 @@ void TPhase::ods_link( int q)
     aObj[ o_phpncp].SetPtr(&ph[q].ncpN );  // i 2
     aObj[ o_phnpx].SetPtr( &ph[q].npxM );  // i 1  added 07.12.2006 KD
     aObj[ o_phnsc].SetPtr( &ph[q].nscM );  // i 1  changed 07.12.2006 KD
-    aObj[ o_phnsit].SetPtr(&ph[q].NsiT );  // i 2
+    aObj[ o_phnsit].SetPtr(&ph[q].NsuT );  // i 2
 
 // new 06/06/12
     aObj[ o_phkin_t].SetPtr(  ph[q].kin_t );  // a 6
@@ -77,17 +77,17 @@ void TPhase::ods_link( int q)
     aObj[ o_phnotes].SetPtr(ph[q].notes );
     aObj[ o_phdim].SetPtr( &ph[q].nDC );     // i 8
     aObj[ o_phdisep].SetPtr(&ph[q].Asur );   // f 8
-    // NsiT
+    // NsuT
     aObj[ o_phscmc].SetPtr(  ph[q].SCMC );
-    aObj[ o_phscmc].SetDim( ph[q].NsiT, 1 );
+    aObj[ o_phscmc].SetDim( ph[q].NsuT, 1 );
     aObj[ o_phxfiec].SetPtr( ph[q].XfIEC);
-    aObj[ o_phxfiec].SetDim( ph[q].NsiT, 1);
+    aObj[ o_phxfiec].SetDim( ph[q].NsuT, 1);
     aObj[ o_phmsdt].SetPtr(  ph[q].MSDT );
-    aObj[ o_phmsdt].SetDim( ph[q].NsiT, 2 );
+    aObj[ o_phmsdt].SetDim( ph[q].NsuT, 2 );
     aObj[ o_phcapt].SetPtr(  ph[q].CapT );
-    aObj[ o_phcapt].SetDim( ph[q].NsiT, 2 );
+    aObj[ o_phcapt].SetDim( ph[q].NsuT, 2 );
     aObj[ o_phfsit].SetPtr(  ph[q].FsiT );
-    aObj[ o_phfsit].SetDim( ph[q].NsiT, 1 );
+    aObj[ o_phfsit].SetDim( ph[q].NsuT, 1 );
     //nDC
     aObj[ o_phsatc].SetPtr(  ph[q].SATC );
     aObj[ o_phsatc].SetDim( ph[q].nDC,  MCAS );
@@ -154,7 +154,7 @@ aObj[ o_phfloat2].SetPtr(&ph[q].Vpor );  // f 8
 
 //dynamic
 aObj[ o_phxsmd].SetPtr(  ph[q].xSmD );
-aObj[ o_phxsmd].SetDim( ph[q].nDC, ph[q].NsiT );
+aObj[ o_phxsmd].SetDim( ph[q].nDC, ph[q].nSiT );
 aObj[ o_phxfaces].SetPtr(  ph[q].ocPRk );
 aObj[ o_phxfaces].SetDim( ph[q].nPRk, 1 );
 
@@ -172,7 +172,7 @@ aObj[ o_phcdc].SetDim( ph[q].nDC, ph[q].nCDc );
 aObj[ o_phisop].SetPtr(  ph[q].IsoP );
 aObj[ o_phisop].SetDim( ph[q].nDC, ph[q].nIsoC );
 aObj[ o_phisos].SetPtr(  ph[q].IsoS );
-aObj[ o_phisos].SetDim( ph[q].NsiT, ph[q].nIsoS );
+aObj[ o_phisos].SetDim( ph[q].nSiT, ph[q].nIsoS );
 aObj[ o_phfsac].SetPtr(  ph[q].feSAr );
 aObj[ o_phfsac].SetDim( 1, ph[q].nPRk );
 aObj[ o_phrpcon].SetPtr(  ph[q].rpCon );
@@ -209,7 +209,7 @@ aObj[ o_pheimll].SetDim( 1, ph[q].nEIp );
 aObj[ o_phlphc2].SetPtr(  ph[q].lPhC );
 aObj[ o_phlphc2].SetDim( ph[q].nlPh, 1 );
 aObj[ o_phisoc].SetPtr(  ph[q].IsoC );
-aObj[ o_phisoc].SetDim( 2, ph[q].NsiT );
+aObj[ o_phisoc].SetDim( 2, ph[q].nSiT );
 
 // added 17/12/12
 aObj[ o_phixsolv].SetPtr(  ph[q].ixsolv );
@@ -415,11 +415,11 @@ void TPhase::dyn_new(int q)
 
     if( ph[q].PFsiT == S_ON || ph[q].PFsiT == S_REM )
     {
-        ph[q].SCMC =  (char *)aObj[ o_phscmc ].Alloc( ph[q].NsiT, 1, A_);
-        ph[q].FsiT =  (float *)aObj[ o_phfsit ].Alloc( ph[q].NsiT, 1, F_);
-        ph[q].XfIEC = (float *)aObj[ o_phxfiec ].Alloc( ph[q].NsiT, 1, F_);
-        ph[q].MSDT =  (float (*)[2])aObj[ o_phmsdt ].Alloc( ph[q].NsiT, 2, F_);
-        ph[q].CapT =  (float (*)[2])aObj[ o_phcapt ].Alloc( ph[q].NsiT, 2, F_);
+        ph[q].SCMC =  (char *)aObj[ o_phscmc ].Alloc( ph[q].NsuT, 1, A_);
+        ph[q].FsiT =  (float *)aObj[ o_phfsit ].Alloc( ph[q].NsuT, 1, F_);
+        ph[q].XfIEC = (float *)aObj[ o_phxfiec ].Alloc( ph[q].NsuT, 1, F_);
+        ph[q].MSDT =  (float (*)[2])aObj[ o_phmsdt ].Alloc( ph[q].NsuT, 2, F_);
+        ph[q].CapT =  (float (*)[2])aObj[ o_phcapt ].Alloc( ph[q].NsuT, 2, F_);
 //        ph[q].SATC =  (char (*)[2])aObj[ o_phsatc ].Alloc( ph[q].nDC, 2, A_);
         ph[q].SATC =  (char (*)[MCAS])aObj[ o_phsatc ].Alloc( ph[q].nDC, MCAS, A_);
 //        ph[q].MaSdj = (float *)aObj[ o_phmasdj ].Alloc( ph[q].nDC, 1, F_);
@@ -522,7 +522,7 @@ void TPhase::dyn_new(int q)
     }
     if( ph[q].PIsoS == S_ON )
     {
-      ph[q].IsoS =  (float *)aObj[ o_phisos].Alloc( ph[q].NsiT, ph[q].nIsoS, F_ );
+      ph[q].IsoS =  (float *)aObj[ o_phisos].Alloc( ph[q].nSiT, ph[q].nIsoS, F_ );
       ph[q].smcSl =  (char (*)[MAXDCNAME])aObj[ o_phsmcsl].Alloc( 1, ph[q].nIsoS, MAXDCNAME );
     }
     else
@@ -532,8 +532,8 @@ void TPhase::dyn_new(int q)
     }
     if( ph[q].PsDiS == S_ON )
     {
-        ph[q].xSmD =  (short *)aObj[  o_phxsmd ].Alloc( ph[q].nDC, ph[q].NsiT, I_ );
-        ph[q].IsoC =  (char *)aObj[ o_phisoc].Alloc( 2, ph[q].NsiT, A_ );
+        ph[q].xSmD =  (short *)aObj[  o_phxsmd ].Alloc( ph[q].nDC, ph[q].nSiT, I_ );
+        ph[q].IsoC =  (char *)aObj[ o_phisoc].Alloc( 2, ph[q].nSiT, A_ );
     }
     else
     {
@@ -673,7 +673,7 @@ void TPhase::set_def( int q)
 
     ph[q].Nsd = 1;
     ph[q].nDC = ph[q].ncpN = ph[q].ncpM =0;
-    ph[q].NsiT = ph[q].nscM = ph[q].npxM = ph[q].nMoi = 0;
+    ph[q].NsuT = ph[q].nscM = ph[q].npxM = ph[q].nMoi = 0;
     ph[q].Asur =    0;//FLOAT_EMPTY;
     ph[q].Sigma0 =  0;//FLOAT_EMPTY;
     ph[q].SigmaG =  0;//FLOAT_EMPTY;
@@ -822,7 +822,7 @@ TPhase::MakeQuery()
     size[2] = php->ncpM;
     size[3] = php->nscM;
     size[4] = php->npxM;
-    size[5] = php->NsiT;
+    size[5] = php->NsuT;
 // new
     size[6] = php->nlPh;
     size[7] = php->nlPc;
@@ -851,7 +851,7 @@ TPhase::MakeQuery()
     php->ncpM = (short)size[2];
     php->nscM = (short)size[3];
     php->npxM = (short)size[4];
-    php->NsiT = (short)size[5];
+    php->NsuT = (short)size[5];
     php->nlPh = (short)size[6];
     php->nlPc = (short)size[7];
     php->ndqf = (short)size[8];
@@ -1114,7 +1114,7 @@ void TPhase::makeReacDCompList(TCStringArray& aDclist)
     rt[RT_REACDC].MakeKey( RT_PHASE, pkeyrd, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END );
    if( pkeyrd[1] != ':')
        pkeyrd[1] = '*';
-   if( php->NsiT > 0 )  // template for adsorption
+   if( php->NsuT > 0 )  // template for adsorption
        pkeyrd[0] = CP_SSPC;  // added by KD 25.10.2004
 
     if( php->nDC && php->SM )
@@ -1148,7 +1148,7 @@ void TPhase::makeReacDCompList(TCStringArray& aDclist)
 AGAINRC:
      aDclist = vfRDMultiKeysSet( window(),
           "Please, mark ReacDC/DComp keys to be included into the Phase",
-                  pkeyrd, aDclist_old, php->NsiT  );
+                  pkeyrd, aDclist_old, php->NsuT  );
 
      if( aDclist.GetCount() < 1 )
      {
@@ -1270,7 +1270,7 @@ AGAIN_SETUP:
     // test sizes
     if( php->nscM < 0 || php->npxM < 0 || php->ncpN < 0 || php->ncpM < 0 ||
             php->ncpN*php->ncpM > MAXPNCOEF || php->Nsd < 0 || php->Nsd > 16 ||
-            php->NsiT < 0 || php->NsiT > 6 )
+            php->NsuT < 0 || php->NsuT > 6 )
     {
         if(vfQuestion(window(), GetName(),
         		"W06PHrem: Invalid number of coeffs in the non-ideal solution model!\n Repeat (Y) or Cancel (N)?"))
@@ -1285,7 +1285,7 @@ AGAIN_SETUP:
     if( php->ncpN * php->ncpM )
         php->Ppnc = S_ON;
       else php->Ppnc = S_OFF;
-    if( !php->NsiT )
+    if( !php->NsuT )
        php->PFsiT = S_OFF;
     if( php->sol_t[DCOMP_DEP] == SM_UNDEF )
         php->PdEq = S_OFF;
@@ -1293,7 +1293,7 @@ AGAIN_SETUP:
     if( php->sol_t[SPHAS_DEP] == SM_UNDEF )
         php->PpEq = S_OFF;
       else php->PpEq = S_ON;
-    if( (php->NsiT != S_OFF) && php->sol_t[SPHAS_TYP] == SM_SURCOM )
+    if( (php->NsuT != S_OFF) && php->sol_t[SPHAS_TYP] == SM_SURCOM )
     {
        php->nMoi = 0; php->nSub = 0;
     }
@@ -1315,16 +1315,16 @@ AGAIN_SETUP:
 
 //---------------------------------------------------------------------
 // old  part
-    if( php->NsiT > 0 && (php->PFsiT == S_REM || php->PFsiT == S_ON  ))
+    if( php->NsuT > 0 && (php->PFsiT == S_REM || php->PFsiT == S_ON  ))
     {  /* Setup of default values */
         php->PphC = PH_SORPTION;
-        for( i=0; i<php->NsiT; i++ )
+        for( i=0; i<php->NsuT; i++ )
         { /* if( !php->SCMC[i] || php->SCMC[i]==A_NUL ) */
             // php->SCMC[i] = php->sol_t[SCM_TYPE];  // fixed, 24.07.2006 (DK)
             php->SCMC[i] = SC_BSM;  // changed, 14.07.2009 (TW)
 
             if( !php->FsiT )
-                php->FsiT[i] = 1./php->NsiT;
+                php->FsiT[i] = 1./php->NsuT;
             if( !php->MSDT[i][0] )
                 php->MSDT[i][0] = aPa->pa.p.DNS;
             if( !php->MSDT[i][1] )
@@ -1795,7 +1795,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
         {
             php->PphC = PH_SINDIS;
         }
-        else if( php->NsiT >= 1. )
+        else if( php->NsuT >= 1. )
         {
             php->PphC = PH_SORPTION;
         }
@@ -2023,7 +2023,7 @@ TPhase::AssemblePhase( const char* key, const char* part, float* param,
 // Initializing
     php->Nsd = 0;
     php->nDC = 0;
-    php->NsiT = php->nMoi = 0;
+    php->NsuT = php->nMoi = 0;
     php->Asur =   php->Sigma0 =  php->SigmaG =   php->R0p =
                   php->h0p =  php->Eps =  php->Cond =  php->Rsp1 =  0.;
 
@@ -2139,9 +2139,9 @@ TPhase::AssemblePhase( const char* key, const char* part, float* param,
         php->DCC[i] = '`';
     }
 
-    if( php->NsiT > 0 && php->PFsiT == S_REM )
+    if( php->NsuT > 0 && php->PFsiT == S_REM )
     {  /* Setup of default values */
-        for( i=0; i<php->NsiT; i++ )
+        for( i=0; i<php->NsuT; i++ )
         {
             if( !php->SCMC[i] || php->SCMC[i]==A_NUL )
                 php->SCMC[i] = SC_CCM;  /* Default! */
@@ -2390,7 +2390,7 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
     if( php->PIsoC == S_ON )
       copyValues( php->IsoP+nDCnew*php->nIsoC, php->IsoP+ii*php->nIsoC, php->nIsoC );
     if( php->PsDiS == S_ON )
-      copyValues( php->xSmD+nDCnew*php->NsiT, php->xSmD+ii*php->NsiT, php->NsiT );
+      copyValues( php->xSmD+nDCnew*php->nSiT, php->xSmD+ii*php->nSiT, php->nSiT );
     if( php->PumpCon == S_ON )
       copyValues( php->umpCon+nDCnew*php->numpC, php->umpCon+ii*php->numpC, php->numpC );
     if( php->Pdqf == S_ON )
@@ -2423,14 +2423,13 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
    if( php->PIsoC == S_ON )
      php->IsoP =  (float *)aObj[ o_phisop].Alloc( php->nDC, php->nIsoC, F_ );
    if( php->PsDiS == S_ON )
-       php->xSmD =  (short *)aObj[  o_phxsmd ].Alloc( php->nDC, php->NsiT, I_ );
+       php->xSmD =  (short *)aObj[  o_phxsmd ].Alloc( php->nDC, php->nSiT, I_ );
    if( php->PumpCon == S_ON )
      php->umpCon =  (float *)aObj[ o_phumpcon].Alloc( php->nDC, php->numpC, F_ );
    if( php->Pdqf == S_ON )
     php->DQFc =  (float *)aObj[ o_phdqfc].Alloc( php->nDC, php->ndqf, F_ );
    if( php->Pdqf == S_ON )
      php->rcpc =  (float *)aObj[ o_phrcpc].Alloc( php->nDC, php->nrcp, F_ );
-
  }
 
  if( php->Ppnc == S_ON && php->npxM > 0 )
