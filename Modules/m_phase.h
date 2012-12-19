@@ -212,6 +212,7 @@ char (*eimLl)[MAXDCNAME]; // new: EIL model parameters comment list per layer [n
   char
     *DCC,   // DC classes { TESKWL GVCHNI JMFD QPR <0-9>  AB  XYZ O } [nDC]
     *DCS,   // Source of input data for DC { r d }.d-DCOMP r-REACT    [nDC]
+  *lDCd,   /// new  Source of input data for DC { r d }.d-DCOMP r-REACT in lDCr   [nSkr]
     *SCMC,  // Class.of EIL models for surface types (old sorption phases) [NsuT]
     *pEq,   // Text of IPN equations related to the whole phase (IIPN syntax)
     *dEq,   // Text of IPN equations related to phase components (IIPN syntax)
@@ -262,7 +263,9 @@ protected:
     void CalcPhaseRecord( bool getDCC  );
     void moiety_new( int nDC, int nMoi, bool setDefault );
     void Set_DC_Phase_coef();
-    void makeReacDCompList(TCStringArray& aDclist);
+    void makeReacDCompList( const char *caption, TCStringArray& aDclist,
+                            short& nDC,  char (*SM)[DC_RKLEN], char * DCS, bool bNsuT);
+    void makePhaseList( const char *caption, TCStringArray& aPhlist );
     void DetNumbCatAn(TCStringArray& aDclist);
     void LoadDCC();
 
@@ -442,6 +445,13 @@ enum kinmet_controls {
 enum volume_code {  /* Codes of volume parameter ??? */
     VOL_UNDEF, VOL_CALC, VOL_CONSTR
 };
+
+static int rkeycmp(const void *e1, const void *e2)
+{
+    int RCmp;
+    RCmp = memcmp( e1, e2, DC_RKLEN );
+    return RCmp;
+}
 
 
 #endif //  _m_phase_h

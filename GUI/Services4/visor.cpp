@@ -834,7 +834,7 @@ TVisor::defaultCFG()
     unsigned char phase_rkfrm[5] =
         { MAXSYMB, MAXPHSYMB, MAXPHNAME, MAXSYMB, MAXPHGROUP };
     rt.Add(new TDataBase(rt.GetCount(), "phase", true, true,
-                         o_phstr, 22+36/*18/12/12*/, 0, 5, phase_rkfrm));
+                         o_phstr, 22+37/*19/12/12*/, 0, 5, phase_rkfrm));
 
     // RT_SYSEQ default
     unsigned char syseq_rkfrm[8] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,

@@ -51,9 +51,10 @@
                      $$MODULES_CPP/s_lsm_lm.cpp  \
                      $$MODULES_CPP/s_lsm_svd.cpp \
                      $$MODULES_CPP/m_reacdc.cpp  \
-                     $$MODULES_CPP/m_phase.cpp \
+                      $$MODULES_CPP/m_reac2.cpp  \
+                    $$MODULES_CPP/m_phase.cpp \
+                    $$MODULES_CPP/m_phase2.cpp \
                      $$MODULES_CPP/m_proces.cpp \
-                     $$MODULES_CPP/m_reac2.cpp  \
                      $$MODULES_CPP/m_prfget.cpp \
                      $$MODULES_CPP/m_prfget2.cpp \
                      $$MODULES_CPP/m_syseq.cpp \

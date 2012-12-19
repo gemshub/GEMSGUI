@@ -560,14 +560,14 @@ enum phase_objects {   // PHASE
     o_phsm,    /*s dyn*/  o_phdcc,   /*a dyn*/   o_phdcs,   /*a dyn*/
     o_phpeq,   /* txt */  o_phdeq,   /* txt */   o_phsdref, /*s dyn*/
     o_phsdval, /*s dyn*/
-//new record (3+26+7)
+//new record (3+27+7)
     o_phstr2, o_phdim2,  o_phfloat2,
     o_phxsmd,  o_phxfaces, o_phlphc1, o_phdqfc, o_phrcpc,
     o_pheipc, o_phcdc, o_phisop, o_phisos, o_phfsac,
-    o_phrpcon, o_phumpcon, o_phlph, o_phldc,  o_phdcpcl ,
-    o_phipicl, o_phipccl,  o_phrpkcl, o_phrprcl, o_phumpcl,
-    o_phsmcdl, o_phsmcsl,  o_pheimpl, o_pheimll, o_phlphc2,
-    o_phisoc,
+    o_phrpcon, o_phumpcon, o_phlph, o_phldcr,  o_phldcd,
+    o_phdcpcl, o_phipicl, o_phipccl,  o_phrpkcl, o_phrprcl,
+    o_phumpcl, o_phsmcdl, o_phsmcsl,  o_pheimpl, o_pheimll,
+    o_phlphc2,  o_phisoc,
     o_phixsolv, o_phixdiel, o_phsolvc, o_phdielc,  o_phdhc,  //added 17/13/12
     o_phapcon, o_phascp,
 
