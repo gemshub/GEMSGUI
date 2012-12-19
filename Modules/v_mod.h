@@ -189,7 +189,7 @@ o_wi_isopc, o_wi_isosc, o_wi_lnscal, o_wi_lnsact, o_wi_lngamf,
 o_wi_cterms, o_wi_isoct,
 // TKinMet stuff
 o_wi_lskin, o_wi_lsupt, o_wi_jcrdc, o_wi_xfaces, o_wi_fsac,
-o_wi_krpc, o_wi_apconc, o_wi_umpc, o_wi_kmod,
+o_wi_krpc, o_wi_apconc,o_wi_ascpc, o_wi_umpc, o_wi_kmod,
     // CalculateActivityCoefficients() - adjustable DOD
     o_neqtxt,  o_nsmod,  o_ntc,  o_ntk,  o_np ,
     o_nis, o_ni,  o_njs,  o_nnext, o_nncp ,

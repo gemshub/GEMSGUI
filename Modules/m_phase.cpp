@@ -961,7 +961,6 @@ AGAIN_SETUP:
                                aDcSkrl, php->nSkr, php->lDCr, php->lDCd, false);
         }
 
-
     //---------------------------------------------------------------------
 
     // Setting up the DC/phase coeffs depending on the

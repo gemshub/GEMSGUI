@@ -439,7 +439,7 @@ aObj[ o_wo_uph ].SetDim( pm.FIs, MIXPHPROPS );
      aObj[ o_wi_isoct].SetPtr( pm.IsoCt );
 // TKinMet stuff
         aObj[ o_wi_lskin].SetPtr( pm.LsKin );
-        aObj[ o_wi_lskin].SetDim( pm.FI, 4 );
+        aObj[ o_wi_lskin].SetDim( pm.FI, 6 );
         aObj[ o_wi_lsupt].SetPtr( pm.LsUpt );
         aObj[ o_wi_lsupt].SetDim( pm.FIs, 2 );
         aObj[ o_wi_jcrdc].SetPtr( pm.xSKrC );
@@ -447,6 +447,7 @@ aObj[ o_wo_uph ].SetDim( pm.FIs, MIXPHPROPS );
         aObj[ o_wi_fsac].SetPtr( pm.feSArC );
         aObj[ o_wi_krpc].SetPtr( pm.rpConC );
         aObj[ o_wi_apconc].SetPtr( pm.apConC );
+        aObj[ o_wi_ascpc].SetPtr( pm.AscpC );
         aObj[ o_wi_umpc].SetPtr( pm.UMpcC );
         aObj[ o_wi_kmod].SetPtr( pm. kMod);
         aObj[ o_wi_kmod].SetDim( pm.FI, 1 );
@@ -634,8 +635,9 @@ pm.GamFs  = (double *)aObj[ o_wo_gamfs ].GetPtr();
     pm.feSArC   = (double *)aObj[ o_wi_fsac].GetPtr();
     pm.rpConC   = (double *)aObj[ o_wi_krpc].GetPtr();
     pm.apConC   = (double *)aObj[ o_wi_apconc].GetPtr();
+    pm.AscpC   = (double *)aObj[ o_wi_ascpc].GetPtr();
     pm.UMpcC   = (double *)aObj[ o_wi_umpc].GetPtr();
-    pm.kMod   = (char(*)[4])aObj[ o_wi_kmod].GetPtr();
+    pm.kMod   = (char(*)[6])aObj[ o_wi_kmod].GetPtr();
 }
 
 
@@ -820,8 +822,9 @@ pm.GamFs  = (double *)aObj[ o_wo_gamfs ].Free();
     pm.feSArC   = (double *)aObj[ o_wi_fsac].Free();
     pm.rpConC   = (double *)aObj[ o_wi_krpc].Free();
     pm.apConC   = (double *)aObj[ o_wi_apconc].Free();
+    pm.AscpC   = (double *)aObj[ o_wi_ascpc].Free();
     pm.UMpcC   = (double *)aObj[ o_wi_umpc].Free();
-    pm.kMod   = (char(*)[4])aObj[ o_wi_kmod].Free();
+    pm.kMod   = (char(*)[6])aObj[ o_wi_kmod].Free();
 
     Free_TSolMod();
 }
@@ -1151,15 +1154,16 @@ pm.GamFs = (double *)aObj[ o_wo_gamfs].Alloc( pm.L, 1, D_);
         pm.CTerms   = (double *)aObj[ o_wi_cterms].Alloc( pm.Ls, 1, D_ );
         //pm.IsoCt   = (char *)aObj[ o_wi_isoct].Alloc( pm.FIs, 1, A_ );
         // TKinMet stuff
-        pm.LsKin   = (long int *)aObj[ o_wi_lskin].Alloc( pm.FI, 4, L_ );
+        pm.LsKin   = (long int *)aObj[ o_wi_lskin].Alloc( pm.FI, 6, L_ );
         pm.LsUpt   = (long int *)aObj[ o_wi_lsupt].Alloc( pm.FIs, 2, L_ );
         //pm.xSKrC   = (long int *)aObj[ o_wi_jcrdc].Alloc( pm.FI, 1, L_ );
         //pm.ocPRkC   = (long int *)aObj[ o_wi_xfaces].Alloc( pm.FI, 1, L_ );
         //pm.feSArC   = (double *)aObj[ o_wi_fsac].Alloc( pm.FI, 1, D_ );
         //pm.rpConC   = (double *)aObj[ o_wi_krpc].Alloc( pm.FI, 1, D_ );
         //pm.apConC   = (double *)aObj[ o_wi_apconc].Alloc( pm.FI, 1, D_ );
+        //pm.AscpC   = (double *)aObj[ o_wi_ascpc].Alloc( pm.FI, 1, D_ );
         //pm.UMpcC   = (double *)aObj[ o_wi_umpc].Alloc( pm.FIs, 1, D_ );
-        pm.kMod   = (char(*)[4])aObj[ o_wi_kmod].Alloc( pm.FI, 1, 4 );
+        pm.kMod   = (char(*)[6])aObj[ o_wi_kmod].Alloc( pm.FI, 1, 6 );
 
     Free_TSolMod(); //Bugfix SD 01/06/12
     Alloc_TSolMod( pm.FIs );

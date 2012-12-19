@@ -110,8 +110,8 @@ nPRk, // nFaces, new: number of «parallel reactions» that affect amount constrai
 nSkr, // nReg,  new: number of (aqueous or gaseous or surface) species from other reacting phases involved
 nrpC,  // new: number of parameter (coefficients) involved in “parallel reaction” terms (0 or 12 + 3res.)
 naptC, // new: number of parameter (coefficients) per species involved in “activity product” terms (0 or 1)
-numpC, // new: number of uptake model parameter coefficients (per end member)
 nAscC, /// new: number of parameter coefficients in specific surface area correction equation ( 0 to 5 )
+numpC, // new: number of uptake model parameter coefficients (per end member)
 
 // TSorpMod stuff EIL model
 nEIl,  // new: number of electrostatic model layers (default: 0, maximum 4)
@@ -124,13 +124,14 @@ nIsoC, // new: number of isotherm parameter coefficients per surface species DC 
 nIsoS, // new: number of isotherm parameter coefficients per surface site (default 0)
 mDe,   // new: maximum denticity number for surface species (default 1)
 nSiT,  /// new: number of site types (to set up on remake)
- iRes4, // new: reserved
+iRes4, // new: reserved
 ;
 
 short *ipxt,  // Table of indexation for interaction parameters [ncpN][npxM]
               // takes over from PXres
 *xSmD, // new: denticity of surface species per surface site (site allocation) [nDC][nSiT]
        // (default 0, -1 means no binding) [nDC][mDe+1]
+
 *ocPRk, // new KinMet: Operation codes for kinetic parallel reaction terms [nPRk]
 *ixsolv, /// new: array of indexes of solvent interaction parameters [nsolv*2]
 *ixdiel /// new: array of indexes of dielectric interaction parameters [ndiel*2]
@@ -180,9 +181,9 @@ fRes2, // new: reserved
 // TKinMet stuff
 *feSAr,  // new: fractions of surface area of the solid related to different parallel reactions [nPRk]
 *rpCon,  // new: Array of kinetic rate constants for faces and regions [nPRk][nrpC]
-*apCon,  // new: Array of parameters per species involved in “activity product” terms [nPRk][nSkr][naptC]
-*umpCon, // new: Array of uptake model parameters [nDC][numpC]
+*apCon,  // new: Array of parameters per species involved in “activity product” terms [nPRk] [nSkr][naptC]
 *Ascp,   /// new: parameter coefficients of equation for correction of specific surface area [nAscC]
+*umpCon, // new: Array of uptake model parameters [nDC][numpC];
 ;
 // Old sorption model stuff
   float (*MSDT)[2]; // SAT: Max & min density of reacted species, 1/nm2 [NsuT]
