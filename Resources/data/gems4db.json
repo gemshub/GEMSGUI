@@ -1,0 +1,58 @@
+// Json notation for GEMS database -> BSON -> MongoDB
+// DK 03.02.2013
+
+{ SDref: {
+    "SDrkey": [ { "SDautr": "string", "flen": 20 },
+                { "SDyear": "string", "flen": 5 },
+                { "SDtype": "string", "flen": 7 } ],
+    "DOD": [
+        { "id": o_sdauthr , "label": "SDauth" ,  "dotype": "S_" , "dimN": 1 , "dimM": 72 , "ndxs": "N" , "values": [  ] },
+        { "id": o_sdtitle , "label": "SDtitl" ,  "dotype": "S_" , "dimN": -1 , "dimM": 1 , "ndxs": "N" , "values": [  ] },
+        { "id": o_sdedit , "label": "SDedit" ,  "dotype": "S_" , "dimN": 1 , "dimM": 72 , "ndxs": "N" , "values": [  ] },
+        { "id": o_sdvoly , "label": "SDvoly" ,  "dotype": "S_" , "dimN": 1 , "dimM": 72 , "ndxs": "N" , "values": [  ] },
+        { "id": o_sdpage , "label": "SDpage" ,  "dotype": "S_" , "dimN": 1 , "dimM": 72 , "ndxs": "N" , "values": [  ] },
+        { "id": o_sdabstr , "label": "SDabst" ,  "dotype": "S_" , "dimN": -1 , "dimM": 1 , "ndxs": "N" , "values": [  ] },
+        { "id": o_sdrefs , "label": "SDrefs" ,  "dotype": "32" , "dimN": -1 , "dimM": 1 , "ndxs": "N" , "values": [  ] },
+        { "id": o_sdnote , "label": "SDnote" ,  "dotype": "S_" , "dimN": 1 , "dimM": 72 , "ndxs": "N" , "values": [  ] },
+        { "id": o_sdbkwd , "label": "SD_kwd" ,  "dotype": "32" , "dimN": -1 , "dimM": 1 , "ndxs": "N" , "values": [  ] }
+     ]
+  }
+}
+
+{"IComp": {
+     "ICrkey": [ { "ICsymb": "string", "flen": 6 },
+                { "ICtype": "string", "flen": 4 },
+                { "ICgrp": "string", "flen": 4 } ],
+     "DOD": [
+         { "id": o_icsst , "label": "StdSt" ,  "dotype": "4" , "dimN": 1 , "dimM": 1 , "ndxs": "N" , "values": [  ] },
+         { "id": o_icname , "label": "ICname" ,  "dotype": "S_" , "dimN": 1 , "dimM": 72 , "ndxs": "N" , "values": [  ] },
+         { "id": o_icform , "label": "ICform" ,  "dotype": "S_" , "dimN": 1 , "dimM": 72 , "ndxs": "N" , "values": [  ] },
+         { "id": o_icdc , "label": "IC_DC" ,  "dotype": "S_" , "dimN": 1 , "dimM": 32 , "ndxs": "N" , "values": [  ] },
+         { "id": o_icfloat , "label": "icflo" ,  "dotype": "F_" , "dimN": 1 , "dimM": 6 , "ndxs": "N" , "values": [  ] },
+         { "id": o_icint , "label": "icint" ,  "dotype": "I_" , "dimN": 1 , "dimM": 3 , "ndxs": "N" , "values": [  ] }
+      ]
+   }
+}
+
+//text backup
+//"ICsymb":
+//"Si    e   silicon_              "
+//"s  "
+//'Silicon'
+//'Si'
+//'---'
+//28.0855 18.81 19.789 12.056 ` 1
+//4 14 `
+
+// IComp  DOD  19
+//o_icawt   M0i    F_  1 1   N "Atomic (molar) mass of Independent Component "
+//o_icass   S0i    F_  1 1   N "Standard-state absolute entropy S0 per g/atom "
+//o_icacp   Cp0i   F_  1 1   N "Standard-state absolute heat capacity Cp0 per g/atom (reserved) "
+//o_icavs   V0i    F_  1 1   N "Standard state volume V0 per g/atom (reserved) "
+//o_icarad  Ri     F_  1 1   N "Ionic radius Angstrom (reserved) "
+//o_icidis  IXi    F_  1 1   N "Relative isotope abundance (1 for chemical elements) "
+//o_icval   Valen  I_  1 1   N "Default valence number (formula charge) of IC in compounds "
+//o_icnum   indMT  I_  1 1   N "Index in Periodical (Mendeleev's) Table of chemical elements "
+//o_iccoor  Zi     I_  1 1   N "Default coordination number in compounds (reserved) "
+
+// To be continued
