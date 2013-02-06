@@ -361,7 +361,7 @@ TObject::Alloc(int newN, int newM, ObjType newType)
 
     if( !IsNull() )
     {
-        if( Type == newType || ( Type > S_ && newType > S_ )  )
+        if( Type == newType || ( Type > S_ && newType > S_ ) || ( Type < S_ && newType < S_ ) )
         {
             if( Type < S_ && Type != A_ && Type != B_ && Type != H_ ) //S_==0, no
             {
