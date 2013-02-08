@@ -921,12 +921,12 @@ short TProfil::BAL_compare()
          jj = pmp->muj[j]; //        DK    07.03.2008,  16.05.2008
 
           if(( syp->DLLim != S_OFF ) && pmp->PLIM == 1 )
-  //            if( fabs( (double)syp->DLL[jj] - pmp->DLL[j] ) >= 1e-19 )
-                if( syp->DLL[jj] != (float)pmp->DLL[j]  )   //SD 22/01/2009
+  //            if( fabs( syp->DLL[jj] - pmp->DLL[j] ) >= 1e-19 )
+                if( syp->DLL[jj] != pmp->DLL[j]  )   //SD 22/01/2009
                   break;
           if(( syp->DULim != S_OFF ) && pmp->PLIM == 1 )
-  //            if( fabs( (double)syp->DUL[jj] - pmp->DUL[j] ) >= 1e-19 )
-                if( syp->DUL[jj] != (float)pmp->DUL[j] )   //SD 22/01/2009
+  //            if( fabs( syp->DUL[jj] - pmp->DUL[j] ) >= 1e-19 )
+                if( syp->DUL[jj] != pmp->DUL[j] )   //SD 22/01/2009
                 break;
           if( syp->DULim != S_OFF || syp->DLLim != S_OFF )
           {  if( pmp->RLC[j] != syp->RLC[jj] )

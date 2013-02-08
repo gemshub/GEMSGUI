@@ -954,15 +954,15 @@ if(  fabs( syp->Vaq ) != 1.  )
     if( syp->DLLim != S_OFF )
     {
         fillValue( syp->RSC, char(QUAN_MOL), mup->L );
-        fillValue( syp->DLL, float(0.), mup->L );
+        fillValue( syp->DLL, (0.), mup->L );
     }
     if( syp->DULim != S_OFF )
     {
         fillValue( syp->RSC, char(QUAN_MOL), mup->L );
-        fillValue( syp->DUL, float(1e6), mup->L );
+        fillValue( syp->DUL, (1e6), mup->L );
     }
     if( syp->PGEX != S_OFF )
-        fillValue( syp->GEX, float(0.), mup->L );
+        fillValue( syp->GEX, (0.), mup->L );
 
     // clear static values
     syp->Msolids = 0.;

@@ -349,19 +349,20 @@ TObject::Alloc(int newN, int newM, ObjType newType)
                 pV1->SetString( str.c_str(), ii*newM+jj );
     }
 
-    // Testing data type for debugging purposes
+    /* Testing data type for debugging purposes
 #ifdef __unix
     if( newType != Type )
         cout << "Different type! Object:" << Keywd
         << " Type= " << (int)Type << " newType= " << (int)newType << endl;
 #endif
+    */
     /* Saving old values */
     int n = min(N,newN);
     int m = min(M,newM);
 
     if( !IsNull() )
     {
-        if( Type == newType || ( Type > S_ && newType > S_ )  )
+        if( Type == newType || ( Type > S_ && newType > S_ ) || ( Type < S_ && newType < S_ ) )
         {
             if( Type < S_ && Type != A_ && Type != B_ && Type != H_ ) //S_==0, no
             {
@@ -436,6 +437,16 @@ double
 TObject::Get(int n, int m)
 {
     check_dim(n,m);
+    return pV->Get(ndx(n,m));
+}
+
+// get cell of data object as double
+double
+TObject::GetEmpty(int n, int m)
+{
+    check_dim(n,m);
+    if( pV->IsEmpty( ndx(N, M) ) )
+        return DOUBLE_EMPTY;
     return pV->Get(ndx(n,m));
 }
 

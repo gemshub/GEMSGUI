@@ -195,26 +195,27 @@ void TSyst::dyn_set(int /*q*/)
     sy.XAun = (char *)aObj[ o_syxaun ].GetPtr();
     sy.XPun = (char *)aObj[ o_syxpun ].GetPtr();
     sy.B = (double *)aObj[ o_syb ].GetPtr();
-    sy.delB = (float *)aObj[ o_sydelb ].GetPtr();
+    sy.delB = (double *)aObj[ o_sydelb ].GetPtr();
     sy.BI = (double *)aObj[ o_sybi ].GetPtr();
     sy.XeA = (double *)aObj[ o_syxea ].GetPtr();
     sy.XeD = (double *)aObj[ o_syxed ].GetPtr();
     sy.Phm = (double *)aObj[ o_syphm ].GetPtr();
-    sy.Pparc = (float *)aObj[ o_sypparc ].GetPtr();
+
+    sy.Pparc = (double *)aObj[ o_sypparc ].GetPtr();
     sy.SATC = (char (*)[MCAS])aObj[ o_sysatc ].GetPtr();
 
-    sy.DUL = (float *)aObj[ o_sydul ].GetPtr();
-    sy.DLL = (float *)aObj[ o_sydll ].GetPtr();
-    sy.GEX = (float *)aObj[ o_sygex ].GetPtr();
-    sy.PUL = (float *)aObj[ o_sypul ].GetPtr();
-    sy.PLL = (float *)aObj[ o_sypll ].GetPtr();
-    sy.YOF = (float *)aObj[ o_syyof ].GetPtr();
-    sy.lnGmf = (float *)aObj[ o_sylngmf ].GetPtr();
+    sy.DUL = (double *)aObj[ o_sydul ].GetPtr();
+    sy.DLL = (double *)aObj[ o_sydll ].GetPtr();
+    sy.GEX = (double *)aObj[ o_sygex ].GetPtr();
+    sy.PUL = (double *)aObj[ o_sypul ].GetPtr();
+    sy.PLL = (double *)aObj[ o_sypll ].GetPtr();
+    sy.YOF = (double *)aObj[ o_syyof ].GetPtr();
+    sy.lnGmf = (double *)aObj[ o_sylngmf ].GetPtr();
     sy.MaSdj = (float (*)[DFCN])aObj[ o_symasdj ].GetPtr();
-    sy.Aalp = (float *)aObj[ o_syaalp ].GetPtr();
-    sy.Sigm = (float (*)[2])aObj[ o_sysigm ].GetPtr();
-    sy.Xr0h0 = (float (*)[2])aObj[ o_syxr0h0 ].GetPtr();
-    sy.XEpsC = (float (*)[2])aObj[ o_syxeps ].GetPtr();
+    sy.Aalp = (double *)aObj[ o_syaalp ].GetPtr();
+    sy.Sigm = (double (*)[2])aObj[ o_sysigm ].GetPtr();
+    sy.Xr0h0 = (double (*)[2])aObj[ o_syxr0h0 ].GetPtr();
+    sy.XEpsC = (double (*)[2])aObj[ o_syxeps ].GetPtr();
     sy.Nfsp =  (float (*)[MNST])aObj[ o_synfsp ].GetPtr();
     sy.MaSdt = (float (*)[MNST])aObj[ o_symasdt ].GetPtr();
     sy.XcapA = (float (*)[MNST])aObj[ o_syxcapa ].GetPtr();
@@ -224,8 +225,8 @@ void TSyst::dyn_set(int /*q*/)
     sy.XcapF = (float (*)[MNST])aObj[ o_syxcapf].GetPtr();
     sy.Xlam =  (float (*)[MNST])aObj[ o_syxlam].GetPtr();
     
-    sy.Guns = (float *)aObj[ o_syguns ].GetPtr();
-    sy.Vuns = (float *)aObj[ o_syvuns ].GetPtr();
+    sy.Guns = (double *)aObj[ o_syguns ].GetPtr();
+    sy.Vuns = (double *)aObj[ o_syvuns ].GetPtr();
 }
 
 // free dynamic memory in objects and values
@@ -245,26 +246,26 @@ void TSyst::dyn_kill(int /*q*/)
     sy.XAun = (char *)aObj[ o_syxaun ].Free();
     sy.XPun = (char *)aObj[ o_syxpun ].Free();
     sy.B = (double *)aObj[ o_syb ].Free();
-    sy.delB = (float *)aObj[ o_sydelb ].Free();
+    sy.delB = (double *)aObj[ o_sydelb ].Free();
     sy.BI = (double *)aObj[ o_sybi ].Free();
     sy.XeA = (double *)aObj[ o_syxea ].Free();
     sy.XeD = (double *)aObj[ o_syxed ].Free();
     sy.Phm = (double *)aObj[ o_syphm ].Free();
-    sy.Pparc = (float *)aObj[ o_sypparc ].Free();
+    sy.Pparc = (double *)aObj[ o_sypparc ].Free();
     sy.SATC = (char (*)[MCAS])aObj[ o_sysatc ].Free();
 
-    sy.DUL = (float *)aObj[ o_sydul ].Free();
-    sy.DLL = (float *)aObj[ o_sydll ].Free();
-    sy.GEX = (float *)aObj[ o_sygex ].Free();
-    sy.PUL = (float *)aObj[ o_sypul ].Free();
-    sy.PLL = (float *)aObj[ o_sypll ].Free();
-    sy.YOF = (float *)aObj[ o_syyof ].Free();
-    sy.lnGmf = (float *)aObj[ o_sylngmf ].Free();
+    sy.DUL = (double *)aObj[ o_sydul ].Free();
+    sy.DLL = (double *)aObj[ o_sydll ].Free();
+    sy.GEX = (double *)aObj[ o_sygex ].Free();
+    sy.PUL = (double *)aObj[ o_sypul ].Free();
+    sy.PLL = (double *)aObj[ o_sypll ].Free();
+    sy.YOF = (double *)aObj[ o_syyof ].Free();
+    sy.lnGmf = (double *)aObj[ o_sylngmf ].Free();
     sy.MaSdj = (float (*)[DFCN])aObj[ o_symasdj ].Free();
-    sy.Aalp = (float *)aObj[ o_syaalp ].Free();
-    sy.Sigm = (float (*)[2])aObj[ o_sysigm ].Free();
-    sy.Xr0h0 = (float (*)[2])aObj[ o_syxr0h0 ].Free();
-    sy.XEpsC = (float (*)[2])aObj[ o_syxeps ].Free();
+    sy.Aalp = (double *)aObj[ o_syaalp ].Free();
+    sy.Sigm = (double (*)[2])aObj[ o_sysigm ].Free();
+    sy.Xr0h0 = (double (*)[2])aObj[ o_syxr0h0 ].Free();
+    sy.XEpsC = (double (*)[2])aObj[ o_syxeps ].Free();
     sy.Nfsp =  (float (*)[MNST])aObj[ o_synfsp ].Free();
     sy.MaSdt = (float (*)[MNST])aObj[ o_symasdt ].Free();
     sy.XcapA = (float (*)[MNST])aObj[ o_syxcapa ].Free();
@@ -274,8 +275,8 @@ void TSyst::dyn_kill(int /*q*/)
     sy.XcapF = (float (*)[MNST])aObj[ o_syxcapf].Free();
     sy.Xlam =  (float (*)[MNST])aObj[ o_syxlam].Free();
 
-    sy.Guns = (float *)aObj[ o_syguns ].Free();
-    sy.Vuns = (float *)aObj[ o_syvuns ].Free();
+    sy.Guns = (double *)aObj[ o_syguns ].Free();
+    sy.Vuns = (double *)aObj[ o_syvuns ].Free();
 }
 
 // realloc dynamic memory
@@ -307,8 +308,8 @@ void TSyst::dyn_new(int /*q*/)
         sy.BIun = (char *)aObj[ o_sybiun ].Free();
     }
     if( sy.PbIC != S_OFF && sy.PdelB != S_OFF )
-        sy.delB = (float *)aObj[ o_sydelb].Alloc( mup->N, 1, F_);
-    else sy.delB = (float *)aObj[ o_sydelb ].Free();
+        sy.delB = (double *)aObj[ o_sydelb].Alloc( mup->N, 1, D_);
+    else sy.delB = (double *)aObj[ o_sydelb ].Free();
 
     if( sy.PbDC != S_OFF )
     {
@@ -343,12 +344,12 @@ void TSyst::dyn_new(int /*q*/)
 
     /* limits */
     if( sy.DLLim != S_OFF )
-        sy.DLL = (float *)aObj[ o_sydll].Alloc( mup->L, 1, F_ );
-    else sy.DLL = (float *)aObj[ o_sydll ].Free();
+        sy.DLL = (double *)aObj[ o_sydll].Alloc( mup->L, 1, D_ );
+    else sy.DLL = (double *)aObj[ o_sydll ].Free();
 
     if( sy.DULim != S_OFF )
-        sy.DUL = (float *)aObj[ o_sydul].Alloc( mup->L, 1, F_ );
-    else sy.DUL = (float *)aObj[ o_sydul ].Free();
+        sy.DUL = (double *)aObj[ o_sydul].Alloc( mup->L, 1, D_ );
+    else sy.DUL = (double *)aObj[ o_sydul ].Free();
 
     if( sy.DULim != S_OFF || sy.DLLim != S_OFF )
     {
@@ -361,12 +362,12 @@ void TSyst::dyn_new(int /*q*/)
         sy.RSC = (char *)aObj[ o_syrsc ].Free();
     }
     if( sy.PLLim != S_OFF )
-        sy.PLL = (float *)aObj[ o_sypll].Alloc( mup->Fi, 1, F_ );
-    else sy.PLL = (float *)aObj[ o_sypll ].Free();
+        sy.PLL = (double *)aObj[ o_sypll].Alloc( mup->Fi, 1, D_ );
+    else sy.PLL = (double *)aObj[ o_sypll ].Free();
 
     if( sy.PULim != S_OFF )
-        sy.PUL = (float *)aObj[ o_sypul].Alloc( mup->Fi, 1, F_ );
-    else sy.PUL = (float *)aObj[ o_sypul ].Free();
+        sy.PUL = (double *)aObj[ o_sypul].Alloc( mup->Fi, 1, D_ );
+    else sy.PUL = (double *)aObj[ o_sypul ].Free();
 
     if( sy.PULim != S_OFF || sy.PLLim != S_OFF )
     {
@@ -381,12 +382,12 @@ void TSyst::dyn_new(int /*q*/)
 
     /* add parameterd */
     if( sy.PYOF != S_OFF )
-        sy.YOF = (float *)aObj[ o_syyof].Alloc( mup->Fi, 1, F_ );
-    else sy.YOF = (float *)aObj[ o_syyof ].Free();
+        sy.YOF = (double *)aObj[ o_syyof].Alloc( mup->Fi, 1, D_ );
+    else sy.YOF = (double *)aObj[ o_syyof ].Free();
 
     if( sy.PParc != S_OFF )
-        sy.Pparc = (float *)aObj[ o_sypparc].Alloc( mup->L, 1, F_ );
-    else sy.Pparc = (float *)aObj[ o_sypparc ].Free();
+        sy.Pparc = (double *)aObj[ o_sypparc].Alloc( mup->L, 1, D_ );
+    else sy.Pparc = (double *)aObj[ o_sypparc ].Free();
 
     if( sy.PSATT != S_OFF )
         sy.SATC = (char (*)[MCAS])aObj[ o_sysatc].Alloc( mup->Lads, MCAS, A_ );
@@ -394,8 +395,8 @@ void TSyst::dyn_new(int /*q*/)
     else sy.SATC = (char (*)[MCAS])aObj[ o_sysatc ].Free();
 
     if( sy.PGEX != S_OFF )
-        sy.GEX = (float *)aObj[ o_sygex].Alloc( mup->L, 1, F_ );
-    else sy.GEX = (float *)aObj[ o_sygex ].Free();
+        sy.GEX = (double *)aObj[ o_sygex].Alloc( mup->L, 1, D_ );
+    else sy.GEX = (double *)aObj[ o_sygex ].Free();
 
     if( sy.PMaSdj != S_OFF )
         sy.MaSdj = (float (*)[DFCN])aObj[ o_symasdj].Alloc( mup->Lads, DFCN, F_ );
@@ -403,26 +404,26 @@ void TSyst::dyn_new(int /*q*/)
     else sy.MaSdj = (float (*)[DFCN])aObj[ o_symasdj ].Free();
 
     if( sy.PlnGf != S_OFF )
-        sy.lnGmf = (float *)aObj[ o_sylngmf].Alloc( mup->L, 1, F_ );
-    else sy.lnGmf = (float *)aObj[ o_sylngmf ].Free();
+        sy.lnGmf = (double *)aObj[ o_sylngmf].Alloc( mup->L, 1, D_ );
+    else sy.lnGmf = (double *)aObj[ o_sylngmf ].Free();
 
     /* Params of dispers phase */
     if( sy.PAalp != S_OFF )
-        sy.Aalp = (float *)aObj[ o_syaalp].Alloc( mup->Fi, 1, F_ );
-    else sy.Aalp = (float *)aObj[ o_syaalp ].Free();
+        sy.Aalp = (double *)aObj[ o_syaalp].Alloc( mup->Fi, 1, D_ );
+    else sy.Aalp = (double *)aObj[ o_syaalp ].Free();
 
     /* Modifications  */
     if( sy.PSigm != S_OFF )
-        sy.Sigm = (float (*)[2])aObj[ o_sysigm].Alloc( mup->Fi, 2, F_ );
-    else sy.Sigm = (float (*)[2])aObj[ o_sysigm ].Free();
+        sy.Sigm = (double (*)[2])aObj[ o_sysigm].Alloc( mup->Fi, 2, D_ );
+    else sy.Sigm = (double (*)[2])aObj[ o_sysigm ].Free();
 
     if( sy.PXepsC != S_OFF )
-        sy.XEpsC = (float (*)[2])aObj[ o_syxeps].Alloc( mup->Fi, 2, F_ );
-    else  sy.XEpsC = (float (*)[2])aObj[ o_syxeps ].Free();
+        sy.XEpsC = (double (*)[2])aObj[ o_syxeps].Alloc( mup->Fi, 2, D_ );
+    else  sy.XEpsC = (double (*)[2])aObj[ o_syxeps ].Free();
 
     if( sy.PXr0h0 != S_OFF )
-        sy.Xr0h0 = (float (*)[2])aObj[ o_syxr0h0].Alloc( mup->Fi, 2, F_ );
-    else sy.Xr0h0 = (float (*)[2])aObj[ o_syxr0h0 ].Free();
+        sy.Xr0h0 = (double (*)[2])aObj[ o_syxr0h0].Alloc( mup->Fi, 2, D_ );
+    else sy.Xr0h0 = (double (*)[2])aObj[ o_syxr0h0 ].Free();
 
     if( sy.PNfsp != S_OFF && sy.NsTm > 0 )
     {
@@ -459,8 +460,8 @@ void TSyst::dyn_new(int /*q*/)
         sy.Xlam = (float (*)[MNST])aObj[ o_syxlam].Alloc(  mup->Fis, sy.NsTm, F_ );
     else sy.Xlam = (float (*)[MNST])aObj[ o_syxlam ].Free();
 
-    sy.Guns = (float *)aObj[ o_syguns ].Alloc( mup->L, 1, F_ );
-    sy.Vuns = (float *)aObj[ o_syvuns ].Alloc( mup->L, 1, F_ );
+    sy.Guns = (double *)aObj[ o_syguns ].Alloc( mup->L, 1, D_ );
+    sy.Vuns = (double *)aObj[ o_syvuns ].Alloc( mup->L, 1, D_ );
 }
 
 
@@ -721,7 +722,7 @@ void TSyst::setDefData()
         memset( sy.BI, 0, mup->N*sizeof(double) );
     }
     if( sy.PbIC != S_OFF && sy.PdelB != S_OFF )
-        memset( sy.delB, 0, mup->N*sizeof(float) );
+        memset( sy.delB, 0, mup->N*sizeof(double) );
     if( sy.PbDC != S_OFF )
     {
         memset( sy.Dcl, S_REM, mup->L );
@@ -808,13 +809,13 @@ void TSyst::setDefData()
         /*......*/
     }
     if( sy.PYOF != S_OFF )
-        memset( sy.YOF, 0, mup->Fi*sizeof(float) );
+        memset( sy.YOF, 0, mup->Fi*sizeof(double) );
     if( sy.PParc != S_OFF )
-        memset( sy.Pparc, 0, mup->L*sizeof(float) );
+        memset( sy.Pparc, 0, mup->L*sizeof(double) );
     if( sy.PGEX != S_OFF )
-        memset( sy.GEX, 0, mup->L*sizeof(float) );
+        memset( sy.GEX, 0, mup->L*sizeof(double) );
     if( sy.PlnGf != S_OFF )
-        memset( sy.lnGmf, 0, mup->L*sizeof(float) );
+        memset( sy.lnGmf, 0, mup->L*sizeof(double) );
     // load start data from phases
     phase_data_load();
     // set selected aqueous and gaseous phase

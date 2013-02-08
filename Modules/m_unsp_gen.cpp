@@ -325,9 +325,9 @@ void TUnSpace::init_generation( )
   UNIFORM0( 1 );
 
   if( syu->Guns )
-          fillValue( syu->Guns, (float)0., TRMults::sm->GetMU()->L );
+          fillValue( syu->Guns, 0., TRMults::sm->GetMU()->L );
   if( syu->Vuns )
-          fillValue( syu->Vuns, (float)0., TRMults::sm->GetMU()->L );
+          fillValue( syu->Vuns, 0., TRMults::sm->GetMU()->L );
 
 // copy data from second column
 

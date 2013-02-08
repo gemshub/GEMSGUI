@@ -193,8 +193,8 @@ if(!Ip)
      for( i=0; i<pmu->L; i++)
      { int ii = (pmu->muj[i]);
 #ifndef IPMGEMPLUGIN
-       double xx = (double)(syu->Guns[ii]);
-       xx += (double)(TSyst::sm->GetSY()->GEX[ii]);  // Added by DK 05.06.2008
+       double xx = (syu->Guns[ii]);
+       xx += (TSyst::sm->GetSY()->GEX[ii]);  // Added by DK 05.06.2008
 //            xx += (float)(pmu->GEX[i])/pmu->RT; // syu->GEX[ii]
        xx += TMTparm::sm->GetTP()->G[ii];
 #else
@@ -412,7 +412,7 @@ void  TUnSpace::NexT(int J )
 // J - point of sample
 {
   int i,j,k1,k2,k3;
-  float R;
+  double R;
   double x, xx;
 
 #ifdef IPMGEMPLUGIN

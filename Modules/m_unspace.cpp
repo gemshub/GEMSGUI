@@ -1169,9 +1169,9 @@ TUnSpace::RecCalc( const char *key )
   pVisor->CloseMessage();
 
   if( TSyst::sm->GetSY()->Guns )
-          fillValue( TSyst::sm->GetSY()->Guns, (float)0., (int)TRMults::sm->GetMU()->L );
+          fillValue( TSyst::sm->GetSY()->Guns, 0., (int)TRMults::sm->GetMU()->L );
   if( TSyst::sm->GetSY()->Vuns )
-          fillValue( TSyst::sm->GetSY()->Vuns, (float)0., (int)TRMults::sm->GetMU()->L );
+          fillValue( TSyst::sm->GetSY()->Vuns, 0., (int)TRMults::sm->GetMU()->L );
 
 // Get startup syseq record for fitting
   //Get base SysEq key from UnSpace key

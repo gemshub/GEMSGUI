@@ -140,7 +140,7 @@ typedef struct
     ;
   double
     *B;  // Vector b of bulk chemical composition of the system, moles [0:mu.N-1]
-  float
+  double
     *delB;//Uncertainties of bulk composition vector b elements,in BCun_ units [mu.N]
   double
     *BI,   // IC quantity/concentration to calculate  b vector [0:mu.N-1]
@@ -150,22 +150,23 @@ typedef struct
   char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [mu.Lads][MCAS]
     /* Classifier of methods of SAT calculation { CNSI }[mu.Ls] */
     /* and allocation of sur DC to carrier components */
-  float
+  double
     *Pparc, // DC partial pressures, bar [0:mu.L-1]
-    /*VG*/  *DUL,// Vector of upper DC restrictions to x_j at eqstate (res)[mu.L]
-    /*NG*/  *DLL,// Vector of lower DC restrictions to x_j at eqstate [mu.L]
-    *GEX,// Excess free energy increment for DC, J/mole [mu.L]
-    *PUL,//Vector of upper restrictions to phases X_a at eqstate(res.)[mu.Fi]
+    *GEX,   // Excess free energy increment for DC, J/mole [mu.L]
+  /*VG*/  *DUL, // Vector of upper DC restrictions to x_j at eqstate (res)[mu.L]
+  /*NG*/  *DLL, // Vector of lower DC restrictions to x_j at eqstate [mu.L]
+    *PUL, //Vector of upper restrictions to phases X_a at eqstate(res.)[mu.Fi]
     *PLL,//Vector of lower restrictions to phases X_a at eqstate(res)[mu.Fi]
     *YOF,   // Phase metastability parameter, J/g [mu.Fi]
     *lnGmf, // ln of initial DC activity coefficients [mu.L]
     *Aalp,  // Specific surface area of dispersed phases, m2/g [mu.Fi]
     *Guns,  //  mu.L work vector of uncertainty space increments to tp->G + sy->GEX
     *Vuns;  //  mu.L work vector of uncertainty space increments to tp->Vm
+  double  (*Sigm)[2];//Specific surface energy of solid-aqueous (gas) interface, J/m2 [mu.Fi][2]
+  double  (*Xr0h0)[2];//Parameters r0 and h0 of particles (pores at r0<0), nm reserved [mu.Fi][2]
+  double  (*XEpsC)[2];// Dielectric constant & conductivity of phase carrier, reserved [mu.Fi][2]
+  // Adsorption / EDL models     default OFF
   float (*MaSdj)[DFCN]; // Density, CD-MUSIC, ads.isotherm params [mu.Lads][DFCN]
-  float  (*Sigm)[2];//Specific surface energy of solid-aqueous (gas) interface, J/m2 [mu.Fi][2]
-  float  (*Xr0h0)[2];//Parameters r0 and h0 of particles (pores at r0<0), nm reserved [mu.Fi][2]
-  float  (*XEpsC)[2];// Dielectric constant & conductivity of phase carrier, reserved [mu.Fi][2]
   float  (*Nfsp)[MNST];// Fraction of surface types relative to carrier components [mu.Fis][6]
   float  (*MaSdt)[MNST];// Max.total reactive species density 1/nm2 [mu.Fis][6]
   float  (*XcapA)[MNST];// Inner-layer capacitance density (TLM,CCM) for surface types, F/m2 [mu.Fis][6]

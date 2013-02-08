@@ -68,19 +68,20 @@ typedef struct
     *Phm, //PHASE(equilibrium) quantity/concentration to calculate b vector[sy.Fib]
     /* Configuration of components and phases
          IC: Default: OFF;   DC: Default ON;  PHASE: Default: ON; */
-    *B; /* Non-zero elements of vector b    [sy.N] */
-  float
-    *delB, /* Vector b uncertainty (if present)[sy.N] */
-    /* Additional constraints:  default OFF */
+    *B, /* Non-zero elements of vector b    [sy.N] */
+
+    *delB; /* Vector b uncertainty (if present)[sy.N] */
+  double
+  /* Additional constraints:  default OFF */
     *Pparc, // DC partial pressures, bar [sy.Le]
-    *GEX,// Excess free energy increment for DC, J/mole [sy.Le]
+    *GEX,   // Excess free energy increment for DC, J/mole [sy.Le]
+    *YOF,   // Phase metastability parameter, J/g [sy.Fie]
     *lnGmf, // ln of initial DC activity coefficients [sy.Le]
-    /* Phases */
-    *Aalp,  // Specific surface area of dispersed phases, m2/g [sy.Fie]
-    *YOF;   // Phase metastability parameter, J/g [sy.Fie]
-  float (*Sigm)[2];//Specific surface energy of solid-aqueous (gas) interface, J/m2 [sy.Fie][2]
-  float (*Xr0h0)[2];//Parameters r0 and h0 of particles (pores at r0<0), nm reserved [sy.Fie][2]
-  float (*XEpsC)[2];// Dielectric constant & conductivity of phase carrier, reserved [sy.Fie][2]
+  /* Phases */
+    *Aalp;  // Specific surface area of dispersed phases, m2/g [sy.Fie]
+  double (*Sigm)[2];//Specific surface energy of solid-aqueous (gas) interface, J/m2 [sy.Fie][2]
+  double (*Xr0h0)[2];//Parameters r0 and h0 of particles (pores at r0<0), nm reserved [sy.Fie][2]
+  double (*XEpsC)[2];// Dielectric constant & conductivity of phase carrier, reserved [sy.Fie][2]
     /* Kinetic constraints: default OFF */
   char
     *RLC,  /* type of non-default constraints on x[j]  [sy.Lk] */
@@ -88,7 +89,7 @@ typedef struct
     *RFLC, /* type of non-default constraints on XF[k] [sy.Fik] */
     *RFSC; /* scale codes for non-def. constr. on XF[k] [sy.Fik] */
     /* see file S_CLASS.H for codes */
-  float
+  double
     /*VG*/  *DUL,// Vector of upper DC restrictions to x_j at eqstate (res)[sy.Lk]
     /*NG*/  *DLL,// Vector of lower DC restrictions to x_j at eqstate [sy.Lk]
     *PUL,//Vector of upper restrictions to phases X_a at eqstate(res.)[sy.Fik]
@@ -99,7 +100,6 @@ typedef struct
   float (*MaSdj)[DFCN]; // Density, Frumkin, CD-MUSIC params new [sy.Lsor][DFCN]
     /* Phase parameters */
   char  (*SCMT)[MNST]; /* Classifier of EDL models for surface types [sy.Fia][6] */
-  
   float (*Nfsp)[MNST];// Fraction of surface types relative to carrier components [sy.Fia][6]
   float (*MaSdt)[MNST];// Max.total reactive species density 1/nm2 [sy.Fia][6]
   float (*XcapA)[MNST];// Inner-layer capacitance density (TLM,CCM) for surface types, F/m2 [sy.Fia][6]

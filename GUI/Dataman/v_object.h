@@ -188,6 +188,7 @@ public:
 
     //--- Value manipulation
     double Get(int n = 0, int m = 0);
+    double GetEmpty(int n = 0, int m = 0);
     void Put(double value, int n = 0, int m = 0);
     // Put cell of object to gstring. Return the lengs of gstring.
     // need inline - time critical function
