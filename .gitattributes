@@ -417,7 +417,6 @@ Resources/help/.gems3help/_1l.cfs -text
 Resources/help/.gems3help/deletable -text
 Resources/help/.gems3help/segments -text
 Resources/help/gems3help.qch -text
-Resources/help/gems3help.qhc -text
 Resources/img/gems1024.png -text
 Resources/img/gems3.ico -text
 Resources/img/gems50.png -text
@@ -723,6 +722,4 @@ Resources/projects/TryNPTDB/sdref.TryNPTDB.ndx -text
 Resources/projects/TryNPTDB/sdref.TryNPTDB.pdb -text
 Resources/projects/TryNPTDB/syseq.TryNPTDB.ndx -text
 Resources/projects/TryNPTDB/syseq.TryNPTDB.pdb -text
-Resources/visor.data/visobj.dat -text
-Resources/visor.data/visor.dat -text
 /gems3.png -text
