@@ -16,19 +16,26 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
+
+#include <QtCore>
+#if QT_VERSION >= 0x050000
+#include <QtWidgets>
+#include <QtPrintSupport/QPrintDialog>
+#include <QtPrintSupport/QPrinter>
+#else
+#include <QtGui>
+#include <QPrintDialog>
+#include <QPrinter>
+#endif
+
 #include <QtHelp/QHelpEngine>
 #include <QtHelp/QHelpContentWidget>
 #include <QtHelp/QHelpIndexWidget>
 #include <QFileInfo>
 #include <QMessageBox>
-#include <QPrintDialog>
-#include <QPrinter>
 #include <QtHelp/QHelpSearchEngine>
 #include <QtHelp/QHelpSearchQueryWidget>
 #include <QtHelp/QHelpSearchResultWidget>
-#include <QtCore>
-#include <QtGui>
-
 #include "HelpWindow.h"
 #include "GemsMainWindow.h"
 #include "visor.h"
@@ -83,10 +90,20 @@ HelpWindow::HelpWindow( QWidget* parent):
     spl->addWidget(tab_);
     tab_->setCurrentIndex(0);
 
+#if QT_VERSION >= 0x050000
+#include <QtWidgets>
+    tab_->setTabText(tab_->indexOf(tabContents),  "Contents");
+    label->setText("TextLabel");
+    tab_->setTabText(tab_->indexOf(tabIndex), "Index");
+    tab_->setTabText(tab_->indexOf(tabSearch),  "Search");
+#else
     tab_->setTabText(tab_->indexOf(tabContents), QApplication::translate("HelpWindowData", "Contents", 0, QApplication::UnicodeUTF8));
     label->setText(QApplication::translate("HelpWindowData", "TextLabel", 0, QApplication::UnicodeUTF8));
     tab_->setTabText(tab_->indexOf(tabIndex), QApplication::translate("HelpWindowData", "Index", 0, QApplication::UnicodeUTF8));
     tab_->setTabText(tab_->indexOf(tabSearch), QApplication::translate("HelpWindowData", "Search", 0, QApplication::UnicodeUTF8));
+#endif
+
+
 
     //End Ui form
 
@@ -102,9 +119,9 @@ HelpWindow::HelpWindow( QWidget* parent):
     toolAddress->addWidget( label_2 );
 
     adressLine = new QLineEdit( toolAddress );
-    adressLine->setEnabled( TRUE );
+    adressLine->setEnabled( true );
     adressLine->setFocusPolicy( Qt::ClickFocus );
-    adressLine->setReadOnly( TRUE );
+    adressLine->setReadOnly( true );
     adressLine->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     toolAddress->addWidget( adressLine );
 #endif  
@@ -200,7 +217,7 @@ void HelpWindow::setActions()
     toolFind->addWidget( label_2 );
 
     findLine = new QLineEdit( toolFind );
-    findLine->setEnabled( TRUE );
+    findLine->setEnabled( true );
     findLine->setFocusPolicy( Qt::ClickFocus );
     toolFind->addWidget( findLine );
     toolFind->addAction(actionFind_Previous);
@@ -252,7 +269,7 @@ void HelpWindow::helpOnHelp()
 
 void HelpWindow::helpPrint()
 {
- QPrinter printer;
+  QPrinter printer;
 
   QPrintDialog dlg(  &printer, this );
   dlg.setWindowTitle(tr("Print GEMS3 Help Page"));
@@ -313,7 +330,7 @@ void HelpWindow::actionFind()
       toolFind->addWidget( label_2 );
 
       findLine = new QLineEdit( toolFind );
-      findLine->setEnabled( TRUE );
+      findLine->setEnabled( true );
       findLine->setFocusPolicy( Qt::ClickFocus );
       toolFind->addWidget( findLine );
       actionFind_Next->setEnabled(true);

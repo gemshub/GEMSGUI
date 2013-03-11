@@ -322,7 +322,13 @@ QVariant TObjectModel::headerData( int section, Qt::Orientation orientation, int
 // return place of object defined by Model
 ePlaceMode TObjectModel::getObjectPlace()
 {
- 	reset();   
+#if QT_VERSION >= 0x050000
+
+    beginResetModel();
+#else
+    reset();
+
+#endif
     return flds[0].place;
 }
 
@@ -339,8 +345,16 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
 
     setFont( pVisorImp->getCellFont() );
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+#if QT_VERSION >= 0x050000
+
+    verticalHeader()->setSectionResizeMode( QHeaderView::ResizeToContents/*QHeaderView::Stretch*/ );
+    horizontalHeader()->setSectionResizeMode( QHeaderView::ResizeToContents/*QHeaderView::Stretch*/ );
+#else
     verticalHeader()->setResizeMode( QHeaderView::ResizeToContents/*QHeaderView::Stretch*/ );
     horizontalHeader()->setResizeMode( QHeaderView::ResizeToContents/*QHeaderView::Stretch*/ );
+
+#endif
     //setEditTriggers( QAbstractItemView::DoubleClicked|QAbstractItemView::AnyKeyPressed );
     setFocusPolicy(Qt::WheelFocus/*Qt::StrongFocus*/);
     setTabKeyNavigation( false );
@@ -790,7 +804,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
              {
                  // setValue();
                  if( sd_key.find_first_of("*?") == gstring::npos )  // pattern
-                     TSData::pm->RecSave( sd_key.c_str(), FALSE );
+                     TSData::pm->RecSave( sd_key.c_str(), false );
              }
          }
          time_t tim;

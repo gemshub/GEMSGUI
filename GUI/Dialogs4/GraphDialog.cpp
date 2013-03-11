@@ -18,14 +18,22 @@
 //-------------------------------------------------------------------
 
 #include <cstdio>
+
 #include <QPainter>
-#include <QPrinter>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QImageWriter>
 #include <QColorDialog>
 #include <QFileDialog>
+#include <QMimeData>
+#include <QDrag>
+
+#if QT_VERSION >= 0x050000
+#include <QtPrintSupport/QPrinter>
+#else
+#include <QPrinter>
+#endif
 
 #include "GraphDialog.h"
 #include "LegendDialog.h"
@@ -607,7 +615,7 @@ extern void qt_set_sane_printing( bool b );
 //Print graph screen to printer device
 void GraphDialog::CmPrint()
 {
-    QPrinter prt;
+   QPrinter prt;
 
   //qt3to4  if( prt.setup() ) printerState()
     {
@@ -629,6 +637,7 @@ void GraphDialog::CmPrint()
 	plot->PaintToDC(painter);
 
     }
+
 }
 
 void GraphDialog::setBackgrColor( QColor color )

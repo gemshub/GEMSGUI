@@ -29,6 +29,8 @@
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
+#include <QMimeData>
+#include <QDrag>
 
 #include "pshape.h"
 #include "GemsMainWindow.h"

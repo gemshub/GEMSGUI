@@ -112,7 +112,13 @@ void TTreeModel::setupModelData()
         prnt->children.append(chld);
       }
    }
-   reset(); 
+#if QT_VERSION >= 0x050000
+
+    beginResetModel();
+#else
+    reset();
+
+#endif
 }
 
 QModelIndex TTreeModel::index(int row, int column, const QModelIndex &parent) const
@@ -529,7 +535,14 @@ TTreeView::TTreeView( QWidget * parent ):
 {
 	    setFont( pVisorImp->getCellFont() );
 	//    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-	    header()->setResizeMode( /*QHeaderView::ResizeToContents*/QHeaderView::Interactive );
+#if QT_VERSION >= 0x050000
+
+    header()->setSectionResizeMode( /*QHeaderView::ResizeToContents*/QHeaderView::Interactive );
+
+#else
+     header()->setResizeMode( /*QHeaderView::ResizeToContents*/QHeaderView::Interactive );
+
+#endif
 	    setEditTriggers( QAbstractItemView::DoubleClicked|QAbstractItemView::AnyKeyPressed );
 	    setFocusPolicy(Qt::StrongFocus);
 	    setTabKeyNavigation( false );

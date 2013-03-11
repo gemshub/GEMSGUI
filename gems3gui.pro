@@ -16,6 +16,8 @@ QT += network
 QT += sql
 QT += xml
 
+greaterThan( QT_MAJOR_VERSION, 4 ): QT += widgets printsupport help
+
 #RESOURCES += img.qrc
 
 !win32 {

@@ -90,30 +90,30 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
     
     pExcludeAll = new QPushButton( this );
     pExcludeAll->setText( trUtf8( "&EXCLUDE ALL" ) );
-    pExcludeAll->setAutoDefault( TRUE );
+    pExcludeAll->setAutoDefault( true );
     buttonBox->addWidget( pExcludeAll );
 
     pFillAll = new QPushButton( this );
     pFillAll->setText( trUtf8( "&RETAIN ALL" ) );
-    pFillAll->setAutoDefault( TRUE );
+    pFillAll->setAutoDefault( true );
     buttonBox->addWidget( pFillAll );
 
     buttonOk = new QPushButton( this );
     buttonOk->setText( trUtf8( "CHECK/&Ok" ) );
-    buttonOk->setAutoDefault( TRUE );
-    buttonOk->setDefault( TRUE );
+    buttonOk->setAutoDefault( true );
+    buttonOk->setDefault( true );
     buttonBox->addWidget( buttonOk );
 
     buttonBox->addStretch();
 
     buttonHelp = new QPushButton( this );
     buttonHelp->setText( trUtf8( "&Learn more..." ) );
-    buttonHelp->setAutoDefault( TRUE );
+    buttonHelp->setAutoDefault( true );
     buttonBox->addWidget( buttonHelp );
 
     buttonCancel = new QPushButton( this );
     buttonCancel->setText( trUtf8( "&Cancel" ) );
-    buttonCancel->setAutoDefault( TRUE );
+    buttonCancel->setAutoDefault( true );
     buttonBox->addWidget( buttonCancel );
 
 /// Missin IC
