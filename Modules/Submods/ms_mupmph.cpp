@@ -522,16 +522,44 @@ void TMulti::multi_sys_ph()
             memcpy( pmp->SF2[k], mup->SF[kk], MAXSYMB );
             memcpy( pmp->SF2[k]+MAXSYMB, mup->SF[kk]+MAXSYMB+MAXPHSYMB, MAXPHNAME );
         }
-        if( kk < mup->Fis && mup->Ll[kk] > 1 )
-        { // load phase record
-           if( pmp->pNP && pmp->pBAL )
-                goto PARLOAD;
+if( pmp->pNP && pmp->pBAL )
+    goto PARLOAD;
+
+aPH->TryRecInp( mup->SF[kk], crt, 0 );  // Now reading all phase records!
+
+// New stuff for TKinMet
 // Resetting vector of TSolMod pointers to avoid problems with activity coeffs
-//     in TSolMod calculations after switching phases on/off (DK 25.05.2009)
-  if(phSolMod[k])
-     delete phSolMod[k];
-  phSolMod[k] = NULL;
-            aPH->TryRecInp( mup->SF[kk], crt, 0 );
+//     in TSolMod calculations after switching phases on/off
+if(phKinMet[k])
+    delete phKinMet[k];
+phKinMet[k] = NULL;
+pmp->kMod[k][0] = aPH->php->kin_t[2];
+pmp->kMod[k][1] = aPH->php->kin_t[3];
+pmp->kMod[k][2] = aPH->php->kin_t[4];
+pmp->kMod[k][3] = aPH->php->kin_t[5];
+pmp->kMod[k][4] = aPH->php->kin_t[6];
+/*
+long int
+*LsKin,  ///< new: number of parallel reactions nPRk[k]; number of species in activity products nSkr[k];
+         /// number of parameter coeffs in parallel reaction term nrpC[k]; number of parameters
+         /// per species in activity products naptC[k]; nAscC number of parameter coefficients in As correction [Fi][6];
+         /// Reserved
+*LsUpt,  ///< new: number of uptake kinetics model parameters (coefficients) numpC[k]; reserved [Fis][2]
+
+*xSKrC,  ///< new: Collected array of aq/gas/sorption species indexes used in activity products (-> += LsKin[k][1])
+*ocPRkC; ///< new: Collected array of operation codes for kinetic parallel reaction terms (-> += LsKin[k][0])
+*/
+
+        if( kk < mup->Fis && mup->Ll[kk] > 1 )
+        { // getting data and parameters for a multicomponent phase
+//           if( pmp->pNP && pmp->pBAL )
+//                goto PARLOAD;
+            // Resetting vector of TSolMod pointers to avoid problems with activity coeffs
+            //     in TSolMod calculations after switching phases on/off (DK 25.05.2009)
+            if(phSolMod[k])
+                delete phSolMod[k];
+            phSolMod[k] = NULL;
+//          aPH->TryRecInp( mup->SF[kk], crt, 0 );
             // read informations from phase-solution
             memcpy( pmp->sMod[k], aPH->php->sol_t, 6 );
             pmp->sMod[k][6] = aPH->php->kin_t[0];
@@ -555,6 +583,16 @@ void TMulti::multi_sys_ph()
             pmp->LsMdc2[k*3] = aPH->php->ndqf;
             pmp->LsMdc2[k*3+1] = aPH->php->nrcp;
 
+// New stuff for TSorpMod
+if(phSorpMod[k])
+   delete phSorpMod[k];
+phSorpMod[k] = NULL;
+/*
+long int
+*LsESmo, ///< new: number of EIL model layers; EIL params per layer; CD coefs per DC; reserved  [Fis][4]
+*LsISmo, ///< new: number of surface sites; isotherm coeffs per site; isotherm coeffs per DC; max.denticity of DC [Fis][4]
+*xSMd;   ///< new: denticity of surface species per surface site (site allocation) (-> L1[k]*LsISmo[k][3]] )
+*/
         }
         else  // nothing to read in the Phase record
             if( k<pmp->FIs )
@@ -568,6 +606,8 @@ void TMulti::multi_sys_ph()
                 pmp->LsPhl[k*2+1] = 0;
                 pmp->LsMdc2[k*3] = 0;
                 pmp->LsMdc2[k*3+1] = 0;
+// New stuff for TSorpMod
+
             }
 
 

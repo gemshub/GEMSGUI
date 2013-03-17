@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id: ms_muload.cpp 1156 2008-12-15 17:50:38Z gems $
 //
-// (c) 1992-2007 S.Dmitrieva, D.Kulik, K.Chudnenko, I.Karpov
+// (c) 1992-2013 S.Dmitrieva, D.Kulik, K.Chudnenko
 //
 // Implementation of parts of the Interior Points Method (IPM) module
 // for convex programming Gibbs energy minimization, described in:
@@ -41,15 +41,218 @@ enum translat_codes { // codes for translations of math script equations
     A_PHxICx = 'D', A_phxicx = 'd', A_ICxPHx = 'E', A_icxphx = 'e'
 };
 
-// Loading of scripts for the non-ideality models of
-// phases - solutions into structure for calculations of equlibria
+
+// New: Loading parameters for kinetics-metastability models of all
+// phases into structure for calculations of equlibria (added by DK on 13.03.2013)
+//
+void TMulti::KinMetModLoad( )
+{
+    int kk, k, j, jj, kf, kfe=0, kp, kpe=0, ka, kae=0, ks, kse=0,
+    JB, JE=0, jb, je=0, kc, kd, kce=0, kde=0, kx, kxe=0;
+    long int jphl=0, jlphc=0;
+    //vstr pkey(MAXRKEYLEN);
+    vstr modT(164);
+    char *kMod;
+    time_t crt;
+    TPhase* aPH = TPhase::pm;
+    RMULTS* mup = TRMults::sm->GetMU();
+    SYSTEM *syp = TSyst::sm->GetSY();
+
+    if( pmp->pKMM >= 1 )
+    return;
+
+    // KinMet data extraction from Phase records (so far another run rel.to SolModLoad())
+    for( kk=0, k=-1; kk<mup->Fi; kk++ )
+    {
+        JB = JE;
+        JE += mup->Ll[kk];
+        if( syp->Pcl[kk] == S_OFF )
+            continue;
+        k++;
+        jb=je;
+        je+= pmp->L1[k];
+
+        // Indexes for extracting data from       arrays
+        kx = kxe;
+        kc = kce;
+        kp = kpe;
+        kf = kfe;
+        ka = kae;
+        ks = kse;
+        kd = kde;
+
+        aPH->TryRecInp( mup->SF[kk], crt, 0 ); // reading phase record
+
+        // selecting type of the model
+        memcpy( modT, aPH->php->kin_t+2, MAXKEYWD );
+        memcpy( pmp->kMod[k], modT, MAXKEYWD );
+        kMod = pmp->kMod[k];
+
+        // load coefficients of KinMet models into MULTI transfer arrays
+LOAD_KKMCOEF:
+        if( pmp->LsKin[k*6] )
+        { // loading parameters for parallel reactions
+
+            //  Copying the PR opcode array from Phase to MULTI
+            if( aPH->php->ocPRk )
+            {
+               if( kp+pmp->LsKin[k*6] >
+                  (int)(sizeof( pmp->ocPRkC )/sizeof(long int)))
+               pmp->ocPRkC = (long int *) aObj[ o_wi_xfaces ].Alloc(
+                  kp+pmp->LsKin[k*6], 1, L_ );
+               ErrorIf( pmp->ocPRkC == NULL, "KinMetModLoad",
+                        "Error in reallocating memory for pmp->ocPRk" );
+
+               copyValues( pmp->ocPRkC+kp, aPH->php->ocPRk, pmp->LsKin[k*6]);
+            }
+            else
+               pmp->LsKin[k*6] = 0;  // no PR codes and coefficients
+
+            if( aPH->php->feSAr )
+            {
+                if( kf+pmp->LsKin[k*6] >
+                    (int)(sizeof( pmp->feSArC )/sizeof(double)))
+                   pmp->feSArC = (double *) aObj[ o_wi_fsac ].Alloc(
+                     (kf+pmp->LsKin[k*3]), 1, D_ );
+                ErrorIf( pmp->PMc == NULL, "KinMetModLoad",
+                         "Error in reallocating memory for pmp->feSArC." );
+                copyValues( pmp->feSArC+kf, aPH->php->feSAr, pmp->LsKin[k*6]);
+            }
+            else
+                pmp->LsKin[k*6] = 0; // no PR codes and area fractions
+
+            if( aPH->php->rpCon )
+            {
+                if( kc+pmp->LsKin[k*6]*pmp->LsKin[k*6+2] >
+                  (int)(sizeof( pmp->rpConC )/sizeof(double)))
+                 pmp->rpConC = (double *) aObj[ o_wi_krpc ].Alloc(
+                   (kc+pmp->LsKin[k*6]*pmp->LsKin[k*6+2]), 1, D_ );
+                ErrorIf( pmp->rpConC == NULL, "KinMetModLoad",
+                       "Error in reallocating memory for pmp->rpConC." );
+                copyValues( pmp->rpConC+kc, aPH->php->rpCon, (pmp->LsKin[k*6]*pmp->LsKin[k*6+2]));
+            }
+            else { // no array with kinetic PR parameters in the Phase record
+//            pmp->LsMod[k*6] = 0;
+                pmp->LsMod[k*6+2] = 0;
+            }
+
+            if( aPH->php->Ascp )
+            {
+                if( ks+pmp->LsKin[k*6+4] >
+                  (int)(sizeof( pmp->AscpC )/sizeof(double)))
+                 pmp->AscpC = (double *) aObj[ o_wi_ascpc ].Alloc(
+                   ks+pmp->LsKin[k*6+4], 1, D_ );
+                ErrorIf( pmp->AscpC == NULL, "KinMetModLoad",
+                       "Error in reallocating memory for pmp->AscpC." );
+                copyValues( pmp->AscpC+ks, aPH->php->Ascp, pmp->LsKin[k*6+4]);
+            }
+            else { // no array with Asur correction parameters in the Phase record
+                pmp->LsKin[k*6+4] = 0;
+            }
+
+            if( aPH->php->lDCr && aPH->php->apCon)   // List of DC names involved in PR activity products
+            {
+                if( kd+pmp->LsKin[k*6+1] >
+                  (int)(sizeof( pmp->xSKrC )/sizeof(long int)))
+                 pmp->xSKrC = (long int *) aObj[ o_wi_jcrdc ].Alloc(
+                   kd+pmp->LsKin[k*6+1], 1, L_ );
+                ErrorIf( pmp->apConC == NULL, "KinMetModLoad",
+                       "Error in reallocating memory for pmp->xSKrC." );
+                if( ka+pmp->LsKin[k*6+1] *pmp->LsKin[k*6]*pmp->LsKin[k*6+3] >
+                  (int)(sizeof( pmp->apConC )/sizeof(double)))
+                 pmp->apConC = (double *) aObj[ o_wi_apconc ].Alloc(
+                   (ka+pmp->LsKin[k*6+1] *pmp->LsKin[k*6]*pmp->LsKin[k*6+3]), 1, D_ );
+                ErrorIf( pmp->apConC == NULL, "KinMetModLoad",
+                       "Error in reallocating memory for pmp->apConC." );
+                int dcph = 0;
+                for( jj=0; jj<aPH->php->nSkr; jj++ )
+                {
+                    gstring DCname = gstring(aPH->php->lDCr[jj], DC_RKLEN );
+                    int dcInd = find_dcnum_multi(DCname.c_str());
+                    if( dcInd >0 )
+                    {   // here, parameters of DCs not present in MULTI are skipped
+                        pmp->xSKrC[kd+dcph] = (long int)dcInd;
+                        copyValues( pmp->apConC+ka+dcph*pmp->LsKin[k*6]*pmp->LsKin[k*6+3],
+                          aPH->php->apCon+jj*pmp->LsKin[k*6]*pmp->LsKin[k*6+3],
+                          (pmp->LsKin[k*6]*pmp->LsKin[k*6+3]));
+                        dcph++;
+                    }
+                }
+                pmp->LsKin[k*6+1] = dcph;  // Set actual number of DCs used in PR activity products
+            }
+            else
+            {
+                pmp->LsKin[k*6+1] = 0; // no DC coefficients for PR activity product terms
+//                pmp->LsMod[k*6+3] = 0;
+            }
+        }
+
+        // Linked phase parameters
+        pmp->LsPhl[k*2] = aPH->php->nlPh;
+        pmp->LsPhl[k*2+1] = aPH->php->nlPc;
+
+        int dphl = 0;
+        if( pmp->LsPhl[k*2] && pmp->LsPhl[k*2+1] )
+        {   // coefficients of linkage parameters in linked phases
+          if( aPH->php->lPhc /*&& aPH->php->IsoC*/ )
+          {
+            if( jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1]
+                 > (int)(sizeof( pmp->lPhc )/sizeof(double)))
+                pmp->lPhc = (double *) aObj[ o_wi_lphc ].Alloc(
+                   jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1], 1, D_ );
+            ErrorIf( pmp->lPhc == NULL, "KinMetModLoad",
+                    "Error in reallocating memory for pmp->lPhc." );
+            if( jphl+pm.LsPhl[k*2]*2
+                 > (int)(sizeof( pmp->PhLin )/sizeof(double)))
+                pmp->PhLin = (long int *) aObj[ o_wi_phlin ].Alloc(
+                   jphl+pm.LsPhl[k*2]*2, 1, L_ );
+            ErrorIf( pmp->PhLin == NULL, "KinMetModLoad",
+                    "Error in reallocating memory for pmp->PhLin." );
+            for( jj=0; jj<aPH->php->nlPh; jj++ )
+            {
+                gstring Pname = gstring(aPH->php->lPh[jj], PH_RKLEN );
+                int phInd = find_phnum_multi(Pname.c_str());
+                if( phInd >0 )
+                {   // here, parameters for phases not in MULTI are skipped
+                    pmp->PhLin[jphl+dphl*2] = phInd;
+                    pmp->PhLin[jphl+dphl*2+1] = (long int)aPH->php->lPhC[jj];
+                    copyValues( pmp->lPhc+jlphc+dphl*pmp->LsPhl[k*2+1],
+                         aPH->php->lPhc+jj*pmp->LsPhl[k*2+1], pmp->LsPhl[k*2+1]);
+                    dphl++;
+                }
+            }
+          }
+          else
+          {    pmp->LsPhl[k*2+1] = 0; // no DC coefficients
+          }
+          pmp->LsPhl[k*2] = dphl;
+        }
+        // move handles
+        jphl  += (pm.LsPhl[k*2]*2);
+        jlphc += (pm.LsPhl[k*2]*pm.LsPhl[k*2+1]);
+
+        kfe += pmp->LsKin[k*6];
+        kpe += pmp->LsKin[k*6];
+        kce += pmp->LsKin[k*6]*pmp->LsKin[k*6+2];
+        kae += pmp->LsKin[k*6]*pmp->LsKin[k*6+1]*pmp->LsKin[k*6+3];
+        kse += pmp->LsMod[k*6+4];
+        kde += pmp->LsKin[k*6+1];
+
+     } // kk, k
+
+     pmp->pKMM = 1;
+ }
+
+
+// Loading parameters and scripts for the non-ideality models of
+// phases-solutions into structure for calculations of equlibria
 // Uses the IPN stack calculation module (c) 1991-1996 S.Dmytrieva
 //
 void TMulti::SolModLoad( )
 {
-    int kk, k, j, jj, jp, jkd,
+    int kk, k, j, jj, jp, jkd, ku, kue=0,
     JB, JE=0, jb, je=0, kc, kd, kce=0, kde=0, kx, kxe=0, ksn = 0, ksf=0, Type=0;
-    long int jphl=0, jlphc=0, jdqfc=0,  jrcpc=0;
+    long int jdqfc=0,  jrcpc=0;
     //vstr pkey(MAXRKEYLEN);
     vstr modT(164);
     char *sMod;
@@ -84,6 +287,7 @@ if( pmp->pIPN >= 1 )           //SD 29/11/2006
         kx = kxe;                  // added 07.12.2006 by KD
         kc = kce;
         kd = kde;
+        ku = kue;
 
         if( pmp->L1[k] == 1 )
             continue;  // one component is left in the multicomponent phase
@@ -333,12 +537,8 @@ LOAD_NIDMCOEF:
           else pmp->LsMdc[k*3] = 0; // no DC coefficients
         }
         // Load new fields from Phase
-
-        pmp->LsPhl[k*2] = aPH->php->nlPh;
-        pmp->LsPhl[k*2+1] = aPH->php->nlPc;
         pmp->LsMdc2[k*3] = aPH->php->ndqf;
         pmp->LsMdc2[k*3+1] = aPH->php->nrcp;
-
 
         if( pmp->LsMdc2[k*3] )
         {   // coefficients for of DQF parameters for DCs in phases
@@ -386,54 +586,44 @@ LOAD_NIDMCOEF:
           else pmp->LsMdc2[k*3+1] = 0; // no DC coefficients
         }
 
-        // !!!!! must be for FI
-        int dphl = 0;
-        if( pmp->LsPhl[k*2] && pmp->LsPhl[k*2+1] )
-        {   // coefficients of reciprocal parameters for DCs in phases
-          if( aPH->php->lPhc && aPH->php->IsoC )
-          {
-            if( jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1]
-                 > (int)(sizeof( pmp->lPhc )/sizeof(double)))
-                pmp->lPhc = (double *) aObj[ o_wi_lphc ].Alloc(
-                   jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1], 1, D_ );
-            ErrorIf( pmp->lPhc == NULL, "SolModLoad",
-                    "Error in reallocating memory for pmp->lPhc." );
-            if( jphl+pm.LsPhl[k*2]*2
-                 > (int)(sizeof( pmp->PhLin )/sizeof(double)))
-                pmp->PhLin = (long int *) aObj[ o_wi_phlin ].Alloc(
-                   jphl+pm.LsPhl[k*2]*2, 1, L_ );
-            ErrorIf( pmp->PhLin == NULL, "SolModLoad",
-                    "Error in reallocating memory for pmp->PhLin." );
-            for( jj=0; jj<aPH->php->nlPh; jj++ )
-            {
-                gstring Pname = gstring(aPH->php->lPh[jj], PH_RKLEN );
-                int phInd = find_phnum_multi(Pname.c_str());
-                if( phInd >0 )
-                {
-                    pmp->PhLin[jphl+dphl*2] = phInd;
-                    pmp->PhLin[jphl+dphl*2+1] = (long int)aPH->php->lPhC[jj];
-                    copyValues( pmp->lPhc+jlphc+dphl*pmp->LsPhl[k*2+1],
-                         aPH->php->lPhc+jj*pmp->LsPhl[k*2+1], pmp->LsPhl[k*2+1]);
-                    dphl++;
-                }
-            }
-          }
-          else
-          {    pmp->LsPhl[k*2+1] = 0; // no DC coefficients
-          }
-          pmp->LsPhl[k*2] = dphl;
-        }
-        // move pointers
-        jphl  += (pm.LsPhl[k*2]*2);
-        jlphc += (pm.LsPhl[k*2]*pm.LsPhl[k*2+1]);
+        // move handles
         jdqfc += (pm.LsMdc2[k*3]*pm.L1[k]);
         jrcpc += (pm.LsMdc2[k*3+1]*pm.L1[k]);
 
         kxe += pmp->LsMod[k*3]*pmp->LsMod[k*3+1];
-        kce += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];  // Changed 10.12.2006  by KD&SD
+        kce += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];
         kde += pmp->LsMdc[k*3]*pmp->L1[k];
         ksn += pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2]*pmp->L1[k];
         ksf += pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2];
+
+// new: load coefficients and parameters for TSorpMod here
+    LOAD_SORPMCOEF:
+        if( pmp->sMod[k][6] != SM_UNDEF )
+        {
+            ;
+        }
+        if( pmp->sMod[k][7] != SM_UNDEF )
+        {
+
+        }
+
+   LOAD_UPTMODCOEF:
+// new: load uptake kinetics model parameters here
+        if( aPH->php->umpCon )
+        {
+            if( ku+pmp->LsUpt[k*2] >
+              (int)(sizeof( pmp->UMpcC )/sizeof(double)))
+             pmp->UMpcC = (double *) aObj[ o_wi_umpc ].Alloc(
+               ku+pmp->LsUpt[k*2], 1, D_ );
+            ErrorIf( pmp->UMpcC == NULL, "SolModLoad",
+                   "Error in reallocating memory for pmp->UMpcC." );
+            copyValues( pmp->UMpcC+ku, aPH->php->umpCon, pmp->LsUpt[k*2]);
+        }
+        else { // no array with uptake kinetics parameters in the Phase record
+            pmp->LsUpt[k*2] = 0;
+        }
+        kue += pmp->LsUpt[k*2];
+
      } // k
 
     pmp->pIPN = 1;
@@ -705,7 +895,7 @@ int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
    return( j );
 }
 
-/// Search of phase index by name ( *name )
+/// Search of Phase index by name ( *name )
 /// Find index in lists MULTI;  pmp->SF
 ///  \return index >=0 or -1
 //
@@ -717,6 +907,21 @@ int TMulti::find_phnum_multi( const char *name)
     for( k=0; k < pmp->FI; k++ )
       if( !memcmp(name, pmp->SF[k], min(len,(int)(MAXPHNAME+MAXSYMB))))
                 return k;
+    return -1;
+}
+
+/// Search of DComp index by name ( *name )
+/// Find index in lists MULTI;  pmp->SM
+///  \return index >=0 or -1
+//
+int TMulti::find_dcnum_multi( const char *name)
+{
+    int j, len;
+
+    len = strlen( name );
+    for( j=0; j < pmp->L; j++ )
+      if( !memcmp(name, pmp->SM[j], min(len,(int)(MAXDCNAME))))
+                return j;
     return -1;
 }
 

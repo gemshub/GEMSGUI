@@ -695,7 +695,7 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
     // Restoring the rest of MULTI contents from primal and dual solution
     pmp->pIPN =0;
     multi->Alloc_internal();
-    multi->EqstatExpand( pmp->stkey, false );
+    multi->EqstatExpand( pmp->stkey, false, false );
 //    outMultiTxt( "IPM_EqstatExpand.txt"  );
     //    multi->Free_internal();
     //    na->unpackDataBr( true );

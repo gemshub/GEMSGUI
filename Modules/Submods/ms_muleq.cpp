@@ -398,7 +398,7 @@ void TMulti::MultiKeyInit( const char*key )
 // Finalizing the full structure MULTI by expanding the SysEq record
 // read from the database
 //
-void TMulti::EqstatExpand( const char *key, bool calcActivityModels )
+void TMulti::EqstatExpand( const char *key, bool calcActivityModels, bool calcKineticModels )
 {
     long int i, j, k;//, jb, je=0, jpb, jpe=0, jdb, jde=0;
 //    double FitVar3;
@@ -442,6 +442,15 @@ void TMulti::EqstatExpand( const char *key, bool calcActivityModels )
     // set IPM weight multipliers for DC
     WeightMultipliers( false );
 
+// New: TKinMet stuff
+if( calcKineticModels )
+{
+    if( pmp->pKMM <= 0 )
+    {
+        KinMetModLoad();
+    }
+    pmp->pKMM = 1;
+}
     // test multicomponent phases and load data for mixing models
     //
     if( pmp->FIs && AllPhasesPure == false )   // bugfix DK 11.03.2010

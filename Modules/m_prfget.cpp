@@ -554,7 +554,7 @@ void TProfil::loadSystat( const char *key )
         multi->loadData( false );  // unpack syseq to multi
         for(short j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
-        multi->EqstatExpand( keyp.c_str(), true );
+        multi->EqstatExpand( keyp.c_str(), true, true );
 //        outMultiTxt( "GEM_EqstatExpand.txt"  );
     }
 
@@ -586,7 +586,7 @@ void TProfil::deriveSystat()
         multi->loadData( false );  // unpack syseq to multi
         for(short j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
-        multi->EqstatExpand( keyp.c_str(), true );
+        multi->EqstatExpand( keyp.c_str(), true, true );
     }
 
     // SD 22/01/2010 bool

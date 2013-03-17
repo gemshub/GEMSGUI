@@ -44,6 +44,8 @@ ICNud = 0;
 
     sizeFIs = 0;
     phSolMod = 0;
+    sizeFI = 0;
+    phKinMet = 0;
 }
 
 const char* TMulti::GetHtml()
@@ -1165,8 +1167,14 @@ pm.GamFs = (double *)aObj[ o_wo_gamfs].Alloc( pm.L, 1, D_);
         //pm.UMpcC   = (double *)aObj[ o_wi_umpc].Alloc( pm.FIs, 1, D_ );
         pm.kMod   = (char(*)[6])aObj[ o_wi_kmod].Alloc( pm.FI, 1, 6 );
 
-    Free_TSolMod(); //Bugfix SD 01/06/12
+    Free_TSolMod();
     Alloc_TSolMod( pm.FIs );
+
+    Free_TSorpMod();
+    Alloc_TSorpMod( pm.FIs );
+
+    Free_TKinMet();
+    Alloc_TKinMet( pm.FI );
 
 }
 
