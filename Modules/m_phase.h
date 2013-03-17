@@ -57,7 +57,7 @@ Prcp, // new: flag for rcpp array for DC-related reciprocal parameter coefficien
 PlPhl,// new: flag for list of record keys of linked phases, cf. lPh, lPhC {+*-}
 Psol, /// TW new: flag for solvent interaction coefficients
 Pdiel, /// TW new: flag for dielectric constant coefficients
-Pdh, /// TW new: flag for generic DH coefficients
+Pdh,  /// TW new: flag for generic DH coefficients
 Pres1,// new: reserved
 
 // TSorpMod stuff
@@ -181,9 +181,10 @@ fRes2, // new: reserved
 // TKinMet stuff
 *feSAr,  /// fractions of surface area of the solid related to different parallel reactions [nPRk]
 *rpCon,  /// array of kinetic rate constants for particle faces or 'parallel reactions' [nPRk][nrpC]
-*apCon,  /// array of parameters per species involved in 'activity product' terms [nPRk] [nSkr][naptC]
+*apCon,  /// array of parameters per species involved in 'activity product' terms [nSkr] [nPRk][naptC]
 *Ascp,   /// parameter coefficients of equation for corrections of specific surface area [nAscC]
-*umpCon /// array of uptake model parameters [nDC][numpC]
+
+*umpCon  /// array of uptake model parameters [nDC][numpC] (only SS phases)
 // new:new: array of nucleation model parameters (A.Testino?)
 ;
 
@@ -200,12 +201,13 @@ char (*lPh)[PH_RKLEN];    /// TKinMet, TSorpMod: list of record keys of linked p
                           /// in MULTI vector of phase indexes long int *xlPh
 char (*lDCr)[DC_RKLEN];   /// TKinMet: list of record keys (names?) of aq, gas or surface catalyzing
       /// or inhibiting species for parallel reactions [nSkr] in MULTI vector of DC indexes long int *xSkr
+//
 char (*dcpcl)[MAXDCNAME]; // new: DC parameter coefficients comment list [nscM]
 char (*ipicl)[MAXDCNAME]; // new: interaction parameter indexes comment list [ncpN]
 char (*ipccl)[MAXDCNAME]; // new: interaction parameter coefficients comment list [ncpM]
 //
 char (*rpkcl)[MAXDCNAME]; /// kinetic rate constants comment list [nrpC]
-char (*rprcl)[MAXDCNAME]; /// kinetic parallel reactions regions comment list [nPRk]
+char (*rprcl)[MAXDCNAME]; /// kinetic parallel reactions comment list [nPRk]
 char (*umpcl)[MAXDCNAME]; /// uptake kinetic model parameters comment list [numpC]
 //
 char (*smcDl)[MAXDCNAME]; // new: sorption model parameters comment list per DC [nIsoC]
