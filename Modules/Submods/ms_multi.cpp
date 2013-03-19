@@ -605,7 +605,7 @@ pm.GamFs  = (double *)aObj[ o_wo_gamfs ].GetPtr();
     // New phase stuff 06/06/12
     pm.LsMdc2  = (long int *)aObj[ o_wi_lsmdc2].GetPtr();
     pm.LsPhl   = (long int *)aObj[ o_wi_lsphl].GetPtr();
-    pm.PhLin   = (long int *)aObj[ o_wi_phlin].GetPtr();
+    pm.PhLin   = (long int (*)[2])aObj[ o_wi_phlin].GetPtr();
     // TSolMod stuff
     pm.lPhc   = (double *)aObj[ o_wi_lphc].GetPtr();
     pm.DQFc   = (double *)aObj[ o_wi_dqfc].GetPtr();
@@ -792,7 +792,7 @@ pm.GamFs  = (double *)aObj[ o_wo_gamfs ].Free();
     // New phase stuff 06/06/12
     pm.LsMdc2  = (long int *)aObj[ o_wi_lsmdc2].Free();
     pm.LsPhl   = (long int *)aObj[ o_wi_lsphl].Free();
-    pm.PhLin   = (long int *)aObj[ o_wi_phlin].Free();
+    pm.PhLin   = (long int (*)[2])aObj[ o_wi_phlin].Free();
     // TSolMod stuff
     pm.lPhc   = (double *)aObj[ o_wi_lphc].Free();
     pm.DQFc   = (double *)aObj[ o_wi_dqfc].Free();

@@ -333,7 +333,7 @@ enum solmod_switches { // indexes of keys of phase (solution, sorption, kinetic)
     LINK_UX_MODE,
     LINK_TP_MODE,
     LINK_PP_MODE,  // LINK_PHP_MODE,
-LINK_INI_MODE, // Initialization mode for kinetics and other time-dependent processes
+LINK_IN_MODE, // Initialization mode for kinetics and other time-dependent processes
 SORP_MOD,  // new, see also enum sorption_control
 KINR_MOD,  /// see also enum kinmet_controls
     // Posible modes of calculation of activity coefficients (private, public)
@@ -443,9 +443,9 @@ enum sorption_control {
     PI_DEN=0, PI_CD0, PI_CDB, PI_P1, PI_P2, PI_P3
 };
 
-enum ph_kinmet_controls {   /// TKinMet: codes to control kinetic rate models
+enum ph_kinmet_controls { /// TKinMet: codes to control kinetic rate models
 
-    KM_UNDEF = 'N',      /// not defined, no account for
+    KM_UNDEF = 'N',       /// not defined, no account for
 //KinProCode
     KM_PRO_MWR = 'M',     /// Kinetics of generic dissolution/precipitation (no uptake, ionex, adsorption)
     KM_PRO_UPT = 'U',     /// Kinetics of uptake/entrapment (of minor/trace element) into solid solution
@@ -466,15 +466,15 @@ enum ph_kinmet_controls {   /// TKinMet: codes to control kinetic rate models
     KM_ADS_INHIB = 'I',   ///  Adsorption inhibition
     KM_NUCL_SSMP  = 'P',  ///  Solid solution nucleation model (Prieto 2013)
 //KinLinkCode
-    KM_LNK_SURF = 'S',   ///   Link to (fraction of) solid substrate surface
-    KM_LNK_PVOL = 'P',   ///    Link to (fraction of) solid substrate (pore) volume
-    KM_LNK_MASS = 'M',   ///	Link to (fraction of) solid substrate mass
+    KM_LNK_SURF = 'S',    ///   Link to (fraction of) solid substrate surface
+    KM_LNK_PVOL = 'P',    ///    Link to (fraction of) solid substrate (pore) volume
+    KM_LNK_MASS = 'M',    ///	Link to (fraction of) solid substrate mass
 //KinSizedCode
-    KM_SIZED_UNI = 'U',  /// 	Uniform particle/pore size distribution
-    KM_SIZED_BIN = 'B',  /// 	Binodal particle/pore size distribution
-    KM_SIZED_FUN = 'F',  ///    Empirical distribution function
+    KM_SIZED_UNI = 'U',   /// 	Uniform particle/pore size distribution
+    KM_SIZED_BIN = 'B',   /// 	Binodal particle/pore size distribution
+    KM_SIZED_FUN = 'F',   ///    Empirical distribution function
 //KinResCode
-    KM_RES_SURF = 'A',   /// surface-scaled rate model (k in mol/m2/s)
+    KM_RES_SURF = 'A',    /// surface-scaled rate model (k in mol/m2/s)
     KM_RES_PVS = 'V'      /// pore-volume-scaled model (k in mol/m3/s)
 
 };

@@ -187,7 +187,7 @@ LOAD_KKMCOEF:
             }
         }
 
-        // Linked phase parameters
+        // Loading Linked phase parameters
         pmp->LsPhl[k*2] = aPH->php->nlPh;
         pmp->LsPhl[k*2+1] = aPH->php->nlPc;
 
@@ -202,10 +202,10 @@ LOAD_KKMCOEF:
                    jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1], 1, D_ );
             ErrorIf( pmp->lPhc == NULL, "KinMetModLoad",
                     "Error in reallocating memory for pmp->lPhc." );
-            if( jphl+pm.LsPhl[k*2]*2
-                 > (int)(sizeof( pmp->PhLin )/sizeof(double)))
-                pmp->PhLin = (long int *) aObj[ o_wi_phlin ].Alloc(
-                   jphl+pm.LsPhl[k*2]*2, 1, L_ );
+            if( jphl+pm.LsPhl[k*2]
+                    > (int)(sizeof( pmp->PhLin )/sizeof(long int (*)[2])))
+                pmp->PhLin = (long int (*)[2]) aObj[ o_wi_phlin ].Alloc(
+                   jphl+pm.LsPhl[k*2], 2, L_ );
             ErrorIf( pmp->PhLin == NULL, "KinMetModLoad",
                     "Error in reallocating memory for pmp->PhLin." );
             for( jj=0; jj<aPH->php->nlPh; jj++ )
@@ -214,8 +214,8 @@ LOAD_KKMCOEF:
                 int phInd = find_phnum_multi(Pname.c_str());
                 if( phInd >0 )
                 {   // here, parameters for phases not in MULTI are skipped
-                    pmp->PhLin[jphl+dphl*2] = phInd;
-                    pmp->PhLin[jphl+dphl*2+1] = (long int)aPH->php->lPhC[jj];
+                    pmp->PhLin[jphl+dphl][0] = phInd;
+                    pmp->PhLin[jphl+dphl][1] = (long int)aPH->php->lPhC[jj];
                     copyValues( pmp->lPhc+jlphc+dphl*pmp->LsPhl[k*2+1],
                          aPH->php->lPhc+jj*pmp->LsPhl[k*2+1], pmp->LsPhl[k*2+1]);
                     dphl++;
@@ -223,13 +223,14 @@ LOAD_KKMCOEF:
             }
           }
           else
-          {    pmp->LsPhl[k*2+1] = 0; // no DC coefficients
+          {
+              pmp->LsPhl[k*2+1] = 0; // no DC coefficients
           }
           pmp->LsPhl[k*2] = dphl;
         }
         // move handles
-        jphl  += (pm.LsPhl[k*2]*2);
-        jlphc += (pm.LsPhl[k*2]*pm.LsPhl[k*2+1]);
+        jphl  += pm.LsPhl[k*2];
+        jlphc += pm.LsPhl[k*2]*pm.LsPhl[k*2+1];
 
         kfe += pmp->LsKin[k*6];
         kpe += pmp->LsKin[k*6];
