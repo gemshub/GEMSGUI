@@ -76,9 +76,9 @@ PapCon,  /// new: flag for lDCr and apCon arrays for parameters of species invol
 kin_t[8],    // was 6 now 8!
   // new:    Type of sorption/ionex/polyelectrolyte isotherm model { N ... }
   // new:    Type of sorption EIL model { N ...  }
-  /// Type of mineral-aqueous/gas reaction kinetics rate model  { N T W ... TBD }
-  /// Direction of the kinetic process to which the rate model refers { N D P G B ... TBD }
-  /// Type of the uptake kinetics model { N E M ... TBD }
+  /// Type code of the kinetics/metastability model  { N T W ... TBD }
+  /// Code of direction of the kinetic process to the rate model applies { N D P G B ... TBD }
+  /// Type code of the uptake kinetics model { N E M ... TBD }
   /// Type of metastability links of this phase to other phases { N S P M ... TBD }
   /// Type of particle/pore size distribution and specific surface area correction { N U B ... }
   /// Code of specific MWR kinetic rate model equation { N ... }
@@ -328,14 +328,14 @@ enum solmod_switches { // indexes of keys of phase (solution, sorption, kinetic)
     SGM_MODE,
     DCE_LINK,
     MIX_TYP,
-SORP_MOD,  // new, see also enum sorption_control
-KINR_MOD,  /// see also enum kinmet_controls
 
     // Link state of CalculateActivityCoefficients()
     LINK_UX_MODE,
     LINK_TP_MODE,
     LINK_PP_MODE,  // LINK_PHP_MODE,
-
+LINK_INI_MODE, // Initialization mode for kinetics and other time-dependent processes
+SORP_MOD,  // new, see also enum sorption_control
+KINR_MOD,  /// see also enum kinmet_controls
     // Posible modes of calculation of activity coefficients (private, public)
     SM_UNDEF = 'N',
     SM_TPDEP = 'T',
@@ -445,30 +445,37 @@ enum sorption_control {
 
 enum ph_kinmet_controls {   /// TKinMet: codes to control kinetic rate models
 
-    KM_UNDEF = 'N',      /// not defined, no account
-    KM_RATE_SURF = 'A',  /// surface-scaled rate model (k in mol/m2/s)
-    KM_RATE_PV = 'V',    /// pore-volume-scaled model (k in mol/m3/s)
-
-    KM_DIR_DISSOL = 'D', /// dissolution
-    KM_DIR_GROWTH = 'G', /// growth on seed particles
-    KM_DIR_NUCPREC ='P', /// nucleation and precipitation
-    KM_DIR_BOTH = 'B',   /// bidirectional (D or G depending on stability index)
-
-    KM_UPT_ENTRAP = 'E', /// unified entrapment model
-    KM_UPT_ENTRDIF = 'M',/// unified entrapment model with in/out diffusion term
-
-    KM_LNK_SURF = 'S',   /// link to (fraction of) solid substrate surface
-    KM_LNK_PVOL = 'P',   /// link to (fraction of) solid substrate (pore) volume
-    KM_LNK_MASS = 'M',   /// link to (fraction of) solid substrate mass
-
-    KM_SIZED_UNI = 'U',  /// uniform
-    KM_SIZED_BIN = 'B',  /// binodal
-    KM_SIZED_FUN = 'F',  /// distribution function
-
-    /// Code of specific MWR kinetic rate model { N ... }
-    KM_MWREQ_PAL = 'P',   /// Palandri 2004
-    KM_MWREQ_WOL = 'W'    /// Wolthers 2012 for calcite
-    // . . . . . .
+    KM_UNDEF = 'N',      /// not defined, no account for
+//KinProCode
+    KM_PRO_MWR = 'M',     /// Kinetics of generic dissolution/precipitation (no uptake, ionex, adsorption)
+    KM_PRO_UPT = 'U',     /// Kinetics of uptake/entrapment (of minor/trace element) into solid solution
+    KM_PRO_IEX = 'X',     /// Kinetics of ion exchange (clays, C-S-H, zeolites, ...)
+    KM_PRO_ADS = 'A',     /// Kinetics of adsorption (on MWI), redox
+    KM_PRO_NUPR = 'P',    /// Kinetics of nucleation and precipitation
+//KinModCode
+    KM_MOD_TST = 'T',     /// Generic TST dissolution/precipitation model following Shott ea 2012
+    KM_MOD_PAL = 'P',     /// Dissolution/precipitation model of the form (Palandri 2004)
+    KM_MOD_WOL = 'W',     /// Carbonate growth model following (Wolthers 2012)
+    KM_MOD_NUGR = 'U',    /// Mineral nucleation and growth model with nuclei/particle size distr. (TBD)
+//KinSorpCode
+    KM_UPT_ENTRAP = 'E',  ///	Unified entrapment model (Thien,Kulik,Curti 2012)
+    KM_UPT_UPDP = 'M',    ///	DePaolo (2011) uptake kinetics model
+    KM_UPT_SEMO = 'G',    ///  Growth (surface) entrapment model (Watson 2004)
+    KM_IEX_FAST = 'F',    ///  Fast ion exchange kinetics (e.g. montmorillonite, CSH)
+    KM_IEX_SLOW = 'L',    ///  Slow ion exchange kinetics (e.g. illite, zeolites)
+    KM_ADS_INHIB = 'I',   ///  Adsorption inhibition
+    KM_NUCL_SSMP  = 'P',  ///  Solid solution nucleation model (Prieto 2013)
+//KinLinkCode
+    KM_LNK_SURF = 'S',   ///   Link to (fraction of) solid substrate surface
+    KM_LNK_PVOL = 'P',   ///    Link to (fraction of) solid substrate (pore) volume
+    KM_LNK_MASS = 'M',   ///	Link to (fraction of) solid substrate mass
+//KinSizedCode
+    KM_SIZED_UNI = 'U',  /// 	Uniform particle/pore size distribution
+    KM_SIZED_BIN = 'B',  /// 	Binodal particle/pore size distribution
+    KM_SIZED_FUN = 'F',  ///    Empirical distribution function
+//KinResCode
+    KM_RES_SURF = 'A',   /// surface-scaled rate model (k in mol/m2/s)
+    KM_RES_PVS = 'V'      /// pore-volume-scaled model (k in mol/m3/s)
 
 };
 
