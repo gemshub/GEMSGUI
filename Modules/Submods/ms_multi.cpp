@@ -44,6 +44,8 @@ ICNud = 0;
 
     sizeFIs = 0;
     phSolMod = 0;
+    sizeFIa = 0;
+    phSorpMod = 0;
     sizeFI = 0;
     phKinMet = 0;
 }

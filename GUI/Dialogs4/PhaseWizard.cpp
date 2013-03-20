@@ -191,6 +191,9 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[37], int size[30],
    ii = kin_t6->findText(QChar(flgs[35]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
             if( ii >= 0  )
                 kin_t6->setCurrentIndex(ii);
+   ii = kin_t7->findText(QChar(flgs[36]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+              if( ii >= 0  )
+              kin_t7->setCurrentIndex(ii);
 
     nPRk->setValue(size[10]);
     nSkr->setValue(size[11]);
@@ -338,8 +341,10 @@ void PhaseWizard::getFlags( char flgs[37] )
   flgs[33] = str[0].toLatin1();
   str = kin_t5->currentText();
   flgs[34] = str[0].toLatin1();
-  str = kin_t5->currentText();
+  str = kin_t6->currentText();
   flgs[35] = str[0].toLatin1();
+  str = kin_t7->currentText();
+  flgs[36] = str[0].toLatin1();
 
   if( ndqf->value() > 0  )
       flgs[13] = '+';

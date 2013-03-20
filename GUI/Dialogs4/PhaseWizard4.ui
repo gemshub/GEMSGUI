@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>761</width>
-    <height>644</height>
+    <width>823</width>
+    <height>785</height>
    </rect>
   </property>
   <property name="font">
@@ -21,7 +21,7 @@
   <property name="windowTitle">
    <string>GEM-Selektor Proces</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_9">
+  <layout class="QVBoxLayout" name="verticalLayout_11">
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="mouseTracking">
@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1197,7 +1197,7 @@
       </layout>
      </widget>
      <widget class="QWidget" name="page_5">
-      <layout class="QVBoxLayout" name="verticalLayout_11">
+      <layout class="QVBoxLayout" name="verticalLayout_10">
        <item>
         <widget class="QLabel" name="label_4">
          <property name="sizePolicy">
@@ -1229,7 +1229,7 @@
          <property name="title">
           <string>Select here the codes defining the KinMet model, or leave 'N' in all places and go to next wizard step </string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_10">
+         <layout class="QVBoxLayout" name="verticalLayout_9">
           <item>
            <widget class="QLabel" name="label_7">
             <property name="text">
@@ -1241,17 +1241,32 @@
            <widget class="QComboBox" name="kin_t2">
             <item>
              <property name="text">
-              <string>N</string>
+              <string>M     Kinetics of generic dissolution/precipitation (no uptake, ionex, adsorption)</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>T</string>
+              <string>U      Kinetics of uptake/entrapment (of minor/trace element) into solid solution</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>W</string>
+              <string>X      Kinetics of ion exchange (clays, C-S-H, zeolites, ...)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>A      Kinetics of adsorption (on MWI), redox</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>P      Kinetics of nucleation and precipitation</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>N     not defined, no account for</string>
              </property>
             </item>
            </widget>
@@ -1267,27 +1282,27 @@
            <widget class="QComboBox" name="kin_t3">
             <item>
              <property name="text">
-              <string>N</string>
+              <string>T     Generic TST dissolution/precipitation model following Shott ea 2012</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>D</string>
+              <string>P      Dissolution/precipitation model of the form (Palandri 2004)</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>P</string>
+              <string>W     Carbonate growth model following (Wolthers 2012)</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>G</string>
+              <string>U      Mineral nucleation and growth model with nuclei/particle size distr. (TBD)</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>B</string>
+              <string>N      not defined, no account for</string>
              </property>
             </item>
            </widget>
@@ -1303,17 +1318,42 @@
            <widget class="QComboBox" name="kin_t4">
             <item>
              <property name="text">
-              <string>N</string>
+              <string>E       Unified entrapment model (Thien,Kulik,Curti 2012)</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>E</string>
+              <string>M      DePaolo (2011) uptake kinetics model</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>M</string>
+              <string>G      Growth (surface) entrapment model (Watson 2004)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>F      Fast ion exchange kinetics (e.g. montmorillonite, CSH)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>L      Slow ion exchange kinetics (e.g. illite, zeolites)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>I       Adsorption inhibition</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>P      Solid solution nucleation model (Prieto 2013)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>N     not defined, no account for</string>
              </property>
             </item>
            </widget>
@@ -1329,17 +1369,22 @@
            <widget class="QComboBox" name="kin_t5">
             <item>
              <property name="text">
-              <string>N</string>
+              <string>S     Link to (fraction of) solid substrate surface</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>S</string>
+              <string>P     Link to (fraction of) solid substrate (pore) volume</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>P</string>
+              <string>M    Link to (fraction of) solid substrate mass</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>N     not defined, no account for</string>
              </property>
             </item>
            </widget>
@@ -1355,17 +1400,48 @@
            <widget class="QComboBox" name="kin_t6">
             <item>
              <property name="text">
-              <string>N</string>
+              <string>U    Uniform particle/pore size distribution</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>U</string>
+              <string>B    Binodal particle/pore size distribution</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>B</string>
+              <string>F    Empirical distribution function</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>N    not defined, no account for</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Select a code of specific MWR kinetic rate model equation</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="kin_t7">
+            <item>
+             <property name="text">
+              <string>A     surface-scaled rate model (k in mol/m2/s)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>V     pore-volume-scaled model (k in mol/m3/s)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>N    not defined, no account for</string>
              </property>
             </item>
            </widget>
