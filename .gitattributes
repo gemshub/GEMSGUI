@@ -413,9 +413,6 @@ Resources/doc/pdf/Tpx-corrections-CG-EoS.pdf -text
 Resources/doc/txt/INSTALL.linux.txt -text
 Resources/doc/txt/INSTALL.macosx.txt -text
 Resources/doc/txt/INSTALL.windows.txt -text
-Resources/help/.gems3help/_1l.cfs -text
-Resources/help/.gems3help/deletable -text
-Resources/help/.gems3help/segments -text
 Resources/help/gems3help.qch -text
 Resources/img/gems1024.png -text
 Resources/img/gems3.ico -text
