@@ -562,8 +562,8 @@ enum phase_objects {   // PHASE
     o_phsdval, /*s dyn*/
 //new record (3+27+7)
     o_phstr2, o_phdim2,  o_phfloat2,
-    o_phxsmd,  o_phxfaces, o_phlphc1, o_phdqfc, o_phrcpc,
-    o_pheipc, o_phcdc, o_phisop, o_phisos, o_phfsac,
+    o_phxsmd,  o_phocprk, o_phlphc1, o_phdqfc, o_phrcpc,
+    o_pheipc, o_phcdc, o_phisop, o_phisos, o_phfesar,
     o_phrpcon, o_phumpcon, o_phlph, o_phldcr,  o_phldcd,
     o_phdcpcl, o_phipicl, o_phipccl,  o_phrpkcl, o_phrprcl,
     o_phumpcl, o_phsmcdl, o_phsmcsl,  o_pheimpl, o_pheimll,

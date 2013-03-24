@@ -155,8 +155,8 @@ aObj[ o_phfloat2].SetPtr(&ph[q].Vpor );  // f 8
 //dynamic
 aObj[ o_phxsmd].SetPtr(  ph[q].xSmD );
 aObj[ o_phxsmd].SetDim( ph[q].nDC, ph[q].nSiT );
-aObj[ o_phxfaces].SetPtr(  ph[q].ocPRk );
-aObj[ o_phxfaces].SetDim( ph[q].nPRk, 1 );
+aObj[ o_phocprk].SetPtr(  ph[q].ocPRk );
+aObj[ o_phocprk].SetDim( ph[q].nPRk, 1 );
 
 aObj[ o_phlphc1].SetPtr(  ph[q].lPhc );
 aObj[ o_phlphc1].SetDim( ph[q].nlPh, ph[q].nlPc );
@@ -173,8 +173,8 @@ aObj[ o_phisop].SetPtr(  ph[q].IsoP );
 aObj[ o_phisop].SetDim( ph[q].nDC, ph[q].nIsoC );
 aObj[ o_phisos].SetPtr(  ph[q].IsoS );
 aObj[ o_phisos].SetDim( ph[q].nSiT, ph[q].nIsoS );
-aObj[ o_phfsac].SetPtr(  ph[q].feSAr );
-aObj[ o_phfsac].SetDim( 1, ph[q].nPRk );
+aObj[ o_phfesar].SetPtr(  ph[q].feSAr );
+aObj[ o_phfesar].SetDim( 1, ph[q].nPRk );
 aObj[ o_phrpcon].SetPtr(  ph[q].rpCon );
 aObj[ o_phrpcon].SetDim( ph[q].nPRk, ph[q].nrpC );
 aObj[ o_phumpcon].SetPtr(  ph[q].umpCon );
@@ -225,7 +225,7 @@ aObj[ o_phdielc].SetDim( ph[q].ncdiel, ph[q].ndiel);
 aObj[ o_phdhc].SetPtr(  ph[q].dhc );
 aObj[ o_phdhc].SetDim( 1, ph[q].ndh );
 aObj[ o_phapcon].SetPtr(  ph[q].apCon );
-aObj[ o_phapcon].SetDim( ph[q].nPRk, ph[q].nSkr* ph[q].naptC );
+aObj[ o_phapcon].SetDim( ph[q].nSkr, ph[q].nPRk * ph[q].naptC );
 aObj[ o_phascp].SetPtr(  ph[q].Ascp );
 aObj[ o_phascp].SetDim( 1, ph[q].nAscC );
 
@@ -272,7 +272,7 @@ if(!ph[q].ipxt )
 
 // new record 06/06/12
     ph[q].xSmD =  (short *)aObj[  o_phxsmd ].GetPtr();
-    ph[q].ocPRk =  (short *)aObj[ o_phxfaces ].GetPtr();
+    ph[q].ocPRk =  (short *)aObj[ o_phocprk ].GetPtr();
     ph[q].lPhc =  (float *)aObj[ o_phlphc1].GetPtr();
     ph[q].DQFc =  (float *)aObj[ o_phdqfc].GetPtr();
     ph[q].rcpc =  (float *)aObj[ o_phrcpc].GetPtr();
@@ -280,7 +280,7 @@ if(!ph[q].ipxt )
     ph[q].CDc =  (float *)aObj[ o_phcdc].GetPtr( );
     ph[q].IsoP =  (float *)aObj[ o_phisop].GetPtr( );
     ph[q].IsoS =  (float *)aObj[ o_phisos].GetPtr( );
-    ph[q].feSAr =  (float *)aObj[ o_phfsac].GetPtr( );
+    ph[q].feSAr =  (float *)aObj[ o_phfesar].GetPtr( );
     ph[q].rpCon =  (float *)aObj[ o_phrpcon].GetPtr( );
     ph[q].umpCon =  (float *)aObj[ o_phumpcon].GetPtr( );
     ph[q].lPh =  (char (*)[PH_RKLEN])aObj[ o_phlph].GetPtr( );
@@ -345,7 +345,7 @@ void TPhase::dyn_kill(int q)
 
     // new record 06/06/12
     ph[q].xSmD =  (short *)aObj[  o_phxsmd ].Free();
-    ph[q].ocPRk =  (short *)aObj[ o_phxfaces ].Free();
+    ph[q].ocPRk =  (short *)aObj[ o_phocprk ].Free();
     ph[q].lPhc =  (float *)aObj[ o_phlphc1].Free();
     ph[q].DQFc =  (float *)aObj[ o_phdqfc].Free();
     ph[q].rcpc =  (float *)aObj[ o_phrcpc].Free();
@@ -353,7 +353,7 @@ void TPhase::dyn_kill(int q)
     ph[q].CDc =  (float *)aObj[ o_phcdc].Free( );
     ph[q].IsoP =  (float *)aObj[ o_phisop].Free( );
     ph[q].IsoS =  (float *)aObj[ o_phisos].Free( );
-    ph[q].feSAr =  (float *)aObj[ o_phfsac].Free( );
+    ph[q].feSAr =  (float *)aObj[ o_phfesar].Free( );
     ph[q].rpCon =  (float *)aObj[ o_phrpcon].Free( );
     ph[q].umpCon =  (float *)aObj[ o_phumpcon].Free( );
     ph[q].lPh =  (char (*)[PH_RKLEN])aObj[ o_phlph].Free( );
@@ -552,8 +552,8 @@ void TPhase::dyn_new(int q)
     {
       ph[q].rpCon =  (float *)aObj[ o_phrpcon].Alloc( ph[q].nPRk, ph[q].nrpC, F_ );
       //ph[q].lDCr =  (char (*)[DC_RKLEN])aObj[ o_phldc].Alloc( ph[q].nSkr, 1, DC_RKLEN );
-      ph[q].feSAr =  (float *)aObj[ o_phfsac].Alloc( ph[q].nPRk, 1, F_ );
-      ph[q].ocPRk =  (short *)aObj[ o_phxfaces ].Alloc( ph[q].nPRk, 1, I_ );
+      ph[q].feSAr =  (float *)aObj[ o_phfesar].Alloc( ph[q].nPRk, 1, F_ );
+      ph[q].ocPRk =  (short *)aObj[ o_phocprk ].Alloc( ph[q].nPRk, 1, I_ );
       ph[q].rpkcl =  (char (*)[MAXDCNAME])aObj[ o_phrpkcl].Alloc( 1, ph[q].nrpC, MAXDCNAME );
       ph[q].rprcl =  (char (*)[MAXDCNAME])aObj[ o_phrprcl].Alloc( ph[q].nPRk, 1, MAXDCNAME );
     }
@@ -561,8 +561,8 @@ void TPhase::dyn_new(int q)
     {
         ph[q].rpCon =  (float *)aObj[ o_phrpcon].Free( );
         //ph[q].lDCr =  (char (*)[DC_RKLEN])aObj[ o_phldc].Free( );
-        ph[q].feSAr =  (float *)aObj[ o_phfsac].Free( );
-        ph[q].ocPRk =  (short *)aObj[ o_phxfaces ].Free();
+        ph[q].feSAr =  (float *)aObj[ o_phfesar].Free( );
+        ph[q].ocPRk =  (short *)aObj[ o_phocprk ].Free();
         ph[q].rpkcl =  (char (*)[MAXDCNAME])aObj[ o_phrpkcl].Free( );
         ph[q].rprcl =  (char (*)[MAXDCNAME])aObj[ o_phrprcl].Free( );
     }
@@ -570,7 +570,7 @@ void TPhase::dyn_new(int q)
     {
         ph[q].lDCr =  (char (*)[DC_RKLEN])aObj[ o_phldcr].Alloc( ph[q].nSkr, 1, DC_RKLEN );
         ph[q].lDCd =  (char *)aObj[ o_phldcd].Alloc( ph[q].nSkr, 1, A_ );
-      ph[q].apCon =  (float *)aObj[ o_phapcon].Alloc( ph[q].nPRk, ph[q].nSkr* ph[q].naptC, F_ );
+      ph[q].apCon =  (float *)aObj[ o_phapcon].Alloc( ph[q].nSkr, ph[q].nPRk*ph[q].naptC, F_ );
     }
     else
     {
@@ -956,11 +956,15 @@ AGAIN_SETUP:
 
         if( php->PapCon != S_OFF )
         { // mark ReacDC/DComp keys list
-          makeReacDCompList( "Please, mark ReacDC/DComp keys list of record keys of aq, gas or surface catalyzing"
+           php->pst_[0] = '*';
+           db->SetKey(php->pst_);
+           makeReacDCompList(
+             "Please, mark ReacDC/DComp keys list of record keys of aq, gas or surface catalyzing"
                              " or inhibiting species for parallel reactions",
-                               aDcSkrl, php->nSkr, php->lDCr, php->lDCd, false);
+                       aDcSkrl, php->nSkr, php->lDCr, php->lDCd, false);
+           php->pst_[0] = php->PphC;
+           db->SetKey(php->pst_);
         }
-
     //---------------------------------------------------------------------
 
     // Setting up the DC/phase coeffs depending on the
