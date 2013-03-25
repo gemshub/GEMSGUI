@@ -157,13 +157,13 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[37], int size[30],
     nIsoS->setValue(size[19]);
     mDe->setValue(size[20]);
 
-    if( flgs[5] != 'N' )
-    {
-      checkBoxSorption->setChecked( true );
-      if( size[5] == 0 ) size[5] = 1;
-      if( r2 == 0. ) r2 = 1.;
-    }
-    else checkBoxSorption->setChecked( false );
+//    if( flgs[5] != 'N' )
+//    {
+//      checkBoxSorption->setChecked( true );
+//      if( size[5] == 0 ) size[5] = 1;
+//      if( r2 == 0. ) r2 = 1.;
+//    }
+//    else checkBoxSorption->setChecked( false );
 
     if( flgs[11] == '+' )
      checkBoxSorption->setChecked(true);
@@ -227,8 +227,8 @@ void   PhaseWizard::getSizes( int size[30] )
     size[4]= pnpxM->value();
     size[5]= spinBox_SurTypes_N->value();
 
-    if( SCM_code->currentText()[0] != QChar('N') )
-      if( size[5] == 0 ) size[5] = 1;
+//    if( SCM_code->currentText()[0] != QChar('N') )
+//      if( size[5] == 0 ) size[5] = 1;
 
     size[6]= nlPh->value();
     size[14]= nEIl->value();

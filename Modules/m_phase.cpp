@@ -405,6 +405,7 @@ void TPhase::dyn_new(int q)
     if( ph[q].Ppnc == S_ON )
     {
        ph[q].pnc = (float *)aObj[ o_phpnc ].Alloc( ph[q].ncpN, ph[q].ncpM, F_ );
+//cout <<  ph[q].ncpN << " " << ph[q].ncpM << endl;
        ph[q].ipicl =  (char (*)[MAXDCNAME])aObj[ o_phipicl].Alloc( ph[q].ncpN, 1, MAXDCNAME );
        ph[q].ipccl =  (char (*)[MAXDCNAME])aObj[ o_phipccl].Alloc( 1, ph[q].ncpM, MAXDCNAME );
     }
