@@ -22,8 +22,8 @@
 
 #include "v_mod.h"
 #include "v_ipnc.h"
-#include "graph.h"
 #include "v_module.h"
+#include "graph.h"
 
 const int PE_RKLEN = 80;
 
@@ -79,7 +79,7 @@ typedef struct
                   // Nxi number of points to be generated ;
                   // process extent variable(s)
     NP,NT,NV,     // N of points: along P; along T; along V
-    NpH, Npe, R1, // N of inverse titration points: along pH; along pe(Eh);reserved
+    NpH, Npe, dimX, // N of inverse titration points: along pH; along pe(Eh);reserved
     Mode,    // Mode of points indexation { 0 - 8 }
     NR1,     // Numbers of: EQSTAT keys
     Nmc,     // N of process model coefficients
@@ -122,8 +122,8 @@ typedef struct
     *Modc    // Array of process script parameters?[0:Ntm-1][Nmc]
     ;
   double
-     *x0,   // Vector of abscissa dimXY[][1]
-     *y0,  // Sampled data array dimXY[][]
+     *x0,   // Vector of abscissa [0:dimXY[0][0:dimX]
+     *y0,  // Sampled data array [0:dimXY[0]][0:dimXY[1]]
      *xE, *yE;         // Input empirical data XE, YE
 
   float

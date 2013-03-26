@@ -1,13 +1,13 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
+
+
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I)
-      [Netscape]">
-    <title>GEMS3 Proces Module</title>
-    <meta name="description" content="Version 2.0.0-PSI">
-  </head>
-  <body>
-    <h1><img src="gems1.png" align="left" width="48" height="48"> <font color="#000066"> GEM-Selektor version 3</font> </h1>
+      [Netscape]"><title>GEMS3 Proces Module</title>
+    
+    <meta name="description" content="Version 2.0.0-PSI"></head><body>
+    <h1><img src="gems1.png" align="left" height="48" width="48"> <font color="#000066"> GEM-Selektor version 3</font> </h1>
     <h2>Process and Reaction Path Simulation (Process) Module<br>
     </h2>
     <hr size="2" width="100%">
@@ -117,8 +117,7 @@
       optionally together with some experimental points. To tell the
       program
       what input data to modify and what output data to sample, you have
-      to provide two&nbsp;&nbsp;<span style="text-decoration:
-        underline;"></span><a href="g_mscript.html">scripts</a>:&nbsp; <a href="#P_expr"><tt>P_expr</tt></a>
+      to provide two&nbsp;&nbsp;<span style="text-decoration: underline;"></span><a href="g_mscript.html">scripts</a>:&nbsp; <a href="#P_expr"><tt>P_expr</tt></a>
       that generates the simulation points, and&nbsp; <a href="#pgExpr"><tt>pgExpr</tt></a>
       that samples the simulation results.&nbsp; </p>
     <br>
@@ -137,7 +136,7 @@
         defined in Process control script</li>
       <li>"R" &nbsp; Sequential reactor scheme, uses equilibrium bulk
         compositions of phases</li>
-      <li>"L" &nbsp; Lippmann diagram (transposed) for a binary solid
+      <li>"L" &nbsp; Lippmann diagram, for a binary solid
         solution only</li>
     </ul>
     <p>More modes can be added in future versions. Each mode requires a
@@ -235,7 +234,7 @@ math
       per 1 kg of water at equilibrium with excess calcite CaCO<sub>3</sub>
       (closed system) must be added to bring it to a prescribed
       equilibrium
-      pH=6.4&plusmn;0.01. The GEM algorithm
+      pH=6.4±0.01. The GEM algorithm
       cannot use pH as an input parameter; the only way to obtain a
       prescribed pH value is to add/subtract acid or alkali in the
       system
@@ -246,8 +245,7 @@ math
       type with the following control <a href="gmscript.html">script </a>program
       typed into "P_expr"
       field on the Process 'Controls' window:</p>
-    <div style="margin-left: 40px; font-family: Courier
-      New,Courier,monospace;">$ Finding molality of CO2 added to
+    <div style="margin-left: 40px; font-family: Courier New,Courier,monospace;">$ Finding molality of CO2 added to
       obtain a prescribed pH <br>
       $ Initialization <br>
       &nbsp; if( NeIt[1] = 0 ) <br>
@@ -280,8 +278,7 @@ math
         ipH[0] </span>contains
       the prescribed pH value,<span style="font-family: monospace;">
         ipH[2]</span>
-      gives a precision to be achieved, <span style="font-family:
-        monospace;">ipH[1]</span>
+      gives a precision to be achieved, <span style="font-family: monospace;">ipH[1]</span>
       will hold the current
       difference between the calculated and prescribed pH. If alkali is
       used
@@ -302,8 +299,7 @@ math
       mode. <br>
     </p>
     <p>The script shown
-      below (see also a SDref record <span style="font-family:
-        monospace;">"mscript-titr-invers:0003:proces:"</span>
+      below (see also a SDref record <span style="font-family: monospace;">"mscript-titr-invers:0003:proces:"</span>
       in the <a href="gm_sdref.html#process_mscripts_simulator">template
 math
 script
@@ -312,37 +308,27 @@ script
       regular
       intervals (e.g., from 2 to 10 in 0.2 unit step).<br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">$
-        modC[J]: acid or base added</span><br style="font-family:
-        Courier New,Courier,monospace;">
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">$
+        modC[J]: acid or base added</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;"> $ pH
-        sequence of inv. titrations</span><br style="font-family:
-        Courier New,Courier,monospace;">
+        sequence of inv. titrations</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;"> if (
-        Next=1) begin</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        Next=1) begin</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
-        &nbsp;cNu =: cpH-pH; end</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        &nbsp;cNu =: cpH-pH; end</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;"> if
-        (Next=2) begin</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        (Next=2) begin</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
         &nbsp;xa_[{NaOH}] =: ((cEh &lt;
-        0)? 1e-8: cEh); </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        0)? 1e-8: cEh); </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
         &nbsp;xa_[{HCl}] =: ((0-cEh &lt;
-        0)? 1e-8: 0-cEh);</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        0)? 1e-8: 0-cEh);</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
-        &nbsp;modC[J] =: cEh; </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        &nbsp;modC[J] =: cEh; </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;"> end</span><br style="font-family: monospace;">
     </div>
-    <p>After copying this script with <span style="font-family:
-        monospace;">Ctrl-C</span>
+    <p>After copying this script with <span style="font-family: monospace;">Ctrl-C</span>
       and pasting it (<span style="font-family: monospace;">Ctrl-V</span>)
       into the <span style="font-family: monospace;">P_expr</span>
       field on
@@ -364,17 +350,13 @@ script
       iteration of the "Golden Section" algorithm, the interval [a,b] is
       corrected as: <br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">x1 = { ipXi[0] at the first iteration;
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">x1 = { ipXi[0] at the first iteration;
         current cEh at next
-        iterations }, </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        iterations }, </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
-        x2 = ipXi[1];</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        x2 = ipXi[1];</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
-        a = min( x1, x2 ); </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        a = min( x1, x2 ); </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
         b = max( x1, x2 ). </span><br>
     </div>
@@ -386,14 +368,12 @@ script
       following
       general structure:<br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">if( Next = 1 ) begin </span><br style="font-family: Courier New,Courier,monospace;">
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">if( Next = 1 ) begin </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
         &lt;expressions&gt; cNu
         =:&lt;function&gt;; &lt;expressions&gt; end </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
-        if( Next = 2 ) begin </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        if( Next = 2 ) begin </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
         &lt;expressions&gt; &lt;titrant&gt; =: cEh; &lt;expressions&gt;
         end </span><br>
@@ -409,16 +389,12 @@ script
       eqiuilibrium
       state. In the above script, the operator <br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family:
-        monospace;">&nbsp;</span><span style="font-family: Courier
-        New,Courier,monospace;">xa_[{NaOH}]
+    <div style="margin-left: 40px;"><span style="font-family: monospace;">&nbsp;</span><span style="font-family: Courier New,Courier,monospace;">xa_[{NaOH}]
         =: ((cEh &lt; 0)? 1e-8: cEh); </span><br>
     </div>
     <p>adds NaOH to the system bulk composition if <span style="font-family: monospace;">cEh</span> &gt; 0, and <br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family:
-        monospace;">&nbsp;</span><span style="font-family: Courier
-        New,Courier,monospace;">xa_[{HCl}]
+    <div style="margin-left: 40px;"><span style="font-family: monospace;">&nbsp;</span><span style="font-family: Courier New,Courier,monospace;">xa_[{HCl}]
         =: ((0-cEh &lt; 0)? 1e-8: 0-cEh); </span><br>
     </div>
     <p>adds HCl if <span style="font-family: monospace;">cEh</span>
@@ -445,8 +421,7 @@ script
       positive
       then only alkali will be added. Othervise, in some of the
       generated
-      equilibria, the acid (negative<span style="font-family:
-        monospace;"> cEh</span>
+      equilibria, the acid (negative<span style="font-family: monospace;"> cEh</span>
       values) and in other - the base will be added. Please, make sure
       (before running the Process simulator) that appropriate boundaries
       are
@@ -454,14 +429,12 @@ script
       smallest
       and the largest pH values necessary. Also you must specify: <br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family:
-        monospace;">ipXi[2]</span>
+    <div style="margin-left: 40px;"><span style="font-family: monospace;">ipXi[2]</span>
       - precision of inverse titration in the same units as the titrant
       addition (e.g. 1e-9 moles); <br>
       <span style="font-family: monospace;">iNu[1]</span>&nbsp; -
       precision
-      of the deviation function result (<span style="font-family:
-        monospace;">cNu</span>)
+      of the deviation function result (<span style="font-family: monospace;">cNu</span>)
       with respect to the calculated parameter (e.g. 0.01 pH unit).<br>
     </div>
     <p>When you calculate the Process Simulator, an inverse modelling
@@ -527,14 +500,11 @@ script
       mol
       solid per 1 kg H<sub>2</sub>O can do the job: <br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">cNu
-        =: iNu[0] + iNu[2]*J;</span><br style="font-family: Courier
-        New,Courier,monospace;">
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">cNu
+        =: iNu[0] + iNu[2]*J;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xa_[{CaCO3}]
         =: (cNu&gt;0?
-        cNu*0.2/100; 1e-6);</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        cNu*0.2/100; 1e-6);</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xa_[{MnCO3}]
         =: (cNu&lt;100?
         (100-cNu)*0.2/100; 1e-6);</span><br>
@@ -546,8 +516,7 @@ script
       prevent degeneration of the system.&nbsp; This script (to be put
       in
       the <span style="font-family: monospace;">"P_expr"</span> field)
-      generates 51 points using the <span style="font-family:
-        monospace;">"iNu"</span>
+      generates 51 points using the <span style="font-family: monospace;">"iNu"</span>
       iterator loaded with 0; 100; 2 to produce 2% steps in solid mole
       fraction scale. This control script can be implemented in 'S'
       process simulation mode. <br>
@@ -567,21 +536,16 @@ script
     with
     a point on "solutus" defines a SSAS equilibrium state. <br>
     <br>
-    Note that the GEM-Selektor Graph Dialog can plot several ordinates
-    (lines) but only against one abscissa. This technical limitation
-    means
-    that only one of two lines of the Lippmann diagram can be plotted in
-    one Process or GtDemo run. To produce the second line, one has to
-    "clone" the record and change only the data sampling script, then
-    re-calculate. <br>
+Note that the GEM-Selektor Graphics Dialog can now plot several
+ordinates (lines) against several abscissas. So, the correct Lippmann
+diagram (consisting of two curves) can be produced in one run. During
+remake of the Proces record, two columns must be allocated in the <span style="font-family: monospace;">xp</span> (abscissa) and two columns in the <span style="font-family: monospace;">yp</span> (ordinate) tables. <br>
     <br>
-    The sampling script below (to be put into <span style="font-family:
-      monospace;">"pGexpr"</span> field ) calculates the
+    The first part of the sampling script (to be put into <span style="font-family: monospace;">"pGexpr"</span> field ) calculates the
     "solidus" curve of the Lippmann diagram: <br>
-    <p style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">$ Lippmann diagram - solidus </span><br style="font-family: Courier New,Courier,monospace;">
+    <p style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">$ Lippmann diagram - solidus </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
-        &nbsp;&nbsp; xp[J] =: Wxx[{rhodochrosite}]; </span><br style="font-family: Courier New,Courier,monospace;">
+        &nbsp;&nbsp; xp[J][0] =: Wxx[{rhodochrosite}]; </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
         &nbsp;&nbsp; yp[J][0] =: lg( my[{CO3-2}]*gamma[{CO3-2}] * </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
@@ -589,40 +553,30 @@ script
         my[{Ca+2}]*gamma[{Ca+2}] +&nbsp; my[{Mn+2}]*gamma[{Mn+2}] ));
       </span><br>
     </p>
-    <p>The next sampling script calculates the "solutus" curve of the
+    <p>The second part of the sampling script calculates the "solutus" curve of the
       Lippmann
-      diagram. "Clone" the Process record and put the second script into
-      the&nbsp; <span style="font-family: monospace;">pGexpr</span>
-      field,
-      then re-run the Process simulator.<br>
+      diagram:<br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">$ Lippmann diagram - solutus </span><br style="font-family: Courier New,Courier,monospace;">
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">$ Lippmann diagram - solutus </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
-        &nbsp; xp[J] =: my[{Mn+2}]*gamma[{Mn+2}] / (
-        my[{Ca+2}]*gamma[{Ca+2}] + </span><br style="font-family:
-        Courier New,Courier,monospace;">
+        &nbsp; xp[J][1] =: my[{Mn+2}]*gamma[{Mn+2}] / (
+        my[{Ca+2}]*gamma[{Ca+2}] + </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 my[{Mn+2}]
-        * gamma[{Mn+2}] ); </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        * gamma[{Mn+2}] ); </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
-        &nbsp; yp[J][0] =: lg( my[{CO3-2}]*gamma[{CO3-2}] * </span><br style="font-family: Courier New,Courier,monospace;">
+        &nbsp; yp[J][1] =: lg( my[{CO3-2}]*gamma[{CO3-2}] * </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (
         my[{Ca+2}]*gamma[{Ca+2}] + my[{Mn+2}]*gamma[{Mn+2}] )); </span><br>
     </div>
-    <p>
-      The full diagram can be plotted after exporting both sets of
-      results
-      and putting them on the same graph in a commercial plotter (MS
-      Excel,
-      SigmaPlot etc.).</p>
+    <p>After
+running the calculation, the Lippmann diagram can be plotted using the
+Graphics Dialog (do not forget to select the abscissa index 0 for the
+first curve and 1 for the second curve).</p>
     <p> The Process Wizard in 'L' mode generates one sampling script (<a href="#WZSTEP_3">details here</a>) that produces both solidus
-      and solutus curves in one simulation run, but the plot is
-      transposed in such a way that the total solubility product SigmaPi
-      is taken as abscissa and the two mole fractions as ordinates. <br>
+      and solutus curves in one simulation run. <br>
     </p>
     <br>
     <hr style="width: 100%; height: 2px;">
@@ -667,7 +621,7 @@ The record key dialog should look like this:
 
 <br>
 
-<img style=" width: 456px; height: 387px;" alt="ProcessRecordKeyDialog1.png" src="ProcessRecordKeyDialog1.png"><br>
+<img style="width: 456px; height: 387px;" alt="ProcessRecordKeyDialog1.png" src="ProcessRecordKeyDialog1.png"><br>
 
 
 <br>
@@ -694,8 +648,7 @@ The record key dialog should look like this:
       </li>
       <li><a href="#PROCESS_R_MODE">"R" &nbsp; Sequential reactor
           scheme, uses equilibrium bulk compositions of phases</a> </li>
-      <li><a href="#PROCESS_L_MODE">"L" &nbsp; Lippmann diagram
-          (transposed) for a binary solid solution</a></li>
+      <li><a href="#PROCESS_L_MODE">"L" &nbsp; Lippmann diagram for a binary solid solution</a></li>
     </ul>
     <p>Contents and actions at the following steps will depend on the
       selected mode. We recommend that the mode symbol is also entered
@@ -771,8 +724,7 @@ The record key dialog should look like this:
       models can be set up in the <a href="gm_gem2mt.html">GEM2MT
         module</a>.<br>
     </p>
-    <h4><a name="PROCESS_L_MODE"></a> "L" mode:&nbsp; Lippmann diagram
-      (transposed) for a binary solid solution</h4>
+    <h4><a name="PROCESS_L_MODE"></a> "L" mode:&nbsp; Lippmann diagram for a binary solid solution</h4>
     <p>Lippmann diagram is a useful tool to visualize aqueous solubility
       of the binary non-ideal solid solution system. In fact, this is a
       superposition of two plots of the same function called "Lippmann
@@ -804,38 +756,28 @@ The record key dialog should look like this:
         <tr>
           <td style="text-align: center;"><br>
           </td>
-          <td style="text-align: center; font-family: Courier
-            New,Courier,monospace;"><a href="#iTm_0">iTm</a><br>
+          <td style="text-align: center; font-family: Courier New,Courier,monospace;"><a href="#iTm_0">iTm</a><br>
           </td>
-          <td style="text-align: center; font-family: Courier
-            New,Courier,monospace;"><a href="#iV_0">iV</a>&nbsp;&nbsp;&nbsp;
+          <td style="text-align: center; font-family: Courier New,Courier,monospace;"><a href="#iV_0">iV</a>&nbsp;&nbsp;&nbsp;
             <br>
           </td>
-          <td style="text-align: center; font-family: Courier
-            New,Courier,monospace;"><a href="#iP_0">iP</a>&nbsp;&nbsp;&nbsp;
+          <td style="text-align: center; font-family: Courier New,Courier,monospace;"><a href="#iP_0">iP</a>&nbsp;&nbsp;&nbsp;
             <br>
           </td>
-          <td style="text-align: center; font-family: Courier
-            New,Courier,monospace;"><a href="#iTC_0">iTC</a>&nbsp; <br>
+          <td style="text-align: center; font-family: Courier New,Courier,monospace;"><a href="#iTC_0">iTC</a>&nbsp; <br>
           </td>
-          <td style="text-align: center; font-family: Courier
-            New,Courier,monospace;"><a href="#iNv_0">iNv</a>&nbsp; <br>
+          <td style="text-align: center; font-family: Courier New,Courier,monospace;"><a href="#iNv_0">iNv</a>&nbsp; <br>
           </td>
-          <td style="text-align: center; font-family: Courier
-            New,Courier,monospace;"><a href="#iTau_0">iTau</a>&nbsp; <br>
+          <td style="text-align: center; font-family: Courier New,Courier,monospace;"><a href="#iTau_0">iTau</a>&nbsp; <br>
           </td>
-          <td style="text-align: center; font-family: Courier
-            New,Courier,monospace;"><a href="#ipXi_0">ipXi</a>&nbsp; <br>
+          <td style="text-align: center; font-family: Courier New,Courier,monospace;"><a href="#ipXi_0">ipXi</a>&nbsp; <br>
           </td>
-          <td style="text-align: center; font-family: Courier
-            New,Courier,monospace;"><a href="#iNu_0">iNu</a>&nbsp;&nbsp;
+          <td style="text-align: center; font-family: Courier New,Courier,monospace;"><a href="#iNu_0">iNu</a>&nbsp;&nbsp;
             <br>
           </td>
-          <td style="text-align: center; font-family: Courier
-            New,Courier,monospace;"><a href="#ipH_0">ipH</a>&nbsp; <br>
+          <td style="text-align: center; font-family: Courier New,Courier,monospace;"><a href="#ipH_0">ipH</a>&nbsp; <br>
           </td>
-          <td style="text-align: center; font-family: Courier
-            New,Courier,monospace;"><a href="#ipe_0">ipe</a>&nbsp;&nbsp;
+          <td style="text-align: center; font-family: Courier New,Courier,monospace;"><a href="#ipe_0">ipe</a>&nbsp;&nbsp;
             <br>
           </td>
         </tr>
@@ -941,8 +883,7 @@ The record key dialog should look like this:
     <table style="text-align: left; width: 980px; height: 35px;" border="1" cellpadding="2" cellspacing="2">
       <tbody>
         <tr>
-          <td style="vertical-align: top;">&nbsp;<a href="#PROCESS_P_MODE_S_2"><span style="font-weight:
-                bold;">P</span> (TP change only)</a><br>
+          <td style="vertical-align: top;">&nbsp;<a href="#PROCESS_P_MODE_S_2"><span style="font-weight: bold;">P</span> (TP change only)</a><br>
           </td>
           <td style="vertical-align: top;"><a href="#PROCESS_S_MODE_S_2"><span style="font-weight: bold;">S</span> (sequential path)</a><br>
           </td>
@@ -980,7 +921,7 @@ The record key dialog should look like this:
       iterators should look like those shown below: <br>
     </p>
     <br>
-    <img style=" width: 748px; height: 108px;" alt="ProcessWizardStepIteratorsPmode1.png" src="ProcessWizardStepIteratorsPmode1.png"><br>
+    <img style="width: 748px; height: 108px;" alt="ProcessWizardStepIteratorsPmode1.png" src="ProcessWizardStepIteratorsPmode1.png"><br>
     <br>
     <p>The iTC iterator will produce 201 steps with temperature from 0
       to 200 <sup>o</sup>C; all other increments in iterators are
@@ -999,7 +940,7 @@ The record key dialog should look like this:
       ....; J=200; cP=201 bar, cTC = 200 C. <br>
     </p>
     <br>
-    <img style=" width: 336px; height: 148px;" alt="ProcessWizardStepIteratorsPmode2.png" src="ProcessWizardStepIteratorsPmode2.png"><br>
+    <img style="width: 336px; height: 148px;" alt="ProcessWizardStepIteratorsPmode2.png" src="ProcessWizardStepIteratorsPmode2.png"><br>
     <br>
     <p>However, if the Step in iP iterator is set to 10 instead of 1
       then only 21 simulation steps will be done at J=0, cP=1 bar, cTC =
@@ -1022,8 +963,7 @@ The record key dialog should look like this:
       the next wizard page. Such control script usually contains
       operators like <br>
     </p>
-    <p style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">cTC =: iTC[0] + J*iTC[2]; </span><br>
+    <p style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">cTC =: iTC[0] + J*iTC[2]; </span><br>
     </p>
     <p>This operator actually does the same as the iterator itself;
       however, because the script interpreter is executed later than the
@@ -1031,8 +971,7 @@ The record key dialog should look like this:
       script operator. For instance, to define a P,T path, the pressure
       dependence can be added in various forms, e.g. parabolic: <br>
     </p>
-    <p style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">cP =: 1 + 2 * cTC + 0.01 * cTC^2;</span><span style="font-family: monospace;"> </span><br>
+    <p style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">cP =: 1 + 2 * cTC + 0.01 * cTC^2;</span><span style="font-family: monospace;"> </span><br>
     </p>
     <p>Here, <span style="font-family: Courier New,Courier,monospace;">'J'</span>
       is the simulation step index, automatically incremented by the
@@ -1044,14 +983,14 @@ The record key dialog should look like this:
       iterators, for example as shown below:<br>
     </p>
     &nbsp;<br>
-    <img style=" width: 350px; height: 107px;" alt="ProcessWizardStepIteratorsPmode3.png" src="ProcessWizardStepIteratorsPmode3.png"><br>
+    <img style="width: 350px; height: 107px;" alt="ProcessWizardStepIteratorsPmode3.png" src="ProcessWizardStepIteratorsPmode3.png"><br>
     <br>
     <p>In total, this will produce a grid of 41 * 41 = 1681 (P,T) points
       with help of the script that you can see now in the control script
       view field: <br>
     </p>
     <br>
-    <img style=" width: 286px; height: 149px;" alt="ProcessWizardStepIteratorsPmode4.png" src="ProcessWizardStepIteratorsPmode4.png"><br>
+    <img style="width: 286px; height: 149px;" alt="ProcessWizardStepIteratorsPmode4.png" src="ProcessWizardStepIteratorsPmode4.png"><br>
     <br>
     <p>This script does not need modification, it stores generated
       temperature and pressure values into (automatically allocated) vP
@@ -1059,14 +998,14 @@ The record key dialog should look like this:
       select at least two phases in the selection list, for instance:<br>
     </p>
     <br>
-    <img style=" width: 213px; height: 147px;" alt="ProcessWizardStepIteratorsPmode5.png" src="ProcessWizardStepIteratorsPmode5.png"><br>
+    <img style="width: 213px; height: 147px;" alt="ProcessWizardStepIteratorsPmode5.png" src="ProcessWizardStepIteratorsPmode5.png"><br>
     &nbsp; <br>
     <p>The program will automatically create the sampling script to
       prepare the diagram (seen on the next wizard page that you can
       simply skip). The script looks like this: <br>
     </p>
     <br>
-    <img style=" width: 370px; height: 127px;" alt="ProcessWizardStepIteratorsPmode6.png" src="ProcessWizardStepIteratorsPmode6.png"><br>
+    <img style="width: 370px; height: 127px;" alt="ProcessWizardStepIteratorsPmode6.png" src="ProcessWizardStepIteratorsPmode6.png"><br>
     <br>
     <p>For each phase, the script contains one operator that checks if
       the phase is present in the mass balance. If yes then it writes
@@ -1077,7 +1016,7 @@ The record key dialog should look like this:
     </p>
     <br>
     <br>
-    <img style=" width: 445px; height: 348px;" alt="ProcessWizardStepIteratorsPmode7.png" src="ProcessWizardStepIteratorsPmode7.png"><br>
+    <img style="width: 445px; height: 348px;" alt="ProcessWizardStepIteratorsPmode7.png" src="ProcessWizardStepIteratorsPmode7.png"><br>
     <br>
     <p>For plotting more complex diagrams, the sampling script needs to
       be modified later to include all possible combinations of phases
@@ -1131,14 +1070,11 @@ The record key dialog should look like this:
       using 'DC-upper' or 'DC-lower' properties. Each item selection
       adds an operator to the control script visible on the right side,
       for instance:&nbsp; &nbsp; &nbsp; &nbsp; </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">modC[J] =: cNu;</span><br style="font-family: Courier New,Courier,monospace;">
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">modC[J] =: cNu;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xa_[{CdCO3}]
-        =: cNu * 1;</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: cNu * 1;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xa_[{CaCO3}]
-        =: cNu * 1;</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: cNu * 1;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">dul_[{Arg}]
         =: cNu * 1;</span><br style="font-family: monospace;">
     </div>
@@ -1166,8 +1102,7 @@ The record key dialog should look like this:
       member SrCO<sub>3</sub> strontianite (Str) and host end member
       CaCO<sub>3</sub> aragonite (Arg)):&nbsp; <br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">xd_[{Str}] =: cNu * 1;</span><br style="font-family: Courier New,Courier,monospace;">
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">xd_[{Str}] =: cNu * 1;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xd_[{Arg}]
         =: 1 - cNu * 1;</span><span style="font-family: monospace;">&nbsp;
       </span>&nbsp; </div>
@@ -1177,35 +1112,25 @@ The record key dialog should look like this:
       shown below, which will be visible in Process wizard Step3 page
       but needs no changes there, so that page should be just skipped. <br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">$ Abscissa - mole fraction of ML in
-        solid solution</span><br style="font-family: Courier
-        New,Courier,monospace;">
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">$ Abscissa - mole fraction of ML in
+        solid solution</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xp[J] =:
-        Wxx[{Str}];</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        Wxx[{Str}];</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$
-        log(Kd(Host)) in kgH2O</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        log(Kd(Host)) in kgH2O</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">yp[J][0]
-        =: lg( Wxx[{Arg}] / my[{Ca+2}] );</span><br style="font-family:
-        Courier New,Courier,monospace;">
+        =: lg( Wxx[{Arg}] / my[{Ca+2}] );</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$
-        log(Kd(Minor)) in kgH2O</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        log(Kd(Minor)) in kgH2O</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">yp[J][1]
-        =: lg( Wxx[{Str}] / my[{Sr+2}] );</span><br style="font-family:
-        Courier New,Courier,monospace;">
+        =: lg( Wxx[{Str}] / my[{Sr+2}] );</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$
-        log(D), dimensionless</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        log(D), dimensionless</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$
         yp[J][2] =: lg( Wxx[{Str}] / my[{Sr+2}] / (Wxx[{Arg}] /
-        my[{Ca+2}]) );</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        my[{Ca+2}]) );</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">yp[J][2]
-        =: yp[J][1] - yp[J][0];</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: yp[J][1] - yp[J][0];</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ Done</span><br>
     </div>
     <p>In this script, the abscissa is set to the mole fraction of minor
@@ -1246,8 +1171,7 @@ The record key dialog should look like this:
       'IComp'). The control script will appear like this: <br>
     </p>
     <div style="margin-left: 40px; font-family: monospace;"><span style="font-family: Courier New,Courier,monospace;">modC[J] =:
-        cpXi;</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        cpXi;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xa_[{CdCO3}]
         =: cXi * 1;</span><br>
     </div>
@@ -1270,11 +1194,9 @@ The record key dialog should look like this:
       from the 'Compos' list (e.g. "CdCO3" and "CaCO3"); the control
       script like this will appear: <br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">modC[J] =: cpXi;</span><br style="font-family: Courier New,Courier,monospace;">
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">modC[J] =: cpXi;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xa_[{CdCO3}]
-        =: cXi * 1;</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: cXi * 1;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xa_[{CaCO3}]
         =: 1 - cXi * 1;</span><br>
     </div>
@@ -1287,25 +1209,20 @@ The record key dialog should look like this:
       script similar to this, which will be visible in the next wizard
       page that has to be simply skipped.&nbsp; <br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">$ Abscissa - log total molality of Trace
-        element</span><br style="font-family: Courier
-        New,Courier,monospace;">
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">$ Abscissa - log total molality of Trace
+        element</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xp[J] =:
-        lgm_t[{Cd}];</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        lgm_t[{Cd}];</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$
         lg(Concentration of Trace element sorbed)</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">yp[J][0]
         =: lg( bXs[{Cd}]/( bXs[{Cd}]+ bXs[{Ca}]) );</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$
-        lg(Kd(Trace element))</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        lg(Kd(Trace element))</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">yp[J][1]
         =: lg( bXs[{Cd}]/( bXs[{Cd}]+ bXs[{Ca}])/m_t[{Cd}] );</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ lg(D)
-        Trace-Host</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        Trace-Host</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">yp[J][2]
         =: yp[J][1] - lg( bXs[{Ca}]/( bXs[{Cd}]+ bXs[{Ca}])/m_t[{Ca}] );</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ Done</span><br>
@@ -1316,8 +1233,7 @@ The record key dialog should look like this:
       and Trace-Host distribution coefficient as ratio of Trace and Host
       Kd's. </p>
     <br>
-    <h4><a name="PROCESS_G_MODE_S_2"></a>"<span style="font-weight:
-        bold;">G</span>" mode:&nbsp; Batch inverse titration sequence
+    <h4><a name="PROCESS_G_MODE_S_2"></a>"<span style="font-weight: bold;">G</span>" mode:&nbsp; Batch inverse titration sequence
       for incremented pH values etc, step 2 </h4>
     <p>Inverse titration means finding such GEM input parameters that
       bring a GEM-calculated output parameter such as pH close to its
@@ -1350,7 +1266,7 @@ The record key dialog should look like this:
     <p>The pH interval and pH step must be given in the <a href="#ipH_0">ipH</a> iterator. Other iterators typically should
       be set as shown below.&nbsp;</p>
     <br>
-    <img style=" width: 750px; height: 108px;" alt="ProcessWizardStepIteratorsGmode1.png" src="ProcessWizardStepIteratorsGmode1.png"><br>
+    <img style="width: 750px; height: 108px;" alt="ProcessWizardStepIteratorsGmode1.png" src="ProcessWizardStepIteratorsGmode1.png"><br>
     <br>
     <p>The iTm iterator should be consistent with the number of pH
       points as given by the ipH iterator. The ipXi iterator controls
@@ -1370,27 +1286,21 @@ The record key dialog should look like this:
       on the right side (assuming that HCl is the acid and NaOH is the
       base): <br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">$ pH sequence of inverse titrations</span><br style="font-family: Courier New,Courier,monospace;">
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">$ pH sequence of inverse titrations</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">if (
-        Next=1) begin </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        Next=1) begin </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;"> &nbsp;
-        cNu =: cpH-pH; end </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        cNu =: cpH-pH; end </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">if
-        (Next=2) begin </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        (Next=2) begin </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;"> &nbsp;
         xa_[{NaOH}] =: ((cEh &lt; 0)? 1e-9: cEh);</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;"> &nbsp;
         xa_[{HCl}] =: ((0-cEh &lt; 0)? 1e-9: 0-cEh);</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;"> &nbsp;
-        modC[J] =: cEh;</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        modC[J] =: cEh;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">
-        &nbsp;end </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        &nbsp;end </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$
         modC[J]: acid or base addition</span><br>
     </div>
@@ -1416,8 +1326,7 @@ The record key dialog should look like this:
       like this (assuming that trace element is Zn taken from Compos
       list as ZnO): <br>
     </p>
-    <div style="margin-left: 40px; font-family: Courier
-      New,Courier,monospace;">$ pH sequence of inverse titrations<br>
+    <div style="margin-left: 40px; font-family: Courier New,Courier,monospace;">$ pH sequence of inverse titrations<br>
       if ( Next=1) begin <br>
       &nbsp; cNu =: cpH-pH; end <br>
       if (Next=2) begin <br>
@@ -1433,8 +1342,7 @@ The record key dialog should look like this:
       items list. This will result in a script like this, which will be
       visible in the next wizard page that is simply to be
       skipped.&nbsp;&nbsp;</p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">xp[J]=: lg(my[{Zn+2}] + my[{ZnO2-2}] +
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">xp[J]=: lg(my[{Zn+2}] + my[{ZnO2-2}] +
         my[{ZnO2H-}] + my[{ZnO@}] + my[{ZnOH+}]);<br>
         $ ... more molalities of M aqueous complexes can be added <br>
         cTau =: 0.001;<br>
@@ -1502,13 +1410,12 @@ The record key dialog should look like this:
     <p>Now, the iterators should look like shown below: <br>
     </p>
     <br>
-    <img style=" width: 746px; height: 105px;" alt="ProcessWizardStep2IteratorsTmode1.png" src="ProcessWizardStep2IteratorsTmode1.png"><br>
+    <img style="width: 746px; height: 105px;" alt="ProcessWizardStep2IteratorsTmode1.png" src="ProcessWizardStep2IteratorsTmode1.png"><br>
     <br>
     <p>The control script on the right side should look like this:
       &nbsp; <br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">$ Difference between given and computed
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">$ Difference between given and computed
         output value <br>
         &nbsp;cpH =: (ipH[0]-lga[{CO2}])*sign(ipH[0])*sign(iNu[1]); <br>
         if( NeIt[1] = 0 ) <br>
@@ -1525,16 +1432,14 @@ The record key dialog should look like this:
         &nbsp;xa_[{CO2}] =: iNu[2]; <br>
         $ Check for convergence <br>
         &nbsp;Next =: ( (abs(cpH)&lt;ipH[2])|(J&gt;99)? 0: 1 ); <br>
-        $ End of script</span><span style="font-family: Courier
-        New,Courier,monospace;"> </span></div>
+        $ End of script</span><span style="font-family: Courier New,Courier,monospace;"> </span></div>
     <p>This script uses only iNu and ipH iterators (with cNu and cpH
       work cells). It stores in modC[0] the current input increment
       size, and stops after 100 iterations to prevent infinite loop. The
       script can be modified and extended by the user later on. The
       output values are sampled by the (automatically created) script: <br>
     </p>
-    <div style="margin-left: 40px; font-family: Courier
-      New,Courier,monospace;">xp[0] =: lga[{CO2}]; <br>
+    <div style="margin-left: 40px; font-family: Courier New,Courier,monospace;">xp[0] =: lga[{CO2}]; <br>
       yp[0][0] =: xa_[{CO2}];&nbsp; <br>
       yp[0][1] =: lga[{CO2}] - ipH[0];</div>
     <p>So, the result - the amount of CO2 to be added to system recipe
@@ -1614,51 +1519,38 @@ The record key dialog should look like this:
       sequential reactors, the control script will look like this:&nbsp;
       <br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">$ Fluid-rock interaction (Flushing,
-        Compos source)</span><br style="font-family: Courier
-        New,Courier,monospace;">
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">$ Fluid-rock interaction (Flushing,
+        Compos source)</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ cNu:
         current amount of evolving aqueous fluid</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ To use
-        if iNu is not set </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        if iNu is not set </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">&nbsp;cNu
-        =: phM[{aq_gen}]; </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: phM[{aq_gen}]; </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">&nbsp;xp_[{aq_gen}]
-        =: cNu; </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: cNu; </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ cXi is
-        current solid/water mass ratio </span><br style="font-family:
-        Courier New,Courier,monospace;">
+        current solid/water mass ratio </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ Take
         current mass of solid if ipXi is not set </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">&nbsp;cXi
-        =: pmXs / cNu; </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: pmXs / cNu; </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">&nbsp;xa_[{SiO2}]
-        =: cXi * cNu; </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: cXi * cNu; </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$
         Cumulative reacted solid/water ratio </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">&nbsp;modC[J]
         =: ( J&gt;0 ? 10^(modC[J-1])+cXi : cXi );</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$
-        modC[J] =: cXi*cNu;</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        modC[J] =: cXi*cNu;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">&nbsp;modC[J]
-        =: lg(modC[J]); </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: lg(modC[J]); </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ Clean
-        up the rest of the system recipe </span><br style="font-family:
-        Courier New,Courier,monospace;">
+        up the rest of the system recipe </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xa_[{Aqua}]
-        =: 0;</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: 0;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xa_[{Ca(OH)2}]
-        =: 0;</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: 0;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ end of
         script</span><br>
     </div>
@@ -1667,14 +1559,11 @@ The record key dialog should look like this:
       script in the next Process wizard page: <br>
     </p>
     <p> </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">xp[J] =: modC[J];</span><br style="font-family: Courier New,Courier,monospace;">
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">xp[J] =: modC[J];</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">yp[J][0]
-        =: lgm_t[{Ca}];</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: lgm_t[{Ca}];</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">yp[J][1]
-        =: lgm_t[{Si}];</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: lgm_t[{Si}];</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">yp[J][2]
         =: pH;</span><br>
     </div>
@@ -1688,61 +1577,45 @@ The record key dialog should look like this:
       silica in water. To simulate this process, the following control
       script will be generated:&nbsp; &nbsp; <br>
     </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">$ Fluid-rock interaction (Leaching,
-        Compos source)</span><br style="font-family: Courier
-        New,Courier,monospace;">
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">$ Fluid-rock interaction (Leaching,
+        Compos source)</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ cNu is
-        current mass of solids (g) </span><br style="font-family:
-        Courier New,Courier,monospace;">
+        current mass of solids (g) </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$
         Current mass of solids is taken if iNu is not set </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">&nbsp;cNu
-        =: pmXs; </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: pmXs; </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">&nbsp;MbXs
-        =: cNu; </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: cNu; </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ Stop,
-        if no solids are left </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        if no solids are left </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">&nbsp;Next
-        =: ( cNu &gt; 0? 1: 0 ); </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: ( cNu &gt; 0? 1: 0 ); </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">if(Next
-        &gt; 0) begin </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        &gt; 0) begin </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ cXi is
-        the water/solid ratio </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        the water/solid ratio </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ Take
         the current mass of fluid if ipXi is not set </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">&nbsp;cXi
-        =:&nbsp; phM[{aq_gen}]/cNu; </span><br style="font-family:
-        Courier New,Courier,monospace;">
+        =:&nbsp; phM[{aq_gen}]/cNu; </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">&nbsp;xa_[{AquaSil}]
-        =: cXi*cNu; </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: cXi*cNu; </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$
         Cumulative reacted water/solid ratio </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">&nbsp;modC[J]
         =: ( J&gt;0? 10^(modC[J-1])+cXi: cXi ); </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$
-        modC[J] =: lg( cXi*cNu ); </span><br style="font-family:
-        Courier New,Courier,monospace;">
+        modC[J] =: lg( cXi*cNu ); </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">&nbsp;modC[J]
-        =: lg(modC[J]); </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: lg(modC[J]); </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">end </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ Clean
-        up the rest of the system recipe </span><br style="font-family:
-        Courier New,Courier,monospace;">
+        up the rest of the system recipe </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xa_[{Ca(OH)2}]
-        =: 0;</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: 0;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xa_[{SiO2}]
-        =: 0;</span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: 0;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ end of
         script</span><br>
     </div>
@@ -1750,8 +1623,7 @@ The record key dialog should look like this:
       you can create the following sampling script in the next Process
       wizard page: <br>
     </p>
-    <div style="margin-left: 40px; font-family: Courier
-      New,Courier,monospace;">xp[J] =: ( pmXs&gt;0 ? modC[J]: empty() );
+    <div style="margin-left: 40px; font-family: Courier New,Courier,monospace;">xp[J] =: ( pmXs&gt;0 ? modC[J]: empty() );
       <br>
       yp[J][0] =: Xa[{C-S-H-3T-2}];<br>
       yp[J][1] =: Xa[{Portlandite}];<br>
@@ -1768,7 +1640,7 @@ The record key dialog should look like this:
       is not plotted by the Graph dialog.&nbsp; </p>
     <br>
     <h4><a name="PROCESS_L_MODE_S_2"></a>"L" mode:&nbsp; Lippmann
-      diagram (transposed) for a binary solid solution, step 2<br>
+      diagram for a binary solid solution, step 2<br>
     </h4>
     <p>Lippmann diagram is a convenient visualization of aqueous
       solubility of the binary non-ideal solid solution system.&nbsp;</p>
@@ -1800,8 +1672,7 @@ The record key dialog should look like this:
       Now, you should see an automatically created simulation control
       script: <br>
     </p>
-    <div style="margin-left: 40px; font-family: Courier
-      New,Courier,monospace;">if(cXi &lt; 0.5) begin<br>
+    <div style="margin-left: 40px; font-family: Courier New,Courier,monospace;">if(cXi &lt; 0.5) begin<br>
       &nbsp;&nbsp; xd_[{Brt}] =: 1-cXi; xd_[{Cls}] =: cXi;<br>
       &nbsp;&nbsp; modC[J] =: cXi;<br>
       &nbsp; end <br>
@@ -1822,26 +1693,24 @@ The record key dialog should look like this:
       is celestite SrSO<sub>4</sub> end member.&nbsp; </p>
     <p>The Lippmann diagram itself will be calculated and plotted with
       help of an automatically created sampling script:</p>
-    <div style="margin-left: 40px; font-family: Courier
-      New,Courier,monospace;">$ Abscissa - log10 of Lippmann's total
+    <div style="margin-left: 40px; font-family: Courier New,Courier,monospace;">
+      $ Abscissa - Solidus <br>
+
+      xp[J][0] =: Wxx[{Cls}]; <br>
+
+      $ Abscissa - Solutus <br>
+
+      xp[J][1] =: 10^lga[{Sr+2}] / ( 10^lga[{Ba+2}] + 10^lga[{Sr+2}] );<br>
+
+$ Ordinates - log10 of Lippmann's total
       solubility product <br>
-      xp[J] =: lga[{SO4-2}] + lg( 10^lga[{Ba+2}] +&nbsp; 10^lga[{Sr+2}]
+      yp[J][0] =: lga[{SO4-2}] + lg( 10^lga[{Ba+2}] +&nbsp; 10^lga[{Sr+2}]
       );<br>
-      $ Solidus <br>
-      yp[J][0] =: Wxx[{Cls}]; <br>
-      $ Solutus <br>
-      yp[J][1] =: 10^lga[{Sr+2}] / ( 10^lga[{Ba+2}] + 10^lga[{Sr+2}] );<br>
+yp[J][1] =: yp[J][0];<br><br>
     </div>
-    <p>Note that this script assigns log<sub>10</sub>SigmaPi values to
-      abscissa and not to the ordinate as in published Lippmann diagrams
-      because it is not possible in GEMS to plot using more than one
-      abscissa, but it is possible to have as many ordinates for
-      separate surves, as necessary. So, the diagram shows up in
-      'transposed' shape. It can be replotted in a spreadsheet in
-      conventional shape after copy-pasting the results from yp and xp
-      arrays on Results page of the Process window. This script usually
+    <p>&nbsp;This script usually
       needs no editing, hence the "Step 3" page of Process Wizard should
-      be simply skipped by clicking the "Next&gt;" button twice. &nbsp;
+      be simply skipped by clicking the "Next&gt;" button twice.&nbsp;
       <br>
     </p>
     <p>When the solubility products of solid solution end members are
@@ -1880,30 +1749,34 @@ The record key dialog should look like this:
       see an automatically created simulation control script, the same
       as for the ion-activity Lippmann diagram variant (see above). The
       total-scale Lippmann diagram itself will be calculated and plotted
-      with help of a different automatically created sampling script:</p>
-    <div style="margin-left: 40px; font-family: Courier
-      New,Courier,monospace;">$ Abscissa - log10 of total dissolved
+      with help of a different automatically created sampling script:<br>
+</p>
+    <div style="margin-left: 40px; font-family: Courier New,Courier,monospace;">
+      $ Abscissa - solidus <br>
+      xp[J][0] =: bXs[{Sr}] / ( bXs[{Sr}] + bXs[{Ca}] );&nbsp; <br>
+      $ Abscissa - solutus<br>
+      xp[J][1] =: m_t[{Sr}] / ( m_t[{Ba}] + m_t[{Sr}] ); <br>
+      $ Ordinates - log10 of total dissolved
       elements product <br>
-      xp[J] =: lg( m_t[{S}] ) + lg( m_t[{Ba}] +&nbsp; m_t[{Sr}] ); <br>
-      $ Solidus <br>
-      yp[J][0] =: bXs[{Sr}] / ( bXs[{Sr}] + bXs[{Ca}] );&nbsp; <br>
-      $ Solutus<br>
-      yp[J][1] =: m_t[{Sr}] / ( m_t[{Ba}] + m_t[{Sr}] ); <br>
-      $ Done<br>
-    </div>
-    <p>Note that, as in the 'classic' variant, the script produces a
-      'transposed' diagrams with the log<sub>10</sub>SigmaPiT function
-      taken as abscissa. Another feature of this sampling script is that
+
+      yp[J][0] =: lg( m_t[{S}] ) + lg( m_t[{Ba}] +&nbsp; m_t[{Sr}] );<br>
+yp[J][1] =: yp[J][0];<br>
+<br>
+    &nbsp;</div>
+    
+<p><br>
+A feature of this sampling script is that
       it calculates the mole fraction for the 'solidus' curve not as the
       mole fraction of a solid solution end member, but as the element
       fraction in the total composition of the solid part of the system.
       This has an advantage when e.g. two solid solution phases are
-      included to reproduce a miscibility gap. In this case, only stable
+      included in the system in order to reproduce a miscibility gap. In this case, only stable
       part of the Lippmann diagram will be visible. If this way of
       calculation of the solid mole fraction is inappropriate for your
-      given system, the operator for yp[J][0] can be replaced with <span style="font-family: Courier New,Courier,monospace;">yp[J][0] =:
+      given system, the operator for <span style="font-family: monospace;">xp[J][0]</span> can be replaced with <span style="font-family: Courier New,Courier,monospace;">xp[J][0] =:
         Wxx[{Cls}];</span>&nbsp; later on by editing the script in the
       Process window.&nbsp;</p>
+
     <p>The sampling script usually needs no editing, hence the "Step 3"
       page of Process Wizard should be simply skipped by clicking the
       "Next&gt;" button twice. &nbsp; </p>
@@ -1919,8 +1792,7 @@ The record key dialog should look like this:
     <table style="text-align: left; width: 980px; height: 35px;" border="1" cellpadding="2" cellspacing="2">
       <tbody>
         <tr>
-          <td style="vertical-align: top;">&nbsp;<a href="#PROCESS_P_MODE_S_3"><span style="font-weight:
-                bold;">P</span> (TP change only)</a><br>
+          <td style="vertical-align: top;">&nbsp;<a href="#PROCESS_P_MODE_S_3"><span style="font-weight: bold;">P</span> (TP change only)</a><br>
           </td>
           <td style="vertical-align: top;"><a href="#PROCESS_S_MODE_S_3"><span style="font-weight: bold;">S</span> (sequential path)</a><br>
           </td>
@@ -1948,27 +1820,21 @@ The record key dialog should look like this:
       respective operators will be removed. <br>
     </p>
     <p>By default, selecting any item creates an assignment operator of
-      the form <span style="font-family: Courier
-        New,Courier,monospace;">yp[J][i] =:
+      the form <span style="font-family: Courier New,Courier,monospace;">yp[J][i] =:
         &lt;Property&gt;[{&lt;Item&gt;}];</span>,&nbsp; where 'i' is the
       ordinate index, automatically incremented from 0. Choosing from
       'Scalars' property may add operators like <span style="font-family: Courier New,Courier,monospace;">yp[J][i] =:
-        &lt;Item&gt;;</span>&nbsp; or&nbsp; <span style="font-family:
-        Courier New,Courier,monospace;">yp[J][i] =: &lt;Item&gt;[J];</span>,
+        &lt;Item&gt;;</span>&nbsp; or&nbsp; <span style="font-family: Courier New,Courier,monospace;">yp[J][i] =: &lt;Item&gt;[J];</span>,
       depending on the item selected.&nbsp;</p>
     <p>The very first operator in the auto-assembled sampling script
-      will be&nbsp; <span style="font-family: Courier
-        New,Courier,monospace;">xp[J] =: J;</span>, which copies
+      will be&nbsp; <span style="font-family: Courier New,Courier,monospace;">xp[J] =: J;</span>, which copies
       simulation step index into the 'abscissa' vector xp. However, any
       other property item can be set as abscissa instead, if it is
       right-clicked in the "Item Selection" list. This shows a small
       menu where "Abscissa" should be selected, which replaces the
-      topmost operator by&nbsp; <span style="font-family: Courier
-        New,Courier,monospace;">xp[J] =: </span><span style="font-family: Courier New,Courier,monospace;">&lt;Property&gt;[{&lt;Item&gt;}];</span>&nbsp;
-      or &nbsp;&nbsp; <span style="font-family: Courier
-        New,Courier,monospace;">xp[J] =: &lt;Item&gt;;</span>&nbsp;
-      or&nbsp; <span style="font-family: Courier
-        New,Courier,monospace;">xp[J] =: &lt;Item&gt;[J];</span>.</p>
+      topmost operator by&nbsp; <span style="font-family: Courier New,Courier,monospace;">xp[J] =: </span><span style="font-family: Courier New,Courier,monospace;">&lt;Property&gt;[{&lt;Item&gt;}];</span>&nbsp;
+      or &nbsp;&nbsp; <span style="font-family: Courier New,Courier,monospace;">xp[J] =: &lt;Item&gt;;</span>&nbsp;
+      or&nbsp; <span style="font-family: Courier New,Courier,monospace;">xp[J] =: &lt;Item&gt;[J];</span>.</p>
     <p>Another option available through the right-click on an item in "Item
       Selection" list is "Calculator". This opens the GEMS Data Object
       Cell Calculator dialog, where you can type a value of the second
@@ -1977,8 +1843,7 @@ The record key dialog should look like this:
       (addition) operation will result in a script operator&nbsp; <span style="font-family: Courier New,Courier,monospace;">yp[J][i] =:
         cTC+273.15;</span> .&nbsp; If, for "my" property, "SiO2@" item,
       you select on Calculator the "log" operation,&nbsp; the following
-      script operator will be added:&nbsp; <span style="font-family:
-        Courier New,Courier,monospace;">yp[J][2] =: ( my[{SiO2@}] &gt;
+      script operator will be added:&nbsp; <span style="font-family: Courier New,Courier,monospace;">yp[J][2] =: ( my[{SiO2@}] &gt;
         0. ? lg(my[{SiO2@}]) : empty() ); </span>In a
       situation when logarithm is taken from zero, this prevents the error by assigning the
       empty() value instead. 
@@ -2013,8 +1878,7 @@ The record key dialog should look like this:
       constraints (default), step 3<br>
     </h4>
     <p>In the "<span style="text-decoration: underline;">Diagram logD vs
-        linear x</span>"&nbsp; or "<span style="text-decoration:
-        underline;">Diagram logKd vs log(m)</span>"&nbsp; variants, the
+        linear x</span>"&nbsp; or "<span style="text-decoration: underline;">Diagram logKd vs log(m)</span>"&nbsp; variants, the
       sampling script is automatically created. Just skip this wizard
       page by clicking 'Next&gt;". </p>
     <p> In the "<span style="text-decoration: underline;">Titration cNu
@@ -2024,8 +1888,7 @@ The record key dialog should look like this:
       select properties and items of interest from the property item
       selection list. <br>
     </p>
-    <h4><a name="PROCESS_G_MODE_S_3"></a>"<span style="font-weight:
-        bold;">G</span>" mode:&nbsp; Batch inverse titration sequence
+    <h4><a name="PROCESS_G_MODE_S_3"></a>"<span style="font-weight: bold;">G</span>" mode:&nbsp; Batch inverse titration sequence
       for incremented pH values etc, step 3</h4>
     <p>In the "<span style="text-decoration: underline;">Constant-pH
         isotherm diagram</span>" variant, the sampling script has been
@@ -2571,19 +2434,14 @@ select
       changes
       in the system along the process path. The control script usually
       looks like this (see also template math scripts): </p>
-    <div style="margin-left: 40px;"><span style="font-family: Courier
-        New,Courier,monospace;">$ Change in Ca/Si bulk ratio in the
-        system </span><br style="font-family: Courier
-        New,Courier,monospace;">
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">$ Change in Ca/Si bulk ratio in the
+        system </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">cNu =:
-        iNu[0] + J*iNu[2]; </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        iNu[0] + J*iNu[2]; </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xd_[{quartz}]
-        =: cNu; </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: cNu; </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">xd_[{portlandite}]
-        =: 1-cNu; </span><br style="font-family: Courier
-        New,Courier,monospace;">
+        =: 1-cNu; </span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">$ end</span><br>
     </div>
     <p>
@@ -2869,13 +2727,11 @@ not
       <dt><a name="cTm"></a><b><big><tt><big>cTm</big> </tt></big></b>-
         Current SysEq VarCSD variant number </dt>
       <dd>Current CSD variant number for <a href="gems_rekey.html#DBM_SysEq">SysEq
-          record key</a> to be generated on <span style="font-family:
-          monospace;">J</span>-th
+          record key</a> to be generated on <span style="font-family: monospace;">J</span>-th
         process iteration. Incremented automatically according to the
         values
         provided in the <span style="font-family: monospace;">"<a href="#iTm_0">iTm</a>"</span>
-        iterator; can also be set in the <span style="font-family:
-          monospace;">P_expr</span>
+        iterator; can also be set in the <span style="font-family: monospace;">P_expr</span>
         math script.</dd>
       <dd>&nbsp; </dd>
       <dt><b><big><tt><a name="iV_0"></a><big>iV[0]</big> </tt></big></b>-<b><i>
@@ -2944,17 +2800,14 @@ not
         incremented in
         the process simulation. Default is 0 (constant pressure);
         otherwise the
-        program will change the &nbsp;<span style="font-family:
-          monospace;">cP</span>
+        program will change the &nbsp;<span style="font-family: monospace;">cP</span>
         &nbsp;cell according to a given non-zero value.</dd>
       <dd>&nbsp; <br>
       </dd>
       <dt><a name="cP"></a><b><big><tt><big>cP</big> </tt></big></b>-
         Current Pressure of interest P (bar). </dt>
-      <dd> Current pressure P to set in a <span style="font-family:
-          monospace;">J</span>-th generated SysEq record
-        key. Automatic Initialization: <span style="font-family:
-          monospace;">cP
+      <dd> Current pressure P to set in a <span style="font-family: monospace;">J</span>-th generated SysEq record
+        key. Automatic Initialization: <span style="font-family: monospace;">cP
           =: iP[0]</span>. Can be incremented in the control&nbsp; <span style="font-family: monospace;"><a href="#P_expr">P_expr</a> </span>math
 script
         expressions; if not changed in script and <span style="font-family: monospace;">iP[2]
@@ -2999,8 +2852,7 @@ Temperature
       </dt>
       <dd>&nbsp; Current temperature cTC to set in a <span style="font-family: monospace;">J</span>-th generated SysEq
         record
-        key. Automatic initialization: <span style="font-family:
-          monospace;">cTC
+        key. Automatic initialization: <span style="font-family: monospace;">cTC
           =: iTC[0]</span>. &nbsp;Can be incremented in the <a href="#P_expr"><span style="font-family: monospace;">P_expr</span></a>
         math script
         expressions; if not and<span style="font-family: monospace;">
@@ -3074,13 +2926,11 @@ not
       
       <dd> Current VarTD number for <a href="gdb_rkey.html#dbm_SysEq">SysEq
 record
-          key</a> to be generated on <span style="font-family:
-          monospace;">J</span>-th
+          key</a> to be generated on <span style="font-family: monospace;">J</span>-th
         process iteration.
         Incremented automatically according to the values provided in
         the <span style="font-family: monospace;">"<a href="gm_proces.html#iNv_0">iNv</a>"</span>
-        iterator; can also be set in the <span style="font-family:
-          monospace;">P_expr</span>
+        iterator; can also be set in the <span style="font-family: monospace;">P_expr</span>
         math script.<br>
         &nbsp;<br>
       </dd>
@@ -3093,14 +2943,12 @@ Real
         processes
         (e.g. mineral dissolution) also depend on the output GEM
         parameters
-        such as pH, ion activities, etc. The <span style="font-family:
-          monospace;">"<a href="#P_expr">P_expr</a>"</span> math script
+        such as pH, ion activities, etc. The <span style="font-family: monospace;">"<a href="#P_expr">P_expr</a>"</span> math script
         in such cases must
         define the mole quantity of a kinetically-retarded species as a
         function of time, pH, ... and use this quantity for setting the
         upper-
-        (<a href="gems_bcc.html#dul_"><span style="font-family:
-            monospace;">dul_</span></a>),
+        (<a href="gems_bcc.html#dul_"><span style="font-family: monospace;">dul_</span></a>),
         the lower (<a href="gems_bcc.html#dll_"><span style="font-family: monospace;">dll_</span></a>) or both
         metastability restrictions (seen on the DComp page of the
         "System"
@@ -3119,8 +2967,7 @@ Real
       <dd> &nbsp; This real value defines the end time point of
         kinteically-dependent
         simulation. Default value is 0.&nbsp;</dd>
-      <dd>The simulation continues as long as <span style="font-family:
-          monospace;">cTau &lt;= iTau[1]</span> <span style="font-family: monospace;">and J &lt; Ntxi[1].</span></dd>
+      <dd>The simulation continues as long as <span style="font-family: monospace;">cTau &lt;= iTau[1]</span> <span style="font-family: monospace;">and J &lt; Ntxi[1].</span></dd>
       <dd>&nbsp;<br>
       </dd>
       <dt> <a name="iTau_2"></a><b><big><tt><big>iTau[2]</big> </tt></big></b>-
@@ -3136,13 +2983,11 @@ Real
       <dd> This cell contains a current real time value during
         kinetically-dependent simulations. Automatic initialization: <span style="font-family: monospace;">cTau =: iTau[0]</span>. The
         cell
-        content can also be set in the <span style="font-family:
-          monospace;">"<a href="#P_expr">P_expr</a>"</span> math script
+        content can also be set in the <span style="font-family: monospace;">"<a href="#P_expr">P_expr</a>"</span> math script
         operators. If not, the
         program will set&nbsp; <span style="font-family: monospace;">cTau
           =:
-          iTau[0] + J*iTau[2]</span> on a <span style="font-family:
-          monospace;">J</span>-th
+          iTau[0] + J*iTau[2]</span> on a <span style="font-family: monospace;">J</span>-th
         step. If time is considered in logarithmic scale then an
         expression <span style="font-family: monospace;">"10^cTau"</span>
         must be used as a
@@ -3163,8 +3008,7 @@ Real
         &nbsp;Default value is 0.&nbsp; </dd>
       <dd><span style="font-weight: bold;">&nbsp; </span><span style="font-weight: bold; text-decoration: underline;"><br>
           Attention:</span> In the case of an <a href="glossary.html#DT_titration_inverse">inverse titration</a>
-        sequence (the <a href="#PePsts_11"><span style="font-family:
-            monospace;">PePsts[11]</span></a>
+        sequence (the <a href="#PePsts_11"><span style="font-family: monospace;">PePsts[11]</span></a>
         flag set to <span style="font-family: monospace;">'+'</span>),
         this
         iterator must contain the interval of minimum-maximum values and
@@ -3182,8 +3026,7 @@ Real
         value is 0. <br>
       </dd>
       <dd><span style="font-weight: bold; text-decoration: underline;">Attention:</span>
-        In the case of an inverse titration sequence (the <a href="gm_proces.html#PePsts_11"><span style="font-family:
-            monospace;">PePsts[11]</span></a>
+        In the case of an inverse titration sequence (the <a href="gm_proces.html#PePsts_11"><span style="font-family: monospace;">PePsts[11]</span></a>
         flag set to <span style="font-family: monospace;">'+'</span>),
         this
         cell must contain the maximum possible addition of
@@ -3209,12 +3052,9 @@ Real
         extent" variable</dt>
       <dd>&nbsp;This cell is automatically initialized as <span style="font-family: monospace;">cpXi =: ipXi[0]</span> when<span style="font-family: monospace;"> J </span>= 0. <br>
       </dd>
-      <dd>If not set in <a href="#P_expr"><span style="font-family:
-            monospace;">P_expr</span></a>
-        math script operators, the <span style="font-family:
-          monospace;">cpXi </span>cell
-        is incremented automatically as&nbsp; <span style="font-family:
-          monospace;">cpXi =: ipXi[0] + J*ipXi[2]</span>. <br>
+      <dd>If not set in <a href="#P_expr"><span style="font-family: monospace;">P_expr</span></a>
+        math script operators, the <span style="font-family: monospace;">cpXi </span>cell
+        is incremented automatically as&nbsp; <span style="font-family: monospace;">cpXi =: ipXi[0] + J*ipXi[2]</span>. <br>
         &nbsp; <br>
       </dd>
       <dt><a name="cXi"></a><b><big><tt><big>cXi</big> </tt></big></b>-
@@ -3271,8 +3111,7 @@ Real
         in the <a href="#P_expr"><span style="font-family: monospace;">P_expr</span></a>
         control script, <span style="font-family: monospace;">cNu</span>
         will be
-        automatically incremented as <span style="font-family:
-          monospace;">cNu
+        automatically incremented as <span style="font-family: monospace;">cNu
           =: iNu[0] + iNu[2]</span>. <br>
         &nbsp; <br>
         <span style="font-weight: bold; text-decoration: underline; color: rgb(204, 0, 0);">Attention:</span>
@@ -3329,8 +3168,7 @@ Real
         in the <span style="font-family: monospace;">P_expr</span> math
         script, the <span style="font-family: monospace;">cpH</span>
         value
-        is automatically incremented as&nbsp; <span style="font-family:
-          monospace;">cpH =: ipH[0] + J*ipH[2]</span>. See
+        is automatically incremented as&nbsp; <span style="font-family: monospace;">cpH =: ipH[0] + J*ipH[2]</span>. See
         also a section about the<a href="#INV_TITR_SEQ"> inverse
           titration
           sequence</a>. <br>
@@ -3347,10 +3185,8 @@ Real
           of GEM inverse titration problems</a>. <br>
       </dd>
       <dd>In cases of forward modelling,
-        these cells can be used as work variables in <a href="gm_proces.html#P_expr"><span style="font-family:
-            monospace;">P_expr</span></a>
-        or <a href="gm_proces.html#pgExpr"><span style="font-family:
-            monospace;">pGexpr</span></a>
+        these cells can be used as work variables in <a href="gm_proces.html#P_expr"><span style="font-family: monospace;">P_expr</span></a>
+        or <a href="gm_proces.html#pgExpr"><span style="font-family: monospace;">pGexpr</span></a>
         math scripts. Default value is 0.</dd>
       <dd> &nbsp; <br>
       </dd>
@@ -3377,8 +3213,7 @@ Real
         in the <span style="font-family: monospace;">P_expr</span> math
         script, the <span style="font-family: monospace;">cpe</span>
         value
-        is automatically incremented as&nbsp; <span style="font-family:
-          monospace;">cpe =: ipe[0] + J*ipe[2]</span>. <br>
+        is automatically incremented as&nbsp; <span style="font-family: monospace;">cpe =: ipe[0] + J*ipe[2]</span>. <br>
       </dd>
       <dd>In
         the&nbsp;<a href="file:///E:/gems2html/program/doc/html/gm_proces.html#INV_TITR_SEQ">
@@ -3405,8 +3240,7 @@ Real
         &nbsp; <br>
       </dd>
       <dt><a name="NeIt_0"></a><big><b><big><tt>NeIt[0]</tt></big></b></big>
-        - Max. number of iterations allowed (<span style="font-family:
-          monospace;">&gt;= Ntxi[1]</span>; for inverse
+        - Max. number of iterations allowed (<span style="font-family: monospace;">&gt;= Ntxi[1]</span>; for inverse
         titrations, <span style="font-family: monospace;">&gt;
           Ntxi[1]*15</span>)</dt>
       <dd>This counter is necessary to prevent infinite cycling
@@ -3428,8 +3262,7 @@ Real
         the process simulator, which is equal to the current index of
         processed
         SysEq record key and the <span style="font-family: monospace;">J</span>
-        index used in math scripts&nbsp; (<span style="font-family:
-          monospace;">
+        index used in math scripts&nbsp; (<span style="font-family: monospace;">
           J =: NeIt[1]</span> ).<br>
         &nbsp; <br>
       </dd>
@@ -3513,8 +3346,7 @@ Real
         format)
         referencing to bibliography or your comments to this process
         simulator
-        definition. Allocated if the&nbsp; <span style="font-family:
-          monospace;">PeDim1[4]&nbsp;</span> counter is set
+        definition. Allocated if the&nbsp; <span style="font-family: monospace;">PeDim1[4]&nbsp;</span> counter is set
         to a positive number upon remake or create. &nbsp;</dd>
       <dd> &nbsp;</dd>
       <dt> <a name="PSDval"></a><big><b><big><tt>PSDval</tt></big></b></big>
@@ -3544,20 +3376,17 @@ Real
       </dd>
       <dd>The&nbsp;<span style="font-family: monospace;"></span>number
         of rows is
-        automatically set equal to <span style="font-family:
-          monospace;">Ntxi[1]</span> on
+        automatically set equal to <span style="font-family: monospace;">Ntxi[1]</span> on
         remake. &nbsp; &nbsp; </dd>
       <dd>&nbsp; <br>
       </dd>
       <dt><a name="vTm"></a><b><big><tt>vTm</tt></big></b> - Optional
         vector
-        to collect VarCSD ( <a href="#cTm"><span style="font-family:
-            monospace;">cTm</span></a> ) numbers from main
+        to collect VarCSD ( <a href="#cTm"><span style="font-family: monospace;">cTm</span></a> ) numbers from main
         process simulaion steps&nbsp;&nbsp; <br>
       </dt>
       <dd>This&nbsp; vector of length <a href="#Ntxi_1"><span style="font-family: monospace;">Ntxi[1]</span></a> is
-        allocated if the <a href="#PePvv_0"><span style="font-family:
-            monospace;">PePvv[0]</span></a>
+        allocated if the <a href="#PePvv_0"><span style="font-family: monospace;">PePvv[0]</span></a>
         flag is turned on <span style="font-family: monospace;">"+" </span>(can
         be done on remake in the Process Wizard).<br>
       </dd>
@@ -3573,8 +3402,7 @@ Real
         of VarCon (<a href="#cNV"><span style="font-family: monospace;">cNV</span></a>)
         numbers from main process simulation steps </dt>
       <dd>This&nbsp; vector of length <a href="#Ntxi_1"><span style="font-family: monospace;">Ntxi[1]</span></a> is
-        allocated if the <a href="#PePvv_1"><span style="font-family:
-            monospace;">PePvv[1]</span></a>
+        allocated if the <a href="#PePvv_1"><span style="font-family: monospace;">PePvv[1]</span></a>
         flag is turned on <span style="font-family: monospace;">"+" </span>(can
         be done on remake in the Process Wizard).</dd>
       <dd>If
@@ -3585,13 +3413,11 @@ Real
       </dd>
       <dt><a name="vP"></a><b><big><tt>vP</tt></big></b> - Optional
         vector
-        of Pressure values (<a href="#cP"><span style="font-family:
-            monospace;">cP</span></a>)
+        of Pressure values (<a href="#cP"><span style="font-family: monospace;">cP</span></a>)
         from main process
         simulation steps </dt>
       <dd>This&nbsp; vector of length <a href="#Ntxi_1"><span style="font-family: monospace;">Ntxi[1]</span></a> is
-        allocated if the <a href="#PePvv_2"><span style="font-family:
-            monospace;">PePvv[2]</span></a>
+        allocated if the <a href="#PePvv_2"><span style="font-family: monospace;">PePvv[2]</span></a>
         flag is turned on <span style="font-family: monospace;">"+" </span>(can
         be done on remake in the Process Wizard).</dd>
       <dd>If
@@ -3602,12 +3428,10 @@ Real
         </span></dd>
       <dt><a name="vV"></a><b><big><tt>vV</tt></big></b> - Optional
         vector
-        of Volume constraint (<a href="#cV"><span style="font-family:
-            monospace;">cV</span></a>) values from main
+        of Volume constraint (<a href="#cV"><span style="font-family: monospace;">cV</span></a>) values from main
         process simulation steps</dt>
       <dd> This&nbsp; vector of length <a href="#Ntxi_1"><span style="font-family: monospace;">Ntxi[1]</span></a> is
-        allocated if the <a href="#PePvv_3"><span style="font-family:
-            monospace;">PePvv[3]</span></a>
+        allocated if the <a href="#PePvv_3"><span style="font-family: monospace;">PePvv[3]</span></a>
         flag is turned on <span style="font-family: monospace;">"+" </span>(can
         be done on remake in the Process Wizard).</dd>
       <dd>If
@@ -3618,12 +3442,10 @@ Real
       </dd>
       <dt><a name="vT"></a><b><big><tt>vT</tt></big></b> - Optional
         vector
-        of Temperatures (<a href="#cTC"><span style="font-family:
-            monospace;">cTC</span></a>)
+        of Temperatures (<a href="#cTC"><span style="font-family: monospace;">cTC</span></a>)
         from main process simulation steps </dt>
       <dd> This&nbsp; vector of length <a href="#Ntxi_1"><span style="font-family: monospace;">Ntxi[1]</span></a> is
-        allocated if the <a href="#PePvv_4"><span style="font-family:
-            monospace;">PePvv[4]</span></a>
+        allocated if the <a href="#PePvv_4"><span style="font-family: monospace;">PePvv[4]</span></a>
         flag is turned on <span style="font-family: monospace;">"+" </span>(can
         be done on remake in the Process Wizard). </dd>
       <dd>If
@@ -3637,8 +3459,7 @@ Real
         main
         process simulation steps </dt>
       <dd>This&nbsp; vector of length <a href="#Ntxi_1"><span style="font-family: monospace;">Ntxi[1]</span></a> is
-        allocated if the <a href="#PePvv_5"><span style="font-family:
-            monospace;">PePvv[5]</span></a>
+        allocated if the <a href="#PePvv_5"><span style="font-family: monospace;">PePvv[5]</span></a>
         flag is turned on <span style="font-family: monospace;">"+" </span>(can
         be done on remake in the Process Wizard).</dd>
       <dd>We
@@ -3652,13 +3473,11 @@ Real
           &nbsp;<br>
         </span></dd>
       <dt><a name="vpXi"></a><b><big><tt>vpXi</tt></big></b> - Optional
-        vector of pXi (-log process extent <span style="font-family:
-          monospace;"><a href="#cpXi">cpXi</a>)</span>
+        vector of pXi (-log process extent <span style="font-family: monospace;"><a href="#cpXi">cpXi</a>)</span>
         values
         from main process simulation steps </dt>
       <dd>This&nbsp; vector of length <a href="#Ntxi_1"><span style="font-family: monospace;">Ntxi[1]</span></a> is
-        allocated if the <a href="#PePvv_6"><span style="font-family:
-            monospace;">PePvv[6]</span></a>
+        allocated if the <a href="#PePvv_6"><span style="font-family: monospace;">PePvv[6]</span></a>
         flag is turned on <span style="font-family: monospace;">"+" </span>(can
         be done on remake in the Process Wizard).</dd>
       <dd>If not specified otherwise in the&nbsp; <a href="#P_expr"><span style="font-family: monospace;">P_expr </span></a>math
@@ -3672,8 +3491,7 @@ Real
         main
         process simulation steps </dt>
       <dd> This&nbsp; vector of length <a href="#Ntxi_1"><span style="font-family: monospace;">Ntxi[1]</span></a> is
-        allocated if the <a href="#PePvv_7"><span style="font-family:
-            monospace;">PePvv[7]</span></a>
+        allocated if the <a href="#PePvv_7"><span style="font-family: monospace;">PePvv[7]</span></a>
         flag is turned on <span style="font-family: monospace;">"+" </span>(can
         be done on remake in the Process Wizard).</dd>
       <dd>If not specified otherwise in the&nbsp; <a href="#P_expr"><span style="font-family: monospace;">P_expr </span></a>math
@@ -3686,8 +3504,7 @@ Real
         array of parameters for kinetic dependencies </dt>
       <dd>This work array for kinetic parameters will be
         created upon
-        remake if the <a href="#PePvv_8"><span style="font-family:
-            monospace;">PePvv[8]</span></a>
+        remake if the <a href="#PePvv_8"><span style="font-family: monospace;">PePvv[8]</span></a>
         flag is turned on (<span style="font-family: monospace;">'+'</span>)
         and
         &nbsp;<a href="#PeDim1_3"><span style="font-family: monospace;">PeDim1[3]</span></a>
@@ -3755,8 +3572,7 @@ Real
         provided (see
         also <a href="#PROCESS_SAMPL_MATH_SCRIPT">"Writing process data
           sampling math scripts"</a> chapter).<br>
-        The minimum possible set of <span style="font-family:
-          monospace;">&nbsp;pGexpr</span>&nbsp;
+        The minimum possible set of <span style="font-family: monospace;">&nbsp;pGexpr</span>&nbsp;
         script expressions for data sampling has the following form: </dd>
     </dl>
     <dl style="margin-left: 40px;">
@@ -3800,14 +3616,12 @@ Real
       <dt> <a name="yp"></a><big><big><b><tt>yp</tt></b></big></big> -
         Data
         table of ordinate(s)&nbsp; y</dt>
-      <dd>Each column of the <span style="font-family:
-          monospace;">yp</span>
+      <dd>Each column of the <span style="font-family: monospace;">yp</span>
         sampled data table will be plotted as a separate curve.
         &nbsp;Number of
         columns in the <span style="font-family: monospace;">yp</span>
         table
-        can be set in the <a href="#pDimXY_1"><span style="font-family:
-            monospace;">pDimXY[1]</span></a> counter upon
+        can be set in the <a href="#pDimXY_1"><span style="font-family: monospace;">pDimXY[1]</span></a> counter upon
         remake/create of the Process record. Number of rows is set from
         <a href="#pDimXY_0"><span style="font-family: monospace;">pDimXY[0]</span></a>
         counter which, in turn, automatically equals <span style="font-family: monospace;">Ntxi[1]</span> counter. <br>
@@ -3895,8 +3709,7 @@ Real
         data. Similar to names in the pLnam list, these will also be
         displayed on the graph legend. Number of elements in this list
         is
-        defined in the <a href="#pDimEf_1"><span style="font-family:
-            monospace;">pDimEf[1]</span></a> counter.&nbsp;</dd>
+        defined in the <a href="#pDimEf_1"><span style="font-family: monospace;">pDimEf[1]</span></a> counter.&nbsp;</dd>
       <dd> &nbsp;</dd>
     </dl>
     <hr style="width: 100%; height: 2px;"><h3><a name="PROCES_DATA_CONFIG"></a>5.4. Data fields that can be
@@ -4032,8 +3845,7 @@ Real
         (+
         -)?&nbsp;</dt>
       <dd>&nbsp;This flag indicates that some metastability constriants
-        or <a href="gems_bcc.html#gEx_"><span style="font-family:
-            monospace;">gEx</span></a>_
+        or <a href="gems_bcc.html#gEx_"><span style="font-family: monospace;">gEx</span></a>_
         increments will be changed in the process simulation. Default is
         off
         &nbsp;('-'). If the flag is set on then the iterator <a href="#iNv_0"><span style="font-family: monospace;">iNv</span></a>
@@ -4126,10 +3938,8 @@ Real
       <dd>This mode permits the user to create customary inverse
         titration
         simulators by writing a special <a href="#P_expr"><span style="font-family: monospace;">P_expr</span></a> math
-        script (<a href="#PePsts_10"><span style="font-family:
-            monospace;">PePsts[10]</span></a>
-        flag must also be turned on). The <span style="font-family:
-          monospace;">"I</span>"
+        script (<a href="#PePsts_10"><span style="font-family: monospace;">PePsts[10]</span></a>
+        flag must also be turned on). The <span style="font-family: monospace;">"I</span>"
         index must be used in some equations to count iterations and
         stop when
         its limit is reached, to prevent infinite cycling. See also<a href="#INVERSE_TITRATION"> examples</a>. Default value of this
@@ -4139,8 +3949,7 @@ Real
         &nbsp;is on then flags <span style="font-family: monospace;">PePsts[2],
 PePsts[4],
           PePsts[7], PePsts[10]</span> must be switched on; however,
-        the flag <a href="#PePsts_11"><span style="font-family:
-            monospace;">PePsts[11]</span></a>
+        the flag <a href="#PePsts_11"><span style="font-family: monospace;">PePsts[11]</span></a>
         must be turned&nbsp; off. </dd>
       <dd><br>
       </dd>
@@ -4186,8 +3995,7 @@ PePsts[4],
         1-D
         parametric minimization algorithm. See more in the "Inverse
         titration
-        sequence" section. For this mode, set <span style="font-family:
-          monospace;">NeIt[0] &gt; Ntxi[1]*15</span>;&nbsp; <br>
+        sequence" section. For this mode, set <span style="font-family: monospace;">NeIt[0] &gt; Ntxi[1]*15</span>;&nbsp; <br>
         flags <span style="font-family: monospace;">PePsts[2],
           PePsts[7],
           PePsts[10]</span> must be turned on, but flag <span style="font-family: monospace;">PePsts[8]</span> must be
@@ -4198,11 +4006,9 @@ PePsts[4],
       </dd>
       <dt> <a name="PePvv_0"></a><b><big><tt>PePvv[0]</tt></big></b> -
         Flag
-        for allocation of an optional <span style="font-family:
-          monospace;">vTm</span>
+        for allocation of an optional <span style="font-family: monospace;">vTm</span>
         vector (+ - *) </dt>
-      <dd> &nbsp; The <a href="#vTm"><span style="font-family:
-            monospace;">vTm</span></a>
+      <dd> &nbsp; The <a href="#vTm"><span style="font-family: monospace;">vTm</span></a>
         vector will be allocated if this flag is turned on ('+' or '*'),
         otherwise this vector will be deallocated (default). <br>
         &nbsp;
@@ -4210,37 +4016,30 @@ PePsts[4],
       </dd>
       <dt><a name="PePvv_1"></a><big><b><tt>PePvv[1]</tt></b></big> -
         Flag
-        for allocation of an optional <span style="font-family:
-          monospace;">vNV</span>
+        for allocation of an optional <span style="font-family: monospace;">vNV</span>
         vector (+ - *)</dt>
-      <dd> &nbsp;The <a href="#vNV"><span style="font-family:
-            monospace;">vNV</span></a>
+      <dd> &nbsp;The <a href="#vNV"><span style="font-family: monospace;">vNV</span></a>
         vector will be allocated if this flag is turned on ('+' or '*'),
         otherwise this vector will be deallocated (default). </dd>
       <dt><a name="PePvv_2"></a><big><b><tt>PePvv[2]</tt></b></big> -
         Flag
-        for allocation of an otpional <span style="font-family:
-          monospace;">vP</span>
+        for allocation of an otpional <span style="font-family: monospace;">vP</span>
         vector (+ - *)</dt>
-      <dd> &nbsp;The <a href="#vP"><span style="font-family:
-            monospace;">vP</span></a>
+      <dd> &nbsp;The <a href="#vP"><span style="font-family: monospace;">vP</span></a>
         vector will be allocated if this flag is turned on ('+' or '*'),
         otherwise this vector will be deallocated (default).&nbsp;&nbsp;
         <br>
       </dd>
       <dt> <a name="PePvv_3"></a><big><b><tt>PePvv[3]</tt></b></big> -
         Flag
-        for allocation of an optional <span style="font-family:
-          monospace;">vT</span>
+        for allocation of an optional <span style="font-family: monospace;">vT</span>
         vector (+ - *)</dt>
-      <dd> &nbsp;The <a href="#vT"><span style="font-family:
-            monospace;">vT</span></a>
+      <dd> &nbsp;The <a href="#vT"><span style="font-family: monospace;">vT</span></a>
         vector will be allocated if this flag is turned on ('+' or '*'),
         otherwise this vector will be deallocated (default). </dd>
       <dt><a name="PePvv_4"></a><b><tt><big>PePvv[4]</big> </tt></b>-
         Flag
-        for allocation of an optional <span style="font-family:
-          monospace;">vV</span>
+        for allocation of an optional <span style="font-family: monospace;">vV</span>
         vector (+ - *)</dt>
       <dd> The <a href="#vV"><span style="font-family: monospace;">vV</span></a>
         vector will be allocated if this flag is turned on ('+' or '*'),
@@ -4248,28 +4047,23 @@ PePsts[4],
       </dd>
       <dt><a name="PePvv_5"></a><big><b><tt>PePvv[5]</tt></b></big> -
         Flag
-        for allocation of an optional <span style="font-family:
-          monospace;">vTau</span>
+        for allocation of an optional <span style="font-family: monospace;">vTau</span>
         vector (+ - *)</dt>
-      <dd> &nbsp; The <a href="#vTau"><span style="font-family:
-            monospace;">vTau</span></a>
+      <dd> &nbsp; The <a href="#vTau"><span style="font-family: monospace;">vTau</span></a>
         vector will be allocated if this flag is turned on ('+' or '*'),
         otherwise this vector will be deallocated (default).&nbsp; <br>
       </dd>
       <dt><a name="PePvv_6"></a><big><b><tt>PePvv[6]</tt></b></big> -
         Flag
-        for allocation of an optional <span style="font-family:
-          monospace;">vpXi</span>
+        for allocation of an optional <span style="font-family: monospace;">vpXi</span>
         vector (+ - *)</dt>
-      <dd>&nbsp; The <a href="#vpXi"><span style="font-family:
-            monospace;">vpXi</span></a>
+      <dd>&nbsp; The <a href="#vpXi"><span style="font-family: monospace;">vpXi</span></a>
         vector will be allocated if this flag is turned on ('+' or '*'),
         otherwise this vector will be deallocated (default).&nbsp; <br>
       </dd>
       <dt><a name="PePvv_7"></a><big><b><tt>PePvv[7]</tt></b></big> -
         Flag
-        for allocation of an optional <span style="font-family:
-          monospace;">vNu</span>
+        for allocation of an optional <span style="font-family: monospace;">vNu</span>
         vector (+ - *)</dt>
       <dd> The <a href="#vNu"><span style="font-family: monospace;">vNu</span></a>
         vector will be allocated if this flag is turned on ('+' or '*'),
@@ -4278,8 +4072,7 @@ PePsts[4],
       </dd>
       <dt><a name="PePvv_8"></a><b><tt><big>PePvv[8]</big> </tt></b>-
         Flag
-        for allocation of an optional <span style="font-family:
-          monospace;">vKin</span>
+        for allocation of an optional <span style="font-family: monospace;">vKin</span>
         array (+ - *) </dt>
       <dd>&nbsp; This flag controls allocation of a kinetic parameters
         array&nbsp;<span style="font-family: monospace;"> <a href="#vKin">vKin</a></span>.
@@ -4333,8 +4126,7 @@ PePsts[4],
         -)? </dt>
       <dd>&nbsp;&nbsp; This flag (if turned on '+') causes the
         GraphDialog module to display
-        data entered into the <a href="#xEp"><span style="font-family:
-            monospace;">xEp</span></a> and <a href="#yEp"><span style="font-family: monospace;">yEp</span></a> arrays as
+        data entered into the <a href="#xEp"><span style="font-family: monospace;">xEp</span></a> and <a href="#yEp"><span style="font-family: monospace;">yEp</span></a> arrays as
         scattered
         symbols on top of the simulated lines. Default flag is off
         ('-'). <br>
@@ -4360,8 +4152,7 @@ PePsts[4],
         or
         remake of the Process record because it is necessary for
         allocation
-        of many dynamic data objects such as <span style="font-family:
-          monospace;"><a href="#xp">xp</a>, <a href="#yp">yp</a>, <a href="#modC">modC</a></span>. However, the
+        of many dynamic data objects such as <span style="font-family: monospace;"><a href="#xp">xp</a>, <a href="#yp">yp</a>, <a href="#modC">modC</a></span>. However, the
         actual number of performed steps can be less than <span style="font-family: monospace;">Ntxi[1]</span> depending on
         the
         process
@@ -4378,8 +4169,7 @@ PePsts[4],
         - Number of columns in the <a href="#modC"><span style="font-family: monospace;">modC</span></a> array</dt>
       <dd> &nbsp;&nbsp; &nbsp;</dd>
       <dt> <a name="PeDim1_2"></a><b><tt><big>PeDim1[2]</big> </tt></b>-
-        Number of rows in the <a href="#vKin"><span style="font-family:
-            monospace;">vKin</span></a> array</dt>
+        Number of rows in the <a href="#vKin"><span style="font-family: monospace;">vKin</span></a> array</dt>
       <dd> &nbsp;&nbsp; <br>
       </dd>
       <dt> <a name="PeDim1_3"></a><b><tt><big>PeDim1[3]</big> </tt></b>-
@@ -4432,8 +4222,7 @@ PePsts[4],
       <dt><b><big><tt>W02PErem: </tt></big></b>Inconsistent
         maximum number of simulation steps! <br>
       </dt>
-      <dd>&nbsp; The <a href="#Ntxi_1"><span style="font-family:
-            monospace;">Ntxi[1]</span></a>
+      <dd>&nbsp; The <a href="#Ntxi_1"><span style="font-family: monospace;">Ntxi[1]</span></a>
         counter contains 0 or a negative value. <br>
       </dd>
       <dd>Remake the record and set the iterators and numbers in Process
@@ -4504,8 +4293,7 @@ PePsts[4],
         analyzing Process simulation control script:&nbsp;</dt>
       <dd>&nbsp; Syntax error(s) were detected during pre-processing or
         translation of
-        text in the <a href="#P_expr"><span style="font-family:
-            monospace;">P_expr</span></a>
+        text in the <a href="#P_expr"><span style="font-family: monospace;">P_expr</span></a>
         math script. The remaining (not yet processed) part of the
         script will
         be shown after the error message in order to help in

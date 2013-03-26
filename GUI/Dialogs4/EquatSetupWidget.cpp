@@ -373,19 +373,31 @@ void EquatSetup::emptyScriptTable()
 
 void EquatSetup::scriptUpdate()
 {
-  QString buf, tScript;
+   uint ii;
+   QString buf, tScript;
 
   if( !eqData.xName.empty() )
-    tScript = QString("%1[%2] =: %3;\n").arg( eqData.xName.c_str(),
+  {
+      tScript = QString("%1[%2] =: %3;\n").arg( eqData.xName.c_str(),
                     eqData.indexName.c_str(), eqData.abscissaEquat.c_str() );
+      for( ii=0; ii<eqData.abscissaLines.GetCount(); ii++ )
+      {
+          buf = QString("%1[%2][%3] =: %4;\n").arg(
+                  eqData.xName.c_str(), eqData.indexName.c_str(),
+                  QString("%1").arg(ii+1), eqData.abscissaLines[ii].c_str() );
+          tScript += buf;
+      }
 
-  for(uint ii=0; ii<scriptData.GetCount(); ii++ )
+  }
+
+  for( ii=0; ii<scriptData.GetCount(); ii++ )
   {
       buf = QString("%1[%2][%3] =: %4;\n").arg(
               eqData.yName.c_str(), eqData.indexName.c_str(),
               QString("%1").arg(ii), scriptData[ii].lineText.c_str() );
     tScript += buf;
   }
+
   textScript->setText(tScript);
 }
 
@@ -406,6 +418,16 @@ void EquatSetup::slotPopupContextMenu(const QPoint &pos)
           connect(act, SIGNAL(triggered()), this, SLOT(CmAbscissa()));
     menu->addAction(act);
 
+    if( eqData.useSeveral )
+    {
+        act =  new QAction(tr("&AbscissaAdd"), this);
+        act->setStatusTip(tr("Define value as new Abscissa"));
+              connect(act, SIGNAL(triggered()), this, SLOT(CmAbscissaAdd()));
+        menu->addAction(act);
+
+    }
+
+
    menu->exec( pLists[cPage]->mapToGlobal(pos) );
      delete menu;
 }
@@ -416,14 +438,29 @@ void EquatSetup::CmAbscissa()
     QListWidgetItem* ndx = pLists[cPage]->currentItem();
     gstring str = ndx->data(Qt::DisplayRole).toString().toLatin1().data();
 
-    eqData.abscissaEquat = getStringValue( nO, pLists[cPage]->currentRow(), str.c_str() );;
+    eqData.abscissaEquat = getStringValue( nO, pLists[cPage]->currentRow(), str.c_str() );
     if(nO<0)
       xNam = str;
     else
       xNam = aObj[nO].GetKeywd();
+
+    eqData.abscissaLines.Clear();
     scriptUpdate();
 }
 
+void EquatSetup::CmAbscissaAdd()
+{
+    int nO =  pgData[cPage].nObj;
+    QListWidgetItem* ndx = pLists[cPage]->currentItem();
+    gstring str = ndx->data(Qt::DisplayRole).toString().toLatin1().data();
 
+    eqData.abscissaLines.Add( getStringValue( nO, pLists[cPage]->currentRow(), str.c_str() ));
+    /*if(nO<0)
+      xNam = str;
+    else
+      xNam = aObj[nO].GetKeywd();
+   */
+   scriptUpdate();
+}
 
 //--------------------- End of InputSystemDialog.cpp ---------------------------

@@ -31,20 +31,25 @@
 
 struct equatSetupData
 {
-
    gstring xName; // Abscissa name
    gstring yName; // Ordinate name
    gstring indexName; // Index name
-   gstring abscissaEquat; // Abscissa object name
+   gstring abscissaEquat; // Abscissa first object name
+
+   bool useSeveral; // More then one Abscissa is permitted
+   TCStringArray abscissaLines;  // Abscissa object names (if more then one Abscissa)
 
    equatSetupData( const char * axName, const char * ayName,
-                   const char * aiName, const char * aitName):
-        xName(axName), yName(ayName), indexName(aiName), abscissaEquat(aitName)
+                   const char * aiName, const char * aitName, bool useMore = false):
+       xName(axName), yName(ayName), indexName(aiName), abscissaEquat(aitName), useSeveral(useMore)
    { }
 
    equatSetupData( equatSetupData& d ):
-     xName(d.xName), yName(d.yName), indexName(d.indexName), abscissaEquat(d.abscissaEquat)
-   { }
+     xName(d.xName), yName(d.yName), indexName(d.indexName), abscissaEquat(d.abscissaEquat), useSeveral(d.useSeveral)
+   {
+       for( uint ii=0; ii<abscissaLines.GetCount(); ii++)
+           abscissaLines.Add( d.abscissaLines[ii] );
+   }
 };
 
 struct pagesSetupData
@@ -154,9 +159,11 @@ public:
       yNam =name;
    }
 
-
    int getScriptLinesNum() const
    {  return   scriptData.GetCount(); }
+
+   int getAbscissaNum() const
+   {  return   eqData.abscissaLines.GetCount()+1; }
 
 public slots:
     // slot or function ????
@@ -165,7 +172,7 @@ public slots:
     void slotPopupContextMenu(const QPoint &pos);
     void CmCalc();
     void CmAbscissa();
-
+    void CmAbscissaAdd();
 };
 
 #endif // EquatSetup_included

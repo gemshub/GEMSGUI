@@ -78,13 +78,13 @@ class ProcessWizard : public QDialog, public Ui::ProcessWizardData
 
 public:
 
-    ProcessWizard( const char* pkey, char flgs[24], int sizes[6],
+    ProcessWizard( const char* pkey, char flgs[24], int sizes[8],
                    short tabInt[6], double tabDoubl[24],
        const char *acalcScript, const char *aoutScript,
        const char* aXname, const char* aYname,  QWidget* parent = NULL);
     virtual ~ProcessWizard();
 
-    void   getSizes( int size[6] );
+    void   getSizes( int size[8] );
     void   getTable( short size[6], double dbl[24] );
     void   getFlags( char flgs[24] );
 

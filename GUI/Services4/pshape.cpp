@@ -34,7 +34,7 @@
 
 #include "pshape.h"
 #include "GemsMainWindow.h"
-#include "GraphDialog.h"
+//#include "GraphDialog.h"
 
 // ----------------------------------------------
 // PShape class
@@ -120,7 +120,7 @@ PPoint::paint(QPainter& dc)
 
     dc.setPen( QPen(color, 2) );
     dc.setBrush( Qt::NoBrush );
-    drawSymbol(&dc, point, type, size, color, 2);
+    //drawSymbol(&dc, point, type, size, color, 2);
 }
 
 

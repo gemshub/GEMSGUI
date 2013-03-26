@@ -73,8 +73,19 @@ int TObjectModel::rowCount( const QModelIndex & /*parent*/ ) const
 
 int TObjectModel::cCount() const
 {
-   int ii, currentdeltaM = 0, deltaM = 0, sizeM = flds[0].pObj->GetMS();
-   for(  ii=1; ii< flds.count(); ii++)
+   int ii=0;
+
+   // test mutable fiels 12/03/13
+   if( flds[ii].place == MutableB && flds.count() >= 4 )
+   {
+        //if(  aFlds[1].place == Tied && aFlds[2].place == UndeTabl && aFlds[3].place == Tied)
+       if( flds[1].pObj->GetMS() >= flds[2].pObj->GetMS()+flds[3].pObj->GetMS())
+         {   ii++;  }
+   }
+
+   int currentdeltaM = 0, deltaM = 0, sizeM = flds[ii].pObj->GetMS();
+   ii++;
+   for(  ii; ii< flds.count(); ii++)
    {
        if(  flds[ii].place == UndeTabl )
        { deltaM = max(deltaM, currentdeltaM + sizeM);
@@ -99,14 +110,24 @@ int TObjectModel::columnCount( const QModelIndex & /*parent*/ ) const
 int TObjectModel::getObjFromModel( int row, int col, 
                 int& nO, int& iN, int &iM, Selection* sel ) const
 {
-  int deltaN = 0, sizeN = flds[0].pObj->GetNS();
-  int fuldeltaM = 0, deltaM = 0,sizeM = flds[0].pObj->GetMS();
+   int iistart, ii = 0;
+    // test mutable fiels 12/03/13
+    if( flds[ii].place == MutableB && flds.count() >= 4 )
+    {
+        //if(  aFlds[1].place == Tied && aFlds[2].place == UndeTabl && aFlds[3].place == Tied)
+        if( flds[1].pObj->GetMS() >= flds[2].pObj->GetMS()+flds[3].pObj->GetMS())
+          {   ii++;  }
+    }
+
+  int deltaN = 0, sizeN = flds[ii].pObj->GetNS();
+  int fuldeltaM = 0, deltaM = 0,sizeM = flds[ii].pObj->GetMS();
   
   nO = iN = iM = -1;
   
-  for( int ii=0; ii< flds.count(); ii++)
+  iistart = ii;
+  for( ii; ii< flds.count(); ii++)
   {
-    if( ii > 0 && flds[ii].place == Tied )
+    if( ii > iistart && flds[ii].place == Tied )
     {	deltaM += sizeM;
 	    sizeM = flds[ii].pObj->GetMS();
         sizeN = max( sizeN, flds[ii].pObj->GetNS() );
@@ -117,7 +138,7 @@ int TObjectModel::getObjFromModel( int row, int col,
        deltaM = 0;
        sizeM = 0;
     }
-    if( ii > 0 && ( flds[ii].place == Sticked || flds[ii].place == UndeTabl ) )
+    if( ii > iistart && ( flds[ii].place == Sticked || flds[ii].place == UndeTabl ) )
     {
     	deltaN += sizeN;
     	sizeN = flds[ii].pObj->GetNS();
@@ -444,32 +465,42 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
  // return current size of object defined by Model
  void TObjectTable::getObjectSize( int& rowSize, int& colSize )
  {
- 	int sizeN = flds[0].pObj->GetNS();
- 	int sizeM = flds[0].pObj->GetMS();
- 	int fullrowSize, fullcolSize;
-        int ii, col_ii = 0, row_ii=0;
+        int fullrowSize, fullcolSize;
+        int ii=0, col_ii = 0, row_ii=0;
+
+        // test mutable fiels 12/03/13
+        if( flds[ii].place == MutableB && flds.count() >= 4 )
+        {
+             //if(  aFlds[1].place == Tied && aFlds[2].place == UndeTabl && aFlds[3].place == Tied)
+            if( flds[1].pObj->GetMS() >= flds[2].pObj->GetMS()+flds[3].pObj->GetMS())
+              {   ii++;  }
+        }
+        int sizeN = flds[ii].pObj->GetNS();
+        int sizeM = flds[ii].pObj->GetMS();
 
 // scroling for TextEdit fields
        //22/04/2010
-        if( flds[0].fType == ftText )
-        { if(sizeN > 0 )
-          {      colSize =  wdF(flds[0].fType, flds[0].npos, flds[0].edit)+1;
-                 rowSize  =  htF(flds[0].fType, flds[0].maxN )+1;
+      if( flds[ii].fType == ftText )
+      { if(sizeN > 0 )
+          {      colSize =  wdF(flds[ii].fType, flds[ii].npos, flds[ii].edit)+1;
+                 rowSize  =  htF(flds[ii].fType, flds[ii].maxN )+1;
           }
             else colSize = rowSize =0;
         }
         else
 	{	
- 	  colSize = ( horizontalHeader()->sectionSize(0) * min(flds[0].maxM, sizeM ) );
- 	  rowSize  = ( verticalHeader()->sectionSize(0) * min(flds[0].maxN, sizeN ) );
+      colSize = ( horizontalHeader()->sectionSize(0) * min(flds[ii].maxM, sizeM ) );
+      rowSize  = ( verticalHeader()->sectionSize(0) * min(flds[ii].maxN, sizeN ) );
 	}
- 	fullcolSize = ( horizontalHeader()->sectionSize(0) *  sizeM  );
+
+    fullcolSize = ( horizontalHeader()->sectionSize(0) *  sizeM  );
  	fullrowSize  = ( verticalHeader()->sectionSize(0) *  sizeN  );
  	
-        int maxColSize = colSize;
-        int maxfullcolSize = fullcolSize;
+    int maxColSize = colSize;
+    int maxfullcolSize = fullcolSize;
 
-    for( ii=1; ii< flds.count(); ii++)
+    ii++;
+    for( ii; ii< flds.count(); ii++)
  	{
         if(  flds[ii].place == Tied )
  		 {

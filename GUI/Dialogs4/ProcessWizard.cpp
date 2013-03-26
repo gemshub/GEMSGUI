@@ -3,7 +3,7 @@
 //
 // Implementation of ProcessWizard class
 //
-// Copyright (C) 2005-2011  S.Dmytriyeva, D.Kulik
+// Copyright (C) 2005-2013  S.Dmytriyeva, D.Kulik
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
@@ -50,7 +50,9 @@ ProcessWizard::CmNext()
     char type = getType();
 
     if( ndx == 2 && nLines > 0)
-        pGraph->setValue( nLines );
+    {    pGraph->setValue( nLines );
+         pGraphX->setValue( pageScript->getAbscissaNum() );
+    }
 
     if( ndx == 0)
     {
@@ -93,7 +95,7 @@ void 	ProcessWizard::resetBackButton()
 }
 
 
-ProcessWizard::ProcessWizard( const char* pkey, char flgs[24], int size[6],
+ProcessWizard::ProcessWizard( const char* pkey, char flgs[24], int size[8],
                     short tabInt[6], double tabDoubl[24],
             const char *acalcScript, const char *aoutScript,
             const char* aXname, const char* aYname, QWidget* parent):
@@ -284,6 +286,7 @@ for(int row=0; row<3; row++)
     pPoints->setValue(size[0]);
     pMods->setValue(size[1]);
     pGraph->setValue(size[2]);
+    pGraphX->setValue(size[6]);
     pELine->setValue(size[3]);
     pECol->setValue(size[4]);
 
@@ -362,12 +365,13 @@ for(int row=0; row<3; row++)
 ProcessWizard::~ProcessWizard()
 {}
 
-void   ProcessWizard::getSizes( int size[6] )
+void   ProcessWizard::getSizes( int size[8] )
 {
 
     size[0]= pPoints->value();
     size[1]= pMods->value();
     size[2]= pGraph->value();
+    size[6]= pGraphX->value();
     size[3]= pELine->value();
     size[4]= pECol->value();
     size[5]= spinBox18->value();
@@ -1347,6 +1351,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
   if( !page1Changed )
           return;
 
+  pGraphX->setValue( 1 );
   switch(type)
   {
     case P_PVT:
@@ -1461,17 +1466,20 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
        EMion1 = lst[2].trimmed();
 
        ret = QString(
-        "$ Abscissa - log10 of Lippmann's total solubility product \n"
-        "xp[J] =: lga[{%2}] + lg( 10^lga[{%3}] +  10^lga[{%4}] );\n"
-        "$ Solidus \n"
-        "yp[J][0] =: Wxx[{%1}]; \n"
-        "$ Solutus \n"
-        "yp[J][1] =: 10^lga[{%4}] / ( 10^lga[{%3}] + 10^lga[{%4}] ); \n").arg(EM1, ComIon, EMion0, EMion1);
+        "$ Abscissa - Solidus \n"
+        "xp[J][0] =: Wxx[{%1}]; \n"
+        "$ Abscissa - Solutus \n"
+        "xp[J][1] =: 10^lga[{%4}] / ( 10^lga[{%3}] + 10^lga[{%4}] ); \n"
+        "$ Ordinates - log10 of Lippmann's total solubility product \n"
+        "yp[J][0] =: lga[{%2}] + lg( 10^lga[{%3}] +  10^lga[{%4}] );\n"
+        "yp[J][1] =: yp[J][0];\n"
+        "$ Done \n" ).arg(EM1, ComIon, EMion0, EMion1);
        rowNames.Add("Solidus");
        rowNames.Add("Solutus");
        pGraph->setValue( 2 );
-       pageScript->setXname("lgSigPi");
-       pageScript->setYname("x(s);x(aq)");
+       pGraphX->setValue( 2 );
+       pageScript->setYname("logSigPi");
+       pageScript->setXname("x(s);x(aq)");
      }
      if( subtype == 1 )
      {
@@ -1494,18 +1502,20 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
          EM1IC = lst[2].trimmed();
 
          ret = QString(
-          "$ Abscissa - log10 of total dissolved elements product \n"
-          "xp[J] =: lg( m_t[{%1}] ) + lg( m_t[{%2}] +  m_t[{%3}] ); \n"
-          "$ Solidus \n"
-          "yp[J][0] =: bXs[{%3}] / ( bXs[{%2}] + bXs[{%3}] ); \n"
-          "$ Solutus \n"
-          "yp[J][1] =: m_t[{%3}] / ( m_t[{%2}] + m_t[{%3}] ); \n"
+          "$ Abscissa - Solidus \n"
+          "xp[J][0] =: bXs[{%3}] / ( bXs[{%2}] + bXs[{%3}] ); \n"
+          "$ Abscissa - Solutus \n"
+          "xp[J][1] =: m_t[{%3}] / ( m_t[{%2}] + m_t[{%3}] ); \n"
+          "$ Ordinates - log10 of total dissolved elements product \n"
+          "yp[J][0] =: lg( m_t[{%1}] ) + lg( m_t[{%2}] +  m_t[{%3}] ); \n"
+          "yp[J][1] =: yp[J][0]; \n"
           "$ Done \n").arg( ComIC, EM0IC, EM1IC );  // removed EM1 as first argument
          rowNames.Add("Solidus");
          rowNames.Add("Solutus");
          pGraph->setValue( 2 );
-         pageScript->setXname("lgSigPiT");
-         pageScript->setYname("x(s);x(aq)");
+         pGraphX->setValue( 2 );
+         pageScript->setYname("lgSigPiT");
+         pageScript->setXname("x(s);x(aq)");
      }
      break;
   //-------------------------------------------------------------------------
@@ -1805,7 +1815,7 @@ void  ProcessWizard::setIterColumn( int col, int from, int until, int step )
 
 //==============================================================================
 
-equatSetupData eqPr( "xp", "yp", "J", "J" );
+equatSetupData eqPr( "xp", "yp", "J", "J", true );
 
 // work with lists
 void ProcessWizard::resetPageList(const char* aXname, const char* aYname)

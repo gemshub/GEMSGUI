@@ -40,13 +40,13 @@ class GtDemoWizard : public QDialog, public Ui::GtDemoWizardData
 
 public:
 
-    GtDemoWizard( const char* pkey, int sizes[7], const char *ascript,
+    GtDemoWizard( const char* pkey, int sizes[8], const char *ascript,
                   const char *proc_key, const char* aXname, const char* aYname,
                   QWidget* parent = NULL);
     virtual ~GtDemoWizard();
 
 
-    void   getSizes( int size[7] );
+    void   getSizes( int size[8] );
     gstring getPrKey();
     gstring getScript() const
     { return pageScript->getScript(); }

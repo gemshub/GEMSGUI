@@ -138,6 +138,8 @@
         <file>Compos-PCO-Page1.png</file>
         <file>Compos-Record-Key.png</file>
         <file>ComposSettingsPage1.png</file>
+        <file>CustomizeGraph.png</file>
+        <file>CustomizePlotCurve.png</file>
         <file>DComp-Page2-Cp-FT-Hem.png</file>
         <file>DComp-Page2-HKF-sulfate-ion.png</file>
         <file>DComp-Record-Key.png</file>
@@ -151,10 +153,14 @@
         <file>FlowChartOfIPM-3-Algorithm.png</file>
         <file>GEMTaskProgressDialogNormal.png</file>
         <file>GEMTaskProgressDialogStepwise.png</file>
+        <file>GraphicsDialog.png</file>
+        <file>GraphicsPrintDialogWin7.png</file>
+        <file>GraphicsSaveDialogWin7.png</file>
         <file>GtDemoRecordKeyDialog1.png</file>
         <file>Help.png</file>
         <file>MissingICsConflictWarning.png</file>
         <file>Pitzer_Phase_page3.png</file>
+        <file>PlotCumulativeMode.png</file>
         <file>PreferencesDialog.png</file>
         <file>ProcessRecordKeyDialog1.png</file>
         <file>ProcessWizardStep2IteratorsTmode1.png</file>

@@ -70,6 +70,7 @@ protected:
     {
         ErrorIf(IsNull(), GetKeywd(), "Access to null object");
     }
+
     void check_dim(int n, int m) const
     {
         check();
@@ -188,6 +189,7 @@ public:
 
     //--- Value manipulation
     double Get(int n = 0, int m = 0);
+    double GetEmpty(int n = 0, int m = 0);
     void Put(double value, int n = 0, int m = 0);
     // Put cell of object to gstring. Return the lengs of gstring.
     // need inline - time critical function

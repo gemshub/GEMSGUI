@@ -118,6 +118,7 @@ void TCPage::AddFields( bool info )
            aFlds.append(rInfo.aFieldInfo[ii+cnt]);
     	   cnt++;
        }
+
        model = new TObjectModel( aFlds, this );
        aModels.Add( model );
        
@@ -190,6 +191,7 @@ void TCPage::RedrawFields()
                       y += htFSPACE;
                       break;
 
+        case MutableB:
         case SkipLine:
                        y += oldRowSize;
         	           y += /*LineH +*/pVisorImp->getCharHeight();
@@ -223,6 +225,7 @@ void TCPage::RedrawFields()
         case Sticked:
         case Down:
         case SkipLine:
+        case MutableB:
             break;
         }
     }

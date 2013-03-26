@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>589</width>
-    <height>492</height>
+    <width>770</width>
+    <height>747</height>
    </rect>
   </property>
   <property name="font">
@@ -19,88 +19,104 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>GEM-Selektor v.2.1-PSI Graphics Dialog</string>
+   <string>GEM-Selektor v.3 Graphics Dialog</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="2,2,2,2,0,0">
-   <item row="0" column="0" rowspan="2" colspan="4">
-    <widget class="QFrame" name="plotFrame">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>400</width>
-       <height>400</height>
-      </size>
-     </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0" colspan="6">
+    <widget class="QFrame" name="framePrn">
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <property name="margin">
-       <number>0</number>
-      </property>
-     </layout>
-    </widget>
-   </item>
-   <item row="0" column="4" colspan="2">
-    <widget class="QGroupBox" name="pGrpLegend">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="title">
-      <string>Legend</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout"/>
-    </widget>
-   </item>
-   <item row="1" column="4" colspan="2">
-    <widget class="QGroupBox" name="groupBox">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="title">
-      <string/>
-     </property>
-     <layout class="QGridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="TextLabel1">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0" rowspan="2">
+       <widget class="QFrame" name="plotFrame">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>400</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QGroupBox" name="pGrpLegend">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="title">
+         <string>Legend| x# |Label </string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout"/>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QGroupBox" name="groupBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="text">
-         <string>Drag and drop legend labels to the plotting area.</string>
+        <property name="title">
+         <string/>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignVCenter</set>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
+        <layout class="QGridLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="TextLabel1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Click legend symbols to adjust curves; select abscissae under x#; edit labels, drag-drop them to plot area</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignVCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>
+     <zorder>plotFrame</zorder>
+     <zorder>pGrpLegend</zorder>
+     <zorder>TextLabel1</zorder>
+     <zorder>groupBox</zorder>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="1" column="0">
     <widget class="QPushButton" name="pFragmentBtn">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -115,7 +131,7 @@
       </font>
      </property>
      <property name="toolTip">
-      <string>Shows a fragment of the plot - set up size and position under Configure...</string>
+      <string>Toggle between a fragment and a full plot; adjust sizes under Customize...</string>
      </property>
      <property name="text">
       <string>&amp;Fragment</string>
@@ -125,7 +141,7 @@
      </attribute>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="1" column="1">
     <widget class="QPushButton" name="pBtn4">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -140,7 +156,7 @@
       </font>
      </property>
      <property name="toolTip">
-      <string>Press to set up axii, colors, and graph legend symbols</string>
+      <string>Click to customize graphics type, x and y axis, legend labels, fonts, background color</string>
      </property>
      <property name="text">
       <string>&amp;Customize</string>
@@ -153,7 +169,7 @@
      </attribute>
     </widget>
    </item>
-   <item row="2" column="2">
+   <item row="1" column="2">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -166,7 +182,7 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="3">
+   <item row="1" column="3">
     <widget class="QPushButton" name="pBtn3">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -181,7 +197,7 @@
       </font>
      </property>
      <property name="toolTip">
-      <string>Prints the plot and its legend (under construction)</string>
+      <string>Print the plot and its legend on system printers</string>
      </property>
      <property name="text">
       <string>&amp;Print</string>
@@ -191,7 +207,7 @@
      </attribute>
     </widget>
    </item>
-   <item row="2" column="4">
+   <item row="1" column="4">
     <widget class="QPushButton" name="PushButton5">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -205,6 +221,9 @@
        <bold>true</bold>
       </font>
      </property>
+     <property name="toolTip">
+      <string>Save the plot as graphical image in a (vector or bitmap) graphic format file</string>
+     </property>
      <property name="text">
       <string>Save Image</string>
      </property>
@@ -213,7 +232,7 @@
      </attribute>
     </widget>
    </item>
-   <item row="2" column="5">
+   <item row="1" column="5">
     <widget class="QPushButton" name="pHelp">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -228,7 +247,7 @@
       </font>
      </property>
      <property name="toolTip">
-      <string>Closes the plot and goes back to the parent window</string>
+      <string>Show help pages for this widget</string>
      </property>
      <property name="text">
       <string>&amp;Help</string>

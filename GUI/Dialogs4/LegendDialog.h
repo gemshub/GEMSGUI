@@ -3,7 +3,7 @@
 //
 // Declaration of LegendDialog class
 //
-// Copyright (C) 1996-2008  A.Rysin, S.Dmytriyeva
+// Copyright (C) 1996-2013 S.Dmytriyeva, A.Rysin
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
@@ -32,7 +32,6 @@
 #include "ui_LegendDialog4.h"
 #include "GraphDialog.h"
 
-
 class LegendDialog :public QDialog, public Ui::LegendDialogData
 {
     Q_OBJECT
@@ -41,7 +40,7 @@ class LegendDialog :public QDialog, public Ui::LegendDialogData
 
     GraphData * graph;
     GraphDialog * graph_dlg;
-    QPushButton *BackGrountBut;
+
     QColor backgroundColor;
     QFont labelFont;
 
@@ -60,9 +59,6 @@ protected slots:
     virtual void CmChangeGraphType(int);
     virtual void languageChange();
 
-protected:
-
 };
-
 
 #endif // LegendDialog_included

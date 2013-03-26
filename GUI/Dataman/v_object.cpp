@@ -440,6 +440,16 @@ TObject::Get(int n, int m)
     return pV->Get(ndx(n,m));
 }
 
+// get cell of data object as double
+double
+TObject::GetEmpty(int n, int m)
+{
+    check_dim(n,m);
+    if( pV->IsEmpty( ndx(N, M) ) )
+        return DOUBLE_EMPTY;
+    return pV->Get(ndx(n,m));
+}
+
 // put value to cell of data object as double
 void
 TObject::Put(double Value, int n, int m)
@@ -1095,8 +1105,11 @@ TConfig cnf(f_obj,' ');
                     break;
                 }
             if( ii == nTypes )
-                throw TFatalError(astr[0].c_str(),
+              {
+                 throw TFatalError(astr[0].c_str(),
                                   "TObject:E17 Unknown object type in ini-file");
+
+               }
         }
 
         if( Find(astr[0].c_str()) >0 )
@@ -1105,6 +1118,7 @@ TConfig cnf(f_obj,' ');
            throw TFatalError(label,
                        "TObject:E18 This data object is already defined");
         }
+        // cout <<  astr[0].c_str() <<  "  " << objectType<< endl;
         Add( new TObject(astr[0].c_str(), objectType, abs(N), M, N<0,
 		     indexationCode, astr[5]) );
         par = cnf.getNext();

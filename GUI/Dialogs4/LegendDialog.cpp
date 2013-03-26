@@ -3,7 +3,7 @@
 //
 // Implementation of LegendDialog classes
 //
-// Copyright (C) 1996-2008  A.Rysin, S.Dmytriyeva
+// Copyright (C) 1996-2013  S.Dmytriyeva, A.Rysin
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
@@ -17,8 +17,8 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 #include <cstdio>
-#include <qcolordialog.h>
-#include <qfontdialog.h>
+#include <QColorDialog>
+#include <QFontDialog>
 
 #include "service.h"
 #include "LegendDialog.h"
@@ -27,23 +27,23 @@
 
 //----------------------------------------------------------
 // Plot Legend windows
-
 LegendDialog::LegendDialog( GraphDialog * aGraph ):
         QDialog(aGraph),
         graph(&(aGraph->gr_data)), graph_dlg(aGraph)
 {
-
     setupUi(this);
+
     QObject::connect(pBtnChangeFont, SIGNAL(clicked()), this, SLOT(CmChangeLabelFont()));
 
     gstring cap = "Customize Graph: ";
     cap += graph->title;
+    setWindowTitle( cap.c_str() );
 
     labelFont = pVisorImp->getAxisLabelFont();
     pLabelFont->setText(labelFont.toString());
 
-    setWindowTitle( cap.c_str() );
-    pAxis->setValue( graph->axisType );
+    pAxisX->setValue( graph->axisTypeX );
+    pAxisY->setValue( graph->axisTypeY );
 
     oldGraphType = graph->graphType;
     comboBox1->setCurrentIndex( graph->graphType );
@@ -79,6 +79,7 @@ LegendDialog::LegendDialog( GraphDialog * aGraph ):
 
     connect(pHelp, SIGNAL(clicked()), this, SLOT(CmHelp()));
     
+    //if( graph->isBackgr_color )
     backgroundColor = graph_dlg->getBackgrColor();
 }
 
@@ -90,7 +91,6 @@ void LegendDialog::languageChange()
 {
     retranslateUi(this);
 }
-
 
 void  LegendDialog::CmChangeGraphType( int new_type )
 {
@@ -104,16 +104,13 @@ void  LegendDialog::CmChangeGraphType( int new_type )
     {
        graph->goodIsolineStructure(new_type);
        oldGraphType = new_type;
-
     }
     catch( TError& xcpt )
     {
         vfMessage(this, xcpt.title, xcpt.mess);
         comboBox1->setCurrentIndex( oldGraphType );
-
     }
 }
-
 
 void LegendDialog::accept()
 {
@@ -157,7 +154,8 @@ int LegendDialog::apply()
 	return 1;
     }
 
-    graph->axisType = pAxis->value();
+    graph->axisTypeX = pAxisX->value();
+    graph->axisTypeY = pAxisY->value();
     graph->graphType = comboBox1->currentIndex();
     graph->xName = gstring( pXname->text().toLatin1().data() );
     graph->yName = gstring( pYname->text().toLatin1().data() );
@@ -178,8 +176,6 @@ int LegendDialog::apply()
 
     return 0;
 }
-
-
 
 void LegendDialog::CmChangeLabelFont()
 {

@@ -44,7 +44,10 @@ void GtDemoWizard::CmNext()
     int ndx = stackedWidget->currentIndex();
     int nLines = pageScript->getScriptLinesNum();
     if( ndx == 1 && nLines > 0)
-        pGraph->setValue( nLines );
+    {        pGraphY->setValue( nLines );
+             pGraphX->setValue( pageScript->getAbscissaNum() );
+    }
+
     if( ndx == 0 ) // define graph window
     {
       CmChangePage2(0);
@@ -77,7 +80,7 @@ void 	GtDemoWizard::resetBackButton()
 }
 
 
-GtDemoWizard::GtDemoWizard( const char* pkey, int size[7], const char *ascript,
+GtDemoWizard::GtDemoWizard( const char* pkey, int size[8], const char *ascript,
                             const char *proc_key, const char* aXname, const char* aYname, QWidget* parent):
             QDialog( parent ), script(ascript), pageScript(0)
 {
@@ -125,7 +128,8 @@ GtDemoWizard::GtDemoWizard( const char* pkey, int size[7], const char *ascript,
    resetPageList(size[0], aXname, aYname);
 
 //Page3
-    pGraph->setValue(size[6]);
+    pGraphY->setValue(size[6]);
+    pGraphX->setValue(size[7]);
     pNwc->setValue(size[2]);
     pNqp->setValue(size[3]);
     pELine->setValue(size[4]);
@@ -147,16 +151,17 @@ GtDemoWizard::GtDemoWizard( const char* pkey, int size[7], const char *ascript,
 GtDemoWizard::~GtDemoWizard()
 {}
 
-void   GtDemoWizard::getSizes( int size[7] )
+void   GtDemoWizard::getSizes( int size[8] )
 {
     size[0] = getnRT();
 
     size[1]= spinBox18->value();
     size[2]= pNwc->value();
     size[3]= pNqp->value();
-    size[6]= pGraph->value();
     size[4]= pELine->value();
     size[5]= pECol->value();
+    size[6]= pGraphY->value();
+    size[7]= pGraphX->value();
 }
 
 int   GtDemoWizard::getnRT()
@@ -218,7 +223,7 @@ void GtDemoWizard::help()
 
 //==============================================================================
 
-equatSetupData eqd( "x0", "y0", "jR", "jR" );
+equatSetupData eqd( "x0", "y0", "jR", "jR", true );
 
 
 

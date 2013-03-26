@@ -685,7 +685,7 @@ vfSystemInput(QWidget* par, const char * p_key,
 
 bool
 vfProcessSet(QWidget* par, const char * p_key,
-              char flgs[24], int size[6], short tabInt[6], double tabDoubl[24],
+              char flgs[24], int size[8], short tabInt[6], double tabDoubl[24],
               gstring& calcScript, gstring& outScript, TCStringArray& names,
               gstring& xName, gstring& yName )
 {
@@ -746,7 +746,7 @@ vfUnSpaceSet(QWidget* par, const char * p_key,
     return true;
 }
 
-bool vfGtDemoSet(QWidget* par, const char * p_key, int size[7],
+bool vfGtDemoSet(QWidget* par, const char * p_key, int size[8],
             gstring& prkey, gstring& script, TCStringArray& names,
             gstring& xName, gstring& yName )
 {
