@@ -312,6 +312,8 @@ Resources/doc/html/CalculateGEMIcon24.png -text
 Resources/doc/html/Compos-PCO-Page1.png -text
 Resources/doc/html/Compos-Record-Key.png -text
 Resources/doc/html/ComposSettingsPage1.png -text
+Resources/doc/html/CustomizeGraph.png -text
+Resources/doc/html/CustomizePlotCurve.png -text
 Resources/doc/html/DComp-Page2-Cp-FT-Hem.png -text
 Resources/doc/html/DComp-Page2-HKF-sulfate-ion.png -text
 Resources/doc/html/DComp-Record-Key.png -text
@@ -325,8 +327,12 @@ Resources/doc/html/EquilibriumModeIcon24.png -text
 Resources/doc/html/FlowChartOfIPM-3-Algorithm.png -text
 Resources/doc/html/GEMTaskProgressDialogNormal.png -text
 Resources/doc/html/GEMTaskProgressDialogStepwise.png -text
+Resources/doc/html/GraphicsDialog.png -text
+Resources/doc/html/GraphicsPrintDialogWin7.png -text
+Resources/doc/html/GraphicsSaveDialogWin7.png -text
 Resources/doc/html/GtDemoRecordKeyDialog1.png -text
 Resources/doc/html/MissingICsConflictWarning.png -text
+Resources/doc/html/PlotCumulativeMode.png -text
 Resources/doc/html/PrefDialog.jpg -text
 Resources/doc/html/PreferencesDialog.png -text
 Resources/doc/html/ProcessRecordKeyDialog1.png -text

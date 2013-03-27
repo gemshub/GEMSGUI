@@ -4,7 +4,8 @@ HEADERS += $$SERVICES4_H/calcthread.h \
            $$SERVICES4_H/visor.h \
            $$SERVICES4_H/help.h \
            $$SERVICES4_H/graph.h \
-           $$SERVICES4_H/pshape.h \
+#           $$SERVICES4_H/pshape.h \
+           $$SERVICES4_H/qwtplot.h \
            $$SERVICES4_H/page_f.h \
            $$SERVICES4_H/model_w.h \
            $$SERVICES4_H/model_tree.h \
@@ -17,7 +18,8 @@ SOURCES += $$SERVICES4_CPP/units.cpp \
            $$SERVICES4_CPP/visor.cpp \
            $$SERVICES4_CPP/help.cpp \
            $$SERVICES4_CPP/graph.cpp \
-           $$SERVICES4_CPP/pshape.cpp \
+#           $$SERVICES4_CPP/pshape.cpp \
+           $$SERVICES4_CPP/qwtplot.cpp \
            $$SERVICES4_CPP/page_f.cpp \
            $$SERVICES4_CPP/model_w.cpp \
            $$SERVICES4_CPP/model_tree.cpp \

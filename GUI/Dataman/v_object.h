@@ -70,6 +70,7 @@ protected:
     {
         ErrorIf(IsNull(), GetKeywd(), "Access to null object");
     }
+
     void check_dim(int n, int m) const
     {
         check();

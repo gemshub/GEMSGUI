@@ -1,9 +1,10 @@
 //-------------------------------------------------------------------
 // $Id: GraphDialog.h 968 2007-12-13 13:23:32Z gems $
 //
-// Declaration of GraphDialog classes (Plotting system)
+// Declaration of GraphDialog classes
+// (Plotting system maim dialog )
 //
-// Copyright (C) 1996-2008  A.Rysin, S.Dmytriyeva
+// Copyright (C) 2013 S.Dmytriyeva
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
@@ -19,7 +20,6 @@
 #ifndef graph_dialog_h
 #define graph_dialog_h
 
-#include <qcolor.h>
 #include <QResizeEvent>
 #include <QDialog>
 #include <QTableWidget>
@@ -27,20 +27,15 @@
 #include <QItemDelegate>
 
 #include "ui_GraphDialog4.h"
-#include  "pshape.h"
-#include  "graph.h"
+#include  "qwtplot.h"
+#include  "v_module.h"
 
 // Widgets for legend and plotting dialogs
-
-void drawSymbol(QPainter* painter, const QPoint& center,
-         int type, int size, const QColor& color, int width=1);
-
 void paintIcon( QIcon &icon, TPlotLine &plLine );
+
 
 //=========================================================================
 // Added for new legend table
-
-
 class DragTableWidget: public QTableWidget
 {
     QPoint startPos;
@@ -58,63 +53,59 @@ class DragTableWidget: public QTableWidget
     void mouseMoveEvent( QMouseEvent *e );
 };
 
-
-
 // class LabelDelegate
 // individual items in views are rendered and edited using delegates
-
 class LabelDelegate: public QItemDelegate
 {
    Q_OBJECT
 
+  QVector<int> first;
+  QVector<int> maxXndx;
+
  public:
 
-   LabelDelegate( QObject * parent = 0 );
+   LabelDelegate( QVector<int> first, QVector<int> maxXndx, QObject * parent = 0 );
    QWidget *createEditor(QWidget *parent,
                          const QStyleOptionViewItem &option,
                          const QModelIndex &index) const;
+   void setModelData(QWidget *editor, QAbstractItemModel *model,
+                                    const QModelIndex &index) const;
+
 };
 
-//=========================================================================
+
+//=======================================================================
 
 class GraphDialog: public QDialog, public Ui::GraphDialogData
 {
     Q_OBJECT
 
-    TPlotWin* plot;
+    TPlotWidget* plot;
     TCModule *pModule;
     DragTableWidget *tbLegend;
     LabelDelegate *dgLegend;
 
     // work part
     bool isFragment;
-    float minX, minY;
-    float maxX, maxY;
-    bool isoline_put;
-    bool lines_put;
 
-
-    void Show();
-    void ShowPlots();
     void ShowLegend();
     void ShowIsolineLegend();
-    //void paintIcon( QIcon &icon, TPlotLine &plLine );
+    gstring getTextIsoline(int ii);
 
     void closeEvent(QCloseEvent*);
 
-
 protected slots:
     void changeIcon( int row, int column );
+    void changeNdx( int row, int column );
     virtual void languageChange();
-
     virtual void CmFragment();
     virtual void CmLegend();
     virtual void CmPrint();
     virtual void CmSave();
     virtual void CmHelp();
 
-protected:
-    void resizeEvent(QResizeEvent* qpev);
+public slots:
+    void selectedFragment( const QRectF& );
 
 public:
 
@@ -129,38 +120,27 @@ public:
     gstring iconFile() const
     {  return  pModule->GetIcon();   }
 
-
     int rtNum() const
     {  return  pModule->rtNum();   }
 
     gstring mainModuleName() const
     {  return  pModule->GetName();   }
 
-
+    // Show dialog
     void ShowNew( const char *capAdd );
-    void Apply();    // Update changes
-    void ApplyLegend();
-    void AddPoint( int nPlot, int nPoint, bool no_mt ); // Add new point to graph
-    //void paintIcon( QIcon &icon, TPlotLine &plLine );
 
-    QColor getColor(int ii) const
-    {
-        return QColor( gr_data.lines[ii].red,
-        	    gr_data.lines[ii].green, gr_data.lines[ii].blue);
-    }
+    // Add new point to graph
+    void AddPoint( int nPlot, int nPoint );
 
-    QColor getColorIsoline(int ii) const
-    {
-        return QColor( gr_data.scale[ii].red,
-        	    gr_data.scale[ii].green, gr_data.scale[ii].blue);
-    }
+    // Update changes
+    void Apply();
 
-    gstring getTextIsoline(int ii);
+    // Save changes to DataBase record
+    void SaveGraphData();
 
     QColor getBackgrColor();
     void setBackgrColor( QColor color );
+
 };
-
-
 
 #endif   // graph_dialog_h

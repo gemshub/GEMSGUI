@@ -876,7 +876,7 @@ TGEM2MT::CalcPoint( int nPoint )
      return;
     // Add point to graph screen
     if( gd_gr )
-        gd_gr->AddPoint( 0, nPoint, true );
+        gd_gr->AddPoint( 0, nPoint );
 }
 
 // Plotting record
@@ -945,24 +945,29 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
 bool
 TGEM2MT::SaveGraphData( GraphData *gr )
 {
+    int ii;
+
 // We can only have one Plot dialog (modal one) so condition should be omitted!!
      if( !gd_gr )
       return false;
      if( gr != gd_gr->getGraphData() )
       return false;
-    mtp->axisType[0] = (short)gr->axisType;
+    mtp->axisType[0] = (short)gr->axisTypeX;
+    mtp->axisType[5] = (short)gr->axisTypeY;
     mtp->axisType[4] = (short)gr->graphType;
     mtp->axisType[1] = (short)gr->b_color[0];
     mtp->axisType[2] = (short)gr->b_color[1];
     mtp->axisType[3] = (short)gr->b_color[2];
     strncpy( mtp->xNames, gr->xName.c_str(), 9);
     strncpy( mtp->yNames, gr->yName.c_str(), 9);
-    memcpy( &mtp->size[0], gr->region, 4*sizeof(float) );
-    memcpy( &mtp->size[1], gr->part,  4*sizeof(float) );
-
+    for( ii=0; ii<4; ii++ )
+    {
+        mtp->size[0][ii] =  gr->region[ii];
+        mtp->size[1][ii] =  gr->part[ii];
+    }
     plot = (TPlotLine *) aObj[ o_mtplline].Alloc(
        gr->lines.GetCount(), sizeof(TPlotLine));
-    for(int ii=0; ii<(int)gr->lines.GetCount(); ii++ )
+    for( ii=0; ii<(int)gr->lines.GetCount(); ii++ )
     {
         plot[ii] = gr->lines[ii];
         //  lNam0 and lNamE back

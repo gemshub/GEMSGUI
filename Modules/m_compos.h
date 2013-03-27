@@ -62,7 +62,7 @@ typedef struct
     *AUcl, // Units of formulae quantity/concentration  [0:La-1]
     *DCS   // Source of DC data: d-DCOMP r-REACDC { d r } [0:Ld-1]
     ;
-    float *CI, // Quantity/concentration of IC C(IC)   [0:Nc-1]
+    double *CI, // Quantity/concentration of IC C(IC)   [0:Nc-1]
     *CD,  // Quantity/concentration of DC C(DC     [0:Ld-1]
     *CA,  //Quantity/concentration of formulae C(AC)   [0:La-1]
     *delC; //Uncertainty of Cm elements in moles       [0:N-1]

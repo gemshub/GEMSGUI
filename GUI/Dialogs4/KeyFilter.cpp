@@ -110,7 +110,7 @@ KeyFilter::KeyFilter(QWidget* win, int irt, const char* key,
     fullKey = new QLineEdit(this);
     fullKey->setText(dbKey.PackKey());
     fullKey->setFocusPolicy( Qt::ClickFocus );
-    fullKey->setReadOnly( TRUE );
+    fullKey->setReadOnly( true );
 
     QFrame *line = new QFrame(this);
     line->setObjectName(QString::fromUtf8("line_3"));

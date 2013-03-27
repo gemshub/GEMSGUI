@@ -32,7 +32,7 @@ class QWidget;
 */
 
 struct GraphData;
-struct TPlotLine;
+//struct TPlotLine;
 
 class TSubModule
 {

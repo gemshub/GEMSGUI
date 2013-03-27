@@ -21,7 +21,7 @@
 #define _page_w_h
 
 #include <QScrollArea>
-#include <QtGui/QStackedWidget>
+#include <QStackedWidget>
 #include <QLabel>
 #include <QButtonGroup>
 #include <QDialog>

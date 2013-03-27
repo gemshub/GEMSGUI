@@ -17,8 +17,15 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <QtGui>
 #include <QThread>
+#include <QMdiArea>
+
+#if QT_VERSION >= 0x050000
+#include <QtWidgets>
+#else
+#include <QtGui>
+#endif
+
 
 #include "visor.h"
 #include "HelpWindow.h"

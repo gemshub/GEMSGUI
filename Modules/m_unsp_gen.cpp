@@ -627,24 +627,29 @@ TUnSpace::RecordPlot( const char* /*key*/ )
 bool
 TUnSpace::SaveGraphData( GraphData *gr )
 {
+    int ii;
 // We can only have one Plot dialog (modal one) so condition should be omitted!!
      if( !gd_gr )
       return false;
      if( gr != gd_gr->getGraphData() )
       return false;
-    usp->axisType[0] = (short)gr->axisType;
+    usp->axisType[0] = (short)gr->axisTypeX;
+    usp->axisType[5] = (short)gr->axisTypeY;
     usp->axisType[4] = (short)gr->graphType;
     usp->axisType[1] = (short)gr->b_color[0];
     usp->axisType[2] = (short)gr->b_color[1];
     usp->axisType[3] = (short)gr->b_color[2];
     strncpy( usp->xNames, gr->xName.c_str(), 9);
     strncpy( usp->yNames, gr->yName.c_str(), 9);
-    memcpy( &usp->size[0], gr->region, 4*sizeof(float) );
-    memcpy( &usp->size[1], gr->part,  4*sizeof(float) );
+    for( ii=0; ii<4; ii++ )
+    {
+        usp->size[0][ii] =  gr->region[ii];
+        usp->size[1][ii] =  gr->part[ii];
+    }
 
     plot = (TPlotLine *)
            aObj[ o_unplline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine));
-    for(int ii=0; ii<(int)gr->lines.GetCount(); ii++ )
+    for( ii=0; ii<(int)gr->lines.GetCount(); ii++ )
     {
         plot[ii] = gr->lines[ii];
         strncpy(  usp->lNam[ii], plot[ii].getName().c_str(), MAXGRNAME );

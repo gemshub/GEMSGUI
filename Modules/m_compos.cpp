@@ -114,18 +114,33 @@ void TCompos::dyn_set(int q)
     bc[q].C = (double *)aObj[ o_bccv ].GetPtr();
     bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ].GetPtr();
     bc[q].CIcl = (char *)aObj[ o_bccicl ].GetPtr();
-    bc[q].CI = (float *)aObj[ o_bcci ].GetPtr();
-    bc[q].delC = (float *)aObj[ o_bcdelc ].GetPtr();
     bc[q].SA = (char (*)[MAXFORMUNIT])aObj[ o_bcsa ].GetPtr();
     bc[q].AUcl = (char *)aObj[ o_bccacl ].GetPtr();
-    bc[q].CA = (float *)aObj[ o_bcca ].GetPtr();
     bc[q].SM = (char (*)[DC_RKLEN])aObj[ o_bcsmk ].GetPtr();
     bc[q].CDcl = (char *)aObj[ o_bccdcl ].GetPtr();
-    bc[q].CD = (float *)aObj[ o_bccd ].GetPtr();
     bc[q].DCS = (char *)aObj[ o_bcdcs ].GetPtr();
     bc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_bcsdref ].GetPtr();
     bc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_bcsdval ].GetPtr();
     bc[q].CFOR = (char *)aObj[ o_bccfor ].GetPtr();
+
+    if( aObj[ o_bcci ].GetType() == F_ )
+       bc[q].CI = (double *)aObj[ o_bcci ].Alloc( bc[q].N, 1, D_ );
+    else
+       bc[q].CI = (double *)aObj[ o_bcci ].GetPtr();
+    if( aObj[ o_bcdelc ].GetType() == F_ )
+       bc[q].delC = (double *)aObj[ o_bcdelc ].Alloc( bc[q].N, 1, D_ );
+    else
+       bc[q].delC = (double *)aObj[ o_bcdelc ].GetPtr();
+    if(aObj[ o_bcca ].GetType() == F_ )
+       bc[q].CA = (double *)aObj[ o_bcca ].Alloc( bc[q].La, 1, D_ );
+    else
+       bc[q].CA = (double *)aObj[ o_bcca ].GetPtr();
+    if(aObj[ o_bccd ].GetType() == F_ )
+       bc[q].CD = (double *)aObj[ o_bccd ].Alloc( bc[q].Ld, 1, D_ );
+    else
+       bc[q].CD = (double *)aObj[ o_bccd ].GetPtr();
+
+
     /* bc[q].tprn =   (char *)aObj[ o_bctprn ].GetPtr(); */
 }
 
@@ -136,14 +151,14 @@ void TCompos::dyn_kill(int q)
     bc[q].C = (double *)aObj[ o_bccv ].Free();
     bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ].Free();
     bc[q].CIcl = (char *)aObj[ o_bccicl ].Free();
-    bc[q].CI = (float *)aObj[ o_bcci ].Free();
-    bc[q].delC = (float *)aObj[ o_bcdelc ].Free();
+    bc[q].CI = (double *)aObj[ o_bcci ].Free();
+    bc[q].delC = (double *)aObj[ o_bcdelc ].Free();
     bc[q].SA = (char (*)[MAXFORMUNIT])aObj[ o_bcsa ].Free();
     bc[q].AUcl = (char *)aObj[ o_bccacl ].Free();
-    bc[q].CA = (float *)aObj[ o_bcca ].Free();
+    bc[q].CA = (double *)aObj[ o_bcca ].Free();
     bc[q].SM = (char (*)[DC_RKLEN])aObj[ o_bcsmk ].Free();
     bc[q].CDcl = (char *)aObj[ o_bccdcl ].Free();
-    bc[q].CD = (float *)aObj[ o_bccd ].Free();
+    bc[q].CD = (double *)aObj[ o_bccd ].Free();
     bc[q].DCS = (char *)aObj[ o_bcdcs ].Free();
     bc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_bcsdref ].Free();
     bc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_bcsdval ].Free();
@@ -169,7 +184,7 @@ void TCompos::dyn_new(int q)
     {
         bc[q].SM = (char (*)[DC_RKLEN])aObj[ o_bcsmk ].Alloc( bc[q].Ld, 1, DC_RKLEN);
         bc[q].CDcl = (char *)aObj[ o_bccdcl ].Alloc( bc[q].Ld, 1, A_);
-        bc[q].CD = (float *)aObj[ o_bccd ].Alloc(  bc[q].Ld, 1, F_);
+        bc[q].CD = (double *)aObj[ o_bccd ].Alloc(  bc[q].Ld, 1, D_);
         bc[q].DCS = (char *)aObj[ o_bcdcs ].Alloc( bc[q].Ld, 1, A_);
     }
     else
@@ -177,7 +192,7 @@ void TCompos::dyn_new(int q)
         bc[q].PcDC = S_OFF;
         bc[q].SM = (char (*)[DC_RKLEN])aObj[ o_bcsmk ].Free();
         bc[q].CDcl = (char *)aObj[ o_bccdcl ].Free();
-        bc[q].CD = (float *)aObj[ o_bccd ].Free();
+        bc[q].CD = (double *)aObj[ o_bccd ].Free();
         bc[q].DCS = (char *)aObj[ o_bcdcs ].Free();
     }
 
@@ -185,28 +200,28 @@ void TCompos::dyn_new(int q)
     {
         bc[q].SA = (char (*)[MAXFORMUNIT])aObj[ o_bcsa ].Alloc(bc[q].La, 1,MAXFORMUNIT);
         bc[q].AUcl = (char *)aObj[ o_bccacl ].Alloc( bc[q].La, 1, A_);
-        bc[q].CA = (float *)aObj[ o_bcca ].Alloc( bc[q].La, 1, F_);
+        bc[q].CA = (double *)aObj[ o_bcca ].Alloc( bc[q].La, 1, D_);
     }
     else
     {
         bc[q].PcAU = S_OFF;
         bc[q].SA = (char (*)[MAXFORMUNIT])aObj[ o_bcsa ].Free();
         bc[q].AUcl = (char *)aObj[ o_bccacl ].Free();
-        bc[q].CA = (float *)aObj[ o_bcca ].Free();
+        bc[q].CA = (double *)aObj[ o_bcca ].Free();
     }
     if( bc[q].PcIC != S_OFF)
     {
         bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ].Alloc( bc[q].N,
                    1, MAXICNAME+MAXSYMB);
         bc[q].CIcl = (char *)aObj[ o_bccicl ].Alloc(  bc[q].N, 1, A_);
-        bc[q].CI = (float *)aObj[ o_bcci ].Alloc(  bc[q].N, 1, F_);
+        bc[q].CI = (double *)aObj[ o_bcci ].Alloc(  bc[q].N, 1, D_);
     }
     else
     {
         bc[q].PcIC = S_OFF;
         bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ].Free();
         bc[q].CIcl = (char *)aObj[ o_bccicl ].Free();
-        bc[q].CI = (float *)aObj[ o_bcci ].Free();
+        bc[q].CI = (double *)aObj[ o_bcci ].Free();
     }
     if( bc[q].PcFO != S_OFF )
         bc[q].CFOR = (char *)aObj[ o_bccfor  ].Alloc( 1, MAXCMPFORM , S_);
@@ -214,9 +229,9 @@ void TCompos::dyn_new(int q)
         bc[q].CFOR = (char *)aObj[ o_bccfor  ].Free();
 
     if( bc[q].PcdC != S_OFF )
-        bc[q].delC = (float *)aObj[ o_bcdelc].Alloc(  bc[q].N, 1, F_);
+        bc[q].delC = (double *)aObj[ o_bcdelc].Alloc(  bc[q].N, 1, D_);
     else
-        bc[q].delC = (float *)aObj[ o_bcdelc ].Free();
+        bc[q].delC = (double *)aObj[ o_bcdelc ].Free();
 
     if( bc[q].Nsd > 0 )
     {
@@ -793,7 +808,7 @@ SPECIFY_C:
         }
         for( i=0; i<bcp->N; i++ )
         {
-            if( !bcp->CI[i] || IsFloatEmpty( bcp->CI[i] ))
+            if( !bcp->CI[i] || IsDoubleEmpty( bcp->CI[i] ))
                 continue;
             /* get index im */
             for( im=0; im<bcp->Nmax; im++ )
@@ -801,11 +816,11 @@ SPECIFY_C:
                     goto IC_FOUND;
             Error( GetName(), "E10BCrem: Wrong index of Independent Component");
 IC_FOUND:
-            CI[im] = (double)bcp->CI[i];
+            CI[im] = bcp->CI[i];
             CIcl[im] = bcp->CIcl[i];
             ICmw = bcp->ICw[im];
             Xincr = Reduce_Conc( CIcl[im], CI[im], ICmw, 1.0, bcp->R1,
-                                 bcp->Msys, bcp->Mwat, bcp->Vaq, bcp->Maq, bcp->Vsys );
+                    bcp->Msys, bcp->Mwat, bcp->Vaq, bcp->Maq, bcp->Vsys );
             /*  if( Xincr < 1e-15 )
                    continue;  30.4.96 */
             C[im] += Xincr;
@@ -829,7 +844,7 @@ IC_FOUND:
         {
             if( j<Ld )
             {
-                if( !bcp->CD[j] || IsFloatEmpty( bcp->CD[j] ))
+                if( !bcp->CD[j] || IsDoubleEmpty( bcp->CD[j] ))
                     continue;
                 /* Read DCOMP or REACDC */
                 memcpy( pkey, bcp->SM[j], DC_RKLEN );
@@ -848,7 +863,7 @@ IC_FOUND:
             }
             else if( j<bcp->Ld+bcp->La )
             {
-                if( !bcp->CA[j-Ld] || IsFloatEmpty( bcp->CA[j-Ld] ))
+                if( !bcp->CA[j-Ld] || IsDoubleEmpty( bcp->CA[j-Ld] ))
                     continue;  /*load formula */
                 Formula = bcp->SA[j-Ld];
                 Formula[MAXFORMUNIT-1] = 0;
@@ -878,10 +893,10 @@ IC_FOUND:
             } // ii
 */
             if( j<Ld )
-                Xincr = Reduce_Conc( bcp->CDcl[j], (double)bcp->CD[j], DCmw, 1.0, bcp->R1,
+                Xincr = Reduce_Conc( bcp->CDcl[j], bcp->CD[j], DCmw, 1.0, bcp->R1,
                        bcp->Msys, bcp->Mwat, bcp->Vaq, bcp->Maq, bcp->Vsys );
             else if( j<bcp->Ld+bcp->La )
-                Xincr = Reduce_Conc( bcp->AUcl[j-Ld], (double)bcp->CA[j-Ld], DCmw, 1.0,
+                Xincr = Reduce_Conc( bcp->AUcl[j-Ld], bcp->CA[j-Ld], DCmw, 1.0,
                   bcp->R1, bcp->Msys, bcp->Mwat, bcp->Vaq, bcp->Maq, bcp->Vsys );
             else
                 Xincr = Reduce_Conc( bcp->PcRes, (double)bcp->R2, DCmw, 1.0,
@@ -896,13 +911,6 @@ IC_FOUND:
                     MsysC += Xincr * A[i] * bcp->ICw[i];
                     R1C += Xincr * A[i];
                 }
-            /* VaqC = 0., VsysC = 0.,
-            if( fabs( bcp->Msys ) > 1e-12 )
-               MsysC += Xincr*DCmw;
-            if( fabs( bcp->Maq ) > 1e-7 )
-               MaqC += Xincr*DCmw;
-            if( fabs( bcp->R1 ) > 1e-12 )
-               R1C += Xincr; */
         } /*  j */
         if( bcp->PcDC != S_OFF )
             bcp->PcDC = S_ON;
@@ -916,7 +924,7 @@ IC_FOUND:
     /* Analyze control sum */
     if( fabs( bcp->R1 ) < 1e-12 )
         bcp->R1 = R1C;
-    if( fabs( (double)bcp->R1 - R1C ) < 1e-8 || fabs( R1C ) < 1e-15 )
+    if( fabs( bcp->R1 - (float)R1C ) < 1e-8 || fabs( R1C ) < 1e-15 )
         /*Xincr = 1.*/;
     else
     { /* normalisation */
@@ -934,7 +942,7 @@ IC_FOUND:
 
     if( fabs( bcp->Msys ) < 1e-12 )
         bcp->Msys = MsysC;
-    if( fabs( (double)bcp->Msys - MsysC ) < 1e-8 || fabs( MsysC ) < 1e-15 )
+    if( fabs( bcp->Msys - (float)MsysC ) < 1e-8 || fabs( MsysC ) < 1e-15 )
         /*Xincr = 1.*/;
     else
     { /* normalisation */
@@ -962,7 +970,7 @@ IC_FOUND:
     if( bcp->PcIC != S_OFF )
     {
         bcp->CIcl = (char *)aObj[ o_bccicl ].Alloc(  bcp->N, 1, A_);
-        bcp->CI = (float *)aObj[ o_bcci ].Alloc(  bcp->N, 1, F_);
+        bcp->CI = (double *)aObj[ o_bcci ].Alloc(  bcp->N, 1, D_);
     }
     /* load vectors */
     for( i1=-1,i=0; i<bcp->Nmax; i++ )

@@ -754,20 +754,25 @@ TRTParm::RecordPlot( const char* /*key*/ )
 bool
 TRTParm::SaveGraphData( GraphData *gr )
 {
+    int ii;
 // We can only have one Plot dialog (modal one) so condition should be omitted!!
      if( !gd_gr )
       return false;
      if( gr != gd_gr->getGraphData() )
       return false;
-    rpp->axisType[0] = (short)gr->axisType;
+    rpp->axisType[0] = (short)gr->axisTypeX;
+    rpp->axisType[5] = (short)gr->axisTypeY;
     rpp->axisType[4] = (short)gr->graphType;
     rpp->axisType[1] = (short)gr->b_color[0];
     rpp->axisType[2] = (short)gr->b_color[1];
     rpp->axisType[3] = (short)gr->b_color[2];
     strncpy( rpp->xNames, gr->xName.c_str(), 9);
     strncpy( rpp->yNames, gr->yName.c_str(), 9);
-    memcpy( &rpp->size[0], gr->region, 4*sizeof(float) );
-    memcpy( &rpp->size[1], gr->part,  4*sizeof(float) );
+    for( ii=0; ii<4; ii++ )
+    {
+        rpp->size[0][ii] =  gr->region[ii];
+        rpp->size[1][ii] =  gr->part[ii];
+    }
 
     plot = (TPlotLine *)
     aObj[ o_rppline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine));

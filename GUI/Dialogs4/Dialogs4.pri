@@ -78,6 +78,7 @@ SOURCES += $$DIALOGS4_CPP/GemsMainWindow.cpp \
                   $$DIALOGS4_CPP/UnSpaceWizard.cpp \
                   $$DIALOGS4_CPP/DualThWizard.cpp
 
+
 FORMS += $$DIALOGS4_CPP/GemsMainWindow4.ui \
          $$DIALOGS4_CPP/NewSystemDialog4.ui \
          $$DIALOGS4_CPP/HelpWindow4.ui \

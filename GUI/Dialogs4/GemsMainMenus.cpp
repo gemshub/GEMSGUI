@@ -17,7 +17,13 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
+#include <QMdiArea>
+
+#if QT_VERSION >= 0x050000
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 
 #include "visor.h"
 #include "m_param.h"
@@ -382,9 +388,9 @@ void TVisorImp::setActions()
 
     //
    pLine = new QLineEdit( toolBar_6 );
-   pLine->setEnabled( TRUE );
+   pLine->setEnabled( true );
    pLine->setFocusPolicy( Qt::ClickFocus );
-   pLine->setReadOnly( TRUE );
+   pLine->setReadOnly( true );
    pLine->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
    toolBar_6->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
    toolBar_6->addWidget( pLine ); // setStretchableWidget( pLine );

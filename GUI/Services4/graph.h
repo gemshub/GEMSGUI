@@ -1,10 +1,10 @@
 //-------------------------------------------------------------------
 // $Id: graph.h 968 2007-12-13 13:23:32Z gems $
 //
-// Declarations of TPlot, GraphData and GraphWindow classes
-// (Plotting system)
+// Declarations of TPlotLine, TPlot, GraphData and GraphWindow classes
+// (Plotting system description)
 //
-// Copyright (C) 1996-2001  S.Dmytriyeva, A.Rysin
+// Copyright (C) 2013  S.Dmytriyeva
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
@@ -17,48 +17,113 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
+
 #ifndef graph_data_h
 #define graph_data_h
 
-#include  "gstring.h"
-#include  "v_module.h"
+#include <QPointF>
+#include <QVector>
+#include <QColor>
+#include <qwt_series_data.h>
 
+#include  "gstring.h"
 class GemDataStream;
 
-const int maxPLOT = 20;
+//const int maxPLOT = 20;
 
-
-struct GColor
-{
-    int red;    // parts of class QColor
-    int green;
-    int blue;
-
-    GColor( int aRed = 25, int aGreen = 0, int aBlue = 150 ):
-            red(aRed), green(aGreen), blue(aBlue)
-    {}
-    GColor( GColor& data ):
-            red(data.red), green(data.green), blue(data.blue)
-    {}
-
-    GColor( bool large, int i, int n);
+enum GRAPHTYPES {
+                 LINES_POINTS = 0,
+                 CUMULATIVE   = 1,
+                 ISOLINES     =  2,
+                 LINES_3D     = 3    // future using in gem2mt
 };
 
 
-
-struct TPlotLine
+/// Description of one plot curve - the representation of a series of points in the x-y plane
+class TPlotLine
 {
-    int type;  // type of points
-    int size;  // size of points
-    int line_size;   // draw connected points
+    int type;   // type of points
+    int sizes;  // size of points ( sizes % 100 ); size of lines ( sizes / 100 % 10 )
+    int ndxX;   // column in Abscissa table
 
     int red;    // parts of class QColor
     int green;
     int blue;
 
-private:
     char name[16];
+
 public:
+
+    TPlotLine( const char *aName = 0,
+               int aPointType = 0, int aPointSize = 4, int aPutLine = 2,
+               int aRed = 25, int aGreen = 0, int aBlue = 150  )
+    {
+        ndxX = 0;
+        setChanges( aPointType, aPointSize, aPutLine, QColor(aRed, aGreen, aBlue) );
+        memcpy( name, aName, 15);
+        name[15] = '\0';
+    }
+
+    TPlotLine( int ii, int maxII, const char *aName = 0,
+               int aPointType = 0, int aPointSize = 4, int aPutLine = 2,
+               int andx = 0):
+            type(aPointType), sizes(aPutLine*100+aPointSize), ndxX(andx)
+    {
+        QColor aColor;
+        aColor.setHsv( 360/maxII*ii, 200, 200);
+        setChanges( aPointType, aPointSize, aPutLine, aColor );
+        memcpy( name, aName, 15);
+        name[15] = '\0';
+    }
+
+    TPlotLine(const TPlotLine& plt ):
+            type(plt.type), sizes(plt.sizes), ndxX(plt.ndxX),
+            red(plt.red),   green(plt.green), blue(plt.blue)
+    {
+        memcpy( name, plt.name, 15);
+    }
+
+    const TPlotLine& operator=( const TPlotLine& p)
+    {
+        type = p.type, sizes = p.sizes, ndxX=p.ndxX,
+        red = p.red,   green = p.green, blue=p.blue;
+        memcpy( name, p.name, 15);
+        return *this;
+    }
+
+    int getType() const
+    {
+        return type;
+    }
+
+    void setType( int aType )
+    {
+        type = aType;
+    }
+
+    int getSize() const
+    {
+        return (sizes % 100);
+    }
+
+    int getLineSize() const
+    {
+        return (sizes /100 % 10);
+    }
+
+    QColor getColor() const
+    {
+        return QColor(red, green, blue);
+    }
+
+    void setChanges( int aPointType, int aPointSize, int aPutLine, QColor aColor )
+    {
+      type = aPointType;
+      sizes = aPutLine*100+aPointSize;
+      red =   aColor.red();
+      green = aColor.green();
+      blue  = aColor.blue();
+    }
 
     void setName( const char *aName )
     {
@@ -71,47 +136,18 @@ public:
         return gstring(name, 0, 15);
     }
 
-
-    TPlotLine( const char *aName = 0,
-               int aPointType = 6, int aPointSize = 2, int aPutLine = 2,
-               int aRed = 25, int aGreen = 0, int aBlue = 150
-             ):
-            type(aPointType), size(aPointSize), line_size(aPutLine),
-            red(aRed),        green(aGreen), blue(aBlue)
+    int getIndex() const
     {
-        memcpy( name, aName, 15);
-        name[15] = '\0';
+        return ndxX; // max( ndxX, -1);
     }
 
-    TPlotLine( int ii, int maxII, const char *aName = 0,
-               int aPointType = 6, int aPointSize = 0, int aPutLine = 2 ):
-            type(aPointType), size(aPointSize), line_size(aPutLine)
+    void setIndex( int aNdxX )
     {
-        GColor col( false, ii, maxII);
-        red = col.red;
-        blue = col.blue;
-        green = col.green;
-
-        memcpy( name, aName, 15);
-        name[15] = '\0';
+        //if( aNdxX < 0  )
+        //    aNdxX = 0;
+        ndxX = aNdxX;
     }
 
-
-
-    TPlotLine(const TPlotLine& plt ):
-            type(plt.type), size(plt.size), line_size(plt.line_size),
-            red(plt.red),   green(plt.green), blue(plt.blue)
-    {
-        memcpy( name, plt.name, 15);
-    }
-    const TPlotLine& operator=( const TPlotLine& p)
-    {
-        type = p.type, size = p.size, line_size=p.line_size,
-        red = p.red,   green = p.green, blue=p.blue;
-        memcpy( name, p.name, 15);
-        return *this;
-    }
-    
     void read(GemDataStream& stream);
     void write(GemDataStream& stream);
     void read(fstream& stream);
@@ -119,122 +155,167 @@ public:
 };
 
 
-struct FPoint;
-
-// description of one plot in graph screen
+/// Description of one plot in graph screen
+/// a series of curves in the x-y plane
 class TPlot
 {
-
-    int nObjX; // indexes in TObjList aObj
-    int nObjY;
-
-    TIArray<TPlotLine> lines;
+    int nObjX; /// index of Abscissa in TObjList aObj
+    int nObjY; /// index of Ordinate in TObjList aObj
 
     // work variables
     int dX;   // number of point in one line
-    int dY1;  // number of lines
+    int nAbs; //number of different Abscissa lines
+    int dY1;  // number of lines (Ordinate)
     bool foString;
     int first;
 
 public:
 
-
     TPlot( int aObjX, int aObjY );
     TPlot( TPlot& plt, int aFirst );
     ~TPlot();
 
-
-    int getLinesNumber() const
-    {
-        return dY1;
-    }   // size from nObjY
-    int getFirstLine() const
-    {
-        return first;
-    }   // first index in lines list
-    int getPointLine( int ii, TIArray<FPoint>& pnts ); // get one line to paint
-    FPoint getPoint( int line, int number ); // get point from one line to paint
-    void getMaxMin( float& minX, float& maxX, float& minY, float& maxY );
-    void getMaxMinIso( float& minX, float& maxX, float& minY, float& maxY );
-    void getMaxMinIsoZ( float& minZ, float& maxZ );
-
-
-    gstring getName( int ii);
-    gstring getNames();
-    int getdX() const { return dX; }
     int getObjX() const { return nObjX; }
     int getObjY() const { return nObjY; }
     bool getfoString() const { return foString; }
+
+    /// Get number of points for one curve
+    int getdX() const
+    { return dX; }
+
+    /// Get number of Abscissa
+    int getNAbs() const
+    { return nAbs; }
+
+    /// Get number of curves
+    int getLinesNumber() const
+    { return dY1;   }
+
+    // first index in lines list
+    int getFirstLine() const
+    {  return first;  }
+
+    /// Return string with Ordinate name and line index
+    gstring getName( int ii);
+
+    /// Get one line to paint (ndxX - column in Abscissa table)
+    int getPointLine( int line, QVector<QPointF>& points, int ndxX );
+    /// Get point from one line to paint  (ndxX - column in Abscissa table)
+    QPointF getPoint( int line, int number, int ndxX );
+    /// Get one line to paint cumulative curve (ndxX - column in Abscissa table)
+    int getPointTube( int line, QVector<QwtIntervalSample>& points, int ndxAbs );
+
+    /// Get min and max values x,y for one curve line
+    void getMaxMinLine( QPointF& min, QPointF& max, int line, int ndxX );
+
+    /// obsolete
+    //void getMaxMin( QPointF& min, QPointF& max );
+    void getMaxMinIso( QPointF& min, QPointF& max );
+    void getMaxMinIsoZ( double& minZ, double& maxZ );
 };
 
-//-------------------------------------------------------------------------
 
-
-enum GRAPHTYPES {
-                 LINES_POINTS = 0,
-                 CUMULATIVE   = 1,
-                 ISOLINES     =  2
-                };
-
-
-//-------------------------------------------------------------------------
+/// Description of 2-D plotting widget.
+/// Description include the curves (TPlotLine, TPlot) settings, the grid settings, the isoline structure settings
 struct GraphData
 {
-
     gstring title;
+    int graphType;      /// GRAPHTYPES ( 0-line by line, 1- cumulative, 2 - isolines )
 
-    TIArray<GColor> scale;    // scale colors for isolines
-    TIArray<TPlot> plots;     // objects to demo
-    TIArray<TPlotLine> lines; // descriptions of all lines
-
-    int axisType;
-    int graphType;      // 05/2005 added Sveta
-                        // ( 0-line by line, 1- cumulative, 2 - isolines )
+    // define grid of plot
+    int axisTypeX;
+    int axisTypeY;
     gstring xName;
     gstring yName;
+    double region[4];
+    double part[4];
 
-    float region[4];
-    float part[4];
-    bool isBackgr_color;
+    // define background color
+    // bool isBackgr_color;
     int b_color[3]; // red, green, blue
+
+    // define curves
+    TIArray<TPlot> plots;     /// objects to demo
+    TIArray<TPlotLine> lines; /// descriptions of all lines
+
+    // data to isoline plots
+     TIArray<QColor> scale;    // scale colors for isolines
+
+ public:
 
     GraphData(  TIArray<TPlot>& aPlots, const char * title,
             float *sizeReg, float *sizePrt,
             TPlotLine * aLinesDesc, short *aAxisType,
             const char *aXName = 0, const char *aYname = 0 );
+
     GraphData( TIArray<TPlot>& aPlots, const char * title,
             const char *aXName = 0, const char *aYname = 0,
             TCStringArray line_names = 0, int agraphType = LINES_POINTS );
+
     GraphData( GraphData& data );
+
     ~GraphData();
 
-    int getSize( int ii) const
+    int getSize( int line ) const
+    { return lines[line].getSize();   }
+
+    int getType( int line ) const
+    {  return lines[line].getType();  }
+
+    int getLineSize(int line ) const
+    {   return lines[line].getLineSize();   }
+
+    int getIndex(int line ) const
     {
-        return lines[ii].size;
-    }
-    int getType( int ii) const
-    {
-        return lines[ii].type;
-    }
-    int getLineSize(int ii) const
-    {
-        return lines[ii].line_size;
-    }
-    gstring getName( int ii) const
-    {
-        return lines[ii].getName();
+        int ndx = lines[line].getIndex();
+        if( plots[ getPlot( line ) ].getNAbs() <= ndx )
+          ndx = 0;
+        return ndx;
     }
 
-   int getPointCol( int i,TIArray<FPoint>& pnts1  );
+    void setIndex(int line, int index  ) const
+    {   lines[line].setIndex(index);   }
+
+    gstring getName( int line ) const
+    {   return lines[line].getName();   }
+
+    void setName( int line, const char *aName ) const
+    {   lines[line].setName( aName );   }
+
+    QColor getColor( int line ) const
+    {   return lines[line].getColor();  }
+
+    int getPlot(int line ) const
+    {   uint ii=1;
+        for( ; ii<plots.GetCount(); ii++)
+            if( line < plots[ii].getFirstLine() )
+              break;
+        return (ii-1);
+    }
+
+    void getIndexes( QVector<int>& first, QVector<int>& maxXndx );
+
+    /// set default grid data
+    void adjustAxis( double& min, double& max, int& numTicks);
+
+   // functions to isoline plot
+   int  getPointCol( int i,  QVector<QPointF>& points );
    void setColorList();
    void getColorList();
    int  getColorLine( int ii );
    void setScales();
    bool goodIsolineStructure( int aGraphType );
+   QColor getColorIsoline(int ii) const
+   {
+       return scale[ii];
+   }
 
 };
 
+// must be changed ============================================
+
 class GraphDialog;
+class TCModule;
 
 class GraphWindow
 {
@@ -243,22 +324,23 @@ public:
 
   GraphDialog *graph_dlg;
 
-//  GraphData data;
   GraphWindow( TCModule *pmodule, TIArray<TPlot>& aPlots, const char * title,
             float *sizeReg, float *sizePrt,
             TPlotLine * aLinesDesc, short *aAxisType,
             const char *aXName = 0, const char *aYname = 0 );
+
   GraphWindow( TCModule *pmodule, TIArray<TPlot>& aPlots, const char * title,
             const char *aXName = 0, const char *aYname = 0,
             TCStringArray line_names = 0, int agraphType = LINES_POINTS );
+
   ~GraphWindow();
 
-  void AddPoint( int nPlot, int nPoint, bool no_mt ); // Add new point to graph
+  // Add new point to graph
+  void AddPoint( int nPlot, int nPoint );
   void Show(const char * capAdd=0); // new show all lines
   GraphData *getGraphData() const;
 
 };
-
 
 #endif   // _graph_data_h
 

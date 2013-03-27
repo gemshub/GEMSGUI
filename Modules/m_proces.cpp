@@ -226,13 +226,18 @@ void TProcess::ods_link( int q)
     aObj[ o_pcsize].SetPtr(    pe[q].size[0] ); /*f 8*/
 
     aObj[ o_pclnam].SetPtr( pe[q].lNam[0] );
-    aObj[ o_pclnam].SetDim( 1, pe[q].dimXY[1] );
+    int dimPclnam = pe[q].dimXY[1];
+    if(  pe[q].dimX > 1)
+        dimPclnam +=  pe[q].dimX;
+    aObj[ o_pclnam].SetDim( 1, dimPclnam );
     aObj[ o_pclname].SetPtr( pe[q].lNamE[0] );
     aObj[ o_pclname].SetDim( 1, pe[q].dimEF[1] );
     aObj[o_pcexpr].SetPtr( pe[q].gr_expr );
         //aObj[o_pcexpr].SetDim(1,len(pe[q].gr_expr));
+    if( pe[q].dimX <= 0)
+        pe[q].dimX = 1;
     aObj[o_pcx0].SetPtr( pe[q].x0 );
-    aObj[o_pcx0].SetDim(pe[q].dimXY[0], 1 );
+    aObj[o_pcx0].SetDim(pe[q].dimXY[0], pe[q].dimX );
     aObj[o_pcy0].SetPtr( pe[q].y0 );
     aObj[o_pcy0].SetDim(pe[q].dimXY[0], pe[q].dimXY[1] );
     aObj[o_pcxe].SetPtr( pe[q].xE );
@@ -281,7 +286,7 @@ void TProcess::dyn_set(int q)
          pe[q].lNamE = (char (*)[MAXGRNAME])aObj[ o_pclname ].GetPtr();
 
     pe[q].gr_expr = (char *)aObj[ o_pcexpr ].GetPtr();
-    pe[q].x0    = (double *)aObj[ o_pcx0 ].GetPtr();
+    pe[q].x0    = (double *)aObj[ o_pcx0 ].GetPtr();    pe[q].dimX = aObj[ o_pcx0 ].GetM();
     pe[q].y0    = (double *)aObj[ o_pcy0 ].GetPtr();
     pe[q].xE    = (double *)aObj[ o_pcxe ].GetPtr();
     pe[q].yE    = (double *)aObj[ o_pcye ].GetPtr();
@@ -393,10 +398,13 @@ void TProcess::dyn_new(int q)
    // graphics
     if( pe[q].PsGR != S_OFF )
     {
+      int dimPclnam = pe[q].dimXY[1];
+      if(  pe[q].dimX > 1)
+            dimPclnam +=  pe[q].dimX;
       pe[q].lNam = (char (*)[MAXGRNAME])aObj[ o_pclnam ].Alloc( 1,
-                 pe[q].dimXY[1], MAXGRNAME);
+                 dimPclnam, MAXGRNAME);
       pe[q].gr_expr = (char *)aObj[ o_pcexpr ].Alloc( 1, 2048, S_);
-      pe[q].x0    = (double *)aObj[ o_pcx0 ].Alloc(pe[q].dimXY[0], 1, D_);
+      pe[q].x0    = (double *)aObj[ o_pcx0 ].Alloc(pe[q].dimXY[0], pe[q].dimX, D_);
       pe[q].y0    = (double *)aObj[ o_pcy0 ].Alloc(
                       pe[q].dimXY[0], pe[q].dimXY[1], D_);
 
@@ -506,6 +514,7 @@ pe[q].PvR1 = '-';    // AIA on:   KD: temporary for process create
     strcpy( pe[q].yNames, "yp" );
     pe[q].dimEF[1] = 1;
     pe[q].dimEF[0] = 0;
+    pe[q].dimX = 1;
     pe[q].dimXY[1] = 1;
     pe[q].dimXY[0] = 0;
     pe[q].lNam = 0;
@@ -621,6 +630,8 @@ bool TProcess::pe_dimValid()
           i = false;
           pep->dimXY[1] = 2;
         }
+        if( pep->dimX == 0 )
+          pep->dimX = 1;
     }
 
     if( i==false )
@@ -752,7 +763,7 @@ TProcess::MakeQuery()
 //    pImp->MakeQuery();
     const char * p_key;
     char flgs[24];
-    int size[6];
+    int size[8];
 
     p_key  = db->PackKey();
     memcpy( flgs, &pep->Istat, 24);
@@ -762,6 +773,7 @@ TProcess::MakeQuery()
     size[3] = pep->dimEF[0];
     size[4] = pep->dimEF[1];
     size[5] = pep->Nsd;
+    size[6] = pep->dimX;
 
     // for scripts
     TCStringArray namesLines;
@@ -794,6 +806,7 @@ TProcess::MakeQuery()
      {    pep->PsGR = S_ON;
           pep->dimXY[0] = pep->Nxi;
      }
+     pep->dimX = (short)size[6];
      pep->dimEF[0] = (short)size[3];
      pep->dimEF[1] = (short)size[4];
      if( pep->dimEF[1] == 0 || pep->dimEF[0] == 0  )
@@ -810,11 +823,17 @@ TProcess::MakeQuery()
 
      if(namesLines.GetCount() > 0)
       {
+         int dimPclnam = pep->dimXY[1];
+         int ndxy = 0;
+         if(  pep->dimX > 1)
+         {      dimPclnam +=  pep->dimX;
+                 ndxy =pep->dimX;
+         }
          pep->lNam = (char (*)[MAXGRNAME])aObj[ o_pclnam ].Alloc( 1,
-                    pep->dimXY[1], MAXGRNAME);
+                    dimPclnam, MAXGRNAME);
          for(short ii=0; ii< min( (short)namesLines.GetCount(),pep->dimXY[1]); ii++)
          {
-           strncpy(  pep->lNam[ii], namesLines[ii].c_str(), MAXGRNAME );
+           strncpy(  pep->lNam[ii+ndxy], namesLines[ii].c_str(), MAXGRNAME );
          }
          strncpy(pep->xNames, xName.c_str(), MAXAXISNAME );
          strncpy(pep->yNames, yName.c_str(), MAXAXISNAME );
@@ -858,12 +877,17 @@ AGAIN:
                 strncpy( pep->lNamE[i], tbuf,MAXGRNAME );
         }
     if( pep->PsGR != S_OFF  )
-         for(int j=0; j< pep->dimXY[1]; j++ )
+    {
+        int ndxy = 0;
+        if(  pep->dimX > 1)
+              ndxy = pep->dimX;
+        for(int j=0; j< pep->dimXY[1]; j++ )
+         if( !*pep->lNam[j+ndxy]|| *pep->lNam[j+ndxy] == ' ' )
          {
             sprintf( tbuf, "%s%d", aPa->pa.GDpsc, j+1 );
-            if( !*pep->lNam[j]|| *pep->lNam[j] == ' ' )
-               strncpy( pep->lNam[j], tbuf, MAXGRNAME );
+            strncpy( pep->lNam[j+ndxy], tbuf, MAXGRNAME );
           }
+     }
 
 SET_OK:  // set begin of calc
     pe_initiate();
@@ -1225,7 +1249,7 @@ pep->ccTime = 0.0;
        if(  pep->Istat < P_MT_MODE && pep->PsGR != S_OFF  )
         {
             int res = vfQuestion3(window(),  GetName(),
-                      "Use graphic window?",
+                      "Show Graphics Dialog during simulation?",
                                "Yes", "No", "Cancel");
             if( res == VF3_3 )
                     return;
@@ -1482,8 +1506,8 @@ TProcess::CalcPoint( int nPoint )
     if( nPoint >= pep->dimXY[0]  || nPoint == -1 )
      return;
     // Add point to graph screen
-    if( gd_gr )
-        gd_gr->AddPoint( 0, nPoint, pep->Istat < P_MT_MODE );
+    if( gd_gr && pep->Istat < P_MT_MODE )
+        gd_gr->AddPoint( 0, nPoint );
 }
 
 void
@@ -1499,6 +1523,10 @@ TProcess::RecordPlot( const char* /*key*/ )
         plt.Add( new TPlot(o_pcxe, o_pcye ));
         nLn += plt[1].getLinesNumber();
     }
+    int ndxy = 0;
+    if(  pep->dimX > 1)
+           ndxy = pep->dimX;
+
     if( plot )
     {
         int oldN = aObj[o_pcplline].GetN();
@@ -1520,7 +1548,7 @@ TProcess::RecordPlot( const char* /*key*/ )
                 }
             }
             if(ii < pep->dimXY[1] )
-                plot[ii].setName( pep->lNam[ii]);
+                plot[ii].setName( pep->lNam[ii+ndxy]);
                 //strncpy( plot[ii].name, pep->lNam[ii], MAXGRNAME-1 );
             else
                 plot[ii].setName( pep->lNamE[ii-pep->dimXY[1]]);
@@ -1536,7 +1564,7 @@ TProcess::RecordPlot( const char* /*key*/ )
       TCStringArray lnames;
       int ii;
       for( ii=0; ii<pep->dimXY[1]; ii++ )
-          lnames.Add( gstring(pep->lNam[ii], 0, MAXGRNAME ));
+          lnames.Add( gstring(pep->lNam[ii+ndxy], 0, MAXGRNAME ));
       for( ii=0; ii<pep->dimEF[1]; ii++ )
           lnames.Add( gstring( pep->lNamE[ii], 0, MAXGRNAME ));
       gd_gr = new GraphWindow( this, plt, pep->name,
@@ -1548,29 +1576,38 @@ TProcess::RecordPlot( const char* /*key*/ )
 bool
 TProcess::SaveGraphData( GraphData *gr )
 {
+    int ii;
 // We can only have one Plot dialog (modal one) so condition should be omitted!!
      if( !gd_gr )
       return false;
      if( gr != gd_gr->getGraphData() )
       return false;
-    pep->axisType[0] = (short)gr->axisType;
+    pep->axisType[0] = (short)gr->axisTypeX;
+    pep->axisType[5] = (short)gr->axisTypeY;
     pep->axisType[4] = (short)gr->graphType;
     pep->axisType[1] = (short)gr->b_color[0];
     pep->axisType[2] = (short)gr->b_color[1];
     pep->axisType[3] = (short)gr->b_color[2];
     strncpy( pep->xNames, gr->xName.c_str(), 9);
     strncpy( pep->yNames, gr->yName.c_str(), 9);
-    memcpy( &pep->size[0], gr->region, 4*sizeof(float) );
-    memcpy( &pep->size[1], gr->part,  4*sizeof(float) );
+    for( ii=0; ii<4; ii++ )
+    {
+        pep->size[0][ii] =  gr->region[ii];
+        pep->size[1][ii] =  gr->part[ii];
+    }
+
+    int ndxy = 0;
+    if(  pep->dimX > 1)
+           ndxy = pep->dimX;
 
     plot = (TPlotLine *)
            aObj[ o_pcplline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine));
-    for(uint ii=0; ii<gr->lines.GetCount(); ii++ )
+    for( ii=0; ii<(int)gr->lines.GetCount(); ii++ )
     {
         plot[ii] = gr->lines[ii];
         //  lNam and lNamE back
         if( (int)ii < pep->dimXY[1] )
-            strncpy(  pep->lNam[ii], plot[ii].getName().c_str(), MAXGRNAME );
+            strncpy(  pep->lNam[ii+ndxy], plot[ii].getName().c_str(), MAXGRNAME );
         else
             strncpy(  pep->lNamE[ii-pep->dimXY[1]], plot[ii].getName().c_str(), MAXGRNAME );
     }

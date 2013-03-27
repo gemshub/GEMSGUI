@@ -27,7 +27,7 @@ par1 and par2 for arrays restricts number of visible elements when scrolled
 par2 for F_TEXT is height of TEXT element (in multiples of cell height)
 
 a				-	label {+-}
-b				-	position {*rdnbtsu}
+b				-	position {*rdnbtsum}
 c				-	read-only {+-?}
 d				-	type {iowh}
 
@@ -44,6 +44,8 @@ b:
  s - sticked (down + tied with previous cell for scrolling)
  l - under the first ( begin + tied with previous cell for scrolling)
  u - under (right under the last element)
+ m - mutable begin ( for internal condition field does not show  )
+
 c:
  + 	read-write
  - 	read-only

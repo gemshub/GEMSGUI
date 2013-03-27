@@ -1,8 +1,8 @@
 //-------------------------------------------------------------------
 // $Id: graph.cpp 968 2007-12-13 13:23:32Z gems $
 //
-// Implementation of TPlot, GraphData and GraphWindow classes
-// (Plotting system)
+// Implementation of TPlotLine, TPlot, GraphData and GraphWindow classes
+// (Plotting system description)
 //
 // Copyright (C) 1996-2001  S.Dmytriyeva, A.Rysin
 // Uses  gstring class (C) A.Rysin 1999
@@ -17,228 +17,220 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-#include <cstdio>
 
-#include "graph.h"
+#include <cstdio>
 #include "GraphDialog.h"
 #include "GemsMainWindow.h"
 #include "gdatastream.h"
 
+//---------------------------------------------------------------------------
+// TPlotLine
+//---------------------------------------------------------------------------
 
-GColor::GColor( bool is_green, int i, int n)
+void TPlotLine::read(GemDataStream& stream)
 {
-    blue = 0;
-    if( i<= n/2 )
-      { red = 255;
-        green = (2*i*255/n)%256;
-      }
-      else
-         if( i <= 3*n/4 )
-         { red = abs((255 - (4*(i-n/2)*255/n)))%256;
-           green = 255;
-         }
-         else
-         { red = 0;
-           green = (255 - (4*(i-3*n/4)*255/(n+2)))%256;
-         }
-
-  if( !is_green )
-  {
-    blue = green;
-    green = 0;
-  }
+    stream >> type;
+    stream >> sizes;
+    stream >> ndxX;
+    stream >> red >> green >> blue;
+    stream.readArray(name, sizeof(name));
 }
 
+void TPlotLine::write(GemDataStream& stream)
+{
+    stream << type;
+    stream << sizes;
+    stream << ndxX;
+    stream << red << green << blue;
+    stream.writeArray(name, sizeof(name));
+}
+
+void TPlotLine::read(fstream& stream)
+{
+    stream >> type;
+    stream >> sizes;
+    stream >> ndxX;
+    stream >> red >> green >> blue;
+    stream.get( name, 16, '\n');
+ }
+
+void TPlotLine::write(fstream& stream)
+{
+    stream << type << " ";
+    stream << sizes << " ";
+    stream << ndxX << " ";
+    stream << red << " " << green << " " << blue << " ";
+    stream << name;
+    stream << endl;
+}
 
 //---------------------------------------------------------------------------
 // TPlot
 //---------------------------------------------------------------------------
 
-
 TPlot::TPlot( int aObjX, int aObjY ):
-        nObjX(aObjX), nObjY(aObjY), first(0)
+     nObjX(aObjX), nObjY(aObjY), first(0)
 {
-
     int dNy, dMy, dY;
-    // foString = ( aObjX<0 || aObj[aObjX].GetN()>1 );
-    foString = ( aObjX<0 || aObj[aObjX].GetN()>=1 );// SD 05/02/2007
+
+    foString = ( aObjX < 0 || aObj[aObjX].GetN() >= 1 );
 
     dNy = aObj[aObjY].GetN();
     dMy = aObj[aObjY].GetM();
 
-    if(aObjX<0) // numbers
-        dX=dNy;
-    else dX = aObj[aObjX].GetN()*aObj[aObjX].GetM();
     if( foString == true )
     {
         dY=dNy;
         dY1=dMy;
-    } /* put graph by column */
+
+        if( aObjX < 0 ) // numbers
+        {    dX = dNy;  nAbs = 1;   }
+        else
+        {    dX = aObj[aObjX].GetN();
+             nAbs = aObj[aObjX].GetM();
+        }
+
+    } // put graph by column
     else
     {
         dY=dMy;
         dY1=dNy;
-    } /* put graph by gstring */
+        dX = aObj[aObjX].GetM();
+        nAbs = aObj[aObjX].GetN();
+    } // put graph by gstring
 
     ErrorIf( dX!=dY, "Graphics demo", "Invalid size of objects.");
-
-}
-
-
-gstring
-TPlot::getName( int ii )
-{
-    vstr s(40);
-    sprintf(s.p, "%s[%u]",aObj[nObjY].GetKeywd(), ii);
-    return gstring(s.p);
-}
-
-gstring
-TPlot::getNames()
-{
-    vstr s(40);
-    sprintf(s.p, "%s  %s",aObj[nObjX].GetKeywd(), aObj[nObjY].GetKeywd());
-    return gstring(s.p);
 }
 
 TPlot::TPlot( TPlot& plt, int aFirst ):
         nObjX(plt.nObjX), nObjY(plt.nObjY), first(aFirst)
 {
-
     foString = plt.foString;
     dX =plt.dX;
+    nAbs = plt.nAbs;
     dY1 =plt.dY1;
 }
 
 TPlot::~TPlot()
 {}
 
-// get array of points to draw one line
-// return number of points in line
-
-int TPlot::getPointLine( int j, TIArray<FPoint>& pnts )
+gstring TPlot::getName( int ii )
 {
-    float x, y;
-    pnts.Clear();
+    vstr s(40);
+    sprintf(s.p, "%s[%u]",aObj[nObjY].GetKeywd(), ii);
+    return gstring(s.p);
+}
+
+// get point to draw one line
+QPointF TPlot::getPoint( int line, int number, int ndxAbs )
+{
+    double x, y;
+
+    if(ndxAbs >= nAbs )
+        ndxAbs = 0;
+
+    if( foString == true )  // put graph by column
+    {
+        if( nObjX < 0 )
+            x = number;
+        else
+            x = aObj[nObjX].GetEmpty( number, ndxAbs );
+
+        y = aObj[nObjY].GetEmpty( number, line );
+    }
+    else    // put graph by gstring
+    {
+       x = aObj[nObjX].GetEmpty( ndxAbs, number );
+       y = aObj[nObjY].GetEmpty( line, number );
+    }
+
+    return QPointF( x, y);
+}
+
+// Build array of points to draw one line
+// return number of points in line
+int TPlot::getPointLine( int j, QVector<QPointF>& points, int ndxAbs )
+{
+    QPointF pos;
+    points.clear();
+
+    for(int  ii=0; ii<dX; ii++ )
+    {   pos = getPoint( j, ii, ndxAbs );
+        if( pos.x() == DOUBLE_EMPTY || pos.y() == DOUBLE_EMPTY )
+          continue;
+        points.append(pos);
+    }
+    return dX;
+}
+
+// Build array of points to draw one line
+// return number of points in line
+int TPlot::getPointTube( int line, QVector<QwtIntervalSample>& points, int ndxAbs )
+{
+    QPointF pos;
+    double miny, maxy;
 
     for(int  ii=0; ii<dX; ii++ )
     {
-        if( foString == true )  /* put graph by column */
-        {
-            if( nObjX < 0 )
-                x = ii; //j;
-            else if( aObj[nObjX].IsEmpty(ii,0) )
-                   x = FLOAT_EMPTY;
-                 else
-                   x = aObj[nObjX].Get(ii,0);
+        pos = getPoint( line, ii, ndxAbs );
+        miny = points[ii].interval.maxValue();
 
-            if( aObj[nObjY].IsEmpty(ii,j) )
-              y = FLOAT_EMPTY;
-            else
-              y = aObj[nObjY].Get(ii,j);
-        }
-        else    /* put graph by gstring */
-        {
-           if( aObj[nObjX].IsEmpty(0,ii) )
-             x = FLOAT_EMPTY;
-           else
-            x = aObj[nObjX].Get(0,ii);
-
-           if( aObj[nObjY].IsEmpty(j,ii) )
-            y = FLOAT_EMPTY;
-           else
-            y = aObj[nObjY].Get(j,ii);
-        }
-        pnts.Add( new FPoint(x, y));
+        if( pos.x() == DOUBLE_EMPTY || pos.y() == DOUBLE_EMPTY )
+          maxy = miny;
+        else
+          maxy = miny+pos.y();
+        points[ii].interval.setMinValue( miny );
+        points[ii].interval.setMaxValue( maxy );
     }
     return dX;
 }
 
 
-
-
-// get point to draw one line
-FPoint TPlot::getPoint( int line, int number )
+// Find min and max values x,y for one curve line
+void TPlot::getMaxMinLine( QPointF& min, QPointF& max, int line, int ndxAbs )
 {
-    float x, y;
+    QPointF point;
+    int jj = line;
 
-        if( foString == true )  /* put graph by column */
-        {
-            if( nObjX < 0 )
-                x = number;
-            else if( aObj[nObjX].IsEmpty(number,0) )
-                   x = FLOAT_EMPTY;
-                 else
-                   x = aObj[nObjX].Get(number,0);
-
-            if( aObj[nObjY].IsEmpty(number,line) )
-              y = FLOAT_EMPTY;
-            else
-              y = aObj[nObjY].Get(number,line);
-        }
-        else    /* put graph by gstring */
-        {
-           if( aObj[nObjX].IsEmpty(0,number) )
-             x = FLOAT_EMPTY;
-           else
-            x = aObj[nObjX].Get(0,number);
-
-           if( aObj[nObjY].IsEmpty(line,number) )
-            y = FLOAT_EMPTY;
-           else
-            y = aObj[nObjY].Get(line,number);
-        }
-    return FPoint( x, y);
+    min = getPoint( 0, jj, ndxAbs );
+    max = min;
+    for( int ii =0; ii<dX; ii++)
+    {
+           point = getPoint( jj, ii, ndxAbs );
+           if( min.x() > point.x() ) min.setX( point.x() );
+           if( max.x() < point.x() ) max.setX( point.x() );
+           if( min.y() > point.y() ) min.setY( point.y() );
+           if( max.y() < point.y() ) max.setY( point.y() );
+    }
 }
 
-void TPlot::getMaxMin( float& minX, float& maxX, float& minY, float& maxY )
+
+// must be changed ---------------------------------------------------------
+
+void TPlot::getMaxMinIso( QPointF& min, QPointF& max )
 {
-    float x,y;
+    double x,y;
+    x = aObj[nObjY].Get(0,0);
+    min.setX( x );
+    max.setX( x );
+    y = aObj[nObjY].Get(0,1);
+    min.setY( y );
+    max.setY( y );
 
-    maxX = minX = aObj[nObjX].Get(0,0);
-    maxY = minY = aObj[nObjY].Get(0,0);
-    for( int j=0; j<dY1; j++)
-        for( int ii =0; ii<dX; ii++)
-        {
-            if( foString == true )  /* put graph by column */
-            {
-                if( nObjX < 0 )
-                    x = j;
-                else x = aObj[nObjX].Get(ii,0);
-                y = aObj[nObjY].Get(ii,j);
-            }
-            else    /* put graph by gstring */
-            {
-                x = aObj[nObjX].Get(0,ii);
-                y = aObj[nObjY].Get(j,ii);
-            }
-            if( minX > x ) minX = x;
-            if( maxX < x ) maxX = x;
-            if( minY > y ) minY = y;
-            if( maxY < y ) maxY = y;
-        }
-}
-
-void TPlot::getMaxMinIso( float& minX, float& maxX, float& minY, float& maxY )
-{
-    float x,y;
-
-    maxX = minX = aObj[nObjY].Get(0,0);
-    maxY = minY = aObj[nObjY].Get(0,1);
     for( int ii =0; ii<dX; ii++)
     {
          x = aObj[nObjY].Get(ii,0);
          y = aObj[nObjY].Get(ii,1);
-         if( minX > x ) minX = x;
-         if( maxX < x ) maxX = x;
-         if( minY > y ) minY = y;
-         if( maxY < y ) maxY = y;
+         if( min.x() > x ) min.setX( x );
+         if( max.x() < x ) max.setX( x );
+         if( min.y() > y ) min.setY( y );
+         if( max.y() < y ) max.setY( y );
    }
 }
 
-void TPlot::getMaxMinIsoZ( float& minZ, float& maxZ )
+void TPlot::getMaxMinIsoZ( double& minZ, double& maxZ )
 {
-    float z;
+    double z;
 
     maxZ = minZ = aObj[nObjY].Get(0,2);
     for( int ii =0; ii<dX; ii++)
@@ -249,25 +241,25 @@ void TPlot::getMaxMinIsoZ( float& minZ, float& maxZ )
    }
 }
 
+//---------------------------------------------------------------------------
+// GraphData
+//---------------------------------------------------------------------------
 
-//----------------------------------------------------------------------------
-
-/*!
-   The constructor
-*/
+/// The constructor
 GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
                float *sizeReg,  float * sizePart,
                TPlotLine* aLinesDesc, short *aAxisType,
                const char *aXName, const char *aYName ):
-        title(aTitle), axisType(aAxisType[0]), graphType(aAxisType[4]),
-        isBackgr_color(true)
+        title(aTitle), axisTypeX(aAxisType[0]), axisTypeY(aAxisType[5]),
+        graphType(aAxisType[4])//,  isBackgr_color(true)
 {
     uint ii;
     int jj, nLines;
 
     xName = gstring( aXName, 0, 9);
     yName = gstring( aYName, 0, 9);
-    // Insert Plots and lines description
+
+    // Insert Plots and curves description
     plots.Clear();
     lines.Clear();
     for( ii=0, nLines=0; ii<aPlots.GetCount(); ii++)
@@ -278,108 +270,41 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
             if(aLinesDesc )
                 lines.Add( new TPlotLine( aLinesDesc[nLines] ) );
             else
-                lines.Add( new TPlotLine( plots[ii].getName(jj).c_str() ) );
+                lines.Add( new TPlotLine( ii, plots[ii].getLinesNumber(), plots[ii].getName(jj).c_str() ) );
+
             if( lines[nLines].getName().empty() )
                 lines[nLines].setName( plots[ii].getName(jj).c_str());
-//            if( *lines[nLines].name == 0 )
-//                strncpy( lines[nLines].name, plots[ii].getName(jj).c_str(), 15 );
         }
     }
 
-   goodIsolineStructure( graphType );
    for(int i=0; i<4; i++ )
-    {
+   {
         region[i] = sizeReg[i];
         part[i]   = sizePart[i];
-    }
-    b_color[0] = aAxisType[1];
-    b_color[1] = aAxisType[2];
-    b_color[2] = aAxisType[3];
+   }
 
-    if( graphType == ISOLINES )
-    {  setColorList();
-       setScales();
-     }
+   b_color[0] = aAxisType[1];
+   b_color[1] = aAxisType[2];
+   b_color[2] = aAxisType[3];
+
+   if( graphType == ISOLINES )
+   {
+        goodIsolineStructure( graphType );
+        setColorList();
+        setScales();
+   }
 }
 
-/*!
-   The constructor
-*/
-GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
-               const char *aXName, const char *aYName,
-               TCStringArray line_names, int agraphType ):
-        title(aTitle), axisType(5), graphType( agraphType ),
-        isBackgr_color(false)
-{
-    float min1, max1, min2, max2;
-    float minX, maxX, minY, maxY;
-
-
-    xName = gstring( aXName, 0, 9);
-    yName = gstring( aYName, 0, 9);
-    // Insert Plots and lines description
-    plots.Clear();
-    lines.Clear();
-    for( uint ii=0, nLines=0; ii<aPlots.GetCount(); ii++)
-    {
-        plots.Add( new TPlot(aPlots[ii], nLines ));
-        int nLinN = plots[ii].getLinesNumber();
-        for( int jj=0; jj<nLinN; jj++, nLines++ )
-        {
-          if( nLines < line_names.GetCount() )
-            lines.Add( new TPlotLine( jj, nLinN, line_names[nLines].c_str() ) );
-          else
-            lines.Add( new TPlotLine( jj, nLinN, plots[ii].getName(jj).c_str() ) );
-        }
-    }
-    goodIsolineStructure( graphType );
-
-    if( graphType == ISOLINES )
-    {
-       setColorList();
-       plots[0].getMaxMinIso(  minX, maxX, minY, maxY );
-       setScales();
-    }
-    else
-    { // set default min-max region
-
-      plots[0].getMaxMin(  minX, maxX, minY, maxY );
-
-      for( uint ii=1; ii<aPlots.GetCount(); ii++)
-      {
-         plots[ii].getMaxMin(  min1, max1, min2, max2 );
-         if( minX > min1 ) minX = min1;
-         if( maxX < max1 ) maxX = max1;
-         if( minY > min2 ) minY = min2;
-         if( maxY < max2 ) maxY = max2;
-      }
-    }
-
-    if( maxX == minX ) maxX += 1.;
-    if( maxY == minY ) maxY += 1.;
-
-    part[0] = minX+(maxX-minX)/3;
-    part[1] = maxX-(maxX-minX)/3;
-    part[2] = minY+(maxY-minY)/3;
-    part[3] = maxY-(maxY-minY)/3;
-
-
-    region[0] = minX;
-    region[1] = maxX;
-    region[2] = minY;
-    region[3] = maxY;
-
-}
-
+/// The constructor
 GraphData::GraphData( GraphData& data ):
-        title(data.title), axisType(data.axisType), graphType(data.graphType),
-        xName(data.xName), yName(data.yName),
-        isBackgr_color(data.isBackgr_color)
+        title(data.title), axisTypeX(data.axisTypeX), axisTypeY(data.axisTypeY),
+        graphType(data.graphType), xName(data.xName), yName(data.yName)
+        //isBackgr_color(data.isBackgr_color)
 {
     uint ii;
     int jj, nLines;
 
-    // Insert Plots and lines description
+    // Insert Plots and curves description
     plots.Clear();
     lines.Clear();
     for( ii=0, nLines=0; ii<data.plots.GetCount(); ii++)
@@ -388,84 +313,145 @@ GraphData::GraphData( GraphData& data ):
         for( jj=0; jj<plots[ii].getLinesNumber(); jj++, nLines++ )
              lines.Add( new TPlotLine( data.lines[nLines] ) );
     }
-    goodIsolineStructure( graphType );
 
     for(int i=0; i<4; i++ )
     {
         region[i] = data.region[i];
         part[i]   = data.part[i];
     }
+
     b_color[0] = data.b_color[0];
     b_color[1] = data.b_color[1];
     b_color[2] = data.b_color[2];
 
     if( graphType == ISOLINES )
-      {
-          scale.Clear();
-          for( ii=0; ii<data.scale.GetCount(); ii++)
-            scale.Add( new GColor( data.scale[ii] ));
-      }
-}
+    {
+         goodIsolineStructure( graphType );
+         scale.Clear();
+         for( ii=0; ii<data.scale.GetCount(); ii++)
+            scale.Add( new QColor( data.scale[ii] ));
+    }
+ }
 
+/// The constructor
+GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
+               const char *aXName, const char *aYName,
+               TCStringArray line_names, int agraphType ):
+        title(aTitle), axisTypeX(4), axisTypeY(4), graphType( agraphType )
+        // isBackgr_color(false)
+{
+    uint ii;
+    int jj, nLines, ndxAbs;
+    double minX, maxX, minY, maxY;
+    QPointF min, max;
+
+    xName = gstring( aXName, 0, 9);
+    yName = gstring( aYName, 0, 9);
+
+    // Insert Plots and curves description
+    plots.Clear();
+    lines.Clear();
+    for( ii=0, nLines=0; ii<aPlots.GetCount(); ii++)
+    {
+        plots.Add( new TPlot(aPlots[ii], nLines ));
+        int nLinN = plots[ii].getLinesNumber();
+        for( int jj=0; jj<nLinN; jj++, nLines++ )
+        {
+           if( jj < plots[ii].getNAbs() )
+             ndxAbs = jj;
+          else  ndxAbs = 0;
+          if( nLines < line_names.GetCount() )
+            lines.Add( new TPlotLine( jj, nLinN, line_names[nLines].c_str(), 0, 4,2, ndxAbs ) );
+          else
+            lines.Add( new TPlotLine( jj, nLinN, plots[ii].getName(jj).c_str(), 0, 4,2, ndxAbs  ) );
+        }
+    }
+
+    if( graphType == ISOLINES )
+    {
+       goodIsolineStructure( graphType );
+       plots[0].getMaxMinIso(  min, max );
+       minX = min.x();
+       maxX = max.x();
+       minY = min.y();
+       maxY = max.y();
+       setColorList();
+       setScales();
+    }
+    else
+    { // set default min-max region
+      plots[0].getMaxMinLine(  min, max, 0, getIndex(0) );
+      minX = min.x();
+      maxX = max.x();
+      minY = min.y();
+      maxY = max.y();
+
+      for( ii=0, nLines=0; ii<aPlots.GetCount(); ii++)
+       for( jj=0; jj<plots[ii].getLinesNumber(); jj++, nLines++ )
+       {  plots[ii].getMaxMinLine( min, max, jj, getIndex(nLines) );
+         if( minX > min.x() ) minX = min.x();
+         if( maxX < max.x() ) maxX = max.x();
+         if( minY > min.y() ) minY = min.y();
+         if( maxY < max.y() ) maxY = max.y();
+       }
+    }
+
+   if( maxX == minX ) maxX += 1.;
+   if( maxY == minY ) maxY += 1.;
+
+   adjustAxis(minX, maxX, axisTypeX);
+   adjustAxis(minY, maxY, axisTypeY);
+
+   region[0] = minX;
+   region[1] = maxX;
+   region[2] = minY;
+   region[3] = maxY;
+   part[0] = minX+(maxX-minX)/3;
+   part[1] = maxX-(maxX-minX)/3;
+   part[2] = minY+(maxY-minY)/3;
+   part[3] = maxY-(maxY-minY)/3;
+
+   QColor color(Qt::white);
+   b_color[0] = color.red();
+   b_color[1] = color.green();
+   b_color[2] = color.blue();
+
+}
 
 GraphData::~GraphData()
 {}
 
-
-// get array of points to draw one columns
-// return number of points in column
-
-int GraphData::getPointCol( int i, TIArray<FPoint>& pnts1 )
+void GraphData::getIndexes( QVector<int>& first, QVector<int>& maxXndx )
 {
-    int  nObjX, nObjY, nLn = 0;
-    float x, y=0.;
-    pnts1.Clear();
-
-    for(uint ii=0; ii<1/*plots.GetCount()*/; ii++)
+    for(uint ii=0; ii<plots.GetCount(); ii++)
     {
-       nObjX = plots[ii].getObjX();
-       nObjY = plots[ii].getObjY();
-
-       if( plots[ii].getfoString() == true )  /* put graph by column */
-       {
-          if( nObjX < 0 )
-             x = i;
-          else if( aObj[nObjX].IsEmpty(i,0) )
-                 x = FLOAT_EMPTY;
-               else
-                 x = aObj[nObjX].Get(i,0);
-       }
-       else    /* put graph by gstring */
-       {
-           if( aObj[nObjX].IsEmpty(0,i) )
-             x = FLOAT_EMPTY;
-           else
-            x = aObj[nObjX].Get(0,i);
-        }
-
-       pnts1.Add( new FPoint(x, y));
-       for( int jj=0; jj<plots[ii].getLinesNumber(); jj++, nLn++ )
-       {
-         if( plots[ii].getfoString() == true )  /* put graph by column */
-           {
-             if( aObj[nObjY].IsEmpty(i,jj) )
-               y += 0;//FLOAT_EMPTY;
-             else
-               y += aObj[nObjY].Get(i,jj);
-           }
-          else    /* put graph by gstring */
-          {
-            if( aObj[nObjY].IsEmpty(jj,i) )
-              y += 0; //FLOAT_EMPTY;
-            else
-              y += aObj[nObjY].Get(jj,i);
-          }
-         pnts1.Add( new FPoint(x, y));
-      }
+        first.append( plots[ii].getFirstLine() );
+        maxXndx.append( plots[ii].getNAbs() );
     }
-    return nLn;
+
 }
 
+void  GraphData::adjustAxis( double& min, double& max, int& numTicks)
+{
+    const int minTicks = 4;
+    double grossStep = (max-min)/minTicks;
+    double step = pow(10. , floor(log10(grossStep)));
+
+    if(5*step < grossStep )
+    {
+        step *=5;
+    }
+    else if(2*step < grossStep )
+           step *=2;
+
+    numTicks = int(ceil(max/step)-floor(min/step));
+    if( numTicks < minTicks)
+       numTicks = minTicks;
+    min = floor(min/step)*step;
+    max = ceil(max/step)*step;
+}
+
+// must be changed -------------------------------------------
 
 bool GraphData::goodIsolineStructure( int aGraphType )
 {
@@ -490,12 +476,54 @@ bool GraphData::goodIsolineStructure( int aGraphType )
   return true;
 }
 
+// get array of points to draw one columns
+// return number of points in column
+int GraphData::getPointCol( int i,  QVector<QPointF>& points )
+{
+    int  nObjX, nObjY, nLn = 0;
+    float x, y=0.;
+    points.clear();
+
+    nObjX = plots[0].getObjX();
+    nObjY = plots[0].getObjY();
+
+    if( plots[0].getfoString() == true )  /* put graph by column */
+    {
+       if( nObjX < 0 )
+          x = i;
+       else
+          x = aObj[nObjX].GetEmpty(i,0);
+     }
+     else    /* put graph by gstring */
+         x = aObj[nObjX].GetEmpty(0,i);
+
+     points.append( QPointF(x, y));
+     for( int jj=0; jj<plots[0].getLinesNumber(); jj++, nLn++ )
+       {
+         if( plots[0].getfoString() == true )  /* put graph by column */
+           {
+             if( aObj[nObjY].IsEmpty(i,jj) )
+               y += 0;
+             else
+               y += aObj[nObjY].Get(i,jj);
+           }
+          else    /* put graph by gstring */
+          {
+            if( aObj[nObjY].IsEmpty(jj,i) )
+              y += 0;
+            else
+              y += aObj[nObjY].Get(jj,i);
+          }
+         points.append( QPointF(x, y));
+      }
+
+    return nLn;
+}
+
 // setup color scale for ISOLINE graphics
 // get data from plots[1] object, colums 2, 3, 4
-
 void GraphData::setColorList()
 {
-
   int cred, cgreen, cblue;
   int nObjY = plots[1].getObjY();
   scale.Clear();
@@ -509,42 +537,35 @@ void GraphData::setColorList()
      if( ( cred ==0 && cgreen == 0 && cblue == 0 ) ||
          cred < 0 || cgreen < 0 || cblue < 0 ||
          cred > 255 || cgreen > 255 || cblue > 255 )
-
-       scale.Add( new GColor( true, ii, plots[1].getdX()) );
+       scale.Add( new QColor( true, ii, plots[1].getdX()) );
      else
-       scale.Add( new GColor( cred, cgreen, cblue ));
+       scale.Add( new QColor( cred, cgreen, cblue ));
   }
 
 }
 
 // put color scale for ISOLINE graphics to object plots[1]
 //  colums 2, 3, 4
-
 void GraphData::getColorList()
 {
-
   int nObjY = plots[1].getObjY();
   for( int ii=0; ii< plots[1].getdX(); ii++ )
   {
      if( ii >= (int)scale.GetCount() )
        break;
-     aObj[nObjY].Put( scale[ii].red, ii, 2 );
-     aObj[nObjY].Put( scale[ii].green, ii, 3 );
-     aObj[nObjY].Put( scale[ii].blue,  ii, 4 );
+     aObj[nObjY].Put( scale[ii].red(), ii, 2 );
+     aObj[nObjY].Put( scale[ii].green(), ii, 3 );
+     aObj[nObjY].Put( scale[ii].blue(),  ii, 4 );
   }
-
 }
-
 
 // put sizes scale for ISOLINE graphics to object plots[1]
 //  colums 0,1
-
 void GraphData::setScales()
 {
-  float minZ, maxZ;
+  double minZ, maxZ;
 
   plots[0].getMaxMinIsoZ(  minZ, maxZ );
-
 
   int nObjY = plots[1].getObjY();
   float delta = (maxZ - minZ ) / plots[1].getdX();
@@ -561,13 +582,11 @@ void GraphData::setScales()
 
 }
 
-
 // find color by value z in point ii
 //  if z not in defined range, undefined color
-
 int GraphData::getColorLine(int ii )
 {
-  float z1, z2, z;
+  double z1, z2, z;
 
   int jj, nObjY = plots[1].getObjY();
 
@@ -582,15 +601,11 @@ int GraphData::getColorLine(int ii )
        return jj;
   }
   return -1;
-
 }
-
 
 //---------------------------------------------------------------------------
 
-/*!
-   The constructor
-*/
+///   The constructor
 GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
                const char * aTitle,
                float *sizeReg,  float * sizePart,
@@ -602,12 +617,9 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
                 aLinesDesc, aAxisType, aXName, aYName);
        graph_dlg = new GraphDialog( pmodule, data );
        pVisorImp->openMdiChild( graph_dlg );
-       //graph_dlg->show();
 }
 
-/*!
-   The constructor
-*/
+///   The constructor
 GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
                const char * aTitle,
                const char *aXName, const char *aYName,
@@ -616,70 +628,26 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
    GraphData  data( aPlots, aTitle, aXName, aYName, line_names, agraphType );
    graph_dlg = new GraphDialog(pmodule, data);
    pVisorImp->openMdiChild( graph_dlg );
-   //graph_dlg->show();
 }
 
 GraphWindow::~GraphWindow()
 {
 }
 
-void
-GraphWindow::AddPoint( int nPlot, int nPoint, bool no_mt )
+void GraphWindow::AddPoint( int nPlot, int nPoint )
 {
-   graph_dlg->AddPoint( nPlot, nPoint, no_mt );
+   graph_dlg->AddPoint( nPlot, nPoint );
 }
 
-void
-GraphWindow::Show( const char * capAdd )
+void GraphWindow::Show( const char * capAdd )
 {
     if( graph_dlg )
      graph_dlg->ShowNew(capAdd);
 }
 
-
-GraphData *
-GraphWindow::getGraphData() const
+GraphData *GraphWindow::getGraphData() const
 {
- return &graph_dlg->gr_data;
-}
-
-
-
-void TPlotLine::read(GemDataStream& stream)
-{
-    stream >> type;
-    stream >> size;
-    stream >> line_size;
-    stream >> red >> green >> blue;
-    stream.readArray(name, sizeof(name));
-}
-
-void TPlotLine::write(GemDataStream& stream)
-{
-    stream << type;
-    stream << size;
-    stream << line_size;
-    stream << red << green << blue;
-    stream.writeArray(name, sizeof(name));
-}
-
-void TPlotLine::read(fstream& stream)
-{
-    stream >> type;
-    stream >> size;
-    stream >> line_size;
-    stream >> red >> green >> blue;
-    stream.get( name, 16, '\n');
- }
-
-void TPlotLine::write(fstream& stream)
-{
-    stream << type << " ";
-    stream << size << " ";
-    stream << line_size << " ";
-    stream << red << " " << green << " " << blue << " ";
-    stream << name;
-    stream << endl;
+  return &graph_dlg->gr_data;
 }
 
 /* for future using

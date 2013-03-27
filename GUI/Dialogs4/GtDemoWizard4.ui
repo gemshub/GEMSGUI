@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>743</width>
-    <height>535</height>
+    <width>763</width>
+    <height>562</height>
    </rect>
   </property>
   <property name="font">
@@ -24,8 +24,8 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
-   <item>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0" colspan="5">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="mouseTracking">
       <bool>false</bool>
@@ -43,10 +43,10 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
-      <layout class="QGridLayout">
+      <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
         <widget class="QLabel" name="pageName">
          <property name="sizePolicy">
@@ -66,31 +66,29 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="1" column="0" rowspan="2" colspan="2">
         <widget class="Line" name="line">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <layout class="QHBoxLayout" name="layout41">
-         <item>
-          <widget class="QLabel" name="textLabel10">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Plain</enum>
-           </property>
-           <property name="text">
-            <string>GtDemo is a tool for sampling numbers from project database records into tables, then plotting, exporting, or copy-pasting them to other programs. 
+       <item row="3" column="0">
+        <widget class="QLabel" name="textLabel10">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="text">
+          <string>GtDemo is a tool for sampling numbers from project database records into tables, then plotting, exporting, or copy-pasting them to other programs. 
 
 Select on this page a record type to be sampled (records must be present already); particular records can be chosen from the list after this wizard is finished.
 
@@ -101,178 +99,176 @@ If the Process type is chosen, only one Process record must be selected later on
 Several GtDemo records to collect different parameters and results can be created upon the same set of database records.
 
 To tell the GtDemo module what data to sample, a script must be provided in the Gexpr field. A simple initial script can be automatically  created using property- and item selection lists in the Step 2 page of this wizard. Example scripts can also be found via the 'Help'  'View Scripts...' menu command.</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::AutoText</enum>
-           </property>
-           <property name="scaledContents">
-            <bool>false</bool>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-           <property name="margin">
-            <number>0</number>
-           </property>
-           <property name="openExternalLinks">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_7">
-           <property name="title">
-            <string>Select a record type </string>
-           </property>
-           <layout class="QVBoxLayout">
-            <item>
-             <widget class="QRadioButton" name="psIC">
-              <property name="text">
-               <string>&amp;IComp</string>
-              </property>
-              <property name="shortcut">
-               <string>Alt+I</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="psDC">
-              <property name="text">
-               <string>D&amp;Comp</string>
-              </property>
-              <property name="shortcut">
-               <string>Alt+C</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="psRE">
-              <property name="text">
-               <string>&amp;ReacDC</string>
-              </property>
-              <property name="shortcut">
-               <string>Alt+R</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="psRP">
-              <property name="text">
-               <string>R&amp;TParm</string>
-              </property>
-              <property name="shortcut">
-               <string>Alt+T</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="psPH">
-              <property name="text">
-               <string>P&amp;hase</string>
-              </property>
-              <property name="shortcut">
-               <string>Alt+H</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="psBC">
-              <property name="text">
-               <string>C&amp;ompos</string>
-              </property>
-              <property name="shortcut">
-               <string>Alt+O</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="psST">
-              <property name="text">
-               <string>&amp;SysEq</string>
-              </property>
-              <property name="shortcut">
-               <string>Alt+S</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="psPE">
-              <property name="text">
-               <string>&amp;Process</string>
-              </property>
-              <property name="shortcut">
-               <string>Alt+P</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="textLabel1_3">
-              <property name="text">
-               <string>Under Construction</string>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="psUT">
-              <property name="text">
-               <string>&amp;DualTh</string>
-              </property>
-              <property name="shortcut">
-               <string>Alt+D</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="psPB">
-              <property name="text">
-               <string>&amp;UnSpace</string>
-              </property>
-              <property name="shortcut">
-               <string>Alt+U</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="psTR">
-              <property name="text">
-               <string>&amp;GEM2MT</string>
-              </property>
-              <property name="shortcut">
-               <string>Alt+G</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::AutoText</enum>
+         </property>
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <property name="openExternalLinks">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" rowspan="2">
+        <widget class="QGroupBox" name="groupBox_7">
+         <property name="title">
+          <string>Select a record type </string>
+         </property>
+         <layout class="QVBoxLayout">
+          <item>
+           <widget class="QRadioButton" name="psIC">
+            <property name="text">
+             <string>&amp;IComp</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+I</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="psDC">
+            <property name="text">
+             <string>D&amp;Comp</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+C</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="psRE">
+            <property name="text">
+             <string>&amp;ReacDC</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+R</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="psRP">
+            <property name="text">
+             <string>R&amp;TParm</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+T</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="psPH">
+            <property name="text">
+             <string>P&amp;hase</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+H</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="psBC">
+            <property name="text">
+             <string>C&amp;ompos</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+O</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="psST">
+            <property name="text">
+             <string>&amp;SysEq</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+S</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="psPE">
+            <property name="text">
+             <string>&amp;Process</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+P</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="textLabel1_3">
+            <property name="text">
+             <string>Under Construction</string>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="psUT">
+            <property name="text">
+             <string>&amp;DualTh</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+D</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="psPB">
+            <property name="text">
+             <string>&amp;UnSpace</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+U</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="psTR">
+            <property name="text">
+             <string>&amp;GEM2MT</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+G</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -300,8 +296,8 @@ To tell the GtDemo module what data to sample, a script must be provided in the 
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">
-      <layout class="QGridLayout" name="gridLayout12">
-       <item row="0" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
         <widget class="QLabel" name="label">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -320,14 +316,14 @@ To tell the GtDemo module what data to sample, a script must be provided in the 
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item>
         <widget class="Line" name="line_2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Spin boxes below define the dynamic memory configuration of this GtDemo data sampler.
@@ -341,14 +337,14 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item>
         <widget class="QGroupBox" name="groupBox_4">
          <property name="title">
           <string>Dimensions of sampled, intermediate, and experimental data</string>
          </property>
-         <layout class="QGridLayout">
+         <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
-           <widget class="QSpinBox" name="pGraph">
+           <widget class="QSpinBox" name="pGraphY">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -384,11 +380,52 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
              <bool>true</bool>
             </property>
             <property name="buddy">
-             <cstring>pGraph</cstring>
+             <cstring>pGraphY</cstring>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
+           <widget class="QSpinBox" name="pGraphX">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>20</number>
+            </property>
+            <property name="value">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="TextLabel1_3">
+            <property name="text">
+             <string>Number of columns in the 'x0' table (from 1 to 20) to keep the data sampled by the 'gExpr' math script. Number of rows in 'x0' table will correspond to the total number of sampled records.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>pGraphY</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
            <widget class="QSpinBox" name="pNwc">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -413,7 +450,7 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="2" column="1">
            <widget class="QLabel" name="TextLabel1">
             <property name="text">
              <string>Optional: number of cells in 'gd_wc' vector for intermediate data. Default: 0.</string>
@@ -429,7 +466,7 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QSpinBox" name="pNqp">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -454,7 +491,7 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="3" column="1">
            <widget class="QLabel" name="TextLabel2">
             <property name="text">
              <string>Optional: Number of columns in 'gQp' table for intermediate data. Default: 0. Number of rows in 'gQp' table will correspond to the total number of sampled records.</string>
@@ -470,7 +507,7 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item row="4" column="0">
            <widget class="QSpinBox" name="pELine">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -492,7 +529,7 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
+          <item row="4" column="1">
            <widget class="QLabel" name="TextLabel1_2_2">
             <property name="text">
              <string>Optional: Number of rows in 'xE', 'yE' arrays. Default: 0 (not allocated).</string>
@@ -508,7 +545,7 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
+          <item row="5" column="0">
            <widget class="QSpinBox" name="pECol">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -533,7 +570,7 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item row="5" column="1">
            <widget class="QLabel" name="TextLabel1_2_2_2">
             <property name="text">
              <string>Optional: Number of columns in 'yE' array. Default: 1.</string>
@@ -549,7 +586,7 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
          </layout>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string/>
@@ -562,7 +599,7 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
       </layout>
      </widget>
      <widget class="QWidget" name="page_4">
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QLabel" name="label_3">
          <property name="sizePolicy">
@@ -579,13 +616,6 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
          </property>
          <property name="text">
           <string>Step 4 - Final settings and comments</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="Line" name="line_4">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
@@ -637,6 +667,13 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
         </widget>
        </item>
        <item>
+        <widget class="Line" name="line_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Optional (only if Process simulation results will be sampled)</string>
@@ -678,7 +715,7 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
          <property name="title">
           <string>What will happen after you click &quot;Finish&quot;</string>
          </property>
-         <layout class="QVBoxLayout">
+         <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QLabel" name="textLabel13">
             <property name="text">
@@ -751,77 +788,73 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
      </widget>
     </widget>
    </item>
-   <item>
-    <layout class="QHBoxLayout" name="gridLayout21">
-     <item>
-      <widget class="QPushButton" name="pHelp">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>&amp;Learn more</string>
-       </property>
-       <property name="shortcut">
-        <string>F1</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="sp_1">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pBack">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>&lt; &amp;Back</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pNext">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>&amp;Next &gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pCancel">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>&amp;Cancel</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+   <item row="1" column="0" rowspan="2">
+    <widget class="QPushButton" name="pHelp">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>&amp;Learn more</string>
+     </property>
+     <property name="shortcut">
+      <string>F1</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <spacer name="sp_1">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>353</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="2" rowspan="2">
+    <widget class="QPushButton" name="pBack">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>&lt; &amp;Back</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3" rowspan="2">
+    <widget class="QPushButton" name="pNext">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>&amp;Next &gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4" rowspan="2">
+    <widget class="QPushButton" name="pCancel">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>&amp;Cancel</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -838,7 +871,7 @@ Optional 'xE', 'yE' arrays can be used to plot the experimental data over sample
   <tabstop>psUT</tabstop>
   <tabstop>psPB</tabstop>
   <tabstop>psTR</tabstop>
-  <tabstop>pGraph</tabstop>
+  <tabstop>pGraphY</tabstop>
   <tabstop>pNwc</tabstop>
   <tabstop>pNqp</tabstop>
   <tabstop>pELine</tabstop>

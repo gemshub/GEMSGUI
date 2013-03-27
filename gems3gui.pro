@@ -12,9 +12,14 @@ CONFIG -= warn_on
 CONFIG += warn_off
 CONFIG += help
 CONFIG += thread
+#CONFIG += printsupport
 QT += network
 QT += sql
 QT += xml
+QT += svg
+#Qt += printsupport
+
+greaterThan( QT_MAJOR_VERSION, 4 ): QT += widgets printsupport help
 
 #RESOURCES += img.qrc
 
@@ -35,6 +40,7 @@ macx-g++ {
 
 RESOURCES = ./GUI/GUI.qrc
 
+QWT5_CPP  =  ./GUI/QWT
 SERVICES4_CPP  =  ./GUI/Services4
 DATAMAN_CPP    =  ./GUI/Dataman
 DIALOGS4_CPP   =  ./GUI/Dialogs4
@@ -44,6 +50,8 @@ NUMERICS_CPP   =  ./Modules/Numerics
 GEMS3K_CPP     =  ../standalone/GEMS3K
 
 
+
+QWT5_H  =  $$QWT5_CPP
 SERVICES4_H  =  $$SERVICES4_CPP
 DATAMAN_H    =  $$DATAMAN_CPP
 DIALOGS4_H   =  $$DIALOGS4_CPP
@@ -52,6 +60,7 @@ SUBMODS_H    =  $$SUBMODS_CPP
 NUMERICS_H   =  $$NUMERICS_CPP
 GEMS3K_H     =  $$GEMS3K_CPP
 
+DEPENDPATH   += $$QWT5_H
 DEPENDPATH   += $$SERVICES4_H
 DEPENDPATH   += $$DATAMAN_H  
 DEPENDPATH   += $$DIALOGS4_H 
@@ -60,6 +69,7 @@ DEPENDPATH   += $$SUBMODS_H
 DEPENDPATH   += $$NUMERICS_H 
 DEPENDPATH   += $$GEMS3K_H   
 
+INCLUDEPATH   += $$QWT5_H
 INCLUDEPATH   += $$SERVICES4_H
 INCLUDEPATH   += $$DATAMAN_H  
 INCLUDEPATH   += $$DIALOGS4_H 
@@ -81,4 +91,5 @@ include($$MODULES_CPP/Modules.pri)
 include($$SUBMODS_CPP/Submods.pri)
 include($$NUMERICS_CPP/Numerics.pri)
 include($$GEMS3K_CPP/gems3k.pri)
+include($$QWT5_CPP/qwt.pri)
 

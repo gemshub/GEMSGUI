@@ -3,7 +3,7 @@
 //
 // Declaration of SymbolDialog class
 //
-// Copyright (C) 1996-2008  A.Rysin, S.Dmytriyeva
+// Copyright (C) 1996-2013  S.Dmytriyeva, A.Rysin
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
@@ -17,7 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-
 #ifndef SymbolDialog_included
 #define SymbolDialog_included
 
@@ -26,10 +25,12 @@
 #include "ui_SymbolDialog4.h"
 #include "graph.h"
 
-
 class SymbolDialog : public QDialog, public Ui::SymbolDialogData
 {
     Q_OBJECT
+
+    QButtonGroup *smbGroup;
+    TPlotLine dat;
 
 protected slots:
     virtual void languageChange();
@@ -37,15 +38,9 @@ protected slots:
 
 public:
 
-    TPlotLine dat;
-
-    SymbolDialog
-    (
-        TPlotLine& aData,
-        QWidget* parent = NULL
-    );
-
+    SymbolDialog( TPlotLine& aData, QWidget* parent = NULL );
     virtual ~SymbolDialog();
+
     TPlotLine& GetPlotLine();
 
 };

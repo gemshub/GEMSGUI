@@ -63,7 +63,7 @@ typedef struct
   short Nlrk,           // N of records
     nRT,              // chain index
     Nsd,              // N of data source references
-    res,              // reserved
+    dimX,              // reserved
     Nwc,              // Dimensions: array of constants gd_wc
     Nqp,              // array of work cells gOp
     axisType[6],     // axis graph type, background(3), graph type, reserved
@@ -83,7 +83,7 @@ typedef struct
   char (*lNamE)[MAXGRNAME];   // List of ID of lines of empirical data
 
   double
-    *x0,   // Vector of abscissa dimXY[][1]
+    *x0,   // Vector of abscissa dimXY[][dimX]
     *y0,  // Sampled data array dimXY[][]
     *xE, *yE,         // Input empirical data XE, YE
     *wc,              // Array of constants (optional)

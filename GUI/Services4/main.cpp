@@ -17,13 +17,21 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-//#include <QtGui>
-#include <QtGui/QApplication>
+
+#include <QApplication>
+#include <QSqlDatabase>
+
+#if QT_VERSION >= 0x050000
+#include <QtWidgets>
+// !!!! qt5 install in ubuntu libglu1-mega-dev
+#else
+#include <QApplication>
 #include <QSqlDatabase>
 #include <QSharedMemory>
 #include <QMainWindow>
 #include <QMessageBox>
-#include <qwindowsstyle.h>
+#include <QWindowsStyle>
+#endif
 
 #include "visor.h"
 #include "GemsMainWindow.h"
@@ -66,7 +74,13 @@ TIntegApp::TIntegApp(int& c, char** v):
            return;
          }
 
+#if QT_VERSION >= 0x050000
+#include <QtWidgets>
+       setStyle(QStyleFactory::create("windows"));
+#else
        setStyle( new QWindowsStyle() );
+#endif
+
        QIcon icon;
        icon.addFile(QString::fromUtf8(":/Icons/gems50.png"), QSize(), QIcon::Normal, QIcon::Off);
        setWindowIcon(icon);
