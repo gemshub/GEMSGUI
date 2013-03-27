@@ -686,8 +686,12 @@ void TProfil::CalcBcc()
 // don't call any GUI (Qt or VisorImp) functions from here!
 // exceptions should be kept inside the function either
 // Modified on 10.09.2007 to return GEM IPM2 calculation time in seconds as double
+// Parameters: kTimeStep: index of time step (>= 0) or -1 to reset kinetics;
+//             kTime: current time (>= 0.0);
+//             kdTime: current time step (can be changed in TKinMet class)
+// Returns: elapsed calculation time in seconds
 //
-double TProfil::CalcEqstat( bool /*prg*/)
+double TProfil::CalcEqstat( double *kdTime, const int kTimeStep, const double kTime )
 {
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
     long int NumIterFIA,  NumIterIPM, NumPrecLoops;
@@ -699,6 +703,25 @@ double TProfil::CalcEqstat( bool /*prg*/)
         Error( "System", "Please, specify bulk composition of the system!");
 
     gstring keyp = rt[RT_SYSEQ].UnpackKey();
+// new: setting chemical kinetics time counter and variables
+    if( kdTime == NULL)
+    {  // no kinetics to consider
+        multi->GetPM()->kTau = 0.;
+        multi->GetPM()->kdT = 0.;
+        multi->GetPM()->ITau = 0;
+        multi->GetPM()->pKMM = 2;  // no need to allocate TKinMet instances
+    }
+    else {   // considering kinetics
+        multi->GetPM()->kTau = kTime;
+        multi->GetPM()->kdT = *kdTime;
+        if( kTimeStep < 0 )
+        {   // we need to initialize TKinMet
+            multi->GetPM()->pKMM = -1;
+            multi->GetPM()->ITau = -1;
+        }
+        else  // TKinMet exists, simulation continues
+            multi->GetPM()->ITau = kTimeStep;
+    }
     PMtest( keyp.c_str() );
 
 #ifndef Use_mt_mode
@@ -707,7 +730,8 @@ double TProfil::CalcEqstat( bool /*prg*/)
 #endif
 
    ComputeEquilibriumState( NumPrecLoops, NumIterFIA, NumIterIPM );
-
+// new - possibly returns a new time step suggestion
+   *kdTime = multi->GetPM()->kdT;
 
    return  multi->GetPM()->t_elap_sec;
 }
