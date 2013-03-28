@@ -340,15 +340,15 @@ unsigned char QwtLinearColorMap::colorIndex(
         return 0;
 
     if ( value >= interval.maxValue() )
-        return ( unsigned char )255;
+        return 255;
 
     const double ratio = ( value - interval.minValue() ) / width;
 
     unsigned char index;
     if ( d_data->mode == FixedColors )
-        index = ( unsigned char )( ratio * 255 ); // always floor
+        index = static_cast<unsigned char>( ratio * 255 ); // always floor
     else
-        index = ( unsigned char )qRound( ratio * 255 );
+        index = static_cast<unsigned char>( qRound( ratio * 255 ) );
 
     return index;
 }

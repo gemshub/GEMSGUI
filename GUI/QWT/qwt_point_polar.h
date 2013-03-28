@@ -192,4 +192,10 @@ inline QPointF qwtFastDegree2Pos( const QPointF &pole,
     return qwtFastPolar2Pos( pole, radius, angle / 180.0 * M_PI );
 } 
 
+inline QwtPointPolar qwtFastPos2Polar( const QPointF &pos )
+{
+    return QwtPointPolar( qwtFastAtan2( pos.y(), pos.x() ),
+        qSqrt( qwtSqr( pos.x() ) + qwtSqr( pos.y() ) ) );
+}
+
 #endif 

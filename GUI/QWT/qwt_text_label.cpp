@@ -63,13 +63,32 @@ void QwtTextLabel::init()
 }
 
 /*!
+   Interface for the designer plugin - does the same as setText()
+   \sa plainText()
+ */
+void QwtTextLabel::setPlainText( const QString &text )
+{
+    setText( QwtText( text ) );
+}
+
+/*!
+   Interface for the designer plugin
+   \sa setPlainText(), text()
+ */
+QString QwtTextLabel::plainText() const
+{
+    return d_data->text.text();
+}
+
+/*!
    Change the label's text, keeping all other QwtText attributes
    \param text New text
    \param textFormat Format of text
 
   \sa QwtText
 */
-void QwtTextLabel::setText( const QString &text, QwtText::TextFormat textFormat )
+void QwtTextLabel::setText( const QString &text, 
+    QwtText::TextFormat textFormat )
 {
     d_data->text.setText( text, textFormat );
 
@@ -231,23 +250,20 @@ void QwtTextLabel::drawContents( QPainter *painter )
     painter->setFont( font() );
     painter->setPen( palette().color( QPalette::Active, QPalette::Text ) );
 
-    drawText( painter, r );
+    drawText( painter, QRectF( r ) );
 
     if ( hasFocus() )
     {
-        const int margin = 2;
+        const int m = 2;
 
-        QRect focusRect = contentsRect();
-        focusRect.setRect( focusRect.x() + margin, focusRect.y() + margin,
-            focusRect.width() - 2 * margin - 2,
-            focusRect.height() - 2 * margin - 2 );
+        QRect focusRect = contentsRect().adjusted( m, m, -m + 1, -m + 1);
 
         QwtPainter::drawFocusRect( painter, this, focusRect );
     }
 }
 
 //! Redraw the text
-void QwtTextLabel::drawText( QPainter *painter, const QRect &textRect )
+void QwtTextLabel::drawText( QPainter *painter, const QRectF &textRect )
 {
     d_data->text.draw( painter, textRect );
 }

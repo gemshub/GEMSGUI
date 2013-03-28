@@ -229,7 +229,7 @@ int QwtScaleDraw::minLabelDist( const QFont &font ) const
             maxDist = dist;
     }
 
-    double angle = labelRotation() / 180.0 * M_PI;
+    double angle = qwtRadians( labelRotation() ); 
     if ( vertical )
         angle += M_PI / 2;
 
@@ -330,7 +330,7 @@ int QwtScaleDraw::minLength( const QFont &font ) const
     int lengthForTicks = 0;
     if ( hasComponent( QwtAbstractScaleDraw::Ticks ) )
     {
-        const double pw = qMax( 1, penWidth() );  // pen width can be zero
+        const double pw = qMax( 1, penWidth() );  // penwidth can be zero
         lengthForTicks = qCeil( ( majorCount + minorCount ) * ( pw + 1.0 ) );
     }
 
@@ -340,8 +340,8 @@ int QwtScaleDraw::minLength( const QFont &font ) const
 /*!
    Find the position, where to paint a label
 
-   The position has a distance of majTickLength() + spacing() + 1
-   from the backbone. The direction depends on the alignment()
+   The position has a distance that depends on the length of the ticks 
+   in direction of the alignment().
 
    \param value Value
 */
@@ -604,10 +604,16 @@ QPointF QwtScaleDraw::pos() const
 */
 void QwtScaleDraw::setLength( double length )
 {
+#if 1
     if ( length >= 0 && length < 10 )
         length = 10;
+
+    // why should we accept negative lengths ???
     if ( length < 0 && length > -10 )
         length = -10;
+#else
+    length = qMax( length, 10 );
+#endif
 
     d_data->len = length;
     updateMap();

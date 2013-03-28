@@ -26,13 +26,13 @@ class QwtColorMap;
 
   On multi-core systems the performance of the image composition
   can often be improved by dividing the area into tiles - each of them
-  rendered in a different thread ( see setRenderThreadCount() ).
+  rendered in a different thread ( see QwtPlotItem::setRenderThreadCount() ).
 
   In ContourMode contour lines are painted for the contour levels.
 
   \image html spectrogram3.png
 
-  \sa QwtRasterData, QwtColorMap
+  \sa QwtRasterData, QwtColorMap, QwtPlotItem::setRenderThreadCount()
 */
 
 class QWT_EXPORT QwtPlotSpectrogram: public QwtPlotRasterItem
@@ -58,9 +58,6 @@ public:
     explicit QwtPlotSpectrogram( const QString &title = QString::null );
     virtual ~QwtPlotSpectrogram();
 
-    void setRenderThreadCount( uint numThreads );
-    uint renderThreadCount() const;
-
     void setDisplayMode( DisplayMode, bool on = true );
     bool testDisplayMode( DisplayMode ) const;
 
@@ -74,6 +71,8 @@ public:
     virtual QwtInterval interval(Qt::Axis) const;
     virtual QRectF pixelHint( const QRectF & ) const;
 
+    void setDefaultContourPen( const QColor &, 
+        qreal width = 0.0, Qt::PenStyle = Qt::SolidLine );
     void setDefaultContourPen( const QPen & );
     QPen defaultContourPen() const;
 

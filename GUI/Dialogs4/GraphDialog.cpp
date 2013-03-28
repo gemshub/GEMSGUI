@@ -25,7 +25,8 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QColorDialog>
-
+#include <QMimeData>
+#include <QDrag>
 
 #include <qwt_symbol.h>
 #include <qwt_picker_machine.h>

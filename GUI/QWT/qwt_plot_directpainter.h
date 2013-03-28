@@ -14,7 +14,7 @@
 #include <qobject.h>
 
 class QRegion;
-class QwtPlotAbstractSeriesItem;
+class QwtPlotSeriesItem;
 
 /*!
     \brief Painter object trying to paint incrementally
@@ -85,7 +85,7 @@ public:
     void setClipRegion( const QRegion & );
     QRegion clipRegion() const;
 
-    void drawSeries( QwtPlotAbstractSeriesItem *, int from, int to );
+    void drawSeries( QwtPlotSeriesItem *, int from, int to );
     void reset();
 
     virtual bool eventFilter( QObject *, QEvent * );

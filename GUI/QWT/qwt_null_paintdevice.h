@@ -31,16 +31,51 @@
 class QWT_EXPORT QwtNullPaintDevice: public QPaintDevice
 {
 public:
-    QwtNullPaintDevice( QPaintEngine::PaintEngineFeatures );
-    QwtNullPaintDevice( const QSize &size,
-        QPaintEngine::PaintEngineFeatures );
+    /*!
+      \brief Render mode
 
+      \sa setMode(), mode()
+     */
+    enum Mode
+    {
+        /*!
+           All vector graphic primitives are painted by
+           the corresponding draw methods
+         */
+        NormalMode, 
+
+        /*!
+           Vector graphic primitives ( beside polygons ) are mapped to a QPainterPath
+           and are painted by drawPath. In PathMode mode
+           only a few draw methods are called:
+
+           - drawPath()
+           - drawPixmap()
+           - drawImage()
+           - drawPolygon()
+         */
+        PolygonPathMode,
+
+        /*!
+           Vector graphic primitives are mapped to a QPainterPath
+           and are painted by drawPath. In PathMode mode
+           only a few draw methods are called:
+
+           - drawPath()
+           - drawPixmap()
+           - drawImage()
+         */
+        PathMode
+    };
+
+    QwtNullPaintDevice();
     virtual ~QwtNullPaintDevice();
 
-    void setSize( const QSize &);
-    QSize size() const;
+    void setMode( Mode );
+    Mode mode() const;
 
     virtual QPaintEngine *paintEngine() const;
+
     virtual int metric( PaintDeviceMetric metric ) const;
 
     virtual void drawRects(const QRect *, int );
@@ -76,9 +111,11 @@ public:
 
     virtual void updateState( const QPaintEngineState &state );
 
-private:
-    void init( QPaintEngine::PaintEngineFeatures );
+protected:
+    //! \return Size needed to implement metric()
+    virtual QSize sizeMetrics() const = 0;
 
+private:
     class PaintEngine;
     PaintEngine *d_engine;
 

@@ -57,13 +57,16 @@ public:
     void setYDiv( const QwtScaleDiv &sy );
     const QwtScaleDiv &yScaleDiv() const;
 
-    void setPen( const QPen &p );
+    void setPen( const QColor &, qreal width = 0.0, Qt::PenStyle = Qt::SolidLine );
+    void setPen( const QPen & );
 
-    void setMajPen( const QPen &p );
-    const QPen& majPen() const;
+    void setMajorPen( const QColor &, qreal width = 0.0, Qt::PenStyle = Qt::SolidLine );
+    void setMajorPen( const QPen & );
+    const QPen& majorPen() const;
 
-    void setMinPen( const QPen &p );
-    const QPen& minPen() const;
+    void setMinorPen( const QColor &, qreal width = 0.0, Qt::PenStyle = Qt::SolidLine );
+    void setMinorPen( const QPen &p );
+    const QPen& minorPen() const;
 
     virtual void draw( QPainter *p,
         const QwtScaleMap &xMap, const QwtScaleMap &yMap,

@@ -14,6 +14,7 @@
 #include <qstring.h>
 #include <qsize.h>
 #include <qfont.h>
+#include <qmetatype.h>
 
 class QColor;
 class QPen;
@@ -31,10 +32,11 @@ class QwtTextEngine;
     A text might include control sequences (f.e tags) describing
     how to render it. Each format (f.e MathML, TeX, Qt Rich Text)
     has its own set of control sequences, that can be handles by
-    a QwtTextEngine for this format.
+    a special QwtTextEngine for this format.
   - Background\n
     A text might have a background, defined by a QPen and QBrush
-    to improve its visibility.
+    to improve its visibility. The corners of the background might
+    be rounded.
   - Font\n
     A text might have an individual font.
   - Color\n
@@ -128,7 +130,7 @@ public:
         /*!
           Layout the text without its margins. This mode is useful if a
           text needs to be aligned accurately, like the tick labels of a scale.
-          If QwtTextEngine::textMargins() is not implemented for the format
+          If QwtTextEngine::textMargins is not implemented for the format
           of the text, MinimumLayout has no effect.
          */
         MinimumLayout = 0x01
@@ -167,8 +169,11 @@ public:
 
     QColor usedColor( const QColor & ) const;
 
-    void setBackgroundPen( const QPen & );
-    QPen backgroundPen() const;
+    void setBorderRadius( double );
+    double borderRadius() const;
+
+    void setBorderPen( const QPen & );
+    QPen borderPen() const;
 
     void setBackgroundBrush( const QBrush & );
     QBrush backgroundBrush() const;
@@ -212,5 +217,7 @@ inline bool QwtText::isEmpty() const
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( QwtText::PaintAttributes )
 Q_DECLARE_OPERATORS_FOR_FLAGS( QwtText::LayoutAttributes )
+
+Q_DECLARE_METATYPE( QwtText )
 
 #endif

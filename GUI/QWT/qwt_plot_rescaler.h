@@ -15,7 +15,6 @@
 #include "qwt_plot.h"
 #include <qobject.h>
 
-class QwtPlotCanvas;
 class QwtPlot;
 class QResizeEvent;
 
@@ -77,7 +76,7 @@ public:
         ExpandBoth
     };
 
-    explicit QwtPlotRescaler( QwtPlotCanvas *,
+    explicit QwtPlotRescaler( QWidget *canvas,
         int referenceAxis = QwtPlot::xBottom,
         RescalePolicy = Expanding );
 
@@ -103,8 +102,8 @@ public:
     void setIntervalHint( int axis, const QwtInterval& );
     QwtInterval intervalHint( int axis ) const;
 
-    QwtPlotCanvas *canvas();
-    const QwtPlotCanvas *canvas() const;
+    QWidget *canvas();
+    const QWidget *canvas() const;
 
     QwtPlot *plot();
     const QwtPlot *plot() const;
