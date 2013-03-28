@@ -8,14 +8,18 @@
  *****************************************************************************/
 
 #include "qwt_plot_rasteritem.h"
-#include "qwt_legend.h"
-#include "qwt_legend_item.h"
 #include "qwt_scale_map.h"
 #include "qwt_painter.h"
 #include <qapplication.h>
 #include <qdesktopwidget.h>
 #include <qpainter.h>
 #include <qpaintengine.h>
+#include <qmath.h>
+#if QT_VERSION >= 0x040400
+#include <qthread.h>
+#include <qfuture.h>
+#include <qtconcurrentrun.h>
+#endif
 #include <float.h>
 
 class QwtPlotRasterItem::PrivateData
@@ -186,7 +190,8 @@ static QImage qwtExpandImage(const QImage &image,
                         yy2 = sz.height();
                 }
 
-                const quint32 *line1 = (const quint32 *) image.scanLine( y1 );
+                const quint32 *line1 = 
+                    reinterpret_cast<const quint32 *>( image.scanLine( y1 ) );
 
                 for ( int x1 = 0; x1 < w; x1++ )
                 {
@@ -217,7 +222,9 @@ static QImage qwtExpandImage(const QImage &image,
                     const quint32 rgb( line1[x1] );
                     for ( int y2 = yy1; y2 < yy2; y2++ )
                     {
-                        quint32 *line2 = ( quint32 *) expanded.scanLine( y2 );
+                        quint32 *line2 = reinterpret_cast<quint32 *>( 
+                            expanded.scanLine( y2 ) );
+
                         for ( int x2 = xx1; x2 < xx2; x2++ ) 
                             line2[x2] = rgb;
                     }       
@@ -297,7 +304,7 @@ static QImage qwtExpandImage(const QImage &image,
     return expanded;
 }   
 
-static QRectF expandToPixels(const QRectF &rect, const QRectF &pixelRect)
+static QRectF qwtExpandToPixels(const QRectF &rect, const QRectF &pixelRect)
 {
     const double pw = pixelRect.width();
     const double ph = pixelRect.height();
@@ -316,7 +323,7 @@ static QRectF expandToPixels(const QRectF &rect, const QRectF &pixelRect)
     return r;
 }
 
-static void transformMaps( const QTransform &tr,
+static void qwtTransformMaps( const QTransform &tr,
     const QwtScaleMap &xMap, const QwtScaleMap &yMap,
     QwtScaleMap &xxMap, QwtScaleMap &yyMap )
 {
@@ -330,7 +337,7 @@ static void transformMaps( const QTransform &tr,
     yyMap.setPaintInterval( p1.y(), p2.y() );
 }
 
-static void adjustMaps( QwtScaleMap &xMap, QwtScaleMap &yMap,
+static void qwtAdjustMaps( QwtScaleMap &xMap, QwtScaleMap &yMap,
     const QRectF &area, const QRectF &paintRect)
 {
     double sx1 = area.left();
@@ -351,7 +358,7 @@ static void adjustMaps( QwtScaleMap &xMap, QwtScaleMap &yMap,
     yMap.setScaleInterval(sy1, sy2);
 }
 
-static bool useCache( QwtPlotRasterItem::CachePolicy policy,
+static bool qwtUseCache( QwtPlotRasterItem::CachePolicy policy,
     const QPainter *painter )
 {
     bool doCache = false;
@@ -377,39 +384,37 @@ static bool useCache( QwtPlotRasterItem::CachePolicy policy,
     return doCache;
 }
 
-static QImage toRgba( const QImage& image, int alpha )
+static void qwtToRgba( const QImage* from, QImage* to,  
+    const QRect& tile, int alpha )
 {
-    if ( alpha < 0 || alpha >= 255 )
-        return image;
-
-    QImage alphaImage( image.size(), QImage::Format_ARGB32 );
-
     const QRgb mask1 = qRgba( 0, 0, 0, alpha );
     const QRgb mask2 = qRgba( 255, 255, 255, 0 );
     const QRgb mask3 = qRgba( 0, 0, 0, 255 );
 
-    const int w = image.size().width();
-    const int h = image.size().height();
+    const int y0 = tile.top();
+    const int y1 = tile.bottom();
+    const int x0 = tile.left();
+    const int x1 = tile.right();
 
-    if ( image.depth() == 8 )
+    if ( from->depth() == 8 )
     {
-        for ( int y = 0; y < h; y++ )
+        for ( int y = y0; y <= y1; y++ )
         {
-            QRgb* alphaLine = ( QRgb* )alphaImage.scanLine( y );
-            const unsigned char *line = image.scanLine( y );
+            QRgb *alphaLine = reinterpret_cast<QRgb *>( to->scanLine( y ) );
+            const unsigned char *line = from->scanLine( y );
 
-            for ( int x = 0; x < w; x++ )
-                *alphaLine++ = ( image.color( *line++ ) & mask2 ) | mask1;
+            for ( int x = x0; x <= x1; x++ )
+                *alphaLine++ = ( from->color( *line++ ) & mask2 ) | mask1;
         }
     }
-    else if ( image.depth() == 32 )
+    else if ( from->depth() == 32 )
     {
-        for ( int y = 0; y < h; y++ )
+        for ( int y = y0; y <= y1; y++ )
         {
-            QRgb* alphaLine = ( QRgb* )alphaImage.scanLine( y );
-            const QRgb* line = ( const QRgb* ) image.scanLine( y );
+            QRgb *alphaLine = reinterpret_cast<QRgb *>( to->scanLine( y ) );
+            const QRgb *line = reinterpret_cast<const QRgb *>( from->scanLine( y ) );
 
-            for ( int x = 0; x < w; x++ )
+            for ( int x = x0; x <= x1; x++ )
             {
                 const QRgb rgb = *line++;
                 if ( rgb & mask3 ) // alpha != 0
@@ -419,8 +424,6 @@ static QImage toRgba( const QImage& image, int alpha )
             }
         }
     }
-
-    return alphaImage;
 }
 
 //! Constructor
@@ -611,7 +614,7 @@ void QwtPlotRasterItem::draw( QPainter *painter,
     if ( canvasRect.isEmpty() || d_data->alpha == 0 )
         return;
 
-    const bool doCache = useCache( d_data->cache.policy, painter );
+    const bool doCache = qwtUseCache( d_data->cache.policy, painter );
 
     const QwtInterval xInterval = interval( Qt::XAxis );
     const QwtInterval yInterval = interval( Qt::YAxis );
@@ -623,7 +626,7 @@ void QwtPlotRasterItem::draw( QPainter *painter,
     */
 
     QwtScaleMap xxMap, yyMap;
-    transformMaps( painter->transform(), xMap, yMap, xxMap, yyMap );
+    qwtTransformMaps( painter->transform(), xMap, yMap, xxMap, yyMap );
 
     QRectF paintRect = painter->transform().mapRect( canvasRect );
     QRectF area = QwtScaleMap::invTransform( xxMap, yyMap, paintRect );
@@ -667,7 +670,7 @@ void QwtPlotRasterItem::draw( QPainter *painter,
             // the aligned paint rectangle exactly match the area
 
             paintRect = qwtAlignRect(paintRect);
-            adjustMaps(xxMap, yyMap, area, paintRect);
+            qwtAdjustMaps(xxMap, yyMap, area, paintRect);
         }
 
         // When we have no information about position and size of
@@ -701,7 +704,7 @@ void QwtPlotRasterItem::draw( QPainter *painter,
             paintRect = qwtAlignRect(paintRect);
 
         // align the area to the data pixels
-        QRectF imageArea = expandToPixels(area, pixelRect);
+        QRectF imageArea = qwtExpandToPixels(area, pixelRect);
 
         if ( imageArea.right() == xInterval.maxValue() &&
             !( xInterval.borderFlags() & QwtInterval::ExcludeMaximum ) )
@@ -844,7 +847,43 @@ QImage QwtPlotRasterItem::compose(
     }
 
     if ( d_data->alpha >= 0 && d_data->alpha < 255 )
-        image = toRgba( image, d_data->alpha );
+    {
+        QImage alphaImage( image.size(), QImage::Format_ARGB32 );
+
+#if QT_VERSION >= 0x040400 && !defined(QT_NO_QFUTURE)
+        uint numThreads = renderThreadCount();
+
+        if ( numThreads <= 0 )
+            numThreads = QThread::idealThreadCount();
+
+        if ( numThreads <= 0 )
+            numThreads = 1;
+
+        const int numRows = image.height() / numThreads;
+
+        QList< QFuture<void> > futures;
+        for ( uint i = 0; i < numThreads; i++ )
+        {
+            QRect tile( 0, i * numRows, image.width(), numRows );
+            if ( i == numThreads - 1 )
+            {
+                tile.setHeight( image.height() - i * numRows );
+                qwtToRgba( &image, &alphaImage, tile, d_data->alpha );
+            }
+            else
+            {
+                futures += QtConcurrent::run(
+                    &qwtToRgba, &image, &alphaImage, tile, d_data->alpha );
+            }
+        }
+        for ( int i = 0; i < futures.size(); i++ )
+            futures[i].waitForFinished();
+#else
+        const QRect tile( 0, 0, image.width(), image.height() );
+        qwtToRgba( &image, &alphaImage, tile, d_data->alpha );
+#endif
+        image = alphaImage;
+    }
 
     return image;
 }

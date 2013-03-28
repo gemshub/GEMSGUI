@@ -206,7 +206,7 @@ QVariant TObjectModel::data( const QModelIndex& index, int role ) const
           case Qt::EditRole:
                if( nO == -1 )
                    return  QString("");
-               return  QString( visualizeEmpty(aObj[nO].GetStringEmpty( iN, iM )).c_str() );
+            return  QString( visualizeEmpty(aObj[nO].GetStringEmpty( iN, iM )).c_str() );
           case Qt::ToolTipRole:
           case Qt::StatusTipRole:
                if( nO >= 0 )
@@ -346,6 +346,7 @@ ePlaceMode TObjectModel::getObjectPlace()
 #if QT_VERSION >= 0x050000
 
     beginResetModel();
+    endResetModel();
 #else
     reset();
 
@@ -584,7 +585,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
         // 	colSize += verticalHeader()->width();
         //   rowSize += horizontalHeader()->height();
     
- //if(  flds.count() > 3 &&
+ //if(  flds.count() > 3 )
  //     gstring(flds[2].pObj->GetKeywd(), 0, 4).find("mCIb") != gstring::npos
  //    )
  //  cout << "colSize " << colSize  << " rowSize " << rowSize << endl;

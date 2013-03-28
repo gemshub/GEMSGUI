@@ -22,6 +22,8 @@
 #include <QPrintDialog>
 #include <QFileDialog>
 #include <QImageWriter>
+#include <QMimeData>
+#include <QDrag>
 
 #include <qwt_plot_canvas.h>
 #include <qwt_symbol.h>
@@ -70,8 +72,8 @@ TPlotWidget::TPlotWidget( GraphData* aGr_data, QWidget *parent):
 
     m_grid = new QwtPlotGrid;
     /// m_grid->enableXMin(true);
-    m_grid->setMajPen(QPen(Qt::black,0,Qt::DotLine));
-    m_grid->setMinPen(QPen(Qt::gray,0,Qt::DotLine));
+    m_grid->setMajorPen(QPen(Qt::black,0,Qt::DotLine));
+    m_grid->setMinorPen(QPen(Qt::gray,0,Qt::DotLine));
     m_grid->attach(m_plot);
 
     QwtText text;

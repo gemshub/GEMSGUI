@@ -108,7 +108,7 @@ void QwtAbstractScaleDraw::setScaleDiv( const QwtScaleDiv &scaleDiv )
   \param transformation New scale transformation
 */
 void QwtAbstractScaleDraw::setTransformation(
-    QwtScaleTransformation *transformation )
+    QwtTransform *transformation )
 {
     d_data->map.setTransformation( transformation );
 }
@@ -365,6 +365,9 @@ double QwtAbstractScaleDraw::maxTickLength() const
 */
 QwtText QwtAbstractScaleDraw::label( double value ) const
 {
+    if ( qFuzzyCompare( value + 1.0, 1.0 ) )
+        value = 0.0; 
+
     return QLocale().toString( value );
 }
 
