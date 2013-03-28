@@ -50,15 +50,15 @@ typedef struct
            //    4 or 9 -end  ( > 5 using stepwise mode)
     PsTP,  // Is TPV of system changing in the process (+ -)
     PsBC,  //  Is there a change in bulk composition (+ -)
-    PsRT,  // Are time dependent calculation and plotting mode (+ -)
+    PsRT,  // Are there time dependent calculations and plotting mode? (+ -)
     PsSY,  // Save changed SYSTEM definition records to PDB (+ -)
-    PsGT,  // Is this a Sequential Reactor simulation (+ -)
+    PsGT,  // Is this a Sequential Reactor simulation? (+ -)
     PsGR,  // Use graphics window (+ -)
     PsUX,  // Do PROCES depend on output equilibrium parameters (pH, Eh etc.)(+-)
-    PsIN,  // Is this an inverse titration problem (+ -)
-    PsType,  // Type of Process (PSGTRL)
-    PsEqn, // Will IPN-equations be specified in PROCES definition (+ -)
-    PsPro, // Is this a sequence of inverse titration points (+ -)
+    PsIN,  // Is this an inverse titration problem? (+ -)
+    PsType,  // Type of Process { P S G T R L }
+    PsEqn, // Will IPN-equations be specified in PROCES definition? (+ -)
+    PsPro, // Is this a sequence of inverse titration points? (+ -)
 
     Pvtm,  // Flags for optional arrays of values: CSD tm (+ - *)
     PvNV,  // MTPARM NV (+ - *)
@@ -151,7 +151,8 @@ typedef struct
     c_P, c_V, c_T, c_TC,
     c_Tau, c_pXi, c_Xi, c_Nu,
     c_pH, c_pe, c_Eh;
-
+double   kdt;   // new TKinMet: current time step length (can be changed in TKinMet instance)
+long int kst;  // new: current time step index
     // work variables
     // IPNCalc rpn;       // IPN of equats of process  -- Expr
     time_t syt, stt, utt, // time to build of current records

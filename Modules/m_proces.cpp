@@ -1418,9 +1418,15 @@ TProcess::internalCalc()
         if( nRec >= 0 )
             pep->syt = rt[RT_SYSEQ].GetTime( nRec );
 
-//        if( nRec < 0 || pep->PsUX != S_OFF || pep->syt < pep->pet )
-//        {
-        pep->ccTime += PRof->CalcEqstat( false/*pointShow==-1*/); // calc current SyStat
+if( pep->PsRT != S_OFF )
+{  // Time-dependent calculations
+//    pep->Ntim;     pep->NTau;    pep->Tau[];
+//    pep->Taui[];   pep->c_Tau;   pep->kst;   pep->kdt;
+    pep->ccTime += PRof->CalcEqstat( &pep->kdt, pep->kst, pep->c_Tau );
+}
+else {
+     pep->ccTime += PRof->CalcEqstat( ); // calc current SyStat without time
+}
 //	    pVisorImp->CalcMulti();
         if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
 //13/08/2009        	    if( pep->Istat < P_MT_MODE )
