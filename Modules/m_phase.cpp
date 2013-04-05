@@ -174,7 +174,7 @@ aObj[ o_phisop].SetDim( ph[q].nDC, ph[q].nIsoC );
 aObj[ o_phisos].SetPtr(  ph[q].IsoS );
 aObj[ o_phisos].SetDim( ph[q].nSiT, ph[q].nIsoS );
 aObj[ o_phfesar].SetPtr(  ph[q].feSAr );
-aObj[ o_phfesar].SetDim( 1, ph[q].nPRk );
+aObj[ o_phfesar].SetDim( ph[q].nPRk, 1 );
 aObj[ o_phrpcon].SetPtr(  ph[q].rpCon );
 aObj[ o_phrpcon].SetDim( ph[q].nPRk, ph[q].nrpC );
 aObj[ o_phumpcon].SetPtr(  ph[q].umpCon );
