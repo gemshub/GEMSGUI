@@ -98,12 +98,16 @@ LOAD_KKMCOEF:
             {
                if( kp+pmp->LsKin[k*6] >
                   (int)(sizeof( pmp->ocPRkC )/sizeof(long int)))
-               pmp->ocPRkC = (long int *) aObj[ o_wi_xfaces ].Alloc(
-                  kp+pmp->LsKin[k*6], 1, L_ );
+               pmp->ocPRkC = (long int (*)[2]) aObj[ o_wi_ocprkc ].Alloc(
+                  kp+pmp->LsKin[k*6], 2, L_ );
                ErrorIf( pmp->ocPRkC == NULL, "KinMetModLoad",
                         "Error in reallocating memory for pmp->ocPRk" );
-
-               copyValues( pmp->ocPRkC+kp, aPH->php->ocPRk, pmp->LsKin[k*6]);
+               for( jj=0; jj<aPH->php->nPRk; jj++ )
+               {
+    pmp->ocPRkC[kp+jj][0] = (long int)aPH->php->ocPRk[jj*2];
+    pmp->ocPRkC[kp+jj][1] = (long int)aPH->php->ocPRk[jj*2+1];
+               }
+//     copyValues( pmp->ocPRkC+kp, aPH->php->ocPRk, pmp->LsKin[k*6]);
             }
             else
                pmp->LsKin[k*6] = 0;  // no PR codes and coefficients

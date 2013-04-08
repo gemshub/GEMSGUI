@@ -156,7 +156,7 @@ aObj[ o_phfloat2].SetPtr(&ph[q].Vpor );  // f 8
 aObj[ o_phxsmd].SetPtr(  ph[q].xSmD );
 aObj[ o_phxsmd].SetDim( ph[q].nDC, ph[q].nSiT );
 aObj[ o_phocprk].SetPtr(  ph[q].ocPRk );
-aObj[ o_phocprk].SetDim( ph[q].nPRk, 1 );
+aObj[ o_phocprk].SetDim( ph[q].nPRk, 2 );
 
 aObj[ o_phlphc1].SetPtr(  ph[q].lPhc );
 aObj[ o_phlphc1].SetDim( ph[q].nlPh, ph[q].nlPc );
@@ -554,7 +554,7 @@ void TPhase::dyn_new(int q)
       ph[q].rpCon =  (float *)aObj[ o_phrpcon].Alloc( ph[q].nPRk, ph[q].nrpC, F_ );
       //ph[q].lDCr =  (char (*)[DC_RKLEN])aObj[ o_phldc].Alloc( ph[q].nSkr, 1, DC_RKLEN );
       ph[q].feSAr =  (float *)aObj[ o_phfesar].Alloc( ph[q].nPRk, 1, F_ );
-      ph[q].ocPRk =  (short *)aObj[ o_phocprk ].Alloc( ph[q].nPRk, 1, I_ );
+      ph[q].ocPRk =  (short *)aObj[ o_phocprk ].Alloc( ph[q].nPRk, 2, I_ );
       ph[q].rpkcl =  (char (*)[MAXDCNAME])aObj[ o_phrpkcl].Alloc( 1, ph[q].nrpC, MAXDCNAME );
       ph[q].rprcl =  (char (*)[MAXDCNAME])aObj[ o_phrprcl].Alloc( ph[q].nPRk, 1, MAXDCNAME );
     }
@@ -758,7 +758,7 @@ void TPhase::set_def( int q)
     ph[q].nIsoC = 0;
     ph[q].nIsoS = 0;
     ph[q].mDe = 1;
-    ph[q].iRes4 = 0;
+    ph[q].nFaces = 1;
     //float
     ph[q].Vpor = 0.;
     ph[q].fSAs = 1.;
@@ -848,7 +848,7 @@ TPhase::MakeQuery()
     size[18] = php->nIsoC;
     size[19] = php->nIsoS;
     size[20] = php->mDe;
-    size[21] = php->iRes4;
+    size[21] = php->nFaces;
     // added 18/12/12
     size[22] = php->ncsolv;
     size[23] = php->nsolv;
@@ -886,7 +886,7 @@ TPhase::MakeQuery()
     php->nIsoC = (short)size[18];
     php->nIsoS = (short)size[19];
     php->mDe = (short)size[20];
-    php->iRes4 = (short)size[21];
+    php->nFaces = (short)size[21];
     // added 18/12/12
     php->ncsolv = (short)size[22];
     php->nsolv = (short)size[23];

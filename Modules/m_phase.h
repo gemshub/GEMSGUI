@@ -112,7 +112,7 @@ nrpC,  /// number of parameter (coefficients) involved in 'parallel reaction' te
 naptC, /// number of parameter (coefficients) per species involved in 'activity product' terms (0 or 1)
 nAscC, /// number of parameter coefficients in specific surface area correction equation ( 0 to 5 )
 numpC, /// number of uptake model parameter coefficients (per end member)
-iRes4, // new: reserved
+nFaces, /// number of (separately considered) crystal faces or surface patches ( 1 to 4 )
 
 // TSorpMod stuff EIL model
 nEIl,  // new: number of electrostatic model layers (default: 0, maximum 4)
@@ -132,7 +132,7 @@ short *ipxt,  // Table of indexation for interaction parameters [ncpN][npxM]
 *xSmD, // new: denticity of surface species per surface site (site allocation) [nDC][nSiT]
        // (default 0, -1 means no binding) [nDC][mDe+1]
 
-*ocPRk,  /// KinMet: Operation codes for kinetic 'parallel reaction' affinity terms [nPRk], default 0
+*ocPRk,  /// KinMet: Operation codes for kinetic 'parallel reaction' affinity terms [nPRk*2], default 0
 *ixsolv, /// new TW: array of indexes of solvent interaction parameters [nsolv*2]
 *ixdiel  /// new TW: array of indexes of dielectric interaction parameters [ndiel*2]
 ;
