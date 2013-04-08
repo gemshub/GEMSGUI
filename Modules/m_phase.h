@@ -111,7 +111,9 @@ nSkr,  /// number of (aqueous or gaseous or surface) species from other reacting
 nrpC,  /// number of parameter (coefficients) involved in 'parallel reaction' terms (0 or 12 + 3res.)
 naptC, /// number of parameter (coefficients) per species involved in 'activity product' terms (0 or 1)
 nAscC, /// number of parameter coefficients in specific surface area correction equation ( 0 to 5 )
+
 numpC, /// number of uptake model parameter coefficients (per end member)
+
 nFaces, /// number of (separately considered) crystal faces or surface patches ( 1 to 4 )
 
 // TSorpMod stuff EIL model
