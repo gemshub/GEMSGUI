@@ -682,8 +682,8 @@ void TPhase::set_def( int q)
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     memcpy( ph[q].sol_t, aPa->pa.PHsol_t, 6 );
     memcpy( &ph[q].PphC, aPa->pa.PHpvc, 6 );
-    strcpy( ph[q].name, "`");
-    strcpy( ph[q].notes, "`" );
+    strcpy( ph[q].name, "enter here a Phase name ...");
+    strcpy( ph[q].notes, "enter here a comment to this Phase definition ..." );
 
     ph[q].Nsd = 1;
     ph[q].nDC = ph[q].ncpN = ph[q].ncpM =0;
@@ -737,8 +737,8 @@ void TPhase::set_def( int q)
     //short
     ph[q].nlPh = 0;
     ph[q].nlPc = 0;
-    ph[q].ndqf=  3;
-    ph[q].nrcp=  3;
+    ph[q].ndqf=  0;
+    ph[q].nrcp=  0;
     ph[q].ncsolv = 0;
     ph[q].nsolv = 0;
     ph[q].ncdiel = 0;
@@ -752,13 +752,13 @@ void TPhase::set_def( int q)
     ph[q].numpC = 0;
     ph[q].nAscC = 0;
     ph[q].nEIl = 0;
-    ph[q].nEIp = 1;
+    ph[q].nEIp = 0;
     ph[q].nCDc = 0;
     ph[q].iRes3 = 0;
     ph[q].nIsoC = 0;
     ph[q].nIsoS = 0;
-    ph[q].mDe = 1;
-    ph[q].nFaces = 1;
+    ph[q].mDe = 0;
+    ph[q].nFaces = 0;
     //float
     ph[q].Vpor = 0.;
     ph[q].fSAs = 1.;
@@ -901,7 +901,7 @@ TPhase::MakeQuery()
 }
 
 
-//Rebuild record structure before calc
+//Remake/Create mode: rebuild Phase record structure before calculations
 int
 TPhase::RecBuild( const char *key, int mode  )
 {
@@ -971,7 +971,7 @@ AGAIN_SETUP:
     // Setting up the DC/phase coeffs depending on the
     // built-in activity coeff model
     if( php->sol_t[SGM_MODE] == SM_STNGAM )
-       Set_DC_Phase_coef();
+       Set_SolMod_Phase_coef();
 
     // test sizes
     if( php->nscM < 0 || php->npxM < 0 || php->ncpN < 0 || php->ncpM < 0 ||
@@ -1003,6 +1003,17 @@ AGAIN_SETUP:
     {
        php->nMoi = 0; php->nSub = 0;
     }
+
+
+    if( php->kin_t[KinProCode] != KM_UNDEF )
+       Set_KinMet_Phase_coef();
+
+// Test sizes
+
+    if( php->kin_t[0] != KM_UNDEF )
+       Set_SorpMod_Phase_coef();
+
+// Test sizes
 
     dyn_new(0);  // reallocation of memory
 
@@ -1428,15 +1439,15 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
      for(jj=0; jj<php->npxM; jj++)
      {
        DCndx = php->ipxt[ii*php->npxM+jj];
-       if( DCndx  < 0  ) // work for Pitzer
+       if( DCndx  < 0  ) // for Pitzer model
          continue;
        DCndx =  DCused[DCndx];
-       if( DCndx  < 0  ) // not exist component
+       if( DCndx  < 0  ) // non-existent component
          break;
        //if( !onlyIPX )
          php->ipxt[ii*php->npxM+jj] = DCndx;
      }
-     if( jj<php->npxM ) // line with  not existed component
+     if( jj<php->npxM ) // row with a non-existent component
        continue;
 
      copyValues( php->ipxt+ncpNnew*php->npxM, php->ipxt+ii*php->npxM, php->npxM );

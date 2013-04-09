@@ -68,14 +68,14 @@ PIsoS,  // new: flag for IsoS array of isotherm parameter coefficients per surfa
 PsDiS,  // new: flag for sDiS array of denticity and surface site indexes {+*-}
 Pres2,  // new: reserved
 
-// TKinMet stuff
-PrpCon, /// flag for rpCon array of kinetic rate constants, feSAr, ocPRk arrays {+*-}
-PumpCon,/// flag for umpCon array of uptake model parameters {+*-}
-PapCon,  /// new: flag for lDCr and apCon arrays for parameters of species involved in activity product terms
+    // TKinMet stuff
+    PrpCon, /// flag for rpCon array of kinetic rate constants, feSAr, ocPRk arrays {+*-}
+    PumpCon,/// flag for umpCon array of uptake model parameters {+*-}
+    PapCon,  /// new: flag for lDCr and apCon arrays for parameters of species involved in activity product terms
 
-kin_t[8],    // was 6 now 8!
-  // new:    Type of sorption/ionex/polyelectrolyte isotherm model { N ... }
-  // new:    Type of sorption EIL model { N ...  }
+    kin_t[8],    // was 6 now 8!
+// new:    Type of sorption/ionex/polyelectrolyte isotherm model { N ... }
+// new:    Type of sorption EIL model { N ...  }
   /// Type code of the kinetics/metastability model  { N T W ... TBD }
   /// Code of direction of the kinetic process to the rate model applies { N D P G B ... TBD }
   /// Type code of the uptake kinetics model { N E M ... TBD }
@@ -95,8 +95,8 @@ kin_t[8],    // was 6 now 8!
     NsuT,     // N of (surface) types (to set up on remake)
     nMoi,     // Number of different substituent moieties in multi-site mixing model (0: simple mixing)
 //
-nlPh,  /// TKinMet, TSorpMod: number of linked phases (cf. PlPhl, lPh), default 0.
-nlPc,  /// TKinMet, TSorpMod: number of parameters per linked phase, default 0.
+    nlPh,  /// TKinMet, TSorpMod: number of linked phases (cf. PlPhl, lPh), default 0.
+    nlPc,  /// TKinMet, TSorpMod: number of parameters per linked phase, default 0.
 ndqf,  // TSolMod new: number of DQF parameter coefficients per end member, default 3.
 nrcp,  // TSolMod new: number of reciprocal parameter coefficients per end member, default 3.
 ncsolv, /// TW new: number of solvent parameter coefficients (columns in solvc array)
@@ -105,16 +105,16 @@ ncdiel, /// TW new: number of dielectric constant coefficients (colums in dielc 
 ndiel,  /// TW new: number of dielectric constant parameters (rows in dielc array)
 ndh,    /// TW new: number of generic DH coefficients (rows in dhc array)
 
- // TKinMet stuff
-nPRk,  /// number of «parallel reactions» that affect amount constraints for k-th phase (1, 2, 3, ...), 1 by default
-nSkr,  /// number of (aqueous or gaseous or surface) species from other reacting phases involved, 0 by default
-nrpC,  /// number of parameter (coefficients) involved in 'parallel reaction' terms (0 or 12 + 3res.)
-naptC, /// number of parameter (coefficients) per species involved in 'activity product' terms (0 or 1)
-nAscC, /// number of parameter coefficients in specific surface area correction equation ( 0 to 5 )
+    // TKinMet stuff
+    nPRk,  /// number of «parallel reactions» that affect amount constraints for k-th phase (1, 2, 3, ...), 1 by default
+    nSkr,  /// number of (aqueous or gaseous or surface) species from other reacting phases involved, 0 by default
+    nrpC,  /// number of parameter (coefficients) involved in 'parallel reaction' terms (0 or 12)
+    naptC, /// number of parameter (coefficients) per species involved in 'activity product' terms (0 or 1)
+    nAscC, /// number of parameter coefficients in specific surface area correction equation ( 0, 1 or 5 )
 
-numpC, /// number of uptake model parameter coefficients (per end member)
+    numpC, /// number of uptake model parameter coefficients (per end member)
 
-nFaces, /// number of (separately considered) crystal faces or surface patches ( 1 to 4 )
+    nFaces, /// number of (separately considered) crystal faces or surface patches ( 1 to 4 )
 
 // TSorpMod stuff EIL model
 nEIl,  // new: number of electrostatic model layers (default: 0, maximum 4)
@@ -134,10 +134,10 @@ short *ipxt,  // Table of indexation for interaction parameters [ncpN][npxM]
 *xSmD, // new: denticity of surface species per surface site (site allocation) [nDC][nSiT]
        // (default 0, -1 means no binding) [nDC][mDe+1]
 
-*ocPRk,  /// KinMet: Operation codes for kinetic 'parallel reaction' affinity terms [nPRk*2], default 0
-*ixsolv, /// new TW: array of indexes of solvent interaction parameters [nsolv*2]
-*ixdiel  /// new TW: array of indexes of dielectric interaction parameters [ndiel*2]
-;
+    *ocPRk,  /// KinMet: Operation codes for kinetic 'parallel reaction' affinity terms [nPRk*2], default 0
+    *ixsolv, /// new TW: array of indexes of solvent interaction parameters [nsolv*2]
+    *ixdiel  /// new TW: array of indexes of dielectric interaction parameters [ndiel*2]
+    ;
 
 float Asur,  // Specific surface area of (carrier) phase, m2/g (new: of this tile) default: 0.
     Sigma0, // Standard mean surface energy of solid-aqueous interface, J/m2
@@ -165,7 +165,7 @@ fRes2, // new: reserved
     *pnc,   //Array of phase-related coefficients of non-ideality model [ncpN][ncpM]
     *scoef, //Array of DC-related coefficients of non-ideality model[nDC][nscM]
 
-*lPhc,  /// TsolMod, TKinMet, TSorpMod: array of phase link parameters [nlPh*nlPc]
+    *lPhc,  /// TsolMod, TKinMet, TSorpMod: array of phase link parameters [nlPh*nlPc]
 // new: TSolMod stuff
 *DQFc,  // new: array of DQF parameters for DCs in phases [nDC*ndqf]
 *rcpc,  // new: array of reciprocal parameters for DCs in phases [nDC*nrcp]
@@ -180,13 +180,13 @@ fRes2, // new: reserved
 *IsoS, // new: array of isotherm parameter coefficients per surface site [nSiT][nIsoS]
        // here site density etc.
 
-// TKinMet stuff
-*feSAr,  /// fractions of surface area of the solid related to different parallel reactions [nPRk]
-*rpCon,  /// array of kinetic rate constants for particle faces or 'parallel reactions' [nPRk][nrpC]
-*apCon,  /// array of parameters per species involved in 'activity product' terms [nSkr] [nPRk][naptC]
-*Ascp,   /// parameter coefficients of equation for corrections of specific surface area [nAscC]
+    // TKinMet stuff
+    *feSAr,  /// fractions of surface area of the solid related to different parallel reactions [nPRk]
+    *rpCon,  /// array of kinetic rate constants for particle faces or 'parallel reactions' [nPRk][nrpC]
+    *apCon,  /// array of parameters per species involved in 'activity product' terms [nSkr] [nPRk][naptC]
+    *Ascp,   /// parameter coefficients of equation for corrections of specific surface area [nAscC]
 
-*umpCon  /// array of uptake model parameters [nDC][numpC] (only SS phases)
+    *umpCon  /// array of uptake model parameters [nDC][numpC] (only SS phases)
 // new:new: array of nucleation model parameters (A.Testino?)
 ;
 
@@ -199,18 +199,18 @@ fRes2, // new: reserved
 // DC list
   char (*SM)[DC_RKLEN]; // List of DC record keys included into this phase[nDC]
 // new stuff (TKinMet, TSorpMod)
-char (*lPh)[PH_RKLEN];    /// TKinMet, TSorpMod: list of record keys of linked phases [nlPh]
+    char (*lPh)[PH_RKLEN];    /// TKinMet, TSorpMod: list of record keys of linked phases [nlPh]
                           /// in MULTI vector of phase indexes long int *xlPh
-char (*lDCr)[DC_RKLEN];   /// TKinMet: list of record keys (names?) of aq, gas or surface catalyzing
+    char (*lDCr)[DC_RKLEN];   /// TKinMet: list of record keys (names?) of aq, gas or surface catalyzing
       /// or inhibiting species for parallel reactions [nSkr] in MULTI vector of DC indexes long int *xSkr
 //
 char (*dcpcl)[MAXDCNAME]; // new: DC parameter coefficients comment list [nscM]
 char (*ipicl)[MAXDCNAME]; // new: interaction parameter indexes comment list [ncpN]
 char (*ipccl)[MAXDCNAME]; // new: interaction parameter coefficients comment list [ncpM]
 //
-char (*rpkcl)[MAXDCNAME]; /// kinetic rate constants comment list [nrpC]
-char (*rprcl)[MAXDCNAME]; /// kinetic parallel reactions comment list [nPRk]
-char (*umpcl)[MAXDCNAME]; /// uptake kinetic model parameters comment list [numpC]
+    char (*rpkcl)[MAXDCNAME]; /// kinetic rate constants comment list [nrpC]
+    char (*rprcl)[MAXDCNAME]; /// kinetic parallel reactions comment list [nPRk]
+    char (*umpcl)[MAXDCNAME]; /// uptake kinetic model parameters comment list [numpC]
 //
 char (*smcDl)[MAXDCNAME]; // new: sorption model parameters comment list per DC [nIsoC]
 char (*smcSl)[MAXDCNAME]; // new: sorption model parameters comment list per site [nIsoS]
@@ -220,13 +220,13 @@ char (*eimLl)[MAXDCNAME]; // new: EIL model parameters comment list per layer [n
   char
     *DCC,   // DC classes { TESKWL GVCHNI JMFD QPR <0-9>  AB  XYZ O } [nDC]
     *DCS,   // Source of input data for DC { r d } d-DCOMP r-REACT    [nDC]
-  *lDCd,   /// TKinMet: Source of input data for DC { r d } d-DCOMP r-REACT in lDCr [nSkr]
+    *lDCd,   /// TKinMet: Source of input data for DC { r d } d-DCOMP r-REACT in lDCr [nSkr]
     *SCMC,  // Class.of EIL models for surface types (old sorption phases) [NsuT]
     *pEq,   // Text with script of IPN equations related to the whole phase (IIPN syntax)
     *dEq,   // Text with script of IPN equations related to phase components (IIPN syntax)
     *tprn,               // internal
-// TSorpMod stuff
-*lPhC, /// TSolMod, TKinMet: Phase linkage type codes [nlPh] { TBA  }
+// TSorpMod, TKinMet stuff
+    *lPhC, /// TSolMod, TKinMet: Phase linkage type codes [nlPh] { TBA  }
 *IsoC, // new: isotherm/SATC code for this surface site type 2*[nSiT] { L Q M F B ... }
   ;
   char (*sdref)[V_SD_RKLEN]; // List of Data Sources SDref keys
@@ -270,7 +270,9 @@ protected:
 
     void CalcPhaseRecord( bool getDCC  );
     void moiety_new( int nDC, int nMoi, bool setDefault );
-    void Set_DC_Phase_coef();
+    void Set_SolMod_Phase_coef();
+void Set_KinMet_Phase_coef();   // new
+void Set_SorpMod_Phase_coef();  // new
     void makeReacDCompList( const char *caption, TCStringArray& aDclist,
                             short& nDC,  char (*SM)[DC_RKLEN], char * DCS, bool bNsuT);
     void makePhaseList( const char *caption, TCStringArray& aPhlist );
@@ -448,18 +450,18 @@ enum sorption_control {
 enum ph_kinmet_controls { /// TKinMet: codes to control kinetic rate models
 
     KM_UNDEF = 'N',       /// not defined, no account for
-//KinProCode
+KinProCode = 2,
     KM_PRO_MWR = 'M',     /// Kinetics of generic dissolution/precipitation (no uptake, ionex, adsorption)
     KM_PRO_UPT = 'U',     /// Kinetics of uptake/entrapment (of minor/trace element) into solid solution
     KM_PRO_IEX = 'X',     /// Kinetics of ion exchange (clays, C-S-H, zeolites, ...)
     KM_PRO_ADS = 'A',     /// Kinetics of adsorption (on MWI), redox
     KM_PRO_NUPR = 'P',    /// Kinetics of nucleation and precipitation
-//KinModCode
+KinModCode = 3,
     KM_MOD_TST = 'T',     /// Generic TST dissolution/precipitation model following Shott ea 2012
     KM_MOD_PAL = 'P',     /// Dissolution/precipitation model of the form (Palandri 2004)
     KM_MOD_WOL = 'W',     /// Carbonate growth model following (Wolthers 2012)
     KM_MOD_NUGR = 'U',    /// Mineral nucleation and growth model with nuclei/particle size distr. (TBD)
-//KinSorpCode
+KinSorpCode = 4,
     KM_UPT_ENTRAP = 'E',  ///	Unified entrapment model (Thien,Kulik,Curti 2012)
     KM_UPT_UPDP = 'M',    ///	DePaolo (2011) uptake kinetics model
     KM_UPT_SEMO = 'G',    ///  Growth (surface) entrapment model (Watson 2004)
@@ -467,15 +469,15 @@ enum ph_kinmet_controls { /// TKinMet: codes to control kinetic rate models
     KM_IEX_SLOW = 'L',    ///  Slow ion exchange kinetics (e.g. illite, zeolites)
     KM_ADS_INHIB = 'I',   ///  Adsorption inhibition
     KM_NUCL_SSMP  = 'P',  ///  Solid solution nucleation model (Prieto 2013)
-//KinLinkCode
+KinLinkCode = 5,
     KM_LNK_SURF = 'S',    ///   Link to (fraction of) solid substrate surface
     KM_LNK_PVOL = 'P',    ///    Link to (fraction of) solid substrate (pore) volume
     KM_LNK_MASS = 'M',    ///	Link to (fraction of) solid substrate mass
-//KinSizedCode
+KinSizedCode = 6,
     KM_SIZED_UNI = 'U',   /// 	Uniform particle/pore size distribution
     KM_SIZED_BIN = 'B',   /// 	Binodal particle/pore size distribution
     KM_SIZED_FUN = 'F',   ///    Empirical distribution function
-//KinResCode
+KinResCode = 7,
     KM_RES_SURF = 'A',    /// surface-scaled rate model (k in mol/m2/s)
     KM_RES_PVS = 'V'      /// pore-volume-scaled model (k in mol/m3/s)
 
@@ -503,6 +505,6 @@ static int rkeycmp(const void *e1, const void *e2)
     return RCmp;
 }
 
-
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #endif //  _m_phase_h
 

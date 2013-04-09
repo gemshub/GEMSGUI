@@ -30,12 +30,9 @@
 
 
 // Setting up the DC/phase coeffs depending on the
-// built-in activity coeff model
-void TPhase::Set_DC_Phase_coef()
+// built-in model of mixing (from TSolMod class)
+void TPhase::Set_SolMod_Phase_coef()
 {
-   php->sol_t[DCOMP_DEP] = SM_UNDEF;
-   php->sol_t[SPHAS_DEP] = SM_UNDEF;
-   php->sol_t[DCE_LINK] = SM_UNDEF;
 
    switch(php->sol_t[SPHAS_TYP])
    {
@@ -257,6 +254,140 @@ void TPhase::Set_DC_Phase_coef()
                        break;
    }
 }
+
+// Setting up the default parameters depending on the
+// built-in kinetics/metastability model (from TSolMod class)
+void TPhase::Set_KinMet_Phase_coef()
+{
+    php->sol_t[DCOMP_DEP] = SM_UNDEF;
+    php->sol_t[SPHAS_DEP] = SM_UNDEF;
+    php->sol_t[DCE_LINK] = SM_UNDEF;
+
+    switch(php->kin_t[KinProCode])
+    {   //KinProCode
+        case KM_PRO_MWR:  // = 'M' Kinetics of generic dissolution/precipitation (no uptake, ionex, adsorption)
+
+            break;
+        case KM_PRO_UPT:  // = 'U' Kinetics of uptake/entrapment (of minor/trace element) into solid solution
+
+            break;
+        case KM_PRO_IEX:  // = 'X' Kinetics of ion exchange (clays, C-S-H, zeolites, ...)
+
+            break;
+        case KM_PRO_ADS:  // = 'A' Kinetics of adsorption (on MWI), redox
+
+            break;
+        case KM_PRO_NUPR: // = 'P' Kinetics of nucleation and precipitation
+
+   //                    php->nscM = 0;   // NP_DC
+   //                    php->npxM = 0;   // MaxOrd
+   //                    php->ncpN = 0;   // NPar
+   //                    php->ncpM = 0;   // NPcoef
+            break;
+        default:  // other models
+            break;
+    }
+
+    switch(php->kin_t[KinModCode])
+    {
+    //KinModCode
+        case KM_MOD_TST: // = 'T' Generic TST dissolution/precipitation model following Schott ea 2012
+            php->PrpCon = S_ON;
+            php->PapCon = S_ON;
+//            php->nPRk = 1;
+//            php->nSkr = 1;
+            php->nrpC = 14;
+            php->naptC = 1;
+//            php->nFaces = 1;
+//            php->nAscC = 1;
+            break;
+        case KM_MOD_PAL: // = 'P' Dissolution/precipitation model of the form (Palandri 2004)
+//            php->PrpCon = S_REM;
+      //      php->PapCon = S_REM;
+            php->nPRk = 3;
+            php->nSkr = 2;
+            php->nrpC = 14;
+            php->naptC = 1;
+            php->nFaces = 1;
+            php->nAscC = 1;
+            break;
+        case KM_MOD_WOL: // = 'W' Carbonate growth model following (Wolthers 2012)
+//            php->PrpCon = S_REM;
+      //      php->PapCon = S_REM;
+            php->nPRk = 1;
+            php->nSkr = 2;
+            php->nrpC = 14;
+            php->naptC = 1;
+            php->nFaces = 1;
+            php->nAscC = 1;
+            break;
+        case KM_MOD_NUGR: // = 'U' Mineral nucleation and growth model with nuclei/particle size distr. (TBD)
+
+            break;
+        default:  // other models
+            break;
+    }
+
+    switch(php->kin_t[KinSorpCode])
+    {
+
+    //KinSorpCode
+        case KM_UPT_ENTRAP: // = 'E' Unified entrapment model (Thien,Kulik,Curti 2012)
+            php->PumpCon = S_REM;
+            break;
+        case KM_UPT_UPDP:   // = 'M' DePaolo (2011) uptake kinetics model
+            php->PumpCon = S_REM;
+            break;
+        case KM_UPT_SEMO:   // = 'G' Growth (surface) entrapment model (Watson 2004)
+            php->PumpCon = S_REM;
+            break;
+        case KM_IEX_FAST:   // = 'F' Fast ion exchange kinetics (e.g. montmorillonite, CSH)
+
+            break;
+        case KM_IEX_SLOW:   // = 'L' Slow ion exchange kinetics (e.g. illite, zeolites)
+
+            break;
+        case KM_ADS_INHIB:  // = 'I' Adsorption inhibition
+
+            break;
+        case KM_NUCL_SSMP:  // = 'P' Solid solution nucleation model (Prieto 2013)
+
+            break;
+        default:  // other models
+            break;
+    }
+
+    switch(php->kin_t[KinLinkCode])
+    {   //KinLinkCode
+        case KM_LNK_SURF: // = 'S' Link to (fraction of) solid substrate surface
+        case KM_LNK_PVOL: // = 'P' Link to (fraction of) solid substrate (pore) volume
+        case KM_LNK_MASS: // = 'M' Link to (fraction of) solid substrate mass
+            break;
+        default:  // other models
+            break;
+    }
+
+    switch(php->kin_t[KinSizedCode])
+    {   //KinSizedCode
+        case KM_SIZED_UNI: // = 'U'	Uniform particle/pore size distribution
+        case KM_SIZED_BIN: // = 'B'	Binodal particle/pore size distribution
+        case KM_SIZED_FUN: // = 'F' Empirical distribution function
+            break;
+        default:  // other models
+            break;
+    }
+
+    //KinResCode
+    // KM_RES_SURF = 'A',    /// surface-scaled rate model (k in mol/m2/s)
+    // KM_RES_PVS = 'V'      /// pore-volume-scaled model (k in mol/m3/s)
+
+}
+
+void TPhase::Set_SorpMod_Phase_coef()
+{
+    // new
+}
+
 
 // Build ReacDC/DComp keys (aDclist) to be included into the Phase
 void TPhase::makeReacDCompList( const char *caption, TCStringArray& aDclist,
