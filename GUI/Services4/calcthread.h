@@ -87,7 +87,7 @@ public:
         {      QMutexLocker  loker(&pVisorImp->getMutexCalc());
                // cout << pVisorImp->getMutexCalc().tryLock()<< endl;
                 showMss = 1L;
-		TProfil::pm->CalcEqstat(false);
+        TProfil::pm->CalcEqstat( NULL, -1, 0. );
 	}
 	catch( TError& err ) 
 	{  error = err; }

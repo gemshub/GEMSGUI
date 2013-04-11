@@ -651,8 +651,9 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
            pmp->pIPN = 0;
            if( pmp->pTPD > 1)
                pmp->pTPD = 1; // reload Go, Vol
-//         Implement here call to a function that sets the system/SysEq switches for
-//             components and phases according to mui, muj, mup that were read in.
+pmp->pKMM = 0;
+           // sets the system/SysEq switches for
+           // components and phases according to mui, muj, mup that were read in.
            SetSysSwitchesFromMulti( );
 //           vfMessage(par, "Changes in the GEMS3K system setup relative to GEMS",
 //                    "Some vectors were allocated or some dimensions changed.\n"

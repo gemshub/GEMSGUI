@@ -431,7 +431,7 @@ void TGEM2MT::calc_eqstat( bool startSys )
     else {
            rt[RT_SYSEQ].Find(mtp->sykey);
            // calculate current EqStat
-           TProfil::pm->CalcEqstat( false );
+           TProfil::pm->CalcEqstat( &mtp->dTau, mtp->ct, mtp->cTau );
     }
 
    if( startSys )

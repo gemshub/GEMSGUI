@@ -691,7 +691,7 @@ void TProfil::CalcBcc()
 //             kdTime: current time step (can be changed in TKinMet class)
 // Returns: elapsed calculation time in seconds
 //
-double TProfil::CalcEqstat( double *kdTime, const int kTimeStep, const double kTime )
+double TProfil::CalcEqstat( double *kdTime, const long kTimeStep, const double kTime )
 {
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
     long int NumIterFIA,  NumIterIPM, NumPrecLoops;

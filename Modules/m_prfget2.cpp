@@ -477,6 +477,7 @@ void TProfil::CalcAllSystems( int makeDump )
     bool outFile = true;
     uint i=0, nbad=0;
     int iRet;
+    double dTime=0.; int kTimeStep =0; double kTime=0.;
 
     rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
@@ -534,7 +535,7 @@ AGAIN:
       try
        {
  	   	showMss = 0L;
- 	    ccTime += CalcEqstat( false);
+        ccTime += CalcEqstat( &dTime, kTimeStep, kTime );
         }
         catch( TError& xcpt )
         {

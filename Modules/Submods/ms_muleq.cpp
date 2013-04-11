@@ -443,14 +443,14 @@ void TMulti::EqstatExpand( const char *key, bool calcActivityModels, bool calcKi
     WeightMultipliers( false );
 
 // New: TKinMet stuff
-if( calcKineticModels )
-{
+//if( calcKineticModels )
+//{
     if( pmp->pKMM <= 0 )
     {
         KinMetModLoad();
+        pmp->pKMM = 1;
     }
-    pmp->pKMM = 1;
-}
+//}
     // test multicomponent phases and load data for mixing models
     //
     if( pmp->FIs && AllPhasesPure == false )   // bugfix DK 11.03.2010

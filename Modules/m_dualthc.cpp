@@ -153,7 +153,7 @@ void TDualTh::calc_eqstat()
 
    rt[RT_SYSEQ].Find(dtp->sykey);
 // calc current SyStat
-   TProfil::pm->CalcEqstat( false );
+   TProfil::pm->CalcEqstat( NULL );
    if( dtp->PsSYd == S_ON )
      TSysEq::pm->CmSave();           // save results to DB
    if( dtp->stld )

@@ -905,7 +905,7 @@ void TVisorImp::CalcMulti()
     try
     {
         showMss = 1L;
-        TProfil::pm->CalcEqstat();
+        TProfil::pm->CalcEqstat( NULL );
     }
     catch( TError& xcpt )
     {

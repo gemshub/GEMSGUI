@@ -88,6 +88,12 @@ void TMulti::KinMetModLoad( )
         memcpy( pmp->kMod[k], modT, MAXKEYWD );
         kMod = pmp->kMod[k];
 
+if(kMod[0] != KM_UNDEF )
+{
+    cout << "k:" << k << " kMod:" << kMod;  // temporary
+    cout << " nPRk:" << pm.LsKin[k*6] << " nSkr:" << pm.LsKin[k*6+1] << " nrpC:" << pm.LsKin[k*6+2] <<
+    " naptC:" << pm.LsKin[k*6+3] << " nAscC:" << pm.LsKin[k*6+4] << " nFaces:" << pm.LsKin[k*6+5] << endl;
+}
         // load coefficients of KinMet models into MULTI transfer arrays
 LOAD_KKMCOEF:
         if( pmp->LsKin[k*6] )
@@ -96,10 +102,9 @@ LOAD_KKMCOEF:
             //  Copying the PR opcode array from Phase to MULTI
             if( aPH->php->ocPRk )
             {
-               if( kp+pmp->LsKin[k*6] >
-                  (int)(sizeof( pmp->ocPRkC )/sizeof(long int)))
-               pmp->ocPRkC = (long int (*)[2]) aObj[ o_wi_ocprkc ].Alloc(
-                  kp+pmp->LsKin[k*6], 2, L_ );
+               if( pmp->ocPRkC == NULL || kp+pmp->LsKin[k*6] > aObj[ o_wi_ocprkc ].GetN() )
+                  pmp->ocPRkC = (long int (*)[2]) aObj[ o_wi_ocprkc ].Alloc(
+                     kp+pmp->LsKin[k*6], 2, L_ );
                ErrorIf( pmp->ocPRkC == NULL, "KinMetModLoad",
                         "Error in reallocating memory for pmp->ocPRk" );
                for( jj=0; jj<aPH->php->nPRk; jj++ )
@@ -114,8 +119,7 @@ LOAD_KKMCOEF:
 
             if( aPH->php->feSAr )
             {
-                if( kf+pmp->LsKin[k*6] >
-                    (int)(sizeof( pmp->feSArC )/sizeof(double)))
+                if( pmp->PMc == NULL || kf+pmp->LsKin[k*6] > aObj[ o_wi_fsac ].GetN() )
                    pmp->feSArC = (double *) aObj[ o_wi_fsac ].Alloc(
                      (kf+pmp->LsKin[k*3]), 1, D_ );
                 ErrorIf( pmp->PMc == NULL, "KinMetModLoad",
@@ -127,8 +131,8 @@ LOAD_KKMCOEF:
 
             if( aPH->php->rpCon )
             {
-                if( kc+pmp->LsKin[k*6]*pmp->LsKin[k*6+2] >
-                  (int)(sizeof( pmp->rpConC )/sizeof(double)))
+                if( pmp->rpConC == NULL ||
+                    kc+pmp->LsKin[k*6]*pmp->LsKin[k*6+2] > aObj[ o_wi_krpc ].GetN() )
                  pmp->rpConC = (double *) aObj[ o_wi_krpc ].Alloc(
                    (kc+pmp->LsKin[k*6]*pmp->LsKin[k*6+2]), 1, D_ );
                 ErrorIf( pmp->rpConC == NULL, "KinMetModLoad",
@@ -142,8 +146,8 @@ LOAD_KKMCOEF:
 
             if( aPH->php->Ascp )
             {
-                if( ks+pmp->LsKin[k*6+4] >
-                  (int)(sizeof( pmp->AscpC )/sizeof(double)))
+                if( pmp->AscpC == NULL || ks+pmp->LsKin[k*6+4] > aObj[ o_wi_ascpc ].GetN() )
+//                  (int)(sizeof( pmp->AscpC )/sizeof(double)))
                  pmp->AscpC = (double *) aObj[ o_wi_ascpc ].Alloc(
                    ks+pmp->LsKin[k*6+4], 1, D_ );
                 ErrorIf( pmp->AscpC == NULL, "KinMetModLoad",
@@ -154,16 +158,17 @@ LOAD_KKMCOEF:
                 pmp->LsKin[k*6+4] = 0;
             }
 
-            if( aPH->php->lDCr && aPH->php->apCon)   // List of DC names involved in PR activity products
-            {
-                if( kd+pmp->LsKin[k*6+1] >
-                  (int)(sizeof( pmp->xSKrC )/sizeof(long int)))
+            if( aPH->php->lDCr && aPH->php->apCon)
+            { // List of DC names involved in PR activity products
+                if( pmp->xSKrC == NULL || kd+pmp->LsKin[k*6+1] > aObj[ o_wi_jcrdc ].GetN() )
+//                  (int)(sizeof( pmp->xSKrC )/sizeof(long int)))
                  pmp->xSKrC = (long int *) aObj[ o_wi_jcrdc ].Alloc(
                    kd+pmp->LsKin[k*6+1], 1, L_ );
-                ErrorIf( pmp->apConC == NULL, "KinMetModLoad",
+                ErrorIf( pmp->xSKrC == NULL, "KinMetModLoad",
                        "Error in reallocating memory for pmp->xSKrC." );
-                if( ka+pmp->LsKin[k*6+1] *pmp->LsKin[k*6]*pmp->LsKin[k*6+3] >
-                  (int)(sizeof( pmp->apConC )/sizeof(double)))
+                if(  pmp->apConC == NULL || ka+pmp->LsKin[k*6+1] *pmp->LsKin[k*6]*pmp->LsKin[k*6+3]
+                     > aObj[ o_wi_apconc ].GetN() )
+   //               (int)(sizeof( pmp->apConC )/sizeof(double)))
                  pmp->apConC = (double *) aObj[ o_wi_apconc ].Alloc(
                    (ka+pmp->LsKin[k*6+1] *pmp->LsKin[k*6]*pmp->LsKin[k*6+3]), 1, D_ );
                 ErrorIf( pmp->apConC == NULL, "KinMetModLoad",
@@ -200,14 +205,14 @@ LOAD_KKMCOEF:
         {   // coefficients of linkage parameters in linked phases
           if( aPH->php->lPhc /*&& aPH->php->IsoC*/ )
           {
-            if( jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1]
-                 > (int)(sizeof( pmp->lPhc )/sizeof(double)))
+            if( pmp->lPhc == NULL || jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1] > aObj[ o_wi_lphc ].GetN() )
+    //             > (int)(sizeof( pmp->lPhc )/sizeof(double)))
                 pmp->lPhc = (double *) aObj[ o_wi_lphc ].Alloc(
                    jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1], 1, D_ );
             ErrorIf( pmp->lPhc == NULL, "KinMetModLoad",
                     "Error in reallocating memory for pmp->lPhc." );
-            if( jphl+pm.LsPhl[k*2]
-                    > (int)(sizeof( pmp->PhLin )/sizeof(long int (*)[2])))
+            if( pmp->PhLin == NULL || jphl+pm.LsPhl[k*2]  > aObj[ o_wi_phlin ].GetN() )
+   //                 > (int)(sizeof( pmp->PhLin )/sizeof(long int (*)[2])))
                 pmp->PhLin = (long int (*)[2]) aObj[ o_wi_phlin ].Alloc(
                    jphl+pm.LsPhl[k*2], 2, L_ );
             ErrorIf( pmp->PhLin == NULL, "KinMetModLoad",
@@ -240,7 +245,7 @@ LOAD_KKMCOEF:
         kpe += pmp->LsKin[k*6];
         kce += pmp->LsKin[k*6]*pmp->LsKin[k*6+2];
         kae += pmp->LsKin[k*6]*pmp->LsKin[k*6+1]*pmp->LsKin[k*6+3];
-        kse += pmp->LsMod[k*6+4];
+        kse += pmp->LsKin[k*6+4];
         kde += pmp->LsKin[k*6+1];
 
      } // kk, k

@@ -83,8 +83,13 @@ void TMulti::MultiSystemInit( )
 
     // Reallocating memory, if necessary
     if( !pm.pBAL )
-        dyn_new();
-
+{
+    pmp->pKMM = -1;
+    pmp->ITau = -1;
+    pmp->kTau = 0.;
+    pmp->kdT = 0.;
+    dyn_new();
+}
    if( pm.pBAL == 2 )
          goto NEXT2;
 
@@ -522,7 +527,7 @@ void TMulti::multi_sys_ph()
             memcpy( pm.SF2[k], mup->SF[kk], MAXSYMB );
             memcpy( pm.SF2[k]+MAXSYMB, mup->SF[kk]+MAXSYMB+MAXPHSYMB, MAXPHNAME );
         }
-        if( pm.pNP && pm.pBAL )
+        if( pm.pNP && pm.pBAL && pm.pKMM )
         goto PARLOAD;
 
         aPH->TryRecInp( mup->SF[kk], crt, 0 );  // Now reading all phase records!

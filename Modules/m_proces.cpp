@@ -1095,7 +1095,8 @@ double TProcess::f_proc( double x )
     CalcEquat();
     // calc SyStat on iterations
     pep->ccTime +=
-      PRof->CalcEqstat( false /*pointShow==-1*/ ); // calc current SyStat
+      PRof->CalcEqstat( NULL ); // calc current SyStat
+      // PRof->CalcEqstat( &pep->kdt, pep->kst, pep->c_Tau ); // calc current SyStat
     pep->Loop = 1;
     CalcEquat();
     return( pep->c_Nu );
@@ -1290,7 +1291,7 @@ pep->ccTime = 0.0;
         //       if( nRec < 0 || pep->syt < pep->pet )
 
         { // current key in base set before
-          pep->ccTime += PRof->CalcEqstat( false /*pointShow==-1*/); // calc current SyStat
+          pep->ccTime += PRof->CalcEqstat( &pep->kdt, pep->kst, pep->c_Tau ); // calc current SyStat
 //	      pVisorImp->CalcMulti();
           TSysEq::pm->CmSave();  // save results
         }
@@ -1425,7 +1426,7 @@ if( pep->PsRT != S_OFF )
     pep->ccTime += PRof->CalcEqstat( &pep->kdt, pep->kst, pep->c_Tau );
 }
 else {
-     pep->ccTime += PRof->CalcEqstat( ); // calc current SyStat without time
+     pep->ccTime += PRof->CalcEqstat( NULL ); // calc current SyStat without time
 }
 //	    pVisorImp->CalcMulti();
         if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
