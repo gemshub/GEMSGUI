@@ -445,11 +445,11 @@ void TMulti::EqstatExpand( const char *key, bool calcActivityModels, bool calcKi
 // New: TKinMet stuff
 //if( calcKineticModels )
 //{
-    if( pmp->pKMM <= 0 )
-    {
-        KinMetModLoad();
-        pmp->pKMM = 1;
-    }
+//    if( pmp->pKMM <= 0 )
+//    {
+//        KinMetModLoad();
+//        pmp->pKMM = 1;
+//    }
 //}
     // test multicomponent phases and load data for mixing models
     //

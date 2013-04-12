@@ -87,13 +87,14 @@ void TMulti::KinMetModLoad( )
         memcpy( modT, aPH->php->kin_t+2, MAXKEYWD );
         memcpy( pmp->kMod[k], modT, MAXKEYWD );
         kMod = pmp->kMod[k];
-
+/*
 if(kMod[0] != KM_UNDEF )
 {
-    cout << "k:" << k << " kMod:" << kMod;  // temporary
+    cout << "k:" << k << " kMod:" << kMod[0] << kMod[1] << kMod[2] << kMod[3] << kMod[4] << kMod[5];
     cout << " nPRk:" << pm.LsKin[k*6] << " nSkr:" << pm.LsKin[k*6+1] << " nrpC:" << pm.LsKin[k*6+2] <<
     " naptC:" << pm.LsKin[k*6+3] << " nAscC:" << pm.LsKin[k*6+4] << " nFaces:" << pm.LsKin[k*6+5] << endl;
 }
+*/
         // load coefficients of KinMet models into MULTI transfer arrays
 LOAD_KKMCOEF:
         if( pmp->LsKin[k*6] )
@@ -119,9 +120,9 @@ LOAD_KKMCOEF:
 
             if( aPH->php->feSAr )
             {
-                if( pmp->PMc == NULL || kf+pmp->LsKin[k*6] > aObj[ o_wi_fsac ].GetN() )
+                if( pmp->feSArC == NULL || kf+pmp->LsKin[k*6] > aObj[ o_wi_fsac ].GetN() )
                    pmp->feSArC = (double *) aObj[ o_wi_fsac ].Alloc(
-                     (kf+pmp->LsKin[k*3]), 1, D_ );
+                     (kf+pmp->LsKin[k*6]), 1, D_ );
                 ErrorIf( pmp->PMc == NULL, "KinMetModLoad",
                          "Error in reallocating memory for pmp->feSArC." );
                 copyValues( pmp->feSArC+kf, aPH->php->feSAr, pmp->LsKin[k*6]);
@@ -173,12 +174,15 @@ LOAD_KKMCOEF:
                    (ka+pmp->LsKin[k*6+1] *pmp->LsKin[k*6]*pmp->LsKin[k*6+3]), 1, D_ );
                 ErrorIf( pmp->apConC == NULL, "KinMetModLoad",
                        "Error in reallocating memory for pmp->apConC." );
-                int dcph = 0;
+                int dcph = 0, dcInd = 0;
+                char DCname[MAXDCNAME+2];
                 for( jj=0; jj<aPH->php->nSkr; jj++ )
                 {
-                    gstring DCname = gstring(aPH->php->lDCr[jj], DC_RKLEN );
-                    int dcInd = find_dcnum_multi(DCname.c_str());
-                    if( dcInd >0 )
+                    strncpy( DCname, aPH->php->lDCr[jj]+(MAXSYMB+MAXDRGROUP), MAXDCNAME );
+                    DCname[MAXDCNAME] = '\0';
+                    dcInd = find_dcnum_multi( DCname );
+// cout << dcph << ": " << DCname << " dcInd:" << dcInd << endl;
+                    if( dcInd >= 0 )
                     {   // here, parameters of DCs not present in MULTI are skipped
                         pmp->xSKrC[kd+dcph] = (long int)dcInd;
                         copyValues( pmp->apConC+ka+dcph*pmp->LsKin[k*6]*pmp->LsKin[k*6+3],
@@ -250,7 +254,7 @@ LOAD_KKMCOEF:
 
      } // kk, k
 
-     pmp->pKMM = 1;
+ //    pmp->pKMM = 1;
  }
 
 
@@ -332,8 +336,9 @@ if( pmp->pIPN >= 1 )           //SD 29/11/2006
            pmp->LsMdc[k*3+2] = aPH->php->nMoi;
 
            // realloc memory
-           if( ksn+pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2]*pmp->L1[k] >
-                   (int)(sizeof( pmp->MoiSN )/sizeof(double)))
+           if( ksn+pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2]*pmp->L1[k] > aObj[ o_wi_moisn ].GetN()
+                   || pmp->MoiSN == NULL )
+//                   (int)(sizeof( pmp->MoiSN )/sizeof(double)))
               pmp->MoiSN = (double *) aObj[ o_wi_moisn ].Alloc(
                      (ksn+pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2]*pmp->L1[k]), 1, D_ );
            ErrorIf( pmp->MoiSN == NULL, "SolModLoad",
@@ -352,8 +357,9 @@ if( pmp->pIPN >= 1 )           //SD 29/11/2006
               }
            } /* jj */
            // realloc memory for the collection of site fractions arrays
-           if( ksf+pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2] >
-                   (int)(sizeof( pmp->SitFr )/sizeof(double)))
+           if( ksf+pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2] > aObj[ o_wo_sitfr ].GetN()
+                   || pmp->SitFr == NULL )
+//                   (int)(sizeof( pmp->SitFr )/sizeof(double)))
               pmp->SitFr = (double *) aObj[ o_wo_sitfr ].Alloc(
                      (ksf+pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2]), 1, D_ );
            ErrorIf( pmp->SitFr == NULL, "SolModLoad",
@@ -495,13 +501,13 @@ LOAD_NIDMCOEF:
         { // loading interaction parameters - rewritten 07.12.2006 by KD
           if( aPH->php->pnc )
           {
-              if( kc+pmp->LsMod[k*3]*pmp->LsMod[k*3+2] >
-                  (int)(sizeof( pmp->PMc )/sizeof(double)))
+              if( kc+pmp->LsMod[k*3]*pmp->LsMod[k*3+2] > aObj[ o_wi_pmc ].GetN()
+                      || pmp->PMc == NULL )
+//                  (int)(sizeof( pmp->PMc )/sizeof(double)))
                  pmp->PMc = (double *) aObj[ o_wi_pmc ].Alloc(
                    (kc+pmp->LsMod[k*3]*pmp->LsMod[k*3+2]), 1, D_ );
               ErrorIf( pmp->PMc == NULL, "SolModLoad",
                        "Error in reallocating memory for pmp->PMc." );
-
               copyValues( pmp->PMc+kc, aPH->php->pnc, (pmp->LsMod[k*3]*pmp->LsMod[k*3+2]));
           }
           else { // no array with interaction parameters in the Phase record
@@ -511,13 +517,13 @@ LOAD_NIDMCOEF:
           //  Copying the IP index array from Phase to MULTI
           if( aPH->php->ipxt )
           {
-             if( kx+pmp->LsMod[k*3]*pmp->LsMod[k*3+1] >
-                (int)(sizeof( pmp->IPx )/sizeof(long int)))
+             if( kx+pmp->LsMod[k*3]*pmp->LsMod[k*3+1] > aObj[ o_wi_ipxpm ].GetN()
+                     || pmp->IPx == NULL )
+//                (int)(sizeof( pmp->IPx )/sizeof(long int)))
              pmp->IPx = (long int *) aObj[ o_wi_ipxpm ].Alloc(
                 (kx+pmp->LsMod[k*3]*pmp->LsMod[k*3+1]), 1, L_ );
              ErrorIf( pmp->IPx == NULL, "SolModLoad",
                       "Error in reallocating memory for pmp->IPx" );
-
              copyValues( pmp->IPx+kx, aPH->php->ipxt,
                      (pmp->LsMod[k*3]*pmp->LsMod[k*3+1]));
           }
@@ -528,8 +534,9 @@ LOAD_NIDMCOEF:
         {   // coefficients for end member components
           if( aPH->php->scoef )
           {
-            if( kd+pmp->LsMdc[k*3]*pmp->L1[k]
-                 > (int)(sizeof( pmp->DMc )/sizeof(double)))
+            if( kd+pmp->LsMdc[k*3]*pmp->L1[k] > aObj[ o_wi_dmc ].GetN()
+                    || pmp->DMc == NULL )
+//                 > (int)(sizeof( pmp->DMc )/sizeof(double)))
                 pmp->DMc = (double *) aObj[ o_wi_dmc ].Alloc(
                    kd+pmp->LsMdc[k*3]*pmp->L1[k], 1, D_ );
             ErrorIf( pmp->DMc == NULL, "SolModLoad",
@@ -554,8 +561,9 @@ LOAD_NIDMCOEF:
         {   // coefficients for of DQF parameters for DCs in phases
           if( aPH->php->DQFc )
           {
-            if( jdqfc+pmp->LsMdc2[k*3]*pmp->L1[k]
-                 > (int)(sizeof( pmp->DQFc )/sizeof(double)))
+            if( jdqfc+pmp->LsMdc2[k*3]*pmp->L1[k] > aObj[ o_wi_dqfc ].GetN()
+                    || pmp->DQFc == NULL )
+//                 > (int)(sizeof( pmp->DQFc )/sizeof(double)))
                 pmp->DQFc = (double *) aObj[ o_wi_dqfc ].Alloc(
                    jdqfc+pmp->LsMdc2[k*3]*pmp->L1[k], 1, D_ );
             ErrorIf( pmp->DQFc == NULL, "SolModLoad",
@@ -577,8 +585,9 @@ LOAD_NIDMCOEF:
         {   // coefficients of reciprocal parameters for DCs in phases
           if( aPH->php->rcpc )
           {
-            if( jrcpc+pmp->LsMdc2[k*3+1]*pmp->L1[k]
-                 > (int)(sizeof( pmp->rcpc )/sizeof(double)))
+            if( jrcpc+pmp->LsMdc2[k*3+1]*pmp->L1[k] > aObj[ o_wi_rcpc ].GetN()
+                    || pmp->rcpc == NULL )
+//                 > (int)(sizeof( pmp->rcpc )/sizeof(double)))
                 pmp->rcpc = (double *) aObj[ o_wi_rcpc ].Alloc(
                    jrcpc+pmp->LsMdc2[k*3+1]*pmp->L1[k], 1, D_ );
             ErrorIf( pmp->rcpc == NULL, "SolModLoad",
@@ -621,8 +630,9 @@ LOAD_NIDMCOEF:
 // new: load uptake kinetics model parameters here
         if( aPH->php->umpCon )
         {
-            if( ku+pmp->LsUpt[k*2] >
-              (int)(sizeof( pmp->UMpcC )/sizeof(double)))
+            if( ku+pmp->LsUpt[k*2] > aObj[ o_wi_umpc ].GetN()
+                    || pmp->UMpcC == NULL )
+//              (int)(sizeof( pmp->UMpcC )/sizeof(double)))
              pmp->UMpcC = (double *) aObj[ o_wi_umpc ].Alloc(
                ku+pmp->LsUpt[k*2], 1, D_ );
             ErrorIf( pmp->UMpcC == NULL, "SolModLoad",
