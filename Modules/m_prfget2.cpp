@@ -535,7 +535,7 @@ AGAIN:
       try
        {
  	   	showMss = 0L;
-        ccTime += CalcEqstat( &dTime, kTimeStep, kTime );
+        ccTime += CalcEqstat( dTime, kTimeStep, kTime );
         }
         catch( TError& xcpt )
         {

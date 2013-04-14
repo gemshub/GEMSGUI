@@ -1,7 +1,7 @@
 // Json notation for GEMS database -> BSON -> MongoDB
 // DK 03.02.2013
 
-{ SDref: {
+{ "SDref": {
     "SDrkey": [ { "SDautr": "string", "flen": 20 },
                 { "SDyear": "string", "flen": 5 },
                 { "SDtype": "string", "flen": 7 } ],
@@ -15,14 +15,14 @@
         { "id": o_sdrefs , "label": "SDrefs" ,  "dotype": "32" , "dimN": -1 , "dimM": 1 , "ndxs": "N" , "values": [  ] },
         { "id": o_sdnote , "label": "SDnote" ,  "dotype": "S_" , "dimN": 1 , "dimM": 72 , "ndxs": "N" , "values": [  ] },
         { "id": o_sdbkwd , "label": "SD_kwd" ,  "dotype": "32" , "dimN": -1 , "dimM": 1 , "ndxs": "N" , "values": [  ] }
-     ]
-  }
+      ]
+   }
 }
 
 {"IComp": {
      "ICrkey": [ { "ICsymb": "string", "flen": 6 },
                 { "ICtype": "string", "flen": 4 },
-                { "ICgrp": "string", "flen": 4 } ],
+                { "ICgrp": "string", "flen": 16 } ],
      "DOD": [
          { "id": o_icsst , "label": "StdSt" ,  "dotype": "4" , "dimN": 1 , "dimM": 1 , "ndxs": "N" , "values": [  ] },
          { "id": o_icname , "label": "ICname" ,  "dotype": "S_" , "dimN": 1 , "dimM": 72 , "ndxs": "N" , "values": [  ] },

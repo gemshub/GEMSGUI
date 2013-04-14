@@ -1089,13 +1089,14 @@ void TProcess::pe_text_analyze()
 // calc function for Method of golden section
 double TProcess::f_proc( double x )
 {
+    double dummy = -1.;
     TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
     pep->Loop = 2;
     pep->c_Eh = x;
     CalcEquat();
     // calc SyStat on iterations
     pep->ccTime +=
-      PRof->CalcEqstat( NULL ); // calc current SyStat
+      PRof->CalcEqstat( dummy ); // calc current SyStat
       // PRof->CalcEqstat( &pep->kdt, pep->kst, pep->c_Tau ); // calc current SyStat
     pep->Loop = 1;
     CalcEquat();
@@ -1291,7 +1292,10 @@ pep->ccTime = 0.0;
         //       if( nRec < 0 || pep->syt < pep->pet )
 
         { // current key in base set before
-          pep->ccTime += PRof->CalcEqstat( &pep->kdt, pep->kst, pep->c_Tau ); // calc current SyStat
+          pep->kdt = pep->Taui[2];
+          pep->kst = -1;
+          pep->c_Tau = pep->Taui[0];
+          pep->ccTime += PRof->CalcEqstat( pep->kdt, pep->kst, pep->c_Tau ); // calc current SyStat
 //	      pVisorImp->CalcMulti();
           TSysEq::pm->CmSave();  // save results
         }
@@ -1423,10 +1427,11 @@ if( pep->PsRT != S_OFF )
 {  // Time-dependent calculations
 //    pep->Ntim;     pep->NTau;    pep->Tau[];
 //    pep->Taui[];   pep->c_Tau;   pep->kst;   pep->kdt;
-    pep->ccTime += PRof->CalcEqstat( &pep->kdt, pep->kst, pep->c_Tau );
+    pep->ccTime += PRof->CalcEqstat( pep->kdt, pep->kst, pep->c_Tau );
 }
 else {
-     pep->ccTime += PRof->CalcEqstat( NULL ); // calc current SyStat without time
+    double dummy;
+    pep->ccTime += PRof->CalcEqstat( dummy ); // calc current SyStat without time
 }
 //	    pVisorImp->CalcMulti();
         if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )

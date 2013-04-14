@@ -691,7 +691,7 @@ void TProfil::CalcBcc()
 //             kdTime: current time step (can be changed in TKinMet class)
 // Returns: elapsed calculation time in seconds
 //
-double TProfil::CalcEqstat( double *kdTime, const long kTimeStep, const double kTime )
+double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double kTime )
 {
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
     long int NumIterFIA,  NumIterIPM, NumPrecLoops;
@@ -704,7 +704,8 @@ double TProfil::CalcEqstat( double *kdTime, const long kTimeStep, const double k
 
     gstring keyp = rt[RT_SYSEQ].UnpackKey();
 // new: setting chemical kinetics time counter and variables
-    if( kdTime == NULL)
+cout << "kdTime: " << kdTime << "  kTimeStep: " << kTimeStep << "  kTime: " << kTime << endl;
+    if( kdTime < 0. )
     {  // no kinetics to consider
         multi->GetPM()->kTau = 0.;
         multi->GetPM()->kdT = 0.;
@@ -713,7 +714,7 @@ double TProfil::CalcEqstat( double *kdTime, const long kTimeStep, const double k
     }
     else {   // considering kinetics
         multi->GetPM()->kTau = kTime;
-        multi->GetPM()->kdT = *kdTime;
+        multi->GetPM()->kdT = kdTime;
         if( kTimeStep < 0 )
         {   // we need to initialize TKinMet
             multi->GetPM()->pKMM = -1;
@@ -732,7 +733,7 @@ double TProfil::CalcEqstat( double *kdTime, const long kTimeStep, const double k
    ComputeEquilibriumState( NumPrecLoops, NumIterFIA, NumIterIPM );
 // new - possibly returns a new time step suggestion
    if(kdTime)
-       *kdTime = multi->GetPM()->kdT;
+       kdTime = multi->GetPM()->kdT;
    return  multi->GetPM()->t_elap_sec;
 }
 

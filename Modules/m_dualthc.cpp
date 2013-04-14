@@ -136,6 +136,7 @@ void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
 void TDualTh::calc_eqstat()
 {
     vstr buf(40);
+    double dummy = -1.;
 
     sprintf(buf, "%.4d", dtp->c_tm);
     memset(dtp->timep, 0, 5 );
@@ -153,7 +154,7 @@ void TDualTh::calc_eqstat()
 
    rt[RT_SYSEQ].Find(dtp->sykey);
 // calc current SyStat
-   TProfil::pm->CalcEqstat( NULL );
+   TProfil::pm->CalcEqstat( dummy );
    if( dtp->PsSYd == S_ON )
      TSysEq::pm->CmSave();           // save results to DB
    if( dtp->stld )

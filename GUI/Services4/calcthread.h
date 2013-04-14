@@ -84,10 +84,11 @@ public:
 	   error.title = "";
 	   error.mess = "";
 	try 
-        {      QMutexLocker  loker(&pVisorImp->getMutexCalc());
+    {      QMutexLocker  loker(&pVisorImp->getMutexCalc());
                // cout << pVisorImp->getMutexCalc().tryLock()<< endl;
                 showMss = 1L;
-        TProfil::pm->CalcEqstat( NULL, -1, 0. );
+        double dummy = -1.;
+        TProfil::pm->CalcEqstat( dummy, -1, 0. );
 	}
 	catch( TError& err ) 
 	{  error = err; }
