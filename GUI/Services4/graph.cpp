@@ -156,8 +156,8 @@ int TPlot::getPointLine( int j, QVector<QPointF>& points, int ndxAbs )
 
     for(int  ii=0; ii<dX; ii++ )
     {   pos = getPoint( j, ii, ndxAbs );
-        if( pos.x() == DOUBLE_EMPTY || pos.y() == DOUBLE_EMPTY )
-          continue;
+        //if( pos.x() == DOUBLE_EMPTY || pos.y() == DOUBLE_EMPTY )
+        //  continue;
         points.append(pos);
     }
     return dX;

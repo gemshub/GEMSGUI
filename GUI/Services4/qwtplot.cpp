@@ -107,12 +107,10 @@ void TPlotWidget::showPlot()
 void TPlotWidget::replotPlot( bool  isFragment )
 {
     //clear lines
-    for(int ii=0; ii<m_curves.count(); ii++)
-    {
-        if( m_curves[ii] )
-         {   m_curves[ii]->detach();
-             delete m_curves[ii];\
-         }
+    QMap<QString, QwtPlotCurve*>::const_iterator i;
+    for (i = m_curves.constBegin(); i != m_curves.constEnd(); ++i)
+    {   i.value()->detach();
+        //delete i.value();
     }
     m_curves.clear();
 
@@ -194,38 +192,63 @@ void TPlotWidget::showPlotLines()
    }
 }
 
-void TPlotWidget::showPlotLine( int nLine, int nPlot, int nLineinPlot )
+QwtPlotCurve *TPlotWidget::newCurve( int nLine )
 {
-
-    if( gr_data->getIndex(nLine) < 0 )
-    {
-        m_curves.insert(nLine,0);
-        return;
-    }
-
-    //define curve
-    QwtPlotCurve *m_curve = new QwtPlotCurve(QString( gr_data->getName(nLine).c_str() ));
-    m_curve->setRenderHint(QwtPlotItem::RenderAntialiased); //sglazhivanie
+    // define pen
     QPen pen = QPen( gr_data->getColor(nLine) );
     pen.setWidth( gr_data->getLineSize(nLine) );
-    m_curve->setPen( pen );
-    if( gr_data->getLineSize(nLine) == 0 )
-       m_curve->setStyle( QwtPlotCurve::NoCurve );
-
     // define symbol
     QwtSymbol* symbol = new QwtSymbol;
     setQwtSymbol( symbol, gr_data->getType(nLine),
                   gr_data->getSize(nLine), gr_data->getColor(nLine)  );
+
+    QwtPlotCurve *m_curve = new QwtPlotCurve(QString( gr_data->getName(nLine).c_str() ));
+    m_curve->setRenderHint(QwtPlotItem::RenderAntialiased); //sglazhivanie
+    m_curve->setPen( pen );
+    if( gr_data->getLineSize(nLine) == 0 )
+       m_curve->setStyle( QwtPlotCurve::NoCurve );
     m_curve->setSymbol( symbol );
+    return m_curve;
+}
+
+
+void TPlotWidget::showPlotLine( int nLine, int nPlot, int nLineinPlot )
+{
+    QwtPlotCurve *m_curve = 0;
+    QString keyCur = QString("%1").arg(nLine);
 
     // get array of not empty points
     QVector<QPointF> points;
     gr_data->plots[nPlot].getPointLine( nLineinPlot, points, gr_data->getIndex(nLine) );
-    m_curve->setSamples( points );
+    QVector<QPointF> pnt;
 
-    m_curve->attach(m_plot);
-    m_curves.insert(nLine,m_curve);
-    //m_curves.append(m_curve);
+    for(int ii=0; ii<points.size(); ii++ )
+    {
+        if( points[ii].x() == DOUBLE_EMPTY || points[ii].y() == DOUBLE_EMPTY )
+        {
+            if(pnt.size() > 0 )
+            {
+                //add curve
+                m_curve = newCurve( nLine );
+                m_curve->setSamples( pnt );
+                m_curve->attach(m_plot);
+                m_curves.insert( keyCur , m_curve);
+                pnt.clear();
+            }
+        }
+        else
+            pnt.append(points[ii]);
+    }
+
+    if(pnt.size() > 0 )
+    {
+        //add curve
+        m_curve = newCurve( nLine );
+        m_curve->setSamples( pnt );
+        m_curve->attach(m_plot);
+        m_curves.insert( keyCur , m_curve);
+        pnt.clear();
+    }
 }
 
 void TPlotWidget::replotPlotLine( int nLine )
@@ -233,11 +256,14 @@ void TPlotWidget::replotPlotLine( int nLine )
     if( gr_data->graphType == LINES_POINTS )
     { //define curve
 
-      if( m_curves[nLine] )
-      {   m_curves[nLine]->detach();
-          delete m_curves[nLine];
-      }
-      m_curves.removeAt(nLine);
+        QString keyCur = QString("%1").arg(nLine);
+        QList<QwtPlotCurve*> values = m_curves.values(keyCur);
+        for (int i = 0; i < values.size(); i++)
+        {
+            values.at(i)->detach();
+            //delete values.at(i);
+        }
+        m_curves.remove(keyCur); // remove all for key
 
       int nPlot = gr_data->getPlot( nLine );
       int nLineinPlot = nLine -gr_data->plots[nPlot].getFirstLine();
@@ -537,7 +563,6 @@ void TPlotWidget::showCumulativeLines()
 
     m_curve->attach(m_plot);
     m_intervalcurves.insert(nLine,m_curve);
-    //m_curves.append(m_curve);
    }
 }
 

@@ -41,7 +41,8 @@ class TPlotWidget: public QWidget
 
     GraphData *gr_data;
 
-    QList<QwtPlotCurve*> m_curves;
+    QMultiMap<QString, QwtPlotCurve*> m_curves;
+    //QList<QwtPlotCurve*> m_curves;
     QList<QwtPlotIntervalCurve*> m_intervalcurves;
     QList<QwtPlotMarker*> m_points;
     QList<QwtPlotMarker*> m_labels;
@@ -51,8 +52,6 @@ class TPlotWidget: public QWidget
     QwtPlotMarker *c_marker;
 
     QwtPlotPicker *m_picker;
-
-
 
     double minX;
     double maxX;
@@ -65,6 +64,8 @@ class TPlotWidget: public QWidget
     void showPoint( int nPlot, int nline, int nPoint );
     void showPlotLines();
     void showPlotLine( int nLine, int nPlot, int nLineinPlot );
+    QwtPlotCurve *newCurve( int nLine );
+
 
     QPointF transform( QPoint pos );
     void showLegendText( QPointF pos, QString text );
