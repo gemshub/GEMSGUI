@@ -224,7 +224,7 @@ template <class T>
 size_t
 TOArray<T>::Add(const T& t)
 {
-    resize(this->count);
+    this->resize(this->count);
     this->p[this->count - 1] = t;
     return this->count - 1;
 }
