@@ -20,6 +20,8 @@
 #ifndef _v_vals_impl_h_
 #define _v_vals_impl_h_
 
+// #include <cstdint>
+#include <stdint.h>  // To be replaced with cstdint after switching to C++ 11 standard
 #include <cstdio>
 #include "v_vals.h"
 #include "v_user.h"

@@ -2,7 +2,7 @@
 TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems3
-#VERSION         = 3.1.0
+#VERSION         = 3.2.0
 
 DEFINES         += Use_mt_mode
 DEFINES         += NODEARRAYLEVEL
@@ -10,15 +10,14 @@ DEFINES         += NODEARRAYLEVEL
 
 CONFIG -= warn_on
 CONFIG += warn_off
-CONFIG += help
+#CONFIG += help
 CONFIG += thread
-#CONFIG += printsupport
 QT += network
 QT += sql
 QT += xml
 QT += svg
 #Qt += printsupport
-
+lessThan( QT_MAJOR_VERSION, 5 ): CONFIG += help
 greaterThan( QT_MAJOR_VERSION, 4 ): QT += widgets printsupport help concurrent
 
 #RESOURCES += img.qrc
@@ -38,9 +37,9 @@ macx-g++ {
   CONFIG += warn_off
 }
 
-RESOURCES = ./GUI/GUI.qrc
+RESOURCES      = ./GUI/GUI.qrc
 
-QWT6_CPP  =  ./GUI/QWT
+QWT6_CPP       =  ./GUI/QWT
 SERVICES4_CPP  =  ./GUI/Services4
 DATAMAN_CPP    =  ./GUI/Dataman
 DIALOGS4_CPP   =  ./GUI/Dialogs4
