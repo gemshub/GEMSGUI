@@ -144,7 +144,7 @@ TVisorImp::TVisorImp(int c, char** v):
        toolProject->addAction(actionGtDemo);
        toolProject->addAction(actionGEM2MT);
        //toolProject->addAction(actionDualTh);
-       //toolProject->addAction(actionUnSpace);
+       toolProject->addAction(actionUnSpace);
        toolProject->addAction(actionProject);
        toolProject->setWindowTitle("toolProject");
 

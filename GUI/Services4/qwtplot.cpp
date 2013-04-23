@@ -638,7 +638,8 @@ SpectrogramData::SpectrogramData(GraphData* aGr_data)
                     break;
             }
         }
-        if( x != points[jj].x() && y != points[jj].y())
+        //if( points.count()<1 ||
+        //        (x != points[jj].x() && y != points[jj].y()))
             points.insert(jj, QwtPoint3D(x,y,z) );
 
     }
@@ -674,12 +675,17 @@ double SpectrogramData::value( double x, double y ) const
 class ColorMap: public QwtLinearColorMap
 {
 public:
-    ColorMap():
-        QwtLinearColorMap( Qt::darkCyan, Qt::red )
+    ColorMap( GraphData* aGr_data ):
+        QwtLinearColorMap( aGr_data->scale[aGr_data->scale.GetCount()-1],
+                           aGr_data->scale[0] )
     {
-        addColorStop( 0.1, Qt::cyan );
-        addColorStop( 0.6, Qt::green );
-        addColorStop( 0.95, Qt::yellow );
+        for(int ii=1; ii<aGr_data->scale.GetCount()-1; ii++)
+            addColorStop( aGr_data->getValueIsoline(ii),
+                          aGr_data->getColorIsoline(ii) );
+
+        //addColorStop( 0.1, Qt::cyan );
+        //addColorStop( 0.6, Qt::green );
+        //addColorStop( 0.95, Qt::yellow );
     }
 };
 
@@ -688,23 +694,23 @@ void TPlotWidget::showIsoLines()
     d_spectrogram = new QwtPlotSpectrogram();
     d_spectrogram->setRenderThreadCount( 0 ); // use system specific thread count
 
-    d_spectrogram->setColorMap( new ColorMap() );
+    d_spectrogram->setColorMap( new ColorMap(gr_data) );
 
     d_spectrogram->setData( new SpectrogramData( gr_data ) );
     d_spectrogram->attach( m_plot );
 
-    QList<double> contourLevels;
-    for ( double level = 0.5; level < 10.0; level += 1.0 )
-        contourLevels += level;
-    d_spectrogram->setContourLevels( contourLevels );
+    //QList<double> contourLevels;
+    //for ( double level = 0.5; level < 10.0; level += 1.0 )
+    //    contourLevels += level;
+    //d_spectrogram->setContourLevels( contourLevels );
+    //cout << " showIsoLines() 4" << endl;
 
     const QwtInterval zInterval = d_spectrogram->data()->interval( Qt::ZAxis );
     // A color bar on the right axis
     QwtScaleWidget *rightAxis = m_plot->axisWidget( QwtPlot::yRight );
     rightAxis->setTitle( "Intensity" );
     rightAxis->setColorBarEnabled( true );
-    rightAxis->setColorMap( zInterval, new ColorMap() );
-
+    rightAxis->setColorMap( zInterval, new ColorMap(gr_data) );
     m_plot->setAxisScale( QwtPlot::yRight, zInterval.minValue(), zInterval.maxValue() );
     m_plot->enableAxis( QwtPlot::yRight );
 

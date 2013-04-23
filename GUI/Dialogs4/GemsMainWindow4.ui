@@ -28,7 +28,7 @@
      <x>0</x>
      <y>0</y>
      <width>1121</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Record">
@@ -1142,7 +1142,7 @@
     <string>Sensitivity Studies (UnSpace)</string>
    </property>
    <property name="visible">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionProject">
