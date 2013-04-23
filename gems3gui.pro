@@ -48,8 +48,6 @@ SUBMODS_CPP    =  ./Modules/Submods
 NUMERICS_CPP   =  ./Modules/Numerics
 GEMS3K_CPP     =  ../standalone/GEMS3K
 
-
-
 QWT6_H  =  $$QWT6_CPP
 SERVICES4_H  =  $$SERVICES4_CPP
 DATAMAN_H    =  $$DATAMAN_CPP
