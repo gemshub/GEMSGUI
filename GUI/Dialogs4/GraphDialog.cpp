@@ -264,7 +264,7 @@ void GraphDialog::changeIcon( int row, int column )
 
 void GraphDialog::changeNdx( int row, int column )
 {
-    if( column == 1 )
+    if( column == 1 &&  gr_data.graphType != ISOLINES )
     {
        int ndxX = tbLegend->item(row, column)->text().toInt();
        gr_data.setIndex( row, ndxX );

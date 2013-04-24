@@ -59,6 +59,7 @@ TPlotWidget::TPlotWidget( GraphData* aGr_data, QWidget *parent):
 {
     setAcceptDrops(true);
     m_grid = 0;
+    d_spectrogram = 0;
     m_plot = new QwtPlot();
 
     QVBoxLayout * const layout = new QVBoxLayout;
@@ -124,6 +125,13 @@ void TPlotWidget::replotPlot( bool  isFragment )
          }
     }
     m_intervalcurves.clear();
+
+    //clear QwtPlotSpectrogram
+    if( d_spectrogram )
+    { d_spectrogram->detach();
+      delete d_spectrogram;
+      d_spectrogram = 0;
+    }
 
     if(  isFragment == true )
     {
@@ -216,6 +224,9 @@ void TPlotWidget::showPlotLine( int nLine, int nPlot, int nLineinPlot )
 {
     QwtPlotCurve *m_curve = 0;
     QString keyCur = QString("%1").arg(nLine);
+
+    if( gr_data->getIndex(nLine) < 0 )
+      return;
 
     // get array of not empty points
     QVector<QPointF> points;

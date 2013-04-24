@@ -41,16 +41,22 @@ class TPlotWidget: public QWidget
 
     GraphData *gr_data;
 
+    // data for different types of graphics
+    // clear if replot
     QMultiMap<QString, QwtPlotCurve*> m_curves;
     //QList<QwtPlotCurve*> m_curves;
     QList<QwtPlotIntervalCurve*> m_intervalcurves;
+    QwtPlotSpectrogram *d_spectrogram;
+
+    // addition data
+    // not clear if replot
     QList<QwtPlotMarker*> m_points;
     QList<QwtPlotMarker*> m_labels;
+
+    // internal for all types of graphics
     QwtPlot *m_plot;
     QwtPlotGrid *m_grid;
-    QwtPlotSpectrogram *d_spectrogram;
     QwtPlotMarker *c_marker;
-
     QwtPlotPicker *m_picker;
 
     double minX;
@@ -60,8 +66,6 @@ class TPlotWidget: public QWidget
     QFont axisFont;
 
     void showGrid();
-    void showPoints( int nPlot, int nPoint );
-    void showPoint( int nPlot, int nline, int nPoint );
     void showPlotLines();
     void showPlotLine( int nLine, int nPlot, int nLineinPlot );
     QwtPlotCurve *newCurve( int nLine );

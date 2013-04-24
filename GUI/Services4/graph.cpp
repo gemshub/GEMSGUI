@@ -129,6 +129,9 @@ QPointF TPlot::getPoint( int line, int number, int ndxAbs )
     if(ndxAbs >= nAbs )
         ndxAbs = 0;
 
+    if( ndxAbs < 0 )
+        return QPointF( DOUBLE_EMPTY, DOUBLE_EMPTY );
+
     if( foString == true )  // put graph by column
     {
         if( nObjX < 0 )
