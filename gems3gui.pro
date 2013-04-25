@@ -2,7 +2,7 @@
 TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems3
-#VERSION         = 3.1.0
+#VERSION         = 3.3.0
 
 DEFINES         += Use_mt_mode
 DEFINES         += NODEARRAYLEVEL
@@ -10,7 +10,7 @@ DEFINES         += NODEARRAYLEVEL
 
 CONFIG -= warn_on
 CONFIG += warn_off
-CONFIG += help
+#CONFIG += help
 CONFIG += thread
 #CONFIG += printsupport
 QT += network
@@ -18,7 +18,7 @@ QT += sql
 QT += xml
 QT += svg
 #Qt += printsupport
-
+lessThan( QT_MAJOR_VERSION, 5 ): CONFIG += help
 greaterThan( QT_MAJOR_VERSION, 4 ): QT += widgets printsupport help concurrent
 
 #RESOURCES += img.qrc
@@ -48,8 +48,6 @@ MODULES_CPP    =  ./Modules
 SUBMODS_CPP    =  ./Modules/Submods
 NUMERICS_CPP   =  ./Modules/Numerics
 GEMS3K_CPP     =  ../standalone/GEMS3K
-
-
 
 QWT6_H  =  $$QWT6_CPP
 SERVICES4_H  =  $$SERVICES4_CPP

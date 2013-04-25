@@ -535,15 +535,18 @@ void TMulti::multi_sys_ph()
         // New stuff for TKinMet
         // Resetting vector of TSolMod pointers to avoid problems with activity coeffs
         //     in TSolMod calculations after switching phases on/off
-        if(phKinMet[k])
-            delete phKinMet[k];
-        phKinMet[k] = NULL;
-        pm.kMod[k][0] = aPH->php->kin_t[2];
-        pm.kMod[k][1] = aPH->php->kin_t[3];
-        pm.kMod[k][2] = aPH->php->kin_t[4];
-        pm.kMod[k][3] = aPH->php->kin_t[5];
-        pm.kMod[k][4] = aPH->php->kin_t[6];
-        pm.kMod[k][5] = aPH->php->kin_t[7];
+        if(pm.ITau < 0 )
+        {
+            if(phKinMet[k])
+                delete phKinMet[k];
+            phKinMet[k] = NULL;
+            pm.kMod[k][0] = aPH->php->kin_t[2];
+            pm.kMod[k][1] = aPH->php->kin_t[3];
+            pm.kMod[k][2] = aPH->php->kin_t[4];
+            pm.kMod[k][3] = aPH->php->kin_t[5];
+            pm.kMod[k][4] = aPH->php->kin_t[6];
+            pm.kMod[k][5] = aPH->php->kin_t[7];
+        }
 
         if( aPH->php->PrpCon == S_ON )
         {

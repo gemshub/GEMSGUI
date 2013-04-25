@@ -1290,7 +1290,6 @@ pep->ccTime = 0.0;
             pep->syt = rt[RT_SYSEQ].Rtime(); // test changes in system after process calc
         }
         //       if( nRec < 0 || pep->syt < pep->pet )
-
         { // current key in base set before
           pep->kdt = pep->Taui[2];
           pep->kst = -1;
@@ -1298,6 +1297,7 @@ pep->ccTime = 0.0;
           pep->ccTime += PRof->CalcEqstat( pep->kdt, pep->kst, pep->c_Tau ); // calc current SyStat
 //	      pVisorImp->CalcMulti();
           TSysEq::pm->CmSave();  // save results
+          pep->kst = 0;
         }
 
 //    }
@@ -1428,10 +1428,14 @@ if( pep->PsRT != S_OFF )
 //    pep->Ntim;     pep->NTau;    pep->Tau[];
 //    pep->Taui[];   pep->c_Tau;   pep->kst;   pep->kdt;
     pep->ccTime += PRof->CalcEqstat( pep->kdt, pep->kst, pep->c_Tau );
+    pep->kst++;
 }
 else {
-    double dummy;
-    pep->ccTime += PRof->CalcEqstat( dummy ); // calc current SyStat without time
+//    double dummy;
+//    pep->ccTime += PRof->CalcEqstat( dummy ); // calc current SyStat without time
+    pep->ccTime += PRof->CalcEqstat( pep->kdt, pep->kst, pep->c_Tau );
+    if( pep->kdt )
+        pep->kst++;
 }
 //	    pVisorImp->CalcMulti();
         if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
