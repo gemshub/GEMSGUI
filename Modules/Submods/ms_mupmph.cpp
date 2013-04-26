@@ -825,14 +825,20 @@ PARLOAD: if( k < syp->Fis )
                 }
                 /*  leave normalized to 1 gram pm.ln1Na[k] *= PMM; */
             case PH_AQUEL:
-                pm.YOF[k] = syp->YOF[kk] * PMM / pm.RT;
-                pm.FWGT[k] = PMM;
+                if( pm.FWGT[k] < 1e-33 )   // bugfix 26.04.13 DK
+                {
+                    pm.YOF[k] = syp->YOF[kk] * PMM / pm.RT;
+                    pm.FWGT[k] = PMM;
+                }
                 break;
             default:
                 if( Cjs >=0 ) // if there is a MAJOR component in solution phase
                     PMM = pm.MM[Cjs];
-                pm.YOF[k] = syp->YOF[kk] * PMM / pm.RT;
-                pm.FWGT[k] = PMM;
+                if( pm.FWGT[k] < 1e-33 )  // bugfix 26.04.13 DK
+                {
+                   pm.YOF[k] = syp->YOF[kk] * PMM / pm.RT;
+                   pm.FWGT[k] = PMM;
+                }
                 break;
             }
 
