@@ -1,53 +1,72 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
-
+  
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <title>GEMS Default TDB</title>
 
   
-  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"><title>GEMS Default TDB</title></head><body>
+</head><body>
 <h1><img src="gems1.png" align="left" height="48" width="48">GEM-Selektor
 version 3</h1>
 
-<h2>Default (Kernel) Thermodynamic Database<br>
+<h2>Default Thermodynamic Database<br>
 </h2>
 
 <hr size="2" width="100%">
 <h3>Contents &nbsp;</h3>
 
-<p><a href="#DDB_INTRO">1.
-GEMS default chemical thermodynamic database</a> </p>
+<p><a style="font-family: Times New Roman,Times,serif;" href="#DDB_INTRO">1.
+GEMS default chemical thermodynamic database</a>
+</p>
+<div style="margin-left: 40px;">
+<p><a style="font-family: Times New Roman,Times,serif;" href="#DDB_KERNEL">1.1.
+PSI/Nagra TDB 12/07</a> </p>
+<div style="margin-left: 40px;">
+<p><a style="font-family: Times New Roman,Times,serif;" href="#PSI_Nagra_TDB_Structure">1.1.1. Database structure</a> </p>
+<p><a style="font-family: Times New Roman,Times,serif;" href="#PSI_Nagra_Data_import">1.1.2 Data import</a></p>
+</div>
+</div>
 
-<blockquote>
-  <p><a href="#DDB_KERNEL">1.1.
-PSI/Nagra TDB 12/07</a></p>
-  <p style="margin-left: 40px;"><a href="#PSI_Nagra_TDB_Structure">1.1.1. Database structure</a></p>
-  <p style="margin-left: 40px;"><a href="#PSI_Nagra_Data_import">1.1.2 Data import<br>
-  </a></p>
 
-  <p><a href="#DDB_COMPLEM">1.2. SUPCRT92 - slop98.dat</a></p>
-  <p style="margin-left: 40px;"><a href="#SLOP98_IMPORT">1.2.1 About
-data import from slop98.dat<br>
-  </a></p>
-  <p><a href="#DDB_THIRD_PARTY">1.3. Third-party
-databases</a></p>
-  <p><a href="gems_ctdb.html#DDB_PROTECTION">1.4. Write protection</a></p>
-</blockquote>
 
-<p><a href="#DDB_FILES">2.
-List of files in default thermodynamic database</a> </p>
+<p><a style="font-family: Times New Roman,Times,serif;" href="#PSI_Nagra_Data_import"> </a></p>
+ 
+<div style="margin-left: 40px;">
+<p><a style="font-family: Times New Roman,Times,serif;" href="#DDB_COMPLEM">1.2.
+SUPCRT92 - slop98.dat</a> </p>
+<div style="margin-left: 40px;">
+<p><a style="font-family: Times New Roman,Times,serif;" href="#SLOP98_IMPORT">1.2.1 About
+data import from slop98.dat</a></p>
+</div>
+<p><a style="font-family: Times New Roman,Times,serif;" href="#SLOP98_IMPORT"> </a><a style="font-family: Times New Roman,Times,serif;" href="#DDB_THIRD_PARTY">1.3. Third-party
+databases</a> </p>
+<p><a style="font-family: Times New Roman,Times,serif;" href="gems_ctdb.html#DDB_PROTECTION">1.4. Write protection</a>
+</p>
+</div>
 
-<blockquote>
-  <p><a href="#DDB_KERNEL_FILES">2.1. PSI/Nagra TDB 12/07 files</a></p>
-  <p><a href="#DDB_COMPLEM_FILES">2.2. SUPCRT92 - slop98.dat files</a></p>
-  <p><a href="#DDB_Support">2.3. Supporting database files <br>
-  </a></p>
-</blockquote>
 
-<p><a href="gems_ctdb.html#DDB_GROUP">3. LES PSI Thermodynamics Group</a><a href="#SLOP98_IMPORT">
+ 
+
+<p><a style="font-family: Times New Roman,Times,serif;" href="#DDB_FILES">2.
+List of files in default thermodynamic database</a>
+</p>
+<div style="margin-left: 40px;">
+<p><a style="font-family: Times New Roman,Times,serif;" href="#DDB_KERNEL_FILES">2.1. PSI/Nagra TDB 12/07 files</a> </p>
+<p><a style="font-family: Times New Roman,Times,serif;" href="#DDB_COMPLEM_FILES">2.2. SUPCRT92 - slop98.dat files</a> </p>
+<p><a style="font-family: Times New Roman,Times,serif;" href="#DDB_Support">2.3.
+Supporting database files </a></p>
+</div>
+
+
+
+<p><a style="font-family: Times New Roman,Times,serif;" href="#DDB_Support">
+</a><a style="font-family: Times New Roman,Times,serif;" href="gems_ctdb.html#DDB_GROUP">3. LES PSI Thermodynamics Group</a><a style="font-family: Times New Roman,Times,serif;" href="#SLOP98_IMPORT">
 </a></p>
 
-<p><a href="#DDB_REFS">4.
-References</a>
-</p>
+
+<p><a style="font-family: Times New Roman,Times,serif;" href="#DDB_REFS">4.
+References</a></p>
+
 
 <hr size="2" width="100%">
 <h2><a name="DDB_INTRO"></a>1.
@@ -73,10 +92,12 @@ Wizard"</a>.<br>
 01/01 (Nagra/PSI TDB 01/01), the latter of which was documented by <a href="#HUMMEL_et_al._2002">HUMMEL et al. (2002)</a>
 (http://les.web.psi.ch/TDBbook/index.htm). The selection of chemical
 elements,
-aqueous &nbsp;species, and minerals and gases in the&nbsp; PSI/Nagra TDB 12/07
+aqueous &nbsp;species, and minerals and gases in the&nbsp; PSI/Nagra
+TDB 12/07
 reflect
 the (rather specific) main purpose of its compilation - the support of
 geochemical modelling related to nuclear waste disposal.</p>
+
 <p>The present update is mainly based on the OECD NEA&#8217;s book series on
 &#8220;Chemical Thermodynamics&#8221;. The following volumes that appeared after
 publication of the Nagra/PSI TDB 01/01 have been considered in the
@@ -88,32 +109,32 @@ present update: <br>
   <tbody>
     <tr>
       <td style="vertical-align: top;">Vol. 5</td>
-<td style="vertical-align: top;">&#8220;Update on the
+      <td style="vertical-align: top;">&#8220;Update on the
 Chemical Thermodynamics of Uranium, Neptunium, Plutonium, Americium and
 Technetium&#8221;</td>
       <td style="vertical-align: top;"><a href="gems_ctdb.html#GUILLAUMONT_et_al._2003">GUILLAUMONT et al. (2003)</a></td>
     </tr>
     <tr>
       <td style="vertical-align: top;">Vol. 6</td>
-<td style="vertical-align: top;">&#8220;Chemical
+      <td style="vertical-align: top;">&#8220;Chemical
 Thermodynamics of Nickel&#8221;</td>
       <td style="vertical-align: top;"><a href="gems_ctdb.html#GAMSJ%C4GER_et_al._2005">GAMSJÄGER et al. (2005)</a></td>
     </tr>
     <tr>
       <td style="vertical-align: top;">Vol. 7</td>
-<td style="vertical-align: top;">&#8220;Chemical
+      <td style="vertical-align: top;">&#8220;Chemical
 Thermodynamics of Selenium&#8220;</td>
       <td style="vertical-align: top;"><a href="gems_ctdb.html#OLIN_et_al._2005">OLIN et al. (2005)</a></td>
     </tr>
     <tr>
       <td style="vertical-align: top;">Vol. 8</td>
-<td style="vertical-align: top;">&#8220;Chemical
+      <td style="vertical-align: top;">&#8220;Chemical
 Thermodynamics of Zirconium&#8220;</td>
       <td style="vertical-align: top;"><a href="gems_ctdb.html#BROWN_et_al._2005">BROWN et al. (2005)</a></td>
     </tr>
     <tr>
       <td style="vertical-align: top;">Vol. 11</td>
-<td style="vertical-align: top;">&#8220;Chemical
+      <td style="vertical-align: top;">&#8220;Chemical
 Thermodynamics of Thorium&#8220;</td>
       <td style="vertical-align: top;"><a href="gems_ctdb.html#RAND_et_al._2009">RAND et al. (2009)</a></td>
     </tr>
@@ -183,7 +204,7 @@ revised by THOENEN, T. (2012)</a></td>
 </table>
 
 <p> All other data contained in the Nagra/PSI TDB 01/01 have been
-adopted without any change.  <br>
+adopted without any change. <br>
 </p>
 
 <ul>
@@ -192,15 +213,17 @@ adopted without any change.  <br>
 
 <h4><a name="PSI_Nagra_TDB_Structure"></a>1.1.1. Database structure<br>
 </h4>
-<p>The PSI/Nagra TDB 12/07 distinguishes three types of data:<br></p>
+
+<p>The PSI/Nagra TDB 12/07 distinguishes three types of data:<br>
+</p>
+
 <ul>
-  <li>
-Core Data</li>
-  <li>
-Recommended Application Data</li>
-  <li>
-Supplemental Data</li>
+
+  <li>Core Data</li>
+  <li>Recommended Application Data</li>
+  <li>Supplemental Data</li>
 </ul>
+
 <p>
 <br>
 <img style="width: 533px; height: 443px;" alt="tdb-datatypes.png" src="tdb-datatypes.png"><br>
@@ -245,6 +268,7 @@ such estimated data would lead to obviously unacceptable results. Such
 estimates are based on chemical analogies, linear free energy
 relationships or on other suitable estimation methods. Supplemental
 data were introduced with the update to the Nagra/PSI TDB 12/07.</p>
+
 <p>The original Nagra/PSI TDB 01/01 was designed to be used with
 geochemical modeling codes that apply the law of mass action (LMA)
 algorithm. The essential thermodynamic data at 1 bar and 25 &#778;C are
@@ -257,28 +281,32 @@ are the basic building blocks for setting up formation reactions, while
 the secondary master species themselves are related to primary master
 species by means of formation reactions (secondary master species are
 often chosen for convenience in formulating formation reactions). With
-this database structure (which has been retained for theNagra/PSI TDB 12/07), the minimal dataset required to calculate
-geochemical equilibria at 1 bar and 25 &#778;C (0.1 MPa, 298.15 K), consists of a value for logK(298) for
+this database structure (which has been retained for theNagra/PSI TDB
+12/07), the minimal dataset required to calculate
+geochemical equilibria at 1 bar and 25 &#778;C (0.1 MPa, 298.15 K), consists
+of a value for logK(298) for
 the formation reaction of each secondary master species and each
 product species, whereas no thermodynamic data are required for the
-primary master species. 
- </p>
+primary master species. </p>
 
 <h4><a name="PSI_Nagra_Data_import"></a>1.1.2. Data import<br>
 </h4>
 
-
 <p>Data from the Nagra/PSI TDB 01/01 were imported by means of
 the PMATCHC code (http://les.web.psi.ch/Software/PMATCHC/index.htm),
 while the update to the Nagra/PSI TDB 12/07 was made entirely within
-the <a href="gems_tdbase.html/#P3300">"Thermodynamic Database" Mode</a> of GEMS.<br>
+the <a href="gems_tdbase.html/#P3300">"Thermodynamic Database" Mode</a>
+of GEMS.<br>
 </p>
 
 <p> </p>
+
 <p><a name="PSI_Nagra_and_SUPCRT"></a>In order to
-make the imported Nagra/PSI TDB 01/01 also usable at elevated temperatures and pressures, it was
+make the imported Nagra/PSI TDB 01/01 also usable at elevated
+temperatures and pressures, it was
 merged with a subset of the <a href="#DDB_COMPLEM">slop98.dat</a>
-file (http://geopig.asu.edu), as follows (for more details see <a href="gems_ctdb.html#THOENEN_and_KULIK_2003">THOENEN and KULIK 2003</a> ):<br>
+file (http://geopig.asu.edu), as follows (for more details see <a href="gems_ctdb.html#THOENEN_and_KULIK_2003">THOENEN and KULIK 2003</a>
+):<br>
 </p>
 
 <p>
@@ -308,11 +336,12 @@ the G0(298) values of the primary or secondary master species taking
 part in the formation reaction. All other thermodynamic data including
 the HKF-parameters were then taken from the SUPCRT database. <br>
 </p>
+
 <p>The
-GEMS-version of the PSI/Nagra TDB 12/07 has inherited all these procedures. In cases where the PSI/Nagra TDB
+GEMS-version of the PSI/Nagra TDB 12/07 has inherited all these
+procedures. In cases where the PSI/Nagra TDB
 12/07 lacks certain data, the following assumptions were made: <br>
 </p>
-
 
 <ol>
 
@@ -339,17 +368,19 @@ logK(298) and H0r(298) or logK(298) and
 S0r(298) are known, then the temperature applicability interval is set
 to 0 to 150 °C.</li>
 </ol>
+
 <p>This GEMS version of the PSI/Nagra TDB 12/07 can be used
 in some cases for
 the reliable
 calculation of aquatic equilibria up to 150 - 200 &#778;C at
 saturated
-vapor pressures. In most cases, however, calculations should be restricted to a pressure of 1 bar and to a temperature of 25 &#778;C.</p>
-<p>The PSI/Nagra TDB 12/07 part of the GEMS default database can be used alone or in combination with the <a href="#DDB_COMPLEM"> SUPCRT92 part</a> of the GEMS default database.<br>
+vapor pressures. In most cases, however, calculations should be
+restricted to a pressure of 1 bar and to a temperature of 25 &#778;C.</p>
+
+<p>The PSI/Nagra TDB 12/07 part of the GEMS default database can be
+used alone or in combination with the <a href="#DDB_COMPLEM"> SUPCRT92
+part</a> of the GEMS default database.<br>
 </p>
-
-
-
 
 <span style="font-weight: bold;"></span>
 <h3><a name="DDB_COMPLEM"></a>1.2. SUPCRT92 - slop98.dat</h3>
@@ -358,6 +389,7 @@ vapor pressures. In most cases, however, calculations should be restricted to a 
 </p>
 
 <h3><small> </small></h3>
+
 The SUPCRT92 part of the GEMS default database consists of slop98.dat
 data, directly
 imported into the <a href="gm_dcomp.html">DComp</a>record
@@ -387,9 +419,9 @@ corrections of partial molal thermodynamic properties of aqueous
 species
 are also incorporated into the GEM-Selektor code.&nbsp;<br>
 
-
-
-<p>The SUPCRT92 part of the GEMS default database can be used alone or in combination with the <a href="#DDB_KERNEL">PSI/Nagra TDB 12/07 part</a> of the GEMS default database
+<p>The SUPCRT92 part of the GEMS default database can be used alone or
+in combination with the <a href="#DDB_KERNEL">PSI/Nagra TDB 12/07 part</a>
+of the GEMS default database
 </p>
 
 <h4><a name="SLOP98_IMPORT"></a>1.2.1. About data import from the
@@ -497,7 +529,6 @@ this mineral as given in the slop98.dat file. For Pd-Oxyannite, the
 chemical
 formula seems to be wrong as it produces a charge imbalance. </p>
 
-
 <h3><font face="Helvetica, Arial, sans-serif"><a name="DDB_THIRD_PARTY"></a></font>1.3.
 Third-party databases<br>
 </h3>
@@ -557,7 +588,6 @@ any time at the user's discretion, but none of these changes will&nbsp;
 affect the default GEMS database (unless the user will find and report
 a bug in
 a record from the default database). &nbsp; </p>
-
 
 <hr size="2" width="100%">
 <h2><a name="DDB_FILES"></a>2.
@@ -962,11 +992,11 @@ Report, TM-44-xx-xx, Paul Scherrer Institut, Villigen, Switzerland.<br>
 
 <br>
 
-
 <hr size="2" width="100%">
-<p>Last change: 19.04.2013 TT</p>
+<p>Last change: 30.04.2013 TT, DK<br>
+</p>
 
-<p>end of file <br>
+<p>Copyright (c) 2003-2013, GEMS Development Team<br>
 &nbsp; </p>
 
 <br>

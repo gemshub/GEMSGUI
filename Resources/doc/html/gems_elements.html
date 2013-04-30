@@ -2,6 +2,7 @@
 <html><head>
 
 
+
   
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
@@ -91,7 +92,7 @@ of GEM-Selektor. </p>
 
 
 
-<img style="width: 737px; height: 560px;" alt="ElementsWizardStep1.png" src="ElementsWizardStep1.png"><br>
+<img style="width: 737px; height: 579px;" alt="ElementsWizardStep1.png" src="ElementsWizardStep1.png"><br>
 
 
 
@@ -118,7 +119,7 @@ forthcoming <a href="gems_aphsetup.html">Autophase Setup dialog</a>. <br>
 </p>
 <p>The structure and organization of the built-in database(s) is not
 hardcoded, but completely defined by DB.default file names.&nbsp; These
-file names follow a simple convention:&nbsp; each&nbsp; name consists
+file names follow a simple convention. Each&nbsp; name consists
 of two to six fields followed by a .pdb or .ndx extension: <br>
 </p>
 <p style="font-family: monospace;">&lt;DB
@@ -128,9 +129,7 @@ Chain&gt;.&lt;Database&gt;.[&lt;Subdatabase&gt;].[&lt;subset&gt;].[&lt;subsubset
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
   <tbody>
     <tr>
-      <td style="vertical-align: top; font-family: monospace;">compos.nagra-psi.ver03.12.ndx<br>
-
-compos.nagra-psi.ver03.12.pdb<br>
+      <td style="vertical-align: top; font-family: monospace;">compos.supcrt.pco.inorg.ver1998.ndx<br>compos.supcrt.pco.inorg.ver1998.pdb<br>
 
       </td>
       <td style="vertical-align: top; font-family: monospace;">icomp.supcrt.ver1998.ndx<br>
@@ -140,18 +139,13 @@ compos.nagra-psi.ver03.12.pdb<br>
 icomp.supcrt.ver1998.pdb</td>
     </tr>
     <tr>
-      <td style="vertical-align: top; font-family: monospace;">phase.nagra-psi.ver03.12.ndx<br>
-
-
-phase.nagra-psi.ver03.12.ndx</td>
+      <td style="vertical-align: top; font-family: monospace;">phase.supcrt.inorg.ver1998.ndx<br>phase.supcrt.inorg.ver1998.pdb</td>
       <td style="vertical-align: top; font-family: monospace;">dcomp.supcrt.inorg.solids.ver1998.ndx<br>
 
 dcomp.supcrt.inorg.solids.ver1998.pdb</td>
     </tr>
     <tr>
-      <td style="vertical-align: top; font-family: monospace;">dcomp.nagra-psi.aqions.ver03.12.ndx<br>
-
-dcomp.nagra-psi.aqions.ver03.12.pdb<br>
+      <td style="vertical-align: top; font-family: monospace;">dcomp.psi-nagra.rec.aqueous.ver12-07.v0.1.ndx<br>dcomp.psi-nagra.rec.aqueous.ver12-07.v0.1.pdb<br>
 
       </td>
       <td style="vertical-align: top; font-family: monospace;">sdref.3rdparty.cemdata.ver07.01.ndx<br>
@@ -161,9 +155,9 @@ sdref.3rdparty.cemdata.ver07.01.pdb</td>
   </tbody>
 </table>
 <br>
-<p>As seen on screenshot above, the &lt;DB chain&gt; and
-&lt;extension&gt; fields, as well as 'ver' keyword, are not shown,
-files from different chains but having the same &lt;Database&gt; field
+<p>On the Step1 page in the screenshot above, the &lt;DB chain&gt; and
+&lt;extension&gt; fields, as well as the 'ver' keyword, are not shown,
+and files from different chains but having the same &lt;Database&gt; field
 are shown as a single entry. The visible 'trees' begin from the
 &lt;Database&gt; field and can be expanded, if &lt;Subdatabase&gt;,
 &lt;Subset&gt;, ...&nbsp; are present in the names of some files with
@@ -172,11 +166,11 @@ with less fields are present (cf. <span style="font-family: monospace;">dcomp.su
 </p>
 <p>When using checkboxes for selection of "3rdparty" subdatabases, the
 user must know whether they are compatible with the selected database.
-For instance, the Cemdata'07 database requires the Nagra-PSI database
+For instance, the Cemdata'07 database requires the PSI/Nagra database
 to be selected, whereas the HERACLES database is standalone, and all
 other databases must be de-selected for its correct usage. The SUPCRT
 database can be used independently of any other database, either
-completely, or only 'organic' or 'inorg(anic)' subdtabases.Contents of the
+completely, or only 'organic' or 'inorg(anic)' subdtabases. Contents of the
 respective databases and subsets are described in the  <a href="gems_ctdb.html">default database documentation</a>. </p>
 <p>These features makes the selection of appropriate database, subsets,
 and extensions very simple and intuitive. Upon creation of a modeling
@@ -565,10 +559,10 @@ the project stoichiometry basis.<br>
 <hr size="2" width="100%">
 <p> </p>
 
-<p> Last change: 12 Dec. 2012&nbsp; DK<br>
+<p> Last change: 30 Apr. 2013&nbsp; DK<br>
 
 </p>
-Copyright (c) 2012, GEMS Development Team<br>
+Copyright (c) 2012-2013, GEMS Development Team<br>
 <br>
 
 <br>

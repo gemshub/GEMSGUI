@@ -1,29 +1,24 @@
 <!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
-<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 
-  
-<title>GEMS3 Techinfo Page</title>
-
-</head><body>
-<h1><img src="gems1.png" height="48" align="left" width="48"> GEM-Selektor version 3</h1>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"><title>GEMS3 Techinfo Page</title></head><body>
+<h1><img src="gems1.png" align="left" height="48" width="48"> GEM-Selektor version 3</h1>
 
 <h2>Technical Information</h2>
 
 <hr size="2" width="100%">
 <p>GEM-Selektor v.3 (GEMS3) is written in C/C++. It has a modern
 windowed multi-document Graphical User's Interface (GUI) that uses the
-functionality of Qt v.4 Toolkit for desktops in the form of
+functionality of Qt v.4 (v.5) UI Toolkit for desktops in the form of
 dynamically-linked libraries and plugins.<br>
 <br>
-Qt4 is a cross-platform framework that allows the same source code to
+Qt is a cross-platform framework that allows the same source code to
 be compiled and run on all major desktop PC platforms, as well as on
-some mobile devices. Desktop variants of Qt4 available under LGPL v.2.1
-licence are included in the Qt SDK, which can be downloaded from
-http://qt.nokia.com or http://qt-project.org.<br>
+some mobile devices. Desktop variants of Qt4 or Qt5 SDK, available under LGPL v.2.1
+licence, can be downloaded from http://qt-project.org.<br>
 &nbsp;&nbsp;&nbsp;&nbsp; <br>
 The GEMS3 executable code is produced by linking together Qt dynamic
-load libraries and plugins provided in Qt SDK with the following parts
+load libraries and plugins provided in Qt4 (Qt5) with the following parts
 compiled with the GNU C++ compilers:<br>
 </p>
 
@@ -37,9 +32,11 @@ Gibbs Energy Minimization (more ...); uses the Jama TNT C++ library
 (NIST) for numerical algebra, but no Qt functionality. GEMS3K code also
 includes the TSolMod class library of built-in models of mixing in
 phases-solutions.</li>
-  <li><b>GEMS-Vizor</b> code, which contains all the specific code for
+  <li><b>GEMS-GUI</b>
+code, which contains all the specific code for
 simple thermodynamic calculations, database management modules, widgets
-and dialogs. This part requires Qt headers for compilation. It also
+and dialogs. This part requires Qt headers for compilation; is is based
+in part on the work of the Qwt project (http://qwt.sf.net). It also
 uses parts of the SUPCRT92 code (translated from Fortran to C/C++), and
 parts of the TSolMod code.</li>
 </ul>
@@ -48,7 +45,7 @@ parts of the TSolMod code.</li>
 <p>The GEMS3 package also contains a Resources/ folder with
 configuration files, default thermodynamic database, help database, and
 some pdf documentation files. Set of icons used in GEM-Selektor GUI:
-(c) 2012, <u>Gillian Gr&uuml;</u><u>n</u>. <br>
+(c) 2012, <u>Gillian Grü</u><u>n</u>. <br>
 </p>
 
 
@@ -59,7 +56,7 @@ some pdf documentation files. Set of icons used in GEM-Selektor GUI:
 <h4>Windows XP/7/8</h4>
 
 
-<p>GEM-Selektor is built using Qt SDK v.1.2.1 with the MinGW port of
+<p>GEM-Selektor is built using Qt4.8.4 (or Qt5.0.2) with the MinGW port of
 GNU C++ compiler and linker. It comes as a self-extracting installer
 file&nbsp; having the name</p>
 
@@ -69,7 +66,7 @@ file&nbsp; having the name</p>
 
 
 <p>where&nbsp; <tt>&lt;ver&gt;</tt>&nbsp; stands for version number
-(e.g. 3.1), <tt>&lt;revGUI&gt;</tt> is the SVN trunk revision number
+(e.g. 3.2), <tt>&lt;revGUI&gt;</tt> is the SVN trunk revision number
 for the GEMS-Vizor part, and <tt>&lt;revG3K&gt;</tt> is the SVN trunk
 revision number for the GEMS3K code part. The installer (ca. 13 Mb
 size) is prepared using the 7-zip SFX Maker out of a 7-zip archive that
@@ -93,8 +90,8 @@ displays with 1600 x 900 or higher resolution.</p>
 <h4>Mac OS X (10.6, 10.7, 10.8)</h4>
 
 
-<p>GEM-Selektor is built using Qt SDK v.1.2.1 which requires the GNU
-C++ compiler and linker provided in the actual version of Xcode. GEMS3
+<p>GEM-Selektor is built using Qt4.8.4 (or Qt5.0.2) which requires the GNU
+C++ compiler and linker (clang for Qt5 variant) provided in the actual version of Xcode. GEMS3
 comes as a disk image file having the name</p>
 
 
@@ -103,7 +100,7 @@ comes as a disk image file having the name</p>
 
 
 <p>where&nbsp; <tt>&lt;ver&gt;</tt>&nbsp; stands for version number
-(e.g. 3.1), <tt>&lt;revGUI&gt;</tt> is the SVN trunk revision number
+(e.g. 3.2), <tt>&lt;revGUI&gt;</tt> is the SVN trunk revision number
 for the GEMS-Vizor part, and <tt>&lt;revG3K&gt;</tt> is the SVN trunk
 revision number for the GEMS3K code part. The installer (ca. 22 Mb
 size) is prepared using the <tt>macdeployqt</tt> utility of Qt SDK
@@ -127,8 +124,8 @@ color displays with 1600 x 900 or higher resolution.</p>
 <h4>Linux</h4>
 
 
-<p>GEM-Selektor is built using Qt SDK v.1.2.1 which uses the native GNU
-C++ compiler and linker. GEMS3 comes as a tar.gzip (tgz) archive file
+<p>GEM-Selektor is built using Qt4.8.4 (or Qt5.0.2)  which uses the native GNU
+C++ compiler and linker. The GEMS3 comes as a tar.gzip (tgz) archive file
 having the name</p>
 
 
@@ -137,7 +134,7 @@ Gems&lt;ver&gt;-&lt;revGUI&gt;.&lt;revG3K&gt;-linux-x86-&lt;bits&gt;.tgz</tt></p
 
 
 <p>where&nbsp; <tt>&lt;ver&gt;</tt>&nbsp; stands for version number
-(e.g. 3.1), <tt>&lt;revGUI&gt;</tt> is the SVN trunk revision number
+(e.g. 3.2), <tt>&lt;revGUI&gt;</tt> is the SVN trunk revision number
 for the GEMS-Vizor part, <tt>&lt;revG3K&gt;</tt> is the SVN trunk
 revision number for the GEMS3K code part, and <tt>&lt;bits&gt;</tt>
 stands for 32 or 64 depending on the linux distribution. The installer
@@ -179,9 +176,9 @@ click the "Change font..." button.</p>
 
 
 <hr size="2" width="100%">
-<p>Last updated:&nbsp; 20. 09. 2012<br>
+<p>Last updated:&nbsp; 30. 04. 2013<br>
 <br>
-Copyright (c)&nbsp; 2003-2012&nbsp; <a href="gems_team.html">GEMS Development Team</a>.<br>
+Copyright (c)&nbsp; 2003-2013&nbsp; <a href="gems_team.html">GEMS Development Team</a>.<br>
 <br>
 <br>
 </p>

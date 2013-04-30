@@ -1,62 +1,59 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-  <meta http-equiv="Content-Type"
- content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR"
- content="Mozilla/4.72 [en]C-BLUEWIN-CH20  (Win98; I) [Netscape]">
-  <title>GEMS3 SysEq Module</title>
-  <meta name="description" content="Version 2.0.0-PSI">
-</head>
-<body>
-<h1><img src="gems1.png" align="left" height="48" width="48"> <font
- color="#000066"> GEM-Selektor version 3<br>
+<html><head>
+
+
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR" content="Mozilla/4.72 [en]C-BLUEWIN-CH20  (Win98; I) [Netscape]"><title>GEMS3 SysEq Module</title>
+  
+  <meta name="description" content="Version 2.0.0-PSI"></head><body>
+<h1><img src="gems1.png" align="left" height="48" width="48"> <font color="#000066"> GEM-Selektor version 3<br>
 </font></h1>
 <h2>SysEq&nbsp; Module and Data Objects </h2>
 <hr size="2" width="100%">
 <h3>Contents</h3>
-<p style="margin-left: 40px;"><a href="#SYSEQ_INTRO"><font
- face="Helvetica, Arial, sans-serif">1. Introduction</font></a><br>
+<p><a href="#SYSEQ_INTRO">1. Introduction</a></p>
+
+
+<div style="margin-left: 40px;">
+<p><a href="#SYSEQ_WORK">1.1. SysEq Record Compression and Expansion</a> </p>
+</div>
+
+<p><a href="#SYSEQ_MWIZARD">2. System Create/Remake Wizard</a>
 </p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#SYSEQ_WORK">1.1. SysEq Record Compression and Expansion</a> </p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#SYSEQ_MWIZARD">2. System Create/Remake Wizard</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#WZSTEP_1">2.1. System Wizard Step 1</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#WZSTEP_2">2.2. System Wizard Step 2</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#SYSEQ_MWINDOW">3. SysEq Module Window</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#MWPAGE_1">3.1. SysEq Window IC_CP Page 1</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#MWPAGE_2">3.2. SysEq Window Phase Page 2</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#MWPAGE_3">3.3. SysEq Window Dcomp Page 3</a><br>
+<div style="margin-left: 40px;">
+<p><a href="#WZSTEP_1">2.1. System Wizard Step 1</a>
 </p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#MWPAGE_4">3.4. SysEq Window EqStat Page 4</a><br>
+<p><a href="#WZSTEP_2">2.2. System Wizard Step 2</a>
 </p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#MWPAGE_5">3.5. SysEq Window Config Page 5</a><br>
+</div>
+<p><a href="#SYSEQ_MWINDOW">3. SysEq Module Window</a>
 </p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#SYSEQ_DATA_ENTRIES">4. SysEq Window Data Entries</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a
- href="#SYSEQ_ERRORS">5. Warnings and Error Messages</a><br>
+<div style="margin-left: 40px;">
+<p><a href="#MWPAGE_1">3.1. SysEq Window IC_CP Page 1</a>
 </p>
-<p><br>
+<p><a href="#MWPAGE_2">3.2. SysEq Window Phase Page 2</a>
+</p>
+<p><a href="#MWPAGE_3">3.3. SysEq Window Dcomp Page 3</a></p>
+<p><a href="#MWPAGE_4">3.4. SysEq Window EqStat Page 4</a></p>
+<p><a href="#MWPAGE_5">3.5. SysEq Window Config Page 5</a></p>
+</div>
+
+
+
+
+
+
+<p><a href="#SYSEQ_DATA_ENTRIES">4. SysEq Window Data Entries</a>
+</p>
+<p><a href="#SYSEQ_ERRORS">5. Warnings and Error Messages</a></p>
 <br>
-<br>
-</p>
+
 <hr size="2" width="100%">
 <h2><a name="SYSEQ_INTRO"></a>1. Introduction </h2>
 <p>The main purpose of SysEq module to keep in SysEq database records
 only that part of information about CSD and GEM IPM calculated
 equilibrium speciation, which differs from that kept in the lists and
-vectors of the Project System data structure (stored in a <a
- href="gm_project.html">Project</a> record). By default, all species,
+vectors of the Project System data structure (stored in a <a href="gm_project.html">Project</a> record). By default, all species,
 phases and compositions involved in the project
 system are considered as "switched on". The default vector of bulk
 composition
@@ -146,8 +143,7 @@ xa_ column to define bulk composition of the system. If the GCO list
 which
 you see on this screen is insufficient for specifying all the bulk
 composition, press "Dcomp" button and put appropriate numbers into xd_
-column there (take care about <a
- href="file:///C:/gems2html/program/doc/html/GEMS-Linux-USREF.html#P6104">units
+column there (take care about <a href="file:///C:/gems2html/program/doc/html/GEMS-Linux-USREF.html#P6104">units
 of measurement</a>). Press&nbsp; "Phase" button and check out phases
 which you will definitely not consider in your modeling (don't check
 out most of solid phases as you may loose the advantages of GEM
@@ -159,10 +155,8 @@ into the bi_ column, if necessary.
 <p>Now, select the <tt>SysEq dialog</tt> window and press a big&nbsp;
 "BCC" button (Bulk Composition Calculation) in the upper left corner.
 In most cases, you will get a warning like this: </p>
-<p><img src="file:///C:/gems2html/program/doc/html/BCC_wrn.png"
- height="138" width="431"> </p>
-<p>This warning is very important. DB is a <a
- href="file:///C:/gems2html/program/doc/html/gp_howto.html#P3211">numerical
+<p><img style="width: 473px; height: 309px;" alt="BCC_check" src="MissingICsConflictWarning.png"> </p>
+<p>This warning is very important. DB is a <a href="file:///C:/gems2html/program/doc/html/gp_howto.html#P3211">numerical
 threshold</a> of the IPM algorithm defining a minimum possible number
 of moles of an independent component in bulk composition of the system.
 So, the first line of this warning means that there are some chemical
@@ -395,8 +389,7 @@ vector&nbsp;</dt>
   <dd>&nbsp;<br>
   </dd>
   <dt> <a name="tBCu_"></a><big><b><tt>tBCu_</tt></b></big> - Scales
-of IC quantity/concentration (packed together with the <a
- href="gems_bcc.html#bi_"><tt>bi_</tt></a> vector)</dt>
+of IC quantity/concentration (packed together with the <a href="gems_bcc.html#bi_"><tt>bi_</tt></a> vector)</dt>
   <dd> &nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
@@ -720,5 +713,5 @@ end of file</tt> <br>
 <br>
 <br>
 <br>
-</body>
-</html>
+
+</body></html>

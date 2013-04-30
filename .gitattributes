@@ -413,7 +413,6 @@ Resources/doc/txt/INSTALL.linux.txt -text
 Resources/doc/txt/INSTALL.macosx.txt -text
 Resources/doc/txt/INSTALL.windows.txt -text
 Resources/help/gems3help.qch -text
-Resources/help/gems3help.qhc -text
 Resources/img/gems1024.png -text
 Resources/img/gems3.ico -text
 Resources/img/gems50.png -text
