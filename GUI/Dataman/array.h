@@ -224,7 +224,7 @@ template <class T>
 size_t
 TOArray<T>::Add(const T& t)
 {
-    resize(this->count);
+    this->resize(this->count);
     this->p[this->count - 1] = t;
     return this->count - 1;
 }
@@ -325,7 +325,7 @@ TArrayF<T>::AddUnique(const T& t)
     if( ii >=0 )
       return ii;
     else
-      return Add(t);
+      return this->Add(t);
 }
 
 // Added for convenience
@@ -375,7 +375,7 @@ template <class T>
 size_t
 TIArray<T>::Add(T* t)
 {
-    resize(this->count);
+    this->resize(this->count);
     this->p[this->count - 1].reset(t);
     return this->count - 1;
 }

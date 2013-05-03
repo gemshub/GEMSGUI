@@ -36,15 +36,17 @@
 #include "GraphDialog.h"
 
 const char* GEMS_LOGO_ICON = "Icons/gems1.png";
-const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
 const char* GEMS_VERSION_STAMP = "GEM-Selektor 3 (GEMS3)";
 #ifdef __unix
 #ifdef __APPLE__
-const int GEMS_DEFAULT_FONT_SIZE = 14;
+const char* GEMS_DEFAULT_FONT_NAME = "Monaco";
+const int GEMS_DEFAULT_FONT_SIZE = 13;
 #else
+const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
 const int GEMS_DEFAULT_FONT_SIZE = 11;
 #endif
 #else
+const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
 const int GEMS_DEFAULT_FONT_SIZE = 10;
 #endif
 TVisorImp* pVisorImp;
@@ -142,7 +144,7 @@ TVisorImp::TVisorImp(int c, char** v):
        toolProject->addAction(actionGtDemo);
        toolProject->addAction(actionGEM2MT);
        //toolProject->addAction(actionDualTh);
-       //toolProject->addAction(actionUnSpace);
+       toolProject->addAction(actionUnSpace);
        toolProject->addAction(actionProject);
        toolProject->setWindowTitle("toolProject");
 

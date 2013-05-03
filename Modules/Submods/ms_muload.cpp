@@ -1087,6 +1087,18 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
         if( *next == ';')
            stmt = next+1;
 
+        if( *next == '$' )
+        {
+            while( !strchr("\r\n\0", *next ))
+            {
+                *ecur = *cur;
+                ecur++;
+                cur++;
+                next++;
+            }
+            continue;
+        }
+
         if( *next != A_delim_IPM && !cc && *next != N_BEGIN )
         {   // Flush text if not relevant for preprocessing
             *ecur = *cur;

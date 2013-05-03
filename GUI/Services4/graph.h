@@ -211,7 +211,7 @@ public:
     /// obsolete
     //void getMaxMin( QPointF& min, QPointF& max );
     void getMaxMinIso( QPointF& min, QPointF& max );
-    void getMaxMinIsoZ( double& minZ, double& maxZ );
+
 };
 
 
@@ -299,16 +299,16 @@ struct GraphData
     void adjustAxis( double& min, double& max, int& numTicks);
 
    // functions to isoline plot
-   int  getPointCol( int i,  QVector<QPointF>& points );
    void setColorList();
    void getColorList();
-   int  getColorLine( int ii );
    void setScales();
    bool goodIsolineStructure( int aGraphType );
    QColor getColorIsoline(int ii) const
    {
-       return scale[ii];
+      return scale[ii];
    }
+   double getValueIsoline(int ii);
+   void setValueIsoline(double val, int ii);
 
 };
 

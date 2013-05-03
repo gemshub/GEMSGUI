@@ -61,6 +61,7 @@ class LabelDelegate: public QItemDelegate
 
   QVector<int> first;
   QVector<int> maxXndx;
+  bool isIsoline;
 
  public:
 
@@ -70,6 +71,10 @@ class LabelDelegate: public QItemDelegate
                          const QModelIndex &index) const;
    void setModelData(QWidget *editor, QAbstractItemModel *model,
                                     const QModelIndex &index) const;
+   void setIsoline( bool aIso )
+   {
+      isIsoline = aIso;
+   }
 
 };
 
@@ -90,7 +95,6 @@ class GraphDialog: public QDialog, public Ui::GraphDialogData
 
     void ShowLegend();
     void ShowIsolineLegend();
-    gstring getTextIsoline(int ii);
 
     void closeEvent(QCloseEvent*);
 

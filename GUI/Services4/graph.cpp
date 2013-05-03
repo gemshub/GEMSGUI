@@ -129,6 +129,9 @@ QPointF TPlot::getPoint( int line, int number, int ndxAbs )
     if(ndxAbs >= nAbs )
         ndxAbs = 0;
 
+    if( ndxAbs < 0 )
+        return QPointF( DOUBLE_EMPTY, DOUBLE_EMPTY );
+
     if( foString == true )  // put graph by column
     {
         if( nObjX < 0 )
@@ -156,8 +159,8 @@ int TPlot::getPointLine( int j, QVector<QPointF>& points, int ndxAbs )
 
     for(int  ii=0; ii<dX; ii++ )
     {   pos = getPoint( j, ii, ndxAbs );
-        if( pos.x() == DOUBLE_EMPTY || pos.y() == DOUBLE_EMPTY )
-          continue;
+        //if( pos.x() == DOUBLE_EMPTY || pos.y() == DOUBLE_EMPTY )
+        //  continue;
         points.append(pos);
     }
     return dX;
@@ -228,18 +231,6 @@ void TPlot::getMaxMinIso( QPointF& min, QPointF& max )
    }
 }
 
-void TPlot::getMaxMinIsoZ( double& minZ, double& maxZ )
-{
-    double z;
-
-    maxZ = minZ = aObj[nObjY].Get(0,2);
-    for( int ii =0; ii<dX; ii++)
-    {
-         z = aObj[nObjY].Get(ii,2);
-         if( minZ > z ) minZ = z;
-         if( maxZ < z ) maxZ = z;
-   }
-}
 
 //---------------------------------------------------------------------------
 // GraphData
@@ -476,50 +467,6 @@ bool GraphData::goodIsolineStructure( int aGraphType )
   return true;
 }
 
-// get array of points to draw one columns
-// return number of points in column
-int GraphData::getPointCol( int i,  QVector<QPointF>& points )
-{
-    int  nObjX, nObjY, nLn = 0;
-    float x, y=0.;
-    points.clear();
-
-    nObjX = plots[0].getObjX();
-    nObjY = plots[0].getObjY();
-
-    if( plots[0].getfoString() == true )  /* put graph by column */
-    {
-       if( nObjX < 0 )
-          x = i;
-       else
-          x = aObj[nObjX].GetEmpty(i,0);
-     }
-     else    /* put graph by gstring */
-         x = aObj[nObjX].GetEmpty(0,i);
-
-     points.append( QPointF(x, y));
-     for( int jj=0; jj<plots[0].getLinesNumber(); jj++, nLn++ )
-       {
-         if( plots[0].getfoString() == true )  /* put graph by column */
-           {
-             if( aObj[nObjY].IsEmpty(i,jj) )
-               y += 0;
-             else
-               y += aObj[nObjY].Get(i,jj);
-           }
-          else    /* put graph by gstring */
-          {
-            if( aObj[nObjY].IsEmpty(jj,i) )
-              y += 0;
-            else
-              y += aObj[nObjY].Get(jj,i);
-          }
-         points.append( QPointF(x, y));
-      }
-
-    return nLn;
-}
-
 // setup color scale for ISOLINE graphics
 // get data from plots[1] object, colums 2, 3, 4
 void GraphData::setColorList()
@@ -537,11 +484,28 @@ void GraphData::setColorList()
      if( ( cred ==0 && cgreen == 0 && cblue == 0 ) ||
          cred < 0 || cgreen < 0 || cblue < 0 ||
          cred > 255 || cgreen > 255 || cblue > 255 )
-       scale.Add( new QColor( true, ii, plots[1].getdX()) );
+     { //default
+         if(!ii)
+            scale.Add( new QColor( Qt::red ) );
+         else if( ii == plots[1].getdX()-1 )
+               scale.Add( new QColor( Qt::darkGreen ) );
+              else
+                scale.Add( new QColor( Qt::yellow ) );
+     }
      else
        scale.Add( new QColor( cred, cgreen, cblue ));
   }
 
+}
+
+double GraphData::getValueIsoline(int ii)
+{
+    return aObj[plots[1].getObjY()].Get(ii,0);
+}
+
+void GraphData::setValueIsoline(double val, int ii)
+{
+    aObj[plots[1].getObjY()].Put( val, ii,0);
 }
 
 // put color scale for ISOLINE graphics to object plots[1]
@@ -560,48 +524,20 @@ void GraphData::getColorList()
 }
 
 // put sizes scale for ISOLINE graphics to object plots[1]
-//  colums 0,1
+//  colum 0
 void GraphData::setScales()
 {
-  double minZ, maxZ;
-
-  plots[0].getMaxMinIsoZ(  minZ, maxZ );
-
   int nObjY = plots[1].getObjY();
-  float delta = (maxZ - minZ ) / plots[1].getdX();
+  double delta = 1. / (plots[1].getdX()-1);
 
-  if( aObj[nObjY].Get(0,0) !=0 || aObj[nObjY].Get(0,1) != 0. )
-    return;
-
-  for( int ii=0; ii< plots[1].getdX(); ii++ )
+  for( int ii=0; ii< plots[1].getdX()-1; ii++ )
   {
-     aObj[nObjY].Put( maxZ-delta*(ii+1), ii, 0 );
-     aObj[nObjY].Put( maxZ-delta*ii, ii, 1 );
+    if( aObj[nObjY].Get(ii,0) == 0 )
+     aObj[nObjY].Put( 1.-delta*(ii), ii, 0 );
   }
-  aObj[nObjY].Put( minZ, plots[1].getdX()-1, 0 );
-
+  aObj[nObjY].Put( 0., plots[1].getdX()-1, 0 );
 }
 
-// find color by value z in point ii
-//  if z not in defined range, undefined color
-int GraphData::getColorLine(int ii )
-{
-  double z1, z2, z;
-
-  int jj, nObjY = plots[1].getObjY();
-
-  z = aObj[plots[0].getObjY()].Get(ii,2);
-
-  for(  jj=0; jj< plots[1].getdX(); jj++ )
-  {
-     z1 = aObj[nObjY].Get(jj,0);
-     z2 = aObj[nObjY].Get(jj,1);
-
-     if( z <= z2 && z >= z1)
-       return jj;
-  }
-  return -1;
-}
 
 //---------------------------------------------------------------------------
 

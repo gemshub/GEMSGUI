@@ -164,6 +164,7 @@ void GraphDialog::ShowLegend()
     QTableWidgetItem *itemL, *itemN;
     Qt::ItemFlags flags;
 
+    ((LabelDelegate *)tbLegend->itemDelegate())->setIsoline(false);
     tbLegend->setAcceptDrops(true);
     tbLegend->setEditTriggers( QAbstractItemView::DoubleClicked|QAbstractItemView::AnyKeyPressed );
 
@@ -189,26 +190,19 @@ void GraphDialog::ShowLegend()
         itemN->setToolTip("Legend column 3");
         tbLegend->setItem(ii, 2, itemN );
     }
-}
 
-gstring GraphDialog::getTextIsoline(int ii)
-{
-    char buf[200];
-    int nObjY = gr_data.plots[1].getObjY();
-    memset( buf, 0, 150 );
-    sprintf(buf, " %.4g : %.4g",
-            aObj[nObjY].Get(ii,0), aObj[nObjY].Get(ii,1));
-    return gstring(buf);
 }
 
 // Insert labels in legend box (Isoline graph)
 void GraphDialog::ShowIsolineLegend()
 {
     QTableWidgetItem *itemL, *itemN;
-    //Qt::ItemFlags flags;
+    Qt::ItemFlags flags;
 
+    ((LabelDelegate *)tbLegend->itemDelegate())->setIsoline(true);
     tbLegend->setAcceptDrops(false);
-    tbLegend->setEditTriggers( QAbstractItemView::NoEditTriggers );
+    //tbLegend->setEditTriggers( QAbstractItemView::NoEditTriggers );
+    tbLegend->setEditTriggers( QAbstractItemView::DoubleClicked|QAbstractItemView::AnyKeyPressed );
 
     tbLegend->clear();
     tbLegend->setRowCount(gr_data.scale.GetCount());
@@ -218,17 +212,17 @@ void GraphDialog::ShowIsolineLegend()
 
         TPlotLine pl( "Scale",  QwtSymbol::Rect, 0, 0, gr_data.scale[ii].red(),
                       gr_data.scale[ii].green(), gr_data.scale[ii].blue() );
-        gstring str = getTextIsoline(ii);
-
         QIcon icon;
         paintIcon( icon, pl );
         itemL = new QTableWidgetItem(icon, "");
-        //flags = itemL->flags();
-        //itemL->setFlags(flags & ~Qt::ItemIsEditable);
+        flags = itemL->flags();
+        itemL->setFlags(flags & ~Qt::ItemIsEditable);
+        itemL->setToolTip("Legend column 1");
 
         tbLegend->setItem(ii, 0, itemL );
-        itemN = new QTableWidgetItem(tr("%1").arg(str.c_str()));
-        tbLegend->setItem(ii, 1, itemN );
+        itemN = new QTableWidgetItem(tr("%1").arg(gr_data.getValueIsoline(ii)));
+        itemN->setToolTip("Legend column 3");
+        tbLegend->setItem(ii, 2, itemN );
     }
  }
 
@@ -270,7 +264,7 @@ void GraphDialog::changeIcon( int row, int column )
 
 void GraphDialog::changeNdx( int row, int column )
 {
-    if( column == 1 )
+    if( column == 1 &&  gr_data.graphType != ISOLINES )
     {
        int ndxX = tbLegend->item(row, column)->text().toInt();
        gr_data.setIndex( row, ndxX );
@@ -279,9 +273,18 @@ void GraphDialog::changeNdx( int row, int column )
    }
     if( column == 2 )
     {
-       gstring  name = tbLegend->item(row, column)->text().toLatin1().data();
-       gr_data.setName( row, name.c_str() );
-       SaveGraphData();
+      if( gr_data.graphType != ISOLINES )
+      {
+        gstring  name = tbLegend->item(row, column)->text().toLatin1().data();
+        gr_data.setName( row, name.c_str() );
+        SaveGraphData();
+      }
+      else
+      {
+         double  val = tbLegend->item(row, column)->text().toDouble();
+         gr_data.setValueIsoline( val, row );
+         SaveGraphData();
+      }
    }
 
 }
@@ -503,7 +506,8 @@ void DragTableWidget::mouseMoveEvent( QMouseEvent *e )
 }
 
 
-LabelDelegate::LabelDelegate( QVector<int> afirst, QVector<int> amaxXndx, QObject * parent ):
+LabelDelegate::LabelDelegate( QVector<int> afirst,
+                              QVector<int> amaxXndx, QObject * parent ):
     QItemDelegate( parent ), first(afirst), maxXndx(amaxXndx)
 {
 }
@@ -517,11 +521,13 @@ QWidget *LabelDelegate::createEditor(QWidget *parent,
     if( index.column() == 2 )
     {
        QLineEdit *editor =  new QLineEdit( parent);
+       if( isIsoline )
+           editor->setValidator( new QDoubleValidator() );
        editor->setMaxLength( 15 );
        return editor;
        //return QItemDelegate::createEditor( parent, option,  index );
     }
-    if( index.column() == 1 )
+    if( !isIsoline && index.column() == 1 )
     {
       int ii, row= index.row();
       int nAbs = maxXndx[0];

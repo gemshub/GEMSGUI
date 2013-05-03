@@ -59,6 +59,7 @@ TPlotWidget::TPlotWidget( GraphData* aGr_data, QWidget *parent):
 {
     setAcceptDrops(true);
     m_grid = 0;
+    d_spectrogram = 0;
     m_plot = new QwtPlot();
 
     QVBoxLayout * const layout = new QVBoxLayout;
@@ -107,12 +108,10 @@ void TPlotWidget::showPlot()
 void TPlotWidget::replotPlot( bool  isFragment )
 {
     //clear lines
-    for(int ii=0; ii<m_curves.count(); ii++)
-    {
-        if( m_curves[ii] )
-         {   m_curves[ii]->detach();
-             delete m_curves[ii];\
-         }
+    QMap<QString, QwtPlotCurve*>::const_iterator i;
+    for (i = m_curves.constBegin(); i != m_curves.constEnd(); ++i)
+    {   i.value()->detach();
+        //delete i.value();
     }
     m_curves.clear();
 
@@ -126,6 +125,13 @@ void TPlotWidget::replotPlot( bool  isFragment )
          }
     }
     m_intervalcurves.clear();
+
+    //clear QwtPlotSpectrogram
+    if( d_spectrogram )
+    { d_spectrogram->detach();
+      delete d_spectrogram;
+      d_spectrogram = 0;
+    }
 
     if(  isFragment == true )
     {
@@ -194,38 +200,66 @@ void TPlotWidget::showPlotLines()
    }
 }
 
-void TPlotWidget::showPlotLine( int nLine, int nPlot, int nLineinPlot )
+QwtPlotCurve *TPlotWidget::newCurve( int nLine )
 {
-
-    if( gr_data->getIndex(nLine) < 0 )
-    {
-        m_curves.insert(nLine,0);
-        return;
-    }
-
-    //define curve
-    QwtPlotCurve *m_curve = new QwtPlotCurve(QString( gr_data->getName(nLine).c_str() ));
-    m_curve->setRenderHint(QwtPlotItem::RenderAntialiased); //sglazhivanie
+    // define pen
     QPen pen = QPen( gr_data->getColor(nLine) );
     pen.setWidth( gr_data->getLineSize(nLine) );
-    m_curve->setPen( pen );
-    if( gr_data->getLineSize(nLine) == 0 )
-       m_curve->setStyle( QwtPlotCurve::NoCurve );
-
     // define symbol
     QwtSymbol* symbol = new QwtSymbol;
     setQwtSymbol( symbol, gr_data->getType(nLine),
                   gr_data->getSize(nLine), gr_data->getColor(nLine)  );
+
+    QwtPlotCurve *m_curve = new QwtPlotCurve(QString( gr_data->getName(nLine).c_str() ));
+    m_curve->setRenderHint(QwtPlotItem::RenderAntialiased); //sglazhivanie
+    m_curve->setPen( pen );
+    if( gr_data->getLineSize(nLine) == 0 )
+       m_curve->setStyle( QwtPlotCurve::NoCurve );
     m_curve->setSymbol( symbol );
+    return m_curve;
+}
+
+
+void TPlotWidget::showPlotLine( int nLine, int nPlot, int nLineinPlot )
+{
+    QwtPlotCurve *m_curve = 0;
+    QString keyCur = QString("%1").arg(nLine);
+
+    if( gr_data->getIndex(nLine) < 0 )
+      return;
 
     // get array of not empty points
     QVector<QPointF> points;
     gr_data->plots[nPlot].getPointLine( nLineinPlot, points, gr_data->getIndex(nLine) );
-    m_curve->setSamples( points );
+    QVector<QPointF> pnt;
 
-    m_curve->attach(m_plot);
-    m_curves.insert(nLine,m_curve);
-    //m_curves.append(m_curve);
+    for(int ii=0; ii<points.size(); ii++ )
+    {
+        if( points[ii].x() == DOUBLE_EMPTY || points[ii].y() == DOUBLE_EMPTY )
+        {
+            if(pnt.size() > 0 )
+            {
+                //add curve
+                m_curve = newCurve( nLine );
+                m_curve->setSamples( pnt );
+                m_curve->attach(m_plot);
+                m_curves.insert( keyCur , m_curve);
+                pnt.clear();
+            }
+        }
+        else
+            pnt.append(points[ii]);
+    }
+
+    if(pnt.size() > 0 )
+    {
+        //add curve
+        m_curve = newCurve( nLine );
+        m_curve->setSamples( pnt );
+        m_curve->attach(m_plot);
+        m_curves.insert( keyCur , m_curve);
+        pnt.clear();
+    }
 }
 
 void TPlotWidget::replotPlotLine( int nLine )
@@ -233,11 +267,14 @@ void TPlotWidget::replotPlotLine( int nLine )
     if( gr_data->graphType == LINES_POINTS )
     { //define curve
 
-      if( m_curves[nLine] )
-      {   m_curves[nLine]->detach();
-          delete m_curves[nLine];
-      }
-      m_curves.removeAt(nLine);
+        QString keyCur = QString("%1").arg(nLine);
+        QList<QwtPlotCurve*> values = m_curves.values(keyCur);
+        for (int i = 0; i < values.size(); i++)
+        {
+            values.at(i)->detach();
+            //delete values.at(i);
+        }
+        m_curves.remove(keyCur); // remove all for key
 
       int nPlot = gr_data->getPlot( nLine );
       int nLineinPlot = nLine -gr_data->plots[nPlot].getFirstLine();
@@ -537,7 +574,6 @@ void TPlotWidget::showCumulativeLines()
 
     m_curve->attach(m_plot);
     m_intervalcurves.insert(nLine,m_curve);
-    //m_curves.append(m_curve);
    }
 }
 
@@ -613,7 +649,8 @@ SpectrogramData::SpectrogramData(GraphData* aGr_data)
                     break;
             }
         }
-        if( x != points[jj].x() && y != points[jj].y())
+        //if( points.count()<1 ||
+        //        (x != points[jj].x() && y != points[jj].y()))
             points.insert(jj, QwtPoint3D(x,y,z) );
 
     }
@@ -649,12 +686,17 @@ double SpectrogramData::value( double x, double y ) const
 class ColorMap: public QwtLinearColorMap
 {
 public:
-    ColorMap():
-        QwtLinearColorMap( Qt::darkCyan, Qt::red )
+    ColorMap( GraphData* aGr_data ):
+        QwtLinearColorMap( aGr_data->scale[aGr_data->scale.GetCount()-1],
+                           aGr_data->scale[0] )
     {
-        addColorStop( 0.1, Qt::cyan );
-        addColorStop( 0.6, Qt::green );
-        addColorStop( 0.95, Qt::yellow );
+        for(int ii=1; ii<aGr_data->scale.GetCount()-1; ii++)
+            addColorStop( aGr_data->getValueIsoline(ii),
+                          aGr_data->getColorIsoline(ii) );
+
+        //addColorStop( 0.1, Qt::cyan );
+        //addColorStop( 0.6, Qt::green );
+        //addColorStop( 0.95, Qt::yellow );
     }
 };
 
@@ -663,23 +705,23 @@ void TPlotWidget::showIsoLines()
     d_spectrogram = new QwtPlotSpectrogram();
     d_spectrogram->setRenderThreadCount( 0 ); // use system specific thread count
 
-    d_spectrogram->setColorMap( new ColorMap() );
+    d_spectrogram->setColorMap( new ColorMap(gr_data) );
 
     d_spectrogram->setData( new SpectrogramData( gr_data ) );
     d_spectrogram->attach( m_plot );
 
-    QList<double> contourLevels;
-    for ( double level = 0.5; level < 10.0; level += 1.0 )
-        contourLevels += level;
-    d_spectrogram->setContourLevels( contourLevels );
+    //QList<double> contourLevels;
+    //for ( double level = 0.5; level < 10.0; level += 1.0 )
+    //    contourLevels += level;
+    //d_spectrogram->setContourLevels( contourLevels );
+    //cout << " showIsoLines() 4" << endl;
 
     const QwtInterval zInterval = d_spectrogram->data()->interval( Qt::ZAxis );
     // A color bar on the right axis
     QwtScaleWidget *rightAxis = m_plot->axisWidget( QwtPlot::yRight );
     rightAxis->setTitle( "Intensity" );
     rightAxis->setColorBarEnabled( true );
-    rightAxis->setColorMap( zInterval, new ColorMap() );
-
+    rightAxis->setColorMap( zInterval, new ColorMap(gr_data) );
     m_plot->setAxisScale( QwtPlot::yRight, zInterval.minValue(), zInterval.maxValue() );
     m_plot->enableAxis( QwtPlot::yRight );
 

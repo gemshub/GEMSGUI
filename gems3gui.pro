@@ -12,7 +12,6 @@ CONFIG -= warn_on
 CONFIG += warn_off
 #CONFIG += help
 CONFIG += thread
-#CONFIG += printsupport
 QT += network
 QT += sql
 QT += xml
@@ -38,9 +37,9 @@ macx-g++ {
   CONFIG += warn_off
 }
 
-RESOURCES = ./GUI/GUI.qrc
+RESOURCES      = ./GUI/GUI.qrc
 
-QWT6_CPP  =  ./GUI/QWT
+QWT6_CPP       =  ./GUI/QWT
 SERVICES4_CPP  =  ./GUI/Services4
 DATAMAN_CPP    =  ./GUI/Dataman
 DIALOGS4_CPP   =  ./GUI/Dialogs4

@@ -42,7 +42,7 @@
 
 const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
 const char *GEMS_ABOUT_HTML = "gems_about.html#PAGE_ABOUT";
-const char *_GEMS_version_stamp = " GEMS-GUI v.3.1 r.2330 (qwt) ";
+const char *_GEMS_version_stamp = " GEMS-GUI v.3.2 rc.2370 ";
 extern const char *_GEMIPM_version_stamp;
 
 HelpWindow* HelpWindow::pDia = 0;
@@ -241,18 +241,19 @@ void HelpWindow::helpVersion()
     QMessageBox::information(this,
 #ifdef __unix
 #ifdef __APPLE__
-           trUtf8("Title"), trUtf8("GEMS3.1 (MacOS X >10.6 64)\n\n")+
+           trUtf8("Title"), trUtf8("GEMS3.2 (MacOS X >10.6 64 clang)\n\n")+
 #else
-           trUtf8("GEMS3.1 (Linux 32/64 gcc4.4)"),
+           trUtf8("GEMS3.2 (Linux 32/64 gcc4.7 Qt5)"),
 #endif
 #else
-           trUtf8("GEMS3.1 (Windows 7 (XP) 32/64"),
+           trUtf8("GEMS3.2 (Windows 7 MinGW 32 gcc4.7"),
 #endif
-           trUtf8("\nThis is GEM-Selektor program package\n\n")+
+           trUtf8("\nThis is GEM-Selektor code package\n\n")+
            trUtf8( _GEMS_version_stamp ) + trUtf8(  "\n\nusing " )+
            trUtf8( _GEMIPM_version_stamp ) +
-           trUtf8( "\n\n\nFor GEMS developers community\n\n"
-                  "(c) 2012, PSI-ETHZ GEMS Development Team\n") );
+           trUtf8( "\n\n\nFor GEMS R&D community\n\n"
+                  "(c) 2013, GEMS Development Team\n\n"
+                  "          PSI-UH-ETHZ" ) );
 }
 
 void HelpWindow::helpAbout()
