@@ -35,7 +35,7 @@ SymbolDialog::SymbolDialog( TPlotLine& aData, QWidget* parent):
     QIcon icon;
     TPlotLine plot_( "Scale",  0, 0, 0, 0, 0, 60 );
 
-    for(int ii=0; ii<22; ii++ )
+    for(int ii=0; ii<24; ii++ )
     {
       pp = new QRadioButton(groupBox);
       // make symbol icons by program
@@ -71,7 +71,7 @@ void SymbolDialog::languageChange()
 TPlotLine& SymbolDialog::GetPlotLine()
 {
     int type = 0;
-    for( int ii=0; ii<22; ii++)
+    for( int ii=0; ii<24; ii++)
     {
         if( smbGroup->button(ii)->isChecked() )
         {

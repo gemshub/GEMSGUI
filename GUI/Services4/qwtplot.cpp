@@ -42,7 +42,12 @@ void setQwtSymbol( QwtSymbol* symbol, int type, int size, QColor color  )
     // define symbol
     if( type > 14 )
     {
-      type -= 14;
+        if( type == 22)
+          type = 13;
+        else
+           if( type == 23)
+              type = 14;
+            else type -= 14;
       // symbol->setBrush( color ); // nocolor
     }
     else
