@@ -195,22 +195,28 @@ void TPlot::getMaxMinLine( QPointF& min, QPointF& max, int line, int ndxAbs )
     QPointF point;
     int jj = line;
 
-    min = getPoint( 0, jj, ndxAbs );
+    min = getPoint( jj, 0, ndxAbs );
     max = min;
     for( int ii =0; ii<dX; ii++)
     {
            point = getPoint( jj, ii, ndxAbs );
-           if( min.x() > point.x() ) min.setX( point.x() );
-           if( max.x() < point.x() ) max.setX( point.x() );
-           if( min.y() > point.y() ) min.setY( point.y() );
-           if( max.y() < point.y() ) max.setY( point.y() );
+           if( point.x() == DOUBLE_EMPTY || point.y() == DOUBLE_EMPTY )
+             continue;
+           if( min.x() > point.x() || min.x() == DOUBLE_EMPTY  )
+               min.setX( point.x() );
+           if( max.x() < point.x() || max.x() == DOUBLE_EMPTY )
+               max.setX( point.x() );
+           if( min.y() > point.y() || min.y() == DOUBLE_EMPTY )
+                min.setY( point.y() );
+           if( max.y() < point.y() || max.y() == DOUBLE_EMPTY )
+               max.setY( point.y() );
     }
 }
 
 
 // must be changed ---------------------------------------------------------
 
-void TPlot::getMaxMinIso( QPointF& min, QPointF& max )
+/*void TPlot::getMaxMinIso( QPointF& min, QPointF& max )
 {
     double x,y;
     x = aObj[nObjY].Get(0,0);
@@ -230,7 +236,7 @@ void TPlot::getMaxMinIso( QPointF& min, QPointF& max )
          if( max.y() < y ) max.setY( y );
    }
 }
-
+*/
 
 //---------------------------------------------------------------------------
 // GraphData
@@ -361,9 +367,13 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
     if( graphType == ISOLINES )
     {
        goodIsolineStructure( graphType );
-       plots[0].getMaxMinIso(  min, max );
-       minX = min.x();
-       maxX = max.x();
+       //plots[0].getMaxMinIso(  min, max );
+       //       minX = min.x();
+       //       maxX = max.x();
+       plots[0].getMaxMinLine( min, max, 0, 0 );
+       minX = min.y();
+       maxX = max.y();
+       plots[0].getMaxMinLine( min, max, 1, 0 );
        minY = min.y();
        maxY = max.y();
        setColorList();

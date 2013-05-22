@@ -715,11 +715,12 @@ void TPlotWidget::showIsoLines()
     d_spectrogram->setData( new SpectrogramData( gr_data ) );
     d_spectrogram->attach( m_plot );
 
-    //QList<double> contourLevels;
-    //for ( double level = 0.5; level < 10.0; level += 1.0 )
-    //    contourLevels += level;
-    //d_spectrogram->setContourLevels( contourLevels );
-    //cout << " showIsoLines() 4" << endl;
+    QList<double> contourLevels;
+    for ( double level = 0; level < 1; level += .1 )
+        contourLevels += level;
+    d_spectrogram->setContourLevels( contourLevels );
+    d_spectrogram->setDisplayMode( QwtPlotSpectrogram::ContourMode, true );
+    d_spectrogram->setDefaultContourPen( QPen()  );
 
     const QwtInterval zInterval = d_spectrogram->data()->interval( Qt::ZAxis );
     // A color bar on the right axis
