@@ -627,22 +627,22 @@ LOAD_NIDMCOEF:
         }
 
    LOAD_UPTMODCOEF:
-// new: load uptake kinetics model parameters here
+// new: load uptake kinetics model parameters here  !!! compression of phase DCs not yet implemented !!!
         if( aPH->php->umpCon )
         {
-            if( ku+pmp->LsUpt[k*2] > aObj[ o_wi_umpc ].GetN()
+            if( ku+pmp->LsUpt[k*2]*pmp->L1[k] > aObj[ o_wi_umpc ].GetN()
                     || pmp->UMpcC == NULL )
 //              (int)(sizeof( pmp->UMpcC )/sizeof(double)))
              pmp->UMpcC = (double *) aObj[ o_wi_umpc ].Alloc(
-               ku+pmp->LsUpt[k*2], 1, D_ );
+               ku+pmp->LsUpt[k*2]*pmp->L1[k], 1, D_ );
             ErrorIf( pmp->UMpcC == NULL, "SolModLoad",
                    "Error in reallocating memory for pmp->UMpcC." );
-            copyValues( pmp->UMpcC+ku, aPH->php->umpCon, pmp->LsUpt[k*2]);
+            copyValues( pmp->UMpcC+ku, aPH->php->umpCon, pmp->LsUpt[k*2]*pmp->L1[k]);
         }
         else { // no array with uptake kinetics parameters in the Phase record
             pmp->LsUpt[k*2] = 0;
         }
-        kue += pmp->LsUpt[k*2];
+        kue += pmp->LsUpt[k*2]*pmp->L1[k];
 
      } // k
 

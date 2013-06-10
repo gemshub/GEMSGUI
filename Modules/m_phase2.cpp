@@ -294,7 +294,7 @@ void TPhase::Set_KinMet_Phase_coef()
         case KM_MOD_TST: // = 'T' Generic TST dissolution/precipitation model following Schott ea 2012
             php->PrpCon = S_ON;
             php->PapCon = S_ON;
-//            php->nPRk = 1;
+            php->nPRk = 2;
 //            php->nSkr = 1;
             php->nrpC = 14;
             php->naptC = 1;
@@ -302,18 +302,18 @@ void TPhase::Set_KinMet_Phase_coef()
 //            php->nAscC = 1;
             break;
         case KM_MOD_PAL: // = 'P' Dissolution/precipitation model of the form (Palandri 2004)
-//            php->PrpCon = S_REM;
-      //      php->PapCon = S_REM;
+            php->PrpCon = S_ON;
+            php->PapCon = S_ON;
             php->nPRk = 3;
-            php->nSkr = 2;
+//            php->nSkr = 2;
             php->nrpC = 14;
             php->naptC = 1;
             php->nFaces = 1;
             php->nAscC = 1;
             break;
         case KM_MOD_WOL: // = 'W' Carbonate growth model following (Wolthers 2012)
-//            php->PrpCon = S_REM;
-      //      php->PapCon = S_REM;
+            php->PrpCon = S_ON;
+            php->PapCon = S_ON;
             php->nPRk = 1;
             php->nSkr = 2;
             php->nrpC = 14;
@@ -333,13 +333,16 @@ void TPhase::Set_KinMet_Phase_coef()
 
     //KinSorpCode
         case KM_UPT_ENTRAP: // = 'E' Unified entrapment model (Thien,Kulik,Curti 2012)
-            php->PumpCon = S_REM;
+            php->PumpCon = S_ON;
+            php->numpC = 6;
             break;
         case KM_UPT_UPDP:   // = 'M' DePaolo (2011) uptake kinetics model
-            php->PumpCon = S_REM;
+            php->PumpCon = S_ON;
+            php->numpC = 6;
             break;
         case KM_UPT_SEMO:   // = 'G' Growth (surface) entrapment model (Watson 2004)
-            php->PumpCon = S_REM;
+            php->PumpCon = S_ON;
+            php->numpC = 6;
             break;
         case KM_IEX_FAST:   // = 'F' Fast ion exchange kinetics (e.g. montmorillonite, CSH)
 
