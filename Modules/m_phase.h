@@ -106,7 +106,7 @@ ndiel,  /// TW new: number of dielectric constant parameters (rows in dielc arra
 ndh,    /// TW new: number of generic DH coefficients (rows in dhc array)
 
     // TKinMet stuff
-    nPRk,  /// number of «parallel reactions» that affect amount constraints for k-th phase (1, 2, 3, ...), 1 by default
+    nPRk,  /// number of parallel reactions that affect amount constraints for k-th phase (1, 2, 3, ...), 1 by default
     nSkr,  /// number of (aqueous or gaseous or surface) species from other reacting phases involved, 0 by default
     nrpC,  /// number of parameter (coefficients) involved in 'parallel reaction' terms (0 or 12)
     naptC, /// number of parameter (coefficients) per species involved in 'activity product' terms (0 or 1)
@@ -200,9 +200,11 @@ fRes2, // new: reserved
   char (*SM)[DC_RKLEN]; // List of DC record keys included into this phase[nDC]
 // new stuff (TKinMet, TSorpMod)
     char (*lPh)[PH_RKLEN];    /// TKinMet, TSorpMod: list of record keys of linked phases [nlPh]
-                          /// in MULTI vector of phase indexes long int *xlPh
+                          /// in MULTI vector of phase indexes  long int *xlPh
     char (*lDCr)[DC_RKLEN];   /// TKinMet: list of record keys (names?) of aq, gas or surface catalyzing
-      /// or inhibiting species for parallel reactions [nSkr] in MULTI vector of DC indexes long int *xSkr
+      /// or inhibiting species for parallel reactions [nSkr] to take into MULTI vector of DC indexes  long int *xSkr
+char (*lICu)[MAXICNAME];   /// TKinMet: list of IC (elements) names [nDC] each representing SS end member
+            /// in fractionation coeffs. to take into MULTI vector of IC indexes  long int *xICu
 //
 char (*dcpcl)[MAXDCNAME]; // new: DC parameter coefficients comment list [nscM]
 char (*ipicl)[MAXDCNAME]; // new: interaction parameter indexes comment list [ncpN]
@@ -276,6 +278,7 @@ void Set_SorpMod_Phase_coef();  // new
     void makeReacDCompList( const char *caption, TCStringArray& aDclist,
                             short& nDC,  char (*SM)[DC_RKLEN], char * DCS, bool bNsuT);
     void makePhaseList( const char *caption, TCStringArray& aPhlist );
+    void makeICompList( const char *caption, TCStringArray& aIclist );
     void DetNumbCatAn(TCStringArray& aDclist);
     void LoadDCC();
 

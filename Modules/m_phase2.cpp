@@ -270,6 +270,11 @@ void TPhase::Set_KinMet_Phase_coef()
             break;
         case KM_PRO_UPT:  // = 'U' Kinetics of uptake/entrapment (of minor/trace element) into solid solution
 
+            for( int j=0; j<php->nDC; j++ ) // Set default selection of elements for end members
+            {
+                memcpy( php->lICu[j], "Tr       ", MAXICNAME );
+                php->lICu[j][MAXICNAME-1] = '\0';
+            }
             break;
         case KM_PRO_IEX:  // = 'X' Kinetics of ion exchange (clays, C-S-H, zeolites, ...)
 
@@ -499,6 +504,46 @@ AGAINRC:
       }
       php->nlPh = (short)(aPhlist.GetCount());
  }
+
+/*
+// Build Phase keys (aIclist) to be included into the Phase
+void TPhase::makeICompList( const char *caption, TCStringArray& aIclist )
+{
+    gstring ikeyrd = "*:*:*:";
+    TCStringArray aIclist_old;
+
+    aIclist.Clear();
+    if( php->PumpCon )
+    {
+      // Build old selections DCOMP and REACDC
+       aIclist_old.Clear();
+       for(int j=0; j<php->nDC; j++ )
+       {
+          gstring key_dr = gstring( php->lICu[j], 0, IC_RKLEN );
+          aIclist_old.Add( key_dr );
+       }
+    }
+AGAINRC:
+     aIclist = vfMultiKeysSet( window(), caption, RT_ICOMP, ikeyrd.c_str(), aIclist_old  );
+     if( aIclist.GetCount() < 1 )
+     {
+        switch ( vfQuestion3(window(), GetName(),
+        "W08PHrem: Number of selected IComp keys < 1.\n"
+        " Mark again, proceed without ICs, or Cancel?",
+        "&Repeat", "&Proceed"))
+        {
+          case VF3_1:
+            goto AGAINRC;
+            ;
+          case VF3_2:
+            break;
+          case VF3_3:  Error( GetName(),
+             "E09PHrem: No IComp records selected into Phase uptake kinetics model...");
+        }
+      }
+//      php->nlICu = (short)(aIclist.GetCount());
+ }
+*/
 
 // Load DC classes from records and set to DCC
 void TPhase::LoadDCC()

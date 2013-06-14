@@ -186,7 +186,10 @@ aObj[ o_phldcr].SetPtr(  ph[q].lDCr );
 aObj[ o_phldcr].SetDim( ph[q].nSkr, 1 );
 aObj[ o_phldcd].SetPtr(  ph[q].lDCd );
 aObj[ o_phldcd].SetDim( ph[q].nSkr, 1 );
-
+//
+aObj[ o_phlicu].SetPtr(  ph[q].lICu );
+aObj[ o_phlicu].SetDim( ph[q].nDC, 1 );
+//
 aObj[ o_phdcpcl].SetPtr(  ph[q].dcpcl );
 aObj[ o_phdcpcl].SetDim( 1, ph[q].nscM );
 aObj[ o_phipicl].SetPtr(  ph[q].ipicl );
@@ -285,6 +288,9 @@ if(!ph[q].ipxt )
     ph[q].umpCon =  (float *)aObj[ o_phumpcon].GetPtr( );
     ph[q].lPh =  (char (*)[PH_RKLEN])aObj[ o_phlph].GetPtr( );
     ph[q].lDCr =  (char (*)[DC_RKLEN])aObj[ o_phldcr].GetPtr( );
+//
+ph[q].lICu =  (char (*)[MAXICNAME])aObj[ o_phlicu].GetPtr( );
+//
     ph[q].lDCd =  (char *)aObj[ o_phldcd].GetPtr( );
     ph[q].dcpcl =  (char (*)[MAXDCNAME])aObj[ o_phdcpcl].GetPtr( );
     ph[q].ipicl =  (char (*)[MAXDCNAME])aObj[ o_phipicl].GetPtr( );
@@ -379,6 +385,7 @@ void TPhase::dyn_kill(int q)
     ph[q].dhc  =  (float *)aObj[ o_phdhc].Free();
     ph[q].apCon =  (float *)aObj[ o_phapcon].Free();
     ph[q].Ascp =  (float *)aObj[ o_phascp].Free();
+ph[q].lICu =  (char (*)[MAXICNAME])aObj[ o_phlicu].Free( );
 }
 
 
@@ -589,11 +596,13 @@ void TPhase::dyn_new(int q)
     {
       ph[q].umpCon =  (float *)aObj[ o_phumpcon].Alloc( ph[q].nDC, ph[q].numpC, F_ );
       ph[q].umpcl =  (char (*)[MAXDCNAME])aObj[ o_phumpcl].Alloc( 1, ph[q].numpC, MAXDCNAME );
+ph[q].lICu =  (char (*)[MAXICNAME])aObj[ o_phlicu].Alloc( ph[q].nDC, 1, MAXICNAME );
     }
     else
     {
       ph[q].umpCon =  (float *)aObj[ o_phumpcon].Free( );
       ph[q].umpcl =  (char (*)[MAXDCNAME])aObj[ o_phumpcl].Free( );
+ph[q].lICu =  (char (*)[MAXICNAME])aObj[ o_phlicu].Free( );
     }
     if( ph[q].PlPhl == S_ON )
     {
@@ -804,6 +813,7 @@ void TPhase::set_def( int q)
     ph[q].dhc  =  0;
     ph[q].apCon = 0;
     ph[q].Ascp = 0;
+ph[q].lICu = 0;
 }
 
 
@@ -909,6 +919,7 @@ TPhase::RecBuild( const char *key, int mode  )
     TCStringArray aDclist;
     TCStringArray aPhlist;
     TCStringArray aDcSkrl;
+//    TCStringArray aIclist;
     gstring str;
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
 
@@ -951,7 +962,7 @@ AGAIN_SETUP:
 
         if( php->PlPhl != S_OFF )
         {
-            makePhaseList( "Please, mark list of record keys of linked phases", aPhlist );
+            makePhaseList( "Please, mark record keys of linked phases", aPhlist );
             db->SetKey(php->pst_);
          }
 
@@ -966,6 +977,16 @@ AGAIN_SETUP:
            php->pst_[0] = php->PphC;
            db->SetKey(php->pst_);
         }
+//
+/*
+        if( php->PumpCon != S_OFF )
+        {
+            makeICompList( "Please, mark record keys of ICs assigned to end members in this"
+                           "SS uptake kinetics model (in the order of end members)", aIclist );
+            db->SetKey(php->pst_);
+         }
+*/
+//
     //---------------------------------------------------------------------
 
     // Setting up the DC/phase coeffs depending on the
@@ -1031,7 +1052,14 @@ AGAIN_SETUP:
     LoadDCC();
 
     if( php->PlPhl != S_OFF )
+    {
+        for( i=0; i<php->nlPh; i++ )
+        {
+            memcpy( php->lPh[i], aPhlist[i].c_str()+2, PH_RKLEN );
+            php->lPh[i][PH_RKLEN-1] = aPhlist[i].c_str()[0];
+        }
         qsort( php->lPh[0], (size_t)php->nlPh, PH_RKLEN, rkeycmp );
+    }
 
     if( php->PapCon != S_OFF )
     { // Get list of components for parallel reactions
@@ -1049,6 +1077,18 @@ AGAIN_SETUP:
        php->lDCr[i][DC_RKLEN-1] = ' ';
       }
     }
+/*
+    if( php->PumpCon != S_OFF )   // added 13.06.13 by DK
+    {
+        for( i=0; i<php->nDC; i++ )
+        {
+            memcpy( php->lICu[i], aIclist[i].c_str()+2, IC_RKLEN );
+            php->lICu[i][IC_RKLEN-1] = aIclist[i].c_str()[0];
+        }
+//        qsort( php->lPh[0], (size_t)php->nlPh, PH_RKLEN, rkeycmp );
+        // don't need sorting here
+    }
+*/
 
 //---------------------------------------------------------------------
 // old  part
@@ -1381,7 +1421,7 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
 
     memcpy( php->SM[nDCnew], php->SM[ii], DC_RKLEN );
     php->DCS[nDCnew] = php->DCS[ii];
-    php->DCC[nDCnew] = php->DCC[ii];;
+    php->DCC[nDCnew] = php->DCC[ii];
     if( php->Psco == S_ON )
       copyValues( php->scoef+nDCnew*php->nscM, php->scoef+ii*php->nscM, php->nscM );
 

@@ -48,7 +48,7 @@ enum translat_codes { // codes for translations of math script equations
 void TMulti::KinMetModLoad( )
 {
     int kk, k, j, jj, kf, kfe=0, kp, kpe=0, ka, kae=0, ks, kse=0,
-    JB, JE=0, jb, je=0, kc, kd, kce=0, kde=0, kx, kxe=0;
+    JB, JE=0, jb, je=0, kc, kd, kce=0, kde=0, kx, kxe=0, ki, kie=0;
     long int jphl=0, jlphc=0;
     //vstr pkey(MAXRKEYLEN);
     vstr modT(164);
@@ -80,6 +80,7 @@ void TMulti::KinMetModLoad( )
         ka = kae;
         ks = kse;
         kd = kde;
+        ki = kie;
 
         aPH->TryRecInp( mup->SF[kk], crt, 0 ); // reading phase record
 
@@ -241,6 +242,40 @@ LOAD_KKMCOEF:
           }
           pmp->LsPhl[k*2] = dphl;
         }
+
+
+        if( aPH->php->lICu && kMod[0] == KM_PRO_UPT )
+        {
+            int icph=0, icInd = 0;
+            char ICname[MAXICNAME+2];
+
+            if( pmp->xICuC == NULL || ki+pmp->L1[k] > aObj[ o_wi_xicuc ].GetN() )
+                pmp->xICuC = (long int *) aObj[ o_wi_xicuc ].Alloc( ki+pmp->L1[k], 1, L_ );
+            ErrorIf( pmp->xICuC == NULL, "KinMetModLoad",
+                    "Error in reallocating memory for pmp->xICuC." );
+            // For now, no compression of IC name list (and other stuff in TKinMet). TBD!!!
+            for( jj=0, j=JB; jj<aPH->php->nDC; jj++, j++ )
+            {
+                if( syp->Dcl[j] == S_OFF ) // here, parameters of DCs not present in MULTI are skipped
+                    continue;
+                strncpy( ICname, aPH->php->lICu[jj], MAXICNAME );
+                ICname[MAXICNAME] = '\0';
+                icInd = find_icnum_multi( ICname );
+    // cout << icph << ": " << ICname << " icInd:" << icInd << endl;
+                if( icInd >= 0 )
+                {
+                    pmp->xICuC[ki+icph] = (long int)icInd;
+                }
+                else {
+                  // This IC is missing in MULTI - potentially error!
+                    ErrorIf( pmp->apConC == NULL, "KinMetModLoad",
+                           "Error in reallocating memory for pmp->apConC." );
+                    pmp->xICuC[ki+icph] = -1L;
+                }
+                j++;   icph++;
+            }
+        }
+
         // move handles
         jphl  += pm.LsPhl[k*2];
         jlphc += pm.LsPhl[k*2]*pm.LsPhl[k*2+1];
@@ -251,7 +286,8 @@ LOAD_KKMCOEF:
         kae += pmp->LsKin[k*6]*pmp->LsKin[k*6+1]*pmp->LsKin[k*6+3];
         kse += pmp->LsKin[k*6+4];
         kde += pmp->LsKin[k*6+1];
-
+        if( aPH->php->lICu && kMod[0] == KM_PRO_UPT )
+            kie += pm.L1[k];
      } // kk, k
 
  //    pmp->pKMM = 1;
@@ -307,7 +343,7 @@ if( pmp->pIPN >= 1 )           //SD 29/11/2006
             continue;  // one component is left in the multicomponent phase
         aPH->TryRecInp( mup->SF[kk], crt, 0 ); // reading phase record
         // Added SD 20/01/2010
-        if( aPH->php->Ppnc == S_ON && aPH->php->npxM > 0 )
+        if( aPH->php->Ppnc == S_ON && aPH->php->npxM > 0 )    // Check conditions of compressing!
             CompressPhaseIpxt( kk );
         // selecting type of the model
         memcpy( modT, aPH->php->sol_t, MAXKEYWD );
@@ -927,6 +963,22 @@ int TMulti::find_phnum_multi( const char *name)
     for( k=0; k < pmp->FI; k++ )
       if( !memcmp(name, pmp->SF[k], min(len,(int)(MAXPHNAME+MAXSYMB))))
                 return k;
+    return -1;
+}
+
+
+/// Search of IComp index by name ( *name )
+/// Find index in lists MULTI;  pmp->SB1
+///  \return index >=0 or -1
+//
+int TMulti::find_icnum_multi( const char *name)
+{
+    int i, len;
+
+    len = strlen( name );
+    for( i=0; i < pmp->N; i++ )
+      if( !memcmp(name, pmp->SB1[i], min(len,(int)(MAXICNAME))))
+                return i;
     return -1;
 }
 

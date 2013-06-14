@@ -455,6 +455,7 @@ aObj[ o_wo_uph ].SetDim( pm.FIs, MIXPHPROPS );
         aObj[ o_wi_umpc].SetPtr( pm.UMpcC );
         aObj[ o_wi_kmod].SetPtr( pm. kMod);
         aObj[ o_wi_kmod].SetDim( pm.FI, 1 );
+aObj[ o_wi_xicuc].SetPtr( pm.xICuC );
 }
 
 // set dynamic Objects ptr to values
@@ -642,6 +643,7 @@ pm.GamFs  = (double *)aObj[ o_wo_gamfs ].GetPtr();
     pm.AscpC   = (double *)aObj[ o_wi_ascpc].GetPtr();
     pm.UMpcC   = (double *)aObj[ o_wi_umpc].GetPtr();
     pm.kMod   = (char(*)[6])aObj[ o_wi_kmod].GetPtr();
+pm.xICuC   = (long int *)aObj[ o_wi_xicuc].GetPtr();
 }
 
 
@@ -829,8 +831,10 @@ pm.GamFs  = (double *)aObj[ o_wo_gamfs ].Free();
     pm.AscpC   = (double *)aObj[ o_wi_ascpc].Free();
     pm.UMpcC   = (double *)aObj[ o_wi_umpc].Free();
     pm.kMod   = (char(*)[6])aObj[ o_wi_kmod].Free();
-
+pm.xICuC   = (long int *)aObj[ o_wi_xicuc].Free();
     Free_TSolMod();
+Free_TKinMet();
+Free_TSorpMod();
 }
 
 // reallocation of dynamic memory
