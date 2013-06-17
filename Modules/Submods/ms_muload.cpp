@@ -142,7 +142,6 @@ LOAD_KKMCOEF:
                 copyValues( pmp->rpConC+kc, aPH->php->rpCon, (pmp->LsKin[k*6]*pmp->LsKin[k*6+2]));
             }
             else { // no array with kinetic PR parameters in the Phase record
-//            pmp->LsMod[k*6] = 0;
                 pmp->LsMod[k*6+2] = 0;
             }
 
@@ -197,7 +196,6 @@ LOAD_KKMCOEF:
             else
             {
                 pmp->LsKin[k*6+1] = 0; // no DC coefficients for PR activity product terms
-//                pmp->LsMod[k*6+3] = 0;
             }
         }
 
@@ -243,8 +241,7 @@ LOAD_KKMCOEF:
           pmp->LsPhl[k*2] = dphl;
         }
 
-
-        if( aPH->php->lICu && kMod[0] == KM_PRO_UPT )
+        if( aPH->php->lICu && kMod[0] == KM_PRO_UPT )  // so far only for uptake kinetics models!
         {
             int icph=0, icInd = 0;
             char ICname[MAXICNAME+2];

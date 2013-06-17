@@ -1077,18 +1077,15 @@ AGAIN_SETUP:
        php->lDCr[i][DC_RKLEN-1] = ' ';
       }
     }
-/*
-    if( php->PumpCon != S_OFF )   // added 13.06.13 by DK
+
+    if( php->PumpCon != S_OFF && php->nDC > 1 )   // added 13.06.13 by DK
     {
-        for( i=0; i<php->nDC; i++ )
-        {
-            memcpy( php->lICu[i], aIclist[i].c_str()+2, IC_RKLEN );
-            php->lICu[i][IC_RKLEN-1] = aIclist[i].c_str()[0];
-        }
-//        qsort( php->lPh[0], (size_t)php->nlPh, PH_RKLEN, rkeycmp );
-        // don't need sorting here
+            for( int j=0; j<php->nDC; j++ ) // Set default selection of elements for end members
+            {
+                memcpy( php->lICu[j], "Tr       ", MAXICNAME );
+                php->lICu[j][MAXICNAME-1] = '\0';
+            }
     }
-*/
 
 //---------------------------------------------------------------------
 // old  part

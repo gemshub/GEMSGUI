@@ -257,24 +257,17 @@ void TPhase::Set_SolMod_Phase_coef()
 
 // Setting up the default parameters depending on the
 // built-in kinetics/metastability model (from TSolMod class)
+//
 void TPhase::Set_KinMet_Phase_coef()
 {
-    php->sol_t[DCOMP_DEP] = SM_UNDEF;
-    php->sol_t[SPHAS_DEP] = SM_UNDEF;
-    php->sol_t[DCE_LINK] = SM_UNDEF;
 
     switch(php->kin_t[KinProCode])
     {   //KinProCode
         case KM_PRO_MWR:  // = 'M' Kinetics of generic dissolution/precipitation (no uptake, ionex, adsorption)
-
+            php->PumpCon == S_OFF;
             break;
         case KM_PRO_UPT:  // = 'U' Kinetics of uptake/entrapment (of minor/trace element) into solid solution
-
-            for( int j=0; j<php->nDC; j++ ) // Set default selection of elements for end members
-            {
-                memcpy( php->lICu[j], "Tr       ", MAXICNAME );
-                php->lICu[j][MAXICNAME-1] = '\0';
-            }
+            php->PumpCon = S_ON;
             break;
         case KM_PRO_IEX:  // = 'X' Kinetics of ion exchange (clays, C-S-H, zeolites, ...)
 
@@ -284,10 +277,6 @@ void TPhase::Set_KinMet_Phase_coef()
             break;
         case KM_PRO_NUPR: // = 'P' Kinetics of nucleation and precipitation
 
-   //                    php->nscM = 0;   // NP_DC
-   //                    php->npxM = 0;   // MaxOrd
-   //                    php->ncpN = 0;   // NPar
-   //                    php->ncpM = 0;   // NPcoef
             break;
         default:  // other models
             break;
