@@ -241,7 +241,7 @@ LOAD_KKMCOEF:
           pmp->LsPhl[k*2] = dphl;
         }
 
-        if( aPH->php->lICu && kMod[0] == KM_PRO_UPT )  // so far only for uptake kinetics models!
+        if( aPH->php->PumpCon && kMod[0] == KM_PRO_UPT )  // so far only for uptake kinetics models!
         {
             int icph=0, icInd = 0;
             char ICname[MAXICNAME+2];
@@ -269,7 +269,7 @@ LOAD_KKMCOEF:
                            "Error in reallocating memory for pmp->apConC." );
                     pmp->xICuC[ki+icph] = -1L;
                 }
-                j++;   icph++;
+                icph++;
             }
         }
 
@@ -283,7 +283,7 @@ LOAD_KKMCOEF:
         kae += pmp->LsKin[k*6]*pmp->LsKin[k*6+1]*pmp->LsKin[k*6+3];
         kse += pmp->LsKin[k*6+4];
         kde += pmp->LsKin[k*6+1];
-        if( aPH->php->lICu && kMod[0] == KM_PRO_UPT )
+        if( aPH->php->PumpCon && kMod[0] == KM_PRO_UPT )
             kie += pm.L1[k];
      } // kk, k
 

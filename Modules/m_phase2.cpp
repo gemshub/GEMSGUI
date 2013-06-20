@@ -1006,6 +1006,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
         strcpy( tempdbuf, "0");
     else sprintf( tempdbuf, "%c", (char)(apar[4]+'0'));
 // cout << "newAqGasPhase: " << amod << endl;
+
     switch( amod )
     {
        case 'N': // No aqueous phase
@@ -1098,6 +1099,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
 MAKE_GAS_PHASE:
     Name = "Auto-set ";
 // cout << "newAqGasPhase Gas: " << gmod << endl;
+
     switch( gmod )
     {
       case 'N': // No gas/fluid phase in the system
@@ -1200,6 +1202,7 @@ TPhase::AssemblePhase( const char* key, const char* part, float* param,
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
 
 // Initializing
+memcpy( php->kin_t, "NNNNNNNN", 8 );
     php->Nsd = 0;
     php->nDC = 0;
     php->NsuT = php->nMoi = 0;
