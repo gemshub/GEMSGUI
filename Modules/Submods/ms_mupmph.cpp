@@ -78,7 +78,8 @@ void TMulti::MultiSystemInit( )
 
    pm.MBX = syp->MBX;
    pm.GWAT = syp->Mwat;
-   pm.IC =  syp->Mbel;
+   if( syp->Mbel > 1e-6 )    // workaround 21.06.13 DK - needs more investigation!
+        pm.IC =  syp->Mbel;
    pm.GWAT = syp->Mwat * H2O_mol_to_kg;   // constant corrected 30.08.2008
 
     // Reallocating memory, if necessary
@@ -130,7 +131,7 @@ NEXT2:
      pm.pBAL = 2;
 }
 
-// Load System data for define lookup
+// Load System data to define lookup arrays
 void TMulti::SystemToLookup( )
 {
    SYSTEM *syp = TSyst::sm->GetSY();
