@@ -142,10 +142,11 @@ o_nldcvs, o_nldchs, o_nlphv, o_nlphh, // new !!!
     o_wd_pe, o_wd_eh, o_wi_mol,  o_wi_gwat,o_wi_ymet,
     o_wio_denw, o_wio_epsw, o_wo_psi, o_wo_lnp, o_wo_rt,
     o_wo_frt,  o_wo_yw,  o_wio_cons,  o_wio_pmxs, o_wio_fitv, o_wd_sitn,
-    o_wi_l1,        o_wi_ipxpm, // added 07.12.2006
+    o_wi_l1,        o_wi_ipxpm,
     o_wi_lsmod,  o_wi_lsmdc, o_wi_mui, o_wi_muk, o_wi_muj,
     o_wi_satndx, o_wi_dul,  o_wi_dll,  o_wi_gex,  o_wi_pul,
-    o_wi_pll, o_wi_yof,  o_wi_pmc, o_wi_dmc,  o_wi_moisn, o_wo_sitfr, o_wio_vol,
+    o_wi_pll, o_wi_yof,     o_wi_pffact, o_wo_prto, o_wo_pkto, o_wo_pvto,
+    o_wi_pmc, o_wi_dmc,  o_wi_moisn, o_wo_sitfr, o_wio_vol,
     o_w_hym, o_w_vl,  o_wi_mm,  o_wio_h0,  o_wio_a0,
     o_wio_u0, o_wio_s0,  o_wio_cp0,  o_wio_cv0,  o_wi_pparc,
     o_wd_ym,  o_wd_yla,  o_wd_yw,  o_wd_gamma,  o_wi_lngmf,
