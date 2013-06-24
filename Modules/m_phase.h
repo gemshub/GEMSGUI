@@ -142,8 +142,8 @@ short *ipxt,  // Table of indexation for interaction parameters [ncpN][npxM]
 float Asur,  // Specific surface area of (carrier) phase, m2/g (new: of this tile) default: 0.
     Sigma0, // Standard mean surface energy of solid-aqueous interface, J/m2
     SigmaG, // Standard mean surface energy of gas-aqueous interface, J/m2
-    R0p,    // Mean radius r0 for (spherical or cylindrical) particles, nm (reserved)
-    h0p,    // Mean thickness h0 for cylindrical or 0 for spherical particles, nm (reserved)
+    R0p,    // Mean radius r0 for (spherical or cylindrical) particles, nm
+    h0p,    // Mean thickness h0 for cylindrical or 0 for spherical particles, nm
     Eps,    // Dielectric constant for solid carrier at Tr (reserved)
     Cond,   // Specific conductivity at Tr, Sm/m/cm2 (reserved)
     Rsp1,   // Default maximum surface density, 1/nm2 (reserved)

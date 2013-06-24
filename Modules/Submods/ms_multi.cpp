@@ -143,6 +143,10 @@ void TMulti::ods_link( int )
     aObj[ o_wo_pkto ].SetDim( pm.FI, 1 );
     aObj[ o_wo_pvto ].SetPtr( pm.PvT );
     aObj[ o_wo_pvto ].SetDim( pm.FI, 1 );
+    aObj[ o_wo_emrd ].SetPtr( pm.emRd );
+    aObj[ o_wo_emrd ].SetDim( pm.Ls, 1 );
+    aObj[ o_wo_emdf ].SetPtr( pm.emDf );
+    aObj[ o_wo_emdf ].SetDim( pm.Ls, 1 );
 //
     /* SIZE OF PMc- CALC M1=1 */
     aObj[ o_wi_pmc ].SetPtr( pm.PMc );  // OBsetDim( o_wi_pmc,  M1, 1 );
@@ -486,10 +490,12 @@ void TMulti::dyn_set(int /*q*/)
     pm.PLL   = (double *)aObj[ o_wi_pll ].GetPtr();
     pm.YOF   = (double *)aObj[ o_wi_yof ].GetPtr();
 // new
-    pm.PfFact   = (double *)aObj[ o_wi_pffact ].GetPtr();
+    pm.PfFact  = (double *)aObj[ o_wi_pffact ].GetPtr();
     pm.PrT   = (double *)aObj[ o_wo_prto ].GetPtr();
     pm.PkT   = (double *)aObj[ o_wo_pkto ].GetPtr();
     pm.PvT   = (double *)aObj[ o_wo_pvto ].GetPtr();
+    pm.emRd   = (double *)aObj[ o_wo_emrd ].GetPtr();
+    pm.emDf   = (double *)aObj[ o_wo_emdf ].GetPtr();
 //
     pm.PMc   = (double *)aObj[ o_wi_pmc ].GetPtr();
     pm.DMc   = (double *)aObj[ o_wi_dmc ].GetPtr();
@@ -684,6 +690,8 @@ void TMulti::dyn_kill(int /*q*/)
     pm.PrT   = (double *)aObj[ o_wo_prto ].Free();
     pm.PkT   = (double *)aObj[ o_wo_pkto ].Free();
     pm.PvT   = (double *)aObj[ o_wo_pvto ].Free();
+    pm.emRd   = (double *)aObj[ o_wo_emrd ].Free();
+    pm.emDf   = (double *)aObj[ o_wo_emdf ].Free();
 //
     pm.PMc   = (double *)aObj[ o_wi_pmc ].Free();
     pm.DMc   = (double *)aObj[ o_wi_dmc ].Free();
@@ -1193,11 +1201,13 @@ pm.GamFs = (double *)aObj[ o_wo_gamfs].Alloc( pm.L, 1, D_);
         //pm.AscpC   = (double *)aObj[ o_wi_ascpc].Alloc( pm.FI, 1, D_ );
         //pm.UMpcC   = (double *)aObj[ o_wi_umpc].Alloc( pm.FIs, 1, D_ );
         pm.kMod   = (char(*)[6])aObj[ o_wi_kmod].Alloc( pm.FI, 1, 6 );
-//  new
+//  new (kinetics output, uptake output)
     pm.PfFact = (double *)aObj[ o_wi_pffact].Alloc( pm.FI, 1, D_ );
     pm.PrT = (double *)aObj[ o_wo_prto].Alloc( pm.FI, 1, D_ );
     pm.PkT = (double *)aObj[ o_wo_pkto].Alloc( pm.FI, 1, D_ );
-    pm.PvT = (double *)aObj[ o_wo_pvto].Alloc( pm.FI, 1, D_ );
+    pm.PvT = (double *)aObj[ o_wo_pvto].Alloc( pm.FI, 1, D_ );  
+    pm.emRd = (double *)aObj[ o_wo_emrd].Alloc( pm.Ls, 1, D_ );
+    pm.emDf = (double *)aObj[ o_wo_emdf].Alloc( pm.Ls, 1, D_ );
 //
     Free_TSolMod();
     Alloc_TSolMod( pm.FIs );
