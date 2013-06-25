@@ -223,11 +223,15 @@ LOAD_KKMCOEF:
                    jphl+pm.LsPhl[k*2], 2, L_ );
             ErrorIf( pmp->PhLin == NULL, "KinMetModLoad",
                     "Error in reallocating memory for pmp->PhLin." );
+            char Pname[MAXSYMB+MAXPHNAME+2]; int phInd;
             for( jj=0; jj<aPH->php->nlPh; jj++ )
             {
-                gstring Pname = gstring(aPH->php->lPh[jj], PH_RKLEN );
-                int phInd = find_phnum_multi(Pname.c_str());
-                if( phInd >0 )
+                strncpy( Pname, aPH->php->lPh[jj], MAXSYMB );
+                strncpy( Pname+MAXSYMB, aPH->php->lPh[jj]+(MAXSYMB+MAXPHSYMB), MAXPHNAME );
+                Pname[MAXSYMB+MAXPHNAME] = '\0';
+                phInd = find_phnum_multi( Pname );
+cout << dphl << ": " << Pname << " phInd: " << phInd << endl;
+                if( phInd >= 0 )
                 {   // here, parameters for phases not in MULTI are skipped
                     pmp->PhLin[jphl+dphl][0] = phInd;
                     pmp->PhLin[jphl+dphl][1] = (long int)aPH->php->lPhC[jj];
@@ -961,7 +965,7 @@ int TMulti::find_phnum_multi( const char *name)
 
     len = strlen( name );
     for( k=0; k < pmp->FI; k++ )
-      if( !memcmp(name, pmp->SF[k], min(len,(int)(MAXPHNAME+MAXSYMB))))
+      if( !memcmp(name, pmp->SF[k], min(len,(int)(MAXPHSYMB+MAXSYMB))))
                 return k;
     return -1;
 }

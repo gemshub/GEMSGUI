@@ -962,7 +962,8 @@ AGAIN_SETUP:
 
         if( php->PlPhl != S_OFF )
         {
-            makePhaseList( "Please, mark record keys of linked phases", aPhlist );
+            makePhaseList( "Please, mark record keys of phases to be linked with this phase",
+                           aPhlist );
             db->SetKey(php->pst_);
          }
 
@@ -1041,7 +1042,7 @@ AGAIN_SETUP:
     // Get list of components : add aMcv and aMrv
     for( i=0; i<php->nDC; i++ )
     {
-        memcpy( php->SM[i], aDclist[i].c_str()+2, DC_RKLEN );
+        memcpy( php->SM[i], aDclist[i].c_str()+2, DC_RKLEN );  // +2  check!
         php->SM[i][DC_RKLEN-1] = aDclist[i].c_str()[0];
     }
     // Sorting the list of dependent components
@@ -1055,7 +1056,7 @@ AGAIN_SETUP:
     {
         for( i=0; i<php->nlPh; i++ )
         {
-            memcpy( php->lPh[i], aPhlist[i].c_str()+2, PH_RKLEN );
+            memcpy( php->lPh[i], aPhlist[i].c_str(), PH_RKLEN );
             php->lPh[i][PH_RKLEN-1] = aPhlist[i].c_str()[0];
         }
         qsort( php->lPh[0], (size_t)php->nlPh, PH_RKLEN, rkeycmp );
@@ -1065,7 +1066,7 @@ AGAIN_SETUP:
     { // Get list of components for parallel reactions
       for( i=0; i<php->nSkr; i++ )
       {
-        memcpy( php->lDCr[i], aDcSkrl[i].c_str()+2, DC_RKLEN );
+        memcpy( php->lDCr[i], aDcSkrl[i].c_str()+2, DC_RKLEN );  // +2  check!
         php->lDCr[i][DC_RKLEN-1] = aDcSkrl[i].c_str()[0];
       }
       // Sorting the list of dependent components
