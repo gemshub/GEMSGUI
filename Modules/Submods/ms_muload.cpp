@@ -211,7 +211,8 @@ LOAD_KKMCOEF:
         {   // coefficients of linkage parameters in linked phases
           if( aPH->php->lPhc /*&& aPH->php->IsoC*/ )
           {
-            if( pmp->lPhc == NULL || jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1] > aObj[ o_wi_lphc ].GetN() )
+              char ibuf[2] = "";
+              if( pmp->lPhc == NULL || jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1] > aObj[ o_wi_lphc ].GetN() )
     //             > (int)(sizeof( pmp->lPhc )/sizeof(double)))
                 pmp->lPhc = (double *) aObj[ o_wi_lphc ].Alloc(
                    jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1], 1, D_ );
@@ -230,11 +231,12 @@ LOAD_KKMCOEF:
                 strncpy( Pname+MAXSYMB, aPH->php->lPh[jj]+(MAXSYMB+MAXPHSYMB), MAXPHNAME );
                 Pname[MAXSYMB+MAXPHNAME] = '\0';
                 phInd = find_phnum_multi( Pname );
-cout << dphl << ": " << Pname << " phInd: " << phInd << endl;
+// cout << dphl << ": " << Pname << " phInd: " << phInd << endl;
                 if( phInd >= 0 )
-                {   // here, parameters for phases not in MULTI are skipped
+                {   // here, parameters for phases not present in MULTI are skipped
                     pmp->PhLin[jphl+dphl][0] = phInd;
-                    pmp->PhLin[jphl+dphl][1] = (long int)aPH->php->lPhC[jj];
+                    ibuf[0] = aPH->php->lPhC[jj];
+                    pmp->PhLin[jphl+dphl][1] = (long int)atoi( ibuf );
                     copyValues( pmp->lPhc+jlphc+dphl*pmp->LsPhl[k*2+1],
                          aPH->php->lPhc+jj*pmp->LsPhl[k*2+1], pmp->LsPhl[k*2+1]);
                     dphl++;
@@ -280,7 +282,7 @@ cout << dphl << ": " << Pname << " phInd: " << phInd << endl;
             }
         }
 
-        // move handles
+        // move handles to process the next phase
         jphl  += pm.LsPhl[k*2];
         jlphc += pm.LsPhl[k*2]*pm.LsPhl[k*2+1];
 

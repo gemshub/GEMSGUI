@@ -228,7 +228,7 @@ char (*eimLl)[MAXDCNAME]; // new: EIL model parameters comment list per layer [n
     *dEq,   // Text with script of IPN equations related to phase components (IIPN syntax)
     *tprn,               // internal
 // TSorpMod, TKinMet stuff
-    *lPhC, /// TSolMod, TKinMet: Phase linkage type codes [nlPh] { TBA  }
+    *lPhC, /// TSolMod, TKinMet: Phase linkage type codes [nlPh] { 0 1 2 3 ... }
 *IsoC, // new: isotherm/SATC code for this surface site type 2*[nSiT] { L Q M F B ... }
   ;
   char (*sdref)[V_SD_RKLEN]; // List of Data Sources SDref keys
