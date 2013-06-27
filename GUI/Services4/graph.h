@@ -210,7 +210,7 @@ public:
 
     /// obsolete
     //void getMaxMin( QPointF& min, QPointF& max );
-    void getMaxMinIso( QPointF& min, QPointF& max );
+    //void getMaxMinIso( QPointF& min, QPointF& max );
 
 };
 
