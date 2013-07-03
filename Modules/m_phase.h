@@ -126,7 +126,7 @@ iRes3, // new: reserved
 nIsoC, // new: number of isotherm parameter coefficients per surface species DC (default 0)
 nIsoS, // new: number of isotherm parameter coefficients per surface site (default 0)
 mDe,   // new: maximum denticity number for surface species (default 1)
-nSiT,  /// new: number of site types (to set up on remake)
+nSiT  /// new: number of site types (to set up on remake)
 ;
 
 short *ipxt,  // Table of indexation for interaction parameters [ncpN][npxM]
@@ -229,7 +229,7 @@ char (*eimLl)[MAXDCNAME]; // new: EIL model parameters comment list per layer [n
     *tprn,               // internal
 // TSorpMod, TKinMet stuff
     *lPhC, /// TSolMod, TKinMet: Phase linkage type codes [nlPh] { 0 1 2 3 ... }
-*IsoC, // new: isotherm/SATC code for this surface site type 2*[nSiT] { L Q M F B ... }
+*IsoC // new: isotherm/SATC code for this surface site type 2*[nSiT] { L Q M F B ... }
   ;
   char (*sdref)[V_SD_RKLEN]; // List of Data Sources SDref keys
   char (*sdval)[V_SD_VALEN];  // Comments to Data Sources
