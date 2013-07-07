@@ -266,7 +266,7 @@ aObj[ o_wi_lsmod ].SetDim( pm.FIs, 3 ); // 3 columns
     aObj[ o_wo_bf].SetPtr( pm.BF );
     aObj[ o_wo_bf ].SetDim( pm.FIs, pm.N );
 aObj[ o_wo_bfc].SetPtr( pm.BFC );
-aObj[ o_wo_bfc ].SetDim( 1, pm.N );
+aObj[ o_wo_bfc ].SetDim( pm.N, 1 );// ( 1, pm.N );
     aObj[ o_w_xf].SetPtr( pm.XF );
     aObj[ o_w_xf ].SetDim( pm.FI, 1 );
     aObj[ o_wo_yf].SetPtr( pm.YF );
@@ -780,8 +780,8 @@ pm.GamFs = (double *)aObj[ o_wo_gamfs].Alloc( pm.L, 1, D_);
     pm.fDQF = (double *)aObj[ o_wi_gex].Alloc( pm.L, 1, D_ );
     pm.FVOL = (double *)aObj[ o_wd_fvol].Alloc( pm.FI, 1, D_ );
     pm.FWGT = (double *)aObj[ o_wd_fwgt].Alloc( pm.FI, 1, D_ );
-    pm.BFC = (double *)aObj[ o_wo_bfc].Alloc( 1, pm.N, D_ );  // Bugfix 11.03.2010 DK
-
+    pm.BFC = (double *)aObj[ o_wo_bfc].Alloc( pm.N, 1, D_ ); // ( 1, pm.N, D_ );
+                    // Bugfix 11.03.2010 DK
 pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].Alloc( pm.L, 1, 6 );
 
     if( pm.L > 0 )

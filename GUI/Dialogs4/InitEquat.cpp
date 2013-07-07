@@ -991,7 +991,7 @@ for(int  k=0; k<TMulti::sm->GetPM()->FIs; k++ )
    //d "Output bulk compositions of multicomponent phases (in moles of Independent Components) "
 }
 
-wnData.Add( new pagesSetupData("bXs", o_wo_bfc)); // i "Total output bulk compositions of solid phases (in moles of Independent Components) "
+wnData.Add( new pagesSetupData("bXs", o_wo_bfc )); // i "Total output bulk compositions of solid phases (in moles of Independent Components) "
 wnData.Add( new pagesSetupData("L1", o_wi_l1)); //"Input number of Dependent Components included into each phase (l-alpha vector) "
 wnData.Add( new pagesSetupData("Yof", o_wi_yof)); // a "Optional phase - aqueous interface energy increment (in (J/mol)/(RT) ) "
 wnData.Add( new pagesSetupData("Aalp", o_wi_aalp)); //a "Specific surface area A of phases, m2/g "

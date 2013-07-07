@@ -29,6 +29,16 @@
 #include "s_formula.h"
 #include "filters_data.h"
 
+const double PCO_DB = 1e-17;
+const double PCO_DBL_MAX = 1e37;
+const double PCO_DBL_MIN = 1e-37;
+const double PCO_DBL_MAX_10_EXP = 37.;
+const double PCO_DBL_MIN_10_EXP = -37.;
+const double PCO_DBL_MAX_EXP = 85.195648;
+const double PCO_DBL_MIN_EXP = -85.195648;
+const double PCO_DBL_EPSILON = 1e-9;
+// please, check http://www.cplusplus.com/reference/cfloat/
+
 TCompos* TCompos::pm;
 
 TCompos::TCompos( int nrt ):
@@ -641,7 +651,7 @@ double TCompos::Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
         Xincr = Xe;
         goto FINISH;
     }
-    if( DCmw > 1e-12 )
+    if( DCmw > PCO_DB/18. ) // 1e-12 )
         switch( UNITP )
         {
         case QUAN_MGRAM: /*'y'*/
@@ -655,7 +665,7 @@ double TCompos::Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
             goto FINISH;
         }
     /* Concentrations */
-    if( fabs( R1 ) > 1e-12 )
+    if( fabs( R1 ) > PCO_DB ) // 1e-12 )
         switch( UNITP )
         { // mole fractions relative to total moles in the system
         case CON_MOLFR:  /*'n'*/
@@ -665,11 +675,11 @@ double TCompos::Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
             Xincr = Xe / 100. * R1;
             goto FINISH;
         case CON_pMOLFR: /*'f'*/
-            if( Xe > -1. && Xe < 15 )
+            if( Xe > -1. && Xe < PCO_DBL_MAX_10_EXP ) // 15 )
                 Xincr = pow(10., -Xe )* R1;
             goto FINISH;
         }
-    if( fabs( Vsys ) > 1e-12 && Vm > 1e-12 )
+    if( fabs( Vsys ) > PCO_DBL_MIN && Vm > PCO_DBL_MIN ) // > 1e-12 && Vm > 1e-12 )
         switch( UNITP )   /* Volumes */
         {
         case CON_VOLFR:  /*'v'*/
@@ -679,11 +689,11 @@ double TCompos::Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
             Xincr = Xe * Vsys * 10. / Vm;
             goto FINISH;
         case CON_pVOLFR: /*'u'*/
-            if( Xe > -1. && Xe < 15 )
+            if( Xe > -1. && Xe < PCO_DBL_MAX_10_EXP ) // 15 )
                 Xincr = pow( 10., -Xe ) * Vsys / Vm;
             goto FINISH;
         }
-    if( fabs( Msys ) > 1e-12 && DCmw > 1e-12 )
+    if( fabs( Msys ) > PCO_DB/20. && DCmw > PCO_DB ) //  > 1e-12 && DCmw > 1e-12 )
         switch( UNITP ) // Mass fractions relative to mass of the system
         {
         case CON_WTFR:   /*'w'*/
@@ -696,7 +706,7 @@ double TCompos::Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
             Xincr = Xe * Msys / 1e3 / DCmw;
             goto FINISH;
         }
-    if( fabs( Mwat ) > 1e-12 )
+    if( fabs( Mwat ) > PCO_DB/18. ) // 1e-12 )
         switch( UNITP ) /* Molalities */
         {
         case CON_MOLAL:  /*'m'*/
@@ -706,11 +716,11 @@ double TCompos::Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
             Xincr = Xe / 1e3 * Mwat;
             goto FINISH;
         case CON_pMOLAL: /*'p'*/
-            if( Xe > -1. && Xe < 15 )
+            if( Xe > -1. && Xe < PCO_DB-2. ) // 15 )
                 Xincr = pow( 10., -Xe ) * Mwat;
             goto FINISH;
         }
-    if( fabs( Vaq ) > 1e-12 )
+    if( fabs( Vaq ) > PCO_DBL_MIN ) //  1e-12 )
         switch( UNITP )  /* Molarities */
         {
         case CON_MOLAR:  /*'L'*/
@@ -720,7 +730,7 @@ double TCompos::Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
             Xincr = Xe * Vaq / 1e3;
             goto FINISH;
         case CON_pMOLAR: /*'q'*/
-            if( Xe > -1. && Xe < 15 )
+            if( Xe > -1. && Xe < PCO_DBL_MAX_10_EXP ) // 15 )
                 Xincr = pow( 10., -Xe ) * Vaq;
             goto FINISH;
             /* g/l, mg/l, mkg/l */
@@ -734,7 +744,7 @@ double TCompos::Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
             Xincr = Xe * Vaq / DCmw / 1e6;
             goto FINISH;
         }
-    if( fabs( Maq ) > 1e-12 && DCmw > 1e-12 )
+    if( fabs( Maq ) > PCO_DB/18. && DCmw > PCO_DB/18. ) // > 1e-12 && DCmw > 1e-12 )
         switch( UNITP )     /* Weight concentrations */
         {
         case CON_AQWFR:  /*'C'*/
@@ -922,43 +932,54 @@ IC_FOUND:
     MsysC /= 1e3;
 
     /* Analyze control sum */
-    if( fabs( bcp->R1 ) < 1e-12 )
+    if( fabs( bcp->R1 ) < PCO_DBL_MIN ) // 1e-12 )
         bcp->R1 = R1C;
-    if( fabs( bcp->R1 - (float)R1C ) < 1e-8 || fabs( R1C ) < 1e-15 )
+    if( fabs( bcp->R1 - (float)R1C ) <  PCO_DBL_EPSILON ) //   1e-8
+//            || fabs( R1C ) < PCO_DBL_MIN ) // 1e-15 )
         /*Xincr = 1.*/;
     else
-    { /* normalisation */
+    { // normalisation to given total moles in PCO
         Xincr = (double)bcp->R1 / R1C;
         MsysC = 0.0;
         for( i=0; i<bcp->Nmax; i++ )
-            if( fabs( C[i] ) >= 1e-12 )
+            if( fabs( C[i] ) >= PCO_DBL_MIN ) // 1e-12 )
             {
                 C[i] *= Xincr;
                 MsysC += C[i]*bcp->ICw[i];
             }
         bcp->R1 = R1C;
         MsysC /= 1e3;
+        if( fabs( bcp->Msys ) < PCO_DBL_MIN ) //  1e-12 )
+            bcp->Msys = MsysC;
+//        if( bcp->Msys >= PCO_DBL_MIN &&  // added 7.07.13 by DK
+//                fabs( bcp->Msys - (float)MsysC ) >= PCO_DBL_EPSILON )
+            bcp->R1 = 0.;  // clear total moles to 0 because PCO mass is inconsistent
     }
 
-    if( fabs( bcp->Msys ) < 1e-12 )
+    if( fabs( bcp->Msys ) < PCO_DBL_MIN ) //  1e-12 )
         bcp->Msys = MsysC;
-    if( fabs( bcp->Msys - (float)MsysC ) < 1e-8 || fabs( MsysC ) < 1e-15 )
+    if( fabs( bcp->Msys - (float)MsysC ) < PCO_DBL_EPSILON ) //   1e-8
+//            || fabs( MsysC ) < PCO_DBL_MIN ) // 1e-15 )
         /*Xincr = 1.*/;
     else
-    { /* normalisation */
+    { // normalisation to given total mass (kg) of PCO
         Xincr = (double)bcp->Msys / MsysC;
         R1C = 0.0;
         for( i=0; i<bcp->Nmax; i++ )
-            if( fabs( C[i] ) >= 1e-12 )
+            if( fabs( C[i] ) >= PCO_DBL_MIN ) // 1e-12 )
             {
                 C[i] *= Xincr;
                 R1C += C[i];
             }
-        bcp->R1 = R1C;
+        if( // bcp->R1 >= PCO_DBL_MIN &&  // added 7.07.13 by DK
+                fabs( bcp->R1 - (float)R1C ) >= PCO_DBL_EPSILON )
+            bcp->R1 = 0.;  // clear total moles to 0 because PCO mass is inconsistent
+        else
+            bcp->R1 = R1C;
     }
 
     for( wps=0, i=0; i<bcp->Nmax; i++ )
-        if( fabs( C[i] ) >= 1e-12 )
+        if( fabs( C[i] ) >= PCO_DBL_MIN ) // 1e-12 )
             wps++;
     if( wps < 1 )
         goto SPECIFY_C;
@@ -975,7 +996,7 @@ IC_FOUND:
     /* load vectors */
     for( i1=-1,i=0; i<bcp->Nmax; i++ )
     {
-        if( fabs( C[i] ) < 1e-12 )
+        if( fabs( C[i] ) < PCO_DBL_MIN ) // 1e-12 )
             continue;
         i1++;
         bcp->C[i1] = C[i];
