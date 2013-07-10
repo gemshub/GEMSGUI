@@ -1,5 +1,6 @@
 * text=auto !eol
 Docs/Descriptions/Activity-Coeffs.doc -text
+Docs/Descriptions/Kinetics-Uptake.doc -text
 Docs/Descriptions/Multisite-Mixmod.doc -text
 Docs/Descriptions/P-corrections.doc -text
 Docs/Descriptions/T-corrections-Reac.doc -text
@@ -404,6 +405,7 @@ Resources/doc/html/theory_tdb.html eol=lf
 Resources/doc/html/toolbutton.png -text
 Resources/doc/html/xpaint.png -text
 Resources/doc/pdf/Activity-Coeffs.pdf -text
+Resources/doc/pdf/Kinetics-Uptake.pdf -text
 Resources/doc/pdf/P-corrections.pdf -text
 Resources/doc/pdf/SCM-corrections.pdf -text
 Resources/doc/pdf/T-corrections-Reac.pdf -text
