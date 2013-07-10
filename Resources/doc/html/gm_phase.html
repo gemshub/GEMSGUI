@@ -1,20 +1,19 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
+
   
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
   
-  <meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
-  <title>GEMS3 Phase Module</title>
+  <meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]"><title>GEMS3 Phase Module</title>
+  
 
   
   
   <meta name="description" content="Version 2.0.0-PSI">
 
   
-  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-
-</head><body>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"></head><body>
 <h1><img src="gems1.png" align="left" height="48" width="48"> <span style="color: rgb(0, 0, 102);"> GEM-Selektor version 3<br>
 </span></h1>
 
@@ -109,9 +108,11 @@ Data Entries on Phase Window Pages</a> </p>
 <blockquote>
   <p><a href="#PHASE_DOD_REMAKE">5.1. Data objects that can be
 modified in Phase wizard upon create/clone/remake only</a> </p>
-  <p><a href="#PHASE_DOD_KINMET">5.2. Data objects for metastability
+  <p><a href="#PHASE_DOD_SORPMOD">5.2. Data objects for isolated
+(ad)sorption and ion exchange models (TSorpMod parameters)</a></p>
+  <p><a href="#PHASE_DOD_KINMET">5.3. Data objects for metastability
 and kinetics (TKinMet parameters)</a> </p>
-  <p><a href="#PHASE_DOD_HIDDEN">5.3. Hidden data objects for use
+  <p><a href="#PHASE_DOD_HIDDEN">5.4. Hidden data objects for use
 in
 Phase math scripts</a></p>
 </blockquote>
@@ -756,7 +757,8 @@ IPM data file.&nbsp; &nbsp; <br>
 implementation)<br>
 </h3>
 
-TBD<br>
+TBD&nbsp;&nbsp; (for now, please read the <span style="font-family: monospace;">Kinetics</span><tt>-uptake.pdf</tt>
+file)<br>
 
 <br>
 
@@ -1934,7 +1936,8 @@ places and go to the next wizard step<br>
 <br>
 </p>
 
-<h4>2.4.1. Dropdown list: Type code of the process kinetics</h4>
+<h4>2.4.1. Dropdown list -&gt; kin_t[2]: Type code of the process
+kinetics</h4>
 
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
 
@@ -1991,7 +1994,8 @@ nucleation and precipitation</td>
 
 <br>
 
-<h4>2.4.2.&nbsp; Dropdown list: Type code of the kinetics/metastability
+<h4>2.4.2.&nbsp; Dropdown list -&gt; kin_t[3]: Type code of the
+kinetics/metastability
 model</h4>
 
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
@@ -2042,7 +2046,8 @@ model with nuclei/particle size distribution<br>
 
 <br>
 
-<h4>2.4.3. Dropdown list: Type code of the sorption kinetics model</h4>
+<h4>2.4.3. Dropdown list -&gt; kin_t[4]: Type code of the sorption
+kinetics model</h4>
 
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
 
@@ -2114,7 +2119,8 @@ illite, zeolites)</td>
 
 <br>
 
-<h4>2.4.4. Dropdown list: Type code of metastability links of this
+<h4>2.4.4. Dropdown list -&gt; kin_t[5]: Type code of metastability
+links of this
 phase to other phases</h4>
 
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
@@ -2156,7 +2162,8 @@ substrate mass</td>
 
 <br>
 
-<h4>2.4.5. Dropdown list: Type of particle/pore size distribution and
+<h4>2.4.5. Dropdown list -&gt; kin_t[6]: Type of particle/pore size
+distribution and
 specific surface area correction</h4>
 
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
@@ -2197,7 +2204,8 @@ distribution</td>
 
 <br>
 
-<h4>2.4.6. Dropdown list: Code of the rate scaling model (reserved)</h4>
+<h4>2.4.6. Dropdown list -&gt; kin_t[7]: Code of the rate scaling model
+(reserved)</h4>
 
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
 
@@ -4520,53 +4528,374 @@ analyzing DC formulae when the Phase record is re-calculated.</p>
     <p>Default value (for models other than the multi-site mixing) is
 0.&nbsp;</p>
   </dd>
-  <dt><br>
-  </dt>
 </dl>
 
-<hr size="2" width="100%">
-<h3><a name="PHASE_DOD_KINMET"></a>5.2. Data objects for metastability
-and kinetics (TKinMet parameters)<br>
-</h3>
+<br>
+
+<br>
+
+<hr style="width: 100%; height: 2px;">
+<h3><a name="PHASE_DOD_SORPMOD"></a>5.2. Data objects for isolated
+(ad)sorption and ion exchange models (TSorpMod parameters)</h3>
+
+This section is under construction (will appear later).<br>
+
+<br>
 
 <dl>
 
+  <dt> <a name="kin_t_0"></a><b><tt><font size="+2">kin_t[0]</font></tt></b>
+- Type code of adsorption/ ion exchange/ polyelectrolyte isotherm model
+{ N&nbsp; }<br>
+  </dt>
+  <dd>
+    <p>This code defines the .</p>
+  </dd>
+  <dd>
+    <p>Possible codes: see <a href="g_useref.html#P_SOLT0">User's
+Reference</a>.
+Default code: <tt>"I"</tt>.&nbsp;</p>
+  </dd>
+  <dd>
+    <p> In the Phase record,&nbsp; &nbsp;
+&nbsp;&nbsp;&nbsp; <br>
+    </p>
+  </dd>
+  <dt><b> <a name="kin_t_1"></a></b><tt style="font-weight: bold;"><font size="+2">kin_t[1]</font></tt> - Type code of the sorption Electric
+Iinterface Layer (EIL, electrostatic) model { N&nbsp;&nbsp; }_ </dt>
+  <dd>
+    <p> This code defines how the <br>
+    </p>
+  </dd>
+  <dd>
+    <p>The code can be set in Phase wizard upon create/clone/remake of
+the Phase record.&nbsp; </p>
+  </dd>
+  <dd>
+    <p>If the .&nbsp; &nbsp; </p>
+  </dd>
+</dl>
+
+<br>
+
+TBD<br>
+
+<br>
+
+<br>
+
+<hr size="2" width="100%">
+<h3><a name="PHASE_DOD_KINMET"></a>5.3. Data objects for metastability
+and kinetics (TKinMet parameters)</h3>
+
+<br>
+
+<dl>
+
+  <dt> <a name="kin_t_2"></a><b><tt><font size="+2">kin_t[2]</font></tt></b>
+- Type code of mineral-aqueous/gas reaction kinetic rate model&nbsp; {
+N M U X A P
+}<br>
+  </dt>
+  <dd>
+    <p>This code configures the mineral-aqueous or mineral-gas reaction
+kinetics model. The code can be set in Phase wizard upon create/ clone/
+remake of
+the Phase record.</p>
+  </dd>
+  <dd>
+    <p>Possible codes: see <a href="g_useref.html#P_KINUPTT1">User's
+Reference</a>.
+Default code: <tt>"N"</tt>, kinetics disabled. &nbsp;</p>
+  </dd>
+  <dd>
+    <p> ...&nbsp; &nbsp;
+&nbsp;&nbsp; <br>
+    </p>
+  </dd>
+  <dt><b> <a name="kin_t_3"></a></b><tt style="font-weight: bold;"><font size="+2">kin_t[3]</font></tt> - Type code of the
+particular form of kinetic model { N T P W U } </dt>
+  <dd>
+    <p>This code defines a particular form of the kinetic model.&nbsp;
+If the
+previous code (kin_t[2] ) is set to 'N', this code will be ignored. <br>
+    </p>
+  </dd>
+  <dd>
+    <p>Possible codes: see <a href="g_useref.html#P_KINUPTT2">User's
+Reference</a>. The code can be set in Phase wizard upon create/ clone/
+remake of
+the Phase record.&nbsp; </p>
+  </dd>
+  <dd>
+    <p>Default code: 'N' (disabled).</p>
+  </dd>
+  <dd>
+    <p>...&nbsp; &nbsp; </p>
+  </dd>
+  <dt> <a name="kin_t_4"></a><tt><b><big><big>kin_t[4]</big></big></b></tt>
+- Type code of the uptake/sorption kinetics model (solution/sorption
+phases
+only) { N E M G F L I P } </dt>
+  <dd>
+    <p>This code defines a particular form of the uptake kinetics
+model.&nbsp;</p>
+  </dd>
+  <dd>
+    <p>Possible codes: see <a href="g_useref.html#P_KINUPTT3">User's
+Reference</a>. The code can be set in Phase wizard upon
+create/clone/remake of
+the Phase record.</p>
+  </dd>
+  <dd>
+    <p>If the previous code (kin_t[2] ) is set to 'N', this code will
+be ignored.</p>
+  </dd>
+  <dd>
+    <p>Default code: 'N' (disabled).</p>
+  </dd>
+  <dd>
+    <p>...<br>
+    </p>
+  </dd>
+  <dt><a name="kin_t_5"></a><b><tt><big><big>kin_t[5]</big></big></tt></b>
+- Type code of metastability links of this phase to other phases { N S
+P M }<br>
+  </dt>
+  <dd>
+    <p>This code defines whether and how this phase is linked to
+another (carrier, seed, or sorbent) phase. <br>
+    </p>
+  </dd>
+  <dd>
+    <p>The code can be set in Phase wizard upon create/clone/remake of
+the Phase record. Possible values: <a href="g_useref.html#P_KINUPTT4">see
+User's
+Reference</a>.&nbsp; </p>
+  </dd>
+  <dd>
+    <p>Default code: 'N', no links.</p>
+  </dd>
+  <dd>
+    <p>... <br>
+    </p>
+  </dd>
+  <dt> <a name="kin_t_6"></a><b><tt><big><big>kin_t[6]</big></big></tt></b>
+- Type code of particle/pore size distribution and specific surface
+area correction { N U B F }<br>
+  </dt>
+  <dd>
+    <p>This code defines how the specific surface area is corrected for
+particle growth or dissolution. <br>
+    </p>
+  </dd>
+  <dd>
+    <p>Possible codes: see <a href="g_useref.html#P_KINUPTT5">User's
+Reference</a>. The code can be set in Phase wizard upon
+create/clone/remake of
+the Phase record. </p>
+  </dd>
+  <dd>
+    <p>Default code 'N', no corrections.</p>
+  </dd>
+  <dd>
+    <p>... &nbsp; <br>
+    </p>
+  </dd>
+  <dt> <a name="kin_t_7"></a><b><tt><big><big>kin_t[7]</big></big></tt></b>
+- Codes of the rate scaling model (reserved)&nbsp;<br>
+  </dt>
+  <dd>
+    <p>This code selects the basis to which the rate constants are
+scaled for this phase. Possible values: <a href="g_useref.html#P_KINUPTT6">see User's Reference</a>.&nbsp;</p>
+  </dd>
+  <dd>
+    <p>The code can be set in Phase wizard upon create/clone/remake of
+the Phase record.</p>
+  </dd>
+  <dd>
+    <p>Default value: 'N'.</p>
+  </dd>
+  <dd>
+    <p>... </p>
+  </dd>
   <dd> &nbsp;</dd>
   <dt> <a name="lPh"></a><big><b><tt><big>lPh</big> </tt></b></big>-
 List of record keys of linked phases <br>
   </dt>
   <dd>
-    <p>List of record keys of linked phases <br>
+    <p>This list contains one or more record keys of linked phases that
+has been selected in Phase Wizard upon remake.&nbsp; When the modeling
+project is opened, these record keys will be converted into phase
+indexes in the chemical thermodynamic system. <br>
     </p>
   </dd>
-
-<dd> &nbsp;</dd>
-<dt> <a name="lPhC"></a><big><b><tt><big>lPhC</big> </tt></b></big>-
-Kinetic rate constants comment list <br>
-</dt>
-<dd>
-<p>Kinetic rate constants comment list <br>
-</p>
-</dd>
-<dt><br>
-
-  </dt><dd> &nbsp;</dd>
-  <dt> <a name="lPhc"></a><big><b><tt><big>lPhc</big> </tt></b></big>-
-Phase linkage type codes <br>
+  <dd> &nbsp;</dd>
+  <dt> <a name="lPhC"></a><big><b><tt><big>lPhC</big> </tt></b></big>-
+Phase linkage type codes<br>
   </dt>
   <dd>
-    <p>Phase linkage type codes [nlPh] { TBA  } <br>
+    <p>The Phase linkage type code shows how the current phase is
+linked to another phase (with key visible in lPh row to the left). <br>
     </p>
   </dd>
-
+  <dd>
+    <p>Possible values:&nbsp; 0 - the link is deactivated</p>
+  </dd>
+  <dd>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; 1
+- metastability constraints for this phase are linked to the surface
+area of the phase where this links points to (default);</p>
+  </dd>
+  <dd>
+    <p>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; 2 - TBD</p>
+  </dd>
+  <dd>
+    <p>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; 3 - TBD.</p>
+  </dd>
+  <dd>
+    <p>The respective property of the phase to which this phase is
+linked to must have non-zero value during calculation of equilibrium
+state.</p>
+  </dd>
+  <dd>
+    <p><br>
+    </p>
+  </dd>
+  <dt> <a name="lPhc"></a><big><b><tt><big>lPhc</big> </tt></b></big>-
+Array of phase linkage parameters<br>
+  </dt>
+  <dd>
+    <p>In this table, phase linkage parameters must be entered (one row
+per phase link).</p>
+  </dd>
+  <dd>
+    <p>At present, only one parameter is used for phase linkage type
+code 1 (see lPhC): a fraction of surface area of the "seed" or
+"carrier" solid phase to define the kinetic rates for this
+"overgrowth"phase (default value: 1).</p>
+  </dd>
+  <dd>
+    <p>Other coefficients: TBD.<br>
+    </p>
+  </dd>
   <dd> &nbsp;</dd>
   <dt> <a name="ocPRk"></a><big><b><tt><big>ocPRk</big> </tt></b></big>-
 Operation codes for kinetic 'parallel reaction' affinity terms <br>
   </dt>
   <dd>
-    <p>Operation codes for kinetic 'parallel reaction' affinity terms
-[nPRk], default 0 <br>
+    <p>This array contains two input codes for each parallel reaction
+(row). <br>
     </p>
+  </dd>
+  <dd>
+    <p>The first code (integer number) allows the user to select a
+particular form of the affinity term to be used in the rate law for
+this parallel reaction (see <span style="font-family: monospace;">Kinetics</span><tt>-uptake.pdf</tt>
+file for detailed equations). The main part of the affinity term is the phase stability index <span style="font-style: italic;">O</span>, automatically computed by GEM algorithm (see Falp). <br>
+</p></dd><dd>
+    <p>Each term has one or more parameters <span style="font-style: italic;">q</span>, <span style="font-style: italic;">m</span> and <span style="font-style: italic;">u</span>, which can be set in the
+respective positions in the <a href="#rpCon">rpCon</a> table. Power
+coefficients <span style="font-style: italic;">q</span>, <span style="font-style: italic;">m</span>, and <span style="font-style: italic;">u</span>, if set to 0 (default), disable
+the respective parts of the affinity term by setting it to 1. <br>
+    </p>
+  </dd>
+  <dd>
+    <p>Possible
+codes:&nbsp; <br>
+    </p>
+  </dd>
+<dd>
+    
+    <table style="text-align: left; width: 90%;" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top;">Code<br>
+          </td>
+          <td style="vertical-align: top;">Form<br>
+          </td>
+          <td style="vertical-align: top;">Explanation<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">0<br>
+          </td>
+          <td style="vertical-align: top;">(<span style="font-style: italic;">u</span>+1-<span style="font-style: italic;">O</span>^<span style="font-style: italic;">q</span>)^<span style="font-style: italic;">m</span><br>
+          </td>
+          <td style="vertical-align: top;">Classic TST affinity term (default);</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">1<br>
+          </td>
+          <td style="vertical-align: top;">(<span style="font-style: italic;">O</span>^<span style="font-style: italic;">q</span>-1-<span style="font-style: italic;">u</span>)^<span style="font-style: italic;">m</span><br>
+          </td>
+          <td style="vertical-align: top;">Classic TST affinity term, reversed</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">2<br>
+          </td>
+          <td style="vertical-align: top;">exp(-<span style="font-style: italic;">m</span>/<span style="font-style: italic;">O</span>)<br>
+          </td>
+          <td style="vertical-align: top;">Affinity term from Schott et al. (2012), Fig. 1e</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">3<br>
+          </td>
+          <td style="vertical-align: top;">1-exp(-(<span style="font-style: italic;">q</span> ln<span style="font-style: italic;">O</span>)^<span style="font-style: italic;">m</span>)<br>
+          </td>
+          <td style="vertical-align: top;">Affinity term from Hellmann &amp; Tisserand (2006), eq 9</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">4<br>
+          </td>
+          <td style="vertical-align: top;"><span style="font-style: italic;">m </span>(<span style="font-style: italic;">O</span>-1) ln<span style="font-style: italic;">O</span><br>
+          </td>
+          <td style="vertical-align: top;">Affinity term from Teng et al. (2000), eq.13</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">5<br>
+          </td>
+          <td style="vertical-align: top;"><span style="font-style: italic;">O</span>^<span style="font-style: italic;">m</span><br>
+          </td>
+          <td style="vertical-align: top;">Affinity term from Teng et al. (2000), Fig.6</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">6<br>
+          </td>
+          <td style="vertical-align: top;">(<span style="font-style: italic;">O</span> - <span style="font-style: italic;">O_n</span>)^<span style="font-style: italic;">m</span><br>
+          </td>
+          <td style="vertical-align: top;">Nucleation
+affinity term from Fritz et al. (2009), eq 6 (TBD)</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">7<br>
+          </td>
+          <td style="vertical-align: top;"><br>
+          </td>
+          <td style="vertical-align: top;">TBD</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">8<br>
+          </td>
+          <td style="vertical-align: top;"><br>
+          </td>
+          <td style="vertical-align: top;">TBD<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</dd><dd><br>
+
+    </dd><dd>
+    <p>The code in the second column of this array should be set to 0 (reserved for future
+development). <br>
+    </p>
+
   </dd>
 
   <dd> &nbsp;</dd>
@@ -4575,120 +4904,570 @@ Fractions of surface area of the solid related to different parallel
 reactions <br>
   </dt>
   <dd>
-    <p>Fractions of surface area of the solid related to different
-parallel reactions [nlPh*nlPc] <br>
+    <p>Here, the (initial) fraction of surface area related to this
+parallel reaction can be changed. Default value is 1.0; allowed values
+are greater than 0 and less than or equal to 1. If this parameter is
+set to 0, the parallel reaction is disabled. <br>
     </p>
   </dd>
-
+  <dd>
+    <p>This parameter can be changed later on by the process simulator
+or the transport code as function of time and other parameters of the
+system. <br>
+    </p>
+  </dd>
   <dd> &nbsp;</dd>
   <dt> <a name="rpCon"></a><big><b><tt><big>rpCon</big> </tt></b></big>-
 Array of kinetic rate constants for particle faces or for parallel
 reactions <br>
   </dt>
   <dd>
-    <p>Array of kinetic rate constants for particle faces or for
-parallel reactions <br>
-    </p>
+    <p>This table contains as many rows as there should be parallel
+reactions in the overall kinetic rate model for this phase, and 14
+columns, where the rate model parameters should be entered for each
+parallel reaction (row) in the following order:</p>
   </dd>
-
+  <dd>
+    <table style="text-align: left; width: 90%;" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top;">Index<br>
+          </td>
+          <td style="vertical-align: top;">Symbol<br>
+          </td>
+          <td style="vertical-align: top;">Desription<br>
+          </td>
+          <td style="vertical-align: top;">Default<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">0<br>
+          </td>
+          <td style="vertical-align: top; font-style: italic;">k<sup>o</sup><br>
+          </td>
+          <td style="vertical-align: top;">Standard-temperature net
+rate constant (in mol/m2/s)<br>
+          </td>
+          <td style="vertical-align: top;">0<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">1<br>
+          </td>
+          <td style="vertical-align: top; font-style: italic;">K<sup>o</sup><br>
+          </td>
+          <td style="vertical-align: top;">Standard-temperature gross
+rate constant (in mol/m2/s)<br>
+          </td>
+          <td style="vertical-align: top;">0<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">2<br>
+          </td>
+          <td style="vertical-align: top; font-style: italic;">A<br>
+          </td>
+          <td style="vertical-align: top;">Arrhenius factor <br>
+          </td>
+          <td style="vertical-align: top;">1<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">3<br>
+          </td>
+          <td style="vertical-align: top; font-style: italic;">E<br>
+          </td>
+          <td style="vertical-align: top;">Activation energy (J/mol)<br>
+          </td>
+          <td style="vertical-align: top;">0<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">4<br>
+          </td>
+          <td style="vertical-align: top; font-style: italic;">b_I<br>
+          </td>
+          <td style="vertical-align: top;">Empirical power parameter
+related to ionic strength <span style="font-style: italic;">I</span>&nbsp; (term <span style="font-style: italic;">I</span>^<span style="font-style: italic;">b_I</span>)<br>
+          </td>
+          <td style="vertical-align: top;">0<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">5<br>
+          </td>
+          <td style="vertical-align: top; font-style: italic;">b_pH<br>
+          </td>
+          <td style="vertical-align: top;">Empirical power parameter
+related to pH (term pH^b_pH)<br>
+          </td>
+          <td style="vertical-align: top;">0<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">6<br>
+          </td>
+          <td style="vertical-align: top; font-style: italic;">b_pe<br>
+          </td>
+          <td style="vertical-align: top;">Empirical power parameter
+related to pe (term pe^b_pe)<br>
+          </td>
+          <td style="vertical-align: top;">0<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">7<br>
+          </td>
+          <td style="vertical-align: top; font-style: italic;">b_Eh<br>
+          </td>
+          <td style="vertical-align: top;">Empirical power parameter
+related to Eh (term Eh^b_Eh)<br>
+          </td>
+          <td style="vertical-align: top;">0<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">8<br>
+          </td>
+          <td style="vertical-align: top; font-style: italic;">p<br>
+          </td>
+          <td style="vertical-align: top;">«Reaction order» power
+parameter for the whole activity product term (in far-from-equilibrium case), see the <a href="#apCon">apCon</a> table for other activity parameters <br>
+          </td>
+          <td style="vertical-align: top;">1<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">9<br>
+          </td>
+          <td style="vertical-align: top; font-style: italic;">q<br>
+          </td>
+          <td style="vertical-align: top;">Power parameter at the
+stability index in the affinity term <br>
+          </td>
+          <td style="vertical-align: top;">1<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">10<br>
+          </td>
+          <td style="vertical-align: top; font-style: italic;">m<br>
+          </td>
+          <td style="vertical-align: top;">Empirical power parameter in
+the affinity term<br>
+          </td>
+          <td style="vertical-align: top;">0<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">11<br>
+          </td>
+          <td style="vertical-align: top; font-style: italic;">u<br>
+          </td>
+          <td style="vertical-align: top;">Power parameter or constant
+in the affinity term <br>
+          </td>
+          <td style="vertical-align: top;">0<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">12<br>
+          </td>
+          <td style="vertical-align: top; font-style: italic;">O_n<br>
+          </td>
+          <td style="vertical-align: top;">«Effective» saturation index
+for nucleation affinity term <br>
+          </td>
+          <td style="vertical-align: top;">1<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">13<br>
+          </td>
+          <td style="vertical-align: top; font-style: italic;">q_n<br>
+          </td>
+          <td style="vertical-align: top;">Reserved parameter for
+nucleation (TBD)<br>
+          </td>
+          <td style="vertical-align: top;">0<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>These parameters apply to general TST rate equation (1.1) as
+desribed in the <span style="font-family: monospace;">Kinetics</span><tt>-uptake.pdf</tt>
+file. Typically, most parameters can be left at their default values,
+which disable the respective terms in eq (1.1).</p>
+  </dd>
+  <dd>I<span style="font-weight: bold;">mportant: </span>Sign
+convention for the net <span style="font-style: italic;">k</span><sup style="font-style: italic;">o</sup> und gross K<sup>o</sup> rate
+constants:</dd>
+  <dd><br>
+  </dd>
+  <dd>
+    <table style="text-align: left; width: 693px; height: 52px;" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top;">&gt; 0 (positive)<br>
+          </td>
+          <td style="vertical-align: top;">Dissolution, decrease<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">&lt; 0 (negative)<br>
+          </td>
+          <td style="vertical-align: top;">Precipitation, nucleation,
+growth (increase)<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>If two or more parallel reactions are provided (e.g. one for
+dissolution, another for growth), the program will choose the
+appropriate one depending on the value of the phase stability index
+lgOm: the former if lgOm &lt; 0.001 and the latter if lgOm &gt; 0.001.
+This makes it possible to use the same phase definition in all possible
+cases, depending on the changing conditions in the system. More
+specific rules:</p>
+  </dd>
+  <dd>
+    <p>If the net rate constant is 0 and gross rate constant is not 0
+then the gross rate constant will be used, and vice versa. If both are
+not 0 then the net rate constant will be used. If the net rate constant
+is positive and phase stability index lgOm&nbsp; &lt; -0.001
+(dissolution) then this net rate constant will be used, but if
+lgOm&nbsp; &gt; 0.001 (precipitation) then this &#8220;parallel reaction&#8221;
+term will be skipped. If the net rate constant is negative and phase
+stability index lgOm&nbsp; &gt; 0.001 (precipitation) then the absolute
+value of this rate constant will be used, but if lgOm&nbsp; &lt; -0.001
+(dissolution) then this &#8220;parallel reaction&#8221; term will be skipped.</p>
+  </dd>
+  <dd>
+    <p>Priority: if both rate constants are given as non-zero values,
+only the net rate constant <span style="font-style: italic;">k</span><sup style="font-style: italic;">o</sup> will be used. </p>
+  </dd>
+  <dd>.</dd>
   <dd> &nbsp;</dd>
   <dt> <a name="rprcl"></a><big><b><tt><big>rprcl</big> </tt></b></big>-
 Kinetic parallel reactions comment list <br>
   </dt>
   <dd>
-    <p>Kinetic parallel reactions comment list <br>
+    <p>It is desirable to put here a short comment for each parallel
+reaction, for instance: <br>
     </p>
+  </dd>
+  <dd>
+    <table style="text-align: left; width: 202px; height: 76px;" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top;">Dissol.low.pH</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">Precip.low.pH</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </dd>
+  <dd>
+    <p>and so on. This greatly improves the readability of the phase
+definition. <br>
+    </p>
+  </dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="rpkcl"></a><big><b><tt><big>rpkcl</big> </tt></b></big>-
+Kinetic rate parameters comment list <br>
+  </dt>
+  <dd>
+    <p>It is desirable to put here a short comment for each rate
+parameter, for instance:</p>
+  </dd>
+  <dd>
+    <table style="text-align: left; width: 745px; height: 28px;" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top;">ko<br>
+          </td>
+          <td style="vertical-align: top;">Ko<br>
+          </td>
+          <td style="vertical-align: top;">Af<br>
+          </td>
+          <td style="vertical-align: top;">Ea<br>
+          </td>
+          <td style="vertical-align: top;">bI<br>
+          </td>
+          <td style="vertical-align: top;">bpH<br>
+          </td>
+          <td style="vertical-align: top;">bpE<br>
+          </td>
+          <td style="vertical-align: top;">bEh<br>
+          </td>
+          <td style="vertical-align: top;">p<br>
+          </td>
+          <td style="vertical-align: top;">q<br>
+          </td>
+          <td style="vertical-align: top;">m<br>
+          </td>
+          <td style="vertical-align: top;">u<br>
+          </td>
+          <td style="vertical-align: top;">Onucl<br>
+          </td>
+          <td style="vertical-align: top;">qn<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+  </dd>
+  <dd>This greatly improves the readability of the phase definition.</dd>
+  <dd>
+    <p>.&nbsp;&nbsp;</p>
+  </dd>
+  
+
+
+  <dt> <a name="lDCr"></a><big><b><tt><big>lDCr</big> </tt></b></big>-
+List of record keys of species involved in activity product terms for
+parallel reactions <br>
+  </dt>
+  <dd>
+    <p>In
+this implementation of kinetic rate calculations, a common list of
+species is used in activity product terms for all parallel reactions.
+Unused species are simply disabled by setting the respective power
+(stoichiometry) coefficient to 0 (default). <br>
+</p></dd><dd>
+    <p>Aqueous or gaseous species can be selected for this list after
+the Phase Wizard is finished. If nothing was selected, the activity
+product terms will be disabled in all parallel reactions (generic terms
+such as pH^bpH still remain active). Upon opening of the modeling
+project, the record keys from this list will be automatically converted
+into the indexes of respective species in the system definition. <br>
+    </p>
+
   </dd>
 
   <dd> &nbsp;</dd>
-  <dt> <a name="rpkcl"></a><big><b><tt><big>rpkcl</big> </tt></b></big>-
-Kinetic rate constants comment list <br>
+  <dt> <a name="lDCd"></a><big><b><tt><big>lDCd</big> </tt></b></big>-
+Location of source records for species involved in activity product terms <br>
   </dt>
   <dd>
-    <p>Kinetic rate constants comment list <br>
+    <p>This
+column is created automatically to point where the source records for
+each species is located: 'r' (ReacDC) or 'd' (DComp) record.</p></dd><dd>
+    <p>There is no need to edit this information.  <br>
     </p>
+
   </dd>
 
-
-<dd> &nbsp;</dd>
-<dt> <a name="Ascp"></a><big><b><tt><big>Ascp</big> </tt></b></big>-
-Parameter coefficients for corrections of specific surface area <br>
-</dt>
-<dd>
-<p>Parameter coefficients for corrections of specific surface area <br>
-</p>
-</dd>
-
-
-
-
-<dd> &nbsp;</dd>
-<dt> <a name="lICu"></a><big><b><tt><big>lICu</big> </tt></b></big>-
-List of names of Independent Components related to SS end members <br>
-</dt>
-<dd>
-<p>List of names of Independent Components related to SS end members <br>
-</p>
-</dd>
-
-
-<dd> &nbsp;</dd>
-<dt> <a name="lDCr"></a><big><b><tt><big>lDCr</big> </tt></b></big>-
-List of record keys of species involved in activity product terms for parallel reactions <br>
-</dt>
-<dd>
-<p>List of record keys of species involved in activity product terms for parallel reactions [nSkr] <br>
-</p>
-</dd>
-
-<dd> &nbsp;</dd>
-<dt> <a name="lDCd"></a><big><b><tt><big>lDCd</big> </tt></b></big>-
-Location of source records for Dependent Components (species) <br>
-</dt>
-<dd>
-<p>Location of source records for Dependent Components (species) { r d } <br>
-</p>
-</dd>
-
-<dd> &nbsp;</dd>
-<dt> <a name="apCon"></a><big><b><tt><big>apCon</big> </tt></b></big>-
+  <dd> &nbsp;</dd>
+  <dt> <a name="apCon"></a><big><b><tt><big>apCon</big> </tt></b></big>-
 Array of parameters per species involved in activity product terms <br>
+  </dt>
+  <dd>
+    <p>This array presently has a row per each parallel reaction and as many columns as there were species selected in the lDCr list. <br>
+</p></dd><dd>
+    <p>Enter in each cell in the row the power coefficient b_j (0 is
+the default) for the respective j-th species whose activity appears in
+the activity product (see eq (1.2) in the <span style="font-family: monospace;">Kinetics</span><tt>-uptake.pdf</tt>
+file). <br>
+    </p>
+  </dd>
+  <dd>
+    <p>b_j is usually a species stoichiometry coefficient in the
+parallel reaction (can also be treated as empirical parameter having
+non-integer value). Setting b_j = 0 disables the contribution of the
+respective species activity to eq (1.2) for a given parallel reaction.
+These activities are taken from GEM output.&nbsp; <br>
+    </p>
+
+  </dd>
+
+  <dd> &nbsp;</dd>
+
+
+
+<dt> <a name="Ascp"></a><big><b><tt><big>Ascp</big> </tt></b></big>-
+Parameter coefficients for corrections of specific surface area for growth or dissolution <br>
 </dt>
 <dd>
-<p>Array of parameters per species involved in activity product terms [nPRk][nSkr][naptC] <br>
-</p>
-</dd>
+<p>This array contains at least one parameter which is the shape factor
+in equation&nbsp; (1.4) for correcting the specific surface area of a
+particulate phase for growth or dissolution, assuming uniform particle
+size.</p></dd><dd>
+    <p>Default value of the shape factor is 1 (spherical particles).&nbsp; <br>
+    </p>
+  </dd>
+  <dd>
+    <p>More corrections to be implemented. <br>
+    </p>
 
-
-<dd> &nbsp;</dd>
-<dt> <a name="lICu"></a><big><b><tt><big>lICu</big> </tt></b></big>-
-List of names of Independent Components related to SS end members <br>
-</dt>
-<dd>
-<p>List of names of Independent Components related to SS end members [nDC] <br>
-</p>
-</dd>
-
-<dd> &nbsp;</dd>
-<dt> <a name="umpCon"></a><big><b><tt><big>umpCon</big> </tt></b></big>-
-Array of uptake model parameters <br>
-</dt>
-<dd>
-<p>Array of uptake model parameters [nDC][numpC] <br>
-</p>
-</dd>
-
+  </dd>
 
 <dd> &nbsp;</dd>
-<dt> <a name="umpcl"></a><big><b><tt><big>umpcl</big> </tt></b></big>-
+
+
+
+  <dt> <a name="lICu"></a><big><b><tt><big>lICu</big> </tt></b></big>-
+List of names of Independent Components characteristic for end members <br>
+  </dt>
+  <dd>
+    <p>In
+the uptake kinetic models, each end member of the phase must be
+associated with its "characteristic" chemical element. This is
+straightforward for simple cases such as Cd uptake in calcite: Cd is
+associated with the CdCO3 end member, and Ca with the (host) CaCO3 end
+member. However, this becomes non-trivial if the end members have
+complex stoichiometry. For that reason, the user must type in a symbol
+of "characteristic" Independent Component against each end member.</p></dd><dd>
+    <p>Default value is "Elem", but, if not changed, will result in errors.&nbsp; <br>
+    </p>
+
+  </dd>
+
+  <dd> &nbsp;</dd>
+  <dt> <a name="umpCon"></a><big><b><tt><big>umpCon</big> </tt></b></big>-
+Array of uptake kinetics model parameters <br>
+  </dt>
+  <dd>
+    <p>This
+table contains a row per each end member, which currently holds 6
+parameters of the "unified uptake kinetics" model (Thien et al., 2013)
+as described by eq (2.7) inthe  <span style="font-family: monospace;">Kinetics</span><tt>-uptake.pdf</tt>
+file. These parameters go in the following order:</p></dd><dd>
+    <table style="text-align: left; width: 90%;" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top;">Index<br>
+          </td>
+          <td style="vertical-align: top;">Symbol<br>
+          </td>
+          <td style="vertical-align: top;">Description<br>
+          </td>
+          <td style="vertical-align: top;">Default<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">0<br>
+          </td>
+          <td style="vertical-align: top;"><span style="font-style: italic;">F</span><br>
+          </td>
+          <td style="vertical-align: top;">Surface enrichment (&gt;1) or depletion (&lt;1) factor of the characteristic element relative to the host element<br>
+          </td>
+          <td style="vertical-align: top;">1<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">1<br>
+          </td>
+          <td style="vertical-align: top;"><span style="font-style: italic;">Del</span>0<br>
+          </td>
+          <td style="vertical-align: top;">Equilibrium fractionation (distribution) coefficient of the characteristic element relative to the host element<br>
+          </td>
+          <td style="vertical-align: top;">1<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">2<br>
+          </td>
+          <td style="vertical-align: top;"><span style="font-style: italic;">D<sub>S</sub></span><br>
+          </td>
+          <td style="vertical-align: top;">Empirical effective sub-surface layer diffusivity parameter ( m<sup>2</sup>/s)<br>
+          </td>
+          <td style="vertical-align: top;">0<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">3<br>
+          </td>
+          <td style="vertical-align: top;"><span style="font-style: italic;">D<sub>L</sub></span><br>
+          </td>
+          <td style="vertical-align: top;">Solid-state diffusion coefficient of the characteristic element in the bulk host mineral phase (m<sup>2</sup>/s)<br>
+          </td>
+          <td style="vertical-align: top;">0<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">4<br>
+          </td>
+          <td style="vertical-align: top;"><span style="font-style: italic;">l</span><br>
+          </td>
+          <td style="vertical-align: top;">Half-thickness of the sub-surface layer (nm)<br>
+          </td>
+          <td style="vertical-align: top;">0<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">5<br>
+          </td>
+          <td style="vertical-align: top;"><span style="font-style: italic;">m</span><br>
+          </td>
+          <td style="vertical-align: top;">Multiplier that links <span style="font-style: italic;">l</span> to the maximum thickness of the elevated-diffusivity sub-surface region <br>
+          </td>
+          <td style="vertical-align: top;">1<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+  </dd>
+  <dd>
+    <p>The uptake kinetics model depends on the overall kinetic rate
+law for the (host) mineral phase. At every time step, the change in
+amount of the whole phase will be computed, then the effective
+fractionation coefficient for Tr (trace) element, then the amount
+change of Tr end member will be found from that and the total dissolved
+molalities of Tr and Hc (host) elements. <br>
+    </p>
+  </dd>
+  <dd>
+    <p>More models and parameter sets are in development.<br>
+    </p>
+
+  </dd>
+
+  <dd> &nbsp;</dd>
+  <dt> <a name="umpcl"></a><big><b><tt><big>umpcl</big> </tt></b></big>-
 Uptake kinetic model parameters comment list <br>
-</dt>
+  </dt>
+  <dd>
+    
+    <dl>
 <dd>
-<p>Uptake kinetic model parameters comment list [numpC] <br>
-</p>
-</dd>
-
-<dd> &nbsp;</dd>
+    <p>It is desirable to put here a short comment for each parameter of the uptake kinetics model, for instance:</p>
+  </dd><dd><table style="text-align: left; width: 469px; height: 28px;" border="1" cellpadding="2" cellspacing="2"><tbody><tr><td style="vertical-align: top;">F<br>
+          </td>
+          <td style="vertical-align: top;">Del0<br>
+          </td>
+          <td style="vertical-align: top;">DS<br>
+          </td>
+          <td style="vertical-align: top;">DL<br>
+          </td>
+          <td style="vertical-align: top;">l<br>
+          </td>
+          <td style="vertical-align: top;">m<br>
+          </td>
+          
+          
+          
+          
+          
+          
+          
+          
+        </tr>
+      </tbody>
+    </table>
+    <br>
+  </dd><dd>This greatly improves the readability of the uptake kinetics model definition.</dd>
+    </dl>
+<p>&nbsp;
+    </p>
+  </dd>
+  <dd> &nbsp;</dd>
   <dt><a name="PHtprn"></a><big><b><tt>PHtprn</tt></b></big> </dt>
   <dd> Internal </dd>
   <dd> <br>
@@ -4696,7 +5475,7 @@ Uptake kinetic model parameters comment list <br>
 </dl>
 
 <hr size="2" width="100%">
-<h3><a name="PHASE_DOD_HIDDEN"></a>5.3. Hidden data objects for usage
+<h3><a name="PHASE_DOD_HIDDEN"></a>5.4. Hidden data objects for usage
 in
 Phase math scripts<br>
 </h3>
@@ -5318,11 +6097,11 @@ from (Kielland 1936), from (Helgeson ea 1981) or</dt>
 </dl>
 
 <hr style="width: 100%; height: 2px;"><b><b><b><br>
-</b></b></b>Copyright (c) 2003-2012 GEMS Develoment Team<br>
+</b></b></b>Copyright (c) 2003-2013 GEMS Develoment Team<br>
 
 <br>
 
-Last update: 5.12.2012 DK<b><b><b><tt><br>
+Last update: 10.07.2013 DK<b><b><b><tt><br>
 </tt><br>
 &nbsp; <br>
 </b> </b></b> <br>

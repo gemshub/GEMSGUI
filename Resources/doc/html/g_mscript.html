@@ -2,6 +2,7 @@
 <html><head>
 
 
+
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]"><title>GEMS MathScript Manual</title>
   
@@ -619,7 +620,8 @@ than; <tt>&nbsp;<big>&gt;=</big></tt>&nbsp; not less than </p>
 <blockquote>
   <p><big><tt>-</tt></big> &nbsp;&nbsp; inversion of sign &nbsp;(unary)<br>
   <big><tt>^</tt></big>&nbsp; &nbsp; raise to power &nbsp;
-&nbsp;(binary) </p>
+&nbsp;(binary), equivalent to pow(x,y) function<br>
+ </p>
 </blockquote>
 <blockquote>
   <p><big><tt>*</tt></big>&nbsp;&nbsp; &nbsp;multiply;&nbsp;&nbsp; <big><tt>/</tt></big>&nbsp;
@@ -713,19 +715,19 @@ allowed in math scripts</p>
     </tr>
     <tr>
       <td><tt><b><big>exp( x )</big></b></tt></td>
-      <td> Exponent of x; e ^ x ( -70 &lt; x &lt; 70 )</td>
+      <td> Exponent of x; e ^ x ( -85.196 &lt; x &lt; 85.196 )</td>
     </tr>
     <tr>
       <td><tt><big><b>sqrt( x )</b></big></tt></td>
-      <td> Square root of x ( x &gt; 0 )</td>
+      <td> Square root of x ( x &gt; 1e-37 )</td>
     </tr>
     <tr>
       <td><tt><b><big>ln( x )</big></b></tt></td>
-      <td> Natural logarithm of x ( x &gt; 0 )</td>
+      <td> Natural logarithm of x ( x &gt; 1e-37 )</td>
     </tr>
     <tr>
       <td><tt><b><big>lg( x )</big></b></tt></td>
-      <td>Decimal logarithm of x ( x &gt; 0 ). Alternative:&nbsp;&nbsp;
+      <td>Decimal logarithm of x ( x &gt; 1e-37 ). Alternative:&nbsp;&nbsp;
 log( x ) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp; </td>
     </tr>
@@ -793,7 +795,7 @@ round(y)</td>
     </tr>
     <tr>
       <td style="vertical-align: top;"><tt><b><big>pow( x,y )</big></b></tt></td>
-      <td style="vertical-align: top;">returns x^y&nbsp; (x to power y)<br>
+      <td style="vertical-align: top;">returns x^y&nbsp; (x to power y), abs(x) &lt; 1e37, y is such that the abs(result) &lt; 1e37 <br>
       </td>
     </tr>
   </tbody>

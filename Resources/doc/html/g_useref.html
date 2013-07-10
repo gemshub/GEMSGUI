@@ -1,6 +1,8 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
 
+
+
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"><title>GEMS3 User's Reference</title></head><body>
 <h1><img src="gems1.png" align="left" height="48" width="48">
 GEM-Selektor version 3</h1>
@@ -67,6 +69,9 @@ Extended Phase Class Codes</a> </p>
 Codes for Surface Complexation Models and Surface Activity Terms</a></p>
   <p><a href="#NONIDTYPES">4.4.
 Codes for the (Non-Ideal) Models of Multi-Component Phases</a></p>
+  <p><a href="#KINUPTTYPES">4.5. Codes for kinetic and uptake models<br>
+  </a></p>
+
 </blockquote>
 
 
@@ -3304,7 +3309,388 @@ in standalone GEMS3K calculations. Codes 'C' and 'T' require entering
 non-zero parameter coefficients into <a href="gm_phase.html#ipxT"><tt>ipxT</tt></a>
 and <tt><a href="gm_phase.html#ph_cf">ph_cf</a></tt> arrays in TSolMod
 convention; therefore, a Phase record must be created before GEM
-calculations.&nbsp; </p>
+calculations. <br>
+</p><br>
+<br>
+<hr style="width: 100%; height: 2px;">
+<h3><a name="KINUPTTYPES"></a>4.5. Codes for kinetic and uptake phase models</h3>
+<p>The model codes described below control execution of the built-in
+subroutines accounting for kinetics of phase dissolution/precipitation
+(including pure phases), the minor element uptake kinetics in solid
+solution phases, as well as
+allocation of necessary optional
+dynamic data objects in the <a href="gm_phase.html">Phase record</a> structure. The codes (usually one upper-case Latin letter or a digit) are located
+in the <a href="gm_phase.html#kin_t"><tt>kin_t</tt></a> vector and can
+be selected in Phase Wizard upon
+creation or remake of the Phase record. Detailed description of
+built-in calculation
+of kinetic rates and uptake can be found in the&nbsp; <span style="font-family: monospace;">Kinetics</span><tt>-uptake.pdf</tt>&nbsp;
+manual file.</p>
+<p>Kinetic and uptake models can be combined with any built-in models of non-ideal mixing.</p>
+<p>Any system that contains only phases that use built-in models of
+kinetics or uptake from TKinMet library can be exported into GEMS3K
+input files and used in standalone
+reactive transport or parameter fitting calculations.&nbsp;
+</p>
+
+
+<br>
+
+<h4><a name="P_KINUPTT1"></a>4.5.1. Type codes of the process kinetics</h4>
+
+
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">N<br>
+      </td>
+      <td style="vertical-align: top;">Not defined, no account for</td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">M<br>
+      </td>
+      <td style="vertical-align: top;">Kinetics of generic
+dissolution/precipitation (no uptake, no ion exchange, no adsorption), generic TST model<br>
+</td>
+      <td style="vertical-align: top;">Maximum 14 or less
+parameters per one parallel reactions, any number of reactions, any
+number of species in the activity product term; choice of 7 different
+forms of the affinity term.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">U<br>
+      </td>
+      <td style="vertical-align: top;">Kinetics of uptake/entrapment
+(of minor/trace element) into solid solution</td>
+      <td style="vertical-align: top;">The same as 'M', plus 6 uptake model parameters per end member (not applicable for pure phases)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">X<br>
+      </td>
+      <td style="vertical-align: top;">Kinetics of ion exchange (clays,
+C-S-H, zeolites, ...)</td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">A<br>
+      </td>
+      <td style="vertical-align: top;">Kinetics of adsorption (on MWI),
+redox transformation</td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">P<br>
+      </td>
+      <td style="vertical-align: top;">Kinetics of solid phase
+nucleation and precipitation</td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<br>
+&nbsp;Coefficients will be passed from Phase definition to GEM equilibrium solver according to the TSolMod parameter convention.<br>
+<br>
+
+
+<h4><a name="P_KINUPTT2"></a>4.5.2.&nbsp; Type codes of the kinetics/metastability
+model</h4>
+
+
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">N<br>
+      </td>
+      <td style="vertical-align: top;">Not defined, no account for</td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">T<br>
+      </td>
+      <td style="vertical-align: top;">Generic TST
+dissolution/precipitation model following (Shott ea 2012)</td>
+      <td style="vertical-align: top;">Usually
+two parallel reactions (positive rate constant for dissolution,
+negative - for precipitation); code selection of the appropriate
+affinity term for each parallel reaction. At least the rate constant at
+25 C should be provided per parallel reaction<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">P<br>
+      </td>
+      <td style="vertical-align: top;">Dissolution/precipitation model
+of the form (Palandri 2004)</td>
+      <td style="vertical-align: top;">A
+particular form of TST rate law for mineral-water reactions (low-pH;
+neutral; high-pH regions), in total 6 parallel reactions (3 for
+precipitation, 3 for dissolution)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">W<br>
+      </td>
+      <td style="vertical-align: top;">Carbonate growth model following
+(Wolthers 2012)</td>
+      <td style="vertical-align: top;">A
+particular TST-like rate law for calcite precipitation (1 parallel
+reaction with the rate constant being in fact a conversion factor of
+linear surface propagation velocity into the rate constant&nbsp; in
+mol/m2/s (25 C only). <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">U<br>
+      </td>
+      <td style="vertical-align: top;">Mineral nucleation and growth
+model with nuclei/particle size distribution<br>
+      </td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<br>
+
+
+<h4><a name="P_KINUPTT3"></a>4.5.3. Type codes of the sorption kinetics model</h4>
+
+
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">N<br>
+      </td>
+      <td style="vertical-align: top;">Not defined, no account for</td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">E<br>
+      </td>
+      <td style="vertical-align: top;">Unified entrapment model
+(Thien,Kulik,Curti 2013)</td>
+      <td style="vertical-align: top;">A
+combination of the Watson (2004) "growth entrapment model" with DePaolo
+(2011) surface reaction kinetics model. 6 model parameters per end
+member (ignored for the 'host' end member).<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">M<br>
+      </td>
+      <td style="vertical-align: top;">DePaolo (2011) uptake kinetics
+model</td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">G<br>
+      </td>
+      <td style="vertical-align: top;">Growth (surface) entrapment
+model (Watson 2004)</td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">F<br>
+      </td>
+      <td style="vertical-align: top;">Fast ion exchange kinetics (e.g.
+montmorillonite, CSH)</td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">L<br>
+      </td>
+      <td style="vertical-align: top;">Slow ion exchange kinetics (e.g.
+illite, zeolites)</td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">I<br>
+      </td>
+      <td style="vertical-align: top;">Adsorption inhibition</td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">P<br>
+      </td>
+      <td style="vertical-align: top;">Solid solution nucleation model
+(Prieto 2013)</td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<br>
+
+
+<h4><a name="P_KINUPTT4"></a>4.5.4. Type codes of metastability links of this
+phase to other phases</h4>
+
+
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">N<br>
+      </td>
+      <td style="vertical-align: top;">Not defined, no account for</td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">S<br>
+      </td>
+      <td style="vertical-align: top;">Link to (fraction of) solid
+substrate (another phase) surface area<br>
+</td>
+      <td style="vertical-align: top;">The phase(s) should be
+condensed; available in the modeling project database; have positive
+specific surface area; present in the system when partial&nbsp;
+equilibrium is calculated. <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">P<br>
+      </td>
+      <td style="vertical-align: top;">Link to (fraction of) solid
+substrate (pore) volume</td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">M<br>
+      </td>
+      <td style="vertical-align: top;">Link to (fraction of) solid
+substrate mass</td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<br>
+
+
+<h4><a name="P_KINUPTT5"></a>4.5.5. Type codes of particle/pore size distribution and
+specific surface area correction</h4>
+
+
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">N<br>
+      </td>
+      <td style="vertical-align: top;">Not defined, no account for</td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">U<br>
+      </td>
+      <td style="vertical-align: top;">Uniform particle/pore size
+distribution</td>
+      <td style="vertical-align: top;">So far, uniform-size spherical particles only are assumed in calculations.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">B<br>
+      </td>
+      <td style="vertical-align: top;">Binodal particle/pore size
+distribution</td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">F<br>
+      </td>
+      <td style="vertical-align: top;">Empirical distribution function</td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<br>
+
+
+<h4><a name="P_KINUPTT6"></a>4.5.6. Codes of the rate scaling model (reserved)</h4>
+
+
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+
+
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">N<br>
+      </td>
+      <td style="vertical-align: top;">Not defined, no account for</td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">A<br>
+      </td>
+      <td style="vertical-align: top;">Surface-scaled rate model (k in
+mol/m2/s)</td>
+      <td style="vertical-align: top;">So far, only rate constants per unit area per seconds are used.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">V<br>
+      </td>
+      <td style="vertical-align: top;">Volume-scaled rate model (k in
+mol/m3/s)</td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr><tr>
+      <td style="vertical-align: top;">M<br>
+      </td>
+      <td style="vertical-align: top;">Mass-scaled rate model (k in mol/kg/s)<br>
+      </td>
+      <td style="vertical-align: top;">TBD<br>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+
+<br>
+<p><br>
+</p>
+<p><br>
+ </p>
+
 
 
 <ol>
@@ -3465,11 +3851,14 @@ Write, Word etc.), as well as Excel or similar spreadsheets. <br>
 
 <tt><br>
 </tt>
-<hr size="2" width="100%"><tt>Copyright (c) 2003-2012 <a href="gems_team.html">GEMS Development Team</a><br>
+<hr size="2" width="100%">Copyright (c) 2003-2013 GEMS Development Team<br>
+
 <br>
-Last updated: 22.08.2012 DK<br>
-</tt><tt>
-</tt>
+
+Last updated: 10.07.2013 DK<br>
+
+
+
 <p>End of Document <br>
 &nbsp; </p>
 
