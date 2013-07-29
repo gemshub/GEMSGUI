@@ -288,7 +288,8 @@ void TPhase::Set_KinMet_Phase_coef()
         case KM_MOD_TST: // = 'T' Generic TST dissolution/precipitation model following Schott ea 2012
             php->PrpCon = S_ON;
             php->PapCon = S_ON;
-            php->nPRk = 2;
+            if( php->nPRk < 1 || php->nPRk > 12 )  // bugfix 29.07.13 by DK, report by BT
+                php->nPRk = 2;
 //            php->nSkr = 1;
             php->nrpC = 14;
             php->naptC = 1;
@@ -298,12 +299,13 @@ void TPhase::Set_KinMet_Phase_coef()
         case KM_MOD_PAL: // = 'P' Dissolution/precipitation model of the form (Palandri 2004)
             php->PrpCon = S_ON;
             php->PapCon = S_ON;
-            php->nPRk = 3;
+            if( php->nPRk < 1 || php->nPRk > 12 )  // bugfix 29.07.13 by DK, report by BT
+                php->nPRk = 3;
 //            php->nSkr = 2;
             php->nrpC = 14;
             php->naptC = 1;
-            php->nFaces = 1;
-            php->nAscC = 1;
+//            php->nFaces = 1;
+//            php->nAscC = 1;
             break;
         case KM_MOD_WOL: // = 'W' Carbonate growth model following (Wolthers 2012)
             php->PrpCon = S_ON;
