@@ -18,6 +18,7 @@
 //-------------------------------------------------------------------
 
 #include <cmath>
+// #include <cfloat>  // to set consistent checks of number limits in script function arguments
 #include <cstdio>
 #include "gstring.h"
 #include "v_ipnc.h"
@@ -27,6 +28,13 @@ const char* DIGIT="0123456789.";
 const char* OPER="!^*/+-<a>b=c&|()";
 const char* RAZD=" +-*/^:[]();=$&|!<>?#,";
 const int FuncNumber=29; // number of functions
+
+const double IPNC_DBL_MAX = 1e37;
+const double IPNC_DBL_MIN = 1e-37;
+const double IPNC_DBL_MAX_10_EXP = 37.;
+const double IPNC_DBL_MIN_10_EXP = -37.;
+const double IPNC_DBL_MAX_EXP = 85.195648;
+const double IPNC_DBL_MIN_EXP = -85.195648;
 
 double derf(double x);
 double derfc(double x);
@@ -81,6 +89,7 @@ IPNCalc::IPNCalc():
     input = 0;
     con_add( 0.0 );
     con_add( 1.0 );
+// cout << DBL_MIN_EXP << endl;
 }
 
 IPNCalc::~IPNCalc()
@@ -860,7 +869,7 @@ void IPNCalc::CalcEquat()
         if( ci == IT_W )  // conditional jump to equation
         {
             ErrorIf( ni<ieq, "E01MSExec", "Invalid conditional goto command");
-            if( fabs( aObj[o_k_].Get() ) < 1e-34 )
+            if( fabs( aObj[o_k_].Get() ) < IPNC_DBL_MIN ) // 1e-34 )
                 ieq = ni;
             else ieq++;
             continue;
@@ -883,13 +892,16 @@ void IPNCalc::CalcEquat()
                 switch( ni )
                 {
                 case 0 :
-                    if( fabs(StackEnd(0)) >1e-34 )
+                    if( fabs(StackEnd(0)) >= IPNC_DBL_MIN ) // 1e-34 )
                         StackEnd(0) = 0.;
                     else StackEnd(0) = 1.;
                     break;
                 case 1 :
-                    StackEnd(-1) =
-                        pow (  StackEnd(-1),  StackEnd(0) );
+                    ErrorIf( (fabs(StackEnd(-1))<IPNC_DBL_MIN || fabs(StackEnd(-1))>IPNC_DBL_MAX
+                             || fabs(StackEnd(0)) < IPNC_DBL_MIN_10_EXP
+                             || fabs(StackEnd(0)) > IPNC_DBL_MAX_10_EXP),
+                             "E28MSExec", "Attempt of pow() argument out of range");
+                    StackEnd(-1) =  pow (  StackEnd(-1),  StackEnd(0) );
                     StackDel();
                     break;
                 case 2 :
@@ -897,7 +909,7 @@ void IPNCalc::CalcEquat()
                     StackDel();
                     break;
                 case 3 :
-                    ErrorIf( fabs(StackEnd(0)) < 1e-34,
+                    ErrorIf( fabs(StackEnd(0)) < IPNC_DBL_MIN, // 1e-34,
                              "E04MSExec","Attempt of zerodivide!");
                     StackEnd(-1) /= StackEnd(0);
                     StackDel();
@@ -935,24 +947,24 @@ void IPNCalc::CalcEquat()
                     StackDel();
                     break;
                 case 10:
-                    if( fabs(StackEnd(-1)-StackEnd(0))
-                            < 1e-34) StackEnd(-1) = 1.;
+                    if( fabs(StackEnd(-1)-StackEnd(0)) < IPNC_DBL_MIN )
+                          /*  < 1e-34) */ StackEnd(-1) = 1.;
                     else StackEnd(-1) = 0.;
                     StackDel();
                     break;
                 case 11 :
-                    if( fabs(StackEnd(-1)-StackEnd(0))
-                            >= 1e-34 ) StackEnd(-1) = 1.;
+                    if( fabs(StackEnd(-1)-StackEnd(0)) < IPNC_DBL_MIN )
+                          /*  >= 1e-34 ) */ StackEnd(-1) = 1.;
                     else StackEnd(-1) = 0.;
                     StackDel();
                     break;
                 case 12 :
-                    if( fabs(StackEnd(0)) <1e-34 )
+                    if( fabs(StackEnd(0)) < IPNC_DBL_MIN ) // 1e-34 )
                         StackEnd(-1) = 0.;
                     StackDel();
                     break;
                 case 13 :
-                    if( fabs(StackEnd(0)) >= 1e-34 )
+                    if( fabs(StackEnd(0)) >= IPNC_DBL_MIN ) // >= 1e-34 )
                         StackEnd(-1) = 1.;
                     StackDel();
                     break;
@@ -1008,27 +1020,30 @@ void IPNCalc::CalcEquat()
                     StackEnd(0) = fabs( StackEnd(0) );
                     break;
                 case sign_f:
-                    if( fabs(StackEnd(0)) > 1e-33 )
+                    if( fabs(StackEnd(0)) >= IPNC_DBL_MIN ) // > 1e-33 )
                         StackEnd(0) = StackEnd(0) /
                                       fabs( StackEnd(0) );
                     else StackEnd(0) = 0;
                     break;
                 case exp_f:
+                    ErrorIf( (StackEnd(0) < IPNC_DBL_MIN_EXP || StackEnd(0) > IPNC_DBL_MAX_EXP),
+                             "E27MSExec", "Attempt of exp() argument out of range");
                     StackEnd(0) = exp( StackEnd(0) );
                     break;
                 case sqrt_f:
-                    ErrorIf( StackEnd(0)<=1e-33, "E07MSExec",
-                             "Attempt of sqrt() argument <= 0");
+                    ErrorIf( StackEnd(0) < IPNC_DBL_MIN, // <=1e-33,
+                             "E07MSExec", "Attempt of sqrt() argument <= 0");
                     StackEnd(0) = sqrt( StackEnd(0) );
                     break;
                 case ln_f:
-                    ErrorIf( StackEnd(0)<=1e-33, "E08MSExec",
-                             "Attempt of ln() argument <= 0");
+// if( StackEnd(0) < IPNC_DBL_MIN ) cout << StackEnd(0) << " ! " << IPNC_DBL_MIN << endl;
+                    ErrorIf( StackEnd(0) < IPNC_DBL_MIN, // <=1e-33,
+                             "E08MSExec", "Attempt of ln() argument <= 0");
                     StackEnd(0) = log( StackEnd(0) );
                     break;
                 case lg_f:
-                    ErrorIf( StackEnd(0)<=1e-33, "E09MSExec",
-                             "Attempt of lg() argument <= 0");
+                    ErrorIf( StackEnd(0)  < IPNC_DBL_MIN, // <=1e-33,
+                             "E09MSExec", "Attempt of lg() argument <= 0");
                     StackEnd(0) = 0.434294481* log( StackEnd(0) );
                     break;
                 case sin_f  :
@@ -1059,12 +1074,12 @@ void IPNCalc::CalcEquat()
                     StackEnd(0) =(double)ROUND(StackEnd(0));
                     break;
                 case asin_f :
-                    ErrorIf( fabs(StackEnd(0))>1, "E10MSExec",
+                    ErrorIf( fabs(StackEnd(0))>1., "E10MSExec",
                              "Attempt of asin() |argument| < 0");
                     StackEnd(0) = asin( StackEnd(0) );
                     break;
                 case acos_f :
-                    ErrorIf( fabs(StackEnd(0))>1, "E11MSExec",
+                    ErrorIf( fabs(StackEnd(0))>1., "E11MSExec",
                              "Attempt of acos() |argument| < 0");
                     StackEnd(0) = acos( StackEnd(0) );
                     break;
@@ -1178,7 +1193,7 @@ void IPNCalc::CalcEquat()
                 }
                 break;
             case IT_T :
-                if( fabs(StackEnd(0)) < 1e-33 )
+                if( fabs(StackEnd(0)) < IPNC_DBL_MIN ) // < 1e-33 )
                     i += ni;
                 StackDel();
                 break;
@@ -1186,7 +1201,7 @@ void IPNCalc::CalcEquat()
                 i += ni-1;
                 break;
             default  :
-                Error("E16MSExec","Invalid element code in execution stack.");
+                Error("E16MSExec","Invalid element code in script execution stack.");
             }
             /*if( TraceStatus )
                 TraceStatus = TraceYNprint( rpn, ieq, i, nstack, stack, 0 );*/
@@ -1195,7 +1210,7 @@ void IPNCalc::CalcEquat()
             ni = aItm[i].num;
         }
         if( aStack.GetCount()>0 )
-            Error( "E17MSExec","Stack is not empty after execution.");
+            Error( "E17MSExec","Stack is not empty after script execution.");
     }
     return;
 }
