@@ -134,19 +134,7 @@ void TMulti::ods_link( int )
     aObj[ o_wi_pll ].SetDim( pm.FIs, 1 );
     aObj[ o_wi_yof ].SetPtr( pm.YOF );
     aObj[ o_wi_yof ].SetDim( pm.FI, 1 );
-// new
-    aObj[ o_wi_pffact ].SetPtr( pm.PfFact );
-    aObj[ o_wi_pffact ].SetDim( pm.FI, 1 );
-    aObj[ o_wo_prto ].SetPtr( pm.PrT );
-    aObj[ o_wo_prto ].SetDim( pm.FI, 1 );
-    aObj[ o_wo_pkto ].SetPtr( pm.PkT );
-    aObj[ o_wo_pkto ].SetDim( pm.FI, 1 );
-    aObj[ o_wo_pvto ].SetPtr( pm.PvT );
-    aObj[ o_wo_pvto ].SetDim( pm.FI, 1 );
-    aObj[ o_wo_emrd ].SetPtr( pm.emRd );
-    aObj[ o_wo_emrd ].SetDim( pm.Ls, 1 );
-    aObj[ o_wo_emdf ].SetPtr( pm.emDf );
-    aObj[ o_wo_emdf ].SetDim( pm.Ls, 1 );
+
 //
     /* SIZE OF PMc- CALC M1=1 */
     aObj[ o_wi_pmc ].SetPtr( pm.PMc );  // OBsetDim( o_wi_pmc,  M1, 1 );
@@ -470,6 +458,19 @@ aObj[ o_wo_uph ].SetDim( pm.FIs, MIXPHPROPS );
         aObj[ o_wi_kmod].SetPtr( pm. kMod);
         aObj[ o_wi_kmod].SetDim( pm.FI, 1 );
 aObj[ o_wi_xicuc].SetPtr( pm.xICuC );
+// new
+    aObj[ o_wi_pffact ].SetPtr( pm.PfFact );
+    aObj[ o_wi_pffact ].SetDim( pm.FI, 1 );
+    aObj[ o_wo_prto ].SetPtr( pm.PrT );
+    aObj[ o_wo_prto ].SetDim( pm.FI, 1 );
+    aObj[ o_wo_pkto ].SetPtr( pm.PkT );
+    aObj[ o_wo_pkto ].SetDim( pm.FI, 1 );
+    aObj[ o_wo_pvto ].SetPtr( pm.PvT );
+    aObj[ o_wo_pvto ].SetDim( pm.FI, 1 );
+    aObj[ o_wo_emrd ].SetPtr( pm.emRd );
+    aObj[ o_wo_emrd ].SetDim( pm.Ls, 1 );
+    aObj[ o_wo_emdf ].SetPtr( pm.emDf );
+    aObj[ o_wo_emdf ].SetDim( pm.Ls, 1 );
 }
 
 // set dynamic Objects ptr to values
