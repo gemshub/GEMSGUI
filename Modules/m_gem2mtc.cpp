@@ -1031,6 +1031,10 @@ aObj[o_n0_ts].SetM( 2 );
      aObj[o_n0_bsp].SetDim( CH->nICb, 1 );
      aObj[o_n0_aph].SetPtr( BR->aPH );
      aObj[o_n0_aph].SetDim( CH->nPHb, 1 );
+     aObj[o_n0_amru].SetPtr( BR->amru );
+     aObj[o_n0_amru].SetDim( CH->nPSb, 1 );
+     aObj[o_n0_amrl].SetPtr( BR->amrl );
+     aObj[o_n0_amrl].SetDim( CH->nPSb, 1 );
      // set data to work arrays
          na->CopyWorkNodeFromArray( nNode, mtp->nC,  na->pNodT0() );
          double *mps = (double *)aObj[o_n0w_mps].GetPtr();
@@ -1089,6 +1093,10 @@ aObj[o_n0_ts].SetM( 2 );
      aObj[o_n0_bsp].SetDim( 0, 1 );
      aObj[o_n0_aph].SetPtr( 0);
      aObj[o_n0_aph].SetDim( 0, 1 );
+     aObj[o_n0_amru].SetPtr( 0 );
+     aObj[o_n0_amru].SetDim( 0, 1 );
+     aObj[o_n0_amrl].SetPtr( 0 );
+     aObj[o_n0_amrl].SetDim( 0, 1 );
    }
 }
 
@@ -1139,6 +1147,10 @@ aObj[o_n1_ts].SetM( 2 );
      aObj[o_n1_bsp].SetDim( CH->nICb, 1 );
      aObj[o_n1_aph].SetPtr( BR->aPH );
      aObj[o_n1_aph].SetDim( CH->nPHb, 1 );
+     aObj[o_n1_amru].SetPtr( BR->amru );
+     aObj[o_n1_amru].SetDim( CH->nPSb, 1 );
+     aObj[o_n1_amrl].SetPtr( BR->amrl );
+     aObj[o_n1_amrl].SetDim( CH->nPSb, 1 );
 
  // set data to work arrays
      na->CopyWorkNodeFromArray( nNode, mtp->nC,  na->pNodT1() );
@@ -1198,6 +1210,11 @@ aObj[o_n1_ts].SetM( 2 );
      aObj[o_n1_bsp].SetDim( 0, 1 );
      aObj[o_n1_aph].SetPtr( 0);
      aObj[o_n1_aph].SetDim( 0, 1 );
+     aObj[o_n1_amru].SetPtr( 0 );
+     aObj[o_n1_amru].SetDim( 0, 1 );
+     aObj[o_n1_amrl].SetPtr( 0 );
+     aObj[o_n1_amrl].SetDim( 0, 1 );
+
    }
 }
 

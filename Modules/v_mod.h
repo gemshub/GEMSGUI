@@ -806,12 +806,13 @@ enum FMTnode_objects {
   o_n1_vps, o_n0_mps, o_n1_mps, o_n0_bps, o_n1_bps, o_n0_xpa, o_n1_xpa, o_n0_bsp, o_n1_bsp,
   o_n0_dul, o_n1_dul, o_n0_dll, o_n1_dll, o_n0_bic, o_n1_bic, o_n0_rmb,
   o_n1_rmb, o_n0_uic, o_n1_uic, /* o_n0_dr1, o_n1_dr1, */ o_n0_aph, o_n1_aph,
+  o_n0_amru, o_n1_amru, o_n0_amrl, o_n1_amrl,
 
     // work objects for vtk output and plotting in GEM2MT module
   o_n0w_mps, o_n1w_mps, o_n0w_vps, o_n1w_vps, o_n0w_m_t, o_n1w_m_t,
   o_n0w_con, o_n1w_con, o_n0w_mju, o_n1w_mju, o_n0w_lga, o_n1w_lga
 
-};  // 34 DODs
+};  // 55 DODs
 
 #endif // _v_mod_h
 

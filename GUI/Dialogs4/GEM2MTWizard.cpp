@@ -799,6 +799,8 @@ void GEM2MTWizard::resetVTKList()
     pNdx.Add(f_rMB);
     pNdx.Add(f_dll);
     pNdx.Add(f_dul);
+        pNdx.Add(f_amrl);
+        pNdx.Add(f_amru);
     pNdx.Add(f_mPH);
     pNdx.Add(f_vPH);
     pNdx.Add(f_m_t);

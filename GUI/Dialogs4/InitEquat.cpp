@@ -696,6 +696,8 @@ wnData.Add( new pagesSetupData("DCmm", o_ch_dcmm));//DC molar mass, g/mole [nDC]
       wnData.Add( new pagesSetupData("n1rMB", o_n1_rmb));//MB Residuals from GEM IPM [nICb] in node 1 - - + +"
       wnData.Add( new pagesSetupData("n1dll", o_n1_dll));//lower kinetic restrictions [nDCb] in node 1 + + - -"
       wnData.Add( new pagesSetupData("n1dul", o_n1_dul));//upper kinetic restrictions [nDCb] in node 1 + + - -"
+      wnData.Add( new pagesSetupData("n1amrl", o_n1_amrl));
+      wnData.Add( new pagesSetupData("n1amru", o_n1_amru));
 
 wnData.Add( new pagesSetupData("n1mPH", o_n1w_mps));//masses of phases in equilibrium, kg [nPHb] in node 1 + + - -"
 wnData.Add( new pagesSetupData("n1vPH", o_n1w_vps));//volumes of phases in equilibrium, m3 [nPSb] in node 1 + + - -"
