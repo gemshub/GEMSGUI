@@ -1043,7 +1043,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 memcpy( &php->PphC, "a++---", 6 );
                 php->ncpN = 2;
                 php->ncpM = 4;
-                php->nscM = 0;
+                php->nscM = 2; // correction by TW from trunk r.2443
                 php->npxM = 0;
 					Name += "ion-association model, EDH(S) equation, common ion size";
 					sprintf( nbuf, ": b_gamma= %-5.3f, T_dep= %s; a_size= %-5.3f; gam_neut= %s, gam_H2O= %s ",
