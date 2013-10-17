@@ -1456,8 +1456,7 @@ TCellCheck::TCellCheck( FieldInfo afld, int in, int im, QWidget * parent ):
     setEditable( false );
     if(fld.nO >= 0)
      this->setToolTip(fld.pObj->GetDescription(iN,iM).c_str() );
-
-   // connect( this, SIGNAL(currentIndexChanged(const QString&)),
+    // connect( this, SIGNAL(currentIndexChanged(const QString&)),
    //         this, SLOT(setChanged()));
 
 }
