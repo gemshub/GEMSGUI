@@ -991,7 +991,7 @@ void TObjectTable::CmCalc()
  
  void TObjectTable::PasteData()
  {
-	Selection sel = getSelectionRange( true );
+     Selection sel = getSelectionRange( true );
     pasteIntoArea( sel, false);
  }
 
@@ -1012,14 +1012,14 @@ void TObjectTable::CmCalc()
 	  for(  ii=sel.N1; ii<=sel.N2; ii++ )
 	  {
 		if( ii > sel.N1 )
-	      clipText += "\n";
+          clipText += splitRow;
   
 		for( jj=sel.M1; jj<=sel.M2; jj++ )
 		{
 		  QModelIndex wIndex = 	index.sibling( ii, jj );
 		  // selected all region if( selmodel->isSelected( wIndex ) )
 		  if( jj > sel.M1 )
-		    clipText += "\t";
+            clipText += splitCol;
 		  cText = wIndex.data(Qt::EditRole).toString();
 		  if( cText == emptiness.c_str() )
 			  cText = "  ";//"\r"; 
@@ -1040,7 +1040,7 @@ void TObjectTable::CmCalc()
 	    if( selectionModel()->columnIntersectsSelection( col,  rootIndex() ) )
        	{
    		  if( !frst )
-   		    clipText += "\t";
+            clipText += splitCol;
    		  frst = false;
    		  cText = model()->headerData( col, Qt::Horizontal, Qt::DisplayRole ).toString();
    		  if( cText == emptiness.c_str() )
@@ -1049,7 +1049,7 @@ void TObjectTable::CmCalc()
 	    }
 	 }  
      if( !frst )
-        clipText += "\n";
+        clipText += splitRow;
 	return clipText;  
   }
 
@@ -1083,15 +1083,15 @@ void TObjectTable::CmCalc()
   	 return Selection( N1, N2, M1, M2 );
   }
 
-  void  TObjectTable::setFromString(const QString& str, 
-		  Selection sel, bool transpose) throw(TError)
+  void  TObjectTable::setFromString(char splitrow, const QString& str,
+          Selection sel, bool transpose) throw(TError)
   {
      TObjectModel *  model = ((TObjectModel *)(currentIndex().model() ));
      if( str.isEmpty() )
   	    return;
   	
      QModelIndex wIndex;
-     const QStringList rows = str.split('\n', QString::KeepEmptyParts);
+     const QStringList rows = str.split(splitrow, QString::KeepEmptyParts);
 
      int ii, jj;
      int rowNum = sel.N1;
@@ -1123,39 +1123,32 @@ void TObjectTable::CmCalc()
 
                    wIndex = 	currentIndex().sibling( ii, jj );
                    model->setData(wIndex, QString(value.c_str()), Qt::EditRole);
-
-                   /*
-                FieldInfo fld =  model->getInfo( ii, jj, iN, iM);
-                if( iN == -1 || iM == -1 || fld.edit != eYes )
-                {
-                 vstr err(200);
-                 sprintf(err, "Invalid cell for paste [%d, %d]: no object or no editable field",
-    				ii, jj );
-                 throw TError("Object paste", err.p);
-                 }
-                 if( !fld.pObj->SetString( value.c_str(), iN, iM ) )
-  		  {
-  		    vstr err(200);
-  		    sprintf(err, "Invalid value for object %s[%d, %d]: '%.100s'!",
-  		    		fld.pObj->GetKeywd(), iN, iM, value.c_str());
-  		    throw TError("Object paste", err.p);
-                  } */
   		}
   	}
  }
 
   void TObjectTable::pasteIntoArea( Selection& sel, bool transpose)
   {
-      QString clipboard = QApplication::clipboard()->text(/*QClipboard::Clipboard*/);
-     
-      int lastCR = clipboard.lastIndexOf('\n');
+      QString clipboard = QApplication::clipboard()->text(QClipboard::Clipboard);
+      char splitrow = splitRow;
+
+      int lastCR = clipboard.lastIndexOf(splitrow);
+      if( lastCR < 0 )
+      {
+#ifdef __APPLE__
+       splitrow = '\n';
+#else
+      splitrow = '\r';
+#endif
+         lastCR = clipboard.lastIndexOf(splitrow);
+      }
       if( lastCR == clipboard.length() - 1 )
   	  clipboard.remove(lastCR, 1);
       QString undoString;
 
       try 
       {
-         const QStringList rows = clipboard.split('\n');
+         const QStringList rows = clipboard.split(splitrow);
          const int clipN = rows.count();
          const bool largerN = transpose ?
            (clipN > (sel.M2 - sel.M1 + 1)) : (clipN > (sel.N2 - sel.N1 +1 ));
@@ -1164,7 +1157,7 @@ void TObjectTable::CmCalc()
      	 bool largerM = false;
          for(int it = 0; it < rows.count(); it++, rowNum++)
   	     {
-  	       int clipM = rows[it].count('\t') + 1;
+           int clipM = rows[it].count(splitCol) + 1;
   	       largerM = transpose ? (clipM > (sel.N2 - sel.N1 + 1 )) : (clipM > (sel.M2 - sel.M1 + 1));
   	       if( largerM )
   		      break;
@@ -1178,7 +1171,7 @@ void TObjectTable::CmCalc()
          }
          undoString = createString( sel );
       
-         setFromString(clipboard, sel, transpose);
+         setFromString(splitrow, clipboard, sel, transpose);
          // update();
          // groupUndoContents = undoString;	// for possible group undo
     }
@@ -1186,7 +1179,7 @@ void TObjectTable::CmCalc()
     {
   	  vfMessage(topLevelWidget(), "Object paste error", ex.mess , vfErr);
   	  if( !undoString.isEmpty() )
-            try { setFromString(undoString, sel, false); }
+            try { setFromString( splitRow, undoString, sel, false); }
                   catch(...) {}
   	    
     }

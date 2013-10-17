@@ -39,6 +39,14 @@ class QAbstractItemModel;
 class QObject;
 class QPainter;
 
+#ifdef __APPLE__
+const char  splitRow = '\r';
+const char  splitCol = '\t';
+#else
+const char  splitRow = '\n';
+const char  splitCol = '\t';
+#endif
+
 const gstring emptiness("---");
 //const gstring short_emptiness("---");
 
@@ -143,7 +151,7 @@ class TObjectTable: public QTableView
         QString createString( Selection& sel );
         QString createHeader();
         void pasteIntoArea( Selection& sel, bool transpose);
-    void  setFromString(const QString& str,
+    void  setFromString(char splitrow, const QString& str,
                 Selection sel, bool transpose) throw(TError);
 
  protected slots:
