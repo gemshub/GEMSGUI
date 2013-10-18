@@ -281,6 +281,8 @@ void Set_SorpMod_Phase_coef();  // new
     void makeICompList( const char *caption, TCStringArray& aIclist );
     void DetNumbCatAn(TCStringArray& aDclist);
     void LoadDCC();
+    void set_def_comments( bool clearall,
+              const char* old_sol, const char *old_kin );
 
 public:
 

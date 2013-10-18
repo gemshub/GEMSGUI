@@ -920,8 +920,10 @@ TPhase::RecBuild( const char *key, int mode  )
     TCStringArray aPhlist;
     TCStringArray aDcSkrl;
 //    TCStringArray aIclist;
-    gstring str;
+//    gstring str;
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    // old flag values to reset  parameter indexes comment
+    char old_sol[7], old_kin[9];
 
     php->PphC = php->pst_[0];
     if( php->PphC == PH_FLUID /* && php->sol_t[SPHAS_TYP] == SM_OTHER */ )
@@ -932,6 +934,9 @@ TPhase::RecBuild( const char *key, int mode  )
     php->Pinternal1 = S_OFF;
     if( db->FindCurrent(key) < 0 )
        php->Pinternal1 = S_ON;      // refresh DC codes if new record
+
+    strncpy( old_sol, php->sol_t, 6);
+    strncpy( old_kin, php->kin_t, 8);
 
 AGAIN_SETUP:
     int ret = TCModule::RecBuild( key, mode );
@@ -1025,7 +1030,8 @@ AGAIN_SETUP:
     {
        php->nMoi = 0; php->nSub = 0;
     }
-
+    if( php->nDC < 2 )
+        php->nMoi = 0;
 
     if( php->kin_t[KinProCode] != KM_UNDEF )
        Set_KinMet_Phase_coef();
@@ -1141,6 +1147,9 @@ AGAIN_SETUP:
         strcpy( php->pEq, "---" );
     if( php->PdEq != S_OFF && php->dEq && !*php->dEq)
         strcpy( php->dEq, "---" );
+
+    // set up default comments
+    set_def_comments( ret == VF3_1, old_sol, old_kin );
 
     SetString("PH_make   Remake of Phase definition OK");
     pVisor->Update();

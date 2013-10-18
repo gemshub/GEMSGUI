@@ -970,6 +970,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
             || php->PphC == PH_LIQUID || php->PphC == PH_SIMELT )   // added DK 29.03.2012
         MakeSublatticeLists( form_array  );
 
+
     if( php->Asur > 1. )
     {
         if( php->nDC == 1 )
@@ -1380,6 +1381,307 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
         db->Rep( Rnum );
        }
 		// contentsChanged = false;
+}
+
+void TPhase::set_def_comments( bool clearall,
+          const char* old_sol, const char *old_kin )
+{
+    int ii;
+    char tbuf[100];
+
+    if( php->Psco == S_ON )
+      if( clearall  )
+      {
+          for(ii=0; ii<php->nscM; ii++)
+          {
+              sprintf( tbuf, "Int%d", ii+1 );
+              strncpy( php->dcpcl[ii], tbuf, MAXDCNAME );
+          }
+      }
+
+    if( php->Ppnc == S_ON )
+     if( clearall || ( php->sol_t[SPHAS_TYP] != old_sol[SPHAS_TYP] ) ||
+             ( php->sol_t[SGM_MODE] != old_sol[SGM_MODE] ))
+     {
+         if( php->sol_t[SGM_MODE] == SM_STNGAM )
+         {
+             for(ii=0; ii<php->ncpN; ii++)
+             {
+                 sprintf( tbuf, "IntPar%d", ii+1 );
+                 strncpy( php->ipicl[ii], tbuf, MAXDCNAME );
+             }
+
+             switch(php->sol_t[SPHAS_TYP])
+             {
+                 case SM_OTHER:   // Customized hardcoded solid-solution models
+                                break;
+                 case SM_BERMAN:   // Sublattice microscopic intra-site interaction model (multicomponent)
+                      strncpy( php->ipccl[0], "w1", MAXDCNAME );
+                      strncpy( php->ipccl[1], "w2", MAXDCNAME );
+                      strncpy( php->ipccl[2], "w3", MAXDCNAME );
+                      //          php->ncpM = 3;  // NPcoef
+                                break;
+                 case SM_VANLAAR:   // Van Laar model (multicomponent)
+                      strncpy( php->ipccl[0], "w1", MAXDCNAME );
+                      strncpy( php->ipccl[1], "w2", MAXDCNAME );
+                      strncpy( php->ipccl[2], "w3", MAXDCNAME );
+                      //          php->ncpM = 3;  // NPcoef
+                                break;
+                 case SM_REGULAR:   // Regular model (multicomponent)
+                       strncpy( php->ipccl[0], "w1", MAXDCNAME );
+                       strncpy( php->ipccl[1], "w2", MAXDCNAME );
+                       strncpy( php->ipccl[2], "w3", MAXDCNAME );
+                       //         php->ncpM = 3;  // NPcoef
+                                break;
+                 case SM_GUGGENM:   // Redlich-Kister model (multicomponent)
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                 strncpy( php->ipccl[2], "w03", MAXDCNAME );
+                 strncpy( php->ipccl[3], "w04", MAXDCNAME );
+                 strncpy( php->ipccl[4], "w11", MAXDCNAME );
+                 strncpy( php->ipccl[5], "w12", MAXDCNAME );
+                 strncpy( php->ipccl[6], "w13", MAXDCNAME );
+                 strncpy( php->ipccl[7], "w14", MAXDCNAME );
+                 strncpy( php->ipccl[8], "w21", MAXDCNAME );
+                 strncpy( php->ipccl[9], "w22", MAXDCNAME );
+                 strncpy( php->ipccl[10], "w23", MAXDCNAME );
+                 strncpy( php->ipccl[11], "w24", MAXDCNAME );
+                 strncpy( php->ipccl[12], "w31", MAXDCNAME );
+                 strncpy( php->ipccl[13], "w32", MAXDCNAME );
+                 strncpy( php->ipccl[14], "w33", MAXDCNAME );
+                 strncpy( php->ipccl[15], "w34", MAXDCNAME );
+                            //    php->ncpM = 16;  // NPcoef
+                                break;
+                case SM_NRTLLIQ:   // NRTL liquid model (multicomponent), added 03.06.2008 (TW)
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                 strncpy( php->ipccl[2], "w03", MAXDCNAME );
+                 strncpy( php->ipccl[3], "w04", MAXDCNAME );
+                 strncpy( php->ipccl[4], "w05", MAXDCNAME );
+                 strncpy( php->ipccl[5], "w06", MAXDCNAME );
+                            //    php->ncpM = 6;  // NPcoef
+                                break;
+                case SM_WILSLIQ:   // Wilson liquid model (multicomponent), added 09.06.2008 (TW)
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                 strncpy( php->ipccl[2], "w03", MAXDCNAME );
+                 strncpy( php->ipccl[3], "w04", MAXDCNAME );
+                              //  php->ncpM = 4;  // NPcoef
+                                break;
+                case SM_REDKIS:   // Redlich-Kister model (binary)
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                 strncpy( php->ipccl[2], "w03", MAXDCNAME );
+                           //     php->ncpN = 1; php->ncpM = 3;
+                                break;
+                case SM_MARGB:  // Margules subregular model (binary)
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                 strncpy( php->ipccl[2], "w03", MAXDCNAME );
+                           //     php->ncpN = 2; php->ncpM = 3;
+                                break;
+                case SM_MARGT:  // Margules regular model (ternary)
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                 strncpy( php->ipccl[2], "w03", MAXDCNAME );
+                 strncpy( php->ipccl[3], "w04", MAXDCNAME );
+                             //   php->ncpN = 4; php->ncpM = 3;
+                                break;
+                case SM_CGFLUID:  // Churakov-Gottschalk (CG) EoS
+                                break;
+                case SM_PRFLUID:  // Peng-Robinson-Stryjek-Vera (PRSV) EoS, one binary interaction parameter
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                           //     php->ncpM = 2;  // NPcoef
+                                break;
+                case SM_SRFLUID:  // Soave-Redlich-Kwong (SRK) EoS, one binary interaction parameter
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                           //       php->ncpM = 2;  // NPcoef
+                                break;
+                case SM_PR78FL:  // Peng-Robinson (PR78) EoS, one binary interaction parameter
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                           //     php->ncpM = 2;  // NPcoef
+                                break;
+                case SM_CORKFL:  // compensated Redlich-Kwong (CORK) EoS, one binary interaction parameter
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                           //     php->ncpM = 1;  // NPcoef
+                                break;
+                case SM_STFLUID:  // Sterner-Pitzer (STP) EoS, one binary interaction parameter
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                            //    php->ncpM = 1;  // NPcoef
+                                break;
+                case SM_AQDAV:  // aqueous Davies
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                 strncpy( php->ipccl[2], "w03", MAXDCNAME );
+                 strncpy( php->ipccl[3], "w04", MAXDCNAME );
+                              //  php->ncpM = 4; // changed 10.07.2008 DK
+                                break;
+                case SM_AQDH1:  // aqueous DH limiting law
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                 strncpy( php->ipccl[2], "w03", MAXDCNAME );
+                 strncpy( php->ipccl[3], "w04", MAXDCNAME );
+                             //   php->ncpM = 4;
+                                break;
+                case SM_AQDH2:  // aqueous DH, individual a0, individual bg
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                 strncpy( php->ipccl[2], "w03", MAXDCNAME );
+                 strncpy( php->ipccl[3], "w04", MAXDCNAME );
+                             //   php->ncpM = 4;
+                                break;
+                case SM_AQDH3:  // aqueous EDH Karpov, individual a0, common bg
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                 strncpy( php->ipccl[2], "w03", MAXDCNAME );
+                 strncpy( php->ipccl[3], "w04", MAXDCNAME );
+                             //   php->ncpM = 4;
+                                break;
+                case SM_AQDHH:  // aqueous EDH Helgeson, common a0 and bg
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                 strncpy( php->ipccl[2], "w03", MAXDCNAME );
+                 strncpy( php->ipccl[3], "w04", MAXDCNAME );
+                             //   php->ncpM = 4;
+                                break;
+                case SM_AQDHS:  // aqueous EDH Shvarov, common a0 and bg
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                 strncpy( php->ipccl[2], "w03", MAXDCNAME );
+                 strncpy( php->ipccl[3], "w04", MAXDCNAME );
+                               // php->ncpM = 4;
+                                break;
+                case SM_AQSIT:  // SIT model in NEA variant - new implementation
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                              //  php->ncpM = 2;  // NPcoef - changed from 1 to 2 on 13.05.09 (DK)
+                                break;
+                case SM_AQEXUQ: // built-in EUNIQUAC model for aqueous activity coeffs, changed 18.01.2009 (TW)
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                               //  php->ncpM = 2;  // NPcoef
+                                 break;
+                case SM_AQPITZ: // built-in Pitzer HMW aqueous activity coefficient model
+                 for(ii=0; ii<php->ncpM; ii++)
+                 {
+                     sprintf( tbuf, "w%d", ii+1 );
+                     strncpy( php->ipccl[ii], tbuf, MAXDCNAME );
+                 }
+                                 break;
+                case SM_AQELVIS:  // built-in ELVIS model for aqueous electrolytes
+                 strncpy( php->ipccl[0], "w01", MAXDCNAME );
+                 strncpy( php->ipccl[1], "w02", MAXDCNAME );
+                 strncpy( php->ipccl[2], "w03", MAXDCNAME );
+                 strncpy( php->ipccl[3], "w04", MAXDCNAME );
+                 strncpy( php->ipccl[4], "w11", MAXDCNAME );
+                 strncpy( php->ipccl[5], "w12", MAXDCNAME );
+                 strncpy( php->ipccl[6], "w13", MAXDCNAME );
+                 strncpy( php->ipccl[7], "w14", MAXDCNAME );
+                             //    php->ncpM = 8;                       // NPcoef = rows of aIPc
+                                 break;
+                default:  // other models
+                                 break;
+             }
+         }
+     }
+
+    if( php->PrpCon == S_ON )
+     if( clearall || ( php->kin_t[KinModCode] != old_kin[KinModCode] ) )
+     {
+         for(ii=0; ii<php->nPRk; ii++)
+         {
+             sprintf( tbuf, "Int%d", ii+1 );
+             strncpy( php->rprcl[ii], tbuf, MAXDCNAME );
+         }
+
+         switch(php->kin_t[KinModCode])
+         {
+         //KinModCode
+             case KM_MOD_TST: // = 'T' Generic TST dissolution/precipitation model following Schott ea 2012
+             strncpy( php->rpkcl[0], "w01", MAXDCNAME );
+             strncpy( php->rpkcl[1], "w02", MAXDCNAME );
+             strncpy( php->rpkcl[2], "w03", MAXDCNAME );
+             strncpy( php->rpkcl[3], "w04", MAXDCNAME );
+             strncpy( php->rpkcl[4], "w11", MAXDCNAME );
+             strncpy( php->rpkcl[5], "w12", MAXDCNAME );
+             strncpy( php->rpkcl[6], "w13", MAXDCNAME );
+             strncpy( php->rpkcl[7], "w14", MAXDCNAME );
+             strncpy( php->rpkcl[8], "w21", MAXDCNAME );
+             strncpy( php->rpkcl[9], "w22", MAXDCNAME );
+             strncpy( php->rpkcl[10], "w23", MAXDCNAME );
+             strncpy( php->rpkcl[11], "w24", MAXDCNAME );
+             strncpy( php->rpkcl[12], "w31", MAXDCNAME );
+             strncpy( php->rpkcl[13], "w32", MAXDCNAME );
+                 break;
+             case KM_MOD_PAL: // = 'P' Dissolution/precipitation model of the form (Palandri 2004)
+             strncpy( php->rpkcl[0], "w01", MAXDCNAME );
+             strncpy( php->rpkcl[1], "w02", MAXDCNAME );
+             strncpy( php->rpkcl[2], "w03", MAXDCNAME );
+             strncpy( php->rpkcl[3], "w04", MAXDCNAME );
+             strncpy( php->rpkcl[4], "w11", MAXDCNAME );
+             strncpy( php->rpkcl[5], "w12", MAXDCNAME );
+             strncpy( php->rpkcl[6], "w13", MAXDCNAME );
+             strncpy( php->rpkcl[7], "w14", MAXDCNAME );
+             strncpy( php->rpkcl[8], "w21", MAXDCNAME );
+             strncpy( php->rpkcl[9], "w22", MAXDCNAME );
+             strncpy( php->rpkcl[10], "w23", MAXDCNAME );
+             strncpy( php->rpkcl[11], "w24", MAXDCNAME );
+             strncpy( php->rpkcl[12], "w31", MAXDCNAME );
+             strncpy( php->rpkcl[13], "w32", MAXDCNAME );
+                 break;
+             case KM_MOD_WOL: // = 'W' Carbonate growth model following (Wolthers 2012)
+             strncpy( php->rpkcl[0], "w01", MAXDCNAME );
+             strncpy( php->rpkcl[1], "w02", MAXDCNAME );
+             strncpy( php->rpkcl[2], "w03", MAXDCNAME );
+             strncpy( php->rpkcl[3], "w04", MAXDCNAME );
+             strncpy( php->rpkcl[4], "w11", MAXDCNAME );
+             strncpy( php->rpkcl[5], "w12", MAXDCNAME );
+             strncpy( php->rpkcl[6], "w13", MAXDCNAME );
+             strncpy( php->rpkcl[7], "w14", MAXDCNAME );
+             strncpy( php->rpkcl[8], "w21", MAXDCNAME );
+             strncpy( php->rpkcl[9], "w22", MAXDCNAME );
+             strncpy( php->rpkcl[10], "w23", MAXDCNAME );
+             strncpy( php->rpkcl[11], "w24", MAXDCNAME );
+             strncpy( php->rpkcl[12], "w31", MAXDCNAME );
+             strncpy( php->rpkcl[13], "w32", MAXDCNAME );
+                 break;
+             case KM_MOD_NUGR: // = 'U' Mineral nucleation and growth model with nuclei/particle size distr. (TBD)
+                break;
+             default:  // other models
+                 break;
+         }
+     }
+
+    if( php->PumpCon == S_ON )
+     if( clearall || ( php->kin_t[KinProCode] != old_kin[KinProCode] ) )
+     {
+
+         // ph[q].umpcl =  (char (*)[MAXDCNAME])aObj[ o_phumpcl].Alloc( 1, ph[q].numpC, MAXDCNAME );
+         switch(php->kin_t[KinProCode])
+         {   //KinProCode
+             case KM_PRO_MWR:  // = 'M' Kinetics of generic dissolution/precipitation (no uptake, ionex, adsorption)
+                 php->PumpCon == S_OFF;
+                 break;
+             case KM_PRO_UPT:  // = 'U' Kinetics of uptake/entrapment (of minor/trace element) into solid solution
+                 php->PumpCon = S_ON;
+                 break;
+             case KM_PRO_IEX:  // = 'X' Kinetics of ion exchange (clays, C-S-H, zeolites, ...)
+
+                 break;
+             case KM_PRO_ADS:  // = 'A' Kinetics of adsorption (on MWI), redox
+
+                 break;
+             case KM_PRO_NUPR: // = 'P' Kinetics of nucleation and precipitation
+
+                 break;
+             default:  // other models
+                 break;
+         }
+     }
+
 }
 
 
