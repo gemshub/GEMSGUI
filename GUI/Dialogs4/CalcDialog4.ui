@@ -52,6 +52,41 @@
        <string>--- (empty)</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>0.4343</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>4.184</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>273.15</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>298.15</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>8.31451</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>2479</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>1000</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="0" column="1">
