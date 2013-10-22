@@ -878,8 +878,8 @@ void TTreeView::printList( fstream& ff )
     	     index = model->index(row, col, parIndex );
     	   	 if( selIndexes.contains( index ) )
     	   	 {
-    	        double res = calc.fun( index.data(Qt::EditRole).toDouble() );
-    	        model->setData(index, QVariant(res).toString(), Qt::EditRole);         
+                QString res = calc.fun( index.data(Qt::EditRole).toDouble() );
+                model->setData(index, res, Qt::EditRole);
     	      }	 
     	  }  	
         }

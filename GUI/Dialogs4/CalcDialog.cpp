@@ -26,6 +26,7 @@
 
 #include "CalcDialog.h"
 #include "v_vals.h"
+#include "v_ipnc.h"
 
 CalcDialog::CalcDialog(QWidget* parent, int obj):
         QDialog( parent ),
@@ -87,15 +88,19 @@ void CalcDialog::ok()
     accept();
 }
 
-double CalcDialog::fun(double val)
+QString CalcDialog::fun(double val)
 {
-    int ii;
+    int ii, pos;
+    double ret = val;
 
     ii = allButtons->checkedId();
     double val2=0.;
     if( ii <= 5 )
     {  
       QString str = pValue->currentText();
+      pos = str.indexOf('(');
+      if( pos >= 0 )
+       str.truncate(pos);
       if( (str.indexOf("---") != -1) || str[0] == '`' )
          val2 = DOUBLE_EMPTY;
       else
@@ -104,45 +109,76 @@ double CalcDialog::fun(double val)
     switch( ii )
     {
     case 0:
-        return val2;
+        ret = val2;
+        break;
     case 1:
-        return val + val2;
+        ret = val + val2;
+        break;
     case 2:
-        return val - val2;
+        ret = val - val2;
+        break;
     case 3:
-        return val * val2;
+        ret = val * val2;
+        break;
     case 4:
-        return val / val2;
+        if( fabs(val2) >=  IPNC_DBL_MIN ) // Attempt of zerodivide!
+          ret = val / val2;
+        break;
     case 5:
-        return pow(val, val2);
-
+        if( !(fabs(val)<IPNC_DBL_MIN || fabs(val)>IPNC_DBL_MAX
+                 || fabs(val2) < IPNC_DBL_MIN_10_EXP
+                 || fabs(val2) > IPNC_DBL_MAX_10_EXP) ) // Attempt of pow() argument out of range
+            ret = pow(val, val2);
+        break;
     case 6:
-        return 1/val;
+        if( fabs(val) >= IPNC_DBL_MIN ) // Attempt of zerodivide!
+         ret = 1/val;
+        break;
     case 7:
-        return sqrt(val);
+        if( val >= IPNC_DBL_MIN ) // Attempt of sqrt() argument <= 0
+         ret = sqrt(val);
+        break;
     case 8:
-        return log10(val);
+        if( val >= IPNC_DBL_MIN )
+         ret = log10(val);
+        break;
     case 9:
-        return log(val);
+        if( val >= IPNC_DBL_MIN )
+            ret = log(val);
+        break;
     case 10:
-        return pow(10.,val);
+        if( !( fabs(val) < IPNC_DBL_MIN_10_EXP
+             || fabs(val) > IPNC_DBL_MAX_10_EXP) ) // Attempt of pow() argument out of range
+            ret = pow(10.,val);
+        break;
     case 11:
-        return exp(val);
+        if( !(val < IPNC_DBL_MIN_EXP || val > IPNC_DBL_MAX_EXP) ) // Attempt of exp() argument out of range
+           ret =  exp(val);
+        break;
     case 12:
-        return sin(val);
+        ret = sin(val);
+        break;
     case 13:
-        return cos(val);
+        ret = cos(val);
+        break;
     case 14:
-        return tan(val);
+        ret = tan(val);
+        break;
     case 15:
-        return DOUBLE_EMPTY; //No Data value
+        ret = DOUBLE_EMPTY; //No Data value
     }
-    return val;
+
+    QString retstr;
+    if( ret == DOUBLE_EMPTY )
+        retstr = "---";
+    else
+        retstr = QString::number(  ret, 'g', 6 );//QVariant(ret).toString();
+    return retstr;
 }
 
 int CalcDialog::funName(double& val)
 {
-    int ii;
+    int ii, pos;
 
     ii = allButtons->checkedId();
 
@@ -150,6 +186,9 @@ int CalcDialog::funName(double& val)
     if( ii <= 5 )
     {
       QString str = pValue->currentText();
+      pos = str.indexOf('(');
+      if( pos >= 0 )
+       str.truncate(pos);
       if( (str.indexOf("---") != -1) || str[0] == '`' )
          val = DOUBLE_EMPTY;
       else
@@ -161,7 +200,7 @@ int CalcDialog::funName(double& val)
 
 gstring CalcDialog::funText(const char * valText )
 {
-    int ii;
+    int ii, pos;
     QString res;
 
     ii = allButtons->checkedId();
@@ -170,6 +209,9 @@ gstring CalcDialog::funText(const char * valText )
     if( ii <= 5 )
     {
       strText = pValue->currentText();
+      pos = strText.indexOf('(');
+      if( pos >= 0 )
+       strText.truncate(pos);
       if( (strText.indexOf("---") != -1) || strText[0] == '`' )
          strText = "empty()";
     }

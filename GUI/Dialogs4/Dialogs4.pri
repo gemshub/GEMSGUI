@@ -23,6 +23,7 @@ HEADERS += $$DIALOGS4_H/GemsMainWindow.h  \
                   $$DIALOGS4_H/SetFiltersDialog.h \
                   $$DIALOGS4_H/ElementsDialog.h\
                   $$DIALOGS4_H/ExcludeFillDialog.h \
+                  $$DIALOGS4_H/PhaseInfoDialog.h \
 # Wizards
                   $$DIALOGS4_H/DCompWizard.h \
                   $$DIALOGS4_H/ReacDCWizard.h \
@@ -64,6 +65,7 @@ SOURCES += $$DIALOGS4_CPP/GemsMainWindow.cpp \
                   $$DIALOGS4_CPP/SetFiltersDialog.cpp \
                   $$DIALOGS4_CPP/ElementsDialog.cpp \
                   $$DIALOGS4_CPP/ExcludeFillDialog.cpp \
+                  $$DIALOGS4_CPP/PhaseInfoDialog.cpp \
 # Wizards
                   $$DIALOGS4_CPP/DCompWizard.cpp \
                   $$DIALOGS4_CPP/ReacDCWizard.cpp \
@@ -103,6 +105,7 @@ FORMS += $$DIALOGS4_CPP/GemsMainWindow4.ui \
          $$DIALOGS4_CPP/LookupDialog4.ui \
          $$DIALOGS4_CPP/SetFiltersDialog4.ui \
          $$DIALOGS4_CPP/ElementsDialog4.ui \
+         $$DIALOGS4_CPP/PhaseInfoDialog4.ui \
 # Wizards
         $$DIALOGS4_CPP/DCompWizard4.ui \
         $$DIALOGS4_CPP/ReacDCWizard4.ui \

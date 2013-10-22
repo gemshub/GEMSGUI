@@ -1002,7 +1002,7 @@ if(  fabs( syp->Vaq ) != 1.  )
 }
 
 
-gstring TProfil::PhNameforDC( int xdc, bool system )
+int TProfil::PhIndexforDC( int xdc, bool system )
 {
   int k, DCx = 0;
   RMULTS* mup = rmults->GetMU();
@@ -1015,7 +1015,6 @@ gstring TProfil::PhNameforDC( int xdc, bool system )
       if( xdc < DCx )
         break;
     }
-   return gstring( mup->SF[k]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME);
   }
   else
   { for( k=0; k<pmp->FI; k++ )
@@ -1024,8 +1023,29 @@ gstring TProfil::PhNameforDC( int xdc, bool system )
       if( xdc < DCx )
         break;
     }
-   return gstring( pmp->SF[k]+MAXSYMB, 0, MAXPHNAME);
- }
+  }
+  return k;
+}
+
+gstring TProfil::PhNameforDC( int xdc, bool system )
+{
+  int k = PhIndexforDC( xdc, system );
+
+  if( system )
+   return gstring( rmults->GetMU()->SF[k]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME);
+  else
+   return gstring( multi->GetPM()->SF[k]+MAXSYMB, 0, MAXPHNAME);
+}
+
+
+gstring TProfil::PhNameforDC( int xdc, int& xph, bool system )
+{
+  xph = PhIndexforDC( xdc, system );
+
+  if( system )
+   return gstring( rmults->GetMU()->SF[xph], 0, PH_RKLEN);
+  else
+   return gstring( multi->GetPM()->SF[xph], 0, MAXPHNAME+MAXSYMB);
 }
 
 TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
@@ -1066,6 +1086,79 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
   return DCnames;
 }
 
+void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<gstring>& dcnames)
+{
+    int k, j, DCx = 0;
+    RMULTS* mup = rmults->GetMU();
+    MULTI*  pmp = multi->GetPM();
+
+    if( system )
+    { for( k=0; k<xph; k++ )
+        DCx += mup->Ll[k];
+      for( j= DCx; j<DCx+mup->Ll[xph];j++ )
+        {
+          xdc.push_back(j);
+          dcnames.push_back( gstring( mup->SM[j], 0, DC_RKLEN ));
+        }
+    }
+    else
+    {
+      for( k=0; k<xph; k++ )
+         DCx += pmp->L1[k];
+      for( j= DCx; j<DCx+pmp->L1[k];j++ )
+      {
+          xdc.push_back(j);
+          dcnames.push_back( gstring( pmp->SM[j],0, MAXDCNAME ));
+      }
+    }
+
+}
+
+//Show Phase DComp connections
+void TProfil::ShowPhaseWindow( const char *objName, int nLine )
+{
+    bool system;
+    int  xph, xdc;
+    gstring phname;
+    vector<int> xdclist;
+    vector<gstring> dcnames;
+
+    switch( *objName )
+    {
+    case 'D': // Phase : DC_v__ or DC_v2 or DCnam or DCnam2
+        xdc = nLine;
+        if( strncmp(objName, aObj[o_musm].GetKeywd(), MAXKEYWD)==0 ||
+                strncmp(objName, aObj[o_musm2].GetKeywd(), MAXKEYWD)==0 )
+           system = true;
+            else  if( strncmp(objName, aObj[o_wd_sm].GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_wd_sm2].GetKeywd(), MAXKEYWD)==0 )
+                   system = false;
+                  else return;
+        phname = PhNameforDC( xdc, xph, system );
+        break;
+    case 'P': // Phase : Ph_v__ or Ph_v2 or Phnam or Phnam2
+        xph = nLine;
+        xdc = -1;
+        if( strncmp(objName, aObj[o_musf].GetKeywd(), MAXKEYWD)==0 ||
+                strncmp(objName, aObj[o_musf2].GetKeywd(), MAXKEYWD)==0 )
+        {    system = true;
+             phname = gstring( rmults->GetMU()->SF[xph], 0, PH_RKLEN);
+        }
+        else  if( strncmp(objName, aObj[o_wd_sf].GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_wd_sf2].GetKeywd(), MAXKEYWD)==0 )
+             {
+                system = false;
+                phname = gstring( multi->GetPM()->SF[xph], 0, MAXSYMB+MAXPHNAME);
+             }
+        else return;
+        break;
+  }
+  DCNamesforPh( xph, system, xdclist, dcnames);
+  if( xdc < 0 )
+      xdc = xdclist[0];
+
+  vfPhaseInfo( window(), system, xph, phname, xdclist, dcnames, xdc );
+}
 
 //------------------ End of m_prfget2.cpp --------------------------
 

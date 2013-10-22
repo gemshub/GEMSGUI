@@ -56,6 +56,7 @@ using namespace std;
 #include "LookupDialog.h"
 #include "LoadMessage.h"
 #include "InputSystemDialog.h"
+#include "PhaseInfoDialog.h"
 
 QMutex mutex;
 
@@ -924,6 +925,13 @@ bool vfLookupDialogSet(QWidget* wpar, char flags[6],
      apdlg.getPdata(  Pai );
      apdlg.getFlags( flags );
     return true;
+}
+
+void vfPhaseInfo(QWidget* wpar, bool system, int xph, gstring phname,
+                 vector<int>& xdclist, vector<gstring>& dcnames, int xdc )
+{
+    PhaseInfoDialog dlg( wpar,  system, xph, phname, xdclist, dcnames, xdc );
+    dlg.exec();
 }
 
 //--------------------- End of service.cpp ---------------------------

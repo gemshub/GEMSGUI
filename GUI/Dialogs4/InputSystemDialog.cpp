@@ -571,9 +571,10 @@ QString InputSystemDialog::createHeader()
           for(int row = rec[0].topRow(); row <= rec[0].bottomRow(); row++ )
            {
               double val = tbData[row].val;
-              val = calc.fun( val );
-              tbData[row].val = val;
-              recTable->item(row,2)->setText( QString::number(  tbData[row].val, 'g', 6 ));
+              QString rval = calc.fun( val );
+              recTable->item(row,2)->setText( rval);
+              tbData[row].val = recTable->item(row, 2)->data(Qt::EditRole).toDouble();;
+
            }
        }
     }

@@ -163,6 +163,7 @@ class TObjectTable: public QTableView
     void CmHelp();
     void CmSDRef();
     void CmDComp();
+    void CmShowPhaseKey();
     void CmCalc();
     void SelectRow();
     void SelectColumn();

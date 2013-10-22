@@ -629,7 +629,17 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
           menu->addAction(act);
         }	
         
-     if( (fld.fType == ftFloat || fld.fType == ftNumeric || 
+     if( fld.fType == ftRecord && (fld.pObj->GetKeywd()[0] == 'D' || fld.pObj->GetKeywd()[0] == 'P'))
+        {
+          act =  new QAction(tr("&Show phase"), this);
+          act->setShortcut(tr("F5"));
+          act->setStatusTip(tr("Show phase/dcomp list for current key"));
+          connect(act, SIGNAL(triggered()), this, SLOT(CmShowPhaseKey()));
+          menu->addAction(act);
+        }
+
+
+     if( (fld.fType == ftFloat || fld.fType == ftNumeric ||
         		fld.fType == ftCheckBox) && fld.edit == eYes )
          {
      	    menu->addSeparator();
@@ -784,6 +794,9 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
       case Qt::Key_F7:
  	         CmDComp();
  	         return;
+    case Qt::Key_F5:
+           CmShowPhaseKey();
+           return;
  	 }
  	QTableView::keyPressEvent(e);
  }
@@ -870,7 +883,7 @@ void TObjectTable::CmCalc()
 
   if(  fld.fType == ftFloat || fld.fType == ftNumeric )
   {
-      double res;
+      QString res;
       CalcDialog calc(topLevelWidget(), fld.nO );
       if( calc.exec() )
       {
@@ -880,7 +893,7 @@ void TObjectTable::CmCalc()
  //     	 fld.pObj->Put(calc.fun(fld.pObj->Get(nn, mm)), nn, mm);
                  wIndex = 	index.sibling( nn, mm );
                  res = calc.fun( wIndex.data(Qt::EditRole).toDouble() );
-                 model->setData(wIndex, QVariant(res).toString(), Qt::EditRole);
+                 model->setData(wIndex, res, Qt::EditRole);
              }
      }
   }
@@ -920,6 +933,23 @@ void TObjectTable::CmCalc()
          vfMessage(topLevelWidget(), err.title, err.mess );
      }
   }
+
+  // Show phase key or dcomp list on F8 pressed on data field
+   void TObjectTable::CmShowPhaseKey()
+   {
+     QModelIndex index = currentIndex();
+     int iN, iM;
+     FieldInfo fld =  ((TObjectModel *)(index.model() ))->getInfo( index.row(), index.column(), iN, iM);
+     if(iN == -1 || iM == -1 || fld.fType != ftRecord )
+         return;
+     try {
+          TProfil::pm->ShowPhaseWindow( fld.pObj->GetKeywd(), iN);
+     }
+      catch( TError& err )
+      {
+          vfMessage(topLevelWidget(), err.title, err.mess );
+      }
+   }
 
   void TObjectTable::SelectRow()
   {

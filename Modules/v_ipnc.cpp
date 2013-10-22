@@ -29,12 +29,7 @@ const char* OPER="!^*/+-<a>b=c&|()";
 const char* RAZD=" +-*/^:[]();=$&|!<>?#,";
 const int FuncNumber=29; // number of functions
 
-const double IPNC_DBL_MAX = 1e37;
-const double IPNC_DBL_MIN = 1e-37;
-const double IPNC_DBL_MAX_10_EXP = 37.;
-const double IPNC_DBL_MIN_10_EXP = -37.;
-const double IPNC_DBL_MAX_EXP = 85.195648;
-const double IPNC_DBL_MIN_EXP = -85.195648;
+
 
 double derf(double x);
 double derfc(double x);

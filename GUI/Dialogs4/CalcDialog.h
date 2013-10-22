@@ -45,7 +45,7 @@ public:
     CalcDialog(QWidget* parent, int nobj);
     virtual ~CalcDialog();
 
-    double fun(double val);
+    QString fun(double val);
     int    funName(double& val);
     gstring funText(const char * valText );
 
