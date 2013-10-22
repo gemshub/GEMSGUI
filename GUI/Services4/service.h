@@ -251,6 +251,8 @@ extern const char *GEMS_ELEMENTS_HTML;  // ElementsDialog
 extern const char *GEMS_SETFILT_HTML;   // SetFiltersDialog
 extern const char *GEMS_APHSETUP_HTML;  // AutoPhaseDialog
 extern const char *GEMS_TEMPL_HTML;     // ChangeKeyDialog
+extern const char *GEMS_PHINFO_HTML;    // PhaseInfoDialog
+extern const char *GEMS_CALCUL_HTML;    // CalcDialog
 extern const char *GEMS_WRIPMF_HTML;    // LookupDialog
 extern const char *GEMS_MARK_HTML;      // SelectDialog
 extern const char *GEMS_SELECT_HTML;    // KeyDialog

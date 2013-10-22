@@ -34,19 +34,19 @@ PhaseInfoDialog::PhaseInfoDialog(QWidget* parent, bool system,
     gstring str;
 
     setupUi(this);
-    setWindowTitle("Phase to which selected DC belongs.");
+    setWindowTitle("Phase Information Widget");
 
     if( system )
     {
-        labelSyst->setText("Modeling Project System:");
-        labelPh->setText("In Phase with this record key:");
-        labelDC->setText( QString("%1 Depended Component(s) with record key(s):").arg(xdclist.size()));
+        labelSyst->setText("In Modelling Project System:");
+        labelPh->setText("              In Phase with this record key:");
+        labelDC->setText( QString("             %1  Depended Component(s) with record key(s):").arg(xdclist.size()));
     }
     else
     {
-        labelSyst->setText("Chemical System Difinition:");
-        labelPh->setText("In Phase:");
-        labelDC->setText( QString("%1 Depended Component(s):").arg(xdclist.size()));
+        labelSyst->setText("In Chemical System Definition:");
+        labelPh->setText("              In Phase:");
+        labelDC->setText( QString("             %1  Depended Component(s):").arg(xdclist.size()));
     }
 
     systKey->setText(tr (rt[RT_SYSEQ].PackKey()));
@@ -195,7 +195,7 @@ void PhaseInfoDialog::languageChange()
 
 void PhaseInfoDialog::help()
 {
-   pVisorImp->OpenHelp( GEMS_TEMPL_HTML );
+   pVisorImp->OpenHelp( GEMS_PHINFO_HTML );
 }
 
 //--------------------- End of PhaseInfoDialog.cpp ---------------------------

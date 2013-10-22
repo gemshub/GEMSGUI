@@ -27,6 +27,9 @@
 #include "CalcDialog.h"
 #include "v_vals.h"
 #include "v_ipnc.h"
+#include "v_mod.h"
+#include "model_w.h"
+#include "service.h"
 
 CalcDialog::CalcDialog(QWidget* parent, int obj):
         QDialog( parent ),
@@ -59,7 +62,7 @@ CalcDialog::CalcDialog(QWidget* parent, int obj):
     QObject::connect(PushButton1_3, SIGNAL(clicked()), this, SLOT(ok()));
     QObject::connect(PushButton1_2, SIGNAL(clicked()), this, SLOT(reject()));
   //  QObject::connect(PushButton1_2, SIGNAL(clicked()), this, SLOT(unaryMode()));
-
+    QObject::connect(PushButton42, SIGNAL(clicked()), this, SLOT(help()));
 }
 
 CalcDialog::~CalcDialog()
@@ -258,6 +261,7 @@ gstring CalcDialog::funText(const char * valText )
 
 
 void CalcDialog::help()
-{ }
-
+{
+   pVisorImp->OpenHelp( GEMS_CALCUL_HTML );
+}
 //--------------------- End of CalcDialog.cpp ---------------------------

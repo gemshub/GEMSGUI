@@ -54,32 +54,32 @@
      </item>
      <item>
       <property name="text">
-       <string>0.4343</string>
+       <string>0.4343  (ln-to-lg)</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>4.184</string>
+       <string>4.184    (cal-to-J)</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>273.15</string>
+       <string>273.15  (K-C)</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>298.15</string>
+       <string>298.15  (Tr)</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>8.31451</string>
+       <string>8.31451 (R)</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>2479</string>
+       <string>2479      (RTr)</string>
       </property>
      </item>
      <item>
@@ -95,7 +95,7 @@
       <bool>false</bool>
      </property>
      <property name="text">
-      <string>&lt;-&amp;Value of the Second Operand</string>
+      <string>&lt;- Value of the Second Operand</string>
      </property>
      <property name="wordWrap">
       <bool>false</bool>
