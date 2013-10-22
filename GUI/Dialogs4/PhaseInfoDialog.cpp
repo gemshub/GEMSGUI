@@ -24,6 +24,7 @@
 #include "PhaseInfoDialog.h"
 #include "v_mod.h"
 #include "model_w.h"
+#include "service.h"
 
 PhaseInfoDialog::PhaseInfoDialog(QWidget* parent, bool system,
                                  int xph, gstring phname, vector<int>& xdclist, vector<gstring>& dcnames, int xdc):
@@ -33,12 +34,20 @@ PhaseInfoDialog::PhaseInfoDialog(QWidget* parent, bool system,
     gstring str;
 
     setupUi(this);
-    setWindowTitle("Demonstrate in calculate Mode.");
+    setWindowTitle("Phase to which selected DC belongs.");
 
     if( system )
-        labelSyst->setText("In Project system:");
+    {
+        labelSyst->setText("Modeling Project System:");
+        labelPh->setText("In Phase with this record key:");
+        labelDC->setText( QString("%1 Depended Component(s) with record key(s):").arg(xdclist.size()));
+    }
     else
-        labelSyst->setText("In this system difinition:");
+    {
+        labelSyst->setText("Chemical System Difinition:");
+        labelPh->setText("In Phase:");
+        labelDC->setText( QString("%1 Depended Component(s):").arg(xdclist.size()));
+    }
 
     systKey->setText(tr (rt[RT_SYSEQ].PackKey()));
 
@@ -170,7 +179,7 @@ void PhaseInfoDialog::CopyDataDC()
 
 void PhaseInfoDialog::CopyDataPh()
 {
-   QString clipText = tableDC->currentItem()->text();
+   QString clipText = tablePh->currentItem()->text();
    clipText = clipText.trimmed();
    QApplication::clipboard()->setText(clipText/*, QClipboard::Clipboard*/);
 }
@@ -185,6 +194,8 @@ void PhaseInfoDialog::languageChange()
 
 
 void PhaseInfoDialog::help()
-{ }
+{
+   pVisorImp->OpenHelp( GEMS_TEMPL_HTML );
+}
 
 //--------------------- End of PhaseInfoDialog.cpp ---------------------------
