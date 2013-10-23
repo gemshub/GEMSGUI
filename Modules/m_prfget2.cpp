@@ -1115,7 +1115,7 @@ void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<gstri
 }
 
 //Show Phase DComp connections
-void TProfil::ShowPhaseWindow( const char *objName, int nLine )
+void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
 {
     bool system;
     int  xph, xdc;
@@ -1157,7 +1157,7 @@ void TProfil::ShowPhaseWindow( const char *objName, int nLine )
   if( xdc < 0 )
       xdc = xdclist[0];
 
-  vfPhaseInfo( window(), system, xph, phname, xdclist, dcnames, xdc );
+  vfPhaseInfo( par, system, xph, phname, xdclist, dcnames, xdc );
 }
 
 //------------------ End of m_prfget2.cpp --------------------------

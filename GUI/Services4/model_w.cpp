@@ -943,7 +943,7 @@ void TObjectTable::CmCalc()
      if(iN == -1 || iM == -1 || fld.fType != ftRecord )
          return;
      try {
-          TProfil::pm->ShowPhaseWindow( fld.pObj->GetKeywd(), iN);
+          TProfil::pm->ShowPhaseWindow( topLevelWidget(), fld.pObj->GetKeywd(), iN);
      }
       catch( TError& err )
       {
