@@ -272,8 +272,10 @@ void TMulti::ods_link( int )
 //    aObj[ o_wo_masdj ].SetDim( pm.Ls, 1 );
     aObj[ o_wo_bf].SetPtr( pm.BF );
     aObj[ o_wo_bf ].SetDim( pm.FIs, pm.N );
-    aObj[ o_wo_bfc].SetPtr( pm.BFC );
-    aObj[ o_wo_bfc ].SetDim( pm.N, 1 );// ( 1, pm.N );
+    aObj[ o_wo_bfc ].SetPtr( pm.BFC );
+    aObj[ o_wo_bfc ].SetDim( pm.N, 1 );// corrected 07.07.2013 for correct use in scripts
+aObj[ o_wo_bfc3 ].SetPtr( pm.BFC );  // Added 22.10.2013
+aObj[ o_wo_bfc3 ].SetDim( 1, pm.N );// for displaying in EqDemo and other screenforms
     aObj[ o_w_xf].SetPtr( pm.XF );
     aObj[ o_w_xf ].SetDim( pm.FI, 1 );
     aObj[ o_wo_yf].SetPtr( pm.YF );
@@ -766,7 +768,9 @@ void TMulti::dyn_kill(int /*q*/)
     pm.IC_lm = (double *)aObj[ o_wd_iclcm ].Free();
     pm.IC_wm = (double *)aObj[ o_wd_icwm ].Free();
     pm.BF    = (double *)aObj[ o_wo_bf ].Free();
-    pm.BFC    = (double *)aObj[ o_wo_bfc ].Free();
+    pm.BFC    = (double *)aObj[ o_wo_bfc ].Free(); // aObj[ o_wo_bfc3 ].SetPtr( NULL );
+    aObj[ o_wo_bfc3 ].SetPtr( 0 );  // Added 22.10.2013
+    aObj[ o_wo_bfc3 ].SetDim( 1, 0 );// for displaying in EqDemo and other screenforms
     pm.XF    = (double *)aObj[ o_w_xf ].Free();
     pm.YF    = (double *)aObj[ o_wo_yf ].Free();
     pm.XFA   = (double *)aObj[ o_ww_xfa ].Free();
@@ -938,8 +942,9 @@ pm.GamFs = (double *)aObj[ o_wo_gamfs].Alloc( pm.L, 1, D_);
     pm.fDQF = (double *)aObj[ o_wi_gex].Alloc( pm.L, 1, D_ );
     pm.FVOL = (double *)aObj[ o_wd_fvol].Alloc( pm.FI, 1, D_ );
     pm.FWGT = (double *)aObj[ o_wd_fwgt].Alloc( pm.FI, 1, D_ );
-    pm.BFC = (double *)aObj[ o_wo_bfc].Alloc( pm.N, 1, D_ ); // ( 1, pm.N, D_ );
-                    // Bugfix 11.03.2010 DK
+    pm.BFC = (double *)aObj[ o_wo_bfc ].Alloc( pm.N, 1, D_ ); // corrected 07.07.2013 for scripts
+    aObj[ o_wo_bfc3 ].SetPtr( pm.BFC );  // Added 22.10.2013
+    aObj[ o_wo_bfc3 ].SetDim( 1, pm.N );// for displaying in EqDemo and other screenforms
    pm.dcMod  = (char (*)[6])aObj[ o_wi_dcmod ].Alloc( pm.L, 1, 6 );
 
     if( pm.L > 0 )
@@ -969,7 +974,6 @@ pm.GamFs = (double *)aObj[ o_wo_gamfs].Alloc( pm.L, 1, D_);
     if( pm.FIs > 0 && pm.Ls > 0 )
     {
        pm.BF = (double *)aObj[ o_wo_bf].Alloc( pm.FIs, pm.N, D_ );
-//      pm.BFC = (double *)aObj[ o_wo_bfc].Alloc( 1, pm.N, D_ );
         pm.XFA = (double *)aObj[ o_ww_xfa].Alloc( pm.FIs, 1, D_ );
         pm.YFA = (double *)aObj[ o_ww_yfa].Alloc( pm.FIs, 1, D_ );
         pm.LsMod = (long int *)aObj[ o_wi_lsmod].Alloc( pm.FIs, 3, L_ );
@@ -990,7 +994,6 @@ pm.GamFs = (double *)aObj[ o_wo_gamfs].Alloc( pm.L, 1, D_);
     else
     {
         pm.BF    = (double *)aObj[ o_wo_bf ].Free();
-//        pm.BFC    = (double *)aObj[ o_wo_bfc ].Free();
         pm.XFA   = (double *)aObj[ o_ww_xfa ].Free();
         pm.YFA   = (double *)aObj[ o_ww_yfa ].Free();
         pm.LsMod = (long int *)aObj[ o_wi_lsmod ].Free();

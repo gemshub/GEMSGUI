@@ -1,9 +1,9 @@
 //-------------------------------------------------------------------
-// $Id: CalcDialog.h 968 2007-12-13 13:23:32Z gems $
+// $Id: PhaseInfoDialog.h 968 2007-12-13 13:23:32Z gems $
 //
-// Declaration of CalcDialog class
+// Declaration of PhaseInfoDialog class
 //
-// Copyright (C) 1996-2010  A.Rysin, S.Dmytriyeva
+// Copyright (C) 2013  S.Dmytriyeva
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
@@ -17,38 +17,34 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#ifndef CalcDialog_included
-#define CalcDialog_included
+#ifndef PhaseInfoDialog_included
+#define PhaseInfoDialog_included
 
+#include <vector>
 #include <QDialog>
 #include <QButtonGroup>
 
-#include "ui_CalcDialog4.h"
+#include "ui_PhaseInfoDialog4.h"
 #include "gstring.h"
 
-class CalcDialog : public QDialog, public Ui::CalcDialogData
+class PhaseInfoDialog : public QDialog, public Ui::PhaseInfoDialogData
 {
     Q_OBJECT
-
-    int  nObj;
-    QButtonGroup *allButtons;
     
 protected slots:
     virtual void languageChange();
-
-    virtual void setMode( int id);
-    virtual void ok();
-    virtual void unaryMode();
+    void slotPopupContextMenuDC(const QPoint &pos);
+    void slotPopupContextMenuPh(const QPoint &pos);
+    void CopyDataDC();
+    void CopyDataPh();
     void help();
     
 public:
-    CalcDialog(QWidget* parent, int nobj);
-    virtual ~CalcDialog();
+    PhaseInfoDialog(QWidget* wpar, bool system,  int xph, gstring phname,
+                    vector<int>& xdclist, vector<gstring>& dcnames, int xdc);
+    virtual ~PhaseInfoDialog();
 
-    QString fun(double val);
-    int    funName(double& val);
-    gstring funText(const char * valText );
 
  };
 
-#endif // CalcDialog_included
+#endif // PhaseInfoDialog_included

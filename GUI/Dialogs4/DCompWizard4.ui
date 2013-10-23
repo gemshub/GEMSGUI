@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>736</width>
-    <height>540</height>
+    <height>556</height>
    </rect>
   </property>
   <property name="font">
@@ -43,7 +43,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_3">

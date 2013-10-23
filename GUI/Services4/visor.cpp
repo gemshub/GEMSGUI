@@ -773,6 +773,7 @@ TVisor::Exit()
 
         toModCFG();
         toWinCFG();
+        aObj[o_wo_bfc3].SetPtr(0);
         aObj[ o_neqtxt].SetPtr(0);
         aObj[ o_dtnam_nr].SetPtr(0);
         aObj[ o_dtres].SetPtr(0);

@@ -784,7 +784,7 @@ void TTreeView::printList( fstream& ff )
 	          	if( selIndexes.contains( index ) )
 	          	{
 	      		  if( !frst )
-	      		    clipText += "\t";
+                    clipText += splitCol;
 	      		  frst = false;
 	      		  cText = model()->data(index).toString();
 	      		  if( cText == emptiness.c_str() )
@@ -793,7 +793,7 @@ void TTreeView::printList( fstream& ff )
 	          	}
 	         }  
        	 if( !frst )
-    	     clipText += "\n";
+             clipText += splitRow;
 
 	     for (rw = 0; rw < model()->rowCount( childIndex ); rw++ ) 
 	     {
@@ -804,7 +804,7 @@ void TTreeView::printList( fstream& ff )
 		       	 if( selIndexes.contains( index ) )
 		         {
 		      	   if( !frst )
-		      	      clipText += "\t";
+                      clipText += splitCol;
 		      	    frst = false;
 		      		cText = model()->data(index).toString();
 		      		if( cText == emptiness.c_str() )
@@ -813,7 +813,7 @@ void TTreeView::printList( fstream& ff )
 		         }
 	        }  
        	   if( !frst )
-        	clipText += "\n";
+            clipText += splitRow;
 	   }
       
      }
@@ -831,7 +831,7 @@ void TTreeView::printList( fstream& ff )
 	    if( selectionModel()->columnIntersectsSelection( col,  rootIndex() ) )
        	{
    		  if( !frst )
-   		    clipText += "\t";
+            clipText += splitCol;
    		  frst = false;
    		  cText = model()->headerData( col, Qt::Horizontal, Qt::DisplayRole ).toString();
    		  if( cText == emptiness.c_str() )
@@ -840,7 +840,7 @@ void TTreeView::printList( fstream& ff )
 	    }
 	 }  
      if( !frst )
-        clipText += "\n";
+        clipText += splitRow;
 	return clipText;  
   }
 
@@ -878,8 +878,8 @@ void TTreeView::printList( fstream& ff )
     	     index = model->index(row, col, parIndex );
     	   	 if( selIndexes.contains( index ) )
     	   	 {
-    	        double res = calc.fun( index.data(Qt::EditRole).toDouble() );
-    	        model->setData(index, QVariant(res).toString(), Qt::EditRole);         
+                QString res = calc.fun( index.data(Qt::EditRole).toDouble() );
+                model->setData(index, res, Qt::EditRole);
     	      }	 
     	  }  	
         }

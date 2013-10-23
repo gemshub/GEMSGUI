@@ -20,7 +20,9 @@
 #ifndef _service_h
 #define _service_h
 
+#include <vector>
 #include "gstring.h"
+
 
 class QWidget;
 struct windowSetupData;
@@ -173,7 +175,12 @@ bool
  vfAutoPhaseSet(QWidget* par, const char* pr_key, gstring& a_key, gstring& g_key,
         char& acode, char& gcode, float apar[8]);
 
-bool vfLookupDialogSet(QWidget* wpar, char flags[6], double Tai[4], double Pai[4] );
+bool vfLookupDialogSet(QWidget* wpar, char flags[6],
+                double Tai[4], double Pai[4] );
+
+void vfPhaseInfo(QWidget* wpar, bool system, int xph, gstring phname,
+                 vector<int>& xdclist, vector<gstring>& dcnames, int xdc );
+
 
 //class TObject;
 //void vfObjToFile(QWidget* par, TObject* obj);
@@ -244,6 +251,8 @@ extern const char *GEMS_ELEMENTS_HTML;  // ElementsDialog
 extern const char *GEMS_SETFILT_HTML;   // SetFiltersDialog
 extern const char *GEMS_APHSETUP_HTML;  // AutoPhaseDialog
 extern const char *GEMS_TEMPL_HTML;     // ChangeKeyDialog
+extern const char *GEMS_PHINFO_HTML;    // PhaseInfoDialog
+extern const char *GEMS_CALCUL_HTML;    // CalcDialog
 extern const char *GEMS_WRIPMF_HTML;    // LookupDialog
 extern const char *GEMS_MARK_HTML;      // SelectDialog
 extern const char *GEMS_SELECT_HTML;    // KeyDialog

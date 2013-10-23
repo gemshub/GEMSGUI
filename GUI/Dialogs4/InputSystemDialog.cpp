@@ -477,7 +477,7 @@ QString InputSystemDialog::createString()
        for( col = rec[0].leftColumn(); col <= rec[0].rightColumn(); col++ )
        {
            if( !frst )
-               clipText += "\t";
+               clipText += splitCol;
            frst = false;
            cText = recTable->item(row, col)->text();
            if( cText == emptiness.c_str() )
@@ -485,7 +485,7 @@ QString InputSystemDialog::createString()
             clipText += cText;
        }
        if( !frst )
-           clipText += "\n";
+           clipText += splitRow;
    }
       return clipText;
 }
@@ -501,7 +501,7 @@ QString InputSystemDialog::createHeader()
    for( col = rec[0].leftColumn(); col <= rec[0].rightColumn(); col++ )
    {
            if( !frst )
-               clipText += "\t";
+               clipText += splitCol;
            frst = false;
            cText = recTable->horizontalHeaderItem(col)->text();
            clipText += cText;
@@ -518,7 +518,7 @@ QString InputSystemDialog::createHeader()
  void InputSystemDialog::CopyDataHeader()
  {
       QString clipText = createHeader();
-      clipText += "\n";
+      clipText += splitRow;
       clipText += createString();
       QApplication::clipboard()->setText(clipText/*, QClipboard::Clipboard*/);
   }
@@ -571,9 +571,10 @@ QString InputSystemDialog::createHeader()
           for(int row = rec[0].topRow(); row <= rec[0].bottomRow(); row++ )
            {
               double val = tbData[row].val;
-              val = calc.fun( val );
-              tbData[row].val = val;
-              recTable->item(row,2)->setText( QString::number(  tbData[row].val, 'g', 6 ));
+              QString rval = calc.fun( val );
+              recTable->item(row,2)->setText( rval);
+              tbData[row].val = recTable->item(row, 2)->data(Qt::EditRole).toDouble();;
+
            }
        }
     }

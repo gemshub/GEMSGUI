@@ -1392,7 +1392,7 @@ void TPhase::set_def_comments( bool clearall,
     if( php->Psco == S_ON )
       if( clearall  )
       {
-          for(ii=0; ii<php->nscM; ii++)
+          for(ii=0; ii<php->nscM; ii++)   // problematic
           {
               sprintf( tbuf, "Int%d", ii+1 );
               strncpy( php->dcpcl[ii], tbuf, MAXDCNAME );
@@ -1426,6 +1426,8 @@ void TPhase::set_def_comments( bool clearall,
                       strncpy( php->ipccl[1], "w2", MAXDCNAME );
                       strncpy( php->ipccl[2], "w3", MAXDCNAME );
                       //          php->ncpM = 3;  // NPcoef
+                      strncpy( php->dcpcl[0], "fip", MAXDCNAME );
+                      //          php->nscM = 1;
                                 break;
                  case SM_REGULAR:   // Regular model (multicomponent)
                        strncpy( php->ipccl[0], "w1", MAXDCNAME );

@@ -644,9 +644,11 @@ const char *GEMS_ELEMENTS_HTML = "gems_elements"; // ElementsDialog
 const char *GEMS_SETFILT_HTML = "gems_elements.html#FILTERS"; // SetFiltersDialog
 const char *GEMS_APHSETUP_HTML = "gems_aphsetup"; // AutoPhaseDialog
 const char *GEMS_TEMPL_HTML = "gems_miscel.html#TEMPLATES";  // ChangeKeyDialog
+const char *GEMS_PHINFO_HTML = "gems_miscel.html#PHASEINFO";  // PhaseInfoDialog
 const char *GEMS_WRIPMF_HTML = "gems_ipm.html#WRITEIPMFILES"; // LookupDialog
 const char *GEMS_MARK_HTML = "gems_miscel.html#MARK"; // SelectDialog
 const char *GEMS_SELECT_HTML = "gems_miscel.html#SELECT"; // KeyDialog
+const char *GEMS_CALCUL_HTML = "gems_miscel.html#CALCULATOR";  // CalcDialog
 // MainDialog
 const char *GEMS_HOWTOSTART_HTML = "gems_about.html#PAGE_HOWTOSTART";
 //const char *GEMS_ABOUT_HTML = "gems_about.html#PAGE_ABOUT";
