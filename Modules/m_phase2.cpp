@@ -1390,12 +1390,176 @@ void TPhase::set_def_comments( bool clearall,
     char tbuf[100];
 
     if( php->Psco == S_ON )
-      if( clearall  )
+      if( clearall || ( php->sol_t[SPHAS_TYP] != old_sol[SPHAS_TYP] ) ||
+              ( php->sol_t[SGM_MODE] != old_sol[SGM_MODE] ) )
       {
-          for(ii=0; ii<php->nscM; ii++)   // problematic
+//          for(ii=0; ii<php->nscM; ii++)   // problematic
+//          {
+//              sprintf( tbuf, "Int%d", ii+1 );
+//              strncpy( php->dcpcl[ii], tbuf, MAXDCNAME );
+//          }
+          if( php->sol_t[SGM_MODE] == SM_STNGAM )
           {
-              sprintf( tbuf, "Int%d", ii+1 );
-              strncpy( php->dcpcl[ii], tbuf, MAXDCNAME );
+              switch(php->sol_t[SPHAS_TYP])
+              {
+              case SM_OTHER:   // Customized hardcoded solid-solution models
+                             break;
+              case SM_BERMAN:   // Sublattice microscopic intra-site interaction model (multicomponent)
+                   strncpy( php->dcpcl[0], "rct", MAXDCNAME );
+                  //               php->nscM = 1;
+                  //          php->ncpM = 3;  // NPcoef
+                             break;
+              case SM_VANLAAR:   // Van Laar model (multicomponent)
+                   //          php->ncpM = 3;  // NPcoef
+                   strncpy( php->dcpcl[0], "fi", MAXDCNAME );
+                   //          php->nscM = 1;
+                             break;
+              case SM_REGULAR:   // Regular model (multicomponent)
+                    //         php->ncpM = 3;  // NPcoef
+                             break;
+              case SM_GUGGENM:   // Redlich-Kister model (multicomponent)
+                         //    php->ncpM = 16;  // NPcoef
+                             break;
+             case SM_NRTLLIQ:   // NRTL liquid model (multicomponent), added 03.06.2008 (TW)
+                         //    php->ncpM = 6;  // NPcoef
+                             break;
+             case SM_WILSLIQ:   // Wilson liquid model (multicomponent), added 09.06.2008 (TW)
+                           //  php->ncpM = 4;  // NPcoef
+                             break;
+             case SM_REDKIS:   // Redlich-Kister model (binary)
+                        //     php->ncpN = 1; php->ncpM = 3;
+                             break;
+             case SM_MARGB:  // Margules subregular model (binary)
+                        //     php->ncpN = 2; php->ncpM = 3;
+                             break;
+             case SM_MARGT:  // Margules regular model (ternary)
+                          //   php->ncpN = 4; php->ncpM = 3;
+                             break;
+             case SM_CGFLUID:  // Churakov-Gottschalk (CG) EoS
+                    strncpy( php->dcpcl[0], "fi", MAXDCNAME );
+                    strncpy( php->dcpcl[1], "fi", MAXDCNAME );
+                    strncpy( php->dcpcl[2], "fi", MAXDCNAME );
+                    strncpy( php->dcpcl[3], "fi", MAXDCNAME );
+                    strncpy( php->dcpcl[4], "fi", MAXDCNAME );
+                    strncpy( php->dcpcl[5], "fi", MAXDCNAME );
+                    strncpy( php->dcpcl[6], "fi", MAXDCNAME );
+                    strncpy( php->dcpcl[7], "fi", MAXDCNAME );
+                    strncpy( php->dcpcl[8], "fi", MAXDCNAME );
+                    strncpy( php->dcpcl[9], "fi", MAXDCNAME );
+                    strncpy( php->dcpcl[10], "fi", MAXDCNAME );
+                    strncpy( php->dcpcl[11], "fi", MAXDCNAME );
+                          //   php->nscM = 12; // last changed 12.12.2008 (TW)
+                             break;
+             case SM_PRFLUID:  // Peng-Robinson-Stryjek-Vera (PRSV) EoS, one binary interaction parameter
+                  strncpy( php->dcpcl[0], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[1], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[2], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[3], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[4], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[5], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[6], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[7], "fi", MAXDCNAME );
+                  //             php->nscM = 7;
+                        //     php->ncpM = 2;  // NPcoef
+                             break;
+             case SM_SRFLUID:  // Soave-Redlich-Kwong (SRK) EoS, one binary interaction parameter
+                  strncpy( php->dcpcl[0], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[1], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[2], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[3], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[4], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[5], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[6], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[7], "fi", MAXDCNAME );
+                  //              php->nscM = 7;
+                        //       php->ncpM = 2;  // NPcoef
+                             break;
+             case SM_PR78FL:  // Peng-Robinson (PR78) EoS, one binary interaction parameter
+                  strncpy( php->dcpcl[0], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[1], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[2], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[3], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[4], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[5], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[6], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[7], "fi", MAXDCNAME );
+                  //              php->nscM = 7;
+                        //     php->ncpM = 2;  // NPcoef
+                             break;
+             case SM_CORKFL:  // compensated Redlich-Kwong (CORK) EoS, one binary interaction parameter
+                  strncpy( php->dcpcl[0], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[1], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[2], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[3], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[4], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[5], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[6], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[7], "fi", MAXDCNAME );
+//               php->nscM = 7;
+               //     php->ncpM = 1;  // NPcoef
+                             break;
+             case SM_STFLUID:  // Sterner-Pitzer (STP) EoS, one binary interaction parameter
+                  strncpy( php->dcpcl[0], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[1], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[2], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[3], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[4], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[5], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[6], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[7], "fi", MAXDCNAME );
+                  //              php->nscM = 7;
+                             //    php->ncpM = 1;  // NPcoef
+                             break;
+             case SM_AQDAV:  // aqueous Davies
+                           //  php->ncpM = 4; // changed 10.07.2008 DK
+                             break;
+             case SM_AQDH1:  // aqueous DH limiting law
+                          //   php->ncpM = 4;
+                             break;
+             case SM_AQDH2:  // aqueous DH, individual a0, individual bg
+                  strncpy( php->dcpcl[0], "a0", MAXDCNAME );
+                  strncpy( php->dcpcl[1], "bg", MAXDCNAME );
+                  // php->nscM = 2;
+                          //   php->ncpM = 4;
+                             break;
+             case SM_AQDH3:  // aqueous EDH Karpov, individual a0, common bg
+                  strncpy( php->dcpcl[0], "a0", MAXDCNAME );
+                  strncpy( php->dcpcl[1], "bg", MAXDCNAME );
+                  // php->nscM = 2;
+                          //   php->ncpM = 4;
+                             break;
+             case SM_AQDHH:  // aqueous EDH Helgeson, common a0 and bg
+                          //   php->ncpM = 4;
+                             break;
+             case SM_AQDHS:  // aqueous EDH Shvarov, common a0 and bg
+                            // php->ncpM = 4;
+                             break;
+             case SM_AQSIT:  // SIT model in NEA variant - new implementation
+                           //  php->ncpM = 2;  // NPcoef - changed from 1 to 2 on 13.05.09 (DK)
+                             break;
+             case SM_AQEXUQ: // built-in EUNIQUAC model for aqueous activity coeffs, changed 18.01.2009 (TW)
+                  strncpy( php->dcpcl[0], "a0", MAXDCNAME );
+                  strncpy( php->dcpcl[1], "bg", MAXDCNAME );
+                  //                      php->nscM = 2;  // NP_DC
+                            //  php->ncpM = 2;  // NPcoef
+                              break;
+             case SM_AQPITZ: // built-in Pitzer HMW aqueous activity coefficient model
+                              break;
+             case SM_AQELVIS:  // built-in ELVIS model for aqueous electrolytes
+                  strncpy( php->dcpcl[0], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[1], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[2], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[3], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[4], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[5], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[6], "fi", MAXDCNAME );
+                  strncpy( php->dcpcl[7], "fi", MAXDCNAME );
+                  //                      php->nscM = 8;  // NP_DC
+                          //    php->ncpM = 8;                       // NPcoef = rows of aIPc
+                              break;
+             default:  // other models
+                              break;
+              }
           }
       }
 
@@ -1426,7 +1590,6 @@ void TPhase::set_def_comments( bool clearall,
                       strncpy( php->ipccl[1], "w2", MAXDCNAME );
                       strncpy( php->ipccl[2], "w3", MAXDCNAME );
                       //          php->ncpM = 3;  // NPcoef
-                      strncpy( php->dcpcl[0], "fip", MAXDCNAME );
                       //          php->nscM = 1;
                                 break;
                  case SM_REGULAR:   // Regular model (multicomponent)

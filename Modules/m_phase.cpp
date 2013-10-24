@@ -961,7 +961,7 @@ AGAIN_SETUP:
 
         // mark ReacDC/DComp keys to be included into the Phase
         makeReacDCompList( "Please, mark ReacDC/DComp keys to be included into the Phase",
-                           aDclist, php->nDC, php->SM, php->DCS, true);
+                           aDclist, php->nDC, php->SM, php->DCS, false);
         // Pre-proc. loop for SIT or Pitzer: determining number of cations and anion
         DetNumbCatAn(aDclist);
 
