@@ -3,6 +3,7 @@
 
 
 
+
   
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
@@ -2070,12 +2071,13 @@ records.&nbsp; <br>
 automatically computed from 
 the contents of <a href="gems_sys.html#bXs">bXs</a> vector after the GEM IPM algorithm has converged, as well as by browsing SysEq records in Equilibria Calculation mode. <br>
   </dd>
-<dd>&nbsp;</dd><dt><a name="bXs"></a><big><b><big><tt>bXs</tt></big></b></big> -&nbsp;
+<dd>&nbsp;</dd><dt><a name="bXs_"></a><big><b><big><tt>bXs_</tt></big></b></big> -&nbsp;
 Total output bulk composition of all solid phases (in moles of Independent Components)<br>
 </dt>
 <dd>&nbsp; &nbsp;</dd>
-<dd>This output vector (of n(N) length) is computed from the primal solution vector <a href="#x">x</a> and from the table of bulk equilibrium compositions of multi-component phases <a href="#bXa">bXa</a> after the GEM IPM algorithm has converged, as well as upon browsing SysEq records in Equilibria Calculation mode.
+<dd>This output vector (of n(N) length) is computed from the primal solution vector <a href="#x">x</a> and from the table of bulk equilibrium compositions of multi-component phases <a href="#bXa">bXa</a> after the GEM IPM algorithm has converged, as well as upon browsing SysEq records in Equilibria Calculation mode.</dd><dd>Attention! In Process and GEM2MT scripts for sequential reactors, please use the <big><span style="font-family: monospace;">bXs</span></big> name of this data object instead of&nbsp; <span style="font-family: monospace;">bXs_</span> .
   </dd>
+
 <dd>&nbsp;</dd><dt> <a name="bXa"></a><big><b><big><tt>bXa</tt></big></b></big> -
 Output bulk compositions of multi-component phases (in moles of
 Independent Components)</dt>
