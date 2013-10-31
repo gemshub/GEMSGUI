@@ -1758,7 +1758,7 @@ void TPhase::set_def_comments( bool clearall,
      {
          for(ii=0; ii<php->nPRk; ii++)
          {
-             sprintf( tbuf, "Int%d", ii+1 );
+             sprintf( tbuf, "p_reac_%d", ii+1 );
              strncpy( php->rprcl[ii], tbuf, MAXDCNAME );
          }
 
@@ -1766,52 +1766,52 @@ void TPhase::set_def_comments( bool clearall,
          {
          //KinModCode
              case KM_MOD_TST: // = 'T' Generic TST dissolution/precipitation model following Schott ea 2012
-             strncpy( php->rpkcl[0], "w01", MAXDCNAME );
-             strncpy( php->rpkcl[1], "w02", MAXDCNAME );
-             strncpy( php->rpkcl[2], "w03", MAXDCNAME );
-             strncpy( php->rpkcl[3], "w04", MAXDCNAME );
-             strncpy( php->rpkcl[4], "w11", MAXDCNAME );
-             strncpy( php->rpkcl[5], "w12", MAXDCNAME );
-             strncpy( php->rpkcl[6], "w13", MAXDCNAME );
-             strncpy( php->rpkcl[7], "w14", MAXDCNAME );
-             strncpy( php->rpkcl[8], "w21", MAXDCNAME );
-             strncpy( php->rpkcl[9], "w22", MAXDCNAME );
-             strncpy( php->rpkcl[10], "w23", MAXDCNAME );
-             strncpy( php->rpkcl[11], "w24", MAXDCNAME );
-             strncpy( php->rpkcl[12], "w31", MAXDCNAME );
-             strncpy( php->rpkcl[13], "w32", MAXDCNAME );
+             strncpy( php->rpkcl[0], "k0", MAXDCNAME );
+             strncpy( php->rpkcl[1], "K0", MAXDCNAME );
+             strncpy( php->rpkcl[2], "AF", MAXDCNAME );
+             strncpy( php->rpkcl[3], "Ea", MAXDCNAME );
+             strncpy( php->rpkcl[4], "bI", MAXDCNAME );
+             strncpy( php->rpkcl[5], "bpH", MAXDCNAME );
+             strncpy( php->rpkcl[6], "bpe", MAXDCNAME );
+             strncpy( php->rpkcl[7], "bEh", MAXDCNAME );
+             strncpy( php->rpkcl[8], "p", MAXDCNAME );
+             strncpy( php->rpkcl[9], "q", MAXDCNAME );
+             strncpy( php->rpkcl[10], "m", MAXDCNAME );
+             strncpy( php->rpkcl[11], "u", MAXDCNAME );
+             strncpy( php->rpkcl[12], "OmgEf", MAXDCNAME );
+             strncpy( php->rpkcl[13], "ResNuc", MAXDCNAME );
                  break;
              case KM_MOD_PAL: // = 'P' Dissolution/precipitation model of the form (Palandri 2004)
-             strncpy( php->rpkcl[0], "w01", MAXDCNAME );
-             strncpy( php->rpkcl[1], "w02", MAXDCNAME );
-             strncpy( php->rpkcl[2], "w03", MAXDCNAME );
-             strncpy( php->rpkcl[3], "w04", MAXDCNAME );
-             strncpy( php->rpkcl[4], "w11", MAXDCNAME );
-             strncpy( php->rpkcl[5], "w12", MAXDCNAME );
-             strncpy( php->rpkcl[6], "w13", MAXDCNAME );
-             strncpy( php->rpkcl[7], "w14", MAXDCNAME );
-             strncpy( php->rpkcl[8], "w21", MAXDCNAME );
-             strncpy( php->rpkcl[9], "w22", MAXDCNAME );
-             strncpy( php->rpkcl[10], "w23", MAXDCNAME );
-             strncpy( php->rpkcl[11], "w24", MAXDCNAME );
-             strncpy( php->rpkcl[12], "w31", MAXDCNAME );
-             strncpy( php->rpkcl[13], "w32", MAXDCNAME );
+             strncpy( php->rpkcl[0], "k0", MAXDCNAME );
+             strncpy( php->rpkcl[1], "K0", MAXDCNAME );
+             strncpy( php->rpkcl[2], "AF", MAXDCNAME );
+             strncpy( php->rpkcl[3], "Ea", MAXDCNAME );
+             strncpy( php->rpkcl[4], "bI", MAXDCNAME );
+             strncpy( php->rpkcl[5], "bpH", MAXDCNAME );
+             strncpy( php->rpkcl[6], "bpe", MAXDCNAME );
+             strncpy( php->rpkcl[7], "bEh", MAXDCNAME );
+             strncpy( php->rpkcl[8], "p", MAXDCNAME );
+             strncpy( php->rpkcl[9], "q", MAXDCNAME );
+             strncpy( php->rpkcl[10], "m", MAXDCNAME );
+             strncpy( php->rpkcl[11], "u", MAXDCNAME );
+             strncpy( php->rpkcl[12], "OmgEf", MAXDCNAME );
+             strncpy( php->rpkcl[13], "ResNuc", MAXDCNAME );
                  break;
              case KM_MOD_WOL: // = 'W' Carbonate growth model following (Wolthers 2012)
-             strncpy( php->rpkcl[0], "w01", MAXDCNAME );
-             strncpy( php->rpkcl[1], "w02", MAXDCNAME );
-             strncpy( php->rpkcl[2], "w03", MAXDCNAME );
-             strncpy( php->rpkcl[3], "w04", MAXDCNAME );
-             strncpy( php->rpkcl[4], "w11", MAXDCNAME );
-             strncpy( php->rpkcl[5], "w12", MAXDCNAME );
-             strncpy( php->rpkcl[6], "w13", MAXDCNAME );
-             strncpy( php->rpkcl[7], "w14", MAXDCNAME );
-             strncpy( php->rpkcl[8], "w21", MAXDCNAME );
-             strncpy( php->rpkcl[9], "w22", MAXDCNAME );
-             strncpy( php->rpkcl[10], "w23", MAXDCNAME );
-             strncpy( php->rpkcl[11], "w24", MAXDCNAME );
-             strncpy( php->rpkcl[12], "w31", MAXDCNAME );
-             strncpy( php->rpkcl[13], "w32", MAXDCNAME );
+             strncpy( php->rpkcl[0], "k0", MAXDCNAME );
+             strncpy( php->rpkcl[1], "K0", MAXDCNAME );
+             strncpy( php->rpkcl[2], "AF", MAXDCNAME );
+             strncpy( php->rpkcl[3], "Ea", MAXDCNAME );
+             strncpy( php->rpkcl[4], "bI", MAXDCNAME );
+             strncpy( php->rpkcl[5], "bpH", MAXDCNAME );
+             strncpy( php->rpkcl[6], "bpe", MAXDCNAME );
+             strncpy( php->rpkcl[7], "bEh", MAXDCNAME );
+             strncpy( php->rpkcl[8], "p", MAXDCNAME );
+             strncpy( php->rpkcl[9], "q", MAXDCNAME );
+             strncpy( php->rpkcl[10], "m", MAXDCNAME );
+             strncpy( php->rpkcl[11], "u", MAXDCNAME );
+             strncpy( php->rpkcl[12], "OmgEf", MAXDCNAME );
+             strncpy( php->rpkcl[13], "ResNuc", MAXDCNAME );
                  break;
              case KM_MOD_NUGR: // = 'U' Mineral nucleation and growth model with nuclei/particle size distr. (TBD)
                 break;
@@ -1832,6 +1832,12 @@ void TPhase::set_def_comments( bool clearall,
                  break;
              case KM_PRO_UPT:  // = 'U' Kinetics of uptake/entrapment (of minor/trace element) into solid solution
                  php->PumpCon = S_ON;
+                 strncpy( php->umpcl[0], "F_Tr", MAXDCNAME );
+                 strncpy( php->umpcl[1], "DelTr", MAXDCNAME );
+                 strncpy( php->umpcl[2], "DsTr", MAXDCNAME );
+                 strncpy( php->umpcl[3], "DlTr", MAXDCNAME );
+                 strncpy( php->umpcl[4], "lsl", MAXDCNAME );
+                 strncpy( php->umpcl[5], "msl", MAXDCNAME );
                  break;
              case KM_PRO_IEX:  // = 'X' Kinetics of ion exchange (clays, C-S-H, zeolites, ...)
 

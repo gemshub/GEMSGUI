@@ -2,6 +2,7 @@
 <html><head>
 
 
+
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]"><title>GEMS3 Miscellaneous Topics</title></head><body>
 <h1><img src="gems1.png" align="left" height="48" width="48">
@@ -14,19 +15,22 @@ GEM-Selektor version 3<br>
 
 <div style="margin-left: 40px;">
 <p><a href="#HOWHELP">1. How to Use GEM-Selektor Help System</a></p>
-<p><a href="#FORMATS">2. Binary and text file formats for GEMS
+<p><a href="#PHASEINFO">2. The Phase Information widget<br>
+</a></p>
+<p><a href="#FORMATS">3. Binary and text file formats for GEMS
 database records </a></p>
-<p><a href="#TEMPLATES">3. Record key templates in GEMS database</a>
+
+<p><a href="#TEMPLATES">4. Record key templates in GEMS database</a>
 </p>
-<p><a href="#MARK">4. Marking items in multiple selection list dialogs</a>
+<p><a href="#MARK">5. Marking items in multiple selection list dialogs</a>
 </p>
-<p><a href="#MARK_FILES">4.1. GEMS Database Chain File List and Selection of
+<p><a href="#MARK_FILES">5.1. GEMS Database Chain File List and Selection of
 Files Linked to it</a>
 </p>
-<p><a href="#SELECT">5. Selecting an item from a selection list dialog</a></p>
-<p><a href="#MAINTAIN">6. GEMS Database Maintenance menu commands and
+<p><a href="#SELECT">6. Selecting an item from a selection list dialog</a></p>
+<p><a href="#MAINTAIN">7. GEMS Database Maintenance menu commands and
 functions</a></p>
-<p><a href="#DEFAULTCONFIG_DATA">7. Data Objects for
+<p><a href="#DEFAULTCONFIG_DATA">8. Data Objects for
 Default Configuration of GEM-Selektor</a></p>
 </div>
 
@@ -71,7 +75,8 @@ and 'Home' toolbar buttons (or the respective items in the 'Go' menu). <br>
 using the 'File' 'Print' menu command (further choices in the appearing
 Print Dialog). <br>
 </p>
-<p>The help contents can also be accessed via tree-like headings in the 'Contents' tab.</p>
+<p>The help contents can also be accessed via tree-like headings in the 'Contents' tab. <br>
+</p>
 <p>The 'Index' tab allows the user to jump to a description (if
 available) of any data object by clicking on the respective label in
 the scrollable list. To reduce the size of the list, some characters
@@ -93,7 +98,45 @@ platform of the currently installed GEM-Selektor code.<br>
 </p>
 <p> </p>
 <p></p><br>
-<hr size="2" width="100%"> <h2><a name="FORMATS"></a>2. Binary and text file formats for GEMS
+<br>
+
+<hr size="2" width="100%"> 
+<h2><a name="PHASEINFO"></a>2. The Phase Information widget<br>
+</h2>
+
+<p>In GEM-Selektor chemical system definitions, as displayed in the
+System, EqDemo, Multi window pages, there are separate lists of phases (<big><span style="font-family: monospace;">PHvp, PHnam</span></big>) and of dependent components (<big><span style="font-family: monospace;">DCvp, DCnam</span></big>), respectively. These lists are connected via the <big><span style="font-family: monospace;">L1_</span></big> and <big><span style="font-family: monospace;">L1</span></big>
+vectors, respectively, showing how many DCs each phase contains, under
+a convention that these blocks of DC names appear in the same order as
+the phases. <br>
+</p>
+<p>These relationships are clearly visible in both Input and Results
+tabs of the Single System dialog, where each phase can be expanded to
+see its DCs. However, in System and EqDemo windows, the lists of names
+of phases and DCs are displayed in different pages, and sometimes it is
+difficult for the user to see, to which phase a chosen DC belongs, or
+which DCs are included into a chosen phase. <br>
+</p>
+<p>To provide such information easly, the Phase Information widget was
+implemented. It can be invoked by putting cursor on any entry in <big><span style="font-family: monospace;">DCvp, DCnam,</span></big>&nbsp; <big><span style="font-family: monospace;">PHvp, PHnam</span></big> name lists and pressing <big><span style="font-family: monospace;">F5</span></big> hot key, or selecting "<span style="font-family: monospace;">Show Phase&nbsp;&nbsp;&nbsp; F5</span>" from the right-click menu. <br>
+</p>
+<p>If invoked from <big><span style="font-family: monospace;">DCvp</span></big> or <big><span style="font-family: monospace;">PHvp</span></big>
+name lists, the Phase Information widget shows Phase record key of the
+phase, with the number and a scrollable list of indexes and record keys
+of all its components, with the chosen DC index (in modeling project)
+highlighted. <br>
+</p>
+<p>If invoked from <big><span style="font-family: monospace;">DCnam</span></big> or <big><span style="font-family: monospace;">PHnam</span></big> name lists, the Phase Information
+widget shows the phase name, with the number and a scrollable list
+of indexes and names of all its components, with the chosen DC index (in GEM IPM chemical system) highlighted.</p>
+<p>To facilitate writing Process, GtDemo and GEM2MT scripts, any phase
+or component name can be copy-pasted from this widget. To take it to
+the clipboard, right-click on the desired name in Phase information
+widget, and select "Copy".&nbsp; </p>
+Click "Ok" to close the widget. "Help" button displays this help page.<br>
+<br>
+<br>
+<hr size="2" width="100%"> <h2><a name="FORMATS"></a>3. Binary and text file formats for GEMS
 database records</h2>
 <p><br>
 </p>
@@ -102,21 +145,21 @@ database records</h2>
 </p>
 <br>
 <hr style="width: 100%; height: 2px;">
-<h2><a name="TEMPLATES"></a>3. Record key templates in GEMS database
+<h2><a name="TEMPLATES"></a>4. Record key templates in GEMS database
 </h2>
 <br>
 <p><br>
 </p>
 <hr size="2" width="100%">
 
-<h2><a name="MARK"></a>4. Marking/selecting items in selection list
+<h2><a name="MARK"></a>5. Marking/selecting items in selection list
 dialogs</h2>
 <br>
 <p><br>
 </p>
 <br>
 <hr style="width: 100%; height: 2px;">
-<h3><a name="MARK_FILES"></a>4.1. GEMS Database Chain File List and
+<h3><a name="MARK_FILES"></a>5.1. GEMS Database Chain File List and
 Selection of Files Linked to it</h3>
 <p><br>
 </p>
@@ -128,7 +171,7 @@ Selection of Files Linked to it</h3>
 </p>
 <hr size="2" width="100%">
 
-<h2><a name="SELECT"></a>5. Choosing an Item from a Selection List
+<h2><a name="SELECT"></a>6. Choosing an Item from a Selection List
 Dialog<br>
 </h2>
 <br>
@@ -142,13 +185,15 @@ Dialog<br>
 <p><br>
 </p>
 <hr size="2" width="100%">
-<h2>&nbsp;<a name="MAINTAIN"></a>6. GEMS3 Database Mode menu
+<h2>&nbsp;<a name="MAINTAIN"></a>7. GEMS3 Database Mode menu
 commands and functions</h2>
 <p> </p>
 <p> In the Database Mode of GEM-Selektor, any module window (IComp,
 DComp, ...) can be opened by clicking the respective button in the left
 pane, or using the 'Modules' menu. Regardless of which module window is
-open, the main GEMS3 frame will show the same menu bar and toolbar buttons, followed by the record key field. Toolbar buttons largely duplicate the most frequently used
+open, the main GEMS3 frame will show the same menu bar and toolbar
+buttons, followed by the record key field. Toolbar buttons largely
+duplicate the most frequently used
 menu commands.
 </p>
 <p>The&nbsp;<a name="P333R"></a>"<b>Record</b>" menu provides commands
@@ -185,13 +230,16 @@ appear. <br>
       <td style="vertical-align: top;"><b><i>New</i></b><span style="font-style: italic; font-weight: bold;">(Clone) </span></td>
       <td style="vertical-align: top;"><br>
       </td>
-      <td style="vertical-align: top;">
-Creates a new database record by "cloning"
+      <td style="vertical-align: top;">Creates
+a new database record by "cloning"
 the currently loaded record. When invoked, it first displays a
-"Please, set a new record key" dialog with a disassembled key of the currently loaded
+"Please, set a new record key" dialog with a disassembled key of the
+currently loaded
 record. Change at list one character in one of the fields
 and
-press "Ok"(remember that the record key must be unique within the database chain). At the next step, the respective Remake Wizard will appear. </td>
+press "Ok"(remember that the record key must be unique within the
+database chain). At the next step, the respective Remake Wizard will
+appear. </td>
     </tr>
     <tr>
       <td style="vertical-align: top;"><span style="font-style: italic;"><span style="font-weight: bold;">Display</span></span></td>
@@ -528,7 +576,7 @@ Database</tt>" dialog. <br>
 <tt></tt></h4>
 <hr style="width: 100%; height: 2px;">&nbsp;
 <br>
-<h2><span style="font-family: Helvetica,Arial,sans-serif;"><a name="DEFAULTCONFIG_DATA"></a>7. Data Objects for Default
+<h2><span style="font-family: Helvetica,Arial,sans-serif;"><a name="DEFAULTCONFIG_DATA"></a>8. Data Objects for Default
 Configuration of GEM-Selektor</span><br>
 </h2>
 <span style="font-family: Helvetica,Arial,sans-serif;"><br>
@@ -620,8 +668,8 @@ with date and time when the records are loaded again into PDB files. </p>
 </p>
 <hr style="width: 100%; height: 2px;">
 
-<p>Copyright (c) 2012 GEMS Development Team</p>
-<p>Last change: 27.11.2012</p>
+<p>Copyright (c) 2013 GEMS Development Team</p>
+<p>Last change: 31.10.2013</p>
 <p>
 <br>
 &nbsp; </p>

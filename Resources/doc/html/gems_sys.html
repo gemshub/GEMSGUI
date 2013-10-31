@@ -1,6 +1,6 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
-  
+
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
   
@@ -9,7 +9,7 @@
 
   
   
-  <meta name="description" content="Version 2.0.0-PSI">
+  <meta name="description" content="Version 3.2.0-PSI">
 
 </head><body>
 <h1><img src="gems1.png" align="left" height="48" width="48"> <font color="#000066"> GEM-Selektor version 3<br>
@@ -1445,7 +1445,7 @@ non-trivial
 metastability restrictions (given in <a href="#dll">dll</a> and <a href="#dul">dul</a> vectors).&nbsp;</dd>
   <dd>Values of the Karpov f(alpha) criterion for phases whose mole
 amounts (in
-the <a href="file:///C:/GEMS2test/program/doc/html/gems_sys.html#Xa"><tt>Xa</tt></a>
+the <a href="gems_sys.html#Xa"><tt>Xa</tt></a>
 vector) have been zeroed off are meaningless and are also zeroed
 off.&nbsp; However, the Om(alpha) values for such phases remain valid
 and show how much is the rest of the system is undersaturated with
@@ -1459,27 +1459,27 @@ records.&nbsp; <br>
   </dd>
   <dt><a name="pmXs"></a><big><b><big><tt>pmXs</tt></big></b></big>
 -&nbsp; Total mass of solid phases in the system (g), obtained from the
-    <a href="#bXs">bXs</a> vector</dt>
+    <a href="#bXs_">bXs_</a> vector</dt>
   <dd>&nbsp; &nbsp;</dd>
   <dd>The total mass of solid phases in the equilibrium state is
-automatically computed from the contents of <a href="gems_sys.html#bXs">bXs</a>
+automatically computed from the contents of <a href="#bXs_">bXs</a>
 vector after the GEM IPM algorithm has converged, as well as by
 browsing SysEq records in Equilibria Calculation mode. <br>
+<dd>&nbsp;</dd>
+<dt><a name="bXs_"></a><big><b><big><tt>bXs_</tt></big></b></big> -&nbsp;
+Total output bulk composition of all solid phases (in moles of Independent Components)<br>
+</dt>
+<dd>&nbsp; &nbsp;</dd>
+<dd>This output vector (of n(N) length) is computed from the primal solution
+vector <a href="#x">x</a> and from the table of bulk equilibrium compositions
+of multi-component phases <a href="#bXa">bXa</a> after the GEM IPM algorithm
+has converged, as well as upon browsing SysEq records in Equilibria Calculation mode.
+</dd><dd>Attention! In Process and GEM2MT scripts for sequential reactors,
+please use the <big><span style="font-family: monospace;">bXs</span></big> name
+of this data object instead of&nbsp; <span style="font-family: monospace;">bXs_</span> .
   </dd>
   <dd>&nbsp;</dd>
-  <dt><a name="bXs"></a><big><b><big><tt>bXs</tt></big></b></big>
--&nbsp;
-Total output bulk composition of all solid phases (in moles of
-Independent Components)<br>
-  </dt>
-  <dd>&nbsp; &nbsp;</dd>
-  <dd>This output vector (of n(N) length) is computed from the primal
-solution vector <a href="#x">x</a> and from the table of bulk
-equilibrium compositions of multi-component phases <a href="#bXa">bXa</a>
-after the GEM IPM algorithm has converged, as well as upon browsing
-SysEq records in Equilibria Calculation mode. </dd>
-  <dd>&nbsp;</dd>
-  <dt> <a name="bXa"></a><big><b><big><tt>bXa</tt></big></b></big> -
+<dt> <a name="bXa"></a><big><b><big><tt>bXa</tt></big></b></big> -
 Output bulk compositions of multi-component phases (in moles of
 Independent Components)</dt>
   <dd>&nbsp;&nbsp;</dd>
