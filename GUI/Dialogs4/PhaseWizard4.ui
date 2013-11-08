@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1297,7 +1297,7 @@
             </item>
             <item>
              <property name="text">
-              <string>W     Carbonate growth model following (Wolthers 2012)</string>
+              <string>W     Linear-rate growth/dissolution model (e.g. calcite, Wolthers 2012)</string>
              </property>
             </item>
             <item>
@@ -1310,7 +1310,7 @@
           <item>
            <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>Select a type code of the sorption kinetics model</string>
+             <string>Select a type code of the sorption/uptake kinetics model</string>
             </property>
            </widget>
           </item>
@@ -1392,7 +1392,7 @@
           <item>
            <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>Select a type of particle/pore size distribution and specific surface area correction</string>
+             <string>Select a type of mass-area shape factor dependency model</string>
             </property>
            </widget>
           </item>
@@ -1405,17 +1405,47 @@
             </item>
             <item>
              <property name="text">
-              <string>U    Uniform particle/pore size distribution</string>
+              <string>T     Empirical f(time) polynomial f = a + bt +ct^2 + dt^3 </string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>B    Binodal particle/pore size distribution</string>
+              <string>S     Empirical f(StabilityIndex) polynomial f = a + bt +ct^2 + dt^3 </string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>F    Empirical distribution function</string>
+              <string>A     Empirical f(SArea-change) polynomial f = a + bt +ct^2 + dt^3 </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>V     Empirical f(Volume-change) polynomial f = a + bt +ct^2 + dt^3 </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>M     Empirical f(Mass-change) polynomial f = a + bt +ct^2 + dt^3 </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>X     Empirical f(Amount-change) cubic polynomial f = a + bt +ct^2 + dt^3 </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>U     Uniform particle/pore size distribution (reserved)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>B     Binodal particle/pore size distribution (reserved)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>F     General particle/pore size distribution model (reserved)</string>
              </property>
             </item>
            </widget>
@@ -1436,12 +1466,37 @@
             </item>
             <item>
              <property name="text">
-              <string>A     surface-scaled rate model (k in mol/m2/s)</string>
+              <string>A     Surface-scaled rate constant (k in mol/m2/s), default</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>V     pore-volume-scaled model (k in mol/m3/s)</string>
+              <string>M     Surface-scaled rate constant (k in kg/m2/s)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>V     Pore-volume-scaled rate constant (k in mol/m3/s)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>W     Pore-volume-scaled rate constant (k in kg/m3/s)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>F      Absolute (unscaled) rate constant (k in mol/s)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>G      Absolute (unscaled) rate constant (k in kg/s)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>L      Linear growth/dissolution rate constant (v in m/s)</string>
              </property>
             </item>
            </widget>
@@ -1496,7 +1551,7 @@ Any parameter coefficients table will be allocated only if all its dimensions ar
           <item row="2" column="1">
            <widget class="QLabel" name="label_20">
             <property name="text">
-             <string>Number of parameter coefficients to be used in parallel reaction terms { 0 12 15 }</string>
+             <string>Number of parameter coefficients to be used in parallel reaction terms { 0 14 }</string>
             </property>
            </widget>
           </item>
@@ -1516,7 +1571,7 @@ Any parameter coefficients table will be allocated only if all its dimensions ar
           <item row="4" column="1">
            <widget class="QLabel" name="label_21">
             <property name="text">
-             <string>Number of minor/trace element uptake kinetics model parameters/coefficients (per SS end member)</string>
+             <string>Number of trace element uptake kinetics model parameters per end member { 0 6 }</string>
             </property>
            </widget>
           </item>
@@ -1526,7 +1581,7 @@ Any parameter coefficients table will be allocated only if all its dimensions ar
           <item row="5" column="1">
            <widget class="QLabel" name="label_24">
             <property name="text">
-             <string>number of parameter coefficients for the specific surface area correction equation { 0 1 3 5 }</string>
+             <string>Number of parameter coefficients for the mass-area shape factor equation { 0 1 3 5 }</string>
             </property>
            </widget>
           </item>
@@ -1582,7 +1637,7 @@ Any parameter coefficients table will be allocated only if all its dimensions ar
           <item row="0" column="1">
            <widget class="QLabel" name="label_27">
             <property name="text">
-             <string>Number of phases linked to this phase ( 0 if no links )</string>
+             <string>Number of phases linked to this phase ( 0 if no metastability linkages )</string>
             </property>
            </widget>
           </item>
@@ -1592,7 +1647,7 @@ Any parameter coefficients table will be allocated only if all its dimensions ar
           <item row="1" column="1">
            <widget class="QLabel" name="label_29">
             <property name="text">
-             <string>Number of parameters per link to another phase (0 by default)</string>
+             <string>Number of parameters per metastability linkage to another phase { 0 1 2 3 ... }</string>
             </property>
            </widget>
           </item>
