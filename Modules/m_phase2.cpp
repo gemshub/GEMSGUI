@@ -294,7 +294,7 @@ void TPhase::Set_KinMet_Phase_coef()
             php->nrpC = 14;
             php->naptC = 1;
 //            php->nFaces = 1;
-//            php->nAscC = 1;
+//            php->nAscC = 4;
             break;
         case KM_MOD_PAL: // = 'P' Dissolution/precipitation model of the form (Palandri 2004)
             php->PrpCon = S_ON;
@@ -304,8 +304,8 @@ void TPhase::Set_KinMet_Phase_coef()
 //            php->nSkr = 2;
             php->nrpC = 14;
             php->naptC = 1;
-//            php->nFaces = 1;
-//            php->nAscC = 1;
+            php->nFaces = 1;
+//            php->nAscC = 4;
             break;
         case KM_MOD_WOL: // = 'W' Carbonate growth model following (Wolthers 2012)
             php->PrpCon = S_ON;
@@ -315,7 +315,7 @@ void TPhase::Set_KinMet_Phase_coef()
             php->nrpC = 14;
             php->naptC = 1;
             php->nFaces = 1;
-            php->nAscC = 1;
+//            php->nAscC = 4;
             break;
         case KM_MOD_NUGR: // = 'U' Mineral nucleation and growth model with nuclei/particle size distr. (TBD)
 
@@ -361,6 +361,8 @@ void TPhase::Set_KinMet_Phase_coef()
         case KM_LNK_SURF: // = 'S' Link to (fraction of) solid substrate surface
         case KM_LNK_PVOL: // = 'P' Link to (fraction of) solid substrate (pore) volume
         case KM_LNK_MASS: // = 'M' Link to (fraction of) solid substrate mass
+        if( php->nlPc < 1 || php->nlPc > 4 )
+            php->nlPc = 4;
             break;
         default:  // other models
             break;
@@ -368,6 +370,14 @@ void TPhase::Set_KinMet_Phase_coef()
 
     switch(php->kin_t[KinSizedCode])
     {   //KinSizedCode
+        case KM_SIZED_ETM: // = 'T',   ///  Empirical f(time) cubic polynomial f = a + bt +ct^2 + dt^3 (default)
+        case KM_SIZED_ESI: // = 'S',   ///  Empirical f(lgSI) cubic polynomial f = a + bt +ct^2 + dt^3
+        case KM_SIZED_ESA: // = 'A',   ///  Empirical f(sarea-change) cubic polynomial f = a + bt +ct^2 + dt^3
+        case KM_SIZED_EVOL: // = 'V',  ///  Empirical f(volume-change) cubic polynomial f = a + bt +ct^2 + dt^3
+        case KM_SIZED_MASS: // = 'M',  ///  Empirical f(mass-change) cubic polynomial f = a + bt +ct^2 + dt^3
+        case KM_SIZED_MOL: //  = 'X',   ///  Empirical f(amount-change) cubic polynomial f = a + bt +ct^2 + dt^3
+            php->nAscC = 4;
+            break;
         case KM_SIZED_UNI: // = 'U'	Uniform particle/pore size distribution
         case KM_SIZED_BIN: // = 'B'	Binodal particle/pore size distribution
         case KM_SIZED_FUN: // = 'F' Empirical distribution function
@@ -376,10 +386,18 @@ void TPhase::Set_KinMet_Phase_coef()
             break;
     }
 
-    //KinResCode
-    // KM_RES_SURF = 'A',    /// surface-scaled rate model (k in mol/m2/s)
-    // KM_RES_PVS = 'V'      /// pore-volume-scaled model (k in mol/m3/s)
-
+    switch(php->kin_t[KinResCode])
+    {
+        case KM_RES_SURF_N: // = 'A',   surface-scaled rate constant (k in mol/m2/s), default
+        case KM_RES_SURF_M: // = 'M',   surface-scaled rate constant (k in kg/m2/s)
+        case KM_RES_PVS_N:  //  = 'V',   pore-volume-scaled rate constant (k in mol/m3/s)
+        case KM_RES_PVS_M:  //  = 'W',   pore-volume-scaled rate constant (k in kg/m3/s)
+        case KM_RES_ABS_N:  //  = 'F',   absolute (unscaled) rate constant (k in mol/s)
+        case KM_RES_ABS_M:  //  = 'G',   absolute (unscaled) rate constant (k in kg/s)
+        case KM_LIN_RATE:   //   = 'L'    linear growth/dissolution rate constant (v in m/s)
+        default:
+        break;
+    }
 }
 
 void TPhase::Set_SorpMod_Phase_coef()

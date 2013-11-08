@@ -108,9 +108,9 @@ ndh,    /// TW new: number of generic DH coefficients (rows in dhc array)
     // TKinMet stuff
     nPRk,  /// number of parallel reactions that affect amount constraints for k-th phase (1, 2, 3, ...), 1 by default
     nSkr,  /// number of (aqueous or gaseous or surface) species from other reacting phases involved, 0 by default
-    nrpC,  /// number of parameter (coefficients) involved in 'parallel reaction' terms (0 or 12)
+    nrpC,  /// number of parameter (coefficients) involved in 'parallel reaction' terms (0 or 14)
     naptC, /// number of parameter (coefficients) per species involved in 'activity product' terms (0 or 1)
-    nAscC, /// number of parameter coefficients in specific surface area correction equation ( 0, 1 or 5 )
+    nAscC, /// number of parameter coefficients in specific surface area correction equation ( 0 or 4 )
 
     numpC, /// number of uptake model parameter coefficients (per end member)
 
@@ -479,12 +479,23 @@ KinLinkCode = 5,
     KM_LNK_PVOL = 'P',    ///    Link to (fraction of) solid substrate (pore) volume
     KM_LNK_MASS = 'M',    ///	Link to (fraction of) solid substrate mass
 KinSizedCode = 6,
+    KM_SIZED_ETM = 'T',   ///  Empirical f(time) cubic polynomial f = a + bt +ct^2 + dt^3 (default)
+    KM_SIZED_ESI = 'S',   ///  Empirical f(lgSI) cubic polynomial f = a + bt +ct^2 + dt^3
+    KM_SIZED_ESA = 'A',   ///  Empirical f(sarea-change) cubic polynomial f = a + bt +ct^2 + dt^3
+    KM_SIZED_EVOL = 'V',  ///  Empirical f(volume-change) cubic polynomial f = a + bt +ct^2 + dt^3
+    KM_SIZED_MASS = 'M',  ///  Empirical f(mass-change) cubic polynomial f = a + bt +ct^2 + dt^3
+    KM_SIZED_MOL = 'X',   ///  Empirical f(amount-change) cubic polynomial f = a + bt +ct^2 + dt^3
     KM_SIZED_UNI = 'U',   /// 	Uniform particle/pore size distribution
     KM_SIZED_BIN = 'B',   /// 	Binodal particle/pore size distribution
     KM_SIZED_FUN = 'F',   ///    Empirical distribution function
 KinResCode = 7,
-    KM_RES_SURF = 'A',    /// surface-scaled rate model (k in mol/m2/s)
-    KM_RES_PVS = 'V'      /// pore-volume-scaled model (k in mol/m3/s)
+    KM_RES_SURF_N = 'A',   /// surface-scaled rate constant (k in mol/m2/s), default
+    KM_RES_SURF_M = 'M',   /// surface-scaled rate constant (k in kg/m2/s)
+    KM_RES_PVS_N  = 'V',   /// pore-volume-scaled rate constant (k in mol/m3/s)
+    KM_RES_PVS_M  = 'W',   /// pore-volume-scaled rate constant (k in kg/m3/s)
+    KM_RES_ABS_N  = 'F',   /// absolute (unscaled) rate constant (k in mol/s)
+    KM_RES_ABS_M  = 'G',   /// absolute (unscaled) rate constant (k in kg/s)
+    KM_LIN_RATE   = 'L'   /// linear growth/dissolution rate constant (v in m/s)
 
 };
 
