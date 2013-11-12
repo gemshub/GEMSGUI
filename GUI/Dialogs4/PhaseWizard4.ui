@@ -1392,7 +1392,7 @@
           <item>
            <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>Select a type of mass-area shape factor dependency model</string>
+             <string>Select a type of shape (sphericity) factor dependency model</string>
             </property>
            </widget>
           </item>
@@ -1410,27 +1410,27 @@
             </item>
             <item>
              <property name="text">
-              <string>S     Empirical f(StabilityIndex) polynomial f = a + bt +ct^2 + dt^3 </string>
+              <string>S     Empirical f(StabilityIndex) polynomial f = a + bx +cx^2 + dx^3 </string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>A     Empirical f(SArea-change) polynomial f = a + bt +ct^2 + dt^3 </string>
+              <string>A     Empirical f(SArea-change) polynomial f = a + bx +cx^2 + dx^3 </string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>V     Empirical f(Volume-change) polynomial f = a + bt +ct^2 + dt^3 </string>
+              <string>V     Empirical f(Volume-change) polynomial f = a + bx +cx^2 + dx^3 </string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>M     Empirical f(Mass-change) polynomial f = a + bt +ct^2 + dt^3 </string>
+              <string>M     Empirical f(Mass-change) polynomial f = a + bx +cx^2 + dx^3 </string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>X     Empirical f(Amount-change) cubic polynomial f = a + bt +ct^2 + dt^3 </string>
+              <string>X     Empirical f(Amount-change) cubic polynomial f = a + bx +cx^2 + dx^3 </string>
              </property>
             </item>
             <item>
@@ -1581,7 +1581,7 @@ Any parameter coefficients table will be allocated only if all its dimensions ar
           <item row="5" column="1">
            <widget class="QLabel" name="label_24">
             <property name="text">
-             <string>Number of parameter coefficients for the mass-area shape factor equation { 0 1 3 5 }</string>
+             <string>Number of adjustment coefficients for the shape (sphericity) factor  { 0 4 }</string>
             </property>
            </widget>
           </item>

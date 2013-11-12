@@ -1291,6 +1291,7 @@ pep->ccTime = 0.0;
         }
         //       if( nRec < 0 || pep->syt < pep->pet )
         { // current key in base set before
+          pe_reset();   // bugfix - to set current values back for the next run of the process
           pep->kdt = pep->Taui[2];
           pep->kst = -1;
           pep->c_Tau = pep->Taui[0];
