@@ -1392,7 +1392,7 @@
           <item>
            <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>Select a type of shape (sphericity) factor dependency model</string>
+             <string>Select a dependency of shape (sphericity) factor adjustment on system or particle properties</string>
             </property>
            </widget>
           </item>
@@ -1405,7 +1405,7 @@
             </item>
             <item>
              <property name="text">
-              <string>T     Empirical f(time) polynomial f = a + bt +ct^2 + dt^3 </string>
+              <string>T     Empirical f(time) cubic polynomial f = a + bt +ct^2 + dt^3 </string>
              </property>
             </item>
             <item>
@@ -1415,27 +1415,27 @@
             </item>
             <item>
              <property name="text">
-              <string>A     Empirical f(SArea-change) polynomial f = a + bx +cx^2 + dx^3 </string>
+              <string>A     Empirical f(SArea change) polynomial f = a + bx +cx^2 + dx^3 </string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>V     Empirical f(Volume-change) polynomial f = a + bx +cx^2 + dx^3 </string>
+              <string>V     Empirical f(Volume change) polynomial f = a + bx +cx^2 + dx^3 </string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>M     Empirical f(Mass-change) polynomial f = a + bx +cx^2 + dx^3 </string>
+              <string>M     Empirical f(Mass change) polynomial f = a + bx +cx^2 + dx^3 </string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>X     Empirical f(Amount-change) cubic polynomial f = a + bx +cx^2 + dx^3 </string>
+              <string>X     Empirical f(Amount change) cubic polynomial f = a + bx +cx^2 + dx^3 </string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>U     Uniform particle/pore size distribution (reserved)</string>
+              <string>U     Uniform particle/pore size distribution, f(d_sv change) polynomial</string>
              </property>
             </item>
             <item>
