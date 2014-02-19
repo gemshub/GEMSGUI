@@ -16,7 +16,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-
+#include <unistd.h>
 #include <cmath>
 #include <cstdio>
 #ifndef __unix

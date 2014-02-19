@@ -16,7 +16,7 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-
+#include <unistd.h>
 #ifndef __unix
 #include <io.h>
 #endif
