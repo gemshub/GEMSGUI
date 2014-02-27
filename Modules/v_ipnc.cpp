@@ -787,7 +787,15 @@ void IPNCalc::RPN_expr( char ck )
             break;
         case '?':
             while( (op = SPUSH()) != '(' )
+            {
+                if( op== '#' )
+                {
+                    err = "Missing ( :\n";
+                    err += input;
+                    Error(  "E18MSTran: ", err.c_str() );
+                }
                 Push( IT_O, INDEX( OPER, op ));
+            }
             input++;
             l = aItm.GetCount();
             Push( IT_T, 0 );

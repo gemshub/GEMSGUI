@@ -601,14 +601,17 @@ if( mtp->PvDDc == S_OFF && mtp->PvDIc == S_ON )  // Set of IC transport using re
 
 if( mtp->PsMO != S_OFF )
 {
+    gstring fname = pVisor->userGEMDir() + "ICaq-log.dat";
 // Preparations: opening output files for monitoring 1D profiles
-logfile = fopen( "ICaq-log.dat", "w+" );    // Total dissolved element molarities
+logfile = fopen( fname.c_str(), "w+" );    // Total dissolved element molarities
 if( !logfile)
   return iRet;
-ph_file = fopen( "Ph-log.dat", "w+" );   // Mole amounts of phases
+fname = pVisor->userGEMDir() + "Ph-log.dat";
+ph_file = fopen( fname.c_str(), "w+" );   // Mole amounts of phases
 if( !ph_file)
   return iRet;
-diffile = fopen( "ICdif-log.dat", "w+" );   //  Element amount diffs for t and t-1
+fname = pVisor->userGEMDir() + "ICdif-log.dat";
+diffile = fopen( fname.c_str(), "w+" );   //  Element amount diffs for t and t-1
 if( !diffile)
   return iRet;
 }

@@ -313,7 +313,9 @@ QString uPD = usrProjD.absolutePath();
         cmd += 	qPrintable( usrProjD.toNativeSeparators( uPD ) );
         cmd += "\" /e /y";
 
-        ofstream fdbg("out.log");
+        gstring fname = pVisor->userGEMDir();
+                fname += "out.log";
+        ofstream fdbg(fname.c_str());
         fdbg << "Creating GEMS user directory:  " << cmd.c_str() << endl;
 #endif
 

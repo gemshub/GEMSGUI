@@ -207,7 +207,7 @@ void TTreeModel::setGOcorr(const QModelIndex& index, QString& value, int nO, int
 
 QString TTreeModel::getGOcorr( const QModelIndex& index, int nO, int iN ) const
 {
-	QString res =  QString( visualizeEmpty(aObj[nO].GetStringEmpty( iN, 0 )).c_str() );
+    QString res =  QString::fromLatin1( visualizeEmpty(aObj[nO].GetStringEmpty( iN, 0 )).c_str() );
 	char code = lineFromIndex(index)->UGval;
 	double dat = res.toDouble();
         double tK = TMulti::sm->GetPM()->T; //TProfil::pm->tpp->TK;
@@ -232,7 +232,7 @@ QString TTreeModel::getGOcorr( const QModelIndex& index, int nO, int iN ) const
 
 QString TTreeModel::getObjValue( const QModelIndex& index, int nO, int iN ) const
 {
-	QString res =  QString( visualizeEmpty(aObj[nO].GetStringEmpty( iN, 0 )).c_str() );
+    QString res =  QString::fromLatin1( visualizeEmpty(aObj[nO].GetStringEmpty( iN, 0 )).c_str() );
     if( res == emptiness.c_str() )
     	return  res;
 	double vl;
@@ -267,7 +267,7 @@ QString TTreeModel::getObjValue( const QModelIndex& index, int nO, int iN ) cons
 		          //  res = res; // o_wo_wx
 		         break;
 		    default: // molality
-		    	res =  QString( visualizeEmpty(aObj[o_wd_ym].GetStringEmpty( iN, 0 )).c_str() );
+                res =  QString::fromLatin1( visualizeEmpty(aObj[o_wd_ym].GetStringEmpty( iN, 0 )).c_str() );
 		         break; /* error in DC class code */
 		 }
 	    break;
