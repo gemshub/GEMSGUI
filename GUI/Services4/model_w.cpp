@@ -206,7 +206,7 @@ QVariant TObjectModel::data( const QModelIndex& index, int role ) const
           case Qt::EditRole:
                if( nO == -1 )
                    return  QString("");
-            return  QString( visualizeEmpty(aObj[nO].GetStringEmpty( iN, iM )).c_str() );
+            return  QString::fromLatin1( visualizeEmpty( aObj[nO].GetStringEmpty( iN, iM ) ).c_str() );
           case Qt::ToolTipRole:
           case Qt::StatusTipRole:
                if( nO >= 0 )

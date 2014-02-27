@@ -24,6 +24,7 @@
 
  #include "v_object.h"
  #include "v_mod.h"
+ #include "visor.h"
 
 #endif
 
@@ -373,10 +374,12 @@ void TLMDataType::lm_print_default( double* par, double* fvec, double *CVM,
  *       nfev  : number of calls to *evaluate
  */
 {
+    gstring fname = pVisor->userGEMDir();
+            fname += "fit_func.out";
     double f, y, *t;
     int i, j;
 
-	fstream f_out("fit_func.out", ios::out|ios::app  );
+    fstream f_out(fname.c_str(), ios::out|ios::app  );
  if( !f_out.good() )
    return;
 

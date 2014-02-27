@@ -712,7 +712,8 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     if( aPHnoused.GetCount() > 0 || aCMnoused.GetCount() > 0)
     {  // List of Phases or Compos with some species discarded
         ios::openmode mod = ios::out;
-        const char *filename = "DiscardedRecords.txt";
+        gstring filename = pVisor->userGEMDir();
+                filename +=  "DiscardedRecords.txt";
 // This question is not needed anymore  DK 27.10.2005
 /*      if( !(::access( filename, 0 )) ) //file exists
             switch( vfQuestion3( window(), filename,
@@ -729,7 +730,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
                 return true;LoadMtparm
             }
 */
-        fstream f( filename, mod );
+        fstream f( filename.c_str(), mod );
         ErrorIf( !f.good() , filename, "Fileopen error");
         f <<   "Discarded Phase records\n";
         for( ii=0; ii<aPHnoused.GetCount(); ii++ )
