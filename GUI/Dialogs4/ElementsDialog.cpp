@@ -817,7 +817,7 @@ void ElementsDialog::setTreeWidget()
           {
             pdb_child = new QStandardItem( aTag );
             pdb_child->setCheckable( true );
-            pdb_child->setTristate( true );
+//            pdb_child->setTristate( true );
             rowItems.clear();
             rowItems << pdb_child;
             rowItems << new QStandardItem(aVer);
@@ -832,7 +832,7 @@ void ElementsDialog::setTreeWidget()
         if( pdb->rowCount()<1 ||  aTag != pdb->child(0)->text() )
         {  pdb_child = new QStandardItem( aTag );
            pdb_child->setCheckable( true );
-           pdb_child->setTristate( true );
+//           pdb_child->setTristate( true );
            pdb->insertRow(0, pdb_child);
         }
     }
