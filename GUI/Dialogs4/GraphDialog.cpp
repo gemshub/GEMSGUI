@@ -438,17 +438,16 @@ void GraphDialog::CmPrint()
     QPrintDialog dialog( &printer );
     if ( dialog.exec()  )
     {
-        QPainter painter(&printer);
+        QPainter painter;
+        painter.begin(&printer);
+        double xscale = printer.pageRect().width()/double(framePrn->width());
+        double yscale = printer.pageRect().height()/double(framePrn->height());
+        double scale = qMin(xscale, yscale);
+        painter.translate(printer.paperRect().x() + printer.pageRect().width()/2,
+                          printer.paperRect().y() + printer.pageRect().height()/2);
+        painter.scale(scale, scale);
+        painter.translate(-framePrn->width()/2, -framePrn->height()/2);
 
-        double dx = (double)(printer.widthMM()*printer.logicalDpiX())
-                    /(double)(framePrn->widthMM()*framePrn->logicalDpiX());
-        double dy = (double)(printer.heightMM()*printer.logicalDpiY())
-                    /(double)(framePrn->heightMM()*framePrn->logicalDpiY());
-
-        //cout << "dx  " << dx << " dy  " << dy << endl;
-        dx = min(dx, dy);
-        painter.scale(dx, dx);
-        painter.setClipRect(framePrn->geometry());
         groupBox->hide();
         framePrn->render( &painter );
         groupBox->show();
