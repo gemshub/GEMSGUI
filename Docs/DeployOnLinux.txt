@@ -1,0 +1,45 @@
+HOW TO PRODUCE AN INSTALLATION PACKAGE OF Qt5-based GEMS3 FOR LINUX
+
+(replaces Produce-linux.txt)
+
+This deployment process is based on the "gemsdeployqtapp.sh" script,
+which is an augmented and extended "deployqtapp.sh" script from
+https://github.com/goblincoding/qtscripts by goblincoding, see also
+http://goblincoding.com/2013/11/07/deploying-qt-5-applications-on-ubuntu-12-04/  
+
+1. Make sure that Qt5 SDK is installed with source code as /Qt in 
+your home directory; we assume that the Qt library is located as 
+"/home/you/Qt/5.3/src" and "/home/you/Qt/5.3/gcc_64" (or gcc_32).
+If not yet done, copy recursively the "/Docs/build-release" directory from the 
+folder where this file is located to the folder in which the "\gems-gui" folder
+is located. Typically, you should have "~/DevGEMS/trunk/gems-gui";
+"~/DevGEMS/trunk/standalone"; and "~/DevGEMS/trunk/build-release" folders
+at the same level. 
+
+2. Make sure that you have built (with the QtCreator) a release variant 
+of GEM-Selektor v.3 in "/home/you/DevGEMS/trunk/build-release", where 
+an executable script "gemsdeployqtapp.sh" and several other files are located; 
+if the script is not executable, open a terminal, cd to that directory, and run 
+   $ chmod u+x ./gemsdeployqtapp.sh.
+
+3. Open a Linux terminal, cd to "/home/you/DevGEMS/trunk/build-release", 
+and execute the script "gemsdeployqtapp.sh":
+   $ ./gemsdeployqtapp.sh gems3
+
+This will create an archive "Gems3-app.tgz". 
+Optionally, to investigate the script output, run
+   $ ./gemsdeployqtapp.sh gems3 > ./output.txt
+
+4. Rename the file "Gems3-app.tgz" to "Gems3.3-<rev1>.<rev2>-linux-x86-64.tgz", 
+for instance "Gems3.3-2558.960-linux-x86-64.tgz". It can now be provided. 
+
+5. For installation steps, see INSTALL-linux.txt. Install and test if it works.
+If gems3 does not start, try the following. In terminal, cd to 
+"/Gems3-app/platforms" and run there the script "fixdep.sh" with root rights:
+   $ sudo ./fixdep.sh
+
+This script needs superuser because it can automatically download the 
+necessary libraries for your platform.       
+
+
+
