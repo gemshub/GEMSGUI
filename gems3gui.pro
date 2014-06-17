@@ -24,10 +24,10 @@ greaterThan( QT_MAJOR_VERSION, 4 ): QT += widgets printsupport help concurrent
 
 !win32 {
   DEFINES += __unix
-  CONFIG( release ) {
-    QMAKE_CFLAGS_RELEASE = -O3
-    QMAKE_CXXFLAGS_RELEASE = -O3
-  }
+#  CONFIG( release ) {
+#    QMAKE_CFLAGS_RELEASE = -O3
+#    QMAKE_CXXFLAGS_RELEASE = -O3
+#  }
 }
 
 macx-g++ {

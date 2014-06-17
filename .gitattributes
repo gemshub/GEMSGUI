@@ -13,6 +13,7 @@ Docs/INSTALL.linux.txt -text
 Docs/INSTALL.macosx.txt -text
 Docs/INSTALL.windows.txt -text
 Docs/SeeLibraryInFinder.workflow/Contents/QuickLook/Preview.png -text
+Docs/build-release/gems3.png -text
 GUI/Icons/CalculateBCCIcon.png -text
 GUI/Icons/CalculateBCCIcon24.png -text
 GUI/Icons/CalculateGEMIcon.png -text
