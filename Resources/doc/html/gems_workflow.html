@@ -23,39 +23,23 @@
       <p><a href="#OPENPROJECT">Opening the Modeling Project</a> </p>
       <p><a href="#CALCEQSTATE">Calculation of Equilibrium State</a> </p>
     </div>
-    <div style="margin-left: 80px;">
+    <div style="margin-left: 80px;"> </div>
+    <div style="margin-left: 40px;">
       <p><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3230">Examination
           of Results</a></p>
       <p><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3240">Modifying
-          and Re-calculating Existing Systems</a></p>
+          and Re-calculating the System</a></p>
       <p><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3250">Calculation
-          of New Equilibria within the project</a> </p>
-      <p><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3260">Sequential
-          Reactors</a> </p>
+          of New Equilibria within the Project</a> </p>
     </div>
+    <div style="margin-left: 80px;"> </div>
     <div style="margin-left: 40px;">
       <p><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3270">Setting
           up and Running Process Definitions</a> </p>
     </div>
-    <div style="margin-left: 80px;">
-      <p><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3271">Creating
-          or Modifying PROCES records</a> </p>
-      <p><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3271">Modifying
-          IPN Math-Scripts in process definitions</a> </p>
-      <p><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3273">Running
-          the process simulation</a> </p>
-    </div>
     <div style="margin-left: 40px;">
       <p><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3280">Setting
-          up and Running Graphic-Demo Data Samplers</a> </p>
-    </div>
-    <div style="margin-left: 80px;">
-      <p><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3281">Creating
-          or Modifying Gtdemo Records</a> </p>
-      <p><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3282">Modifying
-          Math-Scripts&nbsp; in Gtdemo Samplers</a> </p>
-      <p><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3283">Running
-          Gtdemo Samplers</a> </p>
+          up and Running Graphic-tabulation-Demo Data Samplers</a> </p>
     </div>
     <div style="margin-left: 40px;">
       <p><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3290">Plotting
@@ -105,7 +89,7 @@
         Tutorial</a> and leave the HelpViewer window open; drag it to the second
       monitor, if you have two monitors. Work with GEMS3 code, following advice
       in Tutorial, whichprovides for most of the necessary skills. </p>
-    <p>The GEMS3 code has two main modi of operation: <a href="#EQCALCMODE">"Equilibria
+    <p>The GEMS3 code has two main modes of operation: <a href="#EQCALCMODE">"Equilibria
         Calculation"</a> and <a href="#DBMANMODE">"Database Management"</a>. In
       the GEMS3 main frame window, you can switch between them using two icons
       located just below the "Modules" menu item. Watch tooltips on the
@@ -117,8 +101,8 @@
       concentrations go directly into the material balance equations, and the
       "product species" defined by their LMA expressions and equilibrium
       constants of reactions with the master species (see more about that
-      in&nbsp; <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/g_litref.html#1999PAR/APP">[1999PAR/APP]</a>).
-      <br> </p>
+      in&nbsp; <a href="gems_litref.html#1999PAR/APP">[1999PAR/APP]</a>). <br>
+    </p>
     <p>In GEM approach, no "master" and "product" species are distinguished. The
       stoichiometry of all gaseous, aqueous, liquid, solid or surface species is
       written as chemical formulae in terms of&nbsp; Independent Components
@@ -142,8 +126,8 @@ in
       )&nbsp; of the whole system. The GEM algorithms seek for values of&nbsp; <i>x<sub>j
           &nbsp;</sub></i>such that, for the imposed material balance and
       optional metastability constraints, a minimum is provided for <i>G</i> (<i>x</i>
-      ) (see <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/g_litref.html#1997KAR/CHU">[1997KAR/CHU]</a>,
-      for more information). <br>
+      ) (see <a href="gems_litref.html#1997KAR/CHU">[1997KAR/CHU]</a>, for more
+      information). <br>
     </p>
     <p>Thus, to set up a single GEM chemical equilibrium problem, the following
       input items must be provided: </p>
@@ -171,10 +155,10 @@ of
     <hr size="2" width="100%">
     <h2> <a name="EQCALCMODE"></a>"Equilibria Calculation" Mode</h2>
     This is the usual mode for calculation of geochemical models using GEMS3
-    package.&nbsp; Such calculations always refer to the <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3300">thermodynamic
-database
-      </a>which contains input data about stability of all species at wide range
-    of temperature, pressure and compositions of the systems. At present level,
+    package.&nbsp; Such calculations always refer to the thermodynamic
+    database<span style="color: #0000ee;"><span style="text-decoration: underline;"></span></span>
+    that contains the input data about stability of all species at wide range of
+    temperature, pressure and compositions of the systems. At present level,
     such "condensed chemical knowledge" databases are quite extensive, although
     most of published databases still&nbsp; cannot be simply mixed for&nbsp;
     modeling calculations before special procedures for matching thermodynamic
@@ -184,508 +168,206 @@ database
     earth elements); or by phase types (not all systems require consideration of
     adsorption or multi-component non-ideal solid solutions), or by the range of
     temperature/ pressure conditions (many high-PT minerals are not considered
-    in the low-temperature geachemical speciation models). Therefore, it may not
+    in the low-temperature geochemical speciation models). Therefore, it may not
     be convenient always to browse the whole thermodynamic database having 90%
-    of species or phases switched off! To avoid this, a <span style="text-decoration: underline;">"Modeling
+    of species or phases switched off! To avoid this, a <span style="text-decoration: underline;">"Modelling
       Project"</span><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3400">
     </a>concept has been introduced.
-    <p>In general terms, the system profile is a template which defines a subset
-      of thermodynamic database and certain default configuration of chemical
-      systems used for setting up certain class of geochemical models. This
-      template is normally created by the user and stored as a directory of GEMS
-      database extension files within the user's home directory <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3350">(more)</a>.&nbsp;
-On
-      the next modeling session, the system profile record is also used for
-      detecting the changes made by the user in thermodynamic database, and
-      updating already created system definitions, if appropriate. This makes it
-      easy to do small extensions and fixes without creating a new system
-      profile and may save a lot of time and effort. Every expert in geochemical
-      modeling knows that it is hardly possible to compile all the relevant
-      species in advance, very often it turns to be that&nbsp; the model
-      interpretation points to inclusion of a few important phases or complexes
-      overlooked by everybody before. To our knowledge, no other geochemical
-      modeling program permits to do it so easy and quickly as this one! </p>
+    <p>In general terms, the modelling project is a template which defines a
+      subset of thermodynamic database and certain default configuration of
+      chemical systems used for setting up certain class of geochemical models.
+      This template is normally created by the user and stored as a directory of
+      GEMS database files within the user's /Gems3/projects folder.&nbsp; In the
+      next modeling session, the Project record is also used for detecting the
+      changes made by the user in the project thermodynamic database, and
+      updating already created system definitions, if necessary. This makes it
+      easy to do small extensions and fixes without creating a new modelling
+      project and thus may save a lot of time and effort. Every expert in
+      geochemical modeling knows that it is hardly possible to compile all the
+      relevant species in advance, very often it turns out that the model
+      interpretation needs to include a few important phases or complexes that
+      were overlooked before. To our knowledge, no other geochemical modeling
+      program permits to do it so easy and quickly as GEM-Selektor.&nbsp; </p>
     <h3> <a name="OPENPROJECT"></a>Opening the Modeling Project<tt><br>
       </tt></h3>
-    So, to start modeling calculations in GEMS means to get into a system
-    profile. For the beginners, one profile ("Default") is automatically created
-    on the first start of GEMS. We recommend first to work with this default
-    profile for some time (as described in the following sections), before
-    starting to create your own system profiles.&nbsp; This profile is built on
-    a major-element core part of GEMS thermodynamic database (covering 20
-    elements) and can be used for solving of a wide range of "usual" geochemical
-    problems in aqueous systems with gas and many simple mineral phases.
-    <p>Just press the "<tt>Equilibria Calculation Mode</tt>" toolbar button on
-      the GEMS3 main frame (or select the mode in "Modules" menu). A "<tt>Project
-        Remake Wizard"</tt> dialog will appear, <a href="gm_project.html#PROJECT_MWIZARD">described
-        in detail here</a>. After an existing project is open, or a new project
-      is created,&nbsp; you can compute the equilibrium states. To create a new
-      equilibrium state, the temperature, pressure and the "recipe" for bulk
-      system composition and constraints must be provided (<a href="gems_bcc.html">details
-        here</a>).<br>
-    </p>
+    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->To
+      start modeling calculations in GEM-Selektor means to get into a modelling
+      project (upon the first installation, several test projects become available).
+      In the upper-left corner of the main window frame, click on the
+      'Computation of Equilibria' icon&nbsp; <img src="EquilibriumModeIcon24.png">&nbsp;&nbsp;
+      then select a modelling project from the appearing list and open it, or <a
+        href="gm_project.html#PROJECT_CREATE"><span style=" text-decoration: underline; color:#0000ff;">create
+          a new project</span></a>. For beginners, we recommend first to work
+      with test projects for some time, before creating your own projects.<!--EndFragment--></p>
     <h3><a name="EQCALC"></a>Calculation of Equilibrium State</h3>
-    Pressing once a big "GEM IPM" button creates an internal data structure for
-    this chemical system definition and sends it to Gibbs energy minimization
-    using the Interior Points Method. When calculation is finished, you can
-    examine the results by pressing the "<tt>Parameters</tt>" button.
-    <p>Now, let us run your first calculation by left-mouse-button-click on the
-      "GEM IPM" button. A small progress dialog window with "<tt>Running IPM...</tt>"
-      message and a progress bar will appear. This window shows the current
-      SysEq record key and the number of iterations, total mass of gas, aqueous
-      solid phases&nbsp; (in grams),&nbsp; pH, pe and ionic strength of aqueous
-      electrolyte, updated every one or two seconds. A "<tt>Cancel</tt>" button
-      in the lower right corner breaks the calculation. When the IPM calculation
-      is converged, i.e. the equilibrium speciation is computed, the appearance
-      of the progress dialog changes. It displays now "<tt>Converged at
-        DK=&lt;number&gt;</tt>"&nbsp; with two buttons below - "<tt>Accept</tt>"&nbsp;
-and&nbsp;
-      "<tt>Discard</tt>".&nbsp; Both return back to the <tt>SysEq dialog</tt>,&nbsp;
-      the difference is that&nbsp; the&nbsp; "<tt>Accept</tt>" button will
-      pack&nbsp; the system definition plus IPM calculation results and save
-      them to database under the current SySeq record key;&nbsp; the "<tt>Discard</tt>"
-      button will not save the results.&nbsp; The SysEq record is saved also
-      when pressing the&nbsp; "Save" button on the the <tt>SysEq dialog. </tt>Now,
-      press "<tt>Accept" </tt>to continue. </p>
-    <h4> <a name="P3230"></a><tt>3.2.3. Examination of Results (+Scroll Lists,
-        Print, Calculator)</tt></h4>
-    To see what we have calculated, press the "<tt>Parameters</tt>" button on<tt>
-      SysEq dialog</tt>.&nbsp; An EqDemo window should appear with three
-    screenforms which can be seen one at a time upon pressing the <tt>EqIcp,
-      EqPhp</tt> and<tt> EqDcp </tt>buttons in the top part of the window. <tt>Close</tt>&nbsp;
-button
-    gets back to the&nbsp; <tt>SysEq dialog</tt>.&nbsp; Press the <tt>EqPhp</tt>&nbsp;
-button&nbsp;
-    to see which phases appear in just calculated equilibrium state between the
-    normative&nbsp; seawater and the excess dry atmospheric air at ambient
-    conditions.
-    <p>On the screenform, a list of phase names now appears with several linked
-      scrolllists containing some general equilibrium parameters for phases. Put
-      mouse pointer on any of data fields and wait a couple of seconds - you
-      will see a short (one-line) explanation about this data object right near
-      the cursor. If one of the data fields is left-clicked, the same
-      explanation (plus the data object label and index of the clicked cell)
-      appears in the bottom line of the window.&nbsp; Press right mouse button
-      to see a small pop-up menu&nbsp; - usually with "<tt>Help</tt>"&nbsp; and
-      "<tt>Calculator</tt>" lines. Choosing <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P5300">"<tt>Help</tt>"</a>&nbsp;
-will
-      provide a HTML help page about this data object (under construction!). <a
-        href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/GEMS-Linux-USREF.html#P6880">Calculator</a>
-      invokes a convenient calculator widget, you can fill in a cell or a range
-      of cells within the data object field with certain value (e.g., zero) or
-      apply any arithmetic operation to them (the second operand must be typed
-      in the calculator line). The pop-up menu&nbsp; on a list of species or
-      phases will contain a "<tt>Show record</tt>" instead of a "<tt>Calculator</tt>"
-      line. Choosing "<tt>Show record</tt>" will display contents of the
-      respective <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P33D1">ICOMP</a>,
-      <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P33D3">DCOMP</a>,
-      <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P33D4">REACDC</a>
-      or <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P33D6">PHASE</a>
-      definition records from the thermodynamic database (you can edit these
-      records only in "<tt><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3300">Thermodynamic
-          Database</a></tt>" mode). </p>
-    <p>The lists of components and phases are usually large, only small part of
-      them appears in the window as linked scroll lists. You can quickly scan
-      the whole system by putting mouse pointer on a slider on any of the scroll
-      bars and dragging it up and down.&nbsp; Within our example (<tt>EqPhp</tt>
-      screenform) its possible to see that only aqueous and&nbsp; gas phases are
-      present plus single-component mineral phases Fluorapatite,&nbsp; Hematite,
-      and Braunite.&nbsp; Other phases from a long list of those included into
-      calculation were unstable and hence zeroed off by the IPM algorithm. </p>
-    <p>Now, press a <tt>EqDcp</tt> button to display the&nbsp; "Species"
-      screenform.&nbsp; Basically, it is arranged in the same way as "Phase"
-      screenform: on linked scroll lists, one can see the full speciation
-      pattern in all phases (species go in the same order as phases, i.e. first
-      all aqueous species, then gases, solid solutions and single-component
-      phases).&nbsp; In addition to vector x (primary solution of the
-      equilibrium calculation problem), some other useful vectors such as
-      molalities and activity coefficients are displayed. Data from all these
-      vectors (also in most other screenforms) can be sampled in <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3280">GTDEMO</a>
-      or used in <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3270">PROCES</a>
-      definition <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P4000">Math
-        Scripts</a> by labels (with indices or names of species from the list in
-      the leftmost column) visible on top of each vector.&nbsp; Scroll the lists
-      down to see the speciation (all aqueous and gas species present in less
-      than 10<sup>-18</sup> moles are zeroed off). </p>
-    <p>Press a <tt>EqIcp</tt> button to display the "Independent Components"
-      screenform.&nbsp; Here, some general information about system definition
-      and properties of aqueous phase is displayed.&nbsp; The first linked
-      scroll list shows the input bulk composition and the output "dual
-      solution" of the IPM problem - the u vector of chemical potentials of
-      independent components. Next below is another linked scroll list showing
-      total concentrations of independent components dissolved in aqueous
-      electrolyte. If gas phase is present in the problem formulation (not
-      necessarily stable) then a third scroll list will appear below with
-      partial pressures and fugacities of gases. </p>
-    <h4> <a name="P3240"></a><tt>3.2.4. Modifying and Re-calculating Existing
-        System Records</tt></h4>
-    On the demo screenforms of EqDemo window, one can see quite realistic model
-    of metastable equilibrium between the normative seawater of 35 g/kg salinity
-    open to the atmosphere at P=1 bar, T=25 C.&nbsp; There are still some minor
-    problems; for instance, braunite appears as a stable manganese phase&nbsp;
-    and fluorapatite keeps some phosphorus and fluoride, although we know that
-    these phases normally do not precipitate from seawater. So, next exercise
-    will be to modify this definition of chemical system such as to exclude both
-    monerals from the equilibrium state.
-    <p>To do this, we have to close the <tt>EqDemo</tt> window and get back to
-      the <tt>SysEq dialog</tt>. Pressing a "<tt>Thermodynamic System</tt>"
-      button&nbsp; in the upper part of the dialog window will get you into
-      another collection of four screen forms - a "<tt>System</tt>"
-      window.&nbsp; The "<tt>Compos</tt>" screenform permits to set up bulk
-      chemical composition of the system using references to <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P33D2">COMPOS</a>
-      (GCO) definition records; it also contains two identification lines where
-      the user can write what is this system, and optional bibliographic
-      reference fields. The&nbsp; "<tt>Icomp</tt>"&nbsp; screen form permits to
-      configure a list of independent components to be taken into the
-      equilibrium calculation (by toggling some <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P33D1">ICOMP</a>s
-      on/off&nbsp; putting pluses or minuses in the leftmost column); this
-      screenform also displays the total bulk composition vector b and permits
-      to add to it some quantities of independent components by typing them into
-      a&nbsp; bi_&nbsp; (rightmost) vector. The "Phase" screen form lets you
-      toggle some phases on/off and to set metastability parameters and specific
-      surface areas, if necessary. The "<tt>Dcomp</tt>" screen form permits to
-      configure the list of species to be taken into calculation of equilibria;
-      the formula of any of included (toggled on) species can be used for
-      incrementing the total bulk composition of the system via entering
-      quantity of this species into xd_ vector.&nbsp; The gEx_&nbsp;
-      vector&nbsp; can be used for setting up positive or negative increments of
-      standard Gibbs energy value for any species, <i>applicable within this
-        particular system definition only,</i> not altering the thermodynamic
-      database. This vector provides a tool of unmatched flexibility for playing
-      around with thermodynamic data, up to installing a prohibitive increment
-      of +100 kJ/mole or more in order to eliminate the dependent component from
-      equilibrium <i>without changing dimensions of the problem</i>. </p>
-    <p>This last facility is what we will try in our example calculation.&nbsp;
-      Press the "<tt>Dcomp</tt>" button and drag down the scroll list
-      until&nbsp; you find a "<tt>s:CaPO:fluorapatite:rs</tt>" line in the list
-      of DCOMP/REACDC record keys. Then put cursor into gEx_ column cell against
-      this record key and click on the left mouse button. A g0 increment of +80
-      kJ/mol already stays in this cell, and it is still insufficient to
-      suppress fluorapatite - so highly oversaturated is seawater to this
-      mineral!&nbsp; Edit this cell to 200000&nbsp; and press <tt>Tab</tt> or
-      move the cursor&nbsp; elsewhere to take changes into effect. Then look
-      for&nbsp; "<tt>s:MnSiO:braunite:rs</tt>:" in the list. Against it, a
-      +90000 J/mole increment has already been done, and it still tends to
-      precipitate. Change the increment to 200000 and press <tt>Tab</tt> to
-      leave the cell. Press "<tt>Close</tt>" button to get back to <tt>SysEq
-        dialog</tt> window.&nbsp; Finally, press "<tt>GEM IPM</tt>" button to
-      re-calculate the equilibrium state. </p>
-    <p>Press "<tt>Accept</tt>" to save the results when calculation is finished.
-      Examine the results by pressing "<tt>Parameters</tt>" button, as described
-      <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3230">above</a>
-      . You sould find that the Whitlockite phase appears instead of
-      Fluorapatite, and Hausmannite - instead of Braunite. The model
-      metastability can be further tuned exactly in the same way. </p>
-    <h4> <a name="P3250"></a><tt>3.2.5. Calculation of New Equilibria within
-        the System Profile</tt></h4>
-    A next natural question is - how the equilibrium state may change with
-    temperature and/or pressure? This is very easy to do in GEMS - it just
-    requires to create a new SysEq record. Let us try the seawater-air system at
-    1 <sup>o</sup>C,&nbsp; 1 bar.&nbsp; From <tt>SysEq dialog</tt>,&nbsp;
-    press the "<tt>New</tt>"&nbsp; button; this will open a small "<tt>SysEq:
-      New record key</tt>" dialog&nbsp; with the&nbsp; "<tt>Default:G:Seawater:0:0:1:25:0:"</tt>&nbsp;
-disassembled
-    into eight edit lines.&nbsp; First line always contains the name of the
-    system profile (Default); second line is always "G" - Gibbs energy is
-    minimized (minimization of other thermodynamic potentials is under
-    construction);&nbsp; third line is an identifier of chemical system
-    ("Seawater); fourth line is variant number of system composition definition
-    (0, can be any integer up to 9999); fifth line is total volume constraint of
-    the system (0 means no constraint); sixth line is pressure (1 bar); seventh
-    line is temperature (25 <sup>o</sup>C); and eigth line is number of variant
-    for thermodynamic data constraints (any integer between 0 and 999). Seventh
-    line is what we have to change - edit it to 1 (1 <sup>o</sup>C) and press
-    the<tt> OK </tt>button.
-    <h5> <a name="P3251"></a>Format of SysEq record key (numbers below are
-      field length in bytes and types):</h5>
-    <table border="3" cellpadding="3" cellspacing="3">
-      <tbody>
-        <tr>
-          <td>Profile_id</td>
-          <td>PotM</td>
-          <td>System_id</td>
-          <td>VarCSD</td>
-          <td>Volume</td>
-          <td>Pressure</td>
-          <td>Temperature</td>
-          <td>VarTD</td>
-        </tr>
-        <tr>
-          <td>str_10</td>
-          <td>str_3</td>
-          <td>str_12</td>
-          <td>int_5</td>
-          <td>float_8</td>
-          <td>float_8</td>
-          <td>float_8</td>
-          <td>int_4</td>
-        </tr>
-      </tbody>
-    </table>
-    <p>A small dialog "Reorganization of data fields"&nbsp; appears now, with a
-      new SysEq record key. Press&nbsp; "<tt>Bypass</tt>" button as we do not
-      need to re-structurize the system - just to recalculate thermodynamic data
-      to different temperature (right now done autonmatically).&nbsp; A
-      "System::"&nbsp; window now appears. You can edit the first identification
-      line by adding&nbsp; "... at 1 bar 1 C" or something like that and press
-      the "<tt>Close</tt>" button to come back to&nbsp; <tt>SysEq dialog. </tt>The
-      list of new values of thermodynamic data for all species in the system
-      profile can be checked by pressing the "<tt>T,P &amp; Thermodynamic Data"
-      </tt>button in the lower left corner; the numbers will remain the same
-      until different temperature or pressure is specified by picking up an
-      existing&nbsp; SysEq&nbsp; record or creating a new record, just as we did
-      before. Now, press the big "<tt>GEM IPM</tt>" button to calculate the new
-      equilibrium state. Press "<tt>Accept</tt>" to save the results when
-      calculation is finished. Examine the results by pressing "<tt>Parameters</tt>"
-      button, as described <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3230">above</a>
-      . Now you can see what has changed compared to 25 <sup>o</sup>C; for
-      instance, concentrations of dissolved gases such as O2@&nbsp; increased;
-      the total dissolved carbon is now&nbsp; 2.3169 millimolal against 2.1032
-      at 25 <sup>o</sup>C; pH is somewhat lower, quartz appears as stable
-      phase, hausmannite disappears and so on. </p>
+    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->After
+      opening a project, select a single system from the list on the left side
+      and click on the 'Calculate equilibrium state' toolbar icon <img src="CalculateGEMIcon24.png">
+      . Alternatively, create a new single system using 'Record' 'Create' or
+      'New(Clone)' menu command or toolbar icon that open the "Recipe Dialog".
+      In a newly-created project, where no records with single system
+      definitions exist yet, the Recipe Dialog will open automatically upon
+      creating the new system definition record key.
+      <!--EndFragment--></p>
+    <br>
+    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Clicking
+      on the 'Calculate equilibrium state' toolbar icon <a href="click+on+the+%27Calculate+equilibrium+state%27+toolbar+icon+%3F+."><img
+          src="CalculateGEMIcon24.png"></a> (or "Calculate" "Run GEM IPM" menu
+      command)<!--EndFragment--> will create an internal data structure for this
+      chemical system definition, then sent to Gibbs energy minimization using
+      the Interior Points Method. During the calculation, you will see the
+      "Progress Dialog" that shows the current SysEq record key; the number of
+      iterations done; total mases of gas, aqueous solid phases&nbsp; (in
+      grams),&nbsp; pH, pe and ionic strength of aqueous electrolyte, updated
+      every one or two seconds. When finished, this dialog will show "Accept"
+      and "Dismiss" buttons. Click the "Accept" button to save the results into
+      this system database record, or "Dismiss" not to save (e.g. in the case of
+      error).&nbsp;</p>
+    <h3> <a name="P3230"></a>Examination of Results<tt><br>
+      </tt></h3>
+    After closing the Progress Dialog, you can examine the main results in the
+    "Results: Equilibrium State" tab of the "Single System" window. More detail
+    can be seen in EqDemo window pages upon "View" "GEM IPM task results..."
+    menu command (or the respective toolbar button). The EqDemo window has five
+    pages - EqIC, EqPh, EqDC, EqSurf and EqGen. <a href="gems_sys.html">Read
+      here more </a>about the information shown in these windows and how to
+    explore the GEM results.&nbsp; <br>
+    <br>
+    <h3> <a name="P3240"></a>Modifying and Re-calculating the System</h3>
+    In order to compute an equilibrium state in a modified, a new "recipe" must
+    be created or modified that defines the total bulk composition of the
+    chemical system and optional metastability constraints. Next, this bulk
+    composition (vector B_) must be checked for consistency with the list of
+    phases and their components; possible conflicts can be resolved either by
+    adding missing amounts of Independent Components to vector B_ or turning off
+    incompatible Dependent Components and/or phases. When there is no conflict
+    between the bulk composition and phases/components, the whole system setup
+    including thermodynamic data for components and phases will be condensed
+    into a "GEM Task", i.e. an internal data structure delivered to the GEM IPM
+    algorithm for calculation of primal (equilibrium speciation) and dual
+    (chemical potentials of independent components) solutions. After the GEM IPM
+    algorithm has converged, the results solutions can be saved together with
+    the recipe into a SysEq record and.or examined as described above. This
+    typical workflow for computing equilibria in a single system is <a href="gems_bcc.html#HOWTO">described
+      in detail here</a>.<br>
+    <br>
+    <h3> <a name="P3250"></a>Calculation of New Equilibria within the Project</h3>
+    A natural question is - how the equilibrium state may change with
+    temperature and/or pressure? This is very easy to do in GEM-Selektor - it
+    just requires to 'clone' a new SysEq record and change something in the
+    record key (<a href="gems_rekey.html#DBM_SysEq">see description here</a>) in
+    the appearing Record Key Dialog. For instance, to calculate a new
+    equilibrium state at 75 C instead of default 25 C, simply put 75 into the
+    'Temperature' field; to change the pressure to 100 bar from default 1 bar,
+    change in the 'Pressure' field. After completing the new record key, the
+    Recipe Dialog appears. If you do not wish to change the composition of the
+    system, just proceed to calculation of equilibrium state, otherwise do
+    corrections/extensions to the recipe and proceed. Thermodynamic data will be
+    corrected to given T and/or P automatically. The new SysEq will be actually
+    created after you click "Accept" button in the Progress Dialog. <br>
     <p>In quite a similar way, by "cloning" already created SysEq records, the
       impact of changed bulk composition onto chemical equilibrium states can be
-      investigated, either at fixed or variable T,P. Please, try it! First,
-      select again the&nbsp; "<tt>Default:G:Seawater:0:0:1:25:0:</tt>" by
-      pressing <tt>"Select</tt>" button on SysEq dialog window and pointing to
-      the record key in the list. Then press the "New" button, modify the record
-      key to "<tt>Default:G:Seawater:1:0:1:1:0:" </tt>and press<tt> OK, </tt>then<tt>
-        "Bypass". </tt>A "System::"&nbsp; window now appears. You can edit the
-      first identification line changing it to " Seawater at 1 bar 1 C closed at
-      1 bar 25 C". Then change the bulk composition of the system by removing
-      practically all the atmospheric air. To do this, find "AtmAirSim" name in
-      the list of Compos record keys, and, against this name to the right,
-      change the <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/GEMS-Linux-USREF.html#P6104">units
-of
-        measurement</a> from "M" (moles) to "g" (grams) in&nbsp; the XAun_
-      column, and 10 to 0.1 in the xa_ column. This actually means that we
-      removed 9.9999 kg of air from the bulk composition of the system and thus
-      made 1 kg of seawater nearly "closed" with respect to the atmosphere.
-      Please, note that you can also enter <i>negative</i> quantities into xa_,
-      xd_, and&nbsp; bi_&nbsp; vectors; the program checks only that the numbers
-      in the b_ vector are non-negative and will issue a warning if you have
-      made a mistake. All right, after you have changed the composition, press "<tt>Close</tt>"
-      button and then the "<tt>GEM IPM</tt>" button to calculate the new
-      equilibrium state. Press "<tt>Accept</tt>" to save the results. Examine
-      the results by pressing "<tt>Parameters</tt>" button, as described <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3230">above</a>
-      . Now you can see what has changed compared to the open seawater at 25 <sup>o</sup>C.&nbsp;
-For
-      instance, we have calculated a terrific pH = 8.5, f(CO<sub>2</sub>) = 13.2
-      Pa and f(O<sub>2</sub>) = 0.08 bar (normal values are pH about 8.2, f(CO<sub>2</sub>)
-      = 35 Pa and f(O<sub>2</sub>)=0.21 bar). This is just a consequence of
-      "cooling down" a closed parcel of normative seawater equilibrated to the
-      atmosphere at 25 <sup>o</sup>C. Now, you are prepared to an infinite play
-      with the seawater model - for instance, you can create a next system
-      immediately, by adding 1 millimole of carbon or "Redfield organic matter"
-      Compos (CorgRedf) to see a profound difference in speciation and partial
-      pressures of gases in reduced seawater. This. however, goes far beyond the
-      scope of this manual. You should have now a feeling that it is really easy
-      to check various geochemical ideas while performing calculations with
-      GEMS! </p>
-    <h4> <a name="P3260"></a><tt>3.2.6. Sequential Reactor Models</tt></h4>
-    Sequential reactors modeling is often used to reproduce changes in stable
-    mineral assemblage and equilibrated (mobile) aqueous or gas phases in
-    irreversible processes like infiltration metasomatosis, weathering,
-    evaporation, or evolution of aqueous fluid and wall-rock minerals in
-    convective hydrothermal systems (Karpov, 1981; Borisov and Shvarov,1992).
-    The idea is to divide a big "megasystem" into several local-equilibrium
-    "reactors". Aqueous solution of some initial bulk composition enters (in
-    some predefined quantity <tt>qAqu</tt>) into the first reactor containing
-    also the bulk composition of some rock in quantity <tt>qRock</tt>. Then the
-    fluid reaches equilibrium with the rock, possibly dissolving some minerals
-    and precipitating others. Afterwards, certain quantities of phases (e.g.,
-    aqueous fluid) are displaced to the next reactor, with the same or different
-    rock composition, or with another fluid composition to mix and equilibrate,
-    possibly at different temperature and pressure. The process is repeated
-    until all the desired sequence of irreversible changes is modelled.
-    <p>To run such a model in GEMS, one first has to create and calculate a
-      start SysEq record, e.g., representing&nbsp; equilibrium in the initial
-      fluid only. Next, perform the following algorithm. </p>
-    <ol>
-      <li> <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3250">Create
-          new</a> SysEq record key (we recommend changing only last field at
-        constant T,P) and then select "<tt><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3440">Rebuild</a></tt>"
-        option to get into a "<tt><a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3450">SysEq:
-Remake
-            Parameters</a></tt>" configuration window with many switches and
-        flags.</li>
-      <li> Look at help line for every switch doing a mouse click on it. Find a
-        switch "<tt>xp_&nbsp; via quantities of phases ...</tt>" and check it on
-        (with asterisk *), then press<tt> OK </tt>to proceed. This switch
-        activates the mode of using bulk compositions of phases from a
-        previously calculated equilibrium state to calculate bulk composition of
-        the new system.</li>
-      <li> On appearing database file selection dialog, entitled "mark one SysEq
-        record for getting phase bulk compositions", select key of the initial
-        (or previous) SysEq record. This record key should then appear in&nbsp;
-        "SyPhEQ" line on&nbsp; <tt>System::Compos</tt>&nbsp; screen form.</li>
-      <li> Switch to the <tt>System::Compos</tt> screen form and find a new
-        xp_&nbsp; vector column (with all zeros in grams by default). Specify
-        quantity (and units) of aqueous (gas or other) phase from previous SysEq
-        record that you wish to be moved into your new "reactor" in xp_ column.</li>
-      <li> Check that only remaining part of the system bulk composition has
-        been specified in other vectors like xa_,&nbsp; xd_, and bi_ (usually
-        quantities of water and air given there must be zeroed off).</li>
-      <li> Proceed with <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3220">calculation
-of
-          equilibrium state</a> as usual and save it to database. If a "Warning:
-        Charge imbalance in calculated bulk composition! Zero it off?" message
-        appears, press "Yes" button.</li>
-      <li> If more "reactors" have to be calculated, repeat this algorithm
-        selecting just-calculated SysEq as previous "SyPhEQ" record. Otherwise,
-        sequential reactor model is finished.</li>
-    </ol>
-    &nbsp;In this simple way, very sophisticated irreversible processes can be
-    simulated using GEMS. Automatic calculation of sequential reactors using <a
-      href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3270">PROCES</a>
-    simulators is also possible (for experienced users). Sampling and plotting
-    of the results with <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3280">GTDEMO</a>
-    is strongly recommended. <br>
-    &nbsp;
-    <h4> <a name="P3270"></a><tt>3.2.7. Setting up and Running Process
-        Definitions</tt></h4>
-    Most geochemical modeling problems require calculation of a series of
-    equilibrium states to simulate processes such as mixing, dissolution,
-    titration etc. Doing this in manual mode can be boring and time-consuming,
-    especially when the process is controlled by a certain regular change of
-    bulk composition of the system. To facilitate this, a Process simulator
-    record type has been implemented in GEMS code .In calculation mode, this
-    simulator generates a sequence of SysEq records which are then calculated
-    and stored, to be sampled finally into one or several Gtdemo records.
-    <p>Two types of process simulations are possible. The "S" (sequential) type
-      implies that the next step of the process does not depend on the
-      calculated parameters of equilibrium from the previous step. This is true
-      for temperature-pressure changes, simple titrations, and simple reaction
-      extent models like dissolution of a fixed rock composition. The "U"
-      (reciprocal) type of the process means that the next step depends on some
-      parameters of the current equilibrium state, for example, on pH, pe, bulk
-      composition of equilibrium phases, activity of some species etc. Typical
-      examples are sequential reactors; inverse titrations (to given values of
-      pH or pe); or kinetically dependent processes. In case of inverse
-      titration modeling, certain amount of titrant (acid, base, oxidant or
+      investigated, either at fixed or variable T,P. In this case, we recommend
+      to change the VarCSD field of the <a href="gems_rekey.html#DBM_SysEq">SystEq
+        record key</a>, to indicate a different bulk composition, then modify
+      some parts of the system recipe. In the case when the additional metastability
+      restrictions (dll_ or dul_) will be changed in the recipe, we recommend to
+      change the VarCon field of the <a href="gems_rekey.html#DBM_SysEq">SysEq
+        record key</a> upon cloning.&nbsp; </p>
+    <p>With this, you are prepared to an infinite play with single equilibria
+      calculations. </p>
+    <h3> <a name="P3270"></a>Setting up and Running Process Definitions</h3>
+    <p> Most geochemical modeling problems require calculation of a series of
+      equilibrium states to simulate processes such as mixing, dissolution,
+      titration etc. Doing this in manual mode can be boring and time-consuming,
+      especially when the process is controlled by a certain regular change of
+      bulk composition of the system. To facilitate this, a Process simulator
+      record type has been implemented in GEM-Selektor code. In the calculation
+      mode, this simulator generates a sequence of SysEq records which are then
+      calculated and stored, to be sampled finally in the Process record or into
+      one or several Gtdemo records. Please, read the Process Simulation manual
+      for detailed information. </p>
+    <p>Briefly, to create/modify a Process record, turn GEM-Selektor into
+      "Equilibria Calculation" mode, open a modeling project, and click on a
+      "Process" icon on the left side of the main frame window.
+      This opens the Process window. There, click on "Create ..." toolbar button
+      or select a "Record" "Create" menu command (alternatively, select one
+      Process record and click on "New/Clone" button). You will see a list of
+      SysEq records; select there a parent SysEq record for this process
+      simulator, and clock "Ok". This opens a Process record key form. Fill out
+      necessary fields of the new <a href="file:///home/parallels/DevGEMS/trunk/gems-gui/Resources/doc/html/gdb_rkey.html#DBM_Proces">Process
+        record
+        key</a>. Only two last record key fields can be edited; the first 8
+      fields are taken from the parent SysEq record key. After the user clicks
+      "Ok" to finish creating a new record key, the <a href="file:///home/parallels/DevGEMS/trunk/gems-gui/Resources/doc/html/gm_proces.html#WZSTEP_1">Process
+        Wizard Step 1</a> window appears. Follow comments and wizard steps as
+      indicated. When the wizard is completed, you are back in the Process
+      window. Review the window pages, make necessary inputs and modifications,
+      save the Process record and proceed with simulations. </p>
+    <p> </p>
+    <p>Three types of process simulations are possible: sequential, reciprocal,
+      and inverse. The "sequential" implies that the next step of the process
+      does not depend on the calculated parameters of equilibrium from the
+      previous step. This is true for temperature-pressure changes, simple
+      titrations, and simple reaction extent models like dissolution of a fixed
+      rock composition. The "reciprocal" type of the process means that the next
+      step depends on some parameters of the current equilibrium state, for
+      example, on pH, pe, bulk composition of equilibrium phases, activity of
+      some species etc. Typical examples are flow-through cells, "sequential
+      reactors", or kinetically dependent processes. Finally, "inverse" process
+      means that some input parameters of GEM equilibrium task must be found to
+      obtain the same GEM output parameter as the prescribed one before moving
+      to the next process simulation step. A typical case is the inverse
+      titration, where certain amount of titrant (acid, base, oxidant or
       reductant) should be found which brings the aquatic system to certain,
-      pre-defined value of equilibrium pH (or pe, or both). To do this, a "gold
-      section" optimization procedure is invoked which compares the calculated
-      value to the prescribed one, and makes a correction to the amount of
-      titrant, until a convergence with necessary precision is achieved. </p>
-    <p>In general, it may be difficult to predict all meaningful process
-      formulations which may be of interest to (geo)chemists because a process
-      formulation depends on the system definition and modeling objectives, and
-      an unlimited variety of these&nbsp; is possible. Therefore, in GEMS code,
-      the simulated irreversible processes are usually defined using the <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P4000">Math
-        Scripts</a> where the user can write&nbsp; what exactly and where should
-      be changed in the SysEq record for the next step of the simulated
-      sequence. This provides you with an unmatched freedom and flexibility
-      because nearly all numeric input and output data objects in GEMS are
-      accessible to Math Scripts via their labels and indices.&nbsp; The Math
-      Script text is translated into the internal code at the beginning of
-      process simulation, then run automatically in a stack-based interpreter at
-      each simulation step. Some examples of PROCES math scripts are provided <a
-        href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P4600">below</a>.
-    </p>
+      predefined value of equilibrium pH. To do this, a built-in "gold section"
+      optimization procedure is invoked which compares the calculated value to
+      the prescribed one, and makes a correction to the amount of titrant, until
+      a convergence with necessary precision is achieved. </p>
     <p>A Process definition record always refers to an (ordinary) SysEq record
       which must exist in the database before the process definition is created
       and executed. This "parent" SysEq record is used as a template which is
       modified and "cloned" into a sequence of SysEq record generated by the
       process simulator. For this reason, the first eight&nbsp; fields of the
-      PROCES record key are the same as in its parent <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3251">SysEq
+      Process record key are the same as in its parent <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3251">SysEq
 record
         key</a>, followed by the process identifier and type fields.&nbsp; The
       parent SysEq record is never changed by the process simulator; it is just
-      used as a template to generate new, modified SysEq records on the
-      simulation steps. </p>
-    <h5> <a name="P3271"></a>3.2.7.1. Creating or Modifying PROCES records</h5>
-    To create/modify PROCES record, press "Definitions of Processes" button in
-    "Calculation of Equilibria" dialog. In the "Process" window, select <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P333R3">"Record"
-      "Create"</a> or <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P333R2">"Record"
-      "Remake"</a> menu commands and then type in or select a PROCES record key.
-    In the appearing "Reorganization of Data Fields" dialog, press "<tt>Clear
-      all</tt>" button if you wish to create the Process simulator from scratch,
-    "<tt>Remake</tt>" for changing some fields with re-configuration of the
-    record, or "<tt>Bypass</tt>" if you will only edit some numbers or math
-    script lines.&nbsp; In the first two cases, a&nbsp; "Process: Remake
-    Parameters" window appears with switches and counters. Read meaning of the
-    switches and counters by pointing mouse to them, and modify wherever
-    necessary. The most important input at this step is a Ntxi&nbsp; field where
-    you should type a number of "points", i.e. SysEq records to be produced by
-    the process simulator. Often it is advisable to order an optional "<tt>modC</tt>"
-    table (visible on Page 2 of "Process:" window) where some input data can be
-    conveniently typed in and then used in the process math script. Press<tt> OK
-    </tt>when configuration is finished.
-    <p>Now, Page 1 of the <tt>Process:</tt> window appears. If there is nothing
-      to modify then <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3273">proceed
-with
-        calculations</a>.&nbsp; Variants of the process simulation can be set up
-      using one or more of three-number vectors&nbsp; <tt>"iTm", "iNv", "iP",
-        "iTC", "iV", "iTau", "ipXi", "iNu", "ipH", "ipe"</tt>. Scan them with
-      mouse pointer and read help lines. Each of these vectors has the following
-      structure: </p>
-    <p><tt>first cell&nbsp; [0]&nbsp; start value</tt> <br>
-      <tt>second cell [1]&nbsp; limiting value</tt> <br>
-      <tt>third cell&nbsp; [2]&nbsp; increment (0 - not changed)</tt> </p>
-    <p>The first five vectors are automatically used by the program to generate
-      the last five fields of SysEq record keys. Please, make sure that the
-      respective values will not exceed length limits of <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3251">SysEq
-record
-        key format</a>. In the&nbsp; <tt>"iTm"</tt> specification, it is wise
-      to put increment larger than 1 (at best, 5 or 10) if the process
-      simulation will change bulk composition of the system. This may let you a
-      possibility of producing more points in the most interesting parts of the
-      sequence (e.g., near redox barrier) later on. </p>
-    <h5> <a name="P3272"></a>3.2.7.2. Modifying Math-Scripts&nbsp; in Process
-      Definitions</h5>
-    Most of the three-cell interval vectors discussed under previous heading
-    have counterparts - the work objects <tt>"J", "cTm", "cNv", "cP", "cT",
-      "cTC", "cV", "cTau", "cpXi", "cXi", "cNu", "cpH", "cpe", "cEh"</tt> ,
-    visible on&nbsp; <tt>Page 3</tt>&nbsp; of the "Process" window.&nbsp; When
-    calculation of the process begins, these work cells are loaded with the
-    respective start values. The process simulator uses current contents of <tt>"cTm",
-      "cV", "cP", "cTC", and "cNv"</tt> objects to construct SysEq record keys.
-    The <tt>"Next"</tt> object contains 1 if the next process point is to be
-    simulated, or 0 if the sequence is finished; the value will be switched
-    automatically when the pre-defined limit is achieved in any of the work
-    cells or specified in math script. All these&nbsp; work cells and
-    corresponding interval vectors can be used as variables in the process <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P4000">Math
-Script
-      expressions</a> aimed at describing any changes in the system along the
-    process path. The script can be typed into <tt>"P_expr"</tt> text field on
-    <tt>Page 1</tt> of the "Process :"&nbsp; window.&nbsp; The most frequent
-    form of the process script looks like this:
-    <p><tt>$ Change in Ca/Si bulk ratio in the system</tt> <br>
-      <tt>cNu =: iNu[0] + J*iNu[2];</tt> <br>
-      <tt>xd_[\J{quartz}] =: cNu;</tt> <br>
-      <tt>xd_{portlandite} =: 1-cNu;</tt> <br>
-      <tt>$ end</tt> </p>
-    <p>This little program is run automatically to change bulk composition in
-      SysEq records when each next point is generated (indexed with <tt>J</tt>)
-      in the process simulation. The first and the last are comment lines. The
-      second line calculates the current number of moles of added quartz
-      stoichiometry by incrementing within <tt>"iNu"</tt> counter (supposed to
-      be set up by the user). Third line copies it into an element of <tt>"xd_"</tt>
-      vector in <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3250">system
-        definition</a> which corresponds to quartz. Fourth line calculates
-      number of moles of portlandite stoichiometry and assigns it to the
-      respective element of <tt>"xd_"</tt> vector.&nbsp; There are many ways to
-      specify the same process using Math Script expressions; some examples are
-      provided <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P4600">below</a>.
+      used as a template to generate new, modified SysEq images (records) along
+      the simulation steps.</p>
+    <p> </p>
+    <h3> <a name="P3280"></a>Setting up and Running Graphic-tabulation-Demo
+      Data Samplers</h3>
+    <p> When many equilibrium states are calculated using the Process definition
+      to simulate titrations, process extent models, evaporation or temperature/
+      pressure changes, it is problematic to print out all the results, pick up
+      and plot them by hand. To facilitate this operation - a crucial step in
+      the performance of&nbsp; modeling results interpretation - a special
+      facility is included into GEMS code.&nbsp; This is a Gtdemo data sampler
+      and plotter which works according to specifications provided in the Gtdemo
+      records stored in&nbsp; the users database extension files.&nbsp; Gtdemo
+      can sample virtually any numerical data by reading records of any type
+      according to a selected sequence of record keys. Which data to extract and
+      how to recalculate them - the user can specify in a <a href="file:///W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P4000">Math
+        Script</a> text in a special Gtdemo record field.&nbsp; As in case of
+      the <a href="file:///W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3270">Process
+        simulator</a>, the Gtdemo math script is automatically translated and
+      run every time when the Gtdemo record is recalculated. When a next data
+      record is extracted from the database, the Math Script is run to pick up
+      the necessary data, re-scale them or calculate some derived parameters,
+      and store into a Gtdemo table (up to 10 columns). When scanning of
+      database records is finished, this table can also be displayed on a screen
+      form, <a href="file:///W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P333R9">printed</a>
+      into a text file for subsequent import to worksheets or sophisticated
+      scientific graphing software for high-quality presentations, or <a href="file:///W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P333R8">plotted</a>
+      in a graphic window. Graphs can be <a href="file:///W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3290">customized</a>,
+      zoomed and printed. A sequence of (user-defined) experimental points can
+      be displayed on the graph together with the sampled (or calculated)
+      numbers - this is very useful when the thermodynamic model has to be
+      fitted to the experimental data. Any number of Gtdemo records can be
+      created for sampling the same set of GEMS database records. </p>
+    <p><br>
     </p>
-    <h5> <a name="P3273"></a>3.2.7.3. Running the Process Simulation</h5>
-    After editing of the process definition fields is finished, press <a href="../../../../../../../../W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P333R4">"Calculate"</a>
-    button or menu command to start calculations. If the Math script contains
-    syntax errors, you may be asked to fix them before the program can proceed.
-    During calculations, the "IPM Progress"&nbsp; dialog is normally visible
-    with the current SysEq record key. Calculations may take time if the system
-    is large or the process generates many points (depending on the processor
-    performance). When all equilibria are computed, you will see "Process
-    calculation finished OK" in the status line of the "Process: " window. Press
-    "<tt>Accept</tt>" button and proceed with analyzing the results. <br>
-    &nbsp; <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <p><font face="Helvetica, Arial, sans-serif">To be completed in version
-        2.2&nbsp;</font> </p>
     <hr size="2" width="100%">
     <h2><a name="GSM_IRREVER_PROCESS"></a><font face="Helvetica, Arial, sans-serif">4.&nbsp;
         Simulation of Irreversible Processes</font></h2>
@@ -983,7 +665,99 @@ of
         You are now ready to run the Process simulator.</span><br>
     </p>
     <br>
-    <hr size="2" width="100%"> <br>
+    <hr size="2" width="100%">
+    <h5> <a name="P3271"></a>3.2.7.1. Creating or Modifying PROCES records</h5>
+    To create/modify PROCES record, press "Definitions of Processes" button in
+    "Calculation of Equilibria" dialog. In the "Process" window, select <a href="file:///W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P333R3">"Record"
+      "Create"</a> or <a href="file:///W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P333R2">"Record"
+      "Remake"</a> menu commands and then type in or select a PROCES record key.
+    In the appearing "Reorganization of Data Fields" dialog, press "<tt>Clear
+      all</tt>" button if you wish to create the Process simulator from scratch,
+    "<tt>Remake</tt>" for changing some fields with re-configuration of the
+    record, or "<tt>Bypass</tt>" if you will only edit some numbers or math
+    script lines.&nbsp; In the first two cases, a&nbsp; "Process: Remake
+    Parameters" window appears with switches and counters. Read meaning of the
+    switches and counters by pointing mouse to them, and modify wherever
+    necessary. The most important input at this step is a Ntxi&nbsp; field where
+    you should type a number of "points", i.e. SysEq records to be produced by
+    the process simulator. Often it is advisable to order an optional "<tt>modC</tt>"
+    table (visible on Page 2 of "Process:" window) where some input data can be
+    conveniently typed in and then used in the process math script. Press<tt> OK
+    </tt>when configuration is finished.
+    <p>Now, Page 1 of the <tt>Process:</tt> window appears. If there is nothing
+      to modify then <a href="file:///W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3273">proceed
+with
+        calculations</a>.&nbsp; Variants of the process simulation can be set up
+      using one or more of three-number vectors&nbsp; <tt>"iTm", "iNv", "iP",
+        "iTC", "iV", "iTau", "ipXi", "iNu", "ipH", "ipe"</tt>. Scan them with
+      mouse pointer and read help lines. Each of these vectors has the following
+      structure: </p>
+    <p><tt>first cell&nbsp; [0]&nbsp; start value</tt> <br>
+      <tt>second cell [1]&nbsp; limiting value</tt> <br>
+      <tt>third cell&nbsp; [2]&nbsp; increment (0 - not changed)</tt> </p>
+    <p>The first five vectors are automatically used by the program to generate
+      the last five fields of SysEq record keys. Please, make sure that the
+      respective values will not exceed length limits of <a href="file:///W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3251">SysEq
+record
+        key format</a>. In the&nbsp; <tt>"iTm"</tt> specification, it is wise
+      to put increment larger than 1 (at best, 5 or 10) if the process
+      simulation will change bulk composition of the system. This may let you a
+      possibility of producing more points in the most interesting parts of the
+      sequence (e.g., near redox barrier) later on. </p>
+    <h5> <a name="P3272"></a>3.2.7.2. Modifying Math-Scripts&nbsp; in Process
+      Definitions</h5>
+    Most of the three-cell interval vectors discussed under previous heading
+    have counterparts - the work objects <tt>"J", "cTm", "cNv", "cP", "cT",
+      "cTC", "cV", "cTau", "cpXi", "cXi", "cNu", "cpH", "cpe", "cEh"</tt> ,
+    visible on&nbsp; <tt>Page 3</tt>&nbsp; of the "Process" window.&nbsp; When
+    calculation of the process begins, these work cells are loaded with the
+    respective start values. The process simulator uses current contents of <tt>"cTm",
+      "cV", "cP", "cTC", and "cNv"</tt> objects to construct SysEq record keys.
+    The <tt>"Next"</tt> object contains 1 if the next process point is to be
+    simulated, or 0 if the sequence is finished; the value will be switched
+    automatically when the pre-defined limit is achieved in any of the work
+    cells or specified in math script. All these&nbsp; work cells and
+    corresponding interval vectors can be used as variables in the process <a href="file:///W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P4000">Math
+Script
+      expressions</a> aimed at describing any changes in the system along the
+    process path. The script can be typed into <tt>"P_expr"</tt> text field on
+    <tt>Page 1</tt> of the "Process :"&nbsp; window.&nbsp; The most frequent
+    form of the process script looks like this:
+    <p><tt>$ Change in Ca/Si bulk ratio in the system</tt> <br>
+      <tt>cNu =: iNu[0] + J*iNu[2];</tt> <br>
+      <tt>xd_[\J{quartz}] =: cNu;</tt> <br>
+      <tt>xd_{portlandite} =: 1-cNu;</tt> <br>
+      <tt>$ end</tt> </p>
+    <p>This little program is run automatically to change bulk composition in
+      SysEq records when each next point is generated (indexed with <tt>J</tt>)
+      in the process simulation. The first and the last are comment lines. The
+      second line calculates the current number of moles of added quartz
+      stoichiometry by incrementing within <tt>"iNu"</tt> counter (supposed to
+      be set up by the user). Third line copies it into an element of <tt>"xd_"</tt>
+      vector in <a href="file:///W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P3250">system
+        definition</a> which corresponds to quartz. Fourth line calculates
+      number of moles of portlandite stoichiometry and assigns it to the
+      respective element of <tt>"xd_"</tt> vector.&nbsp; There are many ways to
+      specify the same process using Math Script expressions; some examples are
+      provided <a href="file:///W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P4600">below</a>.
+    </p>
+    <h5> <a name="P3273"></a>3.2.7.3. Running the Process Simulation</h5>
+    After editing of the process definition fields is finished, press <a href="file:///W:/Shared/SYNCHRO/ToDoInGEMS/GEMS3HTML/doc/html/ge_howto.html#P333R4">"Calculate"</a>
+    button or menu command to start calculations. If the Math script contains
+    syntax errors, you may be asked to fix them before the program can proceed.
+    During calculations, the "IPM Progress"&nbsp; dialog is normally visible
+    with the current SysEq record key. Calculations may take time if the system
+    is large or the process generates many points (depending on the processor
+    performance). When all equilibria are computed, you will see "Process
+    calculation finished OK" in the status line of the "Process: " window. Press
+    "<tt>Accept</tt>" button and proceed with analyzing the results. <br>
+    &nbsp; <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <p><font face="Helvetica, Arial, sans-serif">To be completed in version
+        2.2&nbsp;</font> </p>
     <h4> <a name="P3280"></a><tt>3.2.8. Setting up and Running Graphic-Demo
         Data Samplers</tt></h4>
     When many equilibrium states are calculated using the Process definition to
@@ -1022,7 +796,7 @@ of
       "Remake"</a> menu commands and then type in or select a Gtdemo record key
     of the following format: <br>
     &nbsp;
-    <table border="3" cellpadding="3" cellspacing="3">
+    <table cellpadding="3" cellspacing="3" border="3">
       <tbody>
         <tr>
           <td>Profile_id</td>
@@ -1341,7 +1115,7 @@ To
       at nearly one bar p(CO<sub>2</sub>): <br>
       &nbsp; <br>
       &nbsp; </p>
-    <table border="3" cellpadding="3" cellspacing="3">
+    <table cellpadding="3" cellspacing="3" border="3">
       <tbody>
         <tr>
           <td><tt>X(Sr),xE</tt></td>
@@ -1863,7 +1637,7 @@ and
       &nbsp; <br>
       &nbsp; <br>
       &nbsp;
-      <table cols="3" border="1" width="73%">
+      <table cols="3" width="73%" border="1">
         <tbody>
           <tr>
             <td>Property of celestite</td>

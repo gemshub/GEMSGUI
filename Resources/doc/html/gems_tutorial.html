@@ -317,18 +317,18 @@ Modifying
       calculate chemical equilibria. </p>
     <h3> <a name="GSM_WORKSESSION"></a>1.1. Starting and Quitting the Work
       Session</h3>
-    <p>You have installed the GEM-Selektor properly on your Windows, Mac OS X or
-      Linux system, and started the program. You should see now a main window,
-      with the "Modules" menu in the top left corner. A left mouse click on this
-      menu shows menu options, the first two indicating two main modes of
-      operation: the EqCalc Mode (calculations of equilibria) and the Database
-      mode; the currently active mode is indicated by a "pressed" icon. To
-      change the mode of operation, simply click on the desired menu entry.
-      Other entries in the "Modules" menu (e.g. DComp, ReacDC in Database Mode
-      or SysEq, Process in EqCalc Mode) open the respective module windows, in
-      which the actual work with the program is done. Alternatively, you can
-      switch between the operation modes or open module windows by simply
-      clicking on the leftmost toolbar column. </p>
+    <p>You have installed the GEM-Selektor on your Windows, Mac OS X or Linux
+      system, and started the program. You should see now a main window, with
+      the "Modules" menu in the top left corner. A left mouse click on this menu
+      shows menu options, the first two indicating two main modes of operation:
+      the EqCalc Mode (calculations of equilibria) and the Database mode; the
+      currently active mode is indicated by a "pressed" icon. To change the mode
+      of operation, simply click on the desired menu entry. Other entries in the
+      "Modules" menu (e.g. DComp, ReacDC in Database Mode or SysEq, Process in
+      EqCalc Mode) open the respective module windows, in which the actual work
+      with the program is done. Alternatively, you can switch between the
+      operation modes or open module windows by simply clicking on the leftmost
+      toolbar column. </p>
     <p>To quit GEM-Selektor, you can anytime go to "Modules" menu and click on
       an "Exit GEMS3" item; or simply close the main window (the exact location
       of this button depends on the operation system and on the desktop
@@ -340,17 +340,16 @@ Modifying
       contains default collections of print/export, import, and template math
       scripts, and also helps in keeping track of the source of any input data
       or comments to your own modelling work. Moreover, all GEM-Selektor dialogs
-      and module window pages show <a href="#GSM_TOOLTIPS">tooltips</a> and
-      provide full runtime access to HTML documentation through the <a href="#GSM_HELP_RUNTIME">Help
+      and module window pages show tooltips and provide full runtime access to
+      HTML documentation database through the <a href="gems_miscel.html#HOWHELP">Help
         Viewer</a> window. </p>
     <h4><a name="GSM_SCRIPT_LIBS"></a>1.2.1.&nbsp; Script Libraries</h4>
     <p>GEM-Selektor comes with a collection of <a href="gm_sdref.html">SDref </a>records
       containing print/export, import, and template math scripts - the default
       script library - that may help you in performing the data import/export in
       Database Mode, and also in writing math scripts for Process simulators and
-      in other places. Another source of template math scripts is in <a href="file:///Users/kulik/DevGEMS/trunk/gems-gui/Resources/doc/html/gm_proces.html">Process</a>
-      and <a href="file:///Users/kulik/DevGEMS/trunk/gems-gui/Resources/doc/html/gm_gtdemo.html">GtDemo</a>
-      remake wizards. </p>
+      in other places. Another source of template math scripts is in <a href="gm_proces.html">Process</a>
+      and <a href="gm_gtdemo.html">GtDemo</a> remake wizards. </p>
     <p>A&nbsp;print script can be selected when the "Print" icon is clicked or
       the "Record" "Print..." menu command activated on any module window. In a
       similar way, export and import scripts can be executed using "Record List"
@@ -405,107 +404,94 @@ Modifying
       and formats of record keys - in <a href="gdb_rkey.html">gdb_rkey.html</a>
       manuals. </p>
     <hr size="2" width="100%">
-    <h2> <a name="GSM_CALC_EQSTAT"></a><font face="Helvetica, Arial, sans-serif">2.
-        Calculating Equilibria using GEM-Selektor</font></h2>
-    <p><br>
-      <font face="Helvetica, Arial, sans-serif"> GEMS program has two main modes
-        of operation:&nbsp; "<a href="#GSM_MOD_PROJECTS">Computation of
-          Equilibria</a>"&nbsp; and&nbsp; "<a href="#GSM_EXTEND_PROJECT">Thermodynamic
-          Database</a>", &nbsp; accessible through the respective buttons on the
-        Main Dialog that appears after the program starts. Computing chemical
-        equilibria is actually the main job of GEM-Selektor, organized in form
-        of the <a href="#GSM_MOD_PROJECTS">modelling projects</a> (or simply
-        projects), i.e. user-controlled parts of GEMS database that accumulate
-        all the input- and calculated data related to a certain modelling
-        application. </font> </p>
-    <p><font face="Helvetica, Arial, sans-serif">The GEMS database can be viewed
-        as consisting of two parts: a&nbsp; <u>thermodynamic database</u>
-        &nbsp;where the input data for the <a href="glossary.html#DT_independent_component">independent
-          components</a>, <a href="glossary.html#DT_dependent_component">dependent
-          components</a>, <a href="glossary.html#DT_phase_thermodynamic">phases</a>,
-        and <a href="glossary.html#DT_PCO">compositions</a> are stored and
-        maintained, and a&nbsp; <u>systems databas</u><u>e</u> &nbsp;where
-        definitions of <a href="glossary.html#DT_system">chemical systems</a>
-        and processes with the results of model calculations are
-        accumulated.&nbsp;</font></p>
-    <p><font face="Helvetica, Arial, sans-serif">Part of the thermodynamic
-        database is supplied together with the GEM-Selektor code. It is called a
-        "Default" database and consists of three parts: "Kernel",
-        "Complementary" and "Specific". </font></p>
-    <p><font face="Helvetica, Arial, sans-serif">The kernel database part
-        contains a consistent collection of species stoichiometries and standard
-        molar thermodynamic properties imported from Nagra-PSI chemical
-        thermodynamic database [<a href="g_litref.html#2002HUMBER">2002HUM/BER</a>]
-        as </font><font face="Helvetica, Arial, sans-serif">described in [<a href="g_litref.html#2003THO/KUL">2003THO/KUL</a>]</font><font
-        face="Helvetica, Arial, sans-serif">. The complementary database part
-        has been imported from the Slop98.dat file [<a href="g_litref.html#1997SHOSAS">1997SHO/SAS</a>].
-        The specific part of the database (at present under construction) will
-        contain extensions relevant for e.g. waste disposal applications. </font></p>
-    <p><font face="Helvetica, Arial, sans-serif">The Default database also
-        contains a minimal set of <a href="gm_phase.html">Phase</a> definition
-        records (to assemble modeling projects), and <a href="gm_sdref.html">SDref</a>
-        records with bibliographic data and template script libraries. For
-        details, consult the <a href="kernel_db.html">GEMS default database
-          manual</a>. </font> </p>
-    <p><font face="Helvetica, Arial, sans-serif">The user can add new database
-        records of any type and thus extend the thermodynamic database or
-        "override" some default thermodynamic values with her/his own data. This
-        is normally possible only within the modelling project database files
-        because default database files are write-protected to ensure
-        compatibility between different modelling applications. Thus, the files
-        located in a user's project directory comprise a user's extension part
-        of the GEMS database.&nbsp; </font> </p>
-    <p><font face="Helvetica, Arial, sans-serif">When a new project is created,
-        a directory (having the same name as the project) with empty database
-        files of all types will be created first. Then, a subset of default
-        database records covering a selected list of independent components will
-        be copied into these project files, after that the kernel database files
-        will be disconnected from the project. Further on, the user can add
-        records with thermodynamic data, compositions, references, scripts,
-        phase definitions, develop and accumulate records with equilibria,
-        process simulators etc., but nothing will be changed in the kernel
-        database.&nbsp; &nbsp; </font> </p>
-    <p><font face="Helvetica, Arial, sans-serif"> Thermodynamic database records
-        (of <a href="gm_icomp.html">IComp</a>, <a href="gm_dcomp.html">DComp</a>,
-        <a href="gm_reacdc.html">ReacDC</a>, <a href="gm_compos.html">Compos</a>,
-        <a href="gm_phase.html">Phase</a> types) cannot be modified, created or
-        deleted even in the user's project files during the program operation in
-        the "Computation of Equilibria" mode. To modify these records, you
-        should first go back to Main Dialog and then to "Thermodynamic Database"
-        mode where all <a href="gems_gdb.html">database management
-          functionality</a> for all record types and database files is
-        provided.&nbsp; </font></p>
-    <p><font face="Helvetica, Arial, sans-serif">In the following steps, we will
-        consider as an example some equilibria between aqueous solution (with-
-        or without the atmosphere), oxide and carbonate mineral phases in the
-        heterogeneous multiphase Ca-Mn-Fe-C-Na-Cl-N-O-H aquatic system. This
-        numerical example stems (in a very simplified form) from a paper [<a href="g_litref.html#2000KULKER">2000KUL/KER</a>]
-        and demonstrates a typical process of creating a new modelling project,
-        setting up system definitions and process simulators, calculating and
-        examining equilibrium states, and plotting some simple but useful
-        diagrams. </font></p>
-    <p><font face="Helvetica, Arial, sans-serif">We will &nbsp;proceed with
-        extending the project database (by adding some new species and phases),
-        updating the project and calculating some SSAS (solid solution - aqueous
-        solution) equilibria at different redox conditions to show some powerful
-        features of the GEM modelling approach [<a href="g_litref.html#1997KARCHU">1997KAR/CHU</a>,
-        <a href="2001KARCHU">2001KAR/CHU</a>] on which the GEM-Selektor code is
-        based. </font> </p>
-    <p><font face="Helvetica, Arial, sans-serif">After completing these
-        exercises, you should be able to create easily your own projects and
-        calculate chemical equilibria, as well as present the results and extend
-        the project thermodynamic database. Then you may proceed with reading
-        detailed&nbsp; <a href="gems_toc.html">manuals</a>&nbsp; on how the
-        GEM-Selektor works, how consistency of thermodynamic data is maintained,
-        and, in parallel, work through more tests and modelling examples that
-        will be provided in the <a href="g_tests.html">test problem suite</a>
-        and <a href="g_tutor.html">tutorial</a> files. </font></p>
-    <p><font face="Helvetica, Arial, sans-serif">Some examples follow those from
-        the PHREEQC2 User's Guide <a href="g_litref.html#1999PARAPP">[1999PAR/APP]</a>
-        which should help you to compare the results obtained by using the
-        alternative Law-of-Mass Action (LMA) and Gibbs Energy Minimization (GEM)
-        techniques and to better understand their common features and
-        differences. </font> </p>
+    <h2> <a name="GSM_CALC_EQSTAT"></a>2. Calculating Equilibria with
+      GEM-Selektor</h2>
+    <p>GEMS program has two main modes of operation:&nbsp; "<a href="#GSM_MOD_PROJECTS">Computation
+        of Equilibria</a>"&nbsp; and&nbsp; "<a href="#GSM_EXTEND_PROJECT">Thermodynamic
+        Database</a>", &nbsp; accessible through the respective buttons on the
+      Main Dialog that appears after the program starts. Computing chemical
+      equilibria is actually the main job of GEM-Selektor, organized in form of
+      the <a href="#GSM_MOD_PROJECTS">modelling projects</a> (or simply
+      projects), i.e. user-controlled parts of GEMS database that accumulate all
+      the input- and calculated data related to a certain modelling application.
+    </p>
+    <p>The GEMS database can be viewed as consisting of two parts: a&nbsp;
+      thermodynamic database &nbsp;where the input data for the <a href="glossary.html#DT_independent_component">independent
+        components</a>, <a href="glossary.html#DT_dependent_component">dependent
+        components</a>, <a href="glossary.html#DT_phase_thermodynamic">phases</a>,
+      and <a href="glossary.html#DT_PCO">compositions</a> are stored and
+      maintained, and a&nbsp; systems database &nbsp;where definitions of <a href="glossary.html#DT_system">chemical
+        systems</a> and processes with the results of model calculations are
+      accumulated.&nbsp;</p>
+    <p>Part of the thermodynamic database is supplied together with the
+      GEM-Selektor code. It is called a "Default" database and consists of three
+      parts: "Kernel", "Complementary" and "Specific". </p>
+    <p>The kernel database part contains a consistent collection of species
+      stoichiometries and standard molar thermodynamic properties imported from
+      Nagra-PSI chemical thermodynamic database [<a href="g_litref.html#2002HUMBER">2002HUM/BER</a>]
+      as described in [<a href="g_litref.html#2003THO/KUL">2003THO/KUL</a>]. The
+      complementary database part has been imported from the Slop98.dat file [<a
+        href="g_litref.html#1997SHOSAS">1997SHO/SAS</a>]. The specific part of
+      the database (at present under construction) will contain extensions
+      relevant for e.g. waste disposal applications. </p>
+    <p>The Default database also contains a minimal set of <a href="gm_phase.html">Phase</a>
+      definition records (to assemble modeling projects), and <a href="gm_sdref.html">SDref</a>
+      records with bibliographic data and template script libraries. For
+      details, consult the <a href="kernel_db.html">GEMS default database
+        manual</a>. </p>
+    <p>The user can add new database records of any type and thus extend the
+      thermodynamic database or "override" some default thermodynamic values
+      with her/his own data. This is normally possible only within the modelling
+      project database files because default database files are write-protected
+      to ensure compatibility between different modelling applications. Thus,
+      the files located in a user's project directory comprise a user's
+      extension part of the GEMS database.&nbsp; </p>
+    <p>When a new project is created, a directory (having the same name as the
+      project) with empty database files of all types will be created first.
+      Then, a subset of default database records covering a selected list of
+      independent components will be copied into these project files, after that
+      the kernel database files will be disconnected from the project. Further
+      on, the user can add records with thermodynamic data, compositions,
+      references, scripts, phase definitions, develop and accumulate records
+      with equilibria, process simulators etc., but nothing will be changed in
+      the kernel database.&nbsp; &nbsp; </p>
+    <p> Thermodynamic database records (of <a href="gm_icomp.html">IComp</a>, <a
+        href="gm_dcomp.html">DComp</a>, <a href="gm_reacdc.html">ReacDC</a>, <a
+        href="gm_compos.html">Compos</a>, <a href="gm_phase.html">Phase</a>
+      types) cannot be modified, created or deleted even in the user's project
+      files during the program operation in the "Computation of Equilibria"
+      mode. To modify these records, you should first go back to Main Dialog and
+      then to "Thermodynamic Database" mode where all <a href="gems_gdb.html">database
+        management functionality</a> for all record types and database files is
+      provided.&nbsp; </p>
+    <p>In the following steps, we will consider as an example some equilibria
+      between aqueous solution (with- or without the atmosphere), oxide and
+      carbonate mineral phases in the heterogeneous multiphase
+      Ca-Mn-Fe-C-Na-Cl-N-O-H aquatic system. This numerical example stems (in a
+      very simplified form) from a paper [<a href="g_litref.html#2000KULKER">2000KUL/KER</a>]
+      and demonstrates a typical process of creating a new modelling project,
+      setting up system definitions and process simulators, calculating and
+      examining equilibrium states, and plotting some simple but useful
+      diagrams. </p>
+    <p>We will &nbsp;proceed with extending the project database (by adding some
+      new species and phases), updating the project and calculating some SSAS
+      (solid solution - aqueous solution) equilibria at different redox
+      conditions to show some powerful features of the GEM modelling approach [<a
+        href="g_litref.html#1997KARCHU">1997KAR/CHU</a>, <a href="2001KARCHU">2001KAR/CHU</a>]
+      on which the GEM-Selektor code is based. </p>
+    <p>After completing these exercises, you should be able to create easily
+      your own projects and calculate chemical equilibria, as well as present
+      the results and extend the project thermodynamic database. Then you may
+      proceed with reading detailed&nbsp; <a href="gems_toc.html">manuals</a>&nbsp;
+      on how the GEM-Selektor works, how consistency of thermodynamic data is
+      maintained, and, in parallel, work through more tests and modelling
+      examples that will be provided in the <a href="g_tests.html">test problem
+        suite</a> and <a href="g_tutor.html">tutorial</a> files. </p>
+    <p>Some examples follow those from the PHREEQC2 User's Guide <a href="g_litref.html#1999PARAPP">[1999PAR/APP]</a>
+      which should help you to compare the results obtained by using the
+      alternative Law-of-Mass Action (LMA) and Gibbs Energy Minimization (GEM)
+      techniques and to better understand their common features and differences.
+    </p>
     <h3><a name="GSM_MOD_PROJECTS"></a><font face="Helvetica, Arial, sans-serif">2.1.
         &nbsp;Modelling Projects and &nbsp;GEMS Database</font></h3>
     <p><font face="Helvetica, Arial, sans-serif">A modelling project is actually
@@ -1791,7 +1777,7 @@ type
       like this: <br>
       &nbsp; </p>
     <p><img src="../../../../../../../../C:/GEMS2test/program/doc/html/syseqkey.png"
-        nosave="" height="242" align="left" width="328"> <br>
+        nosave="" align="left" height="242" width="328"> <br>
       &nbsp; </p>
     <p>The packed key of this SysEq record will look like this:&nbsp; <tt>"Default:G:CaCO3_AQ:1:0:1:25:0:"<font
           size="+1">. </font></tt>Now, press the <tt>"Ok"</tt> button. In a
@@ -2089,7 +2075,7 @@ list
       should appear now: <br>
       &nbsp; <br>
       &nbsp;
-      <table border="3" cellpadding="3" cellspacing="3">
+      <table cellpadding="3" cellspacing="3" border="3">
         <tbody>
           <tr>
             <td><tt><font size="+1">ICnam</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -2180,7 +2166,7 @@ Table
       and press <tt>"Ok"</tt>. The following dialog will appear: <br>
       &nbsp; </p>
     <p><img src="../../../../../../../../C:/GEMS2test/program/doc/html/syseqrem.png"
-        nosave="" height="131" align="left" width="318"> <br>
+        nosave="" align="left" height="131" width="318"> <br>
       &nbsp; </p>
     <p>As we want to change only temperature and leave the rest intact, don't
       press "Clear all" or "Remake" buttons, but carefully click on the "Bypass"
@@ -2235,7 +2221,7 @@ SSAS
       solution - we will need it soon: <br>
       &nbsp; <br>
       &nbsp;
-      <table border="3" cellpadding="3" cellspacing="3">
+      <table cellpadding="3" cellspacing="3" border="3">
         <tbody>
           <tr>
             <td><tt><font size="+1">ICnam</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -2458,7 +2444,7 @@ this
       two carbonate solid solutions is now completely different: <br>
       &nbsp; <br>
       &nbsp;
-      <table border="3" cellpadding="3" cellspacing="3" width="68%">
+      <table cellpadding="3" cellspacing="3" width="68%" border="3">
         <tbody>
           <tr>
             <td>Phase</td>
@@ -2922,7 +2908,7 @@ To
       at nearly one bar p(CO<sub>2</sub>): <br>
       &nbsp; <br>
       &nbsp;
-      <table border="3" cellpadding="3" cellspacing="3">
+      <table cellpadding="3" cellspacing="3" border="3">
         <tbody>
           <tr>
             <td><tt>X(Sr),xE</tt></td>
