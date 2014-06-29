@@ -10,9 +10,15 @@ Docs/GEMS3HelpFileList.html -text
 Docs/GEMS3HelpInventory.html -text
 Docs/INSTALL.linux.txt -text
 Docs/INSTALL.macosx.txt -text
-Docs/INSTALL.windows.txt -text
+Docs/INSTALL.windows.txt eol=crlf
 Docs/SeeLibraryInFinder.workflow/Contents/QuickLook/Preview.png -text
 Docs/build-release/gems3.png -text
+Docs/win-build-release/GEMS3DEPLOY/Gems3-app/Info.plist -text
+Docs/win-build-release/GEMS3DEPLOY/Gems3-app/gems3.png -text
+Docs/win-build-release/GEMS3DEPLOY/Gems3-app/runwindeployqt.bat -text
+Docs/win-build-release/GEMS3DEPLOY/Gems3-app/windeployqt.exe -text
+Docs/win-build-release/GEMS3DEPLOY/INSTALL.windows.txt eol=crlf
+Docs/win-build-release/GEMS3DEPLOY/rungems3.bat -text
 GUI/Icons/CalculateBCCIcon.png -text
 GUI/Icons/CalculateBCCIcon24.png -text
 GUI/Icons/CalculateGEMIcon.png -text

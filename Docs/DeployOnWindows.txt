@@ -1,0 +1,86 @@
+HOW TO PRODUCE AN INSTALLATION PACKAGE OF Qt5-based GEMS3 FOR Win32 MinGW 4.8 
+(Windows XP, 7 or 8; admininstrator rights for your account are needed)
+
+(replaces Produce-windows.txt)
+
+This deployment process is based on the "windeployqt.exe" utility,
+which is an augmented "windeployqt.exe" binary by lkc, taken from
+https://github.com/lkc/windeployqt.
+
+1. Make sure that the Qt5 SDK is installed as C:\Qt or in similar folder.
+We assume that the Qt library is located in C:\Qt5\5.3\mingw482_32\bin
+and Qt Tools are located in C:\Qt5\Tools\mingw482_32\bin (or similar, 
+depending on the current Qt version, MinGW version and their locations).  
+
+2. If not yet done, go into the .\Docs\win-build-release directory and 
+copy recursively the folder \GEMS3DEPLOY to C:\ drive. Dive into the 
+C:\GEMS3DEPLOY\Gems3-app folder. Refresh recursively the \Resources
+subfolder (from .gems-gui\Resources in GEM-Selektor source code tree). 
+
+3. In the C:\GEMS3DEPLOY\Gems3-app folder, edit the "runwindeployqt.bat" 
+file to make sure that it contains the correct paths to 
+C:\Qt5\5.3\mingw482_32\bin and C:\Qt5\Tools\mingw482_32\bin directories
+(modify to actual ones, if necessary). Copy (or refresh) the files 
+qcollectiongenerator.exe, qhelpconverter.exe and qhelpgenerator.exe 
+from C:\Qt5\5.3\mingw482_32\bin to C:\GEMS3DEPLOY\Gems3-app folder.   
+
+4. Using QtCreator, build the actual release variant of gems3.exe. 
+Typically, you should have something like "C:\DevGEMS\trunk\gems-gui";
+"C:\DevGEMS\trunk\standalone"; and "C:\DevGEMS\trunk\build-release" 
+folders at the same level. Find gems3.exe in the latter folder and copy
+it into the C:\GEMS3DEPLOY\Gems3-app folder.  
+
+5. In command-line prompt window (terminal), cd to C:\GEMS3DEPLOY\Gems3-app 
+and run the command:
+
+	>runwindeployqt.bat gems3.exe
+
+This will find and copy all dependence files (Qt libraries, plugins, runtime 
+MinGW libraries, locale files, etc.) into C:\GEMS3DEPLOY\Gems3-app folder. 
+
+6. To test that GEM-Selektor runs correctly: cd to C:\GEMS3DEPLOY and 
+check that the bach file "rungems3.bat" contains correct path to the folder
+where the gems3.exe file is located (e.g. C:\GEMS3DEPLOY\Gems3-app). Edit, 
+if necessary (see also Readme3.txt). Then start GEM-Selektor by executing
+the rungems3.bat file. Upon the first start, the program will create a 
+C:\GEMS3DEPLOY\Library\Gems3\projects folder, in which the test projects\
+are located (by copying them from C:\GEMS3DEPLOY\Gems3-app\Resources\projects).  
+ 
+7. To create a new GEM-Selektor installer file for Windows 7 or Windows 8:
+
+If not yet done, download and install 7-zip v.9.20 (http://www.7-zip.org/). 
+Start it and select the C:\GEMS3DEPLOY folder. Add it contents (i.e. 
+Gems3-app folder and a few files) recursively to the 
+archive (to be created e.g. in C:\TEMP folder) "C:\TEMP\GEMS3DEPLOY.7z". 
+
+If not yet done, download and install 7zip-sfx-maker v.3.3 utility from
+http://sourceforge.net/projects/sfx-maker/ . Also download ResourceHacker 
+v.3.6 from http://www.angusj.com/resourcehacker/; install it into 
+"C:\Program Files (x86)\7-Zip SFX Maker\Resource Hacker" folder. 
+
+Start the 7zip-sfx-maker as an administrator and click on "Load Settings..." 
+button. Select the file 
+.\Docs\win-build-release\Self-extractor-GEMS3-settings.xml 
+(the path is shown relative to the folder in which this file 
+DeployOnWindows.txt is located). 
+Then, using "+" button or "Files" "Add 7z file...", select the 
+file "C:\TEMP\GEMS3DEPLOY.7z" prepared previously. Click through tabs 
+"Dialogs", "Tasks", "Metadata" and edit what is necessary, e.g. revision
+and version numbers, date of production, etc. When done, click on "Save 
+settings..." button to save settings to the file
+ .\Docs\win-build-release\Self-extractor-GEMS3-settings.xml
+which is under version control. Then click on the "Make SFX" button to 
+create the self-installer file. This will create a file 
+C:\TEMP\GEMS3DEPLOY.sfx.exe. Rename it according to the following pattern:
+
+	C:\TEMP\gems3.2-<rev1>.<rev2>-win32-install.sfx.exe 
+
+where put the same actual revision numbers for GEMS GUI (rev1) and 
+GEMS3K (rev2) parts, as used in "Self-extractor-GEMS3-settings.xml" 
+file. The self-extracting installer can now be distributed. 
+
+8. For installation steps, see INSTALL-windows.txt. Install and test 
+if it works.
+
+
+
