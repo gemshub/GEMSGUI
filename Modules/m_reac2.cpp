@@ -490,9 +490,9 @@ NEXT:
         		rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
         	if( !rc[q].Cps || rc[q].PreDC == S_OFF ) /* Temporarily !!!!!!! */
         		 rc[q].DCp =   (float *)aObj[ o_redcp ].Alloc( MAXCPCOEF, 1, F_);
-            for( i=0; i<7; i++ )
+            for( i=0; i<7; i++ ) {
               if( IsFloatEmpty( rc[q].Cps[i] ) )
-                  rc[q].Cps[i] = 0.0;
+                  rc[q].Cps[i] = 0.0; }
         }
         else if (CE == CTM_LGX)
         {
@@ -500,9 +500,9 @@ NEXT:
         		rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
         	if( !rc[q].Cps || rc[q].PreDC == S_OFF ) /* Temporarily !!!!!!! */
         		 rc[q].DCp =   (float *)aObj[ o_redcp ].Alloc( MAXCPCOEF, 1, F_);
-            for( i=0; i<7; i++ )
+            for( i=0; i<7; i++ ) {
               if( IsFloatEmpty( rc[q].pKt[i] ) )
-                  rc[q].pKt[i] = 0.0;
+                  rc[q].pKt[i] = 0.0; }
         }
 
     }

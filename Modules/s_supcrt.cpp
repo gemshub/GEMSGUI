@@ -1320,14 +1320,14 @@ TSupcrt::load(int phase, WATERPARAM& wp)
 //   TdPsdT - return  T * (dPsat / dT).
 double TSupcrt::TdPsdT(double t_)
 {
-    int i=-1;
+//    int i=-1;
     double v, w, y, z, q, b = 0.0e0, c = 0.0e0, TdPsdT;
 
     double a[8]={-.78889166e1,  .25514255e1, -.6716169e1,  .33239495e2,
                  -.10538479e3,  .17435319e3, -.14839348e3, .48631602e2};
     v = t_ / 647.25e0;
     w = 1.0 - v;
-    while (i++ <= 7)
+    for( int i=0; i<=7; i++  ) // while (i++ <= 7)
     {
         z  = i;
         y  = a[i] * pow(w,(z + 1.0e0)/2.0e0);

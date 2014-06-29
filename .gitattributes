@@ -14,6 +14,8 @@ Docs/INSTALL.macosx.txt -text
 Docs/INSTALL.windows.txt -text
 Docs/SeeLibraryInFinder.workflow/Contents/QuickLook/Preview.png -text
 Docs/build-release/gems3.png -text
+Docs/win-build-release/GEMS3DEPLOY/Gems3-app/gems3.png -text
+Docs/win-build-release/GEMS3DEPLOY/Gems3-app/windeployqt.exe -text
 GUI/Icons/CalculateBCCIcon.png -text
 GUI/Icons/CalculateBCCIcon24.png -text
 GUI/Icons/CalculateGEMIcon.png -text
