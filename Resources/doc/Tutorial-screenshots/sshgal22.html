@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 22</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.22">
+</head>
+<body background="bgimg.png">
+<h1><img src="gems1.png" alt="" height="48" width="48"> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal21.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; </font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to
+Start Page</font> </big></a></p>
+<hr size="2" width="100%">
+<p><font face="Helvetica, Arial, sans-serif"><b><big><big><small><small>(33)
+Adding Phase definitions to the project database</small></small></big></big></b></font></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">To use
+newly-added thermodynamic data records for minerals or to add a
+solid-solution model
+to your modelling project system, new phases must be declared by
+creating
+Phase definition records. This is usually not necessary for
+newly-created
+DComp or ReacDC records for aqueous or gaseous species because
+GEM-Selektor
+will try to add them automatically into the respective phases when the
+modelling project will be opened next time.&nbsp;</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Here, we will
+create a Phase record for single-component barium carbonate phase
+"Witherite",
+as well as another Phase record for a non-ideal (Ba,Ca)CO<sub>3</sub>
+solid
+solution made of two end-members witherite BaCO<sub>3</sub> and calcite
+CaCO<sub>3</sub>. The ReacDC record for witherite has been added to the
+"Carbonat" project
+database <a href="sshgal20.html">previously</a>. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">A rule of
+thumb is to make sure that all compounds to be included into the phase
+as components (end-members) are already provided in the project
+database (as DComp or
+ReacDC records) before creating an explicit Phase definition record. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Let us start
+with creating a Phase record "Witherite". A suitable template would be
+an available record "Calcite". To open it in the Phase window, get into
+the "Database
+Management" dialog and click the "Thermodynamic &nbsp;Phases (Phase)"
+button,
+then use the "Display selected record" &nbsp;</span><font
+ face="Helvetica, Arial, sans-serif"><img src="../doc/html/fileopen.png"
+ alt="LoadRecord button" height="20" width="20"> </font><span
+ style="font-family: helvetica,arial,sans-serif;"> &nbsp;toolbar button
+to get a list of available Phase records:&nbsp;</span></p>
+<p><img src="sshgal-22-1.png" alt="Phase list" height="455" width="608">
+<br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Find and
+select a "Calcite" record key, as shown above, and double-click on it
+or click
+"Ok".&nbsp;<br>
+This will get the phase definition for calcite into the Phase
+window:&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-22-2.png" alt="Phase window" height="307" width="608"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The phase
+definition for a single calcite mineral is very simple - basically, it
+contains only a link to the respective DComp record "calcite", and
+comments. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, execute
+the "Record" "New(Clone)..." menu command. Modify the key of the record
+to
+be created as shown below and click "Ok":&nbsp;</span></p>
+<p><img src="sshgal-22-3.png" alt="phase key" height="240" width="345">
+<br>
+</p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Next, a
+"Phase Setup" wizard dialog appears:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Phase Setup Wizard Page 1" src="sshgal-22-4.png"
+ style="width: 615px; height: 541px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Default modes
+are all sufficient for a pure (single-component) condensed phase. Click
+"Next &gt;" to proceed to the second page of Phase wizard, on which
+there is also nothing to change:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Phase Setup Wizard Page 2" src="sshgal-22-4-1.png"
+ style="width: 655px; height: 541px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Click "Next
+&gt;" to proceed to the last wizard page:<br>
+</span></p>
+<p><img alt="Phase Setup Wizard Page 3" src="sshgal-22-4-2.png"
+ style="width: 634px; height: 541px;"><br>
+<br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">After looking
+through the text, click "Finish". </span><span
+ style="font-family: helvetica,arial,sans-serif;">The program will show
+you a list of available ReacDC records and ask to mark those to be
+included in the phase definition. Click on the "Clear All" button and
+select "Witherite" (using left mouse click) as shown below. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-22-5.png" alt="ReacDC select" height="250" width="608">
+&nbsp; </span><br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Click on the
+"Ok" button to proceed. A similar dialog will appear asking</span><span
+ style="font-family: helvetica,arial,sans-serif;"> you to mark DComp
+records to be linked to Phase definition (not shown). As we have
+already selected witherite, click on the "Clear All" button (to
+unselect "calcite") and then on the "Ok" button to proceed. &nbsp;This
+brings you back to the "Phase"
+window, where you have to edit comment lines only:&nbsp;</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"></span><img
+ src="sshgal-22-6.png" alt="Phase edited" height="286" width="591"> <br>
+<span style="font-family: helvetica,arial,sans-serif;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, simply
+click on the </span><font face="Helvetica, Arial, sans-serif"> "Save
+current record" toolbar button &nbsp;</font><font
+ face="Helvetica, Arial, sans-serif"><img src="../doc/html/filesave.png"
+ alt="SaveRecord button" height="20" width="20"> </font><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; or execute the "Record"
+"Save" menu command to save the Phase record into the database file.</font>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><b><span style="font-family: helvetica,arial,sans-serif;"><br>
+(34) Creating a Phase record for an ideal solid solution</span></b></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">It is well
+known that carbonate minerals readily form solid solutions that are
+often non-ideal. To model such solid solutions in GEM-Selektor, one has
+to provide Phase records for them in advance. Let us first create one
+for the (Fe,Mn)CO<sub>3</sub> solid solution that can well be described
+using the Raoultian ideal mixing model because cationic radii of Fe<sup>+2</sup>
+and Mn<sup>+2</sup> are similar. In GEM-Selektor code, the Raoultian
+ideal mixing is a default model for any multi-component non-aqueous
+phase that assumes activities of all end-members equal to their mole
+fractions. Conversely,&nbsp; this means that activity coefficients are
+all unity and there is no need to compute them. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Execute&nbsp;</span><span
+ style="font-family: helvetica,arial,sans-serif;">the "Record"
+"New(Clone)..." menu command. Modify the key of the record to be
+created as shown below and
+click "Ok":&nbsp;</span><span
+ style="font-family: helvetica,arial,sans-serif;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="SS-rKey-1" src="sshgal-22-7.png" height="240" width="344"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In the
+appearing "Phase Setup" wizard, change the first two fields to&nbsp; <big><tt>'I'</tt></big>
+("Ideal") as shown below:</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-22-8.png" alt="SS-Cfig-1"
+ style="width: 617px; height: 541px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">There is
+nothing to change on the other two wizard pages. Therefore, click "Next
+&gt;", then "Next &gt;" and "Finish" to leave the wizard. The program
+will show you a list of available ReacDC records and ask to mark those
+to be included in the phase definition (not shown). Click on the "Clear
+All" and then "Ok" button. </span><span
+ style="font-family: helvetica,arial,sans-serif;">The next dialog will
+appear asking</span><span
+ style="font-family: helvetica,arial,sans-serif;"> you to mark DComp
+records to be linked to Phase definition. Mark there the entries for
+siderite ("Sd") and rhodochrosite ("Rds"), as shown below:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-22-9.png" alt="SS-DC-mark" height="372" width="608"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Click on the
+"Ok" button to proceed. </span><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;This brings you
+back to the "Phase" window. There, you will have to edit comment lines
+and (possibly) to set <big><tt>'I'</tt></big> (ideal end member) codes
+in the <big><tt>PhDCC</tt></big> column, as shown:&nbsp;</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"> <img
+ src="sshgal-22-10.png" alt="SS-id-Phase" height="307" width="608"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">When ready,
+click on the </span><font face="Helvetica, Arial, sans-serif"> "Save
+current record" toolbar button &nbsp;</font><font
+ face="Helvetica, Arial, sans-serif"><img src="../doc/html/filesave.png"
+ alt="SaveRecord button" height="20" width="20"> </font><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; or execute the "Record"
+"Save" menu command to save the Phase record into the database file.</font>
+<span style="font-family: helvetica,arial,sans-serif;"></span> </p>
+<p><br>
+<a href="sshgal23.html"><b><font face="Helvetica, Arial, sans-serif">Next
+Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

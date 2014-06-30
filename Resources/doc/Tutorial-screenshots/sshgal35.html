@@ -1,0 +1,757 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 35</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.35">
+</head>
+<body style="background-image: url(bgimg.png);">
+<h1><img src="gems1.png" alt="" height="48" width="48"> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal34.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; </font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to
+Start Page</font> </big></a></p>
+<hr size="2" width="100%">
+<p><b><font face="Helvetica, Arial, sans-serif">(47) Adding another
+sorption phase to the system (MUSIC model for gibbsite)<br>
+<br>
+</font></b></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">This tutorial
+page shows how to add your own surface complexation model to the
+existing GEMS modelling project.This&nbsp; process consists of the
+following steps: <br>
+</span></p>
+<p style="margin-left: 40px;"><span
+ style="font-family: helvetica,arial,sans-serif;">(i) defining the
+sorbent and its surface structure (number of surface types, site types
+on each surface type, and EDL models); <br>
+(ii) wirting down the stoichiometry of surface complexes and the
+surface complexation reactions; <br>
+(iii) creating a set of ReacDC records for surface species in GEMS
+project database; <br>
+(iv) creating a Phase record that links the ReacDC or DComp record for
+the sorbent, ReacDC records for the surface species, and their
+allocation to surface types and site types (with site densities), as
+well as contains the sorbent's specific surface area, the area
+fractions assigned to surface types, and the parameters of EDL model
+for each surface type;<br>
+(v) extending the system definitions in the modelling project with the
+new sorption phase; <br>
+(vi) calculating new sorption equilibria or re-calculating pre-existing
+SysEq records; (re)running Process simulators for model titrations. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The steps (i)
+to (iv) are to be performed in the "Thermodynamic Database" mode of
+GEMS, the steps (v) and (vi) - in the "Computation of Equilibria" mode.
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The setup of
+a new sorption model will be illustrated here on the example of MUSIC
+model of surface charge of gibbsite Al(OH)<sub>3</sub> in NaNO<sub>3</sub>
+electrolyte, which has only two inner-sphere and two outer-sphere
+surface complexes. Details on the model can be found in papers by
+Hiemstra and van Riemsdijk (1996, 2002) and in the <a
+ href="ChapterSection.PDF">supporting material here</a> which describes
+how the MUSIC model is recast into the GEM SCM framework using the
+Pauling bond valence principle. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Gibbsite
+surface exposes singly-coordinated Al-OH<sup>-0.5</sup> species with
+the bond valence of 0.5 and zero-plane charge of -0.5. This species is
+protonated according to the reaction<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Al-OH<sup>-0.5</sup>
++ H<sup>+</sup> = Al-OH<sub>2</sub><sup>+0.5</sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(1) <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">with log<span
+ style="font-style: italic;">K</span><sub>(1)</sub> = 10.0 which is
+independent of the site density parameter (for gibbsite, 8.15 nm<sup>-2</sup>
+or 1.353 * 10<sup>-5</sup> mol m<sup>-2</sup>).<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The
+outer-sphere adsorption of electrolyte is described with the reactions<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Al-OH<sup>-0.5</sup>
++ Na<sup>+</sup> = Al-OH<sup>-0.5</sup>Na<sup>+</sup>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(2)<br>
+</span><span style="font-family: helvetica,arial,sans-serif;"><br>
+Al-OH<sub>2</sub><sup>+0.5</sup> + NO<sub>3</sub><sup>-</sup> = Al-OH<sub>2</sub><sup>+0.5</sup>NO<sub>3</sub><sup>-</sup>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(3)</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">with log<span
+ style="font-style: italic;">K</span><sub>(2)</sub>&nbsp; = log<span
+ style="font-style: italic;">K</span><sub>(3)</sub> = 0.1</span><span
+ style="font-family: helvetica,arial,sans-serif;"></span><span
+ style="font-family: helvetica,arial,sans-serif;">.&nbsp; <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">However, in
+order to define the elemental stoichiometries of four surface species
+involved in reactions (1), (2) and (3) and determine their standard
+molal Gibbs energies <span style="font-style: italic;">G<sup>o</sup></span>,
+two additional reactions are needed: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">0.75 H<sub>2</sub>O
+= Al-OH<sub>1.5</sub><sup>0</sup>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; (4)<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"> Al-OH<sub>1.5</sub><sup>0</sup>&nbsp;
++ 0.5H<sup>+</sup> = </span><span
+ style="font-family: helvetica,arial,sans-serif;"> Al-OH<sub>2</sub><sup>+0.5</sup>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; (5) &nbsp; &nbsp; <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">with log<span
+ style="font-style: italic;">K</span><sub>(4)</sub> = 1.74436
+(conventional) and log<span style="font-style: italic;">K</span><sub>(5)</sub>
+= 5.3 obtained from GEM SCM fitting of titration data (details are given<a
+ href="ChapterSection.PDF"> here</a>) . The&nbsp;</span><span
+ style="font-family: helvetica,arial,sans-serif;"> Al-OH<sub>1.5</sub><sup>0</sup>&nbsp;</span><span
+ style="font-family: helvetica,arial,sans-serif;"> species is needed
+only to determine the standard molal Gibbs energy of the </span><span
+ style="font-family: helvetica,arial,sans-serif;">Al-OH<sub>2</sub><sup>+0.5</sup>&nbsp;
+surface species; hence, </span><span
+ style="font-family: helvetica,arial,sans-serif;">the&nbsp;</span><span
+ style="font-family: helvetica,arial,sans-serif;"> Al-OH<sub>1.5</sub><sup>0</sup>
+</span><span style="font-family: helvetica,arial,sans-serif;">species
+will only remain in the thermodynamic database, but it will not be
+included in the SCM and in surface charge calculations. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Reaction (4)
+defines the elemental stoichiometry O<sub>0.75</sub>H<sub>1.5</sub>&nbsp;
+of the fictive </span><span
+ style="font-family: helvetica,arial,sans-serif;">Al-OH<sub>1.5</sub><sup>0</sup>&nbsp;</span><span
+ style="font-family: helvetica,arial,sans-serif;"> surface species.
+Next, the </span><span style="font-family: helvetica,arial,sans-serif;">O<sub>0.75</sub>H<sub>2</sub><sup>+0.5</sup>
+stoichiometry is defined through reaction (5) for the Al-OH<sub>2</sub><sup>+0.5</sup>
+surface species. Reaction (1) leads to the </span><span
+ style="font-family: helvetica,arial,sans-serif;">O<sub>0.75</sub>H<sup>-0.5</sup></span><span
+ style="font-family: helvetica,arial,sans-serif;"> stoichiometry for
+the </span><span style="font-family: helvetica,arial,sans-serif;">Al-OH<sup>-0.5</sup>&nbsp;
+</span><span style="font-family: helvetica,arial,sans-serif;">surface
+species. Finally, the elemental stoichiometries </span><span
+ style="font-family: helvetica,arial,sans-serif;"></span><span
+ style="font-family: helvetica,arial,sans-serif;">O<sub>0.75</sub>H<sub>2</sub></span><span
+ style="font-family: helvetica,arial,sans-serif;">NO<sub>3</sub><sup>-0.5</sup>&nbsp;
+and </span><span style="font-family: helvetica,arial,sans-serif;"></span><span
+ style="font-family: helvetica,arial,sans-serif;">O<sub>0.75</sub>H</span><span
+ style="font-family: helvetica,arial,sans-serif;">Na<sup>+0.5</sup>&nbsp;
+of the two outer-sphere surface complexes can be determined from
+reactions (2) and (3), respectively.<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In this order
+of reactions (4), (5), (1), (2), (3), we can now create the ReacDC
+records to determine thermodynamic properties of gibbsite surface
+charge species in the GEMS project database. &nbsp; &nbsp;</span><span
+ style="font-family: helvetica,arial,sans-serif;"> </span><span
+ style="font-family: helvetica,arial,sans-serif;"> </span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In the main
+GEMS dialog, select the "Computation of Equilibria" mode and in the
+appearing list of modeling projects, select the "SorptionUL" project
+that has been created before (see preceding pages of this screenshot
+tutorial). Click the "Open Project" button which gets you in the "Gibbs
+Energy Minimization Modelling Project" Dialog. There, click on the
+"Back" button to get back into the GEMS main dialog and there click on
+the "Thermodynamic Database" button to arrive at the "Thermodynamic
+Database Management" dialog shown below. This procedure ensures that
+all database files belonging to the "SorptionUL" modeling project are
+properly linked and accessible. <br>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="TD Management Dialog" src="sshgal-35-1.png"
+ style="width: 448px; height: 474px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+In the above dialog, click on the "Dependent Components (ReacDC)"
+button to open the ReacDC module window. There, click on the "Display
+selected record"&nbsp;<img alt="Display" src="fileopen.png"
+ style="width: 20px; height: 20px;">&nbsp; toolbar button and in the
+appearing list, select the "c:_ATS_:&gt;OH@:nr:" record key: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Selection" src="sshgal-35-2.png"
+ style="width: 608px; height: 310px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+Click "Ok" to get back to the ReacDC module window:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Prototype ReacDC" src="sshgal-35-3.png"
+ style="width: 487px; height: 571px;"><br>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">This existing
+record can be used as a prototype for creating a fictive neutral
+surface species on gibbsite according to reaction (4). To do this,
+select the "Record" "New(Clone)..." menu command, change the record key
+as shown below, and click "Ok" when ready:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="New key (4)" src="sshgal-35-4.png"
+ style="width: 328px; height: 240px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+This brings you in the "Step1" page of the ReacDC setup wizard. Make
+sure that the class code of the newly-defined Dependent Component
+Al&gt;OH1.5@ is set to 'X' and the method codes for temperature and
+pressure corrections are set as shown below:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="ReacDC wizard 1" src="sshgal-35-5.png"
+ style="width: 691px; height: 516px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">When done,
+click "Next &gt;" to arrive at the "Step 2" page:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="ReacDC wizard 2" src="sshgal-35-6.png"
+ style="width: 691px; height: 516px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Here, check
+that the number of dependent components in reaction is set to 2 (see
+reaction 4 which involves two species). Click "Next &gt;" to continue.
+On the appearing "Step 3" wizard page, set&nbsp; the number of SDref
+bibliography links to 1:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="ReacDC wizard 3" src="sshgal-35-7.png"
+ style="width: 691px; height: 516px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">and click
+"Finish" to continue. In the appearing list of ReacDC record keys to be
+involved in the reaction, click "Clear All" (there is nothing to select
+for reaction 4) and then "Ok". In the next list of DComp record keys to
+be icluded, make sure that only water is selected, as shown below: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Selection H2O" src="sshgal-35-8.png"
+ style="width: 608px; height: 323px;"><br>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">CLick "Ok" to
+get back to the ReacDC window. There, change the species name in the
+comment line to </span><big><span style="font-family: monospace;">Al&gt;OH1.5@</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">, the formula line to
+</span><big><span style="font-family: monospace;">O0.75H1.5@</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">, and check that the
+logK value is set to 1.74436. Very important: in the&nbsp; </span><big><span
+ style="font-family: monospace;">SC_CF</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; field, set the
+reaction stoichiometry coefficient for </span><big><span
+ style="font-family: monospace;">H2O@</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; to -0.75
+according to the reaction (4). When ready, click on the "Calculate
+record data" toolbar button and save changes to database. The
+thermodynamic data will be recalculated as shown on the screenshot
+below:</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="ReacDC fictive" src="sshgal-35-9.png"
+ style="width: 469px; height: 584px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The obtained
+standard molar Gibbs energy -187.844 kJ/mol of the fictive </span><span
+ style="font-family: helvetica,arial,sans-serif;"> </span><big><span
+ style="font-family: monospace;">Al&gt;OH1.5@</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> species is
+highlighted. Change the bibliodraphic reference (the lowermost two
+fields) as shown below and save the record to database by clicking on
+the "Save current record"&nbsp;<img alt="Save button" src="filesave.png"
+ style="width: 20px; height: 20px;">&nbsp;&nbsp; toolbar button. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, we can
+proceed with constructing the ReacDC record that defines stoichiometry
+and thermodynamic properties of the protonated&nbsp; </span><big><span
+ style="font-family: monospace;">Al-OH2+0.5 </span></big><span
+ style="font-family: helvetica,arial,sans-serif;">inner-sphere surface
+species according to reaction (5). The algorithm is the same as the
+just conducted one: we clone any currently loaded record, make
+necessary changes in the ReacDC wizard, select ReacDCs and/or DComps to
+be involved in the reaction, then enter the newly-defined species
+stoichiometry, reaction stoichiometry coefficients, logK and some
+reaction effects (if there are any),&nbsp; re-calculate the data, and
+save the record to the modelling project database.<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, select
+the "Record" "New(Clone)..." menu command, change the record key as
+shown below, and click "Ok" when ready:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Al-OH2+0.5 record key" src="sshgal-35-10.png"
+ style="width: 328px; height: 240px;"><br>
+</span><span style="font-family: helvetica,arial,sans-serif;">&nbsp;&nbsp;
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In the
+appearing ReacDC setup wizards, set fields on "Step 1" page as shown
+below, and click "Next &gt;":<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Wizard -OH2+0.5 page 1" src="sshgal-35-11.png"
+ style="width: 691px; height: 516px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Click "Next
+&gt;" twice and then "Finish" to complete the setup wizard. In the
+appearing ReacDC record key list, mark (with the mouse click) the
+record key of the Al&gt;OH1.5@ species that you have created before
+(make sure that no other record keys are marked):<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Selection ReacDC" src="sshgal-35-12.png"
+ style="width: 608px; height: 291px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Click "Ok"
+then, and in the appearing list of DComp record keys, mark the </span><big><span
+ style="font-family: monospace;">H+</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> species as shown
+below (make sure that water </span><big><span
+ style="font-family: monospace;">H2O@</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> is de-selected):<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Select DComp" src="sshgal-35-13.png"
+ style="width: 608px; height: 251px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+CLick "Ok" to get back to the ReacDC process window. According to
+reaction (5), set the comment line, the formula of newly-defined
+surface species, the SC_DC reaction stoichiometry vector, the logK =
+5.3 (in logKr[1] field), the S0r[0], the ab_[0] fileds :</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Data for -OH2+0.5" src="sshgal-35-14.png"
+ style="width: 467px; height: 596px;"><br>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Please, note
+that logKr[0], G0r[0] and H0r[0] fields should also be set to "empty"
+("---") values as shown above, otherwise the new reaction and dependent
+component properties cannot be calculated. When all necessary data
+fields are&nbsp; set,&nbsp; </span><span
+ style="font-family: helvetica,arial,sans-serif;">click on the
+"Calculate record data" toolbar button and save changes to database.
+The thermodynamic data will be recalculated as shown on the screenshot
+below:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Calculated data" src="sshgal-35-15.png"
+ style="width: 467px; height: 596px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+</span><span style="font-family: helvetica,arial,sans-serif;">Save the
+record to database by clicking on the "Save current record"&nbsp;<img
+ alt="Save button" src="filesave.png" style="width: 20px; height: 20px;">&nbsp;&nbsp;
+toolbar button.&nbsp; We are now ready for creating the next ReacDC
+record for the Al-OH-0.5 inner-sphere surface species through reaction
+(1). <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Select the
+"Record" "New(Clone)..." menu command, change the record key as shown
+below, and click "Ok" when ready:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="New Al-OH-0.5 record key" src="sshgal-35-16.png"
+ style="width: 328px; height: 240px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In the
+appearing Reaction setup wizard, simply click "Next &gt;" twice and
+then "Finish". In the apperaring ReacDC record key list, clear all and
+mark the "</span><big><span style="font-family: monospace;">c:ALO_M1:-OH2+0.5:new:</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" record key, then
+click "Ok". In the next, DComp record key list, make sure that the
+aqueous proton H+ is the only marked record key, and click "Ok". In the
+appearing ReacDC window, edit the comment line, the formula of
+newly-defined species (must be "O0.75H-0.5"), set the correct reaction
+stoichiometry coefficients (in the </span><big><span
+ style="font-family: monospace;">SC_DC</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> column), then enter
+the logK = 10.0 (l</span><big><span style="font-family: monospace;">ogKr[1]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> field), clean other
+fields like in the previous case, and re-calculate the ReacDC record.
+If everything done right, you should see the following contents: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="ReacDC for Al-OH-0.5" src="sshgal-35-17.png"
+ style="width: 467px; height: 596px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+Save the record to database by clicking on the "Save current
+record"&nbsp;<img alt="Save button" src="filesave.png"
+ style="width: 20px; height: 20px;">&nbsp;&nbsp;
+toolbar button.&nbsp; Next, we can create the ReacDC record
+that defines the Al-OH-0.5Na+ outer-sphere surface complex through
+reaction (2). </span><span
+ style="font-family: helvetica,arial,sans-serif;">Select the "Record"
+"New(Clone)..." menu command, change the record key as shown below, and
+click "Ok" when ready:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="New Al-OH-0.5Na+ record key" src="sshgal-35-18.png"
+ style="width: 328px; height: 240px;"><br>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In the
+appearing
+Reaction setup wizard, change the class code to "</span><big><span
+ style="font-family: monospace;">Z&nbsp;&nbsp; outer sphere surface
+complex</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">", then simply click
+"Next &gt;" twice and then
+"Finish". In the apperaring ReacDC record key list, clear all and mark
+the "</span><big><span style="font-family: monospace;">c:ALO_M1:-OH-0.5:new:</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">"
+record key, then click "Ok". In the next, DComp record key list, make
+sure that the aqueous Na+ ion is the only marked record key, and
+click "Ok". In the appearing ReacDC window, edit the comment line, the
+formula of newly-defined species (must be "O0.75HNa+0.5"), set the
+correct reaction stoichiometry coefficients (in the </span><big><span
+ style="font-family: monospace;">SC_DC</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> column), then enter
+the logK = 0.1 (l</span><big><span style="font-family: monospace;">ogKr[1]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">
+field), clean other fields like in the previous case, check the ab_
+field that should contain charges on zero- and beta EDL planes, and
+re-calculate
+the ReacDC record. Now, you should see the
+following window: </span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Data for Al-OH-0.5Na+" src="sshgal-35-19.png"
+ style="width: 467px; height: 596px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+If the data are Ok, save the record to database and proceed with
+creating the last ReacDC in our model of gibbsite surface charge, the
+definition of Al-OH2+0.5NO3- outer-sphere surface species according to
+reaction (3). <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Select the
+"Record" "New(Clone)..." menu command, change the record key as shown
+below, and click "Ok" when ready:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="New record key" src="sshgal-35-20.png"
+ style="width: 328px; height: 240px;"><br>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In the
+appearing
+Reaction setup wizard, check that the class code is "</span><big><span
+ style="font-family: monospace;">Z&nbsp;&nbsp; outer sphere surface
+complex</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">", then simply click
+"Next &gt;" twice and then
+"Finish". In the apperaring ReacDC record key list, clear all and mark
+the "</span><big><span style="font-family: monospace;">c:ALO_M1:-OH2+0.5:new:</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">"
+record key, then click "Ok". In the next, DComp record key list, make
+sure that the aqueous NO3- ion is the only marked record key, and
+click "Ok". In the appearing ReacDC window, edit the comment line, the
+formula of newly-defined species (must be "O0.75H2N|5|O3-0.5"), set the
+correct reaction stoichiometry coefficients (in the </span><big><span
+ style="font-family: monospace;">SC_DC</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> column), then enter
+the logK = 0.1 (l</span><big><span style="font-family: monospace;">ogKr[1]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">
+field), clean other fields like in the previous case, check the ab_
+field that should contain charges on zero- and beta EDL planes, and
+re-calculate
+the ReacDC record. Now, you should see the
+following information:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Data for Al-OH2+0.5NO3-" src="sshgal-35-21.png"
+ style="width: 467px; height: 596px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+When done, save the record to database. We have now all the ReacDC
+records for surface species on gibbsite and can proceed with defining
+the "Gibbsite" sorption phase. Close the ReacDC module window to get
+back to "Thermodynamic Database Management" dialog. There, click on the
+"Thermodynamic Phases (Phase)" button and open the Phase module window.
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In the Phase
+window, execute the "Record" "Create..." menu command and enter the
+following new Phase record key:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="New Phase key" src="sshgal-35-22.png"
+ style="width: 328px; height: 240px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+Click "Ok" when ready. In the appearing Phase setup wizard (Step 1
+page), set the phase model codes as shown on screenshot below:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Phase wizard step 1" src="sshgal-35-23.png"
+ style="width: 629px; height: 541px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Click "Next
+&gt;" to continue setup of the new sorption phase. This brings you to
+the "Step 2" page of the wizard. There, important setup items are
+located in the lower part of the page. Set the checkbox on for the
+consideration of surface complexation in this sorption phase; set the
+number of surface types to 1, and the sorbent specific surface area to
+20.3 m<sup>2</sup>/g:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Phase wizard Step 2" src="sshgal-35-24.png"
+ style="width: 648px; height: 541px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+Click "Next &gt;" to continue setup. In the "Step 3" page, you can set
+the number of bibliographic (SDref) links to 1 and click "Finish" to
+complete the Phase setup wizard. In the appearing ReacDC record key
+list, mark the four newly-created surface species, as shown below:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Selection of ReacDC" src="sshgal-35-25.png"
+ style="width: 608px; height: 430px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Do not mark
+the fictive Al&gt;OH1.5@ neutral surface species - it was needed only
+to calculate thermodynamic properties of the four surface charge
+species on gibbsite. Click "Ok" when ready. In the appearing DComp
+record key list, mark gibbsite (sorbent) as shown below:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="DComp selection" src="sshgal-35-26.png"
+ style="width: 608px; height: 250px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Click
+"Ok"&nbsp; to complete selection of&nbsp; phase components and get back
+to the Phase module window. There, click on the "Calculate Record
+Data"&nbsp;&nbsp; toolbar button, save the record to database, and
+reply "Yes" on the appearing question <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Question" src="sshgal-35-27.png"
+ style="width: 525px; height: 128px;"><br>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Some data
+fields on the Phase Page 1 window will change because some data will be
+read from the ReacDC records. The page should look like this: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Phase Page 1" src="sshgal-35-28.png"
+ style="width: 821px; height: 398px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The table in
+the lower part of the window shows the setup of surface complexation
+model; some fields still need to be entered or changed. Let us examine
+them from left to right. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The leftmost
+PhDCC column contains codes of species involved in the phase. The last '</span><big><span
+ style="font-family: monospace;">O</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">' code against
+gibbsite "</span><big><span style="font-family: monospace;">Gbs</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" must be changed to '</span><big><span
+ style="font-family: monospace;">Q</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">' which tells the
+program that gibbsite "</span><big><span style="font-family: monospace;">Gbs</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" should be treated
+as the sorbent, on whose surface the sites are located. The specific
+surface area is visible above (20.3 m<sup>2</sup>/g). <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The SAT_C[0]
+column filled with '</span><big><span style="font-family: monospace;">L</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">' characters contains
+codes that select calculation of SACT (surface activity coefficient
+terms) which replace the site balances used in other SCM approaches. '</span><big><span
+ style="font-family: monospace;">L</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">' means "Langmuir
+(competitive) isotherm", which is underlying most SCMs including MUSIC
+ones. Only surface species belonging to the same site type on the same
+surface type will compete for sites. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Allocation of
+species to surface types can be given in the "</span><big><span
+ style="font-family: monospace;">SAT_C[2]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" column (default 0,
+i.e. the first surface type; the allocated surface types can be seen on
+Page 3 of the Phase window later on). In our case, there is nothing to
+change because we will consider only one surface type on gibbsite, to
+which the entered specific surface actually refers. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Allocation to
+site types (within each surface type) is given in the "</span><big><span
+ style="font-family: monospace;">SAT_C[4]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" column (default 0,
+i.e. the first site type). In the case of gibbsite, there is also
+nothing to change because the model is, in fact, single-surface
+single-site. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Finally, the "</span><big><span
+ style="font-family: monospace;">SAT_C[3]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" column defines
+where the outer-sphere charge of surface complexes is assigned in the
+framework of chosen EDL model. Since we choose the Basic Stern model,
+the outer-sphere charge should be assigned to the "beta" plane (code '</span><big><span
+ style="font-family: monospace;">b</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">' or '</span><big><span
+ style="font-family: monospace;">1</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">').&nbsp; Therefore,
+enter the '</span><big><span style="font-family: monospace;">b</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">' code against the </span><big><span
+ style="font-family: monospace;">-OH-0.5Na+</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> and </span><big><span
+ style="font-family: monospace;">-OH2+0.5NO3-</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> species. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Next to the
+right, the "</span><big><span style="font-family: monospace;">MaSDj</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" table contains
+numerical parameters of the SCM setup. The most important parameter is
+the site density ("</span><big><span style="font-family: monospace;">MaSDj[0]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" column). The site
+density is a property of each site type and must be given the same
+number for all species allocated to the same site type on the same
+surface type. For the gibbsite surface, the value of 8.15 nm<sup>-2</sup>
+is recommended; enter this value against all surface species. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The next
+column "</span><big><span style="font-family: monospace;">MaSDj[1]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" contains unit
+charges allocated to zero plane for all surface species. These charges
+should have been collected from ReacDC records where we had entered
+them previously into the "</span><big><span
+ style="font-family: monospace;">ab_[0]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" data field. The "</span><big><span
+ style="font-family: monospace;">MaSDj[2]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" column contains
+unit charges of surface species assigned to outer EDL planes (beta- or
+third plane, depending on the code in "</span><big><span
+ style="font-family: monospace;">SAT_C[3]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" column). The
+numbers were entered previously into "</span><big><span
+ style="font-family: monospace;">ab_[1]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" field in ReacDC
+records for surface complexes. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The "</span><big><span
+ style="font-family: monospace;">MaSDj[4]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" column contains
+dentateness of surface species (should be 1 for all). The remaining two
+columns are not used in our SCM. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Enter also
+the comment lines. Finally, this page of the Phase window should look
+like that shown below. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Phase Page 1 updated" src="sshgal-35-29.png"
+ style="width: 821px; height: 398px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, switch
+to Page 3 for completing the surface complexation model setup. There,
+find a "</span><big><span style="font-family: monospace;">SCM_C</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" field which
+contains the '</span><big><span style="font-family: monospace;">S</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">' code (denotes the
+Basic Stern EDL model) to be applied on our single surface type. Nex to
+the right, the fraction of this surface type area relative to the whole
+surface of the sorbent (in this case, 1) should be entered. In the "</span><big><span
+ style="font-family: monospace;">MsDt[0]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" cell, the total
+site density on the surface type is given (enter 8.15 nm<sup>-2</sup>).&nbsp;
+The "</span><big><span style="font-family: monospace;">MsDt[1]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" field is not used
+in Basic Stern EDL&nbsp; model - change it to 0. The "</span><big><span
+ style="font-family: monospace;">Cap_t[0]</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" field contains the
+inner capacitance density C1 parameter (1 F/m</span><sup
+ style="font-family: helvetica,arial,sans-serif;">2</sup><span
+ style="font-family: helvetica,arial,sans-serif;">); change it to 0.9
+F/m<sup>2</sup> according to our model. The next feld (outer
+capacitance density C2) is not used in BS model; the last field
+(permanent charge density) should be 0 for amphoteric oxide surfaces. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Finally, the
+Page 3 should look as shown below.<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Page 3 edited" src="sshgal-35-30.png"
+ style="width: 625px; height: 282px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+The Phase definition for the Basic Stern model of gibbsite surface
+charge can now be saved to database. After this is done, we are ready
+to proceed with sorption equilibria calculations. The next step is to
+plug the new sorption phase into chemical system definitions in our
+modelling project. To do this, close the Phase window and switch back
+to the main GEMS dialog. There, click on the "Computation of
+Equilibria" button, select the project "SorptionUL" in the appearing
+list, and click on the "OpenProject" button. In the appearing dialog<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Question" src="sshgal-35-31.png"
+ style="width: 510px; height: 128px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">click on the
+"Yes for All" button. After some waiting, you should see the "Gibbs
+Energy Minimization Modelling Project" dialog, which means that the new
+sorption phase has been succesfully inserted into all SysEq records
+contained in the project. These pre-existing records all need to be
+re-calculated. Just open a record, find the newly-inserted "</span><big><span
+ style="font-family: monospace;">Gibbsite_an</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">" sorption phase in
+the phases tree, and de-select it by changing '+' to '-' to the right.
+Then click on the "Calculate BCC"&nbsp;<img alt="RunBCC"
+ src="RunBCC.png" style="width: 20px; height: 20px;">&nbsp; toolbar
+button and then calculate the equilibrium by clicking on the "Calculate
+equilibrium state"&nbsp;<img alt="RunIPM" src="RunIPM.png"
+ style="width: 20px; height: 20px;">&nbsp; toolbar button, finally
+clicking "Accept" to save the updated records to database. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">New system
+definitions (for modeling gibbsite surface charge) can be created from
+scratch, as described in the next Tutorial page. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><span
+ style="text-decoration: underline;"><span style="font-weight: bold;"><br>
+</span></span></span><a href="sshgal36.html"><b><font
+ face="Helvetica, Arial, sans-serif">Next
+Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2006&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support
+Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

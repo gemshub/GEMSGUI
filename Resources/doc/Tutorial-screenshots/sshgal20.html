@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 20</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.20">
+</head>
+<body style="background-image: url(bgimg.png);">
+<h1><img src="gems1.png" style="width: 48px; height: 48px;" alt=""> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal19.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp;
+</font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to Start Page</font> </big></a></p>
+<hr size="2" width="100%">
+<p><font face="Helvetica, Arial, sans-serif"><b><big><big><small><small>(31)
+Adding a reaction-defined Dependent Component</small></small></big></big>
+(ReacDC) record. </b></font><span
+ style="font-family: helvetica,arial,sans-serif;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">An
+alternative way
+to describe thermodynamic properties of a chemical species is to write
+a
+reaction of its formation (or decomposition) that involves other
+species with
+data already existing in the GEMS database. Given that the molar
+effects of
+this reaction are known, molar properties of the species of interest
+can be
+algebraically calculated at any temperature. This can be done in GEMS
+package
+by creating a ReacDC record. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">As usual, the
+easiest way to add a reaction-defined dependent component to the
+project database is to open a similar record in the ReacDC window and
+"clone" it, edit necessary data fields and save to the database
+file.&nbsp;<br>
+</span></p>
+<span style="font-family: helvetica,arial,sans-serif;">Suppose we have
+to add the data for crystalline witherite (BaCO<sub>3</sub>) as a
+ReacDC
+record. For the reaction <br>
+Ba<sup>+2</sup> + HCO<sub>3</sub><sup>-</sup> = BaCO<sub>3</sub>(s) +
+H<sup>+</sup> , the <a href="../doc/pdf/TM-44-03-04-web.pdf">Nagra-PSI
+01/01
+database</a> gives the values of logK = -1.7672, dH<sup>o</sup> =
+11.961
+kJ/mol, and dCp = 293.36 J/K/mol at 1 bar and 25 <sup>o</sup>C. These
+data
+are sufficient also for temperature corrections up to 100 - 150 <sup>o</sup>C.
+&nbsp;</span>
+<p><span style="font-family: helvetica,arial,sans-serif;">Let us start
+with creating a ReacDC record for the mineral witherite. A suitable
+template
+would be an available record for rhodochrosite MnCO<sub>3</sub>. To
+open
+it in the ReacDC window, get into the "Database Management" dialog and
+click
+the "Dependent Components (ReacDC)" button, then use the "Display
+Selected
+record" &nbsp;</span><font face="Helvetica, Arial, sans-serif"><img
+ src="fileopen.png" alt="LoadRecord button"
+ style="height: 20px; width: 20px;"> </font><span
+ style="font-family: helvetica,arial,sans-serif;"> &nbsp;toolbar button
+to get a list of ReacDC records:&nbsp;</span><br>
+</p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-20-1.png" alt="ReacDC list"
+ style="height: 455px; width: 608px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Find and
+select a "Rds-Syn" record key, as shown above, and double-click on it
+or click
+the "Ok" button. This will get the data for synthetic rhodochrosite MnCO<sub>3</sub>
+in the ReacDC window:&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-20-2.png" alt="ReacDC window"
+ style="height: 590px; width: 568px;"> &nbsp;</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">What you see
+is Page 1 with name and fomula of the compound (MnCO<sub>3</sub>),
+reaction coefficients (<big><tt>SC_DC</tt></big>) and record keys of
+involved components (<big><tt>REsDC</tt></big>), effects of the
+reaction (e.g. <big><tt>H0r[0]</tt></big>), standard molar properties
+of the compound, and bibliographic references. Click on the "Page 2"
+button to see the second page with some more data; as
+usual, you can examine tooltips and <b><big><tt>F1</tt></big></b> help
+pages
+to learn about &nbsp;the meaning of data fields. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, let us
+return to Page 1 and execute the "Record" "New(Clone)..." menu command.
+Modify
+the key of the record to be created as shown below and click "Ok":&nbsp;</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"></span><img
+ src="sshgal-20-3.png" alt="ReacDC rKey"
+ style="height: 240px; width: 343px;"> <span
+ style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Next, a
+"ReacDC Setup" wizard appears; there is nothing to re-configure in this
+case,
+so just click "Next &gt;" to proceed. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-20-4.png" alt="ReacDC remake wizard"
+ style="width: 691px; height: 513px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">This brings
+about the second page of the wizard; click "Next &gt;" again. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="ReacDC wizard (page 2)" src="sshgal-20-4-1.png"
+ style="width: 691px; height: 478px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The final
+page of the ReacDC wizard (below) contains some useful
+explanations.&nbsp; After reading them, click "Finish".<br>
+</span></p>
+<p><img alt="ReacDC wizard page 3" src="sshgal-20-4-2.png"
+ style="width: 691px; height: 434px;"><br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Next,
+the program will show you a list of available ReacDC records and ask to
+mark those to be included in the reaction (to remind, the reaction is </span><span
+ style="font-family: helvetica,arial,sans-serif;">Ba<sup>+2</sup> + HCO<sub>3</sub><sup>-</sup>
+= BaCO<sub>3</sub>(s) + H<sup>+</sup> </span><font
+ face="Helvetica, Arial, sans-serif">). <br>
+</font></p>
+<p><img src="sshgal-20-5.png" alt="ReacDC select"
+ style="width: 573px; height: 275px;"> <br>
+</p>
+<p><font face="Helvetica, Arial, sans-serif">Note that witherite will
+be automatically
+made as the last component in the reaction, so we have to include </font><span
+ style="font-family: helvetica,arial,sans-serif;">Ba<sup>+2</sup>, HCO<sub>3</sub><sup>-</sup>
+, and H<sup>+</sup> </span><font face="Helvetica, Arial, sans-serif">aqueous
+species only. Since they do not appear in the list above, there is
+nothing
+to select, so click on the "Clear All" and then "Ok" button. The
+program
+will immediately display another multiple selection list of available
+DComp
+records that can be included into the definition of our reaction:&nbsp;
+<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><span
+ style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-20-6.png" alt="DComp select"
+ style="height: 455px; width: 608px;"> <br>
+</span></font></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Click on the
+"Clear All" button and scroll the list to find and mark (by a left
+mouse click) the entries for Ba<sup>+2</sup>, HCO<sub>3</sub><sup>-</sup>
+, and H<sup>+</sup> </span><font face="Helvetica, Arial, sans-serif">aqueous
+species (as shown above). Click on "Ok" button when finished. </font><br>
+<span style="font-family: helvetica,arial,sans-serif;"><br>
+This will finally get you back into the ReacDC window that still
+contains data for MnCO<sub>3</sub> solid that we now have to edit in
+order to replace it with the data for synthetic witherite (see the
+beginning of this page). Put the "Empty" value ("---") into all cells
+where you have no data to enter. Do not forget to change the formula to
+"<big><tt>BaCO3</tt></big>" and
+to check the reaction stoichiometry coefficients. Now, Page 1 should
+look
+like this:&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-20-7.png" alt="ReacDC data entered"
+ style="height: 590px; width: 546px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">To complete
+data in the new record, click on the "Calculate record data" &nbsp;</span><span
+ style="font-family: helvetica,arial,sans-serif;"><img src="kcalc.png"
+ alt="b-calc" style="height: 22px; width: 22px;"> </span><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;
+toolbar&nbsp; button or press <b><big><tt>F9</tt></big></b> hot key or
+execute "Record" "Calculate" menu command. &nbsp;A warning
+appears:&nbsp;</span><br>
+</p>
+<p><img src="sshgal-20-8.png" alt="Warning 1"
+ style="height: 127px; width: 345px;"> <br>
+</p>
+<span style="font-family: helvetica,arial,sans-serif;"></span>
+<p><span style="font-family: helvetica,arial,sans-serif;">Click on the
+"Yes" button to save the data that you have edited.</span> <span
+ style="font-family: helvetica,arial,sans-serif;">The necessary
+calculations will be performed, and you will see the ReacDC window
+again with many data items restored:</span><br>
+</p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-20-9.png" alt="ReacDC data"
+ style="height: 615px; width: 550px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"> If you get
+these or similar numbers, click on the </span><font
+ face="Helvetica, Arial, sans-serif"> "Save current record" toolbar
+button &nbsp;</font><font face="Helvetica, Arial, sans-serif"><img
+ src="filesave.png" alt="SaveRecord button"
+ style="height: 20px; width: 20px;"> </font><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; or execute the "Record"
+"Save" menu command to save data into the database file. Close the
+ReacDC window when finished. <br>
+</font> </p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In the same
+way, you can "clone" ReacDC records for any other dependent components
+provided with logK or other reaction effects, if necessary. Remember
+that formulae of neutral aqueous species in GEMS are written using '<big><tt>@</tt></big>'
+instead of '<big><tt>0</tt></big>' at the end, i.e. the formula of BaCO<sub>3</sub><sup>0</sup>
+should be wrtitten as <big><tt>BaCO3@</tt></big>. </span></p>
+<p><br>
+<a href="sshgal21.html"><b><font face="Helvetica, Arial, sans-serif">Next
+Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

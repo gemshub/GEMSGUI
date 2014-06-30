@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 23</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.23">
+</head>
+<body background="bgimg.png">
+<h1><img src="gems1.png" alt="" height="48" width="48"> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal22.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp;
+</font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to Start Page</font> </big></a></p>
+<hr size="2" width="100%">
+<p><b><span style="font-family: helvetica,arial,sans-serif;">(35)
+Creating Phase records for non-ideal solid solutions</span></b><br>
+</p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Most
+carbonate solid
+solutions are non-ideal mixtures that can be described reasonably well
+using
+a regular Margules model (more in <a
+ href="../doc/pdf/Activity-Coeffs.pdf">Activity-Coeffs.pdf</a> manual)
+with one positive interaction parameter per binary mixture. The
+magnitude of this parameter increases with the difference of cationic
+radii. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">To model such
+solid solutions in GEM-Selektor, one has to provide Phase records for
+them. Let us create one for the (Ba,Ca)CO<sub>3</sub> regular solid
+solution that requires a regular Margules model to calculate activity
+coefficients of end-members. As the difference in cationic radii of Ba<sup>+2</sup>
+and Ca<sup>+2</sup> is significant (0.035 nm), the interaction
+parameter <i>a</i> also has a significant
+value ( <i>a</i> = 6.7, predicted), so barium can admix into calcite
+to small
+extent only (&lt; 1%). Therefore, one <i>must</i> use a non-ideal
+model in
+this case, otherwise the limited miscibility cannot be reproduced in
+modelled
+equilibria. &nbsp;Luckily, there are two built-in binary solid solution
+models
+in the GEM-Selektor code (Margules and Guggenheim) and either can be
+used
+for a regular binary mixture. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, proceed
+with executing </span><span
+ style="font-family: helvetica,arial,sans-serif;">the "Record"
+"New(Clone)..." menu command. Modify the key of the record to be
+created as shown below and click "Ok":&nbsp;</span><span
+ style="font-family: helvetica,arial,sans-serif;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="SS-rKey-2" src="sshgal-23-1.png" height="240" width="328"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In the
+appearing "Phase Setup" wizard, change the first field to <big><tt>'G'</tt></big>
+(binary Redlich-Kister (Guggenheim )
+mixing model) and the second field to <big><tt>'S'</tt></big> (use
+built-in calculations) as shown below:</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-23-2.png" alt="SS-Cfig-2"
+ style="width: 614px; height: 541px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">When done,
+click "Next &gt;" to proceed. There is nothing to change in the second
+and third wizard pages, so click "Next &gt;" again and then "Finish".<br>
+The program will show a list of available ReacDC records and ask to
+mark those to be
+included in the phase definition. Mark the "Witherite" entry (as shown
+below)
+and click on the "Ok" button to proceed.<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-23-3.png" alt="ReacDC mark" height="243" width="608"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"> </span><span
+ style="font-family: helvetica,arial,sans-serif;">The next dialog will
+appear asking</span><span
+ style="font-family: helvetica,arial,sans-serif;"> you to
+mark DComp records to be linked to Phase definition. Mark there the
+entry for calcite ("Cal"), as shown below, and </span><span
+ style="font-family: helvetica,arial,sans-serif;">click on the "Ok"
+button.</span><br>
+</p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-23-4.png" alt="DC-mark" height="379" width="608"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"></span><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;This brings you
+back to the "Phase" window. There, you will have to edit comment lines
+and to set <big><tt>'M'</tt></big> and &nbsp;</span><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>'J'</tt></big></span><span
+ style="font-family: helvetica,arial,sans-serif;"> codes in the <big><tt>PhDCC</tt></big>
+column, as shown:&nbsp;</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"> <img
+ src="sshgal-23-5.png" alt="SS-n-Phase-1"
+ style="width: 608px; height: 358px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The </span><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>'M'</tt></big></span><span
+ style="font-family: helvetica,arial,sans-serif;"> code indicates that
+calcite is the host ("Major") end-member, expected to appear in mole
+fraction not far from unity, and the </span><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>'J'</tt></big></span><span
+ style="font-family: helvetica,arial,sans-serif;"> code denotes
+witherite as a trace ("Junior") end-member, to be present normally in
+minor mole fractions less than a few percent. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">When ready
+with Page 1, switch to Page 3 and enter there the interaction parameter
+<i>a</i> = 6.7, as shown below: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-23-6.png" alt="Param. SS" height="344" width="608"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+When ready, click on the </span><font
+ face="Helvetica, Arial, sans-serif"> "Save current record" toolbar
+button &nbsp;</font><font face="Helvetica, Arial, sans-serif"><img
+ src="../doc/html/filesave.png" alt="SaveRecord button" height="20"
+ width="20"> </font><font face="Helvetica, Arial, sans-serif"> &nbsp;
+or execute the "Record" "Save" menu command to save the Phase record
+into the database file.<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Built-in simple non-ideal
+mixing models available in GEM-Selektor code facilitate setting up
+chemical systems involving many practically interesting binary or
+ternary solid solutions. Yet, the variety of possible mixing models is
+large, so the GEMS code also allows the user to define an arbitrary
+mixing model via creating a Phase record
+with mathematical script(s) describing how to calculate activity
+coefficients of end-members. &nbsp;This requires somewhat more time and
+experience (though a template math script library is available to
+facilitate the process). You can find more details about Phase
+scripting in the <a href="../doc/html/gm_phase.html">Phase module
+manual</a>. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"> Now, you can close the
+Phase window and proceed to the next page of this tutorial. </font>&nbsp;
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p> </p>
+<p><br>
+<a href="sshgal24.html"><b><font face="Helvetica, Arial, sans-serif">Next
+Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

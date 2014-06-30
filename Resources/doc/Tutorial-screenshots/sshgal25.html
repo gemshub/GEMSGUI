@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 25</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.25">
+</head>
+<body background="bgimg.png">
+<h1><img src="gems1.png" alt="" height="48" width="48"> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal24.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; </font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to
+Start Page</font> </big></a></p>
+<hr size="2" width="100%">
+<p><b><font face="Helvetica, Arial, sans-serif"></font></b></p>
+<p><font face="Helvetica, Arial, sans-serif"><b><big><big><small><small>(37)
+Opening the modelling project after extending its database</small></small></big></big></b></font></p>
+<font face="Helvetica, Arial, sans-serif">After adding some IComp,
+DComp, ReacDC, Phase and Compos records to the "Carbonat" project
+database, as described in previous pages of this tutorial, you should
+open the modelling project again to upgrade it and use the extended
+chemical system definitions. This process is mostly automatic; usually,
+you will just have to confirm some
+actions of the program. <br>
+<br>
+Now, leave the "Thermodynamic Database Management" dialog by clicking
+on the "Back" button and get back to the GEMS Main dialog. There, click
+on the "Computation of Equilibria" button. In the appearing "Modelling
+Projects" dialog, select the "Carbonat" project in the list and click
+on the "Open Project"
+button. In a few seconds, you should get the following message: <br>
+<br>
+<img src="sshgal-25-1.png" alt="IComp warning" height="127" width="388">
+<br>
+<br>
+The program has detected that a new Independent Component has been
+added to the project database IComp file. Click on "Yes" to proceed.
+The next two warnings say that new Compos records have also been added:
+<br>
+<br>
+<img src="sshgal-25-2.png" alt="Warning 2" height="127" width="505"> <br>
+<br>
+Click on the "Yes" button.<br>
+<br>
+<img src="sshgal-25-3.png" alt="Warning 3" height="127" width="490"> <br>
+<br>
+Click on the "Yes" button. Now, the program reports that a new aqueous
+species has been added to DComp or ReacDC record chain of the project
+database: <br>
+<br>
+<img src="sshgal-25-4.png" alt="Warning 4" height="127" width="408"> <br>
+<br>
+Click "Yes" to this and three next warnings about aqueous species
+added. Finally, you will see a message that a new Phase definition has
+been detected: <br>
+<br>
+<img src="sshgal-25-5.png" alt="Warning 5" height="127" width="520"> <br>
+<br>
+Click "Yes". The program how shows DComp/ReacDC record keys linked to
+this phase definition: <br>
+<br>
+<img src="sshgal-25-6.png" alt="Warning 6" height="127" width="393"> <br>
+<br>
+Click "Yes". <br>
+<br>
+<img src="sshgal-25-7.png" alt="Warning 7" height="127" width="402"> <br>
+<br>
+Click "Yes". The next phase to be inserted is reported: <br>
+<br>
+<img src="sshgal-25-8.png" alt="Warning 8" height="127" width="517"> <br>
+<br>
+To save time, click on the "Yes for All" button, to allow the program
+to accept all insertions (eventually, also deletions) that you have
+made in the
+project database since the last work session with the "Carbonate"
+project. <br>
+In a few seconds (the program must update allready stored SysEq
+records), you will see the "Modelling Project" <br>
+dialog: <br>
+<br>
+<img src="sshgal-25-9.png" alt="Project Dialog"
+ style="width: 452px; height: 474px;">
+<br>
+<br>
+This means that the modelling project has been upgraded succesfully and
+you can calculate equilibria using extended system definitions. <br>
+<br>
+</font>
+<p><font face="Helvetica, Arial, sans-serif"><b><big><big><small><small><a
+ name="EQULIBRIA"></a>(38) Re-calculating equilibria in the upgraded
+project</small></small></big></big></b></font></p>
+<p><font face="Helvetica, Arial, sans-serif">Click on the
+"Single-System Equilibria
+(SysEq)" button to get into the "Single Thermodynamic System" dialog. <br>
+There, you should already see two new solid solution phases and the
+"Witherite" phase in the "Phase/Species name" list. Execute the
+"Record" "Create" menu command and set the record key as shown below: <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-25-10.png"
+ alt="SysEq rkey" style="width: 328px; height: 245px;"> <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Click "Ok" to proceed and
+then "Ok" to the Remake dialog if it appears. You have already learned
+how to set
+"recipes" and calculate single equilibria at the beginning of this
+Screenshot Tutorial. Give the following recipe in the "Compos" page of
+the "System" window:
+<br>
+</font></p>
+<p><big><tt>Aqua &nbsp; &nbsp; &nbsp; &nbsp; 1000 g <br>
+AtmAirNit &nbsp; &nbsp; 100 g<br>
+BaCO3 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1 g<br>
+CaCO3 &nbsp; &nbsp; &nbsp; &nbsp;1000 g<br>
+NaCl &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1 g</tt></big><font
+ face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Put also comment lines
+like "</font><span style="font-family: monospace;">Ba-calcite + air at
+high s/w ratio</span><font face="Helvetica, Arial, sans-serif">"&nbsp;
+and&nbsp; "</font><span style="font-family: monospace;">Exercise 4 of
+GEMS-PSI Screenshot Tutorial</span><font
+ face="Helvetica, Arial, sans-serif">" on top of the form
+(recommended). <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Change to the main "Single
+Thermodynamic System" dialog and switch off the "Aragonite" and
+"Calcite" phases; then calculate bulk composition of the system
+(the&nbsp;&nbsp;<img style="width: 20px; height: 20px;" alt="RunBCC"
+ src="RunBCC.png">&nbsp; toolbar button). You may receive a warning
+dialog shown below. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img
+ alt="Warning on missing IC" src="sshgal-25-10a.png"
+ style="width: 637px; height: 451px;"><br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">The above dialog appears
+because we did not specify anything for Fe and Mn in the "recipe" for
+bulk composition of the new chemical system; the program does not know
+whether
+this has been done as a mistake or deliberately. As we do not intend to
+consider iron and manganese in this system at all, click on the&nbsp;
+"Check/Ok" button to exclude Fe, Mn and all their species and phases
+from the actual system definition. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Now, run the GEM&nbsp;
+calculation of equilibrium state (the&nbsp;<img
+ style="width: 20px; height: 20px;" alt="RunIPM" src="RunIPM.png">&nbsp;
+toolbar button). You should obtain this or similar speciation: <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-25-11.png"
+ alt="Spec 1" style="width: 818px; height: 510px;"> <br>
+</font> </p>
+<p><font face="Helvetica, Arial, sans-serif"><span
+ style="font-family: helvetica,arial,sans-serif;">The "witherite" end
+member has now a large activity coefficient of 807 which makes its
+activity (ca. 0.4) much larger than the concentration in the
+"Ba-&gt;CaCO3" phase (ca. 0.0005). This is the result of highly
+non-ideal mixing (described by the regular Redlich-Kister model) - a
+consequence of the fact that calcite structure badly accomodates Ba<sup>2+</sup>
+which has a much larger cationic radius than Ca<sup>2+</sup>. <br>
+</span></font></p>
+<p><font face="Helvetica, Arial, sans-serif"><span
+ style="font-family: helvetica,arial,sans-serif;">Note that the single
+"Witherite" phase does not appear because the total dissolved barium
+concentration at equilibrium with the "Ba-&gt;CaCO3" solid solution
+phase (0.142 millimolal) is lower than
+that at equilibrium with pure witherite. The number for witherite in
+the "Activity (DualTh)" column is the saturation index which is less
+than 1 and shows that aqueous solution is undersaturated to pure
+witherite, even though it is saturated to Ba-calcite with 0.0005 mole
+fraction of barium. <br>
+</span></font></p>
+<p><font face="Helvetica, Arial, sans-serif"><span
+ style="font-family: helvetica,arial,sans-serif;">Obviously, if we
+would take less CaCO3 into the bulk composition of the
+system, we could expect that pure "Witherite" phase also appears at
+equilibrium together with highly non-ideal Ba-calcite solid solution. <br>
+</span></font></p>
+<p><font face="Helvetica, Arial, sans-serif"><span
+ style="font-family: helvetica,arial,sans-serif;">"Clone" this SysEq
+record assigning a new key "Carbonat:G:BaCalcite:1:0:25:0" and change
+the addition of CaCO3 PCO from 1000 g to 100 g; then calculate the
+equilibrium state again. The result will be as follows: <br>
+</span></font></p>
+<p><font face="Helvetica, Arial, sans-serif"><span
+ style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-25-12.png" alt="Spec 2"
+ style="width: 818px; height: 449px;"> <br>
+</span></font></p>
+<p><font face="Helvetica, Arial, sans-serif"><span
+ style="font-family: helvetica,arial,sans-serif;">We see that the
+"Witherite" pure phase is now saturated and appears together with the
+"Ba-&gt;CaCO3" solid solution, at total dissolved Ba concentration
+0.284 millimolal - a solubility of pure witherite in this system. The
+mole fraction of "witherite" end-member in the solid solution is now
+0.00125, which is the limiting solid "solubility" due
+to the non-ideality effects.&nbsp;</span></font></p>
+<p><font face="Helvetica, Arial, sans-serif">Now, various effects on
+SSAS system behaviour can be modelled by "cloning" new SysEq records or
+creating Project Simulators. <br>
+<br>
+</font> <a href="sshgal26.html"><b><font
+ face="Helvetica, Arial, sans-serif">Next Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

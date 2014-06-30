@@ -1,0 +1,620 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 30</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.30">
+</head>
+<body style="background-image: url(bgimg.png);">
+<h1><img src="gems1.png" style="width: 48px; height: 48px;" alt=""> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal29.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp;
+</font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to Start Page</font> </big></a></p>
+<hr size="2" width="100%"><br>
+<b><font face="Helvetica, Arial, sans-serif">(43)</font></b><b><font
+ face="Helvetica, Arial, sans-serif"> Creating a project
+for surface complexation modelling</font></b><font
+ face="Helvetica, Arial, sans-serif"><br>
+</font><span style="font-family: helvetica,arial,sans-serif;"><br>
+In this
+section, we will create a modelling project to run a GEM TLM (triple
+layer model)
+for adsorption of hexavalent uranium (uranyl UO<sub>2</sub><sup>+2</sup>,
+abbreviated as UL) on SiO<sub>2</sub> solids, described in detail by
+Kulik
+[<a href="../doc/pdf/sshgal30-sup-mat.pdf"><i>Radiochimica Acta</i>
+2002,
+v.90,
+p.815-832</a>],
+Section 7. &nbsp;The paper can also be downloaded as a pdf
+file
+from the journal's web site. &nbsp;The necessary surface species and
+sorption
+phase definitions are provided in the (inofficial) "sorption" part of
+the
+kernel GEMS-PSI database. New ReacDC records and sorption Phase records
+can be created as described on the previous page of this tutorial. <br>
+</span>
+<p><span style="font-family: helvetica,arial,sans-serif;">As usual,
+start GEM-Selektor and click on the "Calculation of Equilibria" button,
+then click on the "New Project" button. In the dialog shown below,
+enter two fields
+of a new Project record key as shown, and click "Ok" to proceed. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-30-1.png" alt="Project Key"
+ style="height: 240px; width: 354px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">This will
+bring you to the "Elements Dialog" where the stoichiometry of the
+project system should be set up. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-30-2.png" alt="Elements Dialog"
+ style="width: 703px; height: 575px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Here, check
+on
+the "Sorption" chekbox in the "Phases/Data" row to include kernel
+database
+files for sorption models. Then select the elements <big><tt>U, Na,
+Si, C,
+N, Nit, F, O, H, e</tt></big> &nbsp;by clicking on their symbols, as
+shown
+above. Click on the "Ok" button when ready.&nbsp; <br>
+</span></p>
+<p><font face="Helvetica, Arial, sans-serif">Next, a setup dialog for
+aqueous and gas phases will appear (shown below). Click on the "Ok"
+button - this will select the Davies model for aqueous activity
+coefficients and the ideal
+mixture model for gases (defaults). <br>
+</font><br>
+&nbsp;
+<img alt="Elements Dialog" src="sshgal-30-4.png"
+ style="width: 759px; height: 466px;"><br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<span style="font-family: helvetica,arial,sans-serif;">In a few
+seconds (depending on the performance of your PC), you should see the
+"Modelling Project" dialog:</span><br>
+<br>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-31-5.png" alt="Project dialog"
+ style="width: 455px; height: 472px;"> <br>
+</span></p>
+<span style="font-family: helvetica,arial,sans-serif;">This means that
+the project has been successfully created. <br>
+<br>
+However, before defining the
+first chemical system, let us go into the database and look how the
+surface species can be defined through ReacDC records and how Phase
+records should be set up for the sorption phases, including a selected
+electrostatic or non-electrostatic surface complexation model
+(SCM).&nbsp; This sidebar is important for developing skills in
+creating various SCMs on your own, including the state-of-the art
+CD-MUSIC electrostatic SCMs&nbsp; (in GEMS implementation, of
+course).&nbsp; <br>
+<br>
+Before proceeding with the modeling of U(VI) adsorption on SiO<sub>2</sub>
+phases, let us create a set of species and phase definitions for MUSIC
+model of surface charge on gibbsite Al(OH)<sub>3</sub>. The underlying
+concepts and thermodynamic constants are described in the chapter by
+D.Kulik in the "Surface complexation modelling" book (ed.
+J.Lutzenkirchen), Elsevier, 2006. The respecitve fragment of the text
+is <a href="ChapterSection.PDF">provided here (pdf file)</a> for your
+convenience. <br>
+<br>
+</span><span style="font-family: helvetica,arial,sans-serif;">Later on
+in this Tutorial, </span><span
+ style="font-family: helvetica,arial,sans-serif;">we will construct and
+run the gibbsite GEM-MUSIC surface charge titration model after
+considering the 2pK SCM for uranyl adsorption on quartz and silica. <br>
+<br>
+Now, click
+on
+the "Back" button to return to the main GEMS dialog and select there
+the "Thermodynamic Database" mode, which will bring you into this
+dialog: <br>
+<br>
+<img alt="Database dialog" src="sshgal-30-6.png"
+ style="width: 448px; height: 474px;"><br>
+<br>
+Click here on "Dependent Components (ReacDC)" button to open ReacDC
+module window. In that window, click on the "Display Selected Record"
+toolbar button (<img alt="Display selected" src="fileopen.png"
+ style="width: 20px; height: 20px;"> ) and, in the appearing list of
+ReacDC record keys, find those beginning with "c" and, among them, the
+one with the key </span><big><span style="font-family: monospace;">"c:_ATS_:&gt;OH@:nr_"</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">, as shown below.<br>
+<br>
+<img alt="Selection list" src="sshgal-30-7.png"
+ style="width: 476px; height: 365px;"><br>
+<br>
+</span><big><small style="font-family: helvetica,arial,sans-serif;">Click
+"Ok" to load the record and get back to the ReacDC window:<br>
+<br>
+<img alt="ReacDC for SOH group" src="sshgal-30-8.png"
+ style="width: 480px; height: 566px;"><br>
+<br>
+<br>
+What you see now is the reaction defining the &gt;OH<sup>0</sup>
+surface species, used in GEM implementation of 2pK surface complexation
+models (SCM) as a placeholder for the neutral amphoteric SOH group
+(considered as a "surface solvent"). This or similar species is used in
+other reactions defining protonated SOH<sub>2</sub><sup>+</sup>,&nbsp;
+de-protonated SO<sup>-</sup>&nbsp; surface species, as well as inner-
+and outer-sphere surface complexes of aqueous cations and
+ligands.&nbsp; In GEMS versions earlier than 2.1.0, the data
+fields&nbsp; </small><small style="font-family: monospace;">BetAl_</small><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; and&nbsp; </small><small><span
+ style="font-family: monospace;">ab_</span></small><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; were not used
+for surface species.&nbsp; In more recent versions of the
+program,&nbsp; these fields contain&nbsp; the "dentateness" or
+coordination number; the Frumkin exponent parameter; the zero-plane
+charge; and the beta- or third-plane charge of this surface species,
+respectively. </small></big><span
+ style="font-family: helvetica,arial,sans-serif;"></span><br>
+<big><small style="font-family: helvetica,arial,sans-serif;"><br>
+The MUSIC model of surface charging of SiO<sub>2</sub> surfaces
+(cristobalite, quartz, amorphous silica) results in the same
+stoichiometry of (de) protonated surface species as the traditional 2pK
+model. This is because silicon is tetra-coordinated with oxygens in
+such minerals, hence, the Pauling bond valence is 1 and the
+deprotonated Si-O- surface group has the formal charge of -1 on the
+zero plane. So, in both MUSIC and 2pK models, the surface protonation
+process is described with two reactions: <br>
+<br>
+Si-O<sup>-</sup> + H<sup>+</sup> = Si-OH<sup>0</sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp; &nbsp;&nbsp; <span style="font-style: italic;">K<sub>1</sub>&nbsp;&nbsp;
+=&nbsp; </span>8.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(1)<br>
+<br>
+Si-OH<sup>0</sup> + H<sup>+</sup> = Si-OH<sub>2</sub><sup>+</sup>&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp; <span style="font-style: italic;">K<sub>2</sub></span>&nbsp;&nbsp;
+= -4.4&nbsp;&nbsp;&nbsp; (about -1 in traditional 2pK
+SCMs).&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(2)<br>
+&nbsp;<br>
+The neutral species </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">Si-OH<sup>0</sup> + </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">does not contribute
+to measurable surface proton charge at all. The doubly protonated </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">Si-OH<sub>2</sub><sup>+</sup>&nbsp;
+does not contribute at pH &gt; 1. <br>
+<br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">To exclude silicon
+from elemental stoichiometries of surface species, the stoichiometry of
+the </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">Si-OH<sup>0</sup>
+species should be taken as O<sub>0.5</sub>H<sub>0</sub>, with
+thermodynamic properties defined on the ReacDC screenshot above. </small></big><br>
+<big><small style="font-family: helvetica,arial,sans-serif;"><br>
+Let us take a look on the ReacDC definition of the </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">Si-O<sup>-</sup>&nbsp;</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> surface species. </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">Click&nbsp;</small></big><span
+ style="font-family: helvetica,arial,sans-serif;">on the "Display
+Selected Record" toolbar button (<img alt="Display selected"
+ src="fileopen.png" style="width: 20px; height: 20px;"> ) and choose
+the record key </span><big><span style="font-family: monospace;">"c:SiO_TLi:Sio&gt;O-:nr_:"</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">. Press "Ok" to load
+the record and get it in the ReacDC window:<br>
+<br>
+<img alt="ReacDC &gt;O- species" src="sshgal-30-9.png"
+ style="width: 480px; height: 564px;"><br>
+<br>
+The reaction defined in this ReacDC record is a reverted reaction (1)
+above. The elemental stoichiometry of the singly coordinated &gt;O-
+species on silica surfaces is O0.5-; the standard molal Gibbs energy
+(at standard surface density of 20 micromol per m<sup>2</sup>)
+calculated through this reaction is -82.31 kJ/mol. The -1 negative
+charge of this inner-sphere surface species is allocated at 0 surface
+plane. <br>
+<br>
+</span><span style="font-family: helvetica,arial,sans-serif;">Likewise,
+you can examine the record key </span><big><span
+ style="font-family: monospace;">"c:SiO_TLi:Sio&gt;OH2+:nr_:"</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> which is a
+definition of the &gt;OH<sub>2</sub><sup>+</sup> surface species via
+(reversed) reaction (2). Later on, you will see that even with logK =
+1.1 (standard Gibbs energy -122.27 kJ/mol), this species is not stable
+enough to make a significant contribution to surface charge. Many
+chemists believe that SiO<sub>2</sub> surfaces cannot protonate. <br>
+<br>
+Now, open the ReacDC record&nbsp; </span><span
+ style="font-family: helvetica,arial,sans-serif;"> </span><big><span
+ style="font-family: monospace;">"c:SiO_TL_:Sio&gt;O-Na+:nr_:"</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> : </span><br>
+<span style="font-family: helvetica,arial,sans-serif;"><br>
+<img alt="ReacDC &gt;O-Na+" src="sshgal-30-10.png"
+ style="width: 480px; height: 566px;"><br>
+<br>
+<br>
+This ReacDC defines properties of the outer-sphere surface complex of Na<sup>+</sup>
+on deprotonated silanol sites through the reaction<br>
+<br>
+</span><big><small style="font-family: helvetica,arial,sans-serif;">Si-OH<sup>0</sup></small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> + Na<sup>+</sup> =
+Si-O<sup>-</sup>Na<sup>+</sup> + H+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp; &nbsp;&nbsp; <span style="font-style: italic;">K<sub>1Na</sub>
+&nbsp; =&nbsp; </span>-7.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(3)</small></big><br>
+<span style="font-family: helvetica,arial,sans-serif;"><br>
+According to the conventional stoichiometry O<sub>0.5</sub>H of the
+&gt;OH<sup>0</sup> group, the elemental stoichiometry of the &gt;O<sup>-</sup>Na<sup>+</sup>
+species&nbsp; is O<sub>0.5</sub>Na<sup>0</sup>, i.e. it is
+electroneutral as the whole. However, as seen in the&nbsp; </span><span
+ style="font-family: monospace;">ab_</span><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; fields, for
+this species, the charge of -1 is allocated to the zero- plane and +1
+to the beta-plane, as typically done in Basic Stern (BS) or Triple
+Layer (TL) SCMs.<br>
+<br>
+Hydrolysis-type reactions similar to (3) are also used in defining
+inner-sphere cationic surface complexes. For instance, you can open the
+</span><span style="font-family: helvetica,arial,sans-serif;">ReacDC
+record&nbsp; </span><span
+ style="font-family: helvetica,arial,sans-serif;"> </span><big><span
+ style="font-family: monospace;">"c:SiO_TL:Sio&gt;&gt;OUL@:nr_:"</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> which describes the
+doubly-coordinated inner-sphere uranyl surface species &gt;&gt;OUO<sub>2</sub>@:<br>
+<br>
+<img alt="ReacDC &gt;&gt;OUL@" src="sshgal-30-11.png"
+ style="width: 480px; height: 566px;"><br>
+<br>
+</span><span style="font-family: helvetica,arial,sans-serif;">This
+ReacDC uses the reaction<br>
+<br>
+</span><big><small style="font-family: helvetica,arial,sans-serif;">2Si-OH<sup>0</sup></small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> + UO<sub>2</sub><sup>+2</sup>
+= Si<sub>2</sub>&gt;OUO<sub>2</sub><sup>0</sup> + 2H<sup>+</sup>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span
+ style="font-style: italic;">K<sub>UL1</sub> &nbsp; =&nbsp; </span>-7.5
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(4)</small></big><br>
+<span style="font-family: helvetica,arial,sans-serif;"><br>
+Two &gt;OH<sup>0</sup> species are consumed because this uranyl surface
+complex is taken as doubly coordinated. However, this does not mean
+automatically that such a doubly-coordinated surface species must be
+considered as bi-dentate, especially if it is bound to sites of
+specific type. More about site types will be discussed along with Phase
+definition for the sorption phase later in this tutorial. <br>
+<br>
+</span><span style="font-family: helvetica,arial,sans-serif;">Another </span><span
+ style="font-family: helvetica,arial,sans-serif;">ReacDC record&nbsp; </span><span
+ style="font-family: helvetica,arial,sans-serif;"> </span><big><span
+ style="font-family: monospace;">"c:SiO_TL:Sio&gt;&gt;OULH-2:nr_:"</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> describes the
+doubly-coordinated inner-sphere uranyl surface hydroxocomplex
+&gt;&gt;OUO<sub>2</sub>(OH)<sub>2</sub><sup>-2</sup> (screenshot not
+shown here) constructed according to the following reaction: <br>
+<br>
+</span><big><small style="font-family: helvetica,arial,sans-serif;">2Si-OH<sup>0</sup></small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> + UO<sub>2</sub><sup>+2</sup>
++ 2H<sub>2</sub>O = Si<sub>2</sub>&gt;OUO<sub>2</sub>(OH)<sub>2</sub><sup>-2</sup>
++ 4H<sup>+</sup> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span
+ style="font-style: italic;">K<sub>ULH1</sub> &nbsp; =&nbsp; </span>-17.8
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(5)<br>
+<br>
+Formation of this surface complex can also be viewed as an attachment
+of the </small></big><span
+ style="font-family: helvetica,arial,sans-serif;">UO<sub>2</sub>(OH)<sub>2</sub><sup>0</sup>
+aqueous complex to two surface &gt;OH<sup>0</sup> groups. <br>
+At high dissolved U<sup>VI</sup> concentrations (&gt; 10
+micromolal),&nbsp; it is likely that polynuclear uranyl surface
+complexes will form. The simplest possible one is defined in ReacDC
+record </span><span style="font-family: helvetica,arial,sans-serif;">&nbsp;
+</span><span style="font-family: helvetica,arial,sans-serif;"> </span><big><span
+ style="font-family: monospace;">"c:SiO_TL:Sio&gt;&gt;OUL2H+:nr_:"</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; where it is
+constructed according to the reaction<br>
+<br>
+</span><big><small style="font-family: helvetica,arial,sans-serif;">2Si-OH<sup>0</sup></small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> + 2UO<sub>2</sub><sup>+2</sup>
++ H<sub>2</sub>O = Si<sub>2</sub>&gt;O(UO<sub>2</sub>)<sub>2</sub>(OH)<sup>+</sup>
++ 3H<sup>+</sup> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span
+ style="font-style: italic;">K<sub>UL2</sub> &nbsp; =&nbsp; </span>-10.1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(6)</small></big><br>
+<span style="font-family: helvetica,arial,sans-serif;"><br>
+This species is also considered as doubly-coordinated (to two adjacent
+surface oxygens) but monodentate one, although other microscopic
+configurations (e.g. tetra-coordinated bidentate) are also possible. <br>
+<br>
+Under natural conditions, in presence of carbon dioxide, U<sup>VI</sup>
+forms extremely strong carbonate aqueous complexes. Hence, it is likely
+that ternary uranyl - carbonate - surface complexes are present on
+mineral - water interfaces. In the model considered here, one such
+surface complex is defined in the ReacDC record with key </span><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; </span><span
+ style="font-family: helvetica,arial,sans-serif;"> </span><big><span
+ style="font-family: monospace;">"c:SiO_TL:Sio&gt;&gt;OULCH-4:nr_:"</span><small
+ style="font-family: helvetica,arial,sans-serif;"> shown below:<br>
+<br>
+<img alt="ReacDC ternary" src="sshgal-30-12.png"
+ style="width: 480px; height: 619px;">&nbsp;</small></big><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; </span><br>
+<span style="font-family: helvetica,arial,sans-serif;">&nbsp;</span><br>
+<big><small style="font-family: helvetica,arial,sans-serif;">Properties
+of the ternary uranyl-carbonate-surface complex shown above are defined
+according to the reaction: <br>
+<br>
+</small></big><span style="font-family: helvetica,arial,sans-serif;"></span><big><small
+ style="font-family: helvetica,arial,sans-serif;">2Si-OH<sup>0</sup></small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> + UO<sub>2</sub><sup>+2</sup>
++ CO<sub>2</sub><sup>0</sup> + 3H<sub>2</sub>O = Si<sub>2</sub>&gt;OUO<sub>2</sub>(OH)<sub>2</sub>(CO<sub>3</sub>)<sup>-4</sup>
++ 6H<sup>+</sup> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; <span
+ style="font-style: italic;">K<sub>ULH1</sub> &nbsp; =&nbsp; </span>-24.9&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(7)<br>
+<br>
+As shown in the&nbsp; </small><small><span
+ style="font-family: monospace;">ab_</span></small><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; field, the
+surface complex is considered inner-sphere and the whole charge is
+allocated to the zero EDL plane. This is a simplification because, in
+microscopic reality, at least part of the surface charge of adsorbed
+carbonate ions may be located further away from the surface. Such
+phenomena can be described in CD MUSIC models as suggested by
+T.Hiemstra and W. van Riemsdijk. <br>
+<br>
+In order to include the surface complexation model into GEM chemical
+system definition (CSD), the surface species defined in ReacDC records
+must be integrated in a Phase record of special (sorption) type. Let us
+first take a look at a Phase record provided in the default GEMS
+database and copied in our newly-created modelling project. <br>
+<br>
+To do this, switch back to the "Thermodynamic Database Management"
+dialog and click there on "Thermodynamic Phases (Phase)" button to open
+the Phase module window. In this window use the </small></big><span
+ style="font-family: helvetica,arial,sans-serif;">"Display Selected
+Record" toolbar button (<img alt="Display selected" src="fileopen.png"
+ style="width: 20px; height: 20px;"> ) and, in the appearing list of
+Phase record keys, find the one beginning with "x", namely, the </span><big><span
+ style="font-family: monospace;">"x:SIL_U:SiO2_1sTLM:xc:xTLM_np_:"</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> record key, mark it,
+and press "Ok".&nbsp; You should see the following: <br>
+<br>
+<img alt="Phase Page 1" src="sshgal-30-13.png"
+ style="width: 816px; height: 497px;"><br>
+</span><big><small style="font-family: helvetica,arial,sans-serif;"><br>
+This Phase record contains the whole setup of GEM sorption phase, which
+defines the sorbent (always the last component in the list marked with
+the </small><small><span style="font-family: monospace;">'<big>Q</big>'</span></small><small
+ style="font-family: helvetica,arial,sans-serif;"> code in the&nbsp; </small><small><span
+ style="font-family: monospace;">PhDCC</span></small><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; column, </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">in this case quarts </small><span
+ style="font-family: monospace;">Qtz</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">)&nbsp; and the
+surface species (marked with&nbsp; </small><span
+ style="font-family: monospace;">Y, Z</span><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; or&nbsp; </small><small><span
+ style="font-family: monospace;"><big>X</big> </span></small><small
+ style="font-family: helvetica,arial,sans-serif;">). <br>
+<br>
+The table&nbsp; </small><span style="font-family: monospace;">SAT_C</span><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; (next to the
+right of the species record key list) contains the setup of the GEM
+SCM, which can be either single-surface single-site, or multi-surface
+multi-site, or single-surface multi-site one. Each surface (type) can
+hold either a non-electrostatic or an electrostatic EDL model. For
+instance, particles of montmorillonite can be represented with two
+surface types: (0) edge surfaces with silanol- and aluminol-like </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">amphoteric</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> SOH groups and (1)
+siloxane basal planes with permanent charge, exchange cations attracted
+by this charge, but without dangling oxygen bonds and amphoteric SOH
+groups.&nbsp; Accordingly, an electrostatic SCM such as BS or TL can be
+used on the surface type (0), and a non-electrostatic model can be
+applied to surface type (1) assuming that the permanent charge is
+always fully compensated with exchange cations. <br>
+<br>
+Modern multi-site (MUSIC) SCMs consider the oxide surface as exposing
+one, two, three or more types of reactive sites, each forming surface
+complexes in singly-, doubly-, triply- or tetra-coordinated fashion.
+Each site type has its own surface density where two or more surface
+complexes formed on this site type may compete. However, the
+electrostatic EDL model of choice is applied commonly to all species
+and sites developed on this surface. <br>
+<br>
+In the Phase window (Page 1) shown above, surface species are allocated
+to surface- and site types in the&nbsp; </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small><span
+ style="font-family: monospace;">SAT_C</span><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">table columns. <br>
+<br>
+Codes in the&nbsp;</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small><span
+ style="font-family: monospace;">SAT_C[0]</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> column (</small><span
+ style="font-family: monospace;">'L'</span><small
+ style="font-family: helvetica,arial,sans-serif;"> for most surface
+species which means competitive Langmuir isotherm) define the impact of
+site density parameter to density of surface species. <br>
+</small></big>&nbsp;<big><small
+ style="font-family: helvetica,arial,sans-serif;"></small><span
+ style="font-family: monospace;"></span></big><big><span
+ style="font-family: monospace;">SAT_C[1]</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> column allocates
+surface species to the whole sorbent (</small><span
+ style="font-family: monospace;">'V'</span><small
+ style="font-family: helvetica,arial,sans-serif;">) or to some of its
+end members (irrelevant for the present model).<br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;</small><span
+ style="font-family: monospace;">SAT_C[2]</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> column allocates
+each surface species to a surface type, numbered from 0 to 5 (maximum 6
+surface types per phase are technically possible); the surface types
+are described on Page 3 of the Phase window (will be shown later). <br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;</small><span
+ style="font-family: monospace;">SAT_C[3]</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">column allocates each
+surface species to a site type, counted from 0 until 5 separately for
+each surface type. In other words, maximum 36 site types can be
+considered on all surfaces of one sorption phase. To each site type,
+one, many, or no surface species can belong. <br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;</small><span
+ style="font-family: monospace;">SAT_C[4]</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> column is important
+for multi-layer EDL models such as TL or 3L because it allocates the
+outer-sphere surface charge of a surface complex to beta- or third
+plane. <br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;</small><span
+ style="font-family: monospace;">SAT_C[5]</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"></small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">column contains codes
+of units in which densities of surface site types are expressed (for
+now, only </small><span style="font-family: monospace;">'n'</span><small
+ style="font-family: helvetica,arial,sans-serif;"> - in nm<sup>-2</sup>).
+.<br>
+<br>
+The site densities are entered into the&nbsp; </small></big><big><span
+ style="font-family: monospace;">MaSDj[0]</span><small
+ style="font-family: helvetica,arial,sans-serif;"> column located next
+to the&nbsp; </small></big><big><span style="font-family: monospace;">SAT_C
+</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">table. Equal numbers
+must be entered against all surface species competing for sites of the
+same type; in other words, competition on each site type on each
+surface type is considered separately via computing special activity
+coefficients (SACT) which replace balance constraints on total number
+of sites.<br>
+<br>
+The second [1] column of the&nbsp; </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small></big><big><span
+ style="font-family: monospace;">MaSDj</span><small
+ style="font-family: helvetica,arial,sans-serif;"> table contains for
+each surface complex the unit charge allocated to 0 EDL surface plane
+(i.e. the mineral surface). The </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small></big><big><span
+ style="font-family: monospace;">MaSDj[2]</span><small
+ style="font-family: helvetica,arial,sans-serif;"> column contains the
+unit charge allocated to beta- or third EDL plane, depending on the
+code in the&nbsp; </small></big><big><span
+ style="font-family: monospace;">SAT_C[4]</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> column.&nbsp; Both
+columns provide enough flexibility for implementing Stern EDL models,
+as well as three-layer CD MUSIC models where the surface charge of a
+species is distributed between 0, beta and third plane, differently for
+various adsorbed cations and anions. <br>
+<br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"></small></big><big><span
+ style="font-family: monospace;">MaSDj[3]</span><small
+ style="font-family: helvetica,arial,sans-serif;"> column (usually
+contains zeros) may contain values of the Frumkin interaction parameter
+used if the Frumkin isotherm is applied instead of the Langmuir
+isotherm to some surface sites. <br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"><br>
+&nbsp;</small></big><big><span style="font-family: monospace;">MaSDj[4]</span><small
+ style="font-family: helvetica,arial,sans-serif;"> column&nbsp;
+contains the "dentateness" of surface species, 1 for monodentate
+(default), 2 for bidentate, 3 for tridentate, 4 for tetradentate ones.
+This parameter (not to be mixed with the coordination number) describes
+how many surface sites are covered by one adsorbed molecule thus making
+them inaccessible to any other adsorbates.&nbsp; This parameter is used
+in QCA isotherm - a polydentate form of the non-competitive Langmuir
+isotherm.<br>
+<br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;</small></big><big><span
+ style="font-family: monospace;">MaSDj[5]</span><small
+ style="font-family: helvetica,arial,sans-serif;"> column is reserved
+for other parameters used in further development (e.g. BET isotherm). <br>
+<br>
+Other important number on this page is </small><span
+ style="font-family: monospace;">DisPar[0] </span><small
+ style="font-family: helvetica,arial,sans-serif;">- the specific
+surface area of the sorbent (usually taken from BET measurements), in
+this case amorphous silica.&nbsp; All surface types sum up to this
+specific surface area, each with its own fraction. The setup of surface
+types and choice of EDL models is given on Page 3 of the Phase window: <br>
+</small></big><br>
+<span style="font-family: helvetica,arial,sans-serif;"></span><img
+ alt="Page 3 of Phase window" src="sshgal-30-14.png"
+ style="width: 652px; height: 333px;"><br>
+<br>
+<big><small style="font-family: helvetica,arial,sans-serif;"> On the
+above screenshot, one surface type is defined with electrostatic TL EDL
+model ('T'), occupying the whole sorbent surface (1),&nbsp; maximum
+site density of 4.6 nm<sup>-2</sup>,&nbsp; the inner capacitance
+parameter C1 = 1.0 F/m<sup>2</sup>, the outer capacitance C2=0.2 F/m<sup>2</sup>,&nbsp;
+and zero permanent surface charge. Up to six surface types can be set
+up on one sorbent, and the sum of their area fraction is not
+necessarily 1. If this sum is less than 1 then part of the surface is
+considered non-reactive. If this sum is much above 1 then at least one
+surface type is assigned to internal surfaces, e.g. interlayer spaces
+of clay minerals.<br>
+<br>
+Having completed this tour on setup of ReacDC and Phase records
+describing surface complexes and the sorption phase, we can continue
+with setting up a chemical equilibrium model involving surface
+complexation (next page of this tutorial). After working with this
+model for U<sup>VI</sup> adsorption on quartz and silica, we will learn
+how to create "from scratch" a sorption phase for the MUSIC SCM of
+surface charge on gibbsite Al(OH)<sub>3</sub>. <br>
+<br>
+To proceed with the uranyl sorption model, close the Phase and ReacDC
+windows and switch back to the Main GEMS dialog. <br>
+<br>
+</small></big><span style="font-family: helvetica,arial,sans-serif;"><br>
+</span><a href="index.html"><b><font face="Helvetica, Arial, sans-serif">Next
+Page</font></b></a><br>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2006&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

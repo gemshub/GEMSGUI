@@ -1,0 +1,758 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 34</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.34">
+</head>
+<body style="background-image: url(bgimg.png);">
+<h1><img src="gems1.png" alt="" height="48" width="48"> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal33.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; </font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to
+Start Page</font> </big></a></p>
+<hr size="2" width="100%">
+<p><b><span style="font-family: helvetica,arial,sans-serif;">(49)
+Modifying process simulators for GEM surface complexation modelling</span></b></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Once the
+process simulator has been created (this required some work), it can be
+easily "cloned" and modified. </span><span
+ style="font-family: helvetica,arial,sans-serif;">On this page, we will
+perform some typical cases aimed at different presentation of results
+or sensitivity studies of GEM SCMs.<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">It is often
+instructive to plot the modelled titration curves in the surface
+density
+scale. Besides, once the inversion titration sequence has been
+calculated (see <a href="sshgal33.html">previous page</a>) and the
+titrant additions recorded in the <big><tt>modC</tt></big> vector, a
+"cloned" Process record can be re-configured for a much faster
+calculation using a simple "direct titration" scheme.&nbsp;</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">To do such a
+modification, start GEM-Selektor, open the "SorptionUL" project, open
+the "Project" window and get there the previously created Process
+record (if this record was not loaded already). <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, execute
+the "Record" "New(Clone)..." menu command. In the appearing list of
+SysEq record keys, select the one for "parent" system ("<big><tt>SorptionUL:G:UL_on_Qtz:1:0:1:25:0:</tt></big>")
+and press "Ok" to proceed. In the appearing dialog for the new Process
+record key, click on the "From List" button and then "Ok" to get the
+existing record key and modify the last field from "G" to "S" and the
+preceding field by adding "d" (to add a hint that this will be a direct
+titration process), as shown below.&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-34-1.png" alt="New rkey"
+ style="width: 328px; height: 295px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">When ready,
+click "Ok" to continue. In the appearing Process setup wizard, switch
+to the "S" (sequential) mode, as shown below:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Process wizard" src="sshgal-34-2.png"
+ style="width: 594px; height: 558px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">When done,
+click "Next &gt;" three times to get through the rest of wizard back to
+the "Process" window. On Page 1, edit
+the two comment lines,&nbsp; the script, and clean the iterators, as
+shown below.&nbsp; As
+the additions of titrants are now known (you can see them in the&nbsp; </span><big><span
+ style="font-family: monospace;">modC</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;
+vector on the right side), the script can be greatly simplified and the
+"golden section" algorithm is no more needed. <br>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Page 1 edited" src="sshgal-34-3.png"
+ style="width: 693px; height: 498px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+To see the
+difference in performance, we postpone the modification of the second
+script and run the direct titration right now. First, switch to the
+"Graph" page. The <big><tt>xp</tt></big> and <big><tt>yp</tt></big>
+arrays can be efficiently cleaned off to zeros with help of the
+built-in calculator (just right-mouse click on the first cell in the
+array, choose "Select object" and then again right-click on the same
+cell and choose"Edit" and then "Clear").
+<br>
+&nbsp;Now, click on the "Calculate" <img src="kcalc.png"
+ alt="Calculate" height="22" width="22"> &nbsp; tollbar button; click
+"Yes" to save the changed Process record; and also click "Yes" on a
+question "Use graphic window?". You should see next the GEMS Graphics
+dialog with modeled pH edges appearing as more and more disconnected
+dots (at least 10 times faster than in the inverse titration
+calculations). When the calculation is finished, the Graph dialog will
+look like this: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+<img alt="Point graph" src="sshgal-34-4.png"
+ style="width: 630px; height: 443px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Close this
+dialog and open it again (using the "Plot data" toolbar button) to see
+a usual, customizable line-symbol plot. <br>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, switch
+to Page
+2 of the "Process" window. There, the math script must be modified so
+that
+the pH adsorption edges will be shown in the surface density scale (in
+nm<sup>-2</sup>).
+Simply un-comment the second operator (by removing two '$' characters)
+and
+comment out the third operator so that it looks like "<big><tt>$ cXi =:
+b[{U}]/100;</tt></big>"
+.&nbsp; When done with editing, switch to Page 3 where we have to
+re-scale the experimental data which we have previously typed into the </span><big><span
+ style="font-family: monospace;">yEp</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> column.&nbsp;
+Rescaling coefficient can be obtained from the following
+considerations. The previous factor </span><big><span
+ style="font-family: monospace;">cXi</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> (for expressing the
+calculated amounts of surface species as percentage of total uranium
+adsorbed) was simply this total amount divided by 100, i.e. 1e-6 / 100
+= 1e-8. The new factor (to express in the nm-2 density scale) is a
+product of the sorbent mass (100 g), the specific surface area (0.33 m<sup>2</sup>/g),
+and the units conversion factor from moles per m2 to molecules per nm2
+(1.66054e-6). So, the new cXi&nbsp; equals 5.48e-5. Therefore, the
+scaling factor for experimental data is cXi(old)/cXi(new) =
+1e-8/5.48e-5 = 1.825e-4. Now you can use the built-in calculator (F8)
+for multiplying all numbers in the yEp column by this factor
+(1.825e-4). <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, start
+calculation of the process
+simulator
+again; when finished, change the </span><big><span
+ style="font-family: monospace;">Py_Nam</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> field to
+"Uads,nm-2", open the Graph dialog, and customize the plot by
+changing
+the Y axis interval to (0; 0.024). You should arrive at a plot similar
+to
+that shown here: <br>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="New plot" src="sshgal-34-5.png"
+ style="width: 446px; height: 355px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">From this
+graph, where the pH adsorption edges are shown in surface density
+scale, it is clear that at 1e-6 M total uranyl in the system, the
+adsorbed densities of its
+surface species on 100 g crushed quartz are still small (less than 2
+molecules
+per 100 nm<sup>2</sup>). &nbsp;At such densities (much below 0.14 nm-2
+- the density of uranyl-specific sites set in the GEM SCM), the SACT
+corrections
+are almost negligible, so no competition occurs between the adsorbed
+uranyl complexes. .<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+<span style="font-weight: bold;"><a name="PROC-CLONE"></a>(50)&nbsp;
+Cloning a Process record to model a new system</span> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">An existing
+Process record can also be "cloned" and used &nbsp;in modelling another
+system, in which case, a new "parent" SysEq record has to be created
+and calculated first.&nbsp; <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Let us
+explore
+how this works on two examples: one that demonstrates the impact of
+addition
+of a uranyl complexing ligand (0.0001 M NaF) to the system containing
+100
+g/L crushed quartz and 1e-6 M uranyl; and another that has instead 1e-5
+M
+of uranyl without addition of NaF. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In the
+"Process" window, use the "Record" "DIsplay" menu command (or the
+"Display selected record" toolbar button) &nbsp;to get the previously
+created &nbsp;</span><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz:1:0:1:25:0:pHedge1e-6UnoF:G:</tt></big>"</span><font
+ face="Helvetica, Arial, sans-serif">. This will automatically load its
+parent SysEq record </font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz:1:0:1:25:0:</tt></big>"</span><font
+ face="Helvetica, Arial, sans-serif"> which we can use for "cloning" a
+new parent SysEq record and, after that, for "cloning" a new Process
+record.&nbsp;<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Open the "Single
+Thermodynamic System" dialog (by clicking on the "Single-System
+Equilibria" button on
+the "Modelling Project" dialog) and execute the "Record"
+"New(Clone)..."
+menu command. In the appearing dialog, change the new record key to </font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz_F:6:0:1:25:0:</tt></big>"</span><font
+ face="Helvetica, Arial, sans-serif">&nbsp;and click "Ok" to proceed.
+In
+the appearing "System" window, switch to the "IComp" page and change
+there
+the additions of </font><big><tt>F</tt></big><font
+ face="Helvetica, Arial, sans-serif"> and </font><big><tt>Na</tt></big><font
+ face="Helvetica, Arial, sans-serif"> to 1e-4 mol, as shown below.&nbsp;<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"> &nbsp;<img
+ alt="Adding NaF" src="sshgal-34-6.png"
+ style="width: 511px; height: 408px;"> </font><font
+ face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><span
+ style="font-family: helvetica,arial,sans-serif;">Change also the
+comment lines accordingly, close the "System" window, calculate the
+equilibrium
+(using the "GEM calculate" <img src="RunIPM.png" alt="Run GEM"
+ height="20" width="20"> &nbsp;toolbar button) and accept the result to
+save the new "parent" record to database. Now, you can close the
+"Single Thermodynamic System" dialog
+and switch to the "Process" window.&nbsp; <br>
+</span></font></p>
+<p><font face="Helvetica, Arial, sans-serif"><span
+ style="font-family: helvetica,arial,sans-serif;">In the "Process"
+window (where the </span></font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz:1:0:1:25:0:pHedge1e-6UnoF:G:</tt></big>"</span><font
+ face="Helvetica, Arial, sans-serif"> record has already been loaded), </font><font
+ face="Helvetica, Arial, sans-serif"> execute the "Record"
+"New(Clone)..." menu command. In the appearing list, select the SysEq
+record&nbsp; </font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz_F:6:0:1:25:0:</tt></big>"</span><font
+ face="Helvetica, Arial, sans-serif"> that we just have created, as a
+"parent" system for the new process simulator, and press "Ok". In the
+appearing "Process: Please, enter a new record key" </font><font
+ face="Helvetica, Arial, sans-serif">dialog, change the new record key
+to <br>
+</font><span style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz_F:6:0:1:25:0:</tt></big></span><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>pHedge1e-6U+F:G:</tt></big></span><span
+ style="font-family: helvetica,arial,sans-serif;">" and click "Ok" to
+proceed. Now, the Process Setup wizard&nbsp; appears on your desktop.
+Click on the "Next &gt;"&nbsp; button to proceed to the "Step 2" page:<br>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Process wizard page 2" src="sshgal-34-7.png"
+ style="width: 640px; height: 648px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+For this
+system, 12 experimental points are available and can be shown over the
+modelled
+pH edges. Hence, change the number of points of input empirical data to
+12 as shown above, and click "Next &gt;" until leaving the wizard and
+getting back to Page 1 of the Process window. There, fix the comment
+lines by noting the presence of 1e-4 M NaF in the system, and switch to
+the "Graph" page. Enter there the following experimental data into
+the&nbsp; </span><big><span style="font-family: monospace;">xEp</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; and&nbsp; </span><big><span
+ style="font-family: monospace;">yEp</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; columns</span><span
+ style="font-family: helvetica,arial,sans-serif;">:<br>
+</span></p>
+<blockquote>
+  <p><span style="font-family: helvetica,arial,sans-serif;">pHexpr .
+&nbsp;%U<sub>ads</sub>(expr)</span><big><tt><span
+ style="font-family: helvetica,arial,sans-serif;"><br>
+  </span>3.7&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;0<br>
+4.05&nbsp;&nbsp; &nbsp; &nbsp;0<br>
+4.35&nbsp;&nbsp; &nbsp; &nbsp;4<br>
+4.85&nbsp;&nbsp;&nbsp; &nbsp;23<br>
+4.95&nbsp;&nbsp; &nbsp; 31<br>
+5.15 &nbsp;&nbsp; &nbsp;48<br>
+5.35 &nbsp;&nbsp; &nbsp;67<br>
+5.65 &nbsp;&nbsp; &nbsp;88<br>
+5.9&nbsp;&nbsp;&nbsp; &nbsp; 95<br>
+6.05&nbsp;&nbsp; &nbsp; 97<br>
+6.1 &nbsp;&nbsp;&nbsp; &nbsp;97<br>
+6.35&nbsp;&nbsp;&nbsp; &nbsp;99</tt></big><br>
+  </p>
+</blockquote>
+<p><font face="Helvetica, Arial, sans-serif">After </font><span
+ style="font-family: helvetica,arial,sans-serif;"></span><font
+ face="Helvetica, Arial, sans-serif">entering the data, click on the
+"Plot data"&nbsp; <img src="xpaint.png" alt="Plot button" height="22"
+ width="27"> &nbsp; toolbar button to see the old modeled lines with
+just entered experimental points. Confirm saving changes in the Process
+record. The plot now suggests that the modelled pH adsorption edge of
+uranyl in presence of fluorine must shift to higher pH values. Close
+the graph dialog, switch to Page 1 of the Process window, increase the
+maximum titration interval in the </font><big><span
+ style="font-family: monospace;">ipXi</span></big> <span
+ style="font-family: helvetica,arial,sans-serif;">iterator to {
+-0.0015; +0.06 },&nbsp; and click on the "Calculate record data"
+toolbar
+button to run the process simulator (answer "Yes" to the appearing
+question "Use graphic window?"</span>).&nbsp;</p>
+<p><font face="Helvetica, Arial, sans-serif">The slow inverse titration
+sequence calculation begins; you should see the Graph dialog where
+newly-computed
+modelling points appear one-by-one as points over the old plot lines.
+When
+the simulation run is finished Ok, close the Graph dialog and open it
+again
+(confirm saving the Process record to database). Now, the modeled pH
+edge
+fits nicely to the experimental points. After some customization, the
+plot
+should look like this:&nbsp;<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img
+ alt="Fit with fluoride" src="sshgal-34-8.png"
+ style="width: 446px; height: 355px;">&nbsp;<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+The plot shows that the fluorine complexation of uranyl in aqueous
+solution
+significantly out-competes formation of the neutral surface complex of
+uranyl on quartz, but only below pH 5.5; above that, the addition of
+1e-4 M NaF causes no
+visible effect on uranyl adsorption. Compare the above plot with Fig.
+1,a in
+[Kulik,
+2002] paper where the same effect has been modelled using a
+non-electrostatic adsorption model (NEM). </font><br>
+</p>
+<p><font face="Helvetica, Arial, sans-serif"><span
+ style="font-family: helvetica,arial,sans-serif;">As a next exercise,
+we can investigate the impact of increasing total uranyl loading on pH
+adsorption
+edges on crushed quartz (without NaF addition), following Figs. 5,c and
+6,b
+of [Kulik,2002]. &nbsp;</span></font><span
+ style="font-family: helvetica,arial,sans-serif;">In the "Process"
+window,
+use the "Display selected record" toolbar button to get the </span><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz:1:0:1:25:0:pHedge1e-6UnoF:G:</tt></big>"</span><font
+ face="Helvetica, Arial, sans-serif"> Process record, which will
+automatically
+load also its parent SysEq record </font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz:1:0:1:25:0:</tt></big>"</span><font
+ face="Helvetica, Arial, sans-serif">. "Clone" the latter (as described
+above)
+under a new key&nbsp;</font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz:5:0:1:25:0:</tt></big>"</span><font
+ face="Helvetica, Arial, sans-serif">. In the "Compos" page of "System"
+window,
+change the addition of </font><big><tt>"UO3"</tt></big><font
+ face="Helvetica, Arial, sans-serif"> from 1e-6 to 1e-5 moles, then
+calculate
+and save the new SysEq record (by clicking on the "Accept" button on
+the
+Progress dialog). Close the "Single Thermodynamic System" dialog and
+the
+"System" window and switch back to the "Process" window. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">In the "Process" window, </font><font
+ face="Helvetica, Arial, sans-serif">execute the "Record"
+"New(Clone)..." menu command. In the appearing list, select the SysEq
+record&nbsp; </font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz:5:0:1:25:0:</tt></big>"</span><font
+ face="Helvetica, Arial, sans-serif"> which we just have created as a
+"parent" system for the new process simulator, and click "Ok". In the
+appearing "Process: Please, enter a new record key" </font><font
+ face="Helvetica, Arial, sans-serif">dialog, change the record key to </font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz_F:5:0:1:25:0:</tt></big></span><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>pHedge1e-5UnoF:G:</tt></big></span><span
+ style="font-family: helvetica,arial,sans-serif;">" and click "Ok" to
+proceed. Next, the Process Setup wizard&nbsp; appears; go on its second
+page (Stage 2) and
+change there
+the number of plot lines (columns in the <big><tt>yp</tt></big> table)
+from
+4 to 5, the number of empirical points from 16 to 10, and click "Next
+&gt;"&nbsp; until getting back to the Process window. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">On Page 1 of
+the
+"Process" window, change the <big><tt>iTm</tt></big> iterator values
+from
+1030 to 5030 and from 1094 to 5094 (otherwise this process simulator
+will
+erase previous calculations for 1e-6 M uranyl loading). &nbsp;Switch to
+Page
+2 where the data sampling math script needs to be extended in order to
+display
+the "<big><tt>Sio&gt;&gt;OUL2H+</tt></big>" binuclear surface complex
+that
+was totally insignificant at low uranium loadings.&nbsp; Mark and copy (<b><big><tt>Ctrl-C</tt></big></b>)
+the operator "<big><tt>yp[J][2] =: .... </tt></big>" and paste it (<b><big><tt>Ctrl-V</tt></big></b>)
+before the last operator "<big><tt>yp[J][3] =: ...</tt></big>", then
+edit
+the last two operators as follows:&nbsp;<br>
+</span></p>
+<blockquote><span style="font-family: helvetica,arial,sans-serif;"><big><tt>.........</tt></big></span><br>
+  <span style="font-family: helvetica,arial,sans-serif;"><big><tt>yp[J][3]
+=: x[{Sio&gt;&gt;OUL2H+}]*2/cXi;&nbsp;</tt></big></span><br>
+  <span style="font-family: helvetica,arial,sans-serif;"><big><tt>yp[J][4]
+=: yp[J][0]</tt><small><font face="Courier New, Courier, monospace">+</font></small></big></span><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>yp[J][1]</tt></big></span><big><big><tt><small><span
+ style="font-family: helvetica,arial,sans-serif;">+</span></small></tt></big></big><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>yp[J][2]</tt></big></span><big><big><tt><small><span
+ style="font-family: helvetica,arial,sans-serif;">+</span></small></tt></big></big><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>yp[J][3]</tt></big></span><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>;</tt></big></span><big><big><tt><small><span
+ style="font-family: helvetica,arial,sans-serif;"></span></small></tt></big><tt><span
+ style="font-family: helvetica,arial,sans-serif;"></span><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; </span></tt></big><br>
+  <big><tt><span style="font-family: helvetica,arial,sans-serif;"></span></tt></big></blockquote>
+<p><span style="font-family: helvetica,arial,sans-serif;">When
+finished,
+switch to the "Graph" page and edit the <big><tt>pLnam[0,3]</tt></big>
+and
+<big><tt>pLnam[0,4]</tt></big> legend cells accordingly; then find <big><tt>xEp</tt></big>
+and <big><tt>yEp</tt></big> vectors and type in there the following
+experimental
+data: <br>
+</span></p>
+<blockquote>
+  <p> <span style="font-family: helvetica,arial,sans-serif;">pHexpr
+. &nbsp;%U<sub>ads</sub>(expr)</span><big><tt><span
+ style="font-family: helvetica,arial,sans-serif;"><br>
+  </span>3.56 &nbsp;&nbsp; &nbsp; 2.5<br>
+4.12 &nbsp; &nbsp; &nbsp;7.5<br>
+4.3&nbsp;&nbsp; &nbsp; &nbsp;16<br>
+4.5&nbsp;&nbsp;&nbsp; &nbsp; 25<br>
+4.55&nbsp;&nbsp; &nbsp; 32<br>
+4.8 &nbsp;&nbsp; &nbsp; 42.5<br>
+5.15 &nbsp;&nbsp; &nbsp;60<br>
+5.3 &nbsp;&nbsp; &nbsp; 74<br>
+5.53 &nbsp;&nbsp; &nbsp;80<br>
+6.0 &nbsp; &nbsp; &nbsp;91</tt></big><span
+ style="font-family: helvetica,arial,sans-serif;"><br>
+  </span></p>
+</blockquote>
+<p><span style="font-family: helvetica,arial,sans-serif;">When
+finished,
+run the process simulator (confirm saving the record to database);
+afterwards,
+show and customize the plot that should finally look like this: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Graph dialog" src="sshgal-34-9.png"
+ style="width: 630px; height: 443px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Note that, at
+higher
+uranyl loading, the "<big><tt>Sio&gt;&gt;OUL@</tt></big>" surface
+complex
+becomes more significant, and the ternary uranyl-carbonate&nbsp;</span><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>Sio&gt;&gt;OULCH-4</tt></big>"</span><span
+ style="font-family: helvetica,arial,sans-serif;"> surface complex -
+almost unimportant. However, comparison with Fig. 5,c in [Kulik,2002]
+shows that the adsorption of uranium is somewhat under-predicted at pH
+&gt; 5.0. The reason lies in the competition of two species OUL@ and
+OULH-2 for the same kind of sites with 0.14 nm<sup>-2</sup> site
+density. In the paper, no competition was assumed, i.e. these species
+were modeled as binding to different sites each of 0.14 nm<sup>-2</sup>
+density (i.e., both sites&nbsp; together have 0.28 nm<sup>-2</sup>
+density).<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Let us first
+test&nbsp; the model variant with two separate sites for the OUL@ and
+OULH-2 surface species. </span><font
+ face="Helvetica, Arial, sans-serif">Open the "Single Thermodynamic
+System" dialog and get there the
+current
+SysEq record </font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz:5:0:1:25:0:</tt></big>".
+Open the "System" window and select there the "Surfaces" page. On that
+page, </span><font face="Helvetica, Arial, sans-serif">find the </font><big><span
+ style="font-family: monospace;">SATC_[3][4]</span></big><font
+ face="Helvetica, Arial, sans-serif"> cell (against the </font><big><span
+ style="font-family: monospace;">"Sio&gt;&gt;OULH-2"</span></big><font
+ face="Helvetica, Arial, sans-serif"> species) and change there the
+site type index from 1 to 2, in order to consider this uranyl surface
+species as having its own site. Re-calculate the equilibrium and save
+it into the database, then close the "Single Thermodynamic System"
+dialog, get back to the Process window, and start re-calculating the
+titration process.&nbsp; When finished, you should obtain the plot
+shown below:<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img alt="No competition"
+ src="sshgal-34-10.png" style="width: 446px; height: 355px;"><br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+The fit to experimental data is now fine, almost identical to that on </font><span
+ style="font-family: helvetica,arial,sans-serif;">Fig. 5,c in
+[Kulik,2002]. Note that no parameters have been changed in the surface
+complexation model except the allocation of two surface species to two
+separate sites (to remove competition). This is a good demonstration of
+the power and flexibility of GEM SCM approach based on SATC terms that
+replace the site balance constraints. A good fit could obviously be
+obtained by restoring the competition between the OUL@ and OULH-2
+surface species on the same site type, but of higher site density. Try
+0.18 nm<sup>-2</sup> as an exercise - you should see the following
+diagram: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Competition model improved" src="sshgal-34-11.png"
+ style="width: 446px; height: 355px;"><br>
+</span></p>
+<p><font face="Helvetica, Arial, sans-serif">Note that the calculated
+speciation of uranyl on surface is now different from the
+"non-competitive" case, although the total curve for adsorbed uranium
+is not so different. <br>
+</font></p>
+<span style="font-family: helvetica,arial,sans-serif;">Please, also
+note
+that
+</span><span style="font-family: helvetica,arial,sans-serif;">on Fig.5,c</span><span
+ style="font-family: helvetica,arial,sans-serif;"> in [Kulik, 2002], a
+dense curve
+(marked
+with small diamonds) for the "<big><tt>Sio&gt;&gt;OULCH-4</tt></big>"
+complex
+is misplaced (i.e. it is the same as on Fig.5,a). </span><span
+ style="font-family: helvetica,arial,sans-serif;">You just have
+calculated</span><span style="font-family: helvetica,arial,sans-serif;">
+correct curves for this
+surface complex: a small bump (up to 2.4%) around pH=8.5, also visible
+as a
+thin
+line on Fig.5,c in [Kulik,2002]; the total %U<sub>ads</sub> curve is
+correct
+on that figure, though. A new feature in our last calculation is a line
+for
+the "<big><tt>Sio&gt;&gt;OUL2H+</tt></big>" binuclear surface species
+(reaching
+ca. 4% at pH about 6) that becomes important only at high uranium
+surface
+coverages.</span><span style="font-family: helvetica,arial,sans-serif;"></span>
+<font face="Helvetica, Arial, sans-serif"><span
+ style="font-family: helvetica,arial,sans-serif;"></span></font>
+<p><font face="Helvetica, Arial, sans-serif">The last exercise on this
+page
+will be a calculation of pH adsorption edges at the highest uranium
+loading
+0.0001 M. Open the "Single Thermodynamic System" dialog and "clone" the
+current
+SysEq record </font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz:5:0:1:25:0:</tt></big>"</span><font
+ face="Helvetica, Arial, sans-serif"> into a new "parent" record </font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz:4:0:1:25:0:</tt></big>"</span><font
+ face="Helvetica, Arial, sans-serif">. In the "Compos" page of "System"
+window,
+change the addition of </font><big><tt>"UO3"</tt></big><font
+ face="Helvetica, Arial, sans-serif"> from 1e-5 to 1e-4 moles, then
+calculate
+and save the new SysEq record (by clicking on the "Accept" button on
+the
+Progress dialog). Close the "Single Thermodynamic System" dialog and
+the
+"System" window and switch back to the "Process" window. <br>
+</font> </p>
+<p><font face="Helvetica, Arial, sans-serif">In the "Process" window,
+"clone"
+the current record&nbsp; </font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz_F:5:0:1:25:0:</tt></big></span><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>pHedge1e-5UnoF:G:</tt></big></span><span
+ style="font-family: helvetica,arial,sans-serif;">"</span><font
+ face="Helvetica, Arial, sans-serif">. In the appearing list, select
+the
+SysEq record&nbsp; </font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz:4:0:1:25:0:</tt></big>"</span><font
+ face="Helvetica, Arial, sans-serif"> as a "parent" system for the new
+process
+simulator, and press "Ok". In the appearing "Process: Please, enter a
+new
+record key" </font><font face="Helvetica, Arial, sans-serif">dialog,
+change
+the record key to </font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz_F:4:0:1:25:0:</tt></big></span><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>pHedge1e-4UnoF:G:</tt></big></span><span
+ style="font-family: helvetica,arial,sans-serif;">" and click "Ok". </span><span
+ style="font-family: helvetica,arial,sans-serif;">In the Process Remake
+dialog,
+change there the number of empirical points from 10 to 9, edit the
+comment
+lines, and click "Ok" to proceed. On Page 1 of the "Process" window,
+change
+values in the <big><tt>iTm</tt></big> iterator to 4030 and 4094, the
+ipXi titration interval to { -0.0016; 0.06&nbsp; }, then
+switch
+to the "Graph" page and enter the following experimental data into <big><tt>xEp</tt></big>
+and <big><tt>yEp</tt></big> columns: <br>
+</span></p>
+<p> </p>
+<blockquote>
+  <p> <span style="font-family: helvetica,arial,sans-serif;">pHexpr
+. &nbsp;%U<sub>ads</sub>(expr)</span><big><tt><span
+ style="font-family: helvetica,arial,sans-serif;"><br>
+  </span>4.3 &nbsp;&nbsp; &nbsp; &nbsp;5<br>
+4.55 &nbsp;&nbsp; &nbsp;13<br>
+4.7 &nbsp; &nbsp; &nbsp;14<br>
+5.2 &nbsp;&nbsp; &nbsp; 25<br>
+5.45&nbsp;&nbsp; &nbsp; 22<br>
+5.75&nbsp;&nbsp; &nbsp; 24<br>
+5.85 &nbsp;&nbsp; &nbsp;31<br>
+6.05&nbsp;&nbsp; &nbsp; 33<br>
+6.45 &nbsp;&nbsp; &nbsp;30<br>
+  </tt></big></p>
+</blockquote>
+<p><span style="font-family: helvetica,arial,sans-serif;">When done,
+run
+the process simulator with the graphic window. When this (somewhat
+slow)
+calculation is finished, plot the results on Graphic Dialog. After some
+customization,
+you will see that the experimental data are ca. 30% underpredicted at
+pH between 5 and 7 (not shown here). This is obviously the same effect
+of competition between two uranyl surface complexes for the same site
+(0.14 nm<sup>-2</sup> density) that we already observed at 1e-5 M total
+uranium loading. Let us first try to increase the site density up to,
+say, 0.36 nm<sup>-2</sup>. </span><font
+ face="Helvetica, Arial, sans-serif">Open the "Single Thermodynamic
+System" dialog and get there the
+current
+SysEq record </font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz:4:0:1:25:0:</tt></big>".
+Open the "System" window and select there the "Surfaces" page, where
+change both densities for the site 1 from 0.18 to 0.36 nm<sup>-2</sup>.
+Then recalculate the equilibrium, save it to database, close the System
+window and the "Single Thermodynamic System" dialog, and re-run the
+process simulator. When finished, plot the results and you will see
+something like this:<br>
+&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Higher site density" src="sshgal-34-12.png"
+ style="width: 446px; height: 355px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+The fit is good, but the shape and the speciation are different from
+what is shown </span><font face="Helvetica, Arial, sans-serif"><span
+ style="font-family: helvetica,arial,sans-serif;">on Fig. 6,a in
+[Kulik, 2002]. The reason is again that in the paper, the species OUL@
+and OULH-2 were not assumed as competing for the same kind of sites.
+Instead, each of these surface complexes was assumed as occupying its
+own sites at maximum density of 0.14 nm<sup>-2</sup>. Let us try how
+this model should work. Again, </span></font><font
+ face="Helvetica, Arial, sans-serif">open the "Single Thermodynamic
+System" dialog and get there the
+current
+SysEq record </font><span
+ style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:UL_on_Qtz:4:0:1:25:0:</tt></big>".
+Open the "System" window and select there the "Surfaces" page, where
+change both densities back from 0.35 to 0.14 nm<sup>-2</sup>, and the
+site index for the Sio&gt;&gt;OULH-2 species from 1 to 2. Then
+recalculate the equilibrium, save it to database, close the System
+window and the "Single Thermodynamic System" dialog, and re-run the
+process simulator. Finally, you should obtain the graph like shown
+below.<br>
+&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Non-competitive plot" src="sshgal-34-13.png"
+ style="width: 446px; height: 355px;"><br>
+&nbsp;<br>
+</span><span style="font-family: helvetica,arial,sans-serif;"></span><font
+ face="Helvetica, Arial, sans-serif"><span
+ style="font-family: helvetica,arial,sans-serif;"><br>
+The plot above is pretty much
+the same as that on Fig. 6,a in [Kulik, 2002] paper, or Fig. 6,b
+re-plotted
+in the surface density scale. An essential feature of this calculation
+is
+that the individual SACT corrections due to the maximum density 0.14 nm<sup>-2</sup>
+to the "</span></font><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>Sio&gt;&gt;OUL@</tt></big>"
+and "<big><tt>Sio&gt;&gt;OULH-2</tt></big>" surface complexes are now
+strong and important. Without these SACT
+corrections,
+the model would overpredict adsorption of uranyl 10 or more times at pH
+between
+5 and 8. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Different
+shapes
+of the two curves for OUL@ and OULH-2 on the above graph are due to the
+fact that the </span><font face="Helvetica, Arial, sans-serif"><span
+ style="font-family: helvetica,arial,sans-serif;">"</span></font><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>Sio&gt;&gt;OUL@</tt></big>"
+species is neutral and it suffers only from the SACT non-ideality
+correction,
+whereas the inner-sphere "<big><tt>Sio&gt;&gt;OULH-2</tt></big>"
+surface
+species concentration "feels" simultaneously SAcT and Coulombic
+corrections,
+the latter due to development of negative surface charge on quartz
+surface
+with increasing pH. </span><span
+ style="font-family: helvetica,arial,sans-serif;">At the same time, the
+binuclear
+surface species "<big><tt>Sio&gt;&gt;OUL2H+</tt></big>" seems to be
+necessary
+for fitting the pH edge of uranyl at pH between 5.5 and 6.5. This
+modelling
+effort suggests that not all sites on the quartz-water interface are
+capable
+of binding uranyl complexes: only 0.3 to 0.4 sites/nm<sup>2</sup> are
+available
+for such inner-sphere binding out of total 4.6 to 5 sites/nm<sup>2</sup>
+de-protonantabe sites as usually reported for &nbsp;SiO<sub>2</sub>
+surfaces.
+Our tutorial calculations also highlight a crucial importance of the
+allocation of surface complexes to site types and of the site density
+parameters in the surface complexation models.<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">There are
+many
+other interesting SCM parameters worth consideration. To plot them,
+there
+is no need to "clone" and re-run the process simulators - the GtDemo
+samplers
+will do the job in a more convenient way extracting data from already
+computed
+SysEq records, as shown on the following pages of this tutorial.</span>
+</p>
+<p> </p>
+<p><a href="sshgal35.html"><b><font face="Helvetica, Arial, sans-serif">Next
+Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2006&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

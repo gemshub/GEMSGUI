@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 21</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.21">
+</head>
+<body style="background-image: url(bgimg.png);">
+<h1><img src="gems1.png" style="width: 48px; height: 48px;" alt=""> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal20.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; </font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to
+Start Page</font> </big></a></p>
+<hr size="2" width="100%">
+<p><font face="Helvetica, Arial, sans-serif"><b><big><big><small><small>(32)
+Creating a tabulator of T,P corrections (RTParm)</small></small></big></big></b></font></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Once a new <a
+ href="../doc/html/gm_dcomp.html">DComp</a> or <a
+ href="../doc/html/gm_reacdc.html">ReacDC</a> record with thermodynamic
+data
+has been added to the project database, it might be very useful to
+check
+if data responsible for temperature and pressure corrections are fine.
+GEMS
+package offers a tool for this - the<a href="../doc/html/gm_rtparm.html">
+RTParm</a> module and record type. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">One or more
+RTParm
+records can be created on top of any existing DComp or ReacDC record
+and
+can show you (in tabulated and graphical form) a range of T,P corrected
+thermodynamic
+data for a chemical species as function of temperature, pressure, or
+both.
+&nbsp;Methods of such corrections used in GEMS package are described in
+</span><font face="Helvetica, Arial, sans-serif"><a
+ href="../doc/pdf/T-corrections.pdf">T-corrections.pdf</a></font><span
+ style="font-family: helvetica,arial,sans-serif;">, </span><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="../doc/pdf/T-corrections-Reac.pdf">T-corrections-Reac.pdf</a></font><span
+ style="font-family: helvetica,arial,sans-serif;">, and </span><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="../doc/pdf/P-corrections.pdf">P-corrections.pdf</a></font><span
+ style="font-family: helvetica,arial,sans-serif;"> documents that can
+be
+downloaded from this web site. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">To create a
+new
+RTParm record, switch back into the "Thermodynamic Database Management"
+dialog
+(shown below)<br>
+</span></p>
+<p><img src="sshgal-21-1.png" alt="Database Properties"
+ style="height: 474px; width: 449px;">
+<br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">and click on
+a
+"T/P Tabulations and Plots (RTparm)" button to open the RTparm module
+window. There, execute the "Record" "Create..." menu command. A small
+dialog pops up
+immediately:
+<br>
+</span></p>
+<p><img src="sshgal-21-2.png" alt="Select source DC record type"
+ style="height: 127px; width: 292px;">
+<br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">This dialog
+asks
+what sort of source record will be tabulated. Let us start with a
+ReacDC
+record for witherite BaCO3, just created as described on the <a
+ href="http://les.web.psi.ch/Software/GEMS-PSI/screenshots/sshgal20.html">previous
+page</a>. So, click on a "ReacDC" button to
+proceed, and select the "<big><tt>s:BaCO:witherite:My_</tt></big>:"
+record
+from the appearing list: <br>
+</span></p>
+<p><img src="sshgal-21-3.png" alt="Select ReacDC"
+ style="height: 278px; width: 506px;">
+<br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Next, the
+"Insert
+new record key" dialog will appear:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-21-4.png" alt="RTParm record key"
+ style="height: 240px; width: 328px;">
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Enter there
+only
+the last line, as shown above (to indicate that a default configuration
+will
+be used), and click "Ok". As expected, the program will show a "RTparm
+Setup" wizard page (below).<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="RTParm Setup Wizard" src="sshgal-21-5.png"
+ style="width: 711px; height: 547px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Read it and
+click "Next &gt;" button to proceed to the second wizard page:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="RTparm Wizard Page 2" src="sshgal-21-5-1.png"
+ style="width: 711px; height: 547px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The default
+modes values visible on the wizard are Ok for the first time, hence,
+click "Next &gt;" again to move to the last wizard page:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="RTparm Wizard Page 3" src="sshgal-21-5-2.png"
+ style="width: 711px; height: 487px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+The setup fields on this (the last) wizard page are also fine. Click
+"Finish" to proceed.<br>
+This will
+bring
+you to a "Scripts" page of the "RTParm" window:<br>
+</span></p>
+<p><img src="sshgal-21-6.png" alt=""
+ style="height: 454px; width: 607px;">
+<br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The window
+contains
+two iterators (<big><tt>rpPi</tt></big> for pressures and <big><tt>rpTi</tt></big>
+for for temperatures) that define start, end and increment values. The
+order
+of iteration in P and T is defined by a code in the <big><tt>rpMode</tt></big>
+field, and the numbers of steps through pressures and temperatures are
+given
+in the <big><tt>rpNpT</tt></big> fields, together with the total
+number of
+calculations. The text in the <big><tt>tExpr</tt></big> field is a
+math script
+that tells the program what to sample as an abscissa (in this case,
+temperatures
+in K) and as an ordinate (values of molar Gibbs energy function G<sup>o</sup>
+in kJ/mol). The data object fields <big><tt>xT</tt></big>, <big><tt>xP</tt></big>
+&nbsp;and <big><tt>yF</tt></big> are accessible through the "Tables"
+page,
+and data fields <big><tt>twTK</tt></big>, <big><tt>twP</tt></big> and
+<big><tt>twG</tt></big>
+- through the "TPwork" page of the "RTParm" window. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, edit the
+second
+comment line as shown above; select the "Tables" page and click on the
+"Calculate
+record data" <img src="kcalc.png" alt="Calculate button"
+ style="height: 22px; width: 22px;">
+&nbsp; &nbsp;toolbar button to tabulate G<sup>o</sup> values for
+witherite.
+&nbsp;The program asks whether to save the changed (due to remake)
+record
+data:<br>
+</span></p>
+<p><img src="sshgal-21-7.png" alt="Save record request"
+ style="height: 127px; width: 345px;">
+<br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">
+&nbsp;Clicking
+"Yes" will certainly do no harm. </span><span
+ style="font-family: helvetica,arial,sans-serif;">You should see how
+the
+<big><tt>xT, xP</tt></big> and <big><tt>yF</tt></big> columns are
+filled
+out with numbers. The full table shall look like that shown below.
+Pressures
+in the <big><tt>xP</tt></big> column correspond to the so-called
+"saturated
+vapor pressures" - partial pressures of H<sub>2</sub>O vapor at a given
+temperature
+(in bars). Temperature in the <big><tt>xT</tt></big> column is given
+(according
+to the math script) in Kelvins, so you can change "C" to "K" in the
+header
+field above<big><tt> xT</tt></big> and <big><tt>xP</tt></big> fields.
+The
+table can be easily exported into an ASCII file, if you click on the
+"Print
+data" <img src="fileprint.png" alt="Print"
+ style="height: 20px; width: 20px;">
+&nbsp; toolbar button and select a print script from the appearing list
+(not
+shown). <br>
+</span></p>
+<p><img src="sshgal-21-8.png" alt="Tables Page in RTParm"
+ style="height: 497px; width: 466px;">
+<br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">To make a
+plot
+of the calculated data, click on the "Plot data" &nbsp;<img
+ src="xpaint.png" alt="Plot button" style="height: 22px; width: 27px;">
+&nbsp;toolbar button. &nbsp;You should get a Graphics Dialog like that
+below:<br>
+</span></p>
+<p><img src="sshgal-21-9.png" alt="Graph dialog"
+ style="height: 444px; width: 630px;">
+<br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The graph can
+easily
+be customized. Click on "Customize" to get the "Customize Graph"
+dialog:
+<br>
+</span></p>
+<p><img src="sshgal-21-10.png" alt="Customize plots"
+ style="width: 570px; height: 410px;">
+<br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Change the x
+and
+y intervals for the graph as shown above. You can also change the line
+color
+and thickness by clicking on a button in the "Plots list" frame. When
+finished,
+click "Ok" to get back to the Graph dialog. You can export the plot
+into
+a .png or other graphic file by clicking "Save Image..." button and
+selecting
+a file path/name. Such exported plot is shown below. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-21-11.png" alt="Exported plot"
+ style="height: 354px; width: 446px;">
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In a pretty
+much
+the same way, you can create a RTParm table and plot for any DComp
+record
+in your modelling project. &nbsp;If you will change some values (e.g.
+dSr
+or S<sup>o</sup>) in the source record and save it to database, then a
+simple
+re-calculation of the RTParm record (or, better, cloning it under a
+different
+record key) will display the impact of changed parameter on T/P
+dependence
+of G<sup>o</sup> values. &nbsp;Try this as an exercise!&nbsp;</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Coming back
+to
+ReacDC representation of thermodynamic data, you also can display T/P
+dependences
+of the properties of reaction such as logK (this is not possible with
+DComp
+data). &nbsp;You can modify the math script on the "Scripts" page to
+pick
+up any thermodynamic properties (calculated at runtime for each T,P
+pair)
+through the data object labels visible on the "TPwork" page (see
+below).
+<br>
+</span></p>
+<p><img src="sshgal-21-12.png" alt="TPwork Page in RTParm"
+ style="width: 556px; height: 503px;">
+<br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The default
+script
+just picks up the G<sup>o</sup> value from the <big><tt>twG</tt></big>
+data
+object. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">If you need
+to tabulate/display more than one property or functions of it, click on
+the "Remake" toolbar button of the RTparm window (or execute "Record"
+"Remake" menu command). This will bring you back to the "RTparm Setup"
+wizard shown above, where you will have to change necessary
+configuration fields. Back to the RTparm "Scripts" page, add necessary
+assignment operators to the script and execute the RTparm module. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">(to be
+continued)<br>
+</span></p>
+<p> </p>
+<p><br>
+<a href="sshgal22.html"><b><font face="Helvetica, Arial, sans-serif">Next
+Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

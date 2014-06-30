@@ -1,0 +1,622 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 33</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.33">
+</head>
+<body style="background-image: url(bgimg.png);">
+<h1><img src="gems1.png" alt="" height="48" width="48"> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal32.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp;
+</font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to Start Page</font> </big></a></p>
+<hr size="2" width="100%">
+<p> <b><font face="Helvetica, Arial, sans-serif">(48) Creating a
+process simulator to model pH sorption edges</font></b><span
+ style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">On this page,
+we will simulate pH edges of adsorption of uranyl on crushed quartz at
+ambient conditions using GEM TLM, as shown on Fig. 5 in the paper </span><span
+ style="font-family: helvetica,arial,sans-serif;">by Kulik [<a
+ href="../doc/pdf/sshgal30-sup-mat.pdf"><i>Radiochimica Acta</i> 2002,
+v.90, p.815-832</a>]
+(the paper can be downloaded as a pdf file from the journal's web
+site).
+&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">We will
+follow
+more or less the same steps as described on pages <a
+ href="sshgal10.html">10</a> and <a href="sshgal11.html">11</a> of
+this screenshot
+tutorial. The process simulator actually has to titrate the system with
+acid
+or base at constant solid/water ratio and total uranium loading. In a
+generated
+sequence
+of equilibrium states, we will follow the partitioning of uranium
+between
+aqueous solution and the sorbent surface as a function of pH in aqueous
+phase, which itself depends on the added amounts of acid or base. &nbsp;</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Any process
+simulation requires one "parent" chemical system definition with
+calculated equilibrium state to start with. Hence, as a first step, we
+will create such a system using the following recipe:&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<table border="1" cellpadding="2" cellspacing="2" width="100%">
+  <tbody>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Input <br>
+      </font></td>
+      <td valign="top"><big><tt>AtmAirDry</tt></big><font
+ face="Helvetica, Arial, sans-serif"> <br>
+      </font></td>
+      <td valign="top"><big><tt>Aqua</tt></big><font
+ face="Helvetica, Arial, sans-serif"><br>
+      </font></td>
+      <td valign="top"><big><tt>NaNO3</tt></big><font
+ face="Helvetica, Arial, sans-serif"><br>
+      </font></td>
+      <td valign="top"><big><tt>SiO2</tt></big><font
+ face="Helvetica, Arial, sans-serif"><br>
+      </font></td>
+      <td valign="top"><big><tt>UO3</tt></big><font
+ face="Helvetica, Arial, sans-serif"><br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Specific
+surface <br>
+area of Qtz sorbent</font></td>
+      <td valign="top"><big><tt>NaF</tt></big><font
+ face="Helvetica, Arial, sans-serif"><br>
+      </font></td>
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Units<br>
+      </font></td>
+      <td valign="top">kg<br>
+      </td>
+      <td valign="top">g<br>
+      </td>
+      <td valign="top">mol<br>
+      </td>
+      <td valign="top">g<br>
+      </td>
+      <td valign="top">mol <br>
+      </td>
+      <td valign="top">m<sup>2</sup>/g<br>
+      </td>
+      <td valign="top">mol <br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Amount<br>
+      </font></td>
+      <td valign="top"><b><font face="Helvetica, Arial, sans-serif">30<br>
+      </font></b></td>
+      <td valign="top"><b><font face="Helvetica, Arial, sans-serif">994.3<br>
+      </font></b></td>
+      <td valign="top"><b><font face="Helvetica, Arial, sans-serif">0.1<br>
+      </font></b></td>
+      <td valign="top"><b><font face="Helvetica, Arial, sans-serif">100.01<br>
+      </font></b></td>
+      <td valign="top"><b><font face="Helvetica, Arial, sans-serif">1e-6<br>
+      </font></b></td>
+      <td valign="top"><b><font face="Helvetica, Arial, sans-serif">0.33<br>
+      </font></b></td>
+      <td valign="top"><b><font face="Helvetica, Arial, sans-serif">1e-9<br>
+      </font></b></td>
+    </tr>
+  </tbody>
+</table>
+<p><span style="font-family: helvetica,arial,sans-serif;"> </span><font
+ face="Helvetica, Arial, sans-serif">&nbsp;Open the SorptionUL
+modelling
+project (if not done already) and, in the "Single Therrmodynamic
+System"
+dialog, use the "Record" "Create" menu command to create a new SysEq
+record
+keyed "</font><big><tt>SorptionUL:G:UL_on_Qtz:1:0:1:25:0:</tt></big><font
+ face="Helvetica, Arial, sans-serif">". <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Set the recipe in the
+"Compos", "Phase" and "IComp" pages of "System" window. If in doublt
+what to do, please consult two previous tutorial pages that explain in
+detail how to create and
+modify a single system definition with sorption phase(s). The trace
+amount of NaF is added (on the IComp page) in order to keep fluorine
+chemical species for a
+later modelling of the effect of F on uranyl partitioning. &nbsp;Add
+also (on the "Compos" page) 1e-9 mol </font><big><tt>HNO3</tt></big><font
+ face="Helvetica, Arial, sans-serif"> and 1e-9 mol </font><big><tt>NaOH</tt></big>
+<font face="Helvetica, Arial, sans-serif">- these items will be changed
+later in automatic inverse titrations. The "Compos" page should finally
+look like this: <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img alt="Compos parent"
+ src="sshgal-33-0.png" style="width: 510px; height: 642px;">&nbsp;<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+When ready, check BCC &nbsp;</font><span
+ style="font-family: helvetica,arial,sans-serif;"><img src="RunBCC.png"
+ alt="RunBCC" height="20" width="20"> </span><font
+ face="Helvetica, Arial, sans-serif">, make sure that all independent
+components, aqueous, gas and sorption species are switched on, that
+there is no G0 correction to sorbent Qtz in the sorption phase, that
+&nbsp;</font><big><tt>Quartz</tt></big> and <big><tt>Silica-amorph</tt><font
+ face="Helvetica, Arial, sans-serif"> </font></big><font
+ face="Helvetica, Arial, sans-serif">single component phases are
+switched off, and then calculate equilibrium &nbsp;</font><span
+ style="font-family: helvetica,arial,sans-serif;"><img src="RunIPM.png"
+ alt="RunIPM" height="20" width="20"> </span><font
+ face="Helvetica, Arial, sans-serif">&nbsp; in this system.
+You should see the following speciation in the gas and sorption
+phases:: <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img alt="Parent system"
+ src="sshgal-33-1.png" style="width: 745px; height: 713px;">&nbsp;<br>
+</font> </p>
+<p><font face="Helvetica, Arial, sans-serif">By checking e.g. the
+"EqIC"
+page of "EqDemo" window (use the </font><span
+ style="font-family: helvetica,arial,sans-serif;"><img
+ src="ordertool.png" alt="Explore button" height="22" width="22"> </span><font
+ face="Helvetica, Arial, sans-serif">&nbsp; toolbar button), you can
+find out that at pH = 5.5, ca. 96.6% of uranium is adsorbed in this
+system, of which ca. 62.10 % as&nbsp; </font><big><tt>Sio&gt;&gt;OUL@</tt></big><font
+ face="Helvetica, Arial, sans-serif">&nbsp; </font><font
+ face="Helvetica, Arial, sans-serif">and&nbsp; 34.04 % as&nbsp; </font><big><tt>Sio&gt;&gt;OULH-2</tt></big><font
+ face="Helvetica, Arial, sans-serif"> surface complexes. This is
+closely the same as the model point for pH=5.5 on Fig. 5,a in [Kulik,
+2002]
+paper, even though the present model is not exactly the same because it
+assumes a competition of both U<sup>VI</sup> surface species for the
+same kind of sites of density 0.14 nm<sup>-2</sup>.</font><font
+ face="Helvetica, Arial, sans-serif"> So, our "parent
+system" is ready. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">However, to model the pH
+sorption edge, we need to know the range of additions of acid and base
+necessary
+to titrate the system from pH = 3.0 to pH = 9.5.&nbsp; The easiest way
+to
+determine this is to "clone" the parent system (e.g. changing the CSD
+&nbsp;fourth field of SysEq record key to 0, i.e. "</font><big><tt>SorptionUL:G:UL_on_Qtz:0:0:1:25:0:</tt></big><font
+ face="Helvetica, Arial, sans-serif">"), &nbsp;and play around with
+additions of HNO<sub>3</sub> and NaOH in the "Compos" page of "System"
+window (use </font><span
+ style="font-family: helvetica,arial,sans-serif;"><img
+ src="file:///G:/4401/Software/GEMS-PSI/screenshots/SetCompos.png"
+ alt="SetBCC button" height="23" width="22"> </span><font
+ face="Helvetica, Arial, sans-serif">&nbsp; toolbar button)
+until the desired pH values will be calculated. You should arrive at
+about these numbers: to obtain pH = 3 or
+less,
+0.0013 mol HNO<sub>3</sub> or more must be added; to get pH = 9.5 or
+more,
+0.05 mol NaOH should be added instead.<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Let us proceed with
+creating the process simulator for modelling pH adsorption edges. You
+can close now the "Single Thermodynamic System" and related windows and
+(from the "Modelling Project" dialog) click on the "Process Simulation"
+button to open the "Process" window. There, execute the "Record"
+"Create" menu command; from the appearing list, select the parent SysEq
+record (as shown below) and press "Ok" to
+proceed. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-33-2.png"
+ alt="Selection" style="width: 608px; height: 245px;"> &nbsp; &nbsp;</font></p>
+<p><font face="Helvetica, Arial, sans-serif">This will get you to a
+small dialog where two last fields of the new Process record key should
+be completed:&nbsp;</font></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Process rkey" src="sshgal-33-3.png"
+ style="width: 328px; height: 295px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Complete them
+as shown above (to identify shortly what this process simulator is
+supposed to do) and click "Ok" to proceed. The following Process setup
+wizard dialog
+will appear: <br>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Wizard 1" src="sshgal-33-4.png"
+ style="width: 593px; height: 566px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Make sure
+that the "G" radio button is selected, as shown above. This will
+configure the process simulator to run the so-called inverse titration
+sequence: the program will try to model a sequence of equilibria that
+produce pH values in prescribed regular intervals. At each pH point, up
+to 16 GEM calculations will be automatically performed by varying
+additions of acid or base to the total bulk composition, until the
+prescribed pH value is calculated at tolerable precision.&nbsp; When
+ready, </span><span style="font-family: helvetica,arial,sans-serif;">click
+"Next" to proceed; this brings you to the second page of the Process
+setup wizard. <br>
+<br>
+Now, switch
+to
+the second page of this dialog, where you will have to specify some
+dimensions that the program will use to allocate dynamic data in the
+Process record and data structure. The first item nPV (number of points
+to
+be generated) is important.
+Recall that we want to model the adsorption edge in the interval 3.0
+&lt;
+pH &lt; 9.5. A nice plot can be obtained using pH steps of&nbsp; 0.2
+units,
+or 5 calculated points per pH unit. This yields in total (9.4 - 3) * 5
++
+1 = 33 points - hence, type 33 in the <span style="font-weight: bold;">nPV</span>
+field. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Leave the
+next field as is - this will allocate the <big><tt>modC</tt></big>
+vector (will be visible on Page 1 of the "Process" window) to store the
+additions of titrant found in inverse titrations. The third field
+specifies how many lines will be plotted on the process simulator graph
+(and how many columns must be allocated in the <big><tt>yp</tt></big>
+table where the results will be collected). Enter 4 there - lines for
+three uranyl surface complexes and for their total. The next two fields
+define whether the experimental data points will be
+shown on the plot and how many points and parameters are there (there
+are
+16 experimental points and 1 parameter - total % of adsorbed uranium).
+Finally, the
+second wizard page should look like this: </span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Wizard 2" src="sshgal-33-5.png"
+ style="width: 629px; height: 636px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Press "Next"
+when ready; you will see the "Step 3" wizard page (not shown here)
+where it is nothing to change, so click "Next" again. On the appearing
+"Step 4" wizard page (not shown), set the optional number of links to
+data sources to 1, and click "Finish". You should see now Page 1 of the
+"Process" window, where
+the process iterators and the process math script must be specified.
+&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Let us start
+with the math script that defines how the parent system will be changed
+to produce a required sequence of simulated equilibrium states. The
+math script for
+inverse titration sequences </span><span
+ style="font-family: helvetica,arial,sans-serif;">has a rather special
+form</span><span style="font-family: helvetica,arial,sans-serif;">
+because it uses a built-in "golden section" 1-D minimization algorithm.
+So, the best would be to take it from the template math script
+collection and modify for our purposes.
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">To get the
+template script, execute the "Help" "View scripts..." menu command. In
+the appearing list, select one SDref record key ("<big><tt>mscript-titr-invers:0003:proces:</tt></big>"),
+as shown below: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-33-6.png" alt="Process script key"
+ style="width: 608px; height: 293px;">
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The selected
+record now appears in the "SDref" window on your desktop. Switch on
+Page 2 and
+you will see there the template script for inverse titrations with
+comments
+that follow it. Mark the script as shown below (use the left mouse key)
+and copy it (<big><tt>Ctrl-C</tt></big>):<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-33-7.png" alt="Template script"
+ style="width: 638px; height: 500px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Then switch
+to
+Page 1 of the "Process" window and paste (<big><tt>Ctrl-V</tt></big>)
+the
+template script into the <big><tt>P_expr</tt></big> text field. <br>
+The only necessary modification in that script is to change "<big><tt>HCl</tt></big>"
+to "<big><tt>HNO3</tt></big>" in the 7-th line, because our base is
+anyway NaOH, but our acid is HNO<sub>3</sub> and not HCl. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">What remains
+is to set the process iterators correctly (the iterators are seen just
+above the script text field). &nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The <big><tt>iTm</tt></big>
+iterator defines the CSD variant numbers that will be automatically
+inserted into the fourth field of each generated SysEq record key. A
+good idea is to
+set these varying from 1030 to 1094 with step 2 - to remind that we
+will produce
+pH points from 3.0 to 9.4 over 0.2. The next five iterators should be
+left
+as they were. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The remaining
+three iterators require specific settings necessary for correct
+operation of the inverse titration script and the "golden section"
+algorithm. You can read comments to the template script that you have
+just copied and pasted - there are explanations how the script works
+and how to set up necessary process&nbsp; iterators. For us, it is
+important to set the <big><tt>ipH</tt></big> iterator that will
+generate prescribed pH values from 3.0 to 9.4 at step 0.2. The
+tolerable
+precision (0.01 pH unit) should be set in the <big><tt>iNu[1]</tt></big>
+field.
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The <big><tt>ipXi</tt></big>
+iterator will define the range of titrant additions.</span><span
+ style="font-family: helvetica,arial,sans-serif;"> The inverse
+titration sequence
+template math script assumes that, if the amount of titrant (kept by
+the
+program in the <big><tt>cEh</tt></big> cell) is negative, this means
+the
+addition of acid; if &nbsp;the amount of titrant is positive then base
+will
+be added instead. As we have found before, 0.0013 mol HNO<sub>3</sub>
+are
+needed to get pH below 3, and 0.05 mol NaOH should be added instead to
+obtain
+pH &gt; 9.5 in this system. Hence, the <big><tt>ipXi[0]</tt></big>
+value
+should be set to -0.0013 (don't forget the minus sign!); the <big><tt>ipXi[1]</tt></big>
+value will be 0.05; and <big><tt>ipXi[2]</tt></big> should contain the
+default value 1e-8. &nbsp;Now, Page 1 of the "Process" window should
+look like this:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-33-8.png" alt="Edited script"
+ style="width: 680px; height: 493px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, switch
+to
+Page 2 of the "Process" window, where the data sampling math script
+must
+be provided in the <big><tt>pgExpr</tt></big> text field. Like in the
+previous
+case, the easiest way is to take and modify one of the template math
+scripts.
+Execute the "Help" "View scripts..." menu command and select the SDref
+record
+key "<big><tt>mscript-plot-sorpt:0002:proces:</tt></big>", as shown
+below:&nbsp; <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-33-9.png" alt="Select plot script key"
+ style="width: 608px; height: 303px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">From Page 2
+of
+the appearing SDref window, copy and paste the appearing template
+script into the
+<big><tt>pgExpr</tt></big> field on Page 2 of the "Process" window.
+This script needs somewhat more editing than the previous one.</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Firstly, the
+sorption phase name should be changed to the actual one "<big><tt>SiO2_1sTLM</tt></big>"
+in all places where it occurs (in the second operator). This operator
+is supposed
+to calculate a factor that converts mole amounts of surface complexes
+into
+their densities (in nm<sup>-2</sup>), and it will be used in some
+examples later in this tutorial. However, in this example, experimental
+data are expressed in percent of total uranium adsorbed (%U<sub>ads</sub>).
+Therefore, the second operator should be commented out and a simple
+operator "<big><tt>cXi =: b[{U}]/100;</tt></big>" added, which
+calculates a factor that converts mole amounts of (mononuclear) surface
+complexes of uranium into adsorbed uranium fractions in percent.&nbsp; <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Secondly, the
+next two operators that assign to <big><tt>yp[J][0]</tt></big> and <big><tt>yp[J][1]</tt></big>
+must be edited to use actual names of uranyl surface complexes "<big><tt>Sio&gt;&gt;OUL@</tt></big>"
+and "<big><tt>Sio&gt;&gt;OULH2-2</tt></big>". One more operator should
+be added (for <big><tt>yp[J][2]</tt></big> and "<big><tt>Sio&gt;&gt;OULCH-4</tt></big>"
+surface complex). The <big><tt>J</tt></big> index of sumulation point
+will be changed automatically by the program. The last operator must be
+modified to&nbsp; "yp[J][3] =: </span><big><small><span
+ style="font-family: helvetica,arial,sans-serif;"></span></small><tt><span
+ style="font-family: helvetica,arial,sans-serif;">yp[J][0]</span> + <span
+ style="font-family: helvetica,arial,sans-serif;">yp[J][1]</span> + <span
+ style="font-family: helvetica,arial,sans-serif;">yp[J][2]</span></tt></big><tt><big>;</big></tt><font
+ face="Helvetica, Arial, sans-serif">" to compute the total adsorbed
+fraction for three uranium surface species together.&nbsp; After all
+editing, the script
+on Page 2 should look like this: <br>
+</font></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><font
+ face="Helvetica, Arial, sans-serif"><img src="sshgal-33-10.png"
+ alt="Edited plot script" style="width: 663px; height: 527px;"> </font>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In principle,
+the process simulation can be calculated now (the experimental data and
+plot legend
+names can be entered later). <br>
+Switch to the "Graph" page; there you will see the <big><tt>xp</tt></big>
+vector (abscissa) and the <big><tt>yp</tt></big> table with four
+columns (ordinates)
+that will be filled out by execution of the second script. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, click on
+the "Calculate record data" &nbsp;<img src="kcalc.png"
+ alt="Calculate button" height="22" width="22"> &nbsp;toolbar button to
+start process simulation; click "Yes" to save the Process record
+&nbsp;to database and, for the first time, click on the "No" button on
+the appearing question "Use graphic window?". &nbsp;The program may
+issue some messages if there were errors or misprints in the math
+scripts (if this happened, correct the scripts &nbsp;and try
+again).&nbsp;</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The
+calculation proceeds and you should see how the lines in<big><tt> xp </tt></big>and<big><tt>
+yp </tt></big>arrays are one-by-one filled with numbers. Depending on
+the performance of your PC, the whole inverse titration sequence run
+can take from less than a minute to several minutes. When the whole
+calculation is done, the program will display "Calculation finished
+Ok." in the title line of "Process" window.<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Before
+displaying the graph, It makes sense to enter the legend names into <big><tt>pY_Nam,
+pX_Nam</tt></big> and <big><tt>pLnam</tt></big> fields on the "Graph"
+page. Enter "<big><tt>% U ads</tt></big>" into <big><tt>pY_Nam</tt></big>;
+"<big><tt>pH</tt></big>" into <big><tt>pX_Nam</tt></big>; "<big><tt>OUL@</tt></big>",
+"<big><tt>OULH-2</tt></big>", "<big><tt>OULCH-4</tt></big>" and "<big><tt>Total</tt></big>"
+into <big><tt>pLnam</tt></big> cells in this order (corresponding to
+the indexation of columns in the script on Page 2).&nbsp; Now, click on
+the "Plot data"&nbsp;&nbsp; <img src="xpaint.png" alt="Plot button"
+ height="22" width="27"> &nbsp;&nbsp; toolbar button to display the
+graphic dialog </span><span
+ style="font-family: helvetica,arial,sans-serif;">(confirm saving the
+Process record to database)</span><span
+ style="font-family: helvetica,arial,sans-serif;">:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="First plot" src="sshgal-33-11.png"
+ style="width: 630px; height: 443px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The graph
+still needs to be customized, but it is better to do it after entering
+the experimental data (now displayed as a (0,0) point) into the&nbsp; <big><tt>xEp&nbsp;</tt></big>
+and <big><tt>&nbsp;yEp</tt></big> &nbsp;columns on the right side of
+"Graph" page of the "Process" window. &nbsp;Here is the data: <br>
+</span></p>
+<blockquote><span style="font-family: helvetica,arial,sans-serif;">pHexpr
+. &nbsp;%U<sub>ads</sub>(expr)</span><big><tt><span
+ style="font-family: helvetica,arial,sans-serif;"></span></tt></big><br>
+  <big><tt><span style="font-family: helvetica,arial,sans-serif;"> </span>3.7&nbsp;&nbsp;&nbsp;
+&nbsp; &nbsp;4</tt></big><br>
+  <big><tt> 4.0&nbsp;&nbsp;&nbsp; &nbsp; 11</tt></big><br>
+  <big><tt> 4.2&nbsp;&nbsp;&nbsp; &nbsp; 16</tt></big><br>
+  <big><tt> 4.5&nbsp;&nbsp;&nbsp; &nbsp; 30</tt></big><br>
+  <big><tt> 4.8&nbsp;&nbsp;&nbsp; &nbsp; 57</tt></big><br>
+  <big><tt> 5.1&nbsp;&nbsp;&nbsp; &nbsp; 75</tt></big><br>
+  <big><tt> 5.3&nbsp;&nbsp;&nbsp; &nbsp; 87</tt></big><br>
+  <big><tt> 5.6&nbsp;&nbsp;&nbsp; &nbsp; 94</tt></big><br>
+  <big><tt> 6.9&nbsp;&nbsp;&nbsp; &nbsp; 99</tt></big><br>
+  <big><tt> 7.7&nbsp;&nbsp;&nbsp; &nbsp; 97.5</tt></big><br>
+  <big><tt> 8.1 &nbsp;&nbsp;&nbsp; &nbsp;91</tt></big><br>
+  <big><tt> 8.5&nbsp;&nbsp;&nbsp; &nbsp; 55</tt></big><br>
+  <big><tt> 8.7&nbsp;&nbsp;&nbsp; &nbsp; 21</tt></big><br>
+  <big><tt> 9.0&nbsp;&nbsp;&nbsp; &nbsp; 10</tt></big><br>
+  <big><tt> 9.3&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;6</tt></big><br>
+  <big><tt> </tt></big><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>9.4&nbsp;&nbsp;&nbsp;
+&nbsp; 0.01</tt></big></span><br>
+  <span style="font-family: helvetica,arial,sans-serif;"> </span></blockquote>
+<p><span style="font-family: helvetica,arial,sans-serif;">After you
+have entered
+the data, the "Graph" page should look like this: </span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Exp data typed" src="sshgal-33-12.png"
+ style="width: 740px; height: 718px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, click on
+the "Plot data"&nbsp; <img
+ src="file:///G:/4401/Software/GEMS-PSI/screenshots/xpaint.png"
+ alt="Plot button" height="22" width="27"> &nbsp;&nbsp; toolbar button
+to display the graphic dialog again (confirm saving the Process record
+to database). On the Graphic dialog, click on the "Customize..." button
+and get into the "Customize Graph" dialog. There you can adjust axis
+intervals, ticks, colors and sizes of lines and symbols etc. by
+clicking on the buttons with lines and symbols in the lower frame (see
+below).</span><span style="font-family: helvetica,arial,sans-serif;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Customize plot" src="sshgal-33-13.png"
+ style="width: 570px; height: 500px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">&nbsp; Note
+that, for displaying experimental points, you need to set&nbsp; </span><span
+ style="font-family: helvetica,arial,sans-serif;">the line thickness to
+0 and the symbol size to at least 8 or 10. Clicking on the "Apply"
+button shows the effect of changes immediately. When done, close the
+customization dialog by clicking on the "Ok" button. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">You can now
+drag
+the legend names and drop them on the appropriate places on the graph
+that finally should look like this:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Plot ready" src="sshgal-33-14.png"
+ style="width: 630px; height: 443px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The plot can
+be saved as a .png graphic file by clicking on the "Save Image" button.
+&nbsp;The data used for plotting can be exported into ASCII file by
+clicking on the "Print"&nbsp; <img src="fileprint.png"
+ alt="Print button" height="20" width="20"> &nbsp;toolbar button and
+selecting the appropriate print script. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Compare the
+graph with Fig. 5,a of [Kulik, 2002] paper. Both show well how the
+uranyl surface speciation changes along the pH axis. A peculiar feature
+of this system is that it has, in fact, two pH edges - the usual one at
+pH between 3.5 and 5.5,
+and a steep drop at pH between 7.5 and 9.2. This drop is a consequence
+of
+the extremely strong aqueous complexation of uranyl with carbonate ions
+that out-competes
+surface complexation&nbsp; in the alkaline pH range. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Take a look
+on Page
+3 of the "Process" window. There you will see a list of SysEq record
+keys
+that have been generated by this process simulator and saved in the
+project
+database. Any other calculated data (e.g. aqueous speciation, densities
+of
+(de)protonated surface complexes) can be extracted from those records
+and
+plotted by constructing GtDemo records, as it will be demonstratred
+later in this tutorial.<br>
+&nbsp;<br>
+</span></p>
+<p> </p>
+<p><a href="sshgal34.html"><b><font face="Helvetica, Arial, sans-serif">Next
+Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2006&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

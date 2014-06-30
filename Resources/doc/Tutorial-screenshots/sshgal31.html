@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 31</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.31">
+</head>
+<body style="background-image: url(bgimg.png);">
+<h1><img src="gems1.png" style="width: 48px; height: 48px;" alt=""> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal30.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; </font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to
+Start Page</font> </big></a></p>
+<hr size="2" width="100%">
+<p><b><font face="Helvetica, Arial, sans-serif">(44) Creating a
+chemical system definition
+for &nbsp;GEM surface complexation modelling</font></b></p>
+<big style="font-family: helvetica,arial,sans-serif;">Back to the
+"Computation of Equilibria" mode of GEMS, we get into the
+"Modelling Project" dialog:</big><br>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-31-5.png" alt="Project dialog"
+ style="width: 455px; height: 472px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Here, click
+on
+the "Single-System Equilibria" button to create your first system
+definition
+for sorption modelling. <br>
+We are going to start with a single calculation for adsorption of
+uranyl on amorphous silica, so set the following fields in the new
+SysEq record
+key and press "Ok" when finished:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-31-6.png" alt="SysEq rkey"
+ style="height: 245px; width: 342px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The "Remake"
+dialog will appear; If it looks like that shown below, simply click on
+the "Ok"
+button to proceed.&nbsp; <font face="Times New Roman, Times, serif"><br>
+</font></span></p>
+<blockquote><span style="font-family: helvetica,arial,sans-serif;"><font
+ face="Times New Roman, Times, serif"><b>Attention:</b> If the dialog
+below does not
+look correctly ('+' in position [0,9] in the upper row) then you
+probably forgot to select "Sorption" or some chemical elements in the
+"Elements Dialog".
+If this happened,</font></span><span
+ style="font-family: helvetica,arial,sans-serif;"><font
+ face="Times New Roman, Times, serif"> click "Ok" anyway, then close
+all
+dialogs, quit GEM-Selektor, find in "</font><tt>/projects</tt>" <font
+ face="Times New Roman, Times, serif">the</font> "<tt>/SorptionUL</tt>"<font
+ face="Times New Roman, Times, serif"> subdirectory, delete it&nbsp;
+completely, start GEM-Selektor and try creating the modelling project
+again. </font></span><br>
+  <span style="font-family: helvetica,arial,sans-serif;"></span></blockquote>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-31-7.png" alt="Remake Dialog"
+ style="height: 215px; width: 788px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+Now, the "Compos" page of the "System" window should be visible. In
+that window, you need to enter the "recipe" for the bulk chemical
+composition
+of the system. Enter also both comment lines as shown below. The recipe
+is:
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">&nbsp; &nbsp;
+&nbsp;
+&nbsp; &nbsp; 1000 g water + 10 kg of air </span><span
+ style="font-family: monospace;">"AtmAirNit"</span><span
+ style="font-family: helvetica,arial,sans-serif;"> + 0.01 mol NaNO<sub>3</sub>
++ 1 g SiO<sub>2</sub> + 1e-6 mol UO<sub>3</sub>. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">After you
+have
+entered the recipe, the "Compos" page should look like this: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Compos window" src="sshgal-31-8.png"
+ style="width: 497px; height: 644px;"><br>
+</span><span style="font-family: helvetica,arial,sans-serif;">&nbsp;
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+Next, switch to the "Single Thermodynamic System" dialog, where you
+should see the sorption phase "<big><tt>SiO2_1sTLM</tt></big>" in the
+list. Expand it and you will see several surface species, the <big><tt>&gt;OH@</tt></big>
+surface group, and the solid sorbent <big><tt>Qtz</tt></big> (quartz):<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Single System dialog" src="sshgal-31-9.png"
+ style="width: 722px; height: 662px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">As we want to
+model
+the sorption of uranyl on amorphous silica which is ca 11 times more
+soluble than quartz, enter a +5890 J/mol increment for quartz sorbent
+in the "G0
+corr" column (to enter data, right-mouse click on the requested field).
+Also, switch off two single-component phases "<big><tt>Quartz</tt></big>"
+and
+"<big><tt>Silica-amorph</tt></big>" in the "On/off" column, as shown
+above (this is necessary in order to prevent their appearance instead
+of the SiO2,am sorbent in the equilibrium state). &nbsp;When ready,
+click on the "Calculate BCC" <img src="RunBCC.png" alt="RunBCC"
+ style="height: 20px; width: 20px;">
+&nbsp; toolbar button to check whether the system recipe has been
+entered correctly. You should get the following warning dialog:&nbsp; <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Warning Dialog" src="sshgal-31-10.png"
+ style="width: 637px; height: 451px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">It actually
+says that nothing was specified for the total amount of aluminum and
+fluorine in
+this system. As we did not intend to consider Al and F in this
+calculation,
+simply click on
+the "Check/Ok" button; this will switch the independent components Al
+and F with
+all their species off the chemical system definition. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, close
+the
+"System" window and click on the "Calculate the equilibrium
+state"&nbsp;
+<img src="RunIPM.png" alt="RunIPM" style="height: 20px; width: 20px;">&nbsp;toolbar
+button to compute your first surface complexation
+equilibrium using GEM. &nbsp;As usual, you should see the progress
+dialog running. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Progress Dialog" src="sshgal-31-11.png"
+ style="width: 318px; height: 498px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">When it says
+"Converged" (as above), &nbsp;click on the "Accept" button to save
+calculations into GEMS database. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, you can
+examine in detail the calculated aqueous and surface speciation. But,
+before doing that, it is wise to check calculated volume of aqueous
+phase and mass of
+the sorbent (amorphous silica) in order to make sure that we have the
+solid/liquid (S/L) ratio indeed close to 1 g/L. To do that, click on
+the "Explore GEM
+results" &nbsp;<img src="ordertool.png" alt="Explore button"
+ style="height: 22px; width: 22px;"> &nbsp; toolbar button; this opens
+the "EqDemo" window, on which you should select the "EqPh" page: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="EqPh page" src="sshgal-31-12.png"
+ style="width: 609px; height: 539px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The first
+number in the <big><tt>phVol</tt></big> column is the volume of
+aqueous phase in cm<sup>3</sup>; clearly, it should be made ca. 3.266 cm<sup>3</sup>
+smaller to get it close to 1 L. The third number in the <big><tt>phM</tt></big>
+column is the mass of the sorbent in the sorption phase; it needs to be
+made ca. 0.11 g greater (this amount of SiO<sub>2</sub> exists at
+equilibrium
+in dissolved form). &nbsp;The <big><tt>Aalp</tt></big> column shows
+the
+(correct) specific surface area of the amorphous silica sorbent (169 m<sup>2</sup>/g).
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">To make
+necessary corrections, close the "EqDemo" window and open the "System"
+window (using the &nbsp;"Set BCC" &nbsp;<img src="SetCompos.png"
+ alt="SetBCC button" style="height: 23px; width: 22px;"> &nbsp; toolbar
+button). On the "Compos" page, make the necessary corrections in the
+recipe (set 1.11 g <big><tt>SiO2</tt></big> and 996.734 g <big><tt>Aqua</tt></big>,
+the numbers adjusted by our "trial-and-error" consideration), and
+re-calculate the equilibrium state by clicking on the </span><span
+ style="font-family: helvetica,arial,sans-serif;"> "Calculate the
+equilibrium
+state"&nbsp;
+<img src="RunIPM.png" alt="RunIPM" style="height: 20px; width: 20px;">&nbsp;toolbar
+button</span><span style="font-family: helvetica,arial,sans-serif;">.
+Check again the "EqPh" page of the
+"EqDemo" window to make sure that you get very close to 1000 cm<sup>3</sup>
+of aqueous phase and 1.0 g of the sorbent; re-adjust input and
+re-calculate if necessary.
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">You are ready
+now to examine the calculated surface speciation and the setup of
+the sorption phase. <br>
+</span></p>
+<p> </p>
+<p><a href="sshgal32.html"><b><font face="Helvetica, Arial, sans-serif">Next
+Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2006&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

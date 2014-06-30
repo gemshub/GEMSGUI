@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 16</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.16">
+</head>
+<body style="background-image: url(bgimg.png);">
+<h1><img src="gems1.png" style="width: 48px; height: 48px;" alt=""> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal15.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; </font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to
+Start Page</font> </big></a></p>
+<hr size="2" width="100%">
+<p><span style="font-family: helvetica,arial,sans-serif;"><b>(27) How
+to "clone"
+and modify the GtDemo sampler</b>. <br>
+</span></p>
+<span style="font-family: helvetica,arial,sans-serif;">Our task now
+is to modify the GtDemo sampler in order to show presence of relevant
+solid phases. <br>
+<br>
+In GtDemo window, switch to Page 1 and execute the "Record" "New
+(clone)..." menu command. Confirm saving the current record to database
+if the program will ask about that. You will see the "GtDemo: Please,
+enter a new record key" dialog again. Click there on the "From list..."
+button and then "Ok" to get the key of previously created GtDemo
+record, and modify the last field as shown below. <br>
+<br>
+<img src="sshgal-16-1.png" alt="New GtDemo key"
+ style="height: 237px; width: 328px;">
+<br>
+<br>
+Press "Ok" when ready. In the appearing wizard, choose "Process" and
+click "Next &gt;" to
+go for the second page. There, you will
+have to modify the the number of plots, as shown
+below: <br>
+<br>
+<img alt="Modified GtDemo wizard page"
+ title="Modified GtDemo wizard page" src="sshgal-16-2.png"
+ style="width: 662px; height: 598px;"><br>
+<br>
+<br>
+Why do we need 8 plots? This is to follow Calcite, Graphite, Siderite,
+Magnetite,
+Ferrihydrite, Rhodochrosite and Manganite solids plus Eh of aqueous
+solution. Press "Next &gt;" when ready, then "Finish" to leave the
+wizard, and then "Ok" in the appearing&nbsp;
+"...mark/select...'' dialog because all SysEq records are already
+selected. <br>
+<br>
+You are now back to Page 1 of GtDemo window. First, modify the comment
+line. The math script must
+be modified together with the plot names (in </span><big><span
+ style="font-family: monospace;">gLnam</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> fields; only six
+names are displayed, so take care about scrolling the fields to a
+correct position when entering the plot name). We can just plot mole
+quantities of
+the phases mentioned above that are the same as mole quantities of the
+respective Dependent Components DC (the "primal solution" vector <i>x</i>
+). You can check the exact spelling of DC names if you open the "Single
+Thermodynamic System" dialog, switch to the "Results" page, and expand
+each of the phases. <br>
+<br>
+After editing the math script, the Page 1 of GtDemo window should
+appear as
+shown below (note that the </span><big><span
+ style="font-family: monospace;">gLnam</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> field is scrolled to
+the rightmost position on this screen image): <br>
+<br>
+<img src="sshgal-16-3.png" alt="Modified script"
+ style="width: 600px; height: 564px;"> <br>
+<br>
+Multiplication by 1000 converts mole into millimole quantities. <br>
+<br>
+Now, save the record to database, run the data sampler, and plot the
+results (check the previous tutorial file, if in doubts how to do it).
+Customize the
+graph to see something like the one below: <br>
+<br>
+<img src="sshgal-16-4.png" alt="Phases"
+ style="height: 441px; width: 630px;"> <br>
+<br>
+On the above plot, it's clearly seen that the jumps on the Eh*10 curve
+coinside with disappearance of certain redox-controlling solid phases.
+However, the picture is complicated and difficult to discern at O2
+additions between 0.6 and 0.8. You can customize the "Fragment"
+intervals and plot the fragment (by clicking on the "Fragment" button):
+<br>
+<br>
+<img src="sshgal-16-5.png" alt="Phases fragment"
+ style="height: 441px; width: 630px;"> <br>
+<br>
+<br>
+Here we can see that Magnetite appears where Graphite disappears,
+Siderite disappears where Ferrihydrite appears, and Manganite appears
+where Magnetite disappears. In all such points, Eh changes rapidly,
+indicating redox transitions. <br>
+<br>
+There is an interval where Rhodochrosite co-exists with Manganite; when
+Rhodochrosite disappears, the system gets almost completely oxidized,
+and
+Eh does not change anymore. <br>
+<br>
+Calcite is present throughout, but at varying quantity due to strong
+changes in pH and <i>f </i>CO<sub>2</sub> along the redox profile. <br>
+<br>
+Now, you can put together all the obtained graphs and follow how metal
+solubilities, gas fugacities, and phase assemblages are inter-related
+in the modelled redox profile. <br>
+</span>
+<p><font face="Helvetica, Arial, sans-serif"><b>The easiness of
+"cloning"
+and modifying Process simulators and GtDemo samplers in GEM-Selektor is
+now
+at your fingertips. &nbsp;</b>For instance, you can "clone" the Process
+record
+and set it at a smaller step size (e.g. 0.005 g) in the interval 0.6 to
+0.8
+of O<sub>2</sub> additions. After that, you can "clone" the last GtDemo
+record
+to obtain &nbsp;the above picture but at much higher resolution in the
+most
+interesting redox transition region.&nbsp; </font><br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p> <a href="sshgal17.html"><b><font
+ face="Helvetica, Arial, sans-serif">Next Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

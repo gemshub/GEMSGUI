@@ -1,0 +1,490 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 26</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.26">
+</head>
+<body style="background-image: url(bgimg.png);">
+<h1><img src="gems1.png" style="width: 48px; height: 48px;" alt=""> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal24.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp;
+</font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to Start Page</font> </big></a></p>
+<hr size="2" width="100%"><br>
+<b><font face="Helvetica, Arial, sans-serif"><a name="SSAS"></a>(39)
+Creating a project to model solid solution - aqueous solution systems</font></b>
+<p><span style="font-family: helvetica,arial,sans-serif;">In this
+section, we will create a project to calculate partitioning equilibria
+in a solid-solution aqueous-solution system of alkali-earth carbonates
+of Ca, Sr, Ba and Ra.
+Next, some typical cases of metal partitioning between the aqueous
+electrolyte
+and several co-existing solid solutions will be investigated. Even
+though
+hypothetical, such examples also provide a quite realistic picture of
+an
+impact of non-ideal mixing onto partitioning, mainly because the
+carbonate-
+and sulphate binary solid solutions are relatively well understood (see
+an
+overview by P.Glynn, <i>Rev. Mineral. Geochem</i>. 2000 v. 40,
+p.481-511),
+and their Margules interaction parameters are known from experiments or
+have
+been estimated from differences in crystallographic radii of cations.<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The necessary
+end-members and some binary and ternary solid-solution phase
+definitions are provided in the (inofficial) "Solutions" part of the
+kernel GEMS-PSI database. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">To proceed,
+start GEM-Selektor and click on the "Calculation of Equilibria" button,
+then click on the "New Project" button. In the Project record key
+dialog, enter two
+fields of a new key </span><big><font
+ face="Helvetica, Arial, sans-serif">"</font><b><tt>RaBaSrCa:SolidSolutions:</tt></b>"</big><span
+ style="font-family: helvetica,arial,sans-serif;"> and click "Ok".</span><span
+ style="font-family: helvetica,arial,sans-serif;">
+This will bring you into the "Elements Dialog" where the stoichiometry
+of the project system should be set up.</span></p>
+<pre wrap=""><img src="sshgal-26-3.png" alt="SSAS project"
+ style="height: 575px; width: 676px;"><br><br></pre>
+<p><font face="Helvetica, Arial, sans-serif">It is important to select
+chemical elements (by clicking on their symbols) and a "Solutions"
+checkbox </font><span style="font-family: helvetica,arial,sans-serif;">in
+the "Phases/Data" row</span><font face="Helvetica, Arial, sans-serif">
+as shown on the picture, to make sure that all necessary Phase
+definition records will be copied into the project database. </font><span
+ style="font-family: helvetica,arial,sans-serif;">Click on the "Ok"
+button when ready. </span><font face="Helvetica, Arial, sans-serif">Next,
+the setup dialog for
+aqueous and gas phase models will appear (not shown). Click on the "Ok"
+button -
+this will select the Davies model for aqueous activity coefficients and
+the
+ideal gas mixture model for gases (defaults).</font><span
+ style="font-family: helvetica,arial,sans-serif;"> In a few seconds
+(depends on the performance of your PC), you should see the "Modelling
+Project" dialog:<br>
+</span></p>
+<span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-26-2.png" alt="Modelling Project dialog"
+ style="width: 452px; height: 474px;"> </span>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+In the above dialog, click on the "Single-System Equilibria..." button
+to create a first definition of the chemical system</font><font
+ face="Helvetica, Arial, sans-serif"> at 1 bar and 25 <sup>o</sup>C</font><font
+ face="Helvetica, Arial, sans-serif"> (SysEq record keyed &nbsp;"</font><big><tt>RaBaSrCa:G:TestSSAS:0:0:1:25:0:</tt></big>"
+).<span style="font-family: helvetica,arial,sans-serif;"> The "Remake"
+dialog will appear next; simply click on the "Ok" button to proceed.</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"> Now, the
+"Compos" page of the "System" window should be visible. In that window,
+you need to enter the "recipe" for the bulk chemical composition of the
+system. Enter also something into the comment lines. The recipe to
+enter is: <br>
+1000 g water + 10 kg of air "<big><tt>AtmAirNit</tt></big>" + 0.1 mol
+NaCl + 1 g BaCO<sub>3</sub> + 100 g CaCO<sub>3</sub> +10 g SrCO<sub>3</sub>
++ 0.01 g RaCO<sub>3</sub>. </span><span
+ style="font-family: helvetica,arial,sans-serif;">After entering
+the recipe</span><span style="font-family: helvetica,arial,sans-serif;">,
+the "Compos" page should look like this:&nbsp;</span></p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-26-4.png"
+ alt="Compos page" style="height: 611px; width: 487px;"> <br>
+</font></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">As seen on
+the screen image, there is no entry in the PCO list for adding 0.01 g
+RaCO3 to the system bulk composition. This is not a problem
+because&nbsp; the stoicniometry (formula) of any Dependent Component
+from the system definition can be used for addition to bulk composition
+just in the same way as&nbsp; PCO amounts on the "Compos" page on the
+above screen image. Thus, to complete our recipe, switch to the "DComp"
+page of the "System" dialog , scroll the list of DC down until you find
+the <b><big><tt>RaCO3@</tt></big></b> species, and put 0.01 g into the
+respective cell of the&nbsp; <b><big><tt>xd_</tt></big></b> column (do
+not forget to change "M" to "g" as a code of units of measurement in
+the respective </span><big><span
+ style="font-weight: bold; font-family: monospace;">XDun_</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> cell).</span><br>
+<font face="Helvetica, Arial, sans-serif">Now, switch to the "Single
+Thermodynamic System" dialog and click on the "Calculate BCC" <img
+ src="RunBCC.png" alt="Calc BCC" style="height: 20px; width: 20px;">
+&nbsp;toolbar button; then examine the list of phases in the "Input:
+System Definition" page. Below aqueous and gaseous phases, you should
+see entries for two ternary and four binary solid solution phases; each
+of them can
+be expanded to see its end-members.</font><font
+ face="Helvetica, Arial, sans-serif"> Switch off the following entries:</font></p>
+<blockquote><big><tt>(Ba,Ca)CO3(reg)<br>
+(Ra,Ca)CO3(reg)<br>
+(Sr,Ca)CO3(reg)<br>
+Witherite<br>
+Aragonite<br>
+Calcite<br>
+Strontianite</tt></big></blockquote>
+<p><font face="Helvetica, Arial, sans-serif">The resulting page should
+look like that shown below:&nbsp;</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-26-5.png"
+ alt="Phases setup" style="width: 824px; height: 677px;"> </font></p>
+<p><font face="Helvetica, Arial, sans-serif">Calculate bulk composition
+(<img src="RunBCC.png" alt="Calc BCC again"
+ style="height: 20px; width: 20px;"> )&nbsp; again and then
+GEM-calculate (<img src="RunIPM.png" alt="Calculate GEM"
+ style="height: 20px; width: 20px;"> ) the equilibrium state. After
+clicking on the "Accept" button in the
+"Progress Dialog", you should see the following phase speciation tree: <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-26-6.png"
+ alt="Speciation 1" style="width: 821px; height: 644px;"> <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+In addition to aqueous electrolyte and gas mixture, we have three solid
+solution phases present in this (hypothetical) partitioning
+equilibrium:&nbsp; two non-ideal ternaries and one ideal binary. Even
+though setting up and
+calculating this system was technically simple, the behavior of
+partitioning
+equilibria is complex. To understand what has been calculated, we have
+first
+to look at how the phase definitions of solid solutions were arranged.
+This
+can be done by clicking on the "Explore results" &nbsp;<img
+ src="ordertool.png" alt="Explore button"
+ style="height: 22px; width: 22px;"> &nbsp;toolbar button and selecting
+the "EqPh" page in the appearing EqDemo window. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-26-7.png"
+ alt="EqDemo EqPh" style="width: 563px; height: 550px;"> <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Select a phase name with
+the left-mouse drag (as shown above) and press the </font><b><big><tt>F7</tt></big></b><font
+ face="Helvetica, Arial, sans-serif"> hot key - this will get you into
+an underlying Phase definition record from your project database:<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-26-8.png"
+ alt="Ideal Phase" style="height: 235px; width: 594px;"> <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">The definition of ideal
+mixture just tells the program which end-members make it up (in this
+case, witherite BaCO<sub>3</sub> and radium carbonate RaCO<sub>3</sub>,
+with stoichiometries and thermodynamic properties defined in the
+respective ReacDC database records).&nbsp; The (Ba,Ra)CO<sub>3</sub>
+solid solution can be considered as a Raoultian ideal mixture because
+the ionic radii of Ba<sup>+2</sup> and Ra<sup>+2</sup> are similar,
+thus, no significant non-ideal effects are expected. This is not the
+case, however, for the other two ternary solutions involving Sr<sup>+2</sup>
+and Ca<sup>+2</sup> end-members. Close the "Phase" window, mark the "</font><big><tt>(Ca,Ba,Sr)CO3</tt></big>"
+<font face="Helvetica, Arial, sans-serif">entry in the "EqPh" page, and
+press </font><b><big><tt>F7</tt></big></b><font
+ face="Helvetica, Arial, sans-serif"> to see the ternary phase
+definition: </font><br>
+</p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-26-9.png"
+ alt="Ternary page 1" style="height: 255px; width: 594px;"> </font></p>
+<p><font face="Helvetica, Arial, sans-serif">As seen on Page 1 above,
+the solid solution is assembled from three end-members, two of which
+are assumed to be minor (marked as "</font><big><tt>J</tt></big><font
+ face="Helvetica, Arial, sans-serif">" ) and one (calcite) - a major
+end-member (marked as "</font><big><tt>M</tt></big><font
+ face="Helvetica, Arial, sans-serif">"). This coding is necessary
+because the positive values of interaction parameters for all three
+binaries in this ternary model are large enough to produce miscibility
+gaps (more about non-ideal solid solution models can be found in
+the&nbsp; <a
+ href="http://les.web.psi.ch/Software/GEMS-PSI/doc/pdf/Activity-Coeffs.pdf">Activity-Coeffs.pdf</a></font><font
+ face="Helvetica, Arial, sans-serif"> &nbsp;file). How the mixing model
+itself is arranged, can be seen on Page 3 of this Phase window:&nbsp;<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"> <img
+ src="sshgal-26-10.png" alt="Page 3 ternary"
+ style="height: 236px; width: 578px;"> <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">The code "T" in the first
+row defines a regular Margules ternary mixing model; the code "S" tells
+the program that a built-in function to calculate the activity
+coefficients of end-members has to be used and it will take the
+interaction parameters from a table below (expressed in J/mol units). <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Now, close the Phase
+window, </font><font face="Helvetica, Arial, sans-serif"> mark the "</font><big><tt>(Ra,Ba,Sr)CO3</tt></big>"
+<font face="Helvetica, Arial, sans-serif">entry in the "EqPh" page, and
+press </font><b><big><tt>F7</tt></big></b><font
+ face="Helvetica, Arial, sans-serif"> to see the definition of second
+ternary phase:<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-26-11.png"
+ alt="Second Ternary" style="height: 252px; width: 586px;"> <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">This &nbsp;solid solution
+is arranged in the same way as previous, except that a miscibility gap
+is not expected in the witherite-RaCO<sub>3</sub> binary because of a
+small assumed value of the interaction parameter (a12 = 0.5), yet large
+miscibility gaps are expected within two other binaries; and the
+strontianite Str is denoted as a major ("M") end-member. Of course, all
+these interaction parameters and
+end-member coding can be changed, or new solid solutions can be added
+in
+the "Thermodynamic Database" mode of GEM-Selektor (as shown e.g. on <a
+ href="http://les.web.psi.ch/Software/GEMS-PSI/screenshots/sshgal22.html">Page
+22 of this screenshot tutorial</a>).<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><a name="INIT_PARTITIONING"></a>Now,
+close the Phase window and get back to the "Single Thermodynamic
+System" dialog
+(expand gas and solid solution phases): <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-26-6.png"
+ alt="Eqstat dialog again" style="width: 821px; height: 644px;"> <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">You can see that this
+equilibrium contains five co-existing solution phases: non-ideal
+aqueous electrolyte "aq_gen",
+ideal gas mixture "gas_gen", "mainly calcite" non-ideal solid solution
+"(Ca,Ba,Sr)CO3",
+</font><font face="Helvetica, Arial, sans-serif">"mainly strontianite"
+non-ideal
+solid solution "(Ra,Ba,Sr)CO3"</font><font
+ face="Helvetica, Arial, sans-serif">, and&nbsp;</font><font
+ face="Helvetica, Arial, sans-serif">"mainly witherite" ideal solid
+solution "(Ba,Ra)CO3(id)". Three potential single-conponent solid
+phases do not appear in positive amounts as they are strongly
+undersaturated. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">In this <i>partition
+equilibrium state</i>, cations are distributed between the aqueous
+electrolyte and three solid solution phases, and carbonate CO<sub>3</sub>
+is distributed between all five phases. Take, for instance, radium - a
+minor component in this hypothetical system. Out of total Ra amount
+3.496e-5 mol (you can see it e.g. in the "b" column on "EqIC" page of
+"EqDemo" window which you can open with <img src="ordertool.png"
+ alt="EqDemo button" style="width: 22px; height: 22px;"> &nbsp; toolbar
+button), 2.6508e-5 mol or 75.8% went into
+the&nbsp;</font><font face="Helvetica, Arial, sans-serif">"(Ba,Ra)CO3(id)"</font><font
+ face="Helvetica, Arial, sans-serif"> phase, 1.07e-6 mol or 3.05% is
+bound in the </font><font face="Helvetica, Arial, sans-serif">"(Ra,Ba,Sr)CO3"</font><font
+ face="Helvetica, Arial, sans-serif"> phase, and the rest 21.15% or
+7.38e-6 mol is dissolved in the aqueous phase. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Note that radium is mainly
+partitioned into the </font><font face="Helvetica, Arial, sans-serif">"(Ba,Ra)CO3(id)"</font><font
+ face="Helvetica, Arial, sans-serif"> phase because of two reasons.
+Firstly, witherite is relatively less soluble among pure alkali-earth
+carbonates. Secondly,
+the stability of radium end-member in the </font><font
+ face="Helvetica, Arial, sans-serif">"(Ra,Ba,Sr)CO3"</font><font
+ face="Helvetica, Arial, sans-serif"> phase is much influenced by a
+high activity
+coefficient of RaCO3 end-member ( 227.77 ), which makes it
+less
+preferential for radium to be incorporated into "mainly strontianite",
+even
+though there is ca. 10 times more strontium than barium in this system.
+The
+mole fraction ca. 0.01 of RaCO3 in the (Ba,Ra)CO3(id) solid solution
+keeps
+the activity&nbsp; of RaCO3 end member close to 0.01 (<i>a</i> = 0.009)
+and, consequently, pure RaCO3 is ca. 100 times undersaturated, as seen
+on
+the screenshot above. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Another interesting thing
+to see in this calculation is the activity of BaCO3 (witherite): in all
+three phases it is the same (<i>a</i> =
+0.99083), although concentrations (mole fractions) of "witherite"
+end-members are different between
+three phases. This is because of different values of activity
+coefficients - rather high in both ternary phases that limit mole
+fractions of witherite to minor values at the edges of miscibility
+gaps. For instance, mole fraction of witherite in "mainly strontianite"
+phase is only 0.7 %, and that in the "mainly calcite' phase is 0.15 % -
+both are negligible. In the "mainly witherite" phase, the mole
+fractions of strontianite and calcite must also be expected negligible
+(below 1 %), and since this phase itself is present in small amount
+(2.9 mmol), the stontianite and calcite end members in the "mainly
+witherite" phase have been safely ignored. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Overall, this system has
+been set up correctly in a sense that all four possble phases that may
+appear together
+due to highly non-ideal mixing effects have been included (the
+Ra-carbonate phase was undersaturated because the total amount of Ra in
+the system was low). <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Now, it is easy to explore
+how the partitioning of Ra, Ba and Sr will change in responce to
+changes in the bulk composition of the system. &nbsp;Execute the
+"Record" "New(Clone)" menu command and change the fourth field of SysEq
+record key from 0 to 1, to "clone" a new system&nbsp;</font><font
+ face="Helvetica, Arial, sans-serif"> "</font><big><tt>RaBaSrCa:G:TestSSAS:1:0:1:25:0:</tt></big>"
+. <font face="Helvetica, Arial, sans-serif">In the appearing "Compos"
+page of the "System" window, change the amount of BaCO3 in the "recipe"
+from 1 g to 10 g. Press </font><b><big><tt>Enter</tt></big></b><font
+ face="Helvetica, Arial, sans-serif">, close the "System" window and
+calculate the equilibrium state (use the "Run GEM" &nbsp;<img
+ src="RunIPM.png" alt="Run GEM" style="height: 22px; width: 22px;">
+&nbsp;toolbar button and press "Accept" button when GEM IPM algorithm
+has converged). &nbsp;Now, click on the</font><font
+ face="Helvetica, Arial, sans-serif"> "Explore results" &nbsp;<img
+ src="ordertool.png" alt="Explore button"
+ style="height: 22px; width: 22px;"> &nbsp;toolbar button to see the
+"EqIC" page of the appearing "EqDemo"
+window</font>:<br>
+</p>
+<p><img src="sshgal-26-12.png" alt="EqIC page"
+ style="width: 624px; height: 407px;"> <br>
+</p>
+<p><font face="Helvetica, Arial, sans-serif">The calculated dissolved
+Ra concentration
+is now 5.7e-7 molal. To compare with our first example, simply switch
+to
+the "Single Thermodynamic System" dialog (do not close the "EqDemo"
+window),
+click there on the "Display previous record" &nbsp;<img
+ src="arrow_left1.png" alt="Previous" style="height: 16px; width: 16px;">
+&nbsp;toolbar button, and switch back to the "EqDemo" window. The
+previous calculation resulted in 7.385e-6 molal of dissolved Ra, or
+almost 13 times greater than in the second case (remember that we have
+made the addition of
+BaCO3 only 10 times more). By toggling between two calculations
+with&nbsp;<img src="arrow_left1.png" alt="Previous"
+ style="height: 16px; width: 16px;"> &nbsp;and&nbsp;<img
+ src="arrow_right1.png" alt="Next record"
+ style="height: 16px; width: 16px;"> &nbsp;toolbar buttons, you can see
+that dissolved concentrations of Ba, Ca, and Sr have changed only
+slightly. What caused such a non-linear and strong
+effect on dissolved radium?&nbsp;<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">This is easy to see when
+one switches to the "Results" page of </font><font
+ face="Helvetica, Arial, sans-serif">"Single Thermodynamic System"
+dialog and expands all solid solution phases, as shown below: <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-26-13.png"
+ alt="Another SSAS" style="width: 821px; height: 567px;"> <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Comparison of this
+partitioning with the <a href="#INIT_PARTITIONING">initial one</a>
+shows that amount and composition of the "(Ca,Ba,Sr)CO3" phase almost
+did not change (this is why total dissolved concentrations of Ca, Ba
+and Sr almost did not change either). The amount and mole fraction of
+"witherite" end-member in the "(Ra,Ba,Sr)CO3" phase increased in less
+than 1% (remember, we added 10 times more BaCO3 to the recipe)! The
+reason for that is that both non-ideal ternary solid solutions are
+"saturated" with BaCO<sub>3</sub> and cannot accept more barium because
+the amounts of their "major" end-members (calcite and strontianite) did
+not change.&nbsp; <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">So, almost all the added
+barium must have been precipitated into the "(Ba,Ra)CO3(id)" solid
+solution phase. Indeed, the new amount of the latter phase is 0.0485 <i>/</i>
+0.00287 = 17 times more than that in the initial calculation. A
+consequence for that is that radium re-partitioned even stronger into
+the "mainly witherite" phase (the amount of "witherite" end-member in
+this phase is now 3.4307e-5 <i>/</i> 5.6508e-5 = 1.3 times more).
+However, the mole fraction of "witherite" in "</font><font
+ face="Helvetica, Arial, sans-serif">(Ba,Ra)CO3(id)</font><font
+ face="Helvetica, Arial, sans-serif">" phase has decreased ca. 0.009167
+<i>/</i> 0.000708 = 13 times, and this caused ca. 13 times decrease in
+total dissolved Ra molality. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Let us see now what
+happens if
+there is not enough barium in the system to precipitate the "mainly
+witherite" phase. To do this, "clone" a new SysEq record </font><font
+ face="Helvetica, Arial, sans-serif">"</font><big><tt>RaBaSrCa:G:TestSSAS:2:0:1:25:0:</tt></big>"
+. <font face="Helvetica, Arial, sans-serif">In the appearing "Compos"
+page of the "System" window, change the amount of BaCO3 in the "recipe"
+to 0.1 g; press </font><b><big><tt>Enter</tt></big></b><font
+ face="Helvetica, Arial, sans-serif">, close the "System" window and
+calculate the equilibrium state (shown below).<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-26-14.png"
+ alt="Case 3" style="width: 821px; height: 559px;"> <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Only two solid phases
+are&nbsp; present, the "mainly witherite" phase is gone, as expected,
+because its major end-member "witherite" is now undersaturated ( <i>a</i>
+= 0.22 ). The remaining barium is re-distributed between "mainly
+calcite", "mainly strontianite", and aqueous phases; radium is
+distributed between &nbsp;"mainly strontianite" and aqueous phases.
+Total dissolved concentration of barium has decreased ca. 3.6 times to
+0.00012 molal, and total dissolved radium has increased to
+3.16e-5 molal, which is still 1.5 orders of magnitude below that at
+equilibrium with pure RaCO<sub>3</sub>. The system composition went
+away from one of the
+possible miscibility gaps, and the number of co-existing phases has
+decreased by one.&nbsp; </font><font
+ face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">From GEM results such as
+considered above, one can easily calculate various distribution ratios
+and partitioning coefficients to compare with experimental partitioning
+data. One can also set up various Process simulators to plot
+partitioning diagrams, modeled isotherms
+and even Lippmann diagrams. Such process simulators are constructed
+basically&nbsp;
+in the same way as described on <a href="sshgal11.html">Page 11 in
+this screenshot
+tutorial</a>.&nbsp; In this example, </font><font
+ face="Helvetica, Arial, sans-serif">there are three non-ideal binary
+solid solutions</font></p>
+<blockquote><font face="Helvetica, Arial, sans-serif">(Ba,Ca)CO3(reg)</font>
+  <br>
+  <font face="Helvetica, Arial, sans-serif">(Ra,Ca)CO3(reg)</font> <br>
+  <font face="Helvetica, Arial, sans-serif">(Sr,Ca)CO3(reg)</font></blockquote>
+<p><font face="Helvetica, Arial, sans-serif">that were switched off in
+the calculated example. &nbsp;You can create a new SysEq record with
+one of these phases switched on (and other solid solutions switched
+off) and use it as a "parent" system to create Process simulators that
+plot, e.g., partition isotherms,
+i.e. plot total dissolved concentration of one metal as function of
+it's
+end-member mole fraction in solid solution.&nbsp;</font></p>
+<p> <br>
+<a href="sshgal27.html"><b><font face="Helvetica, Arial, sans-serif">Next
+Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

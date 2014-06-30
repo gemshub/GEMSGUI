@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 9</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.9">
+</head>
+<body background="bgimg.png">
+<h1><img src="gems1.png" alt="" height="48" width="48"> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal08.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</font></big><a
+ href="index.html"><big><font face="Helvetica, Arial, sans-serif">Back
+to Start Page</font> </big></a></p>
+<hr size="2" width="100%">
+<p><font face="Helvetica, Arial, sans-serif"><span
+ style="font-weight: bold;">(20) Our previous model calculation shows
+that it is not possible to have all three carbonate minerals (calcite,
+siderite and rhodochrosite) at equilibrium with the atmosphere because
+carbonates of Fe and Mn are not stable at oxidizing conditions.</span><small
+ style="font-weight: bold;"> </small><br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Besides, the calculated
+dissolved total iron concentration (log <i>m</i> = -13.5) at
+equilibrium with Goethite and total manganese (</font><font
+ face="Helvetica, Arial, sans-serif">log <i>m</i> = -15.9</font><font
+ face="Helvetica, Arial, sans-serif">) are far too low compared to
+those measured in oxic natural waters (</font><font
+ face="Helvetica, Arial, sans-serif">log <i>m</i> = -9 +- 1</font><font
+ face="Helvetica, Arial, sans-serif">). So, it would be interesting to
+see how the system would behave if almost all "atmosphere" is removed
+and "hydromagnetite" is allowed to form together with Fe(III)
+hydroxide. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><span
+ style="font-weight: bold;">In GEMS, you can easily "clone" your
+existing system definition and change it to test improved or new
+modelling assumptions.</span> &nbsp;In the "Single Thermodynamic
+System" dialog, just select a Record -&gt; New("Clone") menu command,
+set a new record key: </font><big><tt>"Carbonat:G:CaFeMnHypC:1:0:1:25:0:"</tt></big><font
+ face="Helvetica, Arial, sans-serif">:<br>
+</font></p>
+<p><img src="sshgal-9-0.png" alt="Key2" height="242" width="328"> <br>
+</p>
+<p><font face="Helvetica, Arial, sans-serif"> and press "Ok". <span
+ style="font-weight: bold;">This will immediately bring you to the
+"Compos" page of "System" window:</span><br>
+</font><font face="Helvetica, Arial, sans-serif"><br>
+</font> </p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-9-1.png"
+ alt="Compos page 2" style="width: 597px; height: 669px;"> </font> </p>
+<p><font face="Helvetica, Arial, sans-serif">Change comment lines and
+modify the recipe by addition of "Aqua" to 1000 g, that of "AtmAirNit"
+PCO to 0.1
+g and that of NaCl to
+0.1 mol, as shown above. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Now, close the "System"
+window and switch to the "Single Thermodynamic System" dialog. <br>
+With
+right mouse clicks in the "On/Off" column, switch off the "Goethite"
+and "Hematite" phases, in order to exclude them from GEM calculation of
+the equilibrium state. <br>
+Then expand the "Magnetite" phase and
+right-click in the "G0 corr." column to enter 5708 (J/mol) in order to
+simulate a one logK unit (10 times) more soluble "hydromagnetite"
+(press Enter to accept
+changes):</font><br>
+<font size="+1"><br>
+<img src="sshgal-9-2.png" alt="System 2"
+ style="width: 818px; height: 640px;"> <br>
+</font></p>
+<p><font size="+1"><small><font face="Helvetica, Arial, sans-serif"><br>
+When ready, click on the "Calculate bulk composition" </font></small></font><font
+ face="Helvetica, Arial, sans-serif"><img src="RunBCC.png"
+ alt="RunBCC button" height="20" width="20"> </font><font size="+1"><small><font
+ face="Helvetica, Arial, sans-serif">&nbsp; and then - "Calculate GEM
+IPM" &nbsp; </font></small></font><font
+ face="Helvetica, Arial, sans-serif"><img src="RunIPM.png"
+ alt="Run IPM button" height="20" width="20"> </font><font size="+1"><small><font
+ face="Helvetica, Arial, sans-serif">&nbsp; &nbsp; toolbar buttons.
+Accept the calculation results after the IPM module has converged. You
+should see now something like that shown in a screenshot below (if you
+expand some phases):<br>
+</font></small><br>
+<img src="sshgal-9-3.png" alt="Eqstat 2"
+ style="width: 818px; height: 702px;"> <br>
+</font></p>
+<p><font size="+1"><small><font face="Helvetica, Arial, sans-serif">First
+of all, a glance into the status line tells that our new system is now
+mildly reducing (pe = -1.77) and neutral (pH = 7.08). Oxygen is now
+physically absent (<span style="font-style: italic;"> </span><i>f</i> O<sub>2</sub>
+= 1.31e-62) in a small
+"bubble" of gas phase&nbsp; made of 97% nitrogen and 3% carbon dioxide.
+All three carbonates (Calcite, Siderite, and Rhodochrosite)
+now co-exist with (hydro)magnetite; Ferrihydrite is undersaturated ca.
+4 orders of magnitude. <br>
+</font></small></font></p>
+<p><small><font face="Helvetica, Arial, sans-serif" size="+1"><small><span
+ style="font-weight: bold;">What happened with total dissolved metal
+concentrations?</span> By clicking the </small></font></small><font
+ size="+1"><small><font face="Helvetica, Arial, sans-serif"> "Detailed
+results" <img src="ordertool.png" alt="Show Eqstat button" height="24"
+ width="24"> &nbsp; toolbar button, we get the "EqIC" page of "EqDemo"
+window: </font></small></font><br>
+</p>
+<p><font size="+1"><img src="sshgal-9-4.png" alt="EqDemo IComp 2"
+ style="width: 651px; height: 438px;"> <br>
+</font></p>
+<p><font size="+1"><small><font face="Helvetica, Arial, sans-serif">In
+the lgm_t column, one can see that dissolved iron and manganese are
+now present in concentrations that are several orders of magnitude
+greater than
+those in the previous "open" system. By switching to the "EqDC" page,
+you can
+examine the detailed aqueous speciation of Ca, Fe and Mn.&nbsp;<br>
+</font></small></font></p>
+<font face="Helvetica, Arial, sans-serif"><span
+ style="font-weight: bold;">In a similar way, by "cloning" chemical
+system definitions, you can ask GEMS questions like "what happens
+if..." and immediately get answers expressed in phase assemblage and
+speciation, activities, volumes and other thermodynamic quantities</span><small
+ style="font-weight: bold;">.<br>
+<br>
+</small> <span style="font-weight: bold;">However, the GEMS code
+offers much more efficient tools to perform "batch" model runs, where
+many systems have to be created by a regular change in T,P, bulk
+composition, or other input data. </span><br>
+</font>
+<p><a href="sshgal10.html"><b><font face="Helvetica, Arial, sans-serif">Next
+Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

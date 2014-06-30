@@ -1,0 +1,748 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 32</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.32">
+</head>
+<body style="background-image: url(bgimg.png);">
+<h1><img src="gems1.png" style="width: 48px; height: 48px;" alt=""> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal31.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp;
+</font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to Start Page</font> </big></a></p>
+<hr size="2" width="100%">
+<p><b><span style="font-family: helvetica,arial,sans-serif;">(45)
+Examining the calculated equilibrium partitioning and surface
+speciation&nbsp;</span></b></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Let us take a
+closer look at the previously calculated partitioning equilibrium
+between the SiO<sub>2</sub>,am sorption phase and the aqueous
+electrolyte (details about the model can
+be found in Section 7 of the paper by Kulik </span><span
+ style="font-family: helvetica,arial,sans-serif;"> [<i>Radiochimica Acta</i>
+2002, v.90, p.815-832], <a href="../doc/pdf/sshgal30-sup-mat.pdf">click
+here
+for
+pdf download</a></span><span
+ style="font-family: helvetica,arial,sans-serif;">). <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Switch to the
+"Results" page of the "Single Thermodynamic System" dialog and expand
+the <big><tt>gas_gen</tt></big> and the sorption phase <big><tt>SiO2_1sTLM</tt></big>.
+You should see something quite similar to that shown below. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Surface speciation" src="sshgal-32-1.png"
+ style="width: 770px; height: 682px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The
+calculated "Activity"
+value for CO<sub>2</sub> gas is close to the atmospheric partial
+pressure
+(36 Pa). In the status (lowemost) line of the dialog, the calculated pH
+=
+5.335 and ionic strength (IS = 0.1 m) are indicated. As seen on Fig.
+4,b in
+[Kulik,
+2002] paper, at this pH, 98-99% of uranyl should be adsorbed on the
+amorphous
+silica surface. Indeed, the calculated surface speciation shows that
+67.4%
+of the total uranium loading of 1e-6 mol is present as a
+bi-coordinated
+inner-sphere surface complex <big><tt>Sio&gt;&gt;OUL@</tt></big> and
+31.6%
+- as another bi-coordinated surface complex <big><tt>Sio&gt;&gt;OULH-2</tt></big>;
+the two other uranyl surface complexes are insignificant at these
+conditions. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">So, in total,
+31.6 + 67.4 = 99.0 % of hexavalent uranium was calculated to be
+adsorbed on 1 g/L amorphous silica. This strong sorption keeps the
+total
+dissolved uranium concentration below 1e-8 molal, which makes the free
+uranyl hydroxide phase (schoepite)
+undersaturated by almost 4 orders of magnitude (as seen in the
+"activity"
+column for the expanded <big><tt>Schoepite</tt></big> phase). <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Inspection of
+other surface species shows that the silica surface is significantly
+deprotonated already at pH = 5.335: the calculated amounts of
+inner-sphere <big><tt>Sio&gt;O-</tt></big> and outer-sphere <big><tt>Sio&gt;O-Na+</tt></big>
+surface complexes are ca. 3 orders of magnitude greater than that of
+their protonated counterparts. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">All surface
+species (except </span><big><span style="font-family: monospace;">&gt;OH@</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> which does not
+affect surface charge and U<sup>VI</sup> adsorption) have activity
+coefficients only slightly above unity&nbsp; (1.0024 for the site type
+0 and 1.0258 for the site type 1). These activity coefficients are, in
+fact, the competitive Langmuir surface activity coefficient terms
+(SACT). Since this version of GEMS code, the new SACT are used instead
+of the obsolete and less rigorous SAT terms (still used in the Kulik
+2002 paper). Details can be found <a
+ href="../doc/pdf/SCM-corrections.pdf">here</a>. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Such small
+SACT corrections mean, in fact, that the surface complexes on both site
+types compete in a "nearly ideal" way, so the TLM Coulombic corrections
+alone are sufficient to
+describe correctly this system of low surface densities.
+&nbsp;Indeed, the density of adsorbed uranyl species is less than 0.99
+mkmol / 169 m<sup>2</sup> = 0.00586 mkmol/m<sup>2</sup> = 0.0035 nm<sup>-2</sup>.
+The maximum site density on SiO<sub>2</sub> surfaces is taken here to
+be&nbsp;
+4.6 nm<sup>-2</sup> (site 0) and that for bi-coordinated UVI surface
+complexes - 0.14 nm<sup>-2</sup> (site 1).<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">To see more
+details about the surface complexation model, open the "EqSurf" page of
+"EqDemo" window. The corresponding setup of GEM TLM is accessible on
+the "Surfaces" page of "System" window, both can be viewed at the same
+time. Let us first take a look at the "EqSurf" page (use the </span><span
+ style="font-family: helvetica,arial,sans-serif;">"Explore GEM results"
+&nbsp;<img src="ordertool.png" alt="Explore button"
+ style="height: 22px; width: 22px;"> &nbsp; toolbar button to open it)</span><span
+ style="font-family: helvetica,arial,sans-serif;">.<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="EqSurf page" src="sshgal-32-2.png"
+ style="width: 777px; height: 605px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In the <big><tt>etaA</tt></big>
+column, it is seen that the calculated total charge on the sorbent
+surface is -3.74e-6 mol (put the cursor into cell to see the entire
+value). This corresponds to density of negative charge -3.74 mkmol /
+169
+m<sup>2</sup> = -0.022 mkmol/m<sup>2</sup> = -0.0134 nm<sup>-2</sup> =
+-2.12 mC/m<sup>2</sup>. The corresponding TLM relative surface
+potential
+on zero plane (<big><tt>psiA</tt></big> column) is -0.0207 V. If you
+scroll the whole page to the right, you will see a smaller amount of
+charge on the beta-plane (<big><tt>etaB</tt></big> column) 0.265 mkmol
+(i.e. the amount of adsorbed Na+ ions) and the calculated beta-plane
+potential (<big><tt>psiB</tt></big> column) &nbsp;-0.0185 V. The latter
+is still negative because the electrolyte concentration and pH are not
+large enough to screen efficiently the development of negative charge
+on zero plane. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The&nbsp; </span><big><span
+ style="font-family: monospace;">sati</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; and&nbsp; </span><big><span
+ style="font-family: monospace;">masdj</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; tables in the
+lower part of the screenshot contain the same setup of the SCM as seen
+previously in the sorption Phase definition. The only difference is
+that the site densities are shown in units of micromoles per gram
+sorbent and not in nm<sup>-2</sup> as in the Phase.&nbsp; The SCM setup
+can be changed in this SysEq record independently of the Phase
+definition, as described below. This is especially practical when new
+SCM is developed and one has to try different variants or parameters
+quickly.<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Details on
+performed GEM TLM calculations can be found in the <big><tt><a
+ href="../doc/pdf/SCM-corrections.pdf">SCM-corrections.pdf</a></tt></big>
+file (requires the Adobe Reader installed). Now, let us take a look on
+how the sorption model is organized. </span><span
+ style="font-family: helvetica,arial,sans-serif;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+</span></p>
+<p><b><font face="Helvetica, Arial, sans-serif"><a name="SCM-SYS-SET"></a>(46)
+Setting up SCM parameters in a sorption phase</font></b></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Open the
+"Surfaces" page of "System" window </span><span
+ style="font-family: helvetica,arial,sans-serif;">(use&nbsp; </span><span
+ style="font-family: helvetica,arial,sans-serif;">the &nbsp;"Set BCC"
+&nbsp;<img src="SetCompos.png" alt="SetBCC button"
+ style="height: 23px; width: 22px;"> &nbsp; toolbar button) and scroll
+the <big><tt>DC_v2</tt></big> list down to the end, as shown below.</span><span
+ style="font-family: helvetica,arial,sans-serif;"></span> <br>
+</p>
+<p><img alt="Surfaces setup page" src="sshgal-32-3.png"
+ style="width: 826px; height: 479px;">&nbsp;<br>
+</p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Please, note
+that the values on this page have no meaning for phases other than the
+sorption phase(s). <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">On each
+sorption phase (one in this example), up to six surface types can be
+defined, hence, each
+array in the
+upper row (<big><tt>SCMT_</tt></big>,<big><tt> Nfsp_</tt></big>, <big><tt>MaSdt_</tt></big>
+and so on) has six columns. In this example, only one surface type
+(with index 0) is
+defined as described using the TLM ("<big><tt>T</tt></big>") code
+againsta the <big><tt>SiO2_1sTLM</tt></big>
+sorption phase. The fraction of total sorbent surface assigned to that
+surface type is 1 (set in the <big><tt>Nfsp_</tt></big> field). The
+total maximum site
+density
+for competitive surface species is set to 4.6 nm<sup>-2</sup> (<big><tt>MaSdt_</tt></big>
+field).
+By scrolling the page to the right, you can see that &nbsp;the C1
+capacitance density parameter is set to 1.0 F/m<sup>2</sup> (<big><tt>XcapA_</tt></big>)
+and the C2 parameter - to the usual TLM default value 0.2 F/m<sup>2</sup>
+(<big><tt>XcapB_</tt></big>).
+The permanent surface charge density is set to 0 mkeq/m<sup>2</sup> (<big><tt>XfIEC_</tt></big>).&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The lower
+part of
+the page displays some settings specific to surface sites and species.
+These settings have the same format as in the sorption Phase record,
+and are copied into the System definition when it is created for the
+first time. Later on, some parameters and codes can be changed here,
+the changes will be taken into any SysEq records </span><span
+ style="font-family: helvetica,arial,sans-serif;">"cloned" out of this
+one, but will have no adverse effect on the Phase record kept in the
+thermodynamic database. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The <big><tt>mDCC3</tt></big>
+column (to the right of species name
+list&nbsp; </span><big><span style="font-family: monospace;">DC_v3</span></big><span
+ style="font-family: helvetica,arial,sans-serif;">) encodes the surface
+species as inner-sphere (<big>'<span style="font-family: monospace;">Y</span>'</big>),
+&nbsp;outer-sphere (<big>'<span style="font-family: monospace;">Z</span>'</big>),
+the primary inner-sphere amphoteric OH group (<big>'<span
+ style="font-family: monospace;">X</span>'</big>),
+and the sorbent ('<big><tt>Q</tt></big>'). <br>
+</span></p>
+<p><big><small style="font-family: helvetica,arial,sans-serif;">
+In Surfaces page shown above, the surface species are allocated
+to surface- and site types in the&nbsp; </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small><span
+ style="font-family: monospace;">SATC_</span><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp; </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">table columns. <br>
+<br>
+Codes in the&nbsp;</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small><span
+ style="font-family: monospace;">SATC_[0]</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> column (</small><span
+ style="font-family: monospace;">'L'</span><small
+ style="font-family: helvetica,arial,sans-serif;"> for most surface
+species which means competitive Langmuir isotherm) define the impact of
+site density parameter to density of surface species. <br>
+</small></big>&nbsp;<big><span style="font-family: monospace;"></span></big><big><span
+ style="font-family: monospace;">SATC_[1]</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> column allocates
+surface species to the whole sorbent (</small><span
+ style="font-family: monospace;">'V'</span><small
+ style="font-family: helvetica,arial,sans-serif;">) or to some of its
+end members (irrelevant for the present model).<br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;</small><span
+ style="font-family: monospace;">SATC_[2]</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> column allocates
+each surface species to a surface type, numbered from 0 to 5 (maximum 6
+surface types per phase are technically possible); the surface types
+are described on Page 3 of the Phase window (will be shown later). <br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;</small><span
+ style="font-family: monospace;">SATC_[3]</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">column allocates each
+surface species to a site type, counted from 0 until 5 separately for
+each surface type. In other words, maximum 36 site types can be
+considered on all surfaces of one sorption phase. To each site type,
+one, many, or no surface species can belong. <br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;</small><span
+ style="font-family: monospace;">SATC_[4]</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> column is important
+for multi-layer EDL models such as TL or 3L because it allocates the
+outer-sphere surface charge of a surface complex to beta- or third
+plane. <br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;</small><span
+ style="font-family: monospace;">SATC_[5]</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">column contains codes
+of units in which densities of surface site types are expressed (for
+now, only </small><span style="font-family: monospace;">'n'</span><small
+ style="font-family: helvetica,arial,sans-serif;"> - in nm<sup>-2</sup>).
+.<br>
+<br>
+The site densities are entered into the&nbsp; </small></big><big><span
+ style="font-family: monospace;">MaSDj_[0]</span><small
+ style="font-family: helvetica,arial,sans-serif;"> column located next
+to the right of the&nbsp; </small></big><big><span
+ style="font-family: monospace;">SATC_
+</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">table. Equal numbers
+must be entered against all surface species competing for sites of the
+same type; in other words, competition on each site type on each
+surface type is considered separately via computing special activity
+coefficients (SACT) which replace balance constraints on total number
+of sites.<br>
+<br>
+The second [1] column of the&nbsp; </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small></big><big><span
+ style="font-family: monospace;">MaSDj_</span><small
+ style="font-family: helvetica,arial,sans-serif;"> table contains for
+each surface complex the unit charge allocated to 0 EDL surface plane
+(i.e. the mineral surface). The </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small></big><big><span
+ style="font-family: monospace;">MaSDj_[2]</span><small
+ style="font-family: helvetica,arial,sans-serif;"> column contains the
+unit charge allocated to beta- or third EDL plane, depending on the
+code in the&nbsp; </small></big><big><span
+ style="font-family: monospace;">SATC_[4]</span></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> </small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"> column.&nbsp; Both
+columns provide enough flexibility for implementing Stern EDL models,
+as well as three-layer CD MUSIC models where the surface charge of a
+species is distributed between 0, beta and third plane, differently for
+various adsorbed cations and anions. <br>
+<br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;</small></big><big><span
+ style="font-family: monospace;">MaSDj_[3]</span><small
+ style="font-family: helvetica,arial,sans-serif;"> column (usually
+contains zeros) may contain values of the Frumkin interaction parameter
+used if the Frumkin isotherm is applied instead of the Langmuir
+isotherm to some surface sites. <br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;"><br>
+&nbsp;</small></big><big><span style="font-family: monospace;">MaSDj_[4]</span><small
+ style="font-family: helvetica,arial,sans-serif;"> column&nbsp;
+contains the "dentateness" of surface species, 1 for monodentate
+(default), 2 for bidentate, 3 for tridentate, 4 for tetradentate ones.
+This parameter (not to be mixed with the coordination number) describes
+how many surface sites are covered by one adsorbed molecule thus making
+them inaccessible to any other adsorbates.&nbsp; This parameter is used
+in QCA isotherm - a polydentate form of the non-competitive Langmuir
+isotherm.<br>
+<br>
+</small></big><big><small
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;</small></big><big><span
+ style="font-family: monospace;">MaSDj_[5]</span><small
+ style="font-family: helvetica,arial,sans-serif;"> column is reserved
+for other parameters used in further development (e.g. BET isotherm). </small></big></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"></span><span
+ style="font-family: helvetica,arial,sans-serif;">For details, consult
+the <a href="../doc/html/gm_phase.html"><big><tt>gm_phase.html</tt></big></a>
+and <a href="../doc/html/gems_scm.html"><big><tt>gems_scm.html</tt></big></a>
+manuals for configuring and setting up the sorption
+parameters.<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"> Note that
+the
+settings in <big><tt>SCMT_, Nfsp_, MaSdt_, XcapA_, XcapB_, XfIEC_,
+SATC_,</tt></big> and <big><tt>MaSdj_</tt></big> data objects can be
+changed and saved in
+a particular SysEq record which then can be "cloned" with these new
+settings (this feature is useful for adjusting of SCMs and fitting of
+their parameters against experimental data). However, the class codes
+of dependent components in the <big><tt>mDCC</tt></big> vector cannot
+be saved in SysEq records; to change them, you will have to edit
+thePhase
+record and then open the project
+again.<br>
+<br>
+</span></p>
+<p><b><font face="Helvetica, Arial, sans-serif"><a name="SCM-EQ-RUN"></a>(47)
+Running and checking surface complexation equilibria</font></b></p>
+<p><font face="Helvetica, Arial, sans-serif">Let us now explore the
+effects of changing various SCM parameters and state variables on
+GEM-calculated partitioning equilibria between sorption phases, aqueous
+solution and gas mixture. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">Potentiometric titrations
+are the most common type of adsorption experiments. Let us see the
+effects
+of adding acid or base to the system "SiO<sub>2</sub>,am - uranyl - NaNO<sub>3</sub>
+electrolyte - air" considered earlier (see <a href="sshgal31.html">previous
+page</a>). &nbsp;The pH cannot be set directly at input in
+GEMS code; in order to get systems with given pH values (say 3.0,
+4.0, 7.0, 9.5), one has to adjust the additions of acid (HNO<sub>3</sub>)
+and/or base (NaOH)
+and try again until the desired pH is calculated within reasonable
+precision
+limits (usually 0.01). <br>
+</font></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, get back
+to the </span><span style="font-family: helvetica,arial,sans-serif;">"Single
+Thermodynamic System" dialog and make sure that the SysEq record "<big><tt>SorptionUL:G:ULonSiO2am:1:0:25:0:</tt></big>"
+is loaded. Using the </span><span
+ style="font-family: helvetica,arial,sans-serif;"> the &nbsp;"Set BCC"
+&nbsp;<img src="SetCompos.png" alt="SetBCC button"
+ style="height: 23px; width: 22px;"> &nbsp; toolbar button, open the
+"Compos" page of "System" window and add there 0.0001 mol HNO<sub>3</sub>
+as shown below: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Add acid" src="sshgal-32-4.png"
+ style="width: 498px; height: 645px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+When done, switch back to <span
+ style="font-family: helvetica,arial,sans-serif;"> </span><span
+ style="font-family: helvetica,arial,sans-serif;">"Single Thermodynamic
+System" dialog </span></span><span
+ style="font-family: helvetica,arial,sans-serif;">and </span><span
+ style="font-family: helvetica,arial,sans-serif;">click on the
+"Calculate the equilibrium state"&nbsp; <img src="RunIPM.png"
+ alt="RunIPM" style="height: 20px; width: 20px;"> &nbsp;toolbar button
+to re-calculate the equilibrium state. You should see the following
+Progress dialog: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="New pH Computed" src="sshgal-32-5.png"
+ style="width: 318px; height: 498px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Calculated pH
+has changed from 5.34 to 4.05. To get pH even closer to 4.0, click on
+the "Accept" button, get back to the "Compos" page of the "System"
+window and change
+the addition of HNO<sub>3</sub> to 0.000111 mol; then re-calculate the
+equilibrium to get now pH = 4.003. How the partitioning of uranyl has
+changed? <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">To see that,
+first click on the&nbsp;</span><span
+ style="font-family: helvetica,arial,sans-serif;"> </span><span
+ style="font-family: helvetica,arial,sans-serif;">"Explore GEM results"
+&nbsp;<img src="ordertool.png" alt="Explore button"
+ style="height: 22px; width: 22px;"> &nbsp; toolbar button to open</span><span
+ style="font-family: helvetica,arial,sans-serif;"> the "EqIC" page of
+"EqDemo" window:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Total dissolved" src="sshgal-32-6.png"
+ style="width: 633px; height: 365px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"> The total
+dissolved uranium concentration (highlighted) is now 0.7114 micromolal,
+or ca.
+71% of the
+total uranium loading (1e-6) in this system. This means that at pH =
+4, only ca. 29% of uranyl is adsorbed on the amorphous silica surface
+(compare
+with Fig. 4,b in [Kulik, 2002] paper). Inspection of surface speciation
+(on "Results" page of the "Single Thermodynamic System" dialog) shows
+that
+the adsorbed uranyl is now almost entirely represented by a neutral <big><tt>Sio&gt;&gt;OUL@</tt></big>
+surface complex.<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">As an
+exercise, clone the current record </span><span
+ style="font-family: helvetica,arial,sans-serif;">by executing the
+"Record" "New(Clone)" menu command in </span><span
+ style="font-family: helvetica,arial,sans-serif;">"Single Thermodynamic
+System" dialog and </span><span
+ style="font-family: helvetica,arial,sans-serif;">changing the fourth
+field of SysEq record field to 0; 2; 3; and adjust the calculated pH to
+3.0;
+7.0; 9.5 accordingly. Then explore how the adsorption and surface
+speciation
+of uranyl changes at these pH values and which surface complexes
+prevail. The input additions of acid and base should be approximately
+as follows:
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<table border="1" cellpadding="2" cellspacing="2" width="100%">
+  <tbody>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Record
+CSD #<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">0<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">1<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">2<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">3<br>
+      </font></td>
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Input
+added HNO3, mol<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">0.00111<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">0.000111<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">0<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">0<br>
+      </font></td>
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Input
+added NaOH, mol<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">0<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">0<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">0.000086<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">0.03<br>
+      </font></td>
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">pH,
+calculated <br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">3.0<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">4.0<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">7.0<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">9.5<br>
+      </font></td>
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">%U
+ads, calculated<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">&lt;1.0<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">29.0<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">&gt;99.99<br>
+      </font></td>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">&lt;0.7<br>
+      </font></td>
+    </tr>
+  </tbody>
+</table>
+<p><span style="font-family: helvetica,arial,sans-serif;"><font
+ face="Helvetica, Arial, sans-serif">We see that the effect of pH on
+the adsorption of U<sup>VI</sup> on SiO<sub>2</sub>,am is dramatic. On
+the next pages of this
+tutorial,
+we will learn how to automatize modelling and plotting of pH edges and
+isotherms by creating Process simulators and GtDemo data samplers.&nbsp;</font></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+Now, let us
+try to convert our GEM SCM to describe a slightly different system -
+the sorption of uranyl onto SiO<sub>2</sub>,am but at different S/L
+ratio (0.13 g/L), specific surface area (183 m<sup>2</sup>/g), total
+uranium loading (8.5e-6 M), electrolyte concentration (0.1 M NaNO<sub>3</sub>)
+and isolated from
+atmospheric CO<sub>2</sub>.&nbsp; <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">First, </span><span
+ style="font-family: helvetica,arial,sans-serif;">in "Single
+Thermodynamic System" dialog,</span><span
+ style="font-family: helvetica,arial,sans-serif;"> get back the SysEq
+record </span><span style="font-family: helvetica,arial,sans-serif;">"<big><tt>SorptionUL:G:ULonSiO2am:1:0:25:0:</tt></big>"
+<font face="Helvetica, Arial, sans-serif">and then </font>execute the
+"Record" "New(Clone)" menu command; in the appearing record key dialog,
+give the
+system a new name as shown below: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-32-7.png" alt="New key"
+ style="height: 245px; width: 342px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In the
+appearing "Compos" page of "System" window, modify the recipe as shown
+below. Don't forget to zero off the addition of AtmAirNit.&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Compos page" src="sshgal-32-8.png"
+ style="width: 498px; height: 645px;">&nbsp;<br>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Switch to the
+"Phase" page and change there the specific surface area to 183 m<sup>2</sup>/g:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Phase page" src="sshgal-32-9.png"
+ style="width: 523px; height: 449px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+Next, switch to the "IComp" page and add 20 moles of decoupled nitrogen
+to the bulk composition in order to create a CO<sub>2</sub>-free
+atmosphere: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="IComp page" src="sshgal-32-10.png"
+ style="width: 501px; height: 403px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+When ready, </span><span
+ style="font-family: helvetica,arial,sans-serif;"> click on the
+"Calculate BCC" <img src="RunBCC.png" alt="RunBCC"
+ style="height: 20px; width: 20px;"> &nbsp; toolbar button to check
+whether the system recipe has been entered correctly. You should get
+the warning dialog suggesting to switch off the "<big><tt>C</tt></big>"
+independent compenent. This is not an error because we are going to
+model a carbon-free system, so press the "Check/Ok" button to
+proceed.&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, click on
+the "Calculate the equilibrium state"&nbsp; <img src="RunIPM.png"
+ alt="RunIPM" style="height: 20px; width: 20px;"> &nbsp;toolbar button
+to compute the new equilibrium state. In the Progress dialog, you
+should see pH ca. 4.18 and the mass of solid ca. 0.14 g. </span><span
+ style="font-family: helvetica,arial,sans-serif;">Click on the "Accept"
+button and check the calculated volume of aqueous phase and the mass of
+"Qtz"
+sorbent. Make necessary corrections to additions of water, SiO<sub>2</sub>
+and HNO<sub>3</sub> on the "Compos" page to get 1 L of aqueous solution
+at pH = 5.5 and 0.13 g of the sorbent. The "Compos" page should now
+look
+like this:&nbsp; </span><br>
+</p>
+<p><img alt="Compos  modified" src="sshgal-32-11.png"
+ style="width: 501px; height: 643px;">&nbsp;<br>
+</p>
+<p><span style="font-family: helvetica,arial,sans-serif;">The
+calculated
+equilibrium speciation (see below) demonstrates that the predominant
+surface
+species of uranyl <big><tt>- Sio&gt;&gt;UL@</tt></big> - has now a
+significant SACT correction of 8.98.You can easily calculate that, in
+total, three UL surface complexes at pH 5.5 hold
+ca. 60.7% of the total uranium loading (take care that the amount of
+binuclear Sio&gt;&gt;OUL2H+ species should be doubled in this
+calculation). <br>
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="SurfSpec" src="sshgal-32-12.png"
+ style="width: 763px; height: 570px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+Comparison
+with Fig. 4,c in [Kulik, 2002] shows that this model under-predicts
+adsorption of uranyl in ca. 20 % at this pH. The reason is that the SAT
+correction
+is too strong, i.e. the individual maximum site density imposed to the</span><span
+ style="font-family: helvetica,arial,sans-serif;"><big><tt>
+Sio&gt;&gt;UL@</tt></big></span><span
+ style="font-family: helvetica,arial,sans-serif;"> &nbsp;surface
+complex
+is too small. To check it, open the "Surfaces" page of "System" window
+and
+scroll down the list of dependent components in the lower part of the
+page.
+Indeed, the maximum site density constraint is set to 0.14 nm<sup>-2</sup>,
+while in the model on Fig. 4,c [Kulik, 2002] it is set on 0.18 nm<sup>-2</sup>.
+Correct it as shown below:&nbsp;</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Surf Density" src="sshgal-32-13.png"
+ style="width: 617px; height: 478px;">&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">You will also
+have to switch to the "Compos" page and adjust the addition of HNO<sub>3</sub>
+to 5.23e-6 mol in order to keep pH at 5.50.&nbsp; When ready,
+re-calculate the equilibrium state. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, as seen
+from the "EqIC" page of "EqDemo" window, ca. 72.5 % of uranyl is
+adsorbed, which is stiill a little under-prediction. However, the
+surface binding model we just calculated is not exactly the same as the
+one on Fig. 4,c [Kulik, 2002]. The old model used the non-competitive
+SAT terms separately for both mononuclear uranium surface species; in
+the new model, we assumed that these species compete for the same kind
+of surface sites. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Let us change
+our SCM in order to reproduce the earlier model. To do that,&nbsp; open
+the Surfaces page of the System window again and change the site type
+index from 1 to 2 for the </span><big><span
+ style="font-family: monospace;">Sio&gt;&gt;OULH-2</span></big><span
+ style="font-family: helvetica,arial,sans-serif;"> species. Also change
+the addition of HNO3 to 5e-6 mol and re-calculate equilibrium, further
+adjusting the addition of acid until pH = 5.50 is calculated (at 4.0e-6
+HNO3 added).&nbsp; Now, examine the total percentage of uranium
+adsorbed&nbsp; ( 79.3 %), already in agreement with Fig.4,c [Kulik,
+2002]. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">What have we
+actually done in the last calculation? We simply assumed that the
+Sio&gt;&gt;OUL@ species occupies not the same kind of sites as the
+Sio&gt;&gt;OULH-2 species, hence they do not compete on the surface of
+SiO2,am. This is seen in the surface speciation in two different values
+of Langmuir SACT terms (activity coefficients), both much smaller than
+in the case when both surface species compete for the same kind of
+surface sites at 0.18 nm<sup>-2</sup>. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">A more
+realistic binding model would be to assume that both uranyl surface
+species compete for the same kind of sites, but of higher density, say,
+0.4 nm<sup>-2</sup> (which is still less than 1/10 of the density of
+reactive OH groups on SiO<sub>2</sub> surfaces, 4.6 nm<sup>-2</sup>).
+To implement this model, open the&nbsp; Surfaces page of the System
+window and revert the site index for the Sio&gt;&gt;OULH-2 species to
+1, and also change the density of both </span><span
+ style="font-family: helvetica,arial,sans-serif;">Sio&gt;&gt;OUL@ and </span><span
+ style="font-family: helvetica,arial,sans-serif;">Sio&gt;&gt;OULH-2
+species to a new site density of 0.28 nm<sup>-2</sup>, as shown below:<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="New SCM" src="sshgal-32-14.png"
+ style="width: 617px; height: 478px;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Adjust also
+the addition of HNO3 in calculating equlibria (to 3.66e-6 mol) to get
+calculated pH equal to 5.50. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Examine the
+results. The adsorbed fraction of uranyl should be ca. 85.9 % - a
+perfect fit to the experimental
+data point at pH 5.5 with 85.9% of uranium adsorbed, even a better fit
+than that shown in the paper. The surface speciation is shown below: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ alt="Best model" src="sshgal-32-15.png"
+ style="width: 763px; height: 519px;"><br>
+</span></p>
+<p> <br>
+<a href="sshgal33.html"><b><font face="Helvetica, Arial, sans-serif">Next
+Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2006&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

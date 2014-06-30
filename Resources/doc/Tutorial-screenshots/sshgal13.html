@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 13</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.13">
+</head>
+<body background="bgimg.png">
+<h1><img src="gems1.png" alt="" height="48" width="48"> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal12.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp;
+</font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to Start Page</font> </big></a></p>
+<hr size="2" width="100%">
+<p><span style="font-family: helvetica,arial,sans-serif;"><b>(25) How
+to run
+the Process simulator and plot results</b>. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Press the
+"Calculate record data" <img src="kcalc.png" alt="b-calc" height="22"
+ width="22">
+&nbsp; toolbar button, confirm saving the Process record to database,
+and
+answer "No" to an appearing question about using the graphics during
+calculations.
+<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">When the
+process
+simulation is finished (as indicated on the title line of the Process
+window),
+switch to the "Graph" page to see a table with sampled data. Enter
+names of ordinate axis (pY_Nam field), abscissa axis (pX_Nam), and plot
+lines (ordinates, pLnam fields). The plot names order should correspond
+to that given in the data sampling script on Page 2.&nbsp; The "Graph"
+page&nbsp; should now look like shown below. </span><span
+ style="font-family: helvetica,arial,sans-serif;"><br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-13-1.png" alt="Process results 1"
+ style="width: 779px; height: 573px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+Press the "Plot data on graph dialog" <img src="xpaint.png"
+ alt="b-plot" height="22" width="27">
+&nbsp; toolbar button when ready. Confirm saving of the Process
+database
+record, and you will see the graph as shown below.&nbsp;<br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"> <img
+ src="sshgal-13-2.png" alt="Raw graph"
+ style="width: 630px; height: 443px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+Even though the graph already looks not too bad, it is advisable to
+adjust
+colors and axis scales. <br>
+Click on the "Customize" button and get in the following dialog:&nbsp;</span></p>
+<p><img src="sshgal-13-3.png" alt="Customize dialog"
+ style="width: 570px; height: 490px;"> <br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Change the
+axis
+intervals, as well as colours and symbols on the plot lines, as shown
+above.
+To change the color, click on a button to the left of the legend name
+(e.g.
+-pH) and get into a line/symbol setup dialog: <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"></span><img
+ src="sshgal-13-4.png" alt="Line setup"
+ style="width: 451px; height: 214px;"> <br>
+</p>
+<p><font face="Helvetica, Arial, sans-serif">&nbsp;There, you can
+change colors,
+symbols, symbol size (0 - no symbols) and line size (0 - no line).
+Click
+"Ok" when finished to get back to the Customize dialog. There, click on
+the
+"Apply" button to see changes on the plot.&nbsp; </font></p>
+<p><font face="Helvetica, Arial, sans-serif">Close the Customize dialog
+when
+ready. Now, you can drag and drop with mouse the legend names onto the
+plot
+surface. The plot will look like this:&nbsp;</font><br>
+</p>
+<p><img src="sshgal-13-5.png" alt="Better graph"
+ style="width: 630px; height: 443px;"> <br>
+</p>
+<p><font face="Helvetica, Arial, sans-serif">You can also click on the
+"Fragment" button to see an enlarged part of the diagram (you will have
+to drag-and-drop legend names again). <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">This graph is not yet
+perfect;
+it would look nicer if -pe is plotted instead of pe. This is very easy
+to
+change. Close the graph and switch to Page 2 of the Process window. In
+the
+</font><big><tt>pgExpr</tt></big> <font
+ face="Helvetica, Arial, sans-serif">field, change the last line
+&nbsp;to:&nbsp;<br>
+</font></p>
+<p><big><tt>yp[J][4] =: 0 - pe;&nbsp;</tt></big><font
+ face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"> Now, click on the </font><span
+ style="font-family: helvetica,arial,sans-serif;">"Calculate record
+data"
+<img src="kcalc.png" alt="b-calc" height="22" width="22"> &nbsp;
+toolbar button</span><font face="Helvetica, Arial, sans-serif"> to
+run the Process simulation again, confirm saving the Process record to
+database,
+and press "Yes" to use the graphic window during simulation. This time,
+newly
+calculated results (-pe instead of pe) will be plotted one-by-one as
+scattered
+symbols. When the simulation run is finished, you will see a plot like
+this:
+</font><br>
+</p>
+<p><img src="sshgal-13-6.png" alt="Intermediate graph"
+ style="width: 630px; height: 443px;"> <br>
+</p>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+To retain newly calculated results, close the graph dialog and open it
+again
+(while saving the Process record to database). Then customise the axis
+intervals,
+drag and drop legend labels on the plot, and press the "Save image"
+button
+to save the graph as e.g. a PNG graphic file. When you insert that file
+into
+e.g. a Word document, it will look there as follows: <br>
+<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-13-7.png"
+ alt="final graph" style="width: 446px; height: 355px;"> <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+You can also press the "Fragment" button and produce a plot where the
+aqueous
+speciation is better seen (customize fragment axis intervals, if
+necessary):
+<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img src="sshgal-13-8.png"
+ alt="fragment" style="width: 446px; height: 355px;"> <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+The plot above shows abrupt shapes typical for redox transitions. In
+order
+to understand what causes these shapes, we will have to construct
+another
+plot showing the appearance and disappearance of solid phases and gas
+fugacities
+as function of O<sub>2</sub> addition. <br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif">This can be done by
+constructing
+a GtDemo data sampler using SysEq records already generated in the
+Process
+simulation. <br>
+You can also "clone" the Process record and easily modify it, as
+described
+in more detail in the Process module manual. <br>
+</font></p>
+<p> <a href="sshgal14.html"><b><font
+ face="Helvetica, Arial, sans-serif">Next Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>GEMS2 Screenshots Page 24</title>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <meta name="author" content="PSI GEMS2 Development Team">
+  <meta name="description" content="Screenshot Gallery Tutorial p.24">
+</head>
+<body background="bgimg.png">
+<h1><img src="gems1.png" alt="" height="48" width="48"> <font
+ color="#000066">GEM-Selektor version 2-PSI</font></h1>
+<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
+<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
+ size="+3"> </font></tt></b></h2>
+<h2><b><tt><font size="+2"> </font></tt></b></h2>
+<p><big><a href="sshgal23.html"><font
+ face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp;
+</font></big><a href="index.html"><big><font
+ face="Helvetica, Arial, sans-serif">Back to Start Page</font> </big></a></p>
+<hr size="2" width="100%">
+<p><font face="Helvetica, Arial, sans-serif"><b><big><big><small><small></small></small></big></big></b></font></p>
+<p><font face="Helvetica, Arial, sans-serif"><b><big><big><small><small>(36)
+Adding a Predefined Composition Object</small></small></big></big></b></font></p>
+<font face="Helvetica, Arial, sans-serif">Predefined composition
+objects (PCO) help the user create "recipes" for the bulk composition
+of the
+chemical system because PCO can contain a complex stoichiometry (e.g. a
+rock
+or seawater composition) that can be addressed as&nbsp; certain amount
+of a single
+item. The built-in GEMS database contains a collection of commonly used
+PCOs
+stored as Compos records. <br>
+</font>
+<p> </p>
+<p><font face="Helvetica, Arial, sans-serif">Here, we will learn how to
+create new Compos records and add them to your project database. As
+usual in GEM-Selektor, the easiest way is to open a similar record and
+then use it as a template to "clone" a new Compos record. As we have
+added barium with its aqueous species
+and a BaCO<sub>3</sub> mineral to the "Carbonat" project, let us create
+a
+PCO for BaCO<sub>3</sub> composition.&nbsp; <br>
+</font> </p>
+<p> </p>
+<p><span style="font-family: helvetica,arial,sans-serif;">A suitable
+template would be an available Compos record "CaCO3". To open it in the
+Compos window, get into the "Database Management" dialog and click the
+"Predefined Compositions (Compos)" button, then use the "Display
+selected record" &nbsp;</span><font face="Helvetica, Arial, sans-serif"><img
+ src="../doc/html/fileopen.png" alt="LoadRecord button" height="20"
+ width="20"> </font><span
+ style="font-family: helvetica,arial,sans-serif;"> &nbsp;toolbar button
+to get the list of available Compos records:&nbsp;</span><br>
+</p>
+<p><img src="sshgal-24-1.png" alt="Select Compos" height="455"
+ width="608"> <br>
+</p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Find and
+select a "CaCO3" record key, as shown above, and double-click on it or
+click
+"Ok".&nbsp;<br>
+This will get the PCO definition for calcium carbonate into the Compos
+window:&nbsp;</span><br>
+</p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-24-2.png" alt="CaCO3 PCO" height="347" width="608"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">This simple
+PCO is made up from 1 mole of calcium, 1 mole of carbon and 3 moles of
+oxygen, entered into the "<big><tt>CI</tt></big>" column. The resulting
+PCO stoichiometry (in mole amounts) is visible in the "<big><tt>PCO</tt></big>"
+column to the left of the column of element symbols "<big><tt>symIC</tt></big>".&nbsp;
+One
+mole of this PCO (5 moles of elements in total) has a mass 0.10089 kg. <br>
+Please, note that adding some amount of this PCO to GEM chemical system
+recipe does not automatically mean that the mineral calcite (CaCO3)
+will appear in positive amount in the calculated equilibrium state. The
+purpose of PCOs (many of which resemble stoichiometries of&nbsp;
+chemical species or pure phases) is solely to facilitate construction
+of recipes for the bulk composition of chemical systems of interest.
+&nbsp; <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Now, execute
+the "Record" "New(Clone)..." menu command. Modify the key of the Compos
+record to be created as shown below and click "Ok":&nbsp;</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-24-3.png" alt="Compos rKey" height="240" width="328"> </span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Next, a
+"Compos Setup" wizard appears; there is nothing to re-configure in this
+case, so just click "Next &gt;" to proceed. </span><br>
+</p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-24-4.png" alt="Compos Cfg"
+ style="width: 665px; height: 602px;"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">On the
+appearing second page of the wizard, click "Finish" because there is
+also nothing to change: <br>
+</span></p>
+<p><img alt="Compos Setup Wizard Page 2" src="sshgal-24-4-1.png"
+ style="width: 665px; height: 602px;"><br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><br>
+After that, the program will display a list of available IComp records
+and ask to mark those to be included in the PCO definition. Click on
+calcium to unmark it and on barium to mark it (using left mouse button)
+as shown below. </span><br>
+</p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-24-5.png" alt="Compos IC mark" height="353" width="608"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Click on the
+"Ok" button to proceed. </span><span
+ style="font-family: helvetica,arial,sans-serif;">This brings you back
+to the Compos window, where you have to edit comment lines and the "<big><tt>CI</tt></big>"
+column. <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><b>Important:</b>
+enter zeros into the first and the seventh field of the "<big><tt>MasVol</tt></big>"
+row, to prevent that the new PCO will be normalized to 0.10089 kg mass.
+The Compos window should now look like this:&nbsp; </span><br>
+</p>
+<p><img src="sshgal-24-6.png" alt="Compos edit" height="347" width="608">
+<br>
+<span style="font-family: helvetica,arial,sans-serif;"></span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">To complete
+data in the new record, click on the "Calculate record data" &nbsp;</span><span
+ style="font-family: helvetica,arial,sans-serif;"><img src="kcalc.png"
+ alt="b-calc" style="width: 22px; height: 22px;"> </span><span
+ style="font-family: helvetica,arial,sans-serif;">&nbsp;
+toolbar&nbsp; button or press <b><big><tt>F9</tt></big></b> hot key or
+execute "Record" "Calculate" menu command. &nbsp;A warning
+appears:&nbsp;</span><br>
+</p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-24-7.png" alt="Warning" height="127" width="345"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">Click on the
+"Yes" button to save the data that you have edited.</span> <span
+ style="font-family: helvetica,arial,sans-serif;">The necessary
+calculations will be performed, and you will see the Compos window
+again with a new (molar) mass 0.197337 kg.</span><br>
+</p>
+<p><span style="font-family: helvetica,arial,sans-serif;"><img
+ src="sshgal-24-8.png" alt="Compos done" height="347" width="608"> <br>
+</span></p>
+<p><span style="font-family: helvetica,arial,sans-serif;">click on the </span><font
+ face="Helvetica, Arial, sans-serif"> "Save current record" toolbar
+button &nbsp;</font><font face="Helvetica, Arial, sans-serif"><img
+ src="../doc/html/filesave.png" alt="SaveRecord button" height="20"
+ width="20"> </font><font face="Helvetica, Arial, sans-serif"> &nbsp;
+or execute the "Record" "Save" menu command to save data into the
+database file. Close the Compos window when finished. <br>
+</font> </p>
+<p><span style="font-family: helvetica,arial,sans-serif;">In the same
+way, you can "clone" Compos records for any desired "recipes"; as an
+exercise, create in addition a PCO for BaCl<sub>2</sub>. More
+sophisticated variants that require re-configuration of PCO structure
+are described in the <a href="../doc/html/gm_compos.html">gm_compos.html</a>
+manual. </span><br>
+<br>
+</p>
+<p> <a href="sshgal25.html"><b><font
+ face="Helvetica, Arial, sans-serif">Next Page</font></b></a><br>
+</p>
+<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
+to main GEMS-PSI page</a></b> </font><br>
+<br>
+<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
+2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+Support Team</a>.</font><br>
+<hr size="2" width="100%"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>
