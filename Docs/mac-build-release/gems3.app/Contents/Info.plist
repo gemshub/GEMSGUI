@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>gems3</string>
+	<key>CFBundleExecutable</key>
+	<string>gems3</string>
+	<key>CFBundleGetInfoString</key>
+	<string>GEM-Selektor v3.2 package for geochemical modeling</string>
+	<key>CFBundleIconFile</key>
+	<string>gems3.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>ch.psi.gems3</string>
+	<key>CFBundleName</key>
+	<string>gems3</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>3.2</string>
+	<key>CFBundleSignature</key>
+	<string>GEM-Selektor-rev.2570.970</string>
+	<key>CFBundleVersion</key>
+	<string>3.2.4</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright (c) 2004-2014 GEMS Development Team</string>
+</dict>
+</plist>
