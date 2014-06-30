@@ -1,0 +1,27 @@
+To install GEMS3.1 on Mac OS X 10.7 and up:
+
+1. Click on the installer dmg file to mount it. A window appears with the application gems3.app. 
+
+2. Drag gems3.app from that window to the /Applications folder. The gems3.app contains program 
+   and resource files, including help database and /DB.default folder with the thermodynamic database.   
+
+3. Start GEM-Selektor once by opening the terminal, cd to your home folder, and run a command:
+
+    $ exec /Applications/gems3.app/Contents/MacOS/gems3 -d
+
+This will create a subfolder ~/Library/Gems3/projects if not yet available in your home directory,
+where some test modeling projects will be copied, and your own modeling projects will be stored
+later on. This command will also reset configuration files to point to your actual locations.
+
+4. You can add your old projects folders into ~/Library/gems3/projects/. Backup of modeling
+   projects is strongly recommended at least once per day. 
+
+5. To normally start GEM-Selektor, go to /Applications folder and double-click on "gems3.app".
+To add the GEMS3.2 icon to Dock, right-click on GEMS3 icon in the Dock, and select "Keep in Dock".
+
+6. To update GEM-Selektor: just move gems3.app from /Applications to Trash, and proceed with step
+1 through 3. Only files in gems3.app will be replaced; your own modeling projects, located in
+~/Library/gems3/projects/ folder, will not be affected. To locate this folder in Finder, click
+on Mac OSX desktop, "Go" "Go to folder...", type "~/Library" in the appearing dialog, and click
+the "Go" button.
+ 

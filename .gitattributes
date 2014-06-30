@@ -13,6 +13,10 @@ Docs/INSTALL.macosx.txt -text
 Docs/INSTALL.windows.txt eol=crlf
 Docs/SeeLibraryInFinder.workflow/Contents/QuickLook/Preview.png -text
 Docs/build-release/gems3.png -text
+Docs/mac-build-release/gems3.app/Contents/MacOS/qcollectiongenerator -text
+Docs/mac-build-release/gems3.app/Contents/MacOS/qhelpconverter -text
+Docs/mac-build-release/gems3.app/Contents/MacOS/qhelpgenerator -text
+Docs/mac-build-release/gems3.app/Contents/Resources/gems3.icns -text
 Docs/win-build-release/GEMS3DEPLOY/Gems3-app/Info.plist -text
 Docs/win-build-release/GEMS3DEPLOY/Gems3-app/gems3.png -text
 Docs/win-build-release/GEMS3DEPLOY/Gems3-app/runwindeployqt.bat -text
