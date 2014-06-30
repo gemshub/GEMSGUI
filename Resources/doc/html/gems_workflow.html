@@ -155,8 +155,8 @@ of
     <hr size="2" width="100%">
     <h2> <a name="EQCALCMODE"></a>"Equilibria Calculation" Mode</h2>
     This is the usual mode for calculation of geochemical models using GEMS3
-    package.&nbsp; Such calculations always refer to the thermodynamic
-    database<span style="color: #0000ee;"><span style="text-decoration: underline;"></span></span>
+    package.&nbsp; Such calculations always refer to the thermodynamic database<span
+      style="color: #0000ee;"><span style="text-decoration: underline;"></span></span>
     that contains the input data about stability of all species at wide range of
     temperature, pressure and compositions of the systems. At present level,
     such "condensed chemical knowledge" databases are quite extensive, although
@@ -190,38 +190,36 @@ of
       program permits to do it so easy and quickly as GEM-Selektor.&nbsp; </p>
     <h3> <a name="OPENPROJECT"></a>Opening the Modeling Project<tt><br>
       </tt></h3>
-    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->To
+    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To
       start modeling calculations in GEM-Selektor means to get into a modelling
-      project (upon the first installation, several test projects become available).
-      In the upper-left corner of the main window frame, click on the
-      'Computation of Equilibria' icon&nbsp; <img src="EquilibriumModeIcon24.png">&nbsp;&nbsp;
+      project (upon the first installation, several test projects become
+      available). In the upper-left corner of the main window frame, click on
+      the 'Computation of Equilibria' icon&nbsp; <img src="EquilibriumModeIcon24.png">&nbsp;&nbsp;
       then select a modelling project from the appearing list and open it, or <a
         href="gm_project.html#PROJECT_CREATE"><span style=" text-decoration: underline; color:#0000ff;">create
           a new project</span></a>. For beginners, we recommend first to work
-      with test projects for some time, before creating your own projects.<!--EndFragment--></p>
+      with test projects for some time, before creating your own projects</p>
     <h3><a name="EQCALC"></a>Calculation of Equilibrium State</h3>
-    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->After
+    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">After
       opening a project, select a single system from the list on the left side
       and click on the 'Calculate equilibrium state' toolbar icon <img src="CalculateGEMIcon24.png">
       . Alternatively, create a new single system using 'Record' 'Create' or
       'New(Clone)' menu command or toolbar icon that open the "Recipe Dialog".
       In a newly-created project, where no records with single system
       definitions exist yet, the Recipe Dialog will open automatically upon
-      creating the new system definition record key.
-      <!--EndFragment--></p>
-    <br>
-    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Clicking
+      creating the new system definition record key.</p>
+    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Clicking
       on the 'Calculate equilibrium state' toolbar icon <a href="click+on+the+%27Calculate+equilibrium+state%27+toolbar+icon+%3F+."><img
           src="CalculateGEMIcon24.png"></a> (or "Calculate" "Run GEM IPM" menu
-      command)<!--EndFragment--> will create an internal data structure for this
-      chemical system definition, then sent to Gibbs energy minimization using
-      the Interior Points Method. During the calculation, you will see the
-      "Progress Dialog" that shows the current SysEq record key; the number of
-      iterations done; total mases of gas, aqueous solid phases&nbsp; (in
-      grams),&nbsp; pH, pe and ionic strength of aqueous electrolyte, updated
-      every one or two seconds. When finished, this dialog will show "Accept"
-      and "Dismiss" buttons. Click the "Accept" button to save the results into
-      this system database record, or "Dismiss" not to save (e.g. in the case of
+      command) will create an internal data structure for this chemical system
+      definition, then sent to Gibbs energy minimization using the Interior
+      Points Method. During the calculation, you will see the "Progress Dialog"
+      that shows the current SysEq record key; the number of iterations done;
+      total mases of gas, aqueous solid phases&nbsp; (in grams),&nbsp; pH, pe
+      and ionic strength of aqueous electrolyte, updated every one or two
+      seconds. When finished, this dialog will show "Accept" and "Dismiss"
+      buttons. Click the "Accept" button to save the results into this system
+      database record, or "Dismiss" not to save (e.g. in the case of
       error).&nbsp;</p>
     <h3> <a name="P3230"></a>Examination of Results<tt><br>
       </tt></h3>
@@ -270,9 +268,9 @@ of
       investigated, either at fixed or variable T,P. In this case, we recommend
       to change the VarCSD field of the <a href="gems_rekey.html#DBM_SysEq">SystEq
         record key</a>, to indicate a different bulk composition, then modify
-      some parts of the system recipe. In the case when the additional metastability
-      restrictions (dll_ or dul_) will be changed in the recipe, we recommend to
-      change the VarCon field of the <a href="gems_rekey.html#DBM_SysEq">SysEq
+      some parts of the system recipe. In the case when the additional
+      metastability restrictions (dll_ or dul_) will be changed in the recipe,
+      we recommend to change the VarCon field of the <a href="gems_rekey.html#DBM_SysEq">SysEq
         record key</a> upon cloning.&nbsp; </p>
     <p>With this, you are prepared to an infinite play with single equilibria
       calculations. </p>
@@ -289,16 +287,15 @@ of
       for detailed information. </p>
     <p>Briefly, to create/modify a Process record, turn GEM-Selektor into
       "Equilibria Calculation" mode, open a modeling project, and click on a
-      "Process" icon on the left side of the main frame window.
-      This opens the Process window. There, click on "Create ..." toolbar button
-      or select a "Record" "Create" menu command (alternatively, select one
-      Process record and click on "New/Clone" button). You will see a list of
-      SysEq records; select there a parent SysEq record for this process
-      simulator, and clock "Ok". This opens a Process record key form. Fill out
-      necessary fields of the new <a href="file:///home/parallels/DevGEMS/trunk/gems-gui/Resources/doc/html/gdb_rkey.html#DBM_Proces">Process
-        record
-        key</a>. Only two last record key fields can be edited; the first 8
-      fields are taken from the parent SysEq record key. After the user clicks
+      "Process" icon on the left side of the main frame window. This opens the
+      Process window. There, click on "Create ..." toolbar button or select a
+      "Record" "Create" menu command (alternatively, select one Process record
+      and click on "New/Clone" button). You will see a list of SysEq records;
+      select there a parent SysEq record for this process simulator, and clock
+      "Ok". This opens a Process record key form. Fill out necessary fields of
+      the new <a href="file:///home/parallels/DevGEMS/trunk/gems-gui/Resources/doc/html/gdb_rkey.html#DBM_Proces">Process
+        record key</a>. Only two last record key fields can be edited; the first
+      8 fields are taken from the parent SysEq record key. After the user clicks
       "Ok" to finish creating a new record key, the <a href="file:///home/parallels/DevGEMS/trunk/gems-gui/Resources/doc/html/gm_proces.html#WZSTEP_1">Process
         Wizard Step 1</a> window appears. Follow comments and wizard steps as
       indicated. When the wizard is completed, you are back in the Process
@@ -796,7 +793,7 @@ Script
       "Remake"</a> menu commands and then type in or select a Gtdemo record key
     of the following format: <br>
     &nbsp;
-    <table cellpadding="3" cellspacing="3" border="3">
+    <table border="3" cellpadding="3" cellspacing="3">
       <tbody>
         <tr>
           <td>Profile_id</td>
@@ -1115,7 +1112,7 @@ To
       at nearly one bar p(CO<sub>2</sub>): <br>
       &nbsp; <br>
       &nbsp; </p>
-    <table cellpadding="3" cellspacing="3" border="3">
+    <table border="3" cellpadding="3" cellspacing="3">
       <tbody>
         <tr>
           <td><tt>X(Sr),xE</tt></td>
@@ -1637,7 +1634,7 @@ and
       &nbsp; <br>
       &nbsp; <br>
       &nbsp;
-      <table cols="3" width="73%" border="1">
+      <table cols="3" border="1" width="73%">
         <tbody>
           <tr>
             <td>Property of celestite</td>
