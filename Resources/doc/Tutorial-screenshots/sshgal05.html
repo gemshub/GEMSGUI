@@ -1,194 +1,193 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-  <title>GEMS2 Screenshots Page 5</title>
-  <meta http-equiv="content-type"
- content="text/html; charset=ISO-8859-1">
-  <meta name="author" content="PSI GEMS2 Development Team">
-  <meta name="description" content="Screenshot Gallery Tutorial p.5">
-</head>
-<body background="bgimg.png">
-<h1><img src="gems1.png" alt="" height="48" width="48"> <font
- color="#000066">GEM-Selektor version 2-PSI</font></h1>
-<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
-<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
- size="+3"> </font></tt></b></h2>
-<h2><b><tt><font size="+2"> </font></tt></b></h2>
-<p><big><a href="sshgal04.html"><font
- face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
- face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp;
-</font></big><a href="index.html"><big><font
- face="Helvetica, Arial, sans-serif">Back to Start Page</font> </big></a></p>
-<hr size="2" width="100%">
-<p style="font-weight: bold;"><font face="Helvetica, Arial, sans-serif">(9)
-The "System" module window (shown below) serves for a detailed setup of
-the model chemical system. <br>
-</font></p>
-<p><font face="Helvetica, Arial, sans-serif"><span
- style="font-weight: bold;">The "Compos" page</span><span
- style="font-weight: bold;">, </span>where you get after clicking on
-the
-</font><small><font face="Helvetica, Arial, sans-serif" size="+1"><small>"Bulk
-Composition" &nbsp;<img src="SetCompos.png" alt="SetComposButton"
- height="26" width="25"> toolbar button on "Single Thermodynamic
-System" dialog, <b>offers you an easiest way to express your "recipe"
-to be "cooked" in the chemical equilibrium "kitchen"</b>.</small></font></small>
-<br>
-</p>
-<p><img title="Compos Screenform (System Window)" src="sshgal-5-1.png"
- alt="PCO page of System window" style="width: 589px; height: 681px;"> </p>
-<p><font face="Helvetica, Arial, sans-serif">The </font><big><tt>CCvp</tt></big>
-<font face="Helvetica, Arial, sans-serif">list on the "Compos" page
-contains keys of all PCO records in your project database (see below
-about PCO).
-<br>
-</font></p>
-<p><font face="Helvetica, Arial, sans-serif">The </font><big><tt>xa_</tt></big>
-<font face="Helvetica, Arial, sans-serif">vector, shown above, contains
-the following recipe: 300 g of water; 300 kg of dry air; 1 g CaCO<sub>3</sub>;
-1 g FeCO</font><font face="Helvetica, Arial, sans-serif"><sub>3</sub>;
-1
-g MnCO<sub>3</sub>; and 0.03 mol NaCl. Codes to the left of </font><big><tt>xa_</tt></big>
-<font face="Helvetica, Arial, sans-serif">vector ("g" or "M") define
-units of measurement in which numbers in the</font> <big><tt>xa_</tt></big>
-<font face="Helvetica, Arial, sans-serif">vector will be taken to add
-the respective PCO to total bulk composition of the system. If you work
-with GEMS in parallel, enter this recipe into the Compos page. </font><br>
-</p>
-<p><font face="Helvetica, Arial, sans-serif"><b>(10) "PCO" stands for
-"Predefined Composition Object"</b> - a record that contains elemental
-stoichiometry
-of a commonly used ingredient, such as water, air, acid, base, mineral
-solid, or even rock or sediment, to put into the "equilibration
-pot".&nbsp;<br>
-Some PCO "Compos" records are provided in the GEMS-PSI default
-database;
-of course, you can create in your project database as many your own PCO
-records
-as you wish.</font> &nbsp;<font face="Helvetica, Arial, sans-serif">A
-Compos
-window dispalying the </font><big><tt>"AtmAirNit"</tt></big> <font
- face="Helvetica, Arial, sans-serif">PCO (you can get it by marking the
-PCO name in the list and pressing </font><big><tt>F7</tt></big><font
- face="Helvetica, Arial, sans-serif">) is shown below. </font><br>
-</p>
-<p><img src="sshgal-5-2.png" alt="Compos window" height="295"
- width="747"> <br>
-</p>
-<p><small><font face="Helvetica, Arial, sans-serif"><big>Note that in
-the
-screenshot above, the resulting PCO stoichiometry is normalized to 1 kg
-mass,</big></font></small><font face="Helvetica, Arial, sans-serif"> so
-that
-adding "1 mol" of this PCO is equivalent to adding 1 kg of "normative
-air
-with decoupled nitrogen". Vice versa, adding 2 g of this predefined
-composition
-will add 1/500 of the above stoichiometry (i.e., 0.000024951 mol of C,
-0.109459034
-mol of Nit and 0.029159874 mol of O) to bulk composition of the system.</font></p>
-<hr size="2" width="100%">
-<p><b><font face="Helvetica, Arial, sans-serif">(11) Now, imagine your
-model
-system as a pot where you put all necessary ingredients, close it,
-shake,
-and keep at temperature <i>T</i> and pressure <i>P</i> &nbsp;of
-interest
-long enough to get the "stew" equilibrate into a new phase assemblage. <br>
-</font></b></p>
-<p><font face="Helvetica, Arial, sans-serif"><img src="recipe.jpeg"
- alt="recipe" align="middle" height="155" width="207"> &nbsp;<big><b>&gt;&nbsp;
-Recipe &nbsp;&gt;</b></big>&nbsp;<img src="equilibrat.gif"
- alt="equilibration" align="middle" height="168" width="186"> <big><b>&nbsp;&gt;
-&nbsp; Equilibrium speciation</b></big> <br>
-</font></p>
-<p><b><font face="Helvetica, Arial, sans-serif">This is pretty similar
-to
-what happens in nature, what chemists do practically, and what the GEM
-IPM
-algorithm does mathematically.</font> </b><font
- face="Helvetica, Arial, sans-serif"><b>The GEMS code actually does it
-in
-two steps. </b><br>
-</font></p>
-<ol>
-  <li>
-    <p><font face="Helvetica, Arial, sans-serif">It sums input
-quantities of all ingredient stoichiometries up into a single
-vector&nbsp; <i><b>b</b></i>&nbsp; of total elemental bulk composition
-of the system (i.e. into an elemental "formula" of the whole system). </font></p>
-  </li>
-  <li>
-    <p><font face="Helvetica, Arial, sans-serif">The GEM IPM module
-splits
-the <i><b>b</b></i> &nbsp;vector into moles of phases&nbsp; <i><b>Xa</b></i>&nbsp;
-and their species&nbsp; <i><b>x</b></i>&nbsp; present at equilibrium
-state.&nbsp;</font></p>
-  </li>
-</ol>
-<p></p>
-<p> <font face="Helvetica, Arial, sans-serif">The first step is done
-(without running IPM) when you click upon a "Calculate bulk
-composition" &nbsp;<img src="RunBCC.png" alt="RunBCC button" height="20"
- width="20"> toolbar button on the <a
- href="sshgal04.html#SYSTEM_DIALOG">"Single Thermodynamic System"</a>
-dialog. You can check the result in the "IComp" page of "System" module
-window, as shown below (vector </font><big><tt>B_</tt></big>): </p>
-<p><font size="+1"><img src="sshgal-5-4.png"
- alt="Icomp page of System window" style="width: 597px; height: 420px;">
-<br>
-</font></p>
-<p><small><font face="Helvetica, Arial, sans-serif" size="+1"><small><br>
-After this BCC (Bulk Composition Calculation) operation, all
-ingredients
-(in our case, PCO additions) are already mixed into a single "brew"
-(vector
-B_). <br>
-</small></font></small></p>
-<p><small><font face="Helvetica, Arial, sans-serif" size="+1"><small><b>(12)
-To equilibrate this "brew in the pot" </b>(i.e. to perform the second
-step),
-switch again to </small></font></small><font
- face="Helvetica, Arial, sans-serif"><a
- href="sshgal04.html#SYSTEM_DIALOG">"Single Thermodynamic System"</a>
-dialog
-and click on a "Calculate equilibrium" <img src="RunIPM.png"
- alt="Run IPM button" height="20" width="20"> &nbsp; toolbar button.
-This will start the GEM IPM module, which displays an IPM Progress
-Dialog when it runs: </font></p>
-<p><font size="+1"><img src="sshgal-5-3.png"
- alt="ProgressDialog (IPM-2)" style="width: 318px; height: 494px;"> <br>
-</font></p>
-<p><small><font face="Helvetica, Arial, sans-serif" size="+1"><small><br>
-In a second or less, the IPM Progress Dialog will indicate that the
-IPM-2
-module has converged. Press on the "Accept" button to save the (now
-complete)
-SysEq record into your project database. <br>
-</small></font></small></p>
-<p><small><font face="Helvetica, Arial, sans-serif" size="+1"><small><b>Congratulations!
-Now, you can examine your first GEMS-calculated equilibrium</b>
-(proceed to the next page of this screenshot tutorial).&nbsp; <br>
-</small></font></small></p>
-<p><br>
-<a href="sshgal06.html"><b><font face="Helvetica, Arial, sans-serif">Next
-Page</font></b></a><br>
-</p>
-<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
-to main GEMS-PSI page</a></b> </font><br>
-<br>
-<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
-2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
-Support Team</a>.</font><br>
-<hr size="2" width="100%"><br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-</body>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+    <title>GEMS2 Screenshots Page 5</title>
+    <meta name="author" content="PSI GEMS2 Development Team">
+    <meta name="description" content="Screenshot Gallery Tutorial p.5">
+  </head>
+  <body background="bgimg.png">
+    <h1><img src="gems1.png" alt="" height="48" width="48"> GEM-Selektor version
+      3</h1>
+    <h2>SCREENSHOT GALLERY
+      TUTORIAL </h2>
+    <h2> </h2>
+    <p><a href="sshgal04.html">Previous Page</a> &nbsp; &nbsp; &nbsp; &nbsp;
+      &nbsp;
+      <a href="index.html">Back to Start Page </a></p>
+    <hr size="2" width="100%">
+    <p style="font-weight: bold;">(9)
+      The "System" module window (shown below) serves for a detailed setup of
+      the model chemical system. <br>
+    </p>
+    <p>The "Compos" page, where you get after clicking on
+      the
+      "Bulk
+      Composition" &nbsp;<img src="SetCompos.png" alt="SetComposButton" height="26"
+        width="25"> toolbar button on "Single Thermodynamic
+      System" dialog, offers you an easiest way to express your "recipe"
+      to be "cooked" in the chemical equilibrium "kitchen".&nbsp;</p>
+    <p>Click on the "Compos (xa_)" entry in the "Property" list at the left-hand
+      side. In "Selection" list, click once on entries "Aqua", "AtmAirNit",
+      "CaCO3", "FeCO3", "MnCO3" and "NaCl". These entries should remain
+      highlighted, and in the "Recipe Input" area, you should see a small
+      spreadsheet with all selected entries. In the "Quantity" column of that
+      spreadsheet, put 300 g of water (Aqua), 300 kg of air, 1 g of CaCO3, 1 g
+      of FeCO3, 1 g of MnCO3, and0.03 mol of NaCl, as show in the screen image
+      below. To change Units for NaCl from grams 'g' to moles 'M', double-click
+      on the entry (or select this entry and type space ' ') and select 'M' from
+      the drop-down list. In the "tname" row, type a comment telling what this
+      system should be in plain words. <br>
+    </p>
+    <p><img title="Recipe Dialog" src="sshgal-5-1.png" alt="PCO recipe dialog" style="width: 764px; height: 511px;">
+    </p>
+    <p>If you see the above recipe, click "Ok" to proceed. </p>
+    <p>It is important to realize that entries in the "Compos (xa_)" property
+      selection list are neither thermodynamic phases nor their components;
+      these entries are names of Predefined Composition Objects (PCO), kept as
+      "Compos" records in GEM-Selektor databases (in this case, in the
+      "Carbonate" project database).</p>
+    <p><span style="font-weight: bold;">(10)</span> PCO is a database record
+      that contains elemental
+      stoichiometry
+      of a commonly used ingredient, such as water, air, acid, base, mineral
+      solid, rock, or sediment, to put into the "equilibration
+      pot" to define the bulk composition of the whole system. <br>
+      Some PCO "Compos" records are provided in the GEM-Selektor default
+      database. Of course, you can create in your project database as many your
+      own PCO
+      records
+      as you wish. &nbsp;A
+      Compos
+      module window dispalying the "AtmAirNit" PCO is shown below (the full
+      record key is "AtmAirNit:GA:1kg_dry_Nit_air_simple_:"). <br>
+    </p>
+    <p><img style="width: 722px; height: 316px;" title="Compos AtmAirNit" src="sshgal-5-2.png"
+        alt="Compos window"> <br>
+    </p>
+    <p>Note that in the above screen image, the resulting PCO stoichiometry is
+      normalized to 1 kg
+      mass, so
+      that
+      adding "1 mol" of this PCO is equivalent to adding 1 kg of "normative
+      air
+      with decoupled nitrogen". Vice versa, adding 2 g of this predefined
+      composition
+      will add 1/500 of the above stoichiometry (i.e., 0.000024951 mol of C,
+      0.109459034
+      mol of Nit and 0.029159874 mol of O) to bulk composition of the system. <br>
+      (you can get it by marking the
+      PCO name in the list and pressing F7)</p>
+    <hr size="2" width="100%">
+    <p><span style="font-weight: bold;">(11) Now, imagine your
+        model
+        system as a pot where you put all necessary ingredients, close it,
+        shake,
+        and keep at temperature T and pressure P &nbsp;of
+        interest
+        long enough to get the "stew" equilibrating into a new phase assemblage.
+        <br>
+      </span>
+    </p>
+    <span style="font-weight: bold;">
+    </span>
+    <p><span style="font-weight: bold;"><img src="recipe.jpeg" alt="recipe" align="middle"
+          height="155" width="207"> &nbsp;&gt;&nbsp;
+        Recipe &nbsp;&gt;&nbsp;<img src="equilibrat.gif" alt="equilibration" align="middle"
+          height="168" width="186"> &nbsp;&gt;
+        &nbsp; Equilibrium speciation <br>
+      </span>
+    </p>
+    <span style="font-weight: bold;">
+    </span>
+    <p>This is pretty similar
+      to
+      what happens in nature, what chemists do practically, and what the GEM
+      IPM
+      algorithm does mathematically. The GEM-Selektor code actually does it
+      in
+      two steps. <font face="Helvetica, Arial, sans-serif"><br>
+      </font></p>
+    <ol>
+      <li>
+        <p>It sums input
+          quantities of all ingredient stoichiometries up into a single
+          vector&nbsp; <span style="font-style: italic; font-weight: bold;">b</span>&nbsp;
+          of total elemental bulk composition
+          of the system (i.e. into an elemental "formula" of the whole system).
+        </p>
+      </li>
+      <li>
+        <p>The GEM IPM module
+          splits
+          the <span style="font-style: italic; font-weight: bold;">b</span>
+          &nbsp;vector into moles of phases&nbsp; <span style="font-style: italic; font-weight: bold;">Xa</span>&nbsp;
+and
+          their species&nbsp; <span style="font-weight: bold; font-style: italic;">x</span>&nbsp;
+          present at equilibrium
+          state.&nbsp;</p>
+      </li>
+    </ol>
+    <p></p>
+    <p> The first step is done
+      (without running IPM algorithm) when you click upon a "Calculate bulk
+      composition" &nbsp;<img src="CalculateBCCIcon24.png" alt="RunBCC button" height="20"
+        width="20"> toolbar button on the <a href="sshgal04.html#SYSTEM_DIALOG">"Single
+        Thermodynamic System"</a>
+      dialog. You can check the result in the "IComp" page of "System" module
+      window, as shown below (vector B_). To open this window, use the "Data" "Detailed
+      input recipe..." menu item. </p>
+    <p><font size="+1"><img src="sshgal-5-4.png" alt="Icomp page of System window"
+          style="width: 647px; height: 410px;">
+        <br>
+      </font></p>
+    <p><small><font face="Helvetica, Arial, sans-serif" size="+1"><small><br>
+          </small></font></small>We see that after the Calcuclate Bulk
+      Composition" operation, all
+      ingredients
+      (in our case, PCO additions in the recipe) are already mixed into a single
+      "brew"
+      (vector
+      B_). <br>
+    </p>
+    <p><span style="font-weight: bold;">(12)
+        To equilibrate this "brew in the pot"</span>,
+      close the "System" window and click on a "Calculate equilibrium" <img src="CalculateGEMIcon24.png"
+        alt="Run IPM button" height="20" width="20"> &nbsp; toolbar button.
+      This will start the GEM IPM algorithm module, which displays an IPM
+      Progress
+      Dialog: </p>
+    <p><font size="+1"><img src="sshgal-5-3.png" alt="ProgressDialog (IPM-2)" style="width: 326px; height: 498px;">
+        <br>
+      </font></p>
+    <p><small><font face="Helvetica, Arial, sans-serif" size="+1"><small><br>
+          </small></font></small>In a fraction of second, the IPM Progress
+      Dialog will indicate that the GEM has converged. Press on the "Accept"
+      button to save the (now
+      complete)
+      SysEq record into your project database. <br>
+    </p>
+    <p><span style="font-weight: bold;">Congratulations!
+      </span>Now, you can examine your first GEMS-calculated equilibrium; just
+      proceed to the next page of this screenshot tutorial.&nbsp; <br>
+    </p>
+    <p><br>
+      <a href="sshgal06.html">Next
+        Page</a><br>
+    </p>
+    <a href="../index.html">Back
+      to main GEM-Selektor page</a> <br>
+    <br>
+    ©
+    2003,2014 <a href="../teamhist.html">GEMS Development Team</a>.<br>
+    <hr size="2" width="100%"><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </body>
 </html>

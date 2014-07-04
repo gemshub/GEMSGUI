@@ -310,7 +310,11 @@ Resources/data/units.ini eol=lf
 Resources/data/vis_cn.ini eol=lf
 Resources/data/vis_od.ini eol=lf
 Resources/data/viz_cndoc.txt eol=lf
+Resources/doc/Tutorial-screenshots/CalculateBCCIcon24.png -text
+Resources/doc/Tutorial-screenshots/CalculateGEMIcon24.png -text
 Resources/doc/Tutorial-screenshots/ChapterSection.PDF -text
+Resources/doc/Tutorial-screenshots/DatabaseModeIcon24.png -text
+Resources/doc/Tutorial-screenshots/EquilibriumModeIcon24.png -text
 Resources/doc/Tutorial-screenshots/GEMtableau.png -text
 Resources/doc/Tutorial-screenshots/GtDemoPage1.png -text
 Resources/doc/Tutorial-screenshots/GtDemoPage2.png -text
@@ -322,6 +326,7 @@ Resources/doc/Tutorial-screenshots/RunBCC.png -text
 Resources/doc/Tutorial-screenshots/RunIPM.png -text
 Resources/doc/Tutorial-screenshots/SDrefPage.png -text
 Resources/doc/Tutorial-screenshots/SetCompos.png -text
+Resources/doc/Tutorial-screenshots/ShowHelpWindowIcon24.png -text
 Resources/doc/Tutorial-screenshots/arrow_left1.png -text
 Resources/doc/Tutorial-screenshots/arrow_right1.png -text
 Resources/doc/Tutorial-screenshots/bgimg.png -text
@@ -495,6 +500,7 @@ Resources/doc/Tutorial-screenshots/sshgal-27-6.png -text
 Resources/doc/Tutorial-screenshots/sshgal-27-7.png -text
 Resources/doc/Tutorial-screenshots/sshgal-27-8.png -text
 Resources/doc/Tutorial-screenshots/sshgal-27-9.png -text
+Resources/doc/Tutorial-screenshots/sshgal-3-0.png -text
 Resources/doc/Tutorial-screenshots/sshgal-3-1.png -text
 Resources/doc/Tutorial-screenshots/sshgal-3-2.png -text
 Resources/doc/Tutorial-screenshots/sshgal-3-3.png -text
