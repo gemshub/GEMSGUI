@@ -1,160 +1,146 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-  <title>GEMS2 Screenshots Page 10</title>
-  <meta http-equiv="content-type"
- content="text/html; charset=ISO-8859-1">
-  <meta name="author" content="PSI GEMS2 Development Team">
-  <meta name="description" content="Screenshot Gallery Tutorial p.10">
-</head>
-<body background="bgimg.png">
-<h1><img src="gems1.png" alt="" height="48" width="48"> <font
- color="#000066">GEM-Selektor version 2-PSI</font></h1>
-<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
-<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
- size="+3"> </font></tt></b></h2>
-<h2><b><tt><font size="+2"> </font></tt></b></h2>
-<p><big><a href="sshgal09.html"><font
- face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
- face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; </font></big><a href="index.html"><big><font
- face="Helvetica, Arial, sans-serif">Back to
-Start Page</font> </big></a></p>
-<hr size="2" width="100%">
-<p><font face="Helvetica, Arial, sans-serif"><span
- style="font-weight: bold;">(21) Let us now try how&nbsp; the GEMS code
-performs "batch" model runs, or process simulations, where many
-equilibrium states are generated from a regular change in T,P, bulk
-composition, or other input
-data. </span></font><br>
-<span style="font-family: helvetica,arial,sans-serif;"><br>
-First of all, a process simulation requires one "parent" chemical
-system definition with calculated equilibrium state to be present in
-the project database. Here, we will create a "parent" system by cloning
-the previously calculated SysEq record for the closed carbonate system.
-</span><font face="Helvetica, Arial, sans-serif">&nbsp;<br>
-</font></p>
-<p><font face="Helvetica, Arial, sans-serif">In the "Single
-Thermodynamic System" dialog, select a Record -&gt; New("Clone") menu
-command, and change the old record key </font><big><tt>"Carbonate:G:CaFeMnHypC:1:0:1:25:0:"</tt></big><font
- face="Helvetica, Arial, sans-serif"> to a new one: </font><big><tt>"Carbonate:G:CaFeMnHypC:2:0:1:25:0:"</tt></big>.
-<br>
-</p>
-<p><font face="Helvetica, Arial, sans-serif">Press "Ok", change the
-name
-of the system and add 0.01 mol CH<sub>4</sub> (methane), as shown
-below. </font><br>
-<br>
-</p>
-<p>&nbsp;<img src="sshgal-10-1.png" alt="Compos Parent"
- style="width: 597px; height: 674px;"> </p>
-<p><font face="Helvetica, Arial, sans-serif">Now, close the "System"
-window, </font><font face="Helvetica, Arial, sans-serif">switch to the
-"Single Thermodynamic System" dialog,</font> <font size="+1"><small><font
- face="Helvetica, Arial, sans-serif">and click on the "Calculate GEM
-IPM" &nbsp; </font></small></font><font
- face="Helvetica, Arial, sans-serif"><img src="RunIPM.png"
- alt="Run IPM button" height="20" width="20"> </font><font size="+1"><small><font
- face="Helvetica, Arial, sans-serif">&nbsp;&nbsp; toolbar button. <br>
-</font></small></font></p>
-<p><font size="+1"><small><font face="Helvetica, Arial, sans-serif">Accept
-the calculation results after the IPM module has converged. You should
-see now something like that shown in a screenshot below (if you expand
-some phases):</font></small></font><br>
-</p>
-<p><br>
-<img src="sshgal-10-2.png" alt="Results Parent"
- style="width: 818px; height: 689px;">
-<br>
-</p>
-<p><br>
-<font face="Helvetica, Arial, sans-serif">The presence of a stable
-Graphite phase (0.016 mol) indicates that this system is completely
-reduced. This is also evident from mainly methane-nitrogen composition
-of the gas phase at rather high pH = 9.15, low fugacity of carbon
-dioxide <i>f</i> CO<sub>2</sub>, and&nbsp; extremely low&nbsp; <i>f</i>
-O<sub>2</sub> = 1.4e-74. <br>
-</font></p>
-<p><font face="Helvetica, Arial, sans-serif">Siderite is now
-undersaturated, and iron is present mainly in Magnetite, at rather low
-total dissolved Fe<sub>AQ</sub> = 1.3e-7 molal. You can see this on the
-EqIC page of EqDemo window accessible </font><small><font
- face="Helvetica, Arial, sans-serif" size="+1"><small>by clicking the </small></font></small><font
- size="+1"><small><font face="Helvetica, Arial, sans-serif"> "Detailed
-results" <img src="ordertool.png" alt="Show Eqstat button" height="24"
- width="24"> &nbsp; toolbar button</font></small></font>, <font
- face="Helvetica, Arial, sans-serif">as shown below.</font> <br>
-</p>
-<p><img src="sshgal-10-3.png" alt="EqDemo parent"
- style="width: 651px; height: 427px;"> <br>
-</p>
-<p><br>
-<font face="Helvetica, Arial, sans-serif"><b>(22) This system seems to
-be a nice start point for a stepwise addition of an oxidant (e.g. O<sub>2</sub>)
-to the closed system. </b><br>
-</font></p>
-<p><font face="Helvetica, Arial, sans-serif">The objective of&nbsp;</font><font
- face="Helvetica, Arial, sans-serif">performing such a titration with O<sub>2</sub>
-</font><font face="Helvetica, Arial, sans-serif">is usually to see how
-changing redox conditions may influence the equilibrium phase
-assemblage, or solubilities of Ca, Fe, Mn, pH and Eh in the aqueous
-solution. </font></p>
-<p><font face="Helvetica, Arial, sans-serif">Before proceeding with
-setup of the Process Simulator to perform the O<sub>2</sub> titration,
-we must know how much added O<sub>2</sub> would be sufficient to
-completely oxidize this system. Such an assessment can be done easily
-by the "trial and error" method. &nbsp;<br>
-</font></p>
-<p><font face="Helvetica, Arial, sans-serif">Just open again the Compos
-page of System window, add 0.7 g O<sub>2</sub> to the recipe there, and
-re-calculate the equilibrium. You should see that Graphite and
-Magnetite phases disappear, but Rhodochrosite is still there; this
-means that the system is not yet
-completely oxidized. Change the O<sub>2</sub> addition to 1 g and
-calculate
-the equilibrium again; now, pyrolusite appears instead of
-rhodochrosite,
-and the system is completely oxidized. <br>
-</font></p>
-<p><font face="Helvetica, Arial, sans-serif">So, it is sufficient to
-add O<sub>2</sub>
-to the bulk composition in 0.02 g steps up to 1 g, which will give us
-51
-simulation point. </font><br>
-</p>
-<p><font face="Helvetica, Arial, sans-serif">One more consideration is
-that Manganite or Hausmannite phases are more likely to precipitate
-than Pyrolusite in natural waters; this means that we have to disable
-the Pyrolusite phase. On the "Input: System Definition" tab of the
-"Single Thermodynamic System" dialog, expand the "Pyrolusite" and enter
-57080 (J/mol, or 10 pK units)
-surplus in the respective cell in the "G0 corr." column. Recalculate
-the
-equilibrium and check that &nbsp;Manganite appears instead of
-Pyrolusite.
-<br>
-</font></p>
-<p><font face="Helvetica, Arial, sans-serif"> Now, our parent system is
-ready - do not forget to remove the "trial" O<sub>2</sub> addition,
-recalculate, and save the SysEq record. </font><br>
-</p>
-<p> <a href="sshgal11.html"><b><font
- face="Helvetica, Arial, sans-serif">Next Page</font></b></a><br>
-</p>
-<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
-to main GEMS-PSI page</a></b> </font><br>
-<br>
-<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
-2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
-Support Team</a>.</font><br>
-<hr size="2" width="100%"><br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-</body>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+    <title>GEMS2 Screenshots Page 10</title>
+    <meta name="author" content="PSI GEMS2 Development Team">
+    <meta name="description" content="Screenshot Gallery Tutorial p.10">
+  </head>
+  <body background="bgimg.png">
+    <h1><img src="gems1.png" alt="" height="48" width="48"> GEM-Selektor version
+      3</h1>
+    <h2>SCREENSHOT GALLERY
+      TUTORIAL </h2>
+    <h2> </h2>
+    <p><a href="sshgal09.html">Previous Page</a> &nbsp; &nbsp; &nbsp; &nbsp;
+      &nbsp; <a href="index.html">Back to
+        Start Page </a></p>
+    <hr size="2" width="100%">
+    <p><span style="font-weight: bold;">(21)</span> Let us now try how&nbsp; the
+      GEMS code
+      performs "batch" model runs, or process simulations, where many
+      equilibrium states are generated from a regular change in T,P, bulk
+      composition, or other input
+      data. <br>
+      <br>
+      First of all, a process simulation requires one "parent" chemical
+      system definition with calculated equilibrium state to be present in
+      the project database. Here, we will create a "parent" system by cloning
+      the previously calculated SysEq record for the closed carbonate system.
+      &nbsp;<br>
+    </p>
+    <p>In the "Single
+      Thermodynamic System" dialog, click the "Clone" toolbar button&nbsp; <img
+        alt="Clone button" src="NewCloneRecordIcon24.png">&nbsp; or select a
+      Record -&gt; New("Clone") menu
+      command, and change the old record key "Carbonate:G:CaFeMnHypC:0:0:1:25:0:"
+      to a new one: "Carbonate:G:CaFeMnHypC:1:0:1:25:0:".
+      <br>
+    </p>
+    <p>In the Recipe Dialog, change the
+      comment, and add 0.01 mol CH4 (methane), as shown
+      below. <br>
+      <br>
+    </p>
+    <p>&nbsp;<img src="sshgal-10-1.png" alt="Compos Parent" style="width: 764px; height: 511px;">
+    </p>
+    <p>Now, click "Ok" to switch to the
+      "Single Thermodynamic System" dialog, and click on the "Calculate GEM
+      IPM" &nbsp; <img src="CalculateGEMIcon24.png" alt="Run IPM button" height="20"
+        width="20"> &nbsp;&nbsp; toolbar button. <br>
+    </p>
+    <p>Accept
+      the calculation results after the GEM IPM has converged. You should
+      see now something like that&nbsp; below (expand
+      some phases):<br>
+    </p>
+    <p><br>
+      <img src="sshgal-10-2.png" alt="Results Parent" style="width: 772px; height: 560px;">
+      <br>
+    </p>
+    <p><br>
+      The presence of a stable
+      Graphite phase (0.016 mol) indicates that this system is completely
+      reduced. This is also evident from mainly methane-nitrogen composition
+      of the gas phase at rather high pH = 9.15, low fugacity of carbon
+      dioxide <span style="font-style: italic;">f</span> CO<sub>2</sub>,
+      and&nbsp; extremely low&nbsp; <span style="font-style: italic;">f</span>
+      O<sub>2</sub> = 1.4e-74. <br>
+    </p>
+    <p>Siderite is now
+      undersaturated, and iron is present mainly in Magnetite, at rather low
+      total dissolved Fe<sub>AQ</sub> = 1.3e-7 molal. You can see this on the
+      EqIC page of EqDemo window accessible by clicking the "Open EqDemo window"
+      <img src="ShowGEMResultsIcon24.png" alt="Show Eqstat button" height="24" width="24">
+      &nbsp; toolbar button, as shown below. <br>
+    </p>
+    <p><img src="sshgal-10-3.png" alt="EqDemo parent" style="width: 783px; height: 390px;">
+      <br>
+    </p>
+    <p><br>
+      <span style="font-weight: bold;">(22)</span> This system seems to
+      be a nice start point for a stepwise addition of an oxidant (e.g. O<sub>2</sub>)
+      to the closed system. <br>
+    </p>
+    <p>The objective of&nbsp;performing such a titration with oxygen
+      is usually to see how
+      changing redox conditions may influence the equilibrium phase
+      assemblage, or solubilities of Ca, Fe, Mn, pH and Eh in the aqueous
+      solution. </p>
+    <p>Before proceeding with
+      the setup of the Process Simulator to perform the O<sub>2</sub> titration,
+      we must find out how much added O<sub>2</sub> would be sufficient to
+      completely oxidize this system. Such an assessment can be done easily
+      by the "trial and error" method. &nbsp;<br>
+    </p>
+    <p>Just open again the Compos
+      page of System window, add 0.7 g O<sub>2</sub> to the recipe there, and
+      re-calculate the equilibrium. You should see that Graphite and
+      Magnetite phases disappear, but Rhodochrosite is still there; this
+      means that the system is not yet
+      completely oxidized. Change the O<sub>2</sub> addition to 1 g and
+      calculate
+      the equilibrium again; now, pyrolusite appears instead of
+      rhodochrosite,
+      and the system is completely oxidized. <br>
+    </p>
+    <p>So, it is sufficient to
+      add O<sub>2</sub>
+      to the bulk composition in 0.01 g steps up to 1 g, which will give us 101
+      simulation points. <br>
+    </p>
+    <p>One more consideration is
+      that Manganite or Hausmannite phases are more likely to precipitate
+      than Pyrolusite in natural waters; this means that we have to disable
+      the Pyrolusite phase. To do this, in the
+      "Single Thermodynamic System" dialog, click on the "Input:System
+      Definition" tab; expand the "Pyrolusite" phase; and, in the "Upper_KC"
+      cell for Pyrolusite, enter 0 instead of the default value 1e+006.&nbsp;
+      After that, r0ecalculate
+      the
+      equilibrium and check that &nbsp;Manganite appears instead of
+      Pyrolusite.
+      <br>
+    </p>
+    <p> Now, our parent system is
+      ready - do not forget to remove the "trial" O<sub>2</sub> addition,
+      recalculate, and save the SysEq record. <br>
+    </p>
+    <p> <a href="sshgal11.html">Next Page</a><br>
+    </p>
+    <a href="../index.html">Back
+      to main GEM-Selektor page</a> <br>
+    <br>
+    ©
+    2003,2014&nbsp; <a href="../teamhist.html">GEMS Development Team</a>.<br>
+    <hr size="2" width="100%"><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </body>
 </html>

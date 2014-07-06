@@ -1,170 +1,149 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-  <title>GEMS2 Screenshots Page 12</title>
-  <meta http-equiv="content-type"
- content="text/html; charset=ISO-8859-1">
-  <meta name="author" content="PSI GEMS2 Development Team">
-  <meta name="description" content="Screenshot Gallery Tutorial p.12">
-</head>
-<body background="bgimg.png">
-<h1><img src="gems1.png" alt="" height="48" width="48"> <font
- color="#000066">GEM-Selektor version 2-PSI</font></h1>
-<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
-<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
- size="+3"> </font></tt></b></h2>
-<h2><b><tt><font size="+2"> </font></tt></b></h2>
-<p><big><a href="sshgal11.html"><font
- face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
- face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp;
-</font></big><a href="index.html"><big><font
- face="Helvetica, Arial, sans-serif">Back to Start Page</font> </big></a></p>
-<hr size="2" width="100%">
-<p><span style="font-family: helvetica,arial,sans-serif;"><b>(24) How
-to
-set up iterators and scripts in your first Process Simulator. </b><br>
-</span></p>
-<span style="font-family: helvetica,arial,sans-serif;">What remains is
-to set the Process iterators, provide the simulation- and the
-data-sampling math scripts, run the simulation, and plot the results. <br>
-<br>
-The first iterator <b>iTm</b> (visible on Page 1 of the Process
-window) defines how the program will number the generated system
-definitions (CSD). If we start with CSD #1000 and will produce 51
-points then we will end up with CSD #1500 at increment 10. <br>
-<br>
-Pressure (1 bar) and temperature (25 C) will be kept constant, so there
-is nothing to change in the <b>iP</b> and <b>iTC</b> iterators. <br>
-<br>
-The <b>iNv</b> iterator should usually be set the same as the last
-field of the "parent" SysEq record key, i.e. 0, 0, 0. <br>
-<br>
-The<b> iNu</b> iterator should contain the range ( 0 to 1 g) and the
-linear increment (0.02 g) for additions of O<sub>2</sub> to bulk
-composition of the
-parent system. &nbsp;<br>
-<br>
-After you have set the iterators, Page 1 of the Process window should
-look like this: <br>
-<br>
-<img src="sshgal-12-1.png" alt="Process Iterators"
- style="width: 621px; height: 478px;"> <br>
-<br>
-<br>
-A&nbsp;large (still empty) field at the bottom should contain a math
-script that tells the program what and how to change during the process
-simulation. To facilitate writing of such scripts, the GEMS code is
-provided with the "Template script library", accessible via the "Help"
-"Scripts..." menu command or the <big><tt>F3</tt></big> keystroke.
-Press <big><tt>F3</tt></big> to see
-the following dialog: <br>
-<br>
-<img src="sshgal-12-2.png" alt="Template scripts" height="327"
- width="540"> <br>
-<br>
-<br>
-Select a suitable template script for incremental titrations, as shown
-above, and press "Ok". &nbsp;This will open a SDref window: <br>
-<br>
-<img src="sshgal-12-3.png" alt="SDref page 1" height="497" width="641">
-<br>
-<br>
-<br>
-The template script itself is visible on Page 2 of the SDref window: <br>
-<br>
-<img src="sshgal-12-4.png" alt="SDref page 2" height="503" width="606">
-<br>
-<br>
-Read the comments, then mark the script (with left mouse key pressed)
-as shown above, and press &nbsp;<big><tt>Ctrl-C</tt></big> &nbsp;to
-take it
-into clipboard. <br>
-<br>
-Switch to Page 1 of the Process window, click on the big <big><tt>P_expr</tt></big>
-field and press <big><tt>Ctrl-V</tt></big>&nbsp; to paste the text
-there. <br>
-<br>
-Now you have to edit two lines: put <big><tt>O2</tt></big> instead of <big><tt>CaO</tt></big>
-(because we want to add oxygen and not lime), and uncomment (remove the
-<big><tt>$</tt></big> character) the next line to collect additions of
-oxygen into the <big><tt>modC</tt></big> vector. <br>
-<br>
-The final appearance of Page 1 should be like this: <br>
-<br>
-<img src="sshgal-12-5.png" alt="Process Script 1" height="463"
- width="761"> <br>
-<br>
-Please, note that the first and the last operators are not really
-needed (commented out) - the program will perform the same operations
-automatically.
-These operators are present for showing what the script actually does.
-&nbsp;An
-internal index&nbsp; <big><tt>J</tt></big> &nbsp;indicates the current
-process
-simulation point and will also be incremented automatically. The&nbsp; <big><tt>modC</tt></big>
-&nbsp;array is visible to the right of the script - there we will
-collect
-the O<sub>2</sub> increment (in grams) for each point for the
-subsequent
-plotting.&nbsp; <br>
-<br>
-Now, switch to Page 2 where we have to provide another script for data
-sampling and plotting (in the large <big><tt>pgExpr</tt></big> text
-field
-at the bottom). <br>
-<br>
-Just as &nbsp;for the first time, press <big><tt>F3</tt></big> and
-select
-a&nbsp; "<big><tt>mscript-plot-aqueous:0001:proces:</tt></big>" record
-from
-the list. <br>
-<br>
-On page 2 of the appearing SDref record, mark and copy (<big><tt>Ctrl-C</tt></big>)
-the first five lines, then switch back to the Process window and paste (<big><tt>Ctrl-V</tt></big>)
-the text into the <big><tt>pgExpr</tt></big> field. Edit the script as
-shown below: <br>
-<br>
-<img src="sshgal-12-6.png" alt="Sampling script"
- style="width: 726px; height: 499px;"> <br>
-<br>
-The <big><tt>xp</tt></big> and <big><tt>yp</tt></big> arrays are
-accessible on the "Graph" page of the Process window.&nbsp; The <big><tt>lgm_t,
-pH</tt></big> and <big><tt>pe</tt></big> data objects can be seen on
-pages of the EqDemo window that can be opened by </span><small><font
- face="Helvetica, Arial, sans-serif" size="+1"><small>clicking the </small></font></small><font
- size="+1"><small><font face="Helvetica, Arial, sans-serif"> "Detailed
-results" <img src="ordertool.png" alt="Show Eqstat button" height="24"
- width="24"> &nbsp; toolbar</font></small></font><span
- style="font-family: helvetica,arial,sans-serif;"> button on the
-"Single
-Termodynamic System" dialog. &nbsp;Writing <big><tt>"0 - pH"</tt></big>
-instead
-of <big><tt>"-pH"</tt></big> is required by the syntax of GEMS math
-scripts.
-&nbsp;<br>
-<br>
-<b>We are now ready to run the Process simulator</b>.</span>
-<p> </p>
-<p><br>
-<a href="sshgal13.html"><b><font face="Helvetica, Arial, sans-serif">Next
-Page</font></b></a><br>
-</p>
-<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
-to main GEMS-PSI page</a></b> </font><br>
-<br>
-<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
-2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
-Support Team</a>.</font><br>
-<hr size="2" width="100%"><br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-</body>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+    <title>GEMS2 Screenshots Page 12</title>
+    <meta name="author" content="PSI GEMS2 Development Team">
+    <meta name="description" content="Screenshot Gallery Tutorial p.12">
+  </head>
+  <body background="bgimg.png">
+    <h1><img src="gems1.png" alt="" height="48" width="48"> GEM-Selektor version
+      3</h1>
+    <h2>SCREENSHOT GALLERY
+      TUTORIAL </h2>
+    <h2> </h2>
+    <p><a href="sshgal11.html">Previous Page</a> &nbsp; &nbsp; &nbsp; &nbsp;
+      &nbsp;
+      <a href="index.html">Back to Start Page </a></p>
+    <hr size="2" width="100%">
+    <p>(24) How
+      to
+      set up iterators and scripts in your first Process Simulator. <br>
+    </p>
+    What remains is
+    to set the Process iterators, provide the simulation- and the
+    data-sampling math scripts, run the simulation, and plot the results. <br>
+    <br>
+    <br>
+    <br>
+    After you have set the iterators, Page 1 of the Process window should
+    look like this: <br>
+    <br>
+    <img src="sshgal-12-1.png" alt="Process Iterators" style="width: 621px; height: 478px;">
+    <br>
+    <br>
+    <br>
+    A&nbsp;large (still empty) field at the bottom should contain a math
+    script that tells the program what and how to change during the process
+    simulation. To facilitate writing of such scripts, the GEMS code is
+    provided with the "Template script library", accessible via the "Help"
+    "Scripts..." menu command or the F3 keystroke.
+    Press F3 to see
+    the following dialog: <br>
+    <br>
+    <img src="sshgal-12-2.png" alt="Template scripts" height="327" width="540">
+    <br>
+    <br>
+    <br>
+    Select a suitable template script for incremental titrations, as shown
+    above, and press "Ok". &nbsp;This will open a SDref window: <br>
+    <br>
+    <img src="sshgal-12-3.png" alt="SDref page 1" height="497" width="641">
+    <br>
+    <br>
+    <br>
+    The template script itself is visible on Page 2 of the SDref window: <br>
+    <br>
+    <img src="sshgal-12-4.png" alt="SDref page 2" height="503" width="606">
+    <br>
+    <br>
+    Read the comments, then mark the script (with left mouse key pressed)
+    as shown above, and press &nbsp;Ctrl-C &nbsp;to
+    take it
+    into clipboard. <br>
+    <br>
+    Switch to Page 1 of the Process window, click on the big P_expr
+    field and press Ctrl-V&nbsp; to paste the text
+    there. <br>
+    <br>
+    Now you have to edit two lines: put O2 instead of CaO
+    (because we want to add oxygen and not lime), and uncomment (remove the
+    $ character) the next line to collect additions of
+    oxygen into the modC vector. <br>
+    <br>
+    The final appearance of Page 1 should be like this: <br>
+    <br>
+    <img src="sshgal-12-5.png" alt="Process Script 1" height="463" width="761">
+    <br>
+    <br>
+    Please, note that the first and the last operators are not really
+    needed (commented out) - the program will perform the same operations
+    automatically.
+    These operators are present for showing what the script actually does.
+    &nbsp;An
+    internal index&nbsp; J &nbsp;indicates the current
+    process
+    simulation point and will also be incremented automatically. The&nbsp; modC
+    &nbsp;array is visible to the right of the script - there we will
+    collect
+    the O2 increment (in grams) for each point for the
+    subsequent
+    plotting.&nbsp; <br>
+    <br>
+    Now, switch to Page 2 where we have to provide another script for data
+    sampling and plotting (in the large pgExpr text
+    field
+    at the bottom). <br>
+    <br>
+    Just as &nbsp;for the first time, press F3 and
+    select
+    a&nbsp; "mscript-plot-aqueous:0001:proces:" record
+    from
+    the list. <br>
+    <br>
+    On page 2 of the appearing SDref record, mark and copy (Ctrl-C)
+    the first five lines, then switch back to the Process window and paste
+    (Ctrl-V)
+    the text into the pgExpr field. Edit the script as
+    shown below: <br>
+    <br>
+    <img src="sshgal-12-6.png" alt="Sampling script" style="width: 726px; height: 499px;">
+    <br>
+    <br>
+    The xp and yp arrays are
+    accessible on the "Graph" page of the Process window.&nbsp; The lgm_t,
+    pH and pe data objects can be seen on
+    pages of the EqDemo window that can be opened by clicking the "Detailed
+    results" <img src="ordertool.png" alt="Show Eqstat button" height="24" width="24">
+    &nbsp; toolbar button on the
+    "Single
+    Termodynamic System" dialog. &nbsp;Writing "0 - pH"
+    instead
+    of "-pH" is required by the syntax of GEMS math
+    scripts.
+    &nbsp;<br>
+    <br>
+    We are now ready to run the Process simulator.
+    <p> </p>
+    <p><br>
+      <a href="sshgal13.html">Next
+        Page</a><br>
+    </p>
+    <a href="../index.html">Back
+      to main GEMS-PSI page</a> <br>
+    <br>
+    ©
+    2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
+      Support Team</a>.<br>
+    <hr size="2" width="100%"><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </body>
 </html>

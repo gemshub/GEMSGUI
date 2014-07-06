@@ -319,6 +319,7 @@ Resources/doc/Tutorial-screenshots/GEMtableau.png -text
 Resources/doc/Tutorial-screenshots/GtDemoPage1.png -text
 Resources/doc/Tutorial-screenshots/GtDemoPage2.png -text
 Resources/doc/Tutorial-screenshots/IcompPage.png -text
+Resources/doc/Tutorial-screenshots/NewCloneRecordIcon24.png -text
 Resources/doc/Tutorial-screenshots/PhasePage.png -text
 Resources/doc/Tutorial-screenshots/PhaselistDialog.png -text
 Resources/doc/Tutorial-screenshots/ProcessDialog.png -text
@@ -326,7 +327,9 @@ Resources/doc/Tutorial-screenshots/RunBCC.png -text
 Resources/doc/Tutorial-screenshots/RunIPM.png -text
 Resources/doc/Tutorial-screenshots/SDrefPage.png -text
 Resources/doc/Tutorial-screenshots/SetCompos.png -text
+Resources/doc/Tutorial-screenshots/ShowGEMResultsIcon24.png -text
 Resources/doc/Tutorial-screenshots/ShowHelpWindowIcon24.png -text
+Resources/doc/Tutorial-screenshots/SysEqModuleIcon24.png -text
 Resources/doc/Tutorial-screenshots/arrow_left1.png -text
 Resources/doc/Tutorial-screenshots/arrow_right1.png -text
 Resources/doc/Tutorial-screenshots/bgimg.png -text
@@ -349,6 +352,8 @@ Resources/doc/Tutorial-screenshots/sshgal-11-3.png -text
 Resources/doc/Tutorial-screenshots/sshgal-11-4.png -text
 Resources/doc/Tutorial-screenshots/sshgal-11-5.png -text
 Resources/doc/Tutorial-screenshots/sshgal-11-6.png -text
+Resources/doc/Tutorial-screenshots/sshgal-11-7.png -text
+Resources/doc/Tutorial-screenshots/sshgal-11-8.png -text
 Resources/doc/Tutorial-screenshots/sshgal-12-1.png -text
 Resources/doc/Tutorial-screenshots/sshgal-12-2.png -text
 Resources/doc/Tutorial-screenshots/sshgal-12-3.png -text

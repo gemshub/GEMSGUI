@@ -1,123 +1,123 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-  <title>GEMS2 Screenshots Page 8</title>
-  <meta http-equiv="content-type"
- content="text/html; charset=ISO-8859-1">
-  <meta name="author" content="PSI GEMS2 Development Team">
-  <meta name="description" content="Screenshot Gallery Tutorial p.8">
-</head>
-<body background="bgimg.png">
-<h1><img src="gems1.png" alt="" height="48" width="48"> <font
- color="#000066">GEM-Selektor version 2-PSI</font></h1>
-<h2><font face="Helvetica, Arial, sans-serif">SCREENSHOT GALLERY</font>
-<font face="Helvetica, Arial, sans-serif">TUTORIAL</font><b><tt><font
- size="+3"> </font></tt></b></h2>
-<h2><b><tt><font size="+2"> </font></tt></b></h2>
-<p><big><a href="sshgal07.html"><font
- face="Helvetica, Arial, sans-serif">Previous Page</font></a></big><big><font
- face="Helvetica, Arial, sans-serif"> &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; </font></big><a href="index.html"><big><font
- face="Helvetica, Arial, sans-serif">Back
-to Start Page</font> </big></a></p>
-<hr size="2" width="100%">
-<p><font face="Helvetica, Arial, sans-serif"><small
- style="font-weight: bold;"><big>(17)</big> </small><span
- style="font-weight: bold;">You might be curious about where to find
-details on all the relevant input data used in the GEM calculation.</span>
-In the "Single Thermodynamic System" dialog, execute a
-"Data"-&gt;"Thermodynamic Data..." menu command. This will open a
-"MTparm" window with a list of all Dependent Components (species) in
-aqueous, gaseous, and solid phases. &nbsp; </font><br>
-</p>
-<p><img src="sshgal-8-1.png" alt="MTparm page"
- style="width: 621px; height: 680px;"> </p>
-<p><font face="Helvetica, Arial, sans-serif">A vector <i><b>gTP</b></i>
-&nbsp;contains values of (partial) molar Gibbs energy function, already
-calculated for temperature and pressure of interest shown in the <i><b>T</b></i>
-&nbsp;and <i><b>P</b></i> &nbsp;fields, respectively.&nbsp; For any
-species, a separate increment to <i>gTP</i> &nbsp;value can be given
-in
-the&nbsp; <i><b>gEx_</b></i> &nbsp;column (for instance, for fitting
-purposes). The <i><b>VTP</b></i> column contains (partial) molar
-volumes of species in J/bar (or 0.1 cm<sup>3</sup>/mol). </font><br>
-</p>
-<hr size="2" width="100%">
-<p><font size="+1"><small><font face="Helvetica, Arial, sans-serif"><span
- style="font-weight: bold;">(18) From "MTparm", "System" and "EqDemo"
-windows, you can directly view the underlying database records for
-Dependent Components, phase and PCO definitions.</span><small
- style="font-weight: bold;"> </small><br>
-</font></small></font></p>
-<p><font size="+1"><small><font face="Helvetica, Arial, sans-serif">For
-example, if you mark with the mouse a species name in the <b><i>DCvp</i></b>
-&nbsp;list ("Cal" on the above screenshot) and press </font></small></font><font
- size="+1"><small><big><tt>F7</tt></big> <font
- face="Helvetica, Arial, sans-serif">(or right-click and select "Show
-record"), you will see a DComp module window with record contents
-displayed:<br>
-<br>
-</font></small></font></p>
-<p><font size="+1"><img src="sshgal-8-2.png" alt="DComp page 1"
- height="472" width="608"> <br>
-</font></p>
-<p><font size="+1"><br>
-<small><font face="Helvetica, Arial, sans-serif">On Page 1, the formula
-and standard state properties of calcite are shown together with
-bibliographic references. On Page 2, coefficients of heat capacity
-(Majer-Kelly) equation can be seen - they define temperature
-corrections for standard molar G, H, Cp and S properties. <br>
-</font></small><br>
-</font></p>
-<p><img src="sshgal-8-3.png" alt="DComp page 2" height="487" width="406">
-<br>
-</p>
-<p><font size="+1"><small><font face="Helvetica, Arial, sans-serif"><br>
-Note that data in DComp (also ReacDC, Compos, Phase) records can be
-changed only in the "Thermodynamic Database" mode of GEM-Selektor code
-operation; here, the data can only be viewed. </font></small><br>
-</font></p>
-<hr size="2" width="100%">
-<p><small><font face="Helvetica, Arial, sans-serif" size="+1"><small><span
- style="font-weight: bold;">(19) In GEMS code, thermodynamic data can
-also be consistently defined via properties of reactions with other
-species in ReacDC format records.</span> For instance, pick up
-(using </small></font><font size="+1"><small><big><tt>F7</tt></big>
-key) a </small></font><font size="+1"><small><big><tt>Fe(OH)3(am)</tt></big><font
- face="Helvetica, Arial, sans-serif"> species seen close to the end of
-the <i><b>DCvp</b></i> list in the MTparm window:</font></small></font><font
- face="Helvetica, Arial, sans-serif"><br>
-</font> </small></p>
-<p><font size="+1"><img src="sshgal-8-4.png" alt="ReacDC Page 1"
- height="575" width="568"> <br>
-</font></p>
-<p><font size="+1"><small><font face="Helvetica, Arial, sans-serif">Here,
-the standard molar properties of amorphous iron(III) hydroxide are
-defined via the equilibrium constant (logK = -5.0 at 25 <sup>o</sup>C)
-of the reaction Fe<sup>+3</sup> + 3H<sub>2</sub>O = 3H<sup>+</sup> +
-Fe(OH)<sub>3</sub>(am). Properties of the reaction (S0r =0, Cp0r = 0,
-G0r = 28.54 kJ/mol) also define temperature corrections for logK that
-can be used to predict standard Gibbs energy values for Fe(OH)<sub>3</sub>(am)
-in a temperature interval from 0 to 50 <sup>o</sup>C with a reasonable
-uncertainty. </font></small><br>
-</font></p>
-<p> <br>
-<a href="sshgal09.html"><b><font face="Helvetica, Arial, sans-serif">Next
-Page</font></b></a><br>
-</p>
-<font face="Helvetica, Arial, sans-serif"><b><a href="../index.html">Back
-to main GEMS-PSI page</a></b> </font><br>
-<br>
-<font face="Helvetica, Arial, sans-serif" size="-1">&copy;
-2003-2005&nbsp; <a href="../teamhist.html">GEMS-PSI Development and
-Support Team</a>.</font><br>
-<hr size="2" width="100%"><br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-</body>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+    <title>GEMS2 Screenshots Page 8</title>
+    <meta name="author" content="PSI GEMS2 Development Team">
+    <meta name="description" content="Screenshot Gallery Tutorial p.8">
+  </head>
+  <body background="bgimg.png">
+    <h1><img src="gems1.png" alt="" height="48" width="48"> GEM-Selektor version
+      3</h1>
+    <h2>SCREENSHOT GALLERY
+      TUTORIAL </h2>
+    <h2> </h2>
+    <p><a href="sshgal07.html">Previous Page</a> &nbsp; &nbsp; &nbsp; &nbsp;
+      &nbsp; <a href="index.html">Back
+        to Start Page </a></p>
+    <hr size="2" width="100%">
+    <p><span style="font-weight: bold;">(17)</span> You might be curious about
+      where to find
+      details on all the relevant input data used in the GEM calculation.
+      In the "Single Thermodynamic System" dialog, execute a
+      "Data"-&gt;"Thermodynamic Data at T,P..." menu command. This will open a
+      "MTparm" window with a list of all Dependent Components (species) in
+      aqueous, gaseous, and solid phases. &nbsp; <br>
+    </p>
+    <p><img src="sshgal-8-1.png" alt="MTparm page" style="width: 800px; height: 669px;">
+    </p>
+    <p>A vector <span style="font-weight: bold;">gTP</span>
+      &nbsp;contains values of standard Gibbs energy function per mole of DC,
+      already
+      corrected for temperature and pressure of interest shown in the T
+      &nbsp;and P &nbsp;fields, respectively.&nbsp; For any
+      species, a separate increment to gTP &nbsp;value, valid only for this
+      SysEq record, can be given
+      in
+      the&nbsp; <span style="font-weight: bold;">gEx</span>&nbsp; column (for
+      instance, for fitting
+      purposes). The hTP column contains values of standard enthalpy function,
+      the <span style="font-weight: bold;">STP</span> column - values of
+      absolute entropy per mole, the <span style="font-weight: bold;">CpTP</span>
+      column - per-mole values of heat capacity at constant pressure. The <span
+        style="font-weight: bold;">VTP</span> column contains (partial) molar
+      volumes of species in J/bar (or 0.1 cm<sup>3</sup>/mol). The whole table
+      can be copy-pasted into a spreadsheet, if necessary. <br>
+    </p>
+    <hr size="2" width="100%">
+    <p><span style="font-weight: bold;">(18)</span> In "MTparm", "System" and
+      "EqDemo"
+      windows, you can directly view the underlying database records for
+      Dependent Components, Phases, and Compos (PCO definitions). <br>
+    </p>
+    <p>For
+      example, if you scroll down in the MTparm window and mark with the mouse a
+      species name in the DCvp
+      &nbsp;list ("Cal" on the above screenshot) and press F7 (or right-click
+      and select "Show
+      record"), you will see a DComp module window with the record contents
+      displayed:<br>
+      <br>
+    </p>
+    <p><img style="width: 699px; height: 481px;" src="sshgal-8-2.png" alt="DComp page 1">
+      <br>
+    </p>
+    <p><br>
+      On Page 1, the formula
+      and standard state properties of calcite are shown together with
+      bibliographic references. On Page 2, coefficients of the heat capacity
+      (Majer-Kelly) equation can be seen - they define temperature
+      corrections for standard molar G, H, Cp and S properties. <br>
+      <br>
+    </p>
+    <p><img style="width: 592px; height: 482px;" src="sshgal-8-3.png" alt="DComp page 2">
+      <br>
+    </p>
+    <p><br>
+      Note that the data in DComp (also ReacDC, Compos, Phase) records can be
+      changed right here and saved, but the remake of such thermodynamic
+      database records is only possible in the Database Mode. <br>
+    </p>
+    <hr size="2" width="100%">
+    <p><span style="font-weight: bold;">(19)</span> In GEMS code, thermodynamic
+      data can
+      also be consistently defined via properties of reactions with other
+      species in ReacDC format records. For instance, pick up
+      (using F7
+      key) a Fe(OH)3(am) species seen close to the end of
+      the DCvp list in the MTparm window:<br>
+    </p>
+    <p><img style="width: 567px; height: 592px;" src="sshgal-8-4.png" alt="ReacDC Page 1">
+      <br>
+    </p>
+    <p>Here,
+      the standard molar properties of amorphous iron(III) hydroxide are
+      defined via the equilibrium constant (logK = -5.0 at 25 <sup>o</sup>C)
+      of the reaction Fe<sup>+3</sup> + 3H<sub>2</sub>O = 3H<sup>+</sup> +
+      Fe(OH)<sub>3</sub>(am). Properties (effects) of the reaction (<span style="font-weight: bold;">S0r</span>
+      =0, <span style="font-weight: bold;">Cp0r</span> = 0,
+      <span style="font-weight: bold;">G0r</span> = 28.54 kJ/mol) also define
+      the temperature corrections for logK that
+      can be used to predict standard Gibbs energy values for Fe(OH)3(am)
+      in a temperature interval from 0 to 50 <sup>o</sup>C with a reasonable
+      uncertainty. <br>
+    </p>
+    <p> <br>
+      <a href="sshgal09.html">Next
+        Page</a><br>
+    </p>
+    <a href="../index.html">Back
+      to main GEM-Selektor page</a> <br>
+    <br>
+    ©
+    2003,2014&nbsp; <a href="../teamhist.html">GEMS Development Team</a>.<br>
+    <hr size="2" width="100%"><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </body>
 </html>
