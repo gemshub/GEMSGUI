@@ -523,7 +523,7 @@ void TMulti::multi_sys_ph()
         pm.PHC[k] = mup->PHC[kk];
         memcpy( pm.SF[k], mup->SF[kk], MAXSYMB );
         memcpy( pm.SF[k]+MAXSYMB, mup->SF[kk]+MAXSYMB+MAXPHSYMB, MAXPHNAME );
-        if( k < syp->Fis )
+        if( kk < mup->Fis ) // bugfix 4.04.14 DK was k < syp.Fis
         {
             memcpy( pm.SF2[k], mup->SF[kk], MAXSYMB );
             memcpy( pm.SF2[k]+MAXSYMB, mup->SF[kk]+MAXSYMB+MAXPHSYMB, MAXPHNAME );

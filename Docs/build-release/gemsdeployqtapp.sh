@@ -177,7 +177,7 @@ execscript=$tardir/"run$executable.sh"
 # Create the Resources directory and copy Resources across.
 # You will obviously need to assign the directory path leading
 # to GEM-Selektor Resources e.g. /home/you/DevGEMS/trunk/gems-gui/Resources
-gresourcesdir=$HOME/DevGEMS/trunk/gems-gui/Resources
+gresourcesdir=$HOME/DevGEMS/devPhase/gems-gui/Resources
 resourcesdir=$tardir/Resources
 mkdir $resourcesdir
 echo "Created Resources directory: "$resourcesdir", copying ..."
@@ -193,7 +193,7 @@ cp $qtqhelpgenerator $tardir
 echo "Copied executable "$qtqhelpgenerator" to "$tardir
 
 # Copying minor files needed to complete installation and start GEMS3
-gbuilddir=$HOME/DevGEMS/trunk/build-release
+gbuilddir=$HOME/DevGEMS/devPhase/build-release
 cp -r $gbuilddir/ToDesktop $tardir/ToDesktop
 cp $gbuilddir/gems3.png $tardir/gems3.png
 cp $gbuilddir/INSTALL.linux.txt $tardir/INSTALL.linux.txt

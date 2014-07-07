@@ -11,18 +11,18 @@ http://goblincoding.com/2013/11/07/deploying-qt-5-applications-on-ubuntu-12-04/
 your home directory; we assume that the Qt library is located as 
 "/home/you/Qt/5.3/src" and "/home/you/Qt/5.3/gcc_64" (or gcc_32).
 If not yet done, copy recursively the "/Docs/build-release" directory from the 
-folder where this file is located to the folder in which the "\gems-gui" folder
-is located. Typically, you should have "~/DevGEMS/trunk/gems-gui";
-"~/DevGEMS/trunk/standalone"; and "~/DevGEMS/trunk/build-release" folders
+folder where this file is located to the folder in which the "/gems-gui" folder
+is located. Typically, you should have "~/DevGEMS/devPhase/gems-gui";
+"~/DevGEMS/devPhase/standalone"; and "~/DevGEMS/devPhase/build-release" folders
 at the same level. 
 
 2. Make sure that you have built (with the QtCreator) a release variant 
-of GEM-Selektor v.3 in "/home/you/DevGEMS/trunk/build-release", where 
+of GEM-Selektor v.3 in "/home/you/DevGEMS/devPhase/build-release", where 
 an executable script "gemsdeployqtapp.sh" and several other files are located; 
 if the script is not executable, open a terminal, cd to that directory, and run 
    $ chmod u+x ./gemsdeployqtapp.sh.
 
-3. Open a Linux terminal, cd to "/home/you/DevGEMS/trunk/build-release", 
+3. Open a Linux terminal, cd to "/home/you/DevGEMS/devPhase/build-release", 
 and execute the script "gemsdeployqtapp.sh":
    $ ./gemsdeployqtapp.sh gems3
 
