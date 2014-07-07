@@ -10,48 +10,48 @@ in ~/Qt/5.3/clang_64/bin/ folder.
 We assume that the Qt library is located in ~/Qt/5.3/clang_64/bin/
 and Qt Tools (QtCreator etc.) are located in ~/Qt/.
 
-2. If not yet done, find ~/DevGEMS/trunk/gems-gui/Docs/mac-build-release
+2. If not yet done, find ~/DevGEMS/devPhase/gems-gui/Docs/mac-build-release
 directory and copy it recursively into ~/Applications, then rename it to
-~/Applications/trunk. Dive into the ~/Applications/trunk/gems3.app/Contents
+~/Applications/devPhase. Dive into the ~/Applications/devPhase/gems3.app/Contents
 and refresh recursively the /Resources subfolder contents by copying it
-from ~/DevGEMS/trunk/gems-gui/Resources.
+from ~/DevGEMS/devPhase/gems-gui/Resources.
 
-3. In the ~/Applications/trunk folder, find the "runmacdeployqt.bat" file
+3. In the ~/Applications/devPhase folder, find the "runmacdeployqt.bat" file
 and edit it to make sure that it contains the correct full path to the
 "macdeployqt" utility, e.g. Users/<you>/Qt/5.3/clang_64/bin/macdeployqt.
 From the latter folder, copy the actual files "qcollectiongenerator",
 "qhelpconverter" and "qhelpgenerator" (needed to refresh the help database)
-to ~/Applications/trunk/gems3.app/Contents/MacOS.
+to ~/Applications/devPhase/gems3.app/Contents/MacOS.
 
 4. Using QtCreator, build the actual release variant of gems3 executable.
-Typically, you should have something like "~/DevGEMS/trunk/gems-gui";
-"~/DevGEMS/trunk/standalone"; and "~/DevGEMS/trunk/build-release"
+Typically, you should have something like "~/DevGEMS/devPhase/gems-gui";
+"~/DevGEMS/devPhase/standalone"; and "~/DevGEMS/devPhase/build-release"
 folders at the same level. Find gems3 in /gems3.app in the latter folder
-and copy it into ~/Applications/trunk/gems3.app/Contents/MacOS.
+and copy it into ~/Applications/devPhase/gems3.app/Contents/MacOS.
 
-5. Open terminal, cd to ~/Applications/trunk and run the command:
+5. Open terminal, cd to ~/Applications/devPhase and run the command:
 
-        $ runmacdeployqt.sh
+        $ ./runmacdeployqt.sh
 
 This will find and copy all dependence files (Qt libraries, plugins, etc.)
-into ~/Applications/trunk/gems3.app, and also will create the gems3.dmg
+into ~/Applications/devPhase/gems3.app, and also will create the gems3.dmg
 image file of the GEM-Selektor installer.
 
 6. To make sure that the GEM-Selektor runs correctly: in terminal, cd to ~
 (your user home directory) and start the program with the command:
 
-$ exec /Users/<you>/Applications/trunk/gems3.app/Contents/MacOS/gems3 -d
+$ exec /Users/<you>/Applications/devPhase/gems3.app/Contents/MacOS/gems3 -d
 
 Upon the first start, the gems3 program will create a
 ~/Library/Gems3/projects folder, in which the test projects are located
 (automatically copying from the .../gems3.app/Contents/Resources/projects).
  
 7. To complete creating a new GEM-Selektor installer file for Mac OSX:
-cd to ~/Applications/trunk/ folder and delete the gems3.dmg file. Then,
+cd to ~/Applications/devPhase/ folder and delete the gems3.dmg file. Then,
 to create the installer, run again the command
-    $ runmacdeployqt.sh
+    $ ./runmacdeployqt.sh
 
-This will create the file ~/Applications/trunk/gems3.dmg.
+This will create the file ~/Applications/devPhase/gems3.dmg.
 Rename it according to the following pattern:
 
 Gems3.2-<rev1>.<rev2>-OSX-x86-64.dmg
