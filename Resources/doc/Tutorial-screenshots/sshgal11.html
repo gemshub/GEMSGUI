@@ -9,156 +9,146 @@
   <body background="bgimg.png">
     <h1><img src="gems1.png" alt="" height="48" width="48"> GEM-Selektor version
       3</h1>
-    <h2>SCREENSHOT GALLERY
-      TUTORIAL </h2>
+    <h2>SCREENSHOT GALLERY TUTORIAL </h2>
     <h2> </h2>
     <p><a href="sshgal10.html">Previous Page</a> &nbsp; &nbsp; &nbsp; &nbsp;
-      &nbsp; <a href="index.html">Back to
-        Start Page </a></p>
+      &nbsp; <a href="index.html">Back to Start Page </a></p>
     <hr size="2" width="100%">
-    <p><span style="font-weight: bold;">(23) How
-        to create
-        your first Process Simulator. </span><br>
+    <p><span style="font-weight: bold;">(23) How to create your first Process
+        Simulator. </span><br>
     </p>
     <p>In Gem-Selektor Main Window, in Equilibria Mode, click at the "Process"
       icon on the left side (or use "Modules" "Process" menu command) to open
-      the (still empty) Process
-      window. There, click on the "Create a new record from scratch" (or execute
-      the "Record" "Create(New)" menu command). This will
-      bring you into a "Parent System selection" dialog (shown below). <br>
+      the (still empty) Process window. There, click on the "Create a new record
+      from scratch" (or execute the "Record" "Create(New)" menu command). This
+      will bring you into a "Parent System selection" dialog (shown below). <br>
     </p>
     <p><img src="sshgal-11-1.png" alt="Parent Selection" style="width: 668px; height: 255px;">
       <br>
       <br>
     </p>
-    <p>In the above
-      dialog, select (as shown) the "parent" chemical system (SysEq record) that
-      you have
-      prepared before, and click "Ok" to
-      proceed.&nbsp; The following small dialog appears now (with asterisks
-      in the two last fields): <br>
+    <p>In the above dialog, select (as shown) the "parent" chemical system
+      (SysEq record) that you have prepared previously, and click "Ok" to
+      proceed.&nbsp; Now, a small Process record key dialog appears (with
+      asterisks in the two last fields). </p>
+    <p>The first eight fields of the Process record key are not editable; they
+      are identical with that of the "parent" SysEq record key. Indeed, the
+      program uses that record to to immediately load the "parent" system
+      definition each time when the Process record is loaded from the database.
+      <br>
     </p>
+    You have to fill out the last two fields. Type "O2-titration" in the "Name
+    ..." field to identify the process simulator to be created, and "S" in the
+    "Process simulation mode..." field to indicate that this will be a simple
+    (straightforward)
+    change of the bulk composition, as shown below.
+    <p> </p>
     <p><img src="sshgal-11-2.png" alt="Proces Key" style="width: 456px; height: 389px;">
       <br>
     </p>
-    <p>The first
-      eight fields of the Process record key (not editable) are identical with
-      that of the
-      "parent" SysEq
-      record key. Indeed, the program uses that to immediate record to load the
-      "parent" system each time when the Process record is loaded from the
-      database. <br>
-    </p>
-    <p>You have to
-      fill
-      out the last two fields: "O2-titration" identifies the process
-      simulator
-      to be created, and "S" indicates that this will be a simple (straightforward)
-change
-      of the bulk composition, as shown above. <br>
-    </p>
-    <p>Click "Ok"
-      when finished. This will get you to a Process Setup Wizard:&nbsp;<br>
+    <p>Click "Ok" when finished. This will get you to a Process Setup
+      Wizard:&nbsp;<br>
     </p>
     <p><img title="Process Setup Wizard" src="sshgal-11-3.png" alt="Process Wizard 1"
         style="width: 668px; height: 570px;"> <br>
     </p>
-    <p>The wizard
-      consists of several pages that can be accessed by clicking on the "Next
-      &gt;" or "&lt; Back" button. Each page contains some explanations
-      important for setting up the process simulator properly (the explanations
-      may be
-      changed from version to version). <br>
+    <p>The wizard consists of several steps (pages) that can be accessed by
+      clicking on the "Next &gt;" or "&lt; Back" button. Each page contains some
+      explanations important for setting up the process simulator properly (the
+      explanations may be changed from version to version). <br>
     </p>
-    <p> There is
-      nothing to change on the first wizard page, so click "Next &gt;" switch
-      to the second one - Step 2. </p>
+    <p> There is nothing to change on the first wizard page, so click "Next
+      &gt;" button to proceed to Step 2. You will see a small table, each column
+      being an iterator consisting of three values: start (index [0]), end
+      (index [1]), and increment (index [2]). At every step of the process, the
+      current value of the respective property, beginning from start value, will
+      be automatically incremented by the increment value. The process simulation
+      stops when the end value of some iterator is reached, or the total number
+      of steps is executed. The increment value of 0 deactivates the respective
+      iterator. All iterators are also accessible in the Process module window
+      (will appear after the Process Wizard is finished).</p>
     <p>The first iterator <span style="font-weight: bold;">iTm</span> defines
-      how the program will number the generated system definitions (CSD). If we
-      start with CSD #1000 and will produce 101
-      points then we will end up with CSD #2000 at increment 10. Please, edit
-      the iterator accordingly.<br>
+      how the program will number the chemical system definitions (CSD)
+      generated by the process simulator. If start with CSD # equal to 1000 and
+      produce 101 points then the end value will be 2000 and the increment will
+      be 10. Please, edit the iTm iterator accordingly.<br>
       <br>
-      Pressure (1 bar) and temperature (25 C) will be kept constant, so there
-      is nothing to change in the <span style="font-weight: bold;">iP</span>
-      and <span style="font-weight: bold;">iTC</span> iterators. The<span style="font-weight: bold;">
-        iNv</span> iterator should usually be set the same as the last
-      field of the "parent" SysEq record key, i.e. 0, 0, 0. <br>
+      Pressure (1 bar) and temperature (25 C) will be kept constant, so there is
+      nothing to change in the <span style="font-weight: bold;">iP</span> and <span
+        style="font-weight: bold;">iTC</span> iterators. The<span style="font-weight: bold;">
+        iNv</span> iterator should usually be set the same as the last field of
+      the "parent" SysEq record key, i.e. 0, 0, 0. <br>
       <br>
-      The iNu iterator should contain the range ( 0 to 1 g) and the
-      linear increment (0.01 g) for additions of the titrant O2 to bulk
-      composition of the
-      parent system.&nbsp; Check that the process type is set as "Titration cNu
-      (linear)", as shown below. </p>
-    <p>Click on the "Compos" property and select "O2" as a titrant. The
-      automatically created Process control script will be visible at the
-      right-hand side:</p>
+      The iNu iterator should contain the range ( 0 to 1 g) and the linear
+      increment (0.01 g) for additions of the titrant O2 to bulk composition of
+      the parent system.&nbsp; Check that the process type is set as "Titration
+      cNu (linear)", as shown below. </p>
+    <p>Click on the "Compos" property and select "O2" as a titrant. This
+      automatically creates a simple Process control script, visible at the
+      right-hand side (this script can be modified later in the Process module
+      window, if necessary):</p>
     <img alt="Wizard Page 2" src="sshgal-11-4.png">
     <p>Click "Next &gt;" to proceed to Step 3 of the Process Wizard, which is
-      very helpful to create the Process sampling script aimed at collecting and
-      plotting the simulation results. </p>
-    <p><br>
-    </p>
+      helpful for creating the Process sampling script, aimed at collecting and
+      plotting the simulation results. In this exercise, aimed at following how
+      the aqueous speciation changes upon oxidation of the system, we would plot
+      the total dissolved molalities of Ca, Fe, Mn, as well as pH, pe and Eh of
+      aqueous solution, as curves against the "process extent variable", in this
+      case the stepwise addition of O2. </p>
+    <p>The Step 3 wizard page is arranged similar to the Recipe Wizard. At the
+      left-hand side, you see a list of Properties. Click on the "lgm_t"
+      property (log10 of total dissolved molality of elements) and in the "Item
+      Selection" list, click to select Ca, Fe and Mn. Next, in "Property" list,
+      click on "Scalars" and, in the "Item Selection" list, click on pH, pe, Eh
+      to select them. Then, in the same list, find "modC", right-click on it and
+      select "Abscissa". After doing all this, you should see a "Sampling
+      script", as shown in the screen image below.</p>
     <img alt="Wizard Page 3" src="sshgal-11-5.png">
-    <p><br>
+    <p>This sampling script will appear later also in the Process module window
+      Now, click<br>
     </p>
     <p><br>
     </p>
-    <p>"Important Dimensions"&nbsp; and change the first
-      field (nPV Number of steps to be generated) to 51 and the third field
-      (Number of plots...) to 5, as shown below: <br>
+    <p>"Important Dimensions"&nbsp; and change the first field (nPV Number of
+      steps to be generated) to 51 and the third field (Number of plots...) to
+      5, as shown below: <br>
     </p>
     <p>&nbsp;<img src="sshgal-11-6.png" alt="Process Wizard 4" style="width: 800px; height: 553px;">
     </p>
-    <p>The idea is to collect
-      calculated values of CaAQ, FeAQ, MnAQ,
-      -pH and pe at each of 51 simulation points and plot them.&nbsp; <br>
+    <p>The idea is to collect calculated values of CaAQ, FeAQ, MnAQ, -pH and pe
+      at each of 51 simulation points and plot them.&nbsp; <br>
     </p>
-    <p>Click "Next &gt;"&nbsp; to
-      proceed to the third wizard page, which&nbsp; contains some additional
-      settings (for advanced users). Check that the selections look like
-      shown below:<br>
+    <p>Click "Next &gt;"&nbsp; to proceed to the third wizard page, which&nbsp;
+      contains some additional settings (for advanced users). Check that the
+      selections look like shown below:<br>
     </p>
     <p><img alt="Third page of Process wizard" src="sshgal-11-7.png" style="width: 754px; height: 499px;"><br>
     </p>
-    <p>Press "Next &gt;" now to
-      see the last wizard page which contains explanations about how the
-      process simulator works. On that page (not shown here), set&nbsp; the
-      number of links to bibliography SDref records to 1; read the
-      explanations, and click "Finish" when ready. &nbsp;A
-      Page 1 of the "Process" window will appear; as usual, fill out the
-      first
-      two comment fields e.g. as shown below.&nbsp;</p>
+    <p>Press "Next &gt;" now to see the last wizard page which contains
+      explanations about how the process simulator works. On that page (not
+      shown here), set&nbsp; the number of links to bibliography SDref records
+      to 1; read the explanations, and click "Finish" when ready. &nbsp;A Page 1
+      of the "Process" window will appear; as usual, fill out the first two
+      comment fields e.g. as shown below.&nbsp;</p>
     <p><img src="sshgal-11-8.png" alt="Process Page 1" style="width: 800px; height: 550px;">
       <br>
     </p>
-    <p>You can also type in the
-      third row a reference to your comments or bibliography link ("Example2:2005:comm:"
-      as shown above). <br>
+    <p>You can also type in the third row a reference to your comments or
+      bibliography link ("Example2:2005:comm:" as shown above). <br>
     </p>
-    <p>If you click on that field
-      later
-      and press F2, you will see a SDref window where
-      you
-      can type your comments (on Page 2) and save the SDref record to
-      database. When you press (in the Process window page) F2
-      on the pSDref
-      field next time, your
-      comments
-      will pop up as they have been saved last time; you can change or extend
-      them and save again,
-      and so on. <br>
+    <p>If you click on that field later and press F2, you will see a SDref
+      window where you can type your comments (on Page 2) and save the SDref
+      record to database. When you press (in the Process window page) F2 on the
+      pSDref field next time, your comments will pop up as they have been saved
+      last time; you can change or extend them and save again, and so on. <br>
     </p>
-    <p>Next, we will finalize and
-      run the Process Simulator. <br>
+    <p>Next, we will finalize and run the Process Simulator. <br>
     </p>
     <p> <a href="sshgal12.html">Next Page</a><br>
     </p>
-    <a href="../index.html">Back
-      to main GEM-Selektor page</a> <br>
+    <a href="../index.html">Back to main GEM-Selektor page</a> <br>
     <br>
-    ©
-    2003,2014&nbsp; <a href="../teamhist.html">GEMS Development Team</a>.<br>
+    © 2003,2014&nbsp; <a href="../teamhist.html">GEMS Development Team</a>.<br>
     <hr size="2" width="100%"><br>
     <br>
     <br>
