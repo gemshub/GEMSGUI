@@ -43,7 +43,7 @@ void TPhase::Set_SolMod_Phase_coef()
                       php->ncpM = 0;   // NPcoef
                       break;
        case SM_BERMAN:   // Sublattice microscopic intra-site interaction model (multicomponent)
-                      php->nscM = 1;  // NP_DC
+                      php->nscM = 3;  // NP_DC  // reciprocal energies and their dependence on T
                       php->npxM = 4;  // MaxOrd
                       if( php->ncpN < 1 ) // NPar
                           php->ncpN = 1;
@@ -1422,8 +1422,10 @@ void TPhase::set_def_comments( bool clearall,
               {
               case SM_OTHER:   // Customized hardcoded solid-solution models
                              break;
-              case SM_BERMAN:   // Sublattice microscopic intra-site interaction model (multicomponent)
-                   strncpy( php->dcpcl[0], "rct", MAXDCNAME );
+              case SM_BERMAN:   // Sublattice mixing model (multicomponent), site interactions
+                   strncpy( php->dcpcl[0], "rc0", MAXDCNAME );
+                   strncpy( php->dcpcl[1], "rc1 /T", MAXDCNAME );
+                   strncpy( php->dcpcl[2], "rc2 *T^2", MAXDCNAME );
                   //               php->nscM = 1;
                   //          php->ncpM = 3;  // NPcoef
                              break;
