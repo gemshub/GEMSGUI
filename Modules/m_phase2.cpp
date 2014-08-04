@@ -43,7 +43,8 @@ void TPhase::Set_SolMod_Phase_coef()
                       php->ncpM = 0;   // NPcoef
                       break;
        case SM_BERMAN:   // Sublattice microscopic intra-site interaction model (multicomponent)
-                      php->nscM = 3;  // NP_DC  // reciprocal energies and their dependence on T
+                      // php->nscM = 3;  // NP_DC  // reciprocal energies and their dependence on T
+                      php->nrcp = 3;  // number of coefficients per reciprocal dG parameter
                       php->npxM = 4;  // MaxOrd
                       if( php->ncpN < 1 ) // NPar
                           php->ncpN = 1;
