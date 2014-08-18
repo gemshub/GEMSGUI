@@ -1626,7 +1626,7 @@ void TPhase::set_def_comments( bool clearall,
                     strncpy( php->ipccl[0], "w1", MAXDCNAME );
                     strncpy( php->ipccl[1], "w2", MAXDCNAME );
                     strncpy( php->ipccl[2], "w3", MAXDCNAME );
-//                    strncpy( php->ipccl[2], "w4", MAXDCNAME );
+//                    strncpy( php->ipccl[3], "w4", MAXDCNAME );
                       break;
                  case SM_VANLAAR:   // Van Laar model (multicomponent)
                       strncpy( php->ipccl[0], "w1", MAXDCNAME );
