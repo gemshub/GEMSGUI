@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -228,7 +228,7 @@
             </item>
             <item>
              <property name="text">
-              <string>B   Microscopic  a(symmetric) multicomponent solid-solution model</string>
+              <string>B   Multisite  a(symmetric) multicomponent solid-solution model</string>
              </property>
             </item>
             <item>
@@ -319,6 +319,11 @@
             <item>
              <property name="text">
               <string>J   ELVIS multicomponent liquid solution model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>$   Multisite multicomponent non-ideal (CEF) solid-solution model</string>
              </property>
             </item>
             <item>

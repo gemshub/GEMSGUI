@@ -1323,6 +1323,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
            {
              case SM_IDEAL: // =  'I',	// ideal solution or single-component phase
 //             case SM_BERMAN: // = 'B',    // built-in multicomponent microscopic (a)symmetric solid-solution model (reserved)
+//             case SM_CEF: //  = '$',    //     built-in multicomponent multisite solid-solution model (CALPHAD)
 //             case SM_REDKIS: // = 'G', 	// built-in binary Guggenheim (Redlich-Kister) solid-solution model
 //             case SM_MARGB: // = 'M',	// built-in binary Margules solid-solutions (subregular)
 //             case SM_MARGT: // = 'T',	// built-in ternary Margules solid-solution (regular)
