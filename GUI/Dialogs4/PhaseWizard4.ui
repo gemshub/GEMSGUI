@@ -511,7 +511,7 @@
            <widget class="QComboBox" name="SCM_code">
             <item>
              <property name="text">
-              <string>N   Default mixing rule or form of interaction parameter coefficients  </string>
+              <string>N    Default mixing rule or form of interaction parameter coefficients  </string>
              </property>
             </item>
             <item>
@@ -542,6 +542,11 @@
             <item>
              <property name="text">
               <string>8    Eight-term Pitzer model parameters temperature dependence</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>R    Use CEF reciprocal non-ideality term in Berman multi-site ss model</string>
              </property>
             </item>
            </widget>

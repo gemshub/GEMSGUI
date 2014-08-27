@@ -419,8 +419,8 @@ aObj[ o_wo_uph ].SetDim( pm.FIs, MIXPHPROPS );
      aObj[ o_wi_lndqft].SetDim( pm.Ls, 1 );
      aObj[ o_wi_lnrcpt].SetPtr( pm.lnRcpt );
      aObj[ o_wi_lnrcpt].SetDim( pm.Ls, 1 );
-     aObj[ o_wi_lnext].SetPtr( pm.lnEXt );
-     aObj[ o_wi_lnext].SetDim( pm.Ls, 1 );
+     aObj[ o_wi_lnexet].SetPtr( pm.lnExet );
+     aObj[ o_wi_lnexet].SetDim( pm.Ls, 1 );
      aObj[ o_wi_lncnft].SetPtr( pm.lnCnft );
      aObj[ o_wi_lncnft].SetDim( pm.Ls, 1 );
 //TSorpMod & TKinMet stuff
@@ -639,7 +639,7 @@ pm.GamFs  = (double *)aObj[ o_wo_gamfs ].GetPtr();
     pm.rcpc   = (double *)aObj[ o_wi_rcpc].GetPtr();
     pm.lnDQFt   = (double *)aObj[ o_wi_lndqft].GetPtr();
     pm.lnRcpt   = (double *)aObj[ o_wi_lnrcpt].GetPtr();
-    pm.lnEXt   = (double *)aObj[ o_wi_lnext].GetPtr();
+    pm.lnExet   = (double *)aObj[ o_wi_lnexet].GetPtr();
     pm.lnCnft   = (double *)aObj[ o_wi_lncnft].GetPtr();
     //TSorpMod & TKinMet stuff
     pm.SorMc   = (double *)aObj[ o_wi_sormc].GetPtr();
@@ -837,7 +837,7 @@ pm.GamFs  = (double *)aObj[ o_wo_gamfs ].Free();
     pm.rcpc   = (double *)aObj[ o_wi_rcpc].Free();
     pm.lnDQFt   = (double *)aObj[ o_wi_lndqft].Free();
     pm.lnRcpt   = (double *)aObj[ o_wi_lnrcpt].Free();
-    pm.lnEXt   = (double *)aObj[ o_wi_lnext].Free();
+    pm.lnExet   = (double *)aObj[ o_wi_lnexet].Free();
     pm.lnCnft   = (double *)aObj[ o_wi_lncnft].Free();
     //TSorpMod & TKinMet stuff
     pm.SorMc   = (double *)aObj[ o_wi_sormc].Free();
@@ -1177,7 +1177,7 @@ pm.GamFs = (double *)aObj[ o_wo_gamfs].Alloc( pm.L, 1, D_);
         //pm.rcpc   = (double *)aObj[ o_wi_rcpc].Alloc( pm.FIs, 1, D_ );
         pm.lnDQFt   = (double *)aObj[ o_wi_lndqft].Alloc( pm.Ls, 1, D_ );
         pm.lnRcpt   = (double *)aObj[ o_wi_lnrcpt].Alloc( pm.Ls, 1, D_ );
-        pm.lnEXt   = (double *)aObj[ o_wi_lnext].Alloc( pm.Ls, 1, D_ );
+        pm.lnExet   = (double *)aObj[ o_wi_lnexet].Alloc( pm.Ls, 1, D_ );
         pm.lnCnft   = (double *)aObj[ o_wi_lncnft].Alloc( pm.Ls, 1, D_ );
         //TSorpMod & TKinMet stuff
         pm.SorMc   = (double *)aObj[ o_wi_sormc].Alloc( pm.FIs, 16, D_ );

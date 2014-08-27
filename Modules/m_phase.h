@@ -401,7 +401,8 @@ SM_CEF = '$',    //     built-in multicomponent multisite solid-solution model (
     MR_KW1 = 'K',       // Kunz-Wagner mixing rule (Kunz and Wagner, 2007)
     MR_PITZ5 = '5',     // 5-term Pitzer model temperature dependence (TOUGHREACT variant)
     MR_PITZ6 = '6',     // 6-term Pitzer model temperature dependence (FREZCHEM variant)
-    MR_PITZ8 = '8'      // 8-term Pitzer model temperature dependence
+    MR_PITZ8 = '8',     // 8-term Pitzer model temperature dependence
+    MR_B_RCPT = 'R'    // Use CEF reciprocal non-ideality terms in Berman multi-site ss model
 };
 
 // This code defines standard state and reference scale of concentrations

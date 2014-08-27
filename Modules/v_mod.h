@@ -181,7 +181,7 @@ o_wo_it_efd,  o_wo_it_ipm,    //   o_wd_sitxcat, o_wd_sitxan,
 o_wi_lsmdc2, o_wi_lsphl,o_wi_phlin,
 // TSolMod stuff
 o_wi_lphc, o_wi_dqfc, o_wi_rcpc, o_wi_lndqft, o_wi_lnrcpt,
-o_wi_lnext, o_wi_lncnft,
+o_wi_lnexet, o_wi_lncnft,
 //TSorpMod & TKinMet stuff
 o_wi_sormc,
 // TSorpMod stuff
