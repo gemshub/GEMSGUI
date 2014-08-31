@@ -622,7 +622,7 @@ LOAD_NIDMCOEF:
           }
           else pmp->LsMdc2[k*3] = 0; // no DC coefficients
         }
-
+/*  This switch can be used for something else
         if( pmp->LsMdc2[k*3+1] )
         {   // coefficients of reciprocal parameters for DCs in phases
           if( aPH->php->rcpc )
@@ -642,10 +642,10 @@ LOAD_NIDMCOEF:
                 copyValues( pmp->rcpc+jrcpc+jkd, aPH->php->rcpc+jp*pmp->LsMdc2[k*3+1],
                         pmp->LsMdc2[k*3+1]);
                 jkd += pmp->LsMdc2[k*3+1]; jj++;
-            } /* j */
+            } /* j * /
           }
-          else pmp->LsMdc2[k*3+1] = 0; // no DC coefficients
-        }
+          else */ pmp->LsMdc2[k*3+1] = 0; // no rcpc coefficients - This switch can be used for something else
+//        }
 
         // move handles
         jdqfc += (pm.LsMdc2[k*3]*pm.L1[k]);

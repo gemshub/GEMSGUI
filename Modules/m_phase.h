@@ -98,7 +98,7 @@ Pres2,  // new: reserved
     nlPh,  /// TKinMet, TSorpMod: number of linked phases (cf. PlPhl, lPh), default 0.
     nlPc,  /// TKinMet, TSorpMod: number of parameters per linked phase, default 0.
 ndqf,  // TSolMod new: number of DQF parameter coefficients per end member, default 3.
-nrcp,  // TSolMod new: number of reciprocal parameter coefficients per end member, default 3.
+nrcp,  // not used TSolMod new: number of reciprocal parameter coefficients per end member, default 3.
 ncsolv, /// TW new: number of solvent parameter coefficients (columns in solvc array)
 nsolv,  /// TW new: number of solvent interaction parameters (rows in solvc array)
 ncdiel, /// TW new: number of dielectric constant coefficients (colums in dielc array)

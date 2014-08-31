@@ -414,7 +414,7 @@ aObj[ o_wo_uph ].SetDim( pm.FIs, MIXPHPROPS );
 // TSolMod stuff
      aObj[ o_wi_lphc].SetPtr( pm.lPhc );
      aObj[ o_wi_dqfc].SetPtr( pm.DQFc );
-     aObj[ o_wi_rcpc].SetPtr( pm.rcpc );
+//     aObj[ o_wi_rcpc].SetPtr( pm.rcpc );
      aObj[ o_wi_lndqft].SetPtr( pm.lnDQFt );
      aObj[ o_wi_lndqft].SetDim( pm.Ls, 1 );
      aObj[ o_wi_lnrcpt].SetPtr( pm.lnRcpt );
@@ -636,7 +636,7 @@ pm.GamFs  = (double *)aObj[ o_wo_gamfs ].GetPtr();
     // TSolMod stuff
     pm.lPhc   = (double *)aObj[ o_wi_lphc].GetPtr();
     pm.DQFc   = (double *)aObj[ o_wi_dqfc].GetPtr();
-    pm.rcpc   = (double *)aObj[ o_wi_rcpc].GetPtr();
+//    pm.rcpc   = (double *)aObj[ o_wi_rcpc].GetPtr();
     pm.lnDQFt   = (double *)aObj[ o_wi_lndqft].GetPtr();
     pm.lnRcpt   = (double *)aObj[ o_wi_lnrcpt].GetPtr();
     pm.lnExet   = (double *)aObj[ o_wi_lnexet].GetPtr();
@@ -834,7 +834,7 @@ pm.GamFs  = (double *)aObj[ o_wo_gamfs ].Free();
     // TSolMod stuff
     pm.lPhc   = (double *)aObj[ o_wi_lphc].Free();
     pm.DQFc   = (double *)aObj[ o_wi_dqfc].Free();
-    pm.rcpc   = (double *)aObj[ o_wi_rcpc].Free();
+//    pm.rcpc   = (double *)aObj[ o_wi_rcpc].Free();
     pm.lnDQFt   = (double *)aObj[ o_wi_lndqft].Free();
     pm.lnRcpt   = (double *)aObj[ o_wi_lnrcpt].Free();
     pm.lnExet   = (double *)aObj[ o_wi_lnexet].Free();

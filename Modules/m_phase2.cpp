@@ -44,7 +44,7 @@ void TPhase::Set_SolMod_Phase_coef()
                       break;
        case SM_BERMAN:   // Sublattice microscopic intra-site interaction model (multicomponent)
                       // php->nscM = 3;  // NP_DC  // reciprocal energies and their dependence on T
-                      php->nrcp = 3;  // number of coefficients per reciprocal dG parameter
+                      php->nrcp = 0;  // number of coefficients per reciprocal dG parameter
                       php->npxM = 4;  // MaxOrd
                       if( php->ncpN < 1 ) // NPar
                           php->ncpN = 1;
@@ -54,7 +54,7 @@ void TPhase::Set_SolMod_Phase_coef()
                       break;
        case SM_CEF: // = '$', built-in multicomponent multisite solid-solution model (CALPHAD)
                        // php->nscM = 3;  // NP_DC  // reciprocal energies and their dependence on T
-                       php->nrcp = 3;  // number of coefficients per reciprocal dG parameter
+                       php->nrcp = 0;  // number of coefficients per reciprocal dG parameter
                        php->npxM = 4;  // MaxOrd
                        if( php->ncpN < 1 ) // NPar
                            php->ncpN = 1;
