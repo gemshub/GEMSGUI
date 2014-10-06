@@ -460,7 +460,9 @@ TPhase::MakeQuery()
     php->ncpM = (short)size[2];
     php->nscM = (short)size[3];
     php->npxM = (short)size[4];
-    php->NsiT = (short)size[5];
+    if(php->sol_t[SPHAS_TYP] == SM_SURCOM )
+         php->NsiT = (short)size[5];
+    else { php->NsiT = 0; php->PFsiT = S_OFF; }
     php->Asur = r2;
 }
 
@@ -706,7 +708,7 @@ void TPhase::makeReacDCompList(TCStringArray& aDclist)
     rt[RT_REACDC].MakeKey( RT_PHASE, pkeyrd, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END );
    if( pkeyrd[1] != ':')
        pkeyrd[1] = '*';
-   if( php->NsiT > 0 )  // template for adsorption
+   if( php->NsiT > 0 && php->PFsiT != S_OFF )  // template for adsorption
        pkeyrd[0] = CP_SSPC;  // added by KD 25.10.2004
 
     if( php->nDC && php->SM )
@@ -885,7 +887,7 @@ AGAIN_SETUP:
     if( php->sol_t[SPHAS_DEP] == SM_UNDEF )
         php->PpEq = S_OFF;
       else php->PpEq = S_ON;
-    if( (php->NsiT != S_OFF) && php->sol_t[SPHAS_TYP] == SM_SURCOM )
+    if( (php->PFsiT != S_OFF) && php->sol_t[SPHAS_TYP] == SM_SURCOM )
     {
        php->nMoi = 0; php->nSub = 0;
     }
