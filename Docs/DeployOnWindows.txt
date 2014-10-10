@@ -39,7 +39,7 @@ This will find and copy all dependence files (Qt libraries, plugins, runtime
 MinGW libraries, locale files, etc.) into C:\GEMS3DEPLOY\Gems3-app folder. 
 
 6. To test that GEM-Selektor runs correctly: cd to C:\GEMS3DEPLOY and 
-check that the bach file "rungems3.bat" contains correct path to the folder
+check that the batch file "rungems3.bat" contains correct path to the folder
 where the gems3.exe file is located (e.g. C:\GEMS3DEPLOY\Gems3-app). Edit, 
 if necessary (see also Readme3.txt). Then start GEM-Selektor by executing
 the rungems3.bat file. Upon the first start, the program will create a 
