@@ -401,8 +401,10 @@ void TPlotWidget::savePlot()
         QString imageFilter;
         for ( int i = 0; i < imageFormats.size(); i++ )
         {
-            imageFilter = "Images (*.";
-            imageFilter += imageFormats[i];
+
+            imageFilter = imageFormats[i];
+            imageFilter += "  Image (*.";
+            imageFilter +=  imageFormats[i];
             imageFilter += ")";
             filter += imageFilter;
         }
