@@ -390,6 +390,7 @@ void TPlotWidget::savePlot()
         QImageWriter::supportedImageFormats();
 
     QStringList filter;
+    filter.clear();
     filter += "PDF Documents (*.pdf)";
 #ifndef QWT_NO_SVG
     filter += "SVG Documents (*.svg)";
@@ -402,8 +403,8 @@ void TPlotWidget::savePlot()
         for ( int i = 0; i < imageFormats.size(); i++ )
         {
 
-            imageFilter = imageFormats[i];
-            imageFilter += "  Image (*.";
+            imageFilter = imageFormats[i].toUpper();
+            imageFilter += "   Image (*.";
             imageFilter +=  imageFormats[i];
             imageFilter += ")";
             filter += imageFilter;
@@ -414,19 +415,32 @@ void TPlotWidget::savePlot()
     fileName = QFileDialog::getSaveFileName(
         this, "Saving Graphics Image", fileName,
         filter.join( ";;" ), &selectedFilter, QFileDialog::DontConfirmOverwrite );
+
+ //cout <<   fileName.toLatin1().data() << "  " << selectedFilter.toLatin1().data();
 #endif
     if ( !fileName.isEmpty() )
     {
-        QwtPlotRenderer renderer;
-        renderer.renderDocument( m_plot, fileName, QSizeF( 200, 200 ), 85 );
-
         gstring path = fileName.toLatin1().data();
         gstring dir;
         gstring name;
-        gstring newname;
-        u_splitpath( path, dir, name, newname );
+        gstring ext;
+        u_splitpath( path, dir, name, ext );
+
+        if( ext.empty() ) // solwing for linux
+        {
+            int posb = selectedFilter.lastIndexOf(".");
+            int pose = selectedFilter.indexOf(")", posb);
+            ext = selectedFilter.mid(posb+1, pose-posb-1).toLatin1().data();
+            // cout << ext.c_str();
+            path = u_makepath( dir, name, ext);
+            fileName = path.c_str();
+        }
         dir  += "/";
         pVisor->setLocalDir( dir );
+
+        QwtPlotRenderer renderer;
+        renderer.renderDocument( m_plot, fileName, QSizeF( 200, 200 ), 85 );
+
 
     }
 
