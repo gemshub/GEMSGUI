@@ -416,7 +416,6 @@ void TPlotWidget::savePlot()
         this, "Saving Graphics Image", fileName,
         filter.join( ";;" ), &selectedFilter, QFileDialog::DontConfirmOverwrite );
 
- //cout <<   fileName.toLatin1().data() << "  " << selectedFilter.toLatin1().data();
 #endif
     if ( !fileName.isEmpty() )
     {
@@ -431,19 +430,16 @@ void TPlotWidget::savePlot()
             int posb = selectedFilter.lastIndexOf(".");
             int pose = selectedFilter.indexOf(")", posb);
             ext = selectedFilter.mid(posb+1, pose-posb-1).toLatin1().data();
-            // cout << ext.c_str();
             path = u_makepath( dir, name, ext);
             fileName = path.c_str();
         }
+
         dir  += "/";
         pVisor->setLocalDir( dir );
 
         QwtPlotRenderer renderer;
         renderer.renderDocument( m_plot, fileName, QSizeF( 200, 200 ), 85 );
-
-
     }
-
 }
 
 
