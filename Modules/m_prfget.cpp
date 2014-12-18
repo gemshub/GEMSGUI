@@ -704,7 +704,7 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
 
     gstring keyp = rt[RT_SYSEQ].UnpackKey();
 // new: setting chemical kinetics time counter and variables
-// cout << "kdTime: " << kdTime << "  kTimeStep: " << kTimeStep << "  kTime: " << kTime << endl;
+cout << "kdTime: " << kdTime << "  kTimeStep: " << kTimeStep << "  kTime: " << kTime << endl;
     if( kdTime < 0. )
     {  // no kinetics to consider
         multi->GetPM()->kTau = 0.;

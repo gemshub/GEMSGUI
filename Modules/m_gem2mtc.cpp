@@ -431,7 +431,13 @@ void TGEM2MT::calc_eqstat( bool startSys )
     else {
            rt[RT_SYSEQ].Find(mtp->sykey);
            // calculate current EqStat
-           TProfil::pm->CalcEqstat( mtp->dTau, mtp->ct, mtp->cTau );
+           if( startSys == true )    // This is for initialization of nodes in RMT simulation
+           {
+               double dummy = -1.;
+               TProfil::pm->CalcEqstat( dummy, mtp->ct, 0. );
+           }
+           else
+               TProfil::pm->CalcEqstat( mtp->dTau, mtp->ct, mtp->cTau );
     }
 
    if( startSys )
