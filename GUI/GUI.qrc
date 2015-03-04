@@ -1,0 +1,63 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Icons/gems1.png</file>
+        <file>Icons/gems50.png</file>
+    </qresource>
+    <qresource prefix="/modules">
+        <file>Icons/ICompModuleIcon.png</file>
+        <file>Icons/ComposModuleIcon.png</file>
+        <file>Icons/DCompModuleIcon.png</file>
+        <file>Icons/ReacDCModuleIcon.png</file>
+        <file>Icons/RTparmModuleIcon.png</file>
+        <file>Icons/PhaseModuleIcon.png</file>
+        <file>Icons/SysEqModuleIcon.png</file>
+        <file>Icons/ProcessModuleIcon.png</file>
+        <file>Icons/GEM2MTModuleIcon.png</file>
+        <file>Icons/GtDemoModuleIcon.png</file>
+        <file>Icons/DualThModuleIcon.png</file>
+        <file>Icons/UnSpaceModuleIcon.png</file>
+        <file>Icons/ModelingProjectIcon.png</file>
+        <file>Icons/SDrefModuleIcon.png</file>
+        <file>Icons/PhaseDiagramModuleIcon.png</file>
+        <file>Icons/FitSpaceModuleIcon.png</file>
+    </qresource>
+    <qresource prefix="/menu">
+        <file>Icons/NewCloneRecordIcon.png</file>
+        <file>Icons/NewCreateRecordIcon.png</file>
+        <file>Icons/SelectDisplayRecordIcon.png</file>
+        <file>Icons/RemakeRecordIcon.png</file>
+        <file>Icons/CalculateRecordDataIcon.png</file>
+        <file>Icons/SaveCurrentRecordIcon.png</file>
+        <file>Icons/DeleteCurrentRecordIcon.png</file>
+        <file>Icons/PlotDataOnGraphIcon.png</file>
+        <file>Icons/PrintDataToFileIcon.png</file>
+        <file>Icons/ShowHelpWindowIcon.png</file>
+        <file>Icons/DisplayNextRecordIcon.png</file>
+        <file>Icons/DisplayPrevRecordIcon.png</file>
+        <file>Icons/SetKeyTemplateIcon.png</file>
+        <file>Icons/RecipeWizardIcon.png</file>
+        <file>Icons/DetailedCSDIcon.png</file>
+        <file>Icons/CalculateBCCIcon.png</file>
+        <file>Icons/CalculateGEMIcon.png</file>
+        <file>Icons/EquilibriumModeIcon.png</file>
+        <file>Icons/DatabaseModeIcon.png</file>
+        <file>Icons/HomeInHelpMenu.png</file>
+        <file>Icons/SearchBackwardIcon.png</file>
+        <file>Icons/SearchForwardIcon.png</file>
+        <file>Icons/ShowFilesIcon.png</file>
+        <file>Icons/ShowGEMResultsIcon.png</file>
+    </qresource>
+    <qresource prefix="/message">
+        <file>Icons/ErrorMessageIcon.png</file>
+        <file>Icons/WarningMessageIcon.png</file>
+        <file>Icons/InfoMessageIcon.png</file>
+        <file>Icons/QuestionMessageIcon.png</file>
+        <file>Icons/CancelIcon.png</file>
+    </qresource>
+    <qresource prefix="/help">
+        <file>Icons/CalculateGEMIcon24.png</file>
+        <file>Icons/DatabaseModeIcon24.png</file>
+        <file>Icons/EquilibriumModeIcon24.png</file>
+        <file>Icons/ShowHelpWindowIcon24.png</file>
+    </qresource>
+</RCC>

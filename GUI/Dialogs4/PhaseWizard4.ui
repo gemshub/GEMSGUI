@@ -1,0 +1,1888 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PhaseWizardData</class>
+ <widget class="QDialog" name="PhaseWizardData">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>862</width>
+    <height>785</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>GEM-Selektor Proces</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_11">
+   <item>
+    <widget class="QStackedWidget" name="stackedWidget">
+     <property name="mouseTracking">
+      <bool>false</bool>
+     </property>
+     <property name="acceptDrops">
+      <bool>false</bool>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QLabel" name="pageName">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Step 1 - Defining the Phase and the Model of Mixing</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="textLabel10">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="text">
+          <string>Selection of the codes below will configure the Phase record and tell the program what kind of phase and which model of (non-ideal) mixing should be used, and how it should be calculated.</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::AutoText</enum>
+         </property>
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <property name="openExternalLinks">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_13">
+         <property name="title">
+          <string>Select a phase aggregate state code:</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QComboBox" name="pPhPs_0">
+            <item>
+             <property name="text">
+              <string>a    Aqueous electrolyte solution</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>g    Gaseous or fluid non-electrolyte mixture</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>f     Fluid non-electrolyte mixture (ideal or non-ideal)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>p    Plasma (ionized gas mixture)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>l     Liquid non-electrolyte (melt), also multi-component</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>m   Magmatic silicate melt or other non-aqueous electrolyte</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>h    Liquid hydrocarbon phase, also multi-component</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>s     Condensed solid phase, also multi-component solid solution</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>d    Dispersed (particulate or porous) solid phase, also solid solution</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>x     Sorption phase in aqueous electrolyte</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_7">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="ModelCodeLabel">
+            <property name="text">
+             <string>&amp;Select a model of mixing for this phase:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignBottom</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>ModelCode</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="ModelCode">
+            <item>
+             <property name="text">
+              <string>I    Ideal mixture or pure phase (default)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>M   Binary subregular Margules solid-solution model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>G   Binary Redlich-Kister solid-solution model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>T   Ternary regular Margules solid-solution model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>R   Regular multicomponent solid-solution model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>V   Van Laar multicomponent solid-solution model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>K   Redlich-Kister multicomponent solid-solution model </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>B   Multisite  a(symmetric) multicomponent solid-solution model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>L   NRTL multicomponent liquid solution model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>W  Wilson multicomponent liquid solution model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>F   Churakov-Gottschalk (CG) multicomponent fluid EoS model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>P   Peng-Robinson-Stryjek-Vera (PRSV) multicomponent fluid EoS model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>E   Soave-Redlich-Kwong (SRK) multicomponent fluid EoS model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>6   Sterner-Pitzer (STP) high-pressure fluid EoS model (reserved)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>7   Peng-Robinson (PR78) multicomponent fluid EoS model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>8   Compensated Redlich-Kwong (CORK) multicomponent fluid EoS model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>D   Davies equation aqueous model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>H   Extended Debye-Hueckel aqueous model (Helgeson), common a0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Y   Extended Debye-Hueckel aqueous model (Shvarov), common a0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>3   Extended Debye-Hueckel aqueous model (Karpov), individual a0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2   Debye-Hueckel aqueous model (2-term) individual a0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>1   Debye-Hueckel limiting law aqueous model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>S   SIT multicomponent aqueous model (NEA TDB version)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Z   Pitzer multicomponent aqueous model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Q   Extended UNIQAC multicomponent aqueous model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>J   ELVIS multicomponent liquid solution model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>$   Multisite multicomponent non-ideal (CEF) solid-solution model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>A   Adsorption, SACT and EDL models</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>O   Other non-ideal model (selected by phase name)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>U   Other non-ideal mixing model (user-defined scripts)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>N   No mixing (pure or single-component phase)</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="AC_modeLabel">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
+            <property name="text">
+             <string>Select a mode of calculation of &amp;activity coefficients of end members:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignBottom</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>AC_modeCode</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="AC_modeCode">
+            <item>
+             <property name="text">
+              <string>I    Activity coefficients will be set to 1 (pure phase, simple ideal mixing), default</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>S   Activity coefficients will be calculated using a built-in mixing model selected above</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>N   Activity coefficients will be calculated as given in user-defined script(s)</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="DcEqModeLabel">
+            <property name="text">
+             <string>Select a mode of execution of &amp;DcEq user-defined script for end-members:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>DcEqModeCode</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="DcEqModeCode">
+            <item>
+             <property name="text">
+              <string>N   No DcEq script will be provided in this Phase definition (default)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>T   DcEq script will be executed once before GEM IPM iterations</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>X    DcEq script will be executed after each GEM IPM iteration</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="PhEqModeLabel">
+            <property name="text">
+             <string>Select a mode of execution of &amp;PhEq user-defined script for the whole phase:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignBottom</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>PhEqModeCode</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="PhEqModeCode">
+            <item>
+             <property name="text">
+              <string>N   No PhEq script will be provided in this Phase definition (default)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>T   PhEq script will be executed once before GEM IPM iterations</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>X    PhEq script will be executed after each GEM IPM iteration</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="DcEqLinkLabel">
+            <property name="text">
+             <string>Select a mode of a &amp;linking user-defined DcEq script to phase end members:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignBottom</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>DcEqLinkMode</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="DcEqLinkMode">
+            <item>
+             <property name="text">
+              <string>N   No DcEq script will be provided (pure phase, built-in or ideal model), default</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>U   A universal DcEq script will be applied to each end member in a loop</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>P   A private group of expressions will be executed for each end member separately</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="SCM_codeLabel">
+            <property name="text">
+             <string>Select specific mixing rules (temperature corrections) for EoS and activity models:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignBottom</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="SCM_code">
+            <item>
+             <property name="text">
+              <string>N    Default mixing rule or form of interaction parameter coefficients  </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>W   Basic Van der Waals mixing rules in cubic EoS models</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>C    Constant one-term binary interaction parameter kij</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>T    Temperature-dependent one-term binary interaction parameter kij</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>5     Five-term Pitzer model parameter temperature dependence</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>6     Six-term Pitzer model parameter temperature dependence</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>8    Eight-term Pitzer model parameters temperature dependence</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>R    Use CEF reciprocal non-ideality term in Berman multi-site ss model</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="textLabel10_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="text">
+          <string>To set up a (new) sorption, metastable layer- or a kinetically-controlled phase, please proceed to next wizard pages.</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::AutoText</enum>
+         </property>
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <property name="openExternalLinks">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_2">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Step 2 - Phase Model-of-Mixing Specific Dimensions</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="textLabel2">
+         <property name="text">
+          <string>For TSolMod built-in non-ideal mixing models that use dc_cf and/or ipxT, pc_cf data objects, please set the number of interaction parameters; other relevant dimensions will be allocated automatically. </string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignVCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="group1">
+         <property name="title">
+          <string>Parameters and coefficients related to a phase component (end member)</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="pnscM">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="textLabel1">
+            <property name="text">
+             <string>Number of parameter coefficients per solution phase component (columns in the dc_cf table)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>pnscM</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="ndqf"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Number of Darken (DQF) parameter coefficients per solid solution end member</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QSpinBox" name="nrcp"/>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>Number of reciprocal parameter coefficients per solid solution end member</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="group2">
+         <property name="title">
+          <string>Interaction parameters, coefficients, and indexes related to the model of mixing in this phase</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="pNcpN">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximum">
+             <number>999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="textLabel1_3">
+            <property name="text">
+             <string>Number of interaction parameters (i.e. number of rows in ph_cf and ipxT tables)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>pNcpN</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="pnpxM">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="textLabel1_2">
+            <property name="text">
+             <string>Maximum order of interaction parameters (i.e. number of columns in ipxT index table)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>pnpxM</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QSpinBox" name="pNcpM">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="textLabel1_3_2">
+            <property name="text">
+             <string>Number of coefficients per interaction parameter (i.e. number of columns in ph_cf table)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>pNcpM</cstring>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="group3">
+         <property name="title">
+          <string>Parameters and coefficients related to multi-solvent aqueous electrolyte models (under construction)</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="pncsolv">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximum">
+             <number>99</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="textLabel1_4">
+            <property name="text">
+             <string>Number of solvent parameter coefficients (columns in solvc array)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="pcsolv">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="textLabel1_5">
+            <property name="text">
+             <string>Number of solvent interaction parameters (rows in solvc array)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QSpinBox" name="pncdicl">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="textLabel1_3_3">
+            <property name="text">
+             <string>Number of dielectric constant coefficients (colums in dielc array)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QSpinBox" name="pndicl">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximum">
+             <number>99</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="textLabel1_3_4">
+            <property name="text">
+             <string>Number of dielectric constant parameters (rows in dielc array)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QSpinBox" name="pndh">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximum">
+             <number>99</number>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="textLabel1_3_5">
+            <property name="text">
+             <string>Number of generic DH coefficients (rows in dhc array)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="textLabel2_2">
+         <property name="text">
+          <string>Any parameter coefficients table will be allocated only if all its dimensions are set positive and not zeros. </string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignVCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_3">
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Step 3 - Sorption Phase Model Settings</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_11">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>Select a type of (new) adsorption/ ion exchange/ polyelectrolyte isotherm model, or leave 'N' and go to the next wizard step</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="kin_t0">
+            <item>
+             <property name="text">
+              <string>N</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>Select a type of (new) EIL (Electrified Interface Layer) model for this sorption phase {  N   }</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="kin_t1">
+            <item>
+             <property name="text">
+              <string>N</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_10">
+         <property name="title">
+          <string>Dimensions related to (new) sorption phase model</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="nEIl">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>Number of EIL model layers { 0 1 2 3 }</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="nEIp"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>Number of EIL model parameters</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QSpinBox" name="nCDc"/>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_17">
+            <property name="text">
+             <string>Number of charge distribution coefficients</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QSpinBox" name="nSiT"/>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>Number of (ad)sorption site types { 0 1 2 3 ... 10 }</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QSpinBox" name="nIsoC"/>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="label_28">
+            <property name="text">
+             <string>Number of (ad)sorption isotherm parameter coefficients per component ( sorbed- or surface species) </string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QSpinBox" name="nIsoS"/>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="label_30">
+            <property name="text">
+             <string>Number of (ad)sorption isotherm parameter coefficients per surface site</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QSpinBox" name="mDe"/>
+          </item>
+          <item row="6" column="1">
+           <widget class="QLabel" name="label_31">
+            <property name="text">
+             <string>Maximum denticity number for surface species { 0 1 2 3 4 5 6 }</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Set items in this box only if this phase is an old-style sorption phase, or leave unchanged </string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0" colspan="3">
+           <widget class="QCheckBox" name="checkBoxSorption">
+            <property name="text">
+             <string>Check if surface complexation needs to be considered in this (sorption) phase</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="spinBox_SurTypes_N">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximum">
+             <number>6</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="2">
+           <widget class="QLabel" name="textLabel3">
+            <property name="text">
+             <string>Set the number of surface types (minimum 1, maximum 6) to allocate surface complexes</string>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QLineEdit" name="lineEdit_surfArea">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="textLabel4">
+            <property name="text">
+             <string>Enter here the specific surface area A of the sorbent (in m2 per gram), A&gt;0                            </string>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_5">
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Step 4 - Phase Metastability and Kinetics Model Settings</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_8">
+         <property name="title">
+          <string>Select here the codes defining the KinMet model, or leave 'N' in all places and go to the next wizard step </string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Select a type code of the process kinetics</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="kin_t2">
+            <item>
+             <property name="text">
+              <string>N     Not defined, no account for</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>M     Kinetics of generic dissolution/precipitation (no uptake, no ion exchange, no adsorption)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>U      Kinetics of uptake/entrapment (of minor/trace element) into solid solution</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>X      Kinetics of ion exchange (clays, C-S-H, zeolites, ...)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>A      Kinetics of adsorption (on MWI), redox transformation</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>P      Kinetics of solid phase nucleation and precipitation</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Choose a type code of the kinetics/metastablilty model</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="kin_t3">
+            <item>
+             <property name="text">
+              <string>N     Not defined, no account for</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>T     Generic TST dissolution/precipitation model following Shott ea 2012</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>P      Dissolution/precipitation model of the form (Palandri 2004)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>W     Linear-rate growth/dissolution model (e.g. calcite, Wolthers 2012)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>U      Mineral nucleation and growth model with nuclei/particle size distr. (TBD)</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Select a type code of the sorption/uptake kinetics model</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="kin_t4">
+            <item>
+             <property name="text">
+              <string>N     Not defined, no account for</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>E       Unified entrapment model (Thien,Kulik,Curti 2012)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>M      DePaolo (2011) uptake kinetics model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>G      Growth (surface) entrapment model (Watson 2004)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>F      Fast ion exchange kinetics (e.g. montmorillonite, CSH)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>L      Slow ion exchange kinetics (e.g. illite, zeolites)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>I       Adsorption inhibition</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>P      Solid solution nucleation model (Prieto 2013)</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Choose a type code of metastability links of this phase to other phases</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="kin_t5">
+            <item>
+             <property name="text">
+              <string>N    Not defined, no account for</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>S     Link to (fraction of) solid substrate surface</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>P     Link to (fraction of) solid substrate (pore) volume</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>M    Link to (fraction of) solid substrate mass</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Select a dependency of shape (sphericity) factor adjustment on system or particle properties</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="kin_t6">
+            <item>
+             <property name="text">
+              <string>N    Not defined, no account for</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>T     Empirical f(time) cubic polynomial f = a + bt +ct^2 + dt^3 </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>S     Empirical f(StabilityIndex) polynomial f = a + bx +cx^2 + dx^3 </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>A     Empirical f(SArea change) polynomial f = a + bx +cx^2 + dx^3 </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>V     Empirical f(Volume change) polynomial f = a + bx +cx^2 + dx^3 </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>M     Empirical f(Mass change) polynomial f = a + bx +cx^2 + dx^3 </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>X     Empirical f(Amount change) cubic polynomial f = a + bx +cx^2 + dx^3 </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>U     Uniform particle/pore size distribution, f(d_sv change) polynomial</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>B     Binodal particle/pore size distribution (reserved)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>F     General particle/pore size distribution model (reserved)</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Select a code of rate scaling model (reserved)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="kin_t7">
+            <item>
+             <property name="text">
+              <string>N    Not defined, no account for</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>A     Surface-scaled rate constant (k in mol/m2/s), default</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>M     Surface-scaled rate constant (k in kg/m2/s)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>V     Pore-volume-scaled rate constant (k in mol/m3/s)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>W     Pore-volume-scaled rate constant (k in kg/m3/s)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>F      Absolute (unscaled) rate constant (k in mol/s)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>G      Absolute (unscaled) rate constant (k in kg/s)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>L      Linear growth/dissolution rate constant (v in m/s)</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>For built-in TKinMet models, set the first two dimensionalities; others will usually be allocated automatically, as appropriate.
+Any parameter coefficients table will be allocated only if all its dimensions are positive and not zeros. </string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_9">
+         <property name="title">
+          <string>Dimensions of KinMet model parameter coefficients tables</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="nPRk">
+            <property name="value">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>Number of parallel reactions that affect amount constraints for this phase { 0 1 2 3 ... }</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="nSkr"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>Number of species from other phases involved in parallel reaction activity product terms  { 0 1 ... }</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QSpinBox" name="nrpC"/>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_20">
+            <property name="text">
+             <string>Number of parameter coefficients to be used in parallel reaction terms { 0 14 }</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QSpinBox" name="pnaptC"/>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_23">
+            <property name="text">
+             <string>Number of parameters/coefficients per species involved in activity product terms { 0 1 }                                 </string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QSpinBox" name="numpC"/>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>Number of trace element uptake kinetics model parameters per end member { 0 6 }</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QSpinBox" name="pnAscC"/>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="label_24">
+            <property name="text">
+             <string>Number of adjustment coefficients for the shape (sphericity) factor  { 0 4 }</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_4">
+      <layout class="QVBoxLayout" name="verticalLayout_12">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Step 5 - Phase Links, Other Settings and Comments</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_12">
+         <property name="title">
+          <string>Dimensions related to metastability linkages between this and other phases (leave zeros if no links)</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="nlPh">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>Number of phases linked to this phase ( 0 if no metastability linkages )</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="nlPc"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_29">
+            <property name="text">
+             <string>Number of parameters per metastability linkage to another phase { 0 1 2 3 ... }</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Optional settings</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QSpinBox" name="spinBoxSDrefLnk">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="textLabel5">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>&amp;Set here the number of links to SDref bibliography records (default 0)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>spinBoxSDrefLnk</cstring>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <widget class="QCheckBox" name="getDCC">
+            <property name="text">
+             <string>Extract parameters from DComp/ReacDC records and refresh DC class codes upon 'Calculate'?</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_6">
+         <property name="title">
+          <string>What will happen after you click &quot;Finish&quot;</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <widget class="QLabel" name="textLabel13">
+            <property name="text">
+             <string>(1) A list of available ReacDC ('r') and DComp ('d') records will appear; mark those to be the phase components (end-members). At least one species for a pure phase, or two for a solution phase must be marked.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="textLabel12">
+            <property name="text">
+             <string>(2) In Phase window, fill out PhName and PhNote comments. Depending on setup, enter numbers in DisPar, text in DcEq and/or PhEq, parameter coefficients in ipxT, ph_cf, dc_cf arrays on Phase window pages.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="textLabel14">
+            <property name="text">
+             <string>(3) Click on 'Calculate' toolbar button, then look at the PhDCC column; correct DC codes, if needed ('T' for H+; 'W' for H2O-solvent; 'M','J',or 'I' for solid-solution end members). Save Phase record to project database.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="lajout1">
+     <item>
+      <widget class="QPushButton" name="pHelp">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>  &amp;Learn more  </string>
+       </property>
+       <property name="shortcut">
+        <string>F1</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="lajout2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pBack">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>&lt; &amp;Back</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pNext">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>&amp;Next &gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pCancel">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>&amp;Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>ModelCode</tabstop>
+  <tabstop>AC_modeCode</tabstop>
+  <tabstop>DcEqModeCode</tabstop>
+  <tabstop>PhEqModeCode</tabstop>
+  <tabstop>DcEqLinkMode</tabstop>
+  <tabstop>spinBoxSDrefLnk</tabstop>
+  <tabstop>pHelp</tabstop>
+  <tabstop>pBack</tabstop>
+  <tabstop>pNext</tabstop>
+  <tabstop>pCancel</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pCancel</sender>
+   <signal>clicked()</signal>
+   <receiver>PhaseWizardData</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>587</x>
+     <y>518</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>317</x>
+     <y>270</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
