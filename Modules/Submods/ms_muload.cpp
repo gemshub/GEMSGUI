@@ -250,13 +250,15 @@ LOAD_KKMCOEF:
           pmp->LsPhl[k*2] = dphl;
         }
 
-        if( aPH->php->PumpCon && kMod[0] == KM_PRO_UPT )  // so far only for uptake kinetics models!
+        if( aPH->php->PumpCon && aPH->php->lICu && pmp->LsUpt[k*2+1] > 0 )
+//                ( kMod[2] == KM_UPT_ENTRAP || kMod[2] == KM_IEX_FAST || kMod[2] == KM_IEX_SLOW ) )
+            // kMod[0] == KM_PRO_UPT )  // so far only for uptake kinetics models!
         {
             int icph=0, icInd = 0;
             char ICname[MAXICNAME+2];
 
-            if( pmp->xICuC == NULL || ki+pmp->L1[k] > aObj[ o_wi_xicuc ].GetN() )
-                pmp->xICuC = (long int *) aObj[ o_wi_xicuc ].Alloc( ki+pmp->L1[k], 1, L_ );
+            if( pmp->xICuC == NULL || ki+pmp->LsUpt[k*2+1] > aObj[ o_wi_xicuc ].GetN() )
+                pmp->xICuC = (long int *) aObj[ o_wi_xicuc ].Alloc( ki+pmp->LsUpt[k*2+1], 1, L_ );
             ErrorIf( pmp->xICuC == NULL, "KinMetModLoad",
                     "Error in reallocating memory for pmp->xICuC." );
             // For now, no compression of IC name list (and other stuff in TKinMet). TBD!!!
@@ -275,7 +277,7 @@ LOAD_KKMCOEF:
                 else {
                   // This IC is missing in MULTI - potentially error!
                     ErrorIf( pmp->apConC == NULL, "KinMetModLoad",
-                           "Error in reallocating memory for pmp->apConC." );
+                           "Error in reallocating memory for pmp->xICuC." );
                     pmp->xICuC[ki+icph] = -1L;
                 }
                 icph++;
@@ -292,8 +294,9 @@ LOAD_KKMCOEF:
         kae += pmp->LsKin[k*6]*pmp->LsKin[k*6+1]*pmp->LsKin[k*6+3];
         kse += pmp->LsKin[k*6+4];
         kde += pmp->LsKin[k*6+1];
-        if( aPH->php->PumpCon && kMod[0] == KM_PRO_UPT )
-            kie += pm.L1[k];
+        kie += pmp->LsUpt[k*2+1];
+//        if( aPH->php->PumpCon && kMod[0] == KM_PRO_UPT )
+//            kie += pm.L1[k];
      } // kk, k
 
  //    pmp->pKMM = 1;

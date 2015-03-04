@@ -602,7 +602,10 @@ long int
             pm.LsMdc2[k*3+1] = aPH->php->nrcp;
 
             pm.LsUpt[k*2] = aPH->php->numpC;
-            pm.LsUpt[k*2+1] = aPH->php->nFaces;     // provisional 8.04.2013 DK
+            if( aPH->php->PumpCon && aPH->php->lICu && ( aPH->php->kin_t[4] == KM_UPT_ENTRAP
+                 || aPH->php->kin_t[4] == KM_IEX_FAST || aPH->php->kin_t[4] == KM_IEX_SLOW ) )
+            pm.LsUpt[k*2+1] = pm.L1[k]; // bugfix 04.03.2015 DK
+                  //  aPH->php->nFaces;     // provisional 8.04.2013 DK
 
 // New stuff for TSorpMod
 if(phSorpMod[k])
