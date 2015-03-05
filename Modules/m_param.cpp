@@ -1059,6 +1059,7 @@ void TProfil::outMulti( GemDataStream& ff, string& path  )
 void TProfil::outMulti( string& path, bool addMui, bool with_comments, bool brief_mode )
 {
     multi->to_text_file_gemipm( path.c_str(), addMui, with_comments, brief_mode );
+//    multi->to_text_file_gemipm( path.c_str(), addMui, with_comments, false ); // workaround 18.12.14 DK (built-in kinetics) - reverted
 }
 
 void TProfil::outMultiTxt( const char *path, bool append  )

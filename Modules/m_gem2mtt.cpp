@@ -301,8 +301,10 @@ bool TGEM2MT::CalcIPM_Node( char mode, long int ii, FILE* diffile )
    DATABRPTR* C1 = na->pNodT1();  // nodes at current time point
    bool* iaN = na->piaNode();     // indicators for IA in the nodes
 
-   node0_Tm( ii ) = mtp->cTau;     // set time and time step (for TKinMet)
-   node0_dt( ii ) = mtp->dTau;
+//   node0_Tm( ii ) = mtp->cTau;     // set time and time step (for TKinMet)
+//   node0_dt( ii ) = mtp->dTau;
+   node1_Tm( ii ) = mtp->cTau;     // set time and time step (for TKinMet)
+   node1_dt( ii ) = mtp->dTau;
 
    if(mtp->PsSIA == S_OFF )
        iaN[ii] = true;
