@@ -15,6 +15,7 @@ CONFIG -= warn_on
 CONFIG += warn_off
 #CONFIG += help
 CONFIG += thread
+CONFIG += c++11
 QT += network
 QT += sql
 QT += xml
@@ -120,15 +121,31 @@ UI_SOURSEDIR  = $$MOC_DIR
 UI_HEADERDIR  = $$MOC_DIR
 OBJECTS_DIR   = obj
 
+include($$QWT6_CPP/qwt.pri)
+include($$EJDB_CPP/tcejdb.pri)
+include($$NUMERICS_CPP/Numerics.pri)
+include($$GEMS3K_CPP/gems3k.pri)
+
+
 include($$MODULES_CPP/Modules.pri)
 include($$SERVICES4_CPP/Services4.pri)
 include($$DATAMAN_CPP/Dataman.pri)
 include($$DIALOGS4_CPP/Dialogs4.pri)
-#include($$MODULES_CPP/Modules.pri)
 include($$SUBMODS_CPP/Submods.pri)
-include($$NUMERICS_CPP/Numerics.pri)
-include($$GEMS3K_CPP/gems3k.pri)
-include($$QWT6_CPP/qwt.pri)
-include($$EJDB_CPP/tcejdb.pri)
-#include($$DATAMAN_CPP/Dataman.pri)
 
+
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Reaktor/build/lib/release/ -lReaktor
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Reaktor/build/lib/debug/ -lReaktor
+#else:unix: LIBS += -L$$PWD/../Reaktor/build/lib/ -lReaktor
+
+unix|win32: LIBS += -lReaktor
+unix|win32: LIBS += -lopenblas
+unix|win32: LIBS += -llapack
+
+INCLUDEPATH += $$PWD/../standalone/Reaktor
+DEPENDPATH += $$PWD/../standalone/Reaktor
+
+INCLUDEPATH += ../standalone/Reactor
+DEPENDPATH += ../standalone/Reaktor
+
+../standalone

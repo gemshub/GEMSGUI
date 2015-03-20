@@ -308,7 +308,7 @@ LOAD_KKMCOEF:
 // phases-solutions into structure for calculations of equlibria
 // Uses the IPN stack calculation module (c) 1991-1996 S.Dmytrieva
 //
-void TMulti::SolModLoad( )
+void TMulti::SolModLoad()
 {
     int kk, k, j, jj, jp, jkd, ku, kue=0,
     JB, JE=0, jb, je=0, kc, kd, kce=0, kde=0, kx, kxe=0, ksn = 0, ksf=0, Type=0;

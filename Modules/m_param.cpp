@@ -992,42 +992,6 @@ void TProfil::LoadFromMtparm( QWidget* par, DATACH *CSD , bool no_interpolat)
 // the same functions in ms_param.cpp
 
 
-
-long int showMss = 1L;
-/* test result GEM IPM calculation of equilibrium state in MULTI
-long int TProfil::testMulti()
-{
-  MULTI *pmp = multi->GetPM();
-  if( pmp->MK || pmp->PZ )
-  {
-   if( pa.p.PSM >= 2 )
-   {
-     fstream f_log("ipmlog.txt", ios::out|ios::app );
-     f_log << "Warning " << pmp->stkey << ": " <<  pmp->errorCode << ":" << endl;
-     f_log << pmp->errorBuf << endl;
-   }
-   if( showMss )
-   {
-           multi->addErrorMessage(" \nContinue?");
-      switch( vfQuestion3(0, pmp->errorCode, pmp->errorBuf,
-                           "&Yes", "&No", "&Yes to All" ))
-       {
-       case VF3_3:
-           showMss=0l;
-       case VF3_1:
-           break;
-       case VF3_2:
-           Error(pmp->errorCode, pmp->errorBuf);
-       }
-   }
-
-   return 1L;
-  }
-
-  return 0L	;
-}
-moved to TMulti*/
-
 // GEM IPM calculation of equilibrium state in MULTI
 // without testing changes in the system
 //

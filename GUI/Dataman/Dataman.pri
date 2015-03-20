@@ -6,7 +6,7 @@
                     $$DATAMAN_H/v_dbm_file.h \
                     $$DATAMAN_H/v_ejdb.h \
                     $$DATAMAN_H/v_ejdb_file.h \
-                    $$DATAMAN_H/v_json.h \
+#                    $$DATAMAN_H/v_json.h \
                     $$DATAMAN_H/t_print.h \
                     $$DATAMAN_H/t_read.h \
                     $$DATAMAN_H/v_2module.h \
@@ -20,7 +20,7 @@
                     $$DATAMAN_CPP/v_dbm_file.cpp \
                     $$DATAMAN_CPP/v_ejdb.cpp \
                     $$DATAMAN_CPP/v_ejdb_file.cpp \
-                    $$DATAMAN_CPP/v_json.cpp \
+ #                   $$DATAMAN_CPP/v_json.cpp \
                     $$DATAMAN_CPP/t_print.cpp \
                     $$DATAMAN_CPP/t_read.cpp \
                     $$DATAMAN_CPP/v_2module.cpp\

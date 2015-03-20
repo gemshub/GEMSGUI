@@ -24,7 +24,7 @@ class ThreadControl {
     	    ThreadControl::wait(); \
 	} \
         if( TProfil::pm->userCancel ) \
-            throw UserCancelException(); \
+            throw TMultiSystem::UserCancelException(); \
 	}
 
 #define STEP_POINT2() { \
