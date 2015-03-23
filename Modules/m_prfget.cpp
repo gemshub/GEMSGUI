@@ -709,7 +709,7 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
     {  // no kinetics to consider
         multi->GetPM()->kTau = 0.;
         multi->GetPM()->kdT = 0.;
-        multi->GetPM()->ITau = 0;
+        multi->GetPM()->ITau = -1; // SD 23/03/2015
         multi->GetPM()->pKMM = 2;  // no need to allocate TKinMet instances
     }
     else {   // considering kinetics
@@ -721,7 +721,7 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
             multi->GetPM()->ITau = -1;
         }
         else  // TKinMet exists, simulation continues
-            multi->GetPM()->ITau = kTimeStep;
+             multi->GetPM()->pKMM = 1; // SD 23/03/2015 multi->GetPM()->ITau = kTimeStep;
     }
     PMtest( keyp.c_str() );
 
