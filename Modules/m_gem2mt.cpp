@@ -24,9 +24,12 @@
 #endif
 
 #include "m_gem2mt.h"
+#include "particlearray.h"
+#include "ms_rmults.h"
 #include "visor.h"
 #include "m_syseq.h"
 #include "v_object.h"
+#include "service.h"
 
 TGEM2MT* TGEM2MT::pm;
 
@@ -756,13 +759,13 @@ TGEM2MT::MakeQuery()
     // set up for mathscripts
     double Tai[4], Pai[4];
 
-    Tai[0] = Tai[1] = TMulti::sm->GetPM()->TCc;
-    Pai[0] = Pai[1] = TMulti::sm->GetPM()->Pc;
+    Tai[0] = Tai[1] = TMultiSystem::sm->pmp->TCc;
+    Pai[0] = Pai[1] = TMultiSystem::sm->pmp->Pc;
     Tai[2] = Pai[2] = 0.;
     Tai[3] = Pai[3] = 0.1;
 
     FreeNa();
-    na = new TNodeArray( 1, TMulti::sm->GetPM() );
+    na = new TNodeArray( 1, TMultiSystem::sm );
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructures( 0, true , Tai, Pai  );
 
@@ -941,7 +944,7 @@ AGAIN:
 void TGEM2MT::AllocNa()
 {
   FreeNa();
-  na = new TNodeArray( mtp->nC, TMulti::sm->GetPM() );
+  na = new TNodeArray( mtp->nC, TMultiSystem::sm );
 
   // use particles
   if( mtp->PsMode == RMT_MODE_W  )
@@ -1165,7 +1168,7 @@ void TGEM2MT::RecordPrint( const char* key )
             to_text_file( ff,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF, filename.c_str() );
 
 		}
-    na = new TNodeArray( mtp->nC, TMulti::sm->GetPM() );
+    na = new TNodeArray( mtp->nC, TMultiSystem::sm );
     mtp->gStat = GS_GOING;
     mt_reset();
     Bn_Calc();

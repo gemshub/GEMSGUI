@@ -27,6 +27,9 @@
 #include "t_print.h"
 #include "stepwise.h"
 #include "num_methods.h"
+#include "service.h"
+#include "tmltsystem.h"
+#include "ms_rmults.h"
 
 TProcess* TProcess::pm;
 
@@ -1065,7 +1068,7 @@ void TProcess::pe_text_analyze()
       if( pep->PsEqn != S_OFF )
       {
         PRof->ET_translate( o_petprn, o_peexpr, 0,
-                  TRMults::sm->GetMU()->L, 0, TMulti::sm->GetPM()->L );
+                  TRMults::sm->GetMU()->L, 0, TMultiSystem::sm->pmp->L );
         rpn[0].GetEquat( (char *)aObj[o_petprn].GetPtr() );
       }
     }
@@ -1084,7 +1087,7 @@ void TProcess::pe_text_analyze()
       {
 
         PRof->ET_translate( o_petprn, o_pcexpr, 0,
-                            TRMults::sm->GetMU()->L, 0, TMulti::sm->GetPM()->L );
+                            TRMults::sm->GetMU()->L, 0, TMultiSystem::sm->pmp->L );
         rpn[1].GetEquat( (char *)aObj[o_petprn].GetPtr() );
       }
     }

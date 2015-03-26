@@ -22,8 +22,10 @@
 #include "m_param.h"
 #include "v_ipnc.h"
 #include "graph.h"
-//#include "v_mod.h"
-//#include "v_2module.h"
+#include "tmltsystem.h"
+#include "ms_mtparm.h"
+#include "ms_rmults.h"
+#include "ms_system.h"
 
 const int UNSP_RKLEN = 80,
           NAME_SIZE = 10,
@@ -302,7 +304,7 @@ class TUnSpace : public TCModule
     TPlotLine *plot;
 
      SYSTEM *syu;
-     MULTI *pmu;
+     MULTIBASE *pmu;
      MTPARM *tpu;
 
 protected:

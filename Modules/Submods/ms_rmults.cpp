@@ -17,9 +17,10 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
+
 #include "ms_rmults.h"
+#include "ms_mtparm.h"
 #include "m_param.h"
-#include "m_phase.h"
 #include "m_icomp.h"
 #include "m_dcomp.h"
 #include "m_compos.h"
@@ -27,6 +28,7 @@
 #include "v_object.h"
 #include "s_formula.h"
 #include "visor.h"
+#include "service.h"
 
 TRMults* TRMults::sm;
 
@@ -926,105 +928,6 @@ AGAIN:  anRPhase = vfMultiChoiceSet(window(), aKeysList, msg1.c_str(), anRPhase 
   }
  }
 
-/*
-// Select aqueous phase from available or make default
-string TRMults::SelectAqPhase(const char * dfKey )
-{
-    int i, sel=0;
-    TCStringArray aPhaseList;
-    TCIntArray anRPhase;
-
-     // Get all records of Phase
-    rt[RT_PHASE].GetKeyList( "a:*:*:*:*:", aPhaseList, anRPhase );
-    if( aPhaseList.GetCount()<1 ) //no aqueous phase in open data base files
-    {
-        if( vfQuestion( window(), "Project: Choice of aqueous phase?",
-            "No definitions of aqueous phase available!\n Make default(Yes) or remove (No)?" ))
-        {
-          mu.PmvAq = S_ON; return "";
-        }
-        else {
-          mu.PmvAq = S_OFF; return "";
-        }
-    }
-    if( aPhaseList.GetCount()==1 )
-        return  aPhaseList[0];
-    // get selected phase  added Sveta 18/06/04
-    for(uint ii=0; ii <aPhaseList.GetCount(); ii++)
-    {
-        if( dfKey == aPhaseList[ii] )
-        {
-            sel =ii;
-            break;
-        }
-    }
-    // select phase
-//    do
-//    {
-AGAIN:  i = vfChoice(window(), aPhaseList,
-                   "Please, choose an aqueous phase.", sel);
-//    }
-//    while( i<0 );
-    if( i < 0 )
-    {            // rejected
-      if( vfQuestion( window(), "Project: What aqueous phase?",
-            "No definitions of aqueous phase selected!\n Choose again (Yes) or remove (No)?" ))
-      goto AGAIN;
-      else {
-          mu.PmvAq = S_OFF; return "";
-      }
-    }
-    else return  aPhaseList[i];
-}
-
-// Select gaseous phase from all or make default
-string TRMults::SelectGasPhase(const char * dfKey )
-{
-    int i, sel=0;
-    TCStringArray aPhaseList;
-    TCIntArray anRPhase;
-
-    // Get all records of PHase
-    rt[RT_PHASE].GetKeyList( "g:*:*:*:*:", aPhaseList, anRPhase );
-    if( aPhaseList.GetCount()<1 ) //no gas phase in open data base files
-    { // Sveta 17/05/99  mu.PmvGas = S_ON;  goto DEF_KEY;
-       rt[RT_PHASE].GetKeyList( "f:*:*:*:*:", aPhaseList, anRPhase );
-       if( aPhaseList.GetCount()<1 )
-       {
-          if( vfQuestion( window(), "Project: Choice of gas/fluid phase?",
-            "No definitions of gas/fluid phase available!\n Make default (Yes) or remove (No)?" ))
-          {
-            mu.PmvGas = S_ON; return "";
-          }
-          else {
-            mu.PmvGas = S_OFF; return "";
-          }
-       }
-    }
-    if( aPhaseList.GetCount() == 1 )
-        return  aPhaseList[0];
-    // select phase
-    rt[RT_PHASE].GetKeyList( "*:*:*:*:*:", aPhaseList, anRPhase );
-    // get selected phase  added Sveta 18/06/04
-    for(uint ii=0; ii <aPhaseList.GetCount(); ii++)
-    {
-        if( dfKey == aPhaseList[ii] )
-        {
-            sel =ii;
-            break;
-        }
-    }
-    do
-    {
-      i = vfChoice(window(), aPhaseList,
-         "Please, choose a gas (g) or fluid (f) phase", sel);
-    }
-    while( i<0 );
-    return  aPhaseList[i];
-}
-
-*/
-
 //Set indexes of selected aqueous and gaseous phase
 void TRMults::SetAqGas( const char* AqKey, const char* GasKey )
 {
@@ -1087,5 +990,6 @@ void TRMults::TestIComp()
     } /*j*/
 
 }
+
 //--------------------- End of ms_rmults.cpp ---------------------------
 

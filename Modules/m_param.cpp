@@ -22,16 +22,18 @@
 #include <unistd.h>
 #endif
 
-//#include <cmath>
 #include "v_object.h"
-#include "m_unspace.h"
-#include "m_gtdemo.h"
+#include "m_param.h"
+#include "ms_rmults.h"
+#include "ms_mtparm.h"
+#include "ms_system.h"
+#include "ms_calc.h"
 #include "m_syseq.h"
 #include "m_proces.h"
-#include "m_dualth.h"
 #include "visor.h"
 #include "gdatastream.h"
 #include "nodearray.h"
+#include "service.h"
 
 TProfil* TProfil::pm;
 
@@ -250,6 +252,7 @@ TProfil::TProfil( int nrt ):
     mtparm =  0;
     syst = 0;
     multi =0;
+    wrknode = 0;
 
     //mup = 0;
     //tpp = 0;
@@ -265,7 +268,7 @@ TProfil::TProfil( int nrt ):
     userCancel = false;
     stepWise = false;
     calcFinished = false;
-    fStopCalc = false;
+//    fStopCalc = false;
     comp_change_all = false;
     internalBufer = 0;
 }
@@ -273,39 +276,28 @@ TProfil::TProfil( int nrt ):
 // init submodules to calc module
 void TProfil::InitSubModules()
 {
-    if( !rmults /*aMod.GetCount() < MD_RMULTS*/ )
-    {
         aMod.push_back( rmults = new TRMults( MD_RMULTS ) );
         TRMults::sm = rmults;
         rmults->ods_link();
-        //mup = rmults->GetMU();
         aMod.push_back( mtparm = new TMTparm( MD_MTPARM ) );
         TMTparm::sm = mtparm;
         mtparm->ods_link();
-        //tpp = mtparm->GetTP();
         aMod.push_back( syst = new TSyst( MD_SYSTEM ) );
         TSyst::sm = syst;
         syst->ods_link();
-        //syp = syst->GetSY();
-        aMod.push_back( multi = new TMulti( MD_MULTI ) );
-        TMulti::sm = multi;
-        multi->setPa(this);
-        //pmulti = multi;
+        aMod.push_back( multi = new TMultiSystem( MD_MULTI ) );
+        TMultiSystem::sm = multi;
         multi->ods_link();
-        //pmp = multi->GetPM();
         aMod.push_back( new TEQCalc( MD_EQCALC ) );
         aMod.push_back( new TEQDemo( MD_EQDEMO ) );
 
-    }
+        // Creates TNode structure instance accessible trough the "node" pointer
+        wrknode = new TNode( multi );
 }
 
 // link values to objects
 void TProfil::ods_link( int )
 {
-    /* rmults->ods_link();
-     mtparm->ods_link();
-     syst->ods_link();
-     multi->ods_link();*/
     aObj[o_paver].SetPtr( pa.ver );
     aObj[o_papc].SetPtr( &(pa.p.PC) );
     aObj[o_paprd].SetPtr(&(pa.p.PD) );
@@ -366,15 +358,15 @@ void TProfil::ods_link( int )
 
     aObj[ o_spppar].SetPtr(  (void *)&pa );
     aObj[ o_spppar].SetM( sizeof( SPP_SETTING ) );
-aObj[ o_sptext].SetPtr(  internalBufer );
+    aObj[ o_sptext].SetPtr(  internalBufer );
 }
 
 // set dynamic Objects ptr to values
-
 void TProfil::dyn_set(int )
 {
     pa.p.tprn= (char *)aObj[o_patprn].GetPtr();
-internalBufer = (char *)aObj[ o_sptext].GetPtr();
+    internalBufer = (char *)aObj[ o_sptext].GetPtr();
+
     if( rmults ) rmults->dyn_set();
     if( mtparm ) mtparm->dyn_set();
     if( syst ) syst->dyn_set();
@@ -406,7 +398,6 @@ void TProfil::dyn_new(int )
 
 
 //set default information
-
 void TProfil::set_def( int )
 {
     pa = pa_;
@@ -417,8 +408,7 @@ void TProfil::set_def( int )
     if( multi ) multi->set_def();
 }
 
-/* opens window with 'Remake record' parameters
-*/
+// opens window with 'Remake record' parameters
 void TProfil::MakeQuery()
 {
     const char * p_key;
@@ -437,7 +427,7 @@ void TProfil::MakeQuery()
     memcpy( &rmults->GetMU()->PmvSA, flgs,    10);
     memcpy( &mtparm->GetTP()->PtvG,  flgs+10, 20);
     memcpy( &mtparm->GetTP()->PunE,  flgs+30, 8);
-    // SD 07/08/2009 set BASE_PARAM from default
+    // Set BASE_PARAM from default
     ChangeSettings(tasktype);
 }
 
@@ -454,7 +444,7 @@ const char* TProfil::GetHtml()
 void TProfil::makeGEM2MTFiles(QWidget* par )
 {
     TNodeArray* na = 0;
-    MULTI *pmp = multi->GetPM();
+    MULTIBASE *pmp = multi->pmp;
 
     try
 	 {
@@ -477,7 +467,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       nPp_ = aObj[ o_w_pval].GetN();
 
 
-      na = new TNodeArray( 1, multi->GetPM() );
+      na = new TNodeArray( 1, multi );
 
       // realloc and setup data for dataCH and DataBr structures
       //na->MakeNodeStructures( par, ( flags[0] == S_OFF ) , Tai, Pai  );
@@ -499,7 +489,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       if( na )
        delete na;
       na = 0;
-       Error(  xcpt.title, xcpt.mess );
+       throw; //Error(  xcpt.title, xcpt.mess );
     }
     if( na )
      delete na;
@@ -511,12 +501,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
 bool TProfil::CompareProjectName( const char* SysKey )
 {
     int len = rt[RT_PARAM].FldLen(0);
-//    const char* proj_name = rt[RT_PARAM].UnpackKey();
     const char* proj_key = db->UnpackKey();
-//char project_name[64];
-//memcpy( project_name, proj_key, len );
-//project_name[len] = '\0';
-//cout << len << " proj: " << project_name << " read: " << SysKey << endl;
     if( memcmp( SysKey, proj_key, len ) )
         return true;
     else
@@ -527,18 +512,17 @@ bool TProfil::CompareProjectName( const char* SysKey )
 // Copy T and P from DATABR
 void TProfil::ChangeTPinKey( double T, double P )
 {
-    MULTI* pmp = multi->GetPM();
     char bT[40];
     char bP[40];
 
     Gcvt( T, 6, bT );
     Gcvt( P, 6, bP );
-    rt[RT_SYSEQ].SetKey( pmp->stkey );
-    string str = pmp->stkey;
+    rt[RT_SYSEQ].SetKey( multi->pmp->stkey );
+    string str = multi->pmp->stkey;
     rt[RT_SYSEQ].MakeKey( RT_SYSEQ, str, RT_SYSEQ, 0, RT_SYSEQ, 1,
                            RT_SYSEQ, 2, RT_SYSEQ, 3, RT_SYSEQ, 4,
                            K_IMM, bP, K_IMM, bT, RT_SYSEQ, 7, K_END);
-    strncpy(pmp->stkey, str.c_str(), EQ_RKLEN );
+    strncpy(multi->pmp->stkey, str.c_str(), EQ_RKLEN );
 
     string capName = "Change the key read from GEMS3K I/O files";
 AGAIN:
@@ -558,7 +542,7 @@ AGAIN:
 //       according to mui, muj, mup index lists in MULTI that were read in.
 void TProfil::SetSysSwitchesFromMulti( )
 {
-     MULTI* pmp = multi->GetPM();
+     MULTIBASE* pmp = multi->pmp;
      RMULTS* mup = rmults->GetMU();
      SYSTEM* syp = syst->GetSY();
      int i, ii, j, jj, k, kk;
@@ -608,8 +592,8 @@ void TProfil::SetSysSwitchesFromMulti( )
 // Reading structure MULTI (GEM IPM work structure)
 void TProfil::CmReadMulti( QWidget* par, const char* path )
 {
-    TNodeArray* na = new TNodeArray( 1, multi->GetPM() );
-    MULTI* pmp = multi->GetPM();
+    TNodeArray* na = new TNodeArray( 1, multi );
+    MULTIBASE* pmp = multi->pmp;
     SYSTEM* syp = syst->GetSY();
     //string key = pmp->stkey;
 
@@ -651,7 +635,7 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
            pmp->pIPN = 0;
            if( pmp->pTPD > 1)
                pmp->pTPD = 1; // reload Go, Vol
-pmp->pKMM = 0;
+           pmp->pKMM = 0;
            // sets the system/SysEq switches for
 //             components and phases according to mui, muj, mup that were read in.
            SetSysSwitchesFromMulti( );
@@ -706,68 +690,15 @@ pmp->pKMM = 0;
     // (interpolation of thermodynamic data or precision )
 }
 
-//Delete record with key
-void
-TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
-{
-    vector<string> aList;
-    string pkey;
-    int i;
-
-    rt[RT_PARAM].Get( key ); // read record
-    dyn_set();
-    SetFN();                  // reopen files of data base
-    rt[nRT].SetKey( key);
-
-    // Delete all records connected to project
-    aList.clear();    //SYSEQ
-    rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-                           K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_SYSEQ].GetKeyList( pkey.c_str(), aList );
-    for( i=0; i< aList.size(); i++)
-        TSysEq::pm->DeleteRecord(aList[i].c_str());
-
-    aList.clear();    //PROCES
-    rt[RT_PROCES].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_PROCES].GetKeyList( pkey.c_str(), aList );
-    for( i=0; i< aList.size(); i++)
-        TProcess::pm->DeleteRecord(aList[i].c_str());
-
-    aList.clear();    //UNSPACE
-    rt[RT_UNSPACE].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-      K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_UNSPACE].GetKeyList( pkey.c_str(), aList );
-    for( i=0; i< aList.size(); i++)
-        TUnSpace::pm->DeleteRecord(aList[i].c_str());
-
-    aList.clear();    //GTDEMO
-    rt[RT_GTDEMO].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-                            K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_GTDEMO].GetKeyList( pkey.c_str(), aList );
-    for( i=0; i< aList.size(); i++)
-        TGtDemo::pm->DeleteRecord(aList[i].c_str());
-
-    aList.clear();    //DUALTH
-    rt[RT_DUALTH].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_DUALTH].GetKeyList( pkey.c_str(), aList );
-    for( i=0; i< aList.size(); i++)
-        TDualTh::pm->DeleteRecord(aList[i].c_str());
-
-    rt[nRT].Del( key );
-}
-
-
 // Load Thermodynamic data from Database
 void TProfil::CheckMtparam()
 {
 
-  if( fabs( mtparm->GetTP()->T - multi->GetPM()->TCc ) > 1.e-10 ||
-         fabs( mtparm->GetTP()->P - multi->GetPM()->Pc ) > 1.e-9 )
+  if( fabs( mtparm->GetTP()->T - multi->pmp->TCc ) > 1.e-10 ||
+         fabs( mtparm->GetTP()->P - multi->pmp->Pc ) > 1.e-9 )
    { // load new MTPARM on T or P
-      mtparm->LoadMtparm( multi->GetPM()->TCc, multi->GetPM()->Pc );
-      multi->GetPM()->pTPD = 0;
+      mtparm->LoadMtparm( multi->pmp->TCc, multi->pmp->Pc );
+      multi->pmp->pTPD = 0;
    }
  }
 
@@ -782,7 +713,7 @@ void TProfil::PMtest( const char *key )
     //double V, T, P;
     TSysEq* STat = (TSysEq*)(aMod[RT_SYSEQ]);
     TProcess* Proc = (TProcess*)(aMod[RT_PROCES]);
-    MULTI *pmp = multi->GetPM();
+    MULTIBASE *pmp = multi->pmp;
 
     // test for available old solution
     if( STat->ifCalcFlag() )
@@ -831,7 +762,7 @@ short TProfil::BAL_compare()
     int i,j,k, jj, jb, je=0;
     double Go, Gg, Ge, pGo;
     SYSTEM *syp = TSyst::sm->GetSY();
-    MULTI *pmp = multi->GetPM();
+    MULTIBASE *pmp = multi->pmp;
 
     // Changes in thermdynamic (Saved DComp, ReacDC or Phase records )
     if( pmp->pTPD == -1 )  // 16/11/2011 SD
@@ -991,47 +922,50 @@ void TProfil::LoadFromMtparm( QWidget* par, DATACH *CSD , bool no_interpolat)
 //=========================================================================================
 // the same functions in ms_param.cpp
 
+//#include "equlibrate.h"
+#include "ipmequlib.h"
 
-// GEM IPM calculation of equilibrium state in MULTI
-// without testing changes in the system
+/// GEM IPM calculation of equilibrium state in MULTI
+/// without testing changes in the system
 //
 double TProfil::ComputeEquilibriumState( long int& NumPrecLoops, long int& NumIterFIA, long int& NumIterIPM )
 {
   TSysEq* STat = (TSysEq*)(aMod[RT_SYSEQ]);
   calcFinished = false;
 
-  multi->CalculateEquilibriumState( 0, NumIterFIA, NumIterIPM );
+
+  TIPMEqulibrate* taskPtr = new TIPMEqulibrate( wrknode );
+  //profil->ComputeEquilibriumState( PrecLoops, NumIterFIA, NumIterIPM );
+
+  /* CalcTime = */taskPtr->CalculateEquilibriumState( NumIterFIA, NumIterIPM );
+
+  if( taskPtr )
+     delete taskPtr;
+  ////wrknode->GEM_run( false );
+  //multi->CalculateEquilibriumState( 0, NumIterFIA, NumIterIPM );
 
   calcFinished = true;
   STat->setCalcFlag( true );
   // STat->CellChanged(); // SD 28/11/2011 to protect MessageToSave()
 
-  return multi->GetPM()->t_elap_sec;
+  return multi->pmp->t_elap_sec;
 }
 
+/*
 void TProfil::outMulti( GemDataStream& ff, string& path  )
 {
     ff.writeArray( &pa.p.PC, 10 );
     ff.writeArray( &pa.p.DG, 28 );
-    multi->to_file( ff/*, path*/ );
-}
+    multi->to_file( ff/*, path* );
+}*/
 
-// outpu MULTI to txt format
-// brief_mode - Do not write data items that contain only default values
-// with_comments -Write files with comments for all data entries ( in text mode)
-// addMui - Print internal indices in RMULTS to IPM file for reading into Gems back
-void TProfil::outMulti( string& path, bool addMui, bool with_comments, bool brief_mode )
-{
-    multi->to_text_file_gemipm( path.c_str(), addMui, with_comments, brief_mode );
-//    multi->to_text_file_gemipm( path.c_str(), addMui, with_comments, false ); // workaround 18.12.14 DK (built-in kinetics) - reverted
-}
 
 void TProfil::outMultiTxt( const char *path, bool append  )
 {
     multi->to_text_file( path, append );
 }
 
-
+/*
 // Reading structure MULTI (GEM IPM work structure)
 void TProfil::readMulti( GemDataStream& ff )
 {
@@ -1046,6 +980,398 @@ void TProfil::readMulti( const char* path,  DATACH  *dCH )
 {
       multi->from_text_file_gemipm( path, dCH);
 }
+*/
+
+double TProfil::MolWeight( int N, double *ICaw, double *Smline )
+ { 	return syst->MolWeight( N, ICaw, Smline ); }
+
+void TProfil::SyTestSizes()
+ { 	syst->SyTestSizes(); }
+
+void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
+ tget_ndx *get_ndx  )
+{
+  multi->ET_translate( nOet, nOpex, JB, JE, jb, je, get_ndx);
+}
+
+// Build list names of index for object
+void TProfil::getNamesList( int nO, vector<string>& lst )
+{
+   lst.clear();
+
+   int i, iCode = aObj[nO].GetIndexationCode();
+   RMULTS* mup = TRMults::sm->GetMU();
+   MULTIBASE *pmp = multi->pmp;
+
+   long int nOsz = aObj[nO].GetN();
+
+    // Getting new indexation code
+   switch( iCode )
+   {  // analyze indexation code
+       default: //break;
+          Error( "E01MSWin: Unknown indexation base for data object",aObj[nO].GetKeywd()  );
+       case A_icx:
+                  for( i=0; i<pmp->N; i++ )
+                     lst.push_back( string( pmp->SB[i], 0, MAXICNAME ));
+                  break;
+       case A_dcx:
+       case A_dcxicx:
+                   for( i=0; i<min(pmp->L,nOsz); i++ )
+                       lst.push_back( string( pmp->SM[i],0, MAXDCNAME) );
+                   break;
+       case A_dcsx:
+                   for( i=pmp->Ls + pmp->Lads; i<pmp->L; i++ )
+                       lst.push_back( string( pmp->SM[i], 0, MAXDCNAME) );
+                   break;
+       case A_phx:
+                   for( i=0; i<min(pmp->FI,nOsz); i++ )
+                     lst.push_back( string( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
+                   break;
+       case A_phxicx:
+                   for( i=0; i<pmp->N; i++ )
+                      lst.push_back( string( pmp->SB[i], 0, MAXICNAME ));
+                   break;
+                   //for( i=0; i<pmp->FIs; i++ )
+                   //  lst.Add( string( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
+                   //break;
+       case A_ICx:
+                  for( i=0; i<mup->N; i++ )
+                       lst.push_back( string( mup->SB[i], 0, MAXICNAME ));
+                   break;
+       case A_ACx:
+                  for( i=0; i<mup->La; i++ )
+                      lst.push_back( string( mup->SA[i], 0, MAXCMPNAME ));
+                   break;
+       case A_DCx:
+                   for( i=0; i<mup->L; i++ )
+                      lst.push_back( string( mup->SM[i]+MAXSYMB+MAXDRGROUP ,
+                                             0, MAXDCNAME ));
+                   break;
+       case A_DCSx:
+                  for( i=mup->Ls+mup->Lads; i<mup->L; i++ )
+                    lst.push_back( string( mup->SM[i]+MAXSYMB+MAXDRGROUP ,
+                                            0, MAXDCNAME ));
+                  break;
+       case A_PHx:
+                   for( i=0; i<mup->Fi; i++ )
+                       lst.push_back( string( mup->SF[i]+MAXSYMB+MAXPHSYMB,
+                                              0, MAXPHNAME));
+                   break;
+   }
+}
+
+
+// save old lists of keys to compare
+void TProfil::SaveOldList()
+{
+    RMULTS* mup = rmults->GetMU();
+    Nold = mup->N;
+    Lold = mup->L;
+    Fiold = mup->Fi;
+    Fisold = mup->Fis;
+    Laold = mup->La;
+    Lsold = mup->Ls;
+    SBold = (char (*)[IC_RKLEN]) new char[mup->N*IC_RKLEN];
+    memcpy( SBold, mup->SB, mup->N*IC_RKLEN*sizeof(char));
+    SAold = (char (*)[BC_RKLEN]) new char[mup->La*BC_RKLEN];
+    memcpy( SAold, mup->SA, mup->La*BC_RKLEN*sizeof(char));
+    Llold =   new short[mup->Fi];
+    memcpy( Llold, mup->Ll, mup->Fi*sizeof(short));
+    SFold = (char (*)[PH_RKLEN]) new char[mup->Fi*PH_RKLEN];
+    memcpy( SFold, mup->SF, mup->Fi*sizeof(char)*PH_RKLEN );
+    SMold = (char (*)[DC_RKLEN]) new char[mup->L*DC_RKLEN];
+    memcpy( SMold, mup->SM, mup->L*sizeof(char)*DC_RKLEN );
+}
+
+// delete old lists of keys to compare
+void TProfil::DeleteOldList()
+{
+    if( SBold )  delete[] SBold;
+    SBold= 0;
+    if( SAold )  delete[] SAold;
+    SAold = 0;
+    if(  Llold ) delete[]  Llold;
+    Llold = 0;
+    if( SFold ) delete[] SFold;
+    SFold = 0;
+    if( SMold ) delete[] SMold;
+    SMold = 0;
+}
+
+// push element to the list - refurbished by DK on 15.02.2012
+//
+void TProfil::Push( vector<CompItem>& aList, int aLine,
+                    short aDelta, const char* dbKeywd, string aKey )
+{
+   if( comp_change_all == false )
+   {
+       string stt = aKey;
+       if( aDelta < 0 )
+          stt += " record to be deleted from the project database. Action?";
+       else stt += " record to be inserted into project database. Action?";
+
+       switch( vfQuestion3(window(), dbKeywd, stt.c_str(),
+              "&Do it", "Do it for &All", "&Cancel" ))
+       {
+       case VF3_3:   // Skip: now skipping, as the user wants
+                    Error( dbKeywd, "Comparison error!" );
+                    break;
+       case VF3_2:  // Do it for all
+                    comp_change_all = true;
+       case VF3_1:  // Do it for this item
+                    aList.push_back( CompItem( aLine, aDelta));
+       }
+   }
+   else
+
+       aList.push_back( CompItem( aLine, aDelta));
+}
+
+
+// Compare IComp keys lists
+void TProfil::ICcompare( vector<CompItem>& aIComp)
+{
+    int i, j, l;
+    RMULTS* mup = rmults->GetMU();
+
+    i = 0;
+    j = 0;
+    while( i<Nold && j<mup->N )
+    {
+        l = memcmp( SBold[i], mup->SB[j], IC_RKLEN-MAXICGROUP ); // 14/11/12 SD
+        if( l==0 )
+        {
+            i++;
+            j++;
+        }
+        else
+            if( l<0 )
+            {
+                Push( aIComp, i, -1, "IComp", string(SBold[i], 0, IC_RKLEN) );
+                i++;
+            }
+            else
+            {
+                Push( aIComp, i, 1, "IComp", string(mup->SB[j], 0, IC_RKLEN) );
+                j++;
+            }
+    }
+    while( i<Nold  )
+    {
+        Push( aIComp, i, -1, "IComp", string(SBold[i], 0, IC_RKLEN) );
+        i++;
+    }
+    while( j<mup->N )
+    {
+        Push( aIComp, i, 1, "IComp", string(mup->SB[j], 0, IC_RKLEN) );
+        j++;
+    }
+}
+
+// Compare Compos keys lists
+void TProfil::COMPcompare( vector<CompItem>& aCompos)
+{
+    int i, j, l;
+    RMULTS* mup = rmults->GetMU();
+
+    i = 0;
+    j = 0;
+    while( i<Laold && j<mup->La )
+    {
+        l = memcmp( SAold[i], mup->SA[j], BC_RKLEN-MAXCMPGROUP ); // 14/11/12 SD
+        if( l==0 )
+        {
+            i++;
+            j++;
+        }
+        else
+            if( l<0 )
+            {
+                Push( aCompos, i, -1, "Compos", string(SAold[i], 0, BC_RKLEN) );
+                i++;
+            }
+            else
+            {
+                Push( aCompos, i, 1, "Compos", string(mup->SA[j], 0, BC_RKLEN) );
+                j++;
+            }
+    }
+    while( i<Laold  )
+    {
+        Push( aCompos, i, -1, "Compos", string(SAold[i], 0, BC_RKLEN) );
+        i++;
+    }
+    while( j<mup->La )
+    {
+        Push( aCompos, i, 1, "Compos", string(mup->SA[j], 0, BC_RKLEN) );
+        j++;
+    }
+}
+
+// compare DCOMP&REACT keys lists to one phase
+void TProfil::DCcompare( vector<CompItem>& aList,
+                         int& i,int& j, int nI, int nJ)
+{
+    int l;
+    RMULTS* mup = rmults->GetMU();
+
+    while( i<nI && j<nJ )
+    {
+        l = memcmp( SMold[i], mup->SM[j], DC_RKLEN-MAXSYMB );
+        if( l==0 )
+        {
+            i++;
+            j++;
+        }
+        else
+            if( l<0 )
+            {
+                Push( aList, i, -1, "DComp/ReacDC", string(SMold[i], 0, DC_RKLEN) );
+                i++;
+            }
+            else
+            {
+                Push( aList, i, 1, "DComp/ReacDC", string(mup->SM[j], 0, DC_RKLEN) );
+                j++;
+            }
+    }
+    while( i<nI  )
+    {
+        Push( aList, i, -1, "DComp/ReacDC", string(SMold[i], 0, DC_RKLEN) );
+        i++;
+    }
+    while( j<nJ )
+    {
+        Push( aList, i, 1, "DComp/ReacDC", string(mup->SM[j], 0, DC_RKLEN) );
+        j++;
+    }
+}
+
+// Compare Phase and DComp&React keys lists
+void TProfil::PHcompare( vector<CompItem>& aPhase, vector<CompItem>& aDComp)
+{
+    int i, j, l;
+    int id =0, jd=0;
+    RMULTS* mup = rmults->GetMU();
+
+    i = 0;
+    j = 0;
+    while( i<Fisold && j<mup->Fis )
+    {
+        l = memcmp( SFold[i], mup->SF[j], PH_RKLEN-MAXPHGROUP ); // fix KD 24.06.03
+        if( l==0 )
+        {
+            DCcompare( aDComp, id, jd, id+Llold[i], jd+mup->Ll[j]);
+            i++;
+            j++;
+        }
+        else
+            if( l<0 )
+            {
+                Push( aPhase, i, -1, "Phase", string(SFold[i], 0, PH_RKLEN) );
+                for( int ii=id; ii<id+Llold[i]; ii++)
+                    Push( aDComp, ii, -1, "DComp/ReacDC", string(SMold[ii], 0, DC_RKLEN) );
+                id += Llold[i];
+                i++;
+            }
+            else
+            {
+                Push( aPhase, i, 1, "Phase", string(mup->SF[j], 0, PH_RKLEN) );
+                for( int jj=jd; jj<jd+mup->Ll[j]; jj++)
+                    Push( aDComp, id, 1, "DComp/ReacDC", string(mup->SM[jj], 0, DC_RKLEN) );
+                jd += mup->Ll[j];
+                j++;
+            }
+    }
+    while( i<Fisold  )
+    {
+        Push( aPhase, i, -1, "Phase", string(SFold[i], 0, PH_RKLEN) );
+        for( int ii=id; ii<id+Llold[i]; ii++)
+            Push( aDComp, ii, -1, "DComp/ReacDC", string(SMold[ii], 0, DC_RKLEN) );
+        id += Llold[i];
+        i++;
+    }
+    while( j<mup->Fis )
+    {
+        Push( aPhase, i, 1, "Phase", string(mup->SF[j], 0, PH_RKLEN) );
+        for( int jj=jd; jj<jd+mup->Ll[j]; jj++)
+            Push( aDComp, id, 1, "DComp/ReacDC", string(mup->SM[jj], 0, DC_RKLEN) );
+        jd += mup->Ll[j];
+        j++;
+    }
+
+    // compare one-component phase
+    i = Fisold;
+    j = mup->Fis;
+    id =Lsold, jd=mup->Ls;
+    while( i<Fiold && j<mup->Fi )
+    {
+        l = memcmp( SFold[i], mup->SF[j], PH_RKLEN );
+        if( l==0 )
+        {
+            DCcompare( aDComp, id, jd, id+Llold[i], jd+mup->Ll[j] );
+            i++;
+            j++;
+        }
+        else
+            if( l<0 )
+            {
+                Push( aPhase, i, -1, "Phase", string(SFold[i], 0, PH_RKLEN) );
+                for( int ii=id; ii<id+Llold[i]; ii++)
+                    Push( aDComp, ii, -1, "DComp/ReacDC", string(SMold[ii], 0, DC_RKLEN) );
+                id += Llold[i];
+                i++;
+            }
+            else
+            {
+                Push( aPhase, i, 1, "Phase", string(mup->SF[j], 0, PH_RKLEN) );
+                for( int jj=jd; jj<jd+mup->Ll[j]; jj++)
+                    Push( aDComp, id, 1, "DComp/ReacDC", string(mup->SM[jj], 0, DC_RKLEN) );
+                jd += mup->Ll[j];
+                j++;
+            }
+    }
+    while( i<Fiold  )
+    {
+        Push( aPhase, i, -1, "Phase", string(SFold[i], 0, PH_RKLEN) );
+        for( int ii=id; ii<id+Llold[i]; ii++)
+            Push( aDComp, ii, -1, "DComp/ReacDC", string(SMold[ii], 0, DC_RKLEN) );
+        id += Llold[i];
+        i++;
+    }
+    while( j<mup->Fi )
+    {
+        Push( aPhase, i, 1, "Phase", string(mup->SF[j], 0, PH_RKLEN) );
+        for( int jj=jd; jj<jd+mup->Ll[j]; jj++)
+            Push( aDComp, id, 1, "DComp/ReacDC", string(mup->SM[jj], 0, DC_RKLEN) );
+        jd += mup->Ll[j];
+        j++;
+    }
+}
+
+
+int TProfil::indPH( int i )
+{
+    if( isSysEq == false )
+        return i;
+
+    for( int ii=0; ii<PHon.size(); ii++)
+        if( i == PHon[ii])
+            return ii;
+
+    return -1;
+}
+
+int TProfil::indDC( int i )
+{
+    if( isSysEq == false )
+        return i;
+    for( int ii=0; ii<DCon.size(); ii++)
+        if( i == DCon[ii])
+            return ii;
+    return -1;
+}
+
 
 // ------------------ End of m_param.cpp -----------------------
 

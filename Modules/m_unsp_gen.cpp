@@ -4,7 +4,7 @@
 #include "v_object.h"
 #include "s_formula.h"
 #include "visor.h"
-//#include "v_user.h"
+#include "service.h"
 
 
 //=========================================================================
@@ -539,7 +539,7 @@ void TUnSpace::text_analyze( int nObj)
         if( pVisor->ProfileMode == true )
         {
             mupL = TRMults::sm->GetMU()->L;
-            pmpL = TMulti::sm->GetPM()->L;
+            pmpL = TMultiSystem::sm->pmp->L;
         }
 
         switch(nObj)

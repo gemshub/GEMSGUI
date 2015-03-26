@@ -19,6 +19,7 @@
 
 #include "EquatSetupWidget.h"
 #include "m_param.h"
+#include "tmltsystem.h"
 
 //  nRT = -1 TPwork
 //  nRT = -2 DataBR
@@ -706,10 +707,10 @@ wnData.push_back( pagesSetupData("n1con", o_n1w_con));//DC concentrations in pha
 wnData.push_back( pagesSetupData("n1mju", o_n1w_mju));//DC chemical potentials in equilibrium, J/mol [nDCb] in node 1 + + - -"
 wnData.push_back( pagesSetupData("n1lga", o_n1w_lga));//DC activities in equilibrium, in log10 scale [nDCb] in node 1 + + - -"
 
-      for(int  k=0; k<TMulti::sm->GetPM()->FIs; k++ )
+      for(int  k=0; k<TMultiSystem::sm->pmp->FIs; k++ )
       {
           string name;
-          name =string( TMulti::sm->GetPM()->SF[k]+MAXSYMB, 0, MAXPHNAME);
+          name =string( TMultiSystem::sm->pmp->SF[k]+MAXSYMB, 0, MAXPHNAME);
           strip(name);
           wnData.push_back( pagesSetupData("n1bPS", o_n1_bps, k, name.c_str() ));
       }
@@ -984,10 +985,10 @@ wnData.push_back( pagesSetupData("phVol", o_wd_fvol)); // a "Volumes of phases (
 wnData.push_back( pagesSetupData("phM", o_wd_fwgt)); //a "Masses of phases (in grams) "
 wnData.push_back( pagesSetupData("Fa", o_wo_falp)); //a "Values of the phase stability criterion f(alpha) "
 
-for(int  k=0; k<TMulti::sm->GetPM()->FIs; k++ )
+for(int  k=0; k<TMultiSystem::sm->pmp->FIs; k++ )
 {
     string name;
-    name =string( TMulti::sm->GetPM()->SF[k]+MAXSYMB, 0, MAXPHNAME);
+    name =string( TMultiSystem::sm->pmp->SF[k]+MAXSYMB, 0, MAXPHNAME);
     strip(name);
     wnData.push_back( pagesSetupData("bXa", o_wo_bf, k, name.c_str() ));
    //d "Output bulk compositions of multicomponent phases (in moles of Independent Components) "

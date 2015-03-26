@@ -26,8 +26,8 @@
 
 int TValBase::doublePrecision = 8;
 
-const char* S_EMPTY	=    "`";
-const char* S_ANY  	=    "*";
+//const char* S_EMPTY	=    "`";
+//const char* S_ANY  	=    "*";
 
 /* defining values EMPTY and ANY for different types
     Note: for some reason static constants in template classes

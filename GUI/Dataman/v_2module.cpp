@@ -30,6 +30,7 @@
 #include "NewSystemDialog.h"
 #include "GemsMainWindow.h"
 #include "m_param.h"
+#include "tmltsystem.h"
 #include "v_mod.h"
 
 //---------------------------------------------------------
@@ -300,7 +301,7 @@ void TCModule::RecSave( const char *key, bool onOld )
     contentsChanged = false;
 
     if( pVisor->ProfileMode == true && !isCalcModules() && nRT != RT_SDATA )
-      TMulti::sm->GetPM()->pTPD = -1; // to reload thermodynamic data base
+      TMultiSystem::sm->pmp->pTPD = -1; // to reload thermodynamic data base
 }
 
 /// Read record into memory structure

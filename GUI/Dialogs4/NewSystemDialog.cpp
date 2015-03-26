@@ -27,6 +27,8 @@
 #include "NewSystemDialog.h"
 #include "GemsMainWindow.h"
 #include "m_syseq.h"
+#include "tmltsystem.h"
+#include "service.h"
 
 NewSystemDialog* NewSystemDialog::pDia = 0;
 
@@ -203,7 +205,7 @@ void NewSystemDialog::defineResultList()
 
 void NewSystemDialog::Update()
 {
-    MULTI* pData = TMulti::sm->GetPM();
+    MULTIBASE* pData = TMultiSystem::sm->pmp;
 
    if( !ListViewResult  && aObj[ o_wi_l1 ].GetPtr() )
      defineResultList(); 

@@ -19,6 +19,7 @@
 //
 #include "m_syseq.h"
 #include "visor.h"
+#include "service.h"
 
 TSysEq* TSysEq::pm;
 

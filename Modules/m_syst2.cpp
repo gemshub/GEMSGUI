@@ -20,6 +20,7 @@
 #include "m_syseq.h"
 #include "v_object.h"
 #include "visor.h"
+#include "ms_rmults.h"
 
 // link values to objects
 void TSysEq::ods_link( int q)

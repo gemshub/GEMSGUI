@@ -20,9 +20,11 @@
 #define _v_ejdb_file_h_
 
 #include <vector>
+
 #ifndef __APPLE__
-#include <auto_ptr.h>   // deprecated
+#include <memory>   // deprecated
 #endif
+
 #include "v_file.h"
 #include "ejdb.h"
 #include "filters_data.h"

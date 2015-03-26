@@ -24,9 +24,9 @@
 #include "NewSystemDialog.h"
 #include "m_param.h"
 #include "calcthread.h"
+#include "service.h"
 
-void
-ProgressDialog::switchToAccept(bool isAccept)
+void ProgressDialog::switchToAccept(bool isAccept)
 {
   pClose->setToolTip( trUtf8( "Cancel this GEM IPM calculation" ) );
 
@@ -278,10 +278,8 @@ ProgressDialog::CalcFinished()
     pStepAccept->show();
     pClose->setText("&Dismiss");    // fixed DK 29.02.2012
     pClose->setToolTip( trUtf8( "Close and do not save results to SysEq database record" ) );
-    MULTI* pData = TMulti::sm->GetPM();
     QString str;
-      str.sprintf( "Converged at DK=%.3g", pData->PCI );
-//    str.sprintf( "Converged at DK=%.2g", pData->DXM );
+    str.sprintf( "Converged at DK=%.3g", TMultiSystem::sm->pmp->PCI );
     setWindowTitle(str);
 }
 
@@ -372,7 +370,7 @@ ProgressDialog::Update(bool force)
         return;
 
     QString str;
-    MULTI* pData = TMulti::sm->GetPM();
+    MULTIBASE* pData = TMultiSystem::sm->pmp;
 
 //    str.sprintf( "%2lu:%4lu:%4lu ", pData->W1+pData->K2, pData->ITF, pData->ITG ); // pData->IT );
     str.sprintf( "%2lu:%4lu:%4lu ", pData->K2, pData->ITF, pData->ITG ); // pData->IT );

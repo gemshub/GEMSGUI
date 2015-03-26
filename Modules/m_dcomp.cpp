@@ -30,6 +30,7 @@
 #include "s_formula.h"
 #include "s_supcrt.h"
 #include "filters_data.h"
+#include "s_solmod.h"
 
 TDComp* TDComp::pm;
 

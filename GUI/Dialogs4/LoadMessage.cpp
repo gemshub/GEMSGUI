@@ -26,7 +26,7 @@
 #include <QPushButton>
 
 #include "LoadMessage.h"
-
+#include "service.h"
 //-------------------------------------------------------------------
 
 LoadMessage* LoadMessage::pDia = 0;

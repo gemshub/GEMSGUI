@@ -22,8 +22,10 @@
 #ifndef IPMGEMPLUGIN
 
 #include "m_gem2mt.h"
+#include "particlearray.h"
 #include "visor.h"
 #include "stepwise.h"
+#include "service.h"
 
 #else
 
@@ -138,10 +140,10 @@ void  TGEM2MT::NewNodeArray()
              na->MoveWorkNodeToArray( q, mtp->nC,  na->pNodT0());
              // set up inital data
              DATABR* data_BR = na->pCNode();
-             data_BR->TK = TMulti::sm->GetPM()->TCc+C_to_K; //25
-             data_BR->P = TMulti::sm->GetPM()->Pc*bar_to_Pa; //1
+             data_BR->TK = TMultiSystem::sm->pmp->TCc+C_to_K; //25
+             data_BR->P = TMultiSystem::sm->pmp->Pc*bar_to_Pa; //1
              for(long int i1=0; i1<mtp->nICb; i1++ )
-               data_BR->bIC[i1] = TMulti::sm->GetPM()->B[ mtp->xIC[i1] ];
+               data_BR->bIC[i1] = TMultiSystem::sm->pmp->B[ mtp->xIC[i1] ];
          }
          else // Save databr
              na->packDataBr();

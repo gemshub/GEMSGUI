@@ -20,22 +20,25 @@
 #include <cmath>
 #include <cstdio>
 #include <iomanip>
-#include "io_arrays.h"
 
+#include "io_arrays.h"
+#include "m_gem2mt.h"
+#include "particlearray.h"
 
 #ifndef IPMGEMPLUGIN
 
-#include "m_gem2mt.h"
+//#include "m_gem2mt.h"
 #include "m_compos.h"
 #include "v_object.h"
 #include "visor.h"
 #include "stepwise.h"
+#include "service.h"
 
 #else
 
 #include <ctime>
-#include "m_gem2mt.h"
-#include "nodearray.h"
+//#include "m_gem2mt.h"
+//#include "nodearray.h"
 
 #endif
 

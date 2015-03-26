@@ -257,13 +257,6 @@ GUI/Icons/gems512.png -text
 GUI/Icons/icons_files_gems3mdi.doc -text svneol=unset#application/msword
 GUI/Icons/icons_files_gems3mdi.odt -text
 GUI/Icons/icons_files_gems3mdi_2012_GG.doc -text svneol=unset#application/msword
-GUI/tcejdb/debian/compat -text svneol=unset#application/octet-stream
-GUI/tcejdb/doc/benchmark.pdf -text
-GUI/tcejdb/doc/icon16.png -text
-GUI/tcejdb/doc/logo-ja.png -text
-GUI/tcejdb/doc/logo.png -text
-GUI/tcejdb/doc/tokyoproducts.pdf -text
-GUI/tcejdb/doc/tokyoproducts.ppt -text svneol=unset#application/vnd.ms-powerpoint
 Resources/DB.default/cemdata/Changelog.txt -text
 Resources/DB.default/cemdata/cemdata -text
 Resources/DB.default/cemdata/cemdata_compos -text

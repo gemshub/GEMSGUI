@@ -24,6 +24,7 @@
 #include "v_object.h"
 #include "s_formula.h"
 #include "num_methods.h"
+#include "service.h"
 
 
 //-----------------------------------------------------------------

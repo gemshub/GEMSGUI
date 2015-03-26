@@ -21,8 +21,11 @@
 
 
 #include "m_param.h"
-#include "particlearray.h"
+#include "databr.h"
+//#include "particlearray.h"
 class TRWArrays;
+class TNodeArray;
+class TParticleArray;
 
 #ifndef IPMGEMPLUGIN
 

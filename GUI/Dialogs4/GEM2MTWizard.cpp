@@ -26,6 +26,8 @@
 #include "GemsMainWindow.h"
 #include "num_methods.h"
 #include "m_gem2mt.h"
+#include "tmltsystem.h"
+#include "service.h"
 #include "io_arrays.h"
 
 extern outField DataBR_fields[58];
@@ -998,8 +1000,8 @@ void GEM2MTWizard::setVTK( const vector<int>& vtk1, const vector<int>& vtk2  )
          ndx = vtk2[ii];
 
          if(vtk1[ii] == f_bPS) // bPS
-         { cPage +=  vtk2[ii]/TMulti::sm->GetPM()->N;
-           ndx = vtk2[ii]%TMulti::sm->GetPM()->N;
+         { cPage +=  vtk2[ii]/TMultiSystem::sm->pmp->N;
+           ndx = vtk2[ii]%TMultiSystem::sm->pmp->N;
            cPage = min(cPage, pLists.count()-1);
          }
       }
@@ -1033,7 +1035,7 @@ void GEM2MTWizard::getVTK( vector<int>& vtk1, vector<int>& vtk2  )
         if( vt_1 == f_bPS ) //bPs
         {
            vtk1.push_back( vt_1 );
-           vtk2.push_back(scriptData[ii].nIdx + pgData[page_].ndx*TMulti::sm->GetPM()->N);
+           vtk2.push_back(scriptData[ii].nIdx + pgData[page_].ndx*TMultiSystem::sm->pmp->N);
         }
         else
         {

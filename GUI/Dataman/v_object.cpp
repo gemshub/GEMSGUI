@@ -33,6 +33,7 @@
 #include "config.h"
 #include "v_json.h"
 #include "encoding.h"
+#include "service.h"
 
 // Workaround for ilink unresolved external errors in BCBuilderX
 #ifdef __win32_borland

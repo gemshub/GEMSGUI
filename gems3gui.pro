@@ -32,7 +32,8 @@ greaterThan( QT_MAJOR_VERSION, 4 ): QT += widgets printsupport help concurrent
 
 !win32 {
   DEFINES += __unix
-  PLATFORM_CPP       =  ./GUI/tcejdb/nix
+#  PLATFORM_CPP       =  ./GUI/tcejdb/nix
+  PLATFORM_CPP       =  ../standalone/tcejdb/nix
 #  CONFIG( debug ) {
 #   QMAKE_CFLAGS = -std=gnu99
 #    QMAKE_CXXFLAGS = -std=gnu99
@@ -40,7 +41,8 @@ greaterThan( QT_MAJOR_VERSION, 4 ): QT += widgets printsupport help concurrent
 }
 
 win32 {
-  PLATFORM_CPP       =  ./GUI/tcejdb/win32
+#  PLATFORM_CPP       =  ./GUI/tcejdb/win32
+  PLATFORM_CPP       =  ../standalone/tcejdb/win32
 }
 
 macx-g++ {
@@ -76,11 +78,12 @@ QWT6_CPP       =  ./GUI/QWT
 SERVICES4_CPP  =  ./GUI/Services4
 DATAMAN_CPP    =  ./GUI/Dataman
 DIALOGS4_CPP   =  ./GUI/Dialogs4
-EJDB_CPP       =  ./GUI/tcejdb
+#EJDB_CPP       =  ./GUI/tcejdb
 MODULES_CPP    =  ./Modules
 SUBMODS_CPP    =  ./Modules/Submods
 NUMERICS_CPP   =  ./Modules/Numerics
 GEMS3K_CPP     =  ../standalone/GEMS3K
+EJDB_CPP       =  ../standalone/tcejdb
 
 QWT6_H       =  $$QWT6_CPP
 SERVICES4_H  =  $$SERVICES4_CPP
@@ -121,18 +124,17 @@ UI_SOURSEDIR  = $$MOC_DIR
 UI_HEADERDIR  = $$MOC_DIR
 OBJECTS_DIR   = obj
 
+
+include($$SERVICES4_CPP/Services4.pri)
+include($$DIALOGS4_CPP/Dialogs4.pri)
+include($$NUMERICS_CPP/Numerics.pri)
 include($$QWT6_CPP/qwt.pri)
 include($$EJDB_CPP/tcejdb.pri)
-include($$NUMERICS_CPP/Numerics.pri)
-include($$GEMS3K_CPP/gems3k.pri)
 
-
-include($$MODULES_CPP/Modules.pri)
-include($$SERVICES4_CPP/Services4.pri)
-include($$DATAMAN_CPP/Dataman.pri)
-include($$DIALOGS4_CPP/Dialogs4.pri)
 include($$SUBMODS_CPP/Submods.pri)
-
+include($$MODULES_CPP/Modules.pri)
+include($$DATAMAN_CPP/Dataman.pri)
+include($$GEMS3K_CPP/gems3k.pri)
 
 #win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Reaktor/build/lib/release/ -lReaktor
 #else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Reaktor/build/lib/debug/ -lReaktor

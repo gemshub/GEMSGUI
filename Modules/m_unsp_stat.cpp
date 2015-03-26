@@ -87,7 +87,7 @@ void TUnSpace::unsp_eqkey()
        if( syu->Guns )  // This is used mainly in UnSpace calculations
            Gg = syu->Guns[jj];    // Increment to G0 set by UnSpace
 // Here we determine what was the initial syp->GEX[jj] increment
-       pGo = TMulti::sm->ConvertGj_toUniformStandardState( Go+Gg, j, k );
+       pGo = TMultiSystem::sm->ConvertGj_toUniformStandardState( Go+Gg, j, k );
        Ge = ( pmu->G0[j] - pGo )* pmu->RT; 
        if( TSyst::sm->GetSY()->GEX ) // Setting Gg + Ge to syp->GEX[jj]
            TSyst::sm->GetSY()->GEX[jj] = Gg + Ge;   // Ge is part of pmp->G0 since 07.03.2008 (DK)
@@ -112,7 +112,7 @@ void TUnSpace::unsp_eqkey()
          if( syu->Guns )  // This is used mainly in UnSpace calculations
              Gg = syu->Guns[jj];    // Increment to G0 set by UnSpace
   // Here we determine what was the initial syp->GEX[jj] increment
-         pGo = TMulti::sm->ConvertGj_toUniformStandardState( Go+Gg, j, k );
+         pGo = TMultiSystem::sm->ConvertGj_toUniformStandardState( Go+Gg, j, k );
          Ge = ( pmu->G0[j] - pGo ) * pmu->RT; 
          if( TSyst::sm->GetSY()->GEX ) // Setting Gg + Ge to syp->GEX[jj]
            TSyst::sm->GetSY()->GEX[jj] = Ge;

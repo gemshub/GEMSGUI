@@ -17,9 +17,13 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
+
+#include "ms_system.h"
+#include "ms_rmults.h"
 #include "m_syseq.h"
 #include "v_object.h"
 #include "visor.h"
+#include "service.h"
 
 const char A_EMPTY='`';
 

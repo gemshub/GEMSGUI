@@ -17,10 +17,15 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#include "m_compos.h"
+
+#include "ms_system.h"
+#include "ms_rmults.h"
+#include "tmltsystem.h"
 #include "m_syseq.h"
+#include "m_compos.h"
 #include "s_formula.h"
 #include "v_user.h"
+#include "service.h"
 
 //mark COMPOS from new mark in ICOMP
 void TSyst::mark_ic_to_bc( )
@@ -638,7 +643,7 @@ void TSyst::systbc_calc( int mode )
         }
         else  // another SysEq record not provided or inaccessible
             sy.PbPH = S_REM;
-        if( sy.PbPH != S_OFF && sy.N == TMulti::sm->GetPM()->N )   //   TSysEq::pm->ifCalcFlag() )aPa
+        if( sy.PbPH != S_OFF && sy.N == TMultiSystem::sm->pmp->N )   //   TSysEq::pm->ifCalcFlag() )aPa
         { // Case when no record key is provided -
            PHbcalcMulti( &MsysC, &MaqC, &R1C, &VaqC, &VsysC );  // Calculation
            sy.PbPH = S_ON;
@@ -662,7 +667,7 @@ void TSyst::systbc_calc( int mode )
     if( !memcmp( mup->SB[mup->N-1], "Zz", 2 ))
     {
         N = mup->N - 1;
-        if( fabs( sy.B[N] ) > TMulti::sm->GetPM()->DHBM/10. )  // Fixed by DAK 30.12.02
+        if( fabs( sy.B[N] ) > TMultiSystem::sm->pmp->DHBM/10. )  // Fixed by DAK 30.12.02
         {
             if( /*( pe && (pe[0].Istat == P_EXECUTE ||
                 pe[0].Istat == P_MT_EXECUTE ))  ||*/
@@ -855,7 +860,7 @@ void TSyst::PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
 {
     double *A, *B, Mass, Xincr;
     TCompos* aCMP=(TCompos *)(aMod[RT_COMPOS]);
-    MULTI* pmp = TMulti::sm->GetPM();
+    MULTIBASE* pmp = TMultiSystem::sm->pmp;
     RMULTS* mup = TRMults::sm->GetMU();
     int j, i, k, k_, i_;
 

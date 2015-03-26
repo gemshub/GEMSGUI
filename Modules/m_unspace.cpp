@@ -28,6 +28,7 @@
 #include "m_syseq.h"
 #include "v_object.h"
 #include "visor.h"
+#include "service.h"
 
 TUnSpace* TUnSpace::pm;
 
@@ -1109,7 +1110,7 @@ TUnSpace::RecCalc( const char *key )
     int nAdapt = 1;
 
    syu = TSyst::sm->GetSY();
-   pmu = TMulti::sm->GetPM();
+   pmu = TMultiSystem::sm->pmp;
    tpu = TMTparm::sm->GetTP();
 
 //    TProfil* PRof = (TProfil*)(aMod[RT_PARAM]);

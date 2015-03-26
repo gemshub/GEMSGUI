@@ -20,6 +20,7 @@
 #include <QWaitCondition>
 
 #include "m_param.h"
+#include "tmltsystem.h"
 #include "m_proces.h"
 #include "m_gem2mt.h"
 #include "stepwise.h"
@@ -92,7 +93,7 @@ public:
 	}
 	catch( TError& err ) 
 	{  error = err; }
-	catch( TMulti::UserCancelException& ex )
+    catch( TMultiSystem::UserCancelException& ex )
 	{}
    }
 

@@ -28,6 +28,10 @@
 #include "s_formula.h"
 #include "visor.h"
 #include "s_lsm.h"
+#include "service.h"
+#include "ms_rmults.h"
+#include "ms_system.h"
+#include "tmltsystem.h"
 
 
 // setup data before calculate EqStates
@@ -197,15 +201,15 @@ void TDualTh::build_Ub()
    //  TProfil::pm->pmp->pTPD = 0;
      calc_eqstat();
 
-     RT = TMulti::sm->GetPM()->RT;
+     RT = TMultiSystem::sm->pmp->RT;
 //   RT = R_CONSTANT * (Tdq[ii] + 273.15);
  // set zeros for result
     for( i=0; i<dtp->Nb; i++)
        dtp->Ub[dtp->q*dtp->Nb+i] = 0.;
  // copy calculated data from multy
-    for( i=0; i<TMulti::sm->GetPM()->N; i++)
-       dtp->Ub[ dtp->q*dtp->Nb + (TMulti::sm->GetPM()->mui[i])]
-           = TMulti::sm->GetPM()->U[i] * RT;
+    for( i=0; i<TMultiSystem::sm->pmp->N; i++)
+       dtp->Ub[ dtp->q*dtp->Nb + (TMultiSystem::sm->pmp->mui[i])]
+           = TMultiSystem::sm->pmp->U[i] * RT;
 
     dt_next();      // Generate work values for the next EqStat rkey
     if( (dtp->PvTPI == S_ON) && dtp->Tdq && dtp->Pdq )
@@ -213,7 +217,7 @@ void TDualTh::build_Ub()
         dtp->cT = dtp->Tdq[ii];
         dtp->cP = dtp->Pdq[ii];
         if(dtp->ISq)
-           dtp->ISq[ii] = TMulti::sm->GetPM()->IC;
+           dtp->ISq[ii] = TMultiSystem::sm->pmp->IC;
     }
   }
 }
@@ -272,7 +276,7 @@ void TDualTh::dt_text_analyze()
       {
 
         PRof->ET_translate( o_dttprn, o_dtgexpr,
-          0, TRMults::sm->GetMU()->L, 0, TMulti::sm->GetPM()->L );
+          0, TRMults::sm->GetMU()->L, 0, TMultiSystem::sm->pmp->L );
         rpn[1].GetEquat( (char *)aObj[o_dttprn].GetPtr() );
       }
     }
@@ -687,7 +691,7 @@ TDualTh::RegressionLSM( int /*Mode*/ )  // task or minimization
    TProfil* PRof = (TProfil*)(aMod[RT_PARAM]);
 
    PRof->ET_translate( o_dttprn, o_dtcexpr,
-     0, TRMults::sm->GetMU()->L, 0, TMulti::sm->GetPM()->L );
+     0, TRMults::sm->GetMU()->L, 0, TMultiSystem::sm->pmp->L );
    arpn = (char *)aObj[o_dttprn].GetPtr() ;
  }
  TLMDataType data( afType, TEST_EVL, // may be changed for flags

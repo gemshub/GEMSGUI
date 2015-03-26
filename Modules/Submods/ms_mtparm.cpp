@@ -19,10 +19,14 @@
 //
 
 #include "ms_mtparm.h"
+#include "ms_rmults.h"
+#include "ms_system.h"
+#include "tmltsystem.h"
 #include "m_param.h"
 #include "m_reacdc.h"
 #include "v_object.h"
 #include "visor.h"
+#include "service.h"
 
 TMTparm* TMTparm::sm;
 
@@ -730,10 +734,10 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
        cP = CSD->Pval[ip]/1e5; //bar_to_Pa;
        // calculates new G0, V0, H0, Cp0, S0
        if( fabs( tp.curT - cT ) > 1.e-10 ||
-              fabs( tp.curP - cP ) > 1.e-10 || TMulti::sm->GetPM()->pTPD == -1 )
+              fabs( tp.curP - cP ) > 1.e-10 || TMultiSystem::sm->pmp->pTPD == -1 )
        { // load new MTPARM on T or P
            LoadMtparm( cT, cP );
-           TMulti::sm->GetPM()->pTPD = 0;
+           TMultiSystem::sm->pmp->pTPD = 0;
        }
 
       if( cP < 1e-5 )
@@ -766,7 +770,7 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
      for( kk=0; kk<CSD->nDC; kk++)
       {
          ll = ( kk * CSD->nPp + ip) * CSD->nTp + it;
-         jj= TMulti::sm->GetPM()->muj[kk];
+         jj= TMultiSystem::sm->pmp->muj[kk];
 
          if( tp.mark[jj] == 'e'/*CP_NOT_VALID*/ )
              tp_mark[jj] = 1;
@@ -802,7 +806,7 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
   string err = "";
   for( jj=0, kk=0; kk<CSD->nDC; kk++)
   {
-     if( tp_mark[TMulti::sm->GetPM()->muj[kk]]==1 )
+     if( tp_mark[TMultiSystem::sm->pmp->muj[kk]]==1 )
      {	  err +=" ";
           err += string(CSD->DCNL[kk],0, MaxDCN);
           if(!((++jj)%5)) err += "\n";
@@ -841,10 +845,10 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
        cP = CSD->Pval[ip]/1e5; //bar_to_Pa;
        // calculates new G0, V0, H0, Cp0, S0
        if( fabs( tp.curT - cT ) > 1.e-10 ||
-              fabs( tp.curP - cP ) > 1.e-10 || TMulti::sm->GetPM()->pTPD == -1)
+              fabs( tp.curP - cP ) > 1.e-10 || TMultiSystem::sm->pmp->pTPD == -1)
        { // load new MTPARM on T or P
            LoadMtparm( cT, cP );
-           TMulti::sm->GetPM()->pTPD = 0;
+           TMultiSystem::sm->pmp->pTPD = 0;
        }
 
       if( cP < 1e-5 )
@@ -876,7 +880,7 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
      for( kk=0; kk<CSD->nDC; kk++)
       {
          ll = ( kk * CSD->nPp + ip);
-         jj= TMulti::sm->GetPM()->muj[kk];
+         jj= TMultiSystem::sm->pmp->muj[kk];
 
          if( tp.mark[jj] == 'e'/*CP_NOT_VALID*/ )
              tp_mark[jj] = 1;
@@ -911,7 +915,7 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
   string err = "";
   for( jj=0, kk=0; kk<CSD->nDC; kk++)
   {
-     if( tp_mark[TMulti::sm->GetPM()->muj[kk]]==1 )
+     if( tp_mark[TMultiSystem::sm->pmp->muj[kk]]==1 )
      {	  err +=" ";
           err += string(CSD->DCNL[kk],0, MaxDCN);
           if(!((++jj)%5)) err += "\n";

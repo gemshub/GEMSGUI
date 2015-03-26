@@ -656,7 +656,7 @@ void TGtDemo::gd_text_analyze()
         if( pVisor->ProfileMode == true )
         {
             mupL = TRMults::sm->GetMU()->L;
-            pmpL = TMulti::sm->GetPM()->L;
+            pmpL = TMultiSystem::sm->pmp->L;
         }
         PRof->ET_translate( o_gwetext, o_gdexpr, 0, mupL, 0, pmpL );
         rpn[0].GetEquat( (char *)aObj[o_gwetext].GetPtr() );
@@ -722,9 +722,9 @@ TGtDemo::gd_rec_read( int nI )
             }
             if(  gst.iopt ) // get list of resalt phases
             {
-                for(short k=0; k<TMulti::sm->GetPM()->FI; k++)
-                    if( TMulti::sm->GetPM()->XF[k] > TMulti::sm->GetPM()->DSM )
-                        gst.iopt[ gst.nI++ ] = TMulti::sm->GetPM()->muk[k];
+                for(short k=0; k<TMultiSystem::sm->pmp->FI; k++)
+                    if( TMultiSystem::sm->pmp->XF[k] > TMultiSystem::sm->pmp->DSM )
+                        gst.iopt[ gst.nI++ ] = TMultiSystem::sm->pmp->muk[k];
                 gst.iopt[ gst.nI++ ] = -1;
             }
         }

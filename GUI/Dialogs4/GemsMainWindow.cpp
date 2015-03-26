@@ -34,6 +34,8 @@
 #include "NewSystemDialog.h"
 #include "LoadMessage.h"
 #include "GraphDialog.h"
+#include "service.h"
+using namespace std;
 
 const char* GEMS_LOGO_ICON = "Icons/gems1.png";
 const char* GEMS_VERSION_STAMP = "GEM-Selektor 3 (GEMS3)";
@@ -903,7 +905,7 @@ void TVisorImp::CalcMulti()
         vfMessage(this, xcpt.title, xcpt.mess);
     }
 #else
-    TProfil::pm->fStopCalc = false;
+//    TProfil::pm->fStopCalc = false;
     try
     {
         showMss = 1L;

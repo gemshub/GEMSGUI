@@ -21,6 +21,7 @@
 #include "model_tree.h"
 #include "units.h"
 #include "m_param.h"
+#include "tmltsystem.h"
 #include "CalcDialog.h"
 #include "CalcCheckDialog.h"
 #include "GemsMainWindow.h"
@@ -183,7 +184,7 @@ void TTreeModel::setGOcorr(const QModelIndex& index, QString& value, int nO, int
 {
 	char code = lineFromIndex( index )->UGval;
     double dat = value.toDouble();
-        double tK = TMulti::sm->GetPM()->T; //TProfil::pm->tpp->TK;
+        double tK = TMultiSystem::sm->pmp->T; //TProfil::pm->tpp->TK;
 	  
 	switch( code )
 	{
@@ -210,7 +211,7 @@ QString TTreeModel::getGOcorr( const QModelIndex& index, int nO, int iN ) const
     QString res =  QString::fromUtf8( visualizeEmpty(aObj[nO].GetStringEmpty( iN, 0 )).c_str() );
 	char code = lineFromIndex(index)->UGval;
 	double dat = res.toDouble();
-        double tK = TMulti::sm->GetPM()->T; //TProfil::pm->tpp->TK;
+        double tK = TMultiSystem::sm->pmp->T; //TProfil::pm->tpp->TK;
 	  
 	switch( code )
 	{

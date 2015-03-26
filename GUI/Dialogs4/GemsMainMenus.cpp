@@ -27,7 +27,8 @@
 
 #include "visor.h"
 #include "m_param.h"
-//#include "v_mod.h"
+#include "tmltsystem.h"
+#include "service.h"
 #include "GemsMainWindow.h"
 #include "SettingsDialog.h"
 #include "NewSystemDialog.h"
@@ -909,7 +910,7 @@ void TVisorImp::setActionPrecise()
 
 void TVisorImp::CmRunIPM()
 {
-    TMulti::sm->GetPM()->pNP =
+    TMultiSystem::sm->pmp->pNP =
         ( sactionSimplex->isChecked())? 0: 1;
     if( sactionPrecise->isChecked() && !TProfil::pm->pa.p.PRD )
           TProfil::pm->pa.p.PRD = -5; // Changed

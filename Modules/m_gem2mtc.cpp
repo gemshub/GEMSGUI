@@ -20,6 +20,9 @@
 #include <cmath>
 #include <cstdio>
 #include "m_gem2mt.h"
+#include "particlearray.h"
+#include "ms_rmults.h"
+#include "ms_system.h"
 #include "m_syseq.h"
 #include "visor.h"
 #include "s_formula.h"
@@ -27,6 +30,7 @@
 #include "m_compos.h"
 #include "v_user.h"
 #include "v_object.h"
+#include "service.h"
 
 bool
 TGEM2MT::test_sizes( )
@@ -115,7 +119,7 @@ TGEM2MT::test_sizes( )
 // Make start IComp, Dcomp, PHase selections to DATACH
 void TGEM2MT::SelectNodeStructures( bool select_all )
 {
-  MULTI *mult = TMulti::sm->GetPM();
+  MULTIBASE *mult = TMultiSystem::sm->pmp;
   vector<string> aList;
   vector<int> aSelIC;
   vector<int> aSelDC;
@@ -213,8 +217,8 @@ void TGEM2MT::init_arrays( bool mode )
   if( mode )
   {
     long int ii;
-    double cT =  TMulti::sm->GetPM()->TCc;
-    double cP =  TMulti::sm->GetPM()->Pc;
+    double cT =  TMultiSystem::sm->pmp->TCc;
+    double cP =  TMultiSystem::sm->pmp->Pc;
 
 
     mtp->Msysb = 0.;
@@ -319,7 +323,7 @@ void TGEM2MT::init_arrays( bool mode )
             strcpy( mtp->MGPid[ii], phName.c_str() );
         for(long int k=0; k<mtp->FIf; k++ )
         {
-             char  PHC_ = TMulti::sm->GetPM()->PHC[mtp->xPH[k]];
+             char  PHC_ = TMultiSystem::sm->pmp->PHC[mtp->xPH[k]];
 
              if( PHC_ == PH_AQUEL )
                   mtp->PGT[ii*mtp->FIf+k] = xaq;
@@ -421,16 +425,16 @@ void TGEM2MT::calc_eqstat( bool startSys )
 
     if( mtp->PsMode == RMT_MODE_S ) // S mode - avoid calculating equilibrium, just set b vector
     {
-           TMulti::sm->GetPM()->TCc = mtp->cT;
+           TMultiSystem::sm->pmp->TCc = mtp->cT;
            //TK =  pmp->TC+C_to_K;
-           TMulti::sm->GetPM()->Pc= mtp->cP;
+           TMultiSystem::sm->pmp->Pc= mtp->cP;
            // loading parameters for ICs (independent components)
            for( long int i=-1, ii=0; ii< mtp->Nb; ii++ )
            {
               if( TSyst::sm->GetSY()->Icl[ii] == S_OFF )
                 continue;
               i++;
-              TMulti::sm->GetPM()->B[i] = TSyst::sm->GetSY()->B[ii];
+              TMultiSystem::sm->pmp->B[i] = TSyst::sm->GetSY()->B[ii];
            }
     }
     else {
@@ -847,7 +851,7 @@ void TGEM2MT::Expr_analyze( int obj_num )
         if( pVisor->ProfileMode == true )
         {
             mupL = (int)TRMults::sm->GetMU()->L;
-            pmpL = (int)TMulti::sm->GetPM()->L;
+            pmpL = (int)TMultiSystem::sm->pmp->L;
         }
         PRof->ET_translate( (int)o_mwetext, (int)obj_num, 0,
              mupL, 0, pmpL, get_ndx_ );
