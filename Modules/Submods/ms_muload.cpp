@@ -127,7 +127,7 @@ LOAD_KKMCOEF:
                 if( pmp->feSArC == NULL || kf+pmp->LsKin[k*6] > aObj[ o_wi_fsac ].GetN() )
                    pmp->feSArC = (double *) aObj[ o_wi_fsac ].Alloc(
                      (kf+pmp->LsKin[k*6]), 1, D_ );
-                ErrorIf( pmp->PMc == NULL, "KinMetModLoad",
+                ErrorIf( pmp->feSArC == NULL, "KinMetModLoad",
                          "Error in reallocating memory for pmp->feSArC." );
                 copyValues( pmp->feSArC+kf, aPH->php->feSAr, pmp->LsKin[k*6]);
             }
@@ -145,7 +145,7 @@ LOAD_KKMCOEF:
                 copyValues( pmp->rpConC+kc, aPH->php->rpCon, (pmp->LsKin[k*6]*pmp->LsKin[k*6+2]));
             }
             else { // no array with kinetic PR parameters in the Phase record
-                pmp->LsMod[k*6+2] = 0;
+                pmp->LsKin[k*6+2] = 0;
             }
 
             if( aPH->php->Ascp )
