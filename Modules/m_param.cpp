@@ -480,7 +480,9 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
    // make  all files
    if(flags[5] == S_OFF )
       na->pNodT0()[0]->NodeStatusFMT = No_nodearray;
-   na->PutGEM2MTFiles( par, 1,  ( flags[1] == S_ON ), ( flags[2] == S_ON ),
+
+
+   na->PutGEM2MTFiles( par, 1,  ( flags[1] == S_ON ? ft_json : ft_text ), ( flags[2] == S_ON ),
 		   ( flags[3] == S_ON ), false, true );// addMui, to txt
 //Test to compare standalone  na->GEM_print_ipm( "GemsCalcPhase.txt" );
    }
@@ -923,7 +925,7 @@ void TProfil::LoadFromMtparm( QWidget* par, DATACH *CSD , bool no_interpolat)
 // the same functions in ms_param.cpp
 
 //#include "equlibrate.h"
-#include "ipmequlib.h"
+#include "node.h"
 
 /// GEM IPM calculation of equilibrium state in MULTI
 /// without testing changes in the system
@@ -934,13 +936,9 @@ double TProfil::ComputeEquilibriumState( long int& NumPrecLoops, long int& NumIt
   calcFinished = false;
 
 
-  TIPMEqulibrate* taskPtr = new TIPMEqulibrate( wrknode );
+  double CalcTime = wrknode->ComputeEquilibriumState( NumIterFIA, NumIterIPM );
   //profil->ComputeEquilibriumState( PrecLoops, NumIterFIA, NumIterIPM );
 
-  /* CalcTime = */taskPtr->CalculateEquilibriumState( NumIterFIA, NumIterIPM );
-
-  if( taskPtr )
-     delete taskPtr;
   ////wrknode->GEM_run( false );
   //multi->CalculateEquilibriumState( 0, NumIterFIA, NumIterIPM );
 
@@ -948,7 +946,7 @@ double TProfil::ComputeEquilibriumState( long int& NumPrecLoops, long int& NumIt
   STat->setCalcFlag( true );
   // STat->CellChanged(); // SD 28/11/2011 to protect MessageToSave()
 
-  return multi->pmp->t_elap_sec;
+  return CalcTime;
 }
 
 /*

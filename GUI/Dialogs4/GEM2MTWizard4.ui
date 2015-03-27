@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>763</width>
-    <height>619</height>
+    <width>792</width>
+    <height>682</height>
    </rect>
   </property>
   <property name="font">
@@ -735,7 +735,10 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QCheckBox" name="chMode">
             <property name="text">
-             <string>Write IPM, DCH and DBR files in binary mode (in text mode, if unchecked)</string>
+             <string>Write IPM, DCH and DBR files in json mode (in text mode, if unchecked)</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
