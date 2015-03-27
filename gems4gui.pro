@@ -82,7 +82,7 @@ DIALOGS4_CPP   =  ./GUI/Dialogs4
 MODULES_CPP    =  ./Modules
 SUBMODS_CPP    =  ./Modules/Submods
 NUMERICS_CPP   =  ./Modules/Numerics
-GEMS3K_CPP     =  ../standalone/GEMS3K
+GEMS4K_CPP     =  ../standalone/GEMS4K
 EJDB_CPP       =  ../standalone/tcejdb
 
 QWT6_H       =  $$QWT6_CPP
@@ -93,7 +93,7 @@ EJDB_H       =  $$EJDB_CPP
 MODULES_H    =  $$MODULES_CPP
 SUBMODS_H    =  $$SUBMODS_CPP
 NUMERICS_H   =  $$NUMERICS_CPP
-GEMS3K_H     =  $$GEMS3K_CPP
+GEMS4K_H     =  $$GEMS4K_CPP
 PLATFORM_H   =  $$PLATFORM_CPP
 
 DEPENDPATH   += $$QWT6_H
@@ -104,7 +104,7 @@ DEPENDPATH   += $$EJDB_H
 DEPENDPATH   += $$MODULES_H
 DEPENDPATH   += $$SUBMODS_H
 DEPENDPATH   += $$NUMERICS_H
-DEPENDPATH   += $$GEMS3K_H
+DEPENDPATH   += $$GEMS4K_H
 DEPENDPATH   += $$PLATFORM_H
 
 INCLUDEPATH   += $$QWT6_H
@@ -115,7 +115,7 @@ INCLUDEPATH   += $$EJDB_H
 INCLUDEPATH   += $$MODULES_H
 INCLUDEPATH   += $$SUBMODS_H
 INCLUDEPATH   += $$NUMERICS_H
-INCLUDEPATH   += $$GEMS3K_H
+INCLUDEPATH   += $$GEMS4K_H
 INCLUDEPATH   += $$PLATFORM_H
 
 MOC_DIR = tmp
@@ -134,7 +134,7 @@ include($$EJDB_CPP/tcejdb.pri)
 include($$SUBMODS_CPP/Submods.pri)
 include($$MODULES_CPP/Modules.pri)
 include($$DATAMAN_CPP/Dataman.pri)
-include($$GEMS3K_CPP/gems3k.pri)
+include($$GEMS4K_CPP/gems4k.pri)
 
 #win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Reaktor/build/lib/release/ -lReaktor
 #else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Reaktor/build/lib/debug/ -lReaktor
