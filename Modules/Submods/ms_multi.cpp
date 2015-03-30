@@ -42,8 +42,8 @@ TMultiSystem::TMultiSystem( int nrt ):
     pmp = pActivity->pmp;
     acp = &pActivity->act;
 
-    ////pKinetics = new TKinetics( na_->pCSD(), na_->pCNode() );
-    ////pKinetics->set_def();
+    pKinetics = new TKinetics( pmp->FI );
+    pKinetics->set_def();
 }
 
 

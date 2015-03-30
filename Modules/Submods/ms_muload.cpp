@@ -309,13 +309,13 @@ void TMultiSystem::SolModLoad()
 
     if( pmp->pIPN >= 1 )           //SD 29/11/2006
        return;
-    ErrorIf( !pmp->FIs, "SolModLoad", "No phases-solutions!" );
+    ErrorIf( !pmp->FIs,  "SolModLoad", "No phases-solutions!" );
 
-    if( pmp->pIPN <= 0 )
+    /**if( pmp->pIPN <= 0 )
     {
         qEp.clear();
         qEd.clear();
-    }
+    }*/
 
     // Data extraction from Phase records
     for( kk=0, k=-1; kk<mup->Fis; kk++ )
@@ -366,7 +366,7 @@ void TMultiSystem::SolModLoad()
 
         pActivity->SolModCreatePhase( k, jb, je, JB, JE, aPH->php,  sMod[SPHAS_TYP], sMod[MIX_TYP]  );
 
-        // potentially an error - should be set in any DCE_LINK mode, also SM_UNDEF ?
+        /* potentially an error - should be set in any DCE_LINK mode, also SM_UNDEF ?
         switch( modT[DCE_LINK] )
         {
         case SM_UNDEF:  // no script equations were specified
@@ -375,9 +375,7 @@ void TMultiSystem::SolModLoad()
                goto LOAD_NIDMCOEF;
         case SM_PRIVATE_:
         case SM_PUBLIC:   // nonideal solution
-               //  Changed 07.12.2006   KD
-            /*     if( !pm_GC_ods_link( q, k, jb, kc, kd ))
-                 { iRet = AMW_FE; goto WRONG; }  */
+
             aObj[ o_ntc ].SetPtr( &pmp->TCc );
             aObj[ o_ntk ].SetPtr( &pmp->Tc );
             aObj[ o_np  ].SetPtr(  &pmp->Pc );
@@ -478,7 +476,7 @@ void TMultiSystem::SolModLoad()
         if( pmp->PHC[k] != PH_SORPTION && pmp->PHC[k] != PH_POLYEL )
             sm_text_analyze( k, Type, JB, JE, jb, je );
         else  sm_text_analyze( k, Type, 0, JE, 0, je );
-
+        */
 
         // load coefficients of mixing models into MULTI transfer arrays
         // Valid for both built-in and scripted mixing models
@@ -516,7 +514,7 @@ LOAD_NIDMCOEF:
     pmp->pIPN = 1;
  }
 
-//-------------------------------------------------------------------
+/*-------------------------------------------------------------------
 // Translates, analyzes and unpacks equations of phase non-ideal model
 // Type: 0-equations for the whole phase,
 //       1 - one group of equations for all DC,
@@ -557,18 +555,18 @@ void TMultiSystem::sm_text_analyze( int nph, int Type,
     catch( TError& xcpt )
     {
         vfMessage(window(), xcpt.title, xcpt.mess);
-        /*bool   iRet = */
+        *bool   iRet = *
         TPhase::pm->CheckEqText(  erscan,
            "E97MSTran: Error in Phase non-ideality mixing model scripts: " );
-        /*  if( iRet )  goto AGAIN;  */
+        *  if( iRet )  goto AGAIN;  *
         Error(  "SolModLoad", xcpt.mess );
     }
-    /* if( Type ) // print results to rpn_log.txt
+    * if( Type ) // print results to rpn_log.txt
         qEd[nph].PrintEquat( (char *)aObj[o_neqtxt].GetPtr(), fstream& f);
        else
         qEp[nph].PrintEquat( (char *)aObj[o_neqtxt].GetPtr(), fstream& f);
-     */
-}
+     *
+}*/
 
 //--------------------------------------------------------------------
 // Packs the script of PRIVATE type of solution phase
