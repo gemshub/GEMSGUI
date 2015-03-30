@@ -1,4 +1,4 @@
-//-------------------------------------------------------------------
+﻿//-------------------------------------------------------------------
 // $Id: ms_muload.cpp 1156 2008-12-15 17:50:38Z gems $
 //
 // (c) 1992-2013 S.Dmitrieva, D.Kulik, K.Chudnenko
@@ -299,10 +299,7 @@ LOAD_KKMCOEF:
 //
 void TMultiSystem::SolModLoad()
 {
-    int kk, k, j, jj, jp, jkd, ku, kue=0,
-    JB, JE=0, jb, je=0, kc, kd, kce=0, kde=0, kx, kxe=0, ksn = 0, ksf=0, Type=0;
-    long int jdqfc=0,  jrcpc=0;
-    //vstr pkey(MAXRKEYLEN);
+    int kk, k, j, jj, ku, kue=0, Type=0, JB, JE=0, jb, je=0;
     char modT[164];
     char *sMod;
     time_t crt;
@@ -313,23 +310,13 @@ void TMultiSystem::SolModLoad()
     if( pmp->pIPN >= 1 )           //SD 29/11/2006
        return;
     ErrorIf( !pmp->FIs, "SolModLoad", "No phases-solutions!" );
-    // reallocating arrays for script calculations
-    /*for(kk=0; kk<qEp.size(); kk++ )
-        if(qEp[kk])
-        {  delete qEp[kk];
-           qEp[kk] = 0;
-        }
-    for(kk=0; kk<qEd.size(); kk++ )
-        if(qEd[kk])
-        {  delete qEd[kk];
-           qEd[kk] = 0;
-        }
-     */
+
     if( pmp->pIPN <= 0 )
     {
         qEp.clear();
         qEd.clear();
     }
+
     // Data extraction from Phase records
     for( kk=0, k=-1; kk<mup->Fis; kk++ )
     {
@@ -338,23 +325,20 @@ void TMultiSystem::SolModLoad()
         if( syp->Pcl[kk] == S_OFF || kk >= mup->Fis )
             continue;
         k++;
-        acp->LsMod_[k*3] = acp->LsMod_[k*3+1] = acp->LsMod_[k*3+2] = 0;
-        acp->LsMdc_[k*3] = acp->LsMdc_[k*3+1] = acp->LsMdc_[k*3+2] = 0;
         jb=je;
         je+= pmp->L1[k];
 
         // Indexes for extracting data from IPx, PMc and DMc arrays
-        kx = kxe;                  // added 07.12.2006 by KD
-        kc = kce;
-        kd = kde;
         ku = kue;
 
         if( pmp->L1[k] == 1 )
             continue;  // one component is left in the multicomponent phase
         aPH->TryRecInp( mup->SF[kk], crt, 0 ); // reading phase record
-        // Added SD 20/01/2010
+
+        // Compress phase record
         if( aPH->php->Ppnc == S_ON && aPH->php->npxM > 0 )    // Check conditions of compressing!
             CompressPhaseIpxt( kk );
+
         // selecting type of the model
         memcpy( modT, aPH->php->sol_t, MAXKEYWD );
         memcpy( pmp->sMod[k], modT, MAXKEYWD );
@@ -362,7 +346,7 @@ void TMultiSystem::SolModLoad()
         pmp->sMod[k][7] = aPH->php->kin_t[1];
         sMod = pmp->sMod[k];
 
-        // 16/11/2010 added for multi-site mixed moodels
+        // Reload multi-site mixed moodels
         if( aPH->php->nMoi >0 )
         { TFormula aFo;
           vector<string> form_array;
@@ -378,59 +362,20 @@ void TMultiSystem::SolModLoad()
 
            // get moiety structure from phase
            aPH->MakeSublatticeLists( form_array );
-           acp->LsMdc_[k*3+1] = aPH->php->nSub;
-           acp->LsMdc_[k*3+2] = aPH->php->nMoi;
-
-           // realloc memory
-           if( ksn+acp->LsMdc_[k*3+1]*acp->LsMdc_[k*3+2]*pmp->L1[k] > aObj[ o_wi_moisn ].GetN()
-                   || acp->MoiSN_ == NULL )
-//                   (int)(sizeof( pmp->MoiSN )/sizeof(double)))
-              acp->MoiSN_ = (double *) aObj[ o_wi_moisn ].Alloc(
-                     (ksn+acp->LsMdc_[k*3+1]*acp->LsMdc_[k*3+2]*pmp->L1[k]), 1, D_ );
-           ErrorIf( acp->MoiSN_ == NULL, "SolModLoad",
-                         "Error in reallocating memory for pmp->MoiSN." );
-           fillValue( acp->MoiSN_+ksn, 0., acp->LsMdc_[k*3+1]*acp->LsMdc_[k*3+2]*pmp->L1[k] );
-
-           // copy data to MoiSN
-           for( j=0, jj=jb; jj < je; j++, jj++ )
-           { // set indexes of components - eliminating those switched off
-              for( int ii = 0; ii< acp->LsMdc_[k*3+2]; ii++ )
-              {
-                 int site = aPH->php->nxSub[j*acp->LsMdc_[k*3+2]+ii];
-                 if( site >=0 && site < acp->LsMdc_[k*3+1] )
-                    acp->MoiSN_[ksn+ j*acp->LsMdc_[k*3+1]*acp->LsMdc_[k*3+2] +site*acp->LsMdc_[k*3+2]+ii]=
-                              aPH->php-> OcpN[j*acp->LsMdc_[k*3+2]+ii];
-              }
-           } /* jj */
-           // realloc memory for the collection of site fractions arrays
-           if( ksf+acp->LsMdc_[k*3+1]*acp->LsMdc_[k*3+2] > aObj[ o_wo_sitfr ].GetN()
-                   || acp->SitFr_ == NULL )
-//                   (int)(sizeof( pmp->SitFr )/sizeof(double)))
-              acp->SitFr_ = (double *) aObj[ o_wo_sitfr ].Alloc(
-                     (ksf+acp->LsMdc_[k*3+1]*acp->LsMdc_[k*3+2]), 1, D_ );
-           ErrorIf( acp->SitFr_ == NULL, "SolModLoad",
-                         "Error in reallocating memory for pmp->SitFr." );
-           fillValue( acp->SitFr_+ksf, 0., acp->LsMdc_[k*3+1]*acp->LsMdc_[k*3+2] );
-
        }
- // potentially an error - should be set in any DCE_LINK mode, also SM_UNDEF ?
+
+        pActivity->SolModCreatePhase( k, jb, je, JB, JE, aPH->php,  sMod[SPHAS_TYP], sMod[MIX_TYP]  );
+
+        // potentially an error - should be set in any DCE_LINK mode, also SM_UNDEF ?
         switch( modT[DCE_LINK] )
         {
         case SM_UNDEF:  // no script equations were specified
                if( modT[SGM_MODE] != SM_STNGAM )
                   continue;
-               acp->LsMod_[k*3] = aPH->php->ncpN;  // number of interaction parameters
-               acp->LsMod_[k*3+1] = aPH->php->npxM; // max. order of interaction parameters
-               acp->LsMod_[k*3+2] = aPH->php->ncpM; // number of coeffs per int.parameter
-               acp->LsMdc_[k*3] = aPH->php->nscM; // changed 07.12.2006  KD
                goto LOAD_NIDMCOEF;
         case SM_PRIVATE_:
         case SM_PUBLIC:   // nonideal solution
                //  Changed 07.12.2006   KD
-               acp->LsMod_[k*3] = aPH->php->ncpN;  // number of interaction parameters
-               acp->LsMod_[k*3+1] = aPH->php->npxM; // max. order of interaction parameters
-               acp->LsMod_[k*3+2] = aPH->php->ncpM; // number of coeffs per int.parameter
-               acp->LsMdc_[k*3] = aPH->php->nscM; // changed 07.12.2006  KD
             /*     if( !pm_GC_ods_link( q, k, jb, kc, kd ))
                  { iRet = AMW_FE; goto WRONG; }  */
             aObj[ o_ntc ].SetPtr( &pmp->TCc );
@@ -444,31 +389,24 @@ void TMultiSystem::SolModLoad()
             aObj[ o_nlnrt ].SetPtr(&pmp->FRT );
             aObj[ o_nqp ].SetPtr( pmp->Qp+k*QPSIZE );
             aObj[ o_nqd ].SetPtr( pmp->Qd+k*QDSIZE );  // QDSIZE cells per phase
-//      aObj[ o_nncp].SetPtr( pmp->LsMod+k );  changes 07.12.2006  KD
-            aObj[ o_nncp].SetPtr( acp->LsMod_+k*3 );
-            aObj[ o_nncp].SetDim( 1, 3 );
-            aObj[ o_nncd].SetPtr( acp->LsMdc_+k*3 );
-            aObj[ o_nncd].SetDim( 1, 1 );
+            //aObj[ o_nncp].SetPtr( acp->LsMod_+k*3 );
+            //aObj[ o_nncp].SetDim( 1, 3 );
+            //aObj[ o_nncd].SetPtr( acp->LsMdc_+k*3 );
+            //aObj[ o_nncd].SetDim( 1, 1 );
             aObj[ o_ndc ].SetPtr( pmp->L1+k );
             aObj[ o_nez ].SetPtr( pmp->EZ+jb );
             aObj[o_nez].SetN( pmp->L1[k]);
-
-//            aObj[ o_npcv].SetPtr( pmp->PMc+kc );
-//            aObj[o_npcv].SetDim( 1, pmp->LsMod[k]);  // Changed 07.12.2006 KD
-            aObj[ o_npcv].SetPtr( acp->PMc_+kc );
-            aObj[o_npcv].SetDim( acp->LsMod_[k*3], acp->LsMod_[k*3+2]);
+            //aObj[ o_npcv].SetPtr( acp->PMc_+kc );
+            //aObj[o_npcv].SetDim( acp->LsMod_[k*3], acp->LsMod_[k*3+2]);
             //  Object for indexation of interaction parameters
-            aObj[ o_nu].SetPtr( acp->IPx_+kx );
-            aObj[o_nu].SetDim( acp->LsMod_[k*3], acp->LsMod_[k*3+1]);
-
-            aObj[ o_ndcm].SetPtr( acp->DMc_+kd );
-            aObj[o_ndcm].SetDim( pmp->L1[k], acp->LsMdc_[k*3]);
-
+            //aObj[ o_nu].SetPtr( acp->IPx_+kx );
+            //aObj[o_nu].SetDim( acp->LsMod_[k*3], acp->LsMod_[k*3+1]);
+            //aObj[ o_ndcm].SetPtr( acp->DMc_+kd );
+            //aObj[o_ndcm].SetDim( pmp->L1[k], acp->LsMdc_[k*3]);
             aObj[ o_nmvol].SetPtr(pmp->Vol+jb );
             aObj[o_nmvol].SetN( pmp->L1[k]);
             aObj[ o_nppar].SetPtr(pmp->G0+jb );   // Changed 10.12.2008 by DK
             aObj[ o_nppar].SetN( pmp->L1[k]);
-//            aObj[ o_ngtn].SetPtr( pmp->G0+jb );
             aObj[ o_ngtn].SetPtr( pmp->fDQF+jb );     // changed 15.06.2011 by DK
             aObj[ o_ngtn].SetN( pmp->L1[k]);
             aObj[ o_ngam].SetPtr( pmp->Gamma+jb );
@@ -500,6 +438,7 @@ void TMultiSystem::SolModLoad()
         default: // error - invalid code of the mixing model
             Error( "SolModLoad", "Wrong code of the model of mixing" );
         } // end switch
+
 
         // Translating Phase math script equations of mixing model
         if( !aPH->php->pEq && !aPH->php->dEq )
@@ -540,129 +479,12 @@ void TMultiSystem::SolModLoad()
             sm_text_analyze( k, Type, JB, JE, jb, je );
         else  sm_text_analyze( k, Type, 0, JE, 0, je );
 
+
         // load coefficients of mixing models into MULTI transfer arrays
         // Valid for both built-in and scripted mixing models
 LOAD_NIDMCOEF:
-        if( acp->LsMod_[k*3] )
-        { // loading interaction parameters - rewritten 07.12.2006 by KD
-          if( aPH->php->pnc )
-          {
-              if( kc+acp->LsMod_[k*3]*acp->LsMod_[k*3+2] > aObj[ o_wi_pmc ].GetN()
-                      || acp->PMc_ == NULL )
-//                  (int)(sizeof( pmp->PMc )/sizeof(double)))
-                 acp->PMc_ = (double *) aObj[ o_wi_pmc ].Alloc(
-                   (kc+acp->LsMod_[k*3]*acp->LsMod_[k*3+2]), 1, D_ );
-              ErrorIf( acp->PMc_ == NULL, "SolModLoad",
-                       "Error in reallocating memory for pmp->PMc." );
-              copyValues( acp->PMc_+kc, aPH->php->pnc, (acp->LsMod_[k*3]*acp->LsMod_[k*3+2]));
-          }
-          else { // no array with interaction parameters in the Phase record
-            acp->LsMod_[k*3] = 0;
-            acp->LsMod_[k*3+2] = 0;
-          }
-          //  Copying the IP index array from Phase to MULTI
-          if( aPH->php->ipxt )
-          {
-             if( kx+acp->LsMod_[k*3]*acp->LsMod_[k*3+1] > aObj[ o_wi_ipxpm ].GetN()
-                     || acp->IPx_ == NULL )
-//                (int)(sizeof( pmp->IPx )/sizeof(long int)))
-             acp->IPx_ = (long int *) aObj[ o_wi_ipxpm ].Alloc(
-                (kx+acp->LsMod_[k*3]*acp->LsMod_[k*3+1]), 1, L_ );
-             ErrorIf( acp->IPx_ == NULL, "SolModLoad",
-                      "Error in reallocating memory for pmp->IPx" );
-             copyValues( acp->IPx_+kx, aPH->php->ipxt,
-                     (acp->LsMod_[k*3]*acp->LsMod_[k*3+1]));
-          }
-          else
-             acp->LsMod_[k*3+1] = 0;  // no IP indexation table
-        }
-        if( acp->LsMdc_[k*3] )
-        {   // coefficients for end member components
-          if( aPH->php->scoef )
-          {
-            if( kd+acp->LsMdc_[k*3]*pmp->L1[k] > aObj[ o_wi_dmc ].GetN()
-                    || acp->DMc_ == NULL )
-//                 > (int)(sizeof( pmp->DMc )/sizeof(double)))
-                acp->DMc_ = (double *) aObj[ o_wi_dmc ].Alloc(
-                   kd+acp->LsMdc_[k*3]*pmp->L1[k], 1, D_ );
-            ErrorIf( acp->DMc_ == NULL, "SolModLoad",
-                    "Error in reallocating memory for pmp->DMc." );
-            for( jj=jb, j=JB, jkd=0; j < JE; j++ )
-            { // set indexes of components - eliminating those switched off
-                if( syp->Dcl[j] == S_OFF )
-                    continue;
-                jp = mup->Pl[j]; // mup->Pl[pmp->muj[j]];
-                copyValues( acp->DMc_+kd+jkd, aPH->php->scoef+jp*acp->LsMdc_[k*3],
-                        acp->LsMdc_[k*3]);
-                jkd += acp->LsMdc_[k*3]; jj++;
-            } /* j */
-          }
-          else acp->LsMdc_[k*3] = 0; // no DC coefficients
-        }
-        // Load new fields from Phase
-        acp->LsMdc2_[k*3] = aPH->php->ndqf;
-        acp->LsMdc2_[k*3+1] = aPH->php->nrcp;
 
-        if( acp->LsMdc2_[k*3] )
-        {   // coefficients for of DQF parameters for DCs in phases
-          if( aPH->php->DQFc )
-          {
-            if( jdqfc+acp->LsMdc2_[k*3]*pmp->L1[k] > aObj[ o_wi_dqfc ].GetN()
-                    || acp->DQFc_ == NULL )
-//                 > (int)(sizeof( pmp->DQFc )/sizeof(double)))
-                acp->DQFc_ = (double *) aObj[ o_wi_dqfc ].Alloc(
-                   jdqfc+acp->LsMdc2_[k*3]*pmp->L1[k], 1, D_ );
-            ErrorIf( acp->DQFc_ == NULL, "SolModLoad",
-                    "Error in reallocating memory for pmp->DQFc." );
-            for( jj=jb, j=JB, jkd=0; j < JE; j++ )
-            { // set indexes of components - eliminating those switched off
-                if( syp->Dcl[j] == S_OFF )
-                    continue;
-                jp = mup->Pl[j]; // mup->Pl[pmp->muj[j]];
-                copyValues( acp->DQFc_+jdqfc+jkd, aPH->php->DQFc+jp*acp->LsMdc2_[k*3],
-                        acp->LsMdc2_[k*3]);
-                jkd += acp->LsMdc2_[k*3]; jj++;
-            } /* j */
-          }
-          else acp->LsMdc2_[k*3] = 0; // no DC coefficients
-        }
-/*  This switch can be used for something else
-        if( pmp->LsMdc2[k*3+1] )
-        {   // coefficients of reciprocal parameters for DCs in phases
-          if( aPH->php->rcpc )
-          {
-            if( jrcpc+pmp->LsMdc2[k*3+1]*pmp->L1[k] > aObj[ o_wi_rcpc ].GetN()
-                    || pmp->rcpc == NULL )
-//                 > (int)(sizeof( pmp->rcpc )/sizeof(double)))
-                pmp->rcpc = (double *) aObj[ o_wi_rcpc ].Alloc(
-                   jrcpc+pmp->LsMdc2[k*3+1]*pmp->L1[k], 1, D_ );
-            ErrorIf( pmp->rcpc == NULL, "SolModLoad",
-                    "Error in reallocating memory for pmp->rcpc." );
-            for( jj=jb, j=JB, jkd=0; j < JE; j++ )
-            { // set indexes of components - eliminating those switched off
-                if( syp->Dcl[j] == S_OFF )
-                    continue;
-                jp = mup->Pl[j]; // mup->Pl[pmp->muj[j]];
-                copyValues( pmp->rcpc+jrcpc+jkd, aPH->php->rcpc+jp*pmp->LsMdc2[k*3+1],
-                        pmp->LsMdc2[k*3+1]);
-                jkd += pmp->LsMdc2[k*3+1]; jj++;
-            } /* j * /
-          }
-          else */ acp->LsMdc2_[k*3+1] = 0; // no rcpc coefficients - This switch can be used for something else
-//        }
-
-        // move handles
-        jdqfc += (acp->LsMdc2_[k*3]*pmp->L1[k]);
-        jrcpc += (acp->LsMdc2_[k*3+1]*pmp->L1[k]);
-
-        kxe += acp->LsMod_[k*3]*acp->LsMod_[k*3+1];
-        kce += acp->LsMod_[k*3]*acp->LsMod_[k*3+2];
-        kde += acp->LsMdc_[k*3]*pmp->L1[k];
-        ksn += acp->LsMdc_[k*3+1]*acp->LsMdc_[k*3+2]*pmp->L1[k];
-        ksf += acp->LsMdc_[k*3+1]*acp->LsMdc_[k*3+2];
-
-// new: load coefficients and parameters for TSorpMod here
-    LOAD_SORPMCOEF:
+        // new: load coefficients and parameters for TSorpMod here
         if( pmp->sMod[k][6] != SM_UNDEF )
         {
             ;
@@ -672,8 +494,7 @@ LOAD_NIDMCOEF:
 
         }
 
-   LOAD_UPTMODCOEF:
-// new: load uptake kinetics model parameters here  !!! compression of phase DCs not yet implemented !!!
+       // new: load uptake kinetics model parameters here  !!! compression of phase DCs not yet implemented !!!
         if( aPH->php->umpCon )
         {
             if( ku+pmp->LsUpt[k*2]*pmp->L1[k] > aObj[ o_wi_umpc ].GetN()

@@ -379,12 +379,13 @@ void TMultiSystem::EqstatExpand( const char *key, bool calcActivityModels, bool 
              // not done if these models are already present in MULTI !
            pmp->PD = abs(TProfil::pm->pa.p.PD);
            SolModLoad();   // Call point to loading scripts for mixing models
+           //MakeSolMod();
         }
     	pmp->pIPN = 1;
 
         //   double FitVar3 = pmp->FitVar[3];  // Debugging: Reset the smoothing factor
         //   pmp->FitVar[3] = 1.0;
-        MakeSolMod();
+        //MakeSolMod();
         CalculateActivityCoefficients( LINK_TP_MODE );
        // Computing DQF, FugPure and G wherever necessary; Activity coeffs are restored from lnGmo
         //   pmp->FitVar[3]=FitVar3;  // Debugging

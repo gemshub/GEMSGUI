@@ -127,8 +127,11 @@ NEXT2:
 
     // Resetting vector of TSolMod pointers to avoid problems with activity coeffs
     //     in TSolMod calculations after switching phases on/off (DK 25.05.2009)
-    pActivity->Reset_TSolMod();
-    pActivity->Reset_TSorpMod();
+    if(  pmp->pIPN <=0 ) //   !pmp->pNP || !pmp->pBAL || !pmp->pKMM )
+    {
+       pActivity->Reset_TSolMod();
+       pActivity->Reset_TSorpMod();
+    }
     // loading data for phases, incl. sorption and solution models
     multi_sys_ph();
 
