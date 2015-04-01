@@ -22,11 +22,6 @@
 #include "v_object.h"
 #include "visor.h"
 #include "v_ejdb_file.h"
-#include "service.h"
-#include "ms_rmults.h"
-#include "ms_system.h"
-#include "ms_mtparm.h"
-#include "tmltsystem.h"
 
 extern const char * dfAqKeyD ;
 extern const char * dfAqKeyH ;
@@ -140,7 +135,7 @@ bool TProfil::initCalcMode(const char * profileKey)
         "Loading thermodynamic data", 80 );
 
     // test MTparm
-    MULTIBASE *pmp = multi->pmp;
+    MULTI *pmp = multi->GetPM();
     mtparm->MTparmAlloc();
     mtparm->LoadMtparm( 25., 1.);
     pmp->T = pmp->Tc = 25. + C_to_K;
@@ -372,7 +367,7 @@ AGAIN:
 // (for Process, GTdemo, UnSpace ... calculations)
 void TProfil::loadSystat( const char *key )
 {
-    MULTIBASE *pmp = multi->pmp;
+    MULTI *pmp = multi->GetPM();
     TSysEq* STat = (TSysEq*)(aMod[RT_SYSEQ]);
     //  STat->ods_link(0);
     string str;
@@ -401,7 +396,7 @@ void TProfil::loadSystat( const char *key )
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK SD 24/05/2010
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
-       multi->InitalizeGEM_IPM_Data( wrknode );
+       multi->InitalizeGEM_IPM_Data(  );
 
     if( pmp->pESU )      // unpack old solution
     {
@@ -418,7 +413,7 @@ void TProfil::loadSystat( const char *key )
 // rebuild loading before Systat
 void TProfil::deriveSystat()
 {
-     MULTIBASE *pmp = multi->pmp;
+     MULTI *pmp = multi->GetPM();
      TSysEq::pm->setCalcFlag( false );
 
     string keyp = rt[RT_SYSEQ].UnpackKey();
@@ -434,7 +429,7 @@ void TProfil::deriveSystat()
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK 24/05/2010
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
-        multi->InitalizeGEM_IPM_Data( wrknode );
+        multi->InitalizeGEM_IPM_Data(  );
     if( pmp->pESU )      // unpack old solution
     {
         multi->loadData( false );  // unpack syseq to multi
@@ -483,7 +478,7 @@ AGAIN:
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
-       multi->InitalizeGEM_IPM_Data( wrknode );
+       multi->InitalizeGEM_IPM_Data(  );
 
     // SD 22/01/2010 bool
     systbcInput( window(), str.c_str() );
@@ -544,7 +539,7 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
     long int NumIterFIA,  NumIterIPM, NumPrecLoops;
 
     STat->ods_link(0);
-//    status_ = 0;
+    status = 0;
     syst->SyTest();
     if( !syst->BccCalculated() )
         Error( "System", "Please, specify bulk composition of the system!");
@@ -554,21 +549,21 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
 // cout << "kdTime: " << kdTime << "  kTimeStep: " << kTimeStep << "  kTime: " << kTime << endl;
     if( kdTime < 0. )
     {  // no kinetics to consider
-        multi->pmp->kTau = 0.;
-        multi->pmp->kdT = 0.;
-        multi->pmp->ITau = 0;
-        multi->pmp->pKMM = 2;  // no need to allocate TKinMet instances
+        multi->GetPM()->kTau = 0.;
+        multi->GetPM()->kdT = 0.;
+        multi->GetPM()->ITau = -1; // SD 23/03/2015
+        multi->GetPM()->pKMM = 2;  // no need to allocate TKinMet instances
     }
     else {   // considering kinetics
-        multi->pmp->kTau = kTime;
-        multi->pmp->kdT = kdTime;
+        multi->GetPM()->kTau = kTime;
+        multi->GetPM()->kdT = kdTime;
         if( kTimeStep < 0 )
         {   // we need to initialize TKinMet
-            multi->pmp->pKMM = -1;
-            multi->pmp->ITau = -1;
+            multi->GetPM()->pKMM = -1;
+            multi->GetPM()->ITau = -1;
         }
         else  // TKinMet exists, simulation continues
-            multi->pmp->ITau = kTimeStep;
+             multi->GetPM()->pKMM = 1; // SD 23/03/2015 multi->GetPM()->ITau = kTimeStep;
     }
     PMtest( keyp.c_str() );
 
@@ -580,8 +575,8 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
    ComputeEquilibriumState( NumPrecLoops, NumIterFIA, NumIterIPM );
 // new - possibly returns a new time step suggestion
    if(kdTime)
-       kdTime = multi->pmp->kdT;
-   return  multi->pmp->t_elap_sec;
+       kdTime = multi->GetPM()->kdT;
+   return  multi->GetPM()->t_elap_sec;
 }
 
 

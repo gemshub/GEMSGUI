@@ -240,7 +240,7 @@ LOAD_KKMCOEF:
           pmp->LsPhl[k*2] = dphl;
         }
 
-        if( aPH->php->PumpCon && aPH->php->lICu && pmp->LsUpt[k*2+1] > 0 )
+        if( k < pm.FIs && (aPH->php->PumpCon && aPH->php->lICu && pmp->LsUpt[k*2+1] > 0) )
 //                ( kMod[2] == KM_UPT_ENTRAP || kMod[2] == KM_IEX_FAST || kMod[2] == KM_IEX_SLOW ) )
             // kMod[0] == KM_PRO_UPT )  // so far only for uptake kinetics models!
         {
@@ -284,7 +284,8 @@ LOAD_KKMCOEF:
         kae += pmp->LsKin[k*6]*pmp->LsKin[k*6+1]*pmp->LsKin[k*6+3];
         kse += pmp->LsKin[k*6+4];
         kde += pmp->LsKin[k*6+1];
-        kie += pmp->LsUpt[k*2+1];
+        if( k < pm.FIs )
+           kie += pmp->LsUpt[k*2+1];
 //        if( aPH->php->PumpCon && kMod[0] == KM_PRO_UPT )
 //            kie += pmp->L1[k];
      } // kk, k
