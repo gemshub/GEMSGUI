@@ -67,7 +67,7 @@ void TPhase::ods_link( int q)
     aObj[ o_phnlph].SetPtr(  &ph[q].nlPh );  // i 9
     aObj[ o_phnumpc].SetPtr(  &ph[q].nPRk );  // i 6
     aObj[ o_phnei1].SetPtr(  &ph[q].nEIl );  // i 4
-    aObj[ o_phnisoc].SetPtr(  &ph[q].nIsoC );  // i 4
+    aObj[ o_phnisoc].SetPtr(  &ph[q].nIsoC );  // i 5
     aObj[ o_phvpor].SetPtr(  &ph[q].Vpor );  // f 4
     aObj[ o_phpsdc].SetPtr(  &ph[q].psdC );  // f 4
 
