@@ -127,7 +127,8 @@ iRes3, // new: reserved
 nIsoC, // new: number of isotherm parameter coefficients per surface species DC (default 0)
 nIsoS, // new: number of isotherm parameter coefficients per surface site (default 0)
 mDe,   // new: maximum denticity number for surface species (default 1)
-nSiT  /// new: number of site types (to set up on remake)
+nSiT,  /// new: number of site types (to set up on remake)
+reserv
 ;
 
 short *ipxt,  // Table of indexation for interaction parameters [ncpN][npxM]
