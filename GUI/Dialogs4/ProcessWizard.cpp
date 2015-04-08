@@ -350,6 +350,12 @@ for(int row=0; row<3; row++)
 //Page6
     spinBox18->setValue(size[5]);
 
+    int ii = boxAlg->findText(QChar(flgs[1]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    if( ii >= 0  )
+        boxAlg->setCurrentIndex(ii);
+    else
+        boxAlg->setCurrentIndex(0);
+
 
     QObject::connect( tIters, SIGNAL(cellChanged ( int , int  ) ),
                       this, SLOT(CmItersEdit(int , int )));
@@ -438,19 +444,22 @@ void   ProcessWizard::getFlags( char flgs[24] )
 
   switch( type )
    {
-    case P_TITRSING: memcpy( flgs, "0++-+--++T+-", 12);
+    case P_TITRSING: memcpy( flgs, "0K+-+--++T+-", 12);
         break;
-    case P_INV_TITR: memcpy( flgs, "0++-+--+-G++", 12);
+    case P_INV_TITR: memcpy( flgs, "0K+-+--+-G++", 12);
         break;
-    case P_REACTORS: memcpy( flgs, "0++-++-+-R+-", 12);
+    case P_REACTORS: memcpy( flgs, "0K+-++-+-R+-", 12);
         break;
-    case P_SEQUENT: memcpy( flgs, "0++-+----S+-", 12);
+    case P_SEQUENT: memcpy( flgs, "0K+-+----S+-", 12);
         break;
-    case P_LIP: memcpy( flgs, "0++-+----L+-", 12);
+    case P_LIP: memcpy( flgs, "0K+-+----L+-", 12);
        break;
     case P_PVT:
-    default:  memcpy( flgs, "0*-------P--", 12 );
-   }
+    default:  memcpy( flgs, "0K-------P--", 12 );
+  }
+// calc type
+  flgs[1] = boxAlg->currentText()[0].toLatin1();
+
 // Putting other flags
    if( c_PvTm->isChecked() )
        flgs[12] = '+';

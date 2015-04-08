@@ -754,6 +754,7 @@ bool TVisorImp::SetProfileMode(const char * profileKey )
     //pModeName->setText(" E");
     actionDataBaseMode->setChecked(false);
     setActionPrecise();
+    CmSetKarpovAlgorithm();
     CmSysEq();
     return true;
 }

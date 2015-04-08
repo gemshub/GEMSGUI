@@ -77,7 +77,7 @@ SPP_SETTING pa_ = {
     "++++-+-+++", /* MUpmv[10] */ "jjbC++0+", /* TPpdc[8] */
     "*-*-*-*-*-----------", /* TPpvc[20] */ "+-+-+-----", /* SYppc[10] */
     "*****-*-*-**-***-----------*", /* SYpvc[28]*/  "-+++----ME", /* UTppc[10] */
-    "0*-------P--", /* PEpsc[12]  */  "------------", /* PEpvc[12] */
+    "0K-------P--", /* PEpsc[12]  */  "------------", /* PEpvc[12] */
     { "GTDEMO task name   ", "Graphic screen # " } ,   /* GDcode[2][20] */
     "Plot ",                  /* GDpsc[7] */
     { "Abscissa","Ordinate"},    /* GDpcc[2][9] */
@@ -197,6 +197,19 @@ void TProfil::ChangeSettings(int nSettings)
     pa.ver[TDBVERSION-1]='\0';
 }
 
+/// Set the numerical optimization algorithm used for the chemical equilibrium calculations
+void TProfil::SetNumericalMethodWrk(const char codAlgorithm)
+{
+    switch( codAlgorithm )
+    {
+      case 'O': wrknode->SetNumericalMethod(IpoptAlgorithm);
+                break;
+      case 'N': wrknode->SetNumericalMethod(IpnewtonAlgorithm);
+                break;
+      default:  wrknode->SetNumericalMethod(KarpovAlgorithm);
+    }
+
+}
 void
 BASE_PARAM::write(GemDataStream& oss)
 {

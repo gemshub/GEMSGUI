@@ -93,7 +93,7 @@ PvDDc,  //  Use diffusion coefficients for DC - DDc vector (+ -)
 PvDIc,  //  Use diffusion coefficients for IC - DIc vector (+ -)
    PvDCH,  //  Select ICs, DCs and phases to be exchanged via DATABR file (take all, if unchecked) (+ -)?
    PvnVTK, //  Use selected fields to VTK format (+ -)?
-   Pvres1, //  reserved(+ -)?
+   PvAlg, //   The numerical optimization algorithm used for the chemical equilibrium calculations (K O N)?
 
      // Controls on operation (14)
    PsMode,  // Code of GEM2MT mode of operation { S F B A D W T }
@@ -104,7 +104,7 @@ PvDIc,  //  Use diffusion coefficients for IC - DIc vector (+ -)
         //  2 - analysis run; 3 - analysis done; ( + 5: the same using stepwise mode)
    PsSYd,  // Save generated SysEq records to data base (+ -)
    PsSIA,    // Use smart initial approximation in GEM IPM (+); SIA internal (*); AIA (-)
-   PsSdat, //  Save DataCH and inital DataBR files as text files (+) or binary (-)
+   PsSdat, //  Save DataCH and inital DataBR files as text files (+) or json (-)
    PsSdef, //  Do not write data items that contain only default values (+ -)
    PsScom, //  Write files with comments for all data entries ( in text mode )(+ -)
    PsTPai,  //  Create T,P values in Tval, Pval using iterator(+) or enter(-)

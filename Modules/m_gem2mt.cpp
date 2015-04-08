@@ -1003,6 +1003,15 @@ TGEM2MT::RecCalc( const char * key )
    }
 
    AllocNa();
+   ((TProfil*)(aMod[RT_PARAM]))->SetNumericalMethodWrk(mtp->PvAlg);  //???
+   switch( mtp->PvAlg)
+   {
+     case 'O': na->SetNumericalMethod(IpoptAlgorithm);
+               break;
+     case 'N': na->SetNumericalMethod(IpnewtonAlgorithm);
+               break;
+     default:  na->SetNumericalMethod(KarpovAlgorithm);
+   }
 
    if( mtp->iStat == AS_RUN )
      if( !vfQuestion( window(), key,
@@ -1037,7 +1046,7 @@ TGEM2MT::RecCalc( const char * key )
                    "Please, edit the GEMS3K filelist name", "*.lst" ) == false )
              return;
       }
-     //TMulti::sm->Free_TSolMod();
+
      na->GEM_init( lst_f_name.c_str(), dbr_lst_f_name.c_str(), 0, true );
      CalcIPM( NEED_GEM_AIA, 0, mtp->nC, 0 );
      if( mtp->PsMode == RMT_MODE_W  )

@@ -862,5 +862,6 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
   vfPhaseInfo( par, system, xph, phname, xdclist, dcnames, xdc );
 }
 
+
 //------------------ End of m_prfget2.cpp --------------------------
 

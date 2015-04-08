@@ -412,6 +412,11 @@ pTaustep->setValue(Tau[2]);
     else c_PsDIc->setChecked( false );
     spinBox18->setValue(size[14]);
     pnEl->setValue(size[10]);
+    int ii = boxAlg->findText(QChar(flgs[17]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    if( ii >= 0  )
+        boxAlg->setCurrentIndex(ii);
+    else
+        boxAlg->setCurrentIndex(0);
 
 }
 
@@ -650,8 +655,9 @@ if( c_PsSmode->isChecked() )
      flgs[14] = '+';
   else flgs[14] = '-';
 
-
-// flags 0,1,2,3, 19, 20, 17, 30, 31 not used or internal
+ // calc type
+   flgs[17] = boxAlg->currentText()[0].toLatin1();
+// flags 0,1,2,3, 19, 20 not used or internal
 }
 
 void GEM2MTWizard::help()

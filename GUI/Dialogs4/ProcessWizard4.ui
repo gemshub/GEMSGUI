@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>860</width>
+    <width>896</width>
     <height>635</height>
    </rect>
   </property>
@@ -46,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1097,8 +1097,8 @@ Saving process-generated SysEq records may be necessary for subsequent sampling 
       </layout>
      </widget>
      <widget class="QWidget" name="page_4">
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <item>
         <widget class="QLabel" name="label_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1117,26 +1117,20 @@ Saving process-generated SysEq records may be necessary for subsequent sampling 
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item>
         <widget class="Line" name="line_4">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QGroupBox" name="groupBox_5">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
+       <item>
+        <widget class="QGroupBox" name="groupBox_7">
          <property name="title">
           <string>Optional</string>
          </property>
-         <layout class="QHBoxLayout">
-          <item>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
            <widget class="QSpinBox" name="spinBox18">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1149,7 +1143,7 @@ Saving process-generated SysEq records may be necessary for subsequent sampling 
             </property>
            </widget>
           </item>
-          <item>
+          <item row="0" column="1" colspan="2">
            <widget class="QLabel" name="textLabel11">
             <property name="text">
              <string>&amp;Set here the number of links to SDref source of data and bibliography records (default 0)</string>
@@ -1162,17 +1156,49 @@ Saving process-generated SysEq records may be necessary for subsequent sampling 
             </property>
            </widget>
           </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QComboBox" name="boxAlg">
+            <item>
+             <property name="text">
+              <string>K KarpovAlgorithm</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>O IpoptAlgorithm</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>N IpnewtonAlgorithm</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_28">
+            <property name="text">
+             <string>The numerical optimization algorithm used for the chemical equilibrium calculations</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string/>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>90</height>
+          </size>
+         </property>
+        </spacer>
        </item>
-       <item row="4" column="0">
+       <item>
         <widget class="QGroupBox" name="groupBox_6">
          <property name="title">
           <string>After you click &quot;Finish&quot;:</string>
@@ -1232,6 +1258,19 @@ Saving process-generated SysEq records may be necessary for subsequent sampling 
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>90</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

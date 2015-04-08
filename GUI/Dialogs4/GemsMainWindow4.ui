@@ -28,7 +28,7 @@
      <x>0</x>
      <y>0</y>
      <width>1121</width>
-     <height>20</height>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Record">
@@ -110,6 +110,10 @@
     <addaction name="sactionSimplex"/>
     <addaction name="sactionPrecise"/>
     <addaction name="sactionStepwise"/>
+    <addaction name="separator"/>
+    <addaction name="actionIPM4K_default"/>
+    <addaction name="actionIPOPTL"/>
+    <addaction name="actionELMAL"/>
    </widget>
    <widget class="QMenu" name="smenu_View">
     <property name="title">
@@ -1286,6 +1290,33 @@
   <action name="action_New_Database_EJDB">
    <property name="text">
     <string>&amp;New Database ...</string>
+   </property>
+  </action>
+  <action name="actionIPM4K_default">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>IPM4K (default)</string>
+   </property>
+  </action>
+  <action name="actionIPOPTL">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>IPOPTL</string>
+   </property>
+  </action>
+  <action name="actionELMAL">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>ELMAL</string>
    </property>
   </action>
  </widget>

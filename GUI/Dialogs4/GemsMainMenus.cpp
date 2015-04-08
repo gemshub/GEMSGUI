@@ -372,6 +372,9 @@ void TVisorImp::setActions()
 
     connect( saction_BCC, SIGNAL( triggered()), this, SLOT(CmRunBCC()));
     connect( saction_IPM, SIGNAL( triggered()), this, SLOT(CmRunIPM()));
+    connect( actionIPM4K_default, SIGNAL( triggered()), this, SLOT(CmSetKarpovAlgorithm()));
+    connect( actionIPOPTL, SIGNAL( triggered()), this, SLOT(CmSetIpoptAlgorithm()));
+    connect( actionELMAL, SIGNAL( triggered()), this, SLOT(CmSetIpnewtonAlgorithm()));
     //connect( actionSimplex, SIGNAL( triggered()), this, SLOT(CmSimplex()));
     //connect( actionPrecise, SIGNAL( triggered()), this, SLOT(CmPrecise()));
     //connect( actionStepwise, SIGNAL( triggered()), this, SLOT(CmStepwise()));
@@ -908,6 +911,33 @@ void TVisorImp::setActionPrecise()
    sactionPrecise->setChecked( TProfil::pm->pa.p.PRD );
 }
 
+void TVisorImp::CmSetKarpovAlgorithm()
+{
+    actionIPM4K_default->setChecked(true);
+    actionIPOPTL->setChecked(false);
+    actionELMAL->setChecked(false);
+    sactionStepwise->setEnabled(true);
+}
+
+void TVisorImp::CmSetIpoptAlgorithm()
+{
+    actionIPM4K_default->setChecked(false);
+    actionIPOPTL->setChecked(true);
+    actionELMAL->setChecked(false);
+    sactionStepwise->setChecked(false);
+    sactionStepwise->setEnabled(false);
+
+}
+
+void TVisorImp::CmSetIpnewtonAlgorithm()
+{
+    actionIPM4K_default->setChecked(false);
+    actionIPOPTL->setChecked(false);
+    actionELMAL->setChecked(true);
+    sactionStepwise->setChecked(false);
+    sactionStepwise->setEnabled(false);
+}
+
 void TVisorImp::CmRunIPM()
 {
     TMultiSystem::sm->pmp->pNP =
@@ -917,13 +947,19 @@ void TVisorImp::CmRunIPM()
     TProfil::pm->pa.p.PRD =
         ( !sactionPrecise->isChecked())? 0: TProfil::pm->pa.p.PRD;
 
+    if( actionIPOPTL->isChecked() )
+       TProfil::pm->SetNumericalMethodWrk('O');
+    else if( actionELMAL->isChecked() )
+        TProfil::pm->SetNumericalMethodWrk('N');
+       else
+          TProfil::pm->SetNumericalMethodWrk('K');
     try
     {
 
 #ifdef Use_mt_mode
        TProfil::pm->userCancel = false;
 
-        ProgressDialog* dlg = new ProgressDialog(this,sactionStepwise->isChecked()  );
+        ProgressDialog* dlg = new ProgressDialog(this,  sactionStepwise->isChecked()  );
 
         dlg->show();
 #else

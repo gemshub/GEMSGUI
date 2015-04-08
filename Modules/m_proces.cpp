@@ -1229,6 +1229,7 @@ TProcess::RecCalc( const char *key )
 
     if( pVisor->ProfileMode != true )
         Error( GetName(), "E02PEexec: Please, do it in the Project mode!" );
+    PRof->SetNumericalMethodWrk(pep->PsAlg);
 
 /*  char * */ text_fmt = 0;
 /*  string */ sd_key = "";
