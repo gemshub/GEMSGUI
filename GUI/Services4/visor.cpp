@@ -1242,6 +1242,11 @@ TVisor::CloseMessage()
     pVisorImp->CloseMessage();
 }
 
+char TVisor::GetNumericalMethod()
+{
+    pVisorImp->GetNumericalMethod();
+}
+
 
 TVisor *pVisor;
 

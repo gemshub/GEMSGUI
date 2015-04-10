@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>792</width>
+    <width>821</width>
     <height>682</height>
    </rect>
   </property>
@@ -46,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>8</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -735,7 +735,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QCheckBox" name="chMode">
             <property name="text">
-             <string>Write IPM, DCH and DBR files in json mode (in text mode, if unchecked)</string>
+             <string>Write IPM, DCH and DBR files in json text mode (in binary mode, if unchecked)</string>
             </property>
             <property name="checked">
              <bool>true</bool>

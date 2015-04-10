@@ -1004,14 +1004,7 @@ TGEM2MT::RecCalc( const char * key )
 
    AllocNa();
    ((TProfil*)(aMod[RT_PARAM]))->SetNumericalMethodWrk(mtp->PvAlg);  //???
-   switch( mtp->PvAlg)
-   {
-     case 'O': na->SetNumericalMethod(IpoptAlgorithm);
-               break;
-     case 'N': na->SetNumericalMethod(IpnewtonAlgorithm);
-               break;
-     default:  na->SetNumericalMethod(KarpovAlgorithm);
-   }
+   na->SetNumericalMethod(mtp->PvAlg);
 
    if( mtp->iStat == AS_RUN )
      if( !vfQuestion( window(), key,
@@ -1137,7 +1130,7 @@ void TGEM2MT::savePoint( )
           " or cancel the RMT task (No)?" ) )
        {
          string path = na->PutGEM2MTFiles( window(), mtp->nC,
-          ( mtp->PsSdat==S_OFF ? ft_json : ft_text), mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, true, true ); // with Nod0 and Nod1
+          ( mtp->PsSdat==S_OFF ? ft_json : ft_binary), mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, true, true ); // with Nod0 and Nod1
          mtp->notes[0] = '@';
          strncpy( mtp->notes+1, path.c_str(), MAXFORMULA-1 );
          // save GEM2MT recort

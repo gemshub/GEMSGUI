@@ -198,18 +198,11 @@ void TProfil::ChangeSettings(int nSettings)
 }
 
 /// Set the numerical optimization algorithm used for the chemical equilibrium calculations
-void TProfil::SetNumericalMethodWrk(const char codAlgorithm)
+void TProfil::SetNumericalMethodWrk( const char codAlgorithm)
 {
-    switch( codAlgorithm )
-    {
-      case 'O': wrknode->SetNumericalMethod(IpoptAlgorithm);
-                break;
-      case 'N': wrknode->SetNumericalMethod(IpnewtonAlgorithm);
-                break;
-      default:  wrknode->SetNumericalMethod(KarpovAlgorithm);
-    }
-
+   wrknode->SetNumericalMethod(codAlgorithm);
 }
+
 void
 BASE_PARAM::write(GemDataStream& oss)
 {
@@ -487,6 +480,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       na->MakeNodeStructures( par, ( flags[0] == S_OFF ),( flags[4] == S_ON ),
           arT, arP, nTp_, nPp_, Tai[3], Pai[3]  );
 
+   na->SetNumericalMethod( pVisor->GetNumericalMethod() );
     // setup dataBR and NodeT0 data
    //na->packDataBr();
    na->MoveWorkNodeToArray( 0, 1, na->pNodT0() );
@@ -495,7 +489,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       na->pNodT0()[0]->NodeStatusFMT = No_nodearray;
 
 
-   na->PutGEM2MTFiles( par, 1,  ( flags[1] == S_ON ? ft_json : ft_text ), ( flags[2] == S_ON ),
+   na->PutGEM2MTFiles( par, 1,  ( flags[1] == S_ON ? ft_json : ft_binary ), ( flags[2] == S_ON ),
 		   ( flags[3] == S_ON ), false, true );// addMui, to txt
 //Test to compare standalone  na->GEM_print_ipm( "GemsCalcPhase.txt" );
    }

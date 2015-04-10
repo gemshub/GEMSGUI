@@ -208,6 +208,7 @@ public:
     void ProcessProgress( QWidget* parent, int nRT );
 
     // work with default values
+    char GetNumericalMethod();
     unsigned short updateInterval() const
        {   return updateTime;   }
     void setUpdateInterval(unsigned short updInterval)

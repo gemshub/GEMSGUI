@@ -938,6 +938,16 @@ void TVisorImp::CmSetIpnewtonAlgorithm()
     sactionStepwise->setEnabled(false);
 }
 
+char TVisorImp::GetNumericalMethod()
+{
+    if( actionIPOPTL->isChecked() )
+       return 'O';
+    else if( actionELMAL->isChecked() )
+        return 'N';
+       else
+        return 'K';
+}
+
 void TVisorImp::CmRunIPM()
 {
     TMultiSystem::sm->pmp->pNP =
@@ -947,12 +957,8 @@ void TVisorImp::CmRunIPM()
     TProfil::pm->pa.p.PRD =
         ( !sactionPrecise->isChecked())? 0: TProfil::pm->pa.p.PRD;
 
-    if( actionIPOPTL->isChecked() )
-       TProfil::pm->SetNumericalMethodWrk('O');
-    else if( actionELMAL->isChecked() )
-        TProfil::pm->SetNumericalMethodWrk('N');
-       else
-          TProfil::pm->SetNumericalMethodWrk('K');
+    TProfil::pm->SetNumericalMethodWrk(GetNumericalMethod());
+
     try
     {
 

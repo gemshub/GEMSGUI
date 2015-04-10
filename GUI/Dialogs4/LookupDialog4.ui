@@ -48,7 +48,7 @@
           <item>
            <widget class="QCheckBox" name="chMode">
             <property name="text">
-             <string>Write IPM, DCH and DBR files in json mode (text mode, if unchecked)</string>
+             <string>Write IPM, DCH and DBR files in json text mode (binary mode, if unchecked)</string>
             </property>
             <property name="checked">
              <bool>true</bool>

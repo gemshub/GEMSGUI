@@ -165,7 +165,7 @@ public:
              const char* msg, int prog =0, int total=-1, bool move = false);
     void ProcessProgress( QWidget* parent, int nRT );
     void CloseMessage();
-
+    char GetNumericalMethod();
 
     bool getElemPrMode() const
     {
