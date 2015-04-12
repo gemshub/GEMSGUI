@@ -13,7 +13,7 @@ To install GEM-Selektor v3.x on Windows XP, Windows 7, or Windows 8:
    for example D:\MyWork\Modeling. In this case, the program will be located in 
    D:\MyWork\Modeling\Gems3-app and the projects- in D:\MyWork\Modeling\Library\Gems3\projects.
 
-3. After extracting files, GEMS will start; you can exit it and look for a GEMS v3.2 icon on 
+3. After extracting files, GEMS will start; you can exit it and look for a GEMS v3.x icon on 
    your desktop, to be used further on for staring GEMS.  
 
 5. You can add your old projects folders into \Library\gems3\projects\. Backup of modeling 

@@ -10,13 +10,13 @@
     <HideTitleIcon>False</HideTitleIcon>
     <PromptShowSFXIcon>True</PromptShowSFXIcon>
     <Overwrite>All</Overwrite>
-    <MessageBegin Show="True">Install/Update GEM-Selektor v.3.3.1 rc package (Windows) ?</MessageBegin>
-    <MessageCancel Show="True">Are you sure you want to cancel Installing/Updating GEM-Selektor v3.3.1?</MessageCancel>
+    <MessageBegin Show="True">Install/Update GEM-Selektor v.3.3.3 rc package (Windows) ?</MessageBegin>
+    <MessageCancel Show="True">Are you sure you want to cancel Installing/Updating GEM-Selektor v3.3.3?</MessageCancel>
     <MessageFinish Show="True">Success! Modeling projects can be found in the '\Library\Gems3\projects' subfolder.</MessageFinish>
-    <TitleText>GEMS 3.3.1 (Windows32) rc r.2599.999</TitleText>
+    <TitleText>GEMS 3.3.3 (Windows32) rc r.2646.1036</TitleText>
     <ExtractPathText>Use default, or type/select another location. If the folder does not exist, it will be created.</ExtractPathText>
     <ExtractCancelText>Abort</ExtractCancelText>
-    <ExtractDialogText>Installing/Updating GEM-Selektor v.3.3.1 (Windows)</ExtractDialogText>
+    <ExtractDialogText>Installing/Updating GEM-Selektor v.3.3.3 (Windows)</ExtractDialogText>
     <ExtractTitleText>Writing files ...</ExtractTitleText>
     <ExtractShowIcon>False</ExtractShowIcon>
     <ProgressPercent>1</ProgressPercent>
@@ -30,15 +30,15 @@
   <VersionString>
     <Item Name="Comments" Value="GEM-Selektor package for geochemical modeling" Enabled="True" />
     <Item Name="CompanyName" Value="Paul Scherrer Institut" Enabled="True" />
-    <Item Name="FileDescription" Value="GEM-Selektor r.2599, includes GEMS3K r.999" Enabled="True" />
-    <Item Name="FileVersion" Value=" rev. 2599.999 " Enabled="True" />
+    <Item Name="FileDescription" Value="GEM-Selektor r.2646, includes GEMS3K r.1036" Enabled="True" />
+    <Item Name="FileVersion" Value=" rev. 2646.1036 " Enabled="True" />
     <Item Name="InternalName" Value="gems3.exe" Enabled="True" />
-    <Item Name="LegalCopyright" Value="Copyright © 2003-2014 GEMS Development Team" Enabled="True" />
+    <Item Name="LegalCopyright" Value="Copyright © 2003-2015 GEMS Development Team" Enabled="True" />
     <Item Name="LegalTrademarks" Value="PSI; IGP ETHZ; Univ.Helsinki" Enabled="True" />
     <Item Name="OriginalFilename" Value="gems3.exe" Enabled="True" />
-    <Item Name="PrivateBuild" Value="October 10, 2014 DK" Enabled="True" />
+    <Item Name="PrivateBuild" Value="April 12, 2015 DK" Enabled="True" />
     <Item Name="ProductName" Value="GEM-Selektor (GEMS)" Enabled="True" />
-    <Item Name="ProductVersion" Value="3. 3. 1." Enabled="True" />
+    <Item Name="ProductVersion" Value="3. 3. 3." Enabled="True" />
     <Item Name="SpecialBuild" Value="Pre-release candidate for geochemical community" Enabled="True" />
   </VersionString>
 </Settings>

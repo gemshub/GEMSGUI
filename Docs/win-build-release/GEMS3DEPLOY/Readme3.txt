@@ -45,7 +45,7 @@ No garantee is given that the input data in test projects are, in fact, accurate
 
 Enjoy GEM-Selektor!
 
-(c) 2003,2014 GEMS Development Team
+(c) 2003-2015 GEMS Development Team
 gems2.support@psi.ch
 http://gems.web.psi.ch
  
