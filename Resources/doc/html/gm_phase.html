@@ -7,7 +7,7 @@
     <meta name="description" content="Version 2.0.0-PSI">
   </head>
   <body>
-    <h1><img src="gems1.png" height="48" align="left" width="48"> <span style="color: rgb(0, 0, 102);">
+    <h1><img src="gems1.png" align="left" height="48" width="48"> <span style="color: rgb(0, 0, 102);">
         GEM-Selektor version 3<br>
       </span></h1>
     <h2>Phase Definitions (Phase) Module<br>
@@ -110,8 +110,34 @@
       ideal gas mixture phase, as well as aqueous species and water will be
       linked to the ion-association aqueous electrolyte phase, both (as a
       default) <a href="gems_aphsetup.html">automatically created</a> by
-      opening a modeling project. <br>
-    </p>
+      opening a modeling project.&nbsp;</p>
+    <p><span style="color: #cc0000;"><span style="font-weight: bold;">Attention!
+        </span>In GEM-Selektor v.3.3.x (and respective v.3.3.x of the GEMS3K
+        code) introduced in April 2015, the Phase record and data definition
+        structure, as well as the Phase remake wizard, were substantially
+        extended in order to accommodate more flexible mixing models (TSolMod),
+        built-in mineral-water reaction kinetics (TKinMet), and a new
+        implementation of sorption and surface complexation models (TSorpMod;
+        work in progress).&nbsp;</span></p>
+    <p><span style="color: #cc0000;">For backward compatibility, all Phase
+        records created in GEM-Selektor v.3.2.x or earlier , will open and work
+        normally in GEM-Selektor v.3.3.x. However, new functionality (e.g.
+        multi-site mixing models, kinetics) can only be used if the existing
+        Phase record is remade or newly created. If this is to be in an "old"
+        project folder (i.e. created in GEM-Selektor v.3.2.x or earlier), it is
+        highly recommended to remake </span><span style="color: #cc0000;"><span
+          style="color: #cc0000;">one-by-one </span>all Phase records available
+        in the project (saving each record back after remake). All the Phase
+        records in the default database (DB.default) supplied with GEM-Selektor
+        v.3.3.x have already been converted into the extended record format.<br>
+      </span></p>
+    <p><span style="color: #cc0000;">Note that if some Phase records remain in
+        the "old" format then this will lead to errors or crashes during
+        calculations of equilibria in systems from this project. So, it is
+        essential that ALL Phase records go once through the Phase remake
+        wizard! Any Phase record made or remade in GEM-Selektor v.3.2.x will not
+        be readable in earlier versions of GEM-Selektor (3.2.x or less).</span></p>
+    <p> </p>
     <p>In GEM-Selektor, two kinds of multi-component phases are considered:
       "symmetric" and "asymmetric". In symmetric phases (gas mixture, liquid
       non-electrolyte solutions, solid solutions), concentrations, activities
@@ -5473,9 +5499,9 @@ Mark
       </dd>
     </dl>
     <hr style="width: 100%; height: 2px;"><b><b><b><br>
-        </b></b></b>Copyright (c) 2003-2013 GEMS Develoment Team<br>
+        </b></b></b>Copyright (c) 2003-2015 GEMS Develoment Team<br>
     <br>
-    Last update: 10.07.2013 DK<b><b><b><tt><br>
+    Last update: 12.04.2015 DK<b><b><b><tt><br>
           </tt><br>
           &nbsp; <br>
         </b> </b></b> <br>

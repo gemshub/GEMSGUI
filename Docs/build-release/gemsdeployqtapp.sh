@@ -72,14 +72,14 @@ done
 # Create the fonts directory and copy fonts across. You
 # will obviously need to assign the directory path leading
 # to your fonts to "fontdir", e.g. /home/you/qt/lib/fonts
-qtfontsdir=$HOME/Qt/5.3/Src/qtbase/lib/fonts
+qtfontsdir=$HOME/Qt/5.4/Src/qtbase/lib/fonts
 fontsdir=$PWD/$tardir/fonts
 mkdir $fontsdir
 echo "Created fonts directory: "$fontsdir" copying fonts..."
 cp -r $qtfontsdir/* $fontsdir
 
 # You will need to change this to point to wherever libqxcb.so lives on your PC.
-qtplatformplugin=$HOME/Qt/5.3/gcc_64/plugins/platforms/libqxcb.so
+qtplatformplugin=$HOME/Qt/5.4/gcc_64/plugins/platforms/libqxcb.so
 qtplatformplugindir=$tardir/platforms
 mkdir $qtplatformplugindir
 echo "Created platforms directory: "$qtplatformplugindir
@@ -156,7 +156,7 @@ chmod u+x $fixscript
 
 # Edit this script to add whatever other additional plugins your application
 # requires.
-qtsqliteplugin=$HOME/Qt/5.3/gcc_64/plugins/sqldrivers/libqsqlite.so
+qtsqliteplugin=$HOME/Qt/5.4/gcc_64/plugins/sqldrivers/libqsqlite.so
 qtsqliteplugindir=$tardir/sqldrivers
 mkdir $qtsqliteplugindir
 echo "Created sql driver directory: "$qtsqliteplugindir
@@ -185,10 +185,10 @@ cp -r $gresourcesdir/* $resourcesdir
 echo "Copied Resources directory from "$gresourcesdir" to "$resourcesdir
 
 #Copying executables for generating GEM-Selektor help database
-qtqcollectiongenerator=$HOME/Qt/5.3/gcc_64/bin/qcollectiongenerator
+qtqcollectiongenerator=$HOME/Qt/5.4/gcc_64/bin/qcollectiongenerator
 cp $qtqcollectiongenerator $tardir
 echo "Copied executable "$qtqcollectiongenerator" to "$tardir
-qtqhelpgenerator=$HOME/Qt/5.3/gcc_64/bin/qhelpgenerator
+qtqhelpgenerator=$HOME/Qt/5.4/gcc_64/bin/qhelpgenerator
 cp $qtqhelpgenerator $tardir
 echo "Copied executable "$qtqhelpgenerator" to "$tardir
 
@@ -206,7 +206,7 @@ echo "Creating README..."
 
 readme=$tardir/README
 echo "================================================================================" >> $readme
-echo "GEM-Selektor v.3.2 $etardir" >> $readme
+echo "GEM-Selektor v.3.3.3 $etardir" >> $readme
 echo "Please, read INSTALL.linux.txt file first, and do things as suggested there." >> $readme
 echo "To have projects in /home/you/Library/Gems3 (default location," >> $readme 
 echo "  launch once $executable via" >> $readme
