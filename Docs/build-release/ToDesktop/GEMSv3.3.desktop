@@ -3,8 +3,8 @@ Version=1.0
 Type=Application
 Terminal=false
 Exec=/home/parallels/Gems3-app/rungems3.sh -c
-Comment=GEM-Selektor v.3.2 Package
+Comment=GEM-Selektor v.3.3 Package
 Icon=/home/parallels/Gems3-app/gems3.png
-Name=GEM-Selektor v.3.2
+Name=GEM-Selektor v.3.3.3
 Categories=Utility;Application
 

@@ -198,6 +198,7 @@ cp -r $gbuilddir/ToDesktop $tardir/ToDesktop
 cp $gbuilddir/gems3.png $tardir/gems3.png
 cp $gbuilddir/INSTALL.linux.txt $tardir/INSTALL.linux.txt
 cp $gbuilddir/exec_gems3.sh $execscript
+cp $gbuilddir/qtconf $tardir/qt.conf
 echo "Copied run script: "$execscript 
 chmod u+x $execscript
 
