@@ -21,9 +21,12 @@ of GEM-Selektor v.3.3.x in "/home/you/DevGEMS/devPhase/build-release", where
 an executable script "gemsdeployqtapp.sh" and several other files are located; 
 if the script is not executable, open a terminal, cd to that directory, and run 
    $ chmod u+x ./gemsdeployqtapp.sh.
+Edit this script to make sure that path to Qt locations are correct everywhere
+and that the "distro" string definition contains correct verison and release 
+numbers of GEM-Selektor. 
 
 3. Open a Linux terminal, cd to "/home/you/DevGEMS/devPhase/build-release", 
-and execute the script "gemsdeployqtapp.sh":
+and execute the script "gemsdeployqtapp.sh" giving the exec file name as shown:
    $ ./gemsdeployqtapp.sh gems3
 
 This will create an archive "Gems3-app.tgz". 

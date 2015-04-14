@@ -47,6 +47,7 @@ distro=`lsb_release -d | awk '{print $2$3$4}' | sed 's/\./_/g'`
 # Create the directory that will be tarred up for distribution.
 etardir=`echo $executable"_"$distro | awk '{print tolower($0)}'`
 tardir=Gems3-app
+gemsdistro=Gems3.3.3-2650.1036-linux-x86-64.tgz
 mkdir $tardir
 echo "Created tar ball directory: "$tardir
 
@@ -166,10 +167,21 @@ echo "Copied "$qtsqliteplugin" to "$qtsqliteplugindir
 # Create the run script.
 execscript=$tardir/"run$executable.sh"
 #echo "Created run script: "$execscript
-#echo "#!/bin/sh" > $execscript
+#echo "#!/bin/sh" >> $execscript
 #echo "export LD_LIBRARY_PATH=\`pwd\`/libs" >> $execscript
 #echo "export QT_QPA_FONTDIR=\`pwd\`/fonts" >> $execscript
 #echo "./$executable \`$\`*" >> $execscript
+
+#echo "#!/bin/bash" >> $execscript
+#echo "appname=gems3" >> $execscript
+#echo "dirname=\`dirname $0\`" >> $execscript
+#echo "if [ \"${dirname:0:1}\" != \"/\" ]; then" >> $execscript
+#echo "  dirname=$PWD/$dirname" >> $execscript
+#echo "fi" >> $execscript
+#echo "export LD_LIBRARY_PATH=$dirname/libs" >> $execscript
+#echo "export QT_QPA_FONTDIR=$dirname/fonts" >> $execscript
+#echo "cd $dirname" >> $execscript
+#echo "./$appname $*" >> $execscript
 
 # Make executable.
 #chmod u+x $execscript
@@ -198,7 +210,8 @@ cp -r $gbuilddir/ToDesktop $tardir/ToDesktop
 cp $gbuilddir/gems3.png $tardir/gems3.png
 cp $gbuilddir/INSTALL.linux.txt $tardir/INSTALL.linux.txt
 cp $gbuilddir/exec_gems3.sh $execscript
-cp $gbuilddir/qtconf $tardir/qt.conf
+# qtconf=$tardir/qt.conf
+# echo [Paths] >> $qtconf
 echo "Copied run script: "$execscript 
 chmod u+x $execscript
 
@@ -207,7 +220,7 @@ echo "Creating README..."
 
 readme=$tardir/README
 echo "================================================================================" >> $readme
-echo "GEM-Selektor v.3.3.3 $etardir" >> $readme
+echo "GEM-Selektor v.3.3.3 $etardir bult on linux $distro" >> $readme
 echo "Please, read INSTALL.linux.txt file first, and do things as suggested there." >> $readme
 echo "To have projects in /home/you/Library/Gems3 (default location," >> $readme 
 echo "  launch once $executable via" >> $readme
@@ -229,8 +242,9 @@ echo "" >> $readme
 echo "================================================================================" >> $readme
 
 echo "Creating tarball..."
-tar -zcvf $tardir".tgz" $tardir
+tar -zcvf $gemsdistro $tardir
 
 echo "Cleaning up..."
 rm -rf $tardir
 echo "Done!"
+
