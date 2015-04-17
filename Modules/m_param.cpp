@@ -601,7 +601,7 @@ void TProfil::SetSysSwitchesFromMulti( )
 // Reading structure MULTI (GEM IPM work structure)
 void TProfil::CmReadMulti( QWidget* par, const char* path )
 {
-    TNodeArray* na = new TNodeArray( 1, multi );
+    TNode* na = new TNode( multi );
     MULTIBASE* pmp = multi->pmp;
     SYSTEM* syp = syst->GetSY();
     //string key = pmp->stkey;

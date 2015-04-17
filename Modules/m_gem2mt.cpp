@@ -1133,11 +1133,11 @@ void TGEM2MT::savePoint( )
                mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, true ); // with Nod0 and Nod1
          mtp->notes[0] = '@';
          strncpy( mtp->notes+1, path.c_str(), MAXFORMULA-1 );
+         mtp->iStat = AS_RUN;
          // save GEM2MT recort
          string key_str = db->PackKey();
          RecSave( key_str.c_str() );
          //na->GEM_init( path.c_str(), 0, true );//test
-         mtp->iStat = AS_RUN;
        }
  }
 

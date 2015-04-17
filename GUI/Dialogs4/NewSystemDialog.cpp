@@ -352,8 +352,8 @@ void NewSystemDialog::CmReadMulti()
 
         // open file for input
         string filename;
-        if( vfChooseFileOpen(this, filename,
-          "Browse for GEMS3K *.lst file to import ", "*.lst" ) == false )
+        if( vfChooseDirectory(this, filename,
+          "Browse for GEMS4K directory to import " ) == false )
                return;
         TProfil::pm->CmReadMulti( this, filename.c_str() );
 
