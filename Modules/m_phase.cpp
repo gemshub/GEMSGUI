@@ -740,6 +740,8 @@ void TPhase::set_def( int q)
     ph[q].nxCat = 0;
     ph[q].nxAn =  0;
     ph[q].nxNs =  0;
+    ph[q].nSub=  0;
+    ph[q].nMoi = 0;
 
     ph[q].lsForm = 0;
     ph[q].lsMoi = 0;

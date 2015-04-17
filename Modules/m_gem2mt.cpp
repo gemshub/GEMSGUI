@@ -1023,25 +1023,25 @@ TGEM2MT::RecCalc( const char * key )
    else
    {
        string lst_f_name;
-       string dbr_lst_f_name;
+       //string dbr_lst_f_name;
      if( mtp->notes[0] == '@' )
      {   lst_f_name = string( mtp->notes, 1, MAXFORMULA-1 );
-         dbr_lst_f_name = lst_f_name;
-         size_t pos = dbr_lst_f_name.find("-dat");
-         if( pos != string::npos )
-          dbr_lst_f_name = dbr_lst_f_name.replace(pos, 4,"-dbr");
+         //dbr_lst_f_name = lst_f_name;
+         //size_t pos = dbr_lst_f_name.find("-dat");
+         //if( pos != string::npos )
+         // dbr_lst_f_name = dbr_lst_f_name.replace(pos, 4,"-dbr");
       } // open file to read
      else
-     {  if( vfChooseFileOpen(window(), lst_f_name,
-          "Please, edit the GEMS3K filelist name", "*.lst" ) == false )
+     {  if( vfChooseDirectory(window(), lst_f_name,
+          "Please, edit the GEMS4K file confg path" ) == false )
             return;
-        if( vfChooseFileOpen(window(), dbr_lst_f_name,
-                   "Please, edit the GEMS3K filelist name", "*.lst" ) == false )
-             return;
+     //   if( vfChooseFileOpen(window(), dbr_lst_f_name,
+     //              "Please, edit the GEMS3K filelist name", "*.lst" ) == false )
+     //        return;
       }
 
-     na->GEM_init( lst_f_name.c_str(), dbr_lst_f_name.c_str(), 0, true );
-     CalcIPM( NEED_GEM_AIA, 0, mtp->nC, 0 );
+     na->GEM_init( lst_f_name.c_str() );//, dbr_lst_f_name.c_str(), 0, true );
+     CalcIPM( NEED_GEM_SIA/*NEED_GEM_AIA*/, 0, mtp->nC, 0 );
      if( mtp->PsMode == RMT_MODE_W  )
      {
       putHydP( na->pNodT0() );
@@ -1129,8 +1129,8 @@ void TGEM2MT::savePoint( )
           "Save node array into a set of disk files to resume the task later (Yes),\n"
           " or cancel the RMT task (No)?" ) )
        {
-         string path = na->PutGEM2MTFiles( window(), mtp->nC,
-          ( mtp->PsSdat==S_OFF ? ft_json : ft_binary), mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, true, true ); // with Nod0 and Nod1
+         string path = na->PutGEM2MTFiles( window(),  ( mtp->PsSdat==S_OFF ? ft_json : ft_binary),
+               mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, true ); // with Nod0 and Nod1
          mtp->notes[0] = '@';
          strncpy( mtp->notes+1, path.c_str(), MAXFORMULA-1 );
          // save GEM2MT recort

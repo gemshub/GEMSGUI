@@ -41,7 +41,7 @@ void TMultiSystem::KinMetModLoad( )
     JB, JE=0, jb, je=0, kc, kd, kce=0, kde=0, kx, kxe=0, ki, kie=0;
     long int jphl=0, jlphc=0;
     //vstr pkey(MAXRKEYLEN);
-    vstr modT(164);
+    char modT[164];
     char *kMod;
     time_t crt;
     TPhase* aPH = TPhase::pm;

@@ -41,7 +41,7 @@
 // 4. deleteDBDir, makeDBDir and other move into  TDataBase class
 // and write analogs into TEJDataBase
 // 5?? To do read/write cfg files to json format??
-// Use Andy TConfig
+
 
 
 //-------------------------------------------------------------

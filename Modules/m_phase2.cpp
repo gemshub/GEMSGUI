@@ -570,7 +570,7 @@ AGAINRC:
 // Load DC classes from records and set to DCC
 void TPhase::LoadDCC()
 {
-    vstr dcn(MAXRKEYLEN);
+    char dcn[MAXRKEYLEN];
     char Ctype;
     time_t crt;
     TDComp* aDC=(TDComp *)(aMod[RT_DCOMP]);

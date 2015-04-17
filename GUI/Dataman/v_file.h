@@ -95,7 +95,6 @@ public:
     }
 
     //--- Manipulation
-
     void Makepath();
     bool Exist();
     virtual void Open() = 0;

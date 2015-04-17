@@ -449,7 +449,7 @@ const char* TProfil::GetHtml()
 
 void TProfil::makeGEM2MTFiles(QWidget* par )
 {
-    TNodeArray* na = 0;
+    TNode* na = 0;
     MULTIBASE *pmp = multi->pmp;
 
     try
@@ -473,7 +473,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       nPp_ = aObj[ o_w_pval].GetN();
 
 
-      na = new TNodeArray( 1, multi );
+      na = new TNode( multi );
 
       // realloc and setup data for dataCH and DataBr structures
       //na->MakeNodeStructures( par, ( flags[0] == S_OFF ) , Tai, Pai  );
@@ -482,15 +482,15 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
 
    na->SetNumericalMethod( pVisor->GetNumericalMethod() );
     // setup dataBR and NodeT0 data
-   //na->packDataBr();
-   na->MoveWorkNodeToArray( 0, 1, na->pNodT0() );
+   na->packDataBr();
+   //na->MoveWorkNodeToArray( 0, 1, na->pNodT0() );
    // make  all files
    if(flags[5] == S_OFF )
-      na->pNodT0()[0]->NodeStatusFMT = No_nodearray;
+      na->pCNode()->NodeStatusFMT = No_nodearray;
 
 
-   na->PutGEM2MTFiles( par, 1,  ( flags[1] == S_ON ? ft_json : ft_binary ), ( flags[2] == S_ON ),
-		   ( flags[3] == S_ON ), false, true );// addMui, to txt
+   na->PutGEM2MTFiles( par, ( flags[1] == S_ON ? ft_json : ft_binary ), ( flags[2] == S_ON ),
+           ( flags[3] == S_ON ),  true );// addMui, to txt
 //Test to compare standalone  na->GEM_print_ipm( "GemsCalcPhase.txt" );
    }
     catch( TError& xcpt )
