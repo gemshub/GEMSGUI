@@ -660,6 +660,7 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
           break;
     }
 
+
     // for loading GEX to System
     CheckMtparam();
     multi->DC_LoadThermodynamicData( na );
@@ -687,10 +688,12 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
      pmp->MBX /= 1000.;
 
     // Restoring the rest of MULTI contents from primal and dual solution
-    pmp->pIPN =0;
+     pmp->pIPN =0;
     multi->Alloc_internal();
+
     multi->EqstatExpand( pmp->stkey, false, false );
-//    outMultiTxt( "IPM_EqstatExpand.txt"  );
+
+    //    outMultiTxt( "IPM_EqstatExpand.txt"  );
     //    multi->Free_internal();
     //    na->unpackDataBr( true );
     delete na;

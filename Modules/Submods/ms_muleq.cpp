@@ -374,14 +374,14 @@ void TMultiSystem::EqstatExpand( const char *key, bool calcActivityModels, bool 
 
       if( calcActivityModels )  // added 10.04.2012  DK
       {
-    	if( pmp->pIPN <=0 )  // mixing models finalized
-        {
-             // not done if these models are already present in MULTI !
-           pmp->PD = abs(TProfil::pm->pa.p.PD);
-           SolModLoad();   // Call point to loading scripts for mixing models
-           //MakeSolMod();
-        }
-    	pmp->pIPN = 1;
+          if( pmp->pIPN <=0 )  // mixing models finalized
+          {
+               // not done if these models are already present in MULTI !
+             pmp->PD = abs(TProfil::pm->pa.p.PD);
+             SolModLoad();   // Call point to loading scripts for mixing models
+             //MakeSolMod();
+          }
+          pmp->pIPN = 1;
 
         //   double FitVar3 = pmp->FitVar[3];  // Debugging: Reset the smoothing factor
         //   pmp->FitVar[3] = 1.0;

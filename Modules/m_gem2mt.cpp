@@ -1041,7 +1041,11 @@ TGEM2MT::RecCalc( const char * key )
       }
 
      na->GEM_init( lst_f_name.c_str() );//, dbr_lst_f_name.c_str(), 0, true );
-     CalcIPM( NEED_GEM_SIA/*NEED_GEM_AIA*/, 0, mtp->nC, 0 );
+     int nStart = 0, nEnd = mtp->nC;
+     if( mtp->PsMode == RMT_MODE_A )  // A: 1D advection (numerical) coupled FMT scoping model
+     {     nStart = 1; nEnd = mtp->nC-1;}
+
+     CalcIPM( NEED_GEM_SIA/*NEED_GEM_AIA*/, 1, nEnd, 0 );
      if( mtp->PsMode == RMT_MODE_W  )
      {
       putHydP( na->pNodT0() );
