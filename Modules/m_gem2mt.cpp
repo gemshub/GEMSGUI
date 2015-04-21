@@ -1025,7 +1025,9 @@ TGEM2MT::RecCalc( const char * key )
       }
      //TMulti::sm->Free_TSolMod();
      na->GEM_init( lst_f_name.c_str(), dbr_lst_f_name.c_str(), 0, true );
-     CalcIPM( NEED_GEM_AIA, 0, mtp->nC, 0 );
+
+     if( mtp->PsMode != RMT_MODE_S  )
+       CalcIPM( NEED_GEM_SIA, 0, mtp->nC, 0 );
      if( mtp->PsMode == RMT_MODE_W  )
      {
       putHydP( na->pNodT0() );
@@ -1118,10 +1120,10 @@ void TGEM2MT::savePoint( )
          mtp->notes[0] = '@';
          strncpy( mtp->notes+1, path.c_str(), MAXFORMULA-1 );
          // save GEM2MT recort
+         mtp->iStat = AS_RUN;
          gstring key_str = db->PackKey();
          RecSave( key_str.c_str() );
          //na->GEM_init( path.c_str(), 0, true );//test
-         mtp->iStat = AS_RUN;
        }
  }
 
