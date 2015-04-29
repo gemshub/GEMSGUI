@@ -998,7 +998,8 @@ TGEM2MT::RecCalc( const char * key )
          pathVTK += "/";
          pathVTK += nameVTK.c_str();
          pathVTK += "/";
-         vfMakeDirectory(window(), pathVTK.c_str() );
+         if( !vfMakeDirectory( pathVTK.c_str() ) )
+           Error( pathVTK, "Error making directory");
      }
    }
 
@@ -1045,7 +1046,8 @@ TGEM2MT::RecCalc( const char * key )
      if( mtp->PsMode == RMT_MODE_A )  // A: 1D advection (numerical) coupled FMT scoping model
      {     nStart = 1; nEnd = mtp->nC-1;}
 
-     CalcIPM( NEED_GEM_SIA/*NEED_GEM_AIA*/, 1, nEnd, 0 );
+     if( mtp->PsMode != RMT_MODE_S )
+        CalcIPM( NEED_GEM_SIA/*NEED_GEM_AIA*/, nStart, nEnd, 0 );
      if( mtp->PsMode == RMT_MODE_W  )
      {
       putHydP( na->pNodT0() );

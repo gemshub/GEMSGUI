@@ -105,7 +105,9 @@ bool vfChooseFileSave(QWidget* par, string& path,
   const char* title=0 , const char* filter=0);
 bool vfChooseDirectory(QWidget* par, string& path_,
        const char* title );
-void vfMakeDirectory(QWidget* par, const char *dir );
+bool vfChoose_Directory_Path(QWidget* par, string& dirname_,
+       string& path_, const char* title );
+bool vfMakeDirectory( const char* dir );
 
 double vfGetDouble( QWidget * par, const char* title, const char* label,
   double value = 0, double min = -1e8, double max = 1e8, int decimals = 4 );

@@ -36,7 +36,8 @@ HEADERS += $$DIALOGS4_H/GemsMainWindow.h  \
                   $$DIALOGS4_H/GtDemoWizard.h \
                   $$DIALOGS4_H/GEM2MTWizard.h \
                   $$DIALOGS4_H/UnSpaceWizard.h \
-                  $$DIALOGS4_H/DualThWizard.h
+                  $$DIALOGS4_H/DualThWizard.h \
+    $$PWD/DirNameDialog.h
 
 SOURCES += $$DIALOGS4_CPP/GemsMainWindow.cpp \
            $$DIALOGS4_CPP/GemsMainMenus.cpp \
@@ -78,7 +79,8 @@ SOURCES += $$DIALOGS4_CPP/GemsMainWindow.cpp \
                   $$DIALOGS4_CPP/GtDemoWizard.cpp \
                   $$DIALOGS4_CPP/GEM2MTWizard.cpp \
                   $$DIALOGS4_CPP/UnSpaceWizard.cpp \
-                  $$DIALOGS4_CPP/DualThWizard.cpp
+                  $$DIALOGS4_CPP/DualThWizard.cpp \
+    $$PWD/DirNameDialog.cpp
 
 
 FORMS += $$DIALOGS4_CPP/GemsMainWindow4.ui \
@@ -118,5 +120,6 @@ FORMS += $$DIALOGS4_CPP/GemsMainWindow4.ui \
         $$DIALOGS4_CPP/GtDemoWizard4.ui \
         $$DIALOGS4_CPP/GEM2MTWizard4.ui \
         $$DIALOGS4_CPP/UnSpaceWizard4.ui\
-        $$DIALOGS4_CPP/DualThWizard4.ui
+        $$DIALOGS4_CPP/DualThWizard4.ui \
+    $$PWD/DirNameDialog.ui
 

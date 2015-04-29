@@ -57,6 +57,7 @@ using namespace std;
 #include "LoadMessage.h"
 #include "InputSystemDialog.h"
 #include "PhaseInfoDialog.h"
+#include "DirNameDialog.h"
 
 QMutex mutex;
 
@@ -581,21 +582,31 @@ bool vfChooseDirectory(QWidget* par, string& path_,
     }
 }
 
-void vfMakeDirectory(QWidget* par, const char *dir )
+
+bool vfChoose_Directory_Path(QWidget* par, string& dirname_,
+       string& path_, const char* title )
+{
+    DirNameDialog dlg( dirname_, path_, title, par);
+
+    if( !dlg.exec() )
+     return false;
+
+    dirname_ = dlg.Name();
+    path_ = dlg.Path();
+
+   return true;
+
+}
+
+
+bool vfMakeDirectory(const char* dir )
 {
   // make directory dir (find system function)
     QDir d(dir);
-    if ( d.exists() )
-    {
-        string mess = dir;
-        mess += "\n";
-        mess+=  "This directory exists! Overwrite?";
-        if( !vfQuestion( par, "Create new directory",mess.c_str()) )
-          Error( dir, "Error creating directory!");
-        return;
-    }
-    if( !d.mkdir( dir ))
-        Error( dir, "Error creating directory!");
+    if( !d.exists() )
+     if( !d.mkdir( dir ))
+       return false;
+   return true;
 }
 
 //=============================================
