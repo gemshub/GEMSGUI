@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the terms of GEMS4 Development
+// Quality Assurance Licence (GEMS4.QAL)
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -93,7 +93,7 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
         pModule(pmodule),  isFragment(false), gr_data(data)
 {
 	setupUi(this);
-    string cap = "GEM-Selektor v.3 Graphics Dialog";
+    string cap = "GEM-Selektor v.4 Graphics Dialog";
     setWindowTitle( cap.c_str() );
 
     // define plot window
@@ -301,7 +301,7 @@ void GraphDialog::changeNdx( int row, int column )
 // If this is for adding points - we don't need Clear() and Show() - just add
 void GraphDialog::ShowNew( const char* capAdd )
 {
-    string cap = "GEM-Selektor v.3 Graphics Dialog";
+    string cap = "GEM-Selektor v.4 Graphics Dialog";
     //string cap = windowTitle().toUtf8().data();
     if(capAdd)
        cap += capAdd;

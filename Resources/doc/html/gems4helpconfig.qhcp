@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QHelpCollectionProject version="1.0">
+    <docFiles>
+        <generate>
+            <file>
+                <input>gems4helpconfig.qhp</input>
+                <output>gems4help.qch</output>
+                </file>
+            </generate>
+        <register>
+            <file>gems4help.qch</file>
+            </register>
+        </docFiles>
+    </QHelpCollectionProject>

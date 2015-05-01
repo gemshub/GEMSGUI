@@ -9,8 +9,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the terms of GEMS4 Development
+// Quality Assurance Licence (GEMS4.QAL)
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -109,8 +109,8 @@ HelpWindow::HelpWindow( QWidget* parent):
     //End Ui form
 
 
-    QString collectionFile = QString( pVisor->docDir().c_str() )+ QLatin1String("gems3help.qhc");
- // "/home/gems/gemworks/gems3/shared/doc/html/gems3help.qhc";
+    QString collectionFile = QString( pVisor->docDir().c_str() )+ QLatin1String("gems4help.qhc");
+ // "/home/gems/gemworks/gems4/shared/doc/html/gems4help.qhc";
 
     findLine = 0;
 
@@ -242,12 +242,12 @@ void HelpWindow::helpVersion()
     QMessageBox::information(this,
 #ifdef __unix
 #ifdef __APPLE__
-           trUtf8("Title"), trUtf8("GEMS3.2 (MacOS X >10.6 64 clang)\n\n")+
+           trUtf8("Title"), trUtf8("GEMS4.2 (MacOS X >10.6 64 clang)\n\n")+
 #else
-           trUtf8("GEMS3.2 (Linux 32/64 gcc4.7 Qt5)"),
+           trUtf8("GEMS4.2 (Linux 32/64 gcc4.7 Qt5)"),
 #endif
 #else
-           trUtf8("GEMS3.2 (Windows 7 MinGW 32 gcc4.7"),
+           trUtf8("GEMS4.2 (Windows 7 MinGW 32 gcc4.7"),
 #endif
            trUtf8("\nThis is GEM-Selektor code package\n\n")+
            trUtf8( _GEMS_version_stamp ) + trUtf8(  "\n\nusing " )+
@@ -274,7 +274,7 @@ void HelpWindow::helpPrint()
   QPrinter printer;
 
   QPrintDialog dlg(  &printer, this );
-  dlg.setWindowTitle(tr("Print GEMS3 Help Page"));
+  dlg.setWindowTitle(tr("Print GEMS4 Help Page"));
   if (wBrowser->textCursor().hasSelection() )
       dlg.addEnabledOption(QAbstractPrintDialog::PrintSelection);
   if( dlg.exec() )
@@ -388,7 +388,7 @@ void HelpWindow::showDocumentation(const char* file, const char* item1)
    if (!hEngine)
        return;
 
-    string path = "qthelp://gems3/help/";
+    string path = "qthelp://gems4/help/";
     QUrl path_str;
 
     if( !file/*item1*/ )

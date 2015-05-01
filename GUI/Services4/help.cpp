@@ -9,8 +9,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the terms of GEMS4 Development
+// Quality Assurance Licence (GEMS4.QAL)
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -159,7 +159,7 @@ int HelpConfigurator::readDir(const char *dir)
     return 1;
 }
 
-// Build *.qhp file for help system (gems3helpconfig.qhp by default)
+// Build *.qhp file for help system (gems4helpconfig.qhp by default)
 int HelpConfigurator::writeFile(const char *file)
 {
     fstream f_out( file, ios::out );
@@ -177,7 +177,7 @@ int HelpConfigurator::writeFile(const char *file)
     // Write head
     f_out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
     f_out << "<QtHelpProject version=\"1.0\">" << endl;
-    f_out << "    <namespace>gems3</namespace>" << endl;
+    f_out << "    <namespace>gems4</namespace>" << endl;
     f_out << "    <virtualFolder>help</virtualFolder>" << endl;
     f_out << "    <filterSection>" << endl;
 
@@ -241,7 +241,7 @@ void HelpConfigurator::writeContent( fstream& f_out)
 {
     QString ref;
     QString contentfile = path;
-            contentfile += "/gems3helpconfig.toc";
+            contentfile += "/gems4helpconfig.toc";
     fstream f_in( contentfile.toUtf8().data(), ios::in );
     if( !f_in.good() )
     {
@@ -297,7 +297,7 @@ int main( int argc, char* argv[] )
    // Analyzing command line arguments
    // Default arguments
    char input_dir[256] = "./html";
-   char result_file[256] = "./html/gems3helpconfig.qhp";
+   char result_file[256] = "./html/gems4helpconfig.qhp";
    if (argc >= 2 )
        strncpy( input_dir, argv[1], 256);
    if (argc >= 3 )
@@ -346,7 +346,7 @@ bool Helper::startAssistant()
  //    QString app = QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
 #ifdef __unix
 #ifdef __APPLE__
-        app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/Assistant");    // expected to work
+        app += QLatin1String("/Applications/Gems4.app/Contents/MacOS/Assistant");    // expected to work
 #else
 #ifdef GEMS_RELEASE
 //  #if !defined(Q_OS_MAC)
@@ -377,7 +377,7 @@ bool Helper::startAssistant()
 
         if (!proc->waitForStarted()) 
         {
-            QMessageBox::critical(0, QObject::tr("Gems3"),
+            QMessageBox::critical(0, QObject::tr("GEMS4"),
                 QObject::tr("Unable to launch Qt Assistant (%1)").arg(app));
             return false;
         }    

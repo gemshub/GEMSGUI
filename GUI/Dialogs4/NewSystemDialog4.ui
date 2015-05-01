@@ -158,12 +158,12 @@
   </action>
   <action name="actionOutMulti">
    <property name="text">
-    <string>&amp;Write GEMS3K files...</string>
+    <string>&amp;Write GEMS4K files...</string>
    </property>
   </action>
   <action name="actionReadMulti">
    <property name="text">
-    <string>Read &amp;GEMS3K DBR file...</string>
+    <string>Read &amp;GEMS4K DBR file...</string>
    </property>
   </action>
   <action name="action_BCC">

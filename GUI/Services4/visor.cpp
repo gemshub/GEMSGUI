@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the terms of GEMS4 Development
+// Quality Assurance Licence (GEMS4.QAL)
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -62,7 +62,7 @@ const char *IMAGES_SRC_DIR = "img/";
 const char *HELP_DB_DIR = "help/";
 const char *HELP_SRC_DIR = "doc/html/";
 const char *RESOURCES_DIR = "/Resources/";
-const char *DEFAULT_USER_DIR= "/Library/Gems3/";
+const char *DEFAULT_USER_DIR= "/Library/Gems4/";
 #ifdef oldDBusing        // Pointer to class contened the structure of main DB
 const char *DEFAULT_PR_DIR= "projects/";
 #else
@@ -111,7 +111,7 @@ TVisor::TVisor(int c, char *v[]):
         UserGEMDir += DEFAULT_USER_DIR; // "/Library/gems3/";
 #else  // Linux - in user's home directory
        // By default: /Resources in the same dir as the exe file;
-       //       /Library/gems3/projects on the same level as the /Gems3-app dir.
+       //       /Library/gems3/projects on the same level as the /Gems4-app dir.
     QString dirExe = QCoreApplication::applicationDirPath();
     SysGEMDir = dirExe.toUtf8().data();
     SysGEMDir += RESOURCES_DIR;
@@ -125,7 +125,7 @@ TVisor::TVisor(int c, char *v[]):
 #else
       // windows - in any non-system directory on C:/ or D:/
       // By default: /Resources in the same dir as the exe file;
-      //       /Library/gems3/projects on the same level as the /Gems3-app dir.
+      //       /Library/gems3/projects on the same level as the /Gems4-app dir.
     QString dirExe = QCoreApplication::applicationDirPath();
     SysGEMDir = dirExe.toUtf8().data();
     SysGEMDir += RESOURCES_DIR;

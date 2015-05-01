@@ -19,7 +19,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Setup for writing GEMS3K input files</string>
+   <string>Setup for writing GEMS4K input files</string>
   </property>
   <property name="modal">
    <bool>true</bool>

@@ -730,18 +730,18 @@
   </action>
   <action name="sactionOutMulti">
    <property name="text">
-    <string>&amp;Export GEMS3K files...</string>
+    <string>&amp;Export GEMS4K files...</string>
    </property>
    <property name="toolTip">
-    <string>Export GEM task to GEMS3K input files</string>
+    <string>Export GEM task to GEMS4K input files</string>
    </property>
   </action>
   <action name="sactionReadMulti">
    <property name="text">
-    <string>Import &amp;GEMS3K DBR file...</string>
+    <string>Import &amp;GEMS4K DBR file...</string>
    </property>
    <property name="toolTip">
-    <string>Import GEMS3K DBR file (for this CSD)</string>
+    <string>Import GEMS4K DBR file (for this CSD)</string>
    </property>
   </action>
   <action name="saction_BCC">

@@ -97,9 +97,9 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;GEM2MT module is a tool for automation of simple reactive mass transport simulations coupled with GEM calculation of equilibrium states in spatially distributed nodes (boxes, volumes) over time steps. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;1D advection-diffusion numerical reactive transport simuations can be performed, as well as the evolution of various sequential and flow-trough reactor sequences or generic box-flux (reservoir) dynamics can be modeled. I/O files for standalone GEMS3K calculations can be exported for multiple initial node recipes.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;1D advection-diffusion numerical reactive transport simuations can be performed, as well as the evolution of various sequential and flow-trough reactor sequences or generic box-flux (reservoir) dynamics can be modeled. I/O files for standalone GEMS4K calculations can be exported for multiple initial node recipes.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;Changes of species concentrations or amounts of phases through the node profile with time can be graphically monitored or logged to files in VTK format. As a special option, I/O files for standalone GEMS3K calculations can be exported for multiple initial node recipes. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;Changes of species concentrations or amounts of phases through the node profile with time can be graphically monitored or logged to files in VTK format. As a special option, I/O files for standalone GEMS4K calculations can be exported for multiple initial node recipes. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="textFormat">
@@ -296,7 +296,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QRadioButton" name="pselT">
             <property name="text">
-             <string>&amp;T      Export of .DCH, .IPM and multiple initial .DBR GEMS3K I/O files for standalone codes</string>
+             <string>&amp;T      Export of .DCH, .IPM and multiple initial .DBR GEMS4K I/O files for standalone codes</string>
             </property>
             <property name="shortcut">
              <string>Alt+S</string>
@@ -352,7 +352,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;Set here the number of local-equilibrium nodes (boxes, volumes) for the transport model (except T mode), and the number of system definitions for initialization of nodes, or for the export to GEMS3K I/O files in T mode. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;Set here the number of local-equilibrium nodes (boxes, volumes) for the transport model (except T mode), and the number of system definitions for initialization of nodes, or for the export to GEMS4K I/O files in T mode. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;Some options related to math scripts and file output of simulation results can also be configured.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -638,7 +638,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QCheckBox" name="c_PsSIA">
             <property name="text">
-             <string>Use Smart Initial Approximation in GEMS3K for faster calculations, wherever possible</string>
+             <string>Use Smart Initial Approximation in GEMS4K for faster calculations, wherever possible</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -708,7 +708,7 @@ p, li { white-space: pre-wrap; }
           </font>
          </property>
          <property name="text">
-          <string>Step 3 -  Settings for the GEMS3K data exchange interface</string>
+          <string>Step 3 -  Settings for the GEMS4K data exchange interface</string>
          </property>
         </widget>
        </item>
@@ -722,7 +722,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QGroupBox" name="groupBox_10">
          <property name="title">
-          <string>GEMS3K memory and I/O file data exchange</string>
+          <string>GEMS4K memory and I/O file data exchange</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
@@ -765,7 +765,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QGroupBox" name="pTPInput">
          <property name="title">
-          <string>Automatic setup of GEMS3K look-up arrays with thermodynamic data </string>
+          <string>Automatic setup of GEMS4K look-up arrays with thermodynamic data </string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
@@ -1070,7 +1070,7 @@ p, li { white-space: pre-wrap; }
           </font>
          </property>
          <property name="text">
-          <string>Step 3b -  T and P values for GEMS3K look-up arrays of thermodynamic data</string>
+          <string>Step 3b -  T and P values for GEMS4K look-up arrays of thermodynamic data</string>
          </property>
         </widget>
        </item>

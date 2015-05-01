@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the terms of GEMS4 Development
+// Quality Assurance Licence (GEMS4.QAL)
 //
 // See http://les.web.psi.ch/Software/GEMS-PSI/ for more information
 // E-mail gems2.support@psi.ch
@@ -118,7 +118,7 @@ void SettingsDialog::CmHelpGenerate()
 {
   try
     {
-           QString qhpFile = pRemoteHTML->text()+"gems3helpconfig.qhp";
+           QString qhpFile = pRemoteHTML->text()+"gems4helpconfig.qhp";
              HelpConfigurator rr;
              if( rr.readDir(pRemoteHTML->text().toUtf8().data()))
                 rr.writeFile(qhpFile.toUtf8().data());
@@ -138,19 +138,19 @@ void SettingsDialog::CmHelpGenerate()
                    QString app;
             #ifdef __unix
             #ifdef __APPLE__
-//                    app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/qcollectiongenerator");    // expected to work
+//                    app += QLatin1String("/Applications/Gems4.app/Contents/MacOS/qcollectiongenerator");    // expected to work
                     app += QLatin1String("qcollectiongenerator");
             #else
                    app = QLatin1String(getenv("HOME"));
-                   app += QLatin1String("/Gems3-app/qcollectiongenerator");
+                   app += QLatin1String("/Gems4-app/qcollectiongenerator");
             #endif
             #else    // windows
                     app += QLatin1String("qcollectiongenerator.exe");
             #endif        
                     QStringList args;
-                    args << docPath + QLatin1String("gems3helpconfig.qhcp")
+                    args << docPath + QLatin1String("gems4helpconfig.qhcp")
                         << QLatin1String("-o")
-                        << docPath + QLatin1String("gems3help.qhc");
+                        << docPath + QLatin1String("gems4help.qhc");
                         ;
 
                     pVisorImp->proc->start(app, args);
@@ -159,7 +159,7 @@ void SettingsDialog::CmHelpGenerate()
             
                     if (!pVisorImp->proc->waitForStarted()) 
                     {
-                        Error( "Gems3", "Unable to launch qcollectiongenerator");
+                        Error( "GEMS4", "Unable to launch qcollectiongenerator");
                     }    
                 }
              // open it

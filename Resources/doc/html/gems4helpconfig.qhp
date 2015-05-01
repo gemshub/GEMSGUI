@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QtHelpProject version="1.0">
-    <namespace>gems3</namespace>
+    <namespace>gems4</namespace>
     <virtualFolder>help</virtualFolder>
     <filterSection>
  <toc>
-   <section title="GEM-Selektor Version 3 Code Package" ref="gems_about.html">
+   <section title="GEM-Selektor Version 4 Code Package" ref="gems_about.html">
       <section title="Installation, Configuration and Setup" ref="gems_setup.html">
          <section title="Technical Information" ref="gems_specs.html"> </section>
       </section>
@@ -55,9 +55,9 @@
       </section>
       <section title="Miscellaneous HowTo Pages" ref="gems_miscel.html"></section>
       <section title="Getting Started Tutorial" ref="gems_tutorial.html"></section>
-      <section title="GEMS3 Suite of Test Projects" ref="gems_tests.html"></section>
+      <section title="GEMS4 Suite of Test Projects" ref="gems_tests.html"></section>
    </section>
-   <section title="GEMS3 Users Reference" ref="g_useref.html">
+   <section title="GEMS4 Users Reference" ref="g_useref.html">
       <section title="Database record key formats" ref="gems_rekey.html"></section>        
       <section title="GEMS Math Scripts" ref="g_mscript.html">
          <section title="Hidden DOD list (Math Scripts)" ref="mscr_dod.html"></section>
@@ -73,16 +73,16 @@
       <section title="Reactive Mass Transport Simulations" ref="theory_rmt.html"></section>
       <section title="Inverse Problems, Sensitivity Analysis" ref="theory_uns.html"></section>
    </section>
-   <section title="GEMS3K Numerical Kernel Code" ref="gems3k_about.html">
-      <section title="GEMS3K code and How to Obtain GEMS3K Input Files" ref="gems3k-manual.html"> 
+   <section title="GEMS4K Numerical Kernel Code" ref="gems3k_about.html">
+      <section title="GEMS4K code and How to Obtain GEMS3K Input Files" ref="gems3k-manual.html">
    	<section title="GEM IPM3 Operation, Numerical Controls, Error Messages" ref="gems_ipm.html"></section>
 	</section>
-      <section title="Formats of GEMS3K Text Input/Output Files" ref="gems3k-iofiles.html"></section>
-      <section title="Models of Non-Ideal Phases in GEMS3K Input Files" ref="gems3k-tsolmod.html"></section>
-      <section title="How to Couple Codes with GEMS3K at Simple TNode Level" ref="gems3k-nodelev.html"></section>
+      <section title="Formats of GEMS4K Text Input/Output Files" ref="gems3k-iofiles.html"></section>
+      <section title="Models of Non-Ideal Phases in GEMS4K Input Files" ref="gems3k-tsolmod.html"></section>
+      <section title="How to Couple Codes with GEMS4K at Simple TNode Level" ref="gems3k-nodelev.html"></section>
       <section title="GEMS3K Functions and Access Methods at TNode Level" ref="gems3k-useref.html"></section>
       <section title="Tests and Files for 'gemcalc' and 'node-gem' Examples" ref="gems3k-tests.html"></section>
-      <section title="How to Couple Codes with GEMS3K on TNodeArray Level" ref="gems3k-nodearray.html"></section>
+      <section title="How to Couple Codes with GEMS4K on TNodeArray Level" ref="gems3k-nodearray.html"></section>
    </section>
  </toc>
 

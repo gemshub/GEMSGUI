@@ -9,8 +9,8 @@
 // modelling by Gibbs energy minimization
 // Uses: GEM-Selektor GUI GUI DBMS library, gems/lib/gemvizor.lib
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the terms of GEMS4 Development
+// Quality Assurance Licence (GEMS4.QAL)
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
@@ -527,7 +527,7 @@ public:
 };
 
 enum gem2mt_inernal {
-  RMT_MODE_T = 'T',   // T Preparation of initial DataCH and DataBR files for external coupled RMT modeling using GEMS3K
+  RMT_MODE_T = 'T',   // T Preparation of initial DataCH and DataBR files for external coupled RMT modeling using GEMS4K
 
   RMT_MODE_B = 'B',    // B Box-flux generic RMT simulation (MGP fluxes.)
   RMT_MODE_S = 'S',    // S Sequential reactors RMT simulation ( for moving fluids or solids )

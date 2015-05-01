@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the terms of GEMS4 Development
+// Quality Assurance Licence (GEMS4.QAL)
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -38,7 +38,7 @@
 using namespace std;
 
 const char* GEMS_LOGO_ICON = "Icons/gems1.png";
-const char* GEMS_VERSION_STAMP = "GEM-Selektor 3 (GEMS3)";
+const char* GEMS_VERSION_STAMP = "GEM-Selektor 4 (GEMS4)";
 #ifdef __unix
 #ifdef __APPLE__
 const char* GEMS_DEFAULT_FONT_NAME = "Monaco";
@@ -110,7 +110,7 @@ TVisorImp::TVisorImp(int c, char** v):
        pVisor->Setup();
        pThread = QThread::currentThreadId();
        //setWindowTitle( GEMS_VERSION_STAMP );
-       SetCaption("GEM-Selektor 3 (GEMS3) - Geochemical Equilibrium Modelling "
+       SetCaption("GEM-Selektor 4 (GEMS4) - Geochemical Equilibrium Modelling "
                   "by Gibbs Energy Minimization");
 
 // define menu part

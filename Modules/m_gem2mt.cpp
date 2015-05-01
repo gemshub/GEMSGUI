@@ -9,8 +9,8 @@
 // modelling by Gibbs energy minimization
 // Uses: GEM-Selektor GUI GUI DBMS library, gems/lib/gemvizor.lib
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the terms of GEMS4 Development
+// Quality Assurance Licence (GEMS4.QAL)
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
@@ -1037,7 +1037,7 @@ TGEM2MT::RecCalc( const char * key )
           "Please, edit the GEMS4K file confg path" ) == false )
             return;
      //   if( vfChooseFileOpen(window(), dbr_lst_f_name,
-     //              "Please, edit the GEMS3K filelist name", "*.lst" ) == false )
+     //              "Please, edit the GEMS4K filelist name", "*.lst" ) == false )
      //        return;
       }
 

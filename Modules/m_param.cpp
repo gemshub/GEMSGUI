@@ -10,8 +10,8 @@
 // modelling by Gibbs energy minimization
 // Uses: GEM-Selektor GUI GUI DBMS library, gems/lib/gemvizor.lib
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the terms of GEMS4 Development
+// Quality Assurance Licence (GEMS4.QAL)
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
@@ -52,7 +52,7 @@ const double R_CONSTANT = 8.31451,
 extern char *_GEMS_version_stamp;
 extern char *_GEMIPM_version_stamp;
 SPP_SETTING pa_ = {
-    " GEMS-GUI v.3.1 r.2184 (rc) " " GEMS3K v.3.1 r.710 (rc) ",
+    " GEMS-GUI v.3.1 r.2184 (rc) " " GEMS4K v.3.1 r.710 (rc) ",
     {   // Typical default set (28.08.2012) new PSSC( logSI ) & uDD()
         2,  /* PC */  2,     /* PD */   -5,   /* PRD */
         1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
@@ -506,7 +506,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
 
 }
 
-// Checks if the modelling project name is the same as read from GEMS3K I/O files
+// Checks if the modelling project name is the same as read from GEMS4K I/O files
 bool TProfil::CompareProjectName( const char* SysKey )
 {
     int len = rt[RT_PARAM].FldLen(0);
@@ -517,7 +517,7 @@ bool TProfil::CompareProjectName( const char* SysKey )
       return false;
 }
 
-// Change the key read from GEMS3K I/O files
+// Change the key read from GEMS4K I/O files
 // Copy T and P from DATABR
 void TProfil::ChangeTPinKey( double T, double P )
 {
@@ -533,7 +533,7 @@ void TProfil::ChangeTPinKey( double T, double P )
                            K_IMM, bP, K_IMM, bT, RT_SYSEQ, 7, K_END);
     strncpy(multi->pmp->stkey, str.c_str(), EQ_RKLEN );
 
-    string capName = "Change the key read from GEMS3K I/O files";
+    string capName = "Change the key read from GEMS4K I/O files";
 AGAIN:
     str = TSysEq::pm->GetKeyofRecord( str.c_str(),capName.c_str(), KEY_NEW );
     if( str.empty() )
@@ -608,8 +608,8 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
 
     if( na->GEM_init( path ) )
     {
-      Error( path, "GEMS3K Init() error: \n"
-             "Some GEMS3K input files are corrupt or cannot be found.");
+      Error( path, "GEMS4K Init() error: \n"
+             "Some GEMS4K input files are corrupt or cannot be found.");
     }
     multi->dyn_set();
 
@@ -617,7 +617,7 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
     if( CompareProjectName( pmp->stkey ) )
     {
         delete na;
-        Error( pmp->stkey, "E15IPM: Wrong project name by reading GEMS3K I/O files ");
+        Error( pmp->stkey, "E15IPM: Wrong project name by reading GEMS4K I/O files ");
     }
 
      // Unpacking the actual contents of DBR file including speciation
@@ -648,12 +648,12 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
            // sets the system/SysEq switches for
 //             components and phases according to mui, muj, mup that were read in.
            SetSysSwitchesFromMulti( );
-//           vfMessage(par, "Changes in the GEMS3K system setup relative to GEMS",
+//           vfMessage(par, "Changes in the GEMS4K system setup relative to GEMS",
 //                    "Some vectors were allocated or some dimensions changed.\n"
 //                    "The equilibrium cannot be recalculated");
           break;
        case 1: // Bulk composition has changed, but lists are the same
-          //vfMessage(par, "Changes in the GEMS3K system setup relative to GEMS",
+          //vfMessage(par, "Changes in the GEMS4K system setup relative to GEMS",
           //          "Some constraints are not the same.\n"
           //          "Different results may be obtained upon recalculation");
        default:
@@ -697,7 +697,7 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
     //    multi->Free_internal();
     //    na->unpackDataBr( true );
     delete na;
-    // We can get different results in GEMS than in GEMS3K
+    // We can get different results in GEMS than in GEMS4K
     // because of slightly different values into G, V ...
     // (interpolation of thermodynamic data or precision )
 }
