@@ -550,7 +550,6 @@ bool vfChooseFileSave(QWidget* par, string& path_,
     }
 }
 
-
 bool vfChooseDirectory(QWidget* par, string& path_,
        const char* title )
 {

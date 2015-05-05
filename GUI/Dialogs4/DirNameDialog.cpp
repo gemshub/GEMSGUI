@@ -1,6 +1,7 @@
 #include "DirNameDialog.h"
 #include "ui_DirNameDialog.h"
 #include "service.h"
+#include "visor.h"
 
 
 DirNameDialog::DirNameDialog(const string& name_, const string& path_,
@@ -12,7 +13,17 @@ DirNameDialog::DirNameDialog(const string& name_, const string& path_,
     setWindowTitle( trUtf8(title_) );
 
     ui->nameEdit->setText(name_.c_str());
-    ui->pathEdit->setText(path_.c_str());
+
+    string path;
+    if( path_.find('/') == string::npos )
+    {      path = pVisor->localDir();//userGEMDir();
+           path+= path_;
+    }
+    else   path = path_;
+
+    replace(path.begin(), path.end(),'\\', '/');
+
+    ui->pathEdit->setText(path.c_str());
     QObject::connect( ui->pathButton, SIGNAL(clicked()), this, SLOT(CmTaskDir()));
 }
 
