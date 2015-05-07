@@ -163,7 +163,7 @@ void TGEM2MT::set_def(int q)
 
 //    TProfil *aPa= TProfil::pm;
     memcpy( &mtp->PunE, "jjbC", 4 );
-    memcpy( &mtp->PvICi, "++-----------KS00--+--+-----", 28 );
+    memcpy( &mtp->PvICi, "++-----------KS00----++-----", 28 );
     strcpy( mtp->name,  "`" );
     strcpy( mtp->notes, "`" );
     strcpy( mtp->xNames, "X" );
@@ -173,6 +173,8 @@ void TGEM2MT::set_def(int q)
     memset( mtp->size[0], 0, sizeof(float)*8 );
     memset( mtp->sizeLc, 0, sizeof(double)*3 );
     memset( mtp->sykey, 0, sizeof(char)*(EQ_RKLEN+10) );
+    //mtp->PsSdat=S_OFF;
+    //mtp->PsScom=S_ON;
     mtp->nC = 21;
     mtp->nIV =2;
     mtp->ntM =1000;
