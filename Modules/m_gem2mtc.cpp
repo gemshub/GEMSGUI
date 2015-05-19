@@ -386,6 +386,9 @@ void TGEM2MT::calc_eqstat( bool startSys )
     if( startSys )
     {  mtp->cT = mtp->PTVm[mtp->kv][1];
        mtp->cP = mtp->PTVm[mtp->kv][0];
+        // bugfix: current TC&P changed in MakeNodeStructures
+       TMulti::sm->GetPM()->TC = mtp->cT;
+       TMulti::sm->GetPM()->P = mtp->cP;
     }
     else
     {
@@ -681,7 +684,6 @@ void TGEM2MT::outMulti()
      gen_task( true );
 
      // calculate EqStat record (Thermodynamic&Equlibria)
-     //  TProfil::pm->pmp->pTPD = 0;
      calc_eqstat( true );
 
      // Save databr
@@ -699,7 +701,8 @@ void TGEM2MT::outMulti()
   LinkCSD(0);
 
   na->PutGEM2MTFiles( window(),
-       mtp->nIV, mtp->PsSdat==S_OFF, mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, false, false ); // mui,muj,muk do not output
+
+                      mtp->nIV, mtp->PsSdat==S_OFF, mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, false, false ); // mui,muj,muk do not output
 
   }
 
