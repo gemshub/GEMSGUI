@@ -140,14 +140,10 @@ include($$GEMS4K_CPP/gems4k.pri)
 #else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Reaktor/build/lib/debug/ -lReaktor
 #else:unix: LIBS += -L$$PWD/../Reaktor/build/lib/ -lReaktor
 
-unix|win32: LIBS += -lReaktor
-unix|win32: LIBS += -lopenblas
-unix|win32: LIBS += -llapack
+unix|win32: CONFIG(release, debug|release): LIBS += -L$$PWD/../standalone/Reaktoro/build/release/lib/ -lReaktoro
+else: unix|win32: CONFIG(debug, debug|release): LIBS += -L$$PWD/../standalone/Reaktoro/build/debug/lib/ -lReaktoro
 
-INCLUDEPATH += $$PWD/../standalone/Reaktor
-DEPENDPATH += $$PWD/../standalone/Reaktor
+INCLUDEPATH += $$PWD/../standalone/Reaktoro $$PWD/../standalone/Reaktoro/dependencies
+DEPENDPATH += $$PWD/../standalone/Reaktoro
 
-INCLUDEPATH += ../standalone/Reactor
-DEPENDPATH += ../standalone/Reaktor
-
-../standalone
+#../standalone

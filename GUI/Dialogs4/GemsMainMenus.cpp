@@ -373,8 +373,8 @@ void TVisorImp::setActions()
     connect( saction_BCC, SIGNAL( triggered()), this, SLOT(CmRunBCC()));
     connect( saction_IPM, SIGNAL( triggered()), this, SLOT(CmRunIPM()));
     connect( actionIPM4K_default, SIGNAL( triggered()), this, SLOT(CmSetKarpovAlgorithm()));
-    connect( actionIPOPTL, SIGNAL( triggered()), this, SLOT(CmSetIpoptAlgorithm()));
-    connect( actionELMAL, SIGNAL( triggered()), this, SLOT(CmSetIpnewtonAlgorithm()));
+    connect( actionIPOPT, SIGNAL( triggered()), this, SLOT(CmSetIpoptAlgorithm()));
+    connect( actionIPNewton, SIGNAL( triggered()), this, SLOT(CmSetIpnewtonAlgorithm()));
     //connect( actionSimplex, SIGNAL( triggered()), this, SLOT(CmSimplex()));
     //connect( actionPrecise, SIGNAL( triggered()), this, SLOT(CmPrecise()));
     //connect( actionStepwise, SIGNAL( triggered()), this, SLOT(CmStepwise()));
@@ -914,16 +914,16 @@ void TVisorImp::setActionPrecise()
 void TVisorImp::CmSetKarpovAlgorithm()
 {
     actionIPM4K_default->setChecked(true);
-    actionIPOPTL->setChecked(false);
-    actionELMAL->setChecked(false);
+    actionIPOPT->setChecked(false);
+    actionIPNewton->setChecked(false);
     sactionStepwise->setEnabled(true);
 }
 
 void TVisorImp::CmSetIpoptAlgorithm()
 {
     actionIPM4K_default->setChecked(false);
-    actionIPOPTL->setChecked(true);
-    actionELMAL->setChecked(false);
+    actionIPOPT->setChecked(true);
+    actionIPNewton->setChecked(false);
     sactionStepwise->setChecked(false);
     sactionStepwise->setEnabled(false);
 
@@ -932,17 +932,17 @@ void TVisorImp::CmSetIpoptAlgorithm()
 void TVisorImp::CmSetIpnewtonAlgorithm()
 {
     actionIPM4K_default->setChecked(false);
-    actionIPOPTL->setChecked(false);
-    actionELMAL->setChecked(true);
+    actionIPOPT->setChecked(false);
+    actionIPNewton->setChecked(true);
     sactionStepwise->setChecked(false);
     sactionStepwise->setEnabled(false);
 }
 
 char TVisorImp::GetNumericalMethod()
 {
-    if( actionIPOPTL->isChecked() )
+    if( actionIPOPT->isChecked() )
        return 'O';
-    else if( actionELMAL->isChecked() )
+    else if( actionIPNewton->isChecked() )
         return 'N';
        else
         return 'K';
