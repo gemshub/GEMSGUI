@@ -23,25 +23,27 @@ if the script is not executable, open a terminal, cd to that directory, and run
    $ chmod u+x ./gemsdeployqtapp.sh.
 Edit this script to make sure that path to Qt locations are correct everywhere
 and that the "distro" string definition contains correct verison and release 
-numbers of GEM-Selektor. 
+numbers of GEM-Selektor.
 
 3. Open a Linux terminal, cd to "/home/you/DevGEMS/devPhase/build-release", 
 and execute the script "gemsdeployqtapp.sh" giving the exec file name as shown:
    $ ./gemsdeployqtapp.sh gems3
 
-This will create an archive "Gems3-app.tgz". 
+This will create an archive "Gems3.3-<rev1>.<rev2>-linux-x86-64.tgz", where 
+<rev1> and <rev2> stay for revision numbers of GEM-Selektor GUI and GEMS3K, 
+respectively, that you have entered before into the gemsdeployqtapp.sh script.
+For instance, "Gems3.3.3-2674.1060-linux-x86-64.tgz". The distribution archive
+ca now bw provided. 
+
 Optionally, to investigate the script output, run
    $ ./gemsdeployqtapp.sh gems3 > ./output.txt
 
-4. Rename the file "Gems3-app.tgz" to "Gems3.3-<rev1>.<rev2>-linux-x86-64.tgz", 
-for instance "Gems3.3-2646.1036-linux-x86-64.tgz". It can now be provided. 
-
-5. For installation steps, see INSTALL-linux.txt. Install and test if it works.
+4. For installation steps, see INSTALL-linux.txt. Install and test if it works.
 If gems3 does not start, try the following. In terminal, cd to 
 "/Gems3-app/platforms" and run there the script "fixdep.sh" with root rights:
    $ sudo ./fixdep.sh
 
-This script needs superuser because it can automatically download the 
+The fixdep.sh script needs superuser because it can automatically download the 
 necessary libraries for your platform.       
 
 

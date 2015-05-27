@@ -47,7 +47,7 @@ distro=`lsb_release -d | awk '{print $2$3$4}' | sed 's/\./_/g'`
 # Create the directory that will be tarred up for distribution.
 etardir=`echo $executable"_"$distro | awk '{print tolower($0)}'`
 tardir=Gems3-app
-gemsdistro=Gems3.3.3-2650.1036-linux-x86-64.tgz
+gemsdistro=Gems3.3.3-2674.1060-linux-x86-64.tgz
 mkdir $tardir
 echo "Created tar ball directory: "$tardir
 
