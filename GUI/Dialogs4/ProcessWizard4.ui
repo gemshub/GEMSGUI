@@ -1156,35 +1156,35 @@ Saving process-generated SysEq records may be necessary for subsequent sampling 
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="2">
-           <widget class="QComboBox" name="boxAlg">
-            <item>
-             <property name="text">
-              <string>K KarpovAlgorithm</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>O IpOptAlgorithm</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>N IpNewtonAlgorithm</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>D IpKarpovAlgorithm</string>
-             </property>
-            </item>
-           </widget>
-          </item>
           <item row="1" column="2">
            <widget class="QLabel" name="label_28">
             <property name="text">
              <string>The numerical optimization algorithm used for the chemical equilibrium calculations</string>
             </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QComboBox" name="boxAlg">
+            <item>
+             <property name="text">
+              <string>K IPM3K (Karpov, GEMS3K)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>O IPOPT (Reaktoro, 2014)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>N IPNEWTON (Reaktoro, 2015)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>D IPM4K (Reaktoro, 2015)</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>

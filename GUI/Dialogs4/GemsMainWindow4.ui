@@ -28,7 +28,7 @@
      <x>0</x>
      <y>0</y>
      <width>1121</width>
-     <height>28</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Record">
@@ -1301,7 +1301,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>IPM3K (default)</string>
+    <string>IPM3K (GEMS3K, default)</string>
    </property>
   </action>
   <action name="actionIPOPT">
@@ -1309,7 +1309,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>IPOPT</string>
+    <string>IPOPT (Reaktoro)</string>
    </property>
   </action>
   <action name="actionIPNewton">
@@ -1317,7 +1317,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>IPNewton</string>
+    <string>IPNewton (Reaktoro)</string>
    </property>
   </action>
   <action name="actionIPM4K">
@@ -1325,7 +1325,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>IPM4K</string>
+    <string>IPM4K (Karpov, Reaktoro)</string>
    </property>
   </action>
  </widget>

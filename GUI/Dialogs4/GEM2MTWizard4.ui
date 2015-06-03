@@ -2111,22 +2111,22 @@ The number of boxes nC has already been defined at Step 2.
            <widget class="QComboBox" name="boxAlg">
             <item>
              <property name="text">
-              <string>K KarpovAlgorithm</string>
+              <string>K IPM3K (Karpov, GEMS3K)</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>O IpOptAlgorithm</string>
+              <string>O IPOPT (Reaktoro, 2014)</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>N IpNewtonAlgorithm</string>
+              <string>N IPNEWTON (Reaktoro, 2015)</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>D IpKarpovAlgorithm</string>
+              <string>D IPM4K (Reaktoro, 2015)</string>
              </property>
             </item>
            </widget>
