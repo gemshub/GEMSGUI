@@ -329,9 +329,10 @@ public slots:
 
     void CmRunBCC();
     void CmRunIPM();
-    void CmSetKarpovAlgorithm();
-    void CmSetIpoptAlgorithm();
-    void CmSetIpnewtonAlgorithm();
+    void CmSetKarpovAlgorithm();   // IPM3K old
+    void CmSetIpKarpovAlgorithm(); // IPM4K
+    void CmSetIpOptAlgorithm();
+    void CmSetIpNewtonAlgorithm();
 
     void CmOpen_EQSTAT_ICOMP();
     void CmOpen_MULTI();

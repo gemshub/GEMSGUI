@@ -48,7 +48,7 @@ typedef struct
  char
     Istat, // PROCES status: 0 or 5 -undefinite; 1or 6-start; 2 or 7-run;
            //    4 or 9 -end  ( > 5 using stepwise mode)
-    PsAlg,  // The numerical optimization algorithm used for the chemical equilibrium calculations (K O N)
+    PsAlg,  // The numerical optimization algorithm used for the chemical equilibrium calculations (K O N D)
     PsBC,  //  Is there a change in bulk composition (+ -)
     PsRT,  // Are there time dependent calculations and plotting mode? (+ -)
     PsSY,  // Save changed SYSTEM definition records to PDB (+ -)

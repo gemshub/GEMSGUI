@@ -90,14 +90,15 @@ void TMultiSystem::MultiSystemInit( )
 
     // Reallocating memory, if necessary
     if( !pmp->pBAL )
-{
-    pmp->pKMM = -1;
-    pmp->ITau = -1;
-    pmp->kTau = 0.;
-    pmp->kdT = 0.;
-        dyn_new();
-}
-   if( pmp->pBAL == 2 )
+    {
+     pmp->pKMM = -1;
+     pmp->ITau = -1;
+     pmp->kTau = 0.;
+     pmp->kdT = 0.;
+     dyn_new();
+    }
+
+    if( pmp->pBAL == 2 )
          goto NEXT2;
 
    // loading parameters for ICs (independent components)
@@ -132,6 +133,7 @@ NEXT2:
        pActivity->Reset_TSolMod();
        pActivity->Reset_TSorpMod();
     }
+
     // loading data for phases, incl. sorption and solution models
     multi_sys_ph();
 

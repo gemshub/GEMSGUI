@@ -28,7 +28,7 @@
      <x>0</x>
      <y>0</y>
      <width>1121</width>
-     <height>25</height>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Record">
@@ -111,9 +111,10 @@
     <addaction name="sactionPrecise"/>
     <addaction name="sactionStepwise"/>
     <addaction name="separator"/>
-    <addaction name="actionIPM4K_default"/>
+    <addaction name="actionIPM3K_default"/>
     <addaction name="actionIPOPT"/>
     <addaction name="actionIPNewton"/>
+    <addaction name="actionIPM4K"/>
    </widget>
    <widget class="QMenu" name="smenu_View">
     <property name="title">
@@ -1292,7 +1293,7 @@
     <string>&amp;New Database ...</string>
    </property>
   </action>
-  <action name="actionIPM4K_default">
+  <action name="actionIPM3K_default">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1300,7 +1301,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>IPM4K (default)</string>
+    <string>IPM3K (default)</string>
    </property>
   </action>
   <action name="actionIPOPT">
@@ -1317,6 +1318,14 @@
    </property>
    <property name="text">
     <string>IPNewton</string>
+   </property>
+  </action>
+  <action name="actionIPM4K">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>IPM4K</string>
    </property>
   </action>
  </widget>

@@ -93,7 +93,7 @@ PvDDc,  //  Use diffusion coefficients for DC - DDc vector (+ -)
 PvDIc,  //  Use diffusion coefficients for IC - DIc vector (+ -)
    PvDCH,  //  Select ICs, DCs and phases to be exchanged via DATABR file (take all, if unchecked) (+ -)?
    PvnVTK, //  Use selected fields to VTK format (+ -)?
-   PvAlg, //   The numerical optimization algorithm used for the chemical equilibrium calculations (K O N)?
+   PvAlg, //   The numerical optimization algorithm used for the chemical equilibrium calculations (K O N D)?
 
      // Controls on operation (14)
    PsMode,  // Code of GEM2MT mode of operation { S F B A D W T }

@@ -46,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>8</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -2116,12 +2116,17 @@ The number of boxes nC has already been defined at Step 2.
             </item>
             <item>
              <property name="text">
-              <string>O IpoptAlgorithm</string>
+              <string>O IpOptAlgorithm</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>N IpnewtonAlgorithm</string>
+              <string>N IpNewtonAlgorithm</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>D IpKarpovAlgorithm</string>
              </property>
             </item>
            </widget>

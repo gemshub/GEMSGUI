@@ -1165,12 +1165,17 @@ Saving process-generated SysEq records may be necessary for subsequent sampling 
             </item>
             <item>
              <property name="text">
-              <string>O IpoptAlgorithm</string>
+              <string>O IpOptAlgorithm</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>N IpnewtonAlgorithm</string>
+              <string>N IpNewtonAlgorithm</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>D IpKarpovAlgorithm</string>
              </property>
             </item>
            </widget>

@@ -372,9 +372,10 @@ void TVisorImp::setActions()
 
     connect( saction_BCC, SIGNAL( triggered()), this, SLOT(CmRunBCC()));
     connect( saction_IPM, SIGNAL( triggered()), this, SLOT(CmRunIPM()));
-    connect( actionIPM4K_default, SIGNAL( triggered()), this, SLOT(CmSetKarpovAlgorithm()));
-    connect( actionIPOPT, SIGNAL( triggered()), this, SLOT(CmSetIpoptAlgorithm()));
-    connect( actionIPNewton, SIGNAL( triggered()), this, SLOT(CmSetIpnewtonAlgorithm()));
+    connect( actionIPM3K_default, SIGNAL( triggered()), this, SLOT(CmSetKarpovAlgorithm()));
+    connect( actionIPOPT, SIGNAL( triggered()), this, SLOT(CmSetIpOptAlgorithm()));
+    connect( actionIPNewton, SIGNAL( triggered()), this, SLOT(CmSetIpNewtonAlgorithm()));
+    connect( actionIPM4K, SIGNAL( triggered()), this, SLOT(CmSetIpKarpovAlgorithm()));
     //connect( actionSimplex, SIGNAL( triggered()), this, SLOT(CmSimplex()));
     //connect( actionPrecise, SIGNAL( triggered()), this, SLOT(CmPrecise()));
     //connect( actionStepwise, SIGNAL( triggered()), this, SLOT(CmStepwise()));
@@ -913,15 +914,26 @@ void TVisorImp::setActionPrecise()
 
 void TVisorImp::CmSetKarpovAlgorithm()
 {
-    actionIPM4K_default->setChecked(true);
+    actionIPM3K_default->setChecked(true);
+    actionIPM4K->setChecked(false);
     actionIPOPT->setChecked(false);
     actionIPNewton->setChecked(false);
     sactionStepwise->setEnabled(true);
 }
 
-void TVisorImp::CmSetIpoptAlgorithm()
+void TVisorImp::CmSetIpKarpovAlgorithm()
 {
-    actionIPM4K_default->setChecked(false);
+    actionIPM3K_default->setChecked(false);
+    actionIPM4K->setChecked(true);
+    actionIPOPT->setChecked(false);
+    actionIPNewton->setChecked(false);
+    sactionStepwise->setEnabled(false);
+}
+
+void TVisorImp::CmSetIpOptAlgorithm()
+{
+    actionIPM3K_default->setChecked(false);
+    actionIPM4K->setChecked(false);
     actionIPOPT->setChecked(true);
     actionIPNewton->setChecked(false);
     sactionStepwise->setChecked(false);
@@ -929,9 +941,10 @@ void TVisorImp::CmSetIpoptAlgorithm()
 
 }
 
-void TVisorImp::CmSetIpnewtonAlgorithm()
+void TVisorImp::CmSetIpNewtonAlgorithm()
 {
-    actionIPM4K_default->setChecked(false);
+    actionIPM3K_default->setChecked(false);
+    actionIPM4K->setChecked(false);
     actionIPOPT->setChecked(false);
     actionIPNewton->setChecked(true);
     sactionStepwise->setChecked(false);
@@ -944,8 +957,10 @@ char TVisorImp::GetNumericalMethod()
        return 'O';
     else if( actionIPNewton->isChecked() )
         return 'N';
-       else
-        return 'K';
+       else   if( actionIPM4K->isChecked() )
+                return 'D';
+             else
+                return 'K';
 }
 
 void TVisorImp::CmRunIPM()
