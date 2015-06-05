@@ -689,13 +689,11 @@ void TProfil::CmReadMulti( QWidget* par, const char* path )
 
     // Restoring the rest of MULTI contents from primal and dual solution
      pmp->pIPN =0;
-    multi->Alloc_internal();
 
-    multi->EqstatExpand( pmp->stkey, false, false );
+     multi->Alloc_internal();
+     multi->LoadGEM_IPM_Data( false );
+     multi->EqstatExpand();
 
-    //    outMultiTxt( "IPM_EqstatExpand.txt"  );
-    //    multi->Free_internal();
-    //    na->unpackDataBr( true );
     delete na;
     // We can get different results in GEMS than in GEMS4K
     // because of slightly different values into G, V ...

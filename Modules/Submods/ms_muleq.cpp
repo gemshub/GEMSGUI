@@ -299,9 +299,9 @@ void TMultiSystem::MultiKeyInit( const char*key )
 // Finalizing the full structure MULTI by expanding the SysEq record
 // read from the database
 //
-void TMultiSystem::EqstatExpand( const char *key, bool calcActivityModels, bool calcKineticModels )
+void TMultiSystem::EqstatExpand( )
 {
-    long int i, j, k;//, jb, je=0, jpb, jpe=0, jdb, jde=0;
+    long int i, j, k;
 //    double FitVar3;
     SPP_SETTING *pa = &TProfil::pm->pa;
     pmp->NR = pmp->N;
@@ -312,9 +312,9 @@ void TMultiSystem::EqstatExpand( const char *key, bool calcActivityModels, bool 
         if( pmp->L1[k] > 1 )
             AllPhasesPure = false;
 
-    TotalPhasesAmounts( pmp->X, pmp->XF, pmp->XFA );
-    for( j=0; j<pmp->L; j++ )
-        pmp->Y[j] = pmp->X[j];
+    ///TotalPhasesAmounts( pmp->X, pmp->XF, pmp->XFA );
+    ///for( j=0; j<pmp->L; j++ )
+    ///    pmp->Y[j] = pmp->X[j];
 
     for( k=0; k<pmp->FI; k++ )
     {
@@ -323,7 +323,7 @@ void TMultiSystem::EqstatExpand( const char *key, bool calcActivityModels, bool 
             pmp->YFA[k] = pmp->XFA[k];
     }
     // calculate DC (species) concentrations and activities
-    CalculateConcentrations( pmp->X, pmp->XF, pmp->XFA);
+    ///CalculateConcentrations( pmp->X, pmp->XF, pmp->XFA);
 
     // recalculate kinetic restrictions for DC
     if( pmp->pULR && pmp->PLIM )
@@ -343,52 +343,27 @@ void TMultiSystem::EqstatExpand( const char *key, bool calcActivityModels, bool 
     // set IPM weight multipliers for DC
     WeightMultipliers( false );
 
-// New: TKinMet stuff
-//if( calcKineticModels )
-//{
-//    if( pmp->pKMM <= 0 )
-//    {
-//        KinMetModLoad();
-//        pmp->pKMM = 1;
-//    }
-//}
     // test multicomponent phases and load data for mixing models
     //
     if( pmp->FIs && AllPhasesPure == false )   // bugfix DK 11.03.2010
     {
       int k, jb, je=0;
-      for( k=0; k<pmp->FIs; k++ )
-      { // loop on solution phases
-            jb = je;
-            je += pmp->L1[k];
-   	 // Load activity coeffs for phases-solutions
-       	for( j=jb; j< je; j++ )
-           {
-               pmp->lnGmo[j] = pmp->lnGam[j];
-               if( fabs( pmp->lnGam[j] ) <= 84. )
-   //                pmp->Gamma[j] = exp( pmp->lnGam[j] );
-            	  pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );
-               else pmp->Gamma[j] = 1.0;
-           } // j
-        }  // k
+      ///for( k=0; k<pmp->FIs; k++ )
+      ///{ // loop on solution phases
+      ///      jb = je;
+      ///      je += pmp->L1[k];
+         // Load activity coeffs for phases-solutions
+      ///  for( j=jb; j< je; j++ )
+      ///     {
+      ///         pmp->lnGmo[j] = pmp->lnGam[j];
+      ///         if( fabs( pmp->lnGam[j] ) <= 84. )
+      ///      	  pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );
+      ///         else pmp->Gamma[j] = 1.0;
+      ///     } // j
+      ///  }  // k
 
-      if( calcActivityModels )  // added 10.04.2012  DK
-      {
-          if( pmp->pIPN <=0 )  // mixing models finalized
-          {
-               // not done if these models are already present in MULTI !
-             pmp->PD = abs(TProfil::pm->pa.p.PD);
-             SolModLoad();   // Call point to loading scripts for mixing models
-             //MakeSolMod();
-          }
-          pmp->pIPN = 1;
-
-        //   double FitVar3 = pmp->FitVar[3];  // Debugging: Reset the smoothing factor
-        //   pmp->FitVar[3] = 1.0;
-        //MakeSolMod();
-        CalculateActivityCoefficients( LINK_TP_MODE );
-       // Computing DQF, FugPure and G wherever necessary; Activity coeffs are restored from lnGmo
-        //   pmp->FitVar[3]=FitVar3;  // Debugging
+       CalculateActivityCoefficients( LINK_TP_MODE );
+        // Computing DQF, FugPure and G wherever necessary; Activity coeffs are restored from lnGmo
         if(pmp->E && pmp->LO && pmp->Lads )  // Calling this only when sorption models are present
         {
             jb = 0;
@@ -403,43 +378,15 @@ void TMultiSystem::EqstatExpand( const char *key, bool calcActivityModels, bool 
 		       GouyChapman( jb, je, k );
                }
             }
-            //CalculateActivityCoefficients( LINK_UX_MODE );
-        }
+       }
         CalculateActivityCoefficients( LINK_UX_MODE );
-      }
-      else
-      {   double  LnGam = 0.;
-          je =0;
-          for( k=0; k<pmp->FI; k++ )
-          { // loop on phases
-              jb = je;
-              je += pmp->L1[k];
-             // Real mode for activity coefficients
-             double lnGamG;
-             for( j=jb; j<je; j++ )
-             {
-               if( pmp->DCC[j] == DC_AQ_SURCOMP )  // Workaround for aqueous surface complexes DK 22.07.09
-                  pmp->lnGam[j] = 0.0;
-               lnGamG = PhaseSpecificGamma( j, jb, je, k, 1 );
-               LnGam = pmp->lnGam[j];
-               if( fabs( lnGamG ) > 1e-9 )
-                  LnGam += lnGamG;
-               pmp->lnGmo[j] = LnGam;
-               if( fabs( LnGam ) < 84. )   // before 26.02.08: < 42.
-                      pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );
-               else pmp->Gamma[j] = 1.0;
-
-               pmp->F0[j] = pBaseSyst->DC_PrimalChemicalPotentialUpdate( j, k );
-               pmp->G[j] = pmp->G0[j] + pmp->fDQF[j] + pmp->F0[j];
-             }
-          }
-      }
-
     }
     else {  // no multi-component phases
         pmp->PD = 0;
         pmp->pIPN = 1;
     }
+
+
     pmp->FX = pBaseSyst->pb_GX( pmp->G );
     pmp->GX_ = pmp->FX * pmp->RT;
 

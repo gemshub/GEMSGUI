@@ -27,6 +27,7 @@
 #include "ms_system.h"
 #include "ms_mtparm.h"
 #include "tmltsystem.h"
+#include "node.h"
 
 extern const char * dfAqKeyD ;
 extern const char * dfAqKeyH ;
@@ -405,13 +406,12 @@ void TProfil::loadSystat( const char *key )
 
     if( pmp->pESU )      // unpack old solution
     {
-        multi->loadData( false );  // unpack syseq to multi
-        for(short j=0; j< pmp->L; j++ )
-            pmp->X[j] = pmp->Y[j];
-        multi->EqstatExpand( keyp.c_str(), true, true );
+        multi->LoadGEM_IPM_Data( true ); // unpack syseq to multi
+        multi->EqstatExpand( );
 //        outMultiTxt( "GEM_EqstatExpand.txt"  );
     }
 
+    wrknode->GEM_print_ipm( "CalculateEquilibriumEndload.txt" );
     pVisor->Update();
 }
 
@@ -437,10 +437,8 @@ void TProfil::deriveSystat()
         multi->InitalizeGEM_IPM_Data( wrknode );
     if( pmp->pESU )      // unpack old solution
     {
-        multi->loadData( false );  // unpack syseq to multi
-        for(short j=0; j< pmp->L; j++ )
-            pmp->X[j] = pmp->Y[j];
-        multi->EqstatExpand( keyp.c_str(), true, true );
+        multi->LoadGEM_IPM_Data( true ); // unpack syseq to multi
+        multi->EqstatExpand();
     }
 
     // SD 22/01/2010 bool
@@ -480,10 +478,12 @@ AGAIN:
     syst->loadData( true, ret ); // set def and unpack syseq to system
     // Test MULTY for change (if new System cfg or T, P - new)
     string keyp = rt[RT_SYSEQ].UnpackKey();
+    multi->pmp->pESU = 0;  //  new record was readed
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
-       multi->InitalizeGEM_IPM_Data( wrknode );
+    multi->InitalizeGEM_IPM_Data( wrknode );
+    // ?? multi->LoadGEM_IPM_Data( false ); // unpack syseq to multi
 
     // SD 22/01/2010 bool
     systbcInput( window(), str.c_str() );
