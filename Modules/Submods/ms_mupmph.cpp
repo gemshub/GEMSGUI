@@ -477,32 +477,6 @@ CH_FOUND:
     }
 }
 
-//==========================================
-bool TMultiSystem::CompressPhaseIpxt( int kPH )
-{
-  int jj, jb, cnt=0;
-  vector<int>  aDCused;
-  TPhase* aPH=(TPhase *)(aMod[RT_PHASE]);
-  RMULTS* mup = TRMults::sm->GetMU();
-
-  for( jj=0, jb = 0; jj<kPH; jj++ )
-        jb += mup->Ll[jj];
-
-  for( jj=0, cnt = 0; jj<mup->Ll[kPH]; jj++ )
-  {
-     if( TSyst::sm->GetSY()->Dcl[jj+jb] == S_OFF )
-          aDCused.push_back(-1);
-     else
-     { aDCused.push_back(cnt); cnt++; }
-  }
-
-  if( cnt < mup->Ll[kPH] )
-   return aPH->CompressRecord( cnt, aDCused, true );
-  else return true;
-}
-
-//============================================
-
 //Loading data for phases and mixing models into the structure MULTI
 //
 void TMultiSystem::multi_sys_ph()
@@ -510,15 +484,15 @@ void TMultiSystem::multi_sys_ph()
     int k, i;
     bool non_sorption_phase, is_ss;
     short kk, j, je, jb, ja=0;
-    time_t crt;
+//    time_t crt;
 //    double G;
     double PMM;  // Phase mean mol. mass
     int Cjs, car_l[32], car_c=0; // current index carrier sorbent
-    TPhase* aPH=(TPhase *)(aMod[RT_PHASE]);
+///    TPhase* aPH=(TPhase *)(aMod[RT_PHASE]);
     RMULTS* mup = TRMults::sm->GetMU();
     SYSTEM *syp = TSyst::sm->GetSY();
 
-    aPH->ods_link(0);
+///    aPH->ods_link(0);
 
     pmp->Ls = 0;
     pmp->PG = 0;
@@ -546,25 +520,25 @@ void TMultiSystem::multi_sys_ph()
         if( pmp->pNP && pmp->pBAL && pmp->pKMM )
                 goto PARLOAD;
 
-        aPH->TryRecInp( mup->SF[kk], crt, 0 );  // Now reading all phase records!
+////        aPH->TryRecInp( mup->SF[kk], crt, 0 );  // Now reading all phase records!
 
         // New stuff for TKinMet
         // Resetting vector of TSolMod pointers to avoid problems with activity coeffs
         //     in TSolMod calculations after switching phases on/off
         if(pmp->ITau < 0 )
         {
-            if(phKinMet[k])
-                delete phKinMet[k];
-            phKinMet[k] = NULL;
-            pmp->kMod[k][0] = aPH->php->kin_t[2];
-            pmp->kMod[k][1] = aPH->php->kin_t[3];
-            pmp->kMod[k][2] = aPH->php->kin_t[4];
-            pmp->kMod[k][3] = aPH->php->kin_t[5];
-            pmp->kMod[k][4] = aPH->php->kin_t[6];
-            pmp->kMod[k][5] = aPH->php->kin_t[7];
-        }
+           if(phKinMet[k])
+               delete phKinMet[k];
+           phKinMet[k] = NULL;
+ ///           pmp->kMod[k][0] = aPH->php->kin_t[2];
+ ///           pmp->kMod[k][1] = aPH->php->kin_t[3];
+ ///           pmp->kMod[k][2] = aPH->php->kin_t[4];
+ ///           pmp->kMod[k][3] = aPH->php->kin_t[5];
+ ///           pmp->kMod[k][4] = aPH->php->kin_t[6];
+ ///           pmp->kMod[k][5] = aPH->php->kin_t[7];
+       }
 
-        if( aPH->php->PrpCon == S_ON )
+ /**       if( aPH->php->PrpCon == S_ON )
         {
             pmp->LsKin[k*6] = aPH->php->nPRk;
             pmp->LsKin[k*6+1] = aPH->php->nSkr;
@@ -577,80 +551,56 @@ void TMultiSystem::multi_sys_ph()
             pmp->LsKin[k*6] = pmp->LsKin[k*6+1] = pmp->LsKin[k*6+2] =0;
             pmp->LsKin[k*6+3] = pmp->LsKin[k*6+4] = pmp->LsKin[k*6+5] =0;
         }
-/*
-long int
-*xSKrC,  ///< new: Collected array of aq/gas/sorption species indexes used in activity products (-> += LsKin[k][1])
-*ocPRkC; ///< new: Collected array of operation codes for kinetic parallel reaction terms (-> += LsKin[k][0])
-*/
 
-        if( kk < mup->Fis && mup->Ll[kk] > 1 )
+
+     if( kk < mup->Fis && mup->Ll[kk] > 1 )
         { // getting data and parameters for a multicomponent phase
-//           if( pmp->pNP && pmp->pBAL )
-//                goto PARLOAD;
-// Resetting vector of TSolMod pointers to avoid problems with activity coeffs
-//     in TSolMod calculations after switching phases on/off (DK 25.05.2009)
-//  if(phSolMod[k])
-//     delete phSolMod[k];
-//  phSolMod[k] = NULL;
-//          aPH->TryRecInp( mup->SF[kk], crt, 0 );
             // read informations from phase-solution
-            memcpy( pmp->sMod[k], aPH->php->sol_t, 6 );
-            pmp->sMod[k][6] = aPH->php->kin_t[0];
-            pmp->sMod[k][7] = aPH->php->kin_t[1];
+///            memcpy( pmp->sMod[k], aPH->php->sol_t, 6 );
+///           pmp->sMod[k][6] = aPH->php->kin_t[0];
+///            pmp->sMod[k][7] = aPH->php->kin_t[1];
             // Added SD 20/01/2010
             if( aPH->php->Ppnc == S_ON && aPH->php->npxM > 0 )
                 CompressPhaseIpxt( kk );
-            if( aPH->php->Ppnc == S_ON )
-            {
-               acp->LsMod_[k*3] = aPH->php->ncpN;
-               acp->LsMod_[k*3+2] = aPH->php->ncpM;
-               acp->LsMod_[k*3+1] = aPH->php->npxM;
-            }
-            else acp->LsMod_[k*3] = acp->LsMod_[k*3+1] = acp->LsMod_[k*3+2] =0;
-            if( aPH->php->Psco == S_ON )
-                acp->LsMdc_[k*3] = aPH->php->nscM;
-            else acp->LsMdc_[k*3] = 0;
+///            if( aPH->php->Ppnc == S_ON )
+///            {
+///               acp->LsMod_[k*3] = aPH->php->ncpN;
+///               acp->LsMod_[k*3+2] = aPH->php->ncpM;
+///               acp->LsMod_[k*3+1] = aPH->php->npxM;
+///            }
+///            else acp->LsMod_[k*3] = acp->LsMod_[k*3+1] = acp->LsMod_[k*3+2] =0;
+///            if( aPH->php->Psco == S_ON )
+///                acp->LsMdc_[k*3] = aPH->php->nscM;
+///            else acp->LsMdc_[k*3] = 0;
 
-            pmp->LsPhl[k*2] = aPH->php->nlPh;
-            pmp->LsPhl[k*2+1] = aPH->php->nlPc;
-            acp->LsMdc2_[k*3] = aPH->php->ndqf;
-            acp->LsMdc2_[k*3+1] = aPH->php->nrcp;
+///            pmp->LsPhl[k*2] = aPH->php->nlPh;
+///            pmp->LsPhl[k*2+1] = aPH->php->nlPc;
+///            acp->LsMdc2_[k*3] = aPH->php->ndqf;
+///            acp->LsMdc2_[k*3+1] = aPH->php->nrcp;
 
             pmp->LsUpt[k*2] = aPH->php->numpC;
             if( aPH->php->PumpCon && aPH->php->lICu && ( aPH->php->kin_t[4] == KM_UPT_ENTRAP
                  || aPH->php->kin_t[4] == KM_IEX_FAST || aPH->php->kin_t[4] == KM_IEX_SLOW ) )
             pmp->LsUpt[k*2+1] = pmp->L1[k]; // bugfix 04.03.2015 DK
-                  //  aPH->php->nFaces;     // provisional 8.04.2013 DK
-
-// New stuff for TSorpMod
-//if(phSorpMod[k])
-//   delete phSorpMod[k];
-//phSorpMod[k] = NULL;
-/*
-long int
-*LsESmo, ///< new: number of EIL model layers; EIL params per layer; CD coefs per DC; reserved  [Fis][4]
-*LsISmo, ///< new: number of surface sites; isotherm coeffs per site; isotherm coeffs per DC; max.denticity of DC [Fis][4]
-*xSMd;   ///< new: denticity of surface species per surface site (site allocation) (-> L1[k]*LsISmo[k][3]] )
-*/
-        }
+       }
         else  // nothing to read in the Phase record
             if( k<pmp->FIs )
             {
-                acp->LsMod_[k*3] = 0;
-                acp->LsMod_[k*3+1] = 0;
-                acp->LsMod_[k*3+2] = 0;
-                acp->LsMdc_[k*3] = 0;
-                memset( pmp->sMod[k], ' ', 8 );
-                pmp->LsPhl[k*2] = 0;
-                pmp->LsPhl[k*2+1] = 0;
-                acp->LsMdc2_[k*3] = 0;
-                acp->LsMdc2_[k*3+1] = 0;
+///                acp->LsMod_[k*3] = 0;
+///                acp->LsMod_[k*3+1] = 0;
+///                acp->LsMod_[k*3+2] = 0;
+///                acp->LsMdc_[k*3] = 0;
+///                memset( pmp->sMod[k], ' ', 8 );
+///                pmp->LsPhl[k*2] = 0;
+///                pmp->LsPhl[k*2+1] = 0;
+///                acp->LsMdc2_[k*3] = 0;
+///                acp->LsMdc2_[k*3+1] = 0;
                 pmp->LsUpt[k*2] = 0;
                 pmp->LsUpt[k*2+1] = 0;
 // New stuff for TSorpMod
 
             }
-
+*/
 
 PARLOAD: if( k < syp->Fis )
              pmp->Ls += pmp->L1[k];
