@@ -203,6 +203,15 @@ void TProfil::SetNumericalMethodWrk( const char codAlgorithm)
    wrknode->SetNumericalMethod(codAlgorithm);
 }
 
+/// Set full data to multi into Reactoro
+void TProfil::InsertChangesToMulti( )
+{
+   if( wrknode->GetNumericalMethod() != KarpovAlgorithm )
+      multi->EqstatExpand();
+
+}
+
+
 void
 BASE_PARAM::write(GemDataStream& oss)
 {

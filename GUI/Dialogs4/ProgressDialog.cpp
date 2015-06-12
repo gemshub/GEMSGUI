@@ -151,6 +151,8 @@ ProgressDialog::CmStep()
 // but we have to specify seconds to prevend deadlock anyway
 //	ThreadControl::wait(5000); // 5 sec
 
+    // load data from Reactoro task
+    TProfil::pm->InsertChangesToMulti();;
 	Update(true);
 	pVisorImp->Update( true );
 
