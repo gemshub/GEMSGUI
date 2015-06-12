@@ -918,7 +918,7 @@ void TVisorImp::CmSetKarpovAlgorithm()
     actionIPM4K->setChecked(false);
     actionIPOPT->setChecked(false);
     actionIPNewton->setChecked(false);
-    sactionStepwise->setEnabled(true);
+ //   sactionStepwise->setEnabled(true);
 }
 
 void TVisorImp::CmSetIpKarpovAlgorithm()
@@ -927,7 +927,7 @@ void TVisorImp::CmSetIpKarpovAlgorithm()
     actionIPM4K->setChecked(true);
     actionIPOPT->setChecked(false);
     actionIPNewton->setChecked(false);
-    sactionStepwise->setEnabled(false);
+ //   sactionStepwise->setEnabled(false);
 }
 
 void TVisorImp::CmSetIpOptAlgorithm()
@@ -936,8 +936,8 @@ void TVisorImp::CmSetIpOptAlgorithm()
     actionIPM4K->setChecked(false);
     actionIPOPT->setChecked(true);
     actionIPNewton->setChecked(false);
-    sactionStepwise->setChecked(false);
-    sactionStepwise->setEnabled(false);
+//    sactionStepwise->setChecked(false);
+//    sactionStepwise->setEnabled(false);
 
 }
 
@@ -947,8 +947,8 @@ void TVisorImp::CmSetIpNewtonAlgorithm()
     actionIPM4K->setChecked(false);
     actionIPOPT->setChecked(false);
     actionIPNewton->setChecked(true);
-    sactionStepwise->setChecked(false);
-    sactionStepwise->setEnabled(false);
+ //   sactionStepwise->setChecked(false);
+ //   sactionStepwise->setEnabled(false);
 }
 
 char TVisorImp::GetNumericalMethod()
