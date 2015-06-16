@@ -21,7 +21,7 @@
        <string>To edit, right-click on input values; press Enter to change data</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">

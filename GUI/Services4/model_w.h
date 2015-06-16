@@ -74,6 +74,7 @@ struct Selection {
 // TObjectModel class
 //===========================================
 
+
 /*!
   \ class TObjectModel
   \ class for represents the data set and is responsible for fetchin
@@ -398,7 +399,7 @@ inline int wdF(eFieldType ft, int npos, eEdit edit )
 
 inline int htF(eFieldType ft, int ht)
 {
-    if( ft==ftText ) {
+    if( ft==ftText || ft==ftBson ) {
         return pVisorImp->getCharHeight()*ht/2+1;
     }
 /*    else if( ft == ftCheckBox ) {

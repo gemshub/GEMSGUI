@@ -29,6 +29,7 @@
 
 #include "v_mod.h"
 #include "page_w.h"
+#include "json2cfg.h"
 #include "GemsMainWindow.h"
 
 const int wdSPACE = 8;
@@ -88,8 +89,8 @@ void TCPage::Update()
 
 void TCPage::AddFields( bool info )
 {
-    TObjectModel* model;
-    TObjectTable* fieldTable;
+//    TObjectModel* model;
+//  TAbstractTable* fieldTable;
 //    TCellText*  fieldText;
 	QList<FieldInfo>	aFlds;
 
@@ -120,24 +121,44 @@ void TCPage::AddFields( bool info )
     	   cnt++;
        }
 
-       model = new TObjectModel( aFlds, this );
-       aModels.push_back( model );
-       
+
    	  switch( fi.fType )
        {
-        case ftText:
+       case ftBson:
+        { bson *abson=new bson;
+          FJson fjson_(/*"pHtitr-node-0-000000.json"*/"numeric.settings.json" );
+          fjson_.LoadBson(abson);
+          QStringList aHeaderData;
+          aHeaderData << "key" << "value";
+          TBsonModel* model = new TBsonModel( aFlds,abson, aHeaderData, this );
+          aModels.push_back( model );
+          TBsonView* fieldTable =  new TBsonView( aFlds,this );
+          TBsonDelegate *deleg = new TBsonDelegate(this);
+          fieldTable->setItemDelegate(deleg);
+          fieldTable->setModel(model);
+          fieldTable->setColumnWidth( 0, 150 );
+          fieldTable->expandToDepth(5);
+          aFields.push_back( fieldTable );
+          aTypes.push_back(2);
+        }
+        break;
+       case ftText:
 //        	fieldText =  new TCellText( fi, 0, 0, this );
 //         	aFields.Add( fieldText );
 //         	aTypes.Add(0);
 //             break;     
        default:
-       	    fieldTable =  new TObjectTable( aFlds, this );
+        {
+          TObjectModel* model = new TObjectModel( aFlds, this );
+          aModels.push_back( model );
+          TObjectTable* fieldTable =  new TObjectTable( aFlds, this );
                 TObjectDelegate *deleg = new TObjectDelegate( fieldTable, this);
        	    fieldTable->setItemDelegate(deleg);
        	    fieldTable->setModel(model);
             aFields.push_back( fieldTable );
             aTypes.push_back(1);
-            break;     
+        }
+        break;
        }
       
    	  ii += cnt;
@@ -162,8 +183,20 @@ void TCPage::RedrawFields()
     	oldColSize = colSize;
     	
    	  // get size of element
-        place = aModels[ii]->getObjectPlace();
-        qobject_cast<TObjectTable *>(aFields[ii])->getObjectSize(rowSize, colSize);
+
+        if(aTypes[ii] == 1 )
+        { place = qobject_cast<TObjectModel *>(aModels[ii])->getObjectPlace();
+          TObjectTable *tbl = qobject_cast<TObjectTable *>(aFields[ii]);
+          if( tbl )
+            tbl->getObjectSize(rowSize, colSize);
+        } else
+          if(aTypes[ii] == 2 )
+          {   place = qobject_cast<TBsonModel *>(aModels[ii])->getObjectPlace();
+              TBsonView *tbl = qobject_cast<TBsonView *>(aFields[ii]);
+              if( tbl )
+                tbl->getObjectSize(rowSize, colSize);
+
+          }
 
        // calculating position of the element
        switch( place )

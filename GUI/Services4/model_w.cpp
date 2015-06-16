@@ -42,7 +42,7 @@
 //---------------------------------------------------------------------------------------
 
 TObjectModel::TObjectModel( const QList<FieldInfo>	aFlds,  QObject * parent ):
-		QAbstractTableModel(parent) 	  
+        QAbstractTableModel(parent)
 {
 	flds = aFlds;
 	connect( this, SIGNAL(dataChanged( const QModelIndex&, const QModelIndex& )),
@@ -364,7 +364,7 @@ ePlaceMode TObjectModel::getObjectPlace()
 
 TObjectTable::TObjectTable( const QList<FieldInfo> aFlds, 
 		       QWidget * parent ):
-	 QTableView( parent ), flds(aFlds)
+     QTableView( parent ), flds(aFlds)
 {
     vScroll =false, hScroll=false;
 

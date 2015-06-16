@@ -26,7 +26,7 @@
 #include <QButtonGroup>
 #include <QDialog>
 
-#include "model_w.h"
+#include "model_bson.h"
 #include "v_2module.h"
 
 //===========================================
@@ -51,7 +51,7 @@ class TCPage:
     bool fRedraw;
     bool firstRedraw;
 
-    QList<TObjectModel*> aModels;
+    QList<QAbstractItemModel*> aModels;
     QList<QWidget*> aFields;
     QList<int> aTypes;
     

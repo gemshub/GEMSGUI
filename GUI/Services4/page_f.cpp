@@ -261,7 +261,7 @@ eFieldType PageInfo::GetType(const string & s)
 {
     const char *snames[nFieldTypes] =
         { "F_NUM", "F_FLOAT", "F_STRING", "F_TEXT",
-          "F_CHECKBOX", "F_REF", "F_RECORD"
+          "F_CHECKBOX", "F_REF", "F_RECORD", "F_BSON"
         };
 
     if (s == "F_VALUE")

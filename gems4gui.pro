@@ -124,11 +124,11 @@ include($$SUBMODS_CPP/Submods.pri)
 include($$MODULES_CPP/Modules.pri)
 include($$DATAMAN_CPP/Dataman.pri)
 include($$GEMS4K_CPP/gems4k.pri)
-include($$EJDB_PATH/ejdb.pri)
-#include($$EJDB_PATH/tcejdb.pri)
+#include($$EJDB_PATH/ejdb.pri)
+include($$EJDB_PATH/tcejdb.pri)
 
-CONFIG(release, debug|release): LIBS += -L$$EJDB_LIB_PATH/release/src/ -lejdb
-CONFIG(debug, debug|release): LIBS += -L$$EJDB_LIB_PATH/debug/src/ -lejdb
+#CONFIG(release, debug|release): LIBS += -L$$EJDB_LIB_PATH/release/src/ -lejdb
+#CONFIG(debug, debug|release): LIBS += -L$$EJDB_LIB_PATH/debug/src/ -lejdb
 
 
 unix|win32: CONFIG(release, debug|release): LIBS += -L$$PWD/../standalone/Reaktoro/build/release/lib/ -lReaktoro

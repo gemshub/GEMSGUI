@@ -36,8 +36,8 @@ struct FieldInfo;
 enum eShowType { stResult='r', stIO='i', stWork='o', stAux='w', stHelp='h' };
 
 enum eFieldType { ftNumeric=1, ftFloat, ftString, ftText,
-                  ftCheckBox, ftRef, ftRecord, ftUndefined=0 };
-const int nFieldTypes=7;
+                  ftCheckBox, ftRef, ftRecord, ftBson, ftUndefined=0 };
+const int nFieldTypes=8;
 
 enum eEdit { eYes='+', eNo='-', eParam='?' };
 

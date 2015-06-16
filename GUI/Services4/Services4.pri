@@ -10,7 +10,8 @@ HEADERS += $$SERVICES4_H/calcthread.h \
            $$SERVICES4_H/model_w.h \
            $$SERVICES4_H/model_tree.h \
            $$SERVICES4_H/page_w.h \
-           $$SERVICES4_H/module_w.h
+           $$SERVICES4_H/module_w.h \
+    $$PWD/model_bson.h
 
 SOURCES += $$SERVICES4_CPP/units.cpp \
            $$SERVICES4_CPP/main.cpp \
@@ -24,4 +25,5 @@ SOURCES += $$SERVICES4_CPP/units.cpp \
            $$SERVICES4_CPP/model_w.cpp \
            $$SERVICES4_CPP/model_tree.cpp \
            $$SERVICES4_CPP/page_w.cpp \
-           $$SERVICES4_CPP/module_w.cpp
+           $$SERVICES4_CPP/module_w.cpp \
+    $$PWD/model_bson.cpp
