@@ -323,6 +323,16 @@ void TMTparm::LoadMtparm( double cT, double cP )
     aRC->ods_link(0);
     TProfil *aPa=(TProfil *)(aMod[RT_PARAM]);    // added 07.06.05 by KD
     RMULTS* mup = TRMults::sm->GetMU();
+    // data from PHmake() 17/06/2015
+    int  forlen, sflast=-1;
+    char buf[MAXFORMULA];
+    char *Formula=0, *item=buf, dkey[MAXRKEYLEN];
+    if( mup->PmvDF == S_ON )
+    {
+        mup->DCF[0] = 0;
+        item = mup->DCF;
+    }
+
 
     if( tp.L != mup->L ||  tp.Ls != mup->Ls ||
             tp.Lg != mup->Pg ||  tp.La != mup->Laq )
@@ -367,10 +377,33 @@ if( P < 1e-5 )  // trial check  5.12.2006
             aW.ods_link(0);
         // show curent key ?? mup->DCS[j]+mup->SM[j]
         if( mup->DCS[j] == SRC_DCOMP )
-            aDC->TryRecInp( mup->SM[j], tim, 0 );
+        {    aDC->TryRecInp( mup->SM[j], tim, 0 );
+            Formula = aDC->dcp->form;
+        }
         if( mup->DCS[j] == SRC_REACDC )
-            aRC->TryRecInp( mup->SM[j], tim, 0 );
+        {    aRC->TryRecInp( mup->SM[j], tim, 0 );
+            Formula = aRC->rcp->form;
+        }
 
+        // code from PHmake() 17/06/2015
+        if( mup->PmvDF == S_ON )
+        { // insert dependent component formula
+            forlen = strlen( Formula );
+            for( ; forlen >0; forlen-- )
+                if( Formula[forlen-1] != ' ' )
+                    break;
+            ErrorIf( !forlen, "RMUL", "No formula in DECOMP or REACDC!" );
+            if( sflast < 0 )
+                sflast = strlen( mup->DCF );
+            if( sflast )
+            {
+                item[sflast++] = ',';
+                item[sflast++] = '\n';
+            }
+            strncpy( item+sflast, Formula, forlen );
+            sflast+=forlen;
+            item[sflast]=0;
+        }
 
         /*calc thermodynamic data of Dependent Component*/
         aW.set_zero(0);
@@ -585,6 +618,9 @@ if( P < 1e-5 )  // trial check  5.12.2006
          aWp.init = false;
       }
     } /*j*/
+
+    mup->DCF = (char *)aObj[ o_mudcf].Alloc( 1, sflast+2, S_ );
+
     if( tp.PtvG == S_REM )  tp.PtvG = S_ON;
     if( tp.PtvdG== S_REM )  tp.PtvdG = S_ON;
     if( tp.PtvH == S_REM )  tp.PtvH = S_ON;

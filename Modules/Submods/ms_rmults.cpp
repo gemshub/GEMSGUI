@@ -347,7 +347,6 @@ void TRMults::DCListLoad(  const vector<string>& AqKey,
     int k, jj;
     int j, kk;
     time_t tim;
-    int SPHP=1;  /* at first test phases-solutions */
 
     // Get all records of PHase
     vector<string> aPhaseList;
@@ -407,51 +406,72 @@ void TRMults::DCListLoad(  const vector<string>& AqKey,
     mu.Ll = (short *)aObj[ o_mul1].Alloc( mu.Fi, 1, I_ );
     mu.SF = (char (*)[PH_RKLEN])aObj[ o_musf].Alloc( mu.Fi, 1, PH_RKLEN );
     // List of DCOMP&REACDC component in Project
-    vector<string> List;
+    vector<string> ListPhaseMult;
+    vector<string> ListPhase1;
+    vector<string> ListDCMult;
+    vector<string> ListDC1;
+    vector<int>    LMult;
     TPhase* aPH=(TPhase *)(aMod[RT_PHASE]);
     aPH->ods_link(0);
     // Build list of DCOMP&REACDC from PHASE
-    kk=-1;
     mu.Ls = mu.Lads = mu.Fis = 0;
-TEST2:
+
     for( k=0; k<aPhaseList.size(); k++)
     {
         // test and load keys of DCOMP anf REACDC
         aPH->TryRecInp( aPhaseList[k].c_str(), tim, 0 );
-        if( aPH->php->nDC > 1 && SPHP==0 )
-            continue;
-        if( aPH->php->nDC <= 1 && SPHP==1 )
-            continue;
-        kk++;
-        memcpy( mu.SF[kk], aPhaseList[k].c_str(), PH_RKLEN );
-        mu.Ll[kk] = 0;
-        for( j=0; j<aPH->php->nDC; j++ )
+        //memcpy( mu.SF[kk], aPhaseList[k].c_str(), PH_RKLEN );
+        int Ll=0;
+        if( aPH->php->nDC > 1  )
         {
-            // test to exist of DCOMP or REACDC record later
-            List.push_back( string(aPH->php->SM[j], 0, DC_RKLEN ) );
-            mu.Ll[kk]++;
-        } /* j */
-        if( mu.Ll[kk] > 1 ) // multicomponent phase
+            ListPhaseMult.push_back(aPhaseList[k].c_str());
+            for( j=0; j<aPH->php->nDC; j++ )
+            {
+                // test to exist of DCOMP or REACDC record later
+                ListDCMult.push_back( string(aPH->php->SM[j], 0, DC_RKLEN ) );
+                Ll++;
+            } /* j */
+            LMult.push_back(Ll);
+
+        }
+        else //if( aPH->php->nDC <= 1 )
+           {    ListPhase1.push_back(aPhaseList[k].c_str());
+                for( j=0; j<aPH->php->nDC; j++ )
+                {
+                // test to exist of DCOMP or REACDC record later
+                ListDC1.push_back( string(aPH->php->SM[j], 0, DC_RKLEN ) );
+                Ll++;
+                } /* j */
+            }
+
+        if( Ll > 1 ) // multicomponent phase
         {
-            mu.Ls += mu.Ll[kk];
+            mu.Ls += Ll;
             mu.Fis++;
             if( aPH->php->NsuT > 0 && aPH->php->NsuT < 5 )
-               mu.Lads += mu.Ll[kk];
+               mu.Lads += Ll;
         }
     } /* k */
-    if( SPHP==1)
-    {
-        SPHP=0;
-        goto TEST2;
-    }
-    mu.L = (short)List.size();
+
+    mu.L = (short)(ListDC1.size()+ ListDCMult.size());
     mu.FiE= mu.L;
     mu.PmvDC = S_ON;
     mu.SM = (char (*)[DC_RKLEN])aObj[ o_musm].Alloc( mu.L, 1, DC_RKLEN );
-    for(int i=0; i< List.size(); i++)
-    {
-        memcpy( mu.SM[i], List[i].c_str(), DC_RKLEN );
+
+    for( kk=0, k=0; k< ListPhaseMult.size(); k++, kk++ )
+    {   memcpy( mu.SF[kk], ListPhaseMult[k].c_str(), PH_RKLEN );
+        mu.Ll[kk] = LMult[k];
     }
+    for( k=0; k< ListPhase1.size(); k++, kk++ )
+    {   memcpy( mu.SF[kk], ListPhase1[k].c_str(), PH_RKLEN );
+        mu.Ll[kk] = 1;
+    }
+
+    for( kk=0, k=0; k< ListDCMult.size(); k++, kk++ )
+       memcpy( mu.SM[kk], ListDCMult[k].c_str(), DC_RKLEN );
+    for( k=0; k< ListDC1.size(); k++, kk++ )
+       memcpy( mu.SM[kk], ListDC1[k].c_str(), DC_RKLEN );
+
 }
 
 //Make record of base Rmults from files
@@ -538,27 +558,28 @@ void TRMults::ICmake()
 // Make list of PHASE and set data to work arrays
 void TRMults::PHmake()
 {
-    int  jj, ii,  kk, forlen, sflast=-1;
+    int  jj, ii,  kk;///, forlen, sflast=-1;
     short ij, i;
-    char buf[MAXFORMULA];
+    ///char buf[MAXFORMULA];
     time_t crt;
-    char *Formula=0, *item=buf, dkey[MAXRKEYLEN];
+    ///char *Formula=0, *item=buf,
+    char dkey[MAXRKEYLEN];
     TPhase* aPH=(TPhase *)(aMod[RT_PHASE]);
     aPH->ods_link(0);
-    TDComp* aDC=(TDComp *)(aMod[RT_DCOMP]);
-    aDC->ods_link(0);
-    TReacDC* aRC=(TReacDC *)(aMod[RT_REACDC]);
-    aRC->ods_link(0);
+    ///TDComp* aDC=(TDComp *)(aMod[RT_DCOMP]);
+    ///aDC->ods_link(0);
+    ///TReacDC* aRC=(TReacDC *)(aMod[RT_REACDC]);
+    ///aRC->ods_link(0);
 
     mu.FiE = 0;
     mu.Pg = 0;
     mu.Lhc = 0;
     mu.Laq =  0;
-    if( mu.PmvDF == S_ON )
-    {
-        mu.DCF[0] = 0;
-        item = mu.DCF;
-    }
+    ///if( mu.PmvDF == S_ON )
+    ///{
+    ///    mu.DCF[0] = 0;
+    ///    item = mu.DCF;
+    ///}
     ii=0;
     for( kk=0; kk<mu.Fi; kk++ ) // phase list
     {
@@ -586,38 +607,38 @@ void TRMults::PHmake()
                 ErrorIf(ij<0,"RMULTS", "!!!!!!!!!!!!!!!!!");
                 if( jj<mu.Ls ) mu.Pl[jj] = ij;
             }
-            memcpy( dkey, aPH->php->SM[ij], DC_RKLEN );
-            if( aPH->php->DCS[ij] == SRC_DCOMP )
-            {
-                TDComp::pm->TryRecInp( dkey, crt, 0 );
-                Formula = aDC->dcp->form;
-            }
-            if( aPH->php->DCS[ij] == SRC_REACDC )
-            {
-                TReacDC::pm->TryRecInp( dkey, crt, 0 );
-                Formula = aRC->rcp->form;
-            }
+            ///memcpy( dkey, aPH->php->SM[ij], DC_RKLEN );
+            ///if( aPH->php->DCS[ij] == SRC_DCOMP )
+            ///{
+            ///    TDComp::pm->TryRecInp( dkey, crt, 0 );
+            ///    Formula = aDC->dcp->form;
+            ///}
+            ///if( aPH->php->DCS[ij] == SRC_REACDC )
+            ///{
+            ///    TReacDC::pm->TryRecInp( dkey, crt, 0 );
+            ///    Formula = aRC->rcp->form;
+            ///}
             /* dependent component read! */
             mu.DCS[jj] =  aPH->php->DCS[ij]; /* mu[p].DCS[jj]; */
             mu.DCC[jj] =  aPH->php->DCC[ij]; /* mu[p].DCC[jj]; */
-            if( mu.PmvDF == S_ON )
-            { // insert dependent component formula
-                forlen = strlen( Formula );
-                for( ; forlen >0; forlen-- )
-                    if( Formula[forlen-1] != ' ' )
-                        break;
-                ErrorIf( !forlen, "RMUL", "No formula in DECOMP or REACDC!" );
-                if( sflast < 0 )
-                    sflast = strlen( mu.DCF );
-                if( sflast )
-                {
-                    item[sflast++] = ',';
-                    item[sflast++] = '\n';
-                }
-                strncpy( item+sflast, Formula, forlen );
-                sflast+=forlen;
-                item[sflast]=0;
-            }
+            ///if( mu.PmvDF == S_ON )
+            ///{ // insert dependent component formula
+            ///    forlen = strlen( Formula );
+            ///    for( ; forlen >0; forlen-- )
+            ///        if( Formula[forlen-1] != ' ' )
+            ///            break;
+            ///    ErrorIf( !forlen, "RMUL", "No formula in DECOMP or REACDC!" );
+            ///    if( sflast < 0 )
+            ///        sflast = strlen( mu.DCF );
+            ///    if( sflast )
+            ///    {
+            ///        item[sflast++] = ',';
+            ///        item[sflast++] = '\n';
+            ///    }
+            ///    strncpy( item+sflast, Formula, forlen );
+            ///    sflast+=forlen;
+            ///    item[sflast]=0;
+            ///}
         } /* jj */
         switch( aPH->php->PphC )
         {
@@ -638,7 +659,7 @@ void TRMults::PHmake()
             continue;
         }
     } /* kk */
-    mu.DCF = (char *)aObj[ o_mudcf].Alloc( 1, sflast+2, S_ );
+///    mu.DCF = (char *)aObj[ o_mudcf].Alloc( 1, sflast+2, S_ );
 }
 
 //realloc memory and load data to structure RMULTS
@@ -819,8 +840,8 @@ NEW_PHASE_AGAIN:
   for( int ii=0; ii<mu.Fi; ii++ )
     memcpy( mu.nlPHv[ii], mu.SF[ii]+MAXSYMB+MAXPHSYMB, MAXPHNAME );
 
-    // test data base ICOMP  before calc
-    TestIComp();
+    /// test data base ICOMP  before calc
+    ///TestIComp();
 
     // Set nAq and nGas
     SetAqGas( aqKey.c_str() , gasKey.c_str() );

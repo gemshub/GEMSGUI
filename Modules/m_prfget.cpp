@@ -150,10 +150,13 @@ bool TProfil::initCalcMode(const char * profileKey)
     pmp->RT = R_CONSTANT * pmp->Tc;
     pmp->FRT = F_CONSTANT/pmp->RT;
 
+    // test data base ICOMP  before calc
+    rmults->TestIComp();
+
     // start settins of SYSTEM
-        syst->set_def();
-        syst->dyn_new();
-        syst->setDefData();
+     syst->set_def();
+     syst->dyn_new();
+     syst->setDefData();
 
     // make dump file
         if( rec_key != ALLKEY && makeDump )
