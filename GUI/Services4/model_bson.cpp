@@ -22,6 +22,7 @@
 #include "CalcDialog.h"
 #include "GemsMainWindow.h"
 #include "service.h"
+#include "ipm2format.h"
 
 BsonLine::BsonLine( int andx, const QString& akey, int atype, const QString& avalue):
   ndx( andx), keyname( akey), type( atype ), value( avalue)
@@ -259,6 +260,14 @@ QVariant TBsonModel::headerData( int section, Qt::Orientation orientation, int r
 QString TBsonModel::getDescription( const QModelIndex& index ) const
 {
     BsonLine *item = lineFromIndex( index );
+    bool ok;
+    item->keyname.toInt(&ok,10);
+    if( ok && item->parent->type ==  BSON_ARRAY )
+      item = item->parent;
+    TRWArrays fldsDesk( fo_sMod, MULTI_fields );
+    int ii = fldsDesk.findFld(item->keyname.toUtf8().data());
+    if( ii>=0 )
+      return QString( fldsDesk.getComment( ii ).c_str());
     return item->keyname; // may be string from io2format array
 }
 
@@ -332,7 +341,7 @@ QWidget *TBsonDelegate::createEditor(QWidget *parent,
         switch( line->type  )
         {
         case BSON_BOOL:
-                { QComboBox *accessComboBox = new QComboBox;
+                { QComboBox *accessComboBox = new QComboBox(parent);
                   accessComboBox->addItem(tr("false"));
                   accessComboBox->addItem(tr("true"));
                   return accessComboBox;
@@ -340,7 +349,7 @@ QWidget *TBsonDelegate::createEditor(QWidget *parent,
         case BSON_INT:
         case BSON_LONG:
         case BSON_DOUBLE:
-               { QLineEdit *lineEdit = new QLineEdit;
+               { QLineEdit *lineEdit = new QLineEdit(parent);
                  lineEdit->setValidator(new QDoubleValidator(lineEdit));
                  //lineEdit->setValidator(new QDoubleValidator(-999.0,
                  //            999.0, 2, lineEdit));
@@ -348,7 +357,7 @@ QWidget *TBsonDelegate::createEditor(QWidget *parent,
                }
         case BSON_NULL:
         case BSON_STRING:
-              { QLineEdit *lineEdit = new QLineEdit;
+              { QLineEdit *lineEdit = new QLineEdit(parent);
                 return lineEdit;
               }
         // main constructions
@@ -684,9 +693,16 @@ void TBsonView::getObjectSize( int& rowSize, int& colSize )
   // Help on F1 pressed on data field
     void TBsonView::CmHelp()
     {
-      //QModelIndex index = currentIndex();
-      //BsonLine *line =  ((TBsonModel *)index.model())->lineFromIndex(index);
-      pVisorImp->OpenHelp( GEMS_CALCUL_HTML);
+      QModelIndex index = currentIndex();
+      BsonLine *line =  ((TBsonModel *)index.model())->lineFromIndex(index);
+      bool ok;
+      line->keyname.toInt(&ok,10);
+      if( ok && line->parent->type ==  BSON_ARRAY )
+        line = line->parent;
+
+      string hlp= line->keyname.toUtf8().data();
+      cout << hlp.c_str() << endl;
+      pVisorImp->OpenHelp( 0, hlp.c_str() );
     }
   
 //---------------------- End of file  model_bson.cpp ---------------------------
