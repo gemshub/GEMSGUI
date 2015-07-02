@@ -78,6 +78,7 @@ bool TProfil::initCalcMode(const char * profileKey)
     // free old data
     dyn_kill();
 
+
     // Open all files in list to select
     rt[RT_PARAM].OpenAllFiles();
 
@@ -295,6 +296,7 @@ AGAIN:
        rt[RT_PARAM].SetKey( key_str.c_str() );
        dyn_kill();
        set_def();
+       toBsonObject( (bson *)aObj[o_bspar].GetPtr() );
     }
 
    if( remakeRec )

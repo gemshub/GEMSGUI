@@ -79,6 +79,43 @@ extern template<> const char* TVal<char>::PATTERN_SET();
 
 TObjList aObj;
 
+string TValBson::GetString(size_t ) const
+{
+    ParserJson pars;
+    string jsonstr;
+    pars.printBsonObjectToJson( jsonstr, bcobj.data );
+    return jsonstr;
+}
+
+bool TValBson::SetString(const char* s, size_t )
+{
+    string objStr = s;
+    ParserJson parserJson;
+    parserJson.setJsonText( objStr.substr( objStr.find_first_of('{')+1 ));
+
+    Alloc(0);
+    bson_init( &bcobj );
+    parserJson.parseObject( &bcobj );
+    bson_finish( &bcobj );
+
+    return true;
+}
+
+void TValBson::write(GemDataStream& s, size_t size)
+{
+  Error( "Bson object", "Invalid object type for old DataBase");
+  s.writeArray(bcobj.data, size );
+}
+
+void TValBson::read(GemDataStream& s, size_t size )
+{
+   Error( "Bson object", "Invalid object type for old DataBase");
+   if( bcobj.data )
+     s.readArray( bcobj.data,  size  );
+}
+
+
+
 //=======================================
 // class TObject
 //=======================================
@@ -113,14 +150,12 @@ TObject::~TObject()
 }
 
 // Writes configuration to file f
-void
-TObject::ToCFG(ostream& f)
+void TObject::ToCFG(ostream& f)
 {
     write(f);
 }
 
-string
-TObject::GetFullName(int aN, int aM)
+string TObject::GetFullName(int aN, int aM)
 {
   char v[25];
   string item = GetKeywd();
@@ -129,7 +164,7 @@ TObject::GetFullName(int aN, int aM)
     sprintf(v, "[%u]", aN );
     item += v;
   }
-  if( M > 1 && Type != S_)
+  if( M > 1 && ( Type != S_ && Type != J_) )
   {
     sprintf(v, "[%u]", aM );
     item += v;
@@ -147,7 +182,7 @@ string TObject::GetHelpLink(int aN, int aM)
     item += v;
   }
   else
-    if( M > 1 && Type != S_ )
+    if( M > 1 && Type != S_ && Type != J_)
     {
       sprintf(v, "_%u", aM );
       item += v;
@@ -157,8 +192,7 @@ string TObject::GetHelpLink(int aN, int aM)
 
 // Gets description line from Ni line of DOD list
 //    e.g., for displaying a tooltip
-const string
-TObject::GetDescription(int Ni, int Mi)
+const string TObject::GetDescription(int Ni, int Mi)
 {
     size_t prev_pos = 0;
     size_t pos = Descr.find('\n');
@@ -185,8 +219,7 @@ TObject::GetDescription(int Ni, int Mi)
 }
 
 // Writes DOD data to ostream file
-void
-TObject::write( ostream& os )
+void TObject::write( ostream& os )
 {
     os.write( Keywd, MAXKEYWD );
     os.write( (char*)&Type, sizeof(ObjType) );
@@ -199,8 +232,7 @@ TObject::write( ostream& os )
 }
 
 // Reads DOD data from istream file
-void
-TObject::read( istream& is )
+void TObject::read( istream& is )
 {
     is.read( Keywd, MAXKEYWD );
     is.read( (char*)&Type, sizeof(ObjType) );
@@ -212,8 +244,7 @@ TObject::read( istream& is )
 }
 
 // Determines size of one cell (17/10/2012 using only from GemDataStream )
-size_t
-TObject::GetCellSize() const
+size_t TObject::GetCellSize() const
 {
     if( IsNull() )
         return 0;
@@ -222,17 +253,15 @@ TObject::GetCellSize() const
 }
 
 // Determines size of the whole data object (17/10/2012 using only from GemDataStream )
-size_t
-TObject::GetSize() const
+size_t TObject::GetSize() const
 {
-    if( Type == S_ )
+    if( Type == S_ || Type == J_ )
         return GetCellSize();
     return GetCellSize()*N*M;
 }
 
 // Reallocation of object data types
-TValBase*
-TObject::BuildVal(ObjType type, int m)
+TValBase* TObject::BuildVal(ObjType type, int m)
 {
     TValBase* p = 0;
     switch ( type )
@@ -268,6 +297,9 @@ TObject::BuildVal(ObjType type, int m)
     case S_:
         p = new TValString(m, Dynamic);
         break;
+    case J_:
+        p = new TValBson();
+        break;
     default:
         if( type > 0 /*&& type <= 127*/)
             p = new TValFixString(type, Dynamic);
@@ -282,8 +314,7 @@ TObject::BuildVal(ObjType type, int m)
 }
 
 // sets the pointer to data and (maybe) constructs TVal object
-void
-TObject::SetPtr(void* newPtr)
+void TObject::SetPtr(void* newPtr)
 {
     // TVal is constructed only when SetPtr() is called for the 1st time
     if( !pV )
@@ -293,12 +324,12 @@ TObject::SetPtr(void* newPtr)
     if( IsDynamic() && Type == S_ && newPtr )
         SetM( strlen((const char*)newPtr)+1 );
 
-    pV->SetPtr(newPtr);
+    if( Type != J_ )
+      pV->SetPtr(newPtr);
 }
 
 // Useful for the 1st call to allocate a new dynamic data object
-void*
-TObject::Alloc()
+void* TObject::Alloc()
 {
     // No need if object is allocated - type & dimensions are the same
     if( IsNull() )
@@ -307,8 +338,7 @@ TObject::Alloc()
 }
 
 // Reallocating memory for holding values of object
-void*
-TObject::Alloc(int newN, int newM, ObjType newType)
+void* TObject::Alloc(int newN, int newM, ObjType newType)
 {
     if( !IsDynamic() )
         throw TError(GetKeywd(), "TObject:E04 Attempt to reallocate static data object");
@@ -316,12 +346,13 @@ TObject::Alloc(int newN, int newM, ObjType newType)
       if( newType == S_ && abs(newN) != 1 )
         throw TError("For type S_  N should be 1(-1)");
     */
+
     TValBase* pV1 = BuildVal(newType, newM);
     pV1->Alloc( newN*newM );
 
     /* Filling cells if new block is larger */
 
-    if( newType < 0 && newType != S_ )
+    if( newType < 0 && newType != S_ && newType != J_ )
     {
         for( int ii=0; ii<newN; ii++ )
             for( int jj=0; jj<newM; jj++ )
@@ -347,7 +378,7 @@ TObject::Alloc(int newN, int newM, ObjType newType)
     int n = min(N,newN);
     int m = min(M,newM);
 
-    if( !IsNull() )
+    if( !IsNull() &&  newType != J_ )
     {
         if( Type == newType || ( Type > S_ && newType > S_ ) || ( Type < S_ && newType < S_ ) )
         {
@@ -386,8 +417,7 @@ TObject::Alloc(int newN, int newM, ObjType newType)
 }
 
 // freeing memory for holding values of object
-void*
-TObject::Free()
+void* TObject::Free()
 {
     if( !IsDynamic() )
         throw TError(GetKeywd(), "TObject:E05 Attempt to free static data object");
@@ -402,8 +432,7 @@ TObject::Free()
 
 
 // puts string into data object cell
-bool
-TObject::SetString(const char *vbuf, int aN, int aM)
+bool TObject::SetString(const char *vbuf, int aN, int aM)
 {
     check_dim( aN, aM);
     ErrorIf( !vbuf, GetKeywd(),"TObject:W06 Cannot set empty string to object");
@@ -412,7 +441,7 @@ TObject::SetString(const char *vbuf, int aN, int aM)
     if( !pV->SetString(vbuf, ndx(aN,aM)) )
         return false;
 
-    if( Type == S_ && IsDynamic() )  // oct 2005
+    if( ( Type == S_ || Type == J_) && IsDynamic() )  // oct 2005
         M = GetCellSize();
 
     return true;
@@ -420,16 +449,14 @@ TObject::SetString(const char *vbuf, int aN, int aM)
 
 
 // get cell of data object as double
-double
-TObject::Get(int n, int m)
+double TObject::Get(int n, int m)
 {
     check_dim(n,m);
     return pV->Get(ndx(n,m));
 }
 
 // get cell of data object as double
-double
-TObject::GetEmpty(int n, int m)
+double TObject::GetEmpty(int n, int m)
 {
     check_dim(n,m);
     if( pV->IsEmpty( ndx(N, M) ) )
@@ -438,8 +465,7 @@ TObject::GetEmpty(int n, int m)
 }
 
 // put value to cell of data object as double
-void
-TObject::Put(double Value, int n, int m)
+void TObject::Put(double Value, int n, int m)
 {                    // truncated if overflowed !!!
     check_dim(n,m);
     pV->Put(Value, ndx(n,m));
@@ -452,8 +478,7 @@ const size_t szOLABEL = sizeof(char[2]) + sizeof(char)  + sizeof(char)
                         + sizeof(int) + sizeof(int) + sizeof(char[2]);
 
 // Determines size of a binary image of data object in database file
-size_t
-TObject::lenDB() const
+size_t TObject::lenDB() const
 {
     size_t size;
     int Odim_N;
@@ -462,7 +487,13 @@ TObject::lenDB() const
 
     if( pV )
     {
-        if( Type != S_  )
+        if( Type == J_  )
+        {
+            size = (size_t)csize;
+            Odim_N = 1;
+            Odim_M = 1;
+        }
+        else if( Type != S_  )
         {
             size = (size_t)csize*(size_t)N*(size_t)M;
             Odim_N = N;
@@ -472,7 +503,7 @@ TObject::lenDB() const
         {
           if( IsDynamic() )
           {
-            if( pV && pV->GetPtr() )
+            if(  pV->GetPtr() )
                 size = strlen( (char *)pV->GetPtr() )+1;
             else
                 size = 0;
@@ -511,7 +542,13 @@ size_t  TObject::toDB( GemDataStream& f )
 
     if( pV )
     {
-        if( Type != S_  )
+        if( Type == J_  )
+        {
+            size = (size_t)csize;
+            Odim_N = 1;
+            Odim_M = size;
+        }
+        else if( Type != S_  )
         {
             size = (size_t)csize * (size_t)N * (size_t)M;
             Odim_N = N;
@@ -613,7 +650,7 @@ size_t  TObject::ofDB( GemDataStream& f )
     size_t psize;
 
     psize = GetSize();
-    if( Otype != S_  )
+    if( Otype != S_ && Otype != J_ )
         ssize = (size_t)(csize) * Odim_N * Odim_M;
     else
         ssize = Odim_M; // csize
@@ -737,10 +774,9 @@ void TObject::checkUtf8()
 {
   if( strcmp(Keywd, "SPPpar") == 0 ||
       strcmp(Keywd+2, "plt") == 0 ||
-      ( Type>= D_ && Type<= I_ ) || IsNull() )
+      ( Type>= D_ && Type<= I_ ) || IsNull() || Type==J_ )
    return;
   string value;
-  QString valStr;
 
   if( Type == S_ ) // text
   {
@@ -808,7 +844,11 @@ void TObject::toBsonObject( bson *obj )
   }
 
 
-  if( Type == S_ ) // text
+  if( Type == J_ ) // text
+  {
+      bson_append_bson( obj, "val", (bson*)GetPtr()  );
+  }
+  else if( Type == S_ ) // text
   {
       bson_append_string( obj, "val", (const char*)GetPtr()  );
   }
@@ -908,7 +948,13 @@ void TObject::fromBsonObject( const char *obj )
         return;
     }
 
-    if( Type == S_ ) // text
+    if( Type == J_ ) // text
+    {
+        const char *objdata = bson_find_object_null( obj, "val");
+        if( objdata  )
+         bson_create_from_buffer2( (bson*)GetPtr(), objdata, bson_size2(objdata) );
+     }
+    else if( Type == S_ ) // text
     {
         bson_find_string( obj, "val", valStr );
         SetString(valStr.c_str(), 0,0);
@@ -998,10 +1044,10 @@ TObjList::fromDAT(istream& f)
 }
 
 
-const int nTypes = 12;
+const int nTypes = 13;
 static char OBtype[nTypes][3] =
     { "S_", "I_", "U_", "L_", "X_", "F_",
-      "D_", "C_", "N_", "A_", "B_", "H_" };
+      "D_", "C_", "N_", "A_", "B_", "H_", "J_" };
 
 // Loads default configurations from a text .ini file
 void

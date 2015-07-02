@@ -68,7 +68,8 @@ void bson_to_list( const char *data, int datatype, BsonLine* parent )
               value = QString( "%1").arg( (uint64_t) bson_iterator_long(&i));
               break;
          case BSON_DOUBLE:
-              value = QString( "%1").arg( bson_iterator_double(&i));
+              //value = QString( "%1").arg( bson_iterator_double(&i));
+              value.setNum( bson_iterator_double(&i), 'g', 14 );
               break;
          case BSON_STRING:
               value = QString( "%1").arg( bson_iterator_string(&i));
@@ -103,6 +104,15 @@ void bson_to_list( const char *data, int datatype, BsonLine* parent )
 }
 
 void list_to_bson(BsonLine *line, bson* bsonobj );
+
+void list_to_bson_full(BsonLine *headline, bson* bsonobj )
+{
+    bson_destroy(bsonobj );
+    bson_init( bsonobj );
+    for(int ii=0; ii< headline->children.size(); ii++ )
+      list_to_bson( headline->children[ii],  bsonobj );
+    bson_finish( bsonobj );
+}
 
 void list_to_bson(BsonLine *line, bson* bsonobj )
 {
@@ -302,11 +312,7 @@ bool TBsonModel::setData( const QModelIndex& index, const QVariant& value, int r
 		  {	 
              BsonLine *line =lineFromIndex(index);
              line->value = QVariant(value).toString();
-             if( bsonData )
-              bson_destroy(bsonData );
-             bson_init( bsonData );
-             list_to_bson( line, bsonData );
-             bson_finish( bsonData );
+             list_to_bson_full( rootNode, bsonData );
 		  }	 
 	 return true;
 	} 

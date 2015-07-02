@@ -374,6 +374,8 @@ void TProfil::ods_link( int )
     aObj[ o_spppar].SetPtr(  (void *)&pa );
     aObj[ o_spppar].SetM( sizeof( SPP_SETTING ) );
     aObj[ o_sptext].SetPtr(  internalBufer );
+    aObj[ o_bspar].SetPtr(  0 );
+
 }
 
 // set dynamic Objects ptr to values
@@ -386,13 +388,17 @@ void TProfil::dyn_set(int )
     if( mtparm ) mtparm->dyn_set();
     if( syst ) syst->dyn_set();
     if( multi ) multi->dyn_set();
+    // init default bson data to object
+    if(aObj[o_bspar].IsEmpty(0,0) )
+      toBsonObject( (bson *)aObj[o_bspar].GetPtr() );
 }
 
 // free dynamic memory in objects and values
 void TProfil::dyn_kill(int )
 {
     pa.p.tprn = (char *)aObj[o_patprn].Free();
-internalBufer = (char *)aObj[ o_sptext].Free();
+    internalBufer = (char *)aObj[ o_sptext].Free();
+    bson_destroy((bson *)aObj[o_bspar].GetPtr());
     if( rmults ) rmults->dyn_kill();
     if( mtparm ) mtparm->dyn_kill();
     if( syst ) syst->dyn_kill();
@@ -421,6 +427,59 @@ void TProfil::set_def( int )
     if( mtparm ) mtparm->set_def();
     if( syst ) syst->set_def();
     if( multi ) multi->set_def();
+    // init default bson data to object
+    //toBsonObject( (bson *)aObj[o_bspar].GetPtr() );
+}
+
+void TProfil::toBsonObject( bson *obj )
+{
+    MULTIBASE *pmp = multi->pmp;
+    bson_destroy(obj);
+    bson_init(obj);
+    bson_append_int( obj, "pa_PE", pa.p.PE );
+    bson_append_double( obj, "pa_DB", pa.p.DB );
+    bson_append_double( obj, "pa_DHB", pa.p.DHB);
+    bson_append_double( obj, "pa_EPS", pa.p.EPS);
+    bson_append_double( obj, "pa_DK", pa.p.DK );
+    bson_append_double( obj, "pa_DS", pa.p.DS);
+    bson_append_double( obj, "pa_DF", pa.p.DF);
+    bson_append_double( obj, "pa_DFM", pa.p.DFM );
+    bson_append_int( obj, "pa_DP", pa.p.DP);
+    bson_append_int( obj, "pa_IIM",pa.p.IIM );
+    bson_append_int( obj, "pa_PD", pa.p.PD );
+    bson_append_int( obj, "pa_PRD", pa.p.PRD);
+    bson_append_double( obj, "pa_AG", pa.p.AG );
+    bson_append_double( obj, "pa_DGC", pa.p.DGC );
+    bson_append_int( obj, "pa_PSM", pa.p.PSM);
+    bson_append_double( obj, "pa_GAR",pa.p.GAR );
+    bson_append_double( obj, "pa_GAH", pa.p.GAH );
+    bson_append_double( obj, "pa_XwMin", pa.p.XwMin );
+    bson_append_double( obj, "pa_ScMin", pa.p.ScMin);
+    bson_append_double( obj, "pa_DcMin", pa.p.DcMin );
+    bson_append_double( obj, "pa_PhMin", pa.p.PhMin);
+    bson_append_double( obj, "pa_ICmin", pa.p.ICmin );
+    bson_append_int( obj, "pa_PC", pa.p.PC );
+    bson_append_double( obj, "pa_DFYw", pa.p.DFYw );
+    bson_append_double( obj, "pa_DFYaq",pa.p.DFYaq );
+    bson_append_double( obj, "pa_DFYid", pa.p.DFYid );
+    bson_append_double( obj, "pa_DFYr", pa.p.DFYr );
+    bson_append_double( obj, "pa_DFYh", pa.p.DFYh  );
+    bson_append_double( obj, "pa_DFYc", pa.p.DFYc );
+    bson_append_double( obj, "pa_DFYs", pa.p.DFYs );
+    bson_append_int( obj, "pa_DW", pa.p.DW );
+    bson_append_int( obj, "pa_DT", pa.p.DT );
+    bson_append_double( obj, "pa_GAS", pa.p.GAS );
+    bson_append_double( obj, "pa_DG", pa.p.DG);
+    bson_append_double( obj, "pa_DNS", pa.p.DNS);
+    bson_append_double( obj, "pa_IEPS", pa.p.IEPS );
+    bson_append_double( obj, "pKin", pmp->PLIM );
+    bson_append_double( obj, "pa_DKIN", pa.p.DKIN );
+    bson_append_int( obj, "pa_PLLG", pa.p.PLLG);
+    bson_append_double( obj, "tMin", pmp->tMin);
+    bson_append_double( obj, "tau", 0.99999999999999 );
+    bson_append_bool(obj, "kkt", false);
+    bson_append_bool(obj, "log", false);
+    bson_finish(obj);
 }
 
 // opens window with 'Remake record' parameters

@@ -46,7 +46,7 @@ struct TValBase
     virtual ~TValBase()
     {}
 
-    void SetPtr(void* p)
+    virtual void SetPtr(void* p)
     {
         ptr = p;
     }

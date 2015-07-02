@@ -201,7 +201,7 @@ o_ngte, o_nhte, o_nste, o_nvte, o_ncpte, o_nate, o_nute,
     o_pasdref,
     o_parpnptv, /*i 3*/  o_parpmode,   o_partpi, o_partti, o_partvi,
     o_padrprtr,/*f 2*/ o_papmnum, /*f 3*/ o_paaqpar, /*f 5*/
-    o_tpunits, o_tpsv, o_tpptv,
+    o_tpunits, o_tpsv, o_tpptv, o_bspar,
     // BASE  (in project record )
     o_spppar,   // Params
     o_mupmv, o_muname, o_munotes, o_mudim, o_munfl, // Rmults

@@ -22,14 +22,14 @@
 
 #include <fstream>
 #include <vector>
-#include <QJsonObject>
+#include <stdarg.h>
+//#include <QJsonObject>
 
 #include "v_user.h"
 #include "v_vals.h"
 #include "bson.h"
 
 class GemDataStream;
-//struct bson;
 
 
 const char TOKENOLABEL = '^';
@@ -38,10 +38,76 @@ const char TOKENOBJBEGIN = '~';
 //const MINOBJTYPES = -13;
 enum eObjType
 { S_ = 0, I_ = -1, U_ = -2, L_ = -3, X_ = -4, F_ = -5, D_ = -6,
-  C_ = -7, N_ = -8, A_ = -9, B_ = -10, H_ = -11, N_TYPE_ = -12
+  C_ = -7, N_ = -8, A_ = -9, B_ = -10, H_ = -11, J_ = -12, N_TYPE_ = -13
 };
 
 typedef signed char ObjType;
+
+
+struct TValBson:
+            TValBase
+{
+    bson bcobj;
+
+    TValBson(): TValBase(false)
+    { ptr = &bcobj;
+      bcobj.data = 0;
+      bcobj.errstr = 0;
+    }
+
+    ~TValBson()
+    {
+       bson_destroy(&bcobj);
+    }
+
+    void SetPtr(void* p)
+    {
+        Error( "Bson object", "Invalid operation");
+        ptr = p;
+    }
+
+    size_t cSize() const
+    {
+      Error( "Bson object", "Invalid object type for old DataBase");
+      return bson_size(&bcobj);
+    }
+
+    // see Alloc() description for TVal<T>
+    void* Alloc(size_t sz)
+    {
+        bson_destroy(&bcobj);
+        if( sz )
+         bcobj.data = new char[ sz ];
+        return ptr;
+    }
+
+    double Get(size_t /*ndx*/) const
+    {
+        return 0.;
+    }
+    void Put(double /*val*/, size_t /*ndx*/)
+    {}
+
+    bool IsAny(size_t /*ndx*/) const
+    {
+        return false;
+    }
+
+    bool IsEmpty(size_t /*ndx*/) const
+    {
+        return (bcobj.data==0);
+    }
+
+    string GetString(size_t /*ndx*/) const;
+
+    //  bool VerifyString(const char* s);
+    bool SetString(const char* s, size_t ndx);
+
+    void write(GemDataStream& s, size_t size);
+
+    void read(GemDataStream& s, size_t size );
+
+};
 
 
 //const int MAXKEYWD = 6+1;
@@ -70,6 +136,7 @@ class TObject
     //  TObject();  // for TArray
 
 protected:
+
     void check() const
     {
         ErrorIf(IsNull(), GetKeywd(), "Access to null object");
@@ -81,10 +148,12 @@ protected:
         ErrorIf(n >= N
                 || m >= M, GetKeywd(), "Cell index beyond object dimension");
     }
+
     void check_type(ObjType typ) const
     {
         ErrorIf(typ > 126 || typ < N_TYPE_, GetKeywd(), "Invalid object type");
     }
+
     void write(ostream & os);
     void read(istream & os);
 
@@ -97,6 +166,7 @@ protected:
     //*  void PutEmpty( uint n=0, uint m=0 );
 
 public:
+
     TObject (const char* name, ObjType type, int n, int m,
              bool dyn, char indexCode, const string descr);
     TObject (istream & f);
@@ -114,6 +184,7 @@ public:
     {
         return Keywd;
     }
+
     string GetFullName(int aN, int aM);
     string GetHelpLink(int aN, int aM);
 
@@ -121,22 +192,27 @@ public:
     {
         return Type;
     }
+
     char GetIndexationCode() const
     {
         return IndexationCode;
     }
+
     bool IsDynamic() const
     {
         return Dynamic;
     }
+
     void setDynamic( bool dat )
     {
         Dynamic = dat; // Sveta inernal not using this function
     }
+
     int GetN() const
     {
         return N;
     }
+
     int GetM() const
     {
         return M;
@@ -146,6 +222,7 @@ public:
     {
       if(IsNull())
     	  return 0;
+
     	return N;
     }
 
@@ -153,7 +230,7 @@ public:
     {
       if(IsNull())
       	  return 0;
-      if(Type == S_ )	
+      if(Type == S_ || Type == J_)
     	  return 1; 
         return M;
     }
@@ -162,18 +239,22 @@ public:
     {
         return ((!pV) ? 0 : pV->GetPtr());
     }
+
     bool IsNull() const
     {
         return !GetPtr();
     }
+
     bool IsAny(int N, int M) const
     {
-	return pV->IsAny( ndx(N, M) );
+      return pV->IsAny( ndx(N, M) );
     }
+
     bool IsEmpty(int N, int M) const
     {
-	return pV->IsEmpty( ndx(N, M) );
+      return pV->IsEmpty( ndx(N, M) );
     }
+
     const string GetDescription(int Ni, int Mi);
 
     //--- Object parameters manipulation
@@ -181,14 +262,17 @@ public:
     {
         N = newN;
     }
+
     void SetM(unsigned newM)
     {
         M = newM;
     }
+
     void SetDim(unsigned newN, unsigned newM)
     {
         N = newN, M = newM;
     }
+
     void SetPtr(void *newPtr);
 
     //--- Value manipulation
@@ -202,10 +286,12 @@ public:
         check_dim(aN, aM);
         return ((GetPtr())? pV->GetString(ndx(aN, aM)) : string (S_EMPTY));
     }
+
     string GetStringEmpty(int aN = 0, int aM = 0) const
     {
         return ((GetPtr())? pV->GetString(ndx(aN, aM)) : string (S_EMPTY));
     }
+
     bool SetString(const char* vbuf, int aN = 0, int aM = 0);
 
     //--- Object manipulation

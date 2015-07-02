@@ -125,12 +125,13 @@ void TCPage::AddFields( bool info )
    	  switch( fi.fType )
        {
        case ftBson:
-        { bson *abson=new bson;
-          FJson fjson_(/*"pHtitr-node-0-000000.json"*/"numeric.settings.json" );
-          fjson_.LoadBson(abson);
+        { //bson *abson=new bson;
+          //FJson fjson_(/*"pHtitr-node-0-000000.json"*/"numeric.settings.json" );
+          //fjson_.LoadBson(abson);
+          bson *abson=(bson *)aObj[ fi.nO /*o_bspar*/].GetPtr();
           QStringList aHeaderData;
           aHeaderData << "key" << "value";
-          TBsonModel* model = new TBsonModel( aFlds,abson, aHeaderData, this );
+          TBsonModel* model = new TBsonModel( aFlds, abson, aHeaderData, this );
           aModels.push_back( model );
           TBsonView* fieldTable =  new TBsonView( aFlds,this );
           TBsonDelegate *deleg = new TBsonDelegate(this);
