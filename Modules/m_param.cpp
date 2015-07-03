@@ -391,6 +391,8 @@ void TProfil::dyn_set(int )
     // init default bson data to object
     if(aObj[o_bspar].IsEmpty(0,0) )
       toBsonObject( (bson *)aObj[o_bspar].GetPtr() );
+    // read constants from bson
+    fromBsonObject( (bson *)aObj[o_bspar].GetPtr() );
 }
 
 // free dynamic memory in objects and values
@@ -431,8 +433,16 @@ void TProfil::set_def( int )
     //toBsonObject( (bson *)aObj[o_bspar].GetPtr() );
 }
 
+void TProfil::fromBsonObject( bson *obj )
+{
+    wrknode->SectionFromBson( obj->data, 1/*s_MethodEQS*/ );
+}
+
 void TProfil::toBsonObject( bson *obj )
 {
+    wrknode->SectionToBson( obj, 1/*s_MethodEQS*/ );
+    return;
+   /*
     MULTIBASE *pmp = multi->pmp;
     bson_destroy(obj);
     bson_init(obj);
@@ -480,6 +490,7 @@ void TProfil::toBsonObject( bson *obj )
     bson_append_bool(obj, "kkt", false);
     bson_append_bool(obj, "log", false);
     bson_finish(obj);
+   */
 }
 
 // opens window with 'Remake record' parameters

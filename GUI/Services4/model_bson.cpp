@@ -293,7 +293,10 @@ QVariant TBsonModel::data( const QModelIndex& index, int role ) const
                if( index.column()== 0 )
                    return item->keyname;
                else
-                   return item->value;
+                   if( index.column()== 1 )
+                       return item->value;
+                   else
+                       return getDescription( index );
            }
       case Qt::ToolTipRole:
       case Qt::StatusTipRole:
@@ -313,6 +316,7 @@ bool TBsonModel::setData( const QModelIndex& index, const QVariant& value, int r
              BsonLine *line =lineFromIndex(index);
              line->value = QVariant(value).toString();
              list_to_bson_full( rootNode, bsonData );
+             TProfil::pm->fromBsonObject( (bson *)aObj[flds[0].nO].GetPtr() );
 		  }	 
 	 return true;
 	} 
