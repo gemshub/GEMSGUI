@@ -130,7 +130,7 @@ void TCPage::AddFields( bool info )
           //fjson_.LoadBson(abson);
           bson *abson=(bson *)aObj[ fi.nO /*o_bspar*/].GetPtr();
           QStringList aHeaderData;
-          aHeaderData << "key" << "value";
+          aHeaderData << "key" << "value" << "comment";
           TBsonModel* model = new TBsonModel( aFlds, abson, aHeaderData, this );
           aModels.push_back( model );
           TBsonView* fieldTable =  new TBsonView( aFlds,this );

@@ -147,10 +147,6 @@ class TBsonView: public QTreeView
  public:
      TBsonView( const QList<FieldInfo> aFlds,QWidget * parent = 0 );
      void printJson( fstream& ff );
-     /*void resetList()
-	 {
-         ((TBsonModel *)(model() ))->setupModelData();
-     }*/
      // return current size of object defined by Model
      void getObjectSize( int& rowSize, int& colSize );
 };

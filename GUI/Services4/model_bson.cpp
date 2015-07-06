@@ -245,7 +245,7 @@ int TBsonModel::rowCount( const QModelIndex& parent ) const
 
 int TBsonModel::columnCount( const QModelIndex& parent ) const
 {
-  return 2;
+  return 3;
 }	
 
 Qt::ItemFlags TBsonModel::flags( const QModelIndex& index ) const
@@ -274,6 +274,7 @@ QString TBsonModel::getDescription( const QModelIndex& index ) const
     item->keyname.toInt(&ok,10);
     if( ok && item->parent->type ==  BSON_ARRAY )
       item = item->parent;
+    // !!!  Used only for one tipe object,  must be changed in future
     TRWArrays fldsDesk( fo_sMod, MULTI_fields );
     int ii = fldsDesk.findFld(item->keyname.toUtf8().data());
     if( ii>=0 )
@@ -316,6 +317,7 @@ bool TBsonModel::setData( const QModelIndex& index, const QVariant& value, int r
              BsonLine *line =lineFromIndex(index);
              line->value = QVariant(value).toString();
              list_to_bson_full( rootNode, bsonData );
+             // !!!  Used only for one tipe object, must be changed in future
              TProfil::pm->fromBsonObject( (bson *)aObj[flds[0].nO].GetPtr() );
 		  }	 
 	 return true;
@@ -371,7 +373,7 @@ QWidget *TBsonDelegate::createEditor(QWidget *parent,
                 return lineEdit;
               }
         // main constructions
-        case BSON_OBJECT:
+       case BSON_OBJECT:
        case BSON_ARRAY:
        default:
              Error("TBsonDelegate" ,"can't print type " );
@@ -469,7 +471,7 @@ void TBsonView::getObjectSize( int& rowSize, int& colSize )
      connect(act, SIGNAL(triggered()), this, SLOT(CmHelp()));
      menu->addAction(act);
           	    
-     if( (line->type == BSON_INT || line->type == BSON_LONG ||
+     if( index.column()==1 && (line->type == BSON_INT || line->type == BSON_LONG ||
                 line->type == BSON_DOUBLE )  )
          {
      	    menu->addSeparator();
