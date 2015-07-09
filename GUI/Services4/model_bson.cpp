@@ -69,7 +69,7 @@ void bson_to_list( const char *data, int datatype, BsonLine* parent )
               break;
          case BSON_DOUBLE:
               //value = QString( "%1").arg( bson_iterator_double(&i));
-              value.setNum( bson_iterator_double(&i), 'g', 14 );
+              value.setNum( bson_iterator_double(&i), 'g', 10 );
               break;
          case BSON_STRING:
               value = QString( "%1").arg( bson_iterator_string(&i));
