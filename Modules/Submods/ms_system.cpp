@@ -844,14 +844,14 @@ void TSyst::setDefCheck()
 
 void TSyst::phase_data_load()
 {
-    time_t crt;
-    TPhase* aPH=(TPhase *)(aMod[RT_PHASE]);
+    ///time_t crt;
+    ///TPhase* aPH=(TPhase *)(aMod[RT_PHASE]);
     RMULTS* mup = TRMults::sm->GetMU();
-    aPH->ods_link(0);
+    ///aPH->ods_link(0);
 
     for(short k=0; k<mup->Fi; k++ )
     {
-        aPH->TryRecInp( mup->SF[k], crt, 0 );
+        /// aPH->TryRecInp( mup->SF[k], crt, 0 );
         switch( mup->PHC[k] )
         { /* Load begin parametres */
         case PH_AQUEL:
@@ -865,46 +865,30 @@ void TSyst::phase_data_load()
             break;
         case PH_POLYEL:
         case PH_SORPTION:
-            sorption_data_load( aPH, k );
+            // sveta 09/07/2015 delete sorption from new version
+            // sorption_data_load( aPH, k );
         case PH_SINDIS:
-/*            if( sy.PAalp != S_OFF )
-                sy.Aalp[k] = aPH->php->Asur;
-            if( sy.PSigm != S_OFF )
-            {
-                sy.Sigm[k][0] = aPH->php->Sigma0;
-                sy.Sigm[k][1] = aPH->php->SigmaG;
-            }
-            if( sy.PXr0h0 != S_OFF )
-            {
-                sy.Xr0h0[k][0] = aPH->php->R0p;
-                sy.Xr0h0[k][1] = aPH->php->h0p;
-            }
-            if( sy.PXepsC != S_OFF )
-            {
-                sy.XEpsC[k][0] = aPH->php->Eps;
-                sy.XEpsC[k][1] = aPH->php->Cond;
-            } */
             break;
         default:
             ; /* Error ! */
         }
         // Moved by DK on 25.07.2006
         if( sy.PAalp != S_OFF )
-            sy.Aalp[k] = aPH->php->Asur;
+            sy.Aalp[k] = mup->phCopy[k][0]; //aPH->php->Asur;
         if( sy.PSigm != S_OFF )
         {
-            sy.Sigm[k][0] = aPH->php->Sigma0;
-            sy.Sigm[k][1] = aPH->php->SigmaG;
+            sy.Sigm[k][0] = mup->phCopy[k][1]; //aPH->php->Sigma0;
+            sy.Sigm[k][1] = mup->phCopy[k][2]; //aPH->php->SigmaG;
         }
         if( sy.PXr0h0 != S_OFF )
         {
-            sy.Xr0h0[k][0] = aPH->php->R0p;
-            sy.Xr0h0[k][1] = aPH->php->h0p;
+            sy.Xr0h0[k][0] = mup->phCopy[k][3]; //aPH->php->R0p;
+            sy.Xr0h0[k][1] = mup->phCopy[k][4]; //aPH->php->h0p;
         }
         if( sy.PXepsC != S_OFF )
         {
-            sy.XEpsC[k][0] = aPH->php->Eps;
-            sy.XEpsC[k][1] = aPH->php->Cond;
+            sy.XEpsC[k][0] = mup->phCopy[k][5]; //aPH->php->Eps;
+            sy.XEpsC[k][1] = mup->phCopy[k][6]; //aPH->php->Cond;
         }
     }  /* k */
 }

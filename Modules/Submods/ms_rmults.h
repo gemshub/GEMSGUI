@@ -96,6 +96,9 @@ typedef struct
     *AV;   // Vector of IC molar volumes, cm3/mole [0:N-1]
    char // build from DCOMP/REACDC records
     *DCF;  // List of DC chemical formulae (comma separated) text
+   float (*phCopy)[7]; // copy data from all phase records
+                 // (Aalp, Sigm[k][0], Sigm[k][1], Xr0h0[k][0], Xr0h0[k][1], XEpsC[k][0], XEpsC[k][1]  )
+
 }
 RMULTS;
 

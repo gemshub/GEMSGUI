@@ -83,6 +83,8 @@ aObj[ o_nlphv].SetPtr(  mu.nlPHv );
 aObj[ o_nlphv].SetDim( mu.Fi, 1 );
 aObj[ o_nlphh].SetPtr(  mu.nlPHv );
 aObj[ o_nlphh].SetDim( 1, mu.Fi );
+aObj[ o_phcopy].SetPtr( mu.phCopy );
+aObj[ o_phcopy].SetDim( mu.Fi, 7 );
 // end of add
     aObj[ o_muphc].SetPtr( mu.PHC );
     aObj[ o_muphc].SetDim( mu.Fi, 1 );
@@ -134,6 +136,7 @@ aObj[ o_nldchs].SetDim( 1, mu.Ls );
 aObj[ o_nlphh].SetPtr(  mu.nlPHv );
 aObj[ o_nlphh].SetDim( 1, mu.Fi );
 // end of add
+mu.phCopy  = (float (*)[7])aObj[ o_phcopy ].GetPtr();
 
     mu.SA  = (char (*)[BC_RKLEN])aObj[ o_musa ].GetPtr();
     mu.SB  = (char (*)[IC_RKLEN])aObj[ o_musb ].GetPtr();
@@ -177,6 +180,8 @@ aObj[ o_nldchs].SetDim( 1, 0 );
 aObj[ o_nlphh].SetPtr(  0 );
 aObj[ o_nlphh].SetDim( 1, 0 );
 // end of add
+mu.phCopy  = (float (*)[7])aObj[ o_phcopy ].Free();
+
     mu.SA  = (char (*)[BC_RKLEN])aObj[ o_musa ].Free();
     mu.SB  = (char (*)[IC_RKLEN])aObj[ o_musb ].Free();
     mu.FN  = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn ].Free();
@@ -296,6 +301,8 @@ aObj[ o_nldchs].SetDim( 1, 0 );
         mu.DCF = (char *)aObj[ o_mudcf].Alloc( 1, DCFlen*MAXFORMULA, S_ );
     }
     else  mu.DCF = (char *)aObj[ o_mudcf ].Free();
+
+mu.phCopy  = (float (*)[7])aObj[ o_phcopy ].Alloc( mu.Fi, 7, F_ );
 }
 
 
@@ -325,6 +332,7 @@ mu.DCC3 = 0;
 mu.nlICv  = 0;
 mu.nlDCv  = 0;
 mu.nlPHv  = 0;
+mu.phCopy = 0;
     mu.DCS = 0;
     mu.Pl  = 0;
     mu.ICC = 0;
@@ -588,6 +596,13 @@ void TRMults::PHmake()
         // read Phase record
         aPH->TryRecInp( mu.SF[kk], crt, 0 );
         mu.PHC[kk] = aPH->php->PphC;
+        mu.phCopy[kk][0] = aPH->php->Asur;
+        mu.phCopy[kk][1] = aPH->php->Sigma0;
+        mu.phCopy[kk][2] = aPH->php->SigmaG;
+        mu.phCopy[kk][3] = aPH->php->R0p;
+        mu.phCopy[kk][4] = aPH->php->h0p;
+        mu.phCopy[kk][5] = aPH->php->Eps;
+        mu.phCopy[kk][6] = aPH->php->Cond;
         // test and load � DCOMP and REACDC
         fillValue( dkey, '\0', MAXRKEYLEN );
 
@@ -621,6 +636,7 @@ void TRMults::PHmake()
             /* dependent component read! */
             mu.DCS[jj] =  aPH->php->DCS[ij]; /* mu[p].DCS[jj]; */
             mu.DCC[jj] =  aPH->php->DCC[ij]; /* mu[p].DCC[jj]; */
+            //  Need loading of phase records (and data) in one loop (remove from phase_data_load())
             ///if( mu.PmvDF == S_ON )
             ///{ // insert dependent component formula
             ///    forlen = strlen( Formula );

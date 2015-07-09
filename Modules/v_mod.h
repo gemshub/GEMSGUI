@@ -97,7 +97,7 @@ enum param_objects {                  // work objects
     o_muas, o_muav, o_musf2, o_musm2,
 o_musm3, o_mudcc3,
 o_nlicv, o_nlich, o_nldcv, o_nldch,
-o_nldcvs, o_nldchs, o_nlphv, o_nlphh, // new !!!
+o_nldcvs, o_nldchs, o_nlphv, o_nlphh, o_phcopy, // new !!!
     // MTPARM
     /*o_tpunits, o_tpsv, o_tpptv, moved eldb*/ o_tp_T,  o_tp_P,
     o_tp_RT,  o_tprow,  o_tpepsw, o_tpvisw, o_tp_L,
