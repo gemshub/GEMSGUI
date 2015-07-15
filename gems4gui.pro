@@ -71,6 +71,7 @@ NUMERICS_H   =  $$NUMERICS_CPP
 GEMS4K_H     =  $$GEMS4K_CPP
 
 EJDB_PATH = ../standalone/EJDB
+YAML_PATH = ../standalone/YAML
 
 win32{
    EJDB_LIB_PATH =  $$EJDB_PATH/build-win32
@@ -78,6 +79,9 @@ win32{
 unix{
    EJDB_LIB_PATH =  $$EJDB_PATH/build
 }
+
+YAML_LIB_PATH =  $$YAML_PATH/build
+YAML_H =  $$YAML_PATH/include
 
 EJDB_BSON_H = $$EJDB_PATH/src/bson
 EJDB_EJDB_H = $$EJDB_PATH/src/ejdb
@@ -108,6 +112,7 @@ INCLUDEPATH   += $$EJDB_BSON_H
 INCLUDEPATH   += $$EJDB_EJDB_H
 INCLUDEPATH   += $$EJDB_GENERATED_H
 INCLUDEPATH   += $$EJDB_TCUTIL_H
+INCLUDEPATH   += $$YAML_H
 
 MOC_DIR = tmp
 UI_DIR        = $$MOC_DIR
@@ -129,6 +134,9 @@ include($$EJDB_PATH/tcejdb.pri)
 
 #CONFIG(release, debug|release): LIBS += -L$$EJDB_LIB_PATH/release/src/ -lejdb
 #CONFIG(debug, debug|release): LIBS += -L$$EJDB_LIB_PATH/debug/src/ -lejdb
+
+CONFIG(release, debug|release): LIBS += -L$$YAML_LIB_PATH/release/ -lyaml-cpp
+CONFIG(debug, debug|release): LIBS += -L$$YAML_LIB_PATH/debug/ -lyaml-cpp
 
 
 unix|win32: CONFIG(release, debug|release): LIBS += -L$$PWD/../standalone/Reaktoro/build/release/lib/ -lReaktoro
