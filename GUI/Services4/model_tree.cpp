@@ -539,7 +539,7 @@ TTreeView::TTreeView( QWidget * parent ):
 	    setFont( pVisorImp->getCellFont() );
 	//    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 #if QT_VERSION >= 0x050000
-
+    header()->setSectionsClickable(true);
     header()->setSectionResizeMode( /*QHeaderView::ResizeToContents*/QHeaderView::Interactive );
 
 #else
@@ -556,6 +556,14 @@ TTreeView::TTreeView( QWidget * parent ):
 
        connect( this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotPopupContextMenu(QPoint)));
+       connect( header(), SIGNAL(sectionClicked(int)),
+            this, SLOT(changeCurrent(int)));
+}
+
+void TTreeView::changeCurrent( int section )
+{
+    QModelIndex index = model()->index( 0, section, rootIndex());
+    setCurrentIndex(index);
 }
 
 //Printing all items to txt file
@@ -913,6 +921,8 @@ void TTreeView::printList( fstream& ff )
     void TTreeView::CmHelp()
     {
       QModelIndex index = currentIndex();
+      //if( !index.isValid() )
+      //   index = model()->index(0, 0, rootIndex() );
       int iN, iM;
       FieldInfo fld =  ((TTreeModel *)(index.model() ))->getInfo( index, iN, iM);
       if(iN == -1 || iM == -1 || fld.nO < 0 )
