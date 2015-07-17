@@ -707,10 +707,10 @@ void TGEM2MT::outMulti()
   allocNodeWork();  //????
   LinkCSD(0);
 
-  string path = na->PutGEM2MTFiles( window(),  ( mtp->PsSdat==S_OFF ? ft_json : ft_binary),
+  string path = na->PutGEM2MTFiles( window(),  ( mtp->PsSdat==S_OFF ? ft_json : ft_yaml),
         mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, true ); // with Nod0 and Nod1
   na->PutDBRFileslist( window(), path,
-       mtp->nIV, ( mtp->PsSdat==S_OFF ? ft_json : ft_binary),
+       mtp->nIV, ( mtp->PsSdat==S_OFF ? ft_json : ft_yaml),
         mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF );
 
   }

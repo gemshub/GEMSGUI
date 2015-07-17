@@ -394,7 +394,7 @@ TBsonView::TBsonView( const QList<FieldInfo> aFlds,QWidget * parent ):
      setFont( pVisorImp->getCellFont() );
      setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 #if QT_VERSION >= 0x050000
-
+     header()->setSectionsClickable(true);
      header()->setSectionResizeMode( /*QHeaderView::ResizeToContents*/QHeaderView::Interactive );
 
 #else
@@ -411,8 +411,17 @@ TBsonView::TBsonView( const QList<FieldInfo> aFlds,QWidget * parent ):
 
         connect( this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotPopupContextMenu(QPoint)));
+        connect( header(), SIGNAL(sectionClicked(int)),
+             this, SLOT(changeCurrent(int)));
 }
 
+void TBsonView::changeCurrent( int section )
+{
+    if( !currentIndex().isValid() )
+    { QModelIndex index = model()->index( 0, section, rootIndex());
+      setCurrentIndex(index);
+    }
+}
 // return current size of object defined by Model
 void TBsonView::getObjectSize( int& rowSize, int& colSize )
 {

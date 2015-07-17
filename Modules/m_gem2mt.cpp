@@ -1135,7 +1135,7 @@ void TGEM2MT::savePoint( )
           "Save node array into a set of disk files to resume the task later (Yes),\n"
           " or cancel the RMT task (No)?" ) )
        {
-         string path = na->PutGEM2MTFiles( window(),  ( mtp->PsSdat==S_OFF ? ft_json : ft_binary),
+         string path = na->PutGEM2MTFiles( window(),  ( mtp->PsSdat==S_OFF ? ft_json : ft_yaml),
                mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, true ); // with Nod0 and Nod1
          mtp->notes[0] = '@';
          strncpy( mtp->notes+1, path.c_str(), MAXFORMULA-1 );

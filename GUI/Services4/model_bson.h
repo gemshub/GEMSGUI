@@ -132,6 +132,7 @@ class TBsonView: public QTreeView
 	 
  protected slots:
     void slotPopupContextMenu(const QPoint& pos);
+    void changeCurrent( int section );
 
  public slots:
     void CmHelp();

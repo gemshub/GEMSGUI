@@ -568,7 +568,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       na->pCNode()->NodeStatusFMT = No_nodearray;
 
 
-   na->PutGEM2MTFiles( par, ( flags[1] == S_ON ? ft_json : ft_binary ), ( flags[2] == S_ON ),
+   na->PutGEM2MTFiles( par, ( flags[1] == S_ON ? ft_json : ft_yaml ), ( flags[2] == S_ON ),
            ( flags[3] == S_ON ),  true );// addMui, to txt
 //Test to compare standalone  na->GEM_print_ipm( "GemsCalcPhase.txt" );
    }
