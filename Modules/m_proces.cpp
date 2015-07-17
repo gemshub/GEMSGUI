@@ -1279,14 +1279,12 @@ void TProcess::internalCalc()
     char buf[300];
     string pepstkey;
 
-    
     while( pep->Loop ) // main cycle of process
     {
         sprintf(buf, " step %d (%s)", pep->c_nrk, pep->stkey );
         Vmessage = "Process simulation: ";
         Vmessage += buf;
         Vmessage += ". Please, wait (may take long)...";
-
 
 #ifdef Use_mt_mode
     if( pep->Istat >= P_MT_MODE )
@@ -1370,6 +1368,7 @@ void TProcess::internalCalc()
         //if( nRec >= 0 )
             pep->syt = rt[RT_SYSEQ].GetTime( pep->stkey );
 
+TProfil::pm->outMultiTxt( "ProcessCalc_Eqstat_Before.txt"  );
 if( pep->PsRT != S_OFF )
 {  // Time-dependent calculations
 //    pep->Ntim;     pep->NTau;    pep->Tau[];
@@ -1384,6 +1383,8 @@ else {
     if( pep->kdt )
         pep->kst++;
 }
+TProfil::pm->outMultiTxt( "Process_CalcEqstat_After.txt"  );
+
 //	    pVisorImp->CalcMulti();
         if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
 //13/08/2009        	    if( pep->Istat < P_MT_MODE )
