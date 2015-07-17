@@ -831,7 +831,7 @@ void TVisorImp::CmPrevious()
 }
 
 // for Qt first argument of macro is ignored
-#define TCM_EV_COMMAND(mm,ff)	void TVisorImp::ff() \
+#define TCM_EV_COMMAND(mm,ff)    void TVisorImp::ff() \
                                { TCModuleImp *actwin = activeMdiChild();\
                                  if( actwin )\
                                  {  ((TCModule*)aMod[actwin->rtNum()])->ff(); \
@@ -967,6 +967,8 @@ void TVisorImp::CmRunIPM()
 {
     TMultiSystem::sm->pmp->pNP =
         ( sactionSimplex->isChecked())? 0: 1;
+    TMultiSystem::sm->pmp->reaktoroUseSimplex =
+        ( sactionSimplex->isChecked())? 1 : 0;
     if( sactionPrecise->isChecked() && !TProfil::pm->pa.p.PRD )
           TProfil::pm->pa.p.PRD = -5; // Changed
     TProfil::pm->pa.p.PRD =
