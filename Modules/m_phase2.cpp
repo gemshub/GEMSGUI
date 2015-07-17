@@ -48,19 +48,21 @@ void TPhase::Set_SolMod_Phase_coef()
                       php->npxM = 4;  // MaxOrd
                       if( php->ncpN < 1 ) // NPar
                           php->ncpN = 1;
-                      if( php->ncpN > (php->nDC * php->nDC * 4. ))
-                          php->ncpN = php->nDC * php->nDC * 4.;   // Check max N of parameters!
+                      if( php->ncpN > php->nDC )
+                          php->ncpN = php->nDC;   // Check max N of parameters!
                       php->ncpM = 3;  // NPcoef
                       break;
        case SM_CEF: // = '$', built-in multicomponent multisite solid-solution model (CALPHAD)
                        // php->nscM = 3;  // NP_DC  // reciprocal energies and their dependence on T
                        php->nrcp = 0;  // number of coefficients per reciprocal dG parameter
-                       php->npxM = 4;  // MaxOrd
+//                       php->npxM = php->nSiT*2;
+                       if( php->npxM < 2 || php->npxM > 10 )
+                           php->npxM = 4;  // MaxOrd
                        if( php->ncpN < 1 ) // NPar
                            php->ncpN = 1;
-                       if( php->ncpN > (php->nDC * php->nDC * 4. ))
-                       php->ncpN = php->nDC * php->nDC * 4.;   // Check max N of parameters!
-                       php->ncpM = 3;  // NPcoef
+                       if( php->ncpN > (php->nDC * 2 + 4 ))
+                       php->ncpN = php->nDC * 2 + 4.;   // Check max N of parameters!
+                       php->ncpM = 4;  // NPcoef
        break;
                       break;
        case SM_VANLAAR:   // Van Laar model (multicomponent)
@@ -1435,16 +1437,17 @@ void TPhase::set_def_comments( bool clearall,
               case SM_OTHER:   // Customized hardcoded solid-solution models
                              break;
               case SM_BERMAN:   // Sublattice mixing model (multicomponent), site interactions
-                   strncpy( php->dcpcl[0], "rc0", MAXDCNAME );
-                   strncpy( php->dcpcl[1], "rc1 /T", MAXDCNAME );
-                   strncpy( php->dcpcl[2], "rc2 *T^2", MAXDCNAME );
+//                   strncpy( php->dcpcl[0], "c0", MAXDCNAME );
+//                   strncpy( php->dcpcl[1], "c1 /T", MAXDCNAME );
+//                   strncpy( php->dcpcl[2], "c2 /P", MAXDCNAME );
                   //               php->nscM = 1;
                   //          php->ncpM = 3;  // NPcoef
                              break;
               case SM_CEF:  //  = '$',    built-in multicomponent multisite solid-solution model (CALPHAD)
-                  strncpy( php->dcpcl[0], "rc0", MAXDCNAME );
-                  strncpy( php->dcpcl[1], "rc1 /T", MAXDCNAME );
-                  strncpy( php->dcpcl[2], "rc2 *T^2", MAXDCNAME );
+//                  strncpy( php->dcpcl[0], "c0", MAXDCNAME );
+//                  strncpy( php->dcpcl[1], "c1 /T", MAXDCNAME );
+//                  strncpy( php->dcpcl[2], "c2 /lnT", MAXDCNAME );
+//                  strncpy( php->dcpcl[3], "c3 /P", MAXDCNAME );
                             break;
               case SM_VANLAAR:   // Van Laar model (multicomponent)
                    //          php->ncpM = 3;  // NPcoef
@@ -1626,7 +1629,7 @@ void TPhase::set_def_comments( bool clearall,
                     strncpy( php->ipccl[0], "w1", MAXDCNAME );
                     strncpy( php->ipccl[1], "w2", MAXDCNAME );
                     strncpy( php->ipccl[2], "w3", MAXDCNAME );
-//                    strncpy( php->ipccl[3], "w4", MAXDCNAME );
+                    strncpy( php->ipccl[3], "w4", MAXDCNAME );
                       break;
                  case SM_VANLAAR:   // Van Laar model (multicomponent)
                       strncpy( php->ipccl[0], "w1", MAXDCNAME );
