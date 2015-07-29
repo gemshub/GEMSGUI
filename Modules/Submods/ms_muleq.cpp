@@ -426,7 +426,8 @@ void TMulti::EqstatExpand( const char *key, bool calcActivityModels, bool calcKi
 
     // recalculate kinetic restrictions for DC
     if( pmp->pULR && pmp->PLIM )
-         Set_DC_limits( DC_LIM_INIT );
+//         Set_DC_limits( DC_LIM_INIT );
+        Set_DC_limits( true );    // test 29.07.15 (dangerous!!!!!!!!!!)
 
     // calculate elemental chemical potentials in J/mole
     for( i=0; i<pmp->N; i++ )
