@@ -28,7 +28,7 @@
      <x>0</x>
      <y>0</y>
      <width>1121</width>
-     <height>28</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Record">
@@ -115,6 +115,7 @@
     <addaction name="actionIPOPT"/>
     <addaction name="actionIPNewton"/>
     <addaction name="actionIPM4K"/>
+    <addaction name="actionIPAction"/>
    </widget>
    <widget class="QMenu" name="smenu_View">
     <property name="title">
@@ -1326,6 +1327,11 @@
    </property>
    <property name="text">
     <string>IPM4K (Karpov, Reaktoro)</string>
+   </property>
+  </action>
+  <action name="actionIPAction">
+   <property name="text">
+    <string>IPAction (Reaktoro)</string>
    </property>
   </action>
  </widget>

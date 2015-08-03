@@ -88,8 +88,8 @@ EJDB_EJDB_H = $$EJDB_PATH/src/ejdb
 EJDB_TCUTIL_H = $$EJDB_PATH/src/tcutil
 
 #EJDB_GENERATED_H = $$EJDB_LIB_PATH/debug/src/generated
-CONFIG(release, debug|release): EJDB_GENERATED_H = $$EJDB_LIB_PATH/debug/src/generated
-CONFIG(debug, debug|release): EJDB_GENERATED_H = $$EJDB_LIB_PATH/release/src/generated
+CONFIG(release, debug|release): EJDB_GENERATED_H = $$EJDB_LIB_PATH/release/src/generated
+CONFIG(debug, debug|release): EJDB_GENERATED_H = $$EJDB_LIB_PATH/debug/src/generated
 
 DEPENDPATH   += $$QWT6_H
 DEPENDPATH   += $$SERVICES4_H
