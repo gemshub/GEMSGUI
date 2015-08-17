@@ -445,7 +445,7 @@ double
 TObject::GetEmpty(int n, int m)
 {
     check_dim(n,m);
-    if( pV->IsEmpty( ndx(N, M) ) )
+    if( pV->IsEmpty( ndx(n, m) ) )
         return DOUBLE_EMPTY;
     return pV->Get(ndx(n,m));
 }

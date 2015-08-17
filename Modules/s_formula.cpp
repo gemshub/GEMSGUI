@@ -568,6 +568,7 @@ void TFormula::TestIC( const char* key, int N, char *ICsym )
         memset( ICS, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICS, aCn[i].c_str(), MAXICNAME+MAXSYMB );
         ICS[MAXICNAME+MAXSYMB] = 0;
+        ICS[MAXICNAME+MAXSYMB+1] = 0;
         fixup_ics( ICS );
         for(int j=0; j<N; j++ )
         {
@@ -606,6 +607,7 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
         memset( ICs, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICs, aCn[i].c_str(), MAXICNAME+MAXSYMB );
         ICs[MAXICNAME+MAXSYMB]=0;
+        ICs[MAXICNAME+MAXSYMB+1]=0;
         fixup_ics( ICs );
         // read and if necessary recalc IComp
         aIC->TryRecInp( ICs, icrtim, 0 );
@@ -642,6 +644,7 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn, double &Nj )
         memset( ICs, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICs, aCn[i].c_str(), MAXICNAME+MAXSYMB );
         ICs[MAXICNAME+MAXSYMB]=0;
+        ICs[MAXICNAME+MAXSYMB+1]=0;
         fixup_ics( ICs );
         // read and if necessary recalc IComp
         aIC->TryRecInp( ICs, icrtim, 0 );
@@ -679,6 +682,7 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
         memset( ICS, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICS, aCn[i].c_str(), MAXICNAME+MAXSYMB );
         ICS[MAXICNAME+MAXSYMB] = 0;
+        ICS[MAXICNAME+MAXSYMB+1]=0;
         fixup_ics( ICS );
         for(int j=0; j<N; j++ )
         {
