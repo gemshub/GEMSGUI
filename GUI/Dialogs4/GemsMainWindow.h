@@ -155,9 +155,9 @@ class TVisorImp: public QMainWindow, public Ui::GemsMainWindowData
     //int ProfileMode;
 
     // Appearance settings
-    QFont	CellFont;
-    QFont	axisLabelFont;
-    QFont	defaultFont;
+    QFont    CellFont;
+    QFont    axisLabelFont;
+    QFont    defaultFont;
     int charWidth;
     int charHeight;
 
@@ -183,7 +183,7 @@ public:
     // Sets the caption of the module
     void SetCaption(const char* mess)
          {  setWindowTitle(mess);   }
-    
+
     // Sets the status of the module (in the statusbar)
     void SetStatus( const char* s )
          {  statusBar()->showMessage(s);   }
@@ -333,6 +333,7 @@ public slots:
     void CmSetIpKarpovAlgorithm(); // IPM4K
     void CmSetIpOptAlgorithm();
     void CmSetIpNewtonAlgorithm();
+    void CmSetIpActionAlgorithm();
 
     void CmOpen_EQSTAT_ICOMP();
     void CmOpen_MULTI();
