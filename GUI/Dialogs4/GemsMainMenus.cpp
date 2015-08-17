@@ -376,6 +376,7 @@ void TVisorImp::setActions()
     connect( actionIPOPT, SIGNAL( triggered()), this, SLOT(CmSetIpOptAlgorithm()));
     connect( actionIPNewton, SIGNAL( triggered()), this, SLOT(CmSetIpNewtonAlgorithm()));
     connect( actionIPM4K, SIGNAL( triggered()), this, SLOT(CmSetIpKarpovAlgorithm()));
+    connect( actionIPAction, SIGNAL( triggered()), this, SLOT(CmSetIpActionAlgorithm()));
     //connect( actionSimplex, SIGNAL( triggered()), this, SLOT(CmSimplex()));
     //connect( actionPrecise, SIGNAL( triggered()), this, SLOT(CmPrecise()));
     //connect( actionStepwise, SIGNAL( triggered()), this, SLOT(CmStepwise()));
@@ -918,6 +919,7 @@ void TVisorImp::CmSetKarpovAlgorithm()
     actionIPM4K->setChecked(false);
     actionIPOPT->setChecked(false);
     actionIPNewton->setChecked(false);
+    actionIPAction->setChecked(false);
  //   sactionStepwise->setEnabled(true);
 }
 
@@ -927,6 +929,7 @@ void TVisorImp::CmSetIpKarpovAlgorithm()
     actionIPM4K->setChecked(true);
     actionIPOPT->setChecked(false);
     actionIPNewton->setChecked(false);
+    actionIPAction->setChecked(false);
  //   sactionStepwise->setEnabled(false);
 }
 
@@ -936,6 +939,7 @@ void TVisorImp::CmSetIpOptAlgorithm()
     actionIPM4K->setChecked(false);
     actionIPOPT->setChecked(true);
     actionIPNewton->setChecked(false);
+    actionIPAction->setChecked(false);
 //    sactionStepwise->setChecked(false);
 //    sactionStepwise->setEnabled(false);
 
@@ -947,20 +951,34 @@ void TVisorImp::CmSetIpNewtonAlgorithm()
     actionIPM4K->setChecked(false);
     actionIPOPT->setChecked(false);
     actionIPNewton->setChecked(true);
+    actionIPAction->setChecked(false);
+ //   sactionStepwise->setChecked(false);
+ //   sactionStepwise->setEnabled(false);
+}
+
+void TVisorImp::CmSetIpActionAlgorithm()
+{
+    actionIPM3K_default->setChecked(false);
+    actionIPM4K->setChecked(false);
+    actionIPOPT->setChecked(false);
+    actionIPNewton->setChecked(false);
+    actionIPAction->setChecked(true);
  //   sactionStepwise->setChecked(false);
  //   sactionStepwise->setEnabled(false);
 }
 
 char TVisorImp::GetNumericalMethod()
 {
-    if( actionIPOPT->isChecked() )
-       return 'O';
-    else if( actionIPNewton->isChecked() )
+    if (actionIPOPT->isChecked())
+        return 'O';
+    else if (actionIPNewton->isChecked())
         return 'N';
-       else   if( actionIPM4K->isChecked() )
-                return 'D';
-             else
-                return 'K';
+    else if (actionIPM4K->isChecked())
+        return 'D';
+    else if (actionIPAction->isChecked())
+        return 'A';
+    else
+        return 'K';
 }
 
 void TVisorImp::CmRunIPM()
