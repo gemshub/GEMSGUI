@@ -59,7 +59,6 @@ DIALOGS4_CPP   =  ./GUI/Dialogs4
 MODULES_CPP    =  ./Modules
 SUBMODS_CPP    =  ./Modules/Submods
 NUMERICS_CPP   =  ./Modules/Numerics
-GEMS4K_CPP     =  ../standalone/GEMS4K
 
 QWT6_H       =  $$QWT6_CPP
 SERVICES4_H  =  $$SERVICES4_CPP
@@ -68,28 +67,22 @@ DIALOGS4_H   =  $$DIALOGS4_CPP
 MODULES_H    =  $$MODULES_CPP
 SUBMODS_H    =  $$SUBMODS_CPP
 NUMERICS_H   =  $$NUMERICS_CPP
-GEMS4K_H     =  $$GEMS4K_CPP
 
-EJDB_PATH = ../standalone/EJDB
-YAML_PATH = ../standalone/YAML
+# Define the directory where GEMS4R source code is located
+GEMS4R_DIR = $$PWD/../GEMS4R/GEMS4R
 
-win32{
-   EJDB_LIB_PATH =  $$EJDB_PATH/build-win32
-}
-unix{
-   EJDB_LIB_PATH =  $$EJDB_PATH/build
-}
+# Define the directory where the third-party libraries have been installed
+CONFIG(debug, debug|release) THIRDPARTY_DIR = $$PWD/../build/debug/thirdparty
+CONFIG(release, debug|release) THIRDPARTY_DIR = $$PWD/../build/release/thirdparty
 
-YAML_LIB_PATH =  $$YAML_PATH/build
-YAML_H =  $$YAML_PATH/include
+# Define the directories where the headers of the third-party libraries have been installed
+THIRDPARTY_INCLUDE_DIR += $$THIRDPARTY_DIR/include
+THIRDPARTY_INCLUDE_DIR += $$THIRDPARTY_DIR/include/ejdb
+THIRDPARTY_INCLUDE_DIR += $$THIRDPARTY_DIR/include/yaml-cpp
 
-EJDB_BSON_H = $$EJDB_PATH/src/bson
-EJDB_EJDB_H = $$EJDB_PATH/src/ejdb
-EJDB_TCUTIL_H = $$EJDB_PATH/src/tcutil
-
-#EJDB_GENERATED_H = $$EJDB_LIB_PATH/debug/src/generated
-CONFIG(release, debug|release): EJDB_GENERATED_H = $$EJDB_LIB_PATH/release/src/generated
-CONFIG(debug, debug|release): EJDB_GENERATED_H = $$EJDB_LIB_PATH/debug/src/generated
+# Define the directories where the THIRDPARTY libraries have been installed
+THIRDPARTY_LIBRARY_DIR1 = $$THIRDPARTY_DIR/lib
+THIRDPARTY_LIBRARY_DIR2 = $$THIRDPARTY_DIR/lib/x86_64-linux-gnu
 
 DEPENDPATH   += $$QWT6_H
 DEPENDPATH   += $$SERVICES4_H
@@ -98,7 +91,8 @@ DEPENDPATH   += $$DIALOGS4_H
 DEPENDPATH   += $$MODULES_H
 DEPENDPATH   += $$SUBMODS_H
 DEPENDPATH   += $$NUMERICS_H
-DEPENDPATH   += $$GEMS4K_H
+DEPENDPATH   += $$GEMS4R_DIR
+DEPENDPATH   += $$THIRDPARTY_INCLUDE_DIR
 
 INCLUDEPATH   += $$QWT6_H
 INCLUDEPATH   += $$SERVICES4_H
@@ -107,19 +101,18 @@ INCLUDEPATH   += $$DIALOGS4_H
 INCLUDEPATH   += $$MODULES_H
 INCLUDEPATH   += $$SUBMODS_H
 INCLUDEPATH   += $$NUMERICS_H
-INCLUDEPATH   += $$GEMS4K_H
-INCLUDEPATH   += $$EJDB_BSON_H
-INCLUDEPATH   += $$EJDB_EJDB_H
-INCLUDEPATH   += $$EJDB_GENERATED_H
-INCLUDEPATH   += $$EJDB_TCUTIL_H
-INCLUDEPATH   += $$YAML_H
+INCLUDEPATH   += $$GEMS4R_DIR
+INCLUDEPATH   += $$THIRDPARTY_INCLUDE_DIR
+
+LIBS += -L$$THIRDPARTY_LIBRARY_DIR1
+LIBS += -L$$THIRDPARTY_LIBRARY_DIR2
+LIBS += -lyaml-cpp -lejdb -lpugixml -lReaktoro
 
 MOC_DIR = tmp
 UI_DIR        = $$MOC_DIR
 UI_SOURSEDIR  = $$MOC_DIR
 UI_HEADERDIR  = $$MOC_DIR
 OBJECTS_DIR   = obj
-
 
 include($$SERVICES4_CPP/Services4.pri)
 include($$DIALOGS4_CPP/Dialogs4.pri)
@@ -128,21 +121,4 @@ include($$QWT6_CPP/qwt.pri)
 include($$SUBMODS_CPP/Submods.pri)
 include($$MODULES_CPP/Modules.pri)
 include($$DATAMAN_CPP/Dataman.pri)
-include($$GEMS4K_CPP/gems4k.pri)
-#include($$EJDB_PATH/ejdb.pri)
-include($$EJDB_PATH/tcejdb.pri)
-
-#CONFIG(release, debug|release): LIBS += -L$$EJDB_LIB_PATH/release/src/ -lejdb
-#CONFIG(debug, debug|release): LIBS += -L$$EJDB_LIB_PATH/debug/src/ -lejdb
-
-CONFIG(release, debug|release): LIBS += -L$$YAML_LIB_PATH/release/ -lyaml-cpp
-CONFIG(debug, debug|release): LIBS += -L$$YAML_LIB_PATH/debug/ -lyaml-cpp
-
-
-unix|win32: CONFIG(release, debug|release): LIBS += -L$$PWD/../standalone/Reaktoro/build/release/lib/ -lReaktoro
-else: unix|win32: CONFIG(debug, debug|release): LIBS += -L$$PWD/../standalone/Reaktoro/build/debug/lib/ -lReaktoro
-
-INCLUDEPATH += $$PWD/../standalone/Reaktoro $$PWD/../standalone/Reaktoro/dependencies
-DEPENDPATH += $$PWD/../standalone/Reaktoro
-
-#../standalone
+include(Modules/GEMS4R/GEMS4R.pri)
