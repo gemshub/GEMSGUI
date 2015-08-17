@@ -1,7 +1,7 @@
 
-TEMPLATE	= app
+TEMPLATE    = app
 #LANGUAGE        = C++
-TARGET		= gems4
+TARGET        = gems4
 #VERSION         = 4.0.0
 
 DEFINES         += Use_mt_mode
@@ -106,7 +106,7 @@ INCLUDEPATH   += $$THIRDPARTY_INCLUDE_DIR
 
 LIBS += -L$$THIRDPARTY_LIBRARY_DIR1
 LIBS += -L$$THIRDPARTY_LIBRARY_DIR2
-LIBS += -lyaml-cpp -lejdb -lpugixml -lReaktoro
+LIBS += -lyaml-cpp -lejdb -lpugixml -lsundials_cvode -lsundials_nvecserial -lReaktoro
 
 MOC_DIR = tmp
 UI_DIR        = $$MOC_DIR
