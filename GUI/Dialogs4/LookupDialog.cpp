@@ -107,9 +107,10 @@ void LookupDialog::definePArray()
    double *arP;
 
    nPs = pPPoints->value();
+   getPdata( Pai );
    if( nPs == 1 )
    {
-      getPdata( Pai );
+//      getPdata( Pai );
       nPs = nPi = getNpoints( Pai );
 //      pPPoints->textFromValue( nPi );
       pPPoints->setValue( nPi );
@@ -174,16 +175,17 @@ void LookupDialog::defineTArray()
    double Tai[4];
    double  *arT;
 
+   getTdata( Tai );
    if(chInterp->isChecked())
    {
        nT = pPPoints->value();
-          getTdata( Tai );
+//          getTdata( Tai );
    }
    else {
        nTs = pTPoints->value();
        if( nTs == 1 )
        {
-          getTdata( Tai );
+//          getTdata( Tai );
           nTs = nTi = getNpoints( Tai );
 //          pTPoints->textFromValue( nTi );
           pTPoints->setValue( nTi );
