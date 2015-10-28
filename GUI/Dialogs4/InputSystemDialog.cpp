@@ -53,6 +53,10 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
 
     setupUi(this);
 
+    recTable = new TRecipeTable(groupBox_3, this);
+    gridLayout->addWidget(recTable, 1, 2, 2, 1);
+
+
     // define key of record
     QString str= windowTitle();
             str += pkey;
@@ -175,9 +179,9 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
     QObject::connect( pCancel, SIGNAL(clicked()), this, SLOT(reject()));
     QObject::connect( pOK, SIGNAL(clicked()), this, SLOT(accept()));
 
-    recTable->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect( recTable, SIGNAL(customContextMenuRequested(QPoint)),
-         this, SLOT(slotPopupContextMenu(QPoint)));
+//    recTable->setContextMenuPolicy(Qt::CustomContextMenu);
+//    connect( recTable, SIGNAL(customContextMenuRequested(QPoint)),
+//         this, SLOT(slotPopupContextMenu(QPoint)));
 
 }
 
@@ -411,19 +415,120 @@ int InputSystemDialog::tableDeleteRow( int nRow )
    return tbData.GetCount();
 }
 
-// copy data
-void InputSystemDialog::slotPopupContextMenu(const QPoint &pos)
+void InputSystemDialog::deleteRows( int f_from, int r_to )
 {
-   QMenu *menu = new QMenu(recTable/*this*/);
+  int jj, nO, ndx;
+  uint iWin;
+  for( int row = f_from; row >= r_to; row-- )
+   {
+      ndx = jj = tbData[row].nIdx;
+      iWin = tbData[row].nWin;
+      nO = tbData[row].nObj;
 
-   QAction *act =  new QAction(tr("&Select all"), this);
-   // act->setShortcut(tr("Ctrl+A"));
-    act->setStatusTip(tr("Select all"));
+      if( iWin  >= wnData.GetCount()-1 ) // static list
+        jj = max(0,staticFindRow( nO, jj ));
+
+      pLists[iWin]->item(jj)->setSelected(false);
+      if( iWin != curPage )
+      {
+        int rw = tableFindRow( nO, ndx );
+        if( rw >= 0)
+         tableDeleteRow( rw );
+      }
+   }
+}
+
+
+//=================================================================
+
+
+TRecipeTable::TRecipeTable( QWidget* parent,InputSystemDialog* aparentDlg  ):
+    QTableWidget(parent), parentDlg(aparentDlg)
+{
+    setColumnCount(4);
+    QTableWidgetItem *_qitem = new QTableWidgetItem("Property");
+    setHorizontalHeaderItem(0, _qitem);
+    _qitem = new QTableWidgetItem("Name");
+    setHorizontalHeaderItem(1, _qitem);
+    _qitem = new QTableWidgetItem("Quantity");
+    setHorizontalHeaderItem(2, _qitem);
+    _qitem = new QTableWidgetItem("Units");
+    setHorizontalHeaderItem(3, _qitem);
+
+    QSizePolicy sizePolicy4(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    sizePolicy4.setHorizontalStretch(0);
+    sizePolicy4.setVerticalStretch(0);
+    sizePolicy4.setHeightForWidth(sizePolicy().hasHeightForWidth());
+    setSizePolicy(sizePolicy4);
+    setMinimumSize(QSize(360, 0));
+    horizontalHeader()->setDefaultSectionSize(100);
+    horizontalHeader()->setMinimumSectionSize(25);
+    horizontalHeader()->setStretchLastSection(true);
+    verticalHeader()->setDefaultSectionSize(25);
+    verticalHeader()->setStretchLastSection(false);
+
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect( this, SIGNAL(customContextMenuRequested(QPoint)),
+         this, SLOT(slotPopupContextMenu(QPoint)));
+
+}
+
+void TRecipeTable::keyPressEvent(QKeyEvent* e)
+{
+    if ( e->modifiers() & Qt::ControlModifier )
+    {
+        switch ( e->key() )
+        {
+          case Qt::Key_A:
+            SelectAll();
+            return;
+          case Qt::Key_C:
+            CopyData();
+            return;
+          case Qt::Key_H:
+            CopyDataHeader();
+            return;
+          case Qt::Key_D:
+            DeleteRows();
+            return;
+          case Qt::Key_V:
+            PasteData();
+            return;
+        }
+    }
+    switch( e->key() )
+    {
+      case Qt::Key_F1:
+            CmHelp();
+            return;
+      case Qt::Key_F8:
+            CmCalc();
+              return;
+     }
+    QTableWidget::keyPressEvent(e);
+}
+
+
+
+// copy data
+void TRecipeTable::slotPopupContextMenu(const QPoint &pos)
+{
+   QMenu *menu = new QMenu(this);
+
+   QAction* act =  new QAction(tr("&Help"), this);
+   act->setIcon(QIcon(":/menu/Icons/ShowHelpWindowIcon.png"));
+   act->setShortcut(tr("F1"));
+   act->setStatusTip(tr("Help to the specified cell"));
+   connect(act, SIGNAL(triggered()), this, SLOT(CmHelp()));
+   menu->addAction(act);
+
+   act =  new QAction(tr("Select &all"), this);
+   act->setShortcut(tr("Ctrl+A"));
+   act->setStatusTip(tr("Select all"));
            connect(act, SIGNAL(triggered()), this, SLOT(SelectAll()));
-     menu->addAction(act);
+   menu->addAction(act);
 
-
-     if( recTable->currentColumn() == 2 )
+   if( currentColumn() == 2 )
          {
             menu->addSeparator();
             act =  new QAction(tr("Calculator"), this);
@@ -431,18 +536,23 @@ void InputSystemDialog::slotPopupContextMenu(const QPoint &pos)
             act->setStatusTip(tr("Use Calculator for specified cells"));
             connect(act, SIGNAL(triggered()), this, SLOT(CmCalc()));
             menu->addAction(act);
-         }
 
+            act =  new QAction(tr("Paste"), this);
+            act->setShortcut(tr("Ctrl+V"));
+            act->setStatusTip(tr("Paste to selected cell"));
+            connect(act, SIGNAL(triggered()), this, SLOT(PasteData()));
+            menu->addAction(act);
+         }
      menu->addSeparator();
 
      act =  new QAction(tr("&Copy"), this);
-     //act->setShortcut(tr("Ctrl+C"));
+     act->setShortcut(tr("Ctrl+C"));
      act->setStatusTip(tr("Copy selected data"));
            connect(act, SIGNAL(triggered()), this, SLOT(CopyData()));
      menu->addAction(act);
 
      act =  new QAction(tr("Copy &Header and Cells"), this);
-     //act->setShortcut(tr("Ctrl+H"));
+     act->setShortcut(tr("Ctrl+H"));
      act->setStatusTip(tr("Copy selected header&cells"));
            connect(act, SIGNAL(triggered()), this, SLOT(CopyDataHeader()));
      menu->addAction(act);
@@ -450,25 +560,25 @@ void InputSystemDialog::slotPopupContextMenu(const QPoint &pos)
      menu->addSeparator();
 
      act =  new QAction(tr("&Delete rows"), this);
-     //act->setShortcut(tr("Ctrl+H"));
+     act->setShortcut(tr("Ctrl+D"));
      act->setStatusTip(tr("Delete selected rows"));
            connect(act, SIGNAL(triggered()), this, SLOT(DeleteRows()));
      menu->addAction(act);
 
-     menu->exec( recTable->viewport()->mapToGlobal(pos) );
+     menu->exec( viewport()->mapToGlobal(pos) );
      delete menu;
 }
 
-void InputSystemDialog::SelectAll()
+void TRecipeTable::SelectAll()
 {
-     recTable->selectAll();
+     selectAll();
 }
 
-QString InputSystemDialog::createString()
+QString TRecipeTable::createString()
 {
   QString cText;
   QString clipText;
-  QList<QTableWidgetSelectionRange> rec = recTable->selectedRanges();
+  QList<QTableWidgetSelectionRange> rec = selectedRanges();
   int row, col;
 
   for( row = rec[0].topRow(); row <= rec[0].bottomRow(); row++ )
@@ -479,7 +589,7 @@ QString InputSystemDialog::createString()
            if( !frst )
                clipText += splitCol;
            frst = false;
-           cText = recTable->item(row, col)->text();
+           cText = item(row, col)->text();
            if( cText == emptiness.c_str() )
                   cText = "  ";//"\r";
             clipText += cText;
@@ -490,11 +600,11 @@ QString InputSystemDialog::createString()
       return clipText;
 }
 
-QString InputSystemDialog::createHeader()
+QString TRecipeTable::createHeader()
 {
   QString cText;
   QString clipText;
-  QList<QTableWidgetSelectionRange> rec = recTable->selectedRanges();
+  QList<QTableWidgetSelectionRange> rec = selectedRanges();
   int col;
 
    bool frst = true;
@@ -503,19 +613,19 @@ QString InputSystemDialog::createHeader()
            if( !frst )
                clipText += splitCol;
            frst = false;
-           cText = recTable->horizontalHeaderItem(col)->text();
+           cText = horizontalHeaderItem(col)->text();
            clipText += cText;
     }
    return clipText;
 }
 
- void InputSystemDialog::CopyData()
+ void TRecipeTable::CopyData()
  {
     QString clipText = createString();
     QApplication::clipboard()->setText(clipText/*, QClipboard::Clipboard*/);
  }
 
- void InputSystemDialog::CopyDataHeader()
+ void TRecipeTable::CopyDataHeader()
  {
       QString clipText = createHeader();
       clipText += splitRow;
@@ -524,11 +634,9 @@ QString InputSystemDialog::createHeader()
   }
 
 
- void InputSystemDialog::DeleteRows()
+ void TRecipeTable::DeleteRows()
  {
-   QList<QTableWidgetSelectionRange> rec = recTable->selectedRanges();
-   int jj, nO, ndx;
-   uint iWin;
+   QList<QTableWidgetSelectionRange> rec = selectedRanges();
    int r_from = rec[0].bottomRow();
    int r_to = rec[0].topRow();
    if( r_from < r_to)
@@ -536,51 +644,52 @@ QString InputSystemDialog::createHeader()
       r_from = r_to;
       r_to = rec[0].bottomRow();
    }
+   parentDlg->deleteRows(r_from, r_to);
+ }
 
-   for( int row = rec[0].bottomRow(); row >= rec[0].topRow(); row-- )
-    {
-       ndx = jj = tbData[row].nIdx;
-       iWin = tbData[row].nWin;
-       nO = tbData[row].nObj;
-
-       if( iWin  >= wnData.GetCount()-1 ) // static list
-         jj = max(0,staticFindRow( nO, jj ));
-
-       pLists[iWin]->item(jj)->setSelected(false);
-       if( iWin != curPage )
-       {
-         int rw = tableFindRow( nO, ndx );
-         if( rw >= 0)
-          tableDeleteRow( rw );
-       }
-    }
-}
-
- void InputSystemDialog::CmCalc()
+ void TRecipeTable::CmCalc()
  {
-   QList<QTableWidgetSelectionRange> rec = recTable->selectedRanges();
+   QList<QTableWidgetSelectionRange> rec = selectedRanges();
 
    if( rec.count() < 1 )
       return;
 
-   if(  recTable->currentColumn() == 2 )
+   if(  currentColumn() == 2 )
     {
       CalcDialog calc( this, -1 );
       if( calc.exec() )
        {
           for(int row = rec[0].topRow(); row <= rec[0].bottomRow(); row++ )
            {
-              double val = tbData[row].val;
+              double val =  parentDlg->getTableVal(row);
               QString rval = calc.fun( val );
-              recTable->item(row,2)->setText( rval);
-              tbData[row].val = recTable->item(row, 2)->data(Qt::EditRole).toDouble();;
-
+              item(row,2)->setText( rval);
+              parentDlg->setTableVal(row, item(row, 2)->data(Qt::EditRole).toDouble());
            }
        }
     }
 
  }
 
+ void TRecipeTable::CmHelp()
+ {
+   pVisorImp->OpenHelp( GEMS_RECIPE_HTML );
+ }
+
+ void TRecipeTable::PasteData()
+ {
+     if(  currentColumn() == 2 )
+      {
+          QString rval = QApplication::clipboard()->text(QClipboard::Clipboard);
+          double val = rval.toDouble();
+          rval = QString::number(val,'g',16);
+          int row = currentRow();
+          if( row >= 0  )
+          {  item(row,2)->setText(  rval );
+             parentDlg->setTableVal(row, item(row, 2)->data(Qt::EditRole).toDouble());
+          }
+     }
+ }
 
 //-------------------------------------------------------------------------------------
 // TTreeDelegate -  individual items in views are rendered and edited using delegates

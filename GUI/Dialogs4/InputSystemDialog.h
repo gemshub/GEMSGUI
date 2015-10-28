@@ -44,6 +44,32 @@ public:
                              const QModelIndex &index) const;
 };
 
+class InputSystemDialog;
+
+class TRecipeTable: public QTableWidget
+{
+        Q_OBJECT
+
+    InputSystemDialog *parentDlg;
+
+    void keyPressEvent(QKeyEvent* e);
+    // copy data
+    QString createString();
+    QString createHeader();
+
+  protected slots:
+    void slotPopupContextMenu(const QPoint &pos);
+    void SelectAll();
+    void CopyData();
+    void CopyDataHeader();
+    void DeleteRows();
+    void CmCalc();
+    void CmHelp();
+    void PasteData();
+
+  public:
+       TRecipeTable( QWidget *parent, InputSystemDialog *parentDlg  );
+};
 
 class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
 {
@@ -56,6 +82,7 @@ class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
    uint curPage;
 
    QList<QListWidget *> pLists;
+   TRecipeTable *recTable;
 
    // internal functions
    int tableFindRow( int nO, int ndx );
@@ -64,9 +91,6 @@ class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
    int tableInsertRow( int nO, int ndx, const char * andName);
    int tableDeleteRow( int row );
    void tableShowRow( int row );
-   // copy data
-   QString createString();
-   QString createHeader();
    // working with static list
    int staticFindRow( int nO, int ndx);
 
@@ -87,21 +111,22 @@ public:
    { return wnData[ tbData[row].nWin ].unitLine; }
 
    void getTable( TIArray<tableSetupData>& tab ) const;
+   void deleteRows( int f_from, int r_to );
+
+   double getTableVal( int row ) const
+   {  return tbData[row].val; }
+   void setTableVal( int row, double value )
+   {  tbData[row].val = value; }
+
 
 protected slots:
     virtual void languageChange();
-    void slotPopupContextMenu(const QPoint &pos);
-    void SelectAll();
-    void CopyData();
-    void CopyDataHeader();
-    void DeleteRows();
 
 public slots:
     void changePage( int nPage );
     void tablEdited( int row, int column );
     void changeTable( const QItemSelection & selected, const QItemSelection & deselected );
     void CmPrint();
-    void CmCalc();
     void help();
 };
 
