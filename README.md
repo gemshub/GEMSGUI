@@ -1,6 +1,6 @@
-# README #
+# GEM-Selektor v.3 #
 
-This repository contains the source code and default resources for GEM-Selektor v.3 - the interactive package for thermodynamic modelling of aquatic (geo)chemical systems by Gibbs Energy Minimization using a built-in GEMS3K chemical solver.
+This GEMS3GUI repository contains the source code and default resources for GEM-Selektor v.3 - the interactive package for thermodynamic modelling of aquatic (geo)chemical systems by Gibbs Energy Minimization using a built-in GEMS3K chemical solver.
 
 ### Briefly about GEM-Selektor v.3 ###
 
