@@ -2,14 +2,14 @@
 
 This GEMS3GUI repository contains the source code and default resources for GEM-Selektor v.3 - the interactive package for thermodynamic modelling of aquatic (geo)chemical systems by Gibbs Energy Minimization using a built-in GEMS3K chemical solver.
 
-### Briefly about GEM-Selektor v.3 ###
+## Briefly about GEM-Selektor v.3 ##
 
-Always under development. Distributed "as is" by the Laboratory for Waste Management (LES) of the Paul Scherrer Institute (PSI) with two purposes:
+Distributed "as is" by the Laboratory for Waste Management (LES) of the Paul Scherrer Institute (PSI) with two purposes:
 
 * to promote the GEM method and software into research community;
 * to gather the users feedback - vital for making the software more functional and reliable.
 
-Permission to use the GEM-Selektor software is hereby granted free of charge for educational and research purposes, subject to acceptance of Terms and Conditions of Use. In particular, in any publication of your results obtained using the GEM-Selektor code, please, cite this web page address (http://gems.web.psi.ch) and the following papers: 
+Permission to use the GEM-Selektor software is hereby granted free of charge for educational and research purposes, subject to acceptance of Terms and Conditions of Use. In particular, in any publication of your results obtained using the GEM-Selektor code, please, cite the web page (http://gems.web.psi.ch) and the following papers: 
 
 * Kulik D.A., Wagner T., Dmytrieva S.V., Kosakowski G., Hingerl F.F., Chudnenko K.V., Berner U. (2013): GEM-Selektor geochemical modeling package: revised algorithm and GEMS3K numerical kernel for coupled simulation codes. Computational Geosciences 17, 1-24.
 * Wagner T., Kulik D.A., Hingerl F.F., Dmytrieva S.V. (2012): GEM-Selektor geochemical modeling package: TSolMod library and data interface for multicomponent phase models. Canadian Mineralogist 50, 1173-1195.
@@ -18,10 +18,10 @@ Version: currently 3.3.3.
 
 Learn more about GEM-Selektor from http://gems.web.psi.ch 
 
-### How to clone (download) GEMS3GUI source code ###
+## How to clone (download) the GEMS3GUI source code and build it on linux ##
 
 * In your home directory, make a folder named e.g. ~/gitGEMS3 with a subfolder ~/gitGEMS3/gems3gui.
-* Change into ~/gitGEMS3/gems3gui and clone this repository from https://<you>@bitbucket.org/gems4/gems3k.git using a preinstalled free git client SourceTree or SmartGit (the best way on Windows). 
+* Change into ~/gitGEMS3/gems3gui and clone this repository from https://<you>@bitbucket.org/gems4/gems3gui.git using a preinstalled free git client SourceTree or SmartGit (the best way on Windows). 
 * Alternatively on Mac OS X or linux, open a terminal, cd ~/gitGEMS3/gems3gui and type in the command line (do not forget a period):
 ~~~
 git clone https://<you>@bitbucket.org/gems4/gems3gui.git . 
@@ -36,15 +36,37 @@ To switch back to trunk, type
 git checkout trunk
 ~~~
 
-## How to build and deploy the GEM-Selektor v3 code package ##
+* Now cd back to ~/gitGEMS3 and make a subfolder ~/gitGEMS3/standalone then clone the GEMS3K repository by running
+~~~
+cd standalone
+git clone https://<you>@bitbucket.org/gems4/gems3k.git . 
+~~~ 
 
-### Linux ###
+* This will download the trunk branch of the GEMS3K code. To switch (if necessary) to a different branch, do:
+~~~
+git checkout -b branches/devEJDB --track origin/branches/devEJDB
+git pull origin branches/devEJDB
+~~~ 
+
+* Finally, cd back to ~/gitGEMS3 and create there empty build directories /build-release and /build-debug.
+* We assume that both subfolders /gems3gui and /standalone are under git control and are checked out to "trunk" branch.
+
+### Building and deploying GEM-Selektor v.3 ###
 
 This deployment process is based on the "gemsdeployqtapp.sh" script, which is an augmented and extended "deployqtapp.sh" script from
 https://github.com/goblincoding/qtscripts by goblincoding, see also http://goblincoding.com/2013/11/07/deploying-qt-5-applications-on-ubuntu-12-04/  
 
-1. Make sure that Qt5 SDK is installed with source code in the system (e.g. on ubuntu 15 up) or as /Qt in your home directory; we assume that the Qt library is located as "/home/you/Qt/5.3/src" and "/home/you/Qt/5.3/gcc_64" (or gcc_32). If not yet done, copy recursively the "/Docs/build-release" directory from the  folder where this file is located to the folder in which the "/gems-gui" folder is located. Typically, you should have "~/DevGEMS/devPhase/gems-gui"; "~/DevGEMS/devPhase/standalone"; and "~/DevGEMS/devPhase/build-release" folders
-at the same level. 
+1. Make sure that Qt5 SDK is installed in the system (e.g. on ubuntu 15 up) or as /Qt in your home directory; we assume that the Qt library is located as "/home/you/Qt/5.3/src" and "/home/you/Qt/5.3/gcc_64" (or gcc_32). If not yet done, copy recursively the "/Docs/build-release" directory from the  folder where this file is located to the folder in which the "/gems-gui" folder is located. Typically, you should have "~/DevGEMS/devPhase/gems-gui"; "~/DevGEMS/devPhase/standalone"; and "~/DevGEMS/devPhase/build-release" folders at the same level, as shown below.
+
+~~~
+~/gitGEMS3
+    /gems3gui
+    /standalone
+    /build-release
+    /build-debug
+~~~
+
+We assume that both subfolders /gems3gui and /standalone are under git control and are checked out to "trunk" branch.
 
 2. Make sure that you have built (with the QtCreator) a release variant of GEM-Selektor v.3 in "/home/you/DevGEMS/devPhase/build-release", where an executable script "gemsdeployqtapp.sh" and several other files are located; if the script is not executable, open a terminal, cd to that directory, and run 
 ~~~
