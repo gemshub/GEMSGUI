@@ -62,8 +62,12 @@ On latest versions of Linux, the complete Qt5 is available in the system. On Ubu
 ~~~
 sudo apt-get install qt5-default qttools5-dev
 ~~~
+It may be necessary to install in addition:
+~~~
+sudo apt-get install libqt5svg5 libqt5help5
+~~~
 
-We assume that the Qt library is located as "/home/you/Qt/5.3/src" and "/home/you/Qt/5.3/gcc_64" (or gcc_32). If not yet done, copy recursively the "/Docs/build-release" directory from the  folder where this file is located to the folder in which the "/gems-gui" folder is located. Typically, you should have the folders at the same level, as shown below.
+Now we assume that the Qt library is installed locally as "/home/you/Qt/5.3/src" and "/home/you/Qt/5.3/gcc_64" (or gcc_32). If not yet done, copy recursively the "/Docs/build-release" directory from the  folder where this file is located to the folder in which the "/gems-gui" folder is located. Typically, you should have the folders at the same level, as shown below.
 ~~~
 ~/gitGEMS3
     /gems3gui
