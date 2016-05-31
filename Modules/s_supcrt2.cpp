@@ -478,7 +478,7 @@ int  TSupcrt::valTD(double T, double D, int /*isat*/, int epseqn)
 }
 
 //--------------------------------------------------------------------//
-// Return 1, if T-P define liquid or vaper  H2O in dimention field of HKF
+// Return 1, if T-P define liquid or vapor H2O in the applicability range of HKF
 // else 0.
 int  TSupcrt::valTP(double T, double P)
 {
@@ -1118,7 +1118,7 @@ void TSupcrt::cpswap()
 }
 
 //--------------------------------------------------------------------//
-// Calculation thermodinamic and transport water fitches critical region H2O
+// Calculation thermodinamic and transport water properties in H2O critical region
 // ( 369.85 - 419.85  degC, 0.20-0.42 gm/cm3) see equat Levelt Sengers, et al
 // (1983): J.Phys. Chem. Ref. Data, V.12, No.1, pp.1-28.
 void TSupcrt::LVSeqn(int isat, int iopt, int itripl, double TC,
@@ -1190,7 +1190,7 @@ void TSupcrt::HGKsat(int& isat, int iopt, int itripl, double Temp,
 {
     double  Ptemp=0., dltemp=0., dvtemp=0.;
 
-    if (isat == 1)
+    if ( isat == 1 && aSpc.pset == 0 )
     {
         if (iopt == 1)
             pcorr(itripl, Temp, Pres, Dens, &aSta.Dens[1], epseqn);
@@ -1210,7 +1210,8 @@ void TSupcrt::HGKsat(int& isat, int iopt, int itripl, double Temp,
                                      (fabs(aSta.Dens[0] - dvtemp) <= to->DTOL))))
             {
                 isat = 1;
-                *Pres = Ptemp;
+                if(aSpc.pset != 1)
+                   *Pres = Ptemp;
                 aSta.Dens[0] = dltemp;
                 aSta.Dens[1] = dvtemp;
             }
@@ -1255,7 +1256,7 @@ void TSupcrt::calcv3(int iopt, int itripl, double Temp, double *Pres,
 }
 
 //--------------------------------------------------------------------//
-// Calculation thermodinamic and transport H2O fitches for equation of
+// Calculation thermodynamic and transport H2O properties for equation of
 // state Haar, Gallagher, & Kell (1984).
 void TSupcrt::HGKeqn(int isat, int iopt, int itripl, double Temp,
                      double *Pres, double *Dens0, int epseqn)
@@ -1271,7 +1272,7 @@ void TSupcrt::HGKeqn(int isat, int iopt, int itripl, double Temp,
     }
     else
     {
-        memcpy(&wl, &wr, sizeof(WPROPS));             /* ���஦�� !!!!! */
+        memcpy(&wl, &wr, sizeof(WPROPS));             /* from wr to wl */
         dimHGK(2, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
     }
 }
@@ -1316,11 +1317,14 @@ void TSupcrt::Supcrt_H2O( double /*TC*/, double *P )
     { // set only T
         aSpc.isat=1;
         aSpc.iopt=1;
+        aSpc.pset=0;
     }
     else
     { //set T and P
-        aSpc.isat = 0;
-        aSpc.iopt = 2;
+//        aSpc.isat = 0;
+        aSpc.isat = 1;
+        aSpc.iopt = 1;
+        aSpc.pset = 1;
     }
     aSpc.useLVS=1;
     aSpc.epseqn=4;

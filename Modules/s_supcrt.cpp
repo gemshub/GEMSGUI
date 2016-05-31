@@ -103,7 +103,8 @@ int TSupcrt::valspc(int it, int id, int ip, int ih, int itripl,
             (0 <= ip)     && (ip     <= 4) &&
             (0 <= ih)     && (ih     <= 5) &&
             (0 <= itripl) && (itripl <= 1) &&
-            (0 <= isat)   && (isat   <= 1) &&
+//            (0 <= isat)   && (isat   <= 1) &&
+  (0 <= isat)   && (isat   <= 2) &&
             (1 <= iopt)   && (iopt   <= 2) &&
             (0 <= useLVS) && (useLVS <= 1) &&
             (1 <= epseqn) && (epseqn <= 5)))
