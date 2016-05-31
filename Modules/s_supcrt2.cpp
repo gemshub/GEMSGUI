@@ -1190,7 +1190,7 @@ void TSupcrt::HGKsat(int& isat, int iopt, int itripl, double Temp,
 {
     double  Ptemp=0., dltemp=0., dvtemp=0.;
 
-    if ( isat == 1 && aSpc.pset == 0 )
+    if ( isat == 1 )
     {
         if (iopt == 1)
             pcorr(itripl, Temp, Pres, Dens, &aSta.Dens[1], epseqn);
@@ -1210,8 +1210,7 @@ void TSupcrt::HGKsat(int& isat, int iopt, int itripl, double Temp,
                                      (fabs(aSta.Dens[0] - dvtemp) <= to->DTOL))))
             {
                 isat = 1;
-                if(aSpc.pset != 1)
-                   *Pres = Ptemp;
+                *Pres = Ptemp;
                 aSta.Dens[0] = dltemp;
                 aSta.Dens[1] = dvtemp;
             }
@@ -1256,6 +1255,42 @@ void TSupcrt::calcv3(int iopt, int itripl, double Temp, double *Pres,
 }
 
 //--------------------------------------------------------------------//
+// Calc dependent state values
+void TSupcrt::calcv2(int iopt, int itripl, double Temp, double *Pres,
+                     double *Dens, int epseqn)
+{
+    double ps=0., dll=0., dvv=0., dguess;
+
+    if (iopt == 1)
+    {
+        resid(Temp, Dens);
+        base(Dens, Temp);
+        ideal(Temp);
+        *Pres  = a1.rt * *Dens * ac->zb + qq.q0;
+    }
+    else
+    {
+        if (Temp < ac->tz)
+        {
+            pcorr(itripl, Temp, &ps, &dll, &dvv, epseqn);
+        }
+        else
+        {
+            ps   = 2.0e4;
+            dll  = 0.0e0;
+        }
+//        if (*Pres >  ps)
+            dguess = dll;
+//        else
+//        {
+//            dguess = *Pres / Temp / 0.4e0;
+//        }
+        denHGK(&aSta.Dens[1], Pres, dguess, Temp, &fct.dpdd);   /* Dens ???*/
+        ideal(Temp);
+    }
+}
+
+//--------------------------------------------------------------------//
 // Calculation thermodynamic and transport H2O properties for equation of
 // state Haar, Gallagher, & Kell (1984).
 void TSupcrt::HGKeqn(int isat, int iopt, int itripl, double Temp,
@@ -1263,17 +1298,32 @@ void TSupcrt::HGKeqn(int isat, int iopt, int itripl, double Temp,
 {
     a1.rt = ac->gascon * Temp;
     HGKsat(isat, iopt, itripl, Temp, Pres, Dens0, epseqn);
-    if (isat == 0)
+    if (!aSpc.metastable)
+    {
+        if (isat == 0)
+        {
+            bb(Temp);
+            calcv3(iopt, itripl, Temp, Pres, Dens0, epseqn);
+            thmHGK(Dens0, Temp);
+            dimHGK(isat, itripl, Temp, Pres, Dens0, epseqn);
+        }
+        else
+        {
+            memcpy(&wl, &wr, sizeof(WPROPS));             /* from wr to wl */
+            dimHGK(2, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
+        }
+    } else
     {
         bb(Temp);
+        calcv2(iopt, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
+        thmHGK(&aSta.Dens[1], Temp);
+        dimHGK(isat, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
+
+        memcpy(&wl, &wr, sizeof(WPROPS));
+
         calcv3(iopt, itripl, Temp, Pres, Dens0, epseqn);
         thmHGK(Dens0, Temp);
         dimHGK(isat, itripl, Temp, Pres, Dens0, epseqn);
-    }
-    else
-    {
-        memcpy(&wl, &wr, sizeof(WPROPS));             /* from wr to wl */
-        dimHGK(2, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
     }
 }
 
@@ -1317,14 +1367,13 @@ void TSupcrt::Supcrt_H2O( double /*TC*/, double *P )
     { // set only T
         aSpc.isat=1;
         aSpc.iopt=1;
-        aSpc.pset=0;
+        aSpc.metastable = 0;
     }
     else
     { //set T and P
-//        aSpc.isat = 0;
-        aSpc.isat = 1;
-        aSpc.iopt = 1;
-        aSpc.pset = 1;
+        aSpc.isat = 0;
+        aSpc.iopt = 2;
+        aSpc.metastable = 1;
     }
     aSpc.useLVS=1;
     aSpc.epseqn=4;
@@ -1390,6 +1439,14 @@ void TSupcrt::Supcrt_H2O( double /*TC*/, double *P )
         aSta.Dens[0] = aSta.Dens[1];
         aSta.Dens[1] = tempy;
         load(aSpc.isat, aWp);
+    }
+
+    if (aSpc.metastable == 1)
+    {
+//        tempy = aSta.Dens[0];
+//        aSta.Dens[0] = aSta.Dens[1];
+//        aSta.Dens[1] = tempy;
+        load(0, aWp);
     }
     // translate T - to users units
     aSta.Temp   = TdegUS(aSpc.it, aSta.Temp);

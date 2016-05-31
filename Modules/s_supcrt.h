@@ -333,6 +333,8 @@ protected:
     double TdPsdT(double t_);
     void calcv3(int iopt, int itripl, double Temp, double *Pres,
                 double *Dens, int epseqn);
+    void calcv2(int iopt, int itripl, double Temp, double *Pres,
+                         double *Dens, int epseqn);
     double TdegUS(int it, double t);
 public:
 
