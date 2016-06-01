@@ -686,8 +686,8 @@ void TDComp::DCthermo( int q, int p )
     	aW.twp->P = 1e-5;                   // lowest pressure set to 1 Pa
     if( CM == CTPM_HKF || CV == CPM_AKI /*&& aW.twp->P < 1.00001e-5 */ )  // fixed by KD 03.07.03, 05.12.06, 30.01.08
     { // HKF calculations and/or or determination of P_sat if P=0
-//    	if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
-//    			( fabs( aW.twp->P - aSta.Pres ) > 0.001 ))    // corrected by KD 25.11.05
+        if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
+                ( fabs( aW.twp->P - aSta.Pres ) > 0.001 ) /*|| (dcp->PdcC != aSpc.PdcC) || (CE == CTM_WAT)*/ )    // corrected by KD 25.11.05
     	{ // re-calculation of properties of H2O using HGF/HGK
     		aSta.Temp = aW.twp->TC;
     		if( aSta.Temp < 0.01 && aSta.Temp >= 0.0 ) // Deg. C!
@@ -733,10 +733,11 @@ void TDComp::DCthermo( int q, int p )
             aW.twp->wdEdP = qborn * pow(eps,2.);
         }
 
-//        else
-//        { // calculated before
-//            aW.twp->P = aSta.Pres;
-//        }
+        else
+        { // calculated before
+            aW.twp->P = aSta.Pres;
+            aW.twp->wRo  = aSta.Dens[aSpc.isat];
+        }
     }
 
     switch( CM )
@@ -929,6 +930,8 @@ void TDComp::DCthermo( int q, int p )
             Error( GetName(), msg.c_str() );
         //else  RecBuild( key );  // Recalc new record?
     }
+
+    aSpc.PdcC = dcp->PdcC;
 }
 
 

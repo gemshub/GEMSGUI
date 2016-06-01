@@ -167,6 +167,7 @@ struct SPECS
     int icrit;
     int CV;
     bool metastable;
+    char PdcC;
     SPECS(): it(1)
     {
         memset( &id, '\0', sizeof(int) * 9);
