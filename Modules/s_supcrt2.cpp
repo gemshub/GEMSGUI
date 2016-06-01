@@ -1279,12 +1279,18 @@ void TSupcrt::calcv2(int iopt, int itripl, double Temp, double *Pres,
             ps   = 2.0e4;
             dll  = 0.0e0;
         }
-//        if (*Pres >  ps)
+        if (*Pres <  ps)
+        {
             dguess = dll;
-//        else
-//        {
-//            dguess = *Pres / Temp / 0.4e0;
-//        }
+            if (aSpc.CV == CPM_HKF)
+                aSpc.metastable = true;
+        }
+        else
+        {
+            dguess = *Pres / Temp / 0.4e0;
+            if (aSpc.CV == CPM_GAS)
+                aSpc.metastable = true;
+        }
         denHGK(&aSta.Dens[1], Pres, dguess, Temp, &fct.dpdd);   /* Dens ???*/
         ideal(Temp);
     }
@@ -1298,10 +1304,19 @@ void TSupcrt::HGKeqn(int isat, int iopt, int itripl, double Temp,
 {
     a1.rt = ac->gascon * Temp;
     HGKsat(isat, iopt, itripl, Temp, Pres, Dens0, epseqn);
-    if (!aSpc.metastable)
-    {
+//    if (!aSpc.metastable)
+//    {
         if (isat == 0)
         {
+            // metastable phase propperties
+            bb(Temp);
+            calcv2(iopt, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
+            thmHGK(&aSta.Dens[1], Temp);
+            dimHGK(isat, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
+
+            memcpy(&wl, &wr, sizeof(WPROPS));
+
+            // stable phase properties
             bb(Temp);
             calcv3(iopt, itripl, Temp, Pres, Dens0, epseqn);
             thmHGK(Dens0, Temp);
@@ -1312,19 +1327,21 @@ void TSupcrt::HGKeqn(int isat, int iopt, int itripl, double Temp,
             memcpy(&wl, &wr, sizeof(WPROPS));             /* from wr to wl */
             dimHGK(2, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
         }
-    } else
-    {
-        bb(Temp);
-        calcv2(iopt, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
-        thmHGK(&aSta.Dens[1], Temp);
-        dimHGK(isat, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
+//    } else
+//    {
+//        // metastable phase propperties
+//        bb(Temp);
+//        calcv2(iopt, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
+//        thmHGK(&aSta.Dens[1], Temp);
+//        dimHGK(isat, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
 
-        memcpy(&wl, &wr, sizeof(WPROPS));
+//        memcpy(&wl, &wr, sizeof(WPROPS));
 
-        calcv3(iopt, itripl, Temp, Pres, Dens0, epseqn);
-        thmHGK(Dens0, Temp);
-        dimHGK(isat, itripl, Temp, Pres, Dens0, epseqn);
-    }
+        // stable phase properties
+//        calcv3(iopt, itripl, Temp, Pres, Dens0, epseqn);
+//        thmHGK(Dens0, Temp);
+//        dimHGK(isat, itripl, Temp, Pres, Dens0, epseqn);
+//    }
 }
 
 //--------------------------------------------------------------------//
@@ -1353,11 +1370,14 @@ double TSupcrt::TdegUS(int it, double t)
 //--------------------------------------------------------------------//
 void TSupcrt::Supcrt_H2O( double /*TC*/, double *P )
 {
-    int eR;
+    int eR, CV;
     double tempy;
+
+    CV = aSpc.CV;
 
     memset( &aSpc, '\0', sizeof(SPECS));
     // in SUPCRT92 set type calculation of parametres
+    aSpc.CV = CV;
     aSpc.it=1;
     aSpc.id=1;
     aSpc.ip=1;
@@ -1367,13 +1387,13 @@ void TSupcrt::Supcrt_H2O( double /*TC*/, double *P )
     { // set only T
         aSpc.isat=1;
         aSpc.iopt=1;
-        aSpc.metastable = 0;
+//        aSpc.metastable = 0;
     }
     else
     { //set T and P
         aSpc.isat = 0;
         aSpc.iopt = 2;
-        aSpc.metastable = 1;
+//        aSpc.metastable = 1;
     }
     aSpc.useLVS=1;
     aSpc.epseqn=4;
@@ -1431,23 +1451,32 @@ void TSupcrt::Supcrt_H2O( double /*TC*/, double *P )
         aSta.Dens[0] /= 1.0e3;
         HGKeqn(aSpc.isat, aSpc.iopt, aSpc.itripl,
                aSta.Temp, &aSta.Pres, &aSta.Dens[0], aSpc.epseqn);
+
+        // if metastable
+        if (aSpc.metastable)
+            aSpc.isat = 1;
+        //if metastable isat=1
     }
     load(0, aWp);
     if (aSpc.isat == 1)
     {
-        tempy = aSta.Dens[0];
-        aSta.Dens[0] = aSta.Dens[1];
-        aSta.Dens[1] = tempy;
+        if (!aSpc.metastable)
+        {
+            tempy = aSta.Dens[0];
+            aSta.Dens[0] = aSta.Dens[1];
+            aSta.Dens[1] = tempy;
+        }
         load(aSpc.isat, aWp);
     }
 
-    if (aSpc.metastable == 1)
-    {
+//    if (aSpc.metastable == 1)
+//    {
 //        tempy = aSta.Dens[0];
 //        aSta.Dens[0] = aSta.Dens[1];
 //        aSta.Dens[1] = tempy;
-        load(0, aWp);
-    }
+//        //load(1, aWp); with isat=1
+//        load_metastable(0, aWp);
+//    }
     // translate T - to users units
     aSta.Temp   = TdegUS(aSpc.it, aSta.Temp);
     aSta.Pres  *= un.fp;

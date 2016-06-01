@@ -698,10 +698,14 @@ void TDComp::DCthermo( int q, int p )
     		else
     			aSta.Pres =  aW.twp->P;
 
+            aSpc.CV = CV;
+
     		TSupcrt supCrt;
             supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres );
             if( aW.twp->P < 6.11732e-3 )   // 06.12.2006  DK
                 aW.twp->P = aSta.Pres;
+
+
 
             // pull water properties from WATERPARAM
             rho = aSta.Dens[aSpc.isat];
@@ -877,28 +881,33 @@ void TDComp::DCthermo( int q, int p )
                     idx = 0;            //  'G'     H2O_gas (vapor, steam)
                 else
                     idx = 1;            //  'F'     H2O_liquid
-                switch( aSpc.isat )
-                {
-                  case 2: // metastable systems (water at P<Psat or vapor at P>Psat)?
-                    calc_tpH2O( idx );
-                    break;
-                  case 0: // 1-phase region
-                    if(idx != 0)
-                    {
-                        idx = 0;   // H2O -liquid
-                    calc_tpH2O( idx );
-                    } // Fixed on 02.Nov.2009 by DK after discussion with TW
-                    // else //Calc water-gas on from Cp=f(T)
-                        // (on isat = 0)
-                    // calc_tpcv( q, p, CE, CV );
-                    break;
-                  case 1: // P_sat  2-phase region
-                        calc_tpH2O( idx );
-                    break;
-                  default:
-                    Error( GetName(),
-                           "E13DCrun: Invalid method code!");
-                }
+
+                calc_tpH2O(aSpc.isat);
+
+//                switch( aSpc.isat )
+//                {
+////                  case 2: // metastable systems (water at P<Psat or vapor at P>Psat)?
+////                    calc_tpH2O( idx );
+////                    break;
+//                  case 0: // 1-phase region
+////                    if(idx != 0)
+////                    {
+//                        //idx = 0;   // H2O -liquid
+//                    calc_tpH2O( idx );
+////                    }
+//                    // Fixed on 02.Nov.2009 by DK after discussion with TW
+//                    // else //Calc water-gas on from Cp=f(T)
+//                        // (on isat = 0)
+//                    // calc_tpcv( q, p, CE, CV );
+//                    break;
+//                  case 1: // P_sat  2-phase region
+//                        //calc_tpH2O( idx );
+//                        calc_tpH2O( aSpc.isat );
+//                    break;
+//                  default:
+//                    Error( GetName(),
+//                           "E13DCrun: Invalid method code!");
+//                }
 //                if( CV == CPM_GAS )
 //                {   double fd = aW.twp->RT * log(aW.twp->P);
 //                    // Provisional - HGK seems to return a value corrected with ln(P)!

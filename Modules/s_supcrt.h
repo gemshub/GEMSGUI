@@ -267,6 +267,7 @@ class TSupcrt  // description of thermodinamic properties of water
 
 protected:
     void load(int phase, WATERPARAM& wp);
+    void load_metastable(int phase, WATERPARAM& wp);
     void unit(int it, int id, int ip, int ih, int itripl);
     void tpset();
     void valid(int it, int id, int ip, int ih, int itripl, int isat,
