@@ -669,6 +669,7 @@ void TDComp::DCthermo( int q, int p )
 {
     int idx, CM, CE, CV;
     double rho, eps, alp, dal, bet, xborn, yborn, zborn, qborn;
+//    char wPdcC = "87 'W'";
 
     aW.ods_link( p );
     if( dcp != dc+q )
@@ -686,9 +687,9 @@ void TDComp::DCthermo( int q, int p )
     	aW.twp->P = 1e-5;                   // lowest pressure set to 1 Pa
     if( CM == CTPM_HKF || CV == CPM_AKI /*&& aW.twp->P < 1.00001e-5 */ )  // fixed by KD 03.07.03, 05.12.06, 30.01.08
     { // HKF calculations and/or or determination of P_sat if P=0
-        if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
-                ( fabs( aW.twp->P - aSta.Pres ) > 0.001 ) /*|| (dcp->PdcC != aSpc.PdcC) || (CE == CTM_WAT)*/ )    // corrected by KD 25.11.05
-    	{ // re-calculation of properties of H2O using HGF/HGK
+        if( ((fabs(aW.twp->TC - aSta.Temp) > 0.01) ||
+                ( fabs( aW.twp->P - aSta.Pres ) > 0.001 ) || (aSpc.PdcC != dcp->PdcC)) )    // corrected by KD 25.11.05
+        { // re-calculation of properties of H2O using HGF/HGK
     		aSta.Temp = aW.twp->TC;
     		if( aSta.Temp < 0.01 && aSta.Temp >= 0.0 ) // Deg. C!
     			aSta.Temp = 0.01;
@@ -699,13 +700,12 @@ void TDComp::DCthermo( int q, int p )
     			aSta.Pres =  aW.twp->P;
 
             aSpc.CV = CV;
+            aSpc.PdcC = dcp->PdcC;
 
     		TSupcrt supCrt;
             supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres );
             if( aW.twp->P < 6.11732e-3 )   // 06.12.2006  DK
                 aW.twp->P = aSta.Pres;
-
-
 
             // pull water properties from WATERPARAM
             rho = aSta.Dens[aSpc.isat];
@@ -930,8 +930,6 @@ void TDComp::DCthermo( int q, int p )
             Error( GetName(), msg.c_str() );
         //else  RecBuild( key );  // Recalc new record?
     }
-
-    aSpc.PdcC = dcp->PdcC;
 }
 
 

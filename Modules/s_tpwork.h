@@ -168,6 +168,8 @@ struct SPECS
     int CV;
     bool metastable;
     char PdcC;
+    bool isH2Oaq;
+    bool on_sat_curve;
     SPECS(): it(1)
     {
         memset( &id, '\0', sizeof(int) * 9);
