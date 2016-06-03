@@ -1378,23 +1378,26 @@ void TSupcrt::Supcrt_H2O( double TC, double *P )
     CV = aSpc.CV;
     PdcC = aSpc.PdcC;
     isH2Oaq = aSpc.isH2Oaq;
+    on_sat_curve = aSpc.on_sat_curve;
 
     memset( &aSpc, '\0', sizeof(SPECS));
     // in SUPCRT92 set type calculation of parametres
     aSpc.CV = CV;
     aSpc.PdcC = PdcC;
     aSpc.isH2Oaq = isH2Oaq;
+    aSpc.on_sat_curve = on_sat_curve;
     aSpc.it=1;
     aSpc.id=1;
     aSpc.ip=1;
     aSpc.ih=4;
     aSpc.itripl=1;
     double psat = PsHGK(TC + 273.15)*10.0;
-    if( fabs( *P ) == 0 || fabs(*P -  psat) < 1.e-7* psat )
+    if( fabs( *P ) == 0 || aSpc.on_sat_curve)  //|| fabs(*P -  psat) < 1.e-7* psat )
     { // set only T
         aSpc.isat=1;
         aSpc.iopt=1;
 //        aSpc.metastable = 0;
+        aSpc.on_sat_curve = true;
     }
     else
     { //set T and P
