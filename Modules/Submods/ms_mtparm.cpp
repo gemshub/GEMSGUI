@@ -352,6 +352,9 @@ if( P < 1e-5 )  // trial check  5.12.2006
     	fillValue( tp.mark, '+', tp.L );
 
     aW.ods_link(0);
+
+    aSpc.on_sat_curve = false;
+
     for( j=0; j < tp.L; j++ )
     {
         aW.ods_link(0);
@@ -376,7 +379,9 @@ if( P < 1e-5 )  // trial check  5.12.2006
         aW.twp->unE = tp.PunE;
         aW.twp->unV = tp.PunV;
         if( mup->DCS[j] == SRC_DCOMP )
+        {
             aDC->DCthermo( 0, 0 );
+        }
         else aRC->RCthermo( 0, 0 );
 
         if( aWp.init && P_old < 1.00001e-5 && P < 1.00001e-5 )  //  Doubtful ??
@@ -499,12 +504,20 @@ if( P < 1e-5 )  // trial check  5.12.2006
                     tp.mark[j] = CP_NOT_VALID;
             }
        }
+
+       int CV = toupper( aDC->dcp->pct[2] );
+       if (CV == CPM_GAS)
+           aWp.init = false;
+
        if( aWp.init== true )
        { /* load water properties from HGK/HKF*/
          float b_gamma;
          double gfun;
          double rhow, epsw, alpw, dalw, betw, xbornw, ybornw, zbornw, qbornw;
          double rhov, epsv, alpv, dalv, betv, xbornv, ybornv, zbornv, qbornv;
+
+         if (aSpc.metastable)
+             aSpc.isat = 1;
 
          // pull water parameters from WATERPARAM
          rhow = aSta.Dens[aSpc.isat];  // water liquid
