@@ -885,6 +885,10 @@ void TDComp::DCthermo( int q, int p )
 
                 calc_tpH2O(aSpc.isat);
 
+                if (idx == 0 && aSpc.on_sat_curve)
+                    calc_tpH2O(0);
+
+
 //                switch( aSpc.isat )
 //                {
 ////                  case 2: // metastable systems (water at P<Psat or vapor at P>Psat)?

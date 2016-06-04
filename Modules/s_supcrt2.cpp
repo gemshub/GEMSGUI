@@ -1392,7 +1392,7 @@ void TSupcrt::Supcrt_H2O( double TC, double *P )
     aSpc.ih=4;
     aSpc.itripl=1;
     double psat = PsHGK(TC + 273.15)*10.0;
-    if( fabs( *P ) == 0 || aSpc.on_sat_curve || fabs(*P -  psat) < 1.e-5* psat )
+    if( fabs( *P ) == 0 || aSpc.on_sat_curve || fabs(*P -  psat) < 1.e-9* psat )
     { // set only T
         aSpc.isat=1;
         aSpc.iopt=1;
