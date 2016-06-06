@@ -603,7 +603,7 @@ TRTParm::RecCalc( const char *key )
     if( rpp->Pplot != S_OFF )
         exprE_calc();
 
-    aSpc.on_sat_curve = false;
+    aSpc.on_sat_curve = false; // 01.06.2016
 
     /* calc t/d  properties */
     for( j=0; j<rpp->NV; j++ )

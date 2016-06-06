@@ -688,7 +688,7 @@ void TDComp::DCthermo( int q, int p )
     if( CM == CTPM_HKF || CV == CPM_AKI /*&& aW.twp->P < 1.00001e-5 */ )  // fixed by KD 03.07.03, 05.12.06, 30.01.08
     { // HKF calculations and/or or determination of P_sat if P=0
         if( ((fabs(aW.twp->TC - aSta.Temp) > 0.01) ||
-                ( fabs( aW.twp->P - aSta.Pres ) > 0.001 ) || (aSpc.PdcC != dcp->PdcC)) )    // corrected by KD 25.11.05
+                ( fabs( aW.twp->P - aSta.Pres ) > 0.001 ) || (aSpc.PdcC != dcp->PdcC)) )    // corrected by KD 25.11.05 // added || (aSpc.PdcC != dcp->PdcC)) 01.06.2016
         { // re-calculation of properties of H2O using HGF/HGK
     		aSta.Temp = aW.twp->TC;
     		if( aSta.Temp < 0.01 && aSta.Temp >= 0.0 ) // Deg. C!
@@ -699,8 +699,10 @@ void TDComp::DCthermo( int q, int p )
     		else
     			aSta.Pres =  aW.twp->P;
 
+            // 01.06.2016
             aSpc.CV = CV;
             aSpc.PdcC = dcp->PdcC;
+            //
 
     		TSupcrt supCrt;
             supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres );
@@ -736,7 +738,7 @@ void TDComp::DCthermo( int q, int p )
         else
         { // calculated before
             aW.twp->P = aSta.Pres;
-            aW.twp->wRo  = aSta.Dens[aSpc.isat];
+            aW.twp->wRo  = aSta.Dens[aSpc.isat]; // 01.06.2016
         }
     }
 
@@ -885,29 +887,32 @@ void TDComp::DCthermo( int q, int p )
 
                 calc_tpH2O(aSpc.isat);
 
+                // 01.06.2016
                 if (idx == 0 && aSpc.on_sat_curve)
                     calc_tpH2O(0);
 
-  if (idx == 0 )  // H2O vapor
-  {   double fd = aW.twp->RT * log(aW.twp->P);
+                if (idx == 0 )  // H2O vapor
+                {   double fd = aW.twp->RT * log(aW.twp->P);
                     // Provisional - HGK seems to return a value corrected with ln(P)!
                     aW.twp->G -= fd;   // This is really needed
                     aW.twp->S -= 30.2;  // Not clear why this needs to be done
-//                    aW.twp->H -= fd;   // provisional - needs checking against IAPS tables DK 4.06.2016
-//                    aW.twp->S += fd/aW.twp->T;   // lnP seems more reasonable to correct H0 than S0
-  }
+//                  aW.twp->H -= fd;   // provisional - needs checking against IAPS tables DK 4.06.2016
+//                  aW.twp->S += fd/aW.twp->T;   // lnP seems more reasonable to correct H0 than S0
+                }
+
+  // 01.06.2016
 
 //                switch( aSpc.isat )
 //                {
-////                  case 2: // metastable systems (water at P<Psat or vapor at P>Psat)?
-////                    calc_tpH2O( idx );
-////                    break;
+//                  case 2: // metastable systems (water at P<Psat or vapor at P>Psat)?
+//                    calc_tpH2O( idx );
+//                    break;
 //                  case 0: // 1-phase region
-////                    if(idx != 0)
-////                    {
+//                    if(idx != 0)
+//                    {
 //                        //idx = 0;   // H2O -liquid
 //                    calc_tpH2O( idx );
-////                    }
+//                    }
 //                    // Fixed on 02.Nov.2009 by DK after discussion with TW
 //                    // else //Calc water-gas on from Cp=f(T)
 //                        // (on isat = 0)

@@ -728,6 +728,8 @@ TReacDC::RCthermo( int q, int p )
 
     w_dyn_new();
 
+    aSpc.on_sat_curve = false; // 01.06.2016 - needs testing
+
     // test the component of reaction and calculate its t/d properties
     for( j=0; j<rc[q].nDC; j++ )
     {

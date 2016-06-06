@@ -1255,7 +1255,7 @@ void TSupcrt::calcv3(int iopt, int itripl, double Temp, double *Pres,
 }
 
 //--------------------------------------------------------------------//
-// Calc dependent state values
+// Calc metastable 01.06.2016
 void TSupcrt::calcv2(int iopt, int itripl, double Temp, double *Pres,
                      double *Dens, int epseqn)
 {
@@ -1304,44 +1304,27 @@ void TSupcrt::HGKeqn(int isat, int iopt, int itripl, double Temp,
 {
     a1.rt = ac->gascon * Temp;
     HGKsat(isat, iopt, itripl, Temp, Pres, Dens0, epseqn);
-//    if (!aSpc.metastable)
-//    {
-        if (isat == 0)
-        {
-            // metastable phase propperties
-            bb(Temp);
-            calcv2(iopt, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
-            thmHGK(&aSta.Dens[1], Temp);
-            dimHGK(isat, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
+    if (isat == 0)
+    {
+        // metastable phase propperties 01.06.2016
+        bb(Temp);
+        calcv2(iopt, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
+        thmHGK(&aSta.Dens[1], Temp);
+        dimHGK(isat, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
 
-            memcpy(&wl, &wr, sizeof(WPROPS));
-
-            // stable phase properties
-            bb(Temp);
-            calcv3(iopt, itripl, Temp, Pres, Dens0, epseqn);
-            thmHGK(Dens0, Temp);
-            dimHGK(isat, itripl, Temp, Pres, Dens0, epseqn);
-        }
-        else
-        {
-            memcpy(&wl, &wr, sizeof(WPROPS));             /* from wr to wl */
-            dimHGK(2, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
-        }
-//    } else
-//    {
-//        // metastable phase propperties
-//        bb(Temp);
-//        calcv2(iopt, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
-//        thmHGK(&aSta.Dens[1], Temp);
-//        dimHGK(isat, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
-
-//        memcpy(&wl, &wr, sizeof(WPROPS));
+        memcpy(&wl, &wr, sizeof(WPROPS)); // 01.06.2016
 
         // stable phase properties
-//        calcv3(iopt, itripl, Temp, Pres, Dens0, epseqn);
-//        thmHGK(Dens0, Temp);
-//        dimHGK(isat, itripl, Temp, Pres, Dens0, epseqn);
-//    }
+        bb(Temp);
+        calcv3(iopt, itripl, Temp, Pres, Dens0, epseqn);
+        thmHGK(Dens0, Temp);
+        dimHGK(isat, itripl, Temp, Pres, Dens0, epseqn);
+    }
+    else
+    {
+        memcpy(&wl, &wr, sizeof(WPROPS));             /* from wr to wl */
+        dimHGK(2, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
+    }
 }
 
 //--------------------------------------------------------------------//
@@ -1372,39 +1355,40 @@ void TSupcrt::Supcrt_H2O( double TC, double *P )
 {
     int eR, CV;
     char PdcC;
-    bool isH2Oaq, on_sat_curve;
+    bool on_sat_curve;
     double tempy;
 
+    // 01.06.2016
     CV = aSpc.CV;
     PdcC = aSpc.PdcC;
-    isH2Oaq = aSpc.isH2Oaq;
     on_sat_curve = aSpc.on_sat_curve;
+    //
 
     memset( &aSpc, '\0', sizeof(SPECS));
     // in SUPCRT92 set type calculation of parametres
+    // 01.06.2016
     aSpc.CV = CV;
     aSpc.PdcC = PdcC;
-    aSpc.isH2Oaq = isH2Oaq;
     aSpc.on_sat_curve = on_sat_curve;
+    //
     aSpc.it=1;
     aSpc.id=1;
     aSpc.ip=1;
     aSpc.ih=4;
     aSpc.itripl=1;
+    // 01.06.2016
     double psat = PsHGK(TC + 273.15)*10.0;
-    if( fabs( *P ) == 0 || aSpc.on_sat_curve || fabs(*P -  psat) < 1.e-9* psat )
+    if( fabs( *P ) == 0 || aSpc.on_sat_curve || fabs(*P -  psat) < 1.e-9* psat ) // || aSpc.on_sat_curve || fabs(*P -  psat) < 1.e-9* psat added 01.06.2016
     { // set only T
         aSpc.isat=1;
         aSpc.iopt=1;
-//        aSpc.metastable = 0;
+        // 01.06.2016
         aSpc.on_sat_curve = true;
     }
     else
     { //set T and P
         aSpc.isat = 0;
         aSpc.iopt = 2;
-//        aSpc.on_sat_curve = false;
-//        aSpc.metastable = 1;
     }
     aSpc.useLVS=1;
     aSpc.epseqn=4;
@@ -1463,15 +1447,14 @@ void TSupcrt::Supcrt_H2O( double TC, double *P )
         HGKeqn(aSpc.isat, aSpc.iopt, aSpc.itripl,
                aSta.Temp, &aSta.Pres, &aSta.Dens[0], aSpc.epseqn);
 
-        // if metastable
+        // if metastable added 01.06.2016
         if (aSpc.metastable)
             aSpc.isat = 1;
-        //if metastable isat=1
     }
     load(0, aWp);
     if (aSpc.isat == 1)
     {
-        if (!aSpc.metastable)
+        if (!aSpc.metastable) // 01.06.2016
         {
             tempy = aSta.Dens[0];
             aSta.Dens[0] = aSta.Dens[1];
@@ -1480,14 +1463,6 @@ void TSupcrt::Supcrt_H2O( double TC, double *P )
         load(aSpc.isat, aWp);
     }
 
-//    if (aSpc.metastable == 1)
-//    {
-//        tempy = aSta.Dens[0];
-//        aSta.Dens[0] = aSta.Dens[1];
-//        aSta.Dens[1] = tempy;
-//        //load(1, aWp); with isat=1
-//        load_metastable(0, aWp);
-//    }
     // translate T - to users units
     aSta.Temp   = TdegUS(aSpc.it, aSta.Temp);
     aSta.Pres  *= un.fp;

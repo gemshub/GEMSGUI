@@ -353,7 +353,7 @@ if( P < 1e-5 )  // trial check  5.12.2006
 
     aW.ods_link(0);
 
-    aSpc.on_sat_curve = false;
+    aSpc.on_sat_curve = false; // 01.06.2016
 
     for( j=0; j < tp.L; j++ )
     {
@@ -505,9 +505,11 @@ if( P < 1e-5 )  // trial check  5.12.2006
             }
        }
 
+       //  01.06.2016
        int CV = toupper( aDC->dcp->pct[2] );
        if (CV == CPM_GAS)
            aWp.init = false;
+       //
 
        if( aWp.init== true )
        { /* load water properties from HGK/HKF*/
@@ -516,7 +518,7 @@ if( P < 1e-5 )  // trial check  5.12.2006
          double rhow, epsw, alpw, dalw, betw, xbornw, ybornw, zbornw, qbornw;
          double rhov, epsv, alpv, dalv, betv, xbornv, ybornv, zbornv, qbornv;
 
-         if (aSpc.metastable)
+         if (aSpc.metastable) // 01.06.2016
              aSpc.isat = 1;
 
          // pull water parameters from WATERPARAM
