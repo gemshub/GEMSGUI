@@ -895,7 +895,7 @@ void TDComp::DCthermo( int q, int p )
                 {   double fd = aW.twp->RT * log(aW.twp->P);
                     // Provisional - HGK seems to return a value corrected with ln(P)!
                     aW.twp->G -= fd;   // This is really needed
-                    aW.twp->S -= 30.2;  // Not clear why this needs to be done
+                    //aW.twp->S -= 30.2;  // Not clear why this needs to be done
 //                  aW.twp->H -= fd;   // provisional - needs checking against IAPS tables DK 4.06.2016
 //                  aW.twp->S += fd/aW.twp->T;   // lnP seems more reasonable to correct H0 than S0
                 }
