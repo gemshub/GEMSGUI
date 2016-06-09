@@ -139,6 +139,24 @@ double  TSupcrt::PsHGK(double t)
     return(psHGK);
 }
 
+// added 09.06.2016 DM
+double TSupcrt::getPsatHGK (double TK)
+{
+//    double dp;
+//    double p  = PsHGK(TK);
+//    double dL= 0.0e0;
+//    double dV = 0.0e0;
+
+//    do
+//    {
+//        corr(aSpc.itripl, TK, &p, &dL, &dV, &trp.delg, aSpc.epseqn);
+//        dp   = trp.delg * ac->gascon * TK / (1.0e0 / dV - 1.0e0 / dL);
+//        p  += dp;
+//    }
+//    while ( fabs(trp.delg) > 1.0e-4 );
+    return PsHGK(TK);
+}
+
 //--------------------------------------------------------------------//
 //the "excluded volume" (eq A.3)and virial coefficient (eq A.4), in cm3/g (b1,b2)
 //(b1t,b1tt,b2t,b2tt)./* /ellcon/  /aconst/  /bconst/ bp(10), bq(10) */

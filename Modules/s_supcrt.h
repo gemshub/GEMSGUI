@@ -343,6 +343,9 @@ public:
     //--- Value manipulation
     void Supcrt_H2O( double TC, double *P );
 
+    // 09.06.2016 DM
+    double getPsatHGK (double TK);
+
 };
 
 #endif   // _s_subcrt_h
