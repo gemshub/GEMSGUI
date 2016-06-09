@@ -23,6 +23,8 @@
 #include "m_reacdc.h"
 #include "m_dcomp.h"
 #include "visor.h"
+// added 09.06.2016 for calculating Psat when exporting GEMS3K files and P=0 is not specified; DM
+#include "Modules/s_supcrt.h"
 
 TMTparm* TMTparm::sm;
 
@@ -753,6 +755,15 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
 
       if( cP < 1e-5 )
        CSD->Psat[it] = tp.P*1e5;
+      else // DM added 09.06.2016
+      {
+//          double Psat = 0.0;
+          TSupcrt supCrt;
+//          supCrt.Supcrt_H2O(cT, &Psat);
+//          CSD->Psat[it] = Psat * 100000; // in Pa
+          if (cT+273.15 < 647.067e0)
+            CSD->Psat[it] = supCrt.getPsatHGK(cT + 273.15)*10.0*100000; // in Pa
+      }
 
 //      cout << "tp.RoW = " << tp.RoW << " tp.EpsW = " << tp.EpsW << endl;
 
@@ -864,6 +875,15 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
 
       if( cP < 1e-5 )
        CSD->Psat[it] = tp.P*1e5;
+      else // DM added 09.06.2016
+      {
+//          double Psat = 0.0;
+          TSupcrt supCrt;
+//          supCrt.Supcrt_H2O(cT, &Psat);
+//          CSD->Psat[it] = Psat*100000;
+          if (cT+273.15 < 647.067e0)
+            CSD->Psat[it] = supCrt.getPsatHGK(cT + 273.15)*10.0*100000; // in Pa
+      }
 
       CSD->denW[( 0 * CSD->nPp + ip) ] = tp.RoW    *1e3;
       CSD->denW[( 1 * CSD->nPp + ip) ] = tp.dRdTW  *1e3;
