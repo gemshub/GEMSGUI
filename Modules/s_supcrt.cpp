@@ -139,6 +139,24 @@ double  TSupcrt::PsHGK(double t)
     return(psHGK);
 }
 
+// added 09.06.2016 DM
+double TSupcrt::getPsatHGK (double TK)
+{
+//    double dp;
+//    double p  = PsHGK(TK);
+//    double dL= 0.0e0;
+//    double dV = 0.0e0;
+
+//    do
+//    {
+//        corr(aSpc.itripl, TK, &p, &dL, &dV, &trp.delg, aSpc.epseqn);
+//        dp   = trp.delg * ac->gascon * TK / (1.0e0 / dV - 1.0e0 / dL);
+//        p  += dp;
+//    }
+//    while ( fabs(trp.delg) > 1.0e-4 );
+    return PsHGK(TK);
+}
+
 //--------------------------------------------------------------------//
 //the "excluded volume" (eq A.3)and virial coefficient (eq A.4), in cm3/g (b1,b2)
 //(b1t,b1tt,b2t,b2tt)./* /ellcon/  /aconst/  /bconst/ bp(10), bq(10) */
@@ -1251,8 +1269,37 @@ MET600:
     *r     = Tee;
 }
 
-void
-TSupcrt::load(int phase, WATERPARAM& wp)
+void TSupcrt::load_metastable(int phase, WATERPARAM& wp)
+{
+    wp.Aw[0]     = wl.Aw;
+    wp.Gw[0]     = wl.Gw;
+    wp.Sw[0]     = wl.Sw;
+    wp.Uw[0]     = wl.Uw;
+    wp.Hw[0]     = wl.Hw;
+    wp.Dielw[0]  = wl.Dielw;
+    wp.ZBorn[0]  = wl.ZBorn;
+    wp.Surtenw[0]= wl.Surtenw;
+    wp.Cvw[0]    = wl.Cvw;
+    wp.Cpw[0]    = wl.Cpw;
+    wp.Alphaw[0] = wl.Alphaw;
+    wp.Betaw[0]  = wl.Betaw;
+    wp.YBorn[0]  = wl.YBorn;
+    wp.QBorn[0]  = wl.QBorn;
+    wp.XBorn[0]  = wl.XBorn;
+    wp.Tcondw[0] = wl.Tcondw;
+    wp.Tdiffw[0] = wl.Tdiffw;
+    wp.Prndtlw[0]= wl.Prndtlw;
+    wp.dAldT[0]  = wl.dAldT;
+    wp.Albew[0]  = wl.Albew;
+    wp.Speedw[0] = wl.Speedw;
+    wp.Viscw[0]  = wl.Viscw;
+    wp.Visckw[0] = wl.Visckw;
+    wp.Gigw[0]   = id.gi;
+    wp.Sigw[0]   = id.si;
+    wp.Cpigw[0]  = id.cpi;
+}
+
+void TSupcrt::load(int phase, WATERPARAM& wp)
 {
     if( !phase )
     {   // single phase region or vapor at Psat
@@ -1313,7 +1360,6 @@ TSupcrt::load(int phase, WATERPARAM& wp)
         wp.Sigw[1]   = id.si;
         wp.Cpigw[1]  = id.cpi;
     }
-
 }
 
 //--------------------------------------------------------------------//

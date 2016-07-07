@@ -165,6 +165,10 @@ struct SPECS
     int useLVS;
     int epseqn;
     int icrit;
+    int CV;
+    bool metastable;
+    char PdcC;
+    bool on_sat_curve;
     SPECS(): it(1)
     {
         memset( &id, '\0', sizeof(int) * 9);

@@ -667,6 +667,7 @@ TDComp::calc_tpH2O( int pst )
     ErrorIf( !aW.twp, GetName(), "E23DCrun: Undefined twp!" );
     aW.twp->T = aSta.Temp;
     aW.twp->P = aSta.Pres;
+    aW.twp->wRo = aSta.Dens[pst]; // added DM 13.06.2016
     aW.twp->V = dcp->mwt / aSta.Dens[pst] / 10.;  /* j/bar */
 		// aW.twp->F = aWp.Aw[pst] * CaltoJ;
 		// aW.twp->U = aWp.Uw[pst] * CaltoJ;

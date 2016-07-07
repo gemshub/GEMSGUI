@@ -603,6 +603,8 @@ TRTParm::RecCalc( const char *key )
     if( rpp->Pplot != S_OFF )
         exprE_calc();
 
+//    aSpc.on_sat_curve = false; // 01.06.2016
+
     /* calc t/d  properties */
     for( j=0; j<rpp->NV; j++ )
     {
@@ -645,6 +647,7 @@ TRTParm::RecCalc( const char *key )
                 aW.twp->TCst = aDC->dcp->TCst;
 		aW.twp->Tst = aW.twp->TCst + C_to_K;
                 aW.twp->Pst = aDC->dcp->Pst;
+                aSpc.on_sat_curve = false; // 01.06.2016
                 aDC->DCthermo( 0, 0 );
             }
             break;

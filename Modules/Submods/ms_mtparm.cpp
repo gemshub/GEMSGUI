@@ -23,6 +23,8 @@
 #include "m_reacdc.h"
 #include "m_dcomp.h"
 #include "visor.h"
+// added 09.06.2016 for calculating Psat when exporting GEMS3K files and P=0 is not specified; DM
+#include "Modules/s_supcrt.h"
 
 TMTparm* TMTparm::sm;
 
@@ -352,6 +354,9 @@ if( P < 1e-5 )  // trial check  5.12.2006
     	fillValue( tp.mark, '+', tp.L );
 
     aW.ods_link(0);
+
+    aSpc.on_sat_curve = false; // 01.06.2016
+
     for( j=0; j < tp.L; j++ )
     {
         aW.ods_link(0);
@@ -376,7 +381,9 @@ if( P < 1e-5 )  // trial check  5.12.2006
         aW.twp->unE = tp.PunE;
         aW.twp->unV = tp.PunV;
         if( mup->DCS[j] == SRC_DCOMP )
+        {
             aDC->DCthermo( 0, 0 );
+        }
         else aRC->RCthermo( 0, 0 );
 
         if( aWp.init && P_old < 1.00001e-5 && P < 1.00001e-5 )  //  Doubtful ??
@@ -499,12 +506,22 @@ if( P < 1e-5 )  // trial check  5.12.2006
                     tp.mark[j] = CP_NOT_VALID;
             }
        }
+
+       //  01.06.2016
+       int CV = toupper( aDC->dcp->pct[2] );
+       if (CV == CPM_GAS)
+           aWp.init = false;
+       //
+
        if( aWp.init== true )
        { /* load water properties from HGK/HKF*/
          float b_gamma;
          double gfun;
          double rhow, epsw, alpw, dalw, betw, xbornw, ybornw, zbornw, qbornw;
          double rhov, epsv, alpv, dalv, betv, xbornv, ybornv, zbornv, qbornv;
+
+         if (aSpc.metastable) // 01.06.2016
+             aSpc.isat = 1;
 
          // pull water parameters from WATERPARAM
          rhow = aSta.Dens[aSpc.isat];  // water liquid
@@ -738,6 +755,15 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
 
       if( cP < 1e-5 )
        CSD->Psat[it] = tp.P*1e5;
+      else // DM added 09.06.2016
+      {
+//          double Psat = 0.0;
+          TSupcrt supCrt;
+//          supCrt.Supcrt_H2O(cT, &Psat);
+//          CSD->Psat[it] = Psat * 100000; // in Pa
+          if (cT+273.15 < 647.067e0)
+            CSD->Psat[it] = supCrt.getPsatHGK(cT + 273.15)*10.0*100000; // in Pa
+      }
 
 //      cout << "tp.RoW = " << tp.RoW << " tp.EpsW = " << tp.EpsW << endl;
 
@@ -849,6 +875,15 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
 
       if( cP < 1e-5 )
        CSD->Psat[it] = tp.P*1e5;
+      else // DM added 09.06.2016
+      {
+//          double Psat = 0.0;
+          TSupcrt supCrt;
+//          supCrt.Supcrt_H2O(cT, &Psat);
+//          CSD->Psat[it] = Psat*100000;
+          if (cT+273.15 < 647.067e0)
+            CSD->Psat[it] = supCrt.getPsatHGK(cT + 273.15)*10.0*100000; // in Pa
+      }
 
       CSD->denW[( 0 * CSD->nPp + ip) ] = tp.RoW    *1e3;
       CSD->denW[( 1 * CSD->nPp + ip) ] = tp.dRdTW  *1e3;

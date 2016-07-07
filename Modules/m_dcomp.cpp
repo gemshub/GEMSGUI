@@ -669,6 +669,7 @@ void TDComp::DCthermo( int q, int p )
 {
     int idx, CM, CE, CV;
     double rho, eps, alp, dal, bet, xborn, yborn, zborn, qborn;
+//    char wPdcC = "87 'W'";
 
     aW.ods_link( p );
     if( dcp != dc+q )
@@ -686,9 +687,9 @@ void TDComp::DCthermo( int q, int p )
     	aW.twp->P = 1e-5;                   // lowest pressure set to 1 Pa
     if( CM == CTPM_HKF || CV == CPM_AKI /*&& aW.twp->P < 1.00001e-5 */ )  // fixed by KD 03.07.03, 05.12.06, 30.01.08
     { // HKF calculations and/or or determination of P_sat if P=0
-    	if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
-    			( fabs( aW.twp->P - aSta.Pres ) > 0.001 ))    // corrected by KD 25.11.05
-    	{ // re-calculation of properties of H2O using HGF/HGK
+        if( ((fabs(aW.twp->TC - aSta.Temp) > 0.01) ||
+                ( fabs( aW.twp->P - aSta.Pres ) > 0.001 ) || (aSpc.PdcC != dcp->PdcC)) )    // corrected by KD 25.11.05 // added || (aSpc.PdcC != dcp->PdcC)) 01.06.2016
+        { // re-calculation of properties of H2O using HGF/HGK
     		aSta.Temp = aW.twp->TC;
     		if( aSta.Temp < 0.01 && aSta.Temp >= 0.0 ) // Deg. C!
     			aSta.Temp = 0.01;
@@ -697,6 +698,11 @@ void TDComp::DCthermo( int q, int p )
     			aSta.Pres = 0.0;  // 06.12.2006  DK
     		else
     			aSta.Pres =  aW.twp->P;
+
+            // 01.06.2016
+            aSpc.CV = CV;
+            aSpc.PdcC = dcp->PdcC;
+            //
 
     		TSupcrt supCrt;
             supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres );
@@ -732,6 +738,7 @@ void TDComp::DCthermo( int q, int p )
         else
         { // calculated before
             aW.twp->P = aSta.Pres;
+            aW.twp->wRo  = aSta.Dens[aSpc.isat]; // 01.06.2016
         }
     }
 
@@ -877,31 +884,54 @@ void TDComp::DCthermo( int q, int p )
                     idx = 0;            //  'G'     H2O_gas (vapor, steam)
                 else
                     idx = 1;            //  'F'     H2O_liquid
-                switch( aSpc.isat )
-                {      // shall we have an option for metastable systems (water at P<Psat or vapor at P>Psat)?
-                  case 0: // 1-phase region
-                    if(idx != 0)
-                    // {
-                        idx = 0;   // H2O -liquid
-                    calc_tpH2O( idx );
-                    // } Fixed on 02.Nov.2009 by DK after discussion with TW
-                    // else //Calc water-gas on from Cp=f(T)
-                        // (on isat = 0)
-                    // calc_tpcv( q, p, CE, CV );
-                    break;
-                  case 1: // P_sat  2-phase region
-                        calc_tpH2O( idx );
-                    break;
-                  default:
-                    Error( GetName(),
-                           "E13DCrun: Invalid method code!");
-                }
-                if( CV == CPM_GAS )
+
+                calc_tpH2O(aSpc.isat);
+
+                // 01.06.2016
+                if (idx == 0 && aSpc.on_sat_curve)
+                    calc_tpH2O(0);
+
+                if (idx == 0 )  // H2O vapor
                 {   double fd = aW.twp->RT * log(aW.twp->P);
                     // Provisional - HGK seems to return a value corrected with ln(P)!
-                    aW.twp->G -= fd;
-                    aW.twp->S += fd/aW.twp->T;   // even more provisional for entropy!
+                    aW.twp->G -= fd;   // This is really needed
+                    //aW.twp->S -= 30.2;  // Not clear why this needs to be done
+//                  aW.twp->H -= fd;   // provisional - needs checking against IAPS tables DK 4.06.2016
+//                  aW.twp->S += fd/aW.twp->T;   // lnP seems more reasonable to correct H0 than S0
                 }
+
+  // 01.06.2016
+
+//                switch( aSpc.isat )
+//                {
+//                  case 2: // metastable systems (water at P<Psat or vapor at P>Psat)?
+//                    calc_tpH2O( idx );
+//                    break;
+//                  case 0: // 1-phase region
+//                    if(idx != 0)
+//                    {
+//                        //idx = 0;   // H2O -liquid
+//                    calc_tpH2O( idx );
+//                    }
+//                    // Fixed on 02.Nov.2009 by DK after discussion with TW
+//                    // else //Calc water-gas on from Cp=f(T)
+//                        // (on isat = 0)
+//                    // calc_tpcv( q, p, CE, CV );
+//                    break;
+//                  case 1: // P_sat  2-phase region
+//                        //calc_tpH2O( idx );
+//                        calc_tpH2O( aSpc.isat );
+//                    break;
+//                  default:
+//                    Error( GetName(),
+//                           "E13DCrun: Invalid method code!");
+//                }
+//                if( CV == CPM_GAS )
+//                {   double fd = aW.twp->RT * log(aW.twp->P);
+//                    // Provisional - HGK seems to return a value corrected with ln(P)!
+//                    aW.twp->G -= fd;
+//                    aW.twp->S += fd/aW.twp->T;   // even more provisional for entropy! seems to br
+//                }
                 break;
               default:    // 'K' or any other code
                 calc_tphkf( q, p );  // HKF calculations for aqueous species

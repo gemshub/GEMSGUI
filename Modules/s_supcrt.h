@@ -267,6 +267,7 @@ class TSupcrt  // description of thermodinamic properties of water
 
 protected:
     void load(int phase, WATERPARAM& wp);
+    void load_metastable(int phase, WATERPARAM& wp);
     void unit(int it, int id, int ip, int ih, int itripl);
     void tpset();
     void valid(int it, int id, int ip, int ih, int itripl, int isat,
@@ -333,12 +334,17 @@ protected:
     double TdPsdT(double t_);
     void calcv3(int iopt, int itripl, double Temp, double *Pres,
                 double *Dens, int epseqn);
+    void calcv2(int iopt, int itripl, double Temp, double *Pres,
+                         double *Dens, int epseqn);
     double TdegUS(int it, double t);
 public:
 
     TSupcrt();
     //--- Value manipulation
     void Supcrt_H2O( double TC, double *P );
+
+    // 09.06.2016 DM
+    double getPsatHGK (double TK);
 
 };
 
