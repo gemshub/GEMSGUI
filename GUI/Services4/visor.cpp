@@ -19,6 +19,7 @@
 //
 #include <qapplication.h>
 #include <iostream>
+#include <unistd.h>
 //using namespace std;
 
 #include <QDir>

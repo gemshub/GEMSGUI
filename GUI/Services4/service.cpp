@@ -58,7 +58,7 @@ using namespace std;
 #include "InputSystemDialog.h"
 #include "PhaseInfoDialog.h"
 
-QMutex mutex;
+QMutex qmutex;
 
 //----------------------------------------------------------------
 // GUI Service functions for modules
@@ -68,7 +68,7 @@ bool vfQuestion(QWidget* par, const gstring& title, const gstring& mess)
 {
   if( pThread != QThread::currentThreadId() )
   {
-     QMutexLocker  loker(&mutex);
+     QMutexLocker  loker(&qmutex);
      // (1)
      // int result = 3;
      // NewThread *thread = dynamic_cast<NewThread*>(QThread::currentThread());
@@ -138,7 +138,7 @@ void vfMessage(QWidget* par, const gstring& title, const gstring& mess, WarnType
 {
 	  if( pThread != QThread::currentThreadId() )
 	  {
-             QMutexLocker  loker(&mutex);
+             QMutexLocker  loker(&qmutex);
 	     // (2)	
 	       	 pVisorImp->thdata.setDThread( title, mess );
 	       	 QMetaObject::invokeMethod( pVisorImp, "theadService", 
@@ -199,7 +199,7 @@ int vfQuestion3(QWidget* par, const gstring& title, const gstring& mess, const g
 {
   if( pThread != QThread::currentThreadId() )
   {
-     QMutexLocker  loker(&mutex);
+     QMutexLocker  loker(&qmutex);
      // (2)	
    	 pVisorImp->thdata.setDThread( title, mess, s1, s2, s3 );
    	 QMetaObject::invokeMethod( pVisorImp, "theadService", 
@@ -258,7 +258,7 @@ int vfChoice(QWidget* par, TCStringArray& arr, const char* prompt, int sel)
 {
   if( pThread != QThread::currentThreadId() )
   {
-     QMutexLocker  loker(&mutex);
+     QMutexLocker  loker(&qmutex);
      // (2)	
      pVisorImp->thdata.setDThread( arr, prompt, sel );
    	 QMetaObject::invokeMethod( pVisorImp, "theadService", 
@@ -295,7 +295,7 @@ int vfChoice2(QWidget* par, TCStringArray& arr, const char* prompt,
 {
   if( pThread != QThread::currentThreadId() )
   {
-     QMutexLocker  loker(&mutex);
+     QMutexLocker  loker(&qmutex);
      // (2)	
      pVisorImp->thdata.setDThread( arr, prompt, sel, all_ );
    	 QMetaObject::invokeMethod( pVisorImp, "theadService", 
@@ -359,7 +359,7 @@ vfExcludeFillEdit(QWidget* par, const char* caption,
 {
   if( pThread != QThread::currentThreadId() )
   {
-     QMutexLocker  loker(&mutex);
+     QMutexLocker  loker(&qmutex);
      // (2)	
      pVisorImp->thdata.setDThread( caption, aICkeys, fill_data );
    	 QMetaObject::invokeMethod( pVisorImp, "theadService", 
