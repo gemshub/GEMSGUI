@@ -47,7 +47,7 @@ distro=`lsb_release -d | awk '{print $2$3$4}' | sed 's/\./_/g'`
 # Create the directory that will be tarred up for distribution.
 etardir=`echo $executable"_"$distro | awk '{print tolower($0)}'`
 tardir=Gems3-app
-gemsdistro=Gems3.3.3-2674.1060-linux-x86-64.tgz
+gemsdistro=Gems3.3.4-ff37d86.dfabadd-linux-x86-64.tgz
 mkdir $tardir
 echo "Created tar ball directory: "$tardir
 
@@ -73,14 +73,14 @@ done
 # Create the fonts directory and copy fonts across. You
 # will obviously need to assign the directory path leading
 # to your fonts to "fontdir", e.g. /home/you/qt/lib/fonts
-qtfontsdir=$HOME/Qt/5.4/Src/qtbase/lib/fonts
+qtfontsdir=$HOME/Qt/5.7/Src/qtbase/lib/fonts
 fontsdir=$PWD/$tardir/fonts
 mkdir $fontsdir
 echo "Created fonts directory: "$fontsdir" copying fonts..."
 cp -r $qtfontsdir/* $fontsdir
 
 # You will need to change this to point to wherever libqxcb.so lives on your PC.
-qtplatformplugin=$HOME/Qt/5.4/gcc_64/plugins/platforms/libqxcb.so
+qtplatformplugin=$HOME/Qt/5.7/gcc_64/plugins/platforms/libqxcb.so
 qtplatformplugindir=$tardir/platforms
 mkdir $qtplatformplugindir
 echo "Created platforms directory: "$qtplatformplugindir
@@ -157,7 +157,7 @@ chmod u+x $fixscript
 
 # Edit this script to add whatever other additional plugins your application
 # requires.
-qtsqliteplugin=$HOME/Qt/5.4/gcc_64/plugins/sqldrivers/libqsqlite.so
+qtsqliteplugin=$HOME/Qt/5.7/gcc_64/plugins/sqldrivers/libqsqlite.so
 qtsqliteplugindir=$tardir/sqldrivers
 mkdir $qtsqliteplugindir
 echo "Created sql driver directory: "$qtsqliteplugindir
@@ -189,7 +189,7 @@ execscript=$tardir/"run$executable.sh"
 # Create the Resources directory and copy Resources across.
 # You will obviously need to assign the directory path leading
 # to GEM-Selektor Resources e.g. /home/you/DevGEMS/trunk/gems-gui/Resources
-gresourcesdir=$HOME/DevGEMS/devPhase/gems-gui/Resources
+gresourcesdir=$HOME/gitGEMS3/build-release/Resources
 resourcesdir=$tardir/Resources
 mkdir $resourcesdir
 echo "Created Resources directory: "$resourcesdir", copying ..."
@@ -197,15 +197,15 @@ cp -r $gresourcesdir/* $resourcesdir
 echo "Copied Resources directory from "$gresourcesdir" to "$resourcesdir
 
 #Copying executables for generating GEM-Selektor help database
-qtqcollectiongenerator=$HOME/Qt/5.4/gcc_64/bin/qcollectiongenerator
+qtqcollectiongenerator=$HOME/Qt/5.7/gcc_64/bin/qcollectiongenerator
 cp $qtqcollectiongenerator $tardir
 echo "Copied executable "$qtqcollectiongenerator" to "$tardir
-qtqhelpgenerator=$HOME/Qt/5.4/gcc_64/bin/qhelpgenerator
+qtqhelpgenerator=$HOME/Qt/5.7/gcc_64/bin/qhelpgenerator
 cp $qtqhelpgenerator $tardir
 echo "Copied executable "$qtqhelpgenerator" to "$tardir
 
 # Copying minor files needed to complete installation and start GEMS3
-gbuilddir=$HOME/DevGEMS/devPhase/build-release
+gbuilddir=$HOME/gitGEMS3/build-release
 cp -r $gbuilddir/ToDesktop $tardir/ToDesktop
 cp $gbuilddir/gems3.png $tardir/gems3.png
 cp $gbuilddir/INSTALL.linux.txt $tardir/INSTALL.linux.txt

@@ -9,15 +9,14 @@ http://goblincoding.com/2013/11/07/deploying-qt-5-applications-on-ubuntu-12-04/
 
 1. Make sure that Qt5 SDK is installed with source code as /Qt in 
 your home directory; we assume that the Qt library is located as 
-"/home/you/Qt/5.4/src" and "/home/you/Qt/5.4/gcc_64" (or gcc_32).
+"/home/you/Qt/5.7/src" and "/home/you/Qt/5.7/gcc_64" (or gcc_32).
 If not yet done, copy recursively the "/Docs/build-release" directory from the 
-folder where this file is located to the folder in which the "/gems-gui" folder
-is located. Typically, you should have "~/DevGEMS/devPhase/gems-gui";
-"~/DevGEMS/devPhase/standalone"; and "~/DevGEMS/devPhase/build-release" folders
-at the same level. 
+folder where this file is located to the folder in which the "/gems3gui" folder
+is located. Typically, you should have "~/DevGEMS/gems3gui";
+"~/DevGEMS/standalone"; and "~/DevGEMS/build-release" folders at the same level. 
 
 2. Make sure that you have built (with the QtCreator) a release variant 
-of GEM-Selektor v.3.3.x in "/home/you/DevGEMS/devPhase/build-release", where 
+of GEM-Selektor v.3.3.4 in "/home/you/DevGEMS/build-release", where 
 an executable script "gemsdeployqtapp.sh" and several other files are located; 
 if the script is not executable, open a terminal, cd to that directory, and run 
    $ chmod u+x ./gemsdeployqtapp.sh.
@@ -25,15 +24,15 @@ Edit this script to make sure that path to Qt locations are correct everywhere
 and that the "distro" string definition contains correct verison and release 
 numbers of GEM-Selektor.
 
-3. Open a Linux terminal, cd to "/home/you/DevGEMS/devPhase/build-release", 
+3. Open a Linux terminal, cd to "/home/you/DevGEMS/build-release", 
 and execute the script "gemsdeployqtapp.sh" giving the exec file name as shown:
    $ ./gemsdeployqtapp.sh gems3
 
 This will create an archive "Gems3.3-<rev1>.<rev2>-linux-x86-64.tgz", where 
 <rev1> and <rev2> stay for revision numbers of GEM-Selektor GUI and GEMS3K, 
 respectively, that you have entered before into the gemsdeployqtapp.sh script.
-For instance, "Gems3.3.3-2674.1060-linux-x86-64.tgz". The distribution archive
-ca now bw provided. 
+For instance, "Gems3.3.4-ff37d86.dfabadd-linux-x86-64.tgz". The distribution archive
+can now bw provided. 
 
 Optionally, to investigate the script output, run
    $ ./gemsdeployqtapp.sh gems3 > ./output.txt
