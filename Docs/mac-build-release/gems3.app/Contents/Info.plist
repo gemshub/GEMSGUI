@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>gems3</string>
 	<key>CFBundleGetInfoString</key>
-	<string>GEM-Selektor v3.3.3 package for geochemical modeling</string>
+	<string>GEM-Selektor v3.3.4 package for geochemical modeling</string>
 	<key>CFBundleIconFile</key>
 	<string>gems3.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -19,10 +19,10 @@
 	<key>CFBundleShortVersionString</key>
 	<string>3.3</string>
 	<key>CFBundleSignature</key>
-	<string>GEM-Selektor-rev.2646.1036</string>
+	<string>GEM-Selektor-9e7668c.dfabadd</string>
 	<key>CFBundleVersion</key>
-	<string>3.3.3</string>
+	<string>3.3.4</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright (c) 2004-2015 GEMS Development Team</string>
+	<string>Copyright (c) 2004-2016 GEMS Development Team</string>
 </dict>
 </plist>
