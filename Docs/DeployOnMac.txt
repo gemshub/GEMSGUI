@@ -1,67 +1,107 @@
 HOW TO PRODUCE AN INSTALLATION PACKAGE OF Qt5-based GEMS3 FOR Mac OSX
-10.8 - 10.10
+10.8 - 10.11
 
 (replaces Produce-mac.txt)
 
 This deployment process is based on the "macdeployqt" utility, located
-in ~/Qt/5.4/clang_64/bin/ folder.
+in ~/Qt/5.7/clang_64/bin/ folder.
 
 1. Make sure that the Qt5 SDK is installed as ~/Qt or in similar folder.
-We assume that the Qt library is located in ~/Qt/5.4/clang_64/bin/
+We assume that the Qt library is located in ~/Qt/5.7/clang_64/bin/
 and Qt Tools (QtCreator.app etc.) are located in ~/Qt/.
 
-2. If not yet done, find ~/DevGEMS/devPhase/gems-gui/Docs/mac-build-release
+2. If not yet done, find ~/DevGEMS/gems3gui/Docs/mac-build-release
 directory and copy it recursively into ~/Applications, then rename it to
-~/Applications/devPhase. Dive into the ~/Applications/devPhase/gems3.app/Contents
+~/Applications/trunk. Dive into the ~/Applications/trunk/gems3.app/Contents
 and refresh recursively the /Resources subfolder contents by copying it
-from ~/DevGEMS/devPhase/gems-gui/Resources.
+from ~/DevGEMS/gems3gui/Resources.
 
-3. In the ~/Applications/devPhase folder, find the "runmacdeployqt.bat" file
+3. In the ~/Applications/trunk folder, find the "runmacdeployqt.bat" file
 and edit it to make sure that it contains the correct full path to the
-"macdeployqt" utility, e.g. Users/<you>/Qt/5.4/clang_64/bin/macdeployqt.
+"macdeployqt" utility, e.g. Users/<you>/Qt/5.7/clang_64/bin/macdeployqt.
 From the latter Qt folder, copy the actual files "qcollectiongenerator",
 "qhelpconverter" and "qhelpgenerator" (needed to refresh the help database)
-to ~/Applications/devPhase/gems3.app/Contents/MacOS.
+to ~/Applications/trunk/gems3.app/Contents/MacOS.
 
 4. Using QtCreator, build the actual release variant of gems3 executable.
-Typically, you should have something like "~/DevGEMS/devPhase/gems-gui";
-"~/DevGEMS/devPhase/standalone"; and "~/DevGEMS/devPhase/build-release"
+Typically, you should have something like "~/DevGEMS/gems3gui";
+"~/DevGEMS/standalone"; and "~/DevGEMS/devPhase/build-release"
 folders at the same level. Find gems3 in /gems3.app in the latter folder
-and copy it into ~/Applications/devPhase/gems3.app/Contents/MacOS.
+and copy it into ~/Applications/trunk/gems3.app/Contents/MacOS.
 
-5. Open terminal, cd to ~/Applications/devPhase and run the command:
+5. Open terminal, cd to ~/Applications/trunk and run the command:
 
         $ ./runmacdeployqt.sh
 
 This will find and copy all dependence files (Qt libraries, plugins, etc.)
-into ~/Applications/devPhase/gems3.app, and also will create the gems3.dmg
+into ~/Applications/trunk/gems3.app, and also will create the gems3.dmg
 image file of the GEM-Selektor installer.
 
 6. To make sure that the GEM-Selektor runs correctly: in terminal, cd to ~
 (your user home directory) and start the program with the command:
 
-$ exec /Users/<you>/Applications/devPhase/gems3.app/Contents/MacOS/gems3 -d
+$ exec /Users/<you>/Applications/trunk/gems3.app/Contents/MacOS/gems3 -d
 
 Upon the first start, the gems3 program will create a
 ~/Library/Gems3/projects folder, in which the test projects are located
 (automatically copying from the .../gems3.app/Contents/Resources/projects).
  
 7. To complete creating a new GEM-Selektor installer file for Mac OSX:
-cd to ~/Applications/devPhase/ folder and delete the gems3.dmg file. Then,
+cd to ~/Applications/trunk/ folder and delete the gems3.dmg file. Then,
 to create the installer, run again the command
     $ ./runmacdeployqt.sh
 
-This will create the file ~/Applications/devPhase/gems3.dmg.
+This will create the file ~/Applications/trunk/gems3.dmg.
 Rename it according to the following pattern:
 
-Gems3.3.3-<rev1>.<rev2>-OSX.x86-64.dmg
+Gems3.3.4-<rev1>.<rev2>-OSX.x86-64.dmg
 
-where put the same actual revision numbers for GEMS GUI (rev1) and 
-GEMS3K (rev2) parts, as used in the built code. The dmg file can now
+where put the same actual git commit numbers for GEMS GUI (rev1) and 
+GEMS3K (rev2) parts as those used in the built code. The dmg file can now
 be distributed.
 
 8. For installation steps, see INSTALL-macosx.txt. Install and test
 if it works.
+
+Appendix: Console output from the second run of macdeployqt showing the list of Qt frameworks and plugins used by GEM-Selektor v.3.3.4:
+
+./runmacdeployqt.sh 
+Log:
+Log: Deploying Qt frameworks found inside: ("/Users/kulik/Applications/trunk/gems3.app/Contents/MacOS/gems3", "gems3.app/Contents/PlugIns/bearer/libqcorewlanbearer.dylib", "gems3.app/Contents/PlugIns/bearer/libqgenericbearer.dylib", "gems3.app/Contents/PlugIns/imageformats/libqdds.dylib", "gems3.app/Contents/PlugIns/imageformats/libqgif.dylib", "gems3.app/Contents/PlugIns/imageformats/libqicns.dylib", "gems3.app/Contents/PlugIns/imageformats/libqico.dylib", "gems3.app/Contents/PlugIns/imageformats/libqjpeg.dylib", "gems3.app/Contents/PlugIns/imageformats/libqmacjp2.dylib", "gems3.app/Contents/PlugIns/imageformats/libqsvg.dylib", "gems3.app/Contents/PlugIns/imageformats/libqsvg_debug.dylib", "gems3.app/Contents/PlugIns/imageformats/libqtga.dylib", "gems3.app/Contents/PlugIns/imageformats/libqtiff.dylib", "gems3.app/Contents/PlugIns/imageformats/libqwbmp.dylib", "gems3.app/Contents/PlugIns/imageformats/libqwebp.dylib", "gems3.app/Contents/PlugIns/platforms/libqcocoa.dylib", "gems3.app/Contents/PlugIns/printsupport/libcocoaprintersupport.dylib", "gems3.app/Contents/PlugIns/sqldrivers/libqsqlite.dylib", "gems3.app/Contents/PlugIns/sqldrivers/libqsqlmysql.dylib", "gems3.app/Contents/PlugIns/sqldrivers/libqsqlodbc.dylib", "gems3.app/Contents/PlugIns/sqldrivers/libqsqlpsql.dylib")
+ERROR: no file at "/opt/local/lib/mysql55/mysql/libmysqlclient.18.dylib"
+ERROR: no file at "/usr/local/lib/libpq.5.dylib"
+Log:
+Log: Deploying plugins from "/Users/kulik/Qt/5.7/clang_64/plugins"
+WARNING: Plugin "libqsqlodbc.dylib" uses private API and is not Mac App store compliant.
+WARNING: Plugin "libqsqlpsql.dylib" uses private API and is not Mac App store compliant.
+File exists, skip copy: "gems3.app/Contents/PlugIns/platforms/libqcocoa.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/printsupport/libcocoaprintersupport.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/bearer/libqcorewlanbearer.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/bearer/libqgenericbearer.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/imageformats/libqdds.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/imageformats/libqgif.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/imageformats/libqicns.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/imageformats/libqico.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/imageformats/libqjpeg.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/imageformats/libqmacjp2.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/imageformats/libqsvg.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/imageformats/libqsvg_debug.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/imageformats/libqtga.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/imageformats/libqtiff.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/imageformats/libqwbmp.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/imageformats/libqwebp.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/sqldrivers/libqsqlite.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/sqldrivers/libqsqlmysql.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/sqldrivers/libqsqlodbc.dylib"
+File exists, skip copy: "gems3.app/Contents/PlugIns/sqldrivers/libqsqlpsql.dylib"
+WARNING:
+WARNING: "gems3.app/Contents/Resources/qt.conf" already exists, will not overwrite.
+WARNING: To make sure the plugins are loaded from the correct location,
+WARNING: please make sure qt.conf contains the following lines:
+WARNING: [Paths]
+WARNING:   Plugins = PlugIns
+Log:
+Log: Creating disk image (.dmg) for "gems3.app"
 
 
 
