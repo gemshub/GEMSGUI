@@ -111,7 +111,8 @@ void TReacDC::ods_link( int q)
     aObj[ o_repint].SetDim(  max((short)2,rc[q].nPp), 1 );
     //if( rc[q].PreKP == S_ON && rc[q].nTp && rc[q].nPp ){
     aObj[ o_relgK].SetPtr(  rc[q].logK );
-    aObj[ o_relgK].SetDim(  rc[q].nTp, rc[q].nPp );
+//    aObj[ o_relgK].SetDim(  rc[q].nTp, rc[q].nPp ); // bug fix AY, DM 24.10.2016
+    aObj[ o_relgK].SetDim(   rc[q].nPp, rc[q].nTp );
     //}
     //aObj[ o_retprn].SetPtr( rc[q].tprn  ); aObj[o_retprn].SetDim(1, SPPTPRNBUFSIZE);
     //if( rc[q].Nsd > 0 ) {
@@ -191,7 +192,8 @@ void TReacDC::dyn_new(int q)
     rc[q].Pint =  (float *)aObj[ o_repint  ].Alloc(nPp, 1, F_);
 
     if( rc[q].PreKP != S_OFF && rc[q].nTp >0 && rc[q].nPp>0 )
-        rc[q].logK =  (float *)aObj[ o_relgK ].Alloc( rc[q].nTp, rc[q].nPp, F_);
+//        rc[q].logK =  (float *)aObj[ o_relgK ].Alloc( rc[q].nTp, rc[q].nPp, F_); // bug fix AY, DM 24.10.2016
+        rc[q].logK =  (float *)aObj[ o_relgK ].Alloc( rc[q].nPp, rc[q].nTp, F_);
     else
         rc[q].logK = (float *)aObj[ o_relgK ].Free();
 
