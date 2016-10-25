@@ -625,7 +625,7 @@
 { "id": o_redvt , "label": "adVTP" ,  "dotype": "F_" , "dimN": -3 , "dimM": 1 , "ndxs": "N" , "values": [  ] },
 { "id": o_redst , "label": "a_dST" ,  "dotype": "F_" , "dimN": -3 , "dimM": 1 , "ndxs": "N" , "values": [  ] },
 { "id": o_repkt , "label": "aiLgKr" ,  "dotype": "F_" , "dimN": -3 , "dimM": 1 , "ndxs": "N" , "values": [  ] },
-{ "id": o_relgK , "label": "logKTP" ,  "dotype": "F_" , "dimN": -3 , "dimM": 1 , "ndxs": "N" , "values": [  ] },
+{ "id": o_relgK , "label": "logKPT" ,  "dotype": "F_" , "dimN": -3 , "dimM": 1 , "ndxs": "N" , "values": [  ] },
 { "id": o_resdref , "label": "rSDref" ,  "dotype": "32" , "dimN": -1 , "dimM": 1 , "ndxs": "N" , "values": [  ] },
 { "id": o_resdval , "label": "rSDval" ,  "dotype": "24" , "dimN": -1 , "dimM": 1 , "ndxs": "N" , "values": [  ] },
 { "id": o_repardc , "label": "Par_DC" ,  "dotype": "D_" , "dimN": -1 , "dimM": 6 , "ndxs": "R" , "values": [  ] },
