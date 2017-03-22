@@ -545,19 +545,19 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
     		 // Chemical compositions may become inconsistent with time
     		 // It has to be checked on minimal allowed c0 value
     		 c0  = (node1_bPS( ii, 0, ic ) - niw )*fmolal;    //C1[ii]->bPS[0*CH->nICb + ic];
-    		 c1  = (node1_bPS( ii+1, 0, ic) - niw )*fmolal;   //C1[ii+1]->bPS[0*CH->nICb + ic];
+             c1  = (node1_bPS( ii+1, 0, ic) - niw )*fmolal;   //C1[ii+1]->bPS[0*CH->nICb + ic];
     		 cm1 = (node1_bPS( ii-1, 0, ic ) - niw )*fmolal;  //C1[ii-1]->bPS[0*CH->nICb + ic];
-    		 cm2 = (node1_bPS( ii-2, 0, ic ) - niw )*fmolal;  //C1[ii-2]->bPS[0*CH->nICb + ic];
+             cm2 = (node1_bPS( ii-2, 0, ic ) - niw )*fmolal;  //C1[ii-2]->bPS[0*CH->nICb + ic];
 
     		 // Finite-difference calculation (suggested by FE )
-    		 c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
-    		 cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
-    		 dc = cr*(c12-cm12);
+             c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
+             cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
+             dc = cr*(c12-cm12);
              if( fabs( dc ) < mtp->cdv )  // *c0
             	 continue;
     		 dc /= fmolal; 
-    		 // Checking the new IC amount 
-    		 if( (c0/fmolal - dc) > mtp->cez ) // min( mtp->cez, node1_bIC(ii, ic) * 1e-4 ))
+             // Checking the new IC amount
+             if( (node1_bPS(ii, 0, ic) - dc) > mtp->cez )
     		 {  // New IC amount is positive
     			 node1_bPS( ii, 0, ic ) -= dc;
     			 node1_bIC(ii, ic) -= dc;
@@ -578,7 +578,7 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
      }
 	 // checking charge balance
 	 charge = node1_bIC(ii, CH->nICb-1 );
-node1_bIC(ii, CH->nICb-1 ) = 0.0;		// debugging
+     node1_bIC(ii, CH->nICb-1 ) = 0.0;		// debugging
    } // end of loop over nodes
 }
 
@@ -799,7 +799,7 @@ clock_t TGEM2MT::PrintPoint( long int nPoint, FILE* diffile, FILE* logfile, FILE
     {
        if( diffile )
        {
-           na->logDiffsIC( diffile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, 10 );
+           na->logDiffsIC( diffile, mtp->ct, mtp->cTau, mtp->nC, 10 );
            // logging differences after the MT iteration loop
        }
    }
@@ -808,20 +808,20 @@ clock_t TGEM2MT::PrintPoint( long int nPoint, FILE* diffile, FILE* logfile, FILE
    // from  Trans1D
    if( nPoint == 2 )
    {
-     na->logDiffsIC( diffile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, 1 );
-     na->logProfileAqIC( logfile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, 1 );
-     na->logProfilePhMol( ph_file, mtp->ct, mtp->cTau/(365*86400), mtp->nC, 1 );
+     na->logDiffsIC( diffile, mtp->ct, mtp->cTau, mtp->nC, 1 );
+     na->logProfileAqIC( logfile, mtp->ct, mtp->cTau, mtp->nC, 1 );
+     na->logProfilePhMol( ph_file, mtp->ct, mtp->cTau, mtp->nC, 1 );
    }
 
    if( nPoint == 3 )
    {
-       na->logDiffsIC( diffile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, evrt );
+       na->logDiffsIC( diffile, mtp->ct, mtp->cTau, mtp->nC, evrt );
    }
 
    if( nPoint == 4 )
    {
-       na->logProfileAqIC( logfile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, evrt );
-       na->logProfilePhMol( ph_file, mtp->ct, mtp->cTau/(365*86400), mtp->nC, evrt );
+       na->logProfileAqIC( logfile, mtp->ct, mtp->cTau, mtp->nC, evrt );
+       na->logProfilePhMol( ph_file, mtp->ct, mtp->cTau, mtp->nC, evrt );
    }
 
    // write to VTK
