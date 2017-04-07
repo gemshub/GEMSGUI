@@ -47,7 +47,7 @@ distro=`lsb_release -d | awk '{print $2$3$4}' | sed 's/\./_/g'`
 # Create the directory that will be tarred up for distribution.
 etardir=`echo $executable"_"$distro | awk '{print tolower($0)}'`
 tardir=Gems3-app
-gemsdistro=Gems3.3.4-ff37d86.dfabadd-linux-x86-64.tgz
+gemsdistro=Gems3.3.5-ee754fe.a73e674-linux-x86-64.tgz
 mkdir $tardir
 echo "Created tar ball directory: "$tardir
 
@@ -220,7 +220,7 @@ echo "Creating README..."
 
 readme=$tardir/README
 echo "================================================================================" >> $readme
-echo "GEM-Selektor v.3.3.3 $etardir bult on linux $distro" >> $readme
+echo "GEM-Selektor v.3.3.5 $etardir bult on linux $distro" >> $readme
 echo "Please, read INSTALL.linux.txt file first, and do things as suggested there." >> $readme
 echo "To have projects in /home/you/Library/Gems3 (default location," >> $readme 
 echo "  launch once $executable via" >> $readme
