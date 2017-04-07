@@ -43,7 +43,7 @@
 const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
 const char *GEMS_ABOUT_HTML = "gems_about.html#PAGE_ABOUT";
 
-const char *_GEMS_version_stamp = " GEMS-GUI v.3.3.4 c.3cecb08 ";
+const char *_GEMS_version_stamp = " GEMS-GUI v.3.3.5 c.ee754fe ";
 extern const char *_GEMIPM_version_stamp;
 
 HelpWindow* HelpWindow::pDia = 0;
