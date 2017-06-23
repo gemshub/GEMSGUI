@@ -1181,11 +1181,21 @@ TPhase::RecCalc( const char *key )
         if(!getDCC)
            return;
     }
+
+    if( ( php->PphC == PH_FLUID || php->PphC == PH_LIQUID ||
+          php->PphC == PH_GASMIX ) && php->scoef )
+    {
+        getDCC = vfQuestion(window(), GetName(),
+          "For cubic EoS models for gas/fluid mixtures: \n"
+           "Proceed with extracting EoS parameters from DComp records (Y)?");
+        if(!getDCC)
+           return;
+    }
+
     CalcPhaseRecord( getDCC );
     SetString("PH_solm   PHASE-solution model OK");
     TCModule::RecCalc(key);
 }
-
 
 const char* TPhase::GetHtml()
 {
