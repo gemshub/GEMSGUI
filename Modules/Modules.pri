@@ -17,7 +17,6 @@
                     $$MODULES_H/m_sdata.h  \
                     $$MODULES_H/m_syseq.h  \
                     $$MODULES_H/m_unspace.h  \
- #                   $$MODULES_H/s_fgl.h  \
                     $$MODULES_H/s_formula.h  \
                     $$MODULES_H/s_lsm.h  \
                     $$MODULES_H/s_supcrt.h  \
@@ -42,11 +41,6 @@
                      $$MODULES_CPP/s_supcrt.cpp \
                      $$MODULES_CPP/s_supcrt2.cpp \
                      $$MODULES_CPP/m_compos.cpp \
- #                    $$MODULES_CPP/s_fgl.cpp \
- #                    $$MODULES_CPP/s_fgl1.cpp \
- #                    $$MODULES_CPP/s_fgl2.cpp \
- #                    $$MODULES_CPP/s_fgl3.cpp \
- #                    $$MODULES_CPP/s_fgl4.cpp \
                      $$MODULES_CPP/s_lsm_fun.cpp \
                      $$MODULES_CPP/s_lsm_lm.cpp  \
                      $$MODULES_CPP/s_lsm_svd.cpp \

@@ -667,7 +667,7 @@ void TGEM2MT::outMulti()
   if( mtp->PsTPai != S_OFF )
      gen_TPval();
 
-   na->MakeNodeStructures( mtp->nICb, mtp->nDCb,  mtp->nPHb,
+   na->InitCalcNodeStructures( mtp->nICb, mtp->nDCb,  mtp->nPHb,
      mtp->xIC, mtp->xDC, mtp->xPH, mtp->PsTPpath != S_OFF,
      mtp->Tval, mtp->Pval,
      mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3]  );
@@ -687,8 +687,7 @@ void TGEM2MT::outMulti()
      calc_eqstat( true );
 
      // Save databr
-     na->packDataBr();
-     na->MoveWorkNodeToArray( mtp->kv, mtp->nC, na->pNodT0() );
+     na->SaveToNode( mtp->kv, mtp->nC, na->pNodT0() );
      na->pNodT0()[mtp->kv]->NodeTypeHY = mtp->DiCp[mtp->kv][1];
 
      mt_next();      // Generate work values for the next EqStat rkey
@@ -700,9 +699,8 @@ void TGEM2MT::outMulti()
   allocNodeWork();  //????
   LinkCSD(0);
 
-  na->PutGEM2MTFiles( window(),
-
-                      mtp->nIV, mtp->PsSdat==S_OFF, mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, false, false ); // mui,muj,muk do not output
+  na->PutGEM2MTFiles( window(),   mtp->nIV, mtp->PsSdat==S_OFF,
+    mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, false, false ); // mui,muj,muk do not output
 
   }
 
@@ -1045,7 +1043,7 @@ aObj[o_n0_ts].SetM( 2 );
      aObj[o_n0_amrl].SetPtr( BR->amrl );
      aObj[o_n0_amrl].SetDim( CH->nPSb, 1 );
      // set data to work arrays
-         na->CopyWorkNodeFromArray( nNode, mtp->nC,  na->pNodT0() );
+     const TNode& node = na->LinkToNode( nNode, mtp->nC,  na->pNodT0() );
          double *mps = (double *)aObj[o_n0w_mps].GetPtr();
          double *vps = (double *)aObj[o_n0w_vps].GetPtr();
          double *m_t = (double *)aObj[o_n0w_m_t].GetPtr();
@@ -1055,17 +1053,17 @@ aObj[o_n0_ts].SetM( 2 );
 
          for( ii=0; ii<CH->nPHb; ii++)
          {
-             mps[ii] = na->Ph_Mass(ii);
-             vps[ii] = na->Ph_Volume(ii);
+             mps[ii] = node.Ph_Mass(ii);
+             vps[ii] = node.Ph_Volume(ii);
          }
          for( ii=0; ii<CH->nDCb; ii++)
          {
-             con[ii] = na->Get_cDC(ii);
-             mju[ii] = na->Get_muDC(ii, false );
-             lga[ii] = na->Get_aDC(ii, false );
+             con[ii] = node.Get_cDC(ii);
+             mju[ii] = node.Get_muDC(ii, false );
+             lga[ii] = node.Get_aDC(ii, false );
          }
          for( ii=0; ii<CH->nICb; ii++)
-             m_t[ii] = na->Get_mIC( ii );
+             m_t[ii] = node.Get_mIC( ii );
   }
   else
   {
@@ -1162,7 +1160,7 @@ aObj[o_n1_ts].SetM( 2 );
      aObj[o_n1_amrl].SetDim( CH->nPSb, 1 );
 
  // set data to work arrays
-     na->CopyWorkNodeFromArray( nNode, mtp->nC,  na->pNodT1() );
+     const TNode& node = na->LinkToNode( nNode, mtp->nC,  na->pNodT1() );
      double *mps = (double *)aObj[o_n1w_mps].GetPtr();
      double *vps = (double *)aObj[o_n1w_vps].GetPtr();
      double *m_t = (double *)aObj[o_n1w_m_t].GetPtr();
@@ -1172,17 +1170,17 @@ aObj[o_n1_ts].SetM( 2 );
 
      for( ii=0; ii<CH->nPHb; ii++)
      {
-         mps[ii] = na->Ph_Mass(ii);
-         vps[ii] = na->Ph_Volume(ii);
+         mps[ii] = node.Ph_Mass(ii);
+         vps[ii] = node.Ph_Volume(ii);
      }
      for( ii=0; ii<CH->nDCb; ii++)
      {
-         con[ii] = na->Get_cDC(ii);
-         mju[ii] = na->Get_muDC(ii, false );
-         lga[ii] = na->Get_aDC(ii, false );
+         con[ii] = node.Get_cDC(ii);
+         mju[ii] = node.Get_muDC(ii, false );
+         lga[ii] = node.Get_aDC(ii, false );
      }
      for( ii=0; ii<CH->nICb; ii++)
-         m_t[ii] = na->Get_mIC( ii );
+         m_t[ii] = node.Get_mIC( ii );
   }
   else
   {
