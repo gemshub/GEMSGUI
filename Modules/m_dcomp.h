@@ -50,7 +50,7 @@ typedef struct
 
     pct[6],     // Mode of calculation of thermodynamic properties,T-dependency
     // P-dependency, EOS ID (3 reserved)
-    PdcC,      // DC class code { TESWGVCHNIJM<digit>XYZABPQRO}
+    PdcC,      // DC class code { TESKWGVCHNIJM<digit>XYZABPQRO}
     PdcU,      // Units of energy  { j;   J c C N reserved }
     PdcV,      // Units of volume  { j;   c L a reserved }
     PdcP,      // Units of pressure Pr   { b;   B p P A reserved }

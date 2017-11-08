@@ -349,6 +349,7 @@ void TReacDC::Recalc( int q, const char *key  )
     case CP_GASI:
     case CP_SSPC:
     case CP_SORB:
+    case CP_EXION:
     case CP_MELT: /* must be charge */
         if( !memcmp( CHARGE_NAME, aFo.GetCn( aFo.GetIn()-1 ), 2 ))
             goto NEXT;

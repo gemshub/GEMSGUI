@@ -35,7 +35,7 @@ typedef struct
     //Mode of T-dependency { SHBKWALX123ZREGDC }
     //Mode of P-dependency { N0CKVBEGFAZ }
     // reserved
-    PreC,   // DC class code { TESWGVCHNIJM0123456789XYZABPQRO }
+    PreC,   // DC class code { TESKWGVCHNIJM0123456789XYZABPQRO }
     PreU,      // Units of energy   { j;  JcCN reserved }
     PreV,      // Units of volume   { j;  cLa reserved }
     PreP,      // Units of pressure Pr   { b;  BpPA reserved }

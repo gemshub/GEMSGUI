@@ -264,6 +264,13 @@ void TPhase::Set_SolMod_Phase_coef()
                        php->ncpM = 8;                       // NPcoef = rows of aIPc
                        php->PphC = PH_AQUEL;
                        break;
+      case SM_DONNAN: // built-in Donnan volume model for charged porous medium (new 8.11.2017 DK)
+                        php->ncpN = 1;
+                        php->ncpM = 2; // changed 10.07.2008 DK
+                        php->nscM = 0;
+                        php->npxM = 0;
+                        php->PphC = PH_POLYEL;
+                        break;
       default:  // other models
                        break;
    }

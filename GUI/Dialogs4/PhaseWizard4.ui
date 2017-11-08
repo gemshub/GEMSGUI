@@ -162,6 +162,21 @@
               <string>x     Sorption phase in aqueous electrolyte</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>i      Permanent-charge (ligand) ion-exchange phase </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>y     Polyelectrolyte (oligoelectrolyte), Donnan volume phase</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>z      Adsorption layer phase on hydrated amphoteric surface</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>
@@ -318,7 +333,7 @@
             </item>
             <item>
              <property name="text">
-              <string>J   ELVIS multicomponent liquid solution model</string>
+              <string>J    ELVIS multicomponent liquid solution model</string>
              </property>
             </item>
             <item>
@@ -329,6 +344,11 @@
             <item>
              <property name="text">
               <string>A   Adsorption, SACT and EDL models</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>X    Donnan volume polyelectrolyte (olygoelectrolyte) model</string>
              </property>
             </item>
             <item>

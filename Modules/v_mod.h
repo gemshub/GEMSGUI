@@ -347,13 +347,14 @@ enum DC_phase_state {   // Code of phase state identification of DC record keys
     CP_AQU   = 'a',   // aqueous electrolyte
     CP_GAS   = 'g',   // gaseous species
     CP_GASI  = 'p',   // plasma species
-    CP_FLUID = 'f',   // component of fluid
+    CP_FLUID = 'f',   // component of compressed gaseous fluid
     CP_SOLID = 's',   // components of condensed solid phases, incl. sorption carriers
     CP_LIQID = 'l',   // components of condensed liquid non-electrolyte phases
     CP_MELT  = 'm',   // non-aqueous electrolyte species (eq., in magmatic melt)
-    CP_SSPC  = 'c',   // surface complex (adsorbate)
-    CP_SORB  = 'x',   // exchangeable ion
-    CP_CPEL = 'y',    // complex on poly- (oligo)electrolyte (reserved)
+    CP_SSPC  = 'c',   // surface complex (adsorbate) on old-style sorption phase
+    CP_EXION  = 'i',  // exchangeable ion (in perm.charge ion-exchange phase)
+    CP_SORB  = 'x',   // generic sorbed species (for linked new SCM phases)
+    CP_CPEL = 'y',    // complex or ion in poly- (oligo)electrolyte (reserved)
     CP_MACR = 'q',    // carrier (macromolecule) of poly- (oligo)electrolyte,
     // or constant charge carrier of clay mineral or ion exchange resin
     CP_HCARB = 'h',   // components of mixture of liquid hydrocarbons

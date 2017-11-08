@@ -44,7 +44,7 @@ typedef struct
              //	  One group of equations for all DC {U},one group per DC {P},no {N}
              //         Type of mixing rule in EoS models { WCT } or of sorption model {}
 
-    PphC, // Default class of phase in the system {agpmlsxdh} layered {}
+    PphC, // Default class of phase in the system {agpmlsxiyzdh} layered {}
     Ppnc, // Flag for 'ph_cf' array for phase-related input parameters {+*-}
     Psco, // Flag for 'dc_cf' array for DC-related parameters {+*-}
     PpEq, // Flag for text field for phase-related equations 'PhEq' {+*-}
@@ -388,7 +388,7 @@ SM_CEF = '$',    //     built-in multicomponent multisite solid-solution model (
     SM_AQPITZ = 'Z',    // built-in Pitzer HMW model for aqueous electrolytes
     SM_AQMIX = 'C',     // built-in mixed-solvent aqueous Debye-Hueckel model (reserved)
     SM_AQELVIS = 'J',   // built-in modified extended UNIQUAC model (ELVIS) for aqueous electrolyte
-    SM_IONEX = 'X',     // ion exchange (Donnan, Nikolskii) (reserved)
+    SM_DONNAN = 'X',    // ion exchange (Donnan volume model) (reserved)
     SM_SURCOM = 'A',	// models of surface complexation at solid-aqueous interface
     SM_USERDEF = 'U',	// user-defined mixing model (scripts in Phase record)
     SM_OTHER = 'O',	// other built-in phase-specific models of non-ideal solutions (selected by phase name)

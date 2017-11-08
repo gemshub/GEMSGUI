@@ -408,6 +408,7 @@ int TDComp::RecBuild( const char *key, int mode  )
     case  CP_GASI:
     case  CP_HCARB:
     case  CP_MELT:
+    case  CP_EXION:
     case  CP_SORB:
     case  CP_SSPC:
     case  CP_MACR:
@@ -538,6 +539,7 @@ void TDComp::RecCalc( const char *key )      // dcomp_test
     case CP_GASI:
     case CP_SSPC:
     case CP_SORB:
+    case CP_EXION:
     case CP_MACR:
     case CP_MELT: // need charge
         if( !memcmp( CHARGE_NAME, aFo.GetCn( aFo.GetIn()-1 ), 2 ))
