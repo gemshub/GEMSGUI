@@ -523,6 +523,7 @@ void TDComp::RecCalc( const char *key )      // dcomp_test
     switch( dcp->pstate[0] )
     { //  analysing consistency of chemical formula
     case CP_SOLID:
+    case CP_EXION:
     case CP_GAS:
     case CP_FLUID:
     case CP_UNIV:
@@ -539,7 +540,7 @@ void TDComp::RecCalc( const char *key )      // dcomp_test
     case CP_GASI:
     case CP_SSPC:
     case CP_SORB:
-    case CP_EXION:
+//    case CP_EXION:
     case CP_MACR:
     case CP_MELT: // need charge
         if( !memcmp( CHARGE_NAME, aFo.GetCn( aFo.GetIn()-1 ), 2 ))
