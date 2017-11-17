@@ -271,6 +271,13 @@ void TPhase::Set_SolMod_Phase_coef()
                         php->npxM = 0;
                         php->PphC = PH_POLYEL;
                         break;
+       case SM_SURCOM:  // models of surface complexation at solid-aqueous interface
+                        php->nscM = 0;   // NP_DC     To be improved
+                        php->npxM = 0;   // MaxOrd    To be improved
+                        php->ncpN = 0;   // NPar      To be improved
+                        php->ncpM = 0;   // NPcoef    To be improved
+                        php->PphC = PH_ADSORPT;
+                  break;
       default:  // other models
                        break;
    }

@@ -35,7 +35,7 @@ TPhase::TPhase( int nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("Code of phase state { a g f p l m h s d x }");
+    aFldKeysHelp.Add("Code of phase state { a g f p l m h s d x i z }");
     aFldKeysHelp.Add("Group identifier for such phases (letters, digits)");
     aFldKeysHelp.Add("Name of this phase definition (letters, digits)");
     aFldKeysHelp.Add("Phase class { c d l gm ss ssd ls aq xsa xc }");

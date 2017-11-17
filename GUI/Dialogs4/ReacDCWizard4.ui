@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>647</width>
+    <width>668</width>
     <height>505</height>
    </rect>
   </property>
@@ -43,7 +43,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -266,6 +266,11 @@
             <item>
              <property name="text">
               <string>B   Weak exchange ion (constant charge plane)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>U   Surface complex on amphoteric groups (new SCMs)</string>
              </property>
             </item>
            </widget>

@@ -394,16 +394,20 @@ SM_CEF = '$',    //     built-in multicomponent multisite solid-solution model (
     SM_OTHER = 'O',	// other built-in phase-specific models of non-ideal solutions (selected by phase name)
 
     // Codes to identify specific mixing rules and temperature functions in EoS and activity models
-    MR_UNDEF = 'N', // Default mixing rule or form of interaction parameter coefficients
+    MR_UNDEF = 'N', // Default mixing rule or form of interaction parameter coefficients; NEM for adsorption 'A'
     MR_WAAL = 'W',	// Basic Van der Waals mixing rules in cubic EoS models
-    MR_CONST = 'C',	// Constant one-term interaction parameter kij
-    MR_TEMP = 'T',	// Temperature-dependent one-term interaction parameter kij (Jaubert et al. 2005)
+    MR_CONST = 'C',	// Constant one-term interaction parameter kij; CCM for sorption 'A'
+    MR_TEMP = 'T',	// Temperature-dependent one-term interaction parameter kij (Jaubert et al. 2005); TLM for adsorption 'A'
     MR_LJ = 'J',        // Lemmon-Jacobsen mixing rule (Lemmon and Jacobsen, 1999)
     MR_KW1 = 'K',       // Kunz-Wagner mixing rule (Kunz and Wagner, 2007)
     MR_PITZ5 = '5',     // 5-term Pitzer model temperature dependence (TOUGHREACT variant)
     MR_PITZ6 = '6',     // 6-term Pitzer model temperature dependence (FREZCHEM variant)
     MR_PITZ8 = '8',     // 8-term Pitzer model temperature dependence
-    MR_B_RCPT = 'R'    // Use CEF reciprocal non-ideality terms in Berman multi-site ss model
+    MR_B_RCPT = 'R',    // Use CEF reciprocal non-ideality terms in Berman multi-site ss model
+    MR_A_DLM  = 'D',    // Diffuse-layer electrostatic model (DLM) for adsorption 'A'
+    MR_A_BSM  = 'B',    // Basic Stern electrostatic model (BSM) for adsorption 'A'
+    MR_A_CDLM  = 'M',    // CD-MUSIC (3-layer) electrostatic model (DLM) for adsorption 'A'
+    MR_A_ETLM  = 'E'     // Extended TLM electrostatic model (ETLM) for adsorption 'A'
 };
 
 // This code defines standard state and reference scale of concentrations
@@ -416,7 +420,7 @@ enum PH_CLASSES {  // Possible values
     PH_PLASMA = 'p',  	// plasma
     PH_LIQUID = 'l',  	// non-electrolyte liquid (melt)
     PH_SIMELT = 'm',  	// silicate (magmatic) melt or non-aqueous electrolyte
-    PH_SORPTION = 'x',  // dilspersed solid with adsorption (ion exchange) in aqueous
+    PH_SORPTION = 'x',  // Sorption phase (sorbent+sorbates) in aqueous electrolyte
     PH_POLYEL = 'y',  	// colloidal poly- (oligo)electrolyte e.g. Donnan volume phase
  PH_IONEX = 'i',     // ion exchange on permanent charge ligand e.g. B&B Clay
  PH_ADSORPT = 'z',   // surface complexation (adsorption) on hydrated amphoteric surface

@@ -159,7 +159,7 @@
             </item>
             <item>
              <property name="text">
-              <string>x     Sorption phase in aqueous electrolyte</string>
+              <string>z     Surface complexation (adsorption) on hydrated amphoteric surface</string>
              </property>
             </item>
             <item>
@@ -174,7 +174,7 @@
             </item>
             <item>
              <property name="text">
-              <string>z      Adsorption layer phase on hydrated amphoteric surface</string>
+              <string>x     Sorption phase (sorbent+sorbates) in aqueous electrolyte</string>
              </property>
             </item>
            </widget>
@@ -517,7 +517,7 @@
           <item>
            <widget class="QLabel" name="SCM_codeLabel">
             <property name="text">
-             <string>Select specific mixing rules (temperature corrections) for EoS and activity models:</string>
+             <string>Select specific mixing rules, T corrections for EoS and activity models; EDL models for adsorption:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignBottom</set>
@@ -531,7 +531,7 @@
            <widget class="QComboBox" name="SCM_code">
             <item>
              <property name="text">
-              <string>N    Default mixing rule or form of interaction parameter coefficients  </string>
+              <string>N    Default mixing rule or form of interaction parameter coefficients; NEM for adsorption</string>
              </property>
             </item>
             <item>
@@ -541,22 +541,22 @@
             </item>
             <item>
              <property name="text">
-              <string>C    Constant one-term binary interaction parameter kij</string>
+              <string>C    Constant one-term binary interaction parameter kij; CCM for adsorption</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>T    Temperature-dependent one-term binary interaction parameter kij</string>
+              <string>T    Temperature-dependent one-term binary interaction parameter kij; TLM for adsorption</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>5     Five-term Pitzer model parameter temperature dependence</string>
+              <string>5    Five-term Pitzer model parameter temperature dependence</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>6     Six-term Pitzer model parameter temperature dependence</string>
+              <string>6    Six-term Pitzer model parameter temperature dependence</string>
              </property>
             </item>
             <item>
@@ -567,6 +567,26 @@
             <item>
              <property name="text">
               <string>R    Use CEF reciprocal non-ideality term in Berman multi-site ss model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>D    Diffuse-layer electrostatic model (DLM) for adsorption </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>B    Basic Stern electrostatic model (BSM) for adsorption</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>M   CD-MUSIC (three-layer) electrostatic model for adsorption</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>E    Extended TLM electrostatic model (ETLM) for adsorption </string>
              </property>
             </item>
            </widget>

@@ -46,7 +46,7 @@ TDComp::TDComp( int nrt ):
         TCModule( nrt )
 {
     nQ = 2;
-    aFldKeysHelp.Add("Phase state code of Dependent Component { a g f p s l m c x y h }");
+    aFldKeysHelp.Add("Phase state code of Dependent Component { a g f p s l m c i z y h }");
     aFldKeysHelp.Add("ID of a group to which this Dependent Component belongs");
     aFldKeysHelp.Add("Name of this Dependent Component (chemical species)");
     aFldKeysHelp.Add("Thermodynamic data subset (TDS) code (e.g. database ID)");

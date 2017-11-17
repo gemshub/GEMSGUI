@@ -224,6 +224,11 @@
               <string>B   Weak exchange ion (constant charge, beta-plane)</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>U   Surface complex or amphoteric group (new SCMs)</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>

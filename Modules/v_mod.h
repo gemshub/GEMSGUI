@@ -353,7 +353,7 @@ enum DC_phase_state {   // Code of phase state identification of DC record keys
     CP_MELT  = 'm',   // non-aqueous electrolyte species (eq., in magmatic melt)
     CP_SSPC  = 'c',   // surface complex (adsorbate) on old-style sorption phase
     CP_EXION  = 'i',  // exchangeable ion (in perm.charge ion-exchange phase)
-    CP_SORB  = 'x',   // generic sorbed species (for linked new SCM phases)
+    CP_SORB  = 'z',   // generic sorbed species (for linked new SCM phases)
     CP_CPEL = 'y',    // complex or ion in poly- (oligo)electrolyte (reserved)
     CP_MACR = 'q',    // carrier (macromolecule) of poly- (oligo)electrolyte,
     // or constant charge carrier of clay mineral or ion exchange resin
@@ -493,6 +493,9 @@ typedef enum {  // Classifications of DC
 
     // Single-component phases
     DC_SCP_CONDEN = 'O',     // DC forming a single-component phase
+
+    // New surface complexation models (added 16.11.2017 by DK)
+    DC_SCM_SPECIES = 'U'
 
 } DC_CLASSES;
 
