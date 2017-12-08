@@ -13,7 +13,7 @@
     <MessageBegin Show="True">Install/Update GEM-Selektor v.3.4.0 package (Windows) ?</MessageBegin>
     <MessageCancel Show="True">Are you sure you want to cancel Installing/Updating GEM-Selektor v3.4.0?</MessageCancel>
     <MessageFinish Show="True">Success! Modeling projects can be found in the '\Library\Gems3\projects' subfolder.</MessageFinish>
-    <TitleText>GEMS 3.4.0 (Windows) r.ea3ab43.db4c6f9</TitleText>
+    <TitleText>GEMS 3.4.0 (Windows) r.fedc078.6b792dd</TitleText>
     <ExtractPathText>Use default, or type/select another location. If the folder does not exist, it will be created.</ExtractPathText>
     <ExtractCancelText>Abort</ExtractCancelText>
     <ExtractDialogText>Installing/Updating GEM-Selektor v.3.4.0 (Windows)</ExtractDialogText>
@@ -30,8 +30,8 @@
   <VersionString>
     <Item Name="Comments" Value="GEM-Selektor package for geochemical modeling" Enabled="True" />
     <Item Name="CompanyName" Value="Paul Scherrer Institut" Enabled="True" />
-    <Item Name="FileDescription" Value="GEM-Selektor c.ea3ab43, includes GEMS3K c.db4c6f9" Enabled="False" />
-    <Item Name="FileVersion" Value=" rev. ea3ab43.db4c6f9 " Enabled="False" />
+    <Item Name="FileDescription" Value="GEM-Selektor c.fedc078, includes GEMS3K c.6b792dd" Enabled="False" />
+    <Item Name="FileVersion" Value=" rev. fedc078.6b792dd " Enabled="False" />
     <Item Name="InternalName" Value="gems3.exe" Enabled="True" />
     <Item Name="LegalCopyright" Value="Copyright © 2003-2017 GEMS Development Team" Enabled="True" />
     <Item Name="LegalTrademarks" Value="PSI; IGP ETHZ; Univ.Helsinki" Enabled="True" />
