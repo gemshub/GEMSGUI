@@ -338,7 +338,9 @@ case DC_AQ_SURCOMP:
             break; /* error code of sorbed species */
         case PH_SINCOND:
         case PH_SINDIS:
+        case PH_IONEX:
             break;
+        case PH_ADSORPT:
         default:
             ;        /* error code of phase */
         }
@@ -418,6 +420,8 @@ void TSyst::make_syst()
                    sy.YOF[k] = 2./3.*STENG*SSA;
                 }
                 break;
+            case PH_IONEX:
+            case PH_ADSORPT:
             default:
                 continue;
             }

@@ -656,6 +656,9 @@ PARLOAD: if( k < syp->Fis )
         case PH_LIQUID:
         case PH_SINCOND:
         case PH_SIMELT:
+        case PH_IONEX:
+            break;
+        case PH_ADSORPT:
             break;
         case PH_POLYEL:
         case PH_SORPTION:
