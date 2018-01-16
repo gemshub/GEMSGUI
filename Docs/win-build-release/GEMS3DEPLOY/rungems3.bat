@@ -1,6 +1,6 @@
 echo off
 rem  Change the path to the actual location of GEMS3 executable and Resources
-cd C:\GEMS3DEPLOY\Gems3-app
+cd C:\GEMS340\Gems3-app
 
 rem First launch with default location of modeling projects
  gems3.exe -d > gems3.log 
@@ -19,5 +19,5 @@ rem gems3.exe -d -s . -u ..\Library\Gems3 > gems3.log
 rem Add -f after gems3.exe for a write access to database files in \DB.default\     
 rem (for developers only!) 
 
-rem Create on desktop a shortcut to C:\GEMS3DEPLOY\Gems3-app\gems3.exe -c 
-rem   in shortcut, select the icon C:\GEMS3DEPLOY\Gems3-app\Resources\Gems3.ico
+rem Create on desktop a shortcut to C:\GEMS340\Gems3-app\gems3.exe -c 
+rem   in shortcut, select the icon C:\GEMS340\Gems3-app\Resources\Gems3.ico

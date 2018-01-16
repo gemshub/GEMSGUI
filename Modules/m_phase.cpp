@@ -1265,7 +1265,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
         continue;
      if( !el_data.flags[cbSimelt_] && ( pKey1[0] == 'm') )
         continue;
-     if( !el_data.flags[cbSorption_] && ( pKey1[0] == 'x') )
+     if( !el_data.flags[cbSorption_] && ( pKey1[0] == 'x' || pKey1[0] == 'i' || pKey1[0] == 'z' ) )
         continue;
      if( !el_data.flags[cbPolyel_] && ( pKey1[0] == 'y') )
         continue;
@@ -1290,7 +1290,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
 
 // cbSolutions - multi-component, non-gas, non-electrolyte
      if( el_data.flags[cbSolutions_] && ( pKey1[0] != 'a'
-        && pKey1[0] != 'g' && pKey1[0] != 'f'
+        && pKey1[0] != 'g' && pKey1[0] != 'f' && pKey1[0] != 'i' && pKey1[0] != 'z'
         && pKey1[0] != 'p' && pKey1[0] != 'x' && pKey1[0] != 'h' ) )
          if( php->nDC > 1 )
            continue;
@@ -1362,7 +1362,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
 //             case SM_AQMIX: // = 'C',     // built-in mixed-solvent aqueous Debye-Hueckel model (reserved)
 //             case SM_AQELVIS: // = 'J',   // built-in modified extended UNIQUAC model (ELVIS) for aqueous electrolytes (reserved)
 //             case SM_IONEX: // = 'X',     // ion exchange (Donnan, Nikolskii) (reserved)
-//             case SM_SURCOM: // = 'A',	// models of surface complexation at solid-aqueous interface
+             case SM_SURCOM: // = 'A',	// models of surface complexation at solid-aqueous interface
 //             case SM_USERDEF: // = 'U',	// user-defined mixing model (scripts in Phase record)
 //             case SM_OTHER: // = 'O',	// other built-in phase-specific models of non-ideal solutions (selected by phase name)
                   break;

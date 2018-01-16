@@ -1821,7 +1821,8 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
          continue;
          if( !el_data.flags[cbSimelt_] && ( aDCkey[ii][0] == 'm') )
          continue;
-         if( !el_data.flags[cbSorption_] && ( aDCkey[ii][0] == 'x' || aDCkey[ii][0] == 'c' ) )
+         if( !el_data.flags[cbSorption_] && ( aDCkey[ii][0] == 'x' || aDCkey[ii][0] == 'c'
+                              || aDCkey[ii][0] == 'z' || aDCkey[ii][0] == 'i' ) )
          continue;
          if( !el_data.flags[cbPolyel_] && (aDCkey[ii][0] == 'y') )
          continue;
