@@ -83,8 +83,8 @@ void TProfil::Push( TIArray<CompItem>& aList, int aLine,
    {
        gstring stt = aKey;
        if( aDelta < 0 )
-          stt += " record to be deleted from the project database. Action?";
-       else stt += " record to be inserted into project database. Action?";
+          stt += " record to be deleted from the project system. Action?";
+       else stt += " record to be inserted into project system. Action?";
 
        switch( vfQuestion3(window(), dbKeywd, stt.c_str(),
               "&Do it", "Do it for &All", "&Cancel" ))
