@@ -19,7 +19,10 @@
 
 #include <cmath>
 #include <cstdio>
+#ifdef use_omp
 #include <omp.h>
+#endif
+
 #ifndef IPMGEMPLUGIN
 
 #include "m_gem2mt.h"
