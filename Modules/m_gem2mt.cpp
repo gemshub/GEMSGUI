@@ -51,7 +51,7 @@ TGEM2MT::TGEM2MT( int nrt ):
        " Definition of a GEM2MT (Coupled RMT model)";
 
   na = 0;
-  pa = 0;
+  pa_mt = 0;
 }
 
 // get key of record
@@ -733,10 +733,8 @@ void TGEM2MT::RecInput( const char *key )
     TCModule::RecInput( key );
 }
 
-/* opens window with 'Remake record' parameters
-*/
-void
-TGEM2MT::MakeQuery()
+/// opens window with 'Remake record' parameters
+void TGEM2MT::MakeQuery()
 {
 //    pImp->MakeQuery();
     const char * p_key;
@@ -754,12 +752,7 @@ TGEM2MT::MakeQuery()
     FreeNa();
     na = new TNodeArray( 1, TMulti::sm->GetPM() );
     // realloc and setup data for dataCH and DataBr structures
-    na->MakeNodeStructures( 0, true , Tai, Pai  );
-
-    // setup dataBR and NodeT0 data
-    //na->packDataBr();
-    na->MoveWorkNodeToArray( 0, 1, na->pNodT0() );
-    na->CopyNodeFromTo( 0, 1, na->pNodT0(), na->pNodT1() );
+    na->MakeNodeStructuresOne( 0, true , Tai, Pai  );
 
     allocNodeWork();
     LinkCSD(0);
@@ -937,16 +930,16 @@ void TGEM2MT::AllocNa()
   if( mtp->PsMode == RMT_MODE_W  )
   {
      na->SetGrid( mtp->sizeLc, mtp->grid );   // set up grid structure
-     pa = new TParticleArray( mtp->nPTypes, mtp->nProps,
+     pa_mt = new TParticleArray( mtp->nPTypes, mtp->nProps,
            mtp->NPmean, mtp->ParTD, mtp->nPmin, mtp->nPmax, na );
    }
 }
 
 void TGEM2MT::FreeNa()
 {
-  if( pa )
-  { delete pa;
-    pa = 0;
+  if( pa_mt )
+  { delete pa_mt;
+    pa_mt = 0;
   }
   if(na)
    delete na;
@@ -1032,7 +1025,7 @@ TGEM2MT::RecCalc( const char * key )
      {
       putHydP( na->pNodT0() );
       putHydP( na->pNodT1() );
-      pa->setUpCounters();
+      pa_mt->setUpCounters();
      }
     }
 

@@ -144,8 +144,8 @@ void TMulti::ods_link( int )
     aObj[ o_wo_sitfr ].SetPtr( pm.SitFr );  // work array of site fractions
     aObj[ o_wio_vol ].SetPtr( pm.Vol );
     aObj[ o_wio_vol ].SetDim( pm.L, 1 );
-    aObj[ o_w_hym ].SetPtr( pm.HYM );
-    aObj[ o_w_hym ].SetDim( pm.L, 1 );
+//    aObj[ o_w_hym ].SetPtr( pm.HYM );
+//    aObj[ o_w_hym ].SetDim( pm.L, 1 );
     aObj[ o_w_vl ].SetPtr( pm.VL );
     aObj[ o_w_vl ].SetDim( pm.L, 1 );
     aObj[ o_wi_mm ].SetPtr( pm.MM );
@@ -160,8 +160,8 @@ void TMulti::ods_link( int )
     aObj[ o_wio_s0 ].SetDim( pm.L, 1 );
     aObj[ o_wio_cp0 ].SetPtr( pm.Cp0 );
     aObj[ o_wio_cp0 ].SetDim( pm.L, 1 );
-    aObj[ o_wio_cv0 ].SetPtr( pm.Cv0 );
-    aObj[ o_wio_cv0 ].SetDim( pm.L, 1 );
+//    aObj[ o_wio_cv0 ].SetPtr( pm.Cv0 );
+//    aObj[ o_wio_cv0 ].SetDim( pm.L, 1 );
     aObj[ o_wi_pparc ].SetPtr(pm.Pparc );
     aObj[ o_wi_pparc ].SetDim( pm.L, 1 );
 
@@ -505,7 +505,7 @@ void TMulti::dyn_set(int /*q*/)
     pm.MoiSN  = (double *)aObj[ o_wi_moisn ].GetPtr();
     pm.SitFr  = (double *)aObj[ o_wo_sitfr ].GetPtr();
     pm.Vol   = (double *)aObj[ o_wio_vol ].GetPtr();
-    pm.HYM   = (double *)aObj[ o_w_hym ].GetPtr();
+//    pm.HYM   = (double *)aObj[ o_w_hym ].GetPtr();
     pm.VL    = (double *)aObj[ o_w_vl ].GetPtr();
     pm.MM    = (double *)aObj[ o_wi_mm ].GetPtr();
     pm.H0    = (double *)aObj[ o_wio_h0 ].GetPtr();
@@ -513,7 +513,7 @@ void TMulti::dyn_set(int /*q*/)
     pm.U0    = (double *)aObj[ o_wio_u0 ].GetPtr();
     pm.S0    = (double *)aObj[ o_wio_s0 ].GetPtr();
     pm.Cp0   = (double *)aObj[ o_wio_cp0 ].GetPtr();
-    pm.Cv0   = (double *)aObj[ o_wio_cv0 ].GetPtr();
+//    pm.Cv0   = (double *)aObj[ o_wio_cv0 ].GetPtr();
     pm.Pparc = (double *)aObj[ o_wi_pparc ].GetPtr();
     pm.Y_m   = (double *)aObj[ o_wd_ym ].GetPtr();
     pm.Y_la  = (double *)aObj[ o_wd_yla ].GetPtr();
@@ -701,7 +701,7 @@ void TMulti::dyn_kill(int /*q*/)
     pm.MoiSN  = (double *)aObj[ o_wi_moisn ].Free();
     pm.SitFr  = (double *)aObj[ o_wo_sitfr ].Free();
     pm.Vol   = (double *)aObj[ o_wio_vol ].Free();
-    pm.HYM   = (double *)aObj[ o_w_hym ].Free();
+//    pm.HYM   = (double *)aObj[ o_w_hym ].Free();
     pm.VL    = (double *)aObj[ o_w_vl ].Free();
     pm.MM    = (double *)aObj[ o_wi_mm ].Free();
     pm.H0    = (double *)aObj[ o_wio_h0 ].Free();
@@ -709,7 +709,7 @@ void TMulti::dyn_kill(int /*q*/)
     pm.U0    = (double *)aObj[ o_wio_u0 ].Free();
     pm.S0    = (double *)aObj[ o_wio_s0 ].Free();
     pm.Cp0   = (double *)aObj[ o_wio_cp0 ].Free();
-    pm.Cv0   = (double *)aObj[ o_wio_cv0 ].Free();
+//    pm.Cv0   = (double *)aObj[ o_wio_cv0 ].Free();
     pm.Pparc = (double *)aObj[ o_wi_pparc ].Free();
     pm.Y_m   = (double *)aObj[ o_wd_ym ].Free();
     pm.Y_la  = (double *)aObj[ o_wd_yla ].Free();

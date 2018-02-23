@@ -480,19 +480,15 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       na = new TNodeArray( 1, multi->GetPM() );
 
       // realloc and setup data for dataCH and DataBr structures
-      //na->MakeNodeStructures( par, ( flags[0] == S_OFF ) , Tai, Pai  );
-      na->MakeNodeStructures( par, ( flags[0] == S_OFF ),( flags[4] == S_ON ),
+      na->MakeNodeStructuresOne( par, ( flags[0] == S_OFF ),( flags[4] == S_ON ),
           arT, arP, nTp_, nPp_, Tai[3], Pai[3]  );
 
-    // setup dataBR and NodeT0 data
-   //na->packDataBr();
-   na->MoveWorkNodeToArray( 0, 1, na->pNodT0() );
-   // make  all files
-   if(flags[5] == S_OFF )
-      na->pNodT0()[0]->NodeStatusFMT = No_nodearray;
-   na->PutGEM2MTFiles( par, 1,  ( flags[1] == S_ON ), ( flags[2] == S_ON ),
-		   ( flags[3] == S_ON ), false, true );// addMui, to txt
-//Test to compare standalone  na->GEM_print_ipm( "GemsCalcPhase.txt" );
+       // make  all files
+      if(flags[5] == S_OFF )
+           na->pNodT0()[0]->NodeStatusFMT = No_nodearray;
+      na->PutGEM2MTFiles( par, 1,  ( flags[1] == S_ON ), ( flags[2] == S_ON ),
+                   ( flags[3] == S_ON ), false, true );// addMui, to txt
+      //Test to compare standalone  na->GEM_print_ipm( "GemsCalcPhase.txt" );
     }
     catch( TError& xcpt )
     {
@@ -609,7 +605,7 @@ void TProfil::SetSysSwitchesFromMulti( )
 // Reading structure MULTI (GEM IPM work structure)
 void TProfil::CmReadMulti( QWidget* par, const char* path )
 {
-    TNodeArray* na = new TNodeArray( 1, multi->GetPM() );
+    TNode* na = new TNode( multi->GetPM() );
     MULTI* pmp = multi->GetPM();
     SYSTEM* syp = syst->GetSY();
     //gstring key = pmp->stkey;
