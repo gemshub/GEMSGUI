@@ -253,8 +253,8 @@ void HelpWindow::helpVersion()
            trUtf8( _GEMS_version_stamp ) + trUtf8(  "\n\nusing " )+
            trUtf8( _GEMIPM_version_stamp ) +
            trUtf8( "\n\n\nFor GEMS R&D community\n\n"
-                  "(c) 2015, GEMS Development Team\n\n"
-                  "          PSI-UH-ETHZ" ) );
+                  "(c) 2018, GEMS Development Team\n\n"
+                  "          PSI-ETHZ-CSM" ) );
 }
 
 void HelpWindow::helpAbout()
