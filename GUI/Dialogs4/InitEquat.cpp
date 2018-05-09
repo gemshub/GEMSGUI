@@ -854,6 +854,7 @@ wnData.Add( new pagesSetupData("dul_", o_sydul)); // J "Upper metastability rest
 wnData.Add( new pagesSetupData("dll_", o_sydll)); //J "Lower metastability restrictions for DC mole quantities x at equilibrium state "
 wnData.Add( new pagesSetupData("gEx_", o_sygex)); //J "Optional additions to input g(T,P) values for Dependent Components (J/mol) "
 wnData.Add( new pagesSetupData("xp_", o_syphm)); // A "Input quantities or concentrations of Phases (from another SysEq) contributing to B_ vector "
+
 //o_sypparc Pp_    F_  -3 1  J "Input partial pressures for Dependent Components, bar (reserved) "
 //o_sypul   pul_   F_  -3 1  A "Vector of upper metastability restrictions to quantities of phases (reserved) "
 //o_sypll   pll_   F_  -3 1  A "Vector of lower metastability restrictions to quantities of phases (reserved) "

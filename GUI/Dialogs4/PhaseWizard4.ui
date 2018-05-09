@@ -343,6 +343,11 @@
             </item>
             <item>
              <property name="text">
+              <string>#   Modified Bregg-Williams</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>A   Adsorption, SACT and EDL models</string>
              </property>
             </item>
