@@ -98,7 +98,7 @@ BASE_PARAM dfBase[5] =
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
                 1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
                 0, /* DT */     30000,   /* PLLG */   1,  /* PE */
-                1000,   /* IIM */
+                9999,   /* IIM */
                 1000., /* DG */   1e-13,  /* DHB */  1e-20,  /* DS */
                 1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
