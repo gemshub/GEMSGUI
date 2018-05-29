@@ -48,8 +48,8 @@ void TPhase::Set_SolMod_Phase_coef()
                       php->npxM = 4;  // MaxOrd
                       if( php->ncpN < 1 ) // NPar
                           php->ncpN = 1;
-                      if( php->ncpN > php->nDC )
-                          php->ncpN = php->nDC;   // Check max N of parameters!
+                      if( php->ncpN > php->nDC * 3 )
+                          php->ncpN = php->nDC * 3;   // Check max N of parameters in more detail!
                       php->ncpM = 3;  // NPcoef
                       break;
        case SM_CEF: // = '$', built-in multicomponent multisite solid-solution model (CALPHAD)
@@ -61,7 +61,7 @@ void TPhase::Set_SolMod_Phase_coef()
                        if( php->ncpN < 1 ) // NPar
                            php->ncpN = 1;
                        if( php->ncpN > (php->nDC * 2 + 4 ))
-                       php->ncpN = php->nDC * 2 + 4.;   // Check max N of parameters!
+                       php->ncpN = php->nDC * 2 + 4.;   // Check max N of parameters in more detail!
                        php->ncpM = 4;  // NPcoef
        break;
                       break;
