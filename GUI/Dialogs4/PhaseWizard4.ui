@@ -213,37 +213,37 @@
             </item>
             <item>
              <property name="text">
-              <string>M   Binary subregular Margules solid-solution model</string>
+              <string>M   Binary subregular Margules solid solution model</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>G   Binary Redlich-Kister solid-solution model</string>
+              <string>G   Binary Redlich-Kister solid solution model</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>T   Ternary regular Margules solid-solution model</string>
+              <string>T   Ternary regular Margules solid solution model</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>R   Regular multicomponent solid-solution model</string>
+              <string>R   Regular multicomponent solid solution model</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>V   Van Laar multicomponent solid-solution model</string>
+              <string>V   Van Laar multicomponent solid solution model</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>K   Redlich-Kister multicomponent solid-solution model </string>
+              <string>K   Redlich-Kister multicomponent solid solution model </string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>B   Multisite  a(symmetric) multicomponent solid-solution model</string>
+              <string>B   Multisite  a(symmetric) multicomponent solid solution model</string>
              </property>
             </item>
             <item>
@@ -323,22 +323,36 @@
             </item>
             <item>
              <property name="text">
-              <string>Z   Pitzer multicomponent aqueous model</string>
+              <string>Z   Pitzer multicomponent aqueous solution model (HMW variant)</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Q   Extended UNIQAC multicomponent aqueous model</string>
+              <string>Q   Extended UNIQAC multicomponent aqueous solution model</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>J    ELVIS multicomponent liquid solution model</string>
+              <string>J    ELVIS extended UNIQUAC multicomponent aqueous solution model</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>$   Multisite multicomponent non-ideal (CEF) solid-solution model</string>
+              <string>$   Multisite multicomponent non-ideal (CEF) solid solution model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+<<<<<<< HEAD
+              <string>#   Modified Bragg-Williams model, [Vinograd et al. 2018]</string>
+=======
+              <string>#   Modified Bragg-Williams (MBW) solid solution model (Vinograd, 2018)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>&amp;   Modified Quasi-Chemical (MQC) solution/melt model (Pelton, 2001)</string>
+>>>>>>> 9ab8b332f285a39eef6d43e5b052c812a873c7eb
              </property>
             </item>
             <item>
