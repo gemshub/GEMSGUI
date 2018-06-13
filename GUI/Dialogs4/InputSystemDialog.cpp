@@ -27,6 +27,7 @@
 #include <QMenu>
 #include <QAbstractScrollArea>
 #include <QClipboard>
+#include <QHeaderView>
 
 #include "InputSystemDialog.h"
 #include "GemsMainWindow.h"

@@ -17,6 +17,7 @@
 //-------------------------------------------------------------------
 
 #include <QtGui>
+#include <QHeaderView>
 
 #include "model_tree.h"
 #include "units.h"

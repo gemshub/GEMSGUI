@@ -27,6 +27,7 @@
 #include <QColorDialog>
 #include <QMimeData>
 #include <QDrag>
+#include <QHeaderView>
 
 #include <qwt_symbol.h>
 #include <qwt_picker_machine.h>

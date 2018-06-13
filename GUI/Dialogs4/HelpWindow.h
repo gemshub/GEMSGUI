@@ -22,6 +22,7 @@
 
 #include <QMainWindow>
 #include <QTextBrowser>
+#include <QLineEdit>
 
 #include "ui_HelpWindow4.h"
 //#include "ui_AboutDialog4.h"
