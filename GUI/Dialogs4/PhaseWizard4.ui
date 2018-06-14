@@ -343,16 +343,12 @@
             </item>
             <item>
              <property name="text">
-<<<<<<< HEAD
-              <string>#   Modified Bragg-Williams model, [Vinograd et al. 2018]</string>
-=======
-              <string>#   Modified Bragg-Williams (MBW) solid solution model (Vinograd, 2018)</string>
+              <string>#   Modified Bragg-Williams (MBW) solid solution model (Vinograd et al., 2018)</string>
              </property>
             </item>
             <item>
              <property name="text">
               <string>&amp;   Modified Quasi-Chemical (MQC) solution/melt model (Pelton, 2001)</string>
->>>>>>> 9ab8b332f285a39eef6d43e5b052c812a873c7eb
              </property>
             </item>
             <item>
