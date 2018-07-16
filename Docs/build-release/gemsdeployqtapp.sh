@@ -47,7 +47,7 @@ distro=`lsb_release -d | awk '{print $2$3$4}' | sed 's/\./_/g'`
 # Create the directory that will be tarred up for distribution.
 etardir=`echo $executable"_"$distro | awk '{print tolower($0)}'`
 tardir=Gems3-app
-gemsdistro=Gems3.4.1-b071277.175a3e2-linux-x86-64.tgz
+gemsdistro=Gems3.4.2-aee0d15.a86951d-linux-x86-64.tgz
 mkdir $tardir
 echo "Created tar ball directory: "$tardir
 
@@ -73,14 +73,14 @@ done
 # Create the fonts directory and copy fonts across. You
 # will obviously need to assign the directory path leading
 # to your fonts to "fontdir", e.g. /home/you/qt/lib/fonts
-qtfontsdir=$HOME/Qt/5.10.1/Src/qtbase/lib/fonts
+qtfontsdir=$HOME/Qt/5.11.1/Src/qtbase/lib/fonts
 fontsdir=$PWD/$tardir/fonts
 mkdir $fontsdir
 echo "Created fonts directory: "$fontsdir" copying fonts..."
 cp -r $qtfontsdir/* $fontsdir
 
 # You will need to change this to point to wherever libqxcb.so lives on your PC.
-qtplatformplugin=$HOME/Qt/5.10.1/gcc_64/plugins/platforms/*.*
+qtplatformplugin=$HOME/Qt/5.11.1/gcc_64/plugins/platforms/*.so
 qtplatformplugindir=$tardir/platforms
 mkdir $qtplatformplugindir
 echo "Created platforms directory: "$qtplatformplugindir
@@ -156,29 +156,29 @@ echo "chmod u+x \$removescript" >> $fixscript
 chmod u+x $fixscript
 
 # Edit this script to add whatever other additional plugins your application
-# requires.
-qtsqliteplugin=$HOME/Qt/5.10.1/gcc_64/plugins/sqldrivers/*.*
+# requires. Fixed to skip debug variants of plugins
+qtsqliteplugin=$HOME/Qt/5.11.1/gcc_64/plugins/sqldrivers/*.so
 qtsqliteplugindir=$tardir/sqldrivers
 mkdir $qtsqliteplugindir
 echo "Created sql driver directory: "$qtsqliteplugindir
 cp $qtsqliteplugin $qtsqliteplugindir
 echo "Copied "$qtsqliteplugin" to "$qtsqliteplugindir
 
-qtbearerplugin=$HOME/Qt/5.10.1/gcc_64/plugins/bearer/*.*
+qtbearerplugin=$HOME/Qt/5.11.1/gcc_64/plugins/bearer/*.so
 qtbearerplugindir=$tardir/bearer
 mkdir $qtbearerplugindir
 echo "Created bearer plugin directory: "$qtbearerplugindir
 cp $qtbearerplugin $qtbearerplugindir
 echo "Copied "$qtbearerplugin" to "$qtbearerplugindir
 
-qtprintsupportplugin=$HOME/Qt/5.10.1/gcc_64/plugins/printsupport/*.*
+qtprintsupportplugin=$HOME/Qt/5.11.1/gcc_64/plugins/printsupport/*.so
 qtprintsupportplugindir=$tardir/printsupport
 mkdir $qtprintsupportplugindir
 echo "Created printsupport driver directory: "$qtprintsupportplugindir
 cp $qtprintsupportplugin $qtprintsupportplugindir
 echo "Copied "$qtprintsupportplugin" to "$qtprintsupportplugindir
 
-qtimageformatsplugin=$HOME/Qt/5.10.1/gcc_64/plugins/imageformats/*.*
+qtimageformatsplugin=$HOME/Qt/5.11.1/gcc_64/plugins/imageformats/*.so
 qtimageformatsplugindir=$tardir/imageformats
 mkdir $qtimageformatsplugindir
 echo "Created imageformats plugin directory: "$qtimageformatsplugindir
@@ -218,10 +218,10 @@ cp -r $gresourcesdir/* $resourcesdir
 echo "Copied Resources directory from "$gresourcesdir" to "$resourcesdir
 
 #Copying executables for generating GEM-Selektor help database
-qtqcollectiongenerator=$HOME/Qt/5.10.1/gcc_64/bin/qcollectiongenerator
+qtqcollectiongenerator=$HOME/Qt/5.11.1/gcc_64/bin/qcollectiongenerator
 cp $qtqcollectiongenerator $tardir
 echo "Copied executable "$qtqcollectiongenerator" to "$tardir
-qtqhelpgenerator=$HOME/Qt/5.10.1/gcc_64/bin/qhelpgenerator
+qtqhelpgenerator=$HOME/Qt/5.11.1/gcc_64/bin/qhelpgenerator
 cp $qtqhelpgenerator $tardir
 echo "Copied executable "$qtqhelpgenerator" to "$tardir
 
