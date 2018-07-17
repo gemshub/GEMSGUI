@@ -7,7 +7,7 @@ This deployment process is based on the "windeployqt.exe" utility provided by
 the Qt5 installation on Windows.
 
 1. Make sure that the Qt5 SDK is installed as C:\Qt or in similar folder.
-We assume that the Qt library is located in C:\Qt\5.9.4\mingw53_32\bin
+We assume that the Qt library is located in C:\Qt\5.11.1\mingw53_32\bin
 and MinGW compiler is located in C:\Qt\Tools\mingw530_32\bin (or similar, 
 depending on the current Qt version, MinGW version and their locations).  
 
@@ -18,10 +18,10 @@ subfolder (from .gems-gui\Resources in GEM-Selektor source code tree).
 
 3. In the C:\GEMS3DEPLOY\Gems3-app folder, edit the "runwindeployqt.bat" 
 file to make sure that it contains the correct paths to 
-C:\Qt\5.9.4\mingw53_32\bin and C:\Qt\Tools\mingw530_32\bin directories
+C:\Qt\5.11.1\mingw53_32\bin and C:\Qt\Tools\mingw530_32\bin directories
 (modify to actual ones, if necessary). Copy/refresh files windeployqt.exe, 
 qcollectiongenerator.exe, qhelpconverter.exe and qhelpgenerator.exe 
-from C:\Qt\5.9.4\mingw53_32\bin to the C:\GEMS3DEPLOY\Gems3-app folder.   
+from C:\Qt\5.11.1\mingw53_32\bin to the C:\GEMS3DEPLOY\Gems3-app folder.   
 
 4. Using QtCreator, build the actual release variant of gems3.exe. 
 Typically, you should have something like "C:\DevGEMS\trunk\gems-gui";
