@@ -603,7 +603,7 @@ void TProfil::SetSysSwitchesFromMulti( )
 }
 
 // Reading structure MULTI (GEM IPM work structure)
-void TProfil::CmReadMulti( QWidget* par, const char* path )
+void TProfil::CmReadMulti( QWidget* /*par*/, const char* path )
 {
     TNode* na = new TNode( multi->GetPM() );
     MULTI* pmp = multi->GetPM();
@@ -1036,12 +1036,12 @@ moved to TMulti*/
 // GEM IPM calculation of equilibrium state in MULTI
 // without testing changes in the system
 //
-double TProfil::ComputeEquilibriumState( long int& NumPrecLoops, long int& NumIterFIA, long int& NumIterIPM )
+double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& NumIterFIA, long int& NumIterIPM )
 {
   TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
   calcFinished = false;
 
-  multi->CalculateEquilibriumState( 0, NumIterFIA, NumIterIPM );
+  multi->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
 
   calcFinished = true;
   STat->setCalcFlag( true );

@@ -33,7 +33,7 @@
 void TUnSpace::unsp_eqkey()
 {
 
-	double calculation_time;
+    //double calculation_time;
     long int NumPrecLoops = 0, NumIterFIA = 0, NumIterIPM = 0;
 
 #ifndef IPMGEMPLUGIN
@@ -62,7 +62,7 @@ void TUnSpace::unsp_eqkey()
      pmu->TCc = usp->Tc;
      pmu->Pc = usp->Pc;
          
-     calculation_time = TProfil::pm->ComputeEquilibriumState( NumPrecLoops, NumIterFIA, NumIterIPM );
+     /*calculation_time =*/ TProfil::pm->ComputeEquilibriumState( /*NumPrecLoops,*/ NumIterFIA, NumIterIPM );
     //TProfil::pm->CalcEqstat( false ); // 16/02/2007
 // Later: to implement account for calculation time and numbers of iterations/loops
 
@@ -571,7 +571,7 @@ int TUnSpace::kvant_parag( int type /*short *mas*/ )
     // return:  kol-vo solutions v quantile
 
   int i,j,I=0,S=0,sum,kvant;
-  short maxkol,*sol;
+  short *sol;
 
   kvant = (int)(usp->quan_lev*usp->Q);
   if(kvant<1)
@@ -588,9 +588,9 @@ int TUnSpace::kvant_parag( int type /*short *mas*/ )
     if( sum > S)
       { S=sum; I=i; }
   }
-maxkol = sol[I];
+
 delete[] sol;
-return(I); //return(maxkol);
+return(I);
 }
 
 // indexes into array <mas> po quantile
@@ -816,7 +816,7 @@ double TUnSpace::ePO1( int t, int q )
   double PM=0.;   // Sum for primal potentials for species
   double DM=0.,    // Sum for dual potential for species 
          DDM=0.,  // Sum for differences between PM and DM for a single species 
-         Dif, Ps, Ds, Ddm1;   // Difference, primal, dual potential for a species 
+         Dif, Ps, Ds;//, Ddm1;   // Difference, primal, dual potential for a species
   ii=0;
   for( z=0; z<usp->Fi; z++)
   {
@@ -896,7 +896,7 @@ SPECIES: Dif = Ps - Ds;
 #endif
     } // z loop
 
-    Ddm1 = PM - DM;
+    //Ddm1 = PM - DM;
     return(DDM);
 }
 
@@ -938,7 +938,7 @@ SPECIES: Dif = Ps - Ds;
     double PM=0.;   // Sum for primal potentials for species
     double DM=0.,    // Sum for dual potential for species 
            DDM=0.,  // Sum for differences between PM and DM for a single species 
-           Dif, Ps, Ds, Ddm1;   // Difference, primal, dual potential for a species 
+           Dif, Ps, Ds;//, Ddm1;   // Difference, primal, dual potential for a species
     ii=0;
     for( z=0; z<usp->Fi; z++)
     {
@@ -1021,7 +1021,7 @@ SPECIES: Dif = Ps - Ds;
       ii += mup_Ll[z];
   #endif
       } // z loop
-      Ddm1 = PM - DM;
+      //Ddm1 = PM - DM;
       return(DDM);
 }  
  

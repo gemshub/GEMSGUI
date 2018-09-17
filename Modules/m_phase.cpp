@@ -28,6 +28,13 @@
 #include "m_param.h"
 #include "filters_data.h"
 
+int rkeycmp(const void *e1, const void *e2)
+{
+    int RCmp;
+    RCmp = memcmp( e1, e2, DC_RKLEN );
+    return RCmp;
+}
+
 TPhase* TPhase::pm;
 
 
@@ -1227,7 +1234,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
     uint j;
     int i, cnt;
     bool nRec;
-    const char *pKey1, *pKey4;
+    const char *pKey1;//, *pKey4;
     for(uint ii=0; ii<aPHkey.GetCount(); ii++ )
     {
         uint jj;
@@ -1242,7 +1249,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
 
 // Sorting out phase recs using setup in Elements and SetFilter dialogs
      pKey1 = aPHkey[ii].c_str();
-     pKey4 = aPHkey[ii].c_str()+(MAXSYMB+MAXPHSYMB+MAXPHNAME)*sizeof(char);
+     //pKey4 = aPHkey[ii].c_str()+(MAXSYMB+MAXPHSYMB+MAXPHNAME)*sizeof(char);
 
 // Copy phase record for aqueous and/or gas (fluid) phases
 //     if( !st_data.flags[PHcopyA_] && ( pKey1[0] == 'a' || pKey1[0] == 'g' ))

@@ -8,8 +8,8 @@ DEFINES         += Use_mt_mode
 DEFINES         += NODEARRAYLEVEL
 #DEFINES         += NOMUPNONLOGTERM
 
-CONFIG -= warn_on
-CONFIG += warn_off
+CONFIG += warn_on
+#CONFIG += warn_off
 #CONFIG += help
 CONFIG += thread
 QT += network

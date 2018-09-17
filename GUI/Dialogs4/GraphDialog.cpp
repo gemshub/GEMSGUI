@@ -514,7 +514,7 @@ LabelDelegate::LabelDelegate( QVector<int> afirst,
 
 // Editing QTableView for objects in TCPage
 QWidget *LabelDelegate::createEditor(QWidget *parent,
-        const QStyleOptionViewItem &option,
+        const QStyleOptionViewItem &/*option*/,
         const QModelIndex &index) const
 {
 

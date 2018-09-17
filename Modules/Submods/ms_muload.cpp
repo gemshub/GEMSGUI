@@ -646,7 +646,7 @@ LOAD_NIDMCOEF:
                 copyValues( pmp->rcpc+jrcpc+jkd, aPH->php->rcpc+jp*pmp->LsMdc2[k*3+1],
                         pmp->LsMdc2[k*3+1]);
                 jkd += pmp->LsMdc2[k*3+1]; jj++;
-            } /* j * /
+            } * j *
           }
           else */ pmp->LsMdc2[k*3+1] = 0; // no rcpc coefficients - This switch can be used for something else
 //        }

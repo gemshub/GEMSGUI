@@ -1002,7 +1002,7 @@ TDualTh::Calc_gam_n( char eState )
  short ii, j;
  double muoi, gam=1., Dsur, RT, P, lnFmol=4.016535;
  double Gex, /*Gmix,Gmech,Gid,Gmixt,*/ chi, chiPr, Wg, lnGam1, lnGam2,
-        alp0, alp1, chi1, chi2, Gex_, W12, W21;
+        alp0, alp1, chi1, chi2, /*Gex_,*/ W12, W21;
 
 // dt_initiate( false );
    Dsur = dtp->WmCb - 1.;
@@ -1153,7 +1153,7 @@ TDualTh::Calc_gam_n( char eState )
          chiPr *= chi;  // mole fraction product
          Gex += chi * RT * log( dtp->gam_n[ii*dtp->nM+j] ); // excess Gibbs energy
       }
-      Gex_ = dtp->gmx_n[ii][0];  // excess Gibbs energy for comparison/debugging
+     // Gex_ = dtp->gmx_n[ii][0];  // excess Gibbs energy for comparison/debugging
 // Direct calculation of interaction parameter (binary solution only)!
       if( dtp->nM == 2 )
       {
@@ -1182,7 +1182,7 @@ TDualTh::Calc_gam_n( char eState )
         }
         else if( dtp->nP == 2 )
         {  // Subregular Guggenheim parameters directly from activity coeffs
-           double w12, w21, a0, a1;
+           //double w12, w21, a0, a1;
            lnGam1 = log( dtp->gam_n[ii*dtp->nM] );
            lnGam2 = log( dtp->gam_n[ii*dtp->nM+1] );
            chi1 = dtp->chi[ii*dtp->nM];
@@ -1190,12 +1190,12 @@ TDualTh::Calc_gam_n( char eState )
            alp0 = 0.5*( lnGam1/chi2/chi2 * (3.*chi2-chi1)
                       + lnGam2/chi1/chi1 * (3.*chi1-chi2));
            alp1 = 0.5*( lnGam1/chi2/chi2 - lnGam2/chi1/chi1 );
-           w12 = 2.*lnGam2/chi1 +lnGam1/chi2/chi2 *(chi2-chi1);
-           w21 = 2.*lnGam1/chi2 +lnGam2/chi1/chi1 *(chi1-chi2);
+           //w12 = 2.*lnGam2/chi1 +lnGam1/chi2/chi2 *(chi2-chi1);
+           //w21 = 2.*lnGam1/chi2 +lnGam2/chi1/chi1 *(chi1-chi2);
            W12 = RT*(alp0-alp1);
            W21 = RT*(alp0+alp1);
-           a0 = 0.5*(w12+w21);
-           a1 = 0.5*(w12-w21);
+           //a0 = 0.5*(w12+w21);
+           //a1 = 0.5*(w12-w21);
 
            switch( dtp->PsIPf ) // put results into Wa columns
            {
@@ -1540,8 +1540,8 @@ TDualTh::TWMargules( double Gam[], const double x[], const double W[],
 
 // Original Margules binary model - to be implemented
 short
-TDualTh::MargulesO( double Gam[], const double x[], const double W[],
-         const short nM, const short nP, const double scaleF )
+TDualTh::MargulesO( double Gam[], const double /*x*/[], const double /*W*/[],
+         const short nM, const short /*nP*/, const double /*scaleF*/ )
 {
     short j;
     // binary only - yet to be written
@@ -1553,8 +1553,8 @@ TDualTh::MargulesO( double Gam[], const double x[], const double W[],
 
 // Van Laar multicomponent formalism - to be implemented
 short
-TDualTh::VanLaar( double Gam[], const double x[], const double alp[],
-         const short nM, const short nP, const double scaleF )
+TDualTh::VanLaar( double Gam[], const double /*x*/[], const double /*alp*/[],
+         const short nM, const short /*nP*/, const double /*scaleF*/ )
 {
     short j;
     // binary only - yet to be written
@@ -1566,8 +1566,8 @@ TDualTh::VanLaar( double Gam[], const double x[], const double alp[],
 
 // Bale & Pelton 1990 Dilute SS Formalism - to be implemented
 short
-TDualTh::BalePelton( double Gam[], const double x[], const double eps[],
-         const short nM, const short nP, const double scaleF, const short SolvX )
+TDualTh::BalePelton( double Gam[], const double /*x*/[], const double /*eps*/[],
+         const short nM, const short /*nP*/, const double /*scaleF*/, const short /*SolvX*/ )
 {
     short j;
     // binary ???  multicomp. with e' only
@@ -1579,8 +1579,8 @@ TDualTh::BalePelton( double Gam[], const double x[], const double eps[],
 
 // Darken's quadratic formalism - to be implemented
 short
-TDualTh::DarkenQuad( double Gam[], const double x[], const double eps[],
-         const short nM, const short nP, const double scaleF, const short SolvX )
+TDualTh::DarkenQuad( double Gam[], const double /*x*/[], const double /*eps*/[],
+         const short nM, const short /*nP*/, const double /*scaleF*/, const short /*SolvX*/ )
 {
     short j;
     // binary ???  only

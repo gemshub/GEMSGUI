@@ -157,11 +157,11 @@ KeyFilter::CmOk()
 gstring
 KeyFilter::SetKeyString()
 {
-    TDBKey dbKey( rt[iRt].GetDBKey() );
+    //TDBKey dbKey( rt[iRt].GetDBKey() );
     gstring Key;
 
     Key = "";
-    for( uint ii=0, jj=0; ii<aEdit.GetCount(); ii++, jj=Key.length())
+    for( uint ii=0/*, jj=0*/; ii<aEdit.GetCount(); ii++/*, jj=Key.length()*/)
     {
         gstring s = aEdit[ii].text().toLatin1().data();
         Key += s;

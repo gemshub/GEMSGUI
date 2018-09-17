@@ -247,8 +247,8 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
                float *sizeReg,  float * sizePart,
                TPlotLine* aLinesDesc, short *aAxisType,
                const char *aXName, const char *aYName ):
-        title(aTitle), axisTypeX(aAxisType[0]), axisTypeY(aAxisType[5]),
-        graphType(aAxisType[4])//,  isBackgr_color(true)
+        title(aTitle), graphType(aAxisType[4]), axisTypeX(aAxisType[0]),
+        axisTypeY(aAxisType[5]) //,  isBackgr_color(true)
 {
     uint ii;
     int jj, nLines;
@@ -294,8 +294,9 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
 
 /// The constructor
 GraphData::GraphData( GraphData& data ):
-        title(data.title), axisTypeX(data.axisTypeX), axisTypeY(data.axisTypeY),
-        graphType(data.graphType), xName(data.xName), yName(data.yName)
+        title(data.title), graphType(data.graphType),
+        axisTypeX(data.axisTypeX), axisTypeY(data.axisTypeY),
+        xName(data.xName), yName(data.yName)
         //isBackgr_color(data.isBackgr_color)
 {
     uint ii;
@@ -334,7 +335,7 @@ GraphData::GraphData( GraphData& data ):
 GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
                const char *aXName, const char *aYName,
                TCStringArray line_names, int agraphType ):
-        title(aTitle), axisTypeX(4), axisTypeY(4), graphType( agraphType )
+        title(aTitle), graphType( agraphType ), axisTypeX(4), axisTypeY(4)
         // isBackgr_color(false)
 {
     uint ii;

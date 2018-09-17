@@ -128,7 +128,7 @@ const char* TSData::GetHtml()
 // should be redefined in subclasses (modules)
 // to make some plotting
 
-void TSData::RecordPrint( const char* key )
+void TSData::RecordPrint( const char* /*key*/ )
 {
    gstring text_fmt = "line %s \"SDref record: \", %s rkey, %11s date, %6s time\n"
                       "line %s \"\"\n"

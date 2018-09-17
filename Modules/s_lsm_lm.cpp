@@ -1471,7 +1471,7 @@ double TLMmin::lm_enorm( int n, double *x )
  */
 
 int
-  TLMmin::lm_COVAR( double *C, double sumsq, int m, int n)
+  TLMmin::lm_COVAR( double *C, double /*sumsq*/, int m, int /*n*/)
 {
   int i, j, k, l;
   int *idx, maxi=-1;

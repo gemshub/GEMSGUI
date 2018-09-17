@@ -730,7 +730,7 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
 	pVisorImp->OpenProgress();
 #endif
    // run GEM calculation
-   ComputeEquilibriumState( NumPrecLoops, NumIterFIA, NumIterIPM );
+   ComputeEquilibriumState( /*NumPrecLoops,*/ NumIterFIA, NumIterIPM );
 // new - possibly returns a new time step suggestion
    if(kdTime)
        kdTime = multi->GetPM()->kdT;

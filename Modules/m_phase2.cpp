@@ -28,6 +28,7 @@
 #include "m_param.h"
 #include "filters_data.h"
 
+int rkeycmp(const void *e1, const void *e2);
 
 // Setting up the DC/phase coeffs depending on the
 // built-in model of mixing (from TSolMod class)
@@ -292,7 +293,7 @@ void TPhase::Set_KinMet_Phase_coef()
     switch(php->kin_t[KinProCode])
     {   //KinProCode
         case KM_PRO_MWR:  // = 'M' Kinetics of generic dissolution/precipitation (no uptake, ionex, adsorption)
-            php->PumpCon == S_OFF;
+            php->PumpCon = S_OFF;
             break;
         case KM_PRO_UPT:  // = 'U' Kinetics of uptake/entrapment (of minor/trace element) into solid solution
             php->PumpCon = S_ON;
@@ -1888,7 +1889,7 @@ void TPhase::set_def_comments( bool clearall,
          switch(php->kin_t[KinProCode])
          {   //KinProCode
              case KM_PRO_MWR:  // = 'M' Kinetics of generic dissolution/precipitation (no uptake, ionex, adsorption)
-                 php->PumpCon == S_OFF;
+                 php->PumpCon = S_OFF;
                  break;
              case KM_PRO_UPT:  // = 'U' Kinetics of uptake/entrapment (of minor/trace element) into solid solution
                  php->PumpCon = S_ON;

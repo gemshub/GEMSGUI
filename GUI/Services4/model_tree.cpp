@@ -154,7 +154,7 @@ int TTreeModel::rowCount( const QModelIndex& parent ) const
   return parentItem->children.count();
 }	
 
-int TTreeModel::columnCount( const QModelIndex& parent ) const
+int TTreeModel::columnCount( const QModelIndex&  ) const
 {
   return fldsPh.count();
 }	
@@ -231,7 +231,7 @@ QString TTreeModel::getGOcorr( const QModelIndex& index, int nO, int iN ) const
 	return QString("%1").arg(dat);	
 }
 
-QString TTreeModel::getObjValue( const QModelIndex& index, int nO, int iN ) const
+QString TTreeModel::getObjValue(  int nO, int iN ) const
 {
     QString res =  QString::fromLatin1( visualizeEmpty(aObj[nO].GetStringEmpty( iN, 0 )).c_str() );
     if( res == emptiness.c_str() )
@@ -372,7 +372,7 @@ QVariant TTreeModel::data( const QModelIndex& index, int role ) const
                {  if( index.column()== 7 )
                      res = getGOcorr( index, nO, iN );
                   else
-                     res = getObjValue( index, nO, iN );
+                     res = getObjValue( /*index,*/ nO, iN );
                }
                else if( index.column()== 6 && fldsPh.count() > 7 ) // only Input Window
                        res = QString( lineFromIndex(index)->UGval);
@@ -399,7 +399,7 @@ QVariant TTreeModel::data( const QModelIndex& index, int role ) const
 	  {  if( index.column()== 7 )
 		  res = getGOcorr( index, nO, iN );
 	     else
-		  res = getObjValue( index, nO, iN );
+          res = getObjValue( *index*, nO, iN );
 	  }
 	  else if( index.column()== 6 && fldsPh.count() > 7 ) // only Input Window
 		       res = QString( lineFromIndex(index)->UGval);	
