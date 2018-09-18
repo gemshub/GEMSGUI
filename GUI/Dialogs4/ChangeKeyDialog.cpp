@@ -25,7 +25,7 @@
 #include "ChangeKeyDialog.h"
 
 
-ChangeKeyDialog::ChangeKeyDialog(QWidget* win, int nsymb, const char* caption ):
+ChangeKeyDialog::ChangeKeyDialog(QWidget* win, int nsymb, const char* /*caption*/ ):
         QDialog( win), nSymbols(nsymb)
 {
 	setupUi(this);

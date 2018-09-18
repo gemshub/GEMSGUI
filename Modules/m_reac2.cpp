@@ -1280,7 +1280,7 @@ TReacDC::MRBcalc( double TK, double *H2Oprop, double *MRBcoef, double *ReactProp
 	double R_C = R_CONSTANT;
 	double RHO, ALP, dALPdT, BET, dRHOdT, d2RHOdT2, dRHOdP;
 	double pK298, A, B;
-	double dGr, dSr, dHr, dCPr, dVr, dG298;
+    double dGr, dSr, dHr, dCPr, dVr;//, dG298;
 	double pKw298, pKwTP, zzH2O, zzA, BB, pKTP, logKTP;
 	double I, J, dI, dJ, d2I, d2J;
 
@@ -1318,7 +1318,7 @@ TReacDC::MRBcalc( double TK, double *H2Oprop, double *MRBcoef, double *ReactProp
 	pKTP = pK298*(298.15/TK ) + zzA*BB;
 	logKTP = - pKTP;
 	dGr = pKTP*log(10.)*R_C*TK;
-	dG298 = pK298*log(10.)*R_C*298.15;
+    //dG298 = pK298*log(10.)*R_C*298.15;
 
 	I = a*TK + b + c/TK + d/pow(TK,2.)
 		+ ( e*TK + f + g/TK ) * log10(RHO) - (-pKw298)*298.15;

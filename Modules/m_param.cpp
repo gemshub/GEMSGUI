@@ -693,7 +693,7 @@ pmp->pKMM = 0;
     // Restoring the rest of MULTI contents from primal and dual solution
     pmp->pIPN =0;
     multi->Alloc_internal();
-    multi->EqstatExpand( pmp->stkey, false, false );
+    multi->EqstatExpand( /*pmp->stkey,*/ false );
 //    outMultiTxt( "IPM_EqstatExpand.txt"  );
     //    multi->Free_internal();
     //    na->unpackDataBr( true );
@@ -1050,7 +1050,7 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
   return multi->GetPM()->t_elap_sec;
 }
 
-void TProfil::outMulti( GemDataStream& ff, gstring& path  )
+void TProfil::outMulti( GemDataStream& ff, gstring& /*path*/  )
 {
     ff.writeArray( &pa.p.PC, 10 );
     ff.writeArray( &pa.p.DG, 28 );

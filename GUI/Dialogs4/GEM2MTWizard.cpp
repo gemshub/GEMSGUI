@@ -1223,7 +1223,7 @@ void GEM2MTWizard::objectChanged()
 
 //--------------------- End of GEM2MTWizard.cpp ---------------------------
 
-void GEM2MTWizard::on_moveAq_toggled(bool checked)
+void GEM2MTWizard::on_moveAq_toggled(bool /*checked*/)
 {
 
 }

@@ -86,7 +86,7 @@ int TObjectModel::cCount() const
 
    int currentdeltaM = 0, deltaM = 0, sizeM = flds[ii].pObj->GetMS();
    ii++;
-   for(  ii; ii< flds.count(); ii++)
+   for(  ; ii< flds.count(); ii++)
    {
        if(  flds[ii].place == UndeTabl )
        { deltaM = max(deltaM, currentdeltaM + sizeM);
@@ -126,7 +126,7 @@ int TObjectModel::getObjFromModel( int row, int col,
   nO = iN = iM = -1;
   
   iistart = ii;
-  for( ii; ii< flds.count(); ii++)
+  for( ; ii< flds.count(); ii++)
   {
     if( ii > iistart && flds[ii].place == Tied )
     {	deltaM += sizeM;
@@ -502,7 +502,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
     int maxfullcolSize = fullcolSize;
 
     ii++;
-    for( ii; ii< flds.count(); ii++)
+    for( ; ii< flds.count(); ii++)
  	{
         if(  flds[ii].place == Tied )
  		 {
@@ -979,8 +979,8 @@ void TObjectTable::CmCalc()
     QItemSelectionModel* selmodel = selectionModel();
     Selection sel(0, index.model()->rowCount( index )-1, 0, index.model()->columnCount( index )-1 );
     int iN, iM;
-    FieldInfo fld =  ((TObjectModel *)(index.model() ))->getInfo( 
-    		 index.row(), index.column(), iN, iM, &sel );
+    /*FieldInfo fld = */ ((TObjectModel *)(index.model() ))->getInfo(
+             index.row(), index.column(), iN, iM, &sel );
     if(iN == -1 || iM == -1  )
  	   	return;
     

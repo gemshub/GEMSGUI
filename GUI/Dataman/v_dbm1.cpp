@@ -796,14 +796,14 @@ TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
     va_list Marker;
     uint rkflen;
     int i, rts, nkf;
-    char *sp, *imf;
+    char /**sp,*/ *imf;
 
     ErrorIf( pkey==0,"MakeKey", "No key buf to make key.");
     *pkey = 0;
     va_start( Marker, pkey );
     for( i=0; i<ind.KeyNumFlds(); i++ )
     {
-        sp= pkey+strlen(pkey);
+        //sp= pkey+strlen(pkey);
         rkflen = ind.FldLen(i);
         rts = va_arg( Marker, int );
         switch( rts )

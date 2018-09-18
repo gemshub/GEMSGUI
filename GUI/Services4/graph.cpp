@@ -338,8 +338,9 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
         title(aTitle), graphType( agraphType ), axisTypeX(4), axisTypeY(4)
         // isBackgr_color(false)
 {
-    uint ii;
-    int jj, nLines, ndxAbs;
+    uint ii,nLines ;
+    int jj, /*nLines,*/ ndxAbs;
+
     double minX, maxX, minY, maxY;
     QPointF min, max;
 

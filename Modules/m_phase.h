@@ -271,7 +271,7 @@ class TPhase : public TCModule
 
 protected:
 
-    void CalcPhaseRecord( bool getDCC  );
+    void CalcPhaseRecord( /*bool getDCC*/  );
     void moiety_new( int nDC, int nMoi, bool setDefault );
     void Set_SolMod_Phase_coef();
 void Set_KinMet_Phase_coef();   // new

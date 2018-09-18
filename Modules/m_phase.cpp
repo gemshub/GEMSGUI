@@ -1199,7 +1199,7 @@ TPhase::RecCalc( const char *key )
            return;
     }
 
-    CalcPhaseRecord( getDCC );
+    CalcPhaseRecord( /*getDCC*/ );
     SetString("PH_solm   PHASE-solution model OK");
     TCModule::RecCalc(key);
 }

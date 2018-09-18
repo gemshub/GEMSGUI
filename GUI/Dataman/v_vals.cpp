@@ -34,11 +34,11 @@ const char* S_ANY  	=    "*";
     did not go well for Borland C++, we must use functions members
 */
 
-template<> const short TVal<short>::EMPTY()
+template<> short TVal<short>::EMPTY()
 {
     return  SHORT_EMPTY;
 }
-template<> const short TVal<short>::ANY()
+template<> short TVal<short>::ANY()
 {
     return  SHORT_ANY;
 }
@@ -51,11 +51,11 @@ template<> const char* TVal<short>::PATTERN_SET()
     return  "%hd%s";
 }
 
-template<> const unsigned short TVal<unsigned short>::EMPTY()
+template<> unsigned short TVal<unsigned short>::EMPTY()
 {
     return USHORT_EMPTY;
 }
-template<> const unsigned short TVal<unsigned short>::ANY()
+template<> unsigned short TVal<unsigned short>::ANY()
 {
     return USHORT_ANY;
 }
@@ -68,11 +68,11 @@ template<> const char* TVal<unsigned short>::PATTERN_SET()
     return "%hu%s";
 }
 
-template<> const long TVal<long>::EMPTY()
+template<> long TVal<long>::EMPTY()
 {
     return LONG_EMPTY;
 }
-template<> const long TVal<long>::ANY()
+template<> long TVal<long>::ANY()
 {
     return LONG_ANY;
 }
@@ -85,11 +85,11 @@ template<> const char* TVal<long>::PATTERN_SET()
     return  "%ld%s";
 }
 
-template<> const unsigned long TVal<unsigned long>::EMPTY()
+template<> unsigned long TVal<unsigned long>::EMPTY()
 {
     return ULONG_EMPTY;
 }
-template<> const unsigned long TVal<unsigned long>::ANY()
+template<> unsigned long TVal<unsigned long>::ANY()
 {
     return ULONG_ANY;
 }
@@ -102,11 +102,11 @@ template<> const char* TVal<unsigned long>::PATTERN_SET()
     return  "%lu%s";
 }
 
-template<> const float TVal<float>::EMPTY()
+template<> float TVal<float>::EMPTY()
 {
     return FLOAT_EMPTY;
 }
-template<> const float TVal<float>::ANY()
+template<> float TVal<float>::ANY()
 {
     return FLOAT_ANY;
 }
@@ -119,11 +119,11 @@ template<> const char* TVal<float>::PATTERN_SET()
     return  "%g%s";
 }
 
-template<> const double TVal<double>::EMPTY()
+template<> double TVal<double>::EMPTY()
 {
     return DOUBLE_EMPTY;
 }
-template<> const double TVal<double>::ANY()
+template<> double TVal<double>::ANY()
 {
     return DOUBLE_ANY;
 }
@@ -136,11 +136,11 @@ template<> const char* TVal<double>::PATTERN_SET()
     return  "%lg%s";
 }
 
-template<> const unsigned char TVal<unsigned char>::EMPTY()
+template<> unsigned char TVal<unsigned char>::EMPTY()
 {
     return UCHAR_EMPTY;
 }
-template<> const unsigned char TVal<unsigned char>::ANY()
+template<> unsigned char TVal<unsigned char>::ANY()
 {
     return UCHAR_ANY;
 }
@@ -153,11 +153,11 @@ template<> const char* TVal<unsigned char>::PATTERN_SET()
     return  "%hu%s";
 }
 
-template<> const signed char TVal<signed char>::EMPTY()
+template<> signed char TVal<signed char>::EMPTY()
 {
     return SCHAR_EMPTY;
 }
-template<> const signed char TVal<signed char>::ANY()
+template<> signed char TVal<signed char>::ANY()
 {
     return SCHAR_ANY;
 }
@@ -170,11 +170,11 @@ template<> const char* TVal<signed char>::PATTERN_SET()
     return  "%hd%s";
 }
 
-template<> const char TVal<char>::EMPTY()
+template<> char TVal<char>::EMPTY()
 {
     return CHAR_EMPTY;
 }
-template<> const char TVal<char>::ANY()
+template<> char TVal<char>::ANY()
 {
     return CHAR_ANY;
 }

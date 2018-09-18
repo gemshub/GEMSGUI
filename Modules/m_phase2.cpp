@@ -824,7 +824,7 @@ void TPhase::MakeSublatticeLists( TCStringArray& form_array  )
 
 //Recalc record structure
 void
-TPhase::CalcPhaseRecord(  bool getDCC  )
+TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
 {
     int  i, pa0=0, Kielland=0;
     short nsc=0;
@@ -1412,7 +1412,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
     	php->pnc[i] = param[i];
 
 // Calculating the phase record and saving it to database
-    CalcPhaseRecord( true );
+    CalcPhaseRecord( /*true*/ );
 
     int  Rnum = db->Find( key );
 

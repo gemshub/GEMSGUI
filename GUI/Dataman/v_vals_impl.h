@@ -42,8 +42,8 @@ struct TVal:
             TValBase
 {
     // values and string representations for special values: EMPTY and ANY
-    static const T EMPTY();
-    static const T ANY();
+    static T EMPTY();
+    static T ANY();
     static const char* PATTERN_GET();
     static const char* PATTERN_SET();
 

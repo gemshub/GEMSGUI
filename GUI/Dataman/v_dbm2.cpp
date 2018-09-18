@@ -331,7 +331,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     for( j=0; j<nOD; j++ )   // get objects from file
     {
         if ( j+frstOD == o_phstr2  )
-            if( StillLen < sizeof(short)*16 )     // old record of phase
+            if( StillLen < (int)(16*sizeof(short)) )     // old record of phase
                break;
 
        if ( j+frstOD == o_tpstr  )

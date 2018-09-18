@@ -588,7 +588,7 @@ TVisor::fromWinCFG()
     TConfig& visor_conf = *new TConfig( fname_ini.c_str() );
 #endif
 
-    int win_num = 0;
+    //int win_num = 0;
     gstring name = visor_conf.getFirst();
 
     while ( !name.empty() )
@@ -615,7 +615,7 @@ TVisor::fromWinCFG()
 		    pVisorImp->setAxisLabelFont(axisLabelFont);
                 }
                 else if( name == "number_of_windows" ) {
-                    win_num = visor_conf.getcInt();
+                    //win_num = visor_conf.getcInt();
                 }
             	else if( name == "config_autosave" ) {
 				pVisorImp->setConfigAutosave(visor_conf.getcInt());

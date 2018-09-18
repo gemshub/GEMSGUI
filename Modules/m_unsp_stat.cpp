@@ -34,7 +34,7 @@ void TUnSpace::unsp_eqkey()
 {
 
     //double calculation_time;
-    long int NumPrecLoops = 0, NumIterFIA = 0, NumIterIPM = 0;
+    long int NumIterFIA = 0, NumIterIPM = 0;
 
 #ifndef IPMGEMPLUGIN
 
