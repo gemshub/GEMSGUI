@@ -334,7 +334,8 @@ void TUnSpace::BELOV(int QT, int NG, float *OVB)
   for(D=W+2;D<=NG;D++)
   { MC=0;
     for(j=1;j<=QT;j++)
-    { for(i=1;i<=QT2;i++)
+    {
+      for(i=1;i<=QT2;i++)
          LI1[i]=WL(i,j,QT)+LI[i];
       B=LI1[1];
       for(i=2;i<=QT2;i++)
@@ -342,20 +343,20 @@ void TUnSpace::BELOV(int QT, int NG, float *OVB)
            B=LI1[i];
       m2=0;
       if(B==MC)
-       for(i=1;i<=D-1;i++)
-         if(OVB[i]==OVB[D])
-         { OVB[D]=j;
+        for(i=1;i<=D-1;i++)
+          if(OVB[i]==OVB[D])
+          { OVB[D]=j;
             m2=1;
             break;
-         }
-       if(!m2&&B>MC)
-         { MC=B;
-           OVB[D]=j;
-         }
+          }
+      if(!m2&&B>MC)
+          { MC=B;
+            OVB[D]=j;
+          }
       }
-      for(i=1;i<=QT2;i++)
+    for(i=1;i<=QT2;i++)
         LI[i]+=WL(i,OVB[D],QT);
-   }
+  }
   delete[] LI;
   delete[] LI1;
 }
@@ -412,7 +413,7 @@ void  TUnSpace::NexT(int J )
 // J - point of sample
 {
   int i,j,k1,k2,k3;
-  double R;
+  double R=0;
   double x, xx;
 
 #ifdef IPMGEMPLUGIN
@@ -1115,7 +1116,7 @@ return(gk);
 void TUnSpace::Un_criteria()
 {
    short  t, q, jj;
-   double R;
+   double R=0.;
    double Kr=0.;
 
    for( t=0; t<usp->Q; t++ )
@@ -1170,16 +1171,16 @@ void TUnSpace::Un_criteria()
             if( usp->PvPOR == S_ON )
              usp->POR[ q ] = R;
 
-             if( R >usp->Zmax[t] )
+            if( R >usp->Zmax[t] )
                  usp->Zmax[t] = R;
-             if( R < usp->Zmin[t] )
+            if( R < usp->Zmin[t] )
                  usp->Zmin[t] = R;
-             if( fabs(R) > usp->ZmaxAbs[t] )
+            if( fabs(R) > usp->ZmaxAbs[t] )
                  usp->ZmaxAbs[t] = fabs(R);
-         if( usp->Pa_Zcp == S_OFF )
-             usp->Zcp[t] += R;
-          else
-             usp->Zcp[t] += fabs(R);
+            if( usp->Pa_Zcp == S_OFF )
+                 usp->Zcp[t] += R;
+            else
+                usp->Zcp[t] += fabs(R);
          }
         Kr += fabs(R);
         if(!t )

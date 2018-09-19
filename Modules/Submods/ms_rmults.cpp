@@ -645,6 +645,7 @@ void TRMults::PHmake()
             continue;
         case PH_SORPTION:
             mu.FiE += mu.Ll[kk];
+            continue;
         default:
             continue;
         }
@@ -825,11 +826,11 @@ NEW_PHASE_AGAIN:
   for( int ii=0; ii<mu.Fi; ii++ )
     memcpy( mu.nlPHv[ii], mu.SF[ii]+MAXSYMB+MAXPHSYMB, MAXPHNAME );
 
-    // test data base ICOMP  before calc
-    TestIComp();
+  // test data base ICOMP  before calc
+  TestIComp();
 
-    // Set nAq and nGas
-    SetAqGas( AqKey[0].c_str() , GasKey[0].c_str() );
+  // Set nAq and nGas
+  SetAqGas( AqKey[0].c_str() , GasKey[0].c_str() );
 
 }
 

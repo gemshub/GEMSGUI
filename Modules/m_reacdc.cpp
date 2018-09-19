@@ -821,6 +821,7 @@ CALCULATE_DELTA_R:
         {
         default:
             Error(dckey.p, "E12RErun: Invalid CE method flag!");
+            break;
         case CTM_HKF:
             calc_tphkf_r( q, p );
             break; /* calc aqueous species */
@@ -1753,7 +1754,8 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
             pVisor->Update();
             Error("E21RErun: Calculation failed!",
                     " Please, check data fields and try again!");
-        } // break;
+        }
+        break;
     case FAIL_:
         msg = "E22RErun: Failure!!! Database chain ";
         msg += GetName();

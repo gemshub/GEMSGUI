@@ -459,7 +459,7 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
              cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
              dc = cr*(c12-cm12);
              if( fabs( dc ) < mtp->cdv )  // *c0
-            	 continue;
+                    continue;
     		 dc /= fmolal; 
              // Checking the new IC amount
              if( (node1_bPS(ii, 0, ic) - dc) > mtp->cez )
@@ -603,25 +603,25 @@ char buf[300];
        Vmessage += ". Please, wait (may take long)...";
 
 #ifdef Use_mt_mode
-    if( mtp->PsSmode != S_OFF  )
-    {
-      STEP_POINT2();
-    }
-    else
-      iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
+       if( mtp->PsSmode != S_OFF  )
+       {
+         STEP_POINT2();
+       }
+       else
+           iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
                            mtp->ct, mtp->ntM, UseGraphMonitoring );
 #else
-      iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
+          iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
                              mtp->ct, mtp->ntM, UseGraphMonitoring );
 #endif
 
 #endif
-       if( iRet )
-         break;
+      if( iRet )
+           break;
 
-         //  the mass transport iteration time step
-         switch( mtp->PsMode )
-         {
+      //  the mass transport iteration time step
+      switch( mtp->PsMode )
+      {
           case RMT_MODE_A: MassTransAdvecStep( CompMode );
                            break;
           case RMT_MODE_W: MassTransParticleStep( CompMode );
@@ -631,7 +631,7 @@ char buf[300];
 //          case RMT_MODE_D:
           default: // more mass transport models here
                   break;
-        }
+      }
 
         // The analysis of GEM IA modes in nodes - optional
 //        NodesSetToAIA = CheckPIAinNodes1D( mode, nStart, nEnd );

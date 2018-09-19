@@ -321,8 +321,8 @@ void TMulti::SolModLoad( )
     RMULTS* mup = TRMults::sm->GetMU();
     SYSTEM *syp = TSyst::sm->GetSY();
 
-if( pmp->pIPN >= 1 )           //SD 29/11/2006
-    return;
+    if( pmp->pIPN >= 1 )           //SD 29/11/2006
+         return;
     ErrorIf( !pmp->FIs, "SolModLoad", "No phases-solutions!" );
     // reallocating arrays for script calculations
     if( pmp->pIPN <= 0 )
@@ -1218,10 +1218,11 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
             nO = ii;
             iCode = aObj[ii].GetIndexationCode();
             // Getting new indexation code  KD 30.03.01
-                switch( iCode )
+            switch( iCode )
             {  // analyze indexation code
                default:
                   Error( "E01MSPrep: Unknown indexation base for data object", odlab );
+                  break;
 //             case A_reset:
                case A_icx:
                case A_dcx:
@@ -1409,6 +1410,7 @@ void TMulti::getNamesList( int nO, TCStringArray& lst )
    {  // analyze indexation code
        default: //break;
           Error( "E01MSWin: Unknown indexation base for data object",aObj[nO].GetKeywd()  );
+          break;
        case A_icx:
                   for( i=0; i<pmp->N; i++ )
                      lst.Add( gstring( pmp->SB[i], 0, MAXICNAME ));

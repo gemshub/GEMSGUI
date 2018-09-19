@@ -421,9 +421,10 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
   {
     updateStatus( currentIndex() );
     QTableView::focusInEvent( event );
-   if( no_menu_in )
-    selectionModel()->select( currentIndex(),
-              QItemSelectionModel::SelectCurrent );
+    if( no_menu_in )
+    {
+        selectionModel()->select( currentIndex(), QItemSelectionModel::SelectCurrent );
+    }
     no_menu_in = true;
   }
 
@@ -1078,8 +1079,8 @@ void TObjectTable::CmCalc()
    			  cText = "  ";//"\r"; 
    	      clipText += cText;
 	    }
-	 }  
-     if( !frst )
+    }
+    if( !frst )
         clipText += splitRow;
 	return clipText;  
   }
@@ -1115,7 +1116,7 @@ void TObjectTable::CmCalc()
   }
 
   void  TObjectTable::setFromString(char splitrow, const QString& str,
-          Selection sel, bool transpose) throw(TError)
+          Selection sel, bool transpose) //throw(TError)
   {
      TObjectModel *  model = ((TObjectModel *)(currentIndex().model() ));
      if( str.isEmpty() )

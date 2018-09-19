@@ -355,10 +355,10 @@ void TCModule::CmSaveM()
   try{
        gstring str=db->PackKey();
        if( str.find_first_of("*?" ) != gstring::npos
-            || ( db->GetStatus() == UNDF_  && db->RecCount() &&  // 09/11/2004 Sveta
-              nRT != RT_SDATA ) )   // oct 2005  Sveta
-        Error( GetName(), "E1 Cannot save under record key template, or record contents are not yet loaded!");
-        CmSave();
+           || ( db->GetStatus() == UNDF_  && db->RecCount() &&  // 09/11/2004 Sveta
+           nRT != RT_SDATA ) )   // oct 2005  Sveta
+             Error( GetName(), "E1 Cannot save under record key template, or record contents are not yet loaded!");
+       CmSave();
      }
    catch( TError& xcpt )
     {
@@ -927,6 +927,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
         msg += key;
 // Sveta 14/06/01        if( RecChoise( key ) == false )
             Error( GetName(), msg.c_str() );
+        break;
     case ONEF_:
         dyn_set(q);
         time_s = db->Rtime();
@@ -963,7 +964,8 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
                       " It is recommended to re-calculate the data");
             pVisor->Update();
             Error("Calculation failed!", "Check data fields and try calculation again!");
-        } // break;
+        }
+        break;
     case FAIL_:
         msg = "Failure!!! Database chain ";
         msg += GetName();

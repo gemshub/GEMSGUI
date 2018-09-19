@@ -620,7 +620,7 @@ if( P < 1e-5 )  // trial check  5.12.2006
 
 
     if( tp.mark && tp.G )
-        polmod_test();
+          polmod_test();
     
 	NormDoubleRound(tp.G, tp.L, 13 ); // SD 22/07/2009
 	NormDoubleRound(tp.RoW, 13 ); 

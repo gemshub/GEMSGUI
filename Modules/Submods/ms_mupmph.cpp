@@ -633,7 +633,6 @@ long int
                 pm.LsUpt[k*2] = 0;
                 pm.LsUpt[k*2+1] = 0;
 // New stuff for TSorpMod
-
             }
 
 

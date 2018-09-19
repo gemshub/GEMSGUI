@@ -686,8 +686,8 @@ pmp->pKMM = 0;
 
     // calculate mass of the system
      pmp->MBX = 0.0;
-    for(int i=0; i<pmp->N; i++ )
-     pmp->MBX += pmp->B[i] * pmp->Awt[i];
+     for(int i=0; i<pmp->N; i++ )
+           pmp->MBX += pmp->B[i] * pmp->Awt[i];
      pmp->MBX /= 1000.;
 
     // Restoring the rest of MULTI contents from primal and dual solution

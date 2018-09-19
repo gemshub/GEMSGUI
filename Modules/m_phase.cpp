@@ -1021,18 +1021,22 @@ AGAIN_SETUP:
     // insert coeff of model of solid and other data
     if( php->nscM )
         php->Psco = S_ON;
-      else  php->Psco = S_OFF;
-    if( php->ncpN * php->ncpM )
+    else
+        php->Psco = S_OFF;
+    if( php->ncpN && php->ncpM )
         php->Ppnc = S_ON;
-      else php->Ppnc = S_OFF;
+    else
+        php->Ppnc = S_OFF;
     if( !php->NsuT )
-       php->PFsiT = S_OFF;
+        php->PFsiT = S_OFF;
     if( php->sol_t[DCOMP_DEP] == SM_UNDEF )
         php->PdEq = S_OFF;
-      else php->PdEq = S_ON;
+    else
+        php->PdEq = S_ON;
     if( php->sol_t[SPHAS_DEP] == SM_UNDEF )
         php->PpEq = S_OFF;
-      else php->PpEq = S_ON;
+    else
+        php->PpEq = S_ON;
     if( (php->NsuT != S_OFF) && php->sol_t[SPHAS_TYP] == SM_SURCOM )
     {
        php->nMoi = 0; php->nSub = 0;

@@ -234,9 +234,11 @@ QString TTreeModel::getGOcorr( const QModelIndex& index, int nO, int iN ) const
 QString TTreeModel::getObjValue(  int nO, int iN ) const
 {
     QString res =  QString::fromLatin1( visualizeEmpty(aObj[nO].GetStringEmpty( iN, 0 )).c_str() );
+
     if( res == emptiness.c_str() )
     	return  res;
-	double vl;
+
+    double vl;
 	switch( nO )
 	{
 // Input
@@ -793,19 +795,19 @@ void TTreeView::printList( fstream& ff )
 	          	if( selIndexes.contains( index ) )
 	          	{
 	      		  if( !frst )
-                    clipText += splitCol;
+                      clipText += splitCol;
 	      		  frst = false;
 	      		  cText = model()->data(index).toString();
 	      		  if( cText == emptiness.c_str() )
-	      			  cText = "  ";//"\r"; 
-	      	     clipText += cText;
+                       cText = "  ";//"\r";
+                  clipText += cText;
 	          	}
 	         }  
-       	 if( !frst )
-             clipText += splitRow;
+          if( !frst )
+               clipText += splitRow;
 
-	     for (rw = 0; rw < model()->rowCount( childIndex ); rw++ ) 
-	     {
+          for (rw = 0; rw < model()->rowCount( childIndex ); rw++ )
+          {
 	    	 frst = true; 
              for (col = 0; col < model()->columnCount( childIndex ); col++ ) 
 	         {
@@ -820,9 +822,9 @@ void TTreeView::printList( fstream& ff )
 		      			  cText = "  ";//"\r"; 
 		      	    clipText += cText;
 		         }
-	        }  
-       	   if( !frst )
-            clipText += splitRow;
+          }
+          if( !frst )
+              clipText += splitRow;
 	   }
       
      }
@@ -847,10 +849,10 @@ void TTreeView::printList( fstream& ff )
    			  cText = "  ";//"\r"; 
    	      clipText += cText;
 	    }
-	 }  
-     if( !frst )
+   }
+   if( !frst )
         clipText += splitRow;
-	return clipText;  
+   return clipText;
   }
 
   void TTreeView::CopyData()

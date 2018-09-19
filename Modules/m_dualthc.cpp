@@ -718,7 +718,7 @@ void
 TDualTh::Calc_muo_n( char eState )
 { // calculate muo_n DualTh
  short ii, j;
- double muo, mua, lnGam/*=1.*/, Dsur, RT/* = 2479.*/, P/*=1.*/, lnFmol=4.016535;
+ double muo=0, mua=0, lnGam/*=1.*/, Dsur, RT/* = 2479.*/, P/*=1.*/, lnFmol=4.016535;
  double Chi, lnChi;
 // dt_initiate( false );
   Dsur = dtp->WmCb - 1.;
@@ -923,7 +923,7 @@ TDualTh::Calc_mua_n_stat( char /*eState*/ )
 void
 TDualTh::Calc_gmix_n( char ModE, char /*StP*/ ) // calculation of mixing energies
 {
-  double Gmixt, Gmix, Gmech, Gid, Gex, chi, RT, P;
+  double Gmixt, Gmix, Gmech, Gid, Gex=0, chi, RT, P;
   short j, ii;
 
   if( !( ModE == DT_MODE_G || ModE == DT_MODE_M || ModE == DT_MODE_A ) )
@@ -1457,9 +1457,18 @@ TDualTh::Guggenheim( double Gam[], const double x[], const double alp[],
     a0 = alp[0]*scaleF;
     a1 = alp[1]*scaleF;
     a2 = alp[2]*scaleF;
-    if( a0 > 15. ) a0 = 15.;  if( a0 < -15. ) a0 = -15.;
-    if( a1 > 15. ) a1 = 15.;  if( a1 < -15. ) a1 = -15.;
-    if( a2 > 15. ) a2 = 15.;  if( a2 < -15. ) a2 = -15.;
+    if( a0 > 15. )
+        a0 = 15.;
+    if( a0 < -15. )
+        a0 = -15.;
+    if( a1 > 15. )
+        a1 = 15.;
+    if( a1 < -15. )
+        a1 = -15.;
+    if( a2 > 15. )
+        a2 = 15.;
+    if( a2 < -15. )
+        a2 = -15.;
 
     lnGam0 = x[1]*x[1]*(a0+a1*(3.*x[0]-x[1])+a2*(x[0]-x[1])*(5.*x[0]-x[1]));
     lnGam1 = x[0]*x[0]*(a0-a1*(3.*x[1]-x[0])+a2*(x[1]-x[0])*(5.*x[1]-x[0]));

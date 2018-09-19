@@ -1243,7 +1243,8 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
             pVisor->Update();
             Error("W21DCrun: Calculation failed! ",
                   "Check data fields and try calculation again!");
-        } // break;
+        }
+        break;
     case FAIL_:
         msg = "E22DCrun: Failure!!! Database chain ";
         msg += GetName();

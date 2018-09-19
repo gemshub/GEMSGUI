@@ -390,9 +390,9 @@ void TPhase::Set_KinMet_Phase_coef()
         case KM_LNK_SURF: // = 'S' Link to (fraction of) solid substrate surface
         case KM_LNK_PVOL: // = 'P' Link to (fraction of) solid substrate (pore) volume
         case KM_LNK_MASS: // = 'M' Link to (fraction of) solid substrate mass
-        if( php->nlPc < 1 || php->nlPc > 4 )
-            php->nlPc = 4;
-            break;
+                          if( php->nlPc < 1 || php->nlPc > 4 )
+                              php->nlPc = 4;
+                          break;
         default:  // other models
             break;
     }
@@ -757,6 +757,7 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
                     break;
           case '@': memcpy( php->lsNs[iNs], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
 				    php->nxNs[iNs++] = i;
+                    break;
           default:
                   continue;
         }

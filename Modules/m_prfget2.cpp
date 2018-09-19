@@ -1119,8 +1119,8 @@ void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<gstri
 //Show Phase DComp connections
 void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
 {
-    bool system;
-    int  xph, xdc;
+    bool system = true;
+    int  xph, xdc = -1;
     gstring phname;
     vector<int> xdclist;
     vector<gstring> dcnames;
@@ -1132,10 +1132,11 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
         if( strncmp(objName, aObj[o_musm].GetKeywd(), MAXKEYWD)==0 ||
                 strncmp(objName, aObj[o_musm2].GetKeywd(), MAXKEYWD)==0 )
            system = true;
-            else  if( strncmp(objName, aObj[o_wd_sm].GetKeywd(), MAXKEYWD)==0 ||
+        else  if( strncmp(objName, aObj[o_wd_sm].GetKeywd(), MAXKEYWD)==0 ||
                   strncmp(objName, aObj[o_wd_sm2].GetKeywd(), MAXKEYWD)==0 )
                    system = false;
-                  else return;
+               else
+                  return;
         phname = PhNameforDC( xdc, xph, system );
         break;
     case 'P': // Phase : Ph_v__ or Ph_v2 or Phnam or Phnam2
@@ -1152,7 +1153,8 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
                 system = false;
                 phname = gstring( multi->GetPM()->SF[xph], 0, MAXSYMB+MAXPHNAME);
              }
-        else return;
+            else
+                return;
         break;
   }
   DCNamesforPh( xph, system, xdclist, dcnames);
