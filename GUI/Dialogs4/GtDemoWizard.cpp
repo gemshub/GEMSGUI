@@ -166,41 +166,41 @@ void   GtDemoWizard::getSizes( int size[8] )
 
 int   GtDemoWizard::getnRT()
 {
-  int newRT;
+    int newRT;
 
-   if( psST->isChecked() )
-    newRT = RT_SYSEQ;
-   else
-    if( psPE->isChecked() )
-      newRT = RT_PROCES;
+    if( psST->isChecked() )
+        newRT = RT_SYSEQ;
     else
-     if( psPB->isChecked() )
-          newRT = RT_UNSPACE;
-     else
-      if( psIC->isChecked() )
-          newRT = RT_ICOMP;
-      else
-       if( psDC->isChecked() )
-          newRT = RT_DCOMP;
-       else
-        if( psBC->isChecked() )
-             newRT = RT_COMPOS;
+        if( psPE->isChecked() )
+            newRT = RT_PROCES;
         else
-         if( psRE->isChecked() )
-             newRT = RT_REACDC;
-         else
-          if( psRP->isChecked() )
-             newRT = RT_RTPARM;
-          else
-           if( psPH->isChecked() )
-               newRT = RT_PHASE;
-           else
-            if( psUT->isChecked() )
-               newRT = RT_DUALTH;
+            if( psPB->isChecked() )
+                newRT = RT_UNSPACE;
             else
-               newRT = RT_GEM2MT;
+                if( psIC->isChecked() )
+                    newRT = RT_ICOMP;
+                else
+                    if( psDC->isChecked() )
+                        newRT = RT_DCOMP;
+                    else
+                        if( psBC->isChecked() )
+                            newRT = RT_COMPOS;
+                        else
+                            if( psRE->isChecked() )
+                                newRT = RT_REACDC;
+                            else
+                                if( psRP->isChecked() )
+                                    newRT = RT_RTPARM;
+                                else
+                                    if( psPH->isChecked() )
+                                        newRT = RT_PHASE;
+                                    else
+                                        if( psUT->isChecked() )
+                                            newRT = RT_DUALTH;
+                                        else
+                                            newRT = RT_GEM2MT;
 
-       return newRT;
+    return newRT;
 }
 
 void GtDemoWizard::CmChangePage2(int)

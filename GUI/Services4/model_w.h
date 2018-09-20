@@ -151,8 +151,8 @@ class TObjectTable: public QTableView
         QString createString( Selection& sel );
         QString createHeader();
         void pasteIntoArea( Selection& sel, bool transpose);
-    void  setFromString(char splitrow, const QString& str,
-                Selection sel, bool transpose) throw(TError);
+        void  setFromString(char splitrow, const QString& str,
+                Selection sel, bool transpose);// throw(TError);
 
  protected slots:
     void currentChanged( const QModelIndex& current, const QModelIndex& previous );

@@ -128,7 +128,7 @@ const char* TSData::GetHtml()
 // should be redefined in subclasses (modules)
 // to make some plotting
 
-void TSData::RecordPrint( const char* key )
+void TSData::RecordPrint( const char* /*key*/ )
 {
    gstring text_fmt = "line %s \"SDref record: \", %s rkey, %11s date, %6s time\n"
                       "line %s \"\"\n"
@@ -237,7 +237,8 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
             msg += gstring( key, 0, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked.\n";
             Error( GetName(), msg.c_str() );
-        } // break;
+        }
+        break;
     case FAIL_:
         msg = "E22DCrun: Failure!!! Database chain ";
         msg += GetName();

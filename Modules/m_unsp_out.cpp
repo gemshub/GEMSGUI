@@ -308,10 +308,11 @@ double TUnSpace::value_nPG( int line, int q )
   if( usp->PsGen[6]== S_ON )
      for( j=0; j<usp->Ls; j++)
        if( usp->NgGam[j] > 0  )
-       {   if( line == count )
-          return usp->vNidP[q*usp->Ls+j];
+       {
+          if( line == count )
+               return usp->vNidP[q*usp->Ls+j];
           count++;
-        }
+       }
 
   return 0;
 }
@@ -330,7 +331,7 @@ void TUnSpace::AdapG()
 // UnDCA
 for( int ii=0; ii<usp->nPG; ii++ )
 {
-  double val, sg_val, sr=0, min=0, max=0, sg_sr=0;
+  double val=0, sg_val=0, sr=0, min=0, max=0, sg_sr=0;
   int i1 = 0, sr_sz = 0;
 
 

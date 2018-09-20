@@ -702,7 +702,7 @@ size_t  TObject::ofDB( GemDataStream& f )
     switch( cmp )
     {
     case  1: // old size > new size
-        if( !IsDynamic() )
+         if( !IsDynamic() )
             break;
 
     case -1:  // old size < new size

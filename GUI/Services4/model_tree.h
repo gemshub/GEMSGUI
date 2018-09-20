@@ -71,7 +71,7 @@ class TTreeModel: public QAbstractItemModel
 
   void setGOcorr(const QModelIndex& index, QString& value, int nO, int iN );
   QString getGOcorr( const QModelIndex& index, int nO, int iN ) const;
-  QString getObjValue( const QModelIndex& index, int nO, int iN ) const;
+  QString getObjValue( /*const QModelIndex& index,*/ int nO, int iN ) const;
 
  void childChanged(const QModelIndex& index, const QVariant& value, char old_data);
 public:
@@ -91,8 +91,8 @@ public:
 	 
   void setupModelData();
 
-  FieldInfo getInfo( const QModelIndex& index, int& iN, int& iM, 
-			 Selection* sel=0, int to_calc = 0) const
+  FieldInfo getInfo( const QModelIndex& index, int& iN, int& iM/*,
+             Selection* sel=0, int to_calc = 0*/) const
   {
     TreeLine *parentItem = lineFromIndex( index );
 	iM = 0;   

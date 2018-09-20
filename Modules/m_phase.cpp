@@ -28,6 +28,13 @@
 #include "m_param.h"
 #include "filters_data.h"
 
+int rkeycmp(const void *e1, const void *e2)
+{
+    int RCmp;
+    RCmp = memcmp( e1, e2, DC_RKLEN );
+    return RCmp;
+}
+
 TPhase* TPhase::pm;
 
 
@@ -1014,18 +1021,22 @@ AGAIN_SETUP:
     // insert coeff of model of solid and other data
     if( php->nscM )
         php->Psco = S_ON;
-      else  php->Psco = S_OFF;
-    if( php->ncpN * php->ncpM )
+    else
+        php->Psco = S_OFF;
+    if( php->ncpN && php->ncpM )
         php->Ppnc = S_ON;
-      else php->Ppnc = S_OFF;
+    else
+        php->Ppnc = S_OFF;
     if( !php->NsuT )
-       php->PFsiT = S_OFF;
+        php->PFsiT = S_OFF;
     if( php->sol_t[DCOMP_DEP] == SM_UNDEF )
         php->PdEq = S_OFF;
-      else php->PdEq = S_ON;
+    else
+        php->PdEq = S_ON;
     if( php->sol_t[SPHAS_DEP] == SM_UNDEF )
         php->PpEq = S_OFF;
-      else php->PpEq = S_ON;
+    else
+        php->PpEq = S_ON;
     if( (php->NsuT != S_OFF) && php->sol_t[SPHAS_TYP] == SM_SURCOM )
     {
        php->nMoi = 0; php->nSub = 0;
@@ -1192,7 +1203,7 @@ TPhase::RecCalc( const char *key )
            return;
     }
 
-    CalcPhaseRecord( getDCC );
+    CalcPhaseRecord( /*getDCC*/ );
     SetString("PH_solm   PHASE-solution model OK");
     TCModule::RecCalc(key);
 }
@@ -1227,7 +1238,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
     uint j;
     int i, cnt;
     bool nRec;
-    const char *pKey1, *pKey4;
+    const char *pKey1;//, *pKey4;
     for(uint ii=0; ii<aPHkey.GetCount(); ii++ )
     {
         uint jj;
@@ -1242,7 +1253,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
 
 // Sorting out phase recs using setup in Elements and SetFilter dialogs
      pKey1 = aPHkey[ii].c_str();
-     pKey4 = aPHkey[ii].c_str()+(MAXSYMB+MAXPHSYMB+MAXPHNAME)*sizeof(char);
+     //pKey4 = aPHkey[ii].c_str()+(MAXSYMB+MAXPHSYMB+MAXPHNAME)*sizeof(char);
 
 // Copy phase record for aqueous and/or gas (fluid) phases
 //     if( !st_data.flags[PHcopyA_] && ( pKey1[0] == 'a' || pKey1[0] == 'g' ))

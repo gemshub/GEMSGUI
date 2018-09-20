@@ -554,7 +554,7 @@ void TProfil::loadSystat( const char *key )
         multi->loadData( false );  // unpack syseq to multi
         for(short j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
-        multi->EqstatExpand( keyp.c_str(), true, true );
+        multi->EqstatExpand(/* keyp.c_str(),*/ true );
 //        outMultiTxt( "GEM_EqstatExpand.txt"  );
     }
 
@@ -586,7 +586,7 @@ void TProfil::deriveSystat()
         multi->loadData( false );  // unpack syseq to multi
         for(short j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
-        multi->EqstatExpand( keyp.c_str(), true, true );
+        multi->EqstatExpand( /*keyp.c_str(),*/ true );
     }
 
     // SD 22/01/2010 bool
@@ -694,7 +694,7 @@ void TProfil::CalcBcc()
 double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double kTime )
 {
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
-    long int NumIterFIA,  NumIterIPM, NumPrecLoops;
+    long int NumIterFIA,  NumIterIPM;
 
     STat->ods_link(0);
     status = 0;
@@ -730,7 +730,7 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
 	pVisorImp->OpenProgress();
 #endif
    // run GEM calculation
-   ComputeEquilibriumState( NumPrecLoops, NumIterFIA, NumIterIPM );
+   ComputeEquilibriumState( /*NumPrecLoops,*/ NumIterFIA, NumIterIPM );
 // new - possibly returns a new time step suggestion
    if(kdTime)
        kdTime = multi->GetPM()->kdT;

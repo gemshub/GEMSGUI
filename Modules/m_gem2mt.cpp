@@ -938,12 +938,15 @@ void TGEM2MT::AllocNa()
 void TGEM2MT::FreeNa()
 {
   if( pa_mt )
-  { delete pa_mt;
+  {
+    delete pa_mt;
     pa_mt = 0;
   }
   if(na)
-   delete na;
-   na = 0;
+  {
+     delete na;
+     na = 0;
+  }
 //   freeNodeWork();
    LinkNode0(-1);
    LinkNode1(-1);

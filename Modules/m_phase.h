@@ -271,7 +271,7 @@ class TPhase : public TCModule
 
 protected:
 
-    void CalcPhaseRecord( bool getDCC  );
+    void CalcPhaseRecord( /*bool getDCC*/  );
     void moiety_new( int nDC, int nMoi, bool setDefault );
     void Set_SolMod_Phase_coef();
 void Set_KinMet_Phase_coef();   // new
@@ -524,12 +524,6 @@ enum volume_code {  /* Codes of volume parameter ??? */
     VOL_UNDEF, VOL_CALC, VOL_CONSTR
 };
 
-static int rkeycmp(const void *e1, const void *e2)
-{
-    int RCmp;
-    RCmp = memcmp( e1, e2, DC_RKLEN );
-    return RCmp;
-}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #endif //  _m_phase_h

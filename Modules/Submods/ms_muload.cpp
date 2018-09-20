@@ -48,11 +48,11 @@ enum translat_codes { // codes for translations of math script equations
 void TMulti::KinMetModLoad( )
 {
     int kk, k, j, jj, kf, kfe=0, kp, kpe=0, ka, kae=0, ks, kse=0,
-    JB, JE=0, jb, je=0, kc, kd, kce=0, kde=0, kx, kxe=0, ki, kie=0;
+    JB, JE=0, /*jb,*/ je=0, kc, kd, kce=0, kde=0, /*kx, kxe=0,*/ ki, kie=0;
     long int jphl=0, jlphc=0;
     //vstr pkey(MAXRKEYLEN);
     vstr modT(164);
-    char *kMod;
+    //char *kMod;
     time_t crt;
     TPhase* aPH = TPhase::pm;
     RMULTS* mup = TRMults::sm->GetMU();
@@ -69,11 +69,11 @@ void TMulti::KinMetModLoad( )
         if( syp->Pcl[kk] == S_OFF )
             continue;
         k++;
-        jb=je;
+        //jb=je;
         je+= pmp->L1[k];
 
         // Indexes for extracting data from       arrays
-        kx = kxe;
+        //kx = kxe;
         kc = kce;
         kp = kpe;
         kf = kfe;
@@ -87,7 +87,7 @@ void TMulti::KinMetModLoad( )
         // selecting type of the model
         memcpy( modT, aPH->php->kin_t+2, MAXKEYWD );
         memcpy( pmp->kMod[k], modT, MAXKEYWD );
-        kMod = pmp->kMod[k];
+        //kMod = pmp->kMod[k];
         pmp->PfFact[k] = 1.;   // temporary
 if( aPH->php->h0p && aPH->php->R0p )
     pmp->PfFact[k] = aPH->php->h0p/aPH->php->R0p;
@@ -100,7 +100,7 @@ if(kMod[0] != KM_UNDEF )
 }
 */
         // load coefficients of KinMet models into MULTI transfer arrays
-LOAD_KKMCOEF:
+//LOAD_KKMCOEF:
         if( pmp->LsKin[k*6] )
         { // loading parameters for parallel reactions
 
@@ -315,14 +315,14 @@ void TMulti::SolModLoad( )
     long int jdqfc=0,  jrcpc=0;
     //vstr pkey(MAXRKEYLEN);
     vstr modT(164);
-    char *sMod;
+    //char *sMod;
     time_t crt;
     TPhase* aPH = TPhase::pm;
     RMULTS* mup = TRMults::sm->GetMU();
     SYSTEM *syp = TSyst::sm->GetSY();
 
-if( pmp->pIPN >= 1 )           //SD 29/11/2006
-    return;
+    if( pmp->pIPN >= 1 )           //SD 29/11/2006
+         return;
     ErrorIf( !pmp->FIs, "SolModLoad", "No phases-solutions!" );
     // reallocating arrays for script calculations
     if( pmp->pIPN <= 0 )
@@ -360,7 +360,7 @@ if( pmp->pIPN >= 1 )           //SD 29/11/2006
         memcpy( pmp->sMod[k], modT, MAXKEYWD );
         pmp->sMod[k][6] = aPH->php->kin_t[0];
         pmp->sMod[k][7] = aPH->php->kin_t[1];
-        sMod = pmp->sMod[k];
+        //sMod = pmp->sMod[k];
 
         // 16/11/2010 added for multi-site mixed moodels
         if( aPH->php->nMoi >0 )
@@ -374,7 +374,7 @@ if( pmp->pIPN >= 1 )           //SD 29/11/2006
                      continue;
                  form_array.Add( aFo.form_extr( j, mup->L, mup->DCF ) );
            } /* j */
-           ErrorIf( form_array.GetCount()!=pmp->L1[k],"SolModLoad", "Test error."  );
+           ErrorIf( (long int)form_array.GetCount() != pmp->L1[k], "SolModLoad", "Test error."  );
 
            // get moiety structure from phase
            aPH->MakeSublatticeLists( form_array );
@@ -646,7 +646,7 @@ LOAD_NIDMCOEF:
                 copyValues( pmp->rcpc+jrcpc+jkd, aPH->php->rcpc+jp*pmp->LsMdc2[k*3+1],
                         pmp->LsMdc2[k*3+1]);
                 jkd += pmp->LsMdc2[k*3+1]; jj++;
-            } /* j * /
+            } * j *
           }
           else */ pmp->LsMdc2[k*3+1] = 0; // no rcpc coefficients - This switch can be used for something else
 //        }
@@ -662,7 +662,7 @@ LOAD_NIDMCOEF:
         ksf += pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2];
 
 // new: load coefficients and parameters for TSorpMod here
-    LOAD_SORPMCOEF:
+//    LOAD_SORPMCOEF:
         if( pmp->sMod[k][6] != SM_UNDEF )
         {
             ;
@@ -672,7 +672,7 @@ LOAD_NIDMCOEF:
 
         }
 
-   LOAD_UPTMODCOEF:
+ //  LOAD_UPTMODCOEF:
 // new: load uptake kinetics model parameters here  !!! compression of phase DCs not yet implemented !!!
         if( aPH->php->umpCon )
         {
@@ -1111,16 +1111,16 @@ const char* MSDELIM = " +-*/^:[]();=$&|!<>?#\n\t";
 void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
         tget_ndx *get_ndx )
 {
-    size_t eLen, ls, lb;
+    size_t /*eLen,*/ ls, lb;
     int i=0, ii, pj, LNplace=1, Xplace=0, nO=0;
     char cstate, cc, *etext, *pexpr, *ecur, *cur, *next, *end,
       *prev, *last, *stmt, iCode, odlab[MAXKEYWD+2];
     vstr name(164), nbuf(164);
 
     etext = (char *)aObj[ nOet ].GetPtr();
-    if( etext )
+    /*if( etext )
         eLen = aObj[ nOet ].GetM();
-    else eLen =0;
+    else eLen =0;*/
     pexpr = (char *)aObj[ nOpex ].GetPtr();
 
     ls = strlen( pexpr );
@@ -1218,10 +1218,11 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
             nO = ii;
             iCode = aObj[ii].GetIndexationCode();
             // Getting new indexation code  KD 30.03.01
-                switch( iCode )
+            switch( iCode )
             {  // analyze indexation code
                default:
                   Error( "E01MSPrep: Unknown indexation base for data object", odlab );
+                  break;
 //             case A_reset:
                case A_icx:
                case A_dcx:
@@ -1409,6 +1410,7 @@ void TMulti::getNamesList( int nO, TCStringArray& lst )
    {  // analyze indexation code
        default: //break;
           Error( "E01MSWin: Unknown indexation base for data object",aObj[nO].GetKeywd()  );
+          break;
        case A_icx:
                   for( i=0; i<pmp->N; i++ )
                      lst.Add( gstring( pmp->SB[i], 0, MAXICNAME ));

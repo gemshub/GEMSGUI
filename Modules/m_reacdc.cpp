@@ -380,10 +380,9 @@ TReacDC::MakeQuery()
 
 int TReacDC::RecBuild( const char *key, int mode  )
 {
-    int i, iir, /*Ndc, Nrc,*/ Nc1, Nn1 = 0, Nf1, Nr1;
+    int i, /*iir, Ndc, Nrc,*/ Nc1, Nn1 = 0, Nf1, Nr1;
     vstr pkey(81);
     int CM,CE,CV;
-    gstring str;
     //short oldnDC = rcp->nDC/*, newnDC*/;
 
     TCStringArray aDclist;
@@ -575,21 +574,10 @@ AGAINRC:
 
     /*================================*/
     // get aMcv+aMrv  (Remake code! Must be by component groups )
-    for( i=0,iir=0; i<rcp->nDC; i++ )
+    for( i=0; i<rcp->nDC; i++ )
     {
         if( !rcp->scDC[i] )
             rcp->scDC[i] = 1;
-        /*if( i < (int)aRclist.GetCount() )
-        {
-            memcpy( rcp->DCk[i], aRclist[i].c_str(), DC_RKLEN );
-            rcp->rDC[i] = SRC_REACDC;
-            iir++;
-        }
-        else if( i< (int)(aDclist.GetCount()+aRclist.GetCount()) )
-        {
-            memcpy( rcp->DCk[i], aDclist[i-iir].c_str(), DC_RKLEN );
-            rcp->rDC[i] = SRC_DCOMP;
-        }*/
         if( i< (int)(aDclist.GetCount()) )
         {
             memcpy( rcp->DCk[i], aDclist[i].c_str()+2, DC_RKLEN );
@@ -650,7 +638,7 @@ void
 TReacDC::RCthermo( int q, int p )
 {
 	int CM,CE,CV, j, isotop = 0;
-	double rho, eps, alp, dal, bet, xborn, yborn, zborn, qborn;
+    double rho, eps, alp, dal, bet, xborn, yborn, /*zborn,*/ qborn;
     time_t tim;
     vstr  /*buf[121],*/ dckey(DC_RKLEN + 10);
 
@@ -709,7 +697,7 @@ TReacDC::RCthermo( int q, int p )
         eps = aWp.Dielw[aSpc.isat];
         xborn = aWp.XBorn[aSpc.isat];
         yborn = aWp.YBorn[aSpc.isat];
-        zborn = aWp.ZBorn[aSpc.isat];
+        //zborn = aWp.ZBorn[aSpc.isat];
         qborn = aWp.QBorn[aSpc.isat];
 
         // recalculate and assign water properties
@@ -833,6 +821,7 @@ CALCULATE_DELTA_R:
         {
         default:
             Error(dckey.p, "E12RErun: Invalid CE method flag!");
+            break;
         case CTM_HKF:
             calc_tphkf_r( q, p );
             break; /* calc aqueous species */
@@ -1336,22 +1325,22 @@ void TReacDC::PronsPrep( const char *key )
 	with non-conventional stoichiometry, i.e. MOH, MO, HMO2, MO2
 */
 
-void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
+void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
 {
-    double ZC,HC,SC,CPC,VC,ZL,HL,SL,CPL,VL,Z,H=0.,S=0.,CP=0.,V=0.,
+    double ZC,HC,SC,/*CPC,*/VC,/*ZL,*/HL,SL,/*CPL,*/VL,Z,H=0.,S=0.,CP=0.,V=0.,
     H1,S1,CP1,V1,H2,S2,CP2,V2,H3=0.,S3=0.,CP3=0.,V3=0.,H4=0.,S4=0.,CP4=0.,V4=0.,
     DELGR1,DELGR2,DELGR3,DELGR4,DELSR1,DELSR2,DELSR3,DELSR4,
     DELHR1,DELHR2,DELHR3,DELHR4,DELVR1,//DELVR2,DELVR3,DELVR4,
-    CSC, LSC, /*DZ,*/ scC, LOGKR, Sw, Hw, Gw, Cpw, Vw;
+    CSC, LSC, /*DZ,*/ scC, LOGKR, Sw, Hw;//, Gw, Cpw, Vw;
     int i, iL=0, iC=0, scL, NC, ZZ;
     vstr dcn(MAXRKEYLEN+5);
     int Rfind;
 
     Sw = 69.923/cal_to_J;
     Hw = (-285881)/cal_to_J;
-    Gw = (-237183)/cal_to_J;
-    Cpw = 75.3605/cal_to_J;
-    Vw = 1.80684*10.;
+    //Gw = (-237183)/cal_to_J;
+    //Cpw = 75.3605/cal_to_J;
+    //Vw = 1.80684*10.;
 
     // Finding index of cation and anion
     for( i=0; i<2; i++ )
@@ -1368,7 +1357,7 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
 //    GC = rcp->ParDC[iC][_Gs_]/cal_to_J;
     HC = rcp->ParDC[iC][_Hs_]/cal_to_J;
     SC = rcp->ParDC[iC][_Ss_]/cal_to_J;
-    CPC = rcp->ParDC[iC][_Cps_]/cal_to_J;
+    //CPC = rcp->ParDC[iC][_Cps_]/cal_to_J;
     VC = rcp->ParDC[iC][_Vs_]*10.0;
     CSC = rcp->scDC[iC];
     scC = fabs(CSC);
@@ -1376,11 +1365,11 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
         Error( GetName(), "E15RErun: |Cps| > 1 in PronsPrep for this reaction!");
 
     // Loading data for ligand
-    ZL = rcp->ParDC[iL][_Zs_];
+    //ZL = rcp->ParDC[iL][_Zs_];
 //    GL = rcp->ParDC[iL][_Gs_]/cal_to_J;
     HL = rcp->ParDC[iL][_Hs_]/cal_to_J;
     SL = rcp->ParDC[iL][_Ss_]/cal_to_J;
-    CPL = rcp->ParDC[iL][_Cps_]/cal_to_J;
+    //CPL = rcp->ParDC[iL][_Cps_]/cal_to_J;
     VL = rcp->ParDC[iL][_Vs_]*10.0;
     LSC = rcp->scDC[iL];
 
@@ -1765,7 +1754,8 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
             pVisor->Update();
             Error("E21RErun: Calculation failed!",
                     " Please, check data fields and try again!");
-        } // break;
+        }
+        break;
     case FAIL_:
         msg = "E22RErun: Failure!!! Database chain ";
         msg += GetName();

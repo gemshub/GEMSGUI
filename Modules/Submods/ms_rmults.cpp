@@ -645,6 +645,7 @@ void TRMults::PHmake()
             continue;
         case PH_SORPTION:
             mu.FiE += mu.Ll[kk];
+            continue;
         default:
             continue;
         }
@@ -668,7 +669,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     MTPARM* tpp = TMTparm::sm->GetTP();
     if( tpp->Pbg < '0' || tpp->Pbg > '4' )
-       tpp->Pbg = '0';
+        tpp->Pbg = '0';
     //int resp = aPa->tpp->Pbg-'0';
     // Copying stored params for automatic aq models
     aparam[0] = aPa->pa.aqPar[0];
@@ -688,8 +689,8 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
             //AqKey.Add( gstring( mu.SF[mu.nAq], 0, PH_RKLEN ));
             if( amod == SM_AQDH3 && aparam[0] < 1e-9 )
             {  // To use aq models from old versions
-               aparam[0] = 0.064;
-               aparam[3] = 0.7;
+                aparam[0] = 0.064;
+                aparam[3] = 0.7;
             }
         }
         //else {
@@ -710,8 +711,8 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
                 AqKey.Add( gstring(mu.SF[kk], 0, PH_RKLEN));
             //gaseous phase
             else if(  mu.SF[kk][0] =='g' || mu.SF[kk][0] =='f' )
-                 GasKey.Add( gstring(mu.SF[kk], 0, PH_RKLEN));
-                 else break;
+                GasKey.Add( gstring(mu.SF[kk], 0, PH_RKLEN));
+            else break;
         }
 
     }
@@ -722,35 +723,35 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
     {
         gstring  AqKey1 = "a:*:*:*:*:";
         if(AqKey.GetCount()>0)
-           AqKey1 = AqKey[0];
+            AqKey1 = AqKey[0];
 
         gstring  GasKey1 = "g:*:*:*:*:";
         if(GasKey.GetCount()>0)
-           GasKey1 = GasKey[0];
+            GasKey1 = GasKey[0];
 
 NEW_PHASE_AGAIN:
 
-// Calling the wizard to set generated aq and gas phases
-       if( !vfAutoPhaseSet( pVisor->window()/*window()*/, prfName.c_str(),
-                            AqKey1, GasKey1, amod, gmod, aparam ) )
-       {
-          if( vfQuestion( window(), "Project: Attempt to cancel setup of phases",
-            "Are you really sure?\n Repeat phase setup (Yes) or\nCancel creating the project (No)?" ))
+        // Calling the wizard to set generated aq and gas phases
+        if( !vfAutoPhaseSet( pVisor->window()/*window()*/, prfName.c_str(),
+                             AqKey1, GasKey1, amod, gmod, aparam ) )
+        {
+            if( vfQuestion( window(), "Project: Attempt to cancel setup of phases",
+                            "Are you really sure?\n Repeat phase setup (Yes) or\nCancel creating the project (No)?" ))
                 goto NEW_PHASE_AGAIN;   // cancel - infinite loop?
-          else
-            Error( GetName(), "Project creation aborted by the user - bailing out..." );
-       }
+            else
+                Error( GetName(), "Project creation aborted by the user - bailing out..." );
+        }
 
-       tpp->Pbg = (int)aparam[4]+'0'; // resp+'0';  to check in TSolMod implementation
+        tpp->Pbg = (int)aparam[4]+'0'; // resp+'0';  to check in TSolMod implementation
 
 
-       // define Aq phase lists
-       if( amod == '-' )
-       {
-          mu.PmvAq = S_OFF;
-          AqKey.Clear();
-       }
-       else { // Setting control parameters for the auto aq model
+        // define Aq phase lists
+        if( amod == '-' )
+        {
+            mu.PmvAq = S_OFF;
+            AqKey.Clear();
+        }
+        else { // Setting control parameters for the auto aq model
             mu.PmvAq = amod;
             aPa->pa.aqPar[0] = aparam[0];
             aPa->pa.aqPar[1] = aparam[1];
@@ -760,36 +761,36 @@ NEW_PHASE_AGAIN:
 
             if( mu.PmvAq == 'U' )
             {   SelectAqGasPhase( 0,  AqKey ); // Select aqueous phase from list
-                  if( mu.PmvAq == S_ON ) // No phase to select from list or not selected - make default
+                if( mu.PmvAq == S_ON ) // No phase to select from list or not selected - make default
                     goto NEW_PHASE_AGAIN;
             }
             else
             {
-              AqKey.Clear();
-              AqKey.Add(AqKey1);
+                AqKey.Clear();
+                AqKey.Add(AqKey1);
             }
-       }
+        }
 
-       // define gas/fluid phase
-       if( gmod == '-' )
-       {
+        // define gas/fluid phase
+        if( gmod == '-' )
+        {
             mu.PmvGas = S_OFF;
             GasKey.Clear();
-       }
-       else {
-           mu.PmvGas = gmod;
+        }
+        else {
+            mu.PmvGas = gmod;
 
-           if( mu.PmvGas == 'U')
-           {  SelectAqGasPhase( 1, GasKey ); // Select gaseous phase def
-              if( mu.PmvGas == S_ON )    // No phase to select from list or not selected - make default
-                goto NEW_PHASE_AGAIN;
+            if( mu.PmvGas == 'U')
+            {  SelectAqGasPhase( 1, GasKey ); // Select gaseous phase def
+                if( mu.PmvGas == S_ON )    // No phase to select from list or not selected - make default
+                    goto NEW_PHASE_AGAIN;
             }
-           else
-           {
-             GasKey.Clear();
-             GasKey.Add(GasKey1);
-           }
-       }
+            else
+            {
+                GasKey.Clear();
+                GasKey.Add(GasKey1);
+            }
+        }
 
     }
 
@@ -797,7 +798,7 @@ NEW_PHASE_AGAIN:
 
     // Creating automatic aq and/or gas phases (automatic phase only one )
     TPhase::pm->newAqGasPhase( AqKey[0].c_str(), GasKey[0].c_str(), file,
-        amod, gmod, aparam );
+            amod, gmod, aparam );
 
     MakeRecordLists( AqKey, GasKey ); // build records lists and calc size of arrays
 
@@ -809,21 +810,21 @@ NEW_PHASE_AGAIN:
     memcpy( mu.SF2, mu.SF, mu.Fis*PH_RKLEN*sizeof(char));
     if( mu.Ls && mu.SM2 )  // Fix of a potential bug
         memcpy( mu.SM2, mu.SM, mu.Ls*DC_RKLEN*sizeof(char));
- if( mu.Lads && mu.SM3 && mu.DCC3 )
- {
-    memcpy( mu.SM3, mu.SM+mu.Ls-mu.Lads, mu.Lads*DC_RKLEN*sizeof(char));
-    memcpy( mu.DCC3, mu.DCC+mu.Ls-mu.Lads, mu.Lads*sizeof(char));
- }
-// Added Sveta 03/06/05
- if( mu.nlICv )
-  for( int ii=0; ii<mu.N; ii++ )
-    memcpy( mu.nlICv[ii], mu.SB[ii], MAXICNAME+MAXSYMB );
- if( mu.nlDCv )
-  for( int ii=0; ii<mu.L; ii++ )
-    memcpy( mu.nlDCv[ii], mu.SM[ii]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
- if( mu.nlPHv )
-  for( int ii=0; ii<mu.Fi; ii++ )
-    memcpy( mu.nlPHv[ii], mu.SF[ii]+MAXSYMB+MAXPHSYMB, MAXPHNAME );
+    if( mu.Lads && mu.SM3 && mu.DCC3 )
+    {
+        memcpy( mu.SM3, mu.SM+mu.Ls-mu.Lads, mu.Lads*DC_RKLEN*sizeof(char));
+        memcpy( mu.DCC3, mu.DCC+mu.Ls-mu.Lads, mu.Lads*sizeof(char));
+    }
+    // Added Sveta 03/06/05
+    if( mu.nlICv )
+        for( int ii=0; ii<mu.N; ii++ )
+            memcpy( mu.nlICv[ii], mu.SB[ii], MAXICNAME+MAXSYMB );
+    if( mu.nlDCv )
+        for( int ii=0; ii<mu.L; ii++ )
+            memcpy( mu.nlDCv[ii], mu.SM[ii]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+    if( mu.nlPHv )
+        for( int ii=0; ii<mu.Fi; ii++ )
+            memcpy( mu.nlPHv[ii], mu.SF[ii]+MAXSYMB+MAXPHSYMB, MAXPHNAME );
 
     // test data base ICOMP  before calc
     TestIComp();

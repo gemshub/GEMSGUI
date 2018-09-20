@@ -517,8 +517,8 @@ if( P < 1e-5 )  // trial check  5.12.2006
        { /* load water properties from HGK/HKF*/
          float b_gamma;
          double gfun;
-         double rhow, epsw, alpw, dalw, betw, xbornw, ybornw, zbornw, qbornw;
-         double rhov, epsv, alpv, dalv, betv, xbornv, ybornv, zbornv, qbornv;
+         double rhow, epsw, alpw, dalw, betw, xbornw, ybornw, /*zbornw,*/ qbornw;
+         double rhov, epsv, alpv, dalv, betv, xbornv, ybornv, /*zbornv,*/ qbornv;
 
          if (aSpc.metastable) // 01.06.2016
              aSpc.isat = 1;
@@ -531,7 +531,7 @@ if( P < 1e-5 )  // trial check  5.12.2006
          epsw = aWp.Dielw[aSpc.isat];
          xbornw = aWp.XBorn[aSpc.isat];
          ybornw = aWp.YBorn[aSpc.isat];
-         zbornw = aWp.ZBorn[aSpc.isat];
+         //zbornw = aWp.ZBorn[aSpc.isat];
          qbornw = aWp.QBorn[aSpc.isat];
          rhov = aSta.Dens[!aSpc.isat];  // water vapor
          alpv = aWp.Alphaw[!aSpc.isat];
@@ -540,7 +540,7 @@ if( P < 1e-5 )  // trial check  5.12.2006
          epsv = aWp.Dielw[!aSpc.isat];
          xbornv = aWp.XBorn[!aSpc.isat];
          ybornv = aWp.YBorn[!aSpc.isat];
-         zbornv = aWp.ZBorn[!aSpc.isat];
+         //zbornv = aWp.ZBorn[!aSpc.isat];
          qbornv = aWp.QBorn[!aSpc.isat];
 
          // recalculate and assign water properties
@@ -620,7 +620,7 @@ if( P < 1e-5 )  // trial check  5.12.2006
 
 
     if( tp.mark && tp.G )
-        polmod_test();
+          polmod_test();
     
 	NormDoubleRound(tp.G, tp.L, 13 ); // SD 22/07/2009
 	NormDoubleRound(tp.RoW, 13 ); 

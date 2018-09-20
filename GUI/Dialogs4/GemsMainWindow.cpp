@@ -461,7 +461,7 @@ void TVisorImp::changeKeyList()
 //------------------------------------------------------------------------------------------
 
 // working with TCModuleImp
-void TVisorImp::OpenModule(QWidget* /*par*/, int irt, int page, int viewmode, bool select)
+void TVisorImp::OpenModule(QWidget* /*par*/, int irt, int page, int viewmode, bool /*select*/)
 {
     try
     {
@@ -931,8 +931,8 @@ void TVisorImp::CloseProgress()
        ProgressDialog::pDia->CmClose();
 }
 
-bool TVisorImp::Message( QWidget* parent, const char* name,
-             const char* msg, int prog, int total, bool move )
+bool TVisorImp::Message( QWidget* /*parent*/, const char* name,
+             const char* msg, int prog, int total, bool /*move*/ )
 {
      if( LoadMessage::pDia )
      {
@@ -972,7 +972,7 @@ void TVisorImp::CloseMessage()
    }
 }
 
-void TVisorImp::ProcessProgress( QWidget* parent, int nRT )
+void TVisorImp::ProcessProgress( QWidget* /*parent*/, int nRT )
 {
     TProcess::pm->userCancel = false;
     TGEM2MT::pm->userCancel = false;
@@ -1063,7 +1063,7 @@ bool ThreadControl::wait()
 //  return pVisorImp->getWaitProgress().wait(&pVisorImp->getMutexCalc());
 }
 
-bool ThreadControl::wait(unsigned long time )
+bool ThreadControl::wait(unsigned long /*time*/ )
 {
     return progressWait.wait(&calcMutex);
     //return pVisorImp->getWaitProgress().wait(&pVisorImp->getMutexCalc(),time);

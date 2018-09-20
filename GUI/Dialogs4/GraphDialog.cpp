@@ -317,7 +317,7 @@ void GraphDialog::AddPoint( int nPlot, int nPoint )
 void  GraphDialog::SaveGraphData()
 {
     if( !pModule->SaveGraphData( &gr_data ) )
-       ; // message "Changes cannot be saved"
+      cout << "Graph Data cannot be saved" << endl; // message "Changes cannot be saved"
 }
 
 void GraphDialog::Apply()
@@ -514,7 +514,7 @@ LabelDelegate::LabelDelegate( QVector<int> afirst,
 
 // Editing QTableView for objects in TCPage
 QWidget *LabelDelegate::createEditor(QWidget *parent,
-        const QStyleOptionViewItem &option,
+        const QStyleOptionViewItem &/*option*/,
         const QModelIndex &index) const
 {
 

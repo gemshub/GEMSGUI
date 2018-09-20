@@ -398,7 +398,7 @@ void TMulti::MultiKeyInit( const char*key )
 // Finalizing the full structure MULTI by expanding the SysEq record
 // read from the database
 //
-void TMulti::EqstatExpand( const char *key, bool calcActivityModels, bool calcKineticModels )
+void TMulti::EqstatExpand( /*const char *key,*/ bool calcActivityModels/*, bool calcKineticModels*/ )
 {
     long int i, j, k;//, jb, je=0, jpb, jpe=0, jdb, jde=0;
 //    double FitVar3;

@@ -339,9 +339,9 @@ typedef TArrayF<int> TCIntArray;
 //
 template <class T>
 class TIArray:
-            public TAllocator< auto_ptr<T> >
+            public TAllocator< shared_ptr<T> >
 {
-    typedef auto_ptr<T> ptrT;
+    typedef shared_ptr<T> ptrT;
 
     // forbidden !!!
     const TIArray<T>& operator =(const TIArray<T>& a); // should be not allowed

@@ -124,8 +124,6 @@ TPrintData::TPrintData(const char *sd_key,
     //Print formats
     for( int ii=0; ii<count; ii++ )
     {
-      if( ii == 239)
-       ii = ii;
        if( ifcond )
        {
          prr = 1;
@@ -147,8 +145,8 @@ TPrintData::TPrintData(const char *sd_key,
                 }
             }
             prr = 0;
-         }
-         if( prr == 0 )
+        }
+        if( prr == 0 )
           continue;
        }
        for( uint jj=0; jj<aDts.GetCount(); jj++ )

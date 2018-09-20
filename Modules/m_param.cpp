@@ -603,7 +603,7 @@ void TProfil::SetSysSwitchesFromMulti( )
 }
 
 // Reading structure MULTI (GEM IPM work structure)
-void TProfil::CmReadMulti( QWidget* par, const char* path )
+void TProfil::CmReadMulti( QWidget* /*par*/, const char* path )
 {
     TNode* na = new TNode( multi->GetPM() );
     MULTI* pmp = multi->GetPM();
@@ -686,14 +686,14 @@ pmp->pKMM = 0;
 
     // calculate mass of the system
      pmp->MBX = 0.0;
-    for(int i=0; i<pmp->N; i++ )
-     pmp->MBX += pmp->B[i] * pmp->Awt[i];
+     for(int i=0; i<pmp->N; i++ )
+           pmp->MBX += pmp->B[i] * pmp->Awt[i];
      pmp->MBX /= 1000.;
 
     // Restoring the rest of MULTI contents from primal and dual solution
     pmp->pIPN =0;
     multi->Alloc_internal();
-    multi->EqstatExpand( pmp->stkey, false, false );
+    multi->EqstatExpand( /*pmp->stkey,*/ false );
 //    outMultiTxt( "IPM_EqstatExpand.txt"  );
     //    multi->Free_internal();
     //    na->unpackDataBr( true );
@@ -1036,12 +1036,12 @@ moved to TMulti*/
 // GEM IPM calculation of equilibrium state in MULTI
 // without testing changes in the system
 //
-double TProfil::ComputeEquilibriumState( long int& NumPrecLoops, long int& NumIterFIA, long int& NumIterIPM )
+double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& NumIterFIA, long int& NumIterIPM )
 {
   TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
   calcFinished = false;
 
-  multi->CalculateEquilibriumState( 0, NumIterFIA, NumIterIPM );
+  multi->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
 
   calcFinished = true;
   STat->setCalcFlag( true );
@@ -1050,7 +1050,7 @@ double TProfil::ComputeEquilibriumState( long int& NumPrecLoops, long int& NumIt
   return multi->GetPM()->t_elap_sec;
 }
 
-void TProfil::outMulti( GemDataStream& ff, gstring& path  )
+void TProfil::outMulti( GemDataStream& ff, gstring& /*path*/  )
 {
     ff.writeArray( &pa.p.PC, 10 );
     ff.writeArray( &pa.p.DG, 28 );

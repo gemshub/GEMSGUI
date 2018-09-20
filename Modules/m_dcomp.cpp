@@ -508,10 +508,10 @@ void TDComp::RecCalc( const char *key )      // dcomp_test
 
     TFormula aFo;
     //double Z, MW, foS;
-    int nICs;
+    //int nICs;
     short listAN[100];  // atomic numbers of ICs involved in the formula
     aFo.SetFormula( dcp->form );   // set formula to analyse
-    nICs = aFo.Fmwtz( Z, MW, foS, listAN, nj );  // calculate molar mass, return number of ICs
+    /*nICs =*/ aFo.Fmwtz( Z, MW, foS, listAN, nj );  // calculate molar mass, return number of ICs
     // need to store nj in DComp data structure (DerB?)
     // make sure that this is only done for minerals
 
@@ -671,7 +671,7 @@ RESULT:
 void TDComp::DCthermo( int q, int p )
 {
     int idx, CM, CE, CV;
-    double rho, eps, alp, dal, bet, xborn, yborn, zborn, qborn;
+    double rho, eps, alp, dal, bet, xborn, yborn, /*zborn,*/ qborn;
 //    char wPdcC = "87 'W'";
 
     aW.ods_link( p );
@@ -720,7 +720,7 @@ void TDComp::DCthermo( int q, int p )
             eps = aWp.Dielw[aSpc.isat];
             xborn = aWp.XBorn[aSpc.isat];
             yborn = aWp.YBorn[aSpc.isat];
-            zborn = aWp.ZBorn[aSpc.isat];
+            //zborn = aWp.ZBorn[aSpc.isat];
             qborn = aWp.QBorn[aSpc.isat];
 
             // recalculate and assign water properties
@@ -1243,7 +1243,8 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
             pVisor->Update();
             Error("W21DCrun: Calculation failed! ",
                   "Check data fields and try calculation again!");
-        } // break;
+        }
+        break;
     case FAIL_:
         msg = "E22DCrun: Failure!!! Database chain ";
         msg += GetName();

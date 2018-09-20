@@ -707,7 +707,7 @@ public:
         QwtLinearColorMap( aGr_data->scale[aGr_data->scale.GetCount()-1],
                            aGr_data->scale[0] )
     {
-        for(int ii=1; ii<aGr_data->scale.GetCount()-1; ii++)
+        for(uint ii=1; ii<aGr_data->scale.GetCount()-1; ii++)
             addColorStop( aGr_data->getValueIsoline(ii),
                           aGr_data->getColorIsoline(ii) );
 

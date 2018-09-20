@@ -1269,7 +1269,7 @@ MET600:
     *r     = Tee;
 }
 
-void TSupcrt::load_metastable(int phase, WATERPARAM& wp)
+void TSupcrt::load_metastable(/*int phase,*/ WATERPARAM& wp)
 {
     wp.Aw[0]     = wl.Aw;
     wp.Gw[0]     = wl.Gw;

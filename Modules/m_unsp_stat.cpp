@@ -33,8 +33,8 @@
 void TUnSpace::unsp_eqkey()
 {
 
-	double calculation_time;
-    long int NumPrecLoops = 0, NumIterFIA = 0, NumIterIPM = 0;
+    //double calculation_time;
+    long int NumIterFIA = 0, NumIterIPM = 0;
 
 #ifndef IPMGEMPLUGIN
 
@@ -62,7 +62,7 @@ void TUnSpace::unsp_eqkey()
      pmu->TCc = usp->Tc;
      pmu->Pc = usp->Pc;
          
-     calculation_time = TProfil::pm->ComputeEquilibriumState( NumPrecLoops, NumIterFIA, NumIterIPM );
+     /*calculation_time =*/ TProfil::pm->ComputeEquilibriumState( /*NumPrecLoops,*/ NumIterFIA, NumIterIPM );
     //TProfil::pm->CalcEqstat( false ); // 16/02/2007
 // Later: to implement account for calculation time and numbers of iterations/loops
 
@@ -334,7 +334,8 @@ void TUnSpace::BELOV(int QT, int NG, float *OVB)
   for(D=W+2;D<=NG;D++)
   { MC=0;
     for(j=1;j<=QT;j++)
-    { for(i=1;i<=QT2;i++)
+    {
+      for(i=1;i<=QT2;i++)
          LI1[i]=WL(i,j,QT)+LI[i];
       B=LI1[1];
       for(i=2;i<=QT2;i++)
@@ -342,20 +343,20 @@ void TUnSpace::BELOV(int QT, int NG, float *OVB)
            B=LI1[i];
       m2=0;
       if(B==MC)
-       for(i=1;i<=D-1;i++)
-         if(OVB[i]==OVB[D])
-         { OVB[D]=j;
+        for(i=1;i<=D-1;i++)
+          if(OVB[i]==OVB[D])
+          { OVB[D]=j;
             m2=1;
             break;
-         }
-       if(!m2&&B>MC)
-         { MC=B;
-           OVB[D]=j;
-         }
+          }
+      if(!m2&&B>MC)
+          { MC=B;
+            OVB[D]=j;
+          }
       }
-      for(i=1;i<=QT2;i++)
+    for(i=1;i<=QT2;i++)
         LI[i]+=WL(i,OVB[D],QT);
-   }
+  }
   delete[] LI;
   delete[] LI1;
 }
@@ -412,7 +413,7 @@ void  TUnSpace::NexT(int J )
 // J - point of sample
 {
   int i,j,k1,k2,k3;
-  double R;
+  double R=0;
   double x, xx;
 
 #ifdef IPMGEMPLUGIN
@@ -571,7 +572,7 @@ int TUnSpace::kvant_parag( int type /*short *mas*/ )
     // return:  kol-vo solutions v quantile
 
   int i,j,I=0,S=0,sum,kvant;
-  short maxkol,*sol;
+  short *sol;
 
   kvant = (int)(usp->quan_lev*usp->Q);
   if(kvant<1)
@@ -588,9 +589,9 @@ int TUnSpace::kvant_parag( int type /*short *mas*/ )
     if( sum > S)
       { S=sum; I=i; }
   }
-maxkol = sol[I];
+
 delete[] sol;
-return(I); //return(maxkol);
+return(I);
 }
 
 // indexes into array <mas> po quantile
@@ -816,7 +817,7 @@ double TUnSpace::ePO1( int t, int q )
   double PM=0.;   // Sum for primal potentials for species
   double DM=0.,    // Sum for dual potential for species 
          DDM=0.,  // Sum for differences between PM and DM for a single species 
-         Dif, Ps, Ds, Ddm1;   // Difference, primal, dual potential for a species 
+         Dif, Ps, Ds;//, Ddm1;   // Difference, primal, dual potential for a species
   ii=0;
   for( z=0; z<usp->Fi; z++)
   {
@@ -896,7 +897,7 @@ SPECIES: Dif = Ps - Ds;
 #endif
     } // z loop
 
-    Ddm1 = PM - DM;
+    //Ddm1 = PM - DM;
     return(DDM);
 }
 
@@ -938,7 +939,7 @@ SPECIES: Dif = Ps - Ds;
     double PM=0.;   // Sum for primal potentials for species
     double DM=0.,    // Sum for dual potential for species 
            DDM=0.,  // Sum for differences between PM and DM for a single species 
-           Dif, Ps, Ds, Ddm1;   // Difference, primal, dual potential for a species 
+           Dif, Ps, Ds;//, Ddm1;   // Difference, primal, dual potential for a species
     ii=0;
     for( z=0; z<usp->Fi; z++)
     {
@@ -1021,7 +1022,7 @@ SPECIES: Dif = Ps - Ds;
       ii += mup_Ll[z];
   #endif
       } // z loop
-      Ddm1 = PM - DM;
+      //Ddm1 = PM - DM;
       return(DDM);
 }  
  
@@ -1115,7 +1116,7 @@ return(gk);
 void TUnSpace::Un_criteria()
 {
    short  t, q, jj;
-   double R;
+   double R=0.;
    double Kr=0.;
 
    for( t=0; t<usp->Q; t++ )
@@ -1170,16 +1171,16 @@ void TUnSpace::Un_criteria()
             if( usp->PvPOR == S_ON )
              usp->POR[ q ] = R;
 
-             if( R >usp->Zmax[t] )
+            if( R >usp->Zmax[t] )
                  usp->Zmax[t] = R;
-             if( R < usp->Zmin[t] )
+            if( R < usp->Zmin[t] )
                  usp->Zmin[t] = R;
-             if( fabs(R) > usp->ZmaxAbs[t] )
+            if( fabs(R) > usp->ZmaxAbs[t] )
                  usp->ZmaxAbs[t] = fabs(R);
-         if( usp->Pa_Zcp == S_OFF )
-             usp->Zcp[t] += R;
-          else
-             usp->Zcp[t] += fabs(R);
+            if( usp->Pa_Zcp == S_OFF )
+                 usp->Zcp[t] += R;
+            else
+                usp->Zcp[t] += fabs(R);
          }
         Kr += fabs(R);
         if(!t )

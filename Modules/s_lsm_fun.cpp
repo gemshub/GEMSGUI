@@ -364,7 +364,7 @@ void TLMDataType::rpn_evaluate( double* par, double* fvec )
 //------------------------------------------------------------------
 // for comparing only
 
-void TLMDataType::lm_print_default( double* par, double* fvec, double *CVM,
+void TLMDataType::lm_print_default( double* par, double* /*fvec*/, double *CVM,
                       int iflag, int iter, int nfev, double norm  )
 /*
  *       data  : for soft control of printout behaviour, add control

@@ -86,7 +86,7 @@ int TObjectModel::cCount() const
 
    int currentdeltaM = 0, deltaM = 0, sizeM = flds[ii].pObj->GetMS();
    ii++;
-   for(  ii; ii< flds.count(); ii++)
+   for(  ; ii< flds.count(); ii++)
    {
        if(  flds[ii].place == UndeTabl )
        { deltaM = max(deltaM, currentdeltaM + sizeM);
@@ -126,7 +126,7 @@ int TObjectModel::getObjFromModel( int row, int col,
   nO = iN = iM = -1;
   
   iistart = ii;
-  for( ii; ii< flds.count(); ii++)
+  for( ; ii< flds.count(); ii++)
   {
     if( ii > iistart && flds[ii].place == Tied )
     {	deltaM += sizeM;
@@ -421,9 +421,10 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
   {
     updateStatus( currentIndex() );
     QTableView::focusInEvent( event );
-   if( no_menu_in )
-    selectionModel()->select( currentIndex(),
-              QItemSelectionModel::SelectCurrent );
+    if( no_menu_in )
+    {
+        selectionModel()->select( currentIndex(), QItemSelectionModel::SelectCurrent );
+    }
     no_menu_in = true;
   }
 
@@ -502,7 +503,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
     int maxfullcolSize = fullcolSize;
 
     ii++;
-    for( ii; ii< flds.count(); ii++)
+    for( ; ii< flds.count(); ii++)
  	{
         if(  flds[ii].place == Tied )
  		 {
@@ -979,8 +980,8 @@ void TObjectTable::CmCalc()
     QItemSelectionModel* selmodel = selectionModel();
     Selection sel(0, index.model()->rowCount( index )-1, 0, index.model()->columnCount( index )-1 );
     int iN, iM;
-    FieldInfo fld =  ((TObjectModel *)(index.model() ))->getInfo( 
-    		 index.row(), index.column(), iN, iM, &sel );
+    /*FieldInfo fld = */ ((TObjectModel *)(index.model() ))->getInfo(
+             index.row(), index.column(), iN, iM, &sel );
     if(iN == -1 || iM == -1  )
  	   	return;
     
@@ -1062,26 +1063,26 @@ void TObjectTable::CmCalc()
 
   QString TObjectTable::createHeader()
   {
-    QString cText;
-	QString clipText;
-    int col;
-    bool frst = true;
-    for( col = 0; col < model()->columnCount( rootIndex() ); col++ ) 
-	{
-	    if( selectionModel()->columnIntersectsSelection( col,  rootIndex() ) )
-       	{
-   		  if( !frst )
-            clipText += splitCol;
-   		  frst = false;
-   		  cText = model()->headerData( col, Qt::Horizontal, Qt::DisplayRole ).toString();
-   		  if( cText == emptiness.c_str() )
-   			  cText = "  ";//"\r"; 
-   	      clipText += cText;
-	    }
-	 }  
-     if( !frst )
-        clipText += splitRow;
-	return clipText;  
+      QString cText;
+      QString clipText;
+      int col;
+      bool frst = true;
+      for( col = 0; col < model()->columnCount( rootIndex() ); col++ )
+      {
+          if( selectionModel()->columnIntersectsSelection( col,  rootIndex() ) )
+          {
+              if( !frst )
+                  clipText += splitCol;
+              frst = false;
+              cText = model()->headerData( col, Qt::Horizontal, Qt::DisplayRole ).toString();
+              if( cText == emptiness.c_str() )
+                  cText = "  ";//"\r";
+              clipText += cText;
+          }
+      }
+      if( !frst )
+          clipText += splitRow;
+      return clipText;
   }
 
   Selection TObjectTable::getSelectionRange( bool paste_ )
@@ -1115,7 +1116,7 @@ void TObjectTable::CmCalc()
   }
 
   void  TObjectTable::setFromString(char splitrow, const QString& str,
-          Selection sel, bool transpose) throw(TError)
+          Selection sel, bool transpose) //throw(TError)
   {
      TObjectModel *  model = ((TObjectModel *)(currentIndex().model() ));
      if( str.isEmpty() )

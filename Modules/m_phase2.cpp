@@ -28,6 +28,7 @@
 #include "m_param.h"
 #include "filters_data.h"
 
+int rkeycmp(const void *e1, const void *e2);
 
 // Setting up the DC/phase coeffs depending on the
 // built-in model of mixing (from TSolMod class)
@@ -292,7 +293,7 @@ void TPhase::Set_KinMet_Phase_coef()
     switch(php->kin_t[KinProCode])
     {   //KinProCode
         case KM_PRO_MWR:  // = 'M' Kinetics of generic dissolution/precipitation (no uptake, ionex, adsorption)
-            php->PumpCon == S_OFF;
+            php->PumpCon = S_OFF;
             break;
         case KM_PRO_UPT:  // = 'U' Kinetics of uptake/entrapment (of minor/trace element) into solid solution
             php->PumpCon = S_ON;
@@ -389,9 +390,9 @@ void TPhase::Set_KinMet_Phase_coef()
         case KM_LNK_SURF: // = 'S' Link to (fraction of) solid substrate surface
         case KM_LNK_PVOL: // = 'P' Link to (fraction of) solid substrate (pore) volume
         case KM_LNK_MASS: // = 'M' Link to (fraction of) solid substrate mass
-        if( php->nlPc < 1 || php->nlPc > 4 )
-            php->nlPc = 4;
-            break;
+                          if( php->nlPc < 1 || php->nlPc > 4 )
+                              php->nlPc = 4;
+                          break;
         default:  // other models
             break;
     }
@@ -756,6 +757,7 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
                     break;
           case '@': memcpy( php->lsNs[iNs], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
 				    php->nxNs[iNs++] = i;
+                    break;
           default:
                   continue;
         }
@@ -823,7 +825,7 @@ void TPhase::MakeSublatticeLists( TCStringArray& form_array  )
 
 //Recalc record structure
 void
-TPhase::CalcPhaseRecord(  bool getDCC  )
+TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
 {
     int  i, pa0=0, Kielland=0;
     short nsc=0;
@@ -1411,7 +1413,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
     	php->pnc[i] = param[i];
 
 // Calculating the phase record and saving it to database
-    CalcPhaseRecord( true );
+    CalcPhaseRecord( /*true*/ );
 
     int  Rnum = db->Find( key );
 
@@ -1888,7 +1890,7 @@ void TPhase::set_def_comments( bool clearall,
          switch(php->kin_t[KinProCode])
          {   //KinProCode
              case KM_PRO_MWR:  // = 'M' Kinetics of generic dissolution/precipitation (no uptake, ionex, adsorption)
-                 php->PumpCon == S_OFF;
+                 php->PumpCon = S_OFF;
                  break;
              case KM_PRO_UPT:  // = 'U' Kinetics of uptake/entrapment (of minor/trace element) into solid solution
                  php->PumpCon = S_ON;

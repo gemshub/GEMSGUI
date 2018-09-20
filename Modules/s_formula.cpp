@@ -398,8 +398,8 @@ int Formuan::scanMoiety( TIArray<MOITERM>& moit_ )
                       nj = 1.;
                       getReal( nj, cur_ );
                       moit_.Add( new MOITERM(moiName.c_str(), nSites, nj ));
-                      break;
                       }
+                     break;
         case 'V':  if( cur_[1] == 'a' ) // Va vacancy
                    {
                       cur_ = cur_.substr(2); //Va

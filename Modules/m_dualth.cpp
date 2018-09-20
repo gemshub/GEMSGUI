@@ -823,10 +823,10 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
     double *p_Ub = new double[dtp->nQ*dtp->Nb];
        memcpy( p_Ub, dtp->Ub, dtp->nQ*dtp->Nb*sizeof(double));
 
-    char *p_CIclb;
-    float *p_CIb;
-    char *p_CIcln;
-    float *p_CIn;
+    char *p_CIclb=0;
+    float *p_CIb=0;
+    char *p_CIcln=0;
+    float *p_CIn=0;
 
    if( dtp->PvICb == S_ON )
    {

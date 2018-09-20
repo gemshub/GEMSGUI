@@ -670,7 +670,7 @@ void ProcessWizard::defineWindow(char type)
               GetListsnRT( MD_MULTI, pgData1,  scalarsList );
 
               pgData.Add( new pagesSetupData("Other items", -1));
-              QListWidgetItem *item1 = new QListWidgetItem( "Other items",  listObj);
+              /*QListWidgetItem *item1 =*/ new QListWidgetItem( "Other items",  listObj);
 
               // add page
               QWidget *page1 = new QWidget();
@@ -684,7 +684,7 @@ void ProcessWizard::defineWindow(char type)
               // insert items to list of indexes
                for(  jj=0; jj<scalarsList.GetCount(); jj++ )
                   {
-                     item1 = new QListWidgetItem( scalarsList[jj].pageName.c_str(), lstIndexes1);
+                     /*item1 =*/ new QListWidgetItem( scalarsList[jj].pageName.c_str(), lstIndexes1);
                   }
                pLsts.append(lstIndexes1);
 
@@ -1671,7 +1671,7 @@ void ProcessWizard::setupPages()
 {
   int nO;
   QString str;
-  QListWidgetItem* item1;
+  //QListWidgetItem* item1;
   QWidget* page1;
   QHBoxLayout* horizontalLayout1;
   QListWidget* lstIndexes1;
@@ -1703,7 +1703,7 @@ void ProcessWizard::setupPages()
       TProfil::pm->getNamesList( nO, lst);
 
       str = QString("%1").arg( pgData[ii].pageName.c_str());
-      item1 = new QListWidgetItem( str,  listObj);
+      /*item1 =*/ new QListWidgetItem( str,  listObj);
 
       // add page
       page1 = new QWidget();
@@ -1717,7 +1717,7 @@ void ProcessWizard::setupPages()
       // insert items to list of indexes
        for(uint  jj=0; jj<lst.GetCount(); jj++ )
           {
-             item1 = new QListWidgetItem( lst[jj].c_str(), lstIndexes1);
+             /*item1 =*/ new QListWidgetItem( lst[jj].c_str(), lstIndexes1);
           }
        pLsts.append(lstIndexes1);
     }
@@ -1861,7 +1861,7 @@ TProcesDelegate::TProcesDelegate( QObject * parent ):
 
 // Editing System table
 QWidget *TProcesDelegate::createEditor(QWidget *parent,
-        const QStyleOptionViewItem &option,
+        const QStyleOptionViewItem &/*option*/,
         const QModelIndex &index) const
 {
    int nObj = o_petmi;

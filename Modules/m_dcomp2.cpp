@@ -255,7 +255,7 @@ NEXT:
 void TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
 {
     double /*a,*/ T, Vst, Tst, Pst, P, P_Pst, T_Tst, Ts2, VP, VT,
-          aC, aE, kap, T05, Tst05, Vt, PP, a0, k0, dg, ds, dh, dv, dcp;
+          aC, aE, kap, /*T05, Tst05,*/ Vt, PP, a0, k0, dg, ds, dh, dv, dcp;
     double vc[5];
     float a1;
     int i;
@@ -272,8 +272,8 @@ void TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
     P_Pst = aW.twp->P - Pst;
     T_Tst = T - Tst;
     Ts2 = T_Tst * T_Tst;
-    T05 = sqrt(T);
-    Tst05 = sqrt(Tst);
+    //T05 = sqrt(T);
+    //Tst05 = sqrt(Tst);
 
     // Molar volume assumed independent of T and P
     if( CV == CPM_CON )
@@ -541,7 +541,7 @@ TDComp::BirchMurnaghan( double Pref, double P, double Tref, double T, double v0,
 //-----------------------------------------------------------------
 // calculation of partial molal volumes for aqueous nonelectrolyte species
 // using EOS (Akinfiev and Diamond, 2003) provided by TW 30.01.2008
-void TDComp::calc_akinf( int q, int p )
+void TDComp::calc_akinf( int q, int /*p*/ )
 {
 	double CaltoJ = cal_to_J;
 	// calculate infinite dilution properties of aqueous species at T and P of interest
@@ -609,12 +609,12 @@ void TDComp::calc_akinf( int q, int p )
 
 // Implementation of calculation of hydration properties of nonelectrolytes (Akinfiev and Diamond, 2003)
 void
-TDComp::Akinfiev_EOS_increments(double Tk, double P, double Gig, double Sig, double CPig,
+TDComp::Akinfiev_EOS_increments(double Tk, double /*P*/, double Gig, double Sig, double CPig,
 		double Gw, double Sw, double CPw, double rho, double alp, double bet, double dalpT, int q,
 		double& Geos, double& Veos, double& Seos, double& CPeos, double& Heos )
 {
 	double derP, derT, der2T;
-	double deltaB, lnKH, Nw, xi, aa, bb, RT;
+    double /*deltaB, lnKH,*/ Nw, xi, aa, bb, RT;
 	double fug, vol, drhoT, drhoP, d2rhoT, lnfug, Gres, Sres, CPres;
 	const double RR = 83.1451, R_CONST = R_CONSTANT;
 	const double MW = 18.01528;
@@ -637,8 +637,8 @@ TDComp::Akinfiev_EOS_increments(double Tk, double P, double Gig, double Sig, dou
 
 	// calculation of infinite dilution properties
 	Nw = 1000./MW;
-	deltaB = 0.5*(aa + bb*pow((1000./Tk),0.5));
-	lnKH = (1.-xi)*log(fug) + xi*log(RR*Tk/MW*rho) + 2.*rho*deltaB;
+    //deltaB = 0.5*(aa + bb*pow((1000./Tk),0.5));
+    //lnKH = (1.-xi)*log(fug) + xi*log(RR*Tk/MW*rho) + 2.*rho*deltaB;
 
 	Geos = - R_CONST*Tk*log(Nw) + (1.-xi)*R_CONST*Tk*log(fug) + R_CONST*Tk*xi*log(RR*Tk/MW*rho)
 				+ R_CONST*Tk*rho*(aa+bb*pow((1000./Tk),0.5));

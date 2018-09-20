@@ -43,18 +43,12 @@ KeyDialog::KeyDialog(QWidget* win, int irt, const char* key,
     TCIntArray temp;
     TCStringArray keyList;
 
-
-    bool yesFilter = false;
-
     ErrorIf(!key, "KeyDialog", "pkey is null");
 
     if( strpbrk(key, "*?") == 0 )
         keyFilter = "*";
     else
-    {
         keyFilter = key;
-	yesFilter = true;
-    }
 
     gstring s = "Please, select one record key. Filter: ";
     s +=  keyFilter;
@@ -67,7 +61,7 @@ KeyDialog::KeyDialog(QWidget* win, int irt, const char* key,
     for( int ii=0; ii<n; ii++ )
     {
         pList->addItem(keyList[ii].c_str());
-        if( /*(yesFilter==false) && */keyList[ii]==s )
+        if(  keyList[ii]==s )
             sel = ii;
     }
 
