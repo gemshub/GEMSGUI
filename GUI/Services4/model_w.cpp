@@ -1063,26 +1063,26 @@ void TObjectTable::CmCalc()
 
   QString TObjectTable::createHeader()
   {
-    QString cText;
-	QString clipText;
-    int col;
-    bool frst = true;
-    for( col = 0; col < model()->columnCount( rootIndex() ); col++ ) 
-	{
-	    if( selectionModel()->columnIntersectsSelection( col,  rootIndex() ) )
-       	{
-   		  if( !frst )
-            clipText += splitCol;
-   		  frst = false;
-   		  cText = model()->headerData( col, Qt::Horizontal, Qt::DisplayRole ).toString();
-   		  if( cText == emptiness.c_str() )
-   			  cText = "  ";//"\r"; 
-   	      clipText += cText;
-	    }
-    }
-    if( !frst )
-        clipText += splitRow;
-	return clipText;  
+      QString cText;
+      QString clipText;
+      int col;
+      bool frst = true;
+      for( col = 0; col < model()->columnCount( rootIndex() ); col++ )
+      {
+          if( selectionModel()->columnIntersectsSelection( col,  rootIndex() ) )
+          {
+              if( !frst )
+                  clipText += splitCol;
+              frst = false;
+              cText = model()->headerData( col, Qt::Horizontal, Qt::DisplayRole ).toString();
+              if( cText == emptiness.c_str() )
+                  cText = "  ";//"\r";
+              clipText += cText;
+          }
+      }
+      if( !frst )
+          clipText += splitRow;
+      return clipText;
   }
 
   Selection TObjectTable::getSelectionRange( bool paste_ )
