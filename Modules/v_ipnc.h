@@ -26,13 +26,19 @@ using namespace std;
 
 #include "array.h"
 
+const double IPNC_DBL_MAX = 1e307;
+const double IPNC_DBL_MIN = 1e-307;
+const double IPNC_DBL_MAX_10_EXP = 307.;
+const double IPNC_DBL_MIN_10_EXP = -307.;
+const double IPNC_DBL_MAX_EXP = 706.8936;
+const double IPNC_DBL_MIN_EXP = -706.8936;
 
-const double IPNC_DBL_MAX = 1e37;
-const double IPNC_DBL_MIN = 1e-37;
-const double IPNC_DBL_MAX_10_EXP = 37.;
-const double IPNC_DBL_MIN_10_EXP = -37.;
-const double IPNC_DBL_MAX_EXP = 85.195648;
-const double IPNC_DBL_MIN_EXP = -85.195648;
+// const double IPNC_DBL_MAX = 1e37;
+// const double IPNC_DBL_MIN = 1e-37;
+// const double IPNC_DBL_MAX_10_EXP = 37.;
+// const double IPNC_DBL_MIN_10_EXP = -37.;
+// const double IPNC_DBL_MAX_EXP = 85.195648;
+// const double IPNC_DBL_MIN_EXP = -85.195648;
 
 struct RpnItem
 { // IPN item
