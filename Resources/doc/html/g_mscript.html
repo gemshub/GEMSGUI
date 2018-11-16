@@ -699,9 +699,10 @@ behavior or crash of the program. <br>
 Expressions as Arguments</h3>
 <p> Before calling a function, its argument(s) will be evaluated
 yielding double precision floating-point value(s). All functions&nbsp;
-return a double precision result. In case of error, all functions
-return 0. In the list below, x stands for any arithmetic expression
-allowed in math scripts</p>
+return a double precision result. The valid range of double precision 
+values is assumed to be -1e307 &lt; -1e-307; 1e-307 &lt; 1e307.
+In case of error, all functions return 0. In the list below, x stands 
+for any arithmetic expression allowed in math scripts</p>
 <br>
 <table border="1" cellpadding="2" cellspacing="2" width="100%">
   <tbody>
@@ -715,19 +716,19 @@ allowed in math scripts</p>
     </tr>
     <tr>
       <td><tt><b><big>exp( x )</big></b></tt></td>
-      <td> Exponent of x; e ^ x ( -85.196 &lt; x &lt; 85.196 )</td>
+      <td> Exponent of x; e ^ x ( -706.8936 &lt; x &lt; 706.8936 )</td>
     </tr>
     <tr>
       <td><tt><big><b>sqrt( x )</b></big></tt></td>
-      <td> Square root of x ( x &gt; 1e-37 )</td>
+      <td> Square root of x ( x &gt; 1e-307 )</td>
     </tr>
     <tr>
       <td><tt><b><big>ln( x )</big></b></tt></td>
-      <td> Natural logarithm of x ( x &gt; 1e-37 )</td>
+      <td> Natural logarithm of x ( x &gt; 1e-307 )</td>
     </tr>
     <tr>
       <td><tt><b><big>lg( x )</big></b></tt></td>
-      <td>Decimal logarithm of x ( x &gt; 1e-37 ). Alternative:&nbsp;&nbsp;
+      <td>Decimal logarithm of x ( x &gt; 1e-307 ). Alternative:&nbsp;&nbsp;
 log( x ) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp; </td>
     </tr>
@@ -795,7 +796,7 @@ round(y)</td>
     </tr>
     <tr>
       <td style="vertical-align: top;"><tt><b><big>pow( x,y )</big></b></tt></td>
-      <td style="vertical-align: top;">returns x^y&nbsp; (x to power y), abs(x) &lt; 1e37, y is such that the abs(result) &lt; 1e37 <br>
+      <td style="vertical-align: top;">returns x^y&nbsp; (x to power y), abs(x) &lt; 1e307, y is such that the abs(result) &lt; 1e307 <br>
       </td>
     </tr>
   </tbody>
