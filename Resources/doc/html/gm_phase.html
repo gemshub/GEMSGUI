@@ -1,13 +1,13 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html>
   <head>
-    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
     <meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
     <title>GEMS3 Phase Module</title>
     <meta name="description" content="Version 2.0.0-PSI">
   </head>
   <body>
-    <h1><img src="gems1.png" align="left" height="48" width="48"> <span style="color: rgb(0, 0, 102);">
+    <h1><img src="gems1.png" width="48" height="48" align="left"> <span style="color: rgb(0, 0, 102);">
         GEM-Selektor version 3<br>
       </span></h1>
     <h2>Phase Definitions (Phase) Module<br>
@@ -339,10 +339,10 @@ Built-in
     </p>
     <p>Essential feature in this format is that each structural moiety (cation,
       anion, neutral IC, or a vacancy&nbsp; <tt>Va</tt> ) is taken in the {}
-      braces. The colon &#8216;:&#8217; separates sublattice sites which must follow the
+      braces. The colon ‘:’ separates sublattice sites which must follow the
       same order in all end members. The moiety occupancy&nbsp; numbers&nbsp;
       appear just as stoichiometry coefficients after moieties. Upon parsing the
-      formula, sublattices are counted by encountered colons &#8216;:&#8217; (two in this
+      formula, sublattices are counted by encountered colons ‘:’ (two in this
       example), and the moieties are collected in a list along with their
       site-moiety multiplicity numbers and the site index. All this information
       is then passed to GEMS3K kernel (in memory or through the exported IPM
@@ -541,7 +541,7 @@ TSolMod
       columns, respectively, as shown in a screenshot below.&nbsp; <br>
     </p>
     <p><img alt="TsolMod-EU-example-dc_cf-page.png" src="TsolMod-EU-example-dc_cf-page.png"
-        height="255" width="491"></p>
+        width="491" height="255"></p>
     <p>In the <tt>dc_cf</tt> array, the number of columns, the order of
       coefficients, and their interpretation&nbsp; strictly depend on the model
       type (see <a href="file:///Users/kulik/DevGEMS/trunk/gems-gui/Resources/doc/html/gm_phase.html#p_solt_0"><tt>p_solt[0]</tt></a>)
@@ -572,7 +572,7 @@ TSolMod
       matter; each interaction must be given only once. <br>
     </p>
     <p><img alt="TsolMod-EU-example-ph_cf-page.png" src="TsolMod-EU-example-ph_cf-page.png"
-        height="561" width="490"><br>
+        width="490" height="561"><br>
     </p>
     <p>In TSolMod class functions, interactions are processed one by one, so the
       given interaction parameters (rows in the ipxT + ph_cf table) may appear
@@ -691,10 +691,10 @@ Phase
       code of the phase aggregate state: <br>
     </h4>
     <blockquote> </blockquote>
-    <table border="1" cellpadding="2" cellspacing="2" width="100%">
+    <table cellspacing="2" cellpadding="2" border="1" width="100%">
       <tbody>
         <tr>
-          <td align="center" valign="top">
+          <td valign="top" align="center">
             <p><b>Code<br>
               </b></p>
           </td>
@@ -723,13 +723,13 @@ Phase
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>f</b><br>
+          <td valign="top" align="center"><b>f</b><br>
           </td>
           <td valign="top">fluid mixture (ideal or non-ideal)<br>
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>p</b><br>
+          <td valign="top" align="center"><b>p</b><br>
           </td>
           <td valign="top">plasma (ionized gas mixture) <br>
           </td>
@@ -743,7 +743,7 @@ Phase
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>m</b><br>
+          <td valign="top" align="center"><b>m</b><br>
           </td>
           <td valign="top">silicate (magmatic) melt or non-aqueous electrolyte<br>
           </td>
@@ -794,17 +794,17 @@ record
     </p>
     <h4>2.1.2. Dropdown list -&gt; <a href="#p_solt_0">p_solt[0]</a>:&nbsp;
       Select a model of mixing for this phase:</h4>
-    <table border="1" cellpadding="2" cellspacing="2" width="100%">
+    <table cellspacing="2" cellpadding="2" border="1" width="100%">
       <tbody>
         <tr>
-          <td align="center" valign="top">
+          <td valign="top" align="center">
             <p><b>Code<br>
               </b></p>
           </td>
           <td valign="top">
             <p>Displayed message</p>
           </td>
-          <td align="center" valign="top">
+          <td valign="top" align="center">
             <p><b>TSM<br>
               </b></p>
           </td>
@@ -813,293 +813,301 @@ record
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>I<br>
+          <td valign="top" align="center"><b>I<br>
             </b></td>
           <td valign="top">Ideal mixture (also multi-site) or pure phase,
             default<br>
           </td>
-          <td align="center" valign="top"><b>-<br>
+          <td valign="top" align="center"><b>-<br>
             </b></td>
           <td valign="top"><br>
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>M<br>
+          <td valign="top" align="center"><b>M<br>
             </b></td>
           <td valign="top">Binary subregular Margules solid-solution model (opt.
             DQF)&nbsp; </td>
-          <td align="center" valign="top"><b>-<br>
+          <td valign="top" align="center"><b>-<br>
             </b></td>
           <td valign="top">Appendix 4.2</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>G<br>
+          <td valign="top" align="center"><b>G<br>
             </b></td>
           <td valign="top">Binary Redlich-Kister solid-solution model <br>
           </td>
-          <td align="center" valign="top"><b>-<br>
+          <td valign="top" align="center"><b>-<br>
             </b></td>
           <td valign="top">Appendix 4.2</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>T<br>
+          <td valign="top" align="center"><b>T<br>
             </b></td>
           <td valign="top">Ternary regular Margules solid-solution model<br>
           </td>
-          <td align="center" valign="top"><b>-<br>
+          <td valign="top" align="center"><b>-<br>
             </b></td>
           <td valign="top">Appendix 4.2</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>R<br>
+          <td valign="top" align="center"><b>R<br>
             </b></td>
           <td valign="top">Regular multicomponent solid- or liquid solution
             model<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">Appendix 4.2</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>V<br>
+          <td valign="top" align="center"><b>V<br>
             </b></td>
           <td valign="top">Van Laar multicomponent solid- or liquid solution
             model<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">Appendix 4.2</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>K<br>
+          <td valign="top" align="center"><b>K<br>
             </b></td>
           <td valign="top">Redlich-Kister multicomponent solid- or liquid
             solution model <br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">Appendix 4.2</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>B<br>
+          <td valign="top" align="center"><b>B<br>
             </b></td>
-          <td valign="top">Microscopic&nbsp; a(symmetric) multicomponent
-            multisite solid-solution model (Berman approach)<br>
+          <td valign="top">Multi-site&nbsp; a(symmetric) multicomponent
+            sublattice solid-solution model (Berman approach)<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">Appendix 4.2<br>
           </td>
         </tr>
         <tr>
           <td style="text-align: center;"><span style="font-weight: bold;">$</span></td>
-          <td>Microscopic regular multicomponent multisite solid-solution model
+          <td>Multi-site regular multicomponent sublattice solid-solution model
             (Compound Energy Formalism CEF)</td>
           <td style="text-align: center;"><b>+</b></td>
           <td>Appendix 4.2</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>L<br>
+          <td><span style="font-weight: bold;">&nbsp;&nbsp; #<br>
+            </span></td>
+          <td>ModifiedBragg-Williams (MBW) CEF-based sublattice solid solution
+            model emulating both LRO and SRO </td>
+          <td>&nbsp;&nbsp; <b>+</b>&nbsp; </td>
+          <td>Appendix 4.2</td>
+        </tr>
+        <tr>
+          <td valign="top" align="center"><b>L<br>
             </b></td>
           <td valign="top">NRTL multicomponent liquid solution model<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">Appendix 4.2</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>W<br>
+          <td valign="top" align="center"><b>W<br>
             </b></td>
           <td valign="top">Wilson multicomponent liquid solution (or ion
             exchange) model<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">Appendix 4.2</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>F<br>
+          <td valign="top" align="center"><b>F<br>
             </b></td>
           <td valign="top">Churakov-Gottschalk (CG) multicomponent fluid EoS
             model<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">Appendix 4.3<br>
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>P<br>
+          <td valign="top" align="center"><b>P<br>
             </b></td>
           <td valign="top">Peng-Robinson-Stryjek-Vera (PRSV) multicomponent
             fluid EoS model<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">Appendix 4.3</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>E<br>
+          <td valign="top" align="center"><b>E<br>
             </b></td>
           <td valign="top">Soave-Redlich-Kwong (SRK) multicomponent fluid EoS
             model<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">Appendix 4.3</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>6<br>
+          <td valign="top" align="center"><b>6<br>
             </b></td>
           <td valign="top">Sterner-Pitzer (STP) high-pressure fluid EoS model
             (reserved)<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">under construction<br>
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>7<br>
+          <td valign="top" align="center"><b>7<br>
             </b></td>
           <td valign="top">Peng-Robinson (PR78) multicomponent fluid EoS model<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">Appendix 4.3</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>8<br>
+          <td valign="top" align="center"><b>8<br>
             </b></td>
           <td valign="top">Compensated Redlich-Kwong (CORK) multicomponent fluid
             EoS model<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">Appendix 4.3</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>D<br>
+          <td valign="top" align="center"><b>D<br>
             </b></td>
           <td valign="top">Davies equation aqueous model<br>
           </td>
-          <td align="center" valign="top"><b>-<br>
+          <td valign="top" align="center"><b>-<br>
             </b></td>
           <td valign="top">Appendix 4.1</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>H<br>
+          <td valign="top" align="center"><b>H<br>
             </b></td>
           <td valign="top">Extended Debye-Hueckel aqueous model (Helgeson),
             common a0<br>
           </td>
-          <td align="center" valign="top"><b>-<br>
+          <td valign="top" align="center"><b>-<br>
             </b></td>
           <td valign="top">Appendix 4.1</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>Y<br>
+          <td valign="top" align="center"><b>Y<br>
             </b></td>
           <td valign="top">Extended Debye-Hueckel aqueous model (Shvarov),
             common a0<br>
           </td>
-          <td align="center" valign="top"><b>-<br>
+          <td valign="top" align="center"><b>-<br>
             </b></td>
           <td valign="top">Appendix 4.1</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>3<br>
+          <td valign="top" align="center"><b>3<br>
             </b></td>
           <td valign="top">Extended Debye-Hueckel aqueous model (Karpov),
             individual a0<br>
           </td>
-          <td align="center" valign="top"><b>-<br>
+          <td valign="top" align="center"><b>-<br>
             </b></td>
           <td valign="top">Appendix 4.1</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>2<br>
+          <td valign="top" align="center"><b>2<br>
             </b></td>
           <td valign="top">Debye-Hueckel aqueous model (2-term) individual a0<br>
           </td>
-          <td align="center" valign="top"><b>-<br>
+          <td valign="top" align="center"><b>-<br>
             </b></td>
           <td valign="top">Appendix 4.1</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>1<br>
+          <td valign="top" align="center"><b>1<br>
             </b></td>
           <td valign="top">Debye-Hueckel limiting law aqueous model<br>
           </td>
-          <td align="center" valign="top"><b>-<br>
+          <td valign="top" align="center"><b>-<br>
             </b></td>
           <td valign="top">Appendix 4.1</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>S<br>
+          <td valign="top" align="center"><b>S<br>
             </b></td>
           <td valign="top">SIT multicomponent aqueous model (NEA TDB version)<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">Appendix 4.1; Appendix 4.6<br>
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>Z<br>
+          <td valign="top" align="center"><b>Z<br>
             </b></td>
           <td valign="top">Pitzer (HMW) multicomponent aqueous model<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">Appendix 4.1; Appendix 4.6</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>Q<br>
+          <td valign="top" align="center"><b>Q<br>
             </b></td>
           <td valign="top">Extended UNIQAC multicomponent aqueous model<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">Appendix 4.1; Appendix 4.6</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>J<br>
+          <td valign="top" align="center"><b>J<br>
             </b></td>
           <td valign="top">rEUNIQAC multicomponent aqueous model (reserved)<br>
           </td>
-          <td align="center" valign="top"><b>+<br>
+          <td valign="top" align="center"><b>+<br>
             </b></td>
           <td valign="top">under construction<br>
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>A<br>
+          <td valign="top" align="center"><b>A<br>
             </b></td>
           <td valign="top">Adsorption, SACT and EDL models<br>
           </td>
-          <td align="center" valign="top"><b>-<br>
+          <td valign="top" align="center"><b>-<br>
             </b></td>
           <td valign="top"><br>
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>O<br>
+          <td valign="top" align="center"><b>O<br>
             </b></td>
           <td valign="top">Other non-ideal model selected by phase name
             (reserved)<br>
           </td>
-          <td align="center" valign="top"><b>-<br>
+          <td valign="top" align="center"><b>-<br>
             </b></td>
           <td valign="top">under construction<br>
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>U<br>
+          <td valign="top" align="center"><b>U<br>
             </b></td>
           <td valign="top">Other non-ideal mixing model (user-defined scripts)<br>
           </td>
-          <td align="center" valign="top"><b>-<br>
+          <td valign="top" align="center"><b>-<br>
             </b></td>
           <td valign="top">see help for&nbsp; <a href="#DcEq"><tt>DcEq</tt></a>,&nbsp;
             <a href="gm_phase.html#PhEq"><tt>PhEq</tt></a>; cannot be used in
@@ -1107,11 +1115,11 @@ record
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>N<br>
+          <td valign="top" align="center"><b>N<br>
             </b></td>
           <td valign="top">No mixing (pure or single-component phase)<br>
           </td>
-          <td align="center" valign="top"><b>-<br>
+          <td valign="top" align="center"><b>-<br>
             </b></td>
           <td valign="top">Default option for single-component phases </td>
         </tr>
@@ -1126,10 +1134,10 @@ record
     <h4>2.1.3. Dropdown list -&gt; <a href="#p_solt_3">p_solt[3]</a>: Select a
       mode of calculation of activity coefficients of end members:<br>
     </h4>
-    <table border="1" cellpadding="2" cellspacing="2" width="100%">
+    <table cellspacing="2" cellpadding="2" border="1" width="100%">
       <tbody>
         <tr>
-          <td align="center" valign="top">
+          <td valign="top" align="center">
             <p><b>Code<br>
               </b></p>
           </td>
@@ -1141,21 +1149,21 @@ record
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>I<br>
+          <td valign="top" align="center"> <b>I<br>
             </b></td>
           <td valign="top">Activity coefficients will be set to 1 (pure phase,
             simple ideal mixing), default </td>
           <td valign="top">Also pure phase </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>S<br>
+          <td valign="top" align="center"> <b>S<br>
             </b></td>
           <td valign="top">Activity coefficients will be calculated using a
             built-in mixing model selected above </td>
           <td valign="top">Also multi-site ideal mixing (I) </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>N<br>
+          <td valign="top" align="center"> <b>N<br>
             </b></td>
           <td valign="top">Activity coefficients will be calculated as given in
             user-defined script(s) </td>
@@ -1173,7 +1181,7 @@ record
       user-defined script for end-members:<br>
     </h4>
     <br>
-    <table border="1" cellpadding="2" cellspacing="2" width="100%">
+    <table cellspacing="2" cellpadding="2" border="1" width="100%">
       <tbody>
         <tr>
           <td valign="top"><b>Code</b></td>
@@ -1181,7 +1189,7 @@ record
           <td valign="top">Comment</td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>N</b></td>
+          <td valign="top" align="center"><b>N</b></td>
           <td valign="top">No DcEq script will be provided in this Phase
             definition (default)</td>
           <td valign="top">Select this, if any built-in mixing model or simple
@@ -1189,7 +1197,7 @@ record
             phase). </td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>T</b></td>
+          <td valign="top" align="center"><b>T</b></td>
           <td valign="top">DcEq script will be executed once before GEM IPM
             iterations</td>
           <td valign="top">Expressions depend on <i>T, P</i> &nbsp;and <i>b</i>
@@ -1197,7 +1205,7 @@ record
             speciation/composition </td>
         </tr>
         <tr>
-          <td align="center" valign="top"><b>X</b></td>
+          <td valign="top" align="center"><b>X</b></td>
           <td valign="top">DcEq script will be executed after each GEM IPM
             iteration</td>
           <td valign="top">Expressions depend on the current phase speciation
@@ -1215,10 +1223,10 @@ record
       Select a mode of execution of <a href="#PhEq"><tt>PhEq</tt></a>
       user-defined script for the whole phase:<br>
     </h4>
-    <table border="1" cellpadding="2" cellspacing="2" width="100%">
+    <table cellspacing="2" cellpadding="2" border="1" width="100%">
       <tbody>
         <tr>
-          <td align="center" valign="top">
+          <td valign="top" align="center">
             <p><b>Code<br>
               </b></p>
           </td>
@@ -1230,7 +1238,7 @@ record
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>N<br>
+          <td valign="top" align="center"> <b>N<br>
             </b></td>
           <td valign="top">No PhEq script will be provided in this Phase
             definition (default) </td>
@@ -1239,7 +1247,7 @@ record
             phase). </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>T<br>
+          <td valign="top" align="center"> <b>T<br>
             </b></td>
           <td valign="top">PhEq script will be executed once before GEM IPM
             iterations </td>
@@ -1248,7 +1256,7 @@ record
             speciation/composition. </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>X<br>
+          <td valign="top" align="center"> <b>X<br>
             </b></td>
           <td valign="top">PhEq script will be executed after each GEM IPM
             iteration </td>
@@ -1264,10 +1272,10 @@ record
       Select a mode of linking user-defined <a href="#DcEq"><tt>DcEq</tt></a>
       script to phase end members:<br>
     </h4>
-    <table border="1" cellpadding="2" cellspacing="2" width="100%">
+    <table cellspacing="2" cellpadding="2" border="1" width="100%">
       <tbody>
         <tr>
-          <td align="center" valign="top">
+          <td valign="top" align="center">
             <p><b>Code<br>
               </b></p>
           </td>
@@ -1279,7 +1287,7 @@ record
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>N<br>
+          <td valign="top" align="center"> <b>N<br>
             </b></td>
           <td valign="top">No DcEq script will be provided (pure phase, built-in
             or ideal model), default </td>
@@ -1288,7 +1296,7 @@ record
             phase). </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>U<br>
+          <td valign="top" align="center"> <b>U<br>
             </b></td>
           <td valign="top">A universal DcEq script will be applied to each end
             member in a loop </td>
@@ -1301,7 +1309,7 @@ record
             to <tt>La</tt> - 1. </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>P<br>
+          <td valign="top" align="center"> <b>P<br>
             </b></td>
           <td valign="top">A private group of expressions will be executed for
             each end member separately </td>
@@ -1326,10 +1334,10 @@ record
     <h4>2.1.7. Dropdown list -&gt; <a href="#p_solt_5">p_solt[5]</a>: Select
       specific mixing rules (or form of temperature correction) for EoS and
       activity models: </h4>
-    <table border="1" cellpadding="2" cellspacing="2" width="100%">
+    <table cellspacing="2" cellpadding="2" border="1" width="100%">
       <tbody>
         <tr>
-          <td align="center" valign="top">
+          <td valign="top" align="center">
             <p><b>Code<br>
               </b></p>
           </td>
@@ -1341,7 +1349,7 @@ record
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>N</b> </td>
+          <td valign="top" align="center"> <b>N</b> </td>
           <td valign="top"> Default mixing rule or form of interaction parameter
             coefficients </td>
           <td valign="top"> The appropriate mixing rule or form of interaction
@@ -1349,7 +1357,7 @@ record
             fluid- or aqueous model </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>W<br>
+          <td valign="top" align="center"> <b>W<br>
             </b></td>
           <td valign="top">Basic Van der Waals mixing rules in cubic EoS models
             (default) </td>
@@ -1359,7 +1367,7 @@ record
           </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>C<br>
+          <td valign="top" align="center"> <b>C<br>
             </b></td>
           <td valign="top">Constant one-term binary interaction parameter <i>k<sub>ij</sub></i>
           </td>
@@ -1367,7 +1375,7 @@ record
             be entered into <a href="#ph_cf"><tt>ph_cf</tt></a> array </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>T<br>
+          <td valign="top" align="center"> <b>T<br>
             </b></td>
           <td valign="top">Temperature-dependent one-term binary interaction
             parameter <i>k</i><sub><i>ij</i></sub><br>
@@ -1378,7 +1386,7 @@ record
             <a href="#ph_cf"><tt>ph_cf</tt></a> array </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>5</b> </td>
+          <td valign="top" align="center"> <b>5</b> </td>
           <td valign="top"> 5-term Pitzer model parameter temperature dependence
           </td>
           <td valign="top"> Five coefficients <i>a,b,c,d,e</i> of the
@@ -1388,28 +1396,31 @@ record
             TOUGHREACT software. </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>6</b> </td>
+          <td valign="top" align="center"> <b>6</b> </td>
           <td valign="top"> 6-term Pitzer model parameter temperature dependence
           </td>
           <td valign="top"> FREZCHEM variant (under construction) </td>
         </tr>
         <tr>
-          <td align="center" valign="top"> <b>8</b> </td>
+          <td valign="top" align="center"> <b>8</b> </td>
           <td valign="top"> 8-term Pitzer model parameter temperature dependence
           </td>
           <td valign="top"> under construction </td>
         </tr>
         <tr>
           <td style="text-align: center;"><span style="font-weight: bold;">R</span></td>
-          <td>Calculate reciprocal terms (CEF) with Berman 'B' solution model</td>
+          <td>Calculate reciprocal terms (CEF) with 'B','$' and '#' sublattice
+            solution models</td>
           <td>Requirements: all possible end members must be present in the
             phase definition; no partial site substitution allowed in end
-            members. No additional parameters needed.</td>
+            members. No additional parameters needed. Can be used as an option
+            with Berman 'B', CEF '$' and MBW '#' &nbsp; sublattice solution
+            models.</td>
         </tr>
       </tbody>
     </table>
     <p>Note: Applicable only to non-ideal fluid models 'P', 'E', '7', as well as
-      Berman 'B' solid solution model, also in standalone GEMS3K calculations.
+      sublattice solid solution models, also in standalone GEMS3K calculations.
       Codes 'C' and 'T' require entering non-zero parameter coefficients into <a
         href="#ipxT"><tt>ipxT</tt></a> and <tt><a href="#ph_cf">ph_cf</a></tt>
       arrays in TSolMod convention, therefore, a Phase record must be created
@@ -1434,7 +1445,8 @@ Phase
       be done upon remake of the Phase record.</p>
     <h4>2.2.1. Group box: Parameters and coefficients related to a phase
       component (end member)</h4>
-    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <table style="text-align: left; width: 100%;" cellspacing="2" cellpadding="2"
+      border="1">
       <tbody>
         <tr>
           <td style="vertical-align: top;">Number of parameter coefficients per
@@ -1463,7 +1475,8 @@ Phase
     <br>
     <h4>2.2.2. Group box: Interaction parameters, coefficients, and indexes
       related to the model of mixing in this phase</h4>
-    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <table style="text-align: left; width: 100%;" cellspacing="2" cellpadding="2"
+      border="1">
       <tbody>
         <tr>
           <td style="vertical-align: top;">Number of interaction parameters
@@ -1497,7 +1510,8 @@ Phase
     <h4>2.2.3. Group box: Parameters and coefficients related to multi-solvent
       aqueous electrolyte models (under construction)<br>
     </h4>
-    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <table style="text-align: left; width: 100%;" cellspacing="2" cellpadding="2"
+      border="1">
       <tbody>
         <tr>
           <td style="vertical-align: top;">Number of solvent parameter
@@ -1549,7 +1563,8 @@ Phase
       polyelectrolyte isotherm model, or leave 'N' and go to the next wizard
       step<br>
     </h4>
-    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <table style="text-align: left; width: 100%;" cellspacing="2" cellpadding="2"
+      border="1">
       <tbody>
         <tr>
           <td style="vertical-align: top;">N<br>
@@ -1574,7 +1589,8 @@ Phase
     </p>
     <h4>2.3.2. Dropdown list: Select a type of (new) EIL (Electrified Interface
       Layer) model for this sorption phase </h4>
-    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <table style="text-align: left; width: 100%;" cellspacing="2" cellpadding="2"
+      border="1">
       <tbody>
         <tr>
           <td style="vertical-align: top;">N<br>
@@ -1598,7 +1614,8 @@ Phase
     <br>
     <h4>2.3.3. Group box: Dimensions related to (new) sorption phase models<br>
     </h4>
-    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <table style="text-align: left; width: 100%;" cellspacing="2" cellpadding="2"
+      border="1">
       <tbody>
         <tr>
           <td style="vertical-align: top;">Number of EIL model layers<br>
@@ -1678,7 +1695,8 @@ Phase
       <br>
     </p>
     <h4>2.4.1. Dropdown list -&gt; kin_t[2]: Type code of the process kinetics</h4>
-    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <table style="text-align: left; width: 100%;" cellspacing="2" cellpadding="2"
+      border="1">
       <tbody>
         <tr>
           <td style="vertical-align: top;">N<br>
@@ -1733,7 +1751,8 @@ Phase
     <br>
     <h4>2.4.2.&nbsp; Dropdown list -&gt; kin_t[3]: Type code of the
       kinetics/metastability model</h4>
-    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <table style="text-align: left; width: 100%;" cellspacing="2" cellpadding="2"
+      border="1">
       <tbody>
         <tr>
           <td style="vertical-align: top;">N<br>
@@ -1780,7 +1799,8 @@ Phase
     <br>
     <h4>2.4.3. Dropdown list -&gt; kin_t[4]: Type code of the sorption kinetics
       model</h4>
-    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <table style="text-align: left; width: 100%;" cellspacing="2" cellpadding="2"
+      border="1">
       <tbody>
         <tr>
           <td style="vertical-align: top;">N<br>
@@ -1848,7 +1868,8 @@ Phase
     <br>
     <h4>2.4.4. Dropdown list -&gt; kin_t[5]: Type code of metastability links of
       this phase to other phases</h4>
-    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <table style="text-align: left; width: 100%;" cellspacing="2" cellpadding="2"
+      border="1">
       <tbody>
         <tr>
           <td style="vertical-align: top;">N<br>
@@ -1886,7 +1907,8 @@ Phase
     <br>
     <h4>2.4.5. Dropdown list -&gt; kin_t[6]: Type of particle/pore size
       distribution and specific surface area correction</h4>
-    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <table style="text-align: left; width: 100%;" cellspacing="2" cellpadding="2"
+      border="1">
       <tbody>
         <tr>
           <td style="vertical-align: top;">N<br>
@@ -1923,7 +1945,8 @@ Phase
     <br>
     <h4>2.4.6. Dropdown list -&gt; kin_t[7]: Code of the rate scaling model
       (reserved)</h4>
-    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <table style="text-align: left; width: 100%;" cellspacing="2" cellpadding="2"
+      border="1">
       <tbody>
         <tr>
           <td style="vertical-align: top;">N<br>
@@ -1952,7 +1975,8 @@ Phase
     </table>
     <br>
     <h4>2.4.7. Groupbox: dimensions of KinMet model parameter coefficient tables</h4>
-    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <table style="text-align: left; width: 100%;" cellspacing="2" cellpadding="2"
+      border="1">
       <tbody>
         <tr>
           <td style="vertical-align: top;">Number of parallel reactions that
@@ -3223,27 +3247,27 @@ data
     <blockquote>
       <p>For this particular Margules model, the contents of <tt>ph_cf</tt>
         table must be:&nbsp;</p>
-      <table border="1" cellpadding="2" cellspacing="2" width="60%">
+      <table cellspacing="2" cellpadding="2" border="1" width="60%">
         <tbody>
           <tr>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p><tt>6327</tt></p>
             </td>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p><tt>4.632</tt></p>
             </td>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p><tt>0.093</tt></p>
             </td>
           </tr>
           <tr>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p><tt>7672</tt></p>
             </td>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p><tt>3.857</tt></p>
             </td>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p><tt>0.112</tt></p>
             </td>
           </tr>
@@ -3363,8 +3387,9 @@ and
       </dd>
       <dd>
         <p>Mathematical details about built-in calculations can be found in the
-          <b><tt>Activity-coeffs.pdf</tt></b> manual.&nbsp; &nbsp; &nbsp; &nbsp;
-          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;</p>
+          <b><tt>Activity-coeffs.pdf</tt></b> and&nbsp; <b><tt>Multisite-mod.pdf</tt></b>
+          manuals.&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          &nbsp;&nbsp;&nbsp;</p>
       </dd>
       <dd>
         <p>Coefficients stored in the <tt>ph_cf</tt> array can be used in <a href="g_mscript.html">math
@@ -3414,49 +3439,49 @@ and
       </dd>
     </dl>
     <blockquote>
-      <table border="1" cellpadding="2" cellspacing="2" width="50%">
+      <table cellspacing="2" cellpadding="2" border="1" width="50%">
         <tbody>
           <tr>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p>0</p>
             </td>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p>1</p>
             </td>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p>-1</p>
             </td>
           </tr>
           <tr>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p>0</p>
             </td>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p>2</p>
             </td>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p>-1</p>
             </td>
           </tr>
           <tr>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p>1</p>
             </td>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p>2</p>
             </td>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p>-1</p>
             </td>
           </tr>
           <tr>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p>0</p>
             </td>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p>1</p>
             </td>
-            <td align="center" valign="top">
+            <td valign="top" align="center">
               <p>2</p>
             </td>
           </tr>
@@ -4041,7 +4066,7 @@ index
     TBD<br>
     <br>
     <br>
-    <hr size="2" width="100%">
+    <hr width="100%" size="2">
     <h3><a name="PHASE_DOD_KINMET"></a>5.3. Data objects for metastability and
       kinetics (TKinMet parameters)</h3>
     <br>
@@ -4263,8 +4288,8 @@ index
         </p>
       </dd>
       <dd>
-        <table style="text-align: left; width: 90%;" border="1" cellpadding="2"
-          cellspacing="2">
+        <table style="text-align: left; width: 90%;" cellspacing="2" cellpadding="2"
+          border="1">
           <tbody>
             <tr>
               <td style="vertical-align: top;">Code<br>
@@ -4394,8 +4419,8 @@ index
           parallel reaction (row) in the following order:</p>
       </dd>
       <dd>
-        <table style="text-align: left; width: 90%;" border="1" cellpadding="2"
-          cellspacing="2">
+        <table style="text-align: left; width: 90%;" cellspacing="2" cellpadding="2"
+          border="1">
           <tbody>
             <tr>
               <td style="vertical-align: top;">Index<br>
@@ -4575,8 +4600,8 @@ index
       <dd><br>
       </dd>
       <dd>
-        <table style="text-align: left; width: 693px; height: 52px;" border="1"
-          cellpadding="2" cellspacing="2">
+        <table style="text-align: left; width: 693px; height: 52px;" cellspacing="2"
+          cellpadding="2" border="1">
           <tbody>
             <tr>
               <td style="vertical-align: top;">&gt; 0 (positive)<br>
@@ -4607,11 +4632,11 @@ index
           0 then the net rate constant will be used. If the net rate constant is
           positive and phase stability index lgOm&nbsp; &lt; -0.001
           (dissolution) then this net rate constant will be used, but if
-          lgOm&nbsp; &gt; 0.001 (precipitation) then this &#8220;parallel reaction&#8221;
+          lgOm&nbsp; &gt; 0.001 (precipitation) then this “parallel reaction”
           term will be skipped. If the net rate constant is negative and phase
           stability index lgOm&nbsp; &gt; 0.001 (precipitation) then the
           absolute value of this rate constant will be used, but if lgOm&nbsp;
-          &lt; -0.001 (dissolution) then this &#8220;parallel reaction&#8221; term will be
+          &lt; -0.001 (dissolution) then this “parallel reaction” term will be
           skipped.</p>
       </dd>
       <dd>
@@ -4630,8 +4655,8 @@ index
         </p>
       </dd>
       <dd>
-        <table style="text-align: left; width: 202px; height: 76px;" border="1"
-          cellpadding="2" cellspacing="2">
+        <table style="text-align: left; width: 202px; height: 76px;" cellspacing="2"
+          cellpadding="2" border="1">
           <tbody>
             <tr>
               <td style="vertical-align: top;">Dissol.low.pH</td>
@@ -4660,8 +4685,8 @@ index
           for instance:</p>
       </dd>
       <dd>
-        <table style="text-align: left; width: 745px; height: 28px;" border="1"
-          cellpadding="2" cellspacing="2">
+        <table style="text-align: left; width: 745px; height: 28px;" cellspacing="2"
+          cellpadding="2" border="1">
           <tbody>
             <tr>
               <td style="vertical-align: top;">ko<br>
@@ -4808,8 +4833,8 @@ index
           file. These parameters go in the following order:</p>
       </dd>
       <dd>
-        <table style="text-align: left; width: 90%;" border="1" cellpadding="2"
-          cellspacing="2">
+        <table style="text-align: left; width: 90%;" cellspacing="2" cellpadding="2"
+          border="1">
           <tbody>
             <tr>
               <td style="vertical-align: top;">Index<br>
@@ -4918,8 +4943,8 @@ index
               the uptake kinetics model, for instance:</p>
           </dd>
           <dd>
-            <table style="text-align: left; width: 469px; height: 28px;" border="1"
-              cellpadding="2" cellspacing="2">
+            <table style="text-align: left; width: 469px; height: 28px;" cellspacing="2"
+              cellpadding="2" border="1">
               <tbody>
                 <tr>
                   <td style="vertical-align: top;">F<br>
@@ -4950,7 +4975,7 @@ index
       <dd> <br>
       </dd>
     </dl>
-    <hr size="2" width="100%">
+    <hr width="100%" size="2">
     <h3><a name="PHASE_DOD_HIDDEN"></a>5.4. Hidden data objects for usage in
       Phase math scripts<br>
     </h3>
