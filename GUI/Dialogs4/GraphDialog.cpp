@@ -90,7 +90,7 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
     setWindowTitle( cap.c_str() );
 
     // define plot window
-    plot = new TPlotWidget( &gr_data, this, this );
+    plot = new TPlotWidget( &gr_data, this );
     verticalLayout_2->addWidget( plot);
 
    // Define legend table
@@ -125,8 +125,6 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
             this, SLOT(changeIcon( int, int )));
     connect(tbLegend, SIGNAL(cellChanged( int , int  ) ),
             this, SLOT(changeNdx( int, int )));
-    connect(tbLegend, SIGNAL(cellEntered(int,int)),
-            this, SLOT(highlightRow( int, int )));
     QObject::connect(pHelp, SIGNAL(clicked()), this, SLOT(CmHelp()));
 }
 
@@ -238,29 +236,32 @@ void GraphDialog::changeIcon( int row, int column )
             SymbolDialog cd( gr_data.lines[row], this);
             if( cd.exec() )
             {
-               gr_data.lines[row] =  cd.GetPlotLine();
-               QIcon icon;// = tbLegend->item(row, column)->icon();
-               paintIcon( icon, gr_data.lines[row] );
-               tbLegend->item(row, column)->setIcon(icon);
-               plot->replotPlotLine(row);
-               SaveGraphData();
+                gr_data.lines[row] =  cd.GetPlotLine();
+                QIcon icon;// = tbLegend->item(row, column)->icon();
+                paintIcon( icon, gr_data.lines[row] );
+                tbLegend->item(row, column)->setIcon(icon);
+                plot->replotPlotLine(row);
+                SaveGraphData();
             }
-       }else
+        }else
         {
-             // select isoline color
+            // select isoline color
             QColor color(gr_data.scale[row]);
             QColor backColor = QColorDialog::getColor( color, this );
             if( backColor.isValid() )
             {
-               gr_data.scale[row] =backColor;
-               TPlotLine pl( "Scale",  QwtSymbol::Rect, 0, 0, gr_data.scale[row].red(),
-                             gr_data.scale[row].green(), gr_data.scale[row].blue() );
-               QIcon icon;
-               paintIcon( icon, pl );
-               tbLegend->item(row, column)->setIcon(icon);
-               Apply();
+                gr_data.scale[row] =backColor;
+                TPlotLine pl( "Scale",  QwtSymbol::Rect, 0, 0, gr_data.scale[row].red(),
+                              gr_data.scale[row].green(), gr_data.scale[row].blue() );
+                QIcon icon;
+                paintIcon( icon, pl );
+                tbLegend->item(row, column)->setIcon(icon);
+                Apply();
             }
         }
+    } else if( column ==  2 )
+    {
+       highlightRow( row, column );
     }
 }
 
@@ -294,26 +295,24 @@ void GraphDialog::changeNdx( int row, int column )
 
 void GraphDialog::highlightRow( int row, int column )
 {
-  if( gr_data.graphType == ISOLINES )
+  if( gr_data.graphType == ISOLINES || column != 2)
       return;
 
-  if( activeRow == row && column == 2 )
-    return;
-
-  restoreRow();
-
-  if( column == 2 )
+  if( activeRow == row ) // toggle
   {
-      const TPlotLine& ldt = gr_data.lines[row];
-      gr_data.lines[row].setChanges( ldt.getType(), ldt.getSize()*2, ldt.getLineSize()*2, ldt.getColor() );
-      activeRow = row;
-      plot->replotPlotLine(activeRow);
+    restoreRow();
+    return;
   }
+  restoreRow();
+  const TPlotLine& ldt = gr_data.lines[row];
+  gr_data.lines[row].setChanges( ldt.getType(), ldt.getSize()*2, ldt.getLineSize()*2, ldt.getColor() );
+  activeRow = row;
+  plot->replotPlotLine(activeRow);
 }
 
 void GraphDialog::restoreRow()
 {
- if( activeRow >= 0 /*&& activeRow < gr_data.lines.size()*/ )
+ if( activeRow >= 0 )
  {
     auto row = activeRow;
     const TPlotLine& ldt = gr_data.lines[row];

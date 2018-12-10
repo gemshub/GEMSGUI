@@ -36,7 +36,6 @@
 #include "qwtplot.h"
 #include "visor.h"
 #include "GemsMainWindow.h"
-#include "GraphDialog.h"
 
 void setQwtSymbol( QwtSymbol* symbol, int type, int size, QColor color  )
 {
@@ -60,8 +59,8 @@ void setQwtSymbol( QwtSymbol* symbol, int type, int size, QColor color  )
 }
 
 
-TPlotWidget::TPlotWidget( GraphData* aGr_data,  GraphDialog* top, QWidget *parent):
-    QWidget(parent), gr_data(aGr_data), topDlg(top)
+TPlotWidget::TPlotWidget( GraphData* aGr_data, QWidget *parent):
+    QWidget(parent), gr_data(aGr_data)
 {
     setAcceptDrops(true);
     m_grid = 0;
@@ -515,8 +514,7 @@ void TPlotWidget::dropEvent(QDropEvent* event)
      {
          showLegendText( transform( event->pos()),  text_ );
      }
-     topDlg->restoreRow();
-     //m_plot->replot();
+     m_plot->replot();
   }
 }
 
