@@ -33,16 +33,18 @@
 // Widgets for legend and plotting dialogs
 void paintIcon( QIcon &icon, TPlotLine &plLine );
 
+class GraphDialog;
 
 //=========================================================================
 // Added for new legend table
 class DragTableWidget: public QTableWidget
 {
     QPoint startPos;
+    GraphDialog* topDlg;
 
     public:
-        DragTableWidget(QWidget* parent):
-            QTableWidget(parent) {}
+        DragTableWidget( QWidget *parent,  GraphDialog* top):
+            QTableWidget(parent), topDlg(top) {}
 
         virtual ~DragTableWidget() {}
 
@@ -51,6 +53,7 @@ class DragTableWidget: public QTableWidget
     void startDrag();
     void mousePressEvent( QMouseEvent *e );
     void mouseMoveEvent( QMouseEvent *e );
+    void focusOutEvent(QFocusEvent* event);
 };
 
 // class LabelDelegate
@@ -89,6 +92,7 @@ class GraphDialog: public QDialog, public Ui::GraphDialogData
     TCModule *pModule;
     DragTableWidget *tbLegend;
     LabelDelegate *dgLegend;
+    int activeRow = -1;
 
     // work part
     bool isFragment;
@@ -98,9 +102,12 @@ class GraphDialog: public QDialog, public Ui::GraphDialogData
 
     void closeEvent(QCloseEvent*);
 
+
+
 protected slots:
     void changeIcon( int row, int column );
     void changeNdx( int row, int column );
+    void highlightRow( int row, int column );
     virtual void languageChange();
     virtual void CmFragment();
     virtual void CmLegend();
@@ -110,6 +117,7 @@ protected slots:
 
 public slots:
     void selectedFragment( const QRectF& );
+    void restoreRow();
 
 public:
 

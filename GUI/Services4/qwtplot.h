@@ -33,6 +33,8 @@
 
 #include "graph.h"
 
+class GraphDialog;
+
 void setQwtSymbol( QwtSymbol* symbol, int type, int size, QColor color  );
 
 ///   Plotting area window
@@ -40,6 +42,7 @@ class TPlotWidget: public QWidget
 {
 
     GraphData *gr_data;
+    GraphDialog* topDlg;
 
     // data for different types of graphics
     // clear if replot
@@ -81,7 +84,7 @@ class TPlotWidget: public QWidget
 
 public:
 
-    TPlotWidget(GraphData* aGr_data, QWidget *parent = 0);
+    TPlotWidget(GraphData* aGr_data, GraphDialog* top, QWidget *parent = 0);
     ~TPlotWidget()
     {}
 

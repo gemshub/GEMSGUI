@@ -90,11 +90,11 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
     setWindowTitle( cap.c_str() );
 
     // define plot window
-    plot = new TPlotWidget( &gr_data, this);
+    plot = new TPlotWidget( &gr_data, this, this );
     verticalLayout_2->addWidget( plot);
 
    // Define legend table
-    tbLegend = new DragTableWidget( this );
+    tbLegend = new DragTableWidget( this, this );
     tbLegend->setSizePolicy(  QSizePolicy::Preferred, QSizePolicy::Preferred  );
     tbLegend->setSelectionMode(QAbstractItemView::NoSelection);
     tbLegend->setColumnCount( 3 );
@@ -125,6 +125,8 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
             this, SLOT(changeIcon( int, int )));
     connect(tbLegend, SIGNAL(cellChanged( int , int  ) ),
             this, SLOT(changeNdx( int, int )));
+    connect(tbLegend, SIGNAL(cellEntered(int,int)),
+            this, SLOT(highlightRow( int, int )));
     QObject::connect(pHelp, SIGNAL(clicked()), this, SLOT(CmHelp()));
 }
 
@@ -288,6 +290,37 @@ void GraphDialog::changeNdx( int row, int column )
       }
    }
 
+}
+
+void GraphDialog::highlightRow( int row, int column )
+{
+  if( gr_data.graphType == ISOLINES )
+      return;
+
+  if( activeRow == row && column == 2 )
+    return;
+
+  restoreRow();
+
+  if( column == 2 )
+  {
+      const TPlotLine& ldt = gr_data.lines[row];
+      gr_data.lines[row].setChanges( ldt.getType(), ldt.getSize()*2, ldt.getLineSize()*2, ldt.getColor() );
+      activeRow = row;
+      plot->replotPlotLine(activeRow);
+  }
+}
+
+void GraphDialog::restoreRow()
+{
+ if( activeRow >= 0 /*&& activeRow < gr_data.lines.size()*/ )
+ {
+    auto row = activeRow;
+    const TPlotLine& ldt = gr_data.lines[row];
+    gr_data.lines[row].setChanges( ldt.getType(), ldt.getSize()/2, ldt.getLineSize()/2, ldt.getColor() );
+    activeRow = -1;
+    plot->replotPlotLine(row);
+ }
 }
 
 
@@ -488,10 +521,18 @@ void DragTableWidget::startDrag()
      }
  }
 
+void DragTableWidget::focusOutEvent(QFocusEvent* e )
+{
+    topDlg->restoreRow();
+    QTableWidget::focusOutEvent(e);
+ }
+
 void DragTableWidget::mousePressEvent( QMouseEvent *e )
 {
         if(e->buttons() & Qt::LeftButton )
-          startPos = e->pos();
+        {
+            startPos = e->pos();
+        }
         QTableWidget::mousePressEvent(e);
  }
 
