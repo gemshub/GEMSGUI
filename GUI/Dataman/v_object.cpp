@@ -858,7 +858,7 @@ void TObject::toTXT( fstream& to )
                   }
                   to << sbuf;
                   if( Type > 0 )
-                    to << "\"";
+                    to << "\" ";
                   else
                      to << " ";
              }

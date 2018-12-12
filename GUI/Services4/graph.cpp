@@ -47,11 +47,14 @@ void TPlotLine::write(GemDataStream& stream)
 
 void TPlotLine::read(fstream& stream)
 {
+    char buf[256];
     stream >> type;
     stream >> sizes;
     stream >> ndxX;
     stream >> red >> green >> blue;
-    stream.get( name, 16, '\n');
+    stream.get( buf, 255, '\n');
+    memcpy( name, ( buf[0]==' '? buf+1: buf ), 15);
+    name[15] = '\0';
  }
 
 void TPlotLine::write(fstream& stream)
