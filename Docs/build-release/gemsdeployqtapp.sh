@@ -47,7 +47,7 @@ distro=`lsb_release -d | awk '{print $2$3$4}' | sed 's/\./_/g'`
 # Create the directory that will be tarred up for distribution.
 etardir=`echo $executable"_"$distro | awk '{print tolower($0)}'`
 tardir=Gems3-app
-gemsdistro=Gems3.4.4-0c19d8d.4abd759-linux-x86-64.tgz
+gemsdistro=Gems3.4.4-0c19d8d.4abd759-linux-x86-64-ubuntu.tgz
 mkdir $tardir
 echo "Created tar ball directory: "$tardir
 
@@ -229,6 +229,7 @@ echo "Copied executable "$qtqhelpgenerator" to "$tardir
 gbuilddir=$HOME/gitGEMS3/build-release
 cp -r $gbuilddir/ToDesktop $tardir/ToDesktop
 cp $gbuilddir/gems3.png $tardir/gems3.png
+cp $gbuilddir/qtconf $tardir/qtconf
 cp $gbuilddir/INSTALL.linux.txt $tardir/INSTALL.linux.txt
 cp $gbuilddir/exec_gems3.sh $execscript
 # qtconf=$tardir/qt.conf
