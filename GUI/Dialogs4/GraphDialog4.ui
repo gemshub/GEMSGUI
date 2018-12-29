@@ -24,6 +24,9 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0" colspan="6">
     <widget class="QFrame" name="framePrn">
+     <property name="toolTip">
+      <string>Right-mouse-click on the legend area to see what you can do</string>
+     </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -78,6 +81,15 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="toolTip">
+         <string>Right-mouse-click on the legend area to see what you can do</string>
+        </property>
+        <property name="toolTipDuration">
+         <number>1</number>
+        </property>
+        <property name="whatsThis">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To adjust thickness and color, click on legend symbols. &lt;/p&gt;&lt;p&gt;Under x#, select the abscissa index or -1 to hide the curve. &lt;/p&gt;&lt;p&gt;Single-click on a legend label to highlight its plot curve (toggle). Double-click to edit a label. &lt;/p&gt;&lt;p&gt;Drag-drop a label to its plot curve.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="title">
          <string>Legend| x# |Label </string>
         </property>
@@ -105,7 +117,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Click on legend symbols to adjust thickness and color; under x#, select abscissa index or -1 to hide the curve; single-click on a label to highlight its plot curve (toggle); double-click to edit a label; drag-drop a label to its plot curve.</string>
+            <string>Click on legend items to see effects or make adjustments; right-click on the legend area to learn more.</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignVCenter</set>

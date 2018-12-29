@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>862</width>
+    <width>870</width>
     <height>785</height>
    </rect>
   </property>
@@ -243,7 +243,7 @@
             </item>
             <item>
              <property name="text">
-              <string>B   Multisite  a(symmetric) multicomponent solid solution model</string>
+              <string>B   Berman a(symmetric) multicomponent sublattice solid solution model</string>
              </property>
             </item>
             <item>
@@ -288,7 +288,7 @@
             </item>
             <item>
              <property name="text">
-              <string>D   Davies equation aqueous model</string>
+              <string>D   Davies equation for dilute aqueous elecrolyte ion-association models</string>
              </property>
             </item>
             <item>
@@ -338,17 +338,17 @@
             </item>
             <item>
              <property name="text">
-              <string>$   Multisite multicomponent non-ideal (CEF) solid solution model</string>
+              <string>$   CEF (Compound Energy Formalism) sublattice solid solution model</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>#   Modified Bragg-Williams (MBW) solid solution model (Vinograd et al., 2018)</string>
+              <string>#   Modified Bragg-Williams (MBW) sublattice solid solution model in CEF style</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>&amp;   Modified Quasi-Chemical (MQC) solution/melt model (Pelton, 2001)</string>
+              <string>&amp;   Pelton (2001) modified Quasi-Chemical (MQC) solid solution/ melt model</string>
              </property>
             </item>
             <item>
