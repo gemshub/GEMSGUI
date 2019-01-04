@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
 <Settings>
   <General>
-    <ExtractMode Path="C:\GEMS343" AllowEdit="True">Custom</ExtractMode>
+    <ExtractMode Path="C:\GEMS345" AllowEdit="True">Custom</ExtractMode>
     <HideProgress>False</HideProgress>
     <ProgressDisableCancel>False</ProgressDisableCancel>
     <SelfDelete>False</SelfDelete>
@@ -10,13 +10,13 @@
     <HideTitleIcon>False</HideTitleIcon>
     <PromptShowSFXIcon>True</PromptShowSFXIcon>
     <Overwrite>All</Overwrite>
-    <MessageBegin Show="True">Install/Update GEM-Selektor v.3.4.3 package (Windows) ?</MessageBegin>
-    <MessageCancel Show="True">Are you sure you want to cancel Installing/Updating GEM-Selektor v3.4.3?</MessageCancel>
+    <MessageBegin Show="True">Install/Update GEM-Selektor v.3.4.5 package (Windows) ?</MessageBegin>
+    <MessageCancel Show="True">Are you sure you want to cancel Installing/Updating GEM-Selektor v3.4.5?</MessageCancel>
     <MessageFinish Show="True">Success! Modeling projects can be found in the '\Library\Gems3\projects' subfolder.</MessageFinish>
-    <TitleText>GEMS 3.4.3 (Windows) r.597a65a.4abd759</TitleText>
+    <TitleText>GEMS 3.4.5 (Windows) r.dcffc63.39b782e</TitleText>
     <ExtractPathText>Use default, or type/select another location. If the folder does not exist, it will be created.</ExtractPathText>
     <ExtractCancelText>Abort</ExtractCancelText>
-    <ExtractDialogText>Installing/Updating GEM-Selektor v.3.4.3 (Windows)</ExtractDialogText>
+    <ExtractDialogText>Installing/Updating GEM-Selektor v.3.4.5 (Windows)</ExtractDialogText>
     <ExtractTitleText>Writing files ...</ExtractTitleText>
     <ExtractShowIcon>False</ExtractShowIcon>
     <ProgressPercent>1</ProgressPercent>
@@ -30,15 +30,15 @@
   <VersionString>
     <Item Name="Comments" Value="GEM-Selektor package for geochemical modeling" Enabled="True" />
     <Item Name="CompanyName" Value="Paul Scherrer Institut" Enabled="True" />
-    <Item Name="FileDescription" Value="GEM-Selektor r.597a65a, includes GEMS3K r.4abd759" Enabled="False" />
-    <Item Name="FileVersion" Value=" rev.597a65a.4abd759 " Enabled="False" />
+    <Item Name="FileDescription" Value="GEM-Selektor r.dcffc63, includes GEMS3K r.39b782e" Enabled="False" />
+    <Item Name="FileVersion" Value=" rev.dcffc63.39b782e " Enabled="False" />
     <Item Name="InternalName" Value="gems3.exe" Enabled="True" />
-    <Item Name="LegalCopyright" Value="Copyright © 2003-2018 GEMS Development Team" Enabled="True" />
+    <Item Name="LegalCopyright" Value="Copyright © 2003-2019 GEMS Development Team" Enabled="True" />
     <Item Name="LegalTrademarks" Value="PSI" Enabled="True" />
     <Item Name="OriginalFilename" Value="gems3.exe" Enabled="True" />
-    <Item Name="PrivateBuild" Value="November 20, 2018 DK" Enabled="True" />
+    <Item Name="PrivateBuild" Value="January 4, 2019 DK" Enabled="True" />
     <Item Name="ProductName" Value="GEM-Selektor (GEMS)" Enabled="True" />
-    <Item Name="ProductVersion" Value="3. 4. 3." Enabled="True" />
+    <Item Name="ProductVersion" Value="3. 4. 5." Enabled="True" />
     <Item Name="SpecialBuild" Value="Release candidate for geochemical community" Enabled="False" />
   </VersionString>
 </Settings>

@@ -1,4 +1,4 @@
-HOW TO PRODUCE AN INSTALLATION PACKAGE OF Qt5-based GEMS3 FOR Win32 MinGW 5.3 
+HOW TO PRODUCE AN INSTALLATION PACKAGE OF Qt5-based GEMS3 FOR Win32 MinGW 7.3 
 or up (Windows 7, 8 or 10; admininstrator rights for your account are needed)
 
 (replaces Produce-windows.txt)
@@ -7,8 +7,8 @@ This deployment process is based on the "windeployqt.exe" utility provided by
 the Qt5 installation on Windows.
 
 1. Make sure that the Qt5 SDK is installed as C:\Qt or in similar folder.
-We assume that the Qt library is located in C:\Qt\5.11.1\mingw53_32\bin
-and MinGW compiler is located in C:\Qt\Tools\mingw530_32\bin (or similar, 
+We assume that the Qt library is located in C:\Qt\5.12.0\mingw73_64\bin
+and MinGW compiler is located in C:\Qt\Tools\mingw730_64\bin (or similar, 
 depending on the current Qt version, MinGW version and their locations).  
 
 2. If not yet done, go into the .\Docs\win-build-release directory and 
@@ -17,11 +17,11 @@ C:\GEMS3DEPLOY\Gems3-app folder. Refresh recursively the \Resources
 subfolder (from .gems-gui\Resources in GEM-Selektor source code tree). 
 
 3. In the C:\GEMS3DEPLOY\Gems3-app folder, edit the "runwindeployqt.bat" 
-file to make sure that it contains the correct paths to 
-C:\Qt\5.11.1\mingw53_32\bin and C:\Qt\Tools\mingw530_32\bin directories
+file to make sure that it contains the correct paths  
+C:\Qt\5.11.1\mingw53_32\bin and C:\Qt\Tools\mingw730_64\bin directories
 (modify to actual ones, if necessary). Copy/refresh files windeployqt.exe, 
 qcollectiongenerator.exe, qhelpconverter.exe and qhelpgenerator.exe 
-from C:\Qt\5.11.1\mingw53_32\bin to the C:\GEMS3DEPLOY\Gems3-app folder.   
+from C:\Qt\5.12.0\mingw73_64\bin to the C:\GEMS3DEPLOY\Gems3-app folder.   
 
 4. Using QtCreator, build the actual release variant of gems3.exe. 
 Typically, you should have something like "C:\DevGEMS\trunk\gems-gui";
