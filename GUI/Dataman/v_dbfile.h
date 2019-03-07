@@ -18,8 +18,8 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#ifndef __v_dbfile_h_
-#define __v_dbfile_h_
+#ifndef V_DBFILE_H_
+#define V_DBFILE_H_
 
 #include <ctime>
 #include "gstring.h"
@@ -134,7 +134,8 @@ public:
     }
     void SetnRec( int n )
     {
-        check_dh(), dh->nRec = n;
+        check_dh();
+        dh->nRec = n;
     }
     void GetDh( int& fPos, int& fLen, int& nRT, int& isDel );
     bool GetDhOver();
@@ -153,4 +154,4 @@ public:
 };
 
 
-#endif
+#endif  // V_DBFILE_H_

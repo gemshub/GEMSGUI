@@ -40,11 +40,10 @@ struct TValBase
     bool dynamic;	// object is dynamic
     void* ptr;		// pointer to the value 
 
-    TValBase(bool d) : dynamic(d), ptr(0)
+    TValBase(bool d) : dynamic(d), ptr(nullptr)
     {}
 
-    virtual ~TValBase()
-    {}
+    virtual ~TValBase();
 
     void SetPtr(void* p)
     {
@@ -55,21 +54,21 @@ struct TValBase
         return ptr;
     }
 
-    virtual void* Alloc(size_t sz) = 0;
-    virtual size_t cSize() const = 0;
+    virtual void* Alloc(int sz) = 0;
+    virtual int cSize() const = 0;
 
-    virtual double Get(size_t i=0) const = 0;
-    virtual void Put(double v, size_t i) = 0;
+    virtual double Get(int i=0) const = 0;
+    virtual void Put(double v, int i) = 0;
 
-    virtual bool IsAny(size_t ndx) const = 0;
-    virtual bool IsEmpty(size_t ndx) const = 0;
+    virtual bool IsAny(int ndx) const = 0;
+    virtual bool IsEmpty(int ndx) const = 0;
 
-    virtual gstring GetString(size_t ndx) const = 0;
+    virtual gstring GetString(int ndx) const = 0;
     //  virtual bool VerifyString(const char* s)=0;
-    virtual bool SetString(const char* s, size_t ndx) = 0;
+    virtual bool SetString(const char* s, int ndx) = 0;
 
-    virtual void write(GemDataStream& s, size_t size) = 0;
-    virtual void read(GemDataStream& s, size_t size) = 0;
+    virtual void write(GemDataStream& s, int size) = 0;
+    virtual void read(GemDataStream& s, int size) = 0;
 
 private:
 // forbidding copying and assigning - it's dangerous!

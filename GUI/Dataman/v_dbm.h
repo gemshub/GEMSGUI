@@ -18,8 +18,8 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#ifndef __v_dbm_h_
-#define __v_dbm_h_
+#ifndef V_DBM_H_
+#define V_DBM_H_
 
 #include <iostream>
 #include <ctime>
@@ -418,4 +418,4 @@ public:
 
 extern DataBaseList rt;
 
-#endif	// __v_dbm_h_
+#endif	// V_DBM_H_

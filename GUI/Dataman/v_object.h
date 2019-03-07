@@ -84,8 +84,8 @@ protected:
     void write(ostream & os);
     void read(istream & os);
 
-    size_t GetCellSize() const;
-    size_t GetSize() const;
+    int GetCellSize() const;
+    int GetSize() const;
 
     //*  void Fill(double val, int n1, int m1, int n2, int m2);
     //*  void Fill(double val);
@@ -98,7 +98,7 @@ public:
     TObject (istream & f);
     ~TObject ();
 
-    size_t ndx(int n, int m) const
+    int ndx(int n, int m) const
     {
         return n * M + m;
     }
@@ -156,7 +156,7 @@ public:
 
     void *GetPtr() const
     {
-        return ((!pV) ? 0 : pV->GetPtr());
+        return ((!pV) ? nullptr : pV->GetPtr());
     }
     bool IsNull() const
     {
@@ -173,17 +173,17 @@ public:
     const gstring GetDescription(int Ni, int Mi);
 
     //--- Object parameters manipulation
-    void SetN(unsigned newN)
+    void SetN(int newN)
     {
         N = newN;
     }
-    void SetM(unsigned newM)
+    void SetM(int newM)
     {
         M = newM;
     }
-    void SetDim(unsigned newN, unsigned newM)
+    void SetDim(int newN, int newM)
     {
-        N = newN, M = newM;
+        N = newN; M = newM;
     }
     void SetPtr(void *newPtr);
 
@@ -216,9 +216,9 @@ public:
     void* Alloc(int newN, int newM, ObjType newType);
     void* Free();
 
-    size_t lenDB() const;
-    size_t toDB(GemDataStream& f);
-    size_t ofDB(GemDataStream& f);
+    int lenDB() const;
+    int toDB(GemDataStream& f);
+    int ofDB(GemDataStream& f);
     void toTXT(fstream& f);
     void ofTXT(fstream& f);
 

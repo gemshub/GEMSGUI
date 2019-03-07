@@ -45,8 +45,7 @@ struct str_val:
                 :TOArray<char>(sz, granul)
         { }
 
-        ~str_val()
-        {}
+        ~str_val();
 
 
         bool equals(const str_val& s) const;

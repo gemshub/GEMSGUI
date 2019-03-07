@@ -66,6 +66,9 @@ void CHECK_LEN(size_t ln) throw (StringLenError)
 
 const size_t OVERSIZE = 1;
 
+gstring::str_val::~str_val()
+{}
+
 gstring::str_val*
 gstring::str_val::clone(size_t add_size)
 {

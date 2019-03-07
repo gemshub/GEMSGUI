@@ -54,64 +54,65 @@ struct TVal:
 
     ~TVal()
     {
-        if( dynamic && ptr ) delete[] (T*)ptr;
+        if( dynamic && ptr )
+            delete[] static_cast<T*>(ptr);
     }
 
     // returns size of the cell
-    size_t cSize() const;
+    int cSize() const;
 
     /* allocates memory for given object
 	Note: IsDynamic() verified in TObject
     */
-    void* Alloc(size_t sz)
+    void* Alloc(int sz)
     {
-        delete[] (T*)ptr;
+        delete[] static_cast<T*>(ptr);
         return ptr = new T[sz];
     }
 
     /* returns double representations of the value
     */
-    double Get(size_t ndx) const
+    double Get(int ndx) const
     {
-       return (double)((T*)ptr)[ndx];
+       return static_cast<double>(static_cast<T*>(ptr)[ndx]);
     }
 
     /* converts double parameter and assigns it to the cell
     */
-    void Put(double v, size_t i);
+    void Put(double v, int i);
 
     /* returns true if values equals to ANY
     */
-    bool IsAny(size_t ndx) const
+    bool IsAny(int ndx) const
     {
-        if( ((T*)ptr)[ndx] == ANY() )
+        if( static_cast<T*>(ptr)[ndx] == ANY() )
             return true;
         return false;
     }
 
     /* returns true if values equals to EMPTY
     */
-    bool IsEmpty(size_t ndx) const
+    bool IsEmpty(int ndx) const
     {
-        if( ((T*)ptr)[ndx] == EMPTY() )
+        if( static_cast<T*>(ptr)[ndx] == EMPTY() )
             return true;
         return false;
     }
 
     /* returns string representation of the cell value
     */
-    gstring GetString(size_t ndx) const;
+    gstring GetString(int ndx) const;
     //  bool VerifyString(const char* s);
     /* converts string to the type and puts it into cell
 	returns false on failure
     */
-    bool SetString(const char* s, size_t ndx);
+    bool SetString(const char* s, int ndx);
 
-    void write(GemDataStream& s, size_t size) {
-    s.writeArray((T*)ptr, size/cSize());
+    void write(GemDataStream& s, int size) {
+    s.writeArray(static_cast<T*>(ptr), size/cSize());
     }
-    void read(GemDataStream& s, size_t size) {
-    s.readArray((T*)ptr, size/cSize());
+    void read(GemDataStream& s, int size) {
+    s.readArray(static_cast<T*>(ptr), size/cSize());
     }
 };
 
@@ -125,63 +126,63 @@ struct TVal:
 struct TValFixString:
             TValBase
 {
-    size_t len;
+    int len;
 
-    TValFixString(size_t l, bool d):
+    TValFixString(int l, bool d):
             TValBase(d), len(l)
     { }
 
     ~TValFixString()
     {
-        if( dynamic && ptr) delete[] (char*)ptr;
+        if( dynamic && ptr) delete[] static_cast<char*>(ptr);
     }
 
-    size_t cSize() const
+    int cSize() const
     {
         return len;
     }
 
     // see Alloc() description for TVal<T>
-    void* Alloc(size_t sz)
+    void* Alloc(int sz)
     {
-        delete[] (char*)ptr;
+        delete[] static_cast<char*>(ptr);
         ptr = new char[len*sz + 1];
         // +1 for simple maintenance w/'\0' at the end
-        *(char*)ptr='\0';
+        *static_cast<char*>(ptr)='\0';
         return ptr;
     }
 
-    double Get(size_t ) const
+    double Get(int ) const
     {
         return 0.;
     }
-    void Put(double , size_t)
+    void Put(double , int)
     {}
 
 
-    bool IsAny(size_t ndx) const
+    bool IsAny(int ndx) const
     {
-        return ((char*)ptr)[ndx*len]=='`';
+        return static_cast<char*>(ptr)[ndx*len]=='`';
     }
-    bool IsEmpty(size_t ndx) const
+    bool IsEmpty(int ndx) const
     {
-        return ((char*)ptr)[ndx*len]=='*';
+        return static_cast<char*>(ptr)[ndx*len]=='*';
     }
-    gstring GetString(size_t ndx) const
+    gstring GetString(int ndx) const
     {
         vstr ss(len);
-        strncpy(ss, (const char*)ptr+(ndx*len), len);
+        strncpy(ss, static_cast<char*>(ptr)+(ndx*len), len);
         ss[len]='\0';
         return ss.p;
     }
     //  bool VerifyString(const char* s);
-    bool SetString(const char* s, size_t ndx);
+    bool SetString(const char* s, int ndx);
 
-    void write(GemDataStream& s, size_t size) {
-	s.writeArray((char*)ptr, size);
+    void write(GemDataStream& s, int size) {
+    s.writeArray(static_cast<char*>(ptr), size);
     }
-    void read(GemDataStream& s, size_t size) {
-	s.readArray((char*)ptr, size);
+    void read(GemDataStream& s, int size) {
+    s.readArray(static_cast<char*>(ptr), size);
     }
 };
 
@@ -191,59 +192,59 @@ struct TValFixString:
 struct TValString:
             TValBase
 {
-    size_t size;
+    int size;
 
-    TValString(size_t M, bool d):
+    TValString(int M, bool d):
             TValBase(d), size(M)
     { }
 
     ~TValString()
     {
-        if( dynamic && ptr ) delete[] (char*)ptr;
+        if( dynamic && ptr ) delete[] static_cast<char*>(ptr);
     }
     // if *ptr is dynamic Free should be called
 
-    size_t cSize() const
+    int cSize() const
     {
         return size;/*strlen(ptr);*/
     }
 
     // see Alloc() description for TVal<T>
-    void* Alloc(size_t sz)
+    void* Alloc(int sz)
     {
-        delete[] (char*)ptr;
+        delete[] static_cast<char*>(ptr);
         ptr = new char[(size=sz)+1];
-        *(char*)ptr='\0';
+        *static_cast<char*>(ptr)='\0';
         return ptr;
     }
 
-    double Get(size_t /*ndx*/) const
+    double Get(int /*ndx*/) const
     {
         return 0.;
     }
-    void Put(double /*val*/, size_t /*ndx*/)
+    void Put(double /*val*/, int /*ndx*/)
     {}
 
-    bool IsAny(size_t /*ndx*/) const
+    bool IsAny(int /*ndx*/) const
     {
-        return (strcmp((char*)ptr,S_ANY)==0);
+        return (strcmp(static_cast<char*>(ptr),S_ANY)==0);
     }
-    bool IsEmpty(size_t /*ndx*/) const
+    bool IsEmpty(int /*ndx*/) const
     {
-        return (strcmp((char*)ptr,S_EMPTY)==0);
+        return (strcmp(static_cast<char*>(ptr),S_EMPTY)==0);
     }
-    gstring GetString(size_t /*ndx*/) const
+    gstring GetString(int /*ndx*/) const
     {
-        return (!*(char*)ptr) ? S_EMPTY: (char*)ptr;
+        return (!static_cast<char*>(ptr) ? S_EMPTY: static_cast<char*>(ptr));
     }
     //  bool VerifyString(const char* s);
-    bool SetString(const char* s, size_t ndx);
+    bool SetString(const char* s, int ndx);
 
-    void write(GemDataStream& s, size_t size) {
-	s.writeArray((char*)ptr, size);
+    void write(GemDataStream& s, int size) {
+    s.writeArray(static_cast<char*>(ptr), size);
     }
-    void read(GemDataStream& s, size_t size) {
-	s.readArray((char*)ptr, size);
+    void read(GemDataStream& s, int size) {
+    s.readArray(static_cast<char*>(ptr), size);
     }
 };
 
@@ -254,7 +255,7 @@ struct TValString:
 template<class T>
 inline
 gstring
-TVal<T>::GetString(size_t ndx) const
+TVal<T>::GetString(int ndx) const
 {
     if( IsEmpty(ndx) )
         return S_EMPTY;
@@ -262,7 +263,7 @@ TVal<T>::GetString(size_t ndx) const
         return S_ANY;
 
     vstr vbuf(30);	// double is ~15 digit
-    sprintf(vbuf, PATTERN_GET(), ((T*)ptr)[ndx]);
+    sprintf(vbuf, PATTERN_GET(), static_cast<T*>(ptr)[ndx]);
 
     return vbuf.p;
 }
@@ -270,7 +271,7 @@ TVal<T>::GetString(size_t ndx) const
 template<>
 inline
 gstring
-TVal<double>::GetString(size_t ndx) const
+TVal<double>::GetString(int ndx) const
 {
     if( IsEmpty(ndx) )
         return S_EMPTY;
@@ -278,7 +279,7 @@ TVal<double>::GetString(size_t ndx) const
         return S_ANY;
 
     vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
-    sprintf(vbuf, "%.*lg" , doublePrecision, ((double*)ptr)[ndx]);
+    sprintf(vbuf, "%.*lg" , doublePrecision, static_cast<double*>(ptr)[ndx]);
 
     return vbuf.p;
 }
@@ -286,19 +287,19 @@ TVal<double>::GetString(size_t ndx) const
 template<class T>
 //inline
 bool
-TVal<T>::SetString(const char* s, size_t ndx)
+TVal<T>::SetString(const char* s, int ndx)
 {
     gstring ss = s;
     ss.strip();
     if( /*ss.empty() ||*/ ss==S_EMPTY )
     {
-        ((T*)ptr)[ndx] = EMPTY();
+        static_cast<T*>(ptr)[ndx] = EMPTY();
         return true;
     }
 
     if( ss == S_ANY )
     {
-        ((T*)ptr)[ndx] = ANY();
+        static_cast<T*>(ptr)[ndx] = ANY();
         return true;
     }
 
@@ -307,7 +308,7 @@ TVal<T>::SetString(const char* s, size_t ndx)
     if( sscanf(ss.c_str(), PATTERN_SET(), &v, sv.p ) != 1 )
         return false;
 
-    ((T*)ptr)[ndx] = v;
+    static_cast<T*>(ptr)[ndx] = v;
     return true;
 }
 
@@ -316,9 +317,9 @@ TVal<T>::SetString(const char* s, size_t ndx)
 template<>
 inline
 bool
-TVal<char>::SetString(const char* s, size_t ndx)
+TVal<char>::SetString(const char* s, int ndx)
 {
-    ((char*)ptr)[ndx] = *s;
+    static_cast<char*>(ptr)[ndx] = *s;
     return true;
 }
 
@@ -326,35 +327,35 @@ TVal<char>::SetString(const char* s, size_t ndx)
 template<>
 inline
 bool
-TVal<unsigned char>::SetString(const char* s, size_t ndx)
+TVal<unsigned char>::SetString(const char* s, int ndx)
 {
-    ((unsigned char*)ptr)[ndx] = (unsigned char)*s;
+    static_cast<unsigned char*>(ptr)[ndx] = static_cast<unsigned char>(*s);
     return true;
 }
 
 template<>
 inline
 gstring
-TVal<char>::GetString(size_t ndx) const
+TVal<char>::GetString(int ndx) const
 {
-    return gstring(1, ((char*)ptr)[ndx]);
+    return gstring(1, static_cast<char*>(ptr)[ndx]);
 }
 
 template<>
 inline
 gstring
-TVal<unsigned char>::GetString(size_t ndx) const
+TVal<unsigned char>::GetString(int ndx) const
 {
-    return gstring(1, ((char*)ptr)[ndx]);
+    return gstring(1, static_cast<char*>(ptr)[ndx]);
 }
 
 
 template<class T>
 inline
 void
-TVal<T>::Put(double v, size_t ndx)
+TVal<T>::Put(double v, int ndx)
 {
-   ((T*)ptr)[ndx] = ( fabs(v) <= ANY() ) ? T(v/*+.5*/) : EMPTY();	// truncate
+   static_cast<T*>(ptr)[ndx] = ( fabs(v) <= ANY() ) ? T(v/*+.5*/) : EMPTY();	// truncate
 }
 
 // Put() for <double> need special handling for efficency
@@ -362,15 +363,15 @@ TVal<T>::Put(double v, size_t ndx)
 template<>
 inline
 void
-TVal<double>::Put(double v, size_t ndx)
+TVal<double>::Put(double v, int ndx)
 {
-    ((double*)ptr)[ndx] = v;
+    static_cast<double*>(ptr)[ndx] = v;
 }
 
 // returns size of the cell
 template<class T>
 inline
-size_t TVal<T>::cSize() const
+int TVal<T>::cSize() const
 {
     return sizeof(T);
 }
@@ -378,7 +379,7 @@ size_t TVal<T>::cSize() const
 // returns size of the cell (17/10/2012 using only from GemDataStream )
 template<>
 inline
-size_t TVal<long>::cSize() const
+int TVal<long>::cSize() const
 {
     return sizeof(int32_t);
 }
@@ -387,12 +388,12 @@ size_t TVal<long>::cSize() const
 template<class T>
 extern
 bool
-TVal<unsigned char>::SetString(const char* s, size_t ndx);
+TVal<unsigned char>::SetString(const char* s, int ndx);
 
 template<class T>
 extern
 bool
-TVal<signed char>::SetString(const char* s, size_t ndx);
+TVal<signed char>::SetString(const char* s, int ndx);
 */
 
 /*

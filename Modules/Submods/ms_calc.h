@@ -19,6 +19,7 @@
 #ifndef _ms_calc_h_
 #define _ms_calc_h_
 
+#include "v_mod.h"
 #include "v_module.h"
 #include "service.h"
 

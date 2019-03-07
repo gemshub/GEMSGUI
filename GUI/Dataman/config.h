@@ -17,8 +17,8 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#ifndef __config_h_
-#define __config_h_
+#ifndef CONFIG_H_
+#define CONFIG_H_
 
 #include <fstream>
 #include "gstring.h"
@@ -83,9 +83,9 @@ public:
     bool getcStrings(int n, gstring strs[]);
 
     int getInt(const char* par, int def=0);
-    bool getStr(const char* par, gstring& str, char* def=0);
-    bool getVals(const char* par, int n, int vals[], int defs[]=0);
-    bool getStrings(const char* par, int n, gstring strs[], char* str[]=0);
+    bool getStr(const char* par, gstring& str, char* def=nullptr);
+    bool getVals(const char* par, int n, int vals[], int defs[]=nullptr);
+    bool getStrings(const char* par, int n, gstring strs[], char* str[]=nullptr);
 
     struct EBadSection
         {}
@@ -93,6 +93,6 @@ public:
 };
 
 
-#endif      // __config_h
+#endif      // CONFIG_H_
 
 

@@ -29,6 +29,10 @@ int TValBase::doublePrecision = 8;
 const char* S_EMPTY	=    "`";
 const char* S_ANY  	=    "*";
 
+
+TValBase::~TValBase()
+{}
+
 /* defining values EMPTY and ANY for different types
     Note: for some reason static constants in template classes
     did not go well for Borland C++, we must use functions members
@@ -189,23 +193,20 @@ template<> const char* TVal<char>::PATTERN_SET()
 
 // explicit instantiation of the templates
 
-template struct TVal<short>;
-//template struct TVal<unsigned short>;
-template struct TVal<long>;
-//template struct TVal<unsigned long>;
-template struct TVal<float>;
-//template class TVal<double>;
+//template struct TVal<short>;
+//template struct TVal<long>;
+//template struct TVal<float>;
 
 
 /* specific functions definitions
 */
 
 bool
-TValFixString::SetString(const char* s, size_t ndx)
+TValFixString::SetString(const char* s, int ndx)
 {
     //  if( strlen(s) >= len )
     //  { // cutting extra symbols
-    strncpy(&((char*)ptr)[ndx*len], s, len/*-1*/);
+    strncpy(&(static_cast<char*>(ptr))[ndx*len], s, len/*-1*/);
     // ptr[ndx*len + len-1] = '\0';
     //  }
     //  else
@@ -218,15 +219,15 @@ TValFixString::SetString(const char* s, size_t ndx)
 
 
 bool
-TValString::SetString(const char* s, size_t )
+TValString::SetString(const char* s, int )
 {
-    size_t l = strlen(s);
+    int l = strlen(s);
     if( l > size && dynamic )
         Alloc(l);
 
-    strncpy((char*)ptr, s, size);
+    strncpy(static_cast<char*>(ptr), s, size);
     if(dynamic)
-    ((char*)ptr)[size] = '\0';
+    static_cast<char*>(ptr)[size] = '\0';
 //    else
 //    ((char*)ptr)[size-1] = '\0';
 
@@ -241,7 +242,7 @@ TValString::SetString(const char* s, size_t )
 template<>
 //inline
 bool
-TVal<unsigned char>::SetString(const char* s, size_t ndx)
+TVal<unsigned char>::SetString(const char* s, int ndx)
 {
     gstring ss = s;
     ss.strip();
@@ -272,19 +273,19 @@ TVal<unsigned char>::SetString(const char* s, size_t ndx)
 template<>
 //inline
 bool
-TVal<signed char>::SetString(const char* s, size_t ndx)
+TVal<signed char>::SetString(const char* s, int ndx)
 {
     gstring ss = s;
     ss.strip();
     if( /*ss.empty() ||*/ ss==S_EMPTY )
     {
-        ((signed char*)ptr)[ndx] = EMPTY();
+        static_cast<signed char*>(ptr)[ndx] = EMPTY();
         return true;
     }
 
     if( ss == S_ANY )
     {
-        ((signed char*)ptr)[ndx] = ANY();
+        static_cast<signed char*>(ptr)[ndx] = ANY();
         return true;
     }
 
@@ -295,7 +296,7 @@ TVal<signed char>::SetString(const char* s, size_t ndx)
     if( v<-127 || v>127 )
         return false;
 
-    ((signed char*)ptr)[ndx] = (signed char)v;
+    static_cast<signed char*>(ptr)[ndx] = static_cast<signed char>(v);
     return true;
 }
 
@@ -304,7 +305,7 @@ TVal<signed char>::SetString(const char* s, size_t ndx)
 template<>
 inline
 gstring
-TVal<double>::GetString(size_t ndx) const
+TVal<double>::GetString(int ndx) const
 {
     if( IsEmpty(ndx) )
         return S_EMPTY;

@@ -81,7 +81,7 @@ TObject::TObject( const char* name, ObjType t, int n,
         Dynamic(dyn),   // Flag of dynamic/static data
         N(n), M(m),     // Dimensions N,M
         Descr(desc),    // Description (tooltip) line
-        pV(0),          // Pointer to data
+        pV(nullptr),          // Pointer to data
         Type(t),        // Data type code
 	IndexationCode(indexCode)
 {
@@ -92,7 +92,7 @@ TObject::TObject( const char* name, ObjType t, int n,
 // Ctor by readind from configurator file
 
 TObject::TObject(istream& f):
-        pV(0)
+        pV(nullptr)
 {
     read(f);
 }
@@ -181,12 +181,12 @@ void
 TObject::write( ostream& os )
 {
     os.write( Keywd, MAXKEYWD );
-    os.write( (char*)&Type, sizeof(ObjType) );
-    os.write( (char*)&Dynamic, sizeof(bool) );
-    os.write( (char*)&N, sizeof(int) );
-    os.write( (char*)&M, sizeof(int) );
+    os.write( reinterpret_cast<const char*>(&Type), sizeof(ObjType) );
+    os.write( reinterpret_cast<const char*>(&Dynamic), sizeof(bool) );
+    os.write( reinterpret_cast<const char*>(&N), sizeof(int) );
+    os.write( reinterpret_cast<const char*>(&M), sizeof(int) );
     os.write( &IndexationCode, sizeof(char) );
-    os.write( Descr.c_str(),Descr.length() );
+    os.write( Descr.c_str(), Descr.length() );
     os << '@';
 }
 
@@ -195,16 +195,16 @@ void
 TObject::read( istream& is )
 {
     is.read( Keywd, MAXKEYWD );
-    is.read( (char*)&Type, sizeof(ObjType) );
-    is.read( (char*)&Dynamic, sizeof(bool) );
-    is.read( (char*)&N, sizeof(int) );
-    is.read( (char*)&M, sizeof(int) );
+    is.read( reinterpret_cast<char*>(&Type), sizeof(ObjType) );
+    is.read( reinterpret_cast<char*>(&Dynamic), sizeof(bool) );
+    is.read( reinterpret_cast<char*>(&N), sizeof(int) );
+    is.read( reinterpret_cast<char*>(&M), sizeof(int) );
     is.read( &IndexationCode, sizeof(char) );
     u_getline( is, Descr, '@' );
 }
 
 // Determines size of one cell (17/10/2012 using only from GemDataStream )
-size_t
+int
 TObject::GetCellSize() const
 {
     if( IsNull() )
@@ -214,7 +214,7 @@ TObject::GetCellSize() const
 }
 
 // Determines size of the whole data object (17/10/2012 using only from GemDataStream )
-size_t
+int
 TObject::GetSize() const
 {
     if( Type == S_ )
@@ -226,7 +226,7 @@ TObject::GetSize() const
 TValBase*
 TObject::BuildVal(ObjType type, int m)
 {
-    TValBase* p = 0;
+    TValBase* p = nullptr;
     switch ( type )
     {
     case I_:
@@ -304,7 +304,7 @@ TObject::SetPtr(void* newPtr)
 
     // error protection
     if( IsDynamic() && Type == S_ && newPtr )
-        SetM( strlen((const char*)newPtr)+1 );
+        SetM( strlen(static_cast<const char*>(newPtr))+1 );
 
     pV->SetPtr(newPtr);
 }
@@ -392,7 +392,8 @@ TObject::Alloc(int newN, int newM, ObjType newType)
     pV = pV1;
 
     //  Type = newType;
-    N = newN, M = newM;
+    N = newN;
+    M = newM;
     Type = newType;
 
     return pV->GetPtr();
@@ -410,7 +411,7 @@ TObject::Free()
     M = 0;
     if( pV )
       delete pV;   // deleting Val
-    return pV=0;
+    return pV=nullptr;
 }
 
 
@@ -514,23 +515,23 @@ int TObject::olab_comp( OLABEL& self, size_t& ssize )
 // get object len in DB file
 
 // Size of DOD label image in database file format
-const size_t szOLABEL = sizeof(char[2]) + sizeof(char)  + sizeof(char)
+const int szOLABEL = sizeof(char[2]) + sizeof(char)  + sizeof(char)
                         + sizeof(int) + sizeof(int) + sizeof(char[2]);
 
 // Determines size of a binary image of data object in database file
-size_t
+int
 TObject::lenDB() const
 {
-    size_t size;
+    int size;
     int Odim_N;
-    unsigned int Odim_M;
-    unsigned char csize = (unsigned char)GetCellSize();
+    int Odim_M;
+    int csize = GetCellSize();
 
     if( pV )
     {
         if( Type != S_  )
         {
-            size = (size_t)csize*(size_t)N*(size_t)M;
+            size = csize*N*M;
             Odim_N = N;
             Odim_M = M;
         }
@@ -539,7 +540,7 @@ TObject::lenDB() const
           if( IsDynamic() )
           {
             if( pV && pV->GetPtr() )
-                size = strlen( (char *)pV->GetPtr() )+1;
+                size = strlen( static_cast<char *>(pV->GetPtr()) ) + 1;
             else
                 size = 0;
             Odim_N = size? 1: 0;
@@ -547,7 +548,7 @@ TObject::lenDB() const
           }
           else                      // oct 2005 Sveta
           {
-            size = (size_t)csize;
+            size = csize;
             Odim_N = N;
             Odim_M = M;
           }
@@ -565,21 +566,21 @@ TObject::lenDB() const
 // Contains GEMS-specific workarounds for SPP_SETTING alignments
 // for different architectures and optimizations
 // with debug messages. Needs to be improved !!!!!!!!!!!!!!
-size_t  TObject::toDB( GemDataStream& f )
+int  TObject::toDB( GemDataStream& f )
 {
-    size_t size;
+    int size;
 
     char Lbegin[2];
-    unsigned char csize = (unsigned char)GetCellSize();
+    unsigned char csize = static_cast<unsigned char>(GetCellSize());
     int Odim_N;
-    unsigned int Odim_M;
+    int Odim_M;
     char Obegin[2];
 
     if( pV )
     {
         if( Type != S_  )
         {
-            size = (size_t)csize * (size_t)N * (size_t)M;
+            size = csize * N * M;
             Odim_N = N;
             Odim_M = M;
         }
@@ -588,7 +589,7 @@ size_t  TObject::toDB( GemDataStream& f )
           if( IsDynamic() )
           {
             if( pV && pV->GetPtr() )
-                size = strlen( (char *)pV->GetPtr() ) + 1;
+                size = strlen( static_cast<char *>(pV->GetPtr()) ) + 1;
             else
                 size = 0;
             Odim_N = size ? 1 : 0;
@@ -596,7 +597,7 @@ size_t  TObject::toDB( GemDataStream& f )
          }
          else                   // oct 2005 Sveta
           {
-            size = (size_t)csize;
+            size = csize;
             Odim_N = N;
             Odim_M = M;
           }
@@ -611,9 +612,10 @@ size_t  TObject::toDB( GemDataStream& f )
     Obegin[1] = TOKENOBJBEGIN;
 
 
-    if( Type == S_ && IsDynamic() )  Odim_M = size;
+    if( Type == S_ && IsDynamic() )
+        Odim_M = size;
     f.writeArray( Lbegin, sizeof Lbegin );
-    f << (signed char)Type;
+    f << static_cast<signed char>(Type);
     f << csize;
     f << Odim_N;
     f << Odim_M;
@@ -628,16 +630,16 @@ size_t  TObject::toDB( GemDataStream& f )
 //#ifdef __unix
 //            cerr << endl << "writing SPP_SETTING, size = " << size << endl;
 //#endif
-            ((SPP_SETTING*)GetPtr())->write(f);
+            static_cast<SPP_SETTING*>(GetPtr())->write(f);
             //padding
-            for( unsigned int ii=0; ii<size-758; ii++)
+            for( int ii=0; ii<size-758; ii++)
                 f.put('%');
             //	    size = 758;
         }
 	else	// all object with Keyword "**plt" considered PlotLine object !!!
 	if( strcmp(Keywd+2, "plt") == 0 )
 	    for(int ii=0; ii<GetN(); ii++)
-        	((TPlotLine*)GetPtr() + ii)->write(f);
+            (static_cast<TPlotLine*>(GetPtr()) + ii)->write(f);
         else
             pV->write( f, size );
 
@@ -649,9 +651,9 @@ size_t  TObject::toDB( GemDataStream& f )
 // Gets data object from binary database file
 // Contains GEMS-specific workarounds for SPP_SETTING alignments
 // with debug messages. Needs to be improved !!!!!!!!!!!!!!
-size_t  TObject::ofDB( GemDataStream& f )
+int  TObject::ofDB( GemDataStream& f )
 {
-    size_t ssize;
+    int ssize;
     bool error_S_ = false;
     int cmp;
 
@@ -659,7 +661,7 @@ size_t  TObject::ofDB( GemDataStream& f )
     signed char Otype;
     unsigned char csize;
     int Odim_N;
-    unsigned int Odim_M;
+    int Odim_M;
     char Obegin[2];
 
 
@@ -676,11 +678,10 @@ size_t  TObject::ofDB( GemDataStream& f )
     //  f.read( (char *)&OlbufRead, sizeof( OLABEL )-2 );
     //  cmp = olab_comp( OlbufRead, OlenRead );
 
-    size_t psize;
 
-    psize = GetSize();
+    auto psize = GetSize();
     if( Otype != S_  )
-        ssize = (size_t)(csize) * Odim_N * Odim_M;
+        ssize = csize * Odim_N * Odim_M;
     else
         ssize = Odim_M; // csize
 
@@ -732,8 +733,8 @@ size_t  TObject::ofDB( GemDataStream& f )
 
     if( !ssize )
     {
-        if( GetPtr() != NULL && Type == S_ )
-            *((char *)GetPtr()) = '\0';
+        if( GetPtr() != nullptr && Type == S_ )
+            *(static_cast<char *>(GetPtr())) = '\0';
 
         return szOLABEL - 2;///(size_t)(sizeof( OLABEL )-2);
     }
@@ -771,7 +772,7 @@ size_t  TObject::ofDB( GemDataStream& f )
         f.seekg( r_pos, ios::beg );
         f.sync();
 
-        ((SPP_SETTING*)GetPtr())->read(f);
+        static_cast<SPP_SETTING*>(GetPtr())->read(f);
         // ios::cur - dosen't work in BCB4 :-(
         f.seekg( off + f.tellg(), ios::beg );
         //ssize = 768;
@@ -779,14 +780,14 @@ size_t  TObject::ofDB( GemDataStream& f )
     else	// all object with Keyword "**plt" considered PlotLine object !!!
     if( strcmp(Keywd+2, "plt") == 0 ) {
 	for(int ii=0; ii<GetN(); ii++)
-    	    ((TPlotLine*)GetPtr() + ii)->read(f);
+            (static_cast<TPlotLine*>(GetPtr()) + ii)->read(f);
     }
     else
        if( error_S_ )
        {
          pV->read( f, psize );
          char ch;
-         for( size_t ii=psize; ii<ssize; ii++)
+         for( int ii=psize; ii<ssize; ii++)
              f.get( ch );
 
        }  else
@@ -811,8 +812,8 @@ void TObject::toTXT( fstream& to )
             dimM = 0;
         else
             if( Type == S_  )
-                dimM = strlen((char*)GetPtr())+2;
-        to << "^^" << N << " " << dimM << " " << (int)Type << "~~\n";
+                dimM = strlen( static_cast<char *>(pV->GetPtr()) )+2;
+        to << "^^" << N << " " << dimM << " " << static_cast<int>(Type) << "~~\n";
         if( N==0 || dimM==0 )
             return;
     }
@@ -826,14 +827,14 @@ void TObject::toTXT( fstream& to )
     if( strcmp(Keywd+2, "plt") == 0 )
     {
         for(int ii=0; ii<GetN(); ii++)
-            ((TPlotLine*)GetPtr() + ii)->write(to);
+            (static_cast<TPlotLine*>(GetPtr()) + ii)->write(to);
          return;
     }
 
     if( Type == S_ ) // text
     {  //*((char*)(char*)GetPtr()+M-1) = 0;
 
-        to << "\'" << (char*)GetPtr() << "\'\n";
+        to << "\'" << static_cast<char *>(pV->GetPtr()) << "\'\n";
     }
     else
         for( i=0; i < N; i++ )
@@ -909,7 +910,7 @@ void TObject::ofTXT( fstream& of )
 
     if( strcmp(Keywd+2, "plt") == 0 )
     { for(int ii=0; ii<GetN(); ii++)
-            ((TPlotLine*)GetPtr() + ii)->read(of);
+            (static_cast<TPlotLine*>(GetPtr()) + ii)->read(of);
       return;
     }
 
@@ -940,7 +941,7 @@ void TObject::ofTXT( fstream& of )
         }
         else
         {
-            char *sp = (char*)GetPtr();
+            char *sp = static_cast<char *>(GetPtr());
             of.get( sp, M, '\n');
             if( sp[strlen(sp)-1] == '\'')
                 sp[strlen(sp)-1] = '\0';
@@ -1000,7 +1001,7 @@ void TObject::ofTXT( fstream& of )
 int
 TObjList::Find(const char* s)
 {
-    for( int ii=0; ii<(int)GetCount(); ii++ )
+    for( uint ii=0; ii< GetCount(); ii++ )
         if( strcmp(s, elem(ii).GetKeywd() )==0 )
             return ii;
 
@@ -1030,12 +1031,12 @@ void
 TObjList::toDAT(ostream& f)
 {
     double Value = 0.0;
-    int nObj = GetCount();
+    auto nObj = GetCount();
 
     f << '@';
-    f.write((char*) &Value, sizeof(double) );
-    f.write((char*) &nObj, sizeof(int) );
-    for(int ii=0; ii<nObj; ii++)
+    f.write(reinterpret_cast<char*>(&Value), sizeof(double) );
+    f.write(reinterpret_cast<char*>(&nObj), sizeof(int) );
+    for(uint ii=0; ii<nObj; ii++)
         elem(ii).ToCFG( f );
 }
 
@@ -1048,8 +1049,8 @@ TObjList::fromDAT(istream& f)
     Clear();
     int nObj;
     f.get(); // '@' marker
-    f.read((char*) &Value, sizeof(double) );
-    f.read((char*) &nObj, sizeof(int) );
+    f.read(reinterpret_cast<char*>(&Value), sizeof(double) );
+    f.read(reinterpret_cast<char*>(&nObj), sizeof(int) );
     for(int ii=0; ii<nObj; ii++)
         Add( new TObject(f) );
 }
@@ -1074,7 +1075,7 @@ TConfig cnf(f_obj,' ');
 #endif
     gstring par;
     int N;
-    unsigned M;
+    int M;
     ObjType objectType = 0;
     char indexationCode;
     gstring astr[6];
