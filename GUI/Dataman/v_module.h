@@ -123,7 +123,7 @@ public:
     //-- Module manipulation
 
     void ModUpdate( const char *str );
-    void Show(QWidget* parent, const char *str=0, bool viewmode=false );
+    void Show(QWidget* parent, const char *str=nullptr, bool viewmode=false );
 
     void Update(bool force=true);
     virtual const gstring& GetString()
@@ -208,7 +208,7 @@ public:	// moved to public to remove 'friend' for TCModuleImp
     //--- Manipulation current record
     void CmDelete();
     void CmDerive();
-    void CmShow( const char *key=0 );  //Demonstrate (show) Data Record
+    void CmShow( const char *key=nullptr );  //Demonstrate (show) Data Record
     void CmFilter();  // set Data Record filter
     void CmNew();
     void CmCreate();
@@ -239,8 +239,8 @@ public:
 
     void CmNewinProfile();
     void CmCreateinProfile();
-    void RecordLoadinProfile( const char *key=0 );
-    void CmLoadinProfile( const char *key=0 );
+    void RecordLoadinProfile( const char *key=nullptr );
+    void CmLoadinProfile( const char *key=nullptr );
     void CmPrint();
     void CmScript();
 
@@ -259,7 +259,7 @@ public:
     virtual void AddRecord(const char* key, int& fnum );
     virtual int AddRecordTest(const char* key, int& fnum );
     virtual void DeleteRecord( const char *key, bool errifNo = true  );
-    virtual void RecordPrint( const char *key=0 ); //sddata key
+    virtual void RecordPrint( const char *key=nullptr ); //sddata key
     virtual void RecordPlot( const char *key );
 
     //-- Database manipulation
@@ -294,10 +294,10 @@ public:
 
 
     //  const gstring& GetFldHelp( int Ni ) const { return aFldKeysHelp[Ni];}
-    bool  CheckEqText( const char *erscan, const char *msg=0 );
+    bool  CheckEqText( const char *erscan, const char *msg=nullptr );
 
     //-- Module Information
-    int NumberOpenFils() const
+    size_t NumberOpenFils() const
     {
         return rt[nRT].GetOpenFiles().GetCount();
     }

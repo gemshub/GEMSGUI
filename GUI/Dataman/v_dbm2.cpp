@@ -1248,7 +1248,7 @@ in_stream >> nDB;
 }
 
 TDataBase&
-DataBaseList::operator[](uint ii) const
+DataBaseList::operator[](int ii) const
 {
     ErrorIf( ii > GetCount(),
              "DataBaseList","Invalid chain index.");

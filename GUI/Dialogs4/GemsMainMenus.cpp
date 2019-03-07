@@ -995,7 +995,7 @@ TFileList::TFileList(QWidget* win, int iRt, const char* caption ):
 
    pFileList = new QListWidget(this);
    const TCStringArray& s = rt[iRt].GetOpenFiles();
-   for( uint ii=0; ii<s.GetCount(); ii++ )
+   for( int ii=0; ii<s.GetCount(); ii++ )
               pFileList->addItem(s[ii].c_str());
 
         pFileList->item(rt[iRt].GetWorkFileName())->setSelected(true);

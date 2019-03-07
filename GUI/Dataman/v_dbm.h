@@ -155,7 +155,7 @@ public:
     {
         return anR;
     }
-    int KeyInList()
+    size_t KeyInList()
     {
         return aKey.GetCount();
     }
@@ -242,7 +242,7 @@ protected:
 
 public:
     int specialFilesNum;
-    uint fNum;
+    int fNum;
     TCStringArray fOpenNameBuf;
 
     //  TDateBase();
@@ -352,7 +352,7 @@ public:
                       TCIntArray& indx,  TCIntArray& sel );
     //  int GetNumFiles() { return aFile.GetCount(); }
     void  MakeInNewProfile( const gstring& dir,
-      const char *prfName, const char * f_name=0 );
+      const char *prfName, const char * f_name=nullptr );
     void OpenOnlyFromList( TCStringArray& names );
     void GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey );
     bool ifDefaultOpen() const;
@@ -412,7 +412,7 @@ public:
     void toCFG(fstream& f);
 
     //--- Selectors
-    TDataBase& operator[](uint) const;
+    TDataBase& operator[](int) const;
     int Find(const char* keywd);
 };
 

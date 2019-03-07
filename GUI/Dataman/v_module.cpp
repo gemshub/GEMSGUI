@@ -38,7 +38,7 @@ TSubModule::TSubModule( int nrt ):
         nRT( nrt ),
         contentsChanged(false),
         //   sBw(600), sBh(460),
-        pImp(NULL)
+        pImp(nullptr)
 {
     startKeyEdit = 0;
     iconFileName = "";
@@ -309,7 +309,7 @@ bool
 TCModule::CheckEqText( const char *erscan, const char *msg )
 {
     gstring msger;
-    if( msg==0 )
+    if( msg==nullptr )
         msger = "E90MSTran: Error in translation of script:\n ";
     else
         msger = gstring(msg);

@@ -29,7 +29,7 @@ TReadData::TReadData(const char *sd_key,
     int nrt, const char *fmt_text ):
   key_format( sd_key ), nRT(nrt)
 {
-  input = (char*)fmt_text;
+  input = const_cast<char*>(fmt_text);
   skipSpace();
   do{
       if( *input == ',')
@@ -64,7 +64,7 @@ TReadData::TReadData(const char *sd_key,
             }
             mScript = gstring( input, 0, pose-input );
             input = pose+2;
-            rpn.GetEquat( (char *)mScript.c_str() );
+            rpn.GetEquat( const_cast<char *>(mScript.c_str()) );
    }
 }
 
@@ -132,7 +132,7 @@ TReadData::getFormat()
        break;
    case '#': {
         input++;
-        int  ii, jj, i=0;
+        int  ii=0, jj=0, i=0;
         while( input[i] != ',' && input[i] != ' ' &&
                input[i] != '$'  && input[i] != '\t'&&
                input[i] != '[' && input[i] != '\0'&&
@@ -322,21 +322,21 @@ TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
   }
   if(  dt.objNum== -2 )
   { if( dt.i < rt[nRT].KeyNumFlds() )
-    {
-     memset( rt[nRT].FldKey( dt.i ), ' ', rt[nRT].FldLen( dt.i ));
-     strncpy( rt[nRT].FldKey( dt.i ), dat_str.c_str(),
-         min( (int)rt[nRT].FldLen( dt.i ), (int)dat_str.length() ));
-    }
+      {
+          memset( rt[nRT].FldKey( dt.i ), ' ', rt[nRT].FldLen( dt.i ));
+          strncpy( rt[nRT].FldKey( dt.i ), dat_str.c_str(),
+                   min( static_cast<size_t>(rt[nRT].FldLen( dt.i )), dat_str.length() ));
+      }
   }
   else if(  dt.objNum > 0  )
-    aObj[dt.objNum].SetString( dat_str.c_str(), dt.i, dt.j );
+      aObj[dt.objNum].SetString( dat_str.c_str(), dt.i, dt.j );
 
 }
 
 void  TReadData::readRecord( int n_itr, fstream& fread )
 {
 
- for(uint ii=0; ii<aList.GetCount(); ii++)
+ for(int ii=0; ii<aList.GetCount(); ii++)
  {
    if( aFmts[ii].type == irec_r)
        aFmts[ii].size = n_itr;

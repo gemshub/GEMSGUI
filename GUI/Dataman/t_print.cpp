@@ -30,7 +30,7 @@ TPrintData::TPrintData(const char *sd_key,
   key_format( sd_key ), nRT(nrt)
 {
   ErrorIf( !fout.good() , rt[nRT].GetKeywd(), "Fileopen error");
-  input = (char*)fmt_text;
+  input = const_cast<char*>(fmt_text);
 
   prr = 1;
   iir = 0;
@@ -87,11 +87,11 @@ TPrintData::TPrintData(const char *sd_key,
             input = pose+2;
             ifcond = true;
             try{
-                rpn.GetEquat( (char *)cond.c_str() );
+                rpn.GetEquat( const_cast<char *>(cond.c_str()) );
                }
             catch( TError& xcpt )
             {
-               if( vfQuestion(0, xcpt.title, xcpt.mess+" \nContinue?" ))
+               if( vfQuestion(nullptr, xcpt.title, xcpt.mess+" \nContinue?" ))
                 {
                    ifcond = false;
                 }
@@ -135,12 +135,12 @@ TPrintData::TPrintData(const char *sd_key,
          {
             if( showMss )
              {  //xcpt.mess += " \nContinue?";
-                switch( vfQuestion3(0, xcpt.title, xcpt.mess+" \nContinue?",
+                switch( vfQuestion3(nullptr, xcpt.title, xcpt.mess+" \nContinue?",
                            "&Yes", "&No", "&Yes to All" ))
                 {
                   case VF3_3:  showMss=false;
-                  case VF3_1:
                                break;
+                  case VF3_1:  break;
                   case VF3_2:  Error(xcpt.title, xcpt.mess);
                 }
             }
@@ -176,7 +176,7 @@ TPrintData::~TPrintData()
 bool
 TPrintData::getFormat( const char * fmt )
 {
- int i = 0;
+ size_t i = 0;
 
  // test format % [flags] [width] [.prec] type_char
  // flags: '+' or '-';  width = nn; [.prec]= .nn
@@ -232,7 +232,8 @@ TPrintData::skipSpace( )
 int
 TPrintData::getToken( int& ii, int& jj )
 {
- int i, data=0;
+ int i;
+ int data=0;
  gstring str;
 
  skipSpace();
@@ -427,36 +428,37 @@ TPrintData::getData( )
 
 }
 
-extern const gstring emptiness("---");
+const gstring emptiness("---");
 
 void
 TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
 {
   vstr strbuf(8192);
+  gstring format = fmt.FmtOut();
   switch( dt.data )
   {
     case space_d: fmt.type = 's';
-                 sprintf( strbuf, fmt.FmtOut().c_str(), " ");
+                 sprintf( strbuf, format.c_str(), " ");
                  fout << strbuf << " ";
                  break;
     case index_d: fmt.type = 'd';
-                 sprintf( strbuf, fmt.FmtOut().c_str(), ind );
+                 sprintf( strbuf, format.c_str(), ind );
                  fout << strbuf << " ";
                  break;
     case rkey_d: fmt.type = 's';
-                 sprintf( strbuf, fmt.FmtOut().c_str(), rt[nRT].PackKey() );
+                 sprintf( strbuf, format.c_str(), rt[nRT].PackKey() );
                  fout << strbuf << " ";
                  break;
     case date_d: fmt.type = 's';
-                 sprintf( strbuf, fmt.FmtOut().c_str(), curDate().c_str() );
+                 sprintf( strbuf, format.c_str(), curDate().c_str() );
                  fout << strbuf << " ";
                  break;
     case time_d: fmt.type = 's';
-                 sprintf( strbuf, fmt.FmtOut().c_str(), curTime().c_str() );
+                 sprintf( strbuf, format.c_str(), curTime().c_str() );
                  fout << strbuf << " ";
                  break;
     case text_d: fmt.type = 's';
-                 sprintf( strbuf, fmt.FmtOut().c_str(), dt.line.c_str() );
+                 sprintf( strbuf, format.c_str(), dt.line.c_str() );
                  fout << strbuf << " ";
                  break;
     default:     // objects
@@ -488,7 +490,7 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                { // workaround - skip printing DOD labels and data
                  // if dynamic object is not allocated
                  if( !aObj[dt.data].IsNull() )
-                    sprintf( strbuf, fmt.FmtOut().c_str(),
+                    sprintf( strbuf, format.c_str(),
                         aObj[dt.data].GetKeywd() );
                }
                else
@@ -504,7 +506,7 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                    else
                      str_data = aObj[dt.data].GetStringEmpty( ind, dt.index_j );
                    if( fmt.type == 's' )
-                    sprintf( strbuf, fmt.FmtOut().c_str(), str_data.c_str() );
+                    sprintf( strbuf, format.c_str(), str_data.c_str() );
                    else //c
                     sprintf( strbuf, "'%c'", str_data.c_str()[0] );
 
@@ -521,19 +523,16 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                         {
                           char oldtype = fmt.type;
                           fmt.type = 's';
-                          sprintf( strbuf, fmt.FmtOut().c_str(),
-                                 emptiness.c_str() ); // S_EMPTY );
+                          sprintf( strbuf, format.c_str(), emptiness.c_str() ); // S_EMPTY );
                           fmt.type = oldtype;
                         }
-                         else sprintf( strbuf, fmt.FmtOut().c_str(),
-                            aObj[dt.data].Get( indx, dt.index_j) );
+                         else sprintf( strbuf, format.c_str(), aObj[dt.data].Get( indx, dt.index_j) );
                      }
                      else
                      {
                          char oldtype = fmt.type;
                          fmt.type = 's';
-                         sprintf( strbuf, fmt.FmtOut().c_str(),
-                                 "NULL" ); // S_EMPTY );
+                         sprintf( strbuf, format.c_str(),  "NULL" ); // S_EMPTY );
                          fmt.type = oldtype;
                       }
                  }

@@ -162,7 +162,7 @@ public:
 
 // selectors
     T& elem(size_t ind) const;
-    T& operator[](size_t ind) const
+    T& operator[](int ind) const
     {
         return this->elem(ind);
     }
@@ -279,7 +279,7 @@ public:
 // 
     int Find(const T& object) const;
     void Sort();
-    size_t AddUnique(const T&);
+    int AddUnique(const T&);
 };
 
 // searches the array for element which equals to 'object'
@@ -318,7 +318,7 @@ TArrayF<T>::Sort()
 
 // Adds unique element to the array
 template <class T>
-size_t
+int
 TArrayF<T>::AddUnique(const T& t)
 {
     int ii = Find(t);
@@ -359,7 +359,7 @@ public:
     size_t Add(T* p);
     size_t AddAt(T* p, size_t ind);
     T& elem(size_t ind) const;
-    T& operator[](size_t ind) const
+    T& operator[](int ind) const
     {
         return this->elem(ind);
     }

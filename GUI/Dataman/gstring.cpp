@@ -64,7 +64,7 @@ void CHECK_LEN(size_t ln) throw (StringLenError)
 
 #endif
 
-const size_t OVERSIZE = 1;
+const int OVERSIZE = 1;
 
 gstring::str_val::~str_val()
 {}
@@ -107,7 +107,7 @@ gstring::gstring(const gstring& s, size_t pos, size_t len)
         return;
     }
 //    size_t s_len = s.length() - pos; 13/12/2007
-    size_t s_len = max( s.length() - pos, (size_t)0);
+    size_t s_len = max( s.length() - pos, 0);
     size_t min_length;
     if( len == npos )
         min_length = s_len;
@@ -127,7 +127,7 @@ gstring::gstring(const char* s, size_t pos, size_t len)
     size_t s_len;
     if( len == npos )
       //    s_len = strlen(s);// ? pos Changed SD 27/08/2007
-     s_len = max( strlen(s)-pos , (size_t)0 );
+     s_len = max( strlen(s)-pos , 0 );
     else
         for(s_len = 0; s_len < len && s[s_len+pos]; s_len++ )
         { }
@@ -239,9 +239,9 @@ gstring::find(const char ch, size_t pos) const
 size_t
 gstring::find_first_of(const char* s, size_t pos) const
 {
-    int s_ln = strlen(s);
+    size_t s_ln = strlen(s);
     for(size_t kk=pos; kk<length(); kk++)
-        for(int ii=0; ii<s_ln; ii++)
+        for(size_t ii=0; ii<s_ln; ii++)
             if( ps->elem(kk) == s[ii] )
                 return kk;
     return npos;

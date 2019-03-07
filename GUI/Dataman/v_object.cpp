@@ -812,7 +812,7 @@ void TObject::toTXT( fstream& to )
             dimM = 0;
         else
             if( Type == S_  )
-                dimM = strlen( static_cast<char *>(pV->GetPtr()) )+2;
+                dimM = strlen( static_cast<char *>(GetPtr()) )+2;
         to << "^^" << N << " " << dimM << " " << static_cast<int>(Type) << "~~\n";
         if( N==0 || dimM==0 )
             return;
@@ -834,7 +834,7 @@ void TObject::toTXT( fstream& to )
     if( Type == S_ ) // text
     {  //*((char*)(char*)GetPtr()+M-1) = 0;
 
-        to << "\'" << static_cast<char *>(pV->GetPtr()) << "\'\n";
+        to << "\'" << static_cast<char *>(GetPtr()) << "\'\n";
     }
     else
         for( i=0; i < N; i++ )
@@ -930,7 +930,7 @@ void TObject::ofTXT( fstream& of )
 
         if( IsDynamic() )
         { //if(M<=16)
-            of.get( (char*)GetPtr(), M, '\'');
+            of.get( static_cast<char*>(GetPtr()), M, '\'');
             //else
             //{ of.get( (char*)GetPtr(), M-16, '\0');
             //  of.get( (char*)GetPtr()+M-17, 17, '\'');

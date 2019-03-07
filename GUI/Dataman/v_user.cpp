@@ -75,11 +75,15 @@ u_splitpath(const gstring& Path, gstring& dir,
 {
     size_t pos = Path.rfind("/");
     if( pos != gstring::npos )
-        dir = Path.substr(0, pos), pos++;
+    {
+        dir = Path.substr(0, pos);
+        pos++;
+    }
     else
-        dir = "",
-              pos = 0;
-
+    {
+        dir = "";
+        pos = 0;
+    }
     size_t pose = Path.rfind(".");
     if( pose != gstring::npos )
     {
@@ -430,7 +434,7 @@ void
    data_str.substr(0, len_);
    if( data_str == old_str )
    {
-       int ii = data_str.length()-1;
+       size_t ii = data_str.length()-1;
        if( data_str[ii] == '9' )
         data_str[ii] = '_';
        else

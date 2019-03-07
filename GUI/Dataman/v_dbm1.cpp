@@ -135,16 +135,16 @@ TDBFile::TDBFile(const gstring& fName,
                  const gstring& fExt, const gstring& fDir):
         TFile(fName, fExt, fDir),
         FPosFree(-1),
-        dh(0),
-        sfe(0)
+        dh(nullptr),
+        sfe(nullptr)
 {}
 
 
 TDBFile::TDBFile(const gstring& path):
         TFile(path),
         FPosFree(-1),
-        dh(0),
-        sfe(0)
+        dh(nullptr),
+        sfe(nullptr)
 {
 }
 
@@ -153,8 +153,8 @@ TDBFile::TDBFile(const gstring& path):
 TDBFile::TDBFile(fstream& file):
         TFile(file),
         FPosFree(-1),
-        dh(0),
-        sfe(0)
+        dh(nullptr),
+        sfe(nullptr)
 {}
 
 
@@ -162,14 +162,14 @@ TDBFile::TDBFile(fstream& file):
 void
 TDBFile::check_sfe()
 {
-    ErrorIf( sfe == 0 , GetKeywd(),
+    ErrorIf( sfe == nullptr , GetKeywd(),
              "No memory for deleted records.");
 }
 
 void
 TDBFile::check_dh()
 {
-    ErrorIf( dh == 0 , GetKeywd(),
+    ErrorIf( dh == nullptr , GetKeywd(),
              "No memory for header of file.");
 }
 
@@ -203,9 +203,9 @@ void
 TDBFile::vdbh_new( const char *VerP,
      const char *passwd, int nRT, bool ifDel )
 {
-    if( dh==0 )
+    if( dh==nullptr )
         dh = new VDBhead;
-    if( ifDel && sfe == 0 )
+    if( ifDel && sfe == nullptr )
         sfe = new DBentry[MAXFESTACK];
     clrh();
     if( VerP )
@@ -257,7 +257,7 @@ TDBFile::getHead(GemDataStream& fdb)
 
     if( dh->isDel )
     {
-        if( sfe == 0 )
+        if( sfe == nullptr )
             sfe = new DBentry[MAXFESTACK];
         // fdb.read( (char *)sfe, MAXFESTACK*sizeof( DBentry ));
         for( int ii=0; ii<MAXFESTACK; ii++)
@@ -290,7 +290,7 @@ TDBFile::PutHead( GemDataStream& fdb, int deltRec )
 void
 TDBFile::v_PDBtry( GemDataStream& fdb )
 {
-    if( dh==0 )
+    if( dh==nullptr )
         dh = new VDBhead;
     getHead( fdb );
     // check version
@@ -318,8 +318,8 @@ TDBFile::Close()
 {
     delete dh;
     delete[] sfe;
-    dh = 0;
-    sfe = 0;
+    dh = nullptr;
+    sfe = nullptr;
     FPosFree = 0;
     TFile::Close();
 }
@@ -328,8 +328,8 @@ TDBFile::Close()
 int
 rlencomp( const void *ie_1, const void *ie_2 )
 {
-    DBentry* ie1 = (DBentry *)ie_1;
-    DBentry* ie2 = (DBentry *)ie_2;
+    const DBentry* ie1 = static_cast<const DBentry *>(ie_1);
+    const DBentry* ie2 = static_cast<const DBentry *>(ie_2);
     if( ie1->len > ie2->len ) return 1;
     if( ie1->len < ie2->len ) return -1;
     return 0;
@@ -445,9 +445,9 @@ TDBFile::GetDhOver()
 void
 TDBFile::SetDh( int fLen, int nRec, int nRT, int isDel )
 {
-    if( dh==0 )
+    if( dh==nullptr )
         dh = new VDBhead;
-    if( isDel && sfe == 0 )
+    if( isDel && sfe == nullptr )
         sfe = new DBentry[MAXFESTACK];
     clrh();
     strncpy( dh->VerP, TFile::VV(), 8 );
@@ -583,7 +583,7 @@ TDBKey::~TDBKey()
 void
 TDBKey::check()
 {
-    ErrorIf( pKey==0 || uKey==0 || rkLen==0 || rkInd==0,
+    ErrorIf( pKey==nullptr || uKey==nullptr || rkLen==nullptr || rkInd==nullptr,
              "TDBkey", "No memory for key struct.");
 }
 
@@ -593,7 +593,7 @@ TDBKey::check()
 void
 TDBKey::SetKey( const char *key )
 {
-    ErrorIf( key==0,"TDBKey", "No key buf.");
+    ErrorIf( key==nullptr,"TDBKey", "No key buf.");
 
     vstr sp(fullLen+rkFlds+1);
     if( strncmp( key, ALLKEY, fullLen )==0 )
@@ -798,7 +798,7 @@ TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
     int i, rts, nkf;
     char /**sp,*/ *imf;
 
-    ErrorIf( pkey==0,"MakeKey", "No key buf to make key.");
+    ErrorIf( pkey==nullptr,"MakeKey", "No key buf to make key.");
     *pkey = 0;
     va_start( Marker, pkey );
     for( i=0; i<ind.KeyNumFlds(); i++ )
@@ -864,7 +864,7 @@ TDBKeyList::TDBKeyList(fstream& f):
 void
 TDBKeyList::check_ndx()
 {
-    ErrorIf( ndx==0 || re==0 ,"TDBMKeyList",
+    ErrorIf( ndx==nullptr || re==nullptr ,"TDBMKeyList",
              "No memory for list of indexes.");
 }
 
