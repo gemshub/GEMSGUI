@@ -23,7 +23,7 @@
 #include "config.h"
 #include "v_user.h"
 
-TConfig::TConfig(const char *fname, char st, int tok_ln):
+TConfig::TConfig(const char *fname, char st, const size_t tok_ln):
         token_len(tok_ln),
         space(' '),
         ini(fname),
@@ -62,7 +62,7 @@ TConfig::getLine()
 gstring
 TConfig::readSectionName()
 {
-    int cpos;
+    //int cpos;
     while( 1 )
     {
         if( !getLine() )
@@ -70,7 +70,7 @@ TConfig::readSectionName()
         if( line[0]=='[' )
             break;
     }
-    cpos = ini.tellg();
+    auto cpos = ini.tellg();
     size_t ii;
     for( ii = 0; ii<line.length(); ii++ )
         if( line[ii] == ']' )
@@ -88,7 +88,7 @@ TConfig::readSectionName()
 gstring
 TConfig::readSubSectionName()
 {
-    int cpos;
+    //int cpos;
     while( 1 )
     {
         if( line[0]=='[' )
@@ -99,7 +99,7 @@ TConfig::readSubSectionName()
         if( !getLine() )
             return "";
     }
-    cpos = ini.tellg();
+    auto cpos = ini.tellg();
     size_t ii;
     for( ii = 0; ii<line.length(); ii++ )
         if( line[ii] == '>' )
@@ -128,10 +128,10 @@ TConfig::GetNextSubSection()
     return readSubSectionName();
 }
 
-int
+size_t
 TConfig::getName()
 {
-    size_t ii;
+    size_t ii, jj;
     for( ii=0; ii<line.length(); ii++ )
     {
         if( !isalnum(line[ii]) && line[ii]!='_' && line[ii]!='~')
@@ -141,7 +141,6 @@ TConfig::getName()
             return valPos=0;
     }
 
-    unsigned jj;
     for( jj=ii; jj<line.length(); jj++ )
         if( line[jj] != style && !IsSpace(line[jj]) )
             break;
@@ -217,7 +216,7 @@ TConfig::getNext()
     if( sec_beg != 0 && (line[0]=='[' || line[0]=='<') )		// section break
         return "";
 
-    int pos = getName();
+    size_t pos = getName();
     if( pos != 0 )
         return gstring(line,0,pos);
     return "";
@@ -233,8 +232,10 @@ TConfig::getToken()
             return "";		// over the end of line
 
     if( line[pos] == '"' )
-        space = '"',
-                pos++;
+    {
+        space = '"';
+        pos++;
+    }
 
 CONT_SEARCH:
     for( valPos = pos; valPos<line.length(); valPos++ )

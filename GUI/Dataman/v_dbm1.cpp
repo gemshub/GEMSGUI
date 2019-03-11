@@ -424,7 +424,7 @@ NoBlock:
 
 //get information from dh
 void
-TDBFile::GetDh( int& fPos, int& fLen, int& nRT, int& isDel )
+TDBFile::GetDh( int& fPos, int& fLen, int& nRT, char& isDel )
 {
     check_dh();
     fPos = dh->FPosTRT;
@@ -443,7 +443,7 @@ TDBFile::GetDhOver()
 // sets information into compressed PDB file header
 // Fixed 07.09.04
 void
-TDBFile::SetDh( int fLen, int nRec, int nRT, int isDel )
+TDBFile::SetDh( int fLen, int nRec, int nRT, char isDel )
 {
     if( dh==nullptr )
         dh = new VDBhead;
@@ -460,7 +460,7 @@ TDBFile::SetDh( int fLen, int nRec, int nRT, int isDel )
     {
         dh->FPosTRT += DBentry::data_size() * MAXFESTACK;
         check_sfe();
-        memset( (char*)sfe, 0, DBentry::data_size() * MAXFESTACK );
+        memset( reinterpret_cast<char*>(sfe), 0, DBentry::data_size() * MAXFESTACK );
     }
     dh->nRec = nRec;
     dh->curDr = 0;
@@ -505,7 +505,7 @@ TDBKey::TDBKey( unsigned char nRkflds, const unsigned char* rkfrm ):
         if( i==0 )
             rkInd[i]=0;
         else
-            rkInd[i] = (unsigned char)(rkInd[i-1] + rkLen[i-1]);
+            rkInd[i] = (rkInd[i-1] + rkLen[i-1]);
         fullLen += rkLen[i];
     }
     pKey = new char[fullLen+rkFlds+1+10];
@@ -544,7 +544,7 @@ TDBKey::TDBKey(fstream& in_stream)
         if( ii == 0 )
             rkInd[ii] = 0;
         else
-            rkInd[ii] = (unsigned char)(rkInd[ii-1]+rkLen[ii-1]);
+            rkInd[ii] = (rkInd[ii-1]+rkLen[ii-1]);
         fullLen += rkLen[ii];
     }
     pKey = new char[fullLen+rkFlds+1+10];
@@ -615,7 +615,7 @@ TDBKey::SetKey( const char *key )
 
 // Change i-th field of DBkey to key
 void
-TDBKey::SetFldKey( int i, const char *key )
+TDBKey::SetFldKey( uint i, const char *key )
 {
     ErrorIf( i>= rkFlds, key, "Invalid key field number");
 
@@ -674,7 +674,7 @@ void
 TDBKey::unpack( char *key )
 {
     int i;
-    unsigned ln;
+    unsigned char ln;
     char *sp, *sp1;
 
     check();
@@ -702,7 +702,7 @@ TDBKey::unpack( char *key )
                 }
             }
             else  ln = ( sp1- sp);
-            ln = min( ln, (unsigned int)rkLen[i] );
+            ln = min( ln, rkLen[i] );
             strncpy( uKey+rkInd[i], sp, ln );
             if( *(sp+ln) == ':' )
                   ln++;
@@ -757,7 +757,8 @@ TDBKey::pack( char *key )
 void
 TDBKey::pack( char *key )
 {
-    int i, len, ln;
+    uint i;
+    int len, ln;
     char *sp;
 
     check();
@@ -794,8 +795,9 @@ void
 TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
 {
     va_list Marker;
-    uint rkflen;
-    int i, rts, nkf;
+    unsigned char rkflen;
+    uint i, nkf;
+    int rts;
     char /**sp,*/ *imf;
 
     ErrorIf( pkey==nullptr,"MakeKey", "No key buf to make key.");
@@ -820,18 +822,18 @@ TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
             break;
         case K_IMM:  // field in gstring
             imf = va_arg( Marker, char * );
-            strncat( pkey, imf, min( strlen(imf), (size_t)rkflen ));
+            strncat( pkey, imf, min( strlen(imf), static_cast<size_t>(rkflen) ));
             break;
         case K_ACT:  // get field from  PRIE request
             rts = nRTwrk;
         default:     // get field from enathe chain key
-            nkf = va_arg( Marker, int );
+            nkf = va_arg( Marker, uint );
             if( !*rt[rts].FldKey( nkf ))
                 strcat( pkey, S_ANY );
             else
             {
                 gstring str=  gstring( rt[rts].FldKey( nkf ), 0,
-                                       min( (unsigned int)rt[rts].FldLen(nkf), rkflen ));
+                                       min( rt[rts].FldLen(nkf), rkflen ));
                 StripLine( str );
                 strncat( pkey, str.c_str(), rkflen );
             }
@@ -864,14 +866,14 @@ TDBKeyList::TDBKeyList(fstream& f):
 void
 TDBKeyList::check_ndx()
 {
-    ErrorIf( ndx==nullptr || re==nullptr ,"TDBMKeyList",
+    ErrorIf( ndx[0]==nullptr || re==nullptr ,"TDBMKeyList",
              "No memory for list of indexes.");
 }
 
 void
-TDBKeyList::check_i(int i)
+TDBKeyList::check_i(uint i)
 {
-    if( i<0||i>recInDB )
+    if( i>recInDB )
         Error( "TDBMKeyList","Invalid record index in the chain.");
 }
 
@@ -882,9 +884,9 @@ TDBKeyList::init()
     nI = -1;
     recInDB = 0;
     nBuf = IND_PLUS;
-    int k;
+    size_t k;
 
-    for(int i=0; i<KeyNumFlds(); i++)
+    for(uint i=0; i<KeyNumFlds(); i++)
     {
         k = nBuf * FldLen(i);
         ndx[i] = new char[k];
@@ -898,7 +900,7 @@ TDBKeyList::initnew()
 {
     nI = -1;
     recInDB = 0;
-    for(int j=0; j<KeyNumFlds(); j++)
+    for(uint j=0; j<KeyNumFlds(); j++)
         memset( ndx[j], 0, FldLen(j)*nBuf*sizeof(char) );
     memset( re, 0, nBuf*sizeof(RecEntry) );
     aKey.Clear();
@@ -907,9 +909,9 @@ TDBKeyList::initnew()
 
 // delete the keys of records file nF
 void
-TDBKeyList::delfile( int nF )
+TDBKeyList::delfile( uint nF )
 {
-    int i=0;
+    uint i=0;
     while( i < recInDB )
     {
         if( re[i].nFile == nF )
@@ -926,30 +928,31 @@ TDBKeyList::~TDBKeyList()
 }
 
 RecEntry*
-TDBKeyList::RecPosit(int i)
+TDBKeyList::RecPosit(uint i)
 {
     return &re[i];
 }
 
 // compare key i record and work key
 int
-TDBKeyList::keycom( int i )
+TDBKeyList::keycom( uint i )
 {
     int l = 0;
-    for( int j=0; j<KeyNumFlds(); j++)
+    for( uint j=0; j<KeyNumFlds(); j++)
     {
         l = memcmp( FldKey(j), RecKeyFld( i,j ), FldLen(j) );
-        if( l ) return l;
+        if( l )
+           return l;
     }
     return l;
 }
 
 //Add new key of record in list. Realloc memory if nessasery.
-int
-TDBKeyList::addndx( int nF, int len, const char *key )
+uint
+TDBKeyList::addndx( uint nF, int len, const char *key )
 {
-    int i, l, j;
-    //unsigned j;
+    int i, l;
+    uint j;
 
     SetKey( key );
     if( recInDB >= nBuf ) // realloc buf
@@ -977,14 +980,15 @@ TDBKeyList::addndx( int nF, int len, const char *key )
         l = keycom( i-1 );
     }
     ErrorIf( l==0, key, "Two records with the same key (AddNewKey).");
+    uint ii=i;
     for( j=0; j<KeyNumFlds(); j++)
-        memmove( RecKeyFld(i+1,j), RecKeyFld(i,j),
-                 FldLen(j)*(recInDB-i)*sizeof(char) );
-    memmove( re+i+1, re+i, (recInDB-i)*sizeof(RecEntry) );
+        memmove( RecKeyFld(ii+1,j), RecKeyFld(ii,j),
+                 FldLen(j)*(recInDB-ii)*sizeof(char) );
+    memmove( re+ii+1, re+ii, (recInDB-ii)*sizeof(RecEntry) );
     for( j=0; j<KeyNumFlds(); j++)
-        memcpy( RecKeyFld(i,j), FldKey(j), FldLen(j) );
+        memcpy( RecKeyFld(ii,j), FldKey(j), FldLen(j) );
     re[i].len = len;
-    re[i].nFile = (unsigned char)nF;   //warning
+    re[i].nFile = nF;   //warning
     nI = i;
     recInDB++;
     return i;
@@ -992,9 +996,9 @@ TDBKeyList::addndx( int nF, int len, const char *key )
 
 // Delete i-th record from list
 void
-TDBKeyList::delndx( int i )
+TDBKeyList::delndx( uint i )
 {
-    int j;
+    uint j;
 
     check_i(i);
     for( j=0; j<KeyNumFlds(); j++)
@@ -1010,11 +1014,11 @@ TDBKeyList::delndx( int i )
 int
 TDBKeyList::findx( const char *key )
 {
-    int i,l;
+    int l;
 
     SetKey( key );
     if( recInDB <= 0 ) return -1;
-    for( i=0; i< recInDB; i++ )
+    for(uint i=0; i< recInDB; i++ )
     {
         l = keycom(i);
         if( l < 0 ) // No record
@@ -1022,7 +1026,7 @@ TDBKeyList::findx( const char *key )
         if( l == 0 )
         {
             nI = i;
-            return i;
+            return nI;
         }
     }
     return -1;
@@ -1030,9 +1034,9 @@ TDBKeyList::findx( const char *key )
 
 //Set key i - record to work key structure
 void
-TDBKeyList::PutKey( int i)
+TDBKeyList::PutKey( uint i)
 {
-    int j;
+    uint j;
     check_i(i);
     TDBKey::check();
     for( j=0; j<KeyNumFlds(); j++)
@@ -1042,9 +1046,9 @@ TDBKeyList::PutKey( int i)
 
 //Put key i record to kbuf in unpack form.
 void
-TDBKeyList::RecKey(int i, gstring& kbuf )
+TDBKeyList::RecKey(uint i, gstring& kbuf )
 {
-    int j;
+    uint j;
     check_i(i);
     kbuf = "";
     for( j=0; j<KeyNumFlds(); j++)
@@ -1053,10 +1057,10 @@ TDBKeyList::RecKey(int i, gstring& kbuf )
 
 // write the keys of records to ndx file
 void
-TDBKeyList::PutKeyList( int nF, GemDataStream& f)
+TDBKeyList::PutKeyList( uint nF, GemDataStream& f)
 {
     unsigned char j;
-    for(int i=0; i< recInDB; i++ )
+    for(uint i=0; i< recInDB; i++ )
         if( re[i].nFile == nF )
         {
             for( j=0; j<KeyNumFlds(); j++)
@@ -1069,7 +1073,7 @@ TDBKeyList::PutKeyList( int nF, GemDataStream& f)
 
 // read the keys of records from ndx file
 void
-TDBKeyList::GetKeyList_i(int nF, int nRec, GemDataStream& f)
+TDBKeyList::GetKeyList_i(uint nF, int nRec, GemDataStream& f)
 {
     RecEntry re_;
 
@@ -1080,7 +1084,7 @@ TDBKeyList::GetKeyList_i(int nF, int nRec, GemDataStream& f)
         f.readArray( key, KeyLen());
         //     f.read( (char *)&re_, sizeof(RecEntry));
         re_.read (f);
-        int indRec = addndx( nF, re_.len, key);
+        auto indRec = addndx( nF, re_.len, key);
         re[indRec].pos = re_.pos;
     }
     SetKey(ALLKEY); // bugfix: current key for not readed record
@@ -1088,19 +1092,19 @@ TDBKeyList::GetKeyList_i(int nF, int nRec, GemDataStream& f)
 }
 
 // compare key ni record and pattern in work key
-int
-TDBKeyList::keycmp( int ni )
+uint
+TDBKeyList::keycmp( uint ni )
 {
     if( !(strchr(UnpackKey(),'*') || strchr(UnpackKey(),'?')))
         return  keycom(ni);      // no pattern
 
-    for( int j=0; j<KeyNumFlds(); j++)
+    for( uint j=0; j<KeyNumFlds(); j++)
     {
         char *sp = FldKey(j);
         if( *(sp) == '*' )
 	    continue; //to next field
 
-        for( int i=0; i<FldLen(j); i++ )
+        for( uint i=0; i<FldLen(j); i++ )
         {
             switch( *(sp+i) )
             {
@@ -1126,7 +1130,7 @@ NEXTKF:
 
 //add records key in key list for a wildcard search
 void
-TDBKeyList::arec_add( int ni )
+TDBKeyList::arec_add( uint ni )
 {
     gstring s;
     RecKey( ni, s);
@@ -1135,12 +1139,10 @@ TDBKeyList::arec_add( int ni )
 }
 
 //get key list for a wildcard search
-int
+size_t
 TDBKeyList::xlist( const char *pattern )
 {
     bool OneRec, AllRecs;
-    int i;
-
     SetKey( pattern );
 
     // analyze pattern
@@ -1158,17 +1160,17 @@ TDBKeyList::xlist( const char *pattern )
     anR.Clear();
     if( OneRec )
     {
-        i = findx( pattern );
+       auto i = findx( pattern );
         if( i >= 0 )
             arec_add( i );
         return aKey.GetCount();
     }
-    for( i=0; i<RecCount(); i++ )
+    for(uint ii=0; ii<RecCount(); ii++ )
     {
         if( !AllRecs )
-            if( keycmp(i) != 0 )
+            if( keycmp(ii) != 0 )
                 continue;
-        arec_add(i);
+        arec_add(ii);
     }
     return aKey.GetCount();
 }

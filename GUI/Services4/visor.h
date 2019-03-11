@@ -150,7 +150,7 @@ public:
     TCStringArray readPDBDir(const char *dir, const char *filter );
 
     //void OpenHelp(const char* file, const char* item=0, int page =-1 );
-    void OpenModule(QWidget* parent, int i, int page=0, int viewmode=0, bool select=false);
+    void OpenModule(QWidget* parent, uint i, int page=0, int viewmode=0, bool select=false);
     void OpenProgress(bool step=false);
     void CloseProgress();
     bool Message( QWidget* parent, const char* name,

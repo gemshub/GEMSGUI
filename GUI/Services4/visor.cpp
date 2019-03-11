@@ -1140,7 +1140,7 @@ TCStringArray TVisor::readPDBDir(const char *dir, const char *filter )
 //}
 
 void
-TVisor::OpenModule(QWidget* parent, int i, int page, int viewmode, bool select)
+TVisor::OpenModule(QWidget* parent, uint i, int page, int viewmode, bool select)
 {
     pVisorImp->OpenModule( parent, i, page, viewmode,  select);
 }

@@ -25,8 +25,7 @@
 #include "service.h"
 
 
-TReadData::TReadData(const char *sd_key,
-    int nrt, const char *fmt_text ):
+TReadData::TReadData(const char *sd_key,  uint nrt, const char *fmt_text ):
   key_format( sd_key ), nRT(nrt)
 {
   input = const_cast<char*>(fmt_text);
@@ -227,10 +226,10 @@ TReadData::getData( bool isList )
 {
  int i, data;
  gstring str;
- int ii=0, jj=0;
+ uint ii=0, jj=0;
 
  if( isList )
- ii = jj = 1;
+   ii = jj = 1;
 
  if( *input != '#') // special world
  {
@@ -336,7 +335,7 @@ TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
 void  TReadData::readRecord( int n_itr, fstream& fread )
 {
 
- for(int ii=0; ii<aList.GetCount(); ii++)
+ for(uint ii=0; ii<aList.GetCount(); ii++)
  {
    if( aFmts[ii].type == irec_r)
        aFmts[ii].size = n_itr;
@@ -344,11 +343,11 @@ void  TReadData::readRecord( int n_itr, fstream& fread )
     readData( fread, aFmts[ii], aDts[ii] );
    else
    {
-    int iN, iM;
+    uint iN, iM;
     iN = aDts[ii].i;
     iM = aDts[ii].j;
-    for( int i=0; i<iN; i++)
-     for( int j=0; j<iM; j++)
+    for( uint i=0; i<iN; i++)
+     for( uint j=0; j<iM; j++)
      {
       aDts[ii].i = i;
       aDts[ii].j = j;

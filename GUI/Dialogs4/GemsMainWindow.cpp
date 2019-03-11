@@ -319,7 +319,7 @@ void TVisorImp::showEvent ( QShowEvent * event )
 
 //------------------------------------------------------------------------------------
 // Define list of Module keys using filter
-void TVisorImp::defineModuleKeysList( int nRT )
+void TVisorImp::defineModuleKeysList( uint nRT )
 {
   int ii, jj, kk, ln, colsz;
   gstring keyfld;
@@ -461,7 +461,7 @@ void TVisorImp::changeKeyList()
 //------------------------------------------------------------------------------------------
 
 // working with TCModuleImp
-void TVisorImp::OpenModule(QWidget* /*par*/, int irt, int page, int viewmode, bool /*select*/)
+void TVisorImp::OpenModule(QWidget* /*par*/, uint irt, int page, int viewmode, bool /*select*/)
 {
     try
     {

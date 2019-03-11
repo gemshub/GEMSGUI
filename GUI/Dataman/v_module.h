@@ -45,7 +45,7 @@ private:
     const TSubModule& operator=(const TSubModule&);
 
 protected:
-    int nRT;
+    uint nRT;
     int startKeyEdit;
     bool contentsChanged;     // needs to save
     gstring iconFileName;
@@ -68,7 +68,7 @@ public:
     TCModuleImp* pImp;		// for visor implementation
     QWidget* window();
 
-    TSubModule( int nrt );
+    TSubModule( uint nrt );
     virtual ~TSubModule();
 
     virtual bool IsSubModule()
@@ -95,7 +95,7 @@ public:
         return contentsChanged;
     }
 
-    int rtNum() const
+    uint rtNum() const
     {
         return nRT;
     }
@@ -218,7 +218,7 @@ public:	// moved to public to remove 'friend' for TCModuleImp
     void CmPlot();
 
 public:
-    TCModule( int nrt );
+    TCModule( uint nrt );
     virtual ~TCModule();
 
     bool IsSubModule()
@@ -301,7 +301,7 @@ public:
     {
         return rt[nRT].GetOpenFiles().GetCount();
     }
-    const char* GetFldHelp( int Ni ) const
+    const char* GetFldHelp( uint Ni ) const
     {
         return aFldKeysHelp[Ni].c_str();
     }

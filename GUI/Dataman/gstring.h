@@ -78,7 +78,7 @@ public:
     }
     gstring(const gstring& s, size_t pos, size_t len=npos);
     gstring(const char* s, size_t pos=0, size_t len=npos);
-    gstring(int num, char ch);
+    gstring(size_t num, char ch);
 
     ~gstring()
     {

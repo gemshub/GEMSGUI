@@ -389,7 +389,7 @@ vfExcludeFillEdit(QWidget* par, const char* caption,
 //=============================================
 
 gstring
-vfKeyEdit(QWidget* par, const char* caption, int iRt, const char* key)
+vfKeyEdit(QWidget* par, const char* caption, uint iRt, const char* key)
 {
     KeyDialog dbk(par, iRt, key, caption);
     if( !dbk.exec() )
@@ -417,7 +417,7 @@ vfKeyProfile(QWidget* par, const char* caption, int iRt,
 }
 
 gstring
-vfKeyTemplEdit(QWidget* par, const char* caption, int iRt, const char* key,
+vfKeyTemplEdit(QWidget* par, const char* caption, uint iRt, const char* key,
                bool allowTemplate)
 {
   if( pThread != QThread::currentThreadId() )

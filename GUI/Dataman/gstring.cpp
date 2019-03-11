@@ -140,7 +140,7 @@ gstring::gstring(const char* s, size_t pos, size_t len)
       ps->p[s_len] = '\0';
 }
 
-gstring::gstring(int num, char ch)
+gstring::gstring(size_t num, char ch)
 {
     CHECK_LEN(num);
     ps = new str_val(num + OVERSIZE);

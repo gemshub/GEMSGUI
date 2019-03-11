@@ -194,8 +194,8 @@ public:
 
     //--void SetDialog(QWidget* centralDialog);
 
-    void OpenModule(QWidget* parent, int i, int page=0, int viewmode=0, bool select=false);
-    void defineModuleKeysList( int nRT );
+    void OpenModule(QWidget* parent, uint i, int page=0, int viewmode=0, bool select=false);
+    void defineModuleKeysList( uint nRT );
     void GetHelp();
     void OpenHelp(const char* file, const char* item=0, int page =-1);
     void OpenProgress(bool step=false);

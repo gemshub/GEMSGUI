@@ -162,7 +162,7 @@ public:
 
 // selectors
     T& elem(size_t ind) const;
-    T& operator[](int ind) const
+    T& operator[](size_t ind) const
     {
         return this->elem(ind);
     }
@@ -359,7 +359,7 @@ public:
     size_t Add(T* p);
     size_t AddAt(T* p, size_t ind);
     T& elem(size_t ind) const;
-    T& operator[](int ind) const
+    T& operator[](size_t ind) const
     {
         return this->elem(ind);
     }

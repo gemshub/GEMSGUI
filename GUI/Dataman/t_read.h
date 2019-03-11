@@ -91,10 +91,10 @@ enum data_rdtype { // >=0 - object number
 struct RData
 {
   int  objNum;   // object number  or  rkey or   skip command
-  int  i;        // object i (N)  (sizeN for list reading)
-  int  j;        // object j (M)  (sizeM for list reading)
+  uint  i;        // object i (N)  (sizeN for list reading)
+  uint  j;        // object j (M)  (sizeM for list reading)
 
-  RData( int _index, int i_index, int j_index):
+  RData( int _index, uint i_index, uint j_index):
    objNum(_index), i(i_index), j(j_index)
    { }
 
@@ -112,7 +112,7 @@ struct RData
 class TReadData  // reading data by format
 {
     gstring key_format;        // key of SDref record
-    int nRT;                   // module number
+    uint nRT;                   // module number
 
     char *input;               // current position
     TOArray<bool> aList;     // true if reading list of values
@@ -131,8 +131,7 @@ protected:
 
 public:
 
-    TReadData(const char *sd_key,
-    int nrt, const char *fmt_text );
+    TReadData(const char *sd_key, uint nrt, const char *fmt_text );
     ~TReadData();
 
     void  readRecord( int n_itr, fstream& fread );

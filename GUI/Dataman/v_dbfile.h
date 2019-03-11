@@ -52,7 +52,7 @@ struct VDBhead
     void read(GemDataStream& is);
     void write(GemDataStream& is);
 
-    static size_t data_size()
+    static int data_size()
     {
         return sizeof(char[8])*2
                + sizeof(char[11]) + sizeof(char[5])
@@ -137,9 +137,9 @@ public:
         check_dh();
         dh->nRec = n;
     }
-    void GetDh( int& fPos, int& fLen, int& nRT, int& isDel );
+    void GetDh( int& fPos, int& fLen, int& nRT, char& isDel );
     bool GetDhOver();
-    void SetDh( int fLen, int nRec, int nRT, int isDel );
+    void SetDh( int fLen, int nRec, int nRT, char isDel );
 
     //---  Manipulation files ---
     void Create( unsigned char nRT, bool isDel );

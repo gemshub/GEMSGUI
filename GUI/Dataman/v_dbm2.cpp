@@ -50,7 +50,7 @@ bool TDataBase::dbChangeAllowed( int /*nf*/, bool /*ifRep*/ )
 
 #else
 
-bool TDataBase::dbChangeAllowed( int nf, bool /*ifRep*/ )
+bool TDataBase::dbChangeAllowed( uint nf, bool /*ifRep*/ )
 {
     return ( pVisor->isDBChangeMode() /*&&  ifRep==true*/ )
 	    || ( nf >= specialFilesNum );
@@ -58,10 +58,9 @@ bool TDataBase::dbChangeAllowed( int nf, bool /*ifRep*/ )
 
 #endif
 
-void TDataBase::check_file( int nF )
+void TDataBase::check_file( uint nF )
 {
-    ErrorIf( nF<0 || nF>(int)aFile.GetCount(),
-             GetKeywd(),"Invalid file number.");
+    ErrorIf(  nF>aFile.GetCount(), GetKeywd(),"Invalid file number.");
 }
 
 //put state to cfg file
@@ -73,7 +72,7 @@ out_stream << numFields << "  "; // << endl;
     unsigned char* aLen = ind.RkFrm();
 //    f.write( (char*)cd, ind.KeyNumFlds()*sizeof(unsigned char) );
 for( int ii=0; ii<numFields; ii++)
-    out_stream << ((unsigned short)aLen[ii]) << ' ';
+    out_stream << ( static_cast<unsigned short>(aLen[ii])) << ' ';
 out_stream << "  "; //  endl;
 //    f.write( Keywd, MAXKEYWD );
 out_stream << Keywd << ' '; // endl;
@@ -93,7 +92,7 @@ out_stream << specialFilesNum <<  "  "; //  endl;
     int numFls = fls.GetCount();
 //    f.write( (char*)&nF, sizeof(int) );
 out_stream << numFls << "  "; // << endl;
-    for(int ii=0; ii<numFls; ii++) {
+    for(uint ii=0; ii<fls.GetCount(); ii++) {
 //        f.write( (char*)&fls[i], sizeof(int) );
 out_stream << fls[ii] << ' '; // << endl;
     }
@@ -104,7 +103,7 @@ out_stream << "  " << numFiles << endl;
     ErrorIf( !out_stream.good(), GetKeywd(),
              "Error writing TDataBase to configurator");
 
-    for(int ii=0; ii<numFiles; ii++) {
+    for(uint ii=0; ii<aFile.GetCount(); ii++) {
         aFile[ii].toCFG(out_stream);
     }
 }
@@ -154,10 +153,10 @@ in_stream >> numFiles;
 }
 
 //default configuration of the database
-TDataBase::TDataBase( int nrt, const char* name,
+TDataBase::TDataBase( size_t nrt, const char* name,
                       bool Rclose, bool isDel, int nOf, unsigned char Nobj,
                       int filesNum, unsigned char nRkflds, const unsigned char* rkfrm ):
-        nRT((unsigned char)nrt), status(UNDF_), rclose(Rclose), isDelete(isDel),
+        nRT(nrt), status(UNDF_), rclose(Rclose), isDelete(isDel),
         frstOD(nOf), nOD(Nobj),
         ind( nRkflds, rkfrm ),
         aFile(4, 1), fls(2, 1), specialFilesNum(filesNum)
@@ -165,7 +164,7 @@ TDataBase::TDataBase( int nrt, const char* name,
     strncpy( Keywd, name, MAXKEYWD-1 );
     Keywd[ MAXKEYWD-1 ] = 0;
     fNum = 0;
-    crt = time(NULL);
+    crt = time(nullptr);
 }
 
 //configuration from cfg file
@@ -173,13 +172,13 @@ TDataBase::TDataBase( fstream& f ):
         status(UNDF_), ind(f ), aFile(4, 1), fls(2, 1)
 {
     fromCFG(f);
-    crt = time(NULL);
+    crt = time(nullptr);
     fNum = 0;
 }
 
 TDataBase::~TDataBase()
 {
-    for(uint j=0; j<fls.GetCount(); j++ )
+    for(size_t j=0; j<fls.GetCount(); j++ )
         aFile[fls[j]].Close();
 
     //  aFile.Clear();
@@ -195,7 +194,7 @@ void TDataBase::AddFile(const gstring& path)
 }
 
 // put information to index file
-void TDataBase::putndx( int nF )
+void TDataBase::putndx( uint nF )
 {
     gstring Path;
     GemDataStream f;
@@ -212,7 +211,7 @@ void TDataBase::putndx( int nF )
 }
 
 // get information from index file
-void TDataBase::getndx( int nF )
+void TDataBase::getndx( uint nF )
 {
     gstring Path;
     VDBhead dh;
@@ -233,7 +232,7 @@ void TDataBase::getndx( int nF )
 int TDataBase::reclen( )
 {
     int Olen=0;
-    for(int j=0; j<nOD; j++ )
+    for(uint j=0; j<nOD; j++ )
         Olen += aObj[j+frstOD].lenDB();
     return Olen;
 }
@@ -241,10 +240,11 @@ int TDataBase::reclen( )
 // put record in DB file
 int TDataBase::putrec( RecEntry& rep, GemDataStream& f )
 {
-    int j, len;
+    uint j;
+    size_t len;
     int StillLen;
     RecHead rh;
-    char *pack_key = (char*)ind.PackKey();
+    char *pack_key = const_cast<char*>(ind.PackKey());
 
     // header of the record
     strncpy( rh.bgm, MARKRECHEAD, 2 );
@@ -253,14 +253,14 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f )
     rh.Nobj = nOD;
     rh.rlen =  rep.len;
     StillLen = rep.len;
-    rh.crt = time( NULL );
+    rh.crt = time( nullptr );
     f.seekg(rep.pos, ios::beg );
     //   f.write( (char *)&rh, sizeof(RecHead) );
     rh.write (f);
     // put packed key
     len = strlen( pack_key );
     pack_key[len] = MARKRKEY;
-    f.writeArray( pack_key, (len+1) );
+    f.writeArray( pack_key, len+1 );
     pack_key[len] = '\0';
     StillLen -= len+1;
     ErrorIf( !f.good(), GetKeywd(),
@@ -274,10 +274,11 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f )
 // put record in DB file
 int TDataBase::putrec( RecEntry& rep, GemDataStream& f, RecHead& rhh  )
 {
-    int j, len;
+    uint j;
+    size_t len;
     int StillLen;
     RecHead rh;
-    char *pack_key = (char*)ind.PackKey();
+    char *pack_key = const_cast<char*>(ind.PackKey());
 
     // header of the record
     strncpy( rh.bgm, MARKRECHEAD, 2 );
@@ -311,7 +312,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     int j;
     int StillLen;
     // RecHead rh;
-    char *key = (char*)ind.PackKey();
+    char *key = const_cast<char*>(ind.PackKey());
 
     StillLen = rep.len;
     f.seekg(rep.pos, ios::beg );
@@ -331,7 +332,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     for( j=0; j<nOD; j++ )   // get objects from file
     {
         if ( j+frstOD == o_phstr2  )
-            if( StillLen < (int)(16*sizeof(short)) )     // old record of phase
+            if( StillLen < 16*sizeof(short) )     // old record of phase
                break;
 
        if ( j+frstOD == o_tpstr  )
@@ -354,13 +355,13 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
 /*!
     Add new record with key pkey to file in DB files list
 */
-int TDataBase::AddRecordToFile( const char *pkey, int file )
+uint TDataBase::AddRecordToFile( const char *pkey, uint file )
 {
     int len, oldlen;
     unsigned char nF;
     // test and open file
     fNum = file;
-    nF = (unsigned char)fls[file];
+    nF = fls[file];
     check_file( nF );
 
     ErrorIf( !dbChangeAllowed( nF ),
@@ -369,7 +370,7 @@ int TDataBase::AddRecordToFile( const char *pkey, int file )
 
     aFile[nF].Open( UPDATE_DBV );
 
-    int i = ind.addndx( nF, 0, pkey );     // add record
+    auto i = ind.addndx( nF, 0, pkey );     // add record
     len = reclen();
     len += RecHead::data_size() + strlen(ind.PackKey()) + 1;
     RecEntry* rh = ind.RecPosit(i);
@@ -497,14 +498,14 @@ void TDataBase::RenameList( const char* newName,
     TCStringArray arKey;
     TCIntArray arR;
 
-    uint Nrec = GetKeyList( str_old.c_str(), arKey, arR );
+    auto Nrec = GetKeyList( str_old.c_str(), arKey, arR );
     if( Nrec < 1)
       return;
 
     int nrec;
     gstring str;
 
-    for(uint i=0; i<Nrec; i++ )
+    for(size_t i=0; i<Nrec; i++ )
     {
         nrec =  Find( arKey[i].c_str() );
         Get( nrec );
@@ -518,7 +519,7 @@ void TDataBase::RenameList( const char* newName,
 
 
 //Read record update time from PDB file to memory.
-time_t TDataBase::GetTime( int i )
+time_t TDataBase::GetTime( uint i )
 {
     unsigned char nF;
     RecEntry* ree=ind.RecPosit(i);
@@ -565,11 +566,10 @@ int TDataBase::FindCurrent( const char *pkey)
 // returns state of record
 RecStatus TDataBase::Rtest( const char *key, int mode )
 {
-    int iRec;
     const char *pkey;
     bool OneRec;
 
-    if( key != 0 )
+    if( key != nullptr )
         pkey=key;
     else
         pkey = PackKey();
@@ -592,7 +592,7 @@ RecStatus TDataBase::Rtest( const char *key, int mode )
 AGAIN:
     if( OneRec )
     {
-        iRec = Find( pkey );
+        auto iRec = Find( pkey );
         if( iRec < 0 )
             return NONE_;
         if( mode == 1)
@@ -601,7 +601,7 @@ AGAIN:
     }
     else // template
     {
-        iRec = ind.xlist( pkey );
+        auto iRec = ind.xlist( pkey );
         if( iRec==0 )
             return NONE_;
         if( iRec==1 )
@@ -617,7 +617,7 @@ AGAIN:
 
 //Test state of record with key key_ as template.
 // in field field setted any(*) data
-bool TDataBase::FindPart( const char *key_, int field )
+bool TDataBase::FindPart( const char *key_, uint field )
 {
 
     vstr key(KeyLen(), key_);
@@ -653,7 +653,7 @@ bool TDataBase::KeyTest( const char* key )
 } */
 
 //Create new PDB file.
-void TDataBase::Create( int nF )
+void TDataBase::Create( uint nF )
 {
     check_file( nF );
     if( !aFile[nF].Exist() )
@@ -770,14 +770,14 @@ try
 void
 TDataBase::OpenAllFiles( bool only_kernel )
 {
-    uint j;
+    int j;
 
     if( aFile.GetCount() == 0 )
         return;
 
     Close();
     for( j=0; j< aFile.GetCount(); j++)
-     if( only_kernel && (int)j >=  specialFilesNum )
+     if( only_kernel && j >=  specialFilesNum )
        continue;
      else
         fls.Add( j );
@@ -876,7 +876,7 @@ void TDataBase::DelFile(const gstring& path)
     for(uint ii=0; ii<aFile.GetCount(); ii++)
         if( fl.Name() == aFile[ii].Name() )
         {
-            int  nF = ii;
+            auto  nF = ii;
             int  nFls = fls.Find( nF );
             if( nFls != -1 ) //close file and delete indexes
             {
@@ -907,7 +907,7 @@ try{
         aFile[nff[j]].Open( UPDATE_DBV );
         //added Sveta 04/11/2002 to index files
         if( aFile[nff[j]].GetDhOver())
-         if( vfQuestion( 0, aFile[nff[j]].GetPath(),
+         if( vfQuestion( nullptr, aFile[nff[j]].GetPath(),
          "Stack of deleted records overflow.\nCompress?" ))
              comp.Add(nff[j]);
         // end added
@@ -948,9 +948,9 @@ try{
 
 
 //Get new lists of keys and indexes
-int TDataBase::GetKeyList( const char *keypat,TCStringArray& aKey, TCIntArray& anR)
+size_t TDataBase::GetKeyList( const char *keypat,TCStringArray& aKey, TCIntArray& anR)
 {
-    int l = ind.xlist( keypat );
+    auto l = ind.xlist( keypat );
 //    status = UNDF_;         // 09/11/2004 Sveta    Is it necessary ? KD 13.01.05
     aKey = ind.KeyList();
     anR =ind.RnList();
@@ -959,7 +959,7 @@ int TDataBase::GetKeyList( const char *keypat,TCStringArray& aKey, TCIntArray& a
 
 
 // Scan database file
-int TDataBase::scanfile( int nF, int& fPos, int& fLen,
+int TDataBase::scanfile( uint nF, int& fPos, int& fLen,
 		GemDataStream& inStream, GemDataStream& outStream)
 {
     RecEntry recordEntry;
@@ -967,9 +967,9 @@ int TDataBase::scanfile( int nF, int& fPos, int& fLen,
     gstring str;
     //RecEntry& rep = ind.RecPosit(0);
     int len, fEnd = fPos;
-    int ni, nRec=0;
+    int nRec=0;
 
-    recordEntry.nFile = (unsigned char)nF;             //warning
+    recordEntry.nFile = nF;             //warning
     recordEntry.len = 0;
     while( fPos < fLen )
     {
@@ -1020,7 +1020,7 @@ int TDataBase::scanfile( int nF, int& fPos, int& fLen,
 
          }
 
-        ni = ind.addndx( nF, len, ind.PackKey() );
+        auto ni = ind.addndx( nF, len, ind.PackKey() );
         //RecEntry& rep = ind.RecPosit(ni);
         ind.RecPosit(ni)->pos = fEnd;
         fEnd += len + RecHead::data_size();
@@ -1029,8 +1029,8 @@ int TDataBase::scanfile( int nF, int& fPos, int& fLen,
 
         nRec++;
 
-        pVisor->Message( 0, 0, "Compressing database file. "
-        		"Please, wait...", (int)fPos, (int)fLen);
+        pVisor->Message( nullptr, nullptr, "Compressing database file. "
+                "Please, wait...", fPos, fLen);
     }
     fLen = fEnd;
 
@@ -1048,9 +1048,10 @@ void TDataBase::RebildFile(const TCIntArray& nff)
 
     for(uint j=0; j<nff.GetCount(); j++)
     {
-	int  nRec, nRT, isDel;
+    int  nRec, nRT;
+    char isDel;
 	int fPos, fLen;
-        unsigned char nF = (unsigned char)nff[j];
+    uint nF = nff[j];
         // test and open file
         check_file( nF );
         if( ! dbChangeAllowed( nF ) )
@@ -1114,7 +1115,7 @@ bool TDataBase::SetNewOpenFileList(const TCStringArray& aFlKeywd)
             fls.Add(nF);
         else
         {	
-            if( !vfQuestion( 0, aFlKeywd[i],
+            if( !vfQuestion( nullptr, aFlKeywd[i],
              "This database file was not found in the project or default database.\n"
             		" Continue without this file (Y) or cancel(N)?" ))
                Error( aFlKeywd[i], 
@@ -1151,7 +1152,7 @@ void TDataBase::MakeInNewProfile(const gstring& dir,
     gstring name(dir);
     name += "/";
 
-    if( f_name == 0 || *f_name == '\0' )
+    if( f_name == nullptr || *f_name == '\0' )
     {  name += GetKeywd();
        name += ".";
        name += prfName;
@@ -1165,7 +1166,7 @@ void TDataBase::MakeInNewProfile(const gstring& dir,
 }
 
 // get open file number by name (0 if not found )
-int TDataBase::GetOpenFileNum( const char* secondName )
+uint TDataBase::GetOpenFileNum( const char* secondName )
 {
     gstring name = GetKeywd();
     name += ".";
@@ -1183,7 +1184,7 @@ void TDataBase::GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey )
     name +=_name;
     name += ".";
 
-    for(uint ii=0; ii< aFile.GetCount(); ii++)
+    for(size_t ii=0; ii< aFile.GetCount(); ii++)
     {
       if(  aFile[ii].GetPath().find( name ) != gstring::npos )
           aFlkey.Add( aFile[ii].GetKeywd() );
@@ -1193,7 +1194,7 @@ void TDataBase::GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey )
 // true if opened some files from default data base
 bool TDataBase::ifDefaultOpen() const
 {
-    for(uint i=0; i<fls.GetCount(); i++)
+    for(size_t i=0; i<fls.GetCount(); i++)
         if( aFile[fls[i]].GetPath().find( pVisor->sysDBDir())
               != gstring::npos )
             return true;
@@ -1206,9 +1207,9 @@ bool TDataBase::ifDefaultOpen() const
 
 int DataBaseList::Find(const char* s)
 {
-    for( uint ii=0; ii<GetCount(); ii++ )
+    for( size_t ii=0; ii<GetCount(); ii++ )
         if( strcmp(s, elem(ii).GetKeywd() ) )
-            return ii;
+            return static_cast<int>(ii);
     return -1;
 }
 
@@ -1217,11 +1218,11 @@ void DataBaseList::Init()
 {
     // RT_SDATA default
     unsigned char sdref_rkfrm[3] = { 20, 5, 7 };
-    Add( new TDataBase( GetCount(), "sdref", false, true,
+    Add( new TDataBase( RT_SDATA, "sdref", false, true,
                         o_sdauthr, 9, 3, 3, sdref_rkfrm ) );
     // RT_CONST default
     unsigned char const_rkfrm[2] = { 8, 24 };
-    Add( new TDataBase( GetCount(), "const", false, true,
+    Add( new TDataBase( RT_CONST, "const", false, true,
                         o_constlab, 3, 1, 2, const_rkfrm ) );
 }
 
@@ -1232,7 +1233,7 @@ void DataBaseList::toCFG(fstream& out_stream)
 out_stream << nR << endl;
 
 //    f.write( (char*)&nR, sizeof(int) );
-    for(uint ii=0; ii<GetCount(); ii++)
+    for(size_t ii=0; ii<GetCount(); ii++)
         elem(ii).toCFG( out_stream );
 }
 
@@ -1248,7 +1249,7 @@ in_stream >> nDB;
 }
 
 TDataBase&
-DataBaseList::operator[](int ii) const
+DataBaseList::operator[](size_t ii) const
 {
     ErrorIf( ii > GetCount(),
              "DataBaseList","Invalid chain index.");

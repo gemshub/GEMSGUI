@@ -34,7 +34,7 @@
 
 // Default constructor and destructor
 
-TSubModule::TSubModule( int nrt ):
+TSubModule::TSubModule( uint nrt ):
         nRT( nrt ),
         contentsChanged(false),
         //   sBw(600), sBh(460),
@@ -78,9 +78,9 @@ TSubModule::EvClose()
 QWidget* TSubModule::window()
 {
       if( nRT== RT_SYSEQ && pVisor->ProfileMode == true )
-       return (QWidget*)(NewSystemDialog::pDia);
+       return dynamic_cast<QWidget*>(NewSystemDialog::pDia);
       else
-       return (QWidget*)pImp;
+       return dynamic_cast<QWidget*>(pImp);
 }
 
 // Callback for 'close' command
@@ -150,7 +150,7 @@ void TSubModule::CmHelp2()
 
 // Default constructor
 
-TCModule::TCModule( int nrt ):
+TCModule::TCModule( uint nrt ):
         TSubModule( nrt ),
         db(&rt[nrt]),
         nQ(1), Filter(ALLKEY), start_title(" ")
@@ -233,7 +233,7 @@ TCModule::GetKeyofRecord( const char *oldKey, const char *strTitle,
 
     gstring key;
 
-    if( oldKey == 0 )
+    if( oldKey == nullptr )
     {
         if(Filter.empty())
             key = ALLKEY;
@@ -517,9 +517,9 @@ TCModule::CmShow( const char *key )
 
     	// get key of record
         gstring str;
-        if( key == 0)
+        if( key == nullptr )
         { str = GetKeyofRecord(
-          /*db->PackKey()*/0, "Select data record key ", KEY_OLD );
+          /*db->PackKey()*/nullptr, "Select data record key ", KEY_OLD );
           if( str.empty() )
     	    return;
         }
@@ -554,7 +554,7 @@ TCModule::CmFilter()
 
        TCStringArray aKey;
        TCIntArray anR;
-       int Nrec = db->GetKeyList( Filter.c_str(), aKey, anR );
+       auto Nrec = db->GetKeyList( Filter.c_str(), aKey, anR );
        if( Nrec >= 1 )
        {
         if( pVisor->ProfileMode == true )
@@ -586,7 +586,7 @@ TCModule::CmNext()
        // select scroll list
        TCStringArray aKey;
        TCIntArray anR;
-       int Nrec = db->GetKeyList( Filter.c_str(), aKey, anR );
+       auto Nrec = db->GetKeyList( Filter.c_str(), aKey, anR );
        if( Nrec <= 0 )
            return; // no records to scroll
        // get current record key

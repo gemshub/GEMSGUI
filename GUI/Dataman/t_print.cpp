@@ -34,8 +34,8 @@ TPrintData::TPrintData(const char *sd_key,
 
   prr = 1;
   iir = 0;
-  int o_prn_= aObj.Find("prn");
-  int o_ii_ = aObj.Find("ii");
+  uint o_prn_= aObj.Find("prn");
+  uint o_ii_ = aObj.Find("ii");
 
   aObj[o_prn_].SetPtr(&prr);
   aObj[o_ii_].SetPtr(&iir);

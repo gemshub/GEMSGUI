@@ -108,7 +108,7 @@ struct PData
 class TPrintData  // print resalts of module calc
 {
     gstring key_format;        // key of SDref record
-    int nRT;                   // module number
+    uint nRT;                   // module number
 
     char *input;               // current position
     TIArray<PFormat> aFmts;  // list of formats

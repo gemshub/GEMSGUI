@@ -50,7 +50,7 @@ class TConfig
 
     bool getLine();
     bool findParam(const char* str);
-    int getName();
+    size_t getName();
     gstring getToken();
     void writegstring(gstring&);
     gstring readSectionName();
@@ -64,7 +64,7 @@ class TConfig
 
 public:
 
-    TConfig(const char *fname, char style='=', int tok_ln=55);
+    TConfig(const char *fname, char style='=', const size_t tok_ln=55);
 
     gstring GetFirstSubSection();
     gstring GetNextSubSection();

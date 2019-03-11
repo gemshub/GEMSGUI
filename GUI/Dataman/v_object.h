@@ -243,7 +243,7 @@ public:
 
     //--- Selectors
     int Find(const char* keywd);
-    TObject& operator[] (int i)
+    TObject& operator[] (size_t i)
     {
         return elem(i);
     }

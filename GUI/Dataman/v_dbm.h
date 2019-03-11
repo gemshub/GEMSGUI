@@ -30,8 +30,8 @@
 
 class GemDataStream;
 
-const int	MAXRKFRMSTR = 20,  // max fields in key
-    		IND_PLUS = 112;    // augment of index key buf
+const int	MAXRKFRMSTR = 20;  // max fields in key
+const size_t IND_PLUS = 112;    // augment of index key buf
 
 enum keyctrl {   // codes key bild
     K_END = -5, K_EMP, K_ANY, K_IMM, K_ACT
@@ -82,11 +82,11 @@ public:
     {
         return rkFlds;
     }
-    char *FldKey(int i) const
+    char *FldKey(uint i) const
     {
         return uKey+rkInd[i];
     }
-    unsigned char FldLen(int i) const
+    unsigned char FldLen(uint i) const
     {
         return rkLen[i];
     }
@@ -97,7 +97,7 @@ public:
 
     //--- Manipulation keys
     void SetKey( const char *key );
-    void SetFldKey( int i, const char *fld );
+    void SetFldKey( uint i, const char *fld );
     //  void MakeKey( int nRtwrk, char *pkey, ...);	// !!!!!!
 }
 ;
@@ -107,8 +107,8 @@ class TDBKeyList:
             public TDBKey
 {
     int nI;
-    int recInDB;  // records in DB
-    int nBuf;
+    size_t recInDB;  // records in DB
+    size_t nBuf;
     RecEntry *re;
     char *ndx[MAXRKFRMSTR];
 
@@ -121,29 +121,29 @@ class TDBKeyList:
 
 protected:
     void init();
-    int keycom( int );
-    int keycmp( int );
-    void arec_add( int );
+    int keycom( uint );
+    uint keycmp( uint );
+    void arec_add( uint );
     void check_ndx();
 
 public:
     TDBKeyList( unsigned char nRkflds, const unsigned char* rkfrm );
     TDBKeyList( fstream& f );
     ~TDBKeyList();
-    void check_i(int i);
+    void check_i(uint i);
 
     //--- Selectors
-    RecEntry* RecPosit(int i);
+    RecEntry* RecPosit(uint i);
 
     int iRec() const
     {
         return nI;
     }
-    int RecCount() const
+    size_t RecCount() const
     {
         return recInDB;
     }
-    char *RecKeyFld(int i, unsigned j) const
+    char *RecKeyFld(uint i, uint j) const
     {
         return ndx[j]+i*FldLen(j);
     }
@@ -161,17 +161,17 @@ public:
     }
 
     //--- Manipulation records
-    int  addndx( int nF, int len, const char *key );
-    void delndx(int i);
+    uint  addndx( uint nF, int len, const char *key );
+    void delndx(uint i);
     int  findx( const char *key );
-    int  xlist( const char *pattern );
-    void PutKeyList( int nF, GemDataStream& f);
-    void GetKeyList_i( int nF,int nRec, GemDataStream& f );
-    void delfile( int nF );
+    size_t  xlist( const char *pattern );
+    void PutKeyList( uint nF, GemDataStream& f);
+    void GetKeyList_i( uint nF,int nRec, GemDataStream& f );
+    void delfile( uint nF );
 
     //--- Manipulation key
-    void PutKey(int i);
-    void RecKey(int i, gstring& kbuf );
+    void PutKey(uint i);
+    void RecKey(uint i, gstring& kbuf );
 
     //--- reset class
     void initnew();
@@ -199,7 +199,7 @@ struct RecHead
     void read(GemDataStream& is);
     void write(GemDataStream& os);
 
-    static size_t data_size()
+    static int data_size()
     {
         return sizeof(char[2]) + sizeof(char)*2
 // Sveta 64               + sizeof(long) + sizeof(time_t) + sizeof(char[2]);
@@ -228,17 +228,20 @@ class TDataBase
     time_t crt;
 
 protected:
-    void putndx( int nF );
-    void getndx( int nF );
+
+    //--- check
+    void check_file( uint nF );
+    void putndx( uint nF );
+    void getndx( uint nF );
     int reclen( );
     int putrec( RecEntry& re, GemDataStream& f );
     int putrec( RecEntry& re, GemDataStream& f, RecHead& rhh );
     int getrec( RecEntry& re, GemDataStream& f, RecHead& rh );
     void opfils();
-    int scanfile( int nF, int& fPos, int& fLen,
+    int scanfile( uint nF, int& fPos, int& fLen,
 	    GemDataStream& inStream, GemDataStream& outStream);
     void fromCFG(fstream& f);
-    bool dbChangeAllowed( int nf, bool ifRep=false );
+    bool dbChangeAllowed( uint nf, bool ifRep=false );
 
 public:
     int specialFilesNum;
@@ -246,7 +249,7 @@ public:
     TCStringArray fOpenNameBuf;
 
     //  TDateBase();
-    TDataBase( int nrt, const char* name, bool Rclose, bool isDel,
+    TDataBase( size_t nrt, const char* name, bool Rclose, bool isDel,
                int nOf, unsigned char Nobj, int filesNum,
                unsigned char nRkflds, const unsigned char* rkfrm );
     TDataBase( fstream& f );
@@ -255,8 +258,6 @@ public:
     void AddFile(const gstring& path);
     void DelFile(const gstring& path);
 
-    //--- check
-    void check_file( int nF );
 
     //--- Selectors
     RecStatus GetStatus() const
@@ -272,11 +273,11 @@ public:
     {
         return Keywd;
     }
-    int KeyLen() const
+    uint KeyLen() const
     {
         return ind.KeyLen();
     }
-    void RecKey( int i, gstring& kbuf )
+    void RecKey( uint i, gstring& kbuf )
     {
         ind.RecKey(i,kbuf);
     }
@@ -295,12 +296,12 @@ public:
     {
         return crt;
     }  // time current record
-    time_t GetTime( int i );               // time record number i
-    char *FldKey( int i ) const
+    time_t GetTime( uint i );               // time record number i
+    char *FldKey( uint i ) const
     {
         return ind.FldKey(i);
     }
-    unsigned char FldLen(int i) const
+    unsigned char FldLen(uint i) const
     {
         return ind.FldLen(i);
     }
@@ -325,13 +326,13 @@ public:
     {
         ind.SetKey(key);
     }
-    void SetFldKey( int i, const char *fld )
+    void SetFldKey( uint i, const char *fld )
     {
         ind.SetFldKey( i, fld );
     }
 
     void MakeKey( unsigned char nRtwrk, char *pkey, ...);
-    int RecCount() const
+    size_t RecCount() const
     {
         return ind.RecCount();
     }
@@ -346,7 +347,7 @@ public:
 
 
     //--- Information about of open file list
-    int GetOpenFileNum( const char *secondName  );
+    uint GetOpenFileNum( const char *secondName  );
     bool SetNewOpenFileList( const TCStringArray& aFlNames );
     void GetFileList( int mode, TCStringArray& names,
                       TCIntArray& indx,  TCIntArray& sel );
@@ -358,7 +359,7 @@ public:
     bool ifDefaultOpen() const;
 
     //--- Manipulation Data Base
-    void Create( int nF );
+    void Create( uint nF );
     void Open( bool type, FileStatus mode, const TCIntArray& indx);
     void OpenAllFiles( bool only_kernel = false );
     void Close();
@@ -370,18 +371,18 @@ public:
     void AddOpenFile(const TCIntArray& indx);
 
     //--- Manipulation records
-    int AddRecordToFile(const char *key, int file);
+    uint AddRecordToFile(const char *key, uint file);
     void Rep( int i);
     void Del( int i);
     void Get( int i);
     int Find( const char *key);
     int FindCurrent( const char *key);
     RecStatus Rtest( const char *key, int mode = 1);
-    bool FindPart( const char *key_, int field );
+    bool FindPart( const char *key_, uint field );
     //  RecStatus TryRec( RecStatus rs, char *key, int mode = 1);
 
     //--- Manipulation list of records
-    int GetKeyList( const char *keypat,TCStringArray& aKey,TCIntArray& anR);
+    size_t GetKeyList( const char *keypat,TCStringArray& aKey,TCIntArray& anR);
     const TCStringArray& KeyList() const
     {
         return ind.KeyList();
@@ -412,7 +413,7 @@ public:
     void toCFG(fstream& f);
 
     //--- Selectors
-    TDataBase& operator[](int) const;
+    TDataBase& operator[](size_t) const;
     int Find(const char* keywd);
 };
 
