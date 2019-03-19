@@ -61,7 +61,7 @@ public:
 
     static TSData* pm;
 
-    TSData( int nrt );
+    TSData( uint nrt );
     const char* GetName() const
     {
         return "SDref";

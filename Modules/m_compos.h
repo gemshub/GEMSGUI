@@ -106,7 +106,7 @@ public:
     static TCompos* pm;
     COMPOS *bcp;
 
-    TCompos( int nrt );
+    TCompos( uint nrt );
     ~TCompos();
 
     const char* GetName() const

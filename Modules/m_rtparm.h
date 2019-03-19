@@ -114,7 +114,7 @@ public:
 
     RTPARM *rpp;
 
-    TRTParm( int nrt );
+    TRTParm( uint nrt );
 
     const char* GetName() const
     {

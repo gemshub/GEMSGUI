@@ -29,7 +29,7 @@
 
 TGEM2MT* TGEM2MT::pm;
 
-TGEM2MT::TGEM2MT( int nrt ):
+TGEM2MT::TGEM2MT( uint nrt ):
         TCModule( nrt )
 {
     nQ = 1;

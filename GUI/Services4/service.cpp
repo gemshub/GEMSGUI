@@ -327,7 +327,7 @@ vfMultiChoiceSet(QWidget* par, TCStringArray& arr, const char* prompt, TCIntArra
 }
 
 TCStringArray vfMultiKeys(QWidget* par, const char* caption,
-                            int iRt, const char* key )
+                            uint iRt, const char* key )
 {
     TCStringArray sel;
     KeyDialog dbk(par, iRt, sel, key, caption);

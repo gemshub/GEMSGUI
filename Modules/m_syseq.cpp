@@ -22,7 +22,7 @@
 
 TSysEq* TSysEq::pm;
 
-TSysEq::TSysEq( int nrt ):
+TSysEq::TSysEq( uint nrt ):
         TCModule( nrt )
 {
     nQ = 2;

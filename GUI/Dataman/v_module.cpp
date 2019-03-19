@@ -577,7 +577,7 @@ TCModule::CmNext()
 {
     try
     {
-       int i_next = 0;
+       uint i_next = 0;
        if( ! MessageToSave() )
 	    return;
 
@@ -620,7 +620,7 @@ TCModule::CmPrevious()
 {
     try
     {
-       int i_next = 0;
+       uint i_next = 0;
        if( ! MessageToSave() )
     	return;
 
@@ -629,7 +629,7 @@ TCModule::CmPrevious()
        // select scroll list
        TCStringArray aKey;
        TCIntArray anR;
-       int Nrec = db->GetKeyList( Filter.c_str(), aKey, anR );
+       auto Nrec = db->GetKeyList( Filter.c_str(), aKey, anR );
        if( Nrec <= 0 )
            return; // no records to scroll
        if( !(str.find_first_of("*?" ) != gstring::npos) )
@@ -638,8 +638,10 @@ TCModule::CmPrevious()
          for(uint i=0; i<aKey.GetCount(); i++ )
           if( str == aKey[i])
             {
-              i_next = i-1;
-              if( i_next <  0 ) i_next++;
+              if( i==0 )
+                i_next = i;
+              else
+               i_next = i-1;
               break;
             }
         }
@@ -787,7 +789,7 @@ TCModule::CmCalc()
         clock_t dtime = ( t_end11- t_start11 );
         vstr  buf(200);
         sprintf(buf, "Calculation finished OK (elapsed time: %lg s).",
-                   (double)dtime/(double)CLOCKS_PER_SEC);
+                static_cast<double>(dtime)/CLOCKS_PER_SEC);
         SetString(buf);
 
         pVisor->Update();
@@ -988,7 +990,7 @@ void TCModule::RecordLoadinProfile( const char *key )
 {
     gstring str;
 
-    if( key==0 )
+    if( key==nullptr )
     {
         str = getFilter();
         str = GetKeyofRecord( str.c_str(), "Please, select a record key ", KEY_OLD );
@@ -1209,15 +1211,15 @@ TCModule::RecordPrint( const char* key )
  }
  if( sd_key.find_first_of("*?" ) != gstring::npos )
  {
-     sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
+     sd_key = dynamic_cast<TCModule *>(&aMod[RT_SDATA])->GetKeyofRecord(
           sd_key.c_str(), "Please, select a print script", KEY_OLD);
  }
 
  if( sd_key.empty() )
      return;
 
-  ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
-  const char * text_fmt = (char *)aObj[o_sdabstr].GetPtr();
+  dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+  const char * text_fmt = static_cast<const char *>(aObj[o_sdabstr].GetPtr());
   if( !text_fmt )
        Error( sd_key.c_str(), "No print script in this record.");
 
@@ -1264,15 +1266,15 @@ TCModule::CmScript()
 
       sd_key += "*";
       sd_key += ":";
-      sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
+      sd_key =dynamic_cast<TCModule *>(&aMod[RT_SDATA])->GetKeyofRecord(
           sd_key.c_str(), "Please, select an appropriate script", KEY_OLD);
       if( sd_key.empty() )
       return;
-      ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+      dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
        /*if( pImp )
            pVisorImp->OpenModule(pImp->topLevelWidget(), RT_SDATA);
-       else*/ pVisorImp->OpenModule(0, RT_SDATA,0,true);  // KD: workaround for NewSystemDialog
-      ((TCModule *)&aMod[RT_SDATA])->Update();
+       else*/ pVisorImp->OpenModule(nullptr, RT_SDATA,0,true);  // KD: workaround for NewSystemDialog
+      dynamic_cast<TCModule *>(&aMod[RT_SDATA])->Update();
 
     }
     catch( TError& xcpt )
@@ -1612,7 +1614,7 @@ TCModule::AddRecord(const char* key )
 
     ErrorIf(!key, "TCModule::AddRecord()", "empty record key!");
 
-    if( strpbrk(key,"*?/")!=0 )
+    if( strpbrk(key,"*?/")!=nullptr )
         Error( GetName(), "Attempt to insert record with template key!");
 
     ErrorIf( db->fOpenNameBuf.GetCount()<1, GetName(), "No database file choosen");
@@ -1637,7 +1639,7 @@ TCModule::AddRecord(const char* key, int& fnum )
 
     ErrorIf(!key, "TCModule::AddRecord()", "empty record key!");
 
-    if( strpbrk(key,"*?/")!=0 )
+    if( strpbrk(key,"*?/")!=nullptr )
         Error( GetName(), "Attempt to insert record with template key!");
     if( fnum >= 0 )
       file = fnum;
@@ -1735,10 +1737,9 @@ TCModule::RecToTXT( const char *pattern )
     {
        int Rnum = db->Find( aKey[i].c_str() );
        db->Get( Rnum );
-       aObj[o_reckey].SetPtr( (void *)aKey[i].c_str());
+       aObj[o_reckey].SetPtr( const_cast<void*>(static_cast<const void *>(aKey[i].c_str())));
        aObj[o_reckey].toTXT(f);
-        for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount();
-             no++)
+        for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount();  no++)
             aObj[no].toTXT(f);
     }
 
@@ -1811,12 +1812,12 @@ TCModule::RecExport( const char *pattern )
             sd_key += db->GetKeywd();
             sd_key += "*";
             sd_key += ":";
-    sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
+    sd_key = dynamic_cast<TCModule *>(&aMod[RT_SDATA])->GetKeyofRecord(
           sd_key.c_str(), "Select key of escript format", KEY_OLD);
     if( sd_key.empty() )
      return;
-    ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
-    char * text_fmt = (char *)aObj[o_sdabstr].GetPtr();
+    dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+    char * text_fmt = static_cast<char *>(aObj[o_sdabstr].GetPtr());
     if( !text_fmt )
        Error( sd_key.c_str(), "No format text in this record.");
 
@@ -1874,12 +1875,12 @@ TCModule::RecImport()
             sd_key += db->GetKeywd();
             sd_key += "*";
             sd_key += ":";
-    sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
+    sd_key = dynamic_cast<TCModule *>(&aMod[RT_SDATA])->GetKeyofRecord(
           sd_key.c_str(), "Select key of iscript format", KEY_OLD);
     if( sd_key.empty() )
      return;
-    ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
-    char * text_fmt = (char *)aObj[o_sdabstr].GetPtr();
+    dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+    char * text_fmt = static_cast<char *>(aObj[o_sdabstr].GetPtr());
     if( !text_fmt )
        Error( sd_key.c_str(), "No format text in this record.");
 
@@ -1952,6 +1953,7 @@ TCModule::DelList( const char *pattern )
             {
             case VF3_3:
                 ichs=0;
+                break;
             case VF3_1:
                 break;
             case VF3_2:
@@ -1981,7 +1983,7 @@ TCModule::Transfer( const char *pattern )
         nrec = db->Find( aKey[i].c_str() );
         db->Get( nrec );
         /// !!!
-        int oldfile = db->fNum;
+        auto oldfile = db->fNum;
         db->Del( nrec );
         AddRecord( aKey[i].c_str(), fnum );
         if( fnum == -2 )
@@ -2021,13 +2023,14 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
        {
         case VF_YES:
             rn_type = 1;
+            break;
         case VF_NO:
             break;
         case VF_CANCEL:
         return;
        }
     }
-    int fld = db->KeyNumFlds()-1;
+    uint fld = db->KeyNumFlds()-1;
     gstring from_t;
     gstring to_t;
     if( rn_type == 0 )
@@ -2052,15 +2055,18 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
         else
         {
           //int fld = db->KeyNumFlds()-1;
-          str= gstring(db->FldKey( fld ), 0, db->FldLen( fld ));
-          ChangeforTempl( str, from_t, to_t, db->FldLen( fld ));
-          str += ":";
-          for(int ii=fld-1; ii>=0; ii--)
-          {  gstring str1 =
-               gstring(db->FldKey( ii ), 0, db->FldLen( ii ));
+          gstring str1;
+          str = "";
+          for(uint ii=0; ii<fld; ii++)
+          {
+             str1 = gstring(db->FldKey( ii ), 0, db->FldLen( ii ));
              str1.strip();
-             str = str1 + ":" + str;
+             str += str1 + ":";
            }
+          str1= gstring(db->FldKey( fld ), 0, db->FldLen( fld ));
+          ChangeforTempl( str1, from_t, to_t, db->FldLen( fld ));
+          str += str1 + ":";
+
         }
        if( if_rename )
        {

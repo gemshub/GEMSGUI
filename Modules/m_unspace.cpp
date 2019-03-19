@@ -30,7 +30,7 @@
 
 TUnSpace* TUnSpace::pm;
 
-TUnSpace::TUnSpace( int nrt ):
+TUnSpace::TUnSpace( uint nrt ):
         TCModule( nrt )
 {
     nQ = 2;

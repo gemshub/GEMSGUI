@@ -181,7 +181,7 @@ public:
     SYSPACK *ssp;
     EQSTAT *stp;
 
-    TSysEq( int nrt );
+    TSysEq( uint nrt );
 
     const char* GetName() const
     {

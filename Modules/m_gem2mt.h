@@ -454,7 +454,7 @@ public:
 
     GEM2MT *mtp;
 
-    TGEM2MT( int nrt );
+    TGEM2MT( uint nrt );
 
     const char* GetName() const
     {

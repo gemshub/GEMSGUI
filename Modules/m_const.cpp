@@ -25,7 +25,7 @@
 
 TConst* TConst::pm;
 
-TConst::TConst( int nrt ):
+TConst::TConst( uint nrt ):
         TCModule( nrt )
 {
     CA=0;

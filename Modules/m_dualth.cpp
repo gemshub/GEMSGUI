@@ -26,7 +26,7 @@
 
 TDualTh* TDualTh::pm;
 
-TDualTh::TDualTh( int nrt ):
+TDualTh::TDualTh( uint nrt ):
         TCModule( nrt )
 {
     nQ = 1;

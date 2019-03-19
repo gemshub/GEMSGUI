@@ -291,7 +291,7 @@ public:
 
     PHASE *php;
 
-    TPhase( int nrt );
+    TPhase( uint nrt );
 
     const char* GetName() const
     {

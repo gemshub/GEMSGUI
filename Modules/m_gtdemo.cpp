@@ -34,7 +34,7 @@ bool TGtDemo::check_RT( int nrt )
 }
 ///
 
-TGtDemo::TGtDemo( int nrt ):
+TGtDemo::TGtDemo( uint nrt ):
         TCModule( nrt )
 {
     nQ = 1;

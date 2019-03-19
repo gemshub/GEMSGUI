@@ -63,7 +63,7 @@ SPP_SETTING pa_ = {
         1e-3, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
         1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-20, /* PhMin, */
         1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-        1e-10,  /* DKIN  */ 0,  /* tprn */
+        1e-10,  /* DKIN  */ nullptr,  /* tprn */
     },
     "CSC   ",   /* DCpct[6] */  "OjjbC+---",    /* DCpdc[9] */
     "+----M",   /* BCpc[6] */   "K3C   ",   /* REpct[6] */
@@ -88,8 +88,8 @@ SPP_SETTING pa_ = {
     {0., 0., 0.},   /* Vi[3] */
     1., 25.,      /* Pr, Tr */
     /* MULTI */
-    (float)1.66e-24, /* lowPosNum, */  (float)1e-16, /* logXw, */   (float)1e-9,  /* logYFk */
-    { (float)0.064, (float)3.72, 0., 0., 0. },  // Defaults for aqueous auto-phase models
+    1.66e-24f, /* lowPosNum, */  1e-16f, /* logXw, */   1e-9f,  /* logYFk */
+    { 0.064f, 3.72f, 0., 0., 0. },  // Defaults for aqueous auto-phase models
 }; /* SPP_SETTING */
 
 BASE_PARAM dfBase[5] =
@@ -108,7 +108,7 @@ BASE_PARAM dfBase[5] =
                 1e-3, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
                 1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-20, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-                1e-10,  /* DKIN  */ 0,  /* tprn */
+                1e-10,  /* DKIN  */ nullptr,  /* tprn */
 	    },
             { // Variant for aquatic systems with SCMs in sorption phases
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
@@ -124,7 +124,7 @@ BASE_PARAM dfBase[5] =
                 1e-3, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
                 1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-20, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   5e-3,  /* IEPS */
-                1e-10,  /* DKIN  */ 0,  /* tprn */
+                1e-10,  /* DKIN  */ nullptr,  /* tprn */
 	    },
             { // Variant for fluid-rock systems with highly non-ideal phases
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
@@ -140,7 +140,7 @@ BASE_PARAM dfBase[5] =
                 1e-3, /* GAS */   12.05,  /* DNS */   1e-11,  /* XwMin, */
                 1e-11,  /* ScMin, */  1e-30, /* DcMin, */   1e-20, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-                1e-10,  /* DKIN  */ 0,  /* tprn */
+                1e-10,  /* DKIN  */ nullptr,  /* tprn */
             },
             { // Variant of strict settings for highest accuracy
                 2,  /* PC */  2,     /* PD */   -5,   /* PRD */
@@ -156,7 +156,7 @@ BASE_PARAM dfBase[5] =
                 1e-3, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
                 1e-13,  /* ScMin, */  1e-40, /* DcMin, */   1e-30, /* PhMin, */
                 1e-7,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-                1e-10,  /* DKIN  */ 0,  /* tprn */
+                1e-10,  /* DKIN  */ nullptr,  /* tprn */
             },
             { // Variant of strict settings for reactive mass transport (with sorption)
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
@@ -172,7 +172,7 @@ BASE_PARAM dfBase[5] =
                 1e-3, /* GAS */   12.05,  /* DNS */   1e-13,  /* XwMin, */
                 1e-13,  /* ScMin, */  1e-33, /* DcMin, */   1e-20, /* PhMin, */
                 1e-5,  /* ICmin */   1e-10,  /* EPS */   1e-3,  /* IEPS */
-                1e-10,  /* DKIN  */ 0,  /* tprn */
+                1e-10,  /* DKIN  */ nullptr,  /* tprn */
             }
 	    // More preset parameter structures can be added here
             // (if so, increase number of elements from 5 above and in dfBase() call below)
@@ -233,7 +233,7 @@ SPP_SETTING::read(GemDataStream& iss)
 }
 
 
-TProfil::TProfil( int nrt ):
+TProfil::TProfil( uint nrt ):
         TCModule( nrt )
 {
     aFldKeysHelp.Add("Name of the modeling project");

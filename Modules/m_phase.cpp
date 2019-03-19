@@ -38,7 +38,7 @@ int rkeycmp(const void *e1, const void *e2)
 TPhase* TPhase::pm;
 
 
-TPhase::TPhase( int nrt ):
+TPhase::TPhase( uint nrt ):
         TCModule( nrt )
 {
     nQ = 1;

@@ -67,7 +67,7 @@ public:
 
     ICOMP *icp;
 
-    TIComp( int nrt );
+    TIComp( uint nrt );
 
     const char* GetName() const
     {

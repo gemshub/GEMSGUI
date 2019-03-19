@@ -42,7 +42,7 @@ const double ZBALANCE_PREC =  1e-6,
                            PRESSURE_PREC   = 0.1;
 
 
-TDComp::TDComp( int nrt ):
+TDComp::TDComp( uint nrt ):
         TCModule( nrt )
 {
     nQ = 2;

@@ -25,7 +25,7 @@
 
 TSData* TSData::pm;
 
-TSData::TSData( int nrt ):
+TSData::TSData( uint nrt ):
         TCModule( nrt )
 {
     refs = 0;

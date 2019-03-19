@@ -41,7 +41,7 @@ public:
 
     static TConst* pm;
 
-    TConst( int nrt );
+    TConst( uint nrt );
     const char* GetName() const
     {
         return "Const";

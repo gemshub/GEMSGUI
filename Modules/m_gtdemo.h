@@ -147,7 +147,7 @@ public:
     static TGtDemo* pm;
 
     GTDEMO *gdp;
-    TGtDemo( int nrt );
+    TGtDemo( uint nrt );
 
     const char* GetName() const
     {

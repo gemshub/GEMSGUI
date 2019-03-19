@@ -371,7 +371,7 @@ public:
     void AddOpenFile(const TCIntArray& indx);
 
     //--- Manipulation records
-    uint AddRecordToFile(const char *key, uint file);
+    uint AddRecordToFile(const char *key, int file);
     void Rep( int i);
     void Del( int i);
     void Get( int i);

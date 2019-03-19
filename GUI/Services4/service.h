@@ -69,7 +69,7 @@ vfMultiChoiceSet(QWidget* par, TCStringArray& arr, const char* prompt, TCIntArra
 
 TCStringArray
 vfMultiKeys(QWidget* par, const char* caption,
-        int iRt, const char* key );
+        uint iRt, const char* key );
 
 TCStringArray
 vfMultiKeysSet(QWidget* par, const char* caption,

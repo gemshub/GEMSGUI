@@ -260,7 +260,7 @@ public:
 
     DUALTH *dtp;
 
-    TDualTh( int nrt );
+    TDualTh( uint nrt );
 
     const char* GetName() const
     {

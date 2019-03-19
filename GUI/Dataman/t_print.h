@@ -132,8 +132,7 @@ protected:
 
 public:
 
-    TPrintData(const char *sd_key,
-    int nrt, fstream& fout, const char *fmt_text );
+    TPrintData(const char *sd_key, uint nrt, fstream& fout, const char *fmt_text );
     ~TPrintData();
 
 };

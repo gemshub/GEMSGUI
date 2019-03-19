@@ -41,7 +41,7 @@ const double PCO_DBL_EPSILON = 1e-9;
 
 TCompos* TCompos::pm;
 
-TCompos::TCompos( int nrt ):
+TCompos::TCompos( uint nrt ):
         TCModule( nrt )
 {
     aFldKeysHelp.Add("Name of predefined composition object (PCO)");

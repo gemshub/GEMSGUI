@@ -991,7 +991,7 @@ TDBKeyList::addndx( uint nF, int len, const char *key )
     re[i].nFile = nF;   //warning
     nI = i;
     recInDB++;
-    return i;
+    return ii;
 }
 
 // Delete i-th record from list

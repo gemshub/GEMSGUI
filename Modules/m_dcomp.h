@@ -172,7 +172,7 @@ public:
 
     DCOMP *dcp;
 
-    TDComp( int nrt );
+    TDComp( uint nrt );
 
     const char* GetName() const
     {

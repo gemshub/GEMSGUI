@@ -387,7 +387,7 @@ public:
 
     UNSPACE *usp;
 
-    TUnSpace( int nrt );
+    TUnSpace( uint nrt );
 
     const char* GetName() const
     {

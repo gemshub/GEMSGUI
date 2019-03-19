@@ -62,7 +62,7 @@ TRTParm::GetKeyofRecord( const char *oldKey, const char *strTitle,
 
 
 
-TRTParm::TRTParm( int nrt ):
+TRTParm::TRTParm( uint nrt ):
         TCModule( nrt )
 {
     nQ = 1;

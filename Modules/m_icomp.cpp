@@ -24,7 +24,7 @@
 
 TIComp* TIComp::pm;
 
-TIComp::TIComp( int nrt ):
+TIComp::TIComp( uint nrt ):
         TCModule( nrt )
 {
     aFldKeysHelp.Add("Symbol of Independent Component (IC)");

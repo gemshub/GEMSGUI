@@ -165,7 +165,7 @@ public:
 
     REACDC *rcp;
 
-    TReacDC( int nrt );
+    TReacDC( uint nrt );
 
     const char* GetName() const
     {

@@ -26,7 +26,7 @@
 
 
 TPrintData::TPrintData(const char *sd_key,
-    int nrt, fstream& fout, const char *fmt_text ):
+    uint nrt, fstream& fout, const char *fmt_text ):
   key_format( sd_key ), nRT(nrt)
 {
   ErrorIf( !fout.good() , rt[nRT].GetKeywd(), "Fileopen error");

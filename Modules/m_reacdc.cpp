@@ -29,7 +29,7 @@
 
 TReacDC* TReacDC::pm;
 
-TReacDC::TReacDC( int nrt ):
+TReacDC::TReacDC( uint nrt ):
         TCModule( nrt )
 {
     nQ =8;

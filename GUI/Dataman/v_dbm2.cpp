@@ -53,7 +53,7 @@ bool TDataBase::dbChangeAllowed( int /*nf*/, bool /*ifRep*/ )
 bool TDataBase::dbChangeAllowed( uint nf, bool /*ifRep*/ )
 {
     return ( pVisor->isDBChangeMode() /*&&  ifRep==true*/ )
-	    || ( nf >= specialFilesNum );
+        || ( nf >= static_cast<uint>(specialFilesNum) );
 }
 
 #endif
@@ -332,7 +332,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     for( j=0; j<nOD; j++ )   // get objects from file
     {
         if ( j+frstOD == o_phstr2  )
-            if( StillLen < 16*sizeof(short) )     // old record of phase
+            if( StillLen < static_cast<int>(16*sizeof(short)) )     // old record of phase
                break;
 
        if ( j+frstOD == o_tpstr  )
@@ -355,7 +355,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
 /*!
     Add new record with key pkey to file in DB files list
 */
-uint TDataBase::AddRecordToFile( const char *pkey, uint file )
+uint TDataBase::AddRecordToFile( const char *pkey, int file )
 {
     int len, oldlen;
     unsigned char nF;
@@ -776,7 +776,7 @@ TDataBase::OpenAllFiles( bool only_kernel )
         return;
 
     Close();
-    for( j=0; j< aFile.GetCount(); j++)
+    for( j=0; j< static_cast<int>(aFile.GetCount()); j++)
      if( only_kernel && j >=  specialFilesNum )
        continue;
      else

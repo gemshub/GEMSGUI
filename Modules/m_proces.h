@@ -211,7 +211,7 @@ public:
 
     PROCESS *pep;
 
-    TProcess( int nrt );
+    TProcess( uint nrt );
 
     const char* GetName() const
     {

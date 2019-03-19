@@ -29,7 +29,7 @@
 
 TProcess* TProcess::pm;
 
-TProcess::TProcess( int nrt ):
+TProcess::TProcess( uint nrt ):
         TCModule( nrt )
 {
     nQ = 1;
