@@ -198,6 +198,7 @@ protected:
     void CalcPoint( int nPoint );
     void set_type_flags( char type);
 
+    void refreshState();
 
 public:
 
@@ -213,30 +214,31 @@ public:
 
     TProcess( uint nrt );
 
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "Process";
     }
 
-    void ods_link( int i=0);
-    void dyn_set( int i=0);
-    void dyn_kill( int i=0);
-    void dyn_new( int i=0);
-    void set_def( int i=0);
-    bool check_input( const char *key, int level=1 );
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0) override;
+    bool check_input( const char *key, int level=1 ) override;
     gstring   GetKeyofRecord( const char *oldKey, const char *strTitle,
-                              int keyType );
+                              int keyType ) override;
 
 
-    void RecInput( const char *key );
-    void MakeQuery();
-    int RecBuild( const char *key, int mode = VF_UNDEF );
-    void RecCalc( const char *key );
-    void RecordPlot( const char *key );
-    bool SaveGraphData( GraphData* graph );
+    void RecInput( const char *key ) override;
+    void MakeQuery() override;
+    int RecBuild( const char *key, int mode = VF_UNDEF ) override;
+    void RecCalc( const char *key ) override;
+    void RecordPrint( const char *key=nullptr ) override; //sddata key
+    void RecordPlot( const char *key ) override;
+    bool SaveGraphData( GraphData* graph ) override;
 
     //void CmHelp();
-    const char* GetHtml();
+    const char* GetHtml() override;
     bool NoSave() const
     { return ( pep->PsSY == S_OFF ); }
 
@@ -245,6 +247,12 @@ public:
 
    double f_proc( double x );
 
+   /// Generate MULTI, DATACH and DATABR files structure prepared from GEMS.
+   /// Prints files for separate coupled FMT-GEM programs that use GEMS3K module
+   /// \param filepath - IPM work structure file path&name
+   /// \param brief_mode - Do not write data items that contain only default values
+   /// \return savedSystems - add saved system record to array
+   void genGEM3K( const gstring& filepath, bool brief_mode, TCStringArray& savedSystems );
 };
 
 enum pe_statcode {

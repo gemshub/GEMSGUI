@@ -20,12 +20,14 @@
 
 //#include <cmath>
 //#include <cstdio>
+#include <unistd.h>
 #include "m_proces.h"
 #include "m_syseq.h"
 #include "visor.h"
 #include "t_print.h"
 #include "stepwise.h"
 #include "num_methods.h"
+#include "nodearray.h"
 
 TProcess* TProcess::pm;
 
@@ -46,9 +48,8 @@ TProcess::TProcess( uint nrt ):
     setKeyEditField(8);
     pep=&pe[0];
     set_def();
-    gd_gr = 0;
-    start_title =
-       " Definition of a Process Simulator (batch calculation)";
+    gd_gr = nullptr;
+    start_title = " Definition of a Process Simulator (batch calculation)";
 
     userCancel = false;
     stepWise = false;
@@ -72,7 +73,7 @@ TProcess::GetKeyofRecord( const char *oldKey, const char *strTitle,
 {
     gstring str;
 
-    if( oldKey == 0 )
+    if( oldKey == nullptr )
     {
         if(Filter.empty())
             str = ALLKEY;
@@ -116,7 +117,7 @@ void TProcess::keyTest( const char *key )
     { // test project key
         gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
         StripLine(prfKey);
-        int k = prfKey.length();
+        auto k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
             Error( key, "E08PErem: Wrong SysEq record key (another Modelling Project)!");
@@ -255,72 +256,73 @@ void TProcess::dyn_set(int q)
 {
     ErrorIf( pep!=&pe[q], GetName(), "E06PErem: Dynamic memory corruption in Process data structure");
     // memcpy( pep->key , rt[nRT].UnpackKey(), PE_RKLEN );
-    pe[q].tm =   (short *)aObj[ o_petmv ].GetPtr();
-    pe[q].nv =   (short *)aObj[ o_penvv ].GetPtr();
-    pe[q].P =    (double *)aObj[ o_pepv ].GetPtr();
-    pe[q].V =    (double *)aObj[ o_pevv ].GetPtr();
-    pe[q].TC =    (double *)aObj[ o_petv ].GetPtr();
-    pe[q].Tau =  (double *)aObj[ o_petauv ].GetPtr();
-    pe[q].pXi =  (double *)aObj[ o_pepxiv ].GetPtr();
-    pe[q].Nu =   (double *)aObj[ o_penuv ].GetPtr();
-    pe[q].Kin =  (double *)aObj[ o_pekinv ].GetPtr();
-    pe[q].Modc = (double *)aObj[ o_pemodc ].GetPtr();
-    pe[q].Expr = (char *)aObj[ o_peexpr ].GetPtr();
-    pe[q].stl =  (char (*)[EQ_RKLEN])aObj[ o_pestl ].GetPtr();
-    pe[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_pesdref ].GetPtr();
-    pe[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_pesdval ].GetPtr();
-    pe[q].tprn = (char *)aObj[ o_petprn ].GetPtr();
+    pe[q].tm =   static_cast<short *>(aObj[ o_petmv ].GetPtr());
+    pe[q].nv =   static_cast<short *>(aObj[ o_penvv ].GetPtr());
+    pe[q].P =    static_cast<double *>(aObj[ o_pepv ].GetPtr());
+    pe[q].V =    static_cast<double *>(aObj[ o_pevv ].GetPtr());
+    pe[q].TC =   static_cast<double *>(aObj[ o_petv ].GetPtr());
+    pe[q].Tau =  static_cast<double *>(aObj[ o_petauv ].GetPtr());
+    pe[q].pXi =  static_cast<double *>(aObj[ o_pepxiv ].GetPtr());
+    pe[q].Nu =   static_cast<double *>(aObj[ o_penuv ].GetPtr());
+    pe[q].Kin =  static_cast<double *>(aObj[ o_pekinv ].GetPtr());
+    pe[q].Modc = static_cast<double *>(aObj[ o_pemodc ].GetPtr());
+    pe[q].Expr = static_cast<char *>(aObj[ o_peexpr ].GetPtr());
+    pe[q].stl =  static_cast<char (*)[EQ_RKLEN]>(aObj[ o_pestl ].GetPtr());
+    pe[q].sdref = static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_pesdref ].GetPtr());
+    pe[q].sdval = static_cast<char (*)[V_SD_VALEN]>(aObj[ o_pesdval ].GetPtr());
+    pe[q].tprn = static_cast<char *>(aObj[ o_petprn ].GetPtr());
     // graphics
 
     // Change MAXGRNAME from 7 to 16
     if(pe[q].PsGR != S_OFF && aObj[ o_pclnam ].GetType() == 7 )
-      pe[q].lNam = (char (*)[MAXGRNAME])aObj[ o_pclnam ].Alloc( 1,
-                 pe[q].dimXY[1], MAXGRNAME);
+      pe[q].lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclnam ].Alloc( 1,
+                 pe[q].dimXY[1], MAXGRNAME));
     else
-      pe[q].lNam = (char (*)[MAXGRNAME])aObj[ o_pclnam ].GetPtr();
+      pe[q].lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclnam ].GetPtr());
 
     if( pe[q].PvEF != S_OFF && aObj[ o_pclname ].GetType() == 7  )
-          pe[q].lNamE = (char (*)[MAXGRNAME])aObj[ o_pclname ].Alloc(1,
-                     pe[q].dimEF[1], MAXGRNAME);
+          pe[q].lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclname ].Alloc(1,
+                     pe[q].dimEF[1], MAXGRNAME));
     else
-         pe[q].lNamE = (char (*)[MAXGRNAME])aObj[ o_pclname ].GetPtr();
+         pe[q].lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclname ].GetPtr());
 
-    pe[q].gr_expr = (char *)aObj[ o_pcexpr ].GetPtr();
-    pe[q].x0    = (double *)aObj[ o_pcx0 ].GetPtr();    pe[q].dimX = aObj[ o_pcx0 ].GetM();
-    pe[q].y0    = (double *)aObj[ o_pcy0 ].GetPtr();
-    pe[q].xE    = (double *)aObj[ o_pcxe ].GetPtr();
-    pe[q].yE    = (double *)aObj[ o_pcye ].GetPtr();
-    plot  = (TPlotLine *)aObj[ o_pcplline ].GetPtr();
+    pe[q].gr_expr = static_cast<char *>(aObj[ o_pcexpr ].GetPtr());
+    pe[q].x0    = static_cast<double *>(aObj[ o_pcx0 ].GetPtr());
+    pe[q].dimX =  aObj[ o_pcx0 ].GetM();
+    pe[q].y0    = static_cast<double *>(aObj[ o_pcy0 ].GetPtr());
+    pe[q].xE    = static_cast<double *>(aObj[ o_pcxe ].GetPtr());
+    pe[q].yE    = static_cast<double *>(aObj[ o_pcye ].GetPtr());
+    plot  = static_cast<TPlotLine *>(aObj[ o_pcplline ].GetPtr());
 }
 
 // free dynamic memory in objects and values
 void TProcess::dyn_kill(int q)
 {
     ErrorIf( pep!=&pe[q], GetName(), "E05PErem: Attempt to free corrupted dynamic memory");
-    pe[q].tm =   (short *)aObj[ o_petmv ].Free();
-    pe[q].nv =   (short *)aObj[ o_penvv ].Free();
-    pe[q].P =    (double *)aObj[ o_pepv ].Free();
-    pe[q].V =    (double *)aObj[ o_pevv ].Free();
-    pe[q].TC =    (double *)aObj[ o_petv ].Free();
-    pe[q].Tau =  (double *)aObj[ o_petauv ].Free();
-    pe[q].pXi =  (double *)aObj[ o_pepxiv ].Free();
-    pe[q].Nu =   (double *)aObj[ o_penuv ].Free();
-    pe[q].Kin =  (double *)aObj[ o_pekinv ].Free();
-    pe[q].Modc = (double *)aObj[ o_pemodc ].Free();
-    pe[q].Expr = (char *)aObj[ o_peexpr ].Free();
-    pe[q].stl =  (char (*)[EQ_RKLEN])aObj[ o_pestl ].Free();
-    pe[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_pesdref ].Free();
-    pe[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_pesdval ].Free();
-    pe[q].tprn = (char *)aObj[ o_petprn ].Free();
+    pe[q].tm = static_cast<short *>(aObj[ o_petmv ].Free());
+    pe[q].nv = static_cast<short *>(aObj[ o_penvv ].Free());
+    pe[q].P = static_cast<double *>(aObj[ o_pepv ].Free());
+    pe[q].V = static_cast<double *>(aObj[ o_pevv ].Free());
+    pe[q].TC = static_cast<double *>(aObj[ o_petv ].Free());
+    pe[q].Tau = static_cast<double *>(aObj[ o_petauv ].Free());
+    pe[q].pXi = static_cast<double *>(aObj[ o_pepxiv ].Free());
+    pe[q].Nu = static_cast<double *>(aObj[ o_penuv ].Free());
+    pe[q].Kin = static_cast<double *>(aObj[ o_pekinv ].Free());
+    pe[q].Modc = static_cast<double *>(aObj[ o_pemodc ].Free());
+    pe[q].Expr = static_cast<char *>(aObj[ o_peexpr ].Free());
+    pe[q].stl = static_cast<char (*)[EQ_RKLEN]>(aObj[ o_pestl ].Free());
+    pe[q].sdref = static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_pesdref ].Free());
+    pe[q].sdval = static_cast<char (*)[V_SD_VALEN]>(aObj[ o_pesdval ].Free());
+    pe[q].tprn = static_cast<char *>(aObj[ o_petprn ].Free());
     // graphics
-    pe[q].lNam = (char (*)[MAXGRNAME])aObj[ o_pclnam ].Free();
-    pe[q].lNamE = (char (*)[MAXGRNAME])aObj[ o_pclname ].Free();
-    pe[q].gr_expr = (char *)aObj[ o_pcexpr ].Free();
-    pe[q].x0    = (double *)aObj[ o_pcx0 ].Free();
-    pe[q].y0    = (double *)aObj[ o_pcy0 ].Free();
-    pe[q].xE    = (double *)aObj[ o_pcxe ].Free();
-    pe[q].yE    = (double *)aObj[ o_pcye ].Free();
-    plot  = (TPlotLine *)aObj[ o_pcplline ].Free();
+    pe[q].lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclnam ].Free());
+    pe[q].lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclname ].Free());
+    pe[q].gr_expr = static_cast<char *>(aObj[ o_pcexpr ].Free());
+    pe[q].x0    = static_cast<double *>(aObj[ o_pcx0 ].Free());
+    pe[q].y0    = static_cast<double *>(aObj[ o_pcy0 ].Free());
+    pe[q].xE    = static_cast<double *>(aObj[ o_pcxe ].Free());
+    pe[q].yE    = static_cast<double *>(aObj[ o_pcye ].Free());
+    plot  = static_cast<TPlotLine *>(aObj[ o_pcplline ].Free());
 }
 
 
@@ -330,69 +332,69 @@ void TProcess::dyn_new(int q)
     ErrorIf( pep!=&pe[q], GetName(), "E04PErem: Attempt to allocate corrupted dynamic memory.");
 
     if( pe[q].Pvtm != S_OFF )
-        pe[q].tm = (short *)aObj[ o_petmv ].Alloc( pe[q].Ntm, 1, I_);
-    else  pe[q].tm =   (short *)aObj[ o_petmv ].Free();
+        pe[q].tm= static_cast<short *>(aObj[ o_petmv ].Alloc( pe[q].Ntm, 1, I_));
+    else  pe[q].tm= static_cast<short *>(aObj[ o_petmv ].Free());
 
     if( pe[q].PvNV != S_OFF )
-        pe[q].nv = (short *)aObj[ o_penvv ].Alloc( pe[q].dNNV, 1, I_);
-    else  pe[q].nv =   (short *)aObj[ o_penvv ].Free();
+        pe[q].nv= static_cast<short *>(aObj[ o_penvv ].Alloc( pe[q].dNNV, 1, I_));
+    else  pe[q].nv= static_cast<short *>(aObj[ o_penvv ].Free());
 
     if( pe[q].PvP != S_OFF )
-        pe[q].P = (double *)aObj[ o_pepv ].Alloc( pe[q].dNP, 1, D_);
-    else  pe[q].P =    (double *)aObj[ o_pepv ].Free();
+        pe[q].P= static_cast<double *>(aObj[ o_pepv ].Alloc( pe[q].dNP, 1, D_));
+    else  pe[q].P= static_cast<double *>(aObj[ o_pepv ].Free());
 
     if( pe[q].PvT != S_OFF )
-        pe[q].TC = (double *)aObj[ o_petv].Alloc( pe[q].dNT, 1, D_);
-    else  pe[q].TC =    (double *)aObj[ o_petv ].Free();
+        pe[q].TC= static_cast<double *>(aObj[ o_petv].Alloc( pe[q].dNT, 1, D_));
+    else  pe[q].TC= static_cast<double *>(aObj[ o_petv ].Free());
 
     if( pe[q].PvV != S_OFF )
-        pe[q].V = (double *)aObj[ o_pevv].Alloc( pe[q].dNV, 1, D_);
-    else  pe[q].V =    (double *)aObj[ o_pevv ].Free();
+        pe[q].V= static_cast<double *>(aObj[ o_pevv].Alloc( pe[q].dNV, 1, D_));
+    else  pe[q].V= static_cast<double *>(aObj[ o_pevv ].Free());
 
     if( pe[q].PvTau != S_OFF )
-        pe[q].Tau = (double *)aObj[ o_petauv ].Alloc( pe[q].NTau, 1, D_);
-    else  pe[q].Tau =  (double *)aObj[ o_petauv ].Free();
+        pe[q].Tau= static_cast<double *>(aObj[ o_petauv ].Alloc( pe[q].NTau, 1, D_));
+    else  pe[q].Tau= static_cast<double *>(aObj[ o_petauv ].Free());
 
     if( pe[q].PvpXi != S_OFF )
-        pe[q].pXi = (double *)aObj[ o_pepxiv].Alloc( pe[q].NpXi, 1, D_);
-    else  pe[q].pXi =  (double *)aObj[ o_pepxiv ].Free();
+        pe[q].pXi= static_cast<double *>(aObj[ o_pepxiv].Alloc( pe[q].NpXi, 1, D_));
+    else  pe[q].pXi= static_cast<double *>(aObj[ o_pepxiv ].Free());
 
     if( pe[q].PvNu != S_OFF )
-        pe[q].Nu = (double *)aObj[ o_penuv].Alloc( pe[q].NNu, 1, D_);
-    else  pe[q].Nu =   (double *)aObj[ o_penuv ].Free();
+        pe[q].Nu= static_cast<double *>(aObj[ o_penuv].Alloc( pe[q].NNu, 1, D_));
+    else  pe[q].Nu= static_cast<double *>(aObj[ o_penuv ].Free());
 
     if( pe[q].PvKin != S_OFF )
-        pe[q].Kin = (double *)aObj[ o_pekinv].Alloc( pe[q].Nrea, pe[q].Nrp, D_);
-    else  pe[q].Kin =  (double *)aObj[ o_pekinv ].Free();
+        pe[q].Kin= static_cast<double *>(aObj[ o_pekinv].Alloc( pe[q].Nrea, pe[q].Nrp, D_));
+    else  pe[q].Kin= static_cast<double *>(aObj[ o_pekinv ].Free());
 
     if( pe[q].PvModc != S_OFF )
-        pe[q].Modc = (double *)aObj[ o_pemodc].Alloc( pe[q].Ntm, pe[q].Nmc, D_);
-    else  pe[q].Modc = (double *)aObj[ o_pemodc ].Free();
+        pe[q].Modc= static_cast<double *>(aObj[ o_pemodc].Alloc( pe[q].Ntm, pe[q].Nmc, D_));
+    else  pe[q].Modc= static_cast<double *>(aObj[ o_pemodc ].Free());
 
     if( pe[q].PsEqn != S_OFF )
     {
-        pe[q].Expr = (char *)aObj[ o_peexpr].Alloc( 1, 2048, S_);
-    //    pe[q].tprn = (char *)aObj[ o_petprn].Alloc( 1, 2048, S_);
+        pe[q].Expr= static_cast<char *>(aObj[ o_peexpr].Alloc( 1, 2048, S_));
+    //    pe[q].tprn= static_cast<char *>(aObj[ o_petprn].Alloc( 1, 2048, S_));
     }
     else
     {
-        pe[q].Expr = (char *)aObj[ o_peexpr ].Free();
-    //    pe[q].tprn = (char *)aObj[ o_petprn ].Free();
+        pe[q].Expr= static_cast<char *>(aObj[ o_peexpr ].Free());
+    //    pe[q].tprn= static_cast<char *>(aObj[ o_petprn ].Free());
     }
 
     if( pe[q].Nsd > 0 )
     {
         pe[q].sdref =
-            (char (*)[V_SD_RKLEN])aObj[ o_pesdref].Alloc( pe[q].Nsd, 1, V_SD_RKLEN );
+            static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_pesdref].Alloc( pe[q].Nsd, 1, V_SD_RKLEN ));
         pe[q].sdval =
-            (char (*)[V_SD_VALEN])aObj[ o_pesdval].Alloc( pe[q].Nsd, 1, V_SD_VALEN );
+            static_cast<char (*)[V_SD_VALEN]>(aObj[ o_pesdval].Alloc( pe[q].Nsd, 1, V_SD_VALEN ));
     }
     else
     {
-        pe[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_pesdref ].Free();
-        pe[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_pesdval ].Free();
+        pe[q].sdref= static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_pesdref ].Free());
+        pe[q].sdval= static_cast<char (*)[V_SD_VALEN]>(aObj[ o_pesdval ].Free());
     }
-    pe[q].stl = (char (*)[EQ_RKLEN])aObj[ o_pestl].Alloc( pe[q].NR1, 1, EQ_RKLEN );
+    pe[q].stl= static_cast<char (*)[EQ_RKLEN]>(aObj[ o_pestl].Alloc( pe[q].NR1, 1, EQ_RKLEN ));
 
 
    // graphics
@@ -401,44 +403,44 @@ void TProcess::dyn_new(int q)
       int dimPclnam = pe[q].dimXY[1];
       if(  pe[q].dimX > 1)
             dimPclnam +=  pe[q].dimX;
-      pe[q].lNam = (char (*)[MAXGRNAME])aObj[ o_pclnam ].Alloc( 1,
-                 dimPclnam, MAXGRNAME);
-      pe[q].gr_expr = (char *)aObj[ o_pcexpr ].Alloc( 1, 2048, S_);
-      pe[q].x0    = (double *)aObj[ o_pcx0 ].Alloc(pe[q].dimXY[0], pe[q].dimX, D_);
-      pe[q].y0    = (double *)aObj[ o_pcy0 ].Alloc(
-                      pe[q].dimXY[0], pe[q].dimXY[1], D_);
+      pe[q].lNam= static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclnam ].Alloc( 1,
+                 dimPclnam, MAXGRNAME));
+      pe[q].gr_expr= static_cast<char *>(aObj[ o_pcexpr ].Alloc( 1, 2048, S_));
+      pe[q].x0   = static_cast<double *>(aObj[ o_pcx0 ].Alloc(pe[q].dimXY[0], pe[q].dimX, D_));
+      pe[q].y0   = static_cast<double *>(aObj[ o_pcy0 ].Alloc(
+                      pe[q].dimXY[0], pe[q].dimXY[1], D_));
 
     }
     else
     {
-      pe[q].lNam = (char (*)[MAXGRNAME])aObj[ o_pclnam ].Free();
-      pe[q].gr_expr = (char *)aObj[ o_pcexpr ].Free();
-      pe[q].x0    = (double *)aObj[ o_pcx0 ].Free();
-      pe[q].y0    = (double *)aObj[ o_pcy0 ].Free();
+      pe[q].lNam= static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclnam ].Free());
+      pe[q].gr_expr= static_cast<char *>(aObj[ o_pcexpr ].Free());
+      pe[q].x0   = static_cast<double *>(aObj[ o_pcx0 ].Free());
+      pe[q].y0   = static_cast<double *>(aObj[ o_pcy0 ].Free());
       pe[q].dimXY[1] = 0;
-      plot  = (TPlotLine *)aObj[ o_pcplline ].Free();
+      plot = static_cast<TPlotLine *>(aObj[ o_pcplline ].Free());
    }
     if( pe[q].PsEqn != S_OFF || pe[q].PsGR != S_OFF )
-        pe[q].tprn = (char *)aObj[ o_petprn].Alloc( 1, 2048, S_);
+        pe[q].tprn= static_cast<char *>(aObj[ o_petprn].Alloc( 1, 2048, S_));
     else
-       pe[q].tprn = (char *)aObj[ o_petprn ].Free();
+       pe[q].tprn= static_cast<char *>(aObj[ o_petprn ].Free());
 
 
 
     if( pe[q].PvEF == S_OFF )
     {
-       pe[q].lNamE = (char (*)[MAXGRNAME])aObj[ o_pclname ].Free();
-       pe[q].xE    = (double *)aObj[ o_pcxe ].Free();
-       pe[q].yE    = (double *)aObj[ o_pcye ].Free();
+       pe[q].lNamE= static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclname ].Free());
+       pe[q].xE   = static_cast<double *>(aObj[ o_pcxe ].Free());
+       pe[q].yE   = static_cast<double *>(aObj[ o_pcye ].Free());
        pe[q].dimEF[1] = pe[q].dimEF[0] = 0;
     }
     else
     {
-        pe[q].lNamE = (char (*)[MAXGRNAME])aObj[ o_pclname ].Alloc(1,
-                     pe[q].dimEF[1], MAXGRNAME);
-        pe[q].xE    = (double *)aObj[ o_pcxe ].Alloc(pe[q].dimEF[0], 1, D_);
-        pe[q].yE    = (double *)aObj[ o_pcye ].Alloc(
-                  pe[q].dimEF[0],pe[q].dimEF[1], D_);
+        pe[q].lNamE= static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclname ].Alloc(1,
+                     pe[q].dimEF[1], MAXGRNAME));
+        pe[q].xE   = static_cast<double *>(aObj[ o_pcxe ].Alloc(pe[q].dimEF[0], 1, D_));
+        pe[q].yE   = static_cast<double *>(aObj[ o_pcye ].Alloc(
+                  pe[q].dimEF[0],pe[q].dimEF[1], D_));
     }
 }
 
@@ -470,6 +472,7 @@ void  TProcess::set_type_flags( char type)
 
 }
 
+
 //set default information
 void TProcess::set_def( int q)
 {
@@ -494,21 +497,21 @@ pe[q].PvR1 = '-';    // AIA on:   KD: temporary for process create
     pe[q].Nxi = 21;
     pe[q].Nmc = 1;
 
-    pe[q].tm =  0;
-    pe[q].nv =  0;
-    pe[q].P =   0;
-    pe[q].V =   0;
-    pe[q].TC =  0;
-    pe[q].Tau = 0;
-    pe[q].pXi = 0;
-    pe[q].Nu =  0;
-    pe[q].Kin = 0;
-    pe[q].Modc =0;
-    pe[q].Expr =0;
-    pe[q].stl = 0;
-    pe[q].sdref = 0;
-    pe[q].sdval = 0;
-    pe[q].tprn = 0;
+    pe[q].tm =  nullptr;
+    pe[q].nv =  nullptr;
+    pe[q].P =   nullptr;
+    pe[q].V =   nullptr;
+    pe[q].TC =  nullptr;
+    pe[q].Tau = nullptr;
+    pe[q].pXi = nullptr;
+    pe[q].Nu =  nullptr;
+    pe[q].Kin = nullptr;
+    pe[q].Modc =nullptr;
+    pe[q].Expr =nullptr;
+    pe[q].stl = nullptr;
+    pe[q].sdref = nullptr;
+    pe[q].sdval = nullptr;
+    pe[q].tprn = nullptr;
     // graphics
     strcpy( pe[q].xNames, "xp" );
     strcpy( pe[q].yNames, "yp" );
@@ -517,14 +520,14 @@ pe[q].PvR1 = '-';    // AIA on:   KD: temporary for process create
     pe[q].dimX = 1;
     pe[q].dimXY[1] = 1;
     pe[q].dimXY[0] = 0;
-    pe[q].lNam = 0;
-    pe[q].lNamE = 0;
-    pe[q].gr_expr = 0;
-    pe[q].x0    = 0;
-    pe[q].y0    = 0;
-    pe[q].xE    = 0;
-    pe[q].yE    = 0;
-    plot  = 0;
+    pe[q].lNam = nullptr;
+    pe[q].lNamE = nullptr;
+    pe[q].gr_expr = nullptr;
+    pe[q].x0    = nullptr;
+    pe[q].y0    = nullptr;
+    pe[q].xE    = nullptr;
+    pe[q].yE    = nullptr;
+    plot  = nullptr;
     pe[q].tmi[START_] = 1000;
     pe[q].tmi[STOP_] = 1200;
     pe[q].tmi[STEP_] = 10;
@@ -565,7 +568,7 @@ bool TProcess::check_input( const char * /*key*/, int /*Level*/ )
     if( pVisor->ProfileMode != true )
         return true;
 
-    TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+    TProfil* PRof = dynamic_cast<TProfil*>(&aMod[RT_PARAM]);
     //Get base SysEq key from process key
     rt[RT_SYSEQ].MakeKey( RT_PROCES, pkey, RT_PROCES, 0, RT_PROCES, 1,
                            RT_PROCES, 2, RT_PROCES, 3, RT_PROCES, 4,
@@ -726,7 +729,7 @@ void TProcess::pe_next()
     if( !pep->Nst )
         return;
     pep->j = pep->Nst;
-    pep->c_nrk = min( pep->Nst, (short)(pep->NR1-1));
+    pep->c_nrk = min<short>( pep->Nst, pep->NR1-1);
     pep->c_tm += pep->tmi[STEP_];
     pep->c_NV += pep->NVi[STEP_];
     pep->c_P += pep->Pi[STEP_];
@@ -792,23 +795,23 @@ TProcess::MakeQuery()
      //  return;   // cancel
 
     memcpy( &pep->Istat, flgs, 24);
-    pep->Nxi = (short)size[0];
-    pep->Nsd = (short)size[5];
-    pep->Nmc = (short)size[1];
+    pep->Nxi = size[0];
+    pep->Nsd = size[5];
+    pep->Nmc = size[1];
      if( pep->Nmc == 0  )
          pep->PvModc = S_OFF;
      else
          pep->PvModc = S_ON;
-     pep->dimXY[1] = (short)size[2];
+     pep->dimXY[1] = size[2];
      if( pep->dimXY[1] == 0  )
          pep->PsGR = S_OFF;
      else
      {    pep->PsGR = S_ON;
           pep->dimXY[0] = pep->Nxi;
      }
-     pep->dimX = (short)size[6];
-     pep->dimEF[0] = (short)size[3];
-     pep->dimEF[1] = (short)size[4];
+     pep->dimX = size[6];
+     pep->dimEF[0] = size[3];
+     pep->dimEF[1] = size[4];
      if( pep->dimEF[1] == 0 || pep->dimEF[0] == 0  )
          pep->PvEF = S_OFF;
      else
@@ -817,21 +820,21 @@ TProcess::MakeQuery()
          // from scripts
      if( !outScript.empty() )
      {   if( !pep->gr_expr )
-            pep->gr_expr = (char *)aObj[ o_pcexpr ].Alloc( 1, 2048, S_);
+            pep->gr_expr = static_cast<char *>(aObj[ o_pcexpr ].Alloc( 1, 2048, S_));
          aObj[o_pcexpr].SetString( outScript.c_str(),0,0);
      }
 
      if(namesLines.GetCount() > 0)
       {
          int dimPclnam = pep->dimXY[1];
-         int ndxy = 0;
+         uint ndxy = 0;
          if(  pep->dimX > 1)
          {      dimPclnam +=  pep->dimX;
-                 ndxy =pep->dimX;
+                 ndxy = pep->dimX;
          }
-         pep->lNam = (char (*)[MAXGRNAME])aObj[ o_pclnam ].Alloc( 1,
-                    dimPclnam, MAXGRNAME);
-         for(short ii=0; ii< min( (short)namesLines.GetCount(),pep->dimXY[1]); ii++)
+         pep->lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclnam ].Alloc( 1,
+                    dimPclnam, MAXGRNAME));
+         for(uint ii=0; ii< min<size_t>( namesLines.GetCount(), pep->dimXY[1] ); ii++)
          {
            strncpy(  pep->lNam[ii+ndxy], namesLines[ii].c_str(), MAXGRNAME );
          }
@@ -841,7 +844,7 @@ TProcess::MakeQuery()
 
      if( !calcScript.empty() )
      { if( !pep->Expr )
-          pep->Expr = (char *)aObj[ o_peexpr].Alloc( 1, 2048, S_);
+          pep->Expr = static_cast<char *>(aObj[ o_peexpr].Alloc( 1, 2048, S_));
        aObj[o_peexpr].SetString( calcScript.c_str(),0,0);
      }
 
@@ -928,7 +931,7 @@ TProcess::pe_test()
         nIt = pep->Nst;
         pep->j = nIt /*+1*/;
     }
-    pep->c_nrk = min( nIt, (short)(pep->NR1-1));
+    pep->c_nrk = min<short>( nIt, pep->NR1-1);
 
     if( pep->Ntm>nIt && pep->Pvtm != S_OFF ) pep->tm[nIt] = pep->c_tm;
     if( pep->dNNV>nIt && pep->PvNV != S_OFF ) pep->nv[nIt] = pep->c_NV;
@@ -1047,19 +1050,19 @@ TProcess::pe_test()
 // Translate, analyze and unpack equations of the process
 void TProcess::pe_text_analyze()
 {
-  TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+  TProfil* PRof = dynamic_cast<TProfil*>(&aMod[RT_PARAM]);
     try
     {
       if( pep->PsEqn != S_OFF )
       {
         PRof->ET_translate( o_petprn, o_peexpr, 0,
                   TRMults::sm->GetMU()->L, 0, TMulti::sm->GetPM()->L );
-        rpn[0].GetEquat( (char *)aObj[o_petprn].GetPtr() );
+        rpn[0].GetEquat( static_cast<char *>(aObj[o_petprn].GetPtr()) );
       }
     }
     catch( TError& xcpt )
     {
-        char *erscan = (char *)aObj[o_peexpr].GetPtr();
+        char *erscan = static_cast<char *>(aObj[o_peexpr].GetPtr());
         vfMessage(window(), xcpt.title, xcpt.mess);
         TProcess::pm->CheckEqText(  erscan,
    "E93MSTran: Error in analyzing Process simulation control script: " );
@@ -1073,12 +1076,12 @@ void TProcess::pe_text_analyze()
 
         PRof->ET_translate( o_petprn, o_pcexpr, 0,
                             TRMults::sm->GetMU()->L, 0, TMulti::sm->GetPM()->L );
-        rpn[1].GetEquat( (char *)aObj[o_petprn].GetPtr() );
+        rpn[1].GetEquat( static_cast<char *>(aObj[o_petprn].GetPtr() ));
       }
     }
     catch( TError& xcpt )
     {
-        char *erscan = (char *)aObj[o_pcexpr].GetPtr();
+        char *erscan = static_cast<char *>(aObj[o_pcexpr].GetPtr());
         vfMessage(window(), xcpt.title, xcpt.mess);
         TProcess::pm->CheckEqText(  erscan,
   "E94MSTran: Error in analyzing Process data sampling script: " );
@@ -1090,7 +1093,7 @@ void TProcess::pe_text_analyze()
 double TProcess::f_proc( double x )
 {
     double dummy = -1.;
-    TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+    TProfil* PRof = dynamic_cast<TProfil*>(&aMod[RT_PARAM]);
     pep->Loop = 2;
     pep->c_Eh = x;
     CalcEquat();
@@ -1102,6 +1105,7 @@ double TProcess::f_proc( double x )
     CalcEquat();
     return( pep->c_Nu );
 }
+
 
 // calc function for Method of golden section
 double ff_proc( double x, double )
@@ -1206,7 +1210,7 @@ void
 TProcess::RecCalc( const char *key )
 {
     int nRec;
-    TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+    TProfil* PRof = dynamic_cast<TProfil*>(&aMod[RT_PARAM]);
     TProfil::pm->userCancel = false;
     TProfil::pm->stepWise = false;
     userCancel = false;
@@ -1216,7 +1220,7 @@ TProcess::RecCalc( const char *key )
     if( pVisor->ProfileMode != true )
         Error( GetName(), "E02PEexec: Please, do it in the Project mode!" );
 
-/*  char * */ text_fmt = 0;
+/*  char * */ text_fmt = nullptr;
 /*  gstring */ sd_key = "";
 /*  gstring */ filename = "";
 // Try pure calculation time - now stored in ccTau!  DK 15.01.2009
@@ -1507,14 +1511,21 @@ else {
       pep->Istat = P_FINISHED;
 
     // Get startup syseq record for fitting
+    refreshState();
+}
+
+
+void TProcess::refreshState()
+{
+    // Get startup syseq record for fitting
     rt[RT_SYSEQ].MakeKey( RT_PROCES, pep->stkey, RT_PROCES, 0, RT_PROCES,1,
              RT_PROCES, 2,  RT_PROCES, 3, RT_PROCES, 4, RT_PROCES, 5,
                             RT_PROCES, 6, RT_PROCES, 7, K_END );
-    nRec = rt[RT_SYSEQ].Find(pep->stkey);
+    auto nRec = rt[RT_SYSEQ].Find(pep->stkey);
     if( nRec >= 0 && pep->Istat < P_MT_MODE )
-       PRof->loadSystat( pep->stkey );   // read parent SysEq record and unpack data
-}
+        dynamic_cast<TProfil*>(&aMod[RT_PARAM])->loadSystat( pep->stkey );   // read parent SysEq record and unpack data
 
+}
 
 //Calculate one point to graph
 void
@@ -1525,6 +1536,38 @@ TProcess::CalcPoint( int nPoint )
     // Add point to graph screen
     if( gd_gr && pep->Istat < P_MT_MODE )
         gd_gr->AddPoint( 0, nPoint );
+}
+
+void TProcess::RecordPrint(const char *key)
+{
+    int res = vfQuestion3(window(), "Question",
+                    "Will you produce input files for standalone GEMS3K (Yes) or use print script (No)?",
+               "Yes", "No", "Cancel");
+    if( res == VF3_3 )
+        return;
+
+    if( res == VF3_1 )
+    {
+        gstring filename = gstring( rt[RT_PROCES].FldKey(8), 0, rt[RT_PROCES].FldLen(8));;
+        filename.strip();
+        filename +="_";
+        filename +=rt[RT_PROCES].FldKey(9)[0];
+        filename += "-dat.lst";
+        if( vfChooseFileSave(window(), filename,
+                   "Please, enter the TGEM2MT work structure file name", "*.dat" ) )
+        {
+            if( !access(filename.c_str(), 0 ) ) //file exists
+                if( !vfQuestion( window(), filename.c_str(),
+                        "This file exists! Overwrite?") )
+                   return;
+            TCStringArray savedSystems;
+            genGEM3K(filename, true, savedSystems);
+            refreshState();
+        }
+    }
+    else
+         TCModule::RecordPrint( key );
+
 }
 
 void
@@ -1548,7 +1591,7 @@ TProcess::RecordPlot( const char* /*key*/ )
     {
         int oldN = aObj[o_pcplline].GetN();
 
-        plot = (TPlotLine * )aObj[ o_pcplline ].Alloc( nLn, sizeof(TPlotLine) );
+        plot = static_cast<TPlotLine * >(aObj[ o_pcplline ].Alloc( nLn, sizeof(TPlotLine) ));
         for(int ii=0; ii<nLn; ii++ )
         {
             if( ii >= oldN )
@@ -1593,18 +1636,18 @@ TProcess::RecordPlot( const char* /*key*/ )
 bool
 TProcess::SaveGraphData( GraphData *gr )
 {
-    int ii;
+    uint ii;
 // We can only have one Plot dialog (modal one) so condition should be omitted!!
      if( !gd_gr )
       return false;
      if( gr != gd_gr->getGraphData() )
       return false;
-    pep->axisType[0] = (short)gr->axisTypeX;
-    pep->axisType[5] = (short)gr->axisTypeY;
-    pep->axisType[4] = (short)gr->graphType;
-    pep->axisType[1] = (short)gr->b_color[0];
-    pep->axisType[2] = (short)gr->b_color[1];
-    pep->axisType[3] = (short)gr->b_color[2];
+    pep->axisType[0] = gr->axisTypeX;
+    pep->axisType[5] = gr->axisTypeY;
+    pep->axisType[4] = gr->graphType;
+    pep->axisType[1] = gr->b_color[0];
+    pep->axisType[2] = gr->b_color[1];
+    pep->axisType[3] = gr->b_color[2];
     strncpy( pep->xNames, gr->xName.c_str(), 9);
     strncpy( pep->yNames, gr->yName.c_str(), 9);
     for( ii=0; ii<4; ii++ )
@@ -1613,17 +1656,17 @@ TProcess::SaveGraphData( GraphData *gr )
         pep->size[1][ii] =  gr->part[ii];
     }
 
-    int ndxy = 0;
+    uint ndxy = 0;
     if(  pep->dimX > 1)
            ndxy = pep->dimX;
 
-    plot = (TPlotLine *)
-           aObj[ o_pcplline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine));
-    for( ii=0; ii<(int)gr->lines.GetCount(); ii++ )
+    plot = static_cast<TPlotLine *>
+           (aObj[ o_pcplline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine)));
+    for( ii=0; ii<gr->lines.GetCount(); ii++ )
     {
         plot[ii] = gr->lines[ii];
         //  lNam and lNamE back
-        if( (int)ii < pep->dimXY[1] )
+        if( ii < pep->dimXY[1] )
             strncpy(  pep->lNam[ii+ndxy], plot[ii].getName().c_str(), MAXGRNAME );
         else
             strncpy(  pep->lNamE[ii-pep->dimXY[1]], plot[ii].getName().c_str(), MAXGRNAME );
@@ -1642,6 +1685,63 @@ const char* TProcess::GetHtml()
    return GM_PROCES_HTML;
 }
 
+void TProcess::genGEM3K(const gstring &filepath, bool brief_mode, TCStringArray &savedSystems)
+{
+    // set up Node Array
+    std::unique_ptr<TNodeArray> na;
+    double Tai[4], Pai[4];
 
+    Tai[0] = pep->Ti[0];
+    Tai[1] = pep->Ti[1];
+    Tai[2] = pep->Ti[2];
+    Pai[0] = pep->Pi[0];
+    Pai[1] = pep->Pi[1];
+    Pai[2] = pep->Pi[2];
+    Tai[3] = Pai[3] = 0.1;
+
+    na.reset( new TNodeArray( 1, TMulti::sm->GetPM() )) ;
+    // realloc and setup data for dataCH and DataBr structures
+    na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
+
+    // output base structure
+    ProcessProgressFunction messageF = [](const gstring& , long ){
+              //std::cout << "TProcess GEM3k output" <<  message.c_str() << point << std::endl;
+              return false;
+        };
+    auto dbr_list =  na->genGEMS3KInputFiles(  filepath, messageF, 1, false, brief_mode, false,false, false );
+
+    // output dbr keys
+    if( pep->stl == nullptr )
+      return;
+
+    gstring dir;
+    gstring name;
+    gstring newname;
+    u_splitpath( dbr_list, dir, name, newname );
+    ofstream fout2(dbr_list.c_str(), ios::app);
+
+    for( int ii=0; ii<pep->NR1 ; ++ii )
+    {
+        name = gstring( pep->stl[ii], 0, EQ_RKLEN );
+        auto nRec = rt[RT_SYSEQ].Find(name.c_str());
+        if( nRec >= 0  )
+        {
+           savedSystems.Add(name);
+
+           // read parent SysEq record and unpack data
+           dynamic_cast<TProfil*>(&aMod[RT_PARAM])->loadSystat( name.c_str() );
+           // save to dataBR internal node done before
+
+           // save dataBR
+           KeyToName(name);
+           newname = dir+ "/";
+           newname += name;  // could be convert in sewrvice
+           newname += ".dat";
+           fout2 << "," << " \"" << name.c_str() << ".dat\"";
+           TMulti::sm->GEMS3k_write_dbr( newname.c_str(), false, false, brief_mode );
+       }
+    }
+
+}
 
 // ------------------- End of m_proces.cpp --------------------------

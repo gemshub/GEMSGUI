@@ -265,10 +265,25 @@ gstring curTime()
 }
 
 
-void
-StripLine(gstring& line)
+
+void StripLine(gstring& line)
 {
    line.strip();
+}
+
+void KeyToName(gstring& line)
+{
+   line.strip();
+   if( line.empty())
+      return;
+
+   if( line[line.length()-1] == ':')
+       line.erase(line.length()-1, 1);
+   for(size_t ii=0; ii< line.length(); ++ii )
+   {
+     if( line[ii] == ':' || line[ii] == ' ' )
+       line[ii] = '_';
+   }
 }
 
 //Added Sveta 24/12/2001

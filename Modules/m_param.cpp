@@ -450,6 +450,49 @@ const char* TProfil::GetHtml()
     return GM_PROJECT_HTML;
 }
 
+#include <set>
+#include <memory>
+
+void /*TProfil::*/makeGEM3KFiles( const gstring& systemkey, const std::set<gstring>& dbrkeys )
+{
+    try
+     {
+       // load system ?
+
+       // set up for mathscripts
+        double Tai[4], Pai[4];
+        std::unique_ptr<TNodeArray> na;
+        MULTI *pmp = TMulti::sm->GetPM();
+
+        Tai[0] = Tai[1] = pmp->TCc;
+        Pai[0] = Pai[1] = pmp->Pc;
+        Tai[2] = Pai[2] = 0.;
+        Tai[3] = Pai[3] = 0.1;
+
+        na.reset( new TNodeArray( 1, pmp )) ;
+        // realloc and setup data for dataCH and DataBr structures
+        na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
+
+        ProcessProgressFunction messageF = [](const gstring& message, long point){
+              std::cout << "GEM3k output" <<  message.c_str() << point << std::endl;
+              return false;
+        };
+        gstring path = systemkey;//generatePath(systemkey);
+        na->genGEMS3KInputFiles(  path, messageF, 1, false, true, false,false, false );
+
+        // ouytput dbr keys
+
+
+      //Test to compare standalone  na->GEM_print_ipm( "GemsCalcPhase.txt" );
+    }
+    catch( TError& xcpt )
+    {
+       Error(  xcpt.title.c_str(), xcpt.mess.c_str() );
+    }
+
+}
+
+
 
 void TProfil::makeGEM2MTFiles(QWidget* par )
 {
