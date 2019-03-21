@@ -1561,7 +1561,7 @@ void TProcess::RecordPrint(const char *key)
                         "This file exists! Overwrite?") )
                    return;
             TCStringArray savedSystems;
-            genGEM3K(filename, true, savedSystems);
+            genGEM3K(filename, savedSystems, true, false);
             refreshState();
         }
     }
@@ -1685,7 +1685,7 @@ const char* TProcess::GetHtml()
    return GM_PROCES_HTML;
 }
 
-void TProcess::genGEM3K(const gstring &filepath, bool brief_mode, TCStringArray &savedSystems)
+void TProcess::genGEM3K(const gstring& filepath, TCStringArray& savedSystems, bool brief_mode, bool with_comments)
 {
     // set up Node Array
     std::unique_ptr<TNodeArray> na;
@@ -1708,7 +1708,7 @@ void TProcess::genGEM3K(const gstring &filepath, bool brief_mode, TCStringArray 
               //std::cout << "TProcess GEM3k output" <<  message.c_str() << point << std::endl;
               return false;
         };
-    auto dbr_list =  na->genGEMS3KInputFiles(  filepath, messageF, 1, false, brief_mode, false, false, false );
+    auto dbr_list =  na->genGEMS3KInputFiles(  filepath, messageF, 1, false, brief_mode, with_comments, false, false );
 
     // output dbr keys
     if( pep->stl == nullptr )
@@ -1730,7 +1730,6 @@ void TProcess::genGEM3K(const gstring &filepath, bool brief_mode, TCStringArray 
 
            // read parent SysEq record and unpack data
            dynamic_cast<TProfil*>(&aMod[RT_PARAM])->loadSystat( name.c_str() );
-           // save to dataBR internal node done before
 
            // save dataBR
            KeyToName(name);
@@ -1738,6 +1737,7 @@ void TProcess::genGEM3K(const gstring &filepath, bool brief_mode, TCStringArray 
            newname += name;  // could be convert in sewrvice
            newname += ".dat";
            fout2 << "," << " \"" << name.c_str() << ".dat\"";
+           // save to dataBR internal node  and save to file
            TMulti::sm->GEMS3k_write_dbr( newname.c_str(), false, false, brief_mode );
        }
     }

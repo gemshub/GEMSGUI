@@ -47,15 +47,15 @@ void TProfil::SaveOldList()
     Fisold = mup->Fis;
     Laold = mup->La;
     Lsold = mup->Ls;
-    SBold = (char (*)[IC_RKLEN]) new char[mup->N*IC_RKLEN];
+    SBold = reinterpret_cast<char (*)[IC_RKLEN]>( new char[mup->N*IC_RKLEN]);
     memcpy( SBold, mup->SB, mup->N*IC_RKLEN*sizeof(char));
-    SAold = (char (*)[BC_RKLEN]) new char[mup->La*BC_RKLEN];
+    SAold = reinterpret_cast<char (*)[BC_RKLEN]>( new char[mup->La*BC_RKLEN]);
     memcpy( SAold, mup->SA, mup->La*BC_RKLEN*sizeof(char));
     Llold =   new short[mup->Fi];
     memcpy( Llold, mup->Ll, mup->Fi*sizeof(short));
-    SFold = (char (*)[PH_RKLEN]) new char[mup->Fi*PH_RKLEN];
+    SFold = reinterpret_cast<char (*)[PH_RKLEN]>( new char[mup->Fi*PH_RKLEN]);
     memcpy( SFold, mup->SF, mup->Fi*sizeof(char)*PH_RKLEN );
-    SMold = (char (*)[DC_RKLEN]) new char[mup->L*DC_RKLEN];
+    SMold = reinterpret_cast<char (*)[DC_RKLEN]>( new char[mup->L*DC_RKLEN]);
     memcpy( SMold, mup->SM, mup->L*sizeof(char)*DC_RKLEN );
 }
 
@@ -63,15 +63,15 @@ void TProfil::SaveOldList()
 void TProfil::DeleteOldList()
 {
     if( SBold )  delete[] SBold;
-    SBold= 0;
+    SBold= nullptr;
     if( SAold )  delete[] SAold;
-    SAold = 0;
+    SAold = nullptr;
     if(  Llold ) delete[]  Llold;
-    Llold = 0;
+    Llold = nullptr;
     if( SFold ) delete[] SFold;
-    SFold = 0;
+    SFold = nullptr;
     if( SMold ) delete[] SMold;
-    SMold = 0;
+    SMold = nullptr;
 }
 
 // push element to the list - refurbished by DK on 15.02.2012
@@ -279,7 +279,8 @@ void TProfil::PHcompare( TIArray<CompItem>& aPhase,
     // compare one-component phase
     i = Fisold;
     j = mup->Fis;
-    id =Lsold, jd=mup->Ls;
+    id =Lsold;
+    jd=mup->Ls;
     while( i<Fiold && j<mup->Fi )
     {
         l = memcmp( SFold[i], mup->SF[j], PH_RKLEN );
@@ -349,7 +350,7 @@ void TProfil::TestChangeProfile()
     TCStringArray aList;
     TCIntArray anR;
 
-    TSysEq* aSE=(TSysEq *)(&aMod[RT_SYSEQ]);
+    TSysEq* aSE= dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
     aSE->ods_link(0);
 
 
@@ -363,7 +364,7 @@ void TProfil::TestChangeProfile()
        K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
        rt[RT_GEM2MT].GetKeyList( pkey, aList, anR );
 
-       TGEM2MT* aMT= (TGEM2MT *)(&aMod[RT_GEM2MT]);
+       TGEM2MT* aMT= dynamic_cast<TGEM2MT *>(&aMod[RT_GEM2MT]);
        aMT->ods_link(0);
        for(uint i=0; i< aList.GetCount(); i++)
        {
@@ -408,7 +409,7 @@ void TProfil::TestChangeProfile()
        K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
        rt[RT_DUALTH].GetKeyList( pkey, aList, anR );
 
-       TDualTh* aDU= (TDualTh *)(&aMod[RT_DUALTH]);
+       TDualTh* aDU= dynamic_cast<TDualTh *>(&aMod[RT_DUALTH]);
        aDU->ods_link(0);
        for(uint i=0; i< aList.GetCount(); i++)
        {
@@ -428,7 +429,7 @@ void TProfil::TestChangeProfile()
       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_UNSPACE].GetKeyList( pkey, aList, anR );
 
-    TUnSpace* aPB=(TUnSpace *)(&aMod[RT_UNSPACE]);
+    TUnSpace* aPB=dynamic_cast<TUnSpace *>(&aMod[RT_UNSPACE]);
     aPB->ods_link(-1); //0
     if( aList.GetCount() > 0 )
     {  for(uint i=0; i< aList.GetCount(); i++)
@@ -451,7 +452,7 @@ int TProfil::indPH( int i )
 
     for( uint ii=0; ii<PHon.GetCount(); ii++)
         if( i == PHon[ii])
-            return ii;
+            return static_cast<int>(ii);
 
     return -1;
 }
@@ -462,7 +463,7 @@ int TProfil::indDC( int i )
         return i;
     for( uint ii=0; ii<DCon.GetCount(); ii++)
         if( i == DCon[ii])
-            return ii;
+            return static_cast<int>(ii);
     return -1;
 }
 
@@ -490,11 +491,11 @@ void TProfil::CalcAllSystems( int makeDump )
     str_file = ProfName + "_" + curDateSmol('_')+".Dump.out";
     // open file to output
 AGAIN:
-    if( vfChooseFileSave(0/*window()*/, str_file,
+    if( vfChooseFileSave(nullptr/*window()*/, str_file,
         "Please, enter output file name", "*.out" ) == false )
              return;
      if( !access(str_file.c_str(), 0 ) ) //file exists
-      switch( vfQuestion3( 0/*window()*/, str_file.c_str(),
+      switch( vfQuestion3( nullptr/*window()*/, str_file.c_str(),
       "This set of files exists!",
            "&Overwrite", "&Rename", "&Cancel") )
           {
@@ -513,7 +514,7 @@ AGAIN:
 
     pVisor->CloseMessage();
     MULTI *pmp = multi->GetPM();
-    TSysEq* aSE=(TSysEq *)(&aMod[RT_SYSEQ]);
+    TSysEq* aSE= dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
     aSE->ods_link(0);
     for(nbad =0,  i=0; i< aList.GetCount(); i++)
     {
@@ -521,7 +522,7 @@ AGAIN:
       //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
       //
         sprintf( tbuf, "Project: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
-        iRet =  pVisor->Message( 0, "Re-calculating and saving all equilibria", tbuf.p, i, aList.GetCount() );
+        iRet =  pVisor->Message( nullptr, "Re-calculating and saving all equilibria", tbuf.p, i, aList.GetCount() );
       if( iRet )
         break;
 
@@ -537,7 +538,7 @@ AGAIN:
  	   	showMss = 0L;
         ccTime += CalcEqstat( dTime, kTimeStep, kTime );
         }
-        catch( TError& xcpt )
+        catch( TError& /*xcpt*/ )
         {
             nbad++;
             goodCalc = false;
@@ -656,48 +657,48 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
       return false;
 
 // save built-in default configuration
-     internalBufer = (char *)aObj[ o_sptext].Alloc( 1, elm_data.aSelNames.length()+10, S_);
+     internalBufer = static_cast<char *>(aObj[ o_sptext].Alloc( 1, elm_data.aSelNames.length()+10, S_));
      aObj[o_sptext].SetString( elm_data.aSelNames.c_str(),0,0);
 
 
 //    elm_data.flNames.Add(prfName);
-    pVisor->Message( 0, "Loading Modelling Project",
+    pVisor->Message( nullptr, "Loading Modelling Project",
 "Copying Kernel database records to Modelling Project. Please, wait...", 10  );
 
     // added to project file icomp.kernel.prfname
     // and copy to it selected records
     // add to last key field first symbol from prfname
     // close all kernel files
-    TIComp* aICdata=(TIComp *)(&aMod[RT_ICOMP]);
+    TIComp* aICdata=  dynamic_cast<TIComp *>(&aMod[RT_ICOMP]);
     aICdata->CopyElements( prfName, elm_data, sf_data.ic_d );
     ICcnt.Clear();
     for( ii=0; ii<elm_data.ICrds.GetCount(); ii++ )
        ICcnt.Add(0);
 
     //compos
-    TCompos* aCOdata=(TCompos *)(&aMod[RT_COMPOS]);
+    TCompos* aCOdata=dynamic_cast<TCompos *>(&aMod[RT_COMPOS]);
     TCStringArray aCMnoused;
     aCOdata->CopyRecords( prfName, aCMnoused, elm_data, sf_data.cm_d, SDlist );
 
     //dcomp
-    TDComp* aDCdata=(TDComp *)(&aMod[RT_DCOMP]);
+    TDComp* aDCdata=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
     aDCdata->CopyRecords( prfName, ICcnt, elm_data, sf_data.dc_d, SDlist );
 
     //reacds
-    TReacDC* aRDdata=(TReacDC *)(&aMod[RT_REACDC]);
+    TReacDC* aRDdata= dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
     aRDdata->CopyRecords( prfName, ICcnt, elm_data, sf_data.rd_d, SDlist );
 
     //phase
-    TPhase* aPHdata=(TPhase *)(&aMod[RT_PHASE]);
+    TPhase* aPHdata=dynamic_cast<TPhase *>(&aMod[RT_PHASE]);
     TCStringArray aPHnoused;
     aPHdata->CopyRecords( prfName, aPHnoused, PHkeys, elm_data, sf_data.ph_d, SDlist );
 
     //sdref
-    TSData* aSDat=(TSData *)(&aMod[RT_SDATA]);
+    TSData* aSDat= dynamic_cast<TSData *>(&aMod[RT_SDATA]);
     aSDat->CopyRecords( prfName, SDlist );
 
     //const for future
-    TConst* aConst=(TConst *)(&aMod[RT_CONST]);
+    TConst* aConst= dynamic_cast<TConst *>(&aMod[RT_CONST]);
     aConst->CopyRecords( prfName );
 
     //show errors
@@ -887,13 +888,13 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
 //    if(  fabs( syp->Mbel ) > 0  )
 //     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
 //           aObj[o_symass].GetKeywd(), 0, "",  syp->Mbel, '_' ));
-if(  fabs( syp->Mwat ) != 1.  )  // Fixed for new defaults by DK 27.02.2012
+if(  fabs( syp->Mwat ) != 1.f  )  // Fixed for new defaults by DK 27.02.2012
      tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
            aObj[o_symass].GetKeywd(), 1, "",  syp->Mwat, '_' ));
-if(  fabs( syp->Msys ) != 1.  )
+if(  fabs( syp->Msys ) != 1.f  )
      tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
            aObj[o_symass].GetKeywd(), 2, "",  syp->Msys, '_' ));
-if(  fabs( syp->Maq ) != 1.  )
+if(  fabs( syp->Maq ) != 1.f  )
      tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
            aObj[o_symass].GetKeywd(), 3, "",  syp->Maq, '_' ));
 //   if(  fabs( syp->MBX ) > 0  )
@@ -902,10 +903,10 @@ if(  fabs( syp->Maq ) != 1.  )
 //    if(  fabs( syp->R1 ) > 0  )
 //    tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
 //          aObj[o_symass].GetKeywd(), 5, "",  syp->R1, '_' ));
-if(  fabs( syp->Vsys ) != 1.  )
+if(  fabs( syp->Vsys ) != 1.f  )
      tbData.Add( new tableSetupData( wnData.GetCount()-1, o_syvol,
            aObj[o_syvol].GetKeywd(), 0, "",  syp->Vsys, '_' ));
-if(  fabs( syp->Vaq ) != 1.  )
+if(  fabs( syp->Vaq ) != 1.f  )
      tbData.Add( new tableSetupData( wnData.GetCount()-1, o_syvol,
            aObj[o_syvol].GetKeywd(), 1, "",  syp->Vaq, '_' ));
     if(  fabs( syp->Pmin ) > 0  )
@@ -986,7 +987,7 @@ if(  fabs( syp->Vaq ) != 1.  )
     // inset data from tbData
     for(uint ii=0; ii< tbData.GetCount() ; ii++)
     {
-     int nO = tbData[ii].nObj;
+     uint nO = tbData[ii].nObj;
      if( aObj[nO].GetN() > 1 )
          aObj[ nO ].Put( tbData[ii].val, tbData[ii].nIdx, 0 );
      else
@@ -995,8 +996,8 @@ if(  fabs( syp->Vaq ) != 1.  )
      int nOunit = wnData[ tbData[ii].nWin].nOunit;
      if(nOunit >=0 )
         aObj[ nOunit ].SetString( &tbData[ii].unit, tbData[ii].nIdx, 0);
-      int nOswitch = wnData[ tbData[ii].nWin].nSwitch;
-      if(nOswitch >=0 )
+     int nOswitch = wnData[ tbData[ii].nWin].nSwitch;
+     if(nOswitch >=0 )
         aObj[ nOswitch ].SetString("+",tbData[ii].nIdx, 0);
     }
 
@@ -1052,7 +1053,8 @@ gstring TProfil::PhNameforDC( int xdc, int& xph, bool system )
 
 TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
 {
-  int k, j, DCx = 0, len = strlen( PhName );
+  int k, j, DCx = 0;
+  auto len = strlen( PhName );
   RMULTS* mup = rmults->GetMU();
   MULTI*  pmp = multi->GetPM();
   TCStringArray DCnames;
@@ -1061,7 +1063,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
   if( system )
   { for( k=0; k<mup->Fi; k++ )
     {
-      if( !memcmp(PhName, mup->SF[k]+MAXSYMB+MAXPHSYMB, min(len,MAXPHNAME)))
+      if( !memcmp(PhName, mup->SF[k]+MAXSYMB+MAXPHSYMB, min<size_t>(len,MAXPHNAME)))
         break;
       DCx += mup->Ll[k];
     }
@@ -1075,7 +1077,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
   else
   { for( k=0; k<pmp->FI; k++ )
     {
-       if( !memcmp(PhName, pmp->SF[k]+MAXSYMB, min(len,MAXPHNAME)))
+       if( !memcmp(PhName, pmp->SF[k]+MAXSYMB, min<size_t>(len,MAXPHNAME)))
            break;
        DCx += pmp->L1[k];
     }
@@ -1163,6 +1165,125 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
 
   vfPhaseInfo( par, system, xph, phname, xdclist, dcnames, xdc );
 }
+
+void TProfil::CurrentSystem2GEMS3K( const gstring& filepath, bool brief_mode, bool with_comments )
+{
+    double Tai[4], Pai[4];
+    std::unique_ptr<TNodeArray> na;
+    MULTI *pmp = TMulti::sm->GetPM();
+
+    Tai[0] = Tai[1] = pmp->TCc;
+    Pai[0] = Pai[1] = pmp->Pc;
+    Tai[2] = Pai[2] = 0.;
+    Tai[3] = Pai[3] = 0.1;
+
+    na.reset( new TNodeArray( 1, pmp )) ;
+    // realloc and setup data for dataCH and DataBr structures
+    na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
+
+    ProcessProgressFunction messageF = [filepath](const gstring& message, long point){
+        std::cout << "GEM3k output: " <<  filepath.c_str() << " " << message.c_str() << point << std::endl;
+        return false;
+    };
+    na->genGEMS3KInputFiles(  filepath, messageF, 1, false, brief_mode, with_comments, false, false );
+}
+
+void TProfil::System2GEMS3K( const gstring& filepath, const gstring key, bool brief_mode, bool with_comments )
+{
+    loadSystat( key.c_str() );
+
+    /*  Do we need recalculate system before? */
+    int makeCalc = 0;
+    if( makeCalc )
+    {
+        MULTI *pmp = multi->GetPM();
+        double dTime=0.; int kTimeStep =0; double kTime=0.;
+        if( makeCalc == 2 ) //NEED_GEM_SIA
+            pmp->pNP = 1;
+        else
+            pmp->pNP = 0; //  NEED_GEM_AIA;
+
+        CalcEqstat( dTime, kTimeStep, kTime );
+    }
+    CurrentSystem2GEMS3K( filepath, brief_mode, with_comments );
+}
+
+
+void TProfil::GEMS3KallSystems( int /*makeDump*/ )
+{
+    pVisor->CloseMessage();
+
+    // Select destination
+    gstring dir;
+    if( !vfChooseDirectory( nullptr, dir,"Please, enter output directory location." ))
+        return;
+
+    // Here we can set up Dialog
+    bool brief_mode = true;
+    bool with_comments = false;
+    int makeCalc = 0; // 0 - no recalculation; 2- NEED_GEM_SIA; 1-NEED_GEM_AIA
+
+    try{
+
+        TCStringArray savedSystems;
+        // Generate data from process
+        gstring processPath = dir + "/Processes/";
+        vfMakeDirectory( nullptr, processPath.c_str(), true );
+        // savedSystems from process
+
+
+        // Save systems
+        gstring systemsPath = dir + "/Systems/";
+        // create dir if no exist else question for overwrite
+        vfMakeDirectory( nullptr, systemsPath.c_str(), true );
+
+        vstr pkey(81);
+        vstr tbuf(150);
+        TCStringArray aList;
+        TCIntArray anR;
+        gstring packkey, systemname, recordPath;
+
+        rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+                              K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+        rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
+
+        aMod[RT_SYSEQ].ods_link(0);
+        for( uint ii=0; ii< aList.GetCount(); ii++)
+        {
+            // test exists
+            if( rt[RT_SYSEQ].Find( aList[ii].c_str() ) < 0 )
+                continue;
+
+            packkey = rt[RT_SYSEQ].PackKey();
+
+            // test out before
+            if( savedSystems.Find( packkey ) >= 0)
+                continue;
+
+
+            systemname = packkey;
+            KeyToName(systemname);
+            gstring recordPath = systemsPath + systemname + "/";
+            vfMakeDirectory( nullptr, recordPath.c_str(), false );
+
+            recordPath += systemname+ "-dat.lst";
+            try {
+                System2GEMS3K( recordPath, packkey, brief_mode, with_comments );
+            } catch (TError& xcpt) {
+              cout << "Record out error: " << packkey.c_str() << " :" << xcpt.mess.c_str() << "\n";
+            }
+
+            if( pVisor->Message( nullptr, "Re-calculating and saving all equilibria", tbuf.p, ii, aList.GetCount() ))
+                break;
+        }
+    }
+    catch( TError& xcpt )
+    {
+       cout << "Records out error: " << xcpt.mess.c_str() << "\n";
+    }
+}
+
+
 
 //------------------ End of m_prfget2.cpp --------------------------
 

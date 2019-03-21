@@ -241,30 +241,30 @@ TProfil::TProfil( uint nrt ):
     //startKeyEdit = 0;
     start_title = " Numerical and Configuration Settings ";
     pa= pa_;
-    pa.p.tprn=0;
+    pa.p.tprn=nullptr;
 
-    rmults = 0;
-    mtparm =  0;
-    syst = 0;
-    multi =0;
+    rmults = nullptr;
+    mtparm =  nullptr;
+    syst = nullptr;
+    multi =nullptr;
 
     //mup = 0;
     //tpp = 0;
     //syp = 0;
     //pmp = 0;
 
-    SFold = 0;
-    SMold = 0;
-    SAold = 0;
-    SBold = 0;
-    Llold =0;
+    SFold = nullptr;
+    SMold = nullptr;
+    SAold = nullptr;
+    SBold = nullptr;
+    Llold =nullptr;
 
     userCancel = false;
     stepWise = false;
     calcFinished = false;
     fStopCalc = false;
     comp_change_all = false;
-    internalBufer = 0;
+    internalBufer = nullptr;
 }
 
 // init submodules to calc module
@@ -360,7 +360,7 @@ void TProfil::ods_link( int )
     aObj[ o_pagdpgw].SetPtr(  pa.GDpgw );
     aObj[ o_pasdref].SetPtr(  pa.SDrefKey );
 
-    aObj[ o_spppar].SetPtr(  (void *)&pa );
+    aObj[ o_spppar].SetPtr(  static_cast<void *>(&pa) );
     aObj[ o_spppar].SetM( sizeof( SPP_SETTING ) );
 aObj[ o_sptext].SetPtr(  internalBufer );
     //   aObj[ o_sppconst].SetPtr( sc_ );
@@ -373,8 +373,8 @@ aObj[ o_sptext].SetPtr(  internalBufer );
 
 void TProfil::dyn_set(int )
 {
-    pa.p.tprn= (char *)aObj[o_patprn].GetPtr();
-internalBufer = (char *)aObj[ o_sptext].GetPtr();
+    pa.p.tprn= static_cast<char *>(aObj[o_patprn].GetPtr());
+internalBufer = static_cast<char *>(aObj[ o_sptext].GetPtr());
     if( rmults ) rmults->dyn_set();
     if( mtparm ) mtparm->dyn_set();
     if( syst ) syst->dyn_set();
@@ -384,8 +384,8 @@ internalBufer = (char *)aObj[ o_sptext].GetPtr();
 // free dynamic memory in objects and values
 void TProfil::dyn_kill(int )
 {
-    pa.p.tprn = (char *)aObj[o_patprn].Free();
-internalBufer = (char *)aObj[ o_sptext].Free();
+    pa.p.tprn = static_cast<char *>(aObj[o_patprn].Free());
+internalBufer = static_cast<char *>(aObj[ o_sptext].Free());
     if( rmults ) rmults->dyn_kill();
     if( mtparm ) mtparm->dyn_kill();
     if( syst ) syst->dyn_kill();
@@ -410,7 +410,7 @@ void TProfil::dyn_new(int )
 void TProfil::set_def( int )
 {
     pa = pa_;
-    internalBufer = 0;
+    internalBufer = nullptr;
     if( rmults ) rmults->set_def();
     if( mtparm ) mtparm->set_def();
     if( syst ) syst->set_def();
@@ -496,7 +496,7 @@ void /*TProfil::*/makeGEM3KFiles( const gstring& systemkey, const std::set<gstri
 
 void TProfil::makeGEM2MTFiles(QWidget* par )
 {
-    TNodeArray* na = 0;
+    TNodeArray* na = nullptr;
     MULTI *pmp = multi->GetPM();
 
     try
@@ -514,9 +514,9 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
         	return;
 
       //internal objects for lookup arrays data
-      arT = (double *) aObj[ o_w_tval].GetPtr();
+      arT = static_cast<double *>(aObj[ o_w_tval].GetPtr());
       nTp_ = aObj[ o_w_tval].GetN();
-      arP = (double *) aObj[ o_w_pval].GetPtr();
+      arP = static_cast<double *>(aObj[ o_w_pval].GetPtr());
       nPp_ = aObj[ o_w_pval].GetN();
 
 
@@ -537,19 +537,19 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
     {
       if( na )
        delete na;
-      na = 0;
+      na = nullptr;
        Error(  xcpt.title.c_str(), xcpt.mess.c_str() );
     }
     if( na )
      delete na;
-    na = 0;
+    na = nullptr;
 
 }
 
 // Checks if the modelling project name is the same as read from GEMS3K I/O files
 bool TProfil::CompareProjectName( const char* SysKey )
 {
-    int len = rt[RT_PARAM].FldLen(0);
+    auto len = rt[RT_PARAM].FldLen(0);
 //    const char* proj_name = rt[RT_PARAM].UnpackKey();
     const char* proj_key = db->UnpackKey();
 //char project_name[64];
@@ -601,7 +601,7 @@ void TProfil::SetSysSwitchesFromMulti( )
      MULTI* pmp = multi->GetPM();
      RMULTS* mup = rmults->GetMU();
      SYSTEM* syp = syst->GetSY();
-     int i, ii, j, jj, k, kk;
+     long i, ii, j, jj, k, kk;
 
 
      // Set default informations to arrays
@@ -712,10 +712,10 @@ pmp->pKMM = 0;
     multi->DC_LoadThermodynamicData( na );
 
     // Unpack the pmp->B vector (b) into syp->BI and syp->BI (BI_ vector).
-    for( int i=0; i < pmp->N; i++ )
+    for( long i=0; i < pmp->N; i++ )
         syp->BI[pmp->mui[i]] = syp->B[pmp->mui[i]] = pmp->B[i];
 
-    for( int jj, j=0; j < pmp->L; j++ )
+    for( long jj, j=0; j < pmp->L; j++ )
     {
        jj = pmp->muj[j];
        syp->DLL[jj] = pmp->DLL[j];
@@ -828,8 +828,8 @@ void TProfil::CheckMtparam()
 void TProfil::PMtest( const char *key )
 {
     //double V, T, P;
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
-    TProcess* Proc = (TProcess*)(&aMod[RT_PROCES]);
+    TSysEq* STat = dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
+    TProcess* Proc = dynamic_cast<TProcess *>(&aMod[RT_PROCES]);
     MULTI *pmp = multi->GetPM();
 
     // test for available old solution
@@ -876,7 +876,7 @@ void TProfil::PMtest( const char *key )
 // else if nothing has changed - return 2.
 short TProfil::BAL_compare()
 {
-    int i,j,k, jj, jb, je=0;
+    long i,j,k, jj, jb, je=0;
     double Go, Gg, Ge, pGo;
     SYSTEM *syp = TSyst::sm->GetSY();
     MULTI *pmp = multi->GetPM();
@@ -982,7 +982,7 @@ short TProfil::BAL_compare()
 
     for( k=0; k<pmp->FI; k++ )
     {
-      int kk = pmp->muk[k];
+      auto kk = pmp->muk[k];
       if( syp->PSigm != S_OFF )
       {
          if( fabs( pmp->Sigw[k] - syp->Sigm[kk][0]) > 1e-19 )
@@ -1081,7 +1081,7 @@ moved to TMulti*/
 //
 double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& NumIterFIA, long int& NumIterIPM )
 {
-  TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+  TSysEq* STat = dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
   calcFinished = false;
 
   multi->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );

@@ -575,17 +575,20 @@ bool vfChooseDirectory(QWidget* par, gstring& path_,
     }
 }
 
-void vfMakeDirectory(QWidget* par, const char *dir )
+void vfMakeDirectory(QWidget* par, const char *dir, bool askOverwrite )
 {
-  // make directory dir (find system function)
+    // make directory dir (find system function)
     QDir d(dir);
     if ( d.exists() )
     {
-        gstring mess = dir;
-        mess += "\n";
-        mess+=  "This directory exists! Overwrite?";
-        if( !vfQuestion( par, "Create new directory",mess.c_str()) )
-          Error( dir, "Error creating directory!");
+        if( askOverwrite )
+        {
+            gstring mess = dir;
+            mess += "\n";
+            mess+=  "This directory exists! Overwrite?";
+            if( !vfQuestion( par, "Create new directory",mess.c_str()) )
+                Error( dir, "Error creating directory!");
+        }
         return;
     }
     if( !d.mkdir( dir ))
@@ -627,26 +630,26 @@ AGAIN:
 //=============================================
 
 bool vfListFiles(QWidget* par, bool show_dlg, const char * prfName,
-                TCStringArray& fls, TCIntArray& cnt )
+                 TCStringArray& fls, TCIntArray& cnt )
 {
     ListFilesDialog cw( par, prfName );
     if( show_dlg )
     {
 BACK:
-    if( !cw.exec() )
-      return false;
+        if( !cw.exec() )
+            return false;
 
-    switch( vfQuestion3(par, prfName,
-       "Did you really completed  selection of \n"
-       " database files to be linked to the project?",
-       "&Yes/Proceed", "&No/Go back", "&Help" ))
-    {
-    case VF3_1:
-        break;
-    case VF3_3:
-    case VF3_2:
-        goto BACK;
-    }
+        switch( vfQuestion3(par, prfName,
+                            "Did you really completed  selection of \n"
+                            " database files to be linked to the project?",
+                            "&Yes/Proceed", "&No/Go back", "&Help" ))
+        {
+        case VF3_1:
+            break;
+        case VF3_3:
+        case VF3_2:
+            goto BACK;
+        }
     }
     cw.allSelected( fls, cnt );
     return true;
@@ -658,11 +661,11 @@ BACK:
 //            bool& aAqueous, bool& aGaseous, bool& aSorption)
 bool
 vfElements(QWidget* par, const char * prfName,
-            elmWindowData& elm_data, setFiltersData& sf_data )
+           elmWindowData& elm_data, setFiltersData& sf_data )
 {
-     ElementsDialog eldlg( par, prfName, elm_data );
-     if( !eldlg.exec() )
-      return false;
+    ElementsDialog eldlg( par, prfName, elm_data );
+    if( !eldlg.exec() )
+        return false;
 
     sf_data =  eldlg.getFilters();
     elm_data = eldlg.getData();
@@ -672,12 +675,12 @@ vfElements(QWidget* par, const char * prfName,
 
 bool
 vfSystemInput(QWidget* par, const char * p_key,
-  TIArray<windowSetupData>& wnData, TIArray<tableSetupData>& tbData,
-  TIArray<pagesSetupData>& scalarsList )
+              TIArray<windowSetupData>& wnData, TIArray<tableSetupData>& tbData,
+              TIArray<pagesSetupData>& scalarsList )
 {
-     InputSystemDialog pdlg( par, p_key, wnData, tbData, scalarsList );
-     if( !pdlg.exec() )
-      return false;
+    InputSystemDialog pdlg( par, p_key, wnData, tbData, scalarsList );
+    if( !pdlg.exec() )
+        return false;
 
     pdlg.getTable(tbData);
     return true;
@@ -686,15 +689,15 @@ vfSystemInput(QWidget* par, const char * p_key,
 
 bool
 vfProcessSet(QWidget* par, const char * p_key,
-              char flgs[24], int size[8], short tabInt[6], double tabDoubl[24],
-              gstring& calcScript, gstring& outScript, TCStringArray& names,
-              gstring& xName, gstring& yName )
+             char flgs[24], int size[8], short tabInt[6], double tabDoubl[24],
+gstring& calcScript, gstring& outScript, TCStringArray& names,
+gstring& xName, gstring& yName )
 {
-     ProcessWizard pdlg( p_key, flgs, size,  tabInt, tabDoubl,
-                 calcScript.c_str(), outScript.c_str(),
-                 xName.c_str(), yName.c_str(), par );
-     if( !pdlg.exec() )
-      return false;
+    ProcessWizard pdlg( p_key, flgs, size,  tabInt, tabDoubl,
+                        calcScript.c_str(), outScript.c_str(),
+                        xName.c_str(), yName.c_str(), par );
+    if( !pdlg.exec() )
+        return false;
 
     pdlg.getFlags( flgs );
     pdlg.getSizes( size );
@@ -709,15 +712,15 @@ vfProcessSet(QWidget* par, const char * p_key,
 
 bool
 vfGEM2MTSet(QWidget* par, const char * p_key,
-              char flgs[32], int size[20],  double Tai[4], double Pai[4], double Tau[3],
-            gstring& calcScript, gstring& outScript, TCStringArray& names,
-            gstring& xName, gstring& yName, TCIntArray& vtk1, TCIntArray& vtk2 )
+            char flgs[32], int size[20],  double Tai[4], double Pai[4], double Tau[3],
+gstring& calcScript, gstring& outScript, TCStringArray& names,
+gstring& xName, gstring& yName, TCIntArray& vtk1, TCIntArray& vtk2 )
 {
-     GEM2MTWizard pdlg( p_key, flgs, size, Tai, Pai, Tau,
+    GEM2MTWizard pdlg( p_key, flgs, size, Tai, Pai, Tau,
                        calcScript.c_str(), outScript.c_str(),
                        xName.c_str(), yName.c_str(), vtk1, vtk2, par );
-     if( !pdlg.exec() )
-      return false;
+    if( !pdlg.exec() )
+        return false;
 
     pdlg.getFlags( flgs );
     pdlg.getSizes( size );
@@ -735,11 +738,11 @@ vfGEM2MTSet(QWidget* par, const char * p_key,
 
 bool
 vfUnSpaceSet(QWidget* par, const char * p_key,
-              char flgs[38], int size[10] )
+             char flgs[38], int size[10] )
 {
-     UnSpaceWizard pdlg( p_key, flgs, size, par );
-     if( !pdlg.exec() )
-      return false;
+    UnSpaceWizard pdlg( p_key, flgs, size, par );
+    if( !pdlg.exec() )
+        return false;
 
     pdlg.getFlags( flgs );
     pdlg.getSizes( size );
