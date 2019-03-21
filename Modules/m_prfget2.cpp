@@ -34,6 +34,7 @@
 #include "m_reacdc.h"
 #include "m_sdata.h"
 #include "m_const.h"
+#include "m_proces.h"
 #include "EquatSetupWidget.h"
 #include "GemsMainWindow.h"
 
@@ -1257,6 +1258,52 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
     }
 }
 
+void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const gstring& files_dir, bool brief_mode, bool with_comments )
+{
+    pVisor->CloseMessage();
+
+    vstr pkey(81);
+    vstr tbuf(150);
+    TCStringArray aList;
+    TCIntArray anR;
+    gstring process_name, recordPath;
+
+    rt[RT_PROCES].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    rt[RT_PROCES].GetKeyList( pkey, aList, anR );
+    aMod[RT_PROCES].ods_link(0);
+
+    for( uint ii=0; ii< aList.GetCount(); ii++)
+    {
+        // test exists
+        if( rt[RT_PROCES].Find( aList[ii].c_str() ) < 0 )
+            continue;
+
+        TProcess::pm->RecInput( aList[ii].c_str() );
+
+        // generate name and create directory
+        process_name = gstring( rt[RT_PROCES].FldKey(8), 0, rt[RT_PROCES].FldLen(8));;
+        process_name.strip();
+        process_name +="_";
+        process_name +=rt[RT_PROCES].FldKey(9)[0];
+        KeyToName(process_name);
+        gstring recordPath = files_dir + process_name + "/";
+        vfMakeDirectory( nullptr, recordPath.c_str(), false );
+
+        recordPath += process_name+ "-dat.lst";
+        try {
+            TProcess::pm->genGEM3K( recordPath, savedSystems, brief_mode, with_comments );
+        } catch (TError& xcpt) {
+            cout << "Process record out error: " << aList[ii].c_str() << " :" << xcpt.mess.c_str() << "\n";
+        }
+
+        // stop point
+        if( pVisor->Message( nullptr, "Generating GEMS3K for process records", tbuf.p, ii, aList.GetCount() ))
+            break;
+    }
+}
+
+
 void TProfil::GEMS3KallSystems( int /*makeDump*/ )
 {
     // Select destination
@@ -1269,22 +1316,16 @@ void TProfil::GEMS3KallSystems( int /*makeDump*/ )
     bool with_comments = false;
     int makeCalc =2; // 0 - no recalculation; 2- NEED_GEM_SIA; 1-NEED_GEM_AIA
 
-
     try{
-
-        TCStringArray savedSystems;
         // Generate data from process
+        TCStringArray savedSystems;
         gstring processPath = dir + "/Processes/";
         vfMakeDirectory( nullptr, processPath.c_str(), true );
-
-        // savedSystems from process
-
+        allProcess2GEMS3K( savedSystems, processPath, brief_mode, with_comments );
 
         // Save systems
         gstring systemsPath = dir + "/Systems/";
-        // create dir if no exist else question for overwrite
         vfMakeDirectory( nullptr, systemsPath.c_str(), true );
-
         allSystems2GEMS3K( savedSystems, makeCalc, systemsPath, brief_mode, with_comments );
     }
     catch( TError& xcpt )
