@@ -410,13 +410,6 @@ struct tableSetupData
            objName(oName), ndxName (ndName)
    { }
 
-   /*tableSetupData( uint aWin, int aobj, const char * oName,
-                   int aIdx, const char * ndName,
-                   float aVal, char aUnit ):
-           nWin(aWin), nObj(aobj), nIdx(aIdx), val( static_cast<double>(aVal), unit (aUnit),
-           objName(oName), ndxName (ndName)
-   { }*/
-
    tableSetupData( tableSetupData& d ):
            nWin(d.nWin), nObj(d.nObj), nIdx(d.nIdx), val(d.val), unit(d.unit),
            objName(d.objName), ndxName(d.ndxName)

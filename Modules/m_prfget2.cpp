@@ -1182,23 +1182,23 @@ void TProfil::CurrentSystem2GEMS3K( const gstring& filepath, bool brief_mode, bo
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 
     ProcessProgressFunction messageF = [filepath](const gstring& message, long point){
-        std::cout << "GEM3k output: " <<  filepath.c_str() << " " << message.c_str() << point << std::endl;
+        //std::cout << "GEM3k output: " <<  filepath.c_str() << " " << message.c_str() << point << std::endl;
         return false;
     };
     na->genGEMS3KInputFiles(  filepath, messageF, 1, false, brief_mode, with_comments, false, false );
 }
 
-void TProfil::System2GEMS3K( const gstring& filepath, const gstring key, bool brief_mode, bool with_comments )
+void TProfil::System2GEMS3K( const gstring key, int calcMode, const gstring& filepath, bool brief_mode, bool with_comments )
 {
     loadSystat( key.c_str() );
 
     /*  Do we need recalculate system before? */
-    int makeCalc = 0;
-    if( makeCalc )
+    if( calcMode )
     {
         MULTI *pmp = multi->GetPM();
         double dTime=0.; int kTimeStep =0; double kTime=0.;
-        if( makeCalc == 2 ) //NEED_GEM_SIA
+
+        if( calcMode == 2 ) //NEED_GEM_SIA
             pmp->pNP = 1;
         else
             pmp->pNP = 0; //  NEED_GEM_AIA;
@@ -1209,10 +1209,56 @@ void TProfil::System2GEMS3K( const gstring& filepath, const gstring key, bool br
 }
 
 
-void TProfil::GEMS3KallSystems( int /*makeDump*/ )
+void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, const gstring& files_dir, bool brief_mode, bool with_comments )
 {
     pVisor->CloseMessage();
 
+    vstr pkey(81);
+    vstr tbuf(150);
+    TCStringArray aList;
+    TCIntArray anR;
+    gstring packkey, systemname, recordPath;
+
+    rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+                          K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
+
+    aMod[RT_SYSEQ].ods_link(0);
+
+    for( uint ii=0; ii< aList.GetCount(); ii++)
+    {
+        // test exists
+        if( rt[RT_SYSEQ].Find( aList[ii].c_str() ) < 0 )
+            continue;
+        // get key in pack form
+        packkey = rt[RT_SYSEQ].PackKey();
+
+        // test output before
+        if( savedSystems.Find( packkey ) >= 0)
+            continue;
+        savedSystems.Add(packkey);
+
+        // generate name and create directory
+        systemname = packkey;
+        KeyToName(systemname);
+        gstring recordPath = files_dir + systemname + "/";
+        vfMakeDirectory( nullptr, recordPath.c_str(), false );
+
+        recordPath += systemname+ "-dat.lst";
+        try {
+            System2GEMS3K( packkey, calc_mode, recordPath, brief_mode, with_comments );
+        } catch (TError& xcpt) {
+            cout << "Record out error: " << packkey.c_str() << " :" << xcpt.mess.c_str() << "\n";
+        }
+
+        // stop point
+        if( pVisor->Message( nullptr, "Re-calculating and saving all equilibria", tbuf.p, ii, aList.GetCount() ))
+            break;
+    }
+}
+
+void TProfil::GEMS3KallSystems( int /*makeDump*/ )
+{
     // Select destination
     gstring dir;
     if( !vfChooseDirectory( nullptr, dir,"Please, enter output directory location." ))
@@ -1221,7 +1267,8 @@ void TProfil::GEMS3KallSystems( int /*makeDump*/ )
     // Here we can set up Dialog
     bool brief_mode = true;
     bool with_comments = false;
-    int makeCalc = 0; // 0 - no recalculation; 2- NEED_GEM_SIA; 1-NEED_GEM_AIA
+    int makeCalc =2; // 0 - no recalculation; 2- NEED_GEM_SIA; 1-NEED_GEM_AIA
+
 
     try{
 
@@ -1229,6 +1276,7 @@ void TProfil::GEMS3KallSystems( int /*makeDump*/ )
         // Generate data from process
         gstring processPath = dir + "/Processes/";
         vfMakeDirectory( nullptr, processPath.c_str(), true );
+
         // savedSystems from process
 
 
@@ -1237,45 +1285,7 @@ void TProfil::GEMS3KallSystems( int /*makeDump*/ )
         // create dir if no exist else question for overwrite
         vfMakeDirectory( nullptr, systemsPath.c_str(), true );
 
-        vstr pkey(81);
-        vstr tbuf(150);
-        TCStringArray aList;
-        TCIntArray anR;
-        gstring packkey, systemname, recordPath;
-
-        rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-                              K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-        rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
-
-        aMod[RT_SYSEQ].ods_link(0);
-        for( uint ii=0; ii< aList.GetCount(); ii++)
-        {
-            // test exists
-            if( rt[RT_SYSEQ].Find( aList[ii].c_str() ) < 0 )
-                continue;
-
-            packkey = rt[RT_SYSEQ].PackKey();
-
-            // test out before
-            if( savedSystems.Find( packkey ) >= 0)
-                continue;
-
-
-            systemname = packkey;
-            KeyToName(systemname);
-            gstring recordPath = systemsPath + systemname + "/";
-            vfMakeDirectory( nullptr, recordPath.c_str(), false );
-
-            recordPath += systemname+ "-dat.lst";
-            try {
-                System2GEMS3K( recordPath, packkey, brief_mode, with_comments );
-            } catch (TError& xcpt) {
-              cout << "Record out error: " << packkey.c_str() << " :" << xcpt.mess.c_str() << "\n";
-            }
-
-            if( pVisor->Message( nullptr, "Re-calculating and saving all equilibria", tbuf.p, ii, aList.GetCount() ))
-                break;
-        }
+        allSystems2GEMS3K( savedSystems, makeCalc, systemsPath, brief_mode, with_comments );
     }
     catch( TError& xcpt )
     {
