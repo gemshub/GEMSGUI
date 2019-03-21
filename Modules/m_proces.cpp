@@ -1236,18 +1236,18 @@ pep->ccTime = 0.0;
            sd_key += db->GetKeywd();
            sd_key += "*";
            sd_key += ":";
-           sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
+           sd_key = dynamic_cast<TCModule *>(&aMod[RT_SDATA])->GetKeyofRecord(
              sd_key.c_str(), "Select a print script SDref record key", KEY_OLD);
 
            if( !sd_key.empty() )
            {
-             ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
-              text_fmt = (char *)aObj[o_sdabstr].GetPtr();
+             dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+              text_fmt = static_cast<char *>(aObj[o_sdabstr].GetPtr());
               if( !text_fmt )
                  Error( GetName(), "E00PSexec: No print script format text in this record.");
               if( !vfChooseFileSave(window(), filename,
                      "Please, provide a name of an output file") )
-                text_fmt = 0;
+                text_fmt = nullptr;
            }
         }
         // no Graphic reprasentation in  Thread mode
@@ -1337,7 +1337,7 @@ TProcess::internalCalc()
 {
     int nRec;
     bool iRet = false;
-    TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+    TProfil* PRof = dynamic_cast<TProfil*>(&aMod[RT_PARAM]);
     calcFinished = false;
     char buf[300];
 
@@ -1708,7 +1708,7 @@ void TProcess::genGEM3K(const gstring &filepath, bool brief_mode, TCStringArray 
               //std::cout << "TProcess GEM3k output" <<  message.c_str() << point << std::endl;
               return false;
         };
-    auto dbr_list =  na->genGEMS3KInputFiles(  filepath, messageF, 1, false, brief_mode, false,false, false );
+    auto dbr_list =  na->genGEMS3KInputFiles(  filepath, messageF, 1, false, brief_mode, false, false, false );
 
     // output dbr keys
     if( pep->stl == nullptr )
