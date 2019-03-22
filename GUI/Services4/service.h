@@ -86,8 +86,8 @@ vfKeyEdit(QWidget* par, const char* title, uint iRt, const char* key=0);
 
 gstring
 vfKeyProfile(QWidget* par, const char* title, int iRt,
-        bool& chAqGas, bool& addFiles,
-    bool& remake, int& makeDump, gstring& key_templ  );
+    bool& chAqGas, bool& addFiles, bool& remake, int& makeDump,
+    gstring& key_templ, bool& genGEMS3k, bool& brief_mode  );
 
 gstring
 vfKeyTemplEdit(QWidget* par, const char* title, uint iRt, const char* key=0,

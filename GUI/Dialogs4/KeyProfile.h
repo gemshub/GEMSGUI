@@ -29,7 +29,7 @@ class KeyProfile : public QDialog, public Ui::KeyProfileData
 {
     Q_OBJECT
 
-    int iRt;
+    uint iRt;
     bool newKey;
 
 protected slots:
@@ -41,15 +41,18 @@ protected slots:
 
 public:
 
-    KeyProfile(QWidget* win, int irt, const char* caption = 0);
+    KeyProfile(QWidget* win, uint irt, const char* caption = nullptr);
     virtual ~KeyProfile();
 
-    gstring getKey();
-    bool   getAqGasState();
-    bool   getFilesState();
-    bool   getRemakeState();
-    int   getMakeDump();
-    gstring getTemplateKey();
+    gstring getKey() const;
+    bool   getAqGasState() const;
+    bool   getFilesState() const;
+    bool   getRemakeState() const;
+    int   getMakeDump() const;
+    gstring getTemplateKey() const;
+
+    bool   getGEMSExport() const;
+    bool   getGEMSExportMode() const;
 
 };
 

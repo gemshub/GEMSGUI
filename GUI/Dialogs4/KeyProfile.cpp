@@ -27,13 +27,13 @@
 #include "visor.h"
 #include "service.h"
 
-KeyProfile::KeyProfile( QWidget* win, int irt, const char* caption):
-        QDialog( win),
-        iRt(irt), newKey(false)
+KeyProfile::KeyProfile( QWidget* win, uint irt, const char* caption):
+    QDialog( win),
+    iRt(irt), newKey(false)
 {
-	setupUi(this);
+    setupUi(this);
 
-	pList->setFont( pVisorImp->getCellFont() );
+    pList->setFont( pVisorImp->getCellFont() );
 
     TCIntArray    temp;
     TCStringArray keyList;
@@ -48,34 +48,36 @@ KeyProfile::KeyProfile( QWidget* win, int irt, const char* caption):
         rbOldPrMode->setChecked( true );
     }
 
-//    gstring s = "Select Project record";
-//    pLabel->setText(s.c_str());
+    //    gstring s = "Select Project record";
+    //    pLabel->setText(s.c_str());
 
-    int n = rt[irt].GetKeyList( "*", keyList, temp);
-    for( int ii=0; ii<n; ii++ )
+    auto n = rt[irt].GetKeyList( "*", keyList, temp);
+    for( size_t ii=0; ii<n; ii++ )
         pList->addItem(keyList[ii].c_str());
-     pList->setCurrentRow(0);
-     pList->item(0)->setSelected(true);
+    pList->setCurrentRow(0);
+    pList->item(0)->setSelected(true);
 
-     // signals and slots connections
-     QObject::connect( pRe_runIA, SIGNAL( clicked() ), this, SLOT( CmReturnIA() ) );
-     QObject::connect( pRe_runSmart, SIGNAL( clicked() ), this, SLOT( CmReturnSmart() ) );
-  	 QObject::connect(pList, SIGNAL(itemDoubleClicked ( QListWidgetItem *) ), this, SLOT(accept()));
-//     QObject::connect(pList, SIGNAL(returnPressed(QListWidgetItem *)), this, SLOT(accept()));
+    // signals and slots connections
+    QObject::connect( pRe_runIA, SIGNAL( clicked() ), this, SLOT( CmReturnIA() ) );
+    QObject::connect( pRe_runSmart, SIGNAL( clicked() ), this, SLOT( CmReturnSmart() ) );
+    QObject::connect(pList, SIGNAL(itemDoubleClicked ( QListWidgetItem *) ), this, SLOT(accept()));
+    //     QObject::connect(pList, SIGNAL(returnPressed(QListWidgetItem *)), this, SLOT(accept()));
 }
 
 KeyProfile::~KeyProfile()
 {}
+
+
 
 void KeyProfile::languageChange()
 {
     retranslateUi(this);
 }
 
-gstring KeyProfile::getKey()
+gstring KeyProfile::getKey() const
 {
-   pVisor->setElemPrMode(rbNewPrMode->isChecked());
-   if( newKey == true )
+    pVisor->setElemPrMode(rbNewPrMode->isChecked());
+    if( newKey == true )
         return ALLKEY;
     int sel = pList->currentRow();
     if( sel != -1 )
@@ -86,14 +88,14 @@ gstring KeyProfile::getKey()
 
 void KeyProfile::CmReturnIA()
 {
-	   if( pRe_runIA->isChecked() )
-	         pRe_runSmart->setChecked(false);
+    if( pRe_runIA->isChecked() )
+        pRe_runSmart->setChecked(false);
 }
 
 void KeyProfile::CmReturnSmart()
 {
-	   if( pRe_runSmart->isChecked() )
-	         pRe_runIA->setChecked(false);
+    if( pRe_runSmart->isChecked() )
+        pRe_runIA->setChecked(false);
 }
 
 void KeyProfile::CmNew()
@@ -104,11 +106,11 @@ void KeyProfile::CmNew()
 
 void KeyProfile::CmHelp()
 {
-  pVisorImp->OpenHelp( GEMS_MPROJ_HTML );
+    pVisorImp->OpenHelp( GEMS_MPROJ_HTML );
 }
 
 bool
-KeyProfile::getAqGasState()
+KeyProfile::getAqGasState() const
 {
     if( newKey == true )
         return true;    // new record => selection aqueous and gas phases
@@ -119,7 +121,7 @@ KeyProfile::getAqGasState()
 
 }
 
-int KeyProfile::getMakeDump()
+int KeyProfile::getMakeDump() const
 {
     if( newKey == true )
         return 0;    // new record => no dump
@@ -130,10 +132,10 @@ int KeyProfile::getMakeDump()
     if( pRe_runSmart->isChecked() )
         return 2;  // Re-run and save all sysEq in smart
     
-    return 0; 
+    return 0;
 }
 
-bool KeyProfile::getFilesState()
+bool KeyProfile::getFilesState() const
 {
     if( newKey == true )
         return false;    // new record => add all files
@@ -144,7 +146,7 @@ bool KeyProfile::getFilesState()
 
 }
 
-bool KeyProfile::getRemakeState()
+bool KeyProfile::getRemakeState() const
 {
     if( CheckBox4->isChecked() )
         return true;   // remake flags
@@ -152,16 +154,26 @@ bool KeyProfile::getRemakeState()
 
 }
 
-gstring KeyProfile::getTemplateKey()
+gstring KeyProfile::getTemplateKey() const
 {
     if( newKey == true && pTemplate->isChecked() )
     {
-      int sel = pList->currentRow();
-      if( sel != -1 )
-        return gstring(pList->item(sel)->text().toLatin1().data());
-      Error( "New Modelling Project", "No template record selected");
+        int sel = pList->currentRow();
+        if( sel != -1 )
+            return gstring(pList->item(sel)->text().toLatin1().data());
+        Error( "New Modelling Project", "No template record selected");
     }
     return gstring();
+}
+
+bool KeyProfile::getGEMSExport() const
+{
+    return checkGEMS3k->isChecked();
+}
+
+bool KeyProfile::getGEMSExportMode() const
+{
+    return checkBrief->isChecked();
 }
 
 // --------------------- End KeyProfile.cpp -------------------------

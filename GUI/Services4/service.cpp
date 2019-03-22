@@ -400,8 +400,8 @@ vfKeyEdit(QWidget* par, const char* caption, uint iRt, const char* key)
 
 gstring
 vfKeyProfile(QWidget* par, const char* caption, int iRt,
-    bool& chAqGas, bool& addFiles,
-    bool& remake,  int& makeDump, gstring& key_templ )
+             bool& chAqGas, bool& addFiles, bool& remake, int& makeDump,
+             gstring& key_templ, bool& genGEMS3k, bool& brief_mode   )
 {
     KeyProfile dbk(par, iRt, caption);
     if( !dbk.exec() )
@@ -412,6 +412,9 @@ vfKeyProfile(QWidget* par, const char* caption, int iRt,
     key_templ = dbk.getTemplateKey();
     remake = dbk.getRemakeState();
     makeDump = dbk.getMakeDump();
+
+    genGEMS3k = dbk.getGEMSExport();
+    brief_mode = dbk.getGEMSExportMode();
 
     return dbk.getKey();
 }

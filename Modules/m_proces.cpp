@@ -1685,7 +1685,7 @@ const char* TProcess::GetHtml()
    return GM_PROCES_HTML;
 }
 
-void TProcess::genGEM3K(const gstring& filepath, TCStringArray& savedSystems, bool brief_mode, bool with_comments)
+void TProcess::genGEM3K(const gstring& filepath, TCStringArray& savedSystems, bool brief_mode, bool add_mui)
 {
     // set up Node Array
     std::unique_ptr<TNodeArray> na;
@@ -1708,7 +1708,7 @@ void TProcess::genGEM3K(const gstring& filepath, TCStringArray& savedSystems, bo
               //std::cout << "TProcess GEM3k output" <<  message.c_str() << point << std::endl;
               return false;
         };
-    auto dbr_list =  na->genGEMS3KInputFiles(  filepath, messageF, 1, false, brief_mode, with_comments, false, false );
+    auto dbr_list =  na->genGEMS3KInputFiles(  filepath, messageF, 1, false, brief_mode, false, false, add_mui );
 
     // output dbr keys
     if( pep->stl == nullptr )

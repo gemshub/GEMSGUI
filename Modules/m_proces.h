@@ -251,9 +251,9 @@ public:
    /// Prints files for separate coupled FMT-GEM programs that use GEMS3K module
    /// \param filepath - IPM work structure file path&name
    /// \param brief_mode - Do not write data items that contain only default values
-   /// \param with_comments -Write files with comments for all data entries
+   /// \param add_mui - Print internal indices in RMULTS to IPM file for reading into Gems back
    /// \return savedSystems - add saved system record to array
-   void genGEM3K( const gstring& filepath, TCStringArray& savedSystems, bool brief_mode, bool with_comments = false );
+   void genGEM3K( const gstring& filepath, TCStringArray& savedSystems, bool brief_mode, bool add_mui = false );
 };
 
 enum pe_statcode {
