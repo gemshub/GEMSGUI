@@ -104,7 +104,7 @@ extern const char* S_ANY;
 
 inline bool IsFloatEmpty( const float v )
 {
-    return ( v>0. && v <= FLOAT_EMPTY);
+    return ( v>0.f && v <= FLOAT_EMPTY);
 }
 inline bool IsDoubleEmpty( const double v )
 {

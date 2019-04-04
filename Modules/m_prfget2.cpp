@@ -1273,6 +1273,10 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const gstring& fil
     rt[RT_PROCES].GetKeyList( pkey, aList, anR );
     aMod[RT_PROCES].ods_link(0);
 
+
+    if( aList.GetCount() > 0 )
+        vfMakeDirectory( nullptr, files_dir.c_str(), true );
+
     for( uint ii=0; ii< aList.GetCount(); ii++)
     {
         // test exists
@@ -1313,7 +1317,7 @@ void TProfil::GEMS3KallSystems( int makeCalc, bool brief_mode, bool add_mui )
         // Generate data from process
         TCStringArray savedSystems;
         gstring processPath = dir + "/Processes/";
-        vfMakeDirectory( nullptr, processPath.c_str(), true );
+        //vfMakeDirectory( nullptr, processPath.c_str(), true );
         allProcess2GEMS3K( savedSystems, processPath, brief_mode, add_mui );
 
         // Save systems

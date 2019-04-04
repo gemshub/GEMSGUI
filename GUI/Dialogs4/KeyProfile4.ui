@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
-    <height>651</height>
+    <width>794</width>
+    <height>623</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -32,6 +32,13 @@
    <bool>true</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0" colspan="2">
+    <widget class="QListWidget" name="pList">
+     <property name="selectionRectVisible">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
    <item row="5" column="0">
     <widget class="QCheckBox" name="pTemplate">
      <property name="enabled">
@@ -48,61 +55,6 @@
      </property>
      <property name="checked">
       <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QCheckBox" name="pFiles">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="acceptDrops">
-      <bool>false</bool>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="text">
-      <string>Change &amp;file configuration of the selected project</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="2">
-    <widget class="QLabel" name="pLabel">
-     <property name="text">
-      <string>GEM-Selektor modelling projects: &amp;Select one to open, or click 'New Project...' to create </string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>false</bool>
-     </property>
-     <property name="buddy">
-      <cstring>pList</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QListWidget" name="pList">
-     <property name="selectionRectVisible">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QCheckBox" name="pAqGas">
-     <property name="toolTip">
-      <string>Uncheck to use different models of aqueous and/or gas phases</string>
-     </property>
-     <property name="text">
-      <string>Re&amp;tain setup of aqueous (and gas/fluid) phases</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -272,10 +224,58 @@
      </item>
     </layout>
    </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="pLabel">
+     <property name="text">
+      <string>GEM-Selektor modelling projects: &amp;Select one to open, or click 'New Project...' to create </string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+     <property name="buddy">
+      <cstring>pList</cstring>
+     </property>
+    </widget>
+   </item>
    <item row="4" column="0">
     <widget class="QCheckBox" name="CheckBox4">
      <property name="text">
       <string>Activate Project &amp;Remake wizard</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QCheckBox" name="pFiles">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="acceptDrops">
+      <bool>false</bool>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>Change &amp;file configuration of the selected project</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QCheckBox" name="pAqGas">
+     <property name="toolTip">
+      <string>Uncheck to use different models of aqueous and/or gas phases</string>
+     </property>
+     <property name="text">
+      <string>Re&amp;tain setup of aqueous (and gas/fluid) phases</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -288,7 +288,7 @@
       <item row="0" column="0">
        <widget class="QCheckBox" name="checkGEMS3k">
         <property name="text">
-         <string>Gems-test export</string>
+         <string>GEMStest export</string>
         </property>
        </widget>
       </item>
@@ -305,14 +305,14 @@
       <item row="1" column="0">
        <widget class="QCheckBox" name="pRe_runIA">
         <property name="text">
-         <string>AIA mode (simplex)</string>
+         <string>Automatic (simplex) IA</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="QCheckBox" name="pRe_runSmart">
         <property name="text">
-         <string>Smart IA mode (SIA)</string>
+         <string>Smart (previous) IA</string>
         </property>
        </widget>
       </item>
