@@ -578,7 +578,28 @@ bool vfChooseDirectory(QWidget* par, gstring& path_,
     }
 }
 
-void vfMakeDirectory(QWidget* par, const char *dir, bool askOverwrite )
+void deleteDirectory(QString dir)
+{
+    QDir data_dir(dir);
+
+    //First delete any files in the current directory
+    QFileInfoList files = data_dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files);
+    for(int file = 0; file < files.count(); file++)
+    {
+        data_dir.remove(files.at(file).fileName());
+    }
+
+    //Now recursively delete any child directories
+    QFileInfoList dirs = data_dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs);
+    for(int dir = 0; dir < dirs.count(); dir++)
+    {
+        deleteDirectory(dirs.at(dir).absoluteFilePath());
+        data_dir.rmdir(dirs.at(dir).absoluteFilePath());
+    }
+}
+
+
+void vfMakeDirectory(QWidget* par, const char *dir, int askOverwrite )
 {
     // make directory dir (find system function)
     QDir d(dir);
@@ -591,6 +612,11 @@ void vfMakeDirectory(QWidget* par, const char *dir, bool askOverwrite )
             mess+=  "This directory exists! Overwrite?";
             if( !vfQuestion( par, "Create new directory",mess.c_str()) )
                 Error( dir, "Error creating directory!");
+
+            if( askOverwrite == 2)
+            {
+              deleteDirectory(dir);
+            }
         }
         return;
     }

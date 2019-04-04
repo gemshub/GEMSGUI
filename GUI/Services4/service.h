@@ -107,7 +107,11 @@ bool vfChooseFileSave(QWidget* par, gstring& path,
   const char* title=0 , const char* filter=0);
 bool vfChooseDirectory(QWidget* par, gstring& path_,
        const char* title );
-void vfMakeDirectory(QWidget* par, const char *dir, bool askOverwrite = true );
+
+// askOverwrite = 0 - not ask
+// askOverwrite = 1 - ask and cancel
+// askOverwrite = 2 - ask and clear
+void vfMakeDirectory(QWidget* par, const char *dir, int askOverwrite = 0 );
 double vfGetDouble( QWidget * par, const char* title, const char* label,
   double value = 0, double min = -1e8, double max = 1e8, int decimals = 4 );
 

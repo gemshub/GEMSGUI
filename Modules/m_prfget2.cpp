@@ -1234,6 +1234,9 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
         // get key in pack form
         packkey = rt[RT_SYSEQ].PackKey();
 
+        //test :000: in last field
+        if( gstring(rt[RT_SYSEQ].FldKey(7)).find("000") != gstring::npos )
+            continue;
         // test output before
         if( savedSystems.Find( packkey ) >= 0)
             continue;
@@ -1243,7 +1246,7 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
         systemname = packkey;
         KeyToName(systemname);
         gstring recordPath = files_dir + systemname + "/";
-        vfMakeDirectory( nullptr, recordPath.c_str(), false );
+        vfMakeDirectory( nullptr, recordPath.c_str(), 0 );
 
         recordPath += systemname+ "-dat.lst";
         try {
@@ -1275,7 +1278,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const gstring& fil
 
 
     if( aList.GetCount() > 0 )
-        vfMakeDirectory( nullptr, files_dir.c_str(), true );
+        vfMakeDirectory( nullptr, files_dir.c_str(), 2 );
 
     for( uint ii=0; ii< aList.GetCount(); ii++)
     {
@@ -1290,7 +1293,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const gstring& fil
         process_name.strip();
         KeyToName(process_name);
         gstring recordPath = files_dir + process_name + "/";
-        vfMakeDirectory( nullptr, recordPath.c_str(), false );
+        vfMakeDirectory( nullptr, recordPath.c_str(), 0 );
 
         recordPath += process_name+ "-dat.lst";
         try {
@@ -1317,12 +1320,12 @@ void TProfil::GEMS3KallSystems( int makeCalc, bool brief_mode, bool add_mui )
         // Generate data from process
         TCStringArray savedSystems;
         gstring processPath = dir + "/Processes/";
-        //vfMakeDirectory( nullptr, processPath.c_str(), true );
+        //vfMakeDirectory( nullptr, processPath.c_str(), 2 );
         allProcess2GEMS3K( savedSystems, processPath, brief_mode, add_mui );
 
         // Save systems
         gstring systemsPath = dir + "/Standalone/";
-        vfMakeDirectory( nullptr, systemsPath.c_str(), true );
+        vfMakeDirectory( nullptr, systemsPath.c_str(), 2 );
         allSystems2GEMS3K( savedSystems, makeCalc, systemsPath, brief_mode, add_mui );
     }
     catch( TError& xcpt )

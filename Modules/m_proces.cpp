@@ -1553,9 +1553,9 @@ void TProcess::RecordPrint(const char *key)
         process_name.strip();
         KeyToName(process_name);
         //gstring recordPath = files_dir + process_name + "/";
-        //vfMakeDirectory( nullptr, recordPath.c_str(), false );
+        //vfMakeDirectory( nullptr, recordPath.c_str(), 1 );
 
-        gstring filename = process_name+ "/" +process_name;
+        gstring filename = process_name;
         filename += "-dat.lst";
 
         if( vfChooseFileSave(window(), filename,
@@ -1566,7 +1566,7 @@ void TProcess::RecordPrint(const char *key)
                         "This file exists! Overwrite?") )
                    return;
             TCStringArray savedSystems;
-            genGEM3K(filename, savedSystems, true, false);
+            genGEM3K(filename, savedSystems, false, false);
             refreshState();
         }
     }

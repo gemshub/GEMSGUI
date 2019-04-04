@@ -982,7 +982,7 @@ TGEM2MT::RecCalc( const char * key )
          pathVTK += "/";
          pathVTK += nameVTK.c_str();
          pathVTK += "/";
-         vfMakeDirectory(window(), pathVTK.c_str() );
+         vfMakeDirectory(window(), pathVTK.c_str(), 1 );
      }
    }
 

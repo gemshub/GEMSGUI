@@ -295,7 +295,7 @@
       <item row="0" column="1">
        <widget class="QCheckBox" name="checkBrief">
         <property name="text">
-         <string>Brief mode</string>
+         <string>Without speciation</string>
         </property>
         <property name="checked">
          <bool>true</bool>
