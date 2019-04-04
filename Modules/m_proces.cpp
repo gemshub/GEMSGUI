@@ -1548,13 +1548,18 @@ void TProcess::RecordPrint(const char *key)
 
     if( res == VF3_1 )
     {
-        gstring filename = gstring( rt[RT_PROCES].FldKey(8), 0, rt[RT_PROCES].FldLen(8));;
-        filename.strip();
-        filename +="_";
-        filename +=rt[RT_PROCES].FldKey(9)[0];
+        // generate name and create directory
+        gstring process_name = rt[RT_PROCES].PackKey();
+        process_name.strip();
+        KeyToName(process_name);
+        //gstring recordPath = files_dir + process_name + "/";
+        //vfMakeDirectory( nullptr, recordPath.c_str(), false );
+
+        gstring filename = process_name+ "/" +process_name;
         filename += "-dat.lst";
+
         if( vfChooseFileSave(window(), filename,
-                   "Please, enter the TGEM2MT work structure file name", "*.dat" ) )
+                   "Please, enter the Process work structure file name", "*.lst" ) )
         {
             if( !access(filename.c_str(), 0 ) ) //file exists
                 if( !vfQuestion( window(), filename.c_str(),
