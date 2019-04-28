@@ -25,7 +25,7 @@
 #include "service.h"
 
 
-TReadData::TReadData(const char *sd_key,  uint nrt, const char *fmt_text ):
+TReadData::TReadData(const char *sd_key,  unsigned int nrt, const char *fmt_text ):
   key_format( sd_key ), nRT(nrt)
 {
   input = const_cast<char*>(fmt_text);
