@@ -2,7 +2,7 @@
 TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems3
-#VERSION         = 3.3.0
+#VERSION         = 3.4.6
 
 DEFINES         += Use_mt_mode
 DEFINES         += NODEARRAYLEVEL

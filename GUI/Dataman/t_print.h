@@ -108,7 +108,7 @@ struct PData
 class TPrintData  // print resalts of module calc
 {
     gstring key_format;        // key of SDref record
-    uint nRT;                   // module number
+    unsigned int nRT;          // module number
 
     char *input;               // current position
     TIArray<PFormat> aFmts;  // list of formats
@@ -132,7 +132,7 @@ protected:
 
 public:
 
-    TPrintData(const char *sd_key, uint nrt, fstream& fout, const char *fmt_text );
+    TPrintData(const char *sd_key, unsigned int nrt, fstream& fout, const char *fmt_text );
     ~TPrintData();
 
 };

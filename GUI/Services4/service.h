@@ -69,7 +69,7 @@ vfMultiChoiceSet(QWidget* par, TCStringArray& arr, const char* prompt, TCIntArra
 
 TCStringArray
 vfMultiKeys(QWidget* par, const char* caption,
-        uint iRt, const char* key );
+        unsigned int iRt, const char* key );
 
 TCStringArray
 vfMultiKeysSet(QWidget* par, const char* caption,
@@ -82,7 +82,7 @@ vfListFiles(QWidget* par, bool show_dlg, const char * prfName,
                 TCStringArray& fls, TCIntArray& cnt );
 
 gstring
-vfKeyEdit(QWidget* par, const char* title, uint iRt, const char* key=0);
+vfKeyEdit(QWidget* par, const char* title, unsigned int iRt, const char* key=0);
 
 gstring
 vfKeyProfile(QWidget* par, const char* title, int iRt,
@@ -90,7 +90,7 @@ vfKeyProfile(QWidget* par, const char* title, int iRt,
     gstring& key_templ, bool& genGEMS3k, bool& brief_mode  );
 
 gstring
-vfKeyTemplEdit(QWidget* par, const char* title, uint iRt, const char* key=0,
+vfKeyTemplEdit(QWidget* par, const char* title, unsigned int iRt, const char* key=0,
                bool allowTemplate=true);
 bool
 vfKeyCanged(QWidget* par, const char* caption,
