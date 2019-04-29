@@ -1,97 +1,109 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html><head>
 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]"><title>GEMS3 GEM2MT Module</title>
+<meta name="description" content="Version 3.0.0-PSI"></head><body>
 
-
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]"><title>GEMS3 GEM2MT Module</title>
-  
-  <meta name="description" content="Version 3.0.0-PSI"></head><body>
 <h1><img src="gems1.png" align="left" height="48" width="48"> <font color="#000066"> GEM-Selektor version 3</font> </h1>
-<h2>Reactive Mass Transport (GEM2MT) Module<br>
-</h2>
+
+
+<h2>Reactive Mass Transport (GEM2MT) Module<br></h2>
 <hr size="2" width="100%">
-<p> </p>
-<h3><span style="color: rgb(255, 0, 0);">&lt;under construction&gt;</span><br>
-</h3>
+
+
 <h3>Contents</h3>
-<blockquote>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#GEM2MT_OPERATION">1. GEM2MT Module Operation</a></font></p>
-  <p><a href="#GEM2MT_MODELS"><span style="font-family: Helvetica,Arial,sans-serif;">1.1. Coupled reactive
-transport models</span></a></p>
-  <p><span style="font-family: Helvetica,Arial,sans-serif;"></span>1.2.
-  <br>
-  </p>
+
+<p style="font-family: Helvetica,Arial,sans-serif;"><font face="Helvetica, Arial, sans-serif"><a href="#GEM2MT_OPERATION">1. GEM2MT Module Operation</a></font></p>
+<blockquote>  
+<p style="margin-left: 20px; font-family: Helvetica,Arial,sans-serif;"><a href="#GEM2MT_MODELS"><span style="font-family: Helvetica,Arial,sans-serif;">1.1. Sequential equilibriation reactors (S mode)</span></a></p>
+
+<p style="margin-left: 20px; font-family: Helvetica,Arial,sans-serif;"><a href="#GEM2MT_MODELS2"><span style="font-family: Helvetica,Arial,sans-serif;">1.2. Flow-through reactors (F mode)  </span></a></p>
+
+<p style="margin-left: 20px; font-family: Helvetica,Arial,sans-serif;"><a href="#GEM2MT_MODELS3"><span style="font-family: Helvetica,Arial,sans-serif;">1.3. One-dimensional advective transport (A mode)  </span></a></p>
+
+
+
 </blockquote>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a href="#GEM2MT_MWIZARD">2.
-GEM2MT Create/Remake Wizard</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a href="#WZSTEP_1">2.1. GEM2MT Wizard Step 1</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a href="#WZSTEP_2">2.2. GEM2MT Wizard Step 2</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a href="#WZSTEP_3">2.3. GEM2MT Wizard Step 3</a><br>
-</p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a href="#WZSTEP_4">2.4. GEM2MT Wizard Step 4</a><br>
-</p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a href="gm_gem2mt.html#WZSTEP_5">2.5. GEM2MT Wizard Step 5<br>
-</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a href="gm_gem2mt.html#WZSTEP_6">2.6. GEM2MT Wizard Step 6<br>
-</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a href="gm_gem2mt.html#WZSTEP_7">2.7. GEM2MT Wizard Step 7</a><br>
-</p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a href="gm_gem2mt.html#WZSTEP_7">2.8. GEM2MT Wizard Step 8</a><br>
-</p>
-<a href="gm_gem2mt.html#WZSTEP_4"></a>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a href="#GEM2MT_MWINDOW">3. GEM2MT Module Window</a></p>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a href="#MWPAGE_1">3.1. GEM2MT Window Page 1</a></p>
+
+
+<p style="font-family: Helvetica,Arial,sans-serif;"><a href="#GEM2MT_MWIZARD">2. GEM2MT Create/Remake Wizard</a></p>
 <blockquote>
-  <p style="font-family: Helvetica,Arial,sans-serif;"><a href="#MWPAGE_2">3.2. GEM2MT
-Window Page 2</a></p>
+<p style="margin-left: 20px; font-family: Helvetica,Arial,sans-serif;"><a href="#WZSTEP_1">2.1. GEM2MT Wizard Step 1: mode of simulation (S, F, B, D, W, T)</a></p>
+<p style="margin-left: 20px; font-family: Helvetica,Arial,sans-serif;"><a href="#WZSTEP_2">2.2. GEM2MT Wizard Step 2:</a></p>
+<p style="margin-left: 20px; font-family: Helvetica,Arial,sans-serif;"><a href="#WZSTEP_3">2.3. GEM2MT Wizard Step 3</a><br></p>
+<p style="margin-left: 20px; font-family: Helvetica,Arial,sans-serif;"><a href="#WZSTEP_4">2.4. GEM2MT Wizard Step 4</a><br></p>
+<p style="margin-left: 20px; font-family: Helvetica,Arial,sans-serif;"><a href="gm_gem2mt.html#WZSTEP_5">2.5. GEM2MT Wizard Step 5<br></a></p>
+<p style="margin-left: 20px; font-family: Helvetica,Arial,sans-serif;"><a href="gm_gem2mt.html#WZSTEP_6">2.6. GEM2MT Wizard Step 6<br></a></p>
+<p style="margin-left: 20px; font-family: Helvetica,Arial,sans-serif;"><a href="gm_gem2mt.html#WZSTEP_7">2.7. GEM2MT Wizard Step 7</a><br></p>
+<p style="margin-left: 20px; font-family: Helvetica,Arial,sans-serif;"><a href="gm_gem2mt.html#WZSTEP_7">2.8. GEM2MT Wizard Step 8</a><br></p>
 </blockquote>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a href="#MWPAGE_3">3.3. GEM2MT Window Page 3</a><br>
-</p>
+
+<p style="font-family: Helvetica,Arial,sans-serif;"><a href="#GEM2MT_MWINDOW">3. GEM2MT Module Window</a></p>
 <blockquote>
-  <p style="font-family: Helvetica,Arial,sans-serif;"><a href="#MWPAGE_4">3.4. GEM2MT
-Window Page 4</a><br>
-  </p>
+<p style="margin-left: 20px; font-family: Helvetica,Arial,sans-serif;"><a href="#MWPAGE_1">3.1. GEM2MT Window Page 1</a></p>
+<p style="margin-left: 20px;font-family: Helvetica,Arial,sans-serif;"><a href="#MWPAGE_2">3.2. GEM2MT Window Page 2</a></p>
+<p style="margin-left: 20px; font-family: Helvetica,Arial,sans-serif;"><a href="#MWPAGE_3">3.3. GEM2MT Window Page 3</a><br> </p>
+<p style="margin-left: 20px;font-family: Helvetica,Arial,sans-serif;"><a href="#MWPAGE_4">3.4. GEM2MT Window Page 4</a><br></p>
+<p style="margin-left: 20px; font-family: Helvetica,Arial,sans-serif;"><a href="#MWPAGE_5">3.5. GEM2MT Window Page 5</a><br></p>
 </blockquote>
-<p style="margin-left: 40px; font-family: Helvetica,Arial,sans-serif;"><a href="#MWPAGE_5">3.5. GEM2MT Window Page 5</a><br>
-</p>
-<blockquote>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#GEM2MT_DATA">4.
-GEM2MT Data Entries</a></font></p>
-  <p><font face="Helvetica, Arial, sans-serif"><a href="#GEM2MT_ERRORS">5.
-Warnings and Error Messages</a></font></p>
-&nbsp;<br>
-  <hr size="2" width="100%"></blockquote>
+
+<p><font face="Helvetica, Arial, sans-serif"><a href="#GEM2MT_DATA">4. GEM2MT Data Entries</a></font></p>
+<p><font face="Helvetica, Arial, sans-serif"><a href="#GEM2MT_ERRORS">5. Warnings and Error Messages</a></font></p>&nbsp;<br>
+
+<hr size="2" width="100%">
 <br>
+
+
 <h2><a name="GEM2MT_OPERATION"></a>1. GEM2MT Module Operation</h2>
-<p> Geochemical modeling often requires&nbsp; </p>
+
+<p> This modules permits to calculate fluid-rock equilibria in a series of boxes or nodes, where a fluid is moved sequentially or simultaneously form one box to the other. This type of simulation represents a reactive mass transport type model, where fluxes can be defined, porosity, and other hydrological paramters such as permeability. This model can be used to simulate an open system, and permits to test simple one dimensional reactive transport with complex chemical reactions, that may be later used as benchmark for the coupling of GEMS3K with more complex reactive transport models.  </p>
+
 <br>
+<hr style="width: 100%; height: 2px;">
+
+
+
+
+
+
+
+<p> </p>
+<h3><a name="GEM2MT_MODELS"></a>1.1. Sequential equilibriation reactors (S mode)</span></h3>
 <p><br>
-</p>
-<br>
+
+
+
+
+
+
+
+
+
 <hr style="width: 100%; height: 2px;">
 <p> </p>
-<h3><span style="font-family: Helvetica,Arial,sans-serif;"><a name="GEM2MT_MODELS"></a>1.1. Coupled reactive transport models</span></h3>
+<h3><a name="GEM2MT_MODELS2"></a>1.2. Flow-through reactors (F mode)</span></h3>
 <p><br>
-<span style="font-family: Helvetica,Arial,sans-serif;"></span></p>
-<p><br>
-<span style="font-family: Helvetica,Arial,sans-serif;"></span></p>
-<p><span style="font-family: Helvetica,Arial,sans-serif;"></span></p>
+
+
+
+
+
+
+
 <hr style="width: 100%; height: 2px;">
-<p><span style="font-family: Helvetica,Arial,sans-serif;"><br>
-</span></p>
-<p><span style="font-family: Helvetica,Arial,sans-serif;"></span>1.2. <br>
-</p>
-<br>
+<p> </p>
+<h3><a name="GEM2MT_MODELS3"></a>1.3. One-dimensional advective transport (A mode)</span></h3>
 <p><br>
-</p>
-<br>
-<p><br>
-</p>
-<br>
-<p><br>
-</p>
+
+
+
+
+
+
+
 <hr style="width: 100%; height: 2px;">
+
 <p><br>
 </p>
 <h2><a name="GEM2MT_MWIZARD"></a>2.
@@ -143,6 +155,7 @@ chemical systems and exporting them to GEMS3K input files for external
 coupled RMT codes. <br>
     </span></li>
 </ul>
+
 <p style="font-family: Helvetica,Arial,sans-serif;"><span style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;">S</span>&nbsp;&nbsp;&nbsp;&nbsp; Sequential
 equilibration reactors (with moving fluids or solids)<br>
 </span></p>
@@ -150,18 +163,26 @@ equilibration reactors (with moving fluids or solids)<br>
 &nbsp;&nbsp; &lt;add description&gt;</p>
 <p style="font-family: Helvetica,Arial,sans-serif;"><br>
 <span style="font-family: Helvetica,Arial,sans-serif;"></span></p>
+
+Description: F-mode 
 <p style="font-family: Helvetica,Arial,sans-serif;"><span style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;">F</span>&nbsp;&nbsp;&nbsp;&nbsp;
 Flow-through reactors ( simultaneous transport followed by
 equilibration)</span></p>
 <p style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp; &lt;add description&gt;</p>
+&nbsp;&nbsp; &lt;
+The process in (F) setup needs to define the fluxes between the node 1 and 2, 2 and 3, ... (of fluid or of all solids) in mass per step; such fluxes are usually equal, also to the source flux into node 1 and sink flux from node n. At the initial state, both solid and fluid must be present in all nodes at defined mass ratios. At each step (which corresponds to "wave" in (S) setup), the equilibration occurs in all nodes, and then the fluid (or all solids) are sequentially replaced according to the fluxes (i.e. for example between nodes 1 and 2 with fluid flux J in g/step: J g fluid is removed from node 2 (to be added to node 3) and J g fluid from node 1 is added to node 2). In fact, this is done in a consistent way by using the ODE integrator of the system of mass balance equations for all elements in all nodes.  This mode is in fact analogous to 1-D pure advection transport, except the time is reduced to step only, dispersion is ignored, and hydraulic consistency criteria are not applied.
+
+
+&gt;</p>
 <p style="font-family: Helvetica,Arial,sans-serif;"><br>
 <span style="font-family: Helvetica,Arial,sans-serif;"></span></p>
+
 <p style="font-family: Helvetica,Arial,sans-serif;"><span style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;">B</span>&nbsp;&nbsp;&nbsp;&nbsp; Box-flux
 megasystem (with time-step integration of MPG fluxes) (TBD)<br>
 </span></p>
 <p style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp; &lt;add description&gt;</p>
+
 <p style="font-family: Helvetica,Arial,sans-serif;"><br>
 <span style="font-family: Helvetica,Arial,sans-serif;"></span></p>
 <p style="font-family: Helvetica,Arial,sans-serif;"><span style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;">A</span>&nbsp;&nbsp;&nbsp;&nbsp; 1D
@@ -527,1214 +548,2049 @@ arrays xEp and yEp, and type the empirical data in there. When ready,
 open the plot again and customise it.<br>
 <p style="font-family: Helvetica,Arial,sans-serif;"><br>
 </p>
-<p style="font-family: Helvetica,Arial,sans-serif;"></p>
-<p style="font-family: Helvetica,Arial,sans-serif;"></p>
-<p style="font-family: Helvetica,Arial,sans-serif;"></p>
-<p style="font-family: Helvetica,Arial,sans-serif;"></p>
-<p style="font-family: Helvetica,Arial,sans-serif;"></p>
+
 <hr style="width: 100%; height: 2px;">
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
-</p>
 <h2><a name="GEM2MT_MWINDOW"></a>3. GEM2MT Module Window</h2>
-<br>
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+
+<p>
+The workflow of a system setup after having followed th GEM2MT Wizard includes 
+
+After you click "Finish" (to be enhanced):
+
+(1)  Page 1 of the GEM2MT module window will appear. Enter simulator name / comment.
+
+(2) There, set up the compositions and ID names of initial chemical systems. 
+
+(3) Check the initialization script and settings (for all modes); if in T mode, click 'Calculate'
+
+(4) Check node properties table and (for S, F, B modes) the MPG fluxes list; check monitoring scripts
+
+(5) Click 'Calculate', and watch graphical monitoring of the node profiles
+
+
+ the setup of the system composition and initial fluid/rock ratio in Window Page 1. Then setup of node composition Window Page 2 is used to define the composition of each node, P-T and fluxes.
+
 </p>
 <br>
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
-</p>
+
+
+
+
+
+
+
 <hr style="width: 100%; height: 2px;">
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+<h3><a name="MWPAGE_1"></a>3.1. GEM2MT Window Page 1 (Initial)</h3>
+<p>
+Here you can edit the composition
 </p>
-<h3><a name="MWPAGE_1"></a>3.1. GEM2MT Window Page 1</h3>
-<br>
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
-</p>
-<br>
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
-</p>
+
+
+
+
 <hr style="width: 100%; height: 2px;">
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
-</p>
 <h3><a name="MWPAGE_2"></a>3.2. GEM2MT
-Window Page 2</h3>
-<br>
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+Window Page 2 (Nodes)</h3>
+
+<p>
+
+Here you can define the properties of each nodes. In the DiCp[i,0] (where i the node number), you add an index number, which can be related to a rock composition or fluid composition defined on Window Page 1 (Initial). I.e. of a fluid flowing through a rock. The first node (0), should include the index for the fluid [0] and the index for input in column DiCp[0,i]=3. The last node (i), should include the index for output of column [-3].
+
 </p>
-<br>
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
-</p>
+
+
 <hr style="width: 100%; height: 2px;">
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+<h3><a name="MWPAGE_3"></a>3.3. GEM2MT Window Page 3 (Fluxes)</h3>
+
+<p>
+
+Text goes here
+
 </p>
-<h3><a name="MWPAGE_3"></a>3.3. GEM2MT Window Page 3</h3>
-<br>
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
-</p>
-<br>
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
-</p>
+
+
 <hr style="width: 100%; height: 2px;">
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
-</p>
 <h3><a name="MWPAGE_4"></a>3.4. GEM2MT
-Window Page 4</h3>
-<br>
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+Window Page 4 (Results)</h3>
+
+<p>
+Text goes here
 </p>
-<br>
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
-</p>
+
+
 <hr style="width: 100%; height: 2px;"><br>
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+<h3><a name="MWPAGE_5"></a>3.5. GEM2MT Window Page 5 (Setup)</h3>
+
+<p>
+Text goes here
 </p>
-<h3><a name="MWPAGE_5"></a>3.5. GEM2MT Window Page 5</h3>
-<br>
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
-</p>
-<br>
-<p style="font-family: Helvetica,Arial,sans-serif;"><br>
-</p>
-<br>
-<p><br>
-</p>
-<br>
-<p><br>
-</p>
-<p><br>
-</p>
+
+
 <hr size="2" width="100%">
 <h2><a name="GEM2MT_DATA"></a>4. GEM2MT Data Entries</h2>
 <dl>
   <dt><br>
   </dt>
-  <dt> <big><b><big><tt><a name="dtPvfl_0"></a>dtPvfl[0]</tt></big></b></big>
-Units of
-energy
-{ j; J c C N reserved }</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPvfl_1"></a><big><b><big><tt>dtPvfl[1]</tt></big></b></big>
-Units of
-volume
-{ j; c L a reserved }</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPvfl_2"></a><big><b><big><tt>dtPvfl[2]</tt></big></b></big>
-Units of
-pressure { b; B p P A reserved }</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPvfl_3"></a><big><b><big><tt>dtPvfl[3]</tt></big></b></big>
-Units of
-temperature { C; K F reserved }</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPvfl_4"></a><big><b><big><tt>dtPvfl[4]</tt></big></b></big>
-Use
-coulombic
-factors for non-basis DCs { + - }</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPvfl_5"></a><big><b><big><tt>dtPvfl[5]</tt></big></b></big>
-Use IC
-quantities for basis sub-system compositions? { + * - }</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPvfl_6"></a><big><b><big><tt>dtPvfl[6]</tt></big></b></big>
-Use IC
-quantities for non-basis sub-system compositions? { + * - }</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPvfl_7"></a><big><b><big><tt>dtPvfl[7]</tt></big></b></big>
-Use formula
-(UDF) for basis and non-basis sub-system compositions? { + * - }</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPvfl_8"></a><big><b><big><tt>dtPvfl[8]</tt></big></b></big>
-Include
-references to data sources { + - }?</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPvfl_9"></a><big><b><big><tt>dtPvfl[9]</tt></big></b></big>
-Use math
-script
-for mole fractions of non-basis DCs { + - }?</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPvfl_10"></a><big><b><big><tt>dtPvfl[10]</tt></big></b></big>
-Use math
-script for activity coeffs of non-basis DCs { + - }?</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPvfl_11"></a><big><b><big><tt>dtPvfl[11]</tt></big></b></big>
-Use
-vectors
-for T, P and IS for experiments { + - }?</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPsFl_0"></a><big><b><big><tt>dtPsFl[0]</tt></big></b></big>
-DualTh mode
-of
-operation { M G A X }</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPsFl_1"></a><big><b><big><tt>dtPsFl[1]</tt></big></b></big>
-State of
-non-basis part saturation { E P S }</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPsFl_2"></a><big><b><big><tt>dtPsFl[2]</tt></big></b></big>
-DualTh
-generation status: 0 -indef.; 1 on-going gen.; 2 - done gen. run; 3 -
-gen. run error</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPsFl_3"></a><big><b><big><tt>dtPsFl[3]</tt></big></b></big>
-DualTh
-analysis
-status: 0 - indef.; 1 ready for; 2 - run; 3 - done</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPsFl_4"></a><big><b><big><tt>dtPsFl[4]</tt></big></b></big>
-Save
-generated
-SysEq records to data base? { + - }</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPsFl_5"></a><big><b><big><tt>dtPsFl[5]</tt></big></b></big>
-Interaction parameter formalism code (I G R T M V B O)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPsFl_6"></a><big><b><big><tt>dtPsFl[6]</tt></big></b></big>
-Interaction parameter units code (J K N )</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPsFl_7"></a><big><b><big><tt>dtPsFl[7]</tt></big></b></big>
-Control flag for least-square param. fitting ( N L S B C )</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtSize_0"></a><big><b><big><tt>dtSize[0]</tt></big></b></big>
-Input
-number of
-experiments (equilibria) in basis sub-system</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtSize_1"></a><big><b><big><tt>dtSize[1]</tt></big></b></big>
-Input
-number of
-formula units to set compositions in basis sub-system</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtSize_2"></a><big><b><big><tt>dtSize[2]</tt></big></b></big>
-Input
-number of
-DC (end-member) candidates in non-basis sub-system</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtSize_3"></a><big><b><big><tt>dtSize[3]</tt></big></b></big>
-Input
-number of
-references to data sources</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtSize_4"></a><big><b><big><tt>dtSize[4]</tt></big></b></big>
-Reserved</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtSize_5"></a><big><b><big><tt>dtSize[5]</tt></big></b></big>
-Input
-number of
-elements in the math script work arrays qpg per non-basis DC</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtSize_6"></a><big><b><big><tt>dtSize[6]</tt></big></b></big>
-Number of
-independent components (in basis sub-system, taken from project system)
-  </dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtSize_7"></a><big><b><big><tt>dtSize[7]</tt></big></b></big>
-Number of interaction parameters in the non-basis mixture (default 1 -
-regular)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtTm_0"></a><big><b><big><tt>dtTm[0]</tt></big></b></big>
-SysEq CSD
-variant
-number: start value</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtTm_1"></a><big><b><big><tt>dtTm[1]</tt></big></b></big>
-SysEq CSD
-variant
-number: end value</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtTm_2"></a><big><b><big><tt>dtTm[2]</tt></big></b></big>
-SysEq CSD
-variant
-number: step value</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtNv_0"></a><big><b><big><tt>dtNv[0]</tt></big></b></big>
-Restrictions
-variant number: start value</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtNv_1"></a><big><b><big><tt>dtNv[1]</tt></big></b></big>
-Restrictions
-variant number: end value</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtNv_2"></a><big><b><big><tt>dtNv[2]</tt></big></b></big>
-Restrictions
-variant number: step value</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Pd_0"></a><big><b><big><tt>Pd[0]</tt></big></b></big>
-Pressure P, bar:
-start
-(real) value</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Pd_1"></a><big><b><big><tt>Pd[1]</tt></big></b></big>
-Pressure P, bar:
-end
-value</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Pd_2"></a><big><b><big><tt>Pd[2]</tt></big></b></big>
-Pressure P, bar:
-step
-value</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Td_0"></a><big><b><big><tt>Td[0]</tt></big></b></big>
-Temperature T, C:
-start
-value</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Td_1"></a><big><b><big><tt>Td[1]</tt></big></b></big>
-Temperature T, C:
-end
-value</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Td_2"></a><big><b><big><tt>Td[2]</tt></big></b></big>
-Temperature T, C:
-step
-value</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Vd_0"></a><big><b><big><tt>Vd[0]</tt></big></b></big>
-Volume of the
-system
-(L): start value</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Vd_1"></a><big><b><big><tt>Vd[1]</tt></big></b></big>
-Volume of the
-system
-(L): end value</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Vd_2"></a><big><b><big><tt>Vd[2]</tt></big></b></big>
-Volume of the
-system
-(L): increment</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtComp_0"></a><big><b><big><tt>dtComp[0]</tt></big></b></big>
-Masses (kg)
-and
-volumes (L) for compositions: Ms (total mass, normalization)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtComp_1"></a><big><b><big><tt>dtComp[1]</tt></big></b></big>
-Vs (total
-volume of the object, for volume concentrations)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtComp_2"></a><big><b><big><tt>dtComp[2]</tt></big></b></big>
-M(H2O)
-(mass of
-water-solvent for molalities)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtComp_3"></a><big><b><big><tt>dtComp[3]</tt></big></b></big>
-Maq (mass
-of
-aqueous solution for ppm etc.)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtComp_4"></a><big><b><big><tt>dtComp[4]</tt></big></b></big>
-Vaq (volume
-of
-aqueous solution for molarities)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtComp_5"></a><big><b><big><tt>dtComp[5]</tt></big></b></big>
-Pg
-(pressure in
-gas, for partial pressures)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtComp_6"></a><big><b><big><tt>dtComp[6]</tt></big></b></big>
-MOL total
-mole
-amount for basis sub-system composition calculations</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtComp_7"></a><big><b><big><tt>dtComp[7]</tt></big></b></big>
-Mole
-fraction
-of the carrier DC (e.g. sorbent or H2O solvent)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtComp_8"></a><big><b><big><tt>dtComp[8]</tt></big></b></big>
-A_sur
-(specific
-surface area of the sorbent), for surface species</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtTc"></a><big><b><big><tt>dtTc</tt></big></b></big>
-Current state
-parameter
-T, centigrade</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtPc"></a><big><b><big><tt>dtPc</tt></big></b></big>
-Current state
-parameter
-P, bar</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtVc"></a><big><b><big><tt>dtVc</tt></big></b></big>
-Current state
-parameter
-V, litres</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="for_nr"></a><big><b><big><tt>for_nr</tt></big></b></big>
-Formulae of DC
-(end-member) stoichiometry candidates, input</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="qt"></a><big><b><big><tt>qt</tt></big></b></big>
-Current index of
-experiment</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="it"></a><big><b><big><tt>it</tt></big></b></big>
-Current index of IC</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="jm"></a><big><b><big><tt>jm</tt></big></b></big>
-Current index of DC in
-non-basis sub-system</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="ctm"></a><big><b><big><tt>ctm</tt></big></b></big>
-Current Tm - SYSTEM
-CSD
-number</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="cNV_"></a><big><b><big><tt>cNV_</tt></big></b></big>
-Current Nv - MTPARM
-variant number</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd>&nbsp;</dd>
-  <dt>&nbsp;</dt>
-  <dt> <a name="lmft_s_0"></a><big><b><big><tt>lmft_s[0]</tt></big></b></big>Number
-of parameters to fit (nP)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="lmft_s_1"></a><big><b><big><tt>lmft_s[1]</tt></big></b></big>
-Number of data points to use in fitting (nQ)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="lmft_s_2"></a><big><b><big><tt>lmft_s[2]</tt></big></b></big>
-Number of arguments in the tdat array per one data point (nM)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="lmft_s_3"></a><big><b><big><tt>lmft_s[3]</tt></big></b></big>
-Reserved</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Xi2_0"></a><big><b><big><tt>Xi2[0]</tt></big></b></big>
-Final SOS/DF value (quality of LS fit)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Xi2_1"></a><big><b><big><tt>Xi2[1]</tt></big></b></big>
-Reserved</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="tdat"></a><big><b><big><tt>tdat</tt></big></b></big>&nbsp;&nbsp;
-DualTh least-squares fitter: Array of observations (experimental data)
-arguments</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="ydat"></a><big><b><big><tt>ydat</tt></big></b></big>&nbsp;&nbsp;
-DualTh least-squares fitter: Array of observations (experimental data)
-values</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <br>
-  </dt>
-  <dd><br>
-  </dd>
-  <dt> <a name="par"></a><big><b><big><tt>par</tt></big></b></big>&nbsp;&nbsp;
-Least-squares fitter: Guess parameters (input); Fitted parameters
-(output)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="sdpar"></a><big><b><big><tt>sdpar</tt></big></b></big>
-Least-squares fitter: Standard deviations for fitted parameter values
-(output,optional)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <br>
-  </dt>
-  <dt> <a name="nam_nr"></a><big><b><big><tt>nam_nr</tt></big></b></big>
-Id names of DC
-(end-member) stoichiometry candidates, input</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtName"></a><big><b><big><tt>dtName</tt></big></b></big>
-Comment line for
-the
-full name of this DualTh task</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtNote"></a><big><b><big><tt>dtNote</tt></big></b></big>
-Comment line for
-optional enhancement of the dtName line</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Bb"></a><big><b><big><tt>Bb</tt></big></b></big>
-Table of bulk
-compositions
-of basis sub-systems, moles</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Bn"></a><big><b><big><tt>Bn</tt></big></b></big>
-Table of bulk
-compositions
-of non-basis sub-systems, moles</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Ub"></a><big><b><big><tt>Ub</tt></big></b></big>
-Table of dual solution
-values for basis sub-systems, J/mol</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="chi"></a><big><b><big><tt>chi</tt></big></b></big>
-Table of mole
-fractions of
-DC (end-member) candidates</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="mu_b"></a><big><b><big><tt>mu_b</tt></big></b></big>
-Table of DualTh
-chemical
-potentials of non-basis DC (end-members), J/mol</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="eta_b"></a><big><b><big><tt>eta_b</tt></big></b></big>
-Table of DualTh
-chemical
-potentials of non-basis DC (end-members), normalized</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd>&nbsp;<br>
-  </dd>
-</dl>
-<dl>
-  <dt> <a name="Coul"></a><big><b><big><tt>Coul</tt></big></b></big>
-Table of excess Gibbs energies of mixture for candidates (calculated)
-(or input Coulombic terms for surface complexes)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="gam_n"></a><big><b><big><tt>gam_n</tt></big></b></big>
-Table of activity
-coefficients for non-basis DC (end-members)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd>&nbsp; <br>
-  </dd>
-  <dt> <a name="mu_o"></a><big><b><big><tt>mu_o</tt></big></b></big>
-Table of standard
-chemical potential (Gibbs energies) for non-basis end members, J/mol</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="avsd_o"></a><big><b><big><tt>avsd_o</tt></big></b></big>
-Mean and st.dev. over mu_o columns (experiments) for non-basis DC
-(end-members)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="mu_a"></a><big><b><big><tt>mu_a</tt></big></b></big>
-Table of apparent standard Gibbs energy function G* for minor/trace
-non-basis end members<br>
-  </dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="avsd_a"></a><big><b><big><tt>avsd_a</tt></big></b></big>
-Mean and st.dev. over mu_a columns (experiments) for non-basis DC
-(end-members)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="gmx_n_0"></a><big><b><big><tt>gmx_n[0]</tt></big></b></big>
-in J/mol for nQ experiments : Excess Gibbs energy of mixing (col. 0)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="gmx_n_1"></a><big><b><big><tt>gmx_n[1]</tt></big></b></big>Gibbs
-energy of ideal mixing (col. 1)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dd>&nbsp;</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="gmx_n_2"></a><big><b><big><tt>gmx_n[2]</tt></big></b></big>
-Total Gibbs energy of mixing (col. 2)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="gmx_n_3"></a><big><b><big><tt>gmx_n[3]</tt></big></b></big>
-Gibbs energy of the mechanical mixture of pure end members (col. 3)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="gmx_n_4"></a><big><b><big><tt>gmx_n[4]</tt></big></b></big>
-Integral Gibbs energy of the mixture phase in non-basis sub-system
-(col. 4)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Wa"></a><big><b><big><tt>Wa</tt></big></b></big>
-Interaction parameters for the mixing model estimated directly for each
-experiment </dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd>&nbsp;&nbsp;<br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="avsd_w"></a><big><b><big><tt>avsd_w</tt></big></b></big>
-estimated interaction parameters with st.deviations, averaged from Wa
-or
-regressed from gmx_n[0] column<br>
-  </dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dd>&nbsp; </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="qpg"></a><big><b><big><tt>qpg</tt></big></b></big>
-Work array for gamma
-calculation math script</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="CIb"></a><big><b><big><tt>CIb</tt></big></b></big>
-Input table of
-quantity/
-concentration of IC in basis sub-systems</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="CIn"></a><big><b><big><tt>CIn</tt></big></b></big>
-Input table of
-quantity/
-concentration of IC in non-basis sub-systems</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="CAb"></a><big><b><big><tt>CAb</tt></big></b></big>
-Input table of
-quantity/
-concentration of UDF formulae for basis sub-systems</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="CAn"></a><big><b><big><tt>CAn</tt></big></b></big>
-Input table of
-quantity/
-concentration of DC formulae for non-basis sub-systems</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="cExpr"></a><big><b><big><tt>cExpr</tt></big></b></big>
-Math script text for calculation of Gex for LS fitting of interaction
-parameters</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dgExpr"></a><big><b><big><tt>dgExpr</tt></big></b></big>
-Math script text
-field for calculation of activity coeffs of DC in non-basis sub-system</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtSDrf"></a><big><b><big><tt>dtSDrf</tt></big></b></big>
-List of
-bibliographic references to data sources</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtSDvl"></a><big><b><big><tt>dtSDvl</tt></big></b></big>
-Parameters taken
-from the respective data sources</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="nam_b"></a><big><b><big><tt>nam_b</tt></big></b></big>
-Id names of
-experiments, input</dt>
-  <dd><br>
-  </dd>
-  <dd>description<br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="nam_n"></a><big><b><big><tt>nam_n</tt></big></b></big>
-Id names of DC
-(end-member) stoichiometry candidates, input</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="par_n"></a><big><b><big><tt>par_n</tt></big></b></big>
-Id names of interaction parameters, input</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd>&nbsp;&nbsp;&nbsp; </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="for_n"></a><big><b><big><tt>for_n</tt></big></b></big>
-Formulae of DC
-(end-member) stoichiometry candidates, input</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="for_b"></a><big><b><big><tt>for_b</tt></big></b></big>
-Formulae for
-setting
-basis and non-basis system compositions, input</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="stld"></a><big><b><big><tt>stld</tt></big></b></big>
-List of generated
-SysEq
-record keys</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="typ_n"></a><big><b><big><tt>typ_n</tt></big></b></big>
-Type code of DC
-stoichiometry candidates {O M J I S ... }, input</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="CIclb"></a><big><b><big><tt>CIclb</tt></big></b></big>
-Units of IC
-quantity/concentration for basis compositions, input</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="CIcln"></a><big><b><big><tt>CIcln</tt></big></b></big>
-Units of IC
-quantity/concentration for non-basis compositions, input</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="AUclb"></a><big><b><big><tt>AUclb</tt></big></b></big>
-Units of setting
-quantities of formula units for basis system compositions, input</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="AUcln"></a><big><b><big><tt>AUcln</tt></big></b></big>
-Units of setting
-quantities of DC formulae for non-basis system compositions, input</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="SBM"></a><big><b><big><tt>SBM</tt></big></b></big>
-Keys (names) of IC,
-taken
-from the project definition automatically</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="muo_i"></a><big><b><big><tt>muo_i</tt></big></b></big>
-Input st.state
-chem.
-potentials for candidates (or EMPTY if unknown), J/mol</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="act_n"></a><big><b><big><tt>act_n</tt></big></b></big>
-Table of DualTh-
-calculated activities</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Tdq"></a><big><b><big><tt>Tdq</tt></big></b></big>
-Temperatures of
-experiments (optional input), centigrade C</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Pdq"></a><big><b><big><tt>Pdq</tt></big></b></big>
-Pressures of
-experiments
-(optional input), bar</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="ISq"></a><big><b><big><tt>ISq</tt></big></b></big>
-Effective ionic
-strength
-in aqueous solutions (auto-collected)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="An"></a><big><b><big><tt>An</tt></big></b></big>
-Stoichiometry matrix for
-DC
-(end-member) stoichiometry candidates</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="wa_cp"></a><big><b><big><tt>wa_cp</tt></big></b></big>
-Input code for constrained LS interaction parameter fitting (LM method
-only): 0 - no constraints; 1 - upper; 2 - lower; 3 - two-side</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="wdat"></a><big><b><big><tt>wdat</tt></big></b></big>
-Input for least-squares (LS) fitter: array of weight factors for data,
-(default 1)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="wpar"></a><big><b><big><tt>wpar</tt></big></b></big>
-Input for least-squares (LS) fitter: uncertainty half-interval for a
-priori constrained parameters (optional)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="Wa_ap"></a><big><b><big><tt>Wa_ap</tt></big></b></big>
-Input: a priori interaction parameter values (calculation of activity
-coefficients, LS fitting)</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dd>&nbsp; <br>
-  </dd>
-  <dt> <a name="dSTkey"></a><big><b><big><tt>dSTkey</tt></big></b></big>
-Key of the
-currently
-processed SysEq record</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="dtTprn"></a><big><b><big><tt>dtTprn</tt></big></b></big>
+  
+
+
+
+<dt> <a name="mtPufl_0"></a><big><b><big><code>mtPufl[0]</code></big></b></big>
+Units of energy { j: J c C N reserved }</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPufl_1"></a><big><b><big><code>mtPufl[1]</code></big></b></big>
+Units of volume { j: c L a reserved }</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPufl_2"></a><big><b><big><code>mtPufl[2]</code></big></b></big>
+Units of pressure { b: B p P A reserved }</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPufl_3"></a><big><b><big><code>mtPufl[3]</code></big></b></big>
+Units of temperature { C: K F reserved }</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPvfl_0"></a><big><b><big><code>mtPvfl[0]</code></big></b></big>
+Use IC quantities for initial system compositions? { + * - }</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPvfl_1"></a><big><b><big><code>mtPvfl[1]</code></big></b></big>
+Use formula units for initial sub-system compositions? { + * -}</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPvfl_2"></a><big><b><big><code>mtPvfl[2]</code></big></b></big>
+Use math script for start setup (+ -)?</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPvfl_3"></a><big><b><big><code>mtPvfl[3]</code></big></b></big>
+Use math script for graphic presentation (+ -)?</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPvfl_4"></a><big><b><big><code>mtPvfl[4]</code></big></b></big>
+Use empirical data for graphics (+ -)?</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPvfl_5"></a><big><b><big><code>mtPvfl[5]</code></big></b></big>
+Use mobile phase groups definitions (+ -)?</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPvfl_6"></a><big><b><big><code>mtPvfl[6]</code></big></b></big>
+Use MGP flux definition list (+ -)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPvfl_7"></a><big><b><big><code>mtPvfl[7]</code></big></b></big>
+Use source fluxes and elemental stoichiometries for them? (+ -)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPvfl_8"></a><big><b><big><code>mtPvfl[8]</code></big></b></big>
+Use array of grid point locations? (+ -)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPvfl_9"></a><big><b><big><code>mtPvfl[9]</code></big></b></big>
+Use diffusion coefficients for DC - DDc vector (+ -)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPvfl_10"></a><big><b><big><code>mtPvfl[10]</code></big></b></big>
+Use diffusion coefficients for IC - DIc vector (+ -)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPvfl_11"></a><big><b><big><code>mtPvfl[11]</code></big></b></big>
+Select ICs, DCs and phases to be exchanged via DATABR file (take all, if unchecked) (+ -)?</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPvfl_12"></a><big><b><big><code>mtPvfl[12]</code></big></b></big>
+Use selected fields to VTK format (+ -)?</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPvfl_13"></a><big><b><big><code>mtPvfl[13]</code></big></b></big>
+reserved(+ -)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPsfl_0"></a><big><b><big><code>mtPsfl[0]</code></big></b></big>
+Code of GEM2MT mode of operation { S F A D T W V }</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPsfl_1"></a><big><b><big><code>mtPsfl[0]</code></big></b></big>
+GEM2MT generation status:0 -start; 1 run; 2 - done run; 3 - error (+ 5: the same in stepwise mode)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPsfl_2"></a><big><b><big><code>mtPsfl[1]</code></big></b></big>
+GEM2MT iteration status: 0 -start; 1 ready; 2 - run; 3 - done; ( + 5: the same using
+stepwise mode)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPsfl_3"></a><big><b><big><code>mtPsfl[2]</code></big></b></big>
+Save generated SysEq records to data base (+ -)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPsfl_4"></a><big><b><big><code>mtPsfl[3]</code></big></b></big>
+Use smart initial approximation in GEM IPM (+); SIA internal (*); AIA (-)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPsfl_5"></a><big><b><big><code>mtPsfl[4]</code></big></b></big>
+Save DataCH and inital DataBR files as text files (+) or binary (-)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPsfl_6"></a><big><b><big><code>mtPsfl[5]</code></big></b></big>
+Do not write data items that contain only default values (+ -)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPsfl_7"></a><big><b><big><code>mtPsfl[6]</code></big></b></big>
+Write files with comments for all data entries ( in text mode )(+ -)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPsfl_8"></a><big><b><big><code>mtPsfl[7]</code></big></b></big>
+Create T,P values in Tval, Pval using iterator(+) or enter(-)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPsfl_9"></a><big><b><big><code>mtPsfl[8]</code></big></b></big>
+Disable Interpolation ( pre-defined TP paths ) (+ -)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPsfl_10"></a><big><b><big><code>mtPsfl[9]</code></big></b></big>
+Use non stop debug output for nodes (+ -)?</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPsfl_11"></a><big><b><big><code>mtPsfl[10]</code></big></b></big>
+Use non stop debug output nodes to VTK format(+ -)?</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPsfl_12"></a><big><b><big><code>mtPsfl[11]</code></big></b></big>
+Type flux Phase ( 0 undef, 1 - aq; 2 - gas; 3 - aq+gas, 4 - solids )</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtPsfl_13"></a><big><b><big><code>mtPsfl[12]</code></big></b></big>
+reserved(+ -)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtnC_0"></a><big><b><big><code>mtnC[0]</code></big></b></big>
+nC - input number of local equilibrium cells (nodes)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtnV_0"></a><big><b><big><code>mtnV[0]</code></big></b></big>
+nIV - number of initial variants of the chemical system, nIV <= nC</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtnFD_0"></a><big><b><big><code>mtnFD[0]</code></big></b></big>
+nFD - number of MGP fluxes defined in the megasystem, nFD >= 0</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtnSFD_0"></a><big><b><big><code>mtnSFD[0]</code></big></b></big>
+nSFD - number of IC source flux compositions defined in megasystem, nSFD >= 0</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtnMGP_0"></a><big><b><big><code>mtnMGP[0]</code></big></b></big>
+nMGP - number of mobile groups of phases, nMGP >= 0</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtCIP_0"></a><big><b><big><code>mtCIP[0]</code></big></b></big>
+nEl - number of electrolytes for diffusion coefficients in mDEl</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtCIP_1"></a><big><b><big><code>mtCIP[1]</code></big></b></big>
+Number of allocated particle types < 20</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtCIP_2"></a><big><b><big><code>mtCIP[2]</code></big></b></big>
+Number of particle statistic properties (for monitoring) >= nPTypes</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtSzT_0"></a><big><b><big><code>mtSzT[0]</code></big></b></big>
+Lb - number of formula units to set compositions in initial variants</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtSzT_1"></a><big><b><big><code>mtSzT[1]</code></big></b></big>
+Number of references to data sources</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtSzT_2"></a><big><b><big><code>mtSzT[2]</code></big></b></big>
+Number of elements in the script work array qpi for transport</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtSzT_3"></a><big><b><big><code>mtSzT[3]</code></big></b></big>
+Number of elements in the script work array qpc for graphics</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtSzT_4"></a><big><b><big><code>mtSzT[4]</code></big></b></big>
+N - number of independent components (set automatically)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtSzT_5"></a><big><b><big><code>mtSzT[5]</code></big></b></big>
+Fi - number of phases (set automatically)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtSzT_6"></a><big><b><big><code>mtSzT[6]</code></big></b></big>
+Ls - number of dependent components in multicomponent phases (set
+automatically)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtSzT_7"></a><big><b><big><code>mtSzT[7]</code></big></b></big>
+Time point for the simulation break (Tau[0] at start)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtnSnE_0"></a><big><b><big><code>mtnSnE[0]</code></big></b></big>
+Maximum allowed number of time iteration steps</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtnSnE_1"></a><big><b><big><code>mtnSnE[1]</code></big></b></big>
+Number of plots (columns in the yt array which contains )</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtnSnE_2"></a><big><b><big><code>mtnSnE[2]</code></big></b></big>
+Total number of experimental points (in xEt, yEt) to plot over</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtnSnE_3"></a><big><b><big><code>mtnSnE[3]</code></big></b></big>
+Number of experimental parameters (columns in the yEt array)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPTai_0"></a><big><b><big><code>mtPTai[0]</code></big></b></big>
+Number of P points in MTP interpolation array in DataCH ( 1 to 10 )</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPTai_1"></a><big><b><big><code>mtPTai[1]</code></big></b></big>
+Number of T points in MTP interpolation array in DataCH ( 1 to 20 )</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtCHBR_0"></a><big><b><big><code>mtCHBR[0]</code></big></b></big>
+Number of DCs in phases-solutions in Multi (DATACH)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtCHBR_1"></a><big><b><big><code>mtCHBR[1]</code></big></b></big>
+Number of stoichiometry units (<= nIC) used in the data bridge</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtCHBR_2"></a><big><b><big><code>mtCHBR[2]</code></big></b></big>
+Number of DC (chemical species, <= nDC) used in the data bridge</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtCHBR_3"></a><big><b><big><code>mtCHBR[3]</code></big></b></big>
+Number of phases (<= nPH) used in the data bridge</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtCHBR_4"></a><big><b><big><code>mtCHBR[4]</code></big></b></big>
+nICb number of ICs in (DATABR) for setting box-fluxes</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtCHBR_5"></a><big><b><big><code>mtCHBR[5]</code></big></b></big>
+nPHb number of phases in (DATABR) for setting box-fluxes</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtCHBR_6"></a><big><b><big><code>mtCHBR[6]</code></big></b></big>
+Number of selected fields to VTK format</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtCHBR_7"></a><big><b><big><code>mtCHBR[7]</code></big></b></big>
+reserved</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtCHBR_8"></a><big><b><big><code>mtCHBR[8]</code></big></b></big>
+reserved</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtCHBR_9"></a><big><b><big><code>mtCHBR[9]</code></big></b></big>
+reserved</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mttmi_0"></a><big><b><big><code>mttmi[0]</code></big></b></big>
+SYSTEM CSD definition #: start value</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mttmi_1"></a><big><b><big><code>mttmi[1]</code></big></b></big>
+SYSTEM CSD definition #: end value</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mttmi_2"></a><big><b><big><code>mttmi[2]</code></big></b></big>
+SYSTEM CSD definition #: step value</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtNVi_0"></a><big><b><big><code>mtNVi[0]</code></big></b></big>
+Restrictions variant #: start value</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtNVi_1"></a><big><b><big><code>mtNVi[1]</code></big></b></big>
+Restrictions variant #: end value</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtNVi_2"></a><big><b><big><code>mtNVi[2]</code></big></b></big>
+Restrictions variant #: step value</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtPai_0"></a><big><b><big><code>mtPai[0]</code></big></b></big>
+Pressure P, bar: start (real) for MTP array in DataCH</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPai_1"></a><big><b><big><code>mtPai[1]</code></big></b></big>
+Pressure P, bar: end for MTP array in DataCH</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPai_2"></a><big><b><big><code>mtPai[2]</code></big></b></big>
+Pressure P, bar: step for MTP array in DataCH</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtPai_3"></a><big><b><big><code>mtPai[3]</code></big></b></big>
+Pressure P, bar: tolerance Ptol</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtTai_0"></a><big><b><big><code>mtTai[0]</code></big></b></big>
+Temperature T, C: start (real) for MTP array in DataCH</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtTai_1"></a><big><b><big><code>mtTai[1]</code></big></b></big>
+Temperature T, C: end for MTP array in DataCH</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtTai_2"></a><big><b><big><code>mtTai[2]</code></big></b></big>
+Temperature T, C: step for MTP array in DataCH</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtTai_3"></a><big><b><big><code>mtTai[3]</code></big></b></big>
+Temperature T, C: tolerance Ttol</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtTau_0"></a><big><b><big><code>mtTau[0]</code></big></b></big>
+Physical time iterator: start</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtTau_1"></a><big><b><big><code>mtTau[1]</code></big></b></big>
+Physical time iterator: end</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtTau_2"></a><big><b><big><code>mtTau[2]</code></big></b></big>
+Physical time iterator: step</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtSzLc_0"></a><big><b><big><code>mtSzLc[0]</code></big></b></big>
+spatial dimensions x of the medium defines topology of nodes</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtSzLc_1"></a><big><b><big><code>mtSzLc[1]</code></big></b></big>
+spatial dimensions y of the medium defines topology of nodes</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtSzLc_2"></a><big><b><big><code>mtSzLc[2]</code></big></b></big>
+spatial dimensions z of the medium defines topology of nodes</dt>
+<dd></dd>
+<br>
+
+
+# GEM2MT record <67> fields
+
+
+<dt> <a name="mtName_0"></a><big><b><big><code>mtName[0]</code></big></b></big>
+Comment line for the full name of this GEM2MT task</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtName_0"></a><big><b><big><code>mtName[0]</code></big></b></big>
+Comment line for the full name of this GEM2MT task</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtNote_0"></a><big><b><big><code>mtNote[0]</code></big></b></big>
+Comment line for optional enhancement of the dtName line</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtflgs_0"></a><big><b><big><code>mtflgs[0]</code></big></b></big>
+??? 22 internal</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtShrt_0"></a><big><b><big><code>mtShrt[0]</code></big></b></big>
+??? 38 internal</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtAxis_0"></a><big><b><big><code>mtAxis[0]</code></big></b></big>
+Axis Type (plot setup), backgr color, internal</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtWrkS_0"></a><big><b><big><code>mtWrkS[0]</code></big></b></big>
+internal</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtWrkF_0"></a><big><b><big><code>mtWrkF[0]</code></big></b></big>
+internal</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtInput_0"></a><big><b><big><code>mtInput[0]</code></big></b></big>
+Masses (kg) and volumes (L) for initial systems: Ms (total mass, normalize)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtInput_1"></a><big><b><big><code>mtInput[1]</code></big></b></big>
+Vs (total volume of the object, for volume concentrations)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtInput_2"></a><big><b><big><code>mtInput[2]</code></big></b></big>
+M(H2O) (mass of water-solvent for molalities)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtInput_3"></a><big><b><big><code>mtInput[3]</code></big></b></big>
+Maq (mass of aqueous solution for ppm etc.)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtInput_4"></a><big><b><big><code>mtInput[4]</code></big></b></big>
+Vaq (volume of aqueous solution for molarities)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtInput_5"></a><big><b><big><code>mtInput[5]</code></big></b></big>
+Pg (pressure in gas, for partial pressures)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtInput_6"></a><big><b><big><code>mtInput[6]</code></big></b></big>
+MOL total mole amount for basis sub-system composition calculations</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtInput_7"></a><big><b><big><code>mtInput[7]</code></big></b></big>
+mole fraction of the carrier DC (e.g. sorbent or solvent)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtInput_8"></a><big><b><big><code>mtInput[8]</code></big></b></big>
+Specific surface area of the sorbent (for adsorbed species)</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtADpar_0"></a><big><b><big><code>mtADpar[0]</code></big></b></big>
+Advection/diffusion mass transport: time step reduction factor (usually 1)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtADpar_1"></a><big><b><big><code>mtADpar[1]</code></big></b></big>
+Vt: initial total node volume (m^3)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtADpar_2"></a><big><b><big><code>mtADpar[2]</code></big></b></big>
+vp: fluid advection velocity (m/sec)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtADpar_3"></a><big><b><big><code>mtADpar[3]</code></big></b></big>
+eps: initial node effective porosity (0 < eps < 1), usually 1</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtADpar_4"></a><big><b><big><code>mtADpar[4]</code></big></b></big>
+Km: initial effective permeability, m2, usually 1</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtADpar_5"></a><big><b><big><code>mtADpar[5]</code></big></b></big>
+al: initial value of specific longitudinal dispersivity (m), usually 1e-3</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtADpar_6"></a><big><b><big><code>mtADpar[6]</code></big></b></big>
+Dif: initial general aqueous medium diffusivity (m2/sec), usually 1e-9</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtADpar_7"></a><big><b><big><code>mtADpar[7]</code></big></b></big>
+nto: initial tortuosity factor, usually 1</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtADpar_8"></a><big><b><big><code>mtADpar[8]</code></big></b></big>
+cutoff for IC amount differences in the node between time steps (mol), usually 1e-9</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtADpar_9"></a><big><b><big><code>mtADpar[9]</code></big></b></big>
+cutoff for minimal amounts of IC in node bulk compositions (mol), usually 1e-12</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtADpar_10"></a><big><b><big><code>mtADpar[10]</code></big></b></big>
+ADrs1, reserved</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtFlt_0"></a><big><b><big><code>mtFlt[0]</code></big></b></big>
+??? 22-8 o-mtsize internal</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtSize_0"></a><big><b><big><code>mtSize[0]</code></big></b></big>
+Graph axis scale for the region</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtSize_1"></a><big><b><big><code>mtSize[1]</code></big></b></big>
+Graph axis scale for the fragment</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mX_Nam_0"></a><big><b><big><code>mX_Nam[0]</code></big></b></big>
+Abscissa name (for the graph), up to 8 characters</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mY_Nam_0"></a><big><b><big><code>mY_Nam[0]</code></big></b></big>
+Ordinate name (for the graph), up to 8 characters</dt>
+<dd></dd>
+<br>
+
+
+
+<dt> <a name="mLnam_0"></a><big><b><big><code>mLnam[0]</code></big></b></big>
+List of ID of lines on Graph [nYS]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mLnamE_0"></a><big><b><big><code>mLnamE[0]</code></big></b></big>
+List of ID of lines of empirical data [nYE]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtExpr_0"></a><big><b><big><code>mtExpr[0]</code></big></b></big>
+Math script text for calculation of mass transport</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mgExpr_0"></a><big><b><big><code>mgExpr[0]</code></big></b></big>
+Math script text for data sampling and plotting</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mSDref_0"></a><big><b><big><code>mSDref[0]</code></big></b></big>
+List of SDref keys to data sources</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mSDval_0"></a><big><b><big><code>mSDval[0]</code></big></b></big>
+List of short comments to SDref record keys in the GSDref list</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="DiCp_0"></a><big><b><big><code>DiCp[0]</code></big></b></big>
+Array of indexes of initial system variants for distributing to nodes [nC]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtIC_0"></a><big><b><big><code>mtIC[0]</code></big></b></big>
+ICNL indices in DATABR IC vectors [nICb]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtDC_0"></a><big><b><big><code>mtDC[0]</code></big></b></big>
+DCNL indices in DATABR DC list [nDCb]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtPH_0"></a><big><b><big><code>mtPH[0]</code></big></b></big>
+PHNL indices in DATABR phase vectors [nPHb]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="FDLi_0"></a><big><b><big><code>FDLi[0]</code></big></b></big>
+Source box index in the flux definition</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="FDLi_1"></a><big><b><big><code>FDLi[1]</code></big></b></big>
+Receiver box index in the flux definition</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="PTVi_0"></a><big><b><big><code>PTVi[0]</code></big></b></big>
+Pressure P, bar for initial systems (values within Pai range) [nIV]</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="PTVi_1"></a><big><b><big><code>PTVi[1]</code></big></b></big>
+Temperature T, C for initial systems (values within Tai range) [nIV]</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="PTVi_2"></a><big><b><big><code>PTVi[2]</code></big></b></big>
+Volume of the system (L) [nIV], zeros for G minimization</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="PTVi_3"></a><big><b><big><code>PTVi[3]</code></big></b></big>
+Initial mass (kg) (to normalize composition of initial system in nodes)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="PTVi_4"></a><big><b><big><code>PTVi[4]</code></big></b></big>
+Actual mass of initial system (kg) - to set initial node masses</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="StaP_0"></a><big><b><big><code>StaP[0]</code></big></b></big>
+Pressure P, bar for node (values within Pai range) [nIC]</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="StaP_1"></a><big><b><big><code>StaP[1]</code></big></b></big>
+Temperature T, C for node (values within Tai range) [nIC]</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="StaP_2"></a><big><b><big><code>StaP[2]</code></big></b></big>
+Volume of the node (L) [nIC], usually zeros</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="StaP_3"></a><big><b><big><code>StaP[3]</code></big></b></big>
+Initial mass of the node, kg [nIC]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="xFlds_0"></a><big><b><big><code>xFlds[0]</code></big></b></big>
+List of selected fields to VTK format</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="xEt_0"></a><big><b><big><code>xEt[0]</code></big></b></big>
+Abscissa for experimental points [nXE]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="yEt_0"></a><big><b><big><code>yEt[0]</code></big></b></big>
+Ordinates for experimental points to plot [nXE, nYE]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mDDc_0"></a><big><b><big><code>mDDc[0]</code></big></b></big>
+[Ls] diffusion coefficients for DC</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mDIc_0"></a><big><b><big><code>mDIc[0]</code></big></b></big>
+[N] diffusion coefficients for IC</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mDEl_0"></a><big><b><big><code>mDEl[0]</code></big></b></big>
+[nE] diffusion coefficients for electrolyte salts</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mBn_0"></a><big><b><big><code>mBn[0]</code></big></b></big>
+[nIV][N] Table of bulk compositions of initial systems</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="HydP_0"></a><big><b><big><code>HydP[0]</code></big></b></big>
+Initial hydraulic parameters in nodes: Vt - total volume of node = dx*dy*dz, m**3</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="HydP_1"></a><big><b><big><code>HydP[1]</code></big></b></big>
+vp - advection velocity (in pores) in this node (m/sec)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="HydP_2"></a><big><b><big><code>HydP[2]</code></big></b></big>
+eps - effective (actual) porosity (0 < eps < 1)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="HydP_3"></a><big><b><big><code>HydP[3]</code></big></b></big>
+Km - effective (actual) actual permeability, m**2</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="HydP_4"></a><big><b><big><code>HydP[4]</code></big></b></big>
+al - specific longitudinal dispersivity of porous medium, m</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="HydP_5"></a><big><b><big><code>HydP[5]</code></big></b></big>
+Dif - general diffusivity of disolved matter in the mode</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="HydP_6"></a><big><b><big><code>HydP[6]</code></big></b></big>
+nto - tortuosity factor</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="BSF_0"></a><big><b><big><code>BSF[0]</code></big></b></big>
+[nSFD][N] table of bulk compositions of source fluxes</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="MB_0"></a><big><b><big><code>MB[0]</code></big></b></big>
+[nC] column of current masses of boxes or reservoirs (in kg)</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="dMB_0"></a><big><b><big><code>dMB[0]</code></big></b></big>
+[nC][Nb] Table of current derivatives dM for elements in reservoirs</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="qpi_0"></a><big><b><big><code>qpi[0]</code></big></b></big>
+[Nqpi] Work array for initial systems math script</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="qpc_0"></a><big><b><big><code>qpc[0]</code></big></b></big>
+[Nqpc] Work array for mass transport math script</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="xt_0"></a><big><b><big><code>xt[0]</code></big></b></big>
+Abscissa for sampled data (usually profile distance) [nS]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="yt_0"></a><big><b><big><code>yt[0]</code></big></b></big>
+Ordinates for sampled profile data [nS][nYS]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mCIb_0"></a><big><b><big><code>mCIb[0]</code></big></b></big>
+[nIV][N] Table of quantity/concentration of IC in initial systems</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mCAb_0"></a><big><b><big><code>mCAb[0]</code></big></b></big>
+[nIV][Lbi] Table of quantity/concentration of formulae for initial systems</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="FDLf_0"></a><big><b><big><code>FDLf[0]</code></big></b></big>
+[nFD][4] Part of the flux defnition list: flux order {0 1 2 3 -1 -2 ... }</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="FDLf_1"></a><big><b><big><code>FDLf[1]</code></big></b></big>
+flux rate (depending on order)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="FDLf_2"></a><big><b><big><code>FDLf[2]</code></big></b></big>
+MGP quantity 1 (reserved)</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="FDLf_3"></a><big><b><big><code>FDLf[3]</code></big></b></big>
+MGP quantity 2 (reserved)</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="PGT_0"></a><big><b><big><code>PGT[0]</code></big></b></big>
+Quantities of phases in MGP [Fi][nPG]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="Tval_0"></a><big><b><big><code>Tval[0]</code></big></b></big>
+discrete values of T [nTai]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="Pval_0"></a><big><b><big><code>Pval[0]</code></big></b></big>
+discrete values of P [nPai]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="nam_i_0"></a><big><b><big><code>nam_i[0]</code></big></b></big>
+[nIV][12] id names of initial systems</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="for_i_0"></a><big><b><big><code>for_i[0]</code></big></b></big>
+[Lbi][40] formulae for setting initial system compositions</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="for_e_0"></a><big><b><big><code>for_e[0]</code></big></b></big>
+[nE][40] formulae for diffusing dissolved electrolytes</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mstld_0"></a><big><b><big><code>mstld[0]</code></big></b></big>
+List of SysEq record keys for initial systems [nIV]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mCIclb_0"></a><big><b><big><code>mCIclb[0]</code></big></b></big>
+[N] Units of IC quantity/concentration for initial systems compositions</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mAUcln_0"></a><big><b><big><code>mAUcln[0]</code></big></b></big>
+[Lbi] Units of setting UDF quantities for initial system compositions</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mAUcln_0"></a><big><b><big><code>mAUcln[0]</code></big></b></big>
+[Lbi] Units of setting UDF quantities for initial system compositions</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="FDLid_0"></a><big><b><big><code>FDLid[0]</code></big></b></big>
+[nFD] IDs of fluxes</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="FDLop_0"></a><big><b><big><code>FDLop[0]</code></big></b></big>
+[nFD] Operation codes (letters)</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="FDLmp_0"></a><big><b><big><code>FDLmp[0]</code></big></b></big>
+[nFD] ID of MGP to move in this flux</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="MGPid_0"></a><big><b><big><code>MGPid[0]</code></big></b></big>
+[nPG] ID list of mobile phase groups</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="UMGP_0"></a><big><b><big><code>UMGP[0]</code></big></b></big>
+[nFi] units for setting phase quantities in MGP (see PGT )</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mSBM_0"></a><big><b><big><code>mSBM[0]</code></big></b></big>
+Keys (names) of IC</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mGrid_0"></a><big><b><big><code>mGrid[0]</code></big></b></big>
+Array of grid point locations, size is nC*3</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="NPmean_0"></a><big><b><big><code>NPmean[0]</code></big></b></big>
+Array of initial mean particle type numbers per node [nPTypes]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="nPmin_0"></a><big><b><big><code>nPmin[0]</code></big></b></big>
+Minimum average total number of particles of each type per one node [nPTypes]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="nPmax_0"></a><big><b><big><code>nPmax[0]</code></big></b></big>
+Maximum average total number of particles of each type per one node [nPTypes]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="ParTD_0"></a><big><b><big><code>ParTD[0]</code></big></b></big>
+Array of particle type definitions at t0 or after interruption [nPTypes]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtRes1_0"></a><big><b><big><code>mtRes1[0]</code></big></b></big>
+reserved[nC]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtRes2_0"></a><big><b><big><code>mtRes2[0]</code></big></b></big>
+reserved[nC]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="MTplt_0"></a><big><b><big><code>MTplt[0]</code></big></b></big>
+internal</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="mtSkey_0"></a><big><b><big><code>mtSkey[0]</code></big></b></big>
+Current key of sampled SysEq database record</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mAn_0"></a><big><b><big><code>mAn[0]</code></big></b></big>
+Stoichiometry matrix for ????</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mAe_0"></a><big><b><big><code>mAe[0]</code></big></b></big>
+Stoich matrix for for diffusing electrolytes</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="gfc_0"></a><big><b><big><code>gfc[0]</code></big></b></big>
+[nC][nPG][Nb] Array of element partition coefficients for MGP and its source
+reservoir</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="yfb_0"></a><big><b><big><code>yfb[0]</code></big></b></big>
+[nC][nPG][Nf] Array of MGP bulk compositions at current time point</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mttt_0"></a><big><b><big><code>mttt[0]</code></big></b></big>
+[nC][Nf][9] internal box flx</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtTxt_0"></a><big><b><big><code>mtTxt[0]</code></big></b></big>
+internal</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mttprn_0"></a><big><b><big><code>mttprn[0]</code></big></b></big>
+internal</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="ctm_0"></a><big><b><big><code>ctm[0]</code></big></b></big>
+current CSD #</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="cnv_0"></a><big><b><big><code>cnv[0]</code></big></b></big>
+current restriction variant #</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="qc_0"></a><big><b><big><code>qc[0]</code></big></b></big>
+current index of the compartment ( 1 to nC )</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="kv_0"></a><big><b><big><code>kv[0]</code></big></b></big>
+current index of the initial system variant (1 to nIV )</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="jqc_0"></a><big><b><big><code>jqc[0]</code></big></b></big>
+script c-style index (= qc-1) for transport</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="jqs_0"></a><big><b><big><code>jqs[0]</code></big></b></big>
+script c-style index (= qc-1) for graphics</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="jt_0"></a><big><b><big><code>jt[0]</code></big></b></big>
+index of sampled point (for sampling scripts)</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="jdd_0"></a><big><b><big><code>jdd[0]</code></big></b></big>
+current index of diffusing DC</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="jdi_0"></a><big><b><big><code>jdi[0]</code></big></b></big>
+current index of diffusing IC</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="ide_0"></a><big><b><big><code>ide[0]</code></big></b></big>
+current index of diffusing electrolyte</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="ct_0"></a><big><b><big><code>ct[0]</code></big></b></big>
+actual time iterator</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="rei5_0"></a><big><b><big><code>rei5[0]</code></big></b></big>
+#</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="cTt_0"></a><big><b><big><code>cTt[0]</code></big></b></big>
+current value of T</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="cPt_0"></a><big><b><big><code>cPt[0]</code></big></b></big>
+current value of P</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="cVt_0"></a><big><b><big><code>cVt[0]</code></big></b></big>
+current value of V</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="cTaut_0"></a><big><b><big><code>cTaut[0]</code></big></b></big>
+current physical time</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="oTau_0"></a><big><b><big><code>oTau[0]</code></big></b></big>
+old time step value</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="mtdx_0"></a><big><b><big><code>mtdx[0]</code></big></b></big>
+node distance [L/nC]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="ref2_0"></a><big><b><big><code>ref2[0]</code></big></b></big>
+#</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="ref3_0"></a><big><b><big><code>ref3[0]</code></big></b></big>
+#</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="ref4_0"></a><big><b><big><code>ref4[0]</code></big></b></big>
+#</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="nICb_0"></a><big><b><big><code>nICb[0]</code></big></b></big>
+number of stoichiometry units (<= nIC) used in the data bridge</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="nDCb_0"></a><big><b><big><code>nDCb[0]</code></big></b></big>
+number of DC (chemical species, <= nDC) used in the data bridge</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="nPHb_0"></a><big><b><big><code>nPHb[0]</code></big></b></big>
+number of phases (<= nPH) used in the data bridge</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="nPSb_0"></a><big><b><big><code>nPSb[0]</code></big></b></big>
+number of multicomponent phases (<= nPS) used in the data bridge</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="xIC_0"></a><big><b><big><code>xIC[0]</code></big></b></big>
+ICNL indices in DATABR IC vectors [nICb]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="xDC_0"></a><big><b><big><code>xDC[0]</code></big></b></big>
+DCNL indices in DATABR DC list [nDCb]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="xPH_0"></a><big><b><big><code>xPH[0]</code></big></b></big>
+PHNL indices in DATABR phase vectors [nPHb]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="Amat_0"></a><big><b><big><code>Amat[0]</code></big></b></big>
+DC stoichiometry matrix A composed of a_ij [nIC][nDC]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="ICmm_0"></a><big><b><big><code>ICmm[0]</code></big></b></big>
+IC atomic (molar) mass, g/mole [nIC]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="DCmm_0"></a><big><b><big><code>DCmm[0]</code></big></b></big>
+DC molar mass, g/mole [nDC]</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="DD_0"></a><big><b><big><code>DD[0]</code></big></b></big>
+[nDC] diffusion koefficients, for now constant</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="AalP_0"></a><big><b><big><code>AalP[0]</code></big></b></big>
+reserved</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ct_0"></a><big><b><big><code>n0ct[0]</code></big></b></big>
+Node 0 controls: NodeHandle</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ct_1"></a><big><b><big><code>n0ct[1]</code></big></b></big>
+Node 0 controls: NodeTypeHY</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ct_2"></a><big><b><big><code>n0ct[2]</code></big></b></big>
+Node 0 controls: NodeTypeMT</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ct_3"></a><big><b><big><code>n0ct[3]</code></big></b></big>
+Node 0 controls: NodeStatusFMT</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ct_4"></a><big><b><big><code>n0ct[4]</code></big></b></big>
+Node 0 controls: NodeStatusCH</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ct_5"></a><big><b><big><code>n0ct[5]</code></big></b></big>
+IterDone</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1ct_0"></a><big><b><big><code>n1ct[0]</code></big></b></big>
+Node 1 controls: NodeHandle</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ct_1"></a><big><b><big><code>n1ct[1]</code></big></b></big>
+Node 1 controls: NodeTypeHY</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ct_2"></a><big><b><big><code>n1ct[2]</code></big></b></big>
+Node 1 controls: NodeTypeMT</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ct_3"></a><big><b><big><code>n1ct[3]</code></big></b></big>
+Node 1 controls: NodeStatusFMT</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ct_4"></a><big><b><big><code>n1ct[4]</code></big></b></big>
+Node 1 controls: NodeStatusCH</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ct_5"></a><big><b><big><code>n1ct[5]</code></big></b></big>
+IterDone</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0cs_0"></a><big><b><big><code>n0cs[0]</code></big></b></big>
+Node 0 scalar chemical variables: T</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0cs_1"></a><big><b><big><code>n0cs[1]</code></big></b></big>
+Node 0 scalar chemical variables: P</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0cs_2"></a><big><b><big><code>n0cs[2]</code></big></b></big>
+Node 0 scalar chemical variables: Vs</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0cs_3"></a><big><b><big><code>n0cs[3]</code></big></b></big>
+Node 0 scalar chemical variables: Vi</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0cs_4"></a><big><b><big><code>n0cs[4]</code></big></b></big>
+Node 0 scalar chemical variables: Ms</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0cs_5"></a><big><b><big><code>n0cs[5]</code></big></b></big>
+Node 0 scalar chemical variables: Mi</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0cs_6"></a><big><b><big><code>n0cs[6]</code></big></b></big>
+Node 0 scalar chemical variables: Gs</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0cs_7"></a><big><b><big><code>n0cs[7]</code></big></b></big>
+Node 0 scalar chemical variables: Hs</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0cs_8"></a><big><b><big><code>n0cs[8]</code></big></b></big>
+Node 0 scalar chemical variables: Hi</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0cs_9"></a><big><b><big><code>n0cs[9]</code></big></b></big>
+Node 0 scalar chemical variables: IC</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0cs_10"></a><big><b><big><code>n0cs[10]</code></big></b></big>
+Node 0 scalar chemical variables: pH</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0cs_11"></a><big><b><big><code>n0cs[11]</code></big></b></big>
+Node 0 scalar chemical variables: pe</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0cs_12"></a><big><b><big><code>n0cs[12]</code></big></b></big>
+Node 0 scalar chemical variables: Eh</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1cs_0"></a><big><b><big><code>n1cs[0]</code></big></b></big>
+Node 1 scalar chemical variables: T</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1cs_1"></a><big><b><big><code>n1cs[1]</code></big></b></big>
+Node 1 scalar chemical variables: P</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1cs_2"></a><big><b><big><code>n1cs[2]</code></big></b></big>
+Node 1 scalar chemical variables: Vs</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1cs_3"></a><big><b><big><code>n1cs[3]</code></big></b></big>
+Node 1 scalar chemical variables: Vi</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1cs_4"></a><big><b><big><code>n1cs[4]</code></big></b></big>
+Node 1 scalar chemical variables: Ms</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1cs_5"></a><big><b><big><code>n1cs[5]</code></big></b></big>
+Node 1 scalar chemical variables: Mi</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1cs_6"></a><big><b><big><code>n1cs[6]</code></big></b></big>
+Node 1 scalar chemical variables: Gs</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1cs_7"></a><big><b><big><code>n1cs[7]</code></big></b></big>
+Node 1 scalar chemical variables: Hs</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1cs_8"></a><big><b><big><code>n1cs[8]</code></big></b></big>
+Node 1 scalar chemical variables: Hi</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1cs_9"></a><big><b><big><code>n1cs[9]</code></big></b></big>
+Node 1 scalar chemical variables: IC</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1cs_10"></a><big><b><big><code>n1cs[10]</code></big></b></big>
+Node 1 scalar chemical variables: pH</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1cs_11"></a><big><b><big><code>n1cs[11]</code></big></b></big>
+Node 1 scalar chemical variables: pe</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1cs_12"></a><big><b><big><code>n1cs[12]</code></big></b></big>
+Node 1 scalar chemical variables: Eh</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0ts_0"></a><big><b><big><code>n0ts[0]</code></big></b></big>
+Node 0 scalar transport variables: Tm</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_1"></a><big><b><big><code>n0ts[1]</code></big></b></big>
+Node 0 scalar transport variables: dt</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_2"></a><big><b><big><code>n0ts[2]</code></big></b></big>
+Node 0 scalar transport variables: dt1</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_3"></a><big><b><big><code>n0ts[3]</code></big></b></big>
+Node 0 scalar transport variables: ot</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_4"></a><big><b><big><code>n0ts[4]</code></big></b></big>
+Node 0 scalar transport variables: Vt</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_5"></a><big><b><big><code>n0ts[5]</code></big></b></big>
+Node 0 scalar transport variables: eps</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_6"></a><big><b><big><code>n0ts[6]</code></big></b></big>
+Node 0 scalar transport variables: Km</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_7"></a><big><b><big><code>n0ts[7]</code></big></b></big>
+Node 0 scalar transport variables: Kf</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_8"></a><big><b><big><code>n0ts[8]</code></big></b></big>
+Node 0 scalar transport variables: S</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_8"></a><big><b><big><code>n0ts[8]</code></big></b></big>
+Node 0 scalar transport variables: Tr</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_9"></a><big><b><big><code>n0ts[9]</code></big></b></big>
+Node 0 scalar transport variables: h</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_10"></a><big><b><big><code>n0ts[10]</code></big></b></big>
+Node 0 scalar transport variables: rho</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_11"></a><big><b><big><code>n0ts[11]</code></big></b></big>
+Node 0 scalar transport variables: al</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_12"></a><big><b><big><code>n0ts[12]</code></big></b></big>
+Node 0 scalar transport variables: at</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_13"></a><big><b><big><code>n0ts[13]</code></big></b></big>
+Node 0 scalar transport variables: av</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_14"></a><big><b><big><code>n0ts[14]</code></big></b></big>
+Node 0 scalar transport variables: av</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_15"></a><big><b><big><code>n0ts[15]</code></big></b></big>
+Node 0 scalar transport variables: hDl</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_16"></a><big><b><big><code>n0ts[16]</code></big></b></big>
+Node 0 scalar transport variables: hDt</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_17"></a><big><b><big><code>n0ts[17]</code></big></b></big>
+Node 0 scalar transport variables: hDv</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n0ts_18"></a><big><b><big><code>n0ts[18]</code></big></b></big>
+Node 0 scalar transport variables: nto</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1ts_0"></a><big><b><big><code>n1ts[0]</code></big></b></big>
+Node 1 scalar transport variables: Tm</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_1"></a><big><b><big><code>n1ts[1]</code></big></b></big>
+Node 1 scalar transport variables: dt</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1ts_2"></a><big><b><big><code>n1ts[2]</code></big></b></big>
+Node 1 scalar transport variables: dt1</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_3"></a><big><b><big><code>n1ts[3]</code></big></b></big>
+Node 1 scalar transport variables: ot</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_4"></a><big><b><big><code>n1ts[4]</code></big></b></big>
+Node 1 scalar transport variables: Vt</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_5"></a><big><b><big><code>n1ts[5]</code></big></b></big>
+Node 1 scalar transport variables: eps</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_6"></a><big><b><big><code>n1ts[6]</code></big></b></big>
+Node 1 scalar transport variables: Km</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_7"></a><big><b><big><code>n1ts[7]</code></big></b></big>
+Node 1 scalar transport variables: Kf</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_8"></a><big><b><big><code>n1ts[8]</code></big></b></big>
+Node 1 scalar transport variables: S</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_9"></a><big><b><big><code>n1ts[9]</code></big></b></big>
+Node 1 scalar transport variables: Tr</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_10"></a><big><b><big><code>n1ts[10]</code></big></b></big>
+Node 1 scalar transport variables: h</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_11"></a><big><b><big><code>n1ts[11]</code></big></b></big>
+Node 1 scalar transport variables: rho</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_12"></a><big><b><big><code>n1ts[12]</code></big></b></big>
+Node 1 scalar transport variables: al</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_13"></a><big><b><big><code>n1ts[13]</code></big></b></big>
+Node 1 scalar transport variables: at</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_14"></a><big><b><big><code>n1ts[14]</code></big></b></big>
+Node 1 scalar transport variables: av</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_15"></a><big><b><big><code>n1ts[15]</code></big></b></big>
+Node 1 scalar transport variables: hDl</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_16"></a><big><b><big><code>n1ts[16]</code></big></b></big>
+Node 1 scalar transport variables: hDt</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_17"></a><big><b><big><code>n1ts[17]</code></big></b></big>
+Node 1 scalar transport variables: hDv</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1ts_18"></a><big><b><big><code>n1ts[18]</code></big></b></big>
+Node 1 scalar transport variables: nto</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0xDC_0"></a><big><b><big><code>n0xDC[0]</code></big></b></big>
+DC mole amounts in equilibrium in node 0 [nDCb] - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1xDC_0"></a><big><b><big><code>n1xDC[0]</code></big></b></big>
+DC mole amounts in equilibrium in node 1 [nDCb] - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0gam_0"></a><big><b><big><code>n0gam[0]</code></big></b></big>
+activity coefficients of DC [nDCb] in node 0 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1gam_0"></a><big><b><big><code>n1gam[0]</code></big></b></big>
+activity coefficients of DC [nDCb] in node 1 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0xPH_0"></a><big><b><big><code>n0xPH[0]</code></big></b></big>
+total mole amounts of phases [nPHb] in node 0 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1xPH_0"></a><big><b><big><code>n1xPH[0]</code></big></b></big>
+total mole amounts of phases [nPHb] in node 1 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0vPS_0"></a><big><b><big><code>n0vPS[0]</code></big></b></big>
+volume, m3, of phases solutions [nPSb] in node 0 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1vPS_0"></a><big><b><big><code>n1vPS[0]</code></big></b></big>
+volume, m3, of phases solutions [nPSb] in node 1 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0mPS_0"></a><big><b><big><code>n0mPS[0]</code></big></b></big>
+masses of phases solutions, kg [nPSb] in node 0 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1mPS_0"></a><big><b><big><code>n1mPS[0]</code></big></b></big>
+masses of phases solutions, kg [nPSb] in node 1 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0bPS_0"></a><big><b><big><code>n0bPS[0]</code></big></b></big>
+bulk compositions of phases-solutions [nPSb][nICb], moles, in node 0 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1bPS_0"></a><big><b><big><code>n1bPS[0]</code></big></b></big>
+bulk compositions of phases-solutions [nPSb][nICb] in node 1 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0xPA_0"></a><big><b><big><code>n0xPA[0]</code></big></b></big>
+amount of carrier in phases-solutions [nPSb] ?? in node 0 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1xPA_0"></a><big><b><big><code>n1xPA[0]</code></big></b></big>
+amount of carrier in phases-solutions [nPSb] ?? in node 1 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0bSP_0"></a><big><b><big><code>n0bSP[0]</code></big></b></big>
+equilibrium bulk composition of solid part of the system, moles [nICb] in node 0 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1bSP_0"></a><big><b><big><code>n1bSP[0]</code></big></b></big>
+equilibrium bulk composition of solid part of the system, moles [nICb] in node 1 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0dul_0"></a><big><b><big><code>n0dul[0]</code></big></b></big>
+upper metastability restrictions [nDCb] in node 0 + + - -</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1dul_0"></a><big><b><big><code>n1dul[0]</code></big></b></big>
+upper metastability restrictions [nDCb] in node 1 + + - -</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0dll_0"></a><big><b><big><code>n0dll[0]</code></big></b></big>
+lower metastability restrictions [nDCb] in node 0 + + - -</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1dll_0"></a><big><b><big><code>n1dll[0]</code></big></b></big>
+lower metastability restrictions [nDCb] in node 1 + + - -</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0bIC_0"></a><big><b><big><code>n0bIC[0]</code></big></b></big>
+bulk mole amounts of IC[nICb] in node 0 + + - -</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1bIC_0"></a><big><b><big><code>n1bIC[0]</code></big></b></big>
+bulk mole amounts of IC[nICb] in node 1 + + - -</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0rMB_0"></a><big><b><big><code>n0rMB[0]</code></big></b></big>
+mass balance residuals from GEM IPM [nICb] in node 0 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1rMB_0"></a><big><b><big><code>n1rMB[0]</code></big></b></big>
+mass balance residuals from GEM IPM [nICb] in node 1 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0uIC_0"></a><big><b><big><code>n0uIC[0]</code></big></b></big>
+chemical potentials of independent components (mol/mol) [nICb] - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1uIC_0"></a><big><b><big><code>n1uIC[0]</code></big></b></big>
+chemical potentials of independent components (mol/mol) [nICb] - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0aPH_0"></a><big><b><big><code>n0aPH[0]</code></big></b></big>
+specific surface areas of phases (m2/kg) in node 0 + + - -</dt>
+<dd></dd>
+<br>
+
+<dt> <a name="n1aPH_0"></a><big><b><big><code>n1aPH[0]</code></big></b></big>
+specific surface areas of phases (m2/kg) in node 1 + + - -</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0amru_0"></a><big><b><big><code>n0amru[0]</code></big></b></big>
+Upper AMRs on masses of DCs (kg) in node 0 + + - -</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1amru_0"></a><big><b><big><code>n1amru[0]</code></big></b></big>
+Upper AMRs on masses of DCs (kg) in node 1 + + - -</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0amrl_0"></a><big><b><big><code>n0amrl[0]</code></big></b></big>
+Lower AMRs on masses of DCs (kg) in node 0 + + - -</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1amrl_0"></a><big><b><big><code>n1amrl[0]</code></big></b></big>
+Lower AMRs on masses of DCs (kg) in node 1 + + - -</dt>
+<dd></dd>
+<br>
+
+
+# work objects for vtk output and plotting in GEM2MT module
+
+
+<dt> <a name="n0mPH_0"></a><big><b><big><code>n0mPH[0]</code></big></b></big>
+masses of phases in equilibrium, kg [nPHb] in node 0 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1mPH_0"></a><big><b><big><code>n1mPH[0]</code></big></b></big>
+masses of phases in equilibrium, kg [nPHb] in node 1 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0vPH_0"></a><big><b><big><code>n0vPH[0]</code></big></b></big>
+volumes of phases in equilibrium, m3 [nPSb] in node 0 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1vPH_0"></a><big><b><big><code>n1vPH[0]</code></big></b></big>
+volumes of phases in equilibrium, m3 [nPSb] in node 1 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0m_t_0"></a><big><b><big><code>n0m_t[0]</code></big></b></big>
+total dissolved molality of independent components, m [nICb] in node 0 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1m_t_0"></a><big><b><big><code>n1m_t[0]</code></big></b></big>
+total dissolved molality of independent components, m [nICb] in node 1 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0con_0"></a><big><b><big><code>n0con[0]</code></big></b></big>
+DC concentrations in phases (molal, mole fraction) [nDCb] in node 0 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1con_0"></a><big><b><big><code>n1con[0]</code></big></b></big>
+DC concentrations in phases (molal, mole fraction) [nDCb] in node 1 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0mju_0"></a><big><b><big><code>n0mju[0]</code></big></b></big>
+DC chemical potentials in equilibrium, J/mol [nDCb] in node 0 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1mju_0"></a><big><b><big><code>n1mju[0]</code></big></b></big>
+DC chemical potentials in equilibrium, J/mol [nDCb] in node 1 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n0lga_0"></a><big><b><big><code>n0lga[0]</code></big></b></big>
+DC activities in equilibrium, in log10 scale [nDCb] in node 0 - - + +</dt>
+<dd></dd>
+<br>
+
+
+<dt> <a name="n1lga_0"></a><big><b><big><code>n1lga[0]</code></big></b></big>
+DC activities in equilibrium, in log10 scale [nDCb] in node 1 - - + +</dt>
+<dd></dd>
+<br>
+
+
+
+<dt> <a name="dtTn2_0"></a><big><b><big><code>dtTn2[0]</code></big></b></big>
 Internal</dt>
-  <dd><br>
-  </dd>
-  <dd>description</dd>
-  <dd><br>
-  </dd>
+<dd></dd>
+<br>
+
+
+<dt> <a name="dtTn3_0"></a><big><b><big><code>dtTn3[0]</code></big></b></big>
+Internal</dt>
+<dd></dd>
+<br>
+
+
+
+
+
+
+
+
 </dl>
+
+
+
+
+
 <br>
 <hr size="2" width="100%"><br>
 <br>
