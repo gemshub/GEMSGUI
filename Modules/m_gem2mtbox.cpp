@@ -100,7 +100,7 @@ inline void TGEM2MT::dMBfluxDir( long int q, long int i, double *dm, double fRat
 //
 void TGEM2MT::dMBflux( long int kk, double *m, double *dm, double /*t*/ )
 {
-  long int  q, p, f, fe=-1, i;
+  long int  q, p, f, fe=-1; int i;
   char FLXid[MAXSYMB+1], MGPid[MAXSYMB+1];
   long int FLXorder/*, FLXtype*/;
   double nbIC, fRate, fRateS, MGPo=0., MGPi=0., vkk=1., mqfi, gqfi, Hfei, MBqi;//, MBpi;
@@ -525,7 +525,7 @@ bool
 TGEM2MT::BoxEqStatesUpdate(  long int Ni, long int /*pr*/, double tcur, double step )
 {
   bool iRet = true;
-  FILE* diffile = NULL;
+  FILE* diffile = nullptr;
 
   mtp->dTau = step;
   mtp->cTau = tcur;
@@ -687,7 +687,7 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
       if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
              GetName(), "Use graphic monitoring?") )
         {
-            RecordPlot( 0 );
+            RecordPlot( nullptr );
             UseGraphMonitoring = true;
         }
 #endif

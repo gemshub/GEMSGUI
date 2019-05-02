@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>763</width>
-    <height>619</height>
+    <width>765</width>
+    <height>693</height>
    </rect>
   </property>
   <property name="font">
@@ -46,270 +46,321 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
-      <layout class="QVBoxLayout" name="verticalLayout_12">
-       <item>
-        <widget class="QLabel" name="pageName">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Step 1 - GEM2MT: Select the mode of RMT simulation </string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="textLabel10">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Plain</enum>
-         </property>
-         <property name="text">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+      <widget class="QLabel" name="pageName">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>9</y>
+         <width>383</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Step 1 - GEM2MT: Select the mode of RT simulation </string>
+       </property>
+      </widget>
+      <widget class="Line" name="line">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>32</y>
+         <width>729</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="textLabel10">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>41</y>
+         <width>721</width>
+         <height>191</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="text">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;GEM2MT module is a tool for automation of simple reactive mass transport simulations coupled with GEM calculation of equilibrium states in spatially distributed nodes (boxes, volumes) over time steps. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;1D advection-diffusion numerical reactive transport simuations can be performed, as well as the evolution of various sequential and flow-trough reactor sequences or generic box-flux (reservoir) dynamics can be modeled. I/O files for standalone GEMS3K calculations can be exported for multiple initial node recipes.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;Changes of species concentrations or amounts of phases through the node profile with time can be graphically monitored or logged to files in VTK format. As a special option, I/O files for standalone GEMS3K calculations can be exported for multiple initial node recipes. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::AutoText</enum>
-         </property>
-         <property name="scaledContents">
-          <bool>false</bool>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <property name="openExternalLinks">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title">
-          <string/>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
-          <item>
-           <widget class="QRadioButton" name="pselS">
-            <property name="text">
-             <string>&amp;S     Stepwise evolution of sequential equilibration reactors (with moving fluids or solids)</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+T</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>16</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="pselF">
-            <property name="text">
-             <string>&amp;F     Evolution of flow-through reactors ( simultaneous transport followed by equilibration)</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+V</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>16</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="pselB">
-            <property name="text">
-             <string>&amp;B     Box-flux megasystem evolution (with time-step integration of MPG fluxes)</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+F</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>16</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="pselA">
-            <property name="text">
-             <string>&amp;A     1D finite-difference (advection) reactive mass transport simulation</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+A</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="pselD">
-            <property name="text">
-             <string>&amp;D     1D finite-volume advection-diffusion reactive mass transport simulation</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+D</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="pselW">
-            <property name="text">
-             <string>&amp;W    1D  random-walk advection-diffusion reactive mass transport simulation</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+W</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="pselT">
-            <property name="text">
-             <string>&amp;T      Export of .DCH, .IPM and multiple initial .DBR GEMS3K I/O files for standalone codes</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+S</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2';&quot;&gt;GEM2MT module is a tool for automation of simple reactive transport (RT) simulations coupled with GEM calculation of equilibrium states in spatially distributed nodes (boxes, volumes) over time steps. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2';&quot;&gt;1D advection-diffusion numerical RT simuations can be performed, as well as the evolution of various sequential and flow-trough reactor sequences or generic box-flux (reservoir) dynamics can be modeled. I/O files for standalone GEMS3K calculations can be exported for multiple initial node recipes.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2';&quot;&gt;Changes of species concentrations or amounts of phases through the node profile at time steps can be graphically monitored or logged to files in VTK format. Additionally, I/O files for standalone GEMS3K calculations can be exported for multiple initial node recipes. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::AutoText</enum>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <property name="openExternalLinks">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>237</y>
+         <width>721</width>
+         <height>401</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string/>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <widget class="QRadioButton" name="pselS">
+          <property name="text">
+           <string>&amp;S     Sequential reactors chain with waves (moving fluids or solids between reactors)</string>
+          </property>
+          <property name="shortcut">
+           <string>Alt+T</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>16</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="pselF">
+          <property name="text">
+           <string>&amp;F     Flow-through reactors chain with fluxes (simultaneous transport then equilibration)</string>
+          </property>
+          <property name="shortcut">
+           <string>Alt+V</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>16</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="pselB">
+          <property name="text">
+           <string>&amp;B     Box-flux megasystem with time-step integration of arbitrary MPG fluxes (TBD)</string>
+          </property>
+          <property name="shortcut">
+           <string>Alt+F</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>16</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="pselA">
+          <property name="text">
+           <string>&amp;A     1-D (advection-dispersion) reactive transport using classical finite-difference method</string>
+          </property>
+          <property name="shortcut">
+           <string>Alt+A</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="spacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>8</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="pselC">
+          <property name="text">
+           <string>&amp;C     1-D (advection-dispersion) reactive transport using Crank-Nicolson scheme (TBD)</string>
+          </property>
+          <property name="shortcut">
+           <string>Alt+A</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="pselD">
+          <property name="text">
+           <string>&amp;D     1-D (advection-diffusion) reactive transport using finite-volume method (TBD)</string>
+          </property>
+          <property name="shortcut">
+           <string>Alt+D</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="pselW">
+          <property name="text">
+           <string>&amp;W    1-D (advection-diffusion) reactive transport using random-walk algorithm</string>
+          </property>
+          <property name="shortcut">
+           <string>Alt+W</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="pselT">
+          <property name="text">
+           <string>&amp;T      Export of RT initial-state GEMS3K input files for external coupled RT codes</string>
+          </property>
+          <property name="shortcut">
+           <string>Alt+S</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
      <widget class="QWidget" name="page_2">
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -328,7 +379,7 @@ p, li { white-space: pre-wrap; }
           </font>
          </property>
          <property name="text">
-          <string>Step 2 -Dimensions for the reactive transport model and initial chemical systems</string>
+          <string>Step 2 -Dimensions for the RT model and initial chemical systems</string>
          </property>
         </widget>
        </item>
@@ -722,7 +773,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QGroupBox" name="groupBox_10">
          <property name="title">
-          <string>GEMS3K memory and I/O file data exchange</string>
+          <string>(1) GEMS3K memory and I/O file data exchange</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
@@ -762,7 +813,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QGroupBox" name="pTPInput">
          <property name="title">
-          <string>Automatic setup of GEMS3K look-up arrays with thermodynamic data </string>
+          <string>(2) Automatic setup of GEMS3K look-up arrays with thermodynamic data </string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
@@ -985,7 +1036,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QGroupBox" name="pTPlookup">
          <property name="title">
-          <string> T and P grid values for look-up arrays</string>
+          <string> (3) T and P grid values for look-up arrays</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_7">
           <item row="0" column="0" colspan="3">
@@ -1111,7 +1162,7 @@ p, li { white-space: pre-wrap; }
           </font>
          </property>
          <property name="text">
-          <string>Step 4 -  Settings for mass transport fluxes in reactor / box models (S, F, B modes)</string>
+          <string>Step 4 -  Settings for mass fluxes in reactor/box models (S, F, B modes)</string>
          </property>
         </widget>
        </item>
@@ -1131,9 +1182,11 @@ p, li { white-space: pre-wrap; }
           </sizepolicy>
          </property>
          <property name="text">
-          <string>This wizard page appears in S, F and B modes only and completes the setup of reactor/box RMT simulation. 
+          <string>This wizard page appears in S, F and B modes only and completes the setup of reactor/box RT simulation. 
 
-The number of boxes nC has already been defined at Step 2. 
+The number of boxes nC should have been defined at Step 2. 
+
+ In S and F modes, the number of MPG should be nMGP = 1, and the number of fluxes nFD = nC.
 </string>
          </property>
          <property name="wordWrap">
@@ -1144,7 +1197,7 @@ The number of boxes nC has already been defined at Step 2.
        <item>
         <widget class="QGroupBox" name="groupBox_7">
          <property name="title">
-          <string>Dimensions of MPG fluxes </string>
+          <string>Dimensions for fluxes of MPG (mobile phases group) </string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">
@@ -1175,7 +1228,7 @@ The number of boxes nC has already been defined at Step 2.
           <item row="0" column="1">
            <widget class="QLabel" name="TextLabel2_2">
             <property name="text">
-             <string>nMGP - Number of mobile groups of phases (MGP)</string>
+             <string>nMGP - Number of mobile phases groups (MPG)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -1216,7 +1269,7 @@ The number of boxes nC has already been defined at Step 2.
           <item row="1" column="1">
            <widget class="QLabel" name="TextLabel2">
             <property name="text">
-             <string>nFD - Total number of flux definitions in megasystem</string>
+             <string>nFD - Total number of flux definitions in the megasystem</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -1282,7 +1335,7 @@ The number of boxes nC has already been defined at Step 2.
           <item>
            <widget class="QCheckBox" name="moveAq">
             <property name="text">
-             <string>Move aqueous (&amp;aq) phase</string>
+             <string>Move aqueous (&amp;aq) phase from one box to another</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -1292,14 +1345,14 @@ The number of boxes nC has already been defined at Step 2.
           <item>
            <widget class="QCheckBox" name="moveGas">
             <property name="text">
-             <string>Move gas/fluid/plasma (&amp;gas) phase(s)</string>
+             <string>Move gas/fluid/plasma (&amp;gas) phase(s) from one box to another</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="moveSolid">
             <property name="text">
-             <string>Move all &amp;solids together ('dialysis bag')</string>
+             <string>Move all &amp;solids together ('dialysis bag') from one box to another</string>
             </property>
            </widget>
           </item>
@@ -1406,7 +1459,7 @@ The number of boxes nC has already been defined at Step 2.
           <item row="0" column="1">
            <widget class="QCheckBox" name="chHydP0">
             <property name="text">
-             <string>Init. node volume </string>
+             <string>Initial node volume </string>
             </property>
            </widget>
           </item>
@@ -1552,7 +1605,7 @@ The number of boxes nC has already been defined at Step 2.
        <item>
         <widget class="QLabel" name="label_21">
          <property name="text">
-          <string>To monitor some changes in the nodes / boxes profile upon time steps, the script can be automatically created after setting the dimensions and selecting the node properties, components and phases. This is independent of the VTK flie output that can be configured at the next wizard step. To retain the old monitoring script, just click 'Next &gt;' on this page.</string>
+          <string>To monitor (graphically or in a table) some changes in the nodes / boxes profile upon time steps, the script can be automatically created after setting the dimensions and selecting the node properties, components and phases. This is independent of the VTK flie output that can be configured at the next wizard step. To retain the old monitoring script, just click 'Next &gt;' on this page.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -2129,7 +2182,7 @@ The number of boxes nC has already been defined at Step 2.
           <item row="1" column="0">
            <widget class="QLabel" name="textLabel12">
             <property name="text">
-             <string>(2) There, set up the compositions and ID names of initial chemical system recipes. </string>
+             <string>(2)  In Page 1, set up the compositions and ID names of initial chemical system recipes. </string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -2142,7 +2195,7 @@ The number of boxes nC has already been defined at Step 2.
           <item row="2" column="0">
            <widget class="QLabel" name="textLabel14">
             <property name="text">
-             <string>(3) Check the initialization script and settings (for all modes); if in T mode, click 'Calculate'.</string>
+             <string>(3)  Check the initialization script and settings (for all modes); if in T mode, click 'Calculate'.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -2155,7 +2208,7 @@ The number of boxes nC has already been defined at Step 2.
           <item row="4" column="0">
            <widget class="QLabel" name="textLabel13_2">
             <property name="text">
-             <string>(5) Click 'Calculate', and watch graphical monitoring of the node profiles, if appropriate.</string>
+             <string>(5)  Click 'Calculate', and watch graphical monitoring of the node profiles, if appropriate.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -2168,7 +2221,7 @@ The number of boxes nC has already been defined at Step 2.
           <item row="3" column="0">
            <widget class="QLabel" name="textLabel15">
             <property name="text">
-             <string>Check node properties table and (for S, F, B modes) the fluxes definition list; check monitoring scripts.</string>
+             <string>(4)  Check node properties table and (for S, F, B modes) the fluxes definition list; check monitoring scripts.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>

@@ -46,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -98,7 +98,7 @@ The Process record can be configured in several modes to perform specific simula
 
 Any process simulator belongs to one of three types: 
    1.  'Sequential': only input GEM parameters are modified (modes P, S, L); 
-   2.  'Reciprocal': next step depends on GEM output parameters (e.g. pH) from previous step (mode R); 
+   2.  'Reciprocal': next step depends on GEM outputs (e.g. composition of phases) from the previous step (mode R); 
    3.  'Inverse': GEM input adjusted to obtain prescribed values of GEM output (e.g. pH; modes G, T).
 </string>
          </property>
@@ -138,7 +138,7 @@ Any process simulator belongs to one of three types:
           <item>
            <widget class="QRadioButton" name="pselP">
             <property name="text">
-             <string>&amp;P   Sequential temperature and/or pressure change at fixed bulk composition</string>
+             <string>&amp;P    Sequential temperature and/or pressure change at fixed bulk composition</string>
             </property>
             <property name="shortcut">
              <string>Alt+P</string>
@@ -193,7 +193,7 @@ Any process simulator belongs to one of three types:
           <item>
            <widget class="QRadioButton" name="pselG">
             <property name="text">
-             <string>&amp;G   Batch inverse titration sequence for incremented pH values etc.</string>
+             <string>&amp;G    Batch inverse titration sequence for incremented pH values etc.</string>
             </property>
             <property name="shortcut">
              <string>Alt+G</string>
@@ -248,7 +248,7 @@ Any process simulator belongs to one of three types:
           <item>
            <widget class="QRadioButton" name="pselR">
             <property name="text">
-             <string>&amp;R   Sequential reactor scheme, uses equilibrium bulk compositions of phases</string>
+             <string>&amp;R    Flow-through (sequential) reactor scheme, uses equilibrium bulk compositions of phases</string>
             </property>
             <property name="shortcut">
              <string>Alt+R</string>
@@ -274,7 +274,7 @@ Any process simulator belongs to one of three types:
           <item>
            <widget class="QRadioButton" name="pselL">
             <property name="text">
-             <string>&amp;L   Lippmann diagram (transposed) for a binary solid solution</string>
+             <string>&amp;L    Lippmann diagram (transposed) for a binary solid solution</string>
             </property>
             <property name="shortcut">
              <string>Alt+P</string>
@@ -465,7 +465,7 @@ Any process simulator belongs to one of three types:
            <string/>
           </property>
           <property name="textAlignment">
-           <set>AlignRight|AlignVCenter</set>
+           <set>AlignTrailing|AlignVCenter</set>
           </property>
          </item>
         </widget>

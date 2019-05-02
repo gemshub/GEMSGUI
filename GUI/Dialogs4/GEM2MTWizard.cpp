@@ -202,11 +202,11 @@ GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[32],
                            const char *acalcScript, const char *aoutScript,
                            const char* aXname, const char* aYname,
                            TCIntArray vtk1, TCIntArray vtk2, QWidget* parent):
-          QDialog( parent ),  calcScript(acalcScript), outScript(aoutScript), pageScript(0)
+          QDialog( parent ),  calcScript(acalcScript), outScript(aoutScript), pageScript(nullptr)
 {
 
-    PTable = 0;
-    TTable = 0;
+    PTable = nullptr;
+    TTable = nullptr;
    //    setFinishEnabled( WizardPage2, true);
     setupUi(this);
     gstring str1= "GEM-Selektor GEM2MT Setup:  ";
@@ -227,6 +227,8 @@ GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[32],
          pselB->setChecked( true );
      else  if( flgs[18] == 'A' )
          pselA->setChecked( true );
+      else if( flgs[18] == 'C' )
+         pselC->setChecked( true );
        else if( flgs[18] == 'D' )
           pselD->setChecked( true );
          else if( flgs[18] == 'W' )
@@ -533,12 +535,14 @@ void   GEM2MTWizard::getFlags( char flgs[32] )
   char type='S';
 
   if( pselT->isChecked())
-   type='T';
+    type='T';
   else if( pselB->isChecked())
        type='B';
    else if( pselA->isChecked())
-           type='A';
-     else if( pselD->isChecked())
+         type='A';
+    else if( pselC->isChecked())
+           type='C';
+      else if( pselD->isChecked())
              type='D';
        else  if( pselS->isChecked())
                type='S';

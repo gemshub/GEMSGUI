@@ -83,7 +83,7 @@ public:
                      double Tai[4], double Pai[4], double Tau[3],
                      const char *acalcScript, const char *aoutScript,
                      const char* aXname, const char* aYname,
-                     TCIntArray vtk1, TCIntArray vtk2, QWidget* parent = NULL);
+                     TCIntArray vtk1, TCIntArray vtk2, QWidget* parent = nullptr);
 
     virtual ~GEM2MTWizard();
 

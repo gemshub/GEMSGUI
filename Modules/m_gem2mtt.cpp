@@ -159,7 +159,7 @@ void  TGEM2MT::NewNodeArray()
 
  DATABRPTR* C0 = na->pNodT0();  // nodes at current time point
  for( long int ii=0; ii<mtp->nC; ii++)
-      if(  C0[ii] == 0 )
+      if(  C0[ii] == nullptr )
       Error( "NewNodeArray() error:" ," Undefined boundary condition!" );
 
  // put HydP
@@ -294,7 +294,7 @@ bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node, FILE* 
 {
     bool iRet = true;
 
-    FILE* diffile = NULL;
+    FILE* diffile = nullptr;
     if( mtp->PsMO != S_OFF )
       diffile = updiffile;
 
@@ -333,7 +333,7 @@ bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node, FILE* 
    return iRet;
 }
 
-// The mass transport iteration time step
+// The mass transport iteration initial time step
 void TGEM2MT::MassTransAdvecStart()
 {
     if( mtp->tf <= 0 ) // foolproof
@@ -346,7 +346,21 @@ void TGEM2MT::MassTransAdvecStart()
     mtp->ct = 0;
 }
 
-// The mass transport iteration time step
+// The mass transport iteration initial time step (Crank-Nicolson scheme)
+void TGEM2MT::MassTransCraNicStart()
+{
+    if( mtp->tf <= 0 ) // foolproof
+        mtp->tf = 1.;
+    mtp->dx = mtp->sizeLc[0]/mtp->nC;  // was mtp->cLen/mtp->nC; changed 15.12.2011 DK
+    mtp->dTau = 0.5*(mtp->dx/mtp->fVel)*1./mtp->tf;
+    mtp->oTau = 0.;
+    mtp->cTau = mtp->Tau[START_];
+    // mtp->cTau = 0;
+    mtp->ct = 0;
+}
+
+
+// The mass transport iteration initial time step
 void TGEM2MT::MassTransParticleStart()
 {
     double dt_adv, dt_dif;
@@ -424,7 +438,7 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
             	 for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
             	 {
                          aji = na->DCaJI( jc, ic );
-            		 if( aji )
+                     if( aji != 0.0 )
             		     node1_bIC(ii, ic) -= aji * dc;
             	 }
     	     }
@@ -434,7 +448,7 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
     	    	 for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
             	 {
                          aji = na->DCaJI( jc, ic );
-            		 if( aji )
+                     if( aji != 0.0 )
             		     node1_bIC(ii, ic) -= aji * dc;
             	 }
     	     }	 
@@ -487,6 +501,200 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
    } // end of loop over nodes
 }
 
+// The mass transport iteration time step (Crank-Nicolson scheme, cf Alina Yapparova 2015)
+// CompMode: true: Transport via dependent components in Aq phase (except H2O)
+//           false: Transport via dissolved indepedent components (with H2O)
+//
+void TGEM2MT::MassTransCraNicStep( bool CompMode )
+{
+ double c0, c1, cm1,  cm2, /*cmax,*/ c12, cm12,
+        /*charge, c0new,*/ dc, cr, aji, fmolal;      // some help variables
+ long int ii, ic, jc;
+
+ //  Getting direct access to TNodeArray class data
+ DATACH* CH = na->pCSD();       // DataCH structure
+ // DATABRPTR* C0 = na->pNodT0();  // nodes at current time point
+ // DATABRPTR* C1 = na->pNodT1();  // nodes at previous time point
+
+   mtp->ct += 1;
+   mtp->cTau += mtp->dTau;
+   cr = mtp->fVel * mtp->dTau/mtp->dx;
+
+   for( ii = 2; ii< mtp->nC-1; ii++) // node iteration, -1 the right boundary is open ....
+   {
+     mtp->qc = ii;
+     if( CompMode == true )
+     {  // Advective mass transport over DC gradients in Aq phase
+         fmolal = 55.5084/node1_xDC( ii, CH->nDCinPH[0]-1 );
+         for( jc=0; jc < CH->nDCinPH[0]-1; jc++ )
+         {   // splitting for dependent components except H2O@
+             // It has to be checked on minimal allowed c0 value
+             c0  = node1_xDC( ii, jc )* fmolal;
+             c1  = node1_xDC( ii+1, jc )* fmolal;
+             cm1 = node1_xDC( ii-1, jc )* fmolal;
+             cm2 = node1_xDC( ii-2, jc )* fmolal;
+             if( c0 < 1e-20 && c1 < 1e-20 && cm1 < 1e-20 && cm2 < 1e-20 )
+                continue;
+             c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
+             cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
+             dc = cr*(c12-cm12);
+             if( fabs( dc ) < mtp->cdv )   // *c0   Insignificant fractional difference?
+                 continue;
+             dc /= fmolal;
+             // Checking the new DC amount
+             if( (c0/fmolal - dc) > mtp->cez )
+             {  // the amount of DC remains positive
+                 node1_xDC( ii, jc ) -= dc;
+                 for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
+                 {
+                         aji = na->DCaJI( jc, ic );
+                     if( aji != 0.0 )
+                         node1_bIC(ii, ic) -= aji * dc;
+                 }
+             }
+             else {  // setting the DC amount to minimum
+                 node1_xDC( ii, jc ) = mtp->cez;
+                 dc = c0/fmolal - mtp->cez;
+                 for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
+                 {
+                         aji = na->DCaJI( jc, ic );
+                     if( aji != 0.0 )
+                         node1_bIC(ii, ic) -= aji * dc;
+                 }
+             }
+         } // loop over DC
+     }
+     else { // Advective mass transport over IC gradients in Aq phase
+         double niw; // IC amount in H2O
+         fmolal = 55.5084/node1_xDC( ii, CH->nDCinPH[0]-1 ); // molality factor
+         for( ic=0; ic < CH->nICb; ic++)  // splitting for independent components
+         {
+                 niw = node1_xDC( ii, CH->nDCinPH[0]-1 )* na->DCaJI( CH->nDCinPH[0]-1, ic );
+                // IC amount in H2O
+             // Chemical compositions may become inconsistent with time
+             // It has to be checked on minimal allowed c0 value
+             c0  = (node1_bPS( ii, 0, ic ) - niw )*fmolal;    //C1[ii]->bPS[0*CH->nICb + ic];
+             c1  = (node1_bPS( ii+1, 0, ic) - niw )*fmolal;   //C1[ii+1]->bPS[0*CH->nICb + ic];
+             cm1 = (node1_bPS( ii-1, 0, ic ) - niw )*fmolal;  //C1[ii-1]->bPS[0*CH->nICb + ic];
+             cm2 = (node1_bPS( ii-2, 0, ic ) - niw )*fmolal;  //C1[ii-2]->bPS[0*CH->nICb + ic];
+
+             // Finite-difference calculation (suggested by FE )
+             c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
+             cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
+             dc = cr*(c12-cm12);
+             if( fabs( dc ) < mtp->cdv )  // *c0
+                    continue;
+             dc /= fmolal;
+             // Checking the new IC amount
+             if( (node1_bPS(ii, 0, ic) - dc) > mtp->cez )
+             {  // New IC amount is positive
+                 node1_bPS( ii, 0, ic ) -= dc;
+                 node1_bIC(ii, ic) -= dc;
+             }
+             else { // Setting the new IC amount to threshold
+                 node1_bPS( ii, 0, ic ) = mtp->cez;
+                 node1_bIC(ii, ic) = mtp->cez;
+             }
+             /*if( dc >= C1[i]->bIC[ic] )
+             {
+                fprintf( diffile, "\nError in Mass Transport calculation part :" );
+                fprintf( diffile, " Node= %-8d  Step= %-8d  IC= %s ", i, t, CH->ICNL[ic] );
+                fprintf(diffile, "\n Attempt to set new amount to %lg (old: %lg  Diff: = %lg ) ",
+                C1[i]->bIC[ic]-dc, C1[i]->bIC[ic], dc);
+                BC_error = true;
+             } */
+         } // loop over IC
+     }
+     // checking charge balance
+     //charge = node1_bIC(ii, CH->nICb-1 );
+     node1_bIC(ii, CH->nICb-1 ) = 0.0;		// debugging
+   } // end of loop over nodes
+}
+
+
+
+
+/*
+// A very simple example of finite difference transport algorithm
+// Contributed on 22.08.2014 by Alina Yapparova, Chair of Reservoir Engineering,
+// Montanuniveritaet Leoben, Austria
+//
+double TMyTransport::OneTimeStepRun( long int *ICndx, long int nICndx )
+{
+    double column_length  = 0.5; // [m]
+    double dx = column_length/(nNodes-1);
+
+    //constant velocity field
+    double v = 1.e-8; // velocity [m/s]
+    // stability requirement: dt<=dx/velocity, so we can choose any coefficient k<1
+    double k = 0.5; // k = dt/dx*v
+    // calculate dt
+    double dt = k*dx/v;
+    // and print dt into the output file
+    // cout<<"\tdt = " << dt << "[s]" << endl;
+
+    //Finite difference approximation for the equation dc/dt + v*dc/dx = 0
+    // explicit time, left spatial derivative
+    // (c^{n+1}_{i} - c^{n}_{i})/dt + v*(c^{n}_{i} - c^{n}_{i-1})/dx = 0
+    // c^{n+1}_{i} = (1 - k)*c^{n}_{i} + k*c^{n}_{i-1}
+    long int in;
+    for(  in=1; in< nNodes; in++ )
+    {
+        for (int i=0; i<nICndx; i++)
+        {
+            abIC[in][ICndx[i]] = (1 - k)*abPS[in][ICndx[i]] + k*abPS[in-1][ICndx[i]] + abSP[in][ICndx[i]];
+            // where abPS is the total amount of an independent component ICndx[i] in the aqueous phase (after GEMS computation)
+            // abSP is the total amount of an independent component ICndx[i] in ALL solid phases
+            // abIC is the total amount of ICndx[i] that will serve as an input constraint for GEMS computation at the next time level
+            // NB: more precisely, one should write abPS[in][n*nIC + ICndx[i]], where 0=<n<=nPS, and transport each phase-solution separately
+            //but as far as an aqueous phase is the first in the list (n=0), this simplified indexing will work for transport of aq phase
+        }
+    }
+    return dt;
+}
+
+// Finite difference transport algorithm (Crank-Nicolson scheme)
+// Contributed on 27.07.2015 by Alina Yapparova, Chair of Reservoir Engineering,
+// Montanuniveritaet Leoben, Austria
+//
+double TMyTransport::OneTimeStepRun_CN( long int *ICndx, long int nICndx )
+{
+    double column_length  = 0.5; // [m]
+    double dx = column_length/(nNodes-1);
+
+    //constant velocity field
+    double v = 1.e-8; // velocity [m/s]
+    // stability requirement: unconditionally stable
+    double dt = 1000000.; //[s]
+    double k = dt*v/(2*dx);
+
+    //Finite difference approximation for the equation dc/dt + v*dc/dx = 0
+    // semi-implicit time, left spatial derivative
+    // (1 + k)*c^{n+1}_{i} - k*c^{n+1}_{i-1} =  (1 - k)*c^{n}_{i} + k*c^{n}_{i-1}
+    // c^{n+1}_{i} = 1/(1+k)*(k*c^{n+1}_{i-1} + (1 - k)*c^{n}_{i} + k*c^{n}_{i-1})
+    long int in;
+    for(  in=1; in< nNodes; in++ )
+    {
+        for (int i=0; i<nICndx; i++)
+        {
+            abIC[in][ICndx[i]] = 1/(1+k)*( k*(abIC[in-1][ICndx[i]] - abSP[in-1][ICndx[i]]) + (1 - k)*abPS[in][ICndx[i]] + k*abPS[in-1][ICndx[i]] ) + abSP[in][ICndx[i]];
+            // where abPS is the total amount of an independent component ICndx[i] in the aqueous phase (after GEMS computation)
+            // abSP is the total amount of an independent component ICndx[i] in ALL solid phases
+            // abIC is the total amount of ICndx[i] that will serve as an input constraint for GEMS computation at the next time level
+            // NB: more precisely, one should write abPS[in][n*nIC + ICndx[i]], where 0=<n<=nPS, and transport each phase-solution separately
+            //but as far as an aqueous phase is the first in the list (n=0), this simplified indexing will work for transport of aq phase
+        }
+    }
+    return dt;
+}
+
+*/
+
+
+
+
+
+
 // Main call for the mass transport iterations in 1D case
 //
 // mode is NEED_GEM_AIA or NEED_GEM_PIA (see DATABR.H) mode of GEM initial approximation
@@ -501,9 +709,9 @@ bool TGEM2MT::Trans1D( char mode )
   // long int NodesSetToAIA;
 // gstring Vmessage;
 
-FILE* logfile = NULL;
-FILE* ph_file = NULL;
-FILE* diffile = NULL;
+FILE* logfile = nullptr;
+FILE* ph_file = nullptr;
+FILE* diffile = nullptr;
 
 #ifndef IPMGEMPLUGIN
    showMss = 0L;
@@ -545,8 +753,12 @@ mtp->TimeGEM = 0.0;
    if( mtp->iStat!= AS_RUN  )
    {  switch( mtp->PsMode )
      {
-       case RMT_MODE_A:   // A: 1D advection (numerical) coupled FMT scoping model
+       case RMT_MODE_A:   // A: 1D advection (numerical) coupled FMT finite-differences model
                          MassTransAdvecStart();
+                           nStart = 1; nEnd = mtp->nC-1;
+                 break;
+       case RMT_MODE_C:   // C: 1D advection (numerical) coupled FMT Crank-Nicolson scheme model
+                         MassTransCraNicStart();
                            nStart = 1; nEnd = mtp->nC-1;
                  break;
        case RMT_MODE_W:   // W: random-walk advection-diffusion coupled FMT scoping model
@@ -624,6 +836,8 @@ char buf[300];
       {
           case RMT_MODE_A: MassTransAdvecStep( CompMode );
                            break;
+          case RMT_MODE_C: MassTransCraNicStep( CompMode );
+                       break;
           case RMT_MODE_W: MassTransParticleStep( CompMode );
                            break;
           case RMT_MODE_F: FlowThroughBoxFluxStep();

@@ -50,8 +50,8 @@ TGEM2MT::TGEM2MT( uint nrt ):
     start_title =
        " Definition of a GEM2MT (Coupled RMT model)";
 
-  na = 0;
-  pa_mt = 0;
+  na = nullptr;
+  pa_mt = nullptr;
 }
 
 // get key of record
@@ -752,7 +752,7 @@ void TGEM2MT::MakeQuery()
     FreeNa();
     na = new TNodeArray( 1, TMulti::sm->GetPM() );
     // realloc and setup data for dataCH and DataBr structures
-    na->MakeNodeStructuresOne( 0, true , Tai, Pai  );
+    na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 
     allocNodeWork();
     LinkCSD(0);
@@ -940,12 +940,12 @@ void TGEM2MT::FreeNa()
   if( pa_mt )
   {
     delete pa_mt;
-    pa_mt = 0;
+    pa_mt = nullptr;
   }
   if(na)
   {
      delete na;
-     na = 0;
+     na = nullptr;
   }
 //   freeNodeWork();
    LinkNode0(-1);
@@ -1161,7 +1161,7 @@ void TGEM2MT::RecordPrint( const char* key )
     outMulti();
     mtp->iStat = AS_DONE;
     delete na;
-    na = 0;
+    na = nullptr;
 	}
 	else
 	     TCModule::RecordPrint( key );
@@ -1182,8 +1182,8 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
     uint i;
 
     int Nold = mtp->Nb;
-    char  *p_CIclb=0;
-    double *p_CIb=0;
+    char  *p_CIclb=nullptr;
+    double *p_CIb=nullptr;
     double *p_Bn = new double[mtp->nIV*mtp->Nb];
     memcpy( p_Bn, mtp->Bn, mtp->nIV*mtp->Nb*sizeof(double));
     if( mtp->PvICi != S_OFF )
