@@ -51,16 +51,20 @@
     <p><a href="#GEM2MT_MWINDOW">3. GEM2MT Module Window</a></p>
     <blockquote>
       <p style="margin-left: 20px;"><a href="#MWPAGE_1">3.1. GEM2MT Window Page
-          1</a></p>
+          "Initial" (Initial Systems, Initialization Script)<br>
+        </a></p>
       <p style="margin-left: 20px;"><a href="#MWPAGE_2">3.2. GEM2MT Window Page
-          2</a></p>
+          "Nodes" (Array of Nodes)<br>
+        </a></p>
       <p style="margin-left: 20px;"><a href="#MWPAGE_3">3.3. GEM2MT Window Page
-          3</a><br>
+          "Fluxes" (MPG Compositions, Array of Fluxes)</a><br>
       </p>
       <p style="margin-left: 20px;"><a href="#MWPAGE_4">3.4. GEM2MT Window Page
-          4</a></p>
+          "Results" (Sampling Script, Table of Results)<br>
+        </a></p>
       <p style="margin-left: 20px;"><a href="#MWPAGE_5">3.5. GEM2MT Window Page
-          5</a></p>
+          "Setup" (Task Dimensions and Settings) <br>
+        </a></p>
     </blockquote>
     <p><a href="#GEM2MT_DATA">4. GEM2MT Data Entries</a></p>
     <p><a href="#GEM2MT_ERRORS">5. Warnings and Error Messages</a></p>
@@ -130,8 +134,8 @@
       there, and so on until the last box is reacted. This completes a so-called
       "wave". <br>
     </p>
-    <img src="sequent-reactors.gif" alt="sequential reactors" title="Sequential reactors scheme"
-      style="width: 340px; height: 95px;">
+    <img src="sequent-reactors.png" alt="sequential reactors" title="Sequential reactors scheme"
+      style="width: 360px; height: 101px;">
     <p>Any number of SR "waves" can be performed. At the beginning of second
       wave, the "fresh" fluid is put into the first box with the reacted rock
       composition kept after the first "wave". After equilibration, the fluid is
@@ -149,37 +153,98 @@
       equal-size boxes that may have different temperatures and pressures, if
       desired. The first box must be coded as a constant-flux (Cauchy) source
       (3), and the last box - as a constant-flux sink (-3); all the boxes
-      in-between are normal local-equilibrium systems (1). The same zero-order
-      fluxes of aqueous fluid (not too high!) should be set between boxes 0 and
-      1, 1 and 2, 2 and 3, ... until nC-2 and nC-1 (sink). </p>
-    <p>This means that at a unit time step, a given mass of reacted aqueous
-      fluid is moved into the next box and replaced simultaneously (fresh fluid
-      from the constant-flux source moves from box 0 into box 1, and the same
-      mass of reacted fluid moves away from the last box). In fact, this is done
-      in a consistent way by using the ODE integrator of the system of mass
-      balance equations for all elements in all nodes. </p>
+      in-between are normal local-equilibrium systems (1). Equal zero-order
+      fluxes of aqueous fluid "aq" (not too high!) should be set between boxes 0
+      and 1, 1 and 2, 2 and 3, ... until nC-2 and nC-1 (sink). </p>
+    <p>Composition of the "aq" MPG (mobile phase group) should be defined in the
+      PGT table (units in UMGP column) in the "Fluxes" page of GEM2MT window. A
+      column in PGT table defines quantities of phases moved from the source box
+      in one mole of the flux. If there is another MPG defined, e.g. "gas", then
+      two-phase transport between boxes can be arranged.&nbsp; </p>
+    <p>At a unit time step, a given mass of "aq" flux (reacted aqueous fluid) is
+      moved into the next box replacing there the equivalent mass of fluid that
+      moves to the next box and so on simultaneously (fresh fluid from the
+      constant-flux source moves from box 0 into box 1, and the same mass of
+      reacted fluid moves away from the last box). In fact, this simultaneous
+      transport is consistently performed by the built-in integrator of the ODE
+      system of mass balance equations for all elements in all nodes. </p>
+    <p>The mass of fluid moved by the flux between nodes n and n-1 is defined by
+      the flux composition, flux rate and flux order. The simplest zero-order
+      (constant) flux moves 1 mol of its composition times the flux rate (set in
+      the FDLf table on "Fluxes" page). The rate 0.1 means that 0.1 mol of the
+      flux composition moves per step (unit time). For the 1st order flux, the
+      rate 0.1 means that 0.1 mol of flux composition times the mass of its
+      source MPG (in kg) is moved per step. Such a flux will automatically
+      decrease if the mass of its source phase(s) in the source box decreases,
+      and vice versa.&nbsp; </p>
     <p>After the transport step, the equilibrium speciation is computed in all
       nodes by the GEM algorithm, and the next iteration of transport occurs
-      followed by next equilibration in all boxes, and so on until the maximum
-      number of steps or total time is reached. After each equilibration, the
-      masses, volumes or concentrations of interest (both in aqueous and solid
-      parts) are sampled and plotted. </p>
-    <p>The F mode simulation is in fact analogous to 1-D pure advection
-      transport, except that the time step is set to 1, the tracer dispersion is
-      ignored, and the hydraulic consistency criteria are not applied.</p>
+      followed by the next equilibration in all boxes, and so on, until the
+      maximum number of steps or the total time of simulation is reached. After
+      each equilibration, the masses, volumes or concentrations of interest
+      (both in aqueous and solid parts) are sampled and plotted. </p>
+    <p>The F mode simulation with equal zero-order fluxes is, in fact, analogous
+      to 1-D pure advection transport, except that the time step is set to 1,
+      the tracer dispersion is ignored, and the hydraulic consistency criteria
+      are not applied.</p>
     <p>The B mode operates in a similar way except the combination of boxes and
       fluxes may be arbitrary (not only chain-like), the boxes can have
-      different size, and the fluxes may be of different order. This setup is
-      suitable e.g. for simulating geochemical cycles. The transport step is
+      different size, and the fluxes may be of different order and rate. This
+      setup is suitable e.g. for simulating geochemical cycles or
+      redox-sedimentation dynamics in water columns. The transport step is
       performed by using the ODE integrator of the system of mass balance
-      equations for all elements in all boxes.</p>
+      equations for all elements in all boxes. </p>
+    <p>Theoretical background of the mass-balance integration in a reservoir
+      box-flux "megasystem"can be found e.g. in [Lerman A., Mackenzie F.T.,
+      Garrels R.M. (1975), Modeling of geochemical cycles: Phosphorus as an
+      example, Geol. Soc. Amer. Memoir 142, p. 205-218]. &nbsp; </p>
     <p><br>
     </p>
     <hr style="width: 100%; height: 2px;">
     <p> </p>
     <h3><a name="GEM2MT_A_MODE"></a>1.3. One-dimensional reactive transport (A,
       C, W, D modes)</h3>
-    <p><br>
+    <p>The GEM2MT module allows the user to set up and run simplified 1-D
+      simulations of reactive transport in porous media using the
+      finite-difference advection-dispersion algorithm (classical A mode and
+      implicit Crank-Nicolson C mode TBD) for advection-dominated cases. For the
+      diffusion-dominated transport, the random-walk algorithm (W mode, also
+      accounts for advection) can be used; the pure diffusion transport method
+      (D mode) is under construction in this version of GEM-Selektor.
+      Theoretical background for all these transport modelling methods can be
+      found in numerous textbooks. </p>
+    <p>The non-iterative coupling of transport and chemistry is implemented in
+      all cases (so-called "operator splitting" approach): the mass transport
+      model integration over all nodes alternates with GEM calculation of
+      equilibrium states in all nodes after each time step, until the maximum
+      time or number of time steps is reached. The profiles of amounts of phases
+      or aqueous species of interest can be plotted after each time step (or
+      exported to VTK files). </p>
+    <p>By no means this simple implementation of 1-D reactive transport is
+      designed to compete with popular coupled codes such as PFLOTRAN,
+      OpenGeoSys or CRUNCH. Rather, the purpose of A, C, W modes in GEM2MT is
+      education and testing of reactive system behavior before performing heavy
+      computations of 2-D or 3-D cases using coupled RT codes on parallel
+      high-performance computer hardware. </p>
+    <p>One particular interest is to compare the megasystem evolution between
+      1-D box-flux (mode F, B) models with ODE integration and explicit fluxes,
+      and more rigorous hydraulic advection-dispersion (diffusion) models with
+      concentration gradients (of total dissolved elements or aqueous species)
+      solved by PDE intergration (A,C modes) or stochastic simulation of
+      Brownian movement of particles (W mode). </p>
+    <p>The main difference between the box-flux models and the hydraulic
+      advection-dispersion-diffusion models is the choice of transport
+      parameters (defined initial state for all boxes or nodes is required in
+      all cases). While in B or F modes, the zero- or 1st order fluxes must be
+      set by MPG composition, flux rate or rate constant, in A,C,W modes,
+      initial transport parameters in all nodes must be defined. These include
+      porosity, permeability, advection velocity, dispersivity, tortuosity and
+      diffusivity (common or individual diffusion coefficients). </p>
+    <p>These parameters can be conveniently set upon initialization of the RT
+      problem using the initialization script. If needed, some parameters in
+      some nodes may change in the process (e.g. due to mineral dissolution or
+      precipitation, porosity and permeability may change), which has to be
+      programmed in the last part of initialization script. &nbsp; <br>
     </p>
     <p><br>
     </p>
@@ -765,53 +830,131 @@
     </p>
     <hr style="width: 100%; height: 2px;">
     <h2><a name="GEM2MT_MWINDOW"></a>3. GEM2MT Module Window</h2>
-    <p> The workflow of a system setup after having followed th GEM2MT Wizard
-      includes After you click "Finish" (to be enhanced): </p>
+    <p> The next steps of a RT system setup after having worked through the
+      GEM2MT Wizard include: </p>
     <p> </p>
-    <p>(1) Page 1 of the GEM2MT module window will appear. Enter simulator name
-      / comment. </p>
     <p> </p>
-    <p>(2) There, set up the compositions and ID names of initial chemical
+    <p> </p>
+    <p style="margin-left: 40px;">(1) Page "Initial" of the GEM2MT module window
+      will appear. Enter the simulator task name and comment. Set up the
+      compositions, ID names and initial mass ratios of of initial chemical
       systems. </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;"> (3) In the "Initial" page, check the
+      initialization script with settings of temperature, pressure, ... (for all
+      modes); if in T mode, click 'Calculate' to finish the task.</p>
+    <p style="margin-left: 40px;">(4) In other than T modes, click "Calculate"
+      to check results of the execution of initialization script (fix it if
+      necessary or if errors occurred).&nbsp; </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;">(5) in the "Nodes" page, check the node
+      properties (temperature, pressure, node type, etc.) in the DiCp table; for
+      A, W, C modes, enter overall transport model parameters above the table,
+      then skip the "Fluxes" page. </p>
+    <p style="margin-left: 40px;">(6) in the "Fluxes" page (for S, F, B modes),
+      check the MPG composition table, then the MPG fluxes indexes, orders and
+      rates (rate constants). If needed, check the elemental compositions of
+      source fluxes and their indexes as sources in the respective nodes.&nbsp;
+    </p>
+    <p style="margin-left: 40px;">(7) in the ""Results" page, check the
+      monitoring script (modify if needed), check/edit legend names (for
+      plotting).&nbsp; </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;">(8) If necessary, go again through the GEM2MT
+      wizard; otherwise, click 'Calculate' to run the simulations. At the very
+      first time, do not activate graphical output, only stop the simlation
+      after several tens of steps. Otherwise, watch the graphical monitoring of
+      the node profiles. </p>
     <p> </p>
-    <p> (3) Check the initialization script and settings (for all modes); if in
-      T mode, click 'Calculate' </p>
     <p> </p>
-    <p>(4) Check node properties table and (for S, F, B modes) the MPG fluxes
-      list; check monitoring scripts </p>
     <p> </p>
-    <p>(5) Click 'Calculate', and watch graphical monitoring of the node
-      profiles. </p>
-    <p> </p>
-    <p>The setup of the system composition and initial fluid/rock ratio can be
-      done in Window Page 1. </p>
-    <p> </p>
-    <p>Then setup of node composition Window Page 2 is used to define the
-      composition of each node, P-T and fluxes. </p>
     <br>
     <hr style="width: 100%; height: 2px;">
-    <h3><a name="MWPAGE_1"></a>3.1. GEM2MT Window Page 1 (Initial)</h3>
-    <p> Here you can edit the composition</p>
+    <h3><a name="MWPAGE_1"></a>3.1. GEM2MT Window Page "Initial" (Initial
+      Systems, Initialization Script)</h3>
+    <p> In this page, you can define the masses, temperatures and pressures of a
+      few initial systems and enter/edit their bulk compositions.When the GEM2MT
+      task starts, the initialization script will duplicate each initial system
+      P, T and bulk composition into the prescribed nodes in the array of nodes
+      (boxes) (see "Nodes" page), which may save you hours of tedious typing or
+      copy-pasting. </p>
+    <p> Never miss typing comments about this task into two comment lines in the
+      upper part of the page. The first comment line will also be visible on the
+      plots. Below the comments, an "mInput" row of cells is visible, where
+      values can be added for conversion of units in which compositions of
+      initial systems is given. There are three ways of doing that: </p>
+    <p style="margin-left: 40px;">(i) enter/paste quantities of elements into
+      "mCIb" table; </p>
+    <p style="margin-left: 40px;">(ii) enter chemical formulae and their
+      quantities into "mCAb" table; </p>
+    <p style="margin-left: 40px;">(iii) enter quantities into both table, in
+      which case they will be added up after conversion to mole amounts of
+      chemical elements. </p>
+    <p>In all cases, upon clicking the "Calculate" toolbar button, the resulting
+      bulk compositions of intitial systems will be placed into the "mBn" table
+      (not editable).</p>
+    <p>Below the "mInput" row, you have to enter the names of initial systems,
+      followed by their overall properties entered into the "PTVi" table (each
+      initial system per row): temperature (C), pressure (bar), volume (leave
+      zeros), masses that the respective nodes should have initially. The last
+      column (after starting calculations) will show the actual masses of
+      initial systems. </p>
+    <p> The next table contains symbols of chemical elements (taken from the
+      parent system), the row of units in which their quantities are given below
+      (row per row for each initial system). This table is accessible for input
+      if the respective checkbox is activated in the second wizard page. </p>
+    <p>The "mCAb" table below for entering units and quantities of arbitrary
+      formulae appears if 1 or more is set for number of formula units in the
+      second page of the wizard. This may be a convenient way of setting up
+      compositions of initial fluids or rocks. </p>
+    <p>The data in "mBn" table cannot be edited and will be calculated out of
+      both tables above when the GEM2MT task is calculated. These compositions
+      (scaled if needed) will be copied into the respective nodes upon
+      initialization of zero-time node array. </p>
+    <p>The last field on this page (you may need to scroll the page down) is the
+      text editor field for the initialization script, which is usually created
+      by the GEM2MT wizard, but frequently needs editing afterwards. This script
+      is run at the beginning of the GEM2MT task calculation and, in fact,
+      populates the tables with parameters of nodes and fluxes (if applicable).
+      More about this script can be found in its help page.&nbsp; <br>
+    </p>
     <p><br>
     </p>
     <hr style="width: 100%; height: 2px;">
-    <h3><a name="MWPAGE_2"></a>3.2. GEM2MT Window Page 2 (Nodes)</h3>
+    <h3><a name="MWPAGE_2"></a>3.2. GEM2MT Window Page "Nodes" (Array of Nodes)</h3>
     <p> Here you can define the properties of each nodes. In the DiCp[i,0]
       (where i the node number), you add an index number, which can be related
       to a rock composition or fluid composition defined on Window Page 1
       (Initial). I.e. of a fluid flowing through a rock. The first node (0),
       should include the index for the fluid [0] and the index for input in
       column DiCp[0,i]=3. The last node (i), should include the index for output
-      of column [-3]. </p>
+      of column [-3].</p>
+    <p><br>
+    </p>
     <hr style="width: 100%; height: 2px;">
-    <h3><a name="MWPAGE_3"></a>3.3. GEM2MT Window Page 3 (Fluxes)</h3>
-    <p> Text goes here </p>
+    <h3><a name="MWPAGE_3"></a>3.3. GEM2MT Window Page "Fluxes" (MPG
+      Compositions, Array of Fluxes)</h3>
+    <p> Text goes here</p>
+    <p><br>
+    </p>
     <hr style="width: 100%; height: 2px;">
-    <h3><a name="MWPAGE_4"></a>3.4. GEM2MT Window Page 4 (Results)</h3>
-    <p> Text goes here </p>
+    <h3><a name="MWPAGE_4"></a>3.4. GEM2MT Window Page "Results" (Sampling
+      Script, Table of Results)</h3>
+    <p> Text goes here</p>
+    <p><br>
+    </p>
     <hr style="width: 100%; height: 2px;"><br>
-    <h3><a name="MWPAGE_5"></a>3.5. GEM2MT Window Page 5 (Setup)</h3>
-    <p> Text goes here </p>
+    <h3><a name="MWPAGE_5"></a>3.5. GEM2MT Window Page "Setup" (Task Dimensions
+      and Settings)</h3>
+    <p> Text goes here</p>
+    <p><br>
+    </p>
     <hr width="100%" size="2">
     <h2><a name="GEM2MT_DATA"></a>4. GEM2MT Data Entries</h2>
     <dl>
