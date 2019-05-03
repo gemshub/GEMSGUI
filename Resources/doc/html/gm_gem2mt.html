@@ -826,29 +826,50 @@
     </p>
     <hr style="width: 100%; height: 2px;">
     <h2><a name="GEM2MT_MWINDOW"></a>3. GEM2MT Module Window</h2>
-    <p> The workflow of a system setup after having followed th GEM2MT Wizard
-      includes After you click "Finish" (to be enhanced): </p>
+    <p> The next steps of a RT system setup after worked through the GEM2MT
+      Wizard include: </p>
     <p> </p>
-    <p>(1) Page 1 of the GEM2MT module window will appear. Enter simulator name
-      / comment. </p>
     <p> </p>
-    <p>(2) There, set up the compositions and ID names of initial chemical
+    <p> </p>
+    <p style="margin-left: 40px;">(1) Page "Initial" of the GEM2MT module window
+      will appear. Enter the simulator task name and comment. Set up the
+      compositions, ID names and initial mass ratios of of initial chemical
       systems. </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;"> (3) In the "Initial" page, check the
+      initialization script with settings of temperature, pressure, ... (for all
+      modes); if in T mode, click 'Calculate' to finish the task.</p>
+    <p style="margin-left: 40px;">(4) In other than T modes, click "Calculate"
+      to check results of the execution of initialization script (fix it if
+      necessary or if errors occurred).&nbsp; </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;">(5) in the "Nodes" page, check the node
+      properties (temperature, pressure, node type, etc.) in the DiCp table; for
+      A, W, C modes, enter overall transport model parameters above the table,
+      then skip the "Fluxes" page. </p>
+    <p style="margin-left: 40px;">(6) in the "Fluxes" page (for S, F, B modes),
+      check the MPG composition table, then the MPG fluxes indexes, orders and
+      rates (rate constants). If needed, check the elemental compositions of
+      source fluxes and their indexes as sources in the respective nodes.&nbsp;
+    </p>
+    <p style="margin-left: 40px;">(7) in the ""Results" page, check the
+      monitoring script (modify if needed), check/edit legend names (for
+      plotting).&nbsp; </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;"> </p>
+    <p style="margin-left: 40px;">(8) If necessary, go again through the GEM2MT
+      wizard; otherwise, click 'Calculate' to run the simulations. At the very
+      first time, do not activate graphical output, only stop the simlation
+      after several tens of steps. Otherwise, watch the graphical monitoring of
+      the node profiles. </p>
     <p> </p>
-    <p> (3) Check the initialization script and settings (for all modes); if in
-      T mode, click 'Calculate' </p>
     <p> </p>
-    <p>(4) Check node properties table and (for S, F, B modes) the MPG fluxes
-      list; check monitoring scripts </p>
     <p> </p>
-    <p>(5) Click 'Calculate', and watch graphical monitoring of the node
-      profiles. </p>
-    <p> </p>
-    <p>The setup of the system composition and initial fluid/rock ratio can be
-      done in Window Page 1. </p>
-    <p> </p>
-    <p>Then setup of node composition Window Page 2 is used to define the
-      composition of each node, P-T and fluxes. </p>
     <br>
     <hr style="width: 100%; height: 2px;">
     <h3><a name="MWPAGE_1"></a>3.1. GEM2MT Window Page 1 (Initial)</h3>
