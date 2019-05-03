@@ -27,7 +27,7 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_14">
+  <layout class="QVBoxLayout" name="verticalLayout_12">
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="mouseTracking">
@@ -158,7 +158,7 @@ p, li { white-space: pre-wrap; }
         <item>
          <widget class="QRadioButton" name="pselS">
           <property name="text">
-           <string>&amp;S     Sequential reactors chain with waves (moving fluids or solids between reactors)</string>
+           <string>&amp;S     Sequential reactors chain with waves of moving fluids (or solids) at each step</string>
           </property>
           <property name="shortcut">
            <string>Alt+T</string>
@@ -402,11 +402,8 @@ p, li { white-space: pre-wrap; }
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;Set here the number of local-equilibrium nodes (boxes, volumes) for the transport model (except T mode), and the number of system definitions for initialization of nodes, or for the export to GEMS3K I/O files in T mode. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;Some options related to math scripts and file output of simulation results can also be configured.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Fira Sans Semi-Light'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2';&quot;&gt;Set here the number of local equilibrium nodes (boxes, volumes) for the transport model, and the number of system definitions for initialization of nodes, or for the export to GEMS3K I/O files in T mode. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignVCenter</set>
@@ -425,35 +422,32 @@ p, li { white-space: pre-wrap; }
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Main dimensions for the transport model </string>
+          <string>Main dimensions for the transport model (nodes and time steps) </string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0">
-           <widget class="QSpinBox" name="pnC">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          <item row="2" column="3" colspan="2">
+           <widget class="QDoubleSpinBox" name="pTaustep">
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
-            <property name="minimumSize">
-             <size>
-              <width>60</width>
-              <height>0</height>
-             </size>
+            <property name="decimals">
+             <number>3</number>
             </property>
             <property name="minimum">
-             <number>1</number>
+             <double>0.000000000000000</double>
             </property>
             <property name="maximum">
-             <number>9999</number>
+             <double>1000000000.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>100.000000000000000</double>
             </property>
             <property name="value">
-             <number>2</number>
+             <double>1.000000000000000</double>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="6" column="4">
            <widget class="QSpinBox" name="pntM">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -478,10 +472,10 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="1" column="1" colspan="4">
+          <item row="6" column="2" colspan="2">
            <widget class="QLabel" name="TextLabel1_3_2">
             <property name="text">
-             <string>ntM - Maximum number of time steps (default 1000, negative- unlimited)</string>
+             <string>Maximum number of time steps (default 1000) - ntM</string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
@@ -491,7 +485,14 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
+          <item row="2" column="2">
+           <widget class="QLabel" name="label_23">
+            <property name="text">
+             <string>Step value</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3" colspan="2">
            <widget class="QDoubleSpinBox" name="pTauFrom">
             <property name="layoutDirection">
              <enum>Qt::LeftToRight</enum>
@@ -513,50 +514,21 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="3" column="4">
-           <widget class="QLabel" name="label_23">
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_24">
             <property name="text">
-             <string>Step value</string>
+             <string>mtTau - Physical time:</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="3">
-           <widget class="QDoubleSpinBox" name="pTaustep">
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="decimals">
-             <number>3</number>
-            </property>
-            <property name="minimum">
-             <double>0.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000000000.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>100.000000000000000</double>
-            </property>
-            <property name="value">
-             <double>1.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
+          <item row="1" column="2">
            <widget class="QLabel" name="label_22">
             <property name="text">
              <string>Start value </string>
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_24">
-            <property name="text">
-             <string>Tau - Physical time:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" colspan="4">
+          <item row="0" column="0" colspan="2">
            <widget class="QLabel" name="TextLabel1">
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
@@ -565,7 +537,7 @@ p, li { white-space: pre-wrap; }
              <enum>QFrame::Plain</enum>
             </property>
             <property name="text">
-             <string>nC - Number of local equilibrium nodes (boxes, volumes) </string>
+             <string>nC - Number of nodes (boxes, volumes): </string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
@@ -575,17 +547,8 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_18">
-         <property name="title">
-          <string>Dimensions for initial chemical system definitions</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_13">
-          <item row="0" column="0">
-           <widget class="QSpinBox" name="pnIV">
+          <item row="1" column="0">
+           <widget class="QSpinBox" name="pnC">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -602,17 +565,56 @@ p, li { white-space: pre-wrap; }
              <number>1</number>
             </property>
             <property name="maximum">
-             <number>999</number>
+             <number>9999</number>
             </property>
             <property name="value">
              <number>2</number>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_18">
+         <property name="title">
+          <string>Dimensions of initial chemical systems (rocks and fluids)</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_13">
+          <item row="2" column="0">
+           <widget class="QLabel" name="TextLabel1_2_">
+            <property name="text">
+             <string>Lb - Number of user-defined formula units to set compositions in initial recipes</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QCheckBox" name="c_PvICi">
+            <property name="text">
+             <string>Use quantities of Independent Components to set compositions in initial recipes</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="2">
+           <widget class="QCheckBox" name="c_PsSYd">
+            <property name="text">
+             <string>Save generated SysEq records to the project data base </string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
            <widget class="QLabel" name="TextLabel1_3">
             <property name="text">
-             <string>nIV - Number of initial chemical system recipes, must not exceed nC</string>
+             <string>nIV - Number of initial chemical systems  (must not exceed nC)</string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
@@ -622,7 +624,7 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="2" column="1">
            <widget class="QSpinBox" name="pLb">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -647,33 +649,28 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QCheckBox" name="c_PvICi">
-            <property name="text">
-             <string>Use quantities of Independent Components to set compositions in  initial recipes</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="2">
-           <widget class="QCheckBox" name="c_PsSYd">
-            <property name="text">
-             <string>Save generated SysEq records to the project data base </string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="1">
-           <widget class="QLabel" name="TextLabel1_2_">
-            <property name="text">
-             <string>Lb - Number of user-defined formula units for setting compositions in initial recipes</string>
+           <widget class="QSpinBox" name="pnIV">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignVCenter</set>
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>0</height>
+             </size>
             </property>
-            <property name="wordWrap">
-             <bool>true</bool>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>999</number>
+            </property>
+            <property name="value">
+             <number>2</number>
             </property>
            </widget>
           </item>
@@ -683,13 +680,13 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QGroupBox" name="groupBox_4">
          <property name="title">
-          <string>Options </string>
+          <string>Options (math scripts and file output of simulation results)</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QCheckBox" name="c_PsSIA">
             <property name="text">
-             <string>Use Smart Initial Approximation in GEMS3K for faster calculations, wherever possible</string>
+             <string>Use Smart Initial Approximation in GEMS3K (for faster calculations)</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -733,7 +730,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QCheckBox" name="c_PsSmode">
             <property name="text">
-             <string>Use stepwise simulation mode ( for debugging, stops after each time step)</string>
+             <string>Use stepwise simulation mode (for debugging, stops after each time step)</string>
             </property>
            </widget>
           </item>
@@ -1181,13 +1178,14 @@ p, li { white-space: pre-wrap; }
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>140</height>
+          </size>
+         </property>
          <property name="text">
-          <string>This wizard page appears in S, F and B modes only and completes the setup of reactor/box RT simulation. 
-
-The number of boxes nC should have been defined at Step 2. 
-
- In S and F modes, the number of MPG should be nMGP = 1, and the number of fluxes nFD = nC.
-</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This wizard page appears in S, F and B modes only, and completes the setup of reactor/box RT simulation. &lt;/p&gt;&lt;p&gt;In S and F modes, the number of mobile phases (nMGP) are set to 1, and the number of fluxes definitions (nFD) set to nC+1. &lt;/p&gt;&lt;p&gt;In B mode, different number of mobile phases (nMGP) and flux definitions (nFD) can be defined (e.g. gas and liquid for two phases fluid flow).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -1197,50 +1195,9 @@ The number of boxes nC should have been defined at Step 2.
        <item>
         <widget class="QGroupBox" name="groupBox_7">
          <property name="title">
-          <string>Dimensions for fluxes of MPG (mobile phases group) </string>
+          <string>Dimensions for fluxes of mobile phases group (MPG) </string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <widget class="QSpinBox" name="pnPG">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="minimum">
-             <number>0</number>
-            </property>
-            <property name="maximum">
-             <number>40</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="TextLabel2_2">
-            <property name="text">
-             <string>nMGP - Number of mobile phases groups (MPG)</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignVCenter</set>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-            <property name="buddy">
-             <cstring>pnPG</cstring>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0">
            <widget class="QSpinBox" name="pnFD">
             <property name="sizePolicy">
@@ -1266,10 +1223,67 @@ The number of boxes nC should have been defined at Step 2.
             </property>
            </widget>
           </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="TextLabel2_2">
+            <property name="text">
+             <string>nMGP - Number of mobile phases groups (e.g. gas, liquid, etc.)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>pnPG</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="TextLabel2_3">
+            <property name="text">
+             <string>nSFD - Number of chemical element definitions for additional input/output sources </string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>pnSFD</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="pnPG">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>40</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="1">
            <widget class="QLabel" name="TextLabel2">
             <property name="text">
-             <string>nFD - Total number of flux definitions in the megasystem</string>
+             <string>nFD - Total number of flux rate definitions to be assigned to nodes</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -1307,35 +1321,19 @@ The number of boxes nC should have been defined at Step 2.
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="TextLabel2_3">
-            <property name="text">
-             <string>nSFD - Number of definitions of elemental sources </string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignVCenter</set>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-            <property name="buddy">
-             <cstring>pnSFD</cstring>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_19">
          <property name="title">
-          <string>Only S and F mode (sequential and flow-through reactors)</string>
+          <string>Phase to move from one box to another in S (sequential) and F (flow-through) mode</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
            <widget class="QCheckBox" name="moveAq">
             <property name="text">
-             <string>Move aqueous (&amp;aq) phase from one box to another</string>
+             <string>Move aqueous (&amp;aq) phase</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -1345,14 +1343,14 @@ The number of boxes nC should have been defined at Step 2.
           <item>
            <widget class="QCheckBox" name="moveGas">
             <property name="text">
-             <string>Move gas/fluid/plasma (&amp;gas) phase(s) from one box to another</string>
+             <string>Move gas/fluid/plasma (&amp;gas) phase(s) </string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="moveSolid">
             <property name="text">
-             <string>Move all &amp;solids together ('dialysis bag') from one box to another</string>
+             <string>Move all &amp;solids together ('dialysis bag') </string>
             </property>
            </widget>
           </item>
@@ -1362,7 +1360,7 @@ The number of boxes nC should have been defined at Step 2.
        <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string/>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Flux setup &lt;/p&gt;&lt;p&gt;In S mode, the flux can be set by the initial mass of the fluid (fluid/rock ratio in Initial tab).&lt;/p&gt;&lt;p&gt;In F mode, the flux rate is set in the math script (Initial tab) and by the quantities of phases in MGP (Flux tab).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
