@@ -99,9 +99,147 @@
     concentrations or amounts of phases through the node profile with time can
     be graphically monitored at each time step (wave) or logged to files in VTK
     format.
+
     <p>Relevant features of the main types of reactive transport simulations are
       summarized below. </p>
     <br>
+
+    <p>The S and F modes are normally used for simulating hydrothermal
+      fluid-rock interaction by infiltration of fluid into the rock, which leads
+      to development of alteration zones. To prepare for such simulations, two
+      Compos (PCO) records are usually created in thermodynamic database mode,
+      namely one for fresh fluid such as seawater (let us call it "Fluid") and
+      another for the fresh rock (let us call it "Rock"), best covering the same
+      list of chemical elements (if data are not available for some elements
+      present in the other initial compositions then simply put 1e-9 mol for
+      that element). Such Compos records contain detailed information on
+      compositions of the initial rock and fluid, but can be used each as a
+      single entity for defining their relative proportions in system
+      compositions. Next, a parent system record containing the fluid and the
+      rock is to be created in SysEq under temperature and pressure of interest,
+      to be used later on for creating test systems reproducing chemical state
+      of the fluid and of the rock, as well as creating a new GEM2MT record
+      (object). A simulation setup in S or F modes consists typically of one
+      node of source fluid and about 100 nodes of rock that will be interacted
+      with fluid at hydrothermal conditions, all to be set first using the
+      GEM2MT wizard when creating or re-making the GEM2MT object. </p>
+    <h4>"Sequential reactor chain" S mode </h4>
+    <p>In this mode, we can simulate a "wave" of a fluid that will pass through
+      each of the rock nodes once per step (i.e., a wave consists of ca. 100
+      steps). Many "waves" are possible.&nbsp; </p>
+    <ol>
+      <li>Under GEM2MT, create a new record and select the parent system
+        containing the rock and the fluid created in SysEq ("FRgem2mt").</li>
+      <li>In Step 1 of the wizard, select the S mode.</li>
+      <li>In Step 2 of the wizard, set the number of nodes (nC= 101) and the
+        maximum number of steps (in this case, "waves", i.e. 1000). Select 2 for
+        the number of initial chemical system recipes, which will allow us to
+        define the initial compositions and masses of the fluid and rock initial
+        systems. Optionally, we can set the number of user-defined formula units
+        that will be used for augmenting initial bulk elemental compositions of
+        fluid and rock.</li>
+      <li>In Step 4, we select "Move aqueous fluid".</li>
+      <li>In Step 5, we select P, T, V, Initial system, Node type, MPG flux, and
+        Initial mass.</li>
+      <li>In Step 6, we select the variables you want to plot in each node after
+        each "wave" (i.e. n1vPH for volumes of minerals).</li>
+    </ol>
+    <p>After completing the wizard, we get to the GEM2MT module window "Initial"
+      page.&nbsp; There we need to enter the names of rock and fluid,
+      temperature, pressure, mass of fluid and rock, and the initial composition
+      of the fluid and the rock. This can be done by copy-pasting (transposed)
+      the bulk elemental composition vectors from the test systems (SysEq
+      records) reproducing the fluid and the rock, respectively, or from Compos
+      records "Fluid" and "Rock". It is important to set realistic fluid/rock
+      mass ratio, usually somewhere between 10 and 1000. As an example:</p>
+    <p>In the first row (index 0), enter the name of system "Fluid" or similar,
+      and add a mass of 0.9 kg. </p>
+    <p>In the second row (index 1), enter the name of system "Rock" or similar,
+      and add a mass of 0.1 kg. </p>
+    <p>In both cases, set temperature (e.g. 250 C) and pressure (e.g. 500 bar)
+      for equilibrium conditions. </p>
+    <p>Next in the mICb table of quantity/concentration of IC in initial
+      systems, enter (copy-paste) the concentration and units for each element
+      to define the compositions of rock and fluid in the corresponding rows. </p>
+    <p>Optionally, type user-defined formulae (e.g. "SiO2", "CO2", etc.) and
+      enter their units and quantities, which will be added (after unit
+      conversions) to the bulk elemental compositions of initial systems for
+      fluid and rock. </p>
+    <p>The initialization script (visible in the lower part of the "Initial"
+      page) should have been created by the wizard and normally does not need
+      editing in the S mode. Click the "Calculate" toolbar button and (at the
+      very first time) do not plot the nodes. Stop calculation after a few
+      "waves" and start it again with plotting.&nbsp; </p>
+    <h4>Flow-through reactor chain (F) mode</h4>
+    <p>In this mode, we can simulate the simultaneous transport of (reacted)
+      fluid in one direction through all nodes from one node to the next. This
+      mode requires the definition of equal zero-order fluxes of fluid
+      connecting each node with the next one; equal rates of the fluid flux
+      should be specified (in mass/time (step) units). The initial setup for F
+      mode is similar to that for S mode, with an important difference that the
+      same mass of fluid (corresponding to the effective fluid/rock mass ratio)
+      should be present in all nodes containing the rock at the initial step.
+      For example, in the F mode, we may wish to transport 50 g of fluid per
+      step simultaneously through all nodes, which means flux of 50g/step rate,
+      applied to nodes containing 50 g of rock and 500 g of fluid. In other
+      words, at each (time) step, about one tenth of fluid in each box is
+      transported to the next box. The very first box in the chain is declared a
+      "constant-flux source) and it contains only "fresh" fluid but no rock; the
+      very last box is declared a "constant-flux sink".&nbsp; </p>
+    <ol>
+      <li>Under GEM2MT, we create a new record selecting the parent system
+        containing the rock and fluid created in SysEq ("FRgem2mt").</li>
+      <li>In Step 1 of the wizard, we select the F mode.</li>
+      <li>In Step 2 of the wizard, we set the number of nodes (e.g. nC= 101) and
+        a maximum number of (time) steps (e.g. 1000, note that equilibria in all
+        boxes in the chain are re-calculated (and can be plotted) in one time
+        step). Enter 1 for the number of user-defined formula units (to add at
+        least H2O to the rock initial composition). </li>
+      <li>In Step 5, we set P, T, V, Initial system, Node type, MPG flux, and
+        Initial mass.</li>
+      <li>In Step 6, we select the output variables you want to plot in each
+        nodes (i.e. n1vPH for volumes of minerals).</li>
+    </ol>
+    <p>After completing the wizard, we get to the GEM2MT module window "Initial"
+      page.&nbsp; There we need to enter the names of rock and fluid initial
+      systems, their temperature, pressure, masses, and the initial compositions
+      of the fluid and the rock. This can be done by copy-pasting (transposed)
+      the bulk elemental composition vectors from the test systems (SysEq
+      records) reproducing the fluid and the rock, respectively, or from Compos
+      records "Fluid" and "Rock". It is important to set realistic fluid/rock
+      mass ratio, usually somewhere between 10 and 1000. As an example:
+    </p>
+    <p>In the first row (index 0), enter the name of system "Fluid" or similar,
+      and add a mass of 1 kg. </p>
+    <p>In the second row (index 1), enter the name of system "Rock" or similar,
+      and add a mass of 1 kg. </p>
+    <p>In both cases, set temperature (e.g. 250 C) and pressure (e.g. 500 bar)
+      for equilibrium conditions. </p>
+    <p>Next in the mICb table of quantity/concentration of IC in initial
+      systems, enter (copy-paste) the concentration and units for each element
+      to define the compositions of rock and fluid in the corresponding rows. </p>
+    <p>Optionally, type user-defined formulae (e.g. "H2O", "CO2", etc.) and
+      enter their units and quantities, which will be added (after unit
+      conversions) to the bulk elemental compositions of initial systems for
+      fluid and rock. Check that the composition of the rock also contains
+      enough H2O to have fluid after equilibration in desired fluid/rock mass
+      ratio. </p>
+    <p>The initialization script (visible in the lower part of the "Initial"
+      page) should have been created by the wizard. In this script, we check
+      that the Flux Rate (FDLf) is set to the desired value (e.g. 1). This
+      script will then assign the same flux in all the nodes/boxes.</p>
+    <p>Under tab "Fluxes", we need to set the amount of phase(s) that are
+      transported in the flux (i.e., the composition of the flux in terms of
+      mass of phase in its outgoing box). For defining unit flux as composed of
+      50 g aqueous solution phase, enter 0.05 G of aq_gen phase for quantities
+      of phases in MGP column (the wizard already suggests "aq" as the name of
+      this flux composition or "mobile phase group" MPG).</p>
+    <p>Click the "Calculate" toolbar button and (at the very first time) do not
+      plot the nodes. Stop calculation after a few "waves", then start it again
+      with plotting.&nbsp; </p>
+    <p><br>
+    </p>
+    <p> </p>
     <hr style="width: 100%; height: 2px;">
     <p> </p>
     <h3><a name="GEM2MT_S_MODE"></a>1.1. Sequential reactor chains and waves (S
