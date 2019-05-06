@@ -667,87 +667,158 @@ void GEM2MTWizard::setTScript( bool c_PvMSt_checked )
         ScriptChange( 0 );
 }
 
-// This function assembles the nodes/boxes initialization script
+// This function assembles the nodes and fluxes initialization and modification script
+//   Fixed by DK at CSM on May 6, 2019
 //
-void GEM2MTWizard::ScriptChange(int )
+void GEM2MTWizard::ScriptChange( int )
 {
     QString ret;// = textEquat1->toPlainText();
 
     ret += "if( ct=0 ) begin \n"
-           "$Initialization script \n"
-           " if( qc < nC ) begin \n";
+           "$ Initialization part at zero (time) step\n"
+           " if( (nC > 0) & (qc < nC) ) begin \n"
+           "$  Initial setup of cells (nodes, boxes)\n";
 
     if( chDiCp0->isChecked() ) // Initial system variant assignment to nodes
-     ret += "  DiCp[qc][0] =: ( qc=0 ? 0 : ( nIV > 1 ?  1 : 0 ) );\n";
+     ret +=  "$  assuming that the rock is the last initial system\n"
+             "   DiCp[qc][0] =: ( qc=0 ? 0 : ( nIV > 1 ?  1 : 0 ) );\n";
 
     if( chDiCp1->isChecked() ) // Initial assignment of node type
     {
         if( pselS->isChecked() || pselF->isChecked() )
-           ret += "  DiCp[qc][1] =: ( qc=0 ? ( nSFD=1 ? 0 : 3 ) : 0 ); \n";
-        else
-            ret += "$ Source: node 0, more: ( qc=0 | qc=xx )? ... \n"
+//           ret += "  DiCp[qc][1] =: ( qc=0 ? ( nSFD=1 ? 0 : 3 ) : 0 ); \n";
+        {
+            ret += "$   for S or F mode, node 0 is set to a constant-flux source\n"
+                   "  DiCp[qc][1] =: ( qc=0 ? 3: 0 ); \n";
+        }
+        else {
+            ret += "$   Node 0 set as source, more sources can be set as: ( qc=0 | qc=XX )?...\n"
                    "  DiCp[qc][1] =: ( qc=0 ? 3 : 0 ); \n";
-        ret += "  DiCp[qc][1] =: (  qc<nC-1 ? DiCp[qc][1] : (-3) );\n";
+        }
+        ret +=  "$   Other nodes normal, the last one set as a constant-flux sink\n"
+                "  DiCp[qc][1] =: (  qc<nC-1 ? DiCp[qc][1] : (-3) );\n";
     }
 
     if( chP->isChecked() )   // Initial node pressure, bar (for GEM)
-    { ret += "   StaP[qc][0] =: PTVi[(DiCp[qc][0])][0] + qc*0;\n";
+    { ret +=    "$  setting initial node pressures (change qc*0 to set a gradient)\n"
+                "   StaP[qc][0] =: PTVi[(DiCp[qc][0])][0] + qc*0;\n";
       if( pselS->isChecked() || pselF->isChecked() )
-       ret += "   Pval[qc] =: StaP[qc][0];\n";
+         ret += "   Pval[qc] =: StaP[qc][0];\n";
     }
 
     if( chT->isChecked() )   // Initial node temperature, C (for GEM)
-    {  ret += "   StaP[qc][1] =: PTVi[(DiCp[qc][0])][1] + qc*0;\n";
+    {  ret +=   "$  setting initial node temperatures (change qc*0 to set a gradient)\n"
+                "   StaP[qc][1] =: PTVi[(DiCp[qc][0])][1] + qc*0;\n";
        if( pselS->isChecked() || pselF->isChecked() )
          ret += "   Tval[qc] =: StaP[qc][1];\n";
     }
-    if( chV->isChecked() )    // Volume constraint for GEM (usually 0)
+    if( chV->isChecked() )    // Volume constraint for GEM (usually 0) - change to AMR on water vapor?
      ret += "   StaP[qc][2] =: PTVi[(DiCp[qc][0])][2];\n";
 
     if( chRMass->isChecked() ) // Initial (reactive) mass of the node
      ret += "   StaP[qc][3] =: PTVi[(DiCp[qc][0])][3];\n";
 
     if( chHydP0->isChecked() ) // Initial total volume of the node, m3
-     ret += "   HydP[qc][0] =: ADpar[1];\n";
+     ret +=  "$  Initial total volume of the node, m3 (for porosity)\n"
+             "   HydP[qc][0] =: ADpar[1];\n";
 
     if( chHydP1->isChecked() ) // Initial advection velocity
-     ret += "   HydP[qc][1] =: ADpar[2];\n";
+     ret +=  "$  Initial advection velocity, m/s\n"
+             "   HydP[qc][1] =: ADpar[2];\n";
 
     if( chHydP2->isChecked() )  // Initial effective porosity
-     ret += "   HydP[qc][2] =: ADpar[3];\n";
+     ret +=  "$  Initial effective porosity\n"
+             "   HydP[qc][2] =: ADpar[3];\n";
 
     if( chHydP3->isChecked() )  // initial effective permeability
-     ret += "   HydP[qc][3] =: ADpar[4];\n";
+     ret +=  "$  Initial effective permeability\n"
+             "   HydP[qc][3] =: ADpar[4];\n";
 
     if( chHydP4->isChecked() )   // Initial specific longitudinal dispersivity
-     ret += "   HydP[qc][4] =: ADpar[5];\n";
+     ret +=  "$  Initial specific longitudinal dispersivity\n"
+             "   HydP[qc][4] =: ADpar[5];\n";
 
     if( chHydP5->isChecked() )   // Initial general diffusivity
-     ret += "   HydP[qc][5] =: ADpar[6];\n";
+     ret +=  "$  Initial general diffusivity\n"
+             "   HydP[qc][5] =: ADpar[6];\n";
 
     if( chHydP6->isChecked() )  // Initial tortuosity factor
-     ret += "   HydP[qc][6] =: ADpar[7];\n";
+     ret +=  "$  Initial tortuosity factor\n"
+             "   HydP[qc][6] =: ADpar[7];\n";
 
-    ret += " end \n";
+    ret +=  " end \n"
+            "$ end of initialization of cells (nodes, boxes)\n";
 
     if( chFlux->isChecked() )
-    { ret +=  "   if( qc < nFD ) begin \n"
-             "     FDLi[qc][0] =: ( qc=0? ( nSFD=1?(-1):0): FDLi[qc-1][1] ); \n"
-             "     FDLi[qc][1] =: ( qc < nC-1+nSFD ? FDLi[qc][0]+1 : (-1) ); \n"
-//             "     FDLf[qc][0] =: 1;\n"
-             "     FDLf[qc][0] =: 0;\n"          // Debugging 28.11.2011 DK
-             "$   Flux rate can be set below\n";
+    {
+        ret +=  "   if( (nFD > 0) & (qf < nFD) ) begin \n"
+                "$   initialisation of tables for properties of fluxes\n"
+                "     if( qf = qc ) begin\n"
+                "$    Setting the chain of unidirectional fluxes connecting boxes\n";
+        if( pselS->isChecked() )
+        {
+            ret +=  "$     flux from node/box\n"
+                    "      FDLi[qf][0] =: ( qf=0? 0: FDLi[qf-1][1] ); \n"
+                    "$     flux to node/box\n"
+                    "      FDLi[qf][1] =: ( (qf<(nC-1))? qf : (-1) ); \n"
+                    "$     flux order zero (constant mass per step)\n"
+                    "      FDLf[qf][0] =: 0;\n"
+                    "$     flux rate 1 (the whole fluid mass)\n"
+                    "      FDLf[qf][1] =: 1;\n";
+        }
+        if( pselF->isChecked() )
+        {
+            ret +=  "$     flux from node/box\n"
+                    "      FDLi[qf][0] =: ( qf=0? 0: FDLi[qf-1][1] ); \n"
+                    "$     flux to node/box\n"
+                    "      FDLi[qf][1] =: ( (qf<(nC-1))? qf : (-1) ); \n"
+                    "$     flux order 1 (proportional to source MPG mass)\n"
+                    "      FDLf[qf][0] =: ( qf=0? 0: 1);\n"
+                    "$     flux rate constant\n"
+                    "      FDLf[qf][1] =: ( qf=0? 1: 0.1);\n";
+        }
         if( pselB->isChecked() )
-           ret+=  "     FDLf[qc][1] =: 0.1;\n";
-        else
-           ret+=  "     FDLf[qc][1] =: 1;\n";
-      ret+=  "    end \n";
+        {
+            ret +=  "$     flux from node/box\n"
+                    "      FDLi[qf][0] =: ( qf=0? 0: FDLi[qf-1][1] ); \n"
+                    "$     flux to node/box\n"
+                    "      FDLi[qf][1] =: ( (qf<(nC-1))? qf: (-1) ); \n"
+                    "$     flux order 1 (proportional to source MPG mass)\n"
+                    "      FDLf[qf][0] =: ( qf=0? 0: 1);\n"
+                    "$     flux rate constant\n"
+                    "      FDLf[qf][1] =: ( qf=0? 1: 0.1);\n";
+         }
+//        "     FDLi[qc][0] =: ( qc=0? ( nSFD=1?(-1):0): FDLi[qc-1][1] ); \n"
+//        "     FDLi[qc][1] =: ( qc < nC-1+nSFD ? FDLi[qc][0]+1: (-1) ); \n"
+//             "     FDLf[qc][0] =: 1;\n"
+//        "     FDLf[qc][0] =: 0;\n"          // Debugging 28.11.2011 DK
+//        ret +=  "     FDLf[qc][1] =: 1;\n";
+
+         ret += "  end\n"
+               "$ end of setting a chain of 1-dir fluxes connecting boxes\n";
+
+         ret += "     if( qf > nC-1 ) begin\n"
+                "$    additional fluxes (elemental source or arbitrary fluxes)\n"
+                "     FDLi[qf][0] =: (nSFD > (qf - qc)? qc-qf: 0 );\n"
+                "$    please change 0 above and below this line to a desired source or receiver node index\n"
+                "     FDLi[qf][1] =: 0;\n"
+                "$    flux order (0 = constant mass per step, 1 = ~ to mass of MPG in source), change as desired\n"
+                "     FDLf[qf][0] =: 0;\n"
+                "$    flux rate 1 - change as desired\n"
+                "     FDLf[qf][1] =: 1;\n"
+                "     end\n"
+                "$    end of additional fluxes\n";
+         ret+=  "  end\n"
+                "$ end of initialization of fluxes\n";
     }
     ret += "end\n"
-           "$else\n"
+           "$ end of initialization at ct=0\n"
+           "$\n$else\n"
+           "$ optional modifications at (time) step ct > 0\n"
            "$ begin \n"
-           "$ Optional changes at ct > 1 ... \n"
+           "$  add operators here \n"
            "$ ... \n"
+           "$ end of optional modifications at (time) steps ct > 0\n"
            "$ end \n";
 
     pScript_t->setPlainText(ret);

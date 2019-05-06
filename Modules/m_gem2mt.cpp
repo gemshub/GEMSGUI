@@ -155,7 +155,7 @@ aObj[o_mtchbr].SetPtr( &mtp->Lsf );  /* l10 */
     aObj[o_mtjdi].SetPtr( &mtp->jdi );
     aObj[o_mtide].SetPtr( &mtp->ide );
     aObj[o_mtct_].SetPtr( &mtp->ct );
-    aObj[o_mtrei5].SetPtr( &mtp->rei5 );
+    aObj[o_mtqf].SetPtr( &mtp->qf );
     aObj[o_mtct].SetPtr( &mtp->cT );
     aObj[o_mtcp].SetPtr( &mtp->cP );
     aObj[o_mtcv].SetPtr( &mtp->cV );

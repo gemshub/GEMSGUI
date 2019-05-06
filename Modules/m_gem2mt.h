@@ -307,7 +307,7 @@ double  (*FDLf)[4]; // [nFD][4] Part of the flux defnition list (flux order, flu
    *etext,              // internal
    *tprn;              // internal
 
- //work data
+ //work data indices/counters
  long int
    ctm,    // current CSD #
    cnv,    //  current restriction variant #
@@ -320,7 +320,7 @@ double  (*FDLf)[4]; // [nFD][4] Part of the flux defnition list (flux order, flu
    jdi,   // current index of diffusing IC
    ide,   // current index of diffusing electrolyte
    ct,    // actual time iterator
-   rei5
+   qf     // current index of flux (in the flux table)
    ;
 
  double

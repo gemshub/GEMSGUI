@@ -602,6 +602,7 @@ void TGEM2MT::BoxFluxTransportStart()
     mtp->oTau =  mtp->Tau[START_];
     // mtp->cTau = mtp->Tau[START_];
     mtp->ct = 0;
+    mtp->qf = 0;
 
 #ifndef IPMGEMPLUGIN
     mtp->gfc = (double *)aObj[ o_mtgfc].Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);

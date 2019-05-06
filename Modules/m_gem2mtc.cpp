@@ -745,11 +745,12 @@ void TGEM2MT::CalcStartScript()
   if( mtp->PvMSt  == S_OFF  )
     return;
 
-  // generate Ti, Pi, Vi, DiCp, HydP  arrays
+  // generate Ti, Pi, Vi, DiCp, HydP, ... and fluxes arrays
     for( long int ii=0; ii< max( mtp->nC, mtp->nFD ); ii++)
     {
-      mtp->jt = min( ii, (mtp->nC-1));
-      mtp->qc = ii;
+      mtp->jt = min(ii, mtp->nC-1);
+      mtp->qc = min(ii, mtp->nC-1);  // index of node
+      mtp->qf = min(ii, mtp->nFD-1);  // index of flux
       rpn[0].CalcEquat();
     }
 
