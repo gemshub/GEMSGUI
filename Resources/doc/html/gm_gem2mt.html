@@ -7,7 +7,7 @@
     <meta name="description" content="Version 3.0.0-PSI">
   </head>
   <body>
-    <h1><img src="gems1.png" width="48" height="48" align="left"> <font color="#000066">
+    <h1><img src="gems1.png" height="48" align="left" width="48"> <font color="#000066">
         GEM-Selektor version 3</font> </h1>
     <h2>Reactive Mass Transport (GEM2MT) Module</h2>
     <hr width="100%" size="2">
@@ -99,8 +99,11 @@
     concentrations or amounts of phases through the node profile with time can
     be graphically monitored at each time step (wave) or logged to files in VTK
     format.
-    <p>Below, some relevant features of main types of reactive transport
-      simulations are summarized. </p>
+
+    <p>Relevant features of the main types of reactive transport simulations are
+      summarized below. </p>
+    <br>
+
     <p>The S and F modes are normally used for simulating hydrothermal
       fluid-rock interaction by infiltration of fluid into the rock, which leads
       to development of alteration zones. To prepare for such simulations, two
@@ -241,11 +244,11 @@
     <p> </p>
     <h3><a name="GEM2MT_S_MODE"></a>1.1. Sequential reactor chains and waves (S
       mode)</h3>
-    <p>Such simulations are useful for predicting how the rock alteration zones
-      develop upon a progressive infiltration of the fluid supplied from a
-      constant source (e.g. a large fracture). This is a good model for some
-      steady-state irreversible processes such as weathering, infiltration
-      metasomatosis, evaporation of seawater etc.</p>
+    <p>Such simulations are useful for predicting the development of rock
+      alteration zones upon progressive infiltration of a fluid supplied from a
+      constant source (e.g. a large fracture). This model is a good
+      approximation for steady-state irreversible processes such as weathering,
+      metasomatism, evaporation of seawater etc.</p>
     <p>The simplest case is when there is only one "reactor" (box) at given
       temperature T and pressure P, in which initially only rock of known bulk
       composition is present at a prescribed initial mass. At step 0, the fluid
@@ -255,29 +258,30 @@
       (sampled). At step 1, the reacted fluid in the box is replaced by the
       "fresh" fluid at the same fluid-rock mass ratio, and equilibrated again.
       The loop is repeated many times, allowing the user to follow how the phase
-      composition of altered rock changes along the way. Note that this type of
-      simulation can be done in the <a href="gm_proces.html">Process module</a>
+      composition of the altered rock changes along the way. Note that this type
+      of simulation can be done in the <a href="gm_proces.html">Process module</a>
       of GEM-Selektor as the <a href="gm_proces.html#PROCESS_R_MODE">leaching-type
         "flow-through" reactor 'R' mode</a>.&nbsp; </p>
     <p>The GEM2MT module permits to set up and run a more natural and flexible
-      sequential scheme consisting of many "reactors" (boxes) arranged in a 1-D
-      chain, where the fluid (water) moves from the previous to the next box.
-      The boxes may, in principle, have different temperatures and pressures, if
-      desired. The constant composition "fresh" fluid enters the very first box
-      at a prescribed fluid-rock mass ratio and reacts there. The equilibrated
-      fluid is taken to the next box (at prescribed fluid-rock ratio) and reacts
-      there, and so on until the last box is reacted. This completes a so-called
-      "wave". <br>
+      sequential scheme consisting of many "reactors" (nodes, boxes) arranged in
+      a 1-D chain, where the fluid (water) moves from the previous to the next
+      box. The boxes may, in principle, have different rock compositions,
+      temperatures and pressures, if desired. "Fresh" fluid with a constant
+      composition enters the first box at a prescribed initial fluid-rock mass
+      ratio and equilibrates with the rock. The equilibrated fluid is then moved
+      to the next box (at prescribed fluid-rock ratio) and reacts there, and so
+      on until the last box is reacted. This completes a so-called "wave". <br>
     </p>
     <img src="sequent-reactors.png" alt="sequential reactors" title="Sequential reactors scheme"
       style="width: 360px; height: 101px;">
-    <p>Any number of SR "waves" can be performed. At the beginning of second
-      wave, the "fresh" fluid is put into the first box with the reacted rock
-      composition kept after the first "wave". After equilibration, the fluid is
-      taken into the second box to react with the rock already reacted at the
-      first "wave", and so on. After many "waves", the formation and propagation
-      of rock alteration zones can be followed by plotting amounts of phases in
-      all boxes after each "wave".</p>
+    <p>Any number of sequential reactor "waves" (which correspond to steps) can
+      be performed. At the beginning of the second wave, the "fresh" fluid is
+      put into the first box with the reacted rock composition remaining after
+      the first "wave". After equilibration, the fluid is taken into the second
+      box to react with the rock already reacted with the the first "wave", and
+      so on. After many "waves", the formation and propagation of rock
+      alteration zones can be followed by plotting amounts of phases in all
+      boxes after each "wave".</p>
     <p><br>
     </p>
     <hr style="width: 100%; height: 2px;">
@@ -285,33 +289,38 @@
     <h3><a name="GEM2MT_F_MODE"></a>1.2. Flow-through box-flux sequences (F, B
       modes)</h3>
     <p>In the F mode, the 1-D reactive transport column is represented by many
-      equal-size boxes that may have different temperatures and pressures, if
-      desired. The first box must be coded as a constant-flux (Cauchy) source
-      (3), and the last box - as a constant-flux sink (-3); all the boxes
-      in-between are normal local-equilibrium systems (1). Equal zero-order
-      fluxes of aqueous fluid "aq" (not too high!) should be set between boxes 0
-      and 1, 1 and 2, 2 and 3, ... until nC-2 and nC-1 (sink). </p>
-    <p>Composition of the "aq" MPG (mobile phase group) should be defined in the
-      PGT table (units in UMGP column) in the "Fluxes" page of GEM2MT window. A
-      column in PGT table defines quantities of phases moved from the source box
-      in one mole of the flux. If there is another MPG defined, e.g. "gas", then
-      two-phase transport between boxes can be arranged.&nbsp; </p>
-    <p>At a unit time step, a given mass of "aq" flux (reacted aqueous fluid) is
-      moved into the next box replacing there the equivalent mass of fluid that
-      moves to the next box and so on simultaneously (fresh fluid from the
+      equal-size boxes that may have different rock compositions, temperatures
+      and pressures, if desired. The first box must be coded as a constant-flux
+      (Cauchy) source (3), and the last box - as a constant-flux sink (-3); all
+      the boxes in-between are normal local-equilibrium systems (1). Equal
+      zero-order fluxes of aqueous fluid "aq" (not too high!) should be set
+      between boxes 0 and 1, 1 and 2, 2 and 3, ... until nC-2 and nC-1 (sink).
+      These values are initialized automatically and can be modified from the
+      math script in the "Initial" page of the GEM2MT window and found in the
+      "Nodes" page.</p>
+    <p>In the "Fluxes" page of the GEM2MT window, the quantity of the "aq"
+      (aqueous fluid) mobile phase group (MPG) should be defined in the PGT
+      table and units in UMGP column. This corresponds to the mass or
+      concentration of fluid moved at each time step. A column in the PGT table
+      defines quantities of phases moved from the source box in one mole of the
+      flux. If there is another MPG defined, e.g. "gas", then two-phase
+      transport can be arranged between boxes.&nbsp; </p>
+    <p>At each unit time step, a given mass of reacted aqueous fluid is moved
+      into the next box replacing there the equivalent mass of fluid that moves
+      simultaneously to the next box and so on (fresh fluid from the
       constant-flux source moves from box 0 into box 1, and the same mass of
       reacted fluid moves away from the last box). In fact, this simultaneous
       transport is consistently performed by the built-in integrator of the ODE
       system of mass balance equations for all elements in all nodes. </p>
     <p>The mass of fluid moved by the flux between nodes n and n-1 is defined by
-      the flux composition, flux rate and flux order. The simplest zero-order
-      (constant) flux moves 1 mol of its composition times the flux rate (set in
-      the FDLf table on "Fluxes" page). The rate 0.1 means that 0.1 mol of the
-      flux composition moves per step (unit time). For the 1st order flux, the
-      rate 0.1 means that 0.1 mol of flux composition times the mass of its
-      source MPG (in kg) is moved per step. Such a flux will automatically
-      decrease if the mass of its source phase(s) in the source box decreases,
-      and vice versa.&nbsp; </p>
+      the quantities of phases in MGP (or flux composition), the flux rate and
+      the flux order choosen. The simplest zero-order (constant) flux moves 1
+      mol of its composition times the flux rate (set in the FDLf table on
+      "Fluxes" page). The rate 0.1 means that 0.1 mol of the flux composition
+      moves per step (unit time). For the 1st order flux, the rate 0.1 means
+      that 0.1 mol of flux composition times the mass of its source MPG (in kg)
+      is moved per step. Such a flux will automatically decrease if the mass of
+      its source phase(s) in the source box decreases, and vice versa.&nbsp; </p>
     <p>After the transport step, the equilibrium speciation is computed in all
       nodes by the GEM algorithm, and the next iteration of transport occurs
       followed by the next equilibration in all boxes, and so on, until the
@@ -339,8 +348,8 @@
     <p> </p>
     <h3><a name="GEM2MT_A_MODE"></a>1.3. One-dimensional reactive transport (A,
       C, W, D modes)</h3>
-    <p>The GEM2MT module allows the user to set up and run simplified 1-D
-      simulations of reactive transport in porous media using the
+    <p>The GEM2MT module allows the user to set up and run simplified&nbsp;
+      simulations of 1-D reactive transport in porous media using the
       finite-difference advection-dispersion algorithm (classical A mode and
       implicit Crank-Nicolson C mode TBD) for advection-dominated cases. For the
       diffusion-dominated transport, the random-walk algorithm (W mode, also
@@ -355,31 +364,34 @@
       time or number of time steps is reached. The profiles of amounts of phases
       or aqueous species of interest can be plotted after each time step (or
       exported to VTK files). </p>
-    <p>By no means this simple implementation of 1-D reactive transport is
+    <p>This simple implementation of 1-D reactive transport is by no means
       designed to compete with popular coupled codes such as PFLOTRAN,
-      OpenGeoSys or CRUNCH. Rather, the purpose of A, C, W modes in GEM2MT is
-      education and testing of reactive system behavior before performing heavy
-      computations of 2-D or 3-D cases using coupled RT codes on parallel
+      OpenGeoSys or CRUNCH. The purpose of A, C, W modes in GEM2MT is rather in
+      the education and testing of reactive system behavior before performing
+      heavy computations of 2-D or 3-D cases using coupled RT codes on parallel
       high-performance computer hardware. </p>
-    <p>One particular interest is to compare the megasystem evolution between
-      1-D box-flux (mode F, B) models with ODE integration and explicit fluxes,
-      and more rigorous hydraulic advection-dispersion (diffusion) models with
-      concentration gradients (of total dissolved elements or aqueous species)
-      solved by PDE intergration (A,C modes) or stochastic simulation of
-      Brownian movement of particles (W mode). </p>
+    <p>Of particular interest is the inspection of the evolution of megasystems.
+      This involves the comparison between 1-D box-flux (mode F, B) models with
+      ODE integration and explicit definition of fluxes, with the more rigorous
+      models that consider hydraulic advection-dispersion (diffusion). The
+      latter include concentration gradients (of total dissolved elements or
+      aqueous species) solved by PDE intergration (A,C modes) or stochastic
+      simulation of Brownian movement of particles (W mode). </p>
     <p>The main difference between the box-flux models and the hydraulic
       advection-dispersion-diffusion models is the choice of transport
       parameters (defined initial state for all boxes or nodes is required in
       all cases). While in B or F modes, the zero- or 1st order fluxes must be
-      set by MPG composition, flux rate or rate constant, in A,C,W modes,
-      initial transport parameters in all nodes must be defined. These include
-      porosity, permeability, advection velocity, dispersivity, tortuosity and
-      diffusivity (common or individual diffusion coefficients). </p>
+      set by the MPG composition, flux rate or rate constant, the initial
+      transport parameters must be defined in all nodes&nbsp;in A,C,W modes.
+      These include porosity, permeability, advection velocity, dispersivity,
+      tortuosity and diffusivity (common or individual diffusion coefficients).
+    </p>
     <p>These parameters can be conveniently set upon initialization of the RT
-      problem using the initialization script. If needed, some parameters in
-      some nodes may change in the process (e.g. due to mineral dissolution or
-      precipitation, porosity and permeability may change), which has to be
-      programmed in the last part of initialization script. &nbsp; <br>
+      problem using the initialization math script in the "Initial" page of the
+      GEM2MT window. If needed, some parameters in some nodes may change in the
+      process (e.g. due to mineral dissolution or precipitation, porosity and
+      permeability may change), which has to be programmed in the last part of
+      the initialization script. &nbsp; <br>
     </p>
     <p><br>
     </p>
@@ -535,12 +547,12 @@
       window. </p>
     <p> </p>
     <p> <span style="font-weight: bold;">nIV</span> is the number of initial
-      chemical system definitions that are needed for the initial distribution
-      into all nodes to define the time-zero state of the reactive mass
-      transport problem. This distribution must be set in the "DiCp" vector,
-      which can be filled out upon an execution of the math script for node
-      initialization. In many cases, this script can be created by this wizard,
-      then perhaps modified by the user before the GEM2MT run.</p>
+      chemical system definitions (e.g. rock and fluid) that are needed for the
+      initial distribution into all nodes to define the time-zero state of the
+      reactive mass transport problem. This distribution must be set in the
+      "DiCp" vector, which can be filled out upon an execution of the math
+      script for node initialization. In many cases, this script can be created
+      by this wizard, then perhaps modified by the user before the GEM2MT run.</p>
     <p> </p>
     <p> <span style="font-weight: bold;">Lb</span> is the number of optional
       user-defined formula units for setting composition recipes of initial
@@ -653,9 +665,9 @@
       fluxes in reactor/box models (S, F, B modes)<br>
     </h3>
     <p> This wizard page appears in S, F and B modes only and completes the
-      setup of&nbsp; RT simulations based upon reactors (boxes) connected with
-      defined fluxes of aqueous fluid (S mode) or MPG (mobile phase groups in F,
-      B modes). The number of boxes <span style="font-weight: bold;">nC</span>
+      setup of RT simulations based upon reactors (boxes) connected with defined
+      fluxes of aqueous fluid (S mode) or MPG (mobile phase groups in F, B
+      modes). The number of boxes <span style="font-weight: bold;">nC</span>
       should have already been defined at Step 2. nC tells how many
       equilibrating reactors (boxes) will be considered in the megasystem. </p>
     <p> </p>
