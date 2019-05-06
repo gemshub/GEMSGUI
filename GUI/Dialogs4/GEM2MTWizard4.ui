@@ -46,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <widget class="QLabel" name="pageName">
@@ -1185,7 +1185,7 @@ p, li { white-space: pre-wrap; }
           </size>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This wizard page appears in S, F and B modes only, and completes the setup of reactor/box RT simulation. &lt;/p&gt;&lt;p&gt;In S and F modes, the number of mobile phases (nMGP) are set to 1, and the number of fluxes definitions (nFD) set to nC+1. &lt;/p&gt;&lt;p&gt;In B mode, different number of mobile phases (nMGP) and flux definitions (nFD) can be defined (e.g. gas and liquid for two phases fluid flow).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This wizard page appears in S, F and B modes only, and completes the setup of reactor/box RT simulation. &lt;/p&gt;&lt;p&gt;In S and F modes, the number of mobile phases (nMGP) are set to 1, and the number of fluxes definitions (nFD) set to nC. &lt;/p&gt;&lt;p&gt;In B mode, different number of mobile phases (nMGP) and flux definitions (nFD) can be defined (e.g. gas and liquid for two phases fluid flow).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -1360,7 +1360,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Flux setup &lt;/p&gt;&lt;p&gt;In S mode, the flux can be set by the initial mass of the fluid (fluid/rock ratio in Initial tab).&lt;/p&gt;&lt;p&gt;In F mode, the flux rate is set in the math script (Initial tab) and by the quantities of phases in MGP (Flux tab).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Flux setup &lt;/p&gt;&lt;p&gt;In S mode, the flux can be set by the initial mass of the fluid (fluid/rock ratio in Initial tab).&lt;/p&gt;&lt;p&gt;In F mode, the flux rate is set in the math script (Initial tab) and by the quantities of phases in MGP (Flux tab).&lt;/p&gt;&lt;p&gt;In B mode, the flux rate is set in the math script (Initial tab) and by the quantities of phases in MGP (Flux tab) or.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
