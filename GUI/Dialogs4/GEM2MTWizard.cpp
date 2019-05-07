@@ -686,7 +686,7 @@ void GEM2MTWizard::ScriptChange( int )
     if( chDiCp1->isChecked() ) // Initial assignment of node type
     {
         if( pselS->isChecked() || pselF->isChecked() )
-//           ret += "  DiCp[qc][1] =: ( qc=0 ? ( nSFD=1 ? 0 : 3 ) : 0 ); \n";
+//           ret += "  DiCp[qc][1] =: ( qc=0 ? ( nSFD=1? 0: 3 ): 0 ); \n";
         {
             ret += "$   for S or F mode, node 0 is set to a constant-flux source\n"
                    "  DiCp[qc][1] =: ( qc=0 ? 3: 0 ); \n";
@@ -696,7 +696,7 @@ void GEM2MTWizard::ScriptChange( int )
                    "  DiCp[qc][1] =: ( qc=0 ? 3 : 0 ); \n";
         }
         ret +=  "$   Other nodes normal, the last one set as a constant-flux sink\n"
-                "  DiCp[qc][1] =: (  qc<nC-1 ? DiCp[qc][1] : (-3) );\n";
+                "  DiCp[qc][1] =: (  qc<nC-1 ? DiCp[qc][1]: (-3));\n";
     }
 
     if( chP->isChecked() )   // Initial node pressure, bar (for GEM)
@@ -760,7 +760,7 @@ void GEM2MTWizard::ScriptChange( int )
             ret +=  "$     flux from node/box\n"
                     "      FDLi[qf][0] =: ( qf=0? 0: FDLi[qf-1][1] ); \n"
                     "$     flux to node/box\n"
-                    "      FDLi[qf][1] =: ( (qf<(nC-1))? qf : (-1) ); \n"
+                    "      FDLi[qf][1] =: ( (qf<(nC-1))? (qf+1): (-1)); \n"
                     "$     flux order zero (constant mass per step)\n"
                     "      FDLf[qf][0] =: 0;\n"
                     "$     flux rate 1 (the whole fluid mass)\n"
@@ -771,7 +771,7 @@ void GEM2MTWizard::ScriptChange( int )
             ret +=  "$     flux from node/box\n"
                     "      FDLi[qf][0] =: ( qf=0? 0: FDLi[qf-1][1] ); \n"
                     "$     flux to node/box\n"
-                    "      FDLi[qf][1] =: ( (qf<(nC-1))? qf : (-1) ); \n"
+                    "      FDLi[qf][1] =: ( (qf<(nC-1))? (qf+1): (-1)); \n"
                     "$     flux order 1 (proportional to source MPG mass)\n"
                     "      FDLf[qf][0] =: ( qf=0? 0: 1);\n"
                     "$     flux rate constant\n"
@@ -782,7 +782,7 @@ void GEM2MTWizard::ScriptChange( int )
             ret +=  "$     flux from node/box\n"
                     "      FDLi[qf][0] =: ( qf=0? 0: FDLi[qf-1][1] ); \n"
                     "$     flux to node/box\n"
-                    "      FDLi[qf][1] =: ( (qf<(nC-1))? qf: (-1) ); \n"
+                    "      FDLi[qf][1] =: ( (qf<(nC-1))? (qf+1): (-1)); \n"
                     "$     flux order 1 (proportional to source MPG mass)\n"
                     "      FDLf[qf][0] =: ( qf=0? 0: 1);\n"
                     "$     flux rate constant\n"
