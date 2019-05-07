@@ -684,7 +684,7 @@ void GEM2MTWizard::ScriptChange( int )
            "$  Initial setup of cells (nodes, boxes)\n";
 
     if( chDiCp0->isChecked() ) // Initial system variant assignment to nodes
-     ret +=  "$  assuming that the rock is the last initial system\n"
+     ret +=  "$  Assign different fluid and rock composition indices to nodes (i.e. assuming fluid=0 and rock=1)\n"
              "   DiCp[qc][0] =: ( qc=0 ? 0 : ( nIV > 1 ?  1 : 0 ) );\n";
 
     if( chDiCp1->isChecked() ) // Initial assignment of node type
@@ -704,14 +704,14 @@ void GEM2MTWizard::ScriptChange( int )
     }
 
     if( chP->isChecked() )   // Initial node pressure, bar (for GEM)
-    { ret +=    "$  setting initial node pressures (change qc*0 to set a gradient)\n"
+    { ret +=    "$  Set initial node pressures (change qc*0 to set a gradient)\n"
                 "   StaP[qc][0] =: PTVi[(DiCp[qc][0])][0] + qc*0;\n";
       if( pselS->isChecked() || pselF->isChecked() )
          ret += "   Pval[qc] =: StaP[qc][0];\n";
     }
 
     if( chT->isChecked() )   // Initial node temperature, C (for GEM)
-    {  ret +=   "$  setting initial node temperatures (change qc*0 to set a gradient)\n"
+    {  ret +=   "$  Set initial node temperatures (change qc*0 to set a gradient)\n"
                 "   StaP[qc][1] =: PTVi[(DiCp[qc][0])][1] + qc*0;\n";
        if( pselS->isChecked() || pselF->isChecked() )
          ret += "   Tval[qc] =: StaP[qc][1];\n";
