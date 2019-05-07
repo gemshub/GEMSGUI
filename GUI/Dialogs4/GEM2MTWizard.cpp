@@ -50,6 +50,11 @@ GEM2MTWizard::CmBack()
 
     ndx--;
 
+    if( ndx == T_P_lookup )
+    {  if(!checkArrays->isChecked()|| !pTPInput->isEnabled())
+            ndx--; // T P lists
+    }
+
     if( ndx == vtk_format && !c_PsVTK->isChecked() )
         ndx--;
     if( ndx == graphic_script && !c_PvMSg->isChecked() )
@@ -58,10 +63,6 @@ GEM2MTWizard::CmBack()
         ndx--;
     if( ndx == fluxes_transport && !chk )
         ndx--;
-    if( ndx == T_P_lookup )
-    {  if(!checkArrays->isChecked()|| !pTPInput->isEnabled())
-            ndx--; // T P lists
-    }
 
     stackedWidget->setCurrentIndex ( ndx );
     resetNextButton();
@@ -77,38 +78,65 @@ GEM2MTWizard::CmNext()
     int ndx = stackedWidget->currentIndex();
 
     if( ndx == mode_RMT )
-     {
-         for( int ii=7; ii<14; ii++)
-         {
-             if( chk )
+    {
+        for( int ii=7; ii<14; ii++)
+        {
+            if( chk )
                 GroupBox1->button(ii)->setChecked(false);
-             GroupBox1->button(ii)->setEnabled( !chk );
-         }
-       chFlux->setEnabled( chk );
-       chFlux->setChecked( chk );
-       setTScript( chk );
-       if( chk )
-       {
-         c_PvMSt->setChecked( true );
-         c_PvMSg->setChecked( true );
-         chRMass->setChecked( true );
-       }
+            GroupBox1->button(ii)->setEnabled( !chk );
+        }
+        chFlux->setEnabled( chk );
+        chFlux->setChecked( chk );
+        setTScript( chk );
+        if( chk )
+        {
+            c_PvMSt->setChecked( true );
+            c_PvMSg->setChecked( true );
+            chRMass->setChecked( true );
+        }
     }
 
     if( ndx == fluxes_transport )
     {
-      if( pselS->isChecked() || pselF->isChecked() || pselB->isChecked() )
-           pnFD->setValue( pnC->value() + pnSFD->value() );
+        if( pselS->isChecked() || pselF->isChecked() || pselB->isChecked() )
+            pnFD->setValue( pnC->value() + pnSFD->value() );
     }
 
     if( ndx == graphic_script )
     {
         int nLines = pageScript->getScriptLinesNum();
         if( nLines > 0)
-        pnYS->setValue( nLines );
+            pnYS->setValue( nLines );
     }
 
     ndx++;
+
+    if( ndx == fluxes_transport )
+    {
+        if( !chk )
+            ndx++;
+        else
+        {
+            if( pselS->isChecked() || pselF->isChecked() )
+            {
+                pnPG->setValue( 1 );
+                pnFD->setValue( pnC->value() + pnSFD->value() );
+                //        pnSFD->setValue( 0 );
+            }
+            pnPG->setEnabled( !( pselS->isChecked() || pselF->isChecked() ) );
+            pnFD->setEnabled( !( pselS->isChecked() || pselF->isChecked() ) );
+            //      pnSFD->setEnabled( !( pselS->isChecked() || pselF->isChecked() ));
+        }
+    }
+
+    if( ndx == auto_script && !c_PvMSt->isChecked() )
+        ndx++;
+
+    if( ndx == graphic_script && !c_PvMSg->isChecked() )
+        ndx++;
+
+    if( ndx == vtk_format && !c_PsVTK->isChecked() )
+        ndx++;
 
     if( ndx == gems3k_exchange )
     {    if( pselS->isChecked()|| pselF->isChecked()  )
@@ -126,51 +154,27 @@ GEM2MTWizard::CmNext()
         {
             pTPInput->setEnabled(true);
             pTPlookup->setEnabled(true);
-         }
+        }
     }
 
     if(   ndx == T_P_lookup )
-     { if( !checkArrays->isChecked() || !pTPInput->isEnabled() )
-       {
-       // internal setup arrays
-         // setupPTArrays();
-          ndx++;
-       }
-       else
-         {
-           definePArray();
-           defineTArray();
-           initPTable();
-           initTTable();
-           showPTTable();
-          }
+    { if( !checkArrays->isChecked() || !pTPInput->isEnabled() )
+        {
+            // internal setup arrays
+            // setupPTArrays();
+            ndx++;
+        }
+        else
+        {
+            definePArray();
+            defineTArray();
+            initPTable();
+            initTTable();
+            showPTTable();
+        }
     }
 
-    if( ndx == fluxes_transport && !chk )
-        ndx++;
-    else
-    {
-      if( pselS->isChecked() || pselF->isChecked() )
-      {
-        pnPG->setValue( 1 );
-        pnFD->setValue( pnC->value() + pnSFD->value() );
-//        pnSFD->setValue( 0 );
-      }
-      pnPG->setEnabled( !( pselS->isChecked() || pselF->isChecked() ) );
-      pnFD->setEnabled( !( pselS->isChecked() || pselF->isChecked() ) );
-//      pnSFD->setEnabled( !( pselS->isChecked() || pselF->isChecked() ));
-    }
-
-    if( ndx == auto_script && !c_PvMSt->isChecked() )
-        ndx++;
-
-    if( ndx == graphic_script && !c_PvMSg->isChecked() )
-        ndx++;
-
-    if( ndx == vtk_format && !c_PsVTK->isChecked() )
-        ndx++;
-
-   stackedWidget->setCurrentIndex ( ndx );
+    stackedWidget->setCurrentIndex ( ndx );
     resetNextButton();
     resetBackButton();
 }
