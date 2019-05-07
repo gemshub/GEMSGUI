@@ -27,12 +27,12 @@
 enum gem2mt_remake_pages {
     mode_RMT = 0,
     size_RMT,
-    gems3k_exchange,
-    T_P_lookup,
     fluxes_transport,
     auto_script,
     graphic_script,
     vtk_format,
+    gems3k_exchange,
+    T_P_lookup,
     other_options
 };
 
