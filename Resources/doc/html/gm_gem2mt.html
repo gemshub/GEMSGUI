@@ -7,7 +7,7 @@
     <meta name="description" content="Version 3.0.0-PSI">
   </head>
   <body>
-    <h1><img src="gems1.png" width="48" height="48" align="left"> <font color="#000066">
+    <h1><img src="gems1.png" height="48" align="left" width="48"> <font color="#000066">
         GEM-Selektor version 3</font> </h1>
     <h2>Reactive Mass Transport (GEM2MT) Module</h2>
     <hr width="100%" size="2">
@@ -69,74 +69,79 @@
     &nbsp;<br>
     <hr width="100%" size="2"> <br>
     <h2><a name="GEM2MT_OPERATION"></a>1. GEM2MT Module Operation</h2>
-    <p style="text-align: justify;"> GEM2MT module is a tool for automation of
-      simple reactive mass transport simulations coupled with GEM calculation of
-      equilibrium states in spatially distributed nodes (boxes, volumes) over
-      time steps. This module performs simulations of the evolution of
-      fluid-rock interaction reactive transport systems, where the fluid is
-      moved sequentially or simultaneously from one box to the other. This type
-      of simulation represents a simple reactive mass transport model, which
-      requires definition of fluxes between boxes of certain solid-water mass or
-      volume ratios, alternatively porosity and permeability. This model can be
-      used to simulate an open system, and permits to test one-dimensional
-      reactive transport with complex chemical reactions, that may be later used
-      as a benchmark for the coupling of GEMS3K with more complex reactive
-      transport models.</p>
-    <p>The GEM2MT module can simulate reactive transport in three main modes:</p>
+    <p style="text-align: justify;"> The GEM2MT module is a tool for automation
+      of one-dimensional (1-D) reactive mass transport simulations coupled with
+      GEM calculation of equilibrium states in spatially distributed nodes
+      (boxes, volumes) over time steps. GEM2MT can be used to simulate the open
+      system evolution and fluid-rock reactions occurring along a fluid flow
+      path (e.g. vein, fracture, porous media, etc.). This type of simulation
+      solves simple reactive mass transport problems, which requires the
+      definition of fluxes between boxes of certain fluid/rock mass or volume
+      ratios (or alternatively porosity and permeability) where fluid is moved
+      sequentially or simultaneously from one box to the other. </p>
+    <p style="text-align: justify;">The GEM2MT module also permits testing
+      simple
+      1-D reactive transport problems with complex chemical reactions, that may
+      be later used as a benchmark for the coupling of GEMS3K with more complex
+      reactive transport models. One-dimensional advection-diffusion numerical
+      reactive transport simulations can be performed, as well as the evolution
+      of various sequential and flow-trough reactor sequences or generic
+      box-flux (reservoir) dynamics can be modeled. In addition, I/O files for
+      standalone GEMS3K calculations can be exported for multiple initial node
+      recipes (in the T mode). Changes of species concentrations or amounts of
+      phases through the node profile with time can be graphically monitored at
+      each time step (wave) or logged to files in VTK format. </p>
+    <p>The GEM2MT module can simulate reactive transport in three main modes.
+      More information on the different RMT simulation modes can be found under
+      the following links:</p>
     <ol>
       <li><a href="#GEM2MT_S_MODE">Sequential reactor chain and waves (S);</a> </li>
-      <li><a href="#GEM2MT_F_MODE">Flow-through box-flux sequence (F, B);</a> </li>
+      <li><a href="#GEM2MT_F_MODE">Flow-through and box-flux sequence (F, B);</a>
+      </li>
       <li><a href="#GEM2MT_A_MODE">One-dimensional reactive transport with
           advection/dispersion/diffusion (A,D,W)</a> </li>
     </ol>
     <p> </p>
-    1-D advection-diffusion numerical reactive transport simuations can be
-    performed, as well as the evolution of various sequential and flow-trough
-    reactor sequences or generic box-flux (reservoir) dynamics can be modeled.
-    In addition, I/O files for standalone GEMS3K calculations can be exported
-    for multiple initial node recipes (in the T mode). Changes of species
-    concentrations or amounts of phases through the node profile with time can
-    be graphically monitored at each time step (wave) or logged to files in VTK
-    format.
-    <p>Relevant features of the main types of reactive transport simulations are
-      summarized below. </p>
-    <p style="text-align: justify;">The S and F modes are normally used for
-      simulating hydrothermal fluid-rock interaction by infiltration of fluid
-      into the rock, which leads to development of alteration zones. </p>
+    <p>A typical step by step workflow is shown in the two examples below for
+      the S and F modes. The S and F modes are normally used for simulating
+      fluid-rock interaction by infiltration of fluid into the rock, which leads
+      to development of alteration zones along a fluid flow path. A simulation
+      setup in S or F modes consists typically of one node of source fluid and
+      about 50 to 200 nodes of rock that will be interacted with fluid at
+      hydrothermal conditions, all to be set first using the GEM2MT wizard when
+      creating or re-making the GEM2MT object. </p>
     <p style="text-align: justify;">To prepare for such simulations, two Compos
       (PCO) records are usually created in thermodynamic database mode, namely
       one for fresh fluid such as seawater (let us call it "Fluid") and another
-      for the fresh rock (let us call it "Rock"), best covering the same list of
-      chemical elements (if data are not available for some elements present in
-      the other initial compositions then simply put 1e-9 mol for that element).
-      Such Compos records contain detailed information on compositions of the
-      initial rock and fluid, and can be used each as a single entity for
-      defining their relative proportions in system compositions. </p>
+      for the fresh rock (let us call it "Rock"). Ideally, both rock and fluid,
+      cover the same list of chemical elements (if data are not available for
+      some elements present in the other initial compositions then simply put
+      1e-9 mol for that element). These two system compositions can then be
+      copy/pasted and added later to GEM2MT, either using individual elements
+      (Independent Components) and/or user-defined formulae units.</p>
     <p style="text-align: justify;">Next, a parent system record containing the
-      fluid and the rock is to be created in SysEq under temperature and
-      pressure of interest, to be used later on for creating test systems
-      reproducing chemical state of the fluid and of the rock, as well as for
-      creating a new GEM2MT record (object). </p>
-    <p style="text-align: justify;">A simulation setup in S or F modes consists
-      typically of one node of source fluid and about 50 to 200 nodes of rock
-      that will be interacted with fluid at hydrothermal conditions, all to be
-      set first using the GEM2MT wizard when creating or re-making the GEM2MT
-      object. </p>
-    <h4>"Sequential reactor chain" S mode </h4>
+      fluid and the rock has to be created in SysEq at the temperature and
+      pressure of interest. This record will have to be selected when creating a
+      new GEM2MT record (object) containing all the phases and elements relevant
+      to the fluid-rock system of interest.</p>
+    <p style="text-align: justify;"></p>
+    <h4>Example 1: "Sequential reactor chain" S mode </h4>
     <p>In this mode, we can simulate a "wave" of a fluid that will pass through
-      each of the rock nodes once per step (i.e., a wave consists of ca. 100
-      steps). Many "waves" are possible.&nbsp; </p>
+      each of the rock nodes once per step. A wave consists of the sequential
+      equilibriation of a fluid with ca. 100 nodes of rocks, where several of
+      such "waves" are possible, and defined by the total number of steps.&nbsp;
+    </p>
     <ol>
       <li>Under GEM2MT, create a new record and select the parent system
         containing the rock and the fluid created in SysEq ("FRgem2mt").</li>
       <li>In Step 1 of the wizard, select the S mode.</li>
-      <li>In Step 2 of the wizard, set the number of nodes (nC= 101) and the
-        maximum number of steps (in this case, "waves", i.e. 1000). Select 2 for
-        the number of initial chemical system recipes, which will allow us to
-        define the initial compositions and masses of the fluid and rock initial
-        systems. Optionally, we can set the number of user-defined formula units
-        that will be used for augmenting initial bulk elemental compositions of
-        fluid and rock.</li>
+      <li>In Step 2 of the wizard, set the number of nodes (nC= 101; i.e. 100
+        nodes and 1 input node) and the maximum number of steps (in this case,
+        "waves", i.e. 1000). Select 2 for the number of initial chemical system
+        recipes, which will allow us to define the initial compositions and
+        masses of the fluid and rock. Optionally, we can set the number of
+        user-defined formula units that will be used for augmenting initial bulk
+        elemental compositions of fluid and rock.</li>
       <li>In Step 3, we select "Move aqueous fluid".</li>
       <li>In Step 4, we select P, T, V, Initial system, Node type, MPG flux, and
         Initial mass.</li>
@@ -169,7 +174,7 @@
       editing in the S mode. Click the "Calculate" toolbar button and (at the
       very first time) do not plot the nodes. Stop calculation after a few
       "waves" and start it again with plotting.&nbsp; </p>
-    <h4>Flow-through reactor chain (F) mode</h4>
+    <h4>Example 2: Flow-through reactor chain (F) mode</h4>
     <p>In this mode, we can simulate the simultaneous transport of (reacted)
       fluid in one direction through all nodes from one node to the next. This
       mode requires the definition of equal zero-order fluxes of fluid
