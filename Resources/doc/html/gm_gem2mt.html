@@ -452,7 +452,7 @@
       is taken to the next box (at prescribed fluid-rock ratio, replacing the
       fluid left from the previous "wave") and reacts there, and so on until the
       last box is reacted, thus completing the so-called "wave". Any desired
-      number of "waves" can be done. At the beginning of second wave, the
+      number of "waves" can be performed. At the beginning of second wave, the
       "fresh" fluid replaces the old fluid phase in the first box. After
       equilibration, the fluid is taken into the second box to react, and so on.
       From "wave" to "wave", the propagation of rock alteration zones can be
@@ -462,59 +462,72 @@
     <p><span style="font-weight: bold;">F</span>&nbsp;&nbsp;&nbsp;&nbsp;
       Flow-through reactors chain with fluxes (simultaneous transport then
       equilibration)</p>
-    <p>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &lt; The process in (F) setup needs to
-      define the fluxes between the node 1 and 2, 2 and 3, ... (of fluid or of
-      all solids) in mass per step; such fluxes are usually equal, also to the
-      source flux into node 1 and sink flux from node n. At the initial state,
-      both solid and fluid must be present in all nodes at defined mass ratios.
-      At each step (which corresponds to "wave" in (S) setup), the equilibration
-      occurs in all nodes, and then the fluid (or all solids) are sequentially
-      replaced according to the fluxes (i.e. for example between nodes 1 and 2
-      with fluid flux J in g/step: J g fluid is removed from node 2 (to be added
-      to node 3) and J g fluid from node 1 is added to node 2). In fact, this is
-      done in a consistent way by using the ODE integrator of the system of mass
-      balance equations for all elements in all nodes. This mode is in fact
-      analogous to 1-D pure advection transport, except the time is reduced to
-      step only, dispersion is ignored, and hydraulic consistency criteria are
-      not applied. &gt;</p>
-    <p><br>
-    </p>
+    <p> </p>
+    <p style="margin-left: 40px;">This scheme also consists of many "reactors"
+      (boxes) arranged into a 1-D chain connected by 1st order fluxes. At each
+      (time) step, part of the fluid phase is moved from the previous into the
+      next box simultaneously for all boxes. The very first box is usually
+      defined as a constant source of "fresh" fluid, and the last box in the
+      chain - as having the infinite sink for the fluid. 1st order flux means
+      that the mass (of fluid) transported per (time) step is proportional to
+      the mass of fluid phase in the outgoing box. So, the flux rate constant
+      (typically about 0.1 to 0.3) actually tells what fraction of the fluid
+      mass is transported per (time) step. The effect of this feedback is that,
+      even if the boxes initially contained different masses of fluid, with time
+      the masses of fluid would become equal. This scheme simulates the
+      propagation of rock alteration zones, which can be followed by plotting
+      amounts of phases in all boxes. Compared with S mode, the F mode produces
+      results more similar to those of classical advection RT algorithms.</p>
     <p><span style="font-weight: bold;">B</span>&nbsp;&nbsp;&nbsp;&nbsp;
-      Box-flux megasystem (with time-step integration of arbitrary MPG fluxes)
-      (TBD)<br>
+      Box-flux megasystem (with time-step integration of arbitrary MPG fluxes)<br>
     </p>
-    <p>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &lt;add description&gt;</p>
-    <p><br>
-    </p>
+    <p> </p>
+    <p style="margin-left: 40px;">This scheme is similar to the F scheme, but
+      allows the most general setup of the box-flux dynamic transport scheme,
+      not only a unidirectionally connected chain of boxes. In the B scheme,
+      shortcut fluxes and loops are allowed, as well as zero-, first- and
+      second-order fluxes, point sinks and point sources of given elemental
+      composition. The transport step is performed by the built-in integrator of
+      ODE system of time derivatives of masses of each chemical element in each
+      box (reservoir). After the transport step, chemical equilibria are
+      re-calculated in all boxes. Normally, with time (number of steps), such
+      complex dynamic systems evolve to a steady state when masses and
+      compositions of reservoirs do not change anymore. This scheme may be good
+      for simulating water-sediment columns or geochemical cycles. &nbsp; </p>
     <p><span style="font-weight: bold;">A</span>&nbsp;&nbsp;&nbsp;&nbsp; 1-D
       (advection-dispersion) reactive transport using classical
       finite-difference method</p>
-    <p>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &lt;add description&gt;</p>
+    <p></p>
+    <p style="margin-left: 40px;"> &lt;description&gt;</p>
     <p><br>
     </p>
     <p><span style="font-weight: bold;">C</span>&nbsp;&nbsp;&nbsp;&nbsp; 1-D
       (advection-dispersion) reactive transport using implicit Crank-Nicolson
       scheme </p>
-    <p>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &lt;add description&gt;</p>
+    <p></p>
+    <p style="margin-left: 40px;"> &lt;description&gt;</p>
     <p><br>
     </p>
     <p> </p>
     <p><span style="font-weight: bold;">D</span>&nbsp;&nbsp;&nbsp;&nbsp; 1-D
       (advection-diffusion) reactive transport using finite-volume method (TBD)<br>
     </p>
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &lt;add description&gt;<br>
-    <br>
+    <p style="margin-left: 40px;"> &lt;description&gt;<br>
+      <br>
+    </p>
     <p><span style="font-weight: bold;">W</span>&nbsp;&nbsp;&nbsp; 1-D
       (advection-diffusion) reactive transport using random-walk algorithm </p>
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &lt;add description&gt;<br>
-    <br>
-    <br>
+    <p> </p>
+    <p style="margin-left: 40px;"> &lt;description&gt;<br>
+      <br>
+    </p>
     <span style="font-weight: bold;">T</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     Export of RT initial-state GEMS3K input files for external coupled RT codes<br>
     <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;add description&gt;<br>
-    <br>
-    <br>
+    <p> </p>
+    <p style="margin-left: 40px;"> &lt;description&gt;<br>
+      <br>
+    </p>
     <hr style="width: 100%; height: 2px;">
     <h3><a name="WZSTEP_2"></a>2.2. GEM2MT Wizard Step 2: Dimensions for the RT
       model and initial chemical systems<br>
@@ -594,24 +607,28 @@
       begins; the index of its destination box, where the flux ends; the index
       of MPG definition; the flux order (0, 1, 2, 3), and the flux rate
       constant. The flux order default is 0 (constant flux in units
-      mass/timestep). <br>
+      mass/timestep). Possible flux orders: </p>
+    <p style="margin-left: 40px;">0 - Zero-order (absolute) flux j<sub>0</sub> =
+      v<sub>0</sub>, with rate v<sub>0</sub> in mass/time units;&nbsp; </p>
+    <p style="margin-left: 40px;">1 - First-order to the outgoing box mass flux
+      j<sub>1</sub> = m<sub>out</sub>v<sub>1</sub>, with a rate constant v<sub>1</sub>
+      in 1/time units; </p>
+    <p style="margin-left: 40px;">2 - Second-order to outgoing and incoming MPG
+      mass flux j<sub>2</sub> = m<sub>out</sub>m<sub>in</sub>v<sub>2</sub>, with
+      a rate constant v in 1/time/kg units, proportional to the product of
+      masses in both boxes; </p>
+    <p>3 - First-order flux j<sub>3</sub> = m<sub>in</sub>v<sub>3</sub>, to MPG
+      mass in receiving box,with a rate constant v<sub>3</sub> in 1/time
+      units.&nbsp; <br>
     </p>
     <p> </p>
-    <p>Possible flux orders: 0 - Zero-order (absolute) flux, with velocity v in
-      mass/time units;&nbsp; 1 - First-order to source box mass flux, v in
-      1/time/kg units; 2 - Second-order to source and sink MPG mass flux, v in
-      1/time/kg2 units, proportional to product of masses in both boxes; 3 -
-      First-order flux to MPG mass in receiving box, v in 1/time/kg units.&nbsp;
-      <br>
-    </p>
-    <p> </p>
-    <p>A source flux is defined by its bulk composition (amounts of independent
-      components), which can be entered in the GEM2MT window if nSFD &gt; 0 is
-      set below on this wizard page; the index of its destination box; the flux
-      order (0, 1, 3); and the flux rate constant.<br>
+    <p>A point source flux is defined by its bulk composition (amounts of
+      independent components), which can be entered in the GEM2MT window if nSFD
+      &gt; 0 is set below on this wizard page; the index of its destination box;
+      the flux order (0, 1, 3); and the flux rate constant v<sub>q</sub>.<br>
       <br>
       A sink flux is defined by the index of its source box; the index of MPG
-      definition; the flux order (0, 1, 2); and the flux rate constant.<br>
+      definition; the flux order (0, 1, 2); and the flux rate constant v<sub>s</sub>.<br>
     </p>
     <p> All nFD fluxes should be set in the list accessible on Fluxes page of
       GEM2MT module window. nSFD bulk compositions of source fluxes should be
@@ -643,16 +660,16 @@
       will be added to bulk composition of 0-th reactor at every time step. </p>
     <p> </p>
     <h4> (2) Only S and F mode (sequential and flow-through reactors):</h4>
-    <p> <span style="text-decoration: underline;">Move aqueous (&amp;aq) phase</span>:
+    <p> <span style="text-decoration: underline;">Move aqueous (aq) phase</span>:
       this is default for F and S - mode reactor setups, the moving MPG will
       consist of aqueous phase only. </p>
     <p> </p>
-    <p> <span style="text-decoration: underline;">Move gas/fluid/plasma
-        (&amp;gas) phase(s):</span> Composition of all gaseous phases together
-      can be moved from one reactor to the next, also as an addition to aqueous
-      phase composition.</p>
+    <p> <span style="text-decoration: underline;">Move gas/fluid/plasma (gas)
+        phase(s):</span> Composition of all gaseous phases together can be moved
+      from one reactor to the next, also as an addition to aqueous phase
+      composition.</p>
     <p> </p>
-    <p> <span style="text-decoration: underline;">Move all &amp;solids together</span>
+    <p> <span style="text-decoration: underline;">Move all solids together</span>
       ('dialysis bag'): Alternatively to two above options, the bulk composition
       of all solid phases will be moved from reactor to reactor. </p>
     <p> </p>
