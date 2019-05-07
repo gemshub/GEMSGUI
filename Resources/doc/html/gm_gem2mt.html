@@ -71,18 +71,19 @@
     &nbsp;<br>
     <hr width="100%" size="2"> <br>
     <h2><a name="GEM2MT_OPERATION"></a>1. GEM2MT Module Operation</h2>
-    <p> GEM2MT module is a tool for automation of simple reactive mass transport
-      simulations coupled with GEM calculation of equilibrium states in
-      spatially distributed nodes (boxes, volumes) over time steps. This module
-      performs simulations of the evolution of fluid-rock interaction reactive
-      transport systems, where the fluid is moved sequentially or simultaneously
-      from one box to the other. This type of simulation represents a simple
-      reactive mass transport model, which requires definition of fluxes between
-      boxes of certain solid-water mass or volume ratios, alternatively porosity
-      and permeability. This model can be used to simulate an open system, and
-      permits to test one-dimensional reactive transport with complex chemical
-      reactions, that may be later used as a benchmark for the coupling of
-      GEMS3K with more complex reactive transport models.</p>
+    <p style="text-align: justify;"> GEM2MT module is a tool for automation of
+      simple reactive mass transport simulations coupled with GEM calculation of
+      equilibrium states in spatially distributed nodes (boxes, volumes) over
+      time steps. This module performs simulations of the evolution of
+      fluid-rock interaction reactive transport systems, where the fluid is
+      moved sequentially or simultaneously from one box to the other. This type
+      of simulation represents a simple reactive mass transport model, which
+      requires definition of fluxes between boxes of certain solid-water mass or
+      volume ratios, alternatively porosity and permeability. This model can be
+      used to simulate an open system, and permits to test one-dimensional
+      reactive transport with complex chemical reactions, that may be later used
+      as a benchmark for the coupling of GEMS3K with more complex reactive
+      transport models.</p>
     <p>The GEM2MT module can simulate reactive transport in three main modes:</p>
     <ol>
       <li><a href="#GEM2MT_S_MODE">Sequential reactor chain and waves (S);</a> </li>
@@ -99,30 +100,29 @@
     concentrations or amounts of phases through the node profile with time can
     be graphically monitored at each time step (wave) or logged to files in VTK
     format.
-
     <p>Relevant features of the main types of reactive transport simulations are
       summarized below. </p>
     <br>
-
-    <p>The S and F modes are normally used for simulating hydrothermal
-      fluid-rock interaction by infiltration of fluid into the rock, which leads
-      to development of alteration zones. To prepare for such simulations, two
-      Compos (PCO) records are usually created in thermodynamic database mode,
-      namely one for fresh fluid such as seawater (let us call it "Fluid") and
-      another for the fresh rock (let us call it "Rock"), best covering the same
-      list of chemical elements (if data are not available for some elements
-      present in the other initial compositions then simply put 1e-9 mol for
-      that element). Such Compos records contain detailed information on
-      compositions of the initial rock and fluid, but can be used each as a
-      single entity for defining their relative proportions in system
-      compositions. Next, a parent system record containing the fluid and the
-      rock is to be created in SysEq under temperature and pressure of interest,
-      to be used later on for creating test systems reproducing chemical state
-      of the fluid and of the rock, as well as creating a new GEM2MT record
-      (object). A simulation setup in S or F modes consists typically of one
-      node of source fluid and about 100 nodes of rock that will be interacted
-      with fluid at hydrothermal conditions, all to be set first using the
-      GEM2MT wizard when creating or re-making the GEM2MT object. </p>
+    <p style="text-align: justify;">The S and F modes are normally used for
+      simulating hydrothermal fluid-rock interaction by infiltration of fluid
+      into the rock, which leads to development of alteration zones. To prepare
+      for such simulations, two Compos (PCO) records are usually created in
+      thermodynamic database mode, namely one for fresh fluid such as seawater
+      (let us call it "Fluid") and another for the fresh rock (let us call it
+      "Rock"), best covering the same list of chemical elements (if data are not
+      available for some elements present in the other initial compositions then
+      simply put 1e-9 mol for that element). Such Compos records contain
+      detailed information on compositions of the initial rock and fluid, but
+      can be used each as a single entity for defining their relative
+      proportions in system compositions. Next, a parent system record
+      containing the fluid and the rock is to be created in SysEq under
+      temperature and pressure of interest, to be used later on for creating
+      test systems reproducing chemical state of the fluid and of the rock, as
+      well as creating a new GEM2MT record (object). A simulation setup in S or
+      F modes consists typically of one node of source fluid and about 100 nodes
+      of rock that will be interacted with fluid at hydrothermal conditions, all
+      to be set first using the GEM2MT wizard when creating or re-making the
+      GEM2MT object. </p>
     <h4>"Sequential reactor chain" S mode </h4>
     <p>In this mode, we can simulate a "wave" of a fluid that will pass through
       each of the rock nodes once per step (i.e., a wave consists of ca. 100
@@ -207,8 +207,7 @@
       the bulk elemental composition vectors from the test systems (SysEq
       records) reproducing the fluid and the rock, respectively, or from Compos
       records "Fluid" and "Rock". It is important to set realistic fluid/rock
-      mass ratio, usually somewhere between 10 and 1000. As an example:
-    </p>
+      mass ratio, usually somewhere between 10 and 1000. As an example: </p>
     <p>In the first row (index 0), enter the name of system "Fluid" or similar,
       and add a mass of 1 kg. </p>
     <p>In the second row (index 1), enter the name of system "Rock" or similar,
