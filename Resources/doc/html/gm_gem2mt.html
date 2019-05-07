@@ -656,8 +656,9 @@
         of source flux definitions</span>: optional to set in B, S and F modes.
       In S and F modes, can be 0 or 1; if set to 0 then the first reactor (index
       0) will be treated as constant source of MPG transported into the second
-      reactor; otherwise, the composition of the source flux at a given rate
-      will be added to bulk composition of 0-th reactor at every time step. </p>
+      reactor; otherwise, the composition of the source flux at a given rate can
+      be added to bulk composition of 0-th reactor at every time step (this
+      option requires editing the initialization script). </p>
     <p> </p>
     <h4> (2) Only S and F mode (sequential and flow-through reactors):</h4>
     <p> <span style="text-decoration: underline;">Move aqueous (aq) phase</span>:
@@ -682,27 +683,29 @@
     <h3><a name="WZSTEP_4"></a>2.4. GEM2MT Wizard Step 4: Auto-script for
       nodes/boxes initialization and time change </h3>
     <p> This page configures the automatic setup of initial properties of nodes
-      / boxes in the megasystem by execution of the automatically created script
-      that appears on the right side.&nbsp; After the wizard is completed, In
-      the GEM2MT window, the initial script can be modified and extended; just
-      click 'Next &gt;' to keep the old script with user's modifications. </p>
+      / boxes in the megasystem by assembling the automatically created script
+      that appears on the right side of the widget.&nbsp; After the wizard is
+      completed, the initial script can be modified and extended in the GEM2MT
+      window; just click 'Next &gt;' to keep the old script with user's
+      modifications. </p>
     <p> </p>
-    <p> The script has two sections - one for the initialisation of the RT
-      problem, another for execution at regular time steps. The first block
-      (before 'else') for the initialization of nodes / boxes using bulk
-      compositions of initial systems will be executed once at time step 0,
-      while the second block (if not commented out) will be executed at every
-      subsequent time step. The initialization script can save a lot of time,
-      especially when there are many nodes / boxes to be created. </p>
+    <p> The script has three sections - one for the initialisation of the RT
+      nodes (boxes), other for he initialization of fluxes defined between
+      boxes, and optional placeholder section for execution at regular time
+      steps (to be written/extended by the user). The first two sections will be
+      executed once at time step 0, while the optional one (if not commented
+      out) will be executed at every subsequent time step. The initialization
+      script can save the user a lot of time, especially when there are many
+      nodes / boxes to be created. </p>
     <p> </p>
     <p> Checking/unchecking any option will result in an insertion/removal of
       the respective operator(s) into the script part for nodes initialization.
       The exact form of operators, as well as the availability of some options,
       depends on the chosen RT simulation type. Options 'Pressure' and
       'Temperature' are normally selected by default in all RT cases, and set
-      for all nodes a constant P and T pair taken from Step 3 of this wizard.
+      for all nodes a constant P and T pair taken from Step 7 of this wizard.
       Options 'Initial system', 'Node type' and 'MPG flux' will be automatically
-      activated in S or F modes; the respective parts of the initialization
+      activated in S, F or B modes; the respective parts of the initialization
       script will be set automatically to create a sequential unidirectional
       chain transport of MPG from node to node.</p>
     <p> </p>
