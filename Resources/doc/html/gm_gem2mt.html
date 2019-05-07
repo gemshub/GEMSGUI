@@ -7,7 +7,7 @@
     <meta name="description" content="Version 3.0.0-PSI">
   </head>
   <body>
-    <h1><img src="gems1.png" height="48" align="left" width="48"> <font color="#000066">
+    <h1><img src="gems1.png" width="48" height="48" align="left"> <font color="#000066">
         GEM-Selektor version 3</font> </h1>
     <h2>Reactive Mass Transport (GEM2MT) Module</h2>
     <hr width="100%" size="2">
@@ -29,23 +29,21 @@
           2: Dimensions for the RT model and initial chemical systems <br>
         </a></p>
       <p style="margin-left: 20px;"><a href="#WZSTEP_3">2.3. GEM2MT Wizard Step
-          3: Settings for the GEMS3K data exchange interface<br>
+          3: Settings for mass fluxes in reactor/box models (S, F, B modes)<br>
         </a></p>
       <p style="margin-left: 20px;"><a href="#WZSTEP_4">2.4. GEM2MT Wizard Step
-          4: Settings for mass fluxes in reactor/box models (S, F, B modes)<br>
+          4: Auto-script for nodes / boxes initialization and time change <br>
         </a></p>
-      <p style="margin-left: 20px;"><a href="gm_gem2mt.html#WZSTEP_5">2.5.
-          GEM2MT Wizard Step 5: Auto-script for nodes / boxes initialization and
-          time change <br>
+      <p style="margin-left: 20px;"><a href="#WZSTEP_5">2.5. GEM2MT Wizard Step
+          5: Script for graphical monitoring of simulations<br>
         </a></p>
-      <p style="margin-left: 20px;"><a href="gm_gem2mt.html#WZSTEP_6">2.6.
-          GEM2MT Wizard Step 6: Script for graphical monitoring of simulations<br>
+      <p style="margin-left: 20px;"><a href="#WZSTEP_6">2.6. GEM2MT Wizard Step
+          6: Configure output of results to VTK-format files<br>
         </a></p>
-      <p style="margin-left: 20px;"><a href="gm_gem2mt.html#WZSTEP_7">2.7.
-          GEM2MT Wizard Step 7: Configure output of results to VTK-format files<br>
-        </a></p>
-      <p style="margin-left: 20px;"><a href="gm_gem2mt.html#WZSTEP_7">2.8.
-          GEM2MT Wizard Step 8: Other optional settings<br>
+      <p style="margin-left: 20px;"><a href="#WZSTEP_7">2.7. GEM2MT Wizard Step
+          7: Settings for the GEMS3K data exchange interface</a></p>
+      <p style="margin-left: 20px;"><a href="#WZSTEP_8">2.8. GEM2MT Wizard Step
+          8: Other optional settings<br>
         </a></p>
     </blockquote>
     <p><a href="#GEM2MT_MWINDOW">3. GEM2MT Module Window</a></p>
@@ -102,27 +100,28 @@
     format.
     <p>Relevant features of the main types of reactive transport simulations are
       summarized below. </p>
-    <br>
     <p style="text-align: justify;">The S and F modes are normally used for
       simulating hydrothermal fluid-rock interaction by infiltration of fluid
-      into the rock, which leads to development of alteration zones. To prepare
-      for such simulations, two Compos (PCO) records are usually created in
-      thermodynamic database mode, namely one for fresh fluid such as seawater
-      (let us call it "Fluid") and another for the fresh rock (let us call it
-      "Rock"), best covering the same list of chemical elements (if data are not
-      available for some elements present in the other initial compositions then
-      simply put 1e-9 mol for that element). Such Compos records contain
-      detailed information on compositions of the initial rock and fluid, but
-      can be used each as a single entity for defining their relative
-      proportions in system compositions. Next, a parent system record
-      containing the fluid and the rock is to be created in SysEq under
-      temperature and pressure of interest, to be used later on for creating
-      test systems reproducing chemical state of the fluid and of the rock, as
-      well as creating a new GEM2MT record (object). A simulation setup in S or
-      F modes consists typically of one node of source fluid and about 100 nodes
-      of rock that will be interacted with fluid at hydrothermal conditions, all
-      to be set first using the GEM2MT wizard when creating or re-making the
-      GEM2MT object. </p>
+      into the rock, which leads to development of alteration zones. </p>
+    <p style="text-align: justify;">To prepare for such simulations, two Compos
+      (PCO) records are usually created in thermodynamic database mode, namely
+      one for fresh fluid such as seawater (let us call it "Fluid") and another
+      for the fresh rock (let us call it "Rock"), best covering the same list of
+      chemical elements (if data are not available for some elements present in
+      the other initial compositions then simply put 1e-9 mol for that element).
+      Such Compos records contain detailed information on compositions of the
+      initial rock and fluid, and can be used each as a single entity for
+      defining their relative proportions in system compositions. </p>
+    <p style="text-align: justify;">Next, a parent system record containing the
+      fluid and the rock is to be created in SysEq under temperature and
+      pressure of interest, to be used later on for creating test systems
+      reproducing chemical state of the fluid and of the rock, as well as for
+      creating a new GEM2MT record (object). </p>
+    <p style="text-align: justify;">A simulation setup in S or F modes consists
+      typically of one node of source fluid and about 50 to 200 nodes of rock
+      that will be interacted with fluid at hydrothermal conditions, all to be
+      set first using the GEM2MT wizard when creating or re-making the GEM2MT
+      object. </p>
     <h4>"Sequential reactor chain" S mode </h4>
     <p>In this mode, we can simulate a "wave" of a fluid that will pass through
       each of the rock nodes once per step (i.e., a wave consists of ca. 100
@@ -138,10 +137,10 @@
         systems. Optionally, we can set the number of user-defined formula units
         that will be used for augmenting initial bulk elemental compositions of
         fluid and rock.</li>
-      <li>In Step 4, we select "Move aqueous fluid".</li>
-      <li>In Step 5, we select P, T, V, Initial system, Node type, MPG flux, and
+      <li>In Step 3, we select "Move aqueous fluid".</li>
+      <li>In Step 4, we select P, T, V, Initial system, Node type, MPG flux, and
         Initial mass.</li>
-      <li>In Step 6, we select the variables you want to plot in each node after
+      <li>In Step 5, we select the variables you want to plot in each node after
         each "wave" (i.e. n1vPH for volumes of minerals).</li>
     </ol>
     <p>After completing the wizard, we get to the GEM2MT module window "Initial"
@@ -195,9 +194,9 @@
         boxes in the chain are re-calculated (and can be plotted) in one time
         step). Enter 1 for the number of user-defined formula units (to add at
         least H2O to the rock initial composition). </li>
-      <li>In Step 5, we set P, T, V, Initial system, Node type, MPG flux, and
+      <li>In Step 4, we set P, T, V, Initial system, Node type, MPG flux, and
         Initial mass.</li>
-      <li>In Step 6, we select the output variables you want to plot in each
+      <li>In Step 5, we select the output variables you want to plot in each
         nodes (i.e. n1vPH for volumes of minerals).</li>
     </ol>
     <p>After completing the wizard, we get to the GEM2MT module window "Initial"
@@ -574,93 +573,10 @@
       pages will not be visible. However, in some simulation modes, the scripts
       are mandatory and will be created irrespective of the user's selection. <span
         style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"></span></span></p>
-    <p style="font-family: Helvetica,Arial,sans-serif;"><br>
-    </p>
-    <hr style="width: 100%; height: 2px;">
-    <h3><a name="WZSTEP_3"></a>2.3. GEM2MT Wizard Step 3: Settings for the
-      GEMS3K data exchange interface<br>
-    </h3>
-    <p> These settings are important for the additional T mode for preparing the
-      GEMS3K .dch, .ipm and .dbr input files for external coupled codes, and may
-      also be useful for certain built-in reactive transport modes. Settings are
-      arranged in three groups.</p>
-    <p> </p>
-    <h4> (1) GEMS3K memory and file data exchange</h4>
-    <p> <span style="text-decoration: underline;">Select ICs, DCs and phases to
-        be exchanged via DATABR (take all, if unchecked)</span>: Having this
-      option unchecked is recommended, which will take all components and phases
-      into RT data exchange bridge.</p>
-    <p> </p>
-    <p> <span style="text-decoration: underline;">Write IPM, DCH and DBR files
-        in binary mode (in text mode, if unchecked)</span>: Text mode
-      (unchecked) is default and recommended for keeping the files
-      human-readable.</p>
-    <p> </p>
-    <p> <span style="text-decoration: underline;">Do not write data items that
-        contain only default values (text mode only)</span>: If this option is
-      checked, only the data entries that contain non-default values will be
-      written into data exchange files, while those containing only default
-      values will be skipped. This produces compact files that are easy to read
-      and modify in text editor (especially DBR files), but may potentially
-      become incompatible with future GEMS3K versions if some default values
-      will change. Leave unchecked if in doubt. </p>
-    <p> </p>
-    <p> <span style="text-decoration: underline;">Write .dch, .ipm, .dbr files
-        with comments for all data entries (text mode only):</span> This is the
-      "verbose" mode for education purposes. If this option is checked, a
-      comment line will appear before each data entry, explaining what data it
-      contains (similar to GEM-Selektor tooltips on data objects). May be safely
-      unchecked by experienced users.</p>
-    <p> </p>
-    <h4> (2) Automatic setup of GEMS3K lookup arrays with thermodynamic data </h4>
-    <p> This setup is used for creating lookup arrays for thermodynamic
-      properties of DCs (dependent components) with regular T (temperature) and
-      P (pressure) grid. This applies to standard Gibbs energies g<sup>o</sup>,
-      molar volumes V<sup>o</sup>, optionally ehthalpies h<sup>o</sup>,
-      entropies S<sup>o</sup> and heat capacities Cp<sup>o</sup> (the optional
-      arrays will be created if the respective properties are present in the
-      parent SysEq records).<br>
-    </p>
-    <p> </p>
-    <p>Default is one pressure value (1 bar) and one temperature value (25 <sup>o</sup>C),
-      in which case no interpolation of thermodynamic data can be performed, and
-      all RT calculations will be limited to 1 bar 25 <sup>o</sup>C only.
-      Another single value of T or P can be set by entering equal number in
-      "Minimal" and "Maximal" fields, while leaving 0 in "Step" field. RT
-      calculations will be performed if the actual T and P values in nodes
-      deviate from the grid T, P values plus-minus the respective "Tolerance". </p>
-    <p> To perform RT simulations with variable T and/or P, the lookup arrays
-      must be created by setting "Maximal" T or P greater than "Minimal", and
-      setting "Step" to 5 - 10 C for temperature and 10 - 50 bar for pressure.
-      Usually, good interpolation results require 30-40 grid points in a large
-      temperature range and 10-20 points in a large pressure range. Leaving one
-      of "Step" values zero means that simulations will be performed at constant
-      value of this parameter and variable values of another. For a given node,
-      the interpolation of thermodynamic data in the built-in GEMS3K code will
-      be done if the actual T, P values for the node differ from the closest
-      grid point T, P pair by more than "Tolerance". </p>
-    <p> </p>
-    <h4> (3) T and P grid values for lookup arrays</h4>
-    <p> <span style="text-decoration: underline;">Enter pressure and
-        temperature grid values instead of automatic setup</span>. If this
-      option is activated, the automatic setup of T, P grid is disabled. Set the
-      required numbers of T and P grid values in spin boxes, and enter manually
-      or copy-paste irregular T and P sequences for the lookup grid into the
-      table appearing in the next Step 3b page of this wizard.</p>
-    <p> </p>
-    <p> <u>Disable data interpolation between grid T values (or P values), use
-        data for TP pairs instead</u>. Activation of this option disables the
-      data interpolation over the lookup T, P grid array. In this case, equal
-      number of T and P points must be entered, and the T, P values must be
-      entered pairwise into the respective columns in the next Step 3b page of
-      this wizard. RT calculations can then only be performed if T, P values for
-      a given node correspond to one of the given T, P pairs (plus-minus
-      "Tolerance").<span style="font-family: Helvetica,Arial,sans-serif;"> </span></p>
-    <p><span style="font-family: Helvetica,Arial,sans-serif;"></span></p>
-    <span style="font-family: Helvetica,Arial,sans-serif;"> </span><br>
+    <br>
     <p style="font-family: Helvetica,Arial,sans-serif;"></p>
     <hr style="width: 100%; height: 2px;">
-    <h3><a name="WZSTEP_4"></a>2.4. GEM2MT Wizard Step 4: Settings for mass
+    <h3><a name="WZSTEP_3"></a>2.3. GEM2MT Wizard Step 3: Settings for mass
       fluxes in reactor/box models (S, F, B modes)<br>
     </h3>
     <p> This wizard page appears in S, F and B modes only and completes the
@@ -746,7 +662,7 @@
     <p style="font-family: Helvetica,Arial,sans-serif;"><br>
     </p>
     <hr style="width: 100%; height: 2px;">
-    <h3><a name="WZSTEP_5"></a>2.5. GEM2MT Wizard Step 5: Auto-script for
+    <h3><a name="WZSTEP_4"></a>2.4. GEM2MT Wizard Step 4: Auto-script for
       nodes/boxes initialization and time change </h3>
     <p> This page configures the automatic setup of initial properties of nodes
       / boxes in the megasystem by execution of the automatically created script
@@ -837,7 +753,7 @@
     <p style="font-family: Helvetica,Arial,sans-serif;"><br>
     </p>
     <hr style="width: 100%; height: 2px;">
-    <h3><a name="WZSTEP_6"></a>2.6. GEM2MT Wizard Step 6: Script for graphical
+    <h3><a name="WZSTEP_5"></a>2.5. GEM2MT Wizard Step 5: Script for graphical
       monitoring of simulations<br>
     </h3>
     <p> To monitor (graphically or in a table) some changes in the nodes / boxes
@@ -874,16 +790,14 @@
       plot some experimental data for some step (time point) over the generated
       curves. The data can be entered or copy-pasted in the GEM2MT window page
       after this wizard is finished. &nbsp; </p>
-    <p style="font-family: Helvetica,Arial,sans-serif;"><u>Number of elements in
-        the script work array qpg for graphical monitoring (optional): </u>Enter
-      here an integer (0 to 20) to have access to desired number of work cells
-      (qpg[0], qpg[1], ...) for keeping temporary results in the monitoring
-      script, if necessary.<br>
-    </p>
+    <p><u>Number of elements in the script work array qpg for graphical
+        monitoring (optional): </u>Enter here an integer (0 to 20) to have
+      access to desired number of work cells (qpg[0], qpg[1], ...) for keeping
+      temporary results in the monitoring script, if necessary.</p>
     <p style="font-family: Helvetica,Arial,sans-serif;"></p>
     <br>
     <hr style="width: 100%; height: 2px;">
-    <h3><a name="WZSTEP_7"></a>2.7. GEM2MT Wizard Step 7: Configure output of
+    <h3><a name="WZSTEP_6"></a>2.6. GEM2MT Wizard Step 6: Configure output of
       results to VTK-format files<br>
     </h3>
     <p> The graphical monitoring (set at the previous step) can only show the
@@ -907,12 +821,94 @@
       array in GEM2MT will be written into VTK files. Otherwise, you have to do
       selections from the lists appearing below. </p>
     <p> </p>
-    <p style="font-family: Helvetica,Arial,sans-serif;">To retain the selections
-      done earlier, just click 'Next &gt;'&nbsp; to go to the next wizard page.
-      <br>
+    <p>To retain the selections done earlier, just click 'Next &gt;'&nbsp; to go
+      to the next wizard page. </p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3><a name="WZSTEP_7"></a>2.7. GEM2MT Wizard Step 7: Settings for the
+      GEMS3K data exchange interface<br>
+    </h3>
+    <p> These settings are important for the additional T mode for preparing the
+      GEMS3K .dch, .ipm and .dbr input files for external coupled codes, and may
+      also be useful for certain built-in reactive transport modes. Settings are
+      arranged in three groups.</p>
+    <p> </p>
+    <h4> (1) GEMS3K memory and file data exchange</h4>
+    <p> <span style="text-decoration: underline;">Select ICs, DCs and phases to
+        be exchanged via DATABR (take all, if unchecked)</span>: Having this
+      option unchecked is recommended, which will take all components and phases
+      into RT data exchange bridge.</p>
+    <p> </p>
+    <p> <span style="text-decoration: underline;">Write IPM, DCH and DBR files
+        in binary mode (in text mode, if unchecked)</span>: Text mode
+      (unchecked) is default and recommended for keeping the files
+      human-readable.</p>
+    <p> </p>
+    <p> <span style="text-decoration: underline;">Do not write data items that
+        contain only default values (text mode only)</span>: If this option is
+      checked, only the data entries that contain non-default values will be
+      written into data exchange files, while those containing only default
+      values will be skipped. This produces compact files that are easy to read
+      and modify in text editor (especially DBR files), but may potentially
+      become incompatible with future GEMS3K versions if some default values
+      will change. Leave unchecked if in doubt. </p>
+    <p> </p>
+    <p> <span style="text-decoration: underline;">Write .dch, .ipm, .dbr files
+        with comments for all data entries (text mode only):</span> This is the
+      "verbose" mode for education purposes. If this option is checked, a
+      comment line will appear before each data entry, explaining what data it
+      contains (similar to GEM-Selektor tooltips on data objects). May be safely
+      unchecked by experienced users.</p>
+    <p> </p>
+    <h4> (2) Automatic setup of GEMS3K lookup arrays with thermodynamic data </h4>
+    <p> This setup is used for creating lookup arrays for thermodynamic
+      properties of DCs (dependent components) with regular T (temperature) and
+      P (pressure) grid. This applies to standard Gibbs energies g<sup>o</sup>,
+      molar volumes V<sup>o</sup>, optionally ehthalpies h<sup>o</sup>,
+      entropies S<sup>o</sup> and heat capacities Cp<sup>o</sup> (the optional
+      arrays will be created if the respective properties are present in the
+      parent SysEq records).<br>
     </p>
-    <p style="font-family: Helvetica,Arial,sans-serif;"><br>
-    </p>
+    <p> </p>
+    <p>Default is one pressure value (1 bar) and one temperature value (25 <sup>o</sup>C),
+      in which case no interpolation of thermodynamic data can be performed, and
+      all RT calculations will be limited to 1 bar 25 <sup>o</sup>C only.
+      Another single value of T or P can be set by entering equal number in
+      "Minimal" and "Maximal" fields, while leaving 0 in "Step" field. RT
+      calculations will be performed if the actual T and P values in nodes
+      deviate from the grid T, P values plus-minus the respective "Tolerance". </p>
+    <p> To perform RT simulations with variable T and/or P, the lookup arrays
+      must be created by setting "Maximal" T or P greater than "Minimal", and
+      setting "Step" to 5 - 10 C for temperature and 10 - 50 bar for pressure.
+      Usually, good interpolation results require 30-40 grid points in a large
+      temperature range and 10-20 points in a large pressure range. Leaving one
+      of "Step" values zero means that simulations will be performed at constant
+      value of this parameter and variable values of another. For a given node,
+      the interpolation of thermodynamic data in the built-in GEMS3K code will
+      be done if the actual T, P values for the node differ from the closest
+      grid point T, P pair by more than "Tolerance". </p>
+    <p> </p>
+    <h4> (3) T and P grid values for lookup arrays</h4>
+    <p> <span style="text-decoration: underline;">Enter pressure and
+        temperature grid values instead of automatic setup</span>. If this
+      option is activated, the automatic setup of T, P grid is disabled. Set the
+      required numbers of T and P grid values in spin boxes, and enter manually
+      or copy-paste irregular T and P sequences for the lookup grid into the
+      table appearing in the next Step 3b page of this wizard.</p>
+    <p> </p>
+    <p> <u>Disable data interpolation between grid T values (or P values), use
+        data for TP pairs instead</u>. Activation of this option disables the
+      data interpolation over the lookup T, P grid array. In this case, equal
+      number of T and P points must be entered, and the T, P values must be
+      entered pairwise into the respective columns in the next Step 3b page of
+      this wizard. RT calculations can then only be performed if T, P values for
+      a given node correspond to one of the given T, P pairs (plus-minus
+      "Tolerance").</p>
+    <p><br>
+      <span style="font-family: Helvetica,Arial,sans-serif;"> </span></p>
+    <p><span style="font-family: Helvetica,Arial,sans-serif;"></span></p>
+    <span style="font-family: Helvetica,Arial,sans-serif;"> </span>
+    <p style="font-family: Helvetica,Arial,sans-serif;"> </p>
     <hr style="width: 100%; height: 2px;">
     <h3><a name="WZSTEP_8"></a>2.8. GEM2MT Wizard Step 8: Other optional
       settings<br>
