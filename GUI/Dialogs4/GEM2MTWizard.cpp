@@ -1193,7 +1193,7 @@ void GEM2MTWizard::initPTable()
    QList<FieldInfo>	aFlds;
 
    if( PTable )
-   {   formLayout->removeWidget(PTable);
+   {   gridLayout_14->removeWidget(PTable);
        delete PTable; //????
    }
 
@@ -1209,10 +1209,10 @@ void GEM2MTWizard::initPTable()
    PTable->setItemDelegate(deleg);
    PTable->setModel(model);
 
-    QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    sizePolicy1.setHorizontalStretch(0);
-    sizePolicy1.setVerticalStretch(0);
-    PTable->setSizePolicy(sizePolicy1);
+   QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    //sizePolicy1.setHorizontalStretch(0);
+    //sizePolicy1.setVerticalStretch(0);
+   PTable->setSizePolicy(sizePolicy1);
 
    int rowSize =0, colSize=0;
    PTable->getObjectSize(rowSize, colSize);
@@ -1262,9 +1262,9 @@ void GEM2MTWizard::initTTable()
    QList<FieldInfo>	aFlds;
 
    if( TTable )
-   {   formLayout->removeWidget(TTable);
+   {   gridLayout_14->removeWidget(TTable);
        delete TTable; //????
-       TTable = 0;
+       TTable = nullptr;
    }
 
    if(chInterp->isChecked())  // only one table
@@ -1280,8 +1280,8 @@ void GEM2MTWizard::initTTable()
    TTable->setModel(model);
 
    QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Expanding);
-   sizePolicy1.setHorizontalStretch(0);
-   sizePolicy1.setVerticalStretch(0);
+   //sizePolicy1.setHorizontalStretch(0);
+   //sizePolicy1.setVerticalStretch(0);
    TTable->setSizePolicy(sizePolicy1);
 
    int rowSize =0, colSize=0;
@@ -1289,15 +1289,23 @@ void GEM2MTWizard::initTTable()
    TTable->setMaximumSize(QSize(colSize, 16777215));
 
    //formLayout->setWidget(3, QFormLayout::FieldRole,TTable/*, 3, 1, 1, 1*/);
-
 }
 
 void GEM2MTWizard::showPTTable()
 {
   if(!chInterp->isChecked())
-     formLayout->insertRow(3, PTable ,TTable );
+  {
+      gridLayout_14->addWidget( PTable, 3,0,1,1 );
+      gridLayout_14->addWidget( TTable, 3,1,1,1 );
+      label_26->setText(QApplication::translate("GEM2MTWizardData", "Pressure P, bar", nullptr));
+      label_27->setText(QApplication::translate("GEM2MTWizardData", "Temperature T, C", nullptr));
+  }
   else
-    formLayout->insertRow(3, PTable );
+  {
+    gridLayout_14->addWidget(PTable, 3,0,1,2 );
+    label_26->setText(QApplication::translate("GEM2MTWizardData", "          Pressure P, bar        Temperature T, C ", nullptr));
+    label_27->setText(QApplication::translate("GEM2MTWizardData", "", nullptr));
+  }
 }
 
 void GEM2MTWizard::objectChanged()

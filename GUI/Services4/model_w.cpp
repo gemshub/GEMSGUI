@@ -364,7 +364,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
 		       QWidget * parent ):
 	 QTableView( parent ), flds(aFlds)
 {
-    vScroll =false, hScroll=false;
+    vScroll =false; hScroll=false;
 
     setFont( pVisorImp->getCellFont() );
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
