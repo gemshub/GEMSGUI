@@ -792,26 +792,31 @@ void GEM2MTWizard::ScriptChange( int )
                     "$     flux rate constant\n"
                     "      FDLf[qf][1] =: ( qf=0? 1: 0.1);\n";
          }
-//        "     FDLi[qc][0] =: ( qc=0? ( nSFD=1?(-1):0): FDLi[qc-1][1] ); \n"
-//        "     FDLi[qc][1] =: ( qc < nC-1+nSFD ? FDLi[qc][0]+1: (-1) ); \n"
-//             "     FDLf[qc][0] =: 1;\n"
-//        "     FDLf[qc][0] =: 0;\n"          // Debugging 28.11.2011 DK
-//        ret +=  "     FDLf[qc][1] =: 1;\n";
-
          ret += "  end\n"
                "$ end of setting a chain of 1-dir fluxes connecting boxes\n";
 
          ret += "     if( qf > nC-1 ) begin\n"
-                "$    additional fluxes (elemental source or arbitrary fluxes)\n"
-                "     FDLi[qf][0] =: (nSFD > (qf - qc)? qc-qf: 0 );\n"
-                "$    please change 0 above and below this line to a desired source or receiver node index\n"
-                "     FDLi[qf][1] =: 0;\n"
-                "$    flux order (0 = constant mass per step, 1 = ~ to mass of MPG in source), change as desired\n"
-                "     FDLf[qf][0] =: 0;\n"
-                "$    flux rate 1 - change as desired\n"
-                "     FDLf[qf][1] =: 1;\n"
+                "$    additional fluxes (elemental remo/prod or arbitrary normal fluxes)\n"
+                "$    enter index 0 as MPG name in FDLmp[qf] column\n"
+                "$    group for first elemental removal or production row in BSF table\n"
+                "       if( qf = nC ) begin\n"
+                "         FDLi[qf][0] =: 30;\n"
+                "         FDLi[qf][1] =: (-1);\n"
+                "$    flux order (0, 1 or 3), change as desired\n"
+                "         FDLf[qf][0] =: 0;\n"
+                "$    flux rate (constant): >0: removal; <0: production. Change as desired\n"
+                "         FDLf[qf][1] =: 0.001;\n"
+                "         end\n"
+                "$    end of group - add below groups for other remo/prod rows in BSF table\n";
+
+         ret += "$    for the second group, enter index 1 as MPG name in FDLmp[qf] column\n"
+                "$        if( qf = nC+1 ) begin\n"
+                "$         .......\n"
                 "     end\n"
+                "$    For arbitrary normal MPG fluxes between boxes, add groups like above\n"
+                "$     in setting the chain of fluxes\n"
                 "$    end of additional fluxes\n";
+
          ret+=  "  end\n"
                 "$ end of initialization of fluxes\n";
     }

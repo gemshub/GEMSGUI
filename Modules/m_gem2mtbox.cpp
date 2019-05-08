@@ -347,7 +347,7 @@ double TGEM2MT::BoxMasses( long int q )
 // variant for simplified box-flux and sequential reactors transport models
 // Differs from 'standard' module in interpretation of the mole amount of MPG:
 //     1 'M' means the whole source amount (of aq, gas or solid phase) for S models
-//     and just mole amount of phase for B models
+//     and just mole amount of phase for F and B models
 //
 void TGEM2MT::ComposMGPinBox( long int q  )
 {
@@ -378,7 +378,7 @@ void TGEM2MT::ComposMGPinBox( long int q  )
       for( k=0; k<mtp->FIf; k++)
       {
           Xe = mtp->PGT[k*mtp->nPG+f];  // given quantity of phase to add to MGP
-          if( !Xe )
+          if( fabs(Xe)<1e-19 )
               continue;
           UNITP = mtp->UMGP[k];
           if( k < na->pCSD()->nPSb )
@@ -554,7 +554,7 @@ TGEM2MT::BoxEqStatesUpdate(  long int Ni, long int /*pr*/, double tcur, double s
 #endif
 
    if( iRet )
-         Error("GEM2MT Box-Flux model", "Cancel by user");
+         Error("GEM2MT Box-Flux model", "Cancelled by the user");
   }
 #endif
   
@@ -629,8 +629,9 @@ void TGEM2MT::BoxFluxTransportStart()
        for( q=0; q <mtp->nC; q++ )
            for(f=0; f<mtp->nPG; f++ )
                for(i=0; i<mtp->Nf; i++ )
-               {      y(q,f,i) = 0.0;
-                      g(q,f,i) = 0.0;
+               {
+                   y(q,f,i) = 0.0;
+                   g(q,f,i) = 0.0;
                }
 }
 
@@ -649,9 +650,26 @@ void TGEM2MT::FlowThroughBoxFluxStep()
 //   or -1 if the identifier was not found in the MGP id list
 long int TGEM2MT::LookUpXMGP( const char* MGPid )
 {
-        long int found = -1;
+        long int found = -1, smgpx = -1;
         // Check if the first character is 0 1 2 3 4 5 6 7 8 9
+        switch(MGPid[0])
+        {
+            case '0': smgpx = 0; break;
+            case '1': smgpx = 1; break;
+            case '2': smgpx = 2; break;
+            case '3': smgpx = 3; break;
+            case '4': smgpx = 4; break;
+            case '5': smgpx = 5; break;
+            case '6': smgpx = 6; break;
+            case '7': smgpx = 7; break;
+            case '8': smgpx = 8; break;
+            case '9': smgpx = 9; break;
+            default: break;
+        }
         // If so, this is index of elemental flux with composition from BSF table
+        if(smgpx >= 0)
+            return found;
+        // Looking for a normal MGP index
         for( long int f=0; f < mtp->nPG; f++ )
         {
             if( strncmp( mtp->MGPid[f], MGPid, MAXSYMB ) )
@@ -893,7 +911,7 @@ bool TGEM2MT::CalcBoxFluxModel( char /*mode*/ )
           if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
              GetName(), "Use graphic monitoring?") )
         {
-            RecordPlot( 0 );
+            RecordPlot( nullptr );
             UseGraphMonitoring = true;
         }
 #endif
@@ -913,7 +931,7 @@ bool TGEM2MT::CalcBoxFluxModel( char /*mode*/ )
            "Calculating Reactive Mass Transport (RMT). "
            "Please, wait (may take long)...", nstep, mtp->ntM, UseGraphMonitoring );
        if( iRet )
-        Error("GEM2MT generic box-flux model", "Cancel by user");
+        Error("GEM2MT generic box-flux model", "Cancelled by the user");
 #endif
   INTEG( 1e-3, /*mtp->cdv,*/ mtp->dTau, mtp->Tau[START_], mtp->Tau[STOP_] );
 
