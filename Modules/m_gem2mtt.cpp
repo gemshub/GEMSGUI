@@ -352,7 +352,7 @@ void TGEM2MT::MassTransCraNicStart()
     if( mtp->tf <= 0 ) // foolproof
         mtp->tf = 1.;
     mtp->dx = mtp->sizeLc[0]/mtp->nC;  // was mtp->cLen/mtp->nC; changed 15.12.2011 DK
-    mtp->dTau = 0.5*(mtp->dx/mtp->fVel)*1./mtp->tf;
+    mtp->dTau = (mtp->dx/mtp->fVel)/mtp->tf;
     mtp->oTau = 0.;
     mtp->cTau = mtp->Tau[START_];
     // mtp->cTau = 0;
@@ -360,7 +360,7 @@ void TGEM2MT::MassTransCraNicStart()
 }
 
 
-// The mass transport iteration initial time step
+// The mass transport iteration initial time step (random-walk scheme)
 void TGEM2MT::MassTransParticleStart()
 {
     double dt_adv, dt_dif;

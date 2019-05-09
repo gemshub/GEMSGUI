@@ -617,8 +617,8 @@
       mass flux j<sub>2</sub> = m<sub>out</sub>m<sub>in</sub>v<sub>2</sub>, with
       a rate constant v in 1/time/kg units, proportional to the product of
       masses in both boxes; </p>
-    <p>3 - First-order flux j<sub>3</sub> = m<sub>in</sub>v<sub>3</sub>, to MPG
-      mass in receiving box,with a rate constant v<sub>3</sub> in 1/time
+    <p style="margin-left: 40px;">3 - First-order flux j<sub>3</sub> = m<sub>in</sub>v<sub>3</sub>,
+      to MPG mass in receiving box,with a rate constant v<sub>3</sub> in 1/time
       units.&nbsp; <br>
     </p>
     <p> </p>
@@ -745,7 +745,7 @@
     </p>
     <span style="font-family: Helvetica,Arial,sans-serif;"></span>
     <h4><span style="font-family: Helvetica,Arial,sans-serif;"> Options
-        available for 'true' 1-D mass transport models (A, D, W) only:</span></h4>
+        available for 'true' 1-D mass transport models (A, C, D, W) only:</span></h4>
     <h4> </h4>
     <p><u>Initial node volume:</u> define(s) total volumes (in m<sup>3</sup>) to
       be assigned to nodes for use in transport model only; </p>
@@ -753,18 +753,18 @@
     <p><u>Advection velocity:</u> defines advection velocities (in porous
       medium) to be assigned to nodes (in m/s);</p>
     <p> </p>
-    <p><u>Initial node porosity:</u> defines Effective (actual) porosity ( in
-      scale from 0 to 1) to be assigned to nodes;</p>
+    <p><u>Initial node porosity:</u> defines effective porosity ( in scale from
+      0 to 1) to be assigned to nodes;</p>
     <p> </p>
     <p><u>Init. eff. permeability:</u> defines effective permeability (in m<sup>2</sup>)
       to be assigned to nodes;</p>
     <p> </p>
-    <p><u>Init. media dispersivity:</u> defines hydraulic longitudinal
-      dispersivity (m<sup>2</sup>/s) to be assigned to nodes;<br>
+    <p><u>Init. media dispersivity:</u> defines specific longitudinal
+      dispersivity (m) of porous medium to be assigned to nodes;<br>
     </p>
     <p> </p>
     <p><u>Init. general diffusivity:</u> defines general diffusivity of disolved
-      matter (m<sup>2</sup>/s) to be assigned to nodes;</p>
+      species (m<sup>2</sup>/s) to be assigned to nodes;</p>
     <p> </p>
     <p><u>Init. tortuosity factor:</u> defines tortuosity factor of porous
       medium (dimensionless) to be assigned to nodes.</p>
@@ -787,7 +787,7 @@
       profile(s). To retain the old monitoring script, just click 'Next &gt;' on
       this page.</p>
     <p> </p>
-    <p>This monitoring script is independent of the VTK flie output that can be
+    <p>This monitoring script is independent of the VTK file output that can be
       configured at the next wizard step.<br>
     </p>
     <p> The graphics dialog will be updated for every time step (or each "wave"
@@ -1094,31 +1094,165 @@
     </p>
     <hr style="width: 100%; height: 2px;">
     <h3><a name="MWPAGE_2"></a>3.2. GEM2MT Window Page "Nodes" (Array of Nodes)</h3>
-    <p> Here you can define the properties of each nodes. In the DiCp[i,0]
-      (where i the node number), you add an index number, which can be related
-      to a rock composition or fluid composition defined on Window Page 1
-      (Initial). I.e. of a fluid flowing through a rock. The first node (0),
-      should include the index for the fluid [0] and the index for input in
-      column DiCp[0,i]=3. The last node (i), should include the index for output
-      of column [-3].</p>
+    <p> Here, the properties of each node have to be defined. Normally, this is
+      done automatically upon execution of the "mtExpr" initialization script
+      (visible in the "Initial" page). However, the script can be disabled or
+      assign only part of the data. Here, we describe what should be in which
+      data object or column, to also be able to set things up by editing.</p>
+    <p>Below the title line, a "mtSzLc" object having three cells is seen, which
+      keeps spatial dimensions (m) of the RT problem along x, y, z axis. In the
+      present version of the GEM-Selektor code, only the x dimension (the first
+      cell) needs to be set for 1-D RT simulations (A, C, D, W type). This value
+      is used in calculation of temperature and pressure gradients and in
+      determining the maximum possible time step duration from the Courant
+      criterion (enhanced in D and W cases by accounting for diffusion). &nbsp;
+      &nbsp; </p>
+    <p>The next, "ADpar" row contains the time step reduction factor (default 1)
+      in ADpar[0] cell, followed by the initial values of node transport
+      properties that can be distributed to all nodes by the mtExpr
+      initialization script.</p>
+    <p>The time step reduction factor (ADpar[0]) in A,C,D,W modes is multiplied
+      by the maximum time step dt<sub>max</sub> determined from the Courant
+      criterion to give the time step dt actually used in calculation. The rest
+      of ADpar array contains numerical cutoffs: one (ADpar[8]) for IC amount
+      differences in the node between time steps (mol), default 1e-9 mol;
+      another (ADpar[9]) for minimal amounts of IC in node bulk compositions
+      (mol), usually 1e-12 mol.</p>
+    <p>Below the ADpar row, a large table describing all nodes (in their 1-D
+      sequence) is located.&nbsp; The first column DiCp[0] contains the index of
+      initial system bulk composition (index of row in "mBn" table in the
+      "Initial" page) for each node. The second column DiCp[1] contains the node
+      type for each node:</p>
+    <p style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">0:
+        &nbsp; normal node;<br>
+        &nbsp;&nbsp; Boundary condition nodes:<br>
+        1:&nbsp;&nbsp; Dirichlet source (constant composition source);<br>
+        -1:&nbsp; Dirichlet sink;<br>
+        2:&nbsp;&nbsp; Neumann source (constant gradient source);<br>
+        -2:&nbsp; Neumann sink;<br>
+        3:&nbsp;&nbsp; Cauchy source (constant flux source);<br>
+        -3:&nbsp; Cauchy sink;<br>
+        4:&nbsp;&nbsp; Input time-depended function (TBD).&nbsp;&nbsp;</span> </p>
+    <p>In typical 1-D setup, all the nodes except the first and the last one
+      should have type 0 (normal), the first node (with index 0) has type 3
+      (constant flux source of fluid), and the last node has type -3 (sink of
+      fluid). Sources can also be declared in some nodes in the middle of the
+      1-D setup. </p>
+    <p>The nextfour columns contain: StaP[0] pressure (bar) in each node;
+      StaP[1] temperature (C) in each node; StaP[2] transport volume (dm<sup>3</sup>)
+      of each node (usually zeros); StaP[4] mass (kg) of each node. The
+      following 7 columns to the right belong to the HydP table of transport
+      properties of nodes, used in A,C,D,W modes only and initially filled out
+      by the mtExpr initialization script by copying from the ADpar array using
+      the following assignments:
+    </p>
+    <p style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">HydP[qc][0]
+        =: ADpar[1];&nbsp;&nbsp; $ Vt:&nbsp; total node volume (m<sup>3</sup>)<br>
+        HydP[qc][1] =: ADpar[2];&nbsp;&nbsp; $ vp:&nbsp; fluid advection
+        velocity (m/s)<br>
+        HydP[qc][2] =: ADpar[3];&nbsp;&nbsp; $ eps: effective porosity,
+        0&lt;eps&lt;=1<br>
+        HydP[qc][3] =: ADpar[4];&nbsp;&nbsp; $ Km:&nbsp; effective permeability
+        (m<sup>2</sup>) <br>
+        HydP[qc][4] =: ADpar[5];&nbsp;&nbsp; $ al:&nbsp; specific longitudinal
+        dispersivity (m)<br>
+        HydP[qc][5] =: ADpar[6];&nbsp;&nbsp; $ Dif: general aqueous medium
+        diffusivity (m2/s)<br>
+        HydP[qc][6] =: ADpar[7]; &nbsp; $ nto: tortuosity factor, usually
+        1&lt;=nto&lt;10&nbsp; &nbsp;&nbsp; </span></p>
+    <br>
+    Upon RT simulation, transport properties, temperatures and masses of nodes
+    may in principle change if this is programmed in the third part of the
+    mtExpr script.<br>
     <p><br>
     </p>
     <hr style="width: 100%; height: 2px;">
     <h3><a name="MWPAGE_3"></a>3.3. GEM2MT Window Page "Fluxes" (MPG
       Compositions, Array of Fluxes)</h3>
-    <p> Text goes here</p>
+    <p>The data in this page is not used in A, C, D, W modes of GEM2MT, but is
+      essential for MPG box-flux transport models (modes S, F, B).</p>
+    <p>The first table (below the comment line) describes compositions of mobile
+      phase groups MPG (one per PGT column) in terms of quantities of phases
+      from the outgoing box (node). Each MPG must have an ID (short name) and
+      must contain non-zero quantity of at least one phase. Usually, there is
+      one MPG "aq" that contains aqueous electrolyte phase "aq_gen". Other MPGs
+      can be defined too, e.g. one for moving the gas phase, or one for moving
+      aqueous and gas phases together, or one for moving aqueous and some minor
+      (suspended) solid phases, and so on. </p>
+    <p>The next (optional) BSF table contains elemental compositions of point
+      sources/sinks used for special fluxes performing a production or a removal
+      of matter in certain boxes. Each such source, in fact, is also a MPG with
+      index of row in source composition table used as the name of this MPG
+      (i.e. "0", "1". ...). </p>
+    <p>The next table defines all the fluxes between, to and from boxes (nodes).
+      The first two columns must contain the indexes of outgoing (FDLi[0]) and
+      incoming (FDLi[1]) boxes. The index -1 in FDLi[1][qf] means that a sink
+      (or production or removal) flux with index qf is defined in the box with
+      the index given in FDLi[0][qf]. </p>
+    <p>The next column FDLmp identifies as MPG moved by this flux by MPG ID
+      name. This can be either a real name such as "aq" or "aqueous" available
+      in the MPG composition table above, or "0" or "1" ... which is an index of
+      production or removal bulk composition - one of defined in the BSF table
+      above. </p>
+    <p>The next two FDLf[0] and FDLf[1] columns define the order and the rate
+      (constant) for each flux. Possible flux orders: </p>
+    <div style="margin-left: 40px;">0:&nbsp; Zero-order (absolute) flux j<sub>0</sub>
+      = v<sub>0</sub>, with rate v<sub>0</sub> in mass/time units
+      (default);&nbsp; <br>
+      1:&nbsp; First-order to the outgoing box mass flux j<sub>1</sub> = m<sub>out</sub>v<sub>1</sub>,
+      with a rate constant v<sub>1</sub> in 1/time units; <br>
+      2:&nbsp; Second-order to outgoing and incoming MPG mass flux j<sub>2</sub>
+      = m<sub>out</sub>m<sub>in</sub>v<sub>2</sub>, with a rate constant v in
+      1/time/kg units, proportional to the product of masses in both boxes; <br>
+      3:&nbsp; First-order flux j<sub>3</sub> = m<sub>in</sub>v<sub>3</sub>, to
+      MPG mass in receiving box, with a rate constant v<sub>3</sub> in 1/time
+      units.</div>
+    <p>The columns FDLf[2] and FDLf[3] are reserved for future development. The
+      following column FDLid may contain different IDs for individual fluxes, if
+      desired (not used in calculations). The last FDLop column is reserved for
+      future development.&nbsp; &nbsp; </p>
+    Scrolling much below the mentioned tables, you will find work matrices MB
+    (current masses of chemical elements in all boxes) and below that, a dMB
+    matrix with current derivatives of masses of elements in all boxes. These
+    martices are updated at every time integration step and can be used for
+    monitoring/debugging purposes. &nbsp; <br>
+    <p> </p>
     <p><br>
     </p>
     <hr style="width: 100%; height: 2px;">
     <h3><a name="MWPAGE_4"></a>3.4. GEM2MT Window Page "Results" (Sampling
       Script, Table of Results)</h3>
-    <p> Text goes here</p>
+    <p>Thispage contains the text editor with the "mgExpr" script for sampling
+      and plotting the properties of nodes at a time step. The script is
+      normally created in the GEM2MT wizard and can be edited/improved here. The
+      node and the GEM2MT data object labels that can be used in scripts are
+      listed in section 4 of this document.&nbsp; &nbsp; &nbsp;&nbsp; </p>
+    <p>Below, the fields for axis names, then the tables with legend (column)
+      names and the "xt", "yt" tables of sampled results are located. The axis
+      and legend names can be edited any time. The contents of "xt" and "yt"
+      tables can be copy-pasted to electronic spreadsheets and/or plotted in the
+      Graphics Dialog by using the "Plot" toolbar button. </p>
+    <p>Note that the contents of "xt" and "yt" tables are updated at each next
+      time step, and the previous contents are lost. To have the contents at a
+      given time step available, you have to manually stop the simulation after
+      this time step. If contents of all time steps must be saved, this is
+      better done by arranging the output into VTK format files (that can be
+      later plotted using ParaView or similar software).&nbsp; &nbsp;
+      &nbsp;&nbsp; </p>
     <p><br>
     </p>
     <hr style="width: 100%; height: 2px;"><br>
     <h3><a name="MWPAGE_5"></a>3.5. GEM2MT Window Page "Setup" (Task Dimensions
       and Settings)</h3>
-    <p> Text goes here</p>
+    <p> This page dispalys all the settings and switches controlling the
+      operation of GEM2MT module, most of which can only be changed in GEM2MT
+      wizard during create or remake operations. However, some important
+      settings can be done directly in this window. This refers to iterators
+      mtTau (physical time),&nbsp; mttmi, mtPai, mtTai, mtNVi. The group of
+      single cells below with names starting with 'c' shows current values of
+      counters and indices that are changed in the process of simulations. Yet
+      below, the columns with temperatures and pressures of nodes can be seen.
+      &nbsp; </p>
     <p><br>
     </p>
     <hr width="100%" size="2">
@@ -1538,19 +1672,41 @@
       </dd>
       <br>
       <dt> <a name="mtSzLc_0"></a><big><b><big><code>mtSzLc[0]</code></big></b></big>
-        spatial dimensions x of the medium defines topology of nodes</dt>
+        spatial dimensions x of the medium (m), defines topology of nodes</dt>
       <dd><br>
+      </dd>
+      <dd>This cell is used only in 1-D transport models (A, C, D, W modes).
+        This length is used in calculation of the length discretization interval
+        dx = x/nC (or node size), and in calculation of the pressure gradient
+        (hydraulic head) as (Plast-Pfirst)/x. </dd>
+      <dd><br>
+      </dd>
+      <dd>Note that the hydraulic head is not used directly in calculation of
+        advection velocity, nevertheless, for being physically realistic, the
+        linear pressure gradient (a few millibar to a few bar) can be set in the
+        initialization script. In this case, all nodes will be under different
+        pressures (albeit possibly at the same temperature). Note that heat
+        transport is not yet implemented in GEM2MT.&nbsp; </dd>
+      <dd><br>
+      </dd>
+      <dd>The reasonable values of x can be set between 0.01 and 10 m.</dd>
+      <dd>&nbsp; <br>
       </dd>
       <br>
       <dt> <a name="mtSzLc_1"></a><big><b><big><code>mtSzLc[1]</code></big></b></big>
-        spatial dimensions y of the medium defines topology of nodes</dt>
+        spatial dimensions y of the medium (m) defines topology of nodes</dt>
       <dd><br>
+      </dd>
+      <dd>2-D transport models are currently not implemented, so this cell
+        should be set to 0.<br>
       </dd>
       <br>
       <dt> <a name="mtSzLc_2"></a><big><b><big><code>mtSzLc[2]</code></big></b></big>
         spatial dimensions z of the medium defines topology of nodes</dt>
       <dd><br>
       </dd>
+      <dd>3-D transport models are currently not implemented, so this cell
+        should be set to 0. </dd>
       <br>
       # GEM2MT record &lt;67&gt; fields <br>
       <p> </p>
@@ -1635,10 +1791,47 @@
       </dd>
       <br>
       <dt> <a name="ADpar_0"></a><big><b><big><code>ADpar[0]</code></big></b></big>
-        Advection/diffusion mass transport: time step reduction factor (usually
-        1)</dt>
+        Advection/diffusion mass transport: time step reduction factor tf (1 to
+        1000)</dt>
       <dd><br>
       </dd>
+      <dd>This applies to A, C, D, W modes only, in which the time step duration
+        dt is determined from the CFL (Courant-Friedrichs-Levy) condition. For
+        1-D transport case, the CFL condition has the form:</dd>
+      <dd><br>
+      </dd>
+      <dd>C = vp * dt / dx &lt;= C<sub>max</sub>, where C is the Courant number,
+        and dx = x/nC is the node size. &nbsp; </dd>
+      <dd><br>
+      </dd>
+      <dd>The Cmax value depends on the method. For explicit finite differences
+        (A mode) or diffusion-dominated transport (W, D modes), C<sub>max</sub>
+        = 0.5; for Crank-Nicolson implicit method (C), C<sub>max</sub> = 1.0.
+        For diffusion-controlled transport with advection term (W, D modes), </dd>
+      <dd><br>
+      </dd>
+      <dd>C = min( (vp * dt / dx), (dt / dx<sup>2</sup>) ) &lt;= C<sub>max</sub>.</dd>
+      <dd><br>
+      </dd>
+      <dd>From the above expression, the maximum allowed time step duration dt
+        can be evaluated and used in RT simulations that account for advection,
+        dispersion and diffusion:</dd>
+      <dd><br>
+      </dd>
+      <dd>dt<sub>max</sub> = min( (C<sub>max</sub> * dx / vp), (C<sub>max</sub>
+        * dx<sup>2</sup> / (al * vp + Dif) ) )&nbsp;&nbsp; </dd>
+      <dd><br>
+      </dd>
+      <dd>where al is the dispersivity, and Dif is the diffusivity in aqueous
+        medium.</dd>
+      <dd><br>
+      </dd>
+      <dd>The actually used time step in GEM2MT is: dt<sub>actual</sub> = dt<sub>max</sub>
+        / tf. </dd>
+      <dd>The higher values of time step reduction factor tf &gt; 1 may be
+        applied in case of problems with the numerical stability of RT
+        simulations.</dd>
+      <dd>&nbsp; &nbsp; &nbsp; </dd>
       <br>
       <dt> <a name="ADpar_1"></a><big><b><big><code>ADpar[1]</code></big></b></big>
         Vt: initial total node volume (m<sup>3</sup>)</dt>
@@ -1672,8 +1865,7 @@
       </dd>
       <br>
       <dt> <a name="ADpar_3"></a><big><b><big><code>ADpar[3]</code></big></b></big>
-        eps: initial node effective porosity (0 &lt; eps &lt; 1), usually 0 &lt;
-        eps &lt; 1</dt>
+        eps: initial effective porosity, usually 0 &lt; eps &lt; 1</dt>
       <dd><br>
       </dd>
       <dd> The eps value will be copied for all nodes by the RT problem
@@ -1780,16 +1972,36 @@
         * eps, where eps is the porosity.</dd>
       <dd><br>
       </dd>
-      <dd>The value of self-diffusion coefficient of water at 20 C is 2e-9 m2/s,
-        it increases to almost 8.6e-9 m2/s at 100 C. Diffusion coefficients of
-        aqueous solutes are in the range from 1e-9 to 3e-9 m2/s at room
-        temperature. For this reason, a common Dif value of 2e-9 m2/s is
-        frequently used for water and all solutes.&nbsp; <br>
+      <dd>The value of self-diffusion coefficient of water at 20 <sup>o</sup>C
+        is 2e-9 m<sup>2</sup>/s, it increases to almost 8.6e-9 m<sup>2</sup>/s
+        at 100 C. Diffusion coefficients of aqueous solutes are in the range
+        from 1e-9 to 3e-9 m<sup>2</sup>/s at room temperature. For this reason,
+        a common Dif value of 2e-9 m<sup>2</sup>/s is frequently used for water
+        and all solutes.</dd>
+      <dd>&nbsp; <br>
       </dd>
       <br>
       <dt> <a name="ADpar_7"></a><big><b><big><code>ADpar[7]</code></big></b></big>
-        nto: initial tortuosity factor, usually 1.0</dt>
+        nto: initial tortuosity factor, usually 1&lt;=nto&lt;10</dt>
       <dd><br>
+      </dd>
+      <dd>In porous medium, diffusion pathways of molecules is complicated by
+        pore structure and arrangement relative to simple Brownian movement in
+        aqueous medium. Therefore, the diffusivity of solutes D<sub>pm</sub>
+        measured in porous medium is different from that in aqueous medium Dif
+        at the same temperature. Both can be related using porosity eps and the
+        tortuosity factor nto as follows:</dd>
+      <dd><br>
+      </dd>
+      <dd>nto = eps * Dif / D<sub>pm</sub> &nbsp; </dd>
+      <dd><br>
+      </dd>
+      <dd>There are complex relationships between porosity and tortuosity
+        because of pore size, geometry and distribution.</dd>
+      <dd><br>
+      </dd>
+      <dd>The tortuosity factor is used in D and W modes only.</dd>
+      <dd>&nbsp;<br>
       </dd>
       <br>
       <dt> <a name="ADpar_8"></a><big><b><big><code>ADpar[8]</code></big></b></big>
@@ -2039,32 +2251,32 @@
       </dd>
       <br>
       <dt> <a name="HydP_1"></a><big><b><big><code>HydP[1]</code></big></b></big>
-        vp - advection velocity (in pores) in this node (m/sec)</dt>
+        vp: fluid advection velocity (m/s) in nodes (m/sec)</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="HydP_2"></a><big><b><big><code>HydP[2]</code></big></b></big>
-        eps - effective (actual) porosity (0 &lt; eps &lt; 1)</dt>
+        eps: effective (actual) porosity in nodes (0 &lt; eps &lt; 1)</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="HydP_3"></a><big><b><big><code>HydP[3]</code></big></b></big>
-        Km - effective (actual) actual permeability, m**2</dt>
+        Km: effective (actual) actual permeability in nodes, m<sup>2</sup></dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="HydP_4"></a><big><b><big><code>HydP[4]</code></big></b></big>
-        al - specific longitudinal dispersivity of porous medium, m</dt>
+        al: specific longitudinal dispersivity of porous medium in nodes, m</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="HydP_5"></a><big><b><big><code>HydP[5]</code></big></b></big>
-        Dif - general diffusivity of disolved matter in the mode</dt>
+        Dif: general diffusivity of disolved matter in nodes, m<sup>2</sup>/s</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="HydP_6"></a><big><b><big><code>HydP[6]</code></big></b></big>
-        nto - tortuosity factor</dt>
+        nto - tortuosity factor in nodes (1 to 10)&nbsp; </dt>
       <dd><br>
       </dd>
       <br>

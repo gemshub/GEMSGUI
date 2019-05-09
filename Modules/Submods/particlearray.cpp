@@ -181,14 +181,14 @@ LOCATION TParticleArray::setPointInNode( LOCATION nodeSize[2] )
 // dispersivities between nodes ( in 1D case)
 // px index of particle
 double TParticleArray::InterpolationVp_hDl_1D( long int px,
-   double& vp, double& al, double& Dif )
+   double& vp, double& al, double& Dif, double& Dpm )
 {
   if( nodes->SizeM() > 1 ||  nodes->SizeK() > 1 )
      Error( "InterpolationVp_hDl_1D", "Error mode of interpolation." );
 
   DATABR *dbr1, *dbr2;    // nodes for interpolation
   long int nodInd1, nodInd2;  // number of nodes for interpolation
-  double hDl, x1m, x2m;       // middle-point coordinates in the nodes
+  double hDl, x1m, x2m, eps, nto; // middle-point coordinates in the nodes
   LOCATION nodeSize[2];
 
 // set up location
@@ -209,6 +209,8 @@ double TParticleArray::InterpolationVp_hDl_1D( long int px,
     hDl = dbr1->hDl;
     al = dbr1->al;
     Dif = dbr1->Dif;
+    eps = dbr1->eps;
+    nto = dbr1->nto;
 #endif
   }
   else
@@ -225,7 +227,13 @@ double TParticleArray::InterpolationVp_hDl_1D( long int px,
     al -= (dbr2->al - dbr1->al )*d;
     Dif = dbr1->Dif;
     Dif -= (dbr2->Dif - dbr1->Dif )*d;
-    hDl = al*vp+Dif;
+    eps = dbr1->eps;
+    eps -= (dbr2->eps - dbr1->eps )*d;
+    nto = dbr1->nto;
+    nto -= (dbr2->nto - dbr1->nto )*d;
+    Dpm = eps*Dif/nto;  // added account for tortuosity and porosity DK 9.05.19
+//    hDl = al*vp+Dif;
+    hDl = al*vp+Dpm;    // added DK 9.05.19
 #endif
   }
   return hDl;
@@ -240,7 +248,7 @@ long int TParticleArray::DisplaceParticle( long int px, double /*t0*/, double /*
 //  DATACH* ch = nodes->pCSD();       // DataCH structure
 	long int nodInd = ParT1[px].node;
   double ds = 0.;
-  double vp, hDl, al, Dif;
+  double vp, hDl, al, Dif, Dpm;
 
   ErrorIf( nodInd < 0 , "DisplaceParticle", "Error index" );
 //  DATABR* dbr = nodes->pNodT1()[nodInd];  // nodes at current time point
@@ -255,7 +263,7 @@ long int TParticleArray::DisplaceParticle( long int px, double /*t0*/, double /*
                          break;
 
    case MOBILE_C_MASS:
-        hDl = InterpolationVp_hDl_1D( px, vp, al, Dif );
+        hDl = InterpolationVp_hDl_1D( px, vp, al, Dif, Dpm );
 // vp = dbr->vp;     // testing without interpolation
 // hDl = dbr->hDl;   // testing without interpolation
          if( hDl > 0)
