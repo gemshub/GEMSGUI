@@ -1144,8 +1144,7 @@
       following 7 columns to the right belong to the HydP table of transport
       properties of nodes, used in A,C,D,W modes only and initially filled out
       by the mtExpr initialization script by copying from the ADpar array using
-      the following assignments:
-    </p>
+      the following assignments: </p>
     <p style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">HydP[qc][0]
         =: ADpar[1];&nbsp;&nbsp; $ Vt:&nbsp; total node volume (m<sup>3</sup>)<br>
         HydP[qc][1] =: ADpar[2];&nbsp;&nbsp; $ vp:&nbsp; fluid advection
@@ -1424,29 +1423,29 @@
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="mtnC_0"></a><big><b><big><code>mtnC[0]</code></big></b></big>
-        nC - input number of local equilibrium cells (nodes)</dt>
+      <dt> <a name="nC"></a><big><b><big><code>nC</code></big></b></big>&nbsp;
+        - input number of local equilibrium cells (nodes)</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="mtnV_0"></a><big><b><big><code>mtnV[0]</code></big></b></big>
-        nIV - number of initial variants of the chemical system, nIV &lt;= nC</dt>
+      <dt> <a name="nV"></a><big><b><big><code>nV</code></big></b></big> nIV -
+        number of initial variants of the chemical system, nIV &lt;= nC</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="mtnFD_0"></a><big><b><big><code>mtnFD[0]</code></big></b></big>
-        nFD - number of MGP fluxes defined in the megasystem, nFD &gt;= 0</dt>
+      <dt> <a name="nFD"></a><big><b><big><code>nFD</code></big></b></big>&nbsp;
+        - number of MGP fluxes defined in the megasystem, nFD &gt;= 0</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="mtnSFD_0"></a><big><b><big><code>mtnSFD[0]</code></big></b></big>
-        nSFD - number of IC source flux compositions defined in megasystem, nSFD
+      <dt> <a name="nSFD"></a><big><b><big><code>nSFD</code></big></b></big>&nbsp;
+        - number of IC source flux compositions defined in megasystem, nSFD
         &gt;= 0</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="mtnMGP_0"></a><big><b><big><code>mtnMGP[0]</code></big></b></big>
-        nMGP - number of mobile groups of phases, nMGP &gt;= 0</dt>
+      <dt> <a name="nMGP"></a><big><b><big><code>nMGP</code></big></b></big>&nbsp;
+        - number of mobile groups of phases, nMGP &gt;= 0</dt>
       <dd><br>
       </dd>
       <br>
@@ -2127,8 +2126,7 @@
       </dd>
       <br>
       <dt> <a name="DiCp_0"></a><big><b><big><code>DiCp[0]</code></big></b></big>
-        Array of indexes of initial system variants for distributing to nodes
-        [nC]</dt>
+        Array of indexes of initial system variants for nodes [nC]</dt>
     </dl>
     <p><br>
     </p>
@@ -2532,7 +2530,7 @@
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="ctm"></a><big><b><big><code>ctm</code></big></b></big>
+      <dt> <a name="_ctm"></a><big><b><big><code>_ctm</code></big></b></big>
         current CSD #</dt>
       <dd><br>
       </dd>
@@ -2608,6 +2606,11 @@
       <br>
       <dt> <a name="cTaut"></a><big><b><big><code>cTaut</code></big></b></big>
         current physical time</dt>
+      <dd><br>
+      </dd>
+      <br>
+      <dt> <a name="dTau"></a><big><b><big><code>dTau</code></big></b></big>
+        current time step value</dt>
       <dd><br>
       </dd>
       <br>
