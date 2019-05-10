@@ -684,39 +684,54 @@ void GEM2MTWizard::ScriptChange( int )
            "$  Initial setup of cells (nodes, boxes)\n";
 
     if( chDiCp0->isChecked() ) // Initial system variant assignment to nodes
-     ret +=  "$  Assign different fluid and rock composition indices to nodes (i.e. assuming fluid=0 and rock=1)\n"
-             "   DiCp[qc][0] =: ( qc=0 ? 0 : ( nIV > 1 ?  1 : 0 ) );\n";
+    {
+        ret +=  "$  Assign different fluid and rock composition indices to nodes (assuming fluid=0 and rock=1)\n";
+        if( pselA->isChecked() || pselC->isChecked() )
+        {   // for A and C mode, we need two first nodes as Cauchy sources
+            ret += "$   for A or C mode, nodes 0 and 1 contain the initial fluid\n"
+            "  DiCp[qc][0] =: ( (qc=0 | qc=1 ) ? 0 : ( nIV > 1 ?  1 : 0 ) );\n";
+        }
+        else { // for other modes, one Cauchy source is sufficient
+            ret += "$   Node 0 contains initial fluid, for more nodes change as: ( qc=0 | qc=XX )?...\n"
+                   "  DiCp[qc][0] =: ( qc=0 ? 0 : ( nIV > 1 ?  1 : 0 ) );\n";
+        }
+    }
 
     if( chDiCp1->isChecked() ) // Initial assignment of node type
     {
-        if( pselS->isChecked() || pselF->isChecked() )
-//           ret += "  DiCp[qc][1] =: ( qc=0 ? ( nSFD=1? 0: 3 ): 0 ); \n";
-        {
-            ret += "$   for S or F mode, node 0 is set to a constant-flux source\n"
-                   "  DiCp[qc][1] =: ( qc=0 ? 3: 0 ); \n";
+        if( pselA->isChecked() || pselC->isChecked() )
+        {   // for A and C mode, we need two first nodes as Cauchy sources
+           ret += "$   for A or C mode, nodes 0 and 1 are set to a constant-flux source\n"
+                  "  DiCp[qc][1] =: ( (qc=0 | qc=1) ? 3 : 0 ); \n";
         }
-        else {
-            ret += "$   Node 0 set as source, more sources can be set as: ( qc=0 | qc=XX )?...\n"
+        else if( pselB->isChecked() || pselF->isChecked() )
+        {
+            ret += "$   for B or F mode, node 0 is set to a constant-flux source\n"
+                   "  DiCp[qc][1] =: ( qc=0 ? 3: 0 ); \n";
+        //  ret += "  DiCp[qc][1] =: ( qc=0 ? ( nSFD=1? 0: 3 ): 0 ); \n";
+        }
+        else {// One Cauchy source is sufficient
+            ret += "$   Node 0 is set as source, for more sources change as: ( qc=0 | qc=XX )?...\n"
                    "  DiCp[qc][1] =: ( qc=0 ? 3 : 0 ); \n";
         }
-        ret +=  "$   Other nodes normal, the last one set as a constant-flux sink\n"
+        ret +=  "$   Other nodes normal, the last one is set as a constant-flux sink\n"
                 "  DiCp[qc][1] =: (  qc<nC-1 ? DiCp[qc][1]: (-3));\n";
     }
 
     if( chP->isChecked() )   // Initial node pressure, bar (for GEM)
-    { ret +=    "$  Set initial node pressures (change qc*0 to set a gradient)\n"
+    { ret +=    "$  Set initial node pressures (change 0 in qc*0 to set a gradient)\n"
                 "   StaP[qc][0] =: PTVi[(DiCp[qc][0])][0] + qc*0;\n";
       if( pselS->isChecked() || pselF->isChecked() )
          ret += "   Pval[qc] =: StaP[qc][0];\n";
     }
 
     if( chT->isChecked() )   // Initial node temperature, C (for GEM)
-    {  ret +=   "$  Set initial node temperatures (change qc*0 to set a gradient)\n"
+    {  ret +=   "$  Set initial node temperatures (change 0 in qc*0 to set a gradient)\n"
                 "   StaP[qc][1] =: PTVi[(DiCp[qc][0])][1] + qc*0;\n";
        if( pselS->isChecked() || pselF->isChecked() )
          ret += "   Tval[qc] =: StaP[qc][1];\n";
     }
-    if( chV->isChecked() )    // Volume constraint for GEM (usually 0) - change to AMR on water vapor?
+    if( chV->isChecked() )  // Volume constraint for GEM (usually 0) - change to AMR on water vapor?
      ret += "   StaP[qc][2] =: PTVi[(DiCp[qc][0])][2];\n";
 
     if( chRMass->isChecked() ) // Initial (reactive) mass of the node
