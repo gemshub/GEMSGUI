@@ -945,15 +945,16 @@
     <h3><a name="WZSTEP_8"></a>2.8. GEM2MT Wizard Step 8: Other optional
       settings<br>
     </h3>
-    <p>Random-walk transport model (W mode) only:</p>
+    <p>Random-walk transport model (W and V mode) only:</p>
     <p> </p>
-    <p style="margin-left: 40px;">Number of allocated particle types: </p>
+    <p style="margin-left: 40px;">Number of allocated particle types (default
+      1): </p>
     <p> </p>
     <p style="margin-left: 40px;">Number of particle statistic properties (for
-      monitoring):</p>
+      monitoring):(default 0)</p>
     <p> </p>
     <p style="margin-left: 40px;">Use array of coordinates of node locations in
-      space:</p>
+      space: (default no)</p>
     <p> </p>
     <p style="margin-left: 40px;">Diffusion (under construction)</p>
     <p> </p>
@@ -988,17 +989,20 @@
         list; check monitoring scripts</p>
       <p> </p>
       <p> (5) Click 'Calculate', and watch graphical monitoring of the node
-        profiles</p>
+        profiles.</p>
       <p> </p>
     </div>
     <p> </p>
-    <p> During the first run, do not use the graphic window. After the
-      simulation has finished, you can see the sampled results on the Graph
-      page; click on the "Plot data" button to see customizable graphs. If you
-      wish to plot some experimental values of one of calculated and sampled
-      data, then close the graph dialog, find on the "Graph" page arrays xEp and
-      yEp, and type the empirical data in there. When ready, open the plot again
-      and customise it.</p>
+    <p> During the first run, do not use the graphic window; stop the simulation
+      after a few time step and check the node properties table and the flux
+      table (if appropriate). Start the simulation again, this time with
+      graphical output.&nbsp; After the simulation has finished (or was
+      stopped), you can see the sampled results from the last time step in the
+      Results page; click on the "Plot data" button to see customizable graphs.
+      If you wish to plot some independent experimental values of one of
+      calculated and sampled data, then close the graph dialog, find on the
+      "Graph" page arrays xEp and yEp, and type the empirical data in there.
+      When ready, open the plot again and customise it.</p>
     <p> </p>
     <p style="font-family: Helvetica,Arial,sans-serif;"><br>
     </p>
@@ -1435,25 +1439,83 @@
         - input number of local equilibrium cells (nodes)</dt>
       <dd><br>
       </dd>
+      <dd>This counter defines how many nodes (boxes, reservoirs) are used for
+        spatial discretization of the reactive transport problem (usually 1-D
+        column or chain of boxes). Typically, 50 to 250 nodes provide relatively
+        good spatial resolution and a reasonable computing time.</dd>
+      <dd>&nbsp;<br>
+      </dd>
       <br>
       <dt> <a name="nV"></a><big><b><big><code>nV</code></big></b></big> nIV -
         number of initial variants of the chemical system, nIV &lt;= nC</dt>
       <dd><br>
       </dd>
-      <br>
-      <dt> <a name="nFD"></a><big><b><big><code>nFD</code></big></b></big>&nbsp;
-        - number of MGP fluxes defined in the megasystem, nFD &gt;= 0</dt>
+      <dd>This counter defines how many different bulk system compositions are
+        needed to initialize all nodes (boxes) before starting the RT
+        simulation. Minimum one initial variant of rock + fluid composition at
+        chosen fluid/rock mass ratio is needed (to set all the nodes in B of F
+        mode). If this is the case then the source of additional fluid
+        composition can be defined in the BSF table having nSFD rows.&nbsp; </dd>
+      <dd><br>
+      </dd>
+      <dd>The most common setup for 1-D simulations or box-flux chains needs nIV
+        = 2: one initial system describing the (unreacted) rock (without fluid
+        in S mode, with fluid in other modes); and another one describing the
+        (constant composition) fluid source in the first node (or first two
+        nodes in A and C mode.) These initial composition variants will be
+        distributed into all nodes by execution of the mtExpr initialization
+        script.</dd>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="nSFD"></a><big><b><big><code>nSFD</code></big></b></big>&nbsp;
-        - number of IC source flux compositions defined in megasystem, nSFD
-        &gt;= 0</dt>
+      <dt> <a name="nFD"></a><big><b><big><code>nFD</code></big></b></big>&nbsp;
+        - number of MPG fluxes defined in the megasystem, nFD &gt;= 0</dt>
       <dd><br>
+      </dd>
+      <dd>This counter is used in S, F and B modes only, where it defines the
+        total number of fluxes (including nSFD elemental source fluxes) to be
+        defined in the box-flux RT model. If a unidirectional chain of boxes
+        with fluxes of aqueous fluid between adjacent boxes is to be constructed
+        then the number of fluxes is minimum nFD = nC. This is the case for S
+        and F modes, where the fluxes are actually defined by executing the
+        mtExpr initialization script.</dd>
+      <dd><br>
+      </dd>
+      <dd>In the B mode, it is possible to have more than one MPG and hence nFD
+        &gt; nC (should be set in GEM2MT wizard). For example, if gas phase
+        forms a separate MPG and is transported between boxes at higher speed
+        then nMGP = 2 and nFD = 2*nC. If nSFD &gt; 0 i.e. elemental source
+        fluxes for production or removal in some boxes should be defined, then
+        nFD should be increased by the number of such source fluxes.</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <br>
+      <dt> <a name="nSFD"></a><big><b><big><code>nSFD</code></big></b></big>&nbsp;
+        - number of elemental constant source flux compositions, nSFD &gt;= 0</dt>
+      <dd><br>
+      </dd>
+      <dd>This counter (used in F and B modes) defines the number of different
+        elemental constant source compositions (rows of the BSF table) that can
+        be used by special fluxes describing independent production or removal
+        of matter in some chosen boxes. The number of those special fluxes
+        should be added to the number of normal MPG fluxes in defining the total
+        number of rows nFD in flux definition tables.&nbsp; </dd>
+      <dd>&nbsp;<br>
       </dd>
       <br>
       <dt> <a name="nMGP"></a><big><b><big><code>nMGP</code></big></b></big>&nbsp;
         - number of mobile groups of phases, nMGP &gt;= 0</dt>
+      <dd><br>
+      </dd>
+      <dd>This counter is used in S, F and B modes only, where it defines the
+        number of MPG (mobile phase groups) related to bulk composition of
+        phases in outgoing box that can be moved by different fluxes. The most
+        common case is to define nFD = 1, i.e. one MPG composed from aqueous
+        electrolyte phase only. Another MPG can be composed of the gas phase. It
+        is also possible to create an MPG that transports both aqueous and gas
+        phases in a certain mass ratio; or an MPG where aqueous phase with some
+        minor amount of some solid phase(s) is transported. Any regular flux
+        defined between two boxes can only transport one MPG.</dd>
       <dd><br>
       </dd>
       <br>
@@ -1705,7 +1767,8 @@
       <dd><br>
       </dd>
       <dd>2-D transport models are currently not implemented, so this cell
-        should be set to 0.<br>
+        should be set to 0.</dd>
+      <dd><br>
       </dd>
       <br>
       <dt> <a name="mtSzLc_2"></a><big><b><big><code>mtSzLc[2]</code></big></b></big>
@@ -1713,7 +1776,9 @@
       <dd><br>
       </dd>
       <dd>3-D transport models are currently not implemented, so this cell
-        should be set to 0. </dd>
+        should be set to 0.</dd>
+      <dd><br>
+      </dd>
       <br>
       # GEM2MT record &lt;67&gt; fields <br>
       <p> </p>
@@ -1722,35 +1787,15 @@
       <dd><br>
       </dd>
       <dt> <a name="mtNote_"></a><big><b><big><code>mtNote</code></big></b></big>
-        Comment line for optional enhancement of the dtName line</dt>
-      <dd><br>
-      </dd>
-      <br>
-      <dt> <a name="mtflgs_0"></a><big><b><big><code>mtflgs[0]</code></big></b></big>
-        ??? 22 internal</dt>
-      <dd><br>
-      </dd>
-      <br>
-      <dt> <a name="mtShrt_0"></a><big><b><big><code>mtShrt[0]</code></big></b></big>
-        ??? 38 internal</dt>
+        Comment line for optional enhancement of the mtName line</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtAxis_0"></a><big><b><big><code>mtAxis[0]</code></big></b></big>
         Axis Type (plot setup), backgr color, internal</dt>
+      <dd>&nbsp;</dd>
       <dd><br>
       </dd>
-      <br>
-      <dt> <a name="mtWrkS_0"></a><big><b><big><code>mtWrkS[0]</code></big></b></big>
-        internal</dt>
-      <dd><br>
-      </dd>
-      <br>
-      <dt> <a name="mtWrkF_0"></a><big><b><big><code>mtWrkF[0]</code></big></b></big>
-        internal</dt>
-      <dd><br>
-      </dd>
-      <br>
       <dt> <a name="mtInput_0"></a><big><b><big><code>mtInput[0]</code></big></b></big>
         Masses (kg) and volumes (L) for initial systems: Ms (total mass,
         normalize)</dt>
@@ -2123,12 +2168,12 @@
         &nbsp; <br>
       </dd>
       <br>
-      <dt> <a name="mSDref_0"></a><big><b><big><code>mSDref[0]</code></big></b></big>
+      <dt> <a name="mSDref"></a><big><b><big><code>mSDref</code></big></b></big>
         List of SDref keys to data sources</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="mSDval_0"></a><big><b><big><code>mSDval[0]</code></big></b></big>
+      <dt> <a name="mSDval"></a><big><b><big><code>mSDval</code></big></b></big>
         List of short comments to SDref record keys in the GSDref list</dt>
       <dd><br>
       </dd>
@@ -2145,17 +2190,17 @@
       </dd>
       <br>
       <br>
-      <dt> <a name="mtIC_0"></a><big><b><big><code>mtIC[0]</code></big></b></big>
+      <dt> <a name="mtIC"></a><big><b><big><code>mtIC</code></big></b></big>
         ICNL indices in DATABR IC vectors [nICb]</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="mtDC_0"></a><big><b><big><code>mtDC[0]</code></big></b></big>
+      <dt> <a name="mtDC"></a><big><b><big><code>mtDC</code></big></b></big>
         DCNL indices in DATABR DC list [nDCb]</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="mtPH_0"></a><big><b><big><code>mtPH[0]</code></big></b></big>
+      <dt> <a name="mtPH"></a><big><b><big><code>mtPH</code></big></b></big>
         PHNL indices in DATABR phase vectors [nPHb]</dt>
       <dd><br>
       </dd>
@@ -2215,37 +2260,37 @@
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="xFlds_0"></a><big><b><big><code>xFlds[0]</code></big></b></big>
+      <dt> <a name="xFlds"></a><big><b><big><code>xFlds</code></big></b></big>
         List of selected fields to VTK format</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="xEt_0"></a><big><b><big><code>xEt[0]</code></big></b></big>
+      <dt> <a name="xEt"></a><big><b><big><code>xEt</code></big></b></big>
         Abscissa for experimental points [nXE]</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="yEt_0"></a><big><b><big><code>yEt[0]</code></big></b></big>
+      <dt> <a name="yEt"></a><big><b><big><code>yEt</code></big></b></big>
         Ordinates for experimental points to plot [nXE, nYE]</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="mDDc_0"></a><big><b><big><code>mDDc[0]</code></big></b></big>
+      <dt> <a name="mDDc_"></a><big><b><big><code>mDDc</code></big></b></big>
         [Ls] diffusion coefficients for DC</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="mDIc_0"></a><big><b><big><code>mDIc[0]</code></big></b></big>
+      <dt> <a name="mDIc"></a><big><b><big><code>mDIc</code></big></b></big>
         [N] diffusion coefficients for IC</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="mDEl_0"></a><big><b><big><code>mDEl[0]</code></big></b></big>
+      <dt> <a name="mDEl"></a><big><b><big><code>mDEl</code></big></b></big>
         [nE] diffusion coefficients for electrolyte salts</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="mBn_0"></a><big><b><big><code>mBn[0]</code></big></b></big>
+      <dt> <a name="mBn"></a><big><b><big><code>mBn</code></big></b></big>
         [nIV][N] Table of bulk compositions of initial systems</dt>
       <dd><br>
       </dd>
@@ -2286,27 +2331,27 @@
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="BSF_0"></a><big><b><big><code>BSF[0]</code></big></b></big>
+      <dt> <a name="BSF_"></a><big><b><big><code>BSF</code></big></b></big>
         [nSFD][N] table of bulk compositions of source fluxes</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="MB_0"></a><big><b><big><code>MB[0]</code></big></b></big>
-        [nC] column of current masses of boxes or reservoirs (in kg)</dt>
+      <dt> <a name="MB"></a><big><b><big><code>MB</code></big></b></big> [nC]
+        column of current masses of boxes or reservoirs (in kg)</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="dMB_0"></a><big><b><big><code>dMB[0]</code></big></b></big>
+      <dt> <a name="dMB"></a><big><b><big><code>dMB</code></big></b></big>
         [nC][Nb] Table of current derivatives dM for elements in reservoirs</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="qpi_0"></a><big><b><big><code>qpi[0]</code></big></b></big>
+      <dt> <a name="qpi"></a><big><b><big><code>qpi</code></big></b></big>
         [Nqpi] Work array for initial systems math script</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="qpc_0"></a><big><b><big><code>qpc[0]</code></big></b></big>
+      <dt> <a name="qpc"></a><big><b><big><code>qpc</code></big></b></big>
         [Nqpc] Work array for mass transport math script</dt>
       <dd><br>
       </dd>
@@ -2631,19 +2676,8 @@
         node distance [L/nC]</dt>
       <dd><br>
       </dd>
-      <br>
-      <dt> <a name="ref2"></a><big><b><big><code>ref2</code></big></b></big> #</dt>
       <dd><br>
       </dd>
-      <br>
-      <dt> <a name="ref3"></a><big><b><big><code>ref3</code></big></b></big> #</dt>
-      <dd><br>
-      </dd>
-      <br>
-      <dt> <a name="ref4"></a><big><b><big><code>ref4</code></big></b></big> #</dt>
-      <dd>&nbsp;<br>
-      </dd>
-      <br>
       <dt> <a name="nICb\"></a><big><b><big><code>nICb</code></big></b></big>
         number of stoichiometry units (&lt;= nIC) used in the data bridge</dt>
       <dd><br>
@@ -2694,8 +2728,8 @@
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="DD_0"></a><big><b><big><code>DD[0]</code></big></b></big>
-        [nDC] diffusion koefficients, for now constant</dt>
+      <dt> <a name="DD"></a><big><b><big><code>DD</code></big></b></big> [nDC]
+        diffusion koefficients, for now constant</dt>
       <dd><br>
       </dd>
       <br>
@@ -3341,9 +3375,9 @@
       </dt>
       <dt><br>
       </dt>
-      <dt><b><big><tt>E00DTrem: </tt>Invalid dimensions in DualTh data
+      <dt><b><big><tt>E00DTrem: </tt>Invalid dimensions in GEM2MT data
             structure! </big></b></dt>
-      &nbsp; &nbsp;Some counters are set inconsistently. Remake the DualTh
+      &nbsp; &nbsp;Some counters are set inconsistently. Remake the GEM2MT
       record and check the counters.<br>
       &nbsp;<br>
       &nbsp; <br>
@@ -3352,7 +3386,10 @@
     </dl>
     <hr width="100%" size="2">
     <p><tt>end of file</tt> <br>
-      &nbsp; </p>
+    </p>
+    <p>Last edited: 10 May 2019</p>
+    <p>(c) GEMS Development Team</p>
+    <p>&nbsp; </p>
     <br>
     <blockquote> <br>
     </blockquote>
