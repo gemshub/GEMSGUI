@@ -69,60 +69,62 @@
     &nbsp;<br>
     <hr width="100%" size="2"> <br>
     <h2><a name="GEM2MT_OPERATION"></a>1. GEM2MT Module Operation</h2>
-    <p style="text-align: justify;"> GEM2MT module is a tool for automation of
-      simple reactive mass transport simulations coupled with GEM calculation of
-      equilibrium states in spatially distributed nodes (boxes, volumes) over
-      time steps. This module performs simulations of the evolution of
-      fluid-rock interaction reactive transport systems, where the fluid is
-      moved sequentially or simultaneously from one box to the other. This type
-      of simulation represents a simple reactive mass transport model, which
-      requires definition of fluxes between boxes of certain solid-water mass or
-      volume ratios, alternatively porosity and permeability. This model can be
-      used to simulate an open system, and permits to test one-dimensional
-      reactive transport with complex chemical reactions, that may be later used
-      as a benchmark for the coupling of GEMS3K with more complex reactive
-      transport models.</p>
-    <p>The GEM2MT module can simulate reactive transport in three main modes:</p>
+    <p style="text-align: justify;"> The GEM2MT module is a tool for automation
+      of one-dimensional (1-D) reactive mass transport simulations coupled with
+      GEM calculation of equilibrium states in spatially distributed nodes
+      (boxes, volumes) over time steps. GEM2MT can be used to simulate the open
+      system evolution and fluid-rock reactions occurring along a fluid flow
+      path (e.g. vein, fracture, porous media, etc.). This type of simulation
+      solves simple reactive mass transport problems, which requires the
+      definition of fluxes between boxes of certain fluid/rock mass or volume
+      ratios (or alternatively porosity and permeability) where fluid is moved
+      sequentially or simultaneously from one box to the other. </p>
+    <p style="text-align: justify;">The GEM2MT module also permits testing
+      simple 1-D reactive transport problems with complex chemical reactions,
+      that may be later used as a benchmark for the coupling of GEMS3K with more
+      complex reactive transport models. One-dimensional advection-diffusion
+      numerical reactive transport simulations can be performed, as well as the
+      evolution of various sequential and flow-trough reactor sequences or
+      generic box-flux (reservoir) dynamics can be modeled. In addition, I/O
+      files for standalone GEMS3K calculations can be exported for multiple
+      initial node recipes (in the T mode). Changes of species concentrations or
+      amounts of phases through the node profile with time can be graphically
+      monitored at each time step (wave) or logged to files in VTK format. </p>
+    <p>The GEM2MT module can simulate reactive transport in three main modes.
+      More information on the different RMT simulation modes can be found under
+      the following links:</p>
     <ol>
       <li><a href="#GEM2MT_S_MODE">Sequential reactor chain and waves (S);</a> </li>
-      <li><a href="#GEM2MT_F_MODE">Flow-through box-flux sequence (F, B);</a> </li>
+      <li><a href="#GEM2MT_F_MODE">Flow-through and box-flux sequence (F, B);</a>
+      </li>
       <li><a href="#GEM2MT_A_MODE">One-dimensional reactive transport with
           advection/dispersion/diffusion (A,D,W)</a> </li>
     </ol>
     <p> </p>
-    1-D advection-diffusion numerical reactive transport simuations can be
-    performed, as well as the evolution of various sequential and flow-trough
-    reactor sequences or generic box-flux (reservoir) dynamics can be modeled.
-    In addition, I/O files for standalone GEMS3K calculations can be exported
-    for multiple initial node recipes (in the T mode). Changes of species
-    concentrations or amounts of phases through the node profile with time can
-    be graphically monitored at each time step (wave) or logged to files in VTK
-    format.
-    <p>Relevant features of the main types of reactive transport simulations are
-      summarized below. </p>
-    <p style="text-align: justify;">The S and F modes are normally used for
-      simulating hydrothermal fluid-rock interaction by infiltration of fluid
-      into the rock, which leads to development of alteration zones. </p>
+    <p>A typical step by step workflow is shown in the two examples below for
+      the S and F modes. The S and F modes are normally used for simulating
+      fluid-rock interaction by infiltration of fluid into the rock, which leads
+      to development of alteration zones along a fluid flow path. A simulation
+      setup in S or F modes consists typically of one node of source fluid and
+      about 50 to 200 nodes of rock that will be interacted with fluid at
+      hydrothermal conditions, all to be set first using the GEM2MT wizard when
+      creating or re-making the GEM2MT object. </p>
     <p style="text-align: justify;">To prepare for such simulations, two Compos
       (PCO) records are usually created in thermodynamic database mode, namely
       one for fresh fluid such as seawater (let us call it "Fluid") and another
-      for the fresh rock (let us call it "Rock"), best covering the same list of
-      chemical elements (if data are not available for some elements present in
-      the other initial compositions then simply put 1e-9 mol for that element).
-      Such Compos records contain detailed information on compositions of the
-      initial rock and fluid, and can be used each as a single entity for
-      defining their relative proportions in system compositions. </p>
+      for the fresh rock (let us call it "Rock"). Ideally, both rock and fluid,
+      cover the same list of chemical elements (if data are not available for
+      some elements present in the other initial compositions then simply put
+      1e-9 mol for that element). These two system compositions can then be
+      copy/pasted and added later to GEM2MT, either using individual elements
+      (Independent Components) and/or user-defined formulae units.</p>
     <p style="text-align: justify;">Next, a parent system record containing the
-      fluid and the rock is to be created in SysEq under temperature and
-      pressure of interest, to be used later on for creating test systems
-      reproducing chemical state of the fluid and of the rock, as well as for
-      creating a new GEM2MT record (object). </p>
-    <p style="text-align: justify;">A simulation setup in S or F modes consists
-      typically of one node of source fluid and about 50 to 200 nodes of rock
-      that will be interacted with fluid at hydrothermal conditions, all to be
-      set first using the GEM2MT wizard when creating or re-making the GEM2MT
-      object. </p>
-    <h4>"Sequential reactor chain" S mode </h4>
+      fluid and the rock has to be created in SysEq at the temperature and
+      pressure of interest. This record will have to be selected when creating a
+      new GEM2MT record (object) containing all the phases and elements relevant
+      to the fluid-rock system of interest.</p>
+    <p style="text-align: justify;"></p>
+    <h4>Example 1: "Sequential reactor chain" S mode </h4>
     <p>In this mode, we can simulate a "wave" of a fluid that will pass through
       each of the rock nodes once per step (i.e., a wave consists of ca. 100
       steps). Many "waves" are possible.&nbsp; </p>
@@ -169,7 +171,7 @@
       editing in the S mode. Click the "Calculate" toolbar button and (at the
       very first time) do not plot the nodes. Stop calculation after a few
       "waves" and start it again with plotting.&nbsp; </p>
-    <h4>Flow-through reactor chain (F) mode</h4>
+    <h4>Example 2: Flow-through reactor chain (F) mode</h4>
     <p>In this mode, we can simulate the simultaneous transport of (reacted)
       fluid in one direction through all nodes from one node to the next. This
       mode requires the definition of equal zero-order fluxes of fluid
@@ -516,7 +518,7 @@
       <br>
     </p>
     <p><span style="font-weight: bold;">W</span>&nbsp;&nbsp;&nbsp; 1-D
-      (advection-diffusion) reactive transport using random-walk algorithm </p>
+      (advection-diffusion) reactive transport using random-walk method </p>
     <p> </p>
     <p style="margin-left: 40px;"> &lt;description&gt;<br>
       <br>
@@ -529,7 +531,7 @@
     <p style="margin-left: 40px;"><br>
     </p>
     <p><span style="font-weight: bold;">T</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      Export of RT initial-state GEMS3K input files for external coupled RT
+      Export of initial-state GEMS3K input files set for external coupled RT
       codes</p>
     <br>
     <p> </p>
@@ -1145,12 +1147,12 @@
         3:&nbsp;&nbsp; Cauchy source (constant flux source);<br>
         -3:&nbsp; Cauchy sink;<br>
         4:&nbsp;&nbsp; Input time-depended function (TBD).&nbsp;&nbsp;</span> </p>
-    <p>In typical 1-D setup, all the nodes except the first and the last one
+    <p>In a typical 1-D setup, all the nodes except the first and the last one
       should have type 0 (normal), the first node (with index 0) has type 3
       (constant flux source of fluid), and the last node has type -3 (sink of
       fluid). Sources can also be declared in some nodes in the middle of the
       1-D setup. </p>
-    <p>The nextfour columns contain: StaP[0] pressure (bar) in each node;
+    <p>The next four columns contain: StaP[0] pressure (bar) in each node;
       StaP[1] temperature (C) in each node; StaP[2] transport volume (dm<sup>3</sup>)
       of each node (usually zeros); StaP[4] mass (kg) of each node. The
       following 7 columns to the right belong to the HydP table of transport
@@ -1173,8 +1175,8 @@
         1&lt;=nto&lt;10&nbsp; &nbsp;&nbsp; </span></p>
     <br>
     Upon RT simulation, transport properties, temperatures and masses of nodes
-    may in principle change if this is programmed in the third part of the
-    mtExpr script.<br>
+    may in principle change if this is required by RT algorithm and/or
+    programmed in the third part of the mtExpr script.<br>
     <p><br>
     </p>
     <hr style="width: 100%; height: 2px;">
@@ -1523,14 +1525,21 @@
         nEl - number of electrolytes for diffusion coefficients in mDEl</dt>
       <dd><br>
       </dd>
+      <dd>This counter should be set to positive value only if diffusion of
+        electrolytes is considered in D mode. Otherwise it should be 0.</dd>
+      <dd><br>
+      </dd>
       <br>
       <dt> <a name="mtCIP_1"></a><big><b><big><code>mtCIP[1]</code></big></b></big>
-        Number of allocated particle types &lt; 20</dt>
+        nPTypes - number of allocated particle types &lt; 20</dt>
+      <dd>This counter is used by random walk or particle tracking algorithm. If
+        transport in aqueous solution only is simulated then nPTypes = 1.
+        Usually, each MPG needs its own particle type.</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtCIP_2"></a><big><b><big><code>mtCIP[2]</code></big></b></big>
-        Number of particle statistic properties (for monitoring) &gt;= nPTypes</dt>
+        - number of particle statistic properties (for monitoring) &gt;= nPTypes</dt>
       <dd><br>
       </dd>
       <br>
@@ -1538,19 +1547,26 @@
         Lb - number of formula units to set compositions in initial variants</dt>
       <dd><br>
       </dd>
+      <dd>This counter (normally set in GEM2MT wizard) defines the number of
+        columns in the mCAb table where additions of quantities of arbitrary
+        chemical formulae to the initial system composition variants can be
+        entered. The formulae (in GEM-Selektor syntax) must be entered in the
+        for_i row for each column, the units of measurement in mAUCln row.</dd>
+      <dd>&nbsp; <br>
+      </dd>
       <br>
       <dt> <a name="mtSzT_1"></a><big><b><big><code>mtSzT[1]</code></big></b></big>
-        Number of references to data sources</dt>
+        - number of references to data sources</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtSzT_2"></a><big><b><big><code>mtSzT[2]</code></big></b></big>
-        Number of elements in the script work array qpi for transport</dt>
+        - number of elements in the script work array qpi for transport</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtSzT_3"></a><big><b><big><code>mtSzT[3]</code></big></b></big>
-        Number of elements in the script work array qpc for graphics</dt>
+        - number of elements in the script work array qpc for graphics</dt>
       <dd><br>
       </dd>
       <br>
@@ -1560,7 +1576,7 @@
       </dd>
       <br>
       <dt> <a name="mtSzT_5"></a><big><b><big><code>mtSzT[5]</code></big></b></big>
-        Fi - number of phases (set automatically)</dt>
+        Fi - number of phases in the parent system (set automatically)</dt>
       <dd><br>
       </dd>
       <br>
@@ -1571,72 +1587,78 @@
       </dd>
       <br>
       <dt> <a name="mtSzT_7"></a><big><b><big><code>mtSzT[7]</code></big></b></big>
-        Time point for the simulation break (Tau[0] at start)</dt>
+        - time point for the simulation break (equals to Tau[0] at start)</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtnSnE_0"></a><big><b><big><code>mtnSnE[0]</code></big></b></big>
-        Maximum allowed number of time iteration steps</dt>
+        - maximum allowed number of time iteration steps</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtnSnE_1"></a><big><b><big><code>mtnSnE[1]</code></big></b></big>
-        Number of plots (columns in the yt array which contains )</dt>
+        - number of plots (i.e. columns in the yt array containing sampled
+        properties of nodes)</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtnSnE_2"></a><big><b><big><code>mtnSnE[2]</code></big></b></big>
-        Total number of experimental points (in xEt, yEt) to plot over</dt>
+        - total number of experimental points (in xEt, yEt) to plot over the yt
+        table data</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtnSnE_3"></a><big><b><big><code>mtnSnE[3]</code></big></b></big>
-        Number of experimental parameters (columns in the yEt array)</dt>
+        - number of experimental properties of nodes (i.e. columns in the yEt
+        table)</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtPTai_0"></a><big><b><big><code>mtPTai[0]</code></big></b></big>
-        Number of P points in MTP interpolation array in DataCH ( 1 to 10 )</dt>
+        - number of P points in the interpolation grid for standard
+        thermodynamic data ( up to 10 )</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtPTai_1"></a><big><b><big><code>mtPTai[1]</code></big></b></big>
-        Number of T points in MTP interpolation array in DataCH ( 1 to 20 )</dt>
+        - number of T points in the interpolation grid for standard
+        thermodynamic data ( up to 40 ) </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtCHBR_0"></a><big><b><big><code>mtCHBR[0]</code></big></b></big>
-        Number of DCs in phases-solutions in Multi (DATACH)</dt>
+        - total number of Dependent Components in phases-solutions</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtCHBR_1"></a><big><b><big><code>mtCHBR[1]</code></big></b></big>
-        Number of stoichiometry units (&lt;= nIC) used in the data bridge</dt>
+        - number of stoichiometry units (&lt;= nIC) used in the data bridge</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtCHBR_2"></a><big><b><big><code>mtCHBR[2]</code></big></b></big>
-        Number of DC (chemical species, &lt;= nDC) used in the data bridge</dt>
+        - number of DC (chemical species, &lt;= nDC) used in the data bridge</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtCHBR_3"></a><big><b><big><code>mtCHBR[3]</code></big></b></big>
-        Number of phases (&lt;= nPH) used in the data bridge</dt>
+        - number of phases (&lt;= nPH) used in the data bridge</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtCHBR_4"></a><big><b><big><code>mtCHBR[4]</code></big></b></big>
-        nICb number of ICs in (DATABR) for setting box-fluxes</dt>
+        nICb - number of Independent Components in the data bridge for setting
+        boxes and fluxes </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtCHBR_5"></a><big><b><big><code>mtCHBR[5]</code></big></b></big>
-        nPHb number of phases in (DATABR) for setting box-fluxes</dt>
+        nPHb - number of phases in the data bridge for setting boxes and fluxes</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtCHBR_6"></a><big><b><big><code>mtCHBR[6]</code></big></b></big>
-        Number of selected fields to VTK format</dt>
+        - number of selected data fields to save to VTK format</dt>
       <dd><br>
       </dd>
       <br>
@@ -1656,72 +1678,77 @@
       </dd>
       <br>
       <dt> <a name="mttmi_0"></a><big><b><big><code>mttmi[0]</code></big></b></big>
-        SYSTEM CSD definition #: start value</dt>
+        System CSD definition # iterator: start value</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mttmi_1"></a><big><b><big><code>mttmi[1]</code></big></b></big>
-        SYSTEM CSD definition #: end value</dt>
+        System CSD definition # iterator: end value</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mttmi_2"></a><big><b><big><code>mttmi[2]</code></big></b></big>
-        SYSTEM CSD definition #: step value</dt>
+        System CSD definition # iterator: step value</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtNVi_0"></a><big><b><big><code>mtNVi[0]</code></big></b></big>
-        Restrictions variant #: start value</dt>
+        System restrictions variant # iterator: start value</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtNVi_1"></a><big><b><big><code>mtNVi[1]</code></big></b></big>
-        Restrictions variant #: end value</dt>
+        System restrictions variant # iterator: end value</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtNVi_2"></a><big><b><big><code>mtNVi[2]</code></big></b></big>
-        Restrictions variant #: step value</dt>
+        System restrictions variant # iterator: step value</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtPai_0"></a><big><b><big><code>mtPai[0]</code></big></b></big>
-        Pressure P, bar: start (real) for MTP array in DataCH</dt>
+        Pressure P, bar: start value for creating the interpolation grid array</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtPai_1"></a><big><b><big><code>mtPai[1]</code></big></b></big>
-        Pressure P, bar: end for MTP array in DataCH</dt>
+        Pressure P, bar: end value for creating the interpolation grid array</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtPai_2"></a><big><b><big><code>mtPai[2]</code></big></b></big>
-        Pressure P, bar: step for MTP array in DataCH</dt>
+        Pressure P, bar:&nbsp;step value for creating the interpolation grid
+        array</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtPai_3"></a><big><b><big><code>mtPai[3]</code></big></b></big>
-        Pressure P, bar: tolerance Ptol</dt>
+        Pressure P, bar: tolerance Ptol for interpolation of standard
+        thermodynamic data</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtTai_0"></a><big><b><big><code>mtTai[0]</code></big></b></big>
-        Temperature T, C: start (real) for MTP array in DataCH</dt>
+        Temperature T, C:&nbsp;start value for creating the interpolation grid
+        array</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtTai_1"></a><big><b><big><code>mtTai[1]</code></big></b></big>
-        Temperature T, C: end for MTP array in DataCH</dt>
+        Temperature T, C: end value for creating the interpolation grid array</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtTai_2"></a><big><b><big><code>mtTai[2]</code></big></b></big>
-        Temperature T, C: step for MTP array in DataCH</dt>
+        Temperature T, C:&nbsp;step value for creating the interpolation grid
+        array</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mtTai_3"></a><big><b><big><code>mtTai[3]</code></big></b></big>
-        Temperature T, C: tolerance Ttol</dt>
+        Temperature T, C: tolerance Ttol for interpolation of standard
+        thermodynamic data</dt>
       <dd><br>
       </dd>
       <br>
@@ -1741,7 +1768,7 @@
       </dd>
       <br>
       <dt> <a name="mtSzLc_0"></a><big><b><big><code>mtSzLc[0]</code></big></b></big>
-        spatial dimensions x of the medium (m), defines topology of nodes</dt>
+        spatial dimension x of the (porous) medium (m)</dt>
       <dd><br>
       </dd>
       <dd>This cell is used only in 1-D transport models (A, C, D, W modes).
@@ -1763,7 +1790,7 @@
       </dd>
       <br>
       <dt> <a name="mtSzLc_1"></a><big><b><big><code>mtSzLc[1]</code></big></b></big>
-        spatial dimensions y of the medium (m) defines topology of nodes</dt>
+        spatial dimension y of the (porous) medium (m)</dt>
       <dd><br>
       </dd>
       <dd>2-D transport models are currently not implemented, so this cell
@@ -1772,7 +1799,7 @@
       </dd>
       <br>
       <dt> <a name="mtSzLc_2"></a><big><b><big><code>mtSzLc[2]</code></big></b></big>
-        spatial dimensions z of the medium defines topology of nodes</dt>
+        spatial dimension z of the (porous) medium (m)</dt>
       <dd><br>
       </dd>
       <dd>3-D transport models are currently not implemented, so this cell
@@ -1783,16 +1810,16 @@
       # GEM2MT record &lt;67&gt; fields <br>
       <p> </p>
       <dt> <a name="mtName"></a><big><b><big><code>mtName</code></big></b></big>
-        Comment line for the full name of this GEM2MT task</dt>
+        - comment line for the full name of this GEM2MT task</dt>
       <dd><br>
       </dd>
       <dt> <a name="mtNote_"></a><big><b><big><code>mtNote</code></big></b></big>
-        Comment line for optional enhancement of the mtName line</dt>
+        - comment line for optional enhancement of the mtName line</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="mtAxis_0"></a><big><b><big><code>mtAxis[0]</code></big></b></big>
-        Axis Type (plot setup), backgr color, internal</dt>
+      <dt> <a name="mtAxis"></a><big><b><big><code>mtAxis</code></big></b></big>&nbsp;
+        Axis type (graphical plot setup), background color, internal</dt>
       <dd>&nbsp;</dd>
       <dd><br>
       </dd>
@@ -1843,8 +1870,8 @@
       </dd>
       <br>
       <dt> <a name="ADpar_0"></a><big><b><big><code>ADpar[0]</code></big></b></big>
-        Advection/diffusion mass transport: time step reduction factor tf (1 to
-        1000)</dt>
+        Advection/diffusion mass transport: time step reduction factor tf
+        (usually 1)</dt>
       <dd><br>
       </dd>
       <dd>This applies to A, C, D, W modes only, in which the time step duration
@@ -1886,7 +1913,7 @@
       <dd>&nbsp; &nbsp; &nbsp; </dd>
       <br>
       <dt> <a name="ADpar_1"></a><big><b><big><code>ADpar[1]</code></big></b></big>
-        Vt: initial total node volume (m<sup>3</sup>)</dt>
+        Vt - initial total node volume (m<sup>3</sup>)</dt>
       <dd><br>
       </dd>
       <dd>This value of node volume is only used in the context of porosity -
@@ -1897,10 +1924,10 @@
       </dd>
       <br>
       <dt> <a name="ADpar_2"></a><big><b><big><code>ADpar[2]</code></big></b></big>
-        vp: fluid advection velocity (m/s), usually 1e-10 &lt; vp &lt; 1e-3</dt>
+        vp - fluid advection velocity (m/s), usually 1e-10 &lt; vp &lt; 1e-3</dt>
       <dd><br>
       </dd>
-      <dd>This inital value of advection velocity will be copied for all nodes
+      <dd>This inital value of advection velocity will be copied into all nodes
         by the RT problem initialization script. This value should be not less
         than 1e-10 m/s and usually is about 1e-6 or 1e-7 m/s for groundwater
         flow in the aquifer.</dd>
@@ -1917,7 +1944,7 @@
       </dd>
       <br>
       <dt> <a name="ADpar_3"></a><big><b><big><code>ADpar[3]</code></big></b></big>
-        eps: initial effective porosity, usually 0 &lt; eps &lt; 1</dt>
+        eps - initial effective porosity, usually 0 &lt; eps &lt; 1 (default 1)</dt>
       <dd><br>
       </dd>
       <dd> The eps value will be copied for all nodes by the RT problem
@@ -1940,7 +1967,7 @@
       </dd>
       <br>
       <dt> <a name="ADpar_4"></a><big><b><big><code>ADpar[4]</code></big></b></big>
-        Km: initial effective permeability, m<sup>2</sup>, usually 1 darcy =
+        Km - initial effective permeability, m<sup>2</sup>, usually 1 darcy =
         1e-12 m<sup>2</sup></dt>
       <dd><br>
       </dd>
@@ -1961,13 +1988,13 @@
         clay, limestone, dolomite, fresh granite, basalt.</dd>
       <dd><br>
       </dd>
-      <dd>The Km value will be copied for all nodes by the RT problem
+      <dd>The Km value will be copied to all nodes by the RT problem
         initialization script.&nbsp; </dd>
       <dd>&nbsp;&nbsp; &nbsp; </dd>
       <br>
       <dt> <a name="ADpar_5"></a><big><b><big><code>ADpar[5]</code></big></b></big>
-        al: initial value of specific longitudinal dispersivity (m), usually 1 m
-      </dt>
+        al - initial value of specific longitudinal dispersivity (m), usually
+        0.001 to 1 m </dt>
       <dd><br>
       </dd>
       <dd>Mechanical dispersion (hydrodynamic dispersion) results from water
@@ -1990,17 +2017,17 @@
         to be used in the Fick's First Law term describing the dispersion flux.</dd>
       <dd><br>
       </dd>
-      <dd>The values of longitudinal dispersivity may vary from 0.01 to 10 m for
-        column length up to 10 m, depending on the soil/rock type (about 1 min
-        homogeneous sandy aquifer, less in clayey rocks). </dd>
+      <dd>The values of longitudinal dispersivity may vary from 0.001 to 10 m
+        for column length up to 10 m, depending on the soil/rock type (about 1
+        in homogeneous sandy aquifer, less in clayey rocks). </dd>
       <dd><br>
       </dd>
-      <dd>The al value will be copied for all nodes by the RT problem
+      <dd>The al value will be copied into all nodes by the RT problem
         initialization script.</dd>
       <dd>&nbsp; &nbsp;&nbsp; </dd>
       <br>
       <dt> <a name="ADpar_6"></a><big><b><big><code>ADpar[6]</code></big></b></big>
-        Dif: initial general aqueous medium diffusivity (m<sup>2</sup>/s),
+        Dif&nbsp; - initial general aqueous medium diffusivity (m<sup>2</sup>/s),
         usually 2e-9</dt>
       <dd><br>
       </dd>
@@ -2034,7 +2061,7 @@
       </dd>
       <br>
       <dt> <a name="ADpar_7"></a><big><b><big><code>ADpar[7]</code></big></b></big>
-        nto: initial tortuosity factor, usually 1&lt;=nto&lt;10</dt>
+        nto - initial tortuosity factor, usually 1&lt;=nto&lt;10</dt>
       <dd><br>
       </dd>
       <dd>In porous medium, diffusion pathways of molecules is complicated by
@@ -2057,19 +2084,19 @@
       </dd>
       <br>
       <dt> <a name="ADpar_8"></a><big><b><big><code>ADpar[8]</code></big></b></big>
-        cutoff for IC amount differences in the node between time steps (mol),
+        - cutoff for IC amount differences in the node between time steps (mol),
         usually 1e-9</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="ADpar_9"></a><big><b><big><code>ADpar[9]</code></big></b></big>
-        cutoff for minimal amounts of IC in node bulk compositions (mol),
+        - cutoff for minimal amounts of IC in node bulk compositions (mol),
         usually 1e-12</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="ADpar_10"></a><big><b><big><code>ADpar[10]</code></big></b></big>
-        ADrs1, reserved</dt>
+        - reserved</dt>
       <dd><br>
       </dd>
       <br>
@@ -2079,7 +2106,7 @@
       </dd>
       <br>
       <dt> <a name="mtSize_0"></a><big><b><big><code>mtSize[0]</code></big></b></big>
-        Graph axis scale for the region</dt>
+        Graph axis scale for the plot</dt>
       <dd><br>
       </dd>
       <br>
@@ -2089,37 +2116,41 @@
       </dd>
       <br>
       <dt> <a name="mX_Nam"></a><big><b><big><code>mX_Nam</code></big></b></big>
-        Abscissa name (for the graph plots), up to 8 characters</dt>
+        - abscissa name (for the graph plots), up to 8 characters</dt>
       <dd><br>
       </dd>
-      <dd>To be entered by the user.<br>
+      <dd>To be entered by the user.</dd>
+      <dd><br>
       </dd>
       <br>
       <dt> <a name="mY_Nam"></a><big><b><big><code>mY_Nam</code></big></b></big>
-        Ordinate name (for the graph plots), up to 8 characters</dt>
+        - ordinate name (for the graph plots), up to 8 characters</dt>
       <dd><br>
       </dd>
-      <dd>To be entered by the user.<br>
+      <dd>To be entered by the user.</dd>
+      <dd><br>
       </dd>
       <br>
       <dt> <a name="mLnam"></a><big><b><big><code>mLnam</code></big></b></big>
-        List of legend names for columns in the yt table (curves on the plot)
+        - list of legend names for columns in the yt table (curves on the plot)
         [nYS]</dt>
       <dd><br>
       </dd>
       <dd>Can be automatically created by GEM2MT wizard, may be edited by the
-        user.<br>
+        user.</dd>
+      <dd><br>
       </dd>
       <br>
       <dt> <a name="mLnamE"></a><big><b><big><code>mLnamE</code></big></b></big>
-        List of legend names of columns of entered data in the ytE table [nYE]</dt>
+        - list of legend names of columns of entered data in the ytE table [nYE]</dt>
       <dd><br>
       </dd>
-      <dd>To be entered by the user.<br>
+      <dd>To be entered by the user.</dd>
+      <dd><br>
       </dd>
       <br>
       <dt> <a name="mtExpr"></a><big><b><big><code>mtExpr</code></big></b></big>
-        Math script text for initialization and calculation of mass transport</dt>
+        - math script text for initialization and calculation of mass transport</dt>
       <dd><br>
       </dd>
       <dd>Equations (operators) in this <a href="g_mscript.html">math script</a>
@@ -2135,7 +2166,8 @@
         be edited/extended by the user later on. </dd>
       <br>
       <dt> <a name="mgExpr"></a><big><b><big><code>mgExpr</code></big></b></big>
-        Math script text for data sampling and plotting</dt>
+        - math script text for data sampling and plotting the properties of
+        nodes</dt>
       <dd><br>
       </dd>
       <dd>This <a href="g_mscript.html">math script</a> is necessary to monitor
@@ -2169,26 +2201,74 @@
       </dd>
       <br>
       <dt> <a name="mSDref"></a><big><b><big><code>mSDref</code></big></b></big>
-        List of SDref keys to data sources</dt>
+        - list of SDref keys to data sources</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mSDval"></a><big><b><big><code>mSDval</code></big></b></big>
-        List of short comments to SDref record keys in the GSDref list</dt>
+        - list of short comments to SDref record keys in the mSDref list</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="DiCp_0"></a><big><b><big><code>DiCp[0]</code></big></b></big>
-        Array of indexes of initial system variants for nodes [nC]</dt>
-    </dl>
-    <p><br>
-    </p>
-    <dl>
-      <dt><a name="DiCp_1"></a><big><b><big><code>DiCp[1]</code></big></b></big>
-        Array of node type codes {0 1 2 3 -1 -2 -3} [nC]</dt>
+        -&nbsp; indices of initial system compositions for nodes [nC]</dt>
       <dd><br>
       </dd>
+      <dd>For each node (box), this column should contain indices of initial
+        system composition variants, which are the indices of rows in the mBn
+        table. Usually there are only a few variants (e.g. "Rock" and "FLuid"),
+        whose indices are distributed into hundreds of cells in this column by
+        the initialization script mtExpr at the beginning of GEM2MT module
+        execution.</dd>
+      <dd><br>
+      </dd>
+      <dd>In many cases (e.g. 1-D transport by A, W, S, F, B modes), the first
+        cell in this column (the first two cells in A, C modes) contains the
+        index of initial fluid (water) composition. These cells are acting as
+        infinite sources of constant-composition fluids, as indicated with the
+        respective code in the DiCp[1] column. The rest of cells are given the
+        initial rock (S mode) or rock+fluid (other modes) compositions and
+        declared as "normal" (code 0 in the DiCp[1] column). The very last cell
+        is declared as having the infinite sink of fluid (code -3 in the DiCp[1]
+        column).</dd>
+      <dd><br>
+      </dd>
+      <dd>If needed, some fluid source nodes may be declared in the middle of
+        the sequence of nodes (boxes), or different initial rock types may be
+        assigned to nodes in certain intervals of indices. </dd>
+      <dd>&nbsp;<br>
+      </dd>
       <br>
+      <dt><a name="DiCp_1"></a><big><b><big><code>DiCp[1]</code></big></b></big>
+        - node type codes {0 1 2 3 -1 -2 -3}, 0 is a normal node [nC]</dt>
+      <dd><br>
+      </dd>
+      <dd>This column contains type codes for all nodes defined for a 1-D
+        transport or box-flux chain task. The codes are distributed into
+        hundreds of cells in this column by the initialization script mtExpr at
+        the beginning of GEM2MT module execution. Possible codes:</dd>
+      <dd><br>
+      </dd>
+      <dd><span style="font-family: Courier New,Courier,monospace;">0: &nbsp;
+          normal node;<br>
+          &nbsp;&nbsp; Boundary condition nodes:<br>
+          1:&nbsp;&nbsp; Dirichlet source (constant composition source);<br>
+          -1:&nbsp; Dirichlet sink;<br>
+          2:&nbsp;&nbsp; Neumann source (constant gradient source);<br>
+          -2:&nbsp; Neumann sink;<br>
+          3:&nbsp;&nbsp; Cauchy source (constant flux source);<br>
+          -3:&nbsp; Cauchy sink;<br>
+          4:&nbsp;&nbsp; Input time-depended function (TBD).&nbsp;&nbsp;</span>
+        <p></p>
+      </dd>
+      <dd>The most frequently used boundary condition code is 3 for the first
+        one or two nodes defining a source of "fresh" aqueous fluid, and -3
+        (infinite sink of fluid) in the last node. Accordingly, in the DiCp[0]
+        column, the first one or two nodes should have the index of initial
+        fluid composition, and all other nodes - the index(es) of initial rock
+        or fluid+rock compositions.</dd>
+      <dd>&nbsp; <br>
+      </dd>
       <br>
       <dt> <a name="mtIC"></a><big><b><big><code>mtIC</code></big></b></big>
         ICNL indices in DATABR IC vectors [nICb]</dt>
@@ -2206,57 +2286,140 @@
       </dd>
       <br>
       <dt> <a name="FDLi_0"></a><big><b><big><code>FDLi[0]</code></big></b></big>
-        Source box index in the flux definition</dt>
+        - source (outgoing) box index in MPG flux definition</dt>
+      <dd><br>
+      </dd>
+      <dd>Each normal flux (in S, F, B modes) is defined by the index of
+        outgoing box (node) where it takes the elemental composition and mass of
+        the MPG (mobile phase group) transported by this flux, and the index of
+        incoming box where the mass of MPG will be added to after proper
+        re-scaling according to the flux order, rate and time step duration.
+        This cell defines the index of outgoing box (initially set by the user
+        or by execution of the mtExpr initialization script).</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="FDLi_1"></a><big><b><big><code>FDLi[1]</code></big></b></big>
-        Receiver box index in the flux definition</dt>
+        - receiver (incoming) box index in MPG flux definition</dt>
       <dd><br>
       </dd>
+      <dd>Each normal flux (in S, F, B modes) is defined by the index of
+        outgoing box (node) where it takes the elemental composition and mass of
+        the MPG (mobile phase group) transported by this flux, and the index of
+        incoming box where the mass of MPG will be added to after proper
+        re-scaling according to the flux order, rate and time step duration.
+        This cell defines the index of incoming box (initially set by the user
+        or by execution of the mtExpr initialization script).</dd>
+      <dd><br>
+      </dd>
+      <dd>In a typical arrangement of fluxes for 1-D box-flux chain, the first
+        flux has box indices 0 (source) and 1 (receiver); the second flux - 1
+        and 2; the third - 2 and 3, and so on.</dd>
+      <dd><br>
+      </dd>
+      <dd>In certain cases, this cell may contain -1 indicating that the flux is
+        a sink (of MPG or of constant elemental composition) or a source of
+        constant elemental composition defined as a row in the BSF table (in
+        this case, the ID name of MPG for this flux will be the index of that
+        row in BSF table; whether it is a source or a sink, depends on the sign
+        of the flux rate (constant): (-) source, (+) sink.</dd>
+      <dd>&nbsp; &nbsp; </dd>
       <br>
       <dt> <a name="PTVi_0"></a><big><b><big><code>PTVi[0]</code></big></b></big>
-        Pressure P, bar for initial systems (values within Pai range) [nIV]</dt>
+        - pressure P, bar for initial systems (values within Pai range) [nIV]</dt>
       <dd><br>
+      </dd>
+      <dd>Each row in this table contains generic properties of an initial
+        system variant that will be distributed into all nodes by execution of
+        the mtExpr initialization script. This cell contains initial pressure to
+        act on the nodes; this value, entered by the user, must be in the
+        pressure (interpolation) range as defined in the GEM2MT wizard (see Pai
+        iterator).</dd>
+      <dd>&nbsp; <br>
       </dd>
       <br>
       <dt> <a name="PTVi_1"></a><big><b><big><code>PTVi[1]</code></big></b></big>
-        Temperature T, C for initial systems (values within Tai range) [nIV]</dt>
+        - temperature T, C for initial systems (values within Tai range) [nIV]</dt>
+      <dd><br>
+      </dd>
+      <dd>This cell contains initial temperature (in deg. C) to act on the
+        nodes; this value, entered by the user, must be in the temperature
+        (interpolation) range as defined in the GEM2MT wizard (see Tai
+        iterator).</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="PTVi_2"></a><big><b><big><code>PTVi[2]</code></big></b></big>
-        Volume of the system (L) [nIV], zeros for G minimization</dt>
+        - volume of the system (L) [nIV], zeros for G minimization</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="PTVi_3"></a><big><b><big><code>PTVi[3]</code></big></b></big>
-        Initial mass (kg) (to normalize composition of initial system in nodes)</dt>
+        - initial mass (kg) (to normalize composition of initial system in
+        nodes) [nIV]</dt>
+      <dd><br>
+      </dd>
+      <dd>This initial mass entered by the user, if not 0, will be used to
+        normalize bulk composition of the initial system to a desired mass of
+        the nodes.</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="PTVi_4"></a><big><b><big><code>PTVi[4]</code></big></b></big>
-        Actual mass of initial system (kg) - to set initial node masses</dt>
+        - actual mass of initial system (kg) - to set initial node masses [nIV]</dt>
+      <dd><br>
+      </dd>
+      <dd>This cell contains the automatically calculated (upon initialization
+        of GEM2MT task) mass as given by element amounts in the respective row
+        of the mBn table.</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="StaP_0"></a><big><b><big><code>StaP[0]</code></big></b></big>
-        Pressure P, bar for node (values within Pai range) [nIC]</dt>
+        - pressure P, bar of nodes (values within Pai range) [nIC]</dt>
+      <dd><br>
+      </dd>
+      <dd>For each node (box), this column should contain value of pressure (in
+        bar). Initial values from the PTVi[0] column will be distributed for all
+        nodes by execution of the mtExpr initialization script. Note that nodes
+        may have different values of pressure (e.g. as required by advection
+        pressure gradient) and these values may be changed with time by the
+        transport algorithm or by the runtime part of the mtExpr script.</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="StaP_1"></a><big><b><big><code>StaP[1]</code></big></b></big>
-        Temperature T, C for node (values within Tai range) [nIC]</dt>
+        - temperature T, C of nodes (values within Tai range) [nIC]</dt>
+      <dd><br>
+      </dd>
+      <dd>For each node (box), this column should contain value of temperature
+        (in deg C). Initial values from the PTVi[1] column will be distributed
+        for all nodes by execution of the mtExpr initialization script. Note
+        that nodes may have different values of temperature initially or because
+        these values may be changed with time by the transport algorithm or by
+        the runtime part of the mtExpr script.</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="StaP_2"></a><big><b><big><code>StaP[2]</code></big></b></big>
-        Volume of the node (L) [nIC], usually zeros</dt>
+        - volumes of nodes (L) [nIC], for now zeros</dt>
+      <dd><br>
+      </dd>
+      <dd>This is not used yet (reserved for equilibration in nodes by Hemholtz
+        energy minimization).</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="StaP_3"></a><big><b><big><code>StaP[3]</code></big></b></big>
-        Initial mass of the node, kg [nIC]</dt>
+        - masses of nodes (equilibrating part), kg [nIC]</dt>
+      <dd><br>
+      </dd>
+      <dd>For each node (box), this column should contain the node mass (in kg).
+        Initial values from the PTVi[3] column will be distributed for all nodes
+        by execution of the mtExpr initialization script. Note that nodes may
+        have different masses initially or because these values may be changed
+        with time by the transport algorithm or by the runtime part of the
+        mtExpr script.</dd>
       <dd><br>
       </dd>
       <br>
@@ -2266,7 +2429,12 @@
       </dd>
       <br>
       <dt> <a name="xEt"></a><big><b><big><code>xEt</code></big></b></big>
-        Abscissa for experimental points [nXE]</dt>
+        Abscissa values for experimental points to plot [nXE]</dt>
+      <dd><br>
+      </dd>
+      <dd>In this field, the user can enter the abscissa values for experimental
+        points, usually in the same units as the values in sampled xt array. In
+        many cases, this is just the node index or distance.</dd>
       <dd><br>
       </dd>
       <br>
@@ -2274,9 +2442,17 @@
         Ordinates for experimental points to plot [nXE, nYE]</dt>
       <dd><br>
       </dd>
+      <dd>In this field, the user can enter ordinate(s) values for experimental
+        points, usually in the same units as the values in the sampled yt array.</dd>
+      <dd><br>
+      </dd>
       <br>
       <dt> <a name="mDDc_"></a><big><b><big><code>mDDc</code></big></b></big>
         [Ls] diffusion coefficients for DC</dt>
+      <dd><br>
+      </dd>
+      <dd>This array should contain (entered) individual diffusion coefficients
+        for aqueous species (D mode only).</dd>
       <dd><br>
       </dd>
       <br>
@@ -2284,25 +2460,61 @@
         [N] diffusion coefficients for IC</dt>
       <dd><br>
       </dd>
+      <dd>This array should contain (entered) diffusion coefficients for aqueous
+        dissolved elements (W, D modes).<br>
+        &nbsp; </dd>
       <br>
       <dt> <a name="mDEl"></a><big><b><big><code>mDEl</code></big></b></big>
         [nE] diffusion coefficients for electrolyte salts</dt>
       <dd><br>
       </dd>
+      <dd>This array should contain (entered) diffusion coefficients for
+        electrolytes (D mode only).</dd>
+      <dd><br>
+      </dd>
       <br>
       <dt> <a name="mBn"></a><big><b><big><code>mBn</code></big></b></big>
-        [nIV][N] Table of bulk compositions of initial systems</dt>
+        [nIV][N] Table of bulk compositions of initial system variants</dt>
+      <dd><br>
+      </dd>
+      <dd>This table contains (calculated) amounts of ICs (chemical elements) in
+        initial composition variants (one per row), to be distributed into
+        nodes. Not editable, computed from values entered into mCIb and mCAb
+        tables.</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="HydP_0"></a><big><b><big><code>HydP[0]</code></big></b></big>
         Initial hydraulic parameters in nodes: Vt - total volume of node =
-        dx*dy*dz, m**3</dt>
+        dx*dy*dz, m^3</dt>
+      <dd><br>
+      </dd>
+      <dd>This table (7 columns, one row per node (box)) contains transport
+        properties of nodes, initially distributed by mtExpr scripr from the
+        ADpar row.</dd>
+      <dd><br>
+      </dd>
+      <dd>Total volume of node (initially taken from ADpar[1]) can be usually
+        set to 1.</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="HydP_1"></a><big><b><big><code>HydP[1]</code></big></b></big>
-        vp: fluid advection velocity (m/s) in nodes (m/sec)</dt>
+        vp: fluid advection velocity in nodes (m/s)</dt>
+      <dd>&nbsp;<br>
+      </dd>
+      <dd>Fluid advection velocity vp (initially taken from ADpar[2]) can be
+        usually set to 1e-6 m/s.</dd>
+      <dd>This value should be not less than 1e-10 m/s and usually is about 1e-6
+        or 1e-7 m/s for groundwater flow in the aquifer.</dd>
+      <dt><br>
+      </dt>
+      <dd>The fluid advection velocity depends on the value of Darcy flux q and
+        porosity eps as vp=q/eps. The Darcy flux q or discharge per unit area
+        (in m/s) depends on the permeability Km, pressure gradient (hydraulic
+        head) dP (in Pa/m), and fluid viscosity mu as q = -Km/mu * dP. The minus
+        sign shows that the flow occurs against the pressure gradient (i.e. from
+        high to low pressure).</dd>
       <dd><br>
       </dd>
       <br>
@@ -2310,9 +2522,41 @@
         eps: effective (actual) porosity in nodes (0 &lt; eps &lt; 1)</dt>
       <dd><br>
       </dd>
+      <dd>The porosity value (initially taken from ADpar[3]) will be copied for
+        all nodes by the RT problem initialization script.</dd>
+      <dd><br>
+      </dd>
+      <dd>Typical porosity values are between 0.2 and 0.6 for different rock
+        types, can be effectively less if a fractured reservoir rock is
+        approximated as a porous medium. Porosity is a factor that connects the
+        advection velocity vp with the Darcy flux q as vp=q/eps. The advective
+        flux of aqueous fluid through area A (m<sup>2</sup>) cross section (in
+        kg/s) is&nbsp; J = den * A * eps * vp, where J is the density of the
+        fluid (of aqueous fluid in kg/m<sup>3</sup>).</dd>
+      <dd><br>
+      </dd>
       <br>
       <dt> <a name="HydP_3"></a><big><b><big><code>HydP[3]</code></big></b></big>
         Km: effective (actual) actual permeability in nodes, m<sup>2</sup></dt>
+      <dd><br>
+      </dd>
+      <dd>The permeability value (initially taken from ADpar[4]) will be copied
+        for all nodes by the RT problem initialization script.</dd>
+      <dd><br>
+      </dd>
+      <dd>Permeability is the property of porous medium (rock) showing the
+        ability of the fluid to flow through this medium. Permeability is
+        related to the advection velocity vp as vp = -Km/mu * dP/eps, where dP
+        is pressure gradient (Pa/m), eps is the porosity, and mu is the fluid
+        viscosity (mu = 1e-3 Pa*s for water at room conditions, less at higher
+        temperatures).</dd>
+      <dd><br>
+      </dd>
+      <dd>Typical values of intrinsic permeability (in millidarcy = 1e-15 m<sup>2</sup>)
+        for common types of rocks: 1e8 to 1e-4 for gravel, sand, highly
+        fractured rock;1e4 to1 for fine sand, silt, loess, loam, peat, layered
+        clay, oil reservoir rocks, sandstone; 0.1 to 0.0001 for unweathered
+        clay, limestone, dolomite, fresh granite, basalt.</dd>
       <dd><br>
       </dd>
       <br>
@@ -2320,9 +2564,55 @@
         al: specific longitudinal dispersivity of porous medium in nodes, m</dt>
       <dd><br>
       </dd>
+      <dd>The dispersivity value (initially taken from ADpar[5]) will be copied
+        for all nodes by the RT problem initialization script.</dd>
+      <dt><br>
+      </dt>
+      <dd>Mechanical dispersion (hydrodynamic dispersion) occurs because fluids
+        move faster through the center of the pores than along the edges, or
+        travel shorter pathways and/or splitting or branching to the sides, or
+        move faster through larger pores than through smaller pores. All this
+        results in mixing along the flow paths, which is called <i>mechanical
+          dispersion</i>. </dd>
+      <dd><br>
+      </dd>
+      <dd>In 1-D advection models, by analogy with diffusion, the dispersion is
+        accounted for as a <i>mechanical dispersion coefficient</i> Dm = al *
+        vp, where al is the dispersivity, and vp is the (average) advection
+        velocity. Dm (in m<sup>2</sup>/s) can be combined with effective
+        diffusion coefficient De into the hydrodynamic dispersion coefficient Dh
+        to be used in the Fick's First Law term describing the dispersion flux.
+        The values of longitudinal dispersivity may vary from 0.001 to 10 m for
+        column length up to 10 m, depending on the soil/rock type (about 1 in
+        homogeneous sandy aquifer, less in clayey rocks).</dd>
+      <dd><br>
+      </dd>
       <br>
       <dt> <a name="HydP_5"></a><big><b><big><code>HydP[5]</code></big></b></big>
         Dif: general diffusivity of disolved matter in nodes, m<sup>2</sup>/s</dt>
+      <dd><br>
+      </dd>
+      <dd>The diffusivity value (initially taken from ADpar[6]) will be copied
+        for all nodes by the RT problem initialization script.</dd>
+      <dt><br>
+      </dt>
+      <dd>The diffusion coefficient Dif is a proportionality constant between
+        the molar flux due to molecular diffusion and the concentration
+        gradient, and is a function of the temperature and molecular weight. In
+        locations where the advective flux is low or negligible (clayey
+        aquitards and dense rocks), diffusion may be the dominant transport
+        mechanism. The effective diffusion coefficient De, as used in the Fick's
+        First Law to describe diffusion transport of water and solutes in porous
+        medium, is connected to the aqueous medium diffusion coefficient Dif as
+        De = Dif * eps, where eps is the porosity.</dd>
+      <dd><br>
+      </dd>
+      <dd>The value of self-diffusion coefficient of water at 20 <sup>o</sup>C
+        is 2e-9 m<sup>2</sup>/s, it increases to almost 8.6e-9 m<sup>2</sup>/s
+        at 100 C. Diffusion coefficients of aqueous solutes are in the range
+        from 1e-9 to 3e-9 m<sup>2</sup>/s at room temperature. For this reason,
+        a common Dif value of 2e-9 m<sup>2</sup>/s is frequently used for water
+        and all solutes.</dd>
       <dd><br>
       </dd>
       <br>
@@ -2330,64 +2620,138 @@
         nto - tortuosity factor in nodes (1 to 10)&nbsp; </dt>
       <dd><br>
       </dd>
+      <dd>The tortuosity factor is used in D and W modes only. Its value
+        (initially taken from ADpar[6]) will be copied for all nodes by the RT
+        problem initialization script.</dd>
+      <dd><br>
+      </dd>
+      <dd>In porous medium, diffusion pathways of molecules are complicated by
+        pore structure and arrangement relative to simple Brownian movement in
+        the aqueous medium. Therefore, the diffusivity of solutes D<sub>pm</sub>
+        measured in porous medium is different from that in aqueous medium Dif
+        at the same temperature. Both can be related using porosity eps and the
+        tortuosity factor nto: nto = eps * Dif / D<sub>pm</sub>. There are
+        complex relationships between porosity and tortuosity because of pore
+        size, geometry and distribution.</dd>
+      <dd><br>
+      </dd>
+      <dd><br>
+      </dd>
+      <dt> <a name="BSF"></a><big><b><big><code>BSF</code></big></b></big>&nbsp;
+        - table of bulk compositions of source fluxes [nSFD][N]</dt>
+      <dd><br>
+      </dd>
+      <dd>In B and F modes, this optional table can be created by the user (by
+        specifying the number of constant composition sources/sinks in GEM2MT
+        wizard)&nbsp; to enter the bulk elemental compositions of constant
+        production or removal of matter in certain boxes (reservoirs). The
+        respective fluxes need to be specified separately for these nodes using
+        FDLi[0], FDLi[1] objects.</dd>
+      <dd>&nbsp;<br>
+      </dd>
       <br>
-      <dt> <a name="BSF_"></a><big><b><big><code>BSF</code></big></b></big>
-        [nSFD][N] table of bulk compositions of source fluxes</dt>
+      <dt> <a name="MB"></a><big><b><big><code>MB</code></big></b></big>&nbsp;
+        - table of current masses of elements in boxes (reservoirs) (in kg)
+        [nC][Nb]</dt>
+      <dd><br>
+      </dd>
+      <dd>In B and F modes, this table automatically shows current masses of
+        elements in all boxes after each time step during runtime. The masses
+        are updated by a built-in ODE system integration code. If the masses do
+        not change and the simulation still runs, this means that a steady state
+        is reached. If some masses approach zero or increase too much, this may
+        mean that some fluxes are missing or set incorrectly.&nbsp; </dd>
+      <dd>&nbsp;&nbsp; </dd>
+      <br>
+      <dt> <a name="dMB"></a><big><b><big><code>dMB</code></big></b></big>&nbsp;
+        - table of current derivatives dM/dt for elements in boxes (reservoirs)
+        [nC][Nb]</dt>
+      <dd><br>
+      </dd>
+      <dd>In B and F modes, this table automatically shows current mass
+        derivatives for all elements in all boxes (reservoirs), updated after
+        each time step upon runtime. If you see that some derivatives become too
+        large (positive or negative), this may help resolving problems with
+        incorreclty set fluxes or sources.</dd>
+      <dd>&nbsp; </dd>
+      <br>
+      <dt> <a name="qpi"></a><big><b><big><code>qpi</code></big></b></big>&nbsp;
+        Work array for initialization math script mtExpr [Nqpi]</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="MB"></a><big><b><big><code>MB</code></big></b></big> [nC]
-        column of current masses of boxes or reservoirs (in kg)</dt>
+      <dt> <a name="qpc"></a><big><b><big><code>qpc</code></big></b></big>&nbsp;
+Work
+        array for data sampling math script [Nqpc] </dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="dMB"></a><big><b><big><code>dMB</code></big></b></big>
-        [nC][Nb] Table of current derivatives dM for elements in reservoirs</dt>
+      <dt> <a name="xt"></a><big><b><big><code>xt</code></big></b></big> -
+        abscissa for sampled data (usually node index or distance) [nS]</dt>
+      <dd><br>
+      </dd>
+      <dd>In this table, the sampling script will collect the abscissa values
+        for displaying node properties (usually node index or length
+        coordinate). This occurs after each time step (or wave in S mode). After
+        stopping the simulation, the collected data can be copied and pasted
+        into spreadheets. Simulations can also be run with the Graph dialog
+        open, where the plot curves are updated after each step.</dd>
+      <dd>&nbsp; </dd>
+      <br>
+      <dt> <a name="yt"></a><big><b><big><code>yt</code></big></b></big> -
+        ordinates for sampled node properties data [nS][nYS]</dt>
+      <dd><br>
+      </dd>
+      <dd>In this table, the sampling script will collect the ordinate values -
+        the node properties of interest. This occurs after each time step (or
+        wave in S mode). After stopping the simulation, the collected data can
+        be copied and pasted into spreadheets. Simulations can also be run with
+        the Graph dialog open, where the plot curves are updated after each
+        step.</dd>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="qpi"></a><big><b><big><code>qpi</code></big></b></big>
-        [Nqpi] Work array for initial systems math script</dt>
+      <dt> <a name="mCIb"></a><big><b><big><code>mCIb</code></big></b></big>&nbsp;
+        - table of quantity/concentration of IC in initial systems [nIV][N]</dt>
       <dd><br>
       </dd>
-      <br>
-      <dt> <a name="qpc"></a><big><b><big><code>qpc</code></big></b></big>
-        [Nqpc] Work array for mass transport math script</dt>
-      <dd><br>
+      <dd>In this table, the user can enter bulk elemental compositions of
+        initial system variants (one per row). After units conversion, these
+        will be added to compositions defined from arbitrary formula in mCAb
+        table (if present) and stored into mBn table, from where distributed
+        into nodes by the initialization script mtExpr.</dd>
+      <dd>&nbsp; <br>
       </dd>
       <br>
-      <dt> <a name="xt"></a><big><b><big><code>xt</code></big></b></big>
-        Abscissa for sampled data (usually profile distance) [nS]</dt>
+      <dt> <a name="mCAb"></a><big><b><big><code>mCAb</code></big></b></big>&nbsp;
+        - table of quantity/concentration of formulae for initial systems
+        [nIV][Lbi]</dt>
       <dd><br>
       </dd>
-      <br>
-      <dt> <a name="yt"></a><big><b><big><code>yt</code></big></b></big>
-        Ordinates for sampled profile data [nS][nYS]</dt>
-      <dd><br>
-      </dd>
-      <br>
-      <dt> <a name="mCIb"></a><big><b><big><code>mCIb</code></big></b></big>
-        [nIV][N] Table of quantity/concentration of IC in initial systems</dt>
-      <dd><br>
-      </dd>
-      <br>
-      <dt> <a name="mCAb"></a><big><b><big><code>mCAb</code></big></b></big>
-        [nIV][Lbi] Table of quantity/concentration of formulae for initial
-        systems</dt>
+      <dd>In this table, the user can enter compositions of initial system
+        variants (one per row) as quantities of arbitrary chemical formula (such
+        as SiO2, NaCl etc.) After units conversion, these will be added to
+        elemental compositions defined in mCIb table (if present) and stored
+        into mBn table, from where distributed into nodes by the initialization
+        script mtExpr.</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="FDLf_0"></a><big><b><big><code>FDLf[0]</code></big></b></big>&nbsp;
-        Part of the flux defnition list: flux order {0 1 2 3 } [nFD][4]</dt>
+        Flux defnition list [nFD][4]: MPG flux order {0 1 2 3 }&nbsp;</dt>
       <dd><br>
       </dd>
-      <dd>In this column, the flux order has to be defined. Default is 0
-        (constant flux in units mass/timestep). Possible values: 0 - Zero-order
-        (absolute) flux, with velocity v in mass/time units;&nbsp; 1 -
-        First-order to source box mass flux, v in 1/time/kg units; 2 -
-        Second-order to source and sink MPG mass flux, v in 1/time/kg<sup>2</sup>
-        units, proportional to product of masses in both boxes; 3 - First-order
-        flux to MPG mass in receiving box, v in 1/time/kg units.&nbsp; </dd>
+      <dd>In this column (B,F,S modes), the flux order has to be defined.
+        Default is 0 (constant flux in units mass/timestep). Possible values: </dd>
+      <dd><br>
+      </dd>
+      <dd>0 - Zero-order (absolute) flux, with velocity v in mass/time
+        units;&nbsp; </dd>
+      <dd>1 - First-order to source box mass flux, v in 1/time/kg units; </dd>
+      <dd>2 - Second-order to source and sink MPG mass flux, v in 1/time/kg<sup>2</sup>
+        units, proportional to product of masses in both boxes; </dd>
+      <dd>3 - First-order flux to MPG mass in receiving box, v in 1/time/kg
+        units.&nbsp; </dd>
     </dl>
     <dl>
       <dd>At each time step, the transport of matter between boxes is performed
@@ -2405,13 +2769,32 @@
         flux order (0, 1, 3); and the flux rate constant.<br>
         <br>
         A sink flux is defined by the index of its source box; the index of MPG
-        definition; the flux order (0, 1, 2); and the flux rate constant.<br>
+        definition; the flux order (0, 1, 2); and the flux rate constant.</dd>
+      <dd><br>
       </dd>
       <br>
       <dt> <a name="FDLf_1"></a><big><b><big><code>FDLf[1]</code></big></b></big>
-        flux rate (depending on flux order)</dt>
+        - MPG flux rate v (depending on MPG flux order)</dt>
       <dd><br>
       </dd>
+      <dd>In this column (B,F,S modes), the MPG flux rate or rate constant has
+        to be provided. Its value and dimensionality depends on the flux order
+        in FDLf[0]:</dd>
+      <dd><br>
+      </dd>
+      <dd>0 - Zero-order (absolute) flux, with velocity v in mass/time
+        units;&nbsp; </dd>
+      <dd>1 - First-order to source box mass flux, v in 1/time/kg units; </dd>
+      <dd>2 - Second-order to source and sink MPG mass flux, v in 1/time/kg<sup>2</sup>
+        units, proportional to product of masses in both boxes; </dd>
+      <dd>3 - First-order flux to MPG mass in receiving box, v in 1/time/kg
+        units.</dd>
+      <dd><br>
+      </dd>
+      <dd>In case of a constant elemental source/sink flux, the sign of v
+        defines the direction: negative means production in the box, positive
+        means removal from the box.</dd>
+      <dd>&nbsp; &nbsp; </dd>
       <br>
       <dt> <a name="FDLf_2"></a><big><b><big><code>FDLf[2]</code></big></b></big>
         MGP quantity 1 (reserved)</dt>
@@ -2424,8 +2807,18 @@
       </dd>
       <br>
       <dt> <a name="PGT"></a><big><b><big><code>PGT</code></big></b></big>
-        Quantities of phases in MGP [Fi][nPG]</dt>
+        -&nbsp; quantities of phases defining MPG composition [Fi][nPG]</dt>
       <dd><br>
+      </dd>
+      <dd>In this table (B,F,S modes), the user has to specify some quantities
+        of phases on the outgoing box/node that define bulk elemental
+        composition of this mobile phase group MPG that can be moved between
+        boxes by fluxes of a given order and rate constant. The actual elemental
+        MPG composition will be computed for each flux from compositions of
+        respective phases in each outgoing box after each equilibration (time)
+        step. Typically, only aqueous phase is moved in MPG; any combination of
+        phases is, in principle, possible.&nbsp; </dd>
+      <dd>&nbsp; &nbsp; <br>
       </dd>
       <br>
       <dt> <a name="Tval"></a><big><b><big><code>Tval</code></big></b></big>
@@ -2439,17 +2832,31 @@
       </dd>
       <br>
       <dt> <a name="nam_i"></a><big><b><big><code>nam_i</code></big></b></big>&nbsp;
-        id names of initial systems [nIV][12]</dt>
+-&nbsp;
+        id names of initial system variants [nIV][12]</dt>
+      <dd><br>
+      </dd>
+      <dd>Enter here the names of initial system composition variants for better
+        identification (e.g. "Fluid", "Rock").</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="for_i"></a><big><b><big><code>for_i</code></big></b></big>&nbsp;
-        formulae for setting initial system compositions [Lbi][40]</dt>
+        - formulae for setting initial system compositions [Lbi][40]</dt>
+      <dd><br>
+      </dd>
+      <dd>In this row, formulae should be entered (according to GEM-Selektor
+        formula syntax), such s SiO2, Al2O3, NaCl, ... to further enter their
+        quantities for initial system composition variants in mCAb table. No
+        empty cells are allowed. Maximum length of a formula: 40 characters.</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="for_e"></a><big><b><big><code>for_e</code></big></b></big>&nbsp;
         formulae for diffusing dissolved electrolytes [nE][40]</dt>
+      <dd><br>
+      </dd>
+      <dd>Maximum length of a formula: 40 characters.</dd>
       <dd><br>
       </dd>
       <br>
@@ -2464,12 +2871,11 @@
       </dd>
       <br>
       <dt> <a name="mAUcln"></a><big><b><big><code>mAUcln</code></big></b></big>&nbsp;
-        Units of setting UDF quantities for initial system compositions [Lbi]</dt>
+        Units of setting formulae quantities for initial system compositions
+        [Lbi]</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="mAUcln_0"></a><big><b><big><code></code></big></b></big><br>
-      </dt>
       <dt> <a name="FDLid"></a><big><b><big><code>FDLid</code></big></b></big>
         [nFD] IDs of fluxes</dt>
       <dd><br>
@@ -2496,7 +2902,7 @@
       </dd>
       <br>
       <dt> <a name="mSBM"></a><big><b><big><code>mSBM</code></big></b></big>
-        Keys (names) of IC</dt>
+        Keys (names) of Independent Components</dt>
       <dd><br>
       </dd>
       <br>
