@@ -46,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>7</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="page">
       <widget class="QLabel" name="pageName">
@@ -1200,7 +1200,11 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QLabel" name="label_21">
          <property name="text">
-          <string>To monitor (graphically or in a table) some changes in the nodes / boxes profile upon time steps, the script can be automatically created after setting the dimensions and selecting the node properties, components and phases. This is independent of the VTK flie output that can be configured at the next wizard step. To retain the old monitoring script, just click 'Next &gt;' on this page.</string>
+          <string>To monitor (graphically or in a table) some changes in the nodes / boxes profile upon time steps, the script can be automatically created after setting the dimensions and selecting the node properties, components and phases. This is independent of the VTK file output that can be configured at the next wizard step.
+
+We recommend to use the node state 1 data in the sampling script (node state 0 data can be used for evaluating of changes between previous and current (time) step).
+
+To retain the old sampling script, just click 'Next &gt;' on this page.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -1411,7 +1415,8 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QCheckBox" name="c_PvnVTK">
          <property name="text">
-          <string>Select data fields for VTK output (if unchecked, use all output data fields) </string>
+          <string>  Select data fields for VTK output (if unchecked, use all output data fields).
+  We recommend to output the node state 1 data. </string>
          </property>
         </widget>
        </item>
