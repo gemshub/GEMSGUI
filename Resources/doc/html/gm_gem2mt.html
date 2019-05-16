@@ -65,6 +65,9 @@
         </a></p>
     </blockquote>
     <p><a href="#GEM2MT_DATA">4. GEM2MT Data Entries</a></p>
+    <p style="margin-left: 40px;"><a href="#GEM2MT_SCRIPT_OBJECTS">4.1. Data
+        Objects Only Used in GEM2MT Initialisation and Sampling Scripts <br>
+      </a></p>
     <p><a href="#GEM2MT_ERRORS">5. Warnings and Error Messages</a></p>
     &nbsp;<br>
     <hr width="100%" size="2"> <br>
@@ -420,7 +423,7 @@
       initial system compositions over nodes, and which data to sample from
       nodes for graphic presentation or export to text files.</p>
     <p> </p>
-    <p>This wizard helps you configure and set-up the RMT simulation
+    <p>This wizard helps you configure and set-up a new RT simulation
       step-by-step.<br>
     </p>
     <p><br>
@@ -1364,8 +1367,31 @@
       </dd>
       <br>
       <dt> <a name="mtPsfl_0"></a><big><b><big><code>mtPsfl[0]</code></big></b></big>
-        Code of GEM2MT mode of operation { S F A D T W V }</dt>
+        Code of GEM2MT mode of operation { S F A C D T W V }</dt>
       <dd><br>
+      </dd>
+      <dd>S&nbsp;&nbsp;&nbsp;&nbsp; Sequential reactors chain with waves (moving
+        fluids or solids between reactors)<br>
+        F&nbsp;&nbsp;&nbsp;&nbsp; Flow-through reactors chain with fluxes
+        (simultaneous transport then equilibration)<br>
+        B&nbsp;&nbsp;&nbsp;&nbsp; Box-flux megasystem (with time-step
+        integration of arbitrary MPG fluxes)<br>
+        A&nbsp;&nbsp;&nbsp;&nbsp; 1-D (advection-dispersion) reactive transport
+        using classical finite-difference method<br>
+        C&nbsp;&nbsp;&nbsp;&nbsp; 1-D (advection-dispersion) reactive transport
+        using implicit Crank-Nicolson scheme (TBD)<br>
+        D&nbsp;&nbsp;&nbsp;&nbsp; 1-D (advection-diffusion) reactive transport
+        using finite-volume method (TBD)<br>
+        W&nbsp;&nbsp;&nbsp; 1-D (advection-diffusion) reactive transport using
+        random-walk method<br>
+        V&nbsp;&nbsp;&nbsp;&nbsp; 1-D reactive transport using finite-volume
+        particle tracking algorithm (TBD)<br>
+        T&nbsp;&nbsp;&nbsp;&nbsp; Export of initial-state GEMS3K input files set
+        for external coupled RT codes.</dd>
+      <dd><br>
+      </dd>
+      <dd>More descriptions can be found in the <a href="GEM2MT_MWIZARD">GEM2MT
+          Wizard chapter</a>.<br>
       </dd>
       <br>
       <dt> <a name="mtPsfl_1"></a><big><b><big><code>mtPsfl[0]</code></big></b></big>
@@ -1427,7 +1453,7 @@
       </dd>
       <br>
       <dt> <a name="mtPsfl_12"></a><big><b><big><code>mtPsfl[11]</code></big></b></big>
-        Type flux Phase ( 0 undef, 1 - aq; 2 - gas; 3 - aq+gas, 4 - solids )</dt>
+        Type of MPG flux ( 0 undef, 1 - aq; 2 - gas; 3 - aq+gas, 4 - solids )</dt>
       <dd><br>
       </dd>
       <br>
@@ -1812,6 +1838,12 @@
         - comment line for the full name of this GEM2MT task</dt>
       <dd><br>
       </dd>
+      <dd>It is strongly recommended to write consise comments on what this
+        simulation is doing.</dd>
+      <dd><br>
+      </dd>
+      <dd><br>
+      </dd>
       <dt> <a name="mtNote_"></a><big><b><big><code>mtNote</code></big></b></big>
         - comment line for optional enhancement of the mtName line</dt>
       <dd><br>
@@ -2087,10 +2119,24 @@
         usually 1e-9</dt>
       <dd><br>
       </dd>
+      <dd>This cutoff is a performance optimization feature. If changes of the
+        node bulk composition (at constant T,P and in absence of kinetics) after
+        a time step were negligibly small, then it makes no sense to recompute
+        the equilibrium state. This cutoff can be adjusted by the user.</dd>
+      <dd><br>
+      </dd>
       <br>
       <dt> <a name="ADpar_9"></a><big><b><big><code>ADpar[9]</code></big></b></big>
         - cutoff for minimal amounts of IC in node bulk compositions (mol),
         usually 1e-12</dt>
+      <dd><br>
+      </dd>
+      <dd>It may happen that (due to inconsistencies in setup of fluxes, or too
+        large time step duration) some chemical elements get zero or negative
+        values in the node bulk composition. To prevent serious crashes of the
+        GEMIPM3 algorithm, in this case the calculated negative or zero amounts
+        of chemical elements are replaced by this cutoff (can be adjusted by the
+        user).</dd>
       <dd><br>
       </dd>
       <br>
@@ -2123,10 +2169,10 @@
       </dd>
       <br>
       <dt> <a name="mY_Nam"></a><big><b><big><code>mY_Nam</code></big></b></big>
-        - ordinate name (for the graph plots), up to 8 characters</dt>
+        - ordinate name (for the legend of graph plots), up to 8 characters</dt>
       <dd><br>
       </dd>
-      <dd>To be entered by the user.</dd>
+      <dd>To be entered by the user. </dd>
       <dd><br>
       </dd>
       <br>
@@ -2136,7 +2182,7 @@
       <dd><br>
       </dd>
       <dd>Can be automatically created by GEM2MT wizard, may be edited by the
-        user.</dd>
+        user (usually will need editing for better readability anyway).</dd>
       <dd><br>
       </dd>
       <br>
@@ -2156,13 +2202,15 @@
         text are divided in three sections: one for the initialization of the RT
         nodes (boxes); other for the initialization of fluxes defined between
         boxes; and optional section for execution at regular time steps (if
-        written/extended by the user). The first two sections will be executed
-        once at (time) step 0, while the third one (if not commented out) will
-        be executed at every subsequent time step. This initialization script
-        can save the user a lot of time, especially when there are many nodes /
-        boxes to be created. To save the user's time, the GEM2MT (remake) wizard
-        can automatically generate the initial version of this script that can
-        be edited/extended by the user later on. </dd>
+        written/extended by the user). The first two sections will be
+        automatically executed for each node (indexed with qc) and each flux (S,
+        F, B modes, indexed with qf) once at (time) step 0, while the third one
+        (if not commented out) will be executed at every subsequent time step
+        for each node and flux. This initialization script can save the user a
+        lot of time, especially when there are many nodes / boxes to be created.
+        To save the user's time, the GEM2MT (remake) wizard can automatically
+        generate the initial version of this script that can be edited/extended
+        by the user later on. </dd>
       <br>
       <dt> <a name="mgExpr"></a><big><b><big><code>mgExpr</code></big></b></big>
         - math script text for data sampling and plotting the properties of
@@ -2175,11 +2223,11 @@
         wizard after selecting the node properties, components and phases.
         Optionally, some experimental data can be plotted over the node
         profile(s). This monitoring script is independent of the VTK flie
-        output. This script is executed after every (time) step (or each "wave"
-        in S mode), which means that the table of properties of nodes and the
-        plots on the graph will be updated. The minimum possible set of&nbsp; <span
-          style="font-family: monospace;">mgExpr</span>&nbsp; script expressions
-        for node data sampling has the following form: </dd>
+        output. This script is automatically executed for each node (index qc)
+        after every transport (time) step (or each "wave" in S mode), which
+        means that the whole table of properties of nodes and the plots on the
+        graph will be updated. The minimum possible set of&nbsp; <span style="font-family: monospace;">mgExpr</span>&nbsp;
+        script expressions for node data sampling has the following form: </dd>
     </dl>
     <dl style="margin-left: 40px;">
       <dd><samp><tt>xt[J] =: &lt;expression&gt;;</tt></samp></dd>
@@ -2675,13 +2723,23 @@
       <dd>&nbsp; </dd>
       <br>
       <dt> <a name="qpi"></a><big><b><big><code>qpi</code></big></b></big>&nbsp;
-        Work array for initialization math script mtExpr [Nqpi]</dt>
+        Work array for the initialization math script mtExpr [Nqpi]</dt>
+      <dd><br>
+      </dd>
+      <dd>This data object (number of cells can be set in GEM2MT wizard) can be
+        used in mtExpr script for supplying some additional constant parameters
+        or for keeping temporary data needed for next operators.</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="qpc"></a><big><b><big><code>qpc</code></big></b></big>&nbsp;
 Work
-        array for data sampling math script [Nqpc] </dt>
+        array for the data sampling math script [Nqpc] </dt>
+      <dd><br>
+      </dd>
+      <dd>This data object (number of cells can be set in GEM2MT wizard) can be
+        used in the sampling script for supplying some additional constant
+        parameters or to keep temporary data needed for next operators.</dd>
       <dd><br>
       </dd>
       <br>
@@ -2868,20 +2926,44 @@ Work
         Units of IC quantity/concentration for initial systems compositions [N]</dt>
       <dd><br>
       </dd>
+      <dd>This list contains <a href="g_useref.html#QUANCONCUNITS">codes of
+          units of measurement</a> for quantities of elements that are provided
+        in the mCIb table. The user may set up different codes for different DC,
+        according to certain <a href="g_useref.html#QUANCONCRULES">rules</a>.
+        Default code:&nbsp; M (moles).</dd>
+      <dd>&nbsp;<br>
+      </dd>
       <br>
       <dt> <a name="mAUcln"></a><big><b><big><code>mAUcln</code></big></b></big>&nbsp;
         Units of setting formulae quantities for initial system compositions
         [Lbi]</dt>
       <dd><br>
       </dd>
-      <br>
+      <dd>This list contains <a href="g_useref.html#QUANCONCUNITS">codes of
+          units of measurement</a> for quantities of user-defined formulae that
+        are provided in the mCAb table. The user may set up different codes for
+        different formulae, according to certain <a href="g_useref.html#QUANCONCRULES">rules</a>.
+        Default code:&nbsp; M (moles).</dd>
+      <dd><br>
+      </dd>
+      <dd><br>
+      </dd>
       <dt> <a name="FDLid"></a><big><b><big><code>FDLid</code></big></b></big>
         [nFD] IDs of fluxes</dt>
       <dd><br>
       </dd>
+      <dd>This column contains short strings that identify fluxes (not
+        necessarily unique for each flux). This is not used by the program code,
+        only provides the option for the user to easier identify certain
+        relevant fluxes.</dd>
+      <dd>&nbsp; <br>
+      </dd>
       <br>
       <dt> <a name="FDLop"></a><big><b><big><code>FDLop</code></big></b></big>
         [nFD] Operation codes (letters)</dt>
+      <dd><br>
+      </dd>
+      <dd>This column is reserved for future implementations.</dd>
       <dd><br>
       </dd>
       <br>
@@ -2889,14 +2971,36 @@ Work
         [nFD] ID of MGP to move in this flux</dt>
       <dd><br>
       </dd>
+      <dd>In S, F, B modes, this relevant column defines for each flux which MGP
+        is moved by this flux (usually dubbed "aq"). </dd>
+      <dd><br>
+      </dd>
+      <dd>Two forms of MGP Id are possible: (i) the normal MGP as defined in PGT
+        table of quantities of involved phases, having the alphanumeric Id
+        defined in MGPid row; (ii) The constant-composition source or sink given
+        in a row of BSF table,&nbsp; a special "implicit" form of MGP, in which
+        case, its Id is simply its row index in BSF table (e.g. 0, 1, 2, ...).</dd>
+      <dd>&nbsp; &nbsp; <br>
+      </dd>
       <br>
       <dt> <a name="MGPid"></a><big><b><big><code>MGPid</code></big></b></big>
         [nPG] ID list of mobile phase groups</dt>
       <dd><br>
       </dd>
+      <dd>Here, an Id (short alphanumeric string) should be entered for each MPG
+        of composition defined in the PGT table.</dd>
+      <dd><br>
+      </dd>
       <br>
       <dt> <a name="UMGP_"></a><big><b><big><code>UMGP</code></big></b></big>
-        [nFi] units for setting phase quantities in MPG (see PGT )</dt>
+        [nFi] units for setting phase quantities in MPG (see PGT)</dt>
+      <dd><br>
+      </dd>
+      <dd>This columns contains <a href="g_useref.html#QUANCONCUNITS">codes of
+          units of measurement</a> for quantities of phases given in PGT column,
+        forming the composition of one or more MPGs. The user may set up
+        different codes for different phases, according to certain <a href="g_useref.html#QUANCONCRULES">rules</a>.
+        Default code:&nbsp; M (moles).</dd>
       <dd><br>
       </dd>
       <br>
@@ -2931,40 +3035,32 @@ Work
         Array of particle type definitions at t0 or after interruption [nPTypes]</dt>
       <dd><br>
       </dd>
-      <br>
-      <dt> <a name="mtRes1"></a><big><b><big><code>mtRes1</code></big></b></big>
-        reserved[nC]</dt>
       <dd><br>
       </dd>
-      <br>
-      <dt> <a name="mtRes2"></a><big><b><big><code>mtRes2</code></big></b></big>
-        reserved[nC]</dt>
-      <dd><br>
-      </dd>
-      <br>
-      <dt> <a name="MTplt"></a><big><b><big><code>MTplt</code></big></b></big>
-        internal</dt>
-      <dd><br>
-      </dd>
-      <br>
       <dt> <a name="mtSkey"></a><big><b><big><code>mtSkey</code></big></b></big>
         Current key of sampled SysEq database record</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mAn"></a><big><b><big><code>mAn</code></big></b></big>
-        Stoichiometry matrix for ????</dt>
+        Stoichiometry matrix for user-defined formula with quantities in mCAb
+        table </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="mAe"></a><big><b><big><code>mAe</code></big></b></big>
-        Stoich matrix for for diffusing electrolytes</dt>
+        Stoichiometry matrix for diffusing electrolytes</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="gfc"></a><big><b><big><code>gfc</code></big></b></big>
         [nC][nPG][Nb] Array of element partition coefficients for MPG and its
-        source reservoir</dt>
+        source box</dt>
+      <dd><br>
+      </dd>
+      <dd>This 3-D array connects bulk compositions of source boxes with
+        elemental compositions of all MPGs, to be used in ODE system
+        integration.</dd>
       <dd><br>
       </dd>
       <br>
@@ -2972,49 +3068,88 @@ Work
         [nC][nPG][Nf] Array of MPG bulk compositions at current time point</dt>
       <dd><br>
       </dd>
+      <dd>This 3-D array contains bulk compositions of all MPGs from all
+        outgoing boxes, to be used for computing fluxes of elements between
+        boxes.</dd>
+      <dd><br>
+      </dd>
       <br>
       <dt> <a name="mttt"></a><big><b><big><code>mttt</code></big></b></big>
-        [nC][Nf][9] internal box flx</dt>
+        [nC][Nf][9] internal box-flux integration data</dt>
       <dd><br>
       </dd>
-      <br>
-      <dt> <a name="mtTxt"></a><big><b><big><code>mtTxt</code></big></b></big>
-        internal</dt>
-      <dd><br>
-      </dd>
-      <br>
-      <dt> <a name="mttprn"></a><big><b><big><code>mttprn</code></big></b></big>
-        internal</dt>
-      <dd><br>
-      </dd>
-      <br>
+    </dl>
+    <a name="GEM2MT_SCRIPT_OBJECTS"></a>
+    <h3>4.1. Data objects only used in GEM2MT initialization and sampling&nbsp;
+      scripts </h3>
+    <p> The data objects listed below are only used in GEM2MT scripts. Some of
+      them can be seen in GEM2MT "Settings" page, these are current values of
+      indices ("kv", "qc", "qf", ... ) and iterators ( "cTt", "cPt", ...).
+      Others are only visible in the GEM2MT wizard in the lists of objects for
+      setting up the automatic sampling script to show how properties of all
+      nodes change with simulation (time) steps.</p>
+    <p>These data objects are actually mapped to two arrays of data representing
+      the nodes (boxes) in two states: state 0 and state 1. </p>
+    <p>(0) After each equilibration loop, new speciation is calculated by GEMS3K
+      kernel in all state 1 nodes. Hence, we recommend to use the node state 1
+      objects in the sampling script to collect and plot chemical properties of
+      nodes after the equilibration. </p>
+    <p>(1) Before the next transport model integration loop at the next time
+      step, the data from state 1 nodes are copied into state 0 nodes, which
+      thus keep the composition and transport properties from the previous time
+      step. </p>
+    <p>(2) Next, the mtExpr script is executed (to optionally modify tables with
+      transport properties of nodes and possibly rates of fluxes), and the
+      transport loop starts acting on state 1 nodes. It may use (modified)
+      tables of transport properties of nodes and fluxes to augment those of
+      nodes, then performs the chosen mass transport algorithm that moves the
+      chemical elements between nodes. Most transport methods also use the
+      previous state 0 properties of nodes. </p>
+    <p>(3) After the transport loop is finished on state 1 nodes, the
+      equilibration loop starts on those nodes - by executing the GEMS3K solver
+      node-by-node. In the automatic initial approximation (AIA) mode, the
+      solver just takes the modified bulk chemical composition of the node and
+      writes back the updated speciation in phases. In smart initial
+      approximation (SIA) mode, the GEMS3K solver takes the speciation saved in
+      this node state 0 (i.e. from GEM calculation at previous time step). In
+      most cases, this leads to factor 5-10 faster simulations. </p>
+    <p>When equilibria in all nodes are computed, the control goes to step (0)
+      to start the next trasport loop, unless the maximum number of steps is
+      reached or the user cancelled the simulation. </p>
+    <p>We provide the access also to state 0 node contents because this is the
+      only way to follow in a simple manner how big are changes in properties of
+      nodes between the current and the previous time step.</p>
+    <p><br>
+    </p>
+    <dl>
       <dt> <a name="_ctm"></a><big><b><big><code>_ctm</code></big></b></big>
-        current CSD #</dt>
+        current CSD # (for saving SysEq records in debugging&nbsp; mode)</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="cnv"></a><big><b><big><code>cnv</code></big></b></big>
-        current restriction variant #</dt>
+        current restriction variant # (for saving SysEq records in
+        debugging&nbsp; mode)</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="qc"></a><big><b><big><code>qc</code></big></b></big>
-        current index of the compartment ( 1 to nC )</dt>
+        current index of the compartment ( 0 to nC-1 )</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="kv"></a><big><b><big><code>kv</code></big></b></big>
-        current index of the initial system variant (1 to nIV )</dt>
+        current index of the initial system variant (0 to nIV-1 )</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="jqc"></a><big><b><big><code>jqc</code></big></b></big>
-        script c-style index (= qc-1) for transport</dt>
+        script c-style index for transport</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="jqs"></a><big><b><big><code>jqs</code></big></b></big>
-        script c-style index (= qc-1) for graphics</dt>
+        script c-style index for graphics</dt>
       <dd><br>
       </dd>
       <br>
@@ -3042,11 +3177,15 @@ Work
         time iterator</dt>
       <dd><br>
       </dd>
-      <br>
-      <dt> <a name="rei5"></a><big><b><big><code>rei5</code></big></b></big> #</dt>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt><a name="qf"></a><big><b><big><code>qf</code></big></b></big> current
+        index of the flux ( 0 to nFD-1 )</dt>
       <dd><br>
       </dd>
-      <br>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="rei5"></a></dt>
       <dt> <a name="cTt"></a><big><b><big><code>cTt</code></big></b></big>
         current value of T</dt>
       <dd><br>
@@ -3078,28 +3217,28 @@ Work
       </dd>
       <br>
       <dt> <a name="mtdx"></a><big><b><big><code>mtdx</code></big></b></big>
-        node distance [L/nC]</dt>
+        node size (length) [L/nC] (in A,C,W,V modes)</dt>
       <dd><br>
       </dd>
       <dd><br>
       </dd>
       <dt> <a name="nICb\"></a><big><b><big><code>nICb</code></big></b></big>
-        number of stoichiometry units (&lt;= nIC) used in the data bridge</dt>
+        number of stoichiometry units (&lt;= nIC) used in GEMS3K data bridge</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="nDCb_"></a><big><b><big><code>nDCb</code></big></b></big>
-        number of DC (chemical species, &lt;= nDC) used in the data bridge</dt>
+        number of DC (chemical species, &lt;= nDC) used in GEMS3K data bridge</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="nPHb"></a><big><b><big><code>nPHb</code></big></b></big>
-        number of phases (&lt;= nPH) used in the data bridge</dt>
+        number of phases (&lt;= nPH) used in GEMS3K data bridge</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="nPSb"></a><big><b><big><code>nPSb</code></big></b></big>
-        number of multicomponent phases (&lt;= nPS) used in the data bridge</dt>
+        number of multicomponent phases (&lt;= nPS) used in GEMS3K data bridge</dt>
       <dd><br>
       </dd>
       <br>
@@ -3144,27 +3283,27 @@ Work
       </dd>
       <br>
       <dt> <a name="n0ct_0"></a><big><b><big><code>n0ct[0]</code></big></b></big>
-        Node 0 controls: NodeHandle</dt>
+        Node state 0 controls: NodeHandle</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ct_1"></a><big><b><big><code>n0ct[1]</code></big></b></big>
-        Node 0 controls: NodeTypeHY</dt>
+        Node state 0 controls: NodeTypeHY</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ct_2"></a><big><b><big><code>n0ct[2]</code></big></b></big>
-        Node 0 controls: NodeTypeMT</dt>
+        Node state 0 controls: NodeTypeMT</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ct_3"></a><big><b><big><code>n0ct[3]</code></big></b></big>
-        Node 0 controls: NodeStatusFMT</dt>
+        Node state 0 controls: NodeStatusFMT</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ct_4"></a><big><b><big><code>n0ct[4]</code></big></b></big>
-        Node 0 controls: NodeStatusCH</dt>
+        Node state 0 controls: NodeStatusCH</dt>
       <dd><br>
       </dd>
       <br>
@@ -3174,27 +3313,27 @@ Work
       </dd>
       <br>
       <dt> <a name="n1ct_0"></a><big><b><big><code>n1ct[0]</code></big></b></big>
-        Node 1 controls: NodeHandle</dt>
+        Node state 1 controls: NodeHandle</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ct_1"></a><big><b><big><code>n1ct[1]</code></big></b></big>
-        Node 1 controls: NodeTypeHY</dt>
+        Node state 1 controls: NodeTypeHY</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ct_2"></a><big><b><big><code>n1ct[2]</code></big></b></big>
-        Node 1 controls: NodeTypeMT</dt>
+        Node state 1 controls: NodeTypeMT</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ct_3"></a><big><b><big><code>n1ct[3]</code></big></b></big>
-        Node 1 controls: NodeStatusFMT</dt>
+        Node state 1 controls: NodeStatusFMT</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ct_4"></a><big><b><big><code>n1ct[4]</code></big></b></big>
-        Node 1 controls: NodeStatusCH</dt>
+        Node state 1 controls: NodeStatusCH</dt>
       <dd><br>
       </dd>
       <br>
@@ -3204,573 +3343,568 @@ Work
       </dd>
       <br>
       <dt> <a name="n0cs_0"></a><big><b><big><code>n0cs[0]</code></big></b></big>
-        Node 0 scalar chemical variables: T</dt>
+        Node state 0 scalar chemical variables: T</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0cs_1"></a><big><b><big><code>n0cs[1]</code></big></b></big>
-        Node 0 scalar chemical variables: P</dt>
+        Node state 0 scalar chemical variables: P</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0cs_2"></a><big><b><big><code>n0cs[2]</code></big></b></big>
-        Node 0 scalar chemical variables: Vs</dt>
+        Node state 0 scalar chemical variables: Vs</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0cs_3"></a><big><b><big><code>n0cs[3]</code></big></b></big>
-        Node 0 scalar chemical variables: Vi</dt>
+        Node state 0 scalar chemical variables: Vi</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0cs_4"></a><big><b><big><code>n0cs[4]</code></big></b></big>
-        Node 0 scalar chemical variables: Ms</dt>
+        Node state 0 scalar chemical variables: Ms</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0cs_5"></a><big><b><big><code>n0cs[5]</code></big></b></big>
-        Node 0 scalar chemical variables: Mi</dt>
+        Node state 0 scalar chemical variables: Mi</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0cs_6"></a><big><b><big><code>n0cs[6]</code></big></b></big>
-        Node 0 scalar chemical variables: Gs</dt>
+        Node state 0 scalar chemical variables: Gs</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0cs_7"></a><big><b><big><code>n0cs[7]</code></big></b></big>
-        Node 0 scalar chemical variables: Hs</dt>
+        Node state 0 scalar chemical variables: Hs</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0cs_8"></a><big><b><big><code>n0cs[8]</code></big></b></big>
-        Node 0 scalar chemical variables: Hi</dt>
+        Node state 0 scalar chemical variables: Hi</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0cs_9"></a><big><b><big><code>n0cs[9]</code></big></b></big>
-        Node 0 scalar chemical variables: IC</dt>
+        Node state 0 scalar chemical variables: IC</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0cs_10"></a><big><b><big><code>n0cs[10]</code></big></b></big>
-        Node 0 scalar chemical variables: pH</dt>
+        Node state 0 scalar chemical variables: pH</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0cs_11"></a><big><b><big><code>n0cs[11]</code></big></b></big>
-        Node 0 scalar chemical variables: pe</dt>
+        Node state 0 scalar chemical variables: pe</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0cs_12"></a><big><b><big><code>n0cs[12]</code></big></b></big>
-        Node 0 scalar chemical variables: Eh</dt>
+        Node state 0 scalar chemical variables: Eh</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1cs_0"></a><big><b><big><code>n1cs[0]</code></big></b></big>
-        Node 1 scalar chemical variables: T</dt>
+        Node state 1 scalar chemical variables: T</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1cs_1"></a><big><b><big><code>n1cs[1]</code></big></b></big>
-        Node 1 scalar chemical variables: P</dt>
+        Node state 1 scalar chemical variables: P</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1cs_2"></a><big><b><big><code>n1cs[2]</code></big></b></big>
-        Node 1 scalar chemical variables: Vs</dt>
+        Node state 1 scalar chemical variables: Vs</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1cs_3"></a><big><b><big><code>n1cs[3]</code></big></b></big>
-        Node 1 scalar chemical variables: Vi</dt>
+        Node state 1 scalar chemical variables: Vi</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1cs_4"></a><big><b><big><code>n1cs[4]</code></big></b></big>
-        Node 1 scalar chemical variables: Ms</dt>
+        Node state 1 scalar chemical variables: Ms</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1cs_5"></a><big><b><big><code>n1cs[5]</code></big></b></big>
-        Node 1 scalar chemical variables: Mi</dt>
+        Node state 1 scalar chemical variables: Mi</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1cs_6"></a><big><b><big><code>n1cs[6]</code></big></b></big>
-        Node 1 scalar chemical variables: Gs</dt>
+        Node state 1 scalar chemical variables: Gs</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1cs_7"></a><big><b><big><code>n1cs[7]</code></big></b></big>
-        Node 1 scalar chemical variables: Hs</dt>
+        Node state 1 scalar chemical variables: Hs</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1cs_8"></a><big><b><big><code>n1cs[8]</code></big></b></big>
-        Node 1 scalar chemical variables: Hi</dt>
+        Node state 1 scalar chemical variables: Hi</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1cs_9"></a><big><b><big><code>n1cs[9]</code></big></b></big>
-        Node 1 scalar chemical variables: IC</dt>
+        Node state 1 scalar chemical variables: IC</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1cs_10"></a><big><b><big><code>n1cs[10]</code></big></b></big>
-        Node 1 scalar chemical variables: pH</dt>
+        Node state 1 scalar chemical variables: pH</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1cs_11"></a><big><b><big><code>n1cs[11]</code></big></b></big>
-        Node 1 scalar chemical variables: pe</dt>
+        Node state 1 scalar chemical variables: pe</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1cs_12"></a><big><b><big><code>n1cs[12]</code></big></b></big>
-        Node 1 scalar chemical variables: Eh</dt>
+        Node state 1 scalar chemical variables: Eh</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_0"></a><big><b><big><code>n0ts[0]</code></big></b></big>
-        Node 0 scalar transport variables: Tm</dt>
+        Node state 0 scalar transport variables: Tm</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_1"></a><big><b><big><code>n0ts[1]</code></big></b></big>
-        Node 0 scalar transport variables: dt</dt>
+        Node state 0 scalar transport variables: dt</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_2"></a><big><b><big><code>n0ts[2]</code></big></b></big>
-        Node 0 scalar transport variables: dt1</dt>
+        Node state 0 scalar transport variables: dt1</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_3"></a><big><b><big><code>n0ts[3]</code></big></b></big>
-        Node 0 scalar transport variables: ot</dt>
+        Node state 0 scalar transport variables: ot</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_4"></a><big><b><big><code>n0ts[4]</code></big></b></big>
-        Node 0 scalar transport variables: Vt</dt>
+        Node state 0 scalar transport variables: Vt</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_5"></a><big><b><big><code>n0ts[5]</code></big></b></big>
-        Node 0 scalar transport variables: eps</dt>
+        Node state 0 scalar transport variables: eps</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_6"></a><big><b><big><code>n0ts[6]</code></big></b></big>
-        Node 0 scalar transport variables: Km</dt>
+        Node state 0 scalar transport variables: Km</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_7"></a><big><b><big><code>n0ts[7]</code></big></b></big>
-        Node 0 scalar transport variables: Kf</dt>
+        Node state 0 scalar transport variables: Kf</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_8"></a><big><b><big><code>n0ts[8]</code></big></b></big>
-        Node 0 scalar transport variables: S</dt>
+        Node state 0 scalar transport variables: S</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_8"></a><big><b><big><code>n0ts[8]</code></big></b></big>
-        Node 0 scalar transport variables: Tr</dt>
+        Node state 0 scalar transport variables: Tr</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_9"></a><big><b><big><code>n0ts[9]</code></big></b></big>
-        Node 0 scalar transport variables: h</dt>
+        Node state 0 scalar transport variables: h</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_10"></a><big><b><big><code>n0ts[10]</code></big></b></big>
-        Node 0 scalar transport variables: rho</dt>
+        Node state 0 scalar transport variables: rho</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_11"></a><big><b><big><code>n0ts[11]</code></big></b></big>
-        Node 0 scalar transport variables: al</dt>
+        Node state 0 scalar transport variables: al</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_12"></a><big><b><big><code>n0ts[12]</code></big></b></big>
-        Node 0 scalar transport variables: at</dt>
+        Node state 0 scalar transport variables: at</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_13"></a><big><b><big><code>n0ts[13]</code></big></b></big>
-        Node 0 scalar transport variables: av</dt>
+        Node state 0 scalar transport variables: av</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_14"></a><big><b><big><code>n0ts[14]</code></big></b></big>
-        Node 0 scalar transport variables: av</dt>
+        Node state 0 scalar transport variables: av</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_15"></a><big><b><big><code>n0ts[15]</code></big></b></big>
-        Node 0 scalar transport variables: hDl</dt>
+        Node state 0 scalar transport variables: hDl</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_16"></a><big><b><big><code>n0ts[16]</code></big></b></big>
-        Node 0 scalar transport variables: hDt</dt>
+        Node state 0 scalar transport variables: hDt</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_17"></a><big><b><big><code>n0ts[17]</code></big></b></big>
-        Node 0 scalar transport variables: hDv</dt>
+        Node state 0 scalar transport variables: hDv</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0ts_18"></a><big><b><big><code>n0ts[18]</code></big></b></big>
-        Node 0 scalar transport variables: nto</dt>
+        Node state 0 scalar transport variables: nto</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_0"></a><big><b><big><code>n1ts[0]</code></big></b></big>
-        Node 1 scalar transport variables: Tm</dt>
+        Node state 1 scalar transport variables: Tm</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_1"></a><big><b><big><code>n1ts[1]</code></big></b></big>
-        Node 1 scalar transport variables: dt</dt>
+        Node state 1 scalar transport variables: dt</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_2"></a><big><b><big><code>n1ts[2]</code></big></b></big>
-        Node 1 scalar transport variables: dt1</dt>
+        Node state 1 scalar transport variables: dt1</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_3"></a><big><b><big><code>n1ts[3]</code></big></b></big>
-        Node 1 scalar transport variables: ot</dt>
+        Node state 1 scalar transport variables: ot</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_4"></a><big><b><big><code>n1ts[4]</code></big></b></big>
-        Node 1 scalar transport variables: Vt</dt>
+        Node state 1 scalar transport variables: Vt</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_5"></a><big><b><big><code>n1ts[5]</code></big></b></big>
-        Node 1 scalar transport variables: eps</dt>
+        Node state 1 scalar transport variables: eps</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_6"></a><big><b><big><code>n1ts[6]</code></big></b></big>
-        Node 1 scalar transport variables: Km</dt>
+        Node state 1 scalar transport variables: Km</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_7"></a><big><b><big><code>n1ts[7]</code></big></b></big>
-        Node 1 scalar transport variables: Kf</dt>
+        Node state 1 scalar transport variables: Kf</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_8"></a><big><b><big><code>n1ts[8]</code></big></b></big>
-        Node 1 scalar transport variables: S</dt>
+        Node state 1 scalar transport variables: S</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_9"></a><big><b><big><code>n1ts[9]</code></big></b></big>
-        Node 1 scalar transport variables: Tr</dt>
+        Node state 1 scalar transport variables: Tr</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_10"></a><big><b><big><code>n1ts[10]</code></big></b></big>
-        Node 1 scalar transport variables: h</dt>
+        Node state 1 scalar transport variables: h</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_11"></a><big><b><big><code>n1ts[11]</code></big></b></big>
-        Node 1 scalar transport variables: rho</dt>
+        Node state 1 scalar transport variables: rho</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_12"></a><big><b><big><code>n1ts[12]</code></big></b></big>
-        Node 1 scalar transport variables: al</dt>
+        Node state 1 scalar transport variables: al</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_13"></a><big><b><big><code>n1ts[13]</code></big></b></big>
-        Node 1 scalar transport variables: at</dt>
+        Node state 1 scalar transport variables: at</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_14"></a><big><b><big><code>n1ts[14]</code></big></b></big>
-        Node 1 scalar transport variables: av</dt>
+        Node state 1 scalar transport variables: av</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_15"></a><big><b><big><code>n1ts[15]</code></big></b></big>
-        Node 1 scalar transport variables: hDl</dt>
+        Node state 1 scalar transport variables: hDl</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_16"></a><big><b><big><code>n1ts[16]</code></big></b></big>
-        Node 1 scalar transport variables: hDt</dt>
+        Node state 1 scalar transport variables: hDt</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_17"></a><big><b><big><code>n1ts[17]</code></big></b></big>
-        Node 1 scalar transport variables: hDv</dt>
+        Node state 1 scalar transport variables: hDv</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1ts_18"></a><big><b><big><code>n1ts[18]</code></big></b></big>
-        Node 1 scalar transport variables: nto</dt>
+        Node state 1 scalar transport variables: nto</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0xDC"></a><big><b><big><code>n0xDC</code></big></b></big>
-        DC mole amounts in equilibrium in node 0 [nDCb] - - + +</dt>
+        DC mole amounts in equilibrium in node state 0 [nDCb] </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1xDC"></a><big><b><big><code>n1xDC</code></big></b></big>
-        DC mole amounts in equilibrium in node 1 [nDCb] - - + +</dt>
+        DC mole amounts in equilibrium in node state 1 [nDCb] </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0gam"></a><big><b><big><code>n0gam</code></big></b></big>
-        activity coefficients of DC [nDCb] in node 0 - - + +</dt>
+        activity coefficients of DC&nbsp; in node state 0 [nDCb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1gam"></a><big><b><big><code>n1gam</code></big></b></big>
-        activity coefficients of DC [nDCb] in node 1 - - + +</dt>
+        activity coefficients of DC&nbsp; in node state 1 [nDCb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0xPH"></a><big><b><big><code>n0xPH</code></big></b></big>
-        total mole amounts of phases [nPHb] in node 0 - - + +</dt>
+        total mole amounts of phases&nbsp; in node state 0 [nPHb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1xPH"></a><big><b><big><code>n1xPH</code></big></b></big>
-        total mole amounts of phases [nPHb] in node 1 - - + +</dt>
+        total mole amounts of phases&nbsp; in node state 1 [nPHb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0vPS"></a><big><b><big><code>n0vPS</code></big></b></big>
-        volume, m3, of phases solutions [nPSb] in node 0 - - + +</dt>
+        volume, m3, of phases-solutions in node state 0 [nPSb] </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1vPS"></a><big><b><big><code>n1vPS</code></big></b></big>
-        volume, m3, of phases solutions [nPSb] in node 1 - - + +</dt>
+        volume, m3, of phases-solutions&nbsp; in node state 1 [nPSb] </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0mPS"></a><big><b><big><code>n0mPS</code></big></b></big>
-        masses of phases solutions, kg [nPSb] in node 0 - - + +</dt>
+        masses of phases-solutions, kg&nbsp; in node state 0 [nPSb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1mPS"></a><big><b><big><code>n1mPS</code></big></b></big>
-        masses of phases solutions, kg [nPSb] in node 1 - - + +</dt>
+        masses of phases-solutions, kg&nbsp; in node state 1 [nPSb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0bPS"></a><big><b><big><code>n0bPS</code></big></b></big>
-        bulk compositions of phases-solutions [nPSb][nICb], moles, in node 0 - -
-        + +</dt>
+        bulk compositions of phases-solutions (mol) in node state 0 [nPSb][nICb]
+      </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1bPS"></a><big><b><big><code>n1bPS</code></big></b></big>
-        bulk compositions of phases-solutions [nPSb][nICb] in node 1 - - + +</dt>
+        bulk compositions of phases-solutions (mol) in node state 1 [nPSb][nICb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0xPA"></a><big><b><big><code>n0xPA</code></big></b></big>
-        amount of carrier in phases-solutions [nPSb] ?? in node 0 - - + +</dt>
+        amount of carrier (solvent) in phases-solutions in node state 0 [nPSb] </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1xPA"></a><big><b><big><code>n1xPA</code></big></b></big>
-        amount of carrier in phases-solutions [nPSb] ?? in node 1 - - + +</dt>
+        amount of carrier (solvent) in phases-solutions&nbsp; in node state 1
+        [nPSb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0bSP"></a><big><b><big><code>n0bSP</code></big></b></big>
-        equilibrium bulk composition of solid part of the system, moles [nICb]
-        in node 0 - - + +</dt>
+        equilibrium bulk composition of solid part of the system, moles&nbsp; in
+        node state 0 [nICb] </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1bSP"></a><big><b><big><code>n1bSP</code></big></b></big>
-        equilibrium bulk composition of solid part of the system, moles [nICb]
-        in node 1 - - + +</dt>
+        equilibrium bulk composition of solid part of the system, moles&nbsp; in
+        node state 1 [nICb] </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0dul"></a><big><b><big><code>n0dul</code></big></b></big>
-        upper metastability restrictions [nDCb] in node 0 + + - -</dt>
+        DC upper metastability restrictions&nbsp; in node state 0&nbsp; [nDCb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1dul"></a><big><b><big><code>n1dul</code></big></b></big>
-        upper metastability restrictions [nDCb] in node 1 + + - -</dt>
+        DC upper metastability restrictions&nbsp; in node state 1 [nDCb] </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0dll"></a><big><b><big><code>n0dll</code></big></b></big>
-        lower metastability restrictions [nDCb] in node 0 + + - -</dt>
+        DC lower metastability restrictions in node state 0 [nDCb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1dll"></a><big><b><big><code>n1dll</code></big></b></big>
-        lower metastability restrictions [nDCb] in node 1 + + - -</dt>
+        DC lower metastability restrictions in node state 1 [nDCb] </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0bIC"></a><big><b><big><code>n0bIC</code></big></b></big>
-        bulk mole amounts of IC[nICb] in node 0 + + - -</dt>
+        bulk mole amounts of ICs in node state 0 [nICb]&nbsp;</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1bIC"></a><big><b><big><code>n1bIC</code></big></b></big>
-        bulk mole amounts of IC[nICb] in node 1 + + - -</dt>
+        bulk mole amounts of ICs in node state 1 [nICb]&nbsp;</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0rMB"></a><big><b><big><code>n0rMB</code></big></b></big>
-        mass balance residuals from GEM IPM [nICb] in node 0 - - + +</dt>
+        mass balance residuals for ICs from GEM IPM&nbsp; in node state 0 [nICb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1rMB"></a><big><b><big><code>n1rMB</code></big></b></big>
-        mass balance residuals from GEM IPM [nICb] in node 1 - - + +</dt>
+        mass balance residuals for ICs from GEM IPM&nbsp; in node state 1 [nICb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0uIC"></a><big><b><big><code>n0uIC</code></big></b></big>
-        chemical potentials of independent components (mol/mol) [nICb] - - + +</dt>
+        dual-solution chemical potentials of ICs (mol/mol) in node state 0
+        [nICb] </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1uIC"></a><big><b><big><code>n1uIC</code></big></b></big>
-        chemical potentials of independent components (mol/mol) [nICb] - - + +</dt>
+        dual-solution chemical potentials of ICs (mol/mol) in node state 1
+        [nICb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0aPH"></a><big><b><big><code>n0aPH</code></big></b></big>
-        specific surface areas of phases (m2/kg) in node 0 + + - -</dt>
+        specific surface areas of phases (m2/kg) in node state 0 [nPHb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1aPH"></a><big><b><big><code>n1aPH</code></big></b></big>
-        specific surface areas of phases (m2/kg) in node 1 + + - -</dt>
+        specific surface areas of phases (m2/kg) in node state 1 [nPHb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0amru"></a><big><b><big><code>n0amru</code></big></b></big>
-        Upper AMRs on masses of DCs (kg) in node 0 + + - -</dt>
+        Upper AMRs on masses of DCs (kg) in node state 0 [nDCb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1amru"></a><big><b><big><code>n1amru</code></big></b></big>
-        Upper AMRs on masses of DCs (kg) in node 1 + + - -</dt>
+        Upper AMRs on masses of DCs (kg) in node state 1 [nDCb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0amrl"></a><big><b><big><code>n0amrl</code></big></b></big>
-        Lower AMRs on masses of DCs (kg) in node 0 + + - -</dt>
+        Lower AMRs on masses of DCs (kg) in node state 0 [nDCb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1amrl"></a><big><b><big><code>n1amrl</code></big></b></big>
-        Lower AMRs on masses of DCs (kg) in node 1 + + - -</dt>
+        Lower AMRs on masses of DCs (kg) in node state 1 [nDCb]</dt>
       <dd><br>
       </dd>
       <br>
       # work objects for vtk output and plotting in GEM2MT module<br>
       <br>
       <dt> <a name="n0mPH_"></a><big><b><big><code>n0mPH</code></big></b></big>
-        masses of phases in equilibrium, kg [nPHb] in node 0 - - + +</dt>
+        masses of phases in equilibrium, kg in node state 0 [nPHb] </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1mPH"></a><big><b><big><code>n1mPH</code></big></b></big>
-        masses of phases in equilibrium, kg [nPHb] in node 1 - - + +</dt>
+        masses of phases in equilibrium, kg&nbsp; in node state 1 [nPHb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0vPH"></a><big><b><big><code>n0vPH</code></big></b></big>
-        volumes of phases in equilibrium, m3 [nPSb] in node 0 - - + +</dt>
+        volumes of phases in equilibrium, m^3&nbsp; in node state 0 [nPSb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1vPH_0"></a><big><b><big><code>n1vPH</code></big></b></big>
-        volumes of phases in equilibrium, m3 [nPSb] in node 1 - - + +</dt>
+        volumes of phases in equilibrium, m^3 in node state 1 [nPSb] </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0m_t"></a><big><b><big><code>n0m_t</code></big></b></big>
-        total dissolved molality of independent components, m [nICb] in node 0 -
-        - + +</dt>
+        total dissolved molality of ICs, molal in node state 0 [nICb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1m_t"></a><big><b><big><code>n1m_t</code></big></b></big>
-        total dissolved molality of independent components, m [nICb] in node 1 -
-        - + +</dt>
+        total dissolved molality of ICs, molal in node state 1 [nICb] </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0con"></a><big><b><big><code>n0con</code></big></b></big>
-        DC concentrations in phases (molal, mole fraction) [nDCb] in node 0 - -
-        + +</dt>
+        DC concentrations in phases (molal, mole fraction) in node state 0
+        [nDCb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1con"></a><big><b><big><code>n1con</code></big></b></big>
-        DC concentrations in phases (molal, mole fraction) [nDCb] in node 1 - -
-        + +</dt>
+        DC concentrations in phases (molal, mole fraction) in node state 1
+        [nDCb] </dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0mju"></a><big><b><big><code>n0mju</code></big></b></big>
-        DC chemical potentials in equilibrium, J/mol [nDCb] in node 0 - - + +</dt>
+        DC chemical potentials in equilibrium, J/mol in node state 0
+        [nDCb]&nbsp;</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1mju"></a><big><b><big><code>n1mju</code></big></b></big>
-        DC chemical potentials in equilibrium, J/mol [nDCb] in node 1 - - + +</dt>
+        DC chemical potentials in equilibrium, J/mol in node state 1
+        [nDCb]&nbsp;</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n0lga"></a><big><b><big><code>n0lga</code></big></b></big>
-        DC activities in equilibrium, in log10 scale [nDCb] in node 0 - - + +</dt>
+        DC activities in equilibrium, in log<sub>10</sub> scale in node state 0
+        [nDCb]</dt>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="n1lga"></a><big><b><big><code>n1lga</code></big></b></big>
-        DC activities in equilibrium, in log10 scale [nDCb] in node 1 - - + +</dt>
+        DC activities in equilibrium, in log<sub>10</sub> scale in node state 1
+        [nDCb]</dt>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="dtTn2"></a><big><b><big><code>dtTn2</code></big></b></big>
-        Internal</dt>
-      <dd><br>
-      </dd>
-      <br>
-      <dt> <a name="dtTn3"></a><big><b><big><code>dtTn3</code></big></b></big>
-        Internal</dt>
-      <dd><br>
-      </dd>
-      <br>
+      <dt> <a name="dtTn2"></a><big><b><big><code></code></big></b></big></dt>
     </dl>
     <br>
     <hr width="100%" size="2"><br>
-    <br>
     <h2><a name="GEM2MT_ERRORS"></a>5. Warnings and error messages<br>
     </h2>
     (under construction)<br>
@@ -3778,21 +3912,17 @@ Work
     <dl>
       <dt><br>
       </dt>
-      <dt><br>
-      </dt>
       <dt><b><big><tt>E00DTrem: </tt>Invalid dimensions in GEM2MT data
             structure! </big></b></dt>
       &nbsp; &nbsp;Some counters are set inconsistently. Remake the GEM2MT
       record and check the counters.<br>
-      &nbsp;<br>
-      &nbsp; <br>
       &nbsp; <br>
       <br>
     </dl>
     <hr width="100%" size="2">
     <p><tt>end of file</tt> <br>
     </p>
-    <p>Last edited: 10 May 2019</p>
+    <p>Last edited: 15 May 2019</p>
     <p>(c) GEMS Development Team</p>
     <p>&nbsp; </p>
     <br>

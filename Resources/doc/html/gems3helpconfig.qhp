@@ -571,7 +571,6 @@
         <keyword name="MSpmv_7" ref="gm_project.html#MSpmv_7"/>
         <keyword name="MSpmv_8" ref="gm_project.html#MSpmv_8"/>
         <keyword name="MSpmv_9" ref="gm_project.html#MSpmv_9"/>
-        <keyword name="MTplt" ref="gm_gem2mt.html#MTplt"/>
         <keyword name="MaSDj_0" ref="gm_phase.html#MaSDj_0"/>
         <keyword name="MaSDj_1" ref="gm_phase.html#MaSDj_1"/>
         <keyword name="MaSDj_2" ref="gm_phase.html#MaSDj_2"/>
@@ -1316,7 +1315,6 @@
         <keyword name="dtTm_1" ref="gm_dualth.html#dtTm_1"/>
         <keyword name="dtTm_2" ref="gm_dualth.html#dtTm_2"/>
         <keyword name="dtTn2" ref="gm_gem2mt.html#dtTn2"/>
-        <keyword name="dtTn3" ref="gm_gem2mt.html#dtTn3"/>
         <keyword name="dtTprn" ref="gm_dualth.html#dtTprn"/>
         <keyword name="dtVc" ref="gm_dualth.html#dtVc"/>
         <keyword name="dul" ref="gems_sys.html#dul"/>
@@ -1577,8 +1575,6 @@
         <keyword name="mtPvfl_7" ref="gm_gem2mt.html#mtPvfl_7"/>
         <keyword name="mtPvfl_8" ref="gm_gem2mt.html#mtPvfl_8"/>
         <keyword name="mtPvfl_9" ref="gm_gem2mt.html#mtPvfl_9"/>
-        <keyword name="mtRes1" ref="gm_gem2mt.html#mtRes1"/>
-        <keyword name="mtRes2" ref="gm_gem2mt.html#mtRes2"/>
         <keyword name="mtSize_0" ref="gm_gem2mt.html#mtSize_0"/>
         <keyword name="mtSize_1" ref="gm_gem2mt.html#mtSize_1"/>
         <keyword name="mtSkey" ref="gm_gem2mt.html#mtSkey"/>
@@ -1600,7 +1596,6 @@
         <keyword name="mtTau_0" ref="gm_gem2mt.html#mtTau_0"/>
         <keyword name="mtTau_1" ref="gm_gem2mt.html#mtTau_1"/>
         <keyword name="mtTau_2" ref="gm_gem2mt.html#mtTau_2"/>
-        <keyword name="mtTxt" ref="gm_gem2mt.html#mtTxt"/>
         <keyword name="mtdx" ref="gm_gem2mt.html#mtdx"/>
         <keyword name="mtnSnE_0" ref="gm_gem2mt.html#mtnSnE_0"/>
         <keyword name="mtnSnE_1" ref="gm_gem2mt.html#mtnSnE_1"/>
@@ -1609,7 +1604,6 @@
         <keyword name="mttmi_0" ref="gm_gem2mt.html#mttmi_0"/>
         <keyword name="mttmi_1" ref="gm_gem2mt.html#mttmi_1"/>
         <keyword name="mttmi_2" ref="gm_gem2mt.html#mttmi_2"/>
-        <keyword name="mttprn" ref="gm_gem2mt.html#mttprn"/>
         <keyword name="mttt" ref="gm_gem2mt.html#mttt"/>
         <keyword name="mu" ref="gems_sys.html#mu"/>
         <keyword name="mu_a" ref="gm_dualth.html#mu_a"/>
@@ -1871,6 +1865,7 @@
         <keyword name="qLev" ref="gm_unspace.html#qLev"/>
         <keyword name="qc" ref="gm_gem2mt.html#qc"/>
         <keyword name="qd" ref="gems_sys.html#qd"/>
+        <keyword name="qf" ref="gm_gem2mt.html#qf"/>
         <keyword name="qp" ref="gems_sys.html#qp"/>
         <keyword name="qpc" ref="gm_gem2mt.html#qpc"/>
         <keyword name="qpg" ref="gm_dualth.html#qpg"/>
