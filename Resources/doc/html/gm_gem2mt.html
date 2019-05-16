@@ -7,7 +7,7 @@
     <meta name="description" content="Version 3.0.0-PSI">
   </head>
   <body>
-    <h1><img src="gems1.png" width="48" height="48" align="left"> <font color="#000066">
+    <h1><img src="gems1.png" height="48" align="left" width="48"> <font color="#000066">
         GEM-Selektor version 3</font> </h1>
     <h2>Reactive Mass Transport (GEM2MT) Module</h2>
     <hr width="100%" size="2">
@@ -90,9 +90,7 @@
       initial node recipes (in the T mode). Changes of species concentrations or
       amounts of phases through the node profile with time can be graphically
       monitored at each time step (wave) or logged to files in VTK format. </p>
-    <p>The GEM2MT module can simulate reactive transport in three main modes.
-      More information on the different RMT simulation modes can be found under
-      the following links:</p>
+    <p>The GEM2MT module can simulate reactive transport in three main modes:</p>
     <ol>
       <li><a href="#GEM2MT_S_MODE">Sequential reactor chain and waves (S);</a> </li>
       <li><a href="#GEM2MT_F_MODE">Flow-through and box-flux sequence (F, B);</a>
@@ -101,14 +99,13 @@
           advection/dispersion/diffusion (A,D,W)</a> </li>
     </ol>
     <p> </p>
-    <p>A typical step by step workflow is shown in the two examples below for
-      the S and F modes. The S and F modes are normally used for simulating
+    <p>A typical step by step workflow for the S and F modes is shown in the two
+      examples below. The S and F modes are normally used for simulating
       fluid-rock interaction by infiltration of fluid into the rock, which leads
       to development of alteration zones along a fluid flow path. A simulation
-      setup in S or F modes consists typically of one node of source fluid and
-      about 50 to 200 nodes of rock that will be interacted with fluid at
-      hydrothermal conditions, all to be set first using the GEM2MT wizard when
-      creating or re-making the GEM2MT object. </p>
+      setup consists typically of one node of source fluid and about 50 to 200
+      nodes of rock that will be interacted with fluid, all to be set first
+      using the GEM2MT wizard when creating or re-making a GEM2MT object. </p>
     <p style="text-align: justify;">To prepare for such simulations, two Compos
       (PCO) records are usually created in thermodynamic database mode, namely
       one for fresh fluid such as seawater (let us call it "Fluid") and another
@@ -127,10 +124,10 @@
     <h4>Example 1: "Sequential reactor chain" S mode </h4>
     <p>In this mode, we can simulate a "wave" of a fluid that will pass through
       each of the rock nodes once per step (i.e., a wave consists of ca. 100
-      steps). Many "waves" are possible.&nbsp; </p>
+      substeps). Many "waves" are possible.&nbsp; </p>
     <ol>
       <li>Under GEM2MT, create a new record and select the parent system
-        containing the rock and the fluid created in SysEq ("FRgem2mt").</li>
+        containing the rock and the fluid created in SysEq (e.g. "FRgem2mt").</li>
       <li>In Step 1 of the wizard, select the S mode.</li>
       <li>In Step 2 of the wizard, set the number of nodes (nC= 101) and the
         maximum number of steps (in this case, "waves", i.e. 1000). Select 2 for
@@ -138,7 +135,7 @@
         define the initial compositions and masses of the fluid and rock initial
         systems. Optionally, we can set the number of user-defined formula units
         that will be used for augmenting initial bulk elemental compositions of
-        fluid and rock.</li>
+        the&nbsp; fluid and the rock.</li>
       <li>In Step 3, we select "Move aqueous fluid".</li>
       <li>In Step 4, we select P, T, V, Initial system, Node type, MPG flux, and
         Initial mass.</li>
@@ -157,12 +154,12 @@
       and add a mass of 0.9 kg. </p>
     <p>In the second row (index 1), enter the name of system "Rock" or similar,
       and add a mass of 0.1 kg. </p>
-    <p>In both cases, set temperature (e.g. 250 C) and pressure (e.g. 500 bar)
+    <p>In both cases, set temperature (e.g. 250 °C) and pressure (e.g. 500 bar)
       for equilibrium conditions. </p>
-    <p>Next in the mICb table of quantity/concentration of IC in initial
+    <p>Next in the mICb table below of quantity/concentration of IC in initial
       systems, enter (copy-paste) the concentration and units for each element
       to define the compositions of rock and fluid in the corresponding rows. </p>
-    <p>Optionally, type user-defined formulae (e.g. "SiO2", "CO2", etc.) and
+    <p>Optionally, type user-defined formulae (e.g. "SiO&#8322;", "CO&#8322;", etc.) and
       enter their units and quantities, which will be added (after unit
       conversions) to the bulk elemental compositions of initial systems for
       fluid and rock. </p>
@@ -170,7 +167,8 @@
       page) should have been created by the wizard and normally does not need
       editing in the S mode. Click the "Calculate" toolbar button and (at the
       very first time) do not plot the nodes. Stop calculation after a few
-      "waves" and start it again with plotting.&nbsp; </p>
+      "waves" and start it again with graph plotting to inspect the
+      results.&nbsp; </p>
     <h4>Example 2: Flow-through reactor chain (F) mode</h4>
     <p>In this mode, we can simulate the simultaneous transport of (reacted)
       fluid in one direction through all nodes from one node to the next. This
@@ -185,17 +183,17 @@
       applied to nodes containing 50 g of rock and 500 g of fluid. In other
       words, at each (time) step, about one tenth of fluid in each box is
       transported to the next box. The very first box in the chain is declared a
-      "constant-flux source) and it contains only "fresh" fluid but no rock; the
+      "constant-flux source" and it contains only "fresh" fluid but no rock; the
       very last box is declared a "constant-flux sink".&nbsp; </p>
     <ol>
       <li>Under GEM2MT, we create a new record selecting the parent system
         containing the rock and fluid created in SysEq ("FRgem2mt").</li>
       <li>In Step 1 of the wizard, we select the F mode.</li>
       <li>In Step 2 of the wizard, we set the number of nodes (e.g. nC= 101) and
-        a maximum number of (time) steps (e.g. 1000, note that equilibria in all
-        boxes in the chain are re-calculated (and can be plotted) in one time
-        step). Enter 1 for the number of user-defined formula units (to add at
-        least H2O to the rock initial composition). </li>
+        a maximum number of (time) steps (e.g. 1000); note that equilibria in
+        all boxes in the chain are re-calculated (and can be plotted) in one
+        time step. Enter 1 for the number of user-defined formula units (to add
+        at least H&#8322;O to the rock initial composition). </li>
       <li>In Step 4, we set P, T, V, Initial system, Node type, MPG flux, and
         Initial mass.</li>
       <li>In Step 5, we select the output variables you want to plot in each
@@ -212,18 +210,19 @@
     <p>In the first row (index 0), enter the name of system "Fluid" or similar,
       and add a mass of 1 kg. </p>
     <p>In the second row (index 1), enter the name of system "Rock" or similar,
-      and add a mass of 1 kg. </p>
-    <p>In both cases, set temperature (e.g. 250 C) and pressure (e.g. 500 bar)
+      and add a mass of 0.1 kg. </p>
+    <p>In both cases, set temperature (e.g. 250 °C) and pressure (e.g. 500 bar)
       for equilibrium conditions. </p>
     <p>Next in the mICb table of quantity/concentration of IC in initial
       systems, enter (copy-paste) the concentration and units for each element
       to define the compositions of rock and fluid in the corresponding rows. </p>
-    <p>Optionally, type user-defined formulae (e.g. "H2O", "CO2", etc.) and
+    <p>Optionally, type user-defined formulae (e.g. "H&#8322;O", "CO&#8322;", etc.) and
       enter their units and quantities, which will be added (after unit
       conversions) to the bulk elemental compositions of initial systems for
       fluid and rock. Check that the composition of the rock also contains
-      enough H2O to have fluid after equilibration in desired fluid/rock mass
-      ratio. </p>
+      enough H&#8322;O to have fluid after equilibration in desired fluid/rock mass
+      ratio (e.g. if normalized to 1 kg of rock, add 10 kg of H&#8322;O for a
+      fluid/rock of 10). </p>
     <p>The initialization script (visible in the lower part of the "Initial"
       page) should have been created by the wizard. In this script, we check
       that the Flux Rate (FDLf) is set to the desired value (e.g. 1). This
@@ -235,7 +234,7 @@
       of phases in MGP column (the wizard already suggests "aq" as the name of
       this flux composition or "mobile phase group" MPG).</p>
     <p>Click the "Calculate" toolbar button and (at the very first time) do not
-      plot the nodes. Stop calculation after a few "waves", then start it again
+      plot the nodes. Stop calculation after a few "steps", then start it again
       with plotting.&nbsp; </p>
     <p><br>
     </p>
@@ -275,13 +274,13 @@
     <img src="sequent-reactors.png" alt="sequential reactors" title="Sequential reactors scheme"
       style="width: 360px; height: 101px;">
     <p>Any number of sequential reactor "waves" (which correspond to steps) can
-      be performed. At the beginning of the second wave, the "fresh" fluid is
-      put into the first box with the reacted rock composition remaining after
-      the first "wave". After equilibration, the fluid is taken into the second
-      box to react with the rock already reacted with the the first "wave", and
-      so on. After many "waves", the formation and propagation of rock
-      alteration zones can be followed by plotting amounts of phases in all
-      boxes after each "wave".</p>
+      be performed. At the beginning of the second wave (step 2), the "fresh"
+      fluid is put into the first box with the reacted rock composition
+      remaining after the first "wave". After equilibration, the fluid is taken
+      into the second box to react with the rock already reacted with the the
+      first "wave", and so on. After many "waves", the formation and propagation
+      of rock alteration zones can be followed by plotting amounts of phases in
+      all boxes after each "wave".</p>
     <p><br>
     </p>
     <hr style="width: 100%; height: 2px;">
@@ -314,13 +313,13 @@
       system of mass balance equations for all elements in all nodes. </p>
     <p>The mass of fluid moved by the flux between nodes n and n-1 is defined by
       the quantities of phases in MGP (or flux composition), the flux rate and
-      the flux order choosen. The simplest zero-order (constant) flux moves 1
-      mol of its composition times the flux rate (set in the FDLf table on
-      "Fluxes" page). The rate 0.1 means that 0.1 mol of the flux composition
-      moves per step (unit time). For the 1st order flux, the rate 0.1 means
-      that 0.1 mol of flux composition times the mass of its source MPG (in kg)
-      is moved per step. Such a flux will automatically decrease if the mass of
-      its source phase(s) in the source box decreases, and vice versa.&nbsp; </p>
+      the flux order chosen. The simplest zero-order (constant) flux moves 1 mol
+      of its composition times the flux rate (set in the FDLf table on "Fluxes"
+      page). The rate 0.1 means that 0.1 mol of the flux composition moves per
+      step (unit time). For the 1st order flux, the rate 0.1 means that 0.1 mol
+      of flux composition times the mass of its source MPG (in kg) is moved per
+      step. Such a flux will automatically decrease if the mass of its source
+      phase(s) in the source box decreases, and vice versa.&nbsp; </p>
     <p>After the transport step, the equilibrium speciation is computed in all
       nodes by the GEM algorithm, and the next iteration of transport occurs
       followed by the next equilibration in all boxes, and so on, until the
