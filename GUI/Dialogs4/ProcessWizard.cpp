@@ -100,7 +100,7 @@ ProcessWizard::ProcessWizard( const char* pkey, char flgs[24], int size[8],
             const char *acalcScript, const char *aoutScript,
             const char* aXname, const char* aYname, QWidget* parent):
         QDialog( parent ), curType('-'),
-        calcScript(acalcScript), outScript(aoutScript), pageScript(0)
+        calcScript(acalcScript), outScript(aoutScript), pageScript(nullptr)
 {
     setupUi(this);
     gstring str1= "GEM-Selektor Process Setup:  ";
@@ -583,8 +583,8 @@ void ProcessWizard::defineWindow(char type)
    {
    case P_PVT:
        {
-           lAbout->setText("Please,check iP and iT iterator contents, and set Step to 0 in all other iterators."
-                           "\n\nFor PT phase diagram: select phases to plot, then skip the next wizard page.");
+           lAbout->setText("Please, check/edit the iP and iT iterator contents, and set Step to 0 in all other iterators."
+                           "\n\nFor a PT phase diagram: select phases to plot, then skip the next wizard page.");
          sub1->setText("No script");
          sub2->setText("User-defined script");
          sub3->setText("PT phase diagram");
@@ -601,16 +601,16 @@ void ProcessWizard::defineWindow(char type)
    case P_SEQUENT:
        {
          lAbout->setText(
-   "Linear titration and logD diagram use iNu; logarithmic titration and logKd digram use ipXi. "
-   "Titrations: select items from 'Compos', 'DComp', 'IComp' or 'Phase' lists to act as titrants,"
-   " optionally also from 'DC-lower' or 'DC-upper' to change metastability constraints.\n\n"
-   "To plot logD vs linear x scale, (i) select minor then host end member from the 'DComp' list,"
-   " then trace then host ions from the 'Molality' list. "
-   "To plot logKd and isotherms vs log(molality) scale, select trace and host compositions from the"
-   " 'Compos' list, then trace and host elements from the 'Sorbed' list. "
+   "Linear titration and logD diagrams use the iNu iterator; logarithmic titration and logKd digrams use ipXi. "
+   "Titrations: select required titrants as items from 'Compos', 'DComp', 'IComp' or 'Phase' lists,"
+   " optionally also select items from 'DC-lower' or 'DC-upper' to change metastability constraints.\n\n"
+   "To plot logD vs linear x (mole fraction) scale: (i) select minor then host end member from the 'DComp' list,"
+   " (ii) select trace then host ion from the 'Molality' list. "
+   "To plot logKd and isotherms vs log(molality) scale: (i) select trace then host compositions from the"
+   " 'Compos' list; (ii) select trace then host elements from the 'Sorbed' list. "
    "In both cases, skip the next wizard page. ");
          sub1->setText("Titration cNu (linear)");
-         sub2->setText("Diagram logD vs linear x");
+         sub2->setText("Diagram logD vs x (linear)");
          sub3->setText("Titration cpXi logarithmic");
          sub4->setText("Diagram logKd vs log(m)");
 
@@ -622,13 +622,13 @@ void ProcessWizard::defineWindow(char type)
    case P_LIP:
        {
        lAbout->setText("In both variants, select a binary solid solution in 'Phases'.\n  Ion-activity diagram:"
-                       " in the 'AqIons' property item list, select a common counterion, then the substituting ion1, ion2"
-                       " in the same order as the end members in the selected Phase.\n  Total-scale diagram:"
-                       " in the 'AqElements' property item list, select a common 'counterionic' element; then the"
-                       " substituting ionic1, ionic2 elements in the order given by end members in the selected Phase.\n"
+                       " in the 'AqIons' property list, select a common counterion, then the substituting ion1, ion2"
+                       " in the same order as their end members appear in the selected Phase.\n  Total-element diagram:"
+                       " in the 'AqElements' property list, select a common 'counterionic' element, then the substituting"
+                       " ionic1, ionic2 elements in the same order as their end members appear in the selected Phase.\n"
                        "  In both cases, when ready, skip the next wizard page.");
          sub1->setText("Ion-activity Lippmann diagram");
-         sub2->setText("Total-scale Lippmann diagram");
+         sub2->setText("Total-element Lippmann diagram");
          sub3->hide();
          sub4->hide();
          sub1->setChecked(true);
@@ -639,12 +639,16 @@ void ProcessWizard::defineWindow(char type)
    case P_INV_TITR:
          {
            lAbout->setText(
- "To plot the pH diagram: please, select acid and base from the 'AcidBase' list, and go to the next wizard page.\n\n"
- "To plot constant-pH isotherms: in addition, select the trace element addition in the 'AcidBase' list, set the 'ipe' "
- "iterator accordingly; select aqueous species in the 'Molality' list for the abscissa; finally select one or more "
- "sorbed species from the 'Sorbed' list, then skip the next wizard page.");
+ "To plot a property-vs-pH diagram: select acid and base from the 'AcidBase' list; set the ipH iterator to a desired"
+ " pH range and step; set the ipXi[0] iterator to maximum allowed addition of acid (negative value) and ipXi[1] to"
+ " that of base (positive value) for use by the inverse titration algorithm; and go to the next wizard page.\n\n"
+ "To plot a constant-pH isotherm: select acid and base from the 'AcidBase' list; set the 'ipH' iterator to a desired"
+ " pH value and zero step; set the ipXi[0] iterator to maximum addition of acid (negative value) and ipXi[1] to"
+ " that of base (positive value); select the trace element in the 'AcidBase' list, and in the 'ipe' iterator set"
+ " its addition amount interval and step in log10 scale; select aqueous species in the 'Molality' list for abscissa;"
+ " finally, select one or more sorbed species from the 'Sorbed' list for ordinate(s), then skip the next wizard page.");
            sub1->setText("Property-vs-pH diagram");
-           sub2->setText("Constant-pH isotherm diagram");
+           sub2->setText("Constant-pH isotherm");
            sub3->hide();
            sub4->hide();
            QObject::connect( pLsts[0], SIGNAL(itemSelectionChanged()),
@@ -698,14 +702,17 @@ void ProcessWizard::defineWindow(char type)
    case P_REACTORS:
               {
                 lAbout->setText(
-   "'Flushing' scenario: the fluid part evolves while reacting at each step with the same solid part composition;\n"
-   "'Leaching' scenario: the solid part changes while reacting at each step with the same fluid part composition.\n"
+   "'Flushing' scenario: the fluid part evolves while reacting at each step with the same solid part composition\n"
+   "  (mass of fluid part can be set by iNu iterator, the fluid/rock mass ratio can be set by ipe iterator)."
+   "'Leaching' scenario: the solid part changes while reacting at each step with the same fluid part composition\n"
+   "  (mass of solid part can be set by iNu iterator, the fluid/rock mass ratio can be set by ipe iterator)."
    " To set a 'Compos' constant source of solid ('Flushing') or fluid ('Leaching'), select either from the Compos list."
    " To use a SysEq record as constant source, first check in the parent system whether the link to that SysEq is set,"
-   " and 'xp_' array and 'MbXs' data object is allocated.\n"
-   " If needed, select the 'Compos, 'DComp', 'IComp' items that must be zeroed off because their inputs were"
-   " already covered in constant-source compositions. When done, proceed to the next wizard page and select what to plot:"
-   " some aqueous concentrations in 'Flushing', or some properties of solid phases in 'Leaching' with modC as abscissa." );
+   " and 'xp_' array and 'MbXs' data object are both allocated.\n"
+   " If needed, select next 'Compos', 'DComp', 'IComp' items that must be zeroed off because their inputs were already"
+   " covered in the compositions of fluid (Flushing) or solid (Leaching). When done, proceed to the next wizard page,"
+   " set 'modC' as abscissa, and select what to plot: the mass of aqueous phase and some aqueous concentrations for"
+   " 'Flushing', or the mass of solids and some properties of solid phases for 'Leaching'. " );
                 sub1->setText("Flushing: SysEq source");
                 sub2->setText("Flushing: Compos source");
                 sub3->setText("Leaching: SysEq source");
@@ -1205,6 +1212,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
        {  c_PsEqn->setChecked(true);
           QString Aqg = "aq_gen";
           QString xaName = "Selected_first";
+          QString xbName = "Selected_second";
 
           lst = getSelected( "Phases" );
           if( lst.count() > 0 )
@@ -1216,7 +1224,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                xaName = lst[0].trimmed();
           }
           double from, until;
-          int iNu = 0, ipXi = 0;
+          int iNu = 0, ipe = 0;
           from = tIters->item(0,7)->data(Qt::DisplayRole).toDouble();
           until = tIters->item(1,7)->data(Qt::DisplayRole).toDouble();
           if( fabs(from)>1e-30 ||  fabs(until)>1e-30 )
@@ -1224,93 +1232,112 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
           from = tIters->item(0,6)->data(Qt::DisplayRole).toDouble();
           until = tIters->item(1,6)->data(Qt::DisplayRole).toDouble();
           if( fabs(from)>1e-30 ||  fabs(until)>1e-30 )
-              ipXi = 1;
+              ipe = 1;
 
           if( subtype == 0  )
           {         // Flushing with SysEq source for solid composition
-              ret = QString("$ Fluid-rock interaction (Flushing, SysEq source)\n"
-                            "$ cNu: current amount of evolving aqueous fluid\n");
+              ret = QString("$ Fluid-rock interaction (Flushing, SysEq source for solid)\n"
+                            "$ cNu is mass of evolving aqueous fluid in flow-through reactor\n");
               if( !iNu )
-                  ret += QString("$ To use if iNu is not set \n"
-                              " cNu =: phM[{%1}]; \n").arg(Aqg);
-              ret += QString( " xp_[{%1}] =: cNu; \n"  // potentially incorrect - bXa[0] should be copied to bi_
-                                "$ cXi is current solid/water mass ratio \n").arg(Aqg);
-              if( !ipXi )
-                  ret += QString( "$ Take current mass of solid if ipXi is not set \n"
-                              " cXi =: pmXs / cNu; \n" );
-              ret += QString( " MbXs =: cXi * cNu; \n"
-                              "$ Cumulative reacted solid/water ratio \n"
-                             " modC[J] =: ( J>0 ? 10^(modC[J-1])+cXi : cXi );\n"
-                             "$ modC[J] =: cXi*cNu;\n"
-                             " modC[J] =: lg(modC[J]); \n" );
+                    ret += QString("$ Comment out a line below to take the mass of fluid if iNu is set \n"
+                            " cNu =: (phM[{%1}]; \n").arg(Aqg);
+              ret += QString( " xp_[{%1}] =: cNu; \n"
+                            "$ cpe is the fluid/solid mass ratio \n").arg(Aqg);
+              if( !ipe )
+                    ret += QString( "$ Comment out a line below to take the f/s ratio if ipe is set \n"
+                            " cpe =: (J>0? cpe: cNu/pmXs); \n" );
+              ret += QString( " MbXs =: cNu/cpe; \n"
+                             "$ Cumulative reacted fluid/solid ratio \n"
+                             " modC[J] =: ( J>0 ? 10^(modC[J-1])+cpe : cpe );\n"
+                             "$ modC[J] =: cpe*cNu;\n"
+                             " modC[J] =: lg(modC[J]); \n"
+                             "end \n"
+                             "$ Check below that the entry for fluid composition in the parent \n"
+                             "$  system recipe is set to zero, e.g. as \n"
+                             "  xa_[{%1}] =: 0; \n"
+                              ).arg(xbName);
         }
         if( subtype == 1 )
         {          // Flushing with Compos source for solid composition
-            ret = QString("$ Fluid-rock interaction (Flushing, Compos source)\n"
-                          "$ cNu: current amount of evolving aqueous fluid\n");
+            ret = QString("$ Fluid-rock interaction (Flushing, Compos source for solid)\n"
+                          "$ cNu is mass of evolving aqueous fluid in flow-through reactor\n");
             if( !iNu )
-                ret += QString("$ To use if iNu is not set \n"
-                            " cNu =: phM[{%1}]; \n").arg(Aqg);
+                ret += QString("$ Comment out a line below to take the mass of fluid if iNu is set \n"
+                            " cNu =: (phM[{%1}]; \n").arg(Aqg);
             ret += QString( " xp_[{%1}] =: cNu; \n"
-                              "$ cXi is current solid/water mass ratio \n").arg(Aqg);
-            if( !ipXi )
-                ret += QString( "$ Take current mass of solid if ipXi is not set \n"
-                            " cXi =: pmXs / cNu; \n" );
-            ret += QString( " xa_[{%1}] =: cXi * cNu; \n"
-                            "$ Cumulative reacted solid/water ratio \n"
-                           " modC[J] =: ( J>0 ? 10^(modC[J-1])+cXi : cXi );\n"
-                           "$ modC[J] =: cXi*cNu;\n"
-                           " modC[J] =: lg(modC[J]); \n" ).arg(xaName);
+                            "$ cpe is the fluid/solid mass ratio \n").arg(Aqg);
+            if( !ipe )
+                ret += QString( "$ Comment out a line below to take the f/s ratio if ipe is set \n"
+                            " cpe =: (J>0? cpe: cNu/pmXs); \n" );
+            ret += QString( " xa_[{%1}] =: cNu/cpe; \n"
+                            "$ Cumulative reacted fluid/solid ratio \n"
+                            " modC[J] =: ( J>0 ? 10^(modC[J-1])+cpe : cpe );\n"
+                            "$ modC[J] =: cpe*cNu;\n"
+                            " modC[J] =: lg(modC[J]); \n"
+                            "end \n"
+                            "$ Check below that the entry for fluid composition in the parent \n"
+                            "$  system recipe is set to zero, e.g. as \n"
+                            " xa_[{%2}] =: 0; \n"
+                            ).arg(xaName,xbName);
         }
+
         if( subtype == 2  )
         {      // Leaching with SysEq source for fluid composition
             ret = QString("$ Fluid-rock interaction (Leaching, SysEq source)\n"
-                          "$ cNu is current mass of solids (g) \n");
+                          "$ cNu is mass of evolving solids in flow-through reactor (g) \n");
             if( !iNu )
-                ret += QString( "$ Current mass of solids is taken if iNu is not set \n"
+                ret += QString( "$ Comment out a line below to take the mass of solids if iNu is set \n"
                                 " cNu =: pmXs; \n");
             ret += QString( " MbXs =: cNu; \n" // potentially incorrect - bXs should be copied to bi_
                             "$ Stop, if no solids are left \n"
                             " Next =: ( cNu > 0? 1: 0 ); \n"
                             "if(Next > 0) begin \n"
-                            "$ cXi is the water/solid ratio \n");
-            if( !ipXi )
-                ret += QString( "$ Take the current mass of fluid if ipXi is not set \n"
-                              " cXi =:  phM[{%1}]/cNu; \n"
+                            "$ cpe is the fluid/solid mass ratio \n");
+            if( !ipe )
+                ret += QString( "$ Comment out a line below to take the f/s ratio if ipe is set \n"
+                              " cpe =: (J>0? cpe: phM[{%1}]/cNu); \n"
                                ).arg(Aqg);
-            ret += QString(  " xp_[{%1}] =: cXi*cNu; \n"
-                           "$ Cumulative reacted water/solid ratio \n"
-                           " modC[J] =: ( J>0? 10^(modC[J-1])+cXi: cXi ); \n"
-                           "$ modC[J] =: lg( cXi*cNu ); \n"
-                           " modC[J] =: lg(modC[J]); \n"
-                           "end \n"
-                           ).arg(Aqg);
-      }
+            ret += QString(  " xp_[{%1}] =: cpe*cNu; \n"
+                             "$ Cumulative reacted water/solid ratio \n"
+                             " modC[J] =: ( J>0? 10^(modC[J-1])+cpe: cpe ); \n"
+                             "$ modC[J] =: lg( cpe*cNu ); \n"
+                             " modC[J] =: lg(modC[J]); \n"
+                             "end \n"
+                             "$ Check below that the entry for rock composition in the parent \n"
+                             "$  system recipe is set to zero, e.g. as \n"
+                             "  xa_[{%2}] =: 0; \n"
+                           ).arg(Aqg, xbName);
+       }
+
        if( subtype == 3  )
-        {       // Leaching with Compos source for fluid composition
-          ret = QString("$ Fluid-rock interaction (Leaching, Compos source)\n"
-                        "$ cNu is current mass of solids (g) \n");
+       {       // Leaching with Compos source for fluid composition
+          ret = QString("$ Fluid-rock interaction (Leaching, Compos sources) \n"
+                        "$ cNu is mass of evolving solids in flow-through reactor (g) \n");
           if( !iNu )
-              ret += QString( "$ Current mass of solids is taken if iNu is not set \n"
+              ret += QString( "$ Comment out a line below to take the mass of solids if iNu is set \n"
                               " cNu =: pmXs; \n");
           ret += QString( " MbXs =: cNu; \n"
                           "$ Stop, if no solids are left \n"
                           " Next =: ( cNu > 0? 1: 0 ); \n"
                           "if(Next > 0) begin \n"
-                          "$ cXi is the water/solid ratio \n");
-          if( !ipXi )
-              ret += QString( "$ Take the current mass of fluid if ipXi is not set \n"
-                            " cXi =:  phM[{%1}]/cNu; \n"
+                          "$ cpe is the fluid/solid mass ratio \n");
+          if( !ipe )
+              ret += QString( "$ Comment out a line below to take the f/s ratio if ipe is set \n"
+                            " cpe =: (J>0? cpe: phM[{%1}]/cNu); \n"
                              ).arg(Aqg);
-          ret += QString(  " xa_[{%1}] =: cXi*cNu; \n"
-                         "$ Cumulative reacted water/solid ratio \n"
-                         " modC[J] =: ( J>0? 10^(modC[J-1])+cXi: cXi ); \n"
-                         "$ modC[J] =: lg( cXi*cNu ); \n"
-                         " modC[J] =: lg(modC[J]); \n"
-                         "end \n"
-                         ).arg(xaName);
-     }
-       // Cleaning part for all scenarios
+          ret += QString(  " xa_[{%1}] =: cpe*cNu; \n"
+                           "$ Cumulative reacted water/solid ratio \n"
+                           " modC[J] =: ( J>0? 10^(modC[J-1])+cpe: cpe ); \n"
+                           "$ modC[J] =: lg( cpe*cNu ); \n"
+                           " modC[J] =: lg(modC[J]); \n"
+                           "end \n"
+                           "$ Check below that the entry for rock composition in the parent \n"
+                           "$  system recipe is set to zero, e.g. as \n"
+                           "  xa_[{%2}] =: 0; \n"
+                         ).arg(xaName,xbName);
+      }
+
+       // Cleaning part for all scenarios (check why not cleaned)
         ret += QString( "$ Clean up the rest of the system recipe \n" );
         for(int jj=0; jj<6; jj++ )
         {

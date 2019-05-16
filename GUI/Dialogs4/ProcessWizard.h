@@ -34,7 +34,7 @@ class TProcesDelegate: public QItemDelegate
 
 public:
 
-         TProcesDelegate( QObject * parent = 0 );
+         TProcesDelegate( QObject * parent = nullptr );
          QWidget *createEditor(QWidget *parent,
                                const QStyleOptionViewItem &option,
                                const QModelIndex &index) const;
@@ -81,7 +81,7 @@ public:
     ProcessWizard( const char* pkey, char flgs[24], int sizes[8],
                    short tabInt[6], double tabDoubl[24],
        const char *acalcScript, const char *aoutScript,
-       const char* aXname, const char* aYname,  QWidget* parent = NULL);
+       const char* aXname, const char* aYname,  QWidget* parent = nullptr);
     virtual ~ProcessWizard();
 
     void   getSizes( int size[8] );
