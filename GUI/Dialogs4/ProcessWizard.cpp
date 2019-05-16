@@ -702,15 +702,15 @@ void ProcessWizard::defineWindow(char type)
    case P_REACTORS:
               {
                 lAbout->setText(
-   "'Flushing' scenario: the fluid part evolves while reacting at each step with the same solid part composition\n"
-   "  (mass of fluid part can be set by iNu iterator, the fluid/rock mass ratio can be set by ipe iterator)."
-   "'Leaching' scenario: the solid part changes while reacting at each step with the same fluid part composition\n"
-   "  (mass of solid part can be set by iNu iterator, the fluid/rock mass ratio can be set by ipe iterator)."
+   "'Flushing' scenario: the fluid part evolves while reacting at each step with the same solid part composition"
+   "  (mass of fluid part can be set by iNu iterator, the fluid/rock mass ratio can be set by ipe iterator).\n"
+   "'Leaching' scenario: the solid part changes while reacting at each step with the same fluid part composition"
+   "  (mass of solid part can be set by iNu iterator, the fluid/rock mass ratio can be set by ipe iterator).\n"
    " To set a 'Compos' constant source of solid ('Flushing') or fluid ('Leaching'), select either from the Compos list."
    " To use a SysEq record as constant source, first check in the parent system whether the link to that SysEq is set,"
-   " and 'xp_' array and 'MbXs' data object are both allocated.\n"
-   " If needed, select next 'Compos', 'DComp', 'IComp' items that must be zeroed off because their inputs were already"
-   " covered in the compositions of fluid (Flushing) or solid (Leaching). When done, proceed to the next wizard page,"
+   " and 'xp_' array and 'MbXs' data object are both allocated. Set number of steps using the iTm iterator."
+   " If needed, select some 'Compos', 'DComp', 'IComp' items that must be zeroed off because their inputs were already"
+   " covered in the compositions of fluid (Flushing) or solid (Leaching).\n When done, proceed to the next wizard page,"
    " set 'modC' as abscissa, and select what to plot: the mass of aqueous phase and some aqueous concentrations for"
    " 'Flushing', or the mass of solids and some properties of solid phases for 'Leaching'. " );
                 sub1->setText("Flushing: SysEq source");
@@ -1222,6 +1222,8 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
           {    lst = getSelected( "Compos" );
               if( lst.count() > 0 )
                xaName = lst[0].trimmed();
+              if( lst.count() > 1 )
+               xbName = lst[1].trimmed();
           }
           double from, until;
           int iNu = 0, ipe = 0;
@@ -1254,7 +1256,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                              "end \n"
                              "$ Check below that the entry for fluid composition in the parent \n"
                              "$  system recipe is set to zero, e.g. as \n"
-                             "  xa_[{%1}] =: 0; \n"
+                             "$  xa_[{%1}] =: 0; \n"
                               ).arg(xbName);
         }
         if( subtype == 1 )
@@ -1277,7 +1279,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                             "end \n"
                             "$ Check below that the entry for fluid composition in the parent \n"
                             "$  system recipe is set to zero, e.g. as \n"
-                            " xa_[{%2}] =: 0; \n"
+                            "$ xa_[{%2}] =: 0; \n"
                             ).arg(xaName,xbName);
         }
 
@@ -1305,7 +1307,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                              "end \n"
                              "$ Check below that the entry for rock composition in the parent \n"
                              "$  system recipe is set to zero, e.g. as \n"
-                             "  xa_[{%2}] =: 0; \n"
+                             "$  xa_[{%2}] =: 0; \n"
                            ).arg(Aqg, xbName);
        }
 
@@ -1333,7 +1335,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                            "end \n"
                            "$ Check below that the entry for rock composition in the parent \n"
                            "$  system recipe is set to zero, e.g. as \n"
-                           "  xa_[{%2}] =: 0; \n"
+                           "$  xa_[{%2}] =: 0; \n"
                          ).arg(xaName,xbName);
       }
 
