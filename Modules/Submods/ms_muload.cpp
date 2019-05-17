@@ -59,7 +59,7 @@ void TMulti::KinMetModLoad( )
     SYSTEM *syp = TSyst::sm->GetSY();
 
     if( pmp->pKMM >= 1 )
-    return;
+        return;
 
     // KinMet data extraction from Phase records (so far another run rel.to SolModLoad())
     for( kk=0, k=-1; kk<mup->Fi; kk++ )
