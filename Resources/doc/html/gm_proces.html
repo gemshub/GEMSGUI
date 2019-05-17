@@ -32,8 +32,7 @@
       <p><a href="#WZSTEP_2">2.2. Proces Wizard Step 2 - Process Simulation
           Controls</a></p>
       <p><a href="#WZSTEP_3">2.3. Proces Wizard Step 3 - Selection of Items to
-          Sample/Plot<br>
-        </a></p>
+          Sample/Plot </a></p>
       <p><a href="#WZSTEP_4">2.4. Proces Wizard Step 4 - Important Data Object
           Dimensions</a></p>
       <p><a href="#WZSTEP_5">2.5. Proces Wizard Step 5 - Additional Options</a></p>
@@ -178,8 +177,9 @@ math
     <p> There are several practically important special cases of Process
       simulators (see also the <a href="gm_sdref.html#process_mscripts_simulator">template
         math script database</a>). Three will be outlined in this section:
-      inverse titrations, sequential reactors, and calculation of Lippmann
-      diagrams in the binary solid solution - aqueous solution (SSAS) system.</p>
+      inverse titrations, flow-through reactor (leaching and flushing), and
+      calculation of Lippmann diagrams in binary solid solution - aqueous
+      solution (SSAS) systems.</p>
     <br>
     <hr style="width: 100%; height: 2px;">
     <h4><a name="PROCES_SPECIAL_INVTITR"></a>1.2.1. Inverse titrations<br>
@@ -240,8 +240,7 @@ math
       as function of pH in the 'G' process simulation mode. <br>
     </p>
     <p>The script shown below (see also a SDref record <span style="font-family: monospace;">"mscript-titr-invers:0003:proces:"</span>
-      in the <a href="gm_sdref.html#process_mscripts_simulator">template
-        math
+      in the <a href="gm_sdref.html#process_mscripts_simulator">template math
         script database</a>) helps doing this efficiently. It can be used to
       create a sequence of aquatic equilibria with pH changing in regular
       intervals (e.g., from 2 to 10 in 0.2 unit step).<br>
@@ -363,23 +362,30 @@ math
     </p>
     <br>
     <hr style="width: 100%; height: 2px;">
-    <h4><a name="PROCES_SPECIAL_SEQREACT"></a>1.2.2. Flow-through (sequential)
+    <h4><a name="PROCES_SPECIAL_SEQREACT"></a>1.2.2. Flow-through (stepwise)
       reactor</h4>
-    <p>The "flow-through reactor sequence" is a good model for some steady-state
+    <p>The stepwise "flow-through reactor" is a good model for some steady state
       irreversible processes such as weathering, infiltration metasomatosis,
       evaporation of seawater etc. The idea behind it is that a given mass of
       the aqueous (fluid) phase of a certain initial composition is added to the
-      first "reactor" where it equilibrates at given T, P with a known mass of
-      solids of a given bulk composition. &nbsp;After &nbsp;the local
-      equilibrium has been achieved, the fluid of now different bulk composition
-      is moved (at a given quantity) to the next "reactor" that exists maybe at
-      different T, P, and/or contains some reactive solids of known mass and
-      bulk composition. In the same way, the fluid "propagates" sequentially
-      through a desired number&nbsp; of "reactors".&nbsp;</p>
-    <p>To facilitate "sequential reactor" modelling, we have included the 'R'
+      "reactor" where it equilibrates at given T, P with a known mass of solids
+      (i.e. certain fluid/solid mass ratio) of a given bulk composition.
+      &nbsp;After the local equilibrium has been achieved, at the next step the
+      reacted fluid is removed and replaced with the same mass of "fresh" fluid,
+      which then equilibrates with the rock already altered at the previous
+      step, an so on. In this "leaching" mode, it is convenient to observe how
+      the phase composition of reacted rock changes via progressive alteration
+      by "fresh" fluid. Another possible mode is "flushing", when the aqueous
+      fluid gets more and more reacted with portions of "fresh" rock at
+      progressing steps. In this "flushing" mode, you can observe how the fluid
+      composition evolves during progressive reaction with fresh rock. </p>
+    <p>To facilitate "flow-through reactor" modelling, we have included the 'R'
       mode of process simulation (activated during remake of the Process
       record). Details on creating and running such simulators <a href="#PROCES_MWIZARD">are
-        given here</a>. <br>
+        given here</a>. In another, GEM2MT module, more sophisticated
+      simulations of rock alteration can be performed, such as "sequential
+      reactor chain" or "box-flux chain", or even 1-D advection-diffusion
+      reactive transport simulations.<br>
       <br>
     </p>
     <hr style="width: 100%; height: 2px;">
@@ -430,10 +436,10 @@ math
     horizontal line connecting a point on "solidus" with a point on "solutus"
     defines a SSAS equilibrium state. <br>
     <br>
-    Note that the GEM-Selektor Graphics Dialog can now plot several
-    ordinates (lines) against several abscissas. So, the correct Lippmann
-    diagram (consisting of two curves) can be produced in one run. During
-    remake of the Proces record, two columns must be allocated in the <span style="font-family: monospace;">xp</span>
+    Note that the GEM-Selektor Graphics Dialog can now plot several ordinates
+    (lines) against several abscissas. So, the correct Lippmann diagram
+    (consisting of two curves) can be produced in one run. During remake of the
+    Proces record, two columns must be allocated in the <span style="font-family: monospace;">xp</span>
     (abscissa) and two columns in the <span style="font-family: monospace;">yp</span>
     (ordinate) tables. <br>
     <br>
@@ -466,9 +472,8 @@ my[{Mn+2}]
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ( my[{Ca+2}]*gamma[{Ca+2}] +
         my[{Mn+2}]*gamma[{Mn+2}] )); </span><br>
     </div>
-    <p>After
-      running the calculation, the Lippmann diagram can be plotted using the
-      Graphics Dialog (do not forget to select the abscissa index 0 for the
+    <p>After running the calculation, the Lippmann diagram can be plotted using
+      the Graphics Dialog (do not forget to select the abscissa index 0 for the
       first curve and 1 for the second curve).</p>
     <p> The Process Wizard in 'L' mode generates one sampling script (<a href="#WZSTEP_3">details
         here</a>) that produces both solidus and solutus curves in one
@@ -500,19 +505,15 @@ my[{Mn+2}]
         automatically adjusted to obtain some prescribed values of GEM output,
         e.g. pH (modes G, T).</li>
     </ol>
-    To create/modify a Process record, turn GEM-Selektor into "Equilibria
-    Calculation" mode, open a modeling project, and click on a "Process" icon on
-    the left side of the main frame window.
-    This opens the Process window. There, click on "Create ..." toolbar button
-    or select a "Record" "Create" menu command (alternatively, select one
-    Process record and click on "New/Clone" button). You will see a list of
-    SysEq records; select there a parent SysEq record for this process
-    simulator, and clock "Ok"This opens a Process record key form. Fill out
-    necessary fields of the new <a href="gdb_rkey.html#DBM_Proces">Process
-      record
-      key</a>.&nbsp;
-    The record key dialog should look like this:
-    <br>
+    <p> To create/modify a Process record, turn GEM-Selektor into "Equilibria
+      Calculation" mode, open a modeling project, and click on a "Process" icon
+      on the left side of the main frame window. This opens the Process window.
+      There, click on "Create ..." toolbar button or select a "Record" "Create"
+      menu command (alternatively, select one Process record and click on
+      "New/Clone" button). You will see a list of SysEq records; select there a
+      parent SysEq record for this process simulator, and clock "Ok"This opens a
+      Process record key form. Fill out necessary fields of the new <a href="gdb_rkey.html#DBM_Proces">Process
+        record key</a>.&nbsp; The record key dialog should look like this: </p>
     <br>
     <img style="width: 456px; height: 387px;" alt="ProcessRecordKeyDialog1.png"
       src="ProcessRecordKeyDialog1.png"><br>
@@ -599,13 +600,14 @@ my[{Mn+2}]
     <p>In this mode, a stepwise change of the equilibrium speciation in aqueous
       solution ('flushing') can be followed upon its progressive reaction with
       the same initial composition of the solid part of the system, assuming
-      partial equilibration. Another variant ('leaching') is to follow how the
-      composition of the solid part of the system changes upon the progressive
+      partial equilibration. Another variant ('leaching') aims to follow how the
+      composition of the solid part of the system evolves upon the progressive
       reaction with the same initial composition of the aqueous fluid. This is a
-      very simplistic simulation of reactive mass transport by advection, though
-      providing a qualitative picture of irreversible evolution of the
-      (geo)chemical system. More sophisticated reactive transport models can be
-      set up in the <a href="gm_gem2mt.html">GEM2MT module</a>.<br>
+      very simplistic simulation of reactive mass transport by advection
+      (infiltration), although providing a qualitative picture of irreversible
+      evolution of the (geo)chemical system. More sophisticated reactive
+      transport models can be set up in the <a href="gm_gem2mt.html">GEM2MT
+        module</a>.<br>
     </p>
     <h4><a name="PROCESS_L_MODE"></a> "L" mode:&nbsp; Lippmann diagram for a
       binary solid solution</h4>
@@ -1332,29 +1334,27 @@ my[{Mn+2}]
       'Compos' input, only the iNu[1] = 1 must be set. &nbsp; <br>
     </p>
     <br>
-    <h4><a name="PROCESS_R_MODE_S_2"></a>"R" mode:&nbsp; Sequential reactor
-      scheme, uses equilibrium bulk compositions of phases, step 2<br>
+    <h4><a name="PROCESS_R_MODE_S_2"></a>"R" mode:&nbsp; Stepwise flow-through
+      reactor scheme, uses equilibrium bulk compositions of phases, step 2<br>
     </h4>
     <p>In this mode, a stepwise change of the equilibrium speciation in the
-      system can be simulated with two scenarios: <br>
+      system can be simulated with two scenarios: <br <="" p="">
     </p>
     <ul>
       <li>'Flushing', where the fluid part of the system evolves while reacting
-        at each step with the same solid part; </li>
+        at each step with the same "fresh" solid part; </li>
       <li>'Leaching', where the solid part of the system changes at each step
-        while reacting with the constant fluid part. </li>
+        while reacting with the constant "fresh" fluid part. </li>
     </ul>
     <p> The source of constant initial composition of the solid or the fluid
-      part can be: <br>
-    </p>
+      part can be: </p>
     <ul>
       <li>in equilibrium speciation for another system (SysEq source) </li>
       <li>in a Compos record prepared in advance in the project database (Compos
         source). </li>
     </ul>
     <p>Accordingly, there are four variants of 'sequential reactors' simulation,
-      one of which should be selected: <br>
-    </p>
+      one of which should be selected: </p>
     <ul>
       <li>Flushing: SysEq source</li>
       <li>Flushing: Compos source</li>
@@ -1362,18 +1362,31 @@ my[{Mn+2}]
       <li>Leaching: Compos source</li>
     </ul>
     <p>With process iterators, you can set number of steps (in iTm), pressure
-      (iP), temperature (iTC), as well as constant or variable mass of solid (g)
-      put in the current reactor (step) using iNu iterator, and/or logarithmic
-      water/solid ratio through the ipXi iterator. If iNu and ipXi iterators are
-      not set (contain all zeros) then the total mass of solids and mass of the
-      aqueous phase calculated at the previous step will be taken. <br>
-    </p>
+      (iP), temperature (iTC). </p>
+    <p>In the "Leaching" mode, you can set a constant or variable mass of solid
+      (g) put in the reactor at current step using iNu iterator, and/or
+      water/solid mass ratio set in the ipe iterator. If iNu and ipe iterators
+      are not set (contain all zeros) then the total mass of solids and mass of
+      the aqueous phase calculated at the previous step will be taken, and
+      adjusted to fluid/solid mass ratio evaluated at the first process step.</p>
+    <p>In the "Flushing" mode, you can set a constant or variable mass of
+      aqueous fluid (g) put in the reactor at current step using iNu iterator,
+      and/or solid/water mass ratio set in the ipe iterator. If iNu and ipe
+      iterators are not set (contain all zeros) then the total mass of solids
+      and mass of the aqueous phase calculated at the previous step will be
+      taken, and adjusted to solid/fluid mass ratio evaluated at the first
+      process step. </p>
+    <p></p>
+    <p> </p>
     <p>To set a constant-composition source of solid ('Flushing') or fluid
       ('Leaching'), select either from the Compos property items list. Then, if
       needed, zero off other recipe inputs by selecting the respective Compos,
       DComp, IComp property list entries, except the previously selected source
-      Compos item. <br>
-    </p>
+      Compos item. For example, if "Fluid" and "Rock" records are available in
+      Compos database and both were used to set up a parent SysEq record for the
+      Process, then for 'Flushing' mark first "Rock" to add then "Fluid" to zero
+      off in the system recipe, and for "Leaching" - the other way round: mark
+      first "Fluid" to add then "Rock" to zero off in the system recipe. </p>
     <p>To use another SysEq record as a constant source, first 'remake' the
       parent SysEq and check whether the link to another SysEq is set, and 'xp_'
       array and 'MbXs' data object is allocated. Then, back in this Process
@@ -1382,132 +1395,195 @@ my[{Mn+2}]
       DComp, IComp property list entries.&nbsp;</p>
     <p>When done, proceed to the next wizard page and select what to plot: in
       the 'Flushing' mode, usually some properties of aqueous speciation against
-      the solid/water ratio; in the 'Leaching' mode, some properties of solid
-      phases (as ordinates) against the water/solid ratio (modC as abscissa).</p>
-    <p style="text-decoration: underline;">Flushing: SysEq source</p>
-    <p>&lt;<span style="color: rgb(204, 0, 0);">under construction</span>&gt;<br>
+      the solid/water ratio; in the 'Leaching' mode, some properties (masses,
+      volumes) of solid phases (as ordinates) against the water/solid ratio (use
+      modC as abscissa). </p>
+    <h4 style=" text-decoration: underline;">Flushing: SysEq source</h4>
+    <p>&lt;<span style="color: rgb(204, 0, 0);">text to be added later</span>&gt;</p>
+    <p><br>
     </p>
-    <p><span style="text-decoration: underline;">Flushing: Compos source</span>.
-      Assuming that water was equilibrated with portlandite in the parent system
-      and will come in contact with quartz to evolve in sequential reactors, the
-      control script will look like this:&nbsp; <br>
-    </p>
+    <h4><span style="text-decoration: underline;">Flushing: Compos source</span>
+    </h4>
+    <p>Assuming that "Seawater" composition was equilibrated with "Rock"
+      composition in the parent system, and we would like to follow how the
+      seawater evolves in flow-through reactor upon reaction with next portions
+      of "fresh" rock at certain solid/water mass ratio, the Process wizard will
+      generate a control script like this: </p>
     <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">$
-        Fluid-rock interaction (Flushing, Compos source)</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ cNu: current
-        amount of evolving aqueous fluid</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ To use if iNu
-        is not set </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp;cNu =:
-        phM[{aq_gen}]; </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp;xp_[{aq_gen}]
-        =: cNu; </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ cXi is current
-        solid/water mass ratio </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ Take current
-        mass of solid if ipXi is not set </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp;cXi =:
-        pmXs / cNu; </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp;xa_[{SiO2}]
-        =: cXi * cNu; </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ Cumulative
-        reacted solid/water ratio </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp;modC[J] =:
-        ( J&gt;0 ? 10^(modC[J-1])+cXi : cXi );</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ modC[J] =:
-        cXi*cNu;</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp;modC[J] =:
-        lg(modC[J]); </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ Clean up the
-        rest of the system recipe </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">xa_[{Aqua}] =:
-        0;</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">xa_[{Ca(OH)2}]
-        =: 0;</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ end of script</span><br>
+        Fluid-rock interaction (Flushing, Compos source for solid)<br>
+        $ cNu is mass of evolving aqueous fluid in flow-through reactor<br>
+        $ Comment out a line below to take the mass of fluid if iNu is set <br>
+        &nbsp;cNu =: phM[{aq_gen}]; <br>
+        &nbsp;xp_[{aq_gen}] =: cNu; <br>
+        $ Stop, if no fluid is left <br>
+        &nbsp;Next =: ( cNu &gt; 0? 1: 0 ); <br>
+        &nbsp;if(Next &gt; 0) begin <br>
+        $ cpe is the solid/fluid mass ratio <br>
+        $ Comment out a line below to take the s/f ratio if ipe is set <br>
+        &nbsp;cpe =: (J&gt;0? cpe: pmXs/cNu); <br>
+        &nbsp;xa_[{Rock}] =: cNu*cpe; <br>
+        $ Cumulative reacted solid/fluid ratio (linear) <br>
+        &nbsp;modC[J] =: ( J&gt;0 ? modC[J-1]+cpe : cpe );<br>
+        $ modC[J] =: cpe*cNu;<br>
+        end <br>
+        $ Check below that the entry for fluid composition in the parent <br>
+        $&nbsp; system recipe is set to zero, e.g. as <br>
+        $ xa_[{Seawater}] =: 0; <br>
+        $ Clean up the rest of the system recipe <br>
+        xa_[{Seawater}] =: 0;<br>
+        $ end of script</span><span style="font-family: Courier New,Courier,monospace;"></span><br>
     </div>
     <p>To follow how the composition of aqueous phase changes between simulation
       steps (reactors), you can create the following sampling script in the next
-      Process wizard page: <br>
-    </p>
-    <p> </p>
+      Process wizard page: </p>
     <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">xp[J]
-        =: modC[J];</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">yp[J][0] =:
-        lgm_t[{Ca}];</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">yp[J][1] =:
-        lgm_t[{Si}];</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">yp[J][2] =: pH;</span><br>
+        =: modC[J];<br>
+        yp[J][0] =: pmXs/1000;<br>
+        yp[J][1] =: IS;<br>
+        yp[J][2] =: pH;<br>
+        yp[J][3] =: pe;<br>
+        yp[J][4] =: phM[{aq_gen}]/1000;<br>
+        yp[J][5] =: lgm_t[{C}];<br>
+        yp[J][6] =: lgm_t[{Ca}];<br>
+        yp[J][7] =: lgm_t[{Cl}];<br>
+        yp[J][8] =: lgm_t[{Fe}];<br>
+        yp[J][9] =: lgm_t[{K}];<br>
+        yp[J][10] =: lgm_t[{Mg}];<br>
+        yp[J][11] =: lgm_t[{Na}];<br>
+        yp[J][12] =: lgm_t[{S}];<br>
+      </span></div>
+    <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;"></span><span
+        style="font-family: Courier New,Courier,monospace;"></span>.................<br>
     </div>
-    <br>
-    <p style="text-decoration: underline;">Leaching: SysEq source</p>
-    <p>&lt;<span style="color: rgb(204, 0, 0);">under construction</span>&gt;</p>
-    <p>Leaching: Compos source. Starting from solid consisting of C-S-H phase
-      and portlandite Ca(OH)2 in equilibrium with aqueous solution, the reactors
-      evolve by moving a "dialysis bag" from one to the next reactor filled with
-      'AquaSil' - a solution of 0.0001 M silica in water. To simulate this
-      process, the following control script will be generated:&nbsp; &nbsp; <br>
+    <p>This simulation will normally result in a steady decrease of the mass of
+      aqueous phase <span style="font-family: Courier New,Courier,monospace;">phM[{aq_gen}]
+        </span>over many steps because of formation of hydrated minerals out of
+      unhydrous (igneous) minerals from the fresh rock. This is a realistic
+      scenario; however, if you wish to keep a fixed solid/water mass ratio in
+      the flow-through reactor upon all steps, then enter the mass of aqueous
+      phase (e.g. 100 g) into the iNu[0] and iNu[1] cells, and the desired
+      solid/water ratio (e.g. 0.1) into ipe[0] and ipe[1] cells, and modify the
+      control script as follows: </p>
+    <p style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">$
+        Fluid-rock interaction (Flushing, Compos source for solid)<br>
+        $ cNu is mass of evolving aqueous fluid in flow-through reactor<br>
+        $ Comment out a line below to take the mass of fluid if iNu is set <br>
+        <span style="color: #cc0000;">$ cNu =: phM[{aq_gen}]; </span><br>
+        &nbsp;xp_[{aq_gen}] =: cNu; <br>
+        $ Stop, if no fluid is left <br>
+        &nbsp;Next =: ( cNu &gt; 0? 1: 0 ); <br>
+        &nbsp;if(Next &gt; 0) begin <br>
+        $ cpe is the solid/fluid mass ratio <br>
+        $ Comment out a line below to take the s/f ratio if ipe is set <br>
+        <span style="color: #cc0000;">$ cpe =: (J&gt;0? cpe: pmXs/cNu); </span><br>
+        &nbsp; xa_[{Rock}] =: cNu*cpe; <br>
+        $ Cumulative reacted solid/fluid ratio (linear) <br>
+        &nbsp;modC[J] =: ( J&gt;0 ? modC[J-1]+cpe : cpe );<br>
+        $ modC[J] =: cpe*cNu;<br>
+        &nbsp; end <br>
+        $ Check below that the entry for fluid composition in the parent <br>
+        $&nbsp; system recipe is set to zero, e.g. as <br>
+        $ xa_[{Seawater}] =: 0; <br>
+        $ Clean up the rest of the system recipe <br>
+        xa_[{Seawater}] =: 0;<br>
+        $ end of script</span></p>
+    <p>The results of "Flushing" simulations look better when plotted against
+      the cumulative solid/water ratio in linear scale. However, you can easily
+      modify the control script to produce modC values for abscissa in
+      logarithmic scale (as it is done by default in "Leaching" mode scripts).</p>
+    <p> </p>
+    <span style="font-family: Courier New,Courier,monospace;"></span>
+    <h4 style=" text-decoration: underline;">Leaching: SysEq source</h4>
+    <p>&lt;<span style="color: rgb(204, 0, 0);">text to be added later</span>&gt;</p>
+    <p><br>
     </p>
+    <h4><u>Leaching: Compos source </u></h4>
+    <p>Starting from a parent system consisting of "Rock" and "Seawater"
+      equilibrated at certain fluid/rock ratio (e.g. 10), the stepwise
+      flow-through reactor will evolve the rock like being placed in a "dialysis
+      bag" with reacted fluid removed and replaced by the same amount of fresh
+      "Seawater" composition at each next step. To simulate this 'Leaching'
+      process, the following control script will be generated by the Process
+      wizard: </p>
     <div style="margin-left: 40px;"><span style="font-family: Courier New,Courier,monospace;">$
-        Fluid-rock interaction (Leaching, Compos source)</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ cNu is current
-        mass of solids (g) </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ Current mass
-        of solids is taken if iNu is not set </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp;cNu =:
-        pmXs; </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp;MbXs =:
-        cNu; </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ Stop, if no
-        solids are left </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp;Next =: (
-        cNu &gt; 0? 1: 0 ); </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">if(Next &gt; 0)
-        begin </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ cXi is the
-        water/solid ratio </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ Take the
-        current mass of fluid if ipXi is not set </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp;cXi
-        =:&nbsp; phM[{aq_gen}]/cNu; </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp;xa_[{AquaSil}]
-        =: cXi*cNu; </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ Cumulative
-        reacted water/solid ratio </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp;modC[J] =:
-        ( J&gt;0? 10^(modC[J-1])+cXi: cXi ); </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ modC[J] =: lg(
-        cXi*cNu ); </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">&nbsp;modC[J] =:
-        lg(modC[J]); </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">end </span><br
-        style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ Clean up the
-        rest of the system recipe </span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">xa_[{Ca(OH)2}]
-        =: 0;</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">xa_[{SiO2}] =:
-        0;</span><br style="font-family: Courier New,Courier,monospace;">
-      <span style="font-family: Courier New,Courier,monospace;">$ end of script</span><br>
+        Fluid-rock interaction (Leaching, Compos sources) <br>
+        $ cNu is mass of evolving solids in flow-through reactor (g) <br>
+        &nbsp;cNu =: pmXs; <br>
+        &nbsp;MbXs =: cNu; <br>
+        $ Stop, if no solids are left <br>
+        &nbsp;Next =: ( cNu &gt; 0? 1: 0 ); <br>
+        if(Next &gt; 0) begin <br>
+        $ cpe is the fluid/solid mass ratio <br>
+        $ Comment out a line below to take the f/s ratio if ipe is set <br>
+        &nbsp;cpe =: (J&gt;0? cpe: phM[{aq_gen}]/cNu); <br>
+        &nbsp;xa_[{F_Seawater}] =: cpe*cNu; <br>
+        $ Cumulative reacted water/solid ratio <br>
+        &nbsp;modC[J] =: ( J&gt;0? 10^(modC[J-1])+cpe: cpe ); <br>
+        $ modC[J] =: lg( cpe*cNu ); <br>
+        &nbsp;modC[J] =: lg(modC[J]); <br>
+        end <br>
+        $ Check below that the entry for rock composition in the parent <br>
+        $&nbsp; system recipe is set to zero, e.g. as <br>
+        $&nbsp; xa_[{R_MORB}] =: 0; <br>
+        $ Clean up the rest of the system recipe <br>
+        xa_[{R_MORB}] =: 0;<br>
+        $ end of script</span><span style="font-family: Courier New,Courier,monospace;"></span><br>
     </div>
     <p>To follow how the amounts and composition of solid phases evolve, you can
-      create the following sampling script in the next Process wizard page: <br>
-    </p>
+      create the following sampling script in the next Process wizard page: </p>
     <div style="margin-left: 40px; font-family: Courier New,Courier,monospace;">xp[J]
-      =: ( pmXs&gt;0 ? modC[J]: empty() ); <br>
-      yp[J][0] =: Xa[{C-S-H-3T-2}];<br>
-      yp[J][1] =: Xa[{Portlandite}];<br>
-      yp[J][2] =: Wxx[{CSH-T2C}];<br>
-      yp[J][3] =: Wxx[{CSH-T5C}];<br>
-      yp[J][4] =: Wxx[{CSH-TobH}];<br>
-      yp[J][5] =: Xa[{Silica-amorph}];<br>
+      =: modC[J];<br>
+      yp[J][0] =: phM[{Calcite}];<br>
+      yp[J][1] =: phM[{Dolomite}];<br>
+      yp[J][2] =: phM[{Magnesite}];<br>
+      yp[J][3] =: phM[{Quartz}];<br>
+      yp[J][4] =: phM[{Hematite}];<br>
+      yp[J][5] =: phM[{Magnetite}];<br>
+      yp[J][6] =: phM[{Anhydrite}];<br>
+      yp[J][7] =: phM[{Pyrite}];<br>
+      yp[J][8] =: pmXs/1000;<br>
+      ................<br>
     </div>
-    <p>This script collects the amounts of C-S-H solid solution, portlandite and
-      amorphous silica phase, as well as mole fractions of three end members in
-      the C-S-H phase, until it detects that no solids are left in the system,
-      in which case it writes empty() value into the respective cell of the
-      abscissa, so that this point is not plotted by the Graph dialog.&nbsp; </p>
-    <br>
+    <p>This script collects the amounts of minerals and their total mass (pmXs)
+      in kg, until it detects that all the rock is dissolved (leached out) and
+      stops. To prevent the decrease of the total mass of solids in the
+      flow-through reactor, enter the mass of solids (rock) (e.g. 100 g) into
+      the iNu[0] and iNu[1] cells, and the desired water/solid mass ratio (e.g.
+      10) into ipe[0] and ipe[1] cells, and modify the control script as
+      follows:</p>
+    <p style="margin-left: 40px;"> <span style="font-family: Courier New,Courier,monospace;">$
+        Fluid-rock interaction (Leaching, Compos sources) <br>
+        $ cNu is mass of evolving solids in flow-through reactor (g) <br>
+        <span style="color: #cc0000;">$ cNu =: pmXs;</span> <br>
+        &nbsp;MbXs =: cNu; <br>
+        $ Stop, if no solids are left <br>
+        &nbsp;Next =: ( cNu &gt; 0? 1: 0 ); <br>
+        if(Next &gt; 0) begin <br>
+        $ cpe is the fluid/solid mass ratio <br>
+        $ Comment out a line below to take the f/s ratio if ipe is set <br>
+        <span style="color: #cc0000;">$ cpe =: (J&gt;0? cpe: phM[{aq_gen}]/cNu);</span>
+        <br>
+        &nbsp;xa_[{F_Seawater}] =: cpe*cNu; <br>
+        $ Cumulative reacted water/solid ratio <br>
+        &nbsp;modC[J] =: ( J&gt;0? 10^(modC[J-1])+cpe: cpe ); <br>
+        $ modC[J] =: lg( cpe*cNu ); <br>
+        &nbsp;modC[J] =: lg(modC[J]); <br>
+        end <br>
+        $ Check below that the entry for rock composition in the parent <br>
+        $&nbsp; system recipe is set to zero, e.g. as <br>
+        $&nbsp; xa_[{R_MORB}] =: 0; <br>
+        $ Clean up the rest of the system recipe <br>
+        xa_[{R_MORB}] =: 0;<br>
+        $ end of script</span>&nbsp; </p>
+    <p> The results of "Leaching" simulations look better when plotted against
+      the cumulative water/solid ratio in logarithmic scale, especially after
+      customization to "cumulative plot" (in this case, disable the line "<span
+        style="font-family: Courier New,Courier,monospace;">yp[J][8] =:
+        pmXs/1000;</span>" in the sampling script or change it to "<span style="font-family: Courier New,Courier,monospace;">yp[J][8]
+        =: empty();</span>"). However, you can easily modify the control script
+      to produce modC values for abscissa in a linear scale (as it is done by
+      default in "Leaching" mode scripts). </p>
+    <p> </p>
     <h4><a name="PROCESS_L_MODE_S_2"></a>"L" mode:&nbsp; Lippmann diagram for a
       binary solid solution, step 2<br>
     </h4>
@@ -1622,17 +1698,15 @@ my[{Mn+2}]
       $ Ordinates - log10 of total dissolved elements product <br>
       yp[J][0] =: lg( m_t[{S}] ) + lg( m_t[{Ba}] +&nbsp; m_t[{Sr}] );<br>
       yp[J][1] =: yp[J][0];<br>
-      <br>
-      &nbsp;</div>
-    <p><br>
-      A feature of this sampling script is that it calculates the mole fraction
-      for the 'solidus' curve not as the mole fraction of a solid solution end
-      member, but as the element fraction in the total composition of the solid
-      part of the system. This has an advantage when e.g. two solid solution
-      phases are included in the system in order to reproduce a miscibility gap.
-      In this case, only stable part of the Lippmann diagram will be visible. If
-      this way of calculation of the solid mole fraction is inappropriate for
-      your given system, the operator for <span style="font-family: monospace;">xp[J][0]</span>
+    </div>
+    <p> A feature of this sampling script is that it calculates the mole
+      fraction for the 'solidus' curve not as the mole fraction of a solid
+      solution end member, but as the element fraction in the total composition
+      of the solid part of the system. This has an advantage when e.g. two solid
+      solution phases are included in the system in order to reproduce a
+      miscibility gap. In this case, only stable part of the Lippmann diagram
+      will be visible. If this way of calculation of the solid mole fraction is
+      inappropriate for your given system, the operator for <span style="font-family: monospace;">xp[J][0]</span>
       can be replaced with <span style="font-family: Courier New,Courier,monospace;">xp[J][0]
         =: Wxx[{Cls}];</span>&nbsp; later on by editing the script in the
       Process window.&nbsp;</p>
@@ -1762,8 +1836,8 @@ my[{Mn+2}]
     </h4>
     <p>The sampling script was automatically created. Just skip this wizard page
       by clicking 'Next&gt;". </p>
-    <h4><a name="PROCESS_R_MODE_S_3"></a>"R" mode:&nbsp; Sequential reactor
-      scheme, uses equilibrium bulk compositions of phases, step 3</h4>
+    <h4><a name="PROCESS_R_MODE_S_3"></a>"R" mode:&nbsp; Stepwise flow-through
+      reactor scheme, uses equilibrium bulk compositions of phases, step 3</h4>
     <p>Choose "modC" item from the 'Scalar' property list as abscissa (by
       right-click menu). Then:<br>
     </p>
@@ -2381,9 +2455,9 @@ SysEq
       <dd>New SysEq record keys are generated using VarCSD numbers from the
         current <span style="font-family: monospace;">"cTm"</span> cell, which
         is automatically changed by the program as: <span style="font-family: monospace;">cTm
-          =: iTm[0] + J * iTm[2]; </span>if
-        not overridden by the<span style="font-family: monospace;"> P_expr </span>math
-        script.<span style="font-family: monospace;">&nbsp;</span> </dd>
+          =: iTm[0] + J * iTm[2]; </span>if not overridden by the<span style="font-family: monospace;">
+          P_expr </span>math script.<span style="font-family: monospace;">&nbsp;</span>
+      </dd>
       <dd> <br>
       </dd>
       <dt><a name="iTm_1"></a><b><big><tt><big>iTm[1]</big> </tt></big></b>-
@@ -2480,8 +2554,8 @@ SysEq
       <dd> Current pressure P to set in a <span style="font-family: monospace;">J</span>-th
         generated SysEq record key. Automatic Initialization: <span style="font-family: monospace;">cP
           =: iP[0]</span>. Can be incremented in the control&nbsp; <span style="font-family: monospace;"><a
-            href="#P_expr">P_expr</a> </span>math
-        script expressions; if not changed in script and <span style="font-family: monospace;">iP[2]
+            href="#P_expr">P_expr</a> </span>math script expressions; if not
+        changed in script and <span style="font-family: monospace;">iP[2]
           &lt;&gt; 0</span> then automatically <span style="font-family: monospace;">cP
           = ip[0] + J*iP[2]</span> . </dd>
       <dd><br>
@@ -2531,10 +2605,9 @@ Temperature
       <a name="cT"></a><b><big><tt><big>cT</big> </tt></big></b>- Current
       temperature of interest T (Kelvin)<br>
       <dd>This work cell is automatically calculated as &nbsp;<span style="font-family: monospace;">cT
-          =: cTC + 273.15 </span>&nbsp;at
-        each process simulation step in order to facilitate writing of <a href="#pgExpr"><span
-            style="font-family: monospace;">pGexpr</span></a> data sampling math
-        scripts.</dd>
+          =: cTC + 273.15 </span>&nbsp;at each process simulation step in order
+        to facilitate writing of <a href="#pgExpr"><span style="font-family: monospace;">pGexpr</span></a>
+        data sampling math scripts.</dd>
       <dd>&nbsp;<br>
       </dd>
       <dt><b><big><tt><a name="iNv_0"></a><big>iNv[0]</big> </tt></big></b>-
@@ -2550,9 +2623,8 @@ Temperature
       <dd>New SysEq record keys are generated using TD variant numbers from the
         current <span style="font-family: monospace;">"cNv"</span> cell, which
         is automatically changed by the program as: <span style="font-family: monospace;">cNv
-          =: iNv[0] + J * iNv[2], </span>if
-        not overridden by the<span style="font-family: monospace;"> P_expr </span>math
-        script.<br>
+          =: iNv[0] + J * iNv[2], </span>if not overridden by the<span style="font-family: monospace;">
+          P_expr </span>math script.<br>
         <span style="font-family: monospace;"></span></dd>
       <dd> &nbsp; <br>
       </dd>
@@ -3230,8 +3302,8 @@ Real
         record: the number will be automatically copied from the <a href="#Ntxi_1"><span
             style="font-family: monospace;">Ntxi[1]</span></a> counter.
         &nbsp;However, it is good to check this counter upon remake because it
-        must be that <span style="font-family: monospace;">pDimXY[0]
-          &gt;= Ntxi[1]</span>.&nbsp; <br>
+        must be that <span style="font-family: monospace;">pDimXY[0] &gt;=
+          Ntxi[1]</span>.&nbsp; <br>
       </dd>
       <dd> &nbsp;<br>
       </dd>
@@ -3747,7 +3819,7 @@ Real
         &nbsp; <br>
       </dd>
     </dl>
-    <hr width="100%" size="2"><tt>Last modified: 9 May 2012 DK </tt><tt> </tt>
+    <hr width="100%" size="2"><tt>Last modified: 17 May 2019 DK </tt><tt> </tt>
     <p><tt>End of file</tt> <br>
       &nbsp; </p>
     <br>

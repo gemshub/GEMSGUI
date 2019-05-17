@@ -1242,17 +1242,20 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                             "$ cNu is mass of evolving aqueous fluid in flow-through reactor\n");
               if( !iNu )
                     ret += QString("$ Comment out a line below to take the mass of fluid if iNu is set \n"
-                            " cNu =: (phM[{%1}]; \n").arg(Aqg);
+                            " cNu =: phM[{%1}]; \n").arg(Aqg);
               ret += QString( " xp_[{%1}] =: cNu; \n"
-                            "$ cpe is the fluid/solid mass ratio \n").arg(Aqg);
+                              "$ Stop, if no fluid is left \n"
+                              " Next =: ( cNu > 0? 1: 0 ); \n"
+                              " if(Next > 0) begin \n"
+                              "$ cpe is the solid/fluid mass ratio \n"
+                              ).arg(Aqg);
               if( !ipe )
-                    ret += QString( "$ Comment out a line below to take the f/s ratio if ipe is set \n"
-                            " cpe =: (J>0? cpe: cNu/pmXs); \n" );
-              ret += QString( " MbXs =: cNu/cpe; \n"
-                             "$ Cumulative reacted fluid/solid ratio \n"
-                             " modC[J] =: ( J>0 ? 10^(modC[J-1])+cpe : cpe );\n"
+                    ret += QString( "$ Comment out a line below to take the s/f ratio if ipe is set \n"
+                            " cpe =: (J>0? cpe: pmXs/cNu); \n" );
+              ret += QString( " MbXs =: cNu*cpe; \n"
+                             "$ Cumulative reacted solid/fluid ratio (linear) \n"
+                             " modC[J] =: ( J>0 ? modC[J-1]+cpe : cpe );\n"
                              "$ modC[J] =: cpe*cNu;\n"
-                             " modC[J] =: lg(modC[J]); \n"
                              "end \n"
                              "$ Check below that the entry for fluid composition in the parent \n"
                              "$  system recipe is set to zero, e.g. as \n"
@@ -1265,17 +1268,20 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                           "$ cNu is mass of evolving aqueous fluid in flow-through reactor\n");
             if( !iNu )
                 ret += QString("$ Comment out a line below to take the mass of fluid if iNu is set \n"
-                            " cNu =: (phM[{%1}]; \n").arg(Aqg);
+                            " cNu =: phM[{%1}]; \n").arg(Aqg);
             ret += QString( " xp_[{%1}] =: cNu; \n"
-                            "$ cpe is the fluid/solid mass ratio \n").arg(Aqg);
+                            "$ Stop, if no fluid is left \n"
+                            " Next =: ( cNu > 0? 1: 0 ); \n"
+                            " if(Next > 0) begin \n"
+                            "$ cpe is the solid/fluid mass ratio \n"
+                            ).arg(Aqg);
             if( !ipe )
-                ret += QString( "$ Comment out a line below to take the f/s ratio if ipe is set \n"
-                            " cpe =: (J>0? cpe: cNu/pmXs); \n" );
-            ret += QString( " xa_[{%1}] =: cNu/cpe; \n"
-                            "$ Cumulative reacted fluid/solid ratio \n"
-                            " modC[J] =: ( J>0 ? 10^(modC[J-1])+cpe : cpe );\n"
+                ret += QString( "$ Comment out a line below to take the s/f ratio if ipe is set \n"
+                            " cpe =: (J>0? cpe: pmXs/cNu); \n" );
+            ret += QString( " xa_[{%1}] =: cNu*cpe; \n"
+                            "$ Cumulative reacted solid/fluid ratio (linear) \n"
+                            " modC[J] =: ( J>0 ? modC[J-1]+cpe : cpe );\n"
                             "$ modC[J] =: cpe*cNu;\n"
-                            " modC[J] =: lg(modC[J]); \n"
                             "end \n"
                             "$ Check below that the entry for fluid composition in the parent \n"
                             "$  system recipe is set to zero, e.g. as \n"
@@ -1300,7 +1306,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                               " cpe =: (J>0? cpe: phM[{%1}]/cNu); \n"
                                ).arg(Aqg);
             ret += QString(  " xp_[{%1}] =: cpe*cNu; \n"
-                             "$ Cumulative reacted water/solid ratio \n"
+                             "$ Cumulative reacted water/solid ratio (log10 scale)\n"
                              " modC[J] =: ( J>0? 10^(modC[J-1])+cpe: cpe ); \n"
                              "$ modC[J] =: lg( cpe*cNu ); \n"
                              " modC[J] =: lg(modC[J]); \n"
@@ -1328,7 +1334,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                             " cpe =: (J>0? cpe: phM[{%1}]/cNu); \n"
                              ).arg(Aqg);
           ret += QString(  " xa_[{%1}] =: cpe*cNu; \n"
-                           "$ Cumulative reacted water/solid ratio \n"
+                           "$ Cumulative reacted water/solid ratio (log10 scale) \n"
                            " modC[J] =: ( J>0? 10^(modC[J-1])+cpe: cpe ); \n"
                            "$ modC[J] =: lg( cpe*cNu ); \n"
                            " modC[J] =: lg(modC[J]); \n"

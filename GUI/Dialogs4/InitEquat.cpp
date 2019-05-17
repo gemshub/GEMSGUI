@@ -886,13 +886,13 @@ wnData.Add( new pagesSetupData("Sigm_[][1]", o_sysigm,1)); //| Specific surface 
 
   case MD_MULTI:
 //# Modelling Project IPM MULTI DOD (i j a indexation and basis)
-    scalarsList.Add( new pagesSetupData("Mbx",o_wi_mbx)); //"Total mass of the system, kg "
-    scalarsList.Add( new pagesSetupData("GX",o_wo_fx)); //"Total equilibrium Gibbs potential of the system, in moles "
+    scalarsList.Add( new pagesSetupData("Mbx",o_wi_mbx)); //"Total mass of the whole system, kg "
+    scalarsList.Add( new pagesSetupData("pmXs", o_wio_pmxs)); // "Total mass of all solid phases in the system (g), obtained from bXs vector "
+    scalarsList.Add( new pagesSetupData("GX",o_wo_fx)); //"Total equilibrium Gibbs energy of the system, in moles (normalized) "
     scalarsList.Add( new pagesSetupData("IS",o_wo_ic)); //"Effective molal ionic strength of aqueous electrolyte "
     scalarsList.Add( new pagesSetupData("pH",o_wd_ph)); //"pH of aqueous solution (in molal activity scale) "
     scalarsList.Add( new pagesSetupData("pe",o_wd_pe)); //"pe of aqueous solution (in molal activity scale) "
     scalarsList.Add( new pagesSetupData("Eh",o_wd_eh)); //"Eh of aqueous solution, Volts "
-
     scalarsList.Add( new pagesSetupData("TC[0]",o_wio_tc)); //"Temperature (C) of interest (min-max interval for parametric problems) "
     scalarsList.Add( new pagesSetupData("TC[1]",o_wio_tc,1));
     scalarsList.Add( new pagesSetupData("TK[0]",o_wio_t)); //"Temperature (K) of interest T (min-max interval for parametric problems) "
