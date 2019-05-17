@@ -714,7 +714,7 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
     gstring keyp = rt[RT_SYSEQ].UnpackKey();
     // new: setting chemical kinetics time counter and variables
     // cout << "kdTime: " << kdTime << "  kTimeStep: " << kTimeStep << "  kTime: " << kTime << endl;
-    if( kdTime < 0. )
+    if( kdTime <= 0.  )
     {  // no kinetics to consider
         multi->GetPM()->kTau = 0.;
         multi->GetPM()->kdT = 0.;
@@ -732,7 +732,6 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
         else  // TKinMet exists, simulation continues
         {
             multi->GetPM()->pKMM = 1; // SD 23/03/2015 multi->GetPM()->ITau = kTimeStep;
-            multi->GetPM()->ITau = -1;
         }
     }
 
