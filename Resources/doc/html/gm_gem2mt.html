@@ -7,7 +7,7 @@
     <meta name="description" content="Version 3.0.0-PSI">
   </head>
   <body>
-    <h1><img src="gems1.png" height="48" align="left" width="48"> <font color="#000066">
+    <h1><img src="gems1.png" width="48" height="48" align="left"> <font color="#000066">
         GEM-Selektor version 3</font> </h1>
     <h2>Reactive Mass Transport (GEM2MT) Module</h2>
     <hr width="100%" size="2">
@@ -162,7 +162,7 @@
     <p>Next in the mICb table below of quantity/concentration of IC in initial
       systems, enter (copy-paste) the concentration and units for each element
       to define the compositions of rock and fluid in the corresponding rows. </p>
-    <p>Optionally, type user-defined formulae (e.g. "SiO&#8322;", "CO&#8322;", etc.) and
+    <p>Optionally, type user-defined formulae (e.g. "SiO?", "CO?", etc.) and
       enter their units and quantities, which will be added (after unit
       conversions) to the bulk elemental compositions of initial systems for
       fluid and rock. </p>
@@ -196,7 +196,7 @@
         a maximum number of (time) steps (e.g. 1000); note that equilibria in
         all boxes in the chain are re-calculated (and can be plotted) in one
         time step. Enter 1 for the number of user-defined formula units (to add
-        at least H&#8322;O to the rock initial composition). </li>
+        at least H?O to the rock initial composition). </li>
       <li>In Step 4, we set P, T, V, Initial system, Node type, MPG flux, and
         Initial mass.</li>
       <li>In Step 5, we select the output variables you want to plot in each
@@ -219,12 +219,12 @@
     <p>Next in the mICb table of quantity/concentration of IC in initial
       systems, enter (copy-paste) the concentration and units for each element
       to define the compositions of rock and fluid in the corresponding rows. </p>
-    <p>Optionally, type user-defined formulae (e.g. "H&#8322;O", "CO&#8322;", etc.) and
+    <p>Optionally, type user-defined formulae (e.g. "H?O", "CO?", etc.) and
       enter their units and quantities, which will be added (after unit
       conversions) to the bulk elemental compositions of initial systems for
       fluid and rock. Check that the composition of the rock also contains
-      enough H&#8322;O to have fluid after equilibration in desired fluid/rock mass
-      ratio (e.g. if normalized to 1 kg of rock, add 10 kg of H&#8322;O for a
+      enough H?O to have fluid after equilibration in desired fluid/rock mass
+      ratio (e.g. if normalized to 1 kg of rock, add 10 kg of H?O for a
       fluid/rock of 10). </p>
     <p>The initialization script (visible in the lower part of the "Initial"
       page) should have been created by the wizard. In this script, we check
@@ -502,43 +502,102 @@
       (advection-dispersion) reactive transport using classical
       finite-difference method</p>
     <p></p>
-    <p style="margin-left: 40px;"> &lt;description&gt;</p>
-    <p><br>
+    <p style="margin-left: 40px;">In this mode, the GEM2MT module performs a
+      simple "textbook" finite-difference simulation of 1-D column reactive
+      transport, in which not "tracer" but the whole composition of aqueous
+      phase including water is moved between nodes during the "transport loop",
+      followed by a "chemical equilibration loop" for all nodes at each time
+      step (the so-called operator-splitting sequential non-iterative coupling
+      of reaction and transport).</p>
+    <p style="margin-left: 40px;">The column of a given length l is thought to
+      be divided into n = 100 to 1000 nodes of equal size (l/n) with implicit
+      diameter that defines the same characteristic volume (e.g. 1 cm3) of the
+      node. Each node is characterized by several transport properties
+      (porosity, permeability, dispersivity, fluid advection velocity,
+      temperature, pressure). </p>
+    <p style="margin-left: 40px;">The "fresh" fluid is fed from the left into
+      node 0 and 1 that are declared as infinite flux sources (type 3) and only
+      contain fluid. Other nodes are filled with "rock+fluid" of a given initial
+      composition and porosity that may or may not correspond to real fluid/rock
+      volume ratio. The very last rock-fluid node is marked as an infinite
+      constant-flux sink of aqueous fluid (type -3). </p>
+    <p style="margin-left: 40px;">The time step duration is determined from the
+      Courant number, and can be augmented dividing by a prescribed time step
+      factor (&gt;1). The advection velocity is input instead of the hydraulic
+      head to simplify handling of chemical systems (that can be formally
+      processed at constant pressure, even though this is not quite physically
+      correct).&nbsp; <br>
     </p>
     <p><span style="font-weight: bold;">C</span>&nbsp;&nbsp;&nbsp;&nbsp; 1-D
       (advection-dispersion) reactive transport using implicit Crank-Nicolson
       scheme (TBD) </p>
     <p></p>
-    <p style="margin-left: 40px;"> &lt;description&gt;</p>
-    <p><br>
-    </p>
-    <p> </p>
-    <p><span style="font-weight: bold;">D</span>&nbsp;&nbsp;&nbsp;&nbsp; 1-D
-      (advection-diffusion) reactive transport using finite-volume method (TBD)<br>
-    </p>
-    <p style="margin-left: 40px;"> &lt;description&gt;<br>
-      <br>
-    </p>
+    <p style="margin-left: 40px;">In this mode, the problem setup is the same as
+      in A mode, with the only difference that the simulation is performed using
+      Crank-Nicholson scheme, believed to be more robust regarding to numerical
+      dispersion and/or error accumulation. Both A and C methods are only
+      applicable to advection-dominated cases. </p>
     <p><span style="font-weight: bold;">W</span>&nbsp;&nbsp;&nbsp; 1-D
-      (advection-diffusion) reactive transport using random-walk method </p>
+      (advection-diffusion) reactive transport using the random-walk method </p>
     <p> </p>
-    <p style="margin-left: 40px;"> &lt;description&gt;<br>
-      <br>
-    </p>
-    <p> <br>
-      <span style="font-weight: bold;">V</span>&nbsp;&nbsp;&nbsp; 1-D reactive
+    <p style="margin-left: 40px;">This method is suitable for both advection-
+      and diffusion-dominated cases of reactive transport. Geometrical setup of
+      1-D column and its discretisation into nodes is, in principle, the same as
+      in the A or C modes (with the difference that only one fluid source node
+      is needed instead of two). Another difference is that solute diffusivity
+      (diffusion coefficient) Dif must be provided at input for each node. In
+      the simplest case, the same Dif value is applied to all aqueous solutes
+      and water-solvent; as solutes, total dissolved elements are treated as
+      default. </p>
+    <p style="margin-left: 40px;">The random-walk method effectively simulates
+      the Brownian movement of "particles" of different types (about 500 to 1500
+      particles per node). At each time step, after the chemical equilibration
+      loop, to one particle type, the elemental composition is assigned that
+      corresponds to the current composition of the aqueous fluid in the node in
+      which this particle currently resides. Other particle types can be
+      assigned for different cations and anions, if their diffusion is to be
+      considered individually, or to solid phase compositions that are supposed
+      to migrate as nanoparticles. </p>
+    <p style="margin-left: 40px;">At the following transport loop, the velocity
+      and the direction of each particle is determined by (pseudo)random numbers
+      obtained from a random number generator subroutine (Brownian movement) and
+      augmented by a flow component in one direction (if advection also takes
+      place) or even by the electrical potentials on solids in nodes. The path
+      (velocity times time step) of each particle may move it within a given
+      node, or from this to the next or to the previous node. The bookkeeping of
+      particles that have crossed the boundaries of each node from all the
+      adjacent nodes results in re-calculation of augmented bulk composition of
+      nodes, and thus makes them ready for the next chemical equilibration loop.
+      The time stepping should be selected such that no particle can cross more
+      than one node boundary in one time step. </p>
+    <p> </p>
+    <p><span style="font-weight: bold;">V</span>&nbsp;&nbsp;&nbsp; 1-D reactive
       transport using finite-volume particle tracking algorithm (TBD) </p>
     <p> </p>
-    <p style="margin-left: 40px;"> &lt;description&gt;</p>
-    <p style="margin-left: 40px;"><br>
+    <p style="margin-left: 40px;">This mode runs a similar setup of the
+      advection-diffusion problem as the random-walk algorithm, but with better
+      account of mass balance in nodes and of volume effects on porosity related
+      to dissolution/precipitation of minerals.</p>
+    <p><span style="font-weight: bold;">D</span>&nbsp;&nbsp;&nbsp;&nbsp; 1-D
+      (diffusion) reactive transport using finite-volume method (TBD)<br>
+    </p>
+    <p style="margin-left: 40px;"> Description to be provided in next versions.<br>
     </p>
     <p><span style="font-weight: bold;">T</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       Export of initial-state GEMS3K input files set for external coupled RT
       codes</p>
-    <br>
     <p> </p>
-    <p style="margin-left: 40px;"> &lt;description&gt;<br>
-      <br>
+    <p style="margin-left: 40px;"> To facilitate initialisation of large
+      reactive transport simulations with transport codes coupled with GEMS3K,
+      this mode lets the user to set up the necessary number of initial chemical
+      system variants (e.g. fresh fluid, various rock types) as bulk elemental
+      and/or formula compositions, as well as to define temperature and pressure
+      intervals and steps for exporting a grid array of thermodynamic data for
+      subsequent interpolation in case of reactive transport simulations with
+      variable temperature and pressure. The export of all necessary GEMS3K
+      input files is then performed when the "Calculate" toolbar button is
+      activated.</p>
+    <p><br>
     </p>
     <hr style="width: 100%; height: 2px;">
     <h3><a name="WZSTEP_2"></a>2.2. GEM2MT Wizard Step 2: Dimensions for the RT
@@ -1129,7 +1188,7 @@
       initialization script.</p>
     <p>The time step reduction factor (ADpar[0]) in A,C,D,W modes is multiplied
       by the maximum time step dt<sub>max</sub> determined from the Courant
-      criterion to give the time step dt actually used in calculation. The rest
+      criterion to yield the time step dt actually used in calculation. The rest
       of ADpar array contains numerical cutoffs: one (ADpar[8]) for IC amount
       differences in the node between time steps (mol), default 1e-9 mol;
       another (ADpar[9]) for minimal amounts of IC in node bulk compositions
@@ -1175,12 +1234,13 @@
         diffusivity (m2/s)<br>
         HydP[qc][6] =: ADpar[7]; &nbsp; $ nto: tortuosity factor, usually
         1&lt;=nto&lt;10&nbsp; &nbsp;&nbsp; </span></p>
-    <br>
-    Upon RT simulation, transport properties, temperatures and masses of nodes
-    may in principle change if this is required by RT algorithm and/or
-    programmed in the third part of the mtExpr script.<br>
     <p><br>
-    </p>
+      Upon the RT simulation, transport properties, temperatures and masses of
+      nodes may in principle change, if this is required by RT
+      algorithm, and/or programmed in the third part of the mtExpr
+      script.<br>
+     </p> <br>
+    
     <hr style="width: 100%; height: 2px;">
     <h3><a name="MWPAGE_3"></a>3.3. GEM2MT Window Page "Fluxes" (MPG
       Compositions, Array of Fluxes)</h3>
