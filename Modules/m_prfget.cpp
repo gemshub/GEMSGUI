@@ -724,16 +724,16 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
     else {   // considering kinetics
         multi->GetPM()->kTau = kTime;
         multi->GetPM()->kdT = kdTime;
-
-        multi->GetPM()->ITau = -1;
         if( kTimeStep < 0 )
         {   // we need to initialize TKinMet
-            // SD 17/05/2019 multi->GetPM()->pKMM = -1;
-            multi->GetPM()->pKMM = 1;
-            // multi->GetPM()->ITau = -1;
+            multi->GetPM()->pKMM = -1;
+            multi->GetPM()->ITau = -1;
         }
         else  // TKinMet exists, simulation continues
-           multi->GetPM()->pKMM = 2; //  SD 17/05/2019 before was 1; // SD 23/03/2015 multi->GetPM()->ITau = kTimeStep;
+        {
+            multi->GetPM()->pKMM = 1; // SD 23/03/2015 multi->GetPM()->ITau = kTimeStep;
+            multi->GetPM()->ITau = -1;
+        }
     }
 
     PMtest( keyp.c_str() );
