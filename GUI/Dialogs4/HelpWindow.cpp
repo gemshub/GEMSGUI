@@ -15,7 +15,7 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-
+ 
 
 #include <QtCore>
 #if QT_VERSION >= 0x050000
