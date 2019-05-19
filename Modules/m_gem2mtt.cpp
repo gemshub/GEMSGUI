@@ -810,9 +810,9 @@ char buf[300];
             CalcStartScript();
 
        sprintf(buf, "   time %lg; step %ld ", mtp->cTau, mtp->ct );
-       Vmessage = "Calculating Reactive Mass Transport (RMT): ";
+       Vmessage = "Simulating Reactive Transport: ";
        Vmessage += buf;
-       Vmessage += ". Please, wait (may take long)...";
+       Vmessage += ". Please, wait (may take time)...";
 
 #ifdef Use_mt_mode
        if( mtp->PsSmode != S_OFF  )

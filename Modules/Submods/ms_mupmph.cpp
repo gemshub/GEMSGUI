@@ -528,7 +528,7 @@ void TMulti::multi_sys_ph()
             memcpy( pm.SF2[k], mup->SF[kk], MAXSYMB );
             memcpy( pm.SF2[k]+MAXSYMB, mup->SF[kk]+MAXSYMB+MAXPHSYMB, MAXPHNAME );
         }
-        if( pm.pNP && pm.pBAL && pm.pKMM )
+        if( pm.pNP && pm.pBAL && pm.pKMM>0  )
         goto PARLOAD;
 
         aPH->TryRecInp( mup->SF[kk], crt, 0 );  // Now reading all phase records!
