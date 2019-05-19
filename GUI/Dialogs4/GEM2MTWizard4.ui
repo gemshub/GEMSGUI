@@ -46,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <widget class="QLabel" name="pageName">
@@ -957,7 +957,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Flux setup &lt;/p&gt;&lt;p&gt;In S mode, the flux can be set by the initial mass of the fluid (fluid/rock ratio in Initial tab).&lt;/p&gt;&lt;p&gt;In F mode, the flux rate is set in the math script (Initial tab) and by the quantities of phases in MGP (Flux tab).&lt;/p&gt;&lt;p&gt;In B mode, the flux rate is set in the math script (Initial tab) and by the quantities of phases in MGP (Flux tab) or.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Flux setup (in GEM2MT window)&lt;/p&gt;&lt;p&gt;In S mode, the flux is set by the initial mass of the fluid (fluid/rock ratio in Initial tab).&lt;/p&gt;&lt;p&gt;In F and B modes, the flux rate is set in the math script (Initial tab) and by quantities of phases in MGP (Flux tab).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>

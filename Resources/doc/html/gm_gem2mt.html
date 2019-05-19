@@ -7,7 +7,7 @@
     <meta name="description" content="Version 3.0.0-PSI">
   </head>
   <body>
-    <h1><img src="gems1.png" width="48" height="48" align="left"> <font color="#000066">
+    <h1><img src="gems1.png" height="48" align="left" width="48"> <font color="#000066">
         GEM-Selektor version 3</font> </h1>
     <h2>Reactive Mass Transport (GEM2MT) Module</h2>
     <hr width="100%" size="2">
@@ -162,7 +162,7 @@
     <p>Next in the mICb table below of quantity/concentration of IC in initial
       systems, enter (copy-paste) the concentration and units for each element
       to define the compositions of rock and fluid in the corresponding rows. </p>
-    <p>Optionally, type user-defined formulae (e.g. "SiO?", "CO?", etc.) and
+    <p>Optionally, type user-defined formulae (e.g. "SiO2", "CO2", etc.) and
       enter their units and quantities, which will be added (after unit
       conversions) to the bulk elemental compositions of initial systems for
       fluid and rock. </p>
@@ -196,7 +196,7 @@
         a maximum number of (time) steps (e.g. 1000); note that equilibria in
         all boxes in the chain are re-calculated (and can be plotted) in one
         time step. Enter 1 for the number of user-defined formula units (to add
-        at least H?O to the rock initial composition). </li>
+        at least H2O to the rock initial composition). </li>
       <li>In Step 4, we set P, T, V, Initial system, Node type, MPG flux, and
         Initial mass.</li>
       <li>In Step 5, we select the output variables you want to plot in each
@@ -219,12 +219,12 @@
     <p>Next in the mICb table of quantity/concentration of IC in initial
       systems, enter (copy-paste) the concentration and units for each element
       to define the compositions of rock and fluid in the corresponding rows. </p>
-    <p>Optionally, type user-defined formulae (e.g. "H?O", "CO?", etc.) and
+    <p>Optionally, type user-defined formulae (e.g. "H2O", "CO2", etc.) and
       enter their units and quantities, which will be added (after unit
       conversions) to the bulk elemental compositions of initial systems for
       fluid and rock. Check that the composition of the rock also contains
-      enough H?O to have fluid after equilibration in desired fluid/rock mass
-      ratio (e.g. if normalized to 1 kg of rock, add 10 kg of H?O for a
+      enough H2O to have fluid after equilibration in desired fluid/rock mass
+      ratio (e.g. if normalized to 1 kg of rock, add 10 kg of H2O for a
       fluid/rock of 10). </p>
     <p>The initialization script (visible in the lower part of the "Initial"
       page) should have been created by the wizard. In this script, we check
@@ -522,7 +522,7 @@
       volume ratio. The very last rock-fluid node is marked as an infinite
       constant-flux sink of aqueous fluid (type -3). </p>
     <p style="margin-left: 40px;">The time step duration is determined from the
-      Courant number, and can be augmented dividing by a prescribed time step
+      Courant number, and can be augmented by dividing by a prescribed time step
       factor (&gt;1). The advection velocity is input instead of the hydraulic
       head to simplify handling of chemical systems (that can be formally
       processed at constant pressure, even though this is not quite physically
@@ -587,7 +587,7 @@
       Export of initial-state GEMS3K input files set for external coupled RT
       codes</p>
     <p> </p>
-    <p style="margin-left: 40px;"> To facilitate initialisation of large
+    <p style="margin-left: 40px;"> To facilitate initialization of large
       reactive transport simulations with transport codes coupled with GEMS3K,
       this mode lets the user to set up the necessary number of initial chemical
       system variants (e.g. fresh fluid, various rock types) as bulk elemental
@@ -689,7 +689,7 @@
       a rate constant v in 1/time/kg units, proportional to the product of
       masses in both boxes; </p>
     <p style="margin-left: 40px;">3 - First-order flux j<sub>3</sub> = m<sub>in</sub>v<sub>3</sub>,
-      to MPG mass in receiving box,with a rate constant v<sub>3</sub> in 1/time
+      to MPG mass in receiving box, with a rate constant v<sub>3</sub> in 1/time
       units.&nbsp; <br>
     </p>
     <p> </p>
@@ -715,7 +715,7 @@
     </p>
     <h4>(1) Dimensions of MPG fluxes: <br>
     </h4>
-    <p> <span style="font-weight: bold;">nPG</span> - <span style="text-decoration: underline;">Number
+    <p> <span style="font-weight: bold;">nMGP</span> - <span style="text-decoration: underline;">Number
         of mobile phase groups (MPG)</span>: set it only for the B mode (will be
       set automatically to 1 in S and F modes)</p>
     <p> </p>
@@ -727,8 +727,8 @@
     <p> </p>
     <p> <span style="font-weight: bold;">nSFD</span> - <span style="text-decoration: underline;">Number
         of elemental source composition definitions</span>: optional to set in
-      B, S and F modes. In S and F modes, can be 0 or 1; if set to 0 then the
-      first reactor (index 0) will be treated as constant source of MPG
+      B, S and F modes. In S and F modes, can be 0 or 1; if set to 0 (default)
+      then the first reactor (index 0) will be treated as constant source of MPG
       transported into the second reactor; otherwise, the composition of the
       source flux at a given rate can be added to bulk composition of 0-th
       reactor at every time step (this option requires editing the
@@ -764,7 +764,7 @@
       window; just click 'Next &gt;' to keep the old script with user's
       modifications. </p>
     <p> </p>
-    <p> The script has three sections - one for the initialisation of the RT
+    <p> The script has three sections - one for the initialization of the RT
       nodes (boxes), other for the initialization of fluxes defined between
       boxes, and optional placeholder section for execution at regular time
       steps (to be written/extended by the user). The first two sections will be
@@ -880,11 +880,11 @@
       plot some experimental data for some step (time point) over the generated
       curves. </p>
     <p> </p>
-    <p> <u>Number of columns (plots) in the&nbsp; yEt array for plotting
-        experimental data (optional):</u> This needs to be set if you want to
-      plot some experimental data for some step (time point) over the generated
-      curves. The data can be entered or copy-pasted in the GEM2MT window page
-      after this wizard is finished. &nbsp; </p>
+    <p> <u>Number of columns (plots) in the yEt array for plotting experimental
+        data (optional):</u> This needs to be set if you want to plot some
+      experimental data for some step (time point) over the generated curves.
+      The data can be entered or copy-pasted in the GEM2MT window page after
+      this wizard is finished. &nbsp; </p>
     <p><u>Number of elements in the script work array qpg for graphical
         monitoring (optional): </u>Enter here an integer (0 to 20) to have
       access to desired number of work cells (qpg[0], qpg[1], ...) for keeping
@@ -1109,7 +1109,7 @@
     <p style="margin-left: 40px;"> </p>
     <p style="margin-left: 40px;">(8) If necessary, go again through the GEM2MT
       wizard; otherwise, click 'Calculate' to run the simulations. At the very
-      first time, do not activate graphical output, only stop the simlation
+      first time, do not activate graphical output, only stop the simulation
       after several tens of steps. Otherwise, watch the graphical monitoring of
       the node profiles. </p>
     <p> </p>
@@ -1236,11 +1236,10 @@
         1&lt;=nto&lt;10&nbsp; &nbsp;&nbsp; </span></p>
     <p><br>
       Upon the RT simulation, transport properties, temperatures and masses of
-      nodes may in principle change, if this is required by RT
-      algorithm, and/or programmed in the third part of the mtExpr
-      script.<br>
-     </p> <br>
-    
+      nodes may in principle change, if this is required by RT algorithm, and/or
+      programmed in the third part of the mtExpr script.<br>
+    </p>
+    <br>
     <hr style="width: 100%; height: 2px;">
     <h3><a name="MWPAGE_3"></a>3.3. GEM2MT Window Page "Fluxes" (MPG
       Compositions, Array of Fluxes)</h3>
