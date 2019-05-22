@@ -70,6 +70,13 @@ do
   echo "Copied dependency "$dep" to "$libsdir
 done
 
+dep=$HOME/Qt/5.12.3/gcc_64/lib/libQt5Concurrent.so.5
+cp $dep $libsdir
+dep=$HOME/Qt/5.12.3/gcc_64/lib/libQt5DBus.so.5
+cp $dep $libsdir
+dep=$HOME/Qt/5.12.3/gcc_64/lib/libQt5Xml.so.5
+cp $dep $libsdir
+
 # Create the fonts directory and copy fonts across. You
 # will obviously need to assign the directory path leading
 # to your fonts to "fontdir", e.g. /home/you/qt/lib/fonts
@@ -171,6 +178,13 @@ echo "Created bearer plugin directory: "$qtbearerplugindir
 cp $qtbearerplugin $qtbearerplugindir
 echo "Copied "$qtbearerplugin" to "$qtbearerplugindir
 
+qticonenginesplugin=$HOME/Qt/5.12.3/gcc_64/plugins/iconengines/*.so
+qticonenginesplugindir=$tardir/iconengines
+mkdir $qticonenginesplugindir
+echo "Created iconengines plugin directory: "$qticonenginesplugindir
+cp $qticonenginesplugin $qticonenginesplugindir
+echo "Copied "$qticonenginesplugin" to "$qticonenginesplugindir
+
 qtprintsupportplugin=$HOME/Qt/5.12.3/gcc_64/plugins/printsupport/*.so
 qtprintsupportplugindir=$tardir/printsupport
 mkdir $qtprintsupportplugindir
@@ -184,6 +198,13 @@ mkdir $qtimageformatsplugindir
 echo "Created imageformats plugin directory: "$qtimageformatsplugindir
 cp $qtimageformatsplugin $qtimageformatsplugindir
 echo "Copied "$qtimageformatsplugin" to "$qtimageformatsplugindir
+
+qtstylesplugin=$HOME/Qt/5.12.3/gcc_64/plugins/styles/*.so
+qtstylesplugindir=$tardir/styles
+mkdir $qtstylesplugindir
+echo "Created styles plugin directory: "$qtstylesplugindir
+cp $qtstylesplugin $qtstylesplugindir
+echo "Copied "$qtstylesplugin" to "$qtstylesplugindir
 
 # Create the run script.
 execscript=$tardir/"run$executable.sh"
