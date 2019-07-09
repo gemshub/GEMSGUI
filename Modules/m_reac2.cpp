@@ -117,6 +117,7 @@ void TReacDC::Convert_KT_to_Cp( int CE )
     switch( CE )
     { // calculation 2- and 3-term�param approximation
     case CTM_DKR: // 3-term extrap. from Franck-Marshall density model
+    case CTM_DMD: // 3-term extrap. from Dolejs-Manning density model
     case CTM_MRB: // 3-term extrap. from MRB at 25 C (provisional DK 06.08.07)
     case CTM_LGK:  // Here, all logK-f(T) coeffs are given
     case CTM_LGX:  // uncommented, 19.06.2008
@@ -403,6 +404,51 @@ NEXT:
 
            // calculate MFD function
             MFDcalc(TK, H2Oprop, MFDcoef, ReactProp);
+
+           // get results
+           rc[q].Ks[0] = FLOAT_EMPTY;
+           rc[q].Ks[1] = ReactProp[0];
+           rc[q].Gs[0] = ReactProp[1];
+           rc[q].Hs[0] = ReactProp[3];
+           rc[q].Ss[0] = ReactProp[2];
+           rc[q].Vs[0] = ReactProp[5];
+           rc[q].Cps[0] = ReactProp[4];
+         }
+    }
+    if( CE == CTM_DMD )  // Dolejs-Manning density model added by DM 08.07.2019
+    {
+        if( vfQuestion(window(), GetName(),
+            "Estimate dGr,dSr,dHr,dCpr,dVr using the Dolejs-Manning 2010 density model?" ))
+         {
+            /* Check if this is a dissolution reaction */
+                        if( rc[q].scDC[rc[q].nDC-1] <= 0 )
+                           Error( GetName(),"W27RErun: Dolejs-Manning requires a dissolution reaction!");
+            double TK;
+            double H2Oprop[4];
+            double DMDcoef[5];
+            double ReactProp[6];
+            double rhoW, alphaW, betaW, dAldTW;
+
+            TK = 298.15;
+            // water properties (25 deg C, 1 bar) from SUPCRT92
+            rhoW = 0.99706136;
+            alphaW = 2.59426542e-4;
+            dAldTW = 9.56485765e-6;
+            betaW = 4.52187717e-5;
+            H2Oprop[0] = rhoW;
+            H2Oprop[1] = alphaW;
+            H2Oprop[2] = dAldTW;
+            H2Oprop[3] = betaW;
+
+        // get species parameters
+            DMDcoef[0] = rc[q].DSt[0];
+            DMDcoef[1] = rc[q].DSt[1];
+            DMDcoef[2] = rc[q].DSt[2];
+            DMDcoef[3] = rc[q].DSt[3];
+            DMDcoef[4] = rc[q].DSt[4];
+
+           // calculate MFD function
+            DMDcalc(TK, H2Oprop, DMDcoef, ReactProp);
 
            // get results
            rc[q].Ks[0] = FLOAT_EMPTY;
@@ -1479,6 +1525,119 @@ TReacDC::MFDcalc( double TK, double *H2Oprop, double *MFDcoef, double *ReactProp
 	return 0;
 }
 
+//-----------------------------------------------------------------
+// Calculation of deltaR with Dolejs-Manning density model
+// (added by DM on 08.07.2019
+void TReacDC::calc_r_DMD( int q, int p, int /*CE*/, int /*CV*/ )
+{
+    double TK;
+    double H2Oprop[4];
+    double DMDcoef[5];
+    double ReactProp[6];
+    double rhoW, alphaW, betaW, dAldTW;
+
+    if( (fabs( aW.WW(p).TC - rc[q].TCst ) < 0.2) && (fabs( aW.WW(p).P - rc[q].Pst ) < 0.2) )
+    {  // standard temperature & pressure - just get data from ReacDC record
+       aW.WW(p).K =   rc[q].Ks[0];
+       aW.WW(p).lgK = rc[q].Ks[1];
+       aW.WW(p).dG =  rc[q].Gs[0];
+       aW.WW(p).G  =  rc[q].Gs[1];
+       aW.WW(p).dH =  rc[q].Hs[0];
+       aW.WW(p).H  =  rc[q].Hs[1];
+       aW.WW(p).dS =  rc[q].Ss[0];
+       aW.WW(p).S  =  rc[q].Ss[1];
+       aW.WW(p).dV =  rc[q].Vs[0];
+       aW.WW(p).V  =  rc[q].Vs[1];
+       aW.WW(p).dCp = rc[q].Cps[0];
+       aW.WW(p).Cp =  rc[q].Cps[1];
+        goto FINITA;
+    }
+
+     TK = aW.WW(p).T;
+     // P = aW.WW(p).P;
+      rhoW = aW.WW(p).wRo;
+       alphaW = aW.WW(p).wAlp;
+       dAldTW = aW.WW(p).wdAlpdT;
+       betaW = aW.WW(p).wBet;
+    H2Oprop[0] = rhoW;
+    H2Oprop[1] = alphaW;
+    H2Oprop[2] = dAldTW;
+    H2Oprop[3] = betaW;
+
+    // get species parameters
+    DMDcoef[0] = rc[q].DSt[0];
+    DMDcoef[1] = rc[q].DSt[1];
+    DMDcoef[2] = rc[q].DSt[2];
+    DMDcoef[3] = rc[q].DSt[3];
+    DMDcoef[4] = rc[q].DSt[4];
+
+    // calculate results - call MRB function (see below)
+    DMDcalc (TK, H2Oprop, DMDcoef, ReactProp);
+
+    // aW.WW(p).K =   rc[q].Ks[0];
+       aW.WW(p).lgK = ReactProp[0];
+       if( fabs(aW.WW(p).lgK) < 34. )
+         aW.WW(p).K = exp( aW.WW(p).lgK*lg_to_ln );
+       else aW.WW(p).K = FLOAT_EMPTY;
+       aW.WW(p).dG =  ReactProp[1];
+       aW.WW(p).dH =  ReactProp[3];
+       aW.WW(p).dS =  ReactProp[2];
+       aW.WW(p).dV =  ReactProp[5];
+       aW.WW(p).dCp = ReactProp[4];
+
+FINITA:
+    aW.WW(p).dlgK =rc[q].Ks[2];
+    aW.WW(p).devG = rc[q].Gs[2];
+    aW.WW(p).devH =rc[q].Hs[2];
+    aW.WW(p).devS =rc[q].Ss[2];
+    aW.WW(p).devV =rc[q].Vs[2];
+    aW.WW(p).devCp=rc[q].Cps[2];
+}
+
+int TReacDC::DMDcalc ( double TK, double *H2Oprop, double *DMDcoef, double *ReactProp ) // added by DM 08.07.2019
+{
+    double lnK, logK, dGr, dSr, dHr, dCPr, dVr;
+    double RHOw, ALPw, dALPdTw, BETw;
+    double a, b, c, d, e;
+
+    RHOw = H2Oprop[0];
+    ALPw = H2Oprop[1];
+    dALPdTw = H2Oprop[2];
+    BETw = H2Oprop[3];
+
+    a = DMDcoef[0]; // kJ/mol
+    b = DMDcoef[1]; // J/(K*mol)
+    c = DMDcoef[2]; // J/(K*mol)
+    d = DMDcoef[3]; // J/(mol*K^2)
+    e = DMDcoef[4]; // J/(K*mol)
+
+    lnK = (-1/R_CONSTANT)*(a/TK + b + c*log(TK) + d*TK + e*log(RHOw));
+
+    dSr = -b - c*(1 + log(TK)) - 2*d*TK - e*log(RHOw) + e*TK*ALPw;
+
+    dHr = a - c*TK - d*pow(TK,2.) + e*pow(TK,2.)*ALPw;
+
+    dCPr = -c - 2*d*TK + 2*e*TK*ALPw + e*pow(TK,2.)*dALPdTw;
+
+    dVr = e*TK*BETw;
+
+    dGr = dHr - TK*dSr;
+
+    logK = lnK * ln_to_lg;
+
+
+    if (fabs((-R_CONSTANT*TK*lnK) - dGr) > 0.1)
+            Error( GetName(),"DM denisty model: dGr and lnK not consistent!");
+
+    ReactProp[0] = logK;
+    ReactProp[1] = dGr;
+    ReactProp[2] = dSr;
+    ReactProp[3] = dHr;
+    ReactProp[4] = dCPr;
+    ReactProp[5] = dVr;
+
+    return 0;
+}
 
 /*-----------------------------------------------------------------*/
 // Calc parametres for isotop form if povishen TP

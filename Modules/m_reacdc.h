@@ -105,6 +105,7 @@ typedef struct
     *HKFc,  // Coeffs a1-a4, c1,c2, w, rAB for HKF EOS of reaction (reserved)
     // [MAXHKFCOEF]
     *DVt,   // Coeffs for dVr = f(P,T) equation (reserved) [MAXVTCOEF]
+//*DMt,   // Coeffs for Dolejs-Manning density model [MAXCPCOEF]
 *DSt,   // Coeffs for modified Ryzhenko-Bryzgalin electrostatic model [MAXCPCOEF]
     *pKt,//Coefficients of logK = f(T) or 1000ln(alpha) = f(T) equation:a0
     //  a1 *T    (isotopic: a1/T)
@@ -158,6 +159,9 @@ int MRBcalc ( double TK, double *H2Oprop, double *MRBcoef, double *ReactProp );
 
 void calc_r_FMD( int q, int p, int CE, int CV ); // added by TW 29.01.2008
 int MFDcalc ( double TK, double *H2Oprop, double *MFDcoef, double *ReactProp );
+// Dolejs and Manning (2010) Geofluids 10, 20-40.
+void calc_r_DMD( int q, int p, int CE, int CV ); // added by DM 08.07.2019
+int DMDcalc ( double TK, double *H2Oprop, double *DMDcoef, double *ReactProp ); // added by DM 08.07.2019
 
 public:
 

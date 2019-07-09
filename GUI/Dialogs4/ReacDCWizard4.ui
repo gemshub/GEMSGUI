@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>668</width>
-    <height>505</height>
+    <width>834</width>
+    <height>551</height>
    </rect>
   </property>
   <property name="font">
@@ -431,6 +431,11 @@
             <item>
              <property name="text">
               <string>Y   Calculation of logK, dSr, dCpr, dVr using modified Ryzhenko-Bryzgalin model</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>M  Calculation of logK=f(T,P),  dSr, dCpr, dVr using Dolejs and Manning (2010) density model</string>
              </property>
             </item>
             <item>

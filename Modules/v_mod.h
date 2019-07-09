@@ -298,6 +298,7 @@ enum DC_CNTRL_CODES {
     CTM_DKR = 'R',   // calculation of logK=f(T,P) from density equation (Marshall and Franck, 1978); ReacDC
     CTM_PPE = 'E',   // prediction of properties of aqueous hydroxides using Pronsprep-OH (Shock et al. 1997)
     CTM_MRB = 'Y',   // calculation of logK=f(T,P) with modified Ryzhenko-Bryzgalin model
+    CTM_DMD = 'M',   // calculation of logK=f(T,P) from density equation (Dolejs and Manning, 2010); ReacDC
     CTM_CPG = 'C',   // reserved (FGL)
     CTM_IFG = 'G',   // calculation of parameters for isotopic forms of compounds (Grichuk, 1988); ReacDC
     CTM_KAS = 'K',   // reserved
