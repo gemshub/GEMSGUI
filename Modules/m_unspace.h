@@ -21,7 +21,7 @@
 
 #include "m_param.h"
 #include "v_ipnc.h"
-#include "graph.h"
+#include "graph_window.h"
 //#include "v_mod.h"
 //#include "v_module.h"
 

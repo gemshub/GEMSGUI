@@ -23,7 +23,7 @@
 #include "v_mod.h"
 #include "v_module.h"
 #include "v_ipnc.h"
-#include "graph.h"
+#include "graph_window.h"
 
 const int RP_RKLEN = 48,
           MAXRTNAME = 12;

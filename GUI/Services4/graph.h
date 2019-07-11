@@ -18,8 +18,8 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#ifndef graph_data_h
-#define graph_data_h
+#ifndef graph_data_old_h
+#define graph_data_old_h
 
 #include <QPointF>
 #include <QVector>
@@ -226,6 +226,11 @@ public:
     /// Get object name for model ( col < getNAbs() for Abscissa )
     QString getColumnName( int col ) const;
 
+    /// Abscissa columns list
+    std::vector<int> xColumns() const;
+    /// Ordinate columns list
+    std::vector<int> yColumns() const;
+
 #endif
 
     /// Get point from one line to paint  (ndxX - column in Abscissa table)
@@ -333,43 +338,6 @@ public:
 
 };
 
-// must be changed ============================================
 
-#ifdef USE_QWT
-class GraphDialog;
-#else
-namespace jsonui {
-class GraphDialog;
-}
-using namespace jsonui;
-#endif
-
-class TCModule;
-
-class GraphWindow
-{
-
-public:
-
-    GraphDialog *graph_dlg;
-
-    GraphWindow( TCModule *pmodule, TIArray<TPlot>& aPlots, const char * title,
-                 float *sizeReg, float *sizePrt,
-                 TPlotLine * aLinesDesc, short *aAxisType,
-                 const char *aXName = nullptr, const char *aYname = nullptr );
-
-    GraphWindow( TCModule *pmodule, TIArray<TPlot>& aPlots, const char * title,
-                 const char *aXName = nullptr, const char *aYname = nullptr,
-                 TCStringArray line_names = 0, int agraphType = LINES_POINTS );
-
-    ~GraphWindow();
-
-    // Add new point to graph
-    void AddPoint( int nPlot, int nPoint );
-    void Show(const char * capAdd=nullptr); // new show all lines
-    GraphData *getGraphData() const;
-
-};
-
-#endif   // _graph_data_h
+#endif   // graph_data_old_h
 

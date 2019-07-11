@@ -19,15 +19,9 @@
 //-------------------------------------------------------------------
 
 #include <cstdio>
-#ifdef USE_QWT
-#include "GraphDialog.h"
-#else
-#include "graph.h"
-#include "GraphDialogN.h"
-#endif
-#include "GemsMainWindow.h"
 #include "gdatastream.h"
-
+#include "graph.h"
+#include "GemsMainWindow.h"
 
 #ifndef USE_QWT
 void helpWin( const std::string& name, const std::string& item )
@@ -241,6 +235,22 @@ QString TPlot::getColumnName(int col) const
     else
         value = QString("%1[%2]").arg(aObj[getObjY()].GetKeywd()).arg(col-getNAbs() );
     return value;
+}
+
+std::vector<int> TPlot::xColumns() const
+{
+   std::vector<int> xvec;
+   for( int ii=0; ii<getNAbs(); ++ii )
+     xvec.push_back(ii);
+   return xvec;
+}
+
+std::vector<int> TPlot::yColumns() const
+{
+    std::vector<int> xvec;
+    for( int ii=0; ii<getLinesNumber(); ++ii )
+      xvec.push_back(ii+getNAbs());
+    return xvec;
 }
 
 #endif
@@ -607,64 +617,6 @@ void GraphData::setScales()
 }
 
 
-//---------------------------------------------------------------------------
-
-///   The constructor
-GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
-                         const char * aTitle,
-                         float *sizeReg,  float * sizePart,
-                         TPlotLine* aLinesDesc, short *aAxisType,
-                         const char *aXName, const char *aYName )
-{
-
-    GraphData data(aPlots, aTitle, sizeReg, sizePart,
-                   aLinesDesc, aAxisType, aXName, aYName);
-#ifdef USE_QWT
-    graph_dlg = new GraphDialog( pmodule, data );
-    pVisorImp->openMdiChild( graph_dlg );
-#endif
-}
-
-///   The constructor
-GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
-                         const char * aTitle,
-                         const char *aXName, const char *aYName,
-                         TCStringArray line_names, int agraphType  )
-{
-    GraphData  data( aPlots, aTitle, aXName, aYName, line_names, agraphType );
-#ifdef USE_QWT
-    graph_dlg = new GraphDialog(pmodule, data);
-    pVisorImp->openMdiChild( graph_dlg );
-#endif
-}
-
-GraphWindow::~GraphWindow()
-{
-}
-
-void GraphWindow::AddPoint( int nPlot, int nPoint )
-{
-#ifdef USE_QWT
-    graph_dlg->AddPoint( nPlot, nPoint );
-#endif
-}
-
-void GraphWindow::Show( const char * capAdd )
-{
-#ifdef USE_QWT
-    if( graph_dlg )
-        graph_dlg->ShowNew(capAdd);
-#endif
-}
-
-GraphData *GraphWindow::getGraphData() const
-{
-#ifdef USE_QWT
-    return &graph_dlg->gr_data;
-#else
-    return nullptr;
-#endif
-}
 
 /* for future using
 

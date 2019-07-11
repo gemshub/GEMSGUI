@@ -23,7 +23,7 @@
 #include "v_mod.h"
 #include "v_ipnc.h"
 #include "v_module.h"
-#include "graph.h"
+#include "graph_window.h"
 
 const int PE_RKLEN = 80;
 

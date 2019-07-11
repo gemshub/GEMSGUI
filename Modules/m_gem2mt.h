@@ -27,7 +27,7 @@ class TRWArrays;
 #ifndef IPMGEMPLUGIN
 
 #include "v_ipnc.h"
-#include "graph.h"
+#include "graph_window.h"
 
 #else
 // internal

@@ -21,7 +21,7 @@
 
 #include "v_mod.h"
 #include "v_ipnc.h"
-#include "graph.h"
+#include "graph_window.h"
 
 const int
 MAXGTDNAME =    16,
