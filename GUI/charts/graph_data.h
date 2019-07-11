@@ -39,7 +39,7 @@
 #include <QFont>
 #include <QColor>
 #include <QJsonObject>
-#include "plot_model.h"
+#include "chart_model.h"
 
 namespace jsonui {
 

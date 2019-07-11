@@ -7,8 +7,9 @@ SOURCES += \
     $$CHARTS_CPP/LegendDialogN.cpp \
     $$CHARTS_CPP/GraphDialogN.cpp \
     $$CHARTS_CPP/markershapes.cpp \
-#    $$CHARTS_CPP/plot_model.cpp \
-    $$CHARTS_CPP/chart_view.cpp
+    $$CHARTS_CPP/chart_model.cpp \
+    $$CHARTS_CPP/chart_view.cpp \
+    $$PWD/plot_model.cpp
     
 
 HEADERS += \
@@ -17,9 +18,10 @@ HEADERS += \
     $$CHARTS_H/LegendDialogN.h \
     $$CHARTS_H/SymbolDialogN.h \
     $$CHARTS_H/markershapes.h \
-    $$CHARTS_H/plot_model.h \
+    $$CHARTS_H/chart_model.h \
     $$CHARTS_H/chart_view.h \
-    $$PWD/from_jsonio.h
+    $$PWD/from_jsonio.h \
+    $$PWD/plot_model.h
 
 FORMS += \
     $$CHARTS_CPP/GraphDialog4N.ui \
