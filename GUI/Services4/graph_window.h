@@ -15,6 +15,8 @@ namespace jsonui {
 class GraphDialog;
 }
 using namespace jsonui;
+SeriesLineData convertor( const TPlotLine& plotData );
+
 #endif
 
 class TCModule;
@@ -27,6 +29,9 @@ class GraphWindow
     std::shared_ptr<jsonui::ChartData> m_chartData;
     /// Description of 2D modelS
     std::vector<std::shared_ptr<PlotModel>> m_plotModels;
+
+    ChartData *allocateData( TIArray<TPlot>& aPlots,
+           const char * aTitle, const char *aXName, const char *aYName, int agraphType  );
 #endif
 
 public:

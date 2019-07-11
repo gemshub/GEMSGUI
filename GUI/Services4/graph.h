@@ -41,6 +41,16 @@ enum GRAPHTYPES {
     LINES_3D     = 3    // future using in gem2mt
 };
 
+/**  new
+
+enum GRAPHTYPES_ {
+                 LineChart = 0,
+                 AreaChart = 1,
+                 BarChart  = 2,
+                 Isolines  = 3,   // under construction
+                 lines_3D  = 4    // for future using
+};
+*/
 
 /// Description of one plot curve - the representation of a series of points in the x-y plane
 class TPlotLine
@@ -138,7 +148,7 @@ public:
         name[15] = '\0';
     }
 
-    gstring getName()
+    gstring getName() const
     {
         return gstring(name, 0, 15);
     }

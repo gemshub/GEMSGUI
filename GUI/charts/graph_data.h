@@ -337,6 +337,12 @@ class ChartData : public QObject
 
    void setMinMaxRegion( double reg[4] );
 
+   void setAxisTypes( int axisX, int axisY )
+   {
+       axisTypeX = axisX;
+       axisTypeY = axisY;
+   }
+
 #ifndef NO_JSONIO
     void toJsonNode( jsonio::JsonDom *object ) const;
     void fromJsonNode( const jsonio::JsonDom *object );

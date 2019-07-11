@@ -1,3 +1,4 @@
+#include <QObject>
 #ifdef USE_QWT
 #include "GraphDialog.h"
 #else
@@ -22,22 +23,25 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
                    aLinesDesc, aAxisType, aXName, aYName);
     graph_dlg = new GraphDialog( pmodule, data );
 #else
-
-    /// Descriptions of model extracting data
-    std::vector<std::shared_ptr<jsonui::ChartDataModel>> chartModels;
-
-    for ( uint ii=0; ii<aPlots.GetCount(); ++ii)
+    // alloc memory
+    m_chartData.reset( allocateData( aPlots, aTitle, aXName, aYName, aAxisType[4] ));
+    // get data from settings
+    m_chartData->setBackgroundColor( QColor(aAxisType[1], aAxisType[2], aAxisType[3]) );
+    m_chartData->setAxisTypes( aAxisType[0], aAxisType[5] );
+    for(int i=0; i<4; i++ )
     {
-      m_plotModels.push_back( std::shared_ptr<PlotModel>( new PlotModel( aPlots[ii] )) );
-      chartModels.push_back( std::shared_ptr<ChartDataModel>( new ChartDataModel( m_plotModels.back().get() )) );
-      chartModels.back()->setXColumns(aPlots[ii].xColumns());
-      chartModels.back()->setYColumns(aPlots[ii].yColumns(), true);
+        m_chartData->region[i] = static_cast<double>(sizeReg[i]);
+        m_chartData->part[i]   = static_cast<double>(sizePart[i]);
     }
-    m_chartData.reset(new ChartData( chartModels, "Graph for window", "x", "y" ));
+
+    for (uint ii=0; ii<m_chartData->linesNumber(); ++ii)
+    {
+       m_chartData->setLineData( ii, convertor(aLinesDesc[ii]) );
+    }
 
     graph_dlg = new GraphDialog( pmodule, m_chartData.get(), nullptr );
-    //connect( graph_dlg, SIGNAL( dataChanged(ChartData* ) ),
-    //         _page,  SLOT( saveGraphData( ChartData* ) ) );
+    QObject::connect( graph_dlg, SIGNAL( dataChanged( ChartData* ) ),
+             pmodule->window(),  SLOT( saveGraphData( ChartData* ) ) );
     //connect( _page, SIGNAL( updateGraphWindow() ),
     //         graph_dlg,  SLOT( UpdateAll() ) );
 #endif
@@ -55,22 +59,20 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
     GraphData  data( aPlots, aTitle, aXName, aYName, line_names, agraphType );
     graph_dlg = new GraphDialog(pmodule, data);
 #else
+    // alloc memory
+    m_chartData.reset( allocateData( aPlots, aTitle, aXName, aYName, agraphType ));
 
-    /// Descriptions of model extracting data
-    std::vector<std::shared_ptr<jsonui::ChartDataModel>> chartModels;
-
-    for ( uint ii=0; ii<aPlots.GetCount(); ++ii)
+    // change names
+    for (uint ii=0; ii<line_names.GetCount(); ++ii)
     {
-      m_plotModels.push_back( std::shared_ptr<PlotModel>( new PlotModel( aPlots[ii] )) );
-      chartModels.push_back( std::shared_ptr<ChartDataModel>( new ChartDataModel( m_plotModels.back().get() )) );
-      chartModels.back()->setXColumns(aPlots[ii].xColumns());
-      chartModels.back()->setYColumns(aPlots[ii].yColumns(), true);
+       if( ii > m_chartData->linesNumber() )
+           break;
+       m_chartData->setLineData( ii,  std::string(line_names[ii].c_str())  );
     }
-    m_chartData.reset(new ChartData( chartModels, "Graph for window", "x", "y" ));
 
     graph_dlg = new GraphDialog( pmodule, m_chartData.get(), nullptr );
-    //connect( graph_dlg, SIGNAL( dataChanged(ChartData* ) ),
-    //         _page,  SLOT( saveGraphData( ChartData* ) ) );
+    QObject::connect( graph_dlg, SIGNAL( dataChanged( ChartData* ) ),
+             pmodule->window(),  SLOT( saveGraphData( ChartData* ) ) );
     //connect( _page, SIGNAL( updateGraphWindow() ),
     //         graph_dlg,  SLOT( UpdateAll() ) );
 #endif
@@ -80,6 +82,41 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
 GraphWindow::~GraphWindow()
 {
 }
+
+#ifndef USE_QWT
+
+
+SeriesLineData convertor( const TPlotLine& plotData )
+{
+    SeriesLineData data( plotData.getName().c_str(),
+           plotData.getType(), plotData.getSize(),
+           plotData.getLineSize(),  1, 0, plotData.getColor()  );
+    data.setXColumn(plotData.getIndex());
+    return data;
+}
+
+
+
+
+ChartData *GraphWindow::allocateData( TIArray<TPlot>& aPlots,
+                                      const char * aTitle, const char *aXName, const char *aYName, int agraphType  )
+{
+    uint ii;
+    /// Descriptions of model extracting data
+    std::vector<std::shared_ptr<jsonui::ChartDataModel>> chartModels;
+
+    for ( ii=0; ii<aPlots.GetCount(); ++ii)
+    {
+        m_plotModels.push_back( std::shared_ptr<PlotModel>( new PlotModel( aPlots[ii] )) );
+        chartModels.push_back( std::shared_ptr<ChartDataModel>( new ChartDataModel( m_plotModels.back().get() )) );
+        chartModels.back()->setXColumns(aPlots[ii].xColumns());
+        chartModels.back()->setYColumns(aPlots[ii].yColumns(), true);
+    }
+    return new ChartData( chartModels, aTitle, aXName, aYName, agraphType );
+}
+
+
+#endif
 
 void GraphWindow::AddPoint( int nPlot, int nPoint )
 {
