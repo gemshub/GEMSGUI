@@ -24,7 +24,10 @@
 #include <QPointF>
 #include <QVector>
 #include <QColor>
+
+#ifdef USE_QWT
 #include <qwt_series_data.h>
+#endif
 
 #include  "gstring.h"
 class GemDataStream;
@@ -202,9 +205,10 @@ public:
     int getPointLine( int line, QVector<QPointF>& points, int ndxX );
     /// Get point from one line to paint  (ndxX - column in Abscissa table)
     QPointF getPoint( int line, int number, int ndxX );
+#ifdef USE_QWT
     /// Get one line to paint cumulative curve (ndxX - column in Abscissa table)
     int getPointTube( int line, QVector<QwtIntervalSample>& points, int ndxAbs );
-
+#endif
     /// Get min and max values x,y for one curve line
     void getMaxMinLine( QPointF& min, QPointF& max, int line, int ndxX );
 
@@ -314,7 +318,15 @@ struct GraphData
 
 // must be changed ============================================
 
+#ifdef USE_QWT
 class GraphDialog;
+#else
+namespace jsonui {
+class GraphDialog;
+}
+using namespace jsonui;
+#endif
+
 class TCModule;
 
 class GraphWindow

@@ -32,7 +32,11 @@
 #include "SettingsDialog.h"
 #include "NewSystemDialog.h"
 #include "ProgressDialog.h"
+#ifdef USE_QWT
 #include "GraphDialog.h"
+#else
+#include "GraphDialogN.h"
+#endif
 //#include "LoadMessage.h"
 
 void TVisorImp::updateMenus()

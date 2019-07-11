@@ -35,6 +35,7 @@
 #include <QDialog>
 #include <QTableWidget>
 #include <QItemDelegate>
+#include  "v_module.h"
 
 namespace Ui {
 class GraphDialogData;
@@ -79,14 +80,25 @@ signals:
     void dataChanged( ChartData *achartData );
 
 public:
-     GraphDialog( ChartData *data, QWidget *parent,
+     GraphDialog( TCModule *pmodule, ChartData *data, QWidget *parent,
                   const char *title= "Graphics Dialog" );
     ~GraphDialog();
 
     /// Update all graphic lines with new title
     void UpdatePlots( const char *title );
 
+    gstring moduleName() const
+    {  return  (gstring("gr")+pModule->GetName());   }
+
+    gstring iconFile() const
+    {  return  pModule->GetIcon();   }
+
+    gstring mainModuleName() const
+    {  return  pModule->GetName();   }
+
 private:
+
+    TCModule *pModule;
 
     Ui::GraphDialogData *ui;
     QPushButton* bFragment;

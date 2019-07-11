@@ -2,26 +2,26 @@
 #./install-thirdparty.sh /home/svd/Qt/5.9/gcc_64
 
 SOURCES += \
-    $$PLOTS_DIR/graph_data.cpp \
-    $$PLOTS_DIR/SymbolDialog.cpp \
-    $$PLOTS_DIR/LegendDialog.cpp \
-    $$PLOTS_DIR/GraphDialog.cpp \
-    $$PLOTS_DIR/markershapes.cpp \
-    $$PLOTS_DIR/plot_model.cpp \
-    $$PLOTS_DIR/chart_view.cpp 
+    $$CHARTS_CPP/graph_data.cpp \
+    $$CHARTS_CPP/SymbolDialogN.cpp \
+    $$CHARTS_CPP/LegendDialogN.cpp \
+    $$CHARTS_CPP/GraphDialogN.cpp \
+    $$CHARTS_CPP/markershapes.cpp \
+#    $$CHARTS_CPP/plot_model.cpp \
+    $$CHARTS_CPP/chart_view.cpp
     
 
 HEADERS += \
-    $$PLOTS_DIR/graph_data.h \
-    $$PLOTS_DIR/GraphDialog.h \
-    $$PLOTS_DIR/LegendDialog.h \
-    $$PLOTS_DIR/SymbolDialog.h \
-    $$PLOTS_DIR/markershapes.h \
-    $$PLOTS_DIR/plot_model.h \
-    $$PLOTS_DIR/chart_view.h
+    $$CHARTS_H/graph_data.h \
+    $$CHARTS_H/GraphDialogN.h \
+    $$CHARTS_H/LegendDialogN.h \
+    $$CHARTS_H/SymbolDialogN.h \
+    $$CHARTS_H/markershapes.h \
+    $$CHARTS_H/plot_model.h \
+    $$CHARTS_H/chart_view.h
 
 FORMS += \
-    $$PLOTS_DIR/GraphDialog4.ui \
-    $$PLOTS_DIR/LegendDialog4.ui \
-    $$PLOTS_DIR/SymbolDialog4.ui 
+    $$CHARTS_CPP/GraphDialog4N.ui \
+    $$CHARTS_CPP/LegendDialog4N.ui \
+    $$CHARTS_CPP/SymbolDialog4N.ui
     

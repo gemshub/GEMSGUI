@@ -44,17 +44,17 @@
 #include <QPainter>
 #include <QHeaderView>
 
-#include "ui_GraphDialog4.h"
-#include "GraphDialog.h"
-#include "LegendDialog.h"
-#include "SymbolDialog.h"
+#include "ui_GraphDialog4N.h"
+#include "GraphDialogN.h"
+#include "LegendDialogN.h"
+#include "SymbolDialogN.h"
 #include "chart_view.h"
 
 namespace jsonui {
 
 /// The constructor
-GraphDialog::GraphDialog( ChartData *data, QWidget *parent, const char *title ):
-        QDialog( parent ), ui(new Ui::GraphDialogData),
+GraphDialog::GraphDialog( TCModule *pmodule, ChartData *data, QWidget *parent, const char *title ):
+        QDialog( parent ), pModule(pmodule), ui(new Ui::GraphDialogData),
         gr_data(data), isFragment(false)
 {
     ui->setupUi(this);

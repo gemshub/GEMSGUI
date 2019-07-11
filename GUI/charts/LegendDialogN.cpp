@@ -32,9 +32,9 @@
 
 #include <QColorDialog>
 #include <QFontDialog>
-#include "ui_LegendDialog4.h"
-#include "LegendDialog.h"
-#include "GraphDialog.h"
+#include "ui_LegendDialog4N.h"
+#include "LegendDialogN.h"
+#include "GraphDialogN.h"
 #include "graph_data.h"
 using namespace std;
 

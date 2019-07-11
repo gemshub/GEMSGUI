@@ -19,7 +19,12 @@
 //-------------------------------------------------------------------
 
 #include <cstdio>
+#ifdef USE_QWT
 #include "GraphDialog.h"
+#else
+#include "graph.h"
+#include "GraphDialogN.h"
+#endif
 #include "GemsMainWindow.h"
 #include "gdatastream.h"
 
@@ -169,6 +174,7 @@ int TPlot::getPointLine( int j, QVector<QPointF>& points, int ndxAbs )
     return dX;
 }
 
+#ifdef USE_QWT
 // Build array of points to draw one line
 // return number of points in line
 int TPlot::getPointTube( int line, QVector<QwtIntervalSample>& points, int ndxAbs )
@@ -190,6 +196,7 @@ int TPlot::getPointTube( int line, QVector<QwtIntervalSample>& points, int ndxAb
     }
     return dX;
 }
+#endif
 
 
 // Find min and max values x,y for one curve line
@@ -566,8 +573,10 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
 
        GraphData data(aPlots, aTitle, sizeReg, sizePart,
                 aLinesDesc, aAxisType, aXName, aYName);
+#ifdef USE_QWT
        graph_dlg = new GraphDialog( pmodule, data );
        pVisorImp->openMdiChild( graph_dlg );
+#endif
 }
 
 ///   The constructor
@@ -577,8 +586,10 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
                TCStringArray line_names, int agraphType  )
 {
    GraphData  data( aPlots, aTitle, aXName, aYName, line_names, agraphType );
+#ifdef USE_QWT
    graph_dlg = new GraphDialog(pmodule, data);
    pVisorImp->openMdiChild( graph_dlg );
+#endif
 }
 
 GraphWindow::~GraphWindow()
@@ -587,18 +598,26 @@ GraphWindow::~GraphWindow()
 
 void GraphWindow::AddPoint( int nPlot, int nPoint )
 {
-   graph_dlg->AddPoint( nPlot, nPoint );
+#ifdef USE_QWT
+    graph_dlg->AddPoint( nPlot, nPoint );
+#endif
 }
 
 void GraphWindow::Show( const char * capAdd )
 {
+#ifdef USE_QWT
     if( graph_dlg )
      graph_dlg->ShowNew(capAdd);
+#endif
 }
 
 GraphData *GraphWindow::getGraphData() const
 {
-  return &graph_dlg->gr_data;
+#ifdef USE_QWT
+    return &graph_dlg->gr_data;
+#else
+    return nullptr;
+#endif
 }
 
 /* for future using

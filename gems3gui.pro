@@ -7,6 +7,8 @@ TARGET		= gems3
 DEFINES         += Use_mt_mode
 DEFINES         += NODEARRAYLEVEL
 #DEFINES         += NOMUPNONLOGTERM
+DEFINES += USE_QWT
+
 
 CONFIG += c++11
 CONFIG += warn_on
@@ -40,7 +42,6 @@ macx-g++ {
 
 RESOURCES      = ./GUI/GUI.qrc
 
-QWT6_CPP       =  ./GUI/QWT
 SERVICES4_CPP  =  ./GUI/Services4
 DATAMAN_CPP    =  ./GUI/Dataman
 DIALOGS4_CPP   =  ./GUI/Dialogs4
@@ -49,7 +50,6 @@ SUBMODS_CPP    =  ./Modules/Submods
 NUMERICS_CPP   =  ./Modules/Numerics
 GEMS3K_CPP     =  ../standalone/GEMS3K
 
-QWT6_H  =  $$QWT6_CPP
 SERVICES4_H  =  $$SERVICES4_CPP
 DATAMAN_H    =  $$DATAMAN_CPP
 DIALOGS4_H   =  $$DIALOGS4_CPP
@@ -58,7 +58,6 @@ SUBMODS_H    =  $$SUBMODS_CPP
 NUMERICS_H   =  $$NUMERICS_CPP
 GEMS3K_H     =  $$GEMS3K_CPP
 
-DEPENDPATH   += $$QWT6_H
 DEPENDPATH   += $$SERVICES4_H
 DEPENDPATH   += $$DATAMAN_H  
 DEPENDPATH   += $$DIALOGS4_H 
@@ -67,7 +66,6 @@ DEPENDPATH   += $$SUBMODS_H
 DEPENDPATH   += $$NUMERICS_H 
 DEPENDPATH   += $$GEMS3K_H   
 
-INCLUDEPATH   += $$QWT6_H
 INCLUDEPATH   += $$SERVICES4_H
 INCLUDEPATH   += $$DATAMAN_H  
 INCLUDEPATH   += $$DIALOGS4_H 
@@ -76,18 +74,41 @@ INCLUDEPATH   += $$SUBMODS_H
 INCLUDEPATH   += $$NUMERICS_H 
 INCLUDEPATH   += $$GEMS3K_H   
 
+contains(DEFINES, USE_QWT){
+  QWT6_CPP       =  ./GUI/QWT
+  QWT6_H  =  $$QWT6_CPP
+  DEPENDPATH   += $$QWT6_H
+  INCLUDEPATH   += $$QWT6_H
+}
+!contains(DEFINES, USE_QWT){
+  CHARTS_CPP       =  ./GUI/charts
+  CHARTS_H  =  $$CHARTS_CPP
+  DEPENDPATH   += $CHARTS_H
+  INCLUDEPATH   += $$CHARTS_H
+}
+
+
 MOC_DIR = tmp
 UI_DIR  = $$MOC_DIR
 UI_SOURSEDIR  = $$MOC_DIR
 UI_HEADERDIR  = $$MOC_DIR
 OBJECTS_DIR       = obj
 
-include($$SERVICES4_CPP/Services4.pri)
 include($$DATAMAN_CPP/Dataman.pri)
-include($$DIALOGS4_CPP/Dialogs4.pri)
 include($$MODULES_CPP/Modules.pri)
 include($$SUBMODS_CPP/Submods.pri)
 include($$NUMERICS_CPP/Numerics.pri)
 include($$GEMS3K_CPP/gems3k.pri)
-include($$QWT6_CPP/qwt.pri)
 
+message("Defines: $$DEFINES")
+contains(DEFINES, USE_QWT) {
+
+   include($$SERVICES4_CPP/Services4_old.pri)
+   include($$DIALOGS4_CPP/Dialogs4_old.pri)
+   include($$QWT6_CPP/qwt.pri)
+}
+!contains(DEFINES, USE_QWT) {
+   include($$SERVICES4_CPP/Services4.pri)
+   include($$DIALOGS4_CPP/Dialogs4.pri)
+   include($$CHARTS_CPP/charts.pri)
+}

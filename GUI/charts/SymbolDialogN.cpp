@@ -32,8 +32,8 @@
 
 #include <QColorDialog>
 #include <QRadioButton>
-#include "ui_SymbolDialog4.h"
-#include "SymbolDialog.h"
+#include "ui_SymbolDialog4N.h"
+#include "SymbolDialogN.h"
 
 namespace jsonui {
 
