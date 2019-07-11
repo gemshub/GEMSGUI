@@ -18,7 +18,8 @@ HEADERS += \
     $$CHARTS_H/SymbolDialogN.h \
     $$CHARTS_H/markershapes.h \
     $$CHARTS_H/plot_model.h \
-    $$CHARTS_H/chart_view.h
+    $$CHARTS_H/chart_view.h \
+    $$PWD/from_jsonio.h
 
 FORMS += \
     $$CHARTS_CPP/GraphDialog4N.ui \

@@ -42,7 +42,11 @@
 #include <QGraphicsLayout>
 #include "graph_data.h"
 #include "chart_view.h"
+#ifdef NO_JSONIO
+#include "from_jsonio.h"
+#else
 #include "jsonio/nservice.h"
+#endif
 
 namespace jsonui {
 

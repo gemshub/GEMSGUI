@@ -172,8 +172,10 @@ public:
        xcolumn = aNdxX;
     }
 
+#ifndef NO_JSONIO
     void toJsonNode( jsonio::JsonDom *object ) const;
     void fromJsonNode( const jsonio::JsonDom *object );
+#endif
 
     void toJsonObject(QJsonObject& json) const;
     void fromJsonObject(const QJsonObject& json);
@@ -335,8 +337,10 @@ class ChartData : public QObject
 
    void setMinMaxRegion( double reg[4] );
 
-   void toJsonNode( jsonio::JsonDom *object ) const;
-   void fromJsonNode( const jsonio::JsonDom *object );
+#ifndef NO_JSONIO
+    void toJsonNode( jsonio::JsonDom *object ) const;
+    void fromJsonNode( const jsonio::JsonDom *object );
+#endif
 
    void toJsonObject(QJsonObject& json) const;
    void fromJsonObject(const QJsonObject& json);

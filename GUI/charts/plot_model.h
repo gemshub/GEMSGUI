@@ -37,9 +37,11 @@
 #include <QJsonObject>
 #include <QtCore/QAbstractTableModel>
 
+#ifndef NO_JSONIO
 namespace jsonio {
 class JsonDom;
 }
+#endif
 
 namespace jsonui {
 
@@ -167,8 +169,10 @@ public:
     { return ycolumns; }
 
 
+#ifndef NO_JSONIO
     void toJsonNode( jsonio::JsonDom *object ) const;
     void fromJsonNode( const jsonio::JsonDom *object );
+#endif
 
     void toJsonObject(QJsonObject& json) const;
     void fromJsonObject(const QJsonObject& json);

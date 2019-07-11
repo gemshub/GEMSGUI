@@ -35,9 +35,13 @@
 #include <QJsonArray>
 #include <QVector>
 #include "graph_data.h"
+#ifdef NO_JSONIO
+#include "from_jsonio.h"
+#else
 #include "jsonio/jsondom.h"
+#endif
+
 using namespace std;
-using namespace jsonio;
 
 namespace jsonui {
 
@@ -57,7 +61,8 @@ QColor colorAt(const QColor &start, const QColor &end, qreal pos)
 // SeriesLineData
 //---------------------------------------------------------------------------
 
-void SeriesLineData::toJsonNode( JsonDom *object ) const
+#ifndef NO_JSONIO
+void SeriesLineData::toJsonNode( jsonio::JsonDom *object ) const
 {
    object->appendInt( "gpt", markerShape );
    object->appendInt( "gps", markerSize );
@@ -71,7 +76,7 @@ void SeriesLineData::toJsonNode( JsonDom *object ) const
    object->appendString( "gnm",  name );
 }
 
-void SeriesLineData::fromJsonNode( const JsonDom *object )
+void SeriesLineData::fromJsonNode( const jsonio::JsonDom *object )
 {
     if(!object->findValue( "gpt", markerShape ) )
         markerShape = 0;
@@ -94,7 +99,7 @@ void SeriesLineData::fromJsonNode( const JsonDom *object )
     name = "";
     object->findValue( "gnm", name );
 }
-
+#endif
 
 
 void SeriesLineData::toJsonObject(QJsonObject& json) const
@@ -143,7 +148,8 @@ void ChartData::setMinMaxRegion( double reg[4] )
 
 }
 
-void ChartData::toJsonNode( JsonDom *object ) const
+#ifndef NO_JSONIO
+void ChartData::toJsonNode( jsonio::JsonDom *object ) const
 {
     int ii;
     object->appendString( "title", title );
@@ -184,7 +190,7 @@ void ChartData::toJsonNode( JsonDom *object ) const
      }
 }
 
-void ChartData::fromJsonNode( const JsonDom *object )
+void ChartData::fromJsonNode( const jsonio::JsonDom *object )
 {
    size_t ii;
    if( !object->findValue( "title", title ) )
@@ -240,6 +246,7 @@ void ChartData::fromJsonNode( const JsonDom *object )
         modelsdata[ii]->fromJsonNode( arr->getChild(ii) );
       }
 }
+#endif
 
 void ChartData::toJsonObject(QJsonObject& json) const
 {
@@ -340,7 +347,7 @@ void ChartData::updateXSelections()
         auto nLinN =  modelsdata[ii]->getSeriesNumber();
         for( size_t jj=0; jj<nLinN; jj++, nLines++ )
         {
-            jsonioErrIf( nLines >= defined_lines, "updateXSelections", "Error into graph data.." );
+            jsonio::jsonioErrIf( nLines >= defined_lines, "updateXSelections", "Error into graph data.." );
             if( linesdata[nLines].getXColumn() >= numxColms )
               linesdata[nLines].setXColumn( -1 );
         }
