@@ -56,18 +56,20 @@ git pull origin branches/devEJDB
 This deployment process is based on the "gemsdeployqtapp.sh" script, which is an augmented and extended "deployqtapp.sh" script from
 https://github.com/goblincoding/qtscripts by goblincoding, see also http://goblincoding.com/2013/11/07/deploying-qt-5-applications-on-ubuntu-12-04/  
 
-1. Make sure that Qt5 SDK is installed in the system or as ~/Qt in your home directory.
+1. Make sure that Qt5 SDK is installed in the system or locally as ~/Qt in your home directory (download open-source edition from https://qt.io/download).
 
-On latest versions of Linux, the complete Qt5 is available in the system. On Ubuntu 15.10, it can be installed using a command:
+On latest versions of Linux, the complete Qt5 is available in the system. On Ubuntu 16.04 or later, it can be installed using a command:
 ~~~
-sudo apt-get install qt5-default qttools5-dev
+sudo apt-get install qt5-default qttools5-dev qtcreator
 ~~~
 It may be necessary to install in addition:
 ~~~
 sudo apt-get install libqt5svg5 libqt5svg5-dev libqt5help5
 ~~~
 
-Now we assume that the Qt library is installed locally as "/home/you/Qt/5.3/src" and "/home/you/Qt/5.3/gcc_64" (or gcc_32). If not yet done, copy recursively the "/Docs/build-release" directory from the  folder where this file is located to the folder in which the "/gems-gui" folder is located. Typically, you should have the folders at the same level, as shown below.
+Now we assume that the Qt toolkit is installed in the system with the commands above, or Qt is installed locally as "~/Qt/5.13.0/gcc_64".
+
+If not yet done, copy recursively the "/Docs/build-release" directory from the  folder where this file is located to the folder in which the "/gems-gui" folder is located. Typically, you should have the folders at the same level, as shown below.
 ~~~
 ~/gitGEMS3
     /gems3gui
@@ -77,7 +79,7 @@ Now we assume that the Qt library is installed locally as "/home/you/Qt/5.3/src"
 ~~~
 We assume that both subfolders /gems3gui and /standalone are under git control and are checked out to "trunk" branch.
 
-2. Make sure that you have built (with the QtCreator) a release variant of GEM-Selektor v.3 in "/home/you/DevGEMS/devPhase/build-release", where an executable script "gemsdeployqtapp.sh" and several other files are located; if the script is not executable, open a terminal, cd to that directory, and run 
+2. Start the QtCreator (if Qt5 is in the system, type "qtcreator" in terminal and press Enter) and build a release variant of GEM-Selektor v.3 in "/home/you/DevGEMS/devPhase/build-release", where an executable script "gemsdeployqtapp.sh" and several other files are located; if the script is not executable, open a terminal, cd to that directory, and run 
 ~~~
 chmod u+x ./gemsdeployqtapp.sh.
 ~~~
