@@ -14,7 +14,7 @@ Permission to use the GEM-Selektor software is hereby granted free of charge for
 * Kulik D.A., Wagner T., Dmytrieva S.V., Kosakowski G., Hingerl F.F., Chudnenko K.V., Berner U. (2013): GEM-Selektor geochemical modeling package: revised algorithm and GEMS3K numerical kernel for coupled simulation codes. Computational Geosciences 17, 1-24.
 * Wagner T., Kulik D.A., Hingerl F.F., Dmytrieva S.V. (2012): GEM-Selektor geochemical modeling package: TSolMod library and data interface for multicomponent phase models. Canadian Mineralogist 50, 1173-1195.
 
-Version: currently 3.4.0.
+Version: currently 3.5.0.
 
 Learn more about GEM-Selektor from http://gems.web.psi.ch 
 
@@ -67,7 +67,7 @@ It may be necessary to install in addition:
 sudo apt-get install libqt5svg5 libqt5svg5-dev libqt5help5
 ~~~
 
-Now we assume that the Qt toolkit is installed in the system with the commands above, or Qt is installed locally as "~/Qt/5.13.0/gcc_64".
+Now we assume that the Qt toolkit is installed in the system with the commands above, or Qt is installed locally as "~/Qt/5.9.8/gcc_64".
 
 If not yet done, copy recursively the "/Docs/build-release" directory from the  folder where this file is located to the folder in which the "/gems-gui" folder is located. Typically, you should have the folders at the same level, as shown below.
 ~~~
@@ -94,7 +94,7 @@ This will create an archive "Gems3-app.tgz". Optionally, to investigate the scri
 $ ./gemsdeployqtapp.sh gems3 > ./output.txt
 ~~~
 
-4. Rename the file "Gems3-app.tgz" to "Gems3.3-<rev1>.<rev2>-linux-x86-64.tgz", for instance "Gems3.3-2558.960-linux-x86-64.tgz". It can now be provided. 
+4. Rename the file "Gems3-app.tgz" to "Gems3.5-<rev1>.<rev2>-linux-x86-64.tgz", for instance "Gems3.5-2558.960-linux-x86-64.tgz". It can now be provided. 
 
 5. For installation steps, see INSTALL-linux.txt. Install and test if it works. If gems3 does not start, try the following. In terminal, cd to "/Gems3-app/platforms" and run there the script "fixdep.sh" with superuser rights:
 ~~~
@@ -105,9 +105,9 @@ This script needs superuser because it can automatically download the necessary 
 
 ### Mac OSX ###
 
-This deployment process is based on the "macdeployqt" utility, located in ~/Qt/5.3/clang_64/bin/ folder.
+This deployment process is based on the "macdeployqt" utility, located in ~/Qt/5.9.8/clang_64/bin/ folder.
 
-1. Make sure that the Qt5 SDK is installed as ~/Qt or in similar folder. We assume that the Qt library is located in ~/Qt/5.3/clang_64/bin/ and Qt Tools (QtCreator etc.) are located in ~/Qt/.
+1. Make sure that the Qt5 SDK is installed as ~/Qt or in similar folder. We assume that the Qt library is located in ~/Qt/5.9.8/clang_64/bin/ and Qt Tools (QtCreator etc.) are located in ~/Qt/.
 
 2. If not yet done, find ~/DevGEMS/trunk/gems-gui/Docs/mac-build-release directory and copy it recursively into ~/Applications, then rename it to ~/Applications/devPhase. Dive into the ~/Applications/trunk/gems3.app/Contents and refresh recursively the /Resources subfolder contents by copying it from ~/DevGEMS/trunk/gems-gui/Resources.
 
@@ -146,13 +146,13 @@ be distributed.
 This deployment process is based on the "windeployqt.exe" utility, which is an augmented "windeployqt.exe" binary by lkc, taken from
 https://github.com/lkc/windeployqt.
 
-1. Make sure that the Qt5 SDK is installed as C:\Qt or in similar folder. We assume that the Qt library is located in C:\Qt5\5.3\mingw482_32\bin and Qt Tools are located in C:\Qt5\Tools\mingw482_32\bin (or similar, depending on the current Qt version, MinGW version and their locations).  
+1. Make sure that the Qt5 SDK is installed as C:\Qt or in similar folder. We assume that the Qt library is located in C:\Qt5\5.9.8\mingw482_32\bin and Qt Tools are located in C:\Qt5\Tools\mingw482_32\bin (or similar, depending on the current Qt version, MinGW version and their locations).  
 
 2. If not yet done, go into the .\Docs\win-build-release directory and copy recursively the folder \GEMS3DEPLOY to C:\ drive. Dive into the  C:\GEMS3DEPLOY\Gems3-app folder. Refresh recursively the \Resources subfolder (from .gems-gui\Resources in GEM-Selektor source code tree). 
 
 3. In the C:\GEMS3DEPLOY\Gems3-app folder, edit the "runwindeployqt.bat" file to make sure that it contains the correct paths to 
-C:\Qt5\5.3\mingw482_32\bin and C:\Qt5\Tools\mingw482_32\bin directories (modify to actual ones, if necessary). Copy (or refresh) the files 
-qcollectiongenerator.exe, qhelpconverter.exe and qhelpgenerator.exe from C:\Qt5\5.3\mingw482_32\bin to C:\GEMS3DEPLOY\Gems3-app folder.   
+C:\Qt5\5.9.8\mingw482_32\bin and C:\Qt5\Tools\mingw482_32\bin directories (modify to actual ones, if necessary). Copy (or refresh) the files 
+qcollectiongenerator.exe, qhelpconverter.exe and qhelpgenerator.exe from C:\Qt5\5.9.8\mingw482_32\bin to C:\GEMS3DEPLOY\Gems3-app folder.   
 
 4. Using QtCreator, build the actual release variant of gems3.exe. Typically, you should have something like "C:\DevGEMS\trunk\gems-gui";
 "C:\DevGEMS\trunk\standalone"; and "C:\DevGEMS\trunk\build-release" folders at the same level. Find gems3.exe in the latter folder and copy it into the C:\GEMS3DEPLOY\Gems3-app folder.  
