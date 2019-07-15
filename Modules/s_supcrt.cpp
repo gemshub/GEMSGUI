@@ -810,8 +810,8 @@ void TSupcrt::Born92(double TK, double Pbars, double Dgcm3, double betab,
     *   at state conditions beyond the validity limits of the aqueous
     *   species equation of state.                                   */
 
-    if ( (TdegC > TMAX + TOL) || (Pbars > PMAX + TOL) )
-        return;
+//    if ( (TdegC > TMAX + TOL) || (Pbars > PMAX + TOL) ) // commented out DM 15.07.2019 - to be able to make calculations with aq models above 5000, other than HKF
+//        return;
     if (epseqn == 4)
     {
         /* d2edT2=0.; */
