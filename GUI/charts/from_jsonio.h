@@ -1,6 +1,7 @@
 #ifndef FROM_JSONIO_H
 #define FROM_JSONIO_H
 
+#include <math.h>
 #include <limits>
 #include "verror.h"
 
