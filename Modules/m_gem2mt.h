@@ -481,6 +481,9 @@ public:
     void RecordPrint( const char *key=0 ); //sddata key
     void RecordPlot( const char *key );
     bool SaveGraphData( GraphData* graph );
+#ifndef USE_QWT
+    bool SaveChartData( jsonui::ChartData* grdata );
+#endif
     //void CmHelp();
     const char* GetHtml();
 

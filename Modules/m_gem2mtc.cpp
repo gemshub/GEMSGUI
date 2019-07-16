@@ -947,7 +947,10 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
           mtp->xNames, mtp->yNames, lnames );
     }
 }
-
+#ifndef USE_QWT
+    bool TGEM2MT::SaveChartData( jsonui::ChartData* /*graph*/ )
+    { return false; }
+#endif
 
 // Save changes was done in Plotting dialog
 bool

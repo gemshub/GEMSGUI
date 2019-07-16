@@ -36,14 +36,23 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
 
     for (uint ii=0; ii<m_chartData->linesNumber(); ++ii)
     {
-       m_chartData->setLineData( ii, convertor(aLinesDesc[ii]) );
+        auto seriesdata = convertor(aLinesDesc[ii]);
+        auto plot =  m_chartData->getPlot( ii );
+        if( plot >= 0 && m_plotModels[plot]->absCount() <= seriesdata.getXColumn() )
+           seriesdata.setXColumn(0);
+        m_chartData->setLineData( ii, seriesdata );
     }
 
     graph_dlg = new GraphDialog( pmodule, m_chartData.get() );
-    QObject::connect( graph_dlg, SIGNAL( dataChanged( ChartData* ) ),
-             pmodule->window(),  SLOT( saveGraphData( ChartData* ) ) );
-    //connect( _page, SIGNAL( updateGraphWindow() ),
-    //         graph_dlg,  SLOT( UpdateAll() ) );
+    TCModuleImp *topw =	 qobject_cast<TCModuleImp *>( pmodule->window());
+    if( topw )
+    {
+
+        QObject::connect( graph_dlg, SIGNAL( dataChanged( jsonui::ChartData* ) ),
+                          topw,  SLOT( saveGraphData( jsonui::ChartData* ) ) );
+        //connect( _page, SIGNAL( updateGraphWindow() ),
+        //         graph_dlg,  SLOT( UpdateAll() ) );
+    }
 #endif
 
     pVisorImp->openMdiChild( graph_dlg );
@@ -65,16 +74,21 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
     // change names
     for (uint ii=0; ii<line_names.GetCount(); ++ii)
     {
-       if( ii > m_chartData->linesNumber() )
-           break;
-       m_chartData->setLineData( ii,  std::string(line_names[ii].c_str())  );
+        if( ii > m_chartData->linesNumber() )
+            break;
+        m_chartData->setLineData( ii,  std::string(line_names[ii].c_str())  );
     }
 
     graph_dlg = new GraphDialog( pmodule, m_chartData.get() );
-    QObject::connect( graph_dlg, SIGNAL( dataChanged( ChartData* ) ),
-             pmodule->window(),  SLOT( saveGraphData( ChartData* ) ) );
-    //connect( _page, SIGNAL( updateGraphWindow() ),
-    //         graph_dlg,  SLOT( UpdateAll() ) );
+    TCModuleImp *topw =	 qobject_cast<TCModuleImp *>( pmodule->window());
+    if( topw )
+    {
+
+        QObject::connect( graph_dlg, SIGNAL( dataChanged( jsonui::ChartData* ) ),
+                          topw,  SLOT( saveGraphData( jsonui::ChartData* ) ) );
+        //connect( _page, SIGNAL( updateGraphWindow() ),
+        //         graph_dlg,  SLOT( UpdateAll() ) );
+    }
 #endif
     pVisorImp->openMdiChild( graph_dlg );
 }
@@ -89,8 +103,8 @@ GraphWindow::~GraphWindow()
 SeriesLineData convertor( const TPlotLine& plotData )
 {
     SeriesLineData data( plotData.getName().c_str(),
-           plotData.getType(), plotData.getSize(),
-           plotData.getLineSize(),  1, 0, plotData.getColor()  );
+                         plotData.getType(), plotData.getSize(),
+                         plotData.getLineSize(),  1, 0, plotData.getColor()  );
     data.setXColumn(plotData.getIndex());
     return data;
 }

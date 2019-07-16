@@ -139,6 +139,9 @@ public:
     //void CmHelp();
     const char* GetHtml();
     bool SaveGraphData( GraphData* graph );
+#ifndef USE_QWT
+    //bool SaveChartData( jsonui::ChartData* grdata );
+#endif
 };
 
 #endif  // _m_rtparm_h

@@ -175,6 +175,9 @@ public:
     }
 
     bool SaveGraphData( GraphData* graph );
+#ifndef USE_QWT
+    //bool SaveChartData( jsonui::ChartData* grdata );
+#endif
     //void CmHelp();
     const char* GetHtml();
 

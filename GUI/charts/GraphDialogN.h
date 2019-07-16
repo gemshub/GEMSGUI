@@ -80,7 +80,7 @@ public slots:
     void restoreRow();
 
 signals:
-    void dataChanged( ChartData *achartData );
+    void dataChanged( jsonui::ChartData *achartData );
 
 public:
      GraphDialog( TCModule *pmodule, ChartData *data, const string& title= "Graphics Dialog" );

@@ -32,7 +32,12 @@ class QWidget;
 */
 
 struct GraphData;
-//struct TPlotLine;
+
+#ifndef USE_QWT
+namespace jsonui {
+class ChartData;
+}
+#endif
 
 class TSubModule
 {
@@ -143,6 +148,12 @@ public:
                                      int /*keyType*/ )
     { return"";}
 
+#ifndef USE_QWT
+    //-- for graphic data set
+
+    virtual bool SaveChartData( jsonui::ChartData* /*graph*/ )
+    { return false; }
+#endif
 };
 
 // --- Parametres of function GetKeyofRecord()

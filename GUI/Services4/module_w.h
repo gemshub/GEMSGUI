@@ -28,7 +28,6 @@
 
 class TCWindow;
 
-
 /*!
    \class TCModuleImp
    \brief This class provides windowing for modules
@@ -49,14 +48,18 @@ class TCModuleImp: public QDialog//QMainWindow
     time_t last_update;
     int viewmode;
 
+
 protected:
     void closeEvent(QCloseEvent*);
 
-public/* protected*/ slots:
+public slots:
     
     void CloseWin()
     {  close();  }
-    
+#ifndef USE_QWT
+    void saveGraphData( jsonui::ChartData* );
+#endif
+
 public:
     TCModuleImp(int iMod, int page=0, int viewmode=0);
     virtual ~TCModuleImp();

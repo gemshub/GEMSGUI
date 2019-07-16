@@ -40,6 +40,11 @@ public:
     QVariant headerData ( int section, Qt::Orientation orientation, int role ) const;
 
     void resetMatrixData();
+
+    int absCount() const
+    {
+        return m_plot.getNAbs();
+    }
 };
 
 #endif // PLOTMODEL_H

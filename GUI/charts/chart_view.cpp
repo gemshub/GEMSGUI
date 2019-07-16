@@ -388,6 +388,7 @@ void PlotChartViewPrivate::updateGrid()
     if( !axisX || !axisY)
         return;
 
+
     updateMinMax();
 
     chart->setBackgroundBrush( gr_data->getBackgroundColor() );
