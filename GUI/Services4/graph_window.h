@@ -16,6 +16,7 @@ class GraphDialog;
 }
 using namespace jsonui;
 SeriesLineData convertor( const TPlotLine& plotData );
+TPlotLine convertor( const SeriesLineData& serData );
 
 #endif
 
@@ -54,7 +55,7 @@ public:
     // Add new point to graph
     void AddPoint( int nPlot, int nPoint );
     void ShowGraph(const char * capAdd=nullptr); // new show all lines
-    GraphData *getGraphData() const;
+    void *getGraphData() const;
 
 };
 

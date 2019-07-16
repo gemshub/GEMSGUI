@@ -109,6 +109,14 @@ SeriesLineData convertor( const TPlotLine& plotData )
     return data;
 }
 
+TPlotLine convertor( const SeriesLineData& serData )
+{
+    TPlotLine data( serData.getName().c_str(),
+                             serData.getMarkerShape(), serData.getMarkerSize(), serData.getPenSize(),
+                             25, 0, 150  );
+    //data.setXColumn(plotData.getIndex());
+    return data;
+}
 
 
 
@@ -155,12 +163,12 @@ void GraphWindow::ShowGraph( const char * capAdd )
     }
 }
 
-GraphData *GraphWindow::getGraphData() const
+void *GraphWindow::getGraphData() const
 {
 #ifdef USE_QWT
     return &graph_dlg->gr_data;
 #else
-    return nullptr;
+    return m_chartData.get();
 #endif
 }
 
