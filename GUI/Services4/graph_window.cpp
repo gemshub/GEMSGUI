@@ -120,17 +120,25 @@ ChartData *GraphWindow::allocateData( TIArray<TPlot>& aPlots,
 
 void GraphWindow::AddPoint( int nPlot, int nPoint )
 {
+    if( graph_dlg ) {
+
 #ifdef USE_QWT
-    graph_dlg->AddPoint( nPlot, nPoint );
+        graph_dlg->AddPoint( nPlot, nPoint );
+#else
+        //graph_dlg->UpdatePlots(capAdd);
 #endif
+    }
 }
 
-void GraphWindow::Show( const char * capAdd )
+void GraphWindow::ShowGraph( const char * capAdd )
 {
+    if( graph_dlg ){
 #ifdef USE_QWT
-    if( graph_dlg )
         graph_dlg->ShowNew(capAdd);
+#else
+        graph_dlg->UpdatePlots(capAdd);
 #endif
+    }
 }
 
 GraphData *GraphWindow::getGraphData() const

@@ -736,7 +736,7 @@ void TGEM2MT::CalcGraph()
  char buf[300];
  sprintf(buf, "  ( time %lg; step %ld )", mtp->cTau, mtp->ct );
   if( gd_gr )
-    gd_gr->Show( buf);
+    gd_gr->ShowGraph( buf);
 }
 
 // Calculation of initialization script

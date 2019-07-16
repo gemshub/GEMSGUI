@@ -1468,7 +1468,7 @@ else {
               {
                 // show full graph
                 if( gd_gr )
-                  gd_gr->Show();
+                  gd_gr->ShowGraph();
 
                 // export script
                 if( text_fmt )

@@ -53,7 +53,7 @@ public:
 
     // Add new point to graph
     void AddPoint( int nPlot, int nPoint );
-    void Show(const char * capAdd=nullptr); // new show all lines
+    void ShowGraph(const char * capAdd=nullptr); // new show all lines
     GraphData *getGraphData() const;
 
 };

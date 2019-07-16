@@ -121,8 +121,9 @@ void GraphDialog::closeEvent(QCloseEvent *ev)
 
 void GraphDialog::UpdatePlots( const char* title )
 {
-   setWindowTitle( title );
-   plot->updateAll();
+    if( title )
+     setWindowTitle( title );
+   plot->updateLines();
 }
 
 void GraphDialog::UpdateAll(const char* title )

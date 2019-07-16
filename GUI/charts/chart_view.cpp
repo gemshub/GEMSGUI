@@ -56,32 +56,58 @@ class PlotChartViewPrivate
 public:
 
     explicit PlotChartViewPrivate( ChartData *graphdata,
-            QChartView *parent, QChart* achart ):
+                                   QChartView *parent, QChart* achart ):
         view(parent), chart(achart), gr_data(graphdata)
     {  }
 
     ~PlotChartViewPrivate()
     {
-       clearAll();
+        clearAll();
     }
 
-    void showPlot();
+    void showPlot()
+    {
+        showPlotInternal();
+        makeGrid();
+    }
     void updateSeries( size_t nline );
     void highlightSeries( size_t line, bool enable  );
     void updateAll()
     {
         clearAll();
         showPlot();
-     }
+    }
 
-   void updateFragment( bool newFragment )
-   {
-     if(isFragment != newFragment )
-     {
-        isFragment = newFragment;
-        updateMinMax();
-     }
-   }
+    void updateLines()
+    {
+        clearLines();
+        showPlotInternal();
+        for( uint ii=0; ii<gr_series.size(); ii++ )
+        {
+            if( gr_series[ii].get() )
+            {
+                gr_series[ii]->attachAxis(axisX);
+                gr_series[ii]->attachAxis(axisY);
+            }
+        }
+        for( uint ii=0; ii<gr_points.size(); ii++ )
+        {
+            if( gr_points[ii].get() )
+            {
+                gr_points[ii]->attachAxis(axisX);
+                gr_points[ii]->attachAxis(axisY);
+            }
+        }
+    }
+
+    void updateFragment( bool newFragment )
+    {
+        if(isFragment != newFragment )
+        {
+            isFragment = newFragment;
+            updateMinMax();
+        }
+    }
 
     void updateGrid();
     void updateMinMax();
@@ -89,7 +115,7 @@ public:
     void addLabel(  const QPointF& pointF, const QString& label )
     {
         if( mapLabels.find(label) != mapLabels.end() )
-          chart->removeSeries(mapLabels[label].get());
+            chart->removeSeries(mapLabels[label].get());
 
         QScatterSeries *series  = newScatterLabel( pointF, label );
         chart->addSeries(series);
@@ -101,47 +127,54 @@ public:
 
 protected:
 
-     QChartView *view;
-     QChart* chart;
-     ChartData *gr_data;
+    QChartView *view;
+    QChart* chart;
+    ChartData *gr_data;
 
-     std::vector<std::shared_ptr<QXYSeries> >       gr_series;
-     std::vector<std::shared_ptr<QVXYModelMapper> > series_mapper;
-     std::vector<std::shared_ptr<QScatterSeries> >  gr_points;
-     std::vector<std::shared_ptr<QVXYModelMapper> > points_mapper;
-     std::vector<std::shared_ptr<QAreaSeries> >     gr_areas;
-     QValueAxis *axisX =nullptr;
-     QValueAxis *axisY =nullptr;
-     std::map<QString,std::shared_ptr<QScatterSeries> > mapLabels;
-     bool isFragment = false;
+    std::vector<std::shared_ptr<QXYSeries> >       gr_series;
+    std::vector<std::shared_ptr<QVXYModelMapper> > series_mapper;
+    std::vector<std::shared_ptr<QScatterSeries> >  gr_points;
+    std::vector<std::shared_ptr<QVXYModelMapper> > points_mapper;
+    std::vector<std::shared_ptr<QAreaSeries> >     gr_areas;
+    QValueAxis *axisX =nullptr;
+    QValueAxis *axisY =nullptr;
+    std::map<QString,std::shared_ptr<QScatterSeries> > mapLabels;
+    bool isFragment = false;
 
 private:
 
-     void clearAll();
+    void clearLines();
+    void clearAxis();
+    void clearAll()
+    {
+        clearLines();
+        clearAxis();
+    }
 
-     QXYSeries *newSeriesLine( const SeriesLineData& linedata );
-     QScatterSeries *newScatterSeries( const SeriesLineData& linedata );
-     void updateScatterSeries( QScatterSeries* series, const SeriesLineData& linedata );
-     void mapSeriesLine( QXYSeries *series, QVXYModelMapper *mapper,
-                       ChartDataModel* chmodel, int ycolumn, int xcolumn );
+    QXYSeries *newSeriesLine( const SeriesLineData& linedata );
+    QScatterSeries *newScatterSeries( const SeriesLineData& linedata );
+    void updateScatterSeries( QScatterSeries* series, const SeriesLineData& linedata );
+    void mapSeriesLine( QXYSeries *series, QVXYModelMapper *mapper,
+                        ChartDataModel* chmodel, int ycolumn, int xcolumn );
 
-     void addPlotLine( ChartDataModel* chmodel, int ycolumn, const SeriesLineData& linedata );
-     void addScatterSeries( ChartDataModel* chmodel, int ycolumn, const SeriesLineData& linedata   );
+    void addPlotLine( ChartDataModel* chmodel, int ycolumn, const SeriesLineData& linedata );
+    void addScatterSeries( ChartDataModel* chmodel, int ycolumn, const SeriesLineData& linedata   );
 
-     void showPlotLines();
-     void makeGrid();
+    void showPlotLines();
+    void makeGrid();
+    void showPlotInternal();
 
-     QScatterSeries* newScatterLabel( const QPointF& pointF, const QString& label );
+    QScatterSeries* newScatterLabel( const QPointF& pointF, const QString& label );
 
-     void showAreaChart();
-     void updateSeriesLine( size_t nline );
-     void updateAreaLine( size_t nline );
+    void showAreaChart();
+    void updateSeriesLine( size_t nline );
+    void updateAreaLine( size_t nline );
 
 };
 
 
 
-void PlotChartViewPrivate::clearAll()
+void PlotChartViewPrivate::clearLines()
 {
     mapLabels.clear();
     series_mapper.clear();
@@ -149,8 +182,11 @@ void PlotChartViewPrivate::clearAll()
     points_mapper.clear();
     gr_points.clear();
     gr_areas.clear();
-
     chart->removeAllSeries();
+}
+
+void PlotChartViewPrivate::clearAxis()
+{
     chart->removeAxis(axisX);
     chart->removeAxis(axisY);
     delete axisX;
@@ -159,17 +195,16 @@ void PlotChartViewPrivate::clearAll()
     axisY =nullptr;
 }
 
-
 QXYSeries* PlotChartViewPrivate::newSeriesLine( const SeriesLineData& linedata )
 {
     QXYSeries* series = nullptr;
     if( linedata.getPenSize() <= 0 )
-     return series;
+        return series;
 
     if( linedata.getSpline()  )
-         series = new QSplineSeries;
+        series = new QSplineSeries;
     else
-         series = new QLineSeries;
+        series = new QLineSeries;
 
     series->setName(linedata.getName().c_str());
     QPen pen = series->pen();
@@ -184,7 +219,7 @@ QScatterSeries* PlotChartViewPrivate::newScatterSeries( const SeriesLineData& li
     QScatterSeries *series = nullptr;
 
     if( linedata.getMarkerSize() <= 2 )
-     return series;
+        return series;
 
     series = new QScatterSeries;
     updateScatterSeries( series, linedata );
@@ -198,12 +233,12 @@ void PlotChartViewPrivate::updateScatterSeries( QScatterSeries* series, const Se
     series->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
     series->setMarkerSize(linedata.getMarkerSize());
     series->setBrush( markerShapeImage( linedata ).scaled(
-                      linedata.getMarkerSize(),linedata.getMarkerSize()));
+                          linedata.getMarkerSize(),linedata.getMarkerSize()));
 }
 
 void PlotChartViewPrivate::mapSeriesLine( QXYSeries *series,
-              QVXYModelMapper *mapper, ChartDataModel* chmodel,
-              int ycolumn, int xcolumn )
+                                          QVXYModelMapper *mapper, ChartDataModel* chmodel,
+                                          int ycolumn, int xcolumn )
 {
     mapper->setXColumn(xcolumn+1);
     mapper->setYColumn(ycolumn+1);
@@ -219,7 +254,7 @@ void PlotChartViewPrivate::addPlotLine(
     QVXYModelMapper *mapper = new QVXYModelMapper;
     mapSeriesLine( series, mapper, chmodel, ycolumn, chmodel->getXColumn(linedata.getXColumn()) );
     if( series )
-      chart->addSeries(series);
+        chart->addSeries(series);
     gr_series.push_back(std::shared_ptr<QXYSeries>(series));
     series_mapper.push_back(std::shared_ptr<QVXYModelMapper>(mapper));
 }
@@ -232,7 +267,7 @@ void PlotChartViewPrivate::addScatterSeries(
     QVXYModelMapper *mapper = new QVXYModelMapper;
     mapSeriesLine( series, mapper, chmodel, ycolumn, chmodel->getXColumn(linedata.getXColumn()) );
     if( series )
-       chart->addSeries(series);
+        chart->addSeries(series);
     gr_points.push_back(std::shared_ptr<QScatterSeries>(series));
     points_mapper.push_back(std::shared_ptr<QVXYModelMapper>(mapper));
 }
@@ -240,16 +275,16 @@ void PlotChartViewPrivate::addScatterSeries(
 
 void PlotChartViewPrivate::showPlotLines()
 {
-  size_t ii, nline;
-  for( ii=0, nline =0; ii < gr_data->modelsNumber(); ii++)
-  {
-   auto  srmodel = gr_data->modelData( ii );
-   for(size_t jj=0; jj < srmodel->getSeriesNumber(); jj++, nline++ )
-   {
-      addPlotLine( srmodel, srmodel->getYColumn(jj), gr_data->lineData(nline) );
-      addScatterSeries( srmodel, srmodel->getYColumn(jj), gr_data->lineData(nline)   );
-   }
-  }
+    size_t ii, nline;
+    for( ii=0, nline =0; ii < gr_data->modelsNumber(); ii++)
+    {
+        auto  srmodel = gr_data->modelData( ii );
+        for(size_t jj=0; jj < srmodel->getSeriesNumber(); jj++, nline++ )
+        {
+            addPlotLine( srmodel, srmodel->getYColumn(jj), gr_data->lineData(nline) );
+            addScatterSeries( srmodel, srmodel->getYColumn(jj), gr_data->lineData(nline)   );
+        }
+    }
 }
 
 void PlotChartViewPrivate::showAreaChart()
@@ -262,47 +297,47 @@ void PlotChartViewPrivate::showAreaChart()
     size_t ii, nline;
     for( ii=0, nline =0; ii < gr_data->modelsNumber(); ii++)
     {
-     auto  srmodel = gr_data->modelData( ii );
-     for(size_t jj=0; jj < srmodel->getSeriesNumber(); jj++, nline++ )
-     {
-        QLineSeries *upperSeries = new QLineSeries(chart);
-
-        // extract data
-        delete lineSeries;
-        delete mapper;
-        lineSeries =  new QLineSeries;
-        mapper = new QVXYModelMapper;
-        mapSeriesLine( lineSeries, mapper, srmodel, srmodel->getYColumn(jj), -1 );
-        const QVector<QPointF>& data =  lineSeries->pointsVector();
-
-        for (int j=0; j < data.count(); j++)
+        auto  srmodel = gr_data->modelData( ii );
+        for(size_t jj=0; jj < srmodel->getSeriesNumber(); jj++, nline++ )
         {
-         if (lowerSeries)
-         {
-           const QVector<QPointF>& points = lowerSeries->pointsVector();
-           upperSeries->append(QPointF(j, points[j].y() + data[j].y()));
-         } else
-         {
-           upperSeries->append(QPointF(j, data[j].y()));
-         }
-        }
-        QAreaSeries *area = new QAreaSeries(upperSeries, lowerSeries);
-        // define colors
-        area->setName(gr_data->lineData(nline).getName().c_str());
-        QPen pen = area->pen();
-        getLinePen( pen, gr_data->lineData(nline)  );
-        area->setPen(pen);
-        area->setColor(pen.color());
+            QLineSeries *upperSeries = new QLineSeries(chart);
 
-        chart->addSeries(area);
-        gr_areas.push_back(std::shared_ptr<QAreaSeries>(area));
-        lowerSeries = upperSeries;
-        /// chart->createDefaultAxes(); //???
-      }
+            // extract data
+            delete lineSeries;
+            delete mapper;
+            lineSeries =  new QLineSeries;
+            mapper = new QVXYModelMapper;
+            mapSeriesLine( lineSeries, mapper, srmodel, srmodel->getYColumn(jj), -1 );
+            const QVector<QPointF>& data =  lineSeries->pointsVector();
+
+            for (int j=0; j < data.count(); j++)
+            {
+                if (lowerSeries)
+                {
+                    const QVector<QPointF>& points = lowerSeries->pointsVector();
+                    upperSeries->append(QPointF(j, points[j].y() + data[j].y()));
+                } else
+                {
+                    upperSeries->append(QPointF(j, data[j].y()));
+                }
+            }
+            QAreaSeries *area = new QAreaSeries(upperSeries, lowerSeries);
+            // define colors
+            area->setName(gr_data->lineData(nline).getName().c_str());
+            QPen pen = area->pen();
+            getLinePen( pen, gr_data->lineData(nline)  );
+            area->setPen(pen);
+            area->setColor(pen.color());
+
+            chart->addSeries(area);
+            gr_areas.push_back(std::shared_ptr<QAreaSeries>(area));
+            lowerSeries = upperSeries;
+            /// chart->createDefaultAxes(); //???
+        }
     }
 }
 
-void PlotChartViewPrivate::showPlot()
+void PlotChartViewPrivate::showPlotInternal()
 {
     switch( gr_data->graphType )
     {
@@ -317,31 +352,30 @@ void PlotChartViewPrivate::showPlot()
     case lines_3D:
         break;
     }
-    makeGrid();
 }
 
 void PlotChartViewPrivate::updateMinMax()
 {
     if( !axisX || !axisY)
-      return;
+        return;
 
     if( isFragment )
     {
-      if( !jsonio::essentiallyEqual( gr_data->part[0], gr_data->part[1]) &&
-         !jsonio::essentiallyEqual( gr_data->part[2], gr_data->part[3]) )
-      {
-         axisX->setRange(gr_data->part[0], gr_data->part[1]);
-         axisY->setRange(gr_data->part[2], gr_data->part[3]);
-      }
+        if( !jsonio::essentiallyEqual( gr_data->part[0], gr_data->part[1]) &&
+                !jsonio::essentiallyEqual( gr_data->part[2], gr_data->part[3]) )
+        {
+            axisX->setRange(gr_data->part[0], gr_data->part[1]);
+            axisY->setRange(gr_data->part[2], gr_data->part[3]);
+        }
     }
     else
     {
-       if( !jsonio::essentiallyEqual(gr_data->region[0],gr_data->region[1]) &&
-            !jsonio::essentiallyEqual(gr_data->region[2], gr_data->region[3]) )
-       {
-        axisX->setRange(gr_data->region[0], gr_data->region[1]);
-        axisY->setRange(gr_data->region[2], gr_data->region[3]);
-       }
+        if( !jsonio::essentiallyEqual(gr_data->region[0],gr_data->region[1]) &&
+                !jsonio::essentiallyEqual(gr_data->region[2], gr_data->region[3]) )
+        {
+            axisX->setRange(gr_data->region[0], gr_data->region[1]);
+            axisY->setRange(gr_data->region[2], gr_data->region[3]);
+        }
     }
 }
 
@@ -352,7 +386,7 @@ void PlotChartViewPrivate::updateGrid()
     chart->setTitle( gr_data->title.c_str() );
 
     if( !axisX || !axisY)
-      return;
+        return;
 
     updateMinMax();
 
@@ -380,32 +414,32 @@ void PlotChartViewPrivate::makeGrid()
     if(  jsonio::essentiallyEqual( gr_data->region[0], gr_data->region[1]) ||
          jsonio::essentiallyEqual( gr_data->region[2], gr_data->region[3]) )
     {    // default
-         chart->createDefaultAxes();
-         axisX =  dynamic_cast<QValueAxis*>(chart->axisX());
-         axisY =  dynamic_cast<QValueAxis*>(chart->axisY());
-     } else
-       {
-         axisX = new QValueAxis;
-         chart->addAxis(axisX, Qt::AlignBottom);
-         axisY = new QValueAxis;
-         chart->addAxis(axisY, Qt::AlignLeft);
-         for( uint ii=0; ii<gr_series.size(); ii++ )
-         {
-           if( gr_series[ii].get() )
-           {
-              gr_series[ii]->attachAxis(axisX);
-              gr_series[ii]->attachAxis(axisY);
-           }
-         }
-         for( uint ii=0; ii<gr_points.size(); ii++ )
-         {
-           if( gr_points[ii].get() )
-           {
-              gr_points[ii]->attachAxis(axisX);
-              gr_points[ii]->attachAxis(axisY);
-           }
-         }
-       }
+        chart->createDefaultAxes();
+        axisX =  dynamic_cast<QValueAxis*>(chart->axisX());
+        axisY =  dynamic_cast<QValueAxis*>(chart->axisY());
+    } else
+    {
+        axisX = new QValueAxis;
+        chart->addAxis(axisX, Qt::AlignBottom);
+        axisY = new QValueAxis;
+        chart->addAxis(axisY, Qt::AlignLeft);
+        for( uint ii=0; ii<gr_series.size(); ii++ )
+        {
+            if( gr_series[ii].get() )
+            {
+                gr_series[ii]->attachAxis(axisX);
+                gr_series[ii]->attachAxis(axisY);
+            }
+        }
+        for( uint ii=0; ii<gr_points.size(); ii++ )
+        {
+            if( gr_points[ii].get() )
+            {
+                gr_points[ii]->attachAxis(axisX);
+                gr_points[ii]->attachAxis(axisY);
+            }
+        }
+    }
     updateGrid();
 }
 
@@ -413,16 +447,16 @@ void PlotChartViewPrivate::updateSeries( size_t nline )
 {
     switch( gr_data->graphType )
     {
-      case LineChart:
-           updateSeriesLine( nline );
-           break;
-      case AreaChart:
-           updateAreaLine( nline );
-           break;
-      case BarChart:
-      case Isolines:
-      case lines_3D:
-           break;
+    case LineChart:
+        updateSeriesLine( nline );
+        break;
+    case AreaChart:
+        updateAreaLine( nline );
+        break;
+    case BarChart:
+    case Isolines:
+    case lines_3D:
+        break;
     }
 }
 
@@ -439,7 +473,7 @@ void PlotChartViewPrivate::highlightSeries( size_t line, bool enable )
         QPen pen = series->pen();
         getLinePen( pen, linedata  );
         if( enable )
-          pen.setWidth(linedata.getPenSize()*2);
+            pen.setWidth(linedata.getPenSize()*2);
         series->setPen(pen);
     }
 
@@ -448,7 +482,7 @@ void PlotChartViewPrivate::highlightSeries( size_t line, bool enable )
     {
         auto shsize = linedata.getMarkerSize();
         if( enable )
-          shsize *=2;
+            shsize *=2;
         scatterseries->setBrush( markerShapeImage( linedata ).scaled( shsize,shsize));
         scatterseries->setMarkerSize(shsize);
     }
@@ -457,62 +491,62 @@ void PlotChartViewPrivate::highlightSeries( size_t line, bool enable )
 
 void PlotChartViewPrivate::updateSeriesLine( size_t nline )
 {
-  if( nline >= gr_data->linesNumber() )
-      return;
+    if( nline >= gr_data->linesNumber() )
+        return;
 
-  auto nplot =  gr_data->getPlot( nline );
-  if( nplot < 0 )
-     return;
-  auto  srmodel = gr_data->modelData( static_cast<size_t>(nplot) );
-  auto  linedata = gr_data->lineData( nline );
+    auto nplot =  gr_data->getPlot( nline );
+    if( nplot < 0 )
+        return;
+    auto  srmodel = gr_data->modelData( static_cast<size_t>(nplot) );
+    auto  linedata = gr_data->lineData( nline );
 
-  // update series lines
-  QXYSeries *series = newSeriesLine(linedata );
-  // delete old series
-  if( gr_series[nline].get())
-    chart->removeSeries(gr_series[nline].get());
+    // update series lines
+    QXYSeries *series = newSeriesLine(linedata );
+    // delete old series
+    if( gr_series[nline].get())
+        chart->removeSeries(gr_series[nline].get());
 
-  gr_series[nline].reset( series );
-  series_mapper[nline]->setSeries(series);
-  series_mapper[nline]->setXColumn( srmodel->getXColumn(linedata.getXColumn())+1);
-  if( series )
-  {
-      chart->addSeries(series);
-      series->attachAxis(axisX);
-      series->attachAxis(axisY);
-  }
+    gr_series[nline].reset( series );
+    series_mapper[nline]->setSeries(series);
+    series_mapper[nline]->setXColumn( srmodel->getXColumn(linedata.getXColumn())+1);
+    if( series )
+    {
+        chart->addSeries(series);
+        series->attachAxis(axisX);
+        series->attachAxis(axisY);
+    }
 
-  QScatterSeries *scatterseries = newScatterSeries( linedata );
-  // delete old series
-  if( gr_points[nline].get())
-    chart->removeSeries(gr_points[nline].get());
+    QScatterSeries *scatterseries = newScatterSeries( linedata );
+    // delete old series
+    if( gr_points[nline].get())
+        chart->removeSeries(gr_points[nline].get());
 
-  gr_points[nline].reset( scatterseries );
-  points_mapper[nline]->setSeries(scatterseries);
-  points_mapper[nline]->setXColumn( srmodel->getXColumn(linedata.getXColumn())+1);
-  if( scatterseries )
-  {
-      chart->addSeries(scatterseries);
-      scatterseries->attachAxis(axisX);
-      scatterseries->attachAxis(axisY);
-  }
+    gr_points[nline].reset( scatterseries );
+    points_mapper[nline]->setSeries(scatterseries);
+    points_mapper[nline]->setXColumn( srmodel->getXColumn(linedata.getXColumn())+1);
+    if( scatterseries )
+    {
+        chart->addSeries(scatterseries);
+        scatterseries->attachAxis(axisX);
+        scatterseries->attachAxis(axisY);
+    }
 }
 
 void PlotChartViewPrivate::updateAreaLine( size_t nline )
 {
-  if( nline >= gr_data->linesNumber() )
-      return;
+    if( nline >= gr_data->linesNumber() )
+        return;
 
-  gr_areas[nline]->setName(gr_data->lineData(nline).getName().c_str());
-  QPen pen = gr_areas[nline]->pen();
-  getLinePen( pen, gr_data->lineData(nline)  );
-  gr_areas[nline]->setPen(pen);
-  gr_areas[nline]->setColor(pen.color());
+    gr_areas[nline]->setName(gr_data->lineData(nline).getName().c_str());
+    QPen pen = gr_areas[nline]->pen();
+    getLinePen( pen, gr_data->lineData(nline)  );
+    gr_areas[nline]->setPen(pen);
+    gr_areas[nline]->setColor(pen.color());
 }
 
 
 QScatterSeries* PlotChartViewPrivate::newScatterLabel(
-                         const QPointF& pointF, const QString& label )
+        const QPointF& pointF, const QString& label )
 {
     QScatterSeries *series  =  new QScatterSeries;
     QFontMetrics fm(gr_data->axisFont);
@@ -540,30 +574,35 @@ PlotChartView::PlotChartView( ChartData *graphdata, QWidget *parent) :
     QChartView(new QChart(), parent),
     pdata( new PlotChartViewPrivate(graphdata, this, chart() ) )
 {
-   setRubberBand(QChartView::RectangleRubberBand);
-   setAcceptDrops(true);
+    setRubberBand(QChartView::RectangleRubberBand);
+    setAcceptDrops(true);
 
-   pdata->showPlot();
-   chart()->setDropShadowEnabled(false);
-   chart()->legend()->hide();
-   chart()->layout()->setContentsMargins(0, 0, 0, 0);
-   chart()->setMargins( QMargins( 5,5, 0, 0) );
- // chart()->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
+    pdata->showPlot();
+    chart()->setDropShadowEnabled(false);
+    chart()->legend()->hide();
+    chart()->layout()->setContentsMargins(0, 0, 0, 0);
+    chart()->setMargins( QMargins( 5,5, 0, 0) );
+    // chart()->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
 }
 
 PlotChartView::~PlotChartView()
 {
-  delete pdata;
+    delete pdata;
 }
 
 void PlotChartView::updateLine(size_t line )
 {
-   pdata->updateSeries( line );
+    pdata->updateSeries( line );
 }
 
 void PlotChartView::updateAll()
 {
-   pdata->updateAll();
+    pdata->updateAll();
+}
+
+void PlotChartView::updateLines()
+{
+    pdata->updateLines();
 }
 
 void PlotChartView::setFragment( bool isFragment )
@@ -608,11 +647,11 @@ void PlotChartView::dropEvent( QDropEvent* event )
 {
     if (event->mimeData()->hasFormat("text/plain"))
     {
-      QString text_ = event->mimeData()->text();
-      auto posF =  event->posF();
-      pdata->addLabel( posF, text_ );
-      //std::cout << "pos " << pos.x() <<  " " << pos.y() << "Test drop" << text_.toStdString() << std::endl;
-  }
+        QString text_ = event->mimeData()->text();
+        auto posF =  event->posF();
+        pdata->addLabel( posF, text_ );
+        //std::cout << "pos " << pos.x() <<  " " << pos.y() << "Test drop" << text_.toStdString() << std::endl;
+    }
 }
 
 } // namespace jsonui
