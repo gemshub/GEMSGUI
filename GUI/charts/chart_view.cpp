@@ -446,10 +446,12 @@ void PlotChartViewPrivate::highlightSeries( size_t line, bool enable )
     QScatterSeries *scatterseries = gr_points[line].get();
     if( scatterseries )
     {
-       //auto pen = series->pen();
-       //series->setPen(pen);
+        auto shsize = linedata.getMarkerSize();
+        if( enable )
+          shsize *=2;
+        scatterseries->setBrush( markerShapeImage( linedata ).scaled( shsize,shsize));
+        scatterseries->setMarkerSize(shsize);
     }
-
 }
 
 
