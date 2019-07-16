@@ -50,9 +50,11 @@ class PlotChartView : public QChartView
 
 public slots:
 
-  void updateLine(size_t line );
+  void updateLine( size_t line );
   void updateAll();
   void setFragment( bool isFragment );
+
+  void highlightLine( size_t line, bool enable  );
 
 public:
 

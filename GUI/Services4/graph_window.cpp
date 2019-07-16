@@ -39,7 +39,7 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
        m_chartData->setLineData( ii, convertor(aLinesDesc[ii]) );
     }
 
-    graph_dlg = new GraphDialog( pmodule, m_chartData.get(), nullptr );
+    graph_dlg = new GraphDialog( pmodule, m_chartData.get() );
     QObject::connect( graph_dlg, SIGNAL( dataChanged( ChartData* ) ),
              pmodule->window(),  SLOT( saveGraphData( ChartData* ) ) );
     //connect( _page, SIGNAL( updateGraphWindow() ),
@@ -70,7 +70,7 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
        m_chartData->setLineData( ii,  std::string(line_names[ii].c_str())  );
     }
 
-    graph_dlg = new GraphDialog( pmodule, m_chartData.get(), nullptr );
+    graph_dlg = new GraphDialog( pmodule, m_chartData.get() );
     QObject::connect( graph_dlg, SIGNAL( dataChanged( ChartData* ) ),
              pmodule->window(),  SLOT( saveGraphData( ChartData* ) ) );
     //connect( _page, SIGNAL( updateGraphWindow() ),

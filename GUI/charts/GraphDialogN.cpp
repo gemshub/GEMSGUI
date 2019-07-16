@@ -50,15 +50,18 @@
 #include "SymbolDialogN.h"
 #include "chart_view.h"
 
+#include "GemsMainWindow.h"
+
+
 namespace jsonui {
 
 /// The constructor
-GraphDialog::GraphDialog( TCModule *pmodule, ChartData *data, QWidget *parent, const char *title ):
-        QDialog( parent ), pModule(pmodule), ui(new Ui::GraphDialogData),
+GraphDialog::GraphDialog( TCModule *pmodule, ChartData *data, const string& title ):
+        QDialog( pmodule->window() ), pModule(pmodule), ui(new Ui::GraphDialogData),
         gr_data(data), isFragment(false)
 {
     ui->setupUi(this);
-    setWindowTitle( title );
+    setWindowTitle( title.c_str() );
 
     // define plot window
     plot = new PlotChartView( gr_data, this);
@@ -78,7 +81,7 @@ GraphDialog::GraphDialog( TCModule *pmodule, ChartData *data, QWidget *parent, c
     tbLegend->setItemDelegate(dgLegend);
     ui->verticalLayout->addWidget( tbLegend );
 
-    ui->splitter->setStretchFactor(0, 10);
+    ui->splitter->setStretchFactor(0, 5);
     ui->splitter->setStretchFactor(1, 1);
 
     // Insert labels in legend box
@@ -108,6 +111,12 @@ GraphDialog::~GraphDialog()
 {
     delete tbLegend;
     delete ui;
+}
+
+void GraphDialog::closeEvent(QCloseEvent *ev)
+{
+    ev->accept();
+    pVisorImp->closeMdiChild( this );
 }
 
 void GraphDialog::UpdatePlots( const char* title )
@@ -329,10 +338,11 @@ void GraphDialog::ShowLegend()
 
 void GraphDialog::changeIcon( int rowi, int column )
 {
+     auto row = static_cast<size_t>(rowi);
     if( column == 0 )
+    {
      if( gr_data->graphType == LineChart || gr_data->graphType == AreaChart )
      {
-            auto row = static_cast<size_t>(rowi);
             SymbolDialog cd( gr_data->lineData(row), this);
             if( cd.exec() )
             {
@@ -343,6 +353,11 @@ void GraphDialog::changeIcon( int rowi, int column )
                emit dataChanged( gr_data );
             }
      }
+   }    else if( column ==  2 && gr_data->graphType == LineChart )
+            {
+               highlightRow( row );
+            }
+
 }
 
 void GraphDialog::changeNdx( int rowi, int column )
@@ -360,13 +375,33 @@ void GraphDialog::changeNdx( int rowi, int column )
         std::string  name = tbLegend->item(rowi, column)->text().toStdString();
         gr_data->setLineData(static_cast<size_t>(row), name );
         emit dataChanged( gr_data );
-     }
+    }
 }
+
+void GraphDialog::highlightRow( size_t row )
+{
+    if( activeRow == row ) // toggle
+    {
+        restoreRow();
+        return;
+    }
+    restoreRow();
+    activeRow = row;
+    plot->highlightLine(row, true);
+}
+
+void GraphDialog::restoreRow()
+{
+    if( activeRow != string::npos)
+        plot->highlightLine(activeRow, false);
+    activeRow = string::npos;
+}
+
 
 //=======================================================================================
 // Added for new legend table
 
-void DragTableWidget::startDrag(/*Qt::DropActions supportedActions*/)
+void DragTableWidget::startDragN(/*Qt::DropActions supportedActions*/)
 {
     if( currentColumn() == 2 )
     {
@@ -402,9 +437,15 @@ void DragTableWidget::mouseMoveEvent( QMouseEvent *e )
         if(e->buttons() & Qt::LeftButton )
         { int delta = (e->pos()-startPos).manhattanLength();
             if( delta >= QApplication::startDragDistance() )
-              startDrag();
+              startDragN();
         }
         QTableWidget::mouseMoveEvent(e);
+}
+
+void DragTableWidget::focusOutEvent(QFocusEvent *event)
+{
+    topDlg->restoreRow();
+    QTableWidget::focusOutEvent(event);
 }
 
 //--------------------------------------------------------------------------

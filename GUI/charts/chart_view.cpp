@@ -67,6 +67,7 @@ public:
 
     void showPlot();
     void updateSeries( size_t nline );
+    void highlightSeries( size_t line, bool enable  );
     void updateAll()
     {
         clearAll();
@@ -303,20 +304,20 @@ void PlotChartViewPrivate::showAreaChart()
 
 void PlotChartViewPrivate::showPlot()
 {
-   switch( gr_data->graphType )
-   {
-     case LineChart:
-           showPlotLines();
-           break;
-     case AreaChart:
-          showAreaChart();
-           break;
-     case BarChart:
-     case Isolines:
-     case lines_3D:
-          break;
-   }
-   makeGrid();
+    switch( gr_data->graphType )
+    {
+    case LineChart:
+        showPlotLines();
+        break;
+    case AreaChart:
+        showAreaChart();
+        break;
+    case BarChart:
+    case Isolines:
+    case lines_3D:
+        break;
+    }
+    makeGrid();
 }
 
 void PlotChartViewPrivate::updateMinMax()
@@ -423,6 +424,32 @@ void PlotChartViewPrivate::updateSeries( size_t nline )
       case lines_3D:
            break;
     }
+}
+
+void PlotChartViewPrivate::highlightSeries( size_t line, bool enable )
+{
+    if( gr_data->graphType != LineChart || line >= gr_data->linesNumber() )
+        return;
+    auto  linedata = gr_data->lineData( line );
+
+    // update series lines
+    QXYSeries *series =  gr_series[line].get();
+    if( series )
+    {
+        QPen pen = series->pen();
+        getLinePen( pen, linedata  );
+        if( enable )
+          pen.setWidth(linedata.getPenSize()*2);
+        series->setPen(pen);
+    }
+
+    QScatterSeries *scatterseries = gr_points[line].get();
+    if( scatterseries )
+    {
+       //auto pen = series->pen();
+       //series->setPen(pen);
+    }
+
 }
 
 
@@ -539,7 +566,12 @@ void PlotChartView::updateAll()
 
 void PlotChartView::setFragment( bool isFragment )
 {
-   pdata->updateFragment( isFragment );
+    pdata->updateFragment( isFragment );
+}
+
+void PlotChartView::highlightLine(size_t line, bool enable)
+{
+    pdata->highlightSeries(line, enable);
 }
 
 void PlotChartView::dragEnterEvent(QDragEnterEvent *event)

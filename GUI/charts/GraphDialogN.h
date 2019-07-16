@@ -59,11 +59,13 @@ class GraphDialog: public QDialog
 
     void ShowLegend();
 //    void ShowIsolineLegend();
+    void closeEvent(QCloseEvent*);
 
 protected slots:
 
     void changeIcon( int row, int column );
     void changeNdx( int row, int column );
+    void highlightRow( size_t row );
 
     void CmFragment();
     void CmLegend();
@@ -75,13 +77,13 @@ public slots:
 
     /// Update graphic and legend
     void UpdateAll(const char* title=nullptr );
+    void restoreRow();
 
 signals:
     void dataChanged( ChartData *achartData );
 
 public:
-     GraphDialog( TCModule *pmodule, ChartData *data, QWidget *parent,
-                  const char *title= "Graphics Dialog" );
+     GraphDialog( TCModule *pmodule, ChartData *data, const string& title= "Graphics Dialog" );
     ~GraphDialog();
 
     /// Update all graphic lines with new title
@@ -110,6 +112,7 @@ private:
 
     // work part
     bool isFragment;
+    size_t activeRow = string::npos;
 };
 
 
@@ -119,18 +122,21 @@ private:
 class DragTableWidget: public QTableWidget
 {
     QPoint startPos;
+    GraphDialog* topDlg;
 
     public:
-        DragTableWidget(QWidget* parent):
-            QTableWidget(parent) {}
+        DragTableWidget( GraphDialog* top ):
+            QTableWidget(top), topDlg(top) {}
 
         virtual ~DragTableWidget() {}
 
     protected:
 
-    void startDrag(/*Qt::DropActions supportedActions*/);
+    void startDragN();
     void mousePressEvent( QMouseEvent *e );
     void mouseMoveEvent( QMouseEvent *e );
+    void focusOutEvent(QFocusEvent* event);
+
 };
 
 /// \class LabelDelegate
