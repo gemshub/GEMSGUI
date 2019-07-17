@@ -104,20 +104,21 @@ SeriesLineData convertor( const TPlotLine& plotData )
 {
     SeriesLineData data( plotData.getName().c_str(),
                          plotData.getType(), plotData.getSize(),
-                         plotData.getLineSize(),  1, 0, plotData.getColor()  );
+                         plotData.getLineSize(),
+                         1, 0, // could be add: penStyle  end  spline now default
+                         plotData.getColor()  );
     data.setXColumn(plotData.getIndex());
     return data;
 }
 
 TPlotLine convertor( const SeriesLineData& serData )
 {
-    TPlotLine data( serData.getName().c_str(),
-                             serData.getMarkerShape(), serData.getMarkerSize(), serData.getPenSize(),
-                             25, 0, 150  );
-    //data.setXColumn(plotData.getIndex());
+    TPlotLine data( serData.getName().c_str(), serData.getMarkerShape(), serData.getMarkerSize(),
+                    serData.getPenSize(), serData.getXColumn(),
+                    // could be add: penStyle  end  spline
+                    serData.getColor()  );
     return data;
 }
-
 
 
 ChartData *GraphWindow::allocateData( TIArray<TPlot>& aPlots,

@@ -464,7 +464,7 @@ void TGEM2MT::make_A( long int siz_, char (*for_)[MAXFORMUNITDT] )
   long int ii;
 
   if( !siz_ )
-  { mtp->An = (double *)aObj[ o_mtan ].Free();
+  { mtp->An = static_cast<double *>(aObj[ o_mtan ].Free());
     return;
   }
   for( ii=0; ii<siz_; ii++ )
@@ -478,7 +478,7 @@ void TGEM2MT::make_A( long int siz_, char (*for_)[MAXFORMUNITDT] )
   ErrorIf( mtp->Nb != TRMults::sm->GetMU()->N, GetName(),
                "Invalid data in mtp->Nb ");
 
-  mtp->An = (double *)aObj[ o_mtan ].Alloc( siz_, mtp->Nb, D_ );
+  mtp->An = static_cast<double *>(aObj[ o_mtan ].Alloc( siz_, mtp->Nb, D_ ));
   fillValue(mtp->An, 0., (siz_*mtp->Nb) );
   for( ii=0; ii<siz_; ii++ )
      aFo[ii].Stm_line( TRMults::sm->GetMU()->N, mtp->An+ii*TRMults::sm->GetMU()->N,
@@ -503,7 +503,7 @@ TGEM2MT::Bn_Calc()
        return;
 
 // get data fron IComp
-    TIComp* aIC=(TIComp *)(&aMod[RT_ICOMP]);
+    TIComp* aIC= dynamic_cast<TIComp *>(&aMod[RT_ICOMP]);
     aIC->ods_link(0);
     ICw = new double[mtp->Nb];
     memset( pkey, 0, MAXRKEYLEN+9 );
@@ -768,7 +768,7 @@ int get_ndx_(  int i,  int nO,  int Xplace )
       nO = o_n0_bic;
 
   int N=0, type = 0;
-  long int *arr=0;
+  long int *arr=nullptr;
 
   switch( nO )
   {
@@ -780,13 +780,13 @@ int get_ndx_(  int i,  int nO,  int Xplace )
     case o_n1_gam:
     case o_n1_dul:
     case o_n1_dll: N = aObj[o_mt_xdc].GetN();
-                   arr = (long int *)aObj[o_mt_xdc].GetPtr();
+                   arr = static_cast<long int *>(aObj[o_mt_xdc].GetPtr());
                    type = 2;
                    break;
      case o_n1_xph:
      case o_n0_xph: //CH->nPHb
                     N = aObj[o_mt_xph].GetN();
-                    arr = (long int *)aObj[o_mt_xph].GetPtr();
+                    arr =  static_cast<long int *>(aObj[o_mt_xph].GetPtr());
                     type = 3;
                     break;
     case  o_n0_vps:  // CH->nPSb
@@ -797,8 +797,8 @@ int get_ndx_(  int i,  int nO,  int Xplace )
     case  o_n1_mps:
     case  o_n1_xpa:
     case  o_n1_bps:
-                    N = (int)aObj[o_mtchbr].Get(0);
-                    arr = (long int *)aObj[o_mt_xph].GetPtr();
+                    N = static_cast<int>(aObj[o_mtchbr].Get(0));
+                    arr =  static_cast<long int *>(aObj[o_mt_xph].GetPtr());
                     type = 4;
                     break;
      case o_n0_bic:  //CH->nICb
@@ -810,7 +810,7 @@ int get_ndx_(  int i,  int nO,  int Xplace )
      case o_n1_uic:
      case o_n1_bsp:
                     N = aObj[o_mt_xic].GetN();
-                    arr = (long int *)aObj[o_mt_xic].GetPtr();
+                    arr =  static_cast<long int *>(aObj[o_mt_xic].GetPtr());
                     type = 1;
                     break;
   }
@@ -843,15 +843,15 @@ void TGEM2MT::Expr_analyze( int obj_num )
 
         if( pVisor->ProfileMode == true )
         {
-            mupL = (int)TRMults::sm->GetMU()->L;
-            pmpL = (int)TMulti::sm->GetPM()->L;
+            mupL = TRMults::sm->GetMU()->L;
+            pmpL = TMulti::sm->GetPM()->L;
         }
-        PRof->ET_translate( (int)o_mwetext, (int)obj_num, 0,
+        PRof->ET_translate( o_mwetext, obj_num, 0,
              mupL, 0, pmpL, get_ndx_ );
         if( obj_num == o_mttexpr )
-          rpn[0].GetEquat( (char *)aObj[o_mwetext].GetPtr() );
+          rpn[0].GetEquat(  static_cast<char *>(aObj[o_mwetext].GetPtr()) );
         else
-          rpn[1].GetEquat( (char *)aObj[o_mwetext].GetPtr() );
+          rpn[1].GetEquat( static_cast<char *>(aObj[o_mwetext].GetPtr()) );
 
         if( obj_num == o_mtgexpr )
         { // reset system
@@ -867,7 +867,7 @@ void TGEM2MT::Expr_analyze( int obj_num )
           LinkNode1(-1);
         }
 
-        char *erscan = (char *)aObj[o_mwetext/*obj_num*/].GetPtr();
+        char *erscan = static_cast<char *>(aObj[o_mwetext/*obj_num*/].GetPtr());
         vfMessage(window(), xcpt.title, xcpt.mess);
         CheckEqText(  erscan,
                "E96MSTran: Error in translation of GEM2MT math script: " );
@@ -907,7 +907,7 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
     {
         int oldN = aObj[o_mtplline].GetN();
 
-        plot = (TPlotLine * )aObj[ o_mtplline ].Alloc( nLn, sizeof(TPlotLine) );
+        plot = static_cast<TPlotLine *>(aObj[ o_mtplline ].Alloc( nLn, sizeof(TPlotLine) ));
         for(int ii=0; ii<nLn; ii++ )
         {
             if( ii >= oldN )
@@ -948,15 +948,16 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
     }
 }
 #ifndef USE_QWT
+
     bool TGEM2MT::SaveChartData( jsonui::ChartData* gr )
     {
-        size_t ii;
 
         // We can only have one Plot dialog (modal one) so condition should be omitted!!
         if( !gd_gr )
          return false;
         if( gr != gd_gr->getGraphData() )
          return false;
+
 
        mtp->axisType[0] = static_cast<short>(gr->axisTypeX);
        mtp->axisType[5] = static_cast<short>(gr->axisTypeY);
@@ -966,15 +967,15 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
        mtp->axisType[3] = static_cast<short>(gr->b_color[2]);
        strncpy( mtp->xNames, gr->xName.c_str(), 9);
        strncpy( mtp->yNames, gr->yName.c_str(), 9);
-       for( ii=0; ii<4; ii++ )
+       for(int ii=0; ii<4; ii++ )
        {
            mtp->size[0][ii] =  static_cast<float>(gr->region[ii]);
            mtp->size[1][ii] =  static_cast<float>(gr->part[ii]);
        }
        plot = static_cast<TPlotLine *>(aObj[ o_mtplline].Alloc( gr->getSeriesNumber(), sizeof(TPlotLine)));
-       for( ii=0; ii<gr->getSeriesNumber(); ii++ )
+       for(int ii=0; ii<gr->getSeriesNumber(); ii++ )
        {
-           plot[ii] = convertor(gr->lineData( ii ));
+           plot[ii] = convertor( gr->lineData( ii ) );
            //  lNam0 and lNamE back
            if( ii < mtp->nYS )
                strncpy(  mtp->lNam[ii], plot[ii].getName().c_str(), MAXGRNAME );
@@ -1002,12 +1003,12 @@ TGEM2MT::SaveGraphData( GraphData *gr )
       return false;
      if( gr != gd_gr->getGraphData() )
       return false;
-    mtp->axisType[0] = (short)gr->axisTypeX;
-    mtp->axisType[5] = (short)gr->axisTypeY;
-    mtp->axisType[4] = (short)gr->graphType;
-    mtp->axisType[1] = (short)gr->b_color[0];
-    mtp->axisType[2] = (short)gr->b_color[1];
-    mtp->axisType[3] = (short)gr->b_color[2];
+    mtp->axisType[0] = static_cast<short>(gr->axisTypeX);
+    mtp->axisType[5] = static_cast<short>(gr->axisTypeY);
+    mtp->axisType[4] = static_cast<short>(gr->graphType);
+    mtp->axisType[1] = static_cast<short>(gr->b_color[0]);
+    mtp->axisType[2] = static_cast<short>(gr->b_color[1]);
+    mtp->axisType[3] = static_cast<short>(gr->b_color[2]);
     strncpy( mtp->xNames, gr->xName.c_str(), 9);
     strncpy( mtp->yNames, gr->yName.c_str(), 9);
     for( ii=0; ii<4; ii++ )
@@ -1015,9 +1016,8 @@ TGEM2MT::SaveGraphData( GraphData *gr )
         mtp->size[0][ii] =  gr->region[ii];
         mtp->size[1][ii] =  gr->part[ii];
     }
-    plot = (TPlotLine *) aObj[ o_mtplline].Alloc(
-       gr->lines.GetCount(), sizeof(TPlotLine));
-    for( ii=0; ii<(int)gr->lines.GetCount(); ii++ )
+    plot = static_cast<TPlotLine *>(aObj[ o_mtplline].Alloc(  gr->lines.GetCount(), sizeof(TPlotLine)));
+    for( ii=0; ii<gr->lines.GetCount(); ii++ )
     {
         plot[ii] = gr->lines[ii];
         //  lNam0 and lNamE back
@@ -1087,12 +1087,12 @@ aObj[o_n0_ts].SetM( 2 );
      aObj[o_n0_amrl].SetDim( CH->nPSb, 1 );
      // set data to work arrays
      const TNode& node = na->LinkToNode( nNode, mtp->nC,  na->pNodT0() );
-         double *mps = (double *)aObj[o_n0w_mps].GetPtr();
-         double *vps = (double *)aObj[o_n0w_vps].GetPtr();
-         double *m_t = (double *)aObj[o_n0w_m_t].GetPtr();
-         double *con = (double *)aObj[o_n0w_con].GetPtr();
-         double *mju = (double *)aObj[o_n0w_mju].GetPtr();
-         double *lga = (double *)aObj[o_n0w_lga].GetPtr();
+         double *mps = static_cast<double *>(aObj[o_n0w_mps].GetPtr() );
+         double *vps = static_cast<double *>(aObj[o_n0w_vps].GetPtr() );
+         double *m_t = static_cast<double *>(aObj[o_n0w_m_t].GetPtr() );
+         double *con = static_cast<double *>(aObj[o_n0w_con].GetPtr() );
+         double *mju = static_cast<double *>(aObj[o_n0w_mju].GetPtr() );
+         double *lga = static_cast<double *>(aObj[o_n0w_lga].GetPtr() );
 
          for( ii=0; ii<CH->nPHb; ii++)
          {
@@ -1111,41 +1111,41 @@ aObj[o_n0_ts].SetM( 2 );
   else
   {
      // static
-     aObj[o_n0_ct].SetPtr( 0 );   /* s6 */
-     aObj[o_n0_cs].SetPtr( 0 );            /* d17 */
-     aObj[o_n0_ts].SetPtr( 0 );            /* d19 */
+     aObj[o_n0_ct].SetPtr( nullptr );   /* s6 */
+     aObj[o_n0_cs].SetPtr( nullptr );            /* d17 */
+     aObj[o_n0_ts].SetPtr( nullptr );            /* d19 */
      //dynamic
-     aObj[o_n0_xdc].SetPtr( 0 );
+     aObj[o_n0_xdc].SetPtr( nullptr );
      aObj[o_n0_xdc].SetDim( 0, 1 );
-     aObj[o_n0_gam].SetPtr( 0 );
+     aObj[o_n0_gam].SetPtr( nullptr );
      aObj[o_n0_gam].SetDim( 0, 1 );
-     aObj[o_n0_xph].SetPtr( 0 );
+     aObj[o_n0_xph].SetPtr( nullptr );
      aObj[o_n0_xph].SetDim( 0, 1 );
-     aObj[o_n0_vps].SetPtr( 0 );
+     aObj[o_n0_vps].SetPtr( nullptr );
      aObj[o_n0_vps].SetDim( 0, 1 );
-     aObj[o_n0_mps].SetPtr( 0 );
+     aObj[o_n0_mps].SetPtr( nullptr );
      aObj[o_n0_mps].SetDim( 0, 1 );
-     aObj[o_n0_bps].SetPtr( 0 );
+     aObj[o_n0_bps].SetPtr( nullptr );
      aObj[o_n0_bps].SetDim( 0,1 );
-     aObj[o_n0_xpa].SetPtr( 0 );
+     aObj[o_n0_xpa].SetPtr( nullptr );
      aObj[o_n0_xpa].SetDim( 0, 1 );
-     aObj[o_n0_dul].SetPtr( 0 );
+     aObj[o_n0_dul].SetPtr( nullptr );
      aObj[o_n0_dul].SetDim( 0, 1 );
-     aObj[o_n0_dll].SetPtr( 0 );
+     aObj[o_n0_dll].SetPtr( nullptr );
      aObj[o_n0_dll].SetDim( 0, 1 );
-     aObj[o_n0_bic].SetPtr( 0 );
+     aObj[o_n0_bic].SetPtr( nullptr );
      aObj[o_n0_bic].SetDim( 0, 1 );
-     aObj[o_n0_rmb].SetPtr( 0 );
+     aObj[o_n0_rmb].SetPtr( nullptr );
      aObj[o_n0_rmb].SetDim( 0, 1 );
-     aObj[o_n0_uic].SetPtr( 0 );
+     aObj[o_n0_uic].SetPtr( nullptr );
      aObj[o_n0_uic].SetDim( 0, 1 );
-     aObj[o_n0_bsp].SetPtr( 0 );
+     aObj[o_n0_bsp].SetPtr( nullptr );
      aObj[o_n0_bsp].SetDim( 0, 1 );
-     aObj[o_n0_aph].SetPtr( 0);
+     aObj[o_n0_aph].SetPtr( nullptr);
      aObj[o_n0_aph].SetDim( 0, 1 );
-     aObj[o_n0_amru].SetPtr( 0 );
+     aObj[o_n0_amru].SetPtr( nullptr );
      aObj[o_n0_amru].SetDim( 0, 1 );
-     aObj[o_n0_amrl].SetPtr( 0 );
+     aObj[o_n0_amrl].SetPtr( nullptr );
      aObj[o_n0_amrl].SetDim( 0, 1 );
    }
 }
@@ -1204,12 +1204,12 @@ aObj[o_n1_ts].SetM( 2 );
 
  // set data to work arrays
      const TNode& node = na->LinkToNode( nNode, mtp->nC,  na->pNodT1() );
-     double *mps = (double *)aObj[o_n1w_mps].GetPtr();
-     double *vps = (double *)aObj[o_n1w_vps].GetPtr();
-     double *m_t = (double *)aObj[o_n1w_m_t].GetPtr();
-     double *con = (double *)aObj[o_n1w_con].GetPtr();
-     double *mju = (double *)aObj[o_n1w_mju].GetPtr();
-     double *lga = (double *)aObj[o_n1w_lga].GetPtr();
+     double *mps = static_cast<double *>(aObj[o_n1w_mps].GetPtr());
+     double *vps = static_cast<double *>(aObj[o_n1w_vps].GetPtr());
+     double *m_t = static_cast<double *>(aObj[o_n1w_m_t].GetPtr());
+     double *con = static_cast<double *>(aObj[o_n1w_con].GetPtr());
+     double *mju = static_cast<double *>(aObj[o_n1w_mju].GetPtr());
+     double *lga = static_cast<double *>(aObj[o_n1w_lga].GetPtr());
 
      for( ii=0; ii<CH->nPHb; ii++)
      {
@@ -1228,41 +1228,41 @@ aObj[o_n1_ts].SetM( 2 );
   else
   {
      // static
-     aObj[o_n1_ct].SetPtr( 0 );   /* s6 */
-     aObj[o_n1_cs].SetPtr( 0 );            /* d17 */
-     aObj[o_n1_ts].SetPtr( 0 );            /* d19 */
+     aObj[o_n1_ct].SetPtr( nullptr );   /* s6 */
+     aObj[o_n1_cs].SetPtr( nullptr );            /* d17 */
+     aObj[o_n1_ts].SetPtr( nullptr );            /* d19 */
      //dynamic
-     aObj[o_n1_xdc].SetPtr( 0 );
+     aObj[o_n1_xdc].SetPtr( nullptr );
      aObj[o_n1_xdc].SetDim( 0, 1 );
-     aObj[o_n1_gam].SetPtr( 0 );
+     aObj[o_n1_gam].SetPtr( nullptr );
      aObj[o_n1_gam].SetDim( 0, 1 );
-     aObj[o_n1_xph].SetPtr( 0 );
+     aObj[o_n1_xph].SetPtr( nullptr );
      aObj[o_n1_xph].SetDim( 0, 1 );
-     aObj[o_n1_vps].SetPtr( 0 );
+     aObj[o_n1_vps].SetPtr( nullptr );
      aObj[o_n1_vps].SetDim( 0, 1 );
-     aObj[o_n1_mps].SetPtr( 0 );
+     aObj[o_n1_mps].SetPtr( nullptr );
      aObj[o_n1_mps].SetDim( 0, 1 );
-     aObj[o_n1_bps].SetPtr( 0 );
+     aObj[o_n1_bps].SetPtr( nullptr );
      aObj[o_n1_bps].SetDim( 0,1 );
-     aObj[o_n1_xpa].SetPtr( 0 );
+     aObj[o_n1_xpa].SetPtr( nullptr );
      aObj[o_n1_xpa].SetDim( 0, 1 );
-     aObj[o_n1_dul].SetPtr( 0 );
+     aObj[o_n1_dul].SetPtr( nullptr );
      aObj[o_n1_dul].SetDim( 0, 1 );
-     aObj[o_n1_dll].SetPtr( 0 );
+     aObj[o_n1_dll].SetPtr( nullptr );
      aObj[o_n1_dll].SetDim( 0, 1 );
-     aObj[o_n1_bic].SetPtr( 0 );
+     aObj[o_n1_bic].SetPtr( nullptr );
      aObj[o_n1_bic].SetDim( 0, 1 );
-     aObj[o_n1_rmb].SetPtr( 0 );
+     aObj[o_n1_rmb].SetPtr( nullptr );
      aObj[o_n1_rmb].SetDim( 0, 1 );
-     aObj[o_n1_uic].SetPtr( 0 );
+     aObj[o_n1_uic].SetPtr( nullptr );
      aObj[o_n1_uic].SetDim( 0, 1 );
-     aObj[o_n1_bsp].SetPtr( 0 );
+     aObj[o_n1_bsp].SetPtr( nullptr );
      aObj[o_n1_bsp].SetDim( 0, 1 );
-     aObj[o_n1_aph].SetPtr( 0);
+     aObj[o_n1_aph].SetPtr( nullptr);
      aObj[o_n1_aph].SetDim( 0, 1 );
-     aObj[o_n1_amru].SetPtr( 0 );
+     aObj[o_n1_amru].SetPtr( nullptr );
      aObj[o_n1_amru].SetDim( 0, 1 );
-     aObj[o_n1_amrl].SetPtr( 0 );
+     aObj[o_n1_amrl].SetPtr( nullptr );
      aObj[o_n1_amrl].SetDim( 0, 1 );
 
    }
@@ -1301,26 +1301,26 @@ void  TGEM2MT::LinkCSD(  long int nNode )
   else
   {
      // static
-     aObj[o_ch_nicb].SetPtr( 0 );                     /* i1 */
-     aObj[o_ch_ndcb].SetPtr( 0 );                     /* i1 */
-     aObj[o_ch_nphb].SetPtr( 0 );                     /* i1 */
-     aObj[o_ch_npsb].SetPtr( 0 );                     /* i1 */
+     aObj[o_ch_nicb].SetPtr( nullptr );                     /* i1 */
+     aObj[o_ch_ndcb].SetPtr( nullptr );                     /* i1 */
+     aObj[o_ch_nphb].SetPtr( nullptr );                     /* i1 */
+     aObj[o_ch_npsb].SetPtr( nullptr );                     /* i1 */
      //dynamic
-     aObj[o_ch_xic].SetPtr( 0 );
+     aObj[o_ch_xic].SetPtr( nullptr );
      aObj[o_ch_xic].SetDim( 0, 1 );
-     aObj[o_ch_xdc].SetPtr( 0 );
+     aObj[o_ch_xdc].SetPtr( nullptr );
      aObj[o_ch_xdc].SetDim( 0, 1 );
-     aObj[o_ch_xph].SetPtr( 0 );
+     aObj[o_ch_xph].SetPtr( nullptr );
      aObj[o_ch_xph].SetDim( 0, 1 );
-     aObj[o_ch_a].SetPtr( 0 );
+     aObj[o_ch_a].SetPtr( nullptr );
      aObj[o_ch_a].SetDim( 0 ,1 );
-     aObj[o_ch_icmm].SetPtr( 0 );
+     aObj[o_ch_icmm].SetPtr( nullptr );
      aObj[o_ch_icmm].SetDim( 0, 1 );
-     aObj[o_ch_dcmm].SetPtr( 0 );
+     aObj[o_ch_dcmm].SetPtr( nullptr );
      aObj[o_ch_dcmm].SetDim( 0, 1 );
-     aObj[o_ch_dd].SetPtr( 0 );
+     aObj[o_ch_dd].SetPtr( nullptr );
      aObj[o_ch_dd].SetDim( 0, 1 );
-     aObj[o_ch_aalp].SetPtr( 0);
+     aObj[o_ch_aalp].SetPtr( nullptr);
      aObj[o_ch_aalp].SetDim( 0, 1 );
   }
 }

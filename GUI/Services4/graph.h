@@ -69,6 +69,15 @@ class TPlotLine
 
 public:
 
+    TPlotLine( const char *aName, int aPointType, int aPointSize,
+               int aPutLine, int andx,
+               const QColor& aColor  ):
+        TPlotLine( aName, aPointType, aPointSize, aPutLine,
+                   aColor.red(), aColor.green(), aColor.blue()  )
+    {
+       setIndex( andx );
+    }
+
     TPlotLine( const char *aName = nullptr,
                int aPointType = 0, int aPointSize = 4, int aPutLine = 2,
                int aRed = 25, int aGreen = 0, int aBlue = 150  )
