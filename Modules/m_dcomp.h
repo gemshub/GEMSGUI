@@ -161,7 +161,8 @@ protected:
     // void B_import( int Nft, fstream& imp );
     // From PRONSPREP97
     void ParCor();
-    void calc_akinf( int q, int p );   
+    void calc_akinf( int q, int p );
+    void calc_den_hp98( int q, int /*p*/ );
     void Akinfiev_EOS_increments(double T, double P, double Gig, double Sig, double CPig, 
     		double Gw, double Sw, double CPw, double rho, double alp, double bet, double dalpT, int q,
     		double &Geos, double &Veos, double &Seos, double &CPeos, double &Heos );

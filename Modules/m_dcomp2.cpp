@@ -243,7 +243,7 @@ NEXT:
         }
     }
 
-    if( CV != CPM_AKI )
+    if( CV != CPM_AKI &&  CV != CPM_HP98)
        calc_voldp( q, p, CE, CV );
 
 }
@@ -655,6 +655,57 @@ TDComp::Akinfiev_EOS_increments(double Tk, double /*P*/, double Gig, double Sig,
 	Heos = Geos + Tk*Seos;
 }
 
+
+//-----------------------------------------------------------------
+// calculation of partial molal properties for aqueous species
+// using density model Holland and Powell (1998) DM 14.07.2019
+void TDComp::calc_den_hp98( int q, int /*p*/ )
+{
+    double G298, H298, S298, V298, Cp298, ALPw298, BETw298,  dALPdTw298, dALPdTw, RHOw, RHOw298, ALPw, BETw, Tprime;
+    G298  = dc[q].Gs[0];
+    H298  = dc[q].Hs[0];
+    S298 =  dc[q].Ss[0];
+    V298 =  dc[q].mVs[0];
+    Cp298 = dc[q].Cps[0];
+
+    // calc  props with HGK in gems // props given in HP98 page 314
+    ALPw298 = 0.0002594265420094982; // 0.0002593; // 1/K
+    BETw298 = 4.5218771760478705e-05;// 0.00004523; // 1/bar
+    dALPdTw298 = 9.5648576508681546e-06;// 0.0000095714; // 1/K^2
+    RHOw298 = 0.99706136430627812; // 0.997; // g/cm^3
+
+    double T = aW.twp->T; // K
+    double Pbar = aW.twp->P; // bar
+    double T298 = aW.twp->Tst ;  // K
+
+    // EOS coefficients
+    double b = (double)dc[q].Smax; // the b paramter sits in the filed of the "BetAlp" for minerals
+//	aa = (double)dc[q].CpFS[1];
+//	bb = (double)dc[q].CpFS[2];
+
+    RHOw = aSta.Dens[aSpc.isat];
+    ALPw = aWp.Alphaw[aSpc.isat];
+    BETw = aWp.Betaw[aSpc.isat];
+    dALPdTw = aWp.dAldT[aSpc.isat];
+
+    if (T <= 500)
+        Tprime = T;
+    else
+        Tprime = 500;
+
+    double G_bb = H298 - T*S298 + Pbar*V298 + b*( T298*T - pow(T298,2)/2 - pow(T,2)/2 ) + ( Cp298 - T298*b )/( T298*dALPdTw298 )*( ALPw298*(T - T298) - BETw298*Pbar + (T/Tprime)*log(RHOw/RHOw298) );
+    double G = G298 - (T - T298)*S298 + Pbar*V298 + b*( T298*T - pow(T298,2)/2 - pow(T,2)/2 ) + ( Cp298 - T298*b )/( T298*dALPdTw298 )*( ALPw298*(T - T298) - BETw298*Pbar + (T/Tprime)*log(RHOw/RHOw298) );
+    double S = S298 - b*(T298 - T) - (Cp298 - T298*b)/(T298*dALPdTw298)*(ALPw298 - log(RHOw/RHOw298)/Tprime - (T/Tprime)*ALPw);
+    double V = V298 + (Cp298 - T298*b)/(T298*dALPdTw298)*( -BETw298 + T/Tprime*BETw );
+    double Cp = T*(b - ((T298*b - Cp298)*(T*dALPdTw))/(T298*dALPdTw298*Tprime));
+    double H = G_bb + T*S298;
+
+    aW.twp->G = G;
+    aW.twp->V = V;
+    aW.twp->S = S;
+    aW.twp->Cp = Cp;
+    aW.twp->H = H;
+}
 
 //----------------------------------------------------------------------------
 // begin section converted from SUPCRT92

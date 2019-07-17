@@ -328,6 +328,9 @@ enum DC_CNTRL_CODES {
     CPM_AKI = 'A',   // partial molal volumes of aqueous nonelectrolyte species (Akinfiev and Diamond, 2003)
     CPM_PCR = 'P',   // PARCOR estimation of HKF EoS parameters
     CPM_INK = 'Z',   // Lagrange polynomial interpolation over logK(TP) array; ReacDC
+    // New TP methods
+    CPM_HP98 = 'D',  // calculation with modified Holland and Powell (1998) density model
+
 
     // Codes for species-dependent EoS subroutines
     CEM_OFF = 'N',   // no fluid model routine
@@ -341,7 +344,6 @@ enum DC_CNTRL_CODES {
     CEM_AR = 'A',    // subroutine for Ar fluid
     CEM_PO = 'P',    // subroutine for polar fluids
     CEM_NP = 'Q'     // subroutine for nonpolar fluids
-
 };
 
 enum DC_phase_state {   // Code of phase state identification of DC record keys

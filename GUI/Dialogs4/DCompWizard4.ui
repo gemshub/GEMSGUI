@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>736</width>
-    <height>556</height>
+    <width>817</width>
+    <height>588</height>
    </rect>
   </property>
   <property name="font">
@@ -437,6 +437,11 @@
             <item>
              <property name="text">
               <string>A   Pressure correction for aqueous nonelectrolytes (Akinfiev and Diamond 2003)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>D   Pressure correction for aqueous electrolytes (Holland and Powell 1998)</string>
              </property>
             </item>
             <item>

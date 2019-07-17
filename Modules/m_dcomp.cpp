@@ -688,7 +688,7 @@ void TDComp::DCthermo( int q, int p )
 
     if( CM != CTPM_HKF && aW.twp->P < 1e-5 )
     	aW.twp->P = 1e-5;                   // lowest pressure set to 1 Pa
-    if( CM == CTPM_HKF || CV == CPM_AKI /*&& aW.twp->P < 1.00001e-5 */ )  // fixed by KD 03.07.03, 05.12.06, 30.01.08
+    if( CM == CTPM_HKF || CV == CPM_AKI || CV == CPM_HP98 /*&& aW.twp->P < 1.00001e-5 */ )  // fixed by KD 03.07.03, 05.12.06, 30.01.08
     { // HKF calculations and/or or determination of P_sat if P=0
         if( ((fabs(aW.twp->TC - aSta.Temp) > 0.01) ||
                 ( fabs( aW.twp->P - aSta.Pres ) > 0.001 ) || (aSpc.PdcC != dcp->PdcC)) )    // corrected by KD 25.11.05 // added || (aSpc.PdcC != dcp->PdcC)) 01.06.2016
@@ -875,6 +875,12 @@ void TDComp::DCthermo( int q, int p )
         	// calculation of partial molal volumes for aqueous non-polar species
                 // using EOS (Akinfiev,Diamond 2003) added by DK and TW 30.01.2008
         	calc_akinf( q, p );
+        }
+        else if( CV == CPM_HP98 )
+        {
+            // calculation of partial molal properties for aqueous species
+                // using modified density model, Holland and Powell (1998), added DM 17.07.2019
+            calc_den_hp98( q, p );
         }
         break;
 
