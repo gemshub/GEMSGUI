@@ -901,7 +901,7 @@ bool TGtDemo::SaveChartData( jsonui::ChartData* gr )
 
     return true;
 }
-#endif
+#else
 
 bool
 TGtDemo::SaveGraphData( GraphData *gr )
@@ -947,6 +947,7 @@ TGtDemo::SaveGraphData( GraphData *gr )
 
     return true;
 }
+#endif
 
 const char* TGtDemo::GetHtml()
 {

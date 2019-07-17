@@ -320,11 +320,11 @@ public:
     {
         return db->PackKey();
     }
+#ifdef USE_QWT
     //-- for graphic data set
-
     virtual bool SaveGraphData( GraphData* /*graph*/ )
     { return false; }
-
+#endif
 
  };
 

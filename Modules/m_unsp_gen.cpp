@@ -9,7 +9,7 @@
 // Generation task part
 //=========================================================================
 
-short Prime[]=
+static short Prime[]=
     {
 2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,
 103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,
@@ -32,8 +32,9 @@ short Prime[]=
 
 short TUnSpace::near_prime_number( short num )
 {
+  int sizePrime = (sizeof(Prime)/sizeof(short));
   int i;
-  for( i=0; i<(int)(sizeof(Prime)/sizeof(short))-1; i++)
+  for( i=0; i<sizePrime-1; i++)
    if( Prime[i] >= num )
            break;
 
@@ -58,7 +59,7 @@ bool TUnSpace::test_sizes( )
       usp->Q = 11;
    }
    usp->Q = near_prime_number( usp->Q );
-   usp->qQ = (short)(fabs(usp->quan_lev)*usp->Q);
+   usp->qQ = (fabs(usp->quan_lev)*usp->Q);
    if(usp->qQ<1)
         usp->qQ=1;
 
@@ -115,7 +116,7 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
     for(int i=0; i<usp->L; i++ )
     {
        if(usp->PsGen[0] == S_ON )
-         usp->Gs[i][0] = usp->Gs[i][1] = float(tpp->G[i])+TSyst::sm->GetSY()->GEX[i];
+         usp->Gs[i][0] = usp->Gs[i][1] = tpp->G[i]+TSyst::sm->GetSY()->GEX[i];
 
        if(usp->PsGen[5] == S_ON )
          usp->Vs[i][0] = usp->Vs[i][1] = tpp->Vm[i];
@@ -544,18 +545,18 @@ void TUnSpace::text_analyze( int nObj)
         {
          case o_ungexpr:
                PRof->ET_translate( o_untprn, o_ungexpr, 0, mupL, 0, pmpL );
-               rpn[1].GetEquat( (char *)aObj[o_untprn].GetPtr() );
+               rpn[1].GetEquat( static_cast<char *>(aObj[o_untprn].GetPtr()) );
                break;
          case o_unexpr:
                PRof->ET_translate( o_untprn, o_unexpr, 0, mupL, 0, pmpL );
-               rpn[0].GetEquat( (char *)aObj[o_untprn].GetPtr() );
+               rpn[0].GetEquat( static_cast<char *>(aObj[o_untprn].GetPtr()) );
                break;
         }
 
     }
     catch( TError& xcpt )
     {
-        char *erscan = (char *)aObj[nObj].GetPtr();
+        char *erscan = static_cast<char *>(aObj[nObj].GetPtr());
         vfMessage(window(), xcpt.title, xcpt.mess);
         /*bool   iRet = */
         CheckEqText(  erscan,
@@ -600,7 +601,7 @@ TUnSpace::RecordPlot( const char* /*key*/ )
         int oldN = aObj[o_unplline].GetN();
         TPlotLine defpl("", 3, 6, 0);
 
-        plot = (TPlotLine * )aObj[ o_unplline ].Alloc( nLn, sizeof(TPlotLine) );
+        plot = static_cast<TPlotLine * >(aObj[ o_unplline ].Alloc( nLn, sizeof(TPlotLine) ));
         for(int ii=0; ii<nLn; ii++ )
         {
             if( ii >= oldN )
@@ -623,7 +624,46 @@ TUnSpace::RecordPlot( const char* /*key*/ )
     }
 }
 
+#ifndef USE_QWT
 
+bool TUnSpace::SaveChartData( jsonui::ChartData* gr )
+{
+
+    // We can only have one Plot dialog (modal one) so condition should be omitted!!
+    if( !gd_gr )
+        return false;
+    if( gr != gd_gr->getGraphData() )
+        return false;
+    usp->axisType[0] = static_cast<short>(gr->axisTypeX);
+    usp->axisType[5] = static_cast<short>(gr->axisTypeY);
+    usp->axisType[4] = static_cast<short>(gr->graphType);
+    usp->axisType[1] = static_cast<short>(gr->b_color[0]);
+    usp->axisType[2] = static_cast<short>(gr->b_color[1]);
+    usp->axisType[3] = static_cast<short>(gr->b_color[2]);
+    strncpy( usp->xNames, gr->xName.c_str(), 9);
+    strncpy( usp->yNames, gr->yName.c_str(), 9);
+    for(int ii=0; ii<4; ii++ )
+    {
+        usp->size[0][ii] =  static_cast<float>(gr->region[ii]);
+        usp->size[1][ii] =  static_cast<float>(gr->part[ii]);
+    }
+
+    plot = static_cast<TPlotLine *>(aObj[ o_unplline].Alloc( gr->getSeriesNumber(), sizeof(TPlotLine)));
+    for(int ii=0; ii<gr->getSeriesNumber(); ii++ )
+    {
+        plot[ii] = convertor( gr->lineData( ii ) );
+        strncpy(  usp->lNam[ii], plot[ii].getName().c_str(), MAXGRNAME );
+    }
+
+    //if( gr->graphType == ISOLINES )
+    //   gr->getColorList();
+
+    pVisor->Update();
+    contentsChanged = true;
+
+    return true;
+}
+#else
 bool
 TUnSpace::SaveGraphData( GraphData *gr )
 {
@@ -633,23 +673,22 @@ TUnSpace::SaveGraphData( GraphData *gr )
       return false;
      if( gr != gd_gr->getGraphData() )
       return false;
-    usp->axisType[0] = (short)gr->axisTypeX;
-    usp->axisType[5] = (short)gr->axisTypeY;
-    usp->axisType[4] = (short)gr->graphType;
-    usp->axisType[1] = (short)gr->b_color[0];
-    usp->axisType[2] = (short)gr->b_color[1];
-    usp->axisType[3] = (short)gr->b_color[2];
+    usp->axisType[0] = static_cast<short>(gr->axisTypeX);
+    usp->axisType[5] = static_cast<short>(gr->axisTypeY);
+    usp->axisType[4] = static_cast<short>(gr->graphType);
+    usp->axisType[1] = static_cast<short>(gr->b_color[0]);
+    usp->axisType[2] = static_cast<short>(gr->b_color[1]);
+    usp->axisType[3] = static_cast<short>(gr->b_color[2]);
     strncpy( usp->xNames, gr->xName.c_str(), 9);
     strncpy( usp->yNames, gr->yName.c_str(), 9);
     for( ii=0; ii<4; ii++ )
     {
-        usp->size[0][ii] =  gr->region[ii];
-        usp->size[1][ii] =  gr->part[ii];
+        usp->size[0][ii] =  static_cast<float>(gr->region[ii]);
+        usp->size[1][ii] =  static_cast<float>(gr->part[ii]);
     }
 
-    plot = (TPlotLine *)
-           aObj[ o_unplline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine));
-    for( ii=0; ii<(int)gr->lines.GetCount(); ii++ )
+    plot = static_cast<TPlotLine *>(aObj[ o_unplline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine)));
+    for( ii=0; ii<gr->lines.GetCount(); ii++ )
     {
         plot[ii] = gr->lines[ii];
         strncpy(  usp->lNam[ii], plot[ii].getName().c_str(), MAXGRNAME );
@@ -663,6 +702,7 @@ TUnSpace::SaveGraphData( GraphData *gr )
 
     return true;
 }
+#endif
 
 //=====================================================
 

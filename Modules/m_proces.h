@@ -235,8 +235,9 @@ public:
     void RecCalc( const char *key ) override;
     void RecordPrint( const char *key=nullptr ) override; //sddata key
     void RecordPlot( const char *key ) override;
+#ifdef USE_QWT
     bool SaveGraphData( GraphData* graph ) override;
-#ifndef USE_QWT
+#else
     bool SaveChartData( jsonui::ChartData* grdata ) override;
 #endif
 

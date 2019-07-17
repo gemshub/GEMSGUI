@@ -991,7 +991,7 @@ bool TGEM2MT::SaveChartData( jsonui::ChartData* gr )
 
     return true;
 }
-#endif
+#else
 
 // Save changes was done in Plotting dialog
 bool
@@ -1035,6 +1035,7 @@ TGEM2MT::SaveGraphData( GraphData *gr )
 
     return true;
 }
+#endif
 
 // Link na->pNodT0()[nNode] for internal object list
 // nNode < 0 set up NULL pointers  gfor objects

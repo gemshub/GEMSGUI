@@ -791,7 +791,7 @@ bool TRTParm::SaveChartData( jsonui::ChartData* gr )
 
     return true;
 }
-#endif
+#else
 
 bool
 TRTParm::SaveGraphData( GraphData *gr )
@@ -833,6 +833,7 @@ TRTParm::SaveGraphData( GraphData *gr )
 
     return true;
 }
+#endif
 
 //------------------- End of m_rtparm.cpp ---------------------------
 

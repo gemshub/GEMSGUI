@@ -304,6 +304,7 @@ void TPlot::getMaxMinLine( QPointF& min, QPointF& max, int line, int ndxAbs )
 }
 */
 
+#ifdef USE_QWT
 //---------------------------------------------------------------------------
 // GraphData
 //---------------------------------------------------------------------------
@@ -682,5 +683,5 @@ void  adjustAxis(double& min,double& max,double& numTicks)
 
 */
 
-
+#endif
 //--------------------- End of graph.cpp ---------------------------

@@ -174,8 +174,9 @@ public:
         return gdp->rkey+j*gdp->rtLen;
     }
 
+#ifdef USE_QWT
     bool SaveGraphData( GraphData* graph );
-#ifndef USE_QWT
+#else
     bool SaveChartData( jsonui::ChartData* grdata );
 #endif
     //void CmHelp();

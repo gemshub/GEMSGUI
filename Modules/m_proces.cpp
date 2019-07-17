@@ -1684,7 +1684,7 @@ bool TProcess::SaveChartData( jsonui::ChartData* gr )
 
     return true;
 }
-#endif
+#else
 
 bool
 TProcess::SaveGraphData( GraphData *gr )
@@ -1730,6 +1730,7 @@ TProcess::SaveGraphData( GraphData *gr )
 
     return true;
 }
+#endif
 
 const char* TProcess::GetHtml()
 {

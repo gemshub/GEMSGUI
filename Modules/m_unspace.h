@@ -410,9 +410,10 @@ public:
     void RecCalc( const char *key );
     void RecordPrint( const char *key=0 ); //sddata key
     void RecordPlot( const char *key );
+#ifdef USE_QWT
     bool SaveGraphData( GraphData* graph );
-#ifndef USE_QWT
-    //bool SaveChartData( jsonui::ChartData* grdata );
+#else
+    bool SaveChartData( jsonui::ChartData* grdata );
 #endif
     //void CmHelp();
     const char* GetHtml();

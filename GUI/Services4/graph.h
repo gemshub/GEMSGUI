@@ -261,6 +261,7 @@ public:
 
 };
 
+#ifdef USE_QWT
 
 /// Description of 2-D plotting widget.
 /// Description include the curves (TPlotLine, TPlot) settings, the grid settings, the isoline structure settings
@@ -358,7 +359,7 @@ public:
     void setValueIsoline(double val, int ii);
 
 };
-
+#endif
 
 #endif   // graph_data_old_h
 

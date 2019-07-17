@@ -138,8 +138,9 @@ public:
 
     //void CmHelp();
     const char* GetHtml();
+#ifdef USE_QWT
     bool SaveGraphData( GraphData* graph );
-#ifndef USE_QWT
+#else
     bool SaveChartData( jsonui::ChartData* grdata );
 #endif
 };
