@@ -39,7 +39,7 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
         auto seriesdata = convertor(aLinesDesc[ii]);
         auto plot =  m_chartData->getPlot( ii );
         if( plot >= 0 && m_plotModels[plot]->absCount() <= seriesdata.getXColumn() )
-           seriesdata.setXColumn(0);
+            seriesdata.setXColumn(0);
         m_chartData->setLineData( ii, seriesdata );
     }
 
@@ -95,6 +95,10 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
 
 GraphWindow::~GraphWindow()
 {
+    cout << "delete graph_dlg" << endl;
+    if(graph_dlg)
+        graph_dlg->close();
+    delete graph_dlg;
 }
 
 #ifndef USE_QWT
@@ -148,7 +152,8 @@ void GraphWindow::AddPoint( int nPlot, int nPoint )
 #ifdef USE_QWT
         graph_dlg->AddPoint( nPlot, nPoint );
 #else
-        //graph_dlg->UpdatePlots(capAdd);
+        for( const auto& datamodel: m_plotModels)
+            datamodel->resetMatrixData();
 #endif
     }
 }
@@ -159,10 +164,10 @@ void GraphWindow::ShowGraph( const char * capAdd )
 #ifdef USE_QWT
         graph_dlg->ShowNew(capAdd);
 #else
-       //graph_dlg->UpdatePlots(capAdd);
-       graph_dlg->setWindowTitle(capAdd);
+        //graph_dlg->UpdatePlots(capAdd);
+        graph_dlg->setWindowTitle(capAdd);
         for( const auto& datamodel: m_plotModels)
-           datamodel->resetMatrixData();
+            datamodel->resetMatrixData();
 #endif
     }
 }

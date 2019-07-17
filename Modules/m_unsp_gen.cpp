@@ -587,9 +587,10 @@ void TUnSpace::calc_graph()
 void
 TUnSpace::RecordPlot( const char* /*key*/ )
 {
-     if( usp->PsGraph == S_OFF )
+    if( usp->PsGraph == S_OFF )
       return;
 
+    delete gd_gr;
     TIArray<TPlot> plt;
 
     plt.Add( new TPlot(o_unxa, o_unyc ));

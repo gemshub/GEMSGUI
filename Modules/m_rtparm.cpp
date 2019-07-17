@@ -689,6 +689,8 @@ TRTParm::RecordPlot( const char* /*key*/ )
 {
    TIArray<TPlot> plt;
 
+   delete gd_gr;
+
    if( rpp->Pabs == 'P')
      plt.Add( new TPlot( o_rpxp, o_rpyf ));
    else

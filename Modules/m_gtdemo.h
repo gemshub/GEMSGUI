@@ -124,7 +124,7 @@ class TGtDemo : public TCModule
     GTDEMO gd[1];
     GDSTAT gst;
 
-    GraphWindow *gd_gr;
+    GraphWindow *gd_gr = nullptr;
     TPlotLine *plot;
     gstring titler;
 
@@ -148,6 +148,10 @@ public:
 
     GTDEMO *gdp;
     TGtDemo( uint nrt );
+    ~TGtDemo()
+    {
+        delete gd_gr;
+    }
 
     const char* GetName() const
     {

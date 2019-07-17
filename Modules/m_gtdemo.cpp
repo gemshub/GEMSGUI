@@ -798,6 +798,8 @@ TGtDemo::RecordPlot( const char* /*key*/ )
            return;
       }
 
+    delete gd_gr;
+
     TIArray<TPlot> plt;
 
     plt.Add( new TPlot(o_gdx0, o_gdy0 ));

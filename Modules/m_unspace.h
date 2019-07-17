@@ -298,7 +298,7 @@ class TUnSpace : public TCModule
 {
     UNSPACE us[2];
 
-    GraphWindow *gd_gr;
+    GraphWindow *gd_gr = nullptr;
     TPlotLine *plot;
 
      SYSTEM *syu;
@@ -388,6 +388,11 @@ public:
     UNSPACE *usp;
 
     TUnSpace( uint nrt );
+    ~TUnSpace()
+    {
+        delete gd_gr;
+    }
+
 
     const char* GetName() const
     {

@@ -891,8 +891,11 @@ TGEM2MT::CalcPoint( int nPoint )
 void
 TGEM2MT::RecordPlot( const char* /*key*/ )
 {
+
     if( mtp->PvMSg == S_OFF )
       return;
+
+    delete gd_gr;
 
     TIArray<TPlot> plt;
 

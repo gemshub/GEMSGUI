@@ -1578,6 +1578,7 @@ void TProcess::RecordPrint(const char *key)
 void
 TProcess::RecordPlot( const char* /*key*/ )
 {
+    delete gd_gr;
 
     TIArray<TPlot> plt;
 

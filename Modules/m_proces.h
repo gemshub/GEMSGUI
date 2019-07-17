@@ -170,7 +170,7 @@ class TProcess : public TCModule
 {
     PROCESS pe[1];
 
-    GraphWindow *gd_gr;
+    GraphWindow *gd_gr = nullptr;
     TPlotLine *plot;
 
     char *text_fmt;
@@ -213,6 +213,10 @@ public:
     PROCESS *pep;
 
     TProcess( uint nrt );
+    ~TProcess()
+    {
+        delete gd_gr;
+    }
 
     const char* GetName() const override
     {

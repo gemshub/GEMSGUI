@@ -99,7 +99,7 @@ class TRTParm : public TCModule
 {
     RTPARM rp[1];
 
-    GraphWindow *gd_gr;
+    GraphWindow *gd_gr = nullptr;
     TPlotLine *plot;
 
     void expr_analyze();
@@ -115,6 +115,10 @@ public:
     RTPARM *rpp;
 
     TRTParm( uint nrt );
+    ~TRTParm()
+    {
+        delete gd_gr;
+    }
 
     const char* GetName() const
     {
