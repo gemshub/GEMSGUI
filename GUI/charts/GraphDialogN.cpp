@@ -98,7 +98,8 @@ GraphDialog::GraphDialog( TCModule *pmodule, ChartData *data, const string& titl
     QPushButton* bPrint =ui->buttonBox->addButton("&Print", QDialogButtonBox::ActionRole );
     QPushButton* bSaveImage =ui->buttonBox->addButton("&Save Image", QDialogButtonBox::ActionRole );
 
-    QObject::connect( ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    //QObject::connect( ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    QObject::connect( ui->buttonBox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
     QObject::connect( ui->buttonBox, SIGNAL(helpRequested()), this, SLOT(CmHelp()));
 
     QObject::connect( bFragment, SIGNAL(clicked()), this, SLOT(CmFragment()));

@@ -237,7 +237,7 @@ public:
     void RecordPlot( const char *key ) override;
     bool SaveGraphData( GraphData* graph ) override;
 #ifndef USE_QWT
-    //bool SaveChartData( jsonui::ChartData* grdata ) override;
+    bool SaveChartData( jsonui::ChartData* grdata ) override;
 #endif
 
     //void CmHelp();
