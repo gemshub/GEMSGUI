@@ -140,7 +140,7 @@ public:
     const char* GetHtml();
     bool SaveGraphData( GraphData* graph );
 #ifndef USE_QWT
-    //bool SaveChartData( jsonui::ChartData* grdata );
+    bool SaveChartData( jsonui::ChartData* grdata );
 #endif
 };
 
