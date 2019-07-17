@@ -159,7 +159,10 @@ void GraphWindow::ShowGraph( const char * capAdd )
 #ifdef USE_QWT
         graph_dlg->ShowNew(capAdd);
 #else
-        graph_dlg->UpdatePlots(capAdd);
+       //graph_dlg->UpdatePlots(capAdd);
+       graph_dlg->setWindowTitle(capAdd);
+        for( const auto& datamodel: m_plotModels)
+           datamodel->resetMatrixData();
 #endif
     }
 }
