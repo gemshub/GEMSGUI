@@ -305,9 +305,10 @@ void PlotChartViewPrivate::showAreaChart()
             // extract data
             delete lineSeries;
             delete mapper;
+            const SeriesLineData& linedata = gr_data->lineData(nline);
             lineSeries =  new QLineSeries;
             mapper = new QVXYModelMapper;
-            mapSeriesLine( lineSeries, mapper, srmodel, srmodel->getYColumn(jj), -1 );
+            mapSeriesLine( lineSeries, mapper, srmodel, srmodel->getYColumn(jj), srmodel->getXColumn(linedata.getXColumn()) );
             const QVector<QPointF>& data =  lineSeries->pointsVector();
 
             for (int j=0; j < data.count(); j++)
@@ -315,24 +316,23 @@ void PlotChartViewPrivate::showAreaChart()
                 if (lowerSeries)
                 {
                     const QVector<QPointF>& points = lowerSeries->pointsVector();
-                    upperSeries->append(QPointF(j, points[j].y() + data[j].y()));
+                    upperSeries->append(QPointF(data[j].x(), points[j].y() + data[j].y()));
                 } else
                 {
-                    upperSeries->append(QPointF(j, data[j].y()));
+                    upperSeries->append(QPointF(data[j].x(), data[j].y()));
                 }
             }
             QAreaSeries *area = new QAreaSeries(upperSeries, lowerSeries);
             // define colors
-            area->setName(gr_data->lineData(nline).getName().c_str());
+            area->setName(linedata.getName().c_str());
             QPen pen = area->pen();
-            getLinePen( pen, gr_data->lineData(nline)  );
+            getLinePen( pen,  linedata  );
             area->setPen(pen);
             area->setColor(pen.color());
 
             chart->addSeries(area);
             gr_areas.push_back(std::shared_ptr<QAreaSeries>(area));
             lowerSeries = upperSeries;
-            /// chart->createDefaultAxes(); //???
         }
     }
 }
@@ -438,6 +438,14 @@ void PlotChartViewPrivate::makeGrid()
             {
                 gr_points[ii]->attachAxis(axisX);
                 gr_points[ii]->attachAxis(axisY);
+            }
+        }
+        for( uint ii=0; ii<gr_areas.size(); ii++ )
+        {
+            if( gr_areas[ii].get() )
+            {
+                gr_areas[ii]->attachAxis(axisX);
+                gr_areas[ii]->attachAxis(axisY);
             }
         }
     }
