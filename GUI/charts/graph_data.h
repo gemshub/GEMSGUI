@@ -219,7 +219,7 @@ class ChartData : public QObject
                const std::string& aXName, const std::string& aYname,
                int agraphType = LineChart ):
           title(atitle), graphType( agraphType ), axisTypeX(5), axisTypeY(5),
-          xName(aXName), yName(aYname), axisFont("Sans Serif", 9)
+          xName(aXName), yName(aYname), axisFont("Sans Serif", 10)
       {
         // Define background color
         setBackgroundColor( QColor(Qt::white) );

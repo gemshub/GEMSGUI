@@ -369,7 +369,9 @@ void PlotChartViewPrivate::updateMinMax()
 void PlotChartViewPrivate::updateGrid()
 {
     chart->setFont(gr_data->axisFont);
-    chart->setTitleFont(gr_data->axisFont);
+    auto titleFont = gr_data->axisFont;
+    titleFont.setPointSize(titleFont.pointSize()+4);
+    chart->setTitleFont(titleFont);
     chart->setTitle( gr_data->title.c_str() );
 
     if( !axisX || !axisY)
@@ -384,12 +386,20 @@ void PlotChartViewPrivate::updateGrid()
     axisX->setTitleFont( gr_data->axisFont );
     axisX->setLabelsFont( gr_data->axisFont );
     axisX->setTitleText( gr_data->xName.c_str() );
+    auto penX = axisX->linePen();
+    penX.setWidth(penX.width()*2);
+    penX.setColor(Qt::darkGray);
+    axisX->setLinePen(penX);
+    //axisX->setGridLineColor(Qt::black);
+
 
     axisY->setTickCount( gr_data->axisTypeY );
     axisY->setMinorTickCount(4);
     axisY->setTitleFont( gr_data->axisFont );
     axisY->setLabelsFont( gr_data->axisFont );
     axisY->setTitleText( gr_data->yName.c_str() );
+    //axisY->setGridLineColor(Qt::black);
+    axisY->setLinePen(penX);
 
     /// must be setPen(QChartPrivate::defaultPen()) for lines and points
     /// and default background
