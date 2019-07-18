@@ -82,22 +82,7 @@ public:
     {
         clearLines();
         showPlotInternal();
-        for( uint ii=0; ii<gr_series.size(); ii++ )
-        {
-            if( gr_series[ii].get() )
-            {
-                gr_series[ii]->attachAxis(axisX);
-                gr_series[ii]->attachAxis(axisY);
-            }
-        }
-        for( uint ii=0; ii<gr_points.size(); ii++ )
-        {
-            if( gr_points[ii].get() )
-            {
-                gr_points[ii]->attachAxis(axisX);
-                gr_points[ii]->attachAxis(axisY);
-            }
-        }
+        attachAxis();
     }
 
     void updateFragment( bool newFragment )
@@ -111,6 +96,7 @@ public:
 
     void updateGrid();
     void updateMinMax();
+    void attachAxis();
 
     void addLabel(  const QPointF& pointF, const QString& label )
     {
@@ -290,9 +276,9 @@ void PlotChartViewPrivate::showPlotLines()
 void PlotChartViewPrivate::showAreaChart()
 {
     // The lower series initialized to zero values
+    std::shared_ptr<QLineSeries> lineSeries(new QLineSeries);
+    std::shared_ptr<QVXYModelMapper> mapper(new QVXYModelMapper);
     QLineSeries *lowerSeries = nullptr;
-    QLineSeries *lineSeries =nullptr;
-    QVXYModelMapper *mapper = nullptr;
 
     size_t ii, nline;
     for( ii=0, nline =0; ii < gr_data->modelsNumber(); ii++)
@@ -300,17 +286,17 @@ void PlotChartViewPrivate::showAreaChart()
         auto  srmodel = gr_data->modelData( ii );
         for(size_t jj=0; jj < srmodel->getSeriesNumber(); jj++, nline++ )
         {
-            QLineSeries *upperSeries = new QLineSeries(chart);
+            const SeriesLineData& linedata = gr_data->lineData(nline);
+
+            // add line
+            QLineSeries *upperSeries = dynamic_cast<QLineSeries *>(newSeriesLine( gr_data->lineData(nline)));
+            if( upperSeries )
+                chart->addSeries(upperSeries);
+            gr_series.push_back(std::shared_ptr<QXYSeries>(upperSeries));
 
             // extract data
-            delete lineSeries;
-            delete mapper;
-            const SeriesLineData& linedata = gr_data->lineData(nline);
-            lineSeries =  new QLineSeries;
-            mapper = new QVXYModelMapper;
-            mapSeriesLine( lineSeries, mapper, srmodel, srmodel->getYColumn(jj), srmodel->getXColumn(linedata.getXColumn()) );
+            mapSeriesLine( lineSeries.get(), mapper.get(), srmodel, srmodel->getYColumn(jj), srmodel->getXColumn(linedata.getXColumn()) );
             const QVector<QPointF>& data =  lineSeries->pointsVector();
-
             for (int j=0; j < data.count(); j++)
             {
                 if (lowerSeries)
@@ -322,6 +308,7 @@ void PlotChartViewPrivate::showAreaChart()
                     upperSeries->append(QPointF(data[j].x(), data[j].y()));
                 }
             }
+
             QAreaSeries *area = new QAreaSeries(upperSeries, lowerSeries);
             // define colors
             area->setName(linedata.getName().c_str());
@@ -388,7 +375,6 @@ void PlotChartViewPrivate::updateGrid()
     if( !axisX || !axisY)
         return;
 
-
     updateMinMax();
 
     chart->setBackgroundBrush( gr_data->getBackgroundColor() );
@@ -410,44 +396,56 @@ void PlotChartViewPrivate::updateGrid()
     /// chart->setTheme(QChart::ChartThemeLight);
 }
 
+void PlotChartViewPrivate::attachAxis()
+{
+    if( !axisX || !axisY)
+        return;
+
+    for( uint ii=0; ii<gr_series.size(); ii++ )
+    {
+        if( gr_series[ii].get() )
+        {
+            gr_series[ii]->attachAxis(axisX);
+            gr_series[ii]->attachAxis(axisY);
+        }
+    }
+    for( uint ii=0; ii<gr_points.size(); ii++ )
+    {
+        if( gr_points[ii].get() )
+        {
+            gr_points[ii]->attachAxis(axisX);
+            gr_points[ii]->attachAxis(axisY);
+        }
+    }
+    for( uint ii=0; ii<gr_areas.size(); ii++ )
+    {
+        if( gr_areas[ii].get() )
+        {
+            gr_areas[ii]->attachAxis(axisX);
+            gr_areas[ii]->attachAxis(axisY);
+        }
+    }
+}
+
 void PlotChartViewPrivate::makeGrid()
 {
     if(  jsonio::essentiallyEqual( gr_data->region[0], gr_data->region[1]) ||
          jsonio::essentiallyEqual( gr_data->region[2], gr_data->region[3]) )
     {    // default
         chart->createDefaultAxes();
-        axisX =  dynamic_cast<QValueAxis*>(chart->axisX());
-        axisY =  dynamic_cast<QValueAxis*>(chart->axisY());
+        auto axises = chart->axes(Qt::Horizontal);
+        if( axises.size() > 0 )
+           axisX =  dynamic_cast<QValueAxis*>(axises[0]);
+        axises = chart->axes(Qt::Vertical);
+        if( axises.size() > 0 )
+           axisY =  dynamic_cast<QValueAxis*>(axises[0]);
     } else
     {
         axisX = new QValueAxis;
         chart->addAxis(axisX, Qt::AlignBottom);
         axisY = new QValueAxis;
         chart->addAxis(axisY, Qt::AlignLeft);
-        for( uint ii=0; ii<gr_series.size(); ii++ )
-        {
-            if( gr_series[ii].get() )
-            {
-                gr_series[ii]->attachAxis(axisX);
-                gr_series[ii]->attachAxis(axisY);
-            }
-        }
-        for( uint ii=0; ii<gr_points.size(); ii++ )
-        {
-            if( gr_points[ii].get() )
-            {
-                gr_points[ii]->attachAxis(axisX);
-                gr_points[ii]->attachAxis(axisY);
-            }
-        }
-        for( uint ii=0; ii<gr_areas.size(); ii++ )
-        {
-            if( gr_areas[ii].get() )
-            {
-                gr_areas[ii]->attachAxis(axisX);
-                gr_areas[ii]->attachAxis(axisY);
-            }
-        }
+        attachAxis();
     }
     updateGrid();
 }
