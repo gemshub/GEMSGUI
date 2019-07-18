@@ -204,7 +204,7 @@ QScatterSeries* PlotChartViewPrivate::newScatterSeries( const SeriesLineData& li
 {
     QScatterSeries *series = nullptr;
 
-    if( linedata.getMarkerSize() <= 2 )
+    if( linedata.getMarkerSize() <= 0/*2*/ )
         return series;
 
     series = new QScatterSeries;
@@ -217,9 +217,9 @@ void PlotChartViewPrivate::updateScatterSeries( QScatterSeries* series, const Se
     series->setName( linedata.getName().c_str());
     series->setPen( QPen(Qt::transparent));
     series->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
-    series->setMarkerSize(linedata.getMarkerSize());
-    series->setBrush( markerShapeImage( linedata ).scaled(
-                          linedata.getMarkerSize(),linedata.getMarkerSize()));
+    auto msize = linedata.getMarkerSize()+2;
+    series->setMarkerSize(msize);
+    series->setBrush( markerShapeImage( linedata ).scaled(msize,msize));
 }
 
 void PlotChartViewPrivate::mapSeriesLine( QXYSeries *series,
