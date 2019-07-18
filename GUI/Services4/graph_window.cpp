@@ -2,6 +2,7 @@
 #ifdef USE_QWT
 #include "GraphDialog.h"
 #else
+#include "v_mod.h"
 #include "graph.h"
 #include "GraphDialogN.h"
 #endif
@@ -126,7 +127,7 @@ TPlotLine convertor( const SeriesLineData& serData )
 
 
 ChartData *GraphWindow::allocateData( TIArray<TPlot>& aPlots,
-                                      const char * aTitle, const char *aXName, const char *aYName, int agraphType  )
+  const char * aTitle, const char *aXName, const char *aYName, int agraphType  )
 {
     uint ii;
     /// Descriptions of model extracting data
@@ -139,7 +140,7 @@ ChartData *GraphWindow::allocateData( TIArray<TPlot>& aPlots,
         chartModels.back()->setXColumns(aPlots[ii].xColumns());
         chartModels.back()->setYColumns(aPlots[ii].yColumns(), true);
     }
-    return new ChartData( chartModels, aTitle, aXName, aYName, agraphType );
+    return new ChartData( chartModels, aTitle, std::string(aXName, MAXAXISNAME), std::string(aYName, MAXAXISNAME), agraphType );
 }
 
 
@@ -152,8 +153,14 @@ void GraphWindow::AddPoint( int nPlot, int nPoint )
 #ifdef USE_QWT
         graph_dlg->AddPoint( nPlot, nPoint );
 #else
-        for( const auto& datamodel: m_plotModels)
-            datamodel->resetMatrixData();
+        if( m_chartData->graphType == LineChart )
+        {
+            for( const auto& datamodel: m_plotModels)
+                datamodel->resetMatrixData();
+        }
+        else {
+            graph_dlg->UpdatePlots(nullptr);
+        }
 #endif
     }
 }

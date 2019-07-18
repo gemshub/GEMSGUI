@@ -288,38 +288,54 @@ void PlotChartViewPrivate::showAreaChart()
         {
             const SeriesLineData& linedata = gr_data->lineData(nline);
 
-            // add line
-            QLineSeries *upperSeries = dynamic_cast<QLineSeries *>(newSeriesLine( gr_data->lineData(nline)));
-            if( upperSeries )
-                chart->addSeries(upperSeries);
-            gr_series.push_back(std::shared_ptr<QXYSeries>(upperSeries));
+            if( linedata.getXColumn()  < -1 )
+              continue;
 
             // extract data
             mapSeriesLine( lineSeries.get(), mapper.get(), srmodel, srmodel->getYColumn(jj), srmodel->getXColumn(linedata.getXColumn()) );
             const QVector<QPointF>& data =  lineSeries->pointsVector();
+            bool empty_x = true;
             for (int j=0; j < data.count(); j++)
             {
-                if (lowerSeries)
-                {
-                    const QVector<QPointF>& points = lowerSeries->pointsVector();
-                    upperSeries->append(QPointF(data[j].x(), points[j].y() + data[j].y()));
-                } else
-                {
-                    upperSeries->append(QPointF(data[j].x(), data[j].y()));
+                if( empty_x && j>0 && !jsonio::essentiallyEqual( data[j].x(), data[j-1].x() ))
+                 {
+                    empty_x = false;
+                    break;
                 }
             }
 
-            QAreaSeries *area = new QAreaSeries(upperSeries, lowerSeries);
-            // define colors
-            area->setName(linedata.getName().c_str());
-            QPen pen = area->pen();
-            getLinePen( pen,  linedata  );
-            area->setPen(pen);
-            area->setColor(pen.color());
+            if( !empty_x )
+            {
+                // add line
+                QLineSeries *upperSeries = dynamic_cast<QLineSeries *>(newSeriesLine( gr_data->lineData(nline)));
+                if( upperSeries )
+                    chart->addSeries(upperSeries);
+                gr_series.push_back(std::shared_ptr<QXYSeries>(upperSeries));
 
-            chart->addSeries(area);
-            gr_areas.push_back(std::shared_ptr<QAreaSeries>(area));
-            lowerSeries = upperSeries;
+                for (int j=0; j < data.count(); j++)
+                {
+                    if (lowerSeries)
+                    {
+                        const QVector<QPointF>& points = lowerSeries->pointsVector();
+                        upperSeries->append(QPointF(data[j].x(), points[j].y() + data[j].y()));
+                    } else
+                    {
+                        upperSeries->append(QPointF(data[j].x(), data[j].y()));
+                    }
+                }
+
+                QAreaSeries *area = new QAreaSeries(upperSeries, lowerSeries);
+                // define colors
+                area->setName(linedata.getName().c_str());
+                QPen pen = area->pen();
+                getLinePen( pen,  linedata  );
+                area->setPen(pen);
+                area->setColor(pen.color());
+
+                chart->addSeries(area);
+                gr_areas.push_back(std::shared_ptr<QAreaSeries>(area));
+                lowerSeries = upperSeries;
+            }
         }
     }
 }
@@ -370,7 +386,7 @@ void PlotChartViewPrivate::updateGrid()
 {
     chart->setFont(gr_data->axisFont);
     auto titleFont = gr_data->axisFont;
-    titleFont.setPointSize(titleFont.pointSize()+4);
+    titleFont.setPointSize(titleFont.pointSize()+2);
     chart->setTitleFont(titleFont);
     chart->setTitle( gr_data->title.c_str() );
 
@@ -382,28 +398,26 @@ void PlotChartViewPrivate::updateGrid()
     chart->setBackgroundBrush( gr_data->getBackgroundColor() );
 
     axisX->setTickCount( gr_data->axisTypeX );
-    axisX->setMinorTickCount(4);
-    axisX->setTitleFont( gr_data->axisFont );
+    //axisX->setMinorTickCount(4);
+    axisX->setTitleFont( titleFont );
     axisX->setLabelsFont( gr_data->axisFont );
     axisX->setTitleText( gr_data->xName.c_str() );
     auto penX = axisX->linePen();
-    penX.setWidth(penX.width()*2);
+    penX.setWidth(3);
     penX.setColor(Qt::darkGray);
     axisX->setLinePen(penX);
-    //axisX->setGridLineColor(Qt::black);
 
 
     axisY->setTickCount( gr_data->axisTypeY );
-    axisY->setMinorTickCount(4);
-    axisY->setTitleFont( gr_data->axisFont );
+    //axisY->setMinorTickCount(4);
+    axisY->setTitleFont( titleFont );
     axisY->setLabelsFont( gr_data->axisFont );
     axisY->setTitleText( gr_data->yName.c_str() );
-    //axisY->setGridLineColor(Qt::black);
     axisY->setLinePen(penX);
 
-    /// must be setPen(QChartPrivate::defaultPen()) for lines and points
-    /// and default background
-    /// chart->setTheme(QChart::ChartThemeLight);
+    // must be setPen(QChartPrivate::defaultPen()) for lines and points
+    // and default background
+    // chart->setTheme(QChart::ChartThemeLight);
 }
 
 void PlotChartViewPrivate::attachAxis()
@@ -619,6 +633,7 @@ void PlotChartView::updateAll()
 
 void PlotChartView::updateLines()
 {
+    //pdata->updateAll();
     pdata->updateLines();
 }
 

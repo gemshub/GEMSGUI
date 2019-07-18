@@ -365,11 +365,15 @@ void GraphDialog::changeIcon( int rowi, int column )
 void GraphDialog::changeNdx( int rowi, int column )
 {
     auto row = static_cast<size_t>(rowi);
-    if( column == 1 &&  gr_data->graphType == LineChart )
+    if( column == 1 &&  ( gr_data->graphType == LineChart || gr_data->graphType == AreaChart ) )
     {
+
        auto ndxX = tbLegend->item(rowi, column)->text();
        gr_data->setLineData( row, ndxX );
-       plot->updateLine( row );
+       if( gr_data->graphType == LineChart )
+            plot->updateLine( row );
+       else if( gr_data->graphType == AreaChart )
+              plot->updateAll();
        emit dataChanged( gr_data );
     }
     if( column == 2 /*&&  gr_data->graphType == LineChart*/ )

@@ -796,7 +796,7 @@ char buf[300];
     if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
              GetName(), "Use graphic monitoring?") )
         {
-            RecordPlot( 0 );
+            RecordPlot( nullptr );
             UseGraphMonitoring = true;
         }
 #endif
