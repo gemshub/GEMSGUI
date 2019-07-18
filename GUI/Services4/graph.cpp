@@ -218,7 +218,11 @@ double TPlot::getValue(int row, int col) const
         else
             value = aObj[getObjY()].GetEmpty( col-getNAbs(), row );
     }
-    return value;
+
+    if( IsDoubleEmpty( value ) && row > 0  )
+       return getValue(row-1, col);
+    else
+       return value;
 }
 
 QString TPlot::getColumnName(int col) const

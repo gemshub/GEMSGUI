@@ -1,5 +1,6 @@
 
 #include "plot_model.h"
+#include "v_vals.h"
 
 QVariant PlotModel::data(const QModelIndex &index, int role) const
 {
@@ -10,7 +11,13 @@ QVariant PlotModel::data(const QModelIndex &index, int role) const
     {
     case Qt::DisplayRole:
     case Qt::EditRole:
-        return m_plot.getValue( index.row(), index.column() );
+    {
+        auto value = m_plot.getValue( index.row(), index.column() );
+        if( IsDoubleEmpty( value ) )
+            return QVariant();
+        else
+            return m_plot.getValue( index.row(), index.column() );
+    }
     default: break;
     }
     return QVariant();
