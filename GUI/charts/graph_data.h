@@ -196,7 +196,6 @@ class ChartData : public QObject
  public:
 
     std::string title;  ///< Title of graphic
-    int graphType;      ///< GRAPHTYPES ( 0-line by line, 1- cumulative, 2 - isolines )
 
     // define grid of plot
     int axisTypeX;      ///< Grid type for Abscissa
@@ -245,6 +244,7 @@ class ChartData : public QObject
        int defined_lines = static_cast<int>(linesdata.size());
        int nLines = getSeriesNumber();
 
+       aPlot->setGraphType( graphType );
        modelsdata.push_back( aPlot );
        int nLinN = aPlot->getSeriesNumber();
        for( int jj=0; jj<nLinN; jj++, nLines++ )
@@ -252,7 +252,6 @@ class ChartData : public QObject
          if( nLines >= defined_lines )
            linesdata.push_back( SeriesLineData( jj, nLinN, aPlot->getName(nLinN)  ) );
        }
-
        connect( modelsdata.back().get(), SIGNAL( changedXSelections() ),
                 this,  SLOT( updateXSelections() ) );
        connect( modelsdata.back().get(), SIGNAL( changedYSelections(bool) ),
@@ -276,6 +275,14 @@ class ChartData : public QObject
          }
         return -1;
     }
+
+    int getGraphType() const
+    {
+      return graphType;
+    }
+
+    void setGraphType( int newtype );
+
 
     /// Get number of series
     int getSeriesNumber() const
@@ -315,7 +322,9 @@ class ChartData : public QObject
    {
      int modelndx = getPlot( ndx);
      if( modelndx >= 0)
-       linesdata[ndx].setXColumn( modelsdata[ static_cast<size_t>(modelndx)]->indexAbscissaName( aNdxX ) );
+     {
+         linesdata[ndx].setXColumn( modelsdata[ static_cast<size_t>(modelndx)]->indexAbscissaName( aNdxX ) );
+     }
    }
 
    void setLineData( size_t ndx,  const std::string& aName  )
@@ -352,6 +361,8 @@ class ChartData : public QObject
    void fromJsonObject(const QJsonObject& json);
 
 protected:
+
+   int graphType;      ///< GRAPHTYPES ( 0-line by line, 1- cumulative, 2 - isolines )
 
    // define curves
    std::vector<std::shared_ptr<ChartDataModel>> modelsdata;   ///< Descriptions of model extracting data

@@ -870,7 +870,7 @@ bool TGtDemo::SaveChartData( jsonui::ChartData* gr )
 
     gdp->axisType[0] = static_cast<short>(gr->axisTypeX);
     gdp->axisType[5] = static_cast<short>(gr->axisTypeY);
-    gdp->axisType[4] = static_cast<short>(gr->graphType);
+    gdp->axisType[4] = static_cast<short>(gr->getGraphType());
     gdp->axisType[1] = static_cast<short>(gr->b_color[0]);
     gdp->axisType[2] = static_cast<short>(gr->b_color[1]);
     gdp->axisType[3] = static_cast<short>(gr->b_color[2]);

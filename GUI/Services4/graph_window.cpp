@@ -153,14 +153,14 @@ void GraphWindow::AddPoint( int nPlot, int nPoint )
 #ifdef USE_QWT
         graph_dlg->AddPoint( nPlot, nPoint );
 #else
-        if( m_chartData->graphType == LineChart )
+        //if( m_chartData->graphType == LineChart )
         {
             for( const auto& datamodel: m_plotModels)
                 datamodel->resetMatrixData();
         }
-        else {
-            graph_dlg->UpdatePlots(nullptr);
-        }
+        //else {
+        //    graph_dlg->UpdatePlots(nullptr);
+        //}
 #endif
     }
 }
@@ -171,16 +171,16 @@ void GraphWindow::ShowGraph( const char * capAdd )
 #ifdef USE_QWT
         graph_dlg->ShowNew(capAdd);
 #else
-        if( m_chartData->graphType == LineChart )
+        //if( m_chartData->graphType == LineChart )
         {
             // more quickly
             graph_dlg->setWindowTitle(capAdd);
             for( const auto& datamodel: m_plotModels)
                 datamodel->resetMatrixData();
         }
-        else {
-            graph_dlg->UpdatePlots(capAdd);
-        }
+        //else {
+        //    graph_dlg->UpdatePlots(capAdd);
+        //}
 #endif
     }
 }

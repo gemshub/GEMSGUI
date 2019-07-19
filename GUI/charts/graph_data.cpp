@@ -134,6 +134,12 @@ void SeriesLineData::fromJsonObject(const QJsonObject& json)
 // ChartData
 //---------------------------------------------------------------------------
 
+void ChartData::setGraphType(int newtype)
+{
+  graphType = newtype;
+  for( auto& model: modelsdata)
+      model->setGraphType(newtype);
+}
 
 void ChartData::setMinMaxRegion( double reg[4] )
 {
@@ -349,9 +355,9 @@ void ChartData::updateXSelections()
         {
             jsonio::jsonioErrIf( nLines >= defined_lines, "updateXSelections", "Error into graph data.." );
             if( linesdata[nLines].getXColumn() >= numxColms )
-              linesdata[nLines].setXColumn( -1 );
+                linesdata[nLines].setXColumn( -1 );
         }
-     }
+    }
 }
 
 void ChartData::updateYSelections( bool updateNames )
@@ -365,14 +371,15 @@ void ChartData::updateYSelections( bool updateNames )
         for( uint jj=0; jj<nLinN; jj++, nLines++ )
         {
             if( nLines >= defined_lines )
-                 linesdata.push_back( SeriesLineData( jj, nLinN, modelsdata[ii]->getName(nLines)  ) );
+                linesdata.push_back( SeriesLineData( jj, nLinN, modelsdata[ii]->getName(nLines)  ) );
             else
                 if( updateNames )
                     linesdata[nLines].setName( modelsdata[ii]->getName(nLines) );
-         }
-     }
+        }
+    }
     linesdata.resize(nLines);
 }
+
 
 
 } // namespace jsonui

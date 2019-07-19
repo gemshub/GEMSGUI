@@ -1651,7 +1651,7 @@ bool TProcess::SaveChartData( jsonui::ChartData* gr )
 
     pep->axisType[0] = static_cast<short>(gr->axisTypeX);
     pep->axisType[5] = static_cast<short>(gr->axisTypeY);
-    pep->axisType[4] = static_cast<short>(gr->graphType);
+    pep->axisType[4] = static_cast<short>(gr->getGraphType());
     pep->axisType[1] = static_cast<short>(gr->b_color[0]);
     pep->axisType[2] = static_cast<short>(gr->b_color[1]);
     pep->axisType[3] = static_cast<short>(gr->b_color[2]);

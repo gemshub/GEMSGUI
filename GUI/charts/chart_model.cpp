@@ -32,6 +32,7 @@
 
 #include <QJsonArray>
 #include "chart_model.h"
+#include "graph_data.h"
 #include "jsonio/jsondom.h"
 
 namespace jsonui {
@@ -48,6 +49,7 @@ ChartDataModel::ChartDataModel( QAbstractTableModel *tableModel, QObject *parent
     connect(m_model, SIGNAL(modelReset()), this, SIGNAL(modelReset()) );
     connect(m_model, SIGNAL(destroyed()), this, SIGNAL(destroyed()));
 }
+
 
 int ChartDataModel::rowCount(const QModelIndex &parent) const
 {
@@ -78,18 +80,51 @@ QVariant ChartDataModel::headerData(int section, Qt::Orientation orientation, in
 
 QVariant ChartDataModel::data(const QModelIndex &index, int role) const
 {
-    if (role == Qt::DisplayRole)
+    switch( graphType )
     {
-        if( index.column() == 0 )
-           return index.row();
-        return m_model->data( mIndex( index), role);
-    }
-    else if (role == Qt::EditRole)
-    {
-        if( index.column() > 0 )
-           return m_model->data( mIndex( index), role);
+    case LineChart:
+        if (role == Qt::DisplayRole)
+        {
+            if( index.column() == 0 )
+                return index.row();
+            return m_model->data( mIndex( index), role);
+        }
+        else if (role == Qt::EditRole)
+        {
+            if( index.column() > 0 )
+                return m_model->data( mIndex( index), role);
+        }
+        break;
+
+    case AreaChart:
+        if (role == Qt::DisplayRole  )
+        {
+            if( index.column() == 0 )
+            {
+                return index.row();
+            }
+            else
+            {
+                size_t ii;
+                auto nline = index.column()-1;
+                for ( ii=0; ii<xcolumns.size(); ii++)
+                {
+                    if( xcolumns[ii] == nline)  // abscissa
+                        return m_model->data( mIndex(index), role);
+                }
+                double value=0;
+                for ( ii=0; ii<ycolumns.size(); ii++)
+                {
+                    value += m_model->data( mIndex(index.row(), ycolumns[ii]+1), role).toDouble();
+                    if( ycolumns[ii] == nline)  // ordinate
+                        return value;
+                }
+            }
+        }
+        break;
     }
     return QVariant();
+
 }
 
 bool ChartDataModel::setData(const QModelIndex &index, const QVariant &value, int role)

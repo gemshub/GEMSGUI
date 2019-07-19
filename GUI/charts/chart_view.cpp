@@ -276,11 +276,9 @@ void PlotChartViewPrivate::showPlotLines()
 void PlotChartViewPrivate::showAreaChart()
 {
     // The lower series initialized to zero values
-    std::shared_ptr<QLineSeries> lineSeries(new QLineSeries);
-    std::shared_ptr<QVXYModelMapper> mapper(new QVXYModelMapper);
     QLineSeries *lowerSeries = nullptr;
-
     size_t ii, nline;
+
     for( ii=0, nline =0; ii < gr_data->modelsNumber(); ii++)
     {
         auto  srmodel = gr_data->modelData( ii );
@@ -290,40 +288,11 @@ void PlotChartViewPrivate::showAreaChart()
 
             if( linedata.getXColumn()  < -1 )
               continue;
+            addPlotLine( srmodel, srmodel->getYColumn(jj), linedata   );
 
-            // extract data
-            mapSeriesLine( lineSeries.get(), mapper.get(), srmodel, srmodel->getYColumn(jj), srmodel->getXColumn(linedata.getXColumn()) );
-            const QVector<QPointF>& data =  lineSeries->pointsVector();
-            bool empty_x = true;
-            for (int j=0; j < data.count(); j++)
+            QLineSeries *upperSeries = dynamic_cast<QLineSeries *>(gr_series.back().get());
+            if( upperSeries )
             {
-                if( empty_x && j>0 && !jsonio::essentiallyEqual( data[j].x(), data[j-1].x() ))
-                 {
-                    empty_x = false;
-                    break;
-                }
-            }
-
-            if( !empty_x )
-            {
-                // add line
-                QLineSeries *upperSeries = dynamic_cast<QLineSeries *>(newSeriesLine( gr_data->lineData(nline)));
-                if( upperSeries )
-                    chart->addSeries(upperSeries);
-                gr_series.push_back(std::shared_ptr<QXYSeries>(upperSeries));
-
-                for (int j=0; j < data.count(); j++)
-                {
-                    if (lowerSeries)
-                    {
-                        const QVector<QPointF>& points = lowerSeries->pointsVector();
-                        upperSeries->append(QPointF(data[j].x(), points[j].y() + data[j].y()));
-                    } else
-                    {
-                        upperSeries->append(QPointF(data[j].x(), data[j].y()));
-                    }
-                }
-
                 QAreaSeries *area = new QAreaSeries(upperSeries, lowerSeries);
                 // define colors
                 area->setName(linedata.getName().c_str());
@@ -342,7 +311,7 @@ void PlotChartViewPrivate::showAreaChart()
 
 void PlotChartViewPrivate::showPlotInternal()
 {
-    switch( gr_data->graphType )
+    switch( gr_data->getGraphType() )
     {
     case LineChart:
         showPlotLines();
@@ -476,7 +445,7 @@ void PlotChartViewPrivate::makeGrid()
 
 void PlotChartViewPrivate::updateSeries( size_t nline )
 {
-    switch( gr_data->graphType )
+    switch( gr_data->getGraphType() )
     {
     case LineChart:
         updateSeriesLine( nline );
@@ -493,7 +462,7 @@ void PlotChartViewPrivate::updateSeries( size_t nline )
 
 void PlotChartViewPrivate::highlightSeries( size_t line, bool enable )
 {
-    if( gr_data->graphType != LineChart || line >= gr_data->linesNumber() )
+    if( gr_data->getGraphType() != LineChart || line >= gr_data->linesNumber() )
         return;
     auto  linedata = gr_data->lineData( line );
 

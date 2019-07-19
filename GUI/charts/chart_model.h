@@ -80,6 +80,11 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
+    void setGraphType( int type )
+    {
+       graphType   = type;
+    }
+
     // working with X, Y columns selection
 
     int getXColumn( int line ) const
@@ -177,10 +182,11 @@ public:
     void toJsonObject(QJsonObject& json) const;
     void fromJsonObject(const QJsonObject& json);
 
-private:
+protected:
 
     /// Extern Table wir
     QAbstractTableModel *m_model;
+    int graphType = 0;      ///< GRAPHTYPES ( 0-line by line, 1- cumulative ... )
 
     /// List of the column of the model that contains the x-coordinates of data points
     std::vector<int> xcolumns;

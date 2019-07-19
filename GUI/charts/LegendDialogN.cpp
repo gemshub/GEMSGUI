@@ -121,8 +121,8 @@ void LegendDialog::setChartData()
 {
     ui->pTitle->setText(graph->title.c_str());
 
-    oldGraphType = graph->graphType;
-    ui->comboBox1->setCurrentIndex( graph->graphType );
+    oldGraphType = graph->getGraphType();
+    ui->comboBox1->setCurrentIndex( graph->getGraphType() );
 
     ui->pAxisX->setValue( graph->axisTypeX );
     ui->pAxisY->setValue( graph->axisTypeY );
@@ -179,7 +179,7 @@ bool LegendDialog::applyToDialog()
     double fyn =  ui->pfYn->text().toDouble();
 
     graph->title = ui->pTitle->text().toStdString();
-    graph->graphType = ui->comboBox1->currentIndex();
+    graph->setGraphType( ui->comboBox1->currentIndex() );
     graph->axisTypeX = ui->pAxisX->value();
     graph->axisTypeY = ui->pAxisY->value();
     graph->xName = ui->pXname->text().toStdString();

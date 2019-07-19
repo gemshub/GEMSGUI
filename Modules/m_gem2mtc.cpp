@@ -965,7 +965,7 @@ bool TGEM2MT::SaveChartData( jsonui::ChartData* gr )
 
     mtp->axisType[0] = static_cast<short>(gr->axisTypeX);
     mtp->axisType[5] = static_cast<short>(gr->axisTypeY);
-    mtp->axisType[4] = static_cast<short>(gr->graphType);
+    mtp->axisType[4] = static_cast<short>(gr->getGraphType());
     mtp->axisType[1] = static_cast<short>(gr->b_color[0]);
     mtp->axisType[2] = static_cast<short>(gr->b_color[1]);
     mtp->axisType[3] = static_cast<short>(gr->b_color[2]);

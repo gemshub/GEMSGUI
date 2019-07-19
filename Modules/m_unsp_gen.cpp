@@ -637,7 +637,7 @@ bool TUnSpace::SaveChartData( jsonui::ChartData* gr )
         return false;
     usp->axisType[0] = static_cast<short>(gr->axisTypeX);
     usp->axisType[5] = static_cast<short>(gr->axisTypeY);
-    usp->axisType[4] = static_cast<short>(gr->graphType);
+    usp->axisType[4] = static_cast<short>(gr->getGraphType());
     usp->axisType[1] = static_cast<short>(gr->b_color[0]);
     usp->axisType[2] = static_cast<short>(gr->b_color[1]);
     usp->axisType[3] = static_cast<short>(gr->b_color[2]);

@@ -85,7 +85,7 @@ GraphDialog::GraphDialog( TCModule *pmodule, ChartData *data, const string& titl
     ui->splitter->setStretchFactor(1, 1);
 
     // Insert labels in legend box
-    if( gr_data->graphType == LineChart || gr_data->graphType == AreaChart )
+    if( gr_data->getGraphType() == LineChart || gr_data->getGraphType() == AreaChart )
       ShowLegend();
 
     connect(tbLegend, SIGNAL(cellClicked( int , int  ) ),
@@ -138,7 +138,7 @@ void GraphDialog::UpdateAll(const char* title )
             this, SLOT(changeNdx( int, int )));
 
     // Insert labels in legend box
-    if( gr_data->graphType == LineChart || gr_data->graphType == AreaChart )
+    if( gr_data->getGraphType() == LineChart || gr_data->getGraphType() == AreaChart )
       ShowLegend();
 
     plot->updateAll();
@@ -343,7 +343,7 @@ void GraphDialog::changeIcon( int rowi, int column )
      auto row = static_cast<size_t>(rowi);
     if( column == 0 )
     {
-     if( gr_data->graphType == LineChart || gr_data->graphType == AreaChart )
+     if( gr_data->getGraphType() == LineChart || gr_data->getGraphType() == AreaChart )
      {
             SymbolDialog cd( gr_data->lineData(row), this);
             if( cd.exec() )
@@ -355,7 +355,7 @@ void GraphDialog::changeIcon( int rowi, int column )
                emit dataChanged( gr_data );
             }
      }
-   }    else if( column ==  2 && gr_data->graphType == LineChart )
+   }    else if( column ==  2 && gr_data->getGraphType() == LineChart )
             {
                highlightRow( row );
             }
@@ -365,14 +365,14 @@ void GraphDialog::changeIcon( int rowi, int column )
 void GraphDialog::changeNdx( int rowi, int column )
 {
     auto row = static_cast<size_t>(rowi);
-    if( column == 1 &&  ( gr_data->graphType == LineChart || gr_data->graphType == AreaChart ) )
+    if( column == 1 &&  ( gr_data->getGraphType() == LineChart || gr_data->getGraphType() == AreaChart ) )
     {
 
        auto ndxX = tbLegend->item(rowi, column)->text();
        gr_data->setLineData( row, ndxX );
-       if( gr_data->graphType == LineChart )
+       if( gr_data->getGraphType() == LineChart )
             plot->updateLine( row );
-       else if( gr_data->graphType == AreaChart )
+       else if( gr_data->getGraphType() == AreaChart )
               plot->updateAll();
        emit dataChanged( gr_data );
     }

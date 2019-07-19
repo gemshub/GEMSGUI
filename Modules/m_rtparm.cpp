@@ -763,7 +763,7 @@ bool TRTParm::SaveChartData( jsonui::ChartData* gr )
 
     rpp->axisType[0] = static_cast<short>(gr->axisTypeX);
     rpp->axisType[5] = static_cast<short>(gr->axisTypeY);
-    rpp->axisType[4] = static_cast<short>(gr->graphType);
+    rpp->axisType[4] = static_cast<short>(gr->getGraphType());
     rpp->axisType[1] = static_cast<short>(gr->b_color[0]);
     rpp->axisType[2] = static_cast<short>(gr->b_color[1]);
     rpp->axisType[3] = static_cast<short>(gr->b_color[2]);
