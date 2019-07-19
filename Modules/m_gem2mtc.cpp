@@ -895,8 +895,6 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
     if( mtp->PvMSg == S_OFF )
       return;
 
-    delete gd_gr;
-
     TIArray<TPlot> plt;
 
     plt.Add( new TPlot(o_mtxt, o_mtyt ));
@@ -934,7 +932,7 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
                // strncpy( plot[ii].name, mtp->lNamE[ii-mtp->nYS], MAXGRNAME-1 );
             //plot[ii].name[MAXGRNAME-1] = '\0';
         }
-        gd_gr = new GraphWindow( this, plt, mtp->name,
+        gd_gr = updateGraphWindow( gd_gr, this, plt, mtp->name,
               mtp->size[0], mtp->size[1], plot,
               mtp->axisType, mtp->xNames, mtp->yNames);
     }
@@ -946,7 +944,7 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
           lnames.Add( gstring(mtp->lNam[ii], 0, MAXGRNAME ));
       for( ii=0; ii<mtp->nYE; ii++ )
           lnames.Add( gstring( mtp->lNamE[ii], 0, MAXGRNAME ));
-      gd_gr = new GraphWindow( this, plt, mtp->name,
+      gd_gr = updateGraphWindow( gd_gr, this, plt, mtp->name,
           mtp->xNames, mtp->yNames, lnames );
     }
 }
@@ -959,9 +957,6 @@ bool TGEM2MT::SaveChartData( jsonui::ChartData* gr )
     // We can only have one Plot dialog (modal one) so condition should be omitted!!
     if( !gd_gr )
         return false;
-    if( gr != gd_gr->getGraphData() )
-        return false;
-
 
     mtp->axisType[0] = static_cast<short>(gr->axisTypeX);
     mtp->axisType[5] = static_cast<short>(gr->axisTypeY);

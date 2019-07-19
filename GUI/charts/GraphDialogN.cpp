@@ -56,18 +56,17 @@
 namespace jsonui {
 
 /// The constructor
-GraphDialog::GraphDialog( TCModule *pmodule, ChartData *data, const string& title ):
-        QDialog( pmodule->window() ), pModule(pmodule), ui(new Ui::GraphDialogData),
-        gr_data(data), isFragment(false)
+GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::ChartData>& data,
+                          const std::vector<std::shared_ptr<PlotModel>>& aplotModels,
+                          const string& title ):
+        QDialog( pmodule->window() ), pModule(pmodule), gr_data(data), plotModels(aplotModels),
+        ui(new Ui::GraphDialogData),
+        isFragment(false)
 {
     ui->setupUi(this);
     setWindowTitle( title.c_str() );
 
-    // define plot window
-    plot = new PlotChartView( gr_data, this);
-    ui->verticalLayout_2->addWidget( plot);
-
-   // Define legend table
+    // Define legend table
     tbLegend = new DragTableWidget( this );
     tbLegend->setSelectionMode(QAbstractItemView::NoSelection);
     tbLegend->setColumnCount( 3 );
@@ -77,13 +76,16 @@ GraphDialog::GraphDialog( TCModule *pmodule, ChartData *data, const string& titl
     tbLegend->verticalHeader()->setVisible(false);
     tbLegend->horizontalHeader()->setVisible(false);
 
-    LabelDelegate *dgLegend = new LabelDelegate( gr_data );
+    LabelDelegate *dgLegend = new LabelDelegate( this );
     tbLegend->setItemDelegate(dgLegend);
     ui->verticalLayout->addWidget( tbLegend );
 
     ui->splitter->setStretchFactor(0, 5);
     ui->splitter->setStretchFactor(1, 1);
 
+    // define plot window
+    plot = new PlotChartView( gr_data.get(), this);
+    ui->verticalLayout_2->addWidget( plot);
     // Insert labels in legend box
     if( gr_data->getGraphType() == LineChart || gr_data->getGraphType() == AreaChart )
       ShowLegend();
@@ -114,17 +116,40 @@ GraphDialog::~GraphDialog()
     delete ui;
 }
 
+void GraphDialog::resetGraphDialog(const std::shared_ptr<ChartData> &data,
+                                   const std::vector<std::shared_ptr<PlotModel> > &aplotModels,
+                                   const string &title)
+{
+  gr_data = data;
+  plotModels = aplotModels;
+  UpdateAll(title.c_str() );
+}
+
 void GraphDialog::closeEvent(QCloseEvent *ev)
 {
-    ev->accept();
+    cout << "Close GraphDialog " << endl;
     pVisorImp->closeMdiChild( this );
+    ev->accept();
 }
 
 void GraphDialog::UpdatePlots( const char* title )
 {
     if( title )
      setWindowTitle( title );
-   plot->updateLines();
+    plot->updateLines();
+}
+
+void GraphDialog::AddPoint(int , int )
+{
+    for( const auto& datamodel: plotModels)
+         datamodel->resetMatrixData();
+}
+
+void GraphDialog::ShowGraph(const char *capAdd)
+{
+    setWindowTitle(capAdd);
+    for( const auto& datamodel: plotModels)
+        datamodel->resetMatrixData();
 }
 
 void GraphDialog::UpdateAll(const char* title )
@@ -352,7 +377,7 @@ void GraphDialog::changeIcon( int rowi, int column )
                auto icon = markerShapeIcon(gr_data->lineData(row) );
                tbLegend->item(rowi, column)->setIcon(icon);
                plot->updateLine(row);
-               emit dataChanged( gr_data );
+               emit dataChanged( gr_data.get() );
             }
      }
    }    else if( column ==  2 && gr_data->getGraphType() == LineChart )
@@ -374,13 +399,13 @@ void GraphDialog::changeNdx( int rowi, int column )
             plot->updateLine( row );
        else if( gr_data->getGraphType() == AreaChart )
               plot->updateAll();
-       emit dataChanged( gr_data );
+       emit dataChanged( gr_data.get() );
     }
     if( column == 2 /*&&  gr_data->graphType == LineChart*/ )
     {
         std::string  name = tbLegend->item(rowi, column)->text().toStdString();
         gr_data->setLineData(static_cast<size_t>(row), name );
-        emit dataChanged( gr_data );
+        emit dataChanged( gr_data.get() );
     }
 }
 
@@ -470,10 +495,10 @@ QWidget *LabelDelegate::createEditor(QWidget *parent,
     }
     if( index.column() == 1 )
     {
-        int ndx_plot =  grData->getPlot( static_cast<size_t>(index.row()) );
+        int ndx_plot = topDlg->gr_data->getPlot( static_cast<size_t>(index.row()) );
         if( ndx_plot >= 0 )
         {
-            QStringList cbList = grData->modelData(static_cast<size_t>(ndx_plot))->getAbscissaIndexes();
+            QStringList cbList = topDlg->gr_data->modelData(static_cast<size_t>(ndx_plot))->getAbscissaIndexes();
             if( cbList.count() < 2 ) // only one value correct
                 return nullptr;
             QComboBox* editor =  new QComboBox( parent );

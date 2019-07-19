@@ -124,7 +124,12 @@ class TGtDemo : public TCModule
     GTDEMO gd[1];
     GDSTAT gst;
 
+#ifdef USE_QWT
     GraphWindow *gd_gr = nullptr;
+#else
+    jsonui::GraphDialog *gd_gr = nullptr;
+#endif
+
     TPlotLine *plot;
     gstring titler;
 

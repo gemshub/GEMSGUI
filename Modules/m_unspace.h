@@ -298,7 +298,11 @@ class TUnSpace : public TCModule
 {
     UNSPACE us[2];
 
+#ifdef USE_QWT
     GraphWindow *gd_gr = nullptr;
+#else
+    jsonui::GraphDialog *gd_gr = nullptr;
+#endif
     TPlotLine *plot;
 
      SYSTEM *syu;

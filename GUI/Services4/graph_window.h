@@ -11,29 +11,21 @@
 #ifdef USE_QWT
 class GraphDialog;
 #else
-namespace jsonui {
-class GraphDialog;
-}
-using namespace jsonui;
-SeriesLineData convertor( const TPlotLine& plotData );
-TPlotLine convertor( const SeriesLineData& serData );
+#include "GraphDialogN.h"
+//using namespace jsonui;
+jsonui::SeriesLineData convertor( const TPlotLine& plotData );
+TPlotLine convertor( const jsonui::SeriesLineData& serData );
 
 #endif
 
 class TCModule;
 
+#ifdef USE_QWT
+
+
 class GraphWindow
 {
 
-#ifndef USE_QWT
-    /// Description of 2D plotting widget
-    std::shared_ptr<jsonui::ChartData> m_chartData;
-    /// Description of 2D modelS
-    std::vector<std::shared_ptr<PlotModel>> m_plotModels;
-
-    ChartData *allocateData( TIArray<TPlot>& aPlots,
-           const char * aTitle, const char *aXName, const char *aYName, int agraphType  );
-#endif
 
 public:
 
@@ -59,5 +51,35 @@ public:
 
 };
 
+
+GraphWindow *updateGraphWindow(  GraphWindow* graph_wnd,
+                                 TCModule *pmodule, TIArray<TPlot>& aPlots,
+                                 const char * aTitle,
+                                 float *sizeReg,  float * sizePart,
+                                 TPlotLine* aLinesDesc, short *aAxisType,
+                                 const char *aXName, const char *aYName );
+GraphWindow *updateGraphWindow(  GraphWindow* graph_wnd,
+                                 TCModule *pmodule, TIArray<TPlot>& aPlots,
+                                 const char * aTitle,
+                                 const char *aXName, const char *aYName,
+                                 TCStringArray line_names, int agraphType  );
+
+
+#else
+
+
+jsonui::GraphDialog* updateGraphWindow(  jsonui::GraphDialog* graph_dlg,
+                                         TCModule *pmodule, TIArray<TPlot>& aPlots,
+                                         const char * aTitle,
+                                         float *sizeReg,  float * sizePart,
+                                         TPlotLine* aLinesDesc, short *aAxisType,
+                                         const char *aXName, const char *aYName );
+
+jsonui::GraphDialog* updateGraphWindow(  jsonui::GraphDialog* graph_dlg,
+                                         TCModule *pmodule, TIArray<TPlot>& aPlots,
+                                         const char * aTitle,
+                                         const char *aXName, const char *aYname,
+                                         TCStringArray line_names, int agraphType = LINES_POINTS  );
+#endif
 
 #endif // GRAPH_WINDOW_H

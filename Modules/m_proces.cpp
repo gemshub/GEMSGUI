@@ -1578,8 +1578,6 @@ void TProcess::RecordPrint(const char *key)
 void
 TProcess::RecordPlot( const char* /*key*/ )
 {
-    delete gd_gr;
-
     TIArray<TPlot> plt;
 
     plt.Add( new TPlot(o_pcx0, o_pcy0 ));
@@ -1621,7 +1619,7 @@ TProcess::RecordPlot( const char* /*key*/ )
                 //strncpy( plot[ii].name, pep->lNamE[ii-pep->dimXY[1]], MAXGRNAME-1 );
             //plot[ii].name[MAXGRNAME-1] = '\0';
         }
-        gd_gr = new GraphWindow( this, plt, pep->name,
+        gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
                                      pep->size[0], pep->size[1], plot,
                                      pep->axisType, pep->xNames, pep->yNames);
     }
@@ -1633,7 +1631,7 @@ TProcess::RecordPlot( const char* /*key*/ )
           lnames.Add( gstring(pep->lNam[ii+ndxy], 0, MAXGRNAME ));
       for( ii=0; ii<pep->dimEF[1]; ii++ )
           lnames.Add( gstring( pep->lNamE[ii], 0, MAXGRNAME ));
-      gd_gr = new GraphWindow( this, plt, pep->name,
+      gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
           pep->xNames, pep->yNames, lnames );
     }
 }
@@ -1645,8 +1643,6 @@ bool TProcess::SaveChartData( jsonui::ChartData* gr )
 
     // We can only have one Plot dialog (modal one) so condition should be omitted!!
     if( !gd_gr )
-        return false;
-    if( gr != gd_gr->getGraphData() )
         return false;
 
     pep->axisType[0] = static_cast<short>(gr->axisTypeX);

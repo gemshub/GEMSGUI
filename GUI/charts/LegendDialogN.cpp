@@ -42,7 +42,7 @@ namespace jsonui {
 
 LegendDialog::LegendDialog( GraphDialog* aGraph ):
         QDialog(aGraph), ui(new Ui::LegendDialogData),
-        graph((aGraph->gr_data)), graphDlg(aGraph)
+        graph((aGraph->gr_data.get())), graphDlg(aGraph)
 {
     ui->setupUi(this);
 

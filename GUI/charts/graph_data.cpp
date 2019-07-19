@@ -251,6 +251,8 @@ void ChartData::fromJsonNode( const jsonio::JsonDom *object )
            break;
         modelsdata[ii]->fromJsonNode( arr->getChild(ii) );
       }
+    // refresh model type
+    setGraphType(graphType);
 }
 #endif
 
@@ -340,6 +342,8 @@ void ChartData::fromJsonObject(const QJsonObject& json)
         QJsonObject lnObject = linesArray[ii].toObject();
         modelsdata[ii]->fromJsonObject(lnObject);
     }
+    // refresh model type
+    setGraphType(graphType);
 }
 
 void ChartData::updateXSelections()

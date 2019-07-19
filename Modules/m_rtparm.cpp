@@ -689,8 +689,6 @@ TRTParm::RecordPlot( const char* /*key*/ )
 {
    TIArray<TPlot> plt;
 
-   delete gd_gr;
-
    if( rpp->Pabs == 'P')
      plt.Add( new TPlot( o_rpxp, o_rpyf ));
    else
@@ -733,7 +731,7 @@ TRTParm::RecordPlot( const char* /*key*/ )
                 //strncpy( plot[ii].name, rpp->lNamE[ii-rpp->dimXY[1]], MAXGRNAME-1 );
            // plot[ii].name[MAXGRNAME-1] = '\0';
         }
-        gd_gr = new GraphWindow( this, plt, rpp->name,
+        gd_gr = updateGraphWindow( gd_gr, this, plt, rpp->name,
                                      rpp->size[0], rpp->size[1], plot,
                                      rpp->axisType, rpp->xNames, rpp->yNames);
     }
@@ -745,7 +743,7 @@ TRTParm::RecordPlot( const char* /*key*/ )
           lnames.Add( gstring(rpp->lNam[ii], 0, MAXGRNAME ));
       for( ii=0; ii<rpp->dimEF[1]; ii++ )
           lnames.Add( gstring( rpp->lNamE[ii], 0, MAXGRNAME ));
-      gd_gr = new GraphWindow( this, plt, rpp->name,
+      gd_gr = updateGraphWindow( gd_gr, this, plt, rpp->name,
           rpp->xNames, rpp->yNames, lnames );
     }
 }
@@ -757,8 +755,6 @@ bool TRTParm::SaveChartData( jsonui::ChartData* gr )
 
     // We can only have one Plot dialog (modal one) so condition should be omitted!!
     if( !gd_gr )
-        return false;
-    if( gr != gd_gr->getGraphData() )
         return false;
 
     rpp->axisType[0] = static_cast<short>(gr->axisTypeX);

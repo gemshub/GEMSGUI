@@ -590,7 +590,6 @@ TUnSpace::RecordPlot( const char* /*key*/ )
     if( usp->PsGraph == S_OFF )
       return;
 
-    delete gd_gr;
     TIArray<TPlot> plt;
 
     plt.Add( new TPlot(o_unxa, o_unyc ));
@@ -611,7 +610,7 @@ TUnSpace::RecordPlot( const char* /*key*/ )
             //strncpy( plot[ii].name, usp->lNam[ii], MAXGRNAME-1 );
             //plot[ii].name[MAXGRNAME-1] = '\0';
         }
-        gd_gr = new GraphWindow( this, plt, usp->name,
+        gd_gr = updateGraphWindow( gd_gr, this, plt, usp->name,
                usp->size[0], usp->size[1], plot,
                usp->axisType, usp->xNames, usp->yNames );
     }
@@ -620,7 +619,7 @@ TUnSpace::RecordPlot( const char* /*key*/ )
       TCStringArray lnames;
       for(int  ii=0; ii<usp->dimXY[1]+usp->dimEF[1]; ii++ )
           lnames.Add( gstring(usp->lNam[ii], 0, MAXGRNAME ));
-      gd_gr = new GraphWindow( this, plt, usp->name,
+      gd_gr = updateGraphWindow( gd_gr, this, plt, usp->name,
           usp->xNames, usp->yNames, lnames, ISOLINES );
     }
 }
@@ -633,8 +632,7 @@ bool TUnSpace::SaveChartData( jsonui::ChartData* gr )
     // We can only have one Plot dialog (modal one) so condition should be omitted!!
     if( !gd_gr )
         return false;
-    if( gr != gd_gr->getGraphData() )
-        return false;
+
     usp->axisType[0] = static_cast<short>(gr->axisTypeX);
     usp->axisType[5] = static_cast<short>(gr->axisTypeY);
     usp->axisType[4] = static_cast<short>(gr->getGraphType());

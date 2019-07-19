@@ -36,6 +36,7 @@
 #include <QTableWidget>
 #include <QItemDelegate>
 #include  "v_module.h"
+#include "plot_model.h"
 
 namespace Ui {
 class GraphDialogData;
@@ -83,8 +84,14 @@ signals:
     void dataChanged( jsonui::ChartData *achartData );
 
 public:
-     GraphDialog( TCModule *pmodule, ChartData *data, const string& title= "Graphics Dialog" );
+     GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::ChartData>& data,
+                  const std::vector<std::shared_ptr<PlotModel>>& plotModels,
+                  const string& title= "Graphics Dialog" );
     ~GraphDialog();
+
+    void resetGraphDialog( const std::shared_ptr<jsonui::ChartData>& data,
+                           const std::vector<std::shared_ptr<PlotModel>>& plotModels,
+                           const string& title= "Graphics Dialog" );
 
     /// Update all graphic lines with new title
     void UpdatePlots( const char *title );
@@ -98,14 +105,21 @@ public:
     gstring mainModuleName() const
     {  return  pModule->GetName();   }
 
+    void AddPoint( int nPlot, int nPoint );
+    void ShowGraph( const char * capAdd = nullptr );
+
 private:
 
     TCModule *pModule;
+    /// Description of 2D plotting widget
+    std::shared_ptr<jsonui::ChartData> gr_data;
+    /// Description of 2D modelS
+    std::vector<std::shared_ptr<PlotModel>> plotModels;
 
     Ui::GraphDialogData *ui;
     QPushButton* bFragment;
     PlotChartView* plot;
-    ChartData* gr_data;
+    //ChartData* gr_data;
 
     DragTableWidget* tbLegend;
     LabelDelegate* dgLegend;
@@ -113,6 +127,8 @@ private:
     // work part
     bool isFragment;
     size_t activeRow = string::npos;
+
+    friend class LabelDelegate;
 };
 
 
@@ -143,21 +159,21 @@ class DragTableWidget: public QTableWidget
 /// Individual items in views are rendered and edited using delegates
 class LabelDelegate: public QItemDelegate
 {
-   Q_OBJECT
+    Q_OBJECT
 
-  ChartData *grData;
+    GraphDialog* topDlg;
 
- public:
+public:
 
-   LabelDelegate( ChartData *agr_data, QObject * parent = nullptr ):
-       QItemDelegate( parent ), grData(agr_data)
-   {}
+    LabelDelegate( GraphDialog* atopDlg ):
+        QItemDelegate( atopDlg ), topDlg(atopDlg)
+    {}
 
-   QWidget *createEditor(QWidget *parent,
-                         const QStyleOptionViewItem &option,
-                         const QModelIndex &index) const;
-   void setModelData(QWidget *editor, QAbstractItemModel *model,
-                                    const QModelIndex &index) const;
+    QWidget *createEditor(QWidget *parent,
+                          const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model,
+                      const QModelIndex &index) const;
 };
 
 } // namespace jsonui

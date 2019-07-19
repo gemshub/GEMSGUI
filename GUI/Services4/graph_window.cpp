@@ -11,6 +11,8 @@
 
 //---------------------------------------------------------------------------
 
+#ifdef USE_QWT
+
 ///   The constructor
 GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
                          const char * aTitle,
@@ -19,43 +21,9 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
                          const char *aXName, const char *aYName )
 {
 
-#ifdef USE_QWT
     GraphData data(aPlots, aTitle, sizeReg, sizePart,
                    aLinesDesc, aAxisType, aXName, aYName);
     graph_dlg = new GraphDialog( pmodule, data );
-#else
-    // alloc memory
-    m_chartData.reset( allocateData( aPlots, aTitle, aXName, aYName, aAxisType[4] ));
-    // get data from settings
-    m_chartData->setBackgroundColor( QColor(aAxisType[1], aAxisType[2], aAxisType[3]) );
-    m_chartData->setAxisTypes( aAxisType[0], aAxisType[5] );
-    for(int i=0; i<4; i++ )
-    {
-        m_chartData->region[i] = static_cast<double>(sizeReg[i]);
-        m_chartData->part[i]   = static_cast<double>(sizePart[i]);
-    }
-
-    for (uint ii=0; ii<m_chartData->linesNumber(); ++ii)
-    {
-        auto seriesdata = convertor(aLinesDesc[ii]);
-        auto plot =  m_chartData->getPlot( ii );
-        if( plot >= 0 && m_plotModels[plot]->absCount() <= seriesdata.getXColumn() )
-            seriesdata.setXColumn(0);
-        m_chartData->setLineData( ii, seriesdata );
-    }
-
-    graph_dlg = new GraphDialog( pmodule, m_chartData.get() );
-    TCModuleImp *topw =	 qobject_cast<TCModuleImp *>( pmodule->window());
-    if( topw )
-    {
-
-        QObject::connect( graph_dlg, SIGNAL( dataChanged( jsonui::ChartData* ) ),
-                          topw,  SLOT( saveGraphData( jsonui::ChartData* ) ) );
-        //connect( _page, SIGNAL( updateGraphWindow() ),
-        //         graph_dlg,  SLOT( UpdateAll() ) );
-    }
-#endif
-
     pVisorImp->openMdiChild( graph_dlg );
 }
 
@@ -65,32 +33,8 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
                          const char *aXName, const char *aYName,
                          TCStringArray line_names, int agraphType  )
 {
-#ifdef USE_QWT
     GraphData  data( aPlots, aTitle, aXName, aYName, line_names, agraphType );
     graph_dlg = new GraphDialog(pmodule, data);
-#else
-    // alloc memory
-    m_chartData.reset( allocateData( aPlots, aTitle, aXName, aYName, agraphType ));
-
-    // change names
-    for (uint ii=0; ii<line_names.GetCount(); ++ii)
-    {
-        if( ii > m_chartData->linesNumber() )
-            break;
-        m_chartData->setLineData( ii,  std::string(line_names[ii].c_str())  );
-    }
-
-    graph_dlg = new GraphDialog( pmodule, m_chartData.get() );
-    TCModuleImp *topw =	 qobject_cast<TCModuleImp *>( pmodule->window());
-    if( topw )
-    {
-
-        QObject::connect( graph_dlg, SIGNAL( dataChanged( jsonui::ChartData* ) ),
-                          topw,  SLOT( saveGraphData( jsonui::ChartData* ) ) );
-        //connect( _page, SIGNAL( updateGraphWindow() ),
-        //         graph_dlg,  SLOT( UpdateAll() ) );
-    }
-#endif
     pVisorImp->openMdiChild( graph_dlg );
 }
 
@@ -102,7 +46,60 @@ GraphWindow::~GraphWindow()
     delete graph_dlg;
 }
 
-#ifndef USE_QWT
+void GraphWindow::AddPoint( int nPlot, int nPoint )
+{
+    if( graph_dlg )
+    {
+        graph_dlg->AddPoint( nPlot, nPoint );
+    }
+}
+
+void GraphWindow::ShowGraph( const char * capAdd )
+{
+    if( graph_dlg )
+    {
+        graph_dlg->ShowNew(capAdd);
+    }
+}
+
+void *GraphWindow::getGraphData() const
+{
+    return &graph_dlg->gr_data;
+}
+
+// ------------------------------------------------------------------------------------------------
+
+///   The constructor
+GraphWindow *updateGraphWindow(  GraphWindow* graph_wnd,
+                                 TCModule *pmodule, TIArray<TPlot>& aPlots,
+                                 const char * aTitle,
+                                 float *sizeReg,  float * sizePart,
+                                 TPlotLine* aLinesDesc, short *aAxisType,
+                                 const char *aXName, const char *aYName )
+{
+    if( graph_wnd )
+        delete graph_wnd;
+    graph_wnd = new GraphWindow(pmodule, aPlots, aTitle,
+                                sizeReg, sizePart, aLinesDesc,  aAxisType, aXName,  aYName );
+    return graph_wnd;
+}
+
+///   The constructor
+GraphWindow *updateGraphWindow(  GraphWindow* graph_wnd,
+                         TCModule *pmodule, TIArray<TPlot>& aPlots,
+                         const char * aTitle,
+                         const char *aXName, const char *aYName,
+                         TCStringArray line_names, int agraphType  )
+{
+    if( graph_wnd )
+        delete graph_wnd;
+    graph_wnd = new GraphWindow(pmodule, aPlots, aTitle,
+                                aXName, aYName, line_names, agraphType );
+    return graph_wnd;
+}
+
+#else
+//------------------------------------------------------------------------
 
 
 SeriesLineData convertor( const TPlotLine& plotData )
@@ -126,17 +123,18 @@ TPlotLine convertor( const SeriesLineData& serData )
 }
 
 
-ChartData *GraphWindow::allocateData( TIArray<TPlot>& aPlots,
-  const char * aTitle, const char *aXName, const char *aYName, int agraphType  )
+
+ChartData *allocateData( const TIArray<TPlot>& aPlots,
+                         std::vector<std::shared_ptr<PlotModel>>& plotModels,
+                         const char * aTitle, const char *aXName, const char *aYName, int agraphType  )
 {
-    uint ii;
     /// Descriptions of model extracting data
     std::vector<std::shared_ptr<jsonui::ChartDataModel>> chartModels;
 
-    for ( ii=0; ii<aPlots.GetCount(); ++ii)
+    for (size_t ii=0; ii<aPlots.GetCount(); ++ii)
     {
-        m_plotModels.push_back( std::shared_ptr<PlotModel>( new PlotModel( aPlots[ii] )) );
-        chartModels.push_back( std::shared_ptr<ChartDataModel>( new ChartDataModel( m_plotModels.back().get() )) );
+        plotModels.push_back( std::shared_ptr<PlotModel>( new PlotModel( aPlots[ii] )) );
+        chartModels.push_back( std::shared_ptr<ChartDataModel>( new ChartDataModel( plotModels.back().get() )) );
         chartModels.back()->setXColumns(aPlots[ii].xColumns());
         chartModels.back()->setYColumns(aPlots[ii].yColumns(), true);
     }
@@ -144,53 +142,109 @@ ChartData *GraphWindow::allocateData( TIArray<TPlot>& aPlots,
 }
 
 
-#endif
-
-void GraphWindow::AddPoint( int nPlot, int nPoint )
+///   The constructor
+GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
+                                 TCModule *pmodule, TIArray<TPlot>& aPlots,
+                                 const char * aTitle,
+                                 float *sizeReg,  float * sizePart,
+                                 TPlotLine* aLinesDesc, short *aAxisType,
+                                 const char *aXName, const char *aYName )
 {
-    if( graph_dlg ) {
 
-#ifdef USE_QWT
-        graph_dlg->AddPoint( nPlot, nPoint );
-#else
-        //if( m_chartData->graphType == LineChart )
-        {
-            for( const auto& datamodel: m_plotModels)
-                datamodel->resetMatrixData();
-        }
-        //else {
-        //    graph_dlg->UpdatePlots(nullptr);
-        //}
-#endif
+    /// Description of 2D plotting widget
+    std::shared_ptr<jsonui::ChartData> m_chartData;
+    /// Description of 2D modelS
+    std::vector<std::shared_ptr<PlotModel>> plotModels;
+
+    // alloc memory
+    m_chartData.reset( allocateData( aPlots, plotModels, aTitle, aXName, aYName, aAxisType[4] ));
+    // get data from settings
+    m_chartData->setBackgroundColor( QColor(aAxisType[1], aAxisType[2], aAxisType[3]) );
+    m_chartData->setAxisTypes( aAxisType[0], aAxisType[5] );
+    for(int i=0; i<4; i++ )
+    {
+        m_chartData->region[i] = static_cast<double>(sizeReg[i]);
+        m_chartData->part[i]   = static_cast<double>(sizePart[i]);
     }
-}
 
-void GraphWindow::ShowGraph( const char * capAdd )
-{
-    if( graph_dlg ){
-#ifdef USE_QWT
-        graph_dlg->ShowNew(capAdd);
-#else
-        //if( m_chartData->graphType == LineChart )
-        {
-            // more quickly
-            graph_dlg->setWindowTitle(capAdd);
-            for( const auto& datamodel: m_plotModels)
-                datamodel->resetMatrixData();
-        }
-        //else {
-        //    graph_dlg->UpdatePlots(capAdd);
-        //}
-#endif
+    for (size_t ii=0; ii<m_chartData->linesNumber(); ++ii)
+    {
+        auto seriesdata = convertor(aLinesDesc[ii]);
+        auto plot =  m_chartData->getPlot( ii );
+        if( plot >= 0 &&  plotModels[plot]->absCount() <= seriesdata.getXColumn() )
+            seriesdata.setXColumn(0);
+        m_chartData->setLineData( ii, seriesdata );
     }
+
+    if( graph_dlg )
+    {
+      graph_dlg->close();
+      delete graph_dlg;
+      graph_dlg = nullptr;
+    }
+    if( !graph_dlg )
+    {
+        graph_dlg = new GraphDialog( pmodule, m_chartData, plotModels  );
+        TCModuleImp *topw =	 qobject_cast<TCModuleImp *>( pmodule->window());
+        if( topw )
+        {
+            QObject::connect( graph_dlg, SIGNAL( dataChanged( jsonui::ChartData* ) ),
+                              topw,  SLOT( saveGraphData( jsonui::ChartData* ) ) );
+            //connect( _page, SIGNAL( updateGraphWindow() ),
+            //         graph_dlg,  SLOT( UpdateAll() ) );
+        }
+    }
+    else {
+        graph_dlg->resetGraphDialog( m_chartData, plotModels);
+    }
+    pVisorImp->openMdiChild( graph_dlg );
+    return graph_dlg;
 }
 
-void *GraphWindow::getGraphData() const
+///   The constructor
+GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
+                                 TCModule *pmodule, TIArray<TPlot>& aPlots,
+                                 const char * aTitle,
+                                 const char *aXName, const char *aYName,
+                                 TCStringArray line_names, int agraphType  )
 {
-#ifdef USE_QWT
-    return &graph_dlg->gr_data;
-#else
-    return m_chartData.get();
-#endif
+    /// Description of 2D plotting widget
+    std::shared_ptr<jsonui::ChartData> m_chartData;
+    /// Description of 2D modelS
+    std::vector<std::shared_ptr<PlotModel>> plotModels;
+
+    // alloc memory
+    m_chartData.reset( allocateData( aPlots, plotModels, aTitle, aXName, aYName, agraphType ));
+    // change names
+    for (size_t ii=0; ii<line_names.GetCount(); ++ii)
+    {
+        if( ii > m_chartData->linesNumber() )
+            break;
+        m_chartData->setLineData( ii,  std::string(line_names[ii].c_str())  );
+    }
+    if( graph_dlg )
+    {
+      graph_dlg->close();
+      delete graph_dlg;
+      graph_dlg = nullptr;
+    }
+    if( !graph_dlg )
+    {
+        graph_dlg = new GraphDialog( pmodule, m_chartData, plotModels  );
+        TCModuleImp *topw =	 qobject_cast<TCModuleImp *>( pmodule->window());
+        if( topw )
+        {
+            QObject::connect( graph_dlg, SIGNAL( dataChanged( jsonui::ChartData* ) ),
+                              topw,  SLOT( saveGraphData( jsonui::ChartData* ) ) );
+            //connect( _page, SIGNAL( updateGraphWindow() ),
+            //         graph_dlg,  SLOT( UpdateAll() ) );
+        }
+    }
+    else {
+        graph_dlg->resetGraphDialog( m_chartData, plotModels);
+    }
+    pVisorImp->openMdiChild( graph_dlg );
+    return graph_dlg;
 }
 
+#endif

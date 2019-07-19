@@ -798,8 +798,6 @@ TGtDemo::RecordPlot( const char* /*key*/ )
            return;
       }
 
-    delete gd_gr;
-
     TIArray<TPlot> plt;
 
     plt.Add( new TPlot(o_gdx0, o_gdy0 ));
@@ -841,7 +839,7 @@ TGtDemo::RecordPlot( const char* /*key*/ )
                 //strncpy( plot[ii].name, gdp->lNamE[ii-gdp->dimXY[1]], MAXGRNAME-1 );
             //plot[ii].name[MAXGRNAME-1] = '\0';
         }
-        gd_gr = new GraphWindow( this, plt, gdp->name,
+        gd_gr = updateGraphWindow( gd_gr, this, plt, gdp->name,
                                      gdp->size[0], gdp->size[1], plot,
                                      gdp->axisType, gdp->xNames, gdp->yNames);
     }
@@ -853,7 +851,7 @@ TGtDemo::RecordPlot( const char* /*key*/ )
           lnames.Add( gstring(gdp->lNam0[ii+ndxy], 0, MAXGRNAME ));
       for( ii=0; ii<gdp->dimEF[1]; ii++ )
           lnames.Add( gstring( gdp->lNamE[ii], 0, MAXGRNAME ));
-      gd_gr = new GraphWindow( this, plt, gdp->name,
+      gd_gr = updateGraphWindow( gd_gr, this, plt, gdp->name,
           gdp->xNames, gdp->yNames, lnames );
     }
 }
@@ -864,8 +862,6 @@ bool TGtDemo::SaveChartData( jsonui::ChartData* gr )
 {
     // We can only have one Plot dialog (modal one) so condition should be omitted!!
     if( !gd_gr )
-        return false;
-    if( gr != gd_gr->getGraphData() )
         return false;
 
     gdp->axisType[0] = static_cast<short>(gr->axisTypeX);

@@ -354,7 +354,11 @@ class TGEM2MT
 #ifndef IPMGEMPLUGIN
     IPNCalc rpn[2];      // IPN
 
-    GraphWindow* gd_gr = nullptr;
+#ifdef USE_QWT
+    GraphWindow *gd_gr = nullptr;
+#else
+   jsonui::GraphDialog *gd_gr = nullptr;
+#endif
     TPlotLine* plot;
     gstring title;           // changed titler to title
 #endif

@@ -170,7 +170,11 @@ class TProcess : public TCModule
 {
     PROCESS pe[1];
 
+#ifdef USE_QWT
     GraphWindow *gd_gr = nullptr;
+#else
+    jsonui::GraphDialog *gd_gr = nullptr;
+#endif
     TPlotLine *plot;
 
     char *text_fmt;

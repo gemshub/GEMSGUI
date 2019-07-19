@@ -99,7 +99,11 @@ class TRTParm : public TCModule
 {
     RTPARM rp[1];
 
+#ifdef USE_QWT
     GraphWindow *gd_gr = nullptr;
+#else
+    jsonui::GraphDialog *gd_gr = nullptr;
+#endif
     TPlotLine *plot;
 
     void expr_analyze();
