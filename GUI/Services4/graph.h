@@ -70,12 +70,14 @@ class TPlotLine
 public:
 
     TPlotLine( const char *aName, int aPointType, int aPointSize,
-               int aPutLine, int andx,
-               const QColor& aColor  ):
-        TPlotLine( aName, aPointType, aPointSize, aPutLine,
+               int aLineSize, int lineStyle, int usespline,
+               int andx, const QColor& aColor  ):
+        TPlotLine( aName, aPointType, aPointSize, aLineSize,
                    aColor.red(), aColor.green(), aColor.blue()  )
     {
        setIndex( andx );
+       setSpline( usespline );
+       setLineStyle( lineStyle );
     }
 
     TPlotLine( const char *aName = nullptr,
@@ -137,6 +139,33 @@ public:
     int getLineSize() const
     {
         return (sizes /100 % 10);
+    }
+
+    int getSpline() const
+    {
+        return (sizes /10000 % 10);
+    }
+
+    int getLineStyle() const
+    {
+        auto style = sizes /1000 % 10;
+        if(style == 9)
+          style=-1;
+        return style+1;
+    }
+
+    void setSpline( int spline )
+    {
+        sizes += spline*10000;
+    }
+
+    void setLineStyle( int style )
+    {
+        if( style <= 0)
+          style = 9;
+        else
+          style--;
+        sizes += style*1000;
     }
 
     QColor getColor() const

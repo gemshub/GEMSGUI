@@ -110,7 +110,7 @@ SeriesLineData convertor( const TPlotLine& plotData )
     SeriesLineData data( plotData.getName().c_str(),
                          plotData.getType(), plotData.getSize(),
                          plotData.getLineSize(),
-                         1, 0, // could be add: penStyle  end  spline now default
+                         plotData.getLineStyle(), plotData.getSpline(), // could be add: penStyle  end  spline now default
                          plotData.getColor()  );
     data.setXColumn(plotData.getIndex());
     return data;
@@ -119,7 +119,7 @@ SeriesLineData convertor( const TPlotLine& plotData )
 TPlotLine convertor( const SeriesLineData& serData )
 {
     TPlotLine data( serData.getName().c_str(), serData.getMarkerShape(), serData.getMarkerSize(),
-                    serData.getPenSize(), serData.getXColumn(),
+                    serData.getPenSize(), serData.getPenStyle(), serData.getSpline(), serData.getXColumn(),
                     // could be add: penStyle  end  spline
                     serData.getColor()  );
     return data;
