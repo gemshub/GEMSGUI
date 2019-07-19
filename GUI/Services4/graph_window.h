@@ -62,7 +62,7 @@ GraphWindow *updateGraphWindow(  GraphWindow* graph_wnd,
                                  TCModule *pmodule, TIArray<TPlot>& aPlots,
                                  const char * aTitle,
                                  const char *aXName, const char *aYName,
-                                 TCStringArray line_names, int agraphType  );
+                                 TCStringArray line_names, int agraphType = LINES_POINTS   );
 
 
 #else
