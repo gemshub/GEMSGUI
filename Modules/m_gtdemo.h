@@ -187,6 +187,8 @@ public:
     bool SaveGraphData( GraphData* graph );
 #else
     bool SaveChartData( jsonui::ChartData* grdata );
+    void ClearGraphDialog()
+    {  gd_gr = nullptr; }
 #endif
     //void CmHelp();
     const char* GetHtml();

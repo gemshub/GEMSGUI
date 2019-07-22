@@ -664,6 +664,7 @@ void TVisorImp::closeMdiChild( QWidget *p )
     int ndx = indexMdiChild( p );
     if( ndx >= 0 )
     {
+      //cout<< "closeMdiChild " << endl;
       pModuleName->removeItem(ndx);
       mdiArea->removeSubWindow(p);
     }

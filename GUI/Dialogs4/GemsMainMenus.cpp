@@ -629,10 +629,10 @@ void TVisorImp::CmShow( const char * key )
       QMdiSubWindow * grDlg = findMdiGraph(actwin->moduleName().c_str());
       if( grDlg )
       {
+        grDlg->widget()->close();
         QMdiSubWindow *wn = findMdiChild(actwin->moduleName().c_str());
-        //mdiArea->setActiveSubWindow( wn );
-        mdiArea->setActiveSubWindow( grDlg );
-        mdiArea->closeActiveSubWindow();
+        //mdiArea->setActiveSubWindow( grDlg );
+        //mdiArea->closeActiveSubWindow();
         mdiArea->setActiveSubWindow( wn );
         CmPlot();
         tbKeys->setFocus();

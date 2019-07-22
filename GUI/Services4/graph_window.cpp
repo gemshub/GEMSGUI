@@ -177,12 +177,8 @@ GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
     }
 
     if( graph_dlg )
-    {
-      graph_dlg->close();
-      delete graph_dlg;
-      graph_dlg = nullptr;
-    }
-    if( !graph_dlg )
+        graph_dlg->close();
+    //if( !graph_dlg )
     {
         graph_dlg = new GraphDialog( pmodule, m_chartData, plotModels  );
         TCModuleImp *topw =	 qobject_cast<TCModuleImp *>( pmodule->window());
@@ -194,9 +190,9 @@ GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
             //         graph_dlg,  SLOT( UpdateAll() ) );
         }
     }
-    else {
-        graph_dlg->resetGraphDialog( m_chartData, plotModels);
-    }
+    //else {
+    //    graph_dlg->resetGraphDialog( m_chartData, plotModels);
+    //}
     pVisorImp->openMdiChild( graph_dlg );
     return graph_dlg;
 }
@@ -223,12 +219,8 @@ GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
         m_chartData->setLineData( ii,  std::string(line_names[ii].c_str())  );
     }
     if( graph_dlg )
-    {
       graph_dlg->close();
-      delete graph_dlg;
-      graph_dlg = nullptr;
-    }
-    if( !graph_dlg )
+    //if( !graph_dlg )
     {
         graph_dlg = new GraphDialog( pmodule, m_chartData, plotModels  );
         TCModuleImp *topw =	 qobject_cast<TCModuleImp *>( pmodule->window());
@@ -240,9 +232,9 @@ GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
             //         graph_dlg,  SLOT( UpdateAll() ) );
         }
     }
-    else {
-        graph_dlg->resetGraphDialog( m_chartData, plotModels);
-    }
+    //else {
+    //    graph_dlg->resetGraphDialog( m_chartData, plotModels);
+    //}
     pVisorImp->openMdiChild( graph_dlg );
     return graph_dlg;
 }

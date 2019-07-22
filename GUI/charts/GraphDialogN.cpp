@@ -65,6 +65,7 @@ GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::Chart
 {
     ui->setupUi(this);
     setWindowTitle( title.c_str() );
+    setAttribute( Qt::WA_DeleteOnClose );
 
     // Define legend table
     tbLegend = new DragTableWidget( this );
@@ -112,6 +113,7 @@ GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::Chart
 
 GraphDialog::~GraphDialog()
 {
+    //cout << "Delete ~GraphDialog" << endl;
     delete tbLegend;
     delete ui;
 }
@@ -127,7 +129,9 @@ void GraphDialog::resetGraphDialog(const std::shared_ptr<ChartData> &data,
 
 void GraphDialog::closeEvent(QCloseEvent *ev)
 {
-    cout << "Close GraphDialog " << endl;
+    //cout << "Close GraphDialog " << endl;
+    pModule->ClearGraphDialog();
+    parentWidget()->close();
     pVisorImp->closeMdiChild( this );
     ev->accept();
 }

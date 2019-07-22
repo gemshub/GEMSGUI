@@ -153,6 +153,9 @@ public:
 
     virtual bool SaveChartData( jsonui::ChartData* /*graph*/ )
     { return false; }
+
+    virtual void ClearGraphDialog()
+    { }
 #endif
 };
 

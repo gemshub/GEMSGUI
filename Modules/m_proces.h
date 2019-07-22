@@ -217,7 +217,7 @@ public:
     PROCESS *pep;
 
     TProcess( uint nrt );
-    ~TProcess()
+    ~TProcess() override
     {
         delete gd_gr;
     }
@@ -247,6 +247,8 @@ public:
     bool SaveGraphData( GraphData* graph ) override;
 #else
     bool SaveChartData( jsonui::ChartData* grdata ) override;
+    void ClearGraphDialog() override
+    {  gd_gr = nullptr; }
 #endif
 
     //void CmHelp();
