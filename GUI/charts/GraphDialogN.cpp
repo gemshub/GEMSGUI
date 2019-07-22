@@ -143,10 +143,17 @@ void GraphDialog::UpdatePlots( const char* title )
     plot->updateLines();
 }
 
-void GraphDialog::AddPoint(int , int )
+void GraphDialog::AddPoint(size_t nmodel, int npoint )
 {
-    for( const auto& datamodel: plotModels)
-         datamodel->resetMatrixData();
+    auto model = (nmodel<plotModels.size() ? plotModels[nmodel]: nullptr);
+    if( model )
+    {
+        auto indexTop = model->index(npoint, 0);
+        auto indexBottom = model->index(npoint, model->columnCount( indexTop )-1);
+        emit model->dataChanged( indexTop, indexBottom );
+    }
+    //for( const auto& datamodel: plotModels)
+    //     datamodel->resetMatrixData();
 }
 
 void GraphDialog::ShowGraph(const char *capAdd)

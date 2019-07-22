@@ -105,7 +105,7 @@ public:
     gstring mainModuleName() const
     {  return  pModule->GetName();   }
 
-    void AddPoint( int nPlot, int nPoint );
+    void AddPoint( size_t nPlot, int nPoint );
     void ShowGraph( const char * capAdd = nullptr );
 
 private:
