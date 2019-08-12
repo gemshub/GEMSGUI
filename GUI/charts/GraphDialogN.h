@@ -79,6 +79,7 @@ public slots:
     /// Update graphic and legend
     void UpdateAll(const char* title=nullptr );
     void restoreRow();
+    void updateFragment(QRectF  rect);
 
 signals:
     void dataChanged( jsonui::ChartData *achartData );

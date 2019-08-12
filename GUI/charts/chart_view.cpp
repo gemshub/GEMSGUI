@@ -40,6 +40,7 @@
 #include <QtCharts/QVXYModelMapper>
 #include <QtCharts/QValueAxis>
 #include <QGraphicsLayout>
+#include <QRubberBand>
 #include "graph_data.h"
 #include "chart_view.h"
 #ifdef NO_JSONIO
@@ -110,21 +111,35 @@ public:
         mapLabels[label] = std::shared_ptr<QScatterSeries>(series);
     }
 
+    void addPoint(  const QPointF& pointF, const QString& label )
+    {
+        if( show_point )
+            chart->removeSeries(show_point.get());
+
+        QScatterSeries *series  = newScatterLabel( pointF, label );
+        chart->addSeries(series);
+        series->attachAxis(axisX);
+        series->attachAxis(axisY);
+        show_point.reset(series);
+    }
+
 
 protected:
 
     QChartView *view;
     QChart* chart;
     ChartData *gr_data;
+    QValueAxis *axisX =nullptr;
+    QValueAxis *axisY =nullptr;
 
     std::vector<std::shared_ptr<QXYSeries> >       gr_series;
     std::vector<std::shared_ptr<QVXYModelMapper> > series_mapper;
     std::vector<std::shared_ptr<QScatterSeries> >  gr_points;
     std::vector<std::shared_ptr<QVXYModelMapper> > points_mapper;
     std::vector<std::shared_ptr<QAreaSeries> >     gr_areas;
-    QValueAxis *axisX =nullptr;
-    QValueAxis *axisY =nullptr;
     std::map<QString,std::shared_ptr<QScatterSeries> > mapLabels;
+    std::shared_ptr<QScatterSeries> show_point;
+
     bool isFragment = false;
 
 private:
@@ -566,7 +581,6 @@ QScatterSeries* PlotChartViewPrivate::newScatterLabel(
 }
 
 
-
 //-------------------------------------------------------------------
 
 
@@ -583,6 +597,8 @@ PlotChartView::PlotChartView( ChartData *graphdata, QWidget *parent) :
     chart()->layout()->setContentsMargins(0, 0, 0, 0);
     chart()->setMargins( QMargins( 5,5, 0, 0) );
     // chart()->legend()->setMarkerShape(QLegend::MarkerShapeFromSeries);
+
+    rubberBand = findChild<QRubberBand *>();
 }
 
 PlotChartView::~PlotChartView()
@@ -654,5 +670,33 @@ void PlotChartView::dropEvent( QDropEvent* event )
         //std::cout << "pos " << pos.x() <<  " " << pos.y() << "Test drop" << text_.toStdString() << std::endl;
     }
 }
+
+void PlotChartView::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::RightButton)
+    {
+        /*QPointF fp = chart()->mapToValue(event->pos());
+        QString label = QString("%1:%2").arg( fp.x()).arg( fp.y());
+        pdata->addPoint( event->pos(), label);*/
+        return;
+    }
+    else
+        if (event->button() == Qt::LeftButton)
+        {
+            if( rubberBand && rubberBand->isVisible() )
+            {
+                if( rubberBand->height() < 5 ||  rubberBand->width() < 5 )
+                    return;
+
+                QPointF fp = chart()->mapToValue(rubberBand->geometry().topLeft());
+                QPointF tp = chart()->mapToValue(rubberBand->geometry().bottomRight());
+                QRectF  rect(fp, tp);
+                emit fragmentChanged(rect);
+            }
+        }
+
+    QChartView::mouseReleaseEvent(event);
+}
+
 
 } // namespace jsonui

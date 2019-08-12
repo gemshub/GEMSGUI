@@ -34,6 +34,7 @@
 #define CHARTVIEW_H
 
 #include <memory>
+#include <iostream>
 #include <QtCharts/QChartView>
 
 QT_CHARTS_USE_NAMESPACE
@@ -57,6 +58,10 @@ public slots:
 
   void highlightLine( size_t line, bool enable  );
 
+
+signals:
+    void fragmentChanged(QRectF  rect);
+
 public:
 
     explicit PlotChartView( ChartData *graphdata, QWidget *parent = nullptr);
@@ -65,11 +70,14 @@ public:
 protected:
 
    PlotChartViewPrivate* pdata;
+   QRubberBand *rubberBand;
 
    //virtual void mousePressEvent( QMouseEvent *e );
    void dragEnterEvent(QDragEnterEvent* event);
    void dragMoveEvent(QDragMoveEvent *event);
    void dropEvent(QDropEvent* event);
+   void mouseReleaseEvent(QMouseEvent *event);
+
 };
 
 } // namespace jsonui

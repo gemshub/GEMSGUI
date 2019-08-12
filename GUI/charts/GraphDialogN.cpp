@@ -109,6 +109,9 @@ GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::Chart
     QObject::connect( bCustomize, SIGNAL(clicked()), this, SLOT(CmLegend()));
     QObject::connect( bPrint, SIGNAL(clicked()), this, SLOT(CmPrint()));
     QObject::connect( bSaveImage, SIGNAL(clicked()), this, SLOT(CmSaveImage()));
+
+    QObject::connect( plot, SIGNAL(fragmentChanged(QRectF)), this, SLOT(updateFragment(QRectF)));
+
 }
 
 GraphDialog::~GraphDialog()
@@ -439,6 +442,16 @@ void GraphDialog::restoreRow()
     activeRow = string::npos;
 }
 
+void GraphDialog::updateFragment(QRectF  rect)
+{
+    gr_data->part[0] = rect.left();
+    gr_data->part[1] = rect.right();
+    gr_data->part[2] = rect.top();
+    gr_data->part[3] = rect.bottom();
+    isFragment = false;
+    CmFragment();
+    emit dataChanged( gr_data.get() );
+}
 
 //=======================================================================================
 // Added for new legend table
