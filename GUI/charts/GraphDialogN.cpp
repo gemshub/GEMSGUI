@@ -446,8 +446,8 @@ void GraphDialog::updateFragment(QRectF  rect)
 {
     gr_data->part[0] = rect.left();
     gr_data->part[1] = rect.right();
-    gr_data->part[2] = rect.top();
-    gr_data->part[3] = rect.bottom();
+    gr_data->part[2] = rect.bottom();
+    gr_data->part[3] = rect.top();
     isFragment = false;
     CmFragment();
     emit dataChanged( gr_data.get() );

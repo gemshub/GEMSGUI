@@ -351,8 +351,8 @@ void PlotChartViewPrivate::updateMinMax()
         if( !jsonio::essentiallyEqual( gr_data->part[0], gr_data->part[1]) &&
                 !jsonio::essentiallyEqual( gr_data->part[2], gr_data->part[3]) )
         {
-            axisX->setRange(gr_data->part[0], gr_data->part[1]);
             axisY->setRange(gr_data->part[2], gr_data->part[3]);
+            axisX->setRange(gr_data->part[0], gr_data->part[1]);
         }
     }
     else
