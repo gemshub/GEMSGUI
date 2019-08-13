@@ -67,6 +67,8 @@ public:
     explicit PlotChartView( ChartData *graphdata, QWidget *parent = nullptr);
     ~PlotChartView();
 
+    void renderDocument(const QString &title, const QString &fileName);
+
 protected:
 
    PlotChartViewPrivate* pdata;

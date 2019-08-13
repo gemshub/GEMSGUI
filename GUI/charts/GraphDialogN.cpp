@@ -51,7 +51,7 @@
 #include "chart_view.h"
 
 #include "GemsMainWindow.h"
-
+#include "visor.h"
 
 namespace jsonui {
 
@@ -215,7 +215,7 @@ void GraphDialog::CmFragment()
 
 void GraphDialog::CmSaveImage()
 {
-   QString  fileName  =  "";//  can be get current dir
+   QString  fileName  =  pVisor->localDir().c_str();
             fileName  +=  "image.pdf";
 
     const QList<QByteArray> imageFormats =
@@ -227,7 +227,6 @@ void GraphDialog::CmSaveImage()
 #ifndef QWT_NO_SVG
     filter += "SVG Documents (*.svg)";
 #endif
-    filter += "Postscript Documents (*.ps)";
 
     if ( imageFormats.size() > 0 )
     {
@@ -259,37 +258,12 @@ void GraphDialog::CmSaveImage()
           QString ext = selectedFilter.mid(posb+1, pose-posb-1);
           fileName += "."+ext;
         }
-        QPixmap pixMap = plot->grab();
-        pixMap.save(fileName);
+
+        pVisor->setLocalDir( (finfo.dir().absolutePath().toStdString() + "/").c_str() );
+        plot->renderDocument( gr_data->title.c_str(), fileName );
+
     }
 }
-
-/*
-
- //====
- QImage image(fn);
- QPainter painter(&image);
- painter.setRenderHint(QPainter::Antialiasing);
- scene.render(&painter);
- image.save("file_name.png")
- //========
-         scene->clearSelection();                                                  // Selections would also render to the file
-         scene->setSceneRect(scene->itemsBoundingRect());                          // Re-shrink the scene to it's bounding contents
-         QImage image(scene->sceneRect().size().toSize(), QImage::Format_ARGB32);  // Create the image with the exact size of the shrunk scene
-         image.fill(Qt::transparent);                                              // Start all pixels transparent
-
-         QPainter painter(&image);
-         scene->render(&painter);
-         image.save("file_name.png");
-//=====
-         QString fileName= QFileDialog::getSaveFileName(this, "Save image", QCoreApplication::applicationDirPath(), "BMP Files (*.bmp);;JPEG (*.JPEG);;PNG (*.png)" );
-             if (!fileName.isNull())
-             {
-                 QPixmap pixMap = this->ui->graphicsView->grab();
-                 pixMap.save(fileName);
-             }
-*/
-
 
 // Print graph screen to printer device
 void GraphDialog::CmPrint()
@@ -300,35 +274,9 @@ void GraphDialog::CmPrint()
     QPrintDialog dialog( &printer );
     if ( dialog.exec()  )
     {
-
-        //if( QPrinter::Landscape != printer.orientation() )
-         //   printer.setOrientation(QPrinter::Landscape);
-
-        QPainter painter;
-        painter.begin(&printer);
-        double xscale = printer.pageRect().width()/double(ui->framePrn->width());
-        double yscale = printer.pageRect().height()/double(ui->framePrn->height());
-        double scale = qMin(xscale, yscale);
-        painter.translate(printer.paperRect().x() + printer.pageRect().width()/2,
-                          printer.paperRect().y() + printer.pageRect().height()/2);
-        painter.scale(scale, scale);
-        painter.translate(-ui->framePrn->width()/2, -ui->framePrn->height()/2);
-
-        /*QPainter painter(&printer);
-
-        double dx = (double)(printer.widthMM()*printer.logicalDpiX())
-                    /(double)(framePrn->widthMM()*framePrn->logicalDpiX());
-        double dy = (double)(printer.heightMM()*printer.logicalDpiY())
-                    /(double)(framePrn->heightMM()*framePrn->logicalDpiY());
-
-        //cout << "dx  " << dx << " dy  " << dy << endl;
-        dx = min(dx, dy);
-        painter.scale(dx, dx);
-        painter.setClipRect(framePrn->geometry());
-        */
-        ui->groupBox->hide();
-        ui->framePrn->render( &painter );
-        ui->groupBox->show();
+        printer.setDocName( gr_data->title.c_str() );
+        QPainter p( &printer );
+        plot->render( &p );
     }
 
 }

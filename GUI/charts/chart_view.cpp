@@ -41,6 +41,13 @@
 #include <QtCharts/QValueAxis>
 #include <QGraphicsLayout>
 #include <QRubberBand>
+
+#include <QFileInfo>
+#include <QSizeF>
+#include <QPrinter>
+#include <QSvgGenerator>
+#include <QPixmap>
+
 #include "graph_data.h"
 #include "chart_view.h"
 #ifdef NO_JSONIO
@@ -697,6 +704,63 @@ void PlotChartView::mouseReleaseEvent(QMouseEvent *event)
 
     QChartView::mouseReleaseEvent(event);
 }
+
+
+/*!
+  Render graphical representation of the chart's series and axes to a file
+
+  Supported formats are:
+
+  - pdf\n
+    Portable Document Format PDF
+  - ps\n
+    Postcript
+  - svg\n
+    Scalable Vector Graphics SVG
+  - all image formats supported by Qt\n
+    see QImageWriter::supportedImageFormats()
+
+  \param document title
+  \param fileName Path of the file, where the document will be stored
+
+*/
+void PlotChartView::renderDocument( const QString &title, const QString &fileName )
+{
+    const QString fmt = QFileInfo( fileName ).suffix().toLower();
+    if ( fmt == "pdf" )
+    {
+#ifndef QT_NO_PRINTER
+        QPrinter printer(QPrinter::HighResolution);
+        printer.setDocName( title );
+        printer.setOutputFormat( QPrinter::PdfFormat );
+        printer.setOutputFileName( fileName );
+        printer.setColorMode( QPrinter::Color );
+        printer.setFullPage( true );
+        printer.setPageSize( QPageSize(QPageSize::A4) );
+
+        QPainter p( &printer );
+        render( &p );
+#endif
+    }
+    else if ( fmt == "svg" )
+    {
+#ifndef QWT_NO_SVG
+        QSvgGenerator generator;
+        generator.setTitle( title );
+        generator.setFileName( fileName );
+        generator.setSize( size() );
+        generator.setViewBox( rect() );
+        QPainter p(&generator);
+        render(&p);
+#endif
+    }
+    else
+    {
+        QPixmap picture = grab();
+        picture.save(fileName);
+    }
+}
+
 
 
 } // namespace jsonui
