@@ -94,14 +94,14 @@ public:
     }
 
     SeriesLineData( size_t ndx, size_t maxLines, const std::string& aName = "",
-               int /*mrkType*/ = 0, int mrkSize = 8,
+               int mrkType = 0, int mrkSize = 8,
                int lineSize = 2,  int lineStyle = 1, int usespline =0 ):
         name(aName), xcolumn(-1)
     {
         QColor aColor;
-        aColor.setHsv( 360/maxLines*ndx, 200, 200);
+        aColor.setHsv( static_cast<int>(360/maxLines*ndx), 200, 200);
         //aColor = colorAt(green, blue, double(ndx)/maxLines );
-        setChanges( ndx%20/*mrkType*/, mrkSize, lineSize,  lineStyle, usespline, aColor );
+        setChanges( mrkType, mrkSize, lineSize,  lineStyle, usespline, aColor );
     }
 
     int getMarkerShape() const
@@ -147,7 +147,7 @@ public:
         penSize = pnSize;
         penStyle = pnStyle;
         spline  = usespline;
-        red =   aColor.red();
+        red   = aColor.red();
         green = aColor.green();
         blue  = aColor.blue();
     }
@@ -217,8 +217,9 @@ class ChartData : public QObject
       ChartData( const std::vector<std::shared_ptr<T>>& aPlots,  const std::string& atitle,
                const std::string& aXName, const std::string& aYname,
                int agraphType = LineChart ):
-          title(atitle), graphType( agraphType ), axisTypeX(5), axisTypeY(5),
-          xName(aXName), yName(aYname), axisFont("Sans Serif", 10)
+          title(atitle), axisTypeX(5), axisTypeY(5),
+          xName(aXName), yName(aYname), axisFont("Sans Serif", 10),
+          graphType( agraphType )
       {
         // Define background color
         setBackgroundColor( QColor(Qt::white) );
@@ -339,9 +340,9 @@ class ChartData : public QObject
 
    void setBackgroundColor( const QColor& aColor )
    {
-       b_color[0] =   aColor.red();
+       b_color[0] = aColor.red();
        b_color[1] = aColor.green();
-       b_color[2]  = aColor.blue();
+       b_color[2] = aColor.blue();
    }
 
    void setMinMaxRegion( double reg[4] );

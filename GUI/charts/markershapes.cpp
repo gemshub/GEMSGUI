@@ -58,7 +58,7 @@ QImage markerShapeImage( const SeriesLineData& linedata )
     painter.setPen( pen );
 
     if( static_cast<size_t>(linedata.getMarkerShape()) < shapes().size() )
-      painter.setBrush( linedata.getColor() );
+        painter.setBrush( linedata.getColor() );
     painter.drawPath(imagePath);
 
     return image;
@@ -99,16 +99,16 @@ QIcon markerShapeIcon( const SeriesLineData& linedata )
     QRect rect(0,0,dsize, dsize);
     painter.setPen( QPen( linedata.getColor(), 2 ) );
     painter.drawImage( QRectF( QPointF(size/2, size/2), QSizeF(size,size)),
-                        markerShapeImage( linedata ));
+                       markerShapeImage( linedata ));
 
-     if(linedata.getPenSize() > 0 )
-     {
-       QPoint center = rect.center();
+    if(linedata.getPenSize() > 0 )
+    {
+        QPoint center = rect.center();
         painter.drawLine( rect.x(), center.y(), center.x()-size/2, center.y());
         painter.drawLine( center.x()+size/2, center.y(), rect.width(), center.y());
-     }
-     icon.addPixmap(pic);
-     return icon;
+    }
+    icon.addPixmap(pic);
+    return icon;
 }
 
 // If you know size then you can simply use:
@@ -117,10 +117,10 @@ QIcon markerShapeIcon( const SeriesLineData& linedata )
 
 void getLinePen( QPen& pen, const SeriesLineData& linedata  )
 {
-  pen.setColor(linedata.getColor() );
-  pen.setWidth(linedata.getPenSize());
-  Qt::PenStyle style = (Qt::PenStyle)linedata.getPenStyle();
-  pen.setStyle(style);
+    pen.setColor(linedata.getColor() );
+    pen.setWidth(linedata.getPenSize());
+    Qt::PenStyle style = (Qt::PenStyle)linedata.getPenStyle();
+    pen.setStyle(style);
 }
 
 
@@ -175,8 +175,8 @@ MarkerShapes::MarkerShapes()
     QPainterPath starPath;
     starPath.moveTo(32, 15);
     for (int i = 1; i < 5; ++i) {
-            starPath.lineTo(15 + 16 * qCos(0.8 * i * Pi),
-                            15 + 16 * qSin(0.8 * i * Pi));
+        starPath.lineTo(15 + 16 * qCos(0.8 * i * Pi),
+                        15 + 16 * qSin(0.8 * i * Pi));
     }
     starPath.closeSubpath();
     markers.push_back(starPath);
@@ -214,7 +214,7 @@ MarkerShapes::MarkerShapes()
 
 
 QPolygonF MarkerShapes::trianglePolygon(
-    TriangleType type, const QSize& size )
+        TriangleType type, const QSize& size )
 {
     QPolygonF triangle( 3 );
     QPointF *trianglePoints = triangle.data();
@@ -227,61 +227,61 @@ QPolygonF MarkerShapes::trianglePolygon(
     const double y1 = y - sh2;
     const double y2 = y1 + size.height();
 
-     switch ( type )
-     {
-            case TriangleLeft:
-            {
-                trianglePoints[0].rx() = x2;
-                trianglePoints[0].ry() = y1;
+    switch ( type )
+    {
+    case TriangleLeft:
+    {
+        trianglePoints[0].rx() = x2;
+        trianglePoints[0].ry() = y1;
 
-                trianglePoints[1].rx() = x1;
-                trianglePoints[1].ry() = y;
+        trianglePoints[1].rx() = x1;
+        trianglePoints[1].ry() = y;
 
-                trianglePoints[2].rx() = x2;
-                trianglePoints[2].ry() = y2;
-                break;
-            }
-            case TriangleRight:
-            {
-                trianglePoints[0].rx() = x1;
-                trianglePoints[0].ry() = y1;
+        trianglePoints[2].rx() = x2;
+        trianglePoints[2].ry() = y2;
+        break;
+    }
+    case TriangleRight:
+    {
+        trianglePoints[0].rx() = x1;
+        trianglePoints[0].ry() = y1;
 
-                trianglePoints[1].rx() = x2;
-                trianglePoints[1].ry() = y;
+        trianglePoints[1].rx() = x2;
+        trianglePoints[1].ry() = y;
 
-                trianglePoints[2].rx() = x1;
-                trianglePoints[2].ry() = y2;
+        trianglePoints[2].rx() = x1;
+        trianglePoints[2].ry() = y2;
 
-                break;
-            }
-            case TriangleUp:
-            {
-                trianglePoints[0].rx() = x1;
-                trianglePoints[0].ry() = y2;
+        break;
+    }
+    case TriangleUp:
+    {
+        trianglePoints[0].rx() = x1;
+        trianglePoints[0].ry() = y2;
 
-                trianglePoints[1].rx() = x;
-                trianglePoints[1].ry() = y1;
+        trianglePoints[1].rx() = x;
+        trianglePoints[1].ry() = y1;
 
-                trianglePoints[2].rx() = x2;
-                trianglePoints[2].ry() = y2;
+        trianglePoints[2].rx() = x2;
+        trianglePoints[2].ry() = y2;
 
-                break;
-            }
-            case TriangleDown:
-            {
-                trianglePoints[0].rx() = x1;
-                trianglePoints[0].ry() = y1;
+        break;
+    }
+    case TriangleDown:
+    {
+        trianglePoints[0].rx() = x1;
+        trianglePoints[0].ry() = y1;
 
-                trianglePoints[1].rx() = x;
-                trianglePoints[1].ry() = y2;
+        trianglePoints[1].rx() = x;
+        trianglePoints[1].ry() = y2;
 
-                trianglePoints[2].rx() = x2;
-                trianglePoints[2].ry() = y1;
+        trianglePoints[2].rx() = x2;
+        trianglePoints[2].ry() = y1;
 
-                break;
-            }
-     }
-     return triangle;
+        break;
+    }
+    }
+    return triangle;
 }
 
 

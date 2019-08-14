@@ -210,7 +210,7 @@ void GraphDialog::CmFragment()
         isFragment = false;
         bFragment->setText("&Fragment");
     }
-    plot->setFragment( isFragment );
+    plot->updateFragment( isFragment );
 }
 
 void GraphDialog::CmSaveImage()
@@ -396,8 +396,9 @@ void GraphDialog::updateFragment(QRectF  rect)
     gr_data->part[1] = rect.right();
     gr_data->part[2] = rect.bottom();
     gr_data->part[3] = rect.top();
-    isFragment = false;
-    CmFragment();
+    isFragment = true;
+    bFragment->setText("&Full");
+    plot->resetFragment( isFragment );
     emit dataChanged( gr_data.get() );
 }
 

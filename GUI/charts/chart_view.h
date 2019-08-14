@@ -51,13 +51,11 @@ class PlotChartView : public QChartView
 
 public slots:
 
-  void updateLine( size_t line );
-  void updateAll();
-  void updateLines();
-  void setFragment( bool isFragment );
-
-  void highlightLine( size_t line, bool enable  );
-
+    void updateLine( size_t line );
+    void updateAll();
+    void updateLines();
+    void highlightLine( size_t line, bool enable  );
+    void updateFragment( bool isFragment );
 
 signals:
     void fragmentChanged(QRectF  rect);
@@ -68,17 +66,17 @@ public:
     ~PlotChartView();
 
     void renderDocument(const QString &title, const QString &fileName);
+    void resetFragment( bool isFragment );
 
 protected:
 
-   PlotChartViewPrivate* pdata;
-   QRubberBand *rubberBand;
+    PlotChartViewPrivate* pdata;
+    QRubberBand *rubberBand;
 
-   //virtual void mousePressEvent( QMouseEvent *e );
-   void dragEnterEvent(QDragEnterEvent* event);
-   void dragMoveEvent(QDragMoveEvent *event);
-   void dropEvent(QDropEvent* event);
-   void mouseReleaseEvent(QMouseEvent *event);
+    void dragEnterEvent(QDragEnterEvent* event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dropEvent(QDropEvent* event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 };
 

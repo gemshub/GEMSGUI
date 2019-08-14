@@ -64,16 +64,16 @@ QColor colorAt(const QColor &start, const QColor &end, qreal pos)
 #ifndef NO_JSONIO
 void SeriesLineData::toJsonNode( jsonio::JsonDom *object ) const
 {
-   object->appendInt( "gpt", markerShape );
-   object->appendInt( "gps", markerSize );
-   object->appendInt( "gls", penSize );
-   object->appendInt( "glt", penStyle );
-   object->appendInt( "gsp", spline );
-   object->appendInt( "gndx", xcolumn );
-   object->appendInt( "grd", red );
-   object->appendInt( "ggr",  green );
-   object->appendInt( "gbl",  blue );
-   object->appendString( "gnm",  name );
+    object->appendInt( "gpt", markerShape );
+    object->appendInt( "gps", markerSize );
+    object->appendInt( "gls", penSize );
+    object->appendInt( "glt", penStyle );
+    object->appendInt( "gsp", spline );
+    object->appendInt( "gndx", xcolumn );
+    object->appendInt( "grd", red );
+    object->appendInt( "ggr",  green );
+    object->appendInt( "gbl",  blue );
+    object->appendString( "gnm",  name );
 }
 
 void SeriesLineData::fromJsonNode( const jsonio::JsonDom *object )
@@ -136,9 +136,9 @@ void SeriesLineData::fromJsonObject(const QJsonObject& json)
 
 void ChartData::setGraphType(int newtype)
 {
-  graphType = newtype;
-  for( auto& model: modelsdata)
-      model->setGraphType(newtype);
+    graphType = newtype;
+    for( auto& model: modelsdata)
+        model->setGraphType(newtype);
 }
 
 void ChartData::setMinMaxRegion( double reg[4] )
@@ -180,26 +180,26 @@ void ChartData::toJsonNode( jsonio::JsonDom *object ) const
     for( ii=0; ii<3; ii++)
         arr->appendInt( to_string(ii), b_color[ii] );
 
-     // define curves
+    // define curves
     arr = object->appendArray( "lines");
     for(uint ii=0; ii<linesdata.size(); ii++)
-     {
+    {
         auto obj = arr->appendObject( to_string(ii) );
         linesdata[ii].toJsonNode( obj );
-     }
+    }
 
     arr = object->appendArray(  "models");
     for(uint ii=0; ii<modelsdata.size(); ii++)
-     {
+    {
         auto obj = arr->appendObject( to_string(ii) );
         modelsdata[ii]->toJsonNode( obj );
-     }
+    }
 }
 
 void ChartData::fromJsonNode( const jsonio::JsonDom *object )
 {
-   size_t ii;
-   if( !object->findValue( "title", title ) )
+    size_t ii;
+    if( !object->findValue( "title", title ) )
         title = "title";
     if(!object->findValue( "graphType", graphType ) )
         graphType = LineChart;
@@ -219,38 +219,38 @@ void ChartData::fromJsonNode( const jsonio::JsonDom *object )
 
     auto arr  = object->field( "region" );
     if(arr != nullptr)
-      for( ii=0; ii<4; ii++)
-         if(!arr->findValue( to_string(ii), region[ii] ) )
-              region[ii] = 0;
+        for( ii=0; ii<4; ii++)
+            if(!arr->findValue( to_string(ii), region[ii] ) )
+                region[ii] = 0;
     arr  = object->field( "part" );
     if(arr != nullptr)
-      for( ii=0; ii<4; ii++)
-        if(!arr->findValue( to_string(ii), part[ii] ) )
-            part[ii] = 0;
+        for( ii=0; ii<4; ii++)
+            if(!arr->findValue( to_string(ii), part[ii] ) )
+                part[ii] = 0;
     arr  = object->field( "b_color" );
     if(arr != nullptr)
-      for( ii=0; ii<3; ii++)
-        if(!arr->findValue( to_string(ii), b_color[ii] ) )
-            b_color[ii] = 255;
+        for( ii=0; ii<3; ii++)
+            if(!arr->findValue( to_string(ii), b_color[ii] ) )
+                b_color[ii] = 255;
 
     linesdata.clear();
     SeriesLineData linebuf;
     arr  = object->field( "lines" );
     if(arr != nullptr)
-      for(ii=0; ii<arr->getChildrenCount(); ii++)
-      {
-        linebuf.fromJsonNode( arr->getChild(ii) );
-        linesdata.push_back(  linebuf );
-      }
+        for(ii=0; ii<arr->getChildrenCount(); ii++)
+        {
+            linebuf.fromJsonNode( arr->getChild(ii) );
+            linesdata.push_back(  linebuf );
+        }
 
     arr  = object->field( "models" );
     if(arr != nullptr)
-      for(ii=0; ii<arr->getChildrenCount(); ii++)
-      {
-        if( ii >= modelsdata.size())
-           break;
-        modelsdata[ii]->fromJsonNode( arr->getChild(ii) );
-      }
+        for(ii=0; ii<arr->getChildrenCount(); ii++)
+        {
+            if( ii >= modelsdata.size())
+                break;
+            modelsdata[ii]->fromJsonNode( arr->getChild(ii) );
+        }
     // refresh model type
     setGraphType(graphType);
 }
@@ -313,16 +313,16 @@ void ChartData::fromJsonObject(const QJsonObject& json)
     QJsonArray regArray = json["region"].toArray();
     QJsonArray partArray = json["part"].toArray();
     if( regArray.size() > 3 && partArray.size() > 3 )
-     for(size_t ii=0; ii<4; ii++)
-     {
-        region[ii] = regArray[ii].toDouble();
-        part[ii] = partArray[ii].toDouble();
-     }
+        for(size_t ii=0; ii<4; ii++)
+        {
+            region[ii] = regArray[ii].toDouble();
+            part[ii] = partArray[ii].toDouble();
+        }
 
     QJsonArray colorArray = json["b_color"].toArray();
     if( colorArray.size() > 2 )
-     for(uint ii=0; ii<3; ii++)
-        b_color[ii] = colorArray[ii].toInt();
+        for(uint ii=0; ii<3; ii++)
+            b_color[ii] = colorArray[ii].toInt();
 
     linesdata.clear();
     SeriesLineData linebuf;
@@ -337,8 +337,8 @@ void ChartData::fromJsonObject(const QJsonObject& json)
     linesArray = json["models"].toArray();
     for(int ii=0; ii<linesArray.size(); ii++)
     {
-       if( ii >= static_cast<int>(modelsdata.size()) )
-               break;
+        if( ii >= static_cast<int>(modelsdata.size()) )
+            break;
         QJsonObject lnObject = linesArray[ii].toObject();
         modelsdata[ii]->fromJsonObject(lnObject);
     }

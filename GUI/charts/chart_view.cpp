@@ -102,6 +102,11 @@ public:
         }
     }
 
+    void setFragment( bool newFragment )
+    {
+        isFragment = newFragment;
+    }
+
     void updateGrid();
     void updateMinMax();
     void attachAxis();
@@ -309,7 +314,7 @@ void PlotChartViewPrivate::showAreaChart()
             const SeriesLineData& linedata = gr_data->lineData(nline);
 
             if( linedata.getXColumn()  < -1 )
-              continue;
+                continue;
             addPlotLine( srmodel, srmodel->getYColumn(jj), linedata   );
 
             QLineSeries *upperSeries = dynamic_cast<QLineSeries *>(gr_series.back().get());
@@ -450,10 +455,10 @@ void PlotChartViewPrivate::makeGrid()
         chart->createDefaultAxes();
         auto axises = chart->axes(Qt::Horizontal);
         if( axises.size() > 0 )
-           axisX =  dynamic_cast<QValueAxis*>(axises[0]);
+            axisX =  dynamic_cast<QValueAxis*>(axises[0]);
         axises = chart->axes(Qt::Vertical);
         if( axises.size() > 0 )
-           axisY =  dynamic_cast<QValueAxis*>(axises[0]);
+            axisY =  dynamic_cast<QValueAxis*>(axises[0]);
     } else
     {
         axisX = new QValueAxis;
@@ -593,7 +598,7 @@ QScatterSeries* PlotChartViewPrivate::newScatterLabel(
 
 PlotChartView::PlotChartView( ChartData *graphdata, QWidget *parent) :
     QChartView(new QChart(), parent),
-    pdata( new PlotChartViewPrivate(graphdata, this, chart() ) )
+    pdata( new PlotChartViewPrivate( graphdata, this, chart() ) )
 {
     setRubberBand(QChartView::RectangleRubberBand);
     setAcceptDrops(true);
@@ -629,9 +634,14 @@ void PlotChartView::updateLines()
     pdata->updateLines();
 }
 
-void PlotChartView::setFragment( bool isFragment )
+void PlotChartView::updateFragment( bool isFragment )
 {
     pdata->updateFragment( isFragment );
+}
+
+void PlotChartView::resetFragment( bool isFragment )
+{
+    pdata->setFragment( isFragment );
 }
 
 void PlotChartView::highlightLine(size_t line, bool enable)
@@ -692,8 +702,8 @@ void PlotChartView::mouseReleaseEvent(QMouseEvent *event)
         {
             if( rubberBand && rubberBand->isVisible() )
             {
-                if( rubberBand->height() < 5 ||  rubberBand->width() < 5 )
-                    return;
+                if( rubberBand->height() < 3 ||  rubberBand->width() < 3 )
+                   return;
 
                 QPointF fp = chart()->mapToValue(rubberBand->geometry().topLeft());
                 QPointF tp = chart()->mapToValue(rubberBand->geometry().bottomRight());

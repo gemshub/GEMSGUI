@@ -82,20 +82,20 @@ public:
 
     void setGraphType( int type )
     {
-       graphType   = type;
+        graphType   = type;
     }
 
     // working with X, Y columns selection
 
     int getXColumn( int line ) const
     {
-       if( line == -2 )
-         return line;
+        if( line == -2 )
+            return line;
 
-       if( line>=0 && line < static_cast<int>(xcolumns.size()) )
-        return xcolumns[static_cast<size_t>(line)];
-       else
-        return -1;
+        if( line>=0 && line < static_cast<int>(xcolumns.size()) )
+            return xcolumns[static_cast<size_t>(line)];
+        else
+            return -1;
     }
 
     /// Get number of Abscissa
@@ -106,31 +106,31 @@ public:
 
     QString abscissaIndexName( int ndx ) const
     {
-      if( ndx == -2 )
-        return QString("Off");
-      if( ndx == -1 )
-        return QString("№");
-      return QString("%1").arg(ndx);
+        if( ndx == -2 )
+            return QString("Off");
+        if( ndx == -1 )
+            return QString("№");
+        return QString("%1").arg(ndx);
     }
 
     int indexAbscissaName( const QString ndxName ) const
     {
-      if( ndxName == QString("Off") )
-        return -2;
-      if( ndxName == QString("№") )
-        return -1;
-      return ndxName.toInt();
+        if( ndxName == QString("Off") )
+            return -2;
+        if( ndxName == QString("№") )
+            return -1;
+        return ndxName.toInt();
     }
 
     /// Get list of Abscissa indexes to qComboBox
     QStringList getAbscissaIndexes() const
     {
-      QStringList lst;
-      lst << abscissaIndexName( -2 );
-      lst << abscissaIndexName( -1 );
-      for( int ii=0; ii<getAbscissaNumber(); ii++ )
-          lst <<  abscissaIndexName( ii );
-      return lst;
+        QStringList lst;
+        lst << abscissaIndexName( -2 );
+        lst << abscissaIndexName( -1 );
+        for( int ii=0; ii<getAbscissaNumber(); ii++ )
+            lst <<  abscissaIndexName( ii );
+        return lst;
     }
 
     /// Get number of series
@@ -146,24 +146,24 @@ public:
 
     void setXColumns( const std::vector<int>& axcolumns )
     {
-      xcolumns.clear();
-      for( auto cl:axcolumns )
-       appendXColumn( cl );
-      emit changedXSelections();
+        xcolumns.clear();
+        for( auto cl:axcolumns )
+            appendXColumn( cl );
+        emit changedXSelections();
     }
 
     void setYColumns( const std::vector<int>& aycolumns,  bool updateNames  )
     {
         ycolumns.clear();
         for( auto cl:aycolumns )
-         appendYColumn( cl );
+            appendYColumn( cl );
         emit changedYSelections( updateNames );
     }
 
     std::string getName( size_t line ) const
     {
-//        return std::to_string(line);
-       return m_model->headerData( getYColumn( line ) , Qt::Horizontal, Qt::DisplayRole ).toString().toStdString();
+        //        return std::to_string(line);
+        return m_model->headerData( getYColumn( line ) , Qt::Horizontal, Qt::DisplayRole ).toString().toStdString();
     }
 
     /// List of the column of the model that contains the x-coordinates of data points
@@ -195,34 +195,34 @@ protected:
 
     QModelIndex mIndex(int row, int column ) const
     {
-      if(column == 0 )
-        return QModelIndex();
-      else
-        return m_model->index( row, column-1 );
+        if(column == 0 )
+            return QModelIndex();
+        else
+            return m_model->index( row, column-1 );
     }
 
     QModelIndex mIndex(const QModelIndex &index) const
     {
-      return mIndex( index.row(), index.column() );
+        return mIndex( index.row(), index.column() );
     }
 
     QModelIndex indexM(const QModelIndex &m_index) const
     {
         if( m_index.isValid() )
-           return index( m_index.row(), m_index.column()+1 );
+            return index( m_index.row(), m_index.column()+1 );
         return QModelIndex();
     }
 
     void appendXColumn( int xclm )
     {
-      if( xclm >= 0 && xclm < m_model->columnCount() )
-        xcolumns.push_back(xclm);
+        if( xclm >= 0 && xclm < m_model->columnCount() )
+            xcolumns.push_back(xclm);
     }
 
     void appendYColumn( int yclm )
     {
-      if( yclm >= 0 && yclm < m_model->columnCount() )
-        ycolumns.push_back(yclm);
+        if( yclm >= 0 && yclm < m_model->columnCount() )
+            ycolumns.push_back(yclm);
     }
 
 };

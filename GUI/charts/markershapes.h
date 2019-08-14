@@ -41,67 +41,67 @@ namespace jsonui {
 class MarkerShapes
 {
 
-  friend MarkerShapes& shapes();
+    friend MarkerShapes& shapes();
 
-  std::vector<QPainterPath>  markers;
+    std::vector<QPainterPath>  markers;
 
-  MarkerShapes();
+    MarkerShapes();
 
-  enum TriangleType
-  {
-     TriangleLeft,
-     TriangleRight,
-     TriangleUp,
-     TriangleDown
-  };
+    enum TriangleType
+    {
+        TriangleLeft,
+        TriangleRight,
+        TriangleUp,
+        TriangleDown
+    };
 
-  QPolygonF trianglePolygon( TriangleType type, const QSize& size );
+    QPolygonF trianglePolygon( TriangleType type, const QSize& size );
 
 public:
 
-  /// This enum value describes the shape used when rendering marker items.
-  enum Style
-  {
-      // Poligons ( filled and not filled )
-      MsCircle,        ///< Circle
-      MsRectangle,     ///< Rectangle
-      MsDiamond,       ///< Diamond
-      MsDTriangle,     ///< Triangle pointing downwards
-      MsUTriangle,     ///< Triangle pointing upwards
-      MsLTriangle,     ///< Triangle pointing left
-      MsRTriangle,     ///< Triangle pointing right
-      MsStar,          ///< Five-pointed star
+    /// This enum value describes the shape used when rendering marker items.
+    enum Style
+    {
+        // Poligons ( filled and not filled )
+        MsCircle,        ///< Circle
+        MsRectangle,     ///< Rectangle
+        MsDiamond,       ///< Diamond
+        MsDTriangle,     ///< Triangle pointing downwards
+        MsUTriangle,     ///< Triangle pointing upwards
+        MsLTriangle,     ///< Triangle pointing left
+        MsRTriangle,     ///< Triangle pointing right
+        MsStar,          ///< Five-pointed star
 
-      // Symbols
-      MsCross,     ///< Cross (+)
-      MsXCross,    ///< Diagonal cross (X)
-      MsHLine,     ///< Horizontal line
-      MsVLine,     ///< Vertical line
-      MsLineStar,  ///< Symbol star (*)
-      NoSymbol_     ///< No Style. The symbol cannot be drawn.
-  };
+        // Symbols
+        MsCross,     ///< Cross (+)
+        MsXCross,    ///< Diagonal cross (X)
+        MsHLine,     ///< Horizontal line
+        MsVLine,     ///< Vertical line
+        MsLineStar,  ///< Symbol star (*)
+        NoSymbol_     ///< No Style. The symbol cannot be drawn.
+    };
 
-  std::size_t size() const
-  {
-    return markers.size();
-  }
+    std::size_t size() const
+    {
+        return markers.size();
+    }
 
-  const QPainterPath& shape( size_t ndx ) const
-  {
-    return markers[ndx%markers.size()];
-  }
+    const QPainterPath& shape( size_t ndx ) const
+    {
+        return markers[ndx%markers.size()];
+    }
 
-  void addShape( const QPainterPath& ashape )
-  {
-    markers.push_back(ashape);
-  }
+    void addShape( const QPainterPath& ashape )
+    {
+        markers.push_back(ashape);
+    }
 
 };
 
 MarkerShapes& shapes()
 {
-  static MarkerShapes  msh;
-  return msh;
+    static MarkerShapes  msh;
+    return msh;
 }
 
 } // namespace jsonui

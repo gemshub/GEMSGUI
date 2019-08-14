@@ -38,8 +38,8 @@
 namespace jsonui {
 
 SymbolDialog::SymbolDialog( const SeriesLineData& aData, QWidget* parent):
-        QDialog( parent ), linedata(aData),
-         ui(new Ui::SymbolDialogData)
+    QDialog( parent ), linedata(aData),
+    ui(new Ui::SymbolDialogData)
 {
     ui->setupUi(this);
 
@@ -51,11 +51,11 @@ SymbolDialog::SymbolDialog( const SeriesLineData& aData, QWidget* parent):
     SeriesLineData plot_( "Scale",  0, 40, 0, 0, 0, 60 );
     for(int ii=0; ii<20; ii++ )
     {
-      pp = new QRadioButton(ui->pSymbols);
-      plot_.setMarkerShape( ii );
-      pp->setIcon(markerShapeIcon(plot_));
-      smbGroup->addButton(pp, ii);
-      ui->gridLayout->addWidget(pp, ii/5, ii%5, 1, 1);
+        pp = new QRadioButton(ui->pSymbols);
+        plot_.setMarkerShape( ii );
+        pp->setIcon(markerShapeIcon(plot_));
+        smbGroup->addButton(pp, ii);
+        ui->gridLayout->addWidget(pp, ii/5, ii%5, 1, 1);
     }
 
     ui->pColor->setAutoFillBackground( true);
@@ -70,7 +70,7 @@ SymbolDialog::SymbolDialog( const SeriesLineData& aData, QWidget* parent):
     smbGroup->button( linedata.getMarkerShape() )->setChecked( true );
 
     std::string s  = "Customize plot curve: ";
-                s += linedata.getName();
+    s += linedata.getName();
     setWindowTitle(s.c_str());
 
     QObject::connect( ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -80,7 +80,7 @@ SymbolDialog::SymbolDialog( const SeriesLineData& aData, QWidget* parent):
 
 SymbolDialog::~SymbolDialog()
 {
-  delete ui;
+    delete ui;
 }
 
 
@@ -96,12 +96,12 @@ SeriesLineData& SymbolDialog::GetPlotLine()
 void SymbolDialog::CmSelectColor()
 {
     QPalette pl = ui->pColor->palette();
-	QColor cl = QColorDialog::getColor(pl.color(QPalette::Background), this);
+    QColor cl = QColorDialog::getColor(pl.color(QPalette::Background), this);
 
     if( cl.isValid() )
     {   pl.setColor( QPalette::Background, cl);
         ui->pColor->setPalette(pl);
-    }   
+    }
 }
 
 } // namespace jsonui

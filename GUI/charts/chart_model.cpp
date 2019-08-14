@@ -33,7 +33,9 @@
 #include <QJsonArray>
 #include "chart_model.h"
 #include "graph_data.h"
+#ifndef NO_JSONIO
 #include "jsonio/jsondom.h"
+#endif
 
 namespace jsonui {
 
@@ -141,7 +143,7 @@ bool ChartDataModel::setData(const QModelIndex &index, const QVariant &value, in
 Qt::ItemFlags ChartDataModel::flags(const QModelIndex &index) const
 {
     if( index.column() > 0 )
-       return m_model->flags( mIndex(index) );
+        return m_model->flags( mIndex(index) );
     return QAbstractItemModel::flags(index);
 }
 
@@ -149,13 +151,13 @@ Qt::ItemFlags ChartDataModel::flags(const QModelIndex &index) const
 
 void ChartDataModel::modelUpdated(QModelIndex mtopLeft, QModelIndex mbottomRight)
 {
-  emit dataChanged(indexM(mtopLeft), indexM(mbottomRight));
+    emit dataChanged(indexM(mtopLeft), indexM(mbottomRight));
 }
 
 void ChartDataModel::modelRowsAdded(QModelIndex m_parent, int start, int end)
 {
-   beginInsertRows(indexM(m_parent), start, end);
-   endInsertRows();
+    beginInsertRows(indexM(m_parent), start, end);
+    endInsertRows();
 }
 
 void ChartDataModel::modelRowsRemoved(QModelIndex m_parent, int start, int end)
@@ -185,21 +187,21 @@ void ChartDataModel::toJsonNode( jsonio::JsonDom *object ) const
 {
     auto arr = object->appendArray( "gxclms");
     for(uint ii=0; ii<xcolumns.size(); ii++)
-       arr->appendInt( std::to_string(ii), xcolumns[ii] );
+        arr->appendInt( std::to_string(ii), xcolumns[ii] );
 
     arr = object->appendArray( "gyclms");
     for(uint ii=0; ii<ycolumns.size(); ii++)
-       arr->appendInt( std::to_string(ii), ycolumns[ii] );
+        arr->appendInt( std::to_string(ii), ycolumns[ii] );
 }
 
 // Reads data from bson
 void ChartDataModel::fromJsonNode( const jsonio::JsonDom *object )
 {
-   std::vector<int> columns;
-   object->findArray( "gxclms", columns );
-   setXColumns( columns );
+    std::vector<int> columns;
+    object->findArray( "gxclms", columns );
+    setXColumns( columns );
     object->findArray( "gyclms", columns );
-   setYColumns( columns, false );
+    setYColumns( columns, false );
 }
 #endif
 
@@ -207,11 +209,11 @@ void ChartDataModel::toJsonObject(QJsonObject& json) const
 {
     QJsonArray xArray;
     for( auto it: xcolumns )
-      xArray.append(it);
+        xArray.append(it);
     json["gxclms"] = xArray;
     QJsonArray yArray;
     for( auto it: ycolumns )
-      yArray.append(it);
+        yArray.append(it);
     json["gyclms"] = yArray;
 }
 

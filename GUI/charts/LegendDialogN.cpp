@@ -41,8 +41,8 @@ using namespace std;
 namespace jsonui {
 
 LegendDialog::LegendDialog( GraphDialog* aGraph ):
-        QDialog(aGraph), ui(new Ui::LegendDialogData),
-        graph((aGraph->gr_data.get())), graphDlg(aGraph)
+    QDialog(aGraph), ui(new Ui::LegendDialogData),
+    graph((aGraph->gr_data.get())), graphDlg(aGraph)
 {
     ui->setupUi(this);
 
@@ -65,7 +65,7 @@ LegendDialog::LegendDialog( GraphDialog* aGraph ):
 
 LegendDialog::~LegendDialog()
 {
-  delete ui;
+    delete ui;
 }
 
 
@@ -105,13 +105,13 @@ void LegendDialog::CmBackground()
     {   QPalette pl = ui->pColor->palette();
         pl.setColor( QPalette::Background, cl);
         ui->pColor->setPalette(pl);
-         backgroundColor = cl;
+        backgroundColor = cl;
     }
 }
 
 void LegendDialog::CmHelp()
 {
-   helpWin( "LegendDialogJsonui", "" );
+    helpWin( "LegendDialogJsonui", "" );
 }
 
 
