@@ -34,7 +34,6 @@
 #define CHARTVIEW_H
 
 #include <memory>
-#include <iostream>
 #include <QtCharts/QChartView>
 
 QT_CHARTS_USE_NAMESPACE

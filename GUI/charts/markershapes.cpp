@@ -68,7 +68,7 @@ QImage markerShapeImage( const SeriesLineData& linedata )
 QImage textImage( const QFont& font, const QString& text )
 {
     QFontMetrics fm(font);
-    int pixelsWide = fm.width(text);
+    int pixelsWide = fm.horizontalAdvance(text);
     //int pixelsHigh = fm.height();
 
     QPainterPath textPath;
@@ -119,7 +119,7 @@ void getLinePen( QPen& pen, const SeriesLineData& linedata  )
 {
     pen.setColor(linedata.getColor() );
     pen.setWidth(linedata.getPenSize());
-    Qt::PenStyle style = (Qt::PenStyle)linedata.getPenStyle();
+    Qt::PenStyle style = static_cast<Qt::PenStyle>(linedata.getPenStyle());
     pen.setStyle(style);
 }
 

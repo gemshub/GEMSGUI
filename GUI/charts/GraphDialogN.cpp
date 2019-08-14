@@ -413,7 +413,7 @@ void DragTableWidget::startDragN(/*Qt::DropActions supportedActions*/)
         QString text_ = item->text();
 
         QFontMetrics fm(this->font());
-        QPixmap pixmap(fm.width(text_)+2, fm.height()+2);
+        QPixmap pixmap(fm.horizontalAdvance(text_)+2, fm.height()+2);
         pixmap.fill(QColor(0, 0, 0, 0));
         QPainter dc(&pixmap);
         dc.drawText(2, fm.height()-2, text_ );
@@ -425,7 +425,7 @@ void DragTableWidget::startDragN(/*Qt::DropActions supportedActions*/)
         drag->setMimeData( mimeData );
         drag->setPixmap(pixmap/*QPixmap::grabWidget(this)*/);
         drag->setHotSpot( QPoint(0, pixmap.height()) );
-        drag->start();
+        drag->exec();
      }
  }
 

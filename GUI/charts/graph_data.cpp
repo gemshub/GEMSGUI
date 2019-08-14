@@ -321,7 +321,7 @@ void ChartData::fromJsonObject(const QJsonObject& json)
 
     QJsonArray colorArray = json["b_color"].toArray();
     if( colorArray.size() > 2 )
-        for(uint ii=0; ii<3; ii++)
+        for(size_t ii=0; ii<3; ii++)
             b_color[ii] = colorArray[ii].toInt();
 
     linesdata.clear();

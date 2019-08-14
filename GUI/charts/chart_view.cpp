@@ -152,6 +152,7 @@ protected:
     std::map<QString,std::shared_ptr<QScatterSeries> > mapLabels;
     std::shared_ptr<QScatterSeries> show_point;
 
+    double generated_region[4];
     bool isFragment = false;
 
 private:
@@ -375,6 +376,11 @@ void PlotChartViewPrivate::updateMinMax()
             axisX->setRange(gr_data->region[0], gr_data->region[1]);
             axisY->setRange(gr_data->region[2], gr_data->region[3]);
         }
+        else
+        {
+            axisX->setRange(generated_region[0], generated_region[1]);
+            axisY->setRange(generated_region[2], generated_region[3]);
+        }
     }
 }
 
@@ -459,6 +465,16 @@ void PlotChartViewPrivate::makeGrid()
         axises = chart->axes(Qt::Vertical);
         if( axises.size() > 0 )
             axisY =  dynamic_cast<QValueAxis*>(axises[0]);
+
+        generated_region[0] = axisX->min();
+        generated_region[1] = axisX->max();
+        generated_region[2] = axisY->min();
+        generated_region[3] = axisY->max();
+        gr_data->part[0] = 0;
+        gr_data->part[1] = 0;
+        gr_data->part[2] = 0;
+        gr_data->part[3] = 0;
+
     } else
     {
         axisX = new QValueAxis;
@@ -577,7 +593,7 @@ QScatterSeries* PlotChartViewPrivate::newScatterLabel(
 {
     QScatterSeries *series  =  new QScatterSeries;
     QFontMetrics fm(gr_data->axisFont);
-    int size = fm.width(label);
+    int size = fm.horizontalAdvance(label);
 
     series->setName( label );
     series->setPen( QPen(Qt::transparent));
@@ -695,6 +711,7 @@ void PlotChartView::mouseReleaseEvent(QMouseEvent *event)
         /*QPointF fp = chart()->mapToValue(event->pos());
         QString label = QString("%1:%2").arg( fp.x()).arg( fp.y());
         pdata->addPoint( event->pos(), label);*/
+        event->accept();
         return;
     }
     else
@@ -703,7 +720,11 @@ void PlotChartView::mouseReleaseEvent(QMouseEvent *event)
             if( rubberBand && rubberBand->isVisible() )
             {
                 if( rubberBand->height() < 3 ||  rubberBand->width() < 3 )
-                   return;
+                {
+                    rubberBand->hide();
+                    event->accept();
+                    return;
+                }
 
                 QPointF fp = chart()->mapToValue(rubberBand->geometry().topLeft());
                 QPointF tp = chart()->mapToValue(rubberBand->geometry().bottomRight());
