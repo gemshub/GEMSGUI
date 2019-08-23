@@ -19,6 +19,7 @@
 //-------------------------------------------------------------------
 
 #include <cstdio>
+#include <limits>
 #include "gdatastream.h"
 #include "graph.h"
 #include "GemsMainWindow.h"
@@ -220,7 +221,7 @@ double TPlot::getValue(int row, int col) const
     }
 
     if( IsDoubleEmpty( value ) && row > 0  )
-       return getValue(row-1, col);
+        return std::numeric_limits<double>::lowest();
     else
        return value;
 }

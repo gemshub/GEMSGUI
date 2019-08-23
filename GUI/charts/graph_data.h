@@ -218,7 +218,7 @@ class ChartData : public QObject
                const std::string& aXName, const std::string& aYname,
                int agraphType = LineChart ):
           title(atitle), axisTypeX(5), axisTypeY(5),
-          xName(aXName), yName(aYname), axisFont("Sans Serif", 10),
+          xName(aXName), yName(aYname), axisFont("Sans Serif", 12),
           graphType( agraphType )
       {
         // Define background color
