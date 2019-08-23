@@ -105,7 +105,7 @@ GraphWindow *updateGraphWindow(  GraphWindow* graph_wnd,
 SeriesLineData convertor( const TPlotLine& plotData )
 {
     SeriesLineData data( plotData.getName().c_str(),
-                         plotData.getType(), plotData.getSize(),
+                         plotData.getType()%20, plotData.getSize(),
                          plotData.getLineSize(),
                          plotData.getLineStyle(), plotData.getSpline(), // could be add: penStyle  end  spline now default
                          plotData.getColor()  );

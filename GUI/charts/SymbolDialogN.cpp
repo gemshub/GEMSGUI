@@ -67,7 +67,7 @@ SymbolDialog::SymbolDialog( const SeriesLineData& aData, QWidget* parent):
     ui->pLineStyle->setCurrentIndex( linedata.getPenStyle() );
     ui->pSpline->setChecked( linedata.getSpline() );
     ui->pSymbolSize->setValue( linedata.getMarkerSize() );
-    smbGroup->button( linedata.getMarkerShape() )->setChecked( true );
+    smbGroup->button( linedata.getMarkerShape()%20 )->setChecked( true );
 
     std::string s  = "Customize plot curve: ";
     s += linedata.getName();
