@@ -29,7 +29,7 @@
 
 //-------------------------------------------------------------------
 
-LoadMessage* LoadMessage::pDia = 0;
+LoadMessage* LoadMessage::pDia = nullptr;
 
 LoadMessage::LoadMessage( QWidget* parent,
              const char* name,
@@ -93,14 +93,14 @@ void LoadMessage::Update( const char* mess, int prog, int total )
 
 void LoadMessage::closeEvent(QCloseEvent* ev)
 {
-      pDia = 0;
+      pDia = nullptr;
       pVisorImp->setMenuEnabled( true );
       QProgressDialog::closeEvent(ev);
 }
 
 //-------------------------------------------------------------------
 
-ProcessProgressDialog* ProcessProgressDialog::pDia = 0;
+ProcessProgressDialog* ProcessProgressDialog::pDia = nullptr;
 
 ProcessProgressDialog::ProcessProgressDialog( QWidget* parent, int anRT ):
                QDialog(parent), nRT(anRT)
@@ -131,7 +131,7 @@ ProcessProgressDialog::ProcessProgressDialog( QWidget* parent, int anRT ):
                      pProgress->setMaximum( TProcess::pm->pep->NR1 );
                      break;
      case RT_GEM2MT: TGEM2MT::pm->stepWise = true;
-                     pProgress->setMaximum(TGEM2MT::pm->mtp->ntM );
+                     pProgress->setMaximum( static_cast<int>(TGEM2MT::pm->mtp->ntM) );
                      break;
      default:        pProgress->setMaximum( 100. );
                      break;
@@ -208,7 +208,7 @@ void ProcessProgressDialog::Update()
                      label->setText(TProcess::pm->Vmessage.c_str());
                      setWindowTitle( TProcess::pm->pep->stkey );
                      break;
-     case RT_GEM2MT: pProgress->setValue(TGEM2MT::pm->mtp->ct);
+     case RT_GEM2MT: pProgress->setValue(static_cast<int>(TGEM2MT::pm->mtp->ct));
                      label->setText(TGEM2MT::pm->Vmessage.c_str());
                      //setWindowTitle( TGEM2MT::pm->mtp->sykey );
                      break;
@@ -365,7 +365,7 @@ void ProcessProgressDialog::closeEvent(QCloseEvent* ev)
    }
    // calcThread->wait();
    ThreadControl::wakeOne();	// let's calc
-    pDia = 0;
+    pDia = nullptr;
     pVisorImp->setMenuEnabled( true );
     QDialog::closeEvent(ev);
 }

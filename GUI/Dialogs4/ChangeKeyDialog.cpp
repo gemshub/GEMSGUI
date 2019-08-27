@@ -93,8 +93,7 @@ void ChangeKeyDialog::SetFromString()
       ret = "*";
     else //  ??*???, *?, ??*
      {
-       int n;
-       n = nfirst->value();
+       auto n = nfirst->value();
        ret = gstring(n, '?');
        ret+= "*";
        n = nlast->value();

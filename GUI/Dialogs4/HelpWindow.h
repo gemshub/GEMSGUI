@@ -62,7 +62,7 @@ class SearchWidget : public QWidget
    // bool eventFilter(QObject* o, QEvent *e);
 
 public:
-    SearchWidget(QHelpSearchEngine *engine, QWidget *parent = 0);
+    SearchWidget(QHelpSearchEngine *engine, QWidget *parent = nullptr);
     ~SearchWidget();
 
 signals:
@@ -101,7 +101,7 @@ class HelpWindow : public QMainWindow, public Ui::HelpWindowData
 public:
     static HelpWindow* pDia;
 
-    HelpWindow( QWidget* parent = NULL );
+    HelpWindow( QWidget* parent = nullptr );
     virtual ~HelpWindow();
 
     void showDocumentation(const char* file, const char* item1);

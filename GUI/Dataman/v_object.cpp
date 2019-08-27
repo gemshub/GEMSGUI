@@ -1087,7 +1087,7 @@ TConfig cnf(f_obj,' ');
         cnf.getcStrings(6, astr);
 
         sscanf( astr[2].c_str(),"%d", &N);
-        sscanf( astr[3].c_str(),"%u", &M);
+        sscanf( astr[3].c_str(),"%d", &M);
 	indexationCode = astr[4][0];
 
         if( isdigit(astr[1][0]) )

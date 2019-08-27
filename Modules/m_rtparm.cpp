@@ -347,7 +347,7 @@ TRTParm::MakeQuery()
     const char * p_key;
     char flgs[10];
     int size[7];
-    float val[6];
+    double val[6];
 
     p_key  = db->PackKey();
     memcpy( flgs, &rpp->What, 10);

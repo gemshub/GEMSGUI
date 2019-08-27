@@ -59,7 +59,7 @@ struct pagesSetupData
    int ndx;         //  second index in object
    gstring ndxName; // if ndxName not empty ( ndx is first ndx ), second from list
 
-   pagesSetupData( const char * pName, int aobj, int andx = 0, const char*  andxName = 0):
+   pagesSetupData( const char * pName, int aobj, int andx = 0, const char*  andxName = nullptr):
         pageName(pName),  nObj(aobj), ndx(andx)
    {
      if( andxName )
@@ -144,7 +144,7 @@ public:
 
     EquatSetup( QWidget* parent, equatSetupData aEqData,
        int nRT, TIArray<pagesSetupData>& wnData, TIArray<pagesSetupData>& scalarsList,
-       const char* script = 0, const char* aXname = 0, const char* aYname = 0  );
+       const char* script = nullptr, const char* aXname = nullptr, const char* aYname = nullptr  );
     virtual ~EquatSetup();
 
    gstring getScript() const;
@@ -159,10 +159,10 @@ public:
       yNam =name;
    }
 
-   int getScriptLinesNum() const
+   size_t getScriptLinesNum() const
    {  return   scriptData.GetCount(); }
 
-   int getAbscissaNum() const
+   size_t getAbscissaNum() const
    {  return   eqData.abscissaLines.GetCount()+1; }
 
 public slots:

@@ -36,7 +36,7 @@ class SystemWizard : public QDialog, public Ui::SystemWizardData
 public:
 
     SystemWizard( const char* pkey, char flgs[40],
-         gstring name, gstring comment, gstring EQkey,  QWidget* parent = NULL);
+         gstring name, gstring comment, gstring EQkey,  QWidget* parent = nullptr);
     virtual ~SystemWizard();
 
     gstring getName();

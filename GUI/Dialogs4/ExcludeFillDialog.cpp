@@ -132,7 +132,7 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
     plotLayout->setMargin(11);
     
     QCheckBox* CheckBox1;
-    for(uint ii=0; ii<aICkeys.GetCount(); ii++ )
+    for(size_t ii=0; ii<aICkeys.GetCount(); ii++ )
     {
       CheckBox1 = new QCheckBox( grpBox );
       CheckBox1->setText( trUtf8( aICkeys[ii].c_str() ) );

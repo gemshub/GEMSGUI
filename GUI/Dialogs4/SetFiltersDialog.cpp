@@ -200,25 +200,25 @@ void SetFiltersDialog::getData()
 {
 
     // get IComp
-    data->ic_d.from_templ = (const char*)cbICsearch->currentText().toLatin1().data();
-    data->ic_d.to_templ = (const char*)cbICreplace->currentText().toLatin1().data();
+    data->ic_d.from_templ = cbICsearch->currentText().toLatin1().data();
+    data->ic_d.to_templ = cbICreplace->currentText().toLatin1().data();
     // only show
     //tvIClistP->setText( txt );
     //tvIClistD->setText( txt );
 
   // set DComp
-    data->dc_d.from_templ = (const char*)cbDCsearch->currentText().toLatin1().data();
-    data->dc_d.to_templ = (const char*)cbDCreplace->currentText().toLatin1().data();
-    data->dc_d.f_script = (const char*)mleDCfscript->toPlainText().toLatin1().data();
+    data->dc_d.from_templ = cbDCsearch->currentText().toLatin1().data();
+    data->dc_d.to_templ = cbDCreplace->currentText().toLatin1().data();
+    data->dc_d.f_script = mleDCfscript->toPlainText().toLatin1().data();
 
   // set ReacDC
-    data->rd_d.from_templ = (const char*)cbREsearch->currentText().toLatin1().data();
-    data->rd_d.to_templ = (const char*)cbREreplace->currentText().toLatin1().data();
-    data->rd_d.f_script = (const char*)mleREfscript->toPlainText().toLatin1().data();
+    data->rd_d.from_templ = cbREsearch->currentText().toLatin1().data();
+    data->rd_d.to_templ = cbREreplace->currentText().toLatin1().data();
+    data->rd_d.f_script = mleREfscript->toPlainText().toLatin1().data();
 
   // set Phases
-    data->ph_d.from_templ = (const char*)cbPHsearch->currentText().toLatin1().data();
-    data->ph_d.to_templ = (const char*)cbPHreplace->currentText().toLatin1().data();
+    data->ph_d.from_templ = cbPHsearch->currentText().toLatin1().data();
+    data->ph_d.to_templ = cbPHreplace->currentText().toLatin1().data();
 
     //data->ph_d.flags[PHcopyL_] = cbPHcopyL->isChecked();
     data->ph_d.flags[PHcopyF_] = cbPHcopyF->isChecked();
@@ -228,9 +228,9 @@ void SetFiltersDialog::getData()
     //data->ph_d.flags[PHcopyY_] = cbPHcopyY->isChecked();
 
    // set Compos
-    data->cm_d.from_templ = (const char*)cbPCOsearch->currentText().toLatin1().data();
-    data->cm_d.to_templ = (const char*)cbPCOreplace->currentText().toLatin1().data();
-    data->cm_d.f_script = (const char*)mlePCOfscript->toPlainText().toLatin1().data();
+    data->cm_d.from_templ = cbPCOsearch->currentText().toLatin1().data();
+    data->cm_d.to_templ = cbPCOreplace->currentText().toLatin1().data();
+    data->cm_d.f_script = mlePCOfscript->toPlainText().toLatin1().data();
 
   // get files list (or reopen files)
   //( RT_SDATA, RT_CONST, X, X, RT_ICOMP, RT_DCOMP, RT_COMPOS,
@@ -281,7 +281,7 @@ void SetFiltersDialog::setFiles()
     int jj =0, ik;
 
     int ii, jk, nF;
-    int npMod1 = pkern->childCount();
+    auto npMod1 = pkern->childCount();
     QTreeWidgetItem* pMod;
     QTreeWidgetItem* pFile;
 

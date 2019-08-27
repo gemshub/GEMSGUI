@@ -49,9 +49,9 @@ protected slots:
 public:
 
     KeyDialog(QWidget* win, int irt, const char* key = "*",
-              const char* caption = 0, bool filter=true);
+              const char* caption = nullptr, bool filter=true);
     KeyDialog(QWidget* win, int irt, TCStringArray& sel,
-              const char* key = "*", const char* caption = 0 );
+              const char* key = "*", const char* caption = nullptr );
 
     virtual ~KeyDialog();
 
@@ -81,7 +81,7 @@ protected slots:
 public:
 
     RDKeyDialog(QWidget* win, TCStringArray& sel,
-              const char* key = "*", const char* caption = 0, short NsuT=0 );
+              const char* key = "*", const char* caption = nullptr, short NsuT=0 );
     virtual ~RDKeyDialog();
     TCStringArray allSelectedKeys();
 //    gstring getKey();

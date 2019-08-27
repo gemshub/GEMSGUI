@@ -850,7 +850,7 @@ void GEM2MTWizard::ScriptChange( int )
 
 //==============================================================================
 
-equatSetupData eqMT( "xt", "yt", "qc", "qc" );
+static equatSetupData eqMT( "xt", "yt", "qc", "qc" );
 
 // work with lists
 void GEM2MTWizard::resetPageList(const char* aXname, const char* aYname)

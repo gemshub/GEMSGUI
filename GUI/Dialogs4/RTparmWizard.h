@@ -40,14 +40,14 @@ class RTparmWizard : public QDialog, public Ui::RTparmWizardData
 
 public:
 
-    RTparmWizard( const char* pkey, char flgs[10], int sizes[7], float val[6],
+    RTparmWizard( const char* pkey, char flgs[10], int sizes[7], double val[6],
                   const char *acalcScript, const char* aXname, const char* aYname,
-                  QWidget* parent = NULL);
+                  QWidget* parent = nullptr);
     virtual ~RTparmWizard();
 
     void   getSizes( int size[7] );
     void   getFlags( char flgs[10], gstring& xName );
-    void   getFloat( float val[6] );
+    void   getFloat( double val[6] );
 
     gstring getScript() const
     { return pageScript->getScript();

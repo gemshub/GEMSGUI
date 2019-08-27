@@ -16,8 +16,8 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-#ifndef _GemsMainWindow_h_
-#define _GemsMainWindow_h_
+#ifndef GemsMainWindow_h_
+#define GemsMainWindow_h_
 
 #include <QMainWindow>
 #include <QProcess>
@@ -157,7 +157,7 @@ class TVisorImp: public QMainWindow, public Ui::GemsMainWindowData
     char** argv;
 
     time_t last_update;
-    size_t updateTime;
+    int updateTime;
 
     //int ProfileMode;
 
@@ -206,7 +206,7 @@ public:
     void OpenModule(QWidget* parent, uint i, int page=0, int viewmode=0, bool select=false);
     void defineModuleKeysList( uint nRT );
     void GetHelp();
-    void OpenHelp(const char* file, const char* item=0, int page =-1);
+    void OpenHelp(const char* file, const char* item=nullptr, int page =-1);
     void OpenProgress(bool step=false);
     void CloseProgress();
     bool Message( QWidget* parent, const char* name,
@@ -215,9 +215,9 @@ public:
     void ProcessProgress( QWidget* parent, int nRT );
 
     // work with default values
-    unsigned short updateInterval() const
+    int updateInterval() const
        {   return updateTime;   }
-    void setUpdateInterval(unsigned short updInterval)
+    void setUpdateInterval(int updInterval)
        {
           if( updInterval > 0 && updInterval < 60 )
                  updateTime = updInterval;
@@ -291,7 +291,7 @@ public slots:
 
     void CmCreate();
     void CmNew();
-    void CmShow( const char * key=0 );  //Demonstrate (show) Data Record
+    void CmShow( const char * key=nullptr );  //Demonstrate (show) Data Record
     void CmDerive();
     void CmCalc();  //Calculate or create Data Record
     void CmSave();
@@ -352,7 +352,7 @@ public slots:
 
 // Top level dialog
 
-    bool SetProfileMode( const char * profileKey = 0);
+    bool SetProfileMode( const char * profileKey = nullptr);
     bool SetGeneralMode();
     void CmHelpAbout();
     void CmHelpAuthors();

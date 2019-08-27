@@ -42,7 +42,7 @@ public:
 
     GtDemoWizard( const char* pkey, int sizes[8], const char *ascript,
                   const char *proc_key, const char* aXname, const char* aYname,
-                  QWidget* parent = NULL);
+                  QWidget* parent = nullptr);
     virtual ~GtDemoWizard();
 
 
@@ -57,7 +57,7 @@ protected slots:
     virtual void languageChange();
 
 public slots:
-    void resetPageList( int, const char* aXname=0, const char* aYname=0 );
+    void resetPageList( int, const char* aXname=nullptr, const char* aYname=nullptr );
     void help();
     void CmNext();
     void CmBack();

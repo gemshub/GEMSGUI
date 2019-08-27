@@ -172,7 +172,7 @@ QString CalcDialog::fun(double val)
     }
 
     QString retstr;
-    if( ret == DOUBLE_EMPTY )
+    if( IsDoubleEmpty( ret ) )
         retstr = "---";
     else
         retstr = QString::number(  ret, 'g', 6 );//QVariant(ret).toString();

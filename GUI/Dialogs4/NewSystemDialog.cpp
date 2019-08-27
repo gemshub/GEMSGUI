@@ -28,7 +28,7 @@
 #include "GemsMainWindow.h"
 #include "m_syseq.h"
 
-NewSystemDialog* NewSystemDialog::pDia = 0;
+NewSystemDialog* NewSystemDialog::pDia = nullptr;
 
 NewSystemDialog::NewSystemDialog(QWidget* parent, const char* /*name*/):
 	QMainWindow( parent )
@@ -45,7 +45,7 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* /*name*/):
    defineInputList();
     
 // define new TTreeView window Results: Equilibrium State
-   ListViewResult = 0;
+   ListViewResult = nullptr;
    //defineResultList();
 
     //--setActions();
@@ -214,7 +214,7 @@ void NewSystemDialog::Update()
             msg += QString("  V = %1 L;").arg(pData->VXc/1000., 9, 'g', 4);
     if( pData->PHC )
     {
-       if( pData->PHC[0] == (char)PH_AQUEL )
+       if( pData->PHC[0] == PH_AQUEL )
        {
           char* sMod;
           msg += QString("  Aqueous:");
@@ -270,7 +270,7 @@ void NewSystemDialog::closeEvent(QCloseEvent* ev)
     // close module
     if( MessageToSave() )
     {
-       pDia = 0;
+       pDia = nullptr;
        ev->accept();
        pVisorImp->closeMdiChild( this );
      } else {
@@ -478,112 +478,112 @@ void NewSystemDialog::CmPrInput()
 // Database SysEq record actions
 void NewSystemDialog::CmCreate()
 {
- try
- {
-     if( !MessageToSave() )
+    try
+    {
+        if( !MessageToSave() )
             return;
 
-     if( ListViewResult  )
-     {    delete ListViewResult;
-          ListViewResult = 0;
-     }
+        if( ListViewResult  )
+        {    delete ListViewResult;
+            ListViewResult = nullptr;
+        }
 
-     TProfil::pm->newSystat( VF_CLEARALL );
-      // Create...
-     Update();
- }
+        TProfil::pm->newSystat( VF_CLEARALL );
+        // Create...
+        Update();
+    }
     catch( TError& xcpt )
     {
-       vfMessage(this, xcpt.title, xcpt.mess);
+        vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
 
 void NewSystemDialog::CmNew()
 {
- try
- {
-   if( !MessageToSave() )
+    try
+    {
+        if( !MessageToSave() )
             return;
 
-   TProfil::pm->newSystat( VF_BYPASS );
-   //ListViewResult->resetList();
-      // Create...
-   Update();
- }
+        TProfil::pm->newSystat( VF_BYPASS );
+        //ListViewResult->resetList();
+        // Create...
+        Update();
+    }
     catch( TError& xcpt )
     {
-      vfMessage(this, xcpt.title, xcpt.mess);
+        vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
 
 void NewSystemDialog::CmSelect( const char *key )
 {
     if( rt[RT_SYSEQ].RecCount() <= 0)
-      return;   // Added to avoid a pitfall at creating new project
+        return;   // Added to avoid a pitfall at creating new project
     try
     {
-       if( !MessageToSave() )
-           return;
+        if( !MessageToSave() )
+            return;
 
-      TProfil::pm->loadSystat( key );
-      //ListViewResult->resetList();
-      Update();
+        TProfil::pm->loadSystat( key );
+        //ListViewResult->resetList();
+        Update();
     }
     catch( TError& xcpt )
     {
-      vfMessage(this, xcpt.title, xcpt.mess);
+        vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
 
 void NewSystemDialog::CmRemake()
 {
-  try
-  {
-      if( !MessageToSave() )
+    try
+    {
+        if( !MessageToSave() )
             return;
 
-    TProfil::pm->deriveSystat();
-    //ListViewResult->resetList();
-    Update();
- }
- catch( TError& xcpt )
+        TProfil::pm->deriveSystat();
+        //ListViewResult->resetList();
+        Update();
+    }
+    catch( TError& xcpt )
     {
-      vfMessage(this, xcpt.title, xcpt.mess);
+        vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
 
 void NewSystemDialog::CmSave()
 {
-  try
-  {
-    if( TSysEq::pm->ifCalcFlag()== false )
+    try
     {
-      gstring key_s = rt[RT_SYSEQ].PackKey();
-      if( rt[RT_SYSEQ].Find( key_s.c_str()  ) < 0) // FindCurrent
-      { vfMessage( this, key_s.c_str(),
-        "Please, calculate the equilibrium state before saving this record!");
-            return;
-      }
+        if( TSysEq::pm->ifCalcFlag()== false )
+        {
+            gstring key_s = rt[RT_SYSEQ].PackKey();
+            if( rt[RT_SYSEQ].Find( key_s.c_str()  ) < 0) // FindCurrent
+            { vfMessage( this, key_s.c_str(),
+                         "Please, calculate the equilibrium state before saving this record!");
+                return;
+            }
+        }
+        TProfil::pm->SyTestSizes();
+        TSysEq::pm->CmSaveM();
     }
-    TProfil::pm->SyTestSizes();
-    TSysEq::pm->CmSaveM();
-  }
     catch( TError& xcpt )
     {
-      vfMessage(this, xcpt.title, xcpt.mess);
+        vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
 
 void NewSystemDialog::CmSaveAs()
 {
-  try
-  {
-    TProfil::pm->SyTestSizes();
-    TSysEq::pm->CmSaveAs();
-  }
+    try
+    {
+        TProfil::pm->SyTestSizes();
+        TSysEq::pm->CmSaveAs();
+    }
     catch( TError& xcpt )
     {
-      vfMessage(this, xcpt.title, xcpt.mess);
+        vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
 
@@ -594,38 +594,37 @@ void NewSystemDialog::CmDelete()
 
 void NewSystemDialog::CmNext()
 {
-        if( rt[RT_SYSEQ].RecCount() <= 0 )
-      return;    // Added to avoid a pitfall at creating new project
+    if( rt[RT_SYSEQ].RecCount() <= 0 )
+        return;    // Added to avoid a pitfall at creating new project
     try
     {
         if( !MessageToSave() )
-             return;
+            return;
 
-        int i_next = 0;
-       // get current record key
-       gstring str=rt[RT_SYSEQ].UnpackKey();
-       // select scroll list
-       TCStringArray aKey;
-       TCIntArray anR;
-       int Nrec = rt[RT_SYSEQ].GetKeyList(
-            TSysEq::pm->getFilter(), aKey, anR );
-       if( Nrec <= 0 )
-           return; // no records to scroll
-       // get current record key
-       if( !(str.find_first_of("*?" ) != gstring::npos) )
-          //Current record key is defined!
-       {
-         for(uint i=0; i<aKey.GetCount(); i++ )
-          if( str == aKey[i])
-            {
-              i_next = i+1;
-              if( i_next >=  Nrec ) i_next--;
-              break;
-            }
+        size_t i_next = 0;
+        // get current record key
+        gstring str=rt[RT_SYSEQ].UnpackKey();
+        // select scroll list
+        TCStringArray aKey;
+        TCIntArray anR;
+        auto Nrec = rt[RT_SYSEQ].GetKeyList(TSysEq::pm->getFilter(), aKey, anR );
+        if( Nrec <= 0 )
+            return; // no records to scroll
+        // get current record key
+        if( !(str.find_first_of("*?" ) != gstring::npos) )
+            //Current record key is defined!
+        {
+            for(uint i=0; i<aKey.GetCount(); i++ )
+                if( str == aKey[i])
+                {
+                    i_next = i+1;
+                    if( i_next >=  Nrec ) i_next--;
+                    break;
+                }
         }
-       TProfil::pm->loadSystat( aKey[i_next].c_str() );
-       //ListViewResult->resetList();
-       Update();
+        TProfil::pm->loadSystat( aKey[i_next].c_str() );
+        //ListViewResult->resetList();
+        Update();
     }
     catch( TError& xcpt )
     {
@@ -638,37 +637,38 @@ void NewSystemDialog::CmPrevious()
 {
 
     if( rt[RT_SYSEQ].RecCount() <= 0)
-      return; // Added to avoid a pitfall at creating new project
+        return; // Added to avoid a pitfall at creating new project
     try
     {
         if( !MessageToSave() )
-           return;
+            return;
 
-        int i_next = 0;
-       // get current record key
-       gstring str=rt[RT_SYSEQ].UnpackKey();
-       // select scroll list
-       TCStringArray aKey;
-       TCIntArray anR;
-       int Nrec = rt[RT_SYSEQ].GetKeyList(
-            TSysEq::pm->getFilter(), aKey, anR );
-       if( Nrec <= 0 )
-           return; // no records to scroll
-       // get current record key
-       if( !(str.find_first_of("*?" ) != gstring::npos) )
-          //Current record key is defined!
-       {
-         for(uint i=0; i<aKey.GetCount(); i++ )
-          if( str == aKey[i])
-            {
-             i_next = i-1;
-              if( i_next <  0 ) i_next++;
-              break;
-             }
+        size_t i_next = 0;
+        // get current record key
+        gstring str=rt[RT_SYSEQ].UnpackKey();
+        // select scroll list
+        TCStringArray aKey;
+        TCIntArray anR;
+        auto Nrec = rt[RT_SYSEQ].GetKeyList( TSysEq::pm->getFilter(), aKey, anR );
+        if( Nrec <= 0 )
+            return; // no records to scroll
+        // get current record key
+        if( !(str.find_first_of("*?" ) != gstring::npos) )
+            //Current record key is defined!
+        {
+            for(size_t i=0; i<aKey.GetCount(); i++ )
+                if( str == aKey[i])
+                {
+                    if( i > 0 )
+                      i_next = i-1;
+                    else
+                      i_next = i;
+                    break;
+                }
         }
-       TProfil::pm->loadSystat( aKey[i_next].c_str() );
-       //ListViewResult->resetList();
-       Update();
+        TProfil::pm->loadSystat( aKey[i_next].c_str() );
+        //ListViewResult->resetList();
+        Update();
     }
     catch( TError& xcpt )
     {

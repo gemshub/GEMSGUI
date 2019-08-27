@@ -16,8 +16,8 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-#ifndef _KeyFilter_h_
-#define _KeyFilter_h_
+#ifndef KeyFilter_h_
+#define KeyFilter_h_
 
 #include <qdialog.h>
 #include <qlineedit.h>

@@ -263,7 +263,7 @@ TReadData::getData( bool isList )
        i=0;
        while( isdigit(input[i]) && input[i] != '\0')
               i++;
-       if( i > 0 ) sscanf( input, "%d", &ii);
+       if( i > 0 ) sscanf( input, "%u", &ii);
        input += i;
        skipSpace();
        if( *input == ',' )
@@ -273,7 +273,7 @@ TReadData::getData( bool isList )
           i=0;
           while( isdigit(input[i]) && input[i] != '\0')
                 i++;
-          if( i > 0 ) sscanf( input, "%d", &jj);
+          if( i > 0 ) sscanf( input, "%u", &jj);
           input += i;
        }
      skipSpace();

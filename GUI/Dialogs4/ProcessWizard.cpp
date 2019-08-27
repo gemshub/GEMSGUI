@@ -46,7 +46,7 @@ void
 ProcessWizard::CmNext()
 {
     int ndx = stackedWidget->currentIndex();
-    int nLines = pageScript->getScriptLinesNum();
+    auto nLines = pageScript->getScriptLinesNum();
     char type = getType();
 
     if( ndx == 2 && nLines > 0)
@@ -521,8 +521,6 @@ ProcessWizard::help()
 
 void ProcessWizard::defineWindow(char type)
 {
-  uint jj;
-
   page1Changed = false;
   if( type == curType )
     return;
@@ -614,7 +612,7 @@ void ProcessWizard::defineWindow(char type)
          sub3->setText("Titration cpXi logarithmic");
          sub4->setText("Diagram logKd vs log(m)");
 
-         for(jj=0; jj<6; jj++ )
+         for(int jj=0; jj<6; jj++ )
            QObject::connect( pLsts[jj], SIGNAL(itemSelectionChanged()),
                            this, SLOT(CmSetMode()));
          }
@@ -686,13 +684,13 @@ void ProcessWizard::defineWindow(char type)
               pageLists->addWidget(page1);
 
               // insert items to list of indexes
-               for(  jj=0; jj<scalarsList.GetCount(); jj++ )
+               for(size_t  jj=0; jj<scalarsList.GetCount(); jj++ )
                   {
                      /*item1 =*/ new QListWidgetItem( scalarsList[jj].pageName.c_str(), lstIndexes1);
                   }
                pLsts.append(lstIndexes1);
 
-              for(jj=0; jj<5; jj++ )
+              for(int jj=0; jj<5; jj++ )
                 QObject::connect( pLsts[jj], SIGNAL(itemSelectionChanged()),
                                 this, SLOT(CmSetMode()));
 
@@ -717,12 +715,11 @@ void ProcessWizard::defineWindow(char type)
                 sub2->setText("Flushing: Compos source");
                 sub3->setText("Leaching: SysEq source");
                 sub4->setText("Leaching: Compos source");
-                for(jj=0; jj<6; jj++ )
+                for(int jj=0; jj<6; jj++ )
                   QObject::connect( pLsts[jj], SIGNAL(itemSelectionChanged()),
                                   this, SLOT(CmSetMode()));
                }
                break;
-          break;
 
    default: break;
    }

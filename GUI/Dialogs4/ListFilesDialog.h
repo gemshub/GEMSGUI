@@ -43,7 +43,7 @@ protected slots:
 public:
 
     ListFilesDialog(QWidget* win, const char * prfName,
-         const char* caption = 0 );
+         const char* caption = nullptr );
     virtual ~ListFilesDialog();
 
     void allSelected( TCStringArray& aFls, TCIntArray& aCnt);

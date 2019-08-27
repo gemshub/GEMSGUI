@@ -103,7 +103,7 @@ DualThWizard::DualThWizard( const char* pkey, char flgs[20], int size[8],
     if( ii >= 0  )
     	p_IPf->setCurrentIndex(ii);
 
-    ii = p_IPu->findText(QChar(flgs[18], Qt::MatchStartsWith|Qt::MatchCaseSensitive));
+    ii = p_IPu->findText(QChar(flgs[18]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
     	p_IPu->setCurrentIndex(ii);
 

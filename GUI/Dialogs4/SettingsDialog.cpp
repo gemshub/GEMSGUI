@@ -111,7 +111,7 @@ SettingsDialog::CmApply()
 void
 SettingsDialog::CmHelp()
 {
-  pVisorImp->OpenHelp( GEMS_SETUP_HTML, 0 );
+  pVisorImp->OpenHelp( GEMS_SETUP_HTML, nullptr );
 }
 
 void SettingsDialog::CmHelpGenerate()

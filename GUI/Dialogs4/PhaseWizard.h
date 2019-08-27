@@ -35,7 +35,7 @@ class PhaseWizard : public QDialog, public Ui::PhaseWizardData
 public:
 
     PhaseWizard( const char* pkey, char flgs[37], int size[30],
-                  double r2, QWidget* parent = NULL);
+                  double r2, QWidget* parent = nullptr);
     virtual ~PhaseWizard();
 
 

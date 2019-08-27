@@ -32,7 +32,7 @@ class UnSpaceWizard : public QDialog, public Ui::UnSpaceWizardData
 public:
 
     UnSpaceWizard( const char* pkey, char flgs[38], int sizes[10],
-                   QWidget* parent = NULL);
+                   QWidget* parent = nullptr);
     virtual ~UnSpaceWizard();
 
 

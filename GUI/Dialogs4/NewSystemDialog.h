@@ -46,7 +46,7 @@ class NewSystemDialog : public QMainWindow, public Ui::NewSystemDialogData
 public:
     static NewSystemDialog* pDia;
 
-    NewSystemDialog(QWidget* parent = NULL, const char* name = NULL);
+    NewSystemDialog(QWidget* parent = nullptr, const char* name = nullptr);
     virtual ~NewSystemDialog();
 
     void resetList()
@@ -78,7 +78,7 @@ public slots:
     virtual void languageChange();
     void objectChanged();
 
-    void CmSelect( const char *key=0  );
+    void CmSelect( const char *key=nullptr  );
     void CmNext();
     void CmPrevious();
     void CmCreate();

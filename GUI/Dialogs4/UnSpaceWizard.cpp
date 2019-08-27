@@ -162,7 +162,7 @@ UnSpaceWizard::UnSpaceWizard( const char* pkey, char flgs[38],
     else c_Pa_f6->setChecked( false );
 
 // Page 3
-    p_Pa_Adapt->setValue((int)(flgs[26]-'0'));
+    p_Pa_Adapt->setValue((flgs[26]-'0'));
 
     if( flgs[18] != '-' )
       c_PsEqn->setChecked( true );
@@ -301,8 +301,8 @@ void   UnSpaceWizard::getFlags( char flgs[38] )
     else flgs[25] = '-';
 
 // Page 3
-   flgs[26] = (char)(p_Pa_Adapt->value())+'0';
-    p_Pa_Adapt->setValue((int)(flgs[26]-'0'));
+   flgs[26] = static_cast<char>(p_Pa_Adapt->value())+'0';
+   // p_Pa_Adapt->setValue((int)(flgs[26]-'0'));
 
    if( c_PsEqn->isChecked() )
        flgs[18] = '+';

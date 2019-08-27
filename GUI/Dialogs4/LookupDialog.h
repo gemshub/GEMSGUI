@@ -39,7 +39,7 @@ class LookupDialog : public QDialog, public Ui::LookupDialogData
 
 public:
 
-	LookupDialog( QWidget* parent = NULL);
+    LookupDialog( QWidget* parent = nullptr);
     virtual ~LookupDialog();
 
     void   setTdata( double Tai[4] );

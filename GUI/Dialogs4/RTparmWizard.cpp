@@ -62,7 +62,7 @@ void RTparmWizard::CmNext()
         initPTTable();
     }
 
-    int nLines = pageScript->getScriptLinesNum();
+    auto nLines = pageScript->getScriptLinesNum();
     if( ndx == 2 && nLines > 0)
         pdimY->setValue( nLines );
 
@@ -93,9 +93,9 @@ void 	RTparmWizard::resetBackButton()
 }
 
 RTparmWizard::RTparmWizard( const char* pkey, char flgs[10], int size[7],
-          float val[6],  const char *acalcScript, const char* aXname, const char* aYname,
+          double val[6],  const char *acalcScript, const char* aXname, const char* aYname,
           QWidget* parent):
-    QDialog( parent ), calcScript(acalcScript), pageScript(0)
+    QDialog( parent ), calcScript(acalcScript), pageScript(nullptr)
 {
     int ii;
 
@@ -233,7 +233,7 @@ void RTparmWizard::getFlags( char flgs[6], gstring& xName )
   else flgs[5] = '-';
 }
 
-void   RTparmWizard::getFloat( float val[6] )
+void   RTparmWizard::getFloat( double val[6] )
 {
     val[0] = pTfrom->text().toDouble();
     val[1] = pTuntil->text().toDouble();
@@ -253,22 +253,20 @@ void RTparmWizard::help()
 void RTparmWizard::TChange()
 {
     double Tai[4];
-    int nT;
     Tai[0] = pTfrom->text().toDouble();
     Tai[1] = pTuntil->text().toDouble();
     Tai[2] = pTstep->text().toDouble();
-    nT = getNpoints( Tai );
+    auto nT = getNpoints( Tai );
     pNT->setValue(nT);
 }
 
 void RTparmWizard::PChange()
 {
   double Pai[4];
-  int nP;
   Pai[0] = pPfrom->text().toDouble();
   Pai[1] = pPuntil->text().toDouble();
   Pai[2] = pPstep->text().toDouble();
-  nP = getNpoints( Pai );
+  auto nP = getNpoints( Pai );
   pNP->setValue(nP);
 }
 
@@ -337,9 +335,9 @@ void RTparmWizard::initPTTable()
 
 //==============================================================================
 
-equatSetupData eq( "", "yF", "jTP", "" );
-equatSetupData eqT( "xT", "yF", "jTP", "twTC" );
-equatSetupData eqP( "xP", "yF", "jTP", "twP" );
+static equatSetupData eq( "", "yF", "jTP", "" );
+//static equatSetupData eqT( "xT", "yF", "jTP", "twTC" );
+//static equatSetupData eqP( "xP", "yF", "jTP", "twP" );
 
 // work with lists
 void RTparmWizard::resetPageList(const char* aXname, const char* aYname)

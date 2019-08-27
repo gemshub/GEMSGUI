@@ -61,12 +61,12 @@ ProgressDialog::switchToAccept(bool isAccept)
 }
 
 
-ProgressDialog* ProgressDialog::pDia = 0;
+ProgressDialog* ProgressDialog::pDia = nullptr;
 
 ProgressDialog::ProgressDialog(QWidget* parent,	bool step, bool autoclose_):
 	QDialog( parent ),
     last_update(0),
-	timer(0),
+    timer(nullptr),
 	autoclose(autoclose_)
 {
     setupUi(this);
@@ -330,7 +330,7 @@ ProgressDialog::closeEvent(QCloseEvent* ev)
 {
     if( NewSystemDialog::pDia )
         NewSystemDialog::pDia->resetList();
-    pDia = 0;
+    pDia = nullptr;
     QDialog::closeEvent(ev);
 }
 
@@ -387,7 +387,7 @@ ProgressDialog::Update(bool force)
     pKey->setText(rt[RT_SYSEQ].PackKey());
 
 
-    float g=0, a=0, s=0, l=0;
+    double g=0, a=0, s=0, l=0;
     for( int ii=0; ii<pData->FI; ii++ )
     {
         /// check if '+'
@@ -422,7 +422,7 @@ ProgressDialog::Update(bool force)
 
 
     int ht = pBottle->height();
-    float all = g + a + s +l;
+    double all = g + a + s +l;
     ht_g = (all!=0) ? int(ceil(g * ht / all)) :0;
     ht_a = (all!=0) ? int(ceil(a * ht / all)) :0;
     ht_l = (all!=0) ? int(ceil(l * ht / all)) :0;
@@ -430,7 +430,7 @@ ProgressDialog::Update(bool force)
 
     int progr = 24;
     pProgress->setMaximum(progr);
-    double dist = (double)progr/6.;
+    double dist = progr/6.;
     if( pData->PCI >0. && pData->DXM >0.)
             dist = log10( pData->PCI/ pData->DXM );
     progr -= int(floor(dist*6.));

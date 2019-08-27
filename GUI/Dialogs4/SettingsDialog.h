@@ -32,7 +32,7 @@ class SettingsDialog : public QDialog, public Ui::SettingsDialogData
     QFont cellFont;
 public:
 
-    SettingsDialog( QWidget* parent = NULL);
+    SettingsDialog( QWidget* parent = nullptr);
     virtual ~SettingsDialog();
 
 protected slots:

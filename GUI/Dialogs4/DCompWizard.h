@@ -34,7 +34,7 @@ class DCompWizard : public QDialog, public Ui::DCompWizardData
 public:
 
     DCompWizard( const char* pkey, char flgs[15], int size[4],
-                  QWidget* parent = NULL);
+                  QWidget* parent = nullptr);
     virtual ~DCompWizard();
 
 

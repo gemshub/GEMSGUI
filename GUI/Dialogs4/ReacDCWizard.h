@@ -34,7 +34,7 @@ class ReacDCWizard : public QDialog, public Ui::ReacDCWizardData
 public:
 
     ReacDCWizard( const char* pkey, char flgs[12], int size[4],
-                  QWidget* parent = NULL);
+                  QWidget* parent = nullptr);
     virtual ~ReacDCWizard();
 
 

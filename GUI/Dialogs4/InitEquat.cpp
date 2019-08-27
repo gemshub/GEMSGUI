@@ -605,7 +605,7 @@ o_dtwpar  wpar  D_  -3 1  N "Input for least-squares (LS) fitter: uncertainty ha
 o_dtwa_ap   Wa_ap D_  -3 1  N "Input: a priori interaction parameter values (calculation of activity coefficients, LS fitting)"
 
   */
-    break;
+//    break;
 
   case RT_GEM2MT:
 

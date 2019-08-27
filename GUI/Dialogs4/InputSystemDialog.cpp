@@ -711,9 +711,10 @@ QWidget *TSystemDelegate::createEditor(QWidget *parent,
 
    if( dlg )
     {
-        nObj = dlg->getObjTable( index.row() );
-        nUnit = dlg->getUnitsTable( index.row() );
-        nList = dlg->getListTable( index.row() );
+        size_t row = static_cast<size_t>(index.row());
+        nObj = dlg->getObjTable( row );
+        nUnit = dlg->getUnitsTable( row );
+        nList = dlg->getListTable( row );
     }
 
    switch( index.column() )

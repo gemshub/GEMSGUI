@@ -53,7 +53,7 @@ public:
          elmFilesConfData *elm_data,
          setFiltersData *set_data,
          const char * prfName,
-         const char* caption = 0 );
+         const char* caption = nullptr );
     virtual ~SetFiltersDialog();
 
 };

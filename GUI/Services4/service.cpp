@@ -838,7 +838,7 @@ vfReacDCSet(QWidget* par, const char * p_key,
 
 bool
 vfRTparmSet(QWidget* par, const char * p_key,
-            char flgs[10], int size[7], float val[6],
+            char flgs[10], int size[7], double val[6],
             gstring& script, gstring& xName,  gstring& yName,
             TCStringArray& names )
 {

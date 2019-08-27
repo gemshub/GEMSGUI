@@ -42,7 +42,7 @@ void GtDemoWizard::CmBack()
 void GtDemoWizard::CmNext()
 {
     int ndx = stackedWidget->currentIndex();
-    int nLines = pageScript->getScriptLinesNum();
+    auto nLines = pageScript->getScriptLinesNum();
     if( ndx == 1 && nLines > 0)
     {        pGraphY->setValue( nLines );
              pGraphX->setValue( pageScript->getAbscissaNum() );
@@ -82,7 +82,7 @@ void 	GtDemoWizard::resetBackButton()
 
 GtDemoWizard::GtDemoWizard( const char* pkey, int size[8], const char *ascript,
                             const char *proc_key, const char* aXname, const char* aYname, QWidget* parent):
-            QDialog( parent ), script(ascript), pageScript(0)
+            QDialog( parent ), script(ascript), pageScript(nullptr)
 {
     setupUi(this);
 
@@ -245,7 +245,7 @@ void GtDemoWizard::resetPageList( int newRT,const char* aXname, const char* aYna
         {
             TCStringArray aRklist;
             TCIntArray anRk;
-            int Nr = rt[RT_SYSEQ].GetKeyList( ALLKEY, aRklist, anRk );
+            auto Nr = rt[RT_SYSEQ].GetKeyList( ALLKEY, aRklist, anRk );
             if( Nr > 0 )
               TProfil::pm->loadSystat( aRklist[0].c_str() );
         }

@@ -41,7 +41,7 @@ protected slots:
 
 public:
 
-    ChangeKeyDialog(QWidget* win, int nsymb, const char* caption = 0 );
+    ChangeKeyDialog(QWidget* win, int nsymb, const char* caption = nullptr );
 
     virtual ~ChangeKeyDialog();
 
