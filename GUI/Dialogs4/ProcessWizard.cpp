@@ -379,12 +379,12 @@ void   ProcessWizard::getSizes( int size[8] )
 
 void   ProcessWizard::getTable( short tabInt[6], double dbl[24] )
 {
-    tabInt[0] = tIters->item(0,0)->data(Qt::DisplayRole).toInt();
-    tabInt[1] = tIters->item(1,0)->data(Qt::DisplayRole).toInt();
-    tabInt[2] = tIters->item(2,0)->data(Qt::DisplayRole).toInt();
-    tabInt[3] = tIters->item(0,4)->data(Qt::DisplayRole).toInt();
-    tabInt[4] = tIters->item(1,4)->data(Qt::DisplayRole).toInt();
-    tabInt[5] = tIters->item(2,4)->data(Qt::DisplayRole).toInt();
+    tabInt[0] = tIters->item(0,0)->data(Qt::DisplayRole).value<short>();
+    tabInt[1] = tIters->item(1,0)->data(Qt::DisplayRole).value<short>();
+    tabInt[2] = tIters->item(2,0)->data(Qt::DisplayRole).value<short>();
+    tabInt[3] = tIters->item(0,4)->data(Qt::DisplayRole).value<short>();
+    tabInt[4] = tIters->item(1,4)->data(Qt::DisplayRole).value<short>();
+    tabInt[5] = tIters->item(2,4)->data(Qt::DisplayRole).value<short>();
 
     dbl[0] = tIters->item(0,2)->data(Qt::DisplayRole).toDouble();
     dbl[1] = tIters->item(1,2)->data(Qt::DisplayRole).toDouble();
@@ -1346,7 +1346,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
         ret += QString( "$ Clean up the rest of the system recipe \n" );
         for(int jj=0; jj<6; jj++ )
         {
-          int nO = pgData[jj].nObj;
+          auto nO = pgData[jj].nObj;
           lst = getSelected( jj );
           gstring oName = aObj[nO].GetKeywd();
 
@@ -1798,7 +1798,7 @@ int  ProcessWizard::getNPoints( int col )
      }
      else {
          if( fabs(until) > 1e-30 )
-             nP  = (int)((until-from)/step+1.000001);
+             nP  = static_cast<int>((until-from)/step+1.000001);
          else nP = -1;          // changed by DK 21.05.10
      }
      if( ( getType() == 'G'  && col == 6 ) || ( getType() == 'T' && col == 8 )) // workaround for checking min.addition of titrant
@@ -1847,7 +1847,7 @@ void  ProcessWizard::setIterColumn( int col, int from, int until, int step )
 
 //==============================================================================
 
-equatSetupData eqPr( "xp", "yp", "J", "J", true );
+static equatSetupData eqPr( "xp", "yp", "J", "J", true );
 
 // work with lists
 void ProcessWizard::resetPageList(const char* aXname, const char* aYname)
@@ -1860,7 +1860,7 @@ void ProcessWizard::resetPageList(const char* aXname, const char* aYname)
         {
             TCStringArray aRklist;
             TCIntArray anRk;
-            int Nr = rt[RT_SYSEQ].GetKeyList( ALLKEY, aRklist, anRk );
+            auto Nr = rt[RT_SYSEQ].GetKeyList( ALLKEY, aRklist, anRk );
             if( Nr > 0 )
               TProfil::pm->loadSystat( aRklist[0].c_str() );
         }

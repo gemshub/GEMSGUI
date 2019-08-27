@@ -33,7 +33,7 @@ class KeyDialog : public QDialog, public Ui::KeyDialogData
     //  TStringArray keyList;
     bool multi;
     gstring keyFilter;
-    int iRt;
+    size_t iRt;
     TCStringArray old_sel;
 
     void SetList();
@@ -48,9 +48,9 @@ protected slots:
 
 public:
 
-    KeyDialog(QWidget* win, int irt, const char* key = "*",
+    KeyDialog(QWidget* win, size_t irt, const char* key = "*",
               const char* caption = nullptr, bool filter=true);
-    KeyDialog(QWidget* win, int irt, TCStringArray& sel,
+    KeyDialog(QWidget* win, size_t irt, TCStringArray& sel,
               const char* key = "*", const char* caption = nullptr );
 
     virtual ~KeyDialog();

@@ -204,7 +204,7 @@ public:
     //--void SetDialog(QWidget* centralDialog);
 
     void OpenModule(QWidget* parent, uint i, int page=0, int viewmode=0, bool select=false);
-    void defineModuleKeysList( uint nRT );
+    void defineModuleKeysList( int nRT );
     void GetHelp();
     void OpenHelp(const char* file, const char* item=nullptr, int page =-1);
     void OpenProgress(bool step=false);
@@ -388,7 +388,6 @@ private slots:
     QIcon iconMdiChild( QWidget *p );
 
     void changeModulesKeys( int nRT );
-    //void defineModuleKeysList( int nRT );
     void defineButtonsList();
     void setActions();
 

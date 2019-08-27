@@ -32,7 +32,7 @@
     The constructor
 */
 
-TCModuleImp::TCModuleImp(int irt, int page, int aviewmode):
+TCModuleImp::TCModuleImp(size_t irt, int page, int aviewmode):
         QDialog(0),
         iMod(irt),
         rMod( aMod[irt] ),
@@ -67,12 +67,12 @@ TCModuleImp::TCModuleImp(int irt, int page, int aviewmode):
 TCModuleImp::~TCModuleImp()
 {}
 
-int TCModuleImp::rtNum() const
+size_t TCModuleImp::rtNum() const
 {
     return   rMod.rtNum();
 }
 
-int TCModuleImp::rtNumRecord() const
+size_t TCModuleImp::rtNumRecord() const
 {
     if( rMod.IsSubModule() )
         return  RT_SYSEQ;

@@ -336,7 +336,7 @@ TCStringArray vfMultiKeys(QWidget* par, const char* caption,
 }
 
 TCStringArray vfMultiKeysSet(QWidget* par, const char* caption,
-                    int iRt, const char* key, TCStringArray& sel )
+                    uint iRt, const char* key, TCStringArray& sel )
 {
     KeyDialog dbk(par, iRt, sel, key, caption);
     dbk.exec();

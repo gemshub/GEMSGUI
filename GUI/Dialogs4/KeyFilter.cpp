@@ -27,13 +27,13 @@ using namespace std;
 #include "KeyDialog.h"
 #include "GemsMainWindow.h"
 
-const char* GEMS_RKEY_HTML = "gdb_rkey.html";
+//static const char* GEMS_RKEY_HTML = "gdb_rkey.html";
 
 //============================================================
 // KeyEdit dialog
 //============================================================
 
-KeyFilter::KeyFilter(QWidget* win, int irt, const char* key,
+KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
                      const char* caption, bool allowTempl ):
         QDialog( win ),
         iRt(irt),
@@ -51,12 +51,12 @@ KeyFilter::KeyFilter(QWidget* win, int irt, const char* key,
         dbKey.SetKey(key);
 
     QGridLayout* editBox = new QGridLayout();
-    int editLine = aMod[iRt].keyEditField();
+    auto editLine = aMod[iRt].keyEditField();
     
-    for( int ii=0; ii<dbKey.KeyNumFlds(); ii++)
+    for( uint ii=0; ii<dbKey.KeyNumFlds(); ii++)
     {
         aEdit.Add( pEdit = new QLineEdit(this) );
-        QString str = ((TCModule*)&aMod[irt])->GetFldHelp(ii);
+        QString str = dynamic_cast<TCModule*>(&aMod[irt])->GetFldHelp(ii);
         pEdit->setToolTip( str);
         pEdit->setMaxLength( dbKey.FldLen(ii) );
         pEdit->setMaximumWidth( (dbKey.FldLen(ii)+2) * pVisorImp->getCharWidth() );
@@ -198,7 +198,7 @@ KeyFilter::EvGetList()
 
     dbKey.SetKey(dlg.getKey().c_str());
 
-    for( int ii=0; ii<dbKey.KeyNumFlds(); ii++)
+    for( uint ii=0; ii<dbKey.KeyNumFlds(); ii++)
     {
         gstring s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
         StripLine(s);

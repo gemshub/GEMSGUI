@@ -61,7 +61,7 @@ public slots:
 #endif
 
 public:
-    TCModuleImp(int iMod, int page=0, int viewmode=0);
+    TCModuleImp(size_t iMod, int page=0, int viewmode=0);
     virtual ~TCModuleImp();
 
     /*! Returns whether this module is submodule */
@@ -71,8 +71,8 @@ public:
     gstring moduleName() const
     {  return   rMod.GetName();   }
 
-    int rtNum() const;
-    int rtNumRecord() const;
+    size_t rtNum() const;
+    size_t rtNumRecord() const;
     gstring iconFile() const;
 
     void Update(bool force=true);

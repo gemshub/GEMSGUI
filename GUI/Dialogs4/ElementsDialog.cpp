@@ -87,7 +87,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
    // build IComp list from template database
     TCIntArray aIndMT;
     TCStringArray aIC;
-    TIComp* aICdata=(TIComp *)(&aMod[RT_ICOMP]);
+    TIComp* aICdata=dynamic_cast<TIComp*>(&aMod[RT_ICOMP]);
     aICdata->GetElements( true, aIC, aIndMT );
     sf_data.ic_d.oldIComps.Clear();
 
@@ -480,7 +480,7 @@ void ElementsDialog::SetICompList()
 
      openFilesICOMP();
    // select all IComp keys and indMT (set indMT to -1 for additional)
-    TIComp* aICdata=(TIComp *)(&aMod[RT_ICOMP]);
+    TIComp* aICdata=dynamic_cast<TIComp*>(&aMod[RT_ICOMP]);
     aICdata->GetElements( cbIsotopes->isChecked(), aIC, aIndMT );
 
     for( uint ii=0; ii<aIC.GetCount(); ii++ )
@@ -633,9 +633,10 @@ void ElementsDialog::SetData()
 void ElementsDialog::setFilesList()
 {
    size_t pos1, pos2;
-   int cnt, cnt_sel, ind;
+   int cnt, cnt_sel;
+   size_t ind;
 
-   for(int i=RT_SDATA; i<=RT_PHASE; i++ )
+   for(uint i=RT_SDATA; i<=RT_PHASE; i++ )
     {
         if( aMod[i].IsSubModule() )
             continue;
@@ -645,7 +646,7 @@ void ElementsDialog::setFilesList()
         rt[i].GetFileList(closef|openf|oldself, names, indx, sel);
         cnt = 0;
         cnt_sel = 0;
-        for(int ii=names.GetCount()-1; ii>=0; ii-- )
+        for(uint ii=0; ii<names.GetCount()-1; ii++ )
         {
           // select only DB.default files
           if( names[ii].find( pVisor->sysDBDir())== gstring::npos )
@@ -713,7 +714,7 @@ void ElementsDialog::openFilesSelection()
                "E00EDrem: internal error");
 
  //files_data
-   for(int i=RT_SDATA; i<=RT_PHASE; i++ )
+   for(size_t i=RT_SDATA; i<=RT_PHASE; i++ )
    {
      newSelKeywds.Clear();
 
@@ -734,7 +735,7 @@ void ElementsDialog::openFilesICOMP()
   int cnt=0;
 
  //files_data
-   for(int i=RT_SDATA; i<=RT_PHASE; i++ )
+   for(size_t i=RT_SDATA; i<=RT_PHASE; i++ )
    {
      if( i == RT_ICOMP )
      {  newSelKeywds.Clear();
@@ -798,7 +799,7 @@ void ElementsDialog::setTreeWidget()
         {
           tag = fname.substr(pos1+1, pos2-pos1-1);
           aTag = tag.c_str();
-          pdb_child = 0;
+          pdb_child = nullptr;
           pos3 = fname.find(".", pos2+1);
           if( pos3 != gstring::npos)
               aVer = "";

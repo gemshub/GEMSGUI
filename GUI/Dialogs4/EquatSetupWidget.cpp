@@ -163,7 +163,7 @@ void EquatSetup::resetPageList( int newRT,
 
     // define current page
     cPage = 0;
-    keywdList->setCurrentItem(0);
+    keywdList->setCurrentItem(nullptr);
     keywdList->item(0)->setSelected(true);
     changePage( cPage );
 

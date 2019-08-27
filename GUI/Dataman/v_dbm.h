@@ -310,9 +310,9 @@ public:
         return ind.KeyNumFlds();
     }
     bool KeyTest( const char* key );
-    TDBKey& GetDBKey() const
+    const TDBKey& GetDBKey() const
     {
-        return (TDBKey&)ind;
+        return ind;
     }
     const TCStringArray& GetOpenFiles() const
     {

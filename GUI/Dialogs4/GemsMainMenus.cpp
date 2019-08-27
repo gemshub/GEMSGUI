@@ -42,7 +42,7 @@
 void TVisorImp::updateMenus()
 {
    // addition work with MdiChild
-    bool hasMdiChild = (mdiArea->activeSubWindow() != 0);
+    bool hasMdiChild = (mdiArea->activeSubWindow() != nullptr);
 
     menubar->clear();
     toolBar_2->hide();
@@ -554,12 +554,12 @@ void TVisorImp::CmScript()
   if( actwin )
   {
 
-     ((TCModule*)&aMod[actwin->rtNumRecord()])->CmScript();
+     dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmScript();
   }
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
-         ((TCModule*)&aMod[RT_SYSEQ])->CmScript();
+         dynamic_cast<TCModule*>(&aMod[RT_SYSEQ])->CmScript();
   }
 }
 
@@ -580,9 +580,9 @@ void TVisorImp::CmCreate()
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
     {  if(pVisor->ProfileMode == MDD_DATABASE)
-      ((TCModule*)&aMod[actwin->rtNumRecord()])->CmCreate();
+      dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmCreate();
      else
-      ((TCModule*)&aMod[actwin->rtNumRecord()])->CmCreateinProfile();
+      dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmCreateinProfile();
     }
   }
 }
@@ -600,9 +600,9 @@ void TVisorImp::CmNew()
   {  TCModuleImp *actwin = activeMdiChild();
      if( actwin )
      {  if(pVisor->ProfileMode == MDD_DATABASE)
-          ((TCModule*)&aMod[actwin->rtNumRecord()])->CmNew();
+          dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmNew();
         else
-          ((TCModule*)&aMod[actwin->rtNumRecord()])->CmNewinProfile();
+          dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmNewinProfile();
      }
   }
 }
@@ -621,9 +621,9 @@ void TVisorImp::CmShow( const char * key )
     if( actwin )
     {
       if(pVisor->ProfileMode == MDD_DATABASE)
-       ((TCModule*)&aMod[actwin->rtNumRecord()])->CmShow( key );
+       dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmShow( key );
       else
-       ((TCModule*)&aMod[actwin->rtNumRecord()])->CmLoadinProfile( key );
+       dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmLoadinProfile( key );
 
       defineModuleKeysList( actwin->rtNumRecord() );
       QMdiSubWindow * grDlg = findMdiGraph(actwin->moduleName().c_str());
@@ -651,7 +651,7 @@ void TVisorImp::CmDerive()
   {
      TCModuleImp *actwin = activeMdiChild();
      if( actwin )
-       ((TCModule*)&aMod[actwin->rtNumRecord()])->CmDerive();
+       dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmDerive();
   }
  }
 
@@ -660,7 +660,7 @@ void TVisorImp::CmCalc()
 {
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
-    ((TCModule*)&aMod[actwin->rtNumRecord()])->CmCalc();
+    dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmCalc();
 }
 
 void TVisorImp::CmSave()
@@ -675,7 +675,7 @@ void TVisorImp::CmSave()
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
     {
-      ((TCModule*)&aMod[actwin->rtNumRecord()])->CmSaveM();
+      dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmSaveM();
       // defineModuleKeysList( actwin->rtNumRecord() );
     }
   }
@@ -694,7 +694,7 @@ void TVisorImp::CmSaveAs()
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
     {
-       ((TCModule*)&aMod[actwin->rtNumRecord()])->CmSaveAs();
+       dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmSaveAs();
         // defineModuleKeysList( actwin->rtNumRecord() );
     }
   }
@@ -712,7 +712,7 @@ void TVisorImp::CmDelete()
   {
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
-    {  ((TCModule*)&aMod[actwin->rtNumRecord()])->CmDelete();
+    {  dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmDelete();
        defineModuleKeysList( actwin->rtNumRecord() );
     }
   }
@@ -724,12 +724,12 @@ void TVisorImp::CmPlot()
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
   {
-     ((TCModule*)&aMod[actwin->rtNumRecord()])->CmPlot();
+     dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmPlot();
   }
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
-         ((TCModule*)&aMod[RT_SYSEQ])->CmPlot();
+         dynamic_cast<TCModule*>(&aMod[RT_SYSEQ])->CmPlot();
   }
 }
 
@@ -739,7 +739,7 @@ void TVisorImp::CmPrint()
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
   {
-     ((TCModule*)&aMod[actwin->rtNumRecord()])->CmPrint();
+     dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmPrint();
   }
   else
   {   NewSystemDialog *wn = activeNewSystem();
@@ -755,15 +755,15 @@ void TVisorImp::CmFilter()
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
   {
-     ((TCModule*)&aMod[actwin->rtNum()])->CmFilter();
-     pFilterKey->setText(((TCModule*)&aMod[actwin->rtNumRecord()])->getFilter());
+     dynamic_cast<TCModule*>(&aMod[actwin->rtNum()])->CmFilter();
+     pFilterKey->setText(dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->getFilter());
       defineModuleKeysList( actwin->rtNumRecord() );
   }
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
-      {   ((TCModule*)&aMod[RT_SYSEQ])->CmFilter();
-          pFilterKey->setText(((TCModule*)&aMod[RT_SYSEQ])->getFilter());
+      {   dynamic_cast<TCModule*>(&aMod[RT_SYSEQ])->CmFilter();
+          pFilterKey->setText(dynamic_cast<TCModule*>(&aMod[RT_SYSEQ])->getFilter());
           defineModuleKeysList( RT_SYSEQ );
       }
   }
@@ -820,24 +820,25 @@ void TVisorImp::CmPrevious()
 #define TCM_EV_COMMAND(mm,ff)	void TVisorImp::ff() \
                                { TCModuleImp *actwin = activeMdiChild();\
                                  if( actwin )\
-                                 {  ((TCModule*)&aMod[actwin->rtNum()])->ff(); \
-                                    defineModuleKeysList( actwin->rtNum() );  }    \
+                                 {  dynamic_cast<TCModule*>(&aMod[actwin->rtNum()])->ff(); \
+                                    int nRT_ = static_cast<int>(actwin->rtNum()); \
+                                    defineModuleKeysList( nRT_ );  }    \
                                 }
 
-TCM_EV_COMMAND( CM_REBILDFILE, CmRebildFile);
-TCM_EV_COMMAND(CM_ADDFILETOLIST, CmAddFileToList);
-TCM_EV_COMMAND(CM_ADDOPENFILE, CmAddOpenFile);
-TCM_EV_COMMAND(CM_REOPENFILELIST, CmReOpenFileList);
+TCM_EV_COMMAND( CM_REBILDFILE, CmRebildFile)
+TCM_EV_COMMAND(CM_ADDFILETOLIST, CmAddFileToList)
+TCM_EV_COMMAND(CM_ADDOPENFILE, CmAddOpenFile)
+TCM_EV_COMMAND(CM_REOPENFILELIST, CmReOpenFileList)
 
-TCM_EV_COMMAND(CM_CHOISELIST, CmCopyList);
-TCM_EV_COMMAND(CM_RENAMELIST, CmRenameList);
-TCM_EV_COMMAND(CM_TRANSFERLIST, CmTransferList);
-TCM_EV_COMMAND(CM_DELETELIST, CmDeleteList);
-TCM_EV_COMMAND(CM_KEYSTOTXT, CmKeysToTXT);
-TCM_EV_COMMAND(CM_IMPORT, CmImport);
-TCM_EV_COMMAND(CM_EXPORT, CmExport);
-TCM_EV_COMMAND(CM_IMPORT2, CmBackup);
-TCM_EV_COMMAND(CM_EXPORT2, CmRestore);
+TCM_EV_COMMAND(CM_CHOISELIST, CmCopyList)
+TCM_EV_COMMAND(CM_RENAMELIST, CmRenameList)
+TCM_EV_COMMAND(CM_TRANSFERLIST, CmTransferList)
+TCM_EV_COMMAND(CM_DELETELIST, CmDeleteList)
+TCM_EV_COMMAND(CM_KEYSTOTXT, CmKeysToTXT)
+TCM_EV_COMMAND(CM_IMPORT, CmImport)
+TCM_EV_COMMAND(CM_EXPORT, CmExport)
+TCM_EV_COMMAND(CM_IMPORT2, CmBackup)
+TCM_EV_COMMAND(CM_EXPORT2, CmRestore)
 
 //----------------------------------------------------------------------------------------
 // NewSystemDialog commands
@@ -989,17 +990,17 @@ class TFileList:   public QDialog
 {
     QListWidget* pFileList;
 public:
-        TFileList( QWidget* win, int iRt, const char* caption );
+        TFileList( QWidget* win, size_t iRt, const char* caption );
 };
 
-TFileList::TFileList(QWidget* win, int iRt, const char* caption ):
+TFileList::TFileList(QWidget* win, size_t iRt, const char* caption ):
         QDialog( win )
 {
    setWindowTitle(caption);
 
    pFileList = new QListWidget(this);
    const TCStringArray& s = rt[iRt].GetOpenFiles();
-   for( int ii=0; ii<s.GetCount(); ii++ )
+   for( size_t ii=0; ii<s.GetCount(); ii++ )
               pFileList->addItem(s[ii].c_str());
 
         pFileList->item(rt[iRt].GetWorkFileName())->setSelected(true);
@@ -1021,7 +1022,7 @@ void TVisorImp::EvFileDown()
     int nrt = nRTofActiveSubWindow();
     if( nrt<0 )
      return;
-    TFileList dlg( this, nrt, "Info page" );
+    TFileList dlg( this, static_cast<size_t>(nrt), "Info page" );
     dlg.exec();
 }
 

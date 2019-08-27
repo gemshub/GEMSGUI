@@ -37,7 +37,7 @@ class KeyFilter:   public QDialog
     TIArray<QLineEdit> aEdit;
     QLineEdit *fullKey;
 
-    int iRt;
+    size_t iRt;
  //   int iEd;
     bool allowTemplates;
 
@@ -52,7 +52,7 @@ protected:
     gstring SetKeyString();
 
 public:
-    KeyFilter(QWidget* win, int iRt, const char* keyFilter,
+    KeyFilter(QWidget* win, size_t iRt, const char* keyFilter,
               const char* caption, bool allowTemplates=true );
 
     gstring getFilter();

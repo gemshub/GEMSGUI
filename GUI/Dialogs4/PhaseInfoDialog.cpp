@@ -107,7 +107,7 @@ PhaseInfoDialog::PhaseInfoDialog(QWidget* parent, bool system,
     }
     tableDC->setRowCount(xdclist.size());
 
-    for( uint ii=0; ii<xdclist.size(); ii++ )
+    for( int ii=0; ii<xdclist.size(); ii++ )
     {
         tableDC->setRowHeight(ii, htF(ftString, 0)+6);
         tableDC->setItem(ii, 0, new QTableWidgetItem(tr("%1").arg( xdclist[ii])) );

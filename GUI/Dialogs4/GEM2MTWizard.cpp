@@ -43,7 +43,7 @@ GEM2MTWizard::CmBack()
 
     if( ndx == graphic_script)
     {
-        int nLines = pageScript->getScriptLinesNum();
+        auto nLines = pageScript->getScriptLinesNum();
         if( nLines > 0)
            pnYS->setValue( nLines );
     }
@@ -104,7 +104,7 @@ GEM2MTWizard::CmNext()
 
     if( ndx == graphic_script )
     {
-        int nLines = pageScript->getScriptLinesNum();
+        auto nLines = pageScript->getScriptLinesNum();
         if( nLines > 0)
             pnYS->setValue( nLines );
     }
@@ -874,14 +874,14 @@ void GEM2MTWizard::resetPageList(const char* aXname, const char* aYname)
 // work with lists
 void GEM2MTWizard::resetVTKList()
 {
-    uint ii, jj;
+    uint jj;
     int nO;
 
     TIArray<pagesSetupData> scalarsList;
     TIArray<pagesSetupData> scalarsList2;
     TIArray<pagesSetupData> wnData;
 
-    for( ii=0; ii<38; ii++ )
+    for(int ii=0; ii<38; ii++ )
        scalarsList.Add( new pagesSetupData(DataBR_fields[ii].name.c_str(), ii));
     GetListsnRT( -2, wnData,  scalarsList2 );
 
@@ -922,7 +922,7 @@ void GEM2MTWizard::resetVTKList()
     pLists.append( listStatic  );
 
     listStatic->clear();
-    for(  ii=0; ii<scalarsList.GetCount(); ii++ )
+    for(uint  ii=0; ii<scalarsList.GetCount(); ii++ )
     {
       stData.Add( new pagesSetupData(scalarsList[ii]));
       item1 = new QListWidgetItem( scalarsList[ii].pageName.c_str(),  listStatic);
@@ -931,7 +931,7 @@ void GEM2MTWizard::resetVTKList()
 
 
     // init new pages
-    for( ii=0; ii<wnData.GetCount(); ii++ )
+    for(uint ii=0; ii<wnData.GetCount(); ii++ )
     {
         nO = wnData[ii].nObj;
 
@@ -963,7 +963,7 @@ void GEM2MTWizard::resetVTKList()
 
     // define current page
     cPage = 0;
-    keywdList->setCurrentItem(0);
+    keywdList->setCurrentItem(nullptr);
     keywdList->item(0)->setSelected(true);
     //changePage( cPage );
 
@@ -1157,7 +1157,7 @@ void GEM2MTWizard::setupPTArrays()
    //init P array
    getPdata( Pai );
    nP = getNpoints( Pai );
-   arP = (double *) aObj[ o_mtpval].Alloc( nP, 1, D_);
+   arP = static_cast<double *>(aObj[ o_mtpval].Alloc( nP, 1, D_));
    cP = Pai[START_];
    for( ii=0; ii<nP; ii++ )
    {
@@ -1168,7 +1168,7 @@ void GEM2MTWizard::setupPTArrays()
    //init T array
    getTdata( Tai );
    nT = getNpoints( Tai );
-   arT = (double *) aObj[ o_mtpval].Alloc( nT, 1, D_);
+   arT = static_cast<double *>( aObj[ o_mtpval].Alloc( nT, 1, D_) );
    cT = Tai[START_];
    for( ii=0; ii<nT; ii++ )
    {
@@ -1187,7 +1187,7 @@ void GEM2MTWizard::definePArray()
    nP = pPPoints->value();
   //init P array
    nPs = aObj[ o_mtpval].GetN();
-   arP = (double *) aObj[ o_mtpval].Alloc( nP, 1, D_);
+   arP = static_cast<double *>(aObj[ o_mtpval].Alloc( nP, 1, D_));
 
    if( nPs==1 && nP>1 )
    {
@@ -1255,7 +1255,7 @@ void GEM2MTWizard::defineTArray()
 
    //init T array
    nTs =aObj[ o_mttval].GetN();
-   arT = (double *) aObj[ o_mttval].Alloc( nT, 1, D_);
+   arT = static_cast<double *>(aObj[ o_mttval].Alloc( nT, 1, D_));
 
    if( nTs == 1 && nT >1 )
    {

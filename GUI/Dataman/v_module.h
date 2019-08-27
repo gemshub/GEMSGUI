@@ -51,7 +51,7 @@ private:
 
 protected:
     uint nRT;
-    int startKeyEdit;
+    uint startKeyEdit;
     bool contentsChanged;     // needs to save
     gstring iconFileName;
 
@@ -136,8 +136,8 @@ public:
         return state;
     }
 
-    int keyEditField();
-    void  setKeyEditField( int fld )
+    uint keyEditField();
+    void  setKeyEditField( uint fld )
     {
        startKeyEdit = fld;
     }

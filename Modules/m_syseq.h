@@ -21,6 +21,22 @@
 
 #include "m_param.h"
 
+extern const char * dfAqKeyD ;
+extern const char * dfAqKeyH ;
+extern const char * dfAqKey3 ;
+extern const char * dfAqKey2 ;
+extern const char * dfAqKey1 ;
+extern const char * dfAqKeyY ;
+extern const char * dfGasKey ;
+extern const char * dfFluKeyF;
+extern const char * dfFluKey7;
+extern const char * dfFluKeyP;
+extern const char * dfFluKeyE;
+
+extern const char * dfAqKeyU;
+extern const char * dfFluKeyU;
+
+
 typedef struct
 { /* Packed system state description */
   char

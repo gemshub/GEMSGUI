@@ -48,7 +48,7 @@ TSubModule::TSubModule( uint nrt ):
 TSubModule::~TSubModule()
 {}
 
-int TSubModule::keyEditField()
+uint TSubModule::keyEditField()
 {
     if( nRT == RT_RTPARM || pVisor->ProfileMode == true )
         return startKeyEdit;

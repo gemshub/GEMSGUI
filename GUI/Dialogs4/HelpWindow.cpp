@@ -39,8 +39,9 @@
 #include "HelpWindow.h"
 #include "GemsMainWindow.h"
 #include "visor.h"
+#include "service.h"
 
-const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
+static const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
 const char *GEMS_ABOUT_HTML = "gems_about.html#PAGE_ABOUT";
 
 const char *_GEMS_version_stamp = " GEMS-GUI v.3.5.0 c.80423ef ";
@@ -112,7 +113,7 @@ HelpWindow::HelpWindow( QWidget* parent):
     QString collectionFile = QString( pVisor->docDir().c_str() )+ QLatin1String("gems3help.qhc");
  // "/home/gems/gemworks/gems3/shared/doc/html/gems3help.qhc";
 
-    findLine = 0;
+    findLine = nullptr;
 
 #ifndef GEMS_RELEASE  
     QLabel *label_2 = new QLabel(toolAddress);
@@ -130,10 +131,10 @@ HelpWindow::HelpWindow( QWidget* parent):
     hEngine = new QHelpEngine(collectionFile, this);
     if (!hEngine->setupData()) {
         delete hEngine;
-        hEngine = 0;
-        srchWidget =0;
-        wIndex =0;
-        wContents=0;
+        hEngine = nullptr;
+        srchWidget =nullptr;
+        wIndex =nullptr;
+        wContents=nullptr;
     }
     else
      {
@@ -259,14 +260,14 @@ void HelpWindow::helpVersion()
 
 void HelpWindow::helpAbout()
 {
-    showDocumentation( GEMS_ABOUT_HTML, 0 );
+    showDocumentation( GEMS_ABOUT_HTML, nullptr );
     //AboutDialog dlg;
     //dlg.exec();
 }
 
 void HelpWindow::helpOnHelp()
 {
-   showDocumentation( GEMS_HOWHELP_HTML, 0 );
+   showDocumentation( GEMS_HOWHELP_HTML, nullptr );
 }
 
 void HelpWindow::helpPrint()
@@ -350,7 +351,7 @@ void HelpWindow::actionFindNext()
   if( !findLine )
    return;
 
-  QTextDocument::FindFlags flg = 0;
+  QTextDocument::FindFlags flg = nullptr;
   if(action_Case_sensetiv->isChecked() )
        flg |=QTextDocument::FindCaseSensitively;
 
