@@ -399,7 +399,7 @@ void PlotChartViewPrivate::updateGrid()
 
     chart->setBackgroundBrush( gr_data->getBackgroundColor() );
 
-    axisX->setTickCount( gr_data->axisTypeX );
+    axisX->setTickCount( gr_data->axisTypeX+1 );
     //axisX->setMinorTickCount(4);
     axisX->setTitleFont( titleFont );
     axisX->setLabelsFont( gr_data->axisFont );
@@ -409,8 +409,7 @@ void PlotChartViewPrivate::updateGrid()
     penX.setColor(Qt::darkGray);
     axisX->setLinePen(penX);
 
-
-    axisY->setTickCount( gr_data->axisTypeY );
+    axisY->setTickCount( gr_data->axisTypeY+1 );
     //axisY->setMinorTickCount(4);
     axisY->setTitleFont( titleFont );
     axisY->setLabelsFont( gr_data->axisFont );
