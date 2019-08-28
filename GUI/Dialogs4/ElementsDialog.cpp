@@ -646,7 +646,7 @@ void ElementsDialog::setFilesList()
         rt[i].GetFileList(closef|openf|oldself, names, indx, sel);
         cnt = 0;
         cnt_sel = 0;
-        for(uint ii=0; ii<names.GetCount()-1; ii++ )
+        for(uint ii=0; ii<names.GetCount(); ii++ )
         {
           // select only DB.default files
           if( names[ii].find( pVisor->sysDBDir())== gstring::npos )
