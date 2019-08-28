@@ -48,7 +48,7 @@ QImage markerShapeImage( const SeriesLineData& linedata )
 {
     QPainterPath imagePath = shapes().shape( static_cast<size_t>(linedata.getMarkerShape()) );
 
-    QImage image(32, 32, QImage::Format_ARGB32);
+    QImage image( 32, 32, QImage::Format_ARGB32);
     image.fill(Qt::transparent);
 
     QPainter painter(&image);
@@ -131,22 +131,22 @@ MarkerShapes::MarkerShapes()
 
     // MsCircle,        ///< Circle
     QPainterPath circlePath;
-    circlePath.addEllipse(0, 0, 30, 30);
+    circlePath.addEllipse(2, 2, 28, 28);
     circlePath.closeSubpath();
     markers.push_back(circlePath);
 
     // MsRectangle,     ///< Rectangle
     QPainterPath rectPath;
-    rectPath.addRect(0,0,30,30);
+    rectPath.addRect(2,2,28,28);
     rectPath.closeSubpath();
     markers.push_back(rectPath);
 
     // MsDiamond,       ///< Diamond
     QPainterPath diamondPath;
-    diamondPath.moveTo(0, 16.0);
-    diamondPath.lineTo(16.0, 32.0);
-    diamondPath.lineTo(32.0, 16.0);
-    diamondPath.lineTo(16.0, 0.0);
+    diamondPath.moveTo(2, 16.0);
+    diamondPath.lineTo(16.0, 30.0);
+    diamondPath.lineTo(30.0, 16.0);
+    diamondPath.lineTo(16.0, 2.0);
     diamondPath.closeSubpath();
     markers.push_back(diamondPath);
 
@@ -173,7 +173,7 @@ MarkerShapes::MarkerShapes()
 
     // MsStar,          ///< Five-pointed star
     QPainterPath starPath;
-    starPath.moveTo(32, 15);
+    starPath.moveTo(30, 15);
     for (int i = 1; i < 5; ++i) {
         starPath.lineTo(15 + 16 * qCos(0.8 * i * Pi),
                         15 + 16 * qSin(0.8 * i * Pi));
@@ -222,10 +222,10 @@ QPolygonF MarkerShapes::trianglePolygon(
     double sh2 = 0.5 * size.height();
     double x = size.width()/2.;
     double y = size.height()/2.;
-    const double x1 = x - sw2;
-    const double x2 = x1 + size.width();
-    const double y1 = y - sh2;
-    const double y2 = y1 + size.height();
+    const double x1 = x - sw2+2;
+    const double x2 = x1 + size.width()-2;
+    const double y1 = y - sh2+2;
+    const double y2 = y1 + size.height()-2;
 
     switch ( type )
     {

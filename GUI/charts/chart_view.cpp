@@ -247,7 +247,7 @@ void PlotChartViewPrivate::updateScatterSeries( QScatterSeries* series, const Se
     series->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
     auto msize = linedata.getMarkerSize()+2;
     series->setMarkerSize(msize);
-    series->setBrush( markerShapeImage( linedata ).scaled(msize,msize));
+    series->setBrush( markerShapeImage( linedata ).scaled(msize, msize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
 void PlotChartViewPrivate::mapSeriesLine( QXYSeries *series,
@@ -525,7 +525,7 @@ void PlotChartViewPrivate::highlightSeries( size_t line, bool enable )
         auto shsize = linedata.getMarkerSize();
         if( enable )
             shsize *=2;
-        scatterseries->setBrush( markerShapeImage( linedata ).scaled( shsize,shsize));
+        scatterseries->setBrush( markerShapeImage( linedata ).scaled( shsize,shsize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         scatterseries->setMarkerSize(shsize);
     }
 }
