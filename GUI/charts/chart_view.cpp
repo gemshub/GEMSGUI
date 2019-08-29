@@ -312,10 +312,12 @@ void PlotChartViewPrivate::showAreaChart()
         auto  srmodel = gr_data->modelData( ii );
         for(size_t jj=0; jj < srmodel->getSeriesNumber(); jj++, nline++ )
         {
-            const SeriesLineData& linedata = gr_data->lineData(nline);
+            auto linedata = gr_data->lineData(nline);
 
             if( linedata.getXColumn()  < -1 )
                 continue;
+
+            linedata.setLineChanges( 1, 1, 0 );
             addPlotLine( srmodel, srmodel->getYColumn(jj), linedata   );
 
             QLineSeries *upperSeries = dynamic_cast<QLineSeries *>(gr_series.back().get());
@@ -328,6 +330,7 @@ void PlotChartViewPrivate::showAreaChart()
                 getLinePen( pen,  linedata  );
                 area->setPen(pen);
                 area->setColor(pen.color());
+                area->setOpacity(0.5);
 
                 chart->addSeries(area);
                 gr_areas.push_back(std::shared_ptr<QAreaSeries>(area));

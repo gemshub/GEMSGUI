@@ -152,6 +152,13 @@ public:
         blue  = aColor.blue();
     }
 
+    void setLineChanges( int pnSize, int pnStyle, int usespline )
+    {
+        penSize = pnSize;
+        penStyle = pnStyle;
+        spline  = usespline;
+    }
+
     void setName( const std::string& aName )
     {
        name = aName;
