@@ -601,7 +601,7 @@ QScatterSeries* PlotChartViewPrivate::newScatterLabel(
     series->setPen( QPen(Qt::transparent));
     series->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
     series->setMarkerSize(size);
-    series->setBrush( textImage( gr_data->axisFont, label ).scaled(  size, size ));
+    series->setBrush( textImage( gr_data->axisFont, label ));
 
     auto pointNew = pointF;
     pointNew.setX(pointNew.x()+size/2.);
