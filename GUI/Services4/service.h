@@ -73,7 +73,7 @@ vfMultiKeys(QWidget* par, const char* caption,
 
 TCStringArray
 vfMultiKeysSet(QWidget* par, const char* caption,
-        uint iRt, const char* key, TCStringArray& sel );
+        unsigned int iRt, const char* key, TCStringArray& sel );
 TCStringArray vfRDMultiKeysSet(QWidget* par, const char* caption,
          const char* key, TCStringArray& sel, short NsuT=0 );
 

@@ -81,8 +81,8 @@ GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::Chart
     tbLegend->setItemDelegate(dgLegend);
     ui->verticalLayout->addWidget( tbLegend );
 
-    ui->splitter->setStretchFactor(0, 5);
-    ui->splitter->setStretchFactor(1, 1);
+    ui->splitter->setStretchFactor(0, 6);
+    ui->splitter->setStretchFactor(1, 2);
 
     // define plot window
     plot = new PlotChartView( gr_data.get(), this);
