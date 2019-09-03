@@ -76,7 +76,6 @@ GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::Chart
     tbLegend->setColumnCount( 3 );
     tbLegend->setColumnWidth(0, 30 );
     tbLegend->setColumnWidth(1, 30 );
-    //tbLegend->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
     tbLegend->horizontalHeader()->setStretchLastSection( true);
     tbLegend->verticalHeader()->setVisible(false);
     tbLegend->horizontalHeader()->setVisible(false);
@@ -85,10 +84,8 @@ GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::Chart
     tbLegend->setItemDelegate(dgLegend);
     ui->verticalLayout->addWidget( tbLegend );
 
-
     // define plot window
     plot = new PlotChartView( gr_data.get(), this);
-    //plot->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
     ui->verticalLayout_2->addWidget( plot);
     // Insert labels in legend box
     if( gr_data->getGraphType() == LineChart || gr_data->getGraphType() == AreaChart )
