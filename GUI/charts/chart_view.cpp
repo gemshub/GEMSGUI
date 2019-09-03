@@ -595,7 +595,7 @@ QScatterSeries* PlotChartViewPrivate::newScatterLabel(
 {
     QScatterSeries *series  =  new QScatterSeries;
     QFontMetrics fm(gr_data->axisFont);
-    int size = fm.horizontalAdvance(label);
+    int size = fm.horizontalAdvance(label)+2;
 
     series->setName( label );
     series->setPen( QPen(Qt::transparent));

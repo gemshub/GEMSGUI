@@ -141,18 +141,25 @@ class DragTableWidget: public QTableWidget
     QPoint startPos;
     GraphDialog* topDlg;
 
+
     public:
         DragTableWidget( GraphDialog* top ):
             QTableWidget(top), topDlg(top) {}
 
-        virtual ~DragTableWidget() {}
+        QSize sizeHint() const override
+        {
+            auto sizehint = QTableWidget::sizeHint();
+            sizehint.setWidth(170);
+            return sizehint;
+        }
 
     protected:
 
+
     void startDragN();
-    void mousePressEvent( QMouseEvent *e );
-    void mouseMoveEvent( QMouseEvent *e );
-    void focusOutEvent(QFocusEvent* event);
+    void mousePressEvent( QMouseEvent *e )override;
+    void mouseMoveEvent( QMouseEvent *e )override;
+    void focusOutEvent(QFocusEvent* event)override;
 
 };
 

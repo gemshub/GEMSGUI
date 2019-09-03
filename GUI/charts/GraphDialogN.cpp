@@ -67,12 +67,16 @@ GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::Chart
     setWindowTitle( title.c_str() );
     setAttribute( Qt::WA_DeleteOnClose );
 
+    ui->splitter->setStretchFactor(0, 4);
+    ui->splitter->setStretchFactor(1, 0);
+
     // Define legend table
     tbLegend = new DragTableWidget( this );
     tbLegend->setSelectionMode(QAbstractItemView::NoSelection);
     tbLegend->setColumnCount( 3 );
     tbLegend->setColumnWidth(0, 30 );
     tbLegend->setColumnWidth(1, 30 );
+    //tbLegend->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
     tbLegend->horizontalHeader()->setStretchLastSection( true);
     tbLegend->verticalHeader()->setVisible(false);
     tbLegend->horizontalHeader()->setVisible(false);
@@ -81,15 +85,15 @@ GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::Chart
     tbLegend->setItemDelegate(dgLegend);
     ui->verticalLayout->addWidget( tbLegend );
 
-    ui->splitter->setStretchFactor(0, 6);
-    ui->splitter->setStretchFactor(1, 2);
 
     // define plot window
     plot = new PlotChartView( gr_data.get(), this);
+    //plot->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
     ui->verticalLayout_2->addWidget( plot);
     // Insert labels in legend box
     if( gr_data->getGraphType() == LineChart || gr_data->getGraphType() == AreaChart )
       ShowLegend();
+
 
     connect(tbLegend, SIGNAL(cellClicked( int , int  ) ),
             this, SLOT(changeIcon( int, int )));

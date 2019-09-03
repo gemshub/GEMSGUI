@@ -68,7 +68,7 @@ QImage markerShapeImage( const SeriesLineData& linedata )
 QImage textImage( const QFont& font, const QString& text )
 {
     QFontMetrics fm(font);
-    int pixelsWide = fm.horizontalAdvance(text);
+    int pixelsWide = fm.horizontalAdvance(text)+2;
     int pixelsHigh = fm.height();
     int size, delta = 0;
     if( pixelsWide > pixelsHigh ) {
@@ -80,7 +80,7 @@ QImage textImage( const QFont& font, const QString& text )
       size  =  pixelsHigh;
     }
     QPainterPath textPath;
-    textPath.addText(2, fm.ascent()+delta, font, text );
+    textPath.addText(1, fm.ascent()+delta, font, text );
 
     QImage image(size, size, QImage::Format_ARGB32);
     image.fill(Qt::transparent);
