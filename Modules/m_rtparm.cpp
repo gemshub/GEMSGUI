@@ -757,14 +757,15 @@ bool TRTParm::SaveChartData( jsonui::ChartData* gr )
     if( !gd_gr )
         return false;
 
+    strncpy(  rpp->name, gr->title.c_str(), MAXGSNAME );
     rpp->axisType[0] = static_cast<short>(gr->axisTypeX);
     rpp->axisType[5] = static_cast<short>(gr->axisTypeY);
     rpp->axisType[4] = static_cast<short>(gr->getGraphType());
     rpp->axisType[1] = static_cast<short>(gr->b_color[0]);
     rpp->axisType[2] = static_cast<short>(gr->b_color[1]);
     rpp->axisType[3] = static_cast<short>(gr->b_color[2]);
-    strncpy( rpp->xNames, gr->xName.c_str(), 9);
-    strncpy( rpp->yNames, gr->yName.c_str(), 9);
+    strncpy( rpp->xNames, gr->xName.c_str(), MAXAXISNAME);
+    strncpy( rpp->yNames, gr->yName.c_str(), MAXAXISNAME);
     for(int ii=0; ii<4; ii++ )
     {
         rpp->size[0][ii] =  static_cast<float>(gr->region[ii]);

@@ -958,14 +958,15 @@ bool TGEM2MT::SaveChartData( jsonui::ChartData* gr )
     if( !gd_gr )
         return false;
 
+    strncpy(  mtp->name, gr->title.c_str(), MAXFORMULA );
     mtp->axisType[0] = static_cast<short>(gr->axisTypeX);
     mtp->axisType[5] = static_cast<short>(gr->axisTypeY);
     mtp->axisType[4] = static_cast<short>(gr->getGraphType());
     mtp->axisType[1] = static_cast<short>(gr->b_color[0]);
     mtp->axisType[2] = static_cast<short>(gr->b_color[1]);
     mtp->axisType[3] = static_cast<short>(gr->b_color[2]);
-    strncpy( mtp->xNames, gr->xName.c_str(), 9);
-    strncpy( mtp->yNames, gr->yName.c_str(), 9);
+    strncpy( mtp->xNames, gr->xName.c_str(), MAXAXISNAME);
+    strncpy( mtp->yNames, gr->yName.c_str(), MAXAXISNAME);
     for(int ii=0; ii<4; ii++ )
     {
         mtp->size[0][ii] =  static_cast<float>(gr->region[ii]);

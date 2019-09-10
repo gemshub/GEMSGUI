@@ -1645,14 +1645,15 @@ bool TProcess::SaveChartData( jsonui::ChartData* gr )
     if( !gd_gr )
         return false;
 
+    strncpy(  pep->name, gr->title.c_str(), MAXFORMULA );
     pep->axisType[0] = static_cast<short>(gr->axisTypeX);
     pep->axisType[5] = static_cast<short>(gr->axisTypeY);
     pep->axisType[4] = static_cast<short>(gr->getGraphType());
     pep->axisType[1] = static_cast<short>(gr->b_color[0]);
     pep->axisType[2] = static_cast<short>(gr->b_color[1]);
     pep->axisType[3] = static_cast<short>(gr->b_color[2]);
-    strncpy( pep->xNames, gr->xName.c_str(), 9);
-    strncpy( pep->yNames, gr->yName.c_str(), 9);
+    strncpy( pep->xNames, gr->xName.c_str(), MAXAXISNAME);
+    strncpy( pep->yNames, gr->yName.c_str(), MAXAXISNAME);
     for(uint ii=0; ii<4; ii++ )
     {
         pep->size[0][ii] =  static_cast<float>(gr->region[ii]);
