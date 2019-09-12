@@ -318,7 +318,10 @@ void PlotChartViewPrivate::showAreaChart()
             srmodel->addXColumn(linedata.getXColumn());
 
             if( linedata.getXColumn()  < -1 )
+            {
+                gr_areas.push_back(std::shared_ptr<QAreaSeries>(nullptr));
                 continue;
+            }
 
             linedata.setLineChanges( 1, 1, 0 );
             addPlotLine( srmodel, srmodel->getYColumn(jj), linedata   );
@@ -585,11 +588,14 @@ void PlotChartViewPrivate::updateAreaLine( size_t nline )
     if( nline >= gr_data->linesNumber() )
         return;
 
-    gr_areas[nline]->setName(gr_data->lineData(nline).getName().c_str());
-    QPen pen = gr_areas[nline]->pen();
-    getLinePen( pen, gr_data->lineData(nline)  );
-    gr_areas[nline]->setPen(pen);
-    gr_areas[nline]->setColor(pen.color());
+    if( gr_areas[nline].get() )
+    {
+        gr_areas[nline]->setName(gr_data->lineData(nline).getName().c_str());
+        QPen pen = gr_areas[nline]->pen();
+        getLinePen( pen, gr_data->lineData(nline)  );
+        gr_areas[nline]->setPen(pen);
+        gr_areas[nline]->setColor(pen.color());
+    }
 }
 
 
