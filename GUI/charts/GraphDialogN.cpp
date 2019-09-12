@@ -74,8 +74,8 @@ GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::Chart
     tbLegend = new DragTableWidget( this );
     tbLegend->setSelectionMode(QAbstractItemView::NoSelection);
     tbLegend->setColumnCount( 3 );
-    tbLegend->setColumnWidth(0, 30 );
-    tbLegend->setColumnWidth(1, 30 );
+    tbLegend->setColumnWidth(0, 35 );
+    tbLegend->setColumnWidth(1, 35 );
     tbLegend->horizontalHeader()->setStretchLastSection( true);
     tbLegend->verticalHeader()->setVisible(false);
     tbLegend->horizontalHeader()->setVisible(false);

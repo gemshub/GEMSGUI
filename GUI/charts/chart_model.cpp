@@ -117,9 +117,12 @@ QVariant ChartDataModel::data(const QModelIndex &index, int role) const
                 double value=0;
                 for ( ii=0; ii<ycolumns.size(); ii++)
                 {
-                    auto val = m_model->data( mIndex(index.row(), ycolumns[ii]+1), role).toDouble();
-                    if( val > std::numeric_limits<double>::lowest() )
-                       value += m_model->data( mIndex(index.row(), ycolumns[ii]+1), role).toDouble();
+                    if( getXColumn( y_xcolumns[ii] ) >= -1  )
+                    {
+                        auto val = m_model->data( mIndex(index.row(), ycolumns[ii]+1), role).toDouble();
+                        if( val > std::numeric_limits<double>::lowest() )
+                            value += m_model->data( mIndex(index.row(), ycolumns[ii]+1), role).toDouble();
+                    }
                     if( ycolumns[ii] == nline)  // ordinate
                         return value;
                 }

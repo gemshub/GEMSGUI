@@ -310,9 +310,12 @@ void PlotChartViewPrivate::showAreaChart()
     for( ii=0, nline =0; ii < gr_data->modelsNumber(); ii++)
     {
         auto  srmodel = gr_data->modelData( ii );
+        srmodel->clearXColumn();
         for(size_t jj=0; jj < srmodel->getSeriesNumber(); jj++, nline++ )
         {
             auto linedata = gr_data->lineData(nline);
+
+            srmodel->addXColumn(linedata.getXColumn());
 
             if( linedata.getXColumn()  < -1 )
                 continue;

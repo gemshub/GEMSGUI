@@ -149,7 +149,7 @@ class DragTableWidget: public QTableWidget
         QSize sizeHint() const override
         {
             auto sizehint = QTableWidget::sizeHint();
-            sizehint.setWidth(170);
+            sizehint.setWidth(180);
             return sizehint;
         }
 

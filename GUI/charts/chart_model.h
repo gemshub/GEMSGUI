@@ -109,7 +109,7 @@ public:
         if( ndx == -2 )
             return QString("Off");
         if( ndx == -1 )
-            return QString("№");
+            return QString("#");
         return QString("%1").arg(ndx);
     }
 
@@ -117,7 +117,7 @@ public:
     {
         if( ndxName == QString("Off") )
             return -2;
-        if( ndxName == QString("№") )
+        if( ndxName == QString("#") )
             return -1;
         return ndxName.toInt();
     }
@@ -192,6 +192,9 @@ protected:
     std::vector<int> xcolumns;
     /// List of the column of the model that contains the y-coordinates of data points
     std::vector<int> ycolumns;
+    /// List that contains the x-coordinates of every chart line (y-coordinate).
+    /// Must be the same size as ycolumns, internal for showAreaChart
+    std::vector<int> y_xcolumns;
 
     QModelIndex mIndex(int row, int column ) const
     {
@@ -225,6 +228,18 @@ protected:
             ycolumns.push_back(yclm);
     }
 
+    ///  Clear list that contains the x-coordinates of every chart line (y-coordinate).
+    void clearXColumn()
+    {
+      y_xcolumns.clear();
+    }
+    ///  Add line to list that contains the x-coordinates of every chart line (y-coordinate).
+    void addXColumn( int line )
+    {
+      y_xcolumns.push_back(line);
+    }
+
+    friend class PlotChartViewPrivate;
 };
 
 } // namespace jsonui
