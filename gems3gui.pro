@@ -2,7 +2,7 @@
 TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems3
-#VERSION         = 3.5.1
+#VERSION         = 3.6.0
 
 DEFINES         += Use_mt_mode
 DEFINES         += NODEARRAYLEVEL
@@ -10,7 +10,7 @@ DEFINES         += NODEARRAYLEVEL
 #DEFINES += USE_QWT
 DEFINES  += NO_JSONIO
 
-
+CONFIG+=sdk_no_version_check
 CONFIG += c++11
 CONFIG += warn_on
 #CONFIG += warn_off
