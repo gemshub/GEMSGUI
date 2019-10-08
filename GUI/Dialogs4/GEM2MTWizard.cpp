@@ -714,8 +714,17 @@ void GEM2MTWizard::ScriptChange( int )
             ret += "$   Node 0 is set as source, for more sources change as: ( qc=0 | qc=XX )?...\n"
                    "  DiCp[qc][1] =: ( qc=0 ? 3 : 0 ); \n";
         }
-        ret +=  "$   Other nodes normal, the last one is set as a constant-flux sink\n"
+
+        if( pselW->isChecked() ) // Random-walk sink fix
+        {
+            ret +=  "$   Other nodes normal, the last two set as constant source and sink\n"
+                "  DiCp[qc][1] =: ( qc<nC-2 ? DiCp[qc][1]: (3));\n"
                 "  DiCp[qc][1] =: (  qc<nC-1 ? DiCp[qc][1]: (-3));\n";
+        }
+        else {
+            ret +=  "$   Other nodes normal, the last one is set as a constant-flux sink\n"
+                "  DiCp[qc][1] =: (  qc<nC-1 ? DiCp[qc][1]: (-3));\n";
+        }
     }
 
     if( chP->isChecked() )   // Initial node pressure, bar (for GEM)

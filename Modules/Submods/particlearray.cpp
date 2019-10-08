@@ -304,10 +304,9 @@ long int TParticleArray::MoveParticleBetweenNodes( long int px, bool CompMode, d
   // check minimum/maximum particle number in node
   switch( nodeType )
   {
-    case normal:
+    case normal:    // normal reactive node
               break;
-    case NBC3source:
-    case NBC3sink:
+    case NBC3source:    // = 3, Cauchy source ( constant flux )
         if( new_node == -1 )
         {
 // Only for 1D calculation !!! check for 2D and 3D
@@ -323,6 +322,24 @@ long int TParticleArray::MoveParticleBetweenNodes( long int px, bool CompMode, d
             ParT1[px].xyz.x = new_x;
 //            new_node = nodes->FindNodeFromLocation( ParT1[px].xyz, -1 );
         }
+        break;
+     case NBC3sink: // =-3, Cauchy sink (constant flux)
+        if( new_node == -1 )
+        {
+// Only for 1D calculation !!! check for 2D and 3D
+          double new_x = ParT1[px].xyz.x;
+          if( new_x >= nodes->GetSize().x )
+          {    new_x -= nodes->GetSize().x;
+               new_node = 0;
+          }
+          else // new_x < 0
+          {    new_x  += nodes->GetSize().x;
+               new_node = nodes->nNodes()-1;
+          }
+          ParT1[px].xyz.x = new_x;
+//            new_node = nodes->FindNodeFromLocation( ParT1[px].xyz, -1 );
+        }
+        break;
 /*    if( new_node == -1 )
     {   LOCATION nodeSize[2];
         new_node = ndxCsource;
@@ -336,7 +353,16 @@ long int TParticleArray::MoveParticleBetweenNodes( long int px, bool CompMode, d
        ParT1[px].xyz.x = new_x;
     }
 */
-             break;
+     case NBC2source: //    = 2, Neumann source ( constant gradient )
+        break;
+     case NBC2sink:   //    = -2, Neumann sink (constant gradient)
+        break;
+     case NBC1source: //    = 1, Dirichlet source ( constant concentration )
+        break;
+     case NBC1sink:   //    = -1, Dirichlet sink (constant concentration)
+        break;
+    default:     // Possibly error - wrong node type!
+        break;
   }
 
   if( new_node == -1 )
