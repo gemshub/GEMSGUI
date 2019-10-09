@@ -4,13 +4,12 @@
 // C/C++ interface for particle tracking methods for FMT node array
 // Working whith DATACH and DATABR structures
 //
-// (C) 2006 S.Dmytriyeva, D.Kulik, W.Pfingsten
+// (C) 2006, 2019  S.Dmytriyeva, D.Kulik, W.Pfingsten
 //
-// This file is part of a GEM-Selektor library for thermodynamic
+// This file is part of GEM-Selektor GUI for thermodynamic
 // modelling by Gibbs energy minimization
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the terms of GPL v.3 license
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
