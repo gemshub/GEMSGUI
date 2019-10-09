@@ -513,29 +513,40 @@ void PlotChartViewPrivate::updateSeries( size_t nline )
 
 void PlotChartViewPrivate::highlightSeries( size_t line, bool enable )
 {
-    if( gr_data->getGraphType() != LineChart || line >= gr_data->linesNumber() )
+    if(  line >= gr_data->linesNumber() )
         return;
-    auto  linedata = gr_data->lineData( line );
 
-    // update series lines
-    QXYSeries *series =  gr_series[line].get();
-    if( series )
+    if( gr_data->getGraphType() == LineChart )
     {
-        QPen pen = series->pen();
-        getLinePen( pen, linedata  );
-        if( enable )
-            pen.setWidth(linedata.getPenSize()*2);
-        series->setPen(pen);
+        // update series lines
+        auto  linedata = gr_data->lineData( line );
+        QXYSeries *series =  gr_series[line].get();
+        if( series )
+        {
+            QPen pen = series->pen();
+            getLinePen( pen, linedata  );
+            if( enable )
+                pen.setWidth(linedata.getPenSize()*2);
+            series->setPen(pen);
+        }
+
+        QScatterSeries *scatterseries = gr_points[line].get();
+        if( scatterseries )
+        {
+            auto shsize = linedata.getMarkerSize();
+            if( enable )
+                shsize *=2;
+            scatterseries->setBrush( markerShapeImage( linedata ).scaled( shsize,shsize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            scatterseries->setMarkerSize(shsize);
+        }
     }
-
-    QScatterSeries *scatterseries = gr_points[line].get();
-    if( scatterseries )
+    else if( gr_data->getGraphType() == AreaChart )
     {
-        auto shsize = linedata.getMarkerSize();
-        if( enable )
-            shsize *=2;
-        scatterseries->setBrush( markerShapeImage( linedata ).scaled( shsize,shsize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        scatterseries->setMarkerSize(shsize);
+        QAreaSeries* areaseries =    gr_areas[line].get();
+        if( areaseries)
+        {
+            areaseries->setOpacity( (enable ? 1: 0.5) );
+        }
     }
 }
 
@@ -604,7 +615,7 @@ QScatterSeries* PlotChartViewPrivate::newScatterLabel(
 {
     QScatterSeries *series  =  new QScatterSeries;
     QFontMetrics fm(gr_data->axisFont);
-    int size = fm.horizontalAdvance(label)+2;
+    int size = max(fm.horizontalAdvance(label)+2, fm.height());
 
     series->setName( label );
     series->setPen( QPen(Qt::transparent));
@@ -612,9 +623,7 @@ QScatterSeries* PlotChartViewPrivate::newScatterLabel(
     series->setMarkerSize(size);
     series->setBrush( textImage( gr_data->axisFont, label ));
 
-    auto pointNew = pointF;
-    pointNew.setX(pointNew.x()+size/2.);
-    auto pointV = chart->mapToValue(pointNew );
+    auto pointV = chart->mapToValue(pointF );
     series->append(pointV);
     return series;
 }

@@ -70,17 +70,19 @@ QImage textImage( const QFont& font, const QString& text )
     QFontMetrics fm(font);
     int pixelsWide = fm.horizontalAdvance(text)+2;
     int pixelsHigh = fm.height();
-    int size, delta = 0;
-    if( pixelsWide > pixelsHigh ) {
-
+    int size, ascent = 0;
+    if( pixelsWide > pixelsHigh )
+    {
       size  =  pixelsWide;
-      delta = (pixelsWide-pixelsHigh)/2;
+      ascent =fm.ascent()+(pixelsWide-pixelsHigh)/2;
     }
-    else {
+    else
+    {
       size  =  pixelsHigh;
+      ascent =pixelsHigh-fm.descent();
     }
     QPainterPath textPath;
-    textPath.addText(1, fm.ascent()+delta, font, text );
+    textPath.addText(1, ascent, font, text );
 
     QImage image(size, size, QImage::Format_ARGB32);
     image.fill(Qt::transparent);
@@ -91,6 +93,7 @@ QImage textImage( const QFont& font, const QString& text )
     painter.setBrush( QColor(Qt::darkGray) );
     painter.drawPath(textPath);
 
+    //image.save("TextImage.png");
     return image;
 }
 

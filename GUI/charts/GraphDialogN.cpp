@@ -343,7 +343,7 @@ void GraphDialog::changeIcon( int rowi, int column )
                emit dataChanged( gr_data.get() );
             }
      }
-   }    else if( column ==  2 && gr_data->getGraphType() == LineChart )
+   }    else if( column ==  2  )
             {
                highlightRow( row );
             }
@@ -355,7 +355,6 @@ void GraphDialog::changeNdx( int rowi, int column )
     auto row = static_cast<size_t>(rowi);
     if( column == 1 &&  ( gr_data->getGraphType() == LineChart || gr_data->getGraphType() == AreaChart ) )
     {
-
        auto ndxX = tbLegend->item(rowi, column)->text();
        gr_data->setLineData( row, ndxX );
        if( gr_data->getGraphType() == LineChart )
@@ -425,7 +424,8 @@ void DragTableWidget::startDragN(/*Qt::DropActions supportedActions*/)
         QDrag *drag = new QDrag(this);
         drag->setMimeData( mimeData );
         drag->setPixmap(pixmap/*QPixmap::grabWidget(this)*/);
-        drag->setHotSpot( QPoint(0, pixmap.height()) );
+        //drag->setHotSpot( QPoint(0, pixmap.height()) );
+        drag->setHotSpot( QPoint( pixmap.width() / 2, pixmap.height() / 2 ) );
         drag->exec();
      }
  }
