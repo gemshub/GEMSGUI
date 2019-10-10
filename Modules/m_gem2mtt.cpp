@@ -363,13 +363,18 @@ void TGEM2MT::MassTransCraNicStart()
 // The mass transport iteration initial time step (random-walk scheme)
 void TGEM2MT::MassTransParticleStart()
 {
-    double dt_adv, dt_dif;
+    double dt_adv=0.0, dt_dif=0.0;
     if( mtp->tf <= 0 )
         mtp->tf = 1.;
     mtp->dx = mtp->sizeLc[0]/mtp->nC;  // was mtp->cLen/mtp->nC; changed 15.12.2011 DK
-    dt_adv = (mtp->dx / mtp->fVel);    // Courant - Neumann criteria
-    dt_dif = (mtp->dx*mtp->dx)/2./(mtp->al_in*mtp->fVel + mtp->Dif_in);
-    mtp->dTau = min( dt_adv, dt_dif ) / mtp->tf;
+    if(fabs(mtp->fVel) > 1e-19)
+        dt_adv = (mtp->dx / mtp->fVel);
+    // Courant - Neumann criteria
+    dt_dif = (mtp->dx*mtp->dx)/2./(mtp->al_in*mtp->fVel + mtp->eps_in*mtp->Dif_in/mtp->nto_in); // bugfix 10.10.19 DK
+    if(fabs(dt_adv) > 1e-19)
+        mtp->dTau = min( dt_adv, dt_dif ) / mtp->tf; // advection and diffusion
+    else
+        mtp->dTau = dt_dif / mtp->tf;    // only diffusion
 //    mtp->dTau = 0.5*(mtp->dx/mtp->fVel)*1./mtp->tf;  // Courant criterion
     mtp->oTau = 0.;
     mtp->cTau = mtp->Tau[START_];
