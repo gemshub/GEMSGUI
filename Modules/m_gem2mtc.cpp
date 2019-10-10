@@ -949,8 +949,6 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
     }
 }
 
-#ifndef USE_QWT
-
 bool TGEM2MT::SaveChartData( jsonui::ChartData* gr )
 {
 
@@ -990,51 +988,6 @@ bool TGEM2MT::SaveChartData( jsonui::ChartData* gr )
 
     return true;
 }
-#else
-
-// Save changes was done in Plotting dialog
-bool
-TGEM2MT::SaveGraphData( GraphData *gr )
-{
-    int ii;
-
-// We can only have one Plot dialog (modal one) so condition should be omitted!!
-     if( !gd_gr )
-      return false;
-     if( gr != gd_gr->getGraphData() )
-      return false;
-    mtp->axisType[0] = static_cast<short>(gr->axisTypeX);
-    mtp->axisType[5] = static_cast<short>(gr->axisTypeY);
-    mtp->axisType[4] = static_cast<short>(gr->graphType);
-    mtp->axisType[1] = static_cast<short>(gr->b_color[0]);
-    mtp->axisType[2] = static_cast<short>(gr->b_color[1]);
-    mtp->axisType[3] = static_cast<short>(gr->b_color[2]);
-    strncpy( mtp->xNames, gr->xName.c_str(), 9);
-    strncpy( mtp->yNames, gr->yName.c_str(), 9);
-    for( ii=0; ii<4; ii++ )
-    {
-        mtp->size[0][ii] =  gr->region[ii];
-        mtp->size[1][ii] =  gr->part[ii];
-    }
-    plot = static_cast<TPlotLine *>(aObj[ o_mtplline].Alloc(  gr->lines.GetCount(), sizeof(TPlotLine)));
-    for( ii=0; ii<gr->lines.GetCount(); ii++ )
-    {
-        plot[ii] = gr->lines[ii];
-        //  lNam0 and lNamE back
-        if( ii < mtp->nYS )
-            strncpy(  mtp->lNam[ii], plot[ii].getName().c_str(), MAXGRNAME );
-        else
-            strncpy(  mtp->lNamE[ii-mtp->nYS], plot[ii].getName().c_str(), MAXGRNAME );
-    }
-    if( gr->graphType == ISOLINES )
-       gr->getColorList();
-
-    pVisor->Update();
-    contentsChanged = true;
-
-    return true;
-}
-#endif
 
 // Link na->pNodT0()[nNode] for internal object list
 // nNode < 0 set up NULL pointers  gfor objects

@@ -170,11 +170,7 @@ class TProcess : public TCModule
 {
     PROCESS pe[1];
 
-#ifdef USE_QWT
-    GraphWindow *gd_gr = nullptr;
-#else
     jsonui::GraphDialog *gd_gr = nullptr;
-#endif
     TPlotLine *plot;
 
     char *text_fmt;
@@ -243,13 +239,10 @@ public:
     void RecCalc( const char *key ) override;
     void RecordPrint( const char *key=nullptr ) override; //sddata key
     void RecordPlot( const char *key ) override;
-#ifdef USE_QWT
-    bool SaveGraphData( GraphData* graph ) override;
-#else
+
     bool SaveChartData( jsonui::ChartData* grdata ) override;
     void ClearGraphDialog() override
     {  gd_gr = nullptr; }
-#endif
 
     //void CmHelp();
     const char* GetHtml() override;

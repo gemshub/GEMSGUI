@@ -1,105 +1,9 @@
 #include <QObject>
-#ifdef USE_QWT
-#include "GraphDialog.h"
-#else
 #include "v_mod.h"
 #include "graph.h"
 #include "GraphDialogN.h"
-#endif
 #include "GemsMainWindow.h"
 #include "graph_window.h"
-
-//---------------------------------------------------------------------------
-
-#ifdef USE_QWT
-
-///   The constructor
-GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
-                         const char * aTitle,
-                         float *sizeReg,  float * sizePart,
-                         TPlotLine* aLinesDesc, short *aAxisType,
-                         const char *aXName, const char *aYName )
-{
-
-    GraphData data(aPlots, aTitle, sizeReg, sizePart,
-                   aLinesDesc, aAxisType, aXName, aYName);
-    graph_dlg = new GraphDialog( pmodule, data );
-    pVisorImp->openMdiChild( graph_dlg );
-}
-
-///   The constructor
-GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
-                         const char * aTitle,
-                         const char *aXName, const char *aYName,
-                         TCStringArray line_names, int agraphType  )
-{
-    GraphData  data( aPlots, aTitle, aXName, aYName, line_names, agraphType );
-    graph_dlg = new GraphDialog(pmodule, data);
-    pVisorImp->openMdiChild( graph_dlg );
-}
-
-GraphWindow::~GraphWindow()
-{
-    cout << "delete graph_dlg" << endl;
-    if(graph_dlg)
-        graph_dlg->close();
-    delete graph_dlg;
-}
-
-void GraphWindow::AddPoint( int nPlot, int nPoint )
-{
-    if( graph_dlg )
-    {
-        graph_dlg->AddPoint( nPlot, nPoint );
-    }
-}
-
-void GraphWindow::ShowGraph( const char * capAdd )
-{
-    if( graph_dlg )
-    {
-        graph_dlg->ShowNew(capAdd);
-    }
-}
-
-void *GraphWindow::getGraphData() const
-{
-    return &graph_dlg->gr_data;
-}
-
-// ------------------------------------------------------------------------------------------------
-
-///   The constructor
-GraphWindow *updateGraphWindow(  GraphWindow* graph_wnd,
-                                 TCModule *pmodule, TIArray<TPlot>& aPlots,
-                                 const char * aTitle,
-                                 float *sizeReg,  float * sizePart,
-                                 TPlotLine* aLinesDesc, short *aAxisType,
-                                 const char *aXName, const char *aYName )
-{
-    if( graph_wnd )
-        delete graph_wnd;
-    graph_wnd = new GraphWindow(pmodule, aPlots, aTitle,
-                                sizeReg, sizePart, aLinesDesc,  aAxisType, aXName,  aYName );
-    return graph_wnd;
-}
-
-///   The constructor
-GraphWindow *updateGraphWindow(  GraphWindow* graph_wnd,
-                         TCModule *pmodule, TIArray<TPlot>& aPlots,
-                         const char * aTitle,
-                         const char *aXName, const char *aYName,
-                         TCStringArray line_names, int agraphType  )
-{
-    if( graph_wnd )
-        delete graph_wnd;
-    graph_wnd = new GraphWindow(pmodule, aPlots, aTitle,
-                                aXName, aYName, line_names, agraphType );
-    return graph_wnd;
-}
-
-#else
-//------------------------------------------------------------------------
 
 
 SeriesLineData convertor( const TPlotLine& plotData )
@@ -239,4 +143,3 @@ GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
     return graph_dlg;
 }
 
-#endif

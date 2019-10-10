@@ -856,8 +856,6 @@ TGtDemo::RecordPlot( const char* /*key*/ )
     }
 }
 
-#ifndef USE_QWT
-
 bool TGtDemo::SaveChartData( jsonui::ChartData* gr )
 {
     // We can only have one Plot dialog (modal one) so condition should be omitted!!
@@ -900,53 +898,6 @@ bool TGtDemo::SaveChartData( jsonui::ChartData* gr )
 
     return true;
 }
-#else
-
-bool
-TGtDemo::SaveGraphData( GraphData *gr )
-{
-// We can only have one Plot dialog (modal one) so condition should be omitted!!
-     if( !gd_gr )
-      return false;
-     if( gr != gd_gr->getGraphData() )
-      return false;
-    gdp->axisType[0] = static_cast<short>(gr->axisTypeX);
-    gdp->axisType[5] = static_cast<short>(gr->axisTypeY);
-    gdp->axisType[4] = static_cast<short>(gr->graphType);
-    gdp->axisType[1] = static_cast<short>(gr->b_color[0]);
-    gdp->axisType[2] = static_cast<short>(gr->b_color[1]);
-    gdp->axisType[3] = static_cast<short>(gr->b_color[2]);
-    strncpy( gdp->xNames, gr->xName.c_str(), 9);
-    strncpy( gdp->yNames, gr->yName.c_str(), 9);
-    for(int ii=0; ii<4; ii++ )
-    {
-        gdp->size[0][ii] =  gr->region[ii];
-        gdp->size[1][ii] =  gr->part[ii];
-    }
-
-    int ndxy = 0;
-    if(  gdp->dimX > 1)
-            ndxy =gdp->dimX;
-    plot = static_cast<TPlotLine *>(aObj[ o_gdplline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine)));
-    for(int ii=0; ii<gr->lines.GetCount(); ii++ )
-    {
-        plot[ii] = gr->lines[ii];
-        //  lNam0 and lNamE back
-        if( ii < gdp->dimXY[1] )
-            strncpy(  gdp->lNam0[ii+ndxy], plot[ii].getName().c_str(), MAXGRNAME );
-        else
-            strncpy(  gdp->lNamE[ii-gdp->dimXY[1]], plot[ii].getName().c_str(), MAXGRNAME );
-    }
-
-    if( gr->graphType == ISOLINES )
-       gr->getColorList();
-
-    pVisor->Update();
-    contentsChanged = true;
-
-    return true;
-}
-#endif
 
 const char* TGtDemo::GetHtml()
 {

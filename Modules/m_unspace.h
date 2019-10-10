@@ -298,11 +298,8 @@ class TUnSpace : public TCModule
 {
     UNSPACE us[2];
 
-#ifdef USE_QWT
-    GraphWindow *gd_gr = nullptr;
-#else
+
     jsonui::GraphDialog *gd_gr = nullptr;
-#endif
     TPlotLine *plot;
 
      SYSTEM *syu;
@@ -419,13 +416,11 @@ public:
     void RecCalc( const char *key );
     void RecordPrint( const char *key=0 ); //sddata key
     void RecordPlot( const char *key );
-#ifdef USE_QWT
-    bool SaveGraphData( GraphData* graph );
-#else
+
     bool SaveChartData( jsonui::ChartData* grdata );
     void ClearGraphDialog()
     {  gd_gr = nullptr; }
-#endif
+
     //void CmHelp();
     const char* GetHtml();
 
@@ -473,8 +468,6 @@ typedef enum {
   //
 
 } UNSP_CLASSES;
-
-
 
 #endif  // _m_unspace_h_
 

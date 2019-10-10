@@ -56,9 +56,7 @@ public slots:
     
     void CloseWin()
     {  close();  }
-#ifndef USE_QWT
     void saveGraphData( jsonui::ChartData* );
-#endif
 
 public:
     TCModuleImp(size_t iMod, int page=0, int viewmode=0);

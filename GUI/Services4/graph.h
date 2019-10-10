@@ -22,15 +22,9 @@
 #define graph_data_old_h
 
 #include <math.h>
-
 #include <QPointF>
 #include <QVector>
 #include <QColor>
-
-#ifdef USE_QWT
-#include <qwt_series_data.h>
-#endif
-
 #include  "gstring.h"
 class GemDataStream;
 
@@ -254,20 +248,6 @@ public:
     int getFirstLine() const
     {  return first;  }
 
-#ifdef USE_QWT
-    int getObjX() const { return nObjX; }
-    int getObjY() const { return nObjY; }
-
-    /// Get one line to paint (ndxX - column in Abscissa table)
-    int getPointLine( int line, QVector<QPointF>& points, int ndxX );
-    /// Get one line to paint cumulative curve (ndxX - column in Abscissa table)
-    int getPointTube( int line, QVector<QwtIntervalSample>& points, int ndxAbs );
-
-    /// obsolete
-    //void getMaxMin( QPointF& min, QPointF& max );
-    //void getMaxMinIso( QPointF& min, QPointF& max );
-#else
-
     size_t getObjX() const { return fabs(nObjX); }
     size_t getObjY() const { return fabs(nObjY); }
 
@@ -281,7 +261,6 @@ public:
     /// Ordinate columns list
     std::vector<int> yColumns() const;
 
-#endif
 
     /// Get point from one line to paint  (ndxX - column in Abscissa table)
     QPointF getPoint( int line, int number, int ndxX );
@@ -289,106 +268,6 @@ public:
     void getMaxMinLine( QPointF& min, QPointF& max, int line, int ndxX );
 
 };
-
-#ifdef USE_QWT
-
-/// Description of 2-D plotting widget.
-/// Description include the curves (TPlotLine, TPlot) settings, the grid settings, the isoline structure settings
-struct GraphData
-{
-    gstring title;
-    int graphType;      /// GRAPHTYPES ( 0-line by line, 1- cumulative, 2 - isolines )
-
-    // define grid of plot
-    int axisTypeX;
-    int axisTypeY;
-    gstring xName;
-    gstring yName;
-    double region[4];
-    double part[4];
-
-    // define background color
-    // bool isBackgr_color;
-    int b_color[3]; // red, green, blue
-
-    // define curves
-    TIArray<TPlot> plots;     /// objects to demo
-    TIArray<TPlotLine> lines; /// descriptions of all lines
-
-    // data to isoline plots
-    TIArray<QColor> scale;    // scale colors for isolines
-
-public:
-
-    GraphData(  TIArray<TPlot>& aPlots, const char * title,
-                float *sizeReg, float *sizePrt,
-                TPlotLine * aLinesDesc, short *aAxisType,
-                const char *aXName = nullptr, const char *aYname = nullptr );
-
-    GraphData( TIArray<TPlot>& aPlots, const char * title,
-               const char *aXName = nullptr, const char *aYname = nullptr,
-               TCStringArray line_names = 0, int agraphType = LINES_POINTS );
-
-    GraphData( GraphData& data );
-
-    ~GraphData();
-
-    int getSize( int line ) const
-    { return lines[line].getSize();   }
-
-    int getType( int line ) const
-    {  return lines[line].getType();  }
-
-    int getLineSize(int line ) const
-    {   return lines[line].getLineSize();   }
-
-    int getIndex(int line ) const
-    {
-        int ndx = lines[line].getIndex();
-        if( plots[ getPlot( line ) ].getNAbs() <= ndx )
-            ndx = 0;
-        return ndx;
-    }
-
-    void setIndex(int line, int index  ) const
-    {   lines[line].setIndex(index);   }
-
-    gstring getName( int line ) const
-    {   return lines[line].getName();   }
-
-    void setName( int line, const char *aName ) const
-    {   lines[line].setName( aName );   }
-
-    QColor getColor( int line ) const
-    {   return lines[line].getColor();  }
-
-    int getPlot(int line ) const
-    {   uint ii=1;
-        for( ; ii<plots.GetCount(); ii++)
-            if( line < plots[ii].getFirstLine() )
-                break;
-        return (ii-1);
-    }
-
-    void getIndexes( QVector<int>& first, QVector<int>& maxXndx );
-
-    /// set default grid data
-    void adjustAxis( double& min, double& max, int& numTicks);
-
-    // functions to isoline plot
-    void setColorList();
-    void getColorList();
-    void setScales();
-    bool goodIsolineStructure( int aGraphType );
-    QColor getColorIsoline(int ii) const
-    {
-        return scale[ii];
-    }
-    double getValueIsoline(int ii);
-    void setValueIsoline(double val, int ii);
-
-};
-#endif
 
 #endif   // graph_data_old_h
 

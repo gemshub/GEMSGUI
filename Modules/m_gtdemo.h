@@ -124,12 +124,7 @@ class TGtDemo : public TCModule
     GTDEMO gd[1];
     GDSTAT gst;
 
-#ifdef USE_QWT
-    GraphWindow *gd_gr = nullptr;
-#else
     jsonui::GraphDialog *gd_gr = nullptr;
-#endif
-
     TPlotLine *plot;
     gstring titler;
 
@@ -183,13 +178,9 @@ public:
         return gdp->rkey+j*gdp->rtLen;
     }
 
-#ifdef USE_QWT
-    bool SaveGraphData( GraphData* graph );
-#else
     bool SaveChartData( jsonui::ChartData* grdata );
     void ClearGraphDialog()
     {  gd_gr = nullptr; }
-#endif
     //void CmHelp();
     const char* GetHtml();
 

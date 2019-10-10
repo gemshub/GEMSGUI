@@ -179,13 +179,11 @@ void TCModuleImp::MakeQuery()
     Update(true);
 }
 
-#ifndef USE_QWT
 void TCModuleImp::saveGraphData(jsonui::ChartData *data)
 {
     rMod.SaveChartData(data);
     cout<< "saveGraphData" << endl;
 }
-#endif
 
 // -------------- End of file module_w.cpp ----------------------
 

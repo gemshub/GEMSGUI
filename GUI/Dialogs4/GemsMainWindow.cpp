@@ -33,11 +33,7 @@
 #include "ProgressDialog.h"
 #include "NewSystemDialog.h"
 #include "LoadMessage.h"
-#ifdef USE_QWT
-#include "GraphDialog.h"
-#else
 #include "GraphDialogN.h"
-#endif
 
 //static const char* GEMS_LOGO_ICON = "Icons/gems1.png";
 static const char* GEMS_VERSION_STAMP = "GEM-Selektor 3 (GEMS3)";

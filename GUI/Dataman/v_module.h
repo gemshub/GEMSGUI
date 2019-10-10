@@ -33,11 +33,11 @@ class QWidget;
 
 struct GraphData;
 
-#ifndef USE_QWT
+
 namespace jsonui {
 class ChartData;
 }
-#endif
+
 
 class TSubModule
 {
@@ -148,7 +148,6 @@ public:
                                      int /*keyType*/ )
     { return"";}
 
-#ifndef USE_QWT
     //-- for graphic data set
 
     virtual bool SaveChartData( jsonui::ChartData* /*graph*/ )
@@ -156,7 +155,6 @@ public:
 
     virtual void ClearGraphDialog()
     { }
-#endif
 };
 
 // --- Parametres of function GetKeyofRecord()
@@ -323,11 +321,6 @@ public:
     {
         return db->PackKey();
     }
-#ifdef USE_QWT
-    //-- for graphic data set
-    virtual bool SaveGraphData( GraphData* /*graph*/ )
-    { return false; }
-#endif
 
  };
 

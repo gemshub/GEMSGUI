@@ -1636,8 +1636,6 @@ TProcess::RecordPlot( const char* /*key*/ )
     }
 }
 
-#ifndef USE_QWT
-
 bool TProcess::SaveChartData( jsonui::ChartData* gr )
 {
 
@@ -1682,53 +1680,6 @@ bool TProcess::SaveChartData( jsonui::ChartData* gr )
 
     return true;
 }
-#else
-
-bool
-TProcess::SaveGraphData( GraphData *gr )
-{
-// We can only have one Plot dialog (modal one) so condition should be omitted!!
-     if( !gd_gr )
-      return false;
-     if( gr != gd_gr->getGraphData() )
-      return false;
-    pep->axisType[0] = static_cast<short>(gr->axisTypeX);
-    pep->axisType[5] = static_cast<short>(gr->axisTypeY);
-    pep->axisType[4] = static_cast<short>(gr->graphType);
-    pep->axisType[1] = static_cast<short>(gr->b_color[0]);
-    pep->axisType[2] = static_cast<short>(gr->b_color[1]);
-    pep->axisType[3] = static_cast<short>(gr->b_color[2]);
-    strncpy( pep->xNames, gr->xName.c_str(), 9);
-    strncpy( pep->yNames, gr->yName.c_str(), 9);
-    for(int ii=0; ii<4; ii++ )
-    {
-        pep->size[0][ii] =  static_cast<float>(gr->region[ii]);
-        pep->size[1][ii] =  static_cast<float>(gr->part[ii]);
-    }
-
-    int ndxy = 0;
-    if(  pep->dimX > 1)
-           ndxy = pep->dimX;
-
-    plot = static_cast<TPlotLine *>(aObj[ o_pcplline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine)));
-    for(int ii=0; ii<gr->lines.GetCount(); ii++ )
-    {
-        plot[ii] = gr->lines[ii];
-        //  lNam and lNamE back
-        if( ii < pep->dimXY[1] )
-            strncpy(  pep->lNam[ii+ndxy], plot[ii].getName().c_str(), MAXGRNAME );
-        else
-            strncpy(  pep->lNamE[ii-pep->dimXY[1]], plot[ii].getName().c_str(), MAXGRNAME );
-    }
-
-    if( gr->graphType == ISOLINES )
-       gr->getColorList();
-    pVisor->Update();
-    contentsChanged = true;
-
-    return true;
-}
-#endif
 
 const char* TProcess::GetHtml()
 {

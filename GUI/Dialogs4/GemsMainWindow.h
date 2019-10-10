@@ -41,15 +41,10 @@ QT_END_NAMESPACE
 class TCModule;
 class NewSystemDialog;
 
-
-#ifdef USE_QWT
-class GraphDialog;
-#else
 namespace jsonui {
 class GraphDialog;
 }
 using namespace jsonui;
-#endif
 
 #include <QTableWidget>
 

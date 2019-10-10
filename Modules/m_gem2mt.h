@@ -353,12 +353,7 @@ class TGEM2MT
 
 #ifndef IPMGEMPLUGIN
     IPNCalc rpn[2];      // IPN
-
-#ifdef USE_QWT
-    GraphWindow *gd_gr = nullptr;
-#else
-   jsonui::GraphDialog *gd_gr = nullptr;
-#endif
+    jsonui::GraphDialog *gd_gr = nullptr;
     TPlotLine* plot;
     gstring title;           // changed titler to title
 #endif
@@ -491,13 +486,11 @@ public:
     void RecCalc( const char *key );
     void RecordPrint( const char *key=nullptr ); //sddata key
     void RecordPlot( const char *key );
-#ifdef USE_QWT
-    bool SaveGraphData( GraphData* graph );
-#else
+
     bool SaveChartData( jsonui::ChartData* grdata );
     void ClearGraphDialog()
     {  gd_gr = nullptr; }
-#endif
+
     //void CmHelp();
     const char* GetHtml();
 

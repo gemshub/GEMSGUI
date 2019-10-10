@@ -748,8 +748,6 @@ TRTParm::RecordPlot( const char* /*key*/ )
     }
 }
 
-#ifndef USE_QWT
-
 bool TRTParm::SaveChartData( jsonui::ChartData* gr )
 {
 
@@ -790,49 +788,6 @@ bool TRTParm::SaveChartData( jsonui::ChartData* gr )
 
     return true;
 }
-#else
-
-bool
-TRTParm::SaveGraphData( GraphData *gr )
-{
-// We can only have one Plot dialog (modal one) so condition should be omitted!!
-     if( !gd_gr )
-      return false;
-     if( gr != gd_gr->getGraphData() )
-      return false;
-    rpp->axisType[0] = static_cast<short>(gr->axisTypeX);
-    rpp->axisType[5] = static_cast<short>(gr->axisTypeY);
-    rpp->axisType[4] = static_cast<short>(gr->graphType);
-    rpp->axisType[1] = static_cast<short>(gr->b_color[0]);
-    rpp->axisType[2] = static_cast<short>(gr->b_color[1]);
-    rpp->axisType[3] = static_cast<short>(gr->b_color[2]);
-    strncpy( rpp->xNames, gr->xName.c_str(), 9);
-    strncpy( rpp->yNames, gr->yName.c_str(), 9);
-    for(int ii=0; ii<4; ii++ )
-    {
-        rpp->size[0][ii] =  static_cast<float>(gr->region[ii]);
-        rpp->size[1][ii] =  static_cast<float>(gr->part[ii]);
-    }
-
-    plot = static_cast<TPlotLine *>(aObj[ o_rppline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine)));
-    for(size_t ii=0; ii<gr->lines.GetCount(); ii++ )
-    {
-        plot[ii] = gr->lines[ii];
-        //  lNam0 and lNamE back
-        if(ii < rpp->dimXY[1] )
-            strncpy(  rpp->lNam[ii], plot[ii].getName().c_str(), MAXGRNAME );
-        else
-            strncpy(  rpp->lNamE[ii-rpp->dimXY[1]], plot[ii].getName().c_str(), MAXGRNAME );
-    }
-   if( gr->graphType == ISOLINES )
-       gr->getColorList();
-
-    pVisor->Update();
-    contentsChanged = true;
-
-    return true;
-}
-#endif
 
 //------------------- End of m_rtparm.cpp ---------------------------
 
