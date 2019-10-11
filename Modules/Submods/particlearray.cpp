@@ -210,6 +210,7 @@ double TParticleArray::InterpolationVp_hDl_1D( long int px,
     Dif = dbr1->Dif;
     eps = dbr1->eps;
     nto = dbr1->nto;
+    Dpm = dbr1->Dif*dbr1->eps/dbr1->nto;
 #endif
   }
   else
@@ -230,7 +231,9 @@ double TParticleArray::InterpolationVp_hDl_1D( long int px,
     eps -= (dbr2->eps - dbr1->eps )*d;
     nto = dbr1->nto;
     nto -= (dbr2->nto - dbr1->nto )*d;
-    Dpm = eps*Dif/nto;  // added account for tortuosity and porosity DK 9.05.19
+    Dpm =  dbr1->Dif*dbr1->eps/dbr1->nto;    // fix?
+    Dpm -= (dbr2->Dif*dbr2->eps/dbr2->nto - dbr1->Dif*dbr1->eps/dbr1->nto)*d;
+//    Dpm = eps*Dif/nto;  // added account for tortuosity and porosity DK 9.05.19
 //    hDl = al*vp+Dif;
     hDl = al*vp+Dpm;    // added DK 9.05.19
 #endif
