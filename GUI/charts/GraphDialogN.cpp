@@ -424,8 +424,8 @@ void DragTableWidget::startDragN(/*Qt::DropActions supportedActions*/)
         QDrag *drag = new QDrag(this);
         drag->setMimeData( mimeData );
         drag->setPixmap(pixmap/*QPixmap::grabWidget(this)*/);
-        //drag->setHotSpot( QPoint(0, pixmap.height()) );
-        drag->setHotSpot( QPoint( pixmap.width() / 2, pixmap.height() / 2 ) );
+        drag->setHotSpot( QPoint(0, pixmap.height()/2) );
+        //drag->setHotSpot( QPoint( pixmap.width() / 2, pixmap.height() / 2 ) );
         drag->exec();
      }
  }

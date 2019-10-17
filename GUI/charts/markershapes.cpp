@@ -89,8 +89,8 @@ QImage textImage( const QFont& font, const QString& text )
 
     QPainter painter(&image);
     painter.setRenderHint( QPainter::Antialiasing );
-    painter.setPen( QPen( QColor(Qt::darkGray), 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin) );
-    painter.setBrush( QColor(Qt::darkGray) );
+    painter.setPen( QPen( QColor("#323232"), 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin) );
+    painter.setBrush( QColor("#323232") );
     painter.drawPath(textPath);
 
     //image.save("TextImage.png");

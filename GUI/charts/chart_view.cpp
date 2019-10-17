@@ -623,7 +623,7 @@ QScatterSeries* PlotChartViewPrivate::newScatterLabel(
     series->setMarkerSize(size);
     series->setBrush( textImage( gr_data->axisFont, label ));
 
-    auto pointV = chart->mapToValue(pointF );
+    auto pointV = chart->mapToValue( QPointF(pointF.x()+size/2, pointF.y()) );
     series->append(pointV);
     return series;
 }
