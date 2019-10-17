@@ -9,8 +9,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -42,7 +42,7 @@ void GtDemoWizard::CmBack()
 void GtDemoWizard::CmNext()
 {
     int ndx = stackedWidget->currentIndex();
-    int nLines = pageScript->getScriptLinesNum();
+    auto nLines = pageScript->getScriptLinesNum();
     if( ndx == 1 && nLines > 0)
     {        pGraphY->setValue( nLines );
              pGraphX->setValue( pageScript->getAbscissaNum() );
@@ -82,7 +82,7 @@ void 	GtDemoWizard::resetBackButton()
 
 GtDemoWizard::GtDemoWizard( const char* pkey, int size[8], const char *ascript,
                             const char *proc_key, const char* aXname, const char* aYname, QWidget* parent):
-            QDialog( parent ), script(ascript), pageScript(0)
+            QDialog( parent ), script(ascript), pageScript(nullptr)
 {
     setupUi(this);
 
@@ -245,7 +245,7 @@ void GtDemoWizard::resetPageList( int newRT,const char* aXname, const char* aYna
         {
             TCStringArray aRklist;
             TCIntArray anRk;
-            int Nr = rt[RT_SYSEQ].GetKeyList( ALLKEY, aRklist, anRk );
+            auto Nr = rt[RT_SYSEQ].GetKeyList( ALLKEY, aRklist, anRk );
             if( Nr > 0 )
               TProfil::pm->loadSystat( aRklist[0].c_str() );
         }

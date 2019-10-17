@@ -10,8 +10,8 @@
 // modelling by Gibbs energy minimization
 // Uses: GEM-Selektor GUI GUI DBMS library, gems/lib/gemvizor.lib
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
@@ -23,7 +23,7 @@
 #include "v_mod.h"
 #include "v_ipnc.h"
 #include "v_module.h"
-#include "graph.h"
+#include "graph_window.h"
 
 const int PE_RKLEN = 80;
 
@@ -170,7 +170,7 @@ class TProcess : public TCModule
 {
     PROCESS pe[1];
 
-    GraphWindow *gd_gr;
+    jsonui::GraphDialog *gd_gr = nullptr;
     TPlotLine *plot;
 
     char *text_fmt;
@@ -213,6 +213,10 @@ public:
     PROCESS *pep;
 
     TProcess( uint nrt );
+    ~TProcess() override
+    {
+        delete gd_gr;
+    }
 
     const char* GetName() const override
     {
@@ -235,7 +239,10 @@ public:
     void RecCalc( const char *key ) override;
     void RecordPrint( const char *key=nullptr ) override; //sddata key
     void RecordPlot( const char *key ) override;
-    bool SaveGraphData( GraphData* graph ) override;
+
+    bool SaveChartData( jsonui::ChartData* grdata ) override;
+    void ClearGraphDialog() override
+    {  gd_gr = nullptr; }
 
     //void CmHelp();
     const char* GetHtml() override;

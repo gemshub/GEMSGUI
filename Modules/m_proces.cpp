@@ -10,8 +10,8 @@
 // modelling by Gibbs energy minimization
 // Uses: GEM-Selektor GUI GUI DBMS library, gems/lib/gemvizor.lib
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
@@ -824,17 +824,17 @@ TProcess::MakeQuery()
          aObj[o_pcexpr].SetString( outScript.c_str(),0,0);
      }
 
-     if(namesLines.GetCount() > 0)
+     if(  namesLines.GetCount() > 0)
       {
          int dimPclnam = pep->dimXY[1];
-         uint ndxy = 0;
+         int ndxy = 0;
          if(  pep->dimX > 1)
          {      dimPclnam +=  pep->dimX;
                  ndxy = pep->dimX;
          }
          pep->lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclnam ].Alloc( 1,
                     dimPclnam, MAXGRNAME));
-         for(uint ii=0; ii< min<size_t>( namesLines.GetCount(), pep->dimXY[1] ); ii++)
+         for(int ii=0; ii< min<int>( namesLines.GetCount(), pep->dimXY[1] ); ii++)
          {
            strncpy(  pep->lNam[ii+ndxy], namesLines[ii].c_str(), MAXGRNAME );
          }
@@ -1468,7 +1468,7 @@ else {
               {
                 // show full graph
                 if( gd_gr )
-                  gd_gr->Show();
+                  gd_gr->ShowGraph();
 
                 // export script
                 if( text_fmt )
@@ -1578,7 +1578,6 @@ void TProcess::RecordPrint(const char *key)
 void
 TProcess::RecordPlot( const char* /*key*/ )
 {
-
     TIArray<TPlot> plt;
 
     plt.Add( new TPlot(o_pcx0, o_pcy0 ));
@@ -1620,7 +1619,7 @@ TProcess::RecordPlot( const char* /*key*/ )
                 //strncpy( plot[ii].name, pep->lNamE[ii-pep->dimXY[1]], MAXGRNAME-1 );
             //plot[ii].name[MAXGRNAME-1] = '\0';
         }
-        gd_gr = new GraphWindow( this, plt, pep->name,
+        gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
                                      pep->size[0], pep->size[1], plot,
                                      pep->axisType, pep->xNames, pep->yNames);
     }
@@ -1632,44 +1631,41 @@ TProcess::RecordPlot( const char* /*key*/ )
           lnames.Add( gstring(pep->lNam[ii+ndxy], 0, MAXGRNAME ));
       for( ii=0; ii<pep->dimEF[1]; ii++ )
           lnames.Add( gstring( pep->lNamE[ii], 0, MAXGRNAME ));
-      gd_gr = new GraphWindow( this, plt, pep->name,
+      gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
           pep->xNames, pep->yNames, lnames );
     }
 }
 
-
-bool
-TProcess::SaveGraphData( GraphData *gr )
+bool TProcess::SaveChartData( jsonui::ChartData* gr )
 {
-    uint ii;
-// We can only have one Plot dialog (modal one) so condition should be omitted!!
-     if( !gd_gr )
-      return false;
-     if( gr != gd_gr->getGraphData() )
-      return false;
-    pep->axisType[0] = gr->axisTypeX;
-    pep->axisType[5] = gr->axisTypeY;
-    pep->axisType[4] = gr->graphType;
-    pep->axisType[1] = gr->b_color[0];
-    pep->axisType[2] = gr->b_color[1];
-    pep->axisType[3] = gr->b_color[2];
-    strncpy( pep->xNames, gr->xName.c_str(), 9);
-    strncpy( pep->yNames, gr->yName.c_str(), 9);
-    for( ii=0; ii<4; ii++ )
+
+    // We can only have one Plot dialog (modal one) so condition should be omitted!!
+    if( !gd_gr )
+        return false;
+
+    strncpy(  pep->name, gr->title.c_str(), MAXFORMULA );
+    pep->axisType[0] = static_cast<short>(gr->axisTypeX);
+    pep->axisType[5] = static_cast<short>(gr->axisTypeY);
+    pep->axisType[4] = static_cast<short>(gr->getGraphType());
+    pep->axisType[1] = static_cast<short>(gr->b_color[0]);
+    pep->axisType[2] = static_cast<short>(gr->b_color[1]);
+    pep->axisType[3] = static_cast<short>(gr->b_color[2]);
+    strncpy( pep->xNames, gr->xName.c_str(), MAXAXISNAME);
+    strncpy( pep->yNames, gr->yName.c_str(), MAXAXISNAME);
+    for(uint ii=0; ii<4; ii++ )
     {
-        pep->size[0][ii] =  gr->region[ii];
-        pep->size[1][ii] =  gr->part[ii];
+        pep->size[0][ii] =  static_cast<float>(gr->region[ii]);
+        pep->size[1][ii] =  static_cast<float>(gr->part[ii]);
     }
 
-    uint ndxy = 0;
+    int ndxy = 0;
     if(  pep->dimX > 1)
            ndxy = pep->dimX;
 
-    plot = static_cast<TPlotLine *>
-           (aObj[ o_pcplline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine)));
-    for( ii=0; ii<gr->lines.GetCount(); ii++ )
+    plot = static_cast<TPlotLine *>(aObj[ o_pcplline].Alloc( gr->getSeriesNumber(), sizeof(TPlotLine)));
+    for(int ii=0; ii<gr->getSeriesNumber(); ii++ )
     {
-        plot[ii] = gr->lines[ii];
+        plot[ii] = convertor( gr->lineData( ii ) );
         //  lNam and lNamE back
         if( ii < pep->dimXY[1] )
             strncpy(  pep->lNam[ii+ndxy], plot[ii].getName().c_str(), MAXGRNAME );
@@ -1677,8 +1673,8 @@ TProcess::SaveGraphData( GraphData *gr )
             strncpy(  pep->lNamE[ii-pep->dimXY[1]], plot[ii].getName().c_str(), MAXGRNAME );
     }
 
-    if( gr->graphType == ISOLINES )
-       gr->getColorList();
+    //if( gr->graphType == ISOLINES )
+    //   gr->getColorList();
     pVisor->Update();
     contentsChanged = true;
 

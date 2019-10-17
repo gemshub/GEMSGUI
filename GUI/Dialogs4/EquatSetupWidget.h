@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -59,7 +59,7 @@ struct pagesSetupData
    int ndx;         //  second index in object
    gstring ndxName; // if ndxName not empty ( ndx is first ndx ), second from list
 
-   pagesSetupData( const char * pName, int aobj, int andx = 0, const char*  andxName = 0):
+   pagesSetupData( const char * pName, int aobj, int andx = 0, const char*  andxName = nullptr):
         pageName(pName),  nObj(aobj), ndx(andx)
    {
      if( andxName )
@@ -144,7 +144,7 @@ public:
 
     EquatSetup( QWidget* parent, equatSetupData aEqData,
        int nRT, TIArray<pagesSetupData>& wnData, TIArray<pagesSetupData>& scalarsList,
-       const char* script = 0, const char* aXname = 0, const char* aYname = 0  );
+       const char* script = nullptr, const char* aXname = nullptr, const char* aYname = nullptr  );
     virtual ~EquatSetup();
 
    gstring getScript() const;
@@ -159,10 +159,10 @@ public:
       yNam =name;
    }
 
-   int getScriptLinesNum() const
+   size_t getScriptLinesNum() const
    {  return   scriptData.GetCount(); }
 
-   int getAbscissaNum() const
+   size_t getAbscissaNum() const
    {  return   eqData.abscissaLines.GetCount()+1; }
 
 public slots:

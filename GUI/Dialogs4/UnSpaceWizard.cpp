@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -162,7 +162,7 @@ UnSpaceWizard::UnSpaceWizard( const char* pkey, char flgs[38],
     else c_Pa_f6->setChecked( false );
 
 // Page 3
-    p_Pa_Adapt->setValue((int)(flgs[26]-'0'));
+    p_Pa_Adapt->setValue((flgs[26]-'0'));
 
     if( flgs[18] != '-' )
       c_PsEqn->setChecked( true );
@@ -301,8 +301,8 @@ void   UnSpaceWizard::getFlags( char flgs[38] )
     else flgs[25] = '-';
 
 // Page 3
-   flgs[26] = (char)(p_Pa_Adapt->value())+'0';
-    p_Pa_Adapt->setValue((int)(flgs[26]-'0'));
+   flgs[26] = static_cast<char>(p_Pa_Adapt->value())+'0';
+   // p_Pa_Adapt->setValue((int)(flgs[26]-'0'));
 
    if( c_PsEqn->isChecked() )
        flgs[18] = '+';

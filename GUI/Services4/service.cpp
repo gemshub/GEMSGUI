@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -336,7 +336,7 @@ TCStringArray vfMultiKeys(QWidget* par, const char* caption,
 }
 
 TCStringArray vfMultiKeysSet(QWidget* par, const char* caption,
-                    int iRt, const char* key, TCStringArray& sel )
+                    uint iRt, const char* key, TCStringArray& sel )
 {
     KeyDialog dbk(par, iRt, sel, key, caption);
     dbk.exec();
@@ -838,7 +838,7 @@ vfReacDCSet(QWidget* par, const char * p_key,
 
 bool
 vfRTparmSet(QWidget* par, const char * p_key,
-            char flgs[10], int size[7], float val[6],
+            char flgs[10], int size[7], double val[6],
             gstring& script, gstring& xName,  gstring& yName,
             TCStringArray& names )
 {

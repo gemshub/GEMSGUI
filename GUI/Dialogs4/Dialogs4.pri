@@ -1,9 +1,9 @@
 HEADERS += $$DIALOGS4_H/GemsMainWindow.h  \
            $$DIALOGS4_H/NewSystemDialog.h \
            $$DIALOGS4_H/HelpWindow.h \
-           $$DIALOGS4_H/GraphDialog.h \
-           $$DIALOGS4_H/LegendDialog.h \
-           $$DIALOGS4_H/SymbolDialog.h \
+#           $$DIALOGS4_H/GraphDialog.h \
+#           $$DIALOGS4_H/LegendDialog.h \
+#           $$DIALOGS4_H/SymbolDialog.h \
            $$DIALOGS4_H/LoadMessage.h \
 # UserDialogs
                   $$DIALOGS4_H/ProgressDialog.h \
@@ -42,9 +42,9 @@ SOURCES += $$DIALOGS4_CPP/GemsMainWindow.cpp \
            $$DIALOGS4_CPP/GemsMainMenus.cpp \
            $$DIALOGS4_CPP/NewSystemDialog.cpp \
            $$DIALOGS4_CPP/HelpWindow.cpp \
-           $$DIALOGS4_CPP/GraphDialog.cpp \
-           $$DIALOGS4_CPP/LegendDialog.cpp \
-           $$DIALOGS4_CPP/SymbolDialog.cpp \
+#           $$DIALOGS4_CPP/GraphDialog.cpp \
+#           $$DIALOGS4_CPP/LegendDialog.cpp \
+#           $$DIALOGS4_CPP/SymbolDialog.cpp \
            $$DIALOGS4_CPP/LoadMessage.cpp \
 # UserDialogs
                   $$DIALOGS4_CPP/ProgressDialog.cpp \
@@ -86,9 +86,9 @@ FORMS += $$DIALOGS4_CPP/GemsMainWindow4.ui \
          $$DIALOGS4_CPP/HelpWindow4.ui \
          #$$DIALOGS4_CPP/HowToStartDialog4.ui \
          #$$DIALOGS4_CPP/AboutDialog4.ui \
-         $$DIALOGS4_CPP/GraphDialog4.ui \
-         $$DIALOGS4_CPP/LegendDialog4.ui \
-         $$DIALOGS4_CPP/SymbolDialog4.ui \
+         #$$DIALOGS4_CPP/GraphDialog4.ui \
+         #$$DIALOGS4_CPP/LegendDialog4.ui \
+         #$$DIALOGS4_CPP/SymbolDialog4.ui \
 # UserDialogs
          $$DIALOGS4_CPP/ProgressDialog4.ui \
          $$DIALOGS4_CPP/EquatSetupWidget4.ui \

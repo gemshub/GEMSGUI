@@ -10,8 +10,8 @@
 // modelling by Gibbs energy minimization
 // Uses: GEM-Selektor GUI GUI DBMS library, gems/lib/gemvizor.lib
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
@@ -76,7 +76,7 @@ TRTParm::TRTParm( uint nrt ):
     rpp=&rp[0];
     set_def();
     start_title = " Tabulation/plot of thermodynamic data for one DC (species)";
-    gd_gr = 0;
+    gd_gr = nullptr;
 }
 
 // link values to objects
@@ -142,31 +142,30 @@ void TRTParm::dyn_set(int q)
 //    rpp->nvch = 0;
     // Change MAXGRNAME from 7 to 16
     if(aObj[ o_rtlnam ].GetType() == 7 )
-        rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].Alloc( 1,
-                     rpp->dimXY[1], MAXGRNAME);
+        rpp->lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_rtlnam ].Alloc( 1, rpp->dimXY[1], MAXGRNAME));
     else
-        rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].GetPtr();
+        rpp->lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_rtlnam ].GetPtr());
 
     if(aObj[ o_rtlname ].GetType() == 7 && rpp->Pplot != S_OFF )
-        rpp->lNamE = (char (*)[MAXGRNAME])aObj[ o_rtlname ].Alloc(1,
-                     rpp->dimEF[1], MAXGRNAME);
+        rpp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_rtlname ].Alloc(1,
+                     rpp->dimEF[1], MAXGRNAME));
     else
-        rpp->lNamE = (char (*)[MAXGRNAME])aObj[ o_rtlname ].GetPtr();
+        rpp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_rtlname ].GetPtr());
 
 
 
-    rpp->expr = (char *)aObj[ o_rtexpr ].GetPtr();
-    rpp->exprE = (char *)aObj[ o_rtexpre ].GetPtr();
-    rpp->T    = (double *)aObj[ o_rpxt ].GetPtr();
-    rpp->P    = (double *)aObj[ o_rpxp ].GetPtr();
-    rpp->F    = (double *)aObj[ o_rpyf ].GetPtr();
-    rpp->TE    = (double *)aObj[ o_rpxte ].GetPtr();
-    rpp->PE    = (double *)aObj[ o_rpxpe ].GetPtr();
-    rpp->FE    = (double *)aObj[ o_rpyte ].GetPtr();
-    rpp->trpn  = (char *)aObj[ o_rttext ].GetPtr();
-    plot  = (TPlotLine *)aObj[ o_rppline ].GetPtr();
-    rpp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_rtsdref ].GetPtr();
-    rpp->sdval = (char (*)[V_SD_VALEN])aObj[ o_rtsdval ].GetPtr();
+    rpp->expr = static_cast<char *>(aObj[ o_rtexpr ].GetPtr());
+    rpp->exprE = static_cast<char *>(aObj[ o_rtexpre ].GetPtr());
+    rpp->T    = static_cast<double *>(aObj[ o_rpxt ].GetPtr());
+    rpp->P    = static_cast<double *>(aObj[ o_rpxp ].GetPtr());
+    rpp->F    = static_cast<double *>(aObj[ o_rpyf ].GetPtr());
+    rpp->TE    = static_cast<double *>(aObj[ o_rpxte ].GetPtr());
+    rpp->PE    = static_cast<double *>(aObj[ o_rpxpe ].GetPtr());
+    rpp->FE    = static_cast<double *>(aObj[ o_rpyte ].GetPtr());
+    rpp->trpn  = static_cast<char *>(aObj[ o_rttext ].GetPtr());
+    plot  = static_cast<TPlotLine *>(aObj[ o_rppline ].GetPtr());
+    rpp->sdref = static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_rtsdref ].GetPtr());
+    rpp->sdval = static_cast<char (*)[V_SD_VALEN]>(aObj[ o_rtsdval ].GetPtr());
 }
 
 // free dynamic memory in objects and values
@@ -174,20 +173,20 @@ void TRTParm::dyn_kill(int q)
 {
     ErrorIf( rpp!=&rp[q], GetName(),
              "E02RTrem: Attempt to free corrupt dynamic memory.");
-    rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].Free();
-    rpp->lNamE = (char (*)[MAXGRNAME])aObj[ o_rtlname ].Free();
-    rpp->expr = (char *)aObj[ o_rtexpr ].Free();
-    rpp->exprE = (char *)aObj[ o_rtexpre ].Free();
-    rpp->T    = (double *)aObj[ o_rpxt ].Free();
-    rpp->P    = (double *)aObj[ o_rpxp ].Free();
-    rpp->F    = (double *)aObj[ o_rpyf ].Free();
-    rpp->TE    = (double *)aObj[ o_rpxte ].Free();
-    rpp->PE    = (double *)aObj[ o_rpxpe ].Free();
-    rpp->FE    = (double *)aObj[ o_rpyte ].Free();
-    rpp->trpn  = (char *)aObj[ o_rttext ].Free();
-    plot  = (TPlotLine *)aObj[ o_rppline ].Free();
-    rpp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_rtsdref ].Free();
-    rpp->sdval = (char (*)[V_SD_VALEN])aObj[ o_rtsdval ].Free();
+    rpp->lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_rtlnam ].Free());
+    rpp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_rtlname ].Free());
+    rpp->expr = static_cast<char *>(aObj[ o_rtexpr ].Free());
+    rpp->exprE = static_cast<char *>(aObj[ o_rtexpre ].Free());
+    rpp->T    = static_cast<double *>(aObj[ o_rpxt ].Free());
+    rpp->P    = static_cast<double *>(aObj[ o_rpxp ].Free());
+    rpp->F    = static_cast<double *>(aObj[ o_rpyf ].Free());
+    rpp->TE    = static_cast<double *>(aObj[ o_rpxte ].Free());
+    rpp->PE    = static_cast<double *>(aObj[ o_rpxpe ].Free());
+    rpp->FE    = static_cast<double *>(aObj[ o_rpyte ].Free());
+    rpp->trpn  = static_cast<char *>(aObj[ o_rttext ].Free());
+    plot  = static_cast<TPlotLine *>(aObj[ o_rppline ].Free());
+    rpp->sdref = static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_rtsdref ].Free());
+    rpp->sdval = static_cast<char (*)[V_SD_VALEN]>(aObj[ o_rtsdval ].Free());
 }
 
 // realloc dynamic memory
@@ -196,46 +195,44 @@ void TRTParm::dyn_new(int q)
     ErrorIf( rpp!=&rp[q], GetName(), "E03RTrem: Attempt to allocate corrupt dynamic memory.");
     ErrorIf( rp[q].NV < 1, GetName(), "E04RTrem: Dynamic memory corruption in RTParm data structure");
 
-    rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].Alloc( 1,
-                 rpp->dimXY[1], MAXGRNAME);
-    rpp->expr = (char *)aObj[ o_rtexpr ].Alloc(1, 2048, S_);
+    rpp->lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_rtlnam ].Alloc( 1,
+                 rpp->dimXY[1], MAXGRNAME));
+    rpp->expr = static_cast<char *>(aObj[ o_rtexpr ].Alloc(1, 2048, S_));
 
-    rpp->T  = (double *)aObj[ o_rpxt ].Alloc(rpp->dimXY[0], 1, D_);
-    rpp->P  = (double *)aObj[ o_rpxp ].Alloc(rpp->dimXY[0], 1, D_);
-    rpp->F  = (double *)aObj[ o_rpyf ].Alloc(rpp->dimXY[0], rpp->dimXY[1], D_);
+    rpp->T  = static_cast<double *>(aObj[ o_rpxt ].Alloc(rpp->dimXY[0], 1, D_));
+    rpp->P  = static_cast<double *>(aObj[ o_rpxp ].Alloc(rpp->dimXY[0], 1, D_));
+    rpp->F  = static_cast<double *>(aObj[ o_rpyf ].Alloc(rpp->dimXY[0], rpp->dimXY[1], D_));
 
     if( rpp->Pplot == S_OFF )
     {
-        rpp->lNamE = (char (*)[MAXGRNAME])aObj[ o_rtlname ].Free();
-        rpp->exprE = (char *)aObj[ o_rtexpre ].Free();
-        rpp->TE    = (double *)aObj[ o_rpxte ].Free();
-        rpp->PE    = (double *)aObj[ o_rpxpe ].Free();
-        rpp->FE    = (double *)aObj[ o_rpyte ].Free();
+        rpp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_rtlname ].Free());
+        rpp->exprE = static_cast<char *>(aObj[ o_rtexpre ].Free());
+        rpp->TE    = static_cast<double *>(aObj[ o_rpxte ].Free());
+        rpp->PE    = static_cast<double *>(aObj[ o_rpxpe ].Free());
+        rpp->FE    = static_cast<double *>(aObj[ o_rpyte ].Free());
         rpp->dimEF[1] = rpp->dimEF[0] = 0;
     }
     else
     {
-        rpp->lNamE = (char (*)[MAXGRNAME])aObj[ o_rtlname ].Alloc(1,
-                     rpp->dimEF[1], MAXGRNAME);
-        rpp->exprE = (char *)aObj[ o_rtexpre ].Alloc(1, 2048, S_);
-        rpp->TE    = (double *)aObj[ o_rpxte ].Alloc(rpp->dimEF[0], 1, D_);
-        rpp->PE    = (double *)aObj[ o_rpxpe ].Alloc(rpp->dimEF[0], 1, D_);
-        rpp->FE=(double *)aObj[ o_rpyte ].Alloc(rpp->dimEF[0],rpp->dimEF[1],D_);
+        rpp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_rtlname ].Alloc(1,
+                     rpp->dimEF[1], MAXGRNAME));
+        rpp->exprE = static_cast<char *>(aObj[ o_rtexpre ].Alloc(1, 2048, S_));
+        rpp->TE    = static_cast<double *>(aObj[ o_rpxte ].Alloc(rpp->dimEF[0], 1, D_));
+        rpp->PE    = static_cast<double *>(aObj[ o_rpxpe ].Alloc(rpp->dimEF[0], 1, D_));
+        rpp->FE=static_cast<double *>(aObj[ o_rpyte ].Alloc(rpp->dimEF[0],rpp->dimEF[1],D_));
     }
     if( rpp->Nsd > 0 )
     {
-        rpp->sdref =
-        (char (*)[V_SD_RKLEN])aObj[ o_rtsdref].Alloc( rpp->Nsd, 1, V_SD_RKLEN );
-        rpp->sdval =
-        (char (*)[V_SD_VALEN])aObj[ o_rtsdval].Alloc( rpp->Nsd, 1, V_SD_VALEN );
+        rpp->sdref =  static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_rtsdref].Alloc( rpp->Nsd, 1, V_SD_RKLEN ));
+        rpp->sdval =  static_cast<char (*)[V_SD_VALEN]>(aObj[ o_rtsdval].Alloc( rpp->Nsd, 1, V_SD_VALEN ));
     }
     else
     {
-        rpp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_rtsdref ].Free();
-        rpp->sdval = (char (*)[V_SD_VALEN])aObj[ o_rtsdval ].Free();
+        rpp->sdref = static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_rtsdref ].Free());
+        rpp->sdval = static_cast<char (*)[V_SD_VALEN]>(aObj[ o_rtsdval ].Free());
     }
 
-    rpp->trpn = (char *)aObj[ o_rttext ].Alloc(1, 2048, S_);
+    rpp->trpn = static_cast<char *>(aObj[ o_rttext ].Alloc(1, 2048, S_));
 }
 
 
@@ -243,7 +240,7 @@ void TRTParm::dyn_new(int q)
 void TRTParm::set_def( int q)
 {
     ErrorIf( rpp!=&rp[q], GetName(), "E05RTrem: Dynamic memory corruption in RTParm data structure.");
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    TProfil *aPa= dynamic_cast<TProfil *>(&aMod[RT_PARAM]);
 
     memcpy( &rp[q].What, aPa->pa.RPpdc, 10 );
     strcpy( rp[q].name,  "T (and P) corrections: g0 function of " );   // Fixed for debugging
@@ -263,7 +260,7 @@ void TRTParm::set_def( int q)
         break;
     case 1:
     case 2:
-        rp[q].NV = (short)(rp[q].NP * rp[q].NT);
+        rp[q].NV = (rp[q].NP * rp[q].NT);
         break;
     case 3:
         rp[q].NV = max( rp[q].NP, rp[q].NT );
@@ -276,28 +273,26 @@ void TRTParm::set_def( int q)
     rp[q].Ti[1] = aPa->pa.Ti[1];
     rp[q].Ti[2] = aPa->pa.Ti[2];
     memset( &rpp->Nsd, 0, 12*sizeof(short));
-    rpp->lNam = 0;
-    rpp->lNamE = 0;
-    rpp->expr = 0;
-    rpp->exprE = 0;
-    rpp->T    = 0;
-    rpp->P    = 0;
-    rpp->F    = 0;
-    rpp->TE    = 0;
-    rpp->PE    = 0;
-    rpp->FE    = 0;
-    rpp->trpn  = 0;
-    plot  = 0;
-    rpp->sdref = 0;
-    rpp->sdval = 0;
+    rpp->lNam = nullptr;
+    rpp->lNamE = nullptr;
+    rpp->expr = nullptr;
+    rpp->exprE = nullptr;
+    rpp->T    = nullptr;
+    rpp->P    = nullptr;
+    rpp->F    = nullptr;
+    rpp->TE    = nullptr;
+    rpp->PE    = nullptr;
+    rpp->FE    = nullptr;
+    rpp->trpn  = nullptr;
+    plot  = nullptr;
+    rpp->sdref = nullptr;
+    rpp->sdval = nullptr;
 // Added to set a default script 01.04.2003 KD
 //    rpp->Pplot = S_ON;
     rpp->dimXY[1] = 1;
-    rpp->expr = (char *)aObj[ o_rtexpr ].Alloc(1, 2048, S_);
-    strcpy( (char *)aObj[o_rtexpr].GetPtr(),
-  " yF[jTP][0] =: twG/1000;\n  " );
-    rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].Alloc( 1,
-                 rpp->dimXY[1], MAXGRNAME);
+    rpp->expr = static_cast<char *>(aObj[ o_rtexpr ].Alloc(1, 2048, S_));
+    strcpy( static_cast<char *>(aObj[o_rtexpr].GetPtr()),  " yF[jTP][0] =: twG/1000;\n  " );
+    rpp->lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_rtlnam ].Alloc( 1, rpp->dimXY[1], MAXGRNAME));
     strcpy( rpp->lNam[0], "g0 ");
 }
 
@@ -314,13 +309,13 @@ bool TRTParm::check_input( const char *key, int Level )
     srec = key + MAXSYMB+MAXDRGROUP+MAXDCNAME+MAXSYMB;
     if( *srec == SRC_DCOMP )
     {
-        TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+        TDComp* aDC=   dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
         aDC->ods_link(0);
         aDC->TCModule::TryRecInp( pkey, tr, 0 );
     }
     else
     {
-        TReacDC* aRC=(TReacDC *)(&aMod[RT_REACDC]);
+        TReacDC* aRC= dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
         aRC->ods_link(0); //Sveta 16/11/99
         aRC->TCModule::TryRecInp( pkey, tr, 0 );
     }
@@ -352,7 +347,7 @@ TRTParm::MakeQuery()
     const char * p_key;
     char flgs[10];
     int size[7];
-    float val[6];
+    double val[6];
 
     p_key  = db->PackKey();
     memcpy( flgs, &rpp->What, 10);
@@ -384,13 +379,13 @@ TRTParm::MakeQuery()
      //  return;   // cancel
 
     memcpy( &rpp->What, flgs, 10);
-    rpp->NP = (short)size[0];
-    rpp->NT = (short)size[1];
-    rpp->Mode = (short)size[2];
-    rpp->Nsd = (short)size[3];
-    rpp->dimEF[0] = (short)size[4];
-    rpp->dimEF[1] = (short)size[5];
-    rpp->dimXY[1] = (short)size[6];
+    rpp->NP = size[0];
+    rpp->NT = size[1];
+    rpp->Mode = size[2];
+    rpp->Nsd = size[3];
+    rpp->dimEF[0] = size[4];
+    rpp->dimEF[1] = size[5];
+    rpp->dimXY[1] = size[6];
 
     rpp->Ti[0] = val[0];
     rpp->Ti[1] = val[1];
@@ -401,13 +396,13 @@ TRTParm::MakeQuery()
 
     // from scripts
     if( !rpp->expr )
-       rpp->expr = (char *)aObj[ o_rtexpr ].Alloc(1, 2048, S_);
+       rpp->expr = static_cast<char *>(aObj[ o_rtexpr ].Alloc(1, 2048, S_));
     aObj[o_rtexpr].SetString( calcScript.c_str(),0,0);
     if(namesLines.GetCount() > 0)
      {
-        rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].Alloc( 1,
-                         rpp->dimXY[1], MAXGRNAME);
-        for(short ii=0; ii< min( (short)namesLines.GetCount(),rpp->dimXY[1]); ii++)
+        rpp->lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_rtlnam ].Alloc( 1,
+                         rpp->dimXY[1], MAXGRNAME));
+        for(size_t ii=0; ii< min<size_t>( namesLines.GetCount(),rpp->dimXY[1]); ii++)
         {
           strncpy(  rpp->lNam[ii], namesLines[ii].c_str(), MAXGRNAME );
         }
@@ -448,7 +443,7 @@ AGAIN_SETUP:
         break;
     case 1: // increments in cycle on P nested into cycle on T
     case 2: // increments in cycle on T nested into cycle on P (default)
-        rpp->NV = (short)(rpp->NP * rpp->NT);
+        rpp->NV = (rpp->NP * rpp->NT);
         break;
     case 3: // parallel increments of T and P in one cycle
         rpp->NV = max( rpp->NP, rpp->NT );
@@ -512,11 +507,11 @@ void TRTParm::expr_analyze()
 {
     try
     {
-        rpn[0].GetEquat( (char *)aObj[o_rtexpr].GetPtr() );
+        rpn[0].GetEquat( static_cast<char *>(aObj[o_rtexpr].GetPtr()) );
     }
     catch( TError& xcpt )
     {
-        char *erscan = (char *)aObj[o_rtexpr].GetPtr();
+        char *erscan = static_cast<char *>(aObj[o_rtexpr].GetPtr());
         vfMessage(window(), xcpt.title, xcpt.mess);
         CheckEqText(  erscan,
               "E95MSTran: Error in translation of RTParm script: " );
@@ -531,12 +526,12 @@ void TRTParm::exprE_calc()
     {
      if( !aObj[o_rtexpre].IsNull())
         if(  (!aObj[o_rtexpre].IsEmpty(0,0)) &&
-             (strncmp( (char *)aObj[o_rtexpre].GetPtr(), "---", 3) != 0))
-             rpn[1].GetEquat( (char *)aObj[o_rtexpre].GetPtr() );
+             (strncmp( static_cast<char *>(aObj[o_rtexpre].GetPtr()), "---", 3) != 0))
+             rpn[1].GetEquat( static_cast<char *>(aObj[o_rtexpre].GetPtr()) );
     }
     catch( TError& xcpt )
     {
-        char *erscan = (char *)aObj[o_rtexpre].GetPtr();
+        char *erscan = static_cast<char *>(aObj[o_rtexpre].GetPtr());
         vfMessage(window(), xcpt.title, xcpt.mess);
         CheckEqText(  erscan,
   "E96MSTran: Error in RTParm script for empirical data: " );
@@ -643,9 +638,9 @@ TRTParm::RecCalc( const char *key )
         {
         case SRC_DCOMP:
             {
-                TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+                TDComp* aDC=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
                 aW.twp->TCst = aDC->dcp->TCst;
-		aW.twp->Tst = aW.twp->TCst + C_to_K;
+                aW.twp->Tst = aW.twp->TCst + C_to_K;
                 aW.twp->Pst = aDC->dcp->Pst;
                 aSpc.on_sat_curve = false; // 01.06.2016
                 aDC->DCthermo( 0, 0 );
@@ -653,13 +648,13 @@ TRTParm::RecCalc( const char *key )
             break;
         case SRC_REACDC:
             {
-                TReacDC* aRDC=(TReacDC *)(&aMod[RT_REACDC]);
+                TReacDC* aRDC=dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
                 aW.twp->TCst = aRDC->rcp->TCst;
-		aW.twp->Tst = aW.twp->TCst + C_to_K;
+                aW.twp->Tst = aW.twp->TCst + C_to_K;
                 aW.twp->Pst = aRDC->rcp->Pst;
                 aRDC->RCthermo( 0, 0 );
                 aRDC->ods_link(0);
-		aW.ods_link(0);
+               aW.ods_link(0);
             }
             break;
         default:
@@ -712,7 +707,7 @@ TRTParm::RecordPlot( const char* /*key*/ )
     {
         int oldN = aObj[o_rppline].GetN();
 
-        plot = (TPlotLine * )aObj[ o_rppline ].Alloc( nLn, sizeof(TPlotLine) );
+        plot = static_cast<TPlotLine * >(aObj[ o_rppline ].Alloc( nLn, sizeof(TPlotLine) ));
         for(int ii=0; ii<nLn; ii++ )
         {
             if( ii >= oldN )
@@ -736,7 +731,7 @@ TRTParm::RecordPlot( const char* /*key*/ )
                 //strncpy( plot[ii].name, rpp->lNamE[ii-rpp->dimXY[1]], MAXGRNAME-1 );
            // plot[ii].name[MAXGRNAME-1] = '\0';
         }
-        gd_gr = new GraphWindow( this, plt, rpp->name,
+        gd_gr = updateGraphWindow( gd_gr, this, plt, rpp->name,
                                      rpp->size[0], rpp->size[1], plot,
                                      rpp->axisType, rpp->xNames, rpp->yNames);
     }
@@ -748,48 +743,45 @@ TRTParm::RecordPlot( const char* /*key*/ )
           lnames.Add( gstring(rpp->lNam[ii], 0, MAXGRNAME ));
       for( ii=0; ii<rpp->dimEF[1]; ii++ )
           lnames.Add( gstring( rpp->lNamE[ii], 0, MAXGRNAME ));
-      gd_gr = new GraphWindow( this, plt, rpp->name,
+      gd_gr = updateGraphWindow( gd_gr, this, plt, rpp->name,
           rpp->xNames, rpp->yNames, lnames );
     }
 }
 
-
-bool
-TRTParm::SaveGraphData( GraphData *gr )
+bool TRTParm::SaveChartData( jsonui::ChartData* gr )
 {
-    int ii;
-// We can only have one Plot dialog (modal one) so condition should be omitted!!
-     if( !gd_gr )
-      return false;
-     if( gr != gd_gr->getGraphData() )
-      return false;
-    rpp->axisType[0] = (short)gr->axisTypeX;
-    rpp->axisType[5] = (short)gr->axisTypeY;
-    rpp->axisType[4] = (short)gr->graphType;
-    rpp->axisType[1] = (short)gr->b_color[0];
-    rpp->axisType[2] = (short)gr->b_color[1];
-    rpp->axisType[3] = (short)gr->b_color[2];
-    strncpy( rpp->xNames, gr->xName.c_str(), 9);
-    strncpy( rpp->yNames, gr->yName.c_str(), 9);
-    for( ii=0; ii<4; ii++ )
+
+    // We can only have one Plot dialog (modal one) so condition should be omitted!!
+    if( !gd_gr )
+        return false;
+
+    strncpy(  rpp->name, gr->title.c_str(), MAXGSNAME );
+    rpp->axisType[0] = static_cast<short>(gr->axisTypeX);
+    rpp->axisType[5] = static_cast<short>(gr->axisTypeY);
+    rpp->axisType[4] = static_cast<short>(gr->getGraphType());
+    rpp->axisType[1] = static_cast<short>(gr->b_color[0]);
+    rpp->axisType[2] = static_cast<short>(gr->b_color[1]);
+    rpp->axisType[3] = static_cast<short>(gr->b_color[2]);
+    strncpy( rpp->xNames, gr->xName.c_str(), MAXAXISNAME);
+    strncpy( rpp->yNames, gr->yName.c_str(), MAXAXISNAME);
+    for(int ii=0; ii<4; ii++ )
     {
-        rpp->size[0][ii] =  gr->region[ii];
-        rpp->size[1][ii] =  gr->part[ii];
+        rpp->size[0][ii] =  static_cast<float>(gr->region[ii]);
+        rpp->size[1][ii] =  static_cast<float>(gr->part[ii]);
     }
 
-    plot = (TPlotLine *)
-    aObj[ o_rppline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine));
-    for(int ii=0; ii<(int)gr->lines.GetCount(); ii++ )
+    plot = static_cast<TPlotLine *>(aObj[ o_rppline].Alloc( gr->getSeriesNumber(), sizeof(TPlotLine)));
+    for(int ii=0; ii<gr->getSeriesNumber(); ii++ )
     {
-        plot[ii] = gr->lines[ii];
+        plot[ii] = convertor( gr->lineData( ii ) );
         //  lNam0 and lNamE back
         if(ii < rpp->dimXY[1] )
             strncpy(  rpp->lNam[ii], plot[ii].getName().c_str(), MAXGRNAME );
         else
             strncpy(  rpp->lNamE[ii-rpp->dimXY[1]], plot[ii].getName().c_str(), MAXGRNAME );
     }
-   if( gr->graphType == ISOLINES )
-       gr->getColorList();
+   //if( gr->graphType == ISOLINES )
+   //    gr->getColorList();
 
     pVisor->Update();
     contentsChanged = true;

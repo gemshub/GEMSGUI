@@ -9,8 +9,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -32,7 +32,7 @@ class ProjectWizard : public QDialog, public Ui::ProjectWizardData
 
 public:
 	// flgs 0-9 MSpmv, 10-29 TPptv, 30-33 TPun, 34-37  TPsv
-	ProjectWizard( const char* pkey, char flgs[38],  QWidget* parent = NULL);
+    ProjectWizard( const char* pkey, char flgs[38],  QWidget* parent = nullptr);
     virtual ~ProjectWizard();
 
     int get_Settings()

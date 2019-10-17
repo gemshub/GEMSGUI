@@ -9,8 +9,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -62,7 +62,7 @@ class SearchWidget : public QWidget
    // bool eventFilter(QObject* o, QEvent *e);
 
 public:
-    SearchWidget(QHelpSearchEngine *engine, QWidget *parent = 0);
+    SearchWidget(QHelpSearchEngine *engine, QWidget *parent = nullptr);
     ~SearchWidget();
 
 signals:
@@ -101,7 +101,7 @@ class HelpWindow : public QMainWindow, public Ui::HelpWindowData
 public:
     static HelpWindow* pDia;
 
-    HelpWindow( QWidget* parent = NULL );
+    HelpWindow( QWidget* parent = nullptr );
     virtual ~HelpWindow();
 
     void showDocumentation(const char* file, const char* item1);

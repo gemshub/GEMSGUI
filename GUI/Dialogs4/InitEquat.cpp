@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -605,7 +605,7 @@ o_dtwpar  wpar  D_  -3 1  N "Input for least-squares (LS) fitter: uncertainty ha
 o_dtwa_ap   Wa_ap D_  -3 1  N "Input: a priori interaction parameter values (calculation of activity coefficients, LS fitting)"
 
   */
-    break;
+//    break;
 
   case RT_GEM2MT:
 

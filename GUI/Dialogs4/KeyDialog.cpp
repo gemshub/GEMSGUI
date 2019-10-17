@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -27,7 +27,7 @@
 #include "GemsMainWindow.h"
 #include "v_module.h"
 
-KeyDialog::KeyDialog(QWidget* win, int irt, const char* key,
+KeyDialog::KeyDialog(QWidget* win, size_t irt, const char* key,
                      const char* caption, bool filter):
         QDialog( win),
         multi(false), iRt(irt)
@@ -45,7 +45,7 @@ KeyDialog::KeyDialog(QWidget* win, int irt, const char* key,
 
     ErrorIf(!key, "KeyDialog", "pkey is null");
 
-    if( strpbrk(key, "*?") == 0 )
+    if( strpbrk(key, "*?") == nullptr )
         keyFilter = "*";
     else
         keyFilter = key;
@@ -55,10 +55,10 @@ KeyDialog::KeyDialog(QWidget* win, int irt, const char* key,
     pLabel->setText(s.c_str());
 
     s  = gstring(rt[irt].UnpackKey());
-    int n = rt[irt].GetKeyList( keyFilter.c_str(), keyList, temp);
-    int sel = 0;
+    auto n = rt[irt].GetKeyList( keyFilter.c_str(), keyList, temp);
+    uint sel = 0;
 
-    for( int ii=0; ii<n; ii++ )
+    for( uint ii=0; ii<n; ii++ )
     {
         pList->addItem(keyList[ii].c_str());
         if(  keyList[ii]==s )
@@ -66,8 +66,8 @@ KeyDialog::KeyDialog(QWidget* win, int irt, const char* key,
     }
 
     pList->setSelectionMode(QAbstractItemView::SingleSelection); // pList->setMultiSelection(false);
-    if( sel < 0 || sel > n )
-	sel = 0;
+    if(  sel > n )
+       sel = 0;
     pList->setCurrentRow(sel); // pList->setSelected(sel, true);
     pButton3->hide();
     pButton2->hide();
@@ -80,7 +80,7 @@ KeyDialog::KeyDialog(QWidget* win, int irt, const char* key,
         pFilterButton->hide();
 }
 
-KeyDialog::KeyDialog(QWidget* win, int irt, TCStringArray& sel,
+KeyDialog::KeyDialog(QWidget* win, size_t irt, TCStringArray& sel,
               const char* key, const char* caption):
         QDialog( win),
         multi(true), iRt(irt)
@@ -104,7 +104,7 @@ KeyDialog::KeyDialog(QWidget* win, int irt, TCStringArray& sel,
     QObject::connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
 
     ErrorIf(!key, "KeyDialog", "pkey is null");
-    if( strpbrk(key, "*?") == 0 )
+    if( strpbrk(key, "*?") == nullptr )
         keyFilter = "*";
     else
        keyFilter = key;
@@ -138,14 +138,14 @@ KeyDialog::SetList()
     s +=  keyFilter;
     pLabel->setText(s.c_str());
 
-    int n = rt[iRt].GetKeyList( keyFilter.c_str(), keyList, temp);
+    auto n = rt[iRt].GetKeyList( keyFilter.c_str(), keyList, temp);
 
-    for( int ii=0; ii<n; ii++ )
+    for( uint ii=0; ii<n; ii++ )
        pList->addItem(keyList[ii].c_str());
 
     if( multi )
     {  for(uint jj=0; jj<old_sel.GetCount(); jj++)
-          for( int ii=0; ii<n; ii++ )
+          for( uint ii=0; ii<n; ii++ )
           {
             // comparing parts before '*' for overwrite dcomp, reacdc ....
             size_t pos = old_sel[jj].find('*');
@@ -168,12 +168,12 @@ KeyDialog::getKey()
     int sel = pList->currentRow(); //pList->currentItem();
     if( sel != -1 )
     {
-        ((TCModule*)&aMod[iRt])->setFilter(keyFilter.c_str());
+        dynamic_cast<TCModule*>(&aMod[iRt])->setFilter(keyFilter.c_str());
         gstring res;
         gstring s = pList->item(sel)->text().toLatin1().data();
         //gstring s = ss;
-        int ln;
-        for( int ii=0, jj=0; ii<rt[iRt].KeyNumFlds(); ii++)
+        uint ln;
+        for( uint ii=0, jj=0; ii<rt[iRt].KeyNumFlds(); ii++)
         {
           //pos = strchr( s+jj, ":" );
           ln = rt[iRt].FldLen(ii);
@@ -275,7 +275,7 @@ RDKeyDialog::RDKeyDialog(QWidget* win, TCStringArray& sel,
     QObject::connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
 
     ErrorIf(!key, "KeyDialog", "pkey is null");
-    if( strpbrk(key, "*?") == 0 )
+    if( strpbrk(key, "*?") == nullptr )
         keyFilter = "*";
     else
        keyFilter = key;
@@ -319,9 +319,9 @@ void RDKeyDialog::SetList()
     // ReacDC list
     if( NsuT > 0 )  // template for adsorption
         keyFilter[0] = CP_SSPC;
-    int n = rt[RT_REACDC].GetKeyList( keyFilter.c_str(), keyList, temp);
+    auto n = rt[RT_REACDC].GetKeyList( keyFilter.c_str(), keyList, temp);
 
-    for( int ii=0; ii<n; ii++ )
+    for( uint ii=0; ii<n; ii++ )
        pList->addItem( makeKey( SRC_REACDC, keyList[ii].c_str()));
 
     // Dcomp list
@@ -333,7 +333,7 @@ void RDKeyDialog::SetList()
 
     n = rt[RT_DCOMP].GetKeyList( keyFilter.c_str(), keyList, temp);
 
-    for( int ii=0; ii<n; ii++ )
+    for( uint ii=0; ii<n; ii++ )
        pList->addItem( makeKey( SRC_DCOMP, keyList[ii].c_str()));
 
    for( jj=0; jj<old_sel.count(); jj++)

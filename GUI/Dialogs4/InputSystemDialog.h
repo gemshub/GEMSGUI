@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -35,7 +35,7 @@ class TSystemDelegate: public QItemDelegate
 
 public:
 
-         TSystemDelegate( QObject * parent = 0 );
+         TSystemDelegate( QObject * parent = nullptr );
          QWidget *createEditor(QWidget *parent,
                                const QStyleOptionViewItem &option,
                                const QModelIndex &index) const;
@@ -95,6 +95,7 @@ class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
    int staticFindRow( int nO, int ndx);
 
 
+
 public:
 
     InputSystemDialog( QWidget* parent, const char* pkey,
@@ -103,21 +104,21 @@ public:
     virtual ~InputSystemDialog();
 
 
-   int getObjTable( int row ) const
-       { return tbData[row].nObj; }
-   int getUnitsTable( int row ) const
-       { return wnData[ tbData[row].nWin].nOunit; }
-   int getListTable( int row ) const
-   { return wnData[ tbData[row].nWin ].unitLine; }
 
    void getTable( TIArray<tableSetupData>& tab ) const;
    void deleteRows( int f_from, int r_to );
 
-   double getTableVal( int row ) const
-   {  return tbData[row].val; }
-   void setTableVal( int row, double value )
-   {  tbData[row].val = value; }
+   int getObjTable( size_t row ) const
+       { return tbData[row].nObj; }
+   int getUnitsTable( size_t row ) const
+       { return wnData[ tbData[row].nWin].nOunit; }
+   int getListTable( size_t row ) const
+   { return wnData[ tbData[row].nWin ].unitLine; }
 
+   double getTableVal( size_t row ) const
+   {  return tbData[row].val; }
+   void setTableVal( size_t row, double value )
+   {  tbData[row].val = value; }
 
 protected slots:
     virtual void languageChange();

@@ -9,8 +9,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -39,11 +39,12 @@
 #include "HelpWindow.h"
 #include "GemsMainWindow.h"
 #include "visor.h"
+#include "service.h"
 
-const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
+static const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
 const char *GEMS_ABOUT_HTML = "gems_about.html#PAGE_ABOUT";
 
-const char *_GEMS_version_stamp = " GEMS-GUI v.3.5.0 c.80423ef ";
+const char *_GEMS_version_stamp = " GEMS-GUI v.3.6.0 c.1b43702 ";
 extern const char *_GEMIPM_version_stamp;
 
 HelpWindow* HelpWindow::pDia = nullptr;
@@ -112,7 +113,7 @@ HelpWindow::HelpWindow( QWidget* parent):
     QString collectionFile = QString( pVisor->docDir().c_str() )+ QLatin1String("gems3help.qhc");
  // "/home/gems/gemworks/gems3/shared/doc/html/gems3help.qhc";
 
-    findLine = 0;
+    findLine = nullptr;
 
 #ifndef GEMS_RELEASE  
     QLabel *label_2 = new QLabel(toolAddress);
@@ -130,10 +131,10 @@ HelpWindow::HelpWindow( QWidget* parent):
     hEngine = new QHelpEngine(collectionFile, this);
     if (!hEngine->setupData()) {
         delete hEngine;
-        hEngine = 0;
-        srchWidget =0;
-        wIndex =0;
-        wContents=0;
+        hEngine = nullptr;
+        srchWidget =nullptr;
+        wIndex =nullptr;
+        wContents=nullptr;
     }
     else
      {
@@ -244,29 +245,29 @@ void HelpWindow::helpVersion()
 #ifdef __APPLE__
            trUtf8("Title"), trUtf8("GEMS3.3 (MacOS X >10.6 64 clang)\n\n")+
 #else
-           trUtf8("GEMS3.3 (Linux 32/64 gcc4.6 Qt5)"),
+           trUtf8("GEMS3.3 (Linux 32/64 gcc7.3 Qt5)"),
 #endif
 #else
-           trUtf8("GEMS3.3 (Windows 7 MinGW 32 gcc4.8"),
+           trUtf8("GEMS3.3 (Windows 7 MinGW 64 gcc7.3"),
 #endif
            trUtf8("\nThis is GEM-Selektor code package\n\n")+
            trUtf8( _GEMS_version_stamp ) + trUtf8(  "\n\nusing " )+
            trUtf8( _GEMIPM_version_stamp ) +
            trUtf8( "\n\n\nFor GEMS R&D community\n\n"
-                  "(c) 2018, GEMS Development Team\n\n"
+                  "(c) 2019, GEMS Development Team\n\n"
                   "          PSI-ETHZ-CSM" ) );
 }
 
 void HelpWindow::helpAbout()
 {
-    showDocumentation( GEMS_ABOUT_HTML, 0 );
+    showDocumentation( GEMS_ABOUT_HTML, nullptr );
     //AboutDialog dlg;
     //dlg.exec();
 }
 
 void HelpWindow::helpOnHelp()
 {
-   showDocumentation( GEMS_HOWHELP_HTML, 0 );
+   showDocumentation( GEMS_HOWHELP_HTML, nullptr );
 }
 
 void HelpWindow::helpPrint()
@@ -350,7 +351,7 @@ void HelpWindow::actionFindNext()
   if( !findLine )
    return;
 
-  QTextDocument::FindFlags flg = 0;
+  QTextDocument::FindFlags flg = nullptr;
   if(action_Case_sensetiv->isChecked() )
        flg |=QTextDocument::FindCaseSensitively;
 

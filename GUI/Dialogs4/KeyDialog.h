@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -33,7 +33,7 @@ class KeyDialog : public QDialog, public Ui::KeyDialogData
     //  TStringArray keyList;
     bool multi;
     gstring keyFilter;
-    int iRt;
+    size_t iRt;
     TCStringArray old_sel;
 
     void SetList();
@@ -48,10 +48,10 @@ protected slots:
 
 public:
 
-    KeyDialog(QWidget* win, int irt, const char* key = "*",
-              const char* caption = 0, bool filter=true);
-    KeyDialog(QWidget* win, int irt, TCStringArray& sel,
-              const char* key = "*", const char* caption = 0 );
+    KeyDialog(QWidget* win, size_t irt, const char* key = "*",
+              const char* caption = nullptr, bool filter=true);
+    KeyDialog(QWidget* win, size_t irt, TCStringArray& sel,
+              const char* key = "*", const char* caption = nullptr );
 
     virtual ~KeyDialog();
 
@@ -81,7 +81,7 @@ protected slots:
 public:
 
     RDKeyDialog(QWidget* win, TCStringArray& sel,
-              const char* key = "*", const char* caption = 0, short NsuT=0 );
+              const char* key = "*", const char* caption = nullptr, short NsuT=0 );
     virtual ~RDKeyDialog();
     TCStringArray allSelectedKeys();
 //    gstring getKey();

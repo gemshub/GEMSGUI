@@ -10,8 +10,8 @@
 // modelling by Gibbs energy minimization
 // Uses: GEM-Selektor GUI GUI DBMS library, gems/lib/gemvizor.lib
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
@@ -111,7 +111,7 @@ struct elmWindowData
          pos1 += 13;
          size_t pos2 = strBuf.find( ";", pos1 );
          if( pos2-pos1 >= 14 )
-           for(int ii=0; ii<14; ii++ )
+           for(size_t ii=0; ii<14; ii++ )
              flags[ii] = (strBuf[ii+pos1] =='+');
       }
   }
@@ -394,7 +394,7 @@ struct setFiltersData
 
 struct tableSetupData
 {
-   int nWin;     // page number
+   size_t nWin;     // page number
    int nObj;     // number of object
    int nIdx;     // line into object
    double val;

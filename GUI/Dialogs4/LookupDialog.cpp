@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -37,8 +37,8 @@ LookupDialog::LookupDialog(QWidget* parent):
 {
 	setupUi(this);
 
-    PTable = 0;
-    TTable = 0;
+    PTable = nullptr;
+    TTable = nullptr;
     buttonBack->hide();
     QObject::connect( buttonOK, SIGNAL( clicked() ), this, SLOT( CmNext() ) );
     QObject::connect( buttonBack, SIGNAL( clicked() ), this, SLOT( CmBack() ) );
@@ -119,8 +119,8 @@ void LookupDialog::definePArray()
   //init P array
    double stepP = getStep( Pai, nP );
    cP = Pai[0];
-   arP = (double *) aObj[ o_w_pval].Alloc( nP, 1, D_);
-   if( PTable == 0)
+   arP = static_cast<double*>(aObj[ o_w_pval].Alloc( nP, 1, D_));
+   if( PTable == nullptr)
     for( ii=0; ii<nP; ii++ )
     {
      arP[ii] = cP;
@@ -195,8 +195,8 @@ void LookupDialog::defineTArray()
    //init T array
    double stepT = getStep( Tai, nT );
    cT = Tai[0];
-   arT = (double *) aObj[ o_w_tval].Alloc( nT, 1, D_);
-   if( PTable == 0)
+   arT = static_cast<double*>(aObj[ o_w_tval].Alloc( nT, 1, D_));
+   if( PTable == nullptr)
     for( ii=0; ii<nT; ii++ )
     {
       arT[ii] = cT;
@@ -215,7 +215,7 @@ void LookupDialog::initTTable()
    if( TTable )
    {   gridLayout_4->removeWidget(TTable);
        delete TTable; //????
-       TTable = 0;
+       TTable = nullptr;
    }
 
    if(chInterp->isChecked())  // only one table
@@ -258,7 +258,7 @@ void LookupDialog::setupPTArrays()
    //init P array
    getPdata( Pai );
    nP = getNpoints( Pai );
-   arP = (double *) aObj[ o_w_pval].Alloc( nP, 1, D_);
+   arP = static_cast<double*>( aObj[ o_w_pval].Alloc( nP, 1, D_) );
    cP = Pai[START_];
    for( ii=0; ii<nP; ii++ )
    {
@@ -269,7 +269,7 @@ void LookupDialog::setupPTArrays()
    //init T array
    getTdata( Tai );
    nT = getNpoints( Tai );
-   arT = (double *) aObj[ o_w_tval].Alloc( nT, 1, D_);
+   arT = static_cast<double*>(aObj[ o_w_tval].Alloc( nT, 1, D_));
    cT = Tai[START_];
    for( ii=0; ii<nT; ii++ )
    {

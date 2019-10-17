@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -32,7 +32,12 @@ class QWidget;
 */
 
 struct GraphData;
-//struct TPlotLine;
+
+
+namespace jsonui {
+class ChartData;
+}
+
 
 class TSubModule
 {
@@ -46,7 +51,7 @@ private:
 
 protected:
     uint nRT;
-    int startKeyEdit;
+    uint startKeyEdit;
     bool contentsChanged;     // needs to save
     gstring iconFileName;
 
@@ -131,8 +136,8 @@ public:
         return state;
     }
 
-    int keyEditField();
-    void  setKeyEditField( int fld )
+    uint keyEditField();
+    void  setKeyEditField( uint fld )
     {
        startKeyEdit = fld;
     }
@@ -143,6 +148,13 @@ public:
                                      int /*keyType*/ )
     { return"";}
 
+    //-- for graphic data set
+
+    virtual bool SaveChartData( jsonui::ChartData* /*graph*/ )
+    { return false; }
+
+    virtual void ClearGraphDialog()
+    { }
 };
 
 // --- Parametres of function GetKeyofRecord()
@@ -309,11 +321,6 @@ public:
     {
         return db->PackKey();
     }
-    //-- for graphic data set
-
-    virtual bool SaveGraphData( GraphData* /*graph*/ )
-    { return false; }
-
 
  };
 

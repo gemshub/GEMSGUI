@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -45,7 +45,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     }
 
     pList->setSelectionMode(QAbstractItemView::SingleSelection); //pList->setMultiSelection(false);
-    if( sel < 0 || (uint)sel > list.GetCount() )
+    if( sel < 0 || sel > list.GetCount() )
 	    sel = 0;
     pList->setCurrentRow(sel); // setSelected(sel, true);
 
@@ -77,7 +77,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     }
 
     pList->setSelectionMode(QAbstractItemView::SingleSelection); //pList->setMultiSelection(false);
-    if( sel < 0 || (uint)sel > list.GetCount() )
+    if( sel < 0 || sel > list.GetCount() )
  	    sel = 0;
      pList->setCurrentRow(sel); // setSelected(sel, true);
 

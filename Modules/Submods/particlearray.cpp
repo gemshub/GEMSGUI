@@ -4,13 +4,12 @@
 // C/C++ interface for particle tracking methods for FMT node array
 // Working whith DATACH and DATABR structures
 //
-// (C) 2006 S.Dmytriyeva, D.Kulik, W.Pfingsten
+// (C) 2006, 2019  S.Dmytriyeva, D.Kulik, W.Pfingsten
 //
-// This file is part of a GEM-Selektor library for thermodynamic
+// This file is part of GEM-Selektor GUI for thermodynamic
 // modelling by Gibbs energy minimization
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the terms of GPL v.3 license
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
@@ -211,6 +210,7 @@ double TParticleArray::InterpolationVp_hDl_1D( long int px,
     Dif = dbr1->Dif;
     eps = dbr1->eps;
     nto = dbr1->nto;
+    Dpm = dbr1->Dif*dbr1->eps/dbr1->nto;
 #endif
   }
   else
@@ -231,7 +231,9 @@ double TParticleArray::InterpolationVp_hDl_1D( long int px,
     eps -= (dbr2->eps - dbr1->eps )*d;
     nto = dbr1->nto;
     nto -= (dbr2->nto - dbr1->nto )*d;
-    Dpm = eps*Dif/nto;  // added account for tortuosity and porosity DK 9.05.19
+    Dpm =  dbr1->Dif*dbr1->eps/dbr1->nto;    // fix?
+    Dpm -= (dbr2->Dif*dbr2->eps/dbr2->nto - dbr1->Dif*dbr1->eps/dbr1->nto)*d;
+//    Dpm = eps*Dif/nto;  // added account for tortuosity and porosity DK 9.05.19
 //    hDl = al*vp+Dif;
     hDl = al*vp+Dpm;    // added DK 9.05.19
 #endif
@@ -304,10 +306,9 @@ long int TParticleArray::MoveParticleBetweenNodes( long int px, bool CompMode, d
   // check minimum/maximum particle number in node
   switch( nodeType )
   {
-    case normal:
+    case normal:    // normal reactive node
               break;
-    case NBC3source:
-    case NBC3sink:
+    case NBC3source:    // = 3, Cauchy source ( constant flux )
         if( new_node == -1 )
         {
 // Only for 1D calculation !!! check for 2D and 3D
@@ -323,6 +324,24 @@ long int TParticleArray::MoveParticleBetweenNodes( long int px, bool CompMode, d
             ParT1[px].xyz.x = new_x;
 //            new_node = nodes->FindNodeFromLocation( ParT1[px].xyz, -1 );
         }
+        break;
+     case NBC3sink: // =-3, Cauchy sink (constant flux)
+        if( new_node == -1 )
+        {
+// Only for 1D calculation !!! check for 2D and 3D
+          double new_x = ParT1[px].xyz.x;
+          if( new_x >= nodes->GetSize().x )
+          {    new_x -= nodes->GetSize().x;
+               new_node = 0;
+          }
+          else // new_x < 0
+          {    new_x  += nodes->GetSize().x;
+               new_node = nodes->nNodes()-1;
+          }
+          ParT1[px].xyz.x = new_x;
+//            new_node = nodes->FindNodeFromLocation( ParT1[px].xyz, -1 );
+        }
+        break;
 /*    if( new_node == -1 )
     {   LOCATION nodeSize[2];
         new_node = ndxCsource;
@@ -336,7 +355,16 @@ long int TParticleArray::MoveParticleBetweenNodes( long int px, bool CompMode, d
        ParT1[px].xyz.x = new_x;
     }
 */
-             break;
+     case NBC2source: //    = 2, Neumann source ( constant gradient )
+        break;
+     case NBC2sink:   //    = -2, Neumann sink (constant gradient)
+        break;
+     case NBC1source: //    = 1, Dirichlet source ( constant concentration )
+        break;
+     case NBC1sink:   //    = -1, Dirichlet sink (constant concentration)
+        break;
+    default:     // Possibly error - wrong node type!
+        break;
   }
 
   if( new_node == -1 )

@@ -10,12 +10,36 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
+
+
+// List of maximum values of ionic strength up to which the respective model is applicable
+// (not used in calculations, just to inform the user)
+/*const double dfImaxD = 0.5;
+const double dfImaxH = 1.5;
+const double dfImax3 = 1.0;
+const double dfImax2 = 0.3;
+const double dfImax1 = 0.01;
+const double dfImaxS = 3.0;
+const double dfImaxU = 9.9;*/
+
+#include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qspinbox.h>
+#include <qradiobutton.h>
+#include <qlineedit.h>
+#include <qvalidator.h>
+#include <qvariant.h>
+
+#include "AutoPhaseDialog.h"
+#include "GemsMainWindow.h"
+#include "service.h"
+#include "m_syseq.h"
 
 const char * dfAqKeyD =  "a   AQELIA  aq_gen          aq  Davies          ";
 const char * dfAqKeyH =  "a   AQELIA  aq_gen          aq  EDH_H           ";
@@ -30,28 +54,6 @@ const char * dfFluKey7=  "f   PR      fluid_gen       gm  PR_EoS          ";
 const char * dfFluKeyP=  "f   PRSV    fluid_gen       gm  PRSV_EoS        ";
 const char * dfFluKeyE=  "f   SRK     fluid_gen       gm  SRK_EoS         ";
 const char * dfFluKeyU = "f   FLUID   fluid_spec      gm  User-Provided   ";
-
-// List of maximum values of ionic strength up to which the respective model is applicable
-// (not used in calculations, just to inform the user)
-const double dfImaxD = 0.5;
-const double dfImaxH = 1.5;
-const double dfImax3 = 1.0;
-const double dfImax2 = 0.3;
-const double dfImax1 = 0.01;
-const double dfImaxS = 3.0;
-const double dfImaxU = 9.9;
-
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
-#include <qradiobutton.h>
-#include <qlineedit.h>
-#include <qvalidator.h>
-#include <qvariant.h>
-
-#include "AutoPhaseDialog.h"
-#include "GemsMainWindow.h"
-#include "service.h"
 
 
 AutoPhaseDialog::AutoPhaseDialog (
@@ -108,12 +110,12 @@ void AutoPhaseDialog::languageChange()
 
 void AutoPhaseDialog::get_apar ( float par[8] )
 {
-    par[0] = QString( apEdit0->currentText() ).toDouble();
-    par[1] = QString( apEdit1->currentText() ).toDouble();
-    par[2] = (float)apEdit2->currentIndex();
-    par[3] = (float)apEdit3->currentIndex();
-    par[4] = (float)pBG_T->currentIndex();
-    par[5] = (float)comMolal->currentIndex();
+    par[0] = QString( apEdit0->currentText() ).toFloat();
+    par[1] = QString( apEdit1->currentText() ).toFloat();
+    par[2] = apEdit2->currentIndex();
+    par[3] = apEdit3->currentIndex();
+    par[4] = pBG_T->currentIndex();
+    par[5] = comMolal->currentIndex();
 }
 
 void AutoPhaseDialog::set_apar ( float par[8] )
@@ -122,15 +124,15 @@ void AutoPhaseDialog::set_apar ( float par[8] )
  //   double I_max;
 
     apEdit0->setValidator( new QDoubleValidator( apEdit0 ) );
-    apEdit0->setEditText( str.setNum( (double)par[0] ) );
+    apEdit0->setEditText( str.setNum( par[0] ) );
 
     apEdit1->setValidator( new QDoubleValidator( apEdit1 ) );
-    apEdit1->setEditText( str.setNum( (double)par[1] ) );
+    apEdit1->setEditText( str.setNum( par[1] ) );
 
-    apEdit2->setCurrentIndex( ( (int)par[2] ) );
-    apEdit3->setCurrentIndex( (int)par[3] );
-    pBG_T->setCurrentIndex( (int)par[4] );
-    comMolal->setCurrentIndex( (int)par[5] );
+    apEdit2->setCurrentIndex( static_cast<int>(par[2])  );
+    apEdit3->setCurrentIndex( static_cast<int>(par[3]) );
+    pBG_T->setCurrentIndex( static_cast<int>(par[4]) );
+    comMolal->setCurrentIndex( static_cast<int>(par[5]) );
 }
 
 char

@@ -9,8 +9,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -40,14 +40,14 @@ class RTparmWizard : public QDialog, public Ui::RTparmWizardData
 
 public:
 
-    RTparmWizard( const char* pkey, char flgs[10], int sizes[7], float val[6],
+    RTparmWizard( const char* pkey, char flgs[10], int sizes[7], double val[6],
                   const char *acalcScript, const char* aXname, const char* aYname,
-                  QWidget* parent = NULL);
+                  QWidget* parent = nullptr);
     virtual ~RTparmWizard();
 
     void   getSizes( int size[7] );
     void   getFlags( char flgs[10], gstring& xName );
-    void   getFloat( float val[6] );
+    void   getFloat( double val[6] );
 
     gstring getScript() const
     { return pageScript->getScript();

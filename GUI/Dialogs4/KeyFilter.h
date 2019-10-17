@@ -10,14 +10,14 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-#ifndef _KeyFilter_h_
-#define _KeyFilter_h_
+#ifndef KeyFilter_h_
+#define KeyFilter_h_
 
 #include <qdialog.h>
 #include <qlineedit.h>
@@ -37,7 +37,7 @@ class KeyFilter:   public QDialog
     TIArray<QLineEdit> aEdit;
     QLineEdit *fullKey;
 
-    int iRt;
+    size_t iRt;
  //   int iEd;
     bool allowTemplates;
 
@@ -52,7 +52,7 @@ protected:
     gstring SetKeyString();
 
 public:
-    KeyFilter(QWidget* win, int iRt, const char* keyFilter,
+    KeyFilter(QWidget* win, size_t iRt, const char* keyFilter,
               const char* caption, bool allowTemplates=true );
 
     gstring getFilter();

@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -46,7 +46,7 @@ void
 ProcessWizard::CmNext()
 {
     int ndx = stackedWidget->currentIndex();
-    int nLines = pageScript->getScriptLinesNum();
+    auto nLines = pageScript->getScriptLinesNum();
     char type = getType();
 
     if( ndx == 2 && nLines > 0)
@@ -379,12 +379,12 @@ void   ProcessWizard::getSizes( int size[8] )
 
 void   ProcessWizard::getTable( short tabInt[6], double dbl[24] )
 {
-    tabInt[0] = tIters->item(0,0)->data(Qt::DisplayRole).toInt();
-    tabInt[1] = tIters->item(1,0)->data(Qt::DisplayRole).toInt();
-    tabInt[2] = tIters->item(2,0)->data(Qt::DisplayRole).toInt();
-    tabInt[3] = tIters->item(0,4)->data(Qt::DisplayRole).toInt();
-    tabInt[4] = tIters->item(1,4)->data(Qt::DisplayRole).toInt();
-    tabInt[5] = tIters->item(2,4)->data(Qt::DisplayRole).toInt();
+    tabInt[0] = tIters->item(0,0)->data(Qt::DisplayRole).value<short>();
+    tabInt[1] = tIters->item(1,0)->data(Qt::DisplayRole).value<short>();
+    tabInt[2] = tIters->item(2,0)->data(Qt::DisplayRole).value<short>();
+    tabInt[3] = tIters->item(0,4)->data(Qt::DisplayRole).value<short>();
+    tabInt[4] = tIters->item(1,4)->data(Qt::DisplayRole).value<short>();
+    tabInt[5] = tIters->item(2,4)->data(Qt::DisplayRole).value<short>();
 
     dbl[0] = tIters->item(0,2)->data(Qt::DisplayRole).toDouble();
     dbl[1] = tIters->item(1,2)->data(Qt::DisplayRole).toDouble();
@@ -521,8 +521,6 @@ ProcessWizard::help()
 
 void ProcessWizard::defineWindow(char type)
 {
-  uint jj;
-
   page1Changed = false;
   if( type == curType )
     return;
@@ -614,7 +612,7 @@ void ProcessWizard::defineWindow(char type)
          sub3->setText("Titration cpXi logarithmic");
          sub4->setText("Diagram logKd vs log(m)");
 
-         for(jj=0; jj<6; jj++ )
+         for(int jj=0; jj<6; jj++ )
            QObject::connect( pLsts[jj], SIGNAL(itemSelectionChanged()),
                            this, SLOT(CmSetMode()));
          }
@@ -686,13 +684,13 @@ void ProcessWizard::defineWindow(char type)
               pageLists->addWidget(page1);
 
               // insert items to list of indexes
-               for(  jj=0; jj<scalarsList.GetCount(); jj++ )
+               for(size_t  jj=0; jj<scalarsList.GetCount(); jj++ )
                   {
                      /*item1 =*/ new QListWidgetItem( scalarsList[jj].pageName.c_str(), lstIndexes1);
                   }
                pLsts.append(lstIndexes1);
 
-              for(jj=0; jj<5; jj++ )
+              for(int jj=0; jj<5; jj++ )
                 QObject::connect( pLsts[jj], SIGNAL(itemSelectionChanged()),
                                 this, SLOT(CmSetMode()));
 
@@ -717,12 +715,11 @@ void ProcessWizard::defineWindow(char type)
                 sub2->setText("Flushing: Compos source");
                 sub3->setText("Leaching: SysEq source");
                 sub4->setText("Leaching: Compos source");
-                for(jj=0; jj<6; jj++ )
+                for(int jj=0; jj<6; jj++ )
                   QObject::connect( pLsts[jj], SIGNAL(itemSelectionChanged()),
                                   this, SLOT(CmSetMode()));
                }
                break;
-          break;
 
    default: break;
    }
@@ -1349,7 +1346,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
         ret += QString( "$ Clean up the rest of the system recipe \n" );
         for(int jj=0; jj<6; jj++ )
         {
-          int nO = pgData[jj].nObj;
+          auto nO = pgData[jj].nObj;
           lst = getSelected( jj );
           gstring oName = aObj[nO].GetKeywd();
 
@@ -1801,7 +1798,7 @@ int  ProcessWizard::getNPoints( int col )
      }
      else {
          if( fabs(until) > 1e-30 )
-             nP  = (int)((until-from)/step+1.000001);
+             nP  = static_cast<int>((until-from)/step+1.000001);
          else nP = -1;          // changed by DK 21.05.10
      }
      if( ( getType() == 'G'  && col == 6 ) || ( getType() == 'T' && col == 8 )) // workaround for checking min.addition of titrant
@@ -1850,7 +1847,7 @@ void  ProcessWizard::setIterColumn( int col, int from, int until, int step )
 
 //==============================================================================
 
-equatSetupData eqPr( "xp", "yp", "J", "J", true );
+static equatSetupData eqPr( "xp", "yp", "J", "J", true );
 
 // work with lists
 void ProcessWizard::resetPageList(const char* aXname, const char* aYname)
@@ -1863,7 +1860,7 @@ void ProcessWizard::resetPageList(const char* aXname, const char* aYname)
         {
             TCStringArray aRklist;
             TCIntArray anRk;
-            int Nr = rt[RT_SYSEQ].GetKeyList( ALLKEY, aRklist, anRk );
+            auto Nr = rt[RT_SYSEQ].GetKeyList( ALLKEY, aRklist, anRk );
             if( Nr > 0 )
               TProfil::pm->loadSystat( aRklist[0].c_str() );
         }

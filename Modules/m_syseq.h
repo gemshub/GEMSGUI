@@ -10,8 +10,8 @@
 // modelling by Gibbs energy minimization
 // Uses: GEM-Selektor GUI GUI DBMS library, gems/lib/gemvizor.lib
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
@@ -20,6 +20,22 @@
 #define _m_syseq_h_
 
 #include "m_param.h"
+
+extern const char * dfAqKeyD ;
+extern const char * dfAqKeyH ;
+extern const char * dfAqKey3 ;
+extern const char * dfAqKey2 ;
+extern const char * dfAqKey1 ;
+extern const char * dfAqKeyY ;
+extern const char * dfGasKey ;
+extern const char * dfFluKeyF;
+extern const char * dfFluKey7;
+extern const char * dfFluKeyP;
+extern const char * dfFluKeyE;
+
+extern const char * dfAqKeyU;
+extern const char * dfFluKeyU;
+
 
 typedef struct
 { /* Packed system state description */

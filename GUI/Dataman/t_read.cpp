@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -263,7 +263,7 @@ TReadData::getData( bool isList )
        i=0;
        while( isdigit(input[i]) && input[i] != '\0')
               i++;
-       if( i > 0 ) sscanf( input, "%d", &ii);
+       if( i > 0 ) sscanf( input, "%u", &ii);
        input += i;
        skipSpace();
        if( *input == ',' )
@@ -273,7 +273,7 @@ TReadData::getData( bool isList )
           i=0;
           while( isdigit(input[i]) && input[i] != '\0')
                 i++;
-          if( i > 0 ) sscanf( input, "%d", &jj);
+          if( i > 0 ) sscanf( input, "%u", &jj);
           input += i;
        }
      skipSpace();

@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -43,7 +43,7 @@ GEM2MTWizard::CmBack()
 
     if( ndx == graphic_script)
     {
-        int nLines = pageScript->getScriptLinesNum();
+        auto nLines = pageScript->getScriptLinesNum();
         if( nLines > 0)
            pnYS->setValue( nLines );
     }
@@ -104,7 +104,7 @@ GEM2MTWizard::CmNext()
 
     if( ndx == graphic_script )
     {
-        int nLines = pageScript->getScriptLinesNum();
+        auto nLines = pageScript->getScriptLinesNum();
         if( nLines > 0)
             pnYS->setValue( nLines );
     }
@@ -714,8 +714,17 @@ void GEM2MTWizard::ScriptChange( int )
             ret += "$   Node 0 is set as source, for more sources change as: ( qc=0 | qc=XX )?...\n"
                    "  DiCp[qc][1] =: ( qc=0 ? 3 : 0 ); \n";
         }
-        ret +=  "$   Other nodes normal, the last one is set as a constant-flux sink\n"
+
+        if( pselW->isChecked() ) // Random-walk sink fix
+        {
+            ret +=  "$   Other nodes normal, the last two set as constant source and sink\n"
+                "  DiCp[qc][1] =: ( qc<nC-2 ? DiCp[qc][1]: (3));\n"
                 "  DiCp[qc][1] =: (  qc<nC-1 ? DiCp[qc][1]: (-3));\n";
+        }
+        else {
+            ret +=  "$   Other nodes normal, the last one is set as a constant-flux sink\n"
+                "  DiCp[qc][1] =: (  qc<nC-1 ? DiCp[qc][1]: (-3));\n";
+        }
     }
 
     if( chP->isChecked() )   // Initial node pressure, bar (for GEM)
@@ -850,7 +859,7 @@ void GEM2MTWizard::ScriptChange( int )
 
 //==============================================================================
 
-equatSetupData eqMT( "xt", "yt", "qc", "qc" );
+static equatSetupData eqMT( "xt", "yt", "qc", "qc" );
 
 // work with lists
 void GEM2MTWizard::resetPageList(const char* aXname, const char* aYname)
@@ -874,14 +883,14 @@ void GEM2MTWizard::resetPageList(const char* aXname, const char* aYname)
 // work with lists
 void GEM2MTWizard::resetVTKList()
 {
-    uint ii, jj;
+    uint jj;
     int nO;
 
     TIArray<pagesSetupData> scalarsList;
     TIArray<pagesSetupData> scalarsList2;
     TIArray<pagesSetupData> wnData;
 
-    for( ii=0; ii<38; ii++ )
+    for(int ii=0; ii<38; ii++ )
        scalarsList.Add( new pagesSetupData(DataBR_fields[ii].name.c_str(), ii));
     GetListsnRT( -2, wnData,  scalarsList2 );
 
@@ -922,7 +931,7 @@ void GEM2MTWizard::resetVTKList()
     pLists.append( listStatic  );
 
     listStatic->clear();
-    for(  ii=0; ii<scalarsList.GetCount(); ii++ )
+    for(uint  ii=0; ii<scalarsList.GetCount(); ii++ )
     {
       stData.Add( new pagesSetupData(scalarsList[ii]));
       item1 = new QListWidgetItem( scalarsList[ii].pageName.c_str(),  listStatic);
@@ -931,7 +940,7 @@ void GEM2MTWizard::resetVTKList()
 
 
     // init new pages
-    for( ii=0; ii<wnData.GetCount(); ii++ )
+    for(uint ii=0; ii<wnData.GetCount(); ii++ )
     {
         nO = wnData[ii].nObj;
 
@@ -963,7 +972,7 @@ void GEM2MTWizard::resetVTKList()
 
     // define current page
     cPage = 0;
-    keywdList->setCurrentItem(0);
+    keywdList->setCurrentItem(nullptr);
     keywdList->item(0)->setSelected(true);
     //changePage( cPage );
 
@@ -1157,7 +1166,7 @@ void GEM2MTWizard::setupPTArrays()
    //init P array
    getPdata( Pai );
    nP = getNpoints( Pai );
-   arP = (double *) aObj[ o_mtpval].Alloc( nP, 1, D_);
+   arP = static_cast<double *>(aObj[ o_mtpval].Alloc( nP, 1, D_));
    cP = Pai[START_];
    for( ii=0; ii<nP; ii++ )
    {
@@ -1168,7 +1177,7 @@ void GEM2MTWizard::setupPTArrays()
    //init T array
    getTdata( Tai );
    nT = getNpoints( Tai );
-   arT = (double *) aObj[ o_mtpval].Alloc( nT, 1, D_);
+   arT = static_cast<double *>( aObj[ o_mtpval].Alloc( nT, 1, D_) );
    cT = Tai[START_];
    for( ii=0; ii<nT; ii++ )
    {
@@ -1187,7 +1196,7 @@ void GEM2MTWizard::definePArray()
    nP = pPPoints->value();
   //init P array
    nPs = aObj[ o_mtpval].GetN();
-   arP = (double *) aObj[ o_mtpval].Alloc( nP, 1, D_);
+   arP = static_cast<double *>(aObj[ o_mtpval].Alloc( nP, 1, D_));
 
    if( nPs==1 && nP>1 )
    {
@@ -1255,7 +1264,7 @@ void GEM2MTWizard::defineTArray()
 
    //init T array
    nTs =aObj[ o_mttval].GetN();
-   arT = (double *) aObj[ o_mttval].Alloc( nT, 1, D_);
+   arT = static_cast<double *>(aObj[ o_mttval].Alloc( nT, 1, D_));
 
    if( nTs == 1 && nT >1 )
    {

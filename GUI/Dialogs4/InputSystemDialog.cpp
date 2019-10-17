@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -46,7 +46,7 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
       TIArray<pagesSetupData>& scalarsList ):
         QDialog( parent )
 {
-    uint ii, jj;
+    size_t ii, jj;
     QListWidgetItem* item1;
     QWidget* page1;
     QHBoxLayout* horizontalLayout1;
@@ -131,7 +131,9 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
       item1 = new QListWidgetItem( scalarsList[jj].pageName.c_str(),  lstIndexes1);
       int nJ = scalarsList[jj].ndx;
       if(nJ<0) nJ = 0;
-      int nO = scalarsList[jj].nObj;
+      auto nO = scalarsList[jj].nObj;
+      if( nO<0)
+          continue;
       if( aObj[nO].GetM() > 1 )
        item1->setToolTip( aObj[nO].GetDescription(0,nJ).c_str() );
       else
@@ -149,9 +151,9 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
     // setup from atbData
     for(  ii=0; ii<atbData.GetCount(); ii++ )
     {
-        jj = atbData[ii].nIdx;
-        uint iWin = atbData[ii].nWin;
-        uint nO = atbData[ii].nObj;
+        auto jj = atbData[ii].nIdx;
+        auto iWin = atbData[ii].nWin;
+        auto nO = atbData[ii].nObj;
         if( iWin  >= wnData.GetCount()-1 ) // static list
           jj = max(0,staticFindRow( nO, jj ));
         pLists[iWin]->item(jj)->setSelected(true);
@@ -162,7 +164,7 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
 
     // define current page
     curPage = 0;
-    keywdList->setCurrentItem(0);
+    keywdList->setCurrentItem(nullptr);
     keywdList->item(0)->setSelected(true);
     changePage( curPage );
 
@@ -711,9 +713,10 @@ QWidget *TSystemDelegate::createEditor(QWidget *parent,
 
    if( dlg )
     {
-        nObj = dlg->getObjTable( index.row() );
-        nUnit = dlg->getUnitsTable( index.row() );
-        nList = dlg->getListTable( index.row() );
+        size_t row = static_cast<size_t>(index.row());
+        nObj = dlg->getObjTable( row );
+        nUnit = dlg->getUnitsTable( row );
+        nList = dlg->getListTable( row );
     }
 
    switch( index.column() )

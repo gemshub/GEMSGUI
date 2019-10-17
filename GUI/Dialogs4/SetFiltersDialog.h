@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -53,7 +53,7 @@ public:
          elmFilesConfData *elm_data,
          setFiltersData *set_data,
          const char * prfName,
-         const char* caption = 0 );
+         const char* caption = nullptr );
     virtual ~SetFiltersDialog();
 
 };

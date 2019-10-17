@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -32,7 +32,7 @@
     The constructor
 */
 
-TCModuleImp::TCModuleImp(int irt, int page, int aviewmode):
+TCModuleImp::TCModuleImp(size_t irt, int page, int aviewmode):
         QDialog(0),
         iMod(irt),
         rMod( aMod[irt] ),
@@ -67,12 +67,12 @@ TCModuleImp::TCModuleImp(int irt, int page, int aviewmode):
 TCModuleImp::~TCModuleImp()
 {}
 
-int TCModuleImp::rtNum() const
+size_t TCModuleImp::rtNum() const
 {
     return   rMod.rtNum();
 }
 
-int TCModuleImp::rtNumRecord() const
+size_t TCModuleImp::rtNumRecord() const
 {
     if( rMod.IsSubModule() )
         return  RT_SYSEQ;
@@ -115,8 +115,9 @@ void TCModuleImp::closeEvent(QCloseEvent* e)
           pVisorImp->closeMdiChild( this );
     }
     else
-         e->ignore();
+        e->ignore();
 }
+
 
 QSize TCModuleImp::sizeHint() const
 {
@@ -176,6 +177,12 @@ void TCModuleImp::MakeQuery()
     qd.exec();
 
     Update(true);
+}
+
+void TCModuleImp::saveGraphData(jsonui::ChartData *data)
+{
+    rMod.SaveChartData(data);
+    cout<< "saveGraphData" << endl;
 }
 
 // -------------- End of file module_w.cpp ----------------------

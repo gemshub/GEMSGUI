@@ -9,8 +9,8 @@
 // modelling by Gibbs energy minimization
 // Uses: GEM-Selektor GUI GUI DBMS library, gems/lib/gemvizor.lib
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
@@ -27,7 +27,7 @@ class TRWArrays;
 #ifndef IPMGEMPLUGIN
 
 #include "v_ipnc.h"
-#include "graph.h"
+#include "graph_window.h"
 
 #else
 // internal
@@ -353,8 +353,7 @@ class TGEM2MT
 
 #ifndef IPMGEMPLUGIN
     IPNCalc rpn[2];      // IPN
-
-    GraphWindow* gd_gr;
+    jsonui::GraphDialog *gd_gr = nullptr;
     TPlotLine* plot;
     gstring title;           // changed titler to title
 #endif
@@ -448,7 +447,7 @@ protected:
     void MIDEX( long int j, double t, double h );
     void INTEG( double eps, double& step, double t_begin, double t_end );
 
-    double PrintPoint( long int nPoint, FILE* diffile = NULL, FILE* logfile = NULL, FILE* ph_file = NULL);
+    double PrintPoint( long int nPoint, FILE* diffile = nullptr, FILE* logfile = nullptr, FILE* ph_file = nullptr);
     
 public:
 
@@ -457,6 +456,13 @@ public:
     GEM2MT *mtp;
 
     TGEM2MT( uint nrt );
+
+#ifndef IPMGEMPLUGIN
+    ~TGEM2MT()
+    {
+        delete gd_gr;
+    }
+#endif
 
     const char* GetName() const
     {
@@ -478,9 +484,13 @@ public:
     void MakeQuery();
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
-    void RecordPrint( const char *key=0 ); //sddata key
+    void RecordPrint( const char *key=nullptr ); //sddata key
     void RecordPlot( const char *key );
-    bool SaveGraphData( GraphData* graph );
+
+    bool SaveChartData( jsonui::ChartData* grdata );
+    void ClearGraphDialog()
+    {  gd_gr = nullptr; }
+
     //void CmHelp();
     const char* GetHtml();
 

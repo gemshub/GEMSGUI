@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GraphDialogData</class>
+ <widget class="QDialog" name="GraphDialogData">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>895</width>
+    <height>494</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>9</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>GEM-Selektor v.3 Graphics Dialog</string>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0" colspan="2">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Close|QDialogButtonBox::Help</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QFrame" name="framePrn">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QSplitter" name="splitter">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QFrame" name="plotFrame">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="widget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QGroupBox" name="pGrpLegend">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string>Legend| x# |Label Y </string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout"/>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <layout class="QGridLayout">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="TextLabel1">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Click legend symbols to adjust curves; select abscissae under x#; edit Y (ordinate) labels, drag-drop them to plot area</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignVCenter</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

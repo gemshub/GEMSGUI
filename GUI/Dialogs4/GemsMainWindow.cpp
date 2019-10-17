@@ -10,8 +10,8 @@
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
-// This file may be distributed under the terms of GEMS3 Development
-// Quality Assurance Licence (GEMS3.QAL)
+// This file may be distributed under the GPL v.3 license
+
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -33,20 +33,20 @@
 #include "ProgressDialog.h"
 #include "NewSystemDialog.h"
 #include "LoadMessage.h"
-#include "GraphDialog.h"
+#include "GraphDialogN.h"
 
-const char* GEMS_LOGO_ICON = "Icons/gems1.png";
-const char* GEMS_VERSION_STAMP = "GEM-Selektor 3 (GEMS3)";
+//static const char* GEMS_LOGO_ICON = "Icons/gems1.png";
+static const char* GEMS_VERSION_STAMP = "GEM-Selektor 3 (GEMS3)";
 #ifdef __unix
 #ifdef __APPLE__
-const char* GEMS_DEFAULT_FONT_NAME = "Monaco";
+static const char* GEMS_DEFAULT_FONT_NAME = "Monaco";
 const int GEMS_DEFAULT_FONT_SIZE = 13;
 #else
-const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
+static const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
 const int GEMS_DEFAULT_FONT_SIZE = 11;
 #endif
 #else
-const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
+static const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
 const int GEMS_DEFAULT_FONT_SIZE = 10;
 #endif
 TVisorImp* pVisorImp;
@@ -75,12 +75,12 @@ void TKeyTable::keyPressEvent(QKeyEvent* e)
 
 //   The constructor
 TVisorImp::TVisorImp(int c, char** v):
-        QMainWindow(0),
+        QMainWindow(nullptr),
         argc(c),
         argv(v),
         last_update( 0 ),
         configAutosave(false),
-        proc(0),
+        proc(nullptr),
     currentNrt(-2),
     settedCureentKeyIntotbKeys(false)
 {
@@ -319,18 +319,20 @@ void TVisorImp::showEvent ( QShowEvent * event )
 
 //------------------------------------------------------------------------------------
 // Define list of Module keys using filter
-void TVisorImp::defineModuleKeysList( uint nRT )
+void TVisorImp::defineModuleKeysList( int nRT_ )
 {
-  int ii, jj, kk, ln, colsz;
+  size_t  jj, kk, ln;
+  int ii, colsz;
   gstring keyfld;
-  QTableWidgetItem *item, *curItem=0;
-  gstring oldKey = rt[nRT].UnpackKey();
+  QTableWidgetItem *item, *curItem=nullptr;
   settedCureentKeyIntotbKeys = false;
 
-  if(currentNrt != nRT)
+  if( currentNrt != nRT_ || nRT_ <0 )
     return;
 
-  pFilterKey->setText(((TCModule*)&aMod[nRT])->getFilter());
+  size_t nRT = static_cast<size_t>(nRT_);
+  gstring oldKey = rt[nRT].UnpackKey();
+  pFilterKey->setText( dynamic_cast<TCModule*>(&aMod[nRT])->getFilter());
 
   // define tbKeys
   tbKeys->clear();
@@ -372,11 +374,11 @@ void TVisorImp::defineModuleKeysList( uint nRT )
       }
 
   }
-  for(jj=0; jj<rt[nRT].KeyNumFlds(); jj++)
+  for( jj=0; jj<rt[nRT].KeyNumFlds(); jj++)
   {
       tbKeys->setColumnWidth(jj, wdF( ftString, colSizes[jj], eNo ) );
       item = new QTableWidgetItem(tr("%1").arg( jj+1));
-      item->setToolTip( ((TCModule*)&aMod[nRT])->GetFldHelp(jj));
+      item->setToolTip( dynamic_cast<TCModule*>(&aMod[nRT])->GetFldHelp(jj));
       tbKeys->setHorizontalHeaderItem( jj, item );
   }
 
@@ -407,7 +409,7 @@ void TVisorImp::changeModulesKeys( int nRT )
 {
 
     if( nRT >=0 )
-      pLine->setText(tr (rt[nRT].PackKey()));
+      pLine->setText(tr(rt[nRT].PackKey()));
     else
         pLine->setText(tr(""));
 
@@ -452,9 +454,10 @@ void TVisorImp::openRecordKey( int row, int    )
 void TVisorImp::changeKeyList()
 {
     if( currentNrt >=0 )
-    { gstring filter = pFilterKey->text().toLatin1().data();
-     ((TCModule*)&aMod[currentNrt])->setFilter(filter.c_str());
-     defineModuleKeysList( currentNrt );
+    {
+        gstring filter = pFilterKey->text().toLatin1().data();
+        dynamic_cast<TCModule*>(&aMod[currentNrt])->setFilter(filter.c_str());
+        defineModuleKeysList( currentNrt );
     }
 }
 
@@ -469,7 +472,7 @@ void TVisorImp::OpenModule(QWidget* /*par*/, uint irt, int page, int viewmode, b
        {
          if( !NewSystemDialog::pDia )
          {
-           (new NewSystemDialog(0/*pVisorImp*/));
+           (new NewSystemDialog(nullptr/*pVisorImp*/));
            //----if( select )
            //----   NewSystemDialog::pDia->CmSelect();
            openMdiChild( NewSystemDialog::pDia, true );
@@ -539,7 +542,7 @@ TCModuleImp *TVisorImp::activeMdiChild()
          }
        }
     }
-    return 0;
+    return nullptr;
 }
 
 NewSystemDialog *TVisorImp::activeNewSystem()
@@ -548,7 +551,7 @@ NewSystemDialog *TVisorImp::activeNewSystem()
     {
      return qobject_cast<NewSystemDialog *>(activeSubWindow->widget());
     }
-    return 0;
+    return nullptr;
 }
 
 NewSystemDialog *TVisorImp::activeNewSystemCommand()
@@ -574,7 +577,7 @@ NewSystemDialog *TVisorImp::activeNewSystemCommand()
          }
        }
     }
-    return 0;
+    return nullptr;
 }
 
 QMdiSubWindow *TVisorImp::findMdiChild(const QString &moduleName)
@@ -585,7 +588,7 @@ QMdiSubWindow *TVisorImp::findMdiChild(const QString &moduleName)
         if ( mdiChild && QString(mdiChild->moduleName().c_str()) == moduleName)
             return window;
     }
-    return 0;
+    return nullptr;
 }
 
 QMdiSubWindow *TVisorImp::findMdiGraph(const QString &moduleName)
@@ -597,7 +600,7 @@ QMdiSubWindow *TVisorImp::findMdiGraph(const QString &moduleName)
         if ( mdiChild && QString(mdiChild->mainModuleName().c_str()) == moduleName)
             return windows.at(i);
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -609,7 +612,7 @@ QMdiSubWindow *TVisorImp::findNewSystem()
         if ( mdiChild )
             return window;
     }
-    return 0;
+    return nullptr;
 }
 
 void TVisorImp::setActiveSubWindow(QWidget *window)
@@ -660,6 +663,7 @@ void TVisorImp::closeMdiChild( QWidget *p )
     int ndx = indexMdiChild( p );
     if( ndx >= 0 )
     {
+      //cout<< "closeMdiChild " << endl;
       pModuleName->removeItem(ndx);
       mdiArea->removeSubWindow(p);
     }
@@ -793,7 +797,7 @@ void TVisorImp::setCellFont(const QFont& newCellFont)
 
 void TVisorImp::GetHelp( )
 {
-        (new HelpWindow(  0  ));
+        (new HelpWindow(  nullptr  ));
         //HelpWindow::pDia->show();
 }
 
@@ -878,7 +882,7 @@ void TVisorImp::Update(bool force)
 
     int nrt = nRTofActiveSubWindow();
     if( nrt>=0 )
-       pLine->setText(tr (rt[nrt].PackKey()));
+       pLine->setText(tr(rt[nrt].PackKey()));
 }
 
 
@@ -947,7 +951,7 @@ bool TVisorImp::Message( QWidget* /*parent*/, const char* name,
     else
     {
         //--QPushButton *btn = new QPushButton();
-        LoadMessage* mssg = new LoadMessage(0/* parent*/, name, msg, prog, total);
+        LoadMessage* mssg = new LoadMessage(nullptr/* parent*/, name, msg, prog, total);
         //--mssg->setCancelButton(btn);
         layout2->addWidget(mssg);
         qApp->processEvents();
@@ -978,7 +982,7 @@ void TVisorImp::ProcessProgress( QWidget* /*parent*/, int nRT )
     TGEM2MT::pm->userCancel = false;
 
     ProcessProgressDialog* dlg =
-             new ProcessProgressDialog( 0/*parent*/, nRT );
+             new ProcessProgressDialog( nullptr/*parent*/, nRT );
     //   dlg->show();
     layout2->addWidget(dlg);
     bool enabled = !(pVisor->ProfileMode == MDD_SYSTEM );
@@ -1023,9 +1027,9 @@ void TVisorImp::theadService( int nFunction, QWidget* par )
 
 
 //QMutex updateMutex;
-QMutex calcMutex;
-QWaitCondition calcWait;
-QWaitCondition progressWait;
+static QMutex calcMutex;
+static QWaitCondition calcWait;
+static QWaitCondition progressWait;
 
 QMutex& TVisorImp::getMutexCalc()
 {
