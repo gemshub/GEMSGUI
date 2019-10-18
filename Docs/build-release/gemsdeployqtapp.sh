@@ -47,7 +47,7 @@ distro=`lsb_release -d | awk '{print $2$3$4}' | sed 's/\./_/g'`
 # Create the directory that will be tarred up for distribution.
 etardir=`echo $executable"_"$distro | awk '{print tolower($0)}'`
 tardir=Gems3-app
-gemsdistro=Gems3.5.0-80423ef.707e5ad-linux-x86-64-ubuntu.tgz
+gemsdistro=Gems3.6.0-d4802726.b4d97076-linux-x86-64-ubuntu.tgz
 mkdir $tardir
 echo "Created tar ball directory: "$tardir
 
@@ -70,24 +70,32 @@ do
   echo "Copied dependency "$dep" to "$libsdir
 done
 
-dep=$HOME/Qt/5.12.3/gcc_64/lib/libQt5Concurrent.so.5
+dep=$HOME/Qt/5.12.5/gcc_64/lib/libQt5Concurrent.so.5
 cp $dep $libsdir
-dep=$HOME/Qt/5.12.3/gcc_64/lib/libQt5DBus.so.5
+dep=$HOME/Qt/5.12.5/gcc_64/lib/libQt5DBus.so.5
 cp $dep $libsdir
-dep=$HOME/Qt/5.12.3/gcc_64/lib/libQt5Xml.so.5
+dep=$HOME/Qt/5.12.5/gcc_64/lib/libQt5Xml.so.5
+cp $dep $libsdir
+dep=$HOME/Qt/5.12.5/gcc_64/lib/libQt5Sql.so.5
+cp $dep $libsdir
+dep=$HOME/Qt/5.12.5/gcc_64/lib/libQt5Charts.so.5
+cp $dep $libsdir
+dep=$HOME/Qt/5.12.5/gcc_64/lib/libQt5Help.so.5
+cp $dep $libsdir
+dep=$HOME/Qt/5.12.5/gcc_64/lib/libQt5X11Extras.so.5
 cp $dep $libsdir
 
 # Create the fonts directory and copy fonts across. You
 # will obviously need to assign the directory path leading
 # to your fonts to "fontdir", e.g. /home/you/qt/lib/fonts
-qtfontsdir=$HOME/Qt/5.12.3/Src/qtbase/lib/fonts
-fontsdir=$PWD/$tardir/fonts
-mkdir $fontsdir
-echo "Created fonts directory: "$fontsdir" copying fonts..."
-cp -r $qtfontsdir/* $fontsdir
+#qtfontsdir=$HOME/Qt/5.12.5/Src/qtbase/lib/fonts
+#fontsdir=$PWD/$tardir/fonts
+#mkdir $fontsdir
+#echo "Created fonts directory: "$fontsdir" copying fonts..."
+#cp -r $qtfontsdir/* $fontsdir
 
 # You will need to change this to point to wherever libqxcb.so lives on your PC.
-qtplatformplugin=$HOME/Qt/5.12.3/gcc_64/plugins/platforms/*.so
+qtplatformplugin=$HOME/Qt/5.12.5/gcc_64/plugins/platforms/*.so
 qtplatformplugindir=$tardir/platforms
 mkdir $qtplatformplugindir
 echo "Created platforms directory: "$qtplatformplugindir
@@ -164,47 +172,47 @@ chmod u+x $fixscript
 
 # Edit this script to add whatever other additional plugins your application
 # requires. Fixed to skip debug variants of plugins
-qtsqliteplugin=$HOME/Qt/5.12.3/gcc_64/plugins/sqldrivers/*.so
+qtsqliteplugin=$HOME/Qt/5.12.5/gcc_64/plugins/sqldrivers/*.so
 qtsqliteplugindir=$tardir/sqldrivers
 mkdir $qtsqliteplugindir
 echo "Created sql driver directory: "$qtsqliteplugindir
 cp $qtsqliteplugin $qtsqliteplugindir
 echo "Copied "$qtsqliteplugin" to "$qtsqliteplugindir
 
-qtbearerplugin=$HOME/Qt/5.12.3/gcc_64/plugins/bearer/*.so
+qtbearerplugin=$HOME/Qt/5.12.5/gcc_64/plugins/bearer/*.so
 qtbearerplugindir=$tardir/bearer
 mkdir $qtbearerplugindir
 echo "Created bearer plugin directory: "$qtbearerplugindir
 cp $qtbearerplugin $qtbearerplugindir
 echo "Copied "$qtbearerplugin" to "$qtbearerplugindir
 
-qticonenginesplugin=$HOME/Qt/5.12.3/gcc_64/plugins/iconengines/*.so
+qticonenginesplugin=$HOME/Qt/5.12.5/gcc_64/plugins/iconengines/*.so
 qticonenginesplugindir=$tardir/iconengines
 mkdir $qticonenginesplugindir
 echo "Created iconengines plugin directory: "$qticonenginesplugindir
 cp $qticonenginesplugin $qticonenginesplugindir
 echo "Copied "$qticonenginesplugin" to "$qticonenginesplugindir
 
-qtprintsupportplugin=$HOME/Qt/5.12.3/gcc_64/plugins/printsupport/*.so
+qtprintsupportplugin=$HOME/Qt/5.12.5/gcc_64/plugins/printsupport/*.so
 qtprintsupportplugindir=$tardir/printsupport
 mkdir $qtprintsupportplugindir
 echo "Created printsupport driver directory: "$qtprintsupportplugindir
 cp $qtprintsupportplugin $qtprintsupportplugindir
 echo "Copied "$qtprintsupportplugin" to "$qtprintsupportplugindir
 
-qtimageformatsplugin=$HOME/Qt/5.12.3/gcc_64/plugins/imageformats/*.so
+qtimageformatsplugin=$HOME/Qt/5.12.5/gcc_64/plugins/imageformats/*.so
 qtimageformatsplugindir=$tardir/imageformats
 mkdir $qtimageformatsplugindir
 echo "Created imageformats plugin directory: "$qtimageformatsplugindir
 cp $qtimageformatsplugin $qtimageformatsplugindir
 echo "Copied "$qtimageformatsplugin" to "$qtimageformatsplugindir
 
-qtstylesplugin=$HOME/Qt/5.12.3/gcc_64/plugins/styles/*.so
-qtstylesplugindir=$tardir/styles
-mkdir $qtstylesplugindir
-echo "Created styles plugin directory: "$qtstylesplugindir
-cp $qtstylesplugin $qtstylesplugindir
-echo "Copied "$qtstylesplugin" to "$qtstylesplugindir
+$qtstylesplugin=$HOME/Qt/5.12.5/gcc_64/plugins/styles/*.so
+$qtstylesplugindir=$tardir/styles
+$mkdir $qtstylesplugindir
+$echo "Created styles plugin directory: "$qtstylesplugindir
+$cp $qtstylesplugin $qtstylesplugindir
+$echo "Copied "$qtstylesplugin" to "$qtstylesplugindir
 
 # Create the run script.
 execscript=$tardir/"run$executable.sh"
@@ -239,10 +247,10 @@ cp -r $gresourcesdir/* $resourcesdir
 echo "Copied Resources directory from "$gresourcesdir" to "$resourcesdir
 
 #Copying executables for generating GEM-Selektor help database
-qtqcollectiongenerator=$HOME/Qt/5.12.3/gcc_64/bin/qcollectiongenerator
+qtqcollectiongenerator=$HOME/Qt/5.12.5/gcc_64/bin/qcollectiongenerator
 cp $qtqcollectiongenerator $tardir
 echo "Copied executable "$qtqcollectiongenerator" to "$tardir
-qtqhelpgenerator=$HOME/Qt/5.12.3/gcc_64/bin/qhelpgenerator
+qtqhelpgenerator=$HOME/Qt/5.12.5/gcc_64/bin/qhelpgenerator
 cp $qtqhelpgenerator $tardir
 echo "Copied executable "$qtqhelpgenerator" to "$tardir
 
@@ -263,7 +271,7 @@ echo "Creating README..."
 
 readme=$tardir/README
 echo "================================================================================" >> $readme
-echo "GEM-Selektor v.3.5.0 $etardir bult on linux $distro" >> $readme
+echo "GEM-Selektor v.3.6.0 $etardir bult on linux $distro" >> $readme
 echo "Please, read INSTALL.linux.txt file first, and do things as suggested there." >> $readme
 echo "To have projects in /home/you/Library/Gems3 (default location," >> $readme 
 echo "  launch once $executable via" >> $readme
