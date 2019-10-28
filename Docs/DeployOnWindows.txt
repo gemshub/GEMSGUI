@@ -7,7 +7,7 @@ This deployment process is based on the "windeployqt.exe" utility provided by
 the Qt5 installation on Windows.
 
 1. Make sure that the Qt5 SDK is installed as C:\Qt or in similar folder.
-We assume that the Qt library is located in C:\Qt\5.12.0\mingw73_64\bin
+We assume that the Qt library is located in C:\Qt\5.13.1\mingw73_64\bin
 and MinGW compiler is located in C:\Qt\Tools\mingw730_64\bin (or similar, 
 depending on the current Qt version, MinGW version and their locations).  
 
@@ -18,10 +18,10 @@ subfolder (from .gems-gui\Resources in GEM-Selektor source code tree).
 
 3. In the C:\GEMS3DEPLOY\Gems3-app folder, edit the "runwindeployqt.bat" 
 file to make sure that it contains the correct paths  
-C:\Qt\5.11.1\mingw53_32\bin and C:\Qt\Tools\mingw730_64\bin directories
+C:\Qt\5.13.1\mingw53_32\bin and C:\Qt\Tools\mingw730_64\bin directories
 (modify to actual ones, if necessary). Copy/refresh files windeployqt.exe, 
-qcollectiongenerator.exe, qhelpconverter.exe and qhelpgenerator.exe 
-from C:\Qt\5.12.0\mingw73_64\bin to the C:\GEMS3DEPLOY\Gems3-app folder.   
+qcollectiongenerator.exe and qhelpgenerator.exe 
+from C:\Qt\5.13.1\mingw73_64\bin to the C:\GEMS3DEPLOY\Gems3-app folder.   
 
 4. Using QtCreator, build the actual release variant of gems3.exe. 
 Typically, you should have something like "C:\DevGEMS\trunk\gems-gui";
@@ -52,17 +52,24 @@ located (by copying them from C:\GEMS3DEPLOY\Gems3-app\Resources\projects).
 After quitting gems3.exe, delete recursively folder C:\GEMS3DEPLOY\Library 
 in order to avoid that it is packed into the installer sfx file (see below).   
  
-7. To create a new GEM-Selektor installer file for Windows 7, 8 or 10:
+7. To create a new GEM-Selektor installer file for Windows 7 or 10:
 
 If not yet done, download and install 7-zip (http://www.7-zip.org/). 
 Start it and select the C:\GEMS3DEPLOY folder. Add it contents (i.e. 
 Gems3-app folder and a few files) recursively to the archive 
 (to be created e.g. in C:\TEMP folder) "C:\TEMP\GEMS3DEPLOY.7z". 
+Attention: use only LZMA but not LZMA2 compression method!
 
 If not yet done, download and install 7zip-sfx-maker utility program 
 from http://sourceforge.net/projects/sfx-maker/ . Also download ResourceHacker 
 v.3.6 from http://www.angusj.com/resourcehacker/; install it into 
-"C:\Program Files (x86)\7-Zip SFX Maker\Resource Hacker" folder. 
+"C:\Program Files (x86)\7-Zip SFX Maker\Resource Hacker" folder. Copy the
+ResourceHacker.exe file from that folder to 
+"C:\Program Files (x86)\7-Zip SFX Maker\Resources\" and rename there into 
+ResHacker.exe. It may also be necessary to download the UPX utility from 
+https://sourceforge.net/projects/upx/files/ and unzip it into the same folder
+where ResHacker.exe resides. Also copy the file gems3.ico from
+C:\GEMS3DEPLOY\Gems3-app\Resources\ to folder (\7-Zip SFX Maker\Resources\).    
 
 Start the 7zip-sfx-maker as an administrator and click on "Load Settings..." 
 button. Select .\Docs\win-build-release\Self-extractor-GEMS3-settings.xml 
@@ -80,7 +87,7 @@ which is under version control. Then click on the "Make SFX" button to
 create the self-installer file. This will create a file 
 C:\TEMP\GEMS3DEPLOY.sfx.exe. Rename it according to the following pattern:
 
-	C:\TEMP\gems3.4.x-<rev1>.<rev2>-win32-install.sfx.exe 
+	C:\TEMP\gems3.6.x-<rev1>.<rev2>-win32-install.sfx.exe 
 
 where put the same actual revision numbers for GEMS GUI (rev1) and GEMS3K 
 (rev2) parts, as those used in the "Self-extractor-GEMS3-settings.xml" 

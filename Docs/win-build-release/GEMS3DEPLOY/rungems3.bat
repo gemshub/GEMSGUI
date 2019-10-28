@@ -1,6 +1,6 @@
 echo off
 rem  Change the path to the actual location of GEMS3 executable and Resources
-cd C:\GEMS341\Gems3-app
+cd C:\GEMS360\Gems3-app
 
 rem First launch with default location of modeling projects
  gems3.exe -d > gems3.log 
