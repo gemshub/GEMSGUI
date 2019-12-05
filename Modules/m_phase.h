@@ -330,6 +330,9 @@ public:
                       phSetupData st_data,  TCStringArray& SDlist);
     bool CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX=false );
 
+    int CompressDecomp( int nDCused, TCIntArray& DCused );
+    int CompressSublattice( int nDCused, TCIntArray& DCused );
+
     void MakeSublatticeLists( TCStringArray& form_array  );
 }
 ;

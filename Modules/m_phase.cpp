@@ -1471,8 +1471,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
 
 bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
 {
- int ii, jj, DCndx;
- int nDCnew;
+int ii, nDCnew =0;
  int ncpNnew;
 
  if(nDCused == php->nDC ) // all DComp/ReacDC records exist
@@ -1543,26 +1542,10 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
 
  if( php->Ppnc == S_ON && php->npxM > 0 )
  {
-   for( ncpNnew=0, ii=0; ii<php->ncpN; ii++)
-   {
-     for(jj=0; jj<php->npxM; jj++)
-     {
-       DCndx = php->ipxt[ii*php->npxM+jj];
-       if( DCndx  < 0  ) // for Pitzer model
-         continue;
-       DCndx =  DCused[DCndx];
-       if( DCndx  < 0  ) // non-existent component
-         break;
-       //if( !onlyIPX )
-         php->ipxt[ii*php->npxM+jj] = DCndx;
-     }
-     if( jj<php->npxM ) // row with a non-existent component
-       continue;
-
-     copyValues( php->ipxt+ncpNnew*php->npxM, php->ipxt+ii*php->npxM, php->npxM );
-     copyValues( php->pnc+ncpNnew*php->ncpM, php->pnc+ii*php->ncpM, php->ncpM );
-     ncpNnew++;
-   }
+   if( php->sol_t[SPHAS_TYP] == SM_BERMAN || php->sol_t[SPHAS_TYP] == SM_CEF )
+     ncpNnew = CompressSublattice(nDCnew , DCused);
+   else
+     ncpNnew = CompressDecomp(nDCnew , DCused);
    php->ncpN = ncpNnew;
    php->pnc = (float *)aObj[ o_phpnc ].Alloc( php->ncpN, php->ncpM, F_ );
    php->ipxt = (short *)aObj[ o_phpxres ].Alloc( php->ncpN, php->npxM, I_);
@@ -1571,6 +1554,41 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
 //dyn_new();
 return true;
 
+}
+
+int TPhase::CompressDecomp(int , TCIntArray &DCused)
+{
+    int ii, jj, ncpNnew;
+    int DCndx;
+
+    for( ncpNnew=0, ii=0; ii<php->ncpN; ii++)
+    {
+      for(jj=0; jj<php->npxM; jj++)
+      {
+        DCndx = php->ipxt[ii*php->npxM+jj];
+        if( DCndx  < 0  ) // for Pitzer model
+          continue;
+        DCndx =  DCused[static_cast<uint>(DCndx)];
+        if( DCndx  < 0  ) // non-existent component
+          break;
+        //if( !onlyIPX )
+          php->ipxt[ii*php->npxM+jj] = static_cast<short>(DCndx);
+      }
+      if( jj<php->npxM ) // row with a non-existent component
+        continue;
+
+      copyValues( php->ipxt+ncpNnew*php->npxM, php->ipxt+ii*php->npxM, php->npxM );
+      copyValues( php->pnc+ncpNnew*php->ncpM, php->pnc+ii*php->ncpM, php->ncpM );
+      ncpNnew++;
+    }
+
+   return  ncpNnew;
+}
+
+int TPhase::CompressSublattice(int nDCused, TCIntArray &DCused)
+{
+    CalcPhaseRecord( /*getDCC*/ );
+    return  nDCused;
 }
 
 // ----------------- End of m_phase.cpp -------------------------
