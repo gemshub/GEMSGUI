@@ -1208,6 +1208,46 @@ TPhase::RecCalc( const char *key )
     TCModule::RecCalc(key);
 }
 
+void TPhase::RecordPrint(const char *key_)
+{
+   // generate input
+    TCIntArray aDCused;
+    int i, cnt;
+    aDCused.Clear();
+    for( i=0, cnt=0; i<php->nDC; i++ )
+    {
+       // test to exist of DCOMP or REACDC record later
+       // only 3 fields
+       gstring key = gstring( php->SM[i], 0, DC_RKLEN);
+
+       if( key.find("Fe") == gstring::npos )
+       { aDCused.Add(cnt); cnt++; }
+       else
+         aDCused.Add(-1);
+    } // i
+
+    // compress
+    CompressRecord( cnt, aDCused );
+
+    int res = vfQuestion3(window(), "Question",
+                          "Output to file (Yes) or use print script (No)?",
+                          "Yes", "No", "Cancel");
+    if( res == VF3_1 )
+    {
+        fstream f("noFe-test.txt", ios::out);
+        ErrorIf( !f.good() , GetName(), "File write error");
+
+        aObj[o_reckey].SetPtr( const_cast<void*>(static_cast<const void *>("test")));
+        aObj[o_reckey].toTXT(f);
+        for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount();  no++)
+            aObj[no].toTXT(f);
+
+        ErrorIf( !f.good() , GetName(), "Filewrite error");
+
+    }
+
+}
+
 const char* TPhase::GetHtml()
 {
    return GM_PHASE_HTML;

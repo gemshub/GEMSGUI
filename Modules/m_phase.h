@@ -23,11 +23,12 @@
 #include "v_mod.h"
 #include "v_module.h"
 
-const int MAXPHSYMB =      8,
-                MAXPHGROUP =     16,
-                           MAXPNCOEF =  8192,
-                                      QPSIZE = 180, // earlier 20, 40 SD oct 2005
-                                               QDSIZE = 60;
+const int  MAXPHSYMB =      8,
+           MAXPHGROUP =     16,
+           MAXPNCOEF =  8192,
+           QPSIZE = 180, // earlier 20, 40 SD oct 2005
+           QDSIZE = 60;
+
 typedef struct
 {// Description of PHASE record (old part)
   char pst_[MAXSYMB],       // Phase aggregate state
@@ -274,8 +275,8 @@ protected:
     void CalcPhaseRecord( /*bool getDCC*/  );
     void moiety_new( int nDC, int nMoi, bool setDefault );
     void Set_SolMod_Phase_coef();
-void Set_KinMet_Phase_coef();   // new
-void Set_SorpMod_Phase_coef();  // new
+    void Set_KinMet_Phase_coef();   // new
+    void Set_SorpMod_Phase_coef();  // new
     void makeReacDCompList( const char *caption, TCStringArray& aDclist,
                             short& nDC,  char (*SM)[DC_RKLEN], char * DCS, bool bNsuT);
     void makePhaseList( const char *caption, TCStringArray& aPhlist );
@@ -293,25 +294,27 @@ public:
 
     TPhase( uint nrt );
 
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "Phase";
     }
 
-    void ods_link( int i=0);
-    void dyn_set( int i=0);
-    void dyn_kill( int i=0);
-    void dyn_new( int i=0);
-    void set_def( int i=0);
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0) override;
 
     //  bool check_input( const char *key, int level=1 );
 
-    void RecInput( const char *key );
-    void MakeQuery();
-    int RecBuild( const char *key, int mode = VF_UNDEF );
-    void RecCalc( const char *key );
+    void RecInput( const char *key ) override;
+    void MakeQuery() override;
+    int RecBuild( const char *key, int mode = VF_UNDEF ) override;
+    void RecCalc( const char *key ) override;
+    void RecordPrint( const char *key=nullptr ) override; //test  phase-sublattice-compress
+
     //void CmHelp();
-    const char* GetHtml();
+    const char* GetHtml() override;
     // added by KD on 21.11.04 for SIT
     void MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut );
     // make new aq and/or gas phases (re-written by KD 30.07.03)
@@ -446,7 +449,8 @@ enum sorption_control {
     SAT_FRUM_NCOMP = 'F', SAT_FRUM_COMP = 'R', SAT_PIVO_NCOMP = 'P',
 
     // Assignment of surtype to carrier (end-member) */
-    CCA_VOL = 'V', CCA_0 = '0', CCA_1, CCA_2, CCA_3, CCA_4, CCA_5,
+    CCA_VOL = 'V',
+    CCA_0 = '0', CCA_1, CCA_2, CCA_3, CCA_4, CCA_5,
     CCA_6, CCA_7, CCA_8, CCA_9, SPL_0='0', SPL_1, SPL_2, SPL_3,
     SPL_B = 'b', SPL_D = 'd', SPL_C = 'c',
     SDU_N = 'n', SDU_m = 'm', SDU_M = 'M', SDU_g = 'g',
