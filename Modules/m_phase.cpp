@@ -1471,94 +1471,101 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
 
 bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
 {
- int ii, nDCnew =0;
- int ncpNnew;
+    int ii, nDCnew =0;
+    int ncpNnew;
 
- if(nDCused == php->nDC ) // all DComp/ReacDC records exist
-     return true;
+    if(nDCused == php->nDC ) // all DComp/ReacDC records exist
+        return true;
 
- TCStringArray old_lsMoi;
- if( php->sol_t[SPHAS_TYP] == SM_BERMAN || php->sol_t[SPHAS_TYP] == SM_CEF )
-     old_lsMoi = getSavedLsMoi();
+    TCStringArray old_lsMoi;
+    if( php->sol_t[SPHAS_TYP] == SM_BERMAN || php->sol_t[SPHAS_TYP] == SM_CEF )
+        old_lsMoi = getSavedLsMoi( onlyIPX );
 
 
- if( !onlyIPX )
- {
-   if( php->PpEq != S_OFF && php->PdEq != S_OFF ) // do not compress if scripts
-       return false;
-
-   for( nDCnew=0, ii=0; ii<php->nDC; ii++ )
-   {
-    if( DCused[ii] == -1 )
-     continue;
-
-    memcpy( php->SM[nDCnew], php->SM[ii], DC_RKLEN );
-    php->DCS[nDCnew] = php->DCS[ii];
-    php->DCC[nDCnew] = php->DCC[ii];
-    if( php->Psco == S_ON )
-      copyValues( php->scoef+nDCnew*php->nscM, php->scoef+ii*php->nscM, php->nscM );
-
-    if( php->PCDc == S_ON )
-      copyValues( php->CDc+nDCnew*php->nCDc, php->CDc+ii*php->nCDc, php->nCDc );
-    if( php->PIsoC == S_ON )
-      copyValues( php->IsoP+nDCnew*php->nIsoC, php->IsoP+ii*php->nIsoC, php->nIsoC );
-    if( php->PsDiS == S_ON )
-      copyValues( php->xSmD+nDCnew*php->nSiT, php->xSmD+ii*php->nSiT, php->nSiT );
-    if( php->PumpCon == S_ON )
-      copyValues( php->umpCon+nDCnew*php->numpC, php->umpCon+ii*php->numpC, php->numpC );
-    if( php->Pdqf == S_ON )
-      copyValues( php->DQFc+nDCnew*php->ndqf, php->DQFc+ii*php->ndqf, php->ndqf );
-    if( php->Pdqf == S_ON )
-      copyValues( php->rcpc+nDCnew*php->nrcp, php->rcpc+ii*php->nrcp, php->nrcp );
-
-    if( php->PFsiT != S_OFF )
+    if( !onlyIPX )
     {
-       copyValues( php->SATC[nDCnew], php->SATC[ii], MCAS );
-       copyValues( php->MaSdj[nDCnew], php->MaSdj[ii], DFCN );
+        if( php->PpEq != S_OFF && php->PdEq != S_OFF ) // do not compress if scripts
+            return false;
+
+        for( nDCnew=0, ii=0; ii<php->nDC; ii++ )
+        {
+            if( DCused[ii] == -1 )
+                continue;
+
+            memcpy( php->SM[nDCnew], php->SM[ii], DC_RKLEN );
+            php->DCS[nDCnew] = php->DCS[ii];
+            php->DCC[nDCnew] = php->DCC[ii];
+            if( php->Psco == S_ON )
+                copyValues( php->scoef+nDCnew*php->nscM, php->scoef+ii*php->nscM, php->nscM );
+
+            if( php->PCDc == S_ON )
+                copyValues( php->CDc+nDCnew*php->nCDc, php->CDc+ii*php->nCDc, php->nCDc );
+            if( php->PIsoC == S_ON )
+                copyValues( php->IsoP+nDCnew*php->nIsoC, php->IsoP+ii*php->nIsoC, php->nIsoC );
+            if( php->PsDiS == S_ON )
+                copyValues( php->xSmD+nDCnew*php->nSiT, php->xSmD+ii*php->nSiT, php->nSiT );
+            if( php->PumpCon == S_ON )
+                copyValues( php->umpCon+nDCnew*php->numpC, php->umpCon+ii*php->numpC, php->numpC );
+            if( php->Pdqf == S_ON )
+                copyValues( php->DQFc+nDCnew*php->ndqf, php->DQFc+ii*php->ndqf, php->ndqf );
+            if( php->Pdqf == S_ON )
+                copyValues( php->rcpc+nDCnew*php->nrcp, php->rcpc+ii*php->nrcp, php->nrcp );
+
+            if( php->PFsiT != S_OFF )
+            {
+                copyValues( php->SATC[nDCnew], php->SATC[ii], MCAS );
+                copyValues( php->MaSdj[nDCnew], php->MaSdj[ii], DFCN );
+            }
+            nDCnew++;
+        }
+
+        php->nDC  = nDCnew;
+        // realloc memory
+        php->SM = (char (*)[DC_RKLEN])aObj[ o_phsm ].Alloc( php->nDC, 1, DC_RKLEN );
+        php->DCS = (char *)aObj[ o_phdcs ].Alloc( php->nDC, 1, A_ );
+        php->DCC = (char *)aObj[ o_phdcc ].Alloc( php->nDC, 1, A_ );
+        if( php->Psco == S_ON )
+            php->scoef = (float *)aObj[ o_phscoef].Alloc( php->nDC, php->nscM, F_ );
+        if( php->PFsiT != S_OFF )
+        {
+            php->SATC =  (char (*)[MCAS])aObj[ o_phsatc ].Alloc( php->nDC, MCAS, A_);
+            php->MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].Alloc( php->nDC, DFCN, F_);
+        }
+        if( php->PCDc == S_ON )
+            php->CDc =  (float *)aObj[ o_phcdc].Alloc( php->nDC, php->nCDc, F_ );
+        if( php->PIsoC == S_ON )
+            php->IsoP =  (float *)aObj[ o_phisop].Alloc( php->nDC, php->nIsoC, F_ );
+        if( php->PsDiS == S_ON )
+            php->xSmD =  (short *)aObj[  o_phxsmd ].Alloc( php->nDC, php->nSiT, I_ );
+        if( php->PumpCon == S_ON )
+            php->umpCon =  (float *)aObj[ o_phumpcon].Alloc( php->nDC, php->numpC, F_ );
+        if( php->Pdqf == S_ON )
+            php->DQFc =  (float *)aObj[ o_phdqfc].Alloc( php->nDC, php->ndqf, F_ );
+        if( php->Pdqf == S_ON )
+            php->rcpc =  (float *)aObj[ o_phrcpc].Alloc( php->nDC, php->nrcp, F_ );
     }
-    nDCnew++;
-   }
 
-   php->nDC  = nDCnew;
-   // realloc memory
-   php->SM = (char (*)[DC_RKLEN])aObj[ o_phsm ].Alloc( php->nDC, 1, DC_RKLEN );
-   php->DCS = (char *)aObj[ o_phdcs ].Alloc( php->nDC, 1, A_ );
-   php->DCC = (char *)aObj[ o_phdcc ].Alloc( php->nDC, 1, A_ );
-   if( php->Psco == S_ON )
-      php->scoef = (float *)aObj[ o_phscoef].Alloc( php->nDC, php->nscM, F_ );
-   if( php->PFsiT != S_OFF )
-   {
-      php->SATC =  (char (*)[MCAS])aObj[ o_phsatc ].Alloc( php->nDC, MCAS, A_);
-      php->MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].Alloc( php->nDC, DFCN, F_);
-   }
-   if( php->PCDc == S_ON )
-     php->CDc =  (float *)aObj[ o_phcdc].Alloc( php->nDC, php->nCDc, F_ );
-   if( php->PIsoC == S_ON )
-     php->IsoP =  (float *)aObj[ o_phisop].Alloc( php->nDC, php->nIsoC, F_ );
-   if( php->PsDiS == S_ON )
-       php->xSmD =  (short *)aObj[  o_phxsmd ].Alloc( php->nDC, php->nSiT, I_ );
-   if( php->PumpCon == S_ON )
-     php->umpCon =  (float *)aObj[ o_phumpcon].Alloc( php->nDC, php->numpC, F_ );
-   if( php->Pdqf == S_ON )
-    php->DQFc =  (float *)aObj[ o_phdqfc].Alloc( php->nDC, php->ndqf, F_ );
-   if( php->Pdqf == S_ON )
-     php->rcpc =  (float *)aObj[ o_phrcpc].Alloc( php->nDC, php->nrcp, F_ );
- }
+    if( php->Ppnc == S_ON && php->npxM > 0 )
+    {
+        if( php->sol_t[SPHAS_TYP] == SM_BERMAN || php->sol_t[SPHAS_TYP] == SM_CEF )
+        {
+            if(!onlyIPX) // cpmpressed list
+            {
+                nDCnew=0;
+                DCused.Clear();
+            }
+            ncpNnew = CompressSublattice(nDCnew , DCused, old_lsMoi );
 
- if( php->Ppnc == S_ON && php->npxM > 0 )
- {
-   if( php->sol_t[SPHAS_TYP] == SM_BERMAN || php->sol_t[SPHAS_TYP] == SM_CEF )
-     ncpNnew = CompressSublattice(nDCnew , DCused, old_lsMoi );
-   else
-     ncpNnew = CompressDecomp(nDCnew , DCused);
-   php->ncpN = ncpNnew;
-   php->pnc = (float *)aObj[ o_phpnc ].Alloc( php->ncpN, php->ncpM, F_ );
-   php->ipxt = (short *)aObj[ o_phpxres ].Alloc( php->ncpN, php->npxM, I_);
-}
+        }
+        else
+            ncpNnew = CompressDecomp(nDCnew , DCused);
+        php->ncpN = ncpNnew;
+        php->pnc = (float *)aObj[ o_phpnc ].Alloc( php->ncpN, php->ncpM, F_ );
+        php->ipxt = (short *)aObj[ o_phpxres ].Alloc( php->ncpN, php->npxM, I_);
+    }
 
-//dyn_new();
-return true;
-
+    //dyn_new();
+    return true;
 }
 
 int TPhase::CompressDecomp(int , const TCIntArray &DCused)
@@ -1597,7 +1604,7 @@ int TPhase::CompressSublattice(int nDCused, const TCIntArray&  DCused, const TCS
           || php->PphC == PH_LIQUID || php->PphC == PH_SIMELT) )   // added DK 29.03.2012
         return 0;
 
-    TCStringArray form_array = readFormulaes();
+    TCStringArray form_array = readFormulaes(nDCused, DCused);
     MakeSublatticeLists( form_array  );
 
     TCIntArray  Moiused;
@@ -1647,9 +1654,9 @@ int TPhase::CompressSublattice(int nDCused, const TCIntArray&  DCused, const TCS
 }
 
 
-TCStringArray TPhase::readFormulaes() const
+TCStringArray TPhase::readFormulaes( int nDCused, const TCIntArray&  DCused) const
 {
-    int  i;
+    int  i, DCndx;
     vstr dcn(MAXRKEYLEN);
     time_t crt;
     TCStringArray form_array;
@@ -1662,6 +1669,9 @@ TCStringArray TPhase::readFormulaes() const
     memset( dcn, 0, MAXRKEYLEN );
     for( i=0; i<php->nDC; i++ )
     {
+        if( nDCused > 0 &&  DCused[static_cast<uint>(i)] < 0 ) // non-existent component
+          continue;
+
         memcpy( dcn, php->SM[i], DC_RKLEN );
         dcn[DC_RKLEN]=0;
         /* Read record and extract data */
@@ -1676,12 +1686,11 @@ TCStringArray TPhase::readFormulaes() const
                 aRDC->TryRecInp( dcn, crt, 0 );
                 form_array.Add( gstring(aRDC->rcp->form,0,MAXFORMULA));
             }
-
     }  // i
     return  form_array;
 }
 
-TCStringArray TPhase::getSavedLsMoi() const
+TCStringArray TPhase::getSavedLsMoi(bool onlyIPX) const
 {
     TCStringArray lsMoiOld;
 

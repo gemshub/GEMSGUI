@@ -335,12 +335,9 @@ protected:
 
     int CompressDecomp( int nDCused, const TCIntArray& DCused );
     int CompressSublattice( int nDCused, const TCIntArray&  DCused, const TCStringArray& old_lsMoi );
-    TCStringArray getSavedLsMoi() const;
-    TCStringArray readFormulaes() const;
-
-
-}
-;
+    TCStringArray getSavedLsMoi(bool onlyIPX) const;
+    TCStringArray readFormulaes(int nDCused, const TCIntArray&  DCused) const;
+};
 
 enum solmod_switches { // indexes of keys of phase (solution, sorption, kinetic) models
     SPHAS_TYP,
