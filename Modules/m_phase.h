@@ -329,11 +329,16 @@ public:
                       TCStringArray& aPHtmp, elmWindowData el_data,
                       phSetupData st_data,  TCStringArray& SDlist);
     bool CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX=false );
-
-    int CompressDecomp( int nDCused, TCIntArray& DCused );
-    int CompressSublattice( int nDCused, TCIntArray& DCused );
-
     void MakeSublatticeLists( TCStringArray& form_array  );
+
+protected:
+
+    int CompressDecomp( int nDCused, const TCIntArray& DCused );
+    int CompressSublattice( int nDCused, const TCIntArray&  DCused, const TCStringArray& old_lsMoi );
+    TCStringArray getSavedLsMoi() const;
+    TCStringArray readFormulaes() const;
+
+
 }
 ;
 

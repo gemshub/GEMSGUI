@@ -1471,11 +1471,16 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
 
 bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
 {
-int ii, nDCnew =0;
+ int ii, nDCnew =0;
  int ncpNnew;
 
  if(nDCused == php->nDC ) // all DComp/ReacDC records exist
      return true;
+
+ TCStringArray old_lsMoi;
+ if( php->sol_t[SPHAS_TYP] == SM_BERMAN || php->sol_t[SPHAS_TYP] == SM_CEF )
+     old_lsMoi = getSavedLsMoi();
+
 
  if( !onlyIPX )
  {
@@ -1543,7 +1548,7 @@ int ii, nDCnew =0;
  if( php->Ppnc == S_ON && php->npxM > 0 )
  {
    if( php->sol_t[SPHAS_TYP] == SM_BERMAN || php->sol_t[SPHAS_TYP] == SM_CEF )
-     ncpNnew = CompressSublattice(nDCnew , DCused);
+     ncpNnew = CompressSublattice(nDCnew , DCused, old_lsMoi );
    else
      ncpNnew = CompressDecomp(nDCnew , DCused);
    php->ncpN = ncpNnew;
@@ -1556,7 +1561,7 @@ return true;
 
 }
 
-int TPhase::CompressDecomp(int , TCIntArray &DCused)
+int TPhase::CompressDecomp(int , const TCIntArray &DCused)
 {
     int ii, jj, ncpNnew;
     int DCndx;
@@ -1585,10 +1590,113 @@ int TPhase::CompressDecomp(int , TCIntArray &DCused)
    return  ncpNnew;
 }
 
-int TPhase::CompressSublattice(int nDCused, TCIntArray &DCused)
+int TPhase::CompressSublattice(int nDCused, const TCIntArray&  DCused, const TCStringArray& old_lsMoi )
 {
-    CalcPhaseRecord( /*getDCC*/ );
-    return  nDCused;
+    // from CalcPhaseRecord( /*getDCC*/ );
+    if( !(php->PphC == PH_SINCOND || php->PphC == PH_SINDIS
+          || php->PphC == PH_LIQUID || php->PphC == PH_SIMELT) )   // added DK 29.03.2012
+        return 0;
+
+    TCStringArray form_array = readFormulaes();
+    MakeSublatticeLists( form_array  );
+
+    TCIntArray  Moiused;
+    uint i1;
+    short ii, jj;
+    int ncpNnew, DCndx;
+
+    for( i1=0; i1<old_lsMoi.GetCount(); i1++ )
+    {
+        for( jj=0; jj<php->nMoi; jj++)
+        {
+            if( old_lsMoi[i1] == gstring( php->lsMoi[jj], 0, MAXDCNAME) )
+                break;
+        }
+        if( jj == php->nMoi )
+            Moiused.Add(-1);
+        else
+            Moiused.Add(jj);
+    }
+
+    for( ncpNnew=0, ii=0; ii<php->ncpN; ii++)
+    {
+        jj=0;
+        if( php->sol_t[SPHAS_TYP] == SM_BERMAN )
+            jj=1;
+        for(; jj<php->npxM; jj++)
+        {
+            DCndx = php->ipxt[ii*php->npxM+jj];
+            if( DCndx  < 0  )
+                continue;
+            DCndx =  Moiused[static_cast<uint>(DCndx)];
+            if( DCndx  < 0  ) // non-existent component
+                break;
+            php->ipxt[ii*php->npxM+jj] = static_cast<short>(DCndx);
+        }
+        if( jj<php->npxM ) // row with a non-existent component
+            continue;
+
+        copyValues( php->ipxt+ncpNnew*php->npxM, php->ipxt+ii*php->npxM, php->npxM );
+        copyValues( php->pnc+ncpNnew*php->ncpM, php->pnc+ii*php->ncpM, php->ncpM );
+        memcpy( php->ipicl[ncpNnew], php->ipicl[ii], MAXDCNAME );
+        ncpNnew++;
+    }
+
+    php->ipicl =  (char (*)[MAXDCNAME])aObj[ o_phipicl].Alloc( ncpNnew, 1, MAXDCNAME );
+    return  ncpNnew;
+}
+
+
+TCStringArray TPhase::readFormulaes() const
+{
+    int  i;
+    vstr dcn(MAXRKEYLEN);
+    time_t crt;
+    TCStringArray form_array;
+
+    TDComp* aDC=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
+    TReacDC* aRDC=dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
+    aDC->ods_link(0);
+    aRDC->ods_link(0);
+
+    memset( dcn, 0, MAXRKEYLEN );
+    for( i=0; i<php->nDC; i++ )
+    {
+        memcpy( dcn, php->SM[i], DC_RKLEN );
+        dcn[DC_RKLEN]=0;
+        /* Read record and extract data */
+        if( php->DCS[i] == SRC_DCOMP )
+        {
+            aDC->TryRecInp( dcn, crt, 0 );
+            form_array.Add( gstring(aDC->dcp->form,0,MAXFORMULA));
+        }
+        else
+            if( php->DCS[i] == SRC_REACDC )
+            {
+                aRDC->TryRecInp( dcn, crt, 0 );
+                form_array.Add( gstring(aRDC->rcp->form,0,MAXFORMULA));
+            }
+
+    }  // i
+    return  form_array;
+}
+
+TCStringArray TPhase::getSavedLsMoi() const
+{
+    TCStringArray lsMoiOld;
+
+    lsMoiOld.Add("{K}0");
+    lsMoiOld.Add("{Al}1");
+    lsMoiOld.Add("{Fe}1");
+    lsMoiOld.Add("{Si}2");
+    lsMoiOld.Add("{Si}3");
+    lsMoiOld.Add("{Mg}1");
+    lsMoiOld.Add("{Al}2");
+    lsMoiOld.Add("{Na}0");
+    lsMoiOld.Add("{Va}0");
+
+
+    return lsMoiOld;
 }
 
 // ----------------- End of m_phase.cpp -------------------------
