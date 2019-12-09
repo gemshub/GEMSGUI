@@ -1,4 +1,4 @@
-//-------------------------------------------------------------------
+﻿//-------------------------------------------------------------------
 // $Id: m_phase.cpp 1366 2009-07-18 20:54:59Z wagner $
 //
 // Implementation of TPhase class, config and calculation functions
@@ -249,9 +249,9 @@ void TPhase::dyn_set(int q)
     ErrorIf( php!=&ph[q], GetName(),
              "E01PHrem: Invalid access to ph in dyn_set()");
     memcpy( php->pst_, rt[nRT].UnpackKey(), PH_RKLEN );
-    ph[q].SCMC =  (char *)aObj[ o_phscmc ].GetPtr();
-    ph[q].FsiT =  (float *)aObj[ o_phfsit ].GetPtr();
-    ph[q].XfIEC = (float *)aObj[ o_phxfiec ].GetPtr();
+    ph[q].SCMC =  static_cast<char *>(aObj[ o_phscmc ].GetPtr());
+    ph[q].FsiT =  static_cast<float *>(aObj[ o_phfsit ].GetPtr());
+    ph[q].XfIEC = static_cast<float *>(aObj[ o_phxfiec ].GetPtr());
     ph[q].MSDT  = (float (*)[2])aObj[ o_phmsdt ].GetPtr();
     ph[q].CapT  = (float (*)[2])aObj[ o_phcapt ].GetPtr();
     ph[q].SATC  = (char (*)[MCAS])aObj[ o_phsatc ].GetPtr();
@@ -260,16 +260,16 @@ void TPhase::dyn_set(int q)
 // For safe use of old Phase records without ipxt table   07.12.2006
 if(!ph[q].ipxt )
    php->npxM = 0;
-    ph[q].pnc =   (float *)aObj[ o_phpnc ].GetPtr();
-    ph[q].scoef = (float *)aObj[ o_phscoef ].GetPtr();
+    ph[q].pnc =   static_cast<float *>(aObj[ o_phpnc ].GetPtr());
+    ph[q].scoef = static_cast<float *>(aObj[ o_phscoef ].GetPtr());
     ph[q].SM =    (char (*)[DC_RKLEN])aObj[ o_phsm ].GetPtr();
-    ph[q].DCC =   (char *)aObj[ o_phdcc ].GetPtr();
-    ph[q].DCS =   (char *)aObj[ o_phdcs ].GetPtr();
-    ph[q].pEq =   (char *)aObj[ o_phpeq ].GetPtr();
-    ph[q].dEq =   (char *)aObj[ o_phdeq ].GetPtr();
+    ph[q].DCC =   static_cast<char *>(aObj[ o_phdcc ].GetPtr());
+    ph[q].DCS =   static_cast<char *>(aObj[ o_phdcs ].GetPtr());
+    ph[q].pEq =   static_cast<char *>(aObj[ o_phpeq ].GetPtr());
+    ph[q].dEq =   static_cast<char *>(aObj[ o_phdeq ].GetPtr());
     ph[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_phsdref ].GetPtr();
     ph[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_phsdval ].GetPtr();
-    ph[q].tprn = (char *)aObj[ o_phtprn ].GetPtr();
+    ph[q].tprn = static_cast<char *>(aObj[ o_phtprn ].GetPtr());
     // Added for SIT aqueous model
     ph[q].lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].GetPtr();
     ph[q].lsAn = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].GetPtr();
@@ -283,16 +283,16 @@ if(!ph[q].ipxt )
 // new record 06/06/12
     ph[q].xSmD =  (short *)aObj[  o_phxsmd ].GetPtr();
     ph[q].ocPRk =  (short *)aObj[ o_phocprk ].GetPtr();
-    ph[q].lPhc =  (float *)aObj[ o_phlphc1].GetPtr();
-    ph[q].DQFc =  (float *)aObj[ o_phdqfc].GetPtr();
-    ph[q].rcpc =  (float *)aObj[ o_phrcpc].GetPtr();
-    ph[q].EIpc =  (float *)aObj[ o_pheipc].GetPtr( );
-    ph[q].CDc =  (float *)aObj[ o_phcdc].GetPtr( );
-    ph[q].IsoP =  (float *)aObj[ o_phisop].GetPtr( );
-    ph[q].IsoS =  (float *)aObj[ o_phisos].GetPtr( );
-    ph[q].feSAr =  (float *)aObj[ o_phfesar].GetPtr( );
-    ph[q].rpCon =  (float *)aObj[ o_phrpcon].GetPtr( );
-    ph[q].umpCon =  (float *)aObj[ o_phumpcon].GetPtr( );
+    ph[q].lPhc =  static_cast<float *>(aObj[ o_phlphc1].GetPtr());
+    ph[q].DQFc =  static_cast<float *>(aObj[ o_phdqfc].GetPtr());
+    ph[q].rcpc =  static_cast<float *>(aObj[ o_phrcpc].GetPtr());
+    ph[q].EIpc = static_cast<float *>(aObj[ o_pheipc].GetPtr());
+    ph[q].CDc =  static_cast<float *>(aObj[ o_phcdc].GetPtr());
+    ph[q].IsoP =  static_cast<float *>(aObj[ o_phisop].GetPtr());
+    ph[q].IsoS =  static_cast<float *>(aObj[ o_phisos].GetPtr());
+    ph[q].feSAr =  static_cast<float *>(aObj[ o_phfesar].GetPtr());
+    ph[q].rpCon =  static_cast<float *>(aObj[ o_phrpcon].GetPtr());
+    ph[q].umpCon =  static_cast<float *>(aObj[ o_phumpcon].GetPtr());
     ph[q].lPh =  (char (*)[PH_RKLEN])aObj[ o_phlph].GetPtr( );
     ph[q].lDCr =  (char (*)[DC_RKLEN])aObj[ o_phldcr].GetPtr( );
 //
@@ -1043,6 +1043,8 @@ AGAIN_SETUP:
     }
     if( php->nDC < 2 )
         php->nMoi = 0;
+    if( php->nMoi > 0 )
+       php->PdEq = S_ON;
 
     if( php->kin_t[KinProCode] != KM_UNDEF )
        Set_KinMet_Phase_coef();
@@ -1477,11 +1479,6 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
     if(nDCused == php->nDC ) // all DComp/ReacDC records exist
         return true;
 
-    TCStringArray old_lsMoi;
-    if( php->sol_t[SPHAS_TYP] == SM_BERMAN || php->sol_t[SPHAS_TYP] == SM_CEF )
-        old_lsMoi = getSavedLsMoi( onlyIPX );
-
-
     if( !onlyIPX )
     {
         if( php->PpEq != S_OFF && php->PdEq != S_OFF ) // do not compress if scripts
@@ -1554,7 +1551,7 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
                 nDCnew=0;
                 DCused.Clear();
             }
-            ncpNnew = CompressSublattice(nDCnew , DCused, old_lsMoi );
+            ncpNnew = CompressSublattice( nDCnew, DCused );
 
         }
         else
@@ -1597,12 +1594,14 @@ int TPhase::CompressDecomp(int , const TCIntArray &DCused)
    return  ncpNnew;
 }
 
-int TPhase::CompressSublattice(int nDCused, const TCIntArray&  DCused, const TCStringArray& old_lsMoi )
+int TPhase::CompressSublattice(int nDCused, const TCIntArray&  DCused )
 {
     // from CalcPhaseRecord( /*getDCC*/ );
     if( !(php->PphC == PH_SINCOND || php->PphC == PH_SINDIS
           || php->PphC == PH_LIQUID || php->PphC == PH_SIMELT) )   // added DK 29.03.2012
         return 0;
+
+    TCStringArray old_lsMoi = getSavedLsMoi();
 
     TCStringArray form_array = readFormulaes(nDCused, DCused);
     MakeSublatticeLists( form_array  );
@@ -1690,21 +1689,13 @@ TCStringArray TPhase::readFormulaes( int nDCused, const TCIntArray&  DCused) con
     return  form_array;
 }
 
-TCStringArray TPhase::getSavedLsMoi(bool onlyIPX) const
+TCStringArray TPhase::getSavedLsMoi() const
 {
     TCStringArray lsMoiOld;
-
-    lsMoiOld.Add("{K}0");
-    lsMoiOld.Add("{Al}1");
-    lsMoiOld.Add("{Fe}1");
-    lsMoiOld.Add("{Si}2");
-    lsMoiOld.Add("{Si}3");
-    lsMoiOld.Add("{Mg}1");
-    lsMoiOld.Add("{Al}2");
-    lsMoiOld.Add("{Na}0");
-    lsMoiOld.Add("{Va}0");
-
-
+    if( php->dEq && *php->dEq=='$' )
+    {
+       lsMoiOld = split( gstring(php->dEq,1) ,";");
+    }
     return lsMoiOld;
 }
 

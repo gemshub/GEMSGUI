@@ -62,10 +62,9 @@ void TPhase::Set_SolMod_Phase_coef()
                        if( php->ncpN < 1 ) // NPar
                            php->ncpN = 1;
                        if( php->ncpN > (php->nDC * 2 + 4 ))
-                       php->ncpN = php->nDC * 2 + 4.;   // Check max N of parameters in more detail!
+                       php->ncpN = php->nDC * 2 + 4;   // Check max N of parameters in more detail!
                        php->ncpM = 4;  // NPcoef
-       break;
-                      break;
+                       break;
        case SM_VANLAAR:   // Van Laar model (multicomponent)
                       php->nscM = 1;  // NP_DC
                       php->npxM = 2;  // MaxOrd
@@ -814,8 +813,19 @@ void TPhase::MakeSublatticeLists( TCStringArray& form_array  )
 
    // setup data to formula list
    if( php->nMoi >0 )
-     for( jj=0; jj<form_array.GetCount(); jj++ )
+   {
+       string moi_lst = "$";
+       for( i1=0; i1<php->nMoi; i1++)
+       {
+         moi_lst += string(php->lsMoi[i1])+";";
+       }
+       php->PdEq = S_ON;
+       php->dEq  =  static_cast<char *>(aObj[ o_phdeq ].Alloc( 1, moi_lst.size()+10, S_));
+       strncpy( php->dEq, moi_lst.c_str(),  moi_lst.size()+1 );
+       for( jj=0; jj<form_array.GetCount(); jj++ )
         strncpy( php->lsForm[jj], form_array[jj].c_str(), MAXFORMULA);
+
+   }
 
 }
 

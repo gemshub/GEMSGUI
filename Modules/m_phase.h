@@ -334,8 +334,8 @@ public:
 protected:
 
     int CompressDecomp( int nDCused, const TCIntArray& DCused );
-    int CompressSublattice( int nDCused, const TCIntArray&  DCused, const TCStringArray& old_lsMoi );
-    TCStringArray getSavedLsMoi(bool onlyIPX) const;
+    int CompressSublattice( int nDCused, const TCIntArray&  DCused );
+    TCStringArray getSavedLsMoi() const;
     TCStringArray readFormulaes(int nDCused, const TCIntArray&  DCused) const;
 };
 
