@@ -1118,7 +1118,7 @@ AGAIN_SETUP:
             php->SCMC[i] = SC_BSM;  // changed, 14.07.2009 (TW)
 
             if( !php->FsiT )
-                php->FsiT[i] = 1./php->NsuT;
+                php->FsiT[i] = 1.f/php->NsuT;
             if( !php->MSDT[i][0] )
                 php->MSDT[i][0] = aPa->pa.p.DNS;
             if( !php->MSDT[i][1] )
@@ -1126,7 +1126,7 @@ AGAIN_SETUP:
             if( !php->CapT[i][0] )
                 php->CapT[i][0] = 1.0; // C1 inner capacitance
             if( !php->CapT[i][1] )
-                php->CapT[i][1] = 0.2; // C2 outer capacitance
+                php->CapT[i][1] = 0.2f; // C2 outer capacitance
             if( !php->XfIEC )
                 php->XfIEC[i] = 0;
         }
@@ -1385,8 +1385,8 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
            switch( php->sol_t[SPHAS_TYP] )
            {
              case SM_IDEAL: // =  'I',	// ideal solution or single-component phase
-//             case SM_BERMAN: // = 'B',    // built-in multicomponent microscopic (a)symmetric solid-solution model (reserved)
-//             case SM_CEF: //  = '$',    //     built-in multicomponent multisite solid-solution model (CALPHAD)
+             case SM_BERMAN: // = 'B',    // built-in multicomponent microscopic (a)symmetric solid-solution model (reserved)
+             case SM_CEF: //  = '$',    //     built-in multicomponent multisite solid-solution model (CALPHAD)
 //             case SM_REDKIS: // = 'G', 	// built-in binary Guggenheim (Redlich-Kister) solid-solution model
 //             case SM_MARGB: // = 'M',	// built-in binary Margules solid-solutions (subregular)
 //             case SM_MARGT: // = 'T',	// built-in ternary Margules solid-solution (regular)
@@ -1606,6 +1606,9 @@ int TPhase::CompressSublattice(int nDCused, const TCIntArray&  DCused )
     TCStringArray form_array = readFormulaes(nDCused, DCused);
     MakeSublatticeLists( form_array  );
 
+    ErrorIf( old_lsMoi.GetCount() < php->nMoi, gstring( php->pst_, 0, MAXPHNAME),
+             "Please, recalculate phase record before execution.");
+
     TCIntArray  Moiused;
     uint i1;
     short ii, jj;
@@ -1632,7 +1635,7 @@ int TPhase::CompressSublattice(int nDCused, const TCIntArray&  DCused )
         for(; jj<php->npxM; jj++)
         {
             DCndx = php->ipxt[ii*php->npxM+jj];
-            if( DCndx  < 0  )
+            if( DCndx  < 0 || DCndx >= Moiused.GetCount() )
                 continue;
             DCndx =  Moiused[static_cast<uint>(DCndx)];
             if( DCndx  < 0  ) // non-existent component
