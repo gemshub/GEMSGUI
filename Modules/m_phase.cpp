@@ -1473,7 +1473,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
 
 bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
 {
-    int ii, nDCnew =0;
+    int ii, nDCnew =nDCused;
     int ncpNnew;
 
     if(nDCused == php->nDC ) // all DComp/ReacDC records exist
@@ -1602,7 +1602,6 @@ int TPhase::CompressSublattice(int nDCused, const TCIntArray&  DCused )
         return 0;
 
     TCStringArray old_lsMoi = getSavedLsMoi();
-
     TCStringArray form_array = readFormulaes(nDCused, DCused);
     MakeSublatticeLists( form_array  );
 

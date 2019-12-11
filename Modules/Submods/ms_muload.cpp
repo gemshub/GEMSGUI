@@ -364,7 +364,7 @@ void TMulti::SolModLoad( )
                  //   continue;
                 form_array.Add( aFo.form_extr( j, mup->L, mup->DCF ) );
             } /* j */
-            ErrorIf( (long int)form_array.GetCount() != pmp->L1[k], "SolModLoad", "Test error."  );
+            //ErrorIf( (long int)form_array.GetCount() != pmp->L1[k], "SolModLoad", "Test error."  );
 
             // get moiety structure from phase
             aPH->MakeSublatticeLists( form_array );
