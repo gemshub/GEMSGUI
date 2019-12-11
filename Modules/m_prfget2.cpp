@@ -1207,6 +1207,9 @@ void TProfil::System2GEMS3K( const gstring key, int calcMode, const gstring& fil
         CalcEqstat( dTime, kTimeStep, kTime );
     }
     CurrentSystem2GEMS3K( filepath, brief_mode, add_mui );
+    auto multi_name = filepath.substr(0,filepath.length()-3);
+    multi_name += "txt";
+    outMultiTxt(multi_name.c_str(), true);
 }
 
 
@@ -1214,8 +1217,8 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
 {
     pVisor->CloseMessage();
 
-    vstr pkey(81);
-    vstr tbuf(150);
+    vstr pkey(200);
+    //vstr tbuf(150);
     TCStringArray aList;
     TCIntArray anR;
     gstring packkey, systemname, recordPath;
@@ -1250,13 +1253,14 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
 
         recordPath += systemname+ "-dat.lst";
         try {
+                    std::cout << "generate name: " << packkey.c_str() << std::endl;
             System2GEMS3K( packkey, calc_mode, recordPath, brief_mode, add_mui );
         } catch (TError& xcpt) {
             cout << "Record out error: " << packkey.c_str() << " :" << xcpt.mess.c_str() << "\n";
         }
 
         // stop point
-        if( pVisor->Message( nullptr, "Re-calculating and saving all equilibria", tbuf.p, ii, aList.GetCount() ))
+         if( pVisor->Message( nullptr, "Re-calculating and saving all equilibria", pkey.p, ii, aList.GetCount() ))
             break;
     }
 }
@@ -1265,8 +1269,8 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const gstring& fil
 {
     pVisor->CloseMessage();
 
-    vstr pkey(81);
-    vstr tbuf(150);
+    vstr pkey(200);
+    //vstr tbuf(150);
     TCStringArray aList;
     TCIntArray anR;
     gstring process_name, recordPath;
@@ -1303,7 +1307,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const gstring& fil
         }
 
         // stop point
-        if( pVisor->Message( nullptr, "Generating GEMS3K for process records", tbuf.p, ii, aList.GetCount() ))
+         if( pVisor->Message( nullptr, "Generating GEMS3K for process records", pkey.p, ii, aList.GetCount() ))
             break;
     }
 }

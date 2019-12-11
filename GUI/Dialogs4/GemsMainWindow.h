@@ -386,7 +386,7 @@ private slots:
     void defineButtonsList();
     void setActions();
 
-    void createStatusBar();
+    //void createStatusBar();
 
  // main window fields
     int currentNrt;
