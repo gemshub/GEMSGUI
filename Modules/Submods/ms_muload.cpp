@@ -352,6 +352,23 @@ void TMulti::SolModLoad( )
         if( pmp->L1[k] == 1 )
             continue;  // one component is left in the multicomponent phase
         aPH->TryRecInp( mup->SF[kk], crt, 0 ); // reading phase record
+        // 10/12/2019 added for multi-site mixed moodels
+        if( aPH->php->nMoi >0 )
+        { TFormula aFo;
+            TCStringArray form_array;
+
+            // build formula list
+            for( jj=jb, j=JB; j < JE; j++ )
+            { // set indexes of components - eliminating those switched off
+                //if( syp->Dcl[j] == S_OFF )
+                 //   continue;
+                form_array.Add( aFo.form_extr( j, mup->L, mup->DCF ) );
+            } /* j */
+            ErrorIf( (long int)form_array.GetCount() != pmp->L1[k], "SolModLoad", "Test error."  );
+
+            // get moiety structure from phase
+            aPH->MakeSublatticeLists( form_array );
+        }
         // Added SD 20/01/2010
         if( aPH->php->Ppnc == S_ON && aPH->php->npxM > 0 )    // Check conditions of compressing!
             CompressPhaseIpxt( kk );
@@ -364,20 +381,7 @@ void TMulti::SolModLoad( )
 
         // 16/11/2010 added for multi-site mixed moodels
         if( aPH->php->nMoi >0 )
-        { TFormula aFo;
-          TCStringArray form_array;
-
-           // build formula list
-           for( jj=jb, j=JB; j < JE; j++ )
-           { // set indexes of components - eliminating those switched off
-                 if( syp->Dcl[j] == S_OFF )
-                     continue;
-                 form_array.Add( aFo.form_extr( j, mup->L, mup->DCF ) );
-           } /* j */
-           ErrorIf( (long int)form_array.GetCount() != pmp->L1[k], "SolModLoad", "Test error."  );
-
-           // get moiety structure from phase
-           aPH->MakeSublatticeLists( form_array );
+        {
            pmp->LsMdc[k*3+1] = aPH->php->nSub;
            pmp->LsMdc[k*3+2] = aPH->php->nMoi;
 

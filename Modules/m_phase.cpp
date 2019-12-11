@@ -1222,7 +1222,7 @@ void TPhase::RecordPrint(const char *key_)
        // only 3 fields
        gstring key = gstring( php->SM[i], 0, DC_RKLEN);
 
-       if( key.find("Fe") == gstring::npos )
+       if( key.find("Mg") == gstring::npos )
        { aDCused.Add(cnt); cnt++; }
        else
          aDCused.Add(-1);
@@ -1236,7 +1236,7 @@ void TPhase::RecordPrint(const char *key_)
                           "Yes", "No", "Cancel");
     if( res == VF3_1 )
     {
-        fstream f("noFe-test.txt", ios::out);
+        fstream f("noMg-test.txt", ios::out);
         ErrorIf( !f.good() , GetName(), "File write error");
 
         aObj[o_reckey].SetPtr( const_cast<void*>(static_cast<const void *>("test")));
