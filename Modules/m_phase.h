@@ -328,15 +328,15 @@ public:
     void CopyRecords( const char * prfName, TCStringArray& aPHnoused,
                       TCStringArray& aPHtmp, elmWindowData el_data,
                       phSetupData st_data,  TCStringArray& SDlist);
-    bool CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX=false );
-    void MakeSublatticeLists( TCStringArray& form_array  );
+    bool CompressRecord( int nDCused, TCIntArray& DCused, const TCStringArray& sys_form_array ={}, bool onlyIPX=false );
+    void MakeSublatticeLists( const TCStringArray& form_array  );
 
 protected:
 
     int CompressDecomp( int nDCused, const TCIntArray& DCused );
-    int CompressSublattice( int nDCused, const TCIntArray&  DCused );
+    int CompressSublattice( const TCStringArray& form_array );
     TCStringArray getSavedLsMoi() const;
-    TCStringArray readFormulaes(int nDCused, const TCIntArray&  DCused) const;
+    TCStringArray readFormulaes( const TCIntArray&  DCused) const;
 };
 
 enum solmod_switches { // indexes of keys of phase (solution, sorption, kinetic) models

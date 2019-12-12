@@ -772,7 +772,7 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
 const int MAXMOIETY = 60;
 
 // Assembling indices and name lists for Multi-site (sublattice) SS models
-void TPhase::MakeSublatticeLists( TCStringArray& form_array  )
+void TPhase::MakeSublatticeLists( const TCStringArray& form_array  )
 {
     TFormula form;
     TIArray<MOITERM> moit_;

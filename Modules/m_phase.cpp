@@ -1471,10 +1471,11 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
     db->OpenOnlyFromList(names1);
 }
 
-bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
+bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, const TCStringArray& sys_form_array, bool onlyIPX )
 {
-    int ii, nDCnew =nDCused;
+    int ii, nDCnew =0;
     int ncpNnew;
+
 
     if(nDCused == php->nDC ) // all DComp/ReacDC records exist
         return true;
@@ -1546,13 +1547,13 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, bool onlyIPX )
     {
         if( php->sol_t[SPHAS_TYP] == SM_BERMAN || php->sol_t[SPHAS_TYP] == SM_CEF )
         {
+            TCStringArray form_array = sys_form_array;
             if(!onlyIPX) // cpmpressed list
-            {
-                nDCnew=0;
                 DCused.Clear();
-            }
-            ncpNnew = CompressSublattice( nDCnew, DCused );
 
+            if( form_array.GetCount() <= 0)   // not difined before
+                form_array = readFormulaes( DCused);
+            ncpNnew = CompressSublattice( form_array );
         }
         else
             ncpNnew = CompressDecomp(nDCnew , DCused);
@@ -1594,7 +1595,7 @@ int TPhase::CompressDecomp(int , const TCIntArray &DCused)
    return  ncpNnew;
 }
 
-int TPhase::CompressSublattice(int nDCused, const TCIntArray&  DCused )
+int TPhase::CompressSublattice( const TCStringArray& form_array )
 {
     // from CalcPhaseRecord( /*getDCC*/ );
     if( !(php->PphC == PH_SINCOND || php->PphC == PH_SINDIS
@@ -1602,7 +1603,6 @@ int TPhase::CompressSublattice(int nDCused, const TCIntArray&  DCused )
         return 0;
 
     TCStringArray old_lsMoi = getSavedLsMoi();
-    TCStringArray form_array = readFormulaes(nDCused, DCused);
     MakeSublatticeLists( form_array  );
 
     ErrorIf( old_lsMoi.GetCount() < php->nMoi, gstring( php->pst_, 0, MAXPHNAME),
@@ -1655,12 +1655,13 @@ int TPhase::CompressSublattice(int nDCused, const TCIntArray&  DCused )
 }
 
 
-TCStringArray TPhase::readFormulaes( int nDCused, const TCIntArray&  DCused) const
+TCStringArray TPhase::readFormulaes( const TCIntArray&  DCused) const
 {
     int  i;
     vstr dcn(MAXRKEYLEN);
     time_t crt;
     TCStringArray form_array;
+    bool onlyused = DCused.GetCount()>=php->nDC;
 
     TDComp* aDC=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
     TReacDC* aRDC=dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
@@ -1670,7 +1671,7 @@ TCStringArray TPhase::readFormulaes( int nDCused, const TCIntArray&  DCused) con
     memset( dcn, 0, MAXRKEYLEN );
     for( i=0; i<php->nDC; i++ )
     {
-        if( nDCused > 0 &&  DCused[static_cast<uint>(i)] < 0 ) // non-existent component
+        if( onlyused &&  DCused[static_cast<uint>(i)] < 0 ) // non-existent component
           continue;
 
         memcpy( dcn, php->SM[i], DC_RKLEN );
