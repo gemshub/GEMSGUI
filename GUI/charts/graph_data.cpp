@@ -45,6 +45,7 @@ using namespace std;
 
 namespace jsonui {
 
+QFont ChartData::axisFont("Sans Serif", 14);
 
 QColor colorAt(const QColor &start, const QColor &end, qreal pos)
 {
