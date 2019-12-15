@@ -57,12 +57,14 @@ void TPhase::Set_SolMod_Phase_coef()
                        // php->nscM = 3;  // NP_DC  // reciprocal energies and their dependence on T
                        php->nrcp = 0;  // number of coefficients per reciprocal dG parameter
 //                       php->npxM = php->nSiT*2;
-                       if( php->npxM < 2 || php->npxM > 10 )
+                       if( php->npxM < 4 )
                            php->npxM = 4;  // MaxOrd
+                       if( php->npxM > 12 )
+                           php->npxM = 12;  // MaxOrd
                        if( php->ncpN < 1 ) // NPar
                            php->ncpN = 1;
-                       if( php->ncpN > (php->nDC * 2 + 4 ))
-                       php->ncpN = php->nDC * 2 + 4;   // Check max N of parameters in more detail!
+                       if( php->ncpN > (php->nDC * 3 + 1 ))
+                           php->ncpN = php->nDC * 3 + 1;   // Check max N of parameters in more detail!
                        php->ncpM = 4;  // NPcoef
                        break;
        case SM_VANLAAR:   // Van Laar model (multicomponent)
@@ -1354,7 +1356,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
     {   /* Get list of component : add aMcv and aMrv */
         for( i=0; i<php->nDC; i++ )
         {
-            if( i < aDclist.GetCount() )
+            if( (size_t)i < aDclist.GetCount() )
             {
                 memcpy( php->SM[i], aDclist[i].c_str(), DC_RKLEN );
                 php->SM[i][DC_RKLEN-1] = SRC_DCOMP;
