@@ -602,7 +602,7 @@ void TProfil::SetSysSwitchesFromMulti( )
 }
 
 // Reading structure MULTI (GEM IPM work structure)
-void TProfil::CmReadMulti( QWidget* /*par*/, const char* path )
+void TProfil::CmReadMulti( const char* path )
 {
     TNode* na = new TNode( multi->GetPM() );
     MULTI* pmp = multi->GetPM();

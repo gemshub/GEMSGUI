@@ -352,7 +352,7 @@ void NewSystemDialog::CmReadMulti()
         if( vfChooseFileOpen(this, filename,
           "Browse for GEMS3K *.lst file to import ", "*.lst" ) == false )
                return;
-        TProfil::pm->CmReadMulti( this, filename.c_str() );
+        TProfil::pm->CmReadMulti( filename.c_str() );
 
         // Set SysEq record key as read
         //rt[RT_SYSEQ].SetKey( TMulti::sm->GetPM()->stkey );
