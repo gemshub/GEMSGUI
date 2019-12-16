@@ -63,8 +63,8 @@ void TPhase::Set_SolMod_Phase_coef()
                            php->npxM = 12;  // MaxOrd
                        if( php->ncpN < 1 ) // NPar
                            php->ncpN = 1;
-                       if( php->ncpN > (php->nDC * 3 + 1 ))
-                           php->ncpN = php->nDC * 3 + 1;   // Check max N of parameters in more detail!
+                       if( php->ncpN > (php->nDC * 5 ))
+                           php->ncpN = php->nDC * 5;   // Check max N of parameters in more detail!
                        php->ncpM = 4;  // NPcoef
                        break;
        case SM_VANLAAR:   // Van Laar model (multicomponent)
