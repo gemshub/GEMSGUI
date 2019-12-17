@@ -23,15 +23,16 @@
 #include "node.h"
 
 // Run process of calculate equilibria into the GEMSGUI shell
-double  TProfil::CalculateEquilibriumGUI( const gstring& path)
+double  TProfil::CalculateEquilibriumGUI( const gstring& lst_path)
 {
-   // must be changed for fixed path
-   makeGEM2MTFiles( nullptr );
+   bool brief_mode = false;
+   bool add_mui = true;
+   CurrentSystem2GEMS3K( lst_path, brief_mode, add_mui );
 
    // run gem_ipm
-   auto ret = CalculateEquilibriumServer( path );
+   auto ret = CalculateEquilibriumServer( lst_path );
 
-   CmReadMulti( path.c_str() );
+   CmReadMulti( lst_path.c_str(), true );
 
    return ret;
 }

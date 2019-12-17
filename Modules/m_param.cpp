@@ -602,7 +602,7 @@ void TProfil::SetSysSwitchesFromMulti( )
 }
 
 // Reading structure MULTI (GEM IPM work structure)
-void TProfil::CmReadMulti( const char* path )
+void TProfil::CmReadMulti( const char* path, bool new_ipm )
 {
     TNode* na = new TNode( multi->GetPM() );
     MULTI* pmp = multi->GetPM();
@@ -632,8 +632,11 @@ void TProfil::CmReadMulti( const char* path )
     pmp->P =  pmp->Pc;
     pmp->VX_ = pmp->VXc; // from cm3 to m3
 
-    // Set T and P  for key from DataBr
-    ChangeTPinKey( pmp->TC, pmp->P );
+    if( !new_ipm )
+    {
+        // Set T and P  for key from DataBr
+        ChangeTPinKey( pmp->TC, pmp->P );
+    }
 
     pmp->pESU = 2;  // SysEq unpack flag set
 
@@ -1040,7 +1043,8 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
   TSysEq* STat = dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
   calcFinished = false;
 
-  multi->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
+  CalculateEquilibriumGUI( "server_data/toServer-dat.lst");
+  //multi->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
 
   calcFinished = true;
   STat->setCalcFlag( true );
