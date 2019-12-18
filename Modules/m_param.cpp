@@ -488,6 +488,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       na->PutGEM2MTFiles( par, 1,  ( flags[1] == S_ON ), ( flags[2] == S_ON ),
                    ( flags[3] == S_ON ), false, true );// addMui, to txt
       //Test to compare standalone  na->GEM_print_ipm( "GemsCalcPhase.txt" );
+      //outMultiTxt( "IPM_GEMS.txt"  );
     }
     catch( TError& xcpt )
     {
