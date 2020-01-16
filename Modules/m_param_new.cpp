@@ -18,9 +18,13 @@
 //-------------------------------------------------------------------
 //
 
+
+
 #include "m_syseq.h"
 #include "visor.h"
 #include "node.h"
+#include <zmq.hpp>
+
 
 // Run process of calculate equilibria into the GEMSGUI shell
 double  TProfil::CalculateEquilibriumGUI( const gstring& lst_path)
@@ -38,6 +42,47 @@ double  TProfil::CalculateEquilibriumGUI( const gstring& lst_path)
 }
 
 // Run process of calculate equilibria into the GEMS3K side
+double  TProfil::CalculateEquilibriumServer( const gstring& lst_f_name )
+{
+    double ret=0.;
+    try
+    {
+        std::string path = lst_f_name.c_str();
+
+        //  Prepare our context and socket
+        zmq::context_t context (1);
+        zmq::socket_t socket (context, ZMQ_REQ);
+
+        std::cout << "Connecting to hello world server…" << std::endl;
+        socket.connect ("tcp://localhost:5555");
+
+        //  Do request, waiting each time for a response
+
+            zmq::send_flags snd_flags=zmq::send_flags::none;
+            zmq::message_t request (path.begin(), path.end());
+            std::cout << "Sending:" << request.str() << std::endl;
+            socket.send (request, snd_flags);
+
+            //  Get the reply.
+            zmq::recv_flags rsv_flag = zmq::recv_flags::none;
+            zmq::message_t reply;
+            socket.recv (reply, rsv_flag);
+            std::cout << "Received:" << reply.str() << std::endl;
+            ret = std::stod(reply.to_string(), nullptr );
+
+
+    }catch(TError& err)
+    {
+    }
+    catch(...)
+    {
+
+    }
+    return ret;
+}
+
+
+/* Run process of calculate equilibria into the GEMS3K side
 double  TProfil::CalculateEquilibriumServer( const gstring& lst_f_name )
 {
     double ret=0.;
@@ -83,4 +128,47 @@ double  TProfil::CalculateEquilibriumServer( const gstring& lst_f_name )
 
     }
     return ret;
-}
+}*/
+
+// http://zguide.zeromq.org/cpp:hwserver
+
+// http://zguide.zeromq.org/cpp:hwclient
+
+/*
+
+Install
+
+OSX (MacOS)
+
+You need Brew installed and configured https://brew.sh/
+
+>  brew install zmq
+
+czmq and zyre are also available.
+
+Linux
+
+> apt-get install libzmq3-dev
+
+
+// no example
+https://github.com/zeromq/cppzmq
+// exist example
+https://github.com/zeromq/zmqpp
+
+
+
+git clone https://github.com/zeromq/libzmq.git
+
+
+git clone https://github.com/zeromq/cppzmq.git
+
+
+
+
+*/
+
+
+
+
+//  https://pastebin.com/53ArzzsK

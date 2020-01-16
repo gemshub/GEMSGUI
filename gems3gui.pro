@@ -90,6 +90,8 @@ UI_SOURSEDIR  = $$MOC_DIR
 UI_HEADERDIR  = $$MOC_DIR
 OBJECTS_DIR       = obj
 
+LIBS += -lzmq
+
 include($$DATAMAN_CPP/Dataman.pri)
 include($$MODULES_CPP/Modules.pri)
 include($$SUBMODS_CPP/Submods.pri)
