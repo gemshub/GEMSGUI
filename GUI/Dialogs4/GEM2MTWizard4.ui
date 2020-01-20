@@ -46,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -1434,7 +1434,14 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
                <widget class="QWidget" name="page_9">
                 <layout class="QVBoxLayout" name="verticalLayout_8">
                  <item>
-                  <widget class="QListWidget" name="listStatic"/>
+                  <widget class="QListWidget" name="listStatic">
+                   <property name="isWrapping" stdset="0">
+                    <bool>true</bool>
+                   </property>
+                   <property name="resizeMode">
+                    <enum>QListView::Adjust</enum>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </widget>
