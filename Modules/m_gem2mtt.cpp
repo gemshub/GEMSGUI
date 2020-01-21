@@ -176,7 +176,7 @@ void  TGEM2MT::NewNodeArray()
         return false;
     };
 
-    auto dbr_list =  na->genGEMS3KInputFiles(  "test/Test-dat.lst", messageF, mtp->nC, false, false, false, false, false );
+    auto dbr_list =  na->genGEMS3KInputFiles(  "Test-dat.lst", messageF, mtp->nC, false, false, false, false, false );
     */
 }
 
