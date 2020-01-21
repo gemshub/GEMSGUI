@@ -66,22 +66,22 @@ void  TGEM2MT::copyNodeArrays()
 // put HydP
 void  TGEM2MT::putHydP( DATABRPTR* C0 )
 {
-  for( long int jj=0; jj<mtp->nC; jj ++)
-  {
-       C0[jj]->NodeTypeHY = mtp->DiCp[jj][1];
+    for( long int jj=0; jj<mtp->nC; jj ++)
+    {
+        C0[jj]->NodeTypeHY = mtp->DiCp[jj][1];
 #ifdef NODEARRAYLEVEL
-     if( mtp->HydP )
-     { C0[jj]->Vt = mtp->HydP[jj][0];
-       C0[jj]->vp = mtp->HydP[jj][1];
-       C0[jj]->eps = mtp->HydP[jj][2];
-       C0[jj]->Km = mtp->HydP[jj][3];
-       C0[jj]->al = mtp->HydP[jj][4];
-       C0[jj]->Dif = mtp->HydP[jj][5];
-       C0[jj]->hDl = C0[jj]->al*C0[jj]->vp+C0[jj]->Dif;
-       C0[jj]->nto = mtp->HydP[jj][6];
-     }
+        if( mtp->HydP )
+        { C0[jj]->Vt = mtp->HydP[jj][0];
+            C0[jj]->vp = mtp->HydP[jj][1];
+            C0[jj]->eps = mtp->HydP[jj][2];
+            C0[jj]->Km = mtp->HydP[jj][3];
+            C0[jj]->al = mtp->HydP[jj][4];
+            C0[jj]->Dif = mtp->HydP[jj][5];
+            C0[jj]->hDl = C0[jj]->al*C0[jj]->vp+C0[jj]->Dif;
+            C0[jj]->nto = mtp->HydP[jj][6];
+        }
 #endif
-  }
+    }
 }
 
 #ifndef IPMGEMPLUGIN
@@ -96,80 +96,88 @@ void  TGEM2MT::NewNodeArray()
 {
     long int nit;
 
- // generate Tval&Pval arrays
- if( mtp->PsTPai != S_OFF )
-    gen_TPval();
+    // generate Tval&Pval arrays
+    if( mtp->PsTPai != S_OFF )
+        gen_TPval();
 
- na->InitCalcNodeStructures( mtp->nICb, mtp->nDCb,  mtp->nPHb,
-      mtp->xIC, mtp->xDC, mtp->xPH, mtp->PsTPpath != S_OFF,
-      mtp->Tval, mtp->Pval,
-      mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3]  );
- DATACH* data_CH = na->pCSD();
+    na->InitCalcNodeStructures( mtp->nICb, mtp->nDCb,  mtp->nPHb,
+                                mtp->xIC, mtp->xDC, mtp->xPH, mtp->PsTPpath != S_OFF,
+                                mtp->Tval, mtp->Pval,
+                                mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3]  );
+    DATACH* data_CH = na->pCSD();
 
- // put DDc
- if( data_CH->DD && mtp->DDc )
-  for( long int jj=0; jj<data_CH->nDCs; jj ++)
-      data_CH->DD[jj*data_CH->nPp*data_CH->nTp] = mtp->DDc[jj];
+    // put DDc
+    if( data_CH->DD && mtp->DDc )
+        for( long int jj=0; jj<data_CH->nDCs; jj ++)
+            data_CH->DD[jj*data_CH->nPp*data_CH->nTp] = mtp->DDc[jj];
 
- // Distribute data from initial systems into nodes as prescribed in DiCp[*][0]
+    // Distribute data from initial systems into nodes as prescribed in DiCp[*][0]
 
- for( mtp->kv = 0, nit=0; mtp->kv < mtp->nIV; mtp->kv++ )
- {
-   // Make new SysEq record
-      gen_task( true );
-      // calculate EqStat (Thermodynamic&Equlibria)
-      //  TProfil::pm->pmp->pTPD = 0;
-      calc_eqstat( true );
+    for( mtp->kv = 0, nit=0; mtp->kv < mtp->nIV; mtp->kv++ )
+    {
+        // Make new SysEq record
+        gen_task( true );
+        // calculate EqStat (Thermodynamic&Equlibria)
+        //  TProfil::pm->pmp->pTPD = 0;
+        calc_eqstat( true );
 
-   for( long int q=0; q<mtp->nC; q++)
-   {
-     mtp->qc = q;
+        for( long int q=0; q<mtp->nC; q++)
+        {
+            mtp->qc = q;
 
-     pVisor->Message( window(), GetName(),
-        "Initial calculation of equilibria in nodes. "
-             "Please, wait...", nit, mtp->nC);
+            pVisor->Message( window(), GetName(),
+                             "Initial calculation of equilibria in nodes. "
+                             "Please, wait...", nit, mtp->nC);
 
-     if( mtp->DiCp[q][0] == mtp->kv  )
-     {
-         nit++;
-         gen_task( false );
-         // set T, P for multi and calculate current EqStat
-         calc_eqstat( false );
+            if( mtp->DiCp[q][0] == mtp->kv  )
+            {
+                nit++;
+                gen_task( false );
+                // set T, P for multi and calculate current EqStat
+                calc_eqstat( false );
 
-         if( mtp->PsMode == RMT_MODE_S )
-         {
-             // empty current node
-             DATABR* data_BR = na->reallocDBR( q, mtp->nC,  na->pNodT0());
-             data_BR->TK = TMulti::sm->GetPM()->TCc+C_to_K; //25
-             data_BR->P = TMulti::sm->GetPM()->Pc*bar_to_Pa; //1
-             for(long int i1=0; i1<mtp->nICb; i1++ )
-               data_BR->bIC[i1] = TMulti::sm->GetPM()->B[ mtp->xIC[i1] ];
-         }
-         else // Save databr
-         {
-             na->SaveToNode( q, mtp->nC,  na->pNodT0());
-         }
-         na->pNodT0()[q]->NodeHandle = q;
-     }
-   } // q
-   mt_next();      // Generate work values for the next EqStat rkey
- } // mtp->kv
+                if( mtp->PsMode == RMT_MODE_S )
+                {
+                    // empty current node
+                    DATABR* data_BR = na->reallocDBR( q, mtp->nC,  na->pNodT0());
+                    data_BR->TK = TMulti::sm->GetPM()->TCc+C_to_K; //25
+                    data_BR->P = TMulti::sm->GetPM()->Pc*bar_to_Pa; //1
+                    for(long int i1=0; i1<mtp->nICb; i1++ )
+                        data_BR->bIC[i1] = TMulti::sm->GetPM()->B[ mtp->xIC[i1] ];
+                }
+                else // Save databr
+                {
+                    na->SaveToNode( q, mtp->nC,  na->pNodT0());
+                }
+                na->pNodT0()[q]->NodeHandle = q;
+            }
+        } // q
+        mt_next();      // Generate work values for the next EqStat rkey
+    } // mtp->kv
 
- pVisor->CloseMessage();
+    pVisor->CloseMessage();
 
- DATABRPTR* C0 = na->pNodT0();  // nodes at current time point
- for( long int ii=0; ii<mtp->nC; ii++)
-      if(  C0[ii] == nullptr )
-      Error( "NewNodeArray() error:" ," Undefined boundary condition!" );
+    DATABRPTR* C0 = na->pNodT0();  // nodes at current time point
+    for( long int ii=0; ii<mtp->nC; ii++)
+        if(  C0[ii] == nullptr )
+            Error( "NewNodeArray() error:" ," Undefined boundary condition!" );
 
- // put HydP
- putHydP( C0 );
+    // put HydP
+    putHydP( C0 );
 
- for (long int ii=0; ii<mtp->nC; ii++)    // node iteration
-   {
-       na->CopyNodeFromTo( ii, mtp->nC, C0, na->pNodT1() );
-   }  // ii    end of node iteration loop
+    for (long int ii=0; ii<mtp->nC; ii++)    // node iteration
+    {
+        na->CopyNodeFromTo( ii, mtp->nC, C0, na->pNodT1() );
+    }  // ii    end of node iteration loop
 
+    /* test output generated structure
+    ProcessProgressFunction messageF = [](const gstring& , long ){
+        //std::cout << "TProcess GEM3k output" <<  message.c_str() << point << std::endl;
+        return false;
+    };
+
+    auto dbr_list =  na->genGEMS3KInputFiles(  "test/Test-dat.lst", messageF, mtp->nC, false, false, false, false, false );
+    */
 }
 
 #endif
