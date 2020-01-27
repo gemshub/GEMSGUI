@@ -176,7 +176,7 @@ void  TGEM2MT::NewNodeArray()
         return false;
     };
 
-    auto dbr_list =  na->genGEMS3KInputFiles(  "Test-dat.lst", messageF, mtp->nC, false, false, false, false, false );
+    auto dbr_list =  na->genGEMS3KInputFiles(  "Te_start/Test-dat.lst", messageF, mtp->nC, false, false, false, false, false );
     */
 }
 
@@ -324,6 +324,15 @@ bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node, FILE* 
 
 
    na->CalcIPM_List( TestModeGEMParam(mode, mtp->PsSIA, mtp->ct, mtp->cdv, mtp->cez ), start_node, end_node, diffile );
+
+   /* test output generated structure
+   ProcessProgressFunction messageF = [](const gstring& , long ){
+       //std::cout << "TProcess GEM3k output" <<  message.c_str() << point << std::endl;
+       return false;
+   };
+
+   auto dbr_list =  na->genGEMS3KInputFiles(  "Te_point/Test-dat.lst", messageF, mtp->nC, false, false, false, true, false );
+   */
 
 #ifdef useOMP
    double  t1 = omp_get_wtime();
@@ -784,9 +793,13 @@ mtp->TimeGEM = 0.0;
                break;
      }
 //
-   // Calculation of chemical equilibria in all nodes at the beginning
-   // with the LPP AIA
-     CalcIPM( NEED_GEM_AIA, nStart, nEnd, diffile );
+       // Calculation of chemical equilibria in all nodes at the beginning
+       // with the LPP AIA
+       if( mtp->PsSIA != S_ON )
+           CalcIPM( NEED_GEM_AIA, nStart, nEnd, diffile );
+       else
+           CalcIPM( NEED_GEM_SIA,nStart, nEnd, diffile );
+       ///       CalcIPM( NEED_GEM_AIA, nStart, nEnd, diffile );
    }
    mtp->iStat = AS_READY;
 
