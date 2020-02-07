@@ -137,14 +137,14 @@ void TMulti::SystemToLookup( )
    SYSTEM *syp = TSyst::sm->GetSY();
 
    // copy intervals for minimizatiom
-   pm.Pai_1[0] = syp->Pmin;
-   pm.Pai_1[1] = syp->Pmax;
-   pm.Pai_1[2] = syp->Pinc;
-   pm.Pai_1[3] = 0.1;
-   pm.Tai_1[0] = syp->Tmin;
-   pm.Tai_1[1] = syp->Tmax;
-   pm.Tai_1[2] = syp->Tinc;
-   pm.Tai_1[3] = 0.1;
+   pm.Pai[0] = syp->Pmin;
+   pm.Pai[1] = syp->Pmax;
+   pm.Pai[2] = syp->Pinc;
+   pm.Pai[3] = 0.1;
+   pm.Tai[0] = syp->Tmin;
+   pm.Tai[1] = syp->Tmax;
+   pm.Tai[2] = syp->Tinc;
+   pm.Tai[3] = 0.1;
    pm.Fdev1[0] = 0.;
    pm.Fdev1[1] = syp->Tdev1;
    pm.Fdev2[0] = 0.;
@@ -152,15 +152,15 @@ void TMulti::SystemToLookup( )
 
    if( pm.tMin == G_TP_ ) // set default intervals
    {
-     if( pm.Pai_1[0] > pm.P || pm.Pai_1[1] < pm.P )
+     if( pm.Pai[0] > pm.P || pm.Pai[1] < pm.P )
      {
-       pm.Pai_1[0] = pm.Pai_1[1] = pm.P;
-       pm.Pai_1[2] = 0.;
+       pm.Pai[0] = pm.Pai[1] = pm.P;
+       pm.Pai[2] = 0.;
      }
-     if( pm.Tai_1[0] > pm.TC || pm.Tai_1[1] < pm.TC )
+     if( pm.Tai[0] > pm.TC || pm.Tai[1] < pm.TC )
      {
-       pm.Tai_1[0] = pm.Tai_1[1] = pm.TC;
-       pm.Tai_1[2] = 0.;
+       pm.Tai[0] = pm.Tai[1] = pm.TC;
+       pm.Tai[2] = 0.;
      }
    }
 
