@@ -524,7 +524,9 @@ void TVisorImp::readOutput()
     while( GEMS3_proc->canReadLine() )
     {
         QByteArray linea = GEMS3_proc->readLine();
-        cout << "GEMS3 server: " << linea.toStdString()  << endl;
+        const std::string green("\033[1;32m");
+        const std::string reset("\033[0m");
+        cout << green << "GEMS3 server: " << reset << linea.toStdString()  << endl;
     }
 }
 
