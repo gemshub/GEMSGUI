@@ -31,6 +31,7 @@ double  TProfil::CalculateEquilibriumGUI( const gstring& lst_path)
 {
    bool brief_mode = false;
    bool add_mui = true;
+
    CurrentSystem2GEMS3K( lst_path, brief_mode, add_mui );
 
    // run gem_ipm

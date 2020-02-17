@@ -1043,6 +1043,7 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
   TSysEq* STat = dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
   calcFinished = false;
 
+  multi->Access_GEM_IMP_init();
   outMultiTxt( "Reactoro_before.dump.txt"  );
   CalculateEquilibriumGUI( "/home/sveta/devGEMS/gitGEMS3/standalone/gemserver-build/server_data/toServer-dat.lst");
   //multi->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
