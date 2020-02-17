@@ -618,7 +618,7 @@ void TUnSpace::to_text_file( fstream& ff, bool with_comments )
     {   ff << "\n## Task configuration section ";
         ff << "\n# List of UnSpace group name";
     }
-   prar.writeArray(  "SGp", usp->SGp[0], usp->nG, (int)MAXPHNAME);
+   prar.writeArray(  "SGp", usp->SGp[0], usp->nG, static_cast<short>(MAXPHNAME));
     if( _comment )
       ff << "\n# generation codes for unspace groups: 0- Belov; 1-uniform; 2-normale";
    prar.writeArray(  "PbD", usp->PbD, usp->nG);
@@ -764,7 +764,7 @@ void TUnSpace::to_text_file( fstream& ff, bool with_comments )
     prar.writeArray(  "UnDCAn", usp->UnICn[0], UNSP_SIZE2, NAME_SIZE);
     if( _comment )
       ff << "\n## List of insertain input parameters names ";
-    prar.writeArray(  "ParNames", usp->ParNames[0], usp->nPG, PARNAME_SIZE);
+    prar.writeArray(  "ParNames", usp->ParNames[0], usp->nPG, static_cast<short>(PARNAME_SIZE));
 
 //    if( _comment )
 //     ff << "\n# table of normalised coordinates of points in uncertainty space";
@@ -785,22 +785,22 @@ void TUnSpace::result_to_text_file( fstream& ff, bool with_comments )
   prar.writeArray(  "ncp", usp->ncp, usp->Q*usp->nG );
   if( _comment )
     ff << "\n# index of optimal sample point";
-   prar.writeArray(  "vY", usp->vY, usp->Q*usp->L, usp->L );
+   prar.writeArray(  "vY", usp->vY, usp->Q*usp->L, static_cast<int>(usp->L) );
    if( _comment )
      ff << "\n# G0 values used in sample input data variants (indexes q j)";
-   prar.writeArray(  "vG", usp->vG, usp->Q*usp->L,  usp->L );
+   prar.writeArray(  "vG", usp->vG, usp->Q*usp->L,   static_cast<int>(usp->L) );
    if( _comment )
      ff << "\n# m_t values of total IC molality from sample GEM solution variants (indexes t i)";
-  prar.writeArray(  "vMol", usp->vMol, usp->Q*usp->N, usp->N );
+  prar.writeArray(  "vMol", usp->vMol, usp->Q*usp->N,  static_cast<int>(usp->N) );
   if( _comment )
      ff << "\n#   lnGam values for DC from sample GEM solution variants (indexes t j)";
-   prar.writeArray(  "vGam", usp->vGam, usp->Q*usp->L, usp->L );
+   prar.writeArray(  "vGam", usp->vGam, usp->Q*usp->L,  static_cast<int>(usp->L) );
    if( _comment )
       ff << "\n# XF (phase mole amounts) from sample GEM solution variants (indexes t k)";
-    prar.writeArray(  "vYF", usp->vYF, usp->Q*usp->Fi, usp->Fi );
+    prar.writeArray(  "vYF", usp->vYF, usp->Q*usp->Fi,  static_cast<int>(usp->Fi) );
   if( _comment )
        ff << "\n#  u values of dual chemical potentials from sample GEM solution variants";
-   prar.writeArray(  "vU", usp->vU, usp->Q*usp->N,usp->N );
+   prar.writeArray(  "vU", usp->vU, usp->Q*usp->N, static_cast<int>(usp->N) );
    if( _comment )
       ff << "\n# lga values of log10 fugacity/activity from sample GEM solution variants";
     prar.writeArray(  "vFug", usp->vFug, usp->Q*usp->Ls );
@@ -810,7 +810,7 @@ void TUnSpace::result_to_text_file( fstream& ff, bool with_comments )
   
    if( _comment )
         ff << "\n#   list of phase assemblage titles (made of Phase names";
-   prar.writeArray(  "PhAlst", usp->PhAlst[0], usp->nPhA, 80 );
+   prar.writeArray(  "PhAlst", usp->PhAlst[0], usp->nPhA, static_cast<short>(80) );
    prar.writeArray(  "PhNum", usp->PhNum, usp->nPhA );
    prar.writeArray(  "PhAfreq", usp->PhAfreq, usp->nPhA );
    prar.writeArray(  "sv", usp->sv, usp->Q );
@@ -835,7 +835,7 @@ void TUnSpace::result_to_text_file( fstream& ff, bool with_comments )
    if( usp->PvPOM == S_ON )
   {  if( _comment )
      ff << "\n# payoff matrix";
-    prar.writeArray(  "POM", usp->POM, usp->Q*usp->Q, usp->Q );
+    prar.writeArray(  "POM", usp->POM, usp->Q*usp->Q,  static_cast<int>(usp->Q) );
   }
   if( usp->PvPOR == S_ON )
     {  if( _comment )
