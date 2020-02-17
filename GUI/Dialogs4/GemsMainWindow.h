@@ -369,8 +369,24 @@ private slots:
     void setActiveSubWindowIdex(int ndx);
     void changeKeyList();
 
+    /// Run extern GEMS3 server
+    void startGEMServer();
+
+    /// Kills the GEMS3 server, causing it to exit immediately.
+    /// Kill when error occurred or program exit
+    void killGEMServer();
+
+    /// This slot is executed when an error occurs with the GEMS3 process.
+    /// The specified error describes the type of error that occurred.
+    void GEMServerErrorOccurred(QProcess::ProcessError error);
+
+    void readOutput();
 
  private:
+    /// GEMS3 server application run
+    QProcess *GEMS3_proc = nullptr;
+
+
     TCModuleImp *activeMdiChild(); //( MdiChild = ModuleWindow )
     NewSystemDialog *activeNewSystem();
     NewSystemDialog *activeNewSystemCommand();

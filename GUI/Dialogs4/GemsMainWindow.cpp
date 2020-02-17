@@ -275,6 +275,7 @@ TVisorImp::TVisorImp(int c, char** v):
         }
      }
 
+    startGEMServer();
     moveToolBar();
     updateMenus();
  }
@@ -282,6 +283,7 @@ TVisorImp::TVisorImp(int c, char** v):
 //   The desctructor
 TVisorImp::~TVisorImp()
 {
+    killGEMServer();
     delete pVisor;
 }
 
@@ -459,6 +461,93 @@ void TVisorImp::changeKeyList()
         dynamic_cast<TCModule*>(&aMod[currentNrt])->setFilter(filter.c_str());
         defineModuleKeysList( currentNrt );
     }
+}
+
+void TVisorImp::startGEMServer()
+{
+    try
+    {
+        killGEMServer();
+
+        if (!GEMS3_proc)
+        {
+           GEMS3_proc = new QProcess();
+           GEMS3_proc->setReadChannel(QProcess::StandardOutput);
+           GEMS3_proc->setProcessChannelMode(QProcess::MergedChannels);
+           GEMS3_proc->setCurrentReadChannel(QProcess::StandardOutput);
+           connect(GEMS3_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutput()));
+           connect(GEMS3_proc, SIGNAL(readyRead()), this, SLOT(readOutput()));
+           connect( GEMS3_proc, SIGNAL(errorOccurred(QProcess::ProcessError)),
+                    this, SLOT(GEMServerErrorOccurred(QProcess::ProcessError)));
+           ////connect(GEMS3_proc, SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(stlinkFinish()));
+        }
+
+        if (GEMS3_proc->state() != QProcess::Running)
+        {
+            QString serverPath =  "/home/sveta/devGEMS/gitGEMS3/standalone/gemserver-build";
+            QString app;
+#ifdef __unix
+#ifdef __APPLE__
+            //                    app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/qcollectiongenerator");    // expected to work
+            app += QLatin1String("gems3_server");
+#else
+            app += QLatin1String("gems3_server");
+#endif
+#else    // windows
+            app += QLatin1String("gems3_server.exe");
+#endif
+
+            GEMS3_proc->setWorkingDirectory(serverPath);
+            QStringList argumentos;
+            //argumentos << "-P" << filehex  << "-Q" << "-V" <<  "after_programming";
+            GEMS3_proc->start(app);
+            cout << app.toLatin1().data() << endl;
+
+            if(!GEMS3_proc->waitForStarted(-1))
+            {
+                Error( "Gems3 server", "gems3_server");
+            }
+        }
+    }
+    catch(TError& e)
+    {
+        vfMessage(this, e.title.c_str(), e.mess.c_str() );
+    }
+    catch(...)
+    {
+        cout << "Start GEMS3 server error occurred"  << endl;
+    }
+}
+
+void TVisorImp::readOutput()
+{
+    while( GEMS3_proc->canReadLine() )
+    {
+        QByteArray linea = GEMS3_proc->readLine();
+        cout << "GEMS3 server: " << linea.toStdString()  << endl;
+    }
+}
+
+void TVisorImp::killGEMServer()
+{
+    if (GEMS3_proc && GEMS3_proc->state() == QProcess::Running)
+    {
+        disconnect( GEMS3_proc, SIGNAL(errorOccurred(QProcess::ProcessError)),
+                 this, SLOT(GEMServerErrorOccurred(QProcess::ProcessError)));
+        GEMS3_proc->terminate();
+        GEMS3_proc->waitForFinished(3000);
+        // terminal> killall gems3_server
+    }
+    delete GEMS3_proc;
+    GEMS3_proc = nullptr;
+}
+
+void TVisorImp::GEMServerErrorOccurred(QProcess::ProcessError error)
+{
+    cout << "GEMS3 server error occurred: " << error << endl;
+
+    // try restart server
+    startGEMServer();
 }
 
 //------------------------------------------------------------------------------------------

@@ -119,7 +119,7 @@ main(int argc, char* argv[])
         rt.Clear();
         aObj.Clear();
 
-	delete pVisorImp;
+        delete pVisorImp;
 
         return res;
     }
