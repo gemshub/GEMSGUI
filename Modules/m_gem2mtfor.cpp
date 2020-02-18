@@ -650,7 +650,14 @@ void TGEM2MT::from_text_file(fstream& ff)
 {
 
 // static arrays
+#ifndef JSON_OUT
  TReadArrays  rdar( 57, GEM2MT_static_fields, ff);
+#else
+ nlohmann::json json_data;
+ ff >> json_data;
+ TReadJson  rdar( 57, GEM2MT_static_fields, json_data);
+#endif
+
  long int nfild = rdar.findNext();
  while( nfild >=0 )
  {
@@ -777,7 +784,12 @@ void TGEM2MT::from_text_file(fstream& ff)
  }
 
  //dynamic data
-  TReadArrays  rddar( 26, GEM2MT_dynamic_fields, ff);
+#ifndef JSON_OUT
+ TReadArrays  rddar( 26, GEM2MT_dynamic_fields, ff);
+#else
+ TReadJson  rddar( 26, GEM2MT_dynamic_fields, json_data);
+#endif
+
 
   // set alwase flags for gems2mt
   checkAlws(rdar, rddar);
