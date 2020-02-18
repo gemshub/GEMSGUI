@@ -16,6 +16,10 @@
 #include <iomanip>
 #include "io_arrays.h"
 #include "m_gem2mt.h"
+#ifdef  JSON_OUT
+#include "io_json.h"
+#endif
+
 
 extern const char* _GEMIPM_version_stamp;
 
@@ -454,8 +458,20 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments, bool brief_mode, co
 {
   bool _comment = with_comments;
 
+#ifndef  JSON_OUT
+
   TPrintArrays  prar1(57, GEM2MT_static_fields, ff);
   TPrintArrays  prar(26, GEM2MT_dynamic_fields, ff);
+
+#else
+
+  _comment = false;
+  nlohmann::json json_data;
+  TPrintJson  prar1(57, GEM2MT_static_fields, json_data);
+  TPrintJson  prar(26, GEM2MT_dynamic_fields, json_data);
+
+#endif
+
 
   // Set always for task
   checkAlws(prar1,prar);
@@ -547,7 +563,9 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments, bool brief_mode, co
   prar1.writeArray(f_mtWrkS, &mtp->ctm, 12, 6, _comment, brief_mode  );
   prar1.writeArray(f_mtWrkF, &mtp->cT, 10, 6, _comment, brief_mode  );
 
+#ifndef JSON_OUT
   ff << endl << "\n<END_DIM>" << endl;
+#endif
 
 // dynamic arrays - must follow static data
   if( mtp->PsMode == RMT_MODE_W  )
@@ -619,9 +637,12 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments, bool brief_mode, co
      //!!!mtp->Tval  = new double[ mtp->nTai ];  // from DataCH
      //!!!mtp->Pval  = new double[ mtp->nPai ];
 
+#ifdef  JSON_OUT
+  ff << json_data.dump(4);
+#endif
   ff << endl;
   if( _comment )
-      ff << "\n# End of file";
+      ff << "\n# End of file\n";
 }
 
 // Reading dataCH structure from text file

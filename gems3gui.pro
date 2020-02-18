@@ -8,6 +8,7 @@ DEFINES         += Use_mt_mode
 DEFINES         += NODEARRAYLEVEL
 #DEFINES         += NOMUPNONLOGTERM
 DEFINES  += NO_JSONIO
+DEFINES  += JSON_OUT
 
 CONFIG+=sdk_no_version_check
 CONFIG += c++11
