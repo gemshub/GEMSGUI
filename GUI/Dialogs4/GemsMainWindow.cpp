@@ -479,12 +479,12 @@ void TVisorImp::startGEMServer()
            connect(GEMS3_proc, SIGNAL(readyRead()), this, SLOT(readOutput()));
            connect( GEMS3_proc, SIGNAL(errorOccurred(QProcess::ProcessError)),
                     this, SLOT(GEMServerErrorOccurred(QProcess::ProcessError)));
-           ////connect(GEMS3_proc, SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(stlinkFinish()));
         }
 
         if (GEMS3_proc->state() != QProcess::Running)
         {
-            QString serverPath =  "/home/sveta/devGEMS/gitGEMS3/standalone/gemserver-build";
+            QString serverPath =  pVisor->serverGems3Dir().c_str();
+            //"/home/sveta/devGEMS/gitGEMS3/standalone/gemserver-build";
             QString app;
 #ifdef __unix
 #ifdef __APPLE__
@@ -549,7 +549,8 @@ void TVisorImp::GEMServerErrorOccurred(QProcess::ProcessError error)
     cout << "GEMS3 server error occurred: " << error << endl;
 
     // try restart server
-    startGEMServer();
+    if( error >0 )
+        startGEMServer();
 }
 
 //------------------------------------------------------------------------------------------

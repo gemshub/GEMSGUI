@@ -42,6 +42,11 @@ class TVisor
     gstring UserProfDir;
     gstring LocalDir;
 
+    /// Path to gems3_server executable
+    /// <ServerGems3Dir>/server_data/toServer-dat.lst - path to gems3 server data
+    gstring ServerGems3Dir;
+
+
     gstring LocalDocDir;
     gstring RemoteHTML;
     bool LocalDoc;         // obsolete
@@ -141,6 +146,10 @@ public:
 
     void setLocalDoc(bool local) { // obsolete
         LocalDoc = local;
+    }
+
+    const gstring& serverGems3Dir() const {
+        return ServerGems3Dir;
     }
 
 

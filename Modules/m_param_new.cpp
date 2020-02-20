@@ -18,8 +18,6 @@
 //-------------------------------------------------------------------
 //
 
-
-
 #include "m_syseq.h"
 #include "visor.h"
 #include "node.h"
@@ -27,7 +25,7 @@
 
 
 // Run process of calculate equilibria into the GEMSGUI shell
-double  TProfil::CalculateEquilibriumGUI( const gstring& lst_path)
+double  TProfil::CalculateEquilibriumGUI( const gstring& lst_path )
 {
    bool brief_mode = false;
    bool add_mui = true;
