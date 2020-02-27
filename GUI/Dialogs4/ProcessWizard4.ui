@@ -46,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -248,7 +248,7 @@ Any process simulator belongs to one of three types:
           <item>
            <widget class="QRadioButton" name="pselR">
             <property name="text">
-             <string>&amp;R    Flow-through (sequential) reactor scheme, uses equilibrium bulk compositions of phases</string>
+             <string>&amp;R - Single flow-through reactor (SFTR) simulation using equilibrium compositions of phases</string>
             </property>
             <property name="shortcut">
              <string>Alt+R</string>
@@ -333,11 +333,11 @@ Any process simulator belongs to one of three types:
          <property name="textElideMode">
           <enum>Qt::ElideLeft</enum>
          </property>
-         <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>70</number>
-         </attribute>
          <attribute name="horizontalHeaderMinimumSectionSize">
           <number>10</number>
+         </attribute>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>70</number>
          </attribute>
          <attribute name="verticalHeaderDefaultSectionSize">
           <number>22</number>

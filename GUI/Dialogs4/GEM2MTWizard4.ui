@@ -46,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -801,7 +801,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="1">
            <widget class="QLabel" name="TextLabel2_2">
             <property name="text">
-             <string>nMGP - Number of mobile phases groups (e.g. gas, liquid, etc.)</string>
+             <string>nMGP - Number of mobile groups of phases (e.g. gas, liquid, etc.)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -935,7 +935,7 @@ p, li { white-space: pre-wrap; }
        <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Flux setup (in GEM2MT window)&lt;/p&gt;&lt;p&gt;In S mode, the flux is set by the initial mass of the fluid (fluid/rock ratio in Initial tab).&lt;/p&gt;&lt;p&gt;In F and B modes, the flux rate is set in the math script (Initial tab) and by quantities of phases in MGP (Flux tab).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Flux setup (in GEM2MT window)&lt;/p&gt;&lt;p&gt;In S mode, the flux is automatically set by the initial mass of the fluid (fluid/rock ratio in Initial tab).&lt;/p&gt;&lt;p&gt;In F and B modes, the flux rate is set in the math script (Initial tab) and by quantities of phases in MGP (Flux tab).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>

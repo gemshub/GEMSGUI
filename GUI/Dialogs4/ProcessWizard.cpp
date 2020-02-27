@@ -701,17 +701,17 @@ void ProcessWizard::defineWindow(char type)
    case P_REACTORS:
               {
                 lAbout->setText(
-   "'Flushing' scenario: the fluid part evolves while reacting at each step with the same solid part composition"
-   "  (mass of fluid part can be set by iNu iterator, the fluid/rock mass ratio can be set by ipe iterator).\n"
-   "'Leaching' scenario: the solid part changes while reacting at each step with the same fluid part composition"
-   "  (mass of solid part can be set by iNu iterator, the fluid/rock mass ratio can be set by ipe iterator).\n"
+   "'Flushing' scenario: the fluid part evolves while reacting stepwise with the same solid part composition"
+   "  (the mass of fluid can be set by 'iNu' iterator, the solid/fluid mass ratio can be set by 'ipe' iterator).\n"
+   "'Leaching' scenario: the solid part evolves while reacting stepwise with the same fluid part composition"
+   "  (the mass of solid can be set by 'iNu' iterator, the solid/fluid mass ratio can be set by ipe iterator).\n"
    " To set a 'Compos' constant source of solid ('Flushing') or fluid ('Leaching'), select either from the Compos list."
    " To use a SysEq record as constant source, first check in the parent system whether the link to that SysEq is set,"
-   " and 'xp_' array and 'MbXs' data object are both allocated. Set number of steps using the iTm iterator."
-   " If needed, select some 'Compos', 'DComp', 'IComp' items that must be zeroed off because their inputs were already"
-   " covered in the compositions of fluid (Flushing) or solid (Leaching).\n When done, proceed to the next wizard page,"
-   " set 'modC' as abscissa, and select what to plot: the mass of aqueous phase and some aqueous concentrations for"
-   " 'Flushing', or the mass of solids and some properties of solid phases for 'Leaching'. " );
+   " and 'xp_' array and 'MbXs' data object are both allocated. Set the number of steps using the iTm iterator."
+   " If needed, select 'Compos', 'DComp', 'IComp' items to zero off because their contributions were already"
+   " covered in compositions of fluid (Flushing) or solid (Leaching).\n When done, proceed to the next wizard page,"
+   " set 'modC' as abscissa, and select to plot: the mass of aqueous phase and some aqueous concentrations for"
+   " 'Flushing'; or the mass of solids and some property of solid phases (volume or mass) for 'Leaching'. " );
                 sub1->setText("Flushing: SysEq source");
                 sub2->setText("Flushing: Compos source");
                 sub3->setText("Leaching: SysEq source");
