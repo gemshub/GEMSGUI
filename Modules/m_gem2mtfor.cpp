@@ -621,7 +621,7 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments, bool brief_mode, co
 
   ff << endl;
   if( _comment )
-      ff << "\n# End of file";
+      ff << "\n# End of file\n";
 }
 
 // Reading dataCH structure from text file

@@ -166,7 +166,6 @@ void TMulti::SystemToLookup( )
 
 }
 
-
 //Load data for DC from Modelling Project definition to MULTI structure
 //
 void TMulti::multi_sys_dc()
