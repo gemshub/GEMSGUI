@@ -441,7 +441,7 @@ void TMulti::EqstatExpand( /*const char *key,*/ bool calcActivityModels/*, bool 
         IS_EtaCalc();
 
     // set IPM weight multipliers for DC
-    WeightMultipliers( false );
+    WeightMultipliers( true /*false*/ );
 
 // New: TKinMet stuff
 //if( calcKineticModels )

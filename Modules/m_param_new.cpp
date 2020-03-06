@@ -40,6 +40,8 @@ double  TProfil::CalculateEquilibriumGUI( const gstring& lst_path )
    return ret;
 }
 
+
+
 // Run process of calculate equilibria into the GEMS3K side
 double  TProfil::CalculateEquilibriumServer( const gstring& lst_f_name )
 {
@@ -80,6 +82,36 @@ double  TProfil::CalculateEquilibriumServer( const gstring& lst_f_name )
     return ret;
 }
 
+// Reading structure MULTI (GEM IPM work structure)
+void TProfil::CmReadMultiServer( const char* path )
+{
+    multi->dyn_set();
+
+    MULTI* pmp = multi->GetPM();
+    std::shared_ptr<TNode> na( new TNode( pmp ));
+
+    if( na->GEM_init( path ) )
+    {
+      Error( path, "GEMS3K Init() error: \n"
+             "Some GEMS3K input files are corrupt or cannot be found.");
+    }
+
+    // Unpacking the actual contents of DBR file including speciation
+    na->unpackDataBr( true );
+    for( int j=0; j < pmp->L; j++ )
+        pmp->X[j] = pmp->Y[j];
+    pmp->TC = pmp->TCc;
+    pmp->T =  pmp->Tc;
+    pmp->P =  pmp->Pc;
+
+    pmp->pESU = 2;  // SysEq unpack flag set
+
+    multi->EqstatExpand( /*pmp->stkey,*/ true );
+    for( int i=0; i<pmp->L; i++)
+       pmp->G[i] = pmp->G0[i];
+
+    ///   !!! G[] and F[] different after IPM and EqstatExpand
+}
 
 /* Run process of calculate equilibria into the GEMS3K side
 double  TProfil::CalculateEquilibriumServer( const gstring& lst_f_name )

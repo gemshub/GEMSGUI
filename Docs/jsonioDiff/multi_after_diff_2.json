@@ -9,44 +9,87 @@
 },
 "datafields": [
 {
+   "datakey": "<VPh>",
+   "compare": "rel_def_more",
+   "eps":  1e-9,
+   "ignored" : true
+},
+{
+   "datakey": "<GPh>",
+   "compare": "rel_def_more",
+   "eps":  1e-9,
+   "ignored" : true
+},
+{
+   "datakey": "<HPh>",
+   "compare": "rel_def_more",
+   "eps":  1e-9,
+   "ignored" : true
+},
+{
+   "datakey": "<SPh>",
+   "compare": "rel_def_more",
+   "eps":  1e-9,
+   "ignored" : true
+},
+{
+   "datakey": "<CPh>",
+   "compare": "rel_def_more",
+   "eps":  1e-9,
+   "ignored" : true
+},
+{
+   "datakey": "<APh>",
+   "compare": "rel_def_more",
+   "eps":  1e-9,
+   "ignored" : true
+},
+{
+   "datakey": "<UPh>",
+   "compare": "rel_def_more",
+   "eps":  1e-9,
+   "ignored" : true
+},
+{
    "datakey": "<XFs>",
    "comment": "  ",
    "compare": "rel_def_more",
    "eps":  1e-9,
-   "ignored" : true
+   "ignored" : false
 },
 {
    "datakey": "<Falps>",
    "comment": "  ",
    "compare": "abs_def_more",
    "eps":  1e-10,
-   "ignored" : true
+   "ignored" : false
 },
 {
    "datakey": "<Fug>",
    "comment": "  ",
    "compare": "rel_def_more",
    "eps":  1e-8,
-   "ignored" : true
+   "ignored" : false
 },
 {
    "datakey": "<Fug_l>",
    "comment": "  ",
    "compare": "rel_def_more",
    "eps":  1e-8,
-   "ignored" : true
+   "ignored" : false
 },
 {
    "datakey": "<Ppg_l>",
    "comment": "  ",
    "compare": "rel_def_more",
    "eps":  1e-8,
-   "ignored" : true
+   "ignored" : false
 },
 {
    "datakey": "<MU>",
    "compare": "abs_def_more",
-   "eps": 1e-10
+   "eps": 1e-10,
+   "ignored" : true
 },
 {
    "datakey": "<EMU>",
@@ -61,22 +104,32 @@
 {
    "datakey": "<C>",
    "compare": "abs_def_more",
-   "eps": 1e-14
+   "eps": 1e-14,
+   "ignored" : true
 },
 {
    "datakey": "<Uefd>",
    "compare": "abs_def_more",
-   "eps": 1e-5
+   "eps": 1e-5,
+   "ignored" : true
+},
+{
+   "datakey": "<Uc>",
+   "compare": "abs_def_more",
+   "eps": 1e-5,
+   "ignored" : true
 },
 {
    "datakey": "<W>",
    "compare": "abs_def_more",
-   "eps": 1e-10
+   "eps": 1e-10,
+   "ignored" : true
 },
 {
    "datakey": "<Wx>",
    "compare": "abs_def_more",
-   "eps": 1e-10
+   "eps": 1e-10,
+   "ignored" : true
 },
 {
    "datakey": "<Y_la>",
@@ -96,7 +149,8 @@
 {
    "datakey": "<XY>",
    "compare": "abs_def_more",
-   "eps": 1e-11
+   "eps": 1e-11,
+   "ignored" : true
 },
 {
    "datakey": "<Falp>",
