@@ -1,0 +1,112 @@
+{
+"doctype": "GEMS3K-multi-old",
+"key_pattern": "<([^>]*)>",
+"comment_pattern": "#([^\\\n]*)\\\n",
+"eps_number":
+{
+    "compare": "rel_def_more",
+    "eps": 1e-8
+},
+"datafields": [
+{
+   "datakey": "<XFs>",
+   "comment": "  ",
+   "compare": "rel_def_more",
+   "eps":  1e-9,
+   "ignored" : true
+},
+{
+   "datakey": "<Falps>",
+   "comment": "  ",
+   "compare": "abs_def_more",
+   "eps":  1e-10,
+   "ignored" : true
+},
+{
+   "datakey": "<Fug>",
+   "comment": "  ",
+   "compare": "rel_def_more",
+   "eps":  1e-8,
+   "ignored" : true
+},
+{
+   "datakey": "<Fug_l>",
+   "comment": "  ",
+   "compare": "rel_def_more",
+   "eps":  1e-8,
+   "ignored" : true
+},
+{
+   "datakey": "<Ppg_l>",
+   "comment": "  ",
+   "compare": "rel_def_more",
+   "eps":  1e-8,
+   "ignored" : true
+},
+{
+   "datakey": "<MU>",
+   "compare": "abs_def_more",
+   "eps": 1e-10
+},
+{
+   "datakey": "<EMU>",
+   "compare": "abs_def_more",
+   "eps": 1e-11
+},
+{
+   "datakey": "<NMU>",
+   "compare": "rel_def_more",
+   "eps": 1e-5
+},
+{
+   "datakey": "<C>",
+   "compare": "abs_def_more",
+   "eps": 1e-14
+},
+{
+   "datakey": "<Uefd>",
+   "compare": "abs_def_more",
+   "eps": 1e-5
+},
+{
+   "datakey": "<W>",
+   "compare": "abs_def_more",
+   "eps": 1e-10
+},
+{
+   "datakey": "<Wx>",
+   "compare": "abs_def_more",
+   "eps": 1e-10
+},
+{
+   "datakey": "<Y_la>",
+   "compare": "abs_def_more",
+   "eps":  1e-8
+},
+{
+   "datakey": "<X>",
+   "compare": "abs_def_more",
+   "eps": 1e-12
+},
+{
+   "datakey": "<Y>",
+   "compare": "abs_def_more",
+   "eps": 1e-12
+},
+{
+   "datakey": "<XY>",
+   "compare": "abs_def_more",
+   "eps": 1e-11
+},
+{
+   "datakey": "<Falp>",
+   "compare": "abs_def_more",
+   "eps": 1e-11
+},
+{
+   "datakey": "<BF>",
+   "compare": "abs_def_more",
+   "eps": 1e-12
+}
+]
+}
