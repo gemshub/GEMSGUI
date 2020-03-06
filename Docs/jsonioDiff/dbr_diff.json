@@ -1,0 +1,124 @@
+{
+"doctype": "GEMS3K-dbr-old",
+"key_pattern": "<([^>]*)>",
+"comment_pattern": "#([^\\\n]*)\\\n",
+"eps_number":
+{
+    "compare": "rel_def_more",
+    "eps": 1e-12
+},
+"datafields": [
+{
+    "datakey": "<IterDone>",
+    "ignored": false
+},
+{
+   "datakey": "<Vs>",
+   "comment": " Volume V of reactive subsystem  (m3) ",
+   "compare": "sig_dig_less",
+   "eps": 12
+},
+{
+   "datakey": "<Gs>",
+   "comment": "Total Gibbs energy of the reactive subsystem (J/RT) (norm)",
+   "compare": "sig_dig_less",
+   "eps": 12
+},
+{
+   "datakey": "<IS>",
+   "comment": "Effective aqueous ionic strength (molal)",
+   "compare": "sig_dig_less",
+   "eps": 12
+},
+{
+   "datakey": "<pH>",
+   "comment": "pH of aqueous solution in the activity scale (-log10 molal)",
+   "compare": "sig_dig_less",
+   "eps": 12
+},
+{
+   "datakey": "<pe>",
+   "comment": "pe of aqueous solution in the activity scale (-log10 molal)",
+   "compare": "sig_dig_less",
+   "eps": 10
+},
+{
+   "datakey": "<Eh>",
+   "comment": "Eh of aqueous solution (V)",
+   "compare": "sig_dig_less",
+   "eps": 9
+},
+{
+   "datakey": "<rMB>",
+   "comment": "Mass balance residuals (moles)",
+   "compare": "abs_def_more",
+   "eps": 1e-13
+},
+{
+   "datakey": "<bIC>",
+   "comment": "Input amounts of independent components (moles)",
+   "compare": "sig_dig_less",
+   "eps": 15
+},
+{
+   "datakey": "<uIC>",
+   "comment": "Output normalized chemical potentials of independent components (GEM dual solution)",
+   "compare": "rel_def_more",
+   "eps": 1e-8
+},
+{
+   "datakey": "<bSP>",
+   "comment": "Output bulk composition of the equilibrium solid part of the system (moles) ",
+   "compare": "rel_def_more",
+   "eps": 1e-11
+},
+{
+   "datakey": "<xDC>",
+   "comment": "Output amounts of dependent components (chemical speciation), moles (GEM primal solution)",
+   "compare": "abs_def_more",
+   "eps": 1e-12
+},
+{
+   "datakey": "<gam>",
+   "comment": "Output activity coefficients of dependent components",
+   "compare": "rel_def_more",
+   "eps": 1e-12
+},
+{
+   "datakey": "<xPH>",
+   "comment": "Amounts of phases in equilibrium state, moles (GEM output)",
+   "compare": "rel_def_more",
+   "eps": 1e-12
+},
+{
+   "datakey": "<vPS>",
+   "comment": "Volumes of multicomponent phases, m3 (GEM output)",
+   "compare": "rel_def_more",
+   "eps": 1e-12
+},
+{
+   "datakey": "<mPS>",
+   "comment": "Masses of multicomponent phases, kg (GEM output)",
+   "compare": "rel_def_more",
+   "eps": 1e-12
+},
+{
+   "datakey": "<xPA>",
+   "comment": "Masses of multicomponent phases, kg (GEM output)",
+   "compare": "rel_def_more",
+   "eps": 1e-14
+},
+{
+   "datakey": "<omPH>",
+   "comment": "stability (saturation) indices of phases in log10 scale, can change in GEM",
+   "compare": "abs_def_more",
+   "eps": 1e-11
+},
+{
+   "datakey": "<bPS>",
+   "comment": "Bulk elemental compositions of multicomponent phases, moles (GEM output)",
+   "compare": "abs_def_more",
+   "eps": 1e-12
+}
+]
+}

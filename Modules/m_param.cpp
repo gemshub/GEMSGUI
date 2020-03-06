@@ -630,7 +630,7 @@ void TProfil::CmReadMulti( const char* path, bool new_ipm )
     pmp->TC = pmp->TCc;
     pmp->T =  pmp->Tc;
     pmp->P =  pmp->Pc;
-    pmp->VX_ = pmp->VXc; // from cm3 to m3
+    //pmp->VX_ = pmp->VXc; // from cm3 to m3
 
     if( !new_ipm )
     {
@@ -672,7 +672,7 @@ pmp->pKMM = 0;
 
     // Unpack the pmp->B vector (b) into syp->BI and syp->BI (BI_ vector).
     for( long i=0; i < pmp->N; i++ )
-        syp->BI[pmp->mui[i]] = syp->B[pmp->mui[i]] = pmp->B[i];
+        /*syp->BI[pmp->mui[i]] =*/ syp->B[pmp->mui[i]] = pmp->B[i];
 
     for( long jj, j=0; j < pmp->L; j++ )
     {
@@ -704,6 +704,73 @@ pmp->pKMM = 0;
     // because of slightly different values into G, V ...
     // (interpolation of thermodynamic data or precision )
 }
+
+// Reading structure MULTI (GEM IPM work structure)
+void TProfil::CmReadMultiServer( const char* path )
+{
+    multi->dyn_set();
+
+    MULTI* pmp = multi->GetPM();
+    TNode* na = new TNode( pmp );
+    //SYSTEM* syp = syst->GetSY();
+    //gstring key = pmp->stkey;
+
+    if( na->GEM_init( path ) )
+    {
+      Error( path, "GEMS3K Init() error: \n"
+             "Some GEMS3K input files are corrupt or cannot be found.");
+    }
+    // Here to compare the modelling project name; error when from a different project.
+    if( CompareProjectName( pmp->stkey ) )
+    {
+        delete na;
+        Error( pmp->stkey, "E15IPM: Wrong project name by reading GEMS3K I/O files ");
+    }
+
+     // Unpacking the actual contents of DBR file including speciation
+    na->unpackDataBr( true );
+    for( int j=0; j < pmp->L; j++ )
+        pmp->X[j] = pmp->Y[j];
+    pmp->TC = pmp->TCc;
+    pmp->T =  pmp->Tc;
+    pmp->P =  pmp->Pc;
+
+    pmp->pESU = 2;  // SysEq unpack flag set
+
+    // for loading GEX to System
+    //CheckMtparam();
+    //multi->DC_LoadThermodynamicData( na );
+
+    // Unpack the pmp->B vector (b) into syp->BI and syp->BI (BI_ vector).
+    //for( long i=0; i < pmp->N; i++ )
+    //    /*syp->BI[pmp->mui[i]] =*/ syp->B[pmp->mui[i]] = pmp->B[i];
+
+    /*for( long jj, j=0; j < pmp->L; j++ )
+    {
+       jj = pmp->muj[j];
+       syp->DLL[jj] = pmp->DLL[j];
+       syp->DUL[jj] = pmp->DUL[j];
+       syp->GEX[jj] = na->DC_G0(j, pmp->Pc*bar_to_Pa, pmp->Tc, false) - mtparm->GetTP()->G[jj];
+    }*/
+
+// !!! We cannot restore to System  for adsorbtion must be done
+
+    //TSysEq::pm->CellChanged();
+
+    // calculate mass of the system
+  /*   pmp->MBX = 0.0;
+     for(int i=0; i<pmp->N; i++ )
+           pmp->MBX += pmp->B[i] * pmp->Awt[i];
+     pmp->MBX /= 1000.;
+
+    // Restoring the rest of MULTI contents from primal and dual solution
+    pmp->pIPN =0;
+    multi->Alloc_internal();*/
+    multi->EqstatExpand( /*pmp->stkey,*/ false );
+//    outMultiTxt( "IPM_EqstatExpand.txt"  );
+    delete na;
+}
+
 
 //Delete record with key
 void
@@ -1043,7 +1110,7 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
   TSysEq* STat = dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
   calcFinished = false;
 
-  multi->Access_GEM_IMP_init();
+  //multi->Access_GEM_IMP_init();
   outMultiTxt( "Reactoro_before.dump.txt"  );
   //CalculateEquilibriumGUI( "/home/sveta/devGEMS/gitGEMS3/standalone/gemserver-build/server_data/toServer-dat.lst");
   CalculateEquilibriumGUI( pVisor->serverGems3Dir()+"/server_data/toServer-dat.lst");

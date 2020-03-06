@@ -35,7 +35,7 @@ double  TProfil::CalculateEquilibriumGUI( const gstring& lst_path )
    // run gem_ipm
    auto ret = CalculateEquilibriumServer( lst_path );
 
-   CmReadMulti( lst_path.c_str(), true );
+   CmReadMultiServer( lst_path.c_str() );
 
    return ret;
 }
