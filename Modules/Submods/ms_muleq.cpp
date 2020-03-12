@@ -230,13 +230,16 @@ void TMulti::loadData( bool newRec )
 // =================================================================
 // Moved from MS_MULOAD.CPP
 
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *
+#ifndef IPMGEMPLUGIN
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *
 // Load Thermodynamic Data from MTPARM to MULTI
 void TMulti::DC_LoadThermodynamicData()
 {
     long int j, jj, k, jb, je=0;
     double Go, Gg=0., Ge=0., Vv = 0.;
-
+    SYSTEM *syp = TSyst::sm->GetSY();
+    MTPARM* tpp = TMTparm::sm->GetTP();
     pmp->PunE = tpp->PunE;
     pmp->PunV = tpp->PunV;
     pmp->PunP = tpp->PunP;
@@ -330,7 +333,8 @@ void TMulti::DC_LoadThermodynamicData()
   //Alloc_internal(); // performance optimization 08/02/2007
   pmp->pTPD = 2;
 }
-*/
+
+#endif
 
 // Get T, P, V from record key
 void TMulti::MultiKeyInit( const char*key )

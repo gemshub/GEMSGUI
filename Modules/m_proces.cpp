@@ -1740,7 +1740,8 @@ void TProcess::genGEM3K(const gstring& filepath, TCStringArray& savedSystems, bo
            newname += dat_ext;
            fout2 << "," << " \"" << name.c_str() << "." << dat_ext << "\"";
            // save to dataBR internal node  and save to file
-           TMulti::sm->GEMS3k_write_dbr( newname.c_str(), false, false, brief_mode );
+           //TMulti::sm->GEMS3k_write_dbr( newname.c_str(), false, false, brief_mode );
+           na->GEMS3k_write_dbr( newname.c_str(), false, false, brief_mode );
        }
     }
 
