@@ -29,8 +29,14 @@ double  TProfil::CalculateEquilibriumGUI( const gstring& lst_path )
 {
    bool brief_mode = false;
    bool add_mui = true;
+   MULTI* pmp = multi->GetPM();
 
    CurrentSystem2GEMS3K( lst_path, brief_mode, add_mui );
+   /*cout << setprecision(15) <<
+        " pmp->B[H] " << pmp->B[2] <<
+        " pmp->B[O] " << pmp->B[5] <<
+        " pmp->B[Cl] " << pmp->B[1] <<
+        " pmp->B[Na] " << pmp->B[3] << endl;*/
 
    // run gem_ipm
    auto ret = CalculateEquilibriumServer( lst_path );
@@ -107,9 +113,21 @@ void TProfil::CmReadMultiServer( const char* path )
     pmp->pESU = 2;  // SysEq unpack flag set
 
     multi->EqstatExpand( /*pmp->stkey,*/ true );
+    pmp->FI1 = 0;  // Recomputing the number of non-zeroed-off phases
+    pmp->FI1s = 0;
+    for(int i=0; i<pmp->FI; i++ )
+    {
+        if( pmp->YF[i] >= min( pmp->PhMinM, 1e-22 ) )  // Check 1e-22 !!!!!
+        {
+             pmp->FI1++;
+             if( i < pmp->FIs )
+                 pmp->FI1s++;
+        }
+    }
     for( int i=0; i<pmp->L; i++)
        pmp->G[i] = pmp->G0[i];
 
+    //cout << setprecision(15) <<" pmp->Y_la[4] " << pmp->Y_la[4] << " pmp->lnGam[4] " << pmp->lnGam[4] << endl;
     ///   !!! G[] and F[] different after IPM and EqstatExpand
 }
 

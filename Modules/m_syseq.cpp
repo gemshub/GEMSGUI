@@ -55,7 +55,8 @@ void TSysEq::setCalcFlag( bool ifC )
 {
     if(ifC == true)
         stp->Flags =(stp->Flags|0x1);
-    else stp->Flags =(stp->Flags&(0xF-0x1));
+    else
+        stp->Flags =(stp->Flags&(0xF-0x1));
 }
 
 

@@ -795,7 +795,8 @@ void TProfil::PMtest( const char *key )
 
     // test for available old solution
     if( STat->ifCalcFlag() )
-    { if( !pmp->pESU )      // if pESU == 2 (task loaded before), left value
+    {
+       if( !pmp->pESU )      // if pESU == 2 (task loaded before), left value
           pmp->pESU = 1;
     }
     else pmp->pESU = 0;

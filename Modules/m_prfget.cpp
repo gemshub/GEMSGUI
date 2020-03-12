@@ -545,7 +545,7 @@ void TProfil::loadSystat( const char *key )
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK SD 24/05/2010
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
-       multi->InitalizeGEM_IPM_Data(  );
+    multi->InitalizeGEM_IPM_Data(  );
 
     if( pmp->pESU )      // unpack old solution
     {
@@ -725,6 +725,7 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
     }
 
     PMtest( keyp.c_str() );
+    multi->InitalizeGEM_IPM_Data();
 
 #ifndef Use_mt_mode
      if( prg )
