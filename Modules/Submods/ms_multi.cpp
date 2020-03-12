@@ -28,7 +28,7 @@ TMulti::TMulti( int nrt ):
 {
     set_def();
     pmp = &pm;
-    node = 0;
+    node1 = 0;
 
     sizeN = 0;
     AA=0;
