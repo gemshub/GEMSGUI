@@ -754,9 +754,10 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
        }
 
       if( cP < 1e-5 )
-       CSD->Psat[it] = tp.P*1e5;
+       CSD->Psat[it ] = tp.P*1e5;
       else // DM added 09.06.2016
       {
+
 //          double Psat = 0.0;
           TSupcrt supCrt;
 //          supCrt.Supcrt_H2O(cT, &Psat);
