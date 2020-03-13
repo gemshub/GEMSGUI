@@ -283,6 +283,8 @@ ProgressDialog::CalcFinished()
       str.sprintf( "Converged at DK=%.3g", pData->PCI );
 //    str.sprintf( "Converged at DK=%.2g", pData->DXM );
     setWindowTitle(str);
+    Update(true);
+    pVisorImp->Update(true);
 }
 
 /*! CmAccept
@@ -375,7 +377,7 @@ ProgressDialog::Update(bool force)
     MULTI* pData = TMulti::sm->GetPM();
 
 //    str.sprintf( "%2lu:%4lu:%4lu ", pData->W1+pData->K2, pData->ITF, pData->ITG ); // pData->IT );
-    str.sprintf( "%2lu:%4lu:%4lu ", pData->K2, pData->ITF, pData->ITG ); // pData->IT );
+    str.sprintf( "%4lu ",  pData->IT );
     pIT->setText( str );
     str.sprintf( "%*g", 8, pData->pH );
     pPH->setText( str );
