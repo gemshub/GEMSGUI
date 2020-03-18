@@ -900,20 +900,10 @@ void TVisorImp::CmRunIPM()
     try
     {
 
-#ifdef Use_mt_mode
        TProfil::pm->userCancel = false;
-
-        ProgressDialog* dlg = new ProgressDialog(this,sactionStepwise->isChecked()  );
-
-        dlg->show();
-#else
-
-        if( !menu->isItemChecked( pStepwiseCheck ) )
-        {
-           CalcMulti();
-        }
-#endif
-        Update(true);
+       ProgressDialog* dlg = new ProgressDialog(this,sactionStepwise->isChecked()  );
+       dlg->show();
+       Update(true);
     }
     catch( TError& err)
     {

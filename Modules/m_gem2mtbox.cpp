@@ -540,7 +540,6 @@ TGEM2MT::BoxEqStatesUpdate(  long int Ni, long int /*pr*/, double tcur, double s
       Vmessage += buf;
       Vmessage += ". Please, wait (may take time)...";
 
-#ifdef Use_mt_mode
     if( mtp->PsSmode != S_OFF  )
     {
       STEP_POINT2();
@@ -548,10 +547,7 @@ TGEM2MT::BoxEqStatesUpdate(  long int Ni, long int /*pr*/, double tcur, double s
     else
       iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
                            nstep, mtp->ntM );
-#else
-      iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
-                             nstep, mtp->ntM );
-#endif
+
 
    if( iRet )
          Error("GEM2MT Box-Flux model", "Cancelled by the user");
@@ -780,7 +776,6 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
       Vmessage += buf;
       Vmessage += ". Please, wait (may take time)...";
 
-#ifdef Use_mt_mode
     if( mtp->PsSmode != S_OFF  )
     {
       STEP_POINT2();
@@ -788,10 +783,7 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
      else
       iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
                            mtp->ct, mtp->ntM, UseGraphMonitoring );
-#else
-      iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
-                             mtp->ct, mtp->ntM, UseGraphMonitoring );
-#endif
+
 
       if( iRet )
              return iRet;// Error("GEM2MT SeqReac model", "Cancel by the user");

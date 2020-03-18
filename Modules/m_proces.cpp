@@ -1300,7 +1300,6 @@ pep->ccTime = 0.0;
           pep->kst = -1;
           pep->c_Tau = pep->Taui[0];
           pep->ccTime += PRof->CalcEqstat( pep->kdt, pep->kst, pep->c_Tau ); // calc current SyStat
-//	      pVisorImp->CalcMulti();
           TSysEq::pm->CmSave();  // save results
           pep->kst = 0;
         }
@@ -1310,7 +1309,6 @@ pep->ccTime = 0.0;
     TCModule::RecCalc(key);
     ModUpdate("Working...");
 
-#ifdef Use_mt_mode
      if( pep->Istat >= P_MT_MODE )
      { // use thread
        TProcess::pm->userCancel = false;
@@ -1325,9 +1323,7 @@ pep->ccTime = 0.0;
      }
      else
       internalCalc();
-#else
-      internalCalc();
-#endif
+
 
 }
 
@@ -1350,7 +1346,6 @@ TProcess::internalCalc()
         Vmessage += ". Please, wait (may take time)...";
 
 
-#ifdef Use_mt_mode
     if( pep->Istat >= P_MT_MODE )
     {
        pointShow=-1;
@@ -1361,11 +1356,6 @@ TProcess::internalCalc()
     iRet = pVisor->Message( window(), GetName(),
                  Vmessage.c_str(), pep->c_nrk, pep->NR1, pointShow!=-1);
 
-#else
-    // if( pointShow==-1 )
-    iRet = pVisor->Message( window(), GetName(),
-                 Vmessage.c_str(), pep->c_nrk, pep->NR1, pointShow!=-1);
-#endif
          if( iRet )
            break;   //cancel process
 
@@ -1442,7 +1432,6 @@ else {
     if( pep->kdt )
         pep->kst++;
 }
-//	    pVisorImp->CalcMulti();
         if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
 //13/08/2009        	    if( pep->Istat < P_MT_MODE )
                  TSysEq::pm->CmSave();  // save results
@@ -1499,9 +1488,7 @@ else {
  
     calcFinished = true;
     
-#ifdef Use_mt_mode
    if( pep->Istat < P_MT_MODE )
-#endif
   //  if( pointShow == -1 )
         pVisor->CloseMessage();
 

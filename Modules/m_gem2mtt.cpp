@@ -819,7 +819,7 @@ char buf[300];
        Vmessage += buf;
        Vmessage += ". Please, wait (may take time)...";
 
-#ifdef Use_mt_mode
+
        if( mtp->PsSmode != S_OFF  )
        {
          STEP_POINT2();
@@ -827,10 +827,6 @@ char buf[300];
        else
            iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
                            mtp->ct, mtp->ntM, UseGraphMonitoring );
-#else
-          iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
-                             mtp->ct, mtp->ntM, UseGraphMonitoring );
-#endif
 
 #endif
       if( iRet )

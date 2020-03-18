@@ -3,7 +3,6 @@
 #ifndef _stepwise_h_
 #define _stepwise_h_
 
-#ifdef Use_mt_mode
 
 class ThreadControl {
 
@@ -36,10 +35,5 @@ class ThreadControl {
 	}
 
 
-#else
-
-#define STEP_POINT( ap )
-
-#endif
 
 #endif

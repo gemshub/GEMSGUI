@@ -94,11 +94,8 @@ TVisorImp::TVisorImp(int c, char** v):
      charHeight = 18;
      pVisorImp = this;
 
-   #ifdef Use_mt_mode
-       updateTime = 10; // centiseconds
-   #else
-       updateTime = 1; // second
-   #endif
+     updateTime = 10; // centiseconds
+
 
        defaultFont = QFont(GEMS_DEFAULT_FONT_NAME, GEMS_DEFAULT_FONT_SIZE);
        setCellFont( defaultFont );
@@ -977,55 +974,6 @@ void TVisorImp::Update(bool force)
        pLine->setText(tr(rt[nrt].PackKey()));
 }
 
-
-/*void TVisorImp::SaveSystem()
-{
-    TSysEq::pm->CmSave();
-}*/
-
-void TVisorImp::CalcMulti()
-{
-#ifdef Use_mt_mode
-    TProfil::pm->userCancel = false;
-
-    try
-    {
-        ProgressDialog* dlg = new ProgressDialog(/*window()*/this, false, true);
-        //dlg->exec();
-        dlg->show();
-    }
-    catch( TError& xcpt )
-    {
-        vfMessage(this, xcpt.title, xcpt.mess);
-    }
-#else
-    TProfil::pm->fStopCalc = false;
-    try
-    {
-        showMss = 1L;
-        TProfil::pm->CalcEqstat( -1. );
-    }
-    catch( TError& xcpt )
-    {
-        vfMessage(this, xcpt.title, xcpt.mess);
-    }
-#endif
-}
-
-// Service window functions
-void TVisorImp::OpenProgress( bool step )
-{
-    if( ProgressDialog::pDia )
-        ProgressDialog::pDia->raise();
-    else
-        (new ProgressDialog(NewSystemDialog::pDia, step))->show();
-}
-
-void TVisorImp::CloseProgress()
-{
-    if( ProgressDialog::pDia )
-       ProgressDialog::pDia->CmClose();
-}
 
 bool TVisorImp::Message( QWidget* /*parent*/, const char* name,
              const char* msg, int prog, int total, bool /*move*/ )

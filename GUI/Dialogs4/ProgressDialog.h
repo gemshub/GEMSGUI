@@ -65,11 +65,8 @@ protected:
 public:
     static ProgressDialog* pDia;
 
-#ifdef Use_mt_mode
     ProgressDialog(QWidget* parent, bool step, bool autoclose=false);
-#else
-    ProgressDialog(QWidget* parent = NULL, bool step=false);
-#endif
+
     virtual ~ProgressDialog();
 
     void Update(bool force=false);

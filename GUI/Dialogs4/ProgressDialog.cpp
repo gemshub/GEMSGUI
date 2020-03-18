@@ -296,7 +296,6 @@ ProgressDialog::CmAccept()
 {
     try
     {
-        //pVisorImp->SaveSystem();
         pVisorImp->CmSave();
         close();
     }

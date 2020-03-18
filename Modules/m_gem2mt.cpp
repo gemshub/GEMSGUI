@@ -1061,7 +1061,6 @@ TGEM2MT::RecCalc( const char * key )
          Expr_analyze( o_mtgexpr );
      
        // internal calc
-  #ifdef Use_mt_mode
      if( mtp->PsSmode != S_OFF  )
      { // use thread
         userCancel = false;
@@ -1083,13 +1082,6 @@ TGEM2MT::RecCalc( const char * key )
          else
             mtp->iStat = AS_DONE;
      }
-#else
-      iRet = internalCalc();
-      if(iRet)
-        savePoint();
-      else
-         mtp->iStat = AS_DONE;
-#endif
    }
 
   //FreeNa();

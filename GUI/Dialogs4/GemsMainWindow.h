@@ -202,8 +202,6 @@ public:
     void defineModuleKeysList( int nRT );
     void GetHelp();
     void OpenHelp(const char* file, const char* item=nullptr, int page =-1);
-    void OpenProgress(bool step=false);
-    void CloseProgress();
     bool Message( QWidget* parent, const char* name,
              const char* msg, int prog, int total, bool move);
     void CloseMessage();
@@ -353,8 +351,6 @@ public slots:
     void CmHelpAuthors();
     void CmHelpThanks();
     void CmHelpLicense();
-    void CalcMulti();
-//    void SaveSystem();
     void Update(bool force);
     void theadService( int nFunction, QWidget* par );
 

@@ -1157,18 +1157,6 @@ TVisor::OpenModule(QWidget* parent, uint i, int page, int viewmode, bool select)
 }
 
 void
-TVisor::OpenProgress(bool step)
-{
-    pVisorImp->OpenProgress( step );
-}
-
-void
-TVisor::CloseProgress()
-{
-    pVisorImp->CloseProgress();
-}
-
-void
 TVisor::ProcessProgress( QWidget* parent, int nRT )
 {
     pVisorImp->ProcessProgress( parent,  nRT );

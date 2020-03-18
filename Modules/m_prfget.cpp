@@ -727,10 +727,6 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
     PMtest( keyp.c_str() );
     multi->InitalizeGEM_IPM_Data();
 
-#ifndef Use_mt_mode
-     if( prg )
-	pVisorImp->OpenProgress();
-#endif
    // run GEM calculation
    ComputeEquilibriumState( /*NumPrecLoops,*/ NumIterFIA, NumIterIPM );
 

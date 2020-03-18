@@ -160,8 +160,6 @@ public:
 
     //void OpenHelp(const char* file, const char* item=0, int page =-1 );
     void OpenModule(QWidget* parent, uint i, int page=0, int viewmode=0, bool select=false);
-    void OpenProgress(bool step=false);
-    void CloseProgress();
     bool Message( QWidget* parent, const char* name,
              const char* msg, int prog =0, int total=-1, bool move = false);
     void ProcessProgress( QWidget* parent, int nRT );

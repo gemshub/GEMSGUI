@@ -262,7 +262,6 @@ TProfil::TProfil( uint nrt ):
     userCancel = false;
     stepWise = false;
     calcFinished = false;
-    fStopCalc = false;
     comp_change_all = false;
     internalBufer = nullptr;
 }
