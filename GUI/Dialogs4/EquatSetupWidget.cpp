@@ -147,6 +147,7 @@ void EquatSetup::resetPageList( int newRT,
         horizontalLayout1 = new QHBoxLayout(page1);
         lstIndexes1 = new QListWidget(page1);
         lstIndexes1->setWrapping( true );
+        lstIndexes1->setResizeMode(QListView::Adjust);
         lstIndexes1->setSelectionMode(QAbstractItemView::MultiSelection);
         horizontalLayout1->addWidget(lstIndexes1);
         winStac->addWidget(page1);

@@ -211,8 +211,8 @@ TVisorImp::TVisorImp(int c, char** v):
     splV->setStretchFactor(1, 1);
 
     splH->addWidget(splV);
-    //splH->setStretchFactor(0, 1);
-    //splH->setStretchFactor(1, 2);
+    splH->setStretchFactor(0, 3);
+    splH->setStretchFactor(1, 1);
 
 // define signal/slots
 

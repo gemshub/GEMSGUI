@@ -754,6 +754,8 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
      default: break;
     }
 
+    if( !na->CalcIPM_One( TestModeGEMParam(mode, mtp->PsSIA, mtp->ct, mtp->cdv, mtp->cez ), 0, 0 ) )
+      iRet = false;  // Analysis of errors after GEM calculation?
     // Calculation of current box 0 reactive IC masses in kg
     BoxMasses( 0 );
     // Calculation of MGP bulk compositions in box 0 (in moles of ICs)

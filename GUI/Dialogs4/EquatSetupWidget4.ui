@@ -55,7 +55,17 @@
            <widget class="QWidget" name="page_5">
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <item>
-              <widget class="QListWidget" name="listStatic"/>
+              <widget class="QListWidget" name="listStatic">
+               <property name="flow">
+                <enum>QListView::TopToBottom</enum>
+               </property>
+               <property name="isWrapping" stdset="0">
+                <bool>true</bool>
+               </property>
+               <property name="resizeMode">
+                <enum>QListView::Adjust</enum>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
