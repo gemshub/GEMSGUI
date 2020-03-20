@@ -78,7 +78,8 @@ SOURCES += $$DIALOGS4_CPP/GemsMainWindow.cpp \
                   $$DIALOGS4_CPP/GtDemoWizard.cpp \
                   $$DIALOGS4_CPP/GEM2MTWizard.cpp \
                   $$DIALOGS4_CPP/UnSpaceWizard.cpp \
-                  $$DIALOGS4_CPP/DualThWizard.cpp
+                  $$DIALOGS4_CPP/DualThWizard.cpp \
+    $$PWD/GemsMainThread.cpp
 
 
 FORMS += $$DIALOGS4_CPP/GemsMainWindow4.ui \

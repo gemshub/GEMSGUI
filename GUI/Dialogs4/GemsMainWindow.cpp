@@ -17,7 +17,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <QThread>
 #include <QMdiArea>
 
 #if QT_VERSION >= 0x050000
@@ -26,14 +25,15 @@
 #include <QtGui>
 #endif
 
-
 #include "visor.h"
+#include "m_param.h"
 #include "HelpWindow.h"
 #include "GemsMainWindow.h"
-#include "ProgressDialog.h"
 #include "NewSystemDialog.h"
+
 #include "LoadMessage.h"
-#include "GraphDialogN.h"
+//#include "GraphDialogN.h"
+//#include "ProgressDialog.h"
 
 //static const char* GEMS_LOGO_ICON = "Icons/gems1.png";
 static const char* GEMS_VERSION_STAMP = "GEM-Selektor 3 (GEMS3)";
@@ -224,10 +224,6 @@ TVisorImp::TVisorImp(int c, char** v):
     connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
             this, SLOT(updateMenus()));
 
-    windowMapper = new QSignalMapper(this);
-    connect(windowMapper, SIGNAL(mapped(QWidget *)),
-            this, SLOT(setActiveSubWindow(QWidget *)));
-
     connect(splH, SIGNAL(splitterMoved( int , int  )),
             this, SLOT(moveToolBar( int , int  )));
 
@@ -280,6 +276,9 @@ TVisorImp::TVisorImp(int c, char** v):
 //   The desctructor
 TVisorImp::~TVisorImp()
 {
+    calc_thread.quit();
+    calc_thread.wait();
+
     killGEMServer();
     delete pVisor;
 }
@@ -460,97 +459,6 @@ void TVisorImp::changeKeyList()
     }
 }
 
-void TVisorImp::startGEMServer()
-{
-    try
-    {
-        killGEMServer();
-
-        if (!GEMS3_proc)
-        {
-           GEMS3_proc = new QProcess();
-           GEMS3_proc->setReadChannel(QProcess::StandardOutput);
-           GEMS3_proc->setProcessChannelMode(QProcess::MergedChannels);
-           GEMS3_proc->setCurrentReadChannel(QProcess::StandardOutput);
-           connect(GEMS3_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutput()));
-           connect(GEMS3_proc, SIGNAL(readyRead()), this, SLOT(readOutput()));
-           connect( GEMS3_proc, SIGNAL(errorOccurred(QProcess::ProcessError)),
-                    this, SLOT(GEMServerErrorOccurred(QProcess::ProcessError)));
-        }
-
-        if (GEMS3_proc->state() != QProcess::Running)
-        {
-            QString serverPath =  pVisor->serverGems3Dir().c_str();
-            //"/home/sveta/devGEMS/gitGEMS3/standalone/gemserver-build";
-            QString app;
-#ifdef __unix
-#ifdef __APPLE__
-            //                    app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/qcollectiongenerator");    // expected to work
-            app += QLatin1String("gems3_server");
-#else
-            app += QLatin1String("gems3_server");
-#endif
-#else    // windows
-            app += QLatin1String("gems3_server.exe");
-#endif
-
-            GEMS3_proc->setWorkingDirectory(serverPath);
-            QStringList argumentos;
-            //argumentos << "-P" << filehex  << "-Q" << "-V" <<  "after_programming";
-            GEMS3_proc->start(app);
-            cout << app.toLatin1().data() << endl;
-
-            if(!GEMS3_proc->waitForStarted(-1))
-            {
-                Error( "Gems3 server", "gems3_server");
-            }
-        }
-    }
-    catch(TError& e)
-    {
-        vfMessage(this, e.title.c_str(), e.mess.c_str() );
-    }
-    catch(...)
-    {
-        cout << "Start GEMS3 server error occurred"  << endl;
-    }
-}
-
-void TVisorImp::readOutput()
-{
-    while( GEMS3_proc->canReadLine() )
-    {
-        QByteArray linea = GEMS3_proc->readLine();
-        const std::string green("\033[1;32m");
-        const std::string reset("\033[0m");
-        cout << green << "GEMS3 server: " << reset << linea.toStdString()  << endl;
-    }
-}
-
-void TVisorImp::killGEMServer()
-{
-    if (GEMS3_proc && GEMS3_proc->state() == QProcess::Running)
-    {
-        disconnect( GEMS3_proc, SIGNAL(errorOccurred(QProcess::ProcessError)),
-                 this, SLOT(GEMServerErrorOccurred(QProcess::ProcessError)));
-        GEMS3_proc->terminate();
-        GEMS3_proc->waitForFinished(3000);
-        // terminal> killall gems3_server
-    }
-    delete GEMS3_proc;
-    GEMS3_proc = nullptr;
-}
-
-void TVisorImp::GEMServerErrorOccurred(QProcess::ProcessError error)
-{
-    cout << "GEMS3 server error occurred: " << error << endl;
-
-    // try restart server
-    if( error >0 )
-        startGEMServer();
-}
-
-//------------------------------------------------------------------------------------------
 
 // working with TCModuleImp
 void TVisorImp::OpenModule(QWidget* /*par*/, uint irt, int page, int viewmode, bool /*select*/)
@@ -872,7 +780,7 @@ void TVisorImp::setCellFont(const QFont& newCellFont)
 {
     CellFont = newCellFont;
     QFontMetrics fm(CellFont);
-    charWidth = fm.width("5");
+    charWidth = fm.horizontalAdvance("5");
     charHeight = fm.height();
 }
 
@@ -939,382 +847,6 @@ const char* TVisorImp::getGEMTitle()
 {
     return GEMS_VERSION_STAMP;
 }
-
-
-void TVisorImp::Update(bool force)
-{
-    if( pThread != QThread::currentThreadId() )
-    {
-       // (1)NewThread *thread = dynamic_cast<NewThread*>(QThread::currentThread());
-       //if( thread )
-       //		thread->emitUpdate(force);
-       // (2)
-        QMetaObject::invokeMethod(this, "Update",  Qt::QueuedConnection,
-                                   Q_ARG( bool, force ));
-        // (3)
-        // QMetaObject::invokeMethod(ProcessProgressDialog::pDia, "slUpdate",
-        //	   Qt::QueuedConnection, Q_ARG( bool, force ));
-       return;
-    }
-
-    if( ProgressDialog::pDia )
-        ProgressDialog::pDia->Update(force);
-
-    if( ProcessProgressDialog::pDia )
-        ProcessProgressDialog::pDia->Update();
-
-    if( NewSystemDialog::pDia )
-        NewSystemDialog::pDia->Update();
-
-    for( uint ii=0; ii<aMod.GetCount(); ii++ )
-        aMod[ii].Update(force);
-
-    int nrt = nRTofActiveSubWindow();
-    if( nrt>=0 )
-       pLine->setText(tr(rt[nrt].PackKey()));
-}
-
-
-bool TVisorImp::Message( QWidget* /*parent*/, const char* name,
-             const char* msg, int prog, int total, bool /*move*/ )
-{
-     if( LoadMessage::pDia )
-     {
-
-        if( LoadMessage::pDia->wasCanceled() )
-        {
-          LoadMessage::pDia->setValue(LoadMessage::pDia->maximum());
-          return true;
-        }
-        LoadMessage::pDia->Update(msg, prog, total);
-     }
-    else
-    {
-        //--QPushButton *btn = new QPushButton();
-        LoadMessage* mssg = new LoadMessage(nullptr/* parent*/, name, msg, prog, total);
-        //--mssg->setCancelButton(btn);
-        layout2->addWidget(mssg);
-        qApp->processEvents();
-        bool enabled = !(pVisor->ProfileMode == MDD_SYSTEM && LoadMessage::pDia );
-        setMenuEnabled( enabled );
-         connect( mssg, SIGNAL(canceled () ), this, SLOT(setMenuEnabled()) );
-
-       // (new LoadMessage( parent, name, msg, prog, total))->show();
-      //  if( move && parent  )
-      //    LoadMessage::pDia->move(parent->x()+parent->width(), parent->y());
-    }
-
-   return false;
-}
-
-void TVisorImp::CloseMessage()
-{
-   if( LoadMessage::pDia )
-    {
-       LoadMessage::pDia->setValue(LoadMessage::pDia->maximum());
-       LoadMessage::pDia->close();
-   }
-}
-
-void TVisorImp::ProcessProgress( QWidget* /*parent*/, int nRT )
-{
-    TProcess::pm->userCancel = false;
-    TGEM2MT::pm->userCancel = false;
-
-    ProcessProgressDialog* dlg =
-             new ProcessProgressDialog( nullptr/*parent*/, nRT );
-    //   dlg->show();
-    layout2->addWidget(dlg);
-    bool enabled = !(pVisor->ProfileMode == MDD_SYSTEM );
-    setMenuEnabled( enabled );
-}
-
-//=================================================================
-// thread staff
-
-void TVisorImp::theadService( int nFunction, QWidget* par )
-{
-       switch( nFunction  )
-       {
-        case thMessage:
-          vfMessage( par, thdata.title, thdata.mess );
-                       break;
-        case thQuestion:
-          thdata.res = vfQuestion( par, thdata.title, thdata.mess );
-                       break;
-        case thQuestion3:
-          thdata.res = vfQuestion3( par, thdata.title, thdata.mess,
-                                          thdata.s1, thdata.s2, thdata.s3 );
-                       break;
-        case thChoice:
-          thdata.res = vfChoice( par, thdata.list,
-                             thdata.title.c_str(), thdata.seli );
-                       break;
-        case thChoice2:
-          thdata.res = vfChoice2( par, thdata.list, thdata.title.c_str(),
-                              thdata.seli, thdata.all  );
-                       break;
-        case thExcludeFillEdit:
-          thdata.res = vfExcludeFillEdit( par, thdata.title.c_str(),
-             thdata.list, thdata.sel, thdata.fill_data );
-                       break;
-        default:
-                       break;
-        }
-      thdata.wait = false;
-      ThreadControl::wakeOne();
-}
-
-
-//QMutex updateMutex;
-static QMutex calcMutex;
-static QWaitCondition calcWait;
-static QWaitCondition progressWait;
-
-QMutex& TVisorImp::getMutexCalc()
-{
-    return calcMutex;
-}
-
-QWaitCondition& TVisorImp::getWaitCalc()
-{
-//    return calcWait;
-   return progressWait;
-}
-
-QWaitCondition& TVisorImp::getWaitProgress()
-{
-   return progressWait;
-}
-
-Qt::HANDLE pThread;
-
-void ThreadControl::wakeOne()
-{
-    progressWait.wakeOne();
-//    pVisorImp->getWaitProgress().wakeOne();
-}
-
-void ThreadControl::wakeAll()
-{
-   progressWait.wakeAll();
-//   pVisorImp->getWaitProgress().wakeAll();
-}
-
-bool ThreadControl::wait()
-{
-    return progressWait.wait(&calcMutex);
-//  return pVisorImp->getWaitProgress().wait(&pVisorImp->getMutexCalc());
-}
-
-bool ThreadControl::wait(unsigned long /*time*/ )
-{
-    return progressWait.wait(&calcMutex);
-    //return pVisorImp->getWaitProgress().wait(&pVisorImp->getMutexCalc(),time);
-}
-
-char* ThreadControl::GetPoint()
-{
-    return pVisorImp->getTCpoint();
-}
-
-void ThreadControl::SetPoint(const char* str )
-{
-    pVisorImp->setTCpoint( str );
-}
-
-//===================================================================
-
-/*ModuleListItem mdList[15] =  {
-  { RT_ICOMP, "Independent Components","Independent Components (IComp)" },
-  { RT_DCOMP, "Dependent Components",  "Dependent Components (DComp)" },
-  { RT_REACDC,"React Components" ,  "Dependent Components (ReacDC)" },
-  { RT_RTPARM,"T/P Tabulations" ,   "T/P Tabulations and Plots (RTparm)" },
-  { RT_PHASE, "Thermodynamic Phases",  " Thermodynamic Phases (Phase)" },
-  { RT_COMPOS, "Predefined Compositions", "Predefined Compositions (Compos)" },
-
-  { RT_SDATA, "Bibliography&Scripts", "Bibliography and Scripts (SDref)" },
-  { RT_CONST, "Numerical Constants",  "Numerical Constants (Const)" },
-
-  { RT_SYSEQ, "Chemical Systems", "Single Chemical Systems (SysEq)" },
-  { RT_PROCES,"Process Simulators", "Process Simulators (Process)" },
-  { RT_GEM2MT,"Mass Transport", "Coupled Fluid-Mass Transport (GEM2MT)" },
-  { RT_GTDEMO,"Data Samplers",  "Data Samplers and Plotters (GtDemo)" },
-  { RT_DUALTH,"Dual Thermodynamics", "Dual Thermodynamics (DualTh)" },
-  { RT_UNSPACE, "Sensitivity Studies", "Sensitivity Studies (UnSpace)" },
-  { RT_PARAM, "Project&Settings",      "Modelling Project (Project)" },
- };
-*/
-// working with MdeChild
-/*
-MdiChild *TVisorImp::activeMdiChild()
-{
-    if (QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow())
-        return qobject_cast<MdiChild *>(activeSubWindow->widget());
-    return 0;
-}
-
-QMdiSubWindow *TVisorImp::findMdiChild(const QString &moduleName)
-{
-    foreach (QMdiSubWindow *window, mdiArea->subWindowList())
-    {
-        MdiChild *mdiChild = qobject_cast<MdiChild *>(window->widget());
-        if (mdiChild->currentName() == moduleName)
-            return window;
-    }
-    return 0;
-}
-
-void TVisorImp::setActiveSubWindow(QWidget *window)
-{
-    if (!window)
-        return;
-    mdiArea->setActiveSubWindow(qobject_cast<QMdiSubWindow *>(window));
-}
-
-void TVisorImp::openMdiChild( QTreeWidgetItem * item, int column )
-{
-  int nline = item->type();
-  QMdiSubWindow *wn = findMdiChild( mdList[nline].modName );
-  if( wn )
-      setActiveSubWindow(wn);
-  else
-  { MdiChild *child = createMdiChild( nline );
-    child->show();
-  }
-}
-
-MdiChild *TVisorImp::createMdiChild( int nline )
-{
-    MdiChild *child = new MdiChild( mdList[nline] );
-    mdiArea->addSubWindow(child);
-    return child;
-}
-*/
-
-/* column 1
-    defineButtonsList();
-
-    bModeGroup = new QButtonGroup;
-    bModeGroup->setExclusive(true);
-    QVBoxLayout *layout1 = new QVBoxLayout;
-    layout1->setContentsMargins( 0, 0, 0, 0 );
-    layout1->setSpacing(0);
-    QWidget *itemWidget1 = new QWidget;
-
-    dataBaseButton = new QToolButton(itemWidget1);
-    dataBaseButton->setCheckable(true);
-    dataBaseButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-    dataBaseButton->setIcon(QIcon(QPixmap(":/images/database_access.png")
-                        .scaled(30, 30)));
-    dataBaseButton->setIconSize(QSize(40, 40));
-    dataBaseButton->setText("DataBase");
-    dataBaseButton->setToolTip("Thermodynamic Database Management");
-    bModeGroup->addButton(dataBaseButton, 0);
-    layout1->addWidget(dataBaseButton);
-
-    projectButton = new QToolButton(itemWidget1);
-    projectButton->setCheckable(true);
-    projectButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-    //projectButton->setIcon(QIcon(QPixmap(":/images/chemical-solutions-icon.png")
-    //                    .scaled(40, 40)));
-    projectButton->setIcon(QIcon(QPixmap(":/images/index1.jpeg")
-                        .scaled(30, 30)));
-    projectButton->setIconSize(QSize(40, 40));
-    projectButton->setText("System");
-    projectButton->setToolTip("Computation of Equilibria");
-    bModeGroup->addButton(projectButton, 1);
-    layout1->addWidget(projectButton);
-
-    QSpacerItem *verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    layout1->addItem(verticalSpacer);
-
-    itemWidget1->setLayout(layout1);
-    itemWidget1->setFixedWidth( 50 );
-    horizontalLayout->addWidget(itemWidget1);
-    //spl->addWidget(itemWidget1);
-    toolBar->setFixedWidth(itemWidget1->width());
-*/
-
-/* Define list of Modules for General and Project mode
-void TVisorImp::defineButtonsList()
-{
-  int ii;
-  QStringList lst;
-
-  bModeGroup = new QButtonGroup;
-  bModeGroup->setExclusive(true);
-  QVBoxLayout *layout1 = new QVBoxLayout;
-  layout1->setContentsMargins( 0, 0, 0, 0 );
-  layout1->setSpacing(0);
-  QWidget *itemWidget1 = new QWidget;
-
-  // Thermodynamic Database
-  for( ii=0; ii<6; ii++ )
-  {
-    //lst.clear();
-    //lst << mdList[ii].name;
-    //item = new  QTreeWidgetItem( thermoData,
-    //             lst, *ii*mdList[ii].nRT);
-    //item->setToolTip( 0, mdList[ii].toolTip);
-
-    dataBaseButton = new QToolButton(*itemWidget1*);
-    dataBaseButton->setCheckable(true);
-
-    QFont fnt = dataBaseButton->font();
-    fnt.setPointSize( 8 );
-    dataBaseButton->setFont(fnt);
-    QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    dataBaseButton->setSizePolicy(sizePolicy2);
-    //dataBaseButton->setFixedWidth( 50 );
-    //dataBaseButton->setContentsMargins( 0, 0, 0, 0 );
-
-    dataBaseButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-    dataBaseButton->setIcon(QIcon(QPixmap(":/images/database_access.png")
-                        .scaled(30, 30)));
-    dataBaseButton->setIconSize(QSize(30, 30));
-
-
-    dataBaseButton->setText(aMod[mdList[ii].nRT].GetName());
-    dataBaseButton->setToolTip(mdList[ii].toolTip);
-    bModeGroup->addButton(dataBaseButton, mdList[ii].nRT);
-    layout1->addWidget(dataBaseButton);
-  }
-
-  // GEM Modeling Project
-  for( ii=8; ii<15; ii++ )
-  {
-    //lst.clear();
-    //lst << mdList[ii].name;
-    //item = new  QTreeWidgetItem( projectData,
-    //            lst, *ii*mdList[ii].nRT);
-    //item->setToolTip( 0, mdList[ii].toolTip);
-  }
-
-  //  Other Data
-  for( ii=6; ii<8; ii++ )
-  {
-    //lst.clear();
-    //lst << mdList[ii].name;
-    //item = new  QTreeWidgetItem( otherData,
-    //             lst, *ii*mdList[ii].nRT);
-    //item->setToolTip(0, mdList[ii].toolTip);
-  }
-
-  QSpacerItem *verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-  layout1->addItem(verticalSpacer);
-  itemWidget1->setLayout(layout1);
-  itemWidget1->setFixedWidth( 60 );
-  //QScrollArea *scroll = new QScrollArea;
-  //scroll->setWidget(itemWidget1);
-  //scroll->setFixedWidth( 70 );
-  //horizontalLayout->addWidget(scroll);
-  //toolBar->setFixedWidth(scroll->width());
-
-  horizontalLayout->addWidget(itemWidget1);
-  toolBar->setFixedWidth(itemWidget1->width());
-
-}*/
 
 // -------------- End of file GemsMainWindow.cpp ----------------------
 

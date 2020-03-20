@@ -25,6 +25,9 @@
 #include <QTimer>
 #include <QPainter>
 #include <QLineEdit>
+#include <QThread>
+
+class CalcObject;
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -34,7 +37,6 @@ class QMenu;
 class QComboBox;
 class QMdiArea;
 class QMdiSubWindow;
-class QSignalMapper;
 class QSplitter;
 QT_END_NAMESPACE
 
@@ -379,8 +381,13 @@ private slots:
     void readOutput();
 
  private:
+
     /// GEMS3 server application run
     QProcess *GEMS3_proc = nullptr;
+    /// The thread that provides GEM IPN calculation
+    QThread calc_thread;
+    /// GEM IPN run object
+    CalcObject* calc_model=nullptr;
 
 
     TCModuleImp *activeMdiChild(); //( MdiChild = ModuleWindow )
@@ -414,7 +421,6 @@ private slots:
     QWidget *itemWidget2;
     QHBoxLayout *layout2;
     QLabel *messageText;
-    QSignalMapper *windowMapper;
 
  // menu collection
     QToolBar *toolDataBase;

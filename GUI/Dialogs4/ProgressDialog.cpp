@@ -28,7 +28,7 @@
 void
 ProgressDialog::switchToAccept(bool isAccept)
 {
-  pClose->setToolTip( trUtf8( "Cancel this GEM IPM calculation" ) );
+  pClose->setToolTip( tr( "Cancel this GEM IPM calculation" ) );
 
 	if( isAccept ) {
 		pStepAccept->disconnect();
@@ -39,9 +39,9 @@ ProgressDialog::switchToAccept(bool isAccept)
 		connect( pResume, SIGNAL(clicked()), this, SLOT(CmStop()) );
 		pResume->setText("&Stop");
 
-        pStepAccept->setToolTip( trUtf8(
+        pStepAccept->setToolTip( tr(
                 "Close and save results to SysEq database record" ) );
-        pResume->setToolTip(trUtf8(
+        pResume->setToolTip(tr(
                   "Switch to Stepwise IPM calculation mode" ) );
 	}
 	else {
@@ -54,8 +54,8 @@ ProgressDialog::switchToAccept(bool isAccept)
 		connect( pResume, SIGNAL(clicked()), this, SLOT(CmResume()) );
 		pResume->setText("&Resume");
 
-        pStepAccept->setToolTip(trUtf8("Perform next IPM iteration in Stepwise mode" ) );
-        pResume->setToolTip(trUtf8( "Resume continuous IPM iteration mode" ) );
+        pStepAccept->setToolTip(tr("Perform next IPM iteration in Stepwise mode" ) );
+        pResume->setToolTip(tr( "Resume continuous IPM iteration mode" ) );
 
 	}
 }
@@ -277,7 +277,7 @@ ProgressDialog::CalcFinished()
     pResume->hide();
     pStepAccept->show();
     pClose->setText("&Dismiss");    // fixed DK 29.02.2012
-    pClose->setToolTip( trUtf8( "Close and do not save results to SysEq database record" ) );
+    pClose->setToolTip( tr( "Close and do not save results to SysEq database record" ) );
     MULTI* pData = TMulti::sm->GetPM();
     QString str;
       str.sprintf( "Converged at DK=%.3g", pData->PCI );

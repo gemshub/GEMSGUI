@@ -30,7 +30,6 @@
 #include "GemsMainWindow.h"
 #include "SettingsDialog.h"
 #include "NewSystemDialog.h"
-#include "ProgressDialog.h"
 #include "GraphDialogN.h"
 
 void TVisorImp::updateMenus()
@@ -240,8 +239,8 @@ void TVisorImp::updateWindowMenu()
         QAction *action  = menuWindow->addAction(text);
         action->setCheckable(true);
         action ->setChecked(windows.at(i) == mdiArea->activeSubWindow());
-        connect(action, SIGNAL(triggered()), windowMapper, SLOT(map()));
-        windowMapper->setMapping(action, windows.at(i));
+        QWidget * awindow = windows.at(i);
+        connect(action, &QAction::triggered, this, [this, awindow ](){ setActiveSubWindow(awindow); });
     }
 }
 
@@ -888,30 +887,6 @@ void TVisorImp::setActionPrecise()
    sactionPrecise->setChecked( TProfil::pm->pa.p.PRD );
 }
 
-void TVisorImp::CmRunIPM()
-{
-    TMulti::sm->GetPM()->pNP =
-        ( sactionSimplex->isChecked())? 0: 1;
-    if( sactionPrecise->isChecked() && !TProfil::pm->pa.p.PRD )
-          TProfil::pm->pa.p.PRD = -5; // Changed
-    TProfil::pm->pa.p.PRD =
-        ( !sactionPrecise->isChecked())? 0: TProfil::pm->pa.p.PRD;
-
-    try
-    {
-
-       TProfil::pm->userCancel = false;
-       ProgressDialog* dlg = new ProgressDialog(this,sactionStepwise->isChecked()  );
-       dlg->show();
-       Update(true);
-    }
-    catch( TError& err)
-    {
-        Update(true);
-        vfMessage(this, err.title, err.mess);
-    }
-    NewSystemDialog::pDia->setCurrentTab(1);
-}
 
 // Show resalts (view) actions
 // Access to MULTI data
