@@ -32,8 +32,6 @@
 #include "NewSystemDialog.h"
 
 #include "LoadMessage.h"
-//#include "GraphDialogN.h"
-//#include "ProgressDialog.h"
 
 //static const char* GEMS_LOGO_ICON = "Icons/gems1.png";
 static const char* GEMS_VERSION_STAMP = "GEM-Selektor 3 (GEMS3)";
@@ -237,6 +235,7 @@ TVisorImp::TVisorImp(int c, char** v):
  // Set up Menus and actions
 
     setActions();
+    setCalcClient();
 
     // Use database mode as start mode
     //actionDataBaseMode->setChecked(true);

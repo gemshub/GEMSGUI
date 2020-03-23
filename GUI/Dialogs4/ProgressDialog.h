@@ -26,9 +26,40 @@
 
 #include <ctime>
 #include "ui_ProgressDialog4.h"
+#include "gstring.h"
 
 class CalcThread;
 class QTimer;
+
+/// \class IPNCalcObject object to run IPM calc in other thread
+class IPNCalcObject: public QObject
+{
+    Q_OBJECT
+
+signals:
+
+    /// Finished process
+    void IPM_finish();
+    /// Finished with exception
+    void IPM_exception(gstring err_mess);
+    /// Finished OK
+    void IPM_OK();
+
+public slots:
+
+    /// Start IPM calc
+    void IPM_run();
+
+
+public:
+
+    explicit IPNCalcObject()
+    { }
+
+    ~IPNCalcObject()
+    { }
+
+};
 
 class ProgressDialog : public QDialog, public Ui::ProgressDialogData
 {
@@ -38,39 +69,36 @@ class ProgressDialog : public QDialog, public Ui::ProgressDialogData
     int ht_a;
     int ht_s;
     int ht_l;
-    time_t last_update;
-    CalcThread* calcThread;
-    QTimer* timer;
-    bool autoclose;
-    clock_t t_start;
+    //time_t last_update;
+    //CalcThread* calcThread;
+    //QTimer* timer;
+    //bool autoclose;
+    //clock_t t_start;
 
     void switchToAccept(bool isAccept);
 
 public slots:
     virtual void CmClose();
+    void CalcFinished();
 
 protected slots:
-    virtual void languageChange();
 
+    virtual void languageChange();
     virtual void CmAccept();
-    virtual void CmStep();
-    virtual void CmStop();
-    virtual void CmResume();
-    virtual void Run();
 
 protected:
+
     void closeEvent(QCloseEvent* ev);
     void paintEvent(QPaintEvent* ev);
 
 public:
+
     static ProgressDialog* pDia;
 
-    ProgressDialog(QWidget* parent, bool step, bool autoclose=false);
-
+    ProgressDialog(QWidget* parent);
     virtual ~ProgressDialog();
 
     void Update(bool force=false);
-    void CalcFinished();
 };
 
 #endif // ProgressDialog_included

@@ -27,7 +27,7 @@
 #include <QLineEdit>
 #include <QThread>
 
-class CalcObject;
+class IPNCalcObject;
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -257,7 +257,15 @@ public:
     QWaitCondition& getWaitCalc();
     QMutex& getMutexCalc();
 
+
+Q_SIGNALS:
+    void run_IPM();
+
 public slots:
+
+    void finish_IPN();
+    void error_IPN(gstring err_mess);
+
     void openRecordKey(  int row, int column  );
     void setMenuEnabled( bool menuEnabled = true );
 
@@ -356,7 +364,6 @@ public slots:
     void Update(bool force);
     void theadService( int nFunction, QWidget* par );
 
-
 private slots:
     void updateMenus();
     void updateWindowMenu();
@@ -387,8 +394,9 @@ private slots:
     /// The thread that provides GEM IPN calculation
     QThread calc_thread;
     /// GEM IPN run object
-    CalcObject* calc_model=nullptr;
+    IPNCalcObject* calc_model=nullptr;
 
+    void setCalcClient();
 
     TCModuleImp *activeMdiChild(); //( MdiChild = ModuleWindow )
     NewSystemDialog *activeNewSystem();

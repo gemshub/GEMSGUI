@@ -83,7 +83,6 @@ public:
     ~TVisor();
 
     void Update(bool force=true);
-//    void CalcFinished();
 
     bool isDBChangeMode() const { return dbChangeMode; }
 

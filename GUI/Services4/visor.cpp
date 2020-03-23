@@ -710,11 +710,6 @@ TVisor::Update(bool force)
     pVisorImp->Update(force);
 }
 
-//void
-//TVisor::CalcFinished()
-//{
-//    pVisorImp->CalcFinished();
-//}
 
 void
 TVisor::addModule(TCModule * pm, bool selectFiles)

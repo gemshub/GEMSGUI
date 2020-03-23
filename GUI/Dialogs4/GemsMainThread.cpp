@@ -27,18 +27,23 @@
 void TVisorImp::CmRunIPM()
 {
     TMulti::sm->GetPM()->pNP =
-        ( sactionSimplex->isChecked())? 0: 1;
+            ( sactionSimplex->isChecked())? 0: 1;
     if( sactionPrecise->isChecked() && !TProfil::pm->pa.p.PRD )
-          TProfil::pm->pa.p.PRD = -5; // Changed
+        TProfil::pm->pa.p.PRD = -5; // Changed
     TProfil::pm->pa.p.PRD =
-        ( !sactionPrecise->isChecked())? 0: TProfil::pm->pa.p.PRD;
+            ( !sactionPrecise->isChecked())? 0: TProfil::pm->pa.p.PRD;
 
     try
     {
-       TProfil::pm->userCancel = false;
-       ProgressDialog* dlg = new ProgressDialog(this,sactionStepwise->isChecked()  );
-       dlg->show();
-       Update(true);
+        //TProfil::pm->userCancel = false;
+        if( !ProgressDialog::pDia )
+        {
+          auto dlg = new ProgressDialog(this/*,sactionStepwise->isChecked()*/  );
+          connect( calc_model, &IPNCalcObject::IPM_OK, dlg, &ProgressDialog::CalcFinished );
+        }
+        ProgressDialog::pDia->show();
+        emit run_IPM();
+        Update(true);
     }
     catch( TError& err)
     {
@@ -48,6 +53,46 @@ void TVisorImp::CmRunIPM()
     NewSystemDialog::pDia->setCurrentTab(1);
 }
 
+void TVisorImp::finish_IPN()
+{
+    cout << "finish_IPN" << endl;
+    Update(true);
+}
+
+void TVisorImp::error_IPN( gstring err_mess )
+{
+    cout << "finish_IPN" << endl;
+    //Update(true);
+    vfMessage(this, "error_IPN", err_mess );
+}
+
+void TVisorImp::setCalcClient()
+{
+    qRegisterMetaType<gstring>("gstring");
+    try{
+
+        cout << "setCalcClient" << endl;
+
+        calc_model = new IPNCalcObject();
+
+        // link from GUI
+        connect( this, &TVisorImp::run_IPM, calc_model, &IPNCalcObject::IPM_run );
+
+        // link to GUI
+        connect( calc_model, &IPNCalcObject::IPM_finish, this, &TVisorImp::finish_IPN );
+        connect( calc_model, &IPNCalcObject::IPM_exception, this, &TVisorImp::error_IPN );
+
+        // thread functions
+        calc_model->moveToThread(&calc_thread);
+        connect(&calc_thread, &QThread::finished, calc_model, &QObject::deleteLater);
+        calc_thread.start();
+    }
+    catch(std::exception& e)
+    {
+        std::cout << "Internal comment: " << e.what() << std::endl;
+        throw;
+    }
+}
 
 
 void TVisorImp::startGEMServer()
@@ -58,14 +103,14 @@ void TVisorImp::startGEMServer()
 
         if (!GEMS3_proc)
         {
-           GEMS3_proc = new QProcess();
-           GEMS3_proc->setReadChannel(QProcess::StandardOutput);
-           GEMS3_proc->setProcessChannelMode(QProcess::MergedChannels);
-           GEMS3_proc->setCurrentReadChannel(QProcess::StandardOutput);
-           connect(GEMS3_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutput()));
-           connect(GEMS3_proc, SIGNAL(readyRead()), this, SLOT(readOutput()));
-           connect( GEMS3_proc, SIGNAL(errorOccurred(QProcess::ProcessError)),
-                    this, SLOT(GEMServerErrorOccurred(QProcess::ProcessError)));
+            GEMS3_proc = new QProcess();
+            GEMS3_proc->setReadChannel(QProcess::StandardOutput);
+            GEMS3_proc->setProcessChannelMode(QProcess::MergedChannels);
+            GEMS3_proc->setCurrentReadChannel(QProcess::StandardOutput);
+            connect(GEMS3_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutput()));
+            connect(GEMS3_proc, SIGNAL(readyRead()), this, SLOT(readOutput()));
+            connect( GEMS3_proc, SIGNAL(errorOccurred(QProcess::ProcessError)),
+                     this, SLOT(GEMServerErrorOccurred(QProcess::ProcessError)));
         }
 
         if (GEMS3_proc->state() != QProcess::Running)
@@ -122,7 +167,7 @@ void TVisorImp::killGEMServer()
     if (GEMS3_proc && GEMS3_proc->state() == QProcess::Running)
     {
         disconnect( GEMS3_proc, SIGNAL(errorOccurred(QProcess::ProcessError)),
-                 this, SLOT(GEMServerErrorOccurred(QProcess::ProcessError)));
+                    this, SLOT(GEMServerErrorOccurred(QProcess::ProcessError)));
         GEMS3_proc->terminate();
         GEMS3_proc->waitForFinished(3000);
         // terminal> killall gems3_server
@@ -276,6 +321,7 @@ QMutex& TVisorImp::getMutexCalc()
 {
     return calcMutex;
 }
+
 
 QWaitCondition& TVisorImp::getWaitCalc()
 {
