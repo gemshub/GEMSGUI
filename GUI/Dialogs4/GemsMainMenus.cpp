@@ -248,16 +248,19 @@ void TVisorImp::updateWindowMenu()
 
 void  TVisorImp::moveToolBar( int , int )
 {
-   if(pVisor->ProfileMode == MDD_SYSTEM )
-        toolBar->setFixedWidth(toolProject->size().width());
-    else
-        toolBar->setFixedWidth(toolDataBase->size().width());
+    auto size =  toolBar->size().width();
 
-   /*   if(pVisor->ProfileMode == MDD_SYSTEM )
-        toolProject->setFixedWidth(toolBar->size().width());
-    else
-        toolDataBase->setFixedWidth(toolBar->size().width());
-   */
+    if(pVisor->ProfileMode == MDD_SYSTEM ) {
+        size = max(size, toolProject->size().width());
+        toolBar->setFixedWidth(size);
+        toolProject->setFixedWidth(size);
+    }
+    else {
+        size = max(size, toolDataBase->size().width());
+        toolBar->setFixedWidth(size);
+        toolDataBase->setFixedWidth(size);
+    }
+
     toolModule->setFixedWidth(splH->widget(0)->width());
 }
 

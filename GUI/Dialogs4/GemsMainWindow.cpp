@@ -124,7 +124,7 @@ TVisorImp::TVisorImp(int c, char** v):
        toolDataBase->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
        toolDataBase->setMovable(false);
        this->addToolBar(Qt::LeftToolBarArea, toolDataBase);
-       toolDataBase->setIconSize(QSize(40,40));
+       toolDataBase->setIconSize(QSize(48,48));
        toolDataBase->addAction(actionIComp);
        toolDataBase->addAction(actionDComp);
        toolDataBase->addAction(actionReacDC);
@@ -138,7 +138,7 @@ TVisorImp::TVisorImp(int c, char** v):
        toolProject->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
        toolProject->setMovable(false);
        this->addToolBar(Qt::LeftToolBarArea, toolProject);
-       toolProject->setIconSize(QSize(40,40));
+       toolProject->setIconSize(QSize(48,48));
        toolProject->addAction(actionSysEq);
        toolProject->addAction(actionProcess);
        toolProject->addAction(actionGtDemo);
@@ -275,9 +275,9 @@ TVisorImp::TVisorImp(int c, char** v):
         }
      }
 
-    moveToolBar();
     updateMenus();
- }
+    //moveToolBar();
+}
 
 //   The desctructor
 TVisorImp::~TVisorImp()
