@@ -4,7 +4,7 @@
 // Implementation of config and basic methods of TProfile class
 //
 // Rewritten from C to C++ by S.Dmytriyeva
-// Copyright (C) 1995-2010 S.Dmytriyeva, D.Kulik
+// Copyright (C) 1995-2020 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -49,13 +49,13 @@ const double R_CONSTANT = 8.31451,
 extern char *_GEMS_version_stamp;
 extern char *_GEMIPM_version_stamp;
 SPP_SETTING pa_ = {
-    " GEMS-GUI v.3.1 r.2184 (rc) " " GEMS3K v.3.1 r.710 (rc) ",
-    {   // Typical default set (28.08.2012) new PSSC( logSI ) & uDD()
+    " GEMS-GUI v.3.7.0 c. " " GEMS3K v.3.7.0 c. ",
+    {   // Typical default set (24.03.2020) new PSSC( logSI ) & uDD()
         2,  /* PC */  2,     /* PD */   -5,   /* PRD */
         1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
         0, /* DT */     30000,   /* PLLG */   1,  /* PE */  7000, /* IIM */
         1000., /* DG */   1e-13,  /* DHB */  1e-20,  /* DS */
-        1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+        1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
         1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
         1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
         1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
@@ -93,14 +93,14 @@ SPP_SETTING pa_ = {
 }; /* SPP_SETTING */
 
 BASE_PARAM dfBase[5] =
-        {     // Added to facilitate pre-setting in projects (SD,DK), revised 07.10.2011 DK
+        {     // Added to facilitate pre-setting in projects (SD,DK), revised 24.03.2020 DK
             { // Variant for aquatic systems with moderate non-ideality
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
                 1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
                 0, /* DT */     30000,   /* PLLG */   1,  /* PE */
                 9999,   /* IIM */
                 1000., /* DG */   1e-13,  /* DHB */  1e-20,  /* DS */
-                1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
                 1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
@@ -116,7 +116,7 @@ BASE_PARAM dfBase[5] =
                 0, /* DT */     -30000,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
                 1000., /* DG */   1e-13,  /* DHB */  1e-20,  /* DS */
-                3e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                3e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
                 1e-6, /* DFYs, */  1e-17,  /* DB */   1.0,   /* AG */
@@ -130,9 +130,9 @@ BASE_PARAM dfBase[5] =
                 2,  /* PC */  2,     /* PD */   -4,   /* PRD */
                 1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
                 1, /* DT */     30000,   /* PLLG */   1,  /* PE */
-                7000,   /* IIM */
+                9990,   /* IIM */
                 1000., /* DG */   1e-11,  /* DHB */  1e-20,  /* DS */
-                1e-5,  /* DK */  0.01,  /* DF */  0.001,  /* DFM */
+                6e-5,  /* DK */  0.01,  /* DF */  0.001,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
                 1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
@@ -148,7 +148,7 @@ BASE_PARAM dfBase[5] =
                 0, /* DT */     30000,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
                 1000., /* DG */   1e-14,  /* DHB */  1e-20,  /* DS */
-                1e-7,  /* DK */  0.01,  /* DF */  0.001,  /* DFM */
+                1e-6,  /* DK */  0.01,  /* DF */  0.001,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
                 1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
@@ -164,7 +164,7 @@ BASE_PARAM dfBase[5] =
                 0, /* DT */     30000,   /* PLLG */   1,  /* PE */
                 7000,   /* IIM */
                 1000., /* DG */   1e-14,  /* DHB */  1e-20,  /* DS */
-                1e-6,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+                1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
                 1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
                 1e-5,  /* DFYr,*/  1e-5,  /* DFYh,*/   1e-5,  /* DFYc,*/
                 1e-6, /* DFYs, */  1e-17,  /* DB */   1.,   /* AG */
