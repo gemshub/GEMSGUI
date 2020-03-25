@@ -9,7 +9,7 @@ http://goblincoding.com/2013/11/07/deploying-qt-5-applications-on-ubuntu-12-04/
 
 1. Make sure that Qt5 SDK is installed with source code as /Qt in 
 your home directory; we assume that the Qt library is located as 
-"~/Qt/5.12.5/src" and "~/Qt/5.12.5/gcc_64".
+"~/Qt/5.12.7/src" and "~/Qt/5.12.7/gcc_64".
 If not yet done, copy recursively the "/Docs/build-release" directory from the 
 folder where this file is located to the folder in which the "/gems3gui" folder
 is located. Typically, you should have "~/gitGEMS/gems3gui";
@@ -19,7 +19,7 @@ is located. Typically, you should have "~/gitGEMS/gems3gui";
 "~/gitGEMS/build-release/Resources".
 
 3. Make sure that you have built (with the QtCreator) a release variant 
-of GEM-Selektor v.3.6.0 in "/home/<you>/gitGEMS3/build-release", where
+of GEM-Selektor v.3.7.0 in "/home/<you>/gitGEMS3/build-release", where
 an executable script "gemsdeployqtapp.sh" and several other files are located; 
 if the script is not executable, open a terminal, cd to that directory, and run 
    $ chmod u+x ./gemsdeployqtapp.sh.
@@ -31,10 +31,10 @@ numbers of GEM-Selektor.
 and execute the script "gemsdeployqtapp.sh" giving the exec file name as shown:
    $ ./gemsdeployqtapp.sh gems3
 
-This will create an archive "Gems3.6.0-<rev1>.<rev2>-linux-x86-64.tgz", where
+This will create an archive "Gems3.7.0-<rev1>.<rev2>-linux-x86-64.tgz", where
 <rev1> and <rev2> stay for revision numbers of GEM-Selektor GUI and GEMS3K, 
 respectively, that you have entered before into the gemsdeployqtapp.sh script.
-For instance, "Gems3.6.0-80423ef.707e5ad-linux-x86-64.tgz". The distribution
+For instance, "Gems3.7.0-b053eed.fdcdd2b-linux-x86-64.tgz". The distribution
 archive can now be provided for download.
 
 Optionally, to investigate the script output, run
