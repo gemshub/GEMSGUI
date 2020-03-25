@@ -49,7 +49,7 @@ const double R_CONSTANT = 8.31451,
 extern char *_GEMS_version_stamp;
 extern char *_GEMIPM_version_stamp;
 SPP_SETTING pa_ = {
-    " GEMS-GUI v.3.7.0 c. " " GEMS3K v.3.7.0 c. ",
+    " Tolerances and controls: GEMSGUI v.3.7.0  and " " GEMS3K v.3.7.0 ",
     {   // Typical default set (24.03.2020) new PSSC( logSI ) & uDD()
         2,  /* PC */  2,     /* PD */   -5,   /* PRD */
         1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
