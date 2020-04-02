@@ -88,7 +88,7 @@ public:
                     int mrkType = 0, int mrkSize = 8,
                     int lineSize = 2,  int lineStyle = 1, int usespline =0,
                     const QColor& aColor = QColor( 25, 0, 150)  ):
-        name(aName), xcolumn(-1) // iterate by index
+        name(aName), xcolumn(0/*-1*/) // iterate by index
     {
         setChanges( mrkType, mrkSize, lineSize,  lineStyle, usespline, aColor );
     }
@@ -96,7 +96,7 @@ public:
     SeriesLineData( size_t ndx, size_t maxLines, const std::string& aName = "",
                     int mrkType = 0, int mrkSize = 8,
                     int lineSize = 2,  int lineStyle = 1, int usespline =0 ):
-        name(aName), xcolumn(-1)
+        name(aName), xcolumn(0/*-1*/)
     {
         QColor aColor;
         aColor.setHsv( static_cast<int>(360/maxLines*ndx), 200, 200);
