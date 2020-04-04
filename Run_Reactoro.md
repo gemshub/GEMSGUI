@@ -16,7 +16,6 @@ and possible to be used by the Reaktoro/Optima server.
 
 For more details see README.md
 
-
 * If not yet done, copy recursively the "/Docs/build-release" directory from the  folder where this file is located to the folder in which the "/gems-gui" folder is located. Typically, you should have the folders at the same level, as shown below.
 
 ```sh
@@ -43,51 +42,53 @@ git checkout GEMS-Reactoro
 
 * Do the same to ~/gitGEMS3/standalone
 
-* The GEMS-Reactoro library uses [ZeroMQ](https://github.com/zeromq/libzmq)  core engine in C++ implements ZMTP/3.1 and header-only 
-* C++ binding for [libzmq](https://github.com/zeromq/cppzmq) as thirdparty dependency. 
-* To install the ~/standalone/gemserver$, go into a terminal, and execute the following:
+#### Build standalone GEMS3K server ####
+
+The GEMS-Reactoro library uses [ZeroMQ](https://github.com/zeromq/libzmq)  core engine in C++ implements ZMTP/3.1 and header-only 
+C++ binding for [libzmq](https://github.com/zeromq/cppzmq) as thirdparty dependency. 
+To install the ~/gitGEMS3/standalone/gemserver, go into a terminal, and execute the following:
 
 ```sh
-
+cd ~/gitGEMS3/standalone/gemserver
 sudo ./install-dependencies.sh
 
 ```
 
-* Into Qt Creator open project ~/gitGEMS3/standalone/gemserver/gems3_server.pro, link build directory to ~gitGEMS3/standalone/gemserver-build and build executable.
+* Start Qt Creator and open project ~/gitGEMS3/standalone/gemserver/gems3_server.pro; link build directory to ~gitGEMS3/standalone/gemserver-build and build the executable.
 
-GEMS-Reaktoro project
-* Into Qt Creator open project ~/gitGEMS3/GEMS3gui/gems3gui.pro and build executable.
+#### Build GEMS-Reaktoro client ####
 
+* In Qt Creator and open a project ~/gitGEMS3/gems3gui/gems3gui.pro and build the executable.
 
 * Change command line arguments ( add full path to gemserver executable "~gitGEMS3/standalone/gemserver-build"):
 
 ```sh
 
--d -s /home/sveta/devGEMS/gitGEMS3/GEMS3gui -g /home/sveta/devGEMS/gitGEMS3/standalone/gemserver-build
+-d -s ~/devGEMS/gitGEMS3/gems3gui -g ~/devGEMS/gitGEMS3/standalone/gemserver-build
 ```
 
-* run project and try calculate IPM and/or process
+#### Run GEMS-Reaktoro ####
 
+* run the gems3gui.pro project from QtCreator and try to open/create a project, calculate an equilibrium and/or a process
 
-* After crash or stop debugging, if  gems3_server not terminated in terminal execute command ( for Linux)
+* After a crash or after a stop during debugging, if  gems3_server was not terminated in terminal, execute a command ( for Linux)
 
 ```sh
 
 killall gems3_server
 ```
 
+### Next to be done ###
 
-### Next to do ###
+1. Compare/Test equilibria and processes calculations for more projects, perform bugfixing if needed
 
-1. Compare/Test IPM and processes calculations for more projects, bugfixing
+2.  Send json/key-value data via ZeroMQ messages without saving GEMS3K I/O files
 
-2.  Send json/key-value data without saving files structure
-
-3. Research ZeroMQ patterns, use threads and other and implemented best practices into gems3_server
+3. Research ZeroMQ patterns, use threads and implemented best practices into gems3_server (then take over to Reaktoro/Optima)
 
 http://zguide.zeromq.org/page:all#toc26
 
-4. Implement addition server or change "gems3_server" to execute TNodeArray calculations ( need discussion )
+4. Implement additional server or change "gems3_server" to execute TNodeArray calculations ( need discussion )
 
-5. ...
+5. Create a separate repository for GEMS-Reaktoro by forking this branch and connecting to Reaktoro/Optima forked repository to implement Reaktoro_server
 
