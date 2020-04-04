@@ -1,15 +1,18 @@
-## gems3gui { GEMS-Reactoro } ##
+## gems3gui { GEMS-Reactoro project } ##
 
-Now we have first worked version of GEMS-Reaktoro project.
-We can calculate Systems and Processes on remote server.
+Now we are at the end of Stage 1 having the first working variant of GEMS-Reaktoro code.
+With GEMS-Reaktoro GUI, we can set up a chemical equilibrium problem as usual and compute Systems and Processes using the GEMS3K code as a standalone server.
 
-Numbers was tested to Kaolinite and Solvus projects
-More detailed comparison would be done on next tasks.
+The accuracy of results and their consistency with the trunk GEM-Selektor version 3.7.0 has been tested on Kaolinite and Solvus projects; 
+more detailed comparisons will be done in the next tasks.
 
-For Gem2mt calculation we use internal TNodeArray class, it would be connect for server in next tasks. 
+For GEM2MT reactive transport simulations, we use so far the internal TNodeArray class, which will be connected to GEMS3K server in the next tasks. 
+Main focus at Stage 2 will be to modify Reaktoro as a standalone server using ZeroMQ messaging in a similar way as it has been already done with GEMS3K,
+and arrange a compatible I/O file exchange to be able to run Reaktoro server alternatively to GEMS3K server and compare the results of solving the same 
+test equilibria and processes. This task may be facilitated by using the new JSON format of GEMS3K I/O files, already readable/writable by GEMS3K server 
+and possible to be used by the Reaktoro/Optima server.  
 
-
-### Building and run GEM-Selektor ###
+### How to build and run GEMS-Reaktoro ###
 
 For more details see README.md
 
@@ -25,8 +28,7 @@ For more details see README.md
 ```
 We assume that both subfolders /gems3gui and /standalone are under git control and are checked out to "trunk" branch.
 
-
-* To switch to another branch (e.g. GEMS-Reactoro), use a git client or open a terminal, cd to ~/gitGEMS3/gems3gui, and type in the command line
+* To switch to GEMS-Reactoro branch, use a git client or open a terminal, cd to ~/gitGEMS3/gems3gui, and type in the command line
 
 ```sh
 
@@ -41,7 +43,9 @@ git checkout GEMS-Reactoro
 
 * Do the same to ~/gitGEMS3/standalone
 
-* The GEMS-Reactoro library uses [ZeroMQ](https://github.com/zeromq/libzmq)  core engine in C++ implements ZMTP/3.1 and header-only C++ binding for [libzmq](https://github.com/zeromq/cppzmq) as thirdparty dependency. To install  in a terminal ~/standalone/gemserver$ execute the following:
+* The GEMS-Reactoro library uses [ZeroMQ](https://github.com/zeromq/libzmq)  core engine in C++ implements ZMTP/3.1 and header-only 
+* C++ binding for [libzmq](https://github.com/zeromq/cppzmq) as thirdparty dependency. 
+* To install the ~/standalone/gemserver$, go into a terminal, and execute the following:
 
 ```sh
 
