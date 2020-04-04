@@ -44,8 +44,8 @@ git checkout GEMS-Reactoro
 
 #### Build standalone GEMS3K server ####
 
-The GEMS-Reactoro library uses [ZeroMQ](https://github.com/zeromq/libzmq)  core engine in C++ implements ZMTP/3.1 and header-only 
-C++ binding for [libzmq](https://github.com/zeromq/cppzmq) as thirdparty dependency. 
+The GEMS-Reactoro library uses [ZeroMQ](https://github.com/zeromq/libzmq)  core engine in C++ thet implements ZMTP/3.1 and header-only 
+C++ binding for [libzmq](https://github.com/zeromq/cppzmq) as a thirdparty dependency. 
 To install the ~/gitGEMS3/standalone/gemserver, go into a terminal, and execute the following:
 
 ```sh
