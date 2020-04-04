@@ -14,7 +14,7 @@ Permission to use the GEM-Selektor software is hereby granted free of charge for
 * Kulik D.A., Wagner T., Dmytrieva S.V., Kosakowski G., Hingerl F.F., Chudnenko K.V., Berner U. (2013): GEM-Selektor geochemical modeling package: revised algorithm and GEMS3K numerical kernel for coupled simulation codes. Computational Geosciences 17, 1-24.
 * Wagner T., Kulik D.A., Hingerl F.F., Dmytrieva S.V. (2012): GEM-Selektor geochemical modeling package: TSolMod library and data interface for multicomponent phase models. Canadian Mineralogist 50, 1173-1195.
 
-Version: currently 3.5.0.
+Version: currently 3.7.0.
 
 Learn more about GEM-Selektor from http://gems.web.psi.ch 
 
