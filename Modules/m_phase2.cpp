@@ -57,15 +57,16 @@ void TPhase::Set_SolMod_Phase_coef()
                        // php->nscM = 3;  // NP_DC  // reciprocal energies and their dependence on T
                        php->nrcp = 0;  // number of coefficients per reciprocal dG parameter
 //                       php->npxM = php->nSiT*2;
-                       if( php->npxM < 2 || php->npxM > 10 )
+                       if( php->npxM < 4 )
                            php->npxM = 4;  // MaxOrd
+                       if( php->npxM > 12 )
+                           php->npxM = 12;  // MaxOrd
                        if( php->ncpN < 1 ) // NPar
                            php->ncpN = 1;
-                       if( php->ncpN > (php->nDC * 2 + 4 ))
-                       php->ncpN = php->nDC * 2 + 4.;   // Check max N of parameters in more detail!
+                       if( php->ncpN > (php->nDC * 5 ))
+                           php->ncpN = php->nDC * 5;   // Check max N of parameters in more detail!
                        php->ncpM = 4;  // NPcoef
-       break;
-                      break;
+                       break;
        case SM_VANLAAR:   // Van Laar model (multicomponent)
                       php->nscM = 1;  // NP_DC
                       php->npxM = 2;  // MaxOrd
@@ -495,14 +496,14 @@ AGAINRC:
         {
           case VF3_1:
             goto AGAINRC;
-            ;
+
           case VF3_2:
             break;
           case VF3_3:  Error( GetName(),
              "E09PHrem: No ReacDC/DComp records selected into Phase...");
         }
       }
-      nDC = (short)(aDclist.GetCount());
+      nDC = aDclist.GetCount();
 }
 
 // Build Phase keys (aPhlist) to be included into the Phase
@@ -533,14 +534,14 @@ AGAINRC:
         {
           case VF3_1:
             goto AGAINRC;
-            ;
+
           case VF3_2:
             break;
           case VF3_3:  Error( GetName(),
              "E09PHrem: No Phase records selected into Phase...");
         }
       }
-      php->nlPh = (short)(aPhlist.GetCount());
+      php->nlPh = aPhlist.GetCount();
  }
 
 /*
@@ -589,8 +590,8 @@ void TPhase::LoadDCC()
     vstr dcn(MAXRKEYLEN);
     char Ctype;
     time_t crt;
-    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
-    TReacDC* aRDC=(TReacDC *)(&aMod[RT_REACDC]);
+    TDComp* aDC=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
+    TReacDC* aRDC=dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
     memset( dcn, 0, MAXRKEYLEN );
 
     for(int i=0; i<php->nDC; i++ )
@@ -679,7 +680,9 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
 
    if( WorkCount )
    {   // pre-proc. loop: determining number of cations, anions and neutral species
-      nAn=0, nCat=0, nNs=0;
+      nAn=0;
+      nCat=0;
+      nNs=0;
       for( i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
       {
          spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
@@ -712,28 +715,28 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
       if( php->Ppnc == S_ON
     		  && (php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ) )
       {
-         php->lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Alloc(
-                          php->nCat, 1, MAXDCNAME );
-         php->lsAn  = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Alloc(
-                          php->nAn, 1, MAXDCNAME );
-         php->nxCat = (short *)aObj[ o_ph_w_nxc ].Alloc( php->nCat, 1, I_);
-         php->nxAn  = (short *)aObj[ o_ph_w_nxa ].Alloc( php->nAn, 1, I_);
+         php->lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ].Alloc(
+                          php->nCat, 1, MAXDCNAME ));
+         php->lsAn  = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ].Alloc(
+                          php->nAn, 1, MAXDCNAME ));
+         php->nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ].Alloc( php->nCat, 1, I_));
+         php->nxAn  = static_cast<short *>(aObj[ o_ph_w_nxa ].Alloc( php->nAn, 1, I_));
          if( php->nNs )
          {
-             php->lsNs  = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsn ].Alloc(
-                              php->nNs, 1, MAXDCNAME );
-             php->nxNs  = (short *)aObj[ o_ph_w_nxn ].Alloc( php->nNs, 1, I_);
+             php->lsNs  = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ].Alloc(
+                              php->nNs, 1, MAXDCNAME ));
+             php->nxNs  = static_cast<short *>(aObj[ o_ph_w_nxn ].Alloc( php->nNs, 1, I_));
          }
       }
       else {
 
         php->nSub =  0;
-        php->lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Free();
-        php->lsAn =  (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Free();
-        php->lsNs =  (char (*)[MAXDCNAME])aObj[ o_ph_w_lsn ].Free();
-        php->nxCat = (short *)aObj[ o_ph_w_nxc ].Free();
-        php->nxAn =  (short *)aObj[ o_ph_w_nxa ].Free();
-        php->nxNs =  (short *)aObj[ o_ph_w_nxn ].Free();
+        php->lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ].Free());
+        php->lsAn =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ].Free());
+        php->lsNs =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ].Free());
+        php->nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ].Free());
+        php->nxAn =  static_cast<short *>(aObj[ o_ph_w_nxa ].Free());
+        php->nxNs =  static_cast<short *>(aObj[ o_ph_w_nxn ].Free());
 
       }
    }
@@ -771,7 +774,7 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
 const int MAXMOIETY = 60;
 
 // Assembling indices and name lists for Multi-site (sublattice) SS models
-void TPhase::MakeSublatticeLists( TCStringArray& form_array  )
+void TPhase::MakeSublatticeLists( const TCStringArray& form_array  )
 {
     TFormula form;
     TIArray<MOITERM> moit_;
@@ -814,8 +817,19 @@ void TPhase::MakeSublatticeLists( TCStringArray& form_array  )
 
    // setup data to formula list
    if( php->nMoi >0 )
-     for( jj=0; jj<form_array.GetCount(); jj++ )
+   {
+       string moi_lst = "$";
+       for( i1=0; i1<php->nMoi; i1++)
+       {
+         moi_lst += string(php->lsMoi[i1])+";";
+       }
+       php->PdEq = S_ON;
+       php->dEq  =  static_cast<char *>(aObj[ o_phdeq ].Alloc( 1, moi_lst.size()+10, S_));
+       strncpy( php->dEq, moi_lst.c_str(),  moi_lst.size()+1 );
+       for( jj=0; jj<form_array.GetCount(); jj++ )
         strncpy( php->lsForm[jj], form_array[jj].c_str(), MAXFORMULA);
+
+   }
 
 }
 
@@ -835,8 +849,8 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
     time_t crt;
     TCStringArray form_array;
 
-    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
-    TReacDC* aRDC=(TReacDC *)(&aMod[RT_REACDC]);
+    TDComp* aDC=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
+    TReacDC* aRDC=dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
     aDC->ods_link(0);
     aRDC->ods_link(0);
 
@@ -913,7 +927,7 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
                }
                if( aDC->dcp->CPg && !aDC->dcp->Cemp )
                {
-                  mcex = min( MAXCRITPARAM, (int)nsc );  // PRSV, SRK, PR78, CORK and STP model coefficients
+                  mcex = min<int>( MAXCRITPARAM, nsc );  // PRSV, SRK, PR78, CORK and STP model coefficients
                   for( kx=0; kx< nsc; kx++ )
                   {
                     if( kx < mcex ) // Copying only what is possible
@@ -1048,10 +1062,10 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
 
 //  Setup of aqueous phase
     if( !apar[2] )
-    	strcpy(neutbuf, "1.0");
+        strcpy(neutbuf, "1.0");
     else strcpy(neutbuf, "b_q*IS");
     if( !apar[3] )
-    	strcpy(H2Obuf, "1.0");
+        strcpy(H2Obuf, "1.0");
     else strcpy(H2Obuf, "calculate");
     if( !apar[4] )
         strcpy( tempdbuf, "0");
@@ -1074,7 +1088,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 apar[0] = 0.0;
                 apar[1] = 0.0;
 					Name += "ion-association model, Davies equation";
-					sprintf( nbuf, "Parameters: gam_neut= %s; gam_H2O= %s", neutbuf, H2Obuf );
+                    sprintf( nbuf, "Parameters: gam_neut= %s; gam_H2O= %s", neutbuf, H2Obuf );
                 break;
        case 'H': // EDH model with common bg and common a0 (Helgeson)
                 memcpy( php->sol_t, "HNNSNN", 6 );
@@ -1085,7 +1099,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 php->npxM = 0;
 					Name += "ion-association model, EDH(H) equation, common ion size";
 					sprintf( nbuf, ": b_gamma= %-5.3f, T_dep= %s; a_size= %-5.3f; gam_neut= %s, gam_H2O= %s ",
-							apar[0], tempdbuf, apar[1], neutbuf, H2Obuf );
+                            apar[0], tempdbuf, apar[1], neutbuf, H2Obuf );
                 break;
        case 'Y': // EDH model with common bg and common a0 (Shvarov)
                 memcpy( php->sol_t, "YNNSNN", 6 );
@@ -1096,7 +1110,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 php->npxM = 0;
 					Name += "ion-association model, EDH(S) equation, common ion size";
 					sprintf( nbuf, ": b_gamma= %-5.3f, T_dep= %s; a_size= %-5.3f; gam_neut= %s, gam_H2O= %s ",
-							apar[0], tempdbuf, apar[1], neutbuf, H2Obuf );
+                            apar[0], tempdbuf, apar[1], neutbuf, H2Obuf );
                 break;
        case '3': // EDH model with individual (Kielland) a0 and common bg (Karpov)
                 memcpy( php->sol_t, "3NNSNN", 6 );
@@ -1108,7 +1122,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 apar[1] = 0.0;
 					Name += "ion-association model, EDH(K) equation, individual ion sizes";
 					sprintf( nbuf, ": b_gamma= %-5.3f, T_dep= %s; a_size=specific; gam_neut= %s; gam_H2O= %s ",
-							apar[0], tempdbuf, neutbuf, H2Obuf );
+                            apar[0], tempdbuf, neutbuf, H2Obuf );
                 break;
        case '2': // DH model with individual (Kielland) a0 and optional bg for neutral species
                 memcpy( php->sol_t, "2NNSNN", 6 );
@@ -1120,8 +1134,8 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 apar[0] = 0.0;
                 apar[1] = 0.0;
 					Name += "ion-association model, DH equation, individual ion sizes";
-					sprintf( nbuf, ": b_gamma= %-5.3f; a_size=specific; gam_neut= %s; gam_H2O= %s ",
-							apar[0], neutbuf, H2Obuf );
+                    sprintf( nbuf, ": b_gamma= %-5.3f; a_size=specific; gam_neut= %s; gam_H2O= %s ",
+                            apar[0], neutbuf, H2Obuf );
                 break;
        case '1': // DH limiting law (no a0 and bg required)
                 memcpy( php->sol_t, "1NNSNN", 6 );
@@ -1134,7 +1148,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 apar[1] = 0.0;
                 // apar[2] = 0.0;
 					Name += "ion-association model, Debye-Hueckel limiting law";
-					sprintf( nbuf, "Parameters: gam_H2O= %s ", H2Obuf );
+                    sprintf( nbuf, "Parameters: gam_H2O= %s ", H2Obuf );
                 break;
        default: // Unrecognized code - error message ?
        case 'S': // SIT - under testing
@@ -1185,7 +1199,7 @@ MAKE_GAS_PHASE:
               if( php->ncpN < 1 ) // NPar
             	  php->ncpN = 1;
               if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
-            	  php->ncpN = (php->nDC*(php->nDC-1)/2);
+                  php->ncpN = (php->nDC*(php->nDC-1)/2);
               // php->ncpN = 0;
               php->ncpM = 2;
               php->nscM = 7;
@@ -1201,7 +1215,7 @@ MAKE_GAS_PHASE:
               if( php->ncpN < 1 ) // NPar
             	  php->ncpN = 1;
               if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
-            	  php->ncpN = (php->nDC*(php->nDC-1)/2);
+                  php->ncpN = (php->nDC*(php->nDC-1)/2);
               // php->ncpN = 0;
               php->ncpM = 2;
               php->nscM = 7;
@@ -1217,7 +1231,7 @@ MAKE_GAS_PHASE:
               if( php->ncpN < 1 ) // NPar
             	  php->ncpN = 1;
               if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
-            	  php->ncpN = (php->nDC*(php->nDC-1)/2);
+                  php->ncpN = (php->nDC*(php->nDC-1)/2);
               // php->ncpN = 0;
               php->ncpM = 2;
               php->nscM = 7;
@@ -1235,7 +1249,7 @@ MAKE_GAS_PHASE:
         part = "f:*:*:*:";
 
     // Assembling gas phase
-    AssemblePhase( gkey, part, 0, file, useLst, lst, 0 );
+    AssemblePhase( gkey, part, nullptr, file, useLst, lst, 0 );
 
     // Do sometning else here?
     DONE:
@@ -1250,7 +1264,7 @@ TPhase::AssemblePhase( const char* key, const char* part, float* param,
     int file, bool useLst, TCStringArray lst, int Npar )
 {
 
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    TProfil *aPa=dynamic_cast<TProfil *>(&aMod[RT_PARAM]);
 
 // Initializing
 memcpy( php->kin_t, "NNNNNNNN", 8 );
@@ -1329,12 +1343,12 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
         }
         ErrorIf( Nrc<1&&Ndc<1,  /*key,*/  "AutoAssemblePhase:",
               " No DComp and ReacDC records found! ");
-        php->nDC = (short)(Ndc + Nrc);
+        php->nDC = (Ndc + Nrc);
 //        php->NR1 = (short)aRclist.GetCount();
         iic = aDclist.GetCount();
     }
     else
-        php->nDC = (short)lst.GetCount(); // php->NR1 ?
+        php->nDC = lst.GetCount(); // php->NR1 ?
 
     dyn_new(0);
 
@@ -1342,7 +1356,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
     {   /* Get list of component : add aMcv and aMrv */
         for( i=0; i<php->nDC; i++ )
         {
-            if( i < (int)aDclist.GetCount() )
+            if( (size_t)i < aDclist.GetCount() )
             {
                 memcpy( php->SM[i], aDclist[i].c_str(), DC_RKLEN );
                 php->SM[i][DC_RKLEN-1] = SRC_DCOMP;
@@ -1355,7 +1369,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
         }
         /* Sort list of components */
         if( php->nDC > 2 )
-            qsort( php->SM[0], (size_t)php->nDC, DC_RKLEN, rkeycmp );
+            qsort( php->SM[0], php->nDC, DC_RKLEN, rkeycmp );
     }
     else
         for( i=0; i<php->nDC; i++ ) // , php->NR1=0
@@ -1381,11 +1395,11 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
             if( !php->MSDT[i][0] )
                 php->MSDT[i][0] = aPa->pa.p.DNS;
             if( !php->MSDT[i][1] )
-                php->MSDT[i][1] = 0.6022; /* 1/nm2; = 1 mkmol/m2 */
+                php->MSDT[i][1] = 0.6022f; /* 1/nm2; = 1 mkmol/m2 */
             if( !php->CapT[i][0] )
-                php->CapT[i][0] = 1.0; /* A plane */
+                php->CapT[i][0] = 1.0f; /* A plane */
             if( !php->CapT[i][1] )
-                php->CapT[i][1] = 0.2; /* B plane */
+                php->CapT[i][1] = 0.2f; /* B plane */
         }
 
         for( i=0; i<php->nDC; i++ )

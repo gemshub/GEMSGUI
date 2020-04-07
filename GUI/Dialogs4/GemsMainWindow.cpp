@@ -7,7 +7,7 @@
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
-// Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
+// Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
 // This file may be distributed under the GPL v.3 license
@@ -119,7 +119,7 @@ TVisorImp::TVisorImp(int c, char** v):
        toolDataBase->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
        toolDataBase->setMovable(false);
        this->addToolBar(Qt::LeftToolBarArea, toolDataBase);
-       toolDataBase->setIconSize(QSize(40,40));
+       toolDataBase->setIconSize(QSize(48,48));
        toolDataBase->addAction(actionIComp);
        toolDataBase->addAction(actionDComp);
        toolDataBase->addAction(actionReacDC);
@@ -133,7 +133,7 @@ TVisorImp::TVisorImp(int c, char** v):
        toolProject->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
        toolProject->setMovable(false);
        this->addToolBar(Qt::LeftToolBarArea, toolProject);
-       toolProject->setIconSize(QSize(40,40));
+       toolProject->setIconSize(QSize(48,48));
        toolProject->addAction(actionSysEq);
        toolProject->addAction(actionProcess);
        toolProject->addAction(actionGtDemo);
@@ -267,10 +267,11 @@ TVisorImp::TVisorImp(int c, char** v):
         }
      }
 
+
     startGEMServer();
-    moveToolBar();
     updateMenus();
- }
+    //moveToolBar();
+}
 
 //   The desctructor
 TVisorImp::~TVisorImp()

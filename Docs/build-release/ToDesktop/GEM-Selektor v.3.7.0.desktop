@@ -1,0 +1,20 @@
+[Desktop Entry]
+Categories=Utility;Application
+Comment[en_US]=GEM-Selektor v.3.7 Package
+Comment=GEM-Selektor v.3.7 Package
+Exec=~/GEMS370/Gems3-app/rungems3.sh -c
+GenericName[en_US]=
+GenericName=
+Icon=/home/kulik/GEMS370/Gems3-app/gems3.png
+MimeType=
+Name=GEM-Selektor v.3.3.3
+Path=~/GEMS370/
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+Version=1.0
+X-DBUS-ServiceName=
+X-DBUS-StartupType=none
+X-KDE-SubstituteUID=false
+X-KDE-Username=

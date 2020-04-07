@@ -7,7 +7,7 @@
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
-// Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
+// Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
 // This file may be distributed under the GPL v.3 license
@@ -457,6 +457,32 @@ void
     }
 }
 
+// "a;b;c" to array { "a", "b", "c" }
+TCStringArray split(const gstring& str, const gstring& delimiters)
+{
+    TCStringArray v;
+    gstring vv;
+
+    if( str.empty() )
+        return v;
+
+    string::size_type start = 0;
+    auto pos = str.find_first_of(delimiters.c_str(), start);
+    while(pos != gstring::npos)
+    {
+        vv = gstring(str, start, pos - start);
+        vv.strip();
+        v.Add( vv );
+        start = pos + 1;
+        pos = str.find_first_of(delimiters.c_str(), start);
+    }
+
+    vv = gstring (str, start, str.length() - start);
+    vv.strip();
+    if( !vv.empty() )
+        v.Add( vv );
+    return v;
+}
 
 //--------------------- End of v_user.cpp ---------------------------
 

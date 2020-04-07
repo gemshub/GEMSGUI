@@ -6,7 +6,7 @@
 // Copyright (C) 2010,2012 S.Dmytriyeva
 //
 // This file is part of the GEM-Selektor GUI library which uses the
-// Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
+// Qt v.5 cross-platform App & UI framework (http://qt.io/download-open-source)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
 // This file may be distributed under the GPL v.3 license
@@ -44,7 +44,7 @@
 static const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
 const char *GEMS_ABOUT_HTML = "gems_about.html#PAGE_ABOUT";
 
-const char *_GEMS_version_stamp = " GEMS-GUI v.3.6.0 c.b17fbf5 ";
+const char *_GEMS_version_stamp = " GEMS-GUI v.3.7.0 c.b053eed ";
 extern const char *_GEMIPM_version_stamp;
 
 HelpWindow* HelpWindow::pDia = nullptr;
@@ -243,18 +243,18 @@ void HelpWindow::helpVersion()
     QMessageBox::information(this,
 #ifdef __unix
 #ifdef __APPLE__
-           trUtf8("Title"), trUtf8("GEMS3.6 (MacOS X >10.10 64 clang)\n\n")+
+           trUtf8("Title"), trUtf8("GEMS3.7 (MacOS X 10.10 to 10.15, 64bit clang)\n\n")+
 #else
-           trUtf8("GEMS3.6 (Linux 32/64 gcc7.3 Qt5)"),
+           trUtf8("GEMS3.7 (Linux 64bit gcc7.3 Qt5.12)"),
 #endif
 #else
-           trUtf8("GEMS3.6 (Windows 10 MinGW 64 gcc7.3"),
+           trUtf8("GEMS3.7 (Windows 10 MinGW 64 gcc7.3 Qt5.12"),
 #endif
            trUtf8("\nThis is GEM-Selektor code package\n\n")+
            trUtf8( _GEMS_version_stamp ) + trUtf8(  "\n\nusing " )+
            trUtf8( _GEMIPM_version_stamp ) +
            trUtf8( "\n\n\nFor GEMS R&D community, GPL v.3\n\n"
-                  "(c) 2019, GEMS Development Team\n\n"
+                  "(c) 2020, GEMS Development Team\n\n"
                   "          PSI-ETHZ-CSM" ) );
 }
 

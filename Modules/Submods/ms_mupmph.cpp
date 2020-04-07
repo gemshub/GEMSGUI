@@ -218,7 +218,7 @@ void TMulti::multi_sys_dc()
                 memcpy( pm.SM2[j], mup->SM[jj]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
             if( j < syp->Ls && j >= syp->Ls - syp->Lsor)
             {   // assembling DC name list for sorption surface species
-                ja = (short)(j-(syp->Ls-syp->Lsor));
+                ja = (j-(syp->Ls-syp->Lsor));
                 if(!(pm.SM3 && pm.DCC3))
                 {  // Here a workaround of crash detected on 7.02.2011
                    char buf[32];
@@ -304,7 +304,7 @@ CH_FOUND:
             if( syp->DUL )
                 pm.DUL[j] = syp->DUL[jj];
             else pm.DUL[j] = 1e6;
-            ja = (short)(j-(pm.Ls-pm.Lads));
+            ja = (j-(pm.Ls-pm.Lads));
             if( pm.lnSAC && ja < pm.Lads && ja >= 0
                   && pm.DUL[j] < 1e6 - TProfil::pm->pa.p.DKIN )
                pm.lnSAC[ja][3] = pm.DUL[j]; // Copy of DUL for SACT refining
@@ -334,8 +334,8 @@ CH_FOUND:
         if( !( j < pm.Ls && j >= pm.Ls - pm.Lads ) )
             continue;   // the following is not done for non-surface species
 
-        ja = (short)(j-(pm.Ls-pm.Lads));
-        jja = (short)(jj-(mup->Ls-mup->Lads));
+        ja = (j-(pm.Ls-pm.Lads));
+        jja = (jj-(mup->Ls-mup->Lads));
 // Loading MaSdj - max.sur.densities for non-competitive sorbates */
         if( syp->PMaSdj != S_OFF )
         {
@@ -465,8 +465,10 @@ bool TMulti::CompressPhaseIpxt( int kPH )
 {
   int jj, jb, cnt=0;
   TCIntArray  aDCused;
-  TPhase* aPH=(TPhase *)(&aMod[RT_PHASE]);
+  TPhase* aPH=dynamic_cast<TPhase *>(&aMod[RT_PHASE]);
   RMULTS* mup = TRMults::sm->GetMU();
+  TCStringArray form_array;
+  TFormula aFo;
 
   for( jj=0, jb = 0; jj<kPH; jj++ )
         jb += mup->Ll[jj];
@@ -476,11 +478,15 @@ bool TMulti::CompressPhaseIpxt( int kPH )
      if( TSyst::sm->GetSY()->Dcl[jj+jb] == S_OFF )
           aDCused.Add(-1);
      else
-     { aDCused.Add(cnt); cnt++; }
+     {
+         aDCused.Add(cnt);
+         cnt++;
+         form_array.Add(aFo.form_extr( jj+jb, mup->L, mup->DCF ));
+     }
   }
 
   if( cnt < mup->Ll[kPH] )
-   return aPH->CompressRecord( cnt, aDCused, true );
+   return aPH->CompressRecord( cnt, aDCused, form_array, true );
   else return true;
 }
 
@@ -498,7 +504,7 @@ void TMulti::multi_sys_ph()
 //    double G;
     double PMM;  // Phase mean mol. mass
     int Cjs, car_l[32], car_c=0; // current index carrier sorbent
-    TPhase* aPH=(TPhase *)(&aMod[RT_PHASE]);
+    TPhase* aPH=dynamic_cast<TPhase *>(&aMod[RT_PHASE]);
     RMULTS* mup = TRMults::sm->GetMU();
     SYSTEM *syp = TSyst::sm->GetSY();
 
@@ -539,7 +545,7 @@ void TMulti::multi_sys_ph()
         {
             if(phKinMet[k])
                 delete phKinMet[k];
-            phKinMet[k] = NULL;
+            phKinMet[k] = nullptr;
             pm.kMod[k][0] = aPH->php->kin_t[2];
             pm.kMod[k][1] = aPH->php->kin_t[3];
             pm.kMod[k][2] = aPH->php->kin_t[4];
@@ -575,12 +581,27 @@ long int
             //     in TSolMod calculations after switching phases on/off (DK 25.05.2009)
             if(phSolMod[k])
                 delete phSolMod[k];
-            phSolMod[k] = NULL;
+            phSolMod[k] = nullptr;
 //          aPH->TryRecInp( mup->SF[kk], crt, 0 );
             // read informations from phase-solution
             memcpy( pm.sMod[k], aPH->php->sol_t, 6 );
             pm.sMod[k][6] = aPH->php->kin_t[0];
             pm.sMod[k][7] = aPH->php->kin_t[1];
+            // 10/12/2019 added for multi-site mixed moodels
+            if( aPH->php->nMoi >0 )
+            {
+                TFormula aFo;
+                TCStringArray form_array;
+
+                // build formula list
+                for( int jj=0; jj<mup->Ll[k]; jj++ )
+                {
+                  form_array.Add(aFo.form_extr( jj+jb, mup->L, mup->DCF ));
+                }
+
+                // get moiety full structure from phase
+                aPH->MakeSublatticeLists( form_array );
+            }
             // Added SD 20/01/2010
             if( aPH->php->Ppnc == S_ON && aPH->php->npxM > 0 )
                 CompressPhaseIpxt( kk );
@@ -609,7 +630,7 @@ long int
 // New stuff for TSorpMod
 if(phSorpMod[k])
    delete phSorpMod[k];
-phSorpMod[k] = NULL;
+phSorpMod[k] = nullptr;
 /*
 long int
 *LsESmo, ///< new: number of EIL model layers; EIL params per layer; CD coefs per DC; reserved  [Fis][4]

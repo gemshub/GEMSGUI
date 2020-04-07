@@ -1,5 +1,5 @@
 HOW TO PRODUCE AN INSTALLATION PACKAGE OF Qt5-based GEMS3 FOR Win32 MinGW 7.3 
-or up (Windows 7, 8 or 10; admininstrator rights for your account are needed)
+or up (Windows 10; admininstrator rights for your account are needed)
 
 (replaces Produce-windows.txt)
 
@@ -7,7 +7,7 @@ This deployment process is based on the "windeployqt.exe" utility provided by
 the Qt5 installation on Windows.
 
 1. Make sure that the Qt5 SDK is installed as C:\Qt or in similar folder.
-We assume that the Qt library is located in C:\Qt\5.13.1\mingw73_64\bin
+We assume that the Qt library is located in C:\Qt\5.12.7\mingw73_64\bin
 and MinGW compiler is located in C:\Qt\Tools\mingw730_64\bin (or similar, 
 depending on the current Qt version, MinGW version and their locations).  
 
@@ -18,10 +18,10 @@ subfolder (from .gems-gui\Resources in GEM-Selektor source code tree).
 
 3. In the C:\GEMS3DEPLOY\Gems3-app folder, edit the "runwindeployqt.bat" 
 file to make sure that it contains the correct paths  
-C:\Qt\5.13.1\mingw53_32\bin and C:\Qt\Tools\mingw730_64\bin directories
+C:\Qt\5.12.7\mingw73_64\bin and C:\Qt\Tools\mingw730_64\bin directories
 (modify to actual ones, if necessary). Copy/refresh files windeployqt.exe, 
 qcollectiongenerator.exe and qhelpgenerator.exe 
-from C:\Qt\5.13.1\mingw73_64\bin to the C:\GEMS3DEPLOY\Gems3-app folder.   
+from C:\Qt\5.12.7\mingw73_64\bin to the C:\GEMS3DEPLOY\Gems3-app folder.   
 
 4. Using QtCreator, build the actual release variant of gems3.exe. 
 Typically, you should have something like "C:\DevGEMS\trunk\gems-gui";
@@ -38,9 +38,11 @@ and run the following command:
     >runwindeployqt.bat gems3.exe
 
 This will find and copy all dependence files (Qt libraries, plugins, runtime 
-MinGW libraries, locale files, etc.) into C:\GEMS3DEPLOY\Gems3-app folder. 
-More about deployment of Qt applications on Windows can be found in Qt5 
-documentation, see http://doc.qt.io/qt-5/windows-deployment.html
+MinGW libraries, locale files, etc.) into C:\GEMS3DEPLOY\Gems3-app folder.
+After that, you can delete the file windeployqt.exe to save space in the 
+installer self-extracting archive. More about deployment of Qt applications 
+on Windows can be found in Qt5 documentation, see 
+http://doc.qt.io/qt-5/windows-deployment.html
 
 6. To test whether GEM-Selektor runs correctly: cd to C:\GEMS3DEPLOY and 
 check that the batch file "rungems3.bat" contains correct path to the folder
@@ -52,13 +54,14 @@ located (by copying them from C:\GEMS3DEPLOY\Gems3-app\Resources\projects).
 After quitting gems3.exe, delete recursively folder C:\GEMS3DEPLOY\Library 
 in order to avoid that it is packed into the installer sfx file (see below).   
  
-7. To create a new GEM-Selektor installer file for Windows 7 or 10:
+7. To create a new GEM-Selektor installer file for Windows 10:
 
 If not yet done, download and install 7-zip (http://www.7-zip.org/). 
 Start it and select the C:\GEMS3DEPLOY folder. Add it contents (i.e. 
 Gems3-app folder and a few files) recursively to the archive 
-(to be created e.g. in C:\TEMP folder) "C:\TEMP\GEMS3DEPLOY.7z". 
-Attention: use only LZMA but not LZMA2 compression method!
+and then move it to the C:\TEMP folder "C:\TEMP\GEMS3DEPLOY.7z". 
+Attention: when adding files to archive, choose LZMA but not LZMA2 
+compression method!
 
 If not yet done, download and install 7zip-sfx-maker utility program 
 from http://sourceforge.net/projects/sfx-maker/ . Also download ResourceHacker 
@@ -87,7 +90,7 @@ which is under version control. Then click on the "Make SFX" button to
 create the self-installer file. This will create a file 
 C:\TEMP\GEMS3DEPLOY.sfx.exe. Rename it according to the following pattern:
 
-	C:\TEMP\gems3.6.x-<rev1>.<rev2>-win32-install.sfx.exe 
+	C:\TEMP\gems3.7.x-<rev1>.<rev2>-win32-install.sfx.exe 
 
 where put the same actual revision numbers for GEMS GUI (rev1) and GEMS3K 
 (rev2) parts, as those used in the "Self-extractor-GEMS3-settings.xml" 

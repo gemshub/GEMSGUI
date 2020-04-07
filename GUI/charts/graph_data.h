@@ -45,11 +45,11 @@ namespace jsonui {
 
 
 enum GRAPHTYPES_ {
-                 LineChart = 0,
-                 AreaChart = 1,
-                 BarChart  = 2,
-                 Isolines  = 3,   // under construction
-                 lines_3D  = 4    // for future using
+    LineChart = 0,
+    AreaChart = 1,
+    BarChart  = 2,
+    Isolines  = 3,   // under construction
+    lines_3D  = 4    // for future using
 };
 
 class SeriesLineData;
@@ -80,23 +80,23 @@ class SeriesLineData
 
     std::string name;  ///< This property holds the name of the series
     int xcolumn;       ///< This property holds the column of the model
-                       ///< that contains the x-coordinates of data points ( old ndxX )
+    ///< that contains the x-coordinates of data points ( old ndxX )
 
 public:
 
     SeriesLineData( const std::string& aName = "",
-               int mrkType = 0, int mrkSize = 8,
-               int lineSize = 2,  int lineStyle = 1, int usespline =0,
-               const QColor& aColor = QColor( 25, 0, 150)  ):
-        name(aName), xcolumn(-1) // iterate by index
+                    int mrkType = 0, int mrkSize = 8,
+                    int lineSize = 2,  int lineStyle = 1, int usespline =0,
+                    const QColor& aColor = QColor( 25, 0, 150)  ):
+        name(aName), xcolumn(0/*-1*/) // iterate by index
     {
-       setChanges( mrkType, mrkSize, lineSize,  lineStyle, usespline, aColor );
+        setChanges( mrkType, mrkSize, lineSize,  lineStyle, usespline, aColor );
     }
 
     SeriesLineData( size_t ndx, size_t maxLines, const std::string& aName = "",
-               int mrkType = 0, int mrkSize = 8,
-               int lineSize = 2,  int lineStyle = 1, int usespline =0 ):
-        name(aName), xcolumn(-1)
+                    int mrkType = 0, int mrkSize = 8,
+                    int lineSize = 2,  int lineStyle = 1, int usespline =0 ):
+        name(aName), xcolumn(0/*-1*/)
     {
         QColor aColor;
         aColor.setHsv( static_cast<int>(360/maxLines*ndx), 200, 200);
@@ -161,7 +161,7 @@ public:
 
     void setName( const std::string& aName )
     {
-       name = aName;
+        name = aName;
     }
 
     const std::string& getName() const
@@ -176,7 +176,7 @@ public:
 
     void setXColumn( int aNdxX )
     {
-       xcolumn = aNdxX;
+        xcolumn = aNdxX;
     }
 
 #ifndef NO_JSONIO
@@ -195,12 +195,15 @@ class ChartData : public QObject
 {
     Q_OBJECT
 
- public slots:
+public slots:
 
-   void updateXSelections();
-   void updateYSelections( bool updateNames );
+    void updateXSelections();
+    void updateYSelections( bool updateNames );
 
- public:
+public:
+
+    /// Define Axis Font
+    static QFont axisFont;
 
     std::string title;  ///< Title of graphic
 
@@ -215,31 +218,27 @@ class ChartData : public QObject
     /// Define background color ( the Constructs a color with the RGB values)
     int b_color[3]; // red, green, blue
 
-    /// Define Axis Font
-    QFont axisFont;
-
-//------------------------------------------------------------
+    //------------------------------------------------------------
 
     template <class T>
-      ChartData( const std::vector<std::shared_ptr<T>>& aPlots,  const std::string& atitle,
+    ChartData( const std::vector<std::shared_ptr<T>>& aPlots,  const std::string& atitle,
                const std::string& aXName, const std::string& aYname,
                int agraphType = LineChart ):
-          title(atitle), axisTypeX(5), axisTypeY(5),
-          xName(aXName), yName(aYname), axisFont("Sans Serif", 14),
-          graphType( agraphType )
-      {
+        title(atitle), axisTypeX(5), axisTypeY(5),
+        xName(aXName), yName(aYname), graphType( agraphType )
+    {
         // Define background color
         setBackgroundColor( QColor(Qt::white) );
 
         // Insert Plots and curves description
         modelsdata.clear();
         for( auto plot: aPlots)
-          addNewPlot( plot );
+            addNewPlot( plot );
 
         // Graph&Fragment Min Max Region
         double regg[4] = {0., 0., 0., 0.};
         setMinMaxRegion( regg );
-      }
+    }
 
 
     ~ChartData()
@@ -247,24 +246,24 @@ class ChartData : public QObject
 
     /// add new plot lines selection
     template <class T>
-       void addNewPlot( const std::shared_ptr<T>& aPlot )
+    void addNewPlot( const std::shared_ptr<T>& aPlot )
     {
-       int defined_lines = static_cast<int>(linesdata.size());
-       int nLines = getSeriesNumber();
+        int defined_lines = static_cast<int>(linesdata.size());
+        int nLines = getSeriesNumber();
 
-       aPlot->setGraphType( graphType );
-       modelsdata.push_back( aPlot );
-       int nLinN = aPlot->getSeriesNumber();
-       for( int jj=0; jj<nLinN; jj++, nLines++ )
-       {
-         if( nLines >= defined_lines )
-           linesdata.push_back( SeriesLineData( jj, nLinN, aPlot->getName(nLinN)  ) );
-       }
-       connect( modelsdata.back().get(), SIGNAL( changedXSelections() ),
-                this,  SLOT( updateXSelections() ) );
-       connect( modelsdata.back().get(), SIGNAL( changedYSelections(bool) ),
-                this,  SLOT( updateYSelections(bool) ) );
-     }
+        aPlot->setGraphType( graphType );
+        modelsdata.push_back( aPlot );
+        int nLinN = aPlot->getSeriesNumber();
+        for( int jj=0; jj<nLinN; jj++, nLines++ )
+        {
+            if( nLines >= defined_lines )
+                linesdata.push_back( SeriesLineData( jj, nLinN, aPlot->getName(nLinN)  ) );
+        }
+        connect( modelsdata.back().get(), SIGNAL( changedXSelections() ),
+                 this,  SLOT( updateXSelections() ) );
+        connect( modelsdata.back().get(), SIGNAL( changedYSelections(bool) ),
+                 this,  SLOT( updateYSelections(bool) ) );
+    }
 
 
     /// get plot from index
@@ -273,20 +272,20 @@ class ChartData : public QObject
         size_t sizecnt=0;
         for( size_t ii=0 ; ii<modelsdata.size(); ii++)
         {
-           sizecnt += modelsdata[ii]->getSeriesNumber();
-           if( line < sizecnt )
-           {
-               if( modelline )
-                   *modelline = line - sizecnt + modelsdata[ii]->getSeriesNumber();
-               return static_cast<int>(ii);
-           }
-         }
+            sizecnt += modelsdata[ii]->getSeriesNumber();
+            if( line < sizecnt )
+            {
+                if( modelline )
+                    *modelline = line - sizecnt + modelsdata[ii]->getSeriesNumber();
+                return static_cast<int>(ii);
+            }
+        }
         return -1;
     }
 
     int getGraphType() const
     {
-      return graphType;
+        return graphType;
     }
 
     void setGraphType( int newtype );
@@ -295,89 +294,89 @@ class ChartData : public QObject
     /// Get number of series
     int getSeriesNumber() const
     {
-      int nmb = 0;
-      for( auto model: modelsdata)
-        nmb += model->getSeriesNumber();
-      return nmb;
+        int nmb = 0;
+        for( auto model: modelsdata)
+            nmb += model->getSeriesNumber();
+        return nmb;
     }
 
-   size_t modelsNumber() const
-   {
-     return  modelsdata.size();
-   }
+    size_t modelsNumber() const
+    {
+        return  modelsdata.size();
+    }
 
-   ChartDataModel* modelData( size_t ndx )
-   {
-     return  modelsdata[ndx].get();
-   }
+    ChartDataModel* modelData( size_t ndx )
+    {
+        return  modelsdata[ndx].get();
+    }
 
-   size_t linesNumber() const
-   {
-     return  linesdata.size();
-   }
+    size_t linesNumber() const
+    {
+        return  linesdata.size();
+    }
 
-   const SeriesLineData& lineData( size_t ndx ) const
-   {
-     return  linesdata[ndx];
-   }
+    const SeriesLineData& lineData( size_t ndx ) const
+    {
+        return  linesdata[ndx];
+    }
 
-   void setLineData( size_t ndx, const SeriesLineData& newData  )
-   {
-     linesdata[ndx] = newData;
-   }
+    void setLineData( size_t ndx, const SeriesLineData& newData  )
+    {
+        linesdata[ndx] = newData;
+    }
 
-   void setLineData( size_t ndx,  const QString aNdxX  )
-   {
-     int modelndx = getPlot( ndx);
-     if( modelndx >= 0)
-     {
-         linesdata[ndx].setXColumn( modelsdata[ static_cast<size_t>(modelndx)]->indexAbscissaName( aNdxX ) );
-     }
-   }
+    void setLineData( size_t ndx,  const QString aNdxX  )
+    {
+        int modelndx = getPlot( ndx);
+        if( modelndx >= 0)
+        {
+            linesdata[ndx].setXColumn( modelsdata[ static_cast<size_t>(modelndx)]->indexAbscissaName( aNdxX ) );
+        }
+    }
 
-   void setLineData( size_t ndx,  const std::string& aName  )
-   {
-     linesdata[ndx].setName( aName );
-   }
+    void setLineData( size_t ndx,  const std::string& aName  )
+    {
+        linesdata[ndx].setName( aName );
+    }
 
-   QColor getBackgroundColor() const
-   {
-       return QColor(b_color[0], b_color[1], b_color[2]);
-   }
+    QColor getBackgroundColor() const
+    {
+        return QColor(b_color[0], b_color[1], b_color[2]);
+    }
 
-   void setBackgroundColor( const QColor& aColor )
-   {
-       b_color[0] = aColor.red();
-       b_color[1] = aColor.green();
-       b_color[2] = aColor.blue();
-   }
+    void setBackgroundColor( const QColor& aColor )
+    {
+        b_color[0] = aColor.red();
+        b_color[1] = aColor.green();
+        b_color[2] = aColor.blue();
+    }
 
-   void setMinMaxRegion( double reg[4] );
+    void setMinMaxRegion( double reg[4] );
 
-   void setAxisTypes( int axisX, int axisY )
-   {
-       axisTypeX = axisX;
-       axisTypeY = axisY;
-   }
+    void setAxisTypes( int axisX, int axisY )
+    {
+        axisTypeX = axisX;
+        axisTypeY = axisY;
+    }
 
 #ifndef NO_JSONIO
     void toJsonNode( jsonio::JsonDom *object ) const;
     void fromJsonNode( const jsonio::JsonDom *object );
 #endif
 
-   void toJsonObject(QJsonObject& json) const;
-   void fromJsonObject(const QJsonObject& json);
+    void toJsonObject(QJsonObject& json) const;
+    void fromJsonObject(const QJsonObject& json);
 
 protected:
 
-   int graphType;      ///< GRAPHTYPES ( 0-line by line, 1- cumulative, 2 - isolines )
+    int graphType;      ///< GRAPHTYPES ( 0-line by line, 1- cumulative, 2 - isolines )
 
-   // define curves
-   std::vector<std::shared_ptr<ChartDataModel>> modelsdata;   ///< Descriptions of model extracting data
-   std::vector<SeriesLineData> linesdata;     ///< Descriptions of all lines
+    // define curves
+    std::vector<std::shared_ptr<ChartDataModel>> modelsdata;   ///< Descriptions of model extracting data
+    std::vector<SeriesLineData> linesdata;     ///< Descriptions of all lines
 
-   ChartData( const ChartData& data );   // not defined
-   ChartData& operator=(const ChartData&); // not defined
+    ChartData( const ChartData& data );   // not defined
+    ChartData& operator=(const ChartData&); // not defined
 
 };
 
