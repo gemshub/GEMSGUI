@@ -1096,14 +1096,7 @@ void TProfil::readMulti( GemDataStream& ff )
       multi->from_file( ff );
 }
 
-// Reading structure MULTI (GEM IPM work structure)
-void TProfil::readMulti( const char* path,  DATACH  *dCH )
-{
-    // reads sizes and constants from txt file
-    fstream ff( path, ios::in );
-    ErrorIf( !ff.good() , path, "Fileopen error");
-    multi->from_text_file_gemipm( ff, dCH);
-}
+
 
 // ------------------ End of m_param.cpp -----------------------
 

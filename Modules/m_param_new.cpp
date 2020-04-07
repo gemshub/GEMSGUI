@@ -18,38 +18,34 @@
 //-------------------------------------------------------------------
 //
 
+#define OLD
+
 #include "m_syseq.h"
 #include "visor.h"
-#include "node.h"
+#include "nodearray.h"
 #include <zmq.hpp>
+#include <zmq_addon.hpp>
 
+#ifdef OLD
 
 // Run process of calculate equilibria into the GEMSGUI shell
 double  TProfil::CalculateEquilibriumGUI( const gstring& lst_path )
 {
    bool brief_mode = false;
    bool add_mui = true;
-   MULTI* pmp = multi->GetPM();
 
    CurrentSystem2GEMS3K( lst_path, brief_mode, add_mui );
-   /*cout << setprecision(15) <<
-        " pmp->B[H] " << pmp->B[2] <<
-        " pmp->B[O] " << pmp->B[5] <<
-        " pmp->B[Cl] " << pmp->B[1] <<
-        " pmp->B[Na] " << pmp->B[3] << endl;*/
 
    // run gem_ipm
-   auto ret = CalculateEquilibriumServer( lst_path );
+   auto ret = CalculateEquilibriumServerOld( lst_path );
 
    CmReadMultiServer( lst_path.c_str() );
 
    return ret;
 }
 
-
-
 // Run process of calculate equilibria into the GEMS3K side
-double  TProfil::CalculateEquilibriumServer( const gstring& lst_f_name )
+double  TProfil::CalculateEquilibriumServerOld( const gstring& lst_f_name )
 {
     double ret=0.;
     try
@@ -130,6 +126,88 @@ void TProfil::CmReadMultiServer( const char* path )
     //cout << setprecision(15) <<" pmp->Y_la[4] " << pmp->Y_la[4] << " pmp->lnGam[4] " << pmp->lnGam[4] << endl;
     ///   !!! G[] and F[] different after IPM and EqstatExpand
 }
+
+
+#else
+
+// Run process of calculate equilibria into the GEMSGUI shell
+double  TProfil::CalculateEquilibriumGUI( const gstring& amode )
+{
+   std::string mode = amode.c_str();
+   bool brief_mode = false;
+   bool add_mui = true;
+
+   // run gem_ipm
+   auto ret = CalculateEquilibriumServer( mode, add_mui, brief_mode  );
+
+   return ret;
+}
+
+
+// Run process of calculate equilibria into the GEMS3K side
+double  TProfil::CalculateEquilibriumServer( const std::string& amode, bool addMui, bool brief_mode )
+{
+    double ret=0.;
+    try
+    {
+        double Tai[4], Pai[4];
+        std::unique_ptr<TNodeArray> na;
+        MULTI *pmp = TMulti::sm->GetPM();
+
+        Tai[0] = Tai[1] = pmp->TCc;
+        Pai[0] = Pai[1] = pmp->Pc;
+        Tai[2] = Pai[2] = 0.;
+        Tai[3] = Pai[3] = 0.1;
+
+        na.reset( new TNodeArray( 1, pmp )) ;
+        // realloc and setup data for dataCH and DataBr structures
+        na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
+
+        std::string mode = "system";
+        auto dchjson = na->getCalcNode().datach_to_string( false, brief_mode );
+        auto ipmjson = gemipm_to_string( addMui, false, brief_mode );
+        auto dbrjson = na->getCalcNode().databr_to_string( false, brief_mode );
+
+        //cout << dchjson <<  "\n\n-------------------------------------------\n\n"  << std::endl;
+        //cout << ipmjson <<  "\n\n-------------------------------------------\n\n"  << std::endl;
+        cout << dbrjson <<  "\n\n-------------------------------------------\n\n"  << std::endl;
+
+        //  Prepare our context and socket
+        zmq::context_t context (1);
+        zmq::socket_t socket (context, ZMQ_REQ);
+
+        std::cout << "Connecting to hello world server…" << std::endl;
+        socket.connect ("tcp://localhost:5555");
+
+        //  Do request, waiting each time for a response
+        std::vector<zmq::message_t> msgs_vec;
+        msgs_vec.push_back( zmq::message_t(mode.begin(), mode.end()));
+        msgs_vec.push_back( zmq::message_t(dchjson.begin(), dchjson.end()));
+        msgs_vec.push_back( zmq::message_t(ipmjson.begin(), ipmjson.end()));
+        msgs_vec.push_back( zmq::message_t(dbrjson.begin(), dbrjson.end()));
+        auto iret = zmq::send_multipart(socket, msgs_vec);
+
+
+        //  Get the reply.
+        zmq::recv_flags rsv_flag = zmq::recv_flags::none;
+        zmq::message_t reply;
+        socket.recv (reply, rsv_flag);
+        std::cout << "Received:" << reply.str() << std::endl;
+        ret = std::stod(reply.to_string(), nullptr );
+
+
+    }catch(TError& err)
+    {
+    }
+    catch(...)
+    {
+
+    }
+    return ret;
+}
+
+#endif
+
 
 /* Run process of calculate equilibria into the GEMS3K side
 double  TProfil::CalculateEquilibriumServer( const gstring& lst_f_name )
