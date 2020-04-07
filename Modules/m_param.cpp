@@ -1073,7 +1073,11 @@ void TProfil::outMulti( GemDataStream& ff, gstring& /*path*/  )
 // addMui - Print internal indices in RMULTS to IPM file for reading into Gems back
 void TProfil::outMulti( gstring& path, bool addMui, bool with_comments, bool brief_mode )
 {
-    multi->to_text_file_gemipm( path.c_str(), addMui, with_comments, brief_mode );
+
+    fstream ff( path.c_str(), ios::out );
+    ErrorIf( !ff.good() , path, "Fileopen error");
+
+    multi->to_text_file_gemipm( ff, addMui, with_comments, brief_mode );
 //    multi->to_text_file_gemipm( path.c_str(), addMui, with_comments, false ); // workaround 18.12.14 DK (built-in kinetics) - reverted
 }
 
