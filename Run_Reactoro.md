@@ -31,8 +31,8 @@ We assume that both subfolders /gems3gui and /standalone are under git control a
 
 ```sh
 
-git checkout -b branches/GEMS-Reactoro --track origin/branches/GEMS-Reactoro
-git pull origin branches/GEMS-Reactoro
+git checkout -b GEMS-Reactoro --track origin/GEMS-Reactoro
+git pull origin GEMS-Reactoro
 ```
 or
 ```sh
