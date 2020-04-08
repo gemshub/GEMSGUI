@@ -170,7 +170,7 @@ double  TProfil::CalculateEquilibriumServer( const std::string& amode, bool addM
 
         //cout << dchjson <<  "\n\n-------------------------------------------\n\n"  << std::endl;
         //cout << ipmjson <<  "\n\n-------------------------------------------\n\n"  << std::endl;
-        cout << dbrjson <<  "\n\n-------------------------------------------\n\n"  << std::endl;
+        //cout << dbrjson <<  "\n\n-------------------------------------------\n\n"  << std::endl;
 
         //  Prepare our context and socket
         zmq::context_t context (1);
@@ -189,12 +189,16 @@ double  TProfil::CalculateEquilibriumServer( const std::string& amode, bool addM
 
 
         //  Get the reply.
-        zmq::recv_flags rsv_flag = zmq::recv_flags::none;
-        zmq::message_t reply;
-        socket.recv (reply, rsv_flag);
-        std::cout << "Received:" << reply.str() << std::endl;
-        ret = std::stod(reply.to_string(), nullptr );
+        std::vector<zmq::message_t> omsgs;
+        auto oret = zmq::recv_multipart(socket, std::back_inserter(omsgs));
 
+        if( omsgs.size() >= 2 )
+        {
+          ret = std::stod(omsgs[0].to_string(), nullptr );
+          auto new_dbr = omsgs[1].to_string();
+          std::cout << new_dbr << std::endl;
+          //CmReadMulti( const char* path );
+        }
 
     }catch(TError& err)
     {
@@ -205,6 +209,50 @@ double  TProfil::CalculateEquilibriumServer( const std::string& amode, bool addM
     }
     return ret;
 }
+
+// Reading structure MULTI (GEM IPM work structure)
+void TProfil::CmReadMultiServer( const char* path )
+{
+    multi->dyn_set();
+
+    MULTI* pmp = multi->GetPM();
+    std::shared_ptr<TNode> na( new TNode( pmp ));
+
+    if( na->GEM_init( path ) )
+    {
+      Error( path, "GEMS3K Init() error: \n"
+             "Some GEMS3K input files are corrupt or cannot be found.");
+    }
+
+    // Unpacking the actual contents of DBR file including speciation
+    na->unpackDataBr( true );
+    for( int j=0; j < pmp->L; j++ )
+        pmp->X[j] = pmp->Y[j];
+    pmp->TC = pmp->TCc;
+    pmp->T =  pmp->Tc;
+    pmp->P =  pmp->Pc;
+
+    pmp->pESU = 2;  // SysEq unpack flag set
+
+    multi->EqstatExpand( /*pmp->stkey,*/ true );
+    pmp->FI1 = 0;  // Recomputing the number of non-zeroed-off phases
+    pmp->FI1s = 0;
+    for(int i=0; i<pmp->FI; i++ )
+    {
+        if( pmp->YF[i] >= min( pmp->PhMinM, 1e-22 ) )  // Check 1e-22 !!!!!
+        {
+             pmp->FI1++;
+             if( i < pmp->FIs )
+                 pmp->FI1s++;
+        }
+    }
+    for( int i=0; i<pmp->L; i++)
+       pmp->G[i] = pmp->G0[i];
+
+    //cout << setprecision(15) <<" pmp->Y_la[4] " << pmp->Y_la[4] << " pmp->lnGam[4] " << pmp->lnGam[4] << endl;
+    ///   !!! G[] and F[] different after IPM and EqstatExpand
+}
+
 
 #endif
 

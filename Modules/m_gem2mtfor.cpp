@@ -638,7 +638,7 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments, bool brief_mode, co
      //!!!mtp->Pval  = new double[ mtp->nPai ];
 
 #ifdef  JSON_OUT
-  ff << json_data.dump(4);
+  ff << json_data.dump(( _comment ? 4 : 0 ));
 #endif
   ff << endl;
   if( _comment )
