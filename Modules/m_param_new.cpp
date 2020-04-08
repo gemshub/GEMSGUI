@@ -18,7 +18,7 @@
 //-------------------------------------------------------------------
 //
 
-#define OLD
+//#define OLD
 
 #include "m_syseq.h"
 #include "visor.h"
@@ -138,9 +138,13 @@ double  TProfil::CalculateEquilibriumGUI( const gstring& amode )
     bool add_mui = true;
 
     auto send_msg = CurrentSystem2GEMS3Kjson(  brief_mode, add_mui );
+    //for( const auto& msg: msg_data )
+    //  std::cout << msg <<  "\n----------------------\n"  << std::endl;
 
     // run gem_ipm
     auto recv_message = CalculateEquilibriumServer( send_msg );
+    //for( const auto& msg: recv_message )
+    //  std::cout << msg <<  "\n----------------------\n"  << std::endl;
 
     auto ret = readMultiServer( send_msg, recv_message );
 
@@ -169,9 +173,6 @@ std::vector<std::string> TProfil::CurrentSystem2GEMS3Kjson( bool brief_mode, boo
     msg_data.push_back( gemipm_to_string( add_mui, false, brief_mode ));
     msg_data.push_back( na->getCalcNode().databr_to_string( false, brief_mode ));
 
-    //for( const auto& msg: msg_data )
-    //  std::cout << msg <<  "\n----------------------\n"  << std::endl;
-
     return msg_data;
 }
 
@@ -193,7 +194,6 @@ std::vector<std::string>  TProfil::CalculateEquilibriumServer( const std::vector
         for( const auto& msg: msg_data)
             msgs_vec.push_back( zmq::message_t(msg.begin(), msg.end()));
         /*auto iret =*/ zmq::send_multipart(socket, msgs_vec);
-
 
         //  Get the reply.
         std::vector<zmq::message_t> omsgs;
@@ -224,7 +224,7 @@ double TProfil::readMultiServer( const std::vector<std::string>& send_msg, const
 
     if( recv_msg.size() >= 2 && !recv_msg[1].empty() )
     {
-      auto new_dbr = recv_msg[1];
+      new_dbr = recv_msg[1];
       //std::cout << new_dbr << std::endl;
     }
 
