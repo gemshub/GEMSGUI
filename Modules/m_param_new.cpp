@@ -31,17 +31,17 @@
 // Run process of calculate equilibria into the GEMSGUI shell
 double  TProfil::CalculateEquilibriumGUI( const gstring& lst_path )
 {
-   bool brief_mode = false;
-   bool add_mui = true;
+    bool brief_mode = false;
+    bool add_mui = true;
 
-   CurrentSystem2GEMS3K( lst_path, brief_mode, add_mui );
+    CurrentSystem2GEMS3K( lst_path, brief_mode, add_mui );
 
-   // run gem_ipm
-   auto ret = CalculateEquilibriumServerOld( lst_path );
+    // run gem_ipm
+    auto ret = CalculateEquilibriumServerOld( lst_path );
 
-   CmReadMultiServer( lst_path.c_str() );
+    CmReadMultiServer( lst_path.c_str() );
 
-   return ret;
+    return ret;
 }
 
 // Run process of calculate equilibria into the GEMS3K side
@@ -61,17 +61,17 @@ double  TProfil::CalculateEquilibriumServerOld( const gstring& lst_f_name )
 
         //  Do request, waiting each time for a response
 
-            zmq::send_flags snd_flags=zmq::send_flags::none;
-            zmq::message_t request (path.begin(), path.end());
-            std::cout << "Sending:" << request.str() << std::endl;
-            socket.send (request, snd_flags);
+        zmq::send_flags snd_flags=zmq::send_flags::none;
+        zmq::message_t request (path.begin(), path.end());
+        std::cout << "Sending:" << request.str() << std::endl;
+        socket.send (request, snd_flags);
 
-            //  Get the reply.
-            zmq::recv_flags rsv_flag = zmq::recv_flags::none;
-            zmq::message_t reply;
-            socket.recv (reply, rsv_flag);
-            std::cout << "Received:" << reply.str() << std::endl;
-            ret = std::stod(reply.to_string(), nullptr );
+        //  Get the reply.
+        zmq::recv_flags rsv_flag = zmq::recv_flags::none;
+        zmq::message_t reply;
+        socket.recv (reply, rsv_flag);
+        std::cout << "Received:" << reply.str() << std::endl;
+        ret = std::stod(reply.to_string(), nullptr );
 
 
     }catch(TError& err)
@@ -94,8 +94,8 @@ void TProfil::CmReadMultiServer( const char* path )
 
     if( na->GEM_init( path ) )
     {
-      Error( path, "GEMS3K Init() error: \n"
-             "Some GEMS3K input files are corrupt or cannot be found.");
+        Error( path, "GEMS3K Init() error: \n"
+                     "Some GEMS3K input files are corrupt or cannot be found.");
     }
 
     // Unpacking the actual contents of DBR file including speciation
@@ -115,13 +115,13 @@ void TProfil::CmReadMultiServer( const char* path )
     {
         if( pmp->YF[i] >= min( pmp->PhMinM, 1e-22 ) )  // Check 1e-22 !!!!!
         {
-             pmp->FI1++;
-             if( i < pmp->FIs )
-                 pmp->FI1s++;
+            pmp->FI1++;
+            if( i < pmp->FIs )
+                pmp->FI1s++;
         }
     }
     for( int i=0; i<pmp->L; i++)
-       pmp->G[i] = pmp->G0[i];
+        pmp->G[i] = pmp->G0[i];
 
     //cout << setprecision(15) <<" pmp->Y_la[4] " << pmp->Y_la[4] << " pmp->lnGam[4] " << pmp->lnGam[4] << endl;
     ///   !!! G[] and F[] different after IPM and EqstatExpand
@@ -133,72 +133,73 @@ void TProfil::CmReadMultiServer( const char* path )
 // Run process of calculate equilibria into the GEMSGUI shell
 double  TProfil::CalculateEquilibriumGUI( const gstring& amode )
 {
-   std::string mode = amode.c_str();
-   bool brief_mode = false;
-   bool add_mui = true;
+    std::string mode = amode.c_str();
+    bool brief_mode = false;
+    bool add_mui = true;
 
-   // run gem_ipm
-   auto ret = CalculateEquilibriumServer( mode, add_mui, brief_mode  );
+    auto send_msg = CurrentSystem2GEMS3Kjson(  brief_mode, add_mui );
 
-   return ret;
+    // run gem_ipm
+    auto recv_message = CalculateEquilibriumServer( send_msg );
+
+    auto ret = readMultiServer( send_msg, recv_message );
+
+    return ret;
 }
 
+std::vector<std::string> TProfil::CurrentSystem2GEMS3Kjson( bool brief_mode, bool add_mui )
+{
+    std::vector<std::string> msg_data;
+
+    double Tai[4], Pai[4];
+    std::unique_ptr<TNodeArray> na;
+    MULTI *pmp = TMulti::sm->GetPM();
+
+    Tai[0] = Tai[1] = pmp->TCc;
+    Pai[0] = Pai[1] = pmp->Pc;
+    Tai[2] = Pai[2] = 0.;
+    Tai[3] = Pai[3] = 0.1;
+
+    na.reset( new TNodeArray( 1, pmp )) ;
+    // realloc and setup data for dataCH and DataBr structures
+    na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
+
+    msg_data.push_back( "system" );
+    msg_data.push_back( na->getCalcNode().datach_to_string( false, brief_mode ) );
+    msg_data.push_back( gemipm_to_string( add_mui, false, brief_mode ));
+    msg_data.push_back( na->getCalcNode().databr_to_string( false, brief_mode ));
+
+    //for( const auto& msg: msg_data )
+    //  std::cout << msg <<  "\n----------------------\n"  << std::endl;
+
+    return msg_data;
+}
 
 // Run process of calculate equilibria into the GEMS3K side
-double  TProfil::CalculateEquilibriumServer( const std::string& amode, bool addMui, bool brief_mode )
+std::vector<std::string>  TProfil::CalculateEquilibriumServer( const std::vector<std::string>& msg_data )
 {
-    double ret=0.;
+    std::vector<std::string> msg_return;
     try
     {
-        double Tai[4], Pai[4];
-        std::unique_ptr<TNodeArray> na;
-        MULTI *pmp = TMulti::sm->GetPM();
-
-        Tai[0] = Tai[1] = pmp->TCc;
-        Pai[0] = Pai[1] = pmp->Pc;
-        Tai[2] = Pai[2] = 0.;
-        Tai[3] = Pai[3] = 0.1;
-
-        na.reset( new TNodeArray( 1, pmp )) ;
-        // realloc and setup data for dataCH and DataBr structures
-        na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
-
-        std::string mode = "system";
-        auto dchjson = na->getCalcNode().datach_to_string( false, brief_mode );
-        auto ipmjson = gemipm_to_string( addMui, false, brief_mode );
-        auto dbrjson = na->getCalcNode().databr_to_string( false, brief_mode );
-
-        //cout << dchjson <<  "\n\n-------------------------------------------\n\n"  << std::endl;
-        //cout << ipmjson <<  "\n\n-------------------------------------------\n\n"  << std::endl;
-        //cout << dbrjson <<  "\n\n-------------------------------------------\n\n"  << std::endl;
-
         //  Prepare our context and socket
         zmq::context_t context (1);
         zmq::socket_t socket (context, ZMQ_REQ);
 
-        std::cout << "Connecting to hello world server…" << std::endl;
+        //std::cout << "Connecting to hello world server…" << std::endl;
         socket.connect ("tcp://localhost:5555");
 
         //  Do request, waiting each time for a response
         std::vector<zmq::message_t> msgs_vec;
-        msgs_vec.push_back( zmq::message_t(mode.begin(), mode.end()));
-        msgs_vec.push_back( zmq::message_t(dchjson.begin(), dchjson.end()));
-        msgs_vec.push_back( zmq::message_t(ipmjson.begin(), ipmjson.end()));
-        msgs_vec.push_back( zmq::message_t(dbrjson.begin(), dbrjson.end()));
-        auto iret = zmq::send_multipart(socket, msgs_vec);
+        for( const auto& msg: msg_data)
+            msgs_vec.push_back( zmq::message_t(msg.begin(), msg.end()));
+        /*auto iret =*/ zmq::send_multipart(socket, msgs_vec);
 
 
         //  Get the reply.
         std::vector<zmq::message_t> omsgs;
-        auto oret = zmq::recv_multipart(socket, std::back_inserter(omsgs));
-
-        if( omsgs.size() >= 2 )
-        {
-          ret = std::stod(omsgs[0].to_string(), nullptr );
-          auto new_dbr = omsgs[1].to_string();
-          std::cout << new_dbr << std::endl;
-          //CmReadMulti( const char* path );
-        }
+        /*auto oret =*/ zmq::recv_multipart(socket, std::back_inserter(omsgs));
+        for( const auto& omsg: omsgs)
+            msg_return.push_back( omsg.to_string() );
 
     }catch(TError& err)
     {
@@ -207,21 +208,34 @@ double  TProfil::CalculateEquilibriumServer( const std::string& amode, bool addM
     {
 
     }
-    return ret;
+    return msg_return;
 }
 
 // Reading structure MULTI (GEM IPM work structure)
-void TProfil::CmReadMultiServer( const char* path )
+double TProfil::readMultiServer( const std::vector<std::string>& send_msg, const std::vector<std::string>& recv_msg )
 {
+    double ret = 0;
+    auto new_dbr = send_msg[3];
+
+    if( recv_msg.size() >= 1 )
+    {
+      ret = std::stod(recv_msg[0], nullptr );
+    }
+
+    if( recv_msg.size() >= 2 && !recv_msg[1].empty() )
+    {
+      auto new_dbr = recv_msg[1];
+      //std::cout << new_dbr << std::endl;
+    }
+
     multi->dyn_set();
 
     MULTI* pmp = multi->GetPM();
     std::shared_ptr<TNode> na( new TNode( pmp ));
 
-    if( na->GEM_init( path ) )
+    if( na->GEM_init( send_msg[1], send_msg[2], new_dbr ) )
     {
-      Error( path, "GEMS3K Init() error: \n"
-             "Some GEMS3K input files are corrupt or cannot be found.");
+        Error( "GEMS3K Init() error:",  "Some GEMS3K data illegal.");
     }
 
     // Unpacking the actual contents of DBR file including speciation
@@ -241,16 +255,17 @@ void TProfil::CmReadMultiServer( const char* path )
     {
         if( pmp->YF[i] >= min( pmp->PhMinM, 1e-22 ) )  // Check 1e-22 !!!!!
         {
-             pmp->FI1++;
-             if( i < pmp->FIs )
-                 pmp->FI1s++;
+            pmp->FI1++;
+            if( i < pmp->FIs )
+                pmp->FI1s++;
         }
     }
     for( int i=0; i<pmp->L; i++)
-       pmp->G[i] = pmp->G0[i];
+        pmp->G[i] = pmp->G0[i];
 
     //cout << setprecision(15) <<" pmp->Y_la[4] " << pmp->Y_la[4] << " pmp->lnGam[4] " << pmp->lnGam[4] << endl;
     ///   !!! G[] and F[] different after IPM and EqstatExpand
+    return ret;
 }
 
 
