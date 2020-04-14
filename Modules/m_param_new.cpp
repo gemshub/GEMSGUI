@@ -146,9 +146,20 @@ double  TProfil::CalculateEquilibriumGUI( const gstring& amode )
     //for( const auto& msg: recv_message )
     //  std::cout << msg <<  "\n----------------------\n"  << std::endl;
 
-    auto ret = readMultiServer( send_msg, recv_message );
+    if( recv_message.size() < 1 || recv_message[0]=="error")
+         Error(recv_message.begin()->c_str(), recv_message.back().c_str() );
 
-    return ret;
+    double time = 0.;
+    if( recv_message[0] == "ipmOK" || recv_message[0] == "ipmError"  )
+    {
+        // unpack dbr data
+        time = readMultiServer( send_msg, recv_message );
+
+        if( recv_message[0] == "ipmError"  && recv_message.size() >= 4 )
+         Error(recv_message[2].c_str(), recv_message[3].c_str() );
+    }
+
+    return time;
 }
 
 std::vector<std::string> TProfil::CurrentSystem2GEMS3Kjson( bool brief_mode, bool add_mui )
@@ -217,10 +228,7 @@ double TProfil::readMultiServer( const std::vector<std::string>& send_msg, const
     double ret = 0;
     auto new_dbr = send_msg[3];
 
-    if( recv_msg.size() >= 1 )
-    {
-      ret = std::stod(recv_msg[0], nullptr );
-    }
+    ret = std::stod(recv_msg.back(), nullptr );
 
     if( recv_msg.size() >= 2 && !recv_msg[1].empty() )
     {
@@ -240,6 +248,14 @@ double TProfil::readMultiServer( const std::vector<std::string>& send_msg, const
 
     // Unpacking the actual contents of DBR file including speciation
     na->unpackDataBr( true );
+
+    if( recv_msg[0] == "ipmOK" && recv_msg.size()>=5)
+    {
+        pmp->K2 =  atol( recv_msg[2].c_str() );
+        pmp->ITF =  atol( recv_msg[3].c_str() );
+        pmp->ITG =  atol( recv_msg[4].c_str() );
+    }
+
     for( int j=0; j < pmp->L; j++ )
         pmp->X[j] = pmp->Y[j];
     pmp->TC = pmp->TCc;

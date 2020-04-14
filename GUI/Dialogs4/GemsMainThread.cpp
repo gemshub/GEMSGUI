@@ -40,6 +40,7 @@ void TVisorImp::CmRunIPM()
         {
           auto dlg = new ProgressDialog(this/*,sactionStepwise->isChecked()*/  );
           connect( calc_model, &IPNCalcObject::IPM_OK, dlg, &ProgressDialog::CalcFinished );
+          connect( calc_model, &IPNCalcObject::IPM_exception, dlg, &ProgressDialog::close );
         }
         ProgressDialog::pDia->show();
         emit run_IPM();

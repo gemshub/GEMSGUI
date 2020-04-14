@@ -195,8 +195,8 @@ void ProgressDialog::Update(bool force)
     QString str;
     MULTI* pData = TMulti::sm->GetPM();
 
-    //    str.sprintf( "%2lu:%4lu:%4lu ", pData->W1+pData->K2, pData->ITF, pData->ITG ); // pData->IT );
-    str.sprintf( "%4lu ",  pData->IT );
+    str.sprintf( "%2lu:%4lu:%4lu ", pData->W1+pData->K2, pData->ITF, pData->ITG ); // pData->IT );
+    //str.sprintf( "%4lu ",  pData->IT );
     pIT->setText( str );
     str.sprintf( "%*g", 8, pData->pH );
     pPH->setText( str );
