@@ -1025,6 +1025,7 @@ TGEM2MT::RecCalc( const char * key )
      //TMulti::sm->Free_TSolMod();
      na->GEM_init( lst_f_name.c_str(), dbr_lst_f_name.c_str(), 0, true );
 
+
      if( mtp->PsMode != RMT_MODE_S  )
        CalcIPM( NEED_GEM_SIA, 0, mtp->nC, 0 );
      if( mtp->PsMode == RMT_MODE_W  )
@@ -1056,6 +1057,20 @@ TGEM2MT::RecCalc( const char * key )
           CalcStartScript();
           NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
       }
+
+      std::vector<std::string> send_msg;
+      send_msg.push_back( "system" );
+      send_msg.push_back( na->getCalcNode().datach_to_string( false, false ) );
+      send_msg.push_back( TProfil::pm->gemipm_to_string( true, false, false ));
+      send_msg.push_back( na->getCalcNode().databr_to_string( false, false ));
+      auto recv_message = TProfil::pm->CalculateEquilibriumServer( send_msg );
+
+      if( (recv_message[0] == "ipmOK" || recv_message[0] == "ipmError")  && recv_message.size() >= 2 )
+      {
+         // if( recv_message[0] == "ipmError"  && recv_message.size() >= 4 )
+         //  Error(recv_message[2].c_str(), recv_message[3].c_str() );
+      }
+
 
       allocNodeWork();
       LinkCSD(0);

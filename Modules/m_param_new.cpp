@@ -183,7 +183,6 @@ std::vector<std::string> TProfil::CurrentSystem2GEMS3Kjson( bool brief_mode, boo
     msg_data.push_back( na->getCalcNode().datach_to_string( false, brief_mode ) );
     msg_data.push_back( gemipm_to_string( add_mui, false, brief_mode ));
     msg_data.push_back( na->getCalcNode().databr_to_string( false, brief_mode ));
-
     return msg_data;
 }
 
