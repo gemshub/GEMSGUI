@@ -1059,18 +1059,16 @@ TGEM2MT::RecCalc( const char * key )
       }
 
       std::vector<std::string> send_msg;
-      send_msg.push_back( "system" );
+      send_msg.push_back( "nodearray" );
       send_msg.push_back( na->getCalcNode().datach_to_string( false, false ) );
       send_msg.push_back( TProfil::pm->gemipm_to_string( true, false, false ));
       send_msg.push_back( na->getCalcNode().databr_to_string( false, false ));
       auto recv_message = TProfil::pm->CalculateEquilibriumServer( send_msg );
 
-      if( (recv_message[0] == "ipmOK" || recv_message[0] == "ipmError")  && recv_message.size() >= 2 )
+      if( recv_message.size() >= 2 )
       {
-         // if( recv_message[0] == "ipmError"  && recv_message.size() >= 4 )
-         //  Error(recv_message[2].c_str(), recv_message[3].c_str() );
+         Error(recv_message[0].c_str(), recv_message[1].c_str() );
       }
-
 
       allocNodeWork();
       LinkCSD(0);

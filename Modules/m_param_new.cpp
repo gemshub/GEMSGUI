@@ -136,6 +136,8 @@ double  TProfil::CalculateEquilibriumGUI( const gstring& amode )
     std::string mode = amode.c_str();
     bool brief_mode = false;
     bool add_mui = true;
+    long int NodeStatusCH = T_ERROR_GEM;
+    double time = 0.;
 
     auto send_msg = CurrentSystem2GEMS3Kjson(  brief_mode, add_mui );
     //for( const auto& msg: msg_data )
@@ -146,17 +148,26 @@ double  TProfil::CalculateEquilibriumGUI( const gstring& amode )
     //for( const auto& msg: recv_message )
     //  std::cout << msg <<  "\n----------------------\n"  << std::endl;
 
-    if( recv_message.size() < 1 || recv_message[0]=="error")
-         Error(recv_message.begin()->c_str(), recv_message.back().c_str() );
+    if( recv_message.size() >= 2 )
+        NodeStatusCH =  atol( recv_message[0].c_str() );
+    else
+        Error("CalculateEquilibriumGUI", "Illegal number of messages" );
 
-    double time = 0.;
-    if( recv_message[0] == "ipmOK" || recv_message[0] == "ipmError"  )
+    switch( NodeStatusCH )
     {
-        // unpack dbr data
-        time = readMultiServer( send_msg, recv_message );
-
-        if( recv_message[0] == "ipmError"  && recv_message.size() >= 4 )
-         Error(recv_message[2].c_str(), recv_message[3].c_str() );
+    case OK_GEM_AIA:
+    case OK_GEM_SIA: // unpack dbr data
+        time = readMultiServer( NodeStatusCH, send_msg, recv_message );
+        break;
+    case BAD_GEM_AIA:
+    case BAD_GEM_SIA:  // unpack dbr data
+        time = readMultiServer( NodeStatusCH, send_msg, recv_message );
+        Error( (recv_message.end()-1)->c_str(), recv_message.back().c_str() );
+        break;
+    case ERR_GEM_AIA:
+    case ERR_GEM_SIA:
+    case T_ERROR_GEM:
+        Error( (recv_message.end()-1)->c_str(), recv_message.back().c_str() );
     }
 
     return time;
@@ -222,17 +233,18 @@ std::vector<std::string>  TProfil::CalculateEquilibriumServer( const std::vector
 }
 
 // Reading structure MULTI (GEM IPM work structure)
-double TProfil::readMultiServer( const std::vector<std::string>& send_msg, const std::vector<std::string>& recv_msg )
+double TProfil::readMultiServer( long int NodeStatusCH, const std::vector<std::string>& send_msg, const std::vector<std::string>& recv_msg )
 {
     double ret = 0;
     auto new_dbr = send_msg[3];
 
-    ret = std::stod(recv_msg.back(), nullptr );
+    if( recv_msg.size() >= 3 && !recv_msg[2].empty() )
+        ret = std::stod(recv_msg[2], nullptr );
 
     if( recv_msg.size() >= 2 && !recv_msg[1].empty() )
     {
-      new_dbr = recv_msg[1];
-      //std::cout << new_dbr << std::endl;
+        new_dbr = recv_msg[1];
+        //std::cout << new_dbr << std::endl;
     }
 
     multi->dyn_set();
@@ -248,11 +260,11 @@ double TProfil::readMultiServer( const std::vector<std::string>& send_msg, const
     // Unpacking the actual contents of DBR file including speciation
     na->unpackDataBr( true );
 
-    if( recv_msg[0] == "ipmOK" && recv_msg.size()>=5)
+    if( ( NodeStatusCH == OK_GEM_AIA || NodeStatusCH ==  OK_GEM_SIA) && recv_msg.size()>=6)
     {
-        pmp->K2 =  atol( recv_msg[2].c_str() );
-        pmp->ITF =  atol( recv_msg[3].c_str() );
-        pmp->ITG =  atol( recv_msg[4].c_str() );
+        pmp->K2 =  atol( recv_msg[3].c_str() );
+        pmp->ITF =  atol( recv_msg[4].c_str() );
+        pmp->ITG =  atol( recv_msg[5].c_str() );
     }
 
     for( int j=0; j < pmp->L; j++ )
