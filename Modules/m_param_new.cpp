@@ -23,8 +23,8 @@
 #include "m_syseq.h"
 #include "visor.h"
 #include "nodearray.h"
-#include <zmq.hpp>
-#include <zmq_addon.hpp>
+#include "zmqclient.h"
+#include "GemsMainWindow.h"
 
 #ifdef OLD
 
@@ -144,7 +144,7 @@ double  TProfil::CalculateEquilibriumGUI( const gstring& amode )
     //  std::cout << msg <<  "\n----------------------\n"  << std::endl;
 
     // run gem_ipm
-    auto recv_message = CalculateEquilibriumServer( send_msg );
+    auto recv_message = pVisorImp->getZMQclient()->calculateEquilibriumServer(send_msg);
     //for( const auto& msg: recv_message )
     //  std::cout << msg <<  "\n----------------------\n"  << std::endl;
 
@@ -200,36 +200,7 @@ std::vector<std::string> TProfil::CurrentSystem2GEMS3Kjson( bool brief_mode, boo
 // Run process of calculate equilibria into the GEMS3K side
 std::vector<std::string>  TProfil::CalculateEquilibriumServer( const std::vector<std::string>& msg_data )
 {
-    std::vector<std::string> msg_return;
-    try
-    {
-        //  Prepare our context and socket
-        zmq::context_t context (1);
-        zmq::socket_t socket (context, ZMQ_REQ);
-
-        //std::cout << "Connecting to hello world server…" << std::endl;
-        socket.connect ("tcp://localhost:5555");
-
-        //  Do request, waiting each time for a response
-        std::vector<zmq::message_t> msgs_vec;
-        for( const auto& msg: msg_data)
-            msgs_vec.push_back( zmq::message_t(msg.begin(), msg.end()));
-        /*auto iret =*/ zmq::send_multipart(socket, msgs_vec);
-
-        //  Get the reply.
-        std::vector<zmq::message_t> omsgs;
-        /*auto oret =*/ zmq::recv_multipart(socket, std::back_inserter(omsgs));
-        for( const auto& omsg: omsgs)
-            msg_return.push_back( omsg.to_string() );
-
-    }catch(TError& err)
-    {
-    }
-    catch(...)
-    {
-
-    }
-    return msg_return;
+    return pVisorImp->getZMQclient()->calculateEquilibriumServer(msg_data);
 }
 
 // Reading structure MULTI (GEM IPM work structure)
@@ -298,54 +269,6 @@ double TProfil::readMultiServer( long int NodeStatusCH, const std::vector<std::s
 
 #endif
 
-
-/* Run process of calculate equilibria into the GEMS3K side
-double  TProfil::CalculateEquilibriumServer( const gstring& lst_f_name )
-{
-    double ret=0.;
-    try
-    {
-        auto dbr_lst_f_name = lst_f_name;
-        dbr_lst_f_name = dbr_lst_f_name.replace("-dat","-dbr");
-
-        // Creates TNode structure instance accessible through the "node" pointer
-        TNode* node  = new TNode(multi->GetPM());
-
-        // (1) Initialization of GEMS3K internal data by reading  files
-        //     whose names are given in the lst_f_name
-        if( node->GEM_init( lst_f_name.c_str() ) )
-        {
-            // error occured during reading the files
-            cout << "error occured during reading the files" << endl;
-            return ret;
-        }
-
-        // (2) re-calculating equilibrium by calling GEMS3K, getting the status back
-        long NodeStatusCH = node->GEM_run( false );
-        ret  = node->GEM_CalcTime();
-
-        if( NodeStatusCH == OK_GEM_AIA || NodeStatusCH == OK_GEM_SIA  ){
-            // (3) Writing results in default DBR file
-            node->GEM_write_dbr( dbr_lst_f_name.c_str(), false, true, false );
-            node->GEM_print_ipm( "GEMipmOK.txt" );   // possible debugging printout
-        }
-        else {
-            // (4) possible return status analysis, error message
-            node->GEM_print_ipm( "GEMipmError.txt" );   // possible debugging printout
-            return ret; // GEM IPM did not converge properly - error message needed
-        }
-
-    }catch(TError& err)
-    {
-
-
-    }
-    catch(...)
-    {
-
-    }
-    return ret;
-}*/
 
 // http://zguide.zeromq.org/cpp:hwserver
 

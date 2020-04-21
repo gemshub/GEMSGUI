@@ -28,6 +28,7 @@
 #include <QThread>
 
 class IPNCalcObject;
+class ZMQClient;
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -257,6 +258,7 @@ public:
     QWaitCondition& getWaitCalc();
     QMutex& getMutexCalc();
 
+    ZMQClient* getZMQclient();
 
 Q_SIGNALS:
     void run_IPM();
@@ -396,6 +398,8 @@ private slots:
     /// GEM IPN run object
     IPNCalcObject* calc_model=nullptr;
 
+    std::shared_ptr<ZMQClient> zmq_client;
+
     void setCalcClient();
 
     TCModuleImp *activeMdiChild(); //( MdiChild = ModuleWindow )
@@ -438,7 +442,7 @@ private slots:
     QComboBox *pModuleName;
     //QLabel *pModeName;
 
- };
+};
 
 extern TVisorImp* pVisorImp;
 extern Qt::HANDLE pThread;

@@ -23,6 +23,7 @@
 #include "NewSystemDialog.h"
 #include "ProgressDialog.h"
 #include "LoadMessage.h"
+#include "zmqclient.h"
 
 void TVisorImp::CmRunIPM()
 {
@@ -184,6 +185,15 @@ void TVisorImp::GEMServerErrorOccurred(QProcess::ProcessError error)
     // try restart server
     if( error >0 )
         startGEMServer();
+}
+
+ZMQClient *TVisorImp::getZMQclient()
+{
+    if( zmq_client.get() == nullptr )
+    {
+       zmq_client = std::make_shared<ZMQClient>();
+    }
+    return zmq_client.get();
 }
 
 //------------------------------------------------------------------------------------------
