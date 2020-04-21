@@ -1058,18 +1058,7 @@ TGEM2MT::RecCalc( const char * key )
           NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
       }
 
-      std::vector<std::string> send_msg;
-      send_msg.push_back( "nodearray" );
-      send_msg.push_back( na->getCalcNode().datach_to_string( false, false ) );
-      send_msg.push_back( TProfil::pm->gemipm_to_string( true, false, false ));
-      send_msg.push_back( na->getCalcNode().databr_to_string( false, false ));
-      auto recv_message = TProfil::pm->CalculateEquilibriumServer( send_msg );
-
-      if( recv_message.size() >= 2 )
-      {
-         Error(recv_message[0].c_str(), recv_message[1].c_str() );
-      }
-
+      na->InitNodeServer();
       allocNodeWork();
       LinkCSD(0);
 

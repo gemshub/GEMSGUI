@@ -663,46 +663,46 @@ void TGEM2MT::gen_task( bool startSys )
 
 void TGEM2MT::outMulti()
 {
-  // generate Tval&Pval arrays
-  if( mtp->PsTPai != S_OFF )
-     gen_TPval();
+    // generate Tval&Pval arrays
+    if( mtp->PsTPai != S_OFF )
+        gen_TPval();
 
-   na->InitCalcNodeStructures( mtp->nICb, mtp->nDCb,  mtp->nPHb,
-     mtp->xIC, mtp->xDC, mtp->xPH, mtp->PsTPpath != S_OFF,
-     mtp->Tval, mtp->Pval,
-     mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3]  );
+    na->InitCalcNodeStructures( mtp->nICb, mtp->nDCb,  mtp->nPHb,
+                                mtp->xIC, mtp->xDC, mtp->xPH, mtp->PsTPpath != S_OFF,
+                                mtp->Tval, mtp->Pval,
+                                mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3]  );
 
-   showMss = 1L;
-   for( mtp->kv = 0; mtp->kv < mtp->nIV; mtp->kv++ )
-   {
-     mtp->qc = mtp->kv;
-      pVisor->Message( window(), GetName(),
-      "Calculation of equilibria in nodes. "
-           "Please, wait...", mtp->kv, mtp->nIV);
+    showMss = 1L;
+    for( mtp->kv = 0; mtp->kv < mtp->nIV; mtp->kv++ )
+    {
+        mtp->qc = mtp->kv;
+        pVisor->Message( window(), GetName(),
+                         "Calculation of equilibria in nodes. "
+                         "Please, wait...", mtp->kv, mtp->nIV);
 
-     // Make new Systat record & calculate it
-     gen_task( true );
+        // Make new Systat record & calculate it
+        gen_task( true );
 
-     // calculate EqStat record (Thermodynamic&Equlibria)
-     calc_eqstat( true );
+        // calculate EqStat record (Thermodynamic&Equlibria)
+        calc_eqstat( true );
 
-     // Save databr
-     na->SaveToNode( mtp->kv, mtp->nC, na->pNodT0() );
-     na->pNodT0()[mtp->kv]->NodeTypeHY = mtp->DiCp[mtp->kv][1];
+        // Save databr
+        na->SaveToNode( mtp->kv, mtp->nC, na->pNodT0() );
+        na->pNodT0()[mtp->kv]->NodeTypeHY = mtp->DiCp[mtp->kv][1];
 
-     mt_next();      // Generate work values for the next EqStat rkey
+        mt_next();      // Generate work values for the next EqStat rkey
 
- } // mtp->kv
+    } // mtp->kv
 
-  pVisor->CloseMessage();
+    pVisor->CloseMessage();
 
-  allocNodeWork();  //????
-  LinkCSD(0);
+    allocNodeWork();  //????
+    LinkCSD(0);
 
-  na->PutGEM2MTFiles( window(),   mtp->nIV, mtp->PsSdat==S_OFF,
-    mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, false, false ); // mui,muj,muk do not output
+    na->PutGEM2MTFiles( window(),   mtp->nIV, mtp->PsSdat==S_OFF,
+                        mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, false, false ); // mui,muj,muk do not output
 
-  }
+}
 
 
 // ===========================================================
