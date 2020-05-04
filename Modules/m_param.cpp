@@ -1047,11 +1047,11 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
   calcFinished = false;
 
   //multi->Access_GEM_IMP_init();
-  outMultiTxt( "Reactoro_before.dump.txt"  );
+  outMultiTxt( "Reaktoro_before.dump.txt"  );
   //CalculateEquilibriumGUI( "/home/sveta/devGEMS/gitGEMS3/standalone/gemserver-build/server_data/toServer-dat.lst");
   CalculateEquilibriumGUI( pVisor->serverGems3Dir()+"/server_data/toServer-dat.lst");
   //multi->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
-  outMultiTxt( "Reactoro_after.dump.txt"  );
+  outMultiTxt( "Reaktoro_after.dump.txt"  );
 
   calcFinished = true;
   STat->setCalcFlag( true );
