@@ -29,6 +29,11 @@
 #define max(a,b)    (((a) > (b)) ? (a) : (b))
 #endif
 
+void strip(gstring& str)
+{
+  str.strip();
+}
+
 //#define CHECK_GSTR
 
 #ifdef CHECK_GSTR
