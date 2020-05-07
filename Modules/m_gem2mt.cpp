@@ -925,7 +925,6 @@ void TGEM2MT::AllocNa()
 {
   FreeNa();
 
-  //TMulti::sm->rebuild_lookup(  mtp->Tai, mtp->Pai );
   na = new TNodeArray( mtp->nC, TMulti::sm->GetPM() );
   //na = new TNodeArray( mtp->nC, TMulti::sm );
 

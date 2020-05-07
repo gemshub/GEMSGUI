@@ -668,7 +668,7 @@ pmp->pKMM = 0;
 
     // for loading GEX to System
     CheckMtparam();
-    multi->DC_LoadThermodynamicData( na );
+    multi->TMultiBase::DC_LoadThermodynamicData( na );
 
     // Unpack the pmp->B vector (b) into syp->BI and syp->BI (BI_ vector).
     for( long i=0; i < pmp->N; i++ )

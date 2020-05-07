@@ -545,7 +545,7 @@ void TProfil::loadSystat( const char *key )
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK SD 24/05/2010
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
-    multi->InitalizeGEM_IPM_Data(  );
+    multi->InitalizeGEM_IPM_Data();
 
     if( pmp->pESU )      // unpack old solution
     {
@@ -578,7 +578,7 @@ void TProfil::deriveSystat()
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK 24/05/2010
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
-        multi->InitalizeGEM_IPM_Data(  );
+        multi->InitalizeGEM_IPM_Data();
     if( pmp->pESU )      // unpack old solution
     {
         multi->loadData( false );  // unpack syseq to multi
@@ -629,7 +629,7 @@ AGAIN:
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
-       multi->InitalizeGEM_IPM_Data(  );
+       multi->InitalizeGEM_IPM_Data();
 
 
     // SD 22/01/2010 bool

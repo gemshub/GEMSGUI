@@ -24,7 +24,7 @@ TMulti* TMulti::sm;
 // Constructor
 //
 TMulti::TMulti( int nrt ):
-        TSubModule( nrt )
+        TMultiBase(nullptr),TSubModule( nrt )
 {
     set_def();
     pmp = &pm;

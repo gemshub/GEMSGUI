@@ -6,6 +6,7 @@
 #                    $$SUBMODS_H/datach.h  \
 #                    $$SUBMODS_H/nodearray.h  \
 #                     $$SUBMODS_H/node.h  \
+    $$PWD/ms_multi_new.h \
                       $$SUBMODS_H/particlearray.h  \
                       $$SUBMODS_H/ms_mtparm.h \
 #		     $$SUBMODS_H/ms_multi.h \
@@ -15,6 +16,7 @@
 #		     $$SUBMODS_H/io_arrays.h 
 
         SOURCES	  +=  $$SUBMODS_CPP/ms_rmults.cpp \
+    $$PWD/ms_multi_new.cpp \
                       $$SUBMODS_CPP/ms_mtparm.cpp \
                       $$SUBMODS_CPP/ms_multi.cpp  \
                       $$SUBMODS_CPP/ms_system.cpp \
