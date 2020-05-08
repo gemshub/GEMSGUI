@@ -49,6 +49,7 @@ class TMulti: public TMultiBase, public TSubModule
 {
 
 public:
+
     static TMulti* sm;
 
     // This is used only in GEM-Selektor

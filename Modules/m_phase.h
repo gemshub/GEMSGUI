@@ -529,9 +529,9 @@ enum ph_affin_term_op_codes { /// TKinMet: codes to control affinity terms
 
 };
 
-enum volume_code {  /* Codes of volume parameter ??? */
-    VOL_UNDEF, VOL_CALC, VOL_CONSTR
-};
+//enum volume_code {  /* Codes of volume parameter ??? */
+//    VOL_UNDEF, VOL_CALC, VOL_CONSTR
+//};
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
