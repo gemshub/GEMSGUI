@@ -542,4 +542,102 @@ void TMulti::DC_LoadThermodynamicData()
 #endif
 
 
+void TMulti::get_PAalp_PSigm( char& PAalp, char& PSigm)
+{
+  PAalp =  TSyst::sm->GetSY()->PAalp;
+  PSigm =  TSyst::sm->GetSY()->PSigm;
+}
+
+void TMulti::alloc_IPx( long int LsIPxSum )
+{
+    pm.IPx = (long int *)aObj[ o_wi_ipxpm ].Alloc(LsIPxSum, 1, L_);
+}
+void TMulti::alloc_PMc( long int LsModSum )
+{
+    pm.PMc = (double *)aObj[ o_wi_pmc].Alloc( LsModSum, 1, D_);
+}
+void TMulti::alloc_DMc( long int LsMdcSum )
+{
+    pm.DMc = (double *)aObj[ o_wi_dmc].Alloc( LsMdcSum, 1, D_ );
+}
+void TMulti::alloc_MoiSN( long int LsMsnSum )
+{
+    pm.MoiSN = (double *)aObj[ o_wi_moisn].Alloc( LsMsnSum, 1, D_ );
+}
+void TMulti::alloc_SitFr( long int LsSitSum )
+{
+    pm.SitFr  = (double *)aObj[ o_wo_sitfr ].Alloc( LsSitSum, 1, D_ );
+}
+void TMulti::alloc_DQFc( long int DQFcSum )
+{
+   pm.DQFc = (double *)aObj[ o_wi_dqfc].Alloc( DQFcSum, 1, D_ );
+}
+void TMulti::alloc_PhLin( long int PhLinSum )
+{
+    pm.PhLin = (long int (*)[2])aObj[ o_wi_phlin].Alloc( PhLinSum, 2, L_ );
+}
+void TMulti::alloc_lPhc( long int lPhcSum )
+{
+    pm.lPhc  = (double *)aObj[ o_wi_lphc ].Alloc( lPhcSum, 1, D_ );
+}
+
+void TMulti::alloc_xSMd( long int xSMdSum )
+{
+    pm.xSMd = (long int*)aObj[ o_wi_xsmd].Alloc( xSMdSum, 1, L_ );
+}
+void TMulti::alloc_IsoPc( long int IsoPcSum )
+{
+    pm.IsoPc = (double*)aObj[ o_wi_isopc].Alloc( IsoPcSum, 1, D_ );
+}
+void TMulti::alloc_IsoSc( long int IsoScSum )
+{
+    pm.IsoSc = (double*)aObj[ o_wi_isosc].Alloc( IsoScSum, 1, D_ );
+}
+void TMulti::alloc_IsoCt( long int IsoCtSum )
+{
+   pm.IsoCt = (char*)aObj[ o_wi_isoct].Alloc( IsoCtSum, 1, A_ );
+}
+void TMulti::alloc_EImc( long int EImcSum )
+{
+    pm.EImc = (double*)aObj[ o_wi_eimc].Alloc( EImcSum, 1, D_ );
+}
+void TMulti::alloc_mCDc( long int mCDcSum )
+{
+    pm.mCDc = (double*)aObj[ o_wi_mcdc].Alloc( mCDcSum, 1, D_ );
+}
+
+void TMulti::alloc_xSKrC( long int xSKrCSum )
+{
+    pm.xSKrC = (long int*)aObj[ o_wi_jcrdc].Alloc( xSKrCSum, 1, L_ );
+}
+void TMulti::alloc_ocPRkC( long int ocPRkC_feSArC_Sum )
+{
+    pm.ocPRkC = (long int(*)[2])aObj[ o_wi_ocprkc].Alloc( ocPRkC_feSArC_Sum, 2, L_ );
+}
+void TMulti::alloc_feSArC( long int ocPRkC_feSArC_Sum )
+{
+    pm.feSArC = (double*)aObj[ o_wi_fsac].Alloc( ocPRkC_feSArC_Sum, 1, D_ );
+}
+void TMulti::alloc_rpConC( long int rpConCSum )
+{
+   pm.rpConC = (double*)aObj[ o_wi_krpc].Alloc( rpConCSum, 1, D_ );
+}
+void TMulti::alloc_apConC( long int apConCSum )
+{
+    pm.apConC = (double*)aObj[ o_wi_apconc].Alloc( apConCSum, 1, D_ );
+}
+void TMulti::alloc_AscpC( long int AscpCSum )
+{
+    pm.AscpC = (double*)aObj[ o_wi_ascpc].Alloc( AscpCSum, 1, D_ );
+}
+void TMulti::alloc_UMpcC( long int UMpcSum )
+{
+    pm.UMpcC = (double*)aObj[ o_wi_umpc].Alloc( UMpcSum, 1, D_ );
+}
+void TMulti::alloc_xICuC( long int xICuCSum )
+{
+    pm.xICuC = (long int *)aObj[o_wi_xicuc ].Alloc( xICuCSum, 1, L_ );
+}
+
+
 //--------------------- End of ms_multi_new.cpp ---------------------------

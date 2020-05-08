@@ -55,7 +55,10 @@ public:
     TIArray<IPNCalc> qEp;
     TIArray<IPNCalc> qEd;
 
-    TMulti( int nrt );
+    TMulti( int nrt ):
+        TMultiBase(nullptr),TSubModule( nrt )
+    {}
+
     ~TMulti()
     {
         //      Free_TSolMod();     // Added 06.05.2011 DK - possible bugfix
@@ -137,6 +140,30 @@ protected:
     void multiConstInit_PN() override;
     void GEM_IPM_Init_gui1() override;
     void GEM_IPM_Init_gui2() override;
+    virtual void get_PAalp_PSigm(char &PAalp, char &PSigm) override;
+
+    void alloc_IPx( long int LsIPxSum ) override;
+    void alloc_PMc( long int LsModSum ) override;
+    void alloc_DMc( long int LsMdcSum ) override;
+    void alloc_MoiSN( long int LsMsnSum ) override;
+    void alloc_SitFr( long int LsSitSum ) override;
+    void alloc_DQFc( long int DQFcSum ) override;
+    void alloc_PhLin( long int PhLinSum ) override;
+    void alloc_lPhc( long int lPhcSum ) override;
+    void alloc_xSMd( long int xSMdSum ) override;
+    void alloc_IsoPc( long int IsoPcSum ) override;
+    void alloc_IsoSc( long int IsoScSum ) override;
+    void alloc_IsoCt( long int IsoCtSum ) override;
+    void alloc_EImc( long int EImcSum ) override;
+    void alloc_mCDc( long int mCDcSum ) override;
+    void alloc_xSKrC( long int xSKrCSum ) override;
+    void alloc_ocPRkC( long int ocPRkC_feSArC_Sum ) override;
+    void alloc_feSArC( long int ocPRkC_feSArC_Sum ) override;
+    void alloc_rpConC( long int rpConCSum ) override;
+    void alloc_apConC( long int apConCSum ) override;
+    void alloc_AscpC( long int AscpCSum ) override;
+    void alloc_UMpcC( long int UMpcSum ) override;
+    void alloc_xICuC( long int xICuCSum ) override;
 
     // bool GEM_IPM_InitialApproximation() override;
 

@@ -1088,7 +1088,7 @@ void TProfil::outMultiTxt( const char *path, bool append  )
 
 
 // Reading structure MULTI (GEM IPM work structure)
-void TProfil::readMulti( GemDataStream& ff )
+void TProfil::readMulti( GemDataStream& ff,  DATACH* )
 {
 
       ff.readArray( &pa.p.PC, 10 );
