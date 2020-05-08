@@ -278,7 +278,7 @@ void InputSystemDialog::CmPrint()
 {
     try
     {
-      gstring filename = "InputSystem.txt";
+      std::string filename = "InputSystem.txt";
       if( vfChooseFileSave(this, filename,
           "Put file name for printing" ) == false )
                return;

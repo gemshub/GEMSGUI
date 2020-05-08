@@ -840,7 +840,7 @@ NEW_PHASE_AGAIN:
 void TRMults::SelectAqGasPhase( char AqGasType, TCStringArray& AqGasKey )
 {
     uint ii, jj;
-    gstring typePhase, msg1, msg2;
+    std::string typePhase, msg1, msg2;
     TCStringArray aPhaseType;
     TCStringArray aKeysList;
     TCStringArray aPhaseList;

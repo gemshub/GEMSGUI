@@ -361,9 +361,9 @@ class TGEM2MT
   TNodeArray* na;       // pointer to nodearray class instance
   TParticleArray* pa_mt;       // pointer to TParticleArray class instance
 
-    gstring pathVTK;
-    gstring nameVTK;
-    gstring prefixVTK;
+    std::string pathVTK;
+    std::string nameVTK;
+    std::string prefixVTK;
 
 protected:
 

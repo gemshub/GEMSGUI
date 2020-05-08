@@ -943,7 +943,7 @@ void TDComp::DCthermo( int q, int p )
         }
         break;
     default:
-        gstring msg = "E14DCrun: Invalid method code or data! ";
+        std::string msg = "E14DCrun: Invalid method code or data! ";
         msg += dcp->pstate;
         msg += "'.\nChange record?";
         if( !vfQuestion(window(),  GetName(), msg ))
@@ -1199,7 +1199,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
     dbKey.SetFldKey(3,"*");
     gstring str_key( dbKey.UnpackKey(), 0, db->KeyLen());
     RecStatus iRet = db->Rtest( str_key.c_str(), 1 );
-    gstring msg;
+    std::string msg;
 
     switch( iRet )
     {
@@ -1218,7 +1218,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
             msg +=  GetName();
             msg += ": Data record not found, \n"
                    " key  '";
-            msg += gstring( key, 0, db->KeyLen() );
+            msg += std::string( key.p, 0, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked.\n";
             if(pVisor->ProfileMode == true)
                 Error( GetName(), msg.c_str() );
@@ -1250,7 +1250,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
         msg += GetName();
         msg += " is corrupt,\n"
                "Data record key '";
-        msg += gstring( key, 0, db->KeyLen() );
+        msg += std::string( key.p, 0, db->KeyLen() );
         msg += "'\n Try to backup/restore or compress files in this database chain!";
         Error( GetName(),  msg.c_str() );
     }

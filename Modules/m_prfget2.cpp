@@ -473,7 +473,7 @@ void TProfil::CalcAllSystems( int makeDump )
     double ccTime = 0.;
     vstr pkey(81);
     vstr tbuf(150);
-    gstring str_file;
+    std::string str_file;
 	TCStringArray aList;
     TCIntArray anR;
     bool outFile = true;
@@ -486,10 +486,11 @@ void TProfil::CalcAllSystems( int makeDump )
     rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
 
     //get file name
-    gstring ProfName(pkey);
+    std::string ProfName(pkey);
     size_t pos = ProfName.find(':');
     ProfName = ProfName.substr(0,pos);
-    str_file = ProfName + "_" + curDateSmol('_')+".Dump.out";
+    str_file = ProfName;
+    str_file += "_" + curDateSmol('_')+".Dump.out";
     // open file to output
 AGAIN:
     if( vfChooseFileSave(nullptr/*window()*/, str_file,
@@ -1167,7 +1168,7 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
   vfPhaseInfo( par, system, xph, phname, xdclist, dcnames, xdc );
 }
 
-void TProfil::CurrentSystem2GEMS3K( const gstring& filepath, bool brief_mode, bool add_mui )
+void TProfil::CurrentSystem2GEMS3K( const std::string& filepath, bool brief_mode, bool add_mui )
 {
     double Tai[4], Pai[4];
     std::unique_ptr<TNodeArray> na;
@@ -1182,14 +1183,14 @@ void TProfil::CurrentSystem2GEMS3K( const gstring& filepath, bool brief_mode, bo
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 
-    ProcessProgressFunction messageF = [filepath](const gstring& /*message*/, long /*point*/){
+    ProcessProgressFunction messageF = [filepath](const std::string& /*message*/, long /*point*/){
         //std::cout << "GEM3k output: " <<  filepath.c_str() << " " << message.c_str() << point << std::endl;
         return false;
     };
     na->genGEMS3KInputFiles(  filepath, messageF, 1, false, brief_mode, false, false, add_mui );
 }
 
-void TProfil::System2GEMS3K( const gstring key, int calcMode, const gstring& filepath, bool brief_mode, bool add_mui )
+void TProfil::System2GEMS3K( const gstring key, int calcMode, const std::string& filepath, bool brief_mode, bool add_mui )
 {
     loadSystat( key.c_str() );
 
@@ -1213,7 +1214,7 @@ void TProfil::System2GEMS3K( const gstring key, int calcMode, const gstring& fil
 }
 
 
-void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, const gstring& files_dir, bool brief_mode, bool add_mui )
+void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, const std::string& files_dir, bool brief_mode, bool add_mui )
 {
     pVisor->CloseMessage();
 
@@ -1221,7 +1222,8 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
     //vstr tbuf(150);
     TCStringArray aList;
     TCIntArray anR;
-    gstring packkey, systemname, recordPath;
+    gstring packkey;
+    std::string systemname, recordPath;
 
     rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                           K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
@@ -1246,9 +1248,9 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
         savedSystems.Add(packkey);
 
         // generate name and create directory
-        systemname = packkey;
+        systemname = packkey.c_str();
         KeyToName(systemname);
-        gstring recordPath = files_dir + systemname + "/";
+        std::string recordPath = files_dir + systemname + "/";
         vfMakeDirectory( nullptr, recordPath.c_str(), 0 );
 
         recordPath += systemname+ "-dat.lst";
@@ -1265,7 +1267,7 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
     }
 }
 
-void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const gstring& files_dir, bool brief_mode, bool add_mui )
+void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string& files_dir, bool brief_mode, bool add_mui )
 {
     pVisor->CloseMessage();
 
@@ -1273,7 +1275,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const gstring& fil
     //vstr tbuf(150);
     TCStringArray aList;
     TCIntArray anR;
-    gstring process_name, recordPath;
+    std::string process_name, recordPath;
 
     rt[RT_PROCES].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
@@ -1294,9 +1296,9 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const gstring& fil
 
         // generate name and create directory
         process_name = rt[RT_PROCES].PackKey();
-        process_name.strip();
+        strip( process_name );
         KeyToName(process_name);
-        gstring recordPath = files_dir + process_name + "/";
+        std::string recordPath = files_dir + process_name + "/";
         vfMakeDirectory( nullptr, recordPath.c_str(), 0 );
 
         recordPath += process_name+ "-dat.lst";
@@ -1316,19 +1318,19 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const gstring& fil
 void TProfil::GEMS3KallSystems( int makeCalc, bool brief_mode, bool add_mui )
 {
     // Select destination
-    gstring dir;
+    std::string dir;
     if( !vfChooseDirectory( nullptr, dir,"Please, enter output directory location." ))
         return;
 
     try{
         // Generate data from process
         TCStringArray savedSystems;
-        gstring processPath = dir + "/Processes/";
+        std::string processPath = dir + "/Processes/";
         //vfMakeDirectory( nullptr, processPath.c_str(), 2 );
         allProcess2GEMS3K( savedSystems, processPath, brief_mode, add_mui );
 
         // Save systems
-        gstring systemsPath = dir + "/Standalone/";
+        std::string systemsPath = dir + "/Standalone/";
         vfMakeDirectory( nullptr, systemsPath.c_str(), 2 );
         allSystems2GEMS3K( savedSystems, makeCalc, systemsPath, brief_mode, add_mui );
     }

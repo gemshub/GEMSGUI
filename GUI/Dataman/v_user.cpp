@@ -54,11 +54,11 @@ void NormFloatRound(float *aArr, int size, int digits)
     }  
 }
 
-gstring
-u_makepath(const gstring& dir,
-           const gstring& name, const gstring& ext)
+std::string
+u_makepath(const std::string& dir,
+           const std::string& name, const std::string& ext)
 {
-    gstring Path(dir);
+    std::string Path(dir);
     if( dir != "")
       Path += "/";
     Path += name;
@@ -70,11 +70,11 @@ u_makepath(const gstring& dir,
 
 
 void
-u_splitpath(const gstring& Path, gstring& dir,
-            gstring& name, gstring& ext)
+u_splitpath(const std::string& Path, std::string& dir,
+            std::string& name, std::string& ext)
 {
     size_t pos = Path.rfind("/");
-    if( pos != gstring::npos )
+    if( pos != std::string::npos )
     {
         dir = Path.substr(0, pos);
         pos++;
@@ -85,15 +85,15 @@ u_splitpath(const gstring& Path, gstring& dir,
         pos = 0;
     }
     size_t pose = Path.rfind(".");
-    if( pose != gstring::npos )
+    if( pose != std::string::npos )
     {
-        ext = Path.substr( pose+1, gstring::npos );
+        ext = Path.substr( pose+1, std::string::npos );
         name = Path.substr(pos, pose-pos);
     }
     else
     {
         ext = "";
-        name = Path.substr(pos, gstring::npos);
+        name = Path.substr(pos, std::string::npos);
     }
 }
 
@@ -114,7 +114,7 @@ u_getline(istream& is, gstring& str, char delim)
 
 // read string as: "<characters>",
 istream&
-f_getline(istream& is, gstring& str, char delim)
+f_getline(istream& is, std::string& str, char delim)
 {
     char ch;
     is.get(ch);
@@ -161,11 +161,11 @@ char  (* f_getfiles(const char *f_name, char *Path,
   char  (*filesList)[fileNameLength];
   char  (*filesListNew)[fileNameLength];
   filesList = new char[bSize][fileNameLength];
-  gstring name;
+  std::string name;
 
 // Get path
-   gstring path_;
-   gstring flst_name = f_name;
+   std::string path_;
+   std::string flst_name = f_name;
    size_t pos = flst_name.rfind("/");
    path_ = "";
    if( pos < gstring::npos )
@@ -227,7 +227,7 @@ gstring curDate()
     return tstr.p;
 }
 
-gstring curDateSmol(char ch )
+std::string curDateSmol(char ch )
 {
     struct tm *time_now;
     time_t secs_now;
@@ -238,7 +238,7 @@ gstring curDateSmol(char ch )
 
     vstr tstr(40);
 
-    gstring frm = "%d" + gstring(1,ch)+ "%m" + gstring(1,ch) + "%y";
+    std::string frm = "%d" + std::string(1,ch)+ "%m" + std::string(1,ch) + "%y";
     strftime(tstr, 9, frm.c_str(),
              // "%d/%m/%y",
              time_now);
@@ -271,9 +271,42 @@ void StripLine(gstring& line)
    line.strip();
 }
 
-void KeyToName(gstring& line)
+void strip(string& str)
 {
-   line.strip();
+  string::size_type pos1 = str.find_first_not_of(' ');
+  string::size_type pos2 = str.find_last_not_of(' ');
+  str = str.substr(pos1 == string::npos ? 0 : pos1,
+    pos2 == string::npos ? str.length() - 1 : pos2 - pos1 + 1);
+}
+
+void replace( string& str, const char* old_part, const char* new_part)
+{
+    size_t pos = str.find( old_part ); //rfind( old_part );
+    if( pos != string::npos )
+    {
+        string res(str.substr(0, pos));
+        res += new_part;
+        res += str.substr( pos+strlen(old_part));
+        str = res;
+    }
+}
+
+void replaceall( string& str, const char* old_part, const char* new_part)
+{
+    size_t pos = str.find( old_part ); //rfind( old_part );
+    while( pos != string::npos )
+    {
+        string res(str.substr(0, pos));
+        res += new_part;
+        res += str.substr( pos+strlen(old_part));
+        str = res;
+        pos = str.find( old_part );
+    }
+}
+
+void KeyToName(std::string& line)
+{
+   strip( line );
    if( line.empty())
       return;
 

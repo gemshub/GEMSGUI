@@ -255,8 +255,8 @@ public:
     TDataBase( fstream& f );
     ~TDataBase();
     void toCFG( fstream& f );
-    void AddFile(const gstring& path);
-    void DelFile(const gstring& path);
+    void AddFile(const std::string& path);
+    void DelFile(const std::string& path);
 
 
     //--- Selectors
@@ -352,7 +352,7 @@ public:
     void GetFileList( int mode, TCStringArray& names,
                       TCIntArray& indx,  TCIntArray& sel );
     //  int GetNumFiles() { return aFile.GetCount(); }
-    void  MakeInNewProfile( const gstring& dir,
+    void  MakeInNewProfile( const std::string& dir,
       const char *prfName, const char * f_name=nullptr );
     void OpenOnlyFromList( TCStringArray& names );
     void GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey );

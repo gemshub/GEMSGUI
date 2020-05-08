@@ -29,7 +29,7 @@
 #ifdef OLD
 
 // Run process of calculate equilibria into the GEMSGUI shell
-double  TProfil::CalculateEquilibriumGUI( const gstring& lst_path )
+double  TProfil::CalculateEquilibriumGUI( const std::string& lst_path )
 {
     bool brief_mode = false;
     bool add_mui = true;
@@ -131,7 +131,7 @@ void TProfil::CmReadMultiServer( const char* path )
 #else
 
 // Run process of calculate equilibria into the GEMSGUI shell
-double  TProfil::CalculateEquilibriumGUI( const gstring& amode )
+double  TProfil::CalculateEquilibriumGUI( const std::string& amode )
 {
     std::string mode = amode.c_str();
     bool brief_mode = false;

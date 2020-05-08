@@ -1049,7 +1049,7 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
   //multi->Access_GEM_IMP_init();
   outMultiTxt( "Reaktoro_before.dump.txt"  );
   //CalculateEquilibriumGUI( "/home/sveta/devGEMS/gitGEMS3/standalone/gemserver-build/server_data/toServer-dat.lst");
-  CalculateEquilibriumGUI( pVisor->serverGems3Dir()+"/server_data/toServer-dat.lst");
+  CalculateEquilibriumGUI( std::string(pVisor->serverGems3Dir().c_str())+"/server_data/toServer-dat.lst");
   //multi->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
   outMultiTxt( "Reaktoro_after.dump.txt"  );
 
@@ -1060,7 +1060,7 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
   return multi->GetPM()->t_elap_sec;
 }
 
-void TProfil::outMulti( GemDataStream& ff, gstring& /*path*/  )
+void TProfil::outMulti( GemDataStream& ff, std::string& /*path*/  )
 {
     ff.writeArray( &pa.p.PC, 10 );
     ff.writeArray( &pa.p.DG, 28 );
@@ -1071,7 +1071,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& /*path*/  )
 // brief_mode - Do not write data items that contain only default values
 // with_comments -Write files with comments for all data entries ( in text mode)
 // addMui - Print internal indices in RMULTS to IPM file for reading into Gems back
-void TProfil::outMulti( gstring& path, bool addMui, bool with_comments, bool brief_mode )
+void TProfil::outMulti( std::string& path, bool addMui, bool with_comments, bool brief_mode )
 {
 
     fstream ff( path.c_str(), ios::out );

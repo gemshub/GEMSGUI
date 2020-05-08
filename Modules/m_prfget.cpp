@@ -753,7 +753,7 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
       {
         if( aMod[i].IsSubModule() )
             continue;
-        rt[aMod[i].rtNum()].MakeInNewProfile( Path, prfName );
+        rt[aMod[i].rtNum()].MakeInNewProfile( Path.c_str(), prfName );
       }
      }
     else // copy records from template project
@@ -812,7 +812,7 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
                 {
                   gstring f_new = aFiles[ii];//.replace(
                   //   prfTemplate, prfName);
-                  rt[jj].MakeInNewProfile( Path, prfName, f_new.c_str() );
+                  rt[jj].MakeInNewProfile( Path.c_str(), prfName, f_new.c_str() );
                 }
         }
     }

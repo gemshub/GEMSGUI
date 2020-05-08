@@ -795,7 +795,7 @@ void TGEM2MT::from_text_file(fstream& ff)
   checkAlws(rdar, rddar);
 
   // testing read
- gstring ret = rdar.testRead();
+ auto ret = rdar.testRead();
  if( !ret.empty() )
   { ret += " - fields must be read from gem2mt structure";
     Error( "Error", ret);

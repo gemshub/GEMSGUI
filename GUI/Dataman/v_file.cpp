@@ -91,8 +91,8 @@ TFile::TFile(fstream& fcfg):
     Makepath();
 }
 
-TFile::TFile(const gstring& fName,
-             const gstring& fExt, const gstring& fDir):
+TFile::TFile(const std::string& fName,
+             const std::string& fExt, const std::string& fDir):
         status( NOT_OPEN ),
 	f(*new GemDataStream())
 {
@@ -100,7 +100,7 @@ TFile::TFile(const gstring& fName,
     makeKeyword();
 }
 
-TFile::TFile(const gstring& path):
+TFile::TFile(const std::string& path):
         status( NOT_OPEN ),
         Path(path),
 	f(*new GemDataStream())
@@ -119,26 +119,26 @@ TFile::~TFile()
 void
 TFile::makeKeyword()
 {
-    gstring key;
+    std::string key;
     if( name.empty() )
         return;
 
     // ignoring version and after
     // get version
-    gstring fname = name;
+    std::string fname = name;
     size_t pos1 = fname.find(".ver");
-    if( pos1 != gstring::npos )
+    if( pos1 != std::string::npos )
        fname = fname.substr(0, pos1 );
 
-    key = gstring(fname, 0, 2);
+    key = std::string(fname, 0, 2);
     size_t npos = 0;
     size_t npos2 = fname.find(".", npos);
-    while( npos2 != gstring::npos )
+    while( npos2 != std::string::npos )
     {   npos = npos2+1;
-        key += gstring(fname, npos, 2);
+        key += std::string(fname, npos, 2);
         npos2 = fname.find(".", npos);
     }
-    key += gstring(fname, npos+2);
+    key += std::string(fname, npos+2);
 
     strncpy( Keywd, key.c_str(), MAX_FILENAME_LEN);
     Keywd[MAX_FILENAME_LEN]='\0';
@@ -152,8 +152,8 @@ void TFile::check()
 }
 */
 // Set new full file name. Old file closed.
-void TFile::newFile( const gstring& newName, const gstring& newExt,
-                     const gstring& newDir )
+void TFile::newFile( const std::string& newName, const std::string& newExt,
+                     const std::string& newDir )
 {
     if( status != NOT_OPEN )
         Close();
@@ -224,7 +224,7 @@ if( mode== UPDATE_DBV && access( Path.c_str(), 02 ) != 0)
     status = mode;
 }
 
-void TFile::OpenFromFileName( const gstring& filename, FileStatus mode )
+void TFile::OpenFromFileName( const std::string& filename, FileStatus mode )
 {
     Close();
     remove( GetPath().c_str() );
