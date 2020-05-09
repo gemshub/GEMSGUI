@@ -38,7 +38,7 @@ double TMulti::pb_GX( double *Gxx  )
 {
     long int i, j, k;
     double Gi, x, XF, XFw, FX;
-    SPP_SETTING *pa = paTProfil;
+    const BASE_PARAM *pa_p = pa_p_ptr();
 
     // calculating G(X)
     FX=0.;
@@ -51,25 +51,25 @@ double TMulti::pb_GX( double *Gxx  )
         if( pm.FIs && k<pm.FIs )
             XFw = pm.XFA[k];
         //       if( XFw > const1 )
-        if( ( pm.PHC[k] == PH_AQUEL && XFw >= pa->p.XwMin )
-                || ( pm.PHC[k] == PH_SORPTION && XFw >= pa->p.ScMin )
-                || ( pm.PHC[k] == PH_POLYEL && XFw >= pa->p.ScMin ) )
+        if( ( pm.PHC[k] == PH_AQUEL && XFw >= pa_p->XwMin )
+                || ( pm.PHC[k] == PH_SORPTION && XFw >= pa_p->ScMin )
+                || ( pm.PHC[k] == PH_POLYEL && XFw >= pa_p->ScMin ) )
             pm.logXw = log( XFw );
         /*   */
         XF = pm.XF[k];
         if( !(pm.FIs && k < pm.FIs) )
         {
-            if( XF < pa->p.PhMin )
+            if( XF < pa_p->PhMin )
                 goto NEXT_PHASE;
         }
-        else if( XF < pa->p.DS && pm.logXw < 100. )
+        else if( XF < pa_p->DS && pm.logXw < 100. )
             goto NEXT_PHASE;
         pm.logYFk = log( XF );
 
         for( ; j<i; j++ )
         { // DC loop
             x = pm.X[j];
-            if( x < pa->p.DcMin )
+            if( x < pa_p->DcMin )
                 continue;
             // calculating DC increment to G(x)
             Gi = DC_GibbsEnergyContribution( Gxx[j], x, pm.logYFk, pm.logXw,
@@ -201,7 +201,7 @@ long int TMulti::testMulti()
     //MULTI *pmp = multi->GetPM();
     if( pm.MK || pm.PZ )
     {
-        if( paTProfil->p.PSM >= 2 )
+        if( pa_p_ptr()->PSM >= 2 )
         {
             fstream f_log(TNode::ipmLogFile.c_str(), ios::out|ios::app );
             f_log << "Warning " << pm.stkey << ": " <<  pm.errorCode << ":" << endl;
@@ -238,7 +238,7 @@ bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int 
     pm.js=0;
     pm.next=1;
     char* sMod = pm.sMod[k];
-    SPP_SETTING *pa = paTProfil;
+    const BASE_PARAM *pa_p = pa_p_ptr();
 
     switch( LinkMode )
     { // check the calculation mode
@@ -291,13 +291,13 @@ bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int 
         switch( pm.PHC[k] )
         {  //
         case PH_AQUEL:
-            if(!(pmpXFk > pm.DSM && pm.X[pm.LO] > pm.XwMinM && pm.IC > pa->p.ICmin ))
+            if(!(pmpXFk > pm.DSM && pm.X[pm.LO] > pm.XwMinM && pm.IC > pa_p->ICmin ))
                 return false;
             break;
         case PH_GASMIX:
         case PH_PLASMA:
         case PH_FLUID:
-            if( !(pmpXFk > pm.DSM && pm.XF[k] > pa->p.PhMin))
+            if( !(pmpXFk > pm.DSM && pm.XF[k] > pa_p->PhMin))
                 return false;
             break;
         case PH_LIQUID:
