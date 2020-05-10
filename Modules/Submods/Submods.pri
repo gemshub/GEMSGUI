@@ -7,6 +7,8 @@
 #                    $$SUBMODS_H/nodearray.h  \
 #                     $$SUBMODS_H/node.h  \
     $$PWD/ms_multi_new.h \
+    $$PWD/node_gui.h \
+    $$PWD/nodearray_gui.h \
                       $$SUBMODS_H/particlearray.h  \
                       $$SUBMODS_H/ms_mtparm.h \
 #		     $$SUBMODS_H/ms_multi.h \
@@ -17,6 +19,8 @@
 
         SOURCES	  +=  $$SUBMODS_CPP/ms_rmults.cpp \
     $$PWD/ms_multi_new.cpp \
+    $$PWD/node_gui.cpp \
+    $$PWD/nodearray_gui.cpp \
                       $$SUBMODS_CPP/ms_mtparm.cpp \
                       $$SUBMODS_CPP/ms_multi.cpp  \
                       $$SUBMODS_CPP/ms_system.cpp \

@@ -21,6 +21,7 @@
 
 
 #include "m_param.h"
+#include "nodearray_gui.h"
 #include "particlearray.h"
 class TRWArrays;
 
@@ -358,7 +359,7 @@ class TGEM2MT
     gstring title;           // changed titler to title
 #endif
 
-  TNodeArray* na;       // pointer to nodearray class instance
+  TNodeArrayGUI* na;       // pointer to nodearray class instance
   TParticleArray* pa_mt;       // pointer to TParticleArray class instance
 
     std::string pathVTK;

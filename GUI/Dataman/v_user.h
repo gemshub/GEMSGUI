@@ -145,14 +145,6 @@ private:
 
 };
 
-/// Combines path, directory, name and extension to full pathname
-std::string u_makepath(const std::string& dir,
-           const std::string& name, const std::string& ext);
-
-/// Splits full pathname to path, directory, name and extension
-void
-u_splitpath(const std::string& Path, std::string& dir,
-            std::string& name, std::string& ext);
 
 #define fileNameLength 64
 /// Get Path of file and Reading list of file names from it, return number of files

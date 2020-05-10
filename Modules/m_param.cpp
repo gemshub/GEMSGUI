@@ -30,7 +30,7 @@
 #include "m_dualth.h"
 #include "visor.h"
 #include "gdatastream.h"
-#include "nodearray.h"
+#include "nodearray_gui.h"
 
 TProfil* TProfil::pm;
 
@@ -451,7 +451,7 @@ const char* TProfil::GetHtml()
 
 void TProfil::makeGEM2MTFiles(QWidget* par )
 {
-    TNodeArray* na = nullptr;
+    TNodeArrayGUI* na = nullptr;
     MULTI *pmp = multi->GetPM();
 
     try
@@ -475,7 +475,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       nPp_ = aObj[ o_w_pval].GetN();
 
 
-      na = new TNodeArray( 1, multi );
+      na = new TNodeArrayGUI( 1, multi );
 
       // realloc and setup data for dataCH and DataBr structures
       na->MakeNodeStructuresOne( par, ( flags[0] == S_OFF ),( flags[4] == S_ON ),
@@ -604,7 +604,7 @@ void TProfil::SetSysSwitchesFromMulti( )
 // Reading structure MULTI (GEM IPM work structure)
 void TProfil::CmReadMulti( const char* path, bool new_ipm )
 {
-    TNode* na = new TNode( multi );
+    TNodeGUI* na = new TNodeGUI( multi );
     MULTI* pmp = multi->GetPM();
     SYSTEM* syp = syst->GetSY();
     //gstring key = pmp->stkey;

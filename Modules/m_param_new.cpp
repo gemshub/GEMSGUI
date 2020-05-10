@@ -139,7 +139,7 @@ double  TProfil::CalculateEquilibriumGUI( const std::string& amode )
     long int NodeStatusCH = T_ERROR_GEM;
     double time = 0.;
 
-    std::shared_ptr<TNode> na;
+    std::shared_ptr<TNodeGUI> na;
     auto send_msg = CurrentSystem2GEMS3Kjson( na, brief_mode, add_mui );
     //for( const auto& msg: msg_data )
     //  std::cout << msg <<  "\n----------------------\n"  << std::endl;
@@ -174,7 +174,7 @@ double  TProfil::CalculateEquilibriumGUI( const std::string& amode )
     return time;
 }
 
-std::vector<std::string> TProfil::CurrentSystem2GEMS3Kjson( std::shared_ptr<TNode>& na, bool brief_mode, bool add_mui )
+std::vector<std::string> TProfil::CurrentSystem2GEMS3Kjson( std::shared_ptr<TNodeGUI>& na, bool brief_mode, bool add_mui )
 {
     std::vector<std::string> msg_data;
 
@@ -187,7 +187,7 @@ std::vector<std::string> TProfil::CurrentSystem2GEMS3Kjson( std::shared_ptr<TNod
     Tai[2] = Pai[2] = 0.;
     Tai[3] = Pai[3] = 0.1;
 
-    na.reset( new TNode( multi )) ;
+    na.reset( new TNodeGUI( multi )) ;
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructures( nullptr, true , Tai, Pai  );
 
@@ -205,7 +205,7 @@ std::vector<std::string>  TProfil::CalculateEquilibriumServer( const std::vector
 }
 
 // Reading structure MULTI (GEM IPM work structure)
-double TProfil::readMultiServer( std::shared_ptr<TNode>& na, long int NodeStatusCH, const std::vector<std::string>& recv_msg )
+double TProfil::readMultiServer( std::shared_ptr<TNodeGUI>& na, long int NodeStatusCH, const std::vector<std::string>& recv_msg )
 {
     double ret = 0;
     //auto new_dbr = send_msg[3];

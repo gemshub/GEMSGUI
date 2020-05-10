@@ -1171,7 +1171,7 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
 void TProfil::CurrentSystem2GEMS3K( const std::string& filepath, bool brief_mode, bool add_mui )
 {
     double Tai[4], Pai[4];
-    std::unique_ptr<TNodeArray> na;
+    std::unique_ptr<TNodeArrayGUI> na;
     MULTI *pmp = TMulti::sm->GetPM();
 
     Tai[0] = Tai[1] = pmp->TCc;
@@ -1179,7 +1179,7 @@ void TProfil::CurrentSystem2GEMS3K( const std::string& filepath, bool brief_mode
     Tai[2] = Pai[2] = 0.;
     Tai[3] = Pai[3] = 0.1;
 
-    na.reset( new TNodeArray( 1, TMulti::sm )) ;
+    na.reset( new TNodeArrayGUI( 1, TMulti::sm )) ;
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 

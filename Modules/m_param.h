@@ -35,6 +35,7 @@ extern const double R_CONSTANT, NA_CONSTANT, F_CONSTANT,
     e_CONSTANT,k_CONSTANT, cal_to_J, C_to_K, lg_to_ln, ln_to_lg, H2O_mol_to_kg, Min_phys_amount;
 
 #include "ms_multi.h"
+#include "node_gui.h"
 
 #ifdef IPMGEMPLUGIN
 
@@ -513,10 +514,10 @@ public:
    /// @return IPM work structures array json/key-value format ( <mode>, DATACH, MULTI, DATABR )
    /// @param brief_mode - Do not write data items that contain only default values
    /// @param add_mui - Print internal indices in RMULTS to IPM file for reading into Gems back
-   std::vector<std::string> CurrentSystem2GEMS3Kjson( std::shared_ptr<TNode>& na, bool brief_mode, bool add_mui );
+   std::vector<std::string> CurrentSystem2GEMS3Kjson( std::shared_ptr<TNodeGUI>& na, bool brief_mode, bool add_mui );
 
    /// Reading structure MULTI (GEM IPM work structure)
-   double readMultiServer( std::shared_ptr<TNode>& na, long int NodeStatusCH, const std::vector<std::string>& recv_msg );
+   double readMultiServer( std::shared_ptr<TNodeGUI>& na, long int NodeStatusCH, const std::vector<std::string>& recv_msg );
 };
 
 /* Work codes of surface site types in pm->AtNdx vector (compatibility with old-style SCMs *
