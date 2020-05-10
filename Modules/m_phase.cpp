@@ -1605,7 +1605,7 @@ int TPhase::CompressSublattice( const TCStringArray& form_array )
     TCStringArray old_lsMoi = getSavedLsMoi();
     MakeSublatticeLists( form_array  );
 
-    ErrorIf( old_lsMoi.GetCount() < php->nMoi, gstring( php->pst_, 0, MAXPHNAME),
+    ErrorIf( old_lsMoi.GetCount() < php->nMoi, string( php->pst_, 0, MAXPHNAME),
              "Please, recalculate phase record before execution.");
 
     TCIntArray  Moiused;

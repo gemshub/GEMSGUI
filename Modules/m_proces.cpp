@@ -1687,7 +1687,7 @@ void TProcess::genGEM3K(const std::string& filepath, TCStringArray& savedSystems
     Pai[2] = pep->Pi[2];
     Tai[3] = Pai[3] = 0.1;
 
-    na.reset( new TNodeArray( 1, TMulti::sm->GetPM() )) ;
+    na.reset( new TNodeArray( 1, TMulti::sm )) ;
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 

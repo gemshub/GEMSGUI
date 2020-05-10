@@ -82,6 +82,7 @@ public:
      dyn_new();
    }
    void multi_kill() override {}
+   BASE_PARAM *pa_p_ptr() const override;
 
     // ms_muleq.cpp
     void packData();

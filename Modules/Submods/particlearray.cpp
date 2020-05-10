@@ -16,6 +16,7 @@
 //-------------------------------------------------------------------
 //
 
+#include <cmath>
 #include "particlearray.h"
 
 static long int idum = -10000l;
@@ -270,7 +271,7 @@ long int TParticleArray::DisplaceParticle( long int px, double /*t0*/, double /*
 // hDl = dbr->hDl;   // testing without interpolation
          if( hDl > 0)
 //         ds = 2.*(randuni( idum )-0.5)*sqrt( 6.*hDl*vp*dt);
-         ds = 2.*(ran3( idum )-0.5)*sqrt( 6.*hDl*dt);
+         ds = 2.*(ran3( idum )-0.5)* std::sqrt( 6.*hDl*dt);
          ParT1[px].xyz.x += vp*dt + ds;
                         break;
    }

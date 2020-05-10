@@ -34,18 +34,18 @@
 
 TProfil* TProfil::pm;
 
-const double R_CONSTANT = 8.31451,
-              NA_CONSTANT = 6.0221367e23,
-                F_CONSTANT = 96485.309,
-                  e_CONSTANT = 1.60217733e-19,
-                    k_CONSTANT = 1.380658e-23,
-// Conversion factors
-                      cal_to_J = 4.184,
-                        C_to_K = 273.15,
-                          lg_to_ln = 2.302585093,
-                            ln_to_lg = 0.434294481,
-                              H2O_mol_to_kg = 55.50837344,
-                                Min_phys_amount = 1.66e-24;
+//const double R_CONSTANT = 8.31451,
+//              NA_CONSTANT = 6.0221367e23,
+//                F_CONSTANT = 96485.309,
+//                  e_CONSTANT = 1.60217733e-19,
+//                    k_CONSTANT = 1.380658e-23,
+//// Conversion factors
+//                      cal_to_J = 4.184,
+//                        C_to_K = 273.15,
+//                          lg_to_ln = 2.302585093,
+//                            ln_to_lg = 0.434294481,
+//                              H2O_mol_to_kg = 55.50837344,
+//                                Min_phys_amount = 1.66e-24;
 extern char *_GEMS_version_stamp;
 extern char *_GEMIPM_version_stamp;
 SPP_SETTING pa_ = {
@@ -285,7 +285,7 @@ void TProfil::InitSubModules()
         //syp = syst->GetSY();
         aMod.Add( multi = new TMulti( MD_MULTI ) );
         TMulti::sm = multi;
-        multi->setPa(this);
+        ///multi->setPa(this);
         //pmulti = multi;
         multi->ods_link();
         //pmp = multi->GetPM();
@@ -475,7 +475,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       nPp_ = aObj[ o_w_pval].GetN();
 
 
-      na = new TNodeArray( 1, multi->GetPM() );
+      na = new TNodeArray( 1, multi );
 
       // realloc and setup data for dataCH and DataBr structures
       na->MakeNodeStructuresOne( par, ( flags[0] == S_OFF ),( flags[4] == S_ON ),
@@ -604,7 +604,7 @@ void TProfil::SetSysSwitchesFromMulti( )
 // Reading structure MULTI (GEM IPM work structure)
 void TProfil::CmReadMulti( const char* path, bool new_ipm )
 {
-    TNode* na = new TNode( multi->GetPM() );
+    TNode* na = new TNode( multi );
     MULTI* pmp = multi->GetPM();
     SYSTEM* syp = syst->GetSY();
     //gstring key = pmp->stkey;
@@ -1087,14 +1087,14 @@ void TProfil::outMultiTxt( const char *path, bool append  )
 }
 
 
-// Reading structure MULTI (GEM IPM work structure)
-void TProfil::readMulti( GemDataStream& ff,  DATACH* )
-{
+//// Reading structure MULTI (GEM IPM work structure)
+//void TProfil::readMulti( GemDataStream& ff,  DATACH* )
+//{
 
-      ff.readArray( &pa.p.PC, 10 );
-      ff.readArray( &pa.p.DG, 28 );
-      multi->from_file( ff );
-}
+//      ff.readArray( &pa.p.PC, 10 );
+//      ff.readArray( &pa.p.DG, 28 );
+//      multi->from_file( ff );
+//}
 
 
 

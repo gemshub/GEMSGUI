@@ -34,6 +34,12 @@ bool TMulti::testTSyst( int ii ) const
 // Variant of GX() function for use in the UnSpace module (non-optimized)
 // Should not be called from within GEMIPM!
 //
+BASE_PARAM *TMulti::pa_p_ptr() const
+{
+    //return paTProfil1->p;
+    return &TProfil::pm->pa.p;
+}
+
 double TMulti::pb_GX( double *Gxx  )
 {
     long int i, j, k;

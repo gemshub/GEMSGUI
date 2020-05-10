@@ -734,7 +734,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
             }
 */
         fstream f( filename.c_str(), mod );
-        ErrorIf( !f.good() , filename, "Fileopen error");
+        ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
         f <<   "Discarded Phase records\n";
         for( ii=0; ii<aPHnoused.GetCount(); ii++ )
              f << aPHnoused[ii].c_str() <<  "\n";
@@ -742,7 +742,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
         for( ii=0; ii<aCMnoused.GetCount(); ii++ )
              f << aCMnoused[ii].c_str() <<  "\n";
         f <<   "\n";
-        ErrorIf( !f.good() , filename, "Writefile error");
+        ErrorIf( !f.good() , filename.c_str(), "Writefile error");
    }
 
 
@@ -1179,7 +1179,7 @@ void TProfil::CurrentSystem2GEMS3K( const std::string& filepath, bool brief_mode
     Tai[2] = Pai[2] = 0.;
     Tai[3] = Pai[3] = 0.1;
 
-    na.reset( new TNodeArray( 1, pmp )) ;
+    na.reset( new TNodeArray( 1, TMulti::sm )) ;
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 

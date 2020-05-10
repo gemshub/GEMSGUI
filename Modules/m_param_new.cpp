@@ -180,20 +180,20 @@ std::vector<std::string> TProfil::CurrentSystem2GEMS3Kjson( std::shared_ptr<TNod
 
     double Tai[4], Pai[4];
     //std::unique_ptr<TNode> na;
-    MULTI *pmp = TMulti::sm->GetPM();
+    MULTI *pmp = /*TMulti::sm*/multi->GetPM();
 
     Tai[0] = Tai[1] = pmp->TCc;
     Pai[0] = Pai[1] = pmp->Pc;
     Tai[2] = Pai[2] = 0.;
     Tai[3] = Pai[3] = 0.1;
 
-    na.reset( new TNode(  pmp )) ;
+    na.reset( new TNode( multi )) ;
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructures( nullptr, true , Tai, Pai  );
 
     msg_data.push_back( "system" );
     msg_data.push_back( na->datach_to_string( false, brief_mode ) );
-    msg_data.push_back( gemipm_to_string( add_mui, false, brief_mode ));
+    msg_data.push_back( na->gemipm_to_string( add_mui, false, brief_mode ));
     msg_data.push_back( na->databr_to_string( false, brief_mode ));
     return msg_data;
 }

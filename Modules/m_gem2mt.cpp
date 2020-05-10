@@ -750,7 +750,7 @@ void TGEM2MT::MakeQuery()
     Tai[3] = Pai[3] = 0.1;
 
     FreeNa();
-    na = new TNodeArray( 1, TMulti::sm->GetPM() );
+    na = new TNodeArray( 1, TMulti::sm );
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 
@@ -925,7 +925,7 @@ void TGEM2MT::AllocNa()
 {
   FreeNa();
 
-  na = new TNodeArray( mtp->nC, TMulti::sm->GetPM() );
+  na = new TNodeArray( mtp->nC, TMulti::sm );
   //na = new TNodeArray( mtp->nC, TMulti::sm );
 
   // use particles
@@ -1150,7 +1150,7 @@ void TGEM2MT::RecordPrint( const char* key )
             to_text_file( ff,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF, filename.c_str() );
 
 		}
-    na = new TNodeArray( mtp->nC, TMulti::sm->GetPM() );
+    na = new TNodeArray( mtp->nC, TMulti::sm );
     mtp->gStat = GS_GOING;
     mt_reset();
     Bn_Calc();
