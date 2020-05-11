@@ -1040,7 +1040,7 @@ aObj[o_n0_ts].SetM( 2 );
      aObj[o_n0_amrl].SetPtr( BR->amrl );
      aObj[o_n0_amrl].SetDim( CH->nPSb, 1 );
      // set data to work arrays
-     const TNode& node = na->LinkToNode( nNode, mtp->nC,  na->pNodT0() );
+     const TNode* node = na->LinkToNode( nNode, mtp->nC,  na->pNodT0() );
          double *mps = static_cast<double *>(aObj[o_n0w_mps].GetPtr() );
          double *vps = static_cast<double *>(aObj[o_n0w_vps].GetPtr() );
          double *m_t = static_cast<double *>(aObj[o_n0w_m_t].GetPtr() );
@@ -1050,17 +1050,17 @@ aObj[o_n0_ts].SetM( 2 );
 
          for( ii=0; ii<CH->nPHb; ii++)
          {
-             mps[ii] = node.Ph_Mass(ii);
-             vps[ii] = node.Ph_Volume(ii);
+             mps[ii] = node->Ph_Mass(ii);
+             vps[ii] = node->Ph_Volume(ii);
          }
          for( ii=0; ii<CH->nDCb; ii++)
          {
-             con[ii] = node.Get_cDC(ii);
-             mju[ii] = node.Get_muDC(ii, false );
-             lga[ii] = node.Get_aDC(ii, false );
+             con[ii] = node->Get_cDC(ii);
+             mju[ii] = node->Get_muDC(ii, false );
+             lga[ii] = node->Get_aDC(ii, false );
          }
          for( ii=0; ii<CH->nICb; ii++)
-             m_t[ii] = node.Get_mIC( ii );
+             m_t[ii] = node->Get_mIC( ii );
   }
   else
   {
@@ -1157,7 +1157,7 @@ aObj[o_n1_ts].SetM( 2 );
      aObj[o_n1_amrl].SetDim( CH->nPSb, 1 );
 
  // set data to work arrays
-     const TNode& node = na->LinkToNode( nNode, mtp->nC,  na->pNodT1() );
+     const TNode* node = na->LinkToNode( nNode, mtp->nC,  na->pNodT1() );
      double *mps = static_cast<double *>(aObj[o_n1w_mps].GetPtr());
      double *vps = static_cast<double *>(aObj[o_n1w_vps].GetPtr());
      double *m_t = static_cast<double *>(aObj[o_n1w_m_t].GetPtr());
@@ -1167,17 +1167,17 @@ aObj[o_n1_ts].SetM( 2 );
 
      for( ii=0; ii<CH->nPHb; ii++)
      {
-         mps[ii] = node.Ph_Mass(ii);
-         vps[ii] = node.Ph_Volume(ii);
+         mps[ii] = node->Ph_Mass(ii);
+         vps[ii] = node->Ph_Volume(ii);
      }
      for( ii=0; ii<CH->nDCb; ii++)
      {
-         con[ii] = node.Get_cDC(ii);
-         mju[ii] = node.Get_muDC(ii, false );
-         lga[ii] = node.Get_aDC(ii, false );
+         con[ii] = node->Get_cDC(ii);
+         mju[ii] = node->Get_muDC(ii, false );
+         lga[ii] = node->Get_aDC(ii, false );
      }
      for( ii=0; ii<CH->nICb; ii++)
-         m_t[ii] = node.Get_mIC( ii );
+         m_t[ii] = node->Get_mIC( ii );
   }
   else
   {

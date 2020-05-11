@@ -9,16 +9,15 @@ TNodeArrayGUI::TNodeArrayGUI( long int nNod, TMultiBase *apm  ):
     TNodeArray(nNod)
 {
     calcNodeGUI = new TNodeGUI(apm);
+    calcNode = calcNodeGUI;
     internal_Node.reset( calcNodeGUI );
-    calcNode = *internal_Node.get();
 }
 
 TNodeArrayGUI::TNodeArrayGUI( long int asizeN, long int asizeM, long int asizeK, TMultiBase *apm  ):
     TNodeArray(asizeN, asizeM, asizeK)
 {
-    calcNodeGUI = new TNodeGUI(apm);
+    calcNode = calcNodeGUI = new TNodeGUI(apm);
     internal_Node.reset( calcNodeGUI );
-    calcNode = *internal_Node.get();
 }
 
 
@@ -51,7 +50,7 @@ bool TNodeArrayGUI::CalcIPM_List( const TestModeGEMParam& modeParam, long int st
 //   return code   true   Ok
 //                 false  Error in GEMipm calculation part
 //
-bool TNodeArrayGUI::CalcIPM_Node( const TestModeGEMParam& modeParam, TNode& wrkNode,
+bool TNodeArrayGUI::CalcIPM_Node( const TestModeGEMParam& modeParam, TNode* wrkNode,
                                   long int ii, DATABRPTR* C0, DATABRPTR* C1, bool* piaN, FILE* diffile )
 {
     bool iRet = true;
@@ -91,13 +90,13 @@ bool TNodeArrayGUI::CalcIPM_Node( const TestModeGEMParam& modeParam, TNode& wrkN
     return iRet;
 }
 
-long int  TNodeArrayGUI::CalcNodeServer( TNode& wrkNode, long int  iNode, long int )
+long int  TNodeArrayGUI::CalcNodeServer( TNode* wrkNode, long int  iNode, long int )
 {
     long int  retCode = T_ERROR_GEM;
 
     zmq_message_t send_msg;
     send_msg.push_back("dbr");
-    send_msg.push_back( wrkNode.databr_to_string( false, false ));
+    send_msg.push_back( wrkNode->databr_to_string( false, false ));
     send_msg.push_back( std::to_string(iNode) );
 
     auto recv_message = TProfil::pm->CalculateEquilibriumServer( send_msg );
@@ -109,7 +108,7 @@ long int  TNodeArrayGUI::CalcNodeServer( TNode& wrkNode, long int  iNode, long i
 
     if( retCode == OK_GEM_AIA || retCode ==  OK_GEM_SIA )
     {
-        wrkNode.databr_from_string(recv_message[1]);
+        wrkNode->databr_from_string(recv_message[1]);
     }
 
     return retCode;
@@ -120,9 +119,9 @@ bool TNodeArrayGUI::InitNodeServer()
     na = this; // temporaly fix
     zmq_message_t send_msg;
     send_msg.push_back( "nodearray" );
-    send_msg.push_back( calcNode.datach_to_string( false, false ) );
-    send_msg.push_back( calcNode.gemipm_to_string( true, false, false ));
-    send_msg.push_back( calcNode.databr_to_string( false, false ));
+    send_msg.push_back( calcNode->datach_to_string( false, false ) );
+    send_msg.push_back( calcNode->gemipm_to_string( true, false, false ));
+    send_msg.push_back( calcNode->databr_to_string( false, false ));
 
     auto recv_message = TProfil::pm->CalculateEquilibriumServer( send_msg );
 
