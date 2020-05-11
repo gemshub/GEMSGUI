@@ -91,7 +91,7 @@ TPrintData::TPrintData(const char *sd_key,
                }
             catch( TError& xcpt )
             {
-               if( vfQuestion(nullptr, xcpt.title, xcpt.mess+" \nContinue?" ))
+               if( vfQuestion(nullptr, xcpt.title.c_str(), (xcpt.mess+" \nContinue?").c_str() ))
                 {
                    ifcond = false;
                 }
@@ -112,9 +112,9 @@ TPrintData::TPrintData(const char *sd_key,
           /*while( *input == ' ' || *input == '\n' || *input == '\t')
                   input++; */
           if( !getFormat( input ) )
-          {  gstring str_err = "Wrong or missing format: \n";
+          {  string str_err = "Wrong or missing format: \n";
                str_err += input;
-            Error( key_format, str_err.c_str() );
+            Error( key_format.c_str(), str_err );
           }   // added by KD 17.06.2002 
           getData();
           skipSpace();
@@ -296,9 +296,9 @@ TPrintData::getToken( int& ii, int& jj )
         }
         skipSpace();
         if( *input != ']')
-        {  gstring str_err = "Invalid format: \n";
+        {  string str_err = "Invalid format: \n";
                str_err += input;
-            Error( key_format, str_err.c_str() );
+            Error( key_format.c_str(), str_err );
         }
         input++;
       }
@@ -318,7 +318,7 @@ TPrintData::getToken( int& ii, int& jj )
            str_err += str;
        if( i==0 )
            str_err += input;
-       Error( key_format, str_err.c_str() );
+       Error( key_format.c_str(), str_err.c_str() );
     }
     input += i;
  }
@@ -363,9 +363,9 @@ TPrintData::getToken( int& ii, int& jj )
        }
      skipSpace();
      if( *input != ']')
-     {  gstring str_err = "Invalid format: \n";
+     {  string str_err = "Invalid format: \n";
            str_err += input;
-       Error( key_format, str_err.c_str() );
+       Error( key_format.c_str(), str_err );
      }
     input++;
    }
@@ -418,9 +418,9 @@ TPrintData::getData( )
   }
  if( _data < time_d )
  {
-   gstring str = "Error in format:\n";
+   string str = "Error in format:\n";
            str+= input;
-   Error( key_format, str.c_str());
+   Error( key_format.c_str(), str);
  }
  if( j < 0  )
  { j=i; i=0; }

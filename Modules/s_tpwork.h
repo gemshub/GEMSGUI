@@ -24,6 +24,7 @@
 #include <memory>
 #include <cstring>
 #include "v_mod.h"
+#include "array.h"
 
 struct TPWORK
 {      // working t/d parametres

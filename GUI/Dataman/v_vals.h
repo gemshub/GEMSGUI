@@ -102,13 +102,13 @@ extern const char* S_ANY;
 #define CHAR_EMPTY   	     '`'
 #define CHAR_ANY       	     '*'
 
-inline bool IsFloatEmpty( const float v )
-{
-    return ( v>0.f && v <= FLOAT_EMPTY);
-}
-inline bool IsDoubleEmpty( const double v )
-{
-    return ( v>0. && v <= DOUBLE_EMPTY);
-}
+//inline bool IsFloatEmpty( const float v )
+//{
+//    return ( v>0.f && v <= FLOAT_EMPTY);
+//}
+//inline bool IsDoubleEmpty( const double v )
+//{
+//    return ( v>0. && v <= DOUBLE_EMPTY);
+//}
 
 #endif //_v_vals_h_

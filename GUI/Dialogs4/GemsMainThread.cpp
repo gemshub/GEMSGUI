@@ -61,7 +61,7 @@ void TVisorImp::finish_IPN()
     Update(true);
 }
 
-void TVisorImp::error_IPN( gstring err_mess )
+void TVisorImp::error_IPN( std::string err_mess )
 {
     cout << "finish_IPN" << endl;
     //Update(true);

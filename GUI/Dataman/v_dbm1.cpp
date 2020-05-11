@@ -131,8 +131,8 @@ RecHead::write(GemDataStream& is)
 //-------------------------------------------------------------
 
 // default configurations
-TDBFile::TDBFile(const gstring& fName,
-                 const gstring& fExt, const gstring& fDir):
+TDBFile::TDBFile(const std::string& fName,
+                 const std::string& fExt, const std::string& fDir):
         TFile(fName, fExt, fDir),
         FPosFree(-1),
         dh(nullptr),
@@ -140,7 +140,7 @@ TDBFile::TDBFile(const gstring& fName,
 {}
 
 
-TDBFile::TDBFile(const gstring& path):
+TDBFile::TDBFile(const std::string& path):
         TFile(path),
         FPosFree(-1),
         dh(nullptr),

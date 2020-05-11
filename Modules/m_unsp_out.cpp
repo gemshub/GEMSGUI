@@ -3,15 +3,8 @@
 #include <iomanip>
 #include "io_arrays.h"
 
-#ifndef IPMGEMPLUGIN
 
 #include "m_unspace.h"
-
-#else
-
-#include "ms_unspace.h"
-
-#endif
 // !!! internal using  syp->GEX, mup->Laq, pm->tpp->G
 
 
@@ -32,11 +25,11 @@ void TUnSpace::out_QT( int Ngr  )
 // UiDC
 
   ii = usp->N;
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
   if( TRMults::sm->GetMU()->Laq )
-#else
-  if(mup_Laq )
-#endif
+//#else
+//  if(mup_Laq )
+//#endif
       ii--;
 
   for( l=0; l<ii ; l++ )
@@ -454,13 +447,13 @@ void TUnSpace::adapt_nPG( int line, double new_val, double new_int )
             for( int jj=0; jj<pmu->L; jj++)
              if( pmu->muj[jj] == j )
              {
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
                  pmu->fDQF[jj] = (usp->Gs[j][0]-  // not used after 16/07/2011 must be changed
                   float(TMTparm::sm->GetTP()->G[j]))/pmu->RT; // tpp->G may not be at this T,P
-#else
-                  pmu->GEX[jj] = (usp->Gs[j][0]-
-                   float(pmu->tpp_G[j]))/pmu->RT;
-#endif
+//#else
+//                  pmu->GEX[jj] = (usp->Gs[j][0]-
+//                   float(pmu->tpp_G[j]))/pmu->RT;
+//#endif
                break;
              }
             return;

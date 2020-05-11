@@ -30,22 +30,22 @@
 #include "m_dualth.h"
 #include "visor.h"
 #include "gdatastream.h"
-#include "nodearray.h"
+#include "nodearray_gui.h"
 
 TProfil* TProfil::pm;
 
-const double R_CONSTANT = 8.31451,
-              NA_CONSTANT = 6.0221367e23,
-                F_CONSTANT = 96485.309,
-                  e_CONSTANT = 1.60217733e-19,
-                    k_CONSTANT = 1.380658e-23,
-// Conversion factors
-                      cal_to_J = 4.184,
-                        C_to_K = 273.15,
-                          lg_to_ln = 2.302585093,
-                            ln_to_lg = 0.434294481,
-                              H2O_mol_to_kg = 55.50837344,
-                                Min_phys_amount = 1.66e-24;
+//const double R_CONSTANT = 8.31451,
+//              NA_CONSTANT = 6.0221367e23,
+//                F_CONSTANT = 96485.309,
+//                  e_CONSTANT = 1.60217733e-19,
+//                    k_CONSTANT = 1.380658e-23,
+//// Conversion factors
+//                      cal_to_J = 4.184,
+//                        C_to_K = 273.15,
+//                          lg_to_ln = 2.302585093,
+//                            ln_to_lg = 0.434294481,
+//                              H2O_mol_to_kg = 55.50837344,
+//                                Min_phys_amount = 1.66e-24;
 extern char *_GEMS_version_stamp;
 extern char *_GEMIPM_version_stamp;
 SPP_SETTING pa_ = {
@@ -285,7 +285,7 @@ void TProfil::InitSubModules()
         //syp = syst->GetSY();
         aMod.Add( multi = new TMulti( MD_MULTI ) );
         TMulti::sm = multi;
-        multi->setPa(this);
+        ///multi->setPa(this);
         //pmulti = multi;
         multi->ods_link();
         //pmp = multi->GetPM();
@@ -451,7 +451,7 @@ const char* TProfil::GetHtml()
 
 void TProfil::makeGEM2MTFiles(QWidget* par )
 {
-    TNodeArray* na = nullptr;
+    TNodeArrayGUI* na = nullptr;
     MULTI *pmp = multi->GetPM();
 
     try
@@ -475,7 +475,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       nPp_ = aObj[ o_w_pval].GetN();
 
 
-      na = new TNodeArray( 1, multi->GetPM() );
+      na = new TNodeArrayGUI( 1, multi );
 
       // realloc and setup data for dataCH and DataBr structures
       na->MakeNodeStructuresOne( par, ( flags[0] == S_OFF ),( flags[4] == S_ON ),
@@ -604,7 +604,7 @@ void TProfil::SetSysSwitchesFromMulti( )
 // Reading structure MULTI (GEM IPM work structure)
 void TProfil::CmReadMulti( const char* path, bool new_ipm )
 {
-    TNode* na = new TNode( multi->GetPM() );
+    TNodeGUI* na = new TNodeGUI( multi );
     MULTI* pmp = multi->GetPM();
     SYSTEM* syp = syst->GetSY();
     //gstring key = pmp->stkey;
@@ -668,7 +668,7 @@ pmp->pKMM = 0;
 
     // for loading GEX to System
     CheckMtparam();
-    multi->DC_LoadThermodynamicData( na );
+    multi->TMultiBase::DC_LoadThermodynamicData( na );
 
     // Unpack the pmp->B vector (b) into syp->BI and syp->BI (BI_ vector).
     for( long i=0; i < pmp->N; i++ )
@@ -1049,7 +1049,7 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
   //multi->Access_GEM_IMP_init();
   outMultiTxt( "Reaktoro_before.dump.txt"  );
   //CalculateEquilibriumGUI( "/home/sveta/devGEMS/gitGEMS3/standalone/gemserver-build/server_data/toServer-dat.lst");
-  CalculateEquilibriumGUI( pVisor->serverGems3Dir()+"/server_data/toServer-dat.lst");
+  CalculateEquilibriumGUI( std::string(pVisor->serverGems3Dir().c_str())+"/server_data/toServer-dat.lst");
   //multi->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
   outMultiTxt( "Reaktoro_after.dump.txt"  );
 
@@ -1060,7 +1060,7 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
   return multi->GetPM()->t_elap_sec;
 }
 
-void TProfil::outMulti( GemDataStream& ff, gstring& /*path*/  )
+void TProfil::outMulti( GemDataStream& ff, std::string& /*path*/  )
 {
     ff.writeArray( &pa.p.PC, 10 );
     ff.writeArray( &pa.p.DG, 28 );
@@ -1071,7 +1071,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& /*path*/  )
 // brief_mode - Do not write data items that contain only default values
 // with_comments -Write files with comments for all data entries ( in text mode)
 // addMui - Print internal indices in RMULTS to IPM file for reading into Gems back
-void TProfil::outMulti( gstring& path, bool addMui, bool with_comments, bool brief_mode )
+void TProfil::outMulti( std::string& path, bool addMui, bool with_comments, bool brief_mode )
 {
 
     fstream ff( path.c_str(), ios::out );
@@ -1087,14 +1087,14 @@ void TProfil::outMultiTxt( const char *path, bool append  )
 }
 
 
-// Reading structure MULTI (GEM IPM work structure)
-void TProfil::readMulti( GemDataStream& ff )
-{
+//// Reading structure MULTI (GEM IPM work structure)
+//void TProfil::readMulti( GemDataStream& ff,  DATACH* )
+//{
 
-      ff.readArray( &pa.p.PC, 10 );
-      ff.readArray( &pa.p.DG, 28 );
-      multi->from_file( ff );
-}
+//      ff.readArray( &pa.p.PC, 10 );
+//      ff.readArray( &pa.p.DG, 28 );
+//      multi->from_file( ff );
+//}
 
 
 

@@ -110,9 +110,9 @@ protected:
 
 public:
     //  TDBFile();
-    TDBFile(const gstring& fName,
-            const gstring& fExt, const gstring& fDir );
-    TDBFile(const gstring& path);
+    TDBFile(const std::string& fName,
+            const std::string& fExt, const std::string& fDir );
+    TDBFile(const std::string& path);
     TDBFile(fstream& f);
 
     void check_dh();

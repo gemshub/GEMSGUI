@@ -1201,7 +1201,7 @@ TUnSpace::RecordPrint( const char* key )
 
 	if( res == VF3_1 )
 	{
-		gstring filename;
+                std::string filename;
 		if( vfChooseFileSave(window(), filename,
 				   "Please, enter the Unspace work structure file name", "*.unc" ) )
 		{

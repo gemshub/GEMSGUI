@@ -188,7 +188,7 @@ TDataBase::~TDataBase()
 }
 
 // add new file to database chain
-void TDataBase::AddFile(const gstring& path)
+void TDataBase::AddFile(const std::string& path)
 {
     aFile.Add(new TDBFile(path));
 }
@@ -196,7 +196,7 @@ void TDataBase::AddFile(const gstring& path)
 // put information to index file
 void TDataBase::putndx( uint nF )
 {
-    gstring Path;
+    std::string Path;
     GemDataStream f;
 
     check_file(nF);
@@ -213,7 +213,7 @@ void TDataBase::putndx( uint nF )
 // get information from index file
 void TDataBase::getndx( uint nF )
 {
-    gstring Path;
+    std::string Path;
     VDBhead dh;
     GemDataStream f;
 
@@ -670,7 +670,7 @@ void TDataBase::opfils()
     fNum = 0;
     fOpenNameBuf.Clear();
     for(uint i=0; i<fls.GetCount(); i++)
-        fOpenNameBuf.Add( aFile[fls[i]].Name() );
+        fOpenNameBuf.Add( aFile[fls[i]].Name().c_str() );
 }
 
 // Selection in the list of full file names
@@ -687,7 +687,7 @@ void TDataBase::GetFileList(int mode, TCStringArray& names,
         {
             aFile[i].Makepath();
             names.Add( gstring(aFile[i].GetKeywd())+gstring(" ")+
-                       gstring(aFile[i].GetPath()));
+                       gstring(aFile[i].GetPath().c_str()));
             indeces.Add(i);
             if( (mode&oldself) && nF != -1) //select already open files
                 sel.Add(indeces.GetCount()-1);
@@ -747,7 +747,7 @@ try
         if( xcpt.mess == "Two records with the same key (OpenFiles).")
         {
           xcpt.mess += "\n 2nd record in file: ";
-          xcpt.mess +=  aFile[fls[j]].Name();
+          xcpt.mess +=  aFile[fls[j]].Name().c_str();
 
           while( j < fls.GetCount() )
             fls.Remove(j);
@@ -810,7 +810,7 @@ void TDataBase::OpenOnlyFromList( TCStringArray& names )
     for( ii=0; ii< aFile.GetCount(); ii++)
     {
       for( jj=0; jj< names.GetCount(); jj++)
-        if(  aFile[ii].Name().find( names[jj] ) != gstring::npos )
+        if(  aFile[ii].Name().find( names[jj].c_str() ) != gstring::npos )
          break;
       if( jj < names.GetCount() )
          fls.Add( ii );
@@ -837,7 +837,7 @@ try{
         if( xcpt.mess == "Two records with the same key (AddFileToList).")
         {
           xcpt.mess += "\n 2nd record in file: ";
-          xcpt.mess +=  aFile[aFile.GetCount()-1].Name();
+          xcpt.mess +=  aFile[aFile.GetCount()-1].Name().c_str();
 
           ind.initnew();
 
@@ -869,7 +869,7 @@ int TDataBase::GetFileNum(const char* substr_name)
 */
 
 // delete a file from DBfile list
-void TDataBase::DelFile(const gstring& path)
+void TDataBase::DelFile(const std::string& path)
 {
     TDBFile fl(path);
 
@@ -907,7 +907,7 @@ try{
         aFile[nff[j]].Open( UPDATE_DBV );
         //added Sveta 04/11/2002 to index files
         if( aFile[nff[j]].GetDhOver())
-         if( vfQuestion( nullptr, aFile[nff[j]].GetPath(),
+         if( vfQuestion( nullptr, aFile[nff[j]].GetPath().c_str(),
          "Stack of deleted records overflow.\nCompress?" ))
              comp.Add(nff[j]);
         // end added
@@ -928,7 +928,7 @@ try{
         if( xcpt.mess == "Two records with the same key (AddOpenFile).")
         {
           xcpt.mess += "\n 2nd record in file: ";
-          xcpt.mess +=  aFile[nff[j]].Name();
+          xcpt.mess +=  aFile[nff[j]].Name().c_str();
 
           ind.initnew();
 
@@ -1064,7 +1064,8 @@ void TDataBase::RebildFile(const TCIntArray& nff)
         //ind.delfile( nF );
         aFile[nF].GetDh( fPos, fLen, nRT, isDel );
 
-	gstring tmpFileName = aFile[nF].GetPath() + ".tmp";
+        std::string tmpFileName = aFile[nF].GetPath().c_str();
+                    tmpFileName += ".tmp";
 	GemDataStream outStream( tmpFileName, ios::out | ios::binary );
         for(int ii=0; ii<fPos; ii++ )
           outStream.put(0);
@@ -1075,7 +1076,7 @@ void TDataBase::RebildFile(const TCIntArray& nff)
 
 	outStream.close();
 
-	aFile[nF].OpenFromFileName( tmpFileName, UPDATE_DBV );
+        aFile[nF].OpenFromFileName( tmpFileName.c_str(), UPDATE_DBV );
 
         aFile[nF].SetDh( fLen, nRec, nRT, isDel );
 
@@ -1115,10 +1116,10 @@ bool TDataBase::SetNewOpenFileList(const TCStringArray& aFlKeywd)
             fls.Add(nF);
         else
         {	
-            if( !vfQuestion( nullptr, aFlKeywd[i],
+            if( !vfQuestion( nullptr, aFlKeywd[i].c_str(),
              "This database file was not found in the project or default database.\n"
             		" Continue without this file (Y) or cancel(N)?" ))
-               Error( aFlKeywd[i], 
+               Error( aFlKeywd[i].c_str(),
             		"Please, provide this database file and try opening the project again!");
             allOpend = false;
         }    
@@ -1129,7 +1130,7 @@ bool TDataBase::SetNewOpenFileList(const TCStringArray& aFlKeywd)
 }
 
 //Make new project-file and close another project files (make new Project)
-void TDataBase::MakeInNewProfile(const gstring& dir,
+void TDataBase::MakeInNewProfile(const std::string& dir,
    const char *prfName, const char * f_name )
 {
     /* open only default files (no user files)*/
@@ -1149,7 +1150,7 @@ void TDataBase::MakeInNewProfile(const gstring& dir,
         Open(false, UPDATE_DBV, fl);
 
     /* add new project files*/
-    gstring name(dir);
+    std::string name(dir);
     name += "/";
 
     if( f_name == nullptr || *f_name == '\0' )
@@ -1168,7 +1169,7 @@ void TDataBase::MakeInNewProfile(const gstring& dir,
 // get open file number by name (0 if not found )
 uint TDataBase::GetOpenFileNum( const char* secondName )
 {
-    gstring name = GetKeywd();
+    std::string name = GetKeywd();
     name += ".";
     name +=secondName;
     for(uint i=0; i<fls.GetCount(); i++)
@@ -1180,13 +1181,13 @@ uint TDataBase::GetOpenFileNum( const char* secondName )
 // get list of files keywds, that contained name
 void TDataBase::GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey )
 {
-    gstring name = ".";
+    std::string name = ".";
     name +=_name;
     name += ".";
 
     for(size_t ii=0; ii< aFile.GetCount(); ii++)
     {
-      if(  aFile[ii].GetPath().find( name ) != gstring::npos )
+      if(  aFile[ii].GetPath().find( name ) != std::string::npos )
           aFlkey.Add( aFile[ii].GetKeywd() );
     }
 }
@@ -1195,8 +1196,8 @@ void TDataBase::GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey )
 bool TDataBase::ifDefaultOpen() const
 {
     for(size_t i=0; i<fls.GetCount(); i++)
-        if( aFile[fls[i]].GetPath().find( pVisor->sysDBDir())
-              != gstring::npos )
+        if( aFile[fls[i]].GetPath().find( pVisor->sysDBDir().c_str())
+              != std::string::npos )
             return true;
     return false;
 }

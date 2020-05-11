@@ -32,14 +32,7 @@
 #ifndef _s_lmmin_h_
 #define _s_lmmin_h_
 
-#ifdef IPMGEMPLUGIN
-  #include <cstdio>
-  #include <fstream>
-  using namespace std;
-  #include <cmath>
-#else
- #include "v_ipnc.h"
-#endif
+#include "v_ipnc.h"
 
 #include <jama_svd.h>
 using namespace JAMA;
@@ -70,14 +63,11 @@ class TLMDataType  // data for the task
 
 protected:
 
-#ifndef IPMGEMPLUGIN
   IPNCalc rpn;      // IPN of fit and evaluate functions
 
   void rpn_evaluate( double* par, double* fvec );
   void rpn_par_function( int i, double* p  );
   double rpn_function( int i, double* p );
-
-#endif
 
   void test_sizes();
 // evaluate functions

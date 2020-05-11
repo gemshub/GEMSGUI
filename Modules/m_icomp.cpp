@@ -112,7 +112,7 @@ int TIComp::RecBuild( const char *key, int mode  )
     int bldType = mode;
     if( bldType == VF_UNDEF )
        bldType = vfQuestion3(window(), "Reallocation of data arrays ",
-                              GetName()+ gstring(" : ") + key ,
+                              GetName()+ std::string(" : ") + key ,
                               "&Bypass", "&Remake", "&Clear all");
 int retType = bldType;
 db->SetStatus(ONEF_);

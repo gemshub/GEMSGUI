@@ -41,7 +41,7 @@ signals:
     /// Finished process
     void IPM_finish();
     /// Finished with exception
-    void IPM_exception(gstring err_mess);
+    void IPM_exception(std::string err_mess);
     /// Finished OK
     void IPM_OK();
 

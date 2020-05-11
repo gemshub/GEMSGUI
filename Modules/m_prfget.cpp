@@ -545,7 +545,7 @@ void TProfil::loadSystat( const char *key )
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK SD 24/05/2010
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
-    multi->InitalizeGEM_IPM_Data(  );
+    multi->InitalizeGEM_IPM_Data();
 
     if( pmp->pESU )      // unpack old solution
     {
@@ -578,7 +578,7 @@ void TProfil::deriveSystat()
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK 24/05/2010
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
-        multi->InitalizeGEM_IPM_Data(  );
+        multi->InitalizeGEM_IPM_Data();
     if( pmp->pESU )      // unpack old solution
     {
         multi->loadData( false );  // unpack syseq to multi
@@ -629,7 +629,7 @@ AGAIN:
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
-       multi->InitalizeGEM_IPM_Data(  );
+       multi->InitalizeGEM_IPM_Data();
 
 
     // SD 22/01/2010 bool
@@ -753,7 +753,7 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
       {
         if( aMod[i].IsSubModule() )
             continue;
-        rt[aMod[i].rtNum()].MakeInNewProfile( Path, prfName );
+        rt[aMod[i].rtNum()].MakeInNewProfile( Path.c_str(), prfName );
       }
      }
     else // copy records from template project
@@ -812,7 +812,7 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
                 {
                   gstring f_new = aFiles[ii];//.replace(
                   //   prfTemplate, prfName);
-                  rt[jj].MakeInNewProfile( Path, prfName, f_new.c_str() );
+                  rt[jj].MakeInNewProfile( Path.c_str(), prfName, f_new.c_str() );
                 }
         }
     }

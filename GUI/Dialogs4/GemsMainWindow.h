@@ -79,12 +79,12 @@ struct DThread
   int res;
   bool wait;
   //vfMessage & vfQuestion
-  gstring title;     //prompt(vfChoice), caption
-  gstring mess;
+  std::string title;     //prompt(vfChoice), caption
+  std::string mess;
   //vfQuestion3
-  gstring s1;
-  gstring s2;
-  gstring s3;
+  std::string s1;
+  std::string s2;
+  std::string s3;
   //vfChoice (error, open only one SysEq)
   TCStringArray list;
   int seli;
@@ -95,8 +95,8 @@ struct DThread
   double fill_data;
 
   //Message&Quastion&Question3
-  void setDThread( const gstring& title_, const gstring& mess_,
-                  const gstring& s1_="", const gstring& s2_="", const gstring& s3_="")
+  void setDThread( const std::string& title_, const std::string& mess_,
+                  const std::string& s1_="", const std::string& s2_="", const std::string& s3_="")
   {  res =0;
      wait = true;
      title = title_;
@@ -266,7 +266,7 @@ Q_SIGNALS:
 public slots:
 
     void finish_IPN();
-    void error_IPN(gstring err_mess);
+    void error_IPN(std::string err_mess);
 
     void openRecordKey(  int row, int column  );
     void setMenuEnabled( bool menuEnabled = true );

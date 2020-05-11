@@ -348,7 +348,7 @@ void NewSystemDialog::CmReadMulti()
         //Update();
 
         // open file for input
-        gstring filename;
+        std::string filename;
         if( vfChooseFileOpen(this, filename,
           "Browse for GEMS3K *.lst file to import ", "*.lst" ) == false )
                return;
@@ -436,7 +436,7 @@ void NewSystemDialog::CmPrResults()
       if( !MessageToSave() )
               return;
       // open file to output
-      gstring filename;
+      std::string filename;
       if( vfChooseFileSave(this, filename,
           "Put file name for printing" ) == false )
                return;
@@ -459,7 +459,7 @@ void NewSystemDialog::CmPrInput()
       if( !MessageToSave() )
                return;
         // open file to output
-      gstring filename;
+      std::string filename;
       if( vfChooseFileSave(this, filename,
           "Put file name for printing" ) == false )
                return;

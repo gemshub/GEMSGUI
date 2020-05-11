@@ -126,7 +126,7 @@ main(int argc, char* argv[])
     catch(TError& err)
     {
         cerr << "gems3: " << err.mess.c_str() << endl;
-        gstring s = err.title;
+        auto s = err.title;
         s += ": ";
         s += err.mess;
         QMessageBox::critical(0, "GEMS fatal error", s.c_str());

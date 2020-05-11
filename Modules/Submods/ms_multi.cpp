@@ -8,7 +8,7 @@
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization and of the
-// standalone GEMS3K code (define IPMGEMPLUGIN).
+// standalone GEMS3K code.
 //
 // This file may be distributed under the GPL v.3 license
 
@@ -23,32 +23,7 @@ TMulti* TMulti::sm;
 
 // Constructor
 //
-TMulti::TMulti( int nrt ):
-        TSubModule( nrt )
-{
-    set_def();
-    pmp = &pm;
-    //node1 = 0;
 
-    sizeN = 0;
-    AA=0;
-    BB=0;
-    arrL=0;
-    arrAN=0;
-    
-U_mean = 0;
-U_M2 = 0;
-U_CVo = 0;
-U_CV = 0;
-ICNud = 0;
-
-    sizeFIs = 0;
-    phSolMod = 0;
-    sizeFIa = 0;
-    phSorpMod = 0;
-    sizeFI = 0;
-    phKinMet = 0;
-}
 
 const char* TMulti::GetHtml()
 {

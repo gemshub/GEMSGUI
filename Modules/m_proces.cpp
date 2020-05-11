@@ -27,7 +27,7 @@
 #include "t_print.h"
 #include "stepwise.h"
 #include "num_methods.h"
-#include "nodearray.h"
+#include "nodearray_gui.h"
 
 TProcess* TProcess::pm;
 
@@ -1198,7 +1198,7 @@ void TProcess::CalcEquat(  )
     }
     catch( TError& xcpt)
     {
-        gstring str = xcpt.mess;
+        auto str = xcpt.mess;
         str += "\n Cancel process?";
         if( vfQuestion(  window(), xcpt.title, str))
             Error( GetName(), "E00PEexec: Process simulation cancelled by the user");
@@ -1536,13 +1536,13 @@ void TProcess::RecordPrint(const char *key)
     if( res == VF3_1 )
     {
         // generate name and create directory
-        gstring process_name = rt[RT_PROCES].PackKey();
-        process_name.strip();
+        std::string process_name = rt[RT_PROCES].PackKey();
+        strip(process_name);
         KeyToName(process_name);
         //gstring recordPath = files_dir + process_name + "/";
         //vfMakeDirectory( nullptr, recordPath.c_str(), 1 );
 
-        gstring filename = process_name;
+        std::string filename = process_name;
         filename += "-dat.lst";
 
         if( vfChooseFileSave(window(), filename,
@@ -1673,10 +1673,10 @@ const char* TProcess::GetHtml()
    return GM_PROCES_HTML;
 }
 
-void TProcess::genGEM3K(const gstring& filepath, TCStringArray& savedSystems, bool brief_mode, bool add_mui)
+void TProcess::genGEM3K(const std::string& filepath, TCStringArray& savedSystems, bool brief_mode, bool add_mui)
 {
     // set up Node Array
-    std::unique_ptr<TNodeArray> na;
+    std::unique_ptr<TNodeArrayGUI> na;
     double Tai[4], Pai[4];
 
     Tai[0] = pep->Ti[0];
@@ -1687,34 +1687,34 @@ void TProcess::genGEM3K(const gstring& filepath, TCStringArray& savedSystems, bo
     Pai[2] = pep->Pi[2];
     Tai[3] = Pai[3] = 0.1;
 
-    na.reset( new TNodeArray( 1, TMulti::sm->GetPM() )) ;
+    na.reset( new TNodeArrayGUI( 1, TMulti::sm )) ;
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 
     // output base structure
-    ProcessProgressFunction messageF = [](const gstring& , long ){
+    ProcessProgressFunction messageF = [](const std::string& , long ){
               //std::cout << "TProcess GEM3k output" <<  message.c_str() << point << std::endl;
               return false;
         };
-    auto dbr_list =  na->genGEMS3KInputFiles(  filepath, messageF, 1, false, brief_mode, false, false, add_mui );
+    auto dbr_list =  na->genGEMS3KInputFiles(  filepath.c_str(), messageF, 1, false, brief_mode, false, false, add_mui );
 
     // output dbr keys
     if( pep->stl == nullptr )
       return;
 
-    gstring dir;
-    gstring name;
-    gstring newname;
+    std::string dir;
+    std::string name;
+    std::string newname;
     u_splitpath( dbr_list, dir, name, newname );
     ofstream fout2(dbr_list.c_str(), ios::app);
 
     for( int ii=0; ii<pep->NR1 ; ++ii )
     {
-        name = gstring( pep->stl[ii], 0, EQ_RKLEN );
+        name = std::string( pep->stl[ii], 0, EQ_RKLEN );
         auto nRec = rt[RT_SYSEQ].Find(name.c_str());
         if( nRec >= 0  )
         {
-           savedSystems.Add(name);
+           savedSystems.Add(name.c_str());
 
            // read parent SysEq record and unpack data
            dynamic_cast<TProfil*>(&aMod[RT_PARAM])->loadSystat( name.c_str() );

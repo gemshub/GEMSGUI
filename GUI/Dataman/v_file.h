@@ -50,10 +50,10 @@ class TFile
 
     char Keywd[MAX_FILENAME_LEN+1];
     FileStatus  status;
-    gstring dir;
-    gstring name;
-    gstring ext;
-    gstring Path;
+    std::string dir;
+    std::string name;
+    std::string ext;
+    std::string Path;
 
     void makeKeyword();
 
@@ -66,9 +66,9 @@ public:
     GemDataStream& f;
 
     //  TFile();
-    TFile(const gstring& fName,
-          const gstring& fExt, const gstring& fDir );
-    TFile(const gstring& path);
+    TFile(const std::string& fName,
+          const std::string& fExt, const std::string& fDir );
+    TFile(const std::string& path);
     TFile(fstream& fcfg);
     virtual ~TFile();
     void toCFG(fstream& fcfg);
@@ -82,32 +82,32 @@ public:
     {
         return status;
     }
-    const gstring& Name() const
+    const std::string& Name() const
     {
         return name;
     }
-    const gstring& Ext() const
+    const std::string& Ext() const
     {
         return ext;
     }
-    const gstring& Dir() const
+    const std::string& Dir() const
     {
         return dir;
     }
-    const gstring& GetPath() const
+    const std::string& GetPath() const
     {
         return Path;
     }
 
     //--- Manipulation
-    void newFile( const gstring& newName, const gstring& newExt,
-                  const gstring& newDir );
+    void newFile( const std::string& newName, const std::string& newExt,
+                  const std::string& newDir );
     void Makepath();
     bool Exist();
 //    bool CheckOverwrite(FileStatus mode);
     virtual void Open( FileStatus mode );
     virtual void Close();
-    void OpenFromFileName( const gstring& filename, FileStatus mode );
+    void OpenFromFileName( const std::string& filename, FileStatus mode );
     //  void Reopen(const char* file, FileStatus mode);
 
     static const char* VV()

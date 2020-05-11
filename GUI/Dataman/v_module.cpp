@@ -308,11 +308,11 @@ bool  TCModule::testKeyFilter()
 bool
 TCModule::CheckEqText( const char *erscan, const char *msg )
 {
-    gstring msger;
+    std::string msger;
     if( msg==nullptr )
         msger = "E90MSTran: Error in translation of script:\n ";
     else
-        msger = gstring(msg);
+        msger = std::string(msg);
     msger += erscan;
     msger += "\n  Would you like to make corrections now? ";
     if( !vfQuestion(window(), GetName() , msger ) )
@@ -468,8 +468,8 @@ TCModule::CmDelete()
         if( pVisor->ProfileMode == true && nRT < RT_SYSEQ )
             Error( GetName(), "Please, do it in Database mode!");
 
-        gstring str=db->PackKey();
-        if( str.find_first_of("*?" ) != gstring::npos )
+        std::string str=db->PackKey();
+        if( str.find_first_of("*?" ) != std::string::npos )
             Error( GetName(), "Current record key not defined!");
         if( !vfQuestion(window(), GetName(),
                    "Confirm deletion of data record keyed "+str ))
@@ -670,7 +670,7 @@ TCModule::RecBuild( const char *key, int mode  )
     int bldType = mode;
     if( bldType == VF_UNDEF )
        bldType = vfQuestion3(window(), "Reallocation of data arrays ",
-                              GetName()+ gstring(" : ") + key ,
+                              GetName()+ std::string(" : ") + key ,
                               "&Bypass", "&Remake", "&Clear all");
     int retType = bldType;
     db->SetStatus(ONEF_);
@@ -920,7 +920,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
 	return;
 
     RecStatus iRet = db->Rtest( key, 1 );
-    gstring msg;
+    std::string msg;
 
     switch( iRet )
     {
@@ -1161,7 +1161,7 @@ TCModule::PrintSDref( const char* sd_key, const char* text_fmt )
    Error( sd_key, "No format text in this record.");  */
  // open file to output
 
-    gstring filename="";
+    std::string filename="";
     if( vfChooseFileSave(window(), filename, "Please, provide name of TXT-file") )
     {
         ios::openmode mod = ios::out;
@@ -1324,10 +1324,10 @@ TCModule::CmAddFileToList()
         if( ! MessageToSave() )
 	    return;
 
-        gstring filename = db->GetKeywd();
+        std::string filename = db->GetKeywd();
                 filename += ".newname.";
                 filename +=  PDB_EXT;
-        gstring filter = "*.";
+        std::string filter = "*.";
                 filter +=  PDB_EXT;
 
         if( vfChooseFileSave(window(), filename,
@@ -1335,9 +1335,9 @@ TCModule::CmAddFileToList()
             return;
         // test Path Added Sveta 5/03/02
         // pdb extension, name must started db->GetKeywd()
-        gstring dir;
-        gstring name;
-        gstring ext;
+        std::string dir;
+        std::string name;
+        std::string ext;
         u_splitpath( filename, dir, name, ext);
         ext = PDB_EXT;
         size_t pos = name.find( db->GetKeywd() );
@@ -1347,7 +1347,7 @@ TCModule::CmAddFileToList()
         }
         filename = u_makepath( dir, name, ext );
 
-        TDBFile* file = new TDBFile(filename);
+        TDBFile* file = new TDBFile(filename.c_str());
         /////////
         db->AddFileToList(file);
         db->SetKey( ALLKEY );
@@ -1698,7 +1698,7 @@ TCModule::KeysToTXT( const char *pattern )
         return;
 
     gstring s = GetName();
-    gstring filename;
+    std::string filename;
     s += " : Please, select file to write record keys";
     if( !vfChooseFileSave(window(), filename, s.c_str()) )
         return;
@@ -1725,8 +1725,8 @@ TCModule::RecToTXT( const char *pattern )
     if( aKey.GetCount() <1 )
         return;
 
-    gstring s = GetName();
-    gstring filename;
+    std::string s = GetName();
+    std::string filename;
     s += " : Please, give a file name for unloading records";
     if( vfChooseFileSave( window(), filename, s.c_str() ) == false )
         return;
@@ -1756,8 +1756,8 @@ TCModule::RecOfTXT()
     int Rnum;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
 
-    gstring s =gstring( GetName() )+" : Please, select file with unloaded records";
-    gstring filename;
+    std::string s =std::string( GetName() )+" : Please, select file with unloaded records";
+    std::string filename;
     if( vfChooseFileOpen( window(), filename, s.c_str() ) == false )
         return;
     fstream f(filename.c_str(), ios::in);
@@ -1781,7 +1781,7 @@ TCModule::RecOfTXT()
                 if( fnum == -2 )
                   break;
              }
-        s = gstring( buf );
+        s = std::string( buf );
         do
          {
             f.get(buf[0]);
@@ -1794,10 +1794,10 @@ TCModule::RecOfTXT()
     }
     if( f.bad() )
     {
-      gstring str = "File read error! \n";
+      std::string str = "File read error! \n";
               str += "Last good record :";
               str += s;
-      Error( GetName(), str.c_str() );
+      Error( GetName(), str );
      }
      dyn_set();
 }
@@ -1827,8 +1827,8 @@ TCModule::RecExport( const char *pattern )
     if( aKey.GetCount() <1 )
         return;
 
-    gstring s = GetName();
-    gstring filename;
+    std::string s = GetName();
+    std::string filename;
     s += " : Please, give a file name for unloading records";
     if( vfChooseFileSave( window(), filename, s.c_str() ) == false )
         return;
@@ -1887,8 +1887,8 @@ TCModule::RecImport()
     // translate scripts
     TReadData dat( sd_key.c_str(), nRT, text_fmt );
 
-    gstring s =gstring( GetName() )+" : Please, select file with imported records";
-    gstring filename;
+    std::string s =std::string( GetName() )+" : Please, select file with imported records";
+    std::string filename;
     if( vfChooseFileOpen( window(), filename, s.c_str() ) == false )
         return;
     fstream f(filename.c_str(), ios::in);
@@ -1898,7 +1898,7 @@ TCModule::RecImport()
     while( !f.eof() )
     {
         dat.readRecord( iter, f );
-        gstring keyp = db->UnpackKey();
+        std::string keyp = db->UnpackKey();
         Rnum = db->Find( keyp.c_str() );
         if( Rnum >= 0 )
         {
@@ -1924,10 +1924,10 @@ TCModule::RecImport()
     }
     if( f.bad() )
     {
-      gstring str = "File read error! \n";
+      std::string str = "File read error! \n";
               str += "Last good record :";
               str += s;
-      Error( GetName(), str.c_str() );
+      Error( GetName(), str );
      }
      dyn_set();
 }

@@ -6,9 +6,10 @@ TARGET		= gems3
 
 #DEFINES         += Use_mt_mode
 DEFINES         += NODEARRAYLEVEL
+#DEFINES += NOPARTICLEARRAY
 #DEFINES         += NOMUPNONLOGTERM
 DEFINES  += NO_JSONIO
-DEFINES  += JSON_OUT
+#DEFINES  += NO_JSON_OUT
 
 CONFIG+=sdk_no_version_check
 CONFIG += c++11
@@ -55,7 +56,6 @@ CHARTS_CPP     =  ./GUI/charts
 MODULES_CPP    =  ./Modules
 SUBMODS_CPP    =  ./Modules/Submods
 NUMERICS_CPP   =  ./Modules/Numerics
-GEMS3K_CPP     =  ../standalone/GEMS3K
 
 SERVICES4_H  =  $$SERVICES4_CPP
 DATAMAN_H    =  $$DATAMAN_CPP
@@ -64,7 +64,6 @@ CHARTS_H     =  $$CHARTS_CPP
 MODULES_H    =  $$MODULES_CPP
 SUBMODS_H    =  $$SUBMODS_CPP
 NUMERICS_H   =  $$NUMERICS_CPP
-GEMS3K_H     =  $$GEMS3K_CPP
 
 DEPENDPATH   += $$SERVICES4_H
 DEPENDPATH   += $$DATAMAN_H  
@@ -73,7 +72,7 @@ DEPENDPATH   += $CHARTS_H
 DEPENDPATH   += $$MODULES_H
 DEPENDPATH   += $$SUBMODS_H   
 DEPENDPATH   += $$NUMERICS_H 
-DEPENDPATH   += $$GEMS3K_H   
+
 
 INCLUDEPATH   += $$SERVICES4_H
 INCLUDEPATH   += $$DATAMAN_H  
@@ -82,7 +81,6 @@ INCLUDEPATH   += $$CHARTS_H
 INCLUDEPATH   += $$MODULES_H
 INCLUDEPATH   += $$SUBMODS_H   
 INCLUDEPATH   += $$NUMERICS_H 
-INCLUDEPATH   += $$GEMS3K_H   
 
 
 MOC_DIR = tmp
@@ -91,7 +89,18 @@ UI_SOURSEDIR  = $$MOC_DIR
 UI_HEADERDIR  = $$MOC_DIR
 OBJECTS_DIR       = obj
 
-LIBS += -lzmq
+# link lib
+INCLUDEPATH   += "/usr/local/include/GEMS3K"
+DEPENDPATH   += "/usr/local/include/GEMS3K"
+LIBS += -lzmq -lGEMS3K
+#link sources
+#GEMS3K_CPP     =  ../standalone/GEMS3K
+#GEMS3K_H     =  $$GEMS3K_CPP
+#DEPENDPATH   += $$GEMS3K_H
+#INCLUDEPATH   += $$GEMS3K_H
+#LIBS += -lzmq
+#include($$GEMS3K_CPP/gems3k.pri)
+#end link
 
 include($$DATAMAN_CPP/Dataman.pri)
 include($$MODULES_CPP/Modules.pri)
@@ -100,6 +109,5 @@ include($$NUMERICS_CPP/Numerics.pri)
 include($$SERVICES4_CPP/Services4.pri)
 include($$DIALOGS4_CPP/Dialogs4.pri)
 include($$CHARTS_CPP/charts.pri)
-include($$GEMS3K_CPP/gems3k.pri)
 
 #message("Defines: $$DEFINES")

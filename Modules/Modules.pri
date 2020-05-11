@@ -9,7 +9,7 @@
 		    $$MODULES_H/m_gem2mt.h \
 		    $$MODULES_H/m_gtdemo.h \
                     $$MODULES_H/m_icomp.h  \
-#                    $$MODULES_H/m_param.h  \
+                    $$MODULES_H/m_param.h  \
                     $$MODULES_H/m_phase.h  \
                     $$MODULES_H/m_proces.h  \
                     $$MODULES_H/m_reacdc.h  \

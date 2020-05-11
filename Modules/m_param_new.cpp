@@ -29,7 +29,7 @@
 #ifdef OLD
 
 // Run process of calculate equilibria into the GEMSGUI shell
-double  TProfil::CalculateEquilibriumGUI( const gstring& lst_path )
+double  TProfil::CalculateEquilibriumGUI( const std::string& lst_path )
 {
     bool brief_mode = false;
     bool add_mui = true;
@@ -131,7 +131,7 @@ void TProfil::CmReadMultiServer( const char* path )
 #else
 
 // Run process of calculate equilibria into the GEMSGUI shell
-double  TProfil::CalculateEquilibriumGUI( const gstring& amode )
+double  TProfil::CalculateEquilibriumGUI( const std::string& amode )
 {
     std::string mode = amode.c_str();
     bool brief_mode = false;
@@ -139,7 +139,8 @@ double  TProfil::CalculateEquilibriumGUI( const gstring& amode )
     long int NodeStatusCH = T_ERROR_GEM;
     double time = 0.;
 
-    auto send_msg = CurrentSystem2GEMS3Kjson(  brief_mode, add_mui );
+    std::shared_ptr<TNodeGUI> na;
+    auto send_msg = CurrentSystem2GEMS3Kjson( na, brief_mode, add_mui );
     //for( const auto& msg: msg_data )
     //  std::cout << msg <<  "\n----------------------\n"  << std::endl;
 
@@ -157,11 +158,11 @@ double  TProfil::CalculateEquilibriumGUI( const gstring& amode )
     {
     case OK_GEM_AIA:
     case OK_GEM_SIA: // unpack dbr data
-        time = readMultiServer( NodeStatusCH, send_msg, recv_message );
+        time = readMultiServer( na, NodeStatusCH, recv_message );
         break;
     case BAD_GEM_AIA:
     case BAD_GEM_SIA:  // unpack dbr data
-        time = readMultiServer( NodeStatusCH, send_msg, recv_message );
+        time = readMultiServer( na, NodeStatusCH, recv_message );
         Error( (recv_message.end()-1)->c_str(), recv_message.back().c_str() );
         break;
     case ERR_GEM_AIA:
@@ -173,27 +174,27 @@ double  TProfil::CalculateEquilibriumGUI( const gstring& amode )
     return time;
 }
 
-std::vector<std::string> TProfil::CurrentSystem2GEMS3Kjson( bool brief_mode, bool add_mui )
+std::vector<std::string> TProfil::CurrentSystem2GEMS3Kjson( std::shared_ptr<TNodeGUI>& na, bool brief_mode, bool add_mui )
 {
     std::vector<std::string> msg_data;
 
     double Tai[4], Pai[4];
-    std::unique_ptr<TNodeArray> na;
-    MULTI *pmp = TMulti::sm->GetPM();
+    //std::unique_ptr<TNode> na;
+    MULTI *pmp = /*TMulti::sm*/multi->GetPM();
 
     Tai[0] = Tai[1] = pmp->TCc;
     Pai[0] = Pai[1] = pmp->Pc;
     Tai[2] = Pai[2] = 0.;
     Tai[3] = Pai[3] = 0.1;
 
-    na.reset( new TNodeArray( 1, pmp )) ;
+    na.reset( new TNodeGUI( multi )) ;
     // realloc and setup data for dataCH and DataBr structures
-    na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
+    na->MakeNodeStructures( nullptr, true , Tai, Pai  );
 
     msg_data.push_back( "system" );
-    msg_data.push_back( na->getCalcNode().datach_to_string( false, brief_mode ) );
-    msg_data.push_back( gemipm_to_string( add_mui, false, brief_mode ));
-    msg_data.push_back( na->getCalcNode().databr_to_string( false, brief_mode ));
+    msg_data.push_back( na->datach_to_string( false, brief_mode ) );
+    msg_data.push_back( na->gemipm_to_string( add_mui, false, brief_mode ));
+    msg_data.push_back( na->databr_to_string( false, brief_mode ));
     return msg_data;
 }
 
@@ -204,15 +205,15 @@ std::vector<std::string>  TProfil::CalculateEquilibriumServer( const std::vector
 }
 
 // Reading structure MULTI (GEM IPM work structure)
-double TProfil::readMultiServer( long int NodeStatusCH, const std::vector<std::string>& send_msg, const std::vector<std::string>& recv_msg )
+double TProfil::readMultiServer( std::shared_ptr<TNodeGUI>& na, long int NodeStatusCH, const std::vector<std::string>& recv_msg )
 {
     double ret = 0;
-    auto new_dbr = send_msg[3];
+    //auto new_dbr = send_msg[3];
 
     if( recv_msg.size() >= 3 && !recv_msg[2].empty() )
         ret = std::stod(recv_msg[2], nullptr );
 
-    if( recv_msg.size() >= 2 && !recv_msg[1].empty() )
+    /*if( recv_msg.size() >= 2 && !recv_msg[1].empty() )
     {
         new_dbr = recv_msg[1];
         //std::cout << new_dbr << std::endl;
@@ -227,40 +228,47 @@ double TProfil::readMultiServer( long int NodeStatusCH, const std::vector<std::s
     {
         Error( "GEMS3K Init() error:",  "Some GEMS3K data illegal.");
     }
+   */
 
-    // Unpacking the actual contents of DBR file including speciation
-    na->unpackDataBr( true );
-
-    if( ( NodeStatusCH == OK_GEM_AIA || NodeStatusCH ==  OK_GEM_SIA) && recv_msg.size()>=6)
+    if( recv_msg.size() >= 2 && !recv_msg[1].empty() )
     {
-        pmp->K2 =  atol( recv_msg[3].c_str() );
-        pmp->ITF =  atol( recv_msg[4].c_str() );
-        pmp->ITG =  atol( recv_msg[5].c_str() );
-    }
+        MULTI* pmp = multi->GetPM();
 
-    for( int j=0; j < pmp->L; j++ )
-        pmp->X[j] = pmp->Y[j];
-    pmp->TC = pmp->TCc;
-    pmp->T =  pmp->Tc;
-    pmp->P =  pmp->Pc;
+        na->databr_from_string(recv_msg[1]);
+        // Unpacking the actual contents of DBR file including speciation
+        na->unpackDataBr( true );
 
-    pmp->pESU = 2;  // SysEq unpack flag set
-
-    multi->EqstatExpand( /*pmp->stkey,*/ true );
-    pmp->FI1 = 0;  // Recomputing the number of non-zeroed-off phases
-    pmp->FI1s = 0;
-    for(int i=0; i<pmp->FI; i++ )
-    {
-        if( pmp->YF[i] >= min( pmp->PhMinM, 1e-22 ) )  // Check 1e-22 !!!!!
+        if( ( NodeStatusCH == OK_GEM_AIA || NodeStatusCH ==  OK_GEM_SIA) && recv_msg.size()>=6)
         {
-            pmp->FI1++;
-            if( i < pmp->FIs )
-                pmp->FI1s++;
+            pmp->K2 =  atol( recv_msg[3].c_str() );
+            pmp->ITF =  atol( recv_msg[4].c_str() );
+            pmp->ITG =  atol( recv_msg[5].c_str() );
         }
-    }
-    for( int i=0; i<pmp->L; i++)
-        pmp->G[i] = pmp->G0[i];
 
+        for( int j=0; j < pmp->L; j++ )
+            pmp->X[j] = pmp->Y[j];
+        pmp->TC = pmp->TCc;
+        pmp->T =  pmp->Tc;
+        pmp->P =  pmp->Pc;
+
+        pmp->pESU = 2;  // SysEq unpack flag set
+
+        multi->EqstatExpand( /*pmp->stkey,*/ true );
+        pmp->FI1 = 0;  // Recomputing the number of non-zeroed-off phases
+        pmp->FI1s = 0;
+        for(int i=0; i<pmp->FI; i++ )
+        {
+            if( pmp->YF[i] >= min( pmp->PhMinM, 1e-22 ) )  // Check 1e-22 !!!!!
+            {
+                pmp->FI1++;
+                if( i < pmp->FIs )
+                    pmp->FI1s++;
+            }
+        }
+        for( int i=0; i<pmp->L; i++)
+            pmp->G[i] = pmp->G0[i];
+
+    }
     //cout << setprecision(15) <<" pmp->Y_la[4] " << pmp->Y_la[4] << " pmp->lnGam[4] " << pmp->lnGam[4] << endl;
     ///   !!! G[] and F[] different after IPM and EqstatExpand
     return ret;

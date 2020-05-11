@@ -170,9 +170,9 @@ TReadData::getFormat()
           }
           skipSpace();
           if( *input != ']')
-           {  gstring str_err = "Invalid format (left ']'): \n";
+           {  string str_err = "Invalid format (left ']'): \n";
                str_err += input;
-              Error( key_format, str_err.c_str() );
+              Error( key_format.c_str(), str_err );
             }
           input++;
         }
@@ -278,9 +278,9 @@ TReadData::getData( bool isList )
        }
      skipSpace();
      if( *input != ']')
-     {  gstring str_err = "Invalid format: \n";
+     {  string str_err = "Invalid format: \n";
            str_err += input;
-       Error( key_format, str_err.c_str() );
+       Error( key_format.c_str(), str_err );
      }
     input++;
    }

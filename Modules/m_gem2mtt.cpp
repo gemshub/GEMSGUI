@@ -988,13 +988,9 @@ double TGEM2MT::PrintPoint( long int nPoint, FILE* diffile, FILE* logfile, FILE*
        char buf[200];
 
        sprintf( buf, "%05ld", mtp->ct);
-       gstring name = buf;
+       std::string name = buf;
 
-#ifdef IPMGEMPLUGIN
-    strip(name);
-#else
-    name.strip();
-#endif
+       strip(name);
        name += ".vtk";
 
        name = pathVTK + prefixVTK + name;

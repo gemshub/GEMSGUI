@@ -443,8 +443,8 @@ TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_
     ifstream obj_dat(fname.c_str(), ios::binary | ios::in);
 
     if ( !obj_dat.good() ) {
-	gstring message = "Can't open ";
-	message += fname;
+        std::string message = "Can't open ";
+        message += fname.c_str();
         throw TError(vSigTITLE, message);
     }
 
@@ -480,8 +480,8 @@ TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_
     ifstream visor_dat(fname.c_str(), ios::binary | ios::in);
 
     if ( !obj_dat.good() ) {
-	gstring message = "Can't open ";
-	message += fname;
+        std::string message = "Can't open ";
+        message += fname.c_str();
         throw TError(vSigTITLE, message);
     }
 
@@ -904,7 +904,7 @@ TVisor::defaultCFG()
             {
                 gstring path = pVisor->sysDBDir();
                 path += aDBFiles[ii];
-                rt[jj].AddFile(path);
+                rt[jj].AddFile(path.c_str());
                 cnt++;
             }
         }
@@ -930,7 +930,7 @@ TVisor::defaultCFG()
                     gstring path(dir);
                     path += "/";
                     path += aDBFiles[kk];
-                    rt[jj].AddFile(path);
+                    rt[jj].AddFile(path.c_str());
                 }
           }
         }
@@ -944,7 +944,7 @@ TCStringArray readDirs(const char *dir)
 // cout << "GEMS DB dir: " << dir << endl;
     QDir thisDir(dir);
     if (!thisDir.isReadable())
-        throw TFatalError("GEMS Init", gstring(dir) + ": GEMS DB directory is not readable");
+        throw TFatalError("GEMS Init", std::string(dir) + ": GEMS DB directory is not readable");
 
     thisDir.setFilter(QDir::Dirs);
     //    thisDir.setNameFilter("*.pdb");
@@ -1015,7 +1015,7 @@ TVisor::deleteDBDir(const char *dir)
 
     //--QDir::setCurrent(dir);
     // delete files in module list
-    gstring path;
+    std::string path;
     for (uint ii = 0; ii < aFiles.GetCount(); ii++)
     {
         if (gstring(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
@@ -1026,7 +1026,7 @@ TVisor::deleteDBDir(const char *dir)
                 {
                     path = dir;
                     path += "/";
-                    path += aFiles[ii];
+                    path += aFiles[ii].c_str();
                     //cout << path << endl;
                     rt[jj].Close();
                     rt[jj].DelFile(path);
@@ -1035,7 +1035,7 @@ TVisor::deleteDBDir(const char *dir)
         }
         path = dir;
         path += "/";
-        path += aFiles[ii];
+        path += aFiles[ii].c_str();
         //cout << path.c_str() << endl;
         QFile ff(path.c_str()/*aFiles[ii].c_str()*/);
         ff.remove();

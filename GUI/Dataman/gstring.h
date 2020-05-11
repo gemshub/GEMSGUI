@@ -28,12 +28,6 @@
 #include <cstring>
 #include "array.h"
 
-#ifdef IPMGEMPLUGIN
-   static const size_t npos = static_cast<size_t>(-1);
-//   static  const size_t npos=32767;   /wp sergey 2004 from below assignment
-
-#endif
-
 class gstring
 {
 //    internal class for keeping string values
@@ -64,9 +58,9 @@ struct str_val:
     str_val* ps;
 
 public:
-#ifndef IPMGEMPLUGIN
+
     static const size_t npos = static_cast<size_t>(-1);
-#endif
+
     // various constructors and destructor
     gstring()
     {

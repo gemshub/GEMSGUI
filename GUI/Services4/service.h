@@ -35,7 +35,7 @@ const int VF_CANCEL = 2;
 
 int vfQuestYesNoCancel(QWidget* par, const gstring& title, const gstring& mess);
 
-bool vfQuestion(QWidget* par, const gstring& title, const gstring& mess);
+bool vfQuestion(QWidget* par, const std::string& title, const std::string& mess);
 
 /// remove numbers!
 const int VF3_1 = 6;
@@ -43,14 +43,14 @@ const int VF3_2 = 7;
 const int VF3_3 = 2;
 
 // returns VF3_1, VF3_2 or VF3_3
-int vfQuestion3(QWidget* par, const gstring& title, const gstring& mess,
-                const gstring& s1, const gstring& s2,  const gstring& s3="&Cancel",
+int vfQuestion3(QWidget* par, const std::string& title, const std::string& mess,
+                const std::string& s1, const std::string& s2,  const std::string& s3="&Cancel",
                 bool i_mov = false);
 
 enum WarnType { vfInfo=0, vfWarn, vfErr };
 
 void
-vfMessage(QWidget* par, const gstring& title, const gstring& mess, WarnType type=vfWarn);
+vfMessage(QWidget* par, const std::string& title, const std::string& mess, WarnType type=vfWarn);
 
 int
 vfChoice(QWidget* par, TCStringArray& arr, const char* prompt, int sel=0);
@@ -101,11 +101,11 @@ vfExcludeFillEdit(QWidget* par, const char* caption,
    TCStringArray& aICkeys, TOArray<bool>& sel, double& fill_data );
 
 
-bool vfChooseFileOpen(QWidget* par, gstring& path,
+bool vfChooseFileOpen(QWidget* par, std::string& path,
   const char* title=0 , const char* filter=0);
-bool vfChooseFileSave(QWidget* par, gstring& path,
+bool vfChooseFileSave(QWidget* par, std::string& path,
   const char* title=0 , const char* filter=0);
-bool vfChooseDirectory(QWidget* par, gstring& path_,
+bool vfChooseDirectory(QWidget* par, std::string& path_,
        const char* title );
 
 // askOverwrite = 0 - not ask

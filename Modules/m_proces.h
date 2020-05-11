@@ -175,7 +175,7 @@ class TProcess : public TCModule
 
     char *text_fmt;
     gstring sd_key;
-    gstring filename;
+    std::string filename;
 
 
 protected:
@@ -260,7 +260,7 @@ public:
    /// \param brief_mode - Do not write data items that contain only default values
    /// \param add_mui - Print internal indices in RMULTS to IPM file for reading into Gems back
    /// \return savedSystems - add saved system record to array
-   void genGEM3K( const gstring& filepath, TCStringArray& savedSystems, bool brief_mode, bool add_mui = false );
+   void genGEM3K( const std::string& filepath, TCStringArray& savedSystems, bool brief_mode, bool add_mui = false );
 };
 
 enum pe_statcode {

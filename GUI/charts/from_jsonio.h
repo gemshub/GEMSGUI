@@ -8,7 +8,7 @@
 namespace jsonio {
 
 /// Throw condition jsonio_exception
-inline void jsonioErrIf(bool error, const gstring& title, const gstring& message, const gstring& = "")
+inline void jsonioErrIf(bool error, const std::string& title, const std::string& message, const std::string& = "")
 {
     ErrorIf( error, title, message);
 }

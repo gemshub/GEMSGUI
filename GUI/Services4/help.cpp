@@ -20,6 +20,7 @@
 using namespace std;
 #include "help.h"
 #include "visor.h"
+#include "v_object.h"
 
 
 // read string untill "end"
@@ -47,13 +48,9 @@ void HelpConfigurator::getHrefs( QString file, QString file_name)
 
    if( !f_in.good() )
    {
-#ifdef IPMGEMPLUGIN
-        cout << file.toLatin1().data() << " Fileopen error" << endl;
-#else
         file += " Fileopen error";
         Error( "HelpConfigurator", file.toLatin1().data());
-#endif
-         return;
+        return;
    }
 
    while( !f_in.eof() )
@@ -128,11 +125,7 @@ int HelpConfigurator::readDir(const char *dir)
     QDir thisDir(dir);
     if (!thisDir.isReadable())
     {
-#ifdef IPMGEMPLUGIN
-        cout <<  " GEMS DB directory is not readable" << endl;
-#else
         Error( "HelpConfigurator", "GEMS DB directory is not readable");
-#endif
         return 0;
     }
 
@@ -165,13 +158,9 @@ int HelpConfigurator::writeFile(const char *file)
     fstream f_out( file, ios::out );
     if( !f_out.good() )
     {
-#ifdef IPMGEMPLUGIN
-        cout << file << " Fileopen error" << endl;
-#else
         QString str = QString(file) + " Fileopen error";
         Error( "HelpConfigurator", str.toLatin1().data());
-#endif
-         return 0;
+        return 0;
     }
 
     // Write head
@@ -223,11 +212,10 @@ void HelpConfigurator::writeKeywords( fstream& f_out)
     f_out << "    <keywords>" << endl;
     for( int ii =0; ii<kwds.count(); ii++)
     {
-#ifndef IPMGEMPLUGIN
+
         // add only keywords for objects
         if( showObjectForKeyword(kwds[ii])<0)
           continue;
-#endif
         urls = links.values( kwds[ii] );
 
       for( int jj=0; jj<urls.count(); jj++ )
@@ -245,13 +233,9 @@ void HelpConfigurator::writeContent( fstream& f_out)
     fstream f_in( contentfile.toLatin1().data(), ios::in );
     if( !f_in.good() )
     {
-#ifdef IPMGEMPLUGIN
-        cout << contentfile.toLatin1().data() << " Fileopen error" << endl;
-#else
         contentfile += " Fileopen error";
         Error( "HelpConfigurator", contentfile.toLatin1().data());
-#endif
-         return;
+        return;
     }
 
     while( !f_in.eof() )
@@ -261,10 +245,6 @@ void HelpConfigurator::writeContent( fstream& f_out)
       f_out << ref.toLatin1().data();
     }
 }
-
-#ifndef IPMGEMPLUGIN
-
-#include "v_object.h"
 
 // Searches for reference <keyword> in the list of objects
 //    <keyword> should be in format: objectlabel or objectlabel_<index>
@@ -286,9 +266,6 @@ int HelpConfigurator::showObjectForKeyword(const QString &keyword)
 
     return nO;
 }
-
-#endif
-
 
 
 /*The simplest case: data exchange using disk files only

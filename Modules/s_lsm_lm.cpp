@@ -116,10 +116,10 @@ void TLMmin::Calc( double *sdpar, double *apar_ap,
 {
   if( !data )
     return;
-#ifdef IPMGEMPLUGIN
-    if( data->getInfo() == -1 ) //test_sizes
-      return;
-#endif
+//#ifdef IPMGEMPLUGIN
+//    if( data->getInfo() == -1 ) //test_sizes
+//      return;
+//#endif
     par_ap = apar_ap;
     d_par = ad_par;
     d_type = ad_type;
@@ -489,12 +489,12 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
     if ( (n <= 0) || (m < n) || (ftol < 0.)
 	|| (xtol < 0.) || (gtol < 0.) || (maxfev <= 0) || (factor <= 0.) )
     {
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
         Error( lm_shortmsg[0], lm_infmsg[0]);
-#else
-        *info = 0; // invalid parameter
-        return;
-#endif
+//#else
+//        *info = 0; // invalid parameter
+//        return;
+//#endif
     }
     if ( mode == 2 )  /* scaling by diag[] */
     {
@@ -502,12 +502,12 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
         {
             if ( diag[j] <= 0.0 )
             {
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
               Error( lm_shortmsg[0], lm_infmsg[0]);
-#else
-                *info = 0; // invalid parameter
-                return;
-#endif
+//#else
+//                *info = 0; // invalid parameter
+//                return;
+//#endif
             }
         }
     }
@@ -637,11 +637,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
         if ( gnorm <= gtol )
         {
            *info = 4;
-#ifndef IPMGEMPLUGIN
-         Error( lm_shortmsg[*info], lm_infmsg[*info ]);
-#else    // SD oct 2005
-          return;
-#endif
+           Error( lm_shortmsg[*info], lm_infmsg[*info ]);
         }
 
 // O** rescale if necessary.
@@ -787,12 +783,8 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
             if (gnorm <= LM_MACHEP)
                 *info = 8;
             if ( *info != 0)
-#ifdef IPMGEMPLUGIN
-                return;
-#else
-               Error( lm_shortmsg[*info], lm_infmsg[*info ]);
-#endif
-// OI* end of the inner loop. repeat if iteration unsuccessful.
+                Error( lm_shortmsg[*info], lm_infmsg[*info ]);
+ // OI* end of the inner loop. repeat if iteration unsuccessful.
 
         } while (ratio < p0001);
 
@@ -1514,13 +1506,8 @@ int
      delete[] a;
      delete[] x;
      delete[] work;
+     Error( "lm_COVAR", "Singular matrix A."  );
 
-#ifdef IPMGEMPLUGIN
-        fprintf(stderr, "Singular matrix A in lm_COVAR()!\n");
-        return 0;
-#else
-       Error( "lm_COVAR", "Singular matrix A."  );
-#endif
     }
       work[i]=1.0/max;
  }

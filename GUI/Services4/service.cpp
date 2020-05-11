@@ -64,7 +64,7 @@ QMutex qmutex;
 // GUI Service functions for modules
 //----------------------------------------------------------------
 
-bool vfQuestion(QWidget* par, const gstring& title, const gstring& mess)
+bool vfQuestion(QWidget* par, const std::string& title, const std::string& mess)
 {
   if( pThread != QThread::currentThreadId() )
   {
@@ -81,7 +81,7 @@ bool vfQuestion(QWidget* par, const gstring& title, const gstring& mess)
      //    return result;
      //	 }      
      // (2)	
-       	 pVisorImp->thdata.setDThread( title, mess );
+         pVisorImp->thdata.setDThread( title, mess );
        	 QMetaObject::invokeMethod( pVisorImp, "theadService", 
        	        Q_ARG( int, thQuestion ),  Q_ARG( QWidget*, par ) );
          ThreadControl::wait();
@@ -134,13 +134,13 @@ int vfQuestYesNoCancel(QWidget* par, const gstring& title, const gstring& mess)
     return VF_CANCEL;
 }
 
-void vfMessage(QWidget* par, const gstring& title, const gstring& mess, WarnType type)
+void vfMessage(QWidget* par, const std::string& title, const std::string& mess, WarnType type)
 {
 	  if( pThread != QThread::currentThreadId() )
 	  {
              QMutexLocker  loker(&qmutex);
 	     // (2)	
-	       	 pVisorImp->thdata.setDThread( title, mess );
+             pVisorImp->thdata.setDThread( title, mess );
 	       	 QMetaObject::invokeMethod( pVisorImp, "theadService", 
 	       	        Q_ARG( int, thMessage ),  Q_ARG( QWidget*, par ) );
 	         ThreadControl::wait();
@@ -194,14 +194,14 @@ void vfMessage(QWidget* par, const gstring& title, const gstring& mess, WarnType
 
 static int posx=0, posy=0;
 // returns VF3_1, VF3_2 or VF3_3
-int vfQuestion3(QWidget* par, const gstring& title, const gstring& mess, const gstring& s1,
-            const gstring& s2,  const gstring& s3, bool i_mov )
+int vfQuestion3(QWidget* par, const std::string& title, const std::string& mess, const std::string& s1,
+            const std::string& s2,  const std::string& s3, bool i_mov )
 {
   if( pThread != QThread::currentThreadId() )
   {
      QMutexLocker  loker(&qmutex);
      // (2)	
-   	 pVisorImp->thdata.setDThread( title, mess, s1, s2, s3 );
+     pVisorImp->thdata.setDThread( title, mess, s1, s2, s3 );
    	 QMetaObject::invokeMethod( pVisorImp, "theadService", 
   	        Q_ARG( int, thQuestion3 ),  Q_ARG( QWidget*, par ) );
     ThreadControl::wait();
@@ -466,12 +466,12 @@ double vfGetDouble( QWidget * par, const char* title, const char* label,
 // @param title - dialog title
 //=============================================
 
-bool vfChooseFileOpen(QWidget* par, gstring& path_,
+bool vfChooseFileOpen(QWidget* par, std::string& path_,
           const char* title , const char* filter )
 {
-    gstring path;
-    if( path_.find('/') == gstring::npos )
-    {      path = pVisor->localDir();//userGEMDir();
+    std::string path;
+    if( path_.find('/') == std::string::npos )
+    {      path = pVisor->localDir().c_str();//userGEMDir();
              path+= path_;
     }
     else   path = path_;
@@ -488,12 +488,12 @@ bool vfChooseFileOpen(QWidget* par, gstring& path_,
    if ( !fn.isEmpty() )
     {
         path_ = fn.toLatin1().data();
-        gstring dir;
-        gstring name;
-        gstring newname;
+        std::string dir;
+        std::string name;
+        std::string newname;
         u_splitpath( path_, dir, name, newname );
         dir  += "/";
-        pVisor->setLocalDir( dir );
+        pVisor->setLocalDir( dir.c_str() );
         return true;
     }
     else
@@ -503,12 +503,12 @@ bool vfChooseFileOpen(QWidget* par, gstring& path_,
     }
 }
 
-bool vfChooseFileSave(QWidget* par, gstring& path_,
+bool vfChooseFileSave(QWidget* par, std::string& path_,
        const char* title, const char *filter)
 {
-      gstring path;
-      if( path_.find('/') == gstring::npos )
-      {      path = pVisor->localDir();//userGEMDir();
+      std::string path;
+      if( path_.find('/') == std::string::npos )
+      {      path = pVisor->localDir().c_str();//userGEMDir();
              path+= path_;
       }
       else   path = path_;
@@ -519,7 +519,7 @@ bool vfChooseFileSave(QWidget* par, gstring& path_,
     else
         filt = "Text files (*.txt);;All files (*)";
 
-    path.replace("\\", "/");
+    replace(path, "\\", "/");
 
     QString fn = QFileDialog::getSaveFileName( par, title,
          path.c_str(), filt, 0,
@@ -532,12 +532,12 @@ bool vfChooseFileSave(QWidget* par, gstring& path_,
     if ( !fn.isEmpty() )
     {
         path_ = fn.toLatin1().data();
-        gstring dir;
-        gstring name;
-        gstring newname;
+        std::string dir;
+        std::string name;
+        std::string newname;
         u_splitpath( path_, dir, name, newname );
         dir  += "/";
-        pVisor->setLocalDir( dir );
+        pVisor->setLocalDir( dir.c_str() );
         return true;
     }
     else
@@ -548,19 +548,17 @@ bool vfChooseFileSave(QWidget* par, gstring& path_,
 }
 
 
-bool vfChooseDirectory(QWidget* par, gstring& path_,
+bool vfChooseDirectory(QWidget* par, std::string& path_,
        const char* title )
 {
-      gstring path;
-      if( path_.find('/') == gstring::npos )
-      {      path = pVisor->localDir();//userGEMDir();
+      std::string path;
+      if( path_.find('/') == std::string::npos )
+      {      path = pVisor->localDir().c_str();//userGEMDir();
              path+= path_;
       }
       else   path = path_;
 
-      path.replace("\\", "/");
-
-
+      replace( path, "\\", "/");
       QString dir = QFileDialog::getExistingDirectory(par, title,  path.c_str(),
                                                      QFileDialog::ShowDirsOnly
                                                      | QFileDialog::DontResolveSymlinks);
@@ -568,12 +566,12 @@ bool vfChooseDirectory(QWidget* par, gstring& path_,
     if ( !dir.isEmpty() )
     {
         path_ = dir.toLatin1().data();
-        pVisor->setLocalDir( path_ );
+        pVisor->setLocalDir( path_.c_str() );
         return true;
     }
     else
     {
-        path_ = pVisor->localDir();
+        path_ = pVisor->localDir().c_str();
         return false;
     }
 }
@@ -607,10 +605,10 @@ void vfMakeDirectory(QWidget* par, const char *dir, int askOverwrite )
     {
         if( askOverwrite )
         {
-            gstring mess = dir;
+            std::string mess = dir;
             mess += "\n";
             mess+=  "This directory exists! Overwrite?";
-            if( !vfQuestion( par, "Create new directory",mess.c_str()) )
+            if( !vfQuestion( par, "Create new directory",mess) )
                 Error( dir, "Error creating directory!");
 
             if( askOverwrite == 2)
@@ -630,7 +628,7 @@ void vfMakeDirectory(QWidget* par, const char *dir, int askOverwrite )
 // @param obj - object to export
 void vfObjToFile(QWidget* par, TObject* obj)
 {
-    gstring filename;
+    std::string filename;
 AGAIN:
     if( vfChooseFileSave(par, filename, "Please, provide name of TXT-file") )
     {

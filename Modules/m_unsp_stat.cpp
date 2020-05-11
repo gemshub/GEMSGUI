@@ -1,17 +1,6 @@
-//#include <cmath>
-//#include <cstdio>
-#ifndef IPMGEMPLUGIN
-
 #include "m_unspace.h"
 #include "m_syseq.h"
 #include "visor.h"
-
-#else
-
-#include "ms_unspace.h"
-#include "nodearray.h"
-
-#endif
 
 
 // !!! internal using syp->GEX, syp->B, syp->Dcl, mup->Laq, mup->Pg, mup->Ll
@@ -25,9 +14,9 @@
 // Generation arrays part
 //=========================================================================
 
-#ifdef IPMGEMPLUGIN
-  extern  bool load;
-#endif
+//#ifdef IPMGEMPLUGIN
+//  extern  bool load;
+//#endif
 
 // make EqStat key  && calculate records
 void TUnSpace::unsp_eqkey()
@@ -36,7 +25,6 @@ void TUnSpace::unsp_eqkey()
     //double calculation_time;
     long int NumIterFIA = 0, NumIterIPM = 0;
 
-#ifndef IPMGEMPLUGIN
 
     // calculate EqStat record (Thermodynamic&Equlibria)
     pmu->pTPD = 0;
@@ -117,17 +105,6 @@ void TUnSpace::unsp_eqkey()
   //           syu->GEX[jj] = Ge;       
       } // j loop
     } // k loop
-    
-#else
-    // calculate EqStat record (Thermodynamic&Equlibria)
-     load = false;
-    
-    TNode::na->pCNode()->NodeStatusCH = NEED_GEM_AIA; // activating GEM IPM for automatic initial
-                                      // approximation
- // re-calculating equilibria by calling GEMIPM
-    TNode::na->GEM_run( 1., false );
-#endif    
-
 }
 
 
@@ -137,21 +114,16 @@ void TUnSpace::buildTestedArrays()
  int i;
  short Ip;
 
-#ifndef IPMGEMPLUGIN
  showMss = 1L;
-#endif
  
  for( Ip=0; Ip<usp->Q; Ip++)
  {
     usp->q = Ip;
 
-#ifndef IPMGEMPLUGIN
-
    pVisor->Message( window(), GetName(),
              "Generation of EqStat records\n"
                  "Please, wait...", usp->q, usp->Q);
-#endif
-   
+
  // setup uncertainty point data
      NexT( Ip );
      unsp_eqkey();
@@ -192,16 +164,16 @@ if(!Ip)
 
      for( i=0; i<pmu->L; i++)
      { int ii = (pmu->muj[i]);
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
        double xx = (syu->Guns[ii]);
        xx += (TSyst::sm->GetSY()->GEX[ii]);  // Added by DK 05.06.2008
 //            xx += (float)(pmu->GEX[i])/pmu->RT; // syu->GEX[ii]
        xx += TMTparm::sm->GetTP()->G[ii];
-#else
-       double xx = (pmu->Guns[ii]);
-//            xx += (float)(pmu->GEX[i])/pmu->RT; // syu->GEX[ii]
-            xx += pmu->tpp_G[ii];
-#endif
+//#else
+//       double xx = (pmu->Guns[ii]);
+////            xx += (float)(pmu->GEX[i])/pmu->RT; // syu->GEX[ii]
+//            xx += pmu->tpp_G[ii];
+//#endif
       usp->vG[Ip*usp->L+ii]= xx;
      }
 
@@ -230,24 +202,24 @@ if(!Ip)
  // added for copy of input data
   if( usp->PsGen[1]== S_ON )
     for( i=0; i<usp->L; i++)
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
         if( TMTparm::sm->GetTP()->S )
             usp->vS[i] = TMTparm::sm->GetTP()->S[i];
-#else
-            if( tpp_S )   // not initalazed
-                usp->vS[i] = tpp_S[i];// pmu->tpp_S
-#endif
+//#else
+//            if( tpp_S )   // not initalazed
+//                usp->vS[i] = tpp_S[i];// pmu->tpp_S
+//#endif
 
   if( usp->PsGen[5]== S_ON )
     for( i=0; i<usp->L; i++)
     {
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
         double xx = syu->Vuns[i];
                 xx += TMTparm::sm->GetTP()->Vm[i];
-#else
-       double xx = pmu->Vuns[i];
-               xx += pmu->tpp_Vm[i];
-#endif
+//#else
+//       double xx = pmu->Vuns[i];
+//               xx += pmu->tpp_Vm[i];
+//#endif
       usp->vmV[Ip*usp->L+i]= xx;
     }
 
@@ -416,11 +388,11 @@ void  TUnSpace::NexT(int J )
   double R=0;
   double x, xx;
 
-#ifdef IPMGEMPLUGIN
- DATABR* dBR = TNode::na->pCNode();
- //TC = TNode::na->cTC();
- //P = TNode::na->cP()/bar_to_Pa;
-#endif
+//#ifdef IPMGEMPLUGIN
+// DATABR* dBR = TNode::na->pCNode();
+// //TC = TNode::na->cTC();
+// //P = TNode::na->cP()/bar_to_Pa;
+//#endif
  
   k1 = k2 = k3 = 1;
   for(i=1; i<=usp->nG; i++)
@@ -457,11 +429,11 @@ void  TUnSpace::NexT(int J )
       if(usp->PsGen[0]== S_ON && usp->NgLg[j]==i)
       {
         xx = 2*usp->IntLg[j][0]*R-usp->IntLg[j][0];
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
         syu->Guns[j] = xx;
-#else
-        pmu->Guns[j] = xx;
-#endif
+//#else
+//        pmu->Guns[j] = xx;
+//#endif
       }
 /*      if(usp->PsGen[1]== S_ON&& usp->NgLs[j]==i)
       {  xx = usp->Ss[j][0] - usp->IntLs[j][0]+2*usp->IntLs[j][0]*R;
@@ -471,11 +443,11 @@ void  TUnSpace::NexT(int J )
       if(usp->PsGen[5]== S_ON&& usp->NgLv[j]==i)
       {
         xx = 2*usp->IntLv[j][0]*R-usp->IntLv[j][0];
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
         syu->Vuns[j] = xx;
-#else
-        pmu->Vuns[j] = xx;
-#endif
+//#else
+//        pmu->Vuns[j] = xx;
+//#endif
       }
     }
     if( usp->PsGen[2]== S_ON )
@@ -484,12 +456,12 @@ void  TUnSpace::NexT(int J )
         { xx = usp->Bs[j][0] - usp->IntNb[j][0] + 2*usp->IntNb[j][0]*R;
           if( xx < 0 )
             xx = 0.;
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
           syu->B[j]= xx;
-#else
-          dBR->bIC[TNode::na->IC_xCH_to_xDB( j )] = xx;
-          syu_B[j]= xx;
-#endif
+//#else
+//          dBR->bIC[TNode::na->IC_xCH_to_xDB( j )] = xx;
+//          syu_B[j]= xx;
+//#endif
         }
      }
      /*for( j=0; j<pmu->N; j++)
@@ -507,18 +479,18 @@ void  TUnSpace::NexT(int J )
        usp->Tc = xx;
        if(usp->Tc<0.)
           usp->Tc=0.;
-#ifdef IPMGEMPLUGIN
-         dBR->TC = usp->Tc; 
-#endif          
+//#ifdef IPMGEMPLUGIN
+//         dBR->TC = usp->Tc;
+//#endif
      }
    if( usp->PsGen[4]== S_ON && usp->NgP==i )
      {
        xx = usp->P[0]- usp->IntP[0] + 2*usp->IntP[0]*R;
        usp->Pc = xx;
        if(usp->Pc<0.) usp->Pc = 1e-5;
-#ifdef IPMGEMPLUGIN
-         dBR->P = usp->Pc; 
-#endif          
+//#ifdef IPMGEMPLUGIN
+//         dBR->P = usp->Pc;
+//#endif
      }
    }
 }
@@ -692,11 +664,11 @@ double TUnSpace::ePO( int t, int q )
   double PM,/*rab,*/RG, RGT, ln5551 = 4.0165339;
   int i,k,ii,z,GF=-1,WF=-1,i1,j1;
   short Laq_;
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
   Laq_ = TRMults::sm->GetMU()->Laq;
-#else
-  Laq_ = mup_Laq; 
-#endif
+//#else
+//  Laq_ = mup_Laq;
+//#endif
   
   if(usp->PvSi == S_ON)
     { j1=q; i1=t; i=t; }
@@ -709,11 +681,11 @@ double TUnSpace::ePO( int t, int q )
   if( Laq_ )
      WF=0;
 
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
   if( TRMults::sm->GetMU()->Pg )
-#else
-  if( mup_Pg )
-#endif
+//#else
+//  if( mup_Pg )
+//#endif
   { 
      if( Laq_ )
          GF=0;
@@ -723,13 +695,13 @@ double TUnSpace::ePO( int t, int q )
    ii=0;
    for( z=0; z<usp->Fi; z++)
    {
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
     for( k=ii; k<ii+(TRMults::sm->GetMU()->Ll[z]); k++)
        if (syu->Dcl[k]!=S_OFF )
-#else
-     for( k=ii; k<ii+(mup_Ll[z]); k++)
-//         if (syu_Dcl[k]!=S_OFF )
-#endif
+//#else
+//     for( k=ii; k<ii+(mup_Ll[z]); k++)
+////         if (syu_Dcl[k]!=S_OFF )
+//#endif
        { if( z==WF )
          { if( k < ( Laq_-1) &&
                usp->vYF[i*usp->Fi] >1e-19 &&
@@ -763,11 +735,11 @@ double TUnSpace::ePO( int t, int q )
            PM += ( usp->vG[j1*usp->L+k] / RGT  + log(usp->vY[i*usp->L+k])
            - log(usp->vYF[i*usp->Fi+z])  + usp->vGam[i*usp->L+k] ) * (usp->vY[i1*usp->L+k] );
        }
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
     ii += TRMults::sm->GetMU()->Ll[z];
-#else
-    ii += mup_Ll[z];
-#endif
+//#else
+//    ii += mup_Ll[z];
+//#endif
      }
 
 //     for( z=0; z<usp->N; z++) // 16/02/2007
@@ -787,11 +759,11 @@ double TUnSpace::ePO1( int t, int q )
 	  double /*rab,*/RG, RGT, ln5551 = 4.0165339;
 	  int i,k,ii,z,zi,GF=-1,WF=-1,i1,j1, L1F;
   short Laq_;
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
   Laq_ = TRMults::sm->GetMU()->Laq;
-#else
-  Laq_ = mup_Laq; 
-#endif
+//#else
+//  Laq_ = mup_Laq;
+//#endif
 
   if(usp->PvSi == S_ON)
     { j1=q; i1=t; i=t; }
@@ -804,11 +776,11 @@ double TUnSpace::ePO1( int t, int q )
   if( Laq_ )
      WF=0;
 
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
   if( TRMults::sm->GetMU()->Pg )
-#else
-  if( mup_Pg )
-#endif
+//#else
+//  if( mup_Pg )
+//#endif
   { if(!Laq_)
          GF=0;
     else GF=1;
@@ -821,18 +793,18 @@ double TUnSpace::ePO1( int t, int q )
   ii=0;
   for( z=0; z<usp->Fi; z++)
   {
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
 L1F = TRMults::sm->GetMU()->Ll[z];
   for( k=ii; k<ii+(TRMults::sm->GetMU()->Ll[z]); k++)
   {
 	  if (syu->Dcl[k]==S_OFF )
 		 continue; 
-#else
-L1F = mup_Ll[z];
-  for( k=ii; k<ii+(mup_Ll[z]); k++)
-//    if (syu_Dcl[k]!=S_OFF )
-  {	  
-#endif
+//#else
+//L1F = mup_Ll[z];
+//  for( k=ii; k<ii+(mup_Ll[z]); k++)
+////    if (syu_Dcl[k]!=S_OFF )
+//  {
+//#endif
       Ps = Ds = 0.;
       if( z==WF )
       {
@@ -890,11 +862,11 @@ SPECIES: Dif = Ps - Ds;
 //         DDM += Dif;
          PM += Ps; DM += Ds;         
       }  // k loop
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
     ii += TRMults::sm->GetMU()->Ll[z];
-#else
-    ii += mup_Ll[z];
-#endif
+//#else
+//    ii += mup_Ll[z];
+//#endif
     } // z loop
 
     //Ddm1 = PM - DM;
@@ -909,11 +881,11 @@ SPECIES: Dif = Ps - Ds;
   	  double RG, RGT, ln5551 = 4.0165339;
   	  int i,k,ii,z,GF=-1,WF=-1,i1,j1, L1F;
     short Laq_;
-  #ifndef IPMGEMPLUGIN
+//  #ifndef IPMGEMPLUGIN
     Laq_ = TRMults::sm->GetMU()->Laq;
-  #else
-    Laq_ = mup_Laq; 
-  #endif
+//  #else
+//    Laq_ = mup_Laq;
+//  #endif
 
     if(usp->PvSi == S_ON)
       { j1=q; i1=t; i=t; }
@@ -926,11 +898,11 @@ SPECIES: Dif = Ps - Ds;
     if( Laq_ )
        WF=0;
 
-  #ifndef IPMGEMPLUGIN
+//  #ifndef IPMGEMPLUGIN
     if( TRMults::sm->GetMU()->Pg )
-  #else
-    if( mup_Pg )
-  #endif
+//  #else
+//    if( mup_Pg )
+//  #endif
     { if(!Laq_)
            GF=0;
       else GF=1;
@@ -943,18 +915,18 @@ SPECIES: Dif = Ps - Ds;
     ii=0;
     for( z=0; z<usp->Fi; z++)
     {
-  #ifndef IPMGEMPLUGIN
+//  #ifndef IPMGEMPLUGIN
   L1F = TRMults::sm->GetMU()->Ll[z];
     for( k=ii; k<ii+(TRMults::sm->GetMU()->Ll[z]); k++)
     {
   	  if (syu->Dcl[k]==S_OFF )
   		 continue; 
-  #else
-  L1F = mup_Ll[z];
-    for( k=ii; k<ii+(mup_Ll[z]); k++)
-  //    if (syu_Dcl[k]!=S_OFF )
-    {	  
-  #endif
+//  #else
+//  L1F = mup_Ll[z];
+//    for( k=ii; k<ii+(mup_Ll[z]); k++)
+//  //    if (syu_Dcl[k]!=S_OFF )
+//    {
+//  #endif
         Ps = Ds = 0.;
         if( z==WF )
         {
@@ -1016,11 +988,11 @@ SPECIES: Dif = Ps - Ds;
   //         DDM += Dif;
            PM += Ps; DM += Ds;         
         }  // k loop
-  #ifndef IPMGEMPLUGIN
+//  #ifndef IPMGEMPLUGIN
       ii += TRMults::sm->GetMU()->Ll[z];
-  #else
-      ii += mup_Ll[z];
-  #endif
+//  #else
+//      ii += mup_Ll[z];
+//  #endif
       } // z loop
       //Ddm1 = PM - DM;
       return(DDM);
@@ -1121,15 +1093,12 @@ void TUnSpace::Un_criteria()
 
    for( t=0; t<usp->Q; t++ )
    {
-#ifndef IPMGEMPLUGIN
+
    pVisor->Message( window(), GetName(),
              "Generation of pay off matrix\n"
                  "Please, wait...", t, usp->Q);
-#endif
-  
 
-
-    for( q=0; q<usp->Q; q++ )
+   for( q=0; q<usp->Q; q++ )
     {
       usp->t = t;
       usp->q = q;
@@ -1148,9 +1117,7 @@ void TUnSpace::Un_criteria()
             if( usp->PvPOM == S_ON )
             {
              usp->pmr = usp->POM + t*usp->Q ;
-#ifndef IPMGEMPLUGIN
              aObj[ o_unpmr].SetPtr( usp->pmr );
-#endif
              usp->POM[ t*usp->Q+q ] = R;
             }
             if( usp->PvPOR == S_ON )
@@ -1340,13 +1307,13 @@ for(np=0; np<usp->nPhA; np++ )
           {
             usp->PhAndx[np*usp->N+numPH ] = (short)k;
             numPH++;
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
             lst += gstring(
                TRMults::sm->GetMU()->SF[k]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME);
-#else
-            lst += gstring(
-               mup_SF[k]+MAXSYMB, 0, MAXPHNAME);
-#endif
+//#else
+//            lst += gstring(
+//               mup_SF[k]+MAXSYMB, 0, MAXPHNAME);
+//#endif
             lst.strip();
             lst += ";";
           }

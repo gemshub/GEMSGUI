@@ -750,7 +750,7 @@ void TGEM2MT::MakeQuery()
     Tai[3] = Pai[3] = 0.1;
 
     FreeNa();
-    na = new TNodeArray( 1, TMulti::sm->GetPM() );
+    na = new TNodeArrayGUI( 1, TMulti::sm );
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 
@@ -925,8 +925,7 @@ void TGEM2MT::AllocNa()
 {
   FreeNa();
 
-  //TMulti::sm->rebuild_lookup(  mtp->Tai, mtp->Pai );
-  na = new TNodeArray( mtp->nC, TMulti::sm->GetPM() );
+  na = new TNodeArrayGUI( mtp->nC, TMulti::sm );
   //na = new TNodeArray( mtp->nC, TMulti::sm );
 
   // use particles
@@ -970,14 +969,14 @@ TGEM2MT::RecCalc( const char * key )
 
    if( mtp->PsVTK != S_OFF )
    {
-     prefixVTK = gstring( db->FldKey(8), 0, db->FldLen(8) );
-     prefixVTK.strip();
+     prefixVTK = std::string( db->FldKey(8), 0, db->FldLen(8) );
+     strip( prefixVTK );
      prefixVTK += "_";
-     prefixVTK += gstring( db->FldKey(9), 0, db->FldLen(9) );
-     prefixVTK.strip();
+     prefixVTK += std::string( db->FldKey(9), 0, db->FldLen(9) );
+     strip( prefixVTK );
      prefixVTK += "_";
      nameVTK = db->PackKey();
-     nameVTK = nameVTK.replaceall(":", "_");
+     replaceall( nameVTK, ":", "_");
 
      if( vfChooseDirectory(window(), pathVTK,
           "Please, browse or enter the GEM2MT VTK output directory name" ) )
@@ -1007,12 +1006,12 @@ TGEM2MT::RecCalc( const char * key )
    }
    else
    {
-       gstring lst_f_name;
-       gstring dbr_lst_f_name;
+       std::string lst_f_name;
+       std::string dbr_lst_f_name;
      if( mtp->notes[0] == '@' )
-     {   lst_f_name = gstring( mtp->notes, 1, MAXFORMULA-1 );
+     {   lst_f_name = std::string( mtp->notes, 1, MAXFORMULA-1 );
          dbr_lst_f_name = lst_f_name;
-         dbr_lst_f_name = dbr_lst_f_name.replace("-dat","-dbr");
+         replace(dbr_lst_f_name, "-dat","-dbr");
       } // open file to read
      else
      {  if( vfChooseFileOpen(window(), lst_f_name,
@@ -1108,7 +1107,7 @@ void TGEM2MT::savePoint( )
           "Save node array into a set of disk files to resume the task later (Yes),\n"
           " or cancel the RMT task (No)?" ) )
        {
-         gstring path = na->PutGEM2MTFiles( window(), mtp->nC,
+         auto path = na->PutGEM2MTFiles( window(), mtp->nC,
            mtp->PsSdat==S_OFF, mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, true, true ); // with Nod0 and Nod1
          mtp->notes[0] = '@';
          strncpy( mtp->notes+1, path.c_str(), MAXFORMULA-1 );
@@ -1135,7 +1134,7 @@ void TGEM2MT::RecordPrint( const char* key )
 
 	if( res == VF3_1 )
 	{
-        gstring filename = "GEM2MT-task.";
+        std::string filename = "GEM2MT-task.";
                 filename += dat_ext;
 
 		if( vfChooseFileSave(window(), filename,
@@ -1151,7 +1150,7 @@ void TGEM2MT::RecordPrint( const char* key )
             to_text_file( ff,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF, filename.c_str() );
 
 		}
-    na = new TNodeArray( mtp->nC, TMulti::sm->GetPM() );
+    na = new TNodeArrayGUI( mtp->nC, TMulti::sm );
     mtp->gStat = GS_GOING;
     mt_reset();
     Bn_Calc();
