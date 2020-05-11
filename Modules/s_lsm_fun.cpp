@@ -20,14 +20,10 @@
 //-------------------------------------------------------------------
 //
 
-#ifndef IPMGEMPLUGIN
 
- #include "v_object.h"
- #include "v_mod.h"
- #include "visor.h"
-
-#endif
-
+#include "v_object.h"
+#include "v_mod.h"
+#include "visor.h"
 #include <cmath>
 #include "s_lsm.h"
 
@@ -48,8 +44,6 @@ TLMDataType::TLMDataType(   char afType, char aeType,
 
 TLMDataType::~TLMDataType()
 {
-#ifndef IPMGEMPLUGIN
-
   if( fType == MATHSCRIPT_FIT || eType == MATHSCRIPT_EVL )
   {
     // setup  internal objects  for 0
@@ -67,7 +61,6 @@ TLMDataType::~TLMDataType()
    //    aObj[ o_lms_paf ].Free();
    //     o_lms_jp, o_lms_kp, o_lms_itx
   }
-#endif
 }
 
 int   TLMDataType::evaluate( double* par, double* fvec )
@@ -76,11 +69,9 @@ int   TLMDataType::evaluate( double* par, double* fvec )
   {
      case TEST_EVL: lm_evaluate_default( par, fvec );
                     break;
-#ifndef IPMGEMPLUGIN
      case MATHSCRIPT_EVL:   // using mathscript
                     rpn_evaluate( par, fvec );
                     break;
-#endif
      default:
                    break;
  }
@@ -96,12 +87,8 @@ void TLMDataType::test_sizes()
             if( tm_d != 1 &&  n_par != 3 )
             {
                info = -1;
-#ifndef IPMGEMPLUGIN
        Error( "Test",
           "Built in function is for 1 end members and 3 parameters only." );
-#else
-       printf( "Built in function is for 1 end members and 3 parameters only." );
-#endif
              }
              break;
 
@@ -110,30 +97,22 @@ void TLMDataType::test_sizes()
             if( tm_d != 2 && ( n_par > 6 || n_par <=0 ))
             {
                info = -1;
-#ifndef IPMGEMPLUGIN
        Error( "Redlich-Kister_or_Guggenheim",
        "Built in function is for 2 end members only and upto 6 parameters." );
-#else
-       printf( "Built in function is for 2 end members only and upto 6 parameters." );
-#endif
           }
             break;
      case FUN_IPF_T:
             if( tm_d != 2 &&  n_par != 2 )
           {
             info = -1;
-#ifndef IPMGEMPLUGIN
        Error( "Thompson-Waldbaum",
        "Built in function is for 2 end members and 2 parameters only." );
-#else
-       printf( "Built in function is for 2 end members and 2 parameters only."  );
-#endif
            }
             break;
      case MATHSCRIPT_FIT:   // using mathscript
-#ifdef IPMGEMPLUGIN
-           info = -1;
-#endif
+//#ifdef IPMGEMPLUGIN
+//           info = -1;
+//#endif
                     break;
      case FUN_IPF_M:   // Margules
      case FUN_IPF_V:   // Van Laar
@@ -142,7 +121,6 @@ void TLMDataType::test_sizes()
                    break;
      }
 
-#ifndef IPMGEMPLUGIN
   if( fType == MATHSCRIPT_FIT || eType == MATHSCRIPT_EVL )
   {
     // setup  internal objects
@@ -162,7 +140,7 @@ void TLMDataType::test_sizes()
    // translate equation after setup sizes
    rpn.GetEquat( text_function );
    }
-#endif
+
 }
 
 double TLMDataType::function( int i, double* t, double* p )
@@ -182,11 +160,9 @@ double TLMDataType::function( int i, double* t, double* p )
      case FUN_IPF_T:   // Thompson-Waldbaum
                        r = ThompsonWaldbaum( t, p );
                        break;
-#ifndef IPMGEMPLUGIN
      case MATHSCRIPT_FIT:   // using mathscript
                       r = rpn_function( i, p );
                       break;
-#endif
      case FUN_IPF_M:   // Margules
      case FUN_IPF_V:   // Van Laar
      case FUN_IPF_B:   // Bale-Pelton dilute formalism
@@ -220,11 +196,9 @@ void TLMDataType::par_funct( int i, double* t, double* coef_p )
      case FUN_IPF_T:   // Thompson-Waldbaum
                        parThompsonWaldbaum( t, coef_p );
                        break;
-#ifndef IPMGEMPLUGIN
      case MATHSCRIPT_FIT:   // using mathscript
                        rpn_par_function( i, coef_p  );
                        break;
-#endif
      case FUN_IPF_M:   // Margules
      case FUN_IPF_V:   // Van Laar
      case FUN_IPF_B:   // Bale-Pelton dilute formalism
@@ -315,7 +289,6 @@ void TLMDataType::parThompsonWaldbaum( double *t, double* p )
   p[1] = t[0]*t[1]*t[0];
 }
 
-#ifndef IPMGEMPLUGIN
 
 
 //------------------------------------------------------------------
@@ -357,9 +330,6 @@ void TLMDataType::rpn_evaluate( double* par, double* fvec )
          fvec[ii] = aObj[ o_lms_delta ].Get(ii, 0);
     }
 }
-
-
-#endif
 
 //------------------------------------------------------------------
 // for comparing only

@@ -6,9 +6,6 @@
 // Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2007 S.Dmytriyeva, D.Kulik
 //
-// This file is part of a GEM-Selektor library for thermodynamic
-// modelling by Gibbs energy minimization and of the
-// standalone GEMS3K code (define IPMGEMPLUGIN).
 //
 // This file may be distributed under the GPL v.3 license
 
@@ -441,8 +438,6 @@ void TMulti::GEM_IPM_Init_gui2()
     }
 }
 
-#ifndef IPMGEMPLUGIN
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *
 // Load Thermodynamic Data from MTPARM to MULTI
 void TMulti::DC_LoadThermodynamicData()
@@ -544,8 +539,6 @@ void TMulti::DC_LoadThermodynamicData()
   //Alloc_internal(); // performance optimization 08/02/2007
   pmp->pTPD = 2;
 }
-
-#endif
 
 
 void TMulti::get_PAalp_PSigm( char& PAalp, char& PSigm)

@@ -52,10 +52,10 @@ void TSVDcalc::CalcMin( double *sdpar )
 {
  //  int i, j;
 
-#ifdef IPMGEMPLUGIN
-    if( data->getInfo() == -1 ) //test_sizes
-      return;
-#endif
+//#ifdef IPMGEMPLUGIN
+//    if( data->getInfo() == -1 ) //test_sizes
+//      return;
+//#endif
 
   svdMin( par );
   data->xi2     /= (m-n);

@@ -8,7 +8,7 @@
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization and of the
-// standalone GEMS3K code (define IPMGEMPLUGIN).
+// standalone GEMS3K code.
 //
 // This file may be distributed under the GPL v.3 license
 
