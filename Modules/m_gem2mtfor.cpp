@@ -16,7 +16,7 @@
 #include <iomanip>
 #include "io_arrays.h"
 #include "m_gem2mt.h"
-#ifdef  JSON_OUT
+#ifndef  NO_JSON_OUT
 #include "io_json.h"
 #endif
 
@@ -458,7 +458,7 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments, bool brief_mode, co
 {
   bool _comment = with_comments;
 
-#ifndef  JSON_OUT
+#ifdef NO_JSON_OUT
 
   TPrintArrays  prar1(57, GEM2MT_static_fields, ff);
   TPrintArrays  prar(26, GEM2MT_dynamic_fields, ff);
@@ -563,7 +563,7 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments, bool brief_mode, co
   prar1.writeArray(f_mtWrkS, &mtp->ctm, 12, 6, _comment, brief_mode  );
   prar1.writeArray(f_mtWrkF, &mtp->cT, 10, 6, _comment, brief_mode  );
 
-#ifndef JSON_OUT
+#ifdef NO_JSON_OUT
   ff << endl << "\n<END_DIM>" << endl;
 #endif
 
@@ -637,7 +637,7 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments, bool brief_mode, co
      //!!!mtp->Tval  = new double[ mtp->nTai ];  // from DataCH
      //!!!mtp->Pval  = new double[ mtp->nPai ];
 
-#ifdef  JSON_OUT
+#ifndef  NO_JSON_OUT
   ff << json_data.dump(( _comment ? 4 : 0 ));
 #endif
   ff << endl;
@@ -650,7 +650,7 @@ void TGEM2MT::from_text_file(fstream& ff)
 {
 
 // static arrays
-#ifndef JSON_OUT
+#ifdef NO_JSON_OUT
  TReadArrays  rdar( 57, GEM2MT_static_fields, ff);
 #else
  nlohmann::json json_data;
@@ -784,7 +784,7 @@ void TGEM2MT::from_text_file(fstream& ff)
  }
 
  //dynamic data
-#ifndef JSON_OUT
+#ifdef NO_JSON_OUT
  TReadArrays  rddar( 26, GEM2MT_dynamic_fields, ff);
 #else
  TReadJson  rddar( 26, GEM2MT_dynamic_fields, json_data);
