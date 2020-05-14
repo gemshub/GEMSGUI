@@ -21,8 +21,12 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Enable automatic creation of a module definition (.def) file for a SHARED library on Windows.
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 
+file(GLOB QRC_FILES *.qrc)
+set(RESOURCE ${QRC_FILES})
+qt5_add_resources(GEMS3KGUI_SRCS ${RESOURCE})
+
 # Create a library using the collected source files
-add_library( GEMS3KGUI_OBJECT OBJECT ${HEADER_FILES} ${SOURCE_FILES})
+add_library( GEMS3KGUI_OBJECT OBJECT ${HEADER_FILES} ${SOURCE_FILES} ${GEMS3KGUI_SRCS})
 
 # Check if a shared library is to be built
 if(BUILD_SHARED_LIBS)

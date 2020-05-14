@@ -18,7 +18,7 @@ include(GNUInstallDirs)
 
 # Define which types of libraries to build
 option(BUILD_SHARED_LIBS "Build shared libraries." ON)
-option(BUILD_STATIC_LIBS "Build static libraries." OFF)
+option(BUILD_STATIC_LIBS "Build static libraries." ON)
 
 # Set the default build type to Release
 if(NOT CMAKE_BUILD_TYPE)
