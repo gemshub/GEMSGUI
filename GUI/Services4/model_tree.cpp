@@ -18,6 +18,8 @@
 
 #include <QtGui>
 #include <QHeaderView>
+#include <QMenu>
+#include <QAction>
 
 #include "model_tree.h"
 #include "units.h"

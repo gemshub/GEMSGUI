@@ -35,8 +35,7 @@
 #include "m_sdata.h"
 #include "m_const.h"
 #include "m_proces.h"
-#include "EquatSetupWidget.h"
-#include "GemsMainWindow.h"
+#include "service.h"
 
 // save old lists of keys to compare
 void TProfil::SaveOldList()
@@ -655,7 +654,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 //    bool aAqueous, aGaseous, aSorption;
 //    if( !vfElements(window(), prfName, ICkeys,
 //            dbNames, aAqueous, aGaseous, aSorption ))
-    if( !vfElements(pVisorImp/*window()*/, prfName, elm_data, sf_data ))
+    if( !vfElements(pVisor->window(), prfName, elm_data, sf_data ))
       return false;
 
 // save built-in default configuration

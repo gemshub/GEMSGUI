@@ -1,8 +1,8 @@
 #include <unistd.h>
-#include "nodearray_gui.h"
-#include "visor.h"
+//#include "nodearray_gui.h"
 #include "m_gem2mt.h"
 #include "zmqclient.h"
+#include "visor.h"
 
 
 TNodeArrayGUI::TNodeArrayGUI( long int nNod, TMultiBase *apm  ):

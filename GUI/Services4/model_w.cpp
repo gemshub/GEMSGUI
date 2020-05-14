@@ -20,6 +20,8 @@
 //#define QT_KEYPAD_NAVIGATION
 #include <QtGui>
 #include <QHeaderView>
+#include <QMenu>
+#include <QAction>
 
 #include "model_w.h"
 #include "units.h"

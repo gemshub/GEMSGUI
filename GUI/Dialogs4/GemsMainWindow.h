@@ -26,6 +26,7 @@
 #include <QPainter>
 #include <QLineEdit>
 #include <QThread>
+#include <QHBoxLayout>
 
 class IPNCalcObject;
 class ZMQClient;
@@ -51,7 +52,6 @@ using namespace jsonui;
 
 #include <QTableWidget>
 
-#include "ui_GemsMainWindow4.h"
 #include "module_w.h"
 #include "v_vals.h"
 using namespace std;
@@ -142,15 +142,19 @@ class TKeyTable: public QTableWidget
        {}
 };
 
+namespace Ui {
+class GemsMainWindowData;
+}
 
 /*!
  \class TVisorImp
  \brief This class handles work of TVisor with real GUI classes
 */
-class TVisorImp: public QMainWindow, public Ui::GemsMainWindowData
+class TVisorImp: public QMainWindow
 {
     Q_OBJECT
 
+    Ui::GemsMainWindowData *ui;
     int argc;
     char** argv;
 

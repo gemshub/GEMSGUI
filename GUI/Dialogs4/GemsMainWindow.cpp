@@ -30,6 +30,7 @@
 #include "HelpWindow.h"
 #include "GemsMainWindow.h"
 #include "NewSystemDialog.h"
+#include "ui_GemsMainWindow4.h"
 
 #include "LoadMessage.h"
 
@@ -74,6 +75,7 @@ void TKeyTable::keyPressEvent(QKeyEvent* e)
 //   The constructor
 TVisorImp::TVisorImp(int c, char** v):
         QMainWindow(nullptr),
+        ui(new Ui::GemsMainWindowData),
         argc(c),
         argv(v),
         last_update( 0 ),
@@ -83,7 +85,7 @@ TVisorImp::TVisorImp(int c, char** v):
     currentNrt(-2),
     settedCureentKeyIntotbKeys(false)
 {
-    setupUi(this);
+    ui->setupUi(this);
     (void)statusBar();
     //setMinimumSize( 300, 200 );
 
@@ -121,12 +123,12 @@ TVisorImp::TVisorImp(int c, char** v):
        toolDataBase->setMovable(false);
        this->addToolBar(Qt::LeftToolBarArea, toolDataBase);
        toolDataBase->setIconSize(QSize(48,48));
-       toolDataBase->addAction(actionIComp);
-       toolDataBase->addAction(actionDComp);
-       toolDataBase->addAction(actionReacDC);
-       toolDataBase->addAction(actionRTparm);
-       toolDataBase->addAction(actionPhase);
-       toolDataBase->addAction(actionCompos);
+       toolDataBase->addAction(ui->actionIComp);
+       toolDataBase->addAction(ui->actionDComp);
+       toolDataBase->addAction(ui->actionReacDC);
+       toolDataBase->addAction(ui->actionRTparm);
+       toolDataBase->addAction(ui->actionPhase);
+       toolDataBase->addAction(ui->actionCompos);
        toolDataBase->setWindowTitle("toolDataBase");
 
        toolProject = new QToolBar(this);
@@ -135,13 +137,13 @@ TVisorImp::TVisorImp(int c, char** v):
        toolProject->setMovable(false);
        this->addToolBar(Qt::LeftToolBarArea, toolProject);
        toolProject->setIconSize(QSize(48,48));
-       toolProject->addAction(actionSysEq);
-       toolProject->addAction(actionProcess);
-       toolProject->addAction(actionGtDemo);
-       toolProject->addAction(actionGEM2MT);
+       toolProject->addAction(ui->actionSysEq);
+       toolProject->addAction(ui->actionProcess);
+       toolProject->addAction(ui->actionGtDemo);
+       toolProject->addAction(ui->actionGEM2MT);
        //toolProject->addAction(actionDualTh);
-       toolProject->addAction(actionUnSpace);
-       toolProject->addAction(actionProject);
+       toolProject->addAction(ui->actionUnSpace);
+       toolProject->addAction(ui->actionProject);
        toolProject->setWindowTitle("toolProject");
 
 
@@ -151,8 +153,8 @@ TVisorImp::TVisorImp(int c, char** v):
     splH->setChildrenCollapsible(false);
     //spl->setMidLineWidth(-3);
     //spl->setLineWidth(-3);
-    horizontalLayout->setContentsMargins( 0, 0, 0, 0 );
-    horizontalLayout->addWidget(splH);
+    ui->horizontalLayout->setContentsMargins( 0, 0, 0, 0 );
+    ui->horizontalLayout->addWidget(splH);
 
 // column 1
     QGridLayout *layoutTab = new QGridLayout;
@@ -215,8 +217,8 @@ TVisorImp::TVisorImp(int c, char** v):
 
 // define signal/slots
 
-    connect( action_calcMode, SIGNAL( triggered()), this, SLOT(CmCalcMode()));
-    connect( actionDataBaseMode, SIGNAL( triggered()), this, SLOT(CmDataBaseMode()));
+    connect( ui->action_calcMode, SIGNAL( triggered()), this, SLOT(CmCalcMode()));
+    connect( ui->actionDataBaseMode, SIGNAL( triggered()), this, SLOT(CmDataBaseMode()));
     //connect(bModeGroup, SIGNAL(buttonClicked(int)),
     //        this, SLOT(buttonGroupClicked(int)));
 
@@ -244,7 +246,7 @@ TVisorImp::TVisorImp(int c, char** v):
     if( MDD_DATABASE == pVisor->ProfileMode )
     {
         SetGeneralMode();
-        actionDataBaseMode->setChecked(true);
+        ui->actionDataBaseMode->setChecked(true);
         //CmDataBaseMode();
         //toolProject->hide();
     }
@@ -256,11 +258,11 @@ TVisorImp::TVisorImp(int c, char** v):
         {
             //action_calcMode->setChecked( false );
             SetGeneralMode();
-            actionDataBaseMode->setChecked(true);
+            ui->actionDataBaseMode->setChecked(true);
          }
         else
         {
-           action_calcMode->setChecked(true);
+           ui->action_calcMode->setChecked(true);
            // load last system
            if( rt[RT_SYSEQ].Find( pVisor->lastSystemKey.c_str()) >= 0 )
            CmShow( pVisor->lastSystemKey.c_str() );
@@ -282,6 +284,7 @@ TVisorImp::~TVisorImp()
 
     killGEMServer();
     delete pVisor;
+    delete ui;
 }
 
 void TVisorImp::closeEvent(QCloseEvent* e)
@@ -676,7 +679,7 @@ void TVisorImp::CmCalcMode()
 
   if( newProfileMode == pVisor->ProfileMode )
   {
-    action_calcMode->setChecked(true);
+    ui->action_calcMode->setChecked(true);
     return;
   }
   // close all windows
@@ -684,11 +687,11 @@ void TVisorImp::CmCalcMode()
   if( mdiArea->subWindowList().count()> 0 )
   {
       // cancel closing window
-      action_calcMode->setChecked( false );
+      ui->action_calcMode->setChecked( false );
       return;
   }
   if( !SetProfileMode())
-     action_calcMode->setChecked( false );
+    ui->action_calcMode->setChecked( false );
 
   moveToolBar();
 }
@@ -703,7 +706,7 @@ void TVisorImp::CmDataBaseMode()
 
   if( newProfileMode == pVisor->ProfileMode )
   {
-    actionDataBaseMode->setChecked(true);
+    ui->actionDataBaseMode->setChecked(true);
     return;
   }
 
@@ -712,7 +715,7 @@ void TVisorImp::CmDataBaseMode()
   if( mdiArea->subWindowList().count()> 0 )
   {
       // cancel closing window
-      actionDataBaseMode->setChecked( false );
+      ui->actionDataBaseMode->setChecked( false );
       return;
   }
   SetGeneralMode();
@@ -752,7 +755,7 @@ bool TVisorImp::SetProfileMode(const char * profileKey )
     //action_calcMode->setIcon(iconDatabase);
     //action_calcMode->setToolTip("Go to Database Management");
     //pModeName->setText(" E");
-    actionDataBaseMode->setChecked(false);
+    ui->actionDataBaseMode->setChecked(false);
     setActionPrecise();
     CmSysEq();
     return true;
@@ -769,7 +772,7 @@ bool TVisorImp::SetGeneralMode()
     //action_calcMode->setIcon(iconSystem);
     //action_calcMode->setToolTip("Go to Calculation of Equilibria");
     //pModeName->setText(" D");
-    action_calcMode->setChecked(false);
+    ui->action_calcMode->setChecked(false);
     return true;
 }
 

@@ -118,7 +118,33 @@ double vfGetDouble( QWidget * par, const char* title, const char* label,
 
 struct elmWindowData;
 struct setFiltersData;
-struct pagesSetupData;
+struct pagesSetupData
+{
+   gstring pageName;
+   int nObj;         // index of object
+   int ndx;         //  second index in object
+   gstring ndxName; // if ndxName not empty ( ndx is first ndx ), second from list
+
+   pagesSetupData( const char * pName, int aobj, int andx = 0, const char*  andxName = nullptr):
+        pageName(pName),  nObj(aobj), ndx(andx)
+   {
+     if( andxName )
+     {
+         ndxName = andxName;
+         pageName += "(";
+         pageName += ndxName;
+         pageName += ")";
+     }
+     else
+       ndxName = "";
+   }
+
+   pagesSetupData( pagesSetupData& d ):
+           pageName(d.pageName),  nObj(d.nObj), ndx(d.ndx), ndxName(d.ndxName)
+   {
+
+   }
+};
 
 bool
 vfElements(QWidget* par, const char * prfName,

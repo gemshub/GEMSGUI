@@ -111,3 +111,6 @@ include($$DIALOGS4_CPP/Dialogs4.pri)
 include($$CHARTS_CPP/charts.pri)
 
 #message("Defines: $$DEFINES")
+
+SOURCES += \
+    App/main.cpp

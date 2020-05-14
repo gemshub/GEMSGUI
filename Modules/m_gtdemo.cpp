@@ -26,7 +26,7 @@
 #include "service.h"
 #include "visor.h"
 
-TGtDemo* TGtDemo::pm;
+TGtDemo* TGtDemo::pm = nullptr;
 
 bool TGtDemo::check_RT( int nrt )
 {

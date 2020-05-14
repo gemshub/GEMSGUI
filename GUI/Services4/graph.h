@@ -22,9 +22,8 @@
 #define graph_data_old_h
 
 #include <math.h>
-#include <QPointF>
-#include <QVector>
-#include <QColor>
+class QPointF;
+#include <QtGui/QColor>
 #include  "gstring.h"
 class GemDataStream;
 

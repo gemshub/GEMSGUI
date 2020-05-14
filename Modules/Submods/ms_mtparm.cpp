@@ -24,7 +24,7 @@
 #include "m_dcomp.h"
 #include "visor.h"
 // added 09.06.2016 for calculating Psat when exporting GEMS3K files and P=0 is not specified; DM
-#include "Modules/s_supcrt.h"
+#include "s_supcrt.h"
 
 TMTparm* TMTparm::sm;
 

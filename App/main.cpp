@@ -19,7 +19,7 @@
 
 
 #include <QApplication>
-#include <QSqlDatabase>
+//#include <QSqlDatabase>
 
 #if QT_VERSION >= 0x050000
 #include <QtWidgets>
@@ -59,8 +59,8 @@ TIntegApp::TIntegApp(int& c, char** v):
       argc(c),
       argv(v)
 {
-    cout << "QSqlDatabase: available drivers:" <<
-          QSqlDatabase::drivers().join(QLatin1String(" ")).toLatin1().data() << endl;
+    //cout << "QSqlDatabase: available drivers:" <<
+    //      QSqlDatabase::drivers().join(QLatin1String(" ")).toLatin1().data() << endl;
 
     shMemory.setKey("gems3");
     if( shMemory.attach())

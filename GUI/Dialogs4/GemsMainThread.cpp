@@ -20,6 +20,7 @@
 
 #include "visor.h"
 #include "GemsMainWindow.h"
+#include "ui_GemsMainWindow4.h"
 #include "NewSystemDialog.h"
 #include "ProgressDialog.h"
 #include "LoadMessage.h"
@@ -28,11 +29,11 @@
 void TVisorImp::CmRunIPM()
 {
     TMulti::sm->GetPM()->pNP =
-            ( sactionSimplex->isChecked())? 0: 1;
-    if( sactionPrecise->isChecked() && !TProfil::pm->pa.p.PRD )
+            ( ui->sactionSimplex->isChecked())? 0: 1;
+    if( ui->sactionPrecise->isChecked() && !TProfil::pm->pa.p.PRD )
         TProfil::pm->pa.p.PRD = -5; // Changed
     TProfil::pm->pa.p.PRD =
-            ( !sactionPrecise->isChecked())? 0: TProfil::pm->pa.p.PRD;
+            ( !ui->sactionPrecise->isChecked())? 0: TProfil::pm->pa.p.PRD;
 
     try
     {

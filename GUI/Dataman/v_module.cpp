@@ -29,8 +29,8 @@
 #include "t_print.h"
 #include "t_read.h"
 #include "NewSystemDialog.h"
-#include "GemsMainWindow.h"
 #include "m_param.h"
+//#include "service.h"
 
 // Default constructor and destructor
 
@@ -1273,7 +1273,7 @@ TCModule::CmScript()
       dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
        /*if( pImp )
            pVisorImp->OpenModule(pImp->topLevelWidget(), RT_SDATA);
-       else*/ pVisorImp->OpenModule(nullptr, RT_SDATA,0,true);  // KD: workaround for NewSystemDialog
+       else*/ pVisor->OpenModule(nullptr, RT_SDATA,0,true);  // KD: workaround for NewSystemDialog
       dynamic_cast<TCModule *>(&aMod[RT_SDATA])->Update();
 
     }

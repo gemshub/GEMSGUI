@@ -24,7 +24,6 @@
 #include "visor.h"
 #include "nodearray.h"
 #include "zmqclient.h"
-#include "GemsMainWindow.h"
 
 #ifdef OLD
 
@@ -145,7 +144,7 @@ double  TProfil::CalculateEquilibriumGUI( const std::string& amode )
     //  std::cout << msg <<  "\n----------------------\n"  << std::endl;
 
     // run gem_ipm
-    auto recv_message = pVisorImp->getZMQclient()->calculateEquilibriumServer(send_msg);
+    auto recv_message = pVisor->getZMQclient()->calculateEquilibriumServer(send_msg);
     //for( const auto& msg: recv_message )
     //  std::cout << msg <<  "\n----------------------\n"  << std::endl;
 
@@ -201,7 +200,7 @@ std::vector<std::string> TProfil::CurrentSystem2GEMS3Kjson( std::shared_ptr<TNod
 // Run process of calculate equilibria into the GEMS3K side
 std::vector<std::string>  TProfil::CalculateEquilibriumServer( const std::vector<std::string>& msg_data )
 {
-    return pVisorImp->getZMQclient()->calculateEquilibriumServer(msg_data);
+    return pVisor->getZMQclient()->calculateEquilibriumServer(msg_data);
 }
 
 // Reading structure MULTI (GEM IPM work structure)
