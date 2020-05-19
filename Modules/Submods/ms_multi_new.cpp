@@ -15,7 +15,7 @@
 //-------------------------------------------------------------------
 //
 #include "m_param.h"
-#include "node.h"
+#include "GEMS3K/node.h"
 
 bool TMulti::testTSyst( int ii ) const
 {

@@ -32,7 +32,7 @@
 #include "visor_w.h"
 #include "m_param.h"
 #include "m_syseq.h"
-#include "gdatastream.h"
+#include "GEMS3K/gdatastream.h"
 
 static bool noCommit;
 

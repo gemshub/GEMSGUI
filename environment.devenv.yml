@@ -1,0 +1,28 @@
+name: GEMSGUI
+
+dependencies:
+  - gxx_linux-64=7.3.0  # [linux]
+  - cmake>=3.13
+  - ninja # [unix]
+  - make  # [win]
+  - git
+  - ccache  # [unix]
+  - qt>=5.12.5
+#  - zeromq
+  - cppzmq
+  - mesalib
+  - mesa-libgl-cos6-x86_64
+  - libselinux-cos6-x86_64
+  - libxxf86vm-cos6-x86_64
+  - xorg-libxext
+  - xorg-libxau
+  - xorg-libxdamage
+
+environment:
+
+  LD_LIBRARY_PATH:                                                   # [unix]
+    - {{ root }}/artifacts/lib                                       # [unix]
+
+  PATH:                                                              # [win]
+    - {{ root }}\artifacts\bin                                       # [win]
+

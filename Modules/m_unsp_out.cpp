@@ -1,7 +1,7 @@
 //#include <cmath>
 //#include <cstdio>
 #include <iomanip>
-#include "io_arrays.h"
+#include "GEMS3K/io_arrays.h"
 
 
 #include "m_unspace.h"

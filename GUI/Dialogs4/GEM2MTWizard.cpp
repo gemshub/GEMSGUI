@@ -24,9 +24,9 @@
 
 #include "GEM2MTWizard.h"
 #include "GemsMainWindow.h"
-#include "num_methods.h"
+#include "GEMS3K/num_methods.h"
 #include "m_gem2mt.h"
-#include "io_arrays.h"
+#include "GEMS3K/io_arrays.h"
 
 extern outField DataBR_fields[58];
 

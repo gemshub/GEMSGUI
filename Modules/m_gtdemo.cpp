@@ -20,6 +20,7 @@
 
 #include <cmath>
 #include <cstdio>
+#include <vector>
 #include "m_proces.h"
 #include "m_unspace.h"
 #include "m_gtdemo.h"

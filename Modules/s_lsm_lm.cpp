@@ -35,7 +35,7 @@
 #include <climits>
 #include <cmath>
 #include "s_lsm.h"
-#include "verror.h"
+#include "GEMS3K/verror.h"
 
 // ***** the following messages are referenced by the variable info.
 

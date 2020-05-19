@@ -29,7 +29,7 @@
 #include "m_proces.h"
 #include "m_dualth.h"
 #include "visor.h"
-#include "gdatastream.h"
+#include "GEMS3K/gdatastream.h"
 #include "nodearray_gui.h"
 
 TProfil* TProfil::pm;

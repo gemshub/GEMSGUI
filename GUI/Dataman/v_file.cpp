@@ -30,7 +30,7 @@ using namespace std;
 
 #include "v_file.h"
 #include "v_user.h"
-#include "gdatastream.h"
+#include "GEMS3K/gdatastream.h"
 
 
 //----------------------------------------------------------

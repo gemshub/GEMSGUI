@@ -24,7 +24,7 @@
 #include "v_mod.h"
 #include "visor.h"
 #include "service.h"
-#include "gdatastream.h"
+#include "GEMS3K/gdatastream.h"
 #include "v_module.h"
 
 

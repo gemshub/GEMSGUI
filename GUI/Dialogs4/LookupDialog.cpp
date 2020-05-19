@@ -27,7 +27,7 @@
 #include "GemsMainWindow.h"
 #include "service.h"
 #include "v_mod.h"
-#include "num_methods.h"
+#include "GEMS3K/num_methods.h"
 //#include "model_w.h"
 
 #define Inherited LookupDialogData

@@ -21,7 +21,7 @@
 #define _v_mod_h_
 
 //#include "v_vals.h"
-#include "m_const_base.h"
+#include "GEMS3K/m_const_base.h"
 
 const unsigned int
  MAXMUNAME =      10,

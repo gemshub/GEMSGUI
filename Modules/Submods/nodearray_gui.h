@@ -1,7 +1,7 @@
 #ifndef NODEARRAY_GUI_H
 #define NODEARRAY_GUI_H
 
-#include "nodearray.h"
+#include "GEMS3K/nodearray.h"
 #include "node_gui.h"
 class QWidget;
 

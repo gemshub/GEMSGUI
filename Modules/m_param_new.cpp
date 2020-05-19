@@ -22,7 +22,7 @@
 
 #include "m_syseq.h"
 #include "visor.h"
-#include "nodearray.h"
+#include "GEMS3K/nodearray.h"
 #include "zmqclient.h"
 
 #ifdef OLD

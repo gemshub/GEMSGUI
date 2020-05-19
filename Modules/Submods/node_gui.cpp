@@ -1,5 +1,5 @@
 #include "node_gui.h"
-#include "num_methods.h"
+#include "GEMS3K/num_methods.h"
 #include "visor.h"
 #include "service.h"
 #include "m_param.h"

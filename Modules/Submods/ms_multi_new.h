@@ -31,17 +31,17 @@
 #ifndef ms_multi_new_h
 #define ms_multi_new_h
 
-#include "ms_multi.h"
+#include "GEMS3K/ms_multi.h"
 #include "m_param.h"
 #include "v_ipnc.h"
 
 // Internal subroutine for ET_translate() to process Phase scripts
 typedef int (tget_ndx)( int nI, int nO, int Xplace );
 // TSolMod header
-#include "s_solmod.h"
+#include "GEMS3K/s_solmod.h"
 // new: TsorpMod and TKinMet
-#include "s_sorpmod.h"
-#include "s_kinmet.h"
+#include "GEMS3K/s_sorpmod.h"
+#include "GEMS3K/s_kinmet.h"
 
 
 // Data of MULTI

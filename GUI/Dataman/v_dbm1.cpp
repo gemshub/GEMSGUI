@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <cstdarg>
 
-#include "gdatastream.h"
+#include "GEMS3K/gdatastream.h"
 #include "v_dbm.h"
 #include "v_dbfile.h"
 #include "v_object.h"

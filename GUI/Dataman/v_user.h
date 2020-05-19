@@ -29,7 +29,7 @@
 #include <algorithm>
 #include <iostream>
 using namespace std;
-#include "v_detail.h"
+#include "GEMS3K/v_detail.h"
 #include "array.h"
 #include "gstring.h"
 

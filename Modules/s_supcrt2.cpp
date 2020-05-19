@@ -18,7 +18,7 @@
 //
 
 #include <cmath>
-#include "verror.h"
+#include "GEMS3K/verror.h"
 #include "s_supcrt.h"
 
 /* HGKcon - Constant parameters for the H2O equation of state given by

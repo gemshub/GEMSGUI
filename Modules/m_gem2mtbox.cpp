@@ -20,7 +20,7 @@
 #include <cmath>
 #include <cstdio>
 #include <iomanip>
-#include "io_arrays.h"
+#include "GEMS3K/io_arrays.h"
 
 
 #ifndef IPMGEMPLUGIN
@@ -34,7 +34,7 @@
 
 #include <ctime>
 #include "m_gem2mt.h"
-#include "nodearray.h"
+#include "GEMS3K/nodearray.h"
 
 #endif
 

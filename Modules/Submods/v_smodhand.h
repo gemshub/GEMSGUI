@@ -4,7 +4,7 @@
 #include "ms_rmults.h"
 #include "ms_rtparm.h"
 #include "ms_system.h"
-#include "ms_multi.h"
+#include "GEMS3K/ms_multi.h"
 #include "ms_calc.h"
 
 extern TRMults* psmRMults;

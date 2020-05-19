@@ -2,9 +2,9 @@
 #define JAMA_SVD_H
 
 
-#include "tnt_array1d.h"
+#include "GEMS3K/tnt_array1d.h"
 #include "tnt_array1d_utils.h"
-#include "tnt_array2d.h"
+#include "GEMS3K/tnt_array2d.h"
 #include "tnt_array2d_utils.h"
 #include "tnt_math_utils.h"
 

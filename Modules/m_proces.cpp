@@ -26,7 +26,7 @@
 #include "visor.h"
 #include "t_print.h"
 #include "stepwise.h"
-#include "num_methods.h"
+#include "GEMS3K/num_methods.h"
 #include "nodearray_gui.h"
 
 TProcess* TProcess::pm;

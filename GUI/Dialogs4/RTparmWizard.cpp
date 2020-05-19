@@ -28,7 +28,7 @@
 #include "GemsMainWindow.h"
 #include "v_mod.h"
 #include "service.h"
-#include "num_methods.h"
+#include "GEMS3K/num_methods.h"
 
 void RTparmWizard::languageChange()
 {

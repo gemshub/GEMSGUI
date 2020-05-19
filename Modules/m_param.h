@@ -34,7 +34,7 @@
 extern const double R_CONSTANT, NA_CONSTANT, F_CONSTANT,
     e_CONSTANT,k_CONSTANT, cal_to_J, C_to_K, lg_to_ln, ln_to_lg, H2O_mol_to_kg, Min_phys_amount;
 
-#include "ms_multi.h"
+#include "GEMS3K/ms_multi.h"
 #include "node_gui.h"
 #include "v_mod.h"
 #include "ms_rmults.h"

@@ -20,7 +20,7 @@
 
 #include <cstdio>
 #include <limits>
-#include "gdatastream.h"
+#include "GEMS3K/gdatastream.h"
 #include "graph.h"
 #include "GemsMainWindow.h"
 

@@ -14,10 +14,10 @@
 #include <time.h>
 #include <math.h>
 #include <iomanip>
-#include "io_arrays.h"
+#include "GEMS3K/io_arrays.h"
 #include "m_gem2mt.h"
 #ifndef  NO_JSON_OUT
-#include "io_json.h"
+#include "GEMS3K/io_json.h"
 #endif
 
 

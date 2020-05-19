@@ -22,6 +22,7 @@
 #define graph_data_old_h
 
 #include <math.h>
+#include <vector>
 class QPointF;
 #include <QtGui/QColor>
 #include  "gstring.h"

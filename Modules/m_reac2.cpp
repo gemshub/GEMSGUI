@@ -22,7 +22,7 @@
 #include "m_param.h"
 #include "m_reacdc.h"
 #include "s_formula.h"
-#include "num_methods.h"
+#include "GEMS3K/num_methods.h"
 
 
 //-----------------------------------------------------------------
