@@ -7,6 +7,8 @@ dependencies:
   - make  # [win]
   - git
   - ccache  # [unix]
+  - gems3k
+  - nlohmann_json
   - qt>=5.12.5
 #  - zeromq
   - cppzmq
