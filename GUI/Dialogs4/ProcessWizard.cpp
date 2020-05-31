@@ -1212,9 +1212,13 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
           QString xaName = "Selected_first";
           QString xbName = "Selected_second";
 
+          lst = getFirst( "Phases" );  // Added to fix the case when the Aq phase is not "aq_gen"  28.05.2020 DK
+          if( lst.count() > 0 )
+            Aqg = lst[0].trimmed();
+
           lst = getSelected( "Phases" );
           if( lst.count() > 0 )
-           Aqg = lst[0].trimmed();
+            Aqg = lst[0].trimmed();
 
           if( subtype == 1 || subtype == 3  ) //xa select_first
           {    lst = getSelected( "Compos" );
@@ -1318,28 +1322,30 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
        if( subtype == 3  )
        {       // Leaching with Compos source for fluid composition
           ret = QString("$ Fluid-rock interaction (Leaching, Compos sources) \n"
-                        "$ cNu is mass of evolving solids in single flow-through reactor (g) \n");
+                        "$ cNu is mass of evolving solids in a single flow-through reactor (g) \n");
           if( !iNu )
-              ret += QString( "$ Comment out one line below to take the mass of solids from iNu iterator \n"
+              ret += QString( "$ Comment off one line below to take the mass of solids from iNu iterator, if set \n"
                               " cNu =: pmXs; \n");
           ret += QString( " MbXs =: cNu; \n"
-                          "$ Stop, if no solids are left \n"
+                          "$ Stop, if no solids or no fluid are left \n"
                           " Next =: ( cNu > 0 & phM[{%1}]>0 ? 1: 0 ); \n"
                           "if(Next > 0) begin \n"
-                          "$ cpe is the solid/fluid mass ratio \n");
+                          "$ cpe is the solid/fluid mass ratio (from the equilibrated system) \n")
+                          .arg(Aqg);
           if( !ipe )
               ret += QString( "$ Comment out one line below to take the f/s ratio from ipe iterator \n"
                             " cpe =: (J>0? cpe: cNu/phM[{%1}]); \n"
                              ).arg(Aqg);
           ret += QString(  " xa_[{%1}] =: cNu/cpe; \n"
-                           "$ Cumulative reacted water/solid ratio (log10 scale) \n"
+                           "$ Cumulative reacted fluid/solid ratio (log10 scale) \n"
                            " modC[J] =: ( J>0? 10^(modC[J-1])+1/cpe: 1/cpe ); \n"
-                           "$ modC[J] =: lg(1/cpe * J); \n"
                            " modC[J] =: lg(modC[J]); \n"
+                           "$ modC[J] =: lg(1/cpe * J); \n"
+                           "$$ Cumulative reacted fluid/solid ratio in linear scale \n"
+                           "$ modC[J] =: ( J>0? modC[J-1]+1/cpe: 1/cpe ); \n"
                            "end \n"
                            "$ Check below that the entry for rock composition in the parent \n"
-                           "$  system recipe is set to zero, e.g. as \n"
-                           "$  xa_[{%2}] =: 0; \n"
+                           "$  system recipe is set to zero, e.g. as  xa_[{%2}] =: 0; \n"
                          ).arg(xaName,xbName);
       }
 
@@ -1768,6 +1774,22 @@ QStringList  ProcessWizard::getSelected( const char *name )
     ret = getSelected( listObj->row(itms[0]) );
 
    return ret;
+}
+
+QStringList  ProcessWizard::getFirst( const char *name )
+{
+    QStringList ret;
+
+    QList<QListWidgetItem*> itms = listObj->findItems(name, Qt::MatchExactly);
+    if(itms.count()<1)
+      return ret; // empty name list
+    int nI = listObj->row(itms[0]);
+
+    QListWidgetItem*  ndx;
+    QListWidget *lst = pLsts[nI];
+    ndx = lst->item(0);
+    ret << ndx[0].text();
+    return ret; // first name in the list
 }
 
 

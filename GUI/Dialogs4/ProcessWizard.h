@@ -63,6 +63,7 @@ class ProcessWizard : public QDialog, public Ui::ProcessWizardData
     char        getType() const;
     QStringList  getSelected( int nI );
     QStringList getSelected( const char *name );
+    QStringList getFirst( const char *name );
     int         getNPoints( int col );
     void        setupPages();
     int         isUndefined( int col );
