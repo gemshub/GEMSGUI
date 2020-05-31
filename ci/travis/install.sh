@@ -20,10 +20,11 @@ conda devenv
 source activate GEMSGUI
 mkdir build
 cd build
-# Configure step
-cmake -GNinja \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_LIBDIR=lib \
-    ..
-ninja install
+cmake -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+      -DCMAKE_INSTALL_LIBDIR=$PREFIX/lib \
+      ..
+# Build step
+make #-j${CPU_COUNT}
+make install
 conda list
