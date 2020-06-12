@@ -95,9 +95,10 @@ long int  TNodeArrayGUI::CalcNodeServer( TNode* wrkNode, long int  iNode, long i
     long int  retCode = T_ERROR_GEM;
 
     zmq_message_t send_msg;
-    send_msg.push_back("dbr");
-    send_msg.push_back( wrkNode->databr_to_string( false, false ));
     send_msg.push_back( std::to_string(iNode) );
+    send_msg.push_back( wrkNode->datach_to_string( false, false ) );
+    send_msg.push_back( wrkNode->gemipm_to_string( true, false, false ));
+    send_msg.push_back( wrkNode->databr_to_string( false, false ));
 
     auto recv_message = TProfil::pm->CalculateEquilibriumServer( send_msg );
 
@@ -108,32 +109,11 @@ long int  TNodeArrayGUI::CalcNodeServer( TNode* wrkNode, long int  iNode, long i
 
     if( retCode == OK_GEM_AIA || retCode ==  OK_GEM_SIA )
     {
-        wrkNode->databr_from_string(recv_message[1]);
+        wrkNode->databr_from_string( recv_message[1] );
     }
 
     return retCode;
 }
-
-bool TNodeArrayGUI::InitNodeServer()
-{
-    na = this; // temporaly fix
-    zmq_message_t send_msg;
-    send_msg.push_back( "nodearray" );
-    send_msg.push_back( calcNode->datach_to_string( false, false ) );
-    send_msg.push_back( calcNode->gemipm_to_string( true, false, false ));
-    send_msg.push_back( calcNode->databr_to_string( false, false ));
-
-    auto recv_message = TProfil::pm->CalculateEquilibriumServer( send_msg );
-
-    if( recv_message.size() >= 2 )
-    {
-        Error(recv_message[0].c_str(), recv_message[1].c_str() );
-    }
-
-    return true;
-}
-
-
 
 // Writing dataCH, dataBR structure to binary/text files
 // and other necessary GEM2MT files

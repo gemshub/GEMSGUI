@@ -20,8 +20,6 @@ public:
     ///  Here we do a GEM calculation in boxes from  start_node to end_node
     bool CalcIPM_List( const TestModeGEMParam& modeParam, long int start_node, long int end_node, FILE* diffile ) override;
 
-    ///  Here we run command to setup GEMS3_server for GEM calculation in boxes from  start_node to end_node
-    bool InitNodeServer();
     ///  Here we run command a GEM calculation in box iNode on to GEMS3_server
     long int CalcNodeServer(TNode* wrkNode, long int  iNode, long int Mode) override;
 

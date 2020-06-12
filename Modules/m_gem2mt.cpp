@@ -1057,7 +1057,6 @@ TGEM2MT::RecCalc( const char * key )
           NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
       }
 
-      na->InitNodeServer();
       allocNodeWork();
       LinkCSD(0);
 
