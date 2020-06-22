@@ -23,7 +23,15 @@
 #include "m_syseq.h"
 #include "visor.h"
 #include "GEMS3K/nodearray.h"
-#include "zmqclient.h"
+//#include "zmqclient.h"
+
+#ifdef NO_ASYNC_SERVER
+#include "gemsreaktoro/zmq_req_client.hpp"
+#else
+#include "gemsreaktoro/zmq_client.hpp"
+#endif
+
+// -d -s /home/sveta/devGEMS/gemshub/GEMSGUI  -g /home/sveta/devGEMS/gemshub/build-gems3k-server
 
 #ifdef OLD
 
@@ -133,42 +141,45 @@ void TProfil::CmReadMultiServer( const char* path )
 double  TProfil::CalculateEquilibriumGUI( const std::string& amode )
 {
     std::string mode = amode.c_str();
-    bool brief_mode = false;
-    bool add_mui = true;
-    long int NodeStatusCH = T_ERROR_GEM;
+//    bool brief_mode = false;
+//    bool add_mui = true;
+//    long int NodeStatusCH = T_ERROR_GEM;
     double time = 0.;
 
-    std::shared_ptr<TNodeGUI> na;
-    auto send_msg = CurrentSystem2GEMS3Kjson( na, brief_mode, add_mui );
-    //for( const auto& msg: msg_data )
-    //  std::cout << msg <<  "\n----------------------\n"  << std::endl;
+TNodeGUI na( multi);
 
-    // run gem_ipm
-    auto recv_message = pVisor->getZMQclient()->calculateEquilibriumServer(send_msg);
-    //for( const auto& msg: recv_message )
-    //  std::cout << msg <<  "\n----------------------\n"  << std::endl;
+#ifdef NO_ASYNC_SERVER
+    zmq_req_client_t<TNodeGUI> zmqclient(na);
+#else
+    zmq_client_t<TNodeGUI> zmqclient(na);
+#endif
+     zmqclient.run_task();
 
-    if( recv_message.size() >= 2 )
-        NodeStatusCH =  atol( recv_message[0].c_str() );
-    else
-        Error("CalculateEquilibriumGUI", "Illegal number of messages" );
 
-    switch( NodeStatusCH )
-    {
-    case OK_GEM_AIA:
-    case OK_GEM_SIA: // unpack dbr data
-        time = readMultiServer( na, NodeStatusCH, recv_message );
-        break;
-    case BAD_GEM_AIA:
-    case BAD_GEM_SIA:  // unpack dbr data
-        time = readMultiServer( na, NodeStatusCH, recv_message );
-        Error( (recv_message.end()-1)->c_str(), recv_message.back().c_str() );
-        break;
-    case ERR_GEM_AIA:
-    case ERR_GEM_SIA:
-    case T_ERROR_GEM:
-        Error( (recv_message.end()-1)->c_str(), recv_message.back().c_str() );
-    }
+//    auto send_msg = CurrentSystem2GEMS3Kjson( na, brief_mode, add_mui );
+//    auto recv_message = pVisor->getZMQclient()->calculateEquilibriumServer(send_msg);
+
+//    if( recv_message.size() >= 2 )
+//        NodeStatusCH =  atol( recv_message[0].c_str() );
+//    else
+//        Error("CalculateEquilibriumGUI", "Illegal number of messages" );
+
+//    switch( NodeStatusCH )
+//    {
+//    case OK_GEM_AIA:
+//    case OK_GEM_SIA: // unpack dbr data
+//        time = readMultiServer( na, NodeStatusCH, recv_message );
+//        break;
+//    case BAD_GEM_AIA:
+//    case BAD_GEM_SIA:  // unpack dbr data
+//        time = readMultiServer( na, NodeStatusCH, recv_message );
+//        Error( (recv_message.end()-1)->c_str(), recv_message.back().c_str() );
+//        break;
+//    case ERR_GEM_AIA:
+//    case ERR_GEM_SIA:
+//    case T_ERROR_GEM:
+//        Error( (recv_message.end()-1)->c_str(), recv_message.back().c_str() );
+//    }
 
     return time;
 }

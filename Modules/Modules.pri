@@ -60,6 +60,6 @@
                      $$MODULES_CPP/m_dualth.cpp  \
                      $$MODULES_CPP/m_dualthc.cpp  \
                      $$MODULES_CPP/m_gtdemo.cpp   \
-                     $$MODULES_CPP/m_rtparm.cpp \
-    $$PWD/m_param_new.cpp
+                     $$MODULES_CPP/m_rtparm.cpp
+                     #$$PWD/m_param_new.cpp
       

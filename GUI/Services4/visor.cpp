@@ -1171,10 +1171,10 @@ TVisor::CloseMessage()
     pVisorImp->CloseMessage();
 }
 
-ZMQClient* TVisor::getZMQclient()
-{
-    return pVisorImp->getZMQclient();
-}
+//ZMQClient* TVisor::getZMQclient()
+//{
+//    return pVisorImp->getZMQclient();
+//}
 
 
 TVisor *pVisor;

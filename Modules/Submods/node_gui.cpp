@@ -325,3 +325,109 @@ bool TNodeGUI::TestTPGrid(  double Tai[4], double Pai[4] )
     return notChanged;
 }
 
+std::vector<string> TNodeGUI::generate_send_msg( bool add_head )
+{
+    bool brief_mode = false;
+    bool add_mui = true;
+    double Tai[4], Pai[4];
+
+    // realloc and setup data for dataCH and DataBr structures
+    Tai[0] = Tai[1] = pmm->TCc;
+    Pai[0] = Pai[1] = pmm->Pc;
+    Tai[2] = Pai[2] = 0.;
+    Tai[3] = Pai[3] = 0.1;
+    MakeNodeStructures( nullptr, true , Tai, Pai  );
+
+    std::vector<std::string> msg_data;
+    if( add_head )
+        msg_data.push_back( "system" );
+    msg_data.push_back( datach_to_string( false, brief_mode ) );
+    msg_data.push_back( gemipm_to_string( add_mui, false, brief_mode ));
+    msg_data.push_back( databr_to_string( false, brief_mode ));
+    //std::cout << "Send NodeHandle... " << current_task->pCNode()->NodeHandle << std::endl;
+    return msg_data;
+}
+
+bool TNodeGUI::set_resv_msg(std::vector<string> &&msg_return)
+{
+    double time;
+    long int NodeStatusCH = T_ERROR_GEM;
+
+    if( msg_return.size() >= 2 )
+        NodeStatusCH =  atol( msg_return[0].c_str() );
+    else
+        Error("TNodeGUI - run server: ", "Illegal number of messages" );
+
+    switch( NodeStatusCH )
+    {
+    case OK_GEM_AIA:
+    case OK_GEM_SIA: // unpack dbr data
+        time = readMultiServer( NodeStatusCH, msg_return );
+        return true;
+        break;
+    case BAD_GEM_AIA:
+    case BAD_GEM_SIA:  // unpack dbr data
+        time = readMultiServer( NodeStatusCH, msg_return );
+        Error( (msg_return.end()-1)->c_str(), msg_return.back().c_str() );
+        break;
+    case ERR_GEM_AIA:
+    case ERR_GEM_SIA:
+    case T_ERROR_GEM:
+        Error( (msg_return.end()-1)->c_str(), msg_return.back().c_str() );
+    }
+    return false;
+}
+
+// Reading structure MULTI (GEM IPM work structure)
+double TNodeGUI::readMultiServer( long int NodeStatusCH, const std::vector<std::string>& recv_msg )
+{
+    double ret = 0;
+    //auto new_dbr = send_msg[3];
+
+    if( recv_msg.size() >= 3 && !recv_msg[2].empty() )
+        ret = std::stod(recv_msg[2], nullptr );
+
+    if( recv_msg.size() >= 2 && !recv_msg[1].empty() )
+    {
+
+        databr_from_string(recv_msg[1]);
+        // Unpacking the actual contents of DBR file including speciation
+        unpackDataBr( true );
+
+        if( ( NodeStatusCH == OK_GEM_AIA || NodeStatusCH ==  OK_GEM_SIA) && recv_msg.size()>=6)
+        {
+            pmm->K2 =  atol( recv_msg[3].c_str() );
+            pmm->ITF =  atol( recv_msg[4].c_str() );
+            pmm->ITG =  atol( recv_msg[5].c_str() );
+        }
+
+        for( int j=0; j < pmm->L; j++ )
+            pmm->X[j] = pmm->Y[j];
+        pmm->TC = pmm->TCc;
+        pmm->T =  pmm->Tc;
+        pmm->P =  pmm->Pc;
+
+        pmm->pESU = 2;  // SysEq unpack flag set
+
+        TMulti* amulti = dynamic_cast<TMulti*>(multi);
+        if( amulti)
+            amulti->EqstatExpand( /*pmp->stkey,*/ true );
+        pmm->FI1 = 0;  // Recomputing the number of non-zeroed-off phases
+        pmm->FI1s = 0;
+        for(int i=0; i<pmm->FI; i++ )
+        {
+            if( pmm->YF[i] >= min( pmm->PhMinM, 1e-22 ) )  // Check 1e-22 !!!!!
+            {
+                pmm->FI1++;
+                if( i < pmm->FIs )
+                    pmm->FI1s++;
+            }
+        }
+        for( int i=0; i<pmm->L; i++)
+            pmm->G[i] = pmm->G0[i];
+
+    }
+    //cout << setprecision(15) <<" pmp->Y_la[4] " << pmp->Y_la[4] << " pmp->lnGam[4] " << pmp->lnGam[4] << endl;
+    ///   !!! G[] and F[] different after IPM and EqstatExpand
+    return ret;
+}

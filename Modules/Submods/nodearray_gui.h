@@ -20,8 +20,8 @@ public:
     ///  Here we do a GEM calculation in boxes from  start_node to end_node
     bool CalcIPM_List( const TestModeGEMParam& modeParam, long int start_node, long int end_node, FILE* diffile ) override;
 
-    ///  Here we run command a GEM calculation in box iNode on to GEMS3_server
-    long int CalcNodeServer(TNode* wrkNode, long int  iNode, long int Mode) override;
+    //  Here we run command a GEM calculation in box iNode on to GEMS3_server
+    //long int CalcNodeServer(TNode* wrkNode, long int  iNode, long int Mode) override;
 
     /// Prints MULTI, DATACH and DATABR files structure prepared from GEMS.
     /// Prints files for separate coupled FMT-GEM programs that use GEMS3K module
@@ -112,16 +112,50 @@ public:
         return anyNodeArray[ndx];
     }
 
+    /// False if all subtasks were calculated
+    bool wait_next()  const
+    {
+      return resv_responce <= requests_number;
+    }
+
+    /// False if all subtasks were calculated
+    bool has_next()  const
+    {
+      return sended_requests <= requests_number;
+    }
+
+    /// Generate request strings for ZMQ server
+    std::vector<std::string> generate_send_msg( bool add_head );
+
+    /// Set up data from response strings from ZMQ server
+    /// \return true if success
+    bool set_resv_msg( std::vector<std::string>&& msg_return );
+
+    void reset_requests( size_t start_node,
+                         size_t end_node )
+    {
+        requests_number=end_node;
+        sended_requests = start_node;
+        resv_responce = start_node;
+    }
 
 protected:
 
     TNodeGUI* calcNodeGUI;
+
+    TestModeGEMParam mode_param;
+    FILE* diffile = nullptr;
+    size_t requests_number=0;
+    size_t sended_requests = 0;
+    size_t resv_responce = 0;
+
 
     ///  Here we do a GEM calculation in box ii (implementation thread-safe)
     bool CalcIPM_Node(  const TestModeGEMParam& modeParam, TNode* wrkNode,
                         long int ii, DATABRPTR* C0, DATABRPTR* C1, bool* iaN, FILE* diffile  ) override;
 
     void pVisor_Message( bool toclose, long int ndx = 0, long int size = 0 ) override;
+
 
 };
 
