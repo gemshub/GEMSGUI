@@ -271,7 +271,7 @@ TVisorImp::TVisorImp(int c, char** v):
      }
 
 
-    startGEMServer();
+    //startGEMServer();
     updateMenus();
     //moveToolBar();
 }
