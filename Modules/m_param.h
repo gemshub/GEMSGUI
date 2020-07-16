@@ -372,7 +372,6 @@ public:
 //   bool gemipm_from_string( const std::string& data,  DATACH  *dCH );
 
    void CmReadMulti( const char* path, bool new_ipm = false );
-   void CmReadMultiServer( const char* path );
    double ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& NumIterFIA, long int& NumIterIPM );
    bool CompareProjectName( const char* SysKey );
    void ChangeTPinKey( double T, double P );
@@ -381,25 +380,7 @@ public:
 
    // new Reaktoro
    /// Run process of calculate equilibria into the GEMSGUI shell
-   double CalculateEquilibriumGUI( const std::string& path);
-
-   /// Run process of calculate equilibria into the GEMS3K side
-   double CalculateEquilibriumServerOld( const gstring& path );
-
-   /// Run process of calculate equilibria into the GEMS3K side
-   /// @param IPM work structures array json/key-value format ( <mode>, DATACH, MULTI, DATABR )
-   /// @return report mesages  from server
-   std::vector<std::string> CalculateEquilibriumServer( const std::vector<std::string>& msg_data );
-
-   /// Generate for current loaded system DATACH, MULTI  and DATABR structure prepared from GEMS.
-   /// Prints files for separate coupled FMT-GEM programs that use GEMS3K module
-   /// @return IPM work structures array json/key-value format ( <mode>, DATACH, MULTI, DATABR )
-   /// @param brief_mode - Do not write data items that contain only default values
-   /// @param add_mui - Print internal indices in RMULTS to IPM file for reading into Gems back
-   std::vector<std::string> CurrentSystem2GEMS3Kjson( std::shared_ptr<TNodeGUI>& na, bool brief_mode, bool add_mui );
-
-   /// Reading structure MULTI (GEM IPM work structure)
-   double readMultiServer( std::shared_ptr<TNodeGUI>& na, long int NodeStatusCH, const std::vector<std::string>& recv_msg );
+   void CalculateEquilibriumGUI();
 };
 
 /* Work codes of surface site types in pm->AtNdx vector (compatibility with old-style SCMs *

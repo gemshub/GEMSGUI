@@ -32,6 +32,13 @@
 #include "GEMS3K/gdatastream.h"
 #include "nodearray_gui.h"
 
+#ifdef NO_ASYNC_SERVER
+#include "gemsreaktoro/zmq_req_client.hpp"
+#else
+#include "gemsreaktoro/zmq_client.hpp"
+#endif
+
+
 TProfil* TProfil::pm;
 
 //const double R_CONSTANT = 8.31451,
@@ -1038,6 +1045,22 @@ long int TProfil::testMulti()
 }
 moved to TMulti*/
 
+
+// Run process of calculate equilibria into the GEMSGUI shell
+void  TProfil::CalculateEquilibriumGUI()
+{
+    TNodeGUI na( multi);
+
+#ifdef NO_ASYNC_SERVER
+    zmq_req_client_t<TNodeGUI> zmqclient(na);
+#else
+    zmq_client_t<TNodeGUI> zmqclient(na);
+#endif
+    zmqclient.run_task();
+}
+
+
+
 // GEM IPM calculation of equilibrium state in MULTI
 // without testing changes in the system
 //
@@ -1047,11 +1070,10 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
   calcFinished = false;
 
   //multi->Access_GEM_IMP_init();
-  outMultiTxt( "Reaktoro_before.dump.txt"  );
-  //CalculateEquilibriumGUI( "/home/sveta/devGEMS/gitGEMS3/standalone/gemserver-build/server_data/toServer-dat.lst");
-  CalculateEquilibriumGUI( std::string(pVisor->serverGems3Dir().c_str())+"/server_data/toServer-dat.lst");
+  //outMultiTxt( "Reaktoro_before.dump.txt"  );
+  CalculateEquilibriumGUI( );
   //multi->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
-  outMultiTxt( "Reaktoro_after.dump.txt"  );
+  //outMultiTxt( "Reaktoro_after.dump.txt"  );
 
   calcFinished = true;
   STat->setCalcFlag( true );

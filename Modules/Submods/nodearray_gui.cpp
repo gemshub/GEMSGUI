@@ -1,8 +1,13 @@
 #include <unistd.h>
-//#include "nodearray_gui.h"
 #include "m_gem2mt.h"
-#include "zmqclient.h"
+//#include "zmqclient.h"
 #include "visor.h"
+
+#ifdef NO_ASYNC_SERVER
+#include "gemsreaktoro/zmq_req_client.hpp"
+#else
+#include "gemsreaktoro/zmq_client.hpp"
+#endif
 
 
 TNodeArrayGUI::TNodeArrayGUI( long int nNod, TMultiBase *apm  ):
@@ -26,114 +31,77 @@ TNodeArrayGUI::TNodeArrayGUI( long int asizeN, long int asizeM, long int asizeK,
 //   return code   true   Ok
 //                 false  Error in GEMipm calculation part
 //
-bool TNodeArrayGUI::CalcIPM_List( const TestModeGEMParam& modeParam, long int start_node, long int end_node, FILE* diffile )
+bool TNodeArrayGUI::CalcIPM_List( const TestModeGEMParam& modeParam, long int start_node,
+                                  long int end_node, FILE* adiffile )
 {
-    long int ii;
-    bool iRet = true;
-    DATABRPTR* C0 = pNodT0();
-    DATABRPTR* C1 = pNodT1();
-    bool* iaN = piaNode();     // indicators for IA in the nodes
+    mode_param = modeParam;
+    diffile = adiffile;
 
     start_node = max( start_node, 0L );
     end_node = min( end_node, anNodes );
+    reset_requests( start_node, end_node );
 
-    for( ii = start_node; ii<= end_node; ii++) // node iteration
+#ifdef NO_ASYNC_SERVER
+
+    zmq_req_client_t<TNodeArrayGUI> zmqclient(*this);
+
+    while( gems_task.has_next() )
     {
-        if( !CalcIPM_Node(  modeParam, calcNode, ii, C0, C1, iaN, diffile ) )
-            iRet = false;
+        zmqclient.run_task();
     }
 
-    return iRet;
+#else
+    zmq_client_t<TNodeArrayGUI> zmqclient(*this);
+    zmqclient.start_list();
+#endif
+
+    return true;
 }
 
 //   Here we do a GEM calculation in box ii
 //   return code   true   Ok
 //                 false  Error in GEMipm calculation part
 //
-bool TNodeArrayGUI::CalcIPM_Node( const TestModeGEMParam& modeParam, TNode* wrkNode,
-                                  long int ii, DATABRPTR* C0, DATABRPTR* C1, bool* piaN, FILE* diffile )
+bool TNodeArrayGUI::CalcIPM_Node( const TestModeGEMParam& modeParam, TNode* ,
+                                  long int ii, DATABRPTR* , DATABRPTR* , bool*, FILE* adiffile )
 {
-    bool iRet = true;
+    mode_param = modeParam;
+    sended_requests = ii;
+    diffile = adiffile;
 
-    long int Mode = SmartMode( modeParam, ii, piaN   );
-    bool needGEM = NeedGEMS( wrkNode, modeParam, C0[ii], C1[ii]  );
+#ifdef NO_ASYNC_SERVER
+    zmq_req_client_t<TNodeArrayGUI> zmqclient(*this);
+#else
+    zmq_client_t<TNodeArrayGUI> zmqclient(*this);
+#endif
 
-    if( needGEM )
-    {
-        long RetCode =  RunGEM( wrkNode, ii, Mode, C1 );
-
-        // checking RetCode from GEM IPM calculation
-        if( !(RetCode==OK_GEM_AIA || RetCode == OK_GEM_SIA ))
-        {
-            std::string err_msg = ErrorGEMsMessage( RetCode,  ii, modeParam.step  );
-            iRet = false;
-
-            if( diffile )
-            {
-                // write to file here
-                fprintf( diffile, "\nError reported from GEMS3K module\n%s\n",
-                         err_msg.c_str() );
-            }
-            else
-            {
-                err_msg += "\n Continue?";
-                if( !vfQuestion( TGEM2MT::pm->window(),
-                                 "Error reported from GEMIPM2 module",err_msg.c_str() ))
-                    Error("Error reported from GEMIPM2 module",
-                          "Process stopped by the user");
-            }
-        }
-    }
-    else { // GEM calculation for this node not needed
-        C1[ii]->IterDone = 0; // number of GEMIPM iterations is set to 0
-    }
-    return iRet;
+    return zmqclient.run_task();
 }
 
-long int  TNodeArrayGUI::CalcNodeServer( TNode* wrkNode, long int  iNode, long int )
-{
-    long int  retCode = T_ERROR_GEM;
+//long int  TNodeArrayGUI::CalcNodeServer( TNode* wrkNode, long int  iNode, long int )
+//{
+//    long int  retCode = T_ERROR_GEM;
 
-    zmq_message_t send_msg;
-    send_msg.push_back("dbr");
-    send_msg.push_back( wrkNode->databr_to_string( false, false ));
-    send_msg.push_back( std::to_string(iNode) );
+//    zmq_message_t send_msg;
+//    send_msg.push_back( std::to_string(iNode) );
+//    send_msg.push_back( wrkNode->datach_to_string( false, false ) );
+//    send_msg.push_back( wrkNode->gemipm_to_string( true, false, false ));
+//    send_msg.push_back( wrkNode->databr_to_string( false, false ));
 
-    auto recv_message = TProfil::pm->CalculateEquilibriumServer( send_msg );
+//    auto recv_message = TProfil::pm->CalculateEquilibriumServer( send_msg );
 
-    if( recv_message.size() >= 2 )
-        retCode  =  atol( recv_message[0].c_str() );
-    else
-        Error("RunGEM", "Illegal number of messages" );
+//    if( recv_message.size() >= 2 )
+//        retCode  =  atol( recv_message[0].c_str() );
+//    else
+//        Error("RunGEM", "Illegal number of messages" );
 
-    if( retCode == OK_GEM_AIA || retCode ==  OK_GEM_SIA )
-    {
-        wrkNode->databr_from_string(recv_message[1]);
-    }
+//    if( retCode == OK_GEM_AIA || retCode ==  OK_GEM_SIA )
+//    {
+//        wrkNode->databr_from_string( recv_message[1] );
+//    }
 
-    return retCode;
-}
-
-bool TNodeArrayGUI::InitNodeServer()
-{
-    na = this; // temporaly fix
-    zmq_message_t send_msg;
-    send_msg.push_back( "nodearray" );
-    send_msg.push_back( calcNode->datach_to_string( false, false ) );
-    send_msg.push_back( calcNode->gemipm_to_string( true, false, false ));
-    send_msg.push_back( calcNode->databr_to_string( false, false ));
-
-    auto recv_message = TProfil::pm->CalculateEquilibriumServer( send_msg );
-
-    if( recv_message.size() >= 2 )
-    {
-        Error(recv_message[0].c_str(), recv_message[1].c_str() );
-    }
-
-    return true;
-}
-
-
+//    return retCode;
+//}
 
 // Writing dataCH, dataBR structure to binary/text files
 // and other necessary GEM2MT files
@@ -175,6 +143,98 @@ AGAIN:
     pVisor->CloseMessage();
     return path;
 }
+
+std::vector<string> TNodeArrayGUI::generate_send_msg( bool add_head )
+{
+    DATABRPTR* C0 = pNodT0();
+    DATABRPTR* C1 = pNodT1();
+    bool* iaN = piaNode();     // indicators for IA in the nodes
+
+    long int Mode = SmartMode( mode_param, sended_requests, iaN   );
+    bool needGEM = NeedGEMS( calcNode, mode_param, C0[sended_requests], C1[sended_requests]  );
+
+    if( !needGEM )
+    {
+        C1[sended_requests]->IterDone = 0; // number of GEMIPM iterations is set to 0
+        sended_requests++;
+        resv_responce++;
+        return {}; // skip send-reply
+    }
+
+    // Copy data from the iNode node from array NodT1 to the work DATABR structure
+    CopyWorkNodeFromArray( calcNode, sended_requests, anNodes, C1 );
+    // GEM IPM calculation of equilibrium state in MULTI
+    calcNode->pCNode()->NodeStatusCH = std::abs(Mode);
+    sended_requests++;
+
+    zmq_message_t send_msg;
+    if( add_head )
+        send_msg.push_back( std::to_string(calcNode->pCNode()->NodeHandle) );
+    send_msg.push_back( calcNode->datach_to_string( false, false ) );
+    send_msg.push_back( calcNode->gemipm_to_string( true, false, false ));
+    send_msg.push_back( calcNode->databr_to_string( false, false ));
+    //std::cout << "Send NodeHandle... " << current_task->pCNode()->NodeHandle << std::endl;
+    return send_msg;
+}
+
+
+bool TNodeArrayGUI::set_resv_msg( std::vector<string> &&recv_message )
+{
+    long int  NodeStatusCH = T_ERROR_GEM;
+    long int node_handle=-1;
+    resv_responce++;
+
+    if( recv_message.size() >= 2 )
+        NodeStatusCH  =  atol( recv_message[0].c_str() );
+    else
+        Error("RunGEM", "Illegal number of messages" );
+
+    switch( NodeStatusCH )
+    {
+    case BAD_GEM_AIA:
+    case BAD_GEM_SIA:  // unpack dbr data
+    case OK_GEM_AIA:
+    case OK_GEM_SIA:
+        // unpack dbr data
+        calcNode->databr_from_string( recv_message[1] );
+        node_handle = calcNode->pCNode()->NodeHandle;
+        break;
+    case ERR_GEM_AIA:
+    case ERR_GEM_SIA:
+    case T_ERROR_GEM:
+        break;
+    }
+
+    if( NodeStatusCH == OK_GEM_AIA || NodeStatusCH ==  OK_GEM_SIA )
+    {
+        // Copying data for node iNode back from work DATABR structure into the node array
+        //   if( retCode == OK_GEM_AIA ||
+        //       retCode == OK_GEM_PIA  )
+        MoveWorkNodeToArray( calcNode, node_handle, anNodes, pNodT1() );
+    }
+    else
+    {
+        std::string err_msg = ErrorGEMsMessage( NodeStatusCH, node_handle, mode_param.step  );
+
+        if( diffile )
+        {
+            // write to file here
+            fprintf( diffile, "\nError reported from GEMS3K module\n%s\n",
+                     err_msg.c_str() );
+        }
+        else
+        {
+            err_msg += "\n Continue?";
+            if( !vfQuestion( nullptr /*TGEM2MT::pm->window()*/,
+                             "Error reported from GEMIPM2 module",err_msg ))
+                Error("Error reported from GEMIPM2 module",
+                      "Process stopped by the user");
+        }
+        return false;
+    }
+    return true;
+}
+
 
 void TNodeArrayGUI::pVisor_Message(bool toclose, long int ndx, long int size )
 {

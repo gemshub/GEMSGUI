@@ -52,6 +52,14 @@ public:
     bool TestTPGrid(  double Tai[4], double Pai[4] );
 
 
+    /// Generate request strings for ZMQ server
+    std::vector<std::string> generate_send_msg( bool add_head );
+
+    /// Set up data from response strings from ZMQ server
+    /// \return true if success
+    bool set_resv_msg( std::vector<std::string>&& msg_return );
+
+
 protected:
 
     // Integration in GEMS-PSI GUI environment
@@ -76,6 +84,7 @@ protected:
     //virtual void  setNodeArray( std::string& , long int , bool ) { }
     void init_into_gems3k() override {}
 
+    double readMultiServer(long NodeStatusCH, const std::vector<std::string> &recv_msg);
 };
 
 #endif // NODE_GUI_H

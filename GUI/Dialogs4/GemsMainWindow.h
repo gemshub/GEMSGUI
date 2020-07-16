@@ -29,7 +29,7 @@
 #include <QHBoxLayout>
 
 class IPNCalcObject;
-class ZMQClient;
+//class ZMQClient;
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -262,7 +262,7 @@ public:
     QWaitCondition& getWaitCalc();
     QMutex& getMutexCalc();
 
-    ZMQClient* getZMQclient();
+//    ZMQClient* getZMQclient();
 
 Q_SIGNALS:
     void run_IPM();
@@ -402,7 +402,7 @@ private slots:
     /// GEM IPN run object
     IPNCalcObject* calc_model=nullptr;
 
-    std::shared_ptr<ZMQClient> zmq_client;
+    //std::shared_ptr<ZMQClient> zmq_client;
 
     void setCalcClient();
 

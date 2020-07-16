@@ -1,5 +1,5 @@
 HEADERS += $$SERVICES4_H/calcthread.h \
-           $$SERVICES4_H/zmqclient.h \
+           #$$SERVICES4_H/zmqclient.h \
            $$SERVICES4_H/units.h \
            $$SERVICES4_H/service.h \
            $$SERVICES4_H/visor.h \
@@ -13,7 +13,7 @@ HEADERS += $$SERVICES4_H/calcthread.h \
            $$SERVICES4_H/module_w.h
 
 SOURCES += $$SERVICES4_CPP/units.cpp \
-           $$SERVICES4_CPP/zmqclient.cpp \
+           #$$SERVICES4_CPP/zmqclient.cpp \
            #$$PWD/App/main.cpp \
            $$SERVICES4_CPP/service.cpp \
            $$SERVICES4_CPP/visor.cpp \

@@ -24,7 +24,7 @@
 #include "v_module.h"
 
 class QWidget;
-class ZMQClient;
+//class ZMQClient;
 
 class TVisor
 {
@@ -164,7 +164,7 @@ public:
              const char* msg, int prog =0, int total=-1, bool move = false);
     void ProcessProgress( QWidget* parent, int nRT );
     void CloseMessage();
-    ZMQClient* getZMQclient();
+//    ZMQClient* getZMQclient();
 
 
     bool getElemPrMode() const
