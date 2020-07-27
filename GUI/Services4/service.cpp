@@ -486,7 +486,7 @@ bool vfChooseFileOpen(QWidget* par, std::string& path_,
           QFileDialog::DontConfirmOverwrite );
    if ( !fn.isEmpty() )
     {
-        path_ = fn.toLatin1().data();
+        path_ = fn.toStdString();
         std::string dir;
         std::string name;
         std::string newname;
@@ -530,7 +530,7 @@ bool vfChooseFileSave(QWidget* par, std::string& path_,
 
     if ( !fn.isEmpty() )
     {
-        path_ = fn.toLatin1().data();
+        path_ = fn.toStdString();
         std::string dir;
         std::string name;
         std::string newname;
@@ -564,7 +564,7 @@ bool vfChooseDirectory(QWidget* par, std::string& path_,
 
     if ( !dir.isEmpty() )
     {
-        path_ = dir.toLatin1().data();
+        path_ = dir.toStdString();
         pVisor->setLocalDir( path_.c_str() );
         return true;
     }

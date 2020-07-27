@@ -151,7 +151,7 @@ void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
         pFile = pMod->child( jj );
        if( pFile->isSelected() )
        {
-         string col =pFile->text( 0 ).toLatin1().data();
+         string col =pFile->text( 0 ).toStdString();
          cnt++;
          aFls.Add( col.c_str() );
        }
@@ -164,7 +164,7 @@ void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
         pFile = pMod->child( jj );
        if( pFile->isSelected() )
        {
-         string col =pFile->text( 0 ).toLatin1().data();
+         string col =pFile->text( 0 ).toStdString();
          cnt++;
          aFls.Add( col.c_str() );
        }

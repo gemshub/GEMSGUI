@@ -94,7 +94,7 @@ public:
     void   getTaudata( double Tau[3] );
 
     string getCalcScript() const
-    { string res= pScript_t->toPlainText().toLatin1().data();
+    { string res= pScript_t->toPlainText().toStdString();
       return res;
     }
     string getOutScript() const

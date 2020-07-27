@@ -162,7 +162,7 @@ KeyFilter::SetKeyString()
     Key = "";
     for( uint ii=0/*, jj=0*/; ii<aEdit.GetCount(); ii++/*, jj=Key.length()*/)
     {
-        string s = aEdit[ii].text().toLatin1().data();
+        string s = aEdit[ii].text().toStdString();
         Key += s;
         StripLine(Key);
 //Sveta 04/09/01 ????  if( Key.length()-jj < dbKey.FldLen(ii) )

@@ -43,13 +43,13 @@ void HelpConfigurator::u_getline(istream& is, QString& str, QString end )
 void HelpConfigurator::getHrefs( QString file, QString file_name)
 {
    char ch;
-   fstream f_in( file.toLatin1().data(), ios::in );
+   fstream f_in( file.toStdString(), ios::in );
    QString ref;
 
    if( !f_in.good() )
    {
         file += " Fileopen error";
-        Error( "HelpConfigurator", file.toLatin1().data());
+        Error( "HelpConfigurator", file.toStdString());
         return;
    }
 
@@ -85,14 +85,14 @@ void HelpConfigurator::addNameToList( QString ref, QString file_name )
     QString value;
 
     int indx = ref.indexOf("name=");
-// cout << indx << "    " << ref.toLatin1().data() << endl;
+// cout << indx << "    " << ref.toStdString() << endl;
     if(indx > -1 )
     {
       names.append(ref);
       key =ref.section("\"",1,1);
       value = file_name +"#"+key;
       links.insertMulti(key,QUrl(value));
-// cout << value.toLatin1().data()<<endl;
+// cout << value.toStdString()<<endl;
     }
     else
         hrefs.append(ref);
@@ -104,14 +104,14 @@ void HelpConfigurator::addImgToList( QString ref )
 {
     QString value, rref, file_name;
     int indx = ref.indexOf("src=");
-// cout << indx << "    " << ref.toLatin1().data(); // << endl;
+// cout << indx << "    " << ref.toStdString(); // << endl;
     if(indx > -1 )   // Bugfixes by DK on 15.02.2012
     {
       rref = ref.mid(indx);
       value = rref.section("\"",1,1);
-// cout << "+ " << value.toLatin1().data() << endl;
+// cout << "+ " << value.toStdString() << endl;
       file_name = value.section("/", -1);
-// cout << "- " << file_name.toLatin1().data() << endl;
+// cout << "- " << file_name.toStdString() << endl;
       images.append(file_name);
     }
     else
@@ -159,7 +159,7 @@ int HelpConfigurator::writeFile(const char *file)
     if( !f_out.good() )
     {
         QString str = QString(file) + " Fileopen error";
-        Error( "HelpConfigurator", str.toLatin1().data());
+        Error( "HelpConfigurator", str.toStdString());
         return 0;
     }
 
@@ -187,13 +187,13 @@ void HelpConfigurator::writeFiles( fstream& f_out)
     f_out << "      <files>" << endl;
     for( int ii =0; ii<files.count(); ii++)
     {
-      f_out << "        <file>" << files[ii].toLatin1().data() << "</file>" << endl;
+      f_out << "        <file>" << files[ii].toStdString() << "</file>" << endl;
     }
     images.sort();
     images.removeDuplicates();
     for( int ii =0; ii<images.count(); ii++)
     {
-      f_out << "        <file>" << images[ii].toLatin1().data() << "</file>" << endl;
+      f_out << "        <file>" << images[ii].toStdString() << "</file>" << endl;
     }
     f_out << "      </files>" << endl;
 }
@@ -206,7 +206,7 @@ void HelpConfigurator::writeKeywords( fstream& f_out)
 
     //kwds = links.keys();
     //for(int ii=0; ii<links.count(); ii++ )
-    // cout << kwds[ii].toLatin1().data() << endl;
+    // cout << kwds[ii].toStdString() << endl;
 
     kwds = links.uniqueKeys();
     f_out << "    <keywords>" << endl;
@@ -219,8 +219,8 @@ void HelpConfigurator::writeKeywords( fstream& f_out)
         urls = links.values( kwds[ii] );
 
       for( int jj=0; jj<urls.count(); jj++ )
-      f_out << "        <keyword name=\"" << kwds[ii].toLatin1().data()
-            << "\" ref=\"" << urls[jj].toString().toLatin1().data()  << "\"/>" << endl;
+      f_out << "        <keyword name=\"" << kwds[ii].toStdString()
+            << "\" ref=\"" << urls[jj].toString().toStdString()  << "\"/>" << endl;
     }
     f_out << "    </keywords>" << endl;
 }
@@ -230,11 +230,11 @@ void HelpConfigurator::writeContent( fstream& f_out)
     QString ref;
     QString contentfile = path;
             contentfile += "/gems3helpconfig.toc";
-    fstream f_in( contentfile.toLatin1().data(), ios::in );
+    fstream f_in( contentfile.toStdString(), ios::in );
     if( !f_in.good() )
     {
         contentfile += " Fileopen error";
-        Error( "HelpConfigurator", contentfile.toLatin1().data());
+        Error( "HelpConfigurator", contentfile.toStdString());
         return;
     }
 
@@ -242,7 +242,7 @@ void HelpConfigurator::writeContent( fstream& f_out)
     {
       ref = "";
       u_getline(f_in, ref, ">" );
-      f_out << ref.toLatin1().data();
+      f_out << ref.toStdString();
     }
 }
 
@@ -349,8 +349,8 @@ bool Helper::startAssistant()
             ;
 
         proc->start(app, args);
-    	cout << app.toLatin1().data() << endl;
-    	cout << args[2].toLatin1().data() << endl;
+        cout << app.toStdString() << endl;
+        cout << args[2].toStdString() << endl;
 
         if (!proc->waitForStarted()) 
         {

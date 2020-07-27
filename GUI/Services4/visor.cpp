@@ -108,13 +108,13 @@ TVisor::TVisor(int c, char *v[]):
        // By default: /Resources in the same dir as the exe file;
        //       /Library/gems3/projects on the same level as the /Gems3-app dir.
     QString dirExe = QCoreApplication::applicationDirPath();
-    SysGEMDir = dirExe.toLatin1().data();
+    SysGEMDir = dirExe.toStdString();
     SysGEMDir += RESOURCES_DIR;
-    ServerGems3Dir = dirExe.toLatin1().data();
+    ServerGems3Dir = dirExe.toStdString();
     QDir dirUp(dirExe);
     if( dirUp.cdUp() )
          dirExe = dirUp.path(); // + QDir::separator();
-    LocalDir = dirExe.toLatin1().data();
+    LocalDir = dirExe.toStdString();
     UserGEMDir = localDir() + DEFAULT_USER_DIR;
 #endif // __unix
 
@@ -123,12 +123,12 @@ TVisor::TVisor(int c, char *v[]):
       // By default: /Resources in the same dir as the exe file;
       //       /Library/gems3/projects on the same level as the /Gems3-app dir.
     QString dirExe = QCoreApplication::applicationDirPath();
-    SysGEMDir = dirExe.toLatin1().data();
+    SysGEMDir = dirExe.toStdString();
     SysGEMDir += RESOURCES_DIR;
     QDir dirUp(dirExe);
     if( dirUp.cdUp() )
          dirExe = dirUp.path();
-    LocalDir = dirExe.toLatin1().data();
+    LocalDir = dirExe.toStdString();
     UserGEMDir = localDir() + DEFAULT_USER_DIR;
 // cout << SysGEMDir.c_str() << endl;
 // cout << UserGEMDir.c_str() << endl;
@@ -555,10 +555,10 @@ TVisor::toWinCFG()
 
 //    if( pVisorImp->getCellFont() != pVisorImp->getDefaultFont() ) //Qt3to4
 	f_win_ini << "general_font_string\t=\t\"" << 
-	           pVisorImp->getCellFont().toString().toLatin1().data() << "\"" << endl;
+               pVisorImp->getCellFont().toString().toStdString() << "\"" << endl;
 //    if( pVisorImp->getAxisLabelFont() != pVisorImp->getDefaultFont() ) //Qt3to4
 	f_win_ini << "axis_label_font_string\t=\t\"" << 
-	       pVisorImp->getAxisLabelFont().toString().toLatin1().data() << "\"" << endl;
+           pVisorImp->getAxisLabelFont().toString().toStdString() << "\"" << endl;
 
     int win_num = aWinInfo.GetCount();
     f_win_ini << "number_of_windows\t=\t" << win_num << endl;
@@ -960,7 +960,7 @@ TCStringArray readDirs(const char *dir)
         if (f.isDir() && f.fileName() != "." && f.fileName() != "..")
         {
             //          cout << "Adding dir: " << f->fileName() << endl;
-            aFiles.Add((const char *) f.fileName().toLatin1().data());
+            aFiles.Add( f.fileName().toStdString());
         }
         // else 'special file'
     }
@@ -1006,8 +1006,8 @@ TVisor::deleteDBDir(const char *dir)
         f = it.next();;
         if (f.isSymLink() || f.isFile())
         {
-            //cout << "Adding file: " << f.fileName().toLatin1().data() << endl;
-            aFiles.Add((const char *) f.fileName().toLatin1().data());
+            //cout << "Adding file: " << f.fileName().toStdString() << endl;
+            aFiles.Add(f.fileName().toStdString());
         }
         // else 'special file'
     }
@@ -1114,7 +1114,7 @@ TCStringArray TVisor::readPDBDir(const char *dir, const char *filter )
         if (f.isSymLink() || f.isFile())
         {
             // cout << "Adding file: " << f->fileName() << endl;
-            aFiles.Add((const char *) f.fileName().toLatin1().data());
+            aFiles.Add(f.fileName().toStdString());
         }
         // else 'special file'
     }

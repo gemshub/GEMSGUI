@@ -159,7 +159,7 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
           jj = max(0,staticFindRow( nO, jj ));
         pLists[iWin]->item(jj)->setSelected(true);
         atbData[ii].ndxName =
-            pLists[iWin]->item(jj)->text().toLatin1().data();
+            pLists[iWin]->item(jj)->text().toStdString();
         tableInsertRow( atbData[ii] );
     }
 
@@ -195,7 +195,7 @@ InputSystemDialog::~InputSystemDialog()
 
 void InputSystemDialog::getTable( TIArray<tableSetupData>& tab ) const
 {
-  string txt = pTname->text().toLatin1().data();
+  string txt = pTname->text().toStdString();
 
   if( txt == emptiness /*|| txt == short_emptiness*/ )
   aObj[o_ssname].SetString( S_EMPTY, 0, 0 );
@@ -234,7 +234,7 @@ void InputSystemDialog::changeTable(const QItemSelection & selected, const QItem
   // added selected
   foreach( ndx,  selected.indexes()  )
   {
-    string stt = ndx.data(Qt::DisplayRole).toString().toLatin1().data();
+    string stt = ndx.data(Qt::DisplayRole).toString().toStdString();
     nO = wnData[curPage].nObj;
     ndx_row = ndx.row();
     if( nO<0 || curPage >= wnData.GetCount()-1 )
@@ -266,7 +266,7 @@ void InputSystemDialog::tablEdited( int row, int column )
         tbData[row].val =  recTable->item(row, column)->data(Qt::EditRole).toDouble();
         break;
      case 3:
-        tbData[row].unit = recTable->item(row, column)->text().toLatin1().data()[0];
+        tbData[row].unit = recTable->item(row, column)->text().toStdString()[0];
         break;
      default:
          break;
@@ -287,17 +287,17 @@ void InputSystemDialog::CmPrint()
       /*recTable->selectAll();
       QString clipText = createHeader();
       clipText += createString();
-      f << clipText.toLatin1().data();*/
+      f << clipText.toStdString();*/
 
       char buf[200];
 
-      sprintf( buf, "%-10.9s", recTable->horizontalHeaderItem(0)->text().toLatin1().data() );
+      sprintf( buf, "%-10.9s", recTable->horizontalHeaderItem(0)->text().toStdString() );
       f << buf;
-      sprintf( buf, "%-20.19s", recTable->horizontalHeaderItem(1)->text().toLatin1().data() );
+      sprintf( buf, "%-20.19s", recTable->horizontalHeaderItem(1)->text().toStdString() );
       f << buf;
-      sprintf( buf, "%-14.11s", recTable->horizontalHeaderItem(2)->text().toLatin1().data() );
+      sprintf( buf, "%-14.11s", recTable->horizontalHeaderItem(2)->text().toStdString() );
       f << buf;
-      sprintf( buf, "%-6.6s", recTable->horizontalHeaderItem(3)->text().toLatin1().data() );
+      sprintf( buf, "%-6.6s", recTable->horizontalHeaderItem(3)->text().toStdString() );
       f << buf << endl;
 
       for(uint  ii=0; ii<tbData.GetCount(); ii++ )

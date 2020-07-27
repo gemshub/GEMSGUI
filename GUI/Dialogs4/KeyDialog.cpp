@@ -169,7 +169,7 @@ KeyDialog::getKey()
     {
         dynamic_cast<TCModule*>(&aMod[iRt])->setFilter(keyFilter.c_str());
         string res;
-        string s = pList->item(sel)->text().toLatin1().data();
+        string s = pList->item(sel)->text().toStdString();
         //string s = ss;
         uint ln;
         for( uint ii=0, jj=0; ii<rt[iRt].KeyNumFlds(); ii++)
@@ -236,7 +236,7 @@ KeyDialog::allSelectedKeys()
     for( int ii=0; ii<pList->count(); ii++ )
         if( pList->item(ii)->isSelected() )
         {
-         string s = pList->item(ii)->text().toLatin1().data();;
+         string s = pList->item(ii)->text().toStdString();;
          arr.Add(s.c_str());
         }
     return arr;
@@ -398,7 +398,7 @@ TCStringArray RDKeyDialog::allSelectedKeys()
     for( int ii=0; ii<pList->count(); ii++ )
         if( pList->item(ii)->isSelected() )
         {
-         string s = pList->item(ii)->text().toLatin1().data();;
+         string s = pList->item(ii)->text().toStdString();;
          arr.Add(s.c_str());
         }
     return arr;

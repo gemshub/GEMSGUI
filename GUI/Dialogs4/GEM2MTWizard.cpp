@@ -1003,7 +1003,7 @@ void GEM2MTWizard::changeTable(const QItemSelection & selected, const QItemSelec
   // added selected
   foreach( ndx,  selected.indexes()  )
   {
-    string stt = ndx.data(Qt::DisplayRole).toString().toLatin1().data();
+    string stt = ndx.data(Qt::DisplayRole).toString().toStdString();
     tableInsertRow( pgData[cPage].nObj, ndx.row(), stt.c_str() );
   }
   // delete deselected

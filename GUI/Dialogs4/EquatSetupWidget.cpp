@@ -186,7 +186,7 @@ catch( TError& xcpt )
 
 string EquatSetup::getScript() const
 {
-  string res = textScript->toPlainText().toLatin1().data();
+  string res = textScript->toPlainText().toStdString();
   return res;
 }
 
@@ -228,7 +228,7 @@ void EquatSetup::changeTable(const QItemSelection & selected, const QItemSelecti
   // added selected
   foreach( ndx,  selected.indexes()  )
   {
-    string stt = ndx.data(Qt::DisplayRole).toString().toLatin1().data();
+    string stt = ndx.data(Qt::DisplayRole).toString().toStdString();
     tableInsertRow( pgData[cPage].nObj, ndx.row(), stt.c_str() );
   }
   // delete deselected
@@ -292,7 +292,7 @@ string EquatSetup::getStringValue( int nO, int ndx, const char * andName )
          }
     }
 
-    str = textS.toLatin1().data();
+    str = textS.toStdString();
     return str;
 }
 
@@ -350,7 +350,7 @@ void EquatSetup::CmCalc()
    else
    {
      QListWidgetItem* ndx = pLists[cPage]->item(row);
-     string stt = ndx->data(Qt::DisplayRole).toString().toLatin1().data();
+     string stt = ndx->data(Qt::DisplayRole).toString().toStdString();
      tableInsertRow( nO, row, stt.c_str() );
    }
 }
@@ -436,7 +436,7 @@ void EquatSetup::CmAbscissa()
 {
     int nO =  pgData[cPage].nObj;
     QListWidgetItem* ndx = pLists[cPage]->currentItem();
-    string str = ndx->data(Qt::DisplayRole).toString().toLatin1().data();
+    string str = ndx->data(Qt::DisplayRole).toString().toStdString();
 
     eqData.abscissaEquat = getStringValue( nO, pLists[cPage]->currentRow(), str.c_str() );
     if(nO<0)
@@ -452,7 +452,7 @@ void EquatSetup::CmAbscissaAdd()
 {
     int nO =  pgData[cPage].nObj;
     QListWidgetItem* ndx = pLists[cPage]->currentItem();
-    string str = ndx->data(Qt::DisplayRole).toString().toLatin1().data();
+    string str = ndx->data(Qt::DisplayRole).toString().toStdString();
 
     eqData.abscissaLines.Add( getStringValue( nO, pLists[cPage]->currentRow(), str.c_str() ));
     /*if(nO<0)

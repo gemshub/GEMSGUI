@@ -204,7 +204,7 @@ void TTreeModel::setGOcorr(const QModelIndex& index, QString& value, int nO, int
 	           break;   
 	  }
 	QString res = QString("%1").arg(dat);	
-    string txt = res.toLatin1().data();
+    string txt = res.toStdString();
 	aObj[nO].SetString( txt.c_str(), iN, 0 );
 }
 
@@ -433,7 +433,7 @@ bool TTreeModel::setData( const QModelIndex& index, const QVariant& value, int r
            if( nO >= 0 )
 	   {
              QString val = QVariant(value).toString();
-             string txt = val.toLatin1().data();
+             string txt = val.toStdString();
 	
             if( index.column()== 3 ) // + or - (switch all dcomps with phase)
              {   char old_data = aObj[nO].GetStringEmpty( iN, iM )[0];
@@ -465,7 +465,7 @@ void TTreeModel::childChanged(const QModelIndex& index, const QVariant& value, c
 {
     if( index.column()== 3 ) // + or - (switch all dcomps with phase)
     {
-        string txt = QVariant(value).toString().toLatin1().data();
+        string txt = QVariant(value).toString().toStdString();
 
        if( txt[0] == '-' ||
                (( txt[0] == '+' || txt[0] == '*' ) && old_data == '-' ))
@@ -582,7 +582,7 @@ void TTreeView::printList( fstream& ff )
          {
             index = model()->index(row, col, rootIndex() );
             QString value = model()->data(index).toString();
-            ff << value.toLatin1().data() << " ";
+            ff << value.toStdString() << " ";
          }  
     	 ff << endl;
     	 
@@ -592,7 +592,7 @@ void TTreeView::printList( fstream& ff )
              {
                 index = model()->index(rw, col, childIndex );
                 QString value = model()->data(index).toString();
-                ff << value.toLatin1().data() << " ";
+                ff << value.toStdString() << " ";
              }  
         	 ff << endl;
          }

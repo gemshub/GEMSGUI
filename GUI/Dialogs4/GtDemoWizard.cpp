@@ -212,7 +212,7 @@ void GtDemoWizard::CmChangePage2(int)
 string
 GtDemoWizard::getPrKey()
 {
-  string str = lineEditProcesKey->text().toLatin1().data();
+  string str = lineEditProcesKey->text().toStdString();
   return str;
 }
 

@@ -66,7 +66,7 @@ string
 ChangeKeyDialog::getTemplFrom()
 {
  SetFromString();
- string ret = templFrom->text().toLatin1().data();
+ string ret = templFrom->text().toStdString();
  return ret;
 }
 
@@ -74,7 +74,7 @@ string
 ChangeKeyDialog::getTemplTo()
 {
  SetToString();
- string ret = templTo->text().toLatin1().data();
+ string ret = templTo->text().toStdString();
  return ret;
 }
 
@@ -115,7 +115,7 @@ void ChangeKeyDialog::SetToString()
       {
         if( badd1->isChecked())
             ret = "*";
-        part = lTo1->text().toLatin1().data();
+        part = lTo1->text().toStdString();
         ret += part;
        }
      }
@@ -124,12 +124,12 @@ void ChangeKeyDialog::SetToString()
        if(chfirst->isChecked())
          ret = "invcase";
        else
-         ret =  lfirst->text().toLatin1().data();
+         ret =  lfirst->text().toStdString();
        ret += "*";
        if(chlast->isChecked())
          ret += "invcase";
        else
-         ret +=  llast->text().toLatin1().data();
+         ret +=  llast->text().toStdString();
       }
 
       templTo->setText( ret.c_str() );

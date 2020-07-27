@@ -1098,7 +1098,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
       QString EM0 = "EM0", EM1 = "EM1";
       lst = getSelected( "Phases" );
       if( lst.count() > 0 )
-      {   string phname = lst[0].trimmed().toLatin1().data();
+      {   string phname = lst[0].trimmed().toStdString();
 
           dclst = TProfil::pm->DCNamesforPh( phname.c_str() , true );
           // Here may be message if Invalid phase
@@ -1405,7 +1405,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           for(ii=0; ii<lst.count();ii++)
           {
               lst[ii] = lst[ii].trimmed();
-              rowNames.Add(lst[ii].toLatin1().data());
+              rowNames.Add(lst[ii].toStdString());
               ret  += QString("yp[J][%1] =: (Xa[{%2}]>Pa_DS? vP[J]/10: empty());\n").arg(
                     ii).arg( lst[ii]);
           }
@@ -1488,7 +1488,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
        lst = getSelected( "Phases" );
        if( lst.count() < 1 )
          return;
-       string phname = lst[0].trimmed().toLatin1().data();
+       string phname = lst[0].trimmed().toStdString();
        dclst = TProfil::pm->DCNamesforPh( phname.c_str(), true );
        if( dclst.GetCount() < 2 )
          return;
@@ -1524,7 +1524,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
          lst = getSelected( "Phases" );
          if( lst.count() < 1 )
            return;
-         string phname = lst[0].trimmed().toLatin1().data();
+         string phname = lst[0].trimmed().toStdString();
          dclst = TProfil::pm->DCNamesforPh( phname.c_str(), true );
          if( dclst.GetCount() < 2 )
            break;
@@ -1581,7 +1581,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           for( ii=0; ii<lst.count(); ii++)
           {
              M_c1 = lst[ii].trimmed();
-             rowNames.Add(M_c1.toLatin1().data());
+             rowNames.Add(M_c1.toStdString());
              ret += QString(" yp[J][%1]=: (x[{%2}]> 0? \n"
                             "   lg(x[{%2}]/cTau) : empty() ); \n").arg( QString("%1").arg(ii),M_c1);
           }
@@ -1827,7 +1827,7 @@ int  ProcessWizard::getNPoints( int col )
          nP = -1;
       if( (nP < 1 || nP > 9999) && nP != -1 )
       {
-          string str = tIters->horizontalHeaderItem( col )->text().toLatin1().data();
+          string str = tIters->horizontalHeaderItem( col )->text().toStdString();
           vfMessage(this, str.c_str(), "Wrong number of steps - please, check values in this iterator!");
           return nP;
       }

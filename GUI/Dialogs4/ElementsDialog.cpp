@@ -534,7 +534,7 @@ void ElementsDialog::SetICompList()
        for( jj=0; jj<nmbOther; jj++ )
        {
          bb =  bgOther->button(jj);
-         string ttl = bb->text().toLatin1().data();
+         string ttl = bb->text().toStdString();
          if( name == ttl )
          {
           bb->setEnabled( false );
@@ -877,7 +877,7 @@ void ElementsDialog::getTag( string tag, QStandardItem* pdb)
     if( !pdb )
       return;
 
-    string tag1 = pdb->text().toLatin1().data();
+    string tag1 = pdb->text().toStdString();
     tag += tag1;
 
     if( pdb->checkState() == Qt::Checked)
@@ -1154,7 +1154,7 @@ QVariant FileNamesTreeModel::data( const QModelIndex& index, int role ) const
                      res = QString( lineFromIndex(index)->tag.c_str() );
                   else
                      res = QString( lineFromIndex(index)->tag.c_str() );
-                 cout << index.row() << res.toLatin1().data()<< endl;
+                 cout << index.row() << res.toStdString()<< endl;
                  return  res;
              }
       case Qt::ToolTipRole:

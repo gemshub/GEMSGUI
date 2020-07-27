@@ -254,7 +254,7 @@ string CalcDialog::funText(const char * valText )
         res = "empty()"; //No Data value
     }
 
-    string rres = res.toLatin1().data();
+    string rres = res.toStdString();
     return rres;
 }
 

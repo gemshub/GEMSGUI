@@ -219,11 +219,11 @@ void RTparmWizard::getFlags( char flgs[6], string& xName )
 
     if(butP->isChecked())
     {  flgs[6] = 'P';
-       xName = pPun->currentText().toLatin1().data();
+       xName = pPun->currentText().toStdString();
     }
     else
     {  flgs[6] = 'T';
-       xName = pPtun->currentText().toLatin1().data();
+       xName = pPtun->currentText().toStdString();
     }
 
 // Page 2

@@ -188,7 +188,7 @@ void ProcessProgressDialog::slQuestion( void *result, QWidget* par, QString titl
 {
   cout << "Question " <<QThread::currentThreadId() << "  " << pThread   << endl;
   *((int *)result) = vfQuestion( par, 
-		  (const char*)title.toLatin1().data(), (const char*)mess.toLatin1().data());	
+          (const char*)title.toStdString(), (const char*)mess.toStdString());
   ThreadControl::wakeOne();	// let's calc
 }
 */

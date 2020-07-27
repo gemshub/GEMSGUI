@@ -342,7 +342,7 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
 
 
   // get list or record keys
-  string keyFilter = pFilterKey->text().toLatin1().data();
+  string keyFilter = pFilterKey->text().toStdString();
   TCIntArray temp, colSizes;
   TCStringArray keyList;
   int nKeys = rt[nRT].GetKeyList( keyFilter.c_str(), keyList, temp);
@@ -443,7 +443,7 @@ void TVisorImp::openRecordKey( int row, int    )
 
     for(int jj=0; jj<tbKeys->columnCount(); jj++)
     {
-        currentKey += tbKeys->item( row, jj)->text().toLatin1().data();
+        currentKey += tbKeys->item( row, jj)->text().toStdString();
         StripLine(currentKey);
         currentKey +=":";
      }
@@ -456,7 +456,7 @@ void TVisorImp::changeKeyList()
 {
     if( currentNrt >=0 )
     {
-        string filter = pFilterKey->text().toLatin1().data();
+        string filter = pFilterKey->text().toStdString();
         dynamic_cast<TCModule*>(&aMod[currentNrt])->setFilter(filter.c_str());
         defineModuleKeysList( currentNrt );
     }
@@ -809,7 +809,7 @@ void TVisorImp::OpenHelp(const char* file, const char* item1, int page )
        {
           QString res = item1;
           res += QString("_%1").arg(page);
-          string txt = res.toLatin1().data();
+          string txt = res.toStdString();
           HelpWindow::pDia->showDocumentation( file, txt.c_str() );
         }
         else

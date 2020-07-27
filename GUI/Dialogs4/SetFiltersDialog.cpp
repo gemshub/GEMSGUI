@@ -199,25 +199,25 @@ void SetFiltersDialog::getData()
 {
 
     // get IComp
-    data->ic_d.from_templ = cbICsearch->currentText().toLatin1().data();
-    data->ic_d.to_templ = cbICreplace->currentText().toLatin1().data();
+    data->ic_d.from_templ = cbICsearch->currentText().toStdString();
+    data->ic_d.to_templ = cbICreplace->currentText().toStdString();
     // only show
     //tvIClistP->setText( txt );
     //tvIClistD->setText( txt );
 
   // set DComp
-    data->dc_d.from_templ = cbDCsearch->currentText().toLatin1().data();
-    data->dc_d.to_templ = cbDCreplace->currentText().toLatin1().data();
-    data->dc_d.f_script = mleDCfscript->toPlainText().toLatin1().data();
+    data->dc_d.from_templ = cbDCsearch->currentText().toStdString();
+    data->dc_d.to_templ = cbDCreplace->currentText().toStdString();
+    data->dc_d.f_script = mleDCfscript->toPlainText().toStdString();
 
   // set ReacDC
-    data->rd_d.from_templ = cbREsearch->currentText().toLatin1().data();
-    data->rd_d.to_templ = cbREreplace->currentText().toLatin1().data();
-    data->rd_d.f_script = mleREfscript->toPlainText().toLatin1().data();
+    data->rd_d.from_templ = cbREsearch->currentText().toStdString();
+    data->rd_d.to_templ = cbREreplace->currentText().toStdString();
+    data->rd_d.f_script = mleREfscript->toPlainText().toStdString();
 
   // set Phases
-    data->ph_d.from_templ = cbPHsearch->currentText().toLatin1().data();
-    data->ph_d.to_templ = cbPHreplace->currentText().toLatin1().data();
+    data->ph_d.from_templ = cbPHsearch->currentText().toStdString();
+    data->ph_d.to_templ = cbPHreplace->currentText().toStdString();
 
     //data->ph_d.flags[PHcopyL_] = cbPHcopyL->isChecked();
     data->ph_d.flags[PHcopyF_] = cbPHcopyF->isChecked();
@@ -227,9 +227,9 @@ void SetFiltersDialog::getData()
     //data->ph_d.flags[PHcopyY_] = cbPHcopyY->isChecked();
 
    // set Compos
-    data->cm_d.from_templ = cbPCOsearch->currentText().toLatin1().data();
-    data->cm_d.to_templ = cbPCOreplace->currentText().toLatin1().data();
-    data->cm_d.f_script = mlePCOfscript->toPlainText().toLatin1().data();
+    data->cm_d.from_templ = cbPCOsearch->currentText().toStdString();
+    data->cm_d.to_templ = cbPCOreplace->currentText().toStdString();
+    data->cm_d.f_script = mlePCOfscript->toPlainText().toStdString();
 
   // get files list (or reopen files)
   //( RT_SDATA, RT_CONST, X, X, RT_ICOMP, RT_DCOMP, RT_COMPOS,
@@ -262,7 +262,7 @@ void SetFiltersDialog::getFiles()
         pFile = pMod->child( jj );
        if( pFile->isSelected() )
        {
-         string col =pFile->text( 0 ).toLatin1().data();
+         string col =pFile->text( 0 ).toStdString();
          cnt++;
          el_data->selKeywds.Add( col );
        }
@@ -291,7 +291,7 @@ void SetFiltersDialog::setFiles()
       for( jk = 0; jk< nF; jk++ )
       {
         pFile = pMod->child( jk );
-        string col =pFile->text( 0 ).toLatin1().data();
+        string col =pFile->text( 0 ).toStdString();
         isSel = false;
         for(  ii=0; ii<el_data->selCnt[ik]; ii++ )
           if( el_data->selKeywds[jj+ii].find( col ) != string::npos )

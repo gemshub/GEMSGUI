@@ -80,7 +80,7 @@ string KeyProfile::getKey() const
         return ALLKEY;
     int sel = pList->currentRow();
     if( sel != -1 )
-        return string(pList->item(sel)->text().toLatin1().data());
+        return string(pList->item(sel)->text().toStdString());
 
     return string();
 }
@@ -159,7 +159,7 @@ string KeyProfile::getTemplateKey() const
     {
         int sel = pList->currentRow();
         if( sel != -1 )
-            return string(pList->item(sel)->text().toLatin1().data());
+            return string(pList->item(sel)->text().toStdString());
         Error( "New Modelling Project", "No template record selected");
     }
     return string();

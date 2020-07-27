@@ -244,7 +244,7 @@ bool TObjectModel::setData( const QModelIndex &index, const QVariant &value, int
           int iifld = getObjFromModel( index.row(), index.column(), nO, iN, iM);
           if( nO >= 0 &&  flds[iifld].edit == eYes)
 	  {
-        std::string txt = QVariant(value).toString().toLatin1().data();
+        std::string txt = QVariant(value).toString().toStdString();
 	
               if( txt == emptiness /*|| txt == short_emptiness*/ )
 	      aObj[nO].SetString( S_EMPTY, iN, iM );
@@ -405,7 +405,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
 
  void TObjectTable::updateStatus( const QModelIndex & current)
  {
-   std::string txt = current.data(Qt::StatusTipRole).toString().toLatin1().data();
+   std::string txt = current.data(Qt::StatusTipRole).toString().toStdString();
      pVisorImp->SetStatus( txt.c_str());
  }
  
@@ -828,7 +828,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
   if(iN == -1 || iM == -1 || fld.fType != ftRef || fld.edit != eYes )
          return;
   
-  std::string str = index.data(Qt::EditRole).toString().toLatin1().data();
+  std::string str = index.data(Qt::EditRole).toString().toStdString();
   try
   {
          bool patt = false;
@@ -1136,12 +1136,12 @@ void TObjectTable::CmCalc()
   	    //if( rows[it].isEmpty() ) sd 29/10/2008 
   		// continue;
 
-  	    const QStringList cells = rows[it].split('\t', QString::KeepEmptyParts);
+        const QStringList cells = rows[it].split('\t', Qt::KeepEmptyParts);
   	    int cellNum = sel.M1;
   	    const int mLimit = (transpose) ? (sel.M1 + sel.N2-sel.N1) : sel.M2;
   	    for( int cellIt = 0;  cellIt < cells.count() && cellNum <= mLimit; cellIt++, cellNum++) 
   	    {
-          std::string value = (const char*)cells[ cellIt ].toLatin1().data();
+          std::string value = cells[ cellIt ].toStdString();
           strip( value );
   		  if( value.empty() || value == emptiness )
   		    value = S_EMPTY;

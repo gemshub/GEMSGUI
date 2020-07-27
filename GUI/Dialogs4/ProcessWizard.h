@@ -90,7 +90,7 @@ public:
     void   getFlags( char flgs[24] );
 
     string getCalcScript() const
-    { string res = textEquat1->toPlainText().toLatin1().data();
+    { string res = textEquat1->toPlainText().toStdString();
       return res;
     }
     string getOutScript() const
