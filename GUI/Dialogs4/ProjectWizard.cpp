@@ -4,7 +4,6 @@
 // Implementation of ProjectWizard class
 //
 // Copyright (C) 2009  S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -70,7 +69,7 @@ ProjectWizard::ProjectWizard( const char* pkey, char flgs[38], QWidget* parent):
 
     //setFinishEnabled( WizardPage3, true);
     setupUi(this);
-    gstring str1= "GEM-Selektor Project Setup:  ";
+    string str1= "GEM-Selektor Project Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
 

@@ -4,7 +4,6 @@
 // Implementation of SetFiltersDialog class
 //
 // Copyright (C) 2001-2008  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -263,7 +262,7 @@ void SetFiltersDialog::getFiles()
         pFile = pMod->child( jj );
        if( pFile->isSelected() )
        {
-         gstring col =pFile->text( 0 ).toLatin1().data();
+         string col =pFile->text( 0 ).toLatin1().data();
          cnt++;
          el_data->selKeywds.Add( col );
        }
@@ -292,10 +291,10 @@ void SetFiltersDialog::setFiles()
       for( jk = 0; jk< nF; jk++ )
       {
         pFile = pMod->child( jk );
-        gstring col =pFile->text( 0 ).toLatin1().data();
+        string col =pFile->text( 0 ).toLatin1().data();
         isSel = false;
         for(  ii=0; ii<el_data->selCnt[ik]; ii++ )
-          if( el_data->selKeywds[jj+ii].find( col ) != gstring::npos )
+          if( el_data->selKeywds[jj+ii].find( col ) != string::npos )
            {
               isSel = true;
               break;

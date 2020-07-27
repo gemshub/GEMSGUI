@@ -4,7 +4,6 @@
 // Implementation of GemsMainWindow class
 //
 // Copyright (C) 2020  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
@@ -71,7 +70,7 @@ void TVisorImp::error_IPN( std::string err_mess )
 
 void TVisorImp::setCalcClient()
 {
-    qRegisterMetaType<gstring>("gstring");
+    qRegisterMetaType<string>("string");
     try{
 
         cout << "setCalcClient" << endl;

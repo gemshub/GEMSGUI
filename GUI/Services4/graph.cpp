@@ -5,7 +5,6 @@
 // (Plotting system description)
 //
 // Copyright (C) 1996-2001  S.Dmytriyeva, A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -107,7 +106,7 @@ TPlot::TPlot( int aObjX, int aObjY ):
         dY1=dNy;
         dX = aObj[aObjX].GetM();
         nAbs = aObj[aObjX].GetN();
-    } // put graph by gstring
+    } // put graph by string
 
     ErrorIf( dX!=dY, "Graphics demo", "Invalid size of objects.");
 }
@@ -124,11 +123,11 @@ TPlot::TPlot( TPlot& plt, int aFirst ):
 TPlot::~TPlot()
 {}
 
-gstring TPlot::getName( int ii )
+string TPlot::getName( int ii )
 {
     vstr s(40);
     sprintf(s.p, "%s[%u]",aObj[nObjY].GetKeywd(), ii);
-    return gstring(s.p);
+    return string(s.p);
 }
 
 // get point to draw one line
@@ -151,7 +150,7 @@ QPointF TPlot::getPoint( int line, int number, int ndxAbs )
 
         y = aObj[nObjY].GetEmpty( number, line );
     }
-    else    // put graph by gstring
+    else    // put graph by string
     {
         x = aObj[nObjX].GetEmpty( ndxAbs, number );
         y = aObj[nObjY].GetEmpty( line, number );

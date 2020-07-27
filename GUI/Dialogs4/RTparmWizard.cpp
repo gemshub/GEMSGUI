@@ -4,7 +4,6 @@
 // Implementation of RTparmWizard class
 //
 // Copyright (C) 2005-2008  S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -106,7 +105,7 @@ RTparmWizard::RTparmWizard( const char* pkey, char flgs[10], int size[7],
 
 
     setupUi(this);
-    gstring str1= "GEM-Selektor RTparm Setup:  ";
+    string str1= "GEM-Selektor RTparm Setup:  ";
             str1 += pkey;
     setWindowTitle( str1.c_str() );
     stackedWidget->setCurrentIndex (0);
@@ -209,7 +208,7 @@ void   RTparmWizard::getSizes( int size[7] )
     size[2] = pMode->currentIndex();
 }
 
-void RTparmWizard::getFlags( char flgs[6], gstring& xName )
+void RTparmWizard::getFlags( char flgs[6], string& xName )
 {
 // Page 1 - not return
     QString str = pPtun->currentText();

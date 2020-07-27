@@ -344,7 +344,7 @@ void TLMDataType::lm_print_default( double* par, double* /*fvec*/, double *CVM,
  *       nfev  : number of calls to *evaluate
  */
 {
-    gstring fname = pVisor->userGEMDir();
+    std::string fname = pVisor->userGEMDir();
             fname += "fit_func.out";
     double f, y, *t;
     int i, j;

@@ -33,8 +33,8 @@
 //#include "GemsMainWindow.h"
 
 // temporary workaround to make empty value look better
-//const gstring emptiness("---");
-//const gstring short_emptiness("---");
+//const std::string emptiness("---");
+//const std::string short_emptiness("---");
 //const int szSBAR = 16;		// size of TFiled 'Grid' ScrollBar
 
 //--------------------------------------------------------------------------------------
@@ -184,7 +184,7 @@ QString TObjectModel::getDescription( TObject* pObj, int N, int M) const
     if( !pObj )
       return "";
     
-	gstring desc = pObj->GetDescription(N,M);
+    std::string desc = pObj->GetDescription(N,M);
     QString s;
     if( pObj->GetNS()!=1 || pObj->GetMS()!=1 )
         s = QString("%1 [%2,%3] : %4").arg( pObj->GetKeywd(), QVariant(N).toString(), 
@@ -244,7 +244,7 @@ bool TObjectModel::setData( const QModelIndex &index, const QVariant &value, int
           int iifld = getObjFromModel( index.row(), index.column(), nO, iN, iM);
           if( nO >= 0 &&  flds[iifld].edit == eYes)
 	  {
-		gstring txt = QVariant(value).toString().toLatin1().data();
+        std::string txt = QVariant(value).toString().toLatin1().data();
 	
               if( txt == emptiness /*|| txt == short_emptiness*/ )
 	      aObj[nO].SetString( S_EMPTY, iN, iM );
@@ -405,7 +405,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
 
  void TObjectTable::updateStatus( const QModelIndex & current)
  {
-   gstring txt = current.data(Qt::StatusTipRole).toString().toLatin1().data();
+   std::string txt = current.data(Qt::StatusTipRole).toString().toLatin1().data();
      pVisorImp->SetStatus( txt.c_str());
  }
  
@@ -590,7 +590,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
         //   rowSize += horizontalHeader()->height();
     
  //if(  flds.count() > 3 )
- //     gstring(flds[2].pObj->GetKeywd(), 0, 4).find("mCIb") != gstring::npos
+ //     std::string(flds[2].pObj->GetKeywd(), 0, 4).find("mCIb") != std::string::npos
  //    )
  //  cout << "colSize " << colSize  << " rowSize " << rowSize << endl;
 }
@@ -814,8 +814,8 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
     if(iN == -1 || iM == -1 )
      	return;
      
-     //gstring item = fld.pObj->GetFullName(iN,iM); // for old indexation
-     gstring item = fld.pObj->GetHelpLink(iN,iM);
+     //std::string item = fld.pObj->GetFullName(iN,iM); // for old indexation
+     std::string item = fld.pObj->GetHelpLink(iN,iM);
      pVisorImp->OpenHelp( 0, item.c_str());
  }
 
@@ -828,16 +828,16 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
   if(iN == -1 || iM == -1 || fld.fType != ftRef || fld.edit != eYes )
          return;
   
-  gstring str = index.data(Qt::EditRole).toString().toLatin1().data();
+  std::string str = index.data(Qt::EditRole).toString().toLatin1().data();
   try
   {
          bool patt = false;
          //save new SDrefs
-         gstring sd_key;
+         std::string sd_key;
          if( !strcmp( fld.pObj->GetKeywd(), "SDrefs") )
-             sd_key = gstring( TSData::pm->GetKey() );
+             sd_key = std::string( TSData::pm->GetKey() );
 
-         if( str.find_first_of("*?") != gstring::npos )  // pattern
+         if( str.find_first_of("*?") != std::string::npos )  // pattern
          { // Sveta
              str = TSData::pm->GetKeyofRecord( str.c_str(), "Get key", KEY_NEW);
              if( str.empty() )
@@ -852,7 +852,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
              if( !strcmp(fld.pObj->GetKeywd(), "SDrefs") )
              {
                  // setValue();
-                 if( sd_key.find_first_of("*?") == gstring::npos )  // pattern
+                 if( sd_key.find_first_of("*?") == std::string::npos )  // pattern
                      TSData::pm->RecSave( sd_key.c_str(), false );
              }
          }
@@ -905,7 +905,7 @@ void TObjectTable::CmCalc()
   if(  fld.fType == ftCheckBox )
   {
 	// check selection
-	gstring Vals = aUnits[fld.npos].getVals(iM);
+    std::string Vals = aUnits[fld.npos].getVals(iM);
         CalcCheckDialog calc(topLevelWidget(), fld.nO, Vals);
 
     if( calc.exec() )
@@ -914,8 +914,8 @@ void TObjectTable::CmCalc()
       for(int nn=sel.N1; nn<=sel.N2; nn++)
       {
           wIndex = 	index.sibling( nn, sel.M1 );
-          model->setData(wIndex, QString(gstring(Vals, ii, 1).c_str()), Qt::EditRole);
-        // fld.pObj->SetString( gstring(Vals, ii, 1).c_str(), nn, iM);
+          model->setData(wIndex, QString(std::string(Vals, ii, 1).c_str()), Qt::EditRole);
+        // fld.pObj->SetString( std::string(Vals, ii, 1).c_str(), nn, iM);
       }
     }
   }
@@ -1141,8 +1141,8 @@ void TObjectTable::CmCalc()
   	    const int mLimit = (transpose) ? (sel.M1 + sel.N2-sel.N1) : sel.M2;
   	    for( int cellIt = 0;  cellIt < cells.count() && cellNum <= mLimit; cellIt++, cellNum++) 
   	    {
-  		  gstring value = (const char*)cells[ cellIt ].toLatin1().data();
-                  value.strip();
+          std::string value = (const char*)cells[ cellIt ].toLatin1().data();
+          strip( value );
   		  if( value.empty() || value == emptiness )
   		    value = S_EMPTY;
     	  
@@ -1476,7 +1476,7 @@ TCellCheck::TCellCheck( FieldInfo afld, int in, int im, QWidget * parent ):
     
     for(uint ii=0; ii<Vals.length(); ii++)
     {
-        gstring s(Vals, ii, 1);
+        std::string s(Vals, ii, 1);
         addItem ( s.c_str() );
     }
     resize( size().width()*4, size().height() );

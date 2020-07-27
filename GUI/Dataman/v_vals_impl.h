@@ -4,7 +4,6 @@
 // Declaration of TVal class and its child classes
 //
 // Copyright (C) 1996-2001 A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -101,7 +100,7 @@ struct TVal:
 
     /* returns string representation of the cell value
     */
-    gstring GetString(int ndx) const;
+    string GetString(int ndx) const;
     //  bool VerifyString(const char* s);
     /* converts string to the type and puts it into cell
 	returns false on failure
@@ -168,7 +167,7 @@ struct TValFixString:
     {
         return static_cast<char*>(ptr)[ndx*len]=='*';
     }
-    gstring GetString(int ndx) const
+    string GetString(int ndx) const
     {
         vstr ss(len);
         strncpy(ss, static_cast<char*>(ptr)+(ndx*len), len);
@@ -233,7 +232,7 @@ struct TValString:
     {
         return (strcmp(static_cast<char*>(ptr),S_EMPTY)==0);
     }
-    gstring GetString(int /*ndx*/) const
+    string GetString(int /*ndx*/) const
     {
         return (!static_cast<char*>(ptr) ? S_EMPTY: static_cast<char*>(ptr));
     }
@@ -254,7 +253,7 @@ struct TValString:
 
 template<class T>
 inline
-gstring
+string
 TVal<T>::GetString(int ndx) const
 {
     if( IsEmpty(ndx) )
@@ -270,7 +269,7 @@ TVal<T>::GetString(int ndx) const
 
 template<>
 inline
-gstring
+string
 TVal<double>::GetString(int ndx) const
 {
     if( IsEmpty(ndx) )
@@ -289,8 +288,8 @@ template<class T>
 bool
 TVal<T>::SetString(const char* s, int ndx)
 {
-    gstring ss = s;
-    ss.strip();
+    string ss = s;
+    strip( ss );
     if( /*ss.empty() ||*/ ss==S_EMPTY )
     {
         static_cast<T*>(ptr)[ndx] = EMPTY();
@@ -335,18 +334,18 @@ TVal<unsigned char>::SetString(const char* s, int ndx)
 
 template<>
 inline
-gstring
+string
 TVal<char>::GetString(int ndx) const
 {
-    return gstring(1, static_cast<char*>(ptr)[ndx]);
+    return string(1, static_cast<char*>(ptr)[ndx]);
 }
 
 template<>
 inline
-gstring
+string
 TVal<unsigned char>::GetString(int ndx) const
 {
-    return gstring(1, static_cast<char*>(ptr)[ndx]);
+    return string(1, static_cast<char*>(ptr)[ndx]);
 }
 
 
@@ -401,7 +400,7 @@ template<class T>
 bool
 TVal<T>::VerifyString(const char* s, T& v)
 {
-  gstring ss = s;
+  string ss = s;
   ss.strip();
   if( ss==S_EMPTY )
     return true;
@@ -409,7 +408,7 @@ TVal<T>::VerifyString(const char* s, T& v)
     return true;
   T v;
   vstr sv(strlen(s)+1);
-  gstring PAT = PATTERN;
+  string PAT = PATTERN;
   PAT += "%s";
 
   if( sscanf(ss.c_str(), PAT.c_str(), &v, sv.p ) != 1 )

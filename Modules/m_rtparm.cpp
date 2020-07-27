@@ -30,11 +30,11 @@
 TRTParm* TRTParm::pm;
 
 // get key of record
-gstring
+std::string
 TRTParm::GetKeyofRecord( const char *oldKey, const char *strTitle,
                          int keyType )
 {
-    gstring str;
+    std::string str;
     if( keyType == KEY_NEW )
     {
         switch ( vfQuestion3(window(), GetName(),
@@ -368,11 +368,11 @@ TRTParm::MakeQuery()
 
     // for scripts
     TCStringArray namesLines;
-    gstring calcScript;
+    std::string calcScript;
     if( rpp->expr )
      calcScript = rpp->expr;
-    gstring xName = rpp->xNames;
-    gstring yName = rpp->yNames;
+    std::string xName = rpp->xNames;
+    std::string yName = rpp->yNames;
 
     if( !vfRTparmSet( window(), p_key, flgs, size, val, calcScript, xName, yName, namesLines ))
          Error( p_key, "E06RTrem: RTParm record configuration cancelled by the user!" );
@@ -740,9 +740,9 @@ TRTParm::RecordPlot( const char* /*key*/ )
       TCStringArray lnames;
       int ii;
       for( ii=0; ii<rpp->dimXY[1]; ii++ )
-          lnames.Add( gstring(rpp->lNam[ii], 0, MAXGRNAME ));
+          lnames.Add( std::string(rpp->lNam[ii], 0, MAXGRNAME ));
       for( ii=0; ii<rpp->dimEF[1]; ii++ )
-          lnames.Add( gstring( rpp->lNamE[ii], 0, MAXGRNAME ));
+          lnames.Add( std::string( rpp->lNamE[ii], 0, MAXGRNAME ));
       gd_gr = updateGraphWindow( gd_gr, this, plt, rpp->name,
           rpp->xNames, rpp->yNames, lnames );
     }

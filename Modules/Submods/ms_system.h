@@ -184,7 +184,7 @@ class TSyst :
 {
     //RMULTS* mup;
     SYSTEM sy;
-    gstring titler;
+    std::string titler;
 
 protected:
     void phase_data_load();
@@ -260,7 +260,7 @@ public:
     double MolWeight( int N, float *ICaw, double *Smline );
     double MolWeight( int N, double *ICaw, double *Smline );
 
-    const gstring& GetString()
+    const std::string& GetString()
     {
      titler = rt[RT_SYSEQ].PackKey();
      //titler += " : ";

@@ -4,7 +4,6 @@
 // Declaration of windows for EquatSetup class
 //
 // Copyright (C) 2010  S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -708,9 +707,9 @@ wnData.Add( new pagesSetupData("n1lga", o_n1w_lga));//DC activities in equilibri
 
       for(int  k=0; k<TMulti::sm->GetPM()->FIs; k++ )
       {
-          gstring name;
-          name =gstring( TMulti::sm->GetPM()->SF[k]+MAXSYMB, 0, MAXPHNAME);
-          name.strip();
+          string name;
+          name =string( TMulti::sm->GetPM()->SF[k]+MAXSYMB, 0, MAXPHNAME);
+          strip( name );
           wnData.Add( new pagesSetupData("n1bPS", o_n1_bps, k, name.c_str() ));
       }
 //      wnData.Add( new pagesSetupData("n1bPS", o_n1_bps));//bulk compositions of phases [nPSb][nICb] in node 1 - - + +"
@@ -987,9 +986,9 @@ wnData.Add( new pagesSetupData("Fa", o_wo_falp)); //a "Values of the phase stabi
 
 for(int  k=0; k<TMulti::sm->GetPM()->FIs; k++ )
 {
-    gstring name;
-    name =gstring( TMulti::sm->GetPM()->SF[k]+MAXSYMB, 0, MAXPHNAME);
-    name.strip();
+    string name;
+    name =string( TMulti::sm->GetPM()->SF[k]+MAXSYMB, 0, MAXPHNAME);
+    strip( name );
     wnData.Add( new pagesSetupData("bXa", o_wo_bf, k, name.c_str() ));
    //d "Output bulk compositions of multicomponent phases (in moles of Independent Components) "
 }

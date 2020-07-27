@@ -4,7 +4,6 @@
 // Declaration of TFile class and some filename related constants
 //
 // Copyright (C) 1996-2000 S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -21,8 +20,6 @@
 #define _v_file_h_
 
 #include <fstream>
-
-#include "gstring.h"
 
 class GemDataStream;
 

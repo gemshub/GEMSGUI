@@ -4,7 +4,6 @@
 // Implementation of TUnitsList class
 //
 // Copyright (C) 1996-2001  A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -32,10 +31,10 @@
 const char *defVALS = "+-* `";
 
 
-gstring
+string
 sunits::getVals(int m) const
 {
-    if (vals.find('/') == gstring::npos)	// not splitted
+    if (vals.find('/') == string::npos)	// not splitted
         return vals;
 
     size_t pos = 0, p = 0;
@@ -43,17 +42,17 @@ sunits::getVals(int m) const
     for (int ii = 0; ii < m; ii++)
     {
         pos = vals.find('/', pos);
-        if (pos == gstring::npos)
+        if (pos == string::npos)
             //      return defVALS;
-            return (gstring (vals, p, gstring::npos) + " `");	// the last defined vals
+            return (string (vals, p, string::npos) + " `");	// the last defined vals
         p = ++pos;
     }
 
     size_t sp = vals.find('/', pos);
-    if (sp != gstring::npos)
+    if (sp != string::npos)
         sp = sp - pos;
-    // else the rest of the gstring
-    return (gstring (vals, pos, sp) + " `");
+    // else the rest of the string
+    return (string (vals, pos, sp) + " `");
 }
 
 TUnitsList::TUnitsList()
@@ -114,7 +113,7 @@ TUnitsList::fromDAT(istream& visor_dat)
         visor_dat.read(nm, n);
         visor_dat.read((char *) &n, sizeof n);
         visor_dat.read(vl, n);
-        Add(sunits(gstring (nm), gstring (vl)));
+        Add(sunits(string (nm), string (vl)));
         ;
     }
 
@@ -128,8 +127,8 @@ void
 TUnitsList::load(const char *f_units)
 {
     TConfig cnf(f_units, ' ');
-    gstring par;
-    gstring str;
+    string par;
+    string str;
 
     par = cnf.getFirst();
 
@@ -144,7 +143,7 @@ TUnitsList::load(const char *f_units)
 }
 
 int
-TUnitsList::Find(const gstring &s)
+TUnitsList::Find(const string &s)
 {
     for (uint ii = 0; ii < GetCount(); ii++)
         if (elem(ii).name == s)

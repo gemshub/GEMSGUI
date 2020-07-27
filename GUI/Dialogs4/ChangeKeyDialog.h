@@ -4,7 +4,6 @@
 // Declaration of ChangeKeyDialog class
 //
 // Copyright (C) 1996-2008  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -23,7 +22,6 @@
 #include <QDialog>
 
 #include "ui_ChangeKeyDialog4.h"
-#include "gstring.h"
 
 class ChangeKeyDialog : public QDialog, public Ui::ChangeKeyDialogData
 {
@@ -45,8 +43,8 @@ public:
 
     virtual ~ChangeKeyDialog();
 
-    gstring getTemplFrom();
-    gstring getTemplTo();
+    std::string getTemplFrom();
+    std::string getTemplTo();
 
 };
 

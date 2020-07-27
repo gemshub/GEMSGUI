@@ -82,8 +82,8 @@ TProfil::initCalcMode(const char * profileKey)
             genGEMS3k = false,
             brief_mode = false;
     int  makeDump = 0;
-    gstring key_templ;
-    gstring str;
+    std::string key_templ;
+    std::string str;
 
     if( profileKey==nullptr )
     {
@@ -97,7 +97,7 @@ TProfil::initCalcMode(const char * profileKey)
     {
         if( rt[RT_PARAM].Find(profileKey) < 0)
             return false;
-        str = gstring(profileKey);
+        str = std::string(profileKey);
     }
 
     if( str == ALLKEY )
@@ -181,7 +181,7 @@ void TProfil::OpenProfileMode( const char* key,
         {  // part to add files to list
            rt[RT_PARAM].SetKey( key );
            vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
-           gstring fstKeyFld(_fstKeyFld);
+           std::string fstKeyFld(_fstKeyFld);
            StripLine(fstKeyFld);
 
            GetFN( fstKeyFld.c_str() );
@@ -232,23 +232,23 @@ void TProfil::OpenProfileMode( const char* key,
 
 //Making new Modelling Project
 bool TProfil::NewProfileMode(
-   bool remakeRec, gstring& key_templ__ )
+   bool remakeRec, std::string& key_templ__ )
 {
- gstring new_project_dir_name = "";
+ std::string new_project_dir_name = "";
  try
  {
     bool templ_key = false;
 
-    gstring  templ_str;
+    std::string  templ_str;
 AGAIN:
-    gstring  key_str = GetKeyofRecord( "MyWork:My1stProject"/*ALLKEY*/,
+    std::string  key_str = GetKeyofRecord( "MyWork:My1stProject"/*ALLKEY*/,
             "Enter a new record key, please!", KEY_NEW );
     if( key_str.empty() )
       return false; // cancel command
 
     rt[RT_PARAM].SetKey( key_str.c_str() );
     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
-    gstring fstKeyFld(_fstKeyFld);
+    std::string fstKeyFld(_fstKeyFld);
     StripLine(fstKeyFld);
     new_project_dir_name = fstKeyFld;
 
@@ -297,7 +297,7 @@ AGAIN:
 
      rt[RT_PARAM].SetKey( key_str.c_str() );
 //     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
-//     gstring fstKeyFld(_fstKeyFld);
+//     std::string fstKeyFld(_fstKeyFld);
 //     StripLine(fstKeyFld);
 
      if( templ_key == false  )
@@ -306,7 +306,7 @@ AGAIN:
      {
         rt[RT_PARAM].SetKey( templ_str.c_str() );
         vstr _fstKeyFld_t(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
-        gstring fstKeyFld_t(_fstKeyFld_t);
+        std::string fstKeyFld_t(_fstKeyFld_t);
         StripLine(fstKeyFld_t);
 
         InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
@@ -355,11 +355,11 @@ AGAIN:
       contentsChanged = false;
       //delete projct directory, if Project record create error
 // SD oct 2005
-//      gstring fstKeyFld =
-//                gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+//      std::string fstKeyFld =
+//                std::string(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
 //      StripLine(fstKeyFld);
 
-      gstring Path = pVisor->userProfDir();
+      std::string Path = pVisor->userProfDir();
       Path += new_project_dir_name; // fstKeyFld;
       pVisor->deleteDBDir(Path.c_str());
       throw;
@@ -369,23 +369,23 @@ AGAIN:
 
 //Making new Project  (new elements mode)
 bool TProfil::NewProfileModeElements(
-   bool remakeRec, gstring& key_templ )
+   bool remakeRec, std::string& key_templ )
 {
- gstring new_project_dir_name = "";
+ std::string new_project_dir_name = "";
  try
  {
     bool templ_key = false;
 
-    gstring  templ_str;
+    std::string  templ_str;
 AGAIN:
-    gstring  key_str = GetKeyofRecord( "MyWork:My1stProject"/*ALLKEY*/,
+    std::string  key_str = GetKeyofRecord( "MyWork:My1stProject"/*ALLKEY*/,
             "Enter a new record key, please", KEY_NEW );
     if( key_str.empty() )
       return false; // cancel command
 
     rt[RT_PARAM].SetKey( key_str.c_str() );
     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
-    gstring fstKeyFld(_fstKeyFld);
+    std::string fstKeyFld(_fstKeyFld);
     StripLine(fstKeyFld);
     new_project_dir_name = fstKeyFld;
 
@@ -435,7 +435,7 @@ AGAIN:
 
    rt[RT_PARAM].SetKey( key_str.c_str() );
 //     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
-//     gstring fstKeyFld(_fstKeyFld);
+//     std::string fstKeyFld(_fstKeyFld);
 //     StripLine(fstKeyFld);
 
      if( templ_key == false  )
@@ -444,7 +444,7 @@ AGAIN:
      {
         rt[RT_PARAM].SetKey( templ_str.c_str() );
         vstr _fstKeyFld_t(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
-        gstring fstKeyFld_t(_fstKeyFld_t);
+        std::string fstKeyFld_t(_fstKeyFld_t);
         StripLine(fstKeyFld_t);
 
         InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
@@ -497,11 +497,11 @@ AGAIN:
       contentsChanged = false;
       //delete project directory, if Project record create error
 //SD oct 2005
-//      gstring fstKeyFld =
-//                gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+//      std::string fstKeyFld =
+//                std::string(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
 //      StripLine(fstKeyFld);
 
-      gstring Path = pVisor->userProfDir();
+      std::string Path = pVisor->userProfDir();
       Path +=   new_project_dir_name; // fstKeyFld;
       pVisor->deleteDBDir(Path.c_str());
       throw;
@@ -518,7 +518,7 @@ void TProfil::loadSystat( const char *key )
     vstr pkey(81);
     TSysEq* STat = dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
     //  STat->ods_link(0);
-    gstring str;
+    std::string str;
 
     if( key==nullptr )
     {
@@ -529,7 +529,7 @@ void TProfil::loadSystat( const char *key )
            "Existing CSD and equilibria records in project database", KEY_OLD );
         ErrorIf( str.empty(), GetName(), "Operation cancelled!");
     }
-    else str=gstring(key);
+    else str=std::string(key);
     STat->keyTest( str.c_str() );
 
     // get record
@@ -541,7 +541,7 @@ void TProfil::loadSystat( const char *key )
 
     // Test MULTY for change (if new System cfg or T, P - new)
     pmp->pESU = 0;  //  new record was readed
-    gstring keyp = gstring( rt[RT_SYSEQ].UnpackKey(), 0, rt[RT_SYSEQ].KeyLen() );
+    std::string keyp = std::string( rt[RT_SYSEQ].UnpackKey(), 0, rt[RT_SYSEQ].KeyLen() );
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK SD 24/05/2010
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
@@ -565,8 +565,8 @@ void TProfil::deriveSystat()
      MULTI *pmp = multi->GetPM();
      TSysEq::pm->setCalcFlag( false );
 
-    gstring keyp = rt[RT_SYSEQ].UnpackKey();
-    if( keyp.find_first_of( "*?") != gstring::npos )
+    std::string keyp = rt[RT_SYSEQ].UnpackKey();
+    if( keyp.find_first_of( "*?") != std::string::npos )
         Error("SyStat", "Undefined current record!");
     int ret = TSysEq::pm->RecBuild( keyp.c_str(), VF_REMAKE );
 
@@ -601,15 +601,15 @@ void TProfil::newSystat( int mode )
 {
     TSysEq::pm->setCalcFlag( false ); // => pmp->pESU = 0;
 
-    gstring key_str = rt[RT_SYSEQ].PackKey();
-    if( key_str.find("*") != gstring::npos )
+    std::string key_str = rt[RT_SYSEQ].PackKey();
+    if( key_str.find("*") != std::string::npos )
     {
-        key_str = gstring( db->FldKey(0), 0, db->FldLen(0) );
-        key_str.strip();
+        key_str = std::string( db->FldKey(0), 0, db->FldLen(0) );
+        strip( key_str );
         key_str += ":G:MySystem:0:0:1:25:0:";
     }
-    gstring str = key_str;
-    gstring capName = "Please, enter a new record key: ";
+    std::string str = key_str;
+    std::string capName = "Please, enter a new record key: ";
 
 AGAIN:
     str = TSysEq::pm->GetKeyofRecord( str.c_str(),  capName.c_str(), KEY_NEW );
@@ -625,7 +625,7 @@ AGAIN:
     int ret = TSysEq::pm->RecBuild( str.c_str(), mode );
     syst->loadData( true, ret ); // set def and unpack syseq to system
     // Test MULTY for change (if new System cfg or T, P - new)
-    gstring keyp = rt[RT_SYSEQ].UnpackKey();
+    std::string keyp = rt[RT_SYSEQ].UnpackKey();
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
@@ -700,7 +700,7 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
     if( !syst->BccCalculated() )
         Error( "System", "Please, specify bulk composition of the system!");
 
-    gstring keyp = rt[RT_SYSEQ].UnpackKey();
+    std::string keyp = rt[RT_SYSEQ].UnpackKey();
     // new: setting chemical kinetics time counter and variables
     // cout << "kdTime: " << kdTime << "  kTimeStep: " << kTimeStep << "  kTime: " << kTime << endl;
     if( kdTime <= 0.  )
@@ -741,7 +741,7 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
 void TProfil::InitFN( const char * prfName, const char* prfTemplate )
 {
 
-    gstring Path = pVisor->userProfDir();
+    std::string Path = pVisor->userProfDir();
     Path += prfName;
 
     // make directory Path (find system function)
@@ -758,7 +758,7 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
      }
     else // copy records from template project
     {
-       gstring tmpDirPath = pVisor->userProfDir();
+       std::string tmpDirPath = pVisor->userProfDir();
        tmpDirPath += prfTemplate;
 
        TCStringArray aFiles =
@@ -767,21 +767,22 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
        // copy files to new Prifile
      for (uint ii = 0; ii < aFiles.GetCount(); ii++)
      {
-        gstring f_tmp = tmpDirPath;
+        std::string f_tmp = tmpDirPath;
                 f_tmp += "/";
                 f_tmp += aFiles[ii];
-        gstring f_new = Path;
+        std::string f_new = Path;
                 f_new += "/";
-        f_new += aFiles[ii].replace( prfTemplate, prfName);
+        replace( aFiles[ii], prfTemplate, prfName);
+        f_new += aFiles[ii];
 
-       if ( !(gstring( aFiles[ii], 0, aFiles[ii].find("."))
+       if ( !(std::string( aFiles[ii], 0, aFiles[ii].find("."))
                         ==  db->GetKeywd()))
           pVisor->CopyF( f_new.c_str(), f_tmp.c_str() );
     }
 
 /*   // copy template project
 
-        gstring cmd;
+        std::string cmd;
 
 #ifdef __unix
         cmd = "cp -r ";
@@ -804,13 +805,13 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
     // add files to module list
     for (uint ii = 0; ii < aFiles.GetCount(); ii++)
     {
-       if (gstring(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
+       if (std::string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
         {
             for (uint jj = 0; jj < rt.GetCount(); jj++)
-                if (gstring(aFiles[ii], 0, aFiles[ii].find("."))
+                if (std::string(aFiles[ii], 0, aFiles[ii].find("."))
                         == rt[jj].GetKeywd())
                 {
-                  gstring f_new = aFiles[ii];//.replace(
+                  std::string f_new = aFiles[ii];//.replace(
                   //   prfTemplate, prfName);
                   rt[jj].MakeInNewProfile( Path.c_str(), prfName, f_new.c_str() );
                 }
@@ -865,10 +866,10 @@ void TProfil::SetFN()
 	unsigned i, nx=0;
     short j, k=0;
     TCStringArray aFls;
-    gstring s;
+    std::string s;
 
     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
-    gstring fstKeyFld(_fstKeyFld);
+    std::string fstKeyFld(_fstKeyFld);
     StripLine(fstKeyFld);
 
     for( i=0; i<aMod.GetCount(); i++)
@@ -878,7 +879,7 @@ void TProfil::SetFN()
 ///Added after GEM2MT implemented
         if( i == RT_PARAM )
         {
-            s = gstring( rmults->GetMU()->FN[k], 0, MAX_FILENAME_LEN);
+            s = std::string( rmults->GetMU()->FN[k], 0, MAX_FILENAME_LEN);
             if( s[0] == 'i' && s[1] == 'n') // integ file , use old version DB
             { k+=rmults->GetMU()->Nfl[i];
               nx = 1;
@@ -888,7 +889,7 @@ void TProfil::SetFN()
         aFls.Clear();
         for(j=0; j<rmults->GetMU()->Nfl[i+nx]; j++)
         {
-            s = gstring( rmults->GetMU()->FN[k++], 0, MAX_FILENAME_LEN);
+            s = std::string( rmults->GetMU()->FN[k++], 0, MAX_FILENAME_LEN);
             aFls.Add(s);
         }
 

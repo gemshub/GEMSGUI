@@ -30,7 +30,7 @@ class RTparmWizard : public QDialog, public Ui::RTparmWizardData
     Q_OBJECT
 
     bool isDC;
-    gstring calcScript;
+    string calcScript;
     EquatSetup *pageScript;
 
     void 	resetNextButton();
@@ -46,13 +46,13 @@ public:
     virtual ~RTparmWizard();
 
     void   getSizes( int size[7] );
-    void   getFlags( char flgs[10], gstring& xName );
+    void   getFlags( char flgs[10], string& xName );
     void   getFloat( double val[6] );
 
-    gstring getScript() const
+    string getScript() const
     { return pageScript->getScript();
     }
-    TCStringArray getNames( gstring& xName, gstring& yName ) const
+    TCStringArray getNames( string& xName, string& yName ) const
     { return pageScript->getNames(xName, yName); }
 
 protected slots:

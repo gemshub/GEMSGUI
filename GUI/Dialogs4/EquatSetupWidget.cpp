@@ -4,7 +4,6 @@
 // Implementation of EquatSetup class
 //
 // Copyright (C) 2010  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -185,13 +184,13 @@ catch( TError& xcpt )
 
 }
 
-gstring EquatSetup::getScript() const
+string EquatSetup::getScript() const
 {
-  gstring res = textScript->toPlainText().toLatin1().data();
+  string res = textScript->toPlainText().toLatin1().data();
   return res;
 }
 
-TCStringArray EquatSetup::getNames(gstring& xName, gstring& yName) const
+TCStringArray EquatSetup::getNames(string& xName, string& yName) const
 {
     xName = xNam;
     yName = yNam;
@@ -229,7 +228,7 @@ void EquatSetup::changeTable(const QItemSelection & selected, const QItemSelecti
   // added selected
   foreach( ndx,  selected.indexes()  )
   {
-    gstring stt = ndx.data(Qt::DisplayRole).toString().toLatin1().data();
+    string stt = ndx.data(Qt::DisplayRole).toString().toLatin1().data();
     tableInsertRow( pgData[cPage].nObj, ndx.row(), stt.c_str() );
   }
   // delete deselected
@@ -253,12 +252,12 @@ int EquatSetup::tableFindRow( int nO, int ndx)
   return nRow;
 }
 
-gstring EquatSetup::getStringValue( int nO, int ndx, const char * andName )
+string EquatSetup::getStringValue( int nO, int ndx, const char * andName )
 {
     QString textS;
 
-    gstring str = andName;
-    str.strip();
+    string str = andName;
+    strip( str );
     if(cPage == 0)
     {
       if( stData[ndx].ndx == -1 )
@@ -299,7 +298,7 @@ gstring EquatSetup::getStringValue( int nO, int ndx, const char * andName )
 
 void EquatSetup::tableInsertRow( int nO, int ndx, const char * andName )
 {
-    gstring str = getStringValue(  nO, ndx, andName );
+    string str = getStringValue(  nO, ndx, andName );
 
     if( useCalc )
     {
@@ -351,7 +350,7 @@ void EquatSetup::CmCalc()
    else
    {
      QListWidgetItem* ndx = pLists[cPage]->item(row);
-     gstring stt = ndx->data(Qt::DisplayRole).toString().toLatin1().data();
+     string stt = ndx->data(Qt::DisplayRole).toString().toLatin1().data();
      tableInsertRow( nO, row, stt.c_str() );
    }
 }
@@ -437,7 +436,7 @@ void EquatSetup::CmAbscissa()
 {
     int nO =  pgData[cPage].nObj;
     QListWidgetItem* ndx = pLists[cPage]->currentItem();
-    gstring str = ndx->data(Qt::DisplayRole).toString().toLatin1().data();
+    string str = ndx->data(Qt::DisplayRole).toString().toLatin1().data();
 
     eqData.abscissaEquat = getStringValue( nO, pLists[cPage]->currentRow(), str.c_str() );
     if(nO<0)
@@ -453,7 +452,7 @@ void EquatSetup::CmAbscissaAdd()
 {
     int nO =  pgData[cPage].nObj;
     QListWidgetItem* ndx = pLists[cPage]->currentItem();
-    gstring str = ndx->data(Qt::DisplayRole).toString().toLatin1().data();
+    string str = ndx->data(Qt::DisplayRole).toString().toLatin1().data();
 
     eqData.abscissaLines.Add( getStringValue( nO, pLists[cPage]->currentRow(), str.c_str() ));
     /*if(nO<0)

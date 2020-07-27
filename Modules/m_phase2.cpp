@@ -461,12 +461,12 @@ void TPhase::makeReacDCompList( const char *caption, TCStringArray& aDclist,
        aDclist_old.Clear();
        for( i=0; i<nDC; i++ )
        {
-          gstring key_dr = gstring( SM[i], 0, DC_RKLEN );
+          std::string key_dr = std::string( SM[i], 0, DC_RKLEN );
           if( DCS[i] == SRC_DCOMP )
           {
             rt[RT_DCOMP].SetKey( key_dr.c_str() );
             rt[RT_DCOMP].SetFldKey( 3, "*" );
-            key_dr  = gstring(1, DCS[i]);
+            key_dr  = string(1, DCS[i]);
             key_dr += ' ';
             key_dr += rt[RT_DCOMP].UnpackKey();
           }
@@ -475,7 +475,7 @@ void TPhase::makeReacDCompList( const char *caption, TCStringArray& aDclist,
             {
               rt[RT_REACDC].SetKey( key_dr.c_str() );
               rt[RT_REACDC].SetFldKey( 3, "*" );
-              key_dr  = gstring(1, DCS[i]);
+              key_dr  = std::string(1, DCS[i]);
               key_dr += ' ';
               key_dr += rt[RT_REACDC].UnpackKey();
             }
@@ -509,7 +509,7 @@ AGAINRC:
 // Build Phase keys (aPhlist) to be included into the Phase
 void TPhase::makePhaseList( const char *caption, TCStringArray& aPhlist )
 {
-    gstring pkeyrd = "*:*:*:*:*:";
+    std::string pkeyrd = "*:*:*:*:*:";
     TCStringArray aPhlist_old;
 
     aPhlist.Clear();
@@ -519,7 +519,7 @@ void TPhase::makePhaseList( const char *caption, TCStringArray& aPhlist )
        aPhlist_old.Clear();
        for(int i=0; i<php->nlPh; i++ )
        {
-          gstring key_dr = gstring( php->lPh[i], 0, PH_RKLEN );
+          std::string key_dr = std::string( php->lPh[i], 0, PH_RKLEN );
           aPhlist_old.Add( key_dr );
        }
     }
@@ -548,7 +548,7 @@ AGAINRC:
 // Build Phase keys (aIclist) to be included into the Phase
 void TPhase::makeICompList( const char *caption, TCStringArray& aIclist )
 {
-    gstring ikeyrd = "*:*:*:";
+    std::string ikeyrd = "*:*:*:";
     TCStringArray aIclist_old;
 
     aIclist.Clear();
@@ -558,7 +558,7 @@ void TPhase::makeICompList( const char *caption, TCStringArray& aIclist )
        aIclist_old.Clear();
        for(int j=0; j<php->nDC; j++ )
        {
-          gstring key_dr = gstring( php->lICu[j], 0, IC_RKLEN );
+          std::string key_dr = std::string( php->lICu[j], 0, IC_RKLEN );
           aIclist_old.Add( key_dr );
        }
     }
@@ -639,12 +639,12 @@ void TPhase::DetNumbCatAn(TCStringArray& aDclist)
      ( php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ ))
  {
     int pos;
-    gstring spName;
+    std::string spName;
     for(int i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
     {
-      spName = gstring( aDclist[i], MAXSYMB+MAXDRGROUP+2, MAXDCNAME);
+      spName = std::string( aDclist[i], MAXSYMB+MAXDRGROUP+2, MAXDCNAME);
 
-      spName.strip();
+      strip( spName );
       pos = spName.length()-1;
       while( pos>0 && spName[pos] <=  '9' && spName[pos] >= '0' )
           pos--;
@@ -676,7 +676,7 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
 {
    int pos;
    short i, iCat=0, iAn=0, iNs=0, nAn, nCat, nNs;
-   gstring spName;
+   std::string spName;
 
    if( WorkCount )
    {   // pre-proc. loop: determining number of cations, anions and neutral species
@@ -685,8 +685,8 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
       nNs=0;
       for( i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
       {
-         spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
-         spName.strip();
+         spName = std::string( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
+         strip( spName );
          pos = spName.length()-1;
          while( pos>0 && spName[pos] <=  '9' && spName[pos] >= '0' )
              pos--;
@@ -745,8 +745,8 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
    {
      for( i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
      { // Determining if cation or anion
-       spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
-       spName.strip();
+       spName = std::string( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
+       strip( spName );
        pos = spName.length()-1;
        while( pos>0 && spName[pos] <= '9' && spName[pos] >= '0' )
           pos--;
@@ -906,7 +906,7 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
            bp = aDC->dcp->DerB;
            Z = aDC->dcp->Zz;
            Ctype = aDC->dcp->PdcC;
-           form_array.Add( gstring(aDC->dcp->form,0,MAXFORMULA));
+           form_array.Add( std::string(aDC->dcp->form,0,MAXFORMULA));
            cN = aDC->dcp->Comp;
            Fi = aDC->dcp->Expa;
 
@@ -951,7 +951,7 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
                 bp = aRDC->rcp->DerB;
                 Z = aRDC->rcp->Zz;
                 Ctype = aRDC->rcp->PreC;
-                form_array.Add( gstring(aRDC->rcp->form,0,MAXFORMULA));
+                form_array.Add( std::string(aRDC->rcp->form,0,MAXFORMULA));
                 cN = aRDC->rcp->Comp;
                 Fi = aRDC->rcp->Expa;
             }
@@ -1058,7 +1058,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
 //    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     const char *part;
     char nbuf[MAXFORMULA*2], neutbuf[16], H2Obuf[16], tempdbuf[16];
-    gstring Name = "Auto-set ";
+    std::string Name = "Auto-set ";
 
 //  Setup of aqueous phase
     if( !apar[2] )
@@ -1435,7 +1435,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
         db->AddRecordToFile( key, file );
     else
       {
-        gstring mess = key;
+        std::string mess = key;
         mess += "\n";
         mess+=  "This record exists! Overwrite?";
         if( !vfQuestion( window(), "Automatically generated aq or gas/fluid",mess.c_str()) )

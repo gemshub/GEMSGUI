@@ -55,11 +55,11 @@ TGEM2MT::TGEM2MT( uint nrt ):
 }
 
 // get key of record
-gstring
+std::string
 TGEM2MT::GetKeyofRecord( const char *oldKey, const char *strTitle,
                           int keyType )
 {
-    gstring str;
+    std::string str;
 
     if( oldKey == 0 )
     {
@@ -102,7 +102,7 @@ void TGEM2MT::keyTest( const char *key )
 
     if( pVisor->ProfileMode == true )
     { // test project key
-        gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
         StripLine(prfKey);
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
@@ -784,14 +784,14 @@ void TGEM2MT::MakeQuery()
 
     // for scripts
     TCStringArray namesLines;
-    gstring calcScript="";
-    gstring outScript="";
+    std::string calcScript="";
+    std::string outScript="";
     if( mtp->tExpr )
      calcScript = mtp->tExpr;
     if( mtp->gExpr )
       outScript = mtp->gExpr;
-    gstring xName = mtp->xNames;
-    gstring yName = mtp->yNames;
+    std::string xName = mtp->xNames;
+    std::string yName = mtp->yNames;
 
 
     TCIntArray vtk1;
@@ -1112,7 +1112,7 @@ void TGEM2MT::savePoint( )
          strncpy( mtp->notes+1, path.c_str(), MAXFORMULA-1 );
          // save GEM2MT recort
          mtp->iStat = AS_RUN;
-         gstring key_str = db->PackKey();
+         std::string key_str = db->PackKey();
          RecSave( key_str.c_str() );
          //na->GEM_init( path.c_str(), 0, true );//test
        }

@@ -4,7 +4,6 @@
 // Implementation of KeyFilter class
 //
 // Copyright (C) 1996-2008  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -61,7 +60,7 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
         pEdit->setMaxLength( dbKey.FldLen(ii) );
         pEdit->setMaximumWidth( (dbKey.FldLen(ii)+2) * pVisorImp->getCharWidth() );
         pEdit->setMinimumWidth( (dbKey.FldLen(ii)+2) * pVisorImp->getCharWidth() );
-        gstring s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
+        string s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
         StripLine(s);
         pEdit->setText( s.c_str() );
         connect( pEdit, SIGNAL(editingFinished ()), this, SLOT(setKeyLine()) );
@@ -136,16 +135,16 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
 void
 KeyFilter::CmHelp()
 {                               
-   gstring dbName =  DBM;
+   string dbName =  DBM;
    dbName +="_";
-   dbName += gstring(aMod[iRt].GetName());
+   dbName += string(aMod[iRt].GetName());
    pVisorImp->OpenHelp(  GEMS_REKEY_HTML, dbName.c_str() );
 }
 
 void
 KeyFilter::CmOk()
 {
-    if( allowTemplates || SetKeyString().find_first_of("*?") == gstring::npos )
+    if( allowTemplates || SetKeyString().find_first_of("*?") == string::npos )
     {
         accept();
         return;
@@ -154,16 +153,16 @@ KeyFilter::CmOk()
     vfMessage(this, "Key error", "No templates allowed!", vfErr);
 }
 
-gstring
+string
 KeyFilter::SetKeyString()
 {
     //TDBKey dbKey( rt[iRt].GetDBKey() );
-    gstring Key;
+    string Key;
 
     Key = "";
     for( uint ii=0/*, jj=0*/; ii<aEdit.GetCount(); ii++/*, jj=Key.length()*/)
     {
-        gstring s = aEdit[ii].text().toLatin1().data();
+        string s = aEdit[ii].text().toLatin1().data();
         Key += s;
         StripLine(Key);
 //Sveta 04/09/01 ????  if( Key.length()-jj < dbKey.FldLen(ii) )
@@ -200,14 +199,14 @@ KeyFilter::EvGetList()
 
     for( uint ii=0; ii<dbKey.KeyNumFlds(); ii++)
     {
-        gstring s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
+        string s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
         StripLine(s);
         aEdit[ii].setText( s.c_str() );
     }
     setKeyLine();
 }
 
-gstring
+string
 KeyFilter::getFilter()
 {
     //  if( result )

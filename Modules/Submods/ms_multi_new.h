@@ -183,7 +183,7 @@ private:
     // new TKinMet stuff
     void KinMetModLoad();
     bool CompressPhaseIpxt( int kPH );
-    gstring PressSolMod( int nP );
+    string PressSolMod( int nP );
     char *ExtractEG( char *Etext, int jp, int *EGlen, int Nes );
     int find_icnum( char *name, int LNmode );
     int find_dcnum( char *name, int jb, int je, int LNmode, char *stmt  );

@@ -4,7 +4,6 @@
 // Implementation of TVisor class, setup and config functions
 //
 // Copyright (C) 1996-2012 A.Rysin,S.Dmytriyeva,D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -91,10 +90,10 @@ TVisor::TVisor(int c, char *v[]):
         strcpy(rest, RESOURCES_DIR);
 
 		if( work_path[0] == '.' && work_path[1] == '/' )
-			SysGEMDir = gstring(cur_dir) + (work_path+1);
+            SysGEMDir = string(cur_dir) + (work_path+1);
 		else
 		if( work_path[0] != '/' )
-			SysGEMDir = (gstring(cur_dir) + "/") + work_path;
+            SysGEMDir = (string(cur_dir) + "/") + work_path;
 		else
 			SysGEMDir = work_path;
 	}
@@ -208,8 +207,8 @@ TVisor::TVisor(int c, char *v[]):
 
 	// let's try to find resources by path of the executable
 	getcwd(cur_dir, PATH_MAX);
-	LocalDocDir = gstring(cur_dir) + gstring(LocalDocDir,1);
-        RemoteHTML = gstring(cur_dir) + gstring(RemoteHTML,1);
+    LocalDocDir = string(cur_dir) + string(LocalDocDir,1);
+        RemoteHTML = string(cur_dir) + string(RemoteHTML,1);
      }
 #endif
 #endif
@@ -268,7 +267,7 @@ TVisor::Setup()
     }
 
     // check home dir
-    gstring dir = userGEMDir();
+    string dir = userGEMDir();
     QDir userGEM(dir.c_str());
 
     bool firstTimeStart = !userGEM.exists();
@@ -281,9 +280,9 @@ TVisor::Setup()
 
 //#ifdef __unix
          // build Library
-        gstring dirUp = gstring( dir,0, dir.length()-1);
+        string dirUp = string( dir,0, dir.length()-1);
         size_t pos = dirUp.rfind("/");
-        if( pos != gstring::npos )
+        if( pos != string::npos )
         {
           dirUp = dirUp.substr(0,pos);
           QDir userGEMUP(dirUp.c_str());
@@ -301,7 +300,7 @@ TVisor::Setup()
             throw TFatalError("GEMS Init", "Cannot create user GEMS projects directory");
 
         // copy default project
-        gstring cmd;
+        string cmd;
 
 #ifdef __unix
         cmd = "cp -r ";
@@ -311,8 +310,8 @@ TVisor::Setup()
 
         cout << "Creating GEMS user directory:  " << userProfDir().c_str() << endl;
 #else
-gstring sprdir = sysProfDir();
-gstring uprdir = userProfDir();
+string sprdir = sysProfDir();
+string uprdir = userProfDir();
 QDir sysProjD( sprdir.c_str() );
 QDir usrProjD( uprdir.c_str() );
 QString sPD = sysProjD.absolutePath();
@@ -325,7 +324,7 @@ QString uPD = usrProjD.absolutePath();
         cmd += 	qPrintable( usrProjD.toNativeSeparators( uPD ) );
         cmd += "\" /e /y";
 
-        gstring fname = pVisor->userGEMDir();
+        string fname = pVisor->userGEMDir();
                 fname += "out.log";
         ofstream fdbg(fname.c_str());
         fdbg << "Creating GEMS user directory:  " << cmd.c_str() << endl;
@@ -367,7 +366,7 @@ const char SigEND[lnWINSIG + 1] = "sX";
 void
 TVisor::load()
 {
-    gstring fname = sysGEMDir() + OBJECT_INI;
+    string fname = sysGEMDir() + OBJECT_INI;
 // cout << "fname: " << fname.c_str() << endl;
     aObj.load(fname.c_str());
 
@@ -399,7 +398,7 @@ TVisor::load()
 void
 TVisor::toDAT()
 {
-    gstring fname = sysGEMDir();
+    string fname = sysGEMDir();
     fname += VISOBJ_DAT;
 
     ofstream obj_dat(fname.c_str(), ios::binary | ios::out);
@@ -437,7 +436,7 @@ const char *vSigTITLE = "Configurator";
 void
 TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_v*/)
 {
-    gstring fname = sysGEMDir() + VISOBJ_DAT;
+    string fname = sysGEMDir() + VISOBJ_DAT;
 
     // objects' DAT
     ifstream obj_dat(fname.c_str(), ios::binary | ios::in);
@@ -514,7 +513,7 @@ TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_
 void
 TVisor::toModCFG()
 {
-    gstring fname = userProfDir();//userGEMDir();
+    string fname = userProfDir();//userGEMDir();
     fname += GEM_CONF;
 
     fstream f_gems(fname.c_str(), ios::out /*| ios::binary*/);
@@ -529,7 +528,7 @@ TVisor::toModCFG()
 void
 TVisor::fromModCFG()
 {
-    gstring fname = userProfDir();//userGEMDir();
+    string fname = userProfDir();//userGEMDir();
     fname += GEM_CONF;
 
     fstream f_gems(fname.c_str(), ios::in | ios::binary );
@@ -544,7 +543,7 @@ TVisor::fromModCFG()
 void
 TVisor::toWinCFG()
 {
-    gstring fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
+    string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
 
     fstream f_win_ini(fname_ini.c_str(), ios::out );
     ErrorIf(!f_win_ini.good(), "GEMS Init",
@@ -591,7 +590,7 @@ TVisor::toWinCFG()
 void
 TVisor::fromWinCFG()
 {
-    gstring fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
+    string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
 
 #ifdef __unix
     TConfig visor_conf( fname_ini.c_str() );
@@ -600,7 +599,7 @@ TVisor::fromWinCFG()
 #endif
 
     //int win_num = 0;
-    gstring name = visor_conf.getFirst();
+    string name = visor_conf.getFirst();
 
     while ( !name.empty() )
     {
@@ -613,17 +612,17 @@ TVisor::fromWinCFG()
             }
             else if( name == "general_font_string" ) {
                     visor_conf.getcStr(name);
-                    name.strip();
-		    QFont cellFont;
+                    strip( name );
+                    QFont cellFont;
                     cellFont.fromString( name.c_str() );
-		    pVisorImp->setCellFont(cellFont);
+                    pVisorImp->setCellFont(cellFont);
                 }
         	else if( name == "axis_label_font_string" ) {
                     visor_conf.getcStr(name);
-                    name.strip();
-		    QFont axisLabelFont;
+                    strip( name );
+                    QFont axisLabelFont;
                     axisLabelFont.fromString( name.c_str() );
-		    pVisorImp->setAxisLabelFont(axisLabelFont);
+                    pVisorImp->setAxisLabelFont(axisLabelFont);
                 }
                 else if( name == "number_of_windows" ) {
                     //win_num = visor_conf.getcInt();
@@ -632,17 +631,17 @@ TVisor::fromWinCFG()
 				pVisorImp->setConfigAutosave(visor_conf.getcInt());
 			}
             	else if( name == "local_dir" ) {
-				gstring gstr;
+                string gstr;
 				visor_conf.getcStr(gstr);
 				setLocalDir(gstr);
 			}
             	else if( name == "local_doc_dir" ) {
-				gstring gstr;
+                string gstr;
 				visor_conf.getcStr(gstr);
 				setLocalDocDir(gstr);
 			}
             	else if( name == "remote_doc_url" ) {
-				gstring gstr;
+                string gstr;
 				visor_conf.getcStr(gstr);
                                 setRemoteHTML(gstr);
 			}
@@ -653,7 +652,7 @@ TVisor::fromWinCFG()
                ProfileMode = visor_conf.getcInt();
             }
             else if( name == "default_built_in_TDB" ) {
-                gstring gstr;
+                string gstr;
                 visor_conf.getcStr(gstr);
                 setDefaultBuiltinTDB(gstr);
             }
@@ -668,7 +667,7 @@ TVisor::fromWinCFG()
     }
 
     // Window-specific settings
-    gstring fwin_ini_name = /*userGEMDir*/userProfDir() + WIN_CONF;
+    string fwin_ini_name = /*userGEMDir*/userProfDir() + WIN_CONF;
     ifstream f_win_ini(fwin_ini_name.c_str() );
     ErrorIf(!f_win_ini.good(), "GEMS Init",
             "Error reading configurator file (windows.conf)" );
@@ -897,12 +896,12 @@ TVisor::defaultCFG()
     {
         int cnt = 0;
          for (uint ii = 0; ii < aDBFiles.GetCount(); ii++)
-        { gstring flnm = gstring(aDBFiles[ii], 0, aDBFiles[ii].find("."));
+        { string flnm = string(aDBFiles[ii], 0, aDBFiles[ii].find("."));
             if ( flnm == rt[jj].GetKeywd() ||
                  ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
                  ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
             {
-                gstring path = pVisor->sysDBDir();
+                string path = pVisor->sysDBDir();
                 path += aDBFiles[ii];
                 rt[jj].AddFile(path.c_str());
                 cnt++;
@@ -915,19 +914,19 @@ TVisor::defaultCFG()
     TCStringArray aDBDirs = readDirs(pVisor->userProfDir().c_str());
     for (uint ii = 0; ii < aDBDirs.GetCount(); ii++)
     {
-        gstring dir(pVisor->userProfDir());
+        string dir(pVisor->userProfDir());
         dir += aDBDirs[ii];
         aDBFiles = readPDBDir(dir.c_str(), "*.pdb");
 
         for (uint jj = 0; jj < rt.GetCount(); jj++)
         {
           for (uint kk = 0; kk < aDBFiles.GetCount(); kk++)
-          { gstring flnm = gstring(aDBFiles[kk], 0, aDBFiles[kk].find("."));
+          { string flnm = string(aDBFiles[kk], 0, aDBFiles[kk].find("."));
             if ( flnm == rt[jj].GetKeywd() ||
                 ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
                 ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
                 {
-                    gstring path(dir);
+                    string path(dir);
                     path += "/";
                     path += aDBFiles[kk];
                     rt[jj].AddFile(path.c_str());
@@ -1018,10 +1017,10 @@ TVisor::deleteDBDir(const char *dir)
     std::string path;
     for (uint ii = 0; ii < aFiles.GetCount(); ii++)
     {
-        if (gstring(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
+        if (string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
         {
             for (uint jj = 0; jj < rt.GetCount(); jj++)
-                if (gstring(aFiles[ii], 0, aFiles[ii].find("."))
+                if (string(aFiles[ii], 0, aFiles[ii].find("."))
                         == rt[jj].GetKeywd())
                 {
                     path = dir;

@@ -5,7 +5,6 @@
 // ( Provides stream input/output for  visual elements )
 //
 // Copyright (C) 1996-2001  A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -98,14 +97,14 @@ struct PageInfo
 //    TCPage* pPage;
 
     TIArray<FieldInfo> aFieldInfo;
-    gstring name;
+    string name;
 
-    static eFieldType GetType(const gstring& s);
+    static eFieldType GetType(const string& s);
 
     TCWindow& GetWin();
 
     PageInfo(/*const */CWinInfo& wi, istream& is);
-    PageInfo(/*const */CWinInfo& wi, TConfig& cnf, gstring name);
+    PageInfo(/*const */CWinInfo& wi, TConfig& cnf, string name);
     void load(TConfig& c);
 
     void toDAT(ostream& os);

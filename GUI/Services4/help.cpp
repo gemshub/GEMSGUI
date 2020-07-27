@@ -368,10 +368,10 @@ void Helper::showDocumentation(const char* file, const char* item1)
     if (!startAssistant())
         return;
 
-    gstring path = "";//pVisor->docDir();
+    string path = "";//pVisor->docDir();
     if( item1 )
     {  
-        gstring item = item1;
+        string item = item1;
         checkForRef( file, item );
         if( item.empty() )
             Error("Help", item + ": No such item in HTML files!");
@@ -382,7 +382,7 @@ void Helper::showDocumentation(const char* file, const char* item1)
         path += file;
         // adding ".html" if needed
         if( path.rfind( "#" ) == path.npos )
-           if( gstring(path, path.length()-5, 5) != ".html" )
+           if( string(path, path.length()-5, 5) != ".html" )
               path += ".html"; 
     }
     QString path_str = path.c_str();
@@ -411,18 +411,18 @@ void Helper::showDocumentation(const char* file, const char* item1)
 //
 //    Fixed by DS 17/02/2005
 bool
-Helper::checkForRef( const gstring& file, gstring& ref)
+Helper::checkForRef( const string& file, string& ref)
 {
-    gstring fname = docPath;
+    string fname = docPath;
     fname += file;
-//    gstring fname = file;
+//    string fname = file;
 
     ifstream is(fname.c_str());
     if( !is.good() )
         throw FileError();
 
-    gstring line;
-    gstring ref1 = ref;
+    string line;
+    string ref1 = ref;
 
     size_t pos_name;
     size_t  pos_1 = ref1.find('[');
@@ -430,18 +430,18 @@ Helper::checkForRef( const gstring& file, gstring& ref)
     size_t  pos_12 = ref1.find(']');
     size_t  pos_22 = ref1.rfind("]");
     if( pos_2 == pos_1 )
-           pos_2 = pos_22 = gstring::npos;
+           pos_2 = pos_22 = string::npos;
 
-    gstring o_name = ">";
+    string o_name = ">";
             o_name += ref1.substr(0, pos_1 );
-    gstring o_name2 = "";
-    if( pos_2 != gstring::npos  )
+    string o_name2 = "";
+    if( pos_2 != string::npos  )
     {
         o_name2 = o_name;
         o_name2 += "[]";
         o_name2 += ref1.substr( pos_2, pos_22-pos_2 );
     }
-    gstring name = o_name;
+    string name = o_name;
     ref = "";
 
     /// should be case insensitive  !!!
@@ -454,12 +454,12 @@ Helper::checkForRef( const gstring& file, gstring& ref)
             throw FileError();
 
         size_t posf = line.find("a href=\"");  // 08.01.01
-        if( posf == gstring::npos )
+        if( posf == string::npos )
                continue;
         posf += 8;
 
         if( !o_name2.empty() )
-          if( line.find( o_name2 ) != gstring::npos )
+          if( line.find( o_name2 ) != string::npos )
           {  // include line such: ">keywd[][m]"
             ref = line.substr( posf );
             ref = ref.substr( 0, ref.find('\"') );
@@ -467,7 +467,7 @@ Helper::checkForRef( const gstring& file, gstring& ref)
           }
 ID:
         pos_name = line.find( o_name );
-        if( pos_name != gstring::npos )
+        if( pos_name != string::npos )
         {
 
            size_t poss = o_name.length();
@@ -477,7 +477,7 @@ ID:
              continue; // finding full name, not subtring
            ref = line.substr( posf );
            ref = ref.substr( 0, ref.find('\"') );
-           if( pos_1 == gstring::npos )
+           if( pos_1 == string::npos )
             { // all reference finding
                return true;
             }
@@ -486,7 +486,7 @@ ID:
               o_name += ref1.substr( pos_1, pos_12-pos_1+1);
               pos_1 = pos_2;
               pos_12 = pos_22;
-              pos_2 = pos_22 = gstring::npos;
+              pos_2 = pos_22 = string::npos;
               goto ID;
             }
          }
@@ -494,7 +494,7 @@ ID:
            if( !ref.empty() )
            {
               pos_name = line.find( name );
-              if( pos_name == gstring::npos ) // next object, return nearest
+              if( pos_name == string::npos ) // next object, return nearest
                    return true;
            }
 

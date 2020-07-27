@@ -4,7 +4,6 @@
 // Implementation of TConfig
 //
 // Copyright (C) 1996-2001 A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -48,7 +47,7 @@ TConfig::getLine()
         ErrorIf( !ini.good(), "Config", "Error reading file!");
         //  readline(ini,line);
         nLine++;
-        //    line.strip(/*gstring::Both*/);
+        //    line.strip(/*string::Both*/);
         StripLine( line );
         // empty lines and comments are cut out
         if( line.empty() )
@@ -59,8 +58,7 @@ TConfig::getLine()
     return true;
 }
 
-gstring
-TConfig::readSectionName()
+string TConfig::readSectionName()
 {
     //int cpos;
     while( 1 )
@@ -80,12 +78,12 @@ TConfig::readSectionName()
 
     sec_beg = cpos;
     ssec_beg = 0;
-    gstring sec(line, 1, ii-1);
+    string sec(line, 1, ii-1);
     StripLine(sec);
     return sec;
 }
 
-gstring
+string
 TConfig::readSubSectionName()
 {
     //int cpos;
@@ -108,12 +106,12 @@ TConfig::readSubSectionName()
         throw EBadSection();
 
     ssec_beg = cpos;
-    gstring sec(line, 1, ii-1);
+    string sec(line, 1, ii-1);
     StripLine(sec);
     return sec;
 }
 
-gstring
+string
 TConfig::GetFirstSubSection()
 {
     reset(sec_beg);
@@ -122,7 +120,7 @@ TConfig::GetFirstSubSection()
     return GetNextSubSection();
 }
 
-gstring
+string
 TConfig::GetNextSubSection()
 {
     return readSubSectionName();
@@ -155,9 +153,9 @@ TConfig::findParam(const char* par)
     // speedup if getNext was previous &
     // intruding loopback if repeated!!!
     //  int pos = getName();
-    //  if( pos != 0  &&  gstring(line,pos) == par )
+    //  if( pos != 0  &&  string(line,pos) == par )
     //    return true;
-    gstring s;
+    string s;
     do
     {
         s = getNext();
@@ -182,12 +180,12 @@ TConfig::findParam(const char* par)
 
 // sets Section name for getFirst(), getNext(), get...()
 bool
-TConfig::SetSection(const gstring& s)
+TConfig::SetSection(const string& s)
 {
     reset();
     if( !s.empty() )
     {
-        gstring ss;
+        string ss;
         do
         {
             ss = readSectionName();
@@ -200,7 +198,7 @@ TConfig::SetSection(const gstring& s)
     return true;
 }
 
-gstring
+string
 TConfig::getFirst()
 {
     reset( ((ssec_beg!=0) ? ssec_beg : sec_beg) );
@@ -208,7 +206,7 @@ TConfig::getFirst()
     return getNext();
 }
 
-gstring
+string
 TConfig::getNext()
 {
     if( !getLine() )
@@ -218,11 +216,11 @@ TConfig::getNext()
 
     size_t pos = getName();
     if( pos != 0 )
-        return gstring(line,0,pos);
+        return string(line,0,pos);
     return "";
 }
 
-gstring
+string
 TConfig::getToken()
 {
     unsigned pos = valPos;
@@ -245,7 +243,7 @@ CONT_SEARCH:
 
     if( valPos==line.length() && space=='"')	// new line within quotes
     {
-        gstring line2;
+        string line2;
         u_getline(ini, line2, '\n');
         if( ini.eof() )
             goto BREAK;
@@ -259,10 +257,10 @@ BREAK:
     {
         space = ' ';
         valPos++;
-        return gstring(line, pos, valPos-pos-1);
+        return string(line, pos, valPos-pos-1);
     }
 
-    return gstring(line, pos, valPos-pos);
+    return string(line, pos, valPos-pos);
 }
 
 
@@ -271,14 +269,14 @@ BREAK:
 int
 TConfig::getcInt()
 {
-    gstring val(line,valPos,gstring::npos);
+    string val(line,valPos,string::npos);
 
     return atoi(val.c_str());
 }
 
-//--- simple gstring ----
+//--- simple string ----
 bool
-TConfig::getcStr(gstring& str)
+TConfig::getcStr(string& str)
 {
     str = getToken();
 
@@ -290,7 +288,7 @@ TConfig::getcVals(int n, int vals[])
 {
     for( int ii=0; ii<n; ii++ )
     {
-        gstring st = getToken();
+        string st = getToken();
         vals[ii] = atoi(st.c_str());
     }
 
@@ -298,7 +296,7 @@ TConfig::getcVals(int n, int vals[])
 }
 
 bool
-TConfig::getcStrings(int n, gstring strs[])
+TConfig::getcStrings(int n, string strs[])
 {
     for( int ii=0; ii<n; ii++ )
         strs[ii] = getToken();
@@ -315,14 +313,14 @@ TConfig::getInt(const char* par, int def)
     if( !findParam(par) )
         return def;
 
-    gstring val(line, valPos, gstring::npos);
+    string val(line, valPos, string::npos);
 
     return atoi(val.c_str());
 }
 
-//--- simple gstring ----
+//--- simple string ----
 bool
-TConfig::getStr(const char* par, gstring& str, char* def)
+TConfig::getStr(const char* par, string& str, char* def)
 {
     if( !findParam(par) )
     {
@@ -350,7 +348,7 @@ TConfig::getVals(const char* par, int n, int vals[], int defs[])
 
     for( int ii=0; ii<n; ii++ )
     {
-        gstring st = getToken();
+        string st = getToken();
         vals[ii] = atoi(st.c_str());
     }
 
@@ -358,7 +356,7 @@ TConfig::getVals(const char* par, int n, int vals[], int defs[])
 }
 
 bool
-TConfig::getStrings(const char* par, int n, gstring strs[], char* defs[])
+TConfig::getStrings(const char* par, int n, string strs[], char* defs[])
 {
     if( !findParam(par) )
     {

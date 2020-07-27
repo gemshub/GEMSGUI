@@ -498,7 +498,7 @@ void TFormula::SetFormula( const char * StrForm )
 
     fo_clear();
 
-    aFormula = gstring(StrForm);
+    aFormula = std::string(StrForm);
     if( aFormula.empty() )
         return;
 
@@ -507,7 +507,7 @@ void TFormula::SetFormula( const char * StrForm )
     len = ( len < ti )? len: ti;
     ErrorIf( !len, "TFormula", "E32FPrun: Null length of the formula string");
 
-    gstring fbuf = gstring( StrForm, 0, len );
+    std::string fbuf = std::string( StrForm, 0, len );
     TIArray<ICTERM> itt_;
 
     Formuan aFa( fbuf.c_str() );
@@ -580,10 +580,10 @@ void TFormula::TestIC( const char* key, int N, char *ICsym )
         }
         if( jj==-1 )
         {
-            gstring msg = "IComp: ";
-            msg += gstring(ICS.p, 0, MAXICNAME+MAXSYMB );
+            std::string msg = "IComp: ";
+            msg += std::string(ICS.p, 0, MAXICNAME+MAXSYMB );
             msg += "\n in formula in DComp/ReacDC record: \n";
-            msg += gstring( key, 0, DC_RKLEN);
+            msg += std::string( key, 0, DC_RKLEN);
 
             Error( "E37FPrun: Invalid symbol ", msg.c_str() );
         }
@@ -712,7 +712,7 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
     if( ii < aCn.GetCount() )
         if( fabs( (aZ - tt) ) > 1e-6 )
         {
-            gstring str = " in the formula: ";
+            std::string str = " in the formula: ";
             str +=  aFormula;
             str += "\n calculated charge: ";
             vstr   buf(40);
@@ -724,7 +724,7 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
 }
 
 // Get a formula with index nCk from the formula list Cfor (L is total number of formulae in the list)
-gstring TFormula::form_extr( int nCk, int L, char *Cfor )
+std::string TFormula::form_extr( int nCk, int L, char *Cfor )
 {
     int i, len;
     char  *Fbg;
@@ -746,7 +746,7 @@ gstring TFormula::form_extr( int nCk, int L, char *Cfor )
 
     ErrorIf( !len, "Formula", "E36FPrun: Invalid formula length!" );
 
-    gstring rez( Fbg, 0, len );
+    std::string rez( Fbg, 0, len );
     return rez;
 }
 

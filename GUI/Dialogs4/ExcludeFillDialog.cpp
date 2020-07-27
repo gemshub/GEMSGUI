@@ -4,7 +4,6 @@
 // Implementation of ExcludeFillDialog class
 //
 // Copyright (C) 1996-2008   S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -79,7 +78,7 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
 
     LineEdit = new QLineEdit( this );
     LineEdit->setValidator( new QDoubleValidator( LineEdit ) );
-    // vstr buf(200);  sprintf( buf, "%g", fill_data ); LineEdit->setText( trUtf8( buf.p ) );
+    // vstr_buf(200);  sprintf( buf, "%g", fill_data ); LineEdit->setText( trUtf8( buf.p ) );
     QString str;
     LineEdit->setText( str.setNum( fill_data, 'g' ));
     editBox->addWidget( LineEdit );

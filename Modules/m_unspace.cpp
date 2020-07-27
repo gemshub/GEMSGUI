@@ -56,11 +56,11 @@ TUnSpace::TUnSpace( uint nrt ):
 
 
 // get key of record
-gstring
+std::string
 TUnSpace::GetKeyofRecord( const char *oldKey, const char *strTitle,
                           int keyType )
 {
-    gstring str;
+    std::string str;
 
     if( oldKey == 0 )
     {
@@ -103,7 +103,7 @@ void TUnSpace::keyTest( const char *key )
 
     if( pVisor->ProfileMode == true )
     { // test project key
-        gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
         StripLine(prfKey);
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||

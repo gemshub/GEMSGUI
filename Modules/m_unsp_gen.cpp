@@ -505,7 +505,7 @@ void TUnSpace::init_analyse( )
   // Get full matrix A
   // load formulae
   TIArray<TFormula> aFo;
-  gstring form;
+  std::string form;
   int ii;
 
   for( ii=0; ii<TRMults::sm->GetMU()->L; ii++ )
@@ -618,7 +618,7 @@ TUnSpace::RecordPlot( const char* /*key*/ )
     {
       TCStringArray lnames;
       for(int  ii=0; ii<usp->dimXY[1]+usp->dimEF[1]; ii++ )
-          lnames.Add( gstring(usp->lNam[ii], 0, MAXGRNAME ));
+          lnames.Add( std::string(usp->lNam[ii], 0, MAXGRNAME ));
       gd_gr = updateGraphWindow( gd_gr, this, plt, usp->name,
           usp->xNames, usp->yNames, lnames, ISOLINES );
     }

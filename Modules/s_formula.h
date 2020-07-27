@@ -127,7 +127,7 @@ class TFormula  // description of disassembled formula token
     TOArray<short> aVal;  // list of valence numbers
     //TIArray<MOITERM> moit_;
 
-    gstring aFormula;  // analayzed formula
+    std::string aFormula;  // analayzed formula
 
 protected:
 
@@ -175,7 +175,7 @@ int Fmwtz( double &Z, double &mW, double &eSm, short *lAn, double &Nj );
     void TestIC( const char *key, int N, char *ICsym );
     void Stm_line( int N, double *Sml, char *ICsym, short *ICval );
     void Reset();
-    gstring form_extr( int nCk, int L, char *Cfor );
+    std::string form_extr( int nCk, int L, char *Cfor );
 };
 
 

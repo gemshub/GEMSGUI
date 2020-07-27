@@ -4,7 +4,6 @@
 // Implementation of TCModuleImp class
 //
 // Copyright (C) 1996-2001  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -43,7 +42,7 @@ TCModuleImp::TCModuleImp(size_t irt, int page, int aviewmode):
    //(void)statusBar();
     setAttribute( Qt::WA_DeleteOnClose );
 
-    gstring s = rMod.GetName();
+    std::string s = rMod.GetName();
     s += " :: ";
     rMod.SetTitle();
     s += rMod.GetString();
@@ -80,7 +79,7 @@ size_t TCModuleImp::rtNumRecord() const
         return   rMod.rtNum();
 }
 
-gstring TCModuleImp::iconFile() const
+std::string TCModuleImp::iconFile() const
 {
     if( rMod.IsSubModule() )
         return  aMod[RT_SYSEQ].GetIcon();
@@ -135,7 +134,7 @@ void TCModuleImp::Update(bool force)
         return;
 
     pWin->Update();
-    gstring s = rMod.GetName();
+    std::string s = rMod.GetName();
     s += " :: ";
     s += rMod.GetString();
     SetCaption( s.c_str() );

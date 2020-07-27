@@ -130,7 +130,7 @@ const char* TSData::GetHtml()
 
 void TSData::RecordPrint( const char* /*key*/ )
 {
-   gstring text_fmt = "line %s \"SDref record: \", %s rkey, %11s date, %6s time\n"
+   std::string text_fmt = "line %s \"SDref record: \", %s rkey, %11s date, %6s time\n"
                       "line %s \"\"\n"
                       "line %s \"Authors: \", %s #SDauth\n"
                       "line %s \"Title: \", %s #SDtitl\n"
@@ -169,17 +169,17 @@ void TSData::CopyRecords( const char *prfName, TCStringArray& SDlist )
       RecInput( SDlist[ii].c_str() );
 
       // changing record key
-      gstring str= gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+      std::string str= std::string(db->FldKey( 2 ), 0, db->FldLen( 2 ));
 
       // we can change/add only one last (7) symbol
       // first (6) critical for scripts
       ChangeforTempl( str, "*", "*_", db->FldLen( 2 ));
       str += ":";
-      gstring str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
-      str1.strip();
+      std::string str1 = std::string(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+      strip( str1 );
       str = str1 + ":" + str;
-      str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
-      str1.strip();
+      str1 = std::string(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+      strip( str1 );
       str = str1 + ":" + str;
 
       //Point SaveRecord
@@ -205,17 +205,16 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
     if( ! MessageToSave() )
         return;
 
-    vstr key( db->KeyLen(), key_);
     TDBKey dbKey(db->GetDBKey());
-    dbKey.SetKey(key);
-    gstring fld2 = gstring(dbKey.FldKey(2), 0, dbKey.FldLen(2));
-    fld2.strip();
+    dbKey.SetKey(key_);
+    std::string fld2 = std::string(dbKey.FldKey(2), 0, dbKey.FldLen(2));
+    strip( fld2 );
     fld2 += "*";
     cout << fld2.c_str() << endl;
     dbKey.SetFldKey(2,fld2.c_str());
-    gstring str_key( dbKey.UnpackKey(), 0, db->KeyLen());
+    std::string str_key( dbKey.UnpackKey(), 0, db->KeyLen());
     RecStatus iRet = db->Rtest( str_key.c_str(), 1 );
-    gstring msg;
+    std::string msg;
 
     switch( iRet )
     {
@@ -234,7 +233,7 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
             msg +=  GetName();
             msg += ": Data record not found, \n"
                    " key  '";
-            msg += gstring( key, 0, db->KeyLen() );
+            msg += std::string( key_, 0, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked.\n";
             Error( GetName(), msg.c_str() );
         }
@@ -244,7 +243,7 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
         msg += GetName();
         msg += " is corrupt,\n"
                "Data record key '";
-        msg += gstring( key, 0, db->KeyLen() );
+        msg += std::string( key_, 0, db->KeyLen() );
         msg += "'\n Try to backup/restore or compress files in this database chain!";
         Error( GetName(),  msg.c_str() );
     }

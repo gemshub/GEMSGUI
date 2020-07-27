@@ -47,8 +47,8 @@ const char  splitRow = '\n';
 const char  splitCol = '\t';
 #endif
 
-const gstring emptiness("---");
-//const gstring short_emptiness("---");
+const string emptiness("---");
+//const string short_emptiness("---");
 
 struct Selection {
     int N1;
@@ -66,7 +66,7 @@ struct Selection {
 
 };
 
-//inline gstring visualizeEmpty(const gstring& text);
+//inline string visualizeEmpty(const string& text);
 //inline int wdF(eFieldType ft, int npos, eEdit edit );
 //inline int htF(eFieldType ft, int ht);
 //===========================================
@@ -306,7 +306,7 @@ class TCellCheck:
 {
     Q_OBJECT
 
-    gstring Vals;
+    string Vals;
     int startIndex;
 
 protected:
@@ -375,7 +375,7 @@ public:
 };
 
 inline
-gstring visualizeEmpty(const gstring& text)
+string visualizeEmpty(const string& text)
 {
     return (text==S_EMPTY) ? emptiness : text;
 }

@@ -657,11 +657,11 @@ void TRMults::PHmake()
 void TRMults::LoadRmults( bool NewRec, bool changePhases )
 {
     int file;
-    //gstring AqKey("a:*:*:*:*:");
+    //string AqKey("a:*:*:*:*:");
     TCStringArray AqKey;
-    //gstring PrKey("g:*:*:*:*:");
+    //string PrKey("g:*:*:*:*:");
     TCStringArray GasKey;
-    //gstring FluKey;
+    //string FluKey;
     char amod = SM_AQDAV;    // Added KD 25.01.02
     char gmod = SM_IDEAL;    // Added KD 16.06.03
     float aparam[8]/*, gparam[4]*/;
@@ -686,7 +686,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
         amod = mu.PmvAq;
         if( mu.nAq >= 0)
         {
-            //AqKey.Add( gstring( mu.SF[mu.nAq], 0, PH_RKLEN ));
+            //AqKey.Add( string( mu.SF[mu.nAq], 0, PH_RKLEN ));
             if( amod == SM_AQDH3 && aparam[0] < 1e-9 )
             {  // To use aq models from old versions
                 aparam[0] = 0.064;
@@ -699,7 +699,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
         gmod = mu.PmvGas;
         /*if( mu.nGas >= 0 )
         {
-            GasKey.Add( gstring( mu.SF[mu.nGas], 0, PH_RKLEN ) );
+            GasKey.Add( string( mu.SF[mu.nGas], 0, PH_RKLEN ) );
         }
         else {
              GasKey.Clear();// ="";
@@ -708,24 +708,24 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
         {
             //aqueous phase
             if(  mu.SF[kk][0] =='a' )
-                AqKey.Add( gstring(mu.SF[kk], 0, PH_RKLEN));
+                AqKey.Add( string(mu.SF[kk], 0, PH_RKLEN));
             //gaseous phase
             else if(  mu.SF[kk][0] =='g' || mu.SF[kk][0] =='f' )
-                GasKey.Add( gstring(mu.SF[kk], 0, PH_RKLEN));
+                GasKey.Add( string(mu.SF[kk], 0, PH_RKLEN));
             else break;
         }
 
     }
-    gstring prfName = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
+    string prfName = string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
     StripLine( prfName );
 
     if( changePhases || mu.PmvAq == S_ON || mu.PmvGas == S_ON )
     {
-        gstring  AqKey1 = "a:*:*:*:*:";
+        string  AqKey1 = "a:*:*:*:*:";
         if(AqKey.GetCount()>0)
             AqKey1 = AqKey[0];
 
-        gstring  GasKey1 = "g:*:*:*:*:";
+        string  GasKey1 = "g:*:*:*:*:";
         if(GasKey.GetCount()>0)
             GasKey1 = GasKey[0];
 
@@ -937,7 +937,7 @@ AGAIN:  anRPhase = vfMultiChoiceSet(window(), aKeysList, msg1.c_str(), anRPhase 
 
 /*
 // Select aqueous phase from available or make default
-gstring TRMults::SelectAqPhase(const char * dfKey )
+string TRMults::SelectAqPhase(const char * dfKey )
 {
     int i, sel=0;
     TCStringArray aPhaseList;
@@ -987,7 +987,7 @@ AGAIN:  i = vfChoice(window(), aPhaseList,
 }
 
 // Select gaseous phase from all or make default
-gstring TRMults::SelectGasPhase(const char * dfKey )
+string TRMults::SelectGasPhase(const char * dfKey )
 {
     int i, sel=0;
     TCStringArray aPhaseList;
@@ -1062,7 +1062,7 @@ void TRMults::TestIComp()
 {
     int  ii, j, i, ij;
     TFormula aFo;
-    gstring form;
+    string form;
 
     // test formules React&DComp
     for( ii=0; ii<mu.L; ii++ )
@@ -1085,10 +1085,10 @@ void TRMults::TestIComp()
                     ij++;
             if( !ij )
             {
-                gstring msg= "IComp: ";
-                msg += gstring(aCMP->bcp->SB[i], 0,MAXICNAME+MAXSYMB );
+                string msg= "IComp: ";
+                msg += string(aCMP->bcp->SB[i], 0,MAXICNAME+MAXSYMB );
                 msg += "\n in Compos record: \n";
-                msg += gstring(mu.SA[j], 0, BC_RKLEN );
+                msg += string(mu.SA[j], 0, BC_RKLEN );
 
                 Error( "Invalid IComp", msg.c_str());
             }

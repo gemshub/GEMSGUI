@@ -4,7 +4,6 @@
 // Implementation of TReadData class
 //
 // Copyright (C) 2001  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -57,11 +56,11 @@ TReadData::TReadData(const char *sd_key,  unsigned int nrt, const char *fmt_text
                pose = strchr( pose+1, '#');
             }
             if( !pose )
-            {  gstring str_err = "Invalid condition: \n";
+            {  string str_err = "Invalid condition: \n";
                str_err += input;
                Error( key_format.c_str(), str_err.c_str() );
             }
-            mScript = gstring( input, 0, pose-input );
+            mScript = string( input, 0, pose-input );
             input = pose+2;
             rpn.GetEquat( const_cast<char *>(mScript.c_str()) );
    }
@@ -94,7 +93,7 @@ TReadData::getFormat()
        while( isdigit(input[i]))
                i++;
        if( input[i] != 's' )
-       {  gstring str_err = "Invalid format (must be '%nns'): \n";
+       {  string str_err = "Invalid format (must be '%nns'): \n";
                 str_err += input;
          Error( key_format.c_str(), str_err.c_str() );
        }
@@ -103,7 +102,7 @@ TReadData::getFormat()
         sscanf(input+1, "%d", &size );
        }
        aFmts.Add( new RFormat( read_r, size,
-               gstring( input, 0, i+1) ) );
+               string( input, 0, i+1) ) );
        input+=i+1;
        break;
        }
@@ -113,7 +112,7 @@ TReadData::getFormat()
          aFmts.Add( new RFormat( irec_r, 0, "" ));
          input+=4;
        } else
-       {gstring str_err = "Invalid format (must be IREC): \n";
+       {string str_err = "Invalid format (must be IREC): \n";
                 str_err += input;
          Error( key_format.c_str(), str_err.c_str() );
        }
@@ -124,7 +123,7 @@ TReadData::getFormat()
          aFmts.Add( new RFormat( empty_r, 0, S_EMPTY ));
          input+=5;
        } else
-         { gstring str_err = "Invalid format (must be EMPTY): \n";
+         { string str_err = "Invalid format (must be EMPTY): \n";
                 str_err += input;
            Error( key_format.c_str(), str_err.c_str() );
           }
@@ -137,10 +136,10 @@ TReadData::getFormat()
                input[i] != '[' && input[i] != '\0'&&
                input[i] != '\n')
            i++;
-        gstring str = gstring( input, 0, i );
+        string str = string( input, 0, i );
         int data = aObj.Find( str.c_str() );
         if( data == -1 )
-        {  gstring str_err = "Invalid object name: \n";
+        {  string str_err = "Invalid object name: \n";
             str_err += str;
            Error( key_format.c_str(), str_err.c_str() );
         }
@@ -183,17 +182,17 @@ TReadData::getFormat()
        input++;
        char* pose = strchr( input, '\"');
        if( !pose )
-       {  gstring str_err = "Invalid string ( left simbol '\"'): \n";
+       {  string str_err = "Invalid string ( left simbol '\"'): \n";
               str_err += input;
           Error( key_format.c_str(), str_err.c_str() );
        }
        aFmts.Add( new RFormat( string_r, 0,
-                   gstring( input, 0, pose-input ) ));
+                   string( input, 0, pose-input ) ));
        input = pose+1;
        }
        break;
    default:
-      {  gstring str_err = "Invalid format: \n";
+      {  string str_err = "Invalid format: \n";
          str_err += input;
          Error( key_format.c_str(), str_err.c_str() );
       }
@@ -225,7 +224,7 @@ void
 TReadData::getData( bool isList )
 {
  int i, data;
- gstring str;
+ string str;
  uint ii=0, jj=0;
 
  if( isList )
@@ -233,7 +232,7 @@ TReadData::getData( bool isList )
 
  if( *input != '#') // special world
  {
-   gstring str_err = "Must be #: \n";
+   string str_err = "Must be #: \n";
    str_err += input;
    Error( key_format.c_str(), str_err.c_str() );
  }
@@ -243,14 +242,14 @@ TReadData::getData( bool isList )
            && input[i] != '\t'&&
            input[i] != '[' && input[i] != '\0'&& input[i] != '\n')
  i++;
- str = gstring( input, 0, i );
+ str = string( input, 0, i );
  if( str == "RKEY" )
    data = rkey_s;
  else if( str == "SKIP" )
         data = skip_s;
       else data = aObj.Find( str.c_str() );
  if( data == -1 )
- {  gstring str_err = "Invalid object name: \n";
+ {  string str_err = "Invalid object name: \n";
            str_err += str;
        Error( key_format.c_str(), str_err.c_str() );
  }
@@ -294,7 +293,7 @@ void
 TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
 {
   vstr strbuf(500);
-  gstring dat_str;
+  string dat_str;
 
   
   switch( fmt.type )
@@ -304,7 +303,7 @@ TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
                   fin.read( strbuf.p, fmt.size );
                  else
                   fin >> strbuf.p;
-                 dat_str = gstring(strbuf.p);
+                 dat_str = string(strbuf.p);
                  break;
       case empty_r:
       case string_r:
@@ -312,7 +311,7 @@ TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
                  break;
       case irec_r:
                  sprintf( strbuf, "%d", fmt.size );
-                 dat_str = gstring(strbuf.p);
+                 dat_str = string(strbuf.p);
                  break;
       case object_r:
                  dat_str = aObj[fmt.size].GetStringEmpty( fmt.i, fmt.j );

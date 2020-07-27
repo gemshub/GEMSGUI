@@ -4,7 +4,7 @@
 // Declaration of TConfig
 //
 // Copyright (C) 1996-2001 A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
+
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -21,7 +21,6 @@
 #define CONFIG_H_
 
 #include <fstream>
-#include "gstring.h"
 using namespace std;
 
 /*
@@ -36,25 +35,25 @@ using namespace std;
 class TConfig
 {
     const size_t token_len;
-    char space;	// '"' for gstrings w/spaces
-    //  gstring section;
+    char space;	// '"' for strings w/spaces
+    //  string section;
     int sec_beg;
     int ssec_beg;
 
     fstream ini;
 //    ifstream ini;
     int nLine;
-    gstring line;
+    string line;
     unsigned valPos;
     char style;  // '=' or SPACE as delimiter
 
     bool getLine();
     bool findParam(const char* str);
     size_t getName();
-    gstring getToken();
-    void writegstring(gstring&);
-    gstring readSectionName();
-    gstring readSubSectionName();
+    string getToken();
+    void writestring(string&);
+    string readSectionName();
+    string readSubSectionName();
     void reset(int p=0)
     {
         ini.clear();
@@ -66,11 +65,11 @@ public:
 
     TConfig(const char *fname, char style='=', const size_t tok_ln=55);
 
-    gstring GetFirstSubSection();
-    gstring GetNextSubSection();
-    bool SetSection(const gstring& s);
-    gstring getFirst();
-    gstring getNext();
+    string GetFirstSubSection();
+    string GetNextSubSection();
+    bool SetSection(const string& s);
+    string getFirst();
+    string getNext();
     void close()
     {
       ini.close();  // close vis_cn.ini after reading it
@@ -78,14 +77,14 @@ public:
     // get current values ( after getNext() )
     // no errors are verified
     int getcInt();
-    bool getcStr(gstring& str);
+    bool getcStr(string& str);
     bool getcVals(int n, int vals[]);
-    bool getcStrings(int n, gstring strs[]);
+    bool getcStrings(int n, string strs[]);
 
     int getInt(const char* par, int def=0);
-    bool getStr(const char* par, gstring& str, char* def=nullptr);
+    bool getStr(const char* par, string& str, char* def=nullptr);
     bool getVals(const char* par, int n, int vals[], int defs[]=nullptr);
-    bool getStrings(const char* par, int n, gstring strs[], char* str[]=nullptr);
+    bool getStrings(const char* par, int n, string strs[], char* str[]=nullptr);
 
     struct EBadSection
         {}

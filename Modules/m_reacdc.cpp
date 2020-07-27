@@ -513,19 +513,19 @@ AGAIN_MOD:
         /* Build old selections DCOMP and REACDC */
         aDclist_old.Clear();
         //aRclist_old.Clear();
-        gstring key_dr;
+        std::string key_dr;
 
         for( i=0; i<rcp->nDC; i++ )
         {
           if( rcp->rDC[i] == SRC_DCOMP || rcp->rDC[i] == SRC_REACDC )
           {
-              key_dr  = gstring(1, rcp->rDC[i]);
+              key_dr  = std::string(1, rcp->rDC[i]);
               key_dr += ' ';
-              key_dr += gstring( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB );
+              key_dr += std::string( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB );
               aDclist_old.Add( key_dr.c_str() );
           }
           /*
-          gstring key_dr = gstring( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB ); // SD 18/11/2008
+          std::string key_dr = std::string( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB ); // SD 18/11/2008
           if( rcp->rDC[i] == SRC_DCOMP )
               aDclist_old.Add( key_dr.c_str() );
           else
@@ -862,7 +862,7 @@ CALCULATE_DELTA_R:
         break;
     default:
         {  /* Invalid code method of calculation?*/
-            gstring msg = "W14RErun: Invalid CM method flag!";
+            std::string msg = "W14RErun: Invalid CM method flag!";
             msg += dckey;
             msg += "'.\n Change the record?";
             //if( !vfQuestion( GetName(), buf );
@@ -1708,7 +1708,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
     TDBKey dbKey(db->GetDBKey());
     dbKey.SetKey(key);
     dbKey.SetFldKey(3,"*");
-    gstring str_key( dbKey.UnpackKey(), 0, db->KeyLen() );
+    std::string str_key( dbKey.UnpackKey(), 0, db->KeyLen() );
     RecStatus iRet = db->Rtest( str_key.c_str(), 1 );
     std::string msg;
 
@@ -1736,9 +1736,9 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
             msg +=  "Create a new record?";
             if( !vfQuestion(window(), GetName(), msg ))
                 Error( GetName(), " E18RErun: New record create action dismissed...");
-            gstring str = key.p;
+            std::string str = key.p;
 
-            if( str.find_first_of("*?" ) != gstring::npos)  // pattern
+            if( str.find_first_of("*?" ) != std::string::npos)  // pattern
                 str = GetKeyofRecord( str.c_str(),
                             "Enter a new data record key, please!", KEY_NEW);
             if(  str.empty() )
@@ -1746,7 +1746,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
             int  Rnum = db->Find( str.c_str() );
             ErrorIf( Rnum>=0, GetName(), " W20RErun: This record alredy exists!");
             pVisor->OpenModule(window(), nRT,0,true);
-            gstring str1 = db->UnpackKey();
+            std::string str1 = db->UnpackKey();
             check_input( str1.c_str() );
             RecBuild( str.c_str() );
             SetString("Remake of new record finished OK. "
@@ -1820,7 +1820,7 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
          continue;
 
      // test the same component (overload) 30/11/2006
-     gstring stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);
+     std::string stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);
      for( j=0; j<aICkey_new.GetCount(); j++ )
        if( stt ==  aICkey_new[j])
            break;
@@ -1864,25 +1864,25 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
         continue;
 
     // !!! changing record key
-     gstring str= gstring(db->FldKey( 3 ), 0, db->FldLen( 3 ));
+     std::string str= std::string(db->FldKey( 3 ), 0, db->FldLen( 3 ));
     ChangeforTempl( str, st_data.from_templ,
                     st_data.to_templ, db->FldLen( 3 ));
         str += ":";
-        gstring str1 = gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
-        str1.strip();
+        std::string str1 = std::string(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+        strip( str1 );
         str = str1 + ":" + str;
-        str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
-        str1.strip();
+        str1 = std::string(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+        strip( str1 );
         str = str1 + ":" + str;
-        str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
-        str1.strip();
+        str1 = std::string(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+        strip( str1 );
         str = str1 + ":" + str;
      //Point SaveRecord
      if( AddRecordTest( str.c_str(), fnum_ ))
      {   aICkey_new.Add( stt );  // 30/11/2006
          for(int isd=0; isd<rcp->Nsd; isd++)
-         { gstring sdkey = gstring( rcp->sdref[isd], 0,V_SD_RKLEN);
-          sdkey.strip();
+         { std::string sdkey = std::string( rcp->sdref[isd], 0,V_SD_RKLEN);
+          strip( sdkey );
           SDlist.AddUnique( sdkey );
         }
      }

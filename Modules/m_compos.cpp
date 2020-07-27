@@ -415,7 +415,7 @@ TCompos::RecBuild( const char *key, int mode  )
     int oldIC=0, oldDC=0;
     vstr pkey(81);
     int i;
-    gstring str;
+    std::string str;
     TCStringArray aIclist;
     TCStringArray aDclist;
     //TCStringArray aRclist;
@@ -451,7 +451,7 @@ TCompos::RecBuild( const char *key, int mode  )
     aIclist_old.Clear();
     for( i=0; i<oldIC; i++ )
     {
-      str = gstring( bcp->SB[i], 0, MAXICNAME+MAXSYMB );
+      str = std::string( bcp->SB[i], 0, MAXICNAME+MAXSYMB );
       str += "*                     ";
       aIclist_old.Add( str );
     }
@@ -498,7 +498,7 @@ LOOP_MARKIC:
     for( i=0; i<oldDC; i++ )
       if( bcp->DCS[i]  == SRC_DCOMP )
       {
-        str = gstring( bcp->SM[i], 0, DC_RKLEN );
+        str = std::string( bcp->SM[i], 0, DC_RKLEN );
         aDclist_old.Add( str );
       }
 LOOP_MARKDC:
@@ -511,7 +511,7 @@ LOOP_MARKDC:
     for( i=0; i<oldDC; i++ )
       if( bcp->DCS[i]  == SRC_REACDC )
       {
-        str = gstring( bcp->SM[i], 0, DC_RKLEN );
+        str = std::string( bcp->SM[i], 0, DC_RKLEN );
         aRclist_old.Add( str );
       }
     aRclist = vfMultiKeysSet( window(),
@@ -536,9 +536,9 @@ LOOP_MARKDC:
 
     */
      for( i=0; i<oldDC; i++ )
-     {  str  = gstring(1, bcp->DCS[i]);
+     {  str  = std::string(1, bcp->DCS[i]);
         str += ' ';
-        str += gstring( bcp->SM[i], 0, DC_RKLEN );
+        str += std::string( bcp->SM[i], 0, DC_RKLEN );
         aDclist_old.Add( str );
      }
 LOOP_MARKDC:
@@ -1047,7 +1047,7 @@ void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
     {
 
       // test the same component (overload) 30/11/2006
-      gstring stt = aComp[ii].substr(0,MAXCMPNAME+MAXSYMB);
+      std::string stt = aComp[ii].substr(0,MAXCMPNAME+MAXSYMB);
       for( j=0; j<aICkey_new.GetCount(); j++ )
         if( stt ==  aICkey_new[j])
        break;
@@ -1086,22 +1086,22 @@ void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
 
 
      // !!! changing record key
-     gstring str= gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+     std::string str= std::string(db->FldKey( 2 ), 0, db->FldLen( 2 ));
      ChangeforTempl( str, st_data.from_templ,
                     st_data.to_templ, db->FldLen( 2 ));
         str += ":";
-        gstring str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
-        str1.strip();
+        std::string str1 = std::string(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+        strip( str1 );
         str = str1 + ":" + str;
-        str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
-        str1.strip();
+        str1 = std::string(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+        strip( str1 );
         str = str1 + ":" + str;
         //Point SaveRecord
         if( AddRecordTest( str.c_str(), fnum_ ))
         {   aICkey_new.Add( stt );  // 30/11/2006
             for(int isd=0; isd<bcp->Nsd; isd++)
-            { gstring sdkey = gstring( bcp->sdref[isd], 0,V_SD_RKLEN);
-              sdkey.strip();
+            { std::string sdkey = std::string( bcp->sdref[isd], 0,V_SD_RKLEN);
+              strip( sdkey );
               SDlist.AddUnique( sdkey );
            }
         }

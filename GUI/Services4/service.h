@@ -4,7 +4,6 @@
 // Declaration of  some GUI service functions
 //
 // Copyright (C) 1996-2001  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -21,7 +20,7 @@
 #define _service_h
 
 #include <vector>
-#include "gstring.h"
+#include "v_user.h"
 
 
 class QWidget;
@@ -33,7 +32,7 @@ const int VF_YES =6;
 const int VF_NO = 7;
 const int VF_CANCEL = 2;
 
-int vfQuestYesNoCancel(QWidget* par, const gstring& title, const gstring& mess);
+int vfQuestYesNoCancel(QWidget* par, const std::string& title, const std::string& mess);
 
 bool vfQuestion(QWidget* par, const std::string& title, const std::string& mess);
 
@@ -81,20 +80,20 @@ bool
 vfListFiles(QWidget* par, bool show_dlg, const char * prfName,
                 TCStringArray& fls, TCIntArray& cnt );
 
-gstring
+std::string
 vfKeyEdit(QWidget* par, const char* title, unsigned int iRt, const char* key=0);
 
-gstring
+std::string
 vfKeyProfile(QWidget* par, const char* title, int iRt,
     bool& chAqGas, bool& addFiles, bool& remake, int& makeDump,
-    gstring& key_templ, bool& genGEMS3k, bool& brief_mode  );
+    std::string& key_templ, bool& genGEMS3k, bool& brief_mode  );
 
-gstring
+std::string
 vfKeyTemplEdit(QWidget* par, const char* title, unsigned int iRt, const char* key=0,
                bool allowTemplate=true);
 bool
 vfKeyCanged(QWidget* par, const char* caption,
-            gstring& from_str, gstring& to_str, int fldLen );
+            std::string& from_str, std::string& to_str, int fldLen );
 
 bool
 vfExcludeFillEdit(QWidget* par, const char* caption,
@@ -120,10 +119,10 @@ struct elmWindowData;
 struct setFiltersData;
 struct pagesSetupData
 {
-   gstring pageName;
+   std::string pageName;
    int nObj;         // index of object
    int ndx;         //  second index in object
-   gstring ndxName; // if ndxName not empty ( ndx is first ndx ), second from list
+   std::string ndxName; // if ndxName not empty ( ndx is first ndx ), second from list
 
    pagesSetupData( const char * pName, int aobj, int andx = 0, const char*  andxName = nullptr):
         pageName(pName),  nObj(aobj), ndx(andx)
@@ -157,20 +156,20 @@ bool  vfSystemInput(QWidget* par, const char * p_key,
 bool
 vfProcessSet(QWidget* par, const char * p_key,
               char flds[24], int size[8], short tabInt[6], double tabDoubl[24],
-              gstring& calcScript, gstring& outScript, TCStringArray& names,
-              gstring& xName, gstring& yName );
+              std::string& calcScript, std::string& outScript, TCStringArray& names,
+              std::string& xName, std::string& yName );
 bool
 vfGEM2MTSet(QWidget* par, const char * p_key,
               char flds[32], int size[20],  double Tai[4], double Pai[4],double Tau[3],
-            gstring& calcScript, gstring& outScript, TCStringArray& names,
-            gstring& xName, gstring& yName, TCIntArray& vtk1, TCIntArray& vtk2 );
+            std::string& calcScript, std::string& outScript, TCStringArray& names,
+            std::string& xName, std::string& yName, TCIntArray& vtk1, TCIntArray& vtk2 );
 bool
 vfUnSpaceSet(QWidget* par, const char * p_key,
               char flds[38], int size[10] );
 bool
 vfGtDemoSet(QWidget* par, const char * p_key, int size[8],
-            gstring& prkey, gstring& script, TCStringArray& names,
-            gstring& xName, gstring& yName  );
+            std::string& prkey, std::string& script, TCStringArray& names,
+            std::string& xName, std::string& yName  );
 
 bool
 vfComposSet(QWidget* par, const char * p_key,
@@ -185,7 +184,7 @@ vfReacDCSet(QWidget* par, const char * p_key,
 bool
 vfRTparmSet(QWidget* par, const char * p_key,
             char flgs[10], int sizes[7], double val[6],
-            gstring& script, gstring& xName, gstring& yName, TCStringArray& names  );
+            std::string& script, std::string& xName, std::string& yName, TCStringArray& names  );
 
 bool
 vfPhaseSet(QWidget* par, const char * p_key,
@@ -200,16 +199,16 @@ vfProjectSet(QWidget* par, const char * p_key,
               char flds[38], int&  taskset );
 bool
 vfSystemSet(QWidget* par, const char * p_key,
-            char flgs[40],  gstring& name, gstring& comment, gstring& EQkey );
+            char flgs[40],  std::string& name, std::string& comment, std::string& EQkey );
 bool
- vfAutoPhaseSet(QWidget* par, const char* pr_key, gstring& a_key, gstring& g_key,
+ vfAutoPhaseSet(QWidget* par, const char* pr_key, std::string& a_key, std::string& g_key,
         char& acode, char& gcode, float apar[8]);
 
 bool vfLookupDialogSet(QWidget* wpar, char flags[6],
                 double Tai[4], double Pai[4] );
 
-void vfPhaseInfo(QWidget* wpar, bool system, int xph, gstring phname,
-                 vector<int>& xdclist, vector<gstring>& dcnames, int xdc );
+void vfPhaseInfo(QWidget* wpar, bool system, int xph, std::string phname,
+                 vector<int>& xdclist, vector<std::string>& dcnames, int xdc );
 
 
 //class TObject;

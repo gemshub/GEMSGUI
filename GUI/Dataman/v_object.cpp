@@ -4,7 +4,6 @@
 // Implementation of TObject and TObjList classes
 //
 // Copyright (C) 1996-2001 S.Dmytriyeva, A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -77,7 +76,7 @@ TObjList aObj;
 
 // DOD list element explicit ctor
 TObject::TObject( const char* name, ObjType t, int n,
-                  int m, bool dyn, char indexCode, const gstring desc):
+                  int m, bool dyn, char indexCode, const string desc):
         Dynamic(dyn),   // Flag of dynamic/static data
         N(n), M(m),     // Dimensions N,M
         Descr(desc),    // Description (tooltip) line
@@ -111,11 +110,11 @@ TObject::ToCFG(ostream& f)
     write(f);
 }
 
-gstring
+string
 TObject::GetFullName(int aN, int aM)
 {
   vstr v(15);
-  gstring item = GetKeywd();
+  string item = GetKeywd();
   if( N > 1 )
   {
     sprintf(v, "[%u]", aN );
@@ -129,10 +128,10 @@ TObject::GetFullName(int aN, int aM)
   return item;
 }
 
-gstring TObject::GetHelpLink(int aN, int aM)
+string TObject::GetHelpLink(int aN, int aM)
 {
   vstr v(15);
-  gstring item = GetKeywd();
+  string item = GetKeywd();
   if( !(N<=1 || Descr[0] == '|') )
   {
     sprintf(v, "_%u", aN );
@@ -149,29 +148,29 @@ gstring TObject::GetHelpLink(int aN, int aM)
 
 // Gets description line from Ni line of DOD list
 //    e.g., for displaying a tooltip
-const gstring
+const string
 TObject::GetDescription(int Ni, int Mi)
 {
     size_t prev_pos = 0;
     size_t pos = Descr.find('\n');
 
-    if( pos == gstring::npos )
+    if( pos == string::npos )
         return Descr;
 
     int NMi = Ni;   // Description by lines
     if( N <= 1 || Descr[0] == '|' )     // Decriptions by colums
            NMi = Mi;
 
-    for(int ii=0;  ii < NMi /*&& pos != gstring::npos*/; ii++ )
+    for(int ii=0;  ii < NMi /*&& pos != string::npos*/; ii++ )
     {
         prev_pos = pos + 1;
 
         if( prev_pos >= Descr.length() )
-            return gstring("TObject:E01 -bad description line in DOD-");
+            return string("TObject:E01 -bad description line in DOD-");
 
         pos = Descr.find("\n", prev_pos);
-        if( pos == gstring::npos )
-            return Descr.substr(prev_pos, gstring::npos);
+        if( pos == string::npos )
+            return Descr.substr(prev_pos, string::npos);
     }
     return Descr.substr(prev_pos, pos-prev_pos-1);
 }
@@ -342,7 +341,7 @@ TObject::Alloc(int newN, int newM, ObjType newType)
     }
     else if( newType > 0  )  // Added by Sveta 16/09/99
     {
-        gstring str( newType, ' ' );
+        string str( newType, ' ' );
         // cout << (int)newType << ' ' << Keywd << " T" << str.c_str() << "T" << endl;
         for( int ii=0; ii<newN; ii++ )
             for( int jj=0; jj<newM; jj++ )
@@ -373,7 +372,7 @@ TObject::Alloc(int newN, int newM, ObjType newType)
                         pV1->Put(v, ii*newM + jj);
                     }
             }
-            else // gstrings copying
+            else // strings copying
             {
                 if( Type == S_ )
                     pV1->SetString( GetString(0).c_str(), 0 );
@@ -381,7 +380,7 @@ TObject::Alloc(int newN, int newM, ObjType newType)
                     for( int ii=0; ii<n; ii++ )
                         for( int jj=0; jj<m; jj++ )
                         {
-                            gstring str = pV->GetString(ndx(ii,jj));
+                            string str = pV->GetString(ndx(ii,jj));
                             pV1->SetString( str.c_str(), ii*newM+jj );
                         }
             }
@@ -415,12 +414,12 @@ TObject::Free()
 }
 
 
-// puts gstring into data object cell
+// puts string into data object cell
 bool
 TObject::SetString(const char *vbuf, int aN, int aM)
 {
     check_dim( aN, aM);
-    ErrorIf( !vbuf, GetKeywd(),"TObject:W06 Cannot set empty gstring to object");
+    ErrorIf( !vbuf, GetKeywd(),"TObject:W06 Cannot set empty string to object");
     //???
 
     if( !pV->SetString(vbuf, ndx(aN,aM)) )
@@ -1073,12 +1072,12 @@ TObjList::load(const char* f_obj, int /* maxN */ )
 #else
 TConfig cnf(f_obj,' ');
 #endif
-    gstring par;
+    string par;
     int N;
     int M;
     ObjType objectType = 0;
     char indexationCode;
-    gstring astr[6];
+    string astr[6];
 
     par = cnf.getFirst();
 

@@ -4,7 +4,6 @@
 // Implementation of TValBase, TVal and its templates
 //
 // Copyright (C) 1996-2001 A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -244,7 +243,7 @@ template<>
 bool
 TVal<unsigned char>::SetString(const char* s, int ndx)
 {
-    gstring ss = s;
+    string ss = s;
     ss.strip();
     if( *ss.empty() ||* ss==S_EMPTY )
     {
@@ -275,8 +274,8 @@ template<>
 bool
 TVal<signed char>::SetString(const char* s, int ndx)
 {
-    gstring ss = s;
-    ss.strip();
+    string ss = s;
+    strip( ss );
     if( /*ss.empty() ||*/ ss==S_EMPTY )
     {
         static_cast<signed char*>(ptr)[ndx] = EMPTY();
@@ -304,7 +303,7 @@ TVal<signed char>::SetString(const char* s, int ndx)
 /*
 template<>
 inline
-gstring
+string
 TVal<double>::GetString(int ndx) const
 {
     if( IsEmpty(ndx) )

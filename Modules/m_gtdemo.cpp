@@ -51,21 +51,21 @@ TGtDemo::TGtDemo( uint nrt ):
     gd_gr = nullptr;
 }
 
-const gstring&
+const std::string&
 TGtDemo::GetString()
 {
-    titler = gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+    titler = std::string(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
     titler += " : ";
     titler += TSubModule::GetString();
     return titler;
 }
 
 // get key of record
-gstring
+std::string
 TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
                           int keyType )
 {
-    gstring str;
+    std::string str;
 
     if( oldKey == nullptr )
     {
@@ -77,7 +77,7 @@ TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
 
     if( keyType==KEY_NEW  )
     { // Get key of Project
-        gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
         StripLine(prfKey);
         str = prfKey;
         str+= ":*:*:*:*:";
@@ -97,7 +97,7 @@ void TGtDemo::keyTest( const char *key )
 {
     if( pVisor->ProfileMode == true )
     { // test project key
-        gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
         StripLine(prfKey);
         auto k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
@@ -338,15 +338,15 @@ TGtDemo::MakeQuery()
 //    pImp->MakeQuery();
     const char * p_key;
     TCStringArray namesLines;
-    gstring prkey = gstring( gdp->prKey, 0, MAXRKEYLEN);
+    std::string prkey = std::string( gdp->prKey, 0, MAXRKEYLEN);
     int size[8];
     int nRT = RT_ICOMP;
-    gstring script;
+    std::string script;
     if( gdp->expr )
      script = gdp->expr;
 
-    gstring xName = gdp->xNames;
-    gstring yName = gdp->yNames;
+    std::string xName = gdp->xNames;
+    std::string yName = gdp->yNames;
 
 
     // nRT from flags
@@ -500,7 +500,7 @@ void TGtDemo::bld_rec_list( )
     TCIntArray anRk;
     TCStringArray aMrk;
     TCIntArray aMrk2;
-    gstring str;
+    std::string str;
     char *key_p;
     int i, Nr;
     short rtlen = rt[gdp->nRT].KeyLen();
@@ -849,9 +849,9 @@ TGtDemo::RecordPlot( const char* /*key*/ )
       TCStringArray lnames;
       int ii;
       for( ii=0; ii<gdp->dimXY[1]; ii++ )
-          lnames.Add( gstring(gdp->lNam0[ii+ndxy], 0, MAXGRNAME ));
+          lnames.Add( std::string(gdp->lNam0[ii+ndxy], 0, MAXGRNAME ));
       for( ii=0; ii<gdp->dimEF[1]; ii++ )
-          lnames.Add( gstring( gdp->lNamE[ii], 0, MAXGRNAME ));
+          lnames.Add( std::string( gdp->lNamE[ii], 0, MAXGRNAME ));
       gd_gr = updateGraphWindow( gd_gr, this, plt, gdp->name,
           gdp->xNames, gdp->yNames, lnames );
     }

@@ -4,7 +4,6 @@
 // Implementation of TDataBase, DataBaseList classes
 //
 // Copyright (C) 1996-2001 S.Dmytriyeva, A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -489,7 +488,7 @@ void TDataBase::RenameList( const char* newName,
     if( strlen(newName) > FldLen(0) )
       return;
 
-    gstring str_old = gstring( oldName, 0, FldLen(0) );
+    string str_old = string( oldName, 0, FldLen(0) );
 //04/09/01 ????    if( strlen(oldName)<FldLen(0) )
         str_old += ":";
     for( int i=1; i<KeyNumFlds(); i++)
@@ -503,7 +502,7 @@ void TDataBase::RenameList( const char* newName,
       return;
 
     int nrec;
-    gstring str;
+    string str;
 
     for(size_t i=0; i<Nrec; i++ )
     {
@@ -512,7 +511,7 @@ void TDataBase::RenameList( const char* newName,
         // changing record key
         str = ind.PackKey();
         Del( nrec );
-        str = str.replace( oldName, newName);
+        replace( str, oldName, newName);
         AddRecordToFile( str.c_str(), fNum );
     }
 }
@@ -624,7 +623,7 @@ bool TDataBase::FindPart( const char *key_, uint field )
     TDBKey dbKey(GetDBKey());
     dbKey.SetKey(key);
     dbKey.SetFldKey(field,"*");
-    gstring str_key( dbKey.UnpackKey(), 0, KeyLen() );
+    string str_key( dbKey.UnpackKey(), 0, KeyLen() );
     RecStatus iRet = Rtest( str_key.c_str(), 0 );
     return ( iRet==MANY_ || iRet==ONEF_ );
 }
@@ -686,8 +685,8 @@ void TDataBase::GetFileList(int mode, TCStringArray& names,
         if( (nF==-1&&(mode&closef))||(nF!=-1&&(mode&openf)) )
         {
             aFile[i].Makepath();
-            names.Add( gstring(aFile[i].GetKeywd())+gstring(" ")+
-                       gstring(aFile[i].GetPath().c_str()));
+            names.Add( string(aFile[i].GetKeywd())+string(" ")+
+                       string(aFile[i].GetPath().c_str()));
             indeces.Add(i);
             if( (mode&oldself) && nF != -1) //select already open files
                 sel.Add(indeces.GetCount()-1);
@@ -810,7 +809,7 @@ void TDataBase::OpenOnlyFromList( TCStringArray& names )
     for( ii=0; ii< aFile.GetCount(); ii++)
     {
       for( jj=0; jj< names.GetCount(); jj++)
-        if(  aFile[ii].Name().find( names[jj].c_str() ) != gstring::npos )
+        if(  aFile[ii].Name().find( names[jj].c_str() ) != string::npos )
          break;
       if( jj < names.GetCount() )
          fls.Add( ii );
@@ -861,7 +860,7 @@ int TDataBase::GetFileNum(const char* substr_name)
 {
   for(int ii=fls.GetCount()-1; ii>=0; ii-- )
   {
-   if( aFile[fls[ii]].Name().find( substr_name ) != gstring::npos )
+   if( aFile[fls[ii]].Name().find( substr_name ) != string::npos )
      return ii;
   }
   return -1;
@@ -964,7 +963,7 @@ int TDataBase::scanfile( uint nF, int& fPos, int& fLen,
 {
     RecEntry recordEntry;
     RecHead recordHead;
-    gstring str;
+    string str;
     //RecEntry& rep = ind.RecPosit(0);
     int len, fEnd = fPos;
     int nRec=0;

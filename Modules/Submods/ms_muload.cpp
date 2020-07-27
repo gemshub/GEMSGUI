@@ -708,7 +708,7 @@ void TMulti::sm_text_analyze( int nph, int Type,
                                int JB, int JE, int jb, int je )
 {
     char *erscan = nullptr;
-    gstring save;
+    string save;
 
     erscan = static_cast<char *>(aObj[ o_nwtext].Alloc(  1, 2048, S_ ));
     //AGAIN: // translate equations
@@ -750,14 +750,14 @@ void TMulti::sm_text_analyze( int nph, int Type,
 //--------------------------------------------------------------------
 // Packs the script of PRIVATE type of solution phase
 //
-gstring TMulti::PressSolMod( int nP )
+string TMulti::PressSolMod( int nP )
 {
     int j, jp, k, ks, jb=0, je=0, EGlen;
     char *EGb;
     TPhase* aPH=TPhase::pm;
     RMULTS* mup = TRMults::sm->GetMU();
     SYSTEM *syp = TSyst::sm->GetSY();
-    gstring etext;
+    string etext;
 
     for( k=0,ks=-1; k < mup->Fis && ks < nP; k++ )
     {  // calculating indexes
@@ -782,7 +782,7 @@ gstring TMulti::PressSolMod( int nP )
          "E12MSPrep:", "SolModLoad(): Missing operators group for a phase endmember." );
         if( EGlen )
         {  // set text to buffer
-            etext += gstring( EGb, 0, EGlen );
+            etext += string( EGb, 0, EGlen );
             etext +=  "\n" ;
         }
     }
@@ -948,7 +948,7 @@ int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
     if( ii == 1 )
         return( jf[0] );
 
-    gstring pbuf = "Please, select DC index for the DC name ";
+    string pbuf = "Please, select DC index for the DC name ";
             pbuf += name;
             pbuf += "\n in the first script statement below \n";
             pbuf += stmt;
@@ -1032,7 +1032,7 @@ int TMulti::find_phnum( char *name, int LNmode )
         return( kf[0] );
     /* more then one useful index */
     vstr pbuf_(164);
-    gstring pbuf;
+    string pbuf;
     sprintf( pbuf_, "%d", ii);
     pbuf = pbuf_;
     pbuf += " of Phase indices found for the phase name ";
@@ -1074,7 +1074,7 @@ int TMulti::find_acnum( char *name, int LNmode )
     //sprintf( pbuf, "%d of PCO indices found for the PCO name %s (->%d) \n"
     //         "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
     vstr pbuf_(164);
-    gstring pbuf;
+    string pbuf;
     sprintf( pbuf_, "%d", ii);
     pbuf = pbuf_;
     pbuf += " of PCO indices found for the PCO name ";
@@ -1204,7 +1204,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
             ii = aObj.Find( odlab );
             if( ii<0 )
             { // wrong data object name
-                gstring err = "Identifier (variable) ";
+                string err = "Identifier (variable) ";
                 err += odlab;
                 err += " is not known.";
                 Error( "E00MSPrep: ", err.c_str() );
@@ -1407,47 +1407,47 @@ void TMulti::getNamesList( int nO, TCStringArray& lst )
           break;
        case A_icx:
                   for( i=0; i<pmp->N; i++ )
-                     lst.Add( gstring( pmp->SB[i], 0, MAXICNAME ));
+                     lst.Add( string( pmp->SB[i], 0, MAXICNAME ));
                   break;
        case A_dcx:
        case A_dcxicx:
                    for( i=0; i<min(pmp->L,nOsz); i++ )
-                       lst.Add( gstring( pmp->SM[i],0, MAXDCNAME) );
+                       lst.Add( string( pmp->SM[i],0, MAXDCNAME) );
                    break;
        case A_dcsx:
                    for( i=pmp->Ls + pmp->Lads; i<pmp->L; i++ )
-                       lst.Add( gstring( pmp->SM[i],0, MAXDCNAME) );
+                       lst.Add( string( pmp->SM[i],0, MAXDCNAME) );
                    break;
        case A_phx:
                    for( i=0; i<min(pmp->FI,nOsz); i++ )
-                     lst.Add( gstring( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
+                     lst.Add( string( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
                    break;
        case A_phxicx:
                    for( i=0; i<pmp->N; i++ )
-                      lst.Add( gstring( pmp->SB[i], 0, MAXICNAME ));
+                      lst.Add( string( pmp->SB[i], 0, MAXICNAME ));
                    break;
                    //for( i=0; i<pmp->FIs; i++ )
-                   //  lst.Add( gstring( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
+                   //  lst.Add( string( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
                    //break;
        case A_ICx:
                   for( i=0; i<mup->N; i++ )
-                       lst.Add( gstring( mup->SB[i], 0, MAXICNAME ));
+                       lst.Add( string( mup->SB[i], 0, MAXICNAME ));
                    break;
        case A_ACx:
                   for( i=0; i<mup->La; i++ )
-                      lst.Add( gstring( mup->SA[i], 0, MAXCMPNAME ));
+                      lst.Add( string( mup->SA[i], 0, MAXCMPNAME ));
                    break;
        case A_DCx:
                    for( i=0; i<mup->L; i++ )
-                      lst.Add( gstring( mup->SM[i]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME ));
+                      lst.Add( string( mup->SM[i]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME ));
                    break;
        case A_DCSx:
                   for( i=mup->Ls+mup->Lads; i<mup->L; i++ )
-                    lst.Add( gstring( mup->SM[i]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME ));
+                    lst.Add( string( mup->SM[i]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME ));
                   break;
        case A_PHx:
                    for( i=0; i<mup->Fi; i++ )
-                       lst.Add( gstring( mup->SF[i]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME));
+                       lst.Add( string( mup->SF[i]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME));
                    break;
    }
 }

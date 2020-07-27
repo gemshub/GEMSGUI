@@ -4,7 +4,6 @@
 // Declaration of TValBase class and value constants
 //
 // Copyright (C) 1996-2001 A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -20,7 +19,7 @@
 #ifndef _v_vals_h_
 #define _v_vals_h_
 
-#include "gstring.h"
+#include <string>
 
 class GemDataStream;
 
@@ -63,7 +62,7 @@ struct TValBase
     virtual bool IsAny(int ndx) const = 0;
     virtual bool IsEmpty(int ndx) const = 0;
 
-    virtual gstring GetString(int ndx) const = 0;
+    virtual std::string GetString(int ndx) const = 0;
     //  virtual bool VerifyString(const char* s)=0;
     virtual bool SetString(const char* s, int ndx) = 0;
 

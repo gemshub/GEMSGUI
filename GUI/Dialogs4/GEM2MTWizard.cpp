@@ -4,7 +4,6 @@
 // Implementation of GEM2MTWizard class
 //
 // Copyright (C) 2005-2007  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -213,7 +212,7 @@ GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[32],
     TTable = nullptr;
    //    setFinishEnabled( WizardPage2, true);
     setupUi(this);
-    gstring str1= "GEM-Selektor GEM2MT Setup:  ";
+    string str1= "GEM-Selektor GEM2MT Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
 
@@ -1004,7 +1003,7 @@ void GEM2MTWizard::changeTable(const QItemSelection & selected, const QItemSelec
   // added selected
   foreach( ndx,  selected.indexes()  )
   {
-    gstring stt = ndx.data(Qt::DisplayRole).toString().toLatin1().data();
+    string stt = ndx.data(Qt::DisplayRole).toString().toLatin1().data();
     tableInsertRow( pgData[cPage].nObj, ndx.row(), stt.c_str() );
   }
   // delete deselected

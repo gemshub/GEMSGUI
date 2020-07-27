@@ -4,7 +4,6 @@
 // Implementation of GemsMainWindow class
 //
 // Copyright (C) 2011  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -148,9 +147,9 @@ void TVisorImp::setMenuEnabled( bool menuEnabled )
     itemWidget1->setEnabled(menuEnabled);
 }
 
-gstring TVisorImp::nameMdiChild( QWidget *p )
+string TVisorImp::nameMdiChild( QWidget *p )
 {
-    gstring mdName;
+    string mdName;
 
     TCModuleImp *child = qobject_cast<TCModuleImp *>(p);
     if(child)
@@ -173,7 +172,7 @@ gstring TVisorImp::nameMdiChild( QWidget *p )
 
 QIcon TVisorImp::iconMdiChild( QWidget *p )
 {
-    gstring iconName;
+    string iconName;
 
     TCModuleImp *child = qobject_cast<TCModuleImp *>(p);
     if(child)
@@ -857,7 +856,7 @@ TVisorImp::CmOpen_SYSTEM_ICOMP()
 void                                 // Bulk composition (b)
 TVisorImp::CmInsert_SYSTEM()
 {
-    gstring key_s = rt[RT_SYSEQ].PackKey();
+    string key_s = rt[RT_SYSEQ].PackKey();
     TProfil::pm->systbcInput( this, key_s.c_str() );
     Update( true );
 }

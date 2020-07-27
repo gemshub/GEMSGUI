@@ -4,7 +4,6 @@
 // Declaration of KeyDialog class
 //
 // Copyright (C) 1996-2008 A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -23,8 +22,7 @@
 #include <QDialog>
 
 #include "ui_KeyDialog4.h"
-#include "gstring.h"
-
+#include "v_user.h"
 
 class KeyDialog : public QDialog, public Ui::KeyDialogData
 {
@@ -32,7 +30,7 @@ class KeyDialog : public QDialog, public Ui::KeyDialogData
 
     //  TStringArray keyList;
     bool multi;
-    gstring keyFilter;
+    std::string keyFilter;
     size_t iRt;
     TCStringArray old_sel;
 
@@ -57,7 +55,7 @@ public:
 
 
     TCStringArray allSelectedKeys();
-    gstring getKey();
+    string getKey();
 };
 
 // work with ReacDC&DComp keys lists
@@ -65,7 +63,7 @@ class RDKeyDialog : public QDialog, public Ui::KeyDialogData
 {
     Q_OBJECT
 
-    gstring keyFilter;
+    string keyFilter;
     QStringList old_sel;
     short NsuT;     // N of surface site types (to set up on remake)
     void SetList();
@@ -84,7 +82,7 @@ public:
               const char* key = "*", const char* caption = nullptr, short NsuT=0 );
     virtual ~RDKeyDialog();
     TCStringArray allSelectedKeys();
-//    gstring getKey();
+//    string getKey();
 };
 
 

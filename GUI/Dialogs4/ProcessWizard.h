@@ -46,8 +46,8 @@ class ProcessWizard : public QDialog, public Ui::ProcessWizardData
     Q_OBJECT
 
     char curType;
-    gstring calcScript;
-    gstring outScript;
+    string calcScript;
+    string outScript;
     EquatSetup *pageScript;
     QList<QListWidget *> pLsts;
     QButtonGroup *subTypeButtons;
@@ -89,14 +89,14 @@ public:
     void   getTable( short size[6], double dbl[24] );
     void   getFlags( char flgs[24] );
 
-    gstring getCalcScript() const
-    { gstring res = textEquat1->toPlainText().toLatin1().data();
+    string getCalcScript() const
+    { string res = textEquat1->toPlainText().toLatin1().data();
       return res;
     }
-    gstring getOutScript() const
+    string getOutScript() const
     { return pageScript->getScript(); }
 
-    TCStringArray getNames( gstring& xName, gstring& yName ) const
+    TCStringArray getNames( string& xName, string& yName ) const
     { return pageScript->getNames(xName, yName); }
 
 protected slots:

@@ -534,7 +534,7 @@ TGEM2MT::BoxEqStatesUpdate(  long int Ni, long int /*pr*/, double tcur, double s
   if( Ni >= 0)
   {
       char buf[300];
-      //gstring Vmessage;
+      //std::string Vmessage;
       sprintf(buf, "   step %ld; time %lg; dtime %lg  ", mtp->ct, mtp->cTau, mtp->dTau );
       Vmessage = "Simulating Reactive Transport in a Box-Flux chain: ";
       Vmessage += buf;
@@ -686,7 +686,7 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
 {
 
   try {
-    //gstring Vmessage;
+    //std::string Vmessage;
     long int p, i, kk, x_aq=-1, x_gf=-1;//, naqgf=1, lastp=0;
     bool iRet = false;
     clock_t outp_time = (clock_t)0;

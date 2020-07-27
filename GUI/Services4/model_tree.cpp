@@ -204,7 +204,7 @@ void TTreeModel::setGOcorr(const QModelIndex& index, QString& value, int nO, int
 	           break;   
 	  }
 	QString res = QString("%1").arg(dat);	
-	gstring txt = res.toLatin1().data();
+    string txt = res.toLatin1().data();
 	aObj[nO].SetString( txt.c_str(), iN, 0 );
 }
 
@@ -306,7 +306,7 @@ QString TTreeModel::getDescription( int nO, int N) const
       return "";
     
     TObject& pObj = aObj[nO]; 
-	gstring desc = pObj.GetDescription(N,0);
+    string desc = pObj.GetDescription(N,0);
 	const char *keyWd = pObj.GetKeywd();
 	switch( nO )
 	{
@@ -433,7 +433,7 @@ bool TTreeModel::setData( const QModelIndex& index, const QVariant& value, int r
            if( nO >= 0 )
 	   {
              QString val = QVariant(value).toString();
-             gstring txt = val.toLatin1().data();
+             string txt = val.toLatin1().data();
 	
             if( index.column()== 3 ) // + or - (switch all dcomps with phase)
              {   char old_data = aObj[nO].GetStringEmpty( iN, iM )[0];
@@ -465,7 +465,7 @@ void TTreeModel::childChanged(const QModelIndex& index, const QVariant& value, c
 {
     if( index.column()== 3 ) // + or - (switch all dcomps with phase)
     {
-        gstring txt = QVariant(value).toString().toLatin1().data();
+        string txt = QVariant(value).toString().toLatin1().data();
 
        if( txt[0] == '-' ||
                (( txt[0] == '+' || txt[0] == '*' ) && old_data == '-' ))
@@ -900,13 +900,13 @@ void TTreeView::printList( fstream& ff )
   
     if(  fld.fType == ftCheckBox )
     {
-      gstring Vals = aUnits[fld.npos].getVals(iM);
+      string Vals = aUnits[fld.npos].getVals(iM);
       CalcCheckDialog calc(topLevelWidget(), fld.nO, Vals);
 
       if( calc.exec() )
       {
     	  int ii = calc.fun();
-       	  QString res  = gstring(Vals, ii, 1).c_str();
+          QString res  = string(Vals, ii, 1).c_str();
        	  for(int row = 0; row < model->rowCount( parIndex ); row++ ) 
      	  {
      	    index = model->index(row, col, parIndex );
@@ -932,8 +932,8 @@ void TTreeView::printList( fstream& ff )
       if(iN == -1 || iM == -1 || fld.nO < 0 )
         	return;
         
-      //gstring item = fld.pObj->GetFullName(iN,iM); // for old indexation
-      gstring item = fld.pObj->GetHelpLink(iN,iM);
+      //string item = fld.pObj->GetFullName(iN,iM); // for old indexation
+      string item = fld.pObj->GetHelpLink(iN,iM);
       pVisorImp->OpenHelp( 0, item.c_str());
     }
   

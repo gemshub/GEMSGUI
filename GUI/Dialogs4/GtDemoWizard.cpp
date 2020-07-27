@@ -86,7 +86,7 @@ GtDemoWizard::GtDemoWizard( const char* pkey, int size[8], const char *ascript,
 {
     setupUi(this);
 
-    gstring str1= "GEM-Selektor GtDemo Setup:  ";
+    string str1= "GEM-Selektor GtDemo Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
 
@@ -209,10 +209,10 @@ void GtDemoWizard::CmChangePage2(int)
    resetPageList(  newRT );
 }
 
-gstring
+string
 GtDemoWizard::getPrKey()
 {
-  gstring str = lineEditProcesKey->text().toLatin1().data();
+  string str = lineEditProcesKey->text().toLatin1().data();
   return str;
 }
 

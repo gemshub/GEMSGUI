@@ -273,7 +273,7 @@ public:
     void dyn_new( int i=0);
     void set_def( int i=0);
     bool check_input( const char *key, int level=1 );
-    gstring   GetKeyofRecord( const char *oldKey, const char *strTitle,
+    std::string   GetKeyofRecord( const char *oldKey, const char *strTitle,
                               int keyType );
 
     void RecInput( const char *key );

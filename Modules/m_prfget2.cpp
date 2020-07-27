@@ -77,11 +77,11 @@ void TProfil::DeleteOldList()
 // push element to the list - refurbished by DK on 15.02.2012
 //
 void TProfil::Push( TIArray<CompItem>& aList, int aLine,
-                    short aDelta, const char* dbKeywd, gstring aKey )
+                    short aDelta, const char* dbKeywd, std::string aKey )
 {
    if( comp_change_all == false )
    {
-       gstring stt = aKey;
+       std::string stt = aKey;
        if( aDelta < 0 )
           stt += " record to be deleted from the project system. Action?";
        else stt += " record to be inserted into project system. Action?";
@@ -122,23 +122,23 @@ void TProfil::ICcompare( TIArray<CompItem>& aIComp)
         else
             if( l<0 )
             {
-                Push( aIComp, i, -1, "IComp", gstring(SBold[i], 0, IC_RKLEN) );
+                Push( aIComp, i, -1, "IComp", std::string(SBold[i], 0, IC_RKLEN) );
                 i++;
             }
             else
             {
-                Push( aIComp, i, 1, "IComp", gstring(mup->SB[j], 0, IC_RKLEN) );
+                Push( aIComp, i, 1, "IComp", std::string(mup->SB[j], 0, IC_RKLEN) );
                 j++;
             }
     }
     while( i<Nold  )
     {
-        Push( aIComp, i, -1, "IComp", gstring(SBold[i], 0, IC_RKLEN) );
+        Push( aIComp, i, -1, "IComp", std::string(SBold[i], 0, IC_RKLEN) );
         i++;
     }
     while( j<mup->N )
     {
-        Push( aIComp, i, 1, "IComp", gstring(mup->SB[j], 0, IC_RKLEN) );
+        Push( aIComp, i, 1, "IComp", std::string(mup->SB[j], 0, IC_RKLEN) );
         j++;
     }
 }
@@ -162,23 +162,23 @@ void TProfil::COMPcompare( TIArray<CompItem>& aCompos)
         else
             if( l<0 )
             {
-                Push( aCompos, i, -1, "Compos", gstring(SAold[i], 0, BC_RKLEN) );
+                Push( aCompos, i, -1, "Compos", std::string(SAold[i], 0, BC_RKLEN) );
                 i++;
             }
             else
             {
-                Push( aCompos, i, 1, "Compos", gstring(mup->SA[j], 0, BC_RKLEN) );
+                Push( aCompos, i, 1, "Compos", std::string(mup->SA[j], 0, BC_RKLEN) );
                 j++;
             }
     }
     while( i<Laold  )
     {
-        Push( aCompos, i, -1, "Compos", gstring(SAold[i], 0, BC_RKLEN) );
+        Push( aCompos, i, -1, "Compos", std::string(SAold[i], 0, BC_RKLEN) );
         i++;
     }
     while( j<mup->La )
     {
-        Push( aCompos, i, 1, "Compos", gstring(mup->SA[j], 0, BC_RKLEN) );
+        Push( aCompos, i, 1, "Compos", std::string(mup->SA[j], 0, BC_RKLEN) );
         j++;
     }
 }
@@ -201,23 +201,23 @@ void TProfil::DCcompare( TIArray<CompItem>& aList, int& i,
         else
             if( l<0 )
             {
-                Push( aList, i, -1, "DComp/ReacDC", gstring(SMold[i], 0, DC_RKLEN) );
+                Push( aList, i, -1, "DComp/ReacDC", std::string(SMold[i], 0, DC_RKLEN) );
                 i++;
             }
             else
             {
-                Push( aList, i, 1, "DComp/ReacDC", gstring(mup->SM[j], 0, DC_RKLEN) );
+                Push( aList, i, 1, "DComp/ReacDC", std::string(mup->SM[j], 0, DC_RKLEN) );
                 j++;
             }
     }
     while( i<nI  )
     {
-        Push( aList, i, -1, "DComp/ReacDC", gstring(SMold[i], 0, DC_RKLEN) );
+        Push( aList, i, -1, "DComp/ReacDC", std::string(SMold[i], 0, DC_RKLEN) );
         i++;
     }
     while( j<nJ )
     {
-        Push( aList, i, 1, "DComp/ReacDC", gstring(mup->SM[j], 0, DC_RKLEN) );
+        Push( aList, i, 1, "DComp/ReacDC", std::string(mup->SM[j], 0, DC_RKLEN) );
         j++;
     }
 }
@@ -244,34 +244,34 @@ void TProfil::PHcompare( TIArray<CompItem>& aPhase,
         else
             if( l<0 )
             {
-                Push( aPhase, i, -1, "Phase", gstring(SFold[i], 0, PH_RKLEN) );
+                Push( aPhase, i, -1, "Phase", std::string(SFold[i], 0, PH_RKLEN) );
                 for( int ii=id; ii<id+Llold[i]; ii++)
-                    Push( aDComp, ii, -1, "DComp/ReacDC", gstring(SMold[ii], 0, DC_RKLEN) );
+                    Push( aDComp, ii, -1, "DComp/ReacDC", std::string(SMold[ii], 0, DC_RKLEN) );
                 id += Llold[i];
                 i++;
             }
             else
             {
-                Push( aPhase, i, 1, "Phase", gstring(mup->SF[j], 0, PH_RKLEN) );
+                Push( aPhase, i, 1, "Phase", std::string(mup->SF[j], 0, PH_RKLEN) );
                 for( int jj=jd; jj<jd+mup->Ll[j]; jj++)
-                    Push( aDComp, id, 1, "DComp/ReacDC", gstring(mup->SM[jj], 0, DC_RKLEN) );
+                    Push( aDComp, id, 1, "DComp/ReacDC", std::string(mup->SM[jj], 0, DC_RKLEN) );
                 jd += mup->Ll[j];
                 j++;
             }
     }
     while( i<Fisold  )
     {
-        Push( aPhase, i, -1, "Phase", gstring(SFold[i], 0, PH_RKLEN) );
+        Push( aPhase, i, -1, "Phase", std::string(SFold[i], 0, PH_RKLEN) );
         for( int ii=id; ii<id+Llold[i]; ii++)
-            Push( aDComp, ii, -1, "DComp/ReacDC", gstring(SMold[ii], 0, DC_RKLEN) );
+            Push( aDComp, ii, -1, "DComp/ReacDC", std::string(SMold[ii], 0, DC_RKLEN) );
         id += Llold[i];
         i++;
     }
     while( j<mup->Fis )
     {
-        Push( aPhase, i, 1, "Phase", gstring(mup->SF[j], 0, PH_RKLEN) );
+        Push( aPhase, i, 1, "Phase", std::string(mup->SF[j], 0, PH_RKLEN) );
         for( int jj=jd; jj<jd+mup->Ll[j]; jj++)
-            Push( aDComp, id, 1, "DComp/ReacDC", gstring(mup->SM[jj], 0, DC_RKLEN) );
+            Push( aDComp, id, 1, "DComp/ReacDC", std::string(mup->SM[jj], 0, DC_RKLEN) );
         jd += mup->Ll[j];
         j++;
     }
@@ -293,34 +293,34 @@ void TProfil::PHcompare( TIArray<CompItem>& aPhase,
         else
             if( l<0 )
             {
-                Push( aPhase, i, -1, "Phase", gstring(SFold[i], 0, PH_RKLEN) );
+                Push( aPhase, i, -1, "Phase", std::string(SFold[i], 0, PH_RKLEN) );
                 for( int ii=id; ii<id+Llold[i]; ii++)
-                    Push( aDComp, ii, -1, "DComp/ReacDC", gstring(SMold[ii], 0, DC_RKLEN) );
+                    Push( aDComp, ii, -1, "DComp/ReacDC", std::string(SMold[ii], 0, DC_RKLEN) );
                 id += Llold[i];
                 i++;
             }
             else
             {
-                Push( aPhase, i, 1, "Phase", gstring(mup->SF[j], 0, PH_RKLEN) );
+                Push( aPhase, i, 1, "Phase", std::string(mup->SF[j], 0, PH_RKLEN) );
                 for( int jj=jd; jj<jd+mup->Ll[j]; jj++)
-                    Push( aDComp, id, 1, "DComp/ReacDC", gstring(mup->SM[jj], 0, DC_RKLEN) );
+                    Push( aDComp, id, 1, "DComp/ReacDC", std::string(mup->SM[jj], 0, DC_RKLEN) );
                 jd += mup->Ll[j];
                 j++;
             }
     }
     while( i<Fiold  )
     {
-        Push( aPhase, i, -1, "Phase", gstring(SFold[i], 0, PH_RKLEN) );
+        Push( aPhase, i, -1, "Phase", std::string(SFold[i], 0, PH_RKLEN) );
         for( int ii=id; ii<id+Llold[i]; ii++)
-            Push( aDComp, ii, -1, "DComp/ReacDC", gstring(SMold[ii], 0, DC_RKLEN) );
+            Push( aDComp, ii, -1, "DComp/ReacDC", std::string(SMold[ii], 0, DC_RKLEN) );
         id += Llold[i];
         i++;
     }
     while( j<mup->Fi )
     {
-        Push( aPhase, i, 1, "Phase", gstring(mup->SF[j], 0, PH_RKLEN) );
+        Push( aPhase, i, 1, "Phase", std::string(mup->SF[j], 0, PH_RKLEN) );
         for( int jj=jd; jj<jd+mup->Ll[j]; jj++)
-            Push( aDComp, id, 1, "DComp/ReacDC", gstring(mup->SM[jj], 0, DC_RKLEN) );
+            Push( aDComp, id, 1, "DComp/ReacDC", std::string(mup->SM[jj], 0, DC_RKLEN) );
         jd += mup->Ll[j];
         j++;
     }
@@ -561,7 +561,7 @@ AGAIN:
 //Show IComp, DComp or other reactions from list
 void TProfil::ShowDBWindow( const char *objName, int nLine )
 {
-    gstring s;
+    std::string s;
     RMULTS* mup = rmults->GetMU();
      MULTI *pmp = multi->GetPM();
     time_t tr;
@@ -571,17 +571,17 @@ void TProfil::ShowDBWindow( const char *objName, int nLine )
     {
     case 'I': // Icomp : IC_v__ or ICnam
         if( strncmp(objName, aObj[o_musb].GetKeywd(), MAXKEYWD)==0)
-            s = gstring( mup->SB[nLine], 0, IC_RKLEN );
+            s = std::string( mup->SB[nLine], 0, IC_RKLEN );
         else  if( strncmp(objName, aObj[o_wd_sb].GetKeywd(), MAXKEYWD)==0 ||
                   strncmp(objName, aObj[o_w_sbh].GetKeywd(), MAXKEYWD)==0 )
-            s = gstring( mup->SB[pmp->mui[nLine]], 0, IC_RKLEN );
+            s = std::string( mup->SB[pmp->mui[nLine]], 0, IC_RKLEN );
         else break;
         TIComp::pm->RecInput( s.c_str() );
         TIComp::pm->Show(window(), title, false/*true*/);
         break;
     case 'C': // Compod : CC_v__
         if( strncmp(objName, aObj[o_musa].GetKeywd(), MAXKEYWD)==0)
-            s = gstring( mup->SA[nLine], 0, BC_RKLEN );
+            s = std::string( mup->SA[nLine], 0, BC_RKLEN );
         else break;
         TCompos::pm->RecInput( s.c_str() );
         TCompos::pm->Show(window(), title, false/*true*/);
@@ -589,10 +589,10 @@ void TProfil::ShowDBWindow( const char *objName, int nLine )
     case 'P': // Phase : Ph_v__ or Ph_v2 or Phnam or Phnam2
         if( strncmp(objName, aObj[o_musf].GetKeywd(), MAXKEYWD)==0 ||
                 strncmp(objName, aObj[o_musf2].GetKeywd(), MAXKEYWD)==0 )
-            s = gstring( mup->SF[nLine], 0, PH_RKLEN );
+            s = std::string( mup->SF[nLine], 0, PH_RKLEN );
         else  if( strncmp(objName, aObj[o_wd_sf].GetKeywd(), MAXKEYWD)==0 ||
                   strncmp(objName, aObj[o_wd_sf2].GetKeywd(), MAXKEYWD)==0 )
-            s = gstring( mup->SF[pmp->muk[nLine]], 0, PH_RKLEN );
+            s = std::string( mup->SF[pmp->muk[nLine]], 0, PH_RKLEN );
         else break;
         TPhase::pm->RecInput( s.c_str() );
         TPhase::pm->Show(window(), title, false/*true*/);
@@ -600,12 +600,12 @@ void TProfil::ShowDBWindow( const char *objName, int nLine )
     case 'D': // Phase : DC_v__ or DC_v2 or DCnam or DCnam2
         if( strncmp(objName, aObj[o_musm].GetKeywd(), MAXKEYWD)==0 ||
                 strncmp(objName, aObj[o_musm2].GetKeywd(), MAXKEYWD)==0 )
-            s = gstring( mup->SM[nLine], 0, DC_RKLEN );
+            s = std::string( mup->SM[nLine], 0, DC_RKLEN );
         else  if( strncmp(objName, aObj[o_wd_sm].GetKeywd(), MAXKEYWD)==0 ||
                   strncmp(objName, aObj[o_wd_sm2].GetKeywd(), MAXKEYWD)==0 )
         {
             nLine = pmp->muj[nLine];
-            s = gstring( mup->SM[nLine], 0, DC_RKLEN );
+            s = std::string( mup->SM[nLine], 0, DC_RKLEN );
         }
         else break;
         if( mup->DCS[nLine] == SRC_DCOMP )
@@ -714,7 +714,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     if( aPHnoused.GetCount() > 0 || aCMnoused.GetCount() > 0)
     {  // List of Phases or Compos with some species discarded
         ios::openmode mod = ios::out;
-        gstring filename = pVisor->userGEMDir();
+        std::string filename = pVisor->userGEMDir();
                 filename +=  "DiscardedRecords.txt";
 // This question is not needed anymore  DK 27.10.2005
 /*      if( !(::access( filename, 0 )) ) //file exists
@@ -1031,25 +1031,25 @@ int TProfil::PhIndexforDC( int xdc, bool system )
   return k;
 }
 
-gstring TProfil::PhNameforDC( int xdc, bool system )
+std::string TProfil::PhNameforDC( int xdc, bool system )
 {
   int k = PhIndexforDC( xdc, system );
 
   if( system )
-   return gstring( rmults->GetMU()->SF[k]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME);
+   return std::string( rmults->GetMU()->SF[k]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME);
   else
-   return gstring( multi->GetPM()->SF[k]+MAXSYMB, 0, MAXPHNAME);
+   return std::string( multi->GetPM()->SF[k]+MAXSYMB, 0, MAXPHNAME);
 }
 
 
-gstring TProfil::PhNameforDC( int xdc, int& xph, bool system )
+std::string TProfil::PhNameforDC( int xdc, int& xph, bool system )
 {
   xph = PhIndexforDC( xdc, system );
 
   if( system )
-   return gstring( rmults->GetMU()->SF[xph], 0, PH_RKLEN);
+   return std::string( rmults->GetMU()->SF[xph], 0, PH_RKLEN);
   else
-   return gstring( multi->GetPM()->SF[xph], 0, MAXPHNAME+MAXSYMB);
+   return std::string( multi->GetPM()->SF[xph], 0, MAXPHNAME+MAXSYMB);
 }
 
 TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
@@ -1059,7 +1059,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
   RMULTS* mup = rmults->GetMU();
   MULTI*  pmp = multi->GetPM();
   TCStringArray DCnames;
-  gstring dcstr;
+  std::string dcstr;
 
   if( system )
   { for( k=0; k<mup->Fi; k++ )
@@ -1070,8 +1070,8 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
     }
     for( j= DCx; j<DCx+mup->Ll[k];j++ )
       {
-        dcstr = gstring( mup->SM[j]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME );
-        dcstr.strip();
+        dcstr = std::string( mup->SM[j]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME );
+        strip( dcstr );
         DCnames.Add(dcstr);
       }
   }
@@ -1083,15 +1083,15 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
        DCx += pmp->L1[k];
     }
     for( j= DCx; j<DCx+pmp->L1[k];j++ )
-    {   dcstr =  gstring( pmp->SM[j],0, MAXDCNAME );
-        dcstr.strip();
+    {   dcstr =  std::string( pmp->SM[j],0, MAXDCNAME );
+        strip( dcstr );
         DCnames.Add(dcstr);
     }
   }
   return DCnames;
 }
 
-void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<gstring>& dcnames)
+void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<std::string>& dcnames)
 {
     int k, j, DCx = 0;
     RMULTS* mup = rmults->GetMU();
@@ -1103,7 +1103,7 @@ void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<gstri
       for( j= DCx; j<DCx+mup->Ll[xph];j++ )
         {
           xdc.push_back(j);
-          dcnames.push_back( gstring( mup->SM[j], 0, DC_RKLEN ));
+          dcnames.push_back( std::string( mup->SM[j], 0, DC_RKLEN ));
         }
     }
     else
@@ -1113,7 +1113,7 @@ void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<gstri
       for( j= DCx; j<DCx+pmp->L1[k];j++ )
       {
           xdc.push_back(j);
-          dcnames.push_back( gstring( pmp->SM[j],0, MAXDCNAME ));
+          dcnames.push_back( std::string( pmp->SM[j],0, MAXDCNAME ));
       }
     }
 
@@ -1124,9 +1124,9 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
 {
     bool system = true;
     int  xph, xdc = -1;
-    gstring phname;
+    std::string phname;
     vector<int> xdclist;
-    vector<gstring> dcnames;
+    vector<std::string> dcnames;
 
     switch( *objName )
     {
@@ -1148,13 +1148,13 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
         if( strncmp(objName, aObj[o_musf].GetKeywd(), MAXKEYWD)==0 ||
                 strncmp(objName, aObj[o_musf2].GetKeywd(), MAXKEYWD)==0 )
         {    system = true;
-             phname = gstring( rmults->GetMU()->SF[xph], 0, PH_RKLEN);
+             phname = std::string( rmults->GetMU()->SF[xph], 0, PH_RKLEN);
         }
         else  if( strncmp(objName, aObj[o_wd_sf].GetKeywd(), MAXKEYWD)==0 ||
                   strncmp(objName, aObj[o_wd_sf2].GetKeywd(), MAXKEYWD)==0 )
              {
                 system = false;
-                phname = gstring( multi->GetPM()->SF[xph], 0, MAXSYMB+MAXPHNAME);
+                phname = std::string( multi->GetPM()->SF[xph], 0, MAXSYMB+MAXPHNAME);
              }
             else
                 return;
@@ -1189,7 +1189,7 @@ void TProfil::CurrentSystem2GEMS3K( const std::string& filepath, bool brief_mode
     na->genGEMS3KInputFiles(  filepath, messageF, 1, false, brief_mode, false, false, add_mui );
 }
 
-void TProfil::System2GEMS3K( const gstring key, int calcMode, const std::string& filepath, bool brief_mode, bool add_mui )
+void TProfil::System2GEMS3K( const std::string key, int calcMode, const std::string& filepath, bool brief_mode, bool add_mui )
 {
     loadSystat( key.c_str() );
 
@@ -1221,7 +1221,7 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
     //vstr tbuf(150);
     TCStringArray aList;
     TCIntArray anR;
-    gstring packkey;
+    std::string packkey;
     std::string systemname, recordPath;
 
     rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
@@ -1239,7 +1239,7 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
         packkey = rt[RT_SYSEQ].PackKey();
 
         //test :000: in last field
-        if( gstring(rt[RT_SYSEQ].FldKey(7)).find("000") != gstring::npos )
+        if( std::string(rt[RT_SYSEQ].FldKey(7)).find("000") != std::string::npos )
             continue;
         // test output before
         if( savedSystems.Find( packkey ) >= 0)

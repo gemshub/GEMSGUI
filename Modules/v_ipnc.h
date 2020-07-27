@@ -4,7 +4,6 @@
 // Declaration of IPNCalc class
 //
 // Copyright (C) 1996-2001  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization

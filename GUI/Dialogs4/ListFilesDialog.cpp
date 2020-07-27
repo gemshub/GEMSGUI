@@ -4,7 +4,6 @@
 // Implementation of ListFilesDialog class
 //
 // Copyright (C) 1996-2007  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -33,7 +32,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
     setupUi(this);
 
     //setWindowTitle(prfName);
-    gstring label = "Please, check database files to be linked to Modeling Project ";
+    string label = "Please, check database files to be linked to Modeling Project ";
              label += prfName;
     pLabel->setText( tr(label.c_str()) );
 
@@ -68,7 +67,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
         for( ii=0; ii<names.GetCount(); ii++ )
         {
           // select only DB.default files
-          if( names[ii].find( pVisor->sysDBDir())== gstring::npos )
+          if( names[ii].find( pVisor->sysDBDir())== string::npos )
               continue;
           // get 2 colums
           pos1 = names[ii].find_first_of(" ");
@@ -94,7 +93,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
         for( ii=0; ii<names.GetCount(); ii++ )
         {
           // select only Projecte files
-          if( names[ii].find( prfName/*Path*/ ) == gstring::npos )
+          if( names[ii].find( prfName/*Path*/ ) == string::npos )
               continue;
           // get 2 colums
           pos1 = names[ii].find_first_of(" ");
@@ -152,7 +151,7 @@ void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
         pFile = pMod->child( jj );
        if( pFile->isSelected() )
        {
-         gstring col =pFile->text( 0 ).toLatin1().data();
+         string col =pFile->text( 0 ).toLatin1().data();
          cnt++;
          aFls.Add( col.c_str() );
        }
@@ -165,7 +164,7 @@ void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
         pFile = pMod->child( jj );
        if( pFile->isSelected() )
        {
-         gstring col =pFile->text( 0 ).toLatin1().data();
+         string col =pFile->text( 0 ).toLatin1().data();
          cnt++;
          aFls.Add( col.c_str() );
        }

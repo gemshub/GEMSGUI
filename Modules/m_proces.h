@@ -174,7 +174,7 @@ class TProcess : public TCModule
     TPlotLine *plot;
 
     char *text_fmt;
-    gstring sd_key;
+    std::string sd_key;
     std::string filename;
 
 
@@ -208,7 +208,7 @@ public:
 //    bool stopCalc;
     bool stepWise;
     bool calcFinished;
-    gstring Vmessage;
+    std::string Vmessage;
 
     PROCESS *pep;
 
@@ -229,7 +229,7 @@ public:
     void dyn_new( int i=0) override;
     void set_def( int i=0) override;
     bool check_input( const char *key, int level=1 ) override;
-    gstring   GetKeyofRecord( const char *oldKey, const char *strTitle,
+    std::string   GetKeyofRecord( const char *oldKey, const char *strTitle,
                               int keyType ) override;
 
 

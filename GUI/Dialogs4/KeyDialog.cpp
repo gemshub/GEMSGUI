@@ -4,7 +4,6 @@
 // Implementation of KeyDialog class
 //
 // Copyright (C) 1996-2008  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -50,11 +49,11 @@ KeyDialog::KeyDialog(QWidget* win, size_t irt, const char* key,
     else
         keyFilter = key;
 
-    gstring s = "Please, select one record key. Filter: ";
+    string s = "Please, select one record key. Filter: ";
     s +=  keyFilter;
     pLabel->setText(s.c_str());
 
-    s  = gstring(rt[irt].UnpackKey());
+    s  = string(rt[irt].UnpackKey());
     auto n = rt[irt].GetKeyList( keyFilter.c_str(), keyList, temp);
     uint sel = 0;
 
@@ -134,7 +133,7 @@ KeyDialog::SetList()
     TCIntArray temp;
     TCStringArray keyList;
 
-    gstring s = "Please, mark one or more record keys. Filter: ";
+    string s = "Please, mark one or more record keys. Filter: ";
     s +=  keyFilter;
     pLabel->setText(s.c_str());
 
@@ -149,8 +148,8 @@ KeyDialog::SetList()
           {
             // comparing parts before '*' for overwrite dcomp, reacdc ....
             size_t pos = old_sel[jj].find('*');
-            gstring str(old_sel[jj], 0, pos);
-            if( keyList[ii].find(str) != gstring::npos )
+            string str(old_sel[jj], 0, pos);
+            if( keyList[ii].find(str) != string::npos )
             {
             	pList->item(ii)->setSelected( true); //pList->setSelected(ii, true);
               break;
@@ -162,16 +161,16 @@ KeyDialog::SetList()
 
 
 // olvase unpaked keys?
-gstring
+string
 KeyDialog::getKey()
 {
     int sel = pList->currentRow(); //pList->currentItem();
     if( sel != -1 )
     {
         dynamic_cast<TCModule*>(&aMod[iRt])->setFilter(keyFilter.c_str());
-        gstring res;
-        gstring s = pList->item(sel)->text().toLatin1().data();
-        //gstring s = ss;
+        string res;
+        string s = pList->item(sel)->text().toLatin1().data();
+        //string s = ss;
         uint ln;
         for( uint ii=0, jj=0; ii<rt[iRt].KeyNumFlds(); ii++)
         {
@@ -179,22 +178,22 @@ KeyDialog::getKey()
           ln = rt[iRt].FldLen(ii);
           // if( pos) ln = min( ln, pos-s+jj );
 
-          //res += gstring(s+jj, 0, ln);
-          res += gstring(s, jj, ln);
+          //res += string(s+jj, 0, ln);
+          res += string(s, jj, ln);
           StripLine(res);
           res += ":";
           jj += ln;
         }
         return res;
     }
-    return gstring();
+    return string();
 }
 
 
 void
 KeyDialog::CmFilter()
 {
-    gstring str_name = "Template for ";
+    string str_name = "Template for ";
             str_name +=  rt[iRt].GetKeywd();
             str_name += " record key";
     KeyFilter dbFilter(this, iRt, keyFilter.c_str(), str_name.c_str() );
@@ -210,7 +209,7 @@ KeyDialog::CmFilter()
 void
 KeyDialog::CmSelectAll()
 {
-    // select all gstrings
+    // select all strings
     for( int ii=0; ii<pList->count(); ii++ )
         pList->item(ii)->setSelected( true);
 }
@@ -237,7 +236,7 @@ KeyDialog::allSelectedKeys()
     for( int ii=0; ii<pList->count(); ii++ )
         if( pList->item(ii)->isSelected() )
         {
-         gstring s = pList->item(ii)->text().toLatin1().data();;
+         string s = pList->item(ii)->text().toLatin1().data();;
          arr.Add(s.c_str());
         }
     return arr;
@@ -313,7 +312,7 @@ void RDKeyDialog::SetList()
     int jj=0;
     int ii;
 
-    gstring s = "Please, mark one or more record keys. Filter: ";
+    string s = "Please, mark one or more record keys. Filter: ";
     s +=  keyFilter;
 
     // ReacDC list
@@ -358,7 +357,7 @@ void RDKeyDialog::SetList()
 
 void RDKeyDialog::CmFilter()
 {
-    gstring str_name = "Template for ";
+    string str_name = "Template for ";
             str_name +=  rt[RT_REACDC].GetKeywd();
             str_name +=  "&";
             str_name +=  rt[RT_DCOMP].GetKeywd();
@@ -375,7 +374,7 @@ void RDKeyDialog::CmFilter()
 
 void RDKeyDialog::CmSelectAll()
 {
-    // select all gstrings
+    // select all strings
     for( int ii=0; ii<pList->count(); ii++ )
         pList->item(ii)->setSelected( true);
 }
@@ -399,7 +398,7 @@ TCStringArray RDKeyDialog::allSelectedKeys()
     for( int ii=0; ii<pList->count(); ii++ )
         if( pList->item(ii)->isSelected() )
         {
-         gstring s = pList->item(ii)->text().toLatin1().data();;
+         string s = pList->item(ii)->text().toLatin1().data();;
          arr.Add(s.c_str());
         }
     return arr;

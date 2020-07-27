@@ -4,7 +4,6 @@
 // Declaration of EquatSetup class
 //
 // Copyright (C) 2010  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -32,10 +31,10 @@
 
 struct equatSetupData
 {
-   gstring xName; // Abscissa name
-   gstring yName; // Ordinate name
-   gstring indexName; // Index name
-   gstring abscissaEquat; // Abscissa first object name
+   string xName; // Abscissa name
+   string yName; // Ordinate name
+   string indexName; // Index name
+   string abscissaEquat; // Abscissa first object name
 
    bool useSeveral; // More then one Abscissa is permitted
    TCStringArray abscissaLines;  // Abscissa object names (if more then one Abscissa)
@@ -62,16 +61,16 @@ struct scriptSetupData
    //double val;
    //char unit;
 
-   gstring objName;
-   gstring ndxName;
-   gstring lineText;
+   string objName;
+   string ndxName;
+   string lineText;
 
    scriptSetupData( int aWin, int aobj, const char * oName,
                    int aIdx, const char * ndName,
                    const char * alineText ):
            nWin(aWin), nObj(aobj), nIdx(aIdx),
            objName(oName), ndxName(ndName), lineText(alineText)
-   { ndxName.strip(); }
+   { strip( ndxName ); }
 
    scriptSetupData( scriptSetupData& d ):
            nWin(d.nWin), nObj(d.nObj), nIdx(d.nIdx),
@@ -97,8 +96,8 @@ class EquatSetup : public QWidget, public Ui_EquatWidgetForm
    bool useCalc;
 
    TCStringArray namLines;
-   gstring xNam;
-   gstring yNam;
+   string xNam;
+   string yNam;
 
 
    // internal functions
@@ -107,7 +106,7 @@ class EquatSetup : public QWidget, public Ui_EquatWidgetForm
    void tableDeleteRow( int row );
    void scriptUpdate( );
    void emptyScriptTable();
-   gstring getStringValue( int nO, int ndx, const char * andName );
+   string getStringValue( int nO, int ndx, const char * andName );
 
 protected slots:
     virtual void languageChange();
@@ -121,8 +120,8 @@ public:
        const char* script = nullptr, const char* aXname = nullptr, const char* aYname = nullptr  );
     virtual ~EquatSetup();
 
-   gstring getScript() const;
-   TCStringArray getNames( gstring& xName, gstring& yName ) const;
+   string getScript() const;
+   TCStringArray getNames( string& xName, string& yName ) const;
    void setNames(TCStringArray lst );
    void setXname( const char* name )
    {

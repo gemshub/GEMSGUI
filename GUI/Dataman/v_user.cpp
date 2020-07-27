@@ -4,7 +4,6 @@
 // Declaration of miscellaneous utility functions and classes
 //
 // Copyright (C) 1996-2001 A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -57,7 +56,7 @@ void NormFloatRound(float *aArr, int size, int digits)
 
 
 istream&
-u_getline(istream& is, gstring& str, char delim)
+u_getline(istream& is, string& str, char delim)
 {
     char ch;
     is.get(ch);
@@ -126,7 +125,7 @@ char  (* f_getfiles(const char *f_name, char *Path,
    std::string flst_name = f_name;
    size_t pos = flst_name.rfind("/");
    path_ = "";
-   if( pos < gstring::npos )
+   if( pos < string::npos )
       path_ = flst_name.substr(0, pos+1);
    strncpy( Path, path_.c_str(), 256-fileNameLength);
    Path[255] = '\0';
@@ -167,7 +166,7 @@ char  (* f_getfiles(const char *f_name, char *Path,
 }
 
 
-gstring curDate()
+string curDate()
 {
     struct tm *time_now;
     time_t secs_now;
@@ -204,7 +203,7 @@ std::string curDateSmol(char ch )
     return tstr.p;
 }
 
-gstring curTime()
+string curTime()
 {
     struct tm *time_now;
     time_t secs_now;
@@ -224,9 +223,9 @@ gstring curTime()
 
 
 
-void StripLine(gstring& line)
+void StripLine(string& line)
 {
-   line.strip();
+   strip( line );
 }
 
 //void strip(string& str)
@@ -322,25 +321,25 @@ char chLowUp(char ch)
 //        n
 
 void
-  ChangeforTempl( gstring& data_str,  const gstring& from_templ1,
-                  const gstring& to_templ1, uint len_ )
+  ChangeforTempl( string& data_str,  const string& from_templ1,
+                  const string& to_templ1, uint len_ )
 {
     if( data_str.empty() )
         return;
 
 
-    gstring  from_templ = from_templ1;
-    gstring  to_templ = to_templ1;
+    string  from_templ = from_templ1;
+    string  to_templ = to_templ1;
     bool inv_case = false;
     size_t ii;
-    data_str.strip();
-    gstring old_str = data_str;
+    strip( data_str );
+    string old_str = data_str;
 
-    if( from_templ.equals("*") ) // all key
+    if( from_templ =="*" ) // all key
     {
-      if( to_templ.find("invcase") != gstring::npos )
+      if( to_templ.find("invcase") != string::npos )
       {
-          if( to_templ.equals("invcase") )
+          if( to_templ == "invcase" )
             for( ii=0; ii<data_str.length(); ii++)
               data_str[ii] = chLowUp( data_str[ii]);
           else goto PART;
@@ -349,11 +348,11 @@ void
         if( to_templ[0] == '*' )
         {
          if( data_str.length() >= len_ )
-          data_str = gstring( data_str, 0, len_-1 );
-         data_str += gstring(to_templ, 1);
+          data_str = string( data_str, 0, len_-1 );
+         data_str += string(to_templ, 1);
         }
         else
-          if(to_templ.find("*") != gstring::npos) // no all case
+          if(to_templ.find("*") != string::npos) // no all case
             goto PART;
           else
             data_str = to_templ;
@@ -372,9 +371,9 @@ void
 
     PART:
     // Changed first n symbols
-    if( gstring( to_templ, 0, 7).equals("invcase") )
+    if( string( to_templ, 0, 7) == "invcase" )
     {  inv_case = true;
-       to_templ = gstring( to_templ, 7 );
+       to_templ = string( to_templ, 7 );
     }
 
     ii=0;
@@ -395,22 +394,22 @@ void
        Error( from_templ.c_str(), "Error (1): Invalid character in template ");
      ii++;
    }
-   data_str = gstring( data_str, k );
+   data_str = string( data_str, k );
    pos_to = to_templ.find( "*" );
-   data_str = gstring( to_templ, 0, pos_to) + data_str;
-   if( pos_to  == gstring::npos )
+   data_str = string( to_templ, 0, pos_to) + data_str;
+   if( pos_to  == string::npos )
     to_templ = "";
    else
-    to_templ = gstring( to_templ, pos_to+1);
+    to_templ = string( to_templ, pos_to+1);
    pos_to = from_templ.find( "*" );
-   if( pos_to  == gstring::npos )
+   if( pos_to  == string::npos )
     from_templ = "";
    else
-    from_templ = gstring( from_templ, pos_to+1);
+    from_templ = string( from_templ, pos_to+1);
 
    // Changed last n symbols
    inv_case = false;
-   if( to_templ.equals("invcase") )
+   if( to_templ == "invcase" )
    {  inv_case = true;
       to_templ = "";
    }
@@ -435,7 +434,7 @@ void
      ik--;
      jj--;
    }
-   data_str = gstring( data_str, 0, k );
+   data_str = string( data_str, 0, k );
    data_str += to_templ;
    data_str.substr(0, len_);
    if( data_str == old_str )
@@ -449,27 +448,27 @@ void
 }
 
 // "a;b;c" to array { "a", "b", "c" }
-TCStringArray split(const gstring& str, const gstring& delimiters)
+TCStringArray split(const string& str, const string& delimiters)
 {
     TCStringArray v;
-    gstring vv;
+    string vv;
 
     if( str.empty() )
         return v;
 
     string::size_type start = 0;
     auto pos = str.find_first_of(delimiters.c_str(), start);
-    while(pos != gstring::npos)
+    while(pos != string::npos)
     {
-        vv = gstring(str, start, pos - start);
-        vv.strip();
+        vv = string(str, start, pos - start);
+        strip( vv );
         v.Add( vv );
         start = pos + 1;
         pos = str.find_first_of(delimiters.c_str(), start);
     }
 
-    vv = gstring (str, start, str.length() - start);
-    vv.strip();
+    vv = string (str, start, str.length() - start);
+    strip( vv );
     if( !vv.empty() )
         v.Add( vv );
     return v;

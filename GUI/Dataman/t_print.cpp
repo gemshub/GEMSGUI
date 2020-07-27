@@ -4,7 +4,6 @@
 // Implementation of TPrintData class
 //
 // Copyright (C) 2001  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -62,7 +61,7 @@ TPrintData::TPrintData(const char *sd_key,
               count = 1;
        }
        else
-           {  gstring str_err = "Invalid command: \n";
+           {  string str_err = "Invalid command: \n";
               str_err += input;
               Error( key_format.c_str(), str_err.c_str() );
             }
@@ -79,11 +78,11 @@ TPrintData::TPrintData(const char *sd_key,
                pose = strchr( pose+1, '#');
             }
             if( !pose )
-            {  gstring str_err = "Invalid condition: \n";
+            {  string str_err = "Invalid condition: \n";
                str_err += input;
                Error( key_format.c_str(), str_err.c_str() );
             }
-            cond = gstring( input, 0, pose-input );
+            cond = string( input, 0, pose-input );
             input = pose+2;
             ifcond = true;
             try{
@@ -203,7 +202,7 @@ TPrintData::getFormat( const char * fmt )
  if( fmt[i] == 's' || fmt[i] == 'c' || fmt[i] == 'f' ||
      fmt[i] == 'e' || fmt[i] == 'g' )
  {
-    aFmts.Add( new PFormat( fmt[i], gstring( fmt, 0, i) ) );
+    aFmts.Add( new PFormat( fmt[i], string( fmt, 0, i) ) );
     input += i+1;
     return true;
  }
@@ -234,7 +233,7 @@ TPrintData::getToken( int& ii, int& jj )
 {
  int i;
  int data=0;
- gstring str;
+ string str;
 
  skipSpace();
 /* while( *input == ' ' || *input == '\n' || *input == '\t')
@@ -250,7 +249,7 @@ TPrintData::getToken( int& ii, int& jj )
        else
           i++;
     ii = i;
-/*    str = gstring( input, 0, i );
+/*    str = string( input, 0, i );
     if( *input == '\'')
       input++;
 */
@@ -267,9 +266,9 @@ TPrintData::getToken( int& ii, int& jj )
    && input[i] != '\t' && input[i] != '$' && input[i] != '\0')
           i++;
 */
-    str = gstring( input, 0, i );
+    str = string( input, 0, i );
 
-    if( str.equals("substr") )
+    if( str == "substr" )
     {  data = substr_d;
        input += i;
 
@@ -304,17 +303,17 @@ TPrintData::getToken( int& ii, int& jj )
       }
       return data;
     }
-    if( str.equals("list") ) data = list_d;
-    else if( str.equals("line") ) data = line_d;
-      else if( str.equals("all") ) data = all_d;
-         else if( str.equals("label") ) data = label_d;
-            else if( str.equals("rkey") ) data = rkey_d;
-                else if( str.equals("index") ) data = index_d;
-                   else  if( str.equals("space") ) data = space_d;
-                      else  if( str.equals("date") ) data = date_d;
-                          else  if( str.equals("time") ) data = time_d;
+    if( str == "list" ) data = list_d;
+    else if( str =="line" ) data = line_d;
+      else if( str =="all" ) data = all_d;
+         else if( str == "label" ) data = label_d;
+            else if( str == "rkey" ) data = rkey_d;
+                else if( str == "index" ) data = index_d;
+                   else  if( str == "space" ) data = space_d;
+                      else  if( str == "date" ) data = date_d;
+                          else  if( str == "time" ) data = time_d;
     else
-    {  gstring str_err = "Invalid token: \n";
+    {  string str_err = "Invalid token: \n";
            str_err += str;
        if( i==0 )
            str_err += input;
@@ -330,10 +329,10 @@ TPrintData::getToken( int& ii, int& jj )
            && input[i] != '\t'&&
            input[i] != '[' && input[i] != '\0'&& input[i] != '\n')
        i++;
-    str = gstring( input, 0, i );
+    str = string( input, 0, i );
     data = aObj.Find( str.c_str() );
     if( data < 0 )
-    {  gstring str_err = "Invalid object name: \n";
+    {  string str_err = "Invalid object name: \n";
            str_err += str;
        if( i==0 )
            str_err += input;
@@ -410,7 +409,7 @@ TPrintData::getData( )
 
  if( _data == text_d )
  {
-   aDts.Add( new PData( _data, gstring( input, 0, i ).c_str() ) );
+   aDts.Add( new PData( _data, string( input, 0, i ).c_str() ) );
    input += i;
    if( *input == '"')
       input++;
@@ -428,13 +427,13 @@ TPrintData::getData( )
 
 }
 
-const gstring emptiness("---");
+const string emptiness("---");
 
 void
 TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
 {
   vstr strbuf(8192);
-  gstring format = fmt.FmtOut();
+  string format = fmt.FmtOut();
   switch( dt.data )
   {
     case space_d: fmt.type = 's';
@@ -497,7 +496,7 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                {
                  if( fmt.type == 's' || fmt.type == 'c' )
                  {
-                   gstring str_data;
+                   string str_data;
                    if( dt.end_sub > 0 && ( aObj[dt.data].GetType() >= 0 ) )
                    { // substring only for string type
                     str_data = aObj[dt.data].GetString( ind, dt.index_j );

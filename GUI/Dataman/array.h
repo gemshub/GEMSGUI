@@ -4,7 +4,6 @@
 // Declaration/implementation of array classes collection
 //
 // Copyright (C) 1996-2001 A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library and GEMS3K
 // code package

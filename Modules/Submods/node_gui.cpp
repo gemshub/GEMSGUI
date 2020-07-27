@@ -92,7 +92,7 @@ void TNodeGUI::getDataBridgeNames( QWidget* par, bool select_all,
     {  if( select_all )
             aSelIC.Add( ii );
         else
-            aList.Add( gstring( pmm->SB[ii], 0, MAXICNAME+MAXSYMB));
+            aList.Add( std::string( pmm->SB[ii], 0, MAXICNAME+MAXSYMB));
     }
     if( !select_all  )
         aSelIC = vfMultiChoice(par, aList,
@@ -103,7 +103,7 @@ void TNodeGUI::getDataBridgeNames( QWidget* par, bool select_all,
     {  if( select_all )
             aSelDC.Add( ii );
         else
-            aList.Add( gstring( pmm->SM[ii], 0, MAXDCNAME));
+            aList.Add( std::string( pmm->SM[ii], 0, MAXDCNAME));
     }
     if( !select_all  )
         aSelDC = vfMultiChoice(par, aList,
@@ -114,7 +114,7 @@ void TNodeGUI::getDataBridgeNames( QWidget* par, bool select_all,
     {  if( select_all )
             aSelPH.Add( ii );
         else
-            aList.Add( gstring( pmm->SF[ii], 0, MAXPHNAME+MAXSYMB));
+            aList.Add( std::string( pmm->SF[ii], 0, MAXPHNAME+MAXSYMB));
     }
     if( !select_all  )
         aSelPH = vfMultiChoice(par, aList,

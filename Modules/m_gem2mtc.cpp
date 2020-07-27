@@ -29,7 +29,7 @@
 bool
 TGEM2MT::test_sizes( )
 {
-  gstring err_str;
+  std::string err_str;
 
 
   mtp->Nb = TRMults::sm->GetMU()->N;
@@ -137,7 +137,7 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
     {  if( select_all )
          aSelIC.Add( ii );
        else
-         aList.Add( gstring( mult->SB[ii], 0, MAXICNAME+MAXSYMB));
+         aList.Add( std::string( mult->SB[ii], 0, MAXICNAME+MAXSYMB));
     }
     if( !select_all  )
       aSelIC = vfMultiChoiceSet(window(), aList,
@@ -149,7 +149,7 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
     {  if( select_all )
          aSelDC.Add( ii );
        else
-       aList.Add( gstring( mult->SM[ii], 0, MAXDCNAME));
+       aList.Add( std::string( mult->SM[ii], 0, MAXDCNAME));
     }
     if( !select_all  )
        aSelDC = vfMultiChoiceSet(window(), aList,
@@ -161,7 +161,7 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
     {  if( select_all )
          aSelPH.Add( ii );
        else
-       aList.Add( gstring( mult->SF[ii], 0, MAXPHNAME+MAXSYMB));
+       aList.Add( std::string( mult->SF[ii], 0, MAXPHNAME+MAXSYMB));
     }
     if( !select_all  )
        aSelPH = vfMultiChoiceSet(window(), aList,
@@ -287,7 +287,7 @@ void TGEM2MT::init_arrays( bool mode )
   if( mtp->PsMode == RMT_MODE_S || mtp->PsMode == RMT_MODE_F || mtp->PsMode == RMT_MODE_B )
   {
      long int ii;
-     gstring phName = "0";
+     std::string phName = "0";
      double xaq= 0.;
      double xgas = 0.;
      double xsld = 0.;
@@ -306,8 +306,8 @@ void TGEM2MT::init_arrays( bool mode )
       default: break;
      }
      if( mtp->nPG > 0 && !(!*mtp->MGPid[0] || *mtp->MGPid[0] == ' '))
-       {  phName = gstring(mtp->MGPid[0], 0, MAXSYMB);
-            phName.strip();
+       {  phName = std::string(mtp->MGPid[0], 0, MAXSYMB);
+            strip( phName );
        }
 
      if( mode )  // only start
@@ -460,7 +460,7 @@ void TGEM2MT::make_A( long int siz_, char (*for_)[MAXFORMUNITDT] )
 {
   // Get full matrix A
   TIArray<TFormula> aFo;
-  gstring form;
+  std::string form;
   long int ii;
 
   if( !siz_ )
@@ -470,8 +470,8 @@ void TGEM2MT::make_A( long int siz_, char (*for_)[MAXFORMUNITDT] )
   for( ii=0; ii<siz_; ii++ )
   {
      aFo.Add( new TFormula() );
-     form = gstring( for_[ii], 0, MAXFORMUNITDT );
-     form.strip();
+     form = std::string( for_[ii], 0, MAXFORMUNITDT );
+     strip( form );
      aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
   }
 
@@ -941,9 +941,9 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
       TCStringArray lnames;
       int ii;
       for( ii=0; ii<mtp->nYS; ii++ )
-          lnames.Add( gstring(mtp->lNam[ii], 0, MAXGRNAME ));
+          lnames.Add( std::string(mtp->lNam[ii], 0, MAXGRNAME ));
       for( ii=0; ii<mtp->nYE; ii++ )
-          lnames.Add( gstring( mtp->lNamE[ii], 0, MAXGRNAME ));
+          lnames.Add( std::string( mtp->lNamE[ii], 0, MAXGRNAME ));
       gd_gr = updateGraphWindow( gd_gr, this, plt, mtp->name,
           mtp->xNames, mtp->yNames, lnames );
     }

@@ -4,7 +4,6 @@
 // Implementation of ElementsDialog class
 //
 // Copyright (C) 2001-2008  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -74,9 +73,9 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
 {
 	setupUi(this);
 
-    gstring str =
+    string str =
           "Basis configuration of a new Modelling Project  ";
-         str +=  gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));;
+         str +=  string(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));;
          setWindowTitle( trUtf8(str.c_str()) );
 
          QObject::connect( bBack, SIGNAL(clicked()), this, SLOT(CmBack()));
@@ -272,7 +271,7 @@ ElementsDialog::~ElementsDialog()
 void ElementsDialog::setOpenFilesAsDefault()
 {
   selNames.Clear();
-  gstring defName;
+  string defName;
 
   if( el_data.aSelNames.empty() )
   {  defName = ".";
@@ -286,7 +285,7 @@ void ElementsDialog::setOpenFilesAsDefault()
       el_data.setFlags( el_data.aSelNames);
 
       pos1 =  el_data.aSelNames.find( "<TDBfilters> = " ); //15
-      if( pos1 == gstring::npos )
+      if( pos1 == string::npos )
       {
          defName = ".";
          defName += pVisor->defaultBuiltinTDBL();
@@ -295,10 +294,10 @@ void ElementsDialog::setOpenFilesAsDefault()
       }
       pos1 += 15;
       pos2 = el_data.aSelNames.find_first_of(",;", pos1 );
-      while( pos2 != gstring::npos  )
+      while( pos2 != string::npos  )
       {
           defName = el_data.aSelNames.substr(pos1, pos2-pos1);
-          defName.strip();
+          strip( defName );
           selNames.Add(defName);
           pos1 = pos2+1;
           pos2 = el_data.aSelNames.find_first_of(",;", pos1);
@@ -486,8 +485,8 @@ void ElementsDialog::SetICompList()
     for( uint ii=0; ii<aIC.GetCount(); ii++ )
      if( aIndMT[ii] == -1) // additional
      {
-       gstring name= gstring( aIC[ii], 0, rt[RT_ICOMP].FldLen(0) );
-       name.strip();
+       string name= string( aIC[ii], 0, rt[RT_ICOMP].FldLen(0) );
+       strip( name );
        if( name != "Vol" )
        {
          ErrorIf( nmbOther>12, aIC[ii].c_str(),
@@ -529,13 +528,13 @@ void ElementsDialog::SetICompList()
   for( uint ii=0; ii<aICkey2_sel.GetCount(); ii++ )
   {
        int jj;
-       gstring name= gstring( aICkey2_sel[ii],
+       string name= string( aICkey2_sel[ii],
                       0, rt[RT_ICOMP].FldLen(0) );
-       name.strip();
+       strip( name );
        for( jj=0; jj<nmbOther; jj++ )
        {
          bb =  bgOther->button(jj);
-         gstring ttl = bb->text().toLatin1().data();
+         string ttl = bb->text().toLatin1().data();
          if( name == ttl )
          {
           bb->setEnabled( false );
@@ -649,7 +648,7 @@ void ElementsDialog::setFilesList()
         for(uint ii=0; ii<names.GetCount(); ii++ )
         {
           // select only DB.default files
-          if( names[ii].find( pVisor->sysDBDir())== gstring::npos )
+          if( names[ii].find( pVisor->sysDBDir())== string::npos )
               continue;
           // get 2 colums
           pos1 = names[ii].find_first_of(" ");
@@ -768,7 +767,7 @@ void ElementsDialog::setTreeWidget()
     QList<QStandardItem *> rowItems;
 
     QString aTag, aVer;
-    gstring fname, tag, vers="";
+    string fname, tag, vers="";
     size_t pos1, pos2, pos3;
 
     for( ii=0; ii<files_data.flNames.GetCount(); ii++ )
@@ -782,7 +781,7 @@ void ElementsDialog::setTreeWidget()
 
         // get version
         pos1 = fname.find(".ver");
-        if( pos1 != gstring::npos )
+        if( pos1 != string::npos )
         {
             vers = fname.substr(pos1+1+3);
             fname = fname.substr(0, pos1+1 );
@@ -795,13 +794,13 @@ void ElementsDialog::setTreeWidget()
         // first tag name of chain
         pos1 = fname.find(".");
         pos2 = fname.find(".", pos1+1);
-        while( pos2 != gstring::npos )
+        while( pos2 != string::npos )
         {
           tag = fname.substr(pos1+1, pos2-pos1-1);
           aTag = tag.c_str();
           pdb_child = nullptr;
           pos3 = fname.find(".", pos2+1);
-          if( pos3 != gstring::npos)
+          if( pos3 != string::npos)
               aVer = "";
           else aVer = vers.c_str();
 
@@ -865,7 +864,7 @@ void ElementsDialog::getSelectionTreeWidget()
 {
   selNames.Clear();
   // get names from FTreeWidget
-  gstring tag = ".";
+  string tag = ".";
   for(int jj=0; jj<pkern->rowCount(); jj++ )
       getTag( tag, pkern->child(jj));
 
@@ -873,12 +872,12 @@ void ElementsDialog::getSelectionTreeWidget()
       cout << selNames[ii].c_str() << endl;
 }
 
-void ElementsDialog::getTag( gstring tag, QStandardItem* pdb)
+void ElementsDialog::getTag( string tag, QStandardItem* pdb)
 {
     if( !pdb )
       return;
 
-    gstring tag1 = pdb->text().toLatin1().data();
+    string tag1 = pdb->text().toLatin1().data();
     tag += tag1;
 
     if( pdb->checkState() == Qt::Checked)
@@ -895,7 +894,7 @@ void ElementsDialog::setSelectionTreeWidget()
 {
   // clear all check in ftreeWidget ??!!
 
- gstring name;
+ string name;
  for(uint ii=0; ii<selNames.GetCount(); ii++ )
      for(int jj=0; jj<pkern->rowCount(); jj++ )
      {
@@ -904,7 +903,7 @@ void ElementsDialog::setSelectionTreeWidget()
      }
 }
 
-void ElementsDialog::setTag( gstring fname, QStandardItem* pdb)
+void ElementsDialog::setTag( string fname, QStandardItem* pdb)
 {
     if( !pdb )
       return;
@@ -913,12 +912,12 @@ void ElementsDialog::setTag( gstring fname, QStandardItem* pdb)
     size_t pos2 = fname.find(".", pos1+1);
     if( pos2 == pos1+1 )
         pos2 = fname.find(".", pos2+1);
-    gstring tag = fname.substr(pos1+1, pos2-pos1-1);
+    string tag = fname.substr(pos1+1, pos2-pos1-1);
     QString aTag = tag.c_str();
 
     if( aTag == pdb->text() )
     {
-        if(pos2 == gstring::npos )
+        if(pos2 == string::npos )
            pdb->setCheckState( Qt::Checked );
         else
         {
@@ -933,17 +932,17 @@ void ElementsDialog::setTag( gstring fname, QStandardItem* pdb)
 
 /// Returns; boolean true if a keyword was found in the file name, false otherwise
 ///    for each of open file keywords;
-int ElementsDialog::isOpenFile( gstring& name  )
+int ElementsDialog::isOpenFile( string& name  )
 {
 
-    gstring fname = name;
+    string fname = name;
 
     //scip extension
     size_t pos1 = fname.rfind(".");
     fname = fname.substr( 0, pos1 );
     // scip version
     pos1 = fname.find(".ver");
-    if( pos1 != gstring::npos )
+    if( pos1 != string::npos )
       fname = fname.substr(0, pos1 );
 
     // first tag name of chain
@@ -954,17 +953,17 @@ int ElementsDialog::isOpenFile( gstring& name  )
 
     for(uint ii=0; ii < selNames.GetCount(); ii++ )
     {
-        if(  name.find( selNames[ii] ) != gstring::npos )
+        if(  name.find( selNames[ii] ) != string::npos )
             return 1;
 
-        if(  selNames[ii].find(fname) != gstring::npos )
+        if(  selNames[ii].find(fname) != string::npos )
             return 1;
     }
     return 0;
 }
 
 /*
-TreeFileLine::TreeFileLine(int aRow, gstring aTag, gstring aVer, TreeFileLine* aParent)
+TreeFileLine::TreeFileLine(int aRow, string aTag, string aVer, TreeFileLine* aParent)
 {
     row = aRow;
     tag = aTag;
@@ -1028,7 +1027,7 @@ void FileNamesTreeModel::setupModelData(TCStringArray aFilesData)
     int ii, jj;
     TreeFileLine* pdb;
     TreeFileLine* pdb_child;
-    gstring fname, tag, vers="";
+    string fname, tag, vers="";
     size_t pos1, pos2;
 
     for( ii=0; ii<aFilesData.GetCount(); ii++ )
@@ -1043,7 +1042,7 @@ void FileNamesTreeModel::setupModelData(TCStringArray aFilesData)
 
         // get version
         pos1 = fname.find(".Ver");
-        if( pos1 != gstring::npos )
+        if( pos1 != string::npos )
         {
             vers = fname.substr(pos1+1);
             fname = fname.substr(0, pos1+1 );
@@ -1056,7 +1055,7 @@ void FileNamesTreeModel::setupModelData(TCStringArray aFilesData)
         // first tag name of chain
         pos1 = fname.find(".");
         pos2 = fname.find(".", pos1+1);
-        while( pos2 != gstring::npos )
+        while( pos2 != string::npos )
         {
           tag = fname.substr(pos1+1, pos2-pos1-1);
           pdb_child = 0;

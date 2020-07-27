@@ -4,7 +4,6 @@
 // Declaration of TPrintData class
 //
 // Copyright (C) 2001  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -19,7 +18,6 @@
 #ifndef _t_print_h_
 #define _t_print_h_
 
-#include "gstring.h"
 #include "v_ipnc.h"
 
  // Format: % [flags] [width] [.prec] type_char
@@ -35,9 +33,9 @@ struct PFormat
 {
   char type;
   char long_;
-  gstring fmt;
+  string fmt;
 
-  PFormat( const char aType, gstring aFmt ):
+  PFormat( const char aType, string aFmt ):
     type( aType), long_(' '), fmt(aFmt)
   {}
 
@@ -45,12 +43,12 @@ struct PFormat
     type( d.type), long_(d.long_), fmt( d.fmt)
   {}
 
-  gstring FmtOut()
+  string FmtOut()
   {
-    gstring res = fmt;
+    string res = fmt;
     if( long_ == 'l' && type != 's')
       res += "l";
-    res += gstring( 1, type);
+    res += string( 1, type);
     return res;
   }
 };
@@ -82,7 +80,7 @@ struct PData
   int end_sub;   // end substring  or
 
    // object line for  line type
-  gstring line;
+  string line;
 
   PData( int _data, int _i, int _j,
         int bg_, int end_, bool _all, bool _label):
@@ -107,7 +105,7 @@ struct PData
 
 class TPrintData  // print resalts of module calc
 {
-    gstring key_format;        // key of SDref record
+    string key_format;        // key of SDref record
     unsigned int nRT;          // module number
 
     char *input;               // current position
@@ -115,7 +113,7 @@ class TPrintData  // print resalts of module calc
     TIArray<PData> aDts;     // list of datas
 
     bool  ifcond;
-    gstring cond;      // Text with IPN-expression << prn=: cond; >>
+    string cond;      // Text with IPN-expression << prn=: cond; >>
                        // ii - index of line in expression
     IPNCalc rpn;       // IPN of equats of print condition
     int prr;           // internal

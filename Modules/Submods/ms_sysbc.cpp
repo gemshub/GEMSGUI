@@ -130,7 +130,7 @@ void TSyst::mark_dc_to_ic()
     int  j, ij;
     vstr ICs(MAXRKEYLEN);
     TFormula aFo;
-    gstring form;
+    std::string form;
     RMULTS* mup = TRMults::sm->GetMU();
 
     sy.N = 0;
@@ -166,7 +166,7 @@ void TSyst::mark_ic_to_dc()
     int  j, ij;
     vstr ICs(MAXRKEYLEN);
     TFormula aFo;
-    gstring form;
+    std::string form;
     RMULTS* mup = TRMults::sm->GetMU();
 
     sy.L = 0;
@@ -453,7 +453,7 @@ void TSyst::systbc_calc( int mode )
     double *A=0;
     vstr ICs(MAXRKEYLEN);
     TFormula aFo;
-    gstring form;
+    std::string form;
     time_t crt;
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     TCompos* aCMP=(TCompos *)(&aMod[RT_COMPOS]);
@@ -587,10 +587,10 @@ void TSyst::systbc_calc( int mode )
       if( ProvidedPhm )
       {
         bool NewRkey = false; // , syPbPH, syPPHk;
-        gstring pkey;
-        gstring skey;
+        std::string pkey;
+        std::string skey;
         TSysEq* aSE=(TSysEq *)(&aMod[RT_SYSEQ]);
-        skey = gstring(aSE->ssp->PhmKey, 0, EQ_RKLEN);
+        skey = std::string(aSE->ssp->PhmKey, 0, EQ_RKLEN);
 
         // Added Sveta 14/03/02 check if another SysEq record is available
         if( !skey.empty() && skey[0] != '\0' &&
@@ -610,7 +610,7 @@ void TSyst::systbc_calc( int mode )
                         "Please, select one SysEq record",  RT_SYSEQ,  skey.c_str() );
                     if( skey.empty() )
                     {
-                      gstring msg = "Record ";
+                      std::string msg = "Record ";
                          msg += skey;
                          msg += " not found!" ;
                          Error( GetName(), msg.c_str());
@@ -695,7 +695,7 @@ void TSyst::systbc_calc( int mode )
             continue;
         if( sy.B[i] < aPa->pa.p.DB || sy.B[i] > 1e6 )
         {
-            aICkeys.Add(gstring(mup->SB[i],0, MAXICNAME));
+            aICkeys.Add(std::string(mup->SB[i],0, MAXICNAME));
             aICnums.Add(i);
             sy.Icl[i] = S_REM;
         }
@@ -745,7 +745,7 @@ void TSyst::PHbcalcSysEq( double *MsysC, double *MaqC, double *R1C,
     TCompos* aCMP=(TCompos *)(&aMod[RT_COMPOS]);
     RMULTS* mup = TRMults::sm->GetMU();
     TIArray<TFormula> aFo;
-    gstring form;
+    std::string form;
     int i, j, jf=0, jsf=0, k, Lf;
     double *A, *X;
     double *B, *BS,  Xf, Mass, Xincr;

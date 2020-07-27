@@ -3,8 +3,6 @@
 //
 // Implementation of ProcessWizard class
 //
-// Copyright (C) 2005-2013  S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -103,7 +101,7 @@ ProcessWizard::ProcessWizard( const char* pkey, char flgs[24], int size[8],
         calcScript(acalcScript), outScript(aoutScript), pageScript(nullptr)
 {
     setupUi(this);
-    gstring str1= "GEM-Selektor Process Setup:  ";
+    string str1= "GEM-Selektor Process Setup:  ";
         str1 += pkey;
         setWindowTitle( str1.c_str() );
 
@@ -1043,7 +1041,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
              for(int jj=0; jj<6; jj++ )
              {
                lst = getSelected( jj );
-               gstring oName = aObj[pgData[jj].nObj].GetKeywd();
+               string oName = aObj[pgData[jj].nObj].GetKeywd();
                for(ii=0; ii<lst.count();ii++)
                {
                   lst[ii] = lst[ii].trimmed();
@@ -1070,7 +1068,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
             for(int jj=0; jj<6; jj++ )
             {
               lst = getSelected( jj );
-              gstring oName = aObj[pgData[jj].nObj].GetKeywd();
+              string oName = aObj[pgData[jj].nObj].GetKeywd();
               for(ii=0; ii<lst.count();ii++)
               {
                  lst[ii] = lst[ii].trimmed();
@@ -1100,7 +1098,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
       QString EM0 = "EM0", EM1 = "EM1";
       lst = getSelected( "Phases" );
       if( lst.count() > 0 )
-      {   gstring phname = lst[0].trimmed().toLatin1().data();
+      {   string phname = lst[0].trimmed().toLatin1().data();
 
           dclst = TProfil::pm->DCNamesforPh( phname.c_str() , true );
           // Here may be message if Invalid phase
@@ -1156,7 +1154,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
            //    if( subtype == 0 )
                {
                  QString pH = "Output", com = "Input";
-                 gstring oName;
+                 string oName;
 
                  // select input (titrant)
                  for(int jj=0; jj<4; jj++ )
@@ -1355,7 +1353,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
         {
           auto nO = pgData[jj].nObj;
           lst = getSelected( jj );
-          gstring oName = aObj[nO].GetKeywd();
+          string oName = aObj[nO].GetKeywd();
 
           for(ii=0; ii<lst.count();ii++)
           {
@@ -1490,7 +1488,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
        lst = getSelected( "Phases" );
        if( lst.count() < 1 )
          return;
-       gstring phname = lst[0].trimmed().toLatin1().data();
+       string phname = lst[0].trimmed().toLatin1().data();
        dclst = TProfil::pm->DCNamesforPh( phname.c_str(), true );
        if( dclst.GetCount() < 2 )
          return;
@@ -1526,7 +1524,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
          lst = getSelected( "Phases" );
          if( lst.count() < 1 )
            return;
-         gstring phname = lst[0].trimmed().toLatin1().data();
+         string phname = lst[0].trimmed().toLatin1().data();
          dclst = TProfil::pm->DCNamesforPh( phname.c_str(), true );
          if( dclst.GetCount() < 2 )
            break;
@@ -1610,7 +1608,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
                if( subtype == 0 )
                {
                  QString pH, com;
-                 gstring oName;
+                 string oName;
 
                  // find titrant
                  for(ii=0; ii<4; ii++ )
@@ -1829,7 +1827,7 @@ int  ProcessWizard::getNPoints( int col )
          nP = -1;
       if( (nP < 1 || nP > 9999) && nP != -1 )
       {
-          gstring str = tIters->horizontalHeaderItem( col )->text().toLatin1().data();
+          string str = tIters->horizontalHeaderItem( col )->text().toLatin1().data();
           vfMessage(this, str.c_str(), "Wrong number of steps - please, check values in this iterator!");
           return nP;
       }

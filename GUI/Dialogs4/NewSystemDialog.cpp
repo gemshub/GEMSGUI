@@ -4,7 +4,6 @@
 // Implementation of NewSystemDialog class
 //
 // Copyright (C) 1996-2008 S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -34,9 +33,9 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* /*name*/):
 	QMainWindow( parent )
 {
 	setupUi(this);
-        gstring titl; // = pVisorImp->getGEMTitle();
+        string titl; // = pVisorImp->getGEMTitle();
             titl = "EqStat:: Single Thermodynamic System in Project ";
-            titl+= gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+            titl+= string(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
             setWindowTitle( trUtf8(titl.c_str()) );
 
     pDia = this;
@@ -294,8 +293,8 @@ void NewSystemDialog::printInputList( fstream& f )
 // returns true if user pressed 'save' or 'discard' and false on 'cancel'
 bool NewSystemDialog::MessageToSave()
 {
-    gstring key_str = rt[RT_SYSEQ].PackKey();
-    if( TSysEq::pm->isCellChanged() && key_str.find_first_of("*?") == gstring::npos )
+    string key_str = rt[RT_SYSEQ].PackKey();
+    if( TSysEq::pm->isCellChanged() && key_str.find_first_of("*?") == string::npos )
     {
      int res = vfQuestion3(this, key_str.c_str(),
                        "Data record has been changed!",
@@ -558,7 +557,7 @@ void NewSystemDialog::CmSave()
     {
         if( TSysEq::pm->ifCalcFlag()== false )
         {
-            gstring key_s = rt[RT_SYSEQ].PackKey();
+            string key_s = rt[RT_SYSEQ].PackKey();
             if( rt[RT_SYSEQ].Find( key_s.c_str()  ) < 0) // FindCurrent
             { vfMessage( this, key_s.c_str(),
                          "Please, calculate the equilibrium state before saving this record!");
@@ -603,7 +602,7 @@ void NewSystemDialog::CmNext()
 
         size_t i_next = 0;
         // get current record key
-        gstring str=rt[RT_SYSEQ].UnpackKey();
+        string str=rt[RT_SYSEQ].UnpackKey();
         // select scroll list
         TCStringArray aKey;
         TCIntArray anR;
@@ -611,7 +610,7 @@ void NewSystemDialog::CmNext()
         if( Nrec <= 0 )
             return; // no records to scroll
         // get current record key
-        if( !(str.find_first_of("*?" ) != gstring::npos) )
+        if( !(str.find_first_of("*?" ) != string::npos) )
             //Current record key is defined!
         {
             for(uint i=0; i<aKey.GetCount(); i++ )
@@ -645,7 +644,7 @@ void NewSystemDialog::CmPrevious()
 
         size_t i_next = 0;
         // get current record key
-        gstring str=rt[RT_SYSEQ].UnpackKey();
+        string str=rt[RT_SYSEQ].UnpackKey();
         // select scroll list
         TCStringArray aKey;
         TCIntArray anR;
@@ -653,7 +652,7 @@ void NewSystemDialog::CmPrevious()
         if( Nrec <= 0 )
             return; // no records to scroll
         // get current record key
-        if( !(str.find_first_of("*?" ) != gstring::npos) )
+        if( !(str.find_first_of("*?" ) != string::npos) )
             //Current record key is defined!
         {
             for(size_t i=0; i<aKey.GetCount(); i++ )

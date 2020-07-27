@@ -68,7 +68,7 @@ class QProcess;
 class Helper
 {
 
-    gstring docPath;
+    string docPath;
        
 public:
    Helper();
@@ -79,9 +79,9 @@ private:
     bool startAssistant();
      QProcess *proc;
 
-    bool checkForRef(const gstring& file, gstring& ref);
+    bool checkForRef(const string& file, string& ref);
     //! sets the path where html-files are
-    void setPath(const gstring& p)
+    void setPath(const string& p)
     {
     	docPath = p;
     }

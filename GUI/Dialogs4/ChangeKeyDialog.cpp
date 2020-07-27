@@ -4,7 +4,6 @@
 // Implementation of ChangeKeyDialog class
 //
 // Copyright (C) 1996-2008  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -63,19 +62,19 @@ void ChangeKeyDialog::languageChange()
 }
 
 
-gstring
+string
 ChangeKeyDialog::getTemplFrom()
 {
  SetFromString();
- gstring ret = templFrom->text().toLatin1().data();
+ string ret = templFrom->text().toLatin1().data();
  return ret;
 }
 
-gstring
+string
 ChangeKeyDialog::getTemplTo()
 {
  SetToString();
- gstring ret = templTo->text().toLatin1().data();
+ string ret = templTo->text().toLatin1().data();
  return ret;
 }
 
@@ -87,17 +86,17 @@ void ChangeKeyDialog::CmHelp()
 
 void ChangeKeyDialog::SetFromString()
 {
-    gstring ret;
+    string ret;
 
     if(rAll->isChecked())
       ret = "*";
     else //  ??*???, *?, ??*
      {
        auto n = nfirst->value();
-       ret = gstring(n, '?');
+       ret = string(n, '?');
        ret+= "*";
        n = nlast->value();
-       ret += gstring(n, '?');
+       ret += string(n, '?');
      }
 
     templFrom->setText( ret.c_str() );
@@ -105,8 +104,8 @@ void ChangeKeyDialog::SetFromString()
 
 void ChangeKeyDialog::SetToString()
 {
-    gstring ret="";
-    gstring part;
+    string ret="";
+    string part;
 
     if(rAll->isChecked()) // *abc, abc, invcase
      {

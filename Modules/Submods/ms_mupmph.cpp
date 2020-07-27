@@ -141,7 +141,7 @@ void TMulti::multi_sys_dc()
     double a, *A; // , Vv =0.;
     double mm;
     TIArray<TFormula> aFo;
-    gstring form;
+    string form;
     RMULTS* mup = TRMults::sm->GetMU();
     SYSTEM *syp = TSyst::sm->GetSY();
 

@@ -4,7 +4,6 @@
 // Implementation of InputSystemDialog class
 //
 // Copyright (C) 2010  S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -196,7 +195,7 @@ InputSystemDialog::~InputSystemDialog()
 
 void InputSystemDialog::getTable( TIArray<tableSetupData>& tab ) const
 {
-  gstring txt = pTname->text().toLatin1().data();
+  string txt = pTname->text().toLatin1().data();
 
   if( txt == emptiness /*|| txt == short_emptiness*/ )
   aObj[o_ssname].SetString( S_EMPTY, 0, 0 );
@@ -235,7 +234,7 @@ void InputSystemDialog::changeTable(const QItemSelection & selected, const QItem
   // added selected
   foreach( ndx,  selected.indexes()  )
   {
-    gstring stt = ndx.data(Qt::DisplayRole).toString().toLatin1().data();
+    string stt = ndx.data(Qt::DisplayRole).toString().toLatin1().data();
     nO = wnData[curPage].nObj;
     ndx_row = ndx.row();
     if( nO<0 || curPage >= wnData.GetCount()-1 )

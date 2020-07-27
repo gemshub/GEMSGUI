@@ -669,7 +669,7 @@ enum pe_valind { /* index control */
 // GtDemo
 //---------------------------------
 
-enum grr_constants { // gstring len for graph
+enum grr_constants { // string len for graph
     MAXAXISNAME = 9,
     MAXGSNAME = 70,
     MAXGRNAME = 16

@@ -85,7 +85,7 @@ void TSysEq::keyTest( const char *key )
 {
     if( pVisor->ProfileMode == true )
     { // test project key
-        gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
         StripLine(prfKey);
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
@@ -99,9 +99,9 @@ void TSysEq::keyTest( const char *key )
 void TSysEq::MakeQuery()
 {
     const char * p_key;
-    gstring name = gstring(ssp->name, 0, MAXFORMULA);
-    gstring notes = gstring(ssp->notes, 0, MAXFORMULA);
-    gstring EQkey = gstring(ssp->PhmKey, 0, EQ_RKLEN);
+    std::string name = std::string(ssp->name, 0, MAXFORMULA);
+    std::string notes = std::string(ssp->notes, 0, MAXFORMULA);
+    std::string EQkey = std::string(ssp->PhmKey, 0, EQ_RKLEN);
 
     p_key  = db->PackKey();
 
@@ -138,7 +138,7 @@ TSysEq::RecBuild( const char *key, int mode  )
 //        rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
 //            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
 
-        gstring skey = gstring(ssp->PhmKey, 0, EQ_RKLEN);
+        std::string skey = std::string(ssp->PhmKey, 0, EQ_RKLEN);
         if( /* !skey.empty() && */ skey[0] != '-' && skey != S_EMPTY )
         {
            if( skey.empty() || skey[0] == '\0' || skey[0] == ' ' )
@@ -783,7 +783,7 @@ void TSysEq::RenameList( const char* newName,
     if( (int)strlen(newName) > db->FldLen(0) )
       return;
 
-    gstring str_old = gstring( oldName, 0, db->FldLen(0) );
+    std::string str_old = std::string( oldName, 0, db->FldLen(0) );
 //04/09/01 ????    if( strlen(oldName)<FldLen(0) )
         str_old += ":";
     for( int i=1; i<db->KeyNumFlds(); i++)
@@ -797,7 +797,7 @@ void TSysEq::RenameList( const char* newName,
       return;
 
     int nrec;
-    gstring str;
+    std::string str;
 
     for(uint i=0; i<Nrec; i++ )
     {
@@ -807,14 +807,14 @@ void TSysEq::RenameList( const char* newName,
         // changing record key
         str = db->PackKey();
         db->Del( nrec );
-        str = str.replace( oldName, newName);
+        replace( str, oldName, newName);
         // change tPhEQ key (o_ssphst,PhmKey)
-        gstring tPhkey = gstring( ssp->PhmKey, 0 , EQ_RKLEN );
-        if( tPhkey.find(oldName) != gstring::npos)
+        std::string tPhkey = std::string( ssp->PhmKey, 0 , EQ_RKLEN );
+        if( tPhkey.find(oldName) != std::string::npos)
         {
          db->SetKey( tPhkey.c_str() );
          tPhkey = db->PackKey();
-         tPhkey = tPhkey.replace( oldName, newName);
+         replace( tPhkey, oldName, newName );
          memcpy( ssp->PhmKey, tPhkey.c_str(), EQ_RKLEN );
         }
         db->AddRecordToFile( str.c_str(), db->fNum );

@@ -195,7 +195,7 @@ void TProfil::ChangeSettings(int nSettings)
 	     else
             pa.p = dfBase[min(nSettings-2,5)];
     // Added by DK 16.02.2012
-    gstring pa_ver = _GEMS_version_stamp;
+    std::string pa_ver = _GEMS_version_stamp;
     pa_ver += _GEMIPM_version_stamp;
     memcpy(pa.ver, pa_ver.c_str(), TDBVERSION-1);
     pa.ver[TDBVERSION-1]='\0';
@@ -540,8 +540,8 @@ void TProfil::ChangeTPinKey( double T, double P )
                            RT_SYSEQ, 2, RT_SYSEQ, 3, RT_SYSEQ, 4,
                            K_IMM, bP, K_IMM, bT, RT_SYSEQ, 7, K_END);
 
-    gstring str = pmp->stkey;
-    gstring capName = "Change the key read from GEMS3K I/O files";
+    std::string str = pmp->stkey;
+    std::string capName = "Change the key read from GEMS3K I/O files";
 AGAIN:
     str = TSysEq::pm->GetKeyofRecord( str.c_str(),capName.c_str(), KEY_NEW );
     if( str.empty() )
@@ -614,7 +614,7 @@ void TProfil::CmReadMulti( const char* path, bool new_ipm )
     TNodeGUI* na = new TNodeGUI( multi );
     MULTI* pmp = multi->GetPM();
     SYSTEM* syp = syst->GetSY();
-    //gstring key = pmp->stkey;
+    //std::string key = pmp->stkey;
 
     if( na->GEM_init( path ) )
     {

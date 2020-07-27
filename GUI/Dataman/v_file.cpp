@@ -4,7 +4,6 @@
 // Implementation of TFile class
 //
 // Copyright (C) 1996-2001 S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)

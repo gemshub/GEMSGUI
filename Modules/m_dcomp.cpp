@@ -601,9 +601,9 @@ NEXT:
             {
                 G = H - T * ( S - foS );
                 vstr Msgb(20);
-                gstring s="W08DCrun: Inconsistent values of H0, S0 or G0 -> ";
+                std::string s="W08DCrun: Inconsistent values of H0, S0 or G0 -> ";
                 sprintf( Msgb, "%g", G );
-                s += gstring(Msgb);
+                s += std::string(Msgb);
                 if( vfQuestion( window(), GetName(), s.c_str() ))
                     dcp->Gs[0] = G;
                 else
@@ -1197,7 +1197,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
     TDBKey dbKey(db->GetDBKey());
     dbKey.SetKey(key);
     dbKey.SetFldKey(3,"*");
-    gstring str_key( dbKey.UnpackKey(), 0, db->KeyLen());
+    std::string str_key( dbKey.UnpackKey(), 0, db->KeyLen());
     RecStatus iRet = db->Rtest( str_key.c_str(), 1 );
     std::string msg;
 
@@ -1225,9 +1225,9 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
             msg +=  "Create a new record?";
             if( !vfQuestion(0, GetName(), msg ))
                 Error( GetName(), "E17DCrun: New record creation dismissed...");
-            gstring str = key.p;
+            std::string str = key.p;
 
-            if( str.find_first_of("*?" ) != gstring::npos)  // pattern
+            if( str.find_first_of("*?" ) != std::string::npos)  // pattern
                 str = GetKeyofRecord( str.c_str(),
                                       "Enter a new record key, please ", KEY_NEW);
             if(  str.empty() )
@@ -1310,7 +1310,7 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
       continue;
 
       // test the same component (overload) 30/11/2006
-      gstring stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);
+      std::string stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);
       for( j=0; j<aICkey_new.GetCount(); j++ )
          if( stt ==  aICkey_new[j])
             break;
@@ -1355,25 +1355,25 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
         continue;
 
      // changing record key
-     gstring str= gstring(db->FldKey( 3 ), 0, db->FldLen( 3 ));
+     std::string str= std::string(db->FldKey( 3 ), 0, db->FldLen( 3 ));
     ChangeforTempl( str,  st_data.from_templ,
                     st_data.to_templ, db->FldLen( 3 ));
         str += ":";
-        gstring str1 = gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
-        str1.strip();
+        std::string str1 = std::string(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+        strip( str1 );
         str = str1 + ":" + str;
-        str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
-        str1.strip();
+        str1 = std::string(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+        strip( str1 );
         str = str1 + ":" + str;
-        str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
-        str1.strip();
+        str1 = std::string(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+        strip( str1 );
         str = str1 + ":" + str;
      // Point SaveRecord
      if( AddRecordTest( str.c_str(), fnum_ ))
      {  aICkey_new.Add( stt );  // 30/11/2006
         for(int isd=0; isd<dcp->Nsd; isd++)
-        { gstring sdkey = gstring( dcp->sdref[isd], 0,V_SD_RKLEN);
-          sdkey.strip();
+        { std::string sdkey = std::string( dcp->sdref[isd], 0,V_SD_RKLEN);
+          strip( sdkey );
           SDlist.AddUnique( sdkey );
         }
      }

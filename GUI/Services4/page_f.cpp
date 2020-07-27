@@ -5,7 +5,6 @@
 // ( Provides stream input/output for  visual elements )
 //
 // Copyright (C) 1996-2001  A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -47,11 +46,11 @@ CWinInfo::CWinInfo(TSubModule & m, TConfig & cnf):
 void
 CWinInfo::load(TConfig & cnf)
 {
-    gstring sname = rM.GetName();	// section name
+    string sname = rM.GetName();	// section name
 
     cnf.SetSection(sname);
 
-    gstring size_params[2];
+    string size_params[2];
     if (cnf.getFirst() == "size")
     {
         cnf.getcStrings(2, size_params);
@@ -61,7 +60,7 @@ CWinInfo::load(TConfig & cnf)
             Error("Visor configuration", "Window size is bad!");
     }
 
-    gstring ss = cnf.GetFirstSubSection();
+    string ss = cnf.GetFirstSubSection();
     while (!ss.empty())
     {
         aPageInfo.Add(new PageInfo(*this, cnf, ss));
@@ -149,7 +148,7 @@ PageInfo::PageInfo(/*const */CWinInfo & wi, istream & is):
 }
 
 
-PageInfo::PageInfo(/*const */CWinInfo & wi, TConfig & cnf, gstring s):
+PageInfo::PageInfo(/*const */CWinInfo & wi, TConfig & cnf, string s):
         rWinInfo(wi), /*pPage(0),*/ name(s)
 {
     load(cnf);
@@ -159,18 +158,18 @@ void
 PageInfo::load(TConfig & cnf)
 {
     // object type len p1 p2 abcd
-    gstring obj;
-    gstring mode;
+    string obj;
+    string mode;
     int npos;
 
-    gstring astr[5];
+    string astr[5];
 
     obj = cnf.getFirst();
     while (!obj.empty())
     {
         cnf.getcStrings(5, astr);
 
-        gstring field = astr[0];
+        string field = astr[0];
         eFieldType type = GetType(field);
 
         if (type == ftUndefined)
@@ -271,7 +270,7 @@ PageInfo::fromDAT(istream & is)
 }
 
 eFieldType
-PageInfo::GetType(const gstring & s)
+PageInfo::GetType(const string & s)
 {
     const char *snames[nFieldTypes] =
         { "F_NUM", "F_FLOAT", "F_STRING", "F_TEXT",

@@ -213,7 +213,7 @@ void TReacDC::Convert_KT_to_Cp( int CE )
             fabs( rcp->Gs[0] - Gr ) >= 57.08 ||
             fabs( rcp->Ks[1] - lgK ) >= 0.01 )
     {
-        gstring msgbuf = "W24RErun: Warning: Some of the calculated values\n logK = ";
+        std::string msgbuf = "W24RErun: Warning: Some of the calculated values\n logK = ";
         vstr doublbuf(100);
         sprintf( doublbuf, "%g", lgK );
         msgbuf += doublbuf;

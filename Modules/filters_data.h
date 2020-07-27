@@ -4,7 +4,6 @@
 // Internal declarations
 //
 // Copyright (C) 2002 S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -49,7 +48,7 @@ struct elmWindowData
 {
    TCStringArray ICrds;   // list of selected IComp
    TCStringArray oldIComps; // list from parent project
-   gstring aSelNames;  // names of selected grups of files
+   std::string aSelNames;  // names of selected grups of files
    //   TCStringArray flNames; // kernel, uncertain, specific
 
    bool flags[14];         // selectType
@@ -103,10 +102,10 @@ struct elmWindowData
     return *this;
   }
 
-  void setFlags( gstring strBuf)  //"<TDBflags> = "
+  void setFlags( std::string strBuf)  //"<TDBflags> = "
   {
       size_t  pos1 =  strBuf.find( "<TDBflags> = " ); //13
-      if( pos1 != gstring::npos )
+      if( pos1 != std::string::npos )
       {
          pos1 += 13;
          size_t pos2 = strBuf.find( ";", pos1 );
@@ -116,9 +115,9 @@ struct elmWindowData
       }
   }
 
-  gstring getFlags()
+  std::string getFlags()
   {
-      gstring strBuf =  "<TDBflags> = "; //+13
+      std::string strBuf =  "<TDBflags> = "; //+13
       for(int ii=0; ii<14; ii++ )
           if( flags[ii] )
               strBuf +='+';
@@ -153,8 +152,8 @@ struct elmFilesConfData
 
 struct icSetupData
 {
-   gstring from_templ;
-   gstring to_templ;
+   std::string from_templ;
+   std::string to_templ;
 
    TCStringArray oldIComps; // list from parent project
    TCStringArray newIComps; // list from default database
@@ -196,9 +195,9 @@ struct icSetupData
 
 struct dcSetupData
 {
-   gstring from_templ;
-   gstring to_templ;
-   gstring f_script;
+   std::string from_templ;
+   std::string to_templ;
+   std::string f_script;
 
 //   TCStringArray flKeywds;   // list files to open
 
@@ -232,9 +231,9 @@ struct dcSetupData
 
 struct rdSetupData
 {
-   gstring from_templ;
-   gstring to_templ;
-   gstring f_script;
+   std::string from_templ;
+   std::string to_templ;
+   std::string f_script;
 
 //   TCStringArray flKeywds;   // list files to open
 
@@ -268,9 +267,9 @@ struct rdSetupData
 
 struct cmSetupData
 {
-   gstring from_templ;
-   gstring to_templ;
-   gstring f_script;
+   std::string from_templ;
+   std::string to_templ;
+   std::string f_script;
 
 //   TCStringArray flKeywds;   // list files to open
 
@@ -312,8 +311,8 @@ enum copyFlagX { PHcopyL__ = 0, // (deleted!) Copy Phase records for &liquid (gl
 
 struct phSetupData
 {
-   gstring from_templ;
-   gstring to_templ;
+   std::string from_templ;
+   std::string to_templ;
 
    bool flags[6];
 
@@ -400,8 +399,8 @@ struct tableSetupData
    double val;
    char unit;
 
-   gstring objName;
-   gstring ndxName;
+   std::string objName;
+   std::string ndxName;
 
    tableSetupData( size_t aWin, int aobj, const char * oName,
                    int aIdx, const char * ndName,
@@ -422,7 +421,7 @@ struct tableSetupData
 
 struct windowSetupData
 {
-   gstring pageName;
+   std::string pageName;
    int nObj;       // index of object
    int nOunit;     // index of object with units
    int nSwitch;    // index of object with switches

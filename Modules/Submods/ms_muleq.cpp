@@ -161,8 +161,8 @@ void TMulti::unpackData()
                 goto FOUNDI;
             }
         pm.pNP = 1;
-        { gstring err = "No ";
-          err += gstring(TRMults::sm->GetMU()->SB[i], 0, MAXICNAME);
+        { string err = "No ";
+          err += string(TRMults::sm->GetMU()->SB[i], 0, MAXICNAME);
           err += " IComp in the system!";
           Error( GetName(), err.c_str() /*"no such IComp in this system"*/ );
         }
@@ -241,13 +241,13 @@ void TMulti::MultiKeyInit( const char*key )
 
    
    // Get V, P and T from SysEq record key
-   gstring s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME,MAXPTN);
+   string s = string( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME,MAXPTN);
    V = atof(s.c_str());
-   s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);
+   s = string( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);
    P = atof(s.c_str());
-   s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN+MAXPTN,MAXPTN);
+   s = string( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN+MAXPTN,MAXPTN);
    T = atof(s.c_str());
-   s = gstring( key,MAXMUNAME, MAXTDPCODE);
+   s = string( key,MAXMUNAME, MAXTDPCODE);
 
    typeMin = s[0];
    switch( typeMin )

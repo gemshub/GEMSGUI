@@ -4,7 +4,6 @@
 // Definition of TObject and TObjList classes
 //
 // Copyright (C) 1996-2001 S.Dmytriyeva, A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -21,7 +20,6 @@
 #define _v_object_h_
 
 #include <fstream>
-#include "gstring.h"
 #include "v_user.h"
 #include "v_vals.h"
 
@@ -52,7 +50,7 @@ class TObject
     bool Dynamic;
     int N;
     int M;
-    gstring Descr;
+    string Descr;
     TValBase* pV;		//  void* ptr;
     ObjType Type;
     char IndexationCode;
@@ -94,7 +92,7 @@ protected:
 
 public:
     TObject (const char* name, ObjType type, int n, int m,
-             bool dyn, char indexCode, const gstring descr);
+             bool dyn, char indexCode, const string descr);
     TObject (istream & f);
     ~TObject ();
 
@@ -110,8 +108,8 @@ public:
     {
         return Keywd;
     }
-    gstring GetFullName(int aN, int aM);
-    gstring GetHelpLink(int aN, int aM);
+    string GetFullName(int aN, int aM);
+    string GetHelpLink(int aN, int aM);
 
     ObjType GetType() const
     {
@@ -162,15 +160,15 @@ public:
     {
         return !GetPtr();
     }
-    bool IsAny(int N, int M) const
+    bool IsAny(int aN, int aM) const
     {
-	return pV->IsAny( ndx(N, M) );
+    return pV->IsAny( ndx(aN, aM) );
     }
-    bool IsEmpty(int N, int M) const
+    bool IsEmpty(int aN, int aM) const
     {
-	return pV->IsEmpty( ndx(N, M) );
+    return pV->IsEmpty( ndx(aN, aM) );
     }
-    const gstring GetDescription(int Ni, int Mi);
+    const string GetDescription(int Ni, int Mi);
 
     //--- Object parameters manipulation
     void SetN(int newN)
@@ -191,16 +189,16 @@ public:
     double Get(int n = 0, int m = 0);
     double GetEmpty(int n = 0, int m = 0);
     void Put(double value, int n = 0, int m = 0);
-    // Put cell of object to gstring. Return the lengs of gstring.
+    // Put cell of object to string. Return the lengs of string.
     // need inline - time critical function
-    gstring GetString(int aN = 0, int aM = 0) const
+    string GetString(int aN = 0, int aM = 0) const
     {
         check_dim(aN, aM);
-        return ((GetPtr())? pV->GetString(ndx(aN, aM)) : gstring (S_EMPTY));
+        return ((GetPtr())? pV->GetString(ndx(aN, aM)) : string (S_EMPTY));
     }
-    gstring GetStringEmpty(int aN = 0, int aM = 0) const
+    string GetStringEmpty(int aN = 0, int aM = 0) const
     {
-        return ((GetPtr())? pV->GetString(ndx(aN, aM)) : gstring (S_EMPTY));
+        return ((GetPtr())? pV->GetString(ndx(aN, aM)) : string (S_EMPTY));
     }
     bool SetString(const char* vbuf, int aN = 0, int aM = 0);
 

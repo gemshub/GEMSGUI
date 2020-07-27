@@ -126,7 +126,7 @@ class TGtDemo : public TCModule
 
     jsonui::GraphDialog *gd_gr = nullptr;
     TPlotLine *plot;
-    gstring titler;
+    std::string titler;
 
 protected:
     IPNCalc rpn[2];       // IPN of equats of process  -- Expr
@@ -163,7 +163,7 @@ public:
     void dyn_kill( int i=0);
     void dyn_new( int i=0);
     void set_def( int i=0);
-    gstring   GetKeyofRecord( const char *oldKey, const char *strTitle,
+    std::string   GetKeyofRecord( const char *oldKey, const char *strTitle,
                               int keyType );
 
     void RecInput( const char *key );
@@ -184,7 +184,7 @@ public:
     //void CmHelp();
     const char* GetHtml();
 
-    const gstring& GetString();
+    const std::string& GetString();
 
 };
 

@@ -202,7 +202,7 @@ TIComp::CopyElements( const char * prfName,
          continue;
 
        // test the same component (overload) 30/11/2006
-       gstring stt = el_data.ICrds[i].substr(0,MAXICNAME+MAXSYMB);
+       std::string stt = el_data.ICrds[i].substr(0,MAXICNAME+MAXSYMB);
        for( j=0; j<aICkey_new.GetCount(); j++ )
        // if( !memcmp( stt.c_str(), aICkey_new[j].c_str(), MAXICNAME+MAXSYMB ))
          if( stt ==  aICkey_new[j])
@@ -213,15 +213,15 @@ TIComp::CopyElements( const char * prfName,
        nrec = db->Find( el_data.ICrds[i].c_str() );
        db->Get( nrec );
         /// !!! changing record key
-       gstring str= gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+       std::string str= std::string(db->FldKey( 2 ), 0, db->FldLen( 2 ));
        ChangeforTempl( str, st_data.from_templ,
                        st_data.to_templ, db->FldLen( 2 ));
         str += ":";
-        gstring str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
-        str1.strip();
+        std::string str1 = std::string(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+        strip( str1 );
         str = str1 + ":" + str;
-        str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
-        str1.strip();
+        str1 = std::string(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+        strip( str1 );
         str = str1 + ":" + str;
         //Point SaveRecord
         if( AddRecordTest( str.c_str(), fnum_ ))

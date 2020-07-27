@@ -1299,7 +1299,7 @@ for(np=0; np<usp->nPhA; np++ )
      {
        if( !usp->PhNum[np] )
        {
-         gstring lst = "";
+         std::string lst = "";
          numPH=0;
 
          for( k=0; k<usp->Fi; k++ )
@@ -1308,13 +1308,13 @@ for(np=0; np<usp->nPhA; np++ )
             usp->PhAndx[np*usp->N+numPH ] = (short)k;
             numPH++;
 //#ifndef IPMGEMPLUGIN
-            lst += gstring(
+            lst += std::string(
                TRMults::sm->GetMU()->SF[k]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME);
 //#else
-//            lst += gstring(
+//            lst += std::string(
 //               mup_SF[k]+MAXSYMB, 0, MAXPHNAME);
 //#endif
-            lst.strip();
+            strip( lst );
             lst += ";";
           }
          sprintf( usp->PhAID[np], "GR%2d", np );

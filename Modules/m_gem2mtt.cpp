@@ -171,7 +171,7 @@ void  TGEM2MT::NewNodeArray()
     }  // ii    end of node iteration loop
 
     /* test output generated structure
-    ProcessProgressFunction messageF = [](const gstring& , long ){
+    ProcessProgressFunction messageF = [](const std::string& , long ){
         //std::cout << "TProcess GEM3k output" <<  message.c_str() << point << std::endl;
         return false;
     };
@@ -326,7 +326,7 @@ bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node, FILE* 
    na->CalcIPM_List( TestModeGEMParam(mode, mtp->PsSIA, mtp->ct, mtp->cdv, mtp->cez ), start_node, end_node, diffile );
 
    /* test output generated structure
-   ProcessProgressFunction messageF = [](const gstring& , long ){
+   ProcessProgressFunction messageF = [](const std::string& , long ){
        //std::cout << "TProcess GEM3k output" <<  message.c_str() << point << std::endl;
        return false;
    };
@@ -729,7 +729,7 @@ bool TGEM2MT::Trans1D( char mode )
   bool CompMode = false;   // Component transport mode: true: DC; false: IC
   long int nStart = 0, nEnd = mtp->nC;
   // long int NodesSetToAIA;
-// gstring Vmessage;
+// std::string Vmessage;
 
 FILE* logfile = nullptr;
 FILE* ph_file = nullptr;
@@ -746,7 +746,7 @@ if( mtp->PvDDc == S_OFF && mtp->PvDIc == S_ON )  // Set of IC transport using re
 
 if( mtp->PsMO != S_OFF )
 {
-    gstring fname;
+    std::string fname;
 #ifndef IPMGEMPLUGIN
     fname = pVisor->userGEMDir();
 #endif

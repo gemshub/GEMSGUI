@@ -53,7 +53,7 @@ HelpWindow::HelpWindow( QWidget* parent):
         QMainWindow( parent )
 {
    setupUi(this);
-   gstring titl = pVisorImp->getGEMTitle();
+   string titl = pVisorImp->getGEMTitle();
            titl+= " : Help Viewer ";
            setWindowTitle( trUtf8(titl.c_str()) );
 
@@ -389,7 +389,7 @@ void HelpWindow::showDocumentation(const char* file, const char* item1)
    if (!hEngine)
        return;
 
-    gstring path = "qthelp://gems3/help/";
+    string path = "qthelp://gems3/help/";
     QUrl path_str;
 
     if( !file/*item1*/ )
@@ -401,7 +401,7 @@ void HelpWindow::showDocumentation(const char* file, const char* item1)
         path += file;
         // adding ".html" if needed
         if( path.rfind( "#" ) == path.npos )
-        {   if( gstring(path, path.length()-5, 5) != ".html" )
+        {   if( string(path, path.length()-5, 5) != ".html" )
               path += ".html";
             if( item1  )
             {  path += "#";
@@ -549,7 +549,7 @@ AboutDialog::AboutDialog( QWidget* parent):
         QDialog( parent )
 {
    setupUi(this);
-   gstring titl = pVisorImp->getGEMTitle();
+   string titl = pVisorImp->getGEMTitle();
            titl+= " : About the program package ";
    setWindowTitle( trUtf8(titl.c_str()) );
 }
@@ -566,7 +566,7 @@ HowToStartDialog::HowToStartDialog( QWidget* parent):
         QDialog( parent )
 {
    setupUi(this);
-   gstring titl = pVisorImp->getGEMTitle();
+   string titl = pVisorImp->getGEMTitle();
            titl+= " : Start the program package ";
    setWindowTitle( trUtf8(titl.c_str()) );
 }

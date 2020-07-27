@@ -4,7 +4,6 @@
 // Implementation of GemsMainWindow class
 //
 // Copyright (C) 2011  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -325,7 +324,7 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
 {
   size_t  jj, kk, ln;
   int ii, colsz;
-  gstring keyfld;
+  string keyfld;
   QTableWidgetItem *item, *curItem=nullptr;
   settedCureentKeyIntotbKeys = false;
 
@@ -333,7 +332,7 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
     return;
 
   size_t nRT = static_cast<size_t>(nRT_);
-  gstring oldKey = rt[nRT].UnpackKey();
+  string oldKey = rt[nRT].UnpackKey();
   pFilterKey->setText( dynamic_cast<TCModule*>(&aMod[nRT])->getFilter());
 
   // define tbKeys
@@ -343,7 +342,7 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
 
 
   // get list or record keys
-  gstring keyFilter = pFilterKey->text().toLatin1().data();
+  string keyFilter = pFilterKey->text().toLatin1().data();
   TCIntArray temp, colSizes;
   TCStringArray keyList;
   int nKeys = rt[nRT].GetKeyList( keyFilter.c_str(), keyList, temp);
@@ -361,7 +360,7 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
       {
 
           ln = rt[nRT].FldLen(jj);
-          keyfld = gstring(keyList[ii], kk, ln);
+          keyfld = string(keyList[ii], kk, ln);
           StripLine(keyfld);
           colsz = keyfld.length()+1;
           if( colsz > colSizes[jj])
@@ -437,7 +436,7 @@ void TVisorImp::changeModulesKeys( int nRT )
 
 void TVisorImp::openRecordKey( int row, int    )
 {
-    gstring currentKey ="";
+    string currentKey ="";
 
     if( row >= tbKeys->rowCount())
         return;
@@ -457,7 +456,7 @@ void TVisorImp::changeKeyList()
 {
     if( currentNrt >=0 )
     {
-        gstring filter = pFilterKey->text().toLatin1().data();
+        string filter = pFilterKey->text().toLatin1().data();
         dynamic_cast<TCModule*>(&aMod[currentNrt])->setFilter(filter.c_str());
         defineModuleKeysList( currentNrt );
     }
@@ -810,7 +809,7 @@ void TVisorImp::OpenHelp(const char* file, const char* item1, int page )
        {
           QString res = item1;
           res += QString("_%1").arg(page);
-          gstring txt = res.toLatin1().data();
+          string txt = res.toLatin1().data();
           HelpWindow::pDia->showDocumentation( file, txt.c_str() );
         }
         else

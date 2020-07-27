@@ -927,7 +927,7 @@ TPhase::RecBuild( const char *key, int mode  )
     TCStringArray aPhlist;
     TCStringArray aDcSkrl;
 //    TCStringArray aIclist;
-//    gstring str;
+//    std::string str;
     TProfil *aPa=dynamic_cast<TProfil *>(&aMod[RT_PARAM]);
     // old flag values to reset  parameter indexes comment
     char old_sol[7], old_kin[9];
@@ -1220,9 +1220,9 @@ void TPhase::RecordPrint(const char *key_)
     {
        // test to exist of DCOMP or REACDC record later
        // only 3 fields
-       gstring key = gstring( php->SM[i], 0, DC_RKLEN);
+       std::string key = std::string( php->SM[i], 0, DC_RKLEN);
 
-       if( key.find("Mg") == gstring::npos )
+       if( key.find("Mg") == std::string::npos )
        { aDCused.Add(cnt); cnt++; }
        else
          aDCused.Add(-1);
@@ -1331,7 +1331,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
 //       continue;
 
     // test the same component (overload) 30/11/2006
-    gstring stt = aPHkey[ii].substr(0,MAXSYMB+MAXPHSYMB+MAXPHNAME+MAXSYMB);
+    std::string stt = aPHkey[ii].substr(0,MAXSYMB+MAXPHSYMB+MAXPHNAME+MAXSYMB);
     for( j=0; j<aICkey_new.GetCount(); j++ )
        if( stt ==  aICkey_new[j])
               break;
@@ -1359,7 +1359,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
      {
         // test to exist of DCOMP or REACDC record later
         // only 3 fields
-        gstring key = gstring( php->SM[i], 0, DC_RKLEN);
+        std::string key = std::string( php->SM[i], 0, DC_RKLEN);
         if( php->DCS[i] == SRC_DCOMP )
             nRec = rt[RT_DCOMP].FindPart( php->SM[i], 3 );
         else
@@ -1437,29 +1437,29 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
         }
 
      // !!! changing record key
-    gstring str= gstring(db->FldKey( 4 ), 0, db->FldLen( 4 ));
+    std::string str= std::string(db->FldKey( 4 ), 0, db->FldLen( 4 ));
     ChangeforTempl( str, st_data.from_templ,
                     st_data.to_templ, db->FldLen( 4 ));
         str += ":";
-        gstring str1 = gstring(db->FldKey( 3 ), 0, db->FldLen( 3 ));
-        str1.strip();
+        std::string str1 = std::string(db->FldKey( 3 ), 0, db->FldLen( 3 ));
+        strip( str1 );
         str = str1 + ":" + str;
-        str1 = gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
-        str1.strip();
+        str1 = std::string(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+        strip( str1 );
         str = str1 + ":" + str;
-        str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
-        str1.strip();
+        str1 = std::string(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+        strip( str1 );
         str = str1 + ":" + str;
-        str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
-        str1.strip();
+        str1 = std::string(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+        strip( str1 );
         str = str1 + ":" + str;
      CompressRecord( cnt, aDCused );
      //Point SaveRecord
      if( AddRecordTest( str.c_str(), fnum_ ))
      {  aICkey_new.Add( stt );  // 30/11/2006
         for(int isd=0; isd<php->Nsd; isd++)
-        { gstring sdkey = gstring( php->sdref[isd], 0,V_SD_RKLEN);
-          sdkey.strip();
+        { std::string sdkey = std::string( php->sdref[isd], 0,V_SD_RKLEN);
+          strip( sdkey );
           SDlist.AddUnique( sdkey );
         }
      }
@@ -1617,7 +1617,7 @@ int TPhase::CompressSublattice( const TCStringArray& form_array )
     {
         for( jj=0; jj<php->nMoi; jj++)
         {
-            if( old_lsMoi[i1] == gstring( php->lsMoi[jj], 0, MAXDCNAME) )
+            if( old_lsMoi[i1] == std::string( php->lsMoi[jj], 0, MAXDCNAME) )
                 break;
         }
         if( jj == php->nMoi )
@@ -1680,13 +1680,13 @@ TCStringArray TPhase::readFormulaes( const TCIntArray&  DCused) const
         if( php->DCS[i] == SRC_DCOMP )
         {
             aDC->TryRecInp( dcn, crt, 0 );
-            form_array.Add( gstring(aDC->dcp->form,0,MAXFORMULA));
+            form_array.Add( std::string(aDC->dcp->form,0,MAXFORMULA));
         }
         else
             if( php->DCS[i] == SRC_REACDC )
             {
                 aRDC->TryRecInp( dcn, crt, 0 );
-                form_array.Add( gstring(aRDC->rcp->form,0,MAXFORMULA));
+                form_array.Add( std::string(aRDC->rcp->form,0,MAXFORMULA));
             }
     }  // i
     return  form_array;
@@ -1697,7 +1697,7 @@ TCStringArray TPhase::getSavedLsMoi() const
     TCStringArray lsMoiOld;
     if( php->dEq && *php->dEq=='$' )
     {
-       lsMoiOld = split( gstring(php->dEq,1) ,";");
+       lsMoiOld = split( std::string(php->dEq,1, std::string::npos) ,";");
     }
     return lsMoiOld;
 }

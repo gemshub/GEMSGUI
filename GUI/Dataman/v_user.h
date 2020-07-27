@@ -28,10 +28,10 @@
 
 #include <algorithm>
 #include <iostream>
+#include <cstring>
 using namespace std;
 #include "GEMS3K/v_detail.h"
 #include "array.h"
-#include "gstring.h"
 
 #ifdef __APPLE__
 
@@ -45,6 +45,8 @@ using namespace std;
 typedef unsigned int uint;
 #endif
 
+// added for convenience because of frequent use
+typedef TArrayF<string> TCStringArray;
 const int MAXKEYWD = 6+1;
 
 #ifndef  __unix
@@ -71,34 +73,34 @@ inline bool IsSpace(char ch)
     return ( (ch == ' ') || (ch == '\t') );
 }
 
-void StripLine(gstring& line);
+void StripLine(string& line);
 void KeyToName(std::string& line);
-TCStringArray split(const gstring& str, const gstring& delimiters);
+TCStringArray split(const string& str, const string& delimiters);
 
 // Added by SD on 22/12/2001
 // Change string on templates
 void
-ChangeforTempl( gstring& data_str,  const gstring& from_templ1,
-                const gstring& to_templ1, uint len_ );
+ChangeforTempl( string& data_str,  const string& from_templ1,
+                const string& to_templ1, uint len_ );
 
 // Returns string representation of current date in dd/mm/yyyy format
-gstring curDate();
+string curDate();
 
 // Returns string representation of current date in dd/mm/yy format
 std::string curDateSmol(char ch = '/');
 
 // Returns string representation of current time in HH:MM  format
-gstring curTime();
+string curTime();
 
 // Returns string representation of current date and time
 inline
-gstring curDateTime()
+string curDateTime()
 {
     return curDate() + curTime();
 }
 
-// reads line to gstring class from istream with a delimiter
-istream& u_getline(istream& instream, gstring& dst_string, char delimit = '\n');
+// reads line to string class from istream with a delimiter
+istream& u_getline(istream& instream, string& dst_string, char delimit = '\n');
 istream& f_getline(istream& is, std::string& str, char delim);
 
 

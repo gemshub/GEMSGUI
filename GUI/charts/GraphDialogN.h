@@ -97,13 +97,13 @@ public:
     /// Update all graphic lines with new title
     void UpdatePlots( const char *title );
 
-    gstring moduleName() const
-    {  return  (gstring("gr")+pModule->GetName());   }
+    string moduleName() const
+    {  return  (string("gr")+pModule->GetName());   }
 
-    gstring iconFile() const
+    string iconFile() const
     {  return  pModule->GetIcon();   }
 
-    gstring mainModuleName() const
+    string mainModuleName() const
     {  return  pModule->GetName();   }
 
     void AddPoint( size_t nPlot, int nPoint );

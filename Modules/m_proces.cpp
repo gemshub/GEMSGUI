@@ -57,21 +57,21 @@ TProcess::TProcess( uint nrt ):
 
 }
 /*
-const gstring&
+const std::string&
 TProcess::GetString()
 {
-    titler = gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+    titler = std::string(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
     titler += " : ";
     titler += TSubModule::GetString();
     return titler;
 }
 */
 // get key of record
-gstring
+std::string
 TProcess::GetKeyofRecord( const char *oldKey, const char *strTitle,
                           int keyType )
 {
-    gstring str;
+    std::string str;
 
     if( oldKey == nullptr )
     {
@@ -115,7 +115,7 @@ void TProcess::keyTest( const char *key )
 
     if( pVisor->ProfileMode == true )
     { // test project key
-        gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
         StripLine(prfKey);
         auto k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
@@ -780,14 +780,14 @@ TProcess::MakeQuery()
 
     // for scripts
     TCStringArray namesLines;
-    gstring calcScript="";
-    gstring outScript="";
+    std::string calcScript="";
+    std::string outScript="";
     if( pep->Expr )
      calcScript = pep->Expr;
     if( pep->gr_expr )
       outScript = pep->gr_expr;
-    gstring xName = pep->xNames;
-    gstring yName = pep->yNames;
+    std::string xName = pep->xNames;
+    std::string yName = pep->yNames;
 
     if( !vfProcessSet( window(), p_key, flgs, size, pep->tmi, pep->Pi,
                        calcScript, outScript, namesLines, xName, yName ))
@@ -1221,8 +1221,8 @@ TProcess::RecCalc( const char *key )
         Error( GetName(), "E02PEexec: Please, do it in the Project mode!" );
 
 /*  char * */ text_fmt = nullptr;
-/*  gstring */ sd_key = "";
-/*  gstring */ filename = "";
+/*  std::string */ sd_key = "";
+/*  std::string */ filename = "";
 // Try pure calculation time - now stored in ccTau!  DK 15.01.2009
 pep->ccTime = 0.0;
 
@@ -1539,7 +1539,7 @@ void TProcess::RecordPrint(const char *key)
         std::string process_name = rt[RT_PROCES].PackKey();
         strip(process_name);
         KeyToName(process_name);
-        //gstring recordPath = files_dir + process_name + "/";
+        //std::string recordPath = files_dir + process_name + "/";
         //vfMakeDirectory( nullptr, recordPath.c_str(), 1 );
 
         std::string filename = process_name;
@@ -1615,9 +1615,9 @@ TProcess::RecordPlot( const char* /*key*/ )
       TCStringArray lnames;
       int ii;
       for( ii=0; ii<pep->dimXY[1]; ii++ )
-          lnames.Add( gstring(pep->lNam[ii+ndxy], 0, MAXGRNAME ));
+          lnames.Add( std::string(pep->lNam[ii+ndxy], 0, MAXGRNAME ));
       for( ii=0; ii<pep->dimEF[1]; ii++ )
-          lnames.Add( gstring( pep->lNamE[ii], 0, MAXGRNAME ));
+          lnames.Add( std::string( pep->lNamE[ii], 0, MAXGRNAME ));
       gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
           pep->xNames, pep->yNames, lnames );
     }

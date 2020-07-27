@@ -104,14 +104,14 @@ void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
 {
   // Get full matrix A
   TIArray<TFormula> aFo;
-  gstring form;
+  std::string form;
   int ii;
 
   for( ii=0; ii<siz_; ii++ )
   {
      aFo.Add( new TFormula() );
-     form = gstring( for_[ii], 0, MAXFORMUNITDT );
-     form.strip();
+     form = std::string( for_[ii], 0, MAXFORMUNITDT );
+     strip( form );
      aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
   }
 
@@ -589,7 +589,7 @@ TDualTh::CalcMoleFractNS()  // Use SVD method
        dtp->An, dtp->Bn+(ii*dtp->Nb), dtp->chi+(ii*dtp->nM) );
      if( task_Axb.CalcSVD( true ) > 0 )
      {
-            gstring str = "Mole fractions calculation routine ";
+            std::string str = "Mole fractions calculation routine ";
             str += " finds more than one solution for experiment ";
             str +=  dtp->nam_b[ii];
             str += "\n Please, check its non-basis bulk composition.";
@@ -607,7 +607,7 @@ TDualTh::CalcMoleFractNS()  // Use SVD method
      }
      if( if_resid ) // residual
      {
-            gstring str = "Mole fractions calculation routine ";
+            std::string str = "Mole fractions calculation routine ";
             str += " finds no exact solution for experiment ";
             str +=  dtp->nam_b[ii];
             str += ".\nLeast-squares solution Residuals ";
@@ -742,7 +742,7 @@ TDualTh::Calc_muo_n( char eState )
        {
           lnChi = log( 1e-20 );
           Chi = 1e-20;
-          gstring str = "Zero or negative mole fraction chi";
+          std::string str = "Zero or negative mole fraction chi";
             str += " encountered in the experiment ";
             str +=  dtp->nam_b[ii];
             str += ".\n Mole fraction is set to chi=1e-20 in ";

@@ -4,7 +4,6 @@
 // Declaration of TVisor class, setup and config functions
 //
 // Copyright (C) 1996-2001 A.Rysin,S.Dmytriyeva,D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -20,7 +19,6 @@
 #ifndef _visor_h_
 #define _visor_h_
 
-#include "gstring.h"
 #include "v_module.h"
 
 class QWidget;
@@ -33,29 +31,29 @@ class TVisor
     int argc;
     char** argv;
 
-    gstring lastProjectKey;
-    gstring lastSystemKey;
+    string lastProjectKey;
+    string lastSystemKey;
 
-    gstring SysGEMDir;
-    gstring DefDBDir;
-    gstring DefProfDir;
-    gstring UserGEMDir;
-    gstring UserProfDir;
-    gstring LocalDir;
+    string SysGEMDir;
+    string DefDBDir;
+    string DefProfDir;
+    string UserGEMDir;
+    string UserProfDir;
+    string LocalDir;
 
     /// Path to gems3_server executable
     /// <ServerGems3Dir>/server_data/toServer-dat.lst - path to gems3 server data
-    gstring ServerGems3Dir;
+    string ServerGems3Dir;
 
 
-    gstring LocalDocDir;
-    gstring RemoteHTML;
+    string LocalDocDir;
+    string RemoteHTML;
     bool LocalDoc;         // obsolete
 
-    gstring ImgDir;
+    string ImgDir;
 
     bool isElementsProfileMode;
-    gstring DefaultBuiltinTDB;
+    string DefaultBuiltinTDB;
     bool dbChangeMode;
 
 
@@ -87,44 +85,44 @@ public:
 
     bool isDBChangeMode() const { return dbChangeMode; }
 
-    gstring sysGEMDir() const {
+    string sysGEMDir() const {
         return SysGEMDir;
     }
     
-    gstring sysDBDir() const {
+    string sysDBDir() const {
         return SysGEMDir + DefDBDir;
     }
     
-    gstring sysProfDir() {
+    string sysProfDir() {
         return SysGEMDir + DefProfDir;
     }
     
-    gstring userGEMDir() const {
+    string userGEMDir() const {
         return UserGEMDir;
     }
     
-    gstring userProfDir() const {
+    string userProfDir() const {
         return UserGEMDir + UserProfDir;
     }
 
-    gstring imgDir() {
+    string imgDir() {
         return SysGEMDir + ImgDir;
     }
 
-    const gstring& localDir() const {
+    const string& localDir() const {
         return LocalDir;
     }
 
-    gstring docDir() const {
+    string docDir() const {
         return LocalDocDir;
      //	return (LocalDoc) ? LocalDocDir : RemoteDocURL;
     }
 
-    const gstring& localDocDir() const {
+    const string& localDocDir() const {
         return LocalDocDir;
     }
 
-    const gstring& remoteHTML() const {
+    const string& remoteHTML() const {
         return RemoteHTML;
     }
 
@@ -132,15 +130,15 @@ public:
         return LocalDoc;
     }
 
-    void setLocalDir(const gstring& localDir) {
+    void setLocalDir(const string& localDir) {
         LocalDir = localDir;
     }
 
-    void setLocalDocDir(const gstring& localDir) {
+    void setLocalDocDir(const string& localDir) {
         LocalDocDir = localDir;
     }
 
-    void setRemoteHTML(const gstring& remoteURL) {
+    void setRemoteHTML(const string& remoteURL) {
         RemoteHTML = remoteURL;
     }
 
@@ -148,7 +146,7 @@ public:
         LocalDoc = local;
     }
 
-    const gstring& serverGems3Dir() const {
+    const string& serverGems3Dir() const {
         return ServerGems3Dir;
     }
 
@@ -176,10 +174,10 @@ public:
         isElementsProfileMode = newData;
     }
 
-    const gstring& defaultBuiltinTDBL() const {
+    const string& defaultBuiltinTDBL() const {
         return DefaultBuiltinTDB;
     }
-    void setDefaultBuiltinTDB(const gstring& aDefaultBuiltinTDB) {
+    void setDefaultBuiltinTDB(const string& aDefaultBuiltinTDB) {
         DefaultBuiltinTDB = aDefaultBuiltinTDB;
     }
 

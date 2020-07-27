@@ -4,7 +4,6 @@
 // Implementation of TDBFile, TDBKey and TDBKeyList classes
 //
 // Copyright (C) 1996-2001 S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -598,7 +597,7 @@ TDBKey::SetKey( const char *key )
     vstr sp(fullLen+rkFlds+1);
     if( strncmp( key, ALLKEY, fullLen )==0 )
     {
-        gstring st;
+        string st;
         for(int i=0; i<rkFlds; i++)
             st += "*:";
         strncpy( sp, st.c_str(), fullLen);
@@ -820,7 +819,7 @@ TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
         case K_ANY:  // field  "*"
             strcat( pkey, S_ANY );
             break;
-        case K_IMM:  // field in gstring
+        case K_IMM:  // field in string
             imf = va_arg( Marker, char * );
             strncat( pkey, imf, min( strlen(imf), static_cast<size_t>(rkflen) ));
             break;
@@ -832,7 +831,7 @@ TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
                 strcat( pkey, S_ANY );
             else
             {
-                gstring str=  gstring( rt[rts].FldKey( nkf ), 0,
+                string str=  string( rt[rts].FldKey( nkf ), 0,
                                        min( rt[rts].FldLen(nkf), rkflen ));
                 StripLine( str );
                 strncat( pkey, str.c_str(), rkflen );
@@ -1046,13 +1045,13 @@ TDBKeyList::PutKey( uint i)
 
 //Put key i record to kbuf in unpack form.
 void
-TDBKeyList::RecKey(uint i, gstring& kbuf )
+TDBKeyList::RecKey(uint i, string& kbuf )
 {
     uint j;
     check_i(i);
     kbuf = "";
     for( j=0; j<KeyNumFlds(); j++)
-        kbuf += gstring( RecKeyFld(i,j), 0, FldLen(j) );
+        kbuf += string( RecKeyFld(i,j), 0, FldLen(j) );
 }
 
 // write the keys of records to ndx file
@@ -1132,7 +1131,7 @@ NEXTKF:
 void
 TDBKeyList::arec_add( uint ni )
 {
-    gstring s;
+    string s;
     RecKey( ni, s);
     aKey.Add( s );
     anR.Add( ni );

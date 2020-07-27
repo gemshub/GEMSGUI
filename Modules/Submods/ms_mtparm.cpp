@@ -826,12 +826,12 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
   if( par )
      pVisor->CloseMessage();
 
-  gstring err = "";
+  string err = "";
   for( jj=0, kk=0; kk<CSD->nDC; kk++)
   {
      if( tp_mark[TMulti::sm->GetPM()->muj[kk]]==1 )
      {	  err +=" ";
-          err += gstring(CSD->DCNL[kk],0, MaxDCN);
+          err += string(CSD->DCNL[kk],0, MaxDCN);
           if(!((++jj)%5)) err += "\n";
      }
   }
@@ -944,12 +944,12 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
   if( par )
      pVisor->CloseMessage();
 
-  gstring err = "";
+  string err = "";
   for( jj=0, kk=0; kk<CSD->nDC; kk++)
   {
      if( tp_mark[TMulti::sm->GetPM()->muj[kk]]==1 )
      {	  err +=" ";
-          err += gstring(CSD->DCNL[kk],0, MaxDCN);
+          err += string(CSD->DCNL[kk],0, MaxDCN);
           if(!((++jj)%5)) err += "\n";
      }
   }

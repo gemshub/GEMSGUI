@@ -4,7 +4,6 @@
 // Implementation of IPNCalc
 //
 // Copyright (C) 1996-2001  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -20,7 +19,6 @@
 #include <cmath>
 // #include <cfloat>  // to set consistent checks of number limits in script function arguments
 #include <cstdio>
-#include "gstring.h"
 #include "v_ipnc.h"
 #include "v_object.h"
 
@@ -177,7 +175,7 @@ void IPNCalc::InDigit()
         n += strspn( input+n, DIGIT );
     }
     //ErrorIf( n>24 ,"IPNE01", "Too many digits in a numerical constant.");
-    gstring str=gstring(input, 0, n);
+    std::string str=std::string(input, 0, n);
     //memset( str, 0, 25 );
     //strncpy( str, input, n );
     sscanf( str.c_str(), "%lg", &d );
@@ -185,8 +183,8 @@ void IPNCalc::InDigit()
     Push( IT_C, con_add(d) );
 }
 
-// skip gstring const "<ᨬ����>", in struct put
-// ascii code of the first character in gstring
+// skip std::string const "<ᨬ����>", in struct put
+// ascii code of the first character in std::string
 void IPNCalc::IsAscii()
 {
     double d;
@@ -215,7 +213,7 @@ void IPNCalc::Ffun( char *str)
 {
     int i,j;
     vstr st(MAXKEYWD);
-    gstring err;
+    std::string err;
 
     input++;
     if( (input=xblanc( input ))==0 ) goto OSH;
@@ -283,7 +281,7 @@ void IPNCalc::Variab( const char *str)
 
     if( j<0 )
     {
-        gstring err = "Variable ";
+        std::string err = "Variable ";
         err += str;
         err+= " is not known.";
         Error( "E06MSTran: ", err.c_str() );
@@ -338,7 +336,7 @@ void IPNCalc::I_Variab( char * str)
 
     if( j<0 )
     {
-        gstring err = "Variable ";
+        std::string err = "Variable ";
         err += str;
         err+= " is not declared.";
         Error( "E16MSTran: ", err.c_str() );
@@ -385,7 +383,7 @@ void IPNCalc::bildEquat()
 {
     vstr str(MAXKEYWD);
     char *s;
-    gstring err;
+    std::string err;
     int i,j;
 
     input = s = xblanc( input );
@@ -475,7 +473,7 @@ OSH :
 void IPNCalc::bildWhile()
 {
     int neqbg, it;
-    gstring err;
+    std::string err;
 
     input += 2; // skip do
     if( ( input=xblanc( input ))==0 ) goto OSH;
@@ -536,7 +534,7 @@ OSH :
 void IPNCalc::bildIf()
 {
     int it2,it;
-    gstring err;
+    std::string err;
 
     input += 2; // skip if
     if( ( input=xblanc( input ))==0 ) goto OSH;
@@ -638,7 +636,7 @@ void IPNCalc::RPN_expr( char ck )
     char op,op1;
     int l;
     vstr str(MAXKEYWD);
-    gstring err;
+    std::string err;
 
     memset( stack, 0, MAXSTACK );
     if( (input=xblanc(input))==0 ) goto OSH;
@@ -650,7 +648,7 @@ void IPNCalc::RPN_expr( char ck )
             if( (input=xblanc(input))==0 ) goto OSH;
             continue;
         }
-        if( *input == '"') // gstring const
+        if( *input == '"') // std::string const
         {
             IsAscii();
             if( (input=xblanc(input))==0 ) goto OSH;
