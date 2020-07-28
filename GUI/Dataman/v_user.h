@@ -50,7 +50,19 @@ typedef unsigned int uint;
 
 // added for convenience because of frequent use
 typedef vector<string> TCStringArray;
+// Added for convenience
+typedef vector<int> TCIntArray;
 const int MAXKEYWD = 6+1;
+
+template <class T>
+int findIndex( const std::vector<T>arr, const T& val )
+{
+    auto pos =  std::find(arr.begin(), arr.end(), val);
+    if( pos != arr.end()  )
+        return pos-arr.begin();
+    else
+        return -1;
+}
 
 #ifndef  __unix
 

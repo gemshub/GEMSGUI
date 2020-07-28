@@ -696,7 +696,7 @@ void TSyst::systbc_calc( int mode )
         if( sy.B[i] < aPa->pa.p.DB || sy.B[i] > 1e6 )
         {
             aICkeys.push_back(std::string(mup->SB[i],0, MAXICNAME));
-            aICnums.Add(i);
+            aICnums.push_back(i);
             sy.Icl[i] = S_REM;
         }
         else
@@ -709,7 +709,7 @@ void TSyst::systbc_calc( int mode )
     {
       if( vfExcludeFillEdit( window(), rt[RT_SYSEQ].PackKey(),
             aICkeys, sel,  fill_data ))
-         for( uint ii=0; ii<aICnums.GetCount(); ii++ )
+         for( size_t ii=0; ii<aICnums.size(); ii++ )
          {
            i = aICnums[ii];
            if( sel[ii]== true ) //fill

@@ -732,7 +732,7 @@ TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
 
     // Delete all records connected to project
     aList.clear();    //SYSEQ
-    anR.Clear();
+    anR.clear();
     rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
@@ -740,7 +740,7 @@ TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
         TSysEq::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //PROCES
-    anR.Clear();
+    anR.clear();
     rt[RT_PROCES].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_PROCES].GetKeyList( pkey, aList, anR );
@@ -748,7 +748,7 @@ TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
         TProcess::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //UNSPACE
-    anR.Clear();
+    anR.clear();
     rt[RT_UNSPACE].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_UNSPACE].GetKeyList( pkey, aList, anR );
@@ -756,7 +756,7 @@ TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
         TUnSpace::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //GTDEMO
-    anR.Clear();
+    anR.clear();
     rt[RT_GTDEMO].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_GTDEMO].GetKeyList( pkey, aList, anR );
@@ -764,7 +764,7 @@ TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
         TGtDemo::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //DUALTH
-    anR.Clear();
+    anR.clear();
     rt[RT_DUALTH].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_DUALTH].GetKeyList( pkey, aList, anR );

@@ -1215,7 +1215,7 @@ void TPhase::RecordPrint(const char *key_)
    // generate input
     TCIntArray aDCused;
     int i, cnt;
-    aDCused.Clear();
+    aDCused.clear();
     for( i=0, cnt=0; i<php->nDC; i++ )
     {
        // test to exist of DCOMP or REACDC record later
@@ -1223,9 +1223,9 @@ void TPhase::RecordPrint(const char *key_)
        std::string key = std::string( php->SM[i], 0, DC_RKLEN);
 
        if( key.find("Mg") == std::string::npos )
-       { aDCused.Add(cnt); cnt++; }
+       { aDCused.push_back(cnt); cnt++; }
        else
-         aDCused.Add(-1);
+         aDCused.push_back(-1);
     } // i
 
     // compress
@@ -1354,7 +1354,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
  //      continue;
 
 // Test existence of DComp/ReacDC records
-     aDCused.Clear();
+     aDCused.clear();
      for( i=0, cnt=0; i<php->nDC; i++ )
      {
         // test to exist of DCOMP or REACDC record later
@@ -1365,9 +1365,9 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
         else
             nRec = rt[RT_REACDC].FindPart( php->SM[i], 3 );
         if( nRec )
-        { aDCused.Add(cnt); cnt++; }
+        { aDCused.push_back(cnt); cnt++; }
         else
-          aDCused.Add(-1);
+          aDCused.push_back(-1);
      } // i
 
      if( cnt < php->nDC && !( !st_data.flags[PHcopyF_] && cnt > 1  )) // copy  that retain full
@@ -1549,7 +1549,7 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, const TCStringArra
         {
             TCStringArray form_array = sys_form_array;
             if(!onlyIPX) // cpmpressed list
-                DCused.Clear();
+                DCused.clear();
 
             if( form_array.size() <= 0)   // not difined before
                 form_array = readFormulaes( DCused);
@@ -1621,9 +1621,9 @@ int TPhase::CompressSublattice( const TCStringArray& form_array )
                 break;
         }
         if( jj == php->nMoi )
-            Moiused.Add(-1);
+            Moiused.push_back(-1);
         else
-            Moiused.Add(jj);
+            Moiused.push_back(jj);
     }
 
     for( ncpNnew=0, ii=0; ii<php->ncpN; ii++)
@@ -1634,7 +1634,7 @@ int TPhase::CompressSublattice( const TCStringArray& form_array )
         for(; jj<php->npxM; jj++)
         {
             DCndx = php->ipxt[ii*php->npxM+jj];
-            if( DCndx  < 0 || DCndx >= Moiused.GetCount() )
+            if( DCndx  < 0 || DCndx >= Moiused.size() )
                 continue;
             DCndx =  Moiused[static_cast<uint>(DCndx)];
             if( DCndx  < 0  ) // non-existent component
@@ -1661,7 +1661,7 @@ TCStringArray TPhase::readFormulaes( const TCIntArray&  DCused) const
     vstr dcn(MAXRKEYLEN);
     time_t crt;
     TCStringArray form_array;
-    bool onlyused = DCused.GetCount()>=php->nDC;
+    bool onlyused = DCused.size()>=php->nDC;
 
     TDComp* aDC=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
     TReacDC* aRDC=dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);

@@ -124,18 +124,18 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
   if( !select_all ) // use old selections
   {
      for( ii=0; ii<mtp->nICb; ii++)
-       aSelIC.Add( mtp->xIC[ii] );
+       aSelIC.push_back( mtp->xIC[ii] );
      for( ii=0; ii<mtp->nDCb; ii++)
-       aSelDC.Add( mtp->xDC[ii] );
+       aSelDC.push_back( mtp->xDC[ii] );
      for( ii=0; ii<mtp->nPHb; ii++)
-       aSelPH.Add( mtp->xPH[ii] );
+       aSelPH.push_back( mtp->xPH[ii] );
   }
 
 // select lists
     aList.clear();
     for( ii=0; ii< mult->N; ii++ )
     {  if( select_all )
-         aSelIC.Add( ii );
+         aSelIC.push_back( ii );
        else
          aList.push_back( std::string( mult->SB[ii], 0, MAXICNAME+MAXSYMB));
     }
@@ -147,7 +147,7 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
     aList.clear();
     for( ii=0; ii< mult->L; ii++ )
     {  if( select_all )
-         aSelDC.Add( ii );
+         aSelDC.push_back( ii );
        else
        aList.push_back( std::string( mult->SM[ii], 0, MAXDCNAME));
     }
@@ -159,7 +159,7 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
     aList.clear();
     for( ii=0; ii< mult->FI; ii++ )
     {  if( select_all )
-         aSelPH.Add( ii );
+         aSelPH.push_back( ii );
        else
        aList.push_back( std::string( mult->SF[ii], 0, MAXPHNAME+MAXSYMB));
     }
@@ -169,9 +169,9 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
          aSelPH);
 
 // These dimensionalities define sizes of dynamic data in DATABR structure
-  mtp->nICb = aSelIC.GetCount();
-  mtp->nDCb = aSelDC.GetCount();
-  mtp->nPHb = aSelPH.GetCount();
+  mtp->nICb = aSelIC.size();
+  mtp->nDCb = aSelDC.size();
+  mtp->nPHb = aSelPH.size();
   //int nPSb = 0;
   //for( jj=0; jj< aSelPH.GetCount(); jj++, nPSb++ )
   // if( aSelPH[jj] >= mult->FIs )
@@ -184,11 +184,11 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
   dyn_new();
 
 // set dynamic data
-  for( jj=0; jj< aSelIC.GetCount(); jj++ )
+  for( jj=0; jj< aSelIC.size(); jj++ )
     mtp->xIC[jj] = aSelIC[jj];
-  for( jj=0; jj< aSelDC.GetCount(); jj++ )
+  for( jj=0; jj< aSelDC.size(); jj++ )
     mtp->xDC[jj] = aSelDC[jj];
-  for( jj=0; jj< aSelPH.GetCount(); jj++ )
+  for( jj=0; jj< aSelPH.size(); jj++ )
     mtp->xPH[jj] = aSelPH[jj];
 }
 

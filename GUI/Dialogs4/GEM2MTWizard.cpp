@@ -893,30 +893,30 @@ void GEM2MTWizard::resetVTKList()
        scalarsList.Add( new pagesSetupData(DataBR_fields[ii].name.c_str(), ii));
     GetListsnRT( -2, wnData,  scalarsList2 );
 
-    pNdx.Add(f_bIC);
-    pNdx.Add(f_uIC);
-    pNdx.Add(f_xDC);
-    pNdx.Add(f_gam);
-    pNdx.Add(f_xPH);
-    pNdx.Add(f_mPS);
-    pNdx.Add(f_vPS);
-    pNdx.Add(f_xPA);
-    pNdx.Add(f_bSP);
-    pNdx.Add(f_aPH);
-    pNdx.Add(f_rMB);
-    pNdx.Add(f_dll);
-    pNdx.Add(f_dul);
-        pNdx.Add(f_amrl);
-        pNdx.Add(f_amru);
-    pNdx.Add(f_mPH);
-    pNdx.Add(f_vPH);
-    pNdx.Add(f_m_t);
-    pNdx.Add(f_con);
-    pNdx.Add(f_mju);
-    pNdx.Add(f_lga);
+    pNdx.push_back(f_bIC);
+    pNdx.push_back(f_uIC);
+    pNdx.push_back(f_xDC);
+    pNdx.push_back(f_gam);
+    pNdx.push_back(f_xPH);
+    pNdx.push_back(f_mPS);
+    pNdx.push_back(f_vPS);
+    pNdx.push_back(f_xPA);
+    pNdx.push_back(f_bSP);
+    pNdx.push_back(f_aPH);
+    pNdx.push_back(f_rMB);
+    pNdx.push_back(f_dll);
+    pNdx.push_back(f_dul);
+        pNdx.push_back(f_amrl);
+        pNdx.push_back(f_amru);
+    pNdx.push_back(f_mPH);
+    pNdx.push_back(f_vPH);
+    pNdx.push_back(f_m_t);
+    pNdx.push_back(f_con);
+    pNdx.push_back(f_mju);
+    pNdx.push_back(f_lga);
 
 
-    pNdx.Add(f_bPS);
+    pNdx.push_back(f_bPS);
 
     QString str;
     QListWidgetItem* item1;
@@ -1077,7 +1077,7 @@ inline int GEM2MTWizard::findVTKarr( int vtk1  )
   //if( vtk1 == f_bPS )
   // return po strokam
 
-  for( uint ii=0; ii<pNdx.GetCount(); ii++ )
+  for( size_t ii=0; ii<pNdx.size(); ii++ )
    if( pNdx[ii] == vtk1 )
      return ii+1;
 
@@ -1089,7 +1089,7 @@ void GEM2MTWizard::setVTK( TCIntArray vtk1, TCIntArray vtk2  )
 
   scriptData.Clear();
 
-  for(uint ii=0; ii<vtk1.GetCount(); ii++ )
+  for(size_t ii=0; ii<vtk1.size(); ii++ )
   {
     int cPage;
     int ndx;
@@ -1121,8 +1121,8 @@ void GEM2MTWizard::getVTK( TCIntArray& vtk1, TCIntArray& vtk2  )
 {
   uint page_;
   int vt_1;
-  vtk1.Clear();
-  vtk2.Clear();
+  vtk1.clear();
+  vtk2.clear();
   if( !c_PvnVTK->isChecked() )
    return; // select all
 
@@ -1131,26 +1131,26 @@ void GEM2MTWizard::getVTK( TCIntArray& vtk1, TCIntArray& vtk2  )
       if( scriptData[ii].nObj >= 0 )
       {
         page_ = scriptData[ii].nWin;
-        if(page_ > pNdx.GetCount() )
+        if(page_ > pNdx.size() )
           vt_1 = f_bPS;
         else vt_1 = pNdx[page_-1];
 
 
         if( vt_1 == f_bPS ) //bPs
         {
-           vtk1.Add( vt_1 );
-           vtk2.Add(scriptData[ii].nIdx + pgData[page_].ndx*TMulti::sm->GetPM()->N);
+           vtk1.push_back( vt_1 );
+           vtk2.push_back(scriptData[ii].nIdx + pgData[page_].ndx*TMulti::sm->GetPM()->N);
         }
         else
         {
-           vtk1.Add( vt_1 );
-           vtk2.Add(scriptData[ii].nIdx);
+           vtk1.push_back( vt_1 );
+           vtk2.push_back(scriptData[ii].nIdx);
          }
       }
       else
       {
-        vtk1.Add( scriptData[ii].nIdx );
-        vtk2.Add( 0 );
+        vtk1.push_back( scriptData[ii].nIdx );
+        vtk2.push_back( 0 );
       }
   }
 

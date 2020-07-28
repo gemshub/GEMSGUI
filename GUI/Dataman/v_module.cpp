@@ -1396,7 +1396,7 @@ TCModule::CmReOpenFileList()
 
         TCIntArray arr = SelectFileList(closef|openf|oldself);
 
-        if( arr.GetCount() < 1 )
+        if( arr.size() < 1 )
             if( !vfQuestion( window(), GetName(),
                   "No database files selected to open! Continue?" ))
                 return;
@@ -2098,8 +2098,8 @@ TCModule::SelectFileList(int mode)
          "Selection of files", sel);
 
     TCIntArray arr;
-    for( uint i=0; i<aSel.GetCount(); i++ )
-        arr.Add( indx[aSel[i]] );
+    for( size_t i=0; i<aSel.size(); i++ )
+        arr.push_back( indx[aSel[i]] );
 
     return arr;
 }

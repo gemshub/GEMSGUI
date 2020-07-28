@@ -88,10 +88,10 @@ out_stream << uint(nOD) << "  "; // endl;
 //    f.write( (char*)&specialFilesNum, sizeof(int) );
 out_stream << specialFilesNum <<  "  "; //  endl;
 
-    int numFls = fls.GetCount();
+    int numFls = fls.size();
 //    f.write( (char*)&nF, sizeof(int) );
 out_stream << numFls << "  "; // << endl;
-    for(uint ii=0; ii<fls.GetCount(); ii++) {
+    for(size_t ii=0; ii<fls.size(); ii++) {
 //        f.write( (char*)&fls[i], sizeof(int) );
 out_stream << fls[ii] << ' '; // << endl;
     }
@@ -138,7 +138,7 @@ in_stream >> numFields;
     {
 //        f.read( (char*)&fl, sizeof(int) );
 in_stream >> fl;
-        fls.Add(fl);
+        fls.push_back(fl);
     }
 //    f.read( (char*)&nF, sizeof(int) );
 int numFiles;
@@ -158,7 +158,7 @@ TDataBase::TDataBase( size_t nrt, const char* name,
         nRT(nrt), status(UNDF_), rclose(Rclose), isDelete(isDel),
         frstOD(nOf), nOD(Nobj),
         ind( nRkflds, rkfrm ),
-        aFile(4, 1), fls(2, 1), specialFilesNum(filesNum)
+        aFile(4, 1), fls(), specialFilesNum(filesNum)
 {
     strncpy( Keywd, name, MAXKEYWD-1 );
     Keywd[ MAXKEYWD-1 ] = 0;
@@ -168,7 +168,7 @@ TDataBase::TDataBase( size_t nrt, const char* name,
 
 //configuration from cfg file
 TDataBase::TDataBase( fstream& f ):
-        status(UNDF_), ind(f ), aFile(4, 1), fls(2, 1)
+        status(UNDF_), ind(f ), aFile(4, 1), fls()
 {
     fromCFG(f);
     crt = time(nullptr);
@@ -177,11 +177,11 @@ TDataBase::TDataBase( fstream& f ):
 
 TDataBase::~TDataBase()
 {
-    for(size_t j=0; j<fls.GetCount(); j++ )
+    for(size_t j=0; j<fls.size(); j++ )
         aFile[fls[j]].Close();
 
     //  aFile.Clear();
-    fls.Clear();
+    fls.clear();
     fNum = 0;
     fOpenNameBuf.clear();
 }
@@ -431,7 +431,7 @@ void TDataBase::Rep(int i)
     aFile[nF].PutHead( aFile[nF].f, 0);
     putndx( nF );
     status = ONEF_;
-    fNum = fls.Find( nF );
+    fNum = findIndex<int>( fls, nF );
     if( rclose )  aFile[nF].Close();
 }
 
@@ -476,7 +476,7 @@ void TDataBase::Get(int i)
     getrec( *rh, aFile[nF].f, rhh );
     ind.PutKey(i);
     status = ONEF_;
-    fNum = fls.Find( nF );
+    fNum = findIndex<int>( fls, nF );
     if( rclose )  aFile[nF].Close();
 }
 
@@ -537,8 +537,7 @@ time_t TDataBase::GetTime( uint i )
             strncmp( rh.endm, MARKRECHEAD, 2 ) || rh.Nobj != nOD )
         Error( GetKeywd(), "PDB record header format error");
     status =  UNDF_;
-    ;
-    fNum = fls.Find( nF );
+    fNum = findIndex<int>( fls, nF );
     if( rclose )  aFile[nF].Close();
     return rh.crt;
 }
@@ -668,7 +667,7 @@ void TDataBase::opfils()
 {
     fNum = 0;
     fOpenNameBuf.clear();
-    for(uint i=0; i<fls.GetCount(); i++)
+    for(size_t i=0; i<fls.size(); i++)
         fOpenNameBuf.push_back( aFile[fls[i]].Name().c_str() );
 }
 
@@ -677,19 +676,20 @@ void TDataBase::GetFileList(int mode, TCStringArray& names,
                             TCIntArray& indeces, TCIntArray& sel)
 {
     names.clear();
-    indeces.Clear();
-    sel.Clear();
+    indeces.clear();
+    sel.clear();
     for( uint i=0; i<aFile.GetCount(); i++ )
     {
-        int nF = fls.Find(i);
+
+        int nF = fNum = findIndex<int>( fls, i );
         if( (nF==-1&&(mode&closef))||(nF!=-1&&(mode&openf)) )
         {
             aFile[i].Makepath();
             names.push_back( string(aFile[i].GetKeywd())+string(" ")+
                        string(aFile[i].GetPath().c_str()));
-            indeces.Add(i);
+            indeces.push_back(i);
             if( (mode&oldself) && nF != -1) //select already open files
-                sel.Add(indeces.GetCount()-1);
+                sel.push_back(indeces.size()-1);
         }
     }
 }
@@ -703,25 +703,25 @@ TDataBase::Open( bool type, FileStatus mode, const TCIntArray& nff )
     if( aFile.GetCount() == 0 )
         return;
 
-    if( fls.GetCount()<=0 ) //no config
+    if( fls.size()<=0 ) //no config
     {
         if( type )
         {
-            if( nff.GetCount()<1 )
-                fls.Add(0);
-            for( j=0; j< nff.GetCount(); j++)
-                fls.Add( nff[j] );
+            if( nff.size()<1 )
+                fls.push_back(0);
+            for( j=0; j< nff.size(); j++)
+                fls.push_back( nff[j] );
         }
-        else  fls.Add(0);
+        else  fls.push_back(0);
     }
     //  opfils();
     ind.initnew();
-    for( j=0; j<fls.GetCount(); j++ )
+    for( j=0; j<fls.size(); j++ )
         Create( fls[j] );
 try
   {
     TCIntArray comp;
-    for( j=0; j<fls.GetCount(); j++ )
+    for( j=0; j<fls.size(); j++ )
     {
         aFile[fls[j]].Open( mode );
         //added Sveta 04/11/2002 to index files
@@ -729,14 +729,14 @@ try
 // Sveta 06/2005
 //         if( vfQuestion( 0, aFile[fls[j]].GetPath(),
 //         "Stack of deleted records overflow.\nCompress?" ))
-             comp.Add(fls[j]);
+             comp.push_back(fls[j]);
         // end added
         getndx( fls[j] );
         if( rclose )  aFile[fls[j]].Close();
     }
     opfils();
     //added Sveta 04/11/2002 to index files
-        if( comp.GetCount() >0 )
+        if( comp.size() >0 )
          RebildFile( comp);
     // end added
 
@@ -748,11 +748,11 @@ try
           xcpt.mess += "\n 2nd record in file: ";
           xcpt.mess +=  aFile[fls[j]].Name().c_str();
 
-          while( j < fls.GetCount() )
-            fls.Remove(j);
+          while( j < fls.size() )
+            fls.erase( fls.begin()+j);
          ind.initnew();
 
-          for( j=0; j<fls.GetCount(); j++ )
+          for( j=0; j<fls.size(); j++ )
           {
              aFile[fls[j]].Open( mode );
              getndx( fls[j] );
@@ -779,18 +779,18 @@ TDataBase::OpenAllFiles( bool only_kernel )
      if( only_kernel && j >=  specialFilesNum )
        continue;
      else
-        fls.Add( j );
+        fls.push_back( j );
 
-    Open( true, UPDATE_DBV, 0 );
+    Open( true, UPDATE_DBV, {} );
 }
 
 
 //close files in PDB
 void TDataBase::Close()
 {
-    for(uint j=0; j<fls.GetCount(); j++ )
+    for(size_t j=0; j<fls.size(); j++ )
         aFile[fls[j]].Close();
-    fls.Clear();
+    fls.clear();
     fNum = 0;
     fOpenNameBuf.clear();
     ind.initnew();
@@ -812,10 +812,10 @@ void TDataBase::OpenOnlyFromList( TCStringArray& names )
         if(  aFile[ii].Name().find( names[jj].c_str() ) != string::npos )
          break;
       if( jj < names.size() )
-         fls.Add( ii );
+         fls.push_back( ii );
     }
 
-    Open( true, UPDATE_DBV, 0 );
+    Open( true, UPDATE_DBV, {} );
 }
 
 // add new file to DBfile list
@@ -826,7 +826,7 @@ try{
     Create(aFile.GetCount()-1);
     file->Open( UPDATE_DBV );
     getndx(aFile.GetCount()-1);
-    fls.Add(aFile.GetCount()-1);
+    fls.push_back(aFile.GetCount()-1);
     if( rclose )
         file->Close();
     opfils();
@@ -840,7 +840,7 @@ try{
 
           ind.initnew();
 
-          for(uint j=0; j<fls.GetCount(); j++ )
+          for(size_t j=0; j<fls.size(); j++ )
           {
              aFile[fls[j]].Open( UPDATE_DBV );
              getndx( fls[j] );
@@ -851,7 +851,7 @@ try{
          }
          Error( xcpt.title, xcpt.mess);
    }
-   return fls.Find( aFile.GetCount()-1 );
+   return  findIndex<int>( fls, aFile.GetCount()-1 );
 }
 
 
@@ -876,12 +876,12 @@ void TDataBase::DelFile(const std::string& path)
         if( fl.Name() == aFile[ii].Name() )
         {
             auto  nF = ii;
-            int  nFls = fls.Find( nF );
+            int  nFls = findIndex<int>( fls, nF );
             if( nFls != -1 ) //close file and delete indexes
             {
                 aFile[nF].Close();
                 ind.delfile( nF );
-                fls.Remove(nFls);
+                fls.erase( fls.begin()+nFls);
             }
             fNum = 0; //?????
             aFile.Remove(nF);
@@ -894,13 +894,13 @@ void TDataBase::DelFile(const std::string& path)
 // add open PDB files
 void TDataBase::AddOpenFile(const TCIntArray& nff)
 {
-  uint j=0;
-  if( nff.GetCount()<1 )
+  size_t j=0;
+  if( nff.size()<1 )
         return;
 try{
     TCIntArray comp;
 
-    for( j=0; j<nff.GetCount(); j++)
+    for( j=0; j<nff.size(); j++)
     {  //fls.Add( nff[j] );
         Create( nff[j] );
         aFile[nff[j]].Open( UPDATE_DBV );
@@ -908,16 +908,16 @@ try{
         if( aFile[nff[j]].GetDhOver())
          if( vfQuestion( nullptr, aFile[nff[j]].GetPath().c_str(),
          "Stack of deleted records overflow.\nCompress?" ))
-             comp.Add(nff[j]);
+             comp.push_back(nff[j]);
         // end added
         getndx( nff[j] );
-        fls.Add( nff[j] );
+        fls.push_back( nff[j] );
         if( rclose )
             aFile[nff[j]].Close();
     }
     opfils();
     //added Sveta 04/11/2002 to index files
-        if( comp.GetCount() >0 )
+        if( comp.size() >0 )
          RebildFile( comp);
     // end added
 
@@ -931,7 +931,7 @@ try{
 
           ind.initnew();
 
-          for( j=0; j<fls.GetCount(); j++ )
+          for( j=0; j<fls.size(); j++ )
           {
              aFile[fls[j]].Open( UPDATE_DBV );
              getndx( fls[j] );
@@ -1041,11 +1041,11 @@ void TDataBase::RebildFile(const TCIntArray& nff)
 {
     // close&open db files added Sveta 06/03/02
     TCIntArray fls_old;
-    for(uint j=0; j< fls.GetCount(); j++)
-        fls_old.Add( fls[j] );
+    for(size_t j=0; j< fls.size(); j++)
+        fls_old.push_back( fls[j] );
     Close();
 
-    for(uint j=0; j<nff.GetCount(); j++)
+    for(size_t j=0; j<nff.size(); j++)
     {
     int  nRec, nRT;
     char isDel;
@@ -1112,7 +1112,7 @@ bool TDataBase::SetNewOpenFileList(const TCStringArray& aFlKeywd)
 	    }
 
         if( nF >= 0 )
-            fls.Add(nF);
+            fls.push_back(nF);
         else
         {	
             if( !vfQuestion( nullptr, aFlKeywd[i].c_str(),
@@ -1135,17 +1135,17 @@ void TDataBase::MakeInNewProfile(const std::string& dir,
     /* open only default files (no user files)*/
     //  Close();
     TCIntArray fl;
-    for(uint  i=0; i<fls.GetCount(); i++ )
+    for(size_t  i=0; i<fls.size(); i++ )
     {
         if( fls[i] < specialFilesNum)
         {
-            fl.Add(fls[i]);
+            fl.push_back(fls[i]);
         }
     }
     Close();
-    for(uint  ii=0; ii<fl.GetCount(); ii++ )
-        fls.Add(fl[ii]);
-    if( fls.GetCount() >= 1)
+    for(size_t  ii=0; ii<fl.size(); ii++ )
+        fls.push_back(fl[ii]);
+    if( fls.size() >= 1)
         Open(false, UPDATE_DBV, fl);
 
     /* add new project files*/
@@ -1171,7 +1171,7 @@ uint TDataBase::GetOpenFileNum( const char* secondName )
     std::string name = GetKeywd();
     name += ".";
     name +=secondName;
-    for(uint i=0; i<fls.GetCount(); i++)
+    for(size_t i=0; i<fls.size(); i++)
         if( name == aFile[fls[i]].Name() )
             return i;
     return 0;
@@ -1194,7 +1194,7 @@ void TDataBase::GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey )
 // true if opened some files from default data base
 bool TDataBase::ifDefaultOpen() const
 {
-    for(size_t i=0; i<fls.GetCount(); i++)
+    for(size_t i=0; i<fls.size(); i++)
         if( aFile[fls[i]].GetPath().find( pVisor->sysDBDir().c_str())
               != std::string::npos )
             return true;

@@ -166,11 +166,11 @@ TIComp::GetElements( bool isotopes, TCStringArray& aIC, TCIntArray& aIndMT )
  {
     RecInput( aIC1[ii].c_str() );
     if( *db->FldKey( 1 ) == 'a' || *db->FldKey( 1 ) == 'v' ) // addition
-      aIndMT.Add( -1 );
+      aIndMT.push_back( -1 );
     else
       if( isotopes || *db->FldKey( 1 ) == 'e' || *db->FldKey( 1 ) == 'z' ||
           *db->FldKey( 1 ) == 'h' || *db->FldKey( 1 ) == 'o' )
-        aIndMT.Add( icp->num );
+        aIndMT.push_back( icp->num );
       else
         continue;
    aIC.push_back(aIC1[ii]);

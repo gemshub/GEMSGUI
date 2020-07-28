@@ -903,7 +903,7 @@ TDBKeyList::initnew()
         memset( ndx[j], 0, FldLen(j)*nBuf*sizeof(char) );
     memset( re, 0, nBuf*sizeof(RecEntry) );
     aKey.clear();
-    anR.Clear();
+    anR.clear();
 }
 
 // delete the keys of records file nF
@@ -1134,7 +1134,7 @@ TDBKeyList::arec_add( uint ni )
     string s;
     RecKey( ni, s);
     aKey.push_back( s );
-    anR.Add( ni );
+    anR.push_back( ni );
 }
 
 //get key list for a wildcard search
@@ -1156,7 +1156,7 @@ TDBKeyList::xlist( const char *pattern )
     else
         AllRecs = true;
     aKey.clear();
-    anR.Clear();
+    anR.clear();
     if( OneRec )
     {
        auto i = findx( pattern );

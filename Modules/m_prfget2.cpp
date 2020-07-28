@@ -358,7 +358,7 @@ void TProfil::TestChangeProfile()
     if( aIComp.GetCount()>=1 || aPhase.GetCount()>=1 || aDComp.GetCount()>=1 )
     {
       aList.clear();
-      anR.Clear();
+      anR.clear();
 
        rt[RT_GEM2MT].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
        K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
@@ -381,7 +381,7 @@ void TProfil::TestChangeProfile()
     }
 
     aList.clear();
-    anR.Clear();
+    anR.clear();
 
     // Insert changes to SYSEQ
     rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
@@ -403,7 +403,7 @@ void TProfil::TestChangeProfile()
     if( aIComp.GetCount()>=1  )
     {
       aList.clear();
-      anR.Clear();
+      anR.clear();
 
        rt[RT_DUALTH].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
        K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
@@ -424,7 +424,7 @@ void TProfil::TestChangeProfile()
     if( aIComp.GetCount()<1 &&  aPhase.GetCount()<1 && aDComp.GetCount()<1 )
         return;
     aList.clear();
-    anR.Clear();
+    anR.clear();
     rt[RT_UNSPACE].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_UNSPACE].GetKeyList( pkey, aList, anR );
@@ -450,7 +450,7 @@ int TProfil::indPH( int i )
     if( isSysEq == false )
         return i;
 
-    for( uint ii=0; ii<PHon.GetCount(); ii++)
+    for( size_t ii=0; ii<PHon.size(); ii++)
         if( i == PHon[ii])
             return static_cast<int>(ii);
 
@@ -461,7 +461,7 @@ int TProfil::indDC( int i )
 {
     if( isSysEq == false )
         return i;
-    for( uint ii=0; ii<DCon.GetCount(); ii++)
+    for( size_t ii=0; ii<DCon.size(); ii++)
         if( i == DCon[ii])
             return static_cast<int>(ii);
     return -1;
@@ -672,9 +672,9 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     // close all kernel files
     TIComp* aICdata=  dynamic_cast<TIComp *>(&aMod[RT_ICOMP]);
     aICdata->CopyElements( prfName, elm_data, sf_data.ic_d );
-    ICcnt.Clear();
+    ICcnt.clear();
     for( ii=0; ii<elm_data.ICrds.size(); ii++ )
-       ICcnt.Add(0);
+       ICcnt.push_back(0);
 
     //compos
     TCompos* aCOdata=dynamic_cast<TCompos *>(&aMod[RT_COMPOS]);

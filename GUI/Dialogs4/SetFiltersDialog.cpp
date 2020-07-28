@@ -66,7 +66,7 @@ SetFiltersDialog::SetFiltersDialog(QWidget* win,
     
     uint ii=0;//el_data->flKeywds.GetCount()-1;
 
-    for(unsigned int i=0; i< el_data->flCnt.GetCount(); i++ )
+    for(size_t i=0; i< el_data->flCnt.size(); i++ )
     {
         pMod = new QTreeWidgetItem( pkern );
         pMod->setText(0, rt[i].GetKeywd());
@@ -249,7 +249,7 @@ void SetFiltersDialog::getFiles()
     QTreeWidgetItem* pFile;
     
     el_data->selKeywds.clear();
-    el_data->selCnt.Clear();
+    el_data->selCnt.clear();
 
     for( ii=0; ii< npMod1; ii++ )
     {
@@ -267,7 +267,7 @@ void SetFiltersDialog::getFiles()
          el_data->selKeywds.push_back( col );
        }
       }
-      el_data->selCnt.Add( cnt );
+      el_data->selCnt.push_back( cnt );
     }
 
     el_data->changed = true;

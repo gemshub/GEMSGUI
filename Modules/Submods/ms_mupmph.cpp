@@ -442,10 +442,10 @@ bool TMulti::CompressPhaseIpxt( int kPH )
   for( jj=0, cnt = 0; jj<mup->Ll[kPH]; jj++ )
   {
      if( TSyst::sm->GetSY()->Dcl[jj+jb] == S_OFF )
-          aDCused.Add(-1);
+          aDCused.push_back(-1);
      else
      {
-         aDCused.Add(cnt);
+         aDCused.push_back(cnt);
          cnt++;
          form_array.push_back(aFo.form_extr( jj+jb, mup->L, mup->DCF ));
      }

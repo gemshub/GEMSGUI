@@ -75,7 +75,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
           pFile = new QTreeWidgetItem( pMod );
           pFile->setText(0,  names[ii].substr( 0, pos1 ).c_str() );
           pFile->setText(1,  names[ii].substr( pos2+1 ).c_str() );
-          if( sel.Find(indx[ii]) >= 0 )
+          if( findIndex<int>( sel, indx[ii]) >= 0 )
                pFile->setSelected( true );
         }
     }
@@ -101,7 +101,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
           pFile = new QTreeWidgetItem( pMod );
           pFile->setText(0,  names[ii].substr( 0, pos1 ).c_str() );
           pFile->setText(1,  names[ii].substr( pos2+1 ).c_str() );
-          if( sel.Find(indx[ii]) >= 0 )
+          if(  findIndex<int>( sel, indx[ii] ) >= 0 )
                pFile->setSelected( true );
         }
     }
@@ -130,7 +130,7 @@ void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
 {
 
     aFls.clear();
-    aCnt.Clear();
+    aCnt.clear();
 
     int ii, jj, nF, cnt = 0;
     int npMod1 = pkern->childCount();
@@ -169,7 +169,7 @@ void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
          aFls.push_back( col.c_str() );
        }
       }
-      aCnt.Add( cnt );
+      aCnt.push_back( cnt );
 
     }
 

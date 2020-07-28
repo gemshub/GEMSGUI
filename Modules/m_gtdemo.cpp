@@ -547,7 +547,7 @@ AGAINRC:    //get  keypart
                 if( strncmp( gdp->rkey+i*rtlen, aRklist[j].c_str(), rtlen ))
                     continue;
                 aMrk.push_back(aRklist[j]/*j*/);
-                aMrk2.Add(j);
+                aMrk2.push_back(j);
                 break;
             }
     }
@@ -557,7 +557,7 @@ AGAINRC:    //get  keypart
        aMrk.clear();
        aMrk2 = vfMultiChoiceSet(window(), aRklist,
                        "Please, select/mark some record keys for data sampling", aMrk2 );
-      for(uint j=0; j<aMrk2.GetCount(); j++ )
+      for(size_t j=0; j<aMrk2.size(); j++ )
           aMrk.push_back(aRklist[aMrk2[j]]);
     }
     else

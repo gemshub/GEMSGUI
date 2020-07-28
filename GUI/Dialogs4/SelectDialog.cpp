@@ -109,7 +109,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     }
 
     //  pList->setCurrentRow(0);
-    for( uint jj=0; jj< sel.GetCount(); jj++ )
+    for( size_t jj=0; jj< sel.size(); jj++ )
     {
         if( sel[jj] < pList->count() )
             pList->item(sel[jj])->setSelected( true);
@@ -159,7 +159,7 @@ SelectDialog::allSelected()
 
     for( int ii=0; ii<pList->count(); ii++ )
         if( pList->item(ii)->isSelected() )
-            arr.Add(ii);
+            arr.push_back(ii);
     
     return arr;
 }

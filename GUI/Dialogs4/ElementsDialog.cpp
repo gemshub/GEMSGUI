@@ -100,7 +100,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
      }
      else //elements
      {
-       aBtmId1_sel.Add( aIndMT[ii] );
+       aBtmId1_sel.push_back( aIndMT[ii] );
      }
     }
 
@@ -472,9 +472,9 @@ void ElementsDialog::SetICompList()
     QAbstractButton* bb;
     int nmbOther=1;
 
-    aBtmId1.Clear();
+    aBtmId1.clear();
     aICkey1.clear();
-    aBtmId2.Clear();
+    aBtmId2.clear();
     aICkey2.clear();
 
      openFilesICOMP();
@@ -494,7 +494,7 @@ void ElementsDialog::SetICompList()
          bb = bgOther->button(nmbOther);
          bb->setText( tr( name.c_str() ) );
          bb->setEnabled( true );
-         aBtmId2.Add( nmbOther );
+         aBtmId2.push_back( nmbOther );
          aICkey2.push_back( aIC[ii] );
          nmbOther ++;
        }
@@ -503,7 +503,7 @@ void ElementsDialog::SetICompList()
          bb = bgOther->button(0);
          bb->setText( tr( name.c_str() ) );
          bb->setEnabled( true );
-         aBtmId2.Add( 0 );
+         aBtmId2.push_back( 0 );
          aICkey2.push_back( aIC[ii] );
        }
      }
@@ -512,13 +512,13 @@ void ElementsDialog::SetICompList()
        bb = bgElem->button(aIndMT[ii]);
        if( !bb )
         Error( aIC[ii].c_str(), "E01EDrem: Invalid IComp ");
-       aBtmId1.Add( aIndMT[ii] );
+       aBtmId1.push_back( aIndMT[ii] );
        aICkey1.push_back( aIC[ii] );
        bb->setEnabled( true );
      }
 
   // set selection form template
-  for( uint ii=0; ii<aBtmId1_sel.GetCount(); ii++ )
+  for( size_t ii=0; ii<aBtmId1_sel.size(); ii++ )
   {
        bb = bgElem->button(aBtmId1_sel[ii]);
        bb->setEnabled( false );
@@ -548,7 +548,7 @@ void ElementsDialog::SetICompList()
          bb->setText( tr( name.c_str() ) );
          bb->setEnabled( false );
          bb->setChecked( true );
-         aBtmId2.Add( nmbOther );
+         aBtmId2.push_back( nmbOther );
          aICkey2.push_back( aICkey2_sel[ii] );
          nmbOther ++;
        }
@@ -560,19 +560,19 @@ void ElementsDialog::SetICompList()
 */
 void ElementsDialog::allSelected( TCStringArray& aICkeys )
 {
-    uint ii;
+    size_t ii;
     aICkeys.clear();
 
     SetSorption();
     SetAqueous();
 
-    for( ii=0; ii<aBtmId1.GetCount(); ii++ )
+    for( ii=0; ii<aBtmId1.size(); ii++ )
     {
      if( bgElem->button( aBtmId1[ii] )->isChecked()  )
         aICkeys.push_back( aICkey1[ii] );
     }
 
-    for( ii=0; ii<aBtmId2.GetCount(); ii++ )
+    for( ii=0; ii<aBtmId2.size(); ii++ )
     {
      if( bgOther->button( aBtmId2[ii] )->isChecked()  )
         aICkeys.push_back( aICkey2[ii] );
@@ -664,8 +664,8 @@ void ElementsDialog::setFilesList()
             cnt_sel++;
           }
         }
-        files_data.flCnt.Add( cnt );
-        files_data.selCnt.Add( cnt_sel );
+        files_data.flCnt.push_back( cnt );
+        files_data.selCnt.push_back( cnt_sel );
     }
 }
 
@@ -680,7 +680,7 @@ void ElementsDialog::resetFilesSelection()
    //get new selection
    getSelectionTreeWidget();
 
-   for(uint i=0; i<files_data.flCnt.GetCount(); i++ )
+   for(size_t i=0; i<files_data.flCnt.size(); i++ )
     {
         int cnt_sel = 0;
         for(int ii=0; ii<files_data.flCnt[i]; ii++ )
@@ -693,13 +693,13 @@ void ElementsDialog::resetFilesSelection()
         }
         cnt += files_data.flCnt[i];
         cnt2 += files_data.selCnt[i];
-        newSelCnt.Add( cnt_sel );
+        newSelCnt.push_back( cnt_sel );
     }
 
     files_data.selKeywds.clear();
-    files_data.selCnt.Clear();
-    for(uint ii=0; ii<newSelCnt.GetCount(); ii++ )
-       files_data.selCnt.Add( newSelCnt[ii] );
+    files_data.selCnt.clear();
+    for(size_t ii=0; ii<newSelCnt.size(); ii++ )
+       files_data.selCnt.push_back( newSelCnt[ii] );
     for(size_t ii=0; ii<newSelKeywds.size(); ii++ )
        files_data.selKeywds.push_back( newSelKeywds[ii] );
 }
@@ -709,7 +709,7 @@ void ElementsDialog::openFilesSelection()
 {
   TCStringArray newSelKeywds;   // list of selected files
   int cnt=0;
-  ErrorIf( files_data.selCnt.GetCount()!=RT_PHASE+1, "",
+  ErrorIf( files_data.selCnt.size()!=RT_PHASE+1, "",
                "E00EDrem: internal error");
 
  //files_data

@@ -799,8 +799,8 @@ void TGEM2MT::MakeQuery()
     if( mtp->PvnVTK != S_OFF )
     { // use selected fields to VTK
       for( long int ii=0; ii<mtp->nVTKfld; ii++)
-       { vtk1.Add( mtp->xVTKfld[ii][0]);
-         vtk2.Add( mtp->xVTKfld[ii][1]);
+       { vtk1.push_back( mtp->xVTKfld[ii][0]);
+         vtk2.push_back( mtp->xVTKfld[ii][1]);
        }
     }
 
@@ -860,7 +860,7 @@ void TGEM2MT::MakeQuery()
 
   if( mtp->PvnVTK != S_OFF )
   { // use selected fields to VTK
-      mtp->nVTKfld = vtk1.GetCount();
+      mtp->nVTKfld = vtk1.size();
       mtp->xVTKfld = (long int (*)[2])aObj[ o_mtxflds].Alloc( mtp->nVTKfld, 2, L_ );
      for( long int ii=0; ii<mtp->nVTKfld; ii++)
      { mtp->xVTKfld[ii][0] = vtk1[ii];

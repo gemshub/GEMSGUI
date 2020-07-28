@@ -366,7 +366,7 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
                 if( jj>=AqKey.size() )
                 {
                   aPhaseList.erase(aPhaseList.begin() +ii);
-                  anRPhase.Remove(ii);
+                  anRPhase.erase( anRPhase.begin()+ii);
                 }
                else ii++;
             }
@@ -382,7 +382,7 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
                     if( jj>=GasKey.size() )
                     {
                       aPhaseList.erase(aPhaseList.begin() +ii);
-                      anRPhase.Remove(ii);
+                      anRPhase.erase( anRPhase.begin()+ii);
                     }
                    else ii++;
                 }
@@ -395,7 +395,7 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
                                      aPhaseList[ii].c_str(), PH_RKLEN-MAXPHGROUP  ))
                         {
                             aPhaseList.erase(aPhaseList.begin() +ii);
-                            anRPhase.Remove(ii);
+                            anRPhase.erase( anRPhase.begin()+ii);
                         }
                         else ii++;
                     }
@@ -896,20 +896,20 @@ void TRMults::SelectAqGasPhase( char AqGasType, TCStringArray& AqGasKey )
     }
     else
     {
-       anRPhase.Clear();
+       anRPhase.clear();
        // get selected phase  added Sveta 18/06/04
        for(ii=0; ii <aKeysList.size(); ii++)
        {
          for( jj=0; jj<AqGasKey.size(); jj++ )
             if( AqGasKey[jj] == aKeysList[ii] )
-              anRPhase.Add(ii);
+              anRPhase.push_back(ii);
        }
        msg1 = "Please, choose an";
        msg1+= typePhase +".";
 
 AGAIN:  anRPhase = vfMultiChoiceSet(window(), aKeysList, msg1.c_str(), anRPhase );
 
-    if( anRPhase.GetCount() < 1 )
+    if( anRPhase.size() < 1 )
     {
       msg1 = "Project: What";
       msg1 += typePhase+"?";
@@ -929,7 +929,7 @@ AGAIN:  anRPhase = vfMultiChoiceSet(window(), aKeysList, msg1.c_str(), anRPhase 
     else
     {
       AqGasKey.clear();
-      for(ii=0; ii <anRPhase.GetCount(); ii++)
+      for(ii=0; ii <anRPhase.size(); ii++)
           AqGasKey.push_back( aKeysList[anRPhase[ii]] );
     }
   }

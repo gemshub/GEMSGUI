@@ -328,7 +328,7 @@ TArrayF<T>::AddUnique(const T& t)
 }
 
 // Added for convenience
-typedef TArrayF<int> TCIntArray;
+//typedef TArrayF<int> TCIntArray;
 
 
 // TIArray stores pointers to object

@@ -1546,7 +1546,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
             }
         if( sy.Pcl[i] == S_OFF)  // phf phase OFF in system
         {
-            while( iOff< PHoff.GetCount() && PHoff[iOff] < PHon[i])
+            while( iOff< PHoff.size() && PHoff[iOff] < PHon[i])
             {
                 ErrorIf( i2>= STat->ssp->DM[22],GetName(),
                          "mu.Fi-sy.Fi Invalid count");
@@ -1616,7 +1616,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
             i5++;
         }
     }
-    while( iOff< PHoff.GetCount() )
+    while( iOff< PHoff.size() )
     {
         ErrorIf( i2>= STat->ssp->DM[22],GetName(), "mu.Fi-sy.Fi Invalid count");
         STat->ssp->phf[i2++] = (short)PHoff[iOff++];
@@ -1640,7 +1640,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
             }
         if( sy.Dcl[i] == S_OFF)   // dcf dcomp OFF in system
         {
-            while( iOff< DCoff.GetCount() && DCoff[iOff]< DCon[i] )
+            while( iOff< DCoff.size() && DCoff[iOff]< DCon[i] )
             {
                 ErrorIf( i2>= STat->ssp->DM[23],GetName(),
                          "mu.L-sy.L Invalid count");
@@ -1701,7 +1701,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
             i5++;
         }
     }
-    while( iOff < DCoff.GetCount() )
+    while( iOff < DCoff.size() )
     {
         ErrorIf( i2 >= STat->ssp->DM[23],GetName(),  "mu.L-sy.L invalid count");
         STat->ssp->dcf[i2++] = (short)DCoff[iOff++];

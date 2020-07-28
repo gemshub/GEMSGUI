@@ -348,7 +348,7 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
   int nKeys = rt[nRT].GetKeyList( keyFilter.c_str(), keyList, temp);
 
   for(jj=0; jj<rt[nRT].KeyNumFlds(); jj++)
-   colSizes.Add( 0/*rt[nRT].FldLen(jj)*/ );
+   colSizes.push_back( 0/*rt[nRT].FldLen(jj)*/ );
 
   // define key list
   tbKeys->setRowCount(nKeys);

@@ -1293,7 +1293,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
           for(size_t kk=0; kk<aDclist1.size(); kk++)
           {
             aDclist.push_back(aDclist1[kk]);
-            anRDc.Add(anRDc1[kk]);
+            anRDc.push_back(anRDc1[kk]);
           }
         }
         size_t ii=0;
@@ -1303,7 +1303,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
                     !memcmp( aDclist[ii].c_str()+MAXSYMB+MAXDRGROUP, "e-", 2 ) )
             {
                 aDclist.erase(aDclist.begin() +ii);
-                anRDc.Remove(ii);
+                anRDc.erase( anRDc.begin()+ii);
                 Ndc--;
             }
             else
@@ -1311,7 +1311,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
                         !memcmp( aDclist[ii].c_str(), aDclist[ii-1].c_str(), DC_RKLEN-MAXSYMB ) )
                 {
                     aDclist.erase(aDclist.begin() +ii);
-                    anRDc.Remove(ii);
+                    anRDc.erase( anRDc.begin()+ii);
                     Ndc--;
                 }
                 else ii++;
@@ -1326,7 +1326,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
           for(uint kk=0; kk<aDclist1.size(); kk++)
           {
             aRclist.push_back(aDclist1[kk]);
-            anRRc.Add(anRDc1[kk]);
+            anRRc.push_back(anRDc1[kk]);
           }
         }
         ii=0;
@@ -1336,7 +1336,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
                     !memcmp( aRclist[ii].c_str(), aRclist[ii-1].c_str(), DC_RKLEN-MAXSYMB ) )
             {
                 aRclist.erase(aRclist.begin() +ii);
-                anRRc.Remove(ii);
+                anRRc.erase( anRRc.begin()+ii);
                 Nrc--;
             }
             else ii++;

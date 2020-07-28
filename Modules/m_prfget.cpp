@@ -649,8 +649,8 @@ void TProfil::PackSystat()
     syst->setSizes();
     if( isSysEq ) // add to z_sp_config show mode 07/12/99
     {
-        STat->ssp->DM[22] += PHoff.GetCount();
-        STat->ssp->DM[23] += DCoff.GetCount();
+        STat->ssp->DM[22] += PHoff.size();
+        STat->ssp->DM[23] += DCoff.size();
     }
     multi->setSizes();
     STat->dyn_new();
@@ -845,7 +845,7 @@ bool TProfil::GetFN( const char * prfName, bool show_dlg )
     RMULTS* mup = rmults->GetMU();
     memset(mup->Nfl, 0, MAXNUMCHAINS*sizeof(short));
     mup->NfT = 0;
-    for(size_t i=0; i<aCnt.GetCount(); i++)
+    for(size_t i=0; i<aCnt.size(); i++)
     {
         mup->Nfl[i] = aCnt[i];
         mup->NfT += mup->Nfl[i];

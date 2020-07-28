@@ -1018,7 +1018,7 @@ TVisor::deleteDBDir(const char *dir)
                     //cout << path << endl;
                     rt[jj].Close();
                     rt[jj].DelFile(path);
-                    rt[jj].Open(true, UPDATE_DBV, 0);
+                    rt[jj].Open(true, UPDATE_DBV, {});
                 }
         }
         path = dir;
