@@ -29,8 +29,8 @@ TConst::TConst( uint nrt ):
         TCModule( nrt )
 {
     CA=0;
-    aFldKeysHelp.Add("Code of function using table of constants");
-    aFldKeysHelp.Add("Table of constants ID and dimensions");
+    aFldKeysHelp.push_back("Code of function using table of constants");
+    aFldKeysHelp.push_back("Table of constants ID and dimensions");
     set_def();
     start_title = " Numerical Constants ";
 }
@@ -78,7 +78,7 @@ void TConst::CopyRecords( const char *prfName )
 {
     // close all no project files
     TCStringArray names1;
-    names1.Add(prfName);
+    names1.push_back(prfName);
     db->OpenOnlyFromList(names1);
 }
 

@@ -34,7 +34,7 @@ KeyDialog::KeyDialog(QWidget* win, size_t irt, const char* key,
  
 	setupUi(this);
 	 
-	old_sel.Clear();
+    old_sel.clear();
     pList->setFont( pVisorImp->getCellFont() );
     QObject::connect(pList, SIGNAL(itemDoubleClicked ( QListWidgetItem *) ), this, SLOT(accept()));
     setWindowTitle( caption );
@@ -86,15 +86,15 @@ KeyDialog::KeyDialog(QWidget* win, size_t irt, TCStringArray& sel,
 {
 	setupUi(this);
 
-    old_sel.Clear();
-    for(uint ii=0; ii<sel.GetCount(); ii++)
+    old_sel.clear();
+    for(size_t ii=0; ii<sel.size(); ii++)
     {   if( strchr( sel[ii].c_str(), ':' ))  // key in packed form
         {
           rt[irt].SetKey( sel[ii].c_str() );
-          old_sel.Add(rt[irt].UnpackKey());
+          old_sel.push_back(rt[irt].UnpackKey());
         }
         else
-          old_sel.Add( sel[ii] );
+          old_sel.push_back( sel[ii] );
     }
     
     pList->setFont( pVisorImp->getCellFont() );
@@ -143,7 +143,7 @@ KeyDialog::SetList()
        pList->addItem(keyList[ii].c_str());
 
     if( multi )
-    {  for(uint jj=0; jj<old_sel.GetCount(); jj++)
+    {  for(size_t jj=0; jj<old_sel.size(); jj++)
           for( uint ii=0; ii<n; ii++ )
           {
             // comparing parts before '*' for overwrite dcomp, reacdc ....
@@ -237,7 +237,7 @@ KeyDialog::allSelectedKeys()
         if( pList->item(ii)->isSelected() )
         {
          string s = pList->item(ii)->text().toStdString();;
-         arr.Add(s.c_str());
+         arr.push_back(s.c_str());
         }
     return arr;
 }
@@ -252,7 +252,7 @@ RDKeyDialog::RDKeyDialog(QWidget* win, TCStringArray& sel,
     setupUi(this);
     old_sel.clear();
 
-    for(uint ii=0; ii<sel.GetCount(); ii++)
+    for(size_t ii=0; ii<sel.size(); ii++)
     {   if( strchr( sel[ii].c_str(), ':' ))  // key in packed form
         {
           if( sel[ii][0] == SRC_REACDC )
@@ -399,7 +399,7 @@ TCStringArray RDKeyDialog::allSelectedKeys()
         if( pList->item(ii)->isSelected() )
         {
          string s = pList->item(ii)->text().toStdString();;
-         arr.Add(s.c_str());
+         arr.push_back(s.c_str());
         }
     return arr;
 }

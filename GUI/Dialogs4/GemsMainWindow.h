@@ -112,9 +112,9 @@ struct DThread
      mess ="";
      all = all_;
      seli = sel_;
-     list.Clear();
-     for( uint ii=0; ii<arr.GetCount(); ii++ )
-       list.Add( arr[ii]);
+     list.clear();
+     for( size_t ii=0; ii<arr.size(); ii++ )
+       list.push_back( arr[ii]);
   }
   //vfExcludeFillEdit
   void setDThread( const char* caption, TCStringArray& aICkeys,
@@ -123,9 +123,9 @@ struct DThread
      wait = true;
      title = caption;
      fill_data = fill_data_;
-     list.Clear();
-     for( uint ii=0; ii<aICkeys.GetCount(); ii++ )
-       list.Add( aICkeys[ii]);
+     list.clear();
+     for( size_t ii=0; ii<aICkeys.size(); ii++ )
+       list.push_back( aICkeys[ii]);
   }
 };
 

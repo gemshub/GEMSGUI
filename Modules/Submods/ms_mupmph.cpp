@@ -447,7 +447,7 @@ bool TMulti::CompressPhaseIpxt( int kPH )
      {
          aDCused.Add(cnt);
          cnt++;
-         form_array.Add(aFo.form_extr( jj+jb, mup->L, mup->DCF ));
+         form_array.push_back(aFo.form_extr( jj+jb, mup->L, mup->DCF ));
      }
   }
 
@@ -562,7 +562,7 @@ long int
                 // build formula list
                 for( int jj=0; jj<mup->Ll[k]; jj++ )
                 {
-                  form_array.Add(aFo.form_extr( jj+jb, mup->L, mup->DCF ));
+                  form_array.push_back(aFo.form_extr( jj+jb, mup->L, mup->DCF ));
                 }
 
                 // get moiety full structure from phase

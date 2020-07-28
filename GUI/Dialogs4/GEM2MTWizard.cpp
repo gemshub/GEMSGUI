@@ -945,7 +945,7 @@ void GEM2MTWizard::resetVTKList()
 
         TCStringArray lst;
         TProfil::pm->getNamesList( nO, lst);
-        if( lst.GetCount() < 1 )  // undefined indexation
+        if( lst.size() < 1 )  // undefined indexation
           continue;
 
         pgData.Add( new pagesSetupData(wnData[ii]));
@@ -963,7 +963,7 @@ void GEM2MTWizard::resetVTKList()
         winStac->addWidget(page1);
 
         // insert items to list of indexes
-        for(  jj=0; jj<lst.GetCount(); jj++ )
+        for(  jj=0; jj<lst.size(); jj++ )
         {
           item1 = new QListWidgetItem( lst[jj].c_str(), lstIndexes1);
         }

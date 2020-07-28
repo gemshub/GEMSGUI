@@ -47,8 +47,8 @@ struct equatSetupData
    equatSetupData( equatSetupData& d ):
      xName(d.xName), yName(d.yName), indexName(d.indexName), abscissaEquat(d.abscissaEquat), useSeveral(d.useSeveral)
    {
-       for( uint ii=0; ii<abscissaLines.GetCount(); ii++)
-           abscissaLines.Add( d.abscissaLines[ii] );
+       for( size_t ii=0; ii<abscissaLines.size(); ii++)
+           abscissaLines.push_back( d.abscissaLines[ii] );
    }
 };
 
@@ -136,7 +136,7 @@ public:
    {  return   scriptData.GetCount(); }
 
    size_t getAbscissaNum() const
-   {  return   eqData.abscissaLines.GetCount()+1; }
+   {  return   eqData.abscissaLines.size()+1; }
 
 public slots:
     // slot or function ????

@@ -765,7 +765,7 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
           pVisor->readPDBDir(tmpDirPath.c_str(), "*" );
 
        // copy files to new Prifile
-     for (uint ii = 0; ii < aFiles.GetCount(); ii++)
+     for (uint ii = 0; ii < aFiles.size(); ii++)
      {
         std::string f_tmp = tmpDirPath;
                 f_tmp += "/";
@@ -803,7 +803,7 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
 */
 
     // add files to module list
-    for (uint ii = 0; ii < aFiles.GetCount(); ii++)
+    for (size_t ii = 0; ii < aFiles.size(); ii++)
     {
        if (std::string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
         {
@@ -845,15 +845,15 @@ bool TProfil::GetFN( const char * prfName, bool show_dlg )
     RMULTS* mup = rmults->GetMU();
     memset(mup->Nfl, 0, MAXNUMCHAINS*sizeof(short));
     mup->NfT = 0;
-    for(uint i=0; i<aCnt.GetCount(); i++)
+    for(size_t i=0; i<aCnt.GetCount(); i++)
     {
         mup->Nfl[i] = aCnt[i];
         mup->NfT += mup->Nfl[i];
     }
     mup->FN = static_cast<char (*)[MAX_FILENAME_LEN]>(aObj[ o_mufn].Alloc(
-                  aFls.GetCount(), 1, MAX_FILENAME_LEN ));
+                  aFls.size(), 1, MAX_FILENAME_LEN ));
     // insert files name to FN
-    for(uint j=0; j<aFls.GetCount(); j++)
+    for(size_t j=0; j<aFls.size(); j++)
         strncpy( mup->FN[j], aFls[j].c_str(), MAX_FILENAME_LEN);
     return true;
 }
@@ -886,11 +886,11 @@ void TProfil::SetFN()
             }
         }
 ///end Added after GEM2MT implemented
-        aFls.Clear();
+        aFls.clear();
         for(j=0; j<rmults->GetMU()->Nfl[i+nx]; j++)
         {
             s = std::string( rmults->GetMU()->FN[k++], 0, MAX_FILENAME_LEN);
-            aFls.Add(s);
+            aFls.push_back(s);
         }
 
         if( !rt[aMod[i].rtNum()].SetNewOpenFileList( aFls ))

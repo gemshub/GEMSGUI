@@ -592,7 +592,7 @@ TCModule::CmNext()
        if( !(str.find_first_of("*?" ) != string::npos) )
           //Current record key is defined!
        {
-         for(uint i=0; i<aKey.GetCount(); i++ )
+         for(size_t i=0; i<aKey.size(); i++ )
           if( str == aKey[i])
             {
               i_next = i+1;
@@ -634,7 +634,7 @@ TCModule::CmPrevious()
        if( !(str.find_first_of("*?" ) != string::npos) )
           //Current record key is defined!
        {
-         for(uint i=0; i<aKey.GetCount(); i++ )
+         for(size_t i=0; i<aKey.size(); i++ )
           if( str == aKey[i])
             {
               if( i==0 )
@@ -1616,11 +1616,11 @@ TCModule::AddRecord(const char* key )
     if( strpbrk(key,"*?/")!=nullptr )
         Error( GetName(), "Attempt to insert record with template key!");
 
-    ErrorIf( db->fOpenNameBuf.GetCount()<1, GetName(), "No database file choosen");
-    if( db->fOpenNameBuf.GetCount()>1 )
+    ErrorIf( db->fOpenNameBuf.size()<1, GetName(), "No database file choosen");
+    if( db->fOpenNameBuf.size()>1 )
     {
         string s="Choose a database file to put a record: "+ string(key);
-        file = db->fOpenNameBuf.GetCount() - 1;  // 04.04.01 KD
+        file = db->fOpenNameBuf.size() - 1;  // 04.04.01 KD
         file = vfChoice(window(), db->fOpenNameBuf, s.c_str(), file );
     }
     else
@@ -1644,14 +1644,14 @@ TCModule::AddRecord(const char* key, int& fnum )
       file = fnum;
     else
     {
-        ErrorIf( db->fOpenNameBuf.GetCount()<1, GetName(),
+        ErrorIf( db->fOpenNameBuf.size()<1, GetName(),
               "No database file choosen");
-        if( db->fOpenNameBuf.GetCount()>1 )
+        if( db->fOpenNameBuf.size()>1 )
         {
            bool ok_to_all = false;
            string s="Choose a database file to put a record: "
                       + string(key);
-           file = db->fOpenNameBuf.GetCount() - 1;  // 04.04.01 KD
+           file = db->fOpenNameBuf.size() - 1;  // 04.04.01 KD
            file = vfChoice2(window(), db->fOpenNameBuf, s.c_str(), file, ok_to_all );
            if( ok_to_all == true && file >= 0 )
               fnum = file;
@@ -1693,7 +1693,7 @@ TCModule::KeysToTXT( const char *pattern )
     TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark record keys to be listed in txt-file",
        nRT, pattern );
-    if( aKey.GetCount() <1 )
+    if( aKey.size() <1 )
         return;
 
     string s = GetName();
@@ -1705,9 +1705,8 @@ TCModule::KeysToTXT( const char *pattern )
     ErrorIf( !f.good() , GetName(), "Fileopen error");
 
     // check for errors
-    f << " " << GetName() << " \'" << pattern << "\' Nrec="
-    << aKey.GetCount() << "\n";
-    for(uint i=0; i<aKey.GetCount(); i++ )
+    f << " " << GetName() << " \'" << pattern << "\' Nrec="  << aKey.size() << "\n";
+    for(size_t i=0; i<aKey.size(); i++ )
     {
         f << aKey[i].c_str() << "\n";
     }
@@ -1721,7 +1720,7 @@ TCModule::RecToTXT( const char *pattern )
     TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark records to be unloaded into txt-file",
        nRT, pattern );
-    if( aKey.GetCount() <1 )
+    if( aKey.size() <1 )
         return;
 
     std::string s = GetName();
@@ -1732,7 +1731,7 @@ TCModule::RecToTXT( const char *pattern )
     fstream f(filename.c_str(), ios::out);
     ErrorIf( !f.good() , GetName(), "File write error");
 
-    for(uint i=0; i<aKey.GetCount(); i++ )
+    for(size_t i=0; i<aKey.size(); i++ )
     {
        int Rnum = db->Find( aKey[i].c_str() );
        db->Get( Rnum );
@@ -1823,7 +1822,7 @@ TCModule::RecExport( const char *pattern )
     TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark records to be unloaded into txt-file",
        nRT, pattern );
-    if( aKey.GetCount() <1 )
+    if( aKey.size() <1 )
         return;
 
     std::string s = GetName();
@@ -1849,7 +1848,7 @@ TCModule::RecExport( const char *pattern )
     fstream f(filename.c_str(), mod);
     ErrorIf( !f.good() , GetName(), "File write error");
 
-    for(uint i=0; i<aKey.GetCount(); i++ )
+    for(size_t i=0; i<aKey.size(); i++ )
     {
        int Rnum = db->Find( aKey[i].c_str() );
        db->Get( Rnum );
@@ -1941,7 +1940,7 @@ TCModule::DelList( const char *pattern )
        nRT, pattern );
     int ichs = 1;
 
-    for(uint i=0; i<aKey.GetCount(); i++ )
+    for(size_t i=0; i<aKey.size(); i++ )
     {
         string str = "Please, confirm deleting record \nwith key: ";
         str += aKey[i];
@@ -1977,7 +1976,7 @@ TCModule::Transfer( const char *pattern )
        nRT, pattern );
 
 
-    for(uint i=0; i<aKey.GetCount(); i++ )
+    for(size_t i=0; i<aKey.size(); i++ )
     {
         nrec = db->Find( aKey[i].c_str() );
         db->Get( nrec );
@@ -2012,7 +2011,7 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
 
     int rn_type = 0;
 
-    if( aKey.GetCount() < 2)
+    if( aKey.size() < 2)
       rn_type = 1;
     else
      {  switch (vfQuestYesNoCancel(window(),
@@ -2038,7 +2037,7 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
       return;
     }
 
-    for(uint i=0; i<aKey.GetCount(); i++ )
+    for(size_t i=0; i<aKey.size(); i++ )
     {
         nrec = db->Find( aKey[i].c_str() );
         db->Get( nrec );

@@ -87,34 +87,34 @@ void TNodeGUI::getDataBridgeNames( QWidget* par, bool select_all,
     TCStringArray aList;
 
     // select lists
-    aList.Clear();
+    aList.clear();
     for(long int ii=0; ii< pmm->N; ii++ )
     {  if( select_all )
             aSelIC.Add( ii );
         else
-            aList.Add( std::string( pmm->SB[ii], 0, MAXICNAME+MAXSYMB));
+            aList.push_back( std::string( pmm->SB[ii], 0, MAXICNAME+MAXSYMB));
     }
     if( !select_all  )
         aSelIC = vfMultiChoice(par, aList,
                                "Please, mark independent components for selection into DataBridge");
 
-    aList.Clear();
+    aList.clear();
     for(long int ii=0; ii< pmm->L; ii++ )
     {  if( select_all )
             aSelDC.Add( ii );
         else
-            aList.Add( std::string( pmm->SM[ii], 0, MAXDCNAME));
+            aList.push_back( std::string( pmm->SM[ii], 0, MAXDCNAME));
     }
     if( !select_all  )
         aSelDC = vfMultiChoice(par, aList,
                                "Please, mark dependent components for selection into DataBridge");
 
-    aList.Clear();
+    aList.clear();
     for(long int ii=0; ii< pmm->FI; ii++ )
     {  if( select_all )
             aSelPH.Add( ii );
         else
-            aList.Add( std::string( pmm->SF[ii], 0, MAXPHNAME+MAXSYMB));
+            aList.push_back( std::string( pmm->SF[ii], 0, MAXPHNAME+MAXSYMB));
     }
     if( !select_all  )
         aSelPH = vfMultiChoice(par, aList,

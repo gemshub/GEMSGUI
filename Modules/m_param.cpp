@@ -243,8 +243,8 @@ SPP_SETTING::read(GemDataStream& iss)
 TProfil::TProfil( uint nrt ):
         TCModule( nrt )
 {
-    aFldKeysHelp.Add("Name of the modeling project");
-    aFldKeysHelp.Add("Comment to the project definition");
+    aFldKeysHelp.push_back("Name of the modeling project");
+    aFldKeysHelp.push_back("Comment to the project definition");
     //startKeyEdit = 0;
     start_title = " Numerical and Configuration Settings ";
     pa= pa_;
@@ -731,44 +731,44 @@ TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
     rt[nRT].SetKey( key);
 
     // Delete all records connected to project
-    aList.Clear();    //SYSEQ
+    aList.clear();    //SYSEQ
     anR.Clear();
     rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
-    for( i=0; i< aList.GetCount(); i++)
+    for( i=0; i< aList.size(); i++)
         TSysEq::pm->DeleteRecord(aList[i].c_str());
 
-    aList.Clear();    //PROCES
+    aList.clear();    //PROCES
     anR.Clear();
     rt[RT_PROCES].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_PROCES].GetKeyList( pkey, aList, anR );
-    for( i=0; i< aList.GetCount(); i++)
+    for( i=0; i< aList.size(); i++)
         TProcess::pm->DeleteRecord(aList[i].c_str());
 
-    aList.Clear();    //UNSPACE
+    aList.clear();    //UNSPACE
     anR.Clear();
     rt[RT_UNSPACE].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_UNSPACE].GetKeyList( pkey, aList, anR );
-    for( i=0; i< aList.GetCount(); i++)
+    for( i=0; i< aList.size(); i++)
         TUnSpace::pm->DeleteRecord(aList[i].c_str());
 
-    aList.Clear();    //GTDEMO
+    aList.clear();    //GTDEMO
     anR.Clear();
     rt[RT_GTDEMO].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_GTDEMO].GetKeyList( pkey, aList, anR );
-    for( i=0; i< aList.GetCount(); i++)
+    for( i=0; i< aList.size(); i++)
         TGtDemo::pm->DeleteRecord(aList[i].c_str());
 
-    aList.Clear();    //DUALTH
+    aList.clear();    //DUALTH
     anR.Clear();
     rt[RT_DUALTH].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_DUALTH].GetKeyList( pkey, aList, anR );
-    for( i=0; i< aList.GetCount(); i++)
+    for( i=0; i< aList.size(); i++)
         TDualTh::pm->DeleteRecord(aList[i].c_str());
 
     rt[nRT].Del( Rnum );

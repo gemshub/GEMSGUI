@@ -902,7 +902,7 @@ TDBKeyList::initnew()
     for(uint j=0; j<KeyNumFlds(); j++)
         memset( ndx[j], 0, FldLen(j)*nBuf*sizeof(char) );
     memset( re, 0, nBuf*sizeof(RecEntry) );
-    aKey.Clear();
+    aKey.clear();
     anR.Clear();
 }
 
@@ -1133,7 +1133,7 @@ TDBKeyList::arec_add( uint ni )
 {
     string s;
     RecKey( ni, s);
-    aKey.Add( s );
+    aKey.push_back( s );
     anR.Add( ni );
 }
 
@@ -1155,14 +1155,14 @@ TDBKeyList::xlist( const char *pattern )
         AllRecs = false;
     else
         AllRecs = true;
-    aKey.Clear();
+    aKey.clear();
     anR.Clear();
     if( OneRec )
     {
        auto i = findx( pattern );
         if( i >= 0 )
             arec_add( i );
-        return aKey.GetCount();
+        return aKey.size();
     }
     for(uint ii=0; ii<RecCount(); ii++ )
     {
@@ -1171,7 +1171,7 @@ TDBKeyList::xlist( const char *pattern )
                 continue;
         arec_add(ii);
     }
-    return aKey.GetCount();
+    return aKey.size();
 }
 
 //--------------------- End of v_dbm1.cpp ---------------------------

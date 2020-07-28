@@ -39,11 +39,11 @@ TGtDemo::TGtDemo( uint nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("Name of the modeling project");
-    aFldKeysHelp.Add("Top database chain type for data sampling { PR SY CO PH RE DC IC }");
-    aFldKeysHelp.Add("Name of this GtDemo data sampling task");
-    aFldKeysHelp.Add("Variant number of this GtDemo task");
-    aFldKeysHelp.Add("Record key comment to this GtDemo task");
+    aFldKeysHelp.push_back("Name of the modeling project");
+    aFldKeysHelp.push_back("Top database chain type for data sampling { PR SY CO PH RE DC IC }");
+    aFldKeysHelp.push_back("Name of this GtDemo data sampling task");
+    aFldKeysHelp.push_back("Variant number of this GtDemo task");
+    aFldKeysHelp.push_back("Record key comment to this GtDemo task");
     setKeyEditField(1);
     gdp=&gd[0];
     set_def();
@@ -414,7 +414,7 @@ TGtDemo::MakeQuery()
        gdp->expr = static_cast<char *>(aObj[ o_gdexpr ].Alloc(1, 2048, S_));
     aObj[o_gdexpr].SetString( script.c_str(),0,0);
 
-    if(namesLines.GetCount() > 0)
+    if(namesLines.size() > 0)
      {
         int dimPclnam = gdp->dimXY[1];
         int ndxy = 0;
@@ -424,7 +424,7 @@ TGtDemo::MakeQuery()
         }
         gdp->lNam0 = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlnam ].Alloc( 1,
                      dimPclnam, MAXGRNAME));
-        for(short ii=0; ii< min<short>( namesLines.GetCount(),gdp->dimXY[1]); ii++)
+        for(short ii=0; ii< min<short>( namesLines.size(),gdp->dimXY[1]); ii++)
         {
           strncpy( gdp->lNam0[ii+ndxy], namesLines[ii].c_str(), MAXGRNAME );
         }
@@ -514,14 +514,14 @@ AGAIN:
         TProcess::pm->RecordLoadinProfile(key_p);
         strncpy( gdp->prKey, rt[RT_PROCES].PackKey(), MAXRKEYLEN );
         for( i=0; i<aObj[o_pestl].GetN(); i++ )
-            aRklist.Add( aObj[o_pestl].GetString( i, 0 ));
+            aRklist.push_back( aObj[o_pestl].GetString( i, 0 ));
     }
     else  if( gdp->PsPB != S_OFF ) // GTdemo by TUnSpace
     {
         TUnSpace::pm->RecordLoadinProfile(key_p);
         strncpy( gdp->prKey, rt[RT_UNSPACE].PackKey(), MAXRKEYLEN );
         for( i=0; i<aObj[o_unstl].GetN(); i++ )
-            aRklist.Add( aObj[o_unstl].GetString( i, 0 ));
+            aRklist.push_back( aObj[o_unstl].GetString( i, 0 ));
     }
     else // other type of records
     {
@@ -540,13 +540,13 @@ AGAINRC:    //get  keypart
     }
     if( gdp->rkey )  // old selections
     {
-        aMrk.Clear();
-        for(uint j=0; j<aRklist.GetCount() ; j++ )
+        aMrk.clear();
+        for(uint j=0; j<aRklist.size() ; j++ )
             for( i=0; i<gdp->Nlrk; i++ )
             {
                 if( strncmp( gdp->rkey+i*rtlen, aRklist[j].c_str(), rtlen ))
                     continue;
-                aMrk.Add(aRklist[j]/*j*/);
+                aMrk.push_back(aRklist[j]/*j*/);
                 aMrk2.Add(j);
                 break;
             }
@@ -554,23 +554,23 @@ AGAINRC:    //get  keypart
     // Select records list
     if( gdp->PsPE != S_OFF || gdp->PsPB != S_OFF ) // GTdemo by TUnSpace or by Process
     {
-       aMrk.Clear();
+       aMrk.clear();
        aMrk2 = vfMultiChoiceSet(window(), aRklist,
                        "Please, select/mark some record keys for data sampling", aMrk2 );
       for(uint j=0; j<aMrk2.GetCount(); j++ )
-          aMrk.Add(aRklist[aMrk2[j]]);
+          aMrk.push_back(aRklist[aMrk2[j]]);
     }
     else
     {
         aMrk =  vfMultiKeysSet(window(), "Please, select/mark some record keys for data sampling",
                         gdp->nRT, gdp->wcrk, aMrk );
     }
-    if( aMrk.GetCount() < 1 )
+    if( aMrk.size() < 1 )
     {    if( vfQuestion(window(), GetName(), "No record keys selected to sample! Repeat selection?" ))
             goto AGAIN;
         else Error( GetName(), "E01GDrem: No record keys selected...");
     }
-    gdp->Nlrk = aMrk.GetCount();
+    gdp->Nlrk = aMrk.size();
     gdp->rkey = static_cast<char *>(aObj[ o_gdrkey ].Alloc( gdp->Nlrk, 1, rtlen ));
     // make list of record
     for( i=0; i<gdp->Nlrk; i++ )
@@ -849,9 +849,9 @@ TGtDemo::RecordPlot( const char* /*key*/ )
       TCStringArray lnames;
       int ii;
       for( ii=0; ii<gdp->dimXY[1]; ii++ )
-          lnames.Add( std::string(gdp->lNam0[ii+ndxy], 0, MAXGRNAME ));
+          lnames.push_back( std::string(gdp->lNam0[ii+ndxy], 0, MAXGRNAME ));
       for( ii=0; ii<gdp->dimEF[1]; ii++ )
-          lnames.Add( std::string( gdp->lNamE[ii], 0, MAXGRNAME ));
+          lnames.push_back( std::string( gdp->lNamE[ii], 0, MAXGRNAME ));
       gd_gr = updateGraphWindow( gd_gr, this, plt, gdp->name,
           gdp->xNames, gdp->yNames, lnames );
     }

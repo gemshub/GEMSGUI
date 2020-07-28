@@ -77,10 +77,10 @@ struct elmWindowData
     uint ii;
     for( ii=0; ii<14; ii++ )
      flags[ii] = d.flags[ii];
-    for( ii=0; ii<d.ICrds.GetCount(); ii++ )
-     ICrds.Add(d.ICrds[ii]);
-    for( ii=0; ii<d.oldIComps.GetCount(); ii++ )
-     oldIComps.Add(d.oldIComps[ii]);
+    for( ii=0; ii<d.ICrds.size(); ii++ )
+     ICrds.push_back(d.ICrds[ii]);
+    for( ii=0; ii<d.oldIComps.size(); ii++ )
+     oldIComps.push_back(d.oldIComps[ii]);
     aSelNames = d.aSelNames;
 //    for( ii=0; ii<d.flNames.GetCount(); ii++ )
 //     flNames.Add(d.flNames[ii]);
@@ -91,10 +91,10 @@ struct elmWindowData
     uint ii;
     for( ii=0; ii<14; ii++ )
      flags[ii] = d.flags[ii];
-    for( ii=0; ii<d.ICrds.GetCount(); ii++ )
-     ICrds.Add(d.ICrds[ii]);
-    for( ii=0; ii<d.oldIComps.GetCount(); ii++ )
-     oldIComps.Add(d.oldIComps[ii]);
+    for( ii=0; ii<d.ICrds.size(); ii++ )
+     ICrds.push_back(d.ICrds[ii]);
+    for( ii=0; ii<d.oldIComps.size(); ii++ )
+     oldIComps.push_back(d.oldIComps[ii]);
     aSelNames = d.aSelNames;
 //    for( ii=0; ii<d.flNames.GetCount(); ii++ )
 //     flNames.Add(d.flNames[ii]);
@@ -167,10 +167,10 @@ struct icSetupData
     from_templ( d.from_templ), to_templ(d.to_templ)
   {
     uint ii;
-    for( ii=0; ii<d.oldIComps.GetCount(); ii++ )
-     oldIComps.Add(d.oldIComps[ii]);
-    for( ii=0; ii<d.newIComps.GetCount(); ii++ )
-     newIComps.Add(d.newIComps[ii]);
+    for( ii=0; ii<d.oldIComps.size(); ii++ )
+     oldIComps.push_back(d.oldIComps[ii]);
+    for( ii=0; ii<d.newIComps.size(); ii++ )
+     newIComps.push_back(d.newIComps[ii]);
 //    for( ii=0; ii<d.flKeywds.GetCount(); ii++ )
 //     flKeywds.Add(d.flKeywds[ii]);
   }
@@ -181,10 +181,10 @@ struct icSetupData
     from_templ =  d.from_templ;
     to_templ =    d.to_templ;
 
-    for( ii=0; ii<d.oldIComps.GetCount(); ii++ )
-     oldIComps.Add(d.oldIComps[ii]);
-    for( ii=0; ii<d.newIComps.GetCount(); ii++ )
-     newIComps.Add(d.newIComps[ii]);
+    for( ii=0; ii<d.oldIComps.size(); ii++ )
+     oldIComps.push_back(d.oldIComps[ii]);
+    for( ii=0; ii<d.newIComps.size(); ii++ )
+     newIComps.push_back(d.newIComps[ii]);
 //    for( ii=0; ii<d.flKeywds.GetCount(); ii++ )
 //     flKeywds.Add(d.flKeywds[ii]);
 

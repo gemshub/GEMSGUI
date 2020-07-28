@@ -462,7 +462,7 @@ TCStringArray split(const string& str, const string& delimiters)
     {
         vv = string(str, start, pos - start);
         strip( vv );
-        v.Add( vv );
+        v.push_back( vv );
         start = pos + 1;
         pos = str.find_first_of(delimiters.c_str(), start);
     }
@@ -470,7 +470,7 @@ TCStringArray split(const string& str, const string& delimiters)
     vv = string (str, start, str.length() - start);
     strip( vv );
     if( !vv.empty() )
-        v.Add( vv );
+        v.push_back( vv );
     return v;
 }
 

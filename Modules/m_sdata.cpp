@@ -30,9 +30,9 @@ TSData::TSData( uint nrt ):
 {
     refs = 0;
     title = abstr = 0;
-    aFldKeysHelp.Add("Script name or author's name for data source");
-    aFldKeysHelp.Add("Script number or year of publication { 1990 }");
-    aFldKeysHelp.Add("Script module name { DComp ReacDC } or data source type");
+    aFldKeysHelp.push_back("Script name or author's name for data source");
+    aFldKeysHelp.push_back("Script number or year of publication { 1990 }");
+    aFldKeysHelp.push_back("Script module name { DComp ReacDC } or data source type");
     //startKeyEdit = 0;
     set_def();
     start_title = " Scripts or Bibliographic References ";
@@ -145,7 +145,7 @@ void TSData::RecordPrint( const char* /*key*/ )
 }
 
 
-void TSData::CopyRecords( const char *prfName, TCStringArray& SDlist )
+void TSData::CopyRecords( const char *prfName, std::set<std::string>& SDlist )
 {
     int Rnum;
     uint ii;
@@ -157,16 +157,16 @@ void TSData::CopyRecords( const char *prfName, TCStringArray& SDlist )
     TCIntArray anR;
     TCStringArray aScripts;
     db->GetKeyList( "?script*:*:*:", aScripts, anR );
-    for(ii=0; ii<aScripts.GetCount(); ii++ )
-       SDlist.AddUnique(aScripts[ii]);
+    for(ii=0; ii<aScripts.size(); ii++ )
+       SDlist.insert(aScripts[ii]);
 
     // rename records from list
-    for(ii=0; ii<SDlist.GetCount(); ii++ )
+    for( const auto& sdkey: SDlist )
     {
-      Rnum = db->Find( SDlist[ii].c_str() );
+      Rnum = db->Find( sdkey.c_str() );
       if( Rnum < 0 )
         continue;
-      RecInput( SDlist[ii].c_str() );
+      RecInput( sdkey.c_str() );
 
       // changing record key
       std::string str= std::string(db->FldKey( 2 ), 0, db->FldLen( 2 ));
@@ -191,7 +191,7 @@ void TSData::CopyRecords( const char *prfName, TCStringArray& SDlist )
 
     // close all no project files
     TCStringArray names1;
-    names1.Add(prfName);
+    names1.push_back(prfName);
     db->OpenOnlyFromList(names1);
 }
 

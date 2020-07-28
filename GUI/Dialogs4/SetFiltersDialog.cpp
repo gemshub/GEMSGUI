@@ -143,14 +143,14 @@ void SetFiltersDialog::setData()
     cbICreplace->setEditText( tr(data->ic_d.to_templ.c_str()));
 
     QString txt = tr("");
-    for( uint ii=0; ii<data->ic_d.oldIComps.GetCount(); ii++ )
+    for( size_t ii=0; ii<data->ic_d.oldIComps.size(); ii++ )
     {
       txt += tr( data->ic_d.oldIComps[ii].c_str() );
       txt += tr("\n");
     }
     tvIClistP->setText( txt );
     txt = tr("");
-    for( uint ii=0; ii<data->ic_d.newIComps.GetCount(); ii++ )
+    for( size_t ii=0; ii<data->ic_d.newIComps.size(); ii++ )
     {
       txt += tr( data->ic_d.newIComps[ii].c_str() );
       txt += tr("\n");
@@ -248,7 +248,7 @@ void SetFiltersDialog::getFiles()
     QTreeWidgetItem* pMod;
     QTreeWidgetItem* pFile;
     
-    el_data->selKeywds.Clear();
+    el_data->selKeywds.clear();
     el_data->selCnt.Clear();
 
     for( ii=0; ii< npMod1; ii++ )
@@ -264,7 +264,7 @@ void SetFiltersDialog::getFiles()
        {
          string col =pFile->text( 0 ).toStdString();
          cnt++;
-         el_data->selKeywds.Add( col );
+         el_data->selKeywds.push_back( col );
        }
       }
       el_data->selCnt.Add( cnt );

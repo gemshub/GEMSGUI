@@ -132,36 +132,36 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
   }
 
 // select lists
-    aList.Clear();
+    aList.clear();
     for( ii=0; ii< mult->N; ii++ )
     {  if( select_all )
          aSelIC.Add( ii );
        else
-         aList.Add( std::string( mult->SB[ii], 0, MAXICNAME+MAXSYMB));
+         aList.push_back( std::string( mult->SB[ii], 0, MAXICNAME+MAXSYMB));
     }
     if( !select_all  )
       aSelIC = vfMultiChoiceSet(window(), aList,
           "Please, mark independent components for selection into DataBridge",
           aSelIC);
 
-    aList.Clear();
+    aList.clear();
     for( ii=0; ii< mult->L; ii++ )
     {  if( select_all )
          aSelDC.Add( ii );
        else
-       aList.Add( std::string( mult->SM[ii], 0, MAXDCNAME));
+       aList.push_back( std::string( mult->SM[ii], 0, MAXDCNAME));
     }
     if( !select_all  )
        aSelDC = vfMultiChoiceSet(window(), aList,
          "Please, mark dependent components for selection into DataBridge",
          aSelDC );
 
-    aList.Clear();
+    aList.clear();
     for( ii=0; ii< mult->FI; ii++ )
     {  if( select_all )
          aSelPH.Add( ii );
        else
-       aList.Add( std::string( mult->SF[ii], 0, MAXPHNAME+MAXSYMB));
+       aList.push_back( std::string( mult->SF[ii], 0, MAXPHNAME+MAXSYMB));
     }
     if( !select_all  )
        aSelPH = vfMultiChoiceSet(window(), aList,
@@ -941,9 +941,9 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
       TCStringArray lnames;
       int ii;
       for( ii=0; ii<mtp->nYS; ii++ )
-          lnames.Add( std::string(mtp->lNam[ii], 0, MAXGRNAME ));
+          lnames.push_back( std::string(mtp->lNam[ii], 0, MAXGRNAME ));
       for( ii=0; ii<mtp->nYE; ii++ )
-          lnames.Add( std::string( mtp->lNamE[ii], 0, MAXGRNAME ));
+          lnames.push_back( std::string( mtp->lNamE[ii], 0, MAXGRNAME ));
       gd_gr = updateGraphWindow( gd_gr, this, plt, mtp->name,
           mtp->xNames, mtp->yNames, lnames );
     }

@@ -884,7 +884,7 @@ TVisor::defaultCFG()
     for (uint jj = 0; jj < rt.GetCount(); jj++)
     {
         int cnt = 0;
-         for (uint ii = 0; ii < aDBFiles.GetCount(); ii++)
+         for (size_t ii = 0; ii < aDBFiles.size(); ii++)
         { string flnm = string(aDBFiles[ii], 0, aDBFiles[ii].find("."));
             if ( flnm == rt[jj].GetKeywd() ||
                  ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
@@ -901,7 +901,7 @@ TVisor::defaultCFG()
 
     // reading project dirs
     TCStringArray aDBDirs = readDirs(pVisor->userProfDir().c_str());
-    for (uint ii = 0; ii < aDBDirs.GetCount(); ii++)
+    for (size_t ii = 0; ii < aDBDirs.size(); ii++)
     {
         string dir(pVisor->userProfDir());
         dir += aDBDirs[ii];
@@ -909,7 +909,7 @@ TVisor::defaultCFG()
 
         for (uint jj = 0; jj < rt.GetCount(); jj++)
         {
-          for (uint kk = 0; kk < aDBFiles.GetCount(); kk++)
+          for (size_t kk = 0; kk < aDBFiles.size(); kk++)
           { string flnm = string(aDBFiles[kk], 0, aDBFiles[kk].find("."));
             if ( flnm == rt[jj].GetKeywd() ||
                 ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
@@ -949,7 +949,7 @@ TCStringArray readDirs(const char *dir)
         if (f.isDir() && f.fileName() != "." && f.fileName() != "..")
         {
             //          cout << "Adding dir: " << f->fileName() << endl;
-            aFiles.Add( f.fileName().toStdString());
+            aFiles.push_back( f.fileName().toStdString());
         }
         // else 'special file'
     }
@@ -996,7 +996,7 @@ TVisor::deleteDBDir(const char *dir)
         if (f.isSymLink() || f.isFile())
         {
             //cout << "Adding file: " << f.fileName().toStdString() << endl;
-            aFiles.Add(f.fileName().toStdString());
+            aFiles.push_back(f.fileName().toStdString());
         }
         // else 'special file'
     }
@@ -1004,7 +1004,7 @@ TVisor::deleteDBDir(const char *dir)
     //--QDir::setCurrent(dir);
     // delete files in module list
     std::string path;
-    for (uint ii = 0; ii < aFiles.GetCount(); ii++)
+    for (size_t ii = 0; ii < aFiles.size(); ii++)
     {
         if (string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
         {
@@ -1103,7 +1103,7 @@ TCStringArray TVisor::readPDBDir(const char *dir, const char *filter )
         if (f.isSymLink() || f.isFile())
         {
             // cout << "Adding file: " << f->fileName() << endl;
-            aFiles.Add(f.fileName().toStdString());
+            aFiles.push_back(f.fileName().toStdString());
         }
         // else 'special file'
     }

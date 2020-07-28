@@ -33,16 +33,16 @@ TGEM2MT::TGEM2MT( uint nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("Name of the modeling project");
-    aFldKeysHelp.Add("Thermodynamic potential to minimize {G}");
-    aFldKeysHelp.Add("Name of the parent chemical system definition (CSD)");
-    aFldKeysHelp.Add("CSD (recipe) variant number <integer>");
-    aFldKeysHelp.Add("Volume of the system, dm3");
-    aFldKeysHelp.Add("Pressure, bar, or 0 for Psat(H2O)g");
-    aFldKeysHelp.Add("Temperature, C");
-    aFldKeysHelp.Add("Variant number for additional constraints");
-    aFldKeysHelp.Add("Name of this reactive transport simulation task");
-    aFldKeysHelp.Add("Batch simulator type code, a combination of {}");
+    aFldKeysHelp.push_back("Name of the modeling project");
+    aFldKeysHelp.push_back("Thermodynamic potential to minimize {G}");
+    aFldKeysHelp.push_back("Name of the parent chemical system definition (CSD)");
+    aFldKeysHelp.push_back("CSD (recipe) variant number <integer>");
+    aFldKeysHelp.push_back("Volume of the system, dm3");
+    aFldKeysHelp.push_back("Pressure, bar, or 0 for Psat(H2O)g");
+    aFldKeysHelp.push_back("Temperature, C");
+    aFldKeysHelp.push_back("Variant number for additional constraints");
+    aFldKeysHelp.push_back("Name of this reactive transport simulation task");
+    aFldKeysHelp.push_back("Batch simulator type code, a combination of {}");
     setKeyEditField(8);
 
     mtp=&mt[0];
@@ -840,11 +840,11 @@ void TGEM2MT::MakeQuery()
       aObj[o_mtgexpr].SetString( outScript.c_str(),0,0);
     }
 
-    if(namesLines.GetCount() > 0)
+    if(namesLines.size() > 0)
     {
         mtp->lNam = (char (*)[MAXGRNAME])aObj[ o_mtlnam ].Alloc(
                       1, mtp->nYS, MAXGRNAME);
-       for(long int ii=0; ii< min( (long int)namesLines.GetCount(),mtp->nYS); ii++)
+       for(long int ii=0; ii< min<long int>( namesLines.size(),mtp->nYS); ii++)
        {
            strncpy(  mtp->lNam[ii], namesLines[ii].c_str(), MAXGRNAME );
         }

@@ -158,7 +158,7 @@ public:
     }
     int GetIn() const
     {
-        return aCn.GetCount();
+        return aCn.size();
     }
     const char* GetFormula( ) const
     {

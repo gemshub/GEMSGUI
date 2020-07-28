@@ -357,7 +357,7 @@ void TProfil::TestChangeProfile()
     // Insert changes to GEM2MT ( do it before Insert changes to SYSEQ  30/06/2011 )
     if( aIComp.GetCount()>=1 || aPhase.GetCount()>=1 || aDComp.GetCount()>=1 )
     {
-      aList.Clear();
+      aList.clear();
       anR.Clear();
 
        rt[RT_GEM2MT].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
@@ -366,7 +366,7 @@ void TProfil::TestChangeProfile()
 
        TGEM2MT* aMT= dynamic_cast<TGEM2MT *>(&aMod[RT_GEM2MT]);
        aMT->ods_link(0);
-       for(uint i=0; i< aList.GetCount(); i++)
+       for(uint i=0; i< aList.size(); i++)
        {
          aMT->RecInput( aList[i].c_str() );
          //Get base SysEq key from TGEM2MT key
@@ -380,7 +380,7 @@ void TProfil::TestChangeProfile()
        }
     }
 
-    aList.Clear();
+    aList.clear();
     anR.Clear();
 
     // Insert changes to SYSEQ
@@ -388,7 +388,7 @@ void TProfil::TestChangeProfile()
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
 
-    for(uint i=0; i< aList.GetCount(); i++)
+    for(uint i=0; i< aList.size(); i++)
     {
         //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
         aSE->RecInput( aList[i].c_str() );
@@ -402,7 +402,7 @@ void TProfil::TestChangeProfile()
     // Insert changes to DUALTH
     if( aIComp.GetCount()>=1  )
     {
-      aList.Clear();
+      aList.clear();
       anR.Clear();
 
        rt[RT_DUALTH].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
@@ -411,7 +411,7 @@ void TProfil::TestChangeProfile()
 
        TDualTh* aDU= dynamic_cast<TDualTh *>(&aMod[RT_DUALTH]);
        aDU->ods_link(0);
-       for(uint i=0; i< aList.GetCount(); i++)
+       for(size_t i=0; i< aList.size(); i++)
        {
          aDU->RecInput( aList[i].c_str() );
          aDU->InsertChanges( aIComp  );
@@ -423,7 +423,7 @@ void TProfil::TestChangeProfile()
     // Insert changes to RT_UNSPACE
     if( aIComp.GetCount()<1 &&  aPhase.GetCount()<1 && aDComp.GetCount()<1 )
         return;
-    aList.Clear();
+    aList.clear();
     anR.Clear();
     rt[RT_UNSPACE].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
@@ -431,8 +431,8 @@ void TProfil::TestChangeProfile()
 
     TUnSpace* aPB=dynamic_cast<TUnSpace *>(&aMod[RT_UNSPACE]);
     aPB->ods_link(-1); //0
-    if( aList.GetCount() > 0 )
-    {  for(uint i=0; i< aList.GetCount(); i++)
+    if( aList.size() > 0 )
+    {  for(size_t i=0; i< aList.size(); i++)
        {
     //    aPB->ods_link(0);
         aPB->RecInput( aList[i].c_str() );
@@ -517,13 +517,13 @@ AGAIN:
     MULTI *pmp = multi->GetPM();
     TSysEq* aSE= dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
     aSE->ods_link(0);
-    for(nbad =0,  i=0; i< aList.GetCount(); i++)
+    for(nbad =0,  i=0; i< aList.size(); i++)
     {
 
       //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
       //
         sprintf( tbuf, "Project: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
-        iRet =  pVisor->Message( nullptr, "Re-calculating and saving all equilibria", tbuf.p, i, aList.GetCount() );
+        iRet =  pVisor->Message( nullptr, "Re-calculating and saving all equilibria", tbuf.p, i, aList.size() );
       if( iRet )
         break;
 
@@ -632,12 +632,12 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     uint ii;
     setFiltersData sf_data;
     elmWindowData  elm_data;
-    TCStringArray SDlist;
-    SDlist.Clear();
+    std::set<std::string> SDlist;
+    SDlist.clear();
 
 //    Save list of phases from template profile:
     TCStringArray names1;
-    names1.Add(prfName);
+    names1.push_back(prfName);
     rt[RT_ICOMP].OpenOnlyFromList(names1);
     rt[RT_PHASE].OpenOnlyFromList(names1);
 
@@ -673,7 +673,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     TIComp* aICdata=  dynamic_cast<TIComp *>(&aMod[RT_ICOMP]);
     aICdata->CopyElements( prfName, elm_data, sf_data.ic_d );
     ICcnt.Clear();
-    for( ii=0; ii<elm_data.ICrds.GetCount(); ii++ )
+    for( ii=0; ii<elm_data.ICrds.size(); ii++ )
        ICcnt.Add(0);
 
     //compos
@@ -704,14 +704,14 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 
     //show errors
     TCStringArray aICnoused;
-    for( ii=0; ii<elm_data.ICrds.GetCount(); ii++ )
+    for( ii=0; ii<elm_data.ICrds.size(); ii++ )
        if( ICcnt[ii] == 0 )
-         aICnoused.Add(elm_data.ICrds[ii]);
+         aICnoused.push_back(elm_data.ICrds[ii]);
 
-    if( aICnoused.GetCount() > 0 )
+    if( aICnoused.size() > 0 )
       vfChoice(  window(), aICnoused, "List of unused Independent Components" );
 
-    if( aPHnoused.GetCount() > 0 || aCMnoused.GetCount() > 0)
+    if( aPHnoused.size() > 0 || aCMnoused.size() > 0)
     {  // List of Phases or Compos with some species discarded
         ios::openmode mod = ios::out;
         std::string filename = pVisor->userGEMDir();
@@ -735,10 +735,10 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
         fstream f( filename.c_str(), mod );
         ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
         f <<   "Discarded Phase records\n";
-        for( ii=0; ii<aPHnoused.GetCount(); ii++ )
+        for( ii=0; ii<aPHnoused.size(); ii++ )
              f << aPHnoused[ii].c_str() <<  "\n";
         f <<   "\n\nDiscarded Compos records\n";
-        for( ii=0; ii<aCMnoused.GetCount(); ii++ )
+        for( ii=0; ii<aCMnoused.size(); ii++ )
              f << aCMnoused[ii].c_str() <<  "\n";
         f <<   "\n";
         ErrorIf( !f.good() , filename.c_str(), "Writefile error");
@@ -1072,7 +1072,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
       {
         dcstr = std::string( mup->SM[j]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME );
         strip( dcstr );
-        DCnames.Add(dcstr);
+        DCnames.push_back(dcstr);
       }
   }
   else
@@ -1085,7 +1085,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
     for( j= DCx; j<DCx+pmp->L1[k];j++ )
     {   dcstr =  std::string( pmp->SM[j],0, MAXDCNAME );
         strip( dcstr );
-        DCnames.Add(dcstr);
+        DCnames.push_back(dcstr);
     }
   }
   return DCnames;
@@ -1230,7 +1230,7 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
 
     aMod[RT_SYSEQ].ods_link(0);
 
-    for( uint ii=0; ii< aList.GetCount(); ii++)
+    for( size_t ii=0; ii< aList.size(); ii++)
     {
         // test exists
         if( rt[RT_SYSEQ].Find( aList[ii].c_str() ) < 0 )
@@ -1242,9 +1242,9 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
         if( std::string(rt[RT_SYSEQ].FldKey(7)).find("000") != std::string::npos )
             continue;
         // test output before
-        if( savedSystems.Find( packkey ) >= 0)
+        if( std::find(savedSystems.begin(), savedSystems.end(), packkey) != savedSystems.end()  )
             continue;
-        savedSystems.Add(packkey);
+        savedSystems.push_back(packkey);
 
         // generate name and create directory
         systemname = packkey.c_str();
@@ -1261,7 +1261,7 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
         }
 
         // stop point
-         if( pVisor->Message( nullptr, "Re-calculating and saving all equilibria", pkey.p, ii, aList.GetCount() ))
+         if( pVisor->Message( nullptr, "Re-calculating and saving all equilibria", pkey.p, ii, aList.size() ))
             break;
     }
 }
@@ -1282,10 +1282,10 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
     aMod[RT_PROCES].ods_link(0);
 
 
-    if( aList.GetCount() > 0 )
+    if( aList.size() > 0 )
         vfMakeDirectory( nullptr, files_dir.c_str(), 2 );
 
-    for( uint ii=0; ii< aList.GetCount(); ii++)
+    for( size_t ii=0; ii< aList.size(); ii++)
     {
         // test exists
         if( rt[RT_PROCES].Find( aList[ii].c_str() ) < 0 )
@@ -1308,7 +1308,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
         }
 
         // stop point
-         if( pVisor->Message( nullptr, "Generating GEMS3K for process records", pkey.p, ii, aList.GetCount() ))
+         if( pVisor->Message( nullptr, "Generating GEMS3K for process records", pkey.p, ii, aList.size() ))
             break;
     }
 }

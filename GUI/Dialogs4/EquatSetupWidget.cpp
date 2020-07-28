@@ -129,7 +129,7 @@ void EquatSetup::resetPageList( int newRT,
 
         TCStringArray lst;
         TProfil::pm->getNamesList( nO, lst);
-        if( lst.GetCount() < 1 )  // undefined indexation
+        if( lst.size() < 1 )  // undefined indexation
           continue;
 
         pgData.Add( new pagesSetupData(wnData[ii]));
@@ -152,7 +152,7 @@ void EquatSetup::resetPageList( int newRT,
         winStac->addWidget(page1);
 
         // insert items to list of indexes
-        for(  jj=0; jj<lst.GetCount(); jj++ )
+        for(  jj=0; jj<lst.size(); jj++ )
         {
           item1 = new QListWidgetItem( lst[jj].c_str(), lstIndexes1);
           //str = QString("%1").arg(jj);
@@ -200,9 +200,9 @@ TCStringArray EquatSetup::getNames(string& xName, string& yName) const
 
 void EquatSetup::setNames(TCStringArray lst )
 {
-   namLines.Clear();
-   for(uint ii=0; ii<lst.GetCount(); ii++ )
-       namLines.Add(lst[ii]);
+   namLines.clear();
+   for(size_t ii=0; ii<lst.size(); ii++ )
+       namLines.push_back(lst[ii]);
 }
 
 void EquatSetup::changePage( int nPage )
@@ -310,20 +310,20 @@ void EquatSetup::tableInsertRow( int nO, int ndx, const char * andName )
      }
 
     // added for clear names that got from Process calcScripts
-    if(namLines.GetCount() > scriptData.GetCount() )
-        namLines.Clear();
+    if(namLines.size() > scriptData.GetCount() )
+        namLines.clear();
 
     if(cPage == 0)
      {  scriptData.Add( new scriptSetupData( cPage, nO, andName,
              ndx, andName, str.c_str() ));
-        namLines.Add(andName);
+        namLines.push_back(andName);
         yNam = andName;
      }
        else
         {
            scriptData.Add( new scriptSetupData( cPage, nO, aObj[nO].GetKeywd(),
              ndx, andName, str.c_str() ));
-           namLines.Add(andName);
+           namLines.push_back(andName);
            yNam = aObj[nO].GetKeywd();
        }
 
@@ -359,28 +359,28 @@ void EquatSetup::CmCalc()
 void EquatSetup::tableDeleteRow( int nRow )
 {
    scriptData.Remove(nRow);
-   namLines.Remove(nRow);
+   namLines.erase(namLines.begin() +nRow);
    scriptUpdate();
 }
 
 void EquatSetup::emptyScriptTable()
 {
    scriptData.Clear();;
-   namLines.Clear();
+   namLines.clear();
    //scriptUpdate();
 }
 
 
 void EquatSetup::scriptUpdate()
 {
-   uint ii;
+   size_t ii;
    QString buf, tScript;
 
   if( !eqData.xName.empty() )
   {
       tScript = QString("%1[%2] =: %3;\n").arg( eqData.xName.c_str(),
                     eqData.indexName.c_str(), eqData.abscissaEquat.c_str() );
-      for( ii=0; ii<eqData.abscissaLines.GetCount(); ii++ )
+      for( ii=0; ii<eqData.abscissaLines.size(); ii++ )
       {
           buf = QString("%1[%2][%3] =: %4;\n").arg(
                   eqData.xName.c_str(), eqData.indexName.c_str(),
@@ -444,7 +444,7 @@ void EquatSetup::CmAbscissa()
     else
       xNam = aObj[nO].GetKeywd();
 
-    eqData.abscissaLines.Clear();
+    eqData.abscissaLines.clear();
     scriptUpdate();
 }
 
@@ -454,7 +454,7 @@ void EquatSetup::CmAbscissaAdd()
     QListWidgetItem* ndx = pLists[cPage]->currentItem();
     string str = ndx->data(Qt::DisplayRole).toString().toStdString();
 
-    eqData.abscissaLines.Add( getStringValue( nO, pLists[cPage]->currentRow(), str.c_str() ));
+    eqData.abscissaLines.push_back( getStringValue( nO, pLists[cPage]->currentRow(), str.c_str() ));
     /*if(nO<0)
       xNam = str;
     else

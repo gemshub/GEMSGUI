@@ -444,7 +444,7 @@ void TPhase::makeReacDCompList( const char *caption, TCStringArray& aDclist,
     vstr pkeyrd(81);
     TCStringArray aDclist_old;
 
-    aDclist.Clear();
+    aDclist.clear();
 
     //REACDC&DCOMP  keypart
     rt[RT_REACDC].MakeKey( RT_PHASE, pkeyrd, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END );
@@ -458,7 +458,7 @@ void TPhase::makeReacDCompList( const char *caption, TCStringArray& aDclist,
     if( nDC && SM )
     {
       // Build old selections DCOMP and REACDC
-       aDclist_old.Clear();
+       aDclist_old.clear();
        for( i=0; i<nDC; i++ )
        {
           std::string key_dr = std::string( SM[i], 0, DC_RKLEN );
@@ -479,7 +479,7 @@ void TPhase::makeReacDCompList( const char *caption, TCStringArray& aDclist,
               key_dr += ' ';
               key_dr += rt[RT_REACDC].UnpackKey();
             }
-         aDclist_old.Add( key_dr );
+         aDclist_old.push_back( key_dr );
       }
     }
 
@@ -487,7 +487,7 @@ AGAINRC:
      aDclist = vfRDMultiKeysSet( window(), caption,
                   pkeyrd, aDclist_old, aNsuT  );
 
-     if( aDclist.GetCount() < 1 )
+     if( aDclist.size() < 1 )
      {
         switch ( vfQuestion3(window(), GetName(),
         "W08PHrem: Number of selected ReacDC/DComp keys < 1.\n"
@@ -503,7 +503,7 @@ AGAINRC:
              "E09PHrem: No ReacDC/DComp records selected into Phase...");
         }
       }
-      nDC = aDclist.GetCount();
+      nDC = aDclist.size();
 }
 
 // Build Phase keys (aPhlist) to be included into the Phase
@@ -512,20 +512,20 @@ void TPhase::makePhaseList( const char *caption, TCStringArray& aPhlist )
     std::string pkeyrd = "*:*:*:*:*:";
     TCStringArray aPhlist_old;
 
-    aPhlist.Clear();
+    aPhlist.clear();
     if( php->nlPh && php->lPh )
     {
       // Build old selections DCOMP and REACDC
-       aPhlist_old.Clear();
+       aPhlist_old.clear();
        for(int i=0; i<php->nlPh; i++ )
        {
           std::string key_dr = std::string( php->lPh[i], 0, PH_RKLEN );
-          aPhlist_old.Add( key_dr );
+          aPhlist_old.push_back( key_dr );
        }
     }
 AGAINRC:
      aPhlist = vfMultiKeysSet( window(), caption, RT_PHASE, pkeyrd.c_str(), aPhlist_old  );
-     if( aPhlist.GetCount() < 1 )
+     if( aPhlist.size() < 1 )
      {
         switch ( vfQuestion3(window(), GetName(),
         "W08PHrem: Number of selected Phase keys < 1.\n"
@@ -541,7 +541,7 @@ AGAINRC:
              "E09PHrem: No Phase records selected into Phase...");
         }
       }
-      php->nlPh = aPhlist.GetCount();
+      php->nlPh = aPhlist.size();
  }
 
 /*
@@ -783,9 +783,9 @@ void TPhase::MakeSublatticeLists( const TCStringArray& form_array  )
     int nMoi =  0;
 
     // allocate default buffer and setup default values
-    moiety_new( form_array.GetCount(), MAXMOIETY, true );
+    moiety_new( form_array.size(), MAXMOIETY, true );
 
-    for( jj=0; jj<form_array.GetCount(); jj++ )
+    for( jj=0; jj<form_array.size(); jj++ )
     {
       nSites =  form.BuildMoiety(form_array[jj].c_str(), moit_);
       if( jj== 0)
@@ -812,7 +812,7 @@ void TPhase::MakeSublatticeLists( const TCStringArray& form_array  )
     }
 
    // re allocate memory
-   moiety_new( form_array.GetCount(), nMoi, false );
+   moiety_new( form_array.size(), nMoi, false );
 
 
    // setup data to formula list
@@ -826,7 +826,7 @@ void TPhase::MakeSublatticeLists( const TCStringArray& form_array  )
        php->PdEq = S_ON;
        php->dEq  =  static_cast<char *>(aObj[ o_phdeq ].Alloc( 1, moi_lst.size()+10, S_));
        strncpy( php->dEq, moi_lst.c_str(),  moi_lst.size()+1 );
-       for( jj=0; jj<form_array.GetCount(); jj++ )
+       for( jj=0; jj<form_array.size(); jj++ )
         strncpy( php->lsForm[jj], form_array[jj].c_str(), MAXFORMULA);
 
    }
@@ -906,7 +906,7 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
            bp = aDC->dcp->DerB;
            Z = aDC->dcp->Zz;
            Ctype = aDC->dcp->PdcC;
-           form_array.Add( std::string(aDC->dcp->form,0,MAXFORMULA));
+           form_array.push_back( std::string(aDC->dcp->form,0,MAXFORMULA));
            cN = aDC->dcp->Comp;
            Fi = aDC->dcp->Expa;
 
@@ -951,7 +951,7 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
                 bp = aRDC->rcp->DerB;
                 Z = aRDC->rcp->Zz;
                 Ctype = aRDC->rcp->PreC;
-                form_array.Add( std::string(aRDC->rcp->form,0,MAXFORMULA));
+                form_array.push_back( std::string(aRDC->rcp->form,0,MAXFORMULA));
                 cN = aRDC->rcp->Comp;
                 Fi = aRDC->rcp->Expa;
             }
@@ -1290,19 +1290,19 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
           TCStringArray aDclist1;
           TCIntArray anRDc1;
           Ndc += rt[RT_DCOMP].GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
-          for(uint kk=0; kk<aDclist1.GetCount(); kk++)
+          for(size_t kk=0; kk<aDclist1.size(); kk++)
           {
-            aDclist.Add(aDclist1[kk]);
+            aDclist.push_back(aDclist1[kk]);
             anRDc.Add(anRDc1[kk]);
           }
         }
-        uint ii=0;
-        while( ii< aDclist.GetCount() )
+        size_t ii=0;
+        while( ii< aDclist.size() )
         {
             if( !memcmp( aDclist[ii].c_str()+MAXSYMB+MAXDRGROUP, "E-", 2 ) ||
                     !memcmp( aDclist[ii].c_str()+MAXSYMB+MAXDRGROUP, "e-", 2 ) )
             {
-                aDclist.Remove(ii);
+                aDclist.erase(aDclist.begin() +ii);
                 anRDc.Remove(ii);
                 Ndc--;
             }
@@ -1310,7 +1310,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
                 if( ii>0 &&
                         !memcmp( aDclist[ii].c_str(), aDclist[ii-1].c_str(), DC_RKLEN-MAXSYMB ) )
                 {
-                    aDclist.Remove(ii);
+                    aDclist.erase(aDclist.begin() +ii);
                     anRDc.Remove(ii);
                     Ndc--;
                 }
@@ -1323,19 +1323,19 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
           TCStringArray aDclist1;
           TCIntArray anRDc1;
           Nrc += rt[RT_REACDC].GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
-          for(uint kk=0; kk<aDclist1.GetCount(); kk++)
+          for(uint kk=0; kk<aDclist1.size(); kk++)
           {
-            aRclist.Add(aDclist1[kk]);
+            aRclist.push_back(aDclist1[kk]);
             anRRc.Add(anRDc1[kk]);
           }
         }
         ii=0;
-        while( ii< aRclist.GetCount() )
+        while( ii< aRclist.size() )
         {
             if( ii>0 &&
                     !memcmp( aRclist[ii].c_str(), aRclist[ii-1].c_str(), DC_RKLEN-MAXSYMB ) )
             {
-                aRclist.Remove(ii);
+                aRclist.erase(aRclist.begin() +ii);
                 anRRc.Remove(ii);
                 Nrc--;
             }
@@ -1345,10 +1345,10 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
               " No DComp and ReacDC records found! ");
         php->nDC = (Ndc + Nrc);
 //        php->NR1 = (short)aRclist.GetCount();
-        iic = aDclist.GetCount();
+        iic = aDclist.size();
     }
     else
-        php->nDC = lst.GetCount(); // php->NR1 ?
+        php->nDC = lst.size(); // php->NR1 ?
 
     dyn_new(0);
 
@@ -1356,7 +1356,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
     {   /* Get list of component : add aMcv and aMrv */
         for( i=0; i<php->nDC; i++ )
         {
-            if( (size_t)i < aDclist.GetCount() )
+            if( i < aDclist.size() )
             {
                 memcpy( php->SM[i], aDclist[i].c_str(), DC_RKLEN );
                 php->SM[i][DC_RKLEN-1] = SRC_DCOMP;

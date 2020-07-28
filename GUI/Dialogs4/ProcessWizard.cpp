@@ -1102,9 +1102,9 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
 
           dclst = TProfil::pm->DCNamesforPh( phname.c_str() , true );
           // Here may be message if Invalid phase
-          if( dclst.GetCount() > 0 )
+          if( dclst.size() > 0 )
              EM0 = dclst[0].c_str();
-          if( dclst.GetCount()  > 1 )
+          if( dclst.size()  > 1 )
              EM1 = dclst[1].c_str();
       }
       ret = QString("if(cXi < 0.5) begin\n"
@@ -1405,7 +1405,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           for(ii=0; ii<lst.count();ii++)
           {
               lst[ii] = lst[ii].trimmed();
-              rowNames.Add(lst[ii].toStdString());
+              rowNames.push_back(lst[ii].toStdString());
               ret  += QString("yp[J][%1] =: (Xa[{%2}]>Pa_DS? vP[J]/10: empty());\n").arg(
                     ii).arg( lst[ii]);
           }
@@ -1445,9 +1445,9 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             "$ yp[J][2] =: lg( Wxx[{%1}] / my[{%3}] / (Wxx[{%2}] / my[{%4}]) );\n"
             "yp[J][2] =: yp[J][1] - yp[J][0]; \n"
             "$ Done\n").arg(BL, CL, b_ion, c_ion);
-           rowNames.Add("log(Kd(H))");
-           rowNames.Add("log(Kd(M))");
-           rowNames.Add("log(D_MH)");
+           rowNames.push_back("log(Kd(H))");
+           rowNames.push_back("log(Kd(M))");
+           rowNames.push_back("log(D_MH)");
            pGraph->setValue( 3 );
            pageScript->setXname("x(Minor)");
            pageScript->setYname("log10");
@@ -1472,9 +1472,9 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             "yp[J][2] =: yp[J][1]\n"
             "    - lg( bXs[{%2}]/( bXs[{%1}]+ bXs[{%2}])/m_t[{%2}] );\n"
             "$ Done\n").arg(TraceE1, HostE1);
-           rowNames.Add("x(Trace)");
-           rowNames.Add("Kd(Trace)");
-           rowNames.Add("D(Trace)");
+           rowNames.push_back("x(Trace)");
+           rowNames.push_back("Kd(Trace)");
+           rowNames.push_back("D(Trace)");
            pGraph->setValue( 3 );
            pageScript->setXname("log_m(Tr)");
            pageScript->setYname("log10");
@@ -1490,7 +1490,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
          return;
        string phname = lst[0].trimmed().toStdString();
        dclst = TProfil::pm->DCNamesforPh( phname.c_str(), true );
-       if( dclst.GetCount() < 2 )
+       if( dclst.size() < 2 )
          return;
        EM1 = dclst[1].c_str();
 
@@ -1511,8 +1511,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
         "yp[J][0] =: lga[{%2}] + lg( 10^lga[{%3}] +  10^lga[{%4}] );\n"
         "yp[J][1] =: yp[J][0];\n"
         "$ Done \n" ).arg(EM1, ComIon, EMion0, EMion1);
-       rowNames.Add("Solidus");
-       rowNames.Add("Solutus");
+       rowNames.push_back("Solidus");
+       rowNames.push_back("Solutus");
        pGraph->setValue( 2 );
        pGraphX->setValue( 2 );
        pageScript->setYname("logSigPi");
@@ -1547,8 +1547,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           "yp[J][0] =: lg( m_t[{%1}] ) + lg( m_t[{%2}] +  m_t[{%3}] ); \n"
           "yp[J][1] =: yp[J][0]; \n"
           "$ Done \n").arg( ComIC, EM0IC, EM1IC );  // removed EM1 as first argument
-         rowNames.Add("Solidus");
-         rowNames.Add("Solutus");
+         rowNames.push_back("Solidus");
+         rowNames.push_back("Solutus");
          pGraph->setValue( 2 );
          pGraphX->setValue( 2 );
          pageScript->setYname("lgSigPiT");
@@ -1581,12 +1581,12 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           for( ii=0; ii<lst.count(); ii++)
           {
              M_c1 = lst[ii].trimmed();
-             rowNames.Add(M_c1.toStdString());
+             rowNames.push_back(M_c1.toStdString());
              ret += QString(" yp[J][%1]=: (x[{%2}]> 0? \n"
                             "   lg(x[{%2}]/cTau) : empty() ); \n").arg( QString("%1").arg(ii),M_c1);
           }
           ret += QString("$ log total M sorbed in mol/kg \n");
-          rowNames.Add("log sorbed");
+          rowNames.push_back("log sorbed");
           ret += QString( "yp[J][%1] =: lg((").arg(ii);
           for( ii=0; ii<lst.count(); ii++)
           {
@@ -1595,7 +1595,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
              ret += QString("x[{%1}]").arg( M_c1);
           }
           ret += QString( ")/cTau); \n$ log Kd \n");
-          rowNames.Add("log Kd");
+          rowNames.push_back("log Kd");
           ret += QString( "yp[J][%1] =: ").arg(ii+1);
           ret += QString( " yp[J][%1]- xp[J];\n").arg(ii);
           pGraph->setValue( ii+2 );
@@ -1654,7 +1654,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
    default: break;
      }
 
-   if( rowNames.GetCount() > 0)
+   if( rowNames.size() > 0)
        pageScript->setNames(rowNames);
    pageScript->textScript->setText( ret );
  }
@@ -1753,7 +1753,7 @@ void ProcessWizard::setupPages()
       pageLists->addWidget(page1);
 
       // insert items to list of indexes
-       for(uint  jj=0; jj<lst.GetCount(); jj++ )
+       for(size_t  jj=0; jj<lst.size(); jj++ )
           {
              /*item1 =*/ new QListWidgetItem( lst[jj].c_str(), lstIndexes1);
           }

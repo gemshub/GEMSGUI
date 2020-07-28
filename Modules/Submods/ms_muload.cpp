@@ -360,7 +360,7 @@ void TMulti::SolModLoad( )
 
             // build formula list
             for( jj=jb, j=JB; j < JE; j++ )
-                form_array.Add( aFo.form_extr( j, mup->L, mup->DCF ) );
+                form_array.push_back( aFo.form_extr( j, mup->L, mup->DCF ) );
 
             // get moiety full structure from phase
             aPH->MakeSublatticeLists( form_array );
@@ -1392,7 +1392,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
 // Build list names of index for object
 void TMulti::getNamesList( int nO, TCStringArray& lst )
 {
-   lst.Clear();
+   lst.clear();
 
    int i, iCode = aObj[nO].GetIndexationCode();
    RMULTS* mup = TRMults::sm->GetMU();
@@ -1407,47 +1407,47 @@ void TMulti::getNamesList( int nO, TCStringArray& lst )
           break;
        case A_icx:
                   for( i=0; i<pmp->N; i++ )
-                     lst.Add( string( pmp->SB[i], 0, MAXICNAME ));
+                     lst.push_back( string( pmp->SB[i], 0, MAXICNAME ));
                   break;
        case A_dcx:
        case A_dcxicx:
                    for( i=0; i<min(pmp->L,nOsz); i++ )
-                       lst.Add( string( pmp->SM[i],0, MAXDCNAME) );
+                       lst.push_back( string( pmp->SM[i],0, MAXDCNAME) );
                    break;
        case A_dcsx:
                    for( i=pmp->Ls + pmp->Lads; i<pmp->L; i++ )
-                       lst.Add( string( pmp->SM[i],0, MAXDCNAME) );
+                       lst.push_back( string( pmp->SM[i],0, MAXDCNAME) );
                    break;
        case A_phx:
                    for( i=0; i<min(pmp->FI,nOsz); i++ )
-                     lst.Add( string( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
+                     lst.push_back( string( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
                    break;
        case A_phxicx:
                    for( i=0; i<pmp->N; i++ )
-                      lst.Add( string( pmp->SB[i], 0, MAXICNAME ));
+                      lst.push_back( string( pmp->SB[i], 0, MAXICNAME ));
                    break;
                    //for( i=0; i<pmp->FIs; i++ )
                    //  lst.Add( string( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
                    //break;
        case A_ICx:
                   for( i=0; i<mup->N; i++ )
-                       lst.Add( string( mup->SB[i], 0, MAXICNAME ));
+                       lst.push_back( string( mup->SB[i], 0, MAXICNAME ));
                    break;
        case A_ACx:
                   for( i=0; i<mup->La; i++ )
-                      lst.Add( string( mup->SA[i], 0, MAXCMPNAME ));
+                      lst.push_back( string( mup->SA[i], 0, MAXCMPNAME ));
                    break;
        case A_DCx:
                    for( i=0; i<mup->L; i++ )
-                      lst.Add( string( mup->SM[i]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME ));
+                      lst.push_back( string( mup->SM[i]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME ));
                    break;
        case A_DCSx:
                   for( i=mup->Ls+mup->Lads; i<mup->L; i++ )
-                    lst.Add( string( mup->SM[i]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME ));
+                    lst.push_back( string( mup->SM[i]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME ));
                   break;
        case A_PHx:
                    for( i=0; i<mup->Fi; i++ )
-                       lst.Add( string( mup->SF[i]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME));
+                       lst.push_back( string( mup->SF[i]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME));
                    break;
    }
 }

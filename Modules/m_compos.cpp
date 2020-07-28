@@ -44,9 +44,9 @@ TCompos* TCompos::pm;
 TCompos::TCompos( uint nrt ):
         TCModule( nrt )
 {
-    aFldKeysHelp.Add("Name of predefined composition object (PCO)");
-    aFldKeysHelp.Add("Code of PCO type { AQ RO GA FL HC PM MIN }");
-    aFldKeysHelp.Add("Comment to PCO description");
+    aFldKeysHelp.push_back("Name of predefined composition object (PCO)");
+    aFldKeysHelp.push_back("Code of PCO type { AQ RO GA FL HC PM MIN }");
+    aFldKeysHelp.push_back("Comment to PCO description");
     bcp=&bc[0];
     set_def();
     start_title = " Predefined composition objects (PCO) ";
@@ -448,22 +448,22 @@ TCompos::RecBuild( const char *key, int mode  )
     bcp->N = 0;
     // select ICOMP
     // Build old selections
-    aIclist_old.Clear();
+    aIclist_old.clear();
     for( i=0; i<oldIC; i++ )
     {
       str = std::string( bcp->SB[i], 0, MAXICNAME+MAXSYMB );
       str += "*                     ";
-      aIclist_old.Add( str );
+      aIclist_old.push_back( str );
     }
 LOOP_MARKIC:
     aIclist = vfMultiKeysSet( window(),
        "Please, mark IComp keys for PCO definition",
        RT_ICOMP, "*:*:*:", aIclist_old );
 
-    bcp->Nmax = (short)aIclist.GetCount();
+    bcp->Nmax = aIclist.size();
     // must be Nic = rt[RT_ICOMP].GetKeyList("*:*:*:",.,.);
     bcp->PcIC = S_REM;
-    if( aIclist.GetCount() < 1 )
+    if( aIclist.size() < 1 )
         switch ( vfQuestion3( window(), GetName(),
          "W07BCrem: < 1 IComp keys marked for PCO definition\n"
          "Repeat marking, Proceed to defining PCO in different ways, or\n"
@@ -480,7 +480,7 @@ LOOP_MARKIC:
         }
     else
      {    bcp->PcIC = S_ON;
-          bcp->N = (short)aIclist.GetCount(); /*   bc[q].Nmax = Nic;  */
+          bcp->N = aIclist.size(); /*   bc[q].Nmax = Nic;  */
      }
 
     //  select DCOMP if PcDC = S_ON
@@ -488,11 +488,11 @@ LOOP_MARKIC:
     /*!vfQuestion( window(), GetName(),
     "Will DCOMP stoichiometry be used for COMPOS definition?" )*/
     {
-        aDclist.Clear();
+        aDclist.clear();
         goto COMP_COUNT; //goto RE_SELECT;
     }
     rt[RT_DCOMP].MakeKey( RT_COMPOS, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    aDclist_old.Clear();
+    aDclist_old.clear();
 
     /*
     for( i=0; i<oldDC; i++ )
@@ -539,14 +539,14 @@ LOOP_MARKDC:
      {  str  = std::string(1, bcp->DCS[i]);
         str += ' ';
         str += std::string( bcp->SM[i], 0, DC_RKLEN );
-        aDclist_old.Add( str );
+        aDclist_old.push_back( str );
      }
 LOOP_MARKDC:
     aDclist = vfRDMultiKeysSet( window(),
        " Please, mark ReacDC&DComp keys for use in PCO definition",
        pkey, aDclist_old );
 
-    if( aDclist.GetCount() < 1 )
+    if( aDclist.size() < 1 )
         switch ( vfQuestion3( window(), GetName(),
                   "W09BCrem: < 1 ReacDC&DComp keys marked for PCO.\n"
                   " Repeat marking,  \n"
@@ -565,7 +565,7 @@ LOOP_MARKDC:
 
 COMP_COUNT:
 
-    bcp->Ld = (short)(/*aRclist.GetCount()+*/aDclist.GetCount());
+    bcp->Ld = (/*aRclist.GetCount()+*/aDclist.size());
     if( bcp->Ld < 1 )
         bcp->PcDC = S_OFF;
     else bcp->PcDC = S_ON;
@@ -578,7 +578,7 @@ COMP_COUNT:
     dyn_new();
 
     if( bcp->PcIC != S_OFF )
-        for(uint l=0; l<aIclist.GetCount(); l++ )
+        for(uint l=0; l<aIclist.size(); l++ )
         { // Get list IC
             memcpy( bcp->SB[l], aIclist[l].c_str(), MAXICNAME+MAXSYMB );
             if( !bcp->CIcl[l] || bcp->CIcl[l]==A_NUL )
@@ -1021,11 +1021,11 @@ const char* TCompos::GetHtml()
 
 
 void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
-            elmWindowData el_data, cmSetupData st_data, TCStringArray& SDlist )
+            elmWindowData el_data, cmSetupData st_data, std::set<std::string>& SDlist )
 {
     TCIntArray anR;
     TCStringArray aComp;
-    aCMnoused.Clear();
+    aCMnoused.clear();
 
     // open selected kernel files
     // db->OpenOnlyFromList(el_data.flNames);
@@ -1033,7 +1033,7 @@ void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
 
    // delete the equvalent keys
    TCStringArray aICkey_new;         // 30/11/2006
-   aICkey_new.Clear();
+   aICkey_new.clear();
 
     // get list of records
     db->GetKeyList( "*:*:*:", aComp, anR );
@@ -1043,15 +1043,15 @@ void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
     uint j;
     int i, ij, itmp;
     uint jj;
-    for(uint ii=0; ii<aComp.GetCount(); ii++ )
+    for(uint ii=0; ii<aComp.size(); ii++ )
     {
 
       // test the same component (overload) 30/11/2006
       std::string stt = aComp[ii].substr(0,MAXCMPNAME+MAXSYMB);
-      for( j=0; j<aICkey_new.GetCount(); j++ )
+      for( j=0; j<aICkey_new.size(); j++ )
         if( stt ==  aICkey_new[j])
        break;
-     if( j<aICkey_new.GetCount() )
+     if( j<aICkey_new.size() )
        continue;
 
      RecInput( aComp[ii].c_str() );
@@ -1060,13 +1060,13 @@ void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
      itmp = 0;
      for( i=0; i< bcp->N; i++ )
      {
-      for( jj=0; jj<el_data.ICrds.GetCount(); jj++ )
+      for( jj=0; jj<el_data.ICrds.size(); jj++ )
          if( !memcmp( el_data.ICrds[jj].c_str(), bcp->SB[i], MAXICNAME+MAXSYMB))
             {  ij++;
                break;
             }
 
-      for( jj=0; jj<el_data.oldIComps.GetCount(); jj++ )
+      for( jj=0; jj<el_data.oldIComps.size(); jj++ )
          if( !memcmp( el_data.oldIComps[jj].c_str(),
                            bcp->SB[i], MAXICNAME+MAXSYMB))
             {  itmp++;
@@ -1078,7 +1078,7 @@ void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
      if( !(ij==bcp->N))
      {
         if( ij>0)
-          aCMnoused.Add( aComp[ii] );
+          aCMnoused.push_back( aComp[ii] );
        continue;                // no all icomp
      }
      if( (itmp>=bcp->N))
@@ -1098,18 +1098,18 @@ void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
         str = str1 + ":" + str;
         //Point SaveRecord
         if( AddRecordTest( str.c_str(), fnum_ ))
-        {   aICkey_new.Add( stt );  // 30/11/2006
+        {   aICkey_new.push_back( stt );  // 30/11/2006
             for(int isd=0; isd<bcp->Nsd; isd++)
             { std::string sdkey = std::string( bcp->sdref[isd], 0,V_SD_RKLEN);
               strip( sdkey );
-              SDlist.AddUnique( sdkey );
+              SDlist.insert( sdkey );
            }
         }
      }
 
     // close all no project files
     TCStringArray names1;
-    names1.Add(prfName);
+    names1.push_back(prfName);
     db->OpenOnlyFromList(names1);
 }
 

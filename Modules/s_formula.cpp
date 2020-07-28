@@ -434,7 +434,7 @@ TFormula::~TFormula()
 
 void TFormula::fo_clear()
 {
-    aCn.Clear();
+    aCn.clear();
     aSC.Clear();
     aVal.Clear();
     aZ = 0.;
@@ -465,7 +465,7 @@ void TFormula::fo_unpak( TIArray<ICTERM>& itt_ )
             ICbuf[MAXICNAME] = '*';
         ICbuf[MAXICNAME+MAXSYMB]=0;
 
-        aCn.Add( ICbuf );
+        aCn.push_back( ICbuf );
         aSC.Add( itt_[i].stoc );
         aVal.Add( itt_[i].val  );
 
@@ -563,7 +563,7 @@ void TFormula::TestIC( const char* key, int N, char *ICsym )
     int jj=-1;
     vstr ICS(MAXICNAME+MAXSYMB+10);
 
-    for( i=0; i<aCn.GetCount(); i++ )
+    for( i=0; i<aCn.size(); i++ )
     {
         memset( ICS, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICS, aCn[i].c_str(), MAXICNAME+MAXSYMB );
@@ -602,7 +602,7 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
     double Sc, Zf=0.0;
 
     Z =  mW =  eS = 0.0;
-    for(uint i=0; i<aCn.GetCount(); i++ ) // TERMS
+    for(uint i=0; i<aCn.size(); i++ ) // TERMS
     {
         memset( ICs, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICs, aCn[i].c_str(), MAXICNAME+MAXSYMB );
@@ -623,7 +623,7 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
     }
     if( fabs( Zf ) > 1e-10 && fabs(Z) > 1e-10 )
         Z -= Zf;
-    return aCn.GetCount();
+    return aCn.size();
 }
 
 
@@ -639,7 +639,7 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn, double &Nj )
     double Sc, Zf=0.0;
 
     Z = mW = eS = Nj = 0.0;
-    for(uint i=0; i<aCn.GetCount(); i++ ) // TERMS
+    for(uint i=0; i<aCn.size(); i++ ) // TERMS
     {
         memset( ICs, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICs, aCn[i].c_str(), MAXICNAME+MAXSYMB );
@@ -661,7 +661,7 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn, double &Nj )
     }
     if( fabs( Zf ) > 1e-10 && fabs(Z) > 1e-10 )
         Z -= Zf;
-    return aCn.GetCount();
+    return aCn.size();
 }
 
 
@@ -677,7 +677,7 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
     char *icsp = ICS;
 
     fillValue( Sml, 0., N);
-    for( i=0; i<aCn.GetCount(); i++ )
+    for( i=0; i<aCn.size(); i++ )
     {
         memset( ICS, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICS, aCn[i].c_str(), MAXICNAME+MAXSYMB );
@@ -698,7 +698,7 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
         if( aVal[i] == SHORT_EMPTY && ICval )
             aVal[i] = ICval[jj];
     }
-    ii = aCn.GetCount();
+    ii = aCn.size();
     if( ii < 1 || !ICval )
         return;
     aZ = 0;    // calculate charge balance
@@ -709,7 +709,7 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
 
     // Sveta
     double tt = aSC[ii];
-    if( ii < aCn.GetCount() )
+    if( ii < aCn.size() )
         if( fabs( (aZ - tt) ) > 1e-6 )
         {
             std::string str = " in the formula: ";

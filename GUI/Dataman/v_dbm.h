@@ -155,7 +155,7 @@ public:
     }
     size_t KeyInList()
     {
-        return aKey.GetCount();
+        return aKey.size();
     }
 
     //--- Manipulation records

@@ -88,7 +88,7 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
         // insert items to list of indexes
         TCStringArray lst;
         TProfil::pm->getNamesList( awnData[ii].nObj, lst);
-        for(  jj=0; jj<lst.GetCount(); jj++ )
+        for(  jj=0; jj<lst.size(); jj++ )
         {
           item1 = new QListWidgetItem( lst[jj].c_str(), lstIndexes1);
           char sw = aObj[ awnData[ii].nSwitch].GetString(jj,0)[0];

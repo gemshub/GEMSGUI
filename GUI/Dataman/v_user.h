@@ -26,7 +26,10 @@
 #ifndef _v_user_h_
 #define _v_user_h_
 
+#include <set>
+#include <vector>
 #include <algorithm>
+
 #include <iostream>
 #include <cstring>
 using namespace std;
@@ -46,7 +49,7 @@ typedef unsigned int uint;
 #endif
 
 // added for convenience because of frequent use
-typedef TArrayF<string> TCStringArray;
+typedef vector<string> TCStringArray;
 const int MAXKEYWD = 6+1;
 
 #ifndef  __unix

@@ -66,12 +66,12 @@ TRTParm::TRTParm( uint nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("Phase state of source Dependent Component (DComp or ReacDC)");
-    aFldKeysHelp.Add("Group to which source Dependent Component belongs");
-    aFldKeysHelp.Add("Name of source Dependent Component");
-    aFldKeysHelp.Add("Code of source thermodynamic data set");
-    aFldKeysHelp.Add("Source of input data for DC { r d }");
-    aFldKeysHelp.Add("Variant number of this RTParm calculation task <integer>");
+    aFldKeysHelp.push_back("Phase state of source Dependent Component (DComp or ReacDC)");
+    aFldKeysHelp.push_back("Group to which source Dependent Component belongs");
+    aFldKeysHelp.push_back("Name of source Dependent Component");
+    aFldKeysHelp.push_back("Code of source thermodynamic data set");
+    aFldKeysHelp.push_back("Source of input data for DC { r d }");
+    aFldKeysHelp.push_back("Variant number of this RTParm calculation task <integer>");
     setKeyEditField(5);
     rpp=&rp[0];
     set_def();
@@ -398,11 +398,11 @@ TRTParm::MakeQuery()
     if( !rpp->expr )
        rpp->expr = static_cast<char *>(aObj[ o_rtexpr ].Alloc(1, 2048, S_));
     aObj[o_rtexpr].SetString( calcScript.c_str(),0,0);
-    if(namesLines.GetCount() > 0)
+    if(namesLines.size() > 0)
      {
         rpp->lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_rtlnam ].Alloc( 1,
                          rpp->dimXY[1], MAXGRNAME));
-        for(size_t ii=0; ii< min<size_t>( namesLines.GetCount(),rpp->dimXY[1]); ii++)
+        for(size_t ii=0; ii< min<size_t>( namesLines.size(),rpp->dimXY[1]); ii++)
         {
           strncpy(  rpp->lNam[ii], namesLines[ii].c_str(), MAXGRNAME );
         }
@@ -740,9 +740,9 @@ TRTParm::RecordPlot( const char* /*key*/ )
       TCStringArray lnames;
       int ii;
       for( ii=0; ii<rpp->dimXY[1]; ii++ )
-          lnames.Add( std::string(rpp->lNam[ii], 0, MAXGRNAME ));
+          lnames.push_back( std::string(rpp->lNam[ii], 0, MAXGRNAME ));
       for( ii=0; ii<rpp->dimEF[1]; ii++ )
-          lnames.Add( std::string( rpp->lNamE[ii], 0, MAXGRNAME ));
+          lnames.push_back( std::string( rpp->lNamE[ii], 0, MAXGRNAME ));
       gd_gr = updateGraphWindow( gd_gr, this, plt, rpp->name,
           rpp->xNames, rpp->yNames, lnames );
     }

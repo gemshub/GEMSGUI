@@ -42,11 +42,11 @@ TPhase::TPhase( uint nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("Code of phase state { a g f p l m h s d x i z }");
-    aFldKeysHelp.Add("Group identifier for such phases (letters, digits)");
-    aFldKeysHelp.Add("Name of this phase definition (letters, digits)");
-    aFldKeysHelp.Add("Phase class { c d l gm ss ssd ls aq xsa xc }");
-    aFldKeysHelp.Add("Comment to phase definition");
+    aFldKeysHelp.push_back("Code of phase state { a g f p l m h s d x i z }");
+    aFldKeysHelp.push_back("Group identifier for such phases (letters, digits)");
+    aFldKeysHelp.push_back("Name of this phase definition (letters, digits)");
+    aFldKeysHelp.push_back("Phase class { c d l gm ss ssd ls aq xsa xc }");
+    aFldKeysHelp.push_back("Comment to phase definition");
     php=&ph[0];
     set_def();
     start_title = " Definition of thermodynamic phase ";
@@ -1257,12 +1257,12 @@ const char* TPhase::GetHtml()
 
 void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
             TCStringArray& aPHtmp, elmWindowData el_data,
-            phSetupData st_data, TCStringArray& SDlist )
+            phSetupData st_data, std::set<std::string>& SDlist )
 {
     TCIntArray anR;
     TCIntArray aDCused;
     TCStringArray aPHkey;
-    aPHnoused.Clear();
+    aPHnoused.clear();
 
     // open selected kernel files
     // db->OpenOnlyFromList(el_data.flNames);
@@ -1270,7 +1270,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
 
     // delete the equvalent keys
     TCStringArray aICkey_new;         // 30/11/2006
-    aICkey_new.Clear();
+    aICkey_new.clear();
 
   // get list of records
     db->GetKeyList( "*:*:*:*:*:", aPHkey, anR );
@@ -1281,16 +1281,16 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
     int i, cnt;
     bool nRec;
     const char *pKey1;//, *pKey4;
-    for(uint ii=0; ii<aPHkey.GetCount(); ii++ )
+    for(uint ii=0; ii<aPHkey.size(); ii++ )
     {
         uint jj;
 // compare keys for template project
-       for( jj=0; jj<aPHtmp.GetCount(); jj++ )
+       for( jj=0; jj<aPHtmp.size(); jj++ )
         if( !memcmp( aPHtmp[jj].c_str(), aPHkey[ii].c_str(),
                 PH_RKLEN-MAXPHGROUP ))
          break;
 
-     if( jj<aPHtmp.GetCount() )
+     if( jj<aPHtmp.size() )
         continue;
 
 // Sorting out phase recs using setup in Elements and SetFilter dialogs
@@ -1332,10 +1332,10 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
 
     // test the same component (overload) 30/11/2006
     std::string stt = aPHkey[ii].substr(0,MAXSYMB+MAXPHSYMB+MAXPHNAME+MAXSYMB);
-    for( j=0; j<aICkey_new.GetCount(); j++ )
+    for( j=0; j<aICkey_new.size(); j++ )
        if( stt ==  aICkey_new[j])
               break;
-     if( j<aICkey_new.GetCount() )
+     if( j<aICkey_new.size() )
             continue;
 
 // Read the record here
@@ -1373,7 +1373,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
      if( cnt < php->nDC && !( !st_data.flags[PHcopyF_] && cnt > 1  )) // copy  that retain full
      {
        if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
-         aPHnoused.Add( aPHkey[ii] );
+         aPHnoused.push_back( aPHkey[ii] );
        continue;
      }
      if( cnt < php->nDC ) // added 14/12/12 test for skipping incompressible phases-solutions
@@ -1421,7 +1421,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
                   break;
              default:
                  if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
-                     aPHnoused.Add( aPHkey[ii] );
+                     aPHnoused.push_back( aPHkey[ii] );
                  continue;
             }
             break;
@@ -1429,7 +1429,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
              if( php->sol_t[DCOMP_DEP] != 'N' || php->sol_t[SPHAS_DEP] != 'N' )
              {
                if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
-                   aPHnoused.Add( aPHkey[ii] );
+                   aPHnoused.push_back( aPHkey[ii] );
                continue;
              }
              break;
@@ -1456,18 +1456,18 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
      CompressRecord( cnt, aDCused );
      //Point SaveRecord
      if( AddRecordTest( str.c_str(), fnum_ ))
-     {  aICkey_new.Add( stt );  // 30/11/2006
+     {  aICkey_new.push_back( stt );  // 30/11/2006
         for(int isd=0; isd<php->Nsd; isd++)
         { std::string sdkey = std::string( php->sdref[isd], 0,V_SD_RKLEN);
           strip( sdkey );
-          SDlist.AddUnique( sdkey );
+          SDlist.insert( sdkey );
         }
      }
    }
 
     // close all no project files
     TCStringArray names1;
-    names1.Add(prfName);
+    names1.push_back(prfName);
     db->OpenOnlyFromList(names1);
 }
 
@@ -1551,7 +1551,7 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, const TCStringArra
             if(!onlyIPX) // cpmpressed list
                 DCused.Clear();
 
-            if( form_array.GetCount() <= 0)   // not difined before
+            if( form_array.size() <= 0)   // not difined before
                 form_array = readFormulaes( DCused);
             ncpNnew = CompressSublattice( form_array );
         }
@@ -1605,15 +1605,15 @@ int TPhase::CompressSublattice( const TCStringArray& form_array )
     TCStringArray old_lsMoi = getSavedLsMoi();
     MakeSublatticeLists( form_array  );
 
-    ErrorIf( old_lsMoi.GetCount() < php->nMoi, string( php->pst_, 0, MAXPHNAME),
+    ErrorIf( old_lsMoi.size() < php->nMoi, string( php->pst_, 0, MAXPHNAME),
              "Please, recalculate phase record before execution.");
 
     TCIntArray  Moiused;
-    uint i1;
+    size_t i1;
     short ii, jj;
     int ncpNnew, DCndx;
 
-    for( i1=0; i1<old_lsMoi.GetCount(); i1++ )
+    for( i1=0; i1<old_lsMoi.size(); i1++ )
     {
         for( jj=0; jj<php->nMoi; jj++)
         {
@@ -1680,13 +1680,13 @@ TCStringArray TPhase::readFormulaes( const TCIntArray&  DCused) const
         if( php->DCS[i] == SRC_DCOMP )
         {
             aDC->TryRecInp( dcn, crt, 0 );
-            form_array.Add( std::string(aDC->dcp->form,0,MAXFORMULA));
+            form_array.push_back( std::string(aDC->dcp->form,0,MAXFORMULA));
         }
         else
             if( php->DCS[i] == SRC_REACDC )
             {
                 aRDC->TryRecInp( dcn, crt, 0 );
-                form_array.Add( std::string(aRDC->rcp->form,0,MAXFORMULA));
+                form_array.push_back( std::string(aRDC->rcp->form,0,MAXFORMULA));
             }
     }  // i
     return  form_array;

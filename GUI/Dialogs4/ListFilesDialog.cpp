@@ -64,7 +64,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
         TCIntArray indx;
         TCIntArray sel;
         rt[i].GetFileList(closef|openf|oldself, names, indx, sel);
-        for( ii=0; ii<names.GetCount(); ii++ )
+        for( ii=0; ii<names.size(); ii++ )
         {
           // select only DB.default files
           if( names[ii].find( pVisor->sysDBDir())== string::npos )
@@ -90,7 +90,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
         TCIntArray indx;
         TCIntArray sel;
         rt[i].GetFileList(closef|openf|oldself, names, indx, sel);
-        for( ii=0; ii<names.GetCount(); ii++ )
+        for( ii=0; ii<names.size(); ii++ )
         {
           // select only Projecte files
           if( names[ii].find( prfName/*Path*/ ) == string::npos )
@@ -129,7 +129,7 @@ void ListFilesDialog::CmHelp()
 void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
 {
 
-    aFls.Clear();
+    aFls.clear();
     aCnt.Clear();
 
     int ii, jj, nF, cnt = 0;
@@ -153,7 +153,7 @@ void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
        {
          string col =pFile->text( 0 ).toStdString();
          cnt++;
-         aFls.Add( col.c_str() );
+         aFls.push_back( col.c_str() );
        }
       }
 
@@ -166,7 +166,7 @@ void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
        {
          string col =pFile->text( 0 ).toStdString();
          cnt++;
-         aFls.Add( col.c_str() );
+         aFls.push_back( col.c_str() );
        }
       }
       aCnt.Add( cnt );

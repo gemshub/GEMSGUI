@@ -116,7 +116,7 @@ GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
     // alloc memory
     m_chartData.reset( allocateData( aPlots, plotModels, aTitle, aXName, aYName, agraphType ));
     // change names
-    for (size_t ii=0; ii<line_names.GetCount(); ++ii)
+    for (size_t ii=0; ii<line_names.size(); ++ii)
     {
         if( ii > m_chartData->linesNumber() )
             break;

@@ -963,7 +963,7 @@ TFileList::TFileList(QWidget* win, size_t iRt, const char* caption ):
 
    pFileList = new QListWidget(this);
    const TCStringArray& s = rt[iRt].GetOpenFiles();
-   for( size_t ii=0; ii<s.GetCount(); ii++ )
+   for( size_t ii=0; ii<s.size(); ii++ )
               pFileList->addItem(s[ii].c_str());
 
         pFileList->item(rt[iRt].GetWorkFileName())->setSelected(true);

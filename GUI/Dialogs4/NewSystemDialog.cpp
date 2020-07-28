@@ -613,7 +613,7 @@ void NewSystemDialog::CmNext()
         if( !(str.find_first_of("*?" ) != string::npos) )
             //Current record key is defined!
         {
-            for(uint i=0; i<aKey.GetCount(); i++ )
+            for(size_t i=0; i<aKey.size(); i++ )
                 if( str == aKey[i])
                 {
                     i_next = i+1;
@@ -655,7 +655,7 @@ void NewSystemDialog::CmPrevious()
         if( !(str.find_first_of("*?" ) != string::npos) )
             //Current record key is defined!
         {
-            for(size_t i=0; i<aKey.GetCount(); i++ )
+            for(size_t i=0; i<aKey.size(); i++ )
                 if( str == aKey[i])
                 {
                     if( i > 0 )

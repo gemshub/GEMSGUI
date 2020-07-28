@@ -27,9 +27,9 @@ TIComp* TIComp::pm;
 TIComp::TIComp( uint nrt ):
         TCModule( nrt )
 {
-    aFldKeysHelp.Add("Symbol of Independent Component (IC)");
-    aFldKeysHelp.Add("Class of Independent Component { e o h a i z v }");
-    aFldKeysHelp.Add("Comment to IC definition");
+    aFldKeysHelp.push_back("Symbol of Independent Component (IC)");
+    aFldKeysHelp.push_back("Class of Independent Component { e o h a i z v }");
+    aFldKeysHelp.push_back("Comment to IC definition");
     icp=&ic[0];
     set_def();
     start_title = " Data for Independent Components ";
@@ -162,7 +162,7 @@ TIComp::GetElements( bool isotopes, TCStringArray& aIC, TCIntArray& aIndMT )
  //db->OpenAllFiles(true);
  db->GetKeyList( "*:*:*:", aIC1, anR );
 
- for( uint ii=0; ii<aIC1.GetCount(); ii++ )
+ for( uint ii=0; ii<aIC1.size(); ii++ )
  {
     RecInput( aIC1[ii].c_str() );
     if( *db->FldKey( 1 ) == 'a' || *db->FldKey( 1 ) == 'v' ) // addition
@@ -173,7 +173,7 @@ TIComp::GetElements( bool isotopes, TCStringArray& aIC, TCIntArray& aIndMT )
         aIndMT.Add( icp->num );
       else
         continue;
-   aIC.Add(aIC1[ii]);
+   aIC.push_back(aIC1[ii]);
  }
 }
 
@@ -187,27 +187,27 @@ TIComp::CopyElements( const char * prfName,
 
   // delete the equvalent keys
    TCStringArray aICkey_new;         // 30/11/2006
-   aICkey_new.Clear();
+   aICkey_new.clear();
 
     //  copy to it selected records
     // ( add to last key field first symbol from prfname )
     int nrec;
-    for(uint j, i=0; i<el_data.ICrds.GetCount(); i++ )
+    for(uint j, i=0; i<el_data.ICrds.size(); i++ )
     {
-       for( j=0; j<el_data.oldIComps.GetCount(); j++ )
+       for( j=0; j<el_data.oldIComps.size(); j++ )
         if( !memcmp( el_data.ICrds[i].c_str(),
             el_data.oldIComps[j].c_str(), MAXICNAME+MAXSYMB ))
          break;
-       if( j<el_data.oldIComps.GetCount() )
+       if( j<el_data.oldIComps.size() )
          continue;
 
        // test the same component (overload) 30/11/2006
        std::string stt = el_data.ICrds[i].substr(0,MAXICNAME+MAXSYMB);
-       for( j=0; j<aICkey_new.GetCount(); j++ )
+       for( j=0; j<aICkey_new.size(); j++ )
        // if( !memcmp( stt.c_str(), aICkey_new[j].c_str(), MAXICNAME+MAXSYMB ))
          if( stt ==  aICkey_new[j])
         break;
-      if( j<aICkey_new.GetCount() )
+      if( j<aICkey_new.size() )
         continue;
 
        nrec = db->Find( el_data.ICrds[i].c_str() );
@@ -225,12 +225,12 @@ TIComp::CopyElements( const char * prfName,
         str = str1 + ":" + str;
         //Point SaveRecord
         if( AddRecordTest( str.c_str(), fnum_ ))
-            aICkey_new.Add( stt );  // 30/11/2006
+            aICkey_new.push_back( stt );  // 30/11/2006
     }
 
     // close all no project files
     TCStringArray names1;
-    names1.Add(prfName);
+    names1.push_back(prfName);
     db->OpenOnlyFromList(names1);
 
 }

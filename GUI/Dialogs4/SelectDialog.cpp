@@ -36,7 +36,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
 
     setWindowTitle(title);
     unsigned int lens=30;
-    for( uint ii=0; ii<list.GetCount(); ii++ )
+    for( size_t ii=0; ii<list.size(); ii++ )
     {
         pList->addItem(list[ii].c_str());
         if( list[ii].length() > lens )
@@ -44,7 +44,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     }
 
     pList->setSelectionMode(QAbstractItemView::SingleSelection); //pList->setMultiSelection(false);
-    if( sel < 0 || sel > list.GetCount() )
+    if( sel < 0 || sel > list.size() )
 	    sel = 0;
     pList->setCurrentRow(sel); // setSelected(sel, true);
 
@@ -68,7 +68,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
 
     setWindowTitle(title);
     unsigned int lens=30;
-    for( uint ii=0; ii<list.GetCount(); ii++ )
+    for( size_t ii=0; ii<list.size(); ii++ )
     {
         pList->addItem(list[ii].c_str());
         if( list[ii].length() > lens )
@@ -76,7 +76,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     }
 
     pList->setSelectionMode(QAbstractItemView::SingleSelection); //pList->setMultiSelection(false);
-    if( sel < 0 || sel > list.GetCount() )
+    if( sel < 0 || sel > list.size() )
  	    sel = 0;
      pList->setCurrentRow(sel); // setSelected(sel, true);
 
@@ -101,7 +101,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
 
     pList->setSelectionMode(QAbstractItemView::MultiSelection); //pList->setMultiSelection(true);
     unsigned int lens=30;
-    for( uint ii=0; ii<list.GetCount(); ii++ )
+    for( size_t ii=0; ii<list.size(); ii++ )
     {
         pList->addItem(list[ii].c_str());
         if( list[ii].length() > lens )

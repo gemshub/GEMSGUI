@@ -34,16 +34,16 @@ TUnSpace::TUnSpace( uint nrt ):
         TCModule( nrt )
 {
     nQ = 2;
-    aFldKeysHelp.Add("Name of the modeling project");
-    aFldKeysHelp.Add("Thermodynamic potential to minimize {G}");
-    aFldKeysHelp.Add("Name of the parent chemical system definition (CSD)");
-    aFldKeysHelp.Add("CSD (recipe) variant number <integer>");
-    aFldKeysHelp.Add("Volume of the system, dm3");
-    aFldKeysHelp.Add("Pressure, bar, or 0 for Psat(H2O)g");
-    aFldKeysHelp.Add("Temperature, C");
-    aFldKeysHelp.Add("Variant number for additional constraints");
-    aFldKeysHelp.Add("Name of this UnSpace calculation task");
-    aFldKeysHelp.Add("Payoff matrix function type code, optional {A, B, C, D, E, F}");
+    aFldKeysHelp.push_back("Name of the modeling project");
+    aFldKeysHelp.push_back("Thermodynamic potential to minimize {G}");
+    aFldKeysHelp.push_back("Name of the parent chemical system definition (CSD)");
+    aFldKeysHelp.push_back("CSD (recipe) variant number <integer>");
+    aFldKeysHelp.push_back("Volume of the system, dm3");
+    aFldKeysHelp.push_back("Pressure, bar, or 0 for Psat(H2O)g");
+    aFldKeysHelp.push_back("Temperature, C");
+    aFldKeysHelp.push_back("Variant number for additional constraints");
+    aFldKeysHelp.push_back("Name of this UnSpace calculation task");
+    aFldKeysHelp.push_back("Payoff matrix function type code, optional {A, B, C, D, E, F}");
     setKeyEditField(8);
 
     usp=&us[1];

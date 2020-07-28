@@ -353,19 +353,19 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
     {
         rt[RT_PHASE].GetKeyList( "*:*:*:*:*:", aPhaseList, anRPhase );
         uint ii=0;
-        while( ii < aPhaseList.GetCount() )
+        while( ii < aPhaseList.size() )
         {
             if( *aPhaseList[ii].c_str() == 'a' )
             {
 
-                for(jj=0; jj<AqKey.GetCount(); jj++)
+                for(jj=0; jj<AqKey.size(); jj++)
                 {
                     if( aPhaseList[ii] ==  AqKey[jj])
                      break;
                 }
-                if( jj>=AqKey.GetCount() )
+                if( jj>=AqKey.size() )
                 {
-                  aPhaseList.Remove(ii);
+                  aPhaseList.erase(aPhaseList.begin() +ii);
                   anRPhase.Remove(ii);
                 }
                else ii++;
@@ -374,14 +374,14 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
                 if( *aPhaseList[ii].c_str() == 'g' || *aPhaseList[ii].c_str() == 'f' )
                 {
 
-                    for(jj=0; jj<GasKey.GetCount(); jj++)
+                    for(jj=0; jj<GasKey.size(); jj++)
                     {
                         if(aPhaseList[ii] ==  GasKey[jj])
                          break;
                     }
-                    if( jj>=GasKey.GetCount() )
+                    if( jj>=GasKey.size() )
                     {
-                      aPhaseList.Remove(ii);
+                      aPhaseList.erase(aPhaseList.begin() +ii);
                       anRPhase.Remove(ii);
                     }
                    else ii++;
@@ -394,7 +394,7 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
                         if( !strncmp(aPhaseList[ii-1].c_str(),
                                      aPhaseList[ii].c_str(), PH_RKLEN-MAXPHGROUP  ))
                         {
-                            aPhaseList.Remove(ii);
+                            aPhaseList.erase(aPhaseList.begin() +ii);
                             anRPhase.Remove(ii);
                         }
                         else ii++;
@@ -405,13 +405,13 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
     }
     else
     {
-        for( uint ii=0; ii<lst.GetCount(); ii++)
-            aPhaseList.Add(lst[ii]);
+        for( size_t ii=0; ii<lst.size(); ii++)
+            aPhaseList.push_back(lst[ii]);
     }
 
-    if( aPhaseList.GetCount()<1 )
+    if( aPhaseList.size()<1 )
         Error("RMULT", "No records of Phases!");
-    mu.Fi  = (short)aPhaseList.GetCount();
+    mu.Fi  = aPhaseList.size();
     mu.PmvPH = S_ON;
     mu.Ll = (short *)aObj[ o_mul1].Alloc( mu.Fi, 1, I_ );
     mu.SF = (char (*)[PH_RKLEN])aObj[ o_musf].Alloc( mu.Fi, 1, PH_RKLEN );
@@ -423,7 +423,7 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
     kk=-1;
     mu.Ls = mu.Lads = mu.Fis = 0;
 TEST2:
-    for( k=0; k<aPhaseList.GetCount(); k++)
+    for( k=0; k<aPhaseList.size(); k++)
     {
         // test and load keys of DCOMP anf REACDC
         aPH->TryRecInp( aPhaseList[k].c_str(), tim, 0 );
@@ -438,7 +438,7 @@ TEST2:
         {
             // test to exist of DCOMP or REACDC record later
             vstr ss(DC_RKLEN, aPH->php->SM[j]);
-            List.Add(ss.p);
+            List.push_back(ss.p);
             mu.Ll[kk]++;
         } /* j */
         if( mu.Ll[kk] > 1 ) // multicomponent phase
@@ -454,11 +454,11 @@ TEST2:
         SPHP=0;
         goto TEST2;
     }
-    mu.L = (short)List.GetCount();
+    mu.L = List.size();
     mu.FiE= mu.L;
     mu.PmvDC = S_ON;
     mu.SM = (char (*)[DC_RKLEN])aObj[ o_musm].Alloc( mu.L, 1, DC_RKLEN );
-    for(uint i=0; i< List.GetCount(); i++)
+    for(size_t i=0; i< List.size(); i++)
     {
         memcpy( mu.SM[i], List[i].c_str(), DC_RKLEN );
     }
@@ -472,26 +472,26 @@ void TRMults::MakeRecordLists( TCStringArray AqKey, TCStringArray GasKey )
     TCStringArray aICList;
     TCIntArray anRIC;
     rt[RT_ICOMP].GetKeyList( "*:*:*:", aICList, anRIC );
-    if( aICList.GetCount()<1 )
+    if( aICList.size()<1 )
         Error("RMULT", "No records of Independent component!");
-    mu.N  = (short)aICList.GetCount();
+    mu.N  = aICList.size();
     mu.PmvIC = S_ON;
     mu.SB = (char (*)[IC_RKLEN])aObj[ o_musb].Alloc( mu.N, 1, IC_RKLEN );
-    for( i=0; i< aICList.GetCount(); i++)
+    for( i=0; i< aICList.size(); i++)
         memcpy( mu.SB[i], aICList[i].c_str(), IC_RKLEN );
 
     // Get all records of Compos
     TCStringArray aCompList;
     TCIntArray anRComp;
     rt[RT_COMPOS].GetKeyList( "*:*:*:", aCompList, anRComp );
-    mu.La = (short)aCompList.GetCount();
+    mu.La = aCompList.size();
     if( mu.La<1 )
         mu.PmvSA = S_OFF;
     else
     {
         mu.PmvSA = S_ON;
         mu.SA = (char (*)[BC_RKLEN])aObj[ o_musa].Alloc( mu.La, 1, BC_RKLEN );
-        for( i=0; i< aCompList.GetCount(); i++)
+        for( i=0; i< aCompList.size(); i++)
             memcpy( mu.SA[i], aCompList[i].c_str(), BC_RKLEN );
     }
     // Get all records of PHase  and Get DCOMP&REACT list
@@ -708,10 +708,10 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
         {
             //aqueous phase
             if(  mu.SF[kk][0] =='a' )
-                AqKey.Add( string(mu.SF[kk], 0, PH_RKLEN));
+                AqKey.push_back( string(mu.SF[kk], 0, PH_RKLEN));
             //gaseous phase
             else if(  mu.SF[kk][0] =='g' || mu.SF[kk][0] =='f' )
-                GasKey.Add( string(mu.SF[kk], 0, PH_RKLEN));
+                GasKey.push_back( string(mu.SF[kk], 0, PH_RKLEN));
             else break;
         }
 
@@ -722,11 +722,11 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
     if( changePhases || mu.PmvAq == S_ON || mu.PmvGas == S_ON )
     {
         string  AqKey1 = "a:*:*:*:*:";
-        if(AqKey.GetCount()>0)
+        if(AqKey.size()>0)
             AqKey1 = AqKey[0];
 
         string  GasKey1 = "g:*:*:*:*:";
-        if(GasKey.GetCount()>0)
+        if(GasKey.size()>0)
             GasKey1 = GasKey[0];
 
 NEW_PHASE_AGAIN:
@@ -749,7 +749,7 @@ NEW_PHASE_AGAIN:
         if( amod == '-' )
         {
             mu.PmvAq = S_OFF;
-            AqKey.Clear();
+            AqKey.clear();
         }
         else { // Setting control parameters for the auto aq model
             mu.PmvAq = amod;
@@ -766,8 +766,8 @@ NEW_PHASE_AGAIN:
             }
             else
             {
-                AqKey.Clear();
-                AqKey.Add(AqKey1);
+                AqKey.clear();
+                AqKey.push_back(AqKey1);
             }
         }
 
@@ -775,7 +775,7 @@ NEW_PHASE_AGAIN:
         if( gmod == '-' )
         {
             mu.PmvGas = S_OFF;
-            GasKey.Clear();
+            GasKey.clear();
         }
         else {
             mu.PmvGas = gmod;
@@ -787,8 +787,8 @@ NEW_PHASE_AGAIN:
             }
             else
             {
-                GasKey.Clear();
-                GasKey.Add(GasKey1);
+                GasKey.clear();
+                GasKey.push_back(GasKey1);
             }
         }
 
@@ -849,24 +849,24 @@ void TRMults::SelectAqGasPhase( char AqGasType, TCStringArray& AqGasKey )
     if( AqGasType == 0 )
      {
         typePhase = " aqueous phase";
-        aPhaseType.Add("a:*:*:*:*:");
+        aPhaseType.push_back("a:*:*:*:*:");
      }
     else
      {
         typePhase = " gas/fluid phase";
-        aPhaseType.Add("g:*:*:*:*:");
-        aPhaseType.Add("f:*:*:*:*:");
+        aPhaseType.push_back("g:*:*:*:*:");
+        aPhaseType.push_back("f:*:*:*:*:");
      }
 
      // Get all records of Phase for type
-    for(ii=0; ii<aPhaseType.GetCount(); ii++ )
+    for(ii=0; ii<aPhaseType.size(); ii++ )
     {
         rt[RT_PHASE].GetKeyList( aPhaseType[ii].c_str(), aPhaseList, anRPhase );
-        for( jj=0; jj<aPhaseList.GetCount(); jj++ )
-            aKeysList.Add( aPhaseList[jj]);
+        for( jj=0; jj<aPhaseList.size(); jj++ )
+            aKeysList.push_back( aPhaseList[jj]);
     }
 
-    if( aKeysList.GetCount()<1 ) //no type phase in open data base files
+    if( aKeysList.size()<1 ) //no type phase in open data base files
     {
         msg1 = "Project: Choice of";
         msg1 += typePhase;
@@ -889,18 +889,18 @@ void TRMults::SelectAqGasPhase( char AqGasType, TCStringArray& AqGasKey )
         }
      }
 
-    if( aKeysList.GetCount()==1 )
+    if( aKeysList.size()==1 )
     {
-        AqGasKey.Clear();
-        AqGasKey.Add( aKeysList[0] );
+        AqGasKey.clear();
+        AqGasKey.push_back( aKeysList[0] );
     }
     else
     {
        anRPhase.Clear();
        // get selected phase  added Sveta 18/06/04
-       for(ii=0; ii <aKeysList.GetCount(); ii++)
+       for(ii=0; ii <aKeysList.size(); ii++)
        {
-         for( jj=0; jj<AqGasKey.GetCount(); jj++ )
+         for( jj=0; jj<AqGasKey.size(); jj++ )
             if( AqGasKey[jj] == aKeysList[ii] )
               anRPhase.Add(ii);
        }
@@ -928,9 +928,9 @@ AGAIN:  anRPhase = vfMultiChoiceSet(window(), aKeysList, msg1.c_str(), anRPhase 
     }
     else
     {
-      AqGasKey.Clear();
+      AqGasKey.clear();
       for(ii=0; ii <anRPhase.GetCount(); ii++)
-          AqGasKey.Add( aKeysList[anRPhase[ii]] );
+          AqGasKey.push_back( aKeysList[anRPhase[ii]] );
     }
   }
  }

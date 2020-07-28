@@ -132,7 +132,7 @@ public:
     void set_def( int i=0);
 
     void DCListLoad( TCStringArray AqKey, TCStringArray GasKey,
-                     bool useLst = false, TCStringArray lst = 0 );
+                     bool useLst = false, TCStringArray lst = {} );
     void ICmake();
     void PHmake();
     void TestIComp();

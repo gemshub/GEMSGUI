@@ -46,10 +46,10 @@ TDComp::TDComp( uint nrt ):
         TCModule( nrt )
 {
     nQ = 2;
-    aFldKeysHelp.Add("Phase state code of Dependent Component { a g f p s l m c i z y h }");
-    aFldKeysHelp.Add("ID of a group to which this Dependent Component belongs");
-    aFldKeysHelp.Add("Name of this Dependent Component (chemical species)");
-    aFldKeysHelp.Add("Thermodynamic data subset (TDS) code (e.g. database ID)");
+    aFldKeysHelp.push_back("Phase state code of Dependent Component { a g f p s l m c i z y h }");
+    aFldKeysHelp.push_back("ID of a group to which this Dependent Component belongs");
+    aFldKeysHelp.push_back("Name of this Dependent Component (chemical species)");
+    aFldKeysHelp.push_back("Thermodynamic data subset (TDS) code (e.g. database ID)");
     dcp=&dc[1];
     set_def(1);
     dcp=&dc[0];
@@ -1258,7 +1258,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
 
 
 void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
- elmWindowData el_data, dcSetupData st_data, TCStringArray& SDlist)
+ elmWindowData el_data, dcSetupData st_data, std::set<std::string>& SDlist)
 {
     TCIntArray anR;
     TCStringArray aDCkey;
@@ -1269,7 +1269,7 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
 
      // delete the equvalent keys
      TCStringArray aICkey_new;         // 30/11/2006
-     aICkey_new.Clear();
+     aICkey_new.clear();
 
    // get list of records
     db->GetKeyList( "*:*:*:*:", aDCkey, anR );
@@ -1281,7 +1281,7 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
     uint j;
     TFormula aFo;
 
-    for(uint ii=0; ii<aDCkey.GetCount(); ii++ )
+    for(size_t ii=0; ii<aDCkey.size(); ii++ )
     {
 
      // Phase Filters
@@ -1311,10 +1311,10 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
 
       // test the same component (overload) 30/11/2006
       std::string stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);
-      for( j=0; j<aICkey_new.GetCount(); j++ )
+      for( j=0; j<aICkey_new.size(); j++ )
          if( stt ==  aICkey_new[j])
             break;
-      if( j<aICkey_new.GetCount() )
+      if( j<aICkey_new.size() )
             continue;
 
      RecInput( aDCkey[ii].c_str() );
@@ -1323,14 +1323,14 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
      itmpl=0;
      for( i=0; i<aFo.GetIn(); i++ )
      {
-       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+       for( j=0; j<el_data.ICrds.size(); j++ )
         if( !memcmp( el_data.ICrds[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
           break;
-       if( j == el_data.ICrds.GetCount() )
+       if( j == el_data.ICrds.size() )
         break;
 
        //template
-       for( j=0; j<el_data.oldIComps.GetCount(); j++ )
+       for( j=0; j<el_data.oldIComps.size(); j++ )
         if( !memcmp( el_data.oldIComps[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
           { itmpl++;
             break;
@@ -1342,12 +1342,12 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
      // add cnt
      for( i=0; i<aFo.GetIn(); i++ )
      {
-       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+       for( j=0; j<el_data.ICrds.size(); j++ )
         if( !memcmp( el_data.ICrds[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
           cnt[j]++;
      }
      // test Vol
-       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+       for( j=0; j<el_data.ICrds.size(); j++ )
         if( !memcmp( el_data.ICrds[j].c_str(), "Vol", 3 ) )
           cnt[j]++;
 
@@ -1370,18 +1370,18 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
         str = str1 + ":" + str;
      // Point SaveRecord
      if( AddRecordTest( str.c_str(), fnum_ ))
-     {  aICkey_new.Add( stt );  // 30/11/2006
+     {  aICkey_new.push_back( stt );  // 30/11/2006
         for(int isd=0; isd<dcp->Nsd; isd++)
         { std::string sdkey = std::string( dcp->sdref[isd], 0,V_SD_RKLEN);
           strip( sdkey );
-          SDlist.AddUnique( sdkey );
+          SDlist.insert( sdkey );
         }
      }
    }
 
     // close all no project files
     TCStringArray names1;
-    names1.Add(prfName);
+    names1.push_back(prfName);
     db->OpenOnlyFromList(names1);
 }
 

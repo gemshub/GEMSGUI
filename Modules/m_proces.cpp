@@ -35,16 +35,16 @@ TProcess::TProcess( uint nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("Name of the modeling project");
-    aFldKeysHelp.Add("Thermodynamic potential to minimize {G}");
-    aFldKeysHelp.Add("Name of the parent chemical system definition (CSD)");
-    aFldKeysHelp.Add("CSD (recipe) variant number <integer>");
-    aFldKeysHelp.Add("Volume of the system, dm3");
-    aFldKeysHelp.Add("Pressure, bar, or 0 for Psat(H2O)g");
-    aFldKeysHelp.Add("Temperature, C");
-    aFldKeysHelp.Add("Variant number for additional constraints");
-    aFldKeysHelp.Add("Name of this process simulation task");
-    aFldKeysHelp.Add("Process simulation mode code { P, S, L, G, T, R } ");
+    aFldKeysHelp.push_back("Name of the modeling project");
+    aFldKeysHelp.push_back("Thermodynamic potential to minimize {G}");
+    aFldKeysHelp.push_back("Name of the parent chemical system definition (CSD)");
+    aFldKeysHelp.push_back("CSD (recipe) variant number <integer>");
+    aFldKeysHelp.push_back("Volume of the system, dm3");
+    aFldKeysHelp.push_back("Pressure, bar, or 0 for Psat(H2O)g");
+    aFldKeysHelp.push_back("Temperature, C");
+    aFldKeysHelp.push_back("Variant number for additional constraints");
+    aFldKeysHelp.push_back("Name of this process simulation task");
+    aFldKeysHelp.push_back("Process simulation mode code { P, S, L, G, T, R } ");
     setKeyEditField(8);
     pep=&pe[0];
     set_def();
@@ -824,7 +824,7 @@ TProcess::MakeQuery()
          aObj[o_pcexpr].SetString( outScript.c_str(),0,0);
      }
 
-     if(  namesLines.GetCount() > 0)
+     if(  namesLines.size() > 0)
       {
          int dimPclnam = pep->dimXY[1];
          int ndxy = 0;
@@ -834,7 +834,7 @@ TProcess::MakeQuery()
          }
          pep->lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclnam ].Alloc( 1,
                     dimPclnam, MAXGRNAME));
-         for(int ii=0; ii< min<int>( namesLines.GetCount(), pep->dimXY[1] ); ii++)
+         for(int ii=0; ii< min<int>( namesLines.size(), pep->dimXY[1] ); ii++)
          {
            strncpy(  pep->lNam[ii+ndxy], namesLines[ii].c_str(), MAXGRNAME );
          }
@@ -1615,9 +1615,9 @@ TProcess::RecordPlot( const char* /*key*/ )
       TCStringArray lnames;
       int ii;
       for( ii=0; ii<pep->dimXY[1]; ii++ )
-          lnames.Add( std::string(pep->lNam[ii+ndxy], 0, MAXGRNAME ));
+          lnames.push_back( std::string(pep->lNam[ii+ndxy], 0, MAXGRNAME ));
       for( ii=0; ii<pep->dimEF[1]; ii++ )
-          lnames.Add( std::string( pep->lNamE[ii], 0, MAXGRNAME ));
+          lnames.push_back( std::string( pep->lNamE[ii], 0, MAXGRNAME ));
       gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
           pep->xNames, pep->yNames, lnames );
     }
@@ -1714,7 +1714,7 @@ void TProcess::genGEM3K(const std::string& filepath, TCStringArray& savedSystems
         auto nRec = rt[RT_SYSEQ].Find(name.c_str());
         if( nRec >= 0  )
         {
-           savedSystems.Add(name.c_str());
+           savedSystems.push_back(name.c_str());
 
            // read parent SysEq record and unpack data
            dynamic_cast<TProfil*>(&aMod[RT_PARAM])->loadSystat( name.c_str() );

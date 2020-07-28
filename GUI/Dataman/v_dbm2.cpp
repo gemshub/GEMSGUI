@@ -183,7 +183,7 @@ TDataBase::~TDataBase()
     //  aFile.Clear();
     fls.Clear();
     fNum = 0;
-    fOpenNameBuf.Clear();
+    fOpenNameBuf.clear();
 }
 
 // add new file to database chain
@@ -667,16 +667,16 @@ void TDataBase::Create( uint nF )
 void TDataBase::opfils()
 {
     fNum = 0;
-    fOpenNameBuf.Clear();
+    fOpenNameBuf.clear();
     for(uint i=0; i<fls.GetCount(); i++)
-        fOpenNameBuf.Add( aFile[fls[i]].Name().c_str() );
+        fOpenNameBuf.push_back( aFile[fls[i]].Name().c_str() );
 }
 
 // Selection in the list of full file names
 void TDataBase::GetFileList(int mode, TCStringArray& names,
                             TCIntArray& indeces, TCIntArray& sel)
 {
-    names.Clear();
+    names.clear();
     indeces.Clear();
     sel.Clear();
     for( uint i=0; i<aFile.GetCount(); i++ )
@@ -685,7 +685,7 @@ void TDataBase::GetFileList(int mode, TCStringArray& names,
         if( (nF==-1&&(mode&closef))||(nF!=-1&&(mode&openf)) )
         {
             aFile[i].Makepath();
-            names.Add( string(aFile[i].GetKeywd())+string(" ")+
+            names.push_back( string(aFile[i].GetKeywd())+string(" ")+
                        string(aFile[i].GetPath().c_str()));
             indeces.Add(i);
             if( (mode&oldself) && nF != -1) //select already open files
@@ -792,7 +792,7 @@ void TDataBase::Close()
         aFile[fls[j]].Close();
     fls.Clear();
     fNum = 0;
-    fOpenNameBuf.Clear();
+    fOpenNameBuf.clear();
     ind.initnew();
 }
 
@@ -808,10 +808,10 @@ void TDataBase::OpenOnlyFromList( TCStringArray& names )
 
     for( ii=0; ii< aFile.GetCount(); ii++)
     {
-      for( jj=0; jj< names.GetCount(); jj++)
+      for( jj=0; jj< names.size(); jj++)
         if(  aFile[ii].Name().find( names[jj].c_str() ) != string::npos )
          break;
-      if( jj < names.GetCount() )
+      if( jj < names.size() )
          fls.Add( ii );
     }
 
@@ -1095,11 +1095,11 @@ bool TDataBase::SetNewOpenFileList(const TCStringArray& aFlKeywd)
 {
     bool allOpend = true;
     
-	if(aFlKeywd.GetCount() < 1 )
+    if(aFlKeywd.size() < 1 )
         return  allOpend;
 
     Close();
-    for(uint i=0; i<aFlKeywd.GetCount(); i++)
+    for(uint i=0; i<aFlKeywd.size(); i++)
     {
         int nF = -1;
         for(uint j=0; j<aFile.GetCount(); j++)
@@ -1187,7 +1187,7 @@ void TDataBase::GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey )
     for(size_t ii=0; ii< aFile.GetCount(); ii++)
     {
       if(  aFile[ii].GetPath().find( name ) != std::string::npos )
-          aFlkey.Add( aFile[ii].GetKeywd() );
+          aFlkey.push_back( aFile[ii].GetKeywd() );
     }
 }
 

@@ -76,7 +76,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
     string str =
           "Basis configuration of a new Modelling Project  ";
          str +=  string(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));;
-         setWindowTitle( trUtf8(str.c_str()) );
+         setWindowTitle( str.c_str() );
 
          QObject::connect( bBack, SIGNAL(clicked()), this, SLOT(CmBack()));
          stackedWidget->setCurrentIndex (0);
@@ -88,15 +88,15 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
     TCStringArray aIC;
     TIComp* aICdata=dynamic_cast<TIComp*>(&aMod[RT_ICOMP]);
     aICdata->GetElements( true, aIC, aIndMT );
-    sf_data.ic_d.oldIComps.Clear();
+    sf_data.ic_d.oldIComps.clear();
 
-    for( uint ii=0; ii<aIC.GetCount(); ii++ )
+    for( size_t ii=0; ii<aIC.size(); ii++ )
     {
-     sf_data.ic_d.oldIComps.Add( aIC[ii] );
-     el_data.oldIComps.Add( aIC[ii] );
+     sf_data.ic_d.oldIComps.push_back( aIC[ii] );
+     el_data.oldIComps.push_back( aIC[ii] );
      if( aIndMT[ii] == -1) // additional
      {
-         aICkey2_sel.Add( aIC[ii] );
+         aICkey2_sel.push_back( aIC[ii] );
      }
      else //elements
      {
@@ -270,13 +270,13 @@ ElementsDialog::~ElementsDialog()
 
 void ElementsDialog::setOpenFilesAsDefault()
 {
-  selNames.Clear();
+  selNames.clear();
   string defName;
 
   if( el_data.aSelNames.empty() )
   {  defName = ".";
      defName += pVisor->defaultBuiltinTDBL();
-     selNames.Add(defName);
+     selNames.push_back(defName);
   }
   else  // get from template project
   {
@@ -289,7 +289,7 @@ void ElementsDialog::setOpenFilesAsDefault()
       {
          defName = ".";
          defName += pVisor->defaultBuiltinTDBL();
-         selNames.Add(defName);
+         selNames.push_back(defName);
          return;
       }
       pos1 += 15;
@@ -298,7 +298,7 @@ void ElementsDialog::setOpenFilesAsDefault()
       {
           defName = el_data.aSelNames.substr(pos1, pos2-pos1);
           strip( defName );
-          selNames.Add(defName);
+          selNames.push_back(defName);
           pos1 = pos2+1;
           pos2 = el_data.aSelNames.find_first_of(",;", pos1);
       }
@@ -320,15 +320,15 @@ void ElementsDialog::CmSetFilters()
     // Here to call SetFiltersDialog !!
     openFilesSelection();
     SetData();
-    sf_data.ic_d.newIComps.Clear();
-    for(uint jj, ii=0; ii<el_data.ICrds.GetCount(); ii++ )
+    sf_data.ic_d.newIComps.clear();
+    for(size_t jj, ii=0; ii<el_data.ICrds.size(); ii++ )
     {
-      for( jj=0; jj<sf_data.ic_d.oldIComps.GetCount(); jj++)
+      for( jj=0; jj<sf_data.ic_d.oldIComps.size(); jj++)
         if( !memcmp( el_data.ICrds[ii].c_str(),
             sf_data.ic_d.oldIComps[jj].c_str(), MAXICNAME+MAXSYMB ) )
          break;
-      if( jj== sf_data.ic_d.oldIComps.GetCount() )
-        sf_data.ic_d.newIComps.Add( el_data.ICrds[ii] );
+      if( jj== sf_data.ic_d.oldIComps.size() )
+        sf_data.ic_d.newIComps.push_back( el_data.ICrds[ii] );
     }
 
     SetFiltersDialog  dlg( this, &files_data, &sf_data, prf_name.c_str() );
@@ -473,16 +473,16 @@ void ElementsDialog::SetICompList()
     int nmbOther=1;
 
     aBtmId1.Clear();
-    aICkey1.Clear();
+    aICkey1.clear();
     aBtmId2.Clear();
-    aICkey2.Clear();
+    aICkey2.clear();
 
      openFilesICOMP();
    // select all IComp keys and indMT (set indMT to -1 for additional)
     TIComp* aICdata=dynamic_cast<TIComp*>(&aMod[RT_ICOMP]);
     aICdata->GetElements( cbIsotopes->isChecked(), aIC, aIndMT );
 
-    for( uint ii=0; ii<aIC.GetCount(); ii++ )
+    for( size_t ii=0; ii<aIC.size(); ii++ )
      if( aIndMT[ii] == -1) // additional
      {
        string name= string( aIC[ii], 0, rt[RT_ICOMP].FldLen(0) );
@@ -495,7 +495,7 @@ void ElementsDialog::SetICompList()
          bb->setText( tr( name.c_str() ) );
          bb->setEnabled( true );
          aBtmId2.Add( nmbOther );
-         aICkey2.Add( aIC[ii] );
+         aICkey2.push_back( aIC[ii] );
          nmbOther ++;
        }
        else  //Vol
@@ -504,7 +504,7 @@ void ElementsDialog::SetICompList()
          bb->setText( tr( name.c_str() ) );
          bb->setEnabled( true );
          aBtmId2.Add( 0 );
-         aICkey2.Add( aIC[ii] );
+         aICkey2.push_back( aIC[ii] );
        }
      }
      else //elements
@@ -513,7 +513,7 @@ void ElementsDialog::SetICompList()
        if( !bb )
         Error( aIC[ii].c_str(), "E01EDrem: Invalid IComp ");
        aBtmId1.Add( aIndMT[ii] );
-       aICkey1.Add( aIC[ii] );
+       aICkey1.push_back( aIC[ii] );
        bb->setEnabled( true );
      }
 
@@ -525,7 +525,7 @@ void ElementsDialog::SetICompList()
        bb->setChecked( true );
   }
   
-  for( uint ii=0; ii<aICkey2_sel.GetCount(); ii++ )
+  for( size_t ii=0; ii<aICkey2_sel.size(); ii++ )
   {
        int jj;
        string name= string( aICkey2_sel[ii],
@@ -549,7 +549,7 @@ void ElementsDialog::SetICompList()
          bb->setEnabled( false );
          bb->setChecked( true );
          aBtmId2.Add( nmbOther );
-         aICkey2.Add( aICkey2_sel[ii] );
+         aICkey2.push_back( aICkey2_sel[ii] );
          nmbOther ++;
        }
   }
@@ -561,7 +561,7 @@ void ElementsDialog::SetICompList()
 void ElementsDialog::allSelected( TCStringArray& aICkeys )
 {
     uint ii;
-    aICkeys.Clear();
+    aICkeys.clear();
 
     SetSorption();
     SetAqueous();
@@ -569,13 +569,13 @@ void ElementsDialog::allSelected( TCStringArray& aICkeys )
     for( ii=0; ii<aBtmId1.GetCount(); ii++ )
     {
      if( bgElem->button( aBtmId1[ii] )->isChecked()  )
-        aICkeys.Add( aICkey1[ii] );
+        aICkeys.push_back( aICkey1[ii] );
     }
 
     for( ii=0; ii<aBtmId2.GetCount(); ii++ )
     {
      if( bgOther->button( aBtmId2[ii] )->isChecked()  )
-        aICkeys.Add( aICkey2[ii] );
+        aICkeys.push_back( aICkey2[ii] );
     }
 }
 
@@ -617,10 +617,10 @@ void ElementsDialog::SetData()
 
     el_data.aSelNames = el_data.getFlags();
     el_data.aSelNames += "<TDBfilters> = ";
-    for( uint ii=0; ii<selNames.GetCount(); ii++)
+    for( size_t ii=0; ii<selNames.size(); ii++)
     {
         el_data.aSelNames += selNames[ii];
-        if( ii<selNames.GetCount()-1 )
+        if( ii<selNames.size()-1 )
             el_data.aSelNames += ",\n";
     }
     el_data.aSelNames += ";\n";
@@ -645,7 +645,7 @@ void ElementsDialog::setFilesList()
         rt[i].GetFileList(closef|openf|oldself, names, indx, sel);
         cnt = 0;
         cnt_sel = 0;
-        for(uint ii=0; ii<names.GetCount(); ii++ )
+        for(size_t ii=0; ii<names.size(); ii++ )
         {
           // select only DB.default files
           if( names[ii].find( pVisor->sysDBDir())== string::npos )
@@ -653,14 +653,14 @@ void ElementsDialog::setFilesList()
           // get 2 colums
           pos1 = names[ii].find_first_of(" ");
           pos2 = names[ii].rfind("/");
-          files_data.flKeywds.Add( names[ii].substr( 0, pos1 ) );
-          files_data.flNames.Add( names[ii].substr( pos2+1 ).c_str() );
+          files_data.flKeywds.push_back( names[ii].substr( 0, pos1 ) );
+          files_data.flNames.push_back( names[ii].substr( pos2+1 ).c_str() );
           cnt++;
-          ind = files_data.flKeywds.GetCount()-1;
+          ind = files_data.flKeywds.size()-1;
           if( i == RT_SDATA || i == RT_CONST ||
               isOpenFile( files_data.flNames[ind] ) == 1 )
           {
-            files_data.selKeywds.Add( files_data.flKeywds[ind] );
+            files_data.selKeywds.push_back( files_data.flKeywds[ind] );
             cnt_sel++;
           }
         }
@@ -687,7 +687,7 @@ void ElementsDialog::resetFilesSelection()
         {
           if( isOpenFile( files_data.flNames[cnt+ii] ) )
           {
-             newSelKeywds.Add( files_data.flKeywds[cnt+ii] );
+             newSelKeywds.push_back( files_data.flKeywds[cnt+ii] );
              cnt_sel++;
           }
         }
@@ -696,12 +696,12 @@ void ElementsDialog::resetFilesSelection()
         newSelCnt.Add( cnt_sel );
     }
 
-    files_data.selKeywds.Clear();
+    files_data.selKeywds.clear();
     files_data.selCnt.Clear();
     for(uint ii=0; ii<newSelCnt.GetCount(); ii++ )
        files_data.selCnt.Add( newSelCnt[ii] );
-    for(uint ii=0; ii<newSelKeywds.GetCount(); ii++ )
-       files_data.selKeywds.Add( newSelKeywds[ii] );
+    for(size_t ii=0; ii<newSelKeywds.size(); ii++ )
+       files_data.selKeywds.push_back( newSelKeywds[ii] );
 }
 
 // Open files as difine in files_data selection
@@ -715,10 +715,10 @@ void ElementsDialog::openFilesSelection()
  //files_data
    for(size_t i=RT_SDATA; i<=RT_PHASE; i++ )
    {
-     newSelKeywds.Clear();
+     newSelKeywds.clear();
 
      for(int ii=0; ii<files_data.selCnt[i]; ii++ )
-      newSelKeywds.Add(files_data.selKeywds[cnt+ii]);
+      newSelKeywds.push_back(files_data.selKeywds[cnt+ii]);
      cnt += files_data.selCnt[i];
      // add project files keywds
      rt[i].GetProfileFileKeywds( prf_name.c_str(), newSelKeywds );
@@ -737,9 +737,9 @@ void ElementsDialog::openFilesICOMP()
    for(size_t i=RT_SDATA; i<=RT_PHASE; i++ )
    {
      if( i == RT_ICOMP )
-     {  newSelKeywds.Clear();
+     {  newSelKeywds.clear();
         for(int ii=0; ii<files_data.selCnt[i]; ii++ )
-           newSelKeywds.Add(files_data.selKeywds[cnt+ii]);
+           newSelKeywds.push_back(files_data.selKeywds[cnt+ii]);
         rt[i].SetNewOpenFileList( newSelKeywds );
         break;
      }
@@ -760,7 +760,7 @@ void ElementsDialog::setTreeWidget()
     pkern = standardModel->invisibleRootItem();
     standardModel->setHorizontalHeaderLabels( QStringList() <<  "Built-in Database"   <<  "Version");
 
-    uint ii;
+    size_t ii;
     int jj;
     QStandardItem* pdb;
     QStandardItem* pdb_child;
@@ -770,7 +770,7 @@ void ElementsDialog::setTreeWidget()
     string fname, tag, vers="";
     size_t pos1, pos2, pos3;
 
-    for( ii=0; ii<files_data.flNames.GetCount(); ii++ )
+    for( ii=0; ii<files_data.flNames.size(); ii++ )
     {
         pdb = pkern;
         fname = files_data.flNames[ii];
@@ -862,13 +862,13 @@ void ElementsDialog::deleteTag( QString aTag, QStandardItem* pdb)
 
 void ElementsDialog::getSelectionTreeWidget()
 {
-  selNames.Clear();
+  selNames.clear();
   // get names from FTreeWidget
   string tag = ".";
   for(int jj=0; jj<pkern->rowCount(); jj++ )
       getTag( tag, pkern->child(jj));
 
-  for(uint ii=0; ii<selNames.GetCount(); ii++ )
+  for(size_t ii=0; ii<selNames.size(); ii++ )
       cout << selNames[ii].c_str() << endl;
 }
 
@@ -881,7 +881,7 @@ void ElementsDialog::getTag( string tag, QStandardItem* pdb)
     tag += tag1;
 
     if( pdb->checkState() == Qt::Checked)
-        selNames.Add( tag );
+        selNames.push_back( tag );
     else
     {
         tag += ".";
@@ -895,7 +895,7 @@ void ElementsDialog::setSelectionTreeWidget()
   // clear all check in ftreeWidget ??!!
 
  string name;
- for(uint ii=0; ii<selNames.GetCount(); ii++ )
+ for(size_t ii=0; ii<selNames.size(); ii++ )
      for(int jj=0; jj<pkern->rowCount(); jj++ )
      {
          name = selNames[ii];
@@ -951,7 +951,7 @@ int ElementsDialog::isOpenFile( string& name  )
 
     // cout << "Test name" << fname.c_str() << endl;
 
-    for(uint ii=0; ii < selNames.GetCount(); ii++ )
+    for(size_t ii=0; ii < selNames.size(); ii++ )
     {
         if(  name.find( selNames[ii] ) != string::npos )
             return 1;

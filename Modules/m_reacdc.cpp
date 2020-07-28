@@ -34,10 +34,10 @@ TReacDC::TReacDC( uint nrt ):
 {
     nQ =8;
 
-    aFldKeysHelp.Add("Phase state code of new Dependent Component { a g f p s l m c i z y h }");
-    aFldKeysHelp.Add("ID of a group to which this new Dependent Component belongs");
-    aFldKeysHelp.Add("Name of this new reaction-defined Dependent Component (chemical species)");
-    aFldKeysHelp.Add("Thermodynamic data subset (TDS) code (e.g. database ID)");
+    aFldKeysHelp.push_back("Phase state code of new Dependent Component { a g f p s l m c i z y h }");
+    aFldKeysHelp.push_back("ID of a group to which this new Dependent Component belongs");
+    aFldKeysHelp.push_back("Name of this new reaction-defined Dependent Component (chemical species)");
+    aFldKeysHelp.push_back("Thermodynamic data subset (TDS) code (e.g. database ID)");
 
     for(int i=1; i<nQ; i++)
     {
@@ -511,7 +511,7 @@ AGAIN_MOD:
     if( Nc1>0 || Nr1>0 )
     {
         /* Build old selections DCOMP and REACDC */
-        aDclist_old.Clear();
+        aDclist_old.clear();
         //aRclist_old.Clear();
         std::string key_dr;
 
@@ -522,7 +522,7 @@ AGAIN_MOD:
               key_dr  = std::string(1, rcp->rDC[i]);
               key_dr += ' ';
               key_dr += std::string( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB );
-              aDclist_old.Add( key_dr.c_str() );
+              aDclist_old.push_back( key_dr.c_str() );
           }
           /*
           std::string key_dr = std::string( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB ); // SD 18/11/2008
@@ -548,7 +548,7 @@ AGAINRC:
         pkey, aDclist_old );
 
 
-    if( /*aRclist.GetCount() < 1 &&*/ aDclist.GetCount() < 1 )
+    if( /*aRclist.GetCount() < 1 &&*/ aDclist.size() < 1 )
     {
        switch ( vfQuestion3(window(), GetName(),
             "W09RErem: Number of selected ReacDC/DComp keys < 1.\n"
@@ -566,7 +566,7 @@ AGAINRC:
     }
 
     /*================================*/
-    rcp->nDC =(short)( aDclist.GetCount()/*+aRclist.GetCount()*/+Nn1+Nf1);
+    rcp->nDC = ( aDclist.size()/*+aRclist.GetCount()*/+Nn1+Nf1);
     // ???? 28/02/02 Sveta
     // if( (oldnDC != newnDC) && (newnDC != rcp->nDC) )
     //    rcp->nDC = newnDC;
@@ -578,7 +578,7 @@ AGAINRC:
     {
         if( !rcp->scDC[i] )
             rcp->scDC[i] = 1;
-        if( i< (int)(aDclist.GetCount()) )
+        if( i< aDclist.size() )
         {
             memcpy( rcp->DCk[i], aDclist[i].c_str()+2, DC_RKLEN );
             rcp->rDC[i] = aDclist[i].c_str()[0];
@@ -1768,7 +1768,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
 }
 
 void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
- elmWindowData el_data, rdSetupData st_data, TCStringArray& SDlist)
+ elmWindowData el_data, rdSetupData st_data, std::set<std::string>& SDlist)
 {
     TCIntArray anR;
     TCStringArray aDCkey;
@@ -1779,7 +1779,7 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
 
     // delete the equvalent keys
     TCStringArray aICkey_new;         // 30/11/2006
-    aICkey_new.Clear();
+    aICkey_new.clear();
 
     // get list of records
     db->GetKeyList( "*:*:*:*:", aDCkey, anR );
@@ -1791,7 +1791,7 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
     uint j;
     TFormula aFo;
 
-    for(uint ii=0; ii<aDCkey.GetCount(); ii++ )
+    for(uint ii=0; ii<aDCkey.size(); ii++ )
     {
 
         // Phase Filters
@@ -1821,10 +1821,10 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
 
      // test the same component (overload) 30/11/2006
      std::string stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);
-     for( j=0; j<aICkey_new.GetCount(); j++ )
+     for( j=0; j<aICkey_new.size(); j++ )
        if( stt ==  aICkey_new[j])
            break;
-     if( j<aICkey_new.GetCount() )
+     if( j<aICkey_new.size() )
          continue;
 
     RecInput( aDCkey[ii].c_str() );
@@ -1833,14 +1833,14 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
      itmpl=0;
      for( i=0; i<aFo.GetIn(); i++ )
      {
-       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+       for( j=0; j<el_data.ICrds.size(); j++ )
         if( !memcmp( el_data.ICrds[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
           break;
-       if( j == el_data.ICrds.GetCount() )
+       if( j == el_data.ICrds.size() )
         break;
 
        //template
-       for( j=0; j<el_data.oldIComps.GetCount(); j++ )
+       for( j=0; j<el_data.oldIComps.size(); j++ )
         if( !memcmp( el_data.oldIComps[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
           { itmpl++;
             break;
@@ -1851,12 +1851,12 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
      // add cnt
      for( i=0; i<aFo.GetIn(); i++ )
      {
-       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+       for( j=0; j<el_data.ICrds.size(); j++ )
         if( !memcmp( el_data.ICrds[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
           cnt[j]++;
      }
     // test Vol
-       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+       for( j=0; j<el_data.ICrds.size(); j++ )
         if( !memcmp( el_data.ICrds[j].c_str(), "Vol", 3 ) )
           cnt[j]++;
 
@@ -1879,18 +1879,18 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
         str = str1 + ":" + str;
      //Point SaveRecord
      if( AddRecordTest( str.c_str(), fnum_ ))
-     {   aICkey_new.Add( stt );  // 30/11/2006
+     {   aICkey_new.push_back( stt );  // 30/11/2006
          for(int isd=0; isd<rcp->Nsd; isd++)
          { std::string sdkey = std::string( rcp->sdref[isd], 0,V_SD_RKLEN);
           strip( sdkey );
-          SDlist.AddUnique( sdkey );
+          SDlist.insert( sdkey );
         }
      }
     }
 
     // close all no project files
     TCStringArray names1;
-    names1.Add(prfName);
+    names1.push_back(prfName);
     db->OpenOnlyFromList(names1);
 }
 
