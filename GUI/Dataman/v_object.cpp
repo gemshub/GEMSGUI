@@ -1064,14 +1064,8 @@ static char OBtype[nTypes][3] =
 void
 TObjList::load(const char* f_obj, int /* maxN */ )
 {
-#ifndef __unix
-    // normal notation somehow causes crash on Win32 - workaround to work with pointer
-    // Is it memory leak?
-//    TConfig cnf(f_obj,' ');
-    TConfig& cnf = *new TConfig(f_obj,' ', 55 );
-#else
-TConfig cnf(f_obj,' ');
-#endif
+    TConfig cnf(f_obj,' ');
+
     string par;
     int N;
     int M;
@@ -1083,11 +1077,12 @@ TConfig cnf(f_obj,' ');
 
     while( !par.empty() )
     {
+        //cout << par << endl;
         cnf.getcStrings(6, astr);
 
         sscanf( astr[2].c_str(),"%d", &N);
         sscanf( astr[3].c_str(),"%d", &M);
-	indexationCode = astr[4][0];
+        indexationCode = astr[4][0];
 
         if( isdigit(astr[1][0]) )
         {
@@ -1123,7 +1118,7 @@ TConfig cnf(f_obj,' ');
 		     indexationCode, astr[5]) );
         par = cnf.getNext();
     }
-    cnf.close();
+
 }
 
 //--------------------- End of v_object.cpp ---------------------------

@@ -34,7 +34,7 @@ CWinInfo::CWinInfo(TSubModule & m, istream & visor_dat):
     fromDAT(visor_dat);
 }
 
-CWinInfo::CWinInfo(TSubModule & m, TConfig & cnf):
+CWinInfo::CWinInfo(TSubModule & m, TConfig& cnf):
         pWin(0), rM(m)
 {
     init_width = 600; //400;
@@ -44,7 +44,7 @@ CWinInfo::CWinInfo(TSubModule & m, TConfig & cnf):
 }
 
 void
-CWinInfo::load(TConfig & cnf)
+CWinInfo::load( TConfig& cnf)
 {
     string sname = rM.GetName();	// section name
 
@@ -141,21 +141,21 @@ CWinInfo::fromWinCFG(istream & win_cfg)
 // TCPage
 //----------------------------------------------------------------
 
-PageInfo::PageInfo(/*const */CWinInfo & wi, istream & is):
+PageInfo::PageInfo( CWinInfo & wi, istream & is):
         rWinInfo(wi)/*, pPage(0)*/
 {
     fromDAT(is);
 }
 
 
-PageInfo::PageInfo(/*const */CWinInfo & wi, TConfig & cnf, string s):
+PageInfo::PageInfo( CWinInfo & wi, TConfig& cnf, string s):
         rWinInfo(wi), /*pPage(0),*/ name(s)
 {
     load(cnf);
 }
 
 void
-PageInfo::load(TConfig & cnf)
+PageInfo::load( TConfig& cnf )
 {
     // object type len p1 p2 abcd
     string obj;

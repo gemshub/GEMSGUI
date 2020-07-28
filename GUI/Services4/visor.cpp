@@ -380,16 +380,10 @@ TVisor::load()
     fname = sysGEMDir();
     fname += VISOR_INI;
 
-#ifdef __unix
-    TConfig cnf(fname.c_str(), ' ');
-#else
-    TConfig& cnf = *new TConfig(fname.c_str(), ' ');
-#endif
-
+    TConfig cnf( fname, ' ');
     for (uint ii = 0; ii < aMod.GetCount(); ii++)
      aWinInfo.Add(new CWinInfo(aMod[ii], cnf));
 
-    cnf.close(); // close vis_cn.dat file after reading it
     toDAT();
     toModCFG();
     toWinCFG();
@@ -592,12 +586,7 @@ TVisor::fromWinCFG()
 {
     string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
 
-#ifdef __unix
-    TConfig visor_conf( fname_ini.c_str() );
-#else
-    TConfig& visor_conf = *new TConfig( fname_ini.c_str() );
-#endif
-
+    TConfig visor_conf( fname_ini );
     //int win_num = 0;
     string name = visor_conf.getFirst();
 

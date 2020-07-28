@@ -103,9 +103,9 @@ struct PageInfo
 
     TCWindow& GetWin();
 
-    PageInfo(/*const */CWinInfo& wi, istream& is);
-    PageInfo(/*const */CWinInfo& wi, TConfig& cnf, string name);
-    void load(TConfig& c);
+    PageInfo( CWinInfo& wi, istream& is);
+    PageInfo( CWinInfo& wi, TConfig& cnf, string name);
+    void load(TConfig& cnf);
 
     void toDAT(ostream& os);
     void fromDAT(istream& os);	// must be protected
@@ -134,7 +134,7 @@ struct CWinInfo
 
     CWinInfo(TSubModule& r, istream& is);
     CWinInfo(TSubModule& r, TConfig& cnf);
-    void load(TConfig& c);
+    void load(TConfig& cnf);
 
     void toDAT(ostream& os);
     void fromDAT(istream& is);	// must be protected

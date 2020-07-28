@@ -18,37 +18,57 @@
 
 #include <cstdlib>
 #include <cctype>
+#include <sstream>
+#include <fstream>
+using namespace std;
+
 
 #include "config.h"
 #include "v_user.h"
 
-TConfig::TConfig(const char *fname, char st, const size_t tok_ln):
-        token_len(tok_ln),
-        space(' '),
-        ini(fname),
-        style(st)
+TConfig::TConfig( const string&fname, char st ):
+    space(' '),
+    style( st ),
+    sec_beg( 0 ),
+    ssec_beg( 0 ),
+    cur_pos(0),
+    ini_data()
 {
-    if( !ini.good() )
+    // read all file
+    std::ifstream ini(fname);
+    ErrorIf( !ini.good(), "Read ini file", "File open error...  "+fname );
+    std::stringstream buffer;
+    buffer << ini.rdbuf();
+    ini_data = buffer.str();
+}
+
+std::string TConfig::get_next_line()
+{
+    std::string ln;
+
+    auto next_n = ini_data.find( new_line, cur_pos );
+
+    if(next_n == std::string::npos )
     {
-     Error( fname, "Error opening file!");
+        ln = ini_data.substr(cur_pos);
+        cur_pos = ini_data.length();
     }
-    sec_beg = ssec_beg = 0;
+    else
+    {
+        ln = ini_data.substr(cur_pos, next_n-cur_pos);
+        cur_pos = next_n+new_line.length();
+    }
+    return ln;
 }
 
 
-bool
-TConfig::getLine()
+bool TConfig::getLine()
 {
-    while( 1 )
+    line = "";
+    while( cur_pos < ini_data.length() )
     {
-        u_getline(ini, line, '\n');
-        if( ini.eof() )
-            return false;
-        ErrorIf( !ini.good(), "Config", "Error reading file!");
-        //  readline(ini,line);
-        nLine++;
-        //    line.strip(/*string::Both*/);
-        StripLine( line );
+        line = get_next_line();
+        strip( line );
         // empty lines and comments are cut out
         if( line.empty() )
             continue;
@@ -58,33 +78,28 @@ TConfig::getLine()
     return true;
 }
 
-string TConfig::readSectionName()
+// sets Section name for getFirst(), getNext(), get...()
+bool TConfig::SetSection( const string& sec_name )
 {
-    //int cpos;
-    while( 1 )
+    if( !sec_name.empty() )
     {
-        if( !getLine() )
-            return "";
-        if( line[0]=='[' )
-            break;
+        string ss = "["+sec_name+"]";
+        auto sec_pos = ini_data.find(ss);
+        if(  sec_pos!= std::string::npos )
+        {
+            sec_beg = sec_pos+ss.length();
+            ssec_beg = 0;
+            cur_pos = sec_beg;
+            return true;
+        }
+        return false;
     }
-    auto cpos = ini.tellg();
-    size_t ii;
-    for( ii = 0; ii<line.length(); ii++ )
-        if( line[ii] == ']' )
-            break;
-    if( ii == line.length() )
-        throw EBadSection();
-
-    sec_beg = cpos;
+    sec_beg = 0;
     ssec_beg = 0;
-    string sec(line, 1, ii-1);
-    StripLine(sec);
-    return sec;
+    return true;
 }
 
-string
-TConfig::readSubSectionName()
+string TConfig::readSubSectionName()
 {
     //int cpos;
     while( 1 )
@@ -97,7 +112,6 @@ TConfig::readSubSectionName()
         if( !getLine() )
             return "";
     }
-    auto cpos = ini.tellg();
     size_t ii;
     for( ii = 0; ii<line.length(); ii++ )
         if( line[ii] == '>' )
@@ -105,29 +119,45 @@ TConfig::readSubSectionName()
     if( ii == line.length() )
         throw EBadSection();
 
-    ssec_beg = cpos;
+    ssec_beg = cur_pos;
     string sec(line, 1, ii-1);
-    StripLine(sec);
+    strip(sec);
     return sec;
 }
-
-string
-TConfig::GetFirstSubSection()
+string TConfig::GetFirstSubSection()
 {
-    reset(sec_beg);
+    reset( sec_beg );
     if( !getLine() )
         return "";
     return GetNextSubSection();
 }
 
-string
-TConfig::GetNextSubSection()
+string TConfig::GetNextSubSection()
 {
     return readSubSectionName();
 }
 
-size_t
-TConfig::getName()
+
+string TConfig::getFirst()
+{
+    reset( ((ssec_beg!=0) ? ssec_beg : sec_beg) );
+    return getNext();
+}
+
+string TConfig::getNext()
+{
+    if( !getLine() )
+        return "";
+    if( sec_beg != 0 && (line[0]=='[' || line[0]=='<') )		// section break
+        return "";
+
+    size_t pos = getName();
+    if( pos != 0 )
+        return string(line,0,pos);
+    return "";
+}
+
+size_t TConfig::getName()
 {
     size_t ii, jj;
     for( ii=0; ii<line.length(); ii++ )
@@ -136,19 +166,18 @@ TConfig::getName()
             break;
 
         if( ii >= token_len )
-            return valPos=0;
+            return val_pos=0;
     }
 
     for( jj=ii; jj<line.length(); jj++ )
         if( line[jj] != style && !IsSpace(line[jj]) )
             break;
-    valPos = jj;
+    val_pos = jj;
 
     return ii;
 }
 
-bool
-TConfig::findParam(const char* par)
+bool TConfig::findParam(const char* par)
 {
     // speedup if getNext was previous &
     // intruding loopback if repeated!!!
@@ -177,53 +206,9 @@ TConfig::findParam(const char* par)
     return false;
 }
 
-
-// sets Section name for getFirst(), getNext(), get...()
-bool
-TConfig::SetSection(const string& s)
+string TConfig::getToken()
 {
-    reset();
-    if( !s.empty() )
-    {
-        string ss;
-        do
-        {
-            ss = readSectionName();
-            if( ss.empty() )
-                return false;
-        }
-        while( ss != s );
-    }
-    ssec_beg = 0;
-    return true;
-}
-
-string
-TConfig::getFirst()
-{
-    reset( ((ssec_beg!=0) ? ssec_beg : sec_beg) );
-
-    return getNext();
-}
-
-string
-TConfig::getNext()
-{
-    if( !getLine() )
-        return "";
-    if( sec_beg != 0 && (line[0]=='[' || line[0]=='<') )		// section break
-        return "";
-
-    size_t pos = getName();
-    if( pos != 0 )
-        return string(line,0,pos);
-    return "";
-}
-
-string
-TConfig::getToken()
-{
-    unsigned pos = valPos;
+    auto pos = val_pos;
     // searching for non-space
     for( ; IsSpace(line[pos]); pos++ )
         if( pos == line.length()-1 )
@@ -236,17 +221,18 @@ TConfig::getToken()
     }
 
 CONT_SEARCH:
-    for( valPos = pos; valPos<line.length(); valPos++ )
-        if( line[valPos] == '"' ||
-                (space==' ' && IsSpace(line[valPos]) ) )
+
+    for( val_pos = pos; val_pos<line.length(); val_pos++ )
+        if( line[val_pos] == '"' ||
+                (space==' ' && IsSpace(line[val_pos]) ) )
             break;
 
-    if( valPos==line.length() && space=='"')	// new line within quotes
+    if( val_pos==line.length() && space=='"')	// new line within quotes
     {
-        string line2;
-        u_getline(ini, line2, '\n');
-        if( ini.eof() )
+        string line2 = get_next_line();
+        if( cur_pos ==  ini_data.length() )
             goto BREAK;
+
         // we need '\n' after each line that placed in "..."
         line +=  '\n';
         line += line2;
@@ -256,11 +242,11 @@ BREAK:
     if( space == '"' )
     {
         space = ' ';
-        valPos++;
-        return string(line, pos, valPos-pos-1);
+        val_pos++;
+        return string(line, pos, val_pos-pos-1);
     }
 
-    return string(line, pos, valPos-pos);
+    return string(line, pos, val_pos-pos);
 }
 
 
@@ -269,7 +255,7 @@ BREAK:
 int
 TConfig::getcInt()
 {
-    string val(line,valPos,string::npos);
+    string val(line,val_pos,string::npos);
 
     return atoi(val.c_str());
 }
@@ -313,14 +299,13 @@ TConfig::getInt(const char* par, int def)
     if( !findParam(par) )
         return def;
 
-    string val(line, valPos, string::npos);
+    string val(line, val_pos, string::npos);
 
     return atoi(val.c_str());
 }
 
 //--- simple string ----
-bool
-TConfig::getStr(const char* par, string& str, char* def)
+bool TConfig::getStr(const char* par, string& str, char* def)
 {
     if( !findParam(par) )
     {
@@ -336,8 +321,7 @@ TConfig::getStr(const char* par, string& str, char* def)
     return true;
 }
 
-bool
-TConfig::getVals(const char* par, int n, int vals[], int defs[])
+bool TConfig::getVals(const char* par, int n, int vals[], int defs[])
 {
     if( !findParam(par) )
     {
@@ -355,8 +339,7 @@ TConfig::getVals(const char* par, int n, int vals[], int defs[])
     return true;
 }
 
-bool
-TConfig::getStrings(const char* par, int n, string strs[], char* defs[])
+bool TConfig::getStrings(const char* par, int n, string strs[], char* defs[])
 {
     if( !findParam(par) )
     {
@@ -373,5 +356,8 @@ TConfig::getStrings(const char* par, int n, string strs[], char* defs[])
 
     return true;
 }
+
 //--------------------- End of config.cpp ---------------------------
+
+
 

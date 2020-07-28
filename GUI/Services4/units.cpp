@@ -134,6 +134,7 @@ TUnitsList::load(const char *f_units)
 
     while (!par.empty())
     {
+        //cout << par << "  " << str << endl;
         cnf.getcStr(str);
         //    str += " `";
 

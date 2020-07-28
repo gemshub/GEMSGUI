@@ -20,8 +20,7 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#include <fstream>
-using namespace std;
+#include <string>
 
 /*
   errors:  (output # of line)
@@ -34,61 +33,63 @@ using namespace std;
 
 class TConfig
 {
-    const size_t token_len;
-    char space;	// '"' for strings w/spaces
-    //  string section;
-    int sec_beg;
-    int ssec_beg;
-
-    fstream ini;
-//    ifstream ini;
-    int nLine;
-    string line;
-    unsigned valPos;
-    char style;  // '=' or SPACE as delimiter
+    const size_t token_len = 55;
+    const std::string new_line ="\n";
 
     bool getLine();
     bool findParam(const char* str);
     size_t getName();
-    string getToken();
-    void writestring(string&);
-    string readSectionName();
-    string readSubSectionName();
-    void reset(int p=0)
+
+    std::string getToken();
+    std::string readSectionName();
+    std::string readSubSectionName();
+
+    void reset(size_t p=0)
     {
-        ini.clear();
-        ini.seekg(p);
-        nLine=0;
-    }	// ! if(p!=0) nLine=?
+        cur_pos=p;
+    }
 
 public:
 
-    TConfig(const char *fname, char style='=', const size_t tok_ln=55);
+    TConfig( const std::string&fname, char style='=');
 
-    string GetFirstSubSection();
-    string GetNextSubSection();
-    bool SetSection(const string& s);
-    string getFirst();
-    string getNext();
-    void close()
-    {
-      ini.close();  // close vis_cn.ini after reading it
-    }
+    std::string GetFirstSubSection();
+    std::string GetNextSubSection();
+    bool SetSection(const std::string& s);
+    std::string getFirst();
+    std::string getNext();
+
     // get current values ( after getNext() )
     // no errors are verified
     int getcInt();
-    bool getcStr(string& str);
+    bool getcStr(std::string& str);
     bool getcVals(int n, int vals[]);
-    bool getcStrings(int n, string strs[]);
+    bool getcStrings(int n, std::string strs[]);
 
     int getInt(const char* par, int def=0);
-    bool getStr(const char* par, string& str, char* def=nullptr);
+    bool getStr(const char* par, std::string& str, char* def=nullptr);
     bool getVals(const char* par, int n, int vals[], int defs[]=nullptr);
-    bool getStrings(const char* par, int n, string strs[], char* str[]=nullptr);
+    bool getStrings(const char* par, int n, std::string strs[], char* str[]=nullptr);
 
     struct EBadSection
         {}
     ;
+
+protected:
+
+    char space;	// '"' for strings w/spaces
+    char style;  // '=' or SPACE as delimiter
+
+    //  string section;
+    size_t sec_beg;
+    size_t ssec_beg;
+    size_t cur_pos = 0;
+    std::string line;
+    size_t val_pos;
+
+    std::string ini_data;
+
+    std::string get_next_line();
 };
 
 
