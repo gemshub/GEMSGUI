@@ -184,13 +184,13 @@ ExcludeFillDialog::CmExcludeAll()
      GroupBox1->button(ii)->setChecked( false );
 }
 
-TOArray<bool>
+std::vector<bool>
 ExcludeFillDialog::getFillType()
 {
- TOArray<bool> arr;
+ std::vector<bool> arr;
 
  for(int ii=0; ii<GroupBox1->buttons().count(); ii++ )
-     arr.Add( GroupBox1->button(ii)->isChecked() );
+     arr.push_back( GroupBox1->button(ii)->isChecked() );
 
  return arr;
 }

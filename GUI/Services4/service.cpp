@@ -354,7 +354,7 @@ TCStringArray vfRDMultiKeysSet(QWidget* par, const char* caption,
 // System remake dialog
 bool
 vfExcludeFillEdit(QWidget* par, const char* caption,
-   TCStringArray& aICkeys, TOArray<bool>& sel, double& fill_data )
+   TCStringArray& aICkeys, std::vector<bool>& sel, double& fill_data )
 {
   if( pThread != QThread::currentThreadId() )
   {

@@ -72,10 +72,6 @@ struct scriptSetupData
            objName(oName), ndxName(ndName), lineText(alineText)
    { strip( ndxName ); }
 
-   scriptSetupData( scriptSetupData& d ):
-           nWin(d.nWin), nObj(d.nObj), nIdx(d.nIdx),
-           objName(d.objName), ndxName(d.ndxName), lineText(d.lineText)
-   { }
 };
 
 void GetListsnRT( int nRT, std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList );
@@ -90,7 +86,7 @@ class EquatSetup : public QWidget, public Ui_EquatWidgetForm
    equatSetupData eqData;
    std::vector<pagesSetupData> stData;
    std::vector<pagesSetupData> pgData;
-   TIArray<scriptSetupData>  scriptData;
+   std::vector<scriptSetupData>  scriptData;
 
    QList<QListWidget *> pLists;
    bool useCalc;
@@ -133,7 +129,7 @@ public:
    }
 
    size_t getScriptLinesNum() const
-   {  return   scriptData.GetCount(); }
+   {  return   scriptData.size(); }
 
    size_t getAbscissaNum() const
    {  return   eqData.abscissaLines.size()+1; }

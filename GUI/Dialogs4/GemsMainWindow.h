@@ -90,7 +90,7 @@ struct DThread
   //vfChoise3
   bool all; // only return
   //vfExcludeFillEdit
-  TOArray<bool> sel;
+  std::vector<bool> sel;
   double fill_data;
 
   //Message&Quastion&Question3

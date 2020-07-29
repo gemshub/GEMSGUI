@@ -1019,7 +1019,7 @@ void GEM2MTWizard::changeTable(const QItemSelection & selected, const QItemSelec
 int GEM2MTWizard::tableFindRow( int nO, int ndx)
 {
   int nRow = -1;
-  for(uint ii=0; ii<scriptData.GetCount(); ii++ )
+  for(size_t ii=0; ii<scriptData.size(); ii++ )
   {
    if(scriptData[ii].nObj == nO && scriptData[ii].nIdx == ndx )
       { nRow = ii; break; }
@@ -1030,12 +1030,12 @@ int GEM2MTWizard::tableFindRow( int nO, int ndx)
 void GEM2MTWizard::tableInsertRow( int nO, int ndx, const char * andName )
 {
      if(cPage == 0)
-     {  scriptData.Add( new scriptSetupData( cPage, nO, andName,
+     {  scriptData.push_back(  scriptSetupData( cPage, nO, andName,
              ndx, andName, "" ));
      }
        else
         {
-           scriptData.Add( new scriptSetupData( cPage, nO, aObj[nO].GetKeywd(),
+           scriptData.push_back(  scriptSetupData( cPage, nO, aObj[nO].GetKeywd(),
              ndx, andName, "" ));
        }
      listUpdate();
@@ -1044,7 +1044,7 @@ void GEM2MTWizard::tableInsertRow( int nO, int ndx, const char * andName )
 
 void GEM2MTWizard::tableDeleteRow( int nRow )
 {
-   scriptData.Remove(nRow);
+   scriptData.erase(scriptData.begin()+nRow);
     listUpdate();
 }
 
@@ -1058,7 +1058,7 @@ void GEM2MTWizard::listUpdate()
   QString buf;
 
   listVTK->clear();
-  for(uint ii=0; ii<scriptData.GetCount(); ii++ )
+  for(size_t ii=0; ii<scriptData.size(); ii++ )
   {
       if( scriptData[ii].nObj >= 0 )
           buf = QString("%1(%2)").arg(
@@ -1087,7 +1087,7 @@ inline int GEM2MTWizard::findVTKarr( int vtk1  )
 void GEM2MTWizard::setVTK( TCIntArray vtk1, TCIntArray vtk2  )
 {
 
-  scriptData.Clear();
+  scriptData.clear();
 
   for(size_t ii=0; ii<vtk1.size(); ii++ )
   {
@@ -1126,7 +1126,7 @@ void GEM2MTWizard::getVTK( TCIntArray& vtk1, TCIntArray& vtk2  )
   if( !c_PvnVTK->isChecked() )
    return; // select all
 
-  for(uint ii=0; ii<scriptData.GetCount(); ii++ )
+  for(size_t ii=0; ii<scriptData.size(); ii++ )
   {
       if( scriptData[ii].nObj >= 0 )
       {

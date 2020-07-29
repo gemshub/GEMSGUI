@@ -52,7 +52,7 @@ class TCPage:
 
     TOArray<TObjectModel*> aModels;
     TOArray<QWidget*> aFields;
-    TOArray<int> aTypes;
+    std::vector<int> aTypes;
     
     int getFieldCnt() const
     {

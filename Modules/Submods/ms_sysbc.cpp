@@ -686,7 +686,7 @@ void TSyst::systbc_calc( int mode )
     /* test for zero in composition */
     TCStringArray aICkeys;
     TCIntArray aICnums;
-    TOArray<bool> sel;
+    std::vector<bool> sel;
     double fill_data = aPa->pa.p.DHB*1e4; // fixed DK 29.02.2012
 
     for( i=0; i<N; i++ )
@@ -744,7 +744,7 @@ void TSyst::PHbcalcSysEq( double *MsysC, double *MaqC, double *R1C,
     TSysEq* aSE=(TSysEq *)(&aMod[RT_SYSEQ]);
     TCompos* aCMP=(TCompos *)(&aMod[RT_COMPOS]);
     RMULTS* mup = TRMults::sm->GetMU();
-    TIArray<TFormula> aFo;
+    std::vector<TFormula> aFo;
     std::string form;
     int i, j, jf=0, jsf=0, k, Lf;
     double *A, *X;
@@ -780,7 +780,7 @@ NEXT:
         /* load formulae */
         for( i=0; i<Lf; i++ )
         {
-            aFo.Add( new TFormula() );
+            aFo.push_back(  TFormula() );
             j=aSE->stp->llf[jsf+i];
             form = aFo[i].form_extr( j, mup->L, mup->DCF );
             aFo[i].SetFormula( form.c_str() ); // and ce_fscan
@@ -793,7 +793,7 @@ NEXT:
 
         for( i=0; i<Lf; i++ )
             aFo[i].Stm_line( mup->N, A+i*mup->N, (char *)mup->SB, mup->Val );
-        aFo.Clear();
+        aFo.clear();
         Mass = 0.0; /* calc mass of phase */
         for( i=0; i<Lf; i++ )
             Mass += X[i]*MolWeight( mup->N, mup->BC, A+i*mup->N );

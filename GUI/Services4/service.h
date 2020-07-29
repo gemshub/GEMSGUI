@@ -97,7 +97,7 @@ vfKeyCanged(QWidget* par, const char* caption,
 
 bool
 vfExcludeFillEdit(QWidget* par, const char* caption,
-   TCStringArray& aICkeys, TOArray<bool>& sel, double& fill_data );
+   TCStringArray& aICkeys, std::vector<bool>& sel, double& fill_data );
 
 
 bool vfChooseFileOpen(QWidget* par, std::string& path,

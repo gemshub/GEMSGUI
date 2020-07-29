@@ -43,7 +43,7 @@ public:
       TCStringArray& aICkeys, double fill_data );
    ~ExcludeFillDialog();
 
-    TOArray<bool> getFillType();
+    std::vector<bool> getFillType();
     double getFillValue();
 
 

@@ -244,7 +244,7 @@ void EquatSetup::changeTable(const QItemSelection & selected, const QItemSelecti
 int EquatSetup::tableFindRow( int nO, int ndx)
 {
   int nRow = -1;
-  for(uint ii=0; ii<scriptData.GetCount(); ii++ )
+  for(size_t ii=0; ii<scriptData.size(); ii++ )
   {
    if(scriptData[ii].nObj == nO && scriptData[ii].nIdx == ndx )
       { nRow = ii; break; }
@@ -310,18 +310,18 @@ void EquatSetup::tableInsertRow( int nO, int ndx, const char * andName )
      }
 
     // added for clear names that got from Process calcScripts
-    if(namLines.size() > scriptData.GetCount() )
+    if(namLines.size() > scriptData.size() )
         namLines.clear();
 
     if(cPage == 0)
-     {  scriptData.Add( new scriptSetupData( cPage, nO, andName,
+     {  scriptData.push_back(  scriptSetupData( cPage, nO, andName,
              ndx, andName, str.c_str() ));
         namLines.push_back(andName);
         yNam = andName;
      }
        else
         {
-           scriptData.Add( new scriptSetupData( cPage, nO, aObj[nO].GetKeywd(),
+           scriptData.push_back(  scriptSetupData( cPage, nO, aObj[nO].GetKeywd(),
              ndx, andName, str.c_str() ));
            namLines.push_back(andName);
            yNam = aObj[nO].GetKeywd();
@@ -358,14 +358,14 @@ void EquatSetup::CmCalc()
 
 void EquatSetup::tableDeleteRow( int nRow )
 {
-   scriptData.Remove(nRow);
+   scriptData.erase(scriptData.begin()+nRow);
    namLines.erase(namLines.begin() +nRow);
    scriptUpdate();
 }
 
 void EquatSetup::emptyScriptTable()
 {
-   scriptData.Clear();;
+   scriptData.clear();;
    namLines.clear();
    //scriptUpdate();
 }
@@ -390,7 +390,7 @@ void EquatSetup::scriptUpdate()
 
   }
 
-  for( ii=0; ii<scriptData.GetCount(); ii++ )
+  for( ii=0; ii<scriptData.size(); ii++ )
   {
       buf = QString("%1[%2][%3] =: %4;\n").arg(
               eqData.yName.c_str(), eqData.indexName.c_str(),

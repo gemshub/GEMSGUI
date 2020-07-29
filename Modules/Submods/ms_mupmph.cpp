@@ -140,7 +140,7 @@ void TMulti::multi_sys_dc()
     short jj, jja, ja, kk;
     double a, *A; // , Vv =0.;
     double mm;
-    TIArray<TFormula> aFo;
+    std::vector<TFormula> aFo;
     string form;
     RMULTS* mup = TRMults::sm->GetMU();
     SYSTEM *syp = TSyst::sm->GetSY();
@@ -155,7 +155,7 @@ void TMulti::multi_sys_dc()
         // load formulae
         for( ii=0; ii<mup->L; ii++ )
         {
-            aFo.Add( new TFormula() );
+            aFo.push_back(  TFormula() );
             form = aFo[ii].form_extr( ii, mup->L, mup->DCF );
             aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
         }
@@ -164,7 +164,7 @@ void TMulti::multi_sys_dc()
         fillValue(A, 0., (mup->N*mup->L) );
         for( ii=0; ii<mup->L; ii++ )
             aFo[ii].Stm_line( mup->N, A+ii*mup->N, (char *)mup->SB, mup->Val );
-        aFo.Clear();
+        aFo.clear();
         // loading data for dependent components
         for( L=0, j=-1, jj=0; jj<mup->L; jj++ )
         {

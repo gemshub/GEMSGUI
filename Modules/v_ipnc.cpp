@@ -846,8 +846,8 @@ void IPNCalc::GetEquat( char *txt )
     ErrorIf( input!=0, "E00MSTran: ", "Math Script operator syntax error");
 }
 
-#define StackEnd( i ) aStack[aStack.GetCount()-1+i]
-#define StackDel() aStack.Remove(aStack.GetCount()-1)
+#define StackEnd( i ) aStack[aStack.size()-1+i]
+#define StackDel() aStack.erase(aStack.end()-1)
 
 // calc IPN notation
 void IPNCalc::CalcEquat()
@@ -856,7 +856,7 @@ void IPNCalc::CalcEquat()
     double z;
     int ci;
     uint /*nstack,*/ ni, ieq;
-    TOArray<double> aStack(MAXSTACK, 10);
+    std::vector<double> aStack;
     int k = 1;
 
     o_k_=aObj.Find("k_");
@@ -888,7 +888,7 @@ void IPNCalc::CalcEquat()
             switch( ci )
             {
             case IT_O :
-                if( aStack.GetCount()<2)
+                if( aStack.size()<2)
                     Error( "E03MSExec", "No operands left in execution stack");
                 switch( ni )
                 {
@@ -974,7 +974,7 @@ void IPNCalc::CalcEquat()
                 }
                 break;
             case IT_U :
-                ErrorIf( aStack.GetCount()<1, "E13MSExec",
+                ErrorIf( aStack.size()<1, "E13MSExec",
                          "No operands left in execution stack.");
                 switch( ni )
                 {
@@ -1005,15 +1005,15 @@ void IPNCalc::CalcEquat()
                 }
                 else  //set variable to stack
                 {
-                    aStack.Add( aObj[ni].Get( k1, k2 ) );
+                    aStack.push_back( aObj[ni].Get( k1, k2 ) );
                 }
                 break;
             case IT_C :  // constant
-                aStack.Add( aCon[ni] );
+                aStack.push_back( aCon[ni] );
                 break;
             case IT_F :
                 if( ni != empty_f )
-                  ErrorIf( aStack.GetCount()<1, "E23MSExec",
+                  ErrorIf( aStack.size()<1, "E23MSExec",
                          "No operands left in execution stack.");
                 switch( ni )
                 {
@@ -1094,10 +1094,10 @@ void IPNCalc::CalcEquat()
                     StackEnd(0) = derfc( StackEnd(0) );
                     break;
                 case empty_f :
-                       aStack.Add( DOUBLE_EMPTY );
+                       aStack.push_back( DOUBLE_EMPTY );
                      break;
                 case mod_f  :
-                    ErrorIf( StackEnd(0)==0||aStack.GetCount()<2,
+                    ErrorIf( StackEnd(0)==0||aStack.size()<2,
                              "E12MSExec","Missing mod() argument(s).");
                     StackEnd(-1) =
                         (double)( ROUND (StackEnd(-1))%
@@ -1141,7 +1141,7 @@ void IPNCalc::CalcEquat()
                 switch( aItm[i].num )
                 {
                 case sum_f :
-                    aStack.Add( 0. );
+                    aStack.push_back( 0. );
                     for( j1 = k1; j1 <= k2; j1++ )
                         for( j2 = k3; j2 <= k4; j2++ )
                         {
@@ -1150,7 +1150,7 @@ void IPNCalc::CalcEquat()
                         }
                     break;
                 case prod_f :
-                    aStack.Add( 1. );
+                    aStack.push_back( 1. );
                     for( j1 = k1; j1 <= k2; j1++ )
                         for( j2 = k3; j2 <= k4; j2++ )
                         {
@@ -1160,7 +1160,7 @@ void IPNCalc::CalcEquat()
                         }
                     break;
                 case max_f :
-                    aStack.Add( aObj[ni].Get( k1, k3 ) );
+                    aStack.push_back( aObj[ni].Get( k1, k3 ) );
                     for( j1 = k1; j1 <= k2; j1++ )
                         for( j2 = k3; j2 <= k4; j2++ )
                         {
@@ -1170,7 +1170,7 @@ void IPNCalc::CalcEquat()
                         }
                     break;
                 case min_f :
-                    aStack.Add( aObj[ni].Get( k1, k3 ) );
+                    aStack.push_back( aObj[ni].Get( k1, k3 ) );
                     for( j1 = k1; j1 <= k2; j1++ )
                         for( j2 = k3; j2 <= k4; j2++ )
                         {
@@ -1210,7 +1210,7 @@ void IPNCalc::CalcEquat()
             ci = aItm[i].code;
             ni = aItm[i].num;
         }
-        if( aStack.GetCount()>0 )
+        if( aStack.size()>0 )
             Error( "E17MSExec","Stack is not empty after script execution.");
     }
     return;

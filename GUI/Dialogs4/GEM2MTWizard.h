@@ -50,7 +50,7 @@ class GEM2MTWizard : public QDialog, public Ui::GEM2MTWizardData
     int cPage;
     std::vector<pagesSetupData> stData;
     std::vector<pagesSetupData> pgData;
-    TIArray<scriptSetupData>  scriptData;
+    std::vector<scriptSetupData>  scriptData;
     QList<QListWidget *> pLists;
     TCIntArray pNdx;
 

@@ -134,7 +134,7 @@ void TCPage::AddFields( bool info )
        	    fieldTable->setItemDelegate(deleg);
        	    fieldTable->setModel(model);
        	    aFields.Add( fieldTable );
-        	aTypes.Add(1);
+            aTypes.push_back(1);
             break;     
        }
       
