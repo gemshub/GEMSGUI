@@ -525,47 +525,47 @@ void ProcessWizard::defineWindow(char type)
   curType = type;
 
   // define object pages
-  pgData.Clear();
+  pgData.clear();
   switch(type)
     {
      case P_PVT:
-            pgData.Add( new pagesSetupData("Phases", o_w_xf));
+            pgData.push_back(  pagesSetupData("Phases", o_w_xf));
             break;
      case P_SEQUENT:
-            pgData.Add( new pagesSetupData("Compos", o_syxea));
-            pgData.Add( new pagesSetupData("DComp", o_syxed));
-            pgData.Add( new pagesSetupData("IComp", o_sybi));
-            pgData.Add( new pagesSetupData("Phases", o_syphm)); // xp_
-            pgData.Add( new pagesSetupData("DC-lower", o_sydll)); // dll_
-            pgData.Add( new pagesSetupData("DC-upper", o_sydul)); // dul_
-            pgData.Add( new pagesSetupData("Molality",o_wd_ym ));
-            pgData.Add( new pagesSetupData("Sorbed", o_wo_bfc));
+            pgData.push_back(  pagesSetupData("Compos", o_syxea));
+            pgData.push_back(  pagesSetupData("DComp", o_syxed));
+            pgData.push_back(  pagesSetupData("IComp", o_sybi));
+            pgData.push_back(  pagesSetupData("Phases", o_syphm)); // xp_
+            pgData.push_back(  pagesSetupData("DC-lower", o_sydll)); // dll_
+            pgData.push_back(  pagesSetupData("DC-upper", o_sydul)); // dul_
+            pgData.push_back(  pagesSetupData("Molality",o_wd_ym ));
+            pgData.push_back(  pagesSetupData("Sorbed", o_wo_bfc));
            break;
     case P_LIP:
-           pgData.Add( new pagesSetupData("Phases", o_syyof)); // Yof_
-//           pgData.Add( new pagesSetupData("xd_", o_syxed));
-           pgData.Add( new pagesSetupData("AqIons",o_wd_yla ));
-           pgData.Add( new pagesSetupData("AqElements", o_wd_icm));
+           pgData.push_back(  pagesSetupData("Phases", o_syyof)); // Yof_
+//           pgData.push_back(  pagesSetupData("xd_", o_syxed));
+           pgData.push_back(  pagesSetupData("AqIons",o_wd_yla ));
+           pgData.push_back(  pagesSetupData("AqElements", o_wd_icm));
           break;
     case P_INV_TITR:
-          pgData.Add( new pagesSetupData("AcidBase", o_syxea));
-          pgData.Add( new pagesSetupData("Molality",o_wd_ym ));
-          pgData.Add( new pagesSetupData("Sorbed",o_w_x )); // x
+          pgData.push_back(  pagesSetupData("AcidBase", o_syxea));
+          pgData.push_back(  pagesSetupData("Molality",o_wd_ym ));
+          pgData.push_back(  pagesSetupData("Sorbed",o_w_x )); // x
           break;
     case P_TITRSING:      
-            pgData.Add( new pagesSetupData("Compos", o_syxea));
-            pgData.Add( new pagesSetupData("DComp", o_syxed));
-            pgData.Add( new pagesSetupData("IComp", o_sybi));
-            pgData.Add( new pagesSetupData("DCg0in", o_sygex));
-            pgData.Add( new pagesSetupData("lga", o_wd_yla)); 
+            pgData.push_back(  pagesSetupData("Compos", o_syxea));
+            pgData.push_back(  pagesSetupData("DComp", o_syxed));
+            pgData.push_back(  pagesSetupData("IComp", o_sybi));
+            pgData.push_back(  pagesSetupData("DCg0in", o_sygex));
+            pgData.push_back(  pagesSetupData("lga", o_wd_yla));
           break;
     case P_REACTORS:
-           pgData.Add( new pagesSetupData("Compos", o_syxea)); // xa_
-           pgData.Add( new pagesSetupData("DComp", o_syxed));  // xd_
-           pgData.Add( new pagesSetupData("IComp", o_sybi));   // bi_
-           pgData.Add( new pagesSetupData("Phases", o_syphm)); // xp_
-           pgData.Add( new pagesSetupData("DC-lower", o_sydll)); // dll_
-           pgData.Add( new pagesSetupData("DC-upper", o_sydul)); // dul_
+           pgData.push_back(  pagesSetupData("Compos", o_syxea)); // xa_
+           pgData.push_back(  pagesSetupData("DComp", o_syxed));  // xd_
+           pgData.push_back(  pagesSetupData("IComp", o_sybi));   // bi_
+           pgData.push_back(  pagesSetupData("Phases", o_syphm)); // xp_
+           pgData.push_back(  pagesSetupData("DC-lower", o_sydll)); // dll_
+           pgData.push_back(  pagesSetupData("DC-upper", o_sydul)); // dul_
            break;
 
      default: break;
@@ -665,11 +665,11 @@ void ProcessWizard::defineWindow(char type)
               sub3->hide();
               sub4->hide();
 
-              TIArray<pagesSetupData> scalarsList;
-              TIArray<pagesSetupData> pgData1;
+              std::vector<pagesSetupData> scalarsList;
+              std::vector<pagesSetupData> pgData1;
               GetListsnRT( MD_MULTI, pgData1,  scalarsList );
 
-              pgData.Add( new pagesSetupData("Other items", -1));
+              pgData.push_back( pagesSetupData("Other items", -1));
               /*QListWidgetItem *item1 =*/ new QListWidgetItem( "Other items",  listObj);
 
               // add page
@@ -683,7 +683,7 @@ void ProcessWizard::defineWindow(char type)
               pageLists->addWidget(page1);
 
               // insert items to list of indexes
-               for(size_t  jj=0; jj<scalarsList.GetCount(); jj++ )
+               for(size_t  jj=0; jj<scalarsList.size(); jj++ )
                   {
                      /*item1 =*/ new QListWidgetItem( scalarsList[jj].pageName.c_str(), lstIndexes1);
                   }
@@ -1734,7 +1734,7 @@ void ProcessWizard::setupPages()
     listObj->setDisabled(false);
 
    // init new pages
-   for(uint ii=0; ii<pgData.GetCount();ii++)
+   for(size_t ii=0; ii<pgData.size();ii++)
     {
       nO = pgData[ii].nObj;
       TProfil::pm->getNamesList( nO, lst);
@@ -1875,8 +1875,8 @@ static equatSetupData eqPr( "xp", "yp", "J", "J", true );
 void ProcessWizard::resetPageList(const char* aXname, const char* aYname)
 {
 
-    TIArray<pagesSetupData> scalarsList;
-    TIArray<pagesSetupData> pgData;
+    std::vector<pagesSetupData> scalarsList;
+    std::vector<pagesSetupData> pgData;
 
     if(  rt[RT_SYSEQ].GetStatus() != ONEF_) // read first record in DB
         {

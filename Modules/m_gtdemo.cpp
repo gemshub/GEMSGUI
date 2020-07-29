@@ -799,13 +799,13 @@ TGtDemo::RecordPlot( const char* /*key*/ )
            return;
       }
 
-    TIArray<TPlot> plt;
+    std::vector<TPlot> plt;
 
-    plt.Add( new TPlot(o_gdx0, o_gdy0 ));
+    plt.push_back( TPlot(o_gdx0, o_gdy0 ));
     int  nLn = plt[ 0 ].getLinesNumber();
     if( gdp->PtAEF != S_OFF )
     {
-        plt.Add( new TPlot(o_gdxe, o_gdye ));
+        plt.push_back( TPlot(o_gdxe, o_gdye ));
         nLn += plt[1].getLinesNumber();
     }
     int ndxy = 0;

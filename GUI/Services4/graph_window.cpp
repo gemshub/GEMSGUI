@@ -28,14 +28,14 @@ TPlotLine convertor( const SeriesLineData& serData )
 
 
 
-ChartData *allocateData( const TIArray<TPlot>& aPlots,
+ChartData *allocateData( const std::vector<TPlot>& aPlots,
                          std::vector<std::shared_ptr<PlotModel>>& plotModels,
                          const char * aTitle, const char *aXName, const char *aYName, int agraphType  )
 {
     /// Descriptions of model extracting data
     std::vector<std::shared_ptr<jsonui::ChartDataModel>> chartModels;
 
-    for (size_t ii=0; ii<aPlots.GetCount(); ++ii)
+    for (size_t ii=0; ii<aPlots.size(); ++ii)
     {
         plotModels.push_back( std::shared_ptr<PlotModel>( new PlotModel( aPlots[ii] )) );
         chartModels.push_back( std::shared_ptr<ChartDataModel>( new ChartDataModel( plotModels.back().get() )) );
@@ -48,7 +48,7 @@ ChartData *allocateData( const TIArray<TPlot>& aPlots,
 
 ///   The constructor
 GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
-                                 TCModule *pmodule, TIArray<TPlot>& aPlots,
+                                 TCModule *pmodule, std::vector<TPlot>& aPlots,
                                  const char * aTitle,
                                  float *sizeReg,  float * sizePart,
                                  TPlotLine* aLinesDesc, short *aAxisType,
@@ -103,7 +103,7 @@ GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
 
 ///   The constructor
 GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
-                                 TCModule *pmodule, TIArray<TPlot>& aPlots,
+                                 TCModule *pmodule, std::vector<TPlot>& aPlots,
                                  const char * aTitle,
                                  const char *aXName, const char *aYName,
                                  TCStringArray line_names, int agraphType  )

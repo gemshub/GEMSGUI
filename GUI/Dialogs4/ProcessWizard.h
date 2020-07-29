@@ -51,7 +51,7 @@ class ProcessWizard : public QDialog, public Ui::ProcessWizardData
     EquatSetup *pageScript;
     QList<QListWidget *> pLsts;
     QButtonGroup *subTypeButtons;
-    TIArray<pagesSetupData> pgData;
+    std::vector<pagesSetupData> pgData;
 
     bool page1Changed;
     bool tItersChanged;

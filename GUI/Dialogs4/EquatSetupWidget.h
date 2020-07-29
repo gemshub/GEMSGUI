@@ -78,7 +78,7 @@ struct scriptSetupData
    { }
 };
 
-void GetListsnRT( int nRT, TIArray<pagesSetupData>& wnData, TIArray<pagesSetupData>& scalarsList );
+void GetListsnRT( int nRT, std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList );
 
 
 class EquatSetup : public QWidget, public Ui_EquatWidgetForm
@@ -88,8 +88,8 @@ class EquatSetup : public QWidget, public Ui_EquatWidgetForm
    int cPage;
    int cnRT;
    equatSetupData eqData;
-   TIArray<pagesSetupData> stData;
-   TIArray<pagesSetupData> pgData;
+   std::vector<pagesSetupData> stData;
+   std::vector<pagesSetupData> pgData;
    TIArray<scriptSetupData>  scriptData;
 
    QList<QListWidget *> pLists;
@@ -116,7 +116,7 @@ protected slots:
 public:
 
     EquatSetup( QWidget* parent, equatSetupData aEqData,
-       int nRT, TIArray<pagesSetupData>& wnData, TIArray<pagesSetupData>& scalarsList,
+       int nRT, std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList,
        const char* script = nullptr, const char* aXname = nullptr, const char* aYname = nullptr  );
     virtual ~EquatSetup();
 
@@ -141,7 +141,7 @@ public:
 public slots:
     // slot or function ????
     void resetPageList( int newRT,
-          TIArray<pagesSetupData>& wnData, TIArray<pagesSetupData>& scalarsList );
+          std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList );
     void slotPopupContextMenu(const QPoint &pos);
     void CmCalc();
     void CmAbscissa();

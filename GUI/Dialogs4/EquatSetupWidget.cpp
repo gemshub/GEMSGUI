@@ -30,7 +30,7 @@ void EquatSetup::languageChange()
 
 
 EquatSetup::EquatSetup( QWidget* parent, equatSetupData aEqData,
- int nRT, TIArray<pagesSetupData>& wnData, TIArray<pagesSetupData>& scalarsList,
+ int nRT, std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList,
                         const char* script, const char* aXname, const char* aYname ):
         QWidget( parent ), cPage(-1), cnRT(-1), eqData(aEqData), useCalc(false)
 {
@@ -66,7 +66,7 @@ EquatSetup::~EquatSetup()
 
 // work with lists
 void EquatSetup::resetPageList( int newRT,
-   TIArray<pagesSetupData>& wnData, TIArray<pagesSetupData>& scalarsList )
+   std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList )
 {
     uint ii, jj;
     int nO;
@@ -91,10 +91,10 @@ void EquatSetup::resetPageList( int newRT,
         winStac->removeWidget( winStac->widget(ii) );
       }
     }
-    pgData.Clear();
+    pgData.clear();
     pLists.clear();
     // define lists pages
-    pgData.Add( new pagesSetupData("Scalars", -1));
+    pgData.push_back( pagesSetupData("Scalars", -1));
     pLists.append( listStatic  );
     keywdList->clear();
     new QListWidgetItem( "Scalars",  keywdList);
@@ -109,9 +109,9 @@ void EquatSetup::resetPageList( int newRT,
          this, SLOT(slotPopupContextMenu(QPoint)));
 
     listStatic->clear();
-    for(  ii=0; ii<scalarsList.GetCount(); ii++ )
+    for(  ii=0; ii<scalarsList.size(); ii++ )
     {
-      stData.Add( new pagesSetupData(scalarsList[ii]));
+      stData.push_back( pagesSetupData(scalarsList[ii]));
       item1 = new QListWidgetItem( scalarsList[ii].pageName.c_str(),  listStatic);
       int nJ = scalarsList[ii].ndx;
       if(nJ<0) nJ = 0;
@@ -123,7 +123,7 @@ void EquatSetup::resetPageList( int newRT,
     }
 
     // init new pages
-    for( ii=0; ii<wnData.GetCount(); ii++ )
+    for( ii=0; ii<wnData.size(); ii++ )
     {
         nO = wnData[ii].nObj;
 
@@ -132,8 +132,8 @@ void EquatSetup::resetPageList( int newRT,
         if( lst.size() < 1 )  // undefined indexation
           continue;
 
-        pgData.Add( new pagesSetupData(wnData[ii]));
-        //cout << pgData[pgData.GetCount()-1].pageName.c_str() << " " << pgData[pgData.GetCount()-1].ndxName.c_str() << endl;
+        pgData.push_back( pagesSetupData(wnData[ii]));
+        //cout << pgData[pgData.size()-1].pageName.c_str() << " " << pgData[pgData.size()-1].ndxName.c_str() << endl;
         // insert to list
         //str = QString("%1 (%2)").arg(
         //    wnData[ii].pageName.c_str(), aObj[nO].GetKeywd());

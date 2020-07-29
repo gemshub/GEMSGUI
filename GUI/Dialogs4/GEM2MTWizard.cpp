@@ -864,8 +864,8 @@ static equatSetupData eqMT( "xt", "yt", "qc", "qc" );
 void GEM2MTWizard::resetPageList(const char* aXname, const char* aYname)
 {
 
-    TIArray<pagesSetupData> scalarsList;
-    TIArray<pagesSetupData> pgData;
+    std::vector<pagesSetupData> scalarsList;
+    std::vector<pagesSetupData> pgData;
 
     GetListsnRT( -2, pgData,  scalarsList );
     GetListsnRT( RT_GEM2MT, pgData,  scalarsList );
@@ -885,12 +885,12 @@ void GEM2MTWizard::resetVTKList()
     uint jj;
     int nO;
 
-    TIArray<pagesSetupData> scalarsList;
-    TIArray<pagesSetupData> scalarsList2;
-    TIArray<pagesSetupData> wnData;
+    std::vector<pagesSetupData> scalarsList;
+    std::vector<pagesSetupData> scalarsList2;
+    std::vector<pagesSetupData> wnData;
 
     for(int ii=0; ii<38; ii++ )
-       scalarsList.Add( new pagesSetupData(DataBR_fields[ii].name.c_str(), ii));
+       scalarsList.push_back( pagesSetupData(DataBR_fields[ii].name.c_str(), ii));
     GetListsnRT( -2, wnData,  scalarsList2 );
 
     pNdx.push_back(f_bIC);
@@ -926,20 +926,20 @@ void GEM2MTWizard::resetVTKList()
 
     // delete old data
     cPage = 0;
-    pgData.Add( new pagesSetupData("Scalars", -1));
+    pgData.push_back( pagesSetupData("Scalars", -1));
     pLists.append( listStatic  );
 
     listStatic->clear();
-    for(uint  ii=0; ii<scalarsList.GetCount(); ii++ )
+    for(size_t  ii=0; ii<scalarsList.size(); ii++ )
     {
-      stData.Add( new pagesSetupData(scalarsList[ii]));
+      stData.push_back( pagesSetupData(scalarsList[ii]));
       item1 = new QListWidgetItem( scalarsList[ii].pageName.c_str(),  listStatic);
       item1->setToolTip( DataBR_fields[ii].comment.c_str() );
     }
 
 
     // init new pages
-    for(uint ii=0; ii<wnData.GetCount(); ii++ )
+    for(size_t ii=0; ii<wnData.size(); ii++ )
     {
         nO = wnData[ii].nObj;
 
@@ -948,7 +948,7 @@ void GEM2MTWizard::resetVTKList()
         if( lst.size() < 1 )  // undefined indexation
           continue;
 
-        pgData.Add( new pagesSetupData(wnData[ii]));
+        pgData.push_back( pagesSetupData(wnData[ii]));
         str = QString("%1").arg( wnData[ii].pageName.c_str());
         item1 = new QListWidgetItem( str,  keywdList);
 

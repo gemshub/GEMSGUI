@@ -48,8 +48,8 @@ class GEM2MTWizard : public QDialog, public Ui::GEM2MTWizardData
 
     // for VTK window
     int cPage;
-    TIArray<pagesSetupData> stData;
-    TIArray<pagesSetupData> pgData;
+    std::vector<pagesSetupData> stData;
+    std::vector<pagesSetupData> pgData;
     TIArray<scriptSetupData>  scriptData;
     QList<QListWidget *> pLists;
     TCIntArray pNdx;

@@ -687,20 +687,20 @@ const char* TRTParm::GetHtml()
 void
 TRTParm::RecordPlot( const char* /*key*/ )
 {
-   TIArray<TPlot> plt;
+   std::vector<TPlot> plt;
 
    if( rpp->Pabs == 'P')
-     plt.Add( new TPlot( o_rpxp, o_rpyf ));
+     plt.push_back( TPlot( o_rpxp, o_rpyf ));
    else
-     plt.Add( new TPlot( o_rpxt, o_rpyf ));
+     plt.push_back( TPlot( o_rpxt, o_rpyf ));
 
    int  nLn = plt[ 0 ].getLinesNumber();
    if( rpp->Pplot != S_OFF )
     {
        if( rpp->Pabs == 'P')
-         plt.Add( new TPlot( o_rpxpe, o_rpyte ));
+         plt.push_back( TPlot( o_rpxpe, o_rpyte ));
        else
-         plt.Add( new TPlot( o_rpxte, o_rpyte ));
+         plt.push_back( TPlot( o_rpxte, o_rpyte ));
         nLn += plt[1].getLinesNumber();
     }
     if( plot )

@@ -41,8 +41,8 @@ void InputSystemDialog::languageChange()
 
 
 InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
-      TIArray<windowSetupData>& awnData, TIArray<tableSetupData>& atbData,
-      TIArray<pagesSetupData>& scalarsList ):
+      const std::vector<windowSetupData>& awnData, std::vector<tableSetupData>& atbData,
+      const std::vector<pagesSetupData>& scalarsList ):
         QDialog( parent )
 {
     size_t ii, jj;
@@ -64,9 +64,9 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
 
     pTname->setText( QString(aObj[o_ssname].GetStringEmpty(0,0).c_str()));
     // define lists pages
-    for(  ii=0; ii<awnData.GetCount()-1; ii++ )  // -1 all exept static window
+    for(  ii=0; ii<awnData.size()-1; ii++ )  // -1 all exept static window
     {
-        wnData.Add( new windowSetupData(awnData[ii]));
+        wnData.push_back( windowSetupData(awnData[ii]));
         // insert to list
         str = QString("%1 (%2)").arg(
             awnData[ii].pageName.c_str(), aObj[awnData[ii].nObj].GetKeywd());
@@ -108,8 +108,8 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
 
     // add lists static
     //wnData.Add( new windowSetupData( "Static", -1, 0, -1, -1, 0.,'_' ) );
-    ii = wnData.GetCount();
-    wnData.Add( new windowSetupData(awnData[ii]));
+    ii = wnData.size();
+    wnData.push_back( windowSetupData(awnData[ii]));
     // insert to list
     str = QString("%1").arg(  awnData[ii].pageName.c_str());
     item1 = new QListWidgetItem( str,  keywdList);
@@ -126,9 +126,9 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
     winStac->addWidget(page1);
 
     // insert items to list of indexes
-    for(  jj=0; jj<scalarsList.GetCount(); jj++ )
+    for(  jj=0; jj<scalarsList.size(); jj++ )
     {
-      stData.Add( new pagesSetupData(scalarsList[jj]));
+      stData.push_back( pagesSetupData(scalarsList[jj]));
       item1 = new QListWidgetItem( scalarsList[jj].pageName.c_str(),  lstIndexes1);
       int nJ = scalarsList[jj].ndx;
       if(nJ<0) nJ = 0;
@@ -150,12 +150,12 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
     TSystemDelegate * deleg = new TSystemDelegate( this );
     recTable->setItemDelegate(deleg);
     // setup from atbData
-    for(  ii=0; ii<atbData.GetCount(); ii++ )
+    for(  ii=0; ii<atbData.size(); ii++ )
     {
         auto jj = atbData[ii].nIdx;
         auto iWin = atbData[ii].nWin;
         auto nO = atbData[ii].nObj;
-        if( iWin  >= wnData.GetCount()-1 ) // static list
+        if( iWin  >= wnData.size()-1 ) // static list
           jj = max(0,staticFindRow( nO, jj ));
         pLists[iWin]->item(jj)->setSelected(true);
         atbData[ii].ndxName =
@@ -193,7 +193,7 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
 InputSystemDialog::~InputSystemDialog()
 {}
 
-void InputSystemDialog::getTable( TIArray<tableSetupData>& tab ) const
+void InputSystemDialog::getTable( std::vector<tableSetupData>& tab ) const
 {
   string txt = pTname->text().toStdString();
 
@@ -202,9 +202,9 @@ void InputSystemDialog::getTable( TIArray<tableSetupData>& tab ) const
   else
   aObj[o_ssname].SetString( txt.c_str(), 0, 0 );
 
-  tab.Clear();
-  for( uint ii=0; ii< tbData.GetCount(); ii++ )
-    tab.Add( new tableSetupData(tbData[ii]) );
+  tab.clear();
+  for( uint ii=0; ii< tbData.size(); ii++ )
+    tab.push_back( tableSetupData(tbData[ii]) );
 
 }
 
@@ -220,7 +220,7 @@ void InputSystemDialog::changePage( int nPage_ )
               this, SLOT( changeTable( const QItemSelection&, const QItemSelection& )) );
 
     winStac->setCurrentIndex ( nPage );
-    if( nPage < wnData.GetCount()-1 )
+    if( nPage < wnData.size()-1 )
       lDesc->setText( aObj[wnData[nPage].nObj].GetDescription(0,0).c_str());
     else
       lDesc->setText( "Other system recipe inputs (masses, volumes, T & P intervals)");
@@ -237,7 +237,7 @@ void InputSystemDialog::changeTable(const QItemSelection & selected, const QItem
     string stt = ndx.data(Qt::DisplayRole).toString().toStdString();
     nO = wnData[curPage].nObj;
     ndx_row = ndx.row();
-    if( nO<0 || curPage >= wnData.GetCount()-1 )
+    if( nO<0 || curPage >= wnData.size()-1 )
     { nO = stData[ndx_row].nObj;
       ndx_row =  stData[ndx_row].ndx;
     }
@@ -248,7 +248,7 @@ void InputSystemDialog::changeTable(const QItemSelection & selected, const QItem
   {
     nO = wnData[curPage].nObj;
     ndx_row = ndx.row();
-    if( nO<0 || curPage >= wnData.GetCount()-1 )
+    if( nO<0 || curPage >= wnData.size()-1 )
     { nO = stData[ndx_row].nObj;
       ndx_row =  stData[ndx_row].ndx;
     }
@@ -291,16 +291,16 @@ void InputSystemDialog::CmPrint()
 
       char buf[200];
 
-      sprintf( buf, "%-10.9s", recTable->horizontalHeaderItem(0)->text().toStdString() );
+      sprintf( buf, "%-10.9s", recTable->horizontalHeaderItem(0)->text().toStdString().c_str() );
       f << buf;
-      sprintf( buf, "%-20.19s", recTable->horizontalHeaderItem(1)->text().toStdString() );
+      sprintf( buf, "%-20.19s", recTable->horizontalHeaderItem(1)->text().toStdString().c_str() );
       f << buf;
-      sprintf( buf, "%-14.11s", recTable->horizontalHeaderItem(2)->text().toStdString() );
+      sprintf( buf, "%-14.11s", recTable->horizontalHeaderItem(2)->text().toStdString().c_str() );
       f << buf;
-      sprintf( buf, "%-6.6s", recTable->horizontalHeaderItem(3)->text().toStdString() );
+      sprintf( buf, "%-6.6s", recTable->horizontalHeaderItem(3)->text().toStdString().c_str() );
       f << buf << endl;
 
-      for(uint  ii=0; ii<tbData.GetCount(); ii++ )
+      for(size_t  ii=0; ii<tbData.size(); ii++ )
       {
           sprintf( buf, "%-10.9s", tbData[ii].objName.c_str() );
           f << buf;
@@ -327,7 +327,7 @@ InputSystemDialog::help()
 int InputSystemDialog::tableFindRow( int nO, int ndx)
 {
   int nRow = -1;
-  for(uint ii=0; ii<tbData.GetCount(); ii++ )
+  for(size_t ii=0; ii<tbData.size(); ii++ )
   {
    if(tbData[ii].nObj == nO && tbData[ii].nIdx == ndx )
       { nRow = ii; break; }
@@ -338,7 +338,7 @@ int InputSystemDialog::tableFindRow( int nO, int ndx)
 int InputSystemDialog::staticFindRow( int nO, int ndx)
 {
   int nRow = -1;
-  for(uint ii=0; ii<stData.GetCount(); ii++ )
+  for(size_t ii=0; ii<stData.size(); ii++ )
   {
    if(stData[ii].nObj == nO && stData[ii].ndx == ndx )
       { nRow = ii; break; }
@@ -365,7 +365,7 @@ int InputSystemDialog::staticFindRow( int nO, int ndx)
 
 int InputSystemDialog::tableInsertRow( tableSetupData& d)
 {
-    tbData.Add( new tableSetupData( d ));
+    tbData.push_back( tableSetupData( d ));
 
     int row = recTable->rowCount();
     tableShowRow( row );
@@ -375,7 +375,7 @@ int InputSystemDialog::tableInsertRow( tableSetupData& d)
 
 int InputSystemDialog::tableInsertRow( int nO, int ndx, const char * andName)
 {
-    tbData.Add( new tableSetupData( curPage, nO, aObj[nO].GetKeywd(),
+    tbData.push_back( tableSetupData( curPage, nO, aObj[nO].GetKeywd(),
          ndx, andName, wnData[curPage].defVal, wnData[curPage].defUnit ));
 
     int row = recTable->rowCount();
@@ -414,22 +414,22 @@ void InputSystemDialog::tableShowRow( int row )
 
 int InputSystemDialog::tableDeleteRow( int nRow )
 {
-   tbData.Remove(nRow);
+   tbData.erase(tbData.begin()+ nRow);
    recTable->removeRow(nRow);
-   return tbData.GetCount();
+   return tbData.size();
 }
 
 void InputSystemDialog::deleteRows( int f_from, int r_to )
 {
   int jj, nO, ndx;
-  uint iWin;
+  size_t iWin;
   for( int row = f_from; row >= r_to; row-- )
    {
       ndx = jj = tbData[row].nIdx;
       iWin = tbData[row].nWin;
       nO = tbData[row].nObj;
 
-      if( iWin  >= wnData.GetCount()-1 ) // static list
+      if( iWin  >= wnData.size()-1 ) // static list
         jj = max(0,staticFindRow( nO, jj ));
 
       pLists[iWin]->item(jj)->setSelected(false);

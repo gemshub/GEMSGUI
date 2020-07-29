@@ -138,11 +138,6 @@ struct pagesSetupData
        ndxName = "";
    }
 
-   pagesSetupData( pagesSetupData& d ):
-           pageName(d.pageName),  nObj(d.nObj), ndx(d.ndx), ndxName(d.ndxName)
-   {
-
-   }
 };
 
 bool
@@ -150,8 +145,8 @@ vfElements(QWidget* par, const char * prfName,
            elmWindowData& elm_data, setFiltersData& sf_data );
 
 bool  vfSystemInput(QWidget* par, const char * p_key,
-    TIArray<windowSetupData>& wnData, TIArray<tableSetupData>& tbData,
-    TIArray<pagesSetupData>& scalarsList );
+    std::vector<windowSetupData>& wnData, std::vector<tableSetupData>& tbData,
+    std::vector<pagesSetupData>& scalarsList );
 
 bool
 vfProcessSet(QWidget* par, const char * p_key,

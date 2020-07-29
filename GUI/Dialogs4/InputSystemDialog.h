@@ -75,9 +75,9 @@ class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
 
    Q_OBJECT
 
-   TIArray<windowSetupData> wnData;
-   TIArray<tableSetupData>  tbData;
-   TIArray<pagesSetupData> stData;
+   std::vector<windowSetupData> wnData;
+   std::vector<tableSetupData>  tbData;
+   std::vector<pagesSetupData> stData;
    uint curPage;
 
    QList<QListWidget *> pLists;
@@ -98,13 +98,13 @@ class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
 public:
 
     InputSystemDialog( QWidget* parent, const char* pkey,
-       TIArray<windowSetupData>& wnData, TIArray<tableSetupData>& tbData,
-       TIArray<pagesSetupData>& scalarsList );
+       const std::vector<windowSetupData>& wnData, std::vector<tableSetupData>& tbData,
+       const std::vector<pagesSetupData>& scalarsList );
     virtual ~InputSystemDialog();
 
 
 
-   void getTable( TIArray<tableSetupData>& tab ) const;
+   void getTable( std::vector<tableSetupData>& tab ) const;
    void deleteRows( int f_from, int r_to );
 
    int getObjTable( size_t row ) const

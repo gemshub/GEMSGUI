@@ -459,7 +459,7 @@ void TGEM2MT::calc_eqstat( bool startSys )
 void TGEM2MT::make_A( long int siz_, char (*for_)[MAXFORMUNITDT] )
 {
   // Get full matrix A
-  TIArray<TFormula> aFo;
+  std::vector<TFormula> aFo;
   std::string form;
   long int ii;
 
@@ -469,7 +469,7 @@ void TGEM2MT::make_A( long int siz_, char (*for_)[MAXFORMUNITDT] )
   }
   for( ii=0; ii<siz_; ii++ )
   {
-     aFo.Add( new TFormula() );
+     aFo.push_back( TFormula() );
      form = std::string( for_[ii], 0, MAXFORMUNITDT );
      strip( form );
      aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
@@ -483,7 +483,7 @@ void TGEM2MT::make_A( long int siz_, char (*for_)[MAXFORMUNITDT] )
   for( ii=0; ii<siz_; ii++ )
      aFo[ii].Stm_line( TRMults::sm->GetMU()->N, mtp->An+ii*TRMults::sm->GetMU()->N,
            (char *)TRMults::sm->GetMU()->SB, TRMults::sm->GetMU()->Val );
-  aFo.Clear();
+  aFo.clear();
 }
 
 // Calculate data for matrix Bn as Bb_Calc
@@ -895,13 +895,13 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
     if( mtp->PvMSg == S_OFF )
       return;
 
-    TIArray<TPlot> plt;
+    std::vector<TPlot> plt;
 
-    plt.Add( new TPlot(o_mtxt, o_mtyt ));
+    plt.push_back( TPlot(o_mtxt, o_mtyt ));
     int  nLn = plt[ 0 ].getLinesNumber();
     if( mtp->PvEF != S_OFF )
     {
-        plt.Add( new TPlot(o_mtxet, o_mtyet ));
+        plt.push_back( TPlot(o_mtxet, o_mtyet ));
         nLn += plt[1].getLinesNumber();
     }
     if( plot )

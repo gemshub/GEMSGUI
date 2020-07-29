@@ -701,8 +701,8 @@ vfElements(QWidget* par, const char * prfName,
 
 bool
 vfSystemInput(QWidget* par, const char * p_key,
-              TIArray<windowSetupData>& wnData, TIArray<tableSetupData>& tbData,
-              TIArray<pagesSetupData>& scalarsList )
+              std::vector<windowSetupData>& wnData, std::vector<tableSetupData>& tbData,
+              std::vector<pagesSetupData>& scalarsList )
 {
     InputSystemDialog pdlg( par, p_key, wnData, tbData, scalarsList );
     if( !pdlg.exec() )

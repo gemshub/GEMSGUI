@@ -409,13 +409,6 @@ struct tableSetupData
            objName(oName), ndxName (ndName)
    { }
 
-   tableSetupData( tableSetupData& d ):
-           nWin(d.nWin), nObj(d.nObj), nIdx(d.nIdx), val(d.val), unit(d.unit),
-           objName(d.objName), ndxName(d.ndxName)
-   {
-       // cout << "nWin = " << nWin << " nObj = " << nObj << " nIdx = " << nIdx << endl;
-   }
-
 };
 
 
@@ -434,11 +427,6 @@ struct windowSetupData
         pageName(pName),  nObj(aobj), nOunit(uObj), nSwitch(sObj),
         unitLine(aUnt), defVal( adefVal), defUnit(adefUnit)
    { }
-
-   windowSetupData( windowSetupData& d ):
-           pageName(d.pageName),  nObj(d.nObj), nOunit(d.nOunit),  nSwitch(d.nSwitch),
-           unitLine(d.unitLine), defVal( d.defVal), defUnit(d.defUnit)
-   {}
 
 };
 

@@ -1565,13 +1565,13 @@ void TProcess::RecordPrint(const char *key)
 void
 TProcess::RecordPlot( const char* /*key*/ )
 {
-    TIArray<TPlot> plt;
+    std::vector<TPlot> plt;
 
-    plt.Add( new TPlot(o_pcx0, o_pcy0 ));
+    plt.push_back( TPlot(o_pcx0, o_pcy0 ));
     int  nLn = plt[ 0 ].getLinesNumber();
     if( pep->PvEF != S_OFF )
     {
-        plt.Add( new TPlot(o_pcxe, o_pcye ));
+        plt.push_back( TPlot(o_pcxe, o_pcye ));
         nLn += plt[1].getLinesNumber();
     }
     int ndxy = 0;

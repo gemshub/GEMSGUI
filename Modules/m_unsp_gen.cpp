@@ -504,13 +504,13 @@ void TUnSpace::init_analyse( )
 
   // Get full matrix A
   // load formulae
-  TIArray<TFormula> aFo;
+  std::vector<TFormula> aFo;
   std::string form;
   int ii;
 
   for( ii=0; ii<TRMults::sm->GetMU()->L; ii++ )
   {
-     aFo.Add( new TFormula() );
+     aFo.push_back( TFormula() );
      form = aFo[ii].form_extr( ii, TRMults::sm->GetMU()->L,
                                TRMults::sm->GetMU()->DCF );
      aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
@@ -520,7 +520,7 @@ void TUnSpace::init_analyse( )
   for( ii=0; ii<TRMults::sm->GetMU()->L; ii++ )
      aFo[ii].Stm_line(TRMults::sm->GetMU()->N, usp->A+ii*TRMults::sm->GetMU()->N,
            (char *)TRMults::sm->GetMU()->SB, TRMults::sm->GetMU()->Val );
-  aFo.Clear();
+  aFo.clear();
 }
 
 
@@ -590,11 +590,11 @@ TUnSpace::RecordPlot( const char* /*key*/ )
     if( usp->PsGraph == S_OFF )
       return;
 
-    TIArray<TPlot> plt;
+    std::vector<TPlot> plt;
 
-    plt.Add( new TPlot(o_unxa, o_unyc ));
+    plt.push_back( TPlot(o_unxa, o_unyc ));
     int  nLn = plt[ 0 ].getLinesNumber();
-    plt.Add( new TPlot(o_unxs, o_unys ));
+    plt.push_back( TPlot(o_unxs, o_unys ));
     nLn += plt[1].getLinesNumber();
     if( plot )
     {

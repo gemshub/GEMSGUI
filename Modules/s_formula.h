@@ -111,7 +111,7 @@ class TFormula  // description of disassembled formula token
     std::vector<std::string>  aCn;  // list of IC
     std::vector<double> aSC;  // list of stoichiometric coef.
     std::vector<short> aVal;  // list of valence numbers
-    //TIArray<MOITERM> moit_;
+    //std::vector<MOITERM> moit_;
 
     std::string aFormula;  // analayzed formula
 

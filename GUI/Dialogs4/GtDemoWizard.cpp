@@ -231,8 +231,8 @@ equatSetupData eqd( "x0", "y0", "jR", "jR", true );
 void GtDemoWizard::resetPageList( int newRT,const char* aXname, const char* aYname )
 {
 
-    TIArray<pagesSetupData> scalarsList;
-    TIArray<pagesSetupData> pgData;
+    std::vector<pagesSetupData> scalarsList;
+    std::vector<pagesSetupData> pgData;
 
     if( nRT == newRT )
       return;

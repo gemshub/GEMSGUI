@@ -103,13 +103,13 @@ void TDualTh::dt_next()
 void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
 {
   // Get full matrix A
-  TIArray<TFormula> aFo;
+  std::vector<TFormula> aFo;
   std::string form;
   int ii;
 
   for( ii=0; ii<siz_; ii++ )
   {
-     aFo.Add( new TFormula() );
+     aFo.push_back( TFormula() );
      form = std::string( for_[ii], 0, MAXFORMUNITDT );
      strip( form );
      aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
@@ -129,7 +129,7 @@ void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
      copyValues( dtp->An+ii*TRMults::sm->GetMU()->N, AA, dtp->Nb );
   }
   delete[] AA;
-  aFo.Clear();
+  aFo.clear();
 }
 
 // make EqStat key  && calculate records

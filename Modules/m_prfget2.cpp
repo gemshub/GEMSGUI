@@ -767,22 +767,22 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
     SYSTEM *syp = syst->GetSY();
 
     // define window
-    TIArray<windowSetupData> wnData;
+    std::vector<windowSetupData> wnData;
     // define table
-    TIArray<tableSetupData> tbData;
+    std::vector<tableSetupData> tbData;
     // define scalars
-    TIArray<pagesSetupData> scalarsList;
+    std::vector<pagesSetupData> scalarsList;
 
     // add bulk chemical composition from COMPOS
     if( syp->PbAC != S_OFF && mup->La )
     {
-        wnData.Add( new windowSetupData( "Compos",
+        wnData.push_back( windowSetupData( "Compos",
                    o_syxea, 5, o_syxaun, o_syacl,  0., QUAN_GRAM) );
         for( j=0; j<mup->La; j++ )
         {
             if( syp->Acl[j] == S_OFF || !syp->XeA[j] || IsDoubleEmpty( syp->XeA[j] ))
                 continue;
-            tbData.Add( new tableSetupData( wnData.GetCount()-1, o_syxea,
+            tbData.push_back(  tableSetupData( wnData.size()-1, o_syxea,
                   aObj[o_syxea].GetKeywd(), j, "",  syp->XeA[j], syp->XAun[j] ));
         } //  j
     }
@@ -790,13 +790,13 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
     // add compositions from DCOMP/REACDC
     if( syp->PbDC != S_OFF )
     {
-        wnData.Add( new windowSetupData( "DComp",
+        wnData.push_back( windowSetupData( "DComp",
                 o_syxed, 5, o_syxdun, o_sydcl, 0., QUAN_MOL) );
         for( j=0; j<mup->L; j++ )
         {
             if( syp->Dcl[j] == S_OFF || !syp->XeD[j] || IsDoubleEmpty( syp->XeD[j] ))
                 continue;
-            tbData.Add( new tableSetupData( wnData.GetCount()-1, o_syxed,
+            tbData.push_back( tableSetupData( wnData.size()-1, o_syxed,
                 aObj[o_syxed].GetKeywd(), j, "",  syp->XeD[j], syp->XDun[j] ));
 
         } //  j
@@ -804,13 +804,13 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
 
     if( syp->PbIC != S_OFF )
     { //  add bulk chemical composition from IComp
-        wnData.Add( new windowSetupData( "IComp",
+        wnData.push_back( windowSetupData( "IComp",
                        o_sybi, 5, o_sybiun, o_syicl, 0.,QUAN_MOL) );
         for( i=0; i<mup->N; i++ )
         {
             if( syp->Icl[i] == S_OFF || !syp->BI[i] || IsDoubleEmpty(syp->BI[i] ))
                 continue;
-            tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sybi,
+            tbData.push_back( tableSetupData( wnData.size()-1, o_sybi,
                    aObj[o_sybi].GetKeywd(), i, "",  syp->BI[i], syp->BIun[i] ));
         }
     }
@@ -818,13 +818,13 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
     // add bulk chemical composition from phases
     if( syp->PbPH != S_OFF )
     {
-      wnData.Add( new windowSetupData( "Phase",
+      wnData.push_back( windowSetupData( "Phase",
                      o_syphm, 5, o_syxpun, o_sypcl, 0.,QUAN_GRAM) );
       for( i=0; i<mup->Fi; i++ )
       {
          if( syp->Pcl[i] == S_OFF || !syp->Phm[i] || IsDoubleEmpty(syp->XPun[i] ))
           continue;
-        tbData.Add( new tableSetupData( wnData.GetCount()-1, o_syphm,
+        tbData.push_back( tableSetupData( wnData.size()-1, o_syphm,
              aObj[o_syphm].GetKeywd(), i, "",  syp->Phm[i], syp->XPun[i] ));
       }
     }
@@ -832,102 +832,102 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
     // and other dll, dul, Gex
     if(  syp->DLLim != S_OFF  )
     {
-        wnData.Add( new windowSetupData( "Kin.lower",
+        wnData.push_back( windowSetupData( "Kin.lower",
             o_sydll, 4, o_syrsc, o_sydcl, 0., QUAN_MOL ) );
         for( i=0; i<mup->L; i++ )
         {
           if(  syp->Dcl[i] != S_OFF && syp->DLL[i] > 0 )
-           tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sydll,
+           tbData.push_back( tableSetupData( wnData.size()-1, o_sydll,
                  aObj[o_sydll].GetKeywd(), i, "",  syp->DLL[i], syp->RSC[i] ));
         }
     }
     if(  syp->DULim != S_OFF  )
     {
-        wnData.Add( new windowSetupData( "Kin.upper",
+        wnData.push_back( windowSetupData( "Kin.upper",
                 o_sydul, 4, o_syrsc, o_sydcl, 1e+006, QUAN_MOL) );
         for( i=0; i<mup->L; i++ )
         {
           if( syp->Dcl[i] != S_OFF && syp->DUL[i] < 1e6 )
-           tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sydul,
+           tbData.push_back( tableSetupData( wnData.size()-1, o_sydul,
                  aObj[o_sydul].GetKeywd(), i, "",  syp->DUL[i], syp->RSC[i] ));
         }
     }
     if( syp->PGEX != S_OFF )
     {
-      wnData.Add( new windowSetupData( "G0 shift",
+      wnData.push_back(  windowSetupData( "G0 shift",
                o_sygex, 7, -1, o_sydcl, 0.,'J' ) );
       for( i=0; i<mup->L; i++ )
       {
         if(  syp->Dcl[i] != S_OFF && fabs(syp->GEX[i]) > 0  )
-         tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sygex,
+         tbData.push_back( tableSetupData( wnData.size()-1, o_sygex,
                aObj[o_sygex].GetKeywd(), i, "",  syp->GEX[i], 'J' ));
       }
     }
 
     // add static list
-    wnData.Add( new windowSetupData( "Other Inputs", -1, 0, -1, -1, 0.,'_' ) );
+    wnData.push_back(  windowSetupData( "Other Inputs", -1, 0, -1, -1, 0.,'_' ) );
     // build scalar list
-    scalarsList.Add( new pagesSetupData("g Solids(MbXs)", o_symsolids)); // Total mass of solids (g) from another equilibrium (bXs object) to add to the recipe
- //   scalarsList.Add( new pagesSetupData("Reserved", o_symass,0)); // Molality of reference electrolyte
-    scalarsList.Add( new pagesSetupData("kg H2O-solvent", o_symass,1)); // Anticipated mass (kg) of water-solvent
-    scalarsList.Add( new pagesSetupData("kg System", o_symass,2)); // Anticipated total mass of the system (kg)
-    scalarsList.Add( new pagesSetupData("kg Aqueous(Maq)", o_symass,3)); // Anticipated mass of aqueous phase Maq (kg)
- //   scalarsList.Add( new pagesSetupData("kg Total (MBX)", o_symass,4)); // Final total mass of the system MBX (kg)_
- //   scalarsList.Add( new pagesSetupData("Total IC moles (NMS)", o_symass,5)); // Total number of IC moles in the system NMS  (for mole %% calculations)
-    scalarsList.Add( new pagesSetupData("dm3 System(Vsys)", o_syvol,0)); // Anticipated volume Vsys of the system
-    scalarsList.Add( new pagesSetupData("dm3 Aqueous(Vaq)", o_syvol,1)); // Anticipated volume Vaq  of aqueous phase (L) for molarities
-    scalarsList.Add( new pagesSetupData("P_Min,bar", o_sypmm,0)); // min, max, increment for the pressure interpolation
-    scalarsList.Add( new pagesSetupData("P_Max,bar", o_sypmm,1));
-    scalarsList.Add( new pagesSetupData("P_Step,bar", o_sypmm,2));
-    scalarsList.Add( new pagesSetupData("T_Min,C", o_sytmm,0)); // min, max, increment for the temperature interpolation
-    scalarsList.Add( new pagesSetupData("T_Max,C", o_sytmm,1));
-    scalarsList.Add( new pagesSetupData("T_Step,C", o_sytmm,2));
+    scalarsList.push_back(  pagesSetupData("g Solids(MbXs)", o_symsolids)); // Total mass of solids (g) from another equilibrium (bXs object) to add to the recipe
+ //   scalarsList.push_back(  pagesSetupData("Reserved", o_symass,0)); // Molality of reference electrolyte
+    scalarsList.push_back(  pagesSetupData("kg H2O-solvent", o_symass,1)); // Anticipated mass (kg) of water-solvent
+    scalarsList.push_back(  pagesSetupData("kg System", o_symass,2)); // Anticipated total mass of the system (kg)
+    scalarsList.push_back(  pagesSetupData("kg Aqueous(Maq)", o_symass,3)); // Anticipated mass of aqueous phase Maq (kg)
+ //   scalarsList.push_back(  pagesSetupData("kg Total (MBX)", o_symass,4)); // Final total mass of the system MBX (kg)_
+ //   scalarsList.push_back(  pagesSetupData("Total IC moles (NMS)", o_symass,5)); // Total number of IC moles in the system NMS  (for mole %% calculations)
+    scalarsList.push_back(  pagesSetupData("dm3 System(Vsys)", o_syvol,0)); // Anticipated volume Vsys of the system
+    scalarsList.push_back(  pagesSetupData("dm3 Aqueous(Vaq)", o_syvol,1)); // Anticipated volume Vaq  of aqueous phase (L) for molarities
+    scalarsList.push_back(  pagesSetupData("P_Min,bar", o_sypmm,0)); // min, max, increment for the pressure interpolation
+    scalarsList.push_back(  pagesSetupData("P_Max,bar", o_sypmm,1));
+    scalarsList.push_back(  pagesSetupData("P_Step,bar", o_sypmm,2));
+    scalarsList.push_back(  pagesSetupData("T_Min,C", o_sytmm,0)); // min, max, increment for the temperature interpolation
+    scalarsList.push_back(  pagesSetupData("T_Max,C", o_sytmm,1));
+    scalarsList.push_back(  pagesSetupData("T_Step,C", o_sytmm,2));
     // add static values for table
     if(  fabs( syp->Msolids ) > 0  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symsolids,
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_symsolids,
            aObj[o_symass].GetKeywd(), 0, "",  syp->Msolids, '_' ));
 //    if(  fabs( syp->Mbel ) > 0  )
-//     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
+//     tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
 //           aObj[o_symass].GetKeywd(), 0, "",  syp->Mbel, '_' ));
 if(  fabs( syp->Mwat ) != 1.f  )  // Fixed for new defaults by DK 27.02.2012
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
            aObj[o_symass].GetKeywd(), 1, "",  syp->Mwat, '_' ));
 if(  fabs( syp->Msys ) != 1.f  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
            aObj[o_symass].GetKeywd(), 2, "",  syp->Msys, '_' ));
 if(  fabs( syp->Maq ) != 1.f  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
            aObj[o_symass].GetKeywd(), 3, "",  syp->Maq, '_' ));
 //   if(  fabs( syp->MBX ) > 0  )
-//     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
+//     tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
 //           aObj[o_symass].GetKeywd(), 4, "",  syp->MBX, '_' ));
 //    if(  fabs( syp->R1 ) > 0  )
-//    tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
+//    tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
 //          aObj[o_symass].GetKeywd(), 5, "",  syp->R1, '_' ));
 if(  fabs( syp->Vsys ) != 1.f  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_syvol,
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_syvol,
            aObj[o_syvol].GetKeywd(), 0, "",  syp->Vsys, '_' ));
 if(  fabs( syp->Vaq ) != 1.f  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_syvol,
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_syvol,
            aObj[o_syvol].GetKeywd(), 1, "",  syp->Vaq, '_' ));
     if(  fabs( syp->Pmin ) > 0  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sypmm,
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_sypmm,
            aObj[o_sypmm].GetKeywd(), 0, "",  syp->Pmin, '_' ));
     if(  fabs( syp->Pmax ) > 0  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sypmm,
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_sypmm,
            aObj[o_sypmm].GetKeywd(), 1, "",  syp->Pmax, '_' ));
     if(  fabs( syp->Pinc ) > 0  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sypmm,
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_sypmm,
            aObj[o_sypmm].GetKeywd(), 2, "",  syp->Pinc, '_' ));
 
     if(  fabs( syp->Tmin ) > 0  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sytmm,
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_sytmm,
            aObj[o_sytmm].GetKeywd(), 0, "",  syp->Tmin, '_' ));
     if(  fabs( syp->Tmax ) > 0  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sytmm,
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_sytmm,
            aObj[o_sytmm].GetKeywd(), 1, "",  syp->Tmax, '_' ));
     if(  fabs( syp->Tinc ) > 0  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sytmm,
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_sytmm,
            aObj[o_sytmm].GetKeywd(), 2, "",  syp->Tinc, '_' ));
 
    // change bulk chemical composition
@@ -986,7 +986,7 @@ if(  fabs( syp->Vaq ) != 1.f  )
     syp->Tinc = 0.;
 
     // inset data from tbData
-    for(uint ii=0; ii< tbData.GetCount() ; ii++)
+    for(size_t ii=0; ii< tbData.size() ; ii++)
     {
      uint nO = tbData[ii].nObj;
      if( aObj[nO].GetN() > 1 )

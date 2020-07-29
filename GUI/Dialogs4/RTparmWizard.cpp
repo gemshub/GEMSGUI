@@ -342,8 +342,8 @@ static equatSetupData eq( "", "yF", "jTP", "" );
 void RTparmWizard::resetPageList(const char* aXname, const char* aYname)
 {
 
-    TIArray<pagesSetupData> scalarsList;
-    TIArray<pagesSetupData> pgData;
+    std::vector<pagesSetupData> scalarsList;
+    std::vector<pagesSetupData> pgData;
 
     GetListsnRT( -1, pgData,  scalarsList );
     GetListsnRT( RT_RTPARM, pgData,  scalarsList );
