@@ -71,7 +71,7 @@ Formuan::~Formuan()
 { }
 
 //get <formula>  ::= <fterm> | <fterm><charge>
-void Formuan::scanFormula( TIArray<ICTERM>& tt )
+void Formuan::scanFormula( std::vector<ICTERM>& tt )
 {
   scanCharge();
 
@@ -91,13 +91,13 @@ void Formuan::scanFormula( TIArray<ICTERM>& tt )
 }
 
 //add component to sorted list
-void Formuan::icadd(  TIArray<ICTERM>& itt_, ICTERM it )
+void Formuan::icadd(  std::vector<ICTERM>& itt_, ICTERM it )
 {
     int iRet;
-    uint ii=0;
+    size_t ii=0;
 
     // test for setting element before
-    while( ii < itt_.GetCount() )
+    while( ii < itt_.size() )
     {
         iRet = ictcomp( itt_, ii, it.ick, it.val );
         if( iRet == 0 )// ic find
@@ -109,18 +109,18 @@ void Formuan::icadd(  TIArray<ICTERM>& itt_, ICTERM it )
             break;
         ii++;
     }
-    itt_.AddAt( new ICTERM( it ), ii );
+    itt_.insert( itt_.begin()+ii, ICTERM( it ) );
 }
 
 //add component to sorted list
-void Formuan::icadd(  TIArray<ICTERM>& itt_, const char *icn,
+void Formuan::icadd(  std::vector<ICTERM>& itt_, const char *icn,
                       const char *iso, int val, double csto )
 {
     ICTERM term( icn, iso, val, csto );
     icadd( itt_, term );
 }
 
-int Formuan::ictcomp( TIArray<ICTERM>& itt_, int ii, string& ick, int val )
+int Formuan::ictcomp( std::vector<ICTERM>& itt_, int ii, string& ick, int val )
 {
     //int iRet = memcmp( itt_[ii].ick.c_str(), ick, MAXICNAME+MAXSYMB );
     //if( iRet ) return( iRet );
@@ -166,7 +166,7 @@ void Formuan::scanCharge( )
 
 
 // read charge
-void Formuan::charge(TIArray<ICTERM>& tt)
+void Formuan::charge(std::vector<ICTERM>& tt)
 {
  double cha = 1.0;
  int sign = 1;
@@ -189,17 +189,17 @@ void Formuan::charge(TIArray<ICTERM>& tt)
 
 //get <fterm>  ::= <icterm> | <icterm><icterm>
 //    <icterm> ::= <elem>   | <elem>< elem_st_coef>
-void Formuan::scanFterm( TIArray<ICTERM>& itt_, string& startPos, char endSimb )
+void Formuan::scanFterm( std::vector<ICTERM>& itt_, string& startPos, char endSimb )
 {
   //char *cur_ = startPos;
-  uint ii;
+  size_t ii;
   double st_coef;
-  TIArray<ICTERM> elt_;
+  std::vector<ICTERM> elt_;
 
   while( startPos[0] != endSimb && !startPos.empty())  // list of <elem>< elem_st_coef>
   {
       // get element
-      elt_.Clear();
+      elt_.clear();
 
       scanElem( elt_, startPos );
 
@@ -208,12 +208,12 @@ void Formuan::scanFterm( TIArray<ICTERM>& itt_, string& startPos, char endSimb )
         // get elem_st_coef
         st_coef = 1.;
         getReal( st_coef, startPos );
-        for(uint ii=0; ii<elt_.GetCount(); ii++)
+        for(size_t ii=0; ii<elt_.size(); ii++)
           elt_[ii].stoc *= st_coef;
       }
 
       // added elements list to top level elements
-      for( ii=0; ii<elt_.GetCount(); ii++ )
+      for( ii=0; ii<elt_.size(); ii++ )
         icadd(  itt_, elt_[ii] );
 
       xblanc( startPos );
@@ -226,7 +226,7 @@ void Formuan::scanFterm( TIArray<ICTERM>& itt_, string& startPos, char endSimb )
 //                   <isotope_mass><icsymb><valence> |
 //                   <isotope_mass><icsymb> |
 //                   <icsymb><valence> | <icsymb>
-void Formuan::scanElem( TIArray<ICTERM>& itt_, string& startPos )
+void Formuan::scanElem( std::vector<ICTERM>& itt_, string& startPos )
 {
   //char *cur = startPos;
 
@@ -370,13 +370,13 @@ void Formuan::scanICsymb( string& icName, string& cur)
 // <fterm>  ::= <site_term> : | <fterm> <site_term>:
 // <site_term> ::= <moiety>   | <moiety><moiety>
 // <moiety>    ::= {<elem>}   | {<elem>} <elem_st_coef> | Va
-int Formuan::scanMoiety( TIArray<MOITERM>& moit_ )
+int Formuan::scanMoiety( std::vector<MOITERM>& moit_ )
 {
   string cur_ = form_str;
   size_t endmoi;
   string moiName;
   double nj;          // moiety-site occupancy.
-  moit_.Clear();
+  moit_.clear();
 
   nSites = 0;
   while(  !cur_.empty() )  // list of {<elem>}< elem_st_coef>
@@ -397,7 +397,7 @@ int Formuan::scanMoiety( TIArray<MOITERM>& moit_ )
                       cur_ = cur_.substr(endmoi+1);
                       nj = 1.;
                       getReal( nj, cur_ );
-                      moit_.Add( new MOITERM(moiName.c_str(), nSites, nj ));
+                      moit_.push_back( MOITERM(moiName.c_str(), nSites, nj ));
                       }
                      break;
         case 'V':  if( cur_[1] == 'a' ) // Va vacancy
@@ -405,7 +405,7 @@ int Formuan::scanMoiety( TIArray<MOITERM>& moit_ )
                       cur_ = cur_.substr(2); //Va
                       nj = 1.;
                       getReal( nj, cur_ );
-                      moit_.Add( new MOITERM("Va", nSites, nj ));
+                      moit_.push_back( MOITERM("Va", nSites, nj ));
                       break;
                    }
                   // else other symbol
@@ -435,8 +435,8 @@ TFormula::~TFormula()
 void TFormula::fo_clear()
 {
     aCn.clear();
-    aSC.Clear();
-    aVal.Clear();
+    aSC.clear();
+    aVal.clear();
     aZ = 0.;
 }
 
@@ -447,14 +447,14 @@ void TFormula::Reset()
 }
 
 // unpack list of terms to data and calculate charge
-void TFormula::fo_unpak( TIArray<ICTERM>& itt_ )
+void TFormula::fo_unpak( std::vector<ICTERM>& itt_ )
 {
     char ICbuf[MAXICNAME+MAXSYMB+2];
     string specSim = string(CHARGE_TYPE) + string(ISOTOPE_N) + "v";
 
     fo_clear();
 
-    for(uint i=0; i<itt_.GetCount(); i++ )
+    for(size_t i=0; i<itt_.size(); i++ )
     {
         memset( ICbuf, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICbuf, itt_[i].ick.c_str(), min(itt_[i].ick.length(), (size_t)MAXICNAME));
@@ -466,8 +466,8 @@ void TFormula::fo_unpak( TIArray<ICTERM>& itt_ )
         ICbuf[MAXICNAME+MAXSYMB]=0;
 
         aCn.push_back( ICbuf );
-        aSC.Add( itt_[i].stoc );
-        aVal.Add( itt_[i].val  );
+        aSC.push_back( itt_[i].stoc );
+        aVal.push_back( itt_[i].val  );
 
         if( itt_[i].val != SHORT_EMPTY/*I_EMPTY*/ && itt_[i].ick_iso[0] != 'z' )
             aZ += itt_[i].stoc * itt_[i].val;
@@ -476,7 +476,7 @@ void TFormula::fo_unpak( TIArray<ICTERM>& itt_ )
 
 const char* EQDEL_CHARS   ="$&,=<>";
 
-int TFormula::BuildMoiety( const char * StrForm, TIArray<MOITERM>& moit_ )
+int TFormula::BuildMoiety( const char * StrForm, std::vector<MOITERM>& moit_ )
 {
     int nSites = 0;
     Formuan aFa( StrForm );
@@ -508,7 +508,7 @@ void TFormula::SetFormula( const char * StrForm )
     ErrorIf( !len, "TFormula", "E32FPrun: Null length of the formula string");
 
     std::string fbuf = std::string( StrForm, 0, len );
-    TIArray<ICTERM> itt_;
+    std::vector<ICTERM> itt_;
 
     Formuan aFa( fbuf.c_str() );
 

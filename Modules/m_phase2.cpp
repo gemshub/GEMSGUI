@@ -777,8 +777,8 @@ const int MAXMOIETY = 60;
 void TPhase::MakeSublatticeLists( const TCStringArray& form_array  )
 {
     TFormula form;
-    TIArray<MOITERM> moit_;
-    uint ii, jj;
+    std::vector<MOITERM> moit_;
+    size_t ii, jj;
     int i1, nSites =0;
     int nMoi =  0;
 
@@ -793,7 +793,7 @@ void TPhase::MakeSublatticeLists( const TCStringArray& form_array  )
       else
         ErrorIf( php->nSub!=nSites, "MakeSublatticeLists", "Different number of sites" );
 
-      for( ii=0; ii<moit_.GetCount(); ii++ )
+      for( ii=0; ii<moit_.size(); ii++ )
       {
          for( i1=0; i1<nMoi; i1++)
          {

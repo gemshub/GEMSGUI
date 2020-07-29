@@ -21,11 +21,8 @@
 #ifndef _s_formula_h_
 #define _s_formula_h_
 
-#include "array.h"
 #include "v_user.h"
 #include "v_mod.h"
-
-#include <string>
 
 extern const char * CHARGE_NAME;
 
@@ -39,12 +36,6 @@ struct ICTERM     // description of parsed element
     ICTERM( const char* aIck, const char* aIso, int aVal, double aStoc ):
             ick(aIck), ick_iso(aIso), val(aVal), stoc(aStoc)
     {}
-    ICTERM( ICTERM& data ):
-            val(data.val), stoc(data.stoc)
-    {
-        ick = data.ick;
-        ick_iso = data.ick_iso;
-    }
 };
 
 struct MOITERM    // description of moiety element
@@ -61,11 +52,6 @@ struct MOITERM    // description of moiety element
        name = string(val);
     }
 
-    MOITERM( MOITERM& data ):
-       site(data.site), nj(data.nj)
-    {
-        name = data.name;
-    }
 };
 
 class Formuan  // stack for analyzing formula
@@ -73,17 +59,17 @@ class Formuan  // stack for analyzing formula
     string form_str;
     string charge_str;
 
-    //TIArray<ICTERM>  ict_;
+    //std::vector<ICTERM>  ict_;
 
     int nSites;             // number of sites in formula
-    //TIArray<MOITERM> moit_;
+    //std::vector<MOITERM> moit_;
 
 protected:
 
-    void icadd(  TIArray<ICTERM>& itt_, const char *icn,
+    void icadd(  std::vector<ICTERM>& itt_, const char *icn,
                  const char *iso, int val, double csto );
-    void icadd(  TIArray<ICTERM>& itt_, ICTERM it );
-    int ictcomp( TIArray<ICTERM>& itt_, int ii, string& ick, int val );
+    void icadd(  std::vector<ICTERM>& itt_, ICTERM it );
+    int ictcomp( std::vector<ICTERM>& itt_, int ii, string& ick, int val );
 
 
     inline bool iscapl( char ch )  // is cap letter
@@ -97,10 +83,10 @@ protected:
     //char *xblanc( char *cur );
     void xblanc( string& str );
 
-    void charge(TIArray<ICTERM>& tt);
+    void charge(std::vector<ICTERM>& tt);
     void   scanCharge();
-    void scanFterm( TIArray<ICTERM>& itt_, string& startPos, char endSimb );
-    void scanElem( TIArray<ICTERM>& itt_, string& cur );
+    void scanFterm( std::vector<ICTERM>& itt_, string& startPos, char endSimb );
+    void scanElem( std::vector<ICTERM>& itt_, string& cur );
     void getReal( double& real, string& cur);
     void scanValence( int& val, string& cur);
     void scanIsotope( string& isotop, string& cur);
@@ -112,8 +98,8 @@ public:
     Formuan( const char * formula );
     ~Formuan();
 
-    int scanMoiety( TIArray<MOITERM>& moit_ );
-    void scanFormula( TIArray<ICTERM>& tt );
+    int scanMoiety( std::vector<MOITERM>& moit_ );
+    void scanFormula( std::vector<ICTERM>& tt );
 
 };
 
@@ -122,9 +108,9 @@ class TFormula  // description of disassembled formula token
 {
     double aZ;   // calculated charge in Mol
 
-    TCStringArray  aCn;  // list of IC
-    TOArray<double> aSC;  // list of stoichiometric coef.
-    TOArray<short> aVal;  // list of valence numbers
+    std::vector<std::string>  aCn;  // list of IC
+    std::vector<double> aSC;  // list of stoichiometric coef.
+    std::vector<short> aVal;  // list of valence numbers
     //TIArray<MOITERM> moit_;
 
     std::string aFormula;  // analayzed formula
@@ -132,7 +118,7 @@ class TFormula  // description of disassembled formula token
 protected:
 
     void fo_clear();
-    void fo_unpak( TIArray<ICTERM>& itt_ );
+    void fo_unpak( std::vector<ICTERM>& itt_ );
 
 public:
 
@@ -165,13 +151,13 @@ public:
         return aFormula.c_str();
     }
 
-    int BuildMoiety( const char * StrForm, TIArray<MOITERM>& moit_ );
+    int BuildMoiety( const char * StrForm, std::vector<MOITERM>& moit_ );
 
     //--- Value manipulation
     void fixup_ics( char* ICs );
     void SetFormula( const char * StrForm ); // and ce_fscan
     int Fmwtz( double &Z, double &mW, double &eSm, short *lAn );
-int Fmwtz( double &Z, double &mW, double &eSm, short *lAn, double &Nj );
+    int Fmwtz( double &Z, double &mW, double &eSm, short *lAn, double &Nj );
     void TestIC( const char *key, int N, char *ICsym );
     void Stm_line( int N, double *Sml, char *ICsym, short *ICval );
     void Reset();
