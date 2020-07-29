@@ -805,10 +805,10 @@ const char* TDualTh::GetHtml()
 
 
 // insert changes in Project to TDualTh
-void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
+void TDualTh::InsertChanges( std::vector<CompItem>& aIComp )
 {
     // insert changes to IComp
-    if(aIComp.GetCount()<1 || dtp->nQ < 1)
+    if(aIComp.size()<1 || dtp->nQ < 1)
         return;
 
    // alloc memory & copy data from db
@@ -859,7 +859,7 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
     ii = 0;
     while( jj < dtp->Nb )
     {
-      if( i < aIComp.GetCount() &&  aIComp[i].line == ii )
+      if( i < aIComp.size() &&  aIComp[i].line == ii )
       {
         if( aIComp[i].delta == 1 )
         { // add line

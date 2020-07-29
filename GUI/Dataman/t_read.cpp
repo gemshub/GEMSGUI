@@ -34,14 +34,14 @@ TReadData::TReadData(const char *sd_key,  unsigned int nrt, const char *fmt_text
       input++;
       skipSpace();
      if( strncmp( input, "list", 4 ) )
-         aList.Add(false);
+         aList.push_back(false);
      else {
-         aList.Add(true);
+         aList.push_back(true);
          input += 4;
          skipSpace();
        }
      getFormat();
-     getData( aList[aList.GetCount()-1] );
+     getData( aList[aList.size()-1] );
      skipSpace();
     } while( *input == ',' );
   // Math scripts
@@ -68,9 +68,9 @@ TReadData::TReadData(const char *sd_key,  unsigned int nrt, const char *fmt_text
 
 TReadData::~TReadData()
 {
-     aList.Clear();
-     aFmts.Clear();  // list of formats
-     aDts.Clear();     // list of datas
+     aList.clear();
+     aFmts.clear();  // list of formats
+     aDts.clear();     // list of datas
 }
 
 // Format:
@@ -101,18 +101,18 @@ TReadData::getFormat()
        {
         sscanf(input+1, "%d", &size );
        }
-       aFmts.Add( new RFormat( read_r, size,
-               string( input, 0, i+1) ) );
+       aFmts.push_back( RFormat( read_r, size, string( input, 0, i+1) ) );
        input+=i+1;
        break;
        }
    case 'I':
        if( !strncmp( input, "IREC", 4 ) )
        {
-         aFmts.Add( new RFormat( irec_r, 0, "" ));
+         aFmts.push_back( RFormat( irec_r, 0, "" ));
          input+=4;
        } else
-       {string str_err = "Invalid format (must be IREC): \n";
+       {
+         string str_err = "Invalid format (must be IREC): \n";
                 str_err += input;
          Error( key_format.c_str(), str_err.c_str() );
        }
@@ -120,7 +120,7 @@ TReadData::getFormat()
    case 'E':
        if( !strncmp( input, "EMPTY", 5 ) )
        {
-         aFmts.Add( new RFormat( empty_r, 0, S_EMPTY ));
+         aFmts.push_back( RFormat( empty_r, 0, S_EMPTY ));
          input+=5;
        } else
          { string str_err = "Invalid format (must be EMPTY): \n";
@@ -175,7 +175,7 @@ TReadData::getFormat()
             }
           input++;
         }
-        aFmts.Add( new RFormat( object_r, data, ii, jj ));
+        aFmts.push_back( RFormat( object_r, data, ii, jj ));
        }
        break;
    case '\"': {
@@ -186,8 +186,7 @@ TReadData::getFormat()
               str_err += input;
           Error( key_format.c_str(), str_err.c_str() );
        }
-       aFmts.Add( new RFormat( string_r, 0,
-                   string( input, 0, pose-input ) ));
+       aFmts.push_back( RFormat( string_r, 0, string( input, 0, pose-input ) ));
        input = pose+1;
        }
        break;
@@ -284,7 +283,7 @@ TReadData::getData( bool isList )
     input++;
    }
 
-  aDts.Add( new RData( data, ii, jj ) );
+  aDts.push_back( RData( data, ii, jj ) );
   skipSpace();
 }
 
@@ -334,7 +333,7 @@ TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
 void  TReadData::readRecord( int n_itr, fstream& fread )
 {
 
- for(uint ii=0; ii<aList.GetCount(); ii++)
+ for(size_t ii=0; ii<aList.size(); ii++)
  {
    if( aFmts[ii].type == irec_r)
        aFmts[ii].size = n_itr;

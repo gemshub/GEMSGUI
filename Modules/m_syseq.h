@@ -221,9 +221,9 @@ public:
     void setCalcFlag( bool ifC );
     void keyTest( const char *key );
 
-    void InsertChanges( TIArray<CompItem>& aIComp,
-                        TIArray<CompItem>& aCompos, TIArray<CompItem>& aPhase,
-                        TIArray<CompItem>&aDComp );
+    void InsertChanges( std::vector<CompItem>& aIComp,
+                        std::vector<CompItem>& aCompos, std::vector<CompItem>& aPhase,
+                        std::vector<CompItem>&aDComp );
     void RenameList( const char* newName, const char *oldName );
 
 

@@ -495,8 +495,8 @@ public:
     //void CmHelp();
     const char* GetHtml();
 
-   void InsertChanges( TIArray<CompItem>& aIComp,
-          TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp );
+   void InsertChanges( std::vector<CompItem>& aIComp,
+          std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp );
    void FreeNa();
 
 #else

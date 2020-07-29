@@ -217,19 +217,19 @@ TSysEq::RecCalc( const char *key )
 
 // insert changes in Project to TSysEq
 
-void TSysEq::InsertChanges( TIArray<CompItem>& aIComp,
-                            TIArray<CompItem>& aCompos, TIArray<CompItem>& aPhase,
-                            TIArray<CompItem>&aDComp )
+void TSysEq::InsertChanges( std::vector<CompItem>& aIComp,
+                            std::vector<CompItem>& aCompos, std::vector<CompItem>& aPhase,
+                            std::vector<CompItem>&aDComp )
 {
-    uint i;
+    size_t i;
     int j1, j2, j3, j4, j5, j6;
     short  delta=0;
     bool ifRealloc = false;
     // insert changes to IComp
-    if(aIComp.GetCount()<1)
+    if(aIComp.size()<1)
         goto COMPOS_TEST;
 
-    for( i=0, j1=0, j2=0, j3=0; i<aIComp.GetCount(); i++)
+    for( i=0, j1=0, j2=0, j3=0; i<aIComp.size(); i++)
     {
         if( ssp->nnc )
         {
@@ -286,9 +286,9 @@ void TSysEq::InsertChanges( TIArray<CompItem>& aIComp,
 
     // insert changes to Compos
 COMPOS_TEST:
-    if(aCompos.GetCount()<1)
+    if(aCompos.size()<1)
         goto PHASE_TEST;
-    for( i=0, j1=0, delta=0; i<aCompos.GetCount(); i++)
+    for( i=0, j1=0, delta=0; i<aCompos.size(); i++)
     {
         if( ssp->llc )
         {
@@ -313,10 +313,10 @@ COMPOS_TEST:
     // insert changes to Phase
 PHASE_TEST:
     delta = 0;
-    if(aPhase.GetCount()<1)
+    if(aPhase.size()<1)
         goto DCOMP_TEST;
 
-    for( i=0, j1=0, j2=0, j3=0, j4=0, j5=0, j6=0; i<aPhase.GetCount(); i++)
+    for( i=0, j1=0, j2=0, j3=0, j4=0, j5=0, j6=0; i<aPhase.size(); i++)
     {
         if( ssp->phc )
         {
@@ -424,11 +424,11 @@ PHASE_TEST:
 DCOMP_TEST:
 
     delta = 0;
-    if(aDComp.GetCount()<1)
+    if(aDComp.size()<1)
         goto EXIT_TEST;
 
 
-    for( i=0, j1=0, j2=0, j3=0, j4=0, j5=0, j6=0; i<aDComp.GetCount(); i++)
+    for( i=0, j1=0, j2=0, j3=0, j4=0, j5=0, j6=0; i<aDComp.size(); i++)
     {
         if( ssp->dcc ) // DC     on  in  XeD[]     [sy.Lb]
         {

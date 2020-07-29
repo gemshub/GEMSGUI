@@ -665,8 +665,8 @@ bool TUnSpace::SaveChartData( jsonui::ChartData* gr )
 //=====================================================
 
 // insert changes in Project to TUnSpace
-void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
-    TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp )
+void TUnSpace::InsertChanges( std::vector<CompItem>& aIComp,
+    std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp )
 {
 // make copy of UNSPACE  structure (only for changed arrays )
    ods_link(-2);  //1
@@ -761,13 +761,13 @@ void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
     uint i=0;
     int j, ii=0, jj =0;
 
-if( aIComp.GetCount() < 1)
+if( aIComp.size() < 1)
   goto DCOMPS;
 
 // IComps  ( size  N )
     while( jj < usp->N )
     {
-      if( i < aIComp.GetCount() &&  aIComp[i].line == ii )
+      if( i < aIComp.size() &&  aIComp[i].line == ii )
       {
         if( aIComp[i].delta == 1 )
         { // add line
@@ -832,7 +832,7 @@ if( aIComp.GetCount() < 1)
     }
 
 DCOMPS:
-if( aDComp.GetCount() < 1)
+if( aDComp.size() < 1)
   goto PHASES;
 
 // DComps  ( size  L )
@@ -840,7 +840,7 @@ if( aDComp.GetCount() < 1)
 
     while( jj < usp->L )
     {
-      if( i < aDComp.GetCount() &&  aDComp[i].line == ii )
+      if( i < aDComp.size() &&  aDComp[i].line == ii )
       {
         if( aDComp[i].delta == 1 )
         { // add line
@@ -933,7 +933,7 @@ if( aDComp.GetCount() < 1)
 
     while( jj < usp->Ls )
     {
-      if( i < aDComp.GetCount() &&  aDComp[i].line == ii )
+      if( i < aDComp.size() &&  aDComp[i].line == ii )
       {
         if( aDComp[i].delta == 1 )
         { // add line
@@ -995,14 +995,14 @@ if( aDComp.GetCount() < 1)
 //*************************************************************
 PHASES:
 
-if( aPhase.GetCount() < 1)
+if( aPhase.size() < 1)
   return;
 
     ii=0; jj =0; i=0;
 // PHases  ( size  Fi )
     while( jj < usp->Fi )
     {
-      if( i < aPhase.GetCount() &&  aPhase[i].line == ii )
+      if( i < aPhase.size() &&  aPhase[i].line == ii )
       {
         if( aPhase[i].delta == 1 )
         { // add line

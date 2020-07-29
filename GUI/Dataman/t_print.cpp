@@ -100,8 +100,8 @@ TPrintData::TPrintData(const char *sd_key,
     }
     // end insert
 
-     aFmts.Clear();  // list of formats
-     aDts.Clear();     // list of datas
+     aFmts.clear();  // list of formats
+     aDts.clear();     // list of datas
      bool showMss = true;
      //Read formats
      do{
@@ -148,11 +148,10 @@ TPrintData::TPrintData(const char *sd_key,
         if( prr == 0 )
           continue;
        }
-       for( uint jj=0; jj<aDts.GetCount(); jj++ )
+       for( size_t jj=0; jj<aDts.size(); jj++ )
        {
           if( code == line_d && aDts[jj].index_i != 0)
-            prnData( fout, aDts[jj].index_i,
-                     aFmts[jj], aDts[jj] );
+            prnData( fout, aDts[jj].index_i, aFmts[jj], aDts[jj] );
           else
            prnData( fout, ii, aFmts[jj], aDts[jj] );
        }
@@ -167,8 +166,8 @@ TPrintData::TPrintData(const char *sd_key,
 
 TPrintData::~TPrintData()
 {
-     aFmts.Clear();  // list of formats
-     aDts.Clear();     // list of datas
+     aFmts.clear();  // list of formats
+     aDts.clear();     // list of datas
 }
 
 
@@ -202,7 +201,7 @@ TPrintData::getFormat( const char * fmt )
  if( fmt[i] == 's' || fmt[i] == 'c' || fmt[i] == 'f' ||
      fmt[i] == 'e' || fmt[i] == 'g' )
  {
-    aFmts.Add( new PFormat( fmt[i], string( fmt, 0, i) ) );
+    aFmts.push_back( PFormat( fmt[i], string( fmt, 0, i) ) );
     input += i+1;
     return true;
  }
@@ -409,7 +408,7 @@ TPrintData::getData( )
 
  if( _data == text_d )
  {
-   aDts.Add( new PData( _data, string( input, 0, i ).c_str() ) );
+   aDts.push_back( PData( _data, string( input, 0, i ).c_str() ) );
    input += i;
    if( *input == '"')
       input++;
@@ -423,7 +422,7 @@ TPrintData::getData( )
  }
  if( j < 0  )
  { j=i; i=0; }
- aDts.Add( new PData(_data, i, j, bg_s, end_s, _all, _label));
+ aDts.push_back( PData(_data, i, j, bg_s, end_s, _all, _label));
 
 }
 

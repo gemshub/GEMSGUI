@@ -18,6 +18,7 @@
 #ifndef _t_print_h_
 #define _t_print_h_
 
+#include <vector>
 #include "v_ipnc.h"
 
  // Format: % [flags] [width] [.prec] type_char
@@ -39,10 +40,6 @@ struct PFormat
     type( aType), long_(' '), fmt(aFmt)
   {}
 
-  PFormat( PFormat& d ):
-    type( d.type), long_(d.long_), fmt( d.fmt)
-  {}
-
   string FmtOut()
   {
     string res = fmt;
@@ -51,6 +48,7 @@ struct PFormat
     res += string( 1, type);
     return res;
   }
+
 };
 
   enum data_ttttt { // >=0 - object number
@@ -94,13 +92,6 @@ struct PData
    line( _line )
    { }
 
-
-  PData( PData& d ):
-   is_all(d.is_all), is_label( d.is_label),  data(d.data),
-   index_i(d.index_i), index_j(d.index_j), bg_sub(d.bg_sub),
-   end_sub(d.end_sub), line(d.line)
-   { }
-
 };
 
 class TPrintData  // print resalts of module calc
@@ -109,8 +100,8 @@ class TPrintData  // print resalts of module calc
     unsigned int nRT;          // module number
 
     char *input;               // current position
-    TIArray<PFormat> aFmts;  // list of formats
-    TIArray<PData> aDts;     // list of datas
+    std::vector<PFormat> aFmts;  // list of formats
+    std::vector<PData> aDts;     // list of datas
 
     bool  ifcond;
     string cond;      // Text with IPN-expression << prn=: cond; >>

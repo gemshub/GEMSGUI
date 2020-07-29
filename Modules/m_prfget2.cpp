@@ -76,7 +76,7 @@ void TProfil::DeleteOldList()
 
 // push element to the list - refurbished by DK on 15.02.2012
 //
-void TProfil::Push( TIArray<CompItem>& aList, int aLine,
+void TProfil::Push( std::vector<CompItem>& aList, int aLine,
                     short aDelta, const char* dbKeywd, std::string aKey )
 {
    if( comp_change_all == false )
@@ -95,16 +95,16 @@ void TProfil::Push( TIArray<CompItem>& aList, int aLine,
        case VF3_2:  // Do it for all
                     comp_change_all = true;
        case VF3_1:  // Do it for this item
-                    aList.Add( new CompItem( aLine, aDelta));
+                    aList.push_back(CompItem( aLine, aDelta));
        }
    }
    else
-       aList.Add( new CompItem( aLine, aDelta));
+       aList.push_back( CompItem( aLine, aDelta));
 }
 
 
 // Compare IComp keys lists
-void TProfil::ICcompare( TIArray<CompItem>& aIComp)
+void TProfil::ICcompare( std::vector<CompItem>& aIComp)
 {
     int i, j, l;
     RMULTS* mup = rmults->GetMU();
@@ -144,7 +144,7 @@ void TProfil::ICcompare( TIArray<CompItem>& aIComp)
 }
 
 // Compare Compos keys lists
-void TProfil::COMPcompare( TIArray<CompItem>& aCompos)
+void TProfil::COMPcompare( std::vector<CompItem>& aCompos)
 {
     int i, j, l;
     RMULTS* mup = rmults->GetMU();
@@ -184,7 +184,7 @@ void TProfil::COMPcompare( TIArray<CompItem>& aCompos)
 }
 
 // compare DCOMP&REACT keys lists to one phase
-void TProfil::DCcompare( TIArray<CompItem>& aList, int& i,
+void TProfil::DCcompare( std::vector<CompItem>& aList, int& i,
                          int& j, int nI, int nJ)
 {
     int l;
@@ -223,8 +223,8 @@ void TProfil::DCcompare( TIArray<CompItem>& aList, int& i,
 }
 
 // Compare Phase and DComp&React keys lists
-void TProfil::PHcompare( TIArray<CompItem>& aPhase,
-                         TIArray<CompItem>& aDComp)
+void TProfil::PHcompare( std::vector<CompItem>& aPhase,
+                         std::vector<CompItem>& aDComp)
 {
     int i, j, l;
     int id =0, jd=0;
@@ -333,18 +333,18 @@ void TProfil::TestChangeProfile()
 
     comp_change_all = false;
     // compare ICOMP list
-    TIArray<CompItem> aIComp(10, 5);  // list of IC changes
+    std::vector<CompItem> aIComp;  // list of IC changes
     ICcompare( aIComp);
     // compare COMPOS list
-    TIArray<CompItem> aCompos(10, 5);  // list of Compos changes
+    std::vector<CompItem> aCompos;  // list of Compos changes
     COMPcompare( aCompos );
     // compare PHASE list
-    TIArray<CompItem> aPhase(10, 5);  // list of Phase changes
-    TIArray<CompItem> aDComp(10, 5);  // list of DComp changes
+    std::vector<CompItem> aPhase;  // list of Phase changes
+    std::vector<CompItem> aDComp;  // list of DComp changes
     PHcompare( aPhase, aDComp );
 
-    if( aIComp.GetCount()<1 && aCompos.GetCount()<1 &&
-            aPhase.GetCount()<1 && aDComp.GetCount()<1 )
+    if( aIComp.size()<1 && aCompos.size()<1 &&
+            aPhase.size()<1 && aDComp.size()<1 )
         return;
 
     TCStringArray aList;
@@ -355,7 +355,7 @@ void TProfil::TestChangeProfile()
 
 
     // Insert changes to GEM2MT ( do it before Insert changes to SYSEQ  30/06/2011 )
-    if( aIComp.GetCount()>=1 || aPhase.GetCount()>=1 || aDComp.GetCount()>=1 )
+    if( aIComp.size()>=1 || aPhase.size()>=1 || aDComp.size()>=1 )
     {
       aList.clear();
       anR.clear();
@@ -400,7 +400,7 @@ void TProfil::TestChangeProfile()
     }
 
     // Insert changes to DUALTH
-    if( aIComp.GetCount()>=1  )
+    if( aIComp.size()>=1  )
     {
       aList.clear();
       anR.clear();
@@ -421,7 +421,7 @@ void TProfil::TestChangeProfile()
     }
 
     // Insert changes to RT_UNSPACE
-    if( aIComp.GetCount()<1 &&  aPhase.GetCount()<1 && aDComp.GetCount()<1 )
+    if( aIComp.size()<1 &&  aPhase.size()<1 && aDComp.size()<1 )
         return;
     aList.clear();
     anR.clear();

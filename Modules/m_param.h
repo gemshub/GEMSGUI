@@ -253,12 +253,12 @@ protected:
     void SaveOldList();
     void DeleteOldList();
     void TestChangeProfile();
-    void Push( TIArray<CompItem>& aList, int aLine,
+    void Push( std::vector<CompItem>& aList, int aLine,
                short aDelta, const char* dbKeywd, std::string aKey );
-    void ICcompare( TIArray<CompItem>& aIComp);
-    void COMPcompare( TIArray<CompItem>& aCompos);
-    void DCcompare( TIArray<CompItem>& aList, int& i,int& j, int nI, int nJ);
-    void PHcompare( TIArray<CompItem>& aPhase, TIArray<CompItem>& aDComp);
+    void ICcompare( std::vector<CompItem>& aIComp);
+    void COMPcompare( std::vector<CompItem>& aCompos);
+    void DCcompare( std::vector<CompItem>& aList, int& i,int& j, int nI, int nJ);
+    void PHcompare( std::vector<CompItem>& aPhase, std::vector<CompItem>& aDComp);
 
     // multi load
     short BAL_compare();

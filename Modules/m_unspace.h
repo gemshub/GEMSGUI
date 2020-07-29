@@ -425,8 +425,8 @@ public:
     const char* GetHtml();
 
     //insert changes in profile  (must be in next version)
-    void InsertChanges( TIArray<CompItem>& aIComp,
-                        TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp );
+    void InsertChanges( std::vector<CompItem>& aIComp,
+                        std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp );
     void newSizeifChange();
 
 };

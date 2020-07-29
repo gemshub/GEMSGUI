@@ -283,7 +283,7 @@ public:
     //void CmHelp();
     const char* GetHtml();
 
-    void InsertChanges( TIArray<CompItem>& aIComp );
+    void InsertChanges( std::vector<CompItem>& aIComp );
 };
 
 enum dualth_inernal {

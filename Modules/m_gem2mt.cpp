@@ -1165,18 +1165,18 @@ void TGEM2MT::RecordPrint( const char* key )
 }
 
 // insert changes in Project to GEM2MT
-void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
-      TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp )
+void TGEM2MT::InsertChanges( std::vector<CompItem>& aIComp,
+      std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp )
 {
 
     // insert changes to IComp
-    if(aIComp.GetCount()<1 && aPhase.GetCount()<1 && aDComp.GetCount()<1)
+    if(aIComp.size()<1 && aPhase.size()<1 && aDComp.size()<1)
        return;
 
    // alloc memory & copy data from db
 
     int j, ii, jj;
-    uint i;
+    size_t i;
 
     int Nold = mtp->Nb;
     char  *p_CIclb=nullptr;
@@ -1217,7 +1217,7 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
     i=0; jj = 0; ii = 0;
     while( jj < mtp->Nb )
     {
-      if( i < aIComp.GetCount() &&  aIComp[i].line == ii )
+      if( i < aIComp.size() &&  aIComp[i].line == ii )
       {
         if( aIComp[i].delta == 1 )
         { // add line

@@ -20,10 +20,9 @@
 #define __v_ipnc_h_
 
 #include <cctype>
+#include <vector>
 #include <fstream>
 using namespace std;
-
-#include "array.h"
 
 const double IPNC_DBL_MAX = 1e307;
 const double IPNC_DBL_MIN = 1e-307;
@@ -91,9 +90,9 @@ class IPNCalc
         mod_f, pow_f, sum_f, prod_f, max_f, min_f, null_f, one_f
     };
 
-    TIArray<RpnItem> aItm;  // list of items
-    TIArray<Equation> aEq;  // list of equations
-    TOArray<double> aCon;  // list of constant
+    std::vector<RpnItem> aItm;  // list of items
+    std::vector<Equation> aEq;  // list of equations
+    std::vector<double> aCon;  // list of constant
     char *input;
 
 protected:
@@ -130,7 +129,7 @@ public:
     void PrintEquat( char *s, fstream& f);
     int nEquat() const
     {
-        return aEq.GetCount();
+        return aEq.size();
     }
 
 };
