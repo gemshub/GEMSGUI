@@ -153,17 +153,17 @@ SystemWizard::~SystemWizard()
 
 string SystemWizard::getName(  )
 {
-  return string(pName->text().toStdString());
+  return pName->text().toStdString();
 }
 
 string SystemWizard::getComment(  )
 {
-  return string(pComment->text().toStdString());
+  return pComment->text().toStdString();
 }
 
 string SystemWizard::getEQkey(  )
 {
-  return string(pKey->text().toStdString());
+  return pKey->text().toStdString();
 }
 
 

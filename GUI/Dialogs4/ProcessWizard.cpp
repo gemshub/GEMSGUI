@@ -3,6 +3,7 @@
 //
 // Implementation of ProcessWizard class
 //
+// Copyright (C) 2005-2013  S.Dmytriyeva, D.Kulik
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
