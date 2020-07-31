@@ -34,7 +34,7 @@
 #include <cstring>
 using namespace std;
 #include "GEMS3K/v_detail.h"
-#include "array.h"
+
 
 #ifdef __APPLE__
 

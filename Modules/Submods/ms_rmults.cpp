@@ -797,8 +797,9 @@ NEW_PHASE_AGAIN:
     file =rt[RT_PHASE]->GetOpenFileNum( prfName.c_str() );
 
     // Creating automatic aq and/or gas phases (automatic phase only one )
-    TPhase::pm->newAqGasPhase( AqKey[0].c_str(), GasKey[0].c_str(), file,
-            amod, gmod, aparam );
+    TPhase::pm->newAqGasPhase( ( AqKey.size()>0 ? AqKey[0].c_str(): nullptr),
+                               ( GasKey.size()>0 ? GasKey[0].c_str(): nullptr),
+                               file, amod, gmod, aparam );
 
     MakeRecordLists( AqKey, GasKey ); // build records lists and calc size of arrays
 
@@ -830,7 +831,8 @@ NEW_PHASE_AGAIN:
     TestIComp();
 
     // Set nAq and nGas
-    SetAqGas( AqKey[0].c_str() , GasKey[0].c_str() );
+    SetAqGas( ( AqKey.size()>0 ? AqKey[0].c_str(): nullptr),
+              ( GasKey.size()>0 ? GasKey[0].c_str(): nullptr) );
 
 }
 
@@ -1041,13 +1043,13 @@ void TRMults::SetAqGas( const char* AqKey, const char* GasKey )
     for(short kk=0, ii=0; kk<mu.Fi; kk++ ) // phase list
     {
         //aqueous phase
-        if( !memcmp( mu.SF[kk], AqKey, PH_RKLEN ) )
+        if( AqKey && !memcmp( mu.SF[kk], AqKey, PH_RKLEN ) )
         {
             mu.nAq=kk;
             ii++;
         }
         //gaseous phase
-        if( !memcmp( mu.SF[kk], GasKey, PH_RKLEN ) )
+        if( GasKey && !memcmp( mu.SF[kk], GasKey, PH_RKLEN ) )
         {
             mu.nGas=kk;
             ii++;

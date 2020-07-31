@@ -1066,7 +1066,7 @@ void  TProfil::CalculateEquilibriumGUI()
 // GEM IPM calculation of equilibrium state in MULTI
 // without testing changes in the system
 //
-double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& NumIterFIA, long int& NumIterIPM )
+double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& /*NumIterFIA*/, long int& /*NumIterIPM*/ )
 {
   TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
   calcFinished = false;

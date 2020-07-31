@@ -19,7 +19,6 @@
 #ifndef filters_data_included
 #define filters_data_included
 
-#include "array.h"
 #include "v_user.h"
 
 //-----------------------------------------------------------------------

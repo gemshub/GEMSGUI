@@ -778,14 +778,15 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
       Vmessage += buf;
       Vmessage += ". Please, wait (may take time)...";
 
-    if( mtp->PsSmode != S_OFF  )
-    {
-      STEP_POINT2();
-    }
-     else
-      iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
-                           mtp->ct, mtp->ntM, UseGraphMonitoring );
-
+      if( mtp->PsSmode != S_OFF  )
+      {
+          STEP_POINT2();
+      }
+      else
+      {
+          iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
+                                  mtp->ct, mtp->ntM, UseGraphMonitoring );
+      }
 
       if( iRet )
              return iRet;// Error("GEM2MT SeqReac model", "Cancel by the user");

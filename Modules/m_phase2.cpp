@@ -1245,11 +1245,12 @@ MAKE_GAS_PHASE:
               goto DONE;
     }
     part = "g:*:*:*:";
-    if( gkey[0] == 'f' )
+    if( gkey && gkey[0] == 'f' )
         part = "f:*:*:*:";
 
     // Assembling gas phase
-    AssemblePhase( gkey, part, nullptr, file, useLst, lst, 0 );
+    if(gkey )
+     AssemblePhase( gkey, part, nullptr, file, useLst, lst, 0 );
 
     // Do sometning else here?
     DONE:

@@ -1,6 +1,6 @@
          HEADERS += $$DATAMAN_H/v_vals.h \
                     $$DATAMAN_H/v_user.h \
-                    $$DATAMAN_H/array.h \
+                    #$$DATAMAN_H/array.h \
                     #$$DATAMAN_H/gstring.h \
                     $$DATAMAN_H/v_vals_impl.h \
                     $$DATAMAN_H/v_object.h \

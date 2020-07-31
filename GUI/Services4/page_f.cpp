@@ -234,9 +234,9 @@ PageInfo::toDAT(ostream & os)
     int l = name.length() + 1;	// writing ending '\0'
     os.write((char *) &l, sizeof l);
     os.write(name.c_str(), l);
-    size_t n = aFieldInfo.size();
+    int n = aFieldInfo.size();
     os.write((char *) &n, sizeof n);
-    for (size_t ii = 0; ii < n; ii++)
+    for (int ii = 0; ii < n; ii++)
         aFieldInfo[ii]->toDAT(os);
     // end signature
     os.write(PSigEND, 2);
