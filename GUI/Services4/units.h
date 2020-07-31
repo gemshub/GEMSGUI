@@ -19,6 +19,8 @@
 #define _units_h_
 
 #include <fstream>
+#include <vector>
+#include <string>
 
 //---------------------------------
 // units for TCellCheck
@@ -26,33 +28,33 @@
 
 struct sunits
 {
-    string name;
-    string vals;
+    std::string name;
+    std::string vals;
 
     sunits()
     {}
 
-    sunits(const string & n, const string & v):
+    sunits(const std::string & n, const std::string & v):
             name(n), vals(v)
     {}
 
 
-    string getVals(int m) const;
+    std::string getVals(int m) const;
 };
 
-class TUnitsList : public TOArray<sunits>
+class TUnitsList : public std::vector<sunits>
 {
 
 public:
     TUnitsList();
     int Find(const char* s)
     {
-        return Find(string(s));
+        return Find( std::string(s));
     }
-    int Find(const string & s);
+    int Find(const std::string & s);
 
-    void toDAT(ostream & visor_dat);
-    void fromDAT(istream & visor_dat);
+    void toDAT(std::ostream & visor_dat);
+    void fromDAT(std::istream & visor_dat);
     void load(const char* units_ini);
 };
 

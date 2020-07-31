@@ -56,7 +56,7 @@ sunits::getVals(int m) const
 }
 
 TUnitsList::TUnitsList()
-//  TOArray<sunits>
+//  std::vector<sunits>
 {}
 
 
@@ -75,16 +75,16 @@ TUnitsList::toDAT(ostream& visor_dat)
     // begin signature
     visor_dat << USigBEG;
 
-    int n1 = GetCount();
+    int n1 = size();
     visor_dat.write((char *) &n1, sizeof n1);
     for (int ii = 0; ii < n1; ii++)
     {
-        int n = elem(ii).name.length() + 1;
+        int n = at(ii).name.length() + 1;
         visor_dat.write((char *) &n, sizeof n);
-        visor_dat.write(elem(ii).name.c_str(), n);
-        n = elem(ii).vals.length() + 1;
+        visor_dat.write(at(ii).name.c_str(), n);
+        n = at(ii).vals.length() + 1;
         visor_dat.write((char *) &n, sizeof n);
-        visor_dat.write(elem(ii).vals.c_str(), n);
+        visor_dat.write(at(ii).vals.c_str(), n);
     }
 
     // end signature
@@ -104,8 +104,7 @@ TUnitsList::fromDAT(istream& visor_dat)
     int n1;
     visor_dat.read((char *) &n1, sizeof n1);
 
-    Clear(n1);
-
+    clear();
     for (int ii = 0; ii < n1; ii++)
     {
         int n;
@@ -113,7 +112,7 @@ TUnitsList::fromDAT(istream& visor_dat)
         visor_dat.read(nm, n);
         visor_dat.read((char *) &n, sizeof n);
         visor_dat.read(vl, n);
-        Add(sunits(string (nm), string (vl)));
+        push_back(sunits(string (nm), string (vl)));
         ;
     }
 
@@ -138,7 +137,7 @@ TUnitsList::load(const char *f_units)
         cnf.getcStr(str);
         //    str += " `";
 
-        Add(sunits(par, str));
+        push_back(sunits(par, str));
         par = cnf.getNext();
     }
 }
@@ -146,8 +145,8 @@ TUnitsList::load(const char *f_units)
 int
 TUnitsList::Find(const string &s)
 {
-    for (uint ii = 0; ii < GetCount(); ii++)
-        if (elem(ii).name == s)
+    for (size_t ii = 0; ii < size(); ii++)
+        if (at(ii).name == s)
             return ii;
 
     return -1;

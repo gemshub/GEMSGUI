@@ -50,8 +50,8 @@ class TCPage:
     bool fRedraw;
     bool firstRedraw;
 
-    TOArray<TObjectModel*> aModels;
-    TOArray<QWidget*> aFields;
+    std::vector< std::shared_ptr<TObjectModel> > aModels;
+    std::vector< std::shared_ptr<TObjectTable>> aFields;
     std::vector<int> aTypes;
     
     int getFieldCnt() const
@@ -98,7 +98,7 @@ class TCWindow: public QWidget
 
     CWinInfo& rInfo;
     int iCurPage;
-    TOArray<TCPage*> aPages;
+    std::vector< std::shared_ptr<TCPage>> aPages;
 
     QStackedWidget *pages;
     QScrollArea *scroll;

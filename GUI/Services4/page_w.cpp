@@ -119,7 +119,7 @@ void TCPage::AddFields( bool info )
        }
 
        model = new TObjectModel( aFlds, this );
-       aModels.Add( model );
+       aModels.push_back( std::shared_ptr<TObjectModel>(model) );
        
    	  switch( fi.fType )
        {
@@ -133,7 +133,7 @@ void TCPage::AddFields( bool info )
                 TObjectDelegate *deleg = new TObjectDelegate( fieldTable, this);
        	    fieldTable->setItemDelegate(deleg);
        	    fieldTable->setModel(model);
-       	    aFields.Add( fieldTable );
+            aFields.push_back( std::shared_ptr<TObjectTable>(fieldTable) );
             aTypes.push_back(1);
             break;     
        }
@@ -154,14 +154,14 @@ void TCPage::RedrawFields()
     mwidth = x = X0;
     mheight = y = Y0;
    
-    for( uint ii=0; ii<aModels.GetCount(); ii++ )
+    for( size_t ii=0; ii<aModels.size(); ii++ )
     {
     	oldRowSize = rowSize;
     	oldColSize = colSize;
     	
    	  // get size of element
         place = aModels[ii]->getObjectPlace();
-        qobject_cast<TObjectTable *>(aFields[ii])->getObjectSize(rowSize, colSize);
+        aFields[ii]->getObjectSize(rowSize, colSize);
 
        // calculating position of the element
        switch( place )
@@ -361,7 +361,7 @@ TCWindow::TCWindow(TCModuleImp* pImp, CWinInfo& i, int page):
         scroll->setFrameStyle( QFrame::NoFrame ); //Remove outer frame about data objects
         scroll->setWidget(pPage);
         pages->addWidget( scroll );
-        aPages.Add( pPage );
+        aPages.push_back( std::shared_ptr<TCPage>( pPage) );
     }
     pages->setCurrentIndex(iCurPage);
 
