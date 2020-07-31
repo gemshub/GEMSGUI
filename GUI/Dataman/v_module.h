@@ -326,11 +326,11 @@ public:
 
 // TSubModule and TCModule container
 class TModuleList:
-            public TIArray<TSubModule>
+            public std::vector<std::shared_ptr<TSubModule>>
 {
 public:
     TModuleList():
-            TIArray<TSubModule>(40)
+          std::vector<std::shared_ptr<TSubModule>>()
     {}
 
     ~TModuleList();

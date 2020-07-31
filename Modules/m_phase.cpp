@@ -695,7 +695,7 @@ void TPhase::moiety_new( int nDC, int nMoi, bool setDefault )
 void TPhase::set_def( int q)
 {
     ErrorIf( php!=&ph[q], GetName(), "E05PHrem: Invalid access to ph in set_def()");
-    TProfil *aPa=dynamic_cast<TProfil *>(&aMod[RT_PARAM]);
+    TProfil *aPa=dynamic_cast<TProfil *>(aMod[RT_PARAM].get());
     memcpy( ph[q].sol_t, aPa->pa.PHsol_t, 6 );
     memcpy( &ph[q].PphC, aPa->pa.PHpvc, 6 );
     strcpy( ph[q].name, "enter here a Phase name ...");
@@ -928,7 +928,7 @@ TPhase::RecBuild( const char *key, int mode  )
     TCStringArray aDcSkrl;
 //    TCStringArray aIclist;
 //    std::string str;
-    TProfil *aPa=dynamic_cast<TProfil *>(&aMod[RT_PARAM]);
+    TProfil *aPa=dynamic_cast<TProfil *>(aMod[RT_PARAM].get());
     // old flag values to reset  parameter indexes comment
     char old_sol[7], old_kin[9];
 
@@ -1663,8 +1663,8 @@ TCStringArray TPhase::readFormulaes( const TCIntArray&  DCused) const
     TCStringArray form_array;
     bool onlyused = DCused.size()>=php->nDC;
 
-    TDComp* aDC=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
-    TReacDC* aRDC=dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
+    TDComp* aDC=dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
+    TReacDC* aRDC=dynamic_cast<TReacDC *>(aMod[RT_REACDC].get());
     aDC->ods_link(0);
     aRDC->ods_link(0);
 

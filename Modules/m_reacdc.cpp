@@ -249,7 +249,7 @@ void TReacDC::w_dyn_new()
 void TReacDC::set_def( int q)
 {
     ErrorIf( rcp!=&rc[q], GetName(), "E05RErem: Invalid access to rc in set_def()");
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
 
     //memset( rc[q].pct, 0, sizeof( REACDC )-DC_RKLEN );
     memcpy( rc[q].pct, aPa->pa.REpct, 6 );
@@ -670,7 +670,7 @@ TReacDC::RCthermo( int q, int p )
     if( rcp != rc+q )
         ods_link( q );
     aW.ods_link( p );
-    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+    TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
 
     /*  memcpy( dckey, rc[q].pstate, DC_RKLEN ); */
@@ -1259,7 +1259,7 @@ void TReacDC::PronsPrep( const char *key )
     rcp->Cps[1] = (float)(CP * cal_to_J);
     rcp->Vs[1] = (float)(V/10.0);
 
-    aMod[RT_REACDC].ModUpdate("PRONSPREP correlations (Step 1) done Ok!");
+    aMod[RT_REACDC]->ModUpdate("PRONSPREP correlations (Step 1) done Ok!");
 
     if( !vfQuestion( window(), "DComp",
                "Would you like to create/modify a DComp record?" ))
@@ -1267,7 +1267,7 @@ void TReacDC::PronsPrep( const char *key )
     /* Trying to read resulting DCOMP */
 
     strncpy( dcn, key, MAXRKEYLEN );
-    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+    TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
     Rfind = rt[RT_DCOMP].Find( dcn );
     if(Rfind <0 )
@@ -1628,7 +1628,7 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     rcp->Cps[1] = (float)(CP * cal_to_J);
     rcp->Vs[1] = (float)(V/10.0);
 
-    aMod[RT_REACDC].ModUpdate("PRONSPREP correlations (Step 1) done Ok!");
+    aMod[RT_REACDC]->ModUpdate("PRONSPREP correlations (Step 1) done Ok!");
 
     if( !vfQuestion( window(), "DComp",
                "Would you like to create/modify a DComp record?" ))
@@ -1636,7 +1636,7 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     // Trying to read resulting DCOMP
 
     strncpy( dcn, key, MAXRKEYLEN );
-    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+    TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
     Rfind = rt[RT_DCOMP].Find( dcn );
     if(Rfind <0 )

@@ -264,7 +264,7 @@ void TCompos::dyn_new(int q)
 void TCompos::set_def( int q)
 {
     ErrorIf( bcp!=&bc[q], GetName(), "E04BCrem: Dynamic memory corruption in Compos data structure.");
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
     memcpy( &bc[q].PcIC, aPa->pa.BCpc, 6 );
     memcpy( bc[q].name, "element", 7 ); bc[q].name[7] = 0;
     memcpy( bc[q].notes, "`", 1 ); bc[q].notes[1] = 0;
@@ -778,11 +778,11 @@ TCompos::RecCalc( const char* key )
     int i1;
 
     TFormula aFo;
-    TIComp* aIC=(TIComp *)(&aMod[RT_ICOMP]);
+    TIComp* aIC= dynamic_cast<TIComp *>( aMod[RT_ICOMP].get());
     aIC->ods_link(0);
-    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+    TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
-    TReacDC* aRC=(TReacDC *)(&aMod[RT_REACDC]);
+    TReacDC* aRC= dynamic_cast<TReacDC *>( aMod[RT_REACDC].get());
     aRC->ods_link(0);
 
     bc_work_dyn_new();  // allocate work arrays and set bcp->Nmax

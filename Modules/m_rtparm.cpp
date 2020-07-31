@@ -240,7 +240,7 @@ void TRTParm::dyn_new(int q)
 void TRTParm::set_def( int q)
 {
     ErrorIf( rpp!=&rp[q], GetName(), "E05RTrem: Dynamic memory corruption in RTParm data structure.");
-    TProfil *aPa= dynamic_cast<TProfil *>(&aMod[RT_PARAM]);
+    TProfil *aPa= dynamic_cast<TProfil *>(aMod[RT_PARAM].get());
 
     memcpy( &rp[q].What, aPa->pa.RPpdc, 10 );
     strcpy( rp[q].name,  "T (and P) corrections: g0 function of " );   // Fixed for debugging
@@ -309,13 +309,13 @@ bool TRTParm::check_input( const char *key, int Level )
     srec = key + MAXSYMB+MAXDRGROUP+MAXDCNAME+MAXSYMB;
     if( *srec == SRC_DCOMP )
     {
-        TDComp* aDC=   dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
+        TDComp* aDC=   dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
         aDC->ods_link(0);
         aDC->TCModule::TryRecInp( pkey, tr, 0 );
     }
     else
     {
-        TReacDC* aRC= dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
+        TReacDC* aRC= dynamic_cast<TReacDC *>(aMod[RT_REACDC].get());
         aRC->ods_link(0); //Sveta 16/11/99
         aRC->TCModule::TryRecInp( pkey, tr, 0 );
     }
@@ -638,7 +638,7 @@ TRTParm::RecCalc( const char *key )
         {
         case SRC_DCOMP:
             {
-                TDComp* aDC=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
+                TDComp* aDC=dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
                 aW.twp->TCst = aDC->dcp->TCst;
                 aW.twp->Tst = aW.twp->TCst + C_to_K;
                 aW.twp->Pst = aDC->dcp->Pst;
@@ -648,7 +648,7 @@ TRTParm::RecCalc( const char *key )
             break;
         case SRC_REACDC:
             {
-                TReacDC* aRDC=dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
+                TReacDC* aRDC=dynamic_cast<TReacDC *>(aMod[RT_REACDC].get());
                 aW.twp->TCst = aRDC->rcp->TCst;
                 aW.twp->Tst = aW.twp->TCst + C_to_K;
                 aW.twp->Pst = aRDC->rcp->Pst;
@@ -669,7 +669,7 @@ TRTParm::RecCalc( const char *key )
         }
         // calculate equations of  data
         rpn[0].CalcEquat();
-        aMod[nRT].ModUpdate("Calculation of RTparm arrays");
+        aMod[nRT]->ModUpdate("Calculation of RTparm arrays");
     }
     SetString("RTPARM arrays calculated OK");
     TCModule::RecCalc(key);

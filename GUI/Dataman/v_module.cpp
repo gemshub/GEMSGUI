@@ -1210,14 +1210,14 @@ TCModule::RecordPrint( const char* key )
  }
  if( sd_key.find_first_of("*?" ) != string::npos )
  {
-     sd_key = dynamic_cast<TCModule *>(&aMod[RT_SDATA])->GetKeyofRecord(
+     sd_key = dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->GetKeyofRecord(
           sd_key.c_str(), "Please, select a print script", KEY_OLD);
  }
 
  if( sd_key.empty() )
      return;
 
-  dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+  dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
   const char * text_fmt = static_cast<const char *>(aObj[o_sdabstr].GetPtr());
   if( !text_fmt )
        Error( sd_key.c_str(), "No print script in this record.");
@@ -1265,15 +1265,15 @@ TCModule::CmScript()
 
       sd_key += "*";
       sd_key += ":";
-      sd_key =dynamic_cast<TCModule *>(&aMod[RT_SDATA])->GetKeyofRecord(
+      sd_key =dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->GetKeyofRecord(
           sd_key.c_str(), "Please, select an appropriate script", KEY_OLD);
       if( sd_key.empty() )
       return;
-      dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+      dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
        /*if( pImp )
            pVisorImp->OpenModule(pImp->topLevelWidget(), RT_SDATA);
        else*/ pVisor->OpenModule(nullptr, RT_SDATA,0,true);  // KD: workaround for NewSystemDialog
-      dynamic_cast<TCModule *>(&aMod[RT_SDATA])->Update();
+      dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->Update();
 
     }
     catch( TError& xcpt )
@@ -1810,11 +1810,11 @@ TCModule::RecExport( const char *pattern )
             sd_key += db->GetKeywd();
             sd_key += "*";
             sd_key += ":";
-    sd_key = dynamic_cast<TCModule *>(&aMod[RT_SDATA])->GetKeyofRecord(
+    sd_key = dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->GetKeyofRecord(
           sd_key.c_str(), "Select key of escript format", KEY_OLD);
     if( sd_key.empty() )
      return;
-    dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+    dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
     char * text_fmt = static_cast<char *>(aObj[o_sdabstr].GetPtr());
     if( !text_fmt )
        Error( sd_key.c_str(), "No format text in this record.");
@@ -1873,11 +1873,11 @@ TCModule::RecImport()
             sd_key += db->GetKeywd();
             sd_key += "*";
             sd_key += ":";
-    sd_key = dynamic_cast<TCModule *>(&aMod[RT_SDATA])->GetKeyofRecord(
+    sd_key = dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->GetKeyofRecord(
           sd_key.c_str(), "Select key of iscript format", KEY_OLD);
     if( sd_key.empty() )
      return;
-    dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+    dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
     char * text_fmt = static_cast<char *>(aObj[o_sdabstr].GetPtr());
     if( !text_fmt )
        Error( sd_key.c_str(), "No format text in this record.");

@@ -637,7 +637,7 @@ void TSysEq::set_def( int q)
     ErrorIf( ssp!=&ss[q]||stp!=&st[q], GetName(),
              "Invalid access to ss in set_def.");
     // System ------------------------------------------------------------------
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    TProfil *aPa= dynamic_cast<TProfil *>(aMod[RT_PARAM].get());
     strcpy( ss[q].name, "`");
     strcpy( ss[q].notes, "`");
     memset( ss[q].PhmKey, 0, EQ_RKLEN );

@@ -31,7 +31,7 @@ class KeyFilter:   public QDialog
 {
     Q_OBJECT
 
-    TIArray<QLineEdit> aEdit;
+    std::vector<std::shared_ptr<QLineEdit>> aEdit;
     QLineEdit *fullKey;
 
     size_t iRt;

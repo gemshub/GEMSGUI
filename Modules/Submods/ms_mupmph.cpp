@@ -431,7 +431,7 @@ bool TMulti::CompressPhaseIpxt( int kPH )
 {
   int jj, jb, cnt=0;
   TCIntArray  aDCused;
-  TPhase* aPH=dynamic_cast<TPhase *>(&aMod[RT_PHASE]);
+  TPhase* aPH=dynamic_cast<TPhase *>(aMod[RT_PHASE].get());
   RMULTS* mup = TRMults::sm->GetMU();
   TCStringArray form_array;
   TFormula aFo;
@@ -470,7 +470,7 @@ void TMulti::multi_sys_ph()
 //    double G;
     double PMM;  // Phase mean mol. mass
     int Cjs, car_l[32], car_c=0; // current index carrier sorbent
-    TPhase* aPH=dynamic_cast<TPhase *>(&aMod[RT_PHASE]);
+    TPhase* aPH=dynamic_cast<TPhase *>(aMod[RT_PHASE].get());
     RMULTS* mup = TRMults::sm->GetMU();
     SYSTEM *syp = TSyst::sm->GetSY();
 

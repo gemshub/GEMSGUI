@@ -25,7 +25,7 @@
 void TSyst::mark_ic_to_bc( )
 {
     short j, i, ii, ij, Nn;
-    TCompos* aCMP=(TCompos *)(&aMod[RT_COMPOS]);
+    TCompos* aCMP=dynamic_cast<TCompos *>( aMod[RT_COMPOS].get() );
     RMULTS* mup = TRMults::sm->GetMU();
     time_t crt;
 
@@ -203,7 +203,7 @@ void TSyst::mark_ic_to_dc()
 void TSyst::make_syst_sizes()
 {
     short i, j, k, N;
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
     RMULTS* mup = TRMults::sm->GetMU();
 
     /* Test classified codes! Do more!!!!!!!!!! */
@@ -455,8 +455,8 @@ void TSyst::systbc_calc( int mode )
     TFormula aFo;
     std::string form;
     time_t crt;
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
-    TCompos* aCMP=(TCompos *)(&aMod[RT_COMPOS]);
+    TProfil *aPa= dynamic_cast<TProfil *>(aMod[RT_PARAM].get());
+    TCompos* aCMP= dynamic_cast<TCompos *>( aMod[RT_COMPOS].get());
     RMULTS* mup = TRMults::sm->GetMU();
 
     if( !mode )
@@ -589,7 +589,7 @@ void TSyst::systbc_calc( int mode )
         bool NewRkey = false; // , syPbPH, syPPHk;
         std::string pkey;
         std::string skey;
-        TSysEq* aSE=(TSysEq *)(&aMod[RT_SYSEQ]);
+        TSysEq* aSE= dynamic_cast<TSysEq *>( aMod[RT_SYSEQ].get());
         skey = std::string(aSE->ssp->PhmKey, 0, EQ_RKLEN);
 
         // Added Sveta 14/03/02 check if another SysEq record is available
@@ -741,8 +741,8 @@ void TSyst::systbc_calc( int mode )
 void TSyst::PHbcalcSysEq( double *MsysC, double *MaqC, double *R1C,
                      double */*VaqC*/,  double */*VsysC*/ )
 {
-    TSysEq* aSE=(TSysEq *)(&aMod[RT_SYSEQ]);
-    TCompos* aCMP=(TCompos *)(&aMod[RT_COMPOS]);
+    TSysEq* aSE= dynamic_cast<TSysEq *>( aMod[RT_SYSEQ].get());
+    TCompos* aCMP= dynamic_cast<TCompos *>( aMod[RT_COMPOS].get());
     RMULTS* mup = TRMults::sm->GetMU();
     std::vector<TFormula> aFo;
     std::string form;
@@ -861,7 +861,7 @@ void TSyst::PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
                      double */*VaqC*/,  double */*VsysC*/ )
 {
     double *A, *B, Mass, Xincr;
-    TCompos* aCMP=(TCompos *)(&aMod[RT_COMPOS]);
+    TCompos* aCMP= dynamic_cast<TCompos *>( aMod[RT_COMPOS].get());
     MULTI* pmp = TMulti::sm->GetPM();
     RMULTS* mup = TRMults::sm->GetMU();
     int j, i, k, k_, i_;

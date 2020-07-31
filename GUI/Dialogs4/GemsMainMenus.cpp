@@ -492,7 +492,7 @@ void TVisorImp::CmHelp()
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
   {
-    aMod[actwin->rtNum()].CmHelp();
+    aMod[actwin->rtNum()]->CmHelp();
   }
   else
   {
@@ -551,12 +551,12 @@ void TVisorImp::CmScript()
   if( actwin )
   {
 
-     dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmScript();
+     dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmScript();
   }
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
-         dynamic_cast<TCModule*>(&aMod[RT_SYSEQ])->CmScript();
+         dynamic_cast<TCModule*>(aMod[RT_SYSEQ].get())->CmScript();
   }
 }
 
@@ -577,9 +577,9 @@ void TVisorImp::CmCreate()
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
     {  if(pVisor->ProfileMode == MDD_DATABASE)
-      dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmCreate();
+      dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmCreate();
      else
-      dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmCreateinProfile();
+      dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmCreateinProfile();
     }
   }
 }
@@ -597,9 +597,9 @@ void TVisorImp::CmNew()
   {  TCModuleImp *actwin = activeMdiChild();
      if( actwin )
      {  if(pVisor->ProfileMode == MDD_DATABASE)
-          dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmNew();
+          dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmNew();
         else
-          dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmNewinProfile();
+          dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmNewinProfile();
      }
   }
 }
@@ -618,9 +618,9 @@ void TVisorImp::CmShow( const char * key )
     if( actwin )
     {
       if(pVisor->ProfileMode == MDD_DATABASE)
-       dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmShow( key );
+       dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmShow( key );
       else
-       dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmLoadinProfile( key );
+       dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmLoadinProfile( key );
 
       defineModuleKeysList( actwin->rtNumRecord() );
       QMdiSubWindow * grDlg = findMdiGraph(actwin->moduleName().c_str());
@@ -648,7 +648,7 @@ void TVisorImp::CmDerive()
   {
      TCModuleImp *actwin = activeMdiChild();
      if( actwin )
-       dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmDerive();
+       dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmDerive();
   }
  }
 
@@ -657,7 +657,7 @@ void TVisorImp::CmCalc()
 {
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
-    dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmCalc();
+    dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmCalc();
 }
 
 void TVisorImp::CmSave()
@@ -672,7 +672,7 @@ void TVisorImp::CmSave()
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
     {
-      dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmSaveM();
+      dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmSaveM();
       // defineModuleKeysList( actwin->rtNumRecord() );
     }
   }
@@ -691,7 +691,7 @@ void TVisorImp::CmSaveAs()
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
     {
-       dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmSaveAs();
+       dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmSaveAs();
         // defineModuleKeysList( actwin->rtNumRecord() );
     }
   }
@@ -709,7 +709,7 @@ void TVisorImp::CmDelete()
   {
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
-    {  dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmDelete();
+    {  dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmDelete();
        defineModuleKeysList( actwin->rtNumRecord() );
     }
   }
@@ -721,12 +721,12 @@ void TVisorImp::CmPlot()
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
   {
-     dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmPlot();
+     dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmPlot();
   }
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
-         dynamic_cast<TCModule*>(&aMod[RT_SYSEQ])->CmPlot();
+         dynamic_cast<TCModule*>(aMod[RT_SYSEQ].get())->CmPlot();
   }
 }
 
@@ -736,12 +736,12 @@ void TVisorImp::CmPrint()
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
   {
-     dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmPrint();
+     dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmPrint();
   }
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
-       //  ((TCModule*)&aMod[RT_SYSEQ])->CmPrint();
+       //  dynamic_cast<TCModule *>(aMod[RT_SYSEQ].get())->CmPrint();
         wn->CmPrintEqstat();
   }
 }
@@ -752,15 +752,15 @@ void TVisorImp::CmFilter()
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
   {
-     dynamic_cast<TCModule*>(&aMod[actwin->rtNum()])->CmFilter();
-     pFilterKey->setText(dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->getFilter());
+     dynamic_cast<TCModule*>(aMod[actwin->rtNum()].get())->CmFilter();
+     pFilterKey->setText(dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->getFilter());
       defineModuleKeysList( actwin->rtNumRecord() );
   }
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
-      {   dynamic_cast<TCModule*>(&aMod[RT_SYSEQ])->CmFilter();
-          pFilterKey->setText(dynamic_cast<TCModule*>(&aMod[RT_SYSEQ])->getFilter());
+      {   dynamic_cast<TCModule*>(aMod[RT_SYSEQ].get())->CmFilter();
+          pFilterKey->setText(dynamic_cast<TCModule*>(aMod[RT_SYSEQ].get())->getFilter());
           defineModuleKeysList( RT_SYSEQ );
       }
   }
@@ -771,7 +771,7 @@ void TVisorImp::CmNext()
 {
   /*TCModuleImp *actwin = activeMdiChild();
   if( actwin )
-    ((TCModule*)&aMod[actwin->rtNum()])->CmNext();
+    dynamic_cast<TCModule *>(aMod[actwin->rtNum()].get())->CmNext();
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
@@ -794,7 +794,7 @@ void TVisorImp::CmPrevious()
 {
   /*TCModuleImp *actwin = activeMdiChild();
   if( actwin )
-    ((TCModule*)&aMod[actwin->rtNum()])->CmPrevious();
+    dynamic_cast<TCModule *>(aMod[actwin->rtNum()].get())->CmPrevious();
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
@@ -817,7 +817,7 @@ void TVisorImp::CmPrevious()
 #define TCM_EV_COMMAND(mm,ff)	void TVisorImp::ff() \
                                { TCModuleImp *actwin = activeMdiChild();\
                                  if( actwin )\
-                                 {  dynamic_cast<TCModule*>(&aMod[actwin->rtNum()])->ff(); \
+                                 {  dynamic_cast<TCModule*>(aMod[actwin->rtNum()].get())->ff(); \
                                     int nRT_ = static_cast<int>(actwin->rtNum()); \
                                     defineModuleKeysList( nRT_ );  }    \
                                 }

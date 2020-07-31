@@ -24,7 +24,7 @@
 #include "units.h"
 #include "v_module.h"
 
-TIArray < CWinInfo > aWinInfo;
+std::vector<std::shared_ptr<CWinInfo>> aWinInfo;
 
 CWinInfo::CWinInfo(TSubModule & m, istream & visor_dat):
         pWin(0), rM(m)
@@ -63,7 +63,7 @@ CWinInfo::load( TConfig& cnf)
     string ss = cnf.GetFirstSubSection();
     while (!ss.empty())
     {
-        aPageInfo.Add(new PageInfo(*this, cnf, ss));
+        aPageInfo.push_back( std::make_shared<PageInfo>(*this, cnf, ss));
         ss = cnf.GetNextSubSection();
     }
 }
@@ -81,10 +81,10 @@ CWinInfo::toDAT(ostream & os)
     // start signature
     os.write(SigBEG, 2);
 
-    int n = aPageInfo.GetCount();
+    int n = aPageInfo.size();
     os.write((char *) &n, sizeof n);
     for (int ii = 0; ii < n; ii++)
-        aPageInfo[ii].toDAT(os);
+        aPageInfo[ii]->toDAT(os);
 
     os.write((char *) &init_width, sizeof init_width);
     os.write((char *) &init_height, sizeof init_height);
@@ -105,7 +105,7 @@ CWinInfo::fromDAT(istream & is)
     int n;
     is.read((char *) &n, sizeof n);
     for (int ii = 0; ii < n; ii++)
-        aPageInfo.Add(new PageInfo(*this, is));
+        aPageInfo.push_back( std::make_shared<PageInfo>(*this, is));
 
     is.read((char *) &init_width, sizeof init_width);
     is.read((char *) &init_height, sizeof init_height);
@@ -215,9 +215,8 @@ PageInfo::load( TConfig& cnf )
 
             ePlaceMode place = ePlaceMode(mode[1]);
             eShowType showT = eShowType(mode[3]);
-            aFieldInfo.Add(new FieldInfo(*this, rO, ind, type, npos,
-                                         label, place, edit, showT, maxM,
-                                         maxN));
+            aFieldInfo.push_back( std::make_shared<FieldInfo>(*this, rO, ind, type, npos,
+                                         label, place, edit, showT, maxM, maxN));
         }
         obj = cnf.getNext();
     }
@@ -235,10 +234,10 @@ PageInfo::toDAT(ostream & os)
     int l = name.length() + 1;	// writing ending '\0'
     os.write((char *) &l, sizeof l);
     os.write(name.c_str(), l);
-    int n = aFieldInfo.GetCount();
+    size_t n = aFieldInfo.size();
     os.write((char *) &n, sizeof n);
-    for (int ii = 0; ii < n; ii++)
-        aFieldInfo[ii].toDAT(os);
+    for (size_t ii = 0; ii < n; ii++)
+        aFieldInfo[ii]->toDAT(os);
     // end signature
     os.write(PSigEND, 2);
 }
@@ -262,7 +261,7 @@ PageInfo::fromDAT(istream & is)
     int n;
     is.read((char *) &n, sizeof n);
     for (int ii = 0; ii < n; ii++)
-        aFieldInfo.Add(new FieldInfo(*this, is));
+        aFieldInfo.push_back( std::make_shared<FieldInfo>(*this, is));
 
     is.read(sg, sizeof sg);
     if (sg[0] != PSigEND[0] || sg[1] != PSigEND[1])
@@ -301,7 +300,7 @@ FieldInfo::FieldInfo(const PageInfo & pi, TObject & rO, int anO,
 
 FieldInfo::FieldInfo( int anO, eFieldType fT, int np, bool lb,
            ePlaceMode pl, eEdit e, eShowType sT, int w, int h):
-        rPageInfo(aWinInfo[0].aPageInfo[0]), // for internal using in TreeList 
+        rPageInfo(*aWinInfo[0]->aPageInfo[0]), // for internal using in TreeList
         pObj(&aObj[anO]), nO(anO),
         fType(fT), npos(np),
         label(lb), place(pl), edit(e), showType(sT), maxN(h), maxM(w)

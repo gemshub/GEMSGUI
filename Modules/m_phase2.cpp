@@ -590,8 +590,8 @@ void TPhase::LoadDCC()
     vstr dcn(MAXRKEYLEN);
     char Ctype;
     time_t crt;
-    TDComp* aDC=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
-    TReacDC* aRDC=dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
+    TDComp* aDC=dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
+    TReacDC* aRDC=dynamic_cast<TReacDC *>(aMod[RT_REACDC].get());
     memset( dcn, 0, MAXRKEYLEN );
 
     for(int i=0; i<php->nDC; i++ )
@@ -849,8 +849,8 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
     time_t crt;
     TCStringArray form_array;
 
-    TDComp* aDC=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
-    TReacDC* aRDC=dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
+    TDComp* aDC=dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
+    TReacDC* aRDC=dynamic_cast<TReacDC *>(aMod[RT_REACDC].get());
     aDC->ods_link(0);
     aRDC->ods_link(0);
 
@@ -1055,7 +1055,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
    const char amod, const char gmod, float apar[8], /*float gpar[4],*/
    bool useLst, TCStringArray lst )
 {
-//    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+//    TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
     const char *part;
     char nbuf[MAXFORMULA*2], neutbuf[16], H2Obuf[16], tempdbuf[16];
     std::string Name = "Auto-set ";
@@ -1264,7 +1264,7 @@ TPhase::AssemblePhase( const char* key, const char* part, float* param,
     int file, bool useLst, TCStringArray lst, int Npar )
 {
 
-    TProfil *aPa=dynamic_cast<TProfil *>(&aMod[RT_PARAM]);
+    TProfil *aPa=dynamic_cast<TProfil *>(aMod[RT_PARAM].get());
 
 // Initializing
 memcpy( php->kin_t, "NNNNNNNN", 8 );

@@ -73,7 +73,7 @@ TSysEq::RecSave( const char *key, bool onOld )
 {
     if( pVisor->ProfileMode == true )
     { // test system and pack
-        TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+        TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
         aPa->PackSystat();
     }
     TCModule::RecSave( key, onOld );
@@ -189,7 +189,7 @@ TSysEq::RecBuild( const char *key, int mode  )
         ssp->switches[30] = S_OFF;
         ssp->DM[17] = 0;
     }
-    //TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    //TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
     // for phase separation (exsolution)
     ssp->switches[21] = S_REM;
     ssp->switches[20] = S_REM;

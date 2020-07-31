@@ -255,7 +255,7 @@ void TReacDC::Recalc( int q, const char *key  )
     time_t crt;
 
     TFormula aFo;
-    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+    TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
 
     memset( dcn, 0, MAXRKEYLEN );

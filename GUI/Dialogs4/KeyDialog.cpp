@@ -167,7 +167,7 @@ KeyDialog::getKey()
     int sel = pList->currentRow(); //pList->currentItem();
     if( sel != -1 )
     {
-        dynamic_cast<TCModule*>(&aMod[iRt])->setFilter(keyFilter.c_str());
+        dynamic_cast<TCModule*>(aMod[iRt].get())->setFilter(keyFilter.c_str());
         string res;
         string s = pList->item(sel)->text().toStdString();
         //string s = ss;

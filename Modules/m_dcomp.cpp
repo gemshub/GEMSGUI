@@ -288,7 +288,7 @@ void TDComp::set_def( int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
              "E04DCrem: Invalid access to dc in set_def()");
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
     memcpy( dc[q].pct, aPa->pa.DCpct, 6 );
     memcpy( &dc[q].PdcC, aPa->pa.DCpdc, 9 );
     dc[q].Pst = aPa->pa.DRpst;

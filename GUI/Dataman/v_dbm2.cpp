@@ -1011,7 +1011,7 @@ int TDataBase::scanfile( uint nF, int& fPos, int& fLen,
         if( Rnum>=0 ) // name of exist record
         {
            str=PackKey();
-           str = aMod[nRT].GetKeyofRecord( str.c_str(),
+           str = aMod[nRT]->GetKeyofRecord( str.c_str(),
                       "This key record already exists! Replace please?", KEY_NEW );
            if(  str.empty() )
                 continue;

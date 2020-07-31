@@ -278,26 +278,28 @@ void TProfil::InitSubModules()
 {
     if( !rmults /*aMod.GetCount() < MD_RMULTS*/ )
     {
-        aMod.Add( rmults = new TRMults( MD_RMULTS ) );
+        rmults = new TRMults( MD_RMULTS );
+        aMod.push_back( std::shared_ptr<TRMults>(rmults) );
         TRMults::sm = rmults;
         rmults->ods_link();
         //mup = rmults->GetMU();
-        aMod.Add( mtparm = new TMTparm( MD_MTPARM ) );
+
+        aMod.push_back( std::shared_ptr<TMTparm>( mtparm = new TMTparm( MD_MTPARM ) ));
         TMTparm::sm = mtparm;
         mtparm->ods_link();
         //tpp = mtparm->GetTP();
-        aMod.Add( syst = new TSyst( MD_SYSTEM ) );
+        aMod.push_back( std::shared_ptr<TSyst>( syst = new TSyst( MD_SYSTEM )) );
         TSyst::sm = syst;
         syst->ods_link();
         //syp = syst->GetSY();
-        aMod.Add( multi = new TMulti( MD_MULTI ) );
+        aMod.push_back( std::shared_ptr<TMulti>(multi = new TMulti( MD_MULTI )) );
         TMulti::sm = multi;
         ///multi->setPa(this);
         //pmulti = multi;
         multi->ods_link();
         //pmp = multi->GetPM();
-        aMod.Add( new TEQCalc( MD_EQCALC ) );
-        aMod.Add( new TEQDemo( MD_EQDEMO ) );
+        aMod.push_back( std::shared_ptr<TEQCalc>( new TEQCalc( MD_EQCALC )) );
+        aMod.push_back( std::shared_ptr<TEQDemo>(new TEQDemo( MD_EQDEMO )) );
 
     }
 }
@@ -796,8 +798,8 @@ void TProfil::CheckMtparam()
 void TProfil::PMtest( const char *key )
 {
     //double V, T, P;
-    TSysEq* STat = dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
-    TProcess* Proc = dynamic_cast<TProcess *>(&aMod[RT_PROCES]);
+    TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
+    TProcess* Proc = dynamic_cast<TProcess *>(aMod[RT_PROCES].get());
     MULTI *pmp = multi->GetPM();
 
     // test for available old solution
@@ -1066,7 +1068,7 @@ void  TProfil::CalculateEquilibriumGUI()
 //
 double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& NumIterFIA, long int& NumIterIPM )
 {
-  TSysEq* STat = dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
+  TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
   calcFinished = false;
 
   //multi->Access_GEM_IMP_init();

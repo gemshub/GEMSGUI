@@ -56,7 +56,7 @@ class TCPage:
     
     int getFieldCnt() const
     {
-        return rInfo.aFieldInfo.GetCount();
+        return rInfo.aFieldInfo.size();
     }
     
     TSubModule& getWin() const
@@ -114,7 +114,7 @@ class TCWindow: public QWidget
 
     int getPageCnt() const
     {
-        return rInfo.aPageInfo.GetCount();
+        return rInfo.aPageInfo.size();
     }
 
     TSubModule& getCModule() const

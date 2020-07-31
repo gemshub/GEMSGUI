@@ -54,9 +54,9 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
     QTreeWidgetItem* pFile;
     size_t pos1, pos2;
 
-    for( i=0; i<aMod.GetCount(); i++)
+    for( i=0; i<aMod.size(); i++)
     {
-        if( aMod[i].IsSubModule() )
+        if( aMod[i]->IsSubModule() )
             continue;
         pMod = new QTreeWidgetItem( pkern );
         pMod->setText(0, rt[i].GetKeywd());
@@ -80,9 +80,9 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
         }
     }
 
-    for( i=0; i<aMod.GetCount(); i++)
+    for( i=0; i<aMod.size(); i++)
     {
-        if( aMod[i].IsSubModule() )
+        if( aMod[i]->IsSubModule() )
             continue;
         pMod = new QTreeWidgetItem( pprf);
         pMod->setText(0, rt[i].GetKeywd());

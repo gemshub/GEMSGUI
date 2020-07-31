@@ -568,7 +568,7 @@ bool TProcess::check_input( const char * /*key*/, int /*Level*/ )
     if( pVisor->ProfileMode != true )
         return true;
 
-    TProfil* PRof = dynamic_cast<TProfil*>(&aMod[RT_PARAM]);
+    TProfil* PRof = dynamic_cast<TProfil*>(aMod[RT_PARAM].get());
     //Get base SysEq key from process key
     rt[RT_SYSEQ].MakeKey( RT_PROCES, pkey, RT_PROCES, 0, RT_PROCES, 1,
                            RT_PROCES, 2, RT_PROCES, 3, RT_PROCES, 4,
@@ -1050,7 +1050,7 @@ TProcess::pe_test()
 // Translate, analyze and unpack equations of the process
 void TProcess::pe_text_analyze()
 {
-  TProfil* PRof = dynamic_cast<TProfil*>(&aMod[RT_PARAM]);
+  TProfil* PRof = dynamic_cast<TProfil*>(aMod[RT_PARAM].get());
     try
     {
       if( pep->PsEqn != S_OFF )
@@ -1093,7 +1093,7 @@ void TProcess::pe_text_analyze()
 double TProcess::f_proc( double x )
 {
     double dummy = -1.;
-    TProfil* PRof = dynamic_cast<TProfil*>(&aMod[RT_PARAM]);
+    TProfil* PRof = dynamic_cast<TProfil*>(aMod[RT_PARAM].get());
     pep->Loop = 2;
     pep->c_Eh = x;
     CalcEquat();
@@ -1210,7 +1210,7 @@ void
 TProcess::RecCalc( const char *key )
 {
     int nRec;
-    TProfil* PRof = dynamic_cast<TProfil*>(&aMod[RT_PARAM]);
+    TProfil* PRof = dynamic_cast<TProfil*>(aMod[RT_PARAM].get());
     //TProfil::pm->userCancel = false;
     //TProfil::pm->stepWise = false;
     userCancel = false;
@@ -1236,12 +1236,12 @@ pep->ccTime = 0.0;
            sd_key += db->GetKeywd();
            sd_key += "*";
            sd_key += ":";
-           sd_key = dynamic_cast<TCModule *>(&aMod[RT_SDATA])->GetKeyofRecord(
+           sd_key = dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->GetKeyofRecord(
              sd_key.c_str(), "Select a print script SDref record key", KEY_OLD);
 
            if( !sd_key.empty() )
            {
-             dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+             dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
               text_fmt = static_cast<char *>(aObj[o_sdabstr].GetPtr());
               if( !text_fmt )
                  Error( GetName(), "E00PSexec: No print script format text in this record.");
@@ -1333,7 +1333,7 @@ TProcess::internalCalc()
 {
     int nRec;
     bool iRet = false;
-    TProfil* PRof = dynamic_cast<TProfil*>(&aMod[RT_PARAM]);
+    TProfil* PRof = dynamic_cast<TProfil*>(aMod[RT_PARAM].get());
     calcFinished = false;
     char buf[300];
 
@@ -1510,7 +1510,7 @@ void TProcess::refreshState()
                             RT_PROCES, 6, RT_PROCES, 7, K_END );
     auto nRec = rt[RT_SYSEQ].Find(pep->stkey);
     if( nRec >= 0 && pep->Istat < P_MT_MODE )
-        dynamic_cast<TProfil*>(&aMod[RT_PARAM])->loadSystat( pep->stkey );   // read parent SysEq record and unpack data
+        dynamic_cast<TProfil*>(aMod[RT_PARAM].get())->loadSystat( pep->stkey );   // read parent SysEq record and unpack data
 
 }
 
@@ -1717,7 +1717,7 @@ void TProcess::genGEM3K(const std::string& filepath, TCStringArray& savedSystems
            savedSystems.push_back(name.c_str());
 
            // read parent SysEq record and unpack data
-           dynamic_cast<TProfil*>(&aMod[RT_PARAM])->loadSystat( name.c_str() );
+           dynamic_cast<TProfil*>(aMod[RT_PARAM].get())->loadSystat( name.c_str() );
 
            // save dataBR
            KeyToName(name);

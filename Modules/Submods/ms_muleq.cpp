@@ -27,7 +27,7 @@
 void TMulti::setSizes()
 {
     short j, Lp;
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+    TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
 
     // short
     STat->stp->N = pm.N;
@@ -57,7 +57,7 @@ void TMulti::setSizes()
 void TMulti::packData()
 {
     short i,j;
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+    TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
 
     if( pm.N != STat->stp->N  ) // crash if error in calculation System
     {
@@ -107,7 +107,7 @@ void TMulti::packData()
 void TMulti::packData( TCIntArray PHon, TCIntArray DCon )
 {
     short i,j;
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+    TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
 
     for( i=0,j=0; j<pm.L; j++ )
         if( pm.X[j] >= fmin( pm.lowPosNum, pm.DcMinM ))
@@ -138,8 +138,8 @@ void TMulti::packData( TCIntArray PHon, TCIntArray DCon )
 //
 void TMulti::unpackData()
 {
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
-    TProfil* Prf = (TProfil*)(&aMod[RT_PARAM]);
+    TSysEq* STat = dynamic_cast<TSysEq *>( aMod[RT_SYSEQ].get());
+    TProfil* Prf = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
 
     int i, j, js, jp, is, ip;
 

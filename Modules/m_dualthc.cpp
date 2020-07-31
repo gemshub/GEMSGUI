@@ -243,7 +243,7 @@ void TDualTh::build_mu_n()
 // Translate, analyze and unpack dual-thermo math script for activity coeffs
 void TDualTh::dt_text_analyze()
 {
-  TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+  TProfil* PRof = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
 /*  try
     {
       if( dtp->PvChi != S_OFF )
@@ -311,7 +311,7 @@ TDualTh::Bb_Calc()
        return;
 
 // get data fron IComp
-    TIComp* aIC=(TIComp *)(&aMod[RT_ICOMP]);
+    TIComp* aIC= dynamic_cast<TIComp *>( aMod[RT_ICOMP].get());
     aIC->ods_link(0);
     ICw = new float[dtp->Nb];
     memset( pkey, 0, MAXRKEYLEN+9 );
@@ -452,7 +452,7 @@ TDualTh::Bn_Calc()
        return;
 
 // get data fron IComp
-    TIComp* aIC=(TIComp *)(&aMod[RT_ICOMP]);
+    TIComp* aIC=dynamic_cast<TIComp *>( aMod[RT_ICOMP].get());
     aIC->ods_link(0);
     ICw = new float[dtp->Nb];
     memset( pkey, 0, MAXRKEYLEN+9 );
@@ -681,7 +681,7 @@ TDualTh::RegressionLSM( int /*Mode*/ )  // task or minimization
  if( dtp->PvChi != S_OFF )
  {
    afType  = MATHSCRIPT_FIT;
-   TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+   TProfil* PRof = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
 
    PRof->ET_translate( o_dttprn, o_dtcexpr,
      0, TRMults::sm->GetMU()->L, 0, TMulti::sm->GetPM()->L );

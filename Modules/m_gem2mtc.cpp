@@ -452,7 +452,7 @@ void TGEM2MT::calc_eqstat( bool startSys )
        memcpy( mtp->stld+mtp->kv, mtp->sykey, EQ_RKLEN );
    }
 
-   aMod[RT_GEM2MT].ModUpdate("GEM2MT data sampling in progress...");
+   aMod[RT_GEM2MT]->ModUpdate("GEM2MT data sampling in progress...");
 }
 
 //make matrix An  As Bb_Calc in Dualth
@@ -503,7 +503,7 @@ TGEM2MT::Bn_Calc()
        return;
 
 // get data fron IComp
-    TIComp* aIC= dynamic_cast<TIComp *>(&aMod[RT_ICOMP]);
+    TIComp* aIC= dynamic_cast<TIComp *>(aMod[RT_ICOMP].get());
     aIC->ods_link(0);
     ICw = new double[mtp->Nb];
     memset( pkey, 0, MAXRKEYLEN+9 );

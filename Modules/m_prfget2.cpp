@@ -350,7 +350,7 @@ void TProfil::TestChangeProfile()
     TCStringArray aList;
     TCIntArray anR;
 
-    TSysEq* aSE= dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
+    TSysEq* aSE= dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
     aSE->ods_link(0);
 
 
@@ -364,7 +364,7 @@ void TProfil::TestChangeProfile()
        K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
        rt[RT_GEM2MT].GetKeyList( pkey, aList, anR );
 
-       TGEM2MT* aMT= dynamic_cast<TGEM2MT *>(&aMod[RT_GEM2MT]);
+       TGEM2MT* aMT= dynamic_cast<TGEM2MT *>(aMod[RT_GEM2MT].get());
        aMT->ods_link(0);
        for(uint i=0; i< aList.size(); i++)
        {
@@ -409,7 +409,7 @@ void TProfil::TestChangeProfile()
        K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
        rt[RT_DUALTH].GetKeyList( pkey, aList, anR );
 
-       TDualTh* aDU= dynamic_cast<TDualTh *>(&aMod[RT_DUALTH]);
+       TDualTh* aDU= dynamic_cast<TDualTh *>(aMod[RT_DUALTH].get());
        aDU->ods_link(0);
        for(size_t i=0; i< aList.size(); i++)
        {
@@ -429,7 +429,7 @@ void TProfil::TestChangeProfile()
       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_UNSPACE].GetKeyList( pkey, aList, anR );
 
-    TUnSpace* aPB=dynamic_cast<TUnSpace *>(&aMod[RT_UNSPACE]);
+    TUnSpace* aPB=dynamic_cast<TUnSpace *>(aMod[RT_UNSPACE].get());
     aPB->ods_link(-1); //0
     if( aList.size() > 0 )
     {  for(size_t i=0; i< aList.size(); i++)
@@ -515,7 +515,7 @@ AGAIN:
 
     pVisor->CloseMessage();
     MULTI *pmp = multi->GetPM();
-    TSysEq* aSE= dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
+    TSysEq* aSE= dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
     aSE->ods_link(0);
     for(nbad =0,  i=0; i< aList.size(); i++)
     {
@@ -670,36 +670,36 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     // and copy to it selected records
     // add to last key field first symbol from prfname
     // close all kernel files
-    TIComp* aICdata=  dynamic_cast<TIComp *>(&aMod[RT_ICOMP]);
+    TIComp* aICdata=  dynamic_cast<TIComp *>(aMod[RT_ICOMP].get());
     aICdata->CopyElements( prfName, elm_data, sf_data.ic_d );
     ICcnt.clear();
     for( ii=0; ii<elm_data.ICrds.size(); ii++ )
        ICcnt.push_back(0);
 
     //compos
-    TCompos* aCOdata=dynamic_cast<TCompos *>(&aMod[RT_COMPOS]);
+    TCompos* aCOdata=dynamic_cast<TCompos *>(aMod[RT_COMPOS].get());
     TCStringArray aCMnoused;
     aCOdata->CopyRecords( prfName, aCMnoused, elm_data, sf_data.cm_d, SDlist );
 
     //dcomp
-    TDComp* aDCdata=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
+    TDComp* aDCdata=dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
     aDCdata->CopyRecords( prfName, ICcnt, elm_data, sf_data.dc_d, SDlist );
 
     //reacds
-    TReacDC* aRDdata= dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
+    TReacDC* aRDdata= dynamic_cast<TReacDC *>(aMod[RT_REACDC].get());
     aRDdata->CopyRecords( prfName, ICcnt, elm_data, sf_data.rd_d, SDlist );
 
     //phase
-    TPhase* aPHdata=dynamic_cast<TPhase *>(&aMod[RT_PHASE]);
+    TPhase* aPHdata=dynamic_cast<TPhase *>(aMod[RT_PHASE].get());
     TCStringArray aPHnoused;
     aPHdata->CopyRecords( prfName, aPHnoused, PHkeys, elm_data, sf_data.ph_d, SDlist );
 
     //sdref
-    TSData* aSDat= dynamic_cast<TSData *>(&aMod[RT_SDATA]);
+    TSData* aSDat= dynamic_cast<TSData *>(aMod[RT_SDATA].get());
     aSDat->CopyRecords( prfName, SDlist );
 
     //const for future
-    TConst* aConst= dynamic_cast<TConst *>(&aMod[RT_CONST]);
+    TConst* aConst= dynamic_cast<TConst *>(aMod[RT_CONST].get());
     aConst->CopyRecords( prfName );
 
     //show errors
@@ -1228,7 +1228,7 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
                           K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
 
-    aMod[RT_SYSEQ].ods_link(0);
+    aMod[RT_SYSEQ]->ods_link(0);
 
     for( size_t ii=0; ii< aList.size(); ii++)
     {
@@ -1279,7 +1279,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
     rt[RT_PROCES].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_PROCES].GetKeyList( pkey, aList, anR );
-    aMod[RT_PROCES].ods_link(0);
+    aMod[RT_PROCES]->ods_link(0);
 
 
     if( aList.size() > 0 )

@@ -96,7 +96,7 @@ struct PageInfo
     /*const */CWinInfo& rWinInfo;
 //    TCPage* pPage;
 
-    TIArray<FieldInfo> aFieldInfo;
+    std::vector<std::shared_ptr<FieldInfo>> aFieldInfo;
     string name;
 
     static eFieldType GetType(const string& s);
@@ -127,7 +127,7 @@ struct CWinInfo
     TCWindow* pWin;
 
     TSubModule& rM;
-    TIArray<PageInfo> aPageInfo;
+   std::vector<std::shared_ptr<PageInfo>> aPageInfo;
 
     int init_width;
     int init_height;
@@ -154,6 +154,6 @@ PageInfo::GetWin()
 }
 
 
-extern TIArray<CWinInfo> aWinInfo;
+extern std::vector<std::shared_ptr<CWinInfo>> aWinInfo;
 
 #endif  // _page_s_h

@@ -31,7 +31,7 @@ TGtDemo* TGtDemo::pm = nullptr;
 
 bool TGtDemo::check_RT( int nrt )
 {
-    return ( nrt >RT_ICOMP && nrt < aMod.GetCount());
+    return ( nrt >RT_ICOMP && nrt < aMod.size());
 }
 ///
 
@@ -729,7 +729,7 @@ TGtDemo::gd_rec_read( int nI )
     }
     else
     {
-        auto pmod = dynamic_cast<TCModule *>(&aMod[gdp->nRT]);
+        auto pmod = dynamic_cast<TCModule *>(aMod[gdp->nRT].get());
         if( pmod )
         {
             pmod->RecInput( gdp->Wkb );
@@ -768,7 +768,7 @@ TGtDemo::RecCalc( const char *key )
             strncpy( gdp->SYS_key, rt[RT_SYSEQ].UnpackKey(), EQ_RKLEN );
         }
         rpn[0].CalcEquat();
-        aMod[RT_GTDEMO].ModUpdate("GtDemo data sampling in progress...");
+        aMod[RT_GTDEMO]->ModUpdate("GtDemo data sampling in progress...");
         // Stop Process from Andy Sveta
     }
     /* calc empirical data */
@@ -974,8 +974,8 @@ void TGtDemo::probe_stat( const char *key )
     vstr pbuf(121);
     char  (*lNames)[MAXGRNAME];
     double *y, *U, par[9];
-    TUnSpace* Prob = (TUnSpace*)(&aMod[RT_UNSPACE]);
-    TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+    TUnSpace* Prob = dynamic_cast<TUnSpace *>( aMod[RT_UNSPACE].get());
+    TProfil* PRof = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
 
     if( gdp->PsPB != S_OFF && *gdp->prKey)    // read probe record 
         TUnSpace::pm->RecInput( gdp->prKey );

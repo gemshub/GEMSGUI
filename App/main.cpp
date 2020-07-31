@@ -114,7 +114,7 @@ main(int argc, char* argv[])
         int res = IntegApp.exec();
         // clear static arrays in our order because they're interdependent
         // and static variables are destructed at random order
-        aMod.Clear();
+        aMod.clear();
         rt.Clear();
         aObj.Clear();
 

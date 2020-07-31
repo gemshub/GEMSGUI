@@ -95,7 +95,7 @@ void TCPage::AddFields( bool info )
 
     while( ii<getFieldCnt() )
     {
-       FieldInfo fi = rInfo.aFieldInfo[ii];
+       FieldInfo fi = *rInfo.aFieldInfo[ii];
     
        if(info)
        { if( fi.edit != eParam )  // for TQueryWindow
@@ -110,11 +110,11 @@ void TCPage::AddFields( bool info )
         
        cnt = 1;
        while( (ii+cnt) < getFieldCnt() && 
-    		   ( rInfo.aFieldInfo[ii+cnt].place == Tied || 
-                     rInfo.aFieldInfo[ii+cnt].place == Sticked ||
-                     rInfo.aFieldInfo[ii+cnt].place == UndeTabl ) )
+               ( rInfo.aFieldInfo[ii+cnt]->place == Tied ||
+                     rInfo.aFieldInfo[ii+cnt]->place == Sticked ||
+                     rInfo.aFieldInfo[ii+cnt]->place == UndeTabl ) )
        {
-           aFlds.append(rInfo.aFieldInfo[ii+cnt]);
+           aFlds.append(*rInfo.aFieldInfo[ii+cnt]);
     	   cnt++;
        }
 
@@ -250,8 +250,8 @@ TQueryWindow::TQueryWindow(CWinInfo& w):
     // adds all fields from given module window
     // only from  last page
     // that have 'param' flag set to the Query dialog
-    int LastPage = rInfo.aPageInfo.GetCount()-1;
-    aPage = new  TCPage( rInfo.aPageInfo[LastPage], true );
+    int LastPage = rInfo.aPageInfo.size()-1;
+    aPage = new  TCPage( *rInfo.aPageInfo[LastPage], true );
     scroll = new QScrollArea;
     scroll->setWidget(aPage);
    
@@ -312,7 +312,7 @@ TCWindow::TCWindow(TCModuleImp* pImp, CWinInfo& i, int page):
         for( int ii=0; ii<getPageCnt(); ii++ )
         {
             QPushButton* p = new QPushButton;//( pWin);
-            p->setText( rInfo.aPageInfo[ii].name.c_str() );
+            p->setText( rInfo.aPageInfo[ii]->name.c_str() );
             p->setAutoExclusive(true);
             p->setCheckable( true );
             p->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -355,7 +355,7 @@ TCWindow::TCWindow(TCModuleImp* pImp, CWinInfo& i, int page):
     pages =  new QStackedWidget;//(pWin);
     for( int ii=0; ii<getPageCnt(); ii++ )
     {
-        PageInfo& pi = rInfo.aPageInfo[ii];
+        PageInfo& pi = *rInfo.aPageInfo[ii];
         TCPage* pPage = new TCPage(pi);
         scroll = new QScrollArea;
         scroll->setFrameStyle( QFrame::NoFrame ); //Remove outer frame about data objects

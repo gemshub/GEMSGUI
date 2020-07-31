@@ -299,7 +299,7 @@ aObj[ o_nldchs].SetDim( 1, 0 );
 //set default information
 void TRMults::set_def( int /*q*/)
 {
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    TProfil *aPa= dynamic_cast<TProfil *>(aMod[RT_PARAM].get());
     memcpy( &mu.PmvSA, aPa->pa.MUpmv, 10 );
 //    strcpy( mu.name, "`");
 //    strcpy( mu.notes, "`");
@@ -417,7 +417,7 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
     mu.SF = (char (*)[PH_RKLEN])aObj[ o_musf].Alloc( mu.Fi, 1, PH_RKLEN );
     // List of DCOMP&REACDC component in Project
     TCStringArray List;
-    TPhase* aPH=(TPhase *)(&aMod[RT_PHASE]);
+    TPhase* aPH= dynamic_cast<TPhase *>(aMod[RT_PHASE].get());
     aPH->ods_link(0);
     // Build list of DCOMP&REACDC from PHASE
     kk=-1;
@@ -503,7 +503,7 @@ void TRMults::ICmake()
 {
     int ii, j=0;
     time_t crt;
-    TIComp* aIC=(TIComp *)(&aMod[RT_ICOMP]);
+    TIComp* aIC=dynamic_cast<TIComp *>(aMod[RT_ICOMP].get());
     aIC->ods_link(0);
 
     for( ii=0; ii<mu.N; ii++ )
@@ -554,11 +554,11 @@ void TRMults::PHmake()
     char buf[MAXFORMULA];
     time_t crt;
     char *Formula=0, *item=buf, dkey[MAXRKEYLEN];
-    TPhase* aPH=(TPhase *)(&aMod[RT_PHASE]);
+    TPhase* aPH= dynamic_cast<TPhase *>( aMod[RT_PHASE].get());
     aPH->ods_link(0);
-    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+    TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
-    TReacDC* aRC=(TReacDC *)(&aMod[RT_REACDC]);
+    TReacDC* aRC= dynamic_cast<TReacDC *>( aMod[RT_REACDC].get());
     aRC->ods_link(0);
 
     mu.FiE = 0;
@@ -666,7 +666,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
     char gmod = SM_IDEAL;    // Added KD 16.06.03
     float aparam[8]/*, gparam[4]*/;
 
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    TProfil *aPa=dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
     MTPARM* tpp = TMTparm::sm->GetTP();
     if( tpp->Pbg < '0' || tpp->Pbg > '4' )
         tpp->Pbg = '0';
@@ -1072,7 +1072,7 @@ void TRMults::TestIComp()
         aFo.TestIC( mu.SM[ii], mu.N, (char *)mu.SB);
     }
     // test compos
-    TCompos* aCMP=(TCompos *)(&aMod[RT_COMPOS]);
+    TCompos* aCMP=dynamic_cast<TCompos *>( aMod[RT_COMPOS].get());
     time_t crt;
     aCMP->ods_link(0);
     for( j=0; j<mu.La; j++ )

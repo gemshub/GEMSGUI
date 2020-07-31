@@ -472,7 +472,7 @@ void TSyst::set_def( int /*q*/)
     // strcpy( sy.notes, "`");
     // memset( sy.PhmKey, 0, EQ_RKLEN );
 
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
     RMULTS* mup = TRMults::sm->GetMU();
 
     bool is_a = false;
@@ -562,7 +562,7 @@ void TSyst::set_def( int /*q*/)
 
 void TSyst::loadData( bool newRec, int reBuildType )
 {
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+    TSysEq* STat = dynamic_cast<TSysEq *>( aMod[RT_SYSEQ].get());
     RMULTS* mup = TRMults::sm->GetMU();
 
     //  STat->ods_link(0);
@@ -840,7 +840,7 @@ void TSyst::setDefCheck()
 void TSyst::phase_data_load()
 {
     time_t crt;
-    TPhase* aPH=(TPhase *)(&aMod[RT_PHASE]);
+    TPhase* aPH= dynamic_cast<TPhase *>( aMod[RT_PHASE].get());
     RMULTS* mup = TRMults::sm->GetMU();
     aPH->ods_link(0);
 
@@ -1012,8 +1012,8 @@ void TSyst::unpackData()
     short i,j;
     int ind;
 
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
-    TProfil *Prf = (TProfil*)(&aMod[RT_PARAM]);
+    TSysEq* STat = dynamic_cast<TSysEq *>( aMod[RT_SYSEQ].get());
+    TProfil *Prf = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
     RMULTS* mup = TRMults::sm->GetMU();
     //   STat->ods_link(0);
     // copy static data
@@ -1224,8 +1224,8 @@ void TSyst::unpackData()
 void TSyst::setSizes()
 {
     short i;
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+    TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
+    TSysEq* STat = dynamic_cast<TSysEq *>( aMod[RT_SYSEQ].get());
     RMULTS* mup = TRMults::sm->GetMU();
     //  STat->ods_link(0); did before
 
@@ -1303,8 +1303,8 @@ void TSyst::setSizes()
 void TSyst::packData()
 {
     short i, i1, i2, i3, i4, i5, j;
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+    TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
+    TSysEq* STat = dynamic_cast<TSysEq *>( aMod[RT_SYSEQ].get());
     RMULTS* mup = TRMults::sm->GetMU();
 
     // ICOMP
@@ -1497,8 +1497,8 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
 {
     short i, i1, i2, i3, i4, i5, j;
     uint iOff;
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+    TProfil *aPa=  dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
+    TSysEq* STat = dynamic_cast<TSysEq *>( aMod[RT_SYSEQ].get());
     RMULTS* mup = TRMults::sm->GetMU();
 
     // ICOMP

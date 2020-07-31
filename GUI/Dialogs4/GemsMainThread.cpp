@@ -223,8 +223,8 @@ void TVisorImp::Update(bool force)
     if( NewSystemDialog::pDia )
         NewSystemDialog::pDia->Update();
 
-    for( uint ii=0; ii<aMod.GetCount(); ii++ )
-        aMod[ii].Update(force);
+    for( size_t ii=0; ii<aMod.size(); ii++ )
+        aMod[ii]->Update(force);
 
     int nrt = nRTofActiveSubWindow();
     if( nrt>=0 )

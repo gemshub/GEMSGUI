@@ -86,7 +86,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
    // build IComp list from template database
     TCIntArray aIndMT;
     TCStringArray aIC;
-    TIComp* aICdata=dynamic_cast<TIComp*>(&aMod[RT_ICOMP]);
+    TIComp* aICdata=dynamic_cast<TIComp*>(aMod[RT_ICOMP].get());
     aICdata->GetElements( true, aIC, aIndMT );
     sf_data.ic_d.oldIComps.clear();
 
@@ -479,7 +479,7 @@ void ElementsDialog::SetICompList()
 
      openFilesICOMP();
    // select all IComp keys and indMT (set indMT to -1 for additional)
-    TIComp* aICdata=dynamic_cast<TIComp*>(&aMod[RT_ICOMP]);
+    TIComp* aICdata=dynamic_cast<TIComp*>(aMod[RT_ICOMP].get());
     aICdata->GetElements( cbIsotopes->isChecked(), aIC, aIndMT );
 
     for( size_t ii=0; ii<aIC.size(); ii++ )
@@ -637,7 +637,7 @@ void ElementsDialog::setFilesList()
 
    for(uint i=RT_SDATA; i<=RT_PHASE; i++ )
     {
-        if( aMod[i].IsSubModule() )
+        if( aMod[i]->IsSubModule() )
             continue;
         TCStringArray names;
         TCIntArray indx;

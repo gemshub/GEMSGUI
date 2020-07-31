@@ -886,7 +886,7 @@ void TUnSpace::set_def( int q)
     ErrorIf( usp!=&us[q], GetName(),
              "Invalid access to us in set_def.");
 
-   TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+   TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
 
     strcpy( usp->name,  "`" );
     strcpy( usp->notes, "`" );
@@ -1008,7 +1008,7 @@ bool TUnSpace::check_input( const char */*key*/, int /*Level*/ )
   if( pVisor->ProfileMode != true )
         return true;
 
-  TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+  TProfil* PRof = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
   //Get base SysEq key from UnSpace key
   rt[RT_SYSEQ].MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
                            RT_UNSPACE, 2, RT_UNSPACE, 3, RT_UNSPACE, 4,
@@ -1107,7 +1107,7 @@ TUnSpace::RecCalc( const char *key )
    pmu = TMulti::sm->GetPM();
    tpu = TMTparm::sm->GetTP();
 
-//    TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+//    TProfil* PRof = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
     if( pVisor->ProfileMode != true )
         Error( GetName(), "E02PEexec: Please, do it in the Project mode!" );
 
@@ -1122,7 +1122,7 @@ TUnSpace::RecCalc( const char *key )
 
 
     if( usp->Pa_Adapt > '1')
-    {  nAdapt = (int)(usp->Pa_Adapt-'0');
+    {  nAdapt = (usp->Pa_Adapt-'0');
        usp->Gstat = GS_INDEF; // for Adapt mode need   buildTestedArrays
                                    // for each cicle
     }
@@ -1146,7 +1146,7 @@ TUnSpace::RecCalc( const char *key )
           usp->Astat = AS_INDEF;
           buildTestedArrays();
       }
-      aMod[RT_UNSPACE].ModUpdate("UnSpace data analysing in progress...");
+      aMod[RT_UNSPACE]->ModUpdate("UnSpace data analysing in progress...");
       if( usp->PsGen[0] == S_ON )
       {
         analyseArrays();

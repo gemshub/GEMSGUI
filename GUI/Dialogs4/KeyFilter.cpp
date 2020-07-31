@@ -50,12 +50,13 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
         dbKey.SetKey(key);
 
     QGridLayout* editBox = new QGridLayout();
-    auto editLine = aMod[iRt].keyEditField();
+    auto editLine = aMod[iRt]->keyEditField();
     
     for( uint ii=0; ii<dbKey.KeyNumFlds(); ii++)
     {
-        aEdit.Add( pEdit = new QLineEdit(this) );
-        QString str = dynamic_cast<TCModule*>(&aMod[irt])->GetFldHelp(ii);
+        pEdit = new QLineEdit(this);
+        aEdit.push_back( std::shared_ptr<QLineEdit>(pEdit) );
+        QString str = dynamic_cast<TCModule*>(aMod[irt].get())->GetFldHelp(ii);
         pEdit->setToolTip( str);
         pEdit->setMaxLength( dbKey.FldLen(ii) );
         pEdit->setMaximumWidth( (dbKey.FldLen(ii)+2) * pVisorImp->getCharWidth() );
@@ -72,7 +73,7 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
         if( !allowTemplates && ii < editLine )
             pEdit->setEnabled(false);
     }
-    aEdit[0].setFocus();
+    aEdit[0]->setFocus();
 
     QHBoxLayout* buttonBox = new QHBoxLayout();
     QPushButton* btn;
@@ -137,7 +138,7 @@ KeyFilter::CmHelp()
 {                               
    string dbName =  DBM;
    dbName +="_";
-   dbName += string(aMod[iRt].GetName());
+   dbName += string(aMod[iRt]->GetName());
    pVisorImp->OpenHelp(  GEMS_REKEY_HTML, dbName.c_str() );
 }
 
@@ -160,9 +161,9 @@ KeyFilter::SetKeyString()
     string Key;
 
     Key = "";
-    for( uint ii=0/*, jj=0*/; ii<aEdit.GetCount(); ii++/*, jj=Key.length()*/)
+    for( size_t ii=0/*, jj=0*/; ii<aEdit.size(); ii++/*, jj=Key.length()*/)
     {
-        string s = aEdit[ii].text().toStdString();
+        string s = aEdit[ii]->text().toStdString();
         Key += s;
         StripLine(Key);
 //Sveta 04/09/01 ????  if( Key.length()-jj < dbKey.FldLen(ii) )
@@ -181,8 +182,8 @@ KeyFilter::setKeyLine()
 void
 KeyFilter::EvSetAll()
 {
-    for( uint ii=0; ii<aEdit.GetCount(); ii++ )
-        aEdit[ii].setText("*");
+    for( size_t ii=0; ii<aEdit.size(); ii++ )
+        aEdit[ii]->setText("*");
     setKeyLine();
 }
 
@@ -201,7 +202,7 @@ KeyFilter::EvGetList()
     {
         string s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
         StripLine(s);
-        aEdit[ii].setText( s.c_str() );
+        aEdit[ii]->setText( s.c_str() );
     }
     setKeyLine();
 }

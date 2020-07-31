@@ -248,7 +248,7 @@ void TMTparm::dyn_new(int /*q*/)
 //set default information
 void TMTparm::set_def( int /*q*/)
 {
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    TProfil *aPa=dynamic_cast<TProfil *>(aMod[RT_PARAM].get());
     memcpy( &tp.PunE, aPa->pa.TPpdc, 8 );
     memcpy( &tp.PtvG, aPa->pa.TPpvc, 20 );
     /*  tp.L = mup->L;
@@ -315,11 +315,11 @@ void TMTparm::LoadMtparm( double cT, double cP )
     int j, jf;
     double P_old, TC, TK, P;
     time_t tim;
-    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+    TDComp* aDC=dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
     aDC->ods_link(0);
-    TReacDC* aRC=(TReacDC *)(&aMod[RT_REACDC]);
+    TReacDC* aRC=dynamic_cast<TReacDC *>(aMod[RT_REACDC].get());
     aRC->ods_link(0);
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);    // added 07.06.05 by KD
+    TProfil *aPa=dynamic_cast<TProfil *>(aMod[RT_PARAM].get());    // added 07.06.05 by KD
     RMULTS* mup = TRMults::sm->GetMU();
 
     if( tp.L != mup->L ||  tp.Ls != mup->Ls ||

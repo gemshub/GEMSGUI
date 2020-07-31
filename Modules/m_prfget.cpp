@@ -516,7 +516,7 @@ void TProfil::loadSystat( const char *key )
 {
     MULTI *pmp = multi->GetPM();
     vstr pkey(81);
-    TSysEq* STat = dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
+    TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
     //  STat->ods_link(0);
     std::string str;
 
@@ -642,7 +642,7 @@ AGAIN:
 // packed syseq arrays
 void TProfil::PackSystat()
 {
-    TSysEq* STat = dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
+    TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
     //  STat->ods_link(0);
 
     //  syst->SyTest(); //  Sveta 15/05/99 ??? do it
@@ -691,7 +691,7 @@ void TProfil::CalcBcc()
 //
 double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double kTime )
 {
-    TSysEq* STat = dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
+    TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
     long int NumIterFIA,  NumIterIPM;
 
     STat->ods_link(0);
@@ -749,11 +749,11 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
 
    if( prfTemplate == nullptr )
     { // creating empty files
-      for(uint i=0; i<aMod.GetCount(); i++)
+      for(size_t i=0; i<aMod.size(); i++)
       {
-        if( aMod[i].IsSubModule() )
+        if( aMod[i]->IsSubModule() )
             continue;
-        rt[aMod[i].rtNum()].MakeInNewProfile( Path.c_str(), prfName );
+        rt[aMod[i]->rtNum()].MakeInNewProfile( Path.c_str(), prfName );
       }
      }
     else // copy records from template project
@@ -826,9 +826,9 @@ void TProfil::RenameFN( const char * prfName, const char* prfTemplate )
     // Rename records SysEq in New Project
        TSysEq::pm->RenameList(prfName, prfTemplate);
     // Rename records in New Project > SysEq
-      for(uint i=RT_SYSEQ+1; i<aMod.GetCount(); i++)
+      for(size_t i=RT_SYSEQ+1; i<aMod.size(); i++)
       {
-        if( aMod[i].IsSubModule() )
+        if( aMod[i]->IsSubModule() )
             continue;
         rt[i].RenameList(prfName, prfTemplate);
       }
@@ -872,9 +872,9 @@ void TProfil::SetFN()
     std::string fstKeyFld(_fstKeyFld);
     StripLine(fstKeyFld);
 
-    for( i=0; i<aMod.GetCount(); i++)
+    for( i=0; i<aMod.size(); i++)
     {
-        if( aMod[i].IsSubModule() )
+        if( aMod[i]->IsSubModule() )
             continue;
 ///Added after GEM2MT implemented
         if( i == RT_PARAM )
@@ -893,9 +893,9 @@ void TProfil::SetFN()
             aFls.push_back(s);
         }
 
-        if( !rt[aMod[i].rtNum()].SetNewOpenFileList( aFls ))
+        if( !rt[aMod[i]->rtNum()].SetNewOpenFileList( aFls ))
             allOpend = false;
-        aMod[i].dyn_set();
+        aMod[i]->dyn_set();
     }
     if( !allOpend )
     {

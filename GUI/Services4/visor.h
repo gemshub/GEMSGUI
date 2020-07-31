@@ -58,7 +58,19 @@ class TVisor
 
 
     void initModules();
-    void addModule(TCModule* pm, bool selectFiles=false);
+    template <class T>
+    void addModule(T* pm, bool selectFiles=false)
+    {
+        aMod.push_back( std::shared_ptr<T>(pm));
+        pm->ods_link();
+        //  pm->dyn_set();
+
+        TCIntArray arr;
+        if (selectFiles)
+            arr = pm->SelectFileList(openf | closef);
+        rt[pm->rtNum()].Open(selectFiles, UPDATE_DBV, arr);
+        rt[pm->rtNum()].SetKey(ALLKEY);
+    }
 
     void load();
     void fromDAT( bool option_c, bool option_v );
@@ -74,6 +86,7 @@ class TVisor
 protected:
     bool CanClose();
     void Setup();
+
 
 public:
     int ProfileMode;

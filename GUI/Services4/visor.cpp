@@ -381,8 +381,8 @@ TVisor::load()
     fname += VISOR_INI;
 
     TConfig cnf( fname, ' ');
-    for (uint ii = 0; ii < aMod.GetCount(); ii++)
-     aWinInfo.Add(new CWinInfo(aMod[ii], cnf));
+    for (size_t ii = 0; ii < aMod.size(); ii++)
+     aWinInfo.push_back( std::make_shared<CWinInfo>(*aMod[ii], cnf));
 
     toDAT();
     toModCFG();
@@ -410,10 +410,10 @@ TVisor::toDAT()
     // begin signature
     visor_dat << SigBEG;
 
-    int n = aMod.GetCount();
+    int n = aMod.size();
     visor_dat.write((char *) &n, sizeof n);
     for (int ii = 0; ii < n; ii++)
-        aWinInfo[ii].toDAT(visor_dat);
+        aWinInfo[ii]->toDAT(visor_dat);
 
     // end signature
     visor_dat << SigEND;
@@ -487,9 +487,9 @@ TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_
     // if( n!= aMod.GetCount() )
     //   throw TError();
 
-    aWinInfo.Clear(n + 4);
+    aWinInfo.clear();
     for (int ii = 0; ii < n; ii++)
-        aWinInfo.Add(new CWinInfo(aMod[ii], visor_dat));
+        aWinInfo.push_back( std::make_shared<CWinInfo>(*aMod[ii], visor_dat));
 
     visor_dat.read(sg, sizeof sg);
     if (sg[0] != SigEND[0] || sg[1] != SigEND[1])
@@ -554,7 +554,7 @@ TVisor::toWinCFG()
 	f_win_ini << "axis_label_font_string\t=\t\"" << 
            pVisorImp->getAxisLabelFont().toString().toStdString() << "\"" << endl;
 
-    int win_num = aWinInfo.GetCount();
+    int win_num = aWinInfo.size();
     f_win_ini << "number_of_windows\t=\t" << win_num << endl;
     f_win_ini << "config_autosave\t=\t" << pVisorImp->getConfigAutosave() << endl;
 
@@ -576,7 +576,7 @@ TVisor::toWinCFG()
 
 //    f_win_ini << "# Format of the file and the order should be exactly the same" << endl;
     for (int ii = 0; ii < win_num; ii++)
-        aWinInfo[ii].toWinCFG(f_win_ini);
+        aWinInfo[ii]->toWinCFG(f_win_ini);
 
     f_win_ini.close();
 }
@@ -665,8 +665,8 @@ TVisor::fromWinCFG()
     // error Sveta 13/06/2001 reads only #
  //   f_win_ini >> name_str.p; // Don't compile in BCB5 without .p
 
-    for (uint ii = 0; ii < aWinInfo.GetCount(); ii++)
-        aWinInfo[ii].fromWinCFG(f_win_ini);
+    for (size_t ii = 0; ii < aWinInfo.size(); ii++)
+        aWinInfo[ii]->fromWinCFG(f_win_ini);
 }
 
 //  Reorganized by KD on E.Curti' comment 04.04.01
@@ -699,19 +699,19 @@ TVisor::Update(bool force)
 }
 
 
-void
-TVisor::addModule(TCModule * pm, bool selectFiles)
-{
-    aMod.Add(pm);
-    pm->ods_link();
-    //  pm->dyn_set();
+//void
+//TVisor::addModule( TCModule* pm, bool selectFiles)
+//{
+//    aMod.push_back( std::shared_ptr<TCModule>(pm));
+//    pm->ods_link();
+//    //  pm->dyn_set();
 
-    TCIntArray arr;
-    if (selectFiles)
-        arr = pm->SelectFileList(openf | closef);
-    rt[pm->rtNum()].Open(selectFiles, UPDATE_DBV, arr);
-    rt[pm->rtNum()].SetKey(ALLKEY);
-}
+//    TCIntArray arr;
+//    if (selectFiles)
+//        arr = pm->SelectFileList(openf | closef);
+//    rt[pm->rtNum()].Open(selectFiles, UPDATE_DBV, arr);
+//    rt[pm->rtNum()].SetKey(ALLKEY);
+//}
 
 //Init work structures
 void
