@@ -116,10 +116,10 @@ void EquatSetup::resetPageList( int newRT,
       int nJ = scalarsList[ii].ndx;
       if(nJ<0) nJ = 0;
       nO = scalarsList[ii].nObj;
-      if( aObj[nO].GetM() > 1 )
-       item1->setToolTip( aObj[nO].GetDescription(0,nJ).c_str() );
+      if( aObj[nO]->GetM() > 1 )
+       item1->setToolTip( aObj[nO]->GetDescription(0,nJ).c_str() );
       else
-       item1->setToolTip( aObj[nO].GetDescription(nJ,0).c_str() );
+       item1->setToolTip( aObj[nO]->GetDescription(nJ,0).c_str() );
     }
 
     // init new pages
@@ -136,7 +136,7 @@ void EquatSetup::resetPageList( int newRT,
         //cout << pgData[pgData.size()-1].pageName.c_str() << " " << pgData[pgData.size()-1].ndxName.c_str() << endl;
         // insert to list
         //str = QString("%1 (%2)").arg(
-        //    wnData[ii].pageName.c_str(), aObj[nO].GetKeywd());
+        //    wnData[ii].pageName.c_str(), aObj[nO]->GetKeywd());
         str = QString("%1").arg( wnData[ii].pageName.c_str());
         item1 = new QListWidgetItem( str,  keywdList);
 
@@ -217,7 +217,7 @@ void EquatSetup::changePage( int nPage )
     if( cPage <= 0 )
      lDesc->setText( "List of static data objects (see tooltip on each object name)");
     else
-      lDesc->setText( aObj[pgData[nPage].nObj].GetDescription(0,nJ).c_str());
+      lDesc->setText( aObj[pgData[nPage].nObj]->GetDescription(0,nJ).c_str());
 }
 
 void EquatSetup::changeTable(const QItemSelection & selected, const QItemSelection & deselected)
@@ -272,23 +272,23 @@ string EquatSetup::getStringValue( int nO, int ndx, const char * andName )
     else
     {
 
-       if( aObj[nO].GetM() > 1)
+       if( aObj[nO]->GetM() > 1)
         {
            QString ndxS;
 
            if( !pgData[cPage].ndxName.empty() )
            {
              ndxS =  pgData[cPage].ndxName.c_str();//
-             textS = QString("%1[{%2}][{%3}]").arg( aObj[nO].GetKeywd(), ndxS, str.c_str() );
+             textS = QString("%1[{%2}][{%3}]").arg( aObj[nO]->GetKeywd(), ndxS, str.c_str() );
             }
            else
            {  ndxS = QString("%1").arg(pgData[cPage].ndx);
-              textS = QString("%1[{%2}][%3]").arg( aObj[nO].GetKeywd(), str.c_str(), ndxS );
+              textS = QString("%1[{%2}][%3]").arg( aObj[nO]->GetKeywd(), str.c_str(), ndxS );
            }
         }
         else
          {
-            textS = QString("%1[{%2}]").arg( aObj[nO].GetKeywd(), str.c_str() );
+            textS = QString("%1[{%2}]").arg( aObj[nO]->GetKeywd(), str.c_str() );
          }
     }
 
@@ -321,10 +321,10 @@ void EquatSetup::tableInsertRow( int nO, int ndx, const char * andName )
      }
        else
         {
-           scriptData.push_back(  scriptSetupData( cPage, nO, aObj[nO].GetKeywd(),
+           scriptData.push_back(  scriptSetupData( cPage, nO, aObj[nO]->GetKeywd(),
              ndx, andName, str.c_str() ));
            namLines.push_back(andName);
-           yNam = aObj[nO].GetKeywd();
+           yNam = aObj[nO]->GetKeywd();
        }
 
     scriptUpdate();
@@ -442,7 +442,7 @@ void EquatSetup::CmAbscissa()
     if(nO<0)
       xNam = str;
     else
-      xNam = aObj[nO].GetKeywd();
+      xNam = aObj[nO]->GetKeywd();
 
     eqData.abscissaLines.clear();
     scriptUpdate();
@@ -458,7 +458,7 @@ void EquatSetup::CmAbscissaAdd()
     /*if(nO<0)
       xNam = str;
     else
-      xNam = aObj[nO].GetKeywd();
+      xNam = aObj[nO]->GetKeywd();
    */
    scriptUpdate();
 }

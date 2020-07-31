@@ -92,7 +92,7 @@ void TDComp::calc_tpcv( int q, int p, int CE, int CV )
     T3 = T2 * T;
     T4 = T3 * T;
     T05 = sqrt( T );
-    for( i=0; i</*MAXCPCOEF*/aObj[o_dccp].GetN(); i++ )
+    for( i=0; i</*MAXCPCOEF*/aObj[o_dccp]->GetN(); i++ )
     {  // Cp(t)  current temperature only
         a1 = dc[q].Cp[i*dc[q].NeCp+k];
         if( IsFloatEmpty( a1 ) || !a1 )
@@ -137,7 +137,7 @@ void TDComp::calc_tpcv( int q, int p, int CE, int CV )
                 // if(j)
             aW.twp->G -= aW.twp->S * T_Tst;
             // aW.twp->Cp = 0.;
-            for( i=0; i< /*MAXCPCOEF*/aObj[o_dccp].GetN(); i++ ) // fix 08.09.00
+            for( i=0; i< /*MAXCPCOEF*/aObj[o_dccp]->GetN(); i++ ) // fix 08.09.00
             {
 	        a1 = dc[q].Cp[i*dc[q].NeCp+j];
                 if( IsFloatEmpty( a1 ) || !a1 )

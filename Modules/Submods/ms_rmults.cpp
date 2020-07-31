@@ -38,261 +38,261 @@ TRMults::TRMults( int nrt ):
 // link values to objects
 void TRMults::ods_link( int /*q*/ )
 {
-    //aObj[ o_musymb].SetPtr(  mu.symb );
-    //aObj[ o_mugrp].SetPtr(   mu.grp );
-    aObj[ o_mupmv ].SetPtr(  &mu.PmvSA );   /*a 8*/
-    aObj[ o_muname].SetPtr(  mu.name );
-    aObj[ o_munotes].SetPtr( mu.notes );
-    aObj[ o_mudim].SetPtr(  &mu.N );   /*i 12*/
-    aObj[ o_munfl].SetPtr(  mu.Nfl );
+    //aObj[ o_musymb]->SetPtr(  mu.symb );
+    //aObj[ o_mugrp]->SetPtr(   mu.grp );
+    aObj[ o_mupmv ]->SetPtr(  &mu.PmvSA );   /*a 8*/
+    aObj[ o_muname]->SetPtr(  mu.name );
+    aObj[ o_munotes]->SetPtr( mu.notes );
+    aObj[ o_mudim]->SetPtr(  &mu.N );   /*i 12*/
+    aObj[ o_munfl]->SetPtr(  mu.Nfl );
 
-    aObj[ o_mul1].SetPtr( mu.Ll );
-    aObj[ o_mul1].SetDim( mu.Fi, 1 );
-    aObj[ o_musf].SetPtr( mu.SF );
-    aObj[ o_musf].SetDim( mu.Fi, 1 );
-    aObj[ o_musm].SetPtr(  mu.SM );
-    aObj[ o_musm].SetDim( mu.L, 1 );
-    aObj[ o_musa].SetPtr( mu.SA );
-    aObj[ o_musa].SetDim( mu.La, 1 );
-    aObj[ o_musb].SetPtr( mu.SB );
-    aObj[ o_musb].SetDim( mu.N, 1 );
-    aObj[ o_mufn].SetPtr( mu.FN );
-    aObj[ o_mufn].SetDim( mu.NfT, 1 );
-    aObj[ o_musf2].SetPtr( mu.SF2 );
-    aObj[ o_musf2].SetDim( mu.Fis, 1 );
-    aObj[ o_musm2].SetPtr(  mu.SM2 );
-    aObj[ o_musm2].SetDim( mu.Ls, 1 );
-aObj[ o_musm3].SetPtr(  mu.SM3 );
-aObj[ o_musm3].SetDim( mu.Lads, 1 );
-aObj[ o_nlicv].SetPtr(  mu.nlICv );
-aObj[ o_nlicv].SetDim( mu.N, 1 );
-aObj[ o_nlich].SetPtr(  mu.nlICv );
-aObj[ o_nlich].SetDim( 1, mu.N );
-aObj[ o_nldcv].SetPtr(  mu.nlDCv );
-aObj[ o_nldcv].SetDim( mu.L, 1 );
-aObj[ o_nldch].SetPtr(  mu.nlDCv );
-aObj[ o_nldch].SetDim( 1, mu.L );
-aObj[ o_nldcvs].SetPtr(  mu.nlDCv );
-aObj[ o_nldcvs].SetDim( mu.Ls, 1 );
-aObj[ o_nldchs].SetPtr(  mu.nlDCv );
-aObj[ o_nldchs].SetDim( 1, mu.Ls );
-aObj[ o_nlphv].SetPtr(  mu.nlPHv );
-aObj[ o_nlphv].SetDim( mu.Fi, 1 );
-aObj[ o_nlphh].SetPtr(  mu.nlPHv );
-aObj[ o_nlphh].SetDim( 1, mu.Fi );
+    aObj[ o_mul1]->SetPtr( mu.Ll );
+    aObj[ o_mul1]->SetDim( mu.Fi, 1 );
+    aObj[ o_musf]->SetPtr( mu.SF );
+    aObj[ o_musf]->SetDim( mu.Fi, 1 );
+    aObj[ o_musm]->SetPtr(  mu.SM );
+    aObj[ o_musm]->SetDim( mu.L, 1 );
+    aObj[ o_musa]->SetPtr( mu.SA );
+    aObj[ o_musa]->SetDim( mu.La, 1 );
+    aObj[ o_musb]->SetPtr( mu.SB );
+    aObj[ o_musb]->SetDim( mu.N, 1 );
+    aObj[ o_mufn]->SetPtr( mu.FN );
+    aObj[ o_mufn]->SetDim( mu.NfT, 1 );
+    aObj[ o_musf2]->SetPtr( mu.SF2 );
+    aObj[ o_musf2]->SetDim( mu.Fis, 1 );
+    aObj[ o_musm2]->SetPtr(  mu.SM2 );
+    aObj[ o_musm2]->SetDim( mu.Ls, 1 );
+aObj[ o_musm3]->SetPtr(  mu.SM3 );
+aObj[ o_musm3]->SetDim( mu.Lads, 1 );
+aObj[ o_nlicv]->SetPtr(  mu.nlICv );
+aObj[ o_nlicv]->SetDim( mu.N, 1 );
+aObj[ o_nlich]->SetPtr(  mu.nlICv );
+aObj[ o_nlich]->SetDim( 1, mu.N );
+aObj[ o_nldcv]->SetPtr(  mu.nlDCv );
+aObj[ o_nldcv]->SetDim( mu.L, 1 );
+aObj[ o_nldch]->SetPtr(  mu.nlDCv );
+aObj[ o_nldch]->SetDim( 1, mu.L );
+aObj[ o_nldcvs]->SetPtr(  mu.nlDCv );
+aObj[ o_nldcvs]->SetDim( mu.Ls, 1 );
+aObj[ o_nldchs]->SetPtr(  mu.nlDCv );
+aObj[ o_nldchs]->SetDim( 1, mu.Ls );
+aObj[ o_nlphv]->SetPtr(  mu.nlPHv );
+aObj[ o_nlphv]->SetDim( mu.Fi, 1 );
+aObj[ o_nlphh]->SetPtr(  mu.nlPHv );
+aObj[ o_nlphh]->SetDim( 1, mu.Fi );
 // end of add
-    aObj[ o_muphc].SetPtr( mu.PHC );
-    aObj[ o_muphc].SetDim( mu.Fi, 1 );
-    aObj[ o_mudcc].SetPtr( mu.DCC );
-    aObj[ o_mudcc].SetDim( mu.L, 1 );
-aObj[ o_mudcc3].SetPtr( mu.DCC3 );
-aObj[ o_mudcc3].SetDim( mu.Lads, 1 );
-    aObj[ o_mudcs].SetPtr( mu.DCS );
-    aObj[ o_mudcs].SetDim( mu.L, 1 );
-    aObj[ o_muicc].SetPtr( mu.ICC );
-    aObj[ o_muicc].SetDim( mu.N, 1 );
+    aObj[ o_muphc]->SetPtr( mu.PHC );
+    aObj[ o_muphc]->SetDim( mu.Fi, 1 );
+    aObj[ o_mudcc]->SetPtr( mu.DCC );
+    aObj[ o_mudcc]->SetDim( mu.L, 1 );
+aObj[ o_mudcc3]->SetPtr( mu.DCC3 );
+aObj[ o_mudcc3]->SetDim( mu.Lads, 1 );
+    aObj[ o_mudcs]->SetPtr( mu.DCS );
+    aObj[ o_mudcs]->SetDim( mu.L, 1 );
+    aObj[ o_muicc]->SetPtr( mu.ICC );
+    aObj[ o_muicc]->SetDim( mu.N, 1 );
 
-    aObj[ o_mudcf].SetPtr( mu.DCF );  //aObj[ o_mudcf].SetDim( 1,VIZmsize(mu.DCF));
-    aObj[ o_muicf].SetPtr( mu.ICF );  //aObj[ o_muicf].SetDim( 1,VIZmsize(mu.ICF));
-    aObj[ o_muidcref].SetPtr( mu.IDCref );
-    aObj[ o_muidcref].SetDim( mu.N, 1 );
-    aObj[ o_muval].SetPtr( mu.Val );
-    aObj[ o_muval].SetDim( mu.N, 1 );
-    aObj[ o_mupl].SetPtr( mu.Pl );
-    aObj[ o_mupl].SetDim( mu.Ls, 1 );
-    aObj[ o_mubc].SetPtr( mu.BC );
-    aObj[ o_mubc].SetDim( mu.N, 1 );
-    aObj[ o_muas].SetPtr( mu.AS );
-    aObj[ o_muas].SetDim( mu.N, 1 );
-    aObj[ o_muav].SetPtr( mu.AV );
-    aObj[ o_muav].SetDim( mu.N, 1 );
+    aObj[ o_mudcf]->SetPtr( mu.DCF );  //aObj[ o_mudcf]->SetDim( 1,VIZmsize(mu.DCF));
+    aObj[ o_muicf]->SetPtr( mu.ICF );  //aObj[ o_muicf]->SetDim( 1,VIZmsize(mu.ICF));
+    aObj[ o_muidcref]->SetPtr( mu.IDCref );
+    aObj[ o_muidcref]->SetDim( mu.N, 1 );
+    aObj[ o_muval]->SetPtr( mu.Val );
+    aObj[ o_muval]->SetDim( mu.N, 1 );
+    aObj[ o_mupl]->SetPtr( mu.Pl );
+    aObj[ o_mupl]->SetDim( mu.Ls, 1 );
+    aObj[ o_mubc]->SetPtr( mu.BC );
+    aObj[ o_mubc]->SetDim( mu.N, 1 );
+    aObj[ o_muas]->SetPtr( mu.AS );
+    aObj[ o_muas]->SetDim( mu.N, 1 );
+    aObj[ o_muav]->SetPtr( mu.AV );
+    aObj[ o_muav]->SetDim( mu.N, 1 );
 }
 
 // set dynamic Objects ptr to values
 void TRMults::dyn_set(int /*q*/)
 {
-    mu.SF  = (char (*)[PH_RKLEN])aObj[ o_musf ].GetPtr();
-    mu.SM  = (char (*)[DC_RKLEN])aObj[ o_musm ].GetPtr();
-    mu.SF2  = (char (*)[PH_RKLEN])aObj[ o_musf2 ].GetPtr();
-    mu.SM2  = (char (*)[DC_RKLEN])aObj[ o_musm2 ].GetPtr();
-mu.SM3  = (char (*)[DC_RKLEN])aObj[ o_musm3 ].GetPtr();
+    mu.SF  = (char (*)[PH_RKLEN])aObj[ o_musf ]->GetPtr();
+    mu.SM  = (char (*)[DC_RKLEN])aObj[ o_musm ]->GetPtr();
+    mu.SF2  = (char (*)[PH_RKLEN])aObj[ o_musf2 ]->GetPtr();
+    mu.SM2  = (char (*)[DC_RKLEN])aObj[ o_musm2 ]->GetPtr();
+mu.SM3  = (char (*)[DC_RKLEN])aObj[ o_musm3 ]->GetPtr();
 // Added  Sveta 03/06/05
-mu.nlICv  = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_nlicv ].GetPtr();
-mu.nlDCv  = (char (*)[MAXDCNAME])aObj[ o_nldcv ].GetPtr();
-mu.nlPHv  = (char (*)[MAXPHNAME])aObj[ o_nlphv ].GetPtr();
-aObj[ o_nlich].SetPtr(  mu.nlICv );
-aObj[ o_nlich].SetDim( 1, mu.N );
-aObj[ o_nldch].SetPtr(  mu.nlDCv );
-aObj[ o_nldch].SetDim( 1, mu.L );
-aObj[ o_nldcvs].SetPtr(  mu.nlDCv );
-aObj[ o_nldcvs].SetDim( mu.Ls, 1 );
-aObj[ o_nldchs].SetPtr(  mu.nlDCv );
-aObj[ o_nldchs].SetDim( 1, mu.Ls );
-aObj[ o_nlphh].SetPtr(  mu.nlPHv );
-aObj[ o_nlphh].SetDim( 1, mu.Fi );
+mu.nlICv  = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_nlicv ]->GetPtr();
+mu.nlDCv  = (char (*)[MAXDCNAME])aObj[ o_nldcv ]->GetPtr();
+mu.nlPHv  = (char (*)[MAXPHNAME])aObj[ o_nlphv ]->GetPtr();
+aObj[ o_nlich]->SetPtr(  mu.nlICv );
+aObj[ o_nlich]->SetDim( 1, mu.N );
+aObj[ o_nldch]->SetPtr(  mu.nlDCv );
+aObj[ o_nldch]->SetDim( 1, mu.L );
+aObj[ o_nldcvs]->SetPtr(  mu.nlDCv );
+aObj[ o_nldcvs]->SetDim( mu.Ls, 1 );
+aObj[ o_nldchs]->SetPtr(  mu.nlDCv );
+aObj[ o_nldchs]->SetDim( 1, mu.Ls );
+aObj[ o_nlphh]->SetPtr(  mu.nlPHv );
+aObj[ o_nlphh]->SetDim( 1, mu.Fi );
 // end of add
 
-    mu.SA  = (char (*)[BC_RKLEN])aObj[ o_musa ].GetPtr();
-    mu.SB  = (char (*)[IC_RKLEN])aObj[ o_musb ].GetPtr();
-    mu.FN  = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn ].GetPtr();
-    mu.PHC = (char *)aObj[ o_muphc ].GetPtr();
-    mu.DCC = (char *)aObj[ o_mudcc ].GetPtr();
-mu.DCC3 = (char *)aObj[ o_mudcc3 ].GetPtr();
-    mu.DCS = (char *)aObj[ o_mudcs ].GetPtr();
-    mu.Pl  = (short *)aObj[ o_mupl ].GetPtr();
-    mu.ICC = (char *)aObj[ o_muicc ].GetPtr();
-    mu.DCF = (char *)aObj[ o_mudcf ].GetPtr();
-    mu.ICF = (char *)aObj[ o_muicf ].GetPtr();
-    mu.IDCref = (char (*)[DC_RKLEN])aObj[ o_muidcref ].GetPtr();
-    mu.Ll  = (short *)aObj[ o_mul1 ].GetPtr();
-    mu.Val = (short *)aObj[ o_muval ].GetPtr();
-    mu.BC  = (float *)aObj[ o_mubc ].GetPtr();
-    mu.AS  = (float *)aObj[ o_muas ].GetPtr();
-    mu.AV  = (float *)aObj[ o_muav ].GetPtr();
+    mu.SA  = (char (*)[BC_RKLEN])aObj[ o_musa ]->GetPtr();
+    mu.SB  = (char (*)[IC_RKLEN])aObj[ o_musb ]->GetPtr();
+    mu.FN  = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn ]->GetPtr();
+    mu.PHC = (char *)aObj[ o_muphc ]->GetPtr();
+    mu.DCC = (char *)aObj[ o_mudcc ]->GetPtr();
+mu.DCC3 = (char *)aObj[ o_mudcc3 ]->GetPtr();
+    mu.DCS = (char *)aObj[ o_mudcs ]->GetPtr();
+    mu.Pl  = (short *)aObj[ o_mupl ]->GetPtr();
+    mu.ICC = (char *)aObj[ o_muicc ]->GetPtr();
+    mu.DCF = (char *)aObj[ o_mudcf ]->GetPtr();
+    mu.ICF = (char *)aObj[ o_muicf ]->GetPtr();
+    mu.IDCref = (char (*)[DC_RKLEN])aObj[ o_muidcref ]->GetPtr();
+    mu.Ll  = (short *)aObj[ o_mul1 ]->GetPtr();
+    mu.Val = (short *)aObj[ o_muval ]->GetPtr();
+    mu.BC  = (float *)aObj[ o_mubc ]->GetPtr();
+    mu.AS  = (float *)aObj[ o_muas ]->GetPtr();
+    mu.AV  = (float *)aObj[ o_muav ]->GetPtr();
 }
 
 // free dynamic memory in objects and values
 void TRMults::dyn_kill(int /*q*/)
 {
-    mu.SF  = (char (*)[PH_RKLEN])aObj[ o_musf ].Free();
-    mu.SM  = (char (*)[DC_RKLEN])aObj[ o_musm ].Free();
-    mu.SF2  = (char (*)[PH_RKLEN])aObj[ o_musf2 ].Free();
-    mu.SM2  = (char (*)[DC_RKLEN])aObj[ o_musm2 ].Free();
-mu.SM3  = (char (*)[DC_RKLEN])aObj[ o_musm3 ].Free();
+    mu.SF  = (char (*)[PH_RKLEN])aObj[ o_musf ]->Free();
+    mu.SM  = (char (*)[DC_RKLEN])aObj[ o_musm ]->Free();
+    mu.SF2  = (char (*)[PH_RKLEN])aObj[ o_musf2 ]->Free();
+    mu.SM2  = (char (*)[DC_RKLEN])aObj[ o_musm2 ]->Free();
+mu.SM3  = (char (*)[DC_RKLEN])aObj[ o_musm3 ]->Free();
 // Added  Sveta 03/06/05
-mu.nlICv  = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_nlicv ].Free();
-mu.nlDCv  = (char (*)[MAXDCNAME])aObj[ o_nldcv ].Free();
-mu.nlPHv  = (char (*)[MAXPHNAME])aObj[ o_nlphv ].Free();
-aObj[ o_nlich].SetPtr(  0 );
-aObj[ o_nlich].SetDim( 1, 0 );
-aObj[ o_nldch].SetPtr( 0 );
-aObj[ o_nldch].SetDim( 1, 0 );
-aObj[ o_nldcvs].SetPtr(  0 );
-aObj[ o_nldcvs].SetDim( 0, 1 );
-aObj[ o_nldchs].SetPtr(  0 );
-aObj[ o_nldchs].SetDim( 1, 0 );
-aObj[ o_nlphh].SetPtr(  0 );
-aObj[ o_nlphh].SetDim( 1, 0 );
+mu.nlICv  = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_nlicv ]->Free();
+mu.nlDCv  = (char (*)[MAXDCNAME])aObj[ o_nldcv ]->Free();
+mu.nlPHv  = (char (*)[MAXPHNAME])aObj[ o_nlphv ]->Free();
+aObj[ o_nlich]->SetPtr(  0 );
+aObj[ o_nlich]->SetDim( 1, 0 );
+aObj[ o_nldch]->SetPtr( 0 );
+aObj[ o_nldch]->SetDim( 1, 0 );
+aObj[ o_nldcvs]->SetPtr(  0 );
+aObj[ o_nldcvs]->SetDim( 0, 1 );
+aObj[ o_nldchs]->SetPtr(  0 );
+aObj[ o_nldchs]->SetDim( 1, 0 );
+aObj[ o_nlphh]->SetPtr(  0 );
+aObj[ o_nlphh]->SetDim( 1, 0 );
 // end of add
-    mu.SA  = (char (*)[BC_RKLEN])aObj[ o_musa ].Free();
-    mu.SB  = (char (*)[IC_RKLEN])aObj[ o_musb ].Free();
-    mu.FN  = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn ].Free();
-    mu.PHC = (char *)aObj[ o_muphc ].Free();
-    mu.DCC = (char *)aObj[ o_mudcc ].Free();
-mu.DCC3 = (char *)aObj[ o_mudcc3 ].Free();
-    mu.DCS = (char *)aObj[ o_mudcs ].Free();
-    mu.Pl  = (short *)aObj[ o_mupl ].Free();
-    mu.ICC = (char *)aObj[ o_muicc ].Free();
-    mu.DCF = (char *)aObj[ o_mudcf ].Free();
-    mu.ICF = (char *)aObj[ o_muicf ].Free();
-    mu.IDCref = (char (*)[DC_RKLEN])aObj[ o_muidcref ].Free();
-    mu.Ll  = (short *)aObj[ o_mul1 ].Free();
-    mu.Val = (short *)aObj[ o_muval ].Free();
-    mu.BC  = (float *)aObj[ o_mubc ].Free();
-    mu.AS  = (float *)aObj[ o_muas ].Free();
-    mu.AV  = (float *)aObj[ o_muav ].Free();
+    mu.SA  = (char (*)[BC_RKLEN])aObj[ o_musa ]->Free();
+    mu.SB  = (char (*)[IC_RKLEN])aObj[ o_musb ]->Free();
+    mu.FN  = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn ]->Free();
+    mu.PHC = (char *)aObj[ o_muphc ]->Free();
+    mu.DCC = (char *)aObj[ o_mudcc ]->Free();
+mu.DCC3 = (char *)aObj[ o_mudcc3 ]->Free();
+    mu.DCS = (char *)aObj[ o_mudcs ]->Free();
+    mu.Pl  = (short *)aObj[ o_mupl ]->Free();
+    mu.ICC = (char *)aObj[ o_muicc ]->Free();
+    mu.DCF = (char *)aObj[ o_mudcf ]->Free();
+    mu.ICF = (char *)aObj[ o_muicf ]->Free();
+    mu.IDCref = (char (*)[DC_RKLEN])aObj[ o_muidcref ]->Free();
+    mu.Ll  = (short *)aObj[ o_mul1 ]->Free();
+    mu.Val = (short *)aObj[ o_muval ]->Free();
+    mu.BC  = (float *)aObj[ o_mubc ]->Free();
+    mu.AS  = (float *)aObj[ o_muas ]->Free();
+    mu.AV  = (float *)aObj[ o_muav ]->Free();
 }
 
 // realloc dynamic memory
 void TRMults::dyn_new(int /*q*/)
 {
-    mu.FN = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn].Alloc( mu.NfT, 1, MAX_FILENAME_LEN );
+    mu.FN = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn]->Alloc( mu.NfT, 1, MAX_FILENAME_LEN );
     if( mu.PmvIC == S_ON )
     {
-        mu.SB = (char (*)[IC_RKLEN])aObj[ o_musb].Alloc( mu.N, 1, IC_RKLEN );
-        mu.ICC = (char *)aObj[ o_muicc].Alloc( mu.N, 1, A_ );
-        mu.Val = (short *)aObj[ o_muval].Alloc( mu.N, 1, I_ );
-        mu.BC = (float *)aObj[ o_mubc].Alloc( mu.N, 1, F_ );
-mu.nlICv  = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_nlicv ].Alloc(
+        mu.SB = (char (*)[IC_RKLEN])aObj[ o_musb]->Alloc( mu.N, 1, IC_RKLEN );
+        mu.ICC = (char *)aObj[ o_muicc]->Alloc( mu.N, 1, A_ );
+        mu.Val = (short *)aObj[ o_muval]->Alloc( mu.N, 1, I_ );
+        mu.BC = (float *)aObj[ o_mubc]->Alloc( mu.N, 1, F_ );
+mu.nlICv  = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_nlicv ]->Alloc(
                          mu.N, 1, MAXICNAME+MAXSYMB );
-aObj[ o_nlich].SetPtr(  mu.nlICv );
-aObj[ o_nlich].SetDim( 1, mu.N );
+aObj[ o_nlich]->SetPtr(  mu.nlICv );
+aObj[ o_nlich]->SetDim( 1, mu.N );
     }
     else  Error( GetName(), "PmvIC != S_ON" );
 
     if( mu.PmvIP == S_ON )
     {
-        mu.AS = (float *)aObj[ o_muas].Alloc( mu.N, 1, F_ );
-        mu.AV = (float *)aObj[ o_muav].Alloc( mu.N, 1, F_ );
+        mu.AS = (float *)aObj[ o_muas]->Alloc( mu.N, 1, F_ );
+        mu.AV = (float *)aObj[ o_muav]->Alloc( mu.N, 1, F_ );
     }
     else
     {
-        mu.AS  = (float *)aObj[ o_muas ].Free();
-        mu.AV  = (float *)aObj[ o_muav ].Free();
+        mu.AS  = (float *)aObj[ o_muas ]->Free();
+        mu.AV  = (float *)aObj[ o_muav ]->Free();
     }
 
     if( mu.PmvID == S_ON )
-        mu.IDCref = (char (*)[DC_RKLEN])aObj[o_muidcref].Alloc(mu.N, 1, DC_RKLEN );
-    else  mu.IDCref = (char (*)[DC_RKLEN])aObj[ o_muidcref ].Free();
+        mu.IDCref = (char (*)[DC_RKLEN])aObj[o_muidcref]->Alloc(mu.N, 1, DC_RKLEN );
+    else  mu.IDCref = (char (*)[DC_RKLEN])aObj[ o_muidcref ]->Free();
 
     if( mu.PmvIF == S_ON )
-        mu.ICF = (char *)aObj[ o_muicf].Alloc( 1, mu.N*10, S_ );
-    else mu.ICF = (char *)aObj[ o_muicf ].Free();
+        mu.ICF = (char *)aObj[ o_muicf]->Alloc( 1, mu.N*10, S_ );
+    else mu.ICF = (char *)aObj[ o_muicf ]->Free();
 
     if( mu.PmvSA == S_ON )
-        mu.SA = (char (*)[BC_RKLEN])aObj[ o_musa].Alloc( mu.La, 1, BC_RKLEN );
-    else mu.SA  = (char (*)[BC_RKLEN])aObj[ o_musa ].Free();
+        mu.SA = (char (*)[BC_RKLEN])aObj[ o_musa]->Alloc( mu.La, 1, BC_RKLEN );
+    else mu.SA  = (char (*)[BC_RKLEN])aObj[ o_musa ]->Free();
 
     if( mu.PmvPH == S_ON )
     {
-        mu.SF = (char (*)[PH_RKLEN])aObj[ o_musf].Alloc( mu.Fi, 1, PH_RKLEN );
-        mu.SF2 = (char (*)[PH_RKLEN])aObj[ o_musf2].Alloc( mu.Fis, 1, PH_RKLEN );
-        mu.Ll = (short *)aObj[ o_mul1].Alloc( mu.Fi, 1, I_ );
-        mu.PHC = (char *)aObj[ o_muphc].Alloc( mu.Fi, 1, A_ );
-mu.nlPHv  = (char (*)[MAXPHNAME])aObj[ o_nlphv ].Alloc( mu.Fi, 1, MAXPHNAME );
-aObj[ o_nlphh].SetPtr(  mu.nlPHv );
-aObj[ o_nlphh].SetDim( 1, mu.Fi );
+        mu.SF = (char (*)[PH_RKLEN])aObj[ o_musf]->Alloc( mu.Fi, 1, PH_RKLEN );
+        mu.SF2 = (char (*)[PH_RKLEN])aObj[ o_musf2]->Alloc( mu.Fis, 1, PH_RKLEN );
+        mu.Ll = (short *)aObj[ o_mul1]->Alloc( mu.Fi, 1, I_ );
+        mu.PHC = (char *)aObj[ o_muphc]->Alloc( mu.Fi, 1, A_ );
+mu.nlPHv  = (char (*)[MAXPHNAME])aObj[ o_nlphv ]->Alloc( mu.Fi, 1, MAXPHNAME );
+aObj[ o_nlphh]->SetPtr(  mu.nlPHv );
+aObj[ o_nlphh]->SetDim( 1, mu.Fi );
     }
     else Error( GetName(), "PmvPH != S_ON" );
 
     if( mu.PmvDC == S_ON )
     {
-        mu.SM = (char (*)[DC_RKLEN])aObj[ o_musm].Alloc( mu.L, 1, DC_RKLEN );
-        mu.SM2 = (char (*)[DC_RKLEN])aObj[ o_musm2].Alloc( mu.Ls, 1, DC_RKLEN );
-        mu.DCC = (char *)aObj[ o_mudcc].Alloc( mu.L, 1, A_ );
-        mu.DCS = (char *)aObj[ o_mudcs].Alloc( mu.L, 1, A_ );
+        mu.SM = (char (*)[DC_RKLEN])aObj[ o_musm]->Alloc( mu.L, 1, DC_RKLEN );
+        mu.SM2 = (char (*)[DC_RKLEN])aObj[ o_musm2]->Alloc( mu.Ls, 1, DC_RKLEN );
+        mu.DCC = (char *)aObj[ o_mudcc]->Alloc( mu.L, 1, A_ );
+        mu.DCS = (char *)aObj[ o_mudcs]->Alloc( mu.L, 1, A_ );
         if( mu.Ls )
-            mu.Pl = (short *)aObj[ o_mupl].Alloc( mu.Ls, 1, I_ );
-        else  mu.Pl  = (short *)aObj[ o_mupl ].Free();
+            mu.Pl = (short *)aObj[ o_mupl]->Alloc( mu.Ls, 1, I_ );
+        else  mu.Pl  = (short *)aObj[ o_mupl ]->Free();
 if(mu.Lads) // added 28.10.2004 by KD for implementation of CD MUSIC
 {
-   mu.SM3 = (char (*)[DC_RKLEN])aObj[ o_musm3].Alloc( mu.Lads, 1, DC_RKLEN );
-   mu.DCC3 = (char *)aObj[ o_mudcc3].Alloc( mu.Lads, 1, A_ );
+   mu.SM3 = (char (*)[DC_RKLEN])aObj[ o_musm3]->Alloc( mu.Lads, 1, DC_RKLEN );
+   mu.DCC3 = (char *)aObj[ o_mudcc3]->Alloc( mu.Lads, 1, A_ );
 }
 else {
-   mu.SM3  = (char (*)[DC_RKLEN])aObj[ o_musm3 ].Free();
-   mu.DCC3 = (char *)aObj[ o_mudcc3 ].Free();
+   mu.SM3  = (char (*)[DC_RKLEN])aObj[ o_musm3 ]->Free();
+   mu.DCC3 = (char *)aObj[ o_mudcc3 ]->Free();
 }
-mu.nlDCv  = (char (*)[MAXDCNAME])aObj[ o_nldcv ].Alloc( mu.L, 1, MAXDCNAME);
-aObj[ o_nldch].SetPtr(  mu.nlDCv );
-aObj[ o_nldch].SetDim( 1, mu.L );
-aObj[ o_nldcvs].SetPtr(  mu.nlDCv );
-aObj[ o_nldcvs].SetDim( mu.Ls, 1 );
-aObj[ o_nldchs].SetPtr(  mu.nlDCv );
-aObj[ o_nldchs].SetDim( 1, mu.Ls );
+mu.nlDCv  = (char (*)[MAXDCNAME])aObj[ o_nldcv ]->Alloc( mu.L, 1, MAXDCNAME);
+aObj[ o_nldch]->SetPtr(  mu.nlDCv );
+aObj[ o_nldch]->SetDim( 1, mu.L );
+aObj[ o_nldcvs]->SetPtr(  mu.nlDCv );
+aObj[ o_nldcvs]->SetDim( mu.Ls, 1 );
+aObj[ o_nldchs]->SetPtr(  mu.nlDCv );
+aObj[ o_nldchs]->SetDim( 1, mu.Ls );
     }
     else
     {
-        mu.SM  = (char (*)[DC_RKLEN])aObj[ o_musm ].Free();
-        mu.SM2  = (char (*)[DC_RKLEN])aObj[ o_musm2 ].Free();
-        mu.DCC = (char *)aObj[ o_mudcc ].Free();
-        mu.DCS = (char *)aObj[ o_mudcs ].Free();
-        mu.Pl  = (short *)aObj[ o_mupl ].Free();
-mu.nlDCv  = (char (*)[MAXDCNAME])aObj[ o_nldcv ].Free();
-aObj[ o_nldch].SetPtr(  0 );
-aObj[ o_nldch].SetDim( 1, 0 );
-aObj[ o_nldcvs].SetPtr(  0 );
-aObj[ o_nldcvs].SetDim( 0, 1 );
-aObj[ o_nldchs].SetPtr(  0 );
-aObj[ o_nldchs].SetDim( 1, 0 );
+        mu.SM  = (char (*)[DC_RKLEN])aObj[ o_musm ]->Free();
+        mu.SM2  = (char (*)[DC_RKLEN])aObj[ o_musm2 ]->Free();
+        mu.DCC = (char *)aObj[ o_mudcc ]->Free();
+        mu.DCS = (char *)aObj[ o_mudcs ]->Free();
+        mu.Pl  = (short *)aObj[ o_mupl ]->Free();
+mu.nlDCv  = (char (*)[MAXDCNAME])aObj[ o_nldcv ]->Free();
+aObj[ o_nldch]->SetPtr(  0 );
+aObj[ o_nldch]->SetDim( 1, 0 );
+aObj[ o_nldcvs]->SetPtr(  0 );
+aObj[ o_nldcvs]->SetDim( 0, 1 );
+aObj[ o_nldchs]->SetPtr(  0 );
+aObj[ o_nldchs]->SetDim( 1, 0 );
     }
     if( mu.PmvDF == S_ON )
     {
         short DCFlen = mu.FiE;
         mu.FiE = 0;
-        mu.DCF = (char *)aObj[ o_mudcf].Alloc( 1, DCFlen*MAXFORMULA, S_ );
+        mu.DCF = (char *)aObj[ o_mudcf]->Alloc( 1, DCFlen*MAXFORMULA, S_ );
     }
-    else  mu.DCF = (char *)aObj[ o_mudcf ].Free();
+    else  mu.DCF = (char *)aObj[ o_mudcf ]->Free();
 }
 
 
@@ -413,8 +413,8 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
         Error("RMULT", "No records of Phases!");
     mu.Fi  = aPhaseList.size();
     mu.PmvPH = S_ON;
-    mu.Ll = (short *)aObj[ o_mul1].Alloc( mu.Fi, 1, I_ );
-    mu.SF = (char (*)[PH_RKLEN])aObj[ o_musf].Alloc( mu.Fi, 1, PH_RKLEN );
+    mu.Ll = (short *)aObj[ o_mul1]->Alloc( mu.Fi, 1, I_ );
+    mu.SF = (char (*)[PH_RKLEN])aObj[ o_musf]->Alloc( mu.Fi, 1, PH_RKLEN );
     // List of DCOMP&REACDC component in Project
     TCStringArray List;
     TPhase* aPH= dynamic_cast<TPhase *>(aMod[RT_PHASE].get());
@@ -457,7 +457,7 @@ TEST2:
     mu.L = List.size();
     mu.FiE= mu.L;
     mu.PmvDC = S_ON;
-    mu.SM = (char (*)[DC_RKLEN])aObj[ o_musm].Alloc( mu.L, 1, DC_RKLEN );
+    mu.SM = (char (*)[DC_RKLEN])aObj[ o_musm]->Alloc( mu.L, 1, DC_RKLEN );
     for(size_t i=0; i< List.size(); i++)
     {
         memcpy( mu.SM[i], List[i].c_str(), DC_RKLEN );
@@ -476,7 +476,7 @@ void TRMults::MakeRecordLists( TCStringArray AqKey, TCStringArray GasKey )
         Error("RMULT", "No records of Independent component!");
     mu.N  = aICList.size();
     mu.PmvIC = S_ON;
-    mu.SB = (char (*)[IC_RKLEN])aObj[ o_musb].Alloc( mu.N, 1, IC_RKLEN );
+    mu.SB = (char (*)[IC_RKLEN])aObj[ o_musb]->Alloc( mu.N, 1, IC_RKLEN );
     for( i=0; i< aICList.size(); i++)
         memcpy( mu.SB[i], aICList[i].c_str(), IC_RKLEN );
 
@@ -490,7 +490,7 @@ void TRMults::MakeRecordLists( TCStringArray AqKey, TCStringArray GasKey )
     else
     {
         mu.PmvSA = S_ON;
-        mu.SA = (char (*)[BC_RKLEN])aObj[ o_musa].Alloc( mu.La, 1, BC_RKLEN );
+        mu.SA = (char (*)[BC_RKLEN])aObj[ o_musa]->Alloc( mu.La, 1, BC_RKLEN );
         for( i=0; i< aCompList.size(); i++)
             memcpy( mu.SA[i], aCompList[i].c_str(), BC_RKLEN );
     }
@@ -543,7 +543,7 @@ void TRMults::ICmake()
         }
     }
     if( mu.PmvIF == S_ON )
-        mu.ICF = (char *)aObj[ o_muicf].Alloc( mu.N, j+strlen(mu.ICF)+2, S_ );
+        mu.ICF = (char *)aObj[ o_muicf]->Alloc( mu.N, j+strlen(mu.ICF)+2, S_ );
 }
 
 // Make list of PHASE and set data to work arrays
@@ -650,7 +650,7 @@ void TRMults::PHmake()
             continue;
         }
     } /* kk */
-    mu.DCF = (char *)aObj[ o_mudcf].Alloc( 1, sflast+2, S_ );
+    mu.DCF = (char *)aObj[ o_mudcf]->Alloc( 1, sflast+2, S_ );
 }
 
 //realloc memory and load data to structure RMULTS
@@ -944,7 +944,7 @@ string TRMults::SelectAqPhase(const char * dfKey )
     TCIntArray anRPhase;
 
      // Get all records of Phase
-    rt[RT_PHASE].GetKeyList( "a:*:*:*:*:", aPhaseList, anRPhase );
+    rt[RT_PHASE]->GetKeyList( "a:*:*:*:*:", aPhaseList, anRPhase );
     if( aPhaseList.GetCount()<1 ) //no aqueous phase in open data base files
     {
         if( vfQuestion( window(), "Project: Choice of aqueous phase?",
@@ -994,10 +994,10 @@ string TRMults::SelectGasPhase(const char * dfKey )
     TCIntArray anRPhase;
 
     // Get all records of PHase
-    rt[RT_PHASE].GetKeyList( "g:*:*:*:*:", aPhaseList, anRPhase );
+    rt[RT_PHASE]->GetKeyList( "g:*:*:*:*:", aPhaseList, anRPhase );
     if( aPhaseList.GetCount()<1 ) //no gas phase in open data base files
     { // Sveta 17/05/99  mu.PmvGas = S_ON;  goto DEF_KEY;
-       rt[RT_PHASE].GetKeyList( "f:*:*:*:*:", aPhaseList, anRPhase );
+       rt[RT_PHASE]->GetKeyList( "f:*:*:*:*:", aPhaseList, anRPhase );
        if( aPhaseList.GetCount()<1 )
        {
           if( vfQuestion( window(), "Project: Choice of gas/fluid phase?",
@@ -1013,7 +1013,7 @@ string TRMults::SelectGasPhase(const char * dfKey )
     if( aPhaseList.GetCount() == 1 )
         return  aPhaseList[0];
     // select phase
-    rt[RT_PHASE].GetKeyList( "*:*:*:*:*:", aPhaseList, anRPhase );
+    rt[RT_PHASE]->GetKeyList( "*:*:*:*:*:", aPhaseList, anRPhase );
     // get selected phase  added Sveta 18/06/04
     for(uint ii=0; ii <aPhaseList.GetCount(); ii++)
     {

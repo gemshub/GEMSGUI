@@ -1042,7 +1042,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
              for(int jj=0; jj<6; jj++ )
              {
                lst = getSelected( jj );
-               string oName = aObj[pgData[jj].nObj].GetKeywd();
+               string oName = aObj[pgData[jj].nObj]->GetKeywd();
                for(ii=0; ii<lst.count();ii++)
                {
                   lst[ii] = lst[ii].trimmed();
@@ -1069,7 +1069,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
             for(int jj=0; jj<6; jj++ )
             {
               lst = getSelected( jj );
-              string oName = aObj[pgData[jj].nObj].GetKeywd();
+              string oName = aObj[pgData[jj].nObj]->GetKeywd();
               for(ii=0; ii<lst.count();ii++)
               {
                  lst[ii] = lst[ii].trimmed();
@@ -1163,7 +1163,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                      lst = getSelected( jj );
                      if( lst.count() > 0 )
                      {
-                       oName = aObj[pgData[jj].nObj].GetKeywd();
+                       oName = aObj[pgData[jj].nObj]->GetKeywd();
                        lst[0] = lst[0].trimmed();
                        com  = QString("%1[{%2}]").arg(oName.c_str(), lst[0]);
                        break;
@@ -1176,7 +1176,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                      if( lst.count() > 0 )
                      {
                        if( jj== 4)
-                       {  oName = aObj[pgData[jj].nObj].GetKeywd();
+                       {  oName = aObj[pgData[jj].nObj]->GetKeywd();
                           lst[0] = lst[0].trimmed();
                           pH  = QString("%1[{%2}]").arg(oName.c_str(), lst[0]);
                        }
@@ -1354,7 +1354,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
         {
           auto nO = pgData[jj].nObj;
           lst = getSelected( jj );
-          string oName = aObj[nO].GetKeywd();
+          string oName = aObj[nO]->GetKeywd();
 
           for(ii=0; ii<lst.count();ii++)
           {
@@ -1617,7 +1617,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
                      lst = getSelected( ii );
                      if( lst.count() > 0 )
                      {
-                       oName = aObj[pgData[ii].nObj].GetKeywd();
+                       oName = aObj[pgData[ii].nObj]->GetKeywd();
                        lst[0] = lst[0].trimmed();
                        com  = QString("%1[{%2}]").arg(oName.c_str(), lst[0]);
                        break;
@@ -1630,7 +1630,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
                      if( lst.count() > 0 )
                      {
                        if( ii== 4)
-                       {  oName = aObj[pgData[ii].nObj].GetKeywd();
+                       {  oName = aObj[pgData[ii].nObj]->GetKeywd();
                           lst[0] = lst[0].trimmed();
                           pH  = QString("%1[{%2}]").arg(oName.c_str(), lst[0]);
                        }

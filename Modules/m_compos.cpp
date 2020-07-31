@@ -65,54 +65,54 @@ TCompos::~TCompos()
 // link values to objects
 void TCompos::ods_link( int q)
 {
-    //  aObj[ o_bcnam].SetPtr(  bc[q].cname );
-    //  aObj[ o_bctype].SetPtr( bc[q].type );
-    //  aObj[ o_bcgroup].SetPtr(bc[q].group );
-    aObj[ o_bcpcc].SetPtr(  &bc[q].PcIC );  /*6*/
-    aObj[ o_bcname].SetPtr( bc[q].name );
-    aObj[ o_bcnotes].SetPtr(bc[q].notes );
-    aObj[ o_bcdim].SetPtr(  &bc[q].N );      /*6*/
-    aObj[ o_bcmvol].SetPtr( &bc[q].Msys );   /*8*/
+    //  aObj[ o_bcnam]->SetPtr(  bc[q].cname );
+    //  aObj[ o_bctype]->SetPtr( bc[q].type );
+    //  aObj[ o_bcgroup]->SetPtr(bc[q].group );
+    aObj[ o_bcpcc]->SetPtr(  &bc[q].PcIC );  /*6*/
+    aObj[ o_bcname]->SetPtr( bc[q].name );
+    aObj[ o_bcnotes]->SetPtr(bc[q].notes );
+    aObj[ o_bcdim]->SetPtr(  &bc[q].N );      /*6*/
+    aObj[ o_bcmvol]->SetPtr( &bc[q].Msys );   /*8*/
 
     //if( bc[q].N > 0 ) {
-    aObj[ o_bccv].SetPtr( bc[q].C );
-    aObj[ o_bccv ].SetDim( bc[q].N, 1 );
-    aObj[ o_bcsb].SetPtr( bc[q].SB );
-    aObj[ o_bcsb].SetDim( bc[q].N, 1 );
-    aObj[ o_bccicl].SetPtr( bc[q].CIcl );
-    aObj[ o_bccicl].SetDim( bc[q].N, 1 );
-    aObj[ o_bcci].SetPtr( bc[q].CI );
-    aObj[ o_bcci].SetDim( bc[q].N, 1 );
-    aObj[ o_bcdelc].SetPtr( bc[q].delC );
-    aObj[ o_bcdelc].SetDim( bc[q].N, 1 );
+    aObj[ o_bccv]->SetPtr( bc[q].C );
+    aObj[ o_bccv ]->SetDim( bc[q].N, 1 );
+    aObj[ o_bcsb]->SetPtr( bc[q].SB );
+    aObj[ o_bcsb]->SetDim( bc[q].N, 1 );
+    aObj[ o_bccicl]->SetPtr( bc[q].CIcl );
+    aObj[ o_bccicl]->SetDim( bc[q].N, 1 );
+    aObj[ o_bcci]->SetPtr( bc[q].CI );
+    aObj[ o_bcci]->SetDim( bc[q].N, 1 );
+    aObj[ o_bcdelc]->SetPtr( bc[q].delC );
+    aObj[ o_bcdelc]->SetDim( bc[q].N, 1 );
     //}
     // if( bc[q].La > 0 ) {
-    aObj[ o_bcsa].SetPtr( bc[q].SA );
-    aObj[ o_bcsa].SetDim( bc[q].La, 1 );
-    aObj[ o_bccacl].SetPtr( bc[q].AUcl );
-    aObj[ o_bccacl].SetDim( bc[q].La, 1 );
-    aObj[ o_bcca].SetPtr( bc[q].CA );
-    aObj[ o_bcca].SetDim( bc[q].La, 1 );
+    aObj[ o_bcsa]->SetPtr( bc[q].SA );
+    aObj[ o_bcsa]->SetDim( bc[q].La, 1 );
+    aObj[ o_bccacl]->SetPtr( bc[q].AUcl );
+    aObj[ o_bccacl]->SetDim( bc[q].La, 1 );
+    aObj[ o_bcca]->SetPtr( bc[q].CA );
+    aObj[ o_bcca]->SetDim( bc[q].La, 1 );
     //}
     //if( bc[q].Ld > 0 ) {
-    aObj[ o_bcsmk].SetPtr(bc[q].SM );
-    aObj[ o_bcsmk].SetDim( bc[q].Ld, 1 );
-    aObj[ o_bccdcl].SetPtr( bc[q].CDcl );
-    aObj[ o_bccdcl].SetDim( bc[q].Ld, 1 );
-    aObj[ o_bcdcs].SetPtr( bc[q].DCS );
-    aObj[ o_bcdcs].SetDim( bc[q].Ld, 1 );
-    aObj[ o_bccd].SetPtr( bc[q].CD );
-    aObj[ o_bccd].SetDim( bc[q].Ld, 1 );
+    aObj[ o_bcsmk]->SetPtr(bc[q].SM );
+    aObj[ o_bcsmk]->SetDim( bc[q].Ld, 1 );
+    aObj[ o_bccdcl]->SetPtr( bc[q].CDcl );
+    aObj[ o_bccdcl]->SetDim( bc[q].Ld, 1 );
+    aObj[ o_bcdcs]->SetPtr( bc[q].DCS );
+    aObj[ o_bcdcs]->SetDim( bc[q].Ld, 1 );
+    aObj[ o_bccd]->SetPtr( bc[q].CD );
+    aObj[ o_bccd]->SetDim( bc[q].Ld, 1 );
     // }
     //if( bc[q].Nsd > 0 ){
-    aObj[ o_bcsdref ].SetPtr( bc[q].sdref );
-    aObj[ o_bcsdref ].SetDim( bc[q].Nsd, 1 );
-    aObj[ o_bcsdval ].SetPtr( bc[q].sdval );
-    aObj[ o_bcsdval ].SetDim( bc[q].Nsd, 1 );
+    aObj[ o_bcsdref ]->SetPtr( bc[q].sdref );
+    aObj[ o_bcsdref ]->SetDim( bc[q].Nsd, 1 );
+    aObj[ o_bcsdval ]->SetPtr( bc[q].sdval );
+    aObj[ o_bcsdval ]->SetDim( bc[q].Nsd, 1 );
     //}
-    aObj[ o_bccfor].SetPtr( bc[q].CFOR );
-    aObj[ o_bccfor].SetDim( 1, MAXCMPFORM );
-    /*  aObj[ o_bctprn].SetPtr( bc[q].tprn );  */
+    aObj[ o_bccfor]->SetPtr( bc[q].CFOR );
+    aObj[ o_bccfor]->SetDim( 1, MAXCMPFORM );
+    /*  aObj[ o_bctprn]->SetPtr( bc[q].tprn );  */
     /*  OBsetDim( o_bctprn, 1, SPPTPRNBUFSIZE ); */
     bcp=&bc[q];
 }
@@ -121,59 +121,59 @@ void TCompos::ods_link( int q)
 void TCompos::dyn_set(int q)
 {
     ErrorIf( bcp!=&bc[q], GetName(), "E00BCrem: Attempt to access corrupt dynamic memory.");
-    bc[q].C = (double *)aObj[ o_bccv ].GetPtr();
-    bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ].GetPtr();
-    bc[q].CIcl = (char *)aObj[ o_bccicl ].GetPtr();
-    bc[q].SA = (char (*)[MAXFORMUNIT])aObj[ o_bcsa ].GetPtr();
-    bc[q].AUcl = (char *)aObj[ o_bccacl ].GetPtr();
-    bc[q].SM = (char (*)[DC_RKLEN])aObj[ o_bcsmk ].GetPtr();
-    bc[q].CDcl = (char *)aObj[ o_bccdcl ].GetPtr();
-    bc[q].DCS = (char *)aObj[ o_bcdcs ].GetPtr();
-    bc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_bcsdref ].GetPtr();
-    bc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_bcsdval ].GetPtr();
-    bc[q].CFOR = (char *)aObj[ o_bccfor ].GetPtr();
+    bc[q].C = (double *)aObj[ o_bccv ]->GetPtr();
+    bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ]->GetPtr();
+    bc[q].CIcl = (char *)aObj[ o_bccicl ]->GetPtr();
+    bc[q].SA = (char (*)[MAXFORMUNIT])aObj[ o_bcsa ]->GetPtr();
+    bc[q].AUcl = (char *)aObj[ o_bccacl ]->GetPtr();
+    bc[q].SM = (char (*)[DC_RKLEN])aObj[ o_bcsmk ]->GetPtr();
+    bc[q].CDcl = (char *)aObj[ o_bccdcl ]->GetPtr();
+    bc[q].DCS = (char *)aObj[ o_bcdcs ]->GetPtr();
+    bc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_bcsdref ]->GetPtr();
+    bc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_bcsdval ]->GetPtr();
+    bc[q].CFOR = (char *)aObj[ o_bccfor ]->GetPtr();
 
-    if( aObj[ o_bcci ].GetType() == F_ )
-       bc[q].CI = (double *)aObj[ o_bcci ].Alloc( bc[q].N, 1, D_ );
+    if( aObj[ o_bcci ]->GetType() == F_ )
+       bc[q].CI = (double *)aObj[ o_bcci ]->Alloc( bc[q].N, 1, D_ );
     else
-       bc[q].CI = (double *)aObj[ o_bcci ].GetPtr();
-    if( aObj[ o_bcdelc ].GetType() == F_ )
-       bc[q].delC = (double *)aObj[ o_bcdelc ].Alloc( bc[q].N, 1, D_ );
+       bc[q].CI = (double *)aObj[ o_bcci ]->GetPtr();
+    if( aObj[ o_bcdelc ]->GetType() == F_ )
+       bc[q].delC = (double *)aObj[ o_bcdelc ]->Alloc( bc[q].N, 1, D_ );
     else
-       bc[q].delC = (double *)aObj[ o_bcdelc ].GetPtr();
-    if(aObj[ o_bcca ].GetType() == F_ )
-       bc[q].CA = (double *)aObj[ o_bcca ].Alloc( bc[q].La, 1, D_ );
+       bc[q].delC = (double *)aObj[ o_bcdelc ]->GetPtr();
+    if(aObj[ o_bcca ]->GetType() == F_ )
+       bc[q].CA = (double *)aObj[ o_bcca ]->Alloc( bc[q].La, 1, D_ );
     else
-       bc[q].CA = (double *)aObj[ o_bcca ].GetPtr();
-    if(aObj[ o_bccd ].GetType() == F_ )
-       bc[q].CD = (double *)aObj[ o_bccd ].Alloc( bc[q].Ld, 1, D_ );
+       bc[q].CA = (double *)aObj[ o_bcca ]->GetPtr();
+    if(aObj[ o_bccd ]->GetType() == F_ )
+       bc[q].CD = (double *)aObj[ o_bccd ]->Alloc( bc[q].Ld, 1, D_ );
     else
-       bc[q].CD = (double *)aObj[ o_bccd ].GetPtr();
+       bc[q].CD = (double *)aObj[ o_bccd ]->GetPtr();
 
 
-    /* bc[q].tprn =   (char *)aObj[ o_bctprn ].GetPtr(); */
+    /* bc[q].tprn =   (char *)aObj[ o_bctprn ]->GetPtr(); */
 }
 
 // free dynamic memory in objects and values
 void TCompos::dyn_kill(int q)
 {
     ErrorIf( bcp!=&bc[q], GetName(), "E01BCrem: Attempt to free corrupt dynamic memory.");
-    bc[q].C = (double *)aObj[ o_bccv ].Free();
-    bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ].Free();
-    bc[q].CIcl = (char *)aObj[ o_bccicl ].Free();
-    bc[q].CI = (double *)aObj[ o_bcci ].Free();
-    bc[q].delC = (double *)aObj[ o_bcdelc ].Free();
-    bc[q].SA = (char (*)[MAXFORMUNIT])aObj[ o_bcsa ].Free();
-    bc[q].AUcl = (char *)aObj[ o_bccacl ].Free();
-    bc[q].CA = (double *)aObj[ o_bcca ].Free();
-    bc[q].SM = (char (*)[DC_RKLEN])aObj[ o_bcsmk ].Free();
-    bc[q].CDcl = (char *)aObj[ o_bccdcl ].Free();
-    bc[q].CD = (double *)aObj[ o_bccd ].Free();
-    bc[q].DCS = (char *)aObj[ o_bcdcs ].Free();
-    bc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_bcsdref ].Free();
-    bc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_bcsdval ].Free();
-    bc[q].CFOR = (char *)aObj[ o_bccfor  ].Free();
-    bc[q].tprn =  (char *)aObj[ o_bctprn  ].Free();
+    bc[q].C = (double *)aObj[ o_bccv ]->Free();
+    bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ]->Free();
+    bc[q].CIcl = (char *)aObj[ o_bccicl ]->Free();
+    bc[q].CI = (double *)aObj[ o_bcci ]->Free();
+    bc[q].delC = (double *)aObj[ o_bcdelc ]->Free();
+    bc[q].SA = (char (*)[MAXFORMUNIT])aObj[ o_bcsa ]->Free();
+    bc[q].AUcl = (char *)aObj[ o_bccacl ]->Free();
+    bc[q].CA = (double *)aObj[ o_bcca ]->Free();
+    bc[q].SM = (char (*)[DC_RKLEN])aObj[ o_bcsmk ]->Free();
+    bc[q].CDcl = (char *)aObj[ o_bccdcl ]->Free();
+    bc[q].CD = (double *)aObj[ o_bccd ]->Free();
+    bc[q].DCS = (char *)aObj[ o_bcdcs ]->Free();
+    bc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_bcsdref ]->Free();
+    bc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_bcsdval ]->Free();
+    bc[q].CFOR = (char *)aObj[ o_bccfor  ]->Free();
+    bc[q].tprn =  (char *)aObj[ o_bctprn  ]->Free();
 }
 
 // realloc dynamic memory
@@ -183,80 +183,80 @@ void TCompos::dyn_new(int q)
     //  ErrorIf( bc[q].Nmax < 1, GetName(), "bc[q].Nmax < 1" ); DAK
     ErrorIf( (bc[q].N < 1)&&(bc[q].Nmax < 1), GetName(), "E03BCrem: No Independent Components selected (bc[q].N,Nmax < 1)" );
 
-    // bc[q].C = (double *)aObj[ o_bccv].Alloc( bc[q].Nmax, 1, D_ );  DAK
+    // bc[q].C = (double *)aObj[ o_bccv]->Alloc( bc[q].Nmax, 1, D_ );  DAK
     if( bc[q].N > 0 )
-        bc[q].C = (double *)aObj[ o_bccv].Alloc( bc[q].N, 1, D_ );
+        bc[q].C = (double *)aObj[ o_bccv]->Alloc( bc[q].N, 1, D_ );
     else
-        bc[q].C = (double *)aObj[ o_bccv].Alloc( bc[q].Nmax, 1, D_ );
+        bc[q].C = (double *)aObj[ o_bccv]->Alloc( bc[q].Nmax, 1, D_ );
     //
 
     if( bc[q].PcDC != S_OFF && bc[q].Ld > 0 )
     {
-        bc[q].SM = (char (*)[DC_RKLEN])aObj[ o_bcsmk ].Alloc( bc[q].Ld, 1, DC_RKLEN);
-        bc[q].CDcl = (char *)aObj[ o_bccdcl ].Alloc( bc[q].Ld, 1, A_);
-        bc[q].CD = (double *)aObj[ o_bccd ].Alloc(  bc[q].Ld, 1, D_);
-        bc[q].DCS = (char *)aObj[ o_bcdcs ].Alloc( bc[q].Ld, 1, A_);
+        bc[q].SM = (char (*)[DC_RKLEN])aObj[ o_bcsmk ]->Alloc( bc[q].Ld, 1, DC_RKLEN);
+        bc[q].CDcl = (char *)aObj[ o_bccdcl ]->Alloc( bc[q].Ld, 1, A_);
+        bc[q].CD = (double *)aObj[ o_bccd ]->Alloc(  bc[q].Ld, 1, D_);
+        bc[q].DCS = (char *)aObj[ o_bcdcs ]->Alloc( bc[q].Ld, 1, A_);
     }
     else
     {
         bc[q].PcDC = S_OFF;
-        bc[q].SM = (char (*)[DC_RKLEN])aObj[ o_bcsmk ].Free();
-        bc[q].CDcl = (char *)aObj[ o_bccdcl ].Free();
-        bc[q].CD = (double *)aObj[ o_bccd ].Free();
-        bc[q].DCS = (char *)aObj[ o_bcdcs ].Free();
+        bc[q].SM = (char (*)[DC_RKLEN])aObj[ o_bcsmk ]->Free();
+        bc[q].CDcl = (char *)aObj[ o_bccdcl ]->Free();
+        bc[q].CD = (double *)aObj[ o_bccd ]->Free();
+        bc[q].DCS = (char *)aObj[ o_bcdcs ]->Free();
     }
 
     if( bc[q].PcAU != S_OFF && bc[q].La > 0)
     {
-        bc[q].SA = (char (*)[MAXFORMUNIT])aObj[ o_bcsa ].Alloc(bc[q].La, 1,MAXFORMUNIT);
-        bc[q].AUcl = (char *)aObj[ o_bccacl ].Alloc( bc[q].La, 1, A_);
-        bc[q].CA = (double *)aObj[ o_bcca ].Alloc( bc[q].La, 1, D_);
+        bc[q].SA = (char (*)[MAXFORMUNIT])aObj[ o_bcsa ]->Alloc(bc[q].La, 1,MAXFORMUNIT);
+        bc[q].AUcl = (char *)aObj[ o_bccacl ]->Alloc( bc[q].La, 1, A_);
+        bc[q].CA = (double *)aObj[ o_bcca ]->Alloc( bc[q].La, 1, D_);
     }
     else
     {
         bc[q].PcAU = S_OFF;
-        bc[q].SA = (char (*)[MAXFORMUNIT])aObj[ o_bcsa ].Free();
-        bc[q].AUcl = (char *)aObj[ o_bccacl ].Free();
-        bc[q].CA = (double *)aObj[ o_bcca ].Free();
+        bc[q].SA = (char (*)[MAXFORMUNIT])aObj[ o_bcsa ]->Free();
+        bc[q].AUcl = (char *)aObj[ o_bccacl ]->Free();
+        bc[q].CA = (double *)aObj[ o_bcca ]->Free();
     }
     if( bc[q].PcIC != S_OFF)
     {
-        bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ].Alloc( bc[q].N,
+        bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ]->Alloc( bc[q].N,
                    1, MAXICNAME+MAXSYMB);
-        bc[q].CIcl = (char *)aObj[ o_bccicl ].Alloc(  bc[q].N, 1, A_);
-        bc[q].CI = (double *)aObj[ o_bcci ].Alloc(  bc[q].N, 1, D_);
+        bc[q].CIcl = (char *)aObj[ o_bccicl ]->Alloc(  bc[q].N, 1, A_);
+        bc[q].CI = (double *)aObj[ o_bcci ]->Alloc(  bc[q].N, 1, D_);
     }
     else
     {
         bc[q].PcIC = S_OFF;
-        bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ].Free();
-        bc[q].CIcl = (char *)aObj[ o_bccicl ].Free();
-        bc[q].CI = (double *)aObj[ o_bcci ].Free();
+        bc[q].SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ]->Free();
+        bc[q].CIcl = (char *)aObj[ o_bccicl ]->Free();
+        bc[q].CI = (double *)aObj[ o_bcci ]->Free();
     }
     if( bc[q].PcFO != S_OFF )
-        bc[q].CFOR = (char *)aObj[ o_bccfor  ].Alloc( 1, MAXCMPFORM , S_);
+        bc[q].CFOR = (char *)aObj[ o_bccfor  ]->Alloc( 1, MAXCMPFORM , S_);
     else
-        bc[q].CFOR = (char *)aObj[ o_bccfor  ].Free();
+        bc[q].CFOR = (char *)aObj[ o_bccfor  ]->Free();
 
     if( bc[q].PcdC != S_OFF )
-        bc[q].delC = (double *)aObj[ o_bcdelc].Alloc(  bc[q].N, 1, D_);
+        bc[q].delC = (double *)aObj[ o_bcdelc]->Alloc(  bc[q].N, 1, D_);
     else
-        bc[q].delC = (double *)aObj[ o_bcdelc ].Free();
+        bc[q].delC = (double *)aObj[ o_bcdelc ]->Free();
 
     if( bc[q].Nsd > 0 )
     {
-        bc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_bcsdref ].Alloc(bc[q].Nsd,
+        bc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_bcsdref ]->Alloc(bc[q].Nsd,
                       1, V_SD_RKLEN);
-        bc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_bcsdval ].Alloc(bc[q].Nsd,
+        bc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_bcsdval ]->Alloc(bc[q].Nsd,
                       1, V_SD_VALEN);
     }
     else
     {
-        bc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_bcsdref ].Free();
-        bc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_bcsdval ].Free();
+        bc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_bcsdref ]->Free();
+        bc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_bcsdval ]->Free();
     }
     // if( bc[q].tprn == 0 )
-    //   bc[q].tprn = (char *)aObj[o_bctprn].Alloc( 1, 256, S_ );
+    //   bc[q].tprn = (char *)aObj[o_bctprn]->Alloc( 1, 256, S_ );
 }
 
 //set default information
@@ -323,19 +323,19 @@ void TCompos::bc_work_dyn_new()
                  "W05BCrem: ICOMP data record keys are not selected \n"
                  "(maybe, some PDB chain files are not linked)");
         bcp->Nmax = (short)Nic;
-        bcp->SB1 = (char (*)[IC_RKLEN])aObj[ o_bcsb1 ].Alloc(bcp->Nmax, 1, IC_RKLEN);
+        bcp->SB1 = (char (*)[IC_RKLEN])aObj[ o_bcsb1 ]->Alloc(bcp->Nmax, 1, IC_RKLEN);
         for( int i=0; i<Nic; i++)
             memcpy( bcp->SB1[i], aKey[i].c_str(), IC_RKLEN);
     }
-    bcp->ICw = (double *)aObj[ o_bcicw ].Alloc(bcp->Nmax, 1, D_);
+    bcp->ICw = (double *)aObj[ o_bcicw ]->Alloc(bcp->Nmax, 1, D_);
     if( bcp->A )
         delete[] bcp->A;
     bcp->A = new double[bcp->Nmax];
     memset(bcp->A, 0, sizeof(double)*(bcp->Nmax) );
 
     // Realloc COMPOS: Inserted by DAK 22.10.99
-    bcp->C = (double *)aObj[ o_bccv].Alloc( bcp->Nmax, 1, D_ );
-    bcp->SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ].Alloc( bcp->Nmax,
+    bcp->C = (double *)aObj[ o_bccv]->Alloc( bcp->Nmax, 1, D_ );
+    bcp->SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ]->Alloc( bcp->Nmax,
               1, MAXICNAME+MAXSYMB);
     //
 
@@ -359,8 +359,8 @@ void TCompos::bc_work_dyn_new()
 void TCompos::bc_work_dyn_kill()
 {
     bcp->Nmax = 0;  // Restored by DAK 22.10.99
-    bcp->SB1 = (char (*)[IC_RKLEN])aObj[ o_bcsb1 ].Free();
-    bcp->ICw = (double *)aObj[ o_bcicw ].Free();
+    bcp->SB1 = (char (*)[IC_RKLEN])aObj[ o_bcsb1 ]->Free();
+    bcp->ICw = (double *)aObj[ o_bcicw ]->Free();
     delete[] bcp->A;
     bcp->A =0;
     if( C )
@@ -461,7 +461,7 @@ LOOP_MARKIC:
        RT_ICOMP, "*:*:*:", aIclist_old );
 
     bcp->Nmax = aIclist.size();
-    // must be Nic = rt[RT_ICOMP].GetKeyList("*:*:*:",.,.);
+    // must be Nic = rt[RT_ICOMP]->GetKeyList("*:*:*:",.,.);
     bcp->PcIC = S_REM;
     if( aIclist.size() < 1 )
         switch ( vfQuestion3( window(), GetName(),
@@ -985,13 +985,13 @@ IC_FOUND:
         goto SPECIFY_C;
     bcp->N = wps;
     /* Realloc Compos back */
-    bcp->C = (double *)aObj[ o_bccv].Alloc( bcp->N, 1, D_ );
-    bcp->SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ].Alloc( bcp->N,
+    bcp->C = (double *)aObj[ o_bccv]->Alloc( bcp->N, 1, D_ );
+    bcp->SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_bcsb ]->Alloc( bcp->N,
               1, MAXICNAME+MAXSYMB);
     if( bcp->PcIC != S_OFF )
     {
-        bcp->CIcl = (char *)aObj[ o_bccicl ].Alloc(  bcp->N, 1, A_);
-        bcp->CI = (double *)aObj[ o_bcci ].Alloc(  bcp->N, 1, D_);
+        bcp->CIcl = (char *)aObj[ o_bccicl ]->Alloc(  bcp->N, 1, A_);
+        bcp->CI = (double *)aObj[ o_bcci ]->Alloc(  bcp->N, 1, D_);
     }
     /* load vectors */
     for( i1=-1,i=0; i<bcp->Nmax; i++ )

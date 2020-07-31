@@ -89,11 +89,11 @@ void TTreeModel::setupModelData()
     short* l1_I = 0;
        
     if( nO ==  o_wi_l1 )
-        l1_R = (long int *)aObj[ o_wi_l1 ].GetPtr();
+        l1_R = (long int *)aObj[ o_wi_l1 ]->GetPtr();
     else 	
-        l1_I = (short *)aObj[ nO/*o_mul1*/ ].GetPtr();
+        l1_I = (short *)aObj[ nO/*o_mul1*/ ]->GetPtr();
     
-    int nPhases = aObj[ nO/*o_mul1*/ ].GetN();
+    int nPhases = aObj[ nO/*o_mul1*/ ]->GetN();
     int ii, jj, je, jb;
     je = 0;
     
@@ -168,7 +168,7 @@ Qt::ItemFlags TTreeModel::flags( const QModelIndex& index ) const
   FieldInfo fld = getInfo( index, iN, iM );
   nO = fld.nO;
   if( (fld.edit == eYes ) ) 
-	  if( nO == -1 || aObj[nO].GetPtr() !=0 )
+      if( nO == -1 || aObj[nO]->GetPtr() !=0 )
           {  flags |= Qt::ItemIsEditable;
              return flags;
           }
@@ -205,12 +205,12 @@ void TTreeModel::setGOcorr(const QModelIndex& index, QString& value, int nO, int
 	  }
 	QString res = QString("%1").arg(dat);	
     string txt = res.toStdString();
-	aObj[nO].SetString( txt.c_str(), iN, 0 );
+    aObj[nO]->SetString( txt.c_str(), iN, 0 );
 }
 
 QString TTreeModel::getGOcorr( const QModelIndex& index, int nO, int iN ) const
 {
-    QString res =  QString::fromLatin1( visualizeEmpty(aObj[nO].GetStringEmpty( iN, 0 )).c_str() );
+    QString res =  QString::fromLatin1( visualizeEmpty(aObj[nO]->GetStringEmpty( iN, 0 )).c_str() );
 	char code = lineFromIndex(index)->UGval;
 	double dat = res.toDouble();
         double tK = TMulti::sm->GetPM()->T; //TProfil::pm->tpp->TK;
@@ -235,7 +235,7 @@ QString TTreeModel::getGOcorr( const QModelIndex& index, int nO, int iN ) const
 
 QString TTreeModel::getObjValue(  int nO, int iN ) const
 {
-    QString res =  QString::fromLatin1( visualizeEmpty(aObj[nO].GetStringEmpty( iN, 0 )).c_str() );
+    QString res =  QString::fromLatin1( visualizeEmpty(aObj[nO]->GetStringEmpty( iN, 0 )).c_str() );
 
     if( res == emptiness.c_str() )
     	return  res;
@@ -251,7 +251,7 @@ QString TTreeModel::getObjValue(  int nO, int iN ) const
          break; 		
 // Result	
 	case o_wo_wx:
-		  switch( aObj[o_wi_dcc].GetStringEmpty(iN)[0])
+          switch( aObj[o_wi_dcc]->GetStringEmpty(iN)[0])
 		  {
 		    case DC_SCP_CONDEN:
 		    case DC_AQ_SOLVENT:  /* mol fractions in solvent */
@@ -272,7 +272,7 @@ QString TTreeModel::getObjValue(  int nO, int iN ) const
 		          //  res = res; // o_wo_wx
 		         break;
 		    default: // molality
-                res =  QString::fromLatin1( visualizeEmpty(aObj[o_wd_ym].GetStringEmpty( iN, 0 )).c_str() );
+                res =  QString::fromLatin1( visualizeEmpty(aObj[o_wd_ym]->GetStringEmpty( iN, 0 )).c_str() );
 		         break; /* error in DC class code */
 		 }
 	    break;
@@ -305,14 +305,14 @@ QString TTreeModel::getDescription( int nO, int N) const
     if( nO == -1 )
       return "";
     
-    TObject& pObj = aObj[nO]; 
+    TObject& pObj = *aObj[nO];
     string desc = pObj.GetDescription(N,0);
 	const char *keyWd = pObj.GetKeywd();
 	switch( nO )
 	{
 // Result	
 	case o_wo_wx:
-		  switch( aObj[o_wi_dcc].GetStringEmpty(N)[0])
+          switch( aObj[o_wi_dcc]->GetStringEmpty(N)[0])
 		  {
 		    case DC_SCP_CONDEN:
 		    case DC_AQ_SOLVENT:  /* mol fractions in solvent */
@@ -332,8 +332,8 @@ QString TTreeModel::getDescription( int nO, int N) const
 		         break;
 		    default: // molality
 		        // pObj = aObj[o_wd_ym]; 
-		    	desc = aObj[o_wd_ym].GetDescription(N,0);
-		    	keyWd = aObj[o_wd_ym].GetKeywd();
+                desc = aObj[o_wd_ym]->GetDescription(N,0);
+                keyWd = aObj[o_wd_ym]->GetKeywd();
 		    	break; /* error in DC class code */
 		 }
 	    break;
@@ -436,17 +436,17 @@ bool TTreeModel::setData( const QModelIndex& index, const QVariant& value, int r
              string txt = val.toStdString();
 	
             if( index.column()== 3 ) // + or - (switch all dcomps with phase)
-             {   char old_data = aObj[nO].GetStringEmpty( iN, iM )[0];
+             {   char old_data = aObj[nO]->GetStringEmpty( iN, iM )[0];
                  childChanged( index, value, old_data);
              }
 
             if( txt == emptiness /*|| txt == short_emptiness*/ )
-	      aObj[nO].SetString( S_EMPTY, iN, iM );
+          aObj[nO]->SetString( S_EMPTY, iN, iM );
              else
              {   if( index.column()== 7 )
 	 	   		setGOcorr( index, val, nO, iN );
                  else
-	            aObj[nO].SetString( txt.c_str(), iN, iM );
+                aObj[nO]->SetString( txt.c_str(), iN, iM );
              }
 
             emit dataChanged(index, index); // set flag the system changed

@@ -118,7 +118,7 @@ void LookupDialog::definePArray()
   //init P array
    double stepP = getStep( Pai, nP );
    cP = Pai[0];
-   arP = static_cast<double*>(aObj[ o_w_pval].Alloc( nP, 1, D_));
+   arP = static_cast<double*>(aObj[ o_w_pval]->Alloc( nP, 1, D_));
    if( PTable == nullptr)
     for( ii=0; ii<nP; ii++ )
     {
@@ -194,7 +194,7 @@ void LookupDialog::defineTArray()
    //init T array
    double stepT = getStep( Tai, nT );
    cT = Tai[0];
-   arT = static_cast<double*>(aObj[ o_w_tval].Alloc( nT, 1, D_));
+   arT = static_cast<double*>(aObj[ o_w_tval]->Alloc( nT, 1, D_));
    if( PTable == nullptr)
     for( ii=0; ii<nT; ii++ )
     {
@@ -257,7 +257,7 @@ void LookupDialog::setupPTArrays()
    //init P array
    getPdata( Pai );
    nP = getNpoints( Pai );
-   arP = static_cast<double*>( aObj[ o_w_pval].Alloc( nP, 1, D_) );
+   arP = static_cast<double*>( aObj[ o_w_pval]->Alloc( nP, 1, D_) );
    cP = Pai[START_];
    for( ii=0; ii<nP; ii++ )
    {
@@ -268,7 +268,7 @@ void LookupDialog::setupPTArrays()
    //init T array
    getTdata( Tai );
    nT = getNpoints( Tai );
-   arT = static_cast<double*>(aObj[ o_w_tval].Alloc( nT, 1, D_));
+   arT = static_cast<double*>(aObj[ o_w_tval]->Alloc( nT, 1, D_));
    cT = Tai[START_];
    for( ii=0; ii<nT; ii++ )
    {

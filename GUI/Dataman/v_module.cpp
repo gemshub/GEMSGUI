@@ -1218,7 +1218,7 @@ TCModule::RecordPrint( const char* key )
      return;
 
   dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
-  const char * text_fmt = static_cast<const char *>(aObj[o_sdabstr].GetPtr());
+  const char * text_fmt = static_cast<const char *>(aObj[o_sdabstr]->GetPtr());
   if( !text_fmt )
        Error( sd_key.c_str(), "No print script in this record.");
 
@@ -1735,10 +1735,10 @@ TCModule::RecToTXT( const char *pattern )
     {
        int Rnum = db->Find( aKey[i].c_str() );
        db->Get( Rnum );
-       aObj[o_reckey].SetPtr( const_cast<void*>(static_cast<const void *>(aKey[i].c_str())));
-       aObj[o_reckey].toTXT(f);
+       aObj[o_reckey]->SetPtr( const_cast<void*>(static_cast<const void *>(aKey[i].c_str())));
+       aObj[o_reckey]->toTXT(f);
         for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount();  no++)
-            aObj[no].toTXT(f);
+            aObj[no]->toTXT(f);
     }
 
     ErrorIf( !f.good() , GetName(), "Filewrite error");
@@ -1763,10 +1763,10 @@ TCModule::RecOfTXT()
 
     while( !f.eof() )
     {
-        aObj[o_reckey].SetPtr(buf);
-        aObj[o_reckey].ofTXT(f);
+        aObj[o_reckey]->SetPtr(buf);
+        aObj[o_reckey]->ofTXT(f);
         for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount(); no++)
-            aObj[no].ofTXT(f);
+            aObj[no]->ofTXT(f);
         buf[db->KeyLen()] = '\0';
         Rnum = db->Find( buf );
         if( Rnum >= 0 )
@@ -1815,7 +1815,7 @@ TCModule::RecExport( const char *pattern )
     if( sd_key.empty() )
      return;
     dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
-    char * text_fmt = static_cast<char *>(aObj[o_sdabstr].GetPtr());
+    char * text_fmt = static_cast<char *>(aObj[o_sdabstr]->GetPtr());
     if( !text_fmt )
        Error( sd_key.c_str(), "No format text in this record.");
 
@@ -1878,7 +1878,7 @@ TCModule::RecImport()
     if( sd_key.empty() )
      return;
     dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
-    char * text_fmt = static_cast<char *>(aObj[o_sdabstr].GetPtr());
+    char * text_fmt = static_cast<char *>(aObj[o_sdabstr]->GetPtr());
     if( !text_fmt )
        Error( sd_key.c_str(), "No format text in this record.");
 

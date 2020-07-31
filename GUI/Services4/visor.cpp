@@ -340,18 +340,18 @@ QString uPD = usrProjD.absolutePath();
     else
         fromDAT(default_config, default_settings);
 
-    aObj[o_n0w_mps].SetPtr(0);
-    aObj[o_n1w_mps].SetPtr(0);
-    aObj[o_n0w_vps].SetPtr(0);
-    aObj[o_n1w_vps].SetPtr(0);
-    aObj[o_n0w_m_t].SetPtr(0);
-    aObj[o_n1w_m_t].SetPtr(0);
-    aObj[o_n0w_con].SetPtr(0);
-    aObj[o_n1w_con].SetPtr(0);
-    aObj[o_n0w_mju].SetPtr(0);
-    aObj[o_n1w_mju].SetPtr(0);
-    aObj[o_n0w_lga].SetPtr(0);
-    aObj[o_n1w_lga].SetPtr(0);
+    aObj[o_n0w_mps]->SetPtr(0);
+    aObj[o_n1w_mps]->SetPtr(0);
+    aObj[o_n0w_vps]->SetPtr(0);
+    aObj[o_n1w_vps]->SetPtr(0);
+    aObj[o_n0w_m_t]->SetPtr(0);
+    aObj[o_n1w_m_t]->SetPtr(0);
+    aObj[o_n0w_con]->SetPtr(0);
+    aObj[o_n1w_con]->SetPtr(0);
+    aObj[o_n0w_mju]->SetPtr(0);
+    aObj[o_n1w_mju]->SetPtr(0);
+    aObj[o_n0w_lga]->SetPtr(0);
+    aObj[o_n1w_lga]->SetPtr(0);
 
     // Sveta permission to change data in special DB files
     if (option_f)
@@ -710,7 +710,7 @@ TVisor::Update(bool force)
 //    if (selectFiles)
 //        arr = pm->SelectFileList(openf | closef);
 //    rt[pm->rtNum()].Open(selectFiles, UPDATE_DBV, arr);
-//    rt[pm->rtNum()].SetKey(ALLKEY);
+//    rt[pm->rtNum()]->SetKey(ALLKEY);
 //}
 
 //Init work structures
@@ -770,16 +770,16 @@ TVisor::Exit()
 
         toModCFG();
         toWinCFG();
-        aObj[o_wo_bfc3].SetPtr(0);
-        aObj[ o_neqtxt].SetPtr(0);
-        aObj[ o_dtnam_nr].SetPtr(0);
-        aObj[ o_dtres].SetPtr(0);
-        aObj[ o_unpmr].SetPtr(0);
-        aObj[ o_nlich].SetPtr(0);
-        aObj[ o_nldch].SetPtr(0);
-        aObj[ o_nldcvs].SetPtr(0);
-        aObj[ o_nldchs].SetPtr(0);
-        aObj[ o_nlphh].SetPtr(0);
+        aObj[o_wo_bfc3]->SetPtr(0);
+        aObj[ o_neqtxt]->SetPtr(0);
+        aObj[ o_dtnam_nr]->SetPtr(0);
+        aObj[ o_dtres]->SetPtr(0);
+        aObj[ o_unpmr]->SetPtr(0);
+        aObj[ o_nlich]->SetPtr(0);
+        aObj[ o_nldch]->SetPtr(0);
+        aObj[ o_nldcvs]->SetPtr(0);
+        aObj[ o_nldchs]->SetPtr(0);
+        aObj[ o_nlphh]->SetPtr(0);
         TGEM2MT::pm->FreeNa();
 
     }

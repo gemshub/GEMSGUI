@@ -116,7 +116,7 @@ main(int argc, char* argv[])
         // and static variables are destructed at random order
         aMod.clear();
         rt.Clear();
-        aObj.Clear();
+        aObj.clear();
 
         delete pVisorImp;
 

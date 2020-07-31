@@ -850,7 +850,7 @@ bool TProfil::GetFN( const char * prfName, bool show_dlg )
         mup->Nfl[i] = aCnt[i];
         mup->NfT += mup->Nfl[i];
     }
-    mup->FN = static_cast<char (*)[MAX_FILENAME_LEN]>(aObj[ o_mufn].Alloc(
+    mup->FN = static_cast<char (*)[MAX_FILENAME_LEN]>(aObj[ o_mufn]->Alloc(
                   aFls.size(), 1, MAX_FILENAME_LEN ));
     // insert files name to FN
     for(size_t j=0; j<aFls.size(); j++)

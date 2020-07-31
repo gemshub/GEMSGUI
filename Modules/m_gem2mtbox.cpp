@@ -601,9 +601,9 @@ void TGEM2MT::BoxFluxTransportStart()
     mtp->qf = 0;
 
 #ifndef IPMGEMPLUGIN
-    mtp->gfc = (double *)aObj[ o_mtgfc].Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
-    mtp->yfb = (double *)aObj[ o_mtyfb].Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
-    mtp->tt  = (double (*)[9])aObj[ o_mttt].Alloc(  mtp->nC*mtp->Nf, 9, D_);
+    mtp->gfc = (double *)aObj[ o_mtgfc]->Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
+    mtp->yfb = (double *)aObj[ o_mtyfb]->Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
+    mtp->tt  = (double (*)[9])aObj[ o_mttt]->Alloc(  mtp->nC*mtp->Nf, 9, D_);
 #else
     if( mtp->gfc )
             delete[] mtp->gfc;

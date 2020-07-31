@@ -203,7 +203,7 @@ void NewSystemDialog::Update()
 {
     MULTI* pData = TMulti::sm->GetPM();
 
-   if( !ListViewResult  && aObj[ o_wi_l1 ].GetPtr() )
+   if( !ListViewResult  && aObj[ o_wi_l1 ]->GetPtr() )
      defineResultList(); 
     //pLine->setText(tr (rt[RT_SYSEQ].PackKey()));
     //toolBar_5->update();

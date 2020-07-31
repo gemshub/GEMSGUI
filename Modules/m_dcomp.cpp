@@ -61,70 +61,70 @@ TDComp::TDComp( uint nrt ):
 // link values to objects
 void TDComp::ods_link( int q)
 {
-    // aObj[ o_dcpst ].SetPtr( dc[q].pstate );
-    // aObj[ o_dcps ].SetPtr( dc[q].psymb );
-    // aObj[ o_dcn  ].SetPtr( dc[q].dcn );
-    // aObj[ o_dcatc ].SetPtr( dc[q].atyp );
+    // aObj[ o_dcpst ]->SetPtr( dc[q].pstate );
+    // aObj[ o_dcps ]->SetPtr( dc[q].psymb );
+    // aObj[ o_dcn  ]->SetPtr( dc[q].dcn );
+    // aObj[ o_dcatc ]->SetPtr( dc[q].atyp );
     // if( dcp == &dc[q] )   return;
-    aObj[ o_dcpct ].SetPtr( dc[q].pct );
-    aObj[ o_dcpdc ].SetPtr( &dc[q].PdcC );
-    aObj[ o_dcrmtm ].SetPtr( dc[q].rmtm );
-    aObj[ o_dczz ].SetPtr( &dc[q].Zz );
-    aObj[ o_dcmwt ].SetPtr( &dc[q].mwt );
-    aObj[ o_dcmvs ].SetPtr( dc[q].mVs );
-    aObj[ o_dcgs ].SetPtr( dc[q].Gs );
-    aObj[ o_dchs ].SetPtr( dc[q].Hs );
-    aObj[ o_dcss ].SetPtr( dc[q].Ss );
-    aObj[ o_dccps ].SetPtr( dc[q].Cps );
-    aObj[ o_dcptst ].SetPtr( &dc[q].Pst );
-    aObj[ o_dcstlam ].SetPtr(&dc[q].Smax );
-    aObj[ o_dcbeal ].SetPtr( &dc[q].Comp );
-    aObj[ o_dcder ].SetPtr( &dc[q].Der );
+    aObj[ o_dcpct ]->SetPtr( dc[q].pct );
+    aObj[ o_dcpdc ]->SetPtr( &dc[q].PdcC );
+    aObj[ o_dcrmtm ]->SetPtr( dc[q].rmtm );
+    aObj[ o_dczz ]->SetPtr( &dc[q].Zz );
+    aObj[ o_dcmwt ]->SetPtr( &dc[q].mwt );
+    aObj[ o_dcmvs ]->SetPtr( dc[q].mVs );
+    aObj[ o_dcgs ]->SetPtr( dc[q].Gs );
+    aObj[ o_dchs ]->SetPtr( dc[q].Hs );
+    aObj[ o_dcss ]->SetPtr( dc[q].Ss );
+    aObj[ o_dccps ]->SetPtr( dc[q].Cps );
+    aObj[ o_dcptst ]->SetPtr( &dc[q].Pst );
+    aObj[ o_dcstlam ]->SetPtr(&dc[q].Smax );
+    aObj[ o_dcbeal ]->SetPtr( &dc[q].Comp );
+    aObj[ o_dcder ]->SetPtr( &dc[q].Der );
     // Basic
-    aObj[ o_dcstr ].SetPtr( dc[q].pct );
-    aObj[ o_dcname ].SetPtr( dc[q].name );
-    aObj[ o_dcform ].SetPtr( dc[q].form );
-    aObj[ o_dcdim ].SetPtr( &dc[q].NeCp );
-    aObj[ o_dcfloat1 ].SetPtr( &dc[q].Zz );
-    aObj[ o_dcdbl1 ].SetPtr( dc[q].Gs );
-    aObj[ o_dcfloat2 ].SetPtr(dc[q].Ss );
+    aObj[ o_dcstr ]->SetPtr( dc[q].pct );
+    aObj[ o_dcname ]->SetPtr( dc[q].name );
+    aObj[ o_dcform ]->SetPtr( dc[q].form );
+    aObj[ o_dcdim ]->SetPtr( &dc[q].NeCp );
+    aObj[ o_dcfloat1 ]->SetPtr( &dc[q].Zz );
+    aObj[ o_dcdbl1 ]->SetPtr( dc[q].Gs );
+    aObj[ o_dcfloat2 ]->SetPtr(dc[q].Ss );
     // Dynamic
     // if( dc[q].NeCp > 0 ){
-    aObj[ o_dccpint ].SetPtr( dc[q].TCint );
-    aObj[ o_dccpint ].SetDim( 2, dc[q].NeCp );
-    aObj[ o_dccp ].SetPtr( dc[q].Cp );
-        aObj[ o_dccp ].SetDim( MAXCPCOEF, dc[q].NeCp );
+    aObj[ o_dccpint ]->SetPtr( dc[q].TCint );
+    aObj[ o_dccpint ]->SetDim( 2, dc[q].NeCp );
+    aObj[ o_dccp ]->SetPtr( dc[q].Cp );
+        aObj[ o_dccp ]->SetDim( MAXCPCOEF, dc[q].NeCp );
     // }
-    aObj[ o_dccpfs ].SetPtr( dc[q].CpFS );
-        aObj[ o_dccpfs ].SetDim( MAXCPFSCOEF, 1 );
-    aObj[ o_dchkf ].SetPtr( dc[q].HKFc );
-        aObj[ o_dchkf ].SetDim( MAXHKFCOEF, 1 );
-    aObj[ o_dcvt ].SetPtr( dc[q].Vt );
-        aObj[ o_dcvt ].SetDim( MAXVTCOEF, 1 );
-    aObj[ o_dccritpg ].SetPtr( dc[q].CPg );
-        aObj[ o_dccritpg ].SetDim( MAXCRITPARAM, 1 );
-    aObj[ o_dcodc ].SetPtr( dc[q].ODc );
-        aObj[ o_dcodc ].SetDim( MAXODCOEF, 1 );
+    aObj[ o_dccpfs ]->SetPtr( dc[q].CpFS );
+        aObj[ o_dccpfs ]->SetDim( MAXCPFSCOEF, 1 );
+    aObj[ o_dchkf ]->SetPtr( dc[q].HKFc );
+        aObj[ o_dchkf ]->SetDim( MAXHKFCOEF, 1 );
+    aObj[ o_dcvt ]->SetPtr( dc[q].Vt );
+        aObj[ o_dcvt ]->SetDim( MAXVTCOEF, 1 );
+    aObj[ o_dccritpg ]->SetPtr( dc[q].CPg );
+        aObj[ o_dccritpg ]->SetDim( MAXCRITPARAM, 1 );
+    aObj[ o_dcodc ]->SetPtr( dc[q].ODc );
+        aObj[ o_dcodc ]->SetDim( MAXODCOEF, 1 );
     //if( dc[q].Nft > 0 ) {
-    aObj[ o_dcftp ].SetPtr( dc[q].FtP );
-        aObj[ o_dcftp ].SetDim( 5, dc[q].Nft );
-    aObj[ o_dcftpb ].SetPtr( dc[q].FtBer );
-        // aObj[ o_dcftpb ].SetDim( 3, dc[q].Nft );  // only 1 Landau transition
-        aObj[ o_dcftpb ].SetDim( 3, 1 );
-    aObj[ o_dcfttyp ].SetPtr( dc[q].FtTyp );
-        aObj[ o_dcfttyp ].SetDim( 1, dc[q].Nft );
+    aObj[ o_dcftp ]->SetPtr( dc[q].FtP );
+        aObj[ o_dcftp ]->SetDim( 5, dc[q].Nft );
+    aObj[ o_dcftpb ]->SetPtr( dc[q].FtBer );
+        // aObj[ o_dcftpb ]->SetDim( 3, dc[q].Nft );  // only 1 Landau transition
+        aObj[ o_dcftpb ]->SetDim( 3, 1 );
+    aObj[ o_dcfttyp ]->SetPtr( dc[q].FtTyp );
+        aObj[ o_dcfttyp ]->SetDim( 1, dc[q].Nft );
     //}
     //if( dc[q].Nemp > 0 ) {
-    aObj[ o_dccemp ].SetPtr( dc[q].Cemp );
+    aObj[ o_dccemp ]->SetPtr( dc[q].Cemp );
     if( dc[q].Nemp > 0 )
-      aObj[ o_dccemp ].SetDim( dc[q].Nemp, 1 );
-      // aObj[ o_dccemp ].SetDim( dc[q].Nemp, MAXEOSPARAM );
+      aObj[ o_dccemp ]->SetDim( dc[q].Nemp, 1 );
+      // aObj[ o_dccemp ]->SetDim( dc[q].Nemp, MAXEOSPARAM );
     //}
     //if( dc[q].Nsd > 0 ) {
-    aObj[ o_dcsdref ].SetPtr( dc[q].sdref );
-        aObj[ o_dcsdref ].SetDim( dc[q].Nsd, 1 );
-    aObj[ o_dcsdval ].SetPtr( dc[q].sdval );
-        aObj[ o_dcsdval ].SetDim( dc[q].Nsd, 1 );
+    aObj[ o_dcsdref ]->SetPtr( dc[q].sdref );
+        aObj[ o_dcsdref ]->SetDim( dc[q].Nsd, 1 );
+    aObj[ o_dcsdval ]->SetPtr( dc[q].sdval );
+        aObj[ o_dcsdval ]->SetDim( dc[q].Nsd, 1 );
     //}
     dcp=&dc[q];
 }
@@ -136,36 +136,36 @@ void TDComp::dyn_set(int q)
     ErrorIf( dcp!=&dc[q], GetName(),
              "E00DCrem: Invalid access to dc in dyn_set()");
     memcpy( dcp->pstate, rt[nRT].UnpackKey(), DC_RKLEN );
-    dc[q].TCint= (float *)aObj[ o_dccpint ].GetPtr();
-    dc[q].Cp =   (float *)aObj[ o_dccp ].GetPtr();
-    dc[q].CpFS = (float *)aObj[ o_dccpfs ].GetPtr();
-    dc[q].HKFc = (float *)aObj[ o_dchkf ].GetPtr();
-    dc[q].Vt =   (float *)aObj[ o_dcvt ].GetPtr();
-    dc[q].CPg =  (float *)aObj[ o_dccritpg ].GetPtr();
-    dc[q].ODc =  (float *)aObj[ o_dcodc ].GetPtr();
-    dc[q].FtP =  (float *)aObj[ o_dcftp ].GetPtr();
-    dc[q].FtBer =(float *)aObj[ o_dcftpb ].GetPtr();
-    dc[q].Cemp = (float *)aObj[ o_dccemp ].GetPtr();
-    dc[q].FtTyp = (char (*)[MAXSYMB])aObj[ o_dcfttyp ].GetPtr();
-    dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ].GetPtr();
-    dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ].GetPtr();
+    dc[q].TCint= (float *)aObj[ o_dccpint ]->GetPtr();
+    dc[q].Cp =   (float *)aObj[ o_dccp ]->GetPtr();
+    dc[q].CpFS = (float *)aObj[ o_dccpfs ]->GetPtr();
+    dc[q].HKFc = (float *)aObj[ o_dchkf ]->GetPtr();
+    dc[q].Vt =   (float *)aObj[ o_dcvt ]->GetPtr();
+    dc[q].CPg =  (float *)aObj[ o_dccritpg ]->GetPtr();
+    dc[q].ODc =  (float *)aObj[ o_dcodc ]->GetPtr();
+    dc[q].FtP =  (float *)aObj[ o_dcftp ]->GetPtr();
+    dc[q].FtBer =(float *)aObj[ o_dcftpb ]->GetPtr();
+    dc[q].Cemp = (float *)aObj[ o_dccemp ]->GetPtr();
+    dc[q].FtTyp = (char (*)[MAXSYMB])aObj[ o_dcfttyp ]->GetPtr();
+    dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ]->GetPtr();
+    dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ]->GetPtr();
 
-    if( dc[q].Cp && aObj[ o_dccp ].GetN() != MAXCPCOEF )
+    if( dc[q].Cp && aObj[ o_dccp ]->GetN() != MAXCPCOEF )
         vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_Cp (remake needed)" );
 
-    if( dc[q].CpFS && aObj[ o_dccpfs ].GetN() != MAXCPFSCOEF )
+    if( dc[q].CpFS && aObj[ o_dccpfs ]->GetN() != MAXCPFSCOEF )
         vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of aiCpFS (remake needed)" );
 
-    if( dc[q].HKFc && aObj[ o_dchkf ].GetN() != MAXHKFCOEF )
+    if( dc[q].HKFc && aObj[ o_dchkf ]->GetN() != MAXHKFCOEF )
         vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_HKF (remake needed)" );
 
-    if( dc[q].Vt && aObj[ o_dcvt ].GetN() != MAXVTCOEF )
+    if( dc[q].Vt && aObj[ o_dcvt ]->GetN() != MAXVTCOEF )
         vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_Vtp (remake needed)" );
 
-    if( dc[q].CPg && aObj[ o_dccritpg ].GetN() != MAXCRITPARAM )
+    if( dc[q].CPg && aObj[ o_dccritpg ]->GetN() != MAXCRITPARAM )
         vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of CritPg (remake needed)" );
 
-    if( dc[q].ODc && aObj[ o_dcodc ].GetN() != MAXODCOEF )
+    if( dc[q].ODc && aObj[ o_dcodc ]->GetN() != MAXODCOEF )
         vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_ODc (remake needed)" );
 
 }
@@ -176,20 +176,20 @@ void TDComp::dyn_kill(int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
              "E02DCrem: Invalid access to dc in dyn_kill()");
-    dc[q].TCint= (float *)aObj[ o_dccpint ].Free();
-    dc[q].Cp =    (float *)aObj[ o_dccp ].Free();
-    dc[q].CpFS =  (float *)aObj[ o_dccpfs ].Free();
-    dc[q].HKFc =  (float *)aObj[ o_dchkf ].Free();
-    dc[q].Vt =    (float *)aObj[ o_dcvt ].Free();
-    dc[q].CPg =   (float *)aObj[ o_dccritpg ].Free();
-    dc[q].ODc =   (float *)aObj[ o_dcodc ].Free();
-    dc[q].FtP =   (float *)aObj[ o_dcftp ].Free();
-    dc[q].FtBer = (float *)aObj[ o_dcftpb ].Free();
-    dc[q].Cemp =  (float *)aObj[ o_dccemp ].Free();
-    dc[q].FtTyp = (char (*)[MAXSYMB])aObj[ o_dcfttyp ].Free();
-    dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ].Free();
-    dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ].Free();
-    dc[q].tprn = (char *)aObj[ o_dctprn ].Free();
+    dc[q].TCint= (float *)aObj[ o_dccpint ]->Free();
+    dc[q].Cp =    (float *)aObj[ o_dccp ]->Free();
+    dc[q].CpFS =  (float *)aObj[ o_dccpfs ]->Free();
+    dc[q].HKFc =  (float *)aObj[ o_dchkf ]->Free();
+    dc[q].Vt =    (float *)aObj[ o_dcvt ]->Free();
+    dc[q].CPg =   (float *)aObj[ o_dccritpg ]->Free();
+    dc[q].ODc =   (float *)aObj[ o_dcodc ]->Free();
+    dc[q].FtP =   (float *)aObj[ o_dcftp ]->Free();
+    dc[q].FtBer = (float *)aObj[ o_dcftpb ]->Free();
+    dc[q].Cemp =  (float *)aObj[ o_dccemp ]->Free();
+    dc[q].FtTyp = (char (*)[MAXSYMB])aObj[ o_dcfttyp ]->Free();
+    dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ]->Free();
+    dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ]->Free();
+    dc[q].tprn = (char *)aObj[ o_dctprn ]->Free();
 }
 
 
@@ -206,80 +206,80 @@ void TDComp::dyn_new(int q)
 
     if( dc[q].PdcMK == S_OFF )
     {
-        dc[q].TCint = (float *)aObj[ o_dccpint ].Free();
-        dc[q].Cp = (float *)aObj[ o_dccp ].Free();
+        dc[q].TCint = (float *)aObj[ o_dccpint ]->Free();
+        dc[q].Cp = (float *)aObj[ o_dccp ]->Free();
     }
     else
     {
-        dc[q].TCint = (float *)aObj[ o_dccpint ].Alloc( 2, dc[q].NeCp, F_ );
-        dc[q].Cp = (float *)aObj[ o_dccp ].Alloc( MAXCPCOEF, dc[q].NeCp, F_ );
+        dc[q].TCint = (float *)aObj[ o_dccpint ]->Alloc( 2, dc[q].NeCp, F_ );
+        dc[q].Cp = (float *)aObj[ o_dccp ]->Alloc( MAXCPCOEF, dc[q].NeCp, F_ );
     }
 
     if( dc[q].PdcFT == S_OFF )
     {
-        dc[q].FtP = (float *)aObj[ o_dcftp ].Free();
-        dc[q].FtTyp = (char (*)[MAXSYMB])aObj[ o_dcfttyp ].Free();
+        dc[q].FtP = (float *)aObj[ o_dcftp ]->Free();
+        dc[q].FtTyp = (char (*)[MAXSYMB])aObj[ o_dcfttyp ]->Free();
         // if( CE == CTM_BER )
-        //    dc[q].FtBer = (float *)aObj[ o_dcftpb ].Free();
+        //    dc[q].FtBer = (float *)aObj[ o_dcftpb ]->Free();
     }
     else
     {
-        dc[q].FtP = (float *)aObj[ o_dcftp ].Alloc( 5, dc[q].Nft, F_ );
-        dc[q].FtTyp=(char (*)[MAXSYMB])aObj[ o_dcfttyp ].Alloc( 1, dc[q].Nft, MAXSYMB );
+        dc[q].FtP = (float *)aObj[ o_dcftp ]->Alloc( 5, dc[q].Nft, F_ );
+        dc[q].FtTyp=(char (*)[MAXSYMB])aObj[ o_dcfttyp ]->Alloc( 1, dc[q].Nft, MAXSYMB );
         // if( CE == CTM_BER )
-        //    dc[q].FtBer = (float *)aObj[ o_dcftpb ].Alloc( 3, dc[q].Nft, F_ );
+        //    dc[q].FtBer = (float *)aObj[ o_dcftpb ]->Alloc( 3, dc[q].Nft, F_ );
     }
 
     if ( CM == CTPM_CPT && (CE == CTM_CHP || CE == CTM_BER) )  // added 26.02.2011 (TW)
-        dc[q].FtBer = (float *)aObj[ o_dcftpb ].Alloc( 3, 1, F_ );
+        dc[q].FtBer = (float *)aObj[ o_dcftpb ]->Alloc( 3, 1, F_ );
     else
-        dc[q].FtBer = (float *)aObj[ o_dcftpb ].Free();
+        dc[q].FtBer = (float *)aObj[ o_dcftpb ]->Free();
 
     if( dc[q].Nemp <= 0 )
-        dc[q].Cemp = (float *)aObj[ o_dccemp ].Free();
+        dc[q].Cemp = (float *)aObj[ o_dccemp ]->Free();
     else
-        // dc[q].Cemp = (float *)aObj[ o_dccemp ].Alloc( MAXEOSPARAM, 1, F_ );
-      dc[q].Cemp = (float *)aObj[ o_dccemp ].Alloc( dc[q].Nemp, 1, F_ );
+        // dc[q].Cemp = (float *)aObj[ o_dccemp ]->Alloc( MAXEOSPARAM, 1, F_ );
+      dc[q].Cemp = (float *)aObj[ o_dccemp ]->Alloc( dc[q].Nemp, 1, F_ );
 
     if( dc[q].Nsd == 0 )
     {
-        dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ].Free();
-        dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ].Free();
+        dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ]->Free();
+        dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ]->Free();
     }
     else
     {
-        dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ].Alloc( dc[q].Nsd, 1, V_SD_RKLEN );
-        dc[q].sdval=(char (*)[V_SD_VALEN])aObj[ o_dcsdval ].Alloc( dc[q].Nsd, 1, V_SD_VALEN );
+        dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ]->Alloc( dc[q].Nsd, 1, V_SD_RKLEN );
+        dc[q].sdval=(char (*)[V_SD_VALEN])aObj[ o_dcsdval ]->Alloc( dc[q].Nsd, 1, V_SD_VALEN );
     }
 
     if( CM == CTPM_CPT && CV == CPM_AKI )
-        dc[q].CpFS = (float *)aObj[ o_dccpfs ].Alloc( MAXCPFSCOEF, 1, F_ );
+        dc[q].CpFS = (float *)aObj[ o_dccpfs ]->Alloc( MAXCPFSCOEF, 1, F_ );
     else
-        dc[q].CpFS = (float *)aObj[ o_dccpfs ].Free();
+        dc[q].CpFS = (float *)aObj[ o_dccpfs ]->Free();
 
     if( dc[q].PdcHKF == S_OFF )
-        dc[q].HKFc = (float *)aObj[ o_dchkf ].Free();
+        dc[q].HKFc = (float *)aObj[ o_dchkf ]->Free();
     else
-        dc[q].HKFc = (float *)aObj[ o_dchkf ].Alloc( MAXHKFCOEF, 1, F_ );
+        dc[q].HKFc = (float *)aObj[ o_dchkf ]->Alloc( MAXHKFCOEF, 1, F_ );
 
     if( dc[q].PdcVT == S_OFF  )
-        dc[q].Vt = (float *)aObj[ o_dcvt ].Free();
+        dc[q].Vt = (float *)aObj[ o_dcvt ]->Free();
     else
-        dc[q].Vt = (float *)aObj[ o_dcvt].Alloc( MAXVTCOEF, 1, F_ );
+        dc[q].Vt = (float *)aObj[ o_dcvt]->Alloc( MAXVTCOEF, 1, F_ );
 
     if( CV == CPM_GAS || CV == CPM_PRSV || CV == CPM_SRK || CV == CPM_PR78
             || CV == CPM_CORK || CV == CPM_STP )  // PRSV, SRK, PR78, CORK and STP fluid models
-        dc[q].CPg = (float *)aObj[ o_dccritpg ].Alloc( MAXCRITPARAM, 1, F_ );
+        dc[q].CPg = (float *)aObj[ o_dccritpg ]->Alloc( MAXCRITPARAM, 1, F_ );
     else
-        dc[q].CPg = (float *)aObj[ o_dccritpg ].Free();
+        dc[q].CPg = (float *)aObj[ o_dccritpg ]->Free();
 
     if( CV == CPM_VBM )     // Birch-Murnaghan coeffs, 04.04.2003
-        dc[q].ODc = (float *)aObj[ o_dcodc ].Alloc( MAXODCOEF, 1, F_ );
+        dc[q].ODc = (float *)aObj[ o_dcodc ]->Alloc( MAXODCOEF, 1, F_ );
     else
-        dc[q].ODc = (float *)aObj[ o_dcodc ].Free();
+        dc[q].ODc = (float *)aObj[ o_dcodc ]->Free();
 
     // if( dc[q].tprn == 0 )
-    //   dc[q].tprn = (char *)aObj[ o_dctprn ].Alloc( 1, 256, S_ );
+    //   dc[q].tprn = (char *)aObj[ o_dctprn ]->Alloc( 1, 256, S_ );
 }
 
 

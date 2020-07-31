@@ -545,18 +545,18 @@ void TUnSpace::text_analyze( int nObj)
         {
          case o_ungexpr:
                PRof->ET_translate( o_untprn, o_ungexpr, 0, mupL, 0, pmpL );
-               rpn[1].GetEquat( static_cast<char *>(aObj[o_untprn].GetPtr()) );
+               rpn[1].GetEquat( static_cast<char *>(aObj[o_untprn]->GetPtr()) );
                break;
          case o_unexpr:
                PRof->ET_translate( o_untprn, o_unexpr, 0, mupL, 0, pmpL );
-               rpn[0].GetEquat( static_cast<char *>(aObj[o_untprn].GetPtr()) );
+               rpn[0].GetEquat( static_cast<char *>(aObj[o_untprn]->GetPtr()) );
                break;
         }
 
     }
     catch( TError& xcpt )
     {
-        char *erscan = static_cast<char *>(aObj[nObj].GetPtr());
+        char *erscan = static_cast<char *>(aObj[nObj]->GetPtr());
         vfMessage(window(), xcpt.title, xcpt.mess);
         /*bool   iRet = */
         CheckEqText(  erscan,
@@ -598,10 +598,10 @@ TUnSpace::RecordPlot( const char* /*key*/ )
     nLn += plt[1].getLinesNumber();
     if( plot )
     {
-        int oldN = aObj[o_unplline].GetN();
+        int oldN = aObj[o_unplline]->GetN();
         TPlotLine defpl("", 3, 6, 0);
 
-        plot = static_cast<TPlotLine * >(aObj[ o_unplline ].Alloc( nLn, sizeof(TPlotLine) ));
+        plot = static_cast<TPlotLine * >(aObj[ o_unplline ]->Alloc( nLn, sizeof(TPlotLine) ));
         for(int ii=0; ii<nLn; ii++ )
         {
             if( ii >= oldN )
@@ -646,7 +646,7 @@ bool TUnSpace::SaveChartData( jsonui::ChartData* gr )
         usp->size[1][ii] =  static_cast<float>(gr->part[ii]);
     }
 
-    plot = static_cast<TPlotLine *>(aObj[ o_unplline].Alloc( gr->getSeriesNumber(), sizeof(TPlotLine)));
+    plot = static_cast<TPlotLine *>(aObj[ o_unplline]->Alloc( gr->getSeriesNumber(), sizeof(TPlotLine)));
     for(int ii=0; ii<gr->getSeriesNumber(); ii++ )
     {
         plot[ii] = convertor( gr->lineData( ii ) );

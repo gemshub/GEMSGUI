@@ -34,7 +34,7 @@ CalcCheckDialog::CalcCheckDialog(QWidget* parent,
    setWindowTitle( "Check boxes Calculator" );
 
    if( nO >= 0 )
-        rObj = &aObj[static_cast<size_t>(nO)];
+        rObj = aObj[static_cast<size_t>(nO)].get();
    else
         rObj = new TObject( "tempor", ftCheckBox, 1, 1, false, 'N', "temporary object");
 	

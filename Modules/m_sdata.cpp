@@ -41,15 +41,15 @@ TSData::TSData( uint nrt ):
 // link values to objects
 void TSData::ods_link( int )
 {
-    aObj[o_sdnref].SetPtr( &nREf );
-    aObj[o_sdauth].SetPtr( auth );
-    aObj[o_sdyear].SetPtr( year );
-    aObj[o_sdclass].SetPtr( type );
-    aObj[o_sdvoly].SetPtr( volyr );
-    aObj[o_sdpage].SetPtr( pages );
-    aObj[o_sdauthr].SetPtr( authors );
-    aObj[o_sdedit].SetPtr( editn );
-    aObj[o_sdnote].SetPtr( notes );
+    aObj[o_sdnref]->SetPtr( &nREf );
+    aObj[o_sdauth]->SetPtr( auth );
+    aObj[o_sdyear]->SetPtr( year );
+    aObj[o_sdclass]->SetPtr( type );
+    aObj[o_sdvoly]->SetPtr( volyr );
+    aObj[o_sdpage]->SetPtr( pages );
+    aObj[o_sdauthr]->SetPtr( authors );
+    aObj[o_sdedit]->SetPtr( editn );
+    aObj[o_sdnote]->SetPtr( notes );
 }
 
 // set default data
@@ -73,30 +73,30 @@ void TSData::set_def(int)
 void TSData::dyn_new(int)
 {
     if( title==0 )
-        title = (char *)aObj[o_sdtitle].Alloc( 1, 128, S_ );
+        title = (char *)aObj[o_sdtitle]->Alloc( 1, 128, S_ );
     if( abstr==0 )
-        abstr = (char *)aObj[o_sdabstr].Alloc( 1, 128, S_ );
+        abstr = (char *)aObj[o_sdabstr]->Alloc( 1, 128, S_ );
     if( nREf != 0 )
-        refs = (char *)aObj[o_sdrefs].Alloc( nREf, 1, 32 );
+        refs = (char *)aObj[o_sdrefs]->Alloc( nREf, 1, 32 );
     else  if( refs )
-        refs = (char *)aObj[o_sdrefs].Free();
+        refs = (char *)aObj[o_sdrefs]->Free();
 }
 
 // set dynamic objects ptr to values
 void TSData::dyn_set(int)
 {
-    title = (char *)aObj[o_sdtitle].GetPtr();
-    abstr = (char *)aObj[o_sdabstr].GetPtr();
-    refs = (char *)aObj[o_sdrefs].GetPtr();
-    nREf = (short)aObj[o_sdrefs].GetN();
+    title = (char *)aObj[o_sdtitle]->GetPtr();
+    abstr = (char *)aObj[o_sdabstr]->GetPtr();
+    refs = (char *)aObj[o_sdrefs]->GetPtr();
+    nREf = (short)aObj[o_sdrefs]->GetN();
 }
 
 // free dynamic memory in objects and values
 void TSData::dyn_kill(int)
 {
-    title = (char *)aObj[o_sdtitle].Free();
-    abstr = (char *)aObj[o_sdabstr].Free();
-    refs = (char *)aObj[o_sdrefs].Free();
+    title = (char *)aObj[o_sdtitle]->Free();
+    abstr = (char *)aObj[o_sdabstr]->Free();
+    refs = (char *)aObj[o_sdrefs]->Free();
 }
 
 //Rebuild record structure before calc

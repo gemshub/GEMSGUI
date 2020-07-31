@@ -465,7 +465,7 @@ NEXT:
             rc[q].Hs[0] = 0.0;
             rc[q].Cps[0] = 0.0;
             if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
-                rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+                rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
         }
         else if( CE == CTM_EK1 )
         {
@@ -473,25 +473,25 @@ NEXT:
             rc[q].Hs[0] = DOUBLE_EMPTY;
             rc[q].Cps[0] = 0.0;
             if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
-                rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+                rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
         }
         else if( CE == CTM_EK2 )
         {
             rc[q].Cps[0] = 0.0;
             if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
-                rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+                rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
         }
         else if( CE == CTM_EK3 )
         {
             if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
-                rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+                rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
         }
         else if( CE == CTM_LGK )
         {
         	if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
-        		rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+                rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
         	if( !rc[q].Cps || rc[q].PreDC == S_OFF ) /* Temporarily !!!!!!! */
-        		 rc[q].DCp =   (float *)aObj[ o_redcp ].Alloc( MAXCPCOEF, 1, F_);
+                 rc[q].DCp =   (float *)aObj[ o_redcp ]->Alloc( MAXCPCOEF, 1, F_);
             for( i=0; i<7; i++ )
             {
               if( IsFloatEmpty( rc[q].Cps[i] ) )
@@ -501,9 +501,9 @@ NEXT:
         else if (CE == CTM_LGX)
         {
         	if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
-        		rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+                rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
         	if( !rc[q].Cps || rc[q].PreDC == S_OFF ) /* Temporarily !!!!!!! */
-        		 rc[q].DCp =   (float *)aObj[ o_redcp ].Alloc( MAXCPCOEF, 1, F_);
+                 rc[q].DCp =   (float *)aObj[ o_redcp ]->Alloc( MAXCPCOEF, 1, F_);
             for( i=0; i<7; i++ )
             {
               if( IsFloatEmpty( rc[q].pKt[i] ) )

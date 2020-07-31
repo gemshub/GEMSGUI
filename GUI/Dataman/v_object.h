@@ -20,6 +20,7 @@
 #define _v_object_h_
 
 #include <fstream>
+#include <memory>
 #include "v_user.h"
 #include "v_vals.h"
 
@@ -229,9 +230,10 @@ public:
 
 // Array of objects in the system
 
-class TObjList : public TIArrayF<TObject>
+class TObjList : public std::vector<std::shared_ptr<TObject>>
 {
 public:
+
     TObjList();
     TObjList(istream& f);
 
@@ -241,10 +243,7 @@ public:
 
     //--- Selectors
     int Find(const char* keywd);
-    TObject& operator[] (size_t i)
-    {
-        return elem(i);
-    }
+
 };
 
 extern TObjList aObj;

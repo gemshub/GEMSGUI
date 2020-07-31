@@ -55,71 +55,71 @@ void TReacDC::ods_link( int q)
     ErrorIf( q >= nQ, GetName(), "E00RErem: Invalid link (q>=8)!" );
 
     // static
-    //aObj[ o_repst].SetPtr( rc[q].pstate );
-    //aObj[ o_reps].SetPtr( rc[q].psymb );
-    //aObj[ o_redcn].SetPtr( rc[q].dcn );
-    //aObj[ o_reatyp].SetPtr( rc[q].atyp );
-    aObj[ o_repct].SetPtr(   rc[q].pct );
-    aObj[ o_reprun].SetPtr( &rc[q].PreC );    /*6*/
-    aObj[ o_repra].SetPtr(  &rc[q].PreKT );    /*8*/
-    aObj[ o_rermtm].SetPtr(  rc[q].rmtm );
-    aObj[ o_rezz].SetPtr(   &rc[q].Zz );
-    aObj[ o_remwt].SetPtr(  &rc[q].mwt );
-    aObj[ o_reks].SetPtr(    rc[q].Ks );   /*d 3*/
-    aObj[ o_regs].SetPtr(    rc[q].Gs );   /*d 3*/
-    aObj[ o_rehs].SetPtr(    rc[q].Hs );   /*d 3*/
-    aObj[ o_ress].SetPtr(    rc[q].Ss );   /*f 3*/
-    aObj[ o_recps].SetPtr(   rc[q].Cps );  /*f 3*/
-    aObj[ o_remvs].SetPtr(   rc[q].Vs );   /*f 3*/
-    aObj[ o_renix].SetPtr(   rc[q].Nix );  /*f 3*/
-    aObj[ o_reptst].SetPtr( &rc[q].Pst );  /*f 2*/
-    aObj[ o_realbet].SetPtr(&rc[q].Comp ); /*f 2*/
-    aObj[ o_reder].SetPtr(  &rc[q].Der ); /*f 2*/
-    aObj[ o_redim].SetPtr(  &rc[q].nDC );   /*8*/
-    aObj[ o_refloat1].SetPtr( &rc[q].Zz );  /*2*/
-    aObj[ o_redbl1].SetPtr(   rc[q].Ks );  /*9*/
-    aObj[ o_refloat2].SetPtr( rc[q].Ss );  /*18*/
-    aObj[ o_restr].SetPtr(   rc[q].pct );
-    aObj[ o_rename].SetPtr(  rc[q].name );
-    aObj[ o_reform].SetPtr(  rc[q].form );
+    //aObj[ o_repst]->SetPtr( rc[q].pstate );
+    //aObj[ o_reps]->SetPtr( rc[q].psymb );
+    //aObj[ o_redcn]->SetPtr( rc[q].dcn );
+    //aObj[ o_reatyp]->SetPtr( rc[q].atyp );
+    aObj[ o_repct]->SetPtr(   rc[q].pct );
+    aObj[ o_reprun]->SetPtr( &rc[q].PreC );    /*6*/
+    aObj[ o_repra]->SetPtr(  &rc[q].PreKT );    /*8*/
+    aObj[ o_rermtm]->SetPtr(  rc[q].rmtm );
+    aObj[ o_rezz]->SetPtr(   &rc[q].Zz );
+    aObj[ o_remwt]->SetPtr(  &rc[q].mwt );
+    aObj[ o_reks]->SetPtr(    rc[q].Ks );   /*d 3*/
+    aObj[ o_regs]->SetPtr(    rc[q].Gs );   /*d 3*/
+    aObj[ o_rehs]->SetPtr(    rc[q].Hs );   /*d 3*/
+    aObj[ o_ress]->SetPtr(    rc[q].Ss );   /*f 3*/
+    aObj[ o_recps]->SetPtr(   rc[q].Cps );  /*f 3*/
+    aObj[ o_remvs]->SetPtr(   rc[q].Vs );   /*f 3*/
+    aObj[ o_renix]->SetPtr(   rc[q].Nix );  /*f 3*/
+    aObj[ o_reptst]->SetPtr( &rc[q].Pst );  /*f 2*/
+    aObj[ o_realbet]->SetPtr(&rc[q].Comp ); /*f 2*/
+    aObj[ o_reder]->SetPtr(  &rc[q].Der ); /*f 2*/
+    aObj[ o_redim]->SetPtr(  &rc[q].nDC );   /*8*/
+    aObj[ o_refloat1]->SetPtr( &rc[q].Zz );  /*2*/
+    aObj[ o_redbl1]->SetPtr(   rc[q].Ks );  /*9*/
+    aObj[ o_refloat2]->SetPtr( rc[q].Ss );  /*18*/
+    aObj[ o_restr]->SetPtr(   rc[q].pct );
+    aObj[ o_rename]->SetPtr(  rc[q].name );
+    aObj[ o_reform]->SetPtr(  rc[q].form );
 
     // dynamic
     // if( rc[q].nDC > 0 ) {
-    aObj[ o_redck].SetPtr( rc[q].DCk );
-    aObj[ o_redck].SetDim( rc[q].nDC, 1 );
-    aObj[ o_rerdc].SetPtr(  rc[q].rDC );
-    aObj[ o_rerdc].SetDim( rc[q].nDC, 1 );
-    aObj[ o_rescdc].SetPtr(  rc[q].scDC );
-    aObj[ o_rescdc].SetDim( rc[q].nDC, 1 );
-    aObj[ o_repardc].SetPtr(rc[q].ParDC);
-    aObj[ o_repardc].SetDim( rc[q].nDC, 6 );
+    aObj[ o_redck]->SetPtr( rc[q].DCk );
+    aObj[ o_redck]->SetDim( rc[q].nDC, 1 );
+    aObj[ o_rerdc]->SetPtr(  rc[q].rDC );
+    aObj[ o_rerdc]->SetDim( rc[q].nDC, 1 );
+    aObj[ o_rescdc]->SetPtr(  rc[q].scDC );
+    aObj[ o_rescdc]->SetDim( rc[q].nDC, 1 );
+    aObj[ o_repardc]->SetPtr(rc[q].ParDC);
+    aObj[ o_repardc]->SetDim( rc[q].nDC, 6 );
     //}
-    aObj[ o_redcp].SetPtr( rc[q].DCp );
-    aObj[o_redcp].SetDim( MAXCPCOEF, 1 );
-    aObj[ o_rehkfc].SetPtr(rc[q].HKFc );
-    aObj[o_rehkfc].SetDim( MAXHKFCOEF, 1 );
-    aObj[ o_redvt].SetPtr( rc[q].DVt );
-    aObj[ o_redvt].SetDim( MAXVTCOEF, 1 );
-    aObj[ o_redst].SetPtr( rc[q].DSt );
-    aObj[ o_redst].SetDim( MAXCPCOEF, 1 );
-    aObj[ o_repkt].SetPtr( rc[q].pKt );
-    aObj[ o_repkt].SetDim( MAXCPCOEF, 1 );
+    aObj[ o_redcp]->SetPtr( rc[q].DCp );
+    aObj[o_redcp]->SetDim( MAXCPCOEF, 1 );
+    aObj[ o_rehkfc]->SetPtr(rc[q].HKFc );
+    aObj[o_rehkfc]->SetDim( MAXHKFCOEF, 1 );
+    aObj[ o_redvt]->SetPtr( rc[q].DVt );
+    aObj[ o_redvt]->SetDim( MAXVTCOEF, 1 );
+    aObj[ o_redst]->SetPtr( rc[q].DSt );
+    aObj[ o_redst]->SetDim( MAXCPCOEF, 1 );
+    aObj[ o_repkt]->SetPtr( rc[q].pKt );
+    aObj[ o_repkt]->SetDim( MAXCPCOEF, 1 );
 
-    aObj[ o_retcint].SetPtr( rc[q].TCint );
-    aObj[ o_retcint].SetDim(  max((short)2,rc[q].nTp), 1 );
-    aObj[ o_repint].SetPtr(  rc[q].Pint );
-    aObj[ o_repint].SetDim(  max((short)2,rc[q].nPp), 1 );
+    aObj[ o_retcint]->SetPtr( rc[q].TCint );
+    aObj[ o_retcint]->SetDim(  max((short)2,rc[q].nTp), 1 );
+    aObj[ o_repint]->SetPtr(  rc[q].Pint );
+    aObj[ o_repint]->SetDim(  max((short)2,rc[q].nPp), 1 );
     //if( rc[q].PreKP == S_ON && rc[q].nTp && rc[q].nPp ){
-    aObj[ o_relgK].SetPtr(  rc[q].logK );
-//    aObj[ o_relgK].SetDim(  rc[q].nTp, rc[q].nPp ); // bug fix AY, DM 24.10.2016
-    aObj[ o_relgK].SetDim(   rc[q].nPp, rc[q].nTp );
+    aObj[ o_relgK]->SetPtr(  rc[q].logK );
+//    aObj[ o_relgK]->SetDim(  rc[q].nTp, rc[q].nPp ); // bug fix AY, DM 24.10.2016
+    aObj[ o_relgK]->SetDim(   rc[q].nPp, rc[q].nTp );
     //}
-    //aObj[ o_retprn].SetPtr( rc[q].tprn  ); aObj[o_retprn].SetDim(1, SPPTPRNBUFSIZE);
+    //aObj[ o_retprn]->SetPtr( rc[q].tprn  ); aObj[o_retprn]->SetDim(1, SPPTPRNBUFSIZE);
     //if( rc[q].Nsd > 0 ) {
-    aObj[ o_resdref ].SetPtr( rc[q].sdref );
-    aObj[o_resdref].SetDim(rc[q].Nsd, 1);
-    aObj[ o_resdval ].SetPtr( rc[q].sdval );
-    aObj[o_resdval].SetDim(rc[q].Nsd, 1);
+    aObj[ o_resdref ]->SetPtr( rc[q].sdref );
+    aObj[o_resdref]->SetDim(rc[q].Nsd, 1);
+    aObj[ o_resdval ]->SetPtr( rc[q].sdval );
+    aObj[o_resdval]->SetDim(rc[q].Nsd, 1);
     // }
     rcp=&rc[q];
 }
@@ -129,49 +129,49 @@ void TReacDC::dyn_set(int q)
 {
     ErrorIf( rcp!=&rc[q], GetName(), "E01RErem: Invalid access to rc in dyn_set()");
     memcpy( rcp->pstate, rt[nRT].UnpackKey(), RE_RKLEN );
-    rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ].GetPtr();
-    rc[q].rDC =   (char *)aObj[ o_rerdc ].GetPtr();
-    rc[q].scDC =  (double *)aObj[ o_rescdc ].GetPtr();
-    rc[q].ParDC = (double (*)[6])aObj[ o_repardc ].GetPtr();
-    rc[q].TCint = (float *)aObj[ o_retcint ].GetPtr();
-    rc[q].Pint =  (float *)aObj[ o_repint ].GetPtr();
-    rc[q].DCp =   (float *)aObj[ o_redcp ].GetPtr();
-    rc[q].HKFc =  (float *)aObj[ o_rehkfc ].GetPtr();
-    rc[q].DVt =   (float *)aObj[ o_redvt ].GetPtr();
-    rc[q].DSt =   (float *)aObj[ o_redst ].GetPtr();
-    rc[q].pKt =   (float *)aObj[ o_repkt ].GetPtr();
-    rc[q].logK =  (float *)aObj[ o_relgK ].GetPtr();
-    rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ].GetPtr();
-    rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ].GetPtr();
-    rc[q].tprn =  (char *)aObj[ o_retprn ].GetPtr();
+    rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ]->GetPtr();
+    rc[q].rDC =   (char *)aObj[ o_rerdc ]->GetPtr();
+    rc[q].scDC =  (double *)aObj[ o_rescdc ]->GetPtr();
+    rc[q].ParDC = (double (*)[6])aObj[ o_repardc ]->GetPtr();
+    rc[q].TCint = (float *)aObj[ o_retcint ]->GetPtr();
+    rc[q].Pint =  (float *)aObj[ o_repint ]->GetPtr();
+    rc[q].DCp =   (float *)aObj[ o_redcp ]->GetPtr();
+    rc[q].HKFc =  (float *)aObj[ o_rehkfc ]->GetPtr();
+    rc[q].DVt =   (float *)aObj[ o_redvt ]->GetPtr();
+    rc[q].DSt =   (float *)aObj[ o_redst ]->GetPtr();
+    rc[q].pKt =   (float *)aObj[ o_repkt ]->GetPtr();
+    rc[q].logK =  (float *)aObj[ o_relgK ]->GetPtr();
+    rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ]->GetPtr();
+    rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ]->GetPtr();
+    rc[q].tprn =  (char *)aObj[ o_retprn ]->GetPtr();
 }
 
 // free dynamic memory in objects and values
 void TReacDC::dyn_kill(int q)
 {
     ErrorIf( rcp!=&rc[q], GetName(), "E02RErem: Invalid access to rc in dyn_kill()");
-    rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ].Free();
-    rc[q].rDC =   (char *)aObj[ o_rerdc ].Free();
-    rc[q].scDC =  (double *)aObj[ o_rescdc ].Free();
-    rc[q].ParDC = (double (*)[6])aObj[ o_repardc ].Free();
-    rc[q].TCint = (float *)aObj[ o_retcint ].Free();
-    rc[q].Pint =  (float *)aObj[ o_repint ].Free();
-    rc[q].DCp =   (float *)aObj[ o_redcp ].Free();
-    rc[q].HKFc =  (float *)aObj[ o_rehkfc ].Free();
-    rc[q].DVt =   (float *)aObj[ o_redvt ].Free();
-    rc[q].DSt =   (float *)aObj[ o_redst ].Free();
-    rc[q].pKt =   (float *)aObj[ o_repkt ].Free();
-    rc[q].logK =  (float *)aObj[ o_relgK ].Free();
-    rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ].Free();
-    rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ].Free();
-    rc[q].tprn =  (char *)aObj[ o_retprn ].Free();
+    rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ]->Free();
+    rc[q].rDC =   (char *)aObj[ o_rerdc ]->Free();
+    rc[q].scDC =  (double *)aObj[ o_rescdc ]->Free();
+    rc[q].ParDC = (double (*)[6])aObj[ o_repardc ]->Free();
+    rc[q].TCint = (float *)aObj[ o_retcint ]->Free();
+    rc[q].Pint =  (float *)aObj[ o_repint ]->Free();
+    rc[q].DCp =   (float *)aObj[ o_redcp ]->Free();
+    rc[q].HKFc =  (float *)aObj[ o_rehkfc ]->Free();
+    rc[q].DVt =   (float *)aObj[ o_redvt ]->Free();
+    rc[q].DSt =   (float *)aObj[ o_redst ]->Free();
+    rc[q].pKt =   (float *)aObj[ o_repkt ]->Free();
+    rc[q].logK =  (float *)aObj[ o_relgK ]->Free();
+    rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ]->Free();
+    rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ]->Free();
+    rc[q].tprn =  (char *)aObj[ o_retprn ]->Free();
 }
 
 
 // free dynamic memory in objects and values
 void TReacDC::w_dyn_kill()
 {
-    rcp->ParDC = (double (*)[6])aObj[ o_repardc ].Free();
+    rcp->ParDC = (double (*)[6])aObj[ o_repardc ]->Free();
 }
 
 
@@ -182,67 +182,67 @@ void TReacDC::dyn_new(int q)
     short nTp, nPp;
     ErrorIf( rc[q].nDC < 1, GetName(), "E04RErem: Number of DC in reaction is < 1" );
 
-    rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ].Alloc(rc[q].nDC, 1,DC_RKLEN);
-    rc[q].rDC =   (char *)aObj[ o_rerdc ].Alloc(rc[q].nDC, 1, A_);
-    rc[q].scDC =  (double *)aObj[ o_rescdc ].Alloc(rc[q].nDC, 1, D_);
+    rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ]->Alloc(rc[q].nDC, 1,DC_RKLEN);
+    rc[q].rDC =   (char *)aObj[ o_rerdc ]->Alloc(rc[q].nDC, 1, A_);
+    rc[q].scDC =  (double *)aObj[ o_rescdc ]->Alloc(rc[q].nDC, 1, D_);
 
     nTp = max( (short)2, rc[q].nTp );
-    rc[q].TCint = (float *)aObj[ o_retcint ].Alloc( nTp, 1, F_);
+    rc[q].TCint = (float *)aObj[ o_retcint ]->Alloc( nTp, 1, F_);
     nPp = max( (short)2, rc[q].nPp );
-    rc[q].Pint =  (float *)aObj[ o_repint  ].Alloc(nPp, 1, F_);
+    rc[q].Pint =  (float *)aObj[ o_repint  ]->Alloc(nPp, 1, F_);
 
     if( rc[q].PreKP != S_OFF && rc[q].nTp >0 && rc[q].nPp>0 )
-//        rc[q].logK =  (float *)aObj[ o_relgK ].Alloc( rc[q].nTp, rc[q].nPp, F_); // bug fix AY, DM 24.10.2016
-        rc[q].logK =  (float *)aObj[ o_relgK ].Alloc( rc[q].nPp, rc[q].nTp, F_);
+//        rc[q].logK =  (float *)aObj[ o_relgK ]->Alloc( rc[q].nTp, rc[q].nPp, F_); // bug fix AY, DM 24.10.2016
+        rc[q].logK =  (float *)aObj[ o_relgK ]->Alloc( rc[q].nPp, rc[q].nTp, F_);
     else
-        rc[q].logK = (float *)aObj[ o_relgK ].Free();
+        rc[q].logK = (float *)aObj[ o_relgK ]->Free();
 
 
     if( rc[q].PreDC == S_OFF )
-        rc[q].DCp =   (float *)aObj[ o_redcp ].Free();
+        rc[q].DCp =   (float *)aObj[ o_redcp ]->Free();
     else
-        rc[q].DCp =   (float *)aObj[ o_redcp ].Alloc( MAXCPCOEF, 1, F_);
+        rc[q].DCp =   (float *)aObj[ o_redcp ]->Alloc( MAXCPCOEF, 1, F_);
 
     if( rc[q].PrAki == S_OFF )  /* HKF - �model */
-        rc[q].HKFc =  (float *)aObj[ o_rehkfc ].Free();
+        rc[q].HKFc =  (float *)aObj[ o_rehkfc ]->Free();
     else
-        rc[q].HKFc =  (float *)aObj[ o_rehkfc ].Alloc( MAXHKFCOEF, 1, F_);
+        rc[q].HKFc =  (float *)aObj[ o_rehkfc ]->Alloc( MAXHKFCOEF, 1, F_);
 
     if( rc[q].PreDV == S_OFF )  /* equations dV(T,P) */
-        rc[q].DVt =   (float *)aObj[ o_redvt ].Free();
+        rc[q].DVt =   (float *)aObj[ o_redvt ]->Free();
     else
-        rc[q].DVt =   (float *)aObj[ o_redvt ].Alloc( MAXVTCOEF, 1, F_);
+        rc[q].DVt =   (float *)aObj[ o_redvt ]->Alloc( MAXVTCOEF, 1, F_);
 
     if( rc[q].PreDS == S_OFF ) /* array of coeff. S(T) */
-        rc[q].DSt =   (float *)aObj[ o_redst ].Free();
+        rc[q].DSt =   (float *)aObj[ o_redst ]->Free();
     else
-        rc[q].DSt =   (float *)aObj[ o_redst ].Alloc( MAXCPCOEF, 1, F_);
+        rc[q].DSt =   (float *)aObj[ o_redst ]->Alloc( MAXCPCOEF, 1, F_);
 
     if( rc[q].PreKT == S_OFF )  /* array of coef. regres. lgK(T) */
-        rc[q].pKt =   (float *)aObj[ o_repkt ].Free();
+        rc[q].pKt =   (float *)aObj[ o_repkt ]->Free();
     else
-        rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+        rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
 
     if( rc[q].Nsd > 0 )
     {
-        rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ].Alloc(rc[q].Nsd,
+        rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ]->Alloc(rc[q].Nsd,
                       1, V_SD_RKLEN);
-        rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ].Alloc(rc[q].Nsd,
+        rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ]->Alloc(rc[q].Nsd,
                       1, V_SD_VALEN);
     }
     else
     {
-        rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ].Free();
-        rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ].Free();
+        rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ]->Free();
+        rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ]->Free();
     }
     // if( rc[q].tprn == 0 )
-    //   rc[q].tprn = (char *)aObj[o_retprn].Alloc( 1, 256, S_ );
+    //   rc[q].tprn = (char *)aObj[o_retprn]->Alloc( 1, 256, S_ );
 }
 
 
 void TReacDC::w_dyn_new()
 {
-    rcp->ParDC = (double (*)[6])aObj[ o_repardc ].Alloc( rcp->nDC, 6, D_);
+    rcp->ParDC = (double (*)[6])aObj[ o_repardc ]->Alloc( rcp->nDC, 6, D_);
 }
 
 //set default information

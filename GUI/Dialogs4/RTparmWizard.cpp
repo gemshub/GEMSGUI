@@ -294,8 +294,8 @@ void RTparmWizard::definePTArray()
    //double *arP, *arT;
 
    nPT = max( pNP->value(), pNT->value());
-   /*arP = (double *)*/ aObj[ o_rpxp].Alloc( nPT, 1, D_);
-   /*arT = (double *)*/ aObj[ o_rpxt].Alloc( nPT, 1, D_);
+   /*arP = (double *)*/ aObj[ o_rpxp]->Alloc( nPT, 1, D_);
+   /*arT = (double *)*/ aObj[ o_rpxt]->Alloc( nPT, 1, D_);
 }
 
 void RTparmWizard::initPTTable()

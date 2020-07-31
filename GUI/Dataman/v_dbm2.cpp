@@ -232,7 +232,7 @@ int TDataBase::reclen( )
 {
     int Olen=0;
     for(uint j=0; j<nOD; j++ )
-        Olen += aObj[j+frstOD].lenDB();
+        Olen += aObj[j+frstOD]->lenDB();
     return Olen;
 }
 
@@ -265,7 +265,7 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f )
     ErrorIf( !f.good(), GetKeywd(),
              "PDB file write error");
     for( j=0; j<nOD; j++ )    // put objects to file
-        StillLen -= aObj[j+frstOD].toDB( f );
+        StillLen -= aObj[j+frstOD]->toDB( f );
     crt = rh.crt;
     return StillLen;
 }
@@ -299,7 +299,7 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f, RecHead& rhh  )
     ErrorIf( !f.good(), GetKeywd(),
              "PDB file write error");
     for( j=0; j<nOD; j++ )    // put objects to file
-        StillLen -= aObj[j+frstOD].toDB( f );
+        StillLen -= aObj[j+frstOD]->toDB( f );
     crt = rh.crt;
     return StillLen;
 }
@@ -340,7 +340,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
        if ( j+frstOD == o_sptext )   //12.12.12
           if( StillLen < 10 )
              continue;
-        StillLen -= aObj[j+frstOD].ofDB(f);
+        StillLen -= aObj[j+frstOD]->ofDB(f);
         if (j+frstOD == o_spppar )
             flag_spppar = true;
     }

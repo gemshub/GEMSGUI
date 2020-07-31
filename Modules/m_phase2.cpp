@@ -715,28 +715,28 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
       if( php->Ppnc == S_ON
     		  && (php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ) )
       {
-         php->lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ].Alloc(
+         php->lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ]->Alloc(
                           php->nCat, 1, MAXDCNAME ));
-         php->lsAn  = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ].Alloc(
+         php->lsAn  = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ]->Alloc(
                           php->nAn, 1, MAXDCNAME ));
-         php->nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ].Alloc( php->nCat, 1, I_));
-         php->nxAn  = static_cast<short *>(aObj[ o_ph_w_nxa ].Alloc( php->nAn, 1, I_));
+         php->nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ]->Alloc( php->nCat, 1, I_));
+         php->nxAn  = static_cast<short *>(aObj[ o_ph_w_nxa ]->Alloc( php->nAn, 1, I_));
          if( php->nNs )
          {
-             php->lsNs  = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ].Alloc(
+             php->lsNs  = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ]->Alloc(
                               php->nNs, 1, MAXDCNAME ));
-             php->nxNs  = static_cast<short *>(aObj[ o_ph_w_nxn ].Alloc( php->nNs, 1, I_));
+             php->nxNs  = static_cast<short *>(aObj[ o_ph_w_nxn ]->Alloc( php->nNs, 1, I_));
          }
       }
       else {
 
         php->nSub =  0;
-        php->lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ].Free());
-        php->lsAn =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ].Free());
-        php->lsNs =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ].Free());
-        php->nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ].Free());
-        php->nxAn =  static_cast<short *>(aObj[ o_ph_w_nxa ].Free());
-        php->nxNs =  static_cast<short *>(aObj[ o_ph_w_nxn ].Free());
+        php->lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ]->Free());
+        php->lsAn =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ]->Free());
+        php->lsNs =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ]->Free());
+        php->nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ]->Free());
+        php->nxAn =  static_cast<short *>(aObj[ o_ph_w_nxa ]->Free());
+        php->nxNs =  static_cast<short *>(aObj[ o_ph_w_nxn ]->Free());
 
       }
    }
@@ -824,7 +824,7 @@ void TPhase::MakeSublatticeLists( const TCStringArray& form_array  )
          moi_lst += string(php->lsMoi[i1])+";";
        }
        php->PdEq = S_ON;
-       php->dEq  =  static_cast<char *>(aObj[ o_phdeq ].Alloc( 1, moi_lst.size()+10, S_));
+       php->dEq  =  static_cast<char *>(aObj[ o_phdeq ]->Alloc( 1, moi_lst.size()+10, S_));
        strncpy( php->dEq, moi_lst.c_str(),  moi_lst.size()+1 );
        for( jj=0; jj<form_array.size(); jj++ )
         strncpy( php->lsForm[jj], form_array[jj].c_str(), MAXFORMULA);
@@ -1900,7 +1900,7 @@ void TPhase::set_def_comments( bool clearall,
      if( clearall || ( php->kin_t[KinProCode] != old_kin[KinProCode] ) )
      {
 
-         // ph[q].umpcl =  (char (*)[MAXDCNAME])aObj[ o_phumpcl].Alloc( 1, ph[q].numpC, MAXDCNAME );
+         // ph[q].umpcl =  (char (*)[MAXDCNAME])aObj[ o_phumpcl]->Alloc( 1, ph[q].numpC, MAXDCNAME );
          switch(php->kin_t[KinProCode])
          {   //KinProCode
              case KM_PRO_MWR:  // = 'M' Kinetics of generic dissolution/precipitation (no uptake, ionex, adsorption)

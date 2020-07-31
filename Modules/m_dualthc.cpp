@@ -118,7 +118,7 @@ void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
   ErrorIf( dtp->Nb != TRMults::sm->GetMU()->N, GetName(),
                "Invalid data in dtp->Nb ");
 
-  dtp->An = (float *)aObj[ o_dtan ].Alloc( siz_, dtp->Nb, F_ );
+  dtp->An = (float *)aObj[ o_dtan ]->Alloc( siz_, dtp->Nb, F_ );
   dtp->Asiz = (short)siz_;
   double *AA = new double[TRMults::sm->GetMU()->N]; // dtp->An must be double SD 21/07/2009
   fillValue(dtp->An, (float)0., (siz_*dtp->Nb) );
@@ -270,12 +270,12 @@ void TDualTh::dt_text_analyze()
 
         PRof->ET_translate( o_dttprn, o_dtgexpr,
           0, TRMults::sm->GetMU()->L, 0, TMulti::sm->GetPM()->L );
-        rpn[1].GetEquat( (char *)aObj[o_dttprn].GetPtr() );
+        rpn[1].GetEquat( (char *)aObj[o_dttprn]->GetPtr() );
       }
     }
     catch( TError& xcpt )
     {
-        char *erscan = (char *)aObj[o_dtgexpr].GetPtr();
+        char *erscan = (char *)aObj[o_dtgexpr]->GetPtr();
         vfMessage(window(), xcpt.title, xcpt.mess);
         TDualTh::pm->CheckEqText(  erscan,
   "E94MSTran: Error in translation of math script \n"
@@ -685,7 +685,7 @@ TDualTh::RegressionLSM( int /*Mode*/ )  // task or minimization
 
    PRof->ET_translate( o_dttprn, o_dtcexpr,
      0, TRMults::sm->GetMU()->L, 0, TMulti::sm->GetPM()->L );
-   arpn = (char *)aObj[o_dttprn].GetPtr() ;
+   arpn = (char *)aObj[o_dttprn]->GetPtr() ;
  }
  TLMDataType data( afType, TEST_EVL, // may be changed for flags
                        dtp->nQ, dtp->nM, dtp->nP, dtp->tdat,

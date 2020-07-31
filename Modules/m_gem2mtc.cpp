@@ -464,7 +464,7 @@ void TGEM2MT::make_A( long int siz_, char (*for_)[MAXFORMUNITDT] )
   long int ii;
 
   if( !siz_ )
-  { mtp->An = static_cast<double *>(aObj[ o_mtan ].Free());
+  { mtp->An = static_cast<double *>(aObj[ o_mtan ]->Free());
     return;
   }
   for( ii=0; ii<siz_; ii++ )
@@ -478,7 +478,7 @@ void TGEM2MT::make_A( long int siz_, char (*for_)[MAXFORMUNITDT] )
   ErrorIf( mtp->Nb != TRMults::sm->GetMU()->N, GetName(),
                "Invalid data in mtp->Nb ");
 
-  mtp->An = static_cast<double *>(aObj[ o_mtan ].Alloc( siz_, mtp->Nb, D_ ));
+  mtp->An = static_cast<double *>(aObj[ o_mtan ]->Alloc( siz_, mtp->Nb, D_ ));
   fillValue(mtp->An, 0., (siz_*mtp->Nb) );
   for( ii=0; ii<siz_; ii++ )
      aFo[ii].Stm_line( TRMults::sm->GetMU()->N, mtp->An+ii*TRMults::sm->GetMU()->N,
@@ -779,14 +779,14 @@ int get_ndx_(  int i,  int nO,  int Xplace )
     case o_n1_xdc:  // CH->nDCb
     case o_n1_gam:
     case o_n1_dul:
-    case o_n1_dll: N = aObj[o_mt_xdc].GetN();
-                   arr = static_cast<long int *>(aObj[o_mt_xdc].GetPtr());
+    case o_n1_dll: N = aObj[o_mt_xdc]->GetN();
+                   arr = static_cast<long int *>(aObj[o_mt_xdc]->GetPtr());
                    type = 2;
                    break;
      case o_n1_xph:
      case o_n0_xph: //CH->nPHb
-                    N = aObj[o_mt_xph].GetN();
-                    arr =  static_cast<long int *>(aObj[o_mt_xph].GetPtr());
+                    N = aObj[o_mt_xph]->GetN();
+                    arr =  static_cast<long int *>(aObj[o_mt_xph]->GetPtr());
                     type = 3;
                     break;
     case  o_n0_vps:  // CH->nPSb
@@ -797,8 +797,8 @@ int get_ndx_(  int i,  int nO,  int Xplace )
     case  o_n1_mps:
     case  o_n1_xpa:
     case  o_n1_bps:
-                    N = static_cast<int>(aObj[o_mtchbr].Get(0));
-                    arr =  static_cast<long int *>(aObj[o_mt_xph].GetPtr());
+                    N = static_cast<int>(aObj[o_mtchbr]->Get(0));
+                    arr =  static_cast<long int *>(aObj[o_mt_xph]->GetPtr());
                     type = 4;
                     break;
      case o_n0_bic:  //CH->nICb
@@ -809,8 +809,8 @@ int get_ndx_(  int i,  int nO,  int Xplace )
      case o_n1_rmb:
      case o_n1_uic:
      case o_n1_bsp:
-                    N = aObj[o_mt_xic].GetN();
-                    arr =  static_cast<long int *>(aObj[o_mt_xic].GetPtr());
+                    N = aObj[o_mt_xic]->GetN();
+                    arr =  static_cast<long int *>(aObj[o_mt_xic]->GetPtr());
                     type = 1;
                     break;
   }
@@ -849,9 +849,9 @@ void TGEM2MT::Expr_analyze( int obj_num )
         PRof->ET_translate( o_mwetext, obj_num, 0,
              mupL, 0, pmpL, get_ndx_ );
         if( obj_num == o_mttexpr )
-          rpn[0].GetEquat(  static_cast<char *>(aObj[o_mwetext].GetPtr()) );
+          rpn[0].GetEquat(  static_cast<char *>(aObj[o_mwetext]->GetPtr()) );
         else
-          rpn[1].GetEquat( static_cast<char *>(aObj[o_mwetext].GetPtr()) );
+          rpn[1].GetEquat( static_cast<char *>(aObj[o_mwetext]->GetPtr()) );
 
         if( obj_num == o_mtgexpr )
         { // reset system
@@ -867,7 +867,7 @@ void TGEM2MT::Expr_analyze( int obj_num )
           LinkNode1(-1);
         }
 
-        char *erscan = static_cast<char *>(aObj[o_mwetext/*obj_num*/].GetPtr());
+        char *erscan = static_cast<char *>(aObj[o_mwetext/*obj_num*/]->GetPtr());
         vfMessage(window(), xcpt.title, xcpt.mess);
         CheckEqText(  erscan,
                "E96MSTran: Error in translation of GEM2MT math script: " );
@@ -906,9 +906,9 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
     }
     if( plot )
     {
-        int oldN = aObj[o_mtplline].GetN();
+        int oldN = aObj[o_mtplline]->GetN();
 
-        plot = static_cast<TPlotLine *>(aObj[ o_mtplline ].Alloc( nLn, sizeof(TPlotLine) ));
+        plot = static_cast<TPlotLine *>(aObj[ o_mtplline ]->Alloc( nLn, sizeof(TPlotLine) ));
         for(int ii=0; ii<nLn; ii++ )
         {
             if( ii >= oldN )
@@ -970,7 +970,7 @@ bool TGEM2MT::SaveChartData( jsonui::ChartData* gr )
         mtp->size[0][ii] =  static_cast<float>(gr->region[ii]);
         mtp->size[1][ii] =  static_cast<float>(gr->part[ii]);
     }
-    plot = static_cast<TPlotLine *>(aObj[ o_mtplline].Alloc( gr->getSeriesNumber(), sizeof(TPlotLine)));
+    plot = static_cast<TPlotLine *>(aObj[ o_mtplline]->Alloc( gr->getSeriesNumber(), sizeof(TPlotLine)));
     for(int ii=0; ii<gr->getSeriesNumber(); ii++ )
     {
         plot[ii] = convertor( gr->lineData( ii ) );
@@ -1000,53 +1000,53 @@ void  TGEM2MT::LinkNode0( long int nNode )
   {  BR = na->pNodT0()[nNode];
      DATACH* CH = na->pCSD();
      // static
-     aObj[o_n0_ct].SetPtr( &BR->NodeHandle );   /* s6 */
-     aObj[o_n0_cs].SetPtr( &BR->TK );            /* d17 */
-     aObj[o_n0_ts].SetPtr( &BR->Tm );            /* d2 or d19 */
+     aObj[o_n0_ct]->SetPtr( &BR->NodeHandle );   /* s6 */
+     aObj[o_n0_cs]->SetPtr( &BR->TK );            /* d17 */
+     aObj[o_n0_ts]->SetPtr( &BR->Tm );            /* d2 or d19 */
 #ifndef NODEARRAYLEVEL
-aObj[o_n0_ts].SetM( 2 );
+aObj[o_n0_ts]->SetM( 2 );
 #endif
      //dynamic
-     aObj[o_n0_xdc].SetPtr( BR->xDC );
-     aObj[o_n0_xdc].SetDim( CH->nDCb, 1 );
-     aObj[o_n0_gam].SetPtr( BR->gam );
-     aObj[o_n0_gam].SetDim( CH->nDCb, 1 );
-     aObj[o_n0_xph].SetPtr( BR->xPH );
-     aObj[o_n0_xph].SetDim( CH->nPHb, 1 );
-     aObj[o_n0_vps].SetPtr( BR->vPS );
-     aObj[o_n0_vps].SetDim( CH->nPSb, 1 );
-     aObj[o_n0_mps].SetPtr( BR->mPS );
-     aObj[o_n0_mps].SetDim( CH->nPSb, 1 );
-     aObj[o_n0_bps].SetPtr( BR->bPS );
-     aObj[o_n0_bps].SetDim( CH->nPSb, CH->nICb );
-     aObj[o_n0_xpa].SetPtr( BR->xPA );
-     aObj[o_n0_xpa].SetDim( CH->nPSb, 1 );
-     aObj[o_n0_dul].SetPtr( BR->dul );
-     aObj[o_n0_dul].SetDim( CH->nDCb, 1 );
-     aObj[o_n0_dll].SetPtr( BR->dll );
-     aObj[o_n0_dll].SetDim( CH->nDCb, 1 );
-     aObj[o_n0_bic].SetPtr( BR->bIC );
-     aObj[o_n0_bic].SetDim( CH->nICb, 1 );
-     aObj[o_n0_rmb].SetPtr( BR->rMB );
-     aObj[o_n0_rmb].SetDim( CH->nICb, 1 );
-     aObj[o_n0_uic].SetPtr( BR->uIC );
-     aObj[o_n0_uic].SetDim( CH->nICb, 1 );
-     aObj[o_n0_bsp].SetPtr( BR->bSP );
-     aObj[o_n0_bsp].SetDim( CH->nICb, 1 );
-     aObj[o_n0_aph].SetPtr( BR->aPH );
-     aObj[o_n0_aph].SetDim( CH->nPHb, 1 );
-     aObj[o_n0_amru].SetPtr( BR->amru );
-     aObj[o_n0_amru].SetDim( CH->nPSb, 1 );
-     aObj[o_n0_amrl].SetPtr( BR->amrl );
-     aObj[o_n0_amrl].SetDim( CH->nPSb, 1 );
+     aObj[o_n0_xdc]->SetPtr( BR->xDC );
+     aObj[o_n0_xdc]->SetDim( CH->nDCb, 1 );
+     aObj[o_n0_gam]->SetPtr( BR->gam );
+     aObj[o_n0_gam]->SetDim( CH->nDCb, 1 );
+     aObj[o_n0_xph]->SetPtr( BR->xPH );
+     aObj[o_n0_xph]->SetDim( CH->nPHb, 1 );
+     aObj[o_n0_vps]->SetPtr( BR->vPS );
+     aObj[o_n0_vps]->SetDim( CH->nPSb, 1 );
+     aObj[o_n0_mps]->SetPtr( BR->mPS );
+     aObj[o_n0_mps]->SetDim( CH->nPSb, 1 );
+     aObj[o_n0_bps]->SetPtr( BR->bPS );
+     aObj[o_n0_bps]->SetDim( CH->nPSb, CH->nICb );
+     aObj[o_n0_xpa]->SetPtr( BR->xPA );
+     aObj[o_n0_xpa]->SetDim( CH->nPSb, 1 );
+     aObj[o_n0_dul]->SetPtr( BR->dul );
+     aObj[o_n0_dul]->SetDim( CH->nDCb, 1 );
+     aObj[o_n0_dll]->SetPtr( BR->dll );
+     aObj[o_n0_dll]->SetDim( CH->nDCb, 1 );
+     aObj[o_n0_bic]->SetPtr( BR->bIC );
+     aObj[o_n0_bic]->SetDim( CH->nICb, 1 );
+     aObj[o_n0_rmb]->SetPtr( BR->rMB );
+     aObj[o_n0_rmb]->SetDim( CH->nICb, 1 );
+     aObj[o_n0_uic]->SetPtr( BR->uIC );
+     aObj[o_n0_uic]->SetDim( CH->nICb, 1 );
+     aObj[o_n0_bsp]->SetPtr( BR->bSP );
+     aObj[o_n0_bsp]->SetDim( CH->nICb, 1 );
+     aObj[o_n0_aph]->SetPtr( BR->aPH );
+     aObj[o_n0_aph]->SetDim( CH->nPHb, 1 );
+     aObj[o_n0_amru]->SetPtr( BR->amru );
+     aObj[o_n0_amru]->SetDim( CH->nPSb, 1 );
+     aObj[o_n0_amrl]->SetPtr( BR->amrl );
+     aObj[o_n0_amrl]->SetDim( CH->nPSb, 1 );
      // set data to work arrays
      const TNode* node = na->LinkToNode( nNode, mtp->nC,  na->pNodT0() );
-         double *mps = static_cast<double *>(aObj[o_n0w_mps].GetPtr() );
-         double *vps = static_cast<double *>(aObj[o_n0w_vps].GetPtr() );
-         double *m_t = static_cast<double *>(aObj[o_n0w_m_t].GetPtr() );
-         double *con = static_cast<double *>(aObj[o_n0w_con].GetPtr() );
-         double *mju = static_cast<double *>(aObj[o_n0w_mju].GetPtr() );
-         double *lga = static_cast<double *>(aObj[o_n0w_lga].GetPtr() );
+         double *mps = static_cast<double *>(aObj[o_n0w_mps]->GetPtr() );
+         double *vps = static_cast<double *>(aObj[o_n0w_vps]->GetPtr() );
+         double *m_t = static_cast<double *>(aObj[o_n0w_m_t]->GetPtr() );
+         double *con = static_cast<double *>(aObj[o_n0w_con]->GetPtr() );
+         double *mju = static_cast<double *>(aObj[o_n0w_mju]->GetPtr() );
+         double *lga = static_cast<double *>(aObj[o_n0w_lga]->GetPtr() );
 
          for( ii=0; ii<CH->nPHb; ii++)
          {
@@ -1065,42 +1065,42 @@ aObj[o_n0_ts].SetM( 2 );
   else
   {
      // static
-     aObj[o_n0_ct].SetPtr( nullptr );   /* s6 */
-     aObj[o_n0_cs].SetPtr( nullptr );            /* d17 */
-     aObj[o_n0_ts].SetPtr( nullptr );            /* d19 */
+     aObj[o_n0_ct]->SetPtr( nullptr );   /* s6 */
+     aObj[o_n0_cs]->SetPtr( nullptr );            /* d17 */
+     aObj[o_n0_ts]->SetPtr( nullptr );            /* d19 */
      //dynamic
-     aObj[o_n0_xdc].SetPtr( nullptr );
-     aObj[o_n0_xdc].SetDim( 0, 1 );
-     aObj[o_n0_gam].SetPtr( nullptr );
-     aObj[o_n0_gam].SetDim( 0, 1 );
-     aObj[o_n0_xph].SetPtr( nullptr );
-     aObj[o_n0_xph].SetDim( 0, 1 );
-     aObj[o_n0_vps].SetPtr( nullptr );
-     aObj[o_n0_vps].SetDim( 0, 1 );
-     aObj[o_n0_mps].SetPtr( nullptr );
-     aObj[o_n0_mps].SetDim( 0, 1 );
-     aObj[o_n0_bps].SetPtr( nullptr );
-     aObj[o_n0_bps].SetDim( 0,1 );
-     aObj[o_n0_xpa].SetPtr( nullptr );
-     aObj[o_n0_xpa].SetDim( 0, 1 );
-     aObj[o_n0_dul].SetPtr( nullptr );
-     aObj[o_n0_dul].SetDim( 0, 1 );
-     aObj[o_n0_dll].SetPtr( nullptr );
-     aObj[o_n0_dll].SetDim( 0, 1 );
-     aObj[o_n0_bic].SetPtr( nullptr );
-     aObj[o_n0_bic].SetDim( 0, 1 );
-     aObj[o_n0_rmb].SetPtr( nullptr );
-     aObj[o_n0_rmb].SetDim( 0, 1 );
-     aObj[o_n0_uic].SetPtr( nullptr );
-     aObj[o_n0_uic].SetDim( 0, 1 );
-     aObj[o_n0_bsp].SetPtr( nullptr );
-     aObj[o_n0_bsp].SetDim( 0, 1 );
-     aObj[o_n0_aph].SetPtr( nullptr);
-     aObj[o_n0_aph].SetDim( 0, 1 );
-     aObj[o_n0_amru].SetPtr( nullptr );
-     aObj[o_n0_amru].SetDim( 0, 1 );
-     aObj[o_n0_amrl].SetPtr( nullptr );
-     aObj[o_n0_amrl].SetDim( 0, 1 );
+     aObj[o_n0_xdc]->SetPtr( nullptr );
+     aObj[o_n0_xdc]->SetDim( 0, 1 );
+     aObj[o_n0_gam]->SetPtr( nullptr );
+     aObj[o_n0_gam]->SetDim( 0, 1 );
+     aObj[o_n0_xph]->SetPtr( nullptr );
+     aObj[o_n0_xph]->SetDim( 0, 1 );
+     aObj[o_n0_vps]->SetPtr( nullptr );
+     aObj[o_n0_vps]->SetDim( 0, 1 );
+     aObj[o_n0_mps]->SetPtr( nullptr );
+     aObj[o_n0_mps]->SetDim( 0, 1 );
+     aObj[o_n0_bps]->SetPtr( nullptr );
+     aObj[o_n0_bps]->SetDim( 0,1 );
+     aObj[o_n0_xpa]->SetPtr( nullptr );
+     aObj[o_n0_xpa]->SetDim( 0, 1 );
+     aObj[o_n0_dul]->SetPtr( nullptr );
+     aObj[o_n0_dul]->SetDim( 0, 1 );
+     aObj[o_n0_dll]->SetPtr( nullptr );
+     aObj[o_n0_dll]->SetDim( 0, 1 );
+     aObj[o_n0_bic]->SetPtr( nullptr );
+     aObj[o_n0_bic]->SetDim( 0, 1 );
+     aObj[o_n0_rmb]->SetPtr( nullptr );
+     aObj[o_n0_rmb]->SetDim( 0, 1 );
+     aObj[o_n0_uic]->SetPtr( nullptr );
+     aObj[o_n0_uic]->SetDim( 0, 1 );
+     aObj[o_n0_bsp]->SetPtr( nullptr );
+     aObj[o_n0_bsp]->SetDim( 0, 1 );
+     aObj[o_n0_aph]->SetPtr( nullptr);
+     aObj[o_n0_aph]->SetDim( 0, 1 );
+     aObj[o_n0_amru]->SetPtr( nullptr );
+     aObj[o_n0_amru]->SetDim( 0, 1 );
+     aObj[o_n0_amrl]->SetPtr( nullptr );
+     aObj[o_n0_amrl]->SetDim( 0, 1 );
    }
 }
 
@@ -1116,54 +1116,54 @@ void  TGEM2MT::LinkNode1(  long int nNode )
   {  BR = na->pNodT1()[nNode];
      DATACH* CH = na->pCSD();
      // static
-     aObj[o_n1_ct].SetPtr( &BR->NodeHandle );   /* s6 */
-     aObj[o_n1_cs].SetPtr( &BR->TK );            /* d17 */
-     aObj[o_n1_ts].SetPtr( &BR->Tm );       // d2 or d19
+     aObj[o_n1_ct]->SetPtr( &BR->NodeHandle );   /* s6 */
+     aObj[o_n1_cs]->SetPtr( &BR->TK );            /* d17 */
+     aObj[o_n1_ts]->SetPtr( &BR->Tm );       // d2 or d19
 #ifndef NODEARRAYLEVEL
-aObj[o_n1_ts].SetM( 2 );
+aObj[o_n1_ts]->SetM( 2 );
 #endif
      //dynamic
-     aObj[o_n1_xdc].SetPtr( BR->xDC );
-     aObj[o_n1_xdc].SetDim( CH->nDCb, 1 );
-     aObj[o_n1_gam].SetPtr( BR->gam );
-     aObj[o_n1_gam].SetDim( CH->nDCb, 1 );
-     aObj[o_n1_xph].SetPtr( BR->xPH );
-     aObj[o_n1_xph].SetDim( CH->nPHb, 1 );
-     aObj[o_n1_vps].SetPtr( BR->vPS );
-     aObj[o_n1_vps].SetDim( CH->nPSb, 1 );
-     aObj[o_n1_mps].SetPtr( BR->mPS );
-     aObj[o_n1_mps].SetDim( CH->nPSb, 1 );
-     aObj[o_n1_bps].SetPtr( BR->bPS );
-     aObj[o_n1_bps].SetDim( CH->nPSb, CH->nICb );
-     aObj[o_n1_xpa].SetPtr( BR->xPA );
-     aObj[o_n1_xpa].SetDim( CH->nPSb, 1 );
-     aObj[o_n1_dul].SetPtr( BR->dul );
-     aObj[o_n1_dul].SetDim( CH->nDCb, 1 );
-     aObj[o_n1_dll].SetPtr( BR->dll );
-     aObj[o_n1_dll].SetDim( CH->nDCb, 1 );
-     aObj[o_n1_bic].SetPtr( BR->bIC );
-     aObj[o_n1_bic].SetDim( CH->nICb, 1 );
-     aObj[o_n1_rmb].SetPtr( BR->rMB );
-     aObj[o_n1_rmb].SetDim( CH->nICb, 1 );
-     aObj[o_n1_uic].SetPtr( BR->uIC );
-     aObj[o_n1_uic].SetDim( CH->nICb, 1 );
-     aObj[o_n1_bsp].SetPtr( BR->bSP );
-     aObj[o_n1_bsp].SetDim( CH->nICb, 1 );
-     aObj[o_n1_aph].SetPtr( BR->aPH );
-     aObj[o_n1_aph].SetDim( CH->nPHb, 1 );
-     aObj[o_n1_amru].SetPtr( BR->amru );
-     aObj[o_n1_amru].SetDim( CH->nPSb, 1 );
-     aObj[o_n1_amrl].SetPtr( BR->amrl );
-     aObj[o_n1_amrl].SetDim( CH->nPSb, 1 );
+     aObj[o_n1_xdc]->SetPtr( BR->xDC );
+     aObj[o_n1_xdc]->SetDim( CH->nDCb, 1 );
+     aObj[o_n1_gam]->SetPtr( BR->gam );
+     aObj[o_n1_gam]->SetDim( CH->nDCb, 1 );
+     aObj[o_n1_xph]->SetPtr( BR->xPH );
+     aObj[o_n1_xph]->SetDim( CH->nPHb, 1 );
+     aObj[o_n1_vps]->SetPtr( BR->vPS );
+     aObj[o_n1_vps]->SetDim( CH->nPSb, 1 );
+     aObj[o_n1_mps]->SetPtr( BR->mPS );
+     aObj[o_n1_mps]->SetDim( CH->nPSb, 1 );
+     aObj[o_n1_bps]->SetPtr( BR->bPS );
+     aObj[o_n1_bps]->SetDim( CH->nPSb, CH->nICb );
+     aObj[o_n1_xpa]->SetPtr( BR->xPA );
+     aObj[o_n1_xpa]->SetDim( CH->nPSb, 1 );
+     aObj[o_n1_dul]->SetPtr( BR->dul );
+     aObj[o_n1_dul]->SetDim( CH->nDCb, 1 );
+     aObj[o_n1_dll]->SetPtr( BR->dll );
+     aObj[o_n1_dll]->SetDim( CH->nDCb, 1 );
+     aObj[o_n1_bic]->SetPtr( BR->bIC );
+     aObj[o_n1_bic]->SetDim( CH->nICb, 1 );
+     aObj[o_n1_rmb]->SetPtr( BR->rMB );
+     aObj[o_n1_rmb]->SetDim( CH->nICb, 1 );
+     aObj[o_n1_uic]->SetPtr( BR->uIC );
+     aObj[o_n1_uic]->SetDim( CH->nICb, 1 );
+     aObj[o_n1_bsp]->SetPtr( BR->bSP );
+     aObj[o_n1_bsp]->SetDim( CH->nICb, 1 );
+     aObj[o_n1_aph]->SetPtr( BR->aPH );
+     aObj[o_n1_aph]->SetDim( CH->nPHb, 1 );
+     aObj[o_n1_amru]->SetPtr( BR->amru );
+     aObj[o_n1_amru]->SetDim( CH->nPSb, 1 );
+     aObj[o_n1_amrl]->SetPtr( BR->amrl );
+     aObj[o_n1_amrl]->SetDim( CH->nPSb, 1 );
 
  // set data to work arrays
      const TNode* node = na->LinkToNode( nNode, mtp->nC,  na->pNodT1() );
-     double *mps = static_cast<double *>(aObj[o_n1w_mps].GetPtr());
-     double *vps = static_cast<double *>(aObj[o_n1w_vps].GetPtr());
-     double *m_t = static_cast<double *>(aObj[o_n1w_m_t].GetPtr());
-     double *con = static_cast<double *>(aObj[o_n1w_con].GetPtr());
-     double *mju = static_cast<double *>(aObj[o_n1w_mju].GetPtr());
-     double *lga = static_cast<double *>(aObj[o_n1w_lga].GetPtr());
+     double *mps = static_cast<double *>(aObj[o_n1w_mps]->GetPtr());
+     double *vps = static_cast<double *>(aObj[o_n1w_vps]->GetPtr());
+     double *m_t = static_cast<double *>(aObj[o_n1w_m_t]->GetPtr());
+     double *con = static_cast<double *>(aObj[o_n1w_con]->GetPtr());
+     double *mju = static_cast<double *>(aObj[o_n1w_mju]->GetPtr());
+     double *lga = static_cast<double *>(aObj[o_n1w_lga]->GetPtr());
 
      for( ii=0; ii<CH->nPHb; ii++)
      {
@@ -1182,42 +1182,42 @@ aObj[o_n1_ts].SetM( 2 );
   else
   {
      // static
-     aObj[o_n1_ct].SetPtr( nullptr );   /* s6 */
-     aObj[o_n1_cs].SetPtr( nullptr );            /* d17 */
-     aObj[o_n1_ts].SetPtr( nullptr );            /* d19 */
+     aObj[o_n1_ct]->SetPtr( nullptr );   /* s6 */
+     aObj[o_n1_cs]->SetPtr( nullptr );            /* d17 */
+     aObj[o_n1_ts]->SetPtr( nullptr );            /* d19 */
      //dynamic
-     aObj[o_n1_xdc].SetPtr( nullptr );
-     aObj[o_n1_xdc].SetDim( 0, 1 );
-     aObj[o_n1_gam].SetPtr( nullptr );
-     aObj[o_n1_gam].SetDim( 0, 1 );
-     aObj[o_n1_xph].SetPtr( nullptr );
-     aObj[o_n1_xph].SetDim( 0, 1 );
-     aObj[o_n1_vps].SetPtr( nullptr );
-     aObj[o_n1_vps].SetDim( 0, 1 );
-     aObj[o_n1_mps].SetPtr( nullptr );
-     aObj[o_n1_mps].SetDim( 0, 1 );
-     aObj[o_n1_bps].SetPtr( nullptr );
-     aObj[o_n1_bps].SetDim( 0,1 );
-     aObj[o_n1_xpa].SetPtr( nullptr );
-     aObj[o_n1_xpa].SetDim( 0, 1 );
-     aObj[o_n1_dul].SetPtr( nullptr );
-     aObj[o_n1_dul].SetDim( 0, 1 );
-     aObj[o_n1_dll].SetPtr( nullptr );
-     aObj[o_n1_dll].SetDim( 0, 1 );
-     aObj[o_n1_bic].SetPtr( nullptr );
-     aObj[o_n1_bic].SetDim( 0, 1 );
-     aObj[o_n1_rmb].SetPtr( nullptr );
-     aObj[o_n1_rmb].SetDim( 0, 1 );
-     aObj[o_n1_uic].SetPtr( nullptr );
-     aObj[o_n1_uic].SetDim( 0, 1 );
-     aObj[o_n1_bsp].SetPtr( nullptr );
-     aObj[o_n1_bsp].SetDim( 0, 1 );
-     aObj[o_n1_aph].SetPtr( nullptr);
-     aObj[o_n1_aph].SetDim( 0, 1 );
-     aObj[o_n1_amru].SetPtr( nullptr );
-     aObj[o_n1_amru].SetDim( 0, 1 );
-     aObj[o_n1_amrl].SetPtr( nullptr );
-     aObj[o_n1_amrl].SetDim( 0, 1 );
+     aObj[o_n1_xdc]->SetPtr( nullptr );
+     aObj[o_n1_xdc]->SetDim( 0, 1 );
+     aObj[o_n1_gam]->SetPtr( nullptr );
+     aObj[o_n1_gam]->SetDim( 0, 1 );
+     aObj[o_n1_xph]->SetPtr( nullptr );
+     aObj[o_n1_xph]->SetDim( 0, 1 );
+     aObj[o_n1_vps]->SetPtr( nullptr );
+     aObj[o_n1_vps]->SetDim( 0, 1 );
+     aObj[o_n1_mps]->SetPtr( nullptr );
+     aObj[o_n1_mps]->SetDim( 0, 1 );
+     aObj[o_n1_bps]->SetPtr( nullptr );
+     aObj[o_n1_bps]->SetDim( 0,1 );
+     aObj[o_n1_xpa]->SetPtr( nullptr );
+     aObj[o_n1_xpa]->SetDim( 0, 1 );
+     aObj[o_n1_dul]->SetPtr( nullptr );
+     aObj[o_n1_dul]->SetDim( 0, 1 );
+     aObj[o_n1_dll]->SetPtr( nullptr );
+     aObj[o_n1_dll]->SetDim( 0, 1 );
+     aObj[o_n1_bic]->SetPtr( nullptr );
+     aObj[o_n1_bic]->SetDim( 0, 1 );
+     aObj[o_n1_rmb]->SetPtr( nullptr );
+     aObj[o_n1_rmb]->SetDim( 0, 1 );
+     aObj[o_n1_uic]->SetPtr( nullptr );
+     aObj[o_n1_uic]->SetDim( 0, 1 );
+     aObj[o_n1_bsp]->SetPtr( nullptr );
+     aObj[o_n1_bsp]->SetDim( 0, 1 );
+     aObj[o_n1_aph]->SetPtr( nullptr);
+     aObj[o_n1_aph]->SetDim( 0, 1 );
+     aObj[o_n1_amru]->SetPtr( nullptr );
+     aObj[o_n1_amru]->SetDim( 0, 1 );
+     aObj[o_n1_amrl]->SetPtr( nullptr );
+     aObj[o_n1_amrl]->SetDim( 0, 1 );
 
    }
 }
@@ -1230,52 +1230,52 @@ void  TGEM2MT::LinkCSD(  long int nNode )
   {
      DATACH* CH = na->pCSD();
      // static
-     aObj[o_ch_nicb].SetPtr( &CH->nICb );                     /* l1 */
-     aObj[o_ch_ndcb].SetPtr( &CH->nDCb );                     /* l1 */
-     aObj[o_ch_nphb].SetPtr( &CH->nPHb );                     /* l1 */
-     aObj[o_ch_npsb].SetPtr( &CH->nPSb );                     /* l1 */
+     aObj[o_ch_nicb]->SetPtr( &CH->nICb );                     /* l1 */
+     aObj[o_ch_ndcb]->SetPtr( &CH->nDCb );                     /* l1 */
+     aObj[o_ch_nphb]->SetPtr( &CH->nPHb );                     /* l1 */
+     aObj[o_ch_npsb]->SetPtr( &CH->nPSb );                     /* l1 */
      //dynamic
-     aObj[o_ch_xic].SetPtr( CH->xic );
-     aObj[o_ch_xic].SetDim( CH->nICb, 1 );
-     aObj[o_ch_xdc].SetPtr( CH->xdc );
-     aObj[o_ch_xdc].SetDim( CH->nDCb, 1 );
-     aObj[o_ch_xph].SetPtr( CH->xph );
-     aObj[o_ch_xph].SetDim( CH->nPHb, 1 );
-     aObj[o_ch_a].SetPtr( CH->A );
-     aObj[o_ch_a].SetDim( CH->nDC ,CH->nIC );
-     aObj[o_ch_icmm].SetPtr( CH->ICmm );
-     aObj[o_ch_icmm].SetDim( CH->nIC, 1 );
-     aObj[o_ch_dcmm].SetPtr( CH->DCmm );
-     aObj[o_ch_dcmm].SetDim( CH->nDC, 1 );
-     aObj[o_ch_dd].SetPtr( CH->DD );
-     aObj[o_ch_dd].SetDim( CH->nDCs, na->gridTP());
-//     aObj[o_ch_aalp].SetPtr( CH->Aalp );
-//     aObj[o_ch_aalp].SetDim( CH->nPH, 1 );
+     aObj[o_ch_xic]->SetPtr( CH->xic );
+     aObj[o_ch_xic]->SetDim( CH->nICb, 1 );
+     aObj[o_ch_xdc]->SetPtr( CH->xdc );
+     aObj[o_ch_xdc]->SetDim( CH->nDCb, 1 );
+     aObj[o_ch_xph]->SetPtr( CH->xph );
+     aObj[o_ch_xph]->SetDim( CH->nPHb, 1 );
+     aObj[o_ch_a]->SetPtr( CH->A );
+     aObj[o_ch_a]->SetDim( CH->nDC ,CH->nIC );
+     aObj[o_ch_icmm]->SetPtr( CH->ICmm );
+     aObj[o_ch_icmm]->SetDim( CH->nIC, 1 );
+     aObj[o_ch_dcmm]->SetPtr( CH->DCmm );
+     aObj[o_ch_dcmm]->SetDim( CH->nDC, 1 );
+     aObj[o_ch_dd]->SetPtr( CH->DD );
+     aObj[o_ch_dd]->SetDim( CH->nDCs, na->gridTP());
+//     aObj[o_ch_aalp]->SetPtr( CH->Aalp );
+//     aObj[o_ch_aalp]->SetDim( CH->nPH, 1 );
   }
   else
   {
      // static
-     aObj[o_ch_nicb].SetPtr( nullptr );                     /* i1 */
-     aObj[o_ch_ndcb].SetPtr( nullptr );                     /* i1 */
-     aObj[o_ch_nphb].SetPtr( nullptr );                     /* i1 */
-     aObj[o_ch_npsb].SetPtr( nullptr );                     /* i1 */
+     aObj[o_ch_nicb]->SetPtr( nullptr );                     /* i1 */
+     aObj[o_ch_ndcb]->SetPtr( nullptr );                     /* i1 */
+     aObj[o_ch_nphb]->SetPtr( nullptr );                     /* i1 */
+     aObj[o_ch_npsb]->SetPtr( nullptr );                     /* i1 */
      //dynamic
-     aObj[o_ch_xic].SetPtr( nullptr );
-     aObj[o_ch_xic].SetDim( 0, 1 );
-     aObj[o_ch_xdc].SetPtr( nullptr );
-     aObj[o_ch_xdc].SetDim( 0, 1 );
-     aObj[o_ch_xph].SetPtr( nullptr );
-     aObj[o_ch_xph].SetDim( 0, 1 );
-     aObj[o_ch_a].SetPtr( nullptr );
-     aObj[o_ch_a].SetDim( 0 ,1 );
-     aObj[o_ch_icmm].SetPtr( nullptr );
-     aObj[o_ch_icmm].SetDim( 0, 1 );
-     aObj[o_ch_dcmm].SetPtr( nullptr );
-     aObj[o_ch_dcmm].SetDim( 0, 1 );
-     aObj[o_ch_dd].SetPtr( nullptr );
-     aObj[o_ch_dd].SetDim( 0, 1 );
-     aObj[o_ch_aalp].SetPtr( nullptr);
-     aObj[o_ch_aalp].SetDim( 0, 1 );
+     aObj[o_ch_xic]->SetPtr( nullptr );
+     aObj[o_ch_xic]->SetDim( 0, 1 );
+     aObj[o_ch_xdc]->SetPtr( nullptr );
+     aObj[o_ch_xdc]->SetDim( 0, 1 );
+     aObj[o_ch_xph]->SetPtr( nullptr );
+     aObj[o_ch_xph]->SetDim( 0, 1 );
+     aObj[o_ch_a]->SetPtr( nullptr );
+     aObj[o_ch_a]->SetDim( 0 ,1 );
+     aObj[o_ch_icmm]->SetPtr( nullptr );
+     aObj[o_ch_icmm]->SetDim( 0, 1 );
+     aObj[o_ch_dcmm]->SetPtr( nullptr );
+     aObj[o_ch_dcmm]->SetDim( 0, 1 );
+     aObj[o_ch_dd]->SetPtr( nullptr );
+     aObj[o_ch_dd]->SetDim( 0, 1 );
+     aObj[o_ch_aalp]->SetPtr( nullptr);
+     aObj[o_ch_aalp]->SetDim( 0, 1 );
   }
 }
 
@@ -1283,34 +1283,34 @@ void  TGEM2MT::LinkCSD(  long int nNode )
 void  TGEM2MT::allocNodeWork()
 {
   DATACH* CH = na->pCSD();
-  aObj[o_n0w_mps].Alloc( CH->nPHb, 1, D_);
-  aObj[o_n1w_mps].Alloc( CH->nPHb, 1, D_);
-  aObj[o_n0w_vps].Alloc( CH->nPHb, 1, D_);
-  aObj[o_n1w_vps].Alloc( CH->nPHb, 1, D_);
-  aObj[o_n0w_m_t].Alloc( CH->nICb, 1, D_);
-  aObj[o_n1w_m_t].Alloc( CH->nICb, 1, D_);
-  aObj[o_n0w_con].Alloc( CH->nDCb, 1, D_);
-  aObj[o_n1w_con].Alloc( CH->nDCb, 1, D_);
-  aObj[o_n0w_mju].Alloc( CH->nDCb, 1, D_);
-  aObj[o_n1w_mju].Alloc( CH->nDCb, 1, D_);
-  aObj[o_n0w_lga].Alloc( CH->nDCb, 1, D_);
-  aObj[o_n1w_lga].Alloc( CH->nDCb, 1, D_);
+  aObj[o_n0w_mps]->Alloc( CH->nPHb, 1, D_);
+  aObj[o_n1w_mps]->Alloc( CH->nPHb, 1, D_);
+  aObj[o_n0w_vps]->Alloc( CH->nPHb, 1, D_);
+  aObj[o_n1w_vps]->Alloc( CH->nPHb, 1, D_);
+  aObj[o_n0w_m_t]->Alloc( CH->nICb, 1, D_);
+  aObj[o_n1w_m_t]->Alloc( CH->nICb, 1, D_);
+  aObj[o_n0w_con]->Alloc( CH->nDCb, 1, D_);
+  aObj[o_n1w_con]->Alloc( CH->nDCb, 1, D_);
+  aObj[o_n0w_mju]->Alloc( CH->nDCb, 1, D_);
+  aObj[o_n1w_mju]->Alloc( CH->nDCb, 1, D_);
+  aObj[o_n0w_lga]->Alloc( CH->nDCb, 1, D_);
+  aObj[o_n1w_lga]->Alloc( CH->nDCb, 1, D_);
 }
 
 void  TGEM2MT::freeNodeWork()
 {
-  aObj[o_n0w_mps].Free();
-  aObj[o_n1w_mps].Free();
-  aObj[o_n0w_vps].Free();
-  aObj[o_n1w_vps].Free();
-  aObj[o_n0w_m_t].Free();
-  aObj[o_n1w_m_t].Free();
-  aObj[o_n0w_con].Free();
-  aObj[o_n1w_con].Free();
-  aObj[o_n0w_mju].Free();
-  aObj[o_n1w_mju].Free();
-  aObj[o_n0w_lga].Free();
-  aObj[o_n1w_lga].Free();
+  aObj[o_n0w_mps]->Free();
+  aObj[o_n1w_mps]->Free();
+  aObj[o_n0w_vps]->Free();
+  aObj[o_n1w_vps]->Free();
+  aObj[o_n0w_m_t]->Free();
+  aObj[o_n1w_m_t]->Free();
+  aObj[o_n0w_con]->Free();
+  aObj[o_n1w_con]->Free();
+  aObj[o_n0w_mju]->Free();
+  aObj[o_n1w_mju]->Free();
+  aObj[o_n0w_lga]->Free();
+  aObj[o_n1w_lga]->Free();
 }
 
 

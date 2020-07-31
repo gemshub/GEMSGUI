@@ -313,7 +313,7 @@ TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
                  dat_str = string(strbuf.p);
                  break;
       case object_r:
-                 dat_str = aObj[fmt.size].GetStringEmpty( fmt.i, fmt.j );
+                 dat_str = aObj[fmt.size]->GetStringEmpty( fmt.i, fmt.j );
                  break;
 
   }
@@ -326,7 +326,7 @@ TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
       }
   }
   else if(  dt.objNum > 0  )
-      aObj[dt.objNum].SetString( dat_str.c_str(), dt.i, dt.j );
+      aObj[dt.objNum]->SetString( dat_str.c_str(), dt.i, dt.j );
 
 }
 

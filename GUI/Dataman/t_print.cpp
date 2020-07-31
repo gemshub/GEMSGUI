@@ -36,8 +36,8 @@ TPrintData::TPrintData(const char *sd_key,
   uint o_prn_= aObj.Find("prn");
   uint o_ii_ = aObj.Find("ii");
 
-  aObj[o_prn_].SetPtr(&prr);
-  aObj[o_ii_].SetPtr(&iir);
+  aObj[o_prn_]->SetPtr(&prr);
+  aObj[o_ii_]->SetPtr(&iir);
 
   while( *input )
   {
@@ -53,8 +53,8 @@ TPrintData::TPrintData(const char *sd_key,
             code = getToken( i, j );
             if( code >=0 )
             {
-              count = aObj[code].GetN();
-              if( aObj[code].IsNull() )
+              count = aObj[code]->GetN();
+              if( aObj[code]->IsNull() )
                count = 0;
             }
             else
@@ -465,7 +465,7 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
               else
                if( fmt.type != 's' && fmt.type != 'c' )
                {
-                   switch ( aObj[dt.data].GetType() )
+                   switch ( aObj[dt.data]->GetType() )
                    {
                     case F_: break;
                     case D_: fmt.long_ = 'l'; break;
@@ -474,8 +474,8 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                }
               int scalar = 0, Ndim, Mdim;
               int count = 1;
-              Mdim = aObj[dt.data].GetM();
-              Ndim = aObj[dt.data].GetN();
+              Mdim = aObj[dt.data]->GetM();
+              Ndim = aObj[dt.data]->GetN();
               if( dt.is_all )
                   count = Mdim;
               if( Mdim * Ndim == 1 )
@@ -487,22 +487,22 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                if( dt.is_label )
                { // workaround - skip printing DOD labels and data
                  // if dynamic object is not allocated
-                 if( !aObj[dt.data].IsNull() )
+                 if( !aObj[dt.data]->IsNull() )
                     sprintf( strbuf, format.c_str(),
-                        aObj[dt.data].GetKeywd() );
+                        aObj[dt.data]->GetKeywd() );
                }
                else
                {
                  if( fmt.type == 's' || fmt.type == 'c' )
                  {
                    string str_data;
-                   if( dt.end_sub > 0 && ( aObj[dt.data].GetType() >= 0 ) )
+                   if( dt.end_sub > 0 && ( aObj[dt.data]->GetType() >= 0 ) )
                    { // substring only for string type
-                    str_data = aObj[dt.data].GetString( ind, dt.index_j );
+                    str_data = aObj[dt.data]->GetString( ind, dt.index_j );
                     str_data = str_data.substr( dt.bg_sub, dt.end_sub );
                     }
                    else
-                     str_data = aObj[dt.data].GetStringEmpty( ind, dt.index_j );
+                     str_data = aObj[dt.data]->GetStringEmpty( ind, dt.index_j );
                    if( fmt.type == 's' )
                     sprintf( strbuf, format.c_str(), str_data.c_str() );
                    else //c
@@ -511,20 +511,20 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                   }
                   else // float or double data
                   {
-                     if( !aObj[dt.data].IsNull() ) // workaround - print
+                     if( !aObj[dt.data]->IsNull() ) // workaround - print
                      {  // only static or allocated objects !
                         int indx;
                         if( scalar )
                            indx = 0;
                         else indx = ind;
-                        if( aObj[dt.data].IsEmpty( indx, dt.index_j) )
+                        if( aObj[dt.data]->IsEmpty( indx, dt.index_j) )
                         {
                           char oldtype = fmt.type;
                           fmt.type = 's';
                           sprintf( strbuf, format.c_str(), emptiness.c_str() ); // S_EMPTY );
                           fmt.type = oldtype;
                         }
-                         else sprintf( strbuf, format.c_str(), aObj[dt.data].Get( indx, dt.index_j) );
+                         else sprintf( strbuf, format.c_str(), aObj[dt.data]->Get( indx, dt.index_j) );
                      }
                      else
                      {

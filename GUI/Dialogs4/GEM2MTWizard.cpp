@@ -992,7 +992,7 @@ void GEM2MTWizard::changePage( int nPage )
     if( cPage <= 0 )
      lDesc->setText( "Static Objects List ");
     else
-      lDesc->setText( aObj[pgData[nPage].nObj].GetDescription(0,0).c_str());
+      lDesc->setText( aObj[pgData[nPage].nObj]->GetDescription(0,0).c_str());
 }
 
 void GEM2MTWizard::changeTable(const QItemSelection & selected, const QItemSelection & deselected)
@@ -1035,7 +1035,7 @@ void GEM2MTWizard::tableInsertRow( int nO, int ndx, const char * andName )
      }
        else
         {
-           scriptData.push_back(  scriptSetupData( cPage, nO, aObj[nO].GetKeywd(),
+           scriptData.push_back(  scriptSetupData( cPage, nO, aObj[nO]->GetKeywd(),
              ndx, andName, "" ));
        }
      listUpdate();
@@ -1166,7 +1166,7 @@ void GEM2MTWizard::setupPTArrays()
    //init P array
    getPdata( Pai );
    nP = getNpoints( Pai );
-   arP = static_cast<double *>(aObj[ o_mtpval].Alloc( nP, 1, D_));
+   arP = static_cast<double *>(aObj[ o_mtpval]->Alloc( nP, 1, D_));
    cP = Pai[START_];
    for( ii=0; ii<nP; ii++ )
    {
@@ -1177,7 +1177,7 @@ void GEM2MTWizard::setupPTArrays()
    //init T array
    getTdata( Tai );
    nT = getNpoints( Tai );
-   arT = static_cast<double *>( aObj[ o_mtpval].Alloc( nT, 1, D_) );
+   arT = static_cast<double *>( aObj[ o_mtpval]->Alloc( nT, 1, D_) );
    cT = Tai[START_];
    for( ii=0; ii<nT; ii++ )
    {
@@ -1195,8 +1195,8 @@ void GEM2MTWizard::definePArray()
 
    nP = pPPoints->value();
   //init P array
-   nPs = aObj[ o_mtpval].GetN();
-   arP = static_cast<double *>(aObj[ o_mtpval].Alloc( nP, 1, D_));
+   nPs = aObj[ o_mtpval]->GetN();
+   arP = static_cast<double *>(aObj[ o_mtpval]->Alloc( nP, 1, D_));
 
    if( nPs==1 && nP>1 )
    {
@@ -1263,8 +1263,8 @@ void GEM2MTWizard::defineTArray()
        nT = pTPoints->value();
 
    //init T array
-   nTs =aObj[ o_mttval].GetN();
-   arT = static_cast<double *>(aObj[ o_mttval].Alloc( nT, 1, D_));
+   nTs =aObj[ o_mttval]->GetN();
+   arT = static_cast<double *>(aObj[ o_mttval]->Alloc( nT, 1, D_));
 
    if( nTs == 1 && nT >1 )
    {

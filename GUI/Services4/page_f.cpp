@@ -206,7 +206,7 @@ PageInfo::load( TConfig& cnf )
             throw TError(obj.c_str(), "Object name not found");
         else
         {
-            TObject & rO = aObj[ind];
+            TObject & rO = *aObj[ind];
 
             bool label = mode[0] == '+';
             eEdit edit = eEdit(mode[2]);
@@ -301,7 +301,7 @@ FieldInfo::FieldInfo(const PageInfo & pi, TObject & rO, int anO,
 FieldInfo::FieldInfo( int anO, eFieldType fT, int np, bool lb,
            ePlaceMode pl, eEdit e, eShowType sT, int w, int h):
         rPageInfo(*aWinInfo[0]->aPageInfo[0]), // for internal using in TreeList
-        pObj(&aObj[anO]), nO(anO),
+        pObj(aObj[anO].get()), nO(anO),
         fType(fT), npos(np),
         label(lb), place(pl), edit(e), showType(sT), maxN(h), maxM(w)
 {
@@ -369,7 +369,7 @@ FieldInfo::fromDAT(istream & is)
     if (sg[0] != FSigEND[0] || sg[1] != FSigEND[1])
         throw TError(SigERROR, "EndField");
 
-    pObj = &aObj[nO];
+    pObj = aObj[nO].get();
 }
 //--------------------- End of page_f.cpp ---------------------------
 

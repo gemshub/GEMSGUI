@@ -1000,8 +1000,8 @@ void TObject::ofTXT( fstream& of )
 int
 TObjList::Find(const char* s)
 {
-    for( uint ii=0; ii< GetCount(); ii++ )
-        if( strcmp(s, elem(ii).GetKeywd() )==0 )
+    for( size_t ii=0; ii< size(); ii++ )
+        if( strcmp(s, at(ii)->GetKeywd() )==0 )
             return ii;
 
     return -1;
@@ -1011,7 +1011,7 @@ const int N_OBJECTS = 1000;
 
 // default DOD list configuration
 TObjList::TObjList():
-        TIArrayF<TObject>(N_OBJECTS, 30 )
+        std::vector<std::shared_ptr<TObject>>()
 {
     //  load( "viz_od.ini", MINVISOROBJECTS );
 }
@@ -1019,7 +1019,7 @@ TObjList::TObjList():
 // Reads DOD list configuration from file
 
 TObjList::TObjList(istream& f):
-        TIArrayF<TObject>(N_OBJECTS, 30 )
+        std::vector<std::shared_ptr<TObject>>()
 {
     fromDAT(f);
 }
@@ -1030,13 +1030,13 @@ void
 TObjList::toDAT(ostream& f)
 {
     double Value = 0.0;
-    auto nObj = GetCount();
+    auto nObj = size();
 
     f << '@';
     f.write(reinterpret_cast<char*>(&Value), sizeof(double) );
     f.write(reinterpret_cast<char*>(&nObj), sizeof(int) );
-    for(uint ii=0; ii<nObj; ii++)
-        elem(ii).ToCFG( f );
+    for(size_t ii=0; ii<nObj; ii++)
+        at(ii)->ToCFG( f );
 }
 
 // Reads DOD configuration from config file
@@ -1045,13 +1045,13 @@ TObjList::fromDAT(istream& f)
 {
     double Value;	// not used
 
-    Clear();
+    clear();
     int nObj;
     f.get(); // '@' marker
     f.read(reinterpret_cast<char*>(&Value), sizeof(double) );
     f.read(reinterpret_cast<char*>(&nObj), sizeof(int) );
     for(int ii=0; ii<nObj; ii++)
-        Add( new TObject(f) );
+        push_back( std::make_shared<TObject>(f) );
 }
 
 
@@ -1114,7 +1114,7 @@ TObjList::load(const char* f_obj, int /* maxN */ )
                        "TObject:E18 This data object is already defined");
         }
         // cout <<  astr[0].c_str() <<  "  " << objectType<< endl;
-        Add( new TObject(astr[0].c_str(), objectType, abs(N), M, N<0,
+        push_back( std::make_shared<TObject>(astr[0].c_str(), objectType, abs(N), M, N<0,
 		     indexationCode, astr[5]) );
         par = cnf.getNext();
     }

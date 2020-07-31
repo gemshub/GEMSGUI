@@ -311,69 +311,69 @@ void TProfil::ods_link( int )
      mtparm->ods_link();
      syst->ods_link();
      multi->ods_link();*/
-    aObj[o_paver].SetPtr( pa.ver );
-    aObj[o_papc].SetPtr( &(pa.p.PC) );
-    aObj[o_paprd].SetPtr(&(pa.p.PD) );
-    aObj[o_padpwt].SetPtr( &(pa.p.DP));
-    aObj[o_papllg].SetPtr( &(pa.p.PLLG));
-    aObj[o_pape].SetPtr( &(pa.p.PE) );
-    aObj[o_paiim].SetPtr( &(pa.p.IIM) );
-    aObj[o_padg].SetPtr( &(pa.p.DG) );
+    aObj[o_paver]->SetPtr( pa.ver );
+    aObj[o_papc]->SetPtr( &(pa.p.PC) );
+    aObj[o_paprd]->SetPtr(&(pa.p.PD) );
+    aObj[o_padpwt]->SetPtr( &(pa.p.DP));
+    aObj[o_papllg]->SetPtr( &(pa.p.PLLG));
+    aObj[o_pape]->SetPtr( &(pa.p.PE) );
+    aObj[o_paiim]->SetPtr( &(pa.p.IIM) );
+    aObj[o_padg]->SetPtr( &(pa.p.DG) );
     if( pa.p.DG <1 )                     // SD 07/05/2010
         pa.p.DG = 1e4;
-    aObj[o_padhb].SetPtr( &(pa.p.DHB) );
-    aObj[o_pads].SetPtr( &(pa.p.DS) );
-    aObj[o_padk].SetPtr( &(pa.p.DK) );
-    aObj[ o_padf].SetPtr(   &(pa.p.DF));
-    aObj[ o_padfy].SetPtr(  &(pa.p.DFYw));
-    aObj[ o_padb].SetPtr(   &(pa.p.DB));
-    aObj[ o_paag].SetPtr(   &(pa.p.AG));
-    aObj[ o_padgc].SetPtr(  &(pa.p.DGC));
-    aObj[ o_pagan].SetPtr(  &(pa.p.GAR));
-    aObj[ o_padns].SetPtr(  &(pa.p.DNS));
-    aObj[ o_paxmin].SetPtr( &(pa.p.XwMin));
-    aObj[ o_paeps].SetPtr(  &(pa.p.EPS));
-    aObj[ o_padkin].SetPtr( &(pa.p.DKIN));
-    aObj[ o_patprn].SetPtr( pa.p.tprn );
-    aObj[ o_padcpct].SetPtr(pa.DCpct );
-    aObj[ o_padcpdc].SetPtr(pa.DCpdc );
-    aObj[ o_parepct].SetPtr(pa.REpct );
-    aObj[ o_parepdc].SetPtr(pa.REpdc );
-    aObj[ o_parepvc].SetPtr(pa.REpvc );
-    aObj[ o_parppdc].SetPtr(pa.RPpdc );
-    aObj[ o_parppvc].SetPtr(pa.RPpvc );
-    aObj[ o_paphsol_t].SetPtr(pa.PHsol_t );
-    aObj[ o_paphpvc].SetPtr(pa.PHpvc );
-    aObj[ o_pamupmv].SetPtr(pa.MUpmv );
-    aObj[ o_patppdc].SetPtr(pa.TPpdc );
-    aObj[ o_patppvc].SetPtr(pa.TPpvc );
-    aObj[ o_pasyppc].SetPtr(pa.SYppc );
-    aObj[ o_pasypvc].SetPtr(pa.SYpvc );
-    aObj[ o_pautppc].SetPtr(pa.UTppc );
-    aObj[ o_papepsc].SetPtr(pa.PEpsc );
-    aObj[ o_papepvc].SetPtr(pa.PEpvc );
-    aObj[ o_pagdcode].SetPtr(&pa.GDcode[0][0] );
-    aObj[ o_pagdpsc].SetPtr(pa.GDpsc );
-    aObj[ o_pagdpcc].SetPtr(&pa.GDpcc[0][0] );
-    aObj[ o_pagdptc].SetPtr(pa.GDptc );
-    aObj[ o_parpnptv].SetPtr(&pa.NP );
-    aObj[ o_parpmode].SetPtr(&pa.Mode );
-    aObj[ o_partpi].SetPtr(   pa.Pi );
-    aObj[ o_partti].SetPtr(   pa.Ti );
-    aObj[ o_partvi].SetPtr(   pa.Vi );
-    aObj[ o_padrprtr].SetPtr(&pa.DRpst );
-    aObj[ o_papmnum].SetPtr( &pa.lowPosNum );
+    aObj[o_padhb]->SetPtr( &(pa.p.DHB) );
+    aObj[o_pads]->SetPtr( &(pa.p.DS) );
+    aObj[o_padk]->SetPtr( &(pa.p.DK) );
+    aObj[ o_padf]->SetPtr(   &(pa.p.DF));
+    aObj[ o_padfy]->SetPtr(  &(pa.p.DFYw));
+    aObj[ o_padb]->SetPtr(   &(pa.p.DB));
+    aObj[ o_paag]->SetPtr(   &(pa.p.AG));
+    aObj[ o_padgc]->SetPtr(  &(pa.p.DGC));
+    aObj[ o_pagan]->SetPtr(  &(pa.p.GAR));
+    aObj[ o_padns]->SetPtr(  &(pa.p.DNS));
+    aObj[ o_paxmin]->SetPtr( &(pa.p.XwMin));
+    aObj[ o_paeps]->SetPtr(  &(pa.p.EPS));
+    aObj[ o_padkin]->SetPtr( &(pa.p.DKIN));
+    aObj[ o_patprn]->SetPtr( pa.p.tprn );
+    aObj[ o_padcpct]->SetPtr(pa.DCpct );
+    aObj[ o_padcpdc]->SetPtr(pa.DCpdc );
+    aObj[ o_parepct]->SetPtr(pa.REpct );
+    aObj[ o_parepdc]->SetPtr(pa.REpdc );
+    aObj[ o_parepvc]->SetPtr(pa.REpvc );
+    aObj[ o_parppdc]->SetPtr(pa.RPpdc );
+    aObj[ o_parppvc]->SetPtr(pa.RPpvc );
+    aObj[ o_paphsol_t]->SetPtr(pa.PHsol_t );
+    aObj[ o_paphpvc]->SetPtr(pa.PHpvc );
+    aObj[ o_pamupmv]->SetPtr(pa.MUpmv );
+    aObj[ o_patppdc]->SetPtr(pa.TPpdc );
+    aObj[ o_patppvc]->SetPtr(pa.TPpvc );
+    aObj[ o_pasyppc]->SetPtr(pa.SYppc );
+    aObj[ o_pasypvc]->SetPtr(pa.SYpvc );
+    aObj[ o_pautppc]->SetPtr(pa.UTppc );
+    aObj[ o_papepsc]->SetPtr(pa.PEpsc );
+    aObj[ o_papepvc]->SetPtr(pa.PEpvc );
+    aObj[ o_pagdcode]->SetPtr(&pa.GDcode[0][0] );
+    aObj[ o_pagdpsc]->SetPtr(pa.GDpsc );
+    aObj[ o_pagdpcc]->SetPtr(&pa.GDpcc[0][0] );
+    aObj[ o_pagdptc]->SetPtr(pa.GDptc );
+    aObj[ o_parpnptv]->SetPtr(&pa.NP );
+    aObj[ o_parpmode]->SetPtr(&pa.Mode );
+    aObj[ o_partpi]->SetPtr(   pa.Pi );
+    aObj[ o_partti]->SetPtr(   pa.Ti );
+    aObj[ o_partvi]->SetPtr(   pa.Vi );
+    aObj[ o_padrprtr]->SetPtr(&pa.DRpst );
+    aObj[ o_papmnum]->SetPtr( &pa.lowPosNum );
 
-    aObj[ o_pabcpc].SetPtr(  pa.BCpc );
-    aObj[ o_pagdpgw].SetPtr(  pa.GDpgw );
-    aObj[ o_pasdref].SetPtr(  pa.SDrefKey );
+    aObj[ o_pabcpc]->SetPtr(  pa.BCpc );
+    aObj[ o_pagdpgw]->SetPtr(  pa.GDpgw );
+    aObj[ o_pasdref]->SetPtr(  pa.SDrefKey );
 
-    aObj[ o_spppar].SetPtr(  static_cast<void *>(&pa) );
-    aObj[ o_spppar].SetM( sizeof( SPP_SETTING ) );
-aObj[ o_sptext].SetPtr(  internalBufer );
-    //   aObj[ o_sppconst].SetPtr( sc_ );
+    aObj[ o_spppar]->SetPtr(  static_cast<void *>(&pa) );
+    aObj[ o_spppar]->SetM( sizeof( SPP_SETTING ) );
+aObj[ o_sptext]->SetPtr(  internalBufer );
+    //   aObj[ o_sppconst]->SetPtr( sc_ );
     //   ob[o_sppconst].dim_M = sizeof( SPP_CONST );
-    //   aObj[ o_sppdatac].SetPtr( &nQ );
+    //   aObj[ o_sppdatac]->SetPtr( &nQ );
     //   ob[o_sppdatac].dim_M = sizeof( DATACOUNT );
 }
 
@@ -381,8 +381,8 @@ aObj[ o_sptext].SetPtr(  internalBufer );
 
 void TProfil::dyn_set(int )
 {
-    pa.p.tprn= static_cast<char *>(aObj[o_patprn].GetPtr());
-internalBufer = static_cast<char *>(aObj[ o_sptext].GetPtr());
+    pa.p.tprn= static_cast<char *>(aObj[o_patprn]->GetPtr());
+internalBufer = static_cast<char *>(aObj[ o_sptext]->GetPtr());
     if( rmults ) rmults->dyn_set();
     if( mtparm ) mtparm->dyn_set();
     if( syst ) syst->dyn_set();
@@ -392,8 +392,8 @@ internalBufer = static_cast<char *>(aObj[ o_sptext].GetPtr());
 // free dynamic memory in objects and values
 void TProfil::dyn_kill(int )
 {
-    pa.p.tprn = static_cast<char *>(aObj[o_patprn].Free());
-internalBufer = static_cast<char *>(aObj[ o_sptext].Free());
+    pa.p.tprn = static_cast<char *>(aObj[o_patprn]->Free());
+internalBufer = static_cast<char *>(aObj[ o_sptext]->Free());
     if( rmults ) rmults->dyn_kill();
     if( mtparm ) mtparm->dyn_kill();
     if( syst ) syst->dyn_kill();
@@ -478,10 +478,10 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
         	return;
 
       //internal objects for lookup arrays data
-      arT = static_cast<double *>(aObj[ o_w_tval].GetPtr());
-      nTp_ = aObj[ o_w_tval].GetN();
-      arP = static_cast<double *>(aObj[ o_w_pval].GetPtr());
-      nPp_ = aObj[ o_w_pval].GetN();
+      arT = static_cast<double *>(aObj[ o_w_tval]->GetPtr());
+      nTp_ = aObj[ o_w_tval]->GetN();
+      arP = static_cast<double *>(aObj[ o_w_pval]->GetPtr());
+      nPp_ = aObj[ o_w_pval]->GetN();
 
 
       na = new TNodeArrayGUI( 1, multi );

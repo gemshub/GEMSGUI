@@ -209,11 +209,11 @@ QVariant TObjectModel::data( const QModelIndex& index, int role ) const
           case Qt::EditRole:
                if( nO == -1 )
                    return  QString("");
-            return  QString::fromLatin1( visualizeEmpty( aObj[nO].GetStringEmpty( iN, iM ) ).c_str() );
+            return  QString::fromLatin1( visualizeEmpty( aObj[nO]->GetStringEmpty( iN, iM ) ).c_str() );
           case Qt::ToolTipRole:
           case Qt::StatusTipRole:
                if( nO >= 0 )
-                     return  getDescription(&aObj[nO], iN, iM );
+                     return  getDescription(aObj[nO].get(), iN, iM );
                break;
           case Qt::TextAlignmentRole:
                if(ii < 0 )
@@ -247,9 +247,9 @@ bool TObjectModel::setData( const QModelIndex &index, const QVariant &value, int
         std::string txt = QVariant(value).toString().toStdString();
 	
               if( txt == emptiness /*|| txt == short_emptiness*/ )
-	      aObj[nO].SetString( S_EMPTY, iN, iM );
+          aObj[nO]->SetString( S_EMPTY, iN, iM );
 	    else
-	      aObj[nO].SetString( txt.c_str(), iN, iM );
+          aObj[nO]->SetString( txt.c_str(), iN, iM );
 	    emit dataChanged(index, index);
 	  }	  
 	 return true;
@@ -294,18 +294,18 @@ QVariant TObjectModel::headerData( int section, Qt::Orientation orientation, int
               break;
           if( orientation == Qt::Horizontal )
           {
-           if( flds[ii].label && aObj[nO].GetNS() > 1  )
-           {  if(aObj[nO].GetMS() > 1 )
-                         return QString( "%1[%2]").arg(aObj[nO].GetKeywd()).arg(iM);
+           if( flds[ii].label && aObj[nO]->GetNS() > 1  )
+           {  if(aObj[nO]->GetMS() > 1 )
+                         return QString( "%1[%2]").arg(aObj[nO]->GetKeywd()).arg(iM);
                  else
-                         return aObj[nO].GetKeywd();
+                         return aObj[nO]->GetKeywd();
            }
           }
           else
-          {   if( flds[ii].label && iN == 0  && aObj[nO].GetNS() == 1) // only line objects
-                 return aObj[nO].GetKeywd();
+          {   if( flds[ii].label && iN == 0  && aObj[nO]->GetNS() == 1) // only line objects
+                 return aObj[nO]->GetKeywd();
               else
-                  if( aObj[nO].GetNS() > 1 ) // only multi
+                  if( aObj[nO]->GetNS() > 1 ) // only multi
                        return QVariant(iN);
            }
            break;
@@ -314,7 +314,7 @@ QVariant TObjectModel::headerData( int section, Qt::Orientation orientation, int
               return QSize(0,0);
            if( orientation == Qt::Horizontal )
            {
-              if( flds[ii].label && aObj[nO].GetNS() > 1 /*&& iM == 0*/ )
+              if( flds[ii].label && aObj[nO]->GetNS() > 1 /*&& iM == 0*/ )
                  return QSize( wdF(flds[ii].fType, flds[ii].npos, flds[ii].edit),
                                   htF(flds[ii].fType, 1 )+4 );
               else
@@ -322,9 +322,9 @@ QVariant TObjectModel::headerData( int section, Qt::Orientation orientation, int
            }
            else //if( orientation == Qt::Vertical )
                   {
-                      if( flds[ii].label && iN == 0  && aObj[nO].GetNS() == 1) // only line objects
+                      if( flds[ii].label && iN == 0  && aObj[nO]->GetNS() == 1) // only line objects
                          return QSize( wdF(ftString, 7, eNo ), htF(flds[ii].fType, flds[ii].maxN));
-                      else  if( aObj[nO].GetNS() > 1 ) // only multi
+                      else  if( aObj[nO]->GetNS() > 1 ) // only multi
                                 return QSize( wdF(ftString, 4, eNo ), htF(flds[ii].fType, flds[ii].maxN));
                             else
                                 return QSize( 0, htF(flds[ii].fType, flds[ii].maxN));

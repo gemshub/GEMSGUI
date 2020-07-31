@@ -82,10 +82,10 @@ TPlot::TPlot( int aObjX, int aObjY ):
 {
     int dNy, dMy, dY;
 
-    foString = ( aObjX < 0 || aObj[aObjX].GetN() >= 1 );
+    foString = ( aObjX < 0 || aObj[aObjX]->GetN() >= 1 );
 
-    dNy = aObj[aObjY].GetN();
-    dMy = aObj[aObjY].GetM();
+    dNy = aObj[aObjY]->GetN();
+    dMy = aObj[aObjY]->GetM();
 
     if( foString == true )
     {
@@ -95,8 +95,8 @@ TPlot::TPlot( int aObjX, int aObjY ):
         if( aObjX < 0 ) // numbers
         {    dX = dNy;  nAbs = 1;   }
         else
-        {    dX = aObj[aObjX].GetN();
-            nAbs = aObj[aObjX].GetM();
+        {    dX = aObj[aObjX]->GetN();
+            nAbs = aObj[aObjX]->GetM();
         }
 
     } // put graph by column
@@ -104,8 +104,8 @@ TPlot::TPlot( int aObjX, int aObjY ):
     {
         dY=dMy;
         dY1=dNy;
-        dX = aObj[aObjX].GetM();
-        nAbs = aObj[aObjX].GetN();
+        dX = aObj[aObjX]->GetM();
+        nAbs = aObj[aObjX]->GetN();
     } // put graph by string
 
     ErrorIf( dX!=dY, "Graphics demo", "Invalid size of objects.");
@@ -126,7 +126,7 @@ TPlot::~TPlot()
 string TPlot::getName( int ii )
 {
     vstr s(40);
-    sprintf(s.p, "%s[%u]",aObj[nObjY].GetKeywd(), ii);
+    sprintf(s.p, "%s[%u]",aObj[nObjY]->GetKeywd(), ii);
     return string(s.p);
 }
 
@@ -146,14 +146,14 @@ QPointF TPlot::getPoint( int line, int number, int ndxAbs )
         if( nObjX < 0 )
             x = number;
         else
-            x = aObj[nObjX].GetEmpty( number, ndxAbs );
+            x = aObj[nObjX]->GetEmpty( number, ndxAbs );
 
-        y = aObj[nObjY].GetEmpty( number, line );
+        y = aObj[nObjY]->GetEmpty( number, line );
     }
     else    // put graph by string
     {
-        x = aObj[nObjX].GetEmpty( ndxAbs, number );
-        y = aObj[nObjY].GetEmpty( line, number );
+        x = aObj[nObjX]->GetEmpty( ndxAbs, number );
+        y = aObj[nObjY]->GetEmpty( line, number );
     }
 
     return QPointF( x, y);
@@ -166,16 +166,16 @@ double TPlot::getValue(int row, int col) const
     if( foString == true )  // put graph by column
     {
         if( col < getNAbs() )
-            value = aObj[getObjX()].GetEmpty( row, col );
+            value = aObj[getObjX()]->GetEmpty( row, col );
         else
-            value = aObj[getObjY()].GetEmpty( row, col-getNAbs() );
+            value = aObj[getObjY()]->GetEmpty( row, col-getNAbs() );
     }
     else    // put graph by string
     {
         if( col < getNAbs() )
-            value = aObj[getObjX()].GetEmpty( col, row );
+            value = aObj[getObjX()]->GetEmpty( col, row );
         else
-            value = aObj[getObjY()].GetEmpty( col-getNAbs(), row );
+            value = aObj[getObjY()]->GetEmpty( col-getNAbs(), row );
     }
 
     if( IsDoubleEmpty( value ) && row > 0  )
@@ -191,12 +191,12 @@ QString TPlot::getColumnName(int col) const
     if( col < getNAbs() )
     {
         if( getNAbs() > 1 )
-            value = QString("%1[%2]").arg(aObj[getObjX()].GetKeywd()).arg(col);
+            value = QString("%1[%2]").arg(aObj[getObjX()]->GetKeywd()).arg(col);
         else
-            value = QString("%1").arg(aObj[getObjX()].GetKeywd());
+            value = QString("%1").arg(aObj[getObjX()]->GetKeywd());
     }
     else
-        value = QString("%1[%2]").arg(aObj[getObjY()].GetKeywd()).arg(col-getNAbs() );
+        value = QString("%1[%2]").arg(aObj[getObjY()]->GetKeywd()).arg(col-getNAbs() );
     return value;
 }
 

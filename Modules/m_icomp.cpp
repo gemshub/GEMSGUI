@@ -38,25 +38,25 @@ TIComp::TIComp( uint nrt ):
 // link values to objects
 void TIComp::ods_link( int q)
 {
-    // aObj[ o_icsymb].SetPtr( ic[q].symb );
-    // aObj[ o_ictype].SetPtr( ic[q].type );
-    // aObj[ o_icgrp].SetPtr( ic[q].grp );
-    aObj[ o_icawt].SetPtr( &ic[q].awt );
-    aObj[ o_icass].SetPtr( &ic[q].aSs );
-    aObj[ o_icacp].SetPtr( &ic[q].aCp );
-    aObj[ o_icavs].SetPtr( &ic[q].aVs );
-    aObj[ o_icarad].SetPtr( &ic[q].arad );
-    aObj[ o_icidis].SetPtr( &ic[q].idis );
-    aObj[ o_icval].SetPtr( &ic[q].val );
-    aObj[ o_icnum].SetPtr( &ic[q].num );
-    aObj[ o_iccoor].SetPtr( &ic[q].coor );
-    aObj[ o_icsst].SetPtr( ic[q].sst );
-    aObj[ o_icname].SetPtr( ic[q].name );
-    aObj[ o_icform].SetPtr( ic[q].form );
-    aObj[ o_icdc].SetPtr(  ic[q].dc_ref );
-    aObj[ o_icfloat].SetPtr( &ic[q].awt );
-    aObj[ o_icint].SetPtr( &ic[q].val );
-    aObj[ o_ictprn].SetPtr( ic[q].tprn );
+    // aObj[ o_icsymb]->SetPtr( ic[q].symb );
+    // aObj[ o_ictype]->SetPtr( ic[q].type );
+    // aObj[ o_icgrp]->SetPtr( ic[q].grp );
+    aObj[ o_icawt]->SetPtr( &ic[q].awt );
+    aObj[ o_icass]->SetPtr( &ic[q].aSs );
+    aObj[ o_icacp]->SetPtr( &ic[q].aCp );
+    aObj[ o_icavs]->SetPtr( &ic[q].aVs );
+    aObj[ o_icarad]->SetPtr( &ic[q].arad );
+    aObj[ o_icidis]->SetPtr( &ic[q].idis );
+    aObj[ o_icval]->SetPtr( &ic[q].val );
+    aObj[ o_icnum]->SetPtr( &ic[q].num );
+    aObj[ o_iccoor]->SetPtr( &ic[q].coor );
+    aObj[ o_icsst]->SetPtr( ic[q].sst );
+    aObj[ o_icname]->SetPtr( ic[q].name );
+    aObj[ o_icform]->SetPtr( ic[q].form );
+    aObj[ o_icdc]->SetPtr(  ic[q].dc_ref );
+    aObj[ o_icfloat]->SetPtr( &ic[q].awt );
+    aObj[ o_icint]->SetPtr( &ic[q].val );
+    aObj[ o_ictprn]->SetPtr( ic[q].tprn );
     icp=&ic[q];
 }
 
@@ -65,7 +65,7 @@ void TIComp::dyn_set(int q)
 {
     ErrorIf( icp!=&ic[q], GetName(),
              "Invalid access to ic in dyn_set.");
-    ic[q].tprn= (char *)aObj[o_ictprn].GetPtr();
+    ic[q].tprn= (char *)aObj[o_ictprn]->GetPtr();
 }
 
 // free dynamic memory in objects and values
@@ -73,7 +73,7 @@ void TIComp::dyn_kill(int q)
 {
     ErrorIf( icp!=&ic[q], GetName(),
              "Invalid access to ic in dyn_kill.");
-    ic[q].tprn = (char *)aObj[o_ictprn].Free();
+    ic[q].tprn = (char *)aObj[o_ictprn]->Free();
 }
 
 // realloc dynamic memory

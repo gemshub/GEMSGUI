@@ -62,14 +62,14 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
             str += pkey;
             setWindowTitle( str );
 
-    pTname->setText( QString(aObj[o_ssname].GetStringEmpty(0,0).c_str()));
+    pTname->setText( QString(aObj[o_ssname]->GetStringEmpty(0,0).c_str()));
     // define lists pages
     for(  ii=0; ii<awnData.size()-1; ii++ )  // -1 all exept static window
     {
         wnData.push_back( windowSetupData(awnData[ii]));
         // insert to list
         str = QString("%1 (%2)").arg(
-            awnData[ii].pageName.c_str(), aObj[awnData[ii].nObj].GetKeywd());
+            awnData[ii].pageName.c_str(), aObj[awnData[ii].nObj]->GetKeywd());
         item1 = new QListWidgetItem( str,  keywdList);
 
         // add page
@@ -91,13 +91,13 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
         for(  jj=0; jj<lst.size(); jj++ )
         {
           item1 = new QListWidgetItem( lst[jj].c_str(), lstIndexes1);
-          char sw = aObj[ awnData[ii].nSwitch].GetString(jj,0)[0];
+          char sw = aObj[ awnData[ii].nSwitch]->GetString(jj,0)[0];
           if( sw == S_OFF)
              str = QString("%1 - ").arg(jj);
           else
              str = QString("%1 + ").arg(jj);
 
-          if( aObj[awnData[ii].nObj].GetIndexationCode() == 'J' )
+          if( aObj[awnData[ii].nObj]->GetIndexationCode() == 'J' )
               str += QString(" in phase: %1 ").arg(
                    TProfil::pm->PhNameforDC( jj, true ).c_str());
 
@@ -135,10 +135,10 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
       auto nO = scalarsList[jj].nObj;
       if( nO<0)
           continue;
-      if( aObj[nO].GetM() > 1 )
-       item1->setToolTip( aObj[nO].GetDescription(0,nJ).c_str() );
+      if( aObj[nO]->GetM() > 1 )
+       item1->setToolTip( aObj[nO]->GetDescription(0,nJ).c_str() );
       else
-       item1->setToolTip( aObj[nO].GetDescription(nJ,0).c_str() );
+       item1->setToolTip( aObj[nO]->GetDescription(nJ,0).c_str() );
     }
     pLists.append(lstIndexes1);
 
@@ -198,9 +198,9 @@ void InputSystemDialog::getTable( std::vector<tableSetupData>& tab ) const
   string txt = pTname->text().toStdString();
 
   if( txt == emptiness /*|| txt == short_emptiness*/ )
-  aObj[o_ssname].SetString( S_EMPTY, 0, 0 );
+  aObj[o_ssname]->SetString( S_EMPTY, 0, 0 );
   else
-  aObj[o_ssname].SetString( txt.c_str(), 0, 0 );
+  aObj[o_ssname]->SetString( txt.c_str(), 0, 0 );
 
   tab.clear();
   for( uint ii=0; ii< tbData.size(); ii++ )
@@ -221,7 +221,7 @@ void InputSystemDialog::changePage( int nPage_ )
 
     winStac->setCurrentIndex ( nPage );
     if( nPage < wnData.size()-1 )
-      lDesc->setText( aObj[wnData[nPage].nObj].GetDescription(0,0).c_str());
+      lDesc->setText( aObj[wnData[nPage].nObj]->GetDescription(0,0).c_str());
     else
       lDesc->setText( "Other system recipe inputs (masses, volumes, T & P intervals)");
 }
@@ -375,7 +375,7 @@ int InputSystemDialog::tableInsertRow( tableSetupData& d)
 
 int InputSystemDialog::tableInsertRow( int nO, int ndx, const char * andName)
 {
-    tbData.push_back( tableSetupData( curPage, nO, aObj[nO].GetKeywd(),
+    tbData.push_back( tableSetupData( curPage, nO, aObj[nO]->GetKeywd(),
          ndx, andName, wnData[curPage].defVal, wnData[curPage].defUnit ));
 
     int row = recTable->rowCount();

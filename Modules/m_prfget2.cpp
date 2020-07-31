@@ -570,39 +570,39 @@ void TProfil::ShowDBWindow( const char *objName, int nLine )
     switch( *objName )
     {
     case 'I': // Icomp : IC_v__ or ICnam
-        if( strncmp(objName, aObj[o_musb].GetKeywd(), MAXKEYWD)==0)
+        if( strncmp(objName, aObj[o_musb]->GetKeywd(), MAXKEYWD)==0)
             s = std::string( mup->SB[nLine], 0, IC_RKLEN );
-        else  if( strncmp(objName, aObj[o_wd_sb].GetKeywd(), MAXKEYWD)==0 ||
-                  strncmp(objName, aObj[o_w_sbh].GetKeywd(), MAXKEYWD)==0 )
+        else  if( strncmp(objName, aObj[o_wd_sb]->GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_w_sbh]->GetKeywd(), MAXKEYWD)==0 )
             s = std::string( mup->SB[pmp->mui[nLine]], 0, IC_RKLEN );
         else break;
         TIComp::pm->RecInput( s.c_str() );
         TIComp::pm->Show(window(), title, false/*true*/);
         break;
     case 'C': // Compod : CC_v__
-        if( strncmp(objName, aObj[o_musa].GetKeywd(), MAXKEYWD)==0)
+        if( strncmp(objName, aObj[o_musa]->GetKeywd(), MAXKEYWD)==0)
             s = std::string( mup->SA[nLine], 0, BC_RKLEN );
         else break;
         TCompos::pm->RecInput( s.c_str() );
         TCompos::pm->Show(window(), title, false/*true*/);
         break;
     case 'P': // Phase : Ph_v__ or Ph_v2 or Phnam or Phnam2
-        if( strncmp(objName, aObj[o_musf].GetKeywd(), MAXKEYWD)==0 ||
-                strncmp(objName, aObj[o_musf2].GetKeywd(), MAXKEYWD)==0 )
+        if( strncmp(objName, aObj[o_musf]->GetKeywd(), MAXKEYWD)==0 ||
+                strncmp(objName, aObj[o_musf2]->GetKeywd(), MAXKEYWD)==0 )
             s = std::string( mup->SF[nLine], 0, PH_RKLEN );
-        else  if( strncmp(objName, aObj[o_wd_sf].GetKeywd(), MAXKEYWD)==0 ||
-                  strncmp(objName, aObj[o_wd_sf2].GetKeywd(), MAXKEYWD)==0 )
+        else  if( strncmp(objName, aObj[o_wd_sf]->GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_wd_sf2]->GetKeywd(), MAXKEYWD)==0 )
             s = std::string( mup->SF[pmp->muk[nLine]], 0, PH_RKLEN );
         else break;
         TPhase::pm->RecInput( s.c_str() );
         TPhase::pm->Show(window(), title, false/*true*/);
         break;
     case 'D': // Phase : DC_v__ or DC_v2 or DCnam or DCnam2
-        if( strncmp(objName, aObj[o_musm].GetKeywd(), MAXKEYWD)==0 ||
-                strncmp(objName, aObj[o_musm2].GetKeywd(), MAXKEYWD)==0 )
+        if( strncmp(objName, aObj[o_musm]->GetKeywd(), MAXKEYWD)==0 ||
+                strncmp(objName, aObj[o_musm2]->GetKeywd(), MAXKEYWD)==0 )
             s = std::string( mup->SM[nLine], 0, DC_RKLEN );
-        else  if( strncmp(objName, aObj[o_wd_sm].GetKeywd(), MAXKEYWD)==0 ||
-                  strncmp(objName, aObj[o_wd_sm2].GetKeywd(), MAXKEYWD)==0 )
+        else  if( strncmp(objName, aObj[o_wd_sm]->GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_wd_sm2]->GetKeywd(), MAXKEYWD)==0 )
         {
             nLine = pmp->muj[nLine];
             s = std::string( mup->SM[nLine], 0, DC_RKLEN );
@@ -658,8 +658,8 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
       return false;
 
 // save built-in default configuration
-     internalBufer = static_cast<char *>(aObj[ o_sptext].Alloc( 1, elm_data.aSelNames.length()+10, S_));
-     aObj[o_sptext].SetString( elm_data.aSelNames.c_str(),0,0);
+     internalBufer = static_cast<char *>(aObj[ o_sptext]->Alloc( 1, elm_data.aSelNames.length()+10, S_));
+     aObj[o_sptext]->SetString( elm_data.aSelNames.c_str(),0,0);
 
 
 //    elm_data.flNames.Add(prfName);
@@ -783,7 +783,7 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
             if( syp->Acl[j] == S_OFF || !syp->XeA[j] || IsDoubleEmpty( syp->XeA[j] ))
                 continue;
             tbData.push_back(  tableSetupData( wnData.size()-1, o_syxea,
-                  aObj[o_syxea].GetKeywd(), j, "",  syp->XeA[j], syp->XAun[j] ));
+                  aObj[o_syxea]->GetKeywd(), j, "",  syp->XeA[j], syp->XAun[j] ));
         } //  j
     }
 
@@ -797,7 +797,7 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
             if( syp->Dcl[j] == S_OFF || !syp->XeD[j] || IsDoubleEmpty( syp->XeD[j] ))
                 continue;
             tbData.push_back( tableSetupData( wnData.size()-1, o_syxed,
-                aObj[o_syxed].GetKeywd(), j, "",  syp->XeD[j], syp->XDun[j] ));
+                aObj[o_syxed]->GetKeywd(), j, "",  syp->XeD[j], syp->XDun[j] ));
 
         } //  j
     }
@@ -811,7 +811,7 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
             if( syp->Icl[i] == S_OFF || !syp->BI[i] || IsDoubleEmpty(syp->BI[i] ))
                 continue;
             tbData.push_back( tableSetupData( wnData.size()-1, o_sybi,
-                   aObj[o_sybi].GetKeywd(), i, "",  syp->BI[i], syp->BIun[i] ));
+                   aObj[o_sybi]->GetKeywd(), i, "",  syp->BI[i], syp->BIun[i] ));
         }
     }
 
@@ -825,7 +825,7 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
          if( syp->Pcl[i] == S_OFF || !syp->Phm[i] || IsDoubleEmpty(syp->XPun[i] ))
           continue;
         tbData.push_back( tableSetupData( wnData.size()-1, o_syphm,
-             aObj[o_syphm].GetKeywd(), i, "",  syp->Phm[i], syp->XPun[i] ));
+             aObj[o_syphm]->GetKeywd(), i, "",  syp->Phm[i], syp->XPun[i] ));
       }
     }
 
@@ -838,7 +838,7 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
         {
           if(  syp->Dcl[i] != S_OFF && syp->DLL[i] > 0 )
            tbData.push_back( tableSetupData( wnData.size()-1, o_sydll,
-                 aObj[o_sydll].GetKeywd(), i, "",  syp->DLL[i], syp->RSC[i] ));
+                 aObj[o_sydll]->GetKeywd(), i, "",  syp->DLL[i], syp->RSC[i] ));
         }
     }
     if(  syp->DULim != S_OFF  )
@@ -849,7 +849,7 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
         {
           if( syp->Dcl[i] != S_OFF && syp->DUL[i] < 1e6 )
            tbData.push_back( tableSetupData( wnData.size()-1, o_sydul,
-                 aObj[o_sydul].GetKeywd(), i, "",  syp->DUL[i], syp->RSC[i] ));
+                 aObj[o_sydul]->GetKeywd(), i, "",  syp->DUL[i], syp->RSC[i] ));
         }
     }
     if( syp->PGEX != S_OFF )
@@ -860,7 +860,7 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
       {
         if(  syp->Dcl[i] != S_OFF && fabs(syp->GEX[i]) > 0  )
          tbData.push_back( tableSetupData( wnData.size()-1, o_sygex,
-               aObj[o_sygex].GetKeywd(), i, "",  syp->GEX[i], 'J' ));
+               aObj[o_sygex]->GetKeywd(), i, "",  syp->GEX[i], 'J' ));
       }
     }
 
@@ -885,50 +885,50 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
     // add static values for table
     if(  fabs( syp->Msolids ) > 0  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_symsolids,
-           aObj[o_symass].GetKeywd(), 0, "",  syp->Msolids, '_' ));
+           aObj[o_symass]->GetKeywd(), 0, "",  syp->Msolids, '_' ));
 //    if(  fabs( syp->Mbel ) > 0  )
 //     tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
-//           aObj[o_symass].GetKeywd(), 0, "",  syp->Mbel, '_' ));
+//           aObj[o_symass]->GetKeywd(), 0, "",  syp->Mbel, '_' ));
 if(  fabs( syp->Mwat ) != 1.f  )  // Fixed for new defaults by DK 27.02.2012
      tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
-           aObj[o_symass].GetKeywd(), 1, "",  syp->Mwat, '_' ));
+           aObj[o_symass]->GetKeywd(), 1, "",  syp->Mwat, '_' ));
 if(  fabs( syp->Msys ) != 1.f  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
-           aObj[o_symass].GetKeywd(), 2, "",  syp->Msys, '_' ));
+           aObj[o_symass]->GetKeywd(), 2, "",  syp->Msys, '_' ));
 if(  fabs( syp->Maq ) != 1.f  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
-           aObj[o_symass].GetKeywd(), 3, "",  syp->Maq, '_' ));
+           aObj[o_symass]->GetKeywd(), 3, "",  syp->Maq, '_' ));
 //   if(  fabs( syp->MBX ) > 0  )
 //     tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
-//           aObj[o_symass].GetKeywd(), 4, "",  syp->MBX, '_' ));
+//           aObj[o_symass]->GetKeywd(), 4, "",  syp->MBX, '_' ));
 //    if(  fabs( syp->R1 ) > 0  )
 //    tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
-//          aObj[o_symass].GetKeywd(), 5, "",  syp->R1, '_' ));
+//          aObj[o_symass]->GetKeywd(), 5, "",  syp->R1, '_' ));
 if(  fabs( syp->Vsys ) != 1.f  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_syvol,
-           aObj[o_syvol].GetKeywd(), 0, "",  syp->Vsys, '_' ));
+           aObj[o_syvol]->GetKeywd(), 0, "",  syp->Vsys, '_' ));
 if(  fabs( syp->Vaq ) != 1.f  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_syvol,
-           aObj[o_syvol].GetKeywd(), 1, "",  syp->Vaq, '_' ));
+           aObj[o_syvol]->GetKeywd(), 1, "",  syp->Vaq, '_' ));
     if(  fabs( syp->Pmin ) > 0  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_sypmm,
-           aObj[o_sypmm].GetKeywd(), 0, "",  syp->Pmin, '_' ));
+           aObj[o_sypmm]->GetKeywd(), 0, "",  syp->Pmin, '_' ));
     if(  fabs( syp->Pmax ) > 0  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_sypmm,
-           aObj[o_sypmm].GetKeywd(), 1, "",  syp->Pmax, '_' ));
+           aObj[o_sypmm]->GetKeywd(), 1, "",  syp->Pmax, '_' ));
     if(  fabs( syp->Pinc ) > 0  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_sypmm,
-           aObj[o_sypmm].GetKeywd(), 2, "",  syp->Pinc, '_' ));
+           aObj[o_sypmm]->GetKeywd(), 2, "",  syp->Pinc, '_' ));
 
     if(  fabs( syp->Tmin ) > 0  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_sytmm,
-           aObj[o_sytmm].GetKeywd(), 0, "",  syp->Tmin, '_' ));
+           aObj[o_sytmm]->GetKeywd(), 0, "",  syp->Tmin, '_' ));
     if(  fabs( syp->Tmax ) > 0  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_sytmm,
-           aObj[o_sytmm].GetKeywd(), 1, "",  syp->Tmax, '_' ));
+           aObj[o_sytmm]->GetKeywd(), 1, "",  syp->Tmax, '_' ));
     if(  fabs( syp->Tinc ) > 0  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_sytmm,
-           aObj[o_sytmm].GetKeywd(), 2, "",  syp->Tinc, '_' ));
+           aObj[o_sytmm]->GetKeywd(), 2, "",  syp->Tinc, '_' ));
 
    // change bulk chemical composition
     if( !vfSystemInput( par, p_key, wnData, tbData, scalarsList ))
@@ -989,17 +989,17 @@ if(  fabs( syp->Vaq ) != 1.f  )
     for(size_t ii=0; ii< tbData.size() ; ii++)
     {
      uint nO = tbData[ii].nObj;
-     if( aObj[nO].GetN() > 1 )
-         aObj[ nO ].Put( tbData[ii].val, tbData[ii].nIdx, 0 );
+     if( aObj[nO]->GetN() > 1 )
+         aObj[ nO ]->Put( tbData[ii].val, tbData[ii].nIdx, 0 );
      else
-         aObj[ nO ].Put( tbData[ii].val, 0, tbData[ii].nIdx );
+         aObj[ nO ]->Put( tbData[ii].val, 0, tbData[ii].nIdx );
 
      int nOunit = wnData[ tbData[ii].nWin].nOunit;
      if(nOunit >=0 )
-        aObj[ nOunit ].SetString( &tbData[ii].unit, tbData[ii].nIdx, 0);
+        aObj[ nOunit ]->SetString( &tbData[ii].unit, tbData[ii].nIdx, 0);
      int nOswitch = wnData[ tbData[ii].nWin].nSwitch;
      if(nOswitch >=0 )
-        aObj[ nOswitch ].SetString("+",tbData[ii].nIdx, 0);
+        aObj[ nOswitch ]->SetString("+",tbData[ii].nIdx, 0);
     }
 
     TSysEq::pm->CellChanged();
@@ -1132,11 +1132,11 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
     {
     case 'D': // Phase : DC_v__ or DC_v2 or DCnam or DCnam2
         xdc = nLine;
-        if( strncmp(objName, aObj[o_musm].GetKeywd(), MAXKEYWD)==0 ||
-                strncmp(objName, aObj[o_musm2].GetKeywd(), MAXKEYWD)==0 )
+        if( strncmp(objName, aObj[o_musm]->GetKeywd(), MAXKEYWD)==0 ||
+                strncmp(objName, aObj[o_musm2]->GetKeywd(), MAXKEYWD)==0 )
            system = true;
-        else  if( strncmp(objName, aObj[o_wd_sm].GetKeywd(), MAXKEYWD)==0 ||
-                  strncmp(objName, aObj[o_wd_sm2].GetKeywd(), MAXKEYWD)==0 )
+        else  if( strncmp(objName, aObj[o_wd_sm]->GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_wd_sm2]->GetKeywd(), MAXKEYWD)==0 )
                    system = false;
                else
                   return;
@@ -1145,13 +1145,13 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
     case 'P': // Phase : Ph_v__ or Ph_v2 or Phnam or Phnam2
         xph = nLine;
         xdc = -1;
-        if( strncmp(objName, aObj[o_musf].GetKeywd(), MAXKEYWD)==0 ||
-                strncmp(objName, aObj[o_musf2].GetKeywd(), MAXKEYWD)==0 )
+        if( strncmp(objName, aObj[o_musf]->GetKeywd(), MAXKEYWD)==0 ||
+                strncmp(objName, aObj[o_musf2]->GetKeywd(), MAXKEYWD)==0 )
         {    system = true;
              phname = std::string( rmults->GetMU()->SF[xph], 0, PH_RKLEN);
         }
-        else  if( strncmp(objName, aObj[o_wd_sf].GetKeywd(), MAXKEYWD)==0 ||
-                  strncmp(objName, aObj[o_wd_sf2].GetKeywd(), MAXKEYWD)==0 )
+        else  if( strncmp(objName, aObj[o_wd_sf]->GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_wd_sf2]->GetKeywd(), MAXKEYWD)==0 )
              {
                 system = false;
                 phname = std::string( multi->GetPM()->SF[xph], 0, MAXSYMB+MAXPHNAME);
