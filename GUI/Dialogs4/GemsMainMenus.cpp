@@ -856,7 +856,7 @@ TVisorImp::CmOpen_SYSTEM_ICOMP()
 void                                 // Bulk composition (b)
 TVisorImp::CmInsert_SYSTEM()
 {
-    string key_s = rt[RT_SYSEQ].PackKey();
+    string key_s = rt[RT_SYSEQ]->PackKey();
     TProfil::pm->systbcInput( this, key_s.c_str() );
     Update( true );
 }
@@ -962,11 +962,11 @@ TFileList::TFileList(QWidget* win, size_t iRt, const char* caption ):
    setWindowTitle(caption);
 
    pFileList = new QListWidget(this);
-   const TCStringArray& s = rt[iRt].GetOpenFiles();
+   const TCStringArray& s = rt[iRt]->GetOpenFiles();
    for( size_t ii=0; ii<s.size(); ii++ )
               pFileList->addItem(s[ii].c_str());
 
-        pFileList->item(rt[iRt].GetWorkFileName())->setSelected(true);
+        pFileList->item(rt[iRt]->GetWorkFileName())->setSelected(true);
 
     QPushButton* btn;
     btn = new QPushButton(this);

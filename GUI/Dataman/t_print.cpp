@@ -28,7 +28,7 @@ TPrintData::TPrintData(const char *sd_key,
     unsigned int nrt, fstream& fout, const char *fmt_text ):
   key_format( sd_key ), nRT(nrt)
 {
-  ErrorIf( !fout.good() , rt[nRT].GetKeywd(), "Fileopen error");
+  ErrorIf( !fout.good() , rt[nRT]->GetKeywd(), "Fileopen error");
   input = const_cast<char*>(fmt_text);
 
   prr = 1;
@@ -444,7 +444,7 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                  fout << strbuf << " ";
                  break;
     case rkey_d: fmt.type = 's';
-                 sprintf( strbuf, format.c_str(), rt[nRT].PackKey() );
+                 sprintf( strbuf, format.c_str(), rt[nRT]->PackKey() );
                  fout << strbuf << " ";
                  break;
     case date_d: fmt.type = 's';

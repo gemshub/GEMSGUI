@@ -420,7 +420,7 @@ void TCWindow::ShowInfo()
         nR = RT_SYSEQ;
     else nR = getCModule().rtNum();
 
-    time_t time = rt[nR].Rtime();
+    time_t time = rt[nR]->Rtime();
     struct tm *time_s;
     tzset();
     time_s = localtime(&time);

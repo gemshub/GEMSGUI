@@ -219,7 +219,7 @@ class TDataBase
     int frstOD;
     unsigned char nOD;
     TDBKeyList ind;
-    TIArray<TDBFile> aFile;  // list of add files
+    std::vector< std::shared_ptr<TDBFile>> aFile;  // list of add files
     TCIntArray fls;
 
     //work param
@@ -349,7 +349,7 @@ public:
     bool SetNewOpenFileList( const TCStringArray& aFlNames );
     void GetFileList( int mode, TCStringArray& names,
                       TCIntArray& indx,  TCIntArray& sel );
-    //  int GetNumFiles() { return aFile.GetCount(); }
+    //  int GetNumFiles() { return aFile.size(); }
     void  MakeInNewProfile( const std::string& dir,
       const char *prfName, const char * f_name=nullptr );
     void OpenOnlyFromList( TCStringArray& names );
@@ -397,11 +397,11 @@ public:
 // Data Base container : rt
 
 class DataBaseList:
-            public TIArray<TDataBase>
+            public std::vector<std::shared_ptr<TDataBase>>
 {
 public:
     DataBaseList():
-            TIArray<TDataBase>(40)
+           std::vector<std::shared_ptr<TDataBase>>()
     { }
 
     ~DataBaseList();
@@ -411,7 +411,6 @@ public:
     void toCFG(fstream& f);
 
     //--- Selectors
-    TDataBase& operator[](size_t) const;
     int Find(const char* keywd);
 };
 

@@ -241,11 +241,11 @@ void GtDemoWizard::resetPageList( int newRT,const char* aXname, const char* aYna
 
     if( nRT >= RT_SYSEQ ) // read first record in DB
     {
-        if(  rt[RT_SYSEQ].GetStatus() != ONEF_)
+        if(  rt[RT_SYSEQ]->GetStatus() != ONEF_)
         {
             TCStringArray aRklist;
             TCIntArray anRk;
-            auto Nr = rt[RT_SYSEQ].GetKeyList( ALLKEY, aRklist, anRk );
+            auto Nr = rt[RT_SYSEQ]->GetKeyList( ALLKEY, aRklist, anRk );
             if( Nr > 0 )
               TProfil::pm->loadSystat( aRklist[0].c_str() );
         }

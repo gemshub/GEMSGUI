@@ -310,7 +310,7 @@ public:
     //-- Module Information
     size_t NumberOpenFils() const
     {
-        return rt[nRT].GetOpenFiles().size();
+        return rt[nRT]->GetOpenFiles().size();
     }
     const char* GetFldHelp( uint Ni ) const
     {

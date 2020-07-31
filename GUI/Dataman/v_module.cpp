@@ -151,7 +151,7 @@ void TSubModule::CmHelp2()
 
 TCModule::TCModule( uint nrt ):
         TSubModule( nrt ),
-        db(&rt[nrt]),
+        db(rt[nrt].get()),
         nQ(1), Filter(ALLKEY), start_title(" ")
 {  }
 // start_title = " Access to database record without remake/recalculation"
@@ -271,7 +271,7 @@ string  TCModule::makeKeyFilter()
          ( RT_PARAM == nRT || RT_SYSEQ== nRT || RT_PROCES== nRT ||
      RT_GTDEMO== nRT || RT_UNSPACE== nRT || RT_DUALTH== nRT || RT_GEM2MT== nRT ) )
     {
-      strfilt = string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
+      strfilt = string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0) );
       StripLine(strfilt);
       strfilt += ":";
     }
@@ -294,7 +294,7 @@ bool  TCModule::testKeyFilter()
        ( RT_PARAM == nRT || RT_SYSEQ== nRT || RT_PROCES== nRT ||
          RT_UNSPACE== nRT || RT_DUALTH== nRT || RT_GEM2MT== nRT ) )
   {
-    string strfilt = string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
+    string strfilt = string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0) );
     StripLine(strfilt);
     if( Filter.find( strfilt ) == string::npos )
      return true;

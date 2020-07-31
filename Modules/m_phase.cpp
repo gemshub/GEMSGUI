@@ -248,7 +248,7 @@ void TPhase::dyn_set(int q)
 {
     ErrorIf( php!=&ph[q], GetName(),
              "E01PHrem: Invalid access to ph in dyn_set()");
-    memcpy( php->pst_, rt[nRT].UnpackKey(), PH_RKLEN );
+    memcpy( php->pst_, rt[nRT]->UnpackKey(), PH_RKLEN );
     ph[q].SCMC =  static_cast<char *>(aObj[ o_phscmc ]->GetPtr());
     ph[q].FsiT =  static_cast<float *>(aObj[ o_phfsit ]->GetPtr());
     ph[q].XfIEC = static_cast<float *>(aObj[ o_phxfiec ]->GetPtr());
@@ -951,7 +951,7 @@ AGAIN_SETUP:
         return ret;
 
     // Change Phase key
-    memcpy( php->pst_, rt[nRT].UnpackKey(), PH_RKLEN );
+    memcpy( php->pst_, rt[nRT]->UnpackKey(), PH_RKLEN );
     php->pst_[0] = php->PphC;
     db->SetKey(php->pst_);
 
@@ -1361,9 +1361,9 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
         // only 3 fields
         std::string key = std::string( php->SM[i], 0, DC_RKLEN);
         if( php->DCS[i] == SRC_DCOMP )
-            nRec = rt[RT_DCOMP].FindPart( php->SM[i], 3 );
+            nRec = rt[RT_DCOMP]->FindPart( php->SM[i], 3 );
         else
-            nRec = rt[RT_REACDC].FindPart( php->SM[i], 3 );
+            nRec = rt[RT_REACDC]->FindPart( php->SM[i], 3 );
         if( nRec )
         { aDCused.push_back(cnt); cnt++; }
         else

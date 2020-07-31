@@ -73,8 +73,8 @@ TUnSpace::GetKeyofRecord( const char *oldKey, const char *strTitle,
     if( keyType==KEY_NEW  )
     { // Get key of base SyStat
         vstr pkey(MAXRKEYLEN+10);
-        rt[RT_UNSPACE].SetKey(str.c_str());
-        rt[RT_SYSEQ].MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
+        rt[RT_UNSPACE]->SetKey(str.c_str());
+        rt[RT_SYSEQ]->MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
                                RT_UNSPACE, 2, RT_UNSPACE, 3, RT_UNSPACE, 4,
                                RT_UNSPACE, 5, RT_UNSPACE, 6, RT_UNSPACE, 7, K_END);
         str = TSysEq::pm->GetKeyofRecord( pkey,
@@ -90,7 +90,7 @@ TUnSpace::GetKeyofRecord( const char *oldKey, const char *strTitle,
     str = TCModule::GetKeyofRecord( str.c_str(), strTitle, keyType );
     if(  str.empty() )
         return str;
-    rt[RT_UNSPACE].SetKey(str.c_str());
+    rt[RT_UNSPACE]->SetKey(str.c_str());
      if( keyType != KEY_TEMP )
          keyTest( str.c_str() );
     return str;
@@ -103,16 +103,16 @@ void TUnSpace::keyTest( const char *key )
 
     if( pVisor->ProfileMode == true )
     { // test project key
-        std::string prfKey = std::string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
-                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
+                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
             Error( key, "E08PErem: Invalid record key (another Modelling Project)!");
-        rt[RT_SYSEQ].MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
+        rt[RT_SYSEQ]->MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
                                RT_UNSPACE, 2, RT_UNSPACE, 3, RT_UNSPACE, 4,
                                RT_UNSPACE, 5, RT_UNSPACE, 6, RT_UNSPACE, 7, K_END);
-        if( rt[RT_SYSEQ].Find(pkey) <0 )
+        if( rt[RT_SYSEQ]->Find(pkey) <0 )
             Error( key, "E07PErem: Invalid record key (no system)!");
     }
 }
@@ -1010,13 +1010,13 @@ bool TUnSpace::check_input( const char */*key*/, int /*Level*/ )
 
   TProfil* PRof = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
   //Get base SysEq key from UnSpace key
-  rt[RT_SYSEQ].MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
+  rt[RT_SYSEQ]->MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
                            RT_UNSPACE, 2, RT_UNSPACE, 3, RT_UNSPACE, 4,
                            RT_UNSPACE, 5, RT_UNSPACE, 6, RT_UNSPACE, 7, K_END);
     // read SysEq record and unpack data
     PRof->loadSystat( pkey );
     // test changes in system after unspace calc
-    if( rt[RT_SYSEQ].Rtime() > rt[nRT].Rtime() )
+    if( rt[RT_SYSEQ]->Rtime() > rt[nRT]->Rtime() )
         return true;
     return false;
 }
@@ -1176,7 +1176,7 @@ TUnSpace::RecCalc( const char *key )
 // Get startup syseq record for fitting
   //Get base SysEq key from UnSpace key
   vstr pkey(MAXRKEYLEN+10);
-  rt[RT_SYSEQ].MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
+  rt[RT_SYSEQ]->MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
                            RT_UNSPACE, 2, RT_UNSPACE, 3, RT_UNSPACE, 4,
                            RT_UNSPACE, 5, RT_UNSPACE, 6, RT_UNSPACE, 7, K_END);
     // read SysEq record and unpack data

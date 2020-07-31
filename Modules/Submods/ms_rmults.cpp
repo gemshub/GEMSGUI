@@ -305,8 +305,8 @@ void TRMults::set_def( int /*q*/)
 //    strcpy( mu.notes, "`");
     fillValue( mu.name, '\0', MAXFORMULA);
     fillValue( mu.notes, '\0', MAXFORMULA);
-    strncpy( mu.name, rt[RT_PARAM].FldKey(0), rt[RT_PARAM].FldLen(0) );
-    strncpy( mu.notes, rt[RT_PARAM].FldKey(1), rt[RT_PARAM].FldLen(1) );
+    strncpy( mu.name, rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0) );
+    strncpy( mu.notes, rt[RT_PARAM]->FldKey(1), rt[RT_PARAM]->FldLen(1) );
     memset( &mu.N, 0, 14*sizeof(short));
     mu.SF  = 0;
     mu.SM  = 0;
@@ -351,7 +351,7 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
     TCIntArray anRPhase;
     if( useLst == false )
     {
-        rt[RT_PHASE].GetKeyList( "*:*:*:*:*:", aPhaseList, anRPhase );
+        rt[RT_PHASE]->GetKeyList( "*:*:*:*:*:", aPhaseList, anRPhase );
         uint ii=0;
         while( ii < aPhaseList.size() )
         {
@@ -471,7 +471,7 @@ void TRMults::MakeRecordLists( TCStringArray AqKey, TCStringArray GasKey )
     // Get all records of IComp
     TCStringArray aICList;
     TCIntArray anRIC;
-    rt[RT_ICOMP].GetKeyList( "*:*:*:", aICList, anRIC );
+    rt[RT_ICOMP]->GetKeyList( "*:*:*:", aICList, anRIC );
     if( aICList.size()<1 )
         Error("RMULT", "No records of Independent component!");
     mu.N  = aICList.size();
@@ -483,7 +483,7 @@ void TRMults::MakeRecordLists( TCStringArray AqKey, TCStringArray GasKey )
     // Get all records of Compos
     TCStringArray aCompList;
     TCIntArray anRComp;
-    rt[RT_COMPOS].GetKeyList( "*:*:*:", aCompList, anRComp );
+    rt[RT_COMPOS]->GetKeyList( "*:*:*:", aCompList, anRComp );
     mu.La = aCompList.size();
     if( mu.La<1 )
         mu.PmvSA = S_OFF;
@@ -716,7 +716,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
         }
 
     }
-    string prfName = string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
+    string prfName = string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0) );
     StripLine( prfName );
 
     if( changePhases || mu.PmvAq == S_ON || mu.PmvGas == S_ON )
@@ -794,7 +794,7 @@ NEW_PHASE_AGAIN:
 
     }
 
-    file =rt[RT_PHASE].GetOpenFileNum( prfName.c_str() );
+    file =rt[RT_PHASE]->GetOpenFileNum( prfName.c_str() );
 
     // Creating automatic aq and/or gas phases (automatic phase only one )
     TPhase::pm->newAqGasPhase( AqKey[0].c_str(), GasKey[0].c_str(), file,
@@ -861,7 +861,7 @@ void TRMults::SelectAqGasPhase( char AqGasType, TCStringArray& AqGasKey )
      // Get all records of Phase for type
     for(ii=0; ii<aPhaseType.size(); ii++ )
     {
-        rt[RT_PHASE].GetKeyList( aPhaseType[ii].c_str(), aPhaseList, anRPhase );
+        rt[RT_PHASE]->GetKeyList( aPhaseType[ii].c_str(), aPhaseList, anRPhase );
         for( jj=0; jj<aPhaseList.size(); jj++ )
             aKeysList.push_back( aPhaseList[jj]);
     }

@@ -148,11 +148,11 @@ void TDualTh::calc_eqstat()
     Gcvt( dtp->cP, 6, dtp->Pp );
     Gcvt( dtp->cV, 6, dtp->Bnamep );
 
-   rt[RT_SYSEQ].MakeKey( RT_DUALTH,  dtp->sykey, RT_DUALTH, 0, RT_DUALTH,1,
+   rt[RT_SYSEQ]->MakeKey( RT_DUALTH,  dtp->sykey, RT_DUALTH, 0, RT_DUALTH,1,
          RT_DUALTH, 2, K_IMM, dtp->timep, K_IMM, dtp->Bnamep,
          K_IMM, dtp->Pp, K_IMM, dtp->TCp, K_IMM, dtp->NVp, K_END );
 
-   rt[RT_SYSEQ].Find(dtp->sykey);
+   rt[RT_SYSEQ]->Find(dtp->sykey);
 // calc current SyStat
    TProfil::pm->CalcEqstat( dummy );
    if( dtp->PsSYd == S_ON )

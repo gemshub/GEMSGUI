@@ -59,7 +59,7 @@ bool TDataBase::dbChangeAllowed( uint nf, bool /*ifRep*/ )
 
 void TDataBase::check_file( uint nF )
 {
-    ErrorIf(  nF>aFile.GetCount(), GetKeywd(),"Invalid file number.");
+    ErrorIf(  nF>aFile.size(), GetKeywd(),"Invalid file number.");
 }
 
 //put state to cfg file
@@ -95,15 +95,15 @@ out_stream << numFls << "  "; // << endl;
 //        f.write( (char*)&fls[i], sizeof(int) );
 out_stream << fls[ii] << ' '; // << endl;
     }
-    int numFiles = aFile.GetCount();
+    int numFiles = aFile.size();
 //    f.write( (char*)&nF, sizeof(int) );
 out_stream << "  " << numFiles << endl;
 
     ErrorIf( !out_stream.good(), GetKeywd(),
              "Error writing TDataBase to configurator");
 
-    for(uint ii=0; ii<aFile.GetCount(); ii++) {
-        aFile[ii].toCFG(out_stream);
+    for(size_t ii=0; ii<aFile.size(); ii++) {
+        aFile[ii]->toCFG(out_stream);
     }
 }
 
@@ -148,7 +148,7 @@ in_stream >> numFiles;
              "Error reading TDataBase from configurator");
 
     for(int ii=0; ii<numFiles; ii++)
-        aFile.Add( new TDBFile(in_stream));
+        aFile.push_back( std::make_shared<TDBFile>(in_stream));
 }
 
 //default configuration of the database
@@ -158,7 +158,7 @@ TDataBase::TDataBase( size_t nrt, const char* name,
         nRT(nrt), status(UNDF_), rclose(Rclose), isDelete(isDel),
         frstOD(nOf), nOD(Nobj),
         ind( nRkflds, rkfrm ),
-        aFile(4, 1), fls(), specialFilesNum(filesNum)
+        aFile(), fls(), specialFilesNum(filesNum)
 {
     strncpy( Keywd, name, MAXKEYWD-1 );
     Keywd[ MAXKEYWD-1 ] = 0;
@@ -168,7 +168,7 @@ TDataBase::TDataBase( size_t nrt, const char* name,
 
 //configuration from cfg file
 TDataBase::TDataBase( fstream& f ):
-        status(UNDF_), ind(f ), aFile(4, 1), fls()
+        status(UNDF_), ind(f ), aFile(), fls()
 {
     fromCFG(f);
     crt = time(nullptr);
@@ -178,9 +178,9 @@ TDataBase::TDataBase( fstream& f ):
 TDataBase::~TDataBase()
 {
     for(size_t j=0; j<fls.size(); j++ )
-        aFile[fls[j]].Close();
+        aFile[fls[j]]->Close();
 
-    //  aFile.Clear();
+    //  aFile.clear();
     fls.clear();
     fNum = 0;
     fOpenNameBuf.clear();
@@ -189,7 +189,7 @@ TDataBase::~TDataBase()
 // add new file to database chain
 void TDataBase::AddFile(const std::string& path)
 {
-    aFile.Add(new TDBFile(path));
+    aFile.push_back( std::make_shared<TDBFile>(path));
 }
 
 // put information to index file
@@ -199,13 +199,13 @@ void TDataBase::putndx( uint nF )
     GemDataStream f;
 
     check_file(nF);
-    Path = u_makepath( aFile[nF].Dir(),
-                aFile[nF].Name(), NDX_EXT );
+    Path = u_makepath( aFile[nF]->Dir(),
+                aFile[nF]->Name(), NDX_EXT );
     f.open( Path.c_str(), WRITE_B);
     ErrorIf( !f.good(), Path.c_str(),"Index file open error");
-    aFile[nF].vdbh_setdt( );
+    aFile[nF]->vdbh_setdt( );
     //  f.write( (char *)aFile[nF]->Dh(), sizeof(VDBhead) );
-    aFile[nF].Dh()->write (f);
+    aFile[nF]->Dh()->write (f);
     ind.PutKeyList( nF, f);
 }
 
@@ -217,8 +217,8 @@ void TDataBase::getndx( uint nF )
     GemDataStream f;
 
     check_file( nF );
-    Path = u_makepath( aFile[nF].Dir(),
-                aFile[nF].Name(), NDX_EXT );
+    Path = u_makepath( aFile[nF]->Dir(),
+                aFile[nF]->Name(), NDX_EXT );
     f.open( Path.c_str(), RDONLY_B);
     if( !f.good() )
       Error(  Path.c_str(),"Index file open error");
@@ -364,10 +364,10 @@ uint TDataBase::AddRecordToFile( const char *pkey, int file )
     check_file( nF );
 
     ErrorIf( !dbChangeAllowed( nF ),
-	aFile[nF].Name(), "Cannot add record: changes to system database are not allowed!" );
+    aFile[nF]->Name(), "Cannot add record: changes to system database are not allowed!" );
 
 
-    aFile[nF].Open( UPDATE_DBV );
+    aFile[nF]->Open( UPDATE_DBV );
 
     auto i = ind.addndx( nF, 0, pkey );     // add record
     len = reclen();
@@ -376,24 +376,24 @@ uint TDataBase::AddRecordToFile( const char *pkey, int file )
     rh->len = len;
 
 
-    aFile[nF].FindSfe( *rh );
+    aFile[nF]->FindSfe( *rh );
     rh->len = len - RecHead::data_size();
-    oldlen = aFile[nF].FLen();
-    int iRet =putrec( *rh, aFile[nF].f );
+    oldlen = aFile[nF]->FLen();
+    int iRet =putrec( *rh, aFile[nF]->f );
     if( iRet!=0 )
     {
-        if( aFile[nF].FLen() != oldlen )
-            aFile[nF].FNewLen( iRet) ;
+        if( aFile[nF]->FLen() != oldlen )
+            aFile[nF]->FNewLen( iRet) ;
         rh->len -=iRet;
     }
 
-    aFile[nF].PutHead( aFile[nF].f, 1);
+    aFile[nF]->PutHead( aFile[nF]->f, 1);
 
     putndx(nF);
 
     status = ONEF_;
     if( rclose )
-        aFile[nF].Close();
+        aFile[nF]->Close();
     return i;
 }
 
@@ -408,31 +408,31 @@ void TDataBase::Rep(int i)
     // test and open file
     nF = rh->nFile;
     check_file( nF );
-    ErrorIf( !dbChangeAllowed( nF, true ), aFile[nF].Name(),
+    ErrorIf( !dbChangeAllowed( nF, true ), aFile[nF]->Name(),
                 "Cannot modify record: changes to system database are not allowed!" );
 
-    aFile[nF].Open( UPDATE_DBV );
+    aFile[nF]->Open( UPDATE_DBV );
     // delete record
     rh->len += RecHead::data_size();
-    aFile[nF].AddSfe( *rh );
+    aFile[nF]->AddSfe( *rh );
 
     ind.PutKey(i);
     rh->len = reclen() + RecHead::data_size() + strlen(ind.PackKey()) + 1;
-    aFile[nF].FindSfe( *rh );
+    aFile[nF]->FindSfe( *rh );
     rh->len -= RecHead::data_size();
-    oldlen = aFile[nF].FLen();
-    iRet =putrec( *rh, aFile[nF].f );
+    oldlen = aFile[nF]->FLen();
+    iRet =putrec( *rh, aFile[nF]->f );
     if( iRet!=0 )
     {
-        if( aFile[nF].FLen() != oldlen )
-            aFile[nF].FNewLen( iRet );
+        if( aFile[nF]->FLen() != oldlen )
+            aFile[nF]->FNewLen( iRet );
         rh->len -=iRet;
     }
-    aFile[nF].PutHead( aFile[nF].f, 0);
+    aFile[nF]->PutHead( aFile[nF]->f, 0);
     putndx( nF );
     status = ONEF_;
     fNum = findIndex<int>( fls, nF );
-    if( rclose )  aFile[nF].Close();
+    if( rclose )  aFile[nF]->Close();
 }
 
 //delete i-th record from database
@@ -446,18 +446,18 @@ void TDataBase::Del(int i)
     nF = rh->nFile;
     check_file( nF );
     ErrorIf( !dbChangeAllowed( nF ),
-	aFile[nF].Name(), "Cannot delete record: changes to system database are not allowed!");
+    aFile[nF]->Name(), "Cannot delete record: changes to system database are not allowed!");
 
 
-    aFile[nF].Open( UPDATE_DBV );
+    aFile[nF]->Open( UPDATE_DBV );
     // delete record
     rh->len += RecHead::data_size();
-    aFile[nF].AddSfe( *rh );
+    aFile[nF]->AddSfe( *rh );
     ind.delndx(i);
-    aFile[nF].PutHead( aFile[nF].f, -1);
+    aFile[nF]->PutHead( aFile[nF]->f, -1);
     putndx( nF );
     status = UNDF_;
-    if( rclose )  aFile[nF].Close();
+    if( rclose )  aFile[nF]->Close();
 }
 
 //Read i-th record from PDB file to memory.
@@ -472,12 +472,12 @@ void TDataBase::Get(int i)
     nF = rh->nFile;
     check_file( nF );
 
-    aFile[nF].Open( UPDATE_DBV );
-    getrec( *rh, aFile[nF].f, rhh );
+    aFile[nF]->Open( UPDATE_DBV );
+    getrec( *rh, aFile[nF]->f, rhh );
     ind.PutKey(i);
     status = ONEF_;
     fNum = findIndex<int>( fls, nF );
-    if( rclose )  aFile[nF].Close();
+    if( rclose )  aFile[nF]->Close();
 }
 
 //Rename record (Change first field: for SYSEQ, and >)
@@ -529,16 +529,16 @@ time_t TDataBase::GetTime( uint i )
     nF = ree->nFile;
     check_file( nF );
 
-    aFile[nF].Open( UPDATE_DBV );
-    aFile[nF].f.seekg(ree->pos, ios::beg );
+    aFile[nF]->Open( UPDATE_DBV );
+    aFile[nF]->f.seekg(ree->pos, ios::beg );
     //   aFile[nF]->f.read( (char *)&rh, sizeof(RecHead) );
-    rh.read (aFile[nF].f);
+    rh.read (aFile[nF]->f);
     if( strncmp( rh.bgm, MARKRECHEAD, 2 ) ||
             strncmp( rh.endm, MARKRECHEAD, 2 ) || rh.Nobj != nOD )
         Error( GetKeywd(), "PDB record header format error");
     status =  UNDF_;
     fNum = findIndex<int>( fls, nF );
-    if( rclose )  aFile[nF].Close();
+    if( rclose )  aFile[nF]->Close();
     return rh.crt;
 }
 
@@ -654,9 +654,9 @@ bool TDataBase::KeyTest( const char* key )
 void TDataBase::Create( uint nF )
 {
     check_file( nF );
-    if( !aFile[nF].Exist() )
+    if( !aFile[nF]->Exist() )
     {
-        aFile[nF].Create( nRT, isDelete );
+        aFile[nF]->Create( nRT, isDelete );
         putndx( nF );    // indexes
     }
 
@@ -668,7 +668,7 @@ void TDataBase::opfils()
     fNum = 0;
     fOpenNameBuf.clear();
     for(size_t i=0; i<fls.size(); i++)
-        fOpenNameBuf.push_back( aFile[fls[i]].Name().c_str() );
+        fOpenNameBuf.push_back( aFile[fls[i]]->Name().c_str() );
 }
 
 // Selection in the list of full file names
@@ -678,15 +678,15 @@ void TDataBase::GetFileList(int mode, TCStringArray& names,
     names.clear();
     indeces.clear();
     sel.clear();
-    for( uint i=0; i<aFile.GetCount(); i++ )
+    for( size_t i=0; i<aFile.size(); i++ )
     {
 
         int nF = fNum = findIndex<int>( fls, i );
         if( (nF==-1&&(mode&closef))||(nF!=-1&&(mode&openf)) )
         {
-            aFile[i].Makepath();
-            names.push_back( string(aFile[i].GetKeywd())+string(" ")+
-                       string(aFile[i].GetPath().c_str()));
+            aFile[i]->Makepath();
+            names.push_back( string(aFile[i]->GetKeywd())+string(" ")+
+                       string(aFile[i]->GetPath().c_str()));
             indeces.push_back(i);
             if( (mode&oldself) && nF != -1) //select already open files
                 sel.push_back(indeces.size()-1);
@@ -700,7 +700,7 @@ TDataBase::Open( bool type, FileStatus mode, const TCIntArray& nff )
 {
     uint j;
     ///
-    if( aFile.GetCount() == 0 )
+    if( aFile.size() == 0 )
         return;
 
     if( fls.size()<=0 ) //no config
@@ -723,16 +723,16 @@ try
     TCIntArray comp;
     for( j=0; j<fls.size(); j++ )
     {
-        aFile[fls[j]].Open( mode );
+        aFile[fls[j]]->Open( mode );
         //added Sveta 04/11/2002 to index files
-        if( aFile[fls[j]].GetDhOver())
+        if( aFile[fls[j]]->GetDhOver())
 // Sveta 06/2005
 //         if( vfQuestion( 0, aFile[fls[j]].GetPath(),
 //         "Stack of deleted records overflow.\nCompress?" ))
              comp.push_back(fls[j]);
         // end added
         getndx( fls[j] );
-        if( rclose )  aFile[fls[j]].Close();
+        if( rclose )  aFile[fls[j]]->Close();
     }
     opfils();
     //added Sveta 04/11/2002 to index files
@@ -746,7 +746,7 @@ try
         if( xcpt.mess == "Two records with the same key (OpenFiles).")
         {
           xcpt.mess += "\n 2nd record in file: ";
-          xcpt.mess +=  aFile[fls[j]].Name().c_str();
+          xcpt.mess +=  aFile[fls[j]]->Name().c_str();
 
           while( j < fls.size() )
             fls.erase( fls.begin()+j);
@@ -754,9 +754,9 @@ try
 
           for( j=0; j<fls.size(); j++ )
           {
-             aFile[fls[j]].Open( mode );
+             aFile[fls[j]]->Open( mode );
              getndx( fls[j] );
-             if( rclose )  aFile[fls[j]].Close();
+             if( rclose )  aFile[fls[j]]->Close();
            }
            opfils();
          }
@@ -771,11 +771,11 @@ TDataBase::OpenAllFiles( bool only_kernel )
 {
     int j;
 
-    if( aFile.GetCount() == 0 )
+    if( aFile.size() == 0 )
         return;
 
     Close();
-    for( j=0; j< static_cast<int>(aFile.GetCount()); j++)
+    for( j=0; j< static_cast<int>(aFile.size()); j++)
      if( only_kernel && j >=  specialFilesNum )
        continue;
      else
@@ -789,7 +789,7 @@ TDataBase::OpenAllFiles( bool only_kernel )
 void TDataBase::Close()
 {
     for(size_t j=0; j<fls.size(); j++ )
-        aFile[fls[j]].Close();
+        aFile[fls[j]]->Close();
     fls.clear();
     fNum = 0;
     fOpenNameBuf.clear();
@@ -800,16 +800,16 @@ void TDataBase::Close()
 //close files in PDB
 void TDataBase::OpenOnlyFromList( TCStringArray& names )
 {
-    if( aFile.GetCount() == 0 )
+    if( aFile.size() == 0 )
         return;
 
     Close();
     uint ii, jj;
 
-    for( ii=0; ii< aFile.GetCount(); ii++)
+    for( ii=0; ii< aFile.size(); ii++)
     {
       for( jj=0; jj< names.size(); jj++)
-        if(  aFile[ii].Name().find( names[jj].c_str() ) != string::npos )
+        if(  aFile[ii]->Name().find( names[jj].c_str() ) != string::npos )
          break;
       if( jj < names.size() )
          fls.push_back( ii );
@@ -821,12 +821,12 @@ void TDataBase::OpenOnlyFromList( TCStringArray& names )
 // add new file to DBfile list
 int TDataBase::AddFileToList(TDBFile* file)
 {
-    aFile.Add( file );
+    aFile.push_back( std::shared_ptr<TDBFile>(file) );
 try{
-    Create(aFile.GetCount()-1);
+    Create(aFile.size()-1);
     file->Open( UPDATE_DBV );
-    getndx(aFile.GetCount()-1);
-    fls.push_back(aFile.GetCount()-1);
+    getndx(aFile.size()-1);
+    fls.push_back(aFile.size()-1);
     if( rclose )
         file->Close();
     opfils();
@@ -836,22 +836,22 @@ try{
         if( xcpt.mess == "Two records with the same key (AddFileToList).")
         {
           xcpt.mess += "\n 2nd record in file: ";
-          xcpt.mess +=  aFile[aFile.GetCount()-1].Name().c_str();
+          xcpt.mess +=  aFile[aFile.size()-1]->Name().c_str();
 
           ind.initnew();
 
           for(size_t j=0; j<fls.size(); j++ )
           {
-             aFile[fls[j]].Open( UPDATE_DBV );
+             aFile[fls[j]]->Open( UPDATE_DBV );
              getndx( fls[j] );
              if( rclose )
-                aFile[fls[j]].Close();
+                aFile[fls[j]]->Close();
            }
            opfils();
          }
          Error( xcpt.title, xcpt.mess);
    }
-   return  findIndex<int>( fls, aFile.GetCount()-1 );
+   return  findIndex<int>( fls, aFile.size()-1 );
 }
 
 
@@ -860,7 +860,7 @@ int TDataBase::GetFileNum(const char* substr_name)
 {
   for(int ii=fls.GetCount()-1; ii>=0; ii-- )
   {
-   if( aFile[fls[ii]].Name().find( substr_name ) != string::npos )
+   if( aFile[fls[ii]]->Name().find( substr_name ) != string::npos )
      return ii;
   }
   return -1;
@@ -872,19 +872,19 @@ void TDataBase::DelFile(const std::string& path)
 {
     TDBFile fl(path);
 
-    for(uint ii=0; ii<aFile.GetCount(); ii++)
-        if( fl.Name() == aFile[ii].Name() )
+    for(size_t ii=0; ii<aFile.size(); ii++)
+        if( fl.Name() == aFile[ii]->Name() )
         {
             auto  nF = ii;
             int  nFls = findIndex<int>( fls, nF );
             if( nFls != -1 ) //close file and delete indexes
             {
-                aFile[nF].Close();
+                aFile[nF]->Close();
                 ind.delfile( nF );
                 fls.erase( fls.begin()+nFls);
             }
             fNum = 0; //?????
-            aFile.Remove(nF);
+            aFile.erase( aFile.begin()+ nF);
             opfils();
             break;
         }
@@ -903,17 +903,17 @@ try{
     for( j=0; j<nff.size(); j++)
     {  //fls.Add( nff[j] );
         Create( nff[j] );
-        aFile[nff[j]].Open( UPDATE_DBV );
+        aFile[nff[j]]->Open( UPDATE_DBV );
         //added Sveta 04/11/2002 to index files
-        if( aFile[nff[j]].GetDhOver())
-         if( vfQuestion( nullptr, aFile[nff[j]].GetPath().c_str(),
+        if( aFile[nff[j]]->GetDhOver())
+         if( vfQuestion( nullptr, aFile[nff[j]]->GetPath().c_str(),
          "Stack of deleted records overflow.\nCompress?" ))
              comp.push_back(nff[j]);
         // end added
         getndx( nff[j] );
         fls.push_back( nff[j] );
         if( rclose )
-            aFile[nff[j]].Close();
+            aFile[nff[j]]->Close();
     }
     opfils();
     //added Sveta 04/11/2002 to index files
@@ -927,16 +927,16 @@ try{
         if( xcpt.mess == "Two records with the same key (AddOpenFile).")
         {
           xcpt.mess += "\n 2nd record in file: ";
-          xcpt.mess +=  aFile[nff[j]].Name().c_str();
+          xcpt.mess +=  aFile[nff[j]]->Name().c_str();
 
           ind.initnew();
 
           for( j=0; j<fls.size(); j++ )
           {
-             aFile[fls[j]].Open( UPDATE_DBV );
+             aFile[fls[j]]->Open( UPDATE_DBV );
              getndx( fls[j] );
              if( rclose )
-                aFile[fls[j]].Close();
+                aFile[fls[j]]->Close();
            }
            opfils();
          }
@@ -1058,12 +1058,12 @@ void TDataBase::RebildFile(const TCIntArray& nff)
             ///vfMessage( aFile[nF]->Name(), "Cannot rebuild PDB file!");
             continue;
         }
-        aFile[nF].Open( UPDATE_DBV );
+        aFile[nF]->Open( UPDATE_DBV );
 
         //ind.delfile( nF );
-        aFile[nF].GetDh( fPos, fLen, nRT, isDel );
+        aFile[nF]->GetDh( fPos, fLen, nRT, isDel );
 
-        std::string tmpFileName = aFile[nF].GetPath().c_str();
+        std::string tmpFileName = aFile[nF]->GetPath().c_str();
                     tmpFileName += ".tmp";
 	GemDataStream outStream( tmpFileName, ios::out | ios::binary );
         for(int ii=0; ii<fPos; ii++ )
@@ -1071,18 +1071,18 @@ void TDataBase::RebildFile(const TCIntArray& nff)
 
 	outStream.seekp(fPos/*VDBhead::data_size()*/, ios::beg);
 
-        nRec = scanfile( nF, fPos, fLen, aFile[nF].f, outStream );
+        nRec = scanfile( nF, fPos, fLen, aFile[nF]->f, outStream );
 
 	outStream.close();
 
-        aFile[nF].OpenFromFileName( tmpFileName.c_str(), UPDATE_DBV );
+        aFile[nF]->OpenFromFileName( tmpFileName.c_str(), UPDATE_DBV );
 
-        aFile[nF].SetDh( fLen, nRec, nRT, isDel );
+        aFile[nF]->SetDh( fLen, nRec, nRT, isDel );
 
         putndx( nF );
         status = UNDF_;
 
-        aFile[nF].Close();
+        aFile[nF]->Close();
         ind.delfile( nF );
     }
 
@@ -1102,9 +1102,9 @@ bool TDataBase::SetNewOpenFileList(const TCStringArray& aFlKeywd)
     for(uint i=0; i<aFlKeywd.size(); i++)
     {
         int nF = -1;
-        for(uint j=0; j<aFile.GetCount(); j++)
+        for(size_t j=0; j<aFile.size(); j++)
         {
-            if( aFlKeywd[i] == aFile[j].GetKeywd() )
+            if( aFlKeywd[i] == aFile[j]->GetKeywd() )
             {
                 nF = j;
                 break;
@@ -1172,7 +1172,7 @@ uint TDataBase::GetOpenFileNum( const char* secondName )
     name += ".";
     name +=secondName;
     for(size_t i=0; i<fls.size(); i++)
-        if( name == aFile[fls[i]].Name() )
+        if( name == aFile[fls[i]]->Name() )
             return i;
     return 0;
 }
@@ -1184,10 +1184,10 @@ void TDataBase::GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey )
     name +=_name;
     name += ".";
 
-    for(size_t ii=0; ii< aFile.GetCount(); ii++)
+    for(size_t ii=0; ii< aFile.size(); ii++)
     {
-      if(  aFile[ii].GetPath().find( name ) != std::string::npos )
-          aFlkey.push_back( aFile[ii].GetKeywd() );
+      if(  aFile[ii]->GetPath().find( name ) != std::string::npos )
+          aFlkey.push_back( aFile[ii]->GetKeywd() );
     }
 }
 
@@ -1195,7 +1195,7 @@ void TDataBase::GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey )
 bool TDataBase::ifDefaultOpen() const
 {
     for(size_t i=0; i<fls.size(); i++)
-        if( aFile[fls[i]].GetPath().find( pVisor->sysDBDir().c_str())
+        if( aFile[fls[i]]->GetPath().find( pVisor->sysDBDir().c_str())
               != std::string::npos )
             return true;
     return false;
@@ -1207,8 +1207,8 @@ bool TDataBase::ifDefaultOpen() const
 
 int DataBaseList::Find(const char* s)
 {
-    for( size_t ii=0; ii<GetCount(); ii++ )
-        if( strcmp(s, elem(ii).GetKeywd() ) )
+    for( size_t ii=0; ii<size(); ii++ )
+        if( strcmp(s, at(ii)->GetKeywd() ) )
             return static_cast<int>(ii);
     return -1;
 }
@@ -1218,23 +1218,23 @@ void DataBaseList::Init()
 {
     // RT_SDATA default
     unsigned char sdref_rkfrm[3] = { 20, 5, 7 };
-    Add( new TDataBase( RT_SDATA, "sdref", false, true,
+    push_back( std::make_shared<TDataBase>( RT_SDATA, "sdref", false, true,
                         o_sdauthr, 9, 3, 3, sdref_rkfrm ) );
     // RT_CONST default
     unsigned char const_rkfrm[2] = { 8, 24 };
-    Add( new TDataBase( RT_CONST, "const", false, true,
+    push_back( std::make_shared<TDataBase>( RT_CONST, "const", false, true,
                         o_constlab, 3, 1, 2, const_rkfrm ) );
 }
 
 // configuration to file
 void DataBaseList::toCFG(fstream& out_stream)
 {
-    int nR = GetCount();
+    int nR = size();
 out_stream << nR << endl;
 
 //    f.write( (char*)&nR, sizeof(int) );
-    for(size_t ii=0; ii<GetCount(); ii++)
-        elem(ii).toCFG( out_stream );
+    for(size_t ii=0; ii<size(); ii++)
+        at(ii)->toCFG( out_stream );
 }
 
 // configuration from file
@@ -1245,16 +1245,10 @@ void DataBaseList::fromCFG(fstream& in_stream)
 //    f.read( (char*)&nR, sizeof(int) );
 in_stream >> nDB;
     for( int ii=0; ii<nDB; ii++)
-        Add( new TDataBase( in_stream ) );
+        push_back( std::make_shared<TDataBase>(in_stream ) );
 }
 
-TDataBase&
-DataBaseList::operator[](size_t ii) const
-{
-    ErrorIf( ii > GetCount(),
-             "DataBaseList","Invalid chain index.");
-    return TIArray<TDataBase>::elem(ii);
-}
+
 
 DataBaseList::~DataBaseList()
 {

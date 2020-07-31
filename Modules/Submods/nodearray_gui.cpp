@@ -110,7 +110,7 @@ std::string TNodeArrayGUI::PutGEM2MTFiles(  QWidget* par, long int nIV,
                                             bool putNodT1, bool addMui )
 {
     // Get name of filenames structure
-    std::string path = std::string( rt[RT_SYSEQ].FldKey(2), 0, rt[RT_SYSEQ].FldLen(2));;
+    std::string path = std::string( rt[RT_SYSEQ]->FldKey(2), 0, rt[RT_SYSEQ]->FldLen(2));;
     strip(path);
     if( bin_mode )
         path += "-bin.lst";

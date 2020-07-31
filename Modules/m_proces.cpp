@@ -60,7 +60,7 @@ TProcess::TProcess( uint nrt ):
 const std::string&
 TProcess::GetString()
 {
-    titler = std::string(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+    titler = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
     titler += " : ";
     titler += TSubModule::GetString();
     return titler;
@@ -84,8 +84,8 @@ TProcess::GetKeyofRecord( const char *oldKey, const char *strTitle,
     if( keyType==KEY_NEW  )
     { // Get key of base SyStat
         vstr pkey(MAXRKEYLEN+10);
-        rt[RT_PROCES].SetKey(str.c_str());
-        rt[RT_SYSEQ].MakeKey( RT_PROCES, pkey, RT_PROCES, 0, RT_PROCES, 1,
+        rt[RT_PROCES]->SetKey(str.c_str());
+        rt[RT_SYSEQ]->MakeKey( RT_PROCES, pkey, RT_PROCES, 0, RT_PROCES, 1,
                                RT_PROCES, 2, RT_PROCES, 3, RT_PROCES, 4,
                                RT_PROCES, 5, RT_PROCES, 6, RT_PROCES, 7, K_END);
         str = TSysEq::pm->GetKeyofRecord( pkey,
@@ -101,7 +101,7 @@ TProcess::GetKeyofRecord( const char *oldKey, const char *strTitle,
     str = TCModule::GetKeyofRecord( str.c_str(), strTitle, keyType );
     if(  str.empty() )
         return str;
-    rt[RT_PROCES].SetKey(str.c_str());
+    rt[RT_PROCES]->SetKey(str.c_str());
      if( keyType != KEY_TEMP )
          keyTest( str.c_str() );
     return str;
@@ -115,16 +115,16 @@ void TProcess::keyTest( const char *key )
 
     if( pVisor->ProfileMode == true )
     { // test project key
-        std::string prfKey = std::string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
         auto k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
-                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
+                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
             Error( key, "E08PErem: Wrong SysEq record key (another Modelling Project)!");
-        rt[RT_SYSEQ].MakeKey( RT_PROCES, pkey, RT_PROCES, 0, RT_PROCES, 1,
+        rt[RT_SYSEQ]->MakeKey( RT_PROCES, pkey, RT_PROCES, 0, RT_PROCES, 1,
                                RT_PROCES, 2, RT_PROCES, 3, RT_PROCES, 4,
                                RT_PROCES, 5, RT_PROCES, 6, RT_PROCES, 7, K_END);
-        if( rt[RT_SYSEQ].Find(pkey) <0 )
+        if( rt[RT_SYSEQ]->Find(pkey) <0 )
             Error( key, "E07PErem: wrong SysEq record key (no system)!");
     }
 }
@@ -480,7 +480,7 @@ void TProcess::set_def( int q)
         "E03PErem: Attempt to access corrupted dynamic memory");
     TProfil *aPa= TProfil::pm;
 
-    set_type_flags( rt[rtNum()].FldKey(9)[0] );
+    set_type_flags( rt[rtNum()]->FldKey(9)[0] );
     memcpy( &pe[q].Pvtm, aPa->pa.PEpvc, 12 );
 pe[q].PvR1 = '-';    // AIA on:   KD: temporary for process create
     strcpy( pe[q].name,  "`" );   // Fixed for debugging
@@ -570,14 +570,14 @@ bool TProcess::check_input( const char * /*key*/, int /*Level*/ )
 
     TProfil* PRof = dynamic_cast<TProfil*>(aMod[RT_PARAM].get());
     //Get base SysEq key from process key
-    rt[RT_SYSEQ].MakeKey( RT_PROCES, pkey, RT_PROCES, 0, RT_PROCES, 1,
+    rt[RT_SYSEQ]->MakeKey( RT_PROCES, pkey, RT_PROCES, 0, RT_PROCES, 1,
                            RT_PROCES, 2, RT_PROCES, 3, RT_PROCES, 4,
                            RT_PROCES, 5, RT_PROCES, 6, RT_PROCES, 7, K_END);
     // read SysEq record and unpack data
     PRof->loadSystat( pkey );
     // test changes in system after process calc
-    pep->syt = rt[RT_SYSEQ].Rtime();
-    if( pep->syt > rt[nRT].Rtime() )
+    pep->syt = rt[RT_SYSEQ]->Rtime();
+    if( pep->syt > rt[nRT]->Rtime() )
         return true;
     return false;
 }
@@ -1274,24 +1274,24 @@ pep->ccTime = 0.0;
       pep->Istat = P_EXECUTE;
 
     pe_qekey();
-    pep->pet= rt[RT_PROCES].Rtime();
+    pep->pet= rt[RT_PROCES]->Rtime();
     // load current record SysEq
 //    if( pep->PsUX != S_OFF  )
 //    {
         if( !pep->Nst )
-            rt[RT_SYSEQ].MakeKey( RT_PROCES, pep->stkey, RT_PROCES, 0, RT_PROCES,1,
+            rt[RT_SYSEQ]->MakeKey( RT_PROCES, pep->stkey, RT_PROCES, 0, RT_PROCES,1,
              RT_PROCES, 2,  RT_PROCES, 3, RT_PROCES, 4, RT_PROCES, 5,
                             RT_PROCES, 6, RT_PROCES, 7, K_END );
         else
-            rt[RT_SYSEQ].MakeKey( RT_PROCES,  pep->stkey, RT_PROCES, 0, RT_PROCES,1,
+            rt[RT_SYSEQ]->MakeKey( RT_PROCES,  pep->stkey, RT_PROCES, 0, RT_PROCES,1,
              RT_PROCES, 2, K_IMM, pep->timep, K_IMM, pep->Bnamep,
                K_IMM, pep->Pp, K_IMM, pep->TCp, K_IMM, pep->NVp, K_END );
 
-        nRec = rt[RT_SYSEQ].Find(pep->stkey);
+        nRec = rt[RT_SYSEQ]->Find(pep->stkey);
         if( nRec >= 0)
         {
             PRof->loadSystat( pep->stkey );   // read SysEq record and unpack data
-            pep->syt = rt[RT_SYSEQ].Rtime(); // test changes in system after process calc
+            pep->syt = rt[RT_SYSEQ]->Rtime(); // test changes in system after process calc
         }
         //       if( nRec < 0 || pep->syt < pep->pet )
         { // current key in base set before
@@ -1375,7 +1375,7 @@ TProcess::internalCalc()
             if(  pep->NP == 1)
             {
                 pep->NP = 0;
-                rt[RT_SYSEQ].MakeKey( RT_PROCES,  pep->stkey, RT_PROCES, 0, RT_PROCES,1,
+                rt[RT_SYSEQ]->MakeKey( RT_PROCES,  pep->stkey, RT_PROCES, 0, RT_PROCES,1,
                                        RT_PROCES, 2, K_IMM, pep->timep, K_IMM, pep->Bnamep,
                                        K_IMM, pep->Pp, K_IMM, pep->TCp, K_IMM, pep->NVp, K_END );
                 // proc_titr();
@@ -1410,13 +1410,13 @@ TProcess::internalCalc()
 //        }
 
         // new SyStat key
-        rt[RT_SYSEQ].MakeKey( RT_PROCES,  pep->stkey, RT_PROCES, 0, RT_PROCES,1,
+        rt[RT_SYSEQ]->MakeKey( RT_PROCES,  pep->stkey, RT_PROCES, 0, RT_PROCES,1,
                                RT_PROCES, 2, K_IMM, pep->timep, K_IMM, pep->Bnamep,
                                K_IMM, pep->Pp, K_IMM, pep->TCp, K_IMM, pep->NVp, K_END );
         // test record make before
-        nRec = rt[RT_SYSEQ].Find(pep->stkey);
+        nRec = rt[RT_SYSEQ]->Find(pep->stkey);
         if( nRec >= 0 )
-            pep->syt = rt[RT_SYSEQ].GetTime( nRec );
+            pep->syt = rt[RT_SYSEQ]->GetTime( nRec );
 
 if( pep->PsRT != S_OFF )
 {  // Time-dependent calculations
@@ -1505,10 +1505,10 @@ else {
 void TProcess::refreshState()
 {
     // Get startup syseq record for fitting
-    rt[RT_SYSEQ].MakeKey( RT_PROCES, pep->stkey, RT_PROCES, 0, RT_PROCES,1,
+    rt[RT_SYSEQ]->MakeKey( RT_PROCES, pep->stkey, RT_PROCES, 0, RT_PROCES,1,
              RT_PROCES, 2,  RT_PROCES, 3, RT_PROCES, 4, RT_PROCES, 5,
                             RT_PROCES, 6, RT_PROCES, 7, K_END );
-    auto nRec = rt[RT_SYSEQ].Find(pep->stkey);
+    auto nRec = rt[RT_SYSEQ]->Find(pep->stkey);
     if( nRec >= 0 && pep->Istat < P_MT_MODE )
         dynamic_cast<TProfil*>(aMod[RT_PARAM].get())->loadSystat( pep->stkey );   // read parent SysEq record and unpack data
 
@@ -1536,7 +1536,7 @@ void TProcess::RecordPrint(const char *key)
     if( res == VF3_1 )
     {
         // generate name and create directory
-        std::string process_name = rt[RT_PROCES].PackKey();
+        std::string process_name = rt[RT_PROCES]->PackKey();
         strip(process_name);
         KeyToName(process_name);
         //std::string recordPath = files_dir + process_name + "/";
@@ -1711,7 +1711,7 @@ void TProcess::genGEM3K(const std::string& filepath, TCStringArray& savedSystems
     for( int ii=0; ii<pep->NR1 ; ++ii )
     {
         name = std::string( pep->stl[ii], 0, EQ_RKLEN );
-        auto nRec = rt[RT_SYSEQ].Find(name.c_str());
+        auto nRec = rt[RT_SYSEQ]->Find(name.c_str());
         if( nRec >= 0  )
         {
            savedSystems.push_back(name.c_str());

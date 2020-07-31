@@ -54,7 +54,7 @@ TGtDemo::TGtDemo( uint nrt ):
 const std::string&
 TGtDemo::GetString()
 {
-    titler = std::string(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+    titler = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
     titler += " : ";
     titler += TSubModule::GetString();
     return titler;
@@ -77,7 +77,7 @@ TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
 
     if( keyType==KEY_NEW  )
     { // Get key of Project
-        std::string prfKey = std::string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
         str = prfKey;
         str+= ":*:*:*:*:";
@@ -85,7 +85,7 @@ TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
     str = TCModule::GetKeyofRecord( str.c_str(), strTitle, keyType );
     if(  str.empty() )
         return str;
-    rt[RT_GTDEMO].SetKey(str.c_str());
+    rt[RT_GTDEMO]->SetKey(str.c_str());
      if( keyType != KEY_TEMP )
          keyTest( str.c_str() );
     return str;
@@ -97,11 +97,11 @@ void TGtDemo::keyTest( const char *key )
 {
     if( pVisor->ProfileMode == true )
     { // test project key
-        std::string prfKey = std::string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
         auto k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
-                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
+                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
             Error( key, "E08PErem: Wrong TGtDemo record key (another Modelling Project)!");
      }
 }
@@ -205,7 +205,7 @@ void TGtDemo::dyn_set(int q)
     plot  = static_cast<TPlotLine *>(aObj[ o_gdplline ]->GetPtr());
     gdp->sdref = static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_gdsdref ]->GetPtr());
     gdp->sdval = static_cast<char (*)[V_SD_VALEN]>(aObj[ o_gdsdval ]->GetPtr());
-    gdp->rtLen =  rt[ gdp->nRT ].KeyLen();
+    gdp->rtLen =  rt[ gdp->nRT ]->KeyLen();
 }
 
 // free dynamic memory in objects and values
@@ -503,7 +503,7 @@ void TGtDemo::bld_rec_list( )
     std::string str;
     char *key_p;
     int i, Nr;
-    short rtlen = rt[gdp->nRT].KeyLen();
+    short rtlen = rt[gdp->nRT]->KeyLen();
 
 AGAIN:
     key_p=nullptr;
@@ -512,14 +512,14 @@ AGAIN:
     if( gdp->PsPE != S_OFF )   // GTdemo by Process
     {
         TProcess::pm->RecordLoadinProfile(key_p);
-        strncpy( gdp->prKey, rt[RT_PROCES].PackKey(), MAXRKEYLEN );
+        strncpy( gdp->prKey, rt[RT_PROCES]->PackKey(), MAXRKEYLEN );
         for( i=0; i<aObj[o_pestl]->GetN(); i++ )
             aRklist.push_back( aObj[o_pestl]->GetString( i, 0 ));
     }
     else  if( gdp->PsPB != S_OFF ) // GTdemo by TUnSpace
     {
         TUnSpace::pm->RecordLoadinProfile(key_p);
-        strncpy( gdp->prKey, rt[RT_UNSPACE].PackKey(), MAXRKEYLEN );
+        strncpy( gdp->prKey, rt[RT_UNSPACE]->PackKey(), MAXRKEYLEN );
         for( i=0; i<aObj[o_unstl]->GetN(); i++ )
             aRklist.push_back( aObj[o_unstl]->GetString( i, 0 ));
     }
@@ -529,7 +529,7 @@ AGAINRC:    //get  keypart
         //str = vfKeyTemplEdit(window(), "Please, set a record key filter ", gdp->nRT, gdp->wcrk );
         //      if(  str== "" )   Bugfix 19.12.00  DAK
         //          goto AGAINRC;
-        Nr = rt[gdp->nRT].GetKeyList( gdp->wcrk/*str.c_str()*/, aRklist, anRk );
+        Nr = rt[gdp->nRT]->GetKeyList( gdp->wcrk/*str.c_str()*/, aRklist, anRk );
         if( Nr<1 )
         {
             if( vfQuestion(window(), GetName(),
@@ -611,7 +611,7 @@ TGtDemo::RecBuild( const char *key, int mode  )
         goto AGAIN;
     }
 */
-    gdp->rtLen =  rt[ gdp->nRT ].KeyLen();
+    gdp->rtLen =  rt[ gdp->nRT ]->KeyLen();
     bld_rec_list();
     gdp->dimXY[0] = gdp->Nlrk;
     if(  gdp->dimXY[1] <= 0 )  gdp->dimXY[1] = 2;
@@ -762,10 +762,10 @@ TGtDemo::RecCalc( const char *key )
                  "Sampling the results into GtDemo x0, y0 arrays. "
                  "Please, wait...", gdp->jR, gdp->Nlrk);
         gd_rec_read( gdp->jR );
-        if( strcmp( gdp->SYS_key, rt[RT_SYSEQ].UnpackKey() ))
+        if( strcmp( gdp->SYS_key, rt[RT_SYSEQ]->UnpackKey() ))
         {  /* retranslate the math script text */
             gd_text_analyze();
-            strncpy( gdp->SYS_key, rt[RT_SYSEQ].UnpackKey(), EQ_RKLEN );
+            strncpy( gdp->SYS_key, rt[RT_SYSEQ]->UnpackKey(), EQ_RKLEN );
         }
         rpn[0].CalcEquat();
         aMod[RT_GTDEMO]->ModUpdate("GtDemo data sampling in progress...");

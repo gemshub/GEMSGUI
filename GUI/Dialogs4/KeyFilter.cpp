@@ -44,7 +44,7 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
     setWindowModality(Qt::WindowModal);
     setWindowTitle(caption);
 
-    TDBKey dbKey( rt[irt].GetDBKey() );
+    TDBKey dbKey( rt[irt]->GetDBKey() );
 
     if( key )
         dbKey.SetKey(key);
@@ -194,7 +194,7 @@ KeyFilter::EvGetList()
     if( !dlg.exec() )
         return;
 
-    TDBKey dbKey( rt[iRt].GetDBKey() );
+    TDBKey dbKey( rt[iRt]->GetDBKey() );
 
     dbKey.SetKey(dlg.getKey().c_str());
 

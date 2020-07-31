@@ -97,7 +97,7 @@ public:
 
     const string& GetString()
     {
-     titler = rt[RT_SYSEQ].PackKey();
+     titler = rt[RT_SYSEQ]->PackKey();
      //titler += " : ";
      //titler += TSubModule::GetString();
      return titler;

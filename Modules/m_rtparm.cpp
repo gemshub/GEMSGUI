@@ -304,7 +304,7 @@ bool TRTParm::check_input( const char *key, int Level )
     time_t tr, tra;
     bool iRet= false;
 
-    rt[RT_REACDC].MakeKey( RT_RTPARM, pkey,  RT_RTPARM, 0, RT_RTPARM, 1,
+    rt[RT_REACDC]->MakeKey( RT_RTPARM, pkey,  RT_RTPARM, 0, RT_RTPARM, 1,
                             RT_RTPARM, 2, RT_RTPARM, 3, K_END );
     srec = key + MAXSYMB+MAXDRGROUP+MAXDCNAME+MAXSYMB;
     if( *srec == SRC_DCOMP )
@@ -321,7 +321,7 @@ bool TRTParm::check_input( const char *key, int Level )
     }
     if( abs(Level) == 1 )
     {
-        tra = rt[nRT].Rtime();
+        tra = rt[nRT]->Rtime();
         if( tr >= tra )
             iRet = true;
     }

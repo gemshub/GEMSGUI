@@ -92,7 +92,7 @@ void TIComp::set_def( int q)
     ErrorIf( icp!=&ic[q], GetName(), "Invalid access to IC in set_def()");
     strcpy( ic[q].sst, "s" );
     strcpy( ic[q].name, "Independent Component");
-    strncpy( ic[q].form, rt[rtNum()].FldKey(0), MAXICNAME );
+    strncpy( ic[q].form, rt[rtNum()]->FldKey(0), MAXICNAME );
     strcpy( ic[q].dc_ref, "`" );
     ic[q].awt   =  FLOAT_EMPTY;
     ic[q].aSs   =  FLOAT_EMPTY;

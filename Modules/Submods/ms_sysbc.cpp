@@ -598,11 +598,11 @@ void TSyst::systbc_calc( int mode )
         {
 //           syPbPH = sy.PbPH;
 //           syPPHk = sy.PPHk;
-           pkey = rt[RT_SYSEQ].UnpackKey();  // Save the initial SysEq rkey
+           pkey = rt[RT_SYSEQ]->UnpackKey();  // Save the initial SysEq rkey
            aSE->ods_link(1);
            try
            {
-                  int Rnum = rt[RT_SYSEQ].Find( skey.c_str() );
+                  int Rnum = rt[RT_SYSEQ]->Find( skey.c_str() );
 
                   if( Rnum<0 )    // Here call dialog for selection of the SysEq key
                   {
@@ -616,13 +616,13 @@ void TSyst::systbc_calc( int mode )
                          Error( GetName(), msg.c_str());
                     }
                     else {  // record selected
-                        Rnum = rt[RT_SYSEQ].Find( skey.c_str() );
+                        Rnum = rt[RT_SYSEQ]->Find( skey.c_str() );
                         NewRkey = true;
                     }
                   }
 //                  sy.PbPH = syPbPH;
 //                  sy.PPHk = syPPHk;
-                  rt[RT_SYSEQ].Get( Rnum );  // Read record
+                  rt[RT_SYSEQ]->Get( Rnum );  // Read record
                   aSE->dyn_set(1);
                   PHbcalcSysEq( &MsysC, &MaqC, &R1C, &VaqC, &VsysC );  // Calculation
             }
@@ -630,7 +630,7 @@ void TSyst::systbc_calc( int mode )
             {
                // return to first record
                 aSE->ods_link(0);
-                rt[RT_SYSEQ].SetKey( pkey.c_str() ); // Set back the initial record key
+                rt[RT_SYSEQ]->SetKey( pkey.c_str() ); // Set back the initial record key
                 Error( pkey.c_str() , xcpt.mess );
             }
 
@@ -641,7 +641,7 @@ void TSyst::systbc_calc( int mode )
                  memcpy( aSE->ssp->PhmKey, skey.c_str(), EQ_RKLEN );
              sy.PbPH = S_ON;
               	// Set back the initial record key
-             rt[RT_SYSEQ].SetKey( pkey.c_str() );
+             rt[RT_SYSEQ]->SetKey( pkey.c_str() );
         }
         else  // another SysEq record not provided or inaccessible
             sy.PbPH = S_REM;
@@ -673,7 +673,7 @@ void TSyst::systbc_calc( int mode )
         {
             if( /*( pe && (pe[0].Istat == P_EXECUTE ||
                 pe[0].Istat == P_MT_EXECUTE ))  ||*/
-                vfQuestion(window(), rt[RT_SYSEQ].PackKey(),
+                vfQuestion(window(), rt[RT_SYSEQ]->PackKey(),
                            "Warning: Charge mismatch in calculated \n"
                            "bulk composition!  Compensate(Y) or leave untouched (N)?"  ))
                 sy.BI[N] = -sy.B[N];    // sy.B[N]= 0.0;  fixed on Dec.3,2009 by DK
@@ -707,7 +707,7 @@ void TSyst::systbc_calc( int mode )
 
     if( aICkeys.size() > 0 )
     {
-      if( vfExcludeFillEdit( window(), rt[RT_SYSEQ].PackKey(),
+      if( vfExcludeFillEdit( window(), rt[RT_SYSEQ]->PackKey(),
             aICkeys, sel,  fill_data ))
          for( size_t ii=0; ii<aICnums.size(); ii++ )
          {

@@ -263,7 +263,7 @@ TVisorImp::TVisorImp(int c, char** v):
         {
            ui->action_calcMode->setChecked(true);
            // load last system
-           if( rt[RT_SYSEQ].Find( pVisor->lastSystemKey.c_str()) >= 0 )
+           if( rt[RT_SYSEQ]->Find( pVisor->lastSystemKey.c_str()) >= 0 )
            CmShow( pVisor->lastSystemKey.c_str() );
            //NewSystemDialog::pDia->CmSelect( pVisor->lastSystemKey.c_str());
         }
@@ -332,23 +332,23 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
     return;
 
   size_t nRT = static_cast<size_t>(nRT_);
-  string oldKey = rt[nRT].UnpackKey();
+  string oldKey = rt[nRT]->UnpackKey();
   pFilterKey->setText( dynamic_cast<TCModule*>(aMod[nRT].get())->getFilter());
 
   // define tbKeys
   tbKeys->clear();
   tbKeys->setSortingEnabled ( false );
-  tbKeys->setColumnCount( rt[nRT].KeyNumFlds());
+  tbKeys->setColumnCount( rt[nRT]->KeyNumFlds());
 
 
   // get list or record keys
   string keyFilter = pFilterKey->text().toStdString();
   TCIntArray temp, colSizes;
   TCStringArray keyList;
-  int nKeys = rt[nRT].GetKeyList( keyFilter.c_str(), keyList, temp);
+  int nKeys = rt[nRT]->GetKeyList( keyFilter.c_str(), keyList, temp);
 
-  for(jj=0; jj<rt[nRT].KeyNumFlds(); jj++)
-   colSizes.push_back( 0/*rt[nRT].FldLen(jj)*/ );
+  for(jj=0; jj<rt[nRT]->KeyNumFlds(); jj++)
+   colSizes.push_back( 0/*rt[nRT]->FldLen(jj)*/ );
 
   // define key list
   tbKeys->setRowCount(nKeys);
@@ -356,10 +356,10 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
   for( ii=0; ii<nKeys; ii++ )
   {
       tbKeys->setRowHeight(ii, htF(ftString, 0)+2);
-      for(jj=0, kk=0; jj<rt[nRT].KeyNumFlds(); jj++)
+      for(jj=0, kk=0; jj<rt[nRT]->KeyNumFlds(); jj++)
       {
 
-          ln = rt[nRT].FldLen(jj);
+          ln = rt[nRT]->FldLen(jj);
           keyfld = string(keyList[ii], kk, ln);
           StripLine(keyfld);
           colsz = keyfld.length()+1;
@@ -375,7 +375,7 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
       }
 
   }
-  for( jj=0; jj<rt[nRT].KeyNumFlds(); jj++)
+  for( jj=0; jj<rt[nRT]->KeyNumFlds(); jj++)
   {
       tbKeys->setColumnWidth(jj, wdF( ftString, colSizes[jj], eNo ) );
       item = new QTableWidgetItem(tr("%1").arg( jj+1));
@@ -402,7 +402,7 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
      tbKeys->showColumn(1);
   }
 
-  rt[nRT].SetKey(oldKey.c_str());
+  rt[nRT]->SetKey(oldKey.c_str());
 }
 
 // Change list of Modules for General or Project mode
@@ -410,7 +410,7 @@ void TVisorImp::changeModulesKeys( int nRT )
 {
 
     if( nRT >=0 )
-      pLine->setText(tr(rt[nRT].PackKey()));
+      pLine->setText(tr(rt[nRT]->PackKey()));
     else
         pLine->setText(tr(""));
 
@@ -478,7 +478,7 @@ void TVisorImp::OpenModule(QWidget* /*par*/, uint irt, int page, int viewmode, b
            openMdiChild( NewSystemDialog::pDia, true );
 
            // Create, if no syseq is present in the project
-           if( rt[RT_SYSEQ].RecCount() <= 0)
+           if( rt[RT_SYSEQ]->RecCount() <= 0)
                NewSystemDialog::pDia->CmCreate();
 
            //mdiArea->addSubWindow(NewSystemDialog::pDia);

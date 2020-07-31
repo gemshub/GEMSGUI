@@ -35,8 +35,8 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* /*name*/):
 	setupUi(this);
         string titl; // = pVisorImp->getGEMTitle();
             titl = "EqStat:: Single Thermodynamic System in Project ";
-            titl+= string(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
-            setWindowTitle( trUtf8(titl.c_str()) );
+            titl+= string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+            setWindowTitle(  titl.c_str()  );
 
     pDia = this;
 
@@ -293,7 +293,7 @@ void NewSystemDialog::printInputList( fstream& f )
 // returns true if user pressed 'save' or 'discard' and false on 'cancel'
 bool NewSystemDialog::MessageToSave()
 {
-    string key_str = rt[RT_SYSEQ].PackKey();
+    string key_str = rt[RT_SYSEQ]->PackKey();
     if( TSysEq::pm->isCellChanged() && key_str.find_first_of("*?") == string::npos )
     {
      int res = vfQuestion3(this, key_str.c_str(),
@@ -517,7 +517,7 @@ void NewSystemDialog::CmNew()
 
 void NewSystemDialog::CmSelect( const char *key )
 {
-    if( rt[RT_SYSEQ].RecCount() <= 0)
+    if( rt[RT_SYSEQ]->RecCount() <= 0)
         return;   // Added to avoid a pitfall at creating new project
     try
     {
@@ -557,8 +557,8 @@ void NewSystemDialog::CmSave()
     {
         if( TSysEq::pm->ifCalcFlag()== false )
         {
-            string key_s = rt[RT_SYSEQ].PackKey();
-            if( rt[RT_SYSEQ].Find( key_s.c_str()  ) < 0) // FindCurrent
+            string key_s = rt[RT_SYSEQ]->PackKey();
+            if( rt[RT_SYSEQ]->Find( key_s.c_str()  ) < 0) // FindCurrent
             { vfMessage( this, key_s.c_str(),
                          "Please, calculate the equilibrium state before saving this record!");
                 return;
@@ -593,7 +593,7 @@ void NewSystemDialog::CmDelete()
 
 void NewSystemDialog::CmNext()
 {
-    if( rt[RT_SYSEQ].RecCount() <= 0 )
+    if( rt[RT_SYSEQ]->RecCount() <= 0 )
         return;    // Added to avoid a pitfall at creating new project
     try
     {
@@ -602,11 +602,11 @@ void NewSystemDialog::CmNext()
 
         size_t i_next = 0;
         // get current record key
-        string str=rt[RT_SYSEQ].UnpackKey();
+        string str=rt[RT_SYSEQ]->UnpackKey();
         // select scroll list
         TCStringArray aKey;
         TCIntArray anR;
-        auto Nrec = rt[RT_SYSEQ].GetKeyList(TSysEq::pm->getFilter(), aKey, anR );
+        auto Nrec = rt[RT_SYSEQ]->GetKeyList(TSysEq::pm->getFilter(), aKey, anR );
         if( Nrec <= 0 )
             return; // no records to scroll
         // get current record key
@@ -635,7 +635,7 @@ void NewSystemDialog::CmNext()
 void NewSystemDialog::CmPrevious()
 {
 
-    if( rt[RT_SYSEQ].RecCount() <= 0)
+    if( rt[RT_SYSEQ]->RecCount() <= 0)
         return; // Added to avoid a pitfall at creating new project
     try
     {
@@ -644,11 +644,11 @@ void NewSystemDialog::CmPrevious()
 
         size_t i_next = 0;
         // get current record key
-        string str=rt[RT_SYSEQ].UnpackKey();
+        string str=rt[RT_SYSEQ]->UnpackKey();
         // select scroll list
         TCStringArray aKey;
         TCIntArray anR;
-        auto Nrec = rt[RT_SYSEQ].GetKeyList( TSysEq::pm->getFilter(), aKey, anR );
+        auto Nrec = rt[RT_SYSEQ]->GetKeyList( TSysEq::pm->getFilter(), aKey, anR );
         if( Nrec <= 0 )
             return; // no records to scroll
         // get current record key

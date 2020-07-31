@@ -69,7 +69,7 @@ SetFiltersDialog::SetFiltersDialog(QWidget* win,
     for(size_t i=0; i< el_data->flCnt.size(); i++ )
     {
         pMod = new QTreeWidgetItem( pkern );
-        pMod->setText(0, rt[i].GetKeywd());
+        pMod->setText(0, rt[i]->GetKeywd());
 
        for(int jj=0; jj<el_data->flCnt[i]; jj++ )
        {

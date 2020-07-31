@@ -128,7 +128,7 @@ void TReacDC::ods_link( int q)
 void TReacDC::dyn_set(int q)
 {
     ErrorIf( rcp!=&rc[q], GetName(), "E01RErem: Invalid access to rc in dyn_set()");
-    memcpy( rcp->pstate, rt[nRT].UnpackKey(), RE_RKLEN );
+    memcpy( rcp->pstate, rt[nRT]->UnpackKey(), RE_RKLEN );
     rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ]->GetPtr();
     rc[q].rDC =   (char *)aObj[ o_rerdc ]->GetPtr();
     rc[q].scDC =  (double *)aObj[ o_rescdc ]->GetPtr();
@@ -300,7 +300,7 @@ bool TReacDC::check_input( const char *key, int Level )
     bool iRet = false;
     if( Level != 1 )
         return true;
-    tre = rt[nRT].Rtime();
+    tre = rt[nRT]->Rtime();
     for( i=0; i<nQ; i++)
         if( rcp == &rc[i])
             break;
@@ -332,11 +332,11 @@ bool TReacDC::check_input( const char *key, int Level )
     catch( TError& xcpt )
     {
         ods_link(q);
-        rt[nRT].SetKey(key);
+        rt[nRT]->SetKey(key);
         Error( key/*xcpt.title.c_str()*/, xcpt.mess.c_str());
     }
     ods_link(q);
-    rt[nRT].SetKey(key); //   RecInput( key );
+    rt[nRT]->SetKey(key); //   RecInput( key );
     return iRet;
 }
 
@@ -479,7 +479,7 @@ AGAIN_MOD:
     Nf1 = 0;
 
     //REACDC&DCOMP  keypart
-    rt[RT_REACDC].MakeKey( RT_REACDC, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    rt[RT_REACDC]->MakeKey( RT_REACDC, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
 
     if( rcp->rDC )
     { // calc count DC and RC
@@ -594,7 +594,7 @@ AGAINRC:
     } //i
 
     /**************/
-    rt[nRT].SetKey(key); //   RecInput( key );
+    rt[nRT]->SetKey(key); //   RecInput( key );
     return ret;
 }
 
@@ -1269,7 +1269,7 @@ void TReacDC::PronsPrep( const char *key )
     strncpy( dcn, key, MAXRKEYLEN );
     TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
-    Rfind = rt[RT_DCOMP].Find( dcn );
+    Rfind = rt[RT_DCOMP]->Find( dcn );
     if(Rfind <0 )
     { /* There is no such record - copying data */
         aDC->dcp->Zz = rcp->Zz;
@@ -1288,7 +1288,7 @@ void TReacDC::PronsPrep( const char *key )
     }
     else
     {  /* The record is found */
-        rt[RT_DCOMP].Get(Rfind);
+        rt[RT_DCOMP]->Get(Rfind);
         aDC->dyn_set();
     }
     aDC->dcp->Gs[0] = rcp->Gs[1];
@@ -1306,7 +1306,7 @@ void TReacDC::PronsPrep( const char *key )
              "The DComp record already exists! Modify it (Y) or skip (N)?" ))
             return;
         //Rnum = rt[RT_DCOMP].Find(dcn);
-        rt[RT_DCOMP].Rep(Rfind/*Rnum*/);
+        rt[RT_DCOMP]->Rep(Rfind/*Rnum*/);
     }
     else TDComp::pm->AddRecord(dcn);
     /* A reminder */
@@ -1638,7 +1638,7 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     strncpy( dcn, key, MAXRKEYLEN );
     TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
-    Rfind = rt[RT_DCOMP].Find( dcn );
+    Rfind = rt[RT_DCOMP]->Find( dcn );
     if(Rfind <0 )
     { // There is no such record - copying data
         aDC->dcp->Zz = rcp->Zz;
@@ -1657,7 +1657,7 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     }
     else
     {  // The record is found
-        rt[RT_DCOMP].Get(Rfind);
+        rt[RT_DCOMP]->Get(Rfind);
         aDC->dyn_set();
     }
     aDC->dcp->Gs[0] = rcp->Gs[1];
@@ -1675,7 +1675,7 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
              "The DComp record already exists! Modify it (Y) or skip (N)?" ))
             return;
         //Rnum = rt[RT_DCOMP].Find(dcn);
-        rt[RT_DCOMP].Rep(Rfind/*Rnum*/);
+        rt[RT_DCOMP]->Rep(Rfind/*Rnum*/);
     }
     else TDComp::pm->AddRecord(dcn);
     // A reminder

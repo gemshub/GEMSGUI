@@ -1879,11 +1879,11 @@ void ProcessWizard::resetPageList(const char* aXname, const char* aYname)
     std::vector<pagesSetupData> scalarsList;
     std::vector<pagesSetupData> pgData;
 
-    if(  rt[RT_SYSEQ].GetStatus() != ONEF_) // read first record in DB
+    if(  rt[RT_SYSEQ]->GetStatus() != ONEF_) // read first record in DB
         {
             TCStringArray aRklist;
             TCIntArray anRk;
-            auto Nr = rt[RT_SYSEQ].GetKeyList( ALLKEY, aRklist, anRk );
+            auto Nr = rt[RT_SYSEQ]->GetKeyList( ALLKEY, aRklist, anRk );
             if( Nr > 0 )
               TProfil::pm->loadSystat( aRklist[0].c_str() );
         }

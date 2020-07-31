@@ -50,7 +50,7 @@ KeyProfile::KeyProfile( QWidget* win, uint irt, const char* caption):
     //    string s = "Select Project record";
     //    pLabel->setText(s.c_str());
 
-    auto n = rt[irt].GetKeyList( "*", keyList, temp);
+    auto n = rt[irt]->GetKeyList( "*", keyList, temp);
     for( size_t ii=0; ii<n; ii++ )
         pList->addItem(keyList[ii].c_str());
     pList->setCurrentRow(0);

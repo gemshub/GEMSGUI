@@ -75,7 +75,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
 
     string str =
           "Basis configuration of a new Modelling Project  ";
-         str +=  string(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));;
+         str +=  string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
          setWindowTitle( str.c_str() );
 
          QObject::connect( bBack, SIGNAL(clicked()), this, SLOT(CmBack()));
@@ -485,7 +485,7 @@ void ElementsDialog::SetICompList()
     for( size_t ii=0; ii<aIC.size(); ii++ )
      if( aIndMT[ii] == -1) // additional
      {
-       string name= string( aIC[ii], 0, rt[RT_ICOMP].FldLen(0) );
+       string name= string( aIC[ii], 0, rt[RT_ICOMP]->FldLen(0) );
        strip( name );
        if( name != "Vol" )
        {
@@ -529,7 +529,7 @@ void ElementsDialog::SetICompList()
   {
        int jj;
        string name= string( aICkey2_sel[ii],
-                      0, rt[RT_ICOMP].FldLen(0) );
+                      0, rt[RT_ICOMP]->FldLen(0) );
        strip( name );
        for( jj=0; jj<nmbOther; jj++ )
        {
@@ -642,7 +642,7 @@ void ElementsDialog::setFilesList()
         TCStringArray names;
         TCIntArray indx;
         TCIntArray sel;
-        rt[i].GetFileList(closef|openf|oldself, names, indx, sel);
+        rt[i]->GetFileList(closef|openf|oldself, names, indx, sel);
         cnt = 0;
         cnt_sel = 0;
         for(size_t ii=0; ii<names.size(); ii++ )
@@ -721,9 +721,9 @@ void ElementsDialog::openFilesSelection()
       newSelKeywds.push_back(files_data.selKeywds[cnt+ii]);
      cnt += files_data.selCnt[i];
      // add project files keywds
-     rt[i].GetProfileFileKeywds( prf_name.c_str(), newSelKeywds );
+     rt[i]->GetProfileFileKeywds( prf_name.c_str(), newSelKeywds );
      //open all files
-     rt[i].SetNewOpenFileList( newSelKeywds );
+     rt[i]->SetNewOpenFileList( newSelKeywds );
     }
 }
 
@@ -740,7 +740,7 @@ void ElementsDialog::openFilesICOMP()
      {  newSelKeywds.clear();
         for(int ii=0; ii<files_data.selCnt[i]; ii++ )
            newSelKeywds.push_back(files_data.selKeywds[cnt+ii]);
-        rt[i].SetNewOpenFileList( newSelKeywds );
+        rt[i]->SetNewOpenFileList( newSelKeywds );
         break;
      }
      cnt += files_data.selCnt[i];

@@ -68,8 +68,8 @@ class TVisor
         TCIntArray arr;
         if (selectFiles)
             arr = pm->SelectFileList(openf | closef);
-        rt[pm->rtNum()].Open(selectFiles, UPDATE_DBV, arr);
-        rt[pm->rtNum()].SetKey(ALLKEY);
+        rt[pm->rtNum()]->Open(selectFiles, UPDATE_DBV, arr);
+        rt[pm->rtNum()]->SetKey(ALLKEY);
     }
 
     void load();

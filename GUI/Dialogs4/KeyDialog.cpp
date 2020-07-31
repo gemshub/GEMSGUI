@@ -53,8 +53,8 @@ KeyDialog::KeyDialog(QWidget* win, size_t irt, const char* key,
     s +=  keyFilter;
     pLabel->setText(s.c_str());
 
-    s  = string(rt[irt].UnpackKey());
-    auto n = rt[irt].GetKeyList( keyFilter.c_str(), keyList, temp);
+    s  = string(rt[irt]->UnpackKey());
+    auto n = rt[irt]->GetKeyList( keyFilter.c_str(), keyList, temp);
     uint sel = 0;
 
     for( uint ii=0; ii<n; ii++ )
@@ -90,8 +90,8 @@ KeyDialog::KeyDialog(QWidget* win, size_t irt, TCStringArray& sel,
     for(size_t ii=0; ii<sel.size(); ii++)
     {   if( strchr( sel[ii].c_str(), ':' ))  // key in packed form
         {
-          rt[irt].SetKey( sel[ii].c_str() );
-          old_sel.push_back(rt[irt].UnpackKey());
+          rt[irt]->SetKey( sel[ii].c_str() );
+          old_sel.push_back(rt[irt]->UnpackKey());
         }
         else
           old_sel.push_back( sel[ii] );
@@ -137,7 +137,7 @@ KeyDialog::SetList()
     s +=  keyFilter;
     pLabel->setText(s.c_str());
 
-    auto n = rt[iRt].GetKeyList( keyFilter.c_str(), keyList, temp);
+    auto n = rt[iRt]->GetKeyList( keyFilter.c_str(), keyList, temp);
 
     for( uint ii=0; ii<n; ii++ )
        pList->addItem(keyList[ii].c_str());
@@ -172,10 +172,10 @@ KeyDialog::getKey()
         string s = pList->item(sel)->text().toStdString();
         //string s = ss;
         uint ln;
-        for( uint ii=0, jj=0; ii<rt[iRt].KeyNumFlds(); ii++)
+        for( uint ii=0, jj=0; ii<rt[iRt]->KeyNumFlds(); ii++)
         {
           //pos = strchr( s+jj, ":" );
-          ln = rt[iRt].FldLen(ii);
+          ln = rt[iRt]->FldLen(ii);
           // if( pos) ln = min( ln, pos-s+jj );
 
           //res += string(s+jj, 0, ln);
@@ -194,7 +194,7 @@ void
 KeyDialog::CmFilter()
 {
     string str_name = "Template for ";
-            str_name +=  rt[iRt].GetKeywd();
+            str_name +=  rt[iRt]->GetKeywd();
             str_name += " record key";
     KeyFilter dbFilter(this, iRt, keyFilter.c_str(), str_name.c_str() );
     if( dbFilter.exec() )
@@ -256,12 +256,12 @@ RDKeyDialog::RDKeyDialog(QWidget* win, TCStringArray& sel,
     {   if( strchr( sel[ii].c_str(), ':' ))  // key in packed form
         {
           if( sel[ii][0] == SRC_REACDC )
-          {  rt[RT_REACDC].SetKey( sel[ii].c_str()+2 );
-             old_sel.append( makeKey( SRC_REACDC, rt[RT_REACDC].UnpackKey()));
+          {  rt[RT_REACDC]->SetKey( sel[ii].c_str()+2 );
+             old_sel.append( makeKey( SRC_REACDC, rt[RT_REACDC]->UnpackKey()));
           }
           else
-          {  rt[RT_DCOMP].SetKey( sel[ii].c_str()+2 );
-             old_sel.append( makeKey( SRC_DCOMP, rt[RT_DCOMP].UnpackKey()));
+          {  rt[RT_DCOMP]->SetKey( sel[ii].c_str()+2 );
+             old_sel.append( makeKey( SRC_DCOMP, rt[RT_DCOMP]->UnpackKey()));
           }
         }
         else
@@ -318,7 +318,7 @@ void RDKeyDialog::SetList()
     // ReacDC list
     if( NsuT > 0 )  // template for adsorption
         keyFilter[0] = CP_SSPC;
-    auto n = rt[RT_REACDC].GetKeyList( keyFilter.c_str(), keyList, temp);
+    auto n = rt[RT_REACDC]->GetKeyList( keyFilter.c_str(), keyList, temp);
 
     for( uint ii=0; ii<n; ii++ )
        pList->addItem( makeKey( SRC_REACDC, keyList[ii].c_str()));
@@ -330,7 +330,7 @@ void RDKeyDialog::SetList()
          s+= keyFilter;
     }
 
-    n = rt[RT_DCOMP].GetKeyList( keyFilter.c_str(), keyList, temp);
+    n = rt[RT_DCOMP]->GetKeyList( keyFilter.c_str(), keyList, temp);
 
     for( uint ii=0; ii<n; ii++ )
        pList->addItem( makeKey( SRC_DCOMP, keyList[ii].c_str()));
@@ -358,9 +358,9 @@ void RDKeyDialog::SetList()
 void RDKeyDialog::CmFilter()
 {
     string str_name = "Template for ";
-            str_name +=  rt[RT_REACDC].GetKeywd();
+            str_name +=  rt[RT_REACDC]->GetKeywd();
             str_name +=  "&";
-            str_name +=  rt[RT_DCOMP].GetKeywd();
+            str_name +=  rt[RT_DCOMP]->GetKeywd();
             str_name += " record key";
     KeyFilter dbFilter(this, RT_DCOMP, keyFilter.c_str(), str_name.c_str() );
     if( dbFilter.exec() )

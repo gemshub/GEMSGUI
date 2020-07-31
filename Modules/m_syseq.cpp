@@ -85,11 +85,11 @@ void TSysEq::keyTest( const char *key )
 {
     if( pVisor->ProfileMode == true )
     { // test project key
-        std::string prfKey = std::string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
-                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
+                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
             Error( GetName(), "Invalid key!");
     }
 }
@@ -144,7 +144,7 @@ TSysEq::RecBuild( const char *key, int mode  )
            if( skey.empty() || skey[0] == '\0' || skey[0] == ' ' )
               skey = "*";
            else
-              rt[RT_SYSEQ].SetKey( skey.c_str() ); //Find( skey.c_str() );
+              rt[RT_SYSEQ]->SetKey( skey.c_str() ); //Find( skey.c_str() );
 
           skey = vfKeyEdit( window(),
                "Please, select one SysEq record",  nRT,  skey.c_str() );
@@ -153,7 +153,7 @@ TSysEq::RecBuild( const char *key, int mode  )
           else
                memcpy( ssp->PhmKey, skey.c_str(), EQ_RKLEN );
 
-          rt[RT_SYSEQ].SetKey( key ); // DAK fixed 27.10.99
+          rt[RT_SYSEQ]->SetKey( key ); // DAK fixed 27.10.99
        }
     }
     // Check flags to alloc data

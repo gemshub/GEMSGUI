@@ -318,7 +318,7 @@ void TCompos::bc_work_dyn_new()
     {
         TCStringArray aKey;
         TCIntArray anR;
-        int Nic = rt[RT_ICOMP].GetKeyList( "*:*:*:", aKey, anR );
+        int Nic = rt[RT_ICOMP]->GetKeyList( "*:*:*:", aKey, anR );
         ErrorIf( Nic<1, GetName(),
                  "W05BCrem: ICOMP data record keys are not selected \n"
                  "(maybe, some PDB chain files are not linked)");
@@ -491,7 +491,7 @@ LOOP_MARKIC:
         aDclist.clear();
         goto COMP_COUNT; //goto RE_SELECT;
     }
-    rt[RT_DCOMP].MakeKey( RT_COMPOS, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    rt[RT_DCOMP]->MakeKey( RT_COMPOS, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     aDclist_old.clear();
 
     /*

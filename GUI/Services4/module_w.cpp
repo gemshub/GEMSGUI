@@ -154,7 +154,7 @@ void TCModuleImp::SelectStart()
    //if( qApp->focusWidget() )
    //   qApp->focusWidget()->clearFocus();
 
-   if( iMod >= (int)rt.GetCount() || rt[iMod].RecCount() <= 0)
+   if( iMod >= (int)rt.size() || rt[iMod]->RecCount() <= 0)
        return;   // Added to avoid a selection
 
    if( pVisor->ProfileMode )

@@ -447,7 +447,7 @@ void TPhase::makeReacDCompList( const char *caption, TCStringArray& aDclist,
     aDclist.clear();
 
     //REACDC&DCOMP  keypart
-    rt[RT_REACDC].MakeKey( RT_PHASE, pkeyrd, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END );
+    rt[RT_REACDC]->MakeKey( RT_PHASE, pkeyrd, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END );
    if( pkeyrd[1] != ':')
        pkeyrd[1] = '*';
    if( bNsuT && php->NsuT > 0 )  // template for adsorption
@@ -464,20 +464,20 @@ void TPhase::makeReacDCompList( const char *caption, TCStringArray& aDclist,
           std::string key_dr = std::string( SM[i], 0, DC_RKLEN );
           if( DCS[i] == SRC_DCOMP )
           {
-            rt[RT_DCOMP].SetKey( key_dr.c_str() );
-            rt[RT_DCOMP].SetFldKey( 3, "*" );
+            rt[RT_DCOMP]->SetKey( key_dr.c_str() );
+            rt[RT_DCOMP]->SetFldKey( 3, "*" );
             key_dr  = string(1, DCS[i]);
             key_dr += ' ';
-            key_dr += rt[RT_DCOMP].UnpackKey();
+            key_dr += rt[RT_DCOMP]->UnpackKey();
           }
           else
             if( DCS[i] == SRC_REACDC )
             {
-              rt[RT_REACDC].SetKey( key_dr.c_str() );
-              rt[RT_REACDC].SetFldKey( 3, "*" );
+              rt[RT_REACDC]->SetKey( key_dr.c_str() );
+              rt[RT_REACDC]->SetFldKey( 3, "*" );
               key_dr  = std::string(1, DCS[i]);
               key_dr += ' ';
-              key_dr += rt[RT_REACDC].UnpackKey();
+              key_dr += rt[RT_REACDC]->UnpackKey();
             }
          aDclist_old.push_back( key_dr );
       }
@@ -1284,12 +1284,12 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
     if( useLst == false )
     {
         //DCOMP key list
-        Ndc = rt[RT_DCOMP].GetKeyList( part, aDclist, anRDc );
+        Ndc = rt[RT_DCOMP]->GetKeyList( part, aDclist, anRDc );
         if( part[0] == 'g' ) // Added Sveta 28/10/02 for plasma
         {
           TCStringArray aDclist1;
           TCIntArray anRDc1;
-          Ndc += rt[RT_DCOMP].GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
+          Ndc += rt[RT_DCOMP]->GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
           for(size_t kk=0; kk<aDclist1.size(); kk++)
           {
             aDclist.push_back(aDclist1[kk]);
@@ -1317,12 +1317,12 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
                 else ii++;
         }
         //REACDC  key list
-        Nrc = rt[RT_REACDC].GetKeyList( part, aRclist, anRRc );
+        Nrc = rt[RT_REACDC]->GetKeyList( part, aRclist, anRRc );
         if( part[0] == 'g' ) // Added Sveta 28/10/02 for plasma
         {
           TCStringArray aDclist1;
           TCIntArray anRDc1;
-          Nrc += rt[RT_REACDC].GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
+          Nrc += rt[RT_REACDC]->GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
           for(uint kk=0; kk<aDclist1.size(); kk++)
           {
             aRclist.push_back(aDclist1[kk]);

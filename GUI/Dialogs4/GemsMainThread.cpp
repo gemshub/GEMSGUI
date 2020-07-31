@@ -228,7 +228,7 @@ void TVisorImp::Update(bool force)
 
     int nrt = nRTofActiveSubWindow();
     if( nrt>=0 )
-       pLine->setText(tr(rt[nrt].PackKey()));
+       pLine->setText(tr(rt[nrt]->PackKey()));
 }
 
 

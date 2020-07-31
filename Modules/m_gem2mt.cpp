@@ -72,8 +72,8 @@ TGEM2MT::GetKeyofRecord( const char *oldKey, const char *strTitle,
     if( keyType==KEY_NEW  )
     { // Get key of base SyStat
         vstr pkey(MAXRKEYLEN+10);
-        rt[RT_GEM2MT].SetKey(str.c_str());
-        rt[RT_SYSEQ].MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
+        rt[RT_GEM2MT]->SetKey(str.c_str());
+        rt[RT_SYSEQ]->MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
                                RT_GEM2MT, 2, RT_GEM2MT, 3, RT_GEM2MT, 4,
                                RT_GEM2MT, 5, RT_GEM2MT, 6, RT_GEM2MT, 7, K_END);
         str = TSysEq::pm->GetKeyofRecord( pkey,
@@ -89,7 +89,7 @@ TGEM2MT::GetKeyofRecord( const char *oldKey, const char *strTitle,
     str = TCModule::GetKeyofRecord( str.c_str(), strTitle, keyType );
     if(  str.empty() )
         return str;
-    rt[RT_GEM2MT].SetKey(str.c_str());
+    rt[RT_GEM2MT]->SetKey(str.c_str());
      if( keyType != KEY_TEMP )
          keyTest( str.c_str() );
     return str;
@@ -102,16 +102,16 @@ void TGEM2MT::keyTest( const char *key )
 
     if( pVisor->ProfileMode == true )
     { // test project key
-        std::string prfKey = std::string( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
-                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
+                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
             Error( key, "E08GTrem: Invalid record key (another Modelling Project)!");
-        rt[RT_SYSEQ].MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
+        rt[RT_SYSEQ]->MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
                                RT_GEM2MT, 2, RT_GEM2MT, 3, RT_GEM2MT, 4,
                                RT_GEM2MT, 5, RT_GEM2MT, 6, RT_GEM2MT, 7, K_END);
-        if( rt[RT_SYSEQ].Find(pkey) <0 )
+        if( rt[RT_SYSEQ]->Find(pkey) <0 )
             Error( key, "E07GTrem: Invalid record key (no system)!");
     }
 }
@@ -714,13 +714,13 @@ bool TGEM2MT::check_input( const char * /*key*/, int /*Level*/ )
         return true;
 
     //Get base SysEq key from process key
-    rt[RT_SYSEQ].MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
+    rt[RT_SYSEQ]->MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
                            RT_GEM2MT, 2, RT_GEM2MT, 3, RT_GEM2MT, 4,
                            RT_GEM2MT, 5, RT_GEM2MT, 6, RT_GEM2MT, 7, K_END);
     // read SysEq record and unpack data
     TProfil::pm->loadSystat( pkey );
     // test changes in system after process calc
-    if( rt[RT_SYSEQ].Rtime() > rt[nRT].Rtime() )
+    if( rt[RT_SYSEQ]->Rtime() > rt[nRT]->Rtime() )
         return true;
     return false;
 }

@@ -514,7 +514,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
 // Checks if the modelling project name is the same as read from GEMS3K I/O files
 bool TProfil::CompareProjectName( const char* SysKey )
 {
-    auto len = rt[RT_PARAM].FldLen(0);
+    auto len = rt[RT_PARAM]->FldLen(0);
 //    const char* proj_name = rt[RT_PARAM].UnpackKey();
     const char* proj_key = db->UnpackKey();
 //char project_name[64];
@@ -537,8 +537,8 @@ void TProfil::ChangeTPinKey( double T, double P )
 
     Gcvt( T, 6, bT );
     Gcvt( P, 6, bP );
-    rt[RT_SYSEQ].SetKey( pmp->stkey );
-    rt[RT_SYSEQ].MakeKey( RT_SYSEQ, pmp->stkey, RT_SYSEQ, 0, RT_SYSEQ, 1,
+    rt[RT_SYSEQ]->SetKey( pmp->stkey );
+    rt[RT_SYSEQ]->MakeKey( RT_SYSEQ, pmp->stkey, RT_SYSEQ, 0, RT_SYSEQ, 1,
                            RT_SYSEQ, 2, RT_SYSEQ, 3, RT_SYSEQ, 4,
                            K_IMM, bP, K_IMM, bT, RT_SYSEQ, 7, K_END);
 
@@ -548,12 +548,12 @@ AGAIN:
     str = TSysEq::pm->GetKeyofRecord( str.c_str(),capName.c_str(), KEY_NEW );
     if( str.empty() )
          Error( GetName(), "Record creation rejected!");
-    if( rt[RT_SYSEQ].FindCurrent( str.c_str() ) >= 0 )
+    if( rt[RT_SYSEQ]->FindCurrent( str.c_str() ) >= 0 )
     {
         capName = "This record already exists! Please, enter another name.";
         goto AGAIN;
     }
-    rt[RT_SYSEQ].SetKey( str.c_str() );
+    rt[RT_SYSEQ]->SetKey( str.c_str() );
 }
 
 
@@ -725,55 +725,55 @@ TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
     vstr pkey(81);
     uint i;
 
-    int  Rnum = rt[nRT].Find( key );
+    int  Rnum = rt[nRT]->Find( key );
     ErrorIf( Rnum<0, GetName(), "Record to delete not found!");
-    rt[RT_PARAM].Get( Rnum ); // read record
+    rt[RT_PARAM]->Get( Rnum ); // read record
     dyn_set();
     SetFN();                  // reopen files of data base
-    rt[nRT].SetKey( key);
+    rt[nRT]->SetKey( key);
 
     // Delete all records connected to project
     aList.clear();    //SYSEQ
     anR.clear();
-    rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
+    rt[RT_SYSEQ]->GetKeyList( pkey, aList, anR );
     for( i=0; i< aList.size(); i++)
         TSysEq::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //PROCES
     anR.clear();
-    rt[RT_PROCES].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    rt[RT_PROCES]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_PROCES].GetKeyList( pkey, aList, anR );
+    rt[RT_PROCES]->GetKeyList( pkey, aList, anR );
     for( i=0; i< aList.size(); i++)
         TProcess::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //UNSPACE
     anR.clear();
-    rt[RT_UNSPACE].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    rt[RT_UNSPACE]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_UNSPACE].GetKeyList( pkey, aList, anR );
+    rt[RT_UNSPACE]->GetKeyList( pkey, aList, anR );
     for( i=0; i< aList.size(); i++)
         TUnSpace::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //GTDEMO
     anR.clear();
-    rt[RT_GTDEMO].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    rt[RT_GTDEMO]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_GTDEMO].GetKeyList( pkey, aList, anR );
+    rt[RT_GTDEMO]->GetKeyList( pkey, aList, anR );
     for( i=0; i< aList.size(); i++)
         TGtDemo::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //DUALTH
     anR.clear();
-    rt[RT_DUALTH].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    rt[RT_DUALTH]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_DUALTH].GetKeyList( pkey, aList, anR );
+    rt[RT_DUALTH]->GetKeyList( pkey, aList, anR );
     for( i=0; i< aList.size(); i++)
         TDualTh::pm->DeleteRecord(aList[i].c_str());
 
-    rt[nRT].Del( Rnum );
+    rt[nRT]->Del( Rnum );
 }
 
 

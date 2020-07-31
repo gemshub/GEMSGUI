@@ -564,8 +564,8 @@ TVisor::toWinCFG()
     f_win_ini << "local_doc\t=\t" << LocalDoc << endl;   // obsolete
     f_win_ini << "current_mode\t=\t" << ProfileMode << endl;
     f_win_ini << "default_built_in_TDB\t=\t\"" << DefaultBuiltinTDB.c_str() << "\"" << endl;
-    f_win_ini << "current_project\t=\t\"" << rt[RT_PARAM].PackKey() << "\""  << endl;
-    f_win_ini << "current_system\t=\t\"" << rt[RT_SYSEQ].PackKey() << "\""  << endl;
+    f_win_ini << "current_project\t=\t\"" << rt[RT_PARAM]->PackKey() << "\""  << endl;
+    f_win_ini << "current_system\t=\t\"" << rt[RT_SYSEQ]->PackKey() << "\""  << endl;
     f_win_ini.close();
 
     // Window-specific settings
@@ -801,102 +801,102 @@ TVisor::defaultCFG()
 
     // RT_PROFIL default
     unsigned char param_rkfrm[2] = { MAXMUNAME, MAXMUGROUP };
-    rt.Add(new TDataBase(rt.GetCount(), "projec", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "projec", true, true,
                          o_spppar, 15, 0, 2, param_rkfrm));      // 12.12.12 added new object to Project record
 
     // RT_ICOMP default
     unsigned char icomp_rkfrm[3] = { MAXICNAME, MAXSYMB, MAXICGROUP };
-    rt.Add(new TDataBase(rt.GetCount(), "icomp", false, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "icomp", false, true,
                          o_icsst, 6, 0, 3, icomp_rkfrm));
     // RT_DCOMP default
     unsigned char dcomp_rkfrm[4] = { MAXSYMB, MAXDRGROUP, MAXDCNAME, MAXSYMB };
-    rt.Add(new TDataBase(rt.GetCount(), "dcomp", false, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "dcomp", false, true,
                          o_dcstr, 20, 0, 4, dcomp_rkfrm));
 
     // RT_COMPOS default
     unsigned char compos_rkfrm[3] = { MAXCMPNAME, MAXSYMB, MAXCMPGROUP };
-    rt.Add(new TDataBase(rt.GetCount(), "compos", false, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "compos", false, true,
                          o_bcpcc, 20, 0, 3, compos_rkfrm));
 
     // RT_REACDC default
     unsigned char reacdc_rkfrm[4] = { MAXSYMB, MAXDRGROUP, MAXDCNAME, MAXSYMB };
-    rt.Add(new TDataBase(rt.GetCount(), "reacdc", false, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "reacdc", false, true,
                          o_restr, 20, 0, 4, reacdc_rkfrm));
 
     // RT_RTPARM default
     unsigned char rtparm_rkfrm[6] =
         { MAXSYMB, MAXDRGROUP, MAXDCNAME, MAXSYMB, MAXNV, MAXRTNAME };
-    rt.Add(new TDataBase(rt.GetCount(), "rtparm", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "rtparm", true, true,
                          o_rtname, 27, 0, 6, rtparm_rkfrm));
 
     // RT_PHASE default
     unsigned char phase_rkfrm[5] =
         { MAXSYMB, MAXPHSYMB, MAXPHNAME, MAXSYMB, MAXPHGROUP };
-    rt.Add(new TDataBase(rt.GetCount(), "phase", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "phase", true, true,
                          o_phstr, 22+38/*13/06/13*/, 0, 5, phase_rkfrm));
 
     // RT_SYSEQ default
     unsigned char syseq_rkfrm[8] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
                                      MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV
                                    };
-    rt.Add(new TDataBase(rt.GetCount(), "syseq", false, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "syseq", false, true,
                          o_ssphst, 71, 0, 8, syseq_rkfrm));
 
     // RT_PROCES default
     unsigned char proces_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
                                        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
                                      };
-    rt.Add(new TDataBase(rt.GetCount(), "proces", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "proces", true, true,
                          o_pestr, 26+14/*11/03/02*/, 0, 10, proces_rkfrm));
 
     // RT_UNSPACE default
     unsigned char unspace_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
                  MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
                                        };
-    rt.Add(new TDataBase(rt.GetCount(), "unspac", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "unspac", true, true,
                          o_unname, 70, 0, 10, unspace_rkfrm));
 
 
     // RT_GTDEMO default
     unsigned char gtdemo_rkfrm[5] =
         { MAXMUNAME, MAXDATATYPE, MAXGTDCODE, MAXNV, MAXGDGROUP };
-    rt.Add(new TDataBase(rt.GetCount(), "gtdemo", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "gtdemo", true, true,
                          o_gdps, 27, 0, 5, gtdemo_rkfrm));
 
     // RT_DUALTH default
     unsigned char dualth_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
                                   };
-    rt.Add(new TDataBase(rt.GetCount(), "dualth", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "dualth", true, true,
                          o_dtname, 53, 0, 10, dualth_rkfrm));
 
     // RT_GEM2MT default
     unsigned char gem2mt_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
                                   };
-    rt.Add(new TDataBase(rt.GetCount(), "gem2mt", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "gem2mt", true, true,
                          o_mtname, 67, 0, 10, gem2mt_rkfrm));
 
     // read default database
     TCStringArray aDBFiles = readPDBDir(pVisor->sysDBDir().c_str(), "*.pdb");
     //  readPDBDir(pVisor->userProfDir().c_str());
 
-    for (uint jj = 0; jj < rt.GetCount(); jj++)
+    for (size_t jj = 0; jj < rt.size(); jj++)
     {
         int cnt = 0;
          for (size_t ii = 0; ii < aDBFiles.size(); ii++)
         { string flnm = string(aDBFiles[ii], 0, aDBFiles[ii].find("."));
-            if ( flnm == rt[jj].GetKeywd() ||
+            if ( flnm == rt[jj]->GetKeywd() ||
                  ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
                  ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
             {
                 string path = pVisor->sysDBDir();
                 path += aDBFiles[ii];
-                rt[jj].AddFile(path.c_str());
+                rt[jj]->AddFile(path.c_str());
                 cnt++;
             }
         }
-        rt[jj].specialFilesNum = cnt;
+        rt[jj]->specialFilesNum = cnt;
     }
 
     // reading project dirs
@@ -907,18 +907,18 @@ TVisor::defaultCFG()
         dir += aDBDirs[ii];
         aDBFiles = readPDBDir(dir.c_str(), "*.pdb");
 
-        for (uint jj = 0; jj < rt.GetCount(); jj++)
+        for (size_t jj = 0; jj < rt.size(); jj++)
         {
           for (size_t kk = 0; kk < aDBFiles.size(); kk++)
           { string flnm = string(aDBFiles[kk], 0, aDBFiles[kk].find("."));
-            if ( flnm == rt[jj].GetKeywd() ||
+            if ( flnm == rt[jj]->GetKeywd() ||
                 ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
                 ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
                 {
                     string path(dir);
                     path += "/";
                     path += aDBFiles[kk];
-                    rt[jj].AddFile(path.c_str());
+                    rt[jj]->AddFile(path.c_str());
                 }
           }
         }
@@ -1008,17 +1008,17 @@ TVisor::deleteDBDir(const char *dir)
     {
         if (string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
         {
-            for (uint jj = 0; jj < rt.GetCount(); jj++)
+            for (size_t jj = 0; jj < rt.size(); jj++)
                 if (string(aFiles[ii], 0, aFiles[ii].find("."))
-                        == rt[jj].GetKeywd())
+                        == rt[jj]->GetKeywd())
                 {
                     path = dir;
                     path += "/";
                     path += aFiles[ii].c_str();
                     //cout << path << endl;
-                    rt[jj].Close();
-                    rt[jj].DelFile(path);
-                    rt[jj].Open(true, UPDATE_DBV, {});
+                    rt[jj]->Close();
+                    rt[jj]->DelFile(path);
+                    rt[jj]->Open(true, UPDATE_DBV, {});
                 }
         }
         path = dir;

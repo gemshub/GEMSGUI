@@ -318,11 +318,11 @@ TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
 
   }
   if(  dt.objNum== -2 )
-  { if( dt.i < rt[nRT].KeyNumFlds() )
+  { if( dt.i < rt[nRT]->KeyNumFlds() )
       {
-          memset( rt[nRT].FldKey( dt.i ), ' ', rt[nRT].FldLen( dt.i ));
-          strncpy( rt[nRT].FldKey( dt.i ), dat_str.c_str(),
-                   min( static_cast<size_t>(rt[nRT].FldLen( dt.i )), dat_str.length() ));
+          memset( rt[nRT]->FldKey( dt.i ), ' ', rt[nRT]->FldLen( dt.i ));
+          strncpy( rt[nRT]->FldKey( dt.i ), dat_str.c_str(),
+                   min( static_cast<size_t>(rt[nRT]->FldLen( dt.i )), dat_str.length() ));
       }
   }
   else if(  dt.objNum > 0  )

@@ -59,11 +59,11 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
         if( aMod[i]->IsSubModule() )
             continue;
         pMod = new QTreeWidgetItem( pkern );
-        pMod->setText(0, rt[i].GetKeywd());
+        pMod->setText(0, rt[i]->GetKeywd());
         TCStringArray names;
         TCIntArray indx;
         TCIntArray sel;
-        rt[i].GetFileList(closef|openf|oldself, names, indx, sel);
+        rt[i]->GetFileList(closef|openf|oldself, names, indx, sel);
         for( ii=0; ii<names.size(); ii++ )
         {
           // select only DB.default files
@@ -85,11 +85,11 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
         if( aMod[i]->IsSubModule() )
             continue;
         pMod = new QTreeWidgetItem( pprf);
-        pMod->setText(0, rt[i].GetKeywd());
+        pMod->setText(0, rt[i]->GetKeywd());
         TCStringArray names;
         TCIntArray indx;
         TCIntArray sel;
-        rt[i].GetFileList(closef|openf|oldself, names, indx, sel);
+        rt[i]->GetFileList(closef|openf|oldself, names, indx, sel);
         for( ii=0; ii<names.size(); ii++ )
         {
           // select only Projecte files

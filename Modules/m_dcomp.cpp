@@ -135,7 +135,7 @@ void TDComp::dyn_set(int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
              "E00DCrem: Invalid access to dc in dyn_set()");
-    memcpy( dcp->pstate, rt[nRT].UnpackKey(), DC_RKLEN );
+    memcpy( dcp->pstate, rt[nRT]->UnpackKey(), DC_RKLEN );
     dc[q].TCint= (float *)aObj[ o_dccpint ]->GetPtr();
     dc[q].Cp =   (float *)aObj[ o_dccp ]->GetPtr();
     dc[q].CpFS = (float *)aObj[ o_dccpfs ]->GetPtr();
@@ -296,7 +296,7 @@ void TDComp::set_def( int q)
     dc[q].NeCp = 1;
     dc[q].Nft = dc[q].Nemp = 0;
     dc[q].Nsd = 1;
-    strncpy( dc[q].name, rt[rtNum()].FldKey(2), MAXDCNAME );
+    strncpy( dc[q].name, rt[rtNum()]->FldKey(2), MAXDCNAME );
     dc[q].name[MAXDCNAME] = '\0';
     if( dc[q].pstate[0] == CP_AQU )
     {
@@ -395,7 +395,7 @@ int TDComp::RecBuild( const char *key, int mode  )
     int CM, CE, CV;
     //  int q=0;
 
-    memcpy( dcp->pstate, rt[nRT].UnpackKey(), DC_RKLEN );
+    memcpy( dcp->pstate, rt[nRT]->UnpackKey(), DC_RKLEN );
     switch( dcp->pstate[0] )
     {
     case  CP_LIQID: // EoS liquid component

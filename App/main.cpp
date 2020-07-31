@@ -115,7 +115,7 @@ main(int argc, char* argv[])
         // clear static arrays in our order because they're interdependent
         // and static variables are destructed at random order
         aMod.clear();
-        rt.Clear();
+        rt.clear();
         aObj.clear();
 
         delete pVisorImp;

@@ -827,12 +827,12 @@ TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
             rts = nRTwrk;
         default:     // get field from enathe chain key
             nkf = va_arg( Marker, uint );
-            if( !*rt[rts].FldKey( nkf ))
+            if( !*rt[rts]->FldKey( nkf ))
                 strcat( pkey, S_ANY );
             else
             {
-                string str=  string( rt[rts].FldKey( nkf ), 0,
-                                       min( rt[rts].FldLen(nkf), rkflen ));
+                string str=  string( rt[rts]->FldKey( nkf ), 0,
+                                       min( rt[rts]->FldLen(nkf), rkflen ));
                 StripLine( str );
                 strncat( pkey, str.c_str(), rkflen );
             }
