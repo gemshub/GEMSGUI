@@ -21,6 +21,7 @@
 #define _s_tpwork_h_
 
 #include <cctype>
+#include <vector>
 #include <memory>
 #include <cstring>
 #include "v_mod.h"
@@ -69,7 +70,7 @@ struct TPWORK
 
 // tpwork  container: aW
 class TpworkList:
-            public TIArray<TPWORK>
+            public std::vector<std::shared_ptr<TPWORK>>
 {
 protected:
 
@@ -80,13 +81,13 @@ public:
     struct TPWORK* twp;
     struct TPWORK& WW( int q)
     {
-        return elem(q);
+        return *at(q);
     }
     void set_zero( int q );
     void ods_link( int q );
     bool firstAW() const
     {
-        return twp == &elem(0);
+        return twp == at(0).get();
     }
 };
 

@@ -327,8 +327,8 @@ void TMulti::SolModLoad( )
     // reallocating arrays for script calculations
     if( pmp->pIPN <= 0 )
     {
-        qEp.Clear();
-        qEd.Clear();
+        qEp.clear();
+        qEd.clear();
     }
     // Data extraction from Phase records
     for( kk=0, k=-1; kk<mup->Fis; kk++ )
@@ -722,13 +722,13 @@ void TMulti::sm_text_analyze( int nph, int Type,
         ET_translate( o_nwtext, o_neqtxt, JB, JE, jb, je );
         if( Type )
         {
-            qEd.AddAt( new IPNCalc(), nph );
-            qEd[nph].GetEquat( static_cast<char *>(aObj[o_nwtext].GetPtr()) );
+            qEd.insert( qEd.begin()+nph, std::make_shared<IPNCalc>() );
+            qEd[nph]->GetEquat( static_cast<char *>(aObj[o_nwtext].GetPtr()) );
         }
         else
         {
-            qEp.AddAt( new IPNCalc(), nph );
-            qEp[nph].GetEquat( static_cast<char *>(aObj[o_nwtext].GetPtr() ));
+            qEp.insert( qEp.begin()+nph, std::make_shared<IPNCalc>() );
+            qEp[nph]->GetEquat( static_cast<char *>(aObj[o_nwtext].GetPtr() ));
         }
     }
     catch( TError& xcpt )

@@ -246,20 +246,20 @@ bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int 
     switch( LinkMode )
     { // check the calculation mode
     case LINK_TP_MODE: // running TP-dependent scripts
-        if(( sMod[SPHAS_DEP] == SM_TPDEP || sMod[SPHAS_DEP] == SM_UXDEP ) && qEp[k].nEquat() )
+        if(( sMod[SPHAS_DEP] == SM_TPDEP || sMod[SPHAS_DEP] == SM_UXDEP ) && qEp[k]->nEquat() )
         {	// Changed on 26.02.2008 to try TW DQF scripts - DK
-            qEp[k].CalcEquat();
+            qEp[k]->CalcEquat();
         }
-        if((sMod[DCOMP_DEP] == SM_TPDEP || sMod[DCOMP_DEP] == SM_UXDEP) && qEd[k].nEquat() )
+        if((sMod[DCOMP_DEP] == SM_TPDEP || sMod[DCOMP_DEP] == SM_UXDEP) && qEd[k]->nEquat() )
         {
             switch( sMod[DCE_LINK] )
             {
             case SM_PUBLIC:  // one script for all species
                 for( pm.js=0, pm.is=0; pm.js<pm.L1[k]; pm.js++ )
-                    qEd[k].CalcEquat();
+                    qEd[k]->CalcEquat();
                 break;
             case SM_PRIVATE_: // separate group of equations per species
-                qEd[k].CalcEquat();
+                qEd[k]->CalcEquat();
                 break;
             }
         }
@@ -324,19 +324,19 @@ bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int 
             return false;
         } // end switch
 
-        if( sMod[SPHAS_DEP] == SM_UXDEP && qEp[k].nEquat() )
+        if( sMod[SPHAS_DEP] == SM_UXDEP && qEp[k]->nEquat() )
             // Equations for the whole phase
-            qEp[k].CalcEquat();
-        if( sMod[DCOMP_DEP] == SM_UXDEP && qEd[k].nEquat() )
+            qEp[k]->CalcEquat();
+        if( sMod[DCOMP_DEP] == SM_UXDEP && qEd[k]->nEquat() )
         {  // Equations for species
             switch( sMod[DCE_LINK] )
             {
             case SM_PUBLIC:  // one script for all species
                 for( pm.js=0, pm.is=0; pm.js<pm.L1[k]; pm.js++ )
-                    qEd[k].CalcEquat();
+                    qEd[k]->CalcEquat();
                 break;
             case SM_PRIVATE_:  // separate group of equations for each species
-                qEd[k].CalcEquat();
+                qEd[k]->CalcEquat();
                 break;
             }
         }

@@ -26,26 +26,26 @@ struct STATES aSta;
 struct SPECS aSpc;
 
 TpworkList::TpworkList():
-        TIArray<TPWORK>( 10, 1 )
+        std::vector<std::shared_ptr<TPWORK>>()
 {
-    twp=0;
+    twp = nullptr;
 }
 
 TpworkList::~TpworkList()
 {
-    Clear();
+    clear();
 }
 
 void TpworkList::ods_link( int q )
 {
-    if( q > (int)GetCount() )
+    if( q > (int)size() )
         Error( "E27DCrun: TpworkList", "Invalid number of TPWORK structures!");
-    if( q == (int)GetCount() )
+    if( q == (int)size() )
     {
-        Add( new TPWORK() );
-        memset( (void *)&elem(q), 0, sizeof(TPWORK) );
+        push_back( std::shared_ptr<TPWORK>(new TPWORK()) );
+        memset( (void *)at(q).get(), 0, sizeof(TPWORK) );
     }
-    twp = &elem( q );
+    twp = at(q).get();
     aObj[ o_twdrkey ].SetPtr(  twp->DRkey );
     aObj[ o_twunits ].SetPtr( &twp->pSD ); /*4*/
     aObj[o_twpp].SetPtr( &twp->P );        /*1*/
@@ -82,8 +82,8 @@ void TpworkList::ods_link( int q )
 
 void TpworkList::set_zero( int q )
 {
-    if( q >= (int)GetCount() )
+    if( q >= (int)size() )
         Error( "TpworkList", "Invalid number of TPWORK structures!");
-    memset( (void *)&elem(q), 0, sizeof(TPWORK) );
+    memset( (void *)at(q).get(), 0, sizeof(TPWORK) );
 }
 //--------------------- End of s_tpwork.cpp ---------------------------

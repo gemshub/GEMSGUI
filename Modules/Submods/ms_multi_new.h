@@ -53,8 +53,8 @@ public:
     static TMulti* sm;
 
     // This is used only in GEM-Selektor
-    TIArray<IPNCalc> qEp;
-    TIArray<IPNCalc> qEd;
+    std::vector<std::shared_ptr<IPNCalc>> qEp;
+    std::vector<std::shared_ptr<IPNCalc>> qEd;
 
     TMulti( int nrt ):
         TMultiBase(nullptr),TSubModule( nrt )
