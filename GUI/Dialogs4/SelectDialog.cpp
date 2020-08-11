@@ -44,7 +44,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     }
 
     pList->setSelectionMode(QAbstractItemView::SingleSelection); //pList->setMultiSelection(false);
-    if( sel < 0 || sel > list.size() )
+    if( sel < 0 || sel > static_cast<int>(list.size()) )
 	    sel = 0;
     pList->setCurrentRow(sel); // setSelected(sel, true);
 
@@ -76,7 +76,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     }
 
     pList->setSelectionMode(QAbstractItemView::SingleSelection); //pList->setMultiSelection(false);
-    if( sel < 0 || sel > list.size() )
+    if( sel < 0 || sel > static_cast<int>(list.size()) )
  	    sel = 0;
      pList->setCurrentRow(sel); // setSelected(sel, true);
 

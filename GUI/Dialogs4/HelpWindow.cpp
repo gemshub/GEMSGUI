@@ -29,6 +29,7 @@
 #endif
 
 #include <QtHelp/QHelpEngine>
+#include <QtHelp/QHelpLink>
 #include <QtHelp/QHelpContentWidget>
 #include <QtHelp/QHelpIndexWidget>
 #include <QFileInfo>
@@ -298,8 +299,8 @@ void HelpWindow::showFind()
 {
     if( hEngine )
     {
-       QStringList query = hEngine->searchEngine()->queryWidget()->query().value(0).wordList;
-       findLine->setText(query.value(0));
+       auto query = hEngine->searchEngine()->queryWidget()->searchInput();
+       findLine->setText(query);
     }
 }
 
@@ -351,7 +352,7 @@ void HelpWindow::actionFindNext()
   if( !findLine )
    return;
 
-  QTextDocument::FindFlags flg = nullptr;
+  QTextDocument::FindFlags flg;
   if(action_Case_sensetiv->isChecked() )
        flg |=QTextDocument::FindCaseSensitively;
 
@@ -426,17 +427,19 @@ QUrl HelpWindow::showHelpForKeyword(const QString &keyword)
       return QUrl();
 
     // finding full name, not subString
-    QMap<QString, QUrl> links = hEngine->indexModel()->linksForKeyword( keyword );
+    //QMap<QString, QUrl> links = hEngine->indexModel()->linksForKeyword( keyword );
+    auto links = hEngine->documentsForKeyword(keyword);
     if (links.count())
-      return links.constBegin().value();
+      return links.constBegin()->url;
 
     QString kwInternal = keyword;
     int ndx = kwInternal.lastIndexOf('_');
     if(ndx > -1)
     {    kwInternal= kwInternal.remove(QRegExp("_[0-9]{1,3}")/*ndx*/);
-         links = hEngine->indexModel()->linksForKeyword( kwInternal );
+         // links = hEngine->indexModel()->linksForKeyword( kwInternal );
+         links = hEngine->documentsForKeyword( kwInternal );
             if (links.count())
-              return links.constBegin().value();
+              return links.constBegin()->url;
     }
 
     //for old keywd list
@@ -528,8 +531,8 @@ SearchWidget::~SearchWidget()
 
 void SearchWidget::search() const
 {
-    QList<QHelpSearchQuery> query = srchEngine->queryWidget()->query();
-    srchEngine->search(query);
+   auto query = srchEngine->queryWidget()->searchInput();
+   srchEngine->search(query);
 }
 
 void SearchWidget::searchingStarted()

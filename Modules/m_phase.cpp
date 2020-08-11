@@ -1209,7 +1209,7 @@ TPhase::RecCalc( const char *key )
     TCModule::RecCalc(key);
 }
 
-void TPhase::RecordPrint(const char *key_)
+void TPhase::RecordPrint(const char */*key_*/)
 {
    // generate input
     TCIntArray aDCused;
@@ -1604,7 +1604,7 @@ int TPhase::CompressSublattice( const TCStringArray& form_array )
     TCStringArray old_lsMoi = getSavedLsMoi();
     MakeSublatticeLists( form_array  );
 
-    ErrorIf( old_lsMoi.size() < php->nMoi, string( php->pst_, 0, MAXPHNAME),
+    ErrorIf( static_cast<int>(old_lsMoi.size()) < php->nMoi, string( php->pst_, 0, MAXPHNAME),
              "Please, recalculate phase record before execution.");
 
     TCIntArray  Moiused;
@@ -1633,9 +1633,9 @@ int TPhase::CompressSublattice( const TCStringArray& form_array )
         for(; jj<php->npxM; jj++)
         {
             DCndx = php->ipxt[ii*php->npxM+jj];
-            if( DCndx  < 0 || DCndx >= Moiused.size() )
+            if( DCndx  < 0 || DCndx >= static_cast<int>(Moiused.size()) )
                 continue;
-            DCndx =  Moiused[static_cast<uint>(DCndx)];
+            DCndx =  Moiused[static_cast<size_t>(DCndx)];
             if( DCndx  < 0  ) // non-existent component
                 break;
             php->ipxt[ii*php->npxM+jj] = static_cast<short>(DCndx);
@@ -1660,7 +1660,7 @@ TCStringArray TPhase::readFormulaes( const TCIntArray&  DCused) const
     vstr dcn(MAXRKEYLEN);
     time_t crt;
     TCStringArray form_array;
-    bool onlyused = DCused.size()>=php->nDC;
+    bool onlyused = static_cast<int>(DCused.size())>=php->nDC;
 
     TDComp* aDC=dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
     TReacDC* aRDC=dynamic_cast<TReacDC *>(aMod[RT_REACDC].get());

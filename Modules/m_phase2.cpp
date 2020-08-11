@@ -1357,7 +1357,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
     {   /* Get list of component : add aMcv and aMrv */
         for( i=0; i<php->nDC; i++ )
         {
-            if( i < aDclist.size() )
+            if( i < static_cast<int>(aDclist.size()) )
             {
                 memcpy( php->SM[i], aDclist[i].c_str(), DC_RKLEN );
                 php->SM[i][DC_RKLEN-1] = SRC_DCOMP;

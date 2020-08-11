@@ -19,7 +19,7 @@
 #ifndef __help_h
 #define __help_h
 
-#include <QMap>
+#include <QMultiMap>
 #include <QString>
 #include <QStringList>
 #include <QUrl>
@@ -28,7 +28,7 @@
 class HelpConfigurator
 {
   QString path;
-  QMap<QString, QUrl> links;
+  QMultiMap<QString, QUrl> links;
   QStringList images;
   QStringList files;
 

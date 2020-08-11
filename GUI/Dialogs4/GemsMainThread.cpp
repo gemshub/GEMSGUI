@@ -134,7 +134,7 @@ void TVisorImp::startGEMServer()
             GEMS3_proc->setWorkingDirectory(serverPath);
             QStringList argumentos;
             //argumentos << "-P" << filehex  << "-Q" << "-V" <<  "after_programming";
-            GEMS3_proc->start(app);
+            GEMS3_proc->start(app,argumentos);
             cout << app.toStdString() << endl;
 
             if(!GEMS3_proc->waitForStarted(-1))

@@ -380,7 +380,7 @@ TReacDC::MakeQuery()
 
 int TReacDC::RecBuild( const char *key, int mode  )
 {
-    int i, /*iir, Ndc, Nrc,*/ Nc1, Nn1 = 0, Nf1, Nr1;
+    int /*i, iir, Ndc, Nrc,*/ Nc1, Nn1 = 0, Nf1, Nr1;
     vstr pkey(81);
     int CM,CE,CV;
     //short oldnDC = rcp->nDC/*, newnDC*/;
@@ -484,7 +484,7 @@ AGAIN_MOD:
 
     if( rcp->rDC )
     { // calc count DC and RC
-        for( i=0; i<rcp->nDC; i++ )
+        for(int i=0; i<rcp->nDC; i++ )
         {
             switch( rcp->rDC[i] )
             {
@@ -516,7 +516,7 @@ AGAIN_MOD:
         //aRclist_old.Clear();
         std::string key_dr;
 
-        for( i=0; i<rcp->nDC; i++ )
+        for( int i=0; i<rcp->nDC; i++ )
         {
           if( rcp->rDC[i] == SRC_DCOMP || rcp->rDC[i] == SRC_REACDC )
           {
@@ -575,11 +575,11 @@ AGAINRC:
 
     /*================================*/
     // get aMcv+aMrv  (Remake code! Must be by component groups )
-    for( i=0; i<rcp->nDC; i++ )
+    for( int i=0; i<rcp->nDC; i++ )
     {
         if( !rcp->scDC[i] )
             rcp->scDC[i] = 1;
-        if( i< aDclist.size() )
+        if( i < static_cast<int>(aDclist.size()) )
         {
             memcpy( rcp->DCk[i], aDclist[i].c_str()+2, DC_RKLEN );
             rcp->rDC[i] = aDclist[i].c_str()[0];
@@ -1718,6 +1718,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
     case MANY_:    // Get Key list
         db->GetKeyList( str_key.c_str(), aDclist, anRDc );
         db->Get(anRDc[0]);
+        [[fallthrough]];
     case ONEF_:
         dyn_set(q);
         time_s = db->Rtime();

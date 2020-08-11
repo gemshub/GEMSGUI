@@ -567,7 +567,7 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
  	}	
  	
  	if( fullrowSize > rowSize )
-        {	colSize += fontMetrics().width('M')*2+1;
+        {	colSize += fontMetrics().horizontalAdvance('M')*2+1;
                 //colSize += verticalScrollBar()->width();//szSBAR;
  	}	
  	

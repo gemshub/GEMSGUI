@@ -123,6 +123,7 @@ db->SetStatus(ONEF_);
         retType = VF3_1;
         dyn_kill();
         set_def(); // set default data or zero if necessary
+         [[fallthrough]];
     case VF3_2:
         contentsChanged = true;
         break;

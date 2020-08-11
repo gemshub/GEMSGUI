@@ -91,7 +91,7 @@ void HelpConfigurator::addNameToList( QString ref, QString file_name )
       names.append(ref);
       key =ref.section("\"",1,1);
       value = file_name +"#"+key;
-      links.insertMulti(key,QUrl(value));
+      links.insert(key, QUrl(value));
 // cout << value.toStdString()<<endl;
     }
     else
