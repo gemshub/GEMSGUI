@@ -239,11 +239,11 @@ struct TValString:
     //  bool VerifyString(const char* s);
     bool SetString(const char* s, int ndx);
 
-    void write(GemDataStream& s, int size) {
-    s.writeArray(static_cast<char*>(ptr), size);
+    void write(GemDataStream& s, int size1) {
+    s.writeArray(static_cast<char*>(ptr), size1);
     }
-    void read(GemDataStream& s, int size) {
-    s.readArray(static_cast<char*>(ptr), size);
+    void read(GemDataStream& s, int size1) {
+    s.readArray(static_cast<char*>(ptr), size1);
     }
 };
 

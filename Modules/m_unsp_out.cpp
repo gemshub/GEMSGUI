@@ -16,7 +16,7 @@ void TUnSpace::out_QT( int Ngr  )
 {
   double Ca,Ca1,sCa,sCa1, quanLapl,quanHur,quanWald,quanHom;
   float st=2.,st1=2.; // coeff. Studenta
-  int i, k,ii,l,/*ca=0,*/kf, kf1;
+  int i, k,ii1,l,/*ca=0,*/kf, kf1;
 
  //  paragen( ); // put data to nPhA, PhAndx, PhAfreq ....
 
@@ -24,15 +24,15 @@ void TUnSpace::out_QT( int Ngr  )
 //==============================================
 // UiDC
 
-  ii = usp->N;
+  ii1 = usp->N;
 //#ifndef IPMGEMPLUGIN
   if( TRMults::sm->GetMU()->Laq )
 //#else
 //  if(mup_Laq )
 //#endif
-      ii--;
+      ii1--;
 
-  for( l=0; l<ii ; l++ )
+  for( l=0; l<ii1 ; l++ )
   {
    Ca = sCa = Ca1 = sCa1= 0.;
    kf=0; kf1=0;
@@ -499,7 +499,7 @@ void TUnSpace::adapt_nPG( int line, double new_val, double new_int )
 }
 
 //====================================================================
-extern bool _comment;
+extern bool _comment_bool;
 
 void TUnSpace::to_text_file( fstream& ff, bool with_comments )
 {

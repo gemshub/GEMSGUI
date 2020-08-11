@@ -350,7 +350,7 @@ std::vector<string> TNodeGUI::generate_send_msg( bool add_head )
 
 bool TNodeGUI::set_resv_msg(std::vector<string> &&msg_return)
 {
-    double time;
+    //double time;
     long int NodeStatusCH = T_ERROR_GEM;
 
     if( msg_return.size() >= 2 )
@@ -362,12 +362,12 @@ bool TNodeGUI::set_resv_msg(std::vector<string> &&msg_return)
     {
     case OK_GEM_AIA:
     case OK_GEM_SIA: // unpack dbr data
-        time = readMultiServer( NodeStatusCH, msg_return );
+        /*time =*/ readMultiServer( NodeStatusCH, msg_return );
         return true;
         break;
     case BAD_GEM_AIA:
     case BAD_GEM_SIA:  // unpack dbr data
-        time = readMultiServer( NodeStatusCH, msg_return );
+        /*time =*/ readMultiServer( NodeStatusCH, msg_return );
         Error( (msg_return.end()-1)->c_str(), msg_return.back().c_str() );
         break;
     case ERR_GEM_AIA:

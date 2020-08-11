@@ -83,6 +83,7 @@ inline void TGEM2MT::dMBfluxDir( long int q, long int i, double *dm, double fRat
        case NBC3source:  // 3: Cauchy source ( constant flux )
                  if( sign < 0 )
                       break;
+                 [[fallthrough]];
        case NBC1source:  //1: Dirichlet source ( constant concentration )
        case NBC1sink:    // -1: Dirichlet sink
        case NBC2source:  // 2: Neumann source ( constant gradient )

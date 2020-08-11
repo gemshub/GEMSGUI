@@ -177,7 +177,7 @@ void Formuan::charge(std::vector<ICTERM>& tt)
  switch( chan[0] )
  {
     case CHARGE_NUL:    break;
-    case CHARGE_MINUS:  sign = -1;
+    case CHARGE_MINUS:  sign = -1; [[fallthrough]];
     case CHARGE_PLUS:
                         chan = chan.substr(1);
                         getReal( cha, chan );
@@ -208,8 +208,8 @@ void Formuan::scanFterm( std::vector<ICTERM>& itt_, string& startPos, char endSi
         // get elem_st_coef
         st_coef = 1.;
         getReal( st_coef, startPos );
-        for(size_t ii=0; ii<elt_.size(); ii++)
-          elt_[ii].stoc *= st_coef;
+        for(size_t ii1=0; ii1<elt_.size(); ii1++)
+          elt_[ii1].stoc *= st_coef;
       }
 
       // added elements list to top level elements
@@ -258,6 +258,7 @@ void Formuan::scanElem( std::vector<ICTERM>& itt_, string& startPos )
                       {   startPos = startPos.substr(2);
                           break;
                       } // else goto default - other <icsymb>
+                    [[fallthrough]];
     default: // <isotope_mass><icsymb><valence>
         {
           string isotop = string(ISOTOPE_N);
@@ -408,6 +409,7 @@ int Formuan::scanMoiety( std::vector<MOITERM>& moit_ )
                       moit_.push_back( MOITERM("Va", nSites, nj ));
                       break;
                    }
+                  [[fallthrough]];
                   // else other symbol
         default:   cur_ = cur_.substr(1);
                     break;

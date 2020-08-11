@@ -488,9 +488,9 @@ void TMulti::DC_LoadThermodynamicData()
   //  }
   //  if( pmp->pTPD <= 1 )
   //  {
-      int xVol=0.;
-      if( tpp->PtvVm == S_ON && pmp->PV == VOL_CONSTR )
-        xVol = getXvolume();
+        int xVol=0.;
+        if( tpp->PtvVm == S_ON && pmp->PV == VOL_CONSTR )
+            xVol = getXvolume();
 
         for( k=0; k<pmp->FI; k++ )
         {
@@ -506,7 +506,7 @@ void TMulti::DC_LoadThermodynamicData()
                     Gg = syp->Guns[jj];    // User-set increment to G0 from project system
                 if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
                     Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK
-    // !!!!!!! Insert here a case that checks units of measurement for the G0 increment
+                // !!!!!!! Insert here a case that checks units of measurement for the G0 increment
                 pmp->G0[j] = ConvertGj_toUniformStandardState( Go+Gg+Ge, j, k );
                 Vv = 0.;
                 //  loading Vol
@@ -515,13 +515,14 @@ void TMulti::DC_LoadThermodynamicData()
                     { // loading molar volumes of components into the A matrix
                     case VOL_CONSTR:
                         if( syp->Vuns )
-                           Vv = syp->Vuns[jj];
+                            Vv = syp->Vuns[jj];
                         if( xVol >= 0 )
                             pmp->A[j*pmp->N+xVol] = tpp->Vm[jj]+Vv;
+                         [[fallthrough]];
                     case VOL_CALC:
                     case VOL_UNDEF:
                         if( syp->Vuns )
-                           Vv = syp->Vuns[jj];
+                            Vv = syp->Vuns[jj];
                         pmp->Vol[j] = (tpp->Vm[jj]+Vv ) * 10.;
                         break;
                     }

@@ -45,7 +45,7 @@ double  TdegK(int it, double t)
 
 //--------------------------------------------------------------------//
 void
-TSupcrt::unit(int it, int id, int ip, int ih, int itripl)
+TSupcrt::unit(int it, int id1, int ip, int ih, int itripl)
 {
     double fft[4] =  {1.e0, 1.e0, 0.555555556e0, 0.555555556e0 };
     double ffd[4] = {1.e-3, 1.e0, 1.80152e-2, 1.6018e-2};
@@ -59,14 +59,14 @@ TSupcrt::unit(int it, int id, int ip, int ih, int itripl)
     double ffch[6]= {1.e-3, 1.e0, 1.0e0, 0.23901e0, 0.23901e0, 0.947244e-3 };
 
     un.ft  = fft[it];
-    un.fd  = ffd[id];
-    un.fvd = ffvd[id];
-    un.fvk = ffvk[id];
-    un.fs  = ffs[id];
+    un.fd  = ffd[id1];
+    un.fvd = ffvd[id1];
+    un.fvk = ffvk[id1];
+    un.fs  = ffs[id1];
     un.fp  = ffp[ip];
     un.fh  = ffh[ih];
-    un.fst = ffst[id];
-    un.fc  = ffcd[id] * ffch[ih];
+    un.fst = ffst[id1];
+    un.fc  = ffcd[id1] * ffch[ih];
     if ( itripl == 1 )
         tpset();
 }
@@ -94,11 +94,11 @@ TSupcrt::tpset()
 }
 
 //--------------------------------------------------------------------//
-int TSupcrt::valspc(int it, int id, int ip, int ih, int itripl,
+int TSupcrt::valspc(int it, int id1, int ip, int ih, int itripl,
                     int isat, int iopt, int useLVS, int epseqn)
 {
     if ( !((0 <= it)     && (it     <= 3) &&
-            (0 <= id)     && (id     <= 3) &&
+            (0 <= id1)     && (id1     <= 3) &&
             (0 <= ip)     && (ip     <= 4) &&
             (0 <= ih)     && (ih     <= 5) &&
             (0 <= itripl) && (itripl <= 1) &&
@@ -197,7 +197,7 @@ void TSupcrt::resid(double t, double *d)
     double  qr[11], qt[10], qzr[9], qzt[9];
     double  e, /* q10,*/ q20, v, dfdt,/* q2a, q5t,*/ d2f, dpt, tex, /* fct,*/
     /*dadt,*/ ddz, zz, del, dex,/* qp,*/ qm, att, tx, tau, ex1, ex2;
-    long double q10, fct, q5t, qp, dadt, q2a;
+    long double q10, fct1, q5t, qp, dadt, q2a;
     qr[0]  = 0.0e0;
     qq.q5 = 0.0e0;
     qq.q0 = 0.0e0;
@@ -275,14 +275,14 @@ void TSupcrt::resid(double t, double *d)
                 tex = exp(ex2);
             q10   = dex * tex;
             qm    = km / del - k * ad->aad[j-36] * pow(del,((double)k-1));
-            fct   = qm * *d * *d * q10 / ddz;
-            q5t   = fct * (2.0e0 / *d + qm / ddz) - (*d / ddz) * (*d / ddz) *
+            fct1   = qm * *d * *d * q10 / ddz;
+            q5t   = fct1 * (2.0e0 / *d + qm / ddz) - (*d / ddz) * (*d / ddz) *
                     q10 * (km / del / del + k * (k-1) * ad->aad[j-36] *
                            pow(del,((double)k-2)));
             qq.q5    += q5t * nc->g[j];
-            qp        += nc->g[j] * fct;
+            qp        += nc->g[j] * fct1;
             dadt      -= 2.0e0 * nc->g[j] * att * tau * q10 / tx;
-            res.dpdtr -= 2.0e0 * nc->g[j] * att * tau * fct / tx;
+            res.dpdtr -= 2.0e0 * nc->g[j] * att * tau * fct1 / tx;
             q2a       += t * nc->g[j] * (4.0e0 * att * ex2 + 2.0e0 *
                                          att) * q10 / tx / tx;
             res.ar    += q10 * nc->g[j] / a1.rt;
@@ -376,7 +376,7 @@ OTHER:
 void TSupcrt::ideal(double t)
 {
     int i=1;
-    double  tt, tl, emult;
+    double  tt1, tl, emult;
     double c[18]={ .19730271018e2,    .209662681977e2,  -.483429455355e0,
                    .605743189245e1,   .2256023885e2,    -.987532442e1,
                    -.43135538513e1,    .458155781e0,     -.47754901883e-1,
@@ -384,14 +384,14 @@ void TSupcrt::ideal(double t)
                    -.56473658748e-6,   .16200446e-7,     -.3303822796e-9,
                    .451916067368e-11,-.370734122708e-13, .137546068238e-15 };
 
-    tt  = t / 1.0e2;
-    tl  = log(tt);
-    id.gi  = - (c[0] / tt + c[1]) * tl;
-    id.hi  = (c[1] + c[0] * (1.0e0 - tl) / tt);
-    id.cpi = c[1] - c[0] / tt;
+    tt1  = t / 1.0e2;
+    tl  = log(tt1);
+    id.gi  = - (c[0] / tt1 + c[1]) * tl;
+    id.hi  = (c[1] + c[0] * (1.0e0 - tl) / tt1);
+    id.cpi = c[1] - c[0] / tt1;
     while ( ++i <= 17 )
     {
-        emult = pow(tt,((double)i - 5.));
+        emult = pow(tt1,((double)i - 5.));
         id.gi  -= c[i] * emult;
         id.hi  += c[i] * (i-5) * emult;
         id.cpi += c[i] * (i-5) * (i-4) * emult;
@@ -910,16 +910,16 @@ void TSupcrt::epsBrn(double *eps, double dedP, double dedT,double d2edT2,
 /* triple - translate values U, S, H, A, G zero triple point
 *  properties (Haar et al., 1984; Levelt Sengers et al., 1983) referenced
 *  to triple  point properties data in Helgeson and   Kirkham, 1974a. */
-void TSupcrt::triple(double T, WPROPS  *wr)
+void TSupcrt::triple(double T, WPROPS  *wr1)
 {
     double TS;
 
-    wr->Sw    = wr->Sw + tt->Stri;
-    TS        = T * wr->Sw - tt->Ttr * tt->Stri;
-    wr->Gw = wr->Hw - TS + tt->Gtri;
-    wr->Aw = wr->Uw - TS + tt->Atri;
-    wr->Hw = wr->Hw + tt->Htri;
-    wr->Uw = wr->Uw + tt->Utri;
+    wr1->Sw    = wr1->Sw + tt->Stri;
+    TS        = T * wr1->Sw - tt->Ttr * tt->Stri;
+    wr1->Gw = wr1->Hw - TS + tt->Gtri;
+    wr1->Aw = wr1->Uw - TS + tt->Atri;
+    wr1->Hw = wr1->Hw + tt->Htri;
+    wr1->Uw = wr1->Uw + tt->Utri;
 }
 
 
@@ -1025,7 +1025,7 @@ void  TSupcrt::conver(double *rho,
     double error2;
     double /*sd[2]*/ beta, delta, xk1, cc, besq, p11, aa, xk0,  betai,
     Tstar, dtstin, rhoweg, rhodit, drho, rho1co, twofaz, hold,
-    y1, den1, den2, den12, tt, rho1s2, slope;
+    y1, den1, den2, den12, tt1, rho1s2, slope;
 
     /* double alhi, alpha, deli, p1w, p2w, p4w, s00, s20; */
     beta  =co->a[5];
@@ -1088,8 +1088,8 @@ void  TSupcrt::conver(double *rho,
     den1 = *rho - rhodit;
 
     rtheta(&par.r1, &par.th1, den1, y1);
-    tt       = par.th1 * par.th1;
-    dv.amu  = aa * pow(par.r1,(beta * delta)) * par.th1 * (1.0 - tt);
+    tt1       = par.th1 * par.th1;
+    dv.amu  = aa * pow(par.r1,(beta * delta)) * par.th1 * (1.0 - tt1);
     y1       = dtstin + cc * dv.amu;
 
     ss(par.r1, par.th1, dv.s, dv.sd);
@@ -1109,8 +1109,8 @@ void  TSupcrt::conver(double *rho,
         den12 = den1 - 1.0e-6;
 
     rtheta(&par.r1,&par.th1,den12,y1);
-    tt      = par.th1 * par.th1;
-    dv.amu = aa * pow(par.r1,(beta * delta)) * par.th1 * (1.0 - tt);
+    tt1      = par.th1 * par.th1;
+    dv.amu = aa * pow(par.r1,(beta * delta)) * par.th1 * (1.0 - tt1);
     y1      = dtstin + cc * dv.amu;
 
     ss(par.r1, par.th1, dv.s, dv.sd);
@@ -1136,8 +1136,8 @@ void  TSupcrt::conver(double *rho,
         den2   = den1 - (error1 / slope);
 
         rtheta(&par.r1,&par.th1,den2,y1);
-        tt      = par.th1 * par.th1;
-        dv.amu = aa * pow(par.r1,(beta * delta)) * par.th1 * (1.0 - tt);
+        tt1      = par.th1 * par.th1;
+        dv.amu = aa * pow(par.r1,(beta * delta)) * par.th1 * (1.0 - tt1);
         y1      = dtstin + cc * dv.amu;
 
         ss(par.r1, par.th1, dv.s, dv.sd);
@@ -1156,10 +1156,10 @@ void  TSupcrt::conver(double *rho,
 //--------------------------------------------------------------------//
 //  ss - calc terms of the summation zat defined dPotl/dT and 1-th
 // proizvodnuyu theta (s)  square polynomial.
-void TSupcrt::ss(double r, double th, double *s, double *sd) /*  s[2], sd[2] */
+void TSupcrt::ss(double r, double th1, double *s, double *sd) /*  s[2], sd[2] */
 {
     double  sx[2];
-    double alpha, beta, alhi, beti, s00, s20, s01, s21, tt;
+    double alpha, beta, alhi, beti, s00, s20, s01, s21, tt1;
     /* double besq, delta, deli, gami, p00, p01;*/
 
     alpha= co->q[9];
@@ -1177,16 +1177,16 @@ void TSupcrt::ss(double r, double th, double *s, double *sd) /*  s[2], sd[2] */
     s01  = co->a[18];
     s21  = co->a[19];
 
-    tt    = th * th;
-    sx[0] = s00 + s20 * tt;
-    sd[0] = 2.0 * s20 * th;
-    sx[1] = s01 + s21 * tt;
-    sd[1] = 2.0 * s21 * th;
+    tt1    = th1 * th1;
+    sx[0] = s00 + s20 * tt1;
+    sd[0] = 2.0 * s20 * th1;
+    sx[1] = s01 + s21 * tt1;
+    sd[1] = 2.0 * s21 * th1;
     s[0]  = sx[0] * co->a[9] * co->a[6] * pow(r,(1.0 - alpha));
     s[1]  = sx[1] * co->a[9] * co->a[11] * pow(r,(1.0 - alhi));
 
-    a1.dPdM  = pow(r,beta) * co->a[6] * th + co->a[0] * pow(r,(1.0-alpha)) *
-               co->a[9] * co->a[6] * sx[0] + pow(r,beti) * co->a[11] * th +
+    a1.dPdM  = pow(r,beta) * co->a[6] * th1 + co->a[0] * pow(r,(1.0-alpha)) *
+               co->a[9] * co->a[6] * sx[0] + pow(r,beti) * co->a[11] * th1 +
                co->a[0] * pow(r,(1.0-alhi)) * co->a[9] * co->a[11] * sx[1];
 }
 

@@ -61,97 +61,97 @@ class SVD
 	  Array2D<Real> A(Arg.copy());
       int wantu = 1;  					/* boolean */
       int wantv = 1;  					/* boolean */
-	  int i=0, j=0, k=0;
+      int i=0, j=0, kk=0;
 
       // Reduce A to bidiagonal form, storing the diagonal elements
       // in s and the super-diagonal elements in e.
 
       int nct = min(m-1,n);
       int nrt = max(0,min(n-2,m));
-      for (k = 0; k < max(nct,nrt); k++) {
-         if (k < nct) {
+      for (kk = 0; kk < max(nct,nrt); kk++) {
+         if (kk < nct) {
 
-            // Compute the transformation for the k-th column and
-            // place the k-th diagonal in s[k].
-            // Compute 2-norm of k-th column without under/overflow.
-            s[k] = 0;
-            for (i = k; i < m; i++) {
-               s[k] = hypot(s[k],A[i][k]);
+            // Compute the transformation for the kk-th column and
+            // place the kk-th diagonal in s[kk].
+            // Compute 2-norm of kk-th column without under/overflow.
+            s[kk] = 0;
+            for (i = kk; i < m; i++) {
+               s[kk] = hypot(s[kk],A[i][kk]);
             }
-            if (s[k] != 0.0) {
-               if (A[k][k] < 0.0) {
-                  s[k] = -s[k];
+            if (s[kk] != 0.0) {
+               if (A[kk][kk] < 0.0) {
+                  s[kk] = -s[kk];
                }
-               for (i = k; i < m; i++) {
-                  A[i][k] /= s[k];
+               for (i = kk; i < m; i++) {
+                  A[i][kk] /= s[kk];
                }
-               A[k][k] += 1.0;
+               A[kk][kk] += 1.0;
             }
-            s[k] = -s[k];
+            s[kk] = -s[kk];
          }
-         for (j = k+1; j < n; j++) {
-            if ((k < nct) && (s[k] != 0.0))  {
+         for (j = kk+1; j < n; j++) {
+            if ((kk < nct) && (s[kk] != 0.0))  {
 
             // Apply the transformation.
 
                double t = 0;
-               for (i = k; i < m; i++) {
-                  t += A[i][k]*A[i][j];
+               for (i = kk; i < m; i++) {
+                  t += A[i][kk]*A[i][j];
                }
-               t = -t/A[k][k];
-               for (i = k; i < m; i++) {
-                  A[i][j] += t*A[i][k];
+               t = -t/A[kk][kk];
+               for (i = kk; i < m; i++) {
+                  A[i][j] += t*A[i][kk];
                }
             }
 
-            // Place the k-th row of A into e for the
+            // Place the kk-th row of A into e for the
             // subsequent calculation of the row transformation.
 
-            e[j] = A[k][j];
+            e[j] = A[kk][j];
          }
-         if (wantu & (k < nct)) {
+         if (wantu & (kk < nct)) {
 
             // Place the transformation in U for subsequent back
             // multiplication.
 
-            for (i = k; i < m; i++) {
-               U[i][k] = A[i][k];
+            for (i = kk; i < m; i++) {
+               U[i][kk] = A[i][kk];
             }
          }
-         if (k < nrt) {
+         if (kk < nrt) {
 
-            // Compute the k-th row transformation and place the
-            // k-th super-diagonal in e[k].
+            // Compute the kk-th row transformation and place the
+            // kk-th super-diagonal in e[kk].
             // Compute 2-norm without under/overflow.
-            e[k] = 0;
-            for (i = k+1; i < n; i++) {
-               e[k] = hypot(e[k],e[i]);
+            e[kk] = 0;
+            for (i = kk+1; i < n; i++) {
+               e[kk] = hypot(e[kk],e[i]);
             }
-            if (e[k] != 0.0) {
-               if (e[k+1] < 0.0) {
-                  e[k] = -e[k];
+            if (e[kk] != 0.0) {
+               if (e[kk+1] < 0.0) {
+                  e[kk] = -e[kk];
                }
-               for (i = k+1; i < n; i++) {
-                  e[i] /= e[k];
+               for (i = kk+1; i < n; i++) {
+                  e[i] /= e[kk];
                }
-               e[k+1] += 1.0;
+               e[kk+1] += 1.0;
             }
-            e[k] = -e[k];
-            if ((k+1 < m) & (e[k] != 0.0)) {
+            e[kk] = -e[kk];
+            if ((kk+1 < m) & (e[kk] != 0.0)) {
 
             // Apply the transformation.
 
-               for (i = k+1; i < m; i++) {
+               for (i = kk+1; i < m; i++) {
                   work[i] = 0.0;
                }
-               for (j = k+1; j < n; j++) {
-                  for (i = k+1; i < m; i++) {
+               for (j = kk+1; j < n; j++) {
+                  for (i = kk+1; i < m; i++) {
                      work[i] += e[j]*A[i][j];
                   }
                }
-               for (j = k+1; j < n; j++) {
-                  double t = -e[j]/e[k+1];
-                  for (i = k+1; i < m; i++) {
+               for (j = kk+1; j < n; j++) {
+                  double t = -e[j]/e[kk+1];
+                  for (i = kk+1; i < m; i++) {
                      A[i][j] += t*work[i];
                   }
                }
@@ -161,8 +161,8 @@ class SVD
             // Place the transformation in V for subsequent
             // back multiplication.
 
-               for (i = k+1; i < n; i++) {
-                  V[i][k] = e[i];
+               for (i = kk+1; i < n; i++) {
+                  V[i][kk] = e[i];
                }
             }
          }
@@ -191,30 +191,30 @@ class SVD
             }
             U[j][j] = 1.0;
          }
-         for (k = nct-1; k >= 0; k--) {
-            if (s[k] != 0.0) {
-               for (j = k+1; j < nu; j++) {
+         for (kk = nct-1; kk >= 0; kk--) {
+            if (s[kk] != 0.0) {
+               for (j = kk+1; j < nu; j++) {
                   double t = 0;
-                  for (i = k; i < m; i++) {
-                     t += U[i][k]*U[i][j];
+                  for (i = kk; i < m; i++) {
+                     t += U[i][kk]*U[i][j];
                   }
-                  t = -t/U[k][k];
-                  for (i = k; i < m; i++) {
-                     U[i][j] += t*U[i][k];
+                  t = -t/U[kk][kk];
+                  for (i = kk; i < m; i++) {
+                     U[i][j] += t*U[i][kk];
                   }
                }
-               for (i = k; i < m; i++ ) {
-                  U[i][k] = -U[i][k];
+               for (i = kk; i < m; i++ ) {
+                  U[i][kk] = -U[i][kk];
                }
-               U[k][k] = 1.0 + U[k][k];
-               for (i = 0; i < k-1; i++) {
-                  U[i][k] = 0.0;
+               U[kk][kk] = 1.0 + U[kk][kk];
+               for (i = 0; i < kk-1; i++) {
+                  U[i][kk] = 0.0;
                }
             } else {
                for (i = 0; i < m; i++) {
-                  U[i][k] = 0.0;
+                  U[i][kk] = 0.0;
                }
-               U[k][k] = 1.0;
+               U[kk][kk] = 1.0;
             }
          }
       }
@@ -222,23 +222,23 @@ class SVD
       // If required, generate V.
 
       if (wantv) {
-         for (k = n-1; k >= 0; k--) {
-            if ((k < nrt) & (e[k] != 0.0)) {
-               for (j = k+1; j < nu; j++) {
+         for (kk = n-1; kk >= 0; kk--) {
+            if ((kk < nrt) & (e[kk] != 0.0)) {
+               for (j = kk+1; j < nu; j++) {
                   double t = 0;
-                  for (i = k+1; i < n; i++) {
-                     t += V[i][k]*V[i][j];
+                  for (i = kk+1; i < n; i++) {
+                     t += V[i][kk]*V[i][j];
                   }
-                  t = -t/V[k+1][k];
-                  for (i = k+1; i < n; i++) {
-                     V[i][j] += t*V[i][k];
+                  t = -t/V[kk+1][kk];
+                  for (i = kk+1; i < n; i++) {
+                     V[i][j] += t*V[i][kk];
                   }
                }
             }
             for (i = 0; i < n; i++) {
-               V[i][k] = 0.0;
+               V[i][kk] = 0.0;
             }
-            V[k][k] = 1.0;
+            V[kk][kk] = 1.0;
          }
       }
 

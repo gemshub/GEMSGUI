@@ -1047,10 +1047,10 @@ void TDataBase::RebildFile(const TCIntArray& nff)
 
     for(size_t j=0; j<nff.size(); j++)
     {
-    int  nRec, nRT;
-    char isDel;
-	int fPos, fLen;
-    uint nF = nff[j];
+        int  nRec, nRT1;
+        char isDel;
+        int fPos, fLen;
+        uint nF = nff[j];
         // test and open file
         check_file( nF );
         if( ! dbChangeAllowed( nF ) )
@@ -1061,23 +1061,23 @@ void TDataBase::RebildFile(const TCIntArray& nff)
         aFile[nF]->Open( UPDATE_DBV );
 
         //ind.delfile( nF );
-        aFile[nF]->GetDh( fPos, fLen, nRT, isDel );
+        aFile[nF]->GetDh( fPos, fLen, nRT1, isDel );
 
         std::string tmpFileName = aFile[nF]->GetPath().c_str();
-                    tmpFileName += ".tmp";
-	GemDataStream outStream( tmpFileName, ios::out | ios::binary );
+        tmpFileName += ".tmp";
+        GemDataStream outStream( tmpFileName, ios::out | ios::binary );
         for(int ii=0; ii<fPos; ii++ )
-          outStream.put(0);
+            outStream.put(0);
 
-	outStream.seekp(fPos/*VDBhead::data_size()*/, ios::beg);
+        outStream.seekp(fPos/*VDBhead::data_size()*/, ios::beg);
 
         nRec = scanfile( nF, fPos, fLen, aFile[nF]->f, outStream );
 
-	outStream.close();
+        outStream.close();
 
         aFile[nF]->OpenFromFileName( tmpFileName.c_str(), UPDATE_DBV );
 
-        aFile[nF]->SetDh( fLen, nRec, nRT, isDel );
+        aFile[nF]->SetDh( fLen, nRec, nRT1, isDel );
 
         putndx( nF );
         status = UNDF_;

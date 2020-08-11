@@ -588,10 +588,10 @@ void deleteDirectory(QString dir)
 
     //Now recursively delete any child directories
     QFileInfoList dirs = data_dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs);
-    for(int dir = 0; dir < dirs.count(); dir++)
+    for(int dr = 0; dr < dirs.count(); dr++)
     {
-        deleteDirectory(dirs.at(dir).absoluteFilePath());
-        data_dir.rmdir(dirs.at(dir).absoluteFilePath());
+        deleteDirectory(dirs.at(dr).absoluteFilePath());
+        data_dir.rmdir(dirs.at(dr).absoluteFilePath());
     }
 }
 

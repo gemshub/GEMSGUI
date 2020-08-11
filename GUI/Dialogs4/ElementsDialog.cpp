@@ -66,10 +66,10 @@ void 	ElementsDialog::resetBackButton()
 }
 
 ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
-        elmWindowData  data,   const char* /*caption*/):
+        elmWindowData  data1,   const char* /*caption*/):
         QDialog( win ),
         prf_name ( prfName ),
-        el_data( data )
+        el_data( data1 )
 {
 	setupUi(this);
 
@@ -451,7 +451,8 @@ void ElementsDialog::changeCheck( QStandardItem *pdb )
       }
     }
     if( pdb->checkState() != Qt::PartiallyChecked )
-    { for(int jj=0; jj<pdb->rowCount(); jj++ )
+    {
+        for( jj=0; jj<pdb->rowCount(); jj++ )
          pdb->child(jj)->setCheckState(pdb->checkState());
     }
 }

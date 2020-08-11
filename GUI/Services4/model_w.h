@@ -289,9 +289,9 @@ public:
     	return text();
     }
     
-    virtual void setData( QString data )
+    virtual void setData( QString data1 )
     { 
-    	setText( data );
+        setText( data1 );
     }
 
 };
@@ -325,11 +325,12 @@ public:
     	return currentText();
     }
 
-    virtual void setData( QString data )
-     { startIndex = findText(data);
-       if(startIndex >= 0 )
-           setCurrentIndex(startIndex);
-     }
+    virtual void setData( QString data1 )
+    {
+        startIndex = findText(data1);
+        if(startIndex >= 0 )
+            setCurrentIndex(startIndex);
+    }
 
     virtual bool dataCh()
     { return (startIndex!=currentIndex()); }
@@ -366,9 +367,9 @@ public:
     	return toPlainText();
     }
 
-    virtual void setData( QString data )
+    virtual void setData( QString data1 )
      { 
-    	setPlainText(data);
+        setPlainText(data1);
         edited = false;
      }
 

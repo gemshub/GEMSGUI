@@ -221,6 +221,7 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
     case MANY_:    // Get Key list
         db->GetKeyList(  str_key.c_str(), aSDlist, anRDc );
         db->Get(anRDc[0]);
+        [[fallthrough]];
     case ONEF_:
         dyn_set(q);
         time_s = db->Rtime();

@@ -922,7 +922,6 @@ TPhase::MakeQuery()
 int
 TPhase::RecBuild( const char *key, int mode  )
 {
-    int  i;
     TCStringArray aDclist;
     TCStringArray aPhlist;
     TCStringArray aDcSkrl;
@@ -1059,10 +1058,10 @@ AGAIN_SETUP:
     dyn_new(0);  // reallocation of memory
 
     // Get list of components : add aMcv and aMrv
-    for( i=0; i<php->nDC; i++ )
+    for(int ii=0; ii<php->nDC; ii++ )
     {
-        memcpy( php->SM[i], aDclist[i].c_str()+2, DC_RKLEN );  // +2  check!
-        php->SM[i][DC_RKLEN-1] = aDclist[i].c_str()[0];
+        memcpy( php->SM[ii], aDclist[ii].c_str()+2, DC_RKLEN );  // +2  check!
+        php->SM[ii][DC_RKLEN-1] = aDclist[ii].c_str()[0];
     }
     // Sorting the list of dependent components
     if( php->nDC >= 2 )         // >= may change behavior !
@@ -1073,7 +1072,7 @@ AGAIN_SETUP:
 
     if( php->PlPhl != S_OFF )
     {
-        for( i=0; i<php->nlPh; i++ )
+        for(int i=0; i<php->nlPh; i++ )
         {
             memcpy( php->lPh[i], aPhlist[i].c_str(), PH_RKLEN );
             php->lPh[i][PH_RKLEN-1] = aPhlist[i].c_str()[0];
@@ -1083,7 +1082,7 @@ AGAIN_SETUP:
 
     if( php->PapCon != S_OFF )
     { // Get list of components for parallel reactions
-      for( i=0; i<php->nSkr; i++ )
+      for(int i=0; i<php->nSkr; i++ )
       {
         memcpy( php->lDCr[i], aDcSkrl[i].c_str()+2, DC_RKLEN );  // +2  check!
         php->lDCr[i][DC_RKLEN-1] = aDcSkrl[i].c_str()[0];
@@ -1112,7 +1111,7 @@ AGAIN_SETUP:
     if( php->NsuT > 0 && (php->PFsiT == S_REM || php->PFsiT == S_ON  ))
     {  /* Setup of default values */
         php->PphC = PH_SORPTION;
-        for( i=0; i<php->NsuT; i++ )
+        for(int i=0; i<php->NsuT; i++ )
         { /* if( !php->SCMC[i] || php->SCMC[i]==A_NUL ) */
             // php->SCMC[i] = php->sol_t[SCM_TYPE];  // fixed, 24.07.2006 (DK)
             php->SCMC[i] = SC_BSM;  // changed, 14.07.2009 (TW)
@@ -1130,7 +1129,7 @@ AGAIN_SETUP:
             if( !php->XfIEC )
                 php->XfIEC[i] = 0;
         }
-        for( i=0; i<php->nDC; i++ )
+        for(int i=0; i<php->nDC; i++ )
         {
             php->SATC[i][SA_MCA] = SAT_L_COMP;  // default Langmuir comp.
             php->SATC[i][SA_EMX] = CCA_VOL;  // default per whole sorbent

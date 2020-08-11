@@ -178,9 +178,9 @@ void TCModuleImp::MakeQuery()
     Update(true);
 }
 
-void TCModuleImp::saveGraphData(jsonui::ChartData *data)
+void TCModuleImp::saveGraphData(jsonui::ChartData *data1)
 {
-    rMod.SaveChartData(data);
+    rMod.SaveChartData(data1);
     cout<< "saveGraphData" << endl;
 }
 

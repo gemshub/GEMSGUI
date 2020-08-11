@@ -123,7 +123,7 @@ private:
     //ChartData* gr_data;
 
     DragTableWidget* tbLegend;
-    LabelDelegate* dgLegend;
+    //LabelDelegate* dgLegend;
 
     // work part
     bool isFragment;

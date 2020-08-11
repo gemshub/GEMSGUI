@@ -326,6 +326,7 @@ pTaustep->setValue(Tau[2]);
     switch( flgs[30] )
     {
       case '3': moveGas->setChecked( true );
+               [[fallthrough]];
       case '1': moveAq->setChecked( true );
                break;
       case '2': moveGas->setChecked( true );
@@ -865,13 +866,13 @@ void GEM2MTWizard::resetPageList(const char* aXname, const char* aYname)
 {
 
     std::vector<pagesSetupData> scalarsList;
-    std::vector<pagesSetupData> pgData;
+    std::vector<pagesSetupData> pgData1;
 
-    GetListsnRT( -2, pgData,  scalarsList );
-    GetListsnRT( RT_GEM2MT, pgData,  scalarsList );
+    GetListsnRT( -2, pgData1,  scalarsList );
+    GetListsnRT( RT_GEM2MT, pgData1,  scalarsList );
 
     pageScript = new EquatSetup( page_6, eqMT,
-              RT_GEM2MT, pgData, scalarsList, outScript.c_str(), aXname, aYname  );
+              RT_GEM2MT, pgData1, scalarsList, outScript.c_str(), aXname, aYname  );
     verticalLayout_9->addWidget(pageScript);
 
 
@@ -1091,28 +1092,28 @@ void GEM2MTWizard::setVTK( TCIntArray vtk1, TCIntArray vtk2  )
 
   for(size_t ii=0; ii<vtk1.size(); ii++ )
   {
-    int cPage;
+    int cPage1;
     int ndx;
 
     if( vtk1[ii] < f_bIC )
-     { cPage = 0;
+     { cPage1 = 0;
        ndx = vtk1[ii];
      }
     else
       {
-         cPage =  findVTKarr( vtk1[ii] );
+         cPage1 =  findVTKarr( vtk1[ii] );
          ndx = vtk2[ii];
 
          if(vtk1[ii] == f_bPS) // bPS
-         { cPage +=  vtk2[ii]/TMulti::sm->GetPM()->N;
+         { cPage1 +=  vtk2[ii]/TMulti::sm->GetPM()->N;
            ndx = vtk2[ii]%TMulti::sm->GetPM()->N;
-           cPage = min(cPage, pLists.count()-1);
+           cPage1 = min(cPage1, pLists.count()-1);
          }
       }
 
-    if( cPage >=0 && ndx >=0 )
-    {       keywdList->setCurrentItem(keywdList->item(cPage ));
-            pLists[cPage]->item(ndx)->setSelected(true);
+    if( cPage1 >=0 && ndx >=0 )
+    {       keywdList->setCurrentItem(keywdList->item(cPage1 ));
+            pLists[cPage1]->item(ndx)->setSelected(true);
     }
   }
 }

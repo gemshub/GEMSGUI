@@ -685,6 +685,7 @@ TCModule::RecBuild( const char *key, int mode  )
            contentsChanged = true;
            break;
          }
+        [[fallthrough]];
     case VF3_2:  // =VF_REMAKE
         //if( !pImp )
         //{    Show(pVisorImp, "Remaking...");

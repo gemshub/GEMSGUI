@@ -1040,6 +1040,7 @@ TDualTh::Calc_gam_n( char eState )
                                dtp->Wa[ii*dtp->nP] = alp0;
                                break;
                             }
+                            [[fallthrough]];
              case DT_IPF_G:  // Guggenheim
              case DT_IPF_T:  // Thompson-Waldbaum
                             if(dtp->PsIPu == DT_IPU_J )
@@ -1169,6 +1170,7 @@ TDualTh::Calc_gam_n( char eState )
                                dtp->Wa[ii] = alp0;
                                break;
                             }
+                            [[fallthrough]];
              case DT_IPF_G:  // Guggenheim
              case DT_IPF_T:  // Thompson-Waldbaum
                             if(dtp->PsIPu == DT_IPU_J )
@@ -1206,6 +1208,7 @@ TDualTh::Calc_gam_n( char eState )
                                dtp->Wa[ii+1] = alp1;
                                break;
                             }
+                            [[fallthrough]];
              case DT_IPF_G:  // Guggenheim
                             if(dtp->PsIPu == DT_IPU_J )
                             {
@@ -1386,7 +1389,7 @@ TDualTh::Calc_gam_forward( char PvGam, char PsIPf, char WhereIPar )
        ScaleF = 1.;
        switch( dtp->PsIPu )  // Analyzing units and setting up the the scale factor
        {                     // such that parameters are dimensionless
-          case DT_IPU_K:   ScaleF *= 1000.;
+          case DT_IPU_K:   ScaleF *= 1000.; [[fallthrough]];
           case DT_IPU_J:   ScaleF /= RT;
           case DT_IPU_N:
           default:         break;

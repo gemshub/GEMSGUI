@@ -310,7 +310,6 @@ void RDKeyDialog::SetList()
     TCIntArray temp;
     TCStringArray keyList;
     int jj=0;
-    int ii;
 
     string s = "Please, mark one or more record keys. Filter: ";
     s +=  keyFilter;
@@ -341,7 +340,7 @@ void RDKeyDialog::SetList()
        int pos = str.indexOf('*', 0);
        if( pos > 0 )
         str.truncate ( pos );
-       for( ii=0; ii<pList->count(); ii++ )
+       for(int ii=0; ii<pList->count(); ii++ )
         {
             // comparing parts before '*' for overwrite dcomp, reacdc ....
             if( pList->item(ii)->text().contains(str/*old_sel[jj]*/) )

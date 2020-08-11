@@ -340,7 +340,7 @@ TGtDemo::MakeQuery()
     TCStringArray namesLines;
     std::string prkey = std::string( gdp->prKey, 0, MAXRKEYLEN);
     int size[8];
-    int nRT = RT_ICOMP;
+    int nRT1 = RT_ICOMP;
     std::string script;
     if( gdp->expr )
      script = gdp->expr;
@@ -349,39 +349,39 @@ TGtDemo::MakeQuery()
     std::string yName = gdp->yNames;
 
 
-    // nRT from flags
+    // nRT1 from flags
     if( gdp->PsTR != S_OFF )
-     nRT = RT_GEM2MT;
+     nRT1 = RT_GEM2MT;
     else
      if( gdp->PsUT != S_OFF )
-       nRT = RT_DUALTH;
+       nRT1 = RT_DUALTH;
      else
        if( gdp->PsPB != S_OFF )
-          nRT = RT_UNSPACE;
+          nRT1 = RT_UNSPACE;
        else
          if( gdp->PsPE != S_OFF )
-           nRT = RT_PROCES;
+           nRT1 = RT_PROCES;
          else
            if( gdp->PsST != S_OFF )
-              nRT = RT_SYSEQ;
+              nRT1 = RT_SYSEQ;
            else
              if( gdp->PsPH != S_OFF )
-                nRT = RT_PHASE;
+                nRT1 = RT_PHASE;
              else
                if( gdp->PsRP != S_OFF )
-                  nRT = RT_RTPARM;
+                  nRT1 = RT_RTPARM;
                else
                  if( gdp->PsRE != S_OFF )
-                   nRT = RT_REACDC;
+                   nRT1 = RT_REACDC;
                  else
                    if( gdp->PsBC != S_OFF )
-                      nRT = RT_COMPOS;
+                      nRT1 = RT_COMPOS;
                    else
                      if( gdp->PsDC != S_OFF )
-                        nRT = RT_DCOMP;
+                        nRT1 = RT_DCOMP;
 
     p_key  = db->PackKey();
-    size[0] = nRT;//gdp->nRT;
+    size[0] = nRT1;//gdp->nRT;
     size[1] = gdp->Nsd;
     size[2] = gdp->Nwc;
     size[3] = gdp->Nqp;

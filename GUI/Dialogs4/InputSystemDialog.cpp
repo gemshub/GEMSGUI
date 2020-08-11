@@ -45,7 +45,7 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
       const std::vector<pagesSetupData>& scalarsList ):
         QDialog( parent )
 {
-    size_t ii, jj;
+    size_t ii;
     QListWidgetItem* item1;
     QWidget* page1;
     QHBoxLayout* horizontalLayout1;
@@ -88,7 +88,7 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
         // insert items to list of indexes
         TCStringArray lst;
         TProfil::pm->getNamesList( awnData[ii].nObj, lst);
-        for(  jj=0; jj<lst.size(); jj++ )
+        for(size_t  jj=0; jj<lst.size(); jj++ )
         {
           item1 = new QListWidgetItem( lst[jj].c_str(), lstIndexes1);
           char sw = aObj[ awnData[ii].nSwitch]->GetString(jj,0)[0];
@@ -126,7 +126,7 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
     winStac->addWidget(page1);
 
     // insert items to list of indexes
-    for(  jj=0; jj<scalarsList.size(); jj++ )
+    for( size_t jj=0; jj<scalarsList.size(); jj++ )
     {
       stData.push_back( pagesSetupData(scalarsList[jj]));
       item1 = new QListWidgetItem( scalarsList[jj].pageName.c_str(),  lstIndexes1);

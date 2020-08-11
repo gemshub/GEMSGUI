@@ -298,26 +298,26 @@ void TMulti::MultiKeyInit( const char*key )
 //
 void TMulti::EqstatExpand( /*const char *key,*/ bool calcActivityModels/*, bool calcKineticModels*/ )
 {
-    long int i, j, k;//, jb, je=0, jpb, jpe=0, jdb, jde=0;
+    long int i, j, kk;//, jb, je=0, jpb, jpe=0, jdb, jde=0;
 //    double FitVar3;
     SPP_SETTING *pa = &TProfil::pm->pa;
     pmp->NR = pmp->N;
 
     bool AllPhasesPure = true;   // Added by DK on 09.03.2010
     // checking if all phases are pure
-    for( k=0; k < pmp->FI; k++ )
-        if( pmp->L1[k] > 1 )
+    for( kk=0; kk < pmp->FI; kk++ )
+        if( pmp->L1[kk] > 1 )
             AllPhasesPure = false;
 
     TotalPhasesAmounts( pmp->X, pmp->XF, pmp->XFA );
     for( j=0; j<pmp->L; j++ )
         pmp->Y[j] = pmp->X[j];
 
-    for( k=0; k<pmp->FI; k++ )
+    for( kk=0; kk<pmp->FI; kk++ )
     {
-        pmp->YF[k] = pmp->XF[k];
-        if( k<pmp->FIs )
-            pmp->YFA[k] = pmp->XFA[k];
+        pmp->YF[kk] = pmp->XF[kk];
+        if( kk<pmp->FIs )
+            pmp->YFA[kk] = pmp->XFA[kk];
     }
     // calculate DC (species) concentrations and activities
     CalculateConcentrations( pmp->X, pmp->XF, pmp->XFA);
@@ -455,11 +455,11 @@ void TMulti::EqstatExpand( /*const char *key,*/ bool calcActivityModels/*, bool 
     pmp->FitVar[0] = bfc_mass();   // added DK 02.03.2012
 
     // dynamic work arrays - loading initial data  (added 07.03.2008)
-    for( k=0; k<pmp->FI; k++ )
+    for( kk=0; kk<pmp->FI; kk++ )
     {
-        pmp->XFs[k] = pmp->XF[k];
-        pmp->Falps[k] = pmp->Falp[k];
-        memcpy( pmp->SFs[k], pmp->SF[k], MAXPHNAME+MAXSYMB );
+        pmp->XFs[kk] = pmp->XF[kk];
+        pmp->Falps[kk] = pmp->Falp[kk];
+        memcpy( pmp->SFs[kk], pmp->SF[kk], MAXPHNAME+MAXSYMB );
     }
 
     //calculate gas partial pressures  -- obsolete?, retained evtl. for old process scripts

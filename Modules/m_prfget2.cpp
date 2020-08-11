@@ -94,6 +94,7 @@ void TProfil::Push( std::vector<CompItem>& aList, int aLine,
                     break;
        case VF3_2:  // Do it for all
                     comp_change_all = true;
+                    [[fallthrough]];
        case VF3_1:  // Do it for this item
                     aList.push_back(CompItem( aLine, aDelta));
        }
@@ -1222,7 +1223,7 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
     TCStringArray aList;
     TCIntArray anR;
     std::string packkey;
-    std::string systemname, recordPath;
+    std::string systemname;
 
     rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                           K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
@@ -1274,7 +1275,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
     //vstr tbuf(150);
     TCStringArray aList;
     TCIntArray anR;
-    std::string process_name, recordPath;
+    std::string process_name;
 
     rt[RT_PROCES]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);

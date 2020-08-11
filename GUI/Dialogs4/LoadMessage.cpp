@@ -136,29 +136,29 @@ ProcessProgressDialog::ProcessProgressDialog( QWidget* parent, int anRT ):
                      break;
      }
 
-    pProgress->setToolTip( trUtf8( "Shows number of steps" ) );
+    pProgress->setToolTip( "Shows number of steps" );
     mainBox->addWidget( pProgress );
     
     QHBoxLayout* buttonBox = new QHBoxLayout();
  
     pStopStep = new QPushButton( "&Step", this );
-    pStopStep->setToolTip( trUtf8( "Make next iteration in Stepwise mode" ) );
+    pStopStep->setToolTip( "Make next iteration in Stepwise mode");
     connect( pStopStep, SIGNAL(clicked()), this, SLOT(CmStep()) );
     buttonBox->addWidget(pStopStep);
 
     pResume = new QPushButton( "&Resume", this );
-    pResume->setToolTip( trUtf8( "Make next iteration not in Stepwise mode" ) );
+    pResume->setToolTip("Make next iteration not in Stepwise mode" );
     connect( pResume, SIGNAL(clicked()), this, SLOT(CmResume()) );
     //pResume->hide();
     buttonBox->addWidget(pResume);
 
     pClose = new QPushButton( "&Cancel", this );
-    pClose->setToolTip( trUtf8( "Cancel calculations" ) );
+    pClose->setToolTip( "Cancel calculations" );
     connect( pClose, SIGNAL( clicked() ), this, SLOT( CmClose() ) );
     buttonBox->addWidget(pClose);
 
     pBreak = new QPushButton( "&Break", this );
-    pBreak->setToolTip( trUtf8( "Break calculations" ) );
+    pBreak->setToolTip( "Break calculations"  );
     connect( pBreak, SIGNAL( clicked() ), this, SLOT( CmBreak() ) );
     buttonBox->addWidget(pBreak);
 

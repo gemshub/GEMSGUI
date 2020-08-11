@@ -134,11 +134,11 @@ int HelpConfigurator::readDir(const char *dir)
     filters << "*.html";
     thisDir.setNameFilters(filters);
 
-    QFileInfoList files = thisDir.entryInfoList();
-    if (files.empty())
+    QFileInfoList files1 = thisDir.entryInfoList();
+    if (files1.empty())
         return 0;
 
-    QListIterator<QFileInfo> it(files);
+    QListIterator<QFileInfo> it(files1);
     QFileInfo f;
     while ( it.hasNext() )
     {

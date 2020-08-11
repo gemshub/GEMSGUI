@@ -1877,7 +1877,7 @@ void ProcessWizard::resetPageList(const char* aXname, const char* aYname)
 {
 
     std::vector<pagesSetupData> scalarsList;
-    std::vector<pagesSetupData> pgData;
+    std::vector<pagesSetupData> pgData1;
 
     if(  rt[RT_SYSEQ]->GetStatus() != ONEF_) // read first record in DB
         {
@@ -1888,18 +1888,18 @@ void ProcessWizard::resetPageList(const char* aXname, const char* aYname)
               TProfil::pm->loadSystat( aRklist[0].c_str() );
         }
 
-    GetListsnRT( MD_MULTI, pgData,  scalarsList );
-    GetListsnRT( MD_SYSTEM, pgData,  scalarsList );
-    GetListsnRT( MD_MTPARM, pgData,  scalarsList );
-    GetListsnRT( MD_RMULTS, pgData,  scalarsList );
-    GetListsnRT( RT_PROCES, pgData,  scalarsList );
+    GetListsnRT( MD_MULTI, pgData1,  scalarsList );
+    GetListsnRT( MD_SYSTEM, pgData1,  scalarsList );
+    GetListsnRT( MD_MTPARM, pgData1,  scalarsList );
+    GetListsnRT( MD_RMULTS, pgData1,  scalarsList );
+    GetListsnRT( RT_PROCES, pgData1,  scalarsList );
 
 //    if( pageScript )
-//      pageScript->resetPageList( newRT, pgData, scalarsList );
+//      pageScript->resetPageList( newRT, pgData1, scalarsList );
 //    else
     {
       pageScript = new EquatSetup( page_5, eqPr,
-              RT_PROCES, pgData, scalarsList, outScript.c_str(), aXname, aYname  );
+              RT_PROCES, pgData1, scalarsList, outScript.c_str(), aXname, aYname  );
       verticalLayout->addWidget(pageScript);
     }
 

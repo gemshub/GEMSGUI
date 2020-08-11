@@ -68,7 +68,7 @@ EquatSetup::~EquatSetup()
 void EquatSetup::resetPageList( int newRT,
    std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList )
 {
-    uint ii, jj;
+    size_t ii, jj;
     int nO;
     QString str;
     QListWidgetItem* item1;
@@ -167,12 +167,12 @@ void EquatSetup::resetPageList( int newRT,
     keywdList->item(0)->setSelected(true);
     changePage( cPage );
 
-    for(int  ii=0; ii<pLists.count(); ii++ ) // listStatic added as first
-    {    QObject::connect( pLists[ii]->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
+    for(int  ii1=0; ii1<pLists.count(); ii1++ ) // listStatic added as first
+    {    QObject::connect( pLists[ii1]->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
            this, SLOT( changeTable( const QItemSelection&, const QItemSelection& )) );
 
-        pLists[ii]->setContextMenuPolicy(Qt::CustomContextMenu);
-        connect( pLists[ii], SIGNAL(customContextMenuRequested(QPoint)),
+        pLists[ii1]->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect( pLists[ii1], SIGNAL(customContextMenuRequested(QPoint)),
              this, SLOT(slotPopupContextMenu(QPoint)));
     }
 }

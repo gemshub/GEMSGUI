@@ -1542,18 +1542,18 @@ void TProcess::RecordPrint(const char *key)
         //std::string recordPath = files_dir + process_name + "/";
         //vfMakeDirectory( nullptr, recordPath.c_str(), 1 );
 
-        std::string filename = process_name;
-        filename += "-dat.lst";
+        std::string filename1 = process_name;
+        filename1 += "-dat.lst";
 
-        if( vfChooseFileSave(window(), filename,
+        if( vfChooseFileSave(window(), filename1,
                    "Please, enter the Process work structure file name", "*.lst" ) )
         {
-            if( !access(filename.c_str(), 0 ) ) //file exists
-                if( !vfQuestion( window(), filename.c_str(),
+            if( !access(filename1.c_str(), 0 ) ) //file exists
+                if( !vfQuestion( window(), filename1.c_str(),
                         "This file exists! Overwrite?") )
                    return;
             TCStringArray savedSystems;
-            genGEM3K(filename, savedSystems, false, false);
+            genGEM3K(filename1, savedSystems, false, false);
             refreshState();
         }
     }

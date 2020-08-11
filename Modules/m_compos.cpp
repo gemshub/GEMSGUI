@@ -30,12 +30,12 @@
 #include "filters_data.h"
 
 const double PCO_DB = 1e-17;
-const double PCO_DBL_MAX = 1e37;
+//const double PCO_DBL_MAX = 1e37;
 const double PCO_DBL_MIN = 1e-37;
 const double PCO_DBL_MAX_10_EXP = 37.;
-const double PCO_DBL_MIN_10_EXP = -37.;
-const double PCO_DBL_MAX_EXP = 85.195648;
-const double PCO_DBL_MIN_EXP = -85.195648;
+//const double PCO_DBL_MIN_10_EXP = -37.;
+//const double PCO_DBL_MAX_EXP = 85.195648;
+//const double PCO_DBL_MIN_EXP = -85.195648;
 const double PCO_DBL_EPSILON = 1e-9;
 // please, check http://www.cplusplus.com/reference/cfloat/
 
@@ -773,7 +773,7 @@ TCompos::RecCalc( const char* key )
     double Xincr, ICmw, DCmw;
     double *A;
     vstr ICs(MAXRKEYLEN+10), pkey(MAXRKEYLEN+10);
-    char *Formula, *CIcl=0;
+    char *Formula;//, *CIcl=nullptr;
     time_t crt, tim;
     int i1;
 

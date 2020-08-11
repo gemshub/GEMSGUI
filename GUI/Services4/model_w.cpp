@@ -1125,7 +1125,7 @@ void TObjectTable::CmCalc()
   	    return;
   	
      QModelIndex wIndex;
-     const QStringList rows = str.split(splitrow, QString::KeepEmptyParts);
+     const QStringList rows = str.split(splitrow, Qt::KeepEmptyParts);
 
      int ii, jj;
      int rowNum = sel.N1;

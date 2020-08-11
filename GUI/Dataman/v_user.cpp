@@ -24,6 +24,7 @@
 #include <cmath>
 #include "v_user.h"
 
+char chLowUp(char ch);
 double NormDoubleRound(double aVal, int digits)
 {
     double val;
@@ -196,8 +197,7 @@ std::string curDateSmol(char ch )
     vstr tstr(40);
 
     std::string frm = "%d" + std::string(1,ch)+ "%m" + std::string(1,ch) + "%y";
-    strftime(tstr, 9, frm.c_str(),
-             // "%d/%m/%y",
+    strftime(tstr, 9, frm.c_str(),  // "%d/%m/%y",
              time_now);
 
     return tstr.p;
@@ -360,11 +360,11 @@ void
       data_str.substr(0, len_);
       if( data_str == old_str )
       {
-       size_t ii = data_str.length()-1;
-       if( data_str[ii] == '9' )
-        data_str[ii] = '_';
-       else
-        data_str[ii] = '9';
+          size_t ii1 = data_str.length()-1;
+          if( data_str[ii1] == '9' )
+              data_str[ii1] = '_';
+          else
+              data_str[ii1] = '9';
       }
       return;
     }
@@ -439,11 +439,11 @@ void
    data_str.substr(0, len_);
    if( data_str == old_str )
    {
-       size_t ii = data_str.length()-1;
-       if( data_str[ii] == '9' )
-        data_str[ii] = '_';
+       size_t ii1 = data_str.length()-1;
+       if( data_str[ii1] == '9' )
+        data_str[ii1] = '_';
        else
-        data_str[ii] = '9';
+        data_str[ii1] = '9';
     }
 }
 

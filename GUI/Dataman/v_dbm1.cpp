@@ -825,6 +825,7 @@ TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
             break;
         case K_ACT:  // get field from  PRIE request
             rts = nRTwrk;
+            [[fallthrough]];
         default:     // get field from enathe chain key
             nkf = va_arg( Marker, uint );
             if( !*rt[rts]->FldKey( nkf ))

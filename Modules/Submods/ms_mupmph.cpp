@@ -768,6 +768,7 @@ PARLOAD: if( k < syp->Fis )
 /* End extension */
             case DC_SOL_MAJOR: case DC_SOL_MAJDEP:
                 Cjs = j;
+                [[fallthrough]];
             case DC_SOL_MINOR: case DC_SOL_MINDEP: case DC_SOL_IDEAL:
                 PMM += pm.MM[j]; is_ss = false;
                 break;
@@ -815,6 +816,7 @@ PARLOAD: if( k < syp->Fis )
                     PMM = pm.MM[Cjs];
                     pm.FWGT[k] = PMM;
                 }
+                 [[fallthrough]];
                 /*  leave normalized to 1 gram pm.ln1Na[k] *= PMM; */
             case PH_AQUEL:
                 if( pm.FWGT[k] < 1e-33 )   // bugfix 26.04.13 DK

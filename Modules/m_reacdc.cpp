@@ -446,6 +446,7 @@ AGAIN_MOD:
         case CTM_LGK:
         case CTM_LGX:
             rcp->PreDC = S_ON;
+             [[fallthrough]];
         case CTM_EK0:
         case CTM_EK1:
         case CTM_EK3:

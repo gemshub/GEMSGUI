@@ -702,9 +702,9 @@ int  TObject::ofDB( GemDataStream& f )
     switch( cmp )
     {
     case  1: // old size > new size
-         if( !IsDynamic() )
+        if( !IsDynamic() )
             break;
-
+        [[fallthrough]];
     case -1:  // old size < new size
     case -2: // old Type != new Type
         if( IsDynamic() )
@@ -715,11 +715,11 @@ int  TObject::ofDB( GemDataStream& f )
         }
         else
         {
-           if( Otype == S_ && cmp == -1 )
-            error_S_ = true;
-          else
-            ErrorIf( cmp!=1, GetKeywd(),
-                     "TObject:E07 Invalid type/size on getting static data object");
+            if( Otype == S_ && cmp == -1 )
+                error_S_ = true;
+            else
+                ErrorIf( cmp!=1, GetKeywd(),
+                         "TObject:E07 Invalid type/size on getting static data object");
         }
         break;
     case  2: //size of new object is 0

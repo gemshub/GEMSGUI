@@ -263,7 +263,7 @@ void  TSupcrt::aux(double r1, double th1, double *d2PdT2, double *d2PdMT,
     int i= -1;
     double  sS[2], w[2], y[2], z[2], coex[2], cc, beta, besq, delta, alpha,
     s00, s20, s01, s21, deli, ww, yy, zz, gamma, tt1, ter, g, alhi,
-    beti, gami, a1, a2, a4, f1;
+    beti, gami, a11, a21, a4, f1;
 
     cc   = co->a[0];
     beta = co->a[5];
@@ -308,13 +308,13 @@ void  TSupcrt::aux(double r1, double th1, double *d2PdT2, double *d2PdMT,
             z[i]  = 1.0-besq*(1.0-(2.0*beti))*tt1;
             z[i]  = (z[i]*pow(r1,-gami)) * xk[i] / g;
             zz    = zz + z[i];
-            a1 = (beta * (delta - 3.0) - 3.0 * deli - besq * alhi * gami) /
+            a11 = (beta * (delta - 3.0) - 3.0 * deli - besq * alhi * gami) /
                  (2.0 * besq * besq * (2.0 - alhi) * (1.0 - alhi) * alhi);
-            a2 = 1 + ((beta * (delta - 3.0) - 3.0 * deli - besq * alhi
+            a21 = 1 + ((beta * (delta - 3.0) - 3.0 * deli - besq * alhi
                        * ter) / (2.0 * besq * (1.0 - alhi) * alhi));
-            a2 = -a2;
+            a21 = -a21;
             a4 = 1.0 + ((ter - 2.0) / (2.0 * alhi));
-            f1 = a1 + a2 + a4;
+            f1 = a11 + a21 + a4;
             coex[i] = ((2.0 - alhi) * (1.0 - alhi) * pow(r1, -alhi) * f1 * xk[i]);
             Cvcoex  += coex[i];
         }
@@ -515,13 +515,13 @@ int  TSupcrt::valTP(double T, double P)
 //--------------------------------------------------------------------//
 // valid insert data and scales for HKF
 void
-TSupcrt::valid(int it, int id, int ip, int ih, int itripl, int isat,
+TSupcrt::valid(int it, int id1, int ip, int ih, int itripl, int isat,
                int iopt, int useLVS, int epseqn, double Temp, double *Pres,
                double *Dens0, int *eR)    /* double Temp, Pres, Dens; */
 {
     double Ttripl, Tcrit, Pcrit; /*T, D, P, */
     // valid specification
-    *eR = valspc(it, id, ip, ih, itripl, isat, iopt, useLVS, epseqn);
+    *eR = valspc(it, id1, ip, ih, itripl, isat, iopt, useLVS, epseqn);
     ErrorIf( !*eR, "Tsupcrt","HKF H2O: Specification error!");
     // translate to  degC, bars, g/cm3
     trp.T   = TdegK(it, Temp) - 273.15e0;
