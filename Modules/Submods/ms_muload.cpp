@@ -50,8 +50,7 @@ void TMulti::KinMetModLoad( )
     int kk, k, j, jj, kf, kfe=0, kp, kpe=0, ka, kae=0, ks, kse=0,
     JB, JE=0, /*jb,*/ je=0, kc, kd, kce=0, kde=0, /*kx, kxe=0,*/ ki, kie=0;
     long int jphl=0, jlphc=0;
-    //vstr pkey(MAXRKEYLEN);
-    vstr modT(164);
+    char modT[164];
     //char *kMod;
     time_t crt;
     TPhase* aPH = TPhase::pm;
@@ -313,8 +312,7 @@ void TMulti::SolModLoad( )
     int kk, k, j, jj, jp, jkd, ku, kue=0,
     JB, JE=0, jb, je=0, kc, kd, kce=0, kde=0, kx, kxe=0, ksn = 0, ksf=0, Type=0;
     long int jdqfc=0,  jrcpc=0;
-    //vstr pkey(MAXRKEYLEN);
-    vstr modT(164);
+    char modT[164];
     //char *sMod;
     time_t crt;
     TPhase* aPH = TPhase::pm;
@@ -844,13 +842,13 @@ AgainE:
 int TMulti::find_icnum( char *name, int LNmode )
 {
     int i;
-    vstr ICs(IC_RKLEN+10);
+    char ICs[IC_RKLEN+10];
     char *nbg, *nend;
     TFormula aFo;
 
     nbg = name;
     nend = name+strlen(name)-1;
-    fillValue( ICs.p, ' ', IC_RKLEN );
+    fillValue( ICs, ' ', IC_RKLEN );
     ICs[/*MAXSYMB*/IC_RKLEN] = 0;
     if( isdigit( name[0] ))
 { /* this is isotope 34S */ MOVEDIGIT:
@@ -877,7 +875,7 @@ int TMulti::find_icnum( char *name, int LNmode )
             if( !memcmp( ICs, pmp->SB[i], MAXICNAME/*+MAXSYMB*/ ))
                 return i;
         }
-        Error( ICs.p, "E04MSPrep: IC name cannot be found in GEM IPM work data lists..." );
+        Error( ICs, "E04MSPrep: IC name cannot be found in GEM IPM work data lists..." );
     }
     if( LNmode == 0 )
     {
@@ -887,9 +885,9 @@ int TMulti::find_icnum( char *name, int LNmode )
             if( !memcmp( ICs, mup->SB[i], MAXICNAME+MAXSYMB ))
                 return i;
         }
-        Error( ICs.p, "E14MSPrep: IC name cannot be found in Project system definition lists..." );
+        Error( ICs, "E14MSPrep: IC name cannot be found in Project system definition lists..." );
     }
-    Error( ICs.p, "E09MSPrep: Invalid IC search mode parameter..." );
+    Error( ICs, "E09MSPrep: Invalid IC search mode parameter..." );
     return -1;
 }
 
@@ -902,7 +900,6 @@ int TMulti::find_icnum( char *name, int LNmode )
 int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
 {
     int j, jf[20], ii=0, jj;
-    //vstr pbuf(164);
 
     auto len = strlen( name );
     if( LNmode == 1 )
@@ -1031,7 +1028,7 @@ int TMulti::find_phnum( char *name, int LNmode )
     if( ii == 1 )
         return( kf[0] );
     /* more then one useful index */
-    vstr pbuf_(164);
+    char pbuf_[164];
     string pbuf;
     sprintf( pbuf_, "%d", ii);
     pbuf = pbuf_;
@@ -1070,10 +1067,9 @@ int TMulti::find_acnum( char *name, int LNmode )
     if( ii == 1 )
         return( jf[0] );
     /* more then one matching index */
-    //vstr pbuf(164);
     //sprintf( pbuf, "%d of PCO indices found for the PCO name %s (->%d) \n"
     //         "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
-    vstr pbuf_(164);
+    char pbuf_[164];
     string pbuf;
     sprintf( pbuf_, "%d", ii);
     pbuf = pbuf_;
@@ -1109,7 +1105,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
     int i=0, ii, pj, LNplace=1, Xplace=0, nO=0;
     char cstate, cc, *etext, *pexpr, *ecur, *cur, *next, *end,
       *prev, *last, *stmt, iCode, odlab[MAXKEYWD+2];
-    vstr name(164), nbuf(164);
+    char name[164], nbuf[164];
 
     etext = static_cast<char *>(aObj[ nOet ]->GetPtr());
     /*if( etext )
@@ -1251,7 +1247,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
             }
             cstate = iCode;
             // preparing for getting species/phase/icomp/compos name in
-            fillValue( name.p, ' ', 63 );
+            fillValue( name, ' ', 63 );
             name[63] = 0;
             cc = 1;
             cur++;

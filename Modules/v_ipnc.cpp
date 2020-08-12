@@ -199,26 +199,28 @@ void IPNCalc::IsAscii()
 }
 
 //get identifier
-void IPNCalc::Ident( char *s )
+string IPNCalc::Ident()
 {
     int n,m;
     n=strcspn( input, RAZD );
     m = min( MAXKEYWD, n);
-    strncpy( s, input, m);
+    auto str = string( input, 0, m);//strncpy( s, input, m);
     input+=n;
+    return str;
+
+
 }
 
 //analyse IPN function
-void IPNCalc::Ffun( char *str)
+void IPNCalc::Ffun(const string& str)
 {
     int i,j;
-    vstr st(MAXKEYWD);
     std::string err;
 
     input++;
     if( (input=xblanc( input ))==0 ) goto OSH;
     for( i=0; i<FuncNumber; i++)
-        if( !( strncmp( str, fun[i].func, MAXKEYWD) ) )
+        if( !( strncmp( str.c_str(), fun[i].func, MAXKEYWD) ) )
             break;
     if( i==FuncNumber )
     {
@@ -255,9 +257,7 @@ void IPNCalc::Ffun( char *str)
             err += input;
             Error( "E03MSTran: ", err.c_str() );
         }
-        memset( st, '\0', MAXKEYWD );
-        //st[MAXKEYWD-1] = '\0';
-        Ident( st );
+        auto st = Ident();
         I_Variab( st );
         if( (input=xblanc( input ))==0 ) goto OSH;
         if( *input!=')' )
@@ -275,9 +275,9 @@ OSH:
 }
 
 //analyse IPN variable
-void IPNCalc::Variab( const char *str)
+void IPNCalc::Variab( const string& str)
 {
-    int j = aObj.Find(str);
+    int j = aObj.Find(str.c_str());
 
     if( j<0 )
     {
@@ -330,9 +330,9 @@ OSH:
 }
 
 //analyse IPN interval variable
-void IPNCalc::I_Variab( char * str)
+void IPNCalc::I_Variab( const string& str)
 {
-    int j = aObj.Find(str);
+    int j = aObj.Find(str.c_str());
 
     if( j<0 )
     {
@@ -381,7 +381,6 @@ OSH:
 //get IPN code of one math script operator
 void IPNCalc::bildEquat()
 {
-    vstr str(MAXKEYWD);
     char *s;
     std::string err;
     int i,j;
@@ -440,9 +439,8 @@ void IPNCalc::bildEquat()
             err += input;
             Error(  "E10MSTran: ", err.c_str() );
         }
-        memset( str, '\0', MAXKEYWD );
-        //str[MAXKEYWD-1] = '\0';
-        Ident( str );
+
+        auto str = Ident();
         Variab( str );
         Push( IT_A, 0 );
         eq_add( aItm.size() );
@@ -632,10 +630,9 @@ OSH :
 void IPNCalc::RPN_expr( char ck )
 {
     int itec=-1;
-    vstr stack(MAXSTACK);
+    char stack[MAXSTACK];
     char op,op1;
     int l;
-    vstr str(MAXKEYWD);
     std::string err;
 
     memset( stack, 0, MAXSTACK );
@@ -656,9 +653,7 @@ void IPNCalc::RPN_expr( char ck )
         }
         if( IsLetter( *input ) ) // variable or function
         {
-            memset( str, '\0', MAXKEYWD );
-            //str[MAXKEYWD-1] = '\0';
-            Ident( str );
+            auto str = Ident();
             if( (input=xblanc( input ))==0 ) goto OSH;
             if( *input=='(' )  // function
                 Ffun( str );
@@ -685,14 +680,12 @@ void IPNCalc::RPN_expr( char ck )
                 {
                     if( IsLetter( *input ) )
                     {
-                        memset( str, '\0', MAXKEYWD );
-                        //str[MAXKEYWD-1] = '\0';
-                        Ident( str );
+                        auto str = Ident();
                         if( (input=xblanc( input ))==0 ) goto OSH;
                         if( *input=='(' ) //function
                             Ffun(str);
                         else // variable
-                            Variab( str);
+                            Variab( str );
                     }
                     else
                         if( IsDigit( *input ) ) // constant

@@ -1658,7 +1658,7 @@ int TPhase::CompressSublattice( const TCStringArray& form_array )
 TCStringArray TPhase::readFormulaes( const TCIntArray&  DCused) const
 {
     int  i;
-    vstr dcn(MAXRKEYLEN);
+    char dcn[MAXRKEYLEN];
     time_t crt;
     TCStringArray form_array;
     bool onlyused = static_cast<int>(DCused.size())>=php->nDC;

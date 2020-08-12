@@ -28,29 +28,29 @@ char chLowUp(char ch);
 double NormDoubleRound(double aVal, int digits)
 {
     double val;
-    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
+    char vbuf[30];	// double is ~15 digit   PATTERN_GET()
     sprintf(vbuf, "%.*le" , digits , aVal);
-    sscanf(vbuf.p, "%le", &val );
+    sscanf(vbuf, "%le", &val );
 	return val;
 }
 
 void NormDoubleRound(double *aArr, int size, int digits)
 {
-    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
+    char vbuf[30];	// double is ~15 digit   PATTERN_GET()
     
 	for(int ii=0; ii<size; ii++ )
     { sprintf(vbuf, "%.*le" , digits, aArr[ii]);
-      sscanf(vbuf.p, "%le", &aArr[ii] );
+      sscanf(vbuf, "%le", &aArr[ii] );
     }  
 }
 
 void NormFloatRound(float *aArr, int size, int digits)
 {
-    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
+    char vbuf[30];	// double is ~15 digit   PATTERN_GET()
     
 	for(int ii=0; ii<size; ii++ )
     { sprintf(vbuf, "%.*e" , digits, aArr[ii]);
-      sscanf(vbuf.p, "%e", &aArr[ii] );
+      sscanf(vbuf, "%e", &aArr[ii] );
     }  
 }
 
@@ -98,7 +98,7 @@ u_getline(istream& is, string& str, char delim)
 // cant digits in either printf(3) F format or E format.
 void Gcvt(double number, size_t ndigit, char *buf)
 {
-    vstr internalbuf(40);
+    char internalbuf[40];
     int dg = 6;
      do{
           sprintf(internalbuf, "%.*g", dg, number);
@@ -176,13 +176,13 @@ string curDate()
     time(&secs_now);
     time_now = localtime(&secs_now);
 
-    vstr tstr(40);
+    char tstr[40];
 
     strftime(tstr, 11,
              "%d/%m/%Y",
              time_now);
 
-    return tstr.p;
+    return tstr;
 }
 
 std::string curDateSmol(char ch )
@@ -194,13 +194,13 @@ std::string curDateSmol(char ch )
     time(&secs_now);
     time_now = localtime(&secs_now);
 
-    vstr tstr(40);
+    char tstr[40];
 
     std::string frm = "%d" + std::string(1,ch)+ "%m" + std::string(1,ch) + "%y";
     strftime(tstr, 9, frm.c_str(),  // "%d/%m/%y",
              time_now);
 
-    return tstr.p;
+    return tstr;
 }
 
 string curTime()
@@ -212,13 +212,13 @@ string curTime()
     time(&secs_now);
     time_now = localtime(&secs_now);
 
-    vstr tstr(40);
+    char tstr[40];
 
     strftime(tstr, 6,
              "%H:%M",
              time_now);
 
-    return tstr.p;
+    return tstr;
 }
 
 

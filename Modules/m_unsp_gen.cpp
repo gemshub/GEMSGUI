@@ -138,7 +138,7 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
    if( usp->PsGraph != S_OFF )
     for(int j=0; j< usp->dimXY[1]+usp->dimEF[1]; j++ )
     {
-        vstr tbuf(100);
+        char tbuf[100];
         sprintf( tbuf, "%d", j+1 );
         if( !*usp->lNam[j]|| *usp->lNam[j] == ' ' )
             strncpy( usp->lNam[j], tbuf, MAXGRNAME );
@@ -414,7 +414,7 @@ int TUnSpace::calc_nPG()
 //build list of unspace components
 void TUnSpace::build_nPG_list()
 {
-  vstr tbuf(100);
+  char tbuf[100];
   int j, count=0;
 
   if( !usp->ParNames )

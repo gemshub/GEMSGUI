@@ -112,10 +112,10 @@ protected:
     int SPRTY( char c );
     void InDigit();
     void IsAscii();
-    void Ident( char *s );
-    void Ffun( char * str);
-    void Variab( const char * str);
-    void I_Variab( char * str);
+    string Ident();
+    void Ffun( const string& str);
+    void Variab( const string& str);
+    void I_Variab( const string& str);
     void bildEquat();
     void bildWhile();
     void bildIf();

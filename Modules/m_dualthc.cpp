@@ -135,7 +135,7 @@ void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
 // make EqStat key  && calculate records
 void TDualTh::calc_eqstat()
 {
-    vstr buf(40);
+    char buf[40];
     double dummy = -1.;
 
     sprintf(buf, "%.4d", dtp->c_tm);
@@ -302,7 +302,7 @@ TDualTh::Bb_Calc()
     double Msysb_bk, Tmolb_bk;
     double MsysC = 0., R1C = 0.;
     double Xincr, ICmw, DCmw;
-    vstr  pkey(MAXRKEYLEN+10);
+    char  pkey[MAXRKEYLEN+10];
     float  *ICw;  //IC atomic (molar) masses [0:Nmax-1]
     float *A;
     time_t crt;
@@ -443,7 +443,7 @@ TDualTh::Bn_Calc()
     double Msysb_bk, Tmolb_bk;
     double MsysC = 0., R1C = 0.;
     double Xincr, ICmw, DCmw;
-    vstr  pkey(MAXRKEYLEN+10);
+    char  pkey[MAXRKEYLEN+10];
     float  *ICw;  //IC atomic (molar) masses [0:Nmax-1]
     float *A;
     time_t crt;

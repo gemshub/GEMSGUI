@@ -126,9 +126,9 @@ TPlot::~TPlot()
 
 string TPlot::getName( int ii )
 {
-    vstr s(40);
-    sprintf(s.p, "%s[%u]",aObj[nObjY]->GetKeywd(), ii);
-    return string(s.p);
+    char s[80];
+    sprintf(s, "%s[%u]", aObj[nObjY]->GetKeywd(), ii);
+    return string(s);
 }
 
 // get point to draw one line

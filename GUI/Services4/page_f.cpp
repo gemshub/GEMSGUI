@@ -131,8 +131,8 @@ CWinInfo::fromWinCFG(istream & win_cfg)
 {
 //    win_cfg.read((char *) &init_width, sizeof init_width);
 //    win_cfg.read((char *) &init_height, sizeof init_height);
-    vstr name(100);
-    win_cfg >> name.p;	// Don't compile in BCB without .p 
+    char name[100];
+    win_cfg >> name;	// Don't compile in BCB without .p
     win_cfg >> init_width;
     win_cfg >> init_height;
 }

@@ -563,7 +563,7 @@ void TFormula::TestIC( const char* key, int N, char *ICsym )
 {
     uint i;
     int jj=-1;
-    vstr ICS(MAXICNAME+MAXSYMB+10);
+    char ICS[MAXICNAME+MAXSYMB+10];
 
     for( i=0; i<aCn.size(); i++ )
     {
@@ -583,7 +583,7 @@ void TFormula::TestIC( const char* key, int N, char *ICsym )
         if( jj==-1 )
         {
             std::string msg = "IComp: ";
-            msg += std::string(ICS.p, 0, MAXICNAME+MAXSYMB );
+            msg += std::string(ICS, 0, MAXICNAME+MAXSYMB );
             msg += "\n in formula in DComp/ReacDC record: \n";
             msg += std::string( key, 0, DC_RKLEN);
 
@@ -600,7 +600,7 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
 {
     time_t icrtim;
     TIComp* aIC = TIComp::pm;
-    vstr ICs(MAXICNAME+MAXSYMB+3);
+    char ICs[MAXICNAME+MAXSYMB+3];
     double Sc, Zf=0.0;
 
     Z =  mW =  eS = 0.0;
@@ -637,7 +637,7 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn, double &Nj )
 {
     time_t icrtim;
     TIComp* aIC = TIComp::pm;
-    vstr ICs(MAXICNAME+MAXSYMB+3);
+    char ICs[MAXICNAME+MAXSYMB+3];
     double Sc, Zf=0.0;
 
     Z = mW = eS = Nj = 0.0;
@@ -675,7 +675,7 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
 {
     uint i, ii;
     int jj=-1;
-    vstr ICS(MAXICNAME+MAXSYMB+10);
+    char ICS[MAXICNAME+MAXSYMB+10];
     char *icsp = ICS;
 
     fillValue( Sml, 0., N);
@@ -717,9 +717,9 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
             std::string str = " in the formula: ";
             str +=  aFormula;
             str += "\n calculated charge: ";
-            vstr   buf(40);
+            char   buf[40];
             sprintf( buf, "%lg != %lg", aZ, tt );
-            str += buf.p;
+            str += buf;
  aSC[ii] = aZ;  // KD 03.01.04  - temporary workaround (adsorption)
             vfMessage( 0,  "W34FPrun: Charge imbalance ", str.c_str() );
          }

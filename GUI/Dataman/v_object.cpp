@@ -113,7 +113,7 @@ TObject::ToCFG(ostream& f)
 string
 TObject::GetFullName(int aN, int aM)
 {
-  vstr v(15);
+  char v[15];
   string item = GetKeywd();
   if( N > 1 )
   {
@@ -130,7 +130,7 @@ TObject::GetFullName(int aN, int aM)
 
 string TObject::GetHelpLink(int aN, int aM)
 {
-  vstr v(15);
+  char v[15];
   string item = GetKeywd();
   if( !(N<=1 || Descr[0] == '|') )
   {
@@ -802,7 +802,6 @@ int  TObject::ofDB( GemDataStream& f )
 void TObject::toTXT( fstream& to )
 {
     int dimM, i, j;
-    vstr sbuf(150);
 
     dimM = M;
     if( IsDynamic() )
@@ -840,23 +839,18 @@ void TObject::toTXT( fstream& to )
         {
             for( j=0; j < M; j++ )
             {
-                strcpy(sbuf, GetString(i,j).c_str() );
+                auto sbuf = GetString(i,j);
                 if( Type > 0 )
                     to << "\"";
-                 switch( *sbuf )
-                 {
-                    case 0:
-                        sbuf[0] = '`';
-                        sbuf[1] = 0;
-                        break;
-                    case ' ':
-                        sbuf[0] = ' '/*'�'*/;
-                        sbuf[1] = 0;
-                        break;
-                    default:
-                        break;
-                  }
-                  to << sbuf;
+                if( sbuf.empty() )
+                {
+                    sbuf = "`";
+                }
+                else if( sbuf[0] == ' ' )
+                {
+                    sbuf = " ";
+                }
+                 to << sbuf;
                   if( Type > 0 )
                     to << "\" ";
                   else
@@ -871,7 +865,7 @@ void TObject::ofTXT( fstream& of )
 {
     int rdimN, rdimM, i, j;
     int r_otype;
-    vstr sbuf(160);
+    char sbuf[160];
 
     do
     {
@@ -969,7 +963,7 @@ void TObject::ofTXT( fstream& of )
                               "TObject:E16 Bad format or character when reading text object from TXT");
                 }
                 else
-                   of >> sbuf.p;
+                   of >> sbuf;
 
                 if( Type == A_ || Type == B_ )
                     switch( *sbuf )
@@ -1007,7 +1001,7 @@ TObjList::Find(const char* s)
     return -1;
 }
 
-const int N_OBJECTS = 1000;
+//const int N_OBJECTS = 1000;
 
 // default DOD list configuration
 TObjList::TObjList():

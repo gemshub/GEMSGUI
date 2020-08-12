@@ -722,7 +722,7 @@ TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
 {
     TCStringArray aList;
     TCIntArray anR;
-    vstr pkey(81);
+    char pkey[81];
     uint i;
 
     int  Rnum = rt[nRT]->Find( key );

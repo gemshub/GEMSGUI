@@ -381,7 +381,7 @@ TReacDC::MakeQuery()
 int TReacDC::RecBuild( const char *key, int mode  )
 {
     int /*i, iir, Ndc, Nrc,*/ Nc1, Nn1 = 0, Nf1, Nr1;
-    vstr pkey(81);
+    char pkey[81];
     int CM,CE,CV;
     //short oldnDC = rcp->nDC/*, newnDC*/;
 
@@ -641,7 +641,7 @@ TReacDC::RCthermo( int q, int p )
 	int CM,CE,CV, j, isotop = 0;
     double rho, eps, alp, dal, bet, xborn, yborn, /*zborn,*/ qborn;
     time_t tim;
-    vstr  /*buf[121],*/ dckey(DC_RKLEN + 10);
+    char  /*buf[121],*/ dckey[DC_RKLEN + 10];
 
     aW.twp->Tst = aW.twp->TCst + C_to_K;
     aW.twp->RT = R_CONSTANT * aW.twp->T; /* !!!! */
@@ -821,7 +821,7 @@ CALCULATE_DELTA_R:
         switch( CE )
         {
         default:
-            Error(dckey.p, "E12RErun: Invalid CE method flag!");
+            Error(dckey, "E12RErun: Invalid CE method flag!");
             break;
         case CTM_HKF:
             calc_tphkf_r( q, p );
@@ -852,7 +852,7 @@ CALCULATE_DELTA_R:
              calc_r_MRB( q, p, CE, CV );
             break;
         default:
-            Error(dckey.p,"E13RErem: Invalid CE method flag!");
+            Error(dckey,"E13RErem: Invalid CE method flag!");
         }
         break;
     case CTPM_ISO:
@@ -867,7 +867,7 @@ CALCULATE_DELTA_R:
             msg += dckey;
             msg += "'.\n Change the record?";
             //if( !vfQuestion( GetName(), buf );
-            Error( dckey.p, "E14RErun: Invalid CM method flag in ReacDC!");
+            Error( dckey, "E14RErun: Invalid CM method flag in ReacDC!");
             //  else  RecBuild( dckey );  // !!!!!! Recalc new record?
         }
      }
@@ -958,7 +958,7 @@ void TReacDC::PronsPrep( const char *key )
     DELHR1, DELHR2, DELHR3, DELHR4, DELCP1, DELCP2, DELCP3, DELCP4,
     DELVR1, DELVR2, DELVR3, DELVR4, GZ, CSC, LSC, DZ, scC;
     int i, iL=0, iC=0, scL,  b1, b2, b3, b4;
-    vstr dcn(MAXRKEYLEN+5);
+    char dcn[MAXRKEYLEN+5];
     int Rfind;
 
     /* Finding index of cation and anion */
@@ -1334,7 +1334,7 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     DELHR1,DELHR2,DELHR3,DELHR4,DELVR1,//DELVR2,DELVR3,DELVR4,
     CSC, LSC, /*DZ,*/ scC, LOGKR, Sw, Hw;//, Gw, Cpw, Vw;
     int i, iL=0, iC=0, scL, NC, ZZ;
-    vstr dcn(MAXRKEYLEN+5);
+    char dcn[MAXRKEYLEN+5];
     int Rfind;
 
     Sw = 69.923/cal_to_J;

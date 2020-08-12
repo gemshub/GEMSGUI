@@ -424,11 +424,11 @@ void TCWindow::ShowInfo()
     struct tm *time_s;
     tzset();
     time_s = localtime(&time);
-    vstr str(40);
+    char str[80];
     strftime(str, 20, "%d/%m/%Y, %H:%M", time_s);
 
     //pPackKey->setText( rt[nR].PackKey() );
-    pRTime->setText( str.p );
+    pRTime->setText( str );
 }
 
 //    Updates window

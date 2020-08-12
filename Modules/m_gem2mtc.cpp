@@ -198,7 +198,7 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
 // setup begin initalization
 void TGEM2MT::init_arrays( bool mode )
 {
-  vstr tbuf(100);
+  char tbuf[100];
 
 // set data to SBM (IComp names)
     if( mtp->SBM )
@@ -383,7 +383,7 @@ void TGEM2MT::mt_next()
 // make EqStat key  && calculate records
 void TGEM2MT::calc_eqstat( bool startSys )
 {
-    vstr buf(40);
+    char buf[40];
 
     if( startSys )
     {  mtp->cT = mtp->PTVm[mtp->kv][1];
@@ -496,7 +496,7 @@ TGEM2MT::Bn_Calc()
     double Msysb_bk, Tmolb_bk;
     double MsysC = 0., R1C = 0.;
     double Xincr, ICmw, DCmw;
-    vstr  pkey(MAXRKEYLEN+10);
+    char  pkey[MAXRKEYLEN+10];
     double  *ICw;  //IC atomic (molar) masses [0:Nmax-1]
     double *A;
     time_t crt;

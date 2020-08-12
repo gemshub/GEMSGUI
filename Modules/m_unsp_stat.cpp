@@ -29,7 +29,7 @@ void TUnSpace::unsp_eqkey()
     // calculate EqStat record (Thermodynamic&Equlibria)
     pmu->pTPD = 0;
     //     pmu->pNP = 0;
-    vstr buf(40);
+    char buf[40];
 
     sprintf(buf, "%.4d", usp->q);
     memset(usp->timep, 0, 5 );

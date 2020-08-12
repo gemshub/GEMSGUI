@@ -65,7 +65,7 @@ TDualTh::GetKeyofRecord( const char *oldKey, const char *strTitle,
 
     if( keyType==KEY_NEW  )
     { // Get key of base SyStat
-        vstr pkey(MAXRKEYLEN+10);
+        char pkey[MAXRKEYLEN+10];
         rt[RT_DUALTH]->SetKey(str.c_str());
         rt[RT_SYSEQ]->MakeKey( RT_DUALTH, pkey, RT_DUALTH, 0, RT_DUALTH, 1,
                                RT_DUALTH, 2, RT_DUALTH, 3, RT_DUALTH, 4,
@@ -74,7 +74,7 @@ TDualTh::GetKeyofRecord( const char *oldKey, const char *strTitle,
           "Please, select a parent System for a new DualTh ", KEY_OLD );
         if(  str.empty() )
         {
-            str = pkey.p;
+            str = pkey;
             str+= "*:*:";
         }
         else
@@ -92,7 +92,7 @@ TDualTh::GetKeyofRecord( const char *oldKey, const char *strTitle,
 // test DualTh key to calc mode
 void TDualTh::keyTest( const char *key )
 {
-    vstr pkey(MAXRKEYLEN+10);
+    char pkey[MAXRKEYLEN+10];
 
     if( pVisor->ProfileMode == true )
     { // test project key
@@ -670,7 +670,7 @@ void TDualTh::set_def( int q)
 // return true if nesessary, recalc base SYSEQ
 bool TDualTh::check_input( const char * /*key*/, int /*Level*/ )
 {
-    vstr pkey(MAXRKEYLEN+10);
+    char pkey[MAXRKEYLEN+10];
     if( pVisor->ProfileMode != true )
         return true;
 
@@ -988,7 +988,7 @@ void TDualTh::dt_initiate( bool mode )
   if( mode )
   {
     int ii,i;
-    vstr tbuf(100);
+    char tbuf[100];
 
     dtp->gStat = GS_INDEF;
 

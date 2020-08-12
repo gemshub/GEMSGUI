@@ -413,7 +413,7 @@ int
 TCompos::RecBuild( const char *key, int mode  )
 {
     int oldIC=0, oldDC=0;
-    vstr pkey(81);
+    char pkey[81];
     int i;
     std::string str;
     TCStringArray aIclist;
@@ -772,7 +772,8 @@ TCompos::RecCalc( const char* key )
     double MsysC = 0., R1C = 0.;
     double Xincr, ICmw, DCmw;
     double *A;
-    vstr ICs(MAXRKEYLEN+10), pkey(MAXRKEYLEN+10);
+    //char ICs[MAXRKEYLEN+10];
+    char pkey[MAXRKEYLEN+10];
     char *Formula;//, *CIcl=nullptr;
     time_t crt, tim;
     int i1;

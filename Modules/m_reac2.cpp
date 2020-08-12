@@ -214,7 +214,7 @@ void TReacDC::Convert_KT_to_Cp( int CE )
             fabs( rcp->Ks[1] - lgK ) >= 0.01 )
     {
         std::string msgbuf = "W24RErun: Warning: Some of the calculated values\n logK = ";
-        vstr doublbuf(100);
+        char doublbuf[100];
         sprintf( doublbuf, "%g", lgK );
         msgbuf += doublbuf;
         msgbuf += ", dGr = ";
@@ -251,7 +251,7 @@ void TReacDC::Recalc( int q, const char *key  )
 {
     int i, st0, st1, Count, rShift=0, CM, CE;
     double Z, MW, foS, nj;
-    vstr dcn(MAXRKEYLEN+5);
+    char dcn[MAXRKEYLEN+5];
     time_t crt;
 
     TFormula aFo;

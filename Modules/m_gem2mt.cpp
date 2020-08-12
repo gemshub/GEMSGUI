@@ -71,7 +71,7 @@ TGEM2MT::GetKeyofRecord( const char *oldKey, const char *strTitle,
 
     if( keyType==KEY_NEW  )
     { // Get key of base SyStat
-        vstr pkey(MAXRKEYLEN+10);
+        char pkey[MAXRKEYLEN+10];
         rt[RT_GEM2MT]->SetKey(str.c_str());
         rt[RT_SYSEQ]->MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
                                RT_GEM2MT, 2, RT_GEM2MT, 3, RT_GEM2MT, 4,
@@ -80,7 +80,7 @@ TGEM2MT::GetKeyofRecord( const char *oldKey, const char *strTitle,
           "Please, select a parent System for a new GEM2MT ", KEY_OLD );
         if(  str.empty() )
         {
-            str = pkey.p;
+            str = pkey;
             str+= "*:*:";
         }
         else
@@ -98,7 +98,7 @@ TGEM2MT::GetKeyofRecord( const char *oldKey, const char *strTitle,
 // test GEM2MT key to calc mode
 void TGEM2MT::keyTest( const char *key )
 {
-    vstr pkey(MAXRKEYLEN+10);
+    char pkey[MAXRKEYLEN+10];
 
     if( pVisor->ProfileMode == true )
     { // test project key
@@ -709,7 +709,7 @@ mtp->arr2 = (double *)aObj[ o_mtres2]->Free();
 // return true if nesessary, recalc base SYSEQ
 bool TGEM2MT::check_input( const char * /*key*/, int /*Level*/ )
 {
-    vstr pkey(MAXRKEYLEN+10);
+    char pkey[MAXRKEYLEN+10];
     if( pVisor->ProfileMode != true )
         return true;
 

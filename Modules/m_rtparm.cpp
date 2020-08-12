@@ -299,7 +299,7 @@ void TRTParm::set_def( int q)
 // return true if recalc is necessary
 bool TRTParm::check_input( const char *key, int Level )
 {
-    vstr pkey(MAXRKEYLEN+10);
+    char pkey[MAXRKEYLEN+10];
     const char *srec;
     time_t tr, tra;
     bool iRet= false;
@@ -480,7 +480,7 @@ AGAIN_SETUP:
     dyn_new();
 
     TProfil *aPa=TProfil::pm;
-    vstr tbuf(100);
+    char tbuf[100];
 
     if( rpp->Pplot != S_OFF  )
     {

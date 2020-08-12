@@ -261,10 +261,10 @@ TVal<T>::GetString(int ndx) const
     if( IsAny(ndx) )
         return S_ANY;
 
-    vstr vbuf(30);	// double is ~15 digit
+    char vbuf[30];	// double is ~15 digit
     sprintf(vbuf, PATTERN_GET(), static_cast<T*>(ptr)[ndx]);
 
-    return vbuf.p;
+    return vbuf;
 }
 
 template<class T>

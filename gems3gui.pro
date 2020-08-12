@@ -46,7 +46,6 @@ QMAKE_CXXFLAGS += -Wall -Wextra -Wcast-align -Wpointer-arith \
    -Wcast-qual -Wwrite-strings -Wno-unused-parameter \
    -Wfloat-equal -pedantic -ansi
 
-#QMAKE_CXXFLAGS += -Wfloat-equal
 }
 
 macx-g++ {

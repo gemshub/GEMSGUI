@@ -431,7 +431,7 @@ const string emptiness("---");
 void
 TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
 {
-  vstr strbuf(8192);
+  char strbuf[8192];
   string format = fmt.FmtOut();
   switch( dt.data )
   {

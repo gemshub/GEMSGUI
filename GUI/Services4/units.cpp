@@ -99,8 +99,8 @@ TUnitsList::fromDAT(istream& visor_dat)
     if (sg[0] != USigBEG[0] || sg[1] != USigBEG[1])
         throw TError(USigERROR, USigTITLE);
 
-    vstr nm(100);
-    vstr vl(100);
+    char nm[100];
+    char vl[100];
     int n1;
     visor_dat.read((char *) &n1, sizeof n1);
 

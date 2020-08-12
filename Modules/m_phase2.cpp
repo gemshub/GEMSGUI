@@ -441,7 +441,7 @@ void TPhase::makeReacDCompList( const char *caption, TCStringArray& aDclist,
                    short& nDC,  char (*SM)[DC_RKLEN], char * DCS, bool bNsuT)
 {
     int i, aNsuT = 0;
-    vstr pkeyrd(81);
+    char pkeyrd[81];
     TCStringArray aDclist_old;
 
     aDclist.clear();
@@ -587,7 +587,7 @@ AGAINRC:
 // Load DC classes from records and set to DCC
 void TPhase::LoadDCC()
 {
-    vstr dcn(MAXRKEYLEN);
+    char dcn[MAXRKEYLEN];
     char Ctype;
     time_t crt;
     TDComp* aDC=dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
@@ -843,7 +843,7 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
 {
     int  i, pa0=0, Kielland=0;
     short nsc=0;
-    vstr dcn(MAXRKEYLEN);
+    char dcn[MAXRKEYLEN];
     char Ctype;
     float a0=0., bp=0., Z=0., cN=0., Fi=0.;
     time_t crt;

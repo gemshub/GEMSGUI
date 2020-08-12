@@ -84,7 +84,7 @@ TProcess::GetKeyofRecord( const char *oldKey, const char *strTitle,
 
     if( keyType==KEY_NEW  )
     { // Get key of base SyStat
-        vstr pkey(MAXRKEYLEN+10);
+        char pkey[MAXRKEYLEN+10];
         rt[RT_PROCES]->SetKey(str.c_str());
         rt[RT_SYSEQ]->MakeKey( RT_PROCES, pkey, RT_PROCES, 0, RT_PROCES, 1,
                                RT_PROCES, 2, RT_PROCES, 3, RT_PROCES, 4,
@@ -93,7 +93,7 @@ TProcess::GetKeyofRecord( const char *oldKey, const char *strTitle,
           "Please, select a parent System for a new Process ", KEY_OLD );
         if(  str.empty() )
         {
-            str = pkey.p;
+            str = pkey;
             str+= "*:*:";
         }
         else
@@ -112,7 +112,7 @@ TProcess::GetKeyofRecord( const char *oldKey, const char *strTitle,
 // test Process key to calc mode
 void TProcess::keyTest( const char *key )
 {
-    vstr pkey(MAXRKEYLEN+10);
+    char pkey[MAXRKEYLEN+10];
 
     if( pVisor->ProfileMode == true )
     { // test project key
@@ -565,7 +565,7 @@ pe[q].PvR1 = '-';    // AIA on:   KD: temporary for process create
 // return true if nesessary, recalc base SYSEQ
 bool TProcess::check_input( const char * /*key*/, int /*Level*/ )
 {
-    vstr pkey(MAXRKEYLEN+10);
+    char pkey[MAXRKEYLEN+10];
     if( pVisor->ProfileMode != true )
         return true;
 
@@ -858,7 +858,7 @@ TProcess::RecBuild( const char *key, int mode  )
 {
 
     TProfil *aPa=TProfil::pm;
-    vstr tbuf(100);
+    char tbuf[100];
     if( pVisor->ProfileMode != true )
         Error( GetName(), "E09PErem: Please, do it in the Equilibria Calculation mode!" );
 
@@ -903,7 +903,7 @@ SET_OK:  // set begin of calc
 void
 TProcess::pe_qekey()
 {
-    vstr buf(40);
+    char buf[40];
 
     sprintf(buf, "%.4d", pep->c_tm);
     memset(pep->timep, 0, 5 );

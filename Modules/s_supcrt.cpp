@@ -20,7 +20,7 @@
 
 #include <cmath>
 #include "s_supcrt.h"
-#include "v_detail.h"
+#include "GEMS3K/v_detail.h"
 
 //--------------------------------------------------------------------//
 double  TdegK(int it, double t)

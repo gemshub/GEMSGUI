@@ -128,7 +128,7 @@ void TSyst::mark_dc_to_ph()
 void TSyst::mark_dc_to_ic()
 {
     int  j, ij;
-    vstr ICs(MAXRKEYLEN);
+    char ICs[MAXRKEYLEN];
     TFormula aFo;
     std::string form;
     RMULTS* mup = TRMults::sm->GetMU();
@@ -164,7 +164,7 @@ void TSyst::mark_dc_to_ic()
 void TSyst::mark_ic_to_dc()
 {
     int  j, ij;
-    vstr ICs(MAXRKEYLEN);
+    char ICs[MAXRKEYLEN];
     TFormula aFo;
     std::string form;
     RMULTS* mup = TRMults::sm->GetMU();
@@ -451,7 +451,7 @@ void TSyst::systbc_calc( int mode )
     double MsysC = 0., MaqC = 0., VaqC = 0., VsysC = 0., R1C = 0.;
     double Xincr, DCmw, ACmw, Term, MBX;
     double *A=0;
-    vstr ICs(MAXRKEYLEN);
+    //char ICs[MAXRKEYLEN];
     TFormula aFo;
     std::string form;
     time_t crt;

@@ -600,10 +600,8 @@ NEXT:
             if( fabs( (S_1 - S)/S ) >= DEF_REL_DEV )
             {
                 G = H - T * ( S - foS );
-                vstr Msgb(20);
                 std::string s="W08DCrun: Inconsistent values of H0, S0 or G0 -> ";
-                sprintf( Msgb, "%g", G );
-                s += std::string(Msgb);
+                s += std::to_string(G);
                 if( vfQuestion( window(), GetName(), s.c_str() ))
                     dcp->Gs[0] = G;
                 else

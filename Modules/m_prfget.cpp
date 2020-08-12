@@ -145,7 +145,7 @@ TProfil::initCalcMode(const char * profileKey)
         }
     }
     // Get first  SYSEQ
-    vstr pkey(81);
+    char pkey[81];
     rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                           K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_SYSEQ]->SetKey( pkey );
@@ -296,9 +296,6 @@ AGAIN:
       "Opening database files to Project", 5  );
 
      rt[RT_PARAM]->SetKey( key_str.c_str() );
-//     vstr _fstKeyFld(rt[RT_PARAM]->FldLen(0), rt[RT_PARAM]->FldKey(0));
-//     std::string fstKeyFld(_fstKeyFld);
-//     StripLine(fstKeyFld);
 
      if( templ_key == false  )
         InitFN( fstKeyFld.c_str(), nullptr  ); // make Project directory
@@ -434,9 +431,6 @@ AGAIN:
       "Opening database files to Project", 5  );
 
    rt[RT_PARAM]->SetKey( key_str.c_str() );
-//     vstr _fstKeyFld(rt[RT_PARAM]->FldLen(0), rt[RT_PARAM]->FldKey(0));
-//     std::string fstKeyFld(_fstKeyFld);
-//     StripLine(fstKeyFld);
 
      if( templ_key == false  )
         InitFN( fstKeyFld.c_str(), nullptr  ); // make Project directory
@@ -515,7 +509,7 @@ AGAIN:
 void TProfil::loadSystat( const char *key )
 {
     MULTI *pmp = multi->GetPM();
-    vstr pkey(81);
+    //char pkey[81];
     TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
     //  STat->ods_link(0);
     std::string str;

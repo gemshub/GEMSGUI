@@ -582,7 +582,7 @@ int
 TGtDemo::RecBuild( const char *key, int mode  )
 {
     TProfil *aPa=TProfil::pm;
-    vstr tbuf(100);
+    char tbuf[100];
     int i;
 
     if( gst.iopt )
@@ -971,7 +971,7 @@ void TGtDemo::probe_stat( const char *key )
     int i, j, k, N, M, nPar;
     short nI, nF, QT,*iopt;
     size_t tblen;
-    vstr pbuf(121);
+    char pbuf[121];
     char  (*lNames)[MAXGRNAME];
     double *y, *U, par[9];
     TUnSpace* Prob = dynamic_cast<TUnSpace *>( aMod[RT_UNSPACE].get());

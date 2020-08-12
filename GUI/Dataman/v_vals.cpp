@@ -231,10 +231,10 @@ TVal<double>::GetString(int ndx) const
     if( IsAny(ndx) )
         return S_ANY;
 
-    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
+    char vbuf[30];	// double is ~15 digit   PATTERN_GET()
     sprintf(vbuf, "%.*lg" , doublePrecision, static_cast<double*>(ptr)[ndx]);
 
-    return vbuf.p;
+    return vbuf;
 }
 
 // explicit instantiation of the templates
@@ -358,10 +358,10 @@ TVal<double>::GetString(int ndx) const
     if( IsAny(ndx) )
         return S_ANY;
 
-    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
+    char vbuf[30];	// double is ~15 digit   PATTERN_GET()
     sprintf(vbuf, "%.*lg" , doublePrecision, ((double*)ptr)[ndx]);
 
-    return vbuf.p;
+    return vbuf;
 }*/
 #endif
 

@@ -632,7 +632,7 @@ if( P < 1e-5 )  // trial check  5.12.2006
 void TMTparm::polmod_test()
 {
     int i, j, k, jv;
-    vstr savespn(MAXRKEYLEN);
+    char savespn[MAXRKEYLEN];
     RMULTS* mup = TRMults::sm->GetMU();
 
     if( tp.Pres1 != S_REM )

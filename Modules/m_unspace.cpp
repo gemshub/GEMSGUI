@@ -72,7 +72,7 @@ TUnSpace::GetKeyofRecord( const char *oldKey, const char *strTitle,
 
     if( keyType==KEY_NEW  )
     { // Get key of base SyStat
-        vstr pkey(MAXRKEYLEN+10);
+        char pkey[MAXRKEYLEN+10];
         rt[RT_UNSPACE]->SetKey(str.c_str());
         rt[RT_SYSEQ]->MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
                                RT_UNSPACE, 2, RT_UNSPACE, 3, RT_UNSPACE, 4,
@@ -81,7 +81,7 @@ TUnSpace::GetKeyofRecord( const char *oldKey, const char *strTitle,
           "Please, select a parent System for a new UnSpace ", KEY_OLD );
         if(  str.empty() )
         {
-            str = pkey.p;
+            str = pkey;
             str+= "*:*:";
         }
         else
@@ -99,7 +99,7 @@ TUnSpace::GetKeyofRecord( const char *oldKey, const char *strTitle,
 // test TUnSpace key to calc mode
 void TUnSpace::keyTest( const char *key )
 {
-    vstr pkey(MAXRKEYLEN+10);
+    char pkey[MAXRKEYLEN+10];
 
     if( pVisor->ProfileMode == true )
     { // test project key
@@ -1004,7 +1004,7 @@ void TUnSpace::set_def( int q)
 // return true if nessasary recalc base SYSEQ
 bool TUnSpace::check_input( const char */*key*/, int /*Level*/ )
 {
-  vstr pkey(MAXRKEYLEN+10);
+  char pkey[MAXRKEYLEN+10];
   if( pVisor->ProfileMode != true )
         return true;
 
@@ -1175,7 +1175,7 @@ TUnSpace::RecCalc( const char *key )
 
 // Get startup syseq record for fitting
   //Get base SysEq key from UnSpace key
-  vstr pkey(MAXRKEYLEN+10);
+  char pkey[MAXRKEYLEN+10];
   rt[RT_SYSEQ]->MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
                            RT_UNSPACE, 2, RT_UNSPACE, 3, RT_UNSPACE, 4,
                            RT_UNSPACE, 5, RT_UNSPACE, 6, RT_UNSPACE, 7, K_END);

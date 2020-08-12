@@ -787,7 +787,7 @@ TCModule::CmCalc()
         // 19/02/2007 Sveta
         t_end11 = clock();
         clock_t dtime = ( t_end11- t_start11 );
-        vstr  buf(200);
+        char  buf[200];
         sprintf(buf, "Calculation finished OK (elapsed time: %lg s).",
                 static_cast<double>(dtime)/CLOCKS_PER_SEC);
         SetString(buf);
@@ -1751,7 +1751,7 @@ TCModule::RecToTXT( const char *pattern )
 void
 TCModule::RecOfTXT()
 {
-    vstr buf(150);
+    char buf[150];
     int Rnum;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
 
@@ -1772,7 +1772,7 @@ TCModule::RecOfTXT()
         Rnum = db->Find( buf );
         if( Rnum >= 0 )
         {
-           if( vfQuestion(pImp, buf.p,
+           if( vfQuestion(pImp, buf,
                "Data record with this key already exists! Replace?"))
               db->Rep( Rnum);
         }
@@ -1864,7 +1864,7 @@ TCModule::RecExport( const char *pattern )
 void
 TCModule::RecImport()
 {
-    vstr buf(150);
+    //char buf[150];
     int Rnum;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
     char ch;
@@ -2191,7 +2191,7 @@ TCModule::RecToTXT( const char *pattern )
 void
 TCModule::RecOfTXT()
 {
-    vstr buf(150);
+    char buf[150];
     int ichs, Rnum;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
 

@@ -661,7 +661,6 @@ TVisor::fromWinCFG()
     ErrorIf(!f_win_ini.good(), "GEMS Init",
             "Error reading configurator file (windows.conf)" );
 
- //   vstr name_str(256);
     // error Sveta 13/06/2001 reads only #
  //   f_win_ini >> name_str.p; // Don't compile in BCB5 without .p
 

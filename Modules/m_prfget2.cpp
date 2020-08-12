@@ -330,7 +330,7 @@ void TProfil::PHcompare( std::vector<CompItem>& aPhase,
 // test and insert changes to data base file
 void TProfil::TestChangeProfile()
 {
-    vstr pkey(81);
+    char pkey[81];
 
     comp_change_all = false;
     // compare ICOMP list
@@ -471,8 +471,8 @@ int TProfil::indDC( int i )
 void TProfil::CalcAllSystems( int makeDump )
 {
     double ccTime = 0.;
-    vstr pkey(81);
-    vstr tbuf(150);
+    char pkey[81];
+    char tbuf[150];
     std::string str_file;
 	TCStringArray aList;
     TCIntArray anR;
@@ -524,7 +524,7 @@ AGAIN:
       //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
       //
         sprintf( tbuf, "Project: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
-        iRet =  pVisor->Message( nullptr, "Re-calculating and saving all equilibria", tbuf.p, i, aList.size() );
+        iRet =  pVisor->Message( nullptr, "Re-calculating and saving all equilibria", tbuf, i, aList.size() );
       if( iRet )
         break;
 
@@ -554,7 +554,7 @@ AGAIN:
     {
       fstream ff1(str_file.c_str(), ios::out|ios::app);
       sprintf( tbuf, "\n\nProject: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
-      ff1 << tbuf.p << endl;
+      ff1 << tbuf << endl;
     }
 
 }
@@ -1218,8 +1218,7 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
 {
     pVisor->CloseMessage();
 
-    vstr pkey(200);
-    //vstr tbuf(150);
+    char pkey[200];
     TCStringArray aList;
     TCIntArray anR;
     std::string packkey;
@@ -1262,7 +1261,7 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
         }
 
         // stop point
-         if( pVisor->Message( nullptr, "Re-calculating and saving all equilibria", pkey.p, ii, aList.size() ))
+         if( pVisor->Message( nullptr, "Re-calculating and saving all equilibria", pkey, ii, aList.size() ))
             break;
     }
 }
@@ -1271,8 +1270,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
 {
     pVisor->CloseMessage();
 
-    vstr pkey(200);
-    //vstr tbuf(150);
+    char pkey[200];
     TCStringArray aList;
     TCIntArray anR;
     std::string process_name;
@@ -1309,7 +1307,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
         }
 
         // stop point
-         if( pVisor->Message( nullptr, "Generating GEMS3K for process records", pkey.p, ii, aList.size() ))
+         if( pVisor->Message( nullptr, "Generating GEMS3K for process records", pkey, ii, aList.size() ))
             break;
     }
 }
