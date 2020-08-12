@@ -340,7 +340,7 @@ void TVisorImp::setActions()
        connect( ui->action_Compress, SIGNAL( triggered()), this, SLOT(CmRebildFile()));
 
     // Window
-    connect( ui->actClose, SIGNAL(triggered()), mdiArea, SLOT(closeui->activeSubWindow()));
+    connect( ui->actClose, SIGNAL(triggered()), mdiArea, SLOT(closeActiveSubWindow()));
     connect(ui->actCloseAll, SIGNAL(triggered()), mdiArea, SLOT(closeAllSubWindows()));
     connect(ui->actTile, SIGNAL(triggered()), mdiArea, SLOT(tileSubWindows()));
     connect(ui->actCascade, SIGNAL(triggered()), mdiArea, SLOT(cascadeSubWindows()));

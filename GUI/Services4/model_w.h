@@ -107,8 +107,8 @@ class TObjectModel: public QAbstractTableModel
 	 QVariant headerData ( int section, Qt::Orientation orientation, int role ) const;  
 	 Qt::ItemFlags flags ( const QModelIndex & index ) const;
 	
-	 FieldInfo& getInfo( int row, int col, int& iN, int& iM, 
-                         Selection* sel=0 )
+     const FieldInfo& getInfo( int row, int col, int& iN, int& iM,
+                         Selection* sel=0 ) const
 	 {
 		int nO, ii;
                 ii = getObjFromModel( row, col, nO, iN, iM, sel );

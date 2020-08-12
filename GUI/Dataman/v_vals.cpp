@@ -190,6 +190,53 @@ template<> const char* TVal<char>::PATTERN_SET()
     return  "%c%s";
 }
 
+template<>
+bool TVal<double>::IsAny(int ndx) const
+{
+    if( approximatelyEqual( static_cast<double*>(ptr)[ndx], ANY() ) )
+        return true;
+    return false;
+}
+
+template<>
+bool TVal<double>::IsEmpty(int ndx) const
+{
+    if( approximatelyEqual( static_cast<double*>(ptr)[ndx], EMPTY()) )
+        return true;
+    return false;
+}
+
+template<>
+bool TVal<float>::IsAny(int ndx) const
+{
+    if( approximatelyEqual( static_cast<float*>(ptr)[ndx], ANY() ) )
+        return true;
+    return false;
+}
+
+template<>
+bool TVal<float>::IsEmpty(int ndx) const
+{
+    if( approximatelyEqual( static_cast<float*>(ptr)[ndx], EMPTY()) )
+        return true;
+    return false;
+}
+
+template<>
+string
+TVal<double>::GetString(int ndx) const
+{
+    if( IsEmpty(ndx) )
+        return S_EMPTY;
+    if( IsAny(ndx) )
+        return S_ANY;
+
+    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
+    sprintf(vbuf, "%.*lg" , doublePrecision, static_cast<double*>(ptr)[ndx]);
+
+    return vbuf.p;
+}
+
 // explicit instantiation of the templates
 
 //template struct TVal<short>;

@@ -598,7 +598,10 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
  void TObjectTable::slotPopupContextMenu(const QPoint &pos)
  {
      QModelIndex index = indexAt( pos );
-     TObjectModel* model =(TObjectModel *)index.model();
+     auto model = dynamic_cast<const TObjectModel *>(index.model());
+     if( !model)
+         return;
+
  	int iN, iM;
  	FieldInfo fld =  model->getInfo( index.row(), index.column(), iN, iM);
      if(iN == -1 || iM == -1 )
@@ -810,7 +813,11 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
  {
     QModelIndex index = currentIndex();
  	int iN, iM;
- 	FieldInfo fld =  ((TObjectModel *)(index.model() ))->getInfo( index.row(), index.column(), iN, iM);
+    auto model = dynamic_cast<const TObjectModel *>(index.model());
+    if( !model)
+        return;
+
+    FieldInfo fld =  model->getInfo( index.row(), index.column(), iN, iM);
     if(iN == -1 || iM == -1 )
      	return;
      
@@ -824,7 +831,10 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
  {
   QModelIndex index = currentIndex();
   int iN, iM;
-  FieldInfo fld =  ((TObjectModel *)(index.model() ))->getInfo( index.row(), index.column(), iN, iM);
+  auto model = dynamic_cast<const TObjectModel *>(index.model());
+  if( !model)
+      return;
+  FieldInfo fld =  model->getInfo( index.row(), index.column(), iN, iM);
   if(iN == -1 || iM == -1 || fld.fType != ftRef || fld.edit != eYes )
          return;
   
@@ -846,8 +856,10 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
          }
          if( patt )
          {
-        	 TObjectModel *  model = ((TObjectModel *)(index.model() ));
-        	 model->setData(index, str.c_str(),  Qt::EditRole);
+             auto model = const_cast<TObjectModel *>(dynamic_cast<const TObjectModel *>(index.model()));
+             if( !model)
+                 return;
+             model->setData(index, str.c_str(),  Qt::EditRole);
              //save new SDrefs
              if( !strcmp(fld.pObj->GetKeywd(), "SDrefs") )
              {
@@ -875,13 +887,14 @@ TObjectTable::TObjectTable( const QList<FieldInfo> aFlds,
 void TObjectTable::CmCalc()
 {
   QModelIndex index = currentIndex();
-  TObjectModel *  model = ((TObjectModel *)(currentIndex().model() ));
+  auto model = const_cast<TObjectModel *>(dynamic_cast<const TObjectModel *>(index.model()));
+  if( !model)
+      return;
   Selection sel = getSelectionRange();
   QModelIndex wIndex;
   
   int iN, iM;
-  FieldInfo fld =  ((TObjectModel *)(index.model() ))->getInfo( 
-                  index.row(), index.column(), iN, iM, &sel );
+  FieldInfo fld =  model->getInfo( index.row(), index.column(), iN, iM, &sel );
   if(iN == -1 || iM == -1 || fld.edit != eYes )
 	   	return;
 
@@ -925,8 +938,11 @@ void TObjectTable::CmCalc()
   void TObjectTable::CmDComp()
   {
     QModelIndex index = currentIndex();
+    auto model = dynamic_cast<const TObjectModel *>(index.model());
+    if( !model)
+        return;
     int iN, iM;
-    FieldInfo fld =  ((TObjectModel *)(index.model() ))->getInfo( index.row(), index.column(), iN, iM);
+    FieldInfo fld =  model->getInfo( index.row(), index.column(), iN, iM);
     if(iN == -1 || iM == -1 || fld.fType != ftRecord )
  	   	return;
     try {
@@ -942,8 +958,11 @@ void TObjectTable::CmCalc()
    void TObjectTable::CmShowPhaseKey()
    {
      QModelIndex index = currentIndex();
+     auto model = dynamic_cast<const TObjectModel *>(index.model());
+     if( !model)
+         return;
      int iN, iM;
-     FieldInfo fld =  ((TObjectModel *)(index.model() ))->getInfo( index.row(), index.column(), iN, iM);
+     FieldInfo fld = model->getInfo( index.row(), index.column(), iN, iM);
      if(iN == -1 || iM == -1 || fld.fType != ftRecord )
          return;
      try {
@@ -979,11 +998,13 @@ void TObjectTable::CmCalc()
   void TObjectTable::SelectObject()
   {
     QModelIndex index = currentIndex();
+    auto model = dynamic_cast<const TObjectModel *>(index.model());
+    if( !model)
+        return;
     QItemSelectionModel* selmodel = selectionModel();
     Selection sel(0, index.model()->rowCount( index )-1, 0, index.model()->columnCount( index )-1 );
     int iN, iM;
-    /*FieldInfo fld = */ ((TObjectModel *)(index.model() ))->getInfo(
-             index.row(), index.column(), iN, iM, &sel );
+    /*FieldInfo fld = */ model->getInfo( index.row(), index.column(), iN, iM, &sel );
     if(iN == -1 || iM == -1  )
  	   	return;
     
@@ -1002,7 +1023,9 @@ void TObjectTable::CmCalc()
 
   void TObjectTable::ClearData()
   {
- 	 TObjectModel *  model = ((TObjectModel *)(currentIndex().model() ));
+     auto model = const_cast<TObjectModel *>(dynamic_cast<const TObjectModel *>(currentIndex().model()));
+     if( !model)
+         return;
      foreach( QModelIndex ndx,  selectedIndexes()  )
            model->setData(ndx, emptiness.c_str(),  Qt::EditRole);
      // update();
@@ -1120,8 +1143,10 @@ void TObjectTable::CmCalc()
   void  TObjectTable::setFromString(char splitrow, const QString& str,
           Selection sel, bool transpose) //throw(TError)
   {
-     TObjectModel *  model = ((TObjectModel *)(currentIndex().model() ));
-     if( str.isEmpty() )
+      auto model = const_cast<TObjectModel *>(dynamic_cast<const TObjectModel *>(currentIndex().model()));
+      if( !model)
+          return;
+      if( str.isEmpty() )
   	    return;
   	
      QModelIndex wIndex;
@@ -1293,82 +1318,88 @@ void TObjectDelegate::updateEditorGeometry( QWidget * editor,
      editor->resize( wdF(fld.fType, fld.npos, fld.edit)+4, htF(fld.fType, fld.maxN )+4 );
 }
 */
+
  // Editing QTableView for objects in TCPage
  QWidget *TObjectDelegate::createEditor(QWidget *parent,
-         const QStyleOptionViewItem &option,
-         const QModelIndex &index) const
+                                        const QStyleOptionViewItem &option,
+                                        const QModelIndex &index) const
  {
- 	int iN, iM; 
- 	
- 	//const TObjectModel * mod = static_cast<TObjectModel *>(index.internalPointer() ); 
- 	FieldInfo fld =  ((TObjectModel *)(index.model() ))->getInfo( index.row(), index.column(), iN, iM);
+     int iN, iM;
+
+     //const TObjectModel * mod = static_cast<TObjectModel *>(index.internalPointer() );
+     auto model = dynamic_cast<const TObjectModel *>(index.model());
+     if( !model)
+         return QAbstractItemDelegate::createEditor( parent, option,  index );
+
+     FieldInfo fld =  model->getInfo( index.row(), index.column(), iN, iM);
      if( iN >= 0 && iM >= 0)
      {
-     	switch( fld.fType )
+         switch( fld.fType )
          {
-           case ftCheckBox:
-            { TCellCheck* editor =  new TCellCheck( fld, iN, iM, parent);
- //             connect( editor, SLOT(editingFinished()), this, SLOT(commitAndCloseCheckEditor()));
-              return editor;
-            }  
-          case ftText:
-          {	TCellText* editor =  new TCellText( fld, iN, iM, parent);
- //            connect( editor, SLOT(editingFinished()), this, SLOT(commitAndCloseTextEditor()));
+         case ftCheckBox:
+         { TCellCheck* editor =  new TCellCheck( fld, iN, iM, parent);
+             //             connect( editor, SLOT(editingFinished()), this, SLOT(commitAndCloseCheckEditor()));
              return editor;
-          }   
-         default:
-         	{ TCellInput* editor =  new TCellInput( fld, iN, iM, parent);
- //              connect( (QLineEdit *)editor, SLOT(editingFinished()), this, SLOT(commitAndCloseLineEditor()));
-               return editor;
-         	}  
          }
-     }	
-    return QAbstractItemDelegate::createEditor( parent, option,  index );
+         case ftText:
+         {	TCellText* editor =  new TCellText( fld, iN, iM, parent);
+             //            connect( editor, SLOT(editingFinished()), this, SLOT(commitAndCloseTextEditor()));
+             return editor;
+         }
+         default:
+         { TCellInput* editor =  new TCellInput( fld, iN, iM, parent);
+             //              connect( (QLineEdit *)editor, SLOT(editingFinished()), this, SLOT(commitAndCloseLineEditor()));
+             return editor;
+         }
+         }
+     }
+     return QAbstractItemDelegate::createEditor( parent, option,  index );
  }
 
  void TObjectDelegate::setEditorData(QWidget *editor,
-                                   const QModelIndex &index) const
+                                     const QModelIndex &index) const
  {
- 	TCell *cellEdit = dynamic_cast<TCell*>(editor);
- 	if( cellEdit)
- 	{   
- 	    cellEdit->setData( index.data(Qt::EditRole).toString());
- 	}    
+     TCell *cellEdit = dynamic_cast<TCell*>(editor);
+     if( cellEdit)
+     {
+         cellEdit->setData( index.data(Qt::EditRole).toString());
+     }
  }
 
  void TObjectDelegate::setModelData(QWidget *editor,
-                                  QAbstractItemModel *model,
-                                  const QModelIndex &index) const
+                                    QAbstractItemModel *model,
+                                    const QModelIndex &index) const
  {
- 	TCell *cellEdit = dynamic_cast<TCell*>(editor);
- 	if( cellEdit)
- 	{	
-          if( cellEdit->dataCh() )
-              model->setData(index, cellEdit->getData(),  Qt::EditRole);
- 	}   
-  }
+     TCell *cellEdit = dynamic_cast<TCell*>(editor);
+     if( cellEdit)
+     {
+         if( cellEdit->dataCh() )
+             model->setData(index, cellEdit->getData(),  Qt::EditRole);
+     }
+ }
 
  
-//------------------------------------------------
-// TCell
-//------------------------------------------------
-TCell::TCell(FieldInfo afld, int in, int im):
-    fld(afld), 
-    iN(in), iM(im)
-{
-   edited = false;
-   th = 0;
-}
+ //------------------------------------------------
+ // TCell
+ //------------------------------------------------
+ TCell::TCell(FieldInfo afld, int in, int im):
+     fld(afld),
+     iN(in), iM(im)
+ {
+     edited = false;
+     th = 0;
+ }
 
-// Help on F1 pressed on data field
-void TCell::CmHelp()
-{
-  if(th)
-  {	TObjectTable *topw = qobject_cast<TObjectTable *>( th->parentWidget());
+ // Help on F1 pressed on data field
+ void TCell::CmHelp()
+ {
+     if(th)
+     {
+         TObjectTable *topw = qobject_cast<TObjectTable *>( th->parentWidget());
          if( topw )
-            topw->CmHelp();
-  }
-}
+             topw->CmHelp();
+     }
+ }
 
 //----------------------------------------------
 // TIntValidator,

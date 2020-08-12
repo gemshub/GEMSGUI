@@ -267,22 +267,6 @@ TVal<T>::GetString(int ndx) const
     return vbuf.p;
 }
 
-template<>
-inline
-string
-TVal<double>::GetString(int ndx) const
-{
-    if( IsEmpty(ndx) )
-        return S_EMPTY;
-    if( IsAny(ndx) )
-        return S_ANY;
-
-    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
-    sprintf(vbuf, "%.*lg" , doublePrecision, static_cast<double*>(ptr)[ndx]);
-
-    return vbuf.p;
-}
-
 template<class T>
 //inline
 bool
@@ -382,6 +366,13 @@ int TVal<long>::cSize() const
 {
     return sizeof(int32_t);
 }
+
+
+template<> bool TVal<double>::IsAny(int ndx) const;
+template<> bool TVal<double>::IsEmpty(int ndx) const;
+template<> bool TVal<float>::IsAny(int ndx) const;
+template<> bool TVal<float>::IsEmpty(int ndx) const;
+template<> string TVal<double>::GetString(int ndx) const;
 
 /*
 template<class T>
