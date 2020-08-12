@@ -487,7 +487,7 @@ double randuni (double& x)
     double R;
     j=rand();
     R = ceil(24359738368.*j/RAND_MAX + 10000000000.);
-    if( !fmod(R,2) )
+    if( approximatelyZero(fmod(R,2)) )
       R=R+1.;
     x = R;
   }

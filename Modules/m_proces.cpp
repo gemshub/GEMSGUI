@@ -29,6 +29,7 @@
 #include "GEMS3K/num_methods.h"
 #include "nodearray_gui.h"
 
+double ff_proc( double x, double );
 TProcess* TProcess::pm;
 
 TProcess::TProcess( uint nrt ):
@@ -1429,7 +1430,7 @@ else {
 //    double dummy;
 //    pep->ccTime += PRof->CalcEqstat( dummy ); // calc current SyStat without time
     pep->ccTime += PRof->CalcEqstat( pep->kdt, pep->kst, pep->c_Tau );
-    if( pep->kdt )
+    if( noZero(pep->kdt) )
         pep->kst++;
 }
         if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )

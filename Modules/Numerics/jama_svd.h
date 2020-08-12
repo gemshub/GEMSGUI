@@ -1,7 +1,7 @@
 #ifndef JAMA_SVD_H
 #define JAMA_SVD_H
 
-
+#include "GEMS3K/v_detail.h"
 #include "GEMS3K/tnt_array1d.h"
 #include "tnt_array1d_utils.h"
 #include "GEMS3K/tnt_array2d.h"
@@ -78,7 +78,7 @@ class SVD
             for (i = kk; i < m; i++) {
                s[kk] = hypot(s[kk],A[i][kk]);
             }
-            if (s[kk] != 0.0) {
+            if ( noZero(s[kk]) ) {
                if (A[kk][kk] < 0.0) {
                   s[kk] = -s[kk];
                }
@@ -90,7 +90,7 @@ class SVD
             s[kk] = -s[kk];
          }
          for (j = kk+1; j < n; j++) {
-            if ((kk < nct) && (s[kk] != 0.0))  {
+            if ((kk < nct) && noZero(s[kk]) )  {
 
             // Apply the transformation.
 
@@ -127,7 +127,7 @@ class SVD
             for (i = kk+1; i < n; i++) {
                e[kk] = hypot(e[kk],e[i]);
             }
-            if (e[kk] != 0.0) {
+            if ( noZero(e[kk]) ) {
                if (e[kk+1] < 0.0) {
                   e[kk] = -e[kk];
                }
@@ -137,7 +137,7 @@ class SVD
                e[kk+1] += 1.0;
             }
             e[kk] = -e[kk];
-            if ((kk+1 < m) & (e[kk] != 0.0)) {
+            if ((kk+1 < m) & noZero(e[kk])) {
 
             // Apply the transformation.
 
@@ -192,7 +192,7 @@ class SVD
             U[j][j] = 1.0;
          }
          for (kk = nct-1; kk >= 0; kk--) {
-            if (s[kk] != 0.0) {
+            if ( noZero(s[kk]) ) {
                for (j = kk+1; j < nu; j++) {
                   double t = 0;
                   for (i = kk; i < m; i++) {
@@ -223,7 +223,7 @@ class SVD
 
       if (wantv) {
          for (kk = n-1; kk >= 0; kk--) {
-            if ((kk < nrt) & (e[kk] != 0.0)) {
+            if ((kk < nrt) & noZero(e[kk]) ) {
                for (j = kk+1; j < nu; j++) {
                   double t = 0;
                   for (i = kk+1; i < n; i++) {
@@ -367,7 +367,7 @@ class SVD
                double b = ((spm1 + sp)*(spm1 - sp) + epm1*epm1)/2.0;
                double c = (sp*epm1)*(sp*epm1);
                double shift = 0.0;
-               if ((b != 0.0) || (c != 0.0)) {
+               if ( noZero(b) || noZero(c) ) {
                   shift = sqrt(b*b + c);
                   if (b < 0.0) {
                      shift = -shift;

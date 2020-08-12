@@ -134,7 +134,7 @@ double   ComposWizard::getR2()
 {
  double r=lineEdit1->text().toDouble();
 
- if( r == 0. && checkBox2_2_2->isChecked() )
+ if( approximatelyZero(r) && checkBox2_2_2->isChecked() )
        r = 1.;
   return r;
 }

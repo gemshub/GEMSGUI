@@ -535,7 +535,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec1, double ftol, doub
         {
             temp = x[j];
             step = eps * fabs(temp);
-            if (step == 0.) step = eps;
+            if ( approximatelyZero(step) ) step = eps;
             x[j] = temp + step;
 //            *info = 0;
 //            (*evaluate)( x, m, wa41, data, info );
@@ -581,7 +581,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec1, double ftol, doub
                 for ( j=0; j<n; j++ )
                 {
                     diag1[j] = wa21[j];
-                    if ( wa21[j] == 0. )
+                    if ( approximatelyZero( wa21[j] ) )
                         diag1[j] = 1.;
                 }
             }
@@ -594,7 +594,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec1, double ftol, doub
 
             xnorm = lm_enorm( n, wa31 );
             delta = factor*xnorm;
-            if (delta == 0.)
+            if ( approximatelyZero( delta ) )
                 delta = factor;
         }
 
@@ -606,7 +606,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec1, double ftol, doub
         for ( j=0; j<n; j++ )
         {
             temp3 = fjac1[j*m+j];
-            if (temp3 != 0.)
+            if ( noZero(temp3) )
             {
                 sum = 0;
                 for ( i=j; i<m; i++ )
@@ -622,11 +622,11 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec1, double ftol, doub
 // O** compute the norm of the scaled gradient and test for convergence.
 
         gnorm = 0;
-        if ( fnorm != 0 )
+        if ( noZero(fnorm) )
         {
             for ( j=0; j<n; j++ )
             {
-                if ( wa21[ ipvt1[j] ] == 0 ) continue;
+                if ( approximatelyZero( wa21[ ipvt1[j] ] ) ) continue;
 
                 sum = 0.;
                 for ( i=0; i<=j; i++ )
@@ -717,7 +717,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec1, double ftol, doub
 
 // OI* compute the ratio of the actual to the predicted reduction.
 
-            ratio = prered!=0 ? actred/prered : 0;
+            ratio = noZero(prered) ? actred/prered : 0;
 
 // OI* update the step bound.
 
@@ -732,7 +732,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec1, double ftol, doub
                 delta = temp * MIN(delta,pnorm/p1);
                 par1 /= temp;
             }
-            else if ( par1 == 0. || ratio >= p75 )
+            else if ( approximatelyZero(par1) || ratio >= p75 )
             {
                 delta = pnorm/p5;
                 par1 *= p5;
@@ -891,7 +891,7 @@ void TLMmin::lm_lmpar(int n, double* r, int ldr, int* ipvt1, double* diag1, doub
     for ( j=0; j<n; j++ )
     {
     wa11[j] = qtb[j];
-	if ( r[j*ldr+j] == 0 && nsing == n )
+    if ( approximatelyZero(r[j*ldr+j]) && nsing == n )
             nsing = j;
 	if (nsing < n)
             wa11[j] = 0;
@@ -954,15 +954,15 @@ void TLMmin::lm_lmpar(int n, double* r, int ldr, int* ipvt1, double* diag1, doub
     }
     gnorm = lm_enorm(n,wa11);
     paru = gnorm/delta;
-    if (paru == 0.)
-	paru = LM_DWARF/MIN(delta,p1);
+    if ( approximatelyZero(paru) )
+        paru = LM_DWARF/MIN(delta,p1);
 
 // *** if the input par1 lies outside of the interval (parl,paru),
 //     set par1 to the closer endpoint.
 
     *par1 = MAX( *par1,parl);
     *par1 = MIN( *par1,paru);
-    if ( *par1 == 0.)
+    if ( approximatelyZero(*par1) )
     *par1 = gnorm/dxnorm;
 
 // *** iterate.
@@ -971,7 +971,7 @@ void TLMmin::lm_lmpar(int n, double* r, int ldr, int* ipvt1, double* diag1, doub
 
 // *** evaluate the function at the current value of par1.
 
-        if ( *par1 == 0.)
+        if ( approximatelyZero(*par1) )
             *par1 = MAX(LM_DWARF,p001*paru);
         temp = sqrt( *par1 );
         for ( j=0; j<n; j++ )
@@ -988,7 +988,7 @@ void TLMmin::lm_lmpar(int n, double* r, int ldr, int* ipvt1, double* diag1, doub
 //	 is 0. or the number of iterations has reached 10.
 
         if ( fabs(fp) <= p1*delta
-             || (parl == 0. && fp <= fp_old && fp_old < 0.)
+             || ( approximatelyZero(parl) && fp <= fp_old && fp_old < 0.)
              || iter == 10 )
             break; // the only exit from this loop
 
@@ -1126,7 +1126,7 @@ void TLMmin::lm_qrfac(int m, int n, double* a, int pivot, int* ipvt1,
 //     j-th column of a to a multiple of the j-th unit vector.
 
         ajnorm = lm_enorm( m-j, &a[j*m+j] );
-        if (ajnorm == 0.)
+        if ( approximatelyZero(ajnorm) )
         {
             rdiag[j] = 0;
             continue;
@@ -1153,7 +1153,7 @@ void TLMmin::lm_qrfac(int m, int n, double* a, int pivot, int* ipvt1,
             for ( i=j; i<m; i++ )
                 a[k*m+i] -= temp * a[j*m+i];
 
-            if ( pivot && rdiag[k] != 0. )
+            if ( pivot && noZero(rdiag[k]) )
             {
                 temp = a[m*k+j]/rdiag[k];
                 temp = MAX( 0., 1-temp*temp );
@@ -1263,7 +1263,7 @@ void TLMmin::lm_qrsolv(int n, double* r, int ldr, int* ipvt1, double* diag1,
 // ***	 prepare the row of d to be eliminated, locating the
 // 	 diagonal element using p from the qr factorization.
 
-        if (diag1[ ipvt1[j] ] == 0.)
+        if ( approximatelyZero(diag1[ ipvt1[j] ]) )
             goto L90;
         for ( k=j; k<n; k++ )
             sdiag[k] = 0.;
@@ -1280,7 +1280,7 @@ void TLMmin::lm_qrsolv(int n, double* r, int ldr, int* ipvt1, double* diag1,
 //	    determine a givens rotation which eliminates the
 //	    appropriate element in the current row of d.
 
-            if (sdiag[k] == 0.)
+            if ( approximatelyZero(sdiag[k]) )
 		continue;
             kk = k + ldr * k; // <! keep this shorthand !>
             if ( fabs(r[kk]) < fabs(sdiag[k]) )
@@ -1328,7 +1328,7 @@ void TLMmin::lm_qrsolv(int n, double* r, int ldr, int* ipvt1, double* diag1,
     nsing = n;
     for ( j=0; j<n; j++ )
     {
-	if ( sdiag[j] == 0. && nsing == n )
+    if ( approximatelyZero(sdiag[j]) && nsing == n )
             nsing = j;
 	if (nsing < n)
             wa[j] = 0;
@@ -1501,7 +1501,7 @@ int
    for(j=0; j<m; ++j)
      if((tmp=fabs(a[i*m+j]))>max)
         max=tmp;
-   if(max==0.0)
+   if( approximatelyZero(max) )
    {
      delete[] idx;
      delete[] a;
@@ -1546,7 +1546,7 @@ int
       work[maxi]=work[j];
      }
      idx[j]=maxi;
-     if(a[j*m+j]==0.0)
+     if( approximatelyZero(a[j*m+j]) )
        a[j*m+j]=2.22 *1e-16; // DBL_EPSILON;
      if(j!=m-1)
      {
@@ -1574,7 +1574,7 @@ int
          for(j=k-1; j<i; ++j)
              sum-=a[i*m+j]*x[j];
        else
-        if(sum!=0.0)
+        if( noZero(sum) )
            k=i+1;
        x[i]=sum;
     }
@@ -1671,7 +1671,7 @@ double enorm( int n, double *x )
         }
         else
         {
-            if (xabs != 0.)
+            if ( noZero(xabs) )
             {
                 temp = xabs/x3max;
                 s3 += SQR(temp);
@@ -1681,9 +1681,9 @@ double enorm( int n, double *x )
 
 // calculation of norm.
 
-    if (s1 != 0)
+    if ( noZero(s1) )
         return x1max*sqrt(s1 + (s2/x1max)/x1max);
-    if (s2 != 0)
+    if ( noZero(s2))
     {
         if (s2 >= x3max)
             return sqrt( s2*(1+(x3max/s2)*(x3max*s3)) );

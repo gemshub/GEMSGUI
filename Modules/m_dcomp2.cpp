@@ -95,9 +95,10 @@ void TDComp::calc_tpcv( int q, int p, int CE, int CV )
     for( i=0; i</*MAXCPCOEF*/aObj[o_dccp]->GetN(); i++ )
     {  // Cp(t)  current temperature only
         a1 = dc[q].Cp[i*dc[q].NeCp+k];
-        if( IsFloatEmpty( a1 ) || !a1 )
-	    ac[i] = 0.0;
-        else ac[i] = (double)a1;
+        if( IsFloatEmpty( a1 ) || approximatelyZero(a1) )
+            ac[i] = 0.0;
+        else
+            ac[i] = a1;
      }
      aW.twp->Cp = ( ac[0] + ac[1]*T + ac[2]/T2 + ac[3]/T05 + ac[4]*T2
            + ac[5]*T3 + ac[6]*T4 + ac[7]/T3 + ac[8]/T + ac[9]*T05 /*+ ac[10]*log(T)*/);
@@ -139,10 +140,11 @@ void TDComp::calc_tpcv( int q, int p, int CE, int CV )
             // aW.twp->Cp = 0.;
             for( i=0; i< /*MAXCPCOEF*/aObj[o_dccp]->GetN(); i++ ) // fix 08.09.00
             {
-	        a1 = dc[q].Cp[i*dc[q].NeCp+j];
-                if( IsFloatEmpty( a1 ) || !a1 )
-		    ac[i] = 0.0;
-		else ac[i] = (double)a1;
+                a1 = dc[q].Cp[i*dc[q].NeCp+j];
+                if( IsFloatEmpty( a1 ) || approximatelyZero(a1) )
+                    ac[i] = 0.0;
+                else
+                    ac[i] = a1;
             }
             aW.twp->S  += ( ac[0] * log( TT ) + ac[1] * T_Tst + ac[2] * ( 1./Tst2 - 1./T2 ) / 2.
 	          + ac[3] * 2. * ( 1./Tst05 - 1./T05 ) + ac[4] * ( T2 - Tst2 ) / 2.
@@ -346,9 +348,10 @@ void TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
         for( i=0; i<5; i++ )
         {
             a1 = dc[q].Vt[i];
-            if( IsFloatEmpty( a1 ) || !a1 )
+            if( IsFloatEmpty( a1 ) || approximatelyZero(a1) )
                 vc[i] = 0.0;
-            else vc[i] = (double)a1;
+            else
+                vc[i] = a1;
          }
 
          // expansion/compressibility
@@ -806,7 +809,7 @@ void TDComp::omeg92( double g, double dgdP, double dgdT, double d2gdT2,
                     double *dwdT, double *d2wdT2 )
 {
     double reref, re, Z3, Z4;
-    if( ZZ == 0.0 )  // neutral aqueous species
+    if( approximatelyZero(ZZ) )  // neutral aqueous species
     {
         *W = wref;
         *dwdP = 0.0;

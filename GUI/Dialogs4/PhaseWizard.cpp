@@ -261,7 +261,7 @@ double   PhaseWizard::getR2()
  double r=lineEdit_surfArea->text().toDouble();
 
  if( SCM_code->currentText()[0] != QChar('N') )
-      if( r == 0. ) r = 1.;
+      if( approximatelyZero(r) ) r = 1.;
   return r;
 }
 

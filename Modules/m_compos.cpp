@@ -818,7 +818,7 @@ SPECIFY_C:
         }
         for( i=0; i<bcp->N; i++ )
         {
-            if( !bcp->CI[i] || IsDoubleEmpty( bcp->CI[i] ))
+            if( approximatelyZero(bcp->CI[i]) || IsDoubleEmpty( bcp->CI[i] ))
                 continue;
             /* get index im */
             for( im=0; im<bcp->Nmax; im++ )
@@ -854,7 +854,7 @@ IC_FOUND:
         {
             if( j<Ld )
             {
-                if( !bcp->CD[j] || IsDoubleEmpty( bcp->CD[j] ))
+                if( approximatelyZero(bcp->CD[j]) || IsDoubleEmpty( bcp->CD[j] ))
                     continue;
                 /* Read DCOMP or REACDC */
                 memcpy( pkey, bcp->SM[j], DC_RKLEN );
@@ -873,7 +873,7 @@ IC_FOUND:
             }
             else if( j<bcp->Ld+bcp->La )
             {
-                if( !bcp->CA[j-Ld] || IsDoubleEmpty( bcp->CA[j-Ld] ))
+                if( approximatelyZero(bcp->CA[j-Ld]) || IsDoubleEmpty( bcp->CA[j-Ld] ))
                     continue;  /*load formula */
                 Formula = bcp->SA[j-Ld];
                 Formula[MAXFORMUNIT-1] = 0;
@@ -915,7 +915,7 @@ IC_FOUND:
                    continue;   30.4.96 */
             /* recalc stoichiometry */
             for( i=0; i<bcp->Nmax; i++ )
-                if( A[i] )
+                if( noZero(A[i]) )
                 {
                     C[i] += Xincr*A[i]; /* calc control sum */
                     MsysC += Xincr * A[i] * bcp->ICw[i];
@@ -1121,7 +1121,7 @@ TCompos::MolWeight( int N, double *ICaw, double *Smline )
     double MW = 0.0;
 
     for( i=0; i<N; i++ )
-        if( ICaw[i] && Smline[i] )
+        if( noZero(ICaw[i]) && noZero(Smline[i]) )
             MW += (ICaw[i]) * (Smline[i]);
 
     return( MW );

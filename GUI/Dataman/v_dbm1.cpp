@@ -25,6 +25,8 @@
 #include "v_dbfile.h"
 #include "v_object.h"
 
+int rlencomp( const void *ie_1, const void *ie_2 );
+
 // Reading header of DB file
 void
 VDBhead::read(GemDataStream& is)
@@ -324,8 +326,7 @@ TDBFile::Close()
 }
 
 // compare deleted blocs
-int
-rlencomp( const void *ie_1, const void *ie_2 )
+int rlencomp( const void *ie_1, const void *ie_2 )
 {
     const DBentry* ie1 = static_cast<const DBentry *>(ie_1);
     const DBentry* ie2 = static_cast<const DBentry *>(ie_2);

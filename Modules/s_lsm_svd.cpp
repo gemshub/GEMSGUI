@@ -236,7 +236,7 @@ void TSVDcalc::svdGetX( fd_type b1[], fd_type x[] )
   for( j=0;j<IMIN(m+1,n);j++ )   // Calculate UTB.
   {
      s = 0.0;
-     if ( w[j] )  // Nonzero result only if wj is nonzero.
+     if ( noZero(w[j]) )  // Nonzero result only if wj is nonzero.
      {
        for (i=0;i<m;i++)
            s += U[i][j]*b1[i];
@@ -354,7 +354,7 @@ void TSVDcalc::svdStat()
    for( i=0;i<IMIN(m+1,n);i++ )
    {
        wti[i]=0.0;
-       if(w[i])
+       if( noZero(w[i]) )
          wti[i]=1.0/(w[i]*w[i]);
    }
 

@@ -346,7 +346,7 @@ TDualTh::Bb_Calc()
     { //  Through IC
         for( i=0; i<dtp->Nb; i++ )
         {
-          if( !dtp->CIb[ii*dtp->Nb + i] ||
+          if( approximatelyZero(dtp->CIb[ii*dtp->Nb + i]) ||
                  IsFloatEmpty( dtp->CIb[ ii*dtp->Nb + i ] ))
                 continue;
 
@@ -368,7 +368,7 @@ TDualTh::Bb_Calc()
       for( j=0; j < dtp->La_b; j++ )
       {
          A = dtp->An + j * dtp->Nb;
-         if( !dtp->CAb[ii*dtp->La_b + j] ||
+         if( approximatelyZero(dtp->CAb[ii*dtp->La_b + j]) ||
             IsFloatEmpty( dtp->CAb[ii*dtp->La_b + j] ))
                     continue;
          DCmw = 0.;
@@ -381,7 +381,7 @@ TDualTh::Bb_Calc()
                  dtp->Vaqb, dtp->Maqb, dtp->Vsysb );
          // recalc stoichiometry
          for( i=0; i<dtp->Nb; i++ )
-          if( A[i] )
+          if( noZero(A[i]) )
           {
             dtp->Bb[ii*dtp->Nb+i] += Xincr*A[i]; // calc control sum
             MsysC += Xincr * A[i] * ICw[i];
@@ -487,7 +487,7 @@ TDualTh::Bn_Calc()
     { //  Through IC
         for( i=0; i<dtp->Nb; i++ )
         {
-          if( !dtp->CIn[ii*dtp->Nb + i] ||
+          if( approximatelyZero(dtp->CIn[ii*dtp->Nb + i]) ||
                  IsFloatEmpty( dtp->CIn[ ii*dtp->Nb + i ] ))
                 continue;
 
@@ -509,7 +509,7 @@ TDualTh::Bn_Calc()
     for( j=0; j < dtp->La_b; j++ )
     {
          A = dtp->An + j * dtp->Nb;
-         if( !dtp->CAn[ii*dtp->La_b + j] ||
+         if( approximatelyZero(dtp->CAn[ii*dtp->La_b + j]) ||
             IsFloatEmpty( dtp->CAn[ii*dtp->La_b + j] ))
                     continue;
          DCmw = 0.;
@@ -522,7 +522,7 @@ TDualTh::Bn_Calc()
                  dtp->Vaqb, dtp->Maqb, dtp->Vsysb );
          // recalc stoichiometry
          for( i=0; i<dtp->Nb; i++ )
-          if( A[i] )
+          if( noZero(A[i]) )
           {
             dtp->Bn[ii*dtp->Nb+i] += Xincr*A[i]; // calc control sum
             MsysC += Xincr * A[i] * ICw[i];

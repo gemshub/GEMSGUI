@@ -26,6 +26,8 @@
 #include "m_icomp.h"
 #include "m_compos.h"
 
+int get_ndx_(  int i,  int nO,  int Xplace );
+
 bool
 TGEM2MT::test_sizes( )
 {
@@ -538,7 +540,7 @@ TGEM2MT::Bn_Calc()
     { //  Through IC
         for( i=0; i<mtp->Nb; i++ )
         {
-          if( !mtp->CIb[ii*mtp->Nb + i] ||
+          if( approximatelyZero(mtp->CIb[ii*mtp->Nb + i]) ||
                  IsFloatEmpty( mtp->CIb[ ii*mtp->Nb + i ] ))
                 continue;
 
@@ -560,7 +562,7 @@ TGEM2MT::Bn_Calc()
       for( j=0; j < mtp->Lbi; j++ )
       {
          A = mtp->An + j * mtp->Nb;
-         if( !mtp->CAb[ii*mtp->Lbi + j] ||
+         if( approximatelyZero(mtp->CAb[ii*mtp->Lbi + j]) ||
             IsFloatEmpty( mtp->CAb[ii*mtp->Lbi + j] ))
                     continue;
          DCmw = 0.;
@@ -573,7 +575,7 @@ TGEM2MT::Bn_Calc()
                  mtp->Vaqb, mtp->Maqb, mtp->Vsysb );
          // recalc stoichiometry
          for( i=0; i<mtp->Nb; i++ )
-          if( A[i] )
+          if(  noZero(A[i]) )
           {
             mtp->Bn[ii*mtp->Nb+i] += Xincr*A[i]; // calc control sum
             MsysC += Xincr * A[i] * ICw[i];

@@ -20,6 +20,7 @@
 
 #include <cmath>
 #include "s_supcrt.h"
+#include "v_detail.h"
 
 //--------------------------------------------------------------------//
 double  TdegK(int it, double t)
@@ -249,7 +250,7 @@ void TSupcrt::resid(double t, double *d)
     j=35;
     while (++j <= 39 )
     {
-        if ( nc->g[j] )
+        if ( noZero(nc->g[j]) )
         {
             k   = nc->ii[j];
             km  = nc->jj[j];
@@ -957,7 +958,7 @@ void TSupcrt::dimHGK(int isat,
     Born92(t,pbars,dkgm3/1.0e3,betab,&wr.Alphaw,&wr.dAldT,
            &wr.Dielw,&wr.ZBorn,&wr.QBorn,&wr.YBorn,&wr.XBorn,epseqn);
     wr.Tdiffw = wr.Tcondw / un.fc / un.ft / (dkgm3 * CpJKkg) * un.fvk;
-    if ( wr.Tcondw )
+    if ( noZero(wr.Tcondw) )
         wr.Prndtlw = wr.Viscw / un.fvd * CpJKkg /
                      (wr.Tcondw / un.fc / un.ft);
     else
@@ -1076,7 +1077,7 @@ void  TSupcrt::conver(double *rho,
             return;
         }
     }
-    if ( !drho )
+    if ( approximatelyZero(drho) )
     {
         par.th1   = 0.0;
         par.r1    = dtstin;
@@ -1105,7 +1106,7 @@ void  TSupcrt::conver(double *rho,
     /*   rule for second pass  */
 
     den12 = *rho - *rhodi  - cc * dv.s[1] + rhoweg;
-    if (den12 == den1)
+    if (  approximatelyEqual( den12, den1 ) )
         den12 = den1 - 1.0e-6;
 
     rtheta(&par.r1,&par.th1,den12,y1);
@@ -1423,7 +1424,7 @@ void TSupcrt::tcorr(int itripl, double *t, double *p, double *dL, double *dV,
     double delg, dp;
 
     *t = TsHGK(*p);
-    if (*t == 0.0e0)
+    if ( approximatelyZero(*t) )
         return;
     *dL = 0.0e0;
     *dV = 0.0e0;

@@ -41,11 +41,12 @@ greaterThan( QT_MAJOR_VERSION, 4 ): QT += widgets printsupport help concurrent
 
 QMAKE_CFLAGS += pedantic -Wall -Wextra -Wwrite-strings -Werror
 
-#QMAKE_CXXFLAGS += -Wall -Wextra -Wcast-align -Wpointer-arith \
-#   -Wmissing-declarations -Winline -Wundef \ #-Weffc++ -Wshadow -Wformat-nonliteral \
-#   -Wcast-qual -Wwrite-strings -Wno-unused-parameter \
-#   -Wfloat-equal -pedantic -ansi
+QMAKE_CXXFLAGS += -Wall -Wextra -Wcast-align -Wpointer-arith \
+   -Wmissing-declarations -Winline -Wundef \ #-Weffc++ -Wshadow -Wformat-nonliteral \
+   -Wcast-qual -Wwrite-strings -Wno-unused-parameter \
+   -Wfloat-equal -pedantic -ansi
 
+#QMAKE_CXXFLAGS += -Wfloat-equal
 }
 
 macx-g++ {

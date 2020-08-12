@@ -241,10 +241,10 @@ void ProgressDialog::Update(bool force)
 
     int ht = pBottle->height();
     double all = g + a + s +l;
-    ht_g = (all!=0) ? int(ceil(g * ht / all)) :0;
-    ht_a = (all!=0) ? int(ceil(a * ht / all)) :0;
-    ht_l = (all!=0) ? int(ceil(l * ht / all)) :0;
-    ht_s = (all!=0) ? int(ceil(s * ht / all)) :0;
+    ht_g = noZero(all) ? int(ceil(g * ht / all)) :0;
+    ht_a = noZero(all) ? int(ceil(a * ht / all)) :0;
+    ht_l = noZero(all) ? int(ceil(l * ht / all)) :0;
+    ht_s = noZero(all) ? int(ceil(s * ht / all)) :0;
 
     int progr = 24;
     pProgress->setMaximum(progr);

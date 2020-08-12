@@ -262,7 +262,7 @@ void TUnSpace::UNIFORM0( int reg )
   for(i=0;i<k;i++)
   {   j=rand();
       R=ceil(24359738368.*j/RAND_MAX + 10000000000.);
-      if(!fmod(R,2))
+      if( approximatelyZero(fmod(R,2)) )
          R=R+1.;
        if(!reg)
          usp->OVR[i+1]=R;
@@ -316,7 +316,7 @@ void TUnSpace::BELOV(int QT, int NG, float *OVB)
       m2=0;
       if(B==MC)
         for(i=1;i<=D-1;i++)
-          if(OVB[i]==OVB[D])
+          if( approximatelyEqual( OVB[i], OVB[D]) )
           { OVB[D]=j;
             m2=1;
             break;
@@ -633,13 +633,13 @@ int TUnSpace::filters( int k )
     Filtr=1;
   if( usp->Pa_f_fug == S_ON )
      for(i=0; i<usp->Ls; i++)
-      if(  usp->fug_up[i] &&
+      if( noZero( usp->fug_up[i]) &&
           ( usp->vFug[k*usp->Ls+i] < usp->fug_lo[i] ||
             usp->vFug[k*usp->Ls+i] > usp->fug_up[i] ))
        Filtr=1;
   if( usp->Pa_f_mol == S_ON )
     for(i=0; i<usp->N;i++)
-       if( usp->m_t_up[i] &&
+       if( noZero(usp->m_t_up[i]) &&
         ( usp->vMol[k*usp->N+i] < usp->m_t_lo[i] ||
           usp->vMol[k*usp->N+i] > usp->m_t_up[i]))
        Filtr=1;
@@ -1273,8 +1273,8 @@ void TUnSpace::setPhaseAssemb( )
        for( j=i+1; j<usp->Q; j++)
        { fl=0;
          for( k=0; k<usp->Fi; k++ )
-          if( (usp->vYF[i*usp->Fi+k] && !usp->vYF[j*usp->Fi+k])  ||
-             (!usp->vYF[i*usp->Fi+k] && usp->vYF[j*usp->Fi+k])   )
+          if( (  noZero(usp->vYF[i*usp->Fi+k]) && approximatelyZero(usp->vYF[j*usp->Fi+k]) )  ||
+              ( approximatelyZero(usp->vYF[i*usp->Fi+k]) && noZero(usp->vYF[j*usp->Fi+k]) )   )
           { fl=1; break; }
          if(!fl)
            usp->sv[j] = usp->nPhA;

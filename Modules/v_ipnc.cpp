@@ -118,7 +118,7 @@ int IPNCalc::con_add( double val )
 {
     for( size_t i=0; i<aCon.size(); i++)
     {
-        if( aCon[i] == val )
+        if( approximatelyEqual( aCon[i], val) )
             return i;
     }
     aCon.push_back(val);
@@ -1097,7 +1097,7 @@ void IPNCalc::CalcEquat()
                        aStack.push_back( DOUBLE_EMPTY );
                      break;
                 case mod_f  :
-                    ErrorIf( StackEnd(0)==0||aStack.size()<2,
+                    ErrorIf( approximatelyZero( StackEnd(0)) || aStack.size()<2,
                              "E12MSExec","Missing mod() argument(s).");
                     StackEnd(-1) =
                         (double)( ROUND (StackEnd(-1))%

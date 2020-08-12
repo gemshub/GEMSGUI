@@ -911,15 +911,16 @@ short TProfil::BAL_compare()
   // lists of components didn't change
   // test B - recipes and constraints
       for( i=0; i<pmp->N; i++ )
-          if( pmp->B[i] != 0. )
+          if( noZero( pmp->B[i] ) )
           {
 //              if( fabs( syp->B[pmp->mui[i]] /pmp->B[i] - 1. ) > pa.p.DHB * 0.001   )
               if( fabs( log10( syp->B[pmp->mui[i]] /pmp->B[i] )) > 1e-13  ) // log10( pa.p.DB ) ) )
                   return 1;
           }
           else
-          { if( syp->B[pmp->mui[i]]  !=  0.   )
-              return 1;
+          {
+              if( noZero( syp->B[pmp->mui[i]] )   )
+                    return 1;
           }
 
     je = 0;
@@ -934,11 +935,11 @@ short TProfil::BAL_compare()
 
           if(( syp->DLLim != S_OFF ) && pmp->PLIM == 1 )
   //            if( fabs( syp->DLL[jj] - pmp->DLL[j] ) >= 1e-19 )
-                if( syp->DLL[jj] != pmp->DLL[j]  )   //SD 22/01/2009
+                if( !approximatelyEqual( syp->DLL[jj], pmp->DLL[j])  )   //SD 22/01/2009
                   break;
           if(( syp->DULim != S_OFF ) && pmp->PLIM == 1 )
   //            if( fabs( syp->DUL[jj] - pmp->DUL[j] ) >= 1e-19 )
-                if( syp->DUL[jj] != pmp->DUL[j] )   //SD 22/01/2009
+                if( !approximatelyEqual( syp->DUL[jj], pmp->DUL[j] ) )   //SD 22/01/2009
                 break;
           if( syp->DULim != S_OFF || syp->DLLim != S_OFF )
           {  if( pmp->RLC[j] != syp->RLC[jj] )

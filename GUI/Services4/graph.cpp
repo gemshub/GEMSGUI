@@ -23,6 +23,7 @@
 #include "graph.h"
 #include "GemsMainWindow.h"
 
+void helpWin( const std::string& name, const std::string& item );
 
 void helpWin( const std::string& name, const std::string& item )
 {
@@ -228,15 +229,15 @@ void TPlot::getMaxMinLine( QPointF& min, QPointF& max, int line, int ndxAbs )
     for( int ii =0; ii<dX; ii++)
     {
         point = getPoint( jj, ii, ndxAbs );
-        if( point.x() == DOUBLE_EMPTY || point.y() == DOUBLE_EMPTY )
+        if( approximatelyEqual( point.x(), DOUBLE_EMPTY) || approximatelyEqual( point.y(), DOUBLE_EMPTY ) )
             continue;
-        if( min.x() > point.x() || min.x() == DOUBLE_EMPTY  )
+        if( min.x() > point.x() || approximatelyEqual( min.x(), DOUBLE_EMPTY ) )
             min.setX( point.x() );
-        if( max.x() < point.x() || max.x() == DOUBLE_EMPTY )
+        if( max.x() < point.x() || approximatelyEqual( max.x(), DOUBLE_EMPTY ) )
             max.setX( point.x() );
-        if( min.y() > point.y() || min.y() == DOUBLE_EMPTY )
+        if( min.y() > point.y() || approximatelyEqual( min.y(), DOUBLE_EMPTY ) )
             min.setY( point.y() );
-        if( max.y() < point.y() || max.y() == DOUBLE_EMPTY )
+        if( max.y() < point.y() || approximatelyEqual( max.y(), DOUBLE_EMPTY ) )
             max.setY( point.y() );
     }
 }

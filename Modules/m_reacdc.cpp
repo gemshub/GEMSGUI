@@ -577,7 +577,7 @@ AGAINRC:
     // get aMcv+aMrv  (Remake code! Must be by component groups )
     for( int i=0; i<rcp->nDC; i++ )
     {
-        if( !rcp->scDC[i] )
+        if( approximatelyZero(rcp->scDC[i]) )
             rcp->scDC[i] = 1;
         if( i < static_cast<int>(aDclist.size()) )
         {
@@ -1000,7 +1000,7 @@ void TReacDC::PronsPrep( const char *key )
     BETA4 = 0; //BETA = 0;
     b1 = b2 = b3 = b4 = 0;
     BETA = rcp->Ks[1];
-    if(BETA == 0.0 )
+    if( approximatelyZero(BETA) )
         BETA = 1e-9;
     switch( scL )
     {
@@ -1376,7 +1376,7 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
 
     scL = (int)fabs(LSC);
     LOGKR = rcp->Ks[1];
-    if(LOGKR == 0.0 )
+    if( approximatelyZero(LOGKR) )
         LOGKR = 1e-9;
     ZZ = (int)fabs(ZC);
 

@@ -28,6 +28,7 @@
 #include "m_param.h"
 #include "filters_data.h"
 
+int rkeycmp(const void *e1, const void *e2);
 int rkeycmp(const void *e1, const void *e2)
 {
     int RCmp;
@@ -1118,13 +1119,13 @@ AGAIN_SETUP:
 
             if( !php->FsiT )
                 php->FsiT[i] = 1.f/php->NsuT;
-            if( !php->MSDT[i][0] )
+            if( approximatelyZero(php->MSDT[i][0]) )
                 php->MSDT[i][0] = aPa->pa.p.DNS;
-            if( !php->MSDT[i][1] )
+            if( approximatelyZero(php->MSDT[i][1]) )
                 php->MSDT[i][1] = 4.0; // Third-layer capacitance (reserved)
-            if( !php->CapT[i][0] )
+            if( approximatelyZero(php->CapT[i][0]) )
                 php->CapT[i][0] = 1.0; // C1 inner capacitance
-            if( !php->CapT[i][1] )
+            if( approximatelyZero(php->CapT[i][1]) )
                 php->CapT[i][1] = 0.2f; // C2 outer capacitance
             if( !php->XfIEC )
                 php->XfIEC[i] = 0;

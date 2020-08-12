@@ -781,7 +781,7 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
                    o_syxea, 5, o_syxaun, o_syacl,  0., QUAN_GRAM) );
         for( j=0; j<mup->La; j++ )
         {
-            if( syp->Acl[j] == S_OFF || !syp->XeA[j] || IsDoubleEmpty( syp->XeA[j] ))
+            if( syp->Acl[j] == S_OFF || approximatelyZero(syp->XeA[j]) || IsDoubleEmpty( syp->XeA[j] ))
                 continue;
             tbData.push_back(  tableSetupData( wnData.size()-1, o_syxea,
                   aObj[o_syxea]->GetKeywd(), j, "",  syp->XeA[j], syp->XAun[j] ));
@@ -795,7 +795,7 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
                 o_syxed, 5, o_syxdun, o_sydcl, 0., QUAN_MOL) );
         for( j=0; j<mup->L; j++ )
         {
-            if( syp->Dcl[j] == S_OFF || !syp->XeD[j] || IsDoubleEmpty( syp->XeD[j] ))
+            if( syp->Dcl[j] == S_OFF || approximatelyZero(syp->XeD[j]) || IsDoubleEmpty( syp->XeD[j] ))
                 continue;
             tbData.push_back( tableSetupData( wnData.size()-1, o_syxed,
                 aObj[o_syxed]->GetKeywd(), j, "",  syp->XeD[j], syp->XDun[j] ));
@@ -809,7 +809,7 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
                        o_sybi, 5, o_sybiun, o_syicl, 0.,QUAN_MOL) );
         for( i=0; i<mup->N; i++ )
         {
-            if( syp->Icl[i] == S_OFF || !syp->BI[i] || IsDoubleEmpty(syp->BI[i] ))
+            if( syp->Icl[i] == S_OFF || approximatelyZero(syp->BI[i]) || IsDoubleEmpty(syp->BI[i] ))
                 continue;
             tbData.push_back( tableSetupData( wnData.size()-1, o_sybi,
                    aObj[o_sybi]->GetKeywd(), i, "",  syp->BI[i], syp->BIun[i] ));
@@ -823,7 +823,7 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
                      o_syphm, 5, o_syxpun, o_sypcl, 0.,QUAN_GRAM) );
       for( i=0; i<mup->Fi; i++ )
       {
-         if( syp->Pcl[i] == S_OFF || !syp->Phm[i] || IsDoubleEmpty(syp->XPun[i] ))
+         if( syp->Pcl[i] == S_OFF || approximatelyZero(syp->Phm[i]) || IsDoubleEmpty(syp->XPun[i] ))
           continue;
         tbData.push_back( tableSetupData( wnData.size()-1, o_syphm,
              aObj[o_syphm]->GetKeywd(), i, "",  syp->Phm[i], syp->XPun[i] ));
@@ -890,13 +890,13 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
 //    if(  fabs( syp->Mbel ) > 0  )
 //     tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
 //           aObj[o_symass]->GetKeywd(), 0, "",  syp->Mbel, '_' ));
-if(  fabs( syp->Mwat ) != 1.f  )  // Fixed for new defaults by DK 27.02.2012
+if(  !approximatelyEqual( fabs( syp->Mwat ), 1.f ) )  // Fixed for new defaults by DK 27.02.2012
      tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
            aObj[o_symass]->GetKeywd(), 1, "",  syp->Mwat, '_' ));
-if(  fabs( syp->Msys ) != 1.f  )
+if(  !approximatelyEqual( fabs( syp->Msys ), 1.f)  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
            aObj[o_symass]->GetKeywd(), 2, "",  syp->Msys, '_' ));
-if(  fabs( syp->Maq ) != 1.f  )
+if(  !approximatelyEqual( fabs( syp->Maq ), 1.f )  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
            aObj[o_symass]->GetKeywd(), 3, "",  syp->Maq, '_' ));
 //   if(  fabs( syp->MBX ) > 0  )
@@ -905,10 +905,10 @@ if(  fabs( syp->Maq ) != 1.f  )
 //    if(  fabs( syp->R1 ) > 0  )
 //    tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
 //          aObj[o_symass]->GetKeywd(), 5, "",  syp->R1, '_' ));
-if(  fabs( syp->Vsys ) != 1.f  )
+if(  !approximatelyEqual( fabs( syp->Vsys ), 1.f)  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_syvol,
            aObj[o_syvol]->GetKeywd(), 0, "",  syp->Vsys, '_' ));
-if(  fabs( syp->Vaq ) != 1.f  )
+if(  !approximatelyEqual( fabs( syp->Vaq),  1.f)  )
      tbData.push_back(  tableSetupData( wnData.size()-1, o_syvol,
            aObj[o_syvol]->GetKeywd(), 1, "",  syp->Vaq, '_' ));
     if(  fabs( syp->Pmin ) > 0  )

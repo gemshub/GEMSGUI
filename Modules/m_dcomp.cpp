@@ -992,7 +992,7 @@ void TDComp::DCthermo( int q, int p )
 
 // #define LROUND(x)      ((long)((x)+.5))
 
-void TDComp::ParCor(  )
+void TDComp::ParCor()
 {
     double z, /*g, h,*/ s, v, cp, ak, rx, sigma, polar, Q, x, y, xN,
             conv, tr, theta, pfunk, eta, wabsh, gamma, alphaz=0.,  re,
@@ -1012,6 +1012,7 @@ void TDComp::ParCor(  )
 
     ak = 0.0;
     rx = 0.0;
+    re = 0.0;
     sigma = 0.0;
     polar = 2.0;
     Q = 5.903e-07;
@@ -1031,7 +1032,7 @@ void TDComp::ParCor(  )
     else
         gamma = 0.0;
 
-    if(z != 0.0)
+    if( noZero(z) )
     {
 
 /*        if(abs((int)z) == 1.0) alphaz = 72.;    // ???? 1/12/2006
@@ -1039,13 +1040,13 @@ void TDComp::ParCor(  )
         if(abs((int)z) == 3.0) alphaz = 211.;
         if(abs((int)z) == 4.0) alphaz = 286.;
 */
-        if(fabs(z) == 1.0) alphaz = 72.;    // ???? 1/12/2006
-        if(fabs(z) == 2.0) alphaz = 141.;
-        if(fabs(z) == 3.0) alphaz = 211.;
-        if(fabs(z) == 4.0) alphaz = 286.;
-        if(s != 0.0)
+        if( approximatelyEqual( fabs(z), 1.0) ) alphaz = 72.;    // ???? 1/12/2006
+        if( approximatelyEqual( fabs(z), 2.0) ) alphaz = 141.;
+        if( approximatelyEqual( fabs(z), 3.0) ) alphaz = 211.;
+        if( approximatelyEqual( fabs(z), 4.0) ) alphaz = 286.;
+        if(  noZero(s) )
         {
-            if(rx != 0.0)
+            if( noZero(rx) )
                 re = rx+z*gamma;
             else
             {
@@ -1057,12 +1058,11 @@ void TDComp::ParCor(  )
         }
         else
         {
-            if(rx != 0.0)
+            if( noZero( rx ))
             {
                 re = rx+z*gamma;
                 // s = z*z* (eta* y - 100.) / re + alphaz;
             }
-
             else
                 Error("E15DCrun: PARCOR error",  "If Z!=0, either S or Rx must be given!" );
         }
@@ -1071,7 +1071,7 @@ void TDComp::ParCor(  )
     }
     else
     {
-        if( polar == 2.)
+        if( approximatelyEqual( polar, 2.) )
             wcon = -0.038*100000.;
     }
 
@@ -1089,11 +1089,11 @@ void TDComp::ParCor(  )
     // sn = s-ss;
 
     // the correlations for EOS parameters begin
-    if(ak != 0.0)
+    if( noZero( ak ) )
     {
         aks=wcon*xN*conv;
         akn=ak-aks;
-        if(sigma != 0.0)
+        if( noZero( sigma ) )
         {
             a2 = 17.19e4 * akn+421.1;
 
@@ -1119,7 +1119,7 @@ void TDComp::ParCor(  )
     }
     else
     {
-        if(sigma != 0.0)
+        if( noZero(sigma) )
         {
             a1 = (1.3684e-2)*vn + 0.1765;
             ia1 = LROUND(a1*100000.);

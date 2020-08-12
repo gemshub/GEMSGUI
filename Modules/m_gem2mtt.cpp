@@ -253,7 +253,7 @@ long int TGEM2MT::CheckPIAinNodes1D( char IAmode, long int start_node, long int 
 	     // checking pair of adjacent nodes for phase assemblage differences
          for( long int kk=0; kk<CH->nPHb; kk++ )
 	     {
-	    	if( C0[ii]->xPH[kk] == 0.0 && C0[ii-1]->xPH[kk] == 0.0 )
+            if( approximatelyZero( C0[ii]->xPH[kk] ) && approximatelyZero( C0[ii-1]->xPH[kk] ) )
 	    		continue;    // Phase kk is absent in both node systems
 	    	if( C0[ii]->xPH[kk] > 0.0 && C0[ii-1]->xPH[kk] > 0.0 )
 	    		continue;    // Phase kk is present in both node systems
@@ -459,8 +459,8 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
     	    	 node1_xDC( ii, jc ) -= dc;			 
             	 for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
             	 {
-                         aji = na->DCaJI( jc, ic );
-                     if( aji != 0.0 )
+                     aji = na->DCaJI( jc, ic );
+                     if( noZero( aji ) )
             		     node1_bIC(ii, ic) -= aji * dc;
             	 }
     	     }
@@ -469,8 +469,8 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
     	    	 dc = c0/fmolal - mtp->cez;
     	    	 for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
             	 {
-                         aji = na->DCaJI( jc, ic );
-                     if( aji != 0.0 )
+                     aji = na->DCaJI( jc, ic );
+                     if( noZero( aji ) )
             		     node1_bIC(ii, ic) -= aji * dc;
             	 }
     	     }	 
@@ -569,8 +569,8 @@ void TGEM2MT::MassTransCraNicStep( bool CompMode )
                  node1_xDC( ii, jc ) -= dc;
                  for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
                  {
-                         aji = na->DCaJI( jc, ic );
-                     if( aji != 0.0 )
+                     aji = na->DCaJI( jc, ic );
+                     if( noZero( aji ) )
                          node1_bIC(ii, ic) -= aji * dc;
                  }
              }
@@ -579,8 +579,8 @@ void TGEM2MT::MassTransCraNicStep( bool CompMode )
                  dc = c0/fmolal - mtp->cez;
                  for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
                  {
-                         aji = na->DCaJI( jc, ic );
-                     if( aji != 0.0 )
+                     aji = na->DCaJI( jc, ic );
+                     if( noZero( aji ) )
                          node1_bIC(ii, ic) -= aji * dc;
                  }
              }

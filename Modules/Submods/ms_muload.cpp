@@ -89,7 +89,7 @@ void TMulti::KinMetModLoad( )
         memcpy( pmp->kMod[k], modT, MAXKEYWD );
         //kMod = pmp->kMod[k];
         pmp->PfFact[k] = 1.;   // temporary
-if( aPH->php->h0p && aPH->php->R0p )
+if( noZero(aPH->php->h0p) && noZero(aPH->php->R0p) )
     pmp->PfFact[k] = aPH->php->h0p/aPH->php->R0p;
 /*
 if(kMod[0] != KM_UNDEF )

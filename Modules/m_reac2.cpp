@@ -1611,8 +1611,8 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
         aE = 0.;
         for( i=0; i<5; i++ )
         { // see all  coef Vp(T,P)
-            a = (double)rc[q].DVt[i];
-            if( IsDoubleEmpty( a ) || !a ) continue;
+            a = rc[q].DVt[i];
+            if( IsDoubleEmpty( a ) || approximatelyZero(a) ) continue;
             switch( i ) // calc delta
             {
             case 0:
@@ -1643,7 +1643,7 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
             for( i=0; i<MAXVTCOEF; i++ )
             {
                 a = (double)rc[q].DVt[i];
-                if( IsDoubleEmpty( a ) || !a ) continue;
+                if( IsDoubleEmpty( a ) || approximatelyZero(a) ) continue;
                 switch( i ) //calc delta coef Vp(T)
                 {
                 case 0:

@@ -55,8 +55,8 @@ CWinInfo::load( TConfig& cnf)
     {
         cnf.getcStrings(2, size_params);
 
-        if (sscanf(size_params[0].c_str(), "%u", &init_width) != 1
-                || sscanf(size_params[1].c_str(), "%u", &init_height) != 1)
+        if (sscanf(size_params[0].c_str(), "%d", &init_width) != 1
+                || sscanf(size_params[1].c_str(), "%d", &init_height) != 1)
             Error("Visor configuration", "Window size is bad!");
     }
 
@@ -177,7 +177,7 @@ PageInfo::load( TConfig& cnf )
 
         if (type != ftCheckBox)
         {
-            if ( /*type!=ftText && */ sscanf(astr[1].c_str(), "%u", &npos) != 1)
+            if ( /*type!=ftText && */ sscanf(astr[1].c_str(), "%d", &npos) != 1)
                 throw TError(obj.c_str(), "Bad field lenth");
         }
         else if ((npos = aUnits.Find(astr[1])) == -1)
@@ -185,7 +185,7 @@ PageInfo::load( TConfig& cnf )
 
         int maxm, maxn;
         int maxM = DEF_M_BROWSE, maxN = DEF_N_BROWSE;
-        if (sscanf(astr[2].c_str(), "%u", &maxm) != 1)
+        if (sscanf(astr[2].c_str(), "%d", &maxm) != 1)
             throw TError(obj.c_str(), "Bad field width");
         if (maxm > DEF_M_BROWSE)
             maxM = maxm;

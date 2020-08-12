@@ -1061,13 +1061,13 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
     std::string Name = "Auto-set ";
 
 //  Setup of aqueous phase
-    if( !apar[2] )
+    if( approximatelyZero(apar[2]) )
         strcpy(neutbuf, "1.0");
     else strcpy(neutbuf, "b_q*IS");
-    if( !apar[3] )
+    if( approximatelyZero(apar[3]) )
         strcpy(H2Obuf, "1.0");
     else strcpy(H2Obuf, "calculate");
-    if( !apar[4] )
+    if( approximatelyZero(apar[4]) )
         strcpy( tempdbuf, "0");
     else sprintf( tempdbuf, "%c", (char)(apar[4]+'0'));
 // cout << "newAqGasPhase: " << amod << endl;
@@ -1393,13 +1393,13 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
         {
             if( !php->SCMC[i] || php->SCMC[i]==A_NUL )
                 php->SCMC[i] = SC_CCM;  /* Default! */
-            if( !php->MSDT[i][0] )
+            if( approximatelyZero(php->MSDT[i][0]) )
                 php->MSDT[i][0] = aPa->pa.p.DNS;
-            if( !php->MSDT[i][1] )
+            if( approximatelyZero(php->MSDT[i][1]) )
                 php->MSDT[i][1] = 0.6022f; /* 1/nm2; = 1 mkmol/m2 */
-            if( !php->CapT[i][0] )
+            if( approximatelyZero(php->CapT[i][0]) )
                 php->CapT[i][0] = 1.0f; /* A plane */
-            if( !php->CapT[i][1] )
+            if( approximatelyZero(php->CapT[i][1]) )
                 php->CapT[i][1] = 0.2f; /* B plane */
         }
 

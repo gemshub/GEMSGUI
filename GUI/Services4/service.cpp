@@ -16,7 +16,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-using namespace std;
+
 #include <unistd.h>
 #ifndef __unix
 #include <io.h>
@@ -56,7 +56,11 @@ using namespace std;
 #include "LoadMessage.h"
 #include "InputSystemDialog.h"
 #include "PhaseInfoDialog.h"
+//using namespace std;
 
+
+void deleteDirectory(QString dir);
+void vfObjToFile(QWidget* par, TObject* obj);
 QMutex qmutex;
 
 //----------------------------------------------------------------

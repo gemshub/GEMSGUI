@@ -5,6 +5,9 @@
 #include "GemsMainWindow.h"
 #include "graph_window.h"
 
+ChartData *allocateData( const std::vector<TPlot>& aPlots,
+                         std::vector<std::shared_ptr<PlotModel>>& plotModels,
+                         const char * aTitle, const char *aXName, const char *aYName, int agraphType  );
 
 SeriesLineData convertor( const TPlotLine& plotData )
 {

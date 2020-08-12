@@ -731,7 +731,7 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
    ComputeEquilibriumState( /*NumPrecLoops,*/ NumIterFIA, NumIterIPM );
 
 // new - possibly returns a new time step suggestion
-   if(kdTime)
+   if( noZero(kdTime) )
        kdTime = multi->GetPM()->kdT;
    return  multi->GetPM()->t_elap_sec;
 }
