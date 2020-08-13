@@ -304,7 +304,7 @@ TVal<unsigned char>::SetString(const char* s, int ndx)
         return true;
     }
 
-    vstr sv(strlen(s)+1);
+    vvstr sv(strlen(s)+1);
     unsigned short v;
     if( sscanf(ss.c_str(), "%hu%s", &v, sv.p ) != 1 )
         return false;
@@ -335,9 +335,9 @@ TVal<signed char>::SetString(const char* s, int ndx)
         return true;
     }
 
-    vstr sv(strlen(s)+1);
+    auto sv = std::make_shared<char>( ss.length()+3 );
     signed short v;
-    if( sscanf(ss.c_str(), "%hd%s", &v, sv.p ) != 1 )
+    if( sscanf(ss.c_str(), "%hd%s", &v, sv.get() ) != 1 )
         return false;
     if( v<-127 || v>127 )
         return false;

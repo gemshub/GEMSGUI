@@ -617,10 +617,8 @@ AGAIN:
 // in field field setted any(*) data
 bool TDataBase::FindPart( const char *key_, uint field )
 {
-
-    vstr key(KeyLen(), key_);
     TDBKey dbKey(GetDBKey());
-    dbKey.SetKey(key);
+    dbKey.SetKey(key_);
     dbKey.SetFldKey(field,"*");
     string str_key( dbKey.UnpackKey(), 0, KeyLen() );
     RecStatus iRet = Rtest( str_key.c_str(), 0 );

@@ -130,38 +130,6 @@ inline char* gcvt(double num, int digit, char* buf)
 #endif  // __FreeBSD
 
 
-// dynamically allocates temporary 'char*'
-// for simple string manipulations
-// (used instead of stack char[] allocation to avoid stack problems)
-struct vstr
-{
-    char* p;
-    vstr(int ln): p(new char[ln+1])
-    { }
-
-    vstr(int ln, const char* s): p(new char[ln+1])    {
-        strncpy(p, s, ln);
-        p[ln]='\0';
-    }
-
-    vstr(const char* s): p(new char[strlen(s)+1])    {
-       strcpy(p, s);
-    }
-
-    ~vstr()    {
-        delete[] p;
-    }
-
-    operator char* ()    {
-        return p;
-    }
-
-private:
-    vstr (const vstr&);
-    const vstr& operator= (const vstr&);
-
-};
-
 
 #define fileNameLength 64
 /// Get Path of file and Reading list of file names from it, return number of files

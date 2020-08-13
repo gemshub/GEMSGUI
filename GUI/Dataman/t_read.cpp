@@ -291,7 +291,7 @@ TReadData::getData( bool isList )
 void
 TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
 {
-  vstr strbuf(500);
+  char strbuf[500];
   string dat_str;
 
   
@@ -299,10 +299,10 @@ TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
   {
       case read_r:
                  if( fmt.size < 400  )
-                  fin.read( strbuf.p, fmt.size );
+                  fin.read( strbuf, fmt.size );
                  else
-                  fin >> strbuf.p;
-                 dat_str = string(strbuf.p);
+                  fin >> strbuf;
+                 dat_str = string(strbuf);
                  break;
       case empty_r:
       case string_r:
@@ -310,7 +310,7 @@ TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
                  break;
       case irec_r:
                  sprintf( strbuf, "%d", fmt.size );
-                 dat_str = string(strbuf.p);
+                 dat_str = string(strbuf);
                  break;
       case object_r:
                  dat_str = aObj[fmt.size]->GetStringEmpty( fmt.i, fmt.j );

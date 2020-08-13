@@ -21,6 +21,7 @@
 #include <cstdarg>
 
 #include "GEMS3K/gdatastream.h"
+#include "v_mod.h"
 #include "v_dbm.h"
 #include "v_dbfile.h"
 #include "v_object.h"
@@ -595,22 +596,22 @@ TDBKey::SetKey( const char *key )
 {
     ErrorIf( key==nullptr,"TDBKey", "No key buf.");
 
-    vstr sp(fullLen+rkFlds+1);
+    //vvstr sp(fullLen+rkFlds+1);
+    std::string sp;
     if( strncmp( key, ALLKEY, fullLen )==0 )
     {
         string st;
         for(int i=0; i<rkFlds; i++)
             st += "*:";
-        strncpy( sp, st.c_str(), fullLen);
+        sp = std::string( st, 0, fullLen);
     }
     else
-        strncpy( sp, key, fullLen);
+        sp = std::string( key, 0, fullLen);
 
-    sp[fullLen] = '\0';
-    if( strchr( sp, ':' ))  // key in packed form
-        unpack( sp );
+    if( strchr( sp.c_str(), ':' ))  // key in packed form
+        unpack( sp.c_str() );
     else
-        pack( sp );
+        pack( sp.c_str() );
  }
 
 // Change i-th field of DBkey to key
@@ -671,7 +672,7 @@ TDBKey::unpack( char *key )
 
 // unpack key
 void
-TDBKey::unpack( char *key )
+TDBKey::unpack( const char *key )
 {
     int i;
     unsigned char ln;
@@ -712,7 +713,7 @@ TDBKey::unpack( char *key )
             sp += ln;
         }
         uKey[fullLen]= '\0';
-        strncpy( key, uKey, fullLen );
+        //// strncpy( key, uKey, fullLen );
     }
 }
 
@@ -755,7 +756,7 @@ TDBKey::pack( char *key )
 
 // pack key
 void
-TDBKey::pack( char *key )
+TDBKey::pack( const char *key )
 {
     uint i;
     int len, ln;
@@ -786,7 +787,7 @@ TDBKey::pack( char *key )
                 pKey[len-1]=':';
             }
         }
-        strncpy( key, pKey, fullLen );
+       //// strncpy( key, pKey, fullLen );
     }
 }
 
@@ -1077,8 +1078,8 @@ void
 TDBKeyList::GetKeyList_i(uint nF, int nRec, GemDataStream& f)
 {
     RecEntry re_;
-
-    vstr key(KeyLen()+1);
+    //vvstr key(KeyLen()+1);
+    char key[MAXRKEYLEN+10];
     memset( key, 0, KeyLen()+1);
     for( int i=0; i< nRec; i++ )
     {

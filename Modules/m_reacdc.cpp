@@ -1705,9 +1705,8 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
     if( ! MessageToSave() )
 	return;
 
-    vstr key(db->KeyLen(), key_);
     TDBKey dbKey(db->GetDBKey());
-    dbKey.SetKey(key);
+    dbKey.SetKey(key_);
     dbKey.SetFldKey(3,"*");
     std::string str_key( dbKey.UnpackKey(), 0, db->KeyLen() );
     RecStatus iRet = db->Rtest( str_key.c_str(), 1 );
@@ -1731,14 +1730,14 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
             msg +=  GetName();
             msg += ": Data record not found, \n"
                    " key  '";
-            msg += std::string( key.p, 0, db->KeyLen() );
+            msg += std::string( key_, 0, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked to chain.\n";
             if(pVisor->ProfileMode == true)
                 Error( GetName(), msg.c_str() );
             msg +=  "Create a new record?";
             if( !vfQuestion(window(), GetName(), msg ))
                 Error( GetName(), " E18RErun: New record create action dismissed...");
-            std::string str = key.p;
+            std::string str = key_;
 
             if( str.find_first_of("*?" ) != std::string::npos)  // pattern
                 str = GetKeyofRecord( str.c_str(),
@@ -1763,7 +1762,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
         msg += GetName();
         msg += " is corrupt,\n"
                "data record key '";
-        msg += std::string( key.p, 0, db->KeyLen() );
+        msg += std::string( key_, 0, db->KeyLen() );
         msg += "'\n Try to backup/restore or compress files in this database chain!";
         Error( GetName(),  msg.c_str() );
     }

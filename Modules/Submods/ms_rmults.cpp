@@ -437,8 +437,8 @@ TEST2:
         for( j=0; j<aPH->php->nDC; j++ )
         {
             // test to exist of DCOMP or REACDC record later
-            vstr ss(DC_RKLEN, aPH->php->SM[j]);
-            List.push_back(ss.p);
+            auto ss = string(aPH->php->SM[j], 0, DC_RKLEN);
+            List.push_back(ss);
             mu.Ll[kk]++;
         } /* j */
         if( mu.Ll[kk] > 1 ) // multicomponent phase

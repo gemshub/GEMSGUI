@@ -51,8 +51,8 @@ class TDBKey
     const TDBKey& operator=(const TDBKey&);
 
 protected:
-    void unpack( char *key );
-    void pack( char *key );
+    void unpack( const char *key );
+    void pack( const char *key );
 
 public:
     TDBKey(unsigned char nRkflds,const unsigned char* rkfrm );

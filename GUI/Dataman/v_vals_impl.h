@@ -19,7 +19,7 @@
 #ifndef _v_vals_impl_h_
 #define _v_vals_impl_h_
 
-// #include <cstdint>
+#include <memory>
 #include <stdint.h>  // To be replaced with cstdint after switching to C++ 11 standard
 #include <cstdio>
 #include "v_vals.h"
@@ -101,7 +101,6 @@ struct TVal:
     /* returns string representation of the cell value
     */
     string GetString(int ndx) const;
-    //  bool VerifyString(const char* s);
     /* converts string to the type and puts it into cell
 	returns false on failure
     */
@@ -169,12 +168,9 @@ struct TValFixString:
     }
     string GetString(int ndx) const
     {
-        vstr ss(len);
-        strncpy(ss, static_cast<char*>(ptr)+(ndx*len), len);
-        ss[len]='\0';
-        return ss.p;
+        auto ss = string( static_cast<char*>(ptr)+(ndx*len), len);
+        return ss;
     }
-    //  bool VerifyString(const char* s);
     bool SetString(const char* s, int ndx);
 
     void write(GemDataStream& s, int size) {
@@ -236,7 +232,6 @@ struct TValString:
     {
         return (!static_cast<char*>(ptr) ? S_EMPTY: static_cast<char*>(ptr));
     }
-    //  bool VerifyString(const char* s);
     bool SetString(const char* s, int ndx);
 
     void write(GemDataStream& s, int size1) {
@@ -287,8 +282,8 @@ TVal<T>::SetString(const char* s, int ndx)
     }
 
     T v;
-    vstr sv(strlen(s)+3);
-    if( sscanf(ss.c_str(), PATTERN_SET(), &v, sv.p ) != 1 )
+    auto sv = std::make_shared<char>( ss.length()+3 );
+    if( sscanf(ss.c_str(), PATTERN_SET(), &v, sv.get() ) != 1 )
         return false;
 
     static_cast<T*>(ptr)[ndx] = v;
@@ -386,28 +381,6 @@ bool
 TVal<signed char>::SetString(const char* s, int ndx);
 */
 
-/*
-template<class T>
-bool
-TVal<T>::VerifyString(const char* s, T& v)
-{
-  string ss = s;
-  ss.strip();
-  if( ss==S_EMPTY )
-    return true;
-  if( ss == S_ANY )
-    return true;
-  T v;
-  vstr sv(strlen(s)+1);
-  string PAT = PATTERN;
-  PAT += "%s";
-
-  if( sscanf(ss.c_str(), PAT.c_str(), &v, sv.p ) != 1 )
-    return false;
-
-  return true;
-}
-*/
 
 #endif // _v_vals_impl_h_
 

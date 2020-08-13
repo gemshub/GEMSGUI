@@ -63,7 +63,6 @@ struct TValBase
     virtual bool IsEmpty(int ndx) const = 0;
 
     virtual std::string GetString(int ndx) const = 0;
-    //  virtual bool VerifyString(const char* s)=0;
     virtual bool SetString(const char* s, int ndx) = 0;
 
     virtual void write(GemDataStream& s, int size) = 0;

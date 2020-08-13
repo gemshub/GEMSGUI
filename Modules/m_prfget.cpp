@@ -180,8 +180,7 @@ void TProfil::OpenProfileMode( const char* key,
         if( addFile == true )
         {  // part to add files to list
            rt[RT_PARAM]->SetKey( key );
-           vstr _fstKeyFld(rt[RT_PARAM]->FldLen(0), rt[RT_PARAM]->FldKey(0));
-           std::string fstKeyFld(_fstKeyFld);
+           std::string fstKeyFld = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
            StripLine(fstKeyFld);
 
            GetFN( fstKeyFld.c_str() );
@@ -247,8 +246,7 @@ AGAIN:
       return false; // cancel command
 
     rt[RT_PARAM]->SetKey( key_str.c_str() );
-    vstr _fstKeyFld(rt[RT_PARAM]->FldLen(0), rt[RT_PARAM]->FldKey(0));
-    std::string fstKeyFld(_fstKeyFld);
+    std::string fstKeyFld = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
     StripLine(fstKeyFld);
     new_project_dir_name = fstKeyFld;
 
@@ -302,8 +300,7 @@ AGAIN:
      else  // using existing Project
      {
         rt[RT_PARAM]->SetKey( templ_str.c_str() );
-        vstr _fstKeyFld_t(rt[RT_PARAM]->FldLen(0), rt[RT_PARAM]->FldKey(0));
-        std::string fstKeyFld_t(_fstKeyFld_t);
+        std::string fstKeyFld_t = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(fstKeyFld_t);
 
         InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
@@ -381,8 +378,7 @@ AGAIN:
       return false; // cancel command
 
     rt[RT_PARAM]->SetKey( key_str.c_str() );
-    vstr _fstKeyFld(rt[RT_PARAM]->FldLen(0), rt[RT_PARAM]->FldKey(0));
-    std::string fstKeyFld(_fstKeyFld);
+    std::string fstKeyFld = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
     StripLine(fstKeyFld);
     new_project_dir_name = fstKeyFld;
 
@@ -437,8 +433,7 @@ AGAIN:
      else  // using existing Project
      {
         rt[RT_PARAM]->SetKey( templ_str.c_str() );
-        vstr _fstKeyFld_t(rt[RT_PARAM]->FldLen(0), rt[RT_PARAM]->FldKey(0));
-        std::string fstKeyFld_t(_fstKeyFld_t);
+        std::string fstKeyFld_t = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(fstKeyFld_t);
 
         InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
@@ -862,8 +857,7 @@ void TProfil::SetFN()
     TCStringArray aFls;
     std::string s;
 
-    vstr _fstKeyFld(rt[RT_PARAM]->FldLen(0), rt[RT_PARAM]->FldKey(0));
-    std::string fstKeyFld(_fstKeyFld);
+    std::string fstKeyFld = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
     StripLine(fstKeyFld);
 
     for( i=0; i<aMod.size(); i++)

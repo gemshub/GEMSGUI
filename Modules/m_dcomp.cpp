@@ -1191,9 +1191,8 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
     if( ! MessageToSave() )
 	return;
 
-    vstr key( db->KeyLen(), key_);
     TDBKey dbKey(db->GetDBKey());
-    dbKey.SetKey(key);
+    dbKey.SetKey(key_);
     dbKey.SetFldKey(3,"*");
     std::string str_key( dbKey.UnpackKey(), 0, db->KeyLen());
     RecStatus iRet = db->Rtest( str_key.c_str(), 1 );
@@ -1217,14 +1216,14 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
             msg +=  GetName();
             msg += ": Data record not found, \n"
                    " key  '";
-            msg += std::string( key.p, 0, db->KeyLen() );
+            msg += std::string( key_, 0, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked.\n";
             if(pVisor->ProfileMode == true)
                 Error( GetName(), msg.c_str() );
             msg +=  "Create a new record?";
             if( !vfQuestion(0, GetName(), msg ))
                 Error( GetName(), "E17DCrun: New record creation dismissed...");
-            std::string str = key.p;
+            std::string str = key_;
 
             if( str.find_first_of("*?" ) != std::string::npos)  // pattern
                 str = GetKeyofRecord( str.c_str(),
@@ -1234,8 +1233,8 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
             int  Rnum = db->Find( str.c_str() );
             ErrorIf( Rnum>=0, GetName(), " E19DCrun: This record alredy exists!");
             pVisor->OpenModule(window(), nRT,0,true);
-            vstr str1( db->KeyLen(), db->UnpackKey());
-            check_input( str1 );
+            auto str1 = string( db->UnpackKey(), 0, db->KeyLen());
+            check_input( str1.c_str() );
             RecBuild( str.c_str() );
             SetString(" W20DCrun: Remake of the new record finished OK. "
                       " It is recommended to re-calculate the data.");
@@ -1249,7 +1248,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
         msg += GetName();
         msg += " is corrupt,\n"
                "Data record key '";
-        msg += std::string( key.p, 0, db->KeyLen() );
+        msg += std::string( key_, 0, db->KeyLen() );
         msg += "'\n Try to backup/restore or compress files in this database chain!";
         Error( GetName(),  msg.c_str() );
     }

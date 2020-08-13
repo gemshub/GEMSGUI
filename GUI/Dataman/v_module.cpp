@@ -913,13 +913,12 @@ TCModule::CmFind() // ???? error in smShow
 void
 TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
 {
-    vstr key( db->KeyLen(), _key);
-    // string  key( _key, 0, db->KeyLen());
+    string  key( _key, 0, db->KeyLen() );
 
     if( ! MessageToSave() )
 	return;
 
-    RecStatus iRet = db->Rtest( key, 1 );
+    RecStatus iRet = db->Rtest( key.c_str(), 1 );
     std::string msg;
 
     switch( iRet )
@@ -949,7 +948,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
             msg +=  "Create new record?";
             if( !vfQuestion(window(), GetName(), msg ))
                 Error( GetName(), "Record creation rejected!");
-            string str = key.p;
+            string str = key;
 
             if( str.find_first_of("*?" ) != string::npos)  // pattern
                 str = GetKeyofRecord( str.c_str(),
