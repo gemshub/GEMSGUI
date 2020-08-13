@@ -780,7 +780,7 @@ void TSysEq::newSizeifChange()
 void TSysEq::RenameList( const char* newName,
         const char *oldName )
 {
-    if( (int)strlen(newName) > db->FldLen(0) )
+    if( strlen(newName) > db->FldLen(0) )
       return;
 
     std::string str_old = std::string( oldName, 0, db->FldLen(0) );

@@ -863,7 +863,7 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
           pVisor->Message( par, "Building lookup arrays",
               "Loading thermodynamic data", ip, CSD->nPp );
 
-       it = min( ip, (int)(CSD->nTp-1) );
+       it = min<int>( ip, CSD->nTp-1 );
        cT = CSD->TKval[it]-C_to_K;
        cP = CSD->Pval[ip]/1e5; //bar_to_Pa;
        // calculates new G0, V0, H0, Cp0, S0

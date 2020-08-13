@@ -149,7 +149,7 @@ int IPNCalc::INDEX( const char *s, char ch )
     const char *f = strchr(s, ch);
     if( f==0 )
         return -1;
-    return (int)(f-s);
+    return (f-s);
 }
 
 //Get operation priority
@@ -1380,7 +1380,7 @@ double derf(double x)
     w = x < 0 ? -x : x;
     if (w < 2.2) {
         t = w * w;
-        k = (int) t;
+        k = static_cast<int>(t);
         t -= k;
         k *= 13;
         y = ((((((((((((a[k] * t + a[k + 1]) * t +
@@ -1389,7 +1389,7 @@ double derf(double x)
             a[k + 8]) * t + a[k + 9]) * t + a[k + 10]) * t +
             a[k + 11]) * t + a[k + 12]) * w;
     } else if (w < 6.9) {
-        k = (int) w;
+        k = static_cast<int>(w);
         t = w - k;
         k = 13 * (k - 2);
         y = (((((((((((b[k] * t + b[k + 1]) * t +

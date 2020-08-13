@@ -38,9 +38,9 @@ TpworkList::~TpworkList()
 
 void TpworkList::ods_link( int q )
 {
-    if( q > (int)size() )
+    if( q > static_cast<int>(size()) )
         Error( "E27DCrun: TpworkList", "Invalid number of TPWORK structures!");
-    if( q == (int)size() )
+    if( q == static_cast<int>(size()) )
     {
         push_back( std::shared_ptr<TPWORK>(new TPWORK()) );
         memset( (void *)at(q).get(), 0, sizeof(TPWORK) );
@@ -82,7 +82,7 @@ void TpworkList::ods_link( int q )
 
 void TpworkList::set_zero( int q )
 {
-    if( q >= (int)size() )
+    if( q >= static_cast<int>(size()) )
         Error( "TpworkList", "Invalid number of TPWORK structures!");
     memset( (void *)at(q).get(), 0, sizeof(TPWORK) );
 }

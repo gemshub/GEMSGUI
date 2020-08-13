@@ -490,9 +490,9 @@ NEXT:
         {
         	if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
                 rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
-        	if( !rc[q].Cps || rc[q].PreDC == S_OFF ) /* Temporarily !!!!!!! */
+            if( /*!rc[q].Cps ||*/ rc[q].PreDC == S_OFF ) /* Temporarily !!!!!!! */
                  rc[q].DCp =   (float *)aObj[ o_redcp ]->Alloc( MAXCPCOEF, 1, F_);
-            for( i=0; i<7; i++ )
+            for( i=0; i<3; i++ )
             {
               if( IsFloatEmpty( rc[q].Cps[i] ) )
                   rc[q].Cps[i] = 0.0;

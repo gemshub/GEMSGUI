@@ -993,7 +993,7 @@ void TReacDC::PronsPrep( const char *key )
     LSC = rcp->scDC[iL];
 
     /* Loading Log_beta using st.coeff.at ligand */
-    scL = (int)fabs(LSC);
+    scL = static_cast<int>(fabs(LSC));
     BETA1 = 0;
     BETA2 = 0;
     BETA3 = 0;
@@ -1374,14 +1374,14 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     VL = rcp->ParDC[iL][_Vs_]*10.0;
     LSC = rcp->scDC[iL];
 
-    scL = (int)fabs(LSC);
+    scL = static_cast<int>(fabs(LSC));
     LOGKR = rcp->Ks[1];
     if( approximatelyZero(LOGKR) )
         LOGKR = 1e-9;
-    ZZ = (int)fabs(ZC);
+    ZZ = static_cast<int>(fabs(ZC));
 
 //    NC = 0;  // needs to pull atomic number of cation from IComp here
-    NC = (int)lAN[iC];
+    NC = lAN[iC];
 
     // calculations for complex number 1
     switch ( ZZ )

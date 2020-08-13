@@ -871,7 +871,7 @@ void TSyst::PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
     for( k=0; k< pmp->FI; k++ )
     { // cycle by phases
         i=j+pmp->L1[k];
-        k_ = (int)pmp->muk[k];
+        k_ = pmp->muk[k];
         if( approximatelyZero(sy.Phm[k_]) || approximatelyZero(pmp->XFs[k]) || (sy.PPHk == S_OFF && sy.PbPH != S_REM ) )
         {
             j=i;       // There is no amount given for this phase in xp_
@@ -883,7 +883,7 @@ void TSyst::PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
             A = pmp->BF+k*pmp->N;
             for( i=0; i<pmp->N; i++ )
             {
-                i_ = (int)pmp->mui[i];
+                i_ = pmp->mui[i];
                 B[i_] = A[i];
             }
         }
@@ -922,7 +922,7 @@ void TSyst::PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
         A = pmp->BFC;
         for( i=0; i<pmp->N; i++ )
         {
-            i_ = (int)pmp->mui[i];
+            i_ = pmp->mui[i];
             B[i_] = A[i];
         }
 //        Mass = MolWeight( mup->N, mup->BC, B );

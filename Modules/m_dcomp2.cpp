@@ -924,7 +924,7 @@ void TDComp::calc_tphkf( int q, int /*p*/ )
     arf.C[0] = dc[q].HKFc[4];
     arf.C[1] = dc[q].HKFc[5];
     arf.wref = dc[q].HKFc[6];
-    arf.chg = (int)dc[q].Zz;
+    arf.chg = static_cast<int>(dc[q].Zz);
     if ( aSpc.isat )
         i=1;        // below Psat curve (vapour field)?
     else
