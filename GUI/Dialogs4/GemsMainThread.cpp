@@ -70,7 +70,7 @@ void TVisorImp::error_IPN( std::string err_mess )
 
 void TVisorImp::setCalcClient()
 {
-    qRegisterMetaType<string>("string");
+    qRegisterMetaType<std::string>("std::string");
     try{
 
         cout << "setCalcClient" << endl;

@@ -104,7 +104,7 @@ void ProgressDialog::CalcFinished()
     pAccept->show();
     pClose->setText("&Dismiss");
     pClose->setToolTip( tr( "Close and do not save results to SysEq database record" ) );
-    QString str = QString("Converged at DK=%.3g").arg(TMulti::sm->GetPM()->PCI);
+    QString str = QString("Converged at DK=%1").arg(TMulti::sm->GetPM()->PCI);
     setWindowTitle(str);
     Update(true);
     //pVisorImp->Update(true);
