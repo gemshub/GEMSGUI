@@ -452,7 +452,7 @@ void TProfil::MakeQuery()
 // Help on Modelling Project module ( ? button )
 const char* TProfil::GetHtml()
 {
-   if(pVisor->ProfileMode == true )
+   if(pVisor->ProfileMode )
      return GEMS_NUMSET_HTML;
    else
     return GM_PROJECT_HTML;

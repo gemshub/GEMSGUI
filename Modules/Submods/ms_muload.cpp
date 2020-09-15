@@ -750,7 +750,8 @@ void TMulti::sm_text_analyze( int nph, int Type,
 //
 string TMulti::PressSolMod( int nP )
 {
-    int j, jp, k, ks, jb=0, je=0, EGlen;
+    int j, jp, k, ks, jb=0, je=0;
+    size_t EGlen;
     char *EGb;
     TPhase* aPH=TPhase::pm;
     RMULTS* mup = TRMults::sm->GetMU();
@@ -775,7 +776,7 @@ string TMulti::PressSolMod( int nP )
         jp = mup->Pl[j];  // index component in phase
         EGlen = 0;
         // get equation number jp in  PHASE
-        EGb = ExtractEG( aPH->php->dEq, jp, &EGlen, aPH->php->nDC );
+        EGb = ExtractEG( aPH->php->dEq, jp, EGlen, aPH->php->nDC );
         ErrorIf( !EGb,
          "E12MSPrep:", "SolModLoad(): Missing operators group for a phase endmember." );
         if( EGlen )
@@ -791,7 +792,7 @@ string TMulti::PressSolMod( int nP )
 //Get groop of equations number jp from Etext
 // Returns *EGlen=0 if there is no equations for the group jp
 //
-char *TMulti::ExtractEG( char *Etext, int jp, int *EGlen, int Nes )
+char *TMulti::ExtractEG( char *Etext, int jp, size_t& EGlen, int Nes )
 {
     int j;
     char *begin, *end;
@@ -818,19 +819,19 @@ AgainE:
     /*   if( !end && jp < Nes-1 ) can be < eqns than DC! final \@ */
     if( !end && jp >= 0 && jp < Nes-1 )
     {
-        *EGlen = 0;
+        EGlen = 0;
         return begin;
     }
     if( !end && jp == Nes-1 )
     {
-        *EGlen = strlen( begin );
+        EGlen = strlen( begin );
         return begin;
     }
     end++;
     if( *end != EQSET_DELIM )
         goto AgainE;
     end++;
-    *EGlen = end-begin;
+    EGlen = end-begin;
     return begin;
 }
 

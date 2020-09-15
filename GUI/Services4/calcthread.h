@@ -92,7 +92,7 @@ public:
 	}
 	catch( TError& err ) 
 	{  error = err; }
-	catch( TMulti::UserCancelException& ex )
+    catch( TMulti::UserCancelException& /*ex*/ )
 	{}
    }
 
@@ -119,7 +119,7 @@ public:
 	      }
 	  catch( TError& err ) 
 	  {  error = err; 	}
-	  catch( TProcess::UserCancelException& ex ) 
+      catch( TProcess::UserCancelException& /*ex*/ )
 	  { 	}
    }
     
@@ -146,7 +146,7 @@ public:
               }
           catch( TError& err )
           {  error = err; 	}
-          catch( TGEM2MT::UserCancelException& ex )
+          catch( TGEM2MT::UserCancelException& /*ex*/ )
           { 	}
    }
 

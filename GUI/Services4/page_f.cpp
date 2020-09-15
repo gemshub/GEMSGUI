@@ -301,7 +301,7 @@ FieldInfo::FieldInfo(const PageInfo & pi, TObject & rO, int anO,
 FieldInfo::FieldInfo( int anO, eFieldType fT, int np, bool lb,
            ePlaceMode pl, eEdit e, eShowType sT, int w, int h):
         rPageInfo(*aWinInfo[0]->aPageInfo[0]), // for internal using in TreeList
-        pObj(aObj[anO].get()), nO(anO),
+        pObj( anO>=0 ?  aObj[anO].get(): nullptr ), nO(anO),
         fType(fT), npos(np),
         label(lb), place(pl), edit(e), showType(sT), maxN(h), maxM(w)
 {

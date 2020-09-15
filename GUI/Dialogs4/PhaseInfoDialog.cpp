@@ -116,7 +116,8 @@ PhaseInfoDialog::PhaseInfoDialog(QWidget* parent, bool system,
         if( xdclist[ii] == xdc )
          row = ii;
         if( system)
-        {  str = dcnames[ii];
+        {
+           str = dcnames[ii];
            // std::cout << str.c_str() << xdc << endl;
            tableDC->setItem(ii, 1, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXSYMB).c_str() )) );
            str = str.substr(MAXSYMB);

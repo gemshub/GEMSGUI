@@ -646,7 +646,7 @@ void TSysEq::set_def( int q)
     bool is_x = false;
     bool is_g = false;
 
-    if( pVisor->ProfileMode == true )
+    if( pVisor->ProfileMode )
         for( int i=0; i<TRMults::sm->GetMU()->Fi; i++)
         {
             if( TRMults::sm->GetMU()->PHC[i] == PH_AQUEL )

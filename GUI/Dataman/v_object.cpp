@@ -996,7 +996,7 @@ TObjList::Find(const char* s)
 {
     for( size_t ii=0; ii< size(); ii++ )
         if( strcmp(s, at(ii)->GetKeywd() )==0 )
-            return ii;
+            return static_cast<int>(ii);
 
     return -1;
 }

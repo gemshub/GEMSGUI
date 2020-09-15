@@ -412,7 +412,7 @@ void InputSystemDialog::tableShowRow( int row )
     recTable->setItem(row, 3, _item4);
 }
 
-int InputSystemDialog::tableDeleteRow( int nRow )
+size_t InputSystemDialog::tableDeleteRow( int nRow )
 {
    tbData.erase(tbData.begin()+ nRow);
    recTable->removeRow(nRow);

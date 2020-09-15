@@ -12,7 +12,7 @@ DEFINES  += NO_JSONIO
 #DEFINES  += NO_JSON_OUT
 
 CONFIG+=sdk_no_version_check
-CONFIG += c++11
+CONFIG += c++14
 CONFIG += warn_on
 #CONFIG += warn_off
 #CONFIG += help

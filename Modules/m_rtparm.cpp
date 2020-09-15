@@ -422,7 +422,8 @@ AGAIN_SETUP:
         return ret;
     if( ret == VF3_1 )
     {
-        int ilx, len;
+        int ilx;
+        size_t len;
         strncat( rpp->name, db->FldKey(2), db->FldLen(2));
         len = strlen( rpp->name );
         for( ilx=len-1; ilx>0; ilx-- )

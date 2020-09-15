@@ -501,7 +501,8 @@ void TRMults::MakeRecordLists( TCStringArray AqKey, TCStringArray GasKey )
 // Make list of ICOMP and set data to work arrays
 void TRMults::ICmake()
 {
-    int ii, j=0;
+    int ii;
+    size_t j=0;
     time_t crt;
     TIComp* aIC=dynamic_cast<TIComp *>(aMod[RT_ICOMP].get());
     aIC->ods_link(0);
@@ -689,8 +690,8 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
             //AqKey.Add( string( mu.SF[mu.nAq], 0, PH_RKLEN ));
             if( amod == SM_AQDH3 && aparam[0] < 1e-9 )
             {  // To use aq models from old versions
-                aparam[0] = 0.064;
-                aparam[3] = 0.7;
+                aparam[0] = 0.064f;
+                aparam[3] = 0.7f;
             }
         }
         //else {

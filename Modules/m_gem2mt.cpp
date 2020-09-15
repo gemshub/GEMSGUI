@@ -16,10 +16,12 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#include <unistd.h>
+
 #include <cmath>
 #include <cstdio>
-#ifndef __unix
+#ifdef __unix
+#include <unistd.h>
+#else
 #include <io.h>
 #endif
 
@@ -100,7 +102,7 @@ void TGEM2MT::keyTest( const char *key )
 {
     char pkey[MAXRKEYLEN+10];
 
-    if( pVisor->ProfileMode == true )
+    if( pVisor->ProfileMode )
     { // test project key
         std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
@@ -710,7 +712,7 @@ mtp->arr2 = (double *)aObj[ o_mtres2]->Free();
 bool TGEM2MT::check_input( const char * /*key*/, int /*Level*/ )
 {
     char pkey[MAXRKEYLEN+10];
-    if( pVisor->ProfileMode != true )
+    if( !pVisor->ProfileMode )
         return true;
 
     //Get base SysEq key from process key
@@ -844,7 +846,7 @@ void TGEM2MT::MakeQuery()
     {
         mtp->lNam = (char (*)[MAXGRNAME])aObj[ o_mtlnam ]->Alloc(
                       1, mtp->nYS, MAXGRNAME);
-       for(long int ii=0; ii< min<long int>( namesLines.size(),mtp->nYS); ii++)
+       for(size_t ii=0; ii< min<size_t>( namesLines.size(),mtp->nYS); ii++)
        {
            strncpy(  mtp->lNam[ii], namesLines[ii].c_str(), MAXGRNAME );
         }
@@ -873,7 +875,7 @@ void TGEM2MT::MakeQuery()
 int
 TGEM2MT::RecBuild( const char *key, int mode )
 {
-    if( pVisor->ProfileMode != true )
+    if( !pVisor->ProfileMode )
       Error( GetName(), "E09DTrem: Please, do it in the Project mode!" );
 
     bool setdef = false;
@@ -964,7 +966,7 @@ TGEM2MT::RecCalc( const char * key )
  {
     bool iRet;
 
-     if( pVisor->ProfileMode != true  )
+     if( !pVisor->ProfileMode  )
        Error( GetName(), "E02GTexec: Please, do it in the Equilibria Calculation mode" );
 
    if( mtp->PsVTK != S_OFF )

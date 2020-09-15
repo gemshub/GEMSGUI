@@ -40,7 +40,7 @@ class TCModuleImp: public QDialog//QMainWindow
 
     //QToolBar* toolBar;
 
-    int	    iMod;
+    size_t	    iMod;
     TSubModule& rMod;
     TCWindow* pWin;
 
@@ -58,7 +58,7 @@ public slots:
     void saveGraphData( jsonui::ChartData* );
 
 public:
-    TCModuleImp(size_t iMod, int page=0, int viewmode=0);
+    TCModuleImp(size_t aiMod, int page=0, int viewmode=0);
     virtual ~TCModuleImp();
 
     /*! Returns whether this module is submodule */

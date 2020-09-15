@@ -82,28 +82,15 @@ struct TVal:
 
     /* returns true if values equals to ANY
     */
-    bool IsAny(int ndx) const
-    {
-        if( static_cast<T*>(ptr)[ndx] == ANY() )
-            return true;
-        return false;
-    }
+    bool IsAny(int ndx) const;
 
-    /* returns true if values equals to EMPTY
-    */
-    bool IsEmpty(int ndx) const
-    {
-        if( static_cast<T*>(ptr)[ndx] == EMPTY() )
-            return true;
-        return false;
-    }
+    /* returns true if values equals to EMPTY */
+    bool IsEmpty(int ndx) const;
 
-    /* returns string representation of the cell value
-    */
+    /* returns string representation of the cell value */
     string GetString(int ndx) const;
     /* converts string to the type and puts it into cell
-	returns false on failure
-    */
+    returns false on failure  */
     bool SetString(const char* s, int ndx);
 
     void write(GemDataStream& s, int size) {
@@ -246,6 +233,28 @@ struct TValString:
 //  TVal<T> functions definitions
 //
 
+/* returns true if values equals to ANY
+*/
+template<class T>
+inline
+bool
+TVal<T>::IsAny(int ndx) const
+{
+    if( static_cast<T*>(ptr)[ndx] == ANY() )
+        return true;
+    return false;
+}
+
+template<class T>
+inline
+bool
+TVal<T>::IsEmpty(int ndx) const
+{
+    if( static_cast<T*>(ptr)[ndx] == EMPTY() )
+        return true;
+    return false;
+}
+
 template<class T>
 inline
 string
@@ -282,7 +291,8 @@ TVal<T>::SetString(const char* s, int ndx)
     }
 
     T v;
-    auto sv = std::make_shared<char>( ss.length()+3 );
+    auto sv = std::make_unique<char[]>(ss.length()+3);
+    //auto sv = std::make_shared<char[]>( ss.length()+3 );
     if( sscanf(ss.c_str(), PATTERN_SET(), &v, sv.get() ) != 1 )
         return false;
 
@@ -339,8 +349,7 @@ TVal<T>::Put(double v, int ndx)
 // Put() for <double> need special handling for efficency
 
 template<>
-inline
-void
+inline void
 TVal<double>::Put(double v, int ndx)
 {
     static_cast<double*>(ptr)[ndx] = v;

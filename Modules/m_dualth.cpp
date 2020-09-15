@@ -94,11 +94,11 @@ void TDualTh::keyTest( const char *key )
 {
     char pkey[MAXRKEYLEN+10];
 
-    if( pVisor->ProfileMode == true )
+    if( pVisor->ProfileMode )
     { // test project key
         std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
-        int k = prfKey.length();
+        size_t k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
             Error( key, "E08PErem: Invalid record key (another Modelling Project)!");
@@ -671,7 +671,7 @@ void TDualTh::set_def( int q)
 bool TDualTh::check_input( const char * /*key*/, int /*Level*/ )
 {
     char pkey[MAXRKEYLEN+10];
-    if( pVisor->ProfileMode != true )
+    if( !pVisor->ProfileMode )
         return true;
 
     //Get base SysEq key from process key
@@ -738,7 +738,7 @@ int
 TDualTh::RecBuild( const char *key, int mode  )
 {
 
- if( pVisor->ProfileMode != true )
+ if( !pVisor->ProfileMode )
         Error( GetName(), "E09DTrem: Please, do it in the Project mode!" );
  bool set_def = false;
 
@@ -772,7 +772,7 @@ AGAIN:
 void
 TDualTh::RecCalc( const char *key )
 {
-    if( pVisor->ProfileMode != true )
+    if( !pVisor->ProfileMode )
         Error( GetName(), "E02DTexec: Please, do it in the Project mode!" );
 
 

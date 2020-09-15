@@ -478,7 +478,7 @@ void TSyst::set_def( int /*q*/)
     bool is_a = false;
     bool is_x = false;
     bool is_g = false;
-    if( pVisor->ProfileMode == true )
+    if( pVisor->ProfileMode )
         for( int i=0; i<mup->Fi; i++)
         {
             if( mup->PHC[i] == PH_AQUEL )

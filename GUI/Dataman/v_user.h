@@ -59,7 +59,7 @@ int findIndex( const std::vector<T>arr, const T& val )
 {
     auto pos =  std::find(arr.begin(), arr.end(), val);
     if( pos != arr.end()  )
-        return pos-arr.begin();
+        return static_cast<int>(pos-arr.begin());
     else
         return -1;
 }
@@ -75,13 +75,6 @@ void Gcvt(double number, size_t ndigit, char *buf);
 double NormDoubleRound(double aVal, int digits);
 void NormDoubleRound(double *aArr, int size, int digits);
 void NormFloatRound(float *aArr, int size, int digits);
-
-inline
-int ROUND(double x )
-{
-    return int((x)+.5);
-}
-
 
 inline bool IsSpace(char ch)
 {
@@ -129,12 +122,6 @@ inline char* gcvt(double num, int digit, char* buf)
 
 #endif  // __FreeBSD
 
-
-
-#define fileNameLength 64
-/// Get Path of file and Reading list of file names from it, return number of files
-char  (* f_getfiles(const char *f_name, char *Path, 
-		long int& nElem, char delim ))[fileNameLength];
 
 
 

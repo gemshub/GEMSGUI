@@ -120,7 +120,7 @@ void Formuan::icadd(  std::vector<ICTERM>& itt_, const char *icn,
     icadd( itt_, term );
 }
 
-int Formuan::ictcomp( std::vector<ICTERM>& itt_, int ii, string& ick, int val )
+int Formuan::ictcomp( std::vector<ICTERM>& itt_, size_t ii, string& ick, int val )
 {
     //int iRet = memcmp( itt_[ii].ick.c_str(), ick, MAXICNAME+MAXSYMB );
     //if( iRet ) return( iRet );
@@ -496,7 +496,7 @@ int TFormula::BuildMoiety( const char * StrForm, std::vector<MOITERM>& moit_ )
 // Set new formula and analyze it , calculate charge, get moiety
 void TFormula::SetFormula( const char * StrForm )
 {
-    int len, ti;
+    size_t len, ti;
 
     fo_clear();
 
@@ -596,7 +596,7 @@ void TFormula::TestIC( const char* key, int N, char *ICsym )
 // Calculate charge, molar mass, elemental entropy, atomic numbers
 // from chemical formulae
 // returns number of elements (ICs) used in the formula
-int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
+size_t TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
 {
     time_t icrtim;
     TIComp* aIC = TIComp::pm;
@@ -604,7 +604,7 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
     double Sc, Zf=0.0;
 
     Z =  mW =  eS = 0.0;
-    for(uint i=0; i<aCn.size(); i++ ) // TERMS
+    for(size_t i=0; i<aCn.size(); i++ ) // TERMS
     {
         memset( ICs, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICs, aCn[i].c_str(), MAXICNAME+MAXSYMB );
@@ -633,7 +633,7 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
 // calculate charge, molar mass, elemental entropy, atomic number, atoms per formula unit
 // from chemical formulae
 // returns number of elements (ICs) used in the formula
-int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn, double &Nj )
+size_t TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn, double &Nj )
 {
     time_t icrtim;
     TIComp* aIC = TIComp::pm;
@@ -673,7 +673,7 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn, double &Nj )
 //
 void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
 {
-    uint i, ii;
+    size_t i, ii;
     int jj=-1;
     char ICS[MAXICNAME+MAXSYMB+10];
     char *icsp = ICS;
@@ -709,9 +709,10 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
     for( i=0; i<ii; i++ )
         aZ += aVal[i] * aSC[i];
 
-    // Sveta
-    double tt = aSC[ii];
+    // Sveta 11/09/2020 Error 2
     if( ii < aCn.size() )
+    {
+        double tt = aSC[ii];
         if( fabs( (aZ - tt) ) > 1e-6 )
         {
             std::string str = " in the formula: ";
@@ -723,18 +724,19 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
  aSC[ii] = aZ;  // KD 03.01.04  - temporary workaround (adsorption)
             vfMessage( 0,  "W34FPrun: Charge imbalance ", str.c_str() );
          }
+   }
 }
 
 // Get a formula with index nCk from the formula list Cfor (L is total number of formulae in the list)
 std::string TFormula::form_extr( int nCk, int L, char *Cfor )
 {
-    int i, len;
+    size_t  len;
     char  *Fbg;
 
     ErrorIf( nCk >= L || nCk < 0, "Formula", "E35FPrun: Error in the formula list!" );
     Fbg = Cfor;
     if( nCk )
-        for( i=0; i<nCk; i++ )
+        for(int i=0; i<nCk; i++ )
         {
             len = strcspn( Fbg, EQDEL_CHARS );
             ErrorIf( !len && nCk < L-1, "Formula", "E35FPrun: Error in the formula list" );

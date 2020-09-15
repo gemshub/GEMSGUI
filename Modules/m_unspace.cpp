@@ -17,10 +17,12 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#include <unistd.h>
+
 #include <cmath>
 #include <cstdio>
-#ifndef __unix
+#ifdef __unix
+#include <unistd.h>
+#else
 #include <io.h>
 #endif
 
@@ -101,11 +103,11 @@ void TUnSpace::keyTest( const char *key )
 {
     char pkey[MAXRKEYLEN+10];
 
-    if( pVisor->ProfileMode == true )
+    if( pVisor->ProfileMode )
     { // test project key
         std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
-        int k = prfKey.length();
+        auto k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
             Error( key, "E08PErem: Invalid record key (another Modelling Project)!");
@@ -453,7 +455,7 @@ void TUnSpace::dyn_set(int q)
 */
 
     // make work arrays
-    if( pVisor->ProfileMode != true )
+    if( !pVisor->ProfileMode )
         return;
 //    work_arrays_new();
 }
@@ -901,7 +903,7 @@ void TUnSpace::set_def( int q)
 
    memset( &usp->N, 0, 36*sizeof(int));
    memset( usp->T, 0, 22*sizeof(float));
-   usp->quan_lev = 0.05;
+   usp->quan_lev = 0.05f;
 
     usp->Q = 111;
     usp->nGB = 1;
@@ -1002,10 +1004,10 @@ void TUnSpace::set_def( int q)
 }
 
 // return true if nessasary recalc base SYSEQ
-bool TUnSpace::check_input( const char */*key*/, int /*Level*/ )
+bool TUnSpace::check_input( const char* /*key*/, int /*Level*/ )
 {
   char pkey[MAXRKEYLEN+10];
-  if( pVisor->ProfileMode != true )
+  if( !pVisor->ProfileMode )
         return true;
 
   TProfil* PRof = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
@@ -1071,7 +1073,7 @@ TUnSpace::RecBuild( const char *key, int mode  )
 {
   bool set_def = false;
 
-  if( pVisor->ProfileMode != true )
+  if( !pVisor->ProfileMode )
         Error( GetName(), "Do it in Project mode!" );
 AGAIN:
 
@@ -1108,7 +1110,7 @@ TUnSpace::RecCalc( const char *key )
    tpu = TMTparm::sm->GetTP();
 
 //    TProfil* PRof = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
-    if( pVisor->ProfileMode != true )
+    if( !pVisor->ProfileMode )
         Error( GetName(), "E02PEexec: Please, do it in the Project mode!" );
 
     // load start syseq (alloc memory)

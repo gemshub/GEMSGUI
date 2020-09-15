@@ -142,7 +142,7 @@ void TSyst::mark_dc_to_ic()
         /* analyse DC formule */
         form = aFo.form_extr( j, mup->L, mup->DCF );
         aFo.SetFormula( form.c_str() );   // set formula to analyse
-        for(int ii=0; ii<aFo.GetIn(); ii++ )
+        for(size_t ii=0; ii<aFo.GetIn(); ii++ )
         { /* cycle on formula terms  */
             ICs[IC_RKLEN-1]=0;
             memset( ICs, ' ', IC_RKLEN-1 );
@@ -177,7 +177,7 @@ void TSyst::mark_ic_to_dc()
         /* analyse DC formule */
         form = aFo.form_extr( j, mup->L, mup->DCF );
         aFo.SetFormula( form.c_str() );   // set formula to analyse
-        for(int ii=0; ii<aFo.GetIn(); ii++ )
+        for(size_t ii=0; ii<aFo.GetIn(); ii++ )
         { /* cycle on formula terms  */
             ICs[IC_RKLEN-1]=0;
             memset( ICs, ' ', IC_RKLEN-1 );
@@ -739,7 +739,7 @@ void TSyst::systbc_calc( int mode )
 //Calc bulk chemical composition from phases in EQStat
 // Modified 19.05.2010 DK
 void TSyst::PHbcalcSysEq( double *MsysC, double *MaqC, double *R1C,
-                     double */*VaqC*/,  double */*VsysC*/ )
+                     double* /*VaqC*/,  double* /*VsysC*/ )
 {
     TSysEq* aSE= dynamic_cast<TSysEq *>( aMod[RT_SYSEQ].get());
     TCompos* aCMP= dynamic_cast<TCompos *>( aMod[RT_COMPOS].get());
@@ -858,7 +858,7 @@ NEXT:
 //Calc bulk chemical composition from phases in current contents of MULTI
 // Added by DK 12.02.2010
 void TSyst::PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
-                     double */*VaqC*/,  double */*VsysC*/ )
+                     double* /*VaqC*/,  double* /*VsysC*/ )
 {
     double *A, *B, Mass, Xincr;
     TCompos* aCMP= dynamic_cast<TCompos *>( aMod[RT_COMPOS].get());

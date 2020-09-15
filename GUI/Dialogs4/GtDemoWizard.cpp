@@ -44,7 +44,8 @@ void GtDemoWizard::CmNext()
     int ndx = stackedWidget->currentIndex();
     auto nLines = pageScript->getScriptLinesNum();
     if( ndx == 1 && nLines > 0)
-    {        pGraphY->setValue( nLines );
+    {
+             pGraphY->setValue( nLines );
              pGraphX->setValue( pageScript->getAbscissaNum() );
     }
 

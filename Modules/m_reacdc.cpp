@@ -1732,7 +1732,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
                    " key  '";
             msg += std::string( key_, 0, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked to chain.\n";
-            if(pVisor->ProfileMode == true)
+            if( pVisor->ProfileMode )
                 Error( GetName(), msg.c_str() );
             msg +=  "Create a new record?";
             if( !vfQuestion(window(), GetName(), msg ))
@@ -1787,12 +1787,10 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
-    int i;
-    int itmpl;
-    uint j;
+    size_t i, j, itmpl;
     TFormula aFo;
 
-    for(uint ii=0; ii<aDCkey.size(); ii++ )
+    for(size_t ii=0; ii<aDCkey.size(); ii++ )
     {
 
         // Phase Filters

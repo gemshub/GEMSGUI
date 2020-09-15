@@ -496,7 +496,7 @@ AGAIN:
 
 
 // LROUND macro for Parcor algorithm
-#define LROUND(x)      ((long)((x)+.5))
+#define LROUND(x)      ( static_cast<float>(static_cast<long>((x)+.5)))
 
 
 //Recalculation of DComp record
@@ -1218,7 +1218,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
                    " key  '";
             msg += std::string( key_, 0, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked.\n";
-            if(pVisor->ProfileMode == true)
+            if( pVisor->ProfileMode )
                 Error( GetName(), msg.c_str() );
             msg +=  "Create a new record?";
             if( !vfQuestion(0, GetName(), msg ))
@@ -1274,9 +1274,7 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
-    int i;
-    int itmpl;
-    uint j;
+    size_t i, j, itmpl;
     TFormula aFo;
 
     for(size_t ii=0; ii<aDCkey.size(); ii++ )

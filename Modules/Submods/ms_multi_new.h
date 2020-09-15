@@ -184,7 +184,7 @@ private:
     void KinMetModLoad();
     bool CompressPhaseIpxt( int kPH );
     string PressSolMod( int nP );
-    char *ExtractEG( char *Etext, int jp, int *EGlen, int Nes );
+    char *ExtractEG( char *Etext, int jp, size_t& EGlen, int Nes );
     int find_icnum( char *name, int LNmode );
     int find_dcnum( char *name, int jb, int je, int LNmode, char *stmt  );
     int find_phnum( char *name, int LNmode );

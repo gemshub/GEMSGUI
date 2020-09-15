@@ -248,16 +248,17 @@ public:
     template <class T>
     void addNewPlot( const std::shared_ptr<T>& aPlot )
     {
-        int defined_lines = static_cast<int>(linesdata.size());
-        int nLines = getSeriesNumber();
+        auto defined_lines = linesdata.size();
+        size_t nLines = getSeriesNumber();
 
         aPlot->setGraphType( graphType );
         modelsdata.push_back( aPlot );
-        int nLinN = aPlot->getSeriesNumber();
-        for( int jj=0; jj<nLinN; jj++, nLines++ )
+        auto nLinN = aPlot->getSeriesNumber();
+        for( size_t jj=0; jj<nLinN; jj++, nLines++ )
         {
             if( nLines >= defined_lines )
-                linesdata.push_back( SeriesLineData( jj, nLinN, aPlot->getName(nLinN)  ) );
+                linesdata.push_back( SeriesLineData( jj, nLinN, aPlot->getName(jj)  ) );
+            // linesdata.push_back( SeriesLineData( jj, nLinN, aPlot->getName(nLinN)  ) );
         }
         connect( modelsdata.back().get(), SIGNAL( changedXSelections() ),
                  this,  SLOT( updateXSelections() ) );
@@ -294,10 +295,10 @@ public:
     /// Get number of series
     int getSeriesNumber() const
     {
-        int nmb = 0;
+        size_t nmb = 0;
         for( auto model: modelsdata)
             nmb += model->getSeriesNumber();
-        return nmb;
+        return static_cast<int>(nmb);
     }
 
     size_t modelsNumber() const

@@ -91,7 +91,7 @@ void TCPage::AddFields( bool info )
 //    TCellText*  fieldText;
 	QList<FieldInfo>	aFlds;
 
-    int ii = 0, cnt;
+    size_t ii = 0, cnt;
 
     while( ii<getFieldCnt() )
     {
@@ -250,7 +250,7 @@ TQueryWindow::TQueryWindow(CWinInfo& w):
     // adds all fields from given module window
     // only from  last page
     // that have 'param' flag set to the Query dialog
-    int LastPage = rInfo.aPageInfo.size()-1;
+    auto LastPage = rInfo.aPageInfo.size()-1;
     aPage = new  TCPage( *rInfo.aPageInfo[LastPage], true );
     scroll = new QScrollArea;
     scroll->setWidget(aPage);

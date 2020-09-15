@@ -127,11 +127,15 @@ public:
       yNam =name;
    }
 
-   size_t getScriptLinesNum() const
-   {  return   scriptData.size(); }
+   int getScriptLinesNum() const
+   {
+       return   static_cast<int>(scriptData.size());
+   }
 
-   size_t getAbscissaNum() const
-   {  return   eqData.abscissaLines.size()+1; }
+   int getAbscissaNum() const
+   {
+       return   static_cast<int>(eqData.abscissaLines.size()+1);
+   }
 
 public slots:
     // slot or function ????

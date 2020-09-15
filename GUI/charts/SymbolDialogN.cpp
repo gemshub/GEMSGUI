@@ -96,10 +96,11 @@ SeriesLineData& SymbolDialog::GetPlotLine()
 void SymbolDialog::CmSelectColor()
 {
     QPalette pl = ui->pColor->palette();
-    QColor cl = QColorDialog::getColor(pl.color(QPalette::Background), this);
+    QColor cl = QColorDialog::getColor(pl.color(QPalette::Window), this);
 
     if( cl.isValid() )
-    {   pl.setColor( QPalette::Background, cl);
+    {
+        pl.setColor( QPalette::Window, cl);
         ui->pColor->setPalette(pl);
     }
 }

@@ -318,13 +318,13 @@ void TCompos::bc_work_dyn_new()
     {
         TCStringArray aKey;
         TCIntArray anR;
-        int Nic = rt[RT_ICOMP]->GetKeyList( "*:*:*:", aKey, anR );
+        auto Nic = rt[RT_ICOMP]->GetKeyList( "*:*:*:", aKey, anR );
         ErrorIf( Nic<1, GetName(),
                  "W05BCrem: ICOMP data record keys are not selected \n"
                  "(maybe, some PDB chain files are not linked)");
         bcp->Nmax = (short)Nic;
         bcp->SB1 = (char (*)[IC_RKLEN])aObj[ o_bcsb1 ]->Alloc(bcp->Nmax, 1, IC_RKLEN);
-        for( int i=0; i<Nic; i++)
+        for( size_t i=0; i<Nic; i++)
             memcpy( bcp->SB1[i], aKey[i].c_str(), IC_RKLEN);
     }
     bcp->ICw = (double *)aObj[ o_bcicw ]->Alloc(bcp->Nmax, 1, D_);

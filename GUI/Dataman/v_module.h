@@ -143,7 +143,7 @@ public:
 
 
     //-- Module manipulation
-    virtual string  GetKeyofRecord( const char */*oldKey*/, const char */*strTitle*/,
+    virtual string  GetKeyofRecord( const char* /*oldKey*/, const char* /*strTitle*/,
                                      int /*keyType*/ )
     { return"";}
 

@@ -320,18 +320,17 @@ void TVisorImp::showEvent ( QShowEvent * event )
 
 //------------------------------------------------------------------------------------
 // Define list of Module keys using filter
-void TVisorImp::defineModuleKeysList( int nRT_ )
+void TVisorImp::defineModuleKeysList( size_t nRT )
 {
-  size_t  jj, kk, ln;
-  int ii, colsz;
+  size_t  kk, ln;
+  int jj, ii, colsz;
   string keyfld;
   QTableWidgetItem *item, *curItem=nullptr;
   settedCureentKeyIntotbKeys = false;
 
-  if( currentNrt != nRT_ || nRT_ <0 )
+  if( currentNrt != static_cast<int>(nRT) )
     return;
 
-  size_t nRT = static_cast<size_t>(nRT_);
   string oldKey = rt[nRT]->UnpackKey();
   pFilterKey->setText( dynamic_cast<TCModule*>(aMod[nRT].get())->getFilter());
 
@@ -390,7 +389,7 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
     tbKeys->scrollToItem( curItem, QAbstractItemView::PositionAtCenter );
   }
 
-  if( pVisor->ProfileMode == true && (nRT == RT_SYSEQ || nRT == RT_PROCES
+  if( pVisor->ProfileMode && (nRT == RT_SYSEQ || nRT == RT_PROCES
     || nRT == RT_UNSPACE  || nRT > RT_GTDEMO ) )
   {
      tbKeys->hideColumn(0);

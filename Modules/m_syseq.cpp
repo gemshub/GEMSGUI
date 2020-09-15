@@ -71,7 +71,7 @@ void TSysEq::RecInput( const char *key )
 void
 TSysEq::RecSave( const char *key, bool onOld )
 {
-    if( pVisor->ProfileMode == true )
+    if( pVisor->ProfileMode  )
     { // test system and pack
         TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
         aPa->PackSystat();
@@ -83,11 +83,11 @@ TSysEq::RecSave( const char *key, bool onOld )
 // test Project key to calc mode
 void TSysEq::keyTest( const char *key )
 {
-    if( pVisor->ProfileMode == true )
+    if( pVisor->ProfileMode )
     { // test project key
         std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
-        int k = prfKey.length();
+        auto k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
             Error( GetName(), "Invalid key!");
@@ -120,7 +120,7 @@ void TSysEq::MakeQuery()
 int
 TSysEq::RecBuild( const char *key, int mode  )
 {
-    if( pVisor->ProfileMode != true )
+    if( !pVisor->ProfileMode )
         Error( GetName(), "Invalid mode!");
 
 
@@ -209,7 +209,7 @@ TSysEq::RecBuild( const char *key, int mode  )
 void
 TSysEq::RecCalc( const char *key )
 {
-    if( pVisor->ProfileMode != true )
+    if( !pVisor->ProfileMode )
         Error( GetName(), "Invalid mode!");
     TCModule::RecCalc(key);
 }
@@ -792,7 +792,7 @@ void TSysEq::RenameList( const char* newName,
     TCStringArray arKey;
     TCIntArray arR;
 
-    uint Nrec = db->GetKeyList( str_old.c_str(), arKey, arR );
+    auto Nrec = db->GetKeyList( str_old.c_str(), arKey, arR );
     if( Nrec < 1)
       return;
 

@@ -675,7 +675,7 @@ void
 TDBKey::unpack( const char *key )
 {
     int i;
-    unsigned char ln;
+    size_t ln;
     char *sp, *sp1;
 
     check();
@@ -703,7 +703,7 @@ TDBKey::unpack( const char *key )
                 }
             }
             else  ln = ( sp1- sp);
-            ln = min( ln, rkLen[i] );
+            ln = min<size_t>( ln, rkLen[i] );
             strncpy( uKey+rkInd[i], sp, ln );
             if( *(sp+ln) == ':' )
                   ln++;

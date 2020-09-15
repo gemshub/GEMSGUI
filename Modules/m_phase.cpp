@@ -1210,7 +1210,7 @@ TPhase::RecCalc( const char *key )
     TCModule::RecCalc(key);
 }
 
-void TPhase::RecordPrint(const char */*key_*/)
+void TPhase::RecordPrint(const char* /*key_*/)
 {
    // generate input
     TCIntArray aDCused;

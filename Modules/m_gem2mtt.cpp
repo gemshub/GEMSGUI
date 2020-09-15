@@ -19,7 +19,7 @@
 
 #include <cmath>
 #include <cstdio>
-#ifdef use_omp
+#ifdef useOMP
 #include <omp.h>
 #endif
 

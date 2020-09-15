@@ -267,7 +267,7 @@ TValFixString::SetString(const char* s, int ndx)
 bool
 TValString::SetString(const char* s, int )
 {
-    int l = strlen(s);
+    int l = static_cast<int>( strlen(s) );
     if( l > size && dynamic )
         Alloc(l);
 

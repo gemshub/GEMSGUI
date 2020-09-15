@@ -17,8 +17,9 @@
 //-------------------------------------------------------------------
 
 
+#ifdef __unix
 #include <unistd.h>
-#ifndef __unix
+#else
 #include <io.h>
 #endif
 
@@ -556,7 +557,8 @@ bool vfChooseDirectory(QWidget* par, std::string& path_,
 {
       std::string path;
       if( path_.find('/') == std::string::npos )
-      {      path = pVisor->localDir().c_str();//userGEMDir();
+      {      
+            path = pVisor->localDir();//userGEMDir();
              path+= path_;
       }
       else   path = path_;

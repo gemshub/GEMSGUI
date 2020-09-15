@@ -487,7 +487,8 @@ void  TUnSpace::NexT(int J )
      {
        xx = usp->P[0]- usp->IntP[0] + 2*usp->IntP[0]*R;
        usp->Pc = xx;
-       if(usp->Pc<0.) usp->Pc = 1e-5;
+       if(usp->Pc<0.)
+           usp->Pc = 1e-5f;
 //#ifdef IPMGEMPLUGIN
 //         dBR->P = usp->Pc;
 //#endif

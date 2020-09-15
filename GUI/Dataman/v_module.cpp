@@ -15,8 +15,9 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
+#ifdef __unix
 #include <unistd.h>
-#ifndef __unix
+#else
 #include <io.h>
 #endif
 
@@ -49,7 +50,7 @@ TSubModule::~TSubModule()
 
 uint TSubModule::keyEditField()
 {
-    if( nRT == RT_RTPARM || pVisor->ProfileMode == true )
+    if( nRT == RT_RTPARM || pVisor->ProfileMode )
         return startKeyEdit;
     else return 0;
 }
@@ -76,7 +77,7 @@ TSubModule::EvClose()
 
 QWidget* TSubModule::window()
 {
-      if( nRT== RT_SYSEQ && pVisor->ProfileMode == true )
+      if( nRT== RT_SYSEQ && pVisor->ProfileMode )
        return dynamic_cast<QWidget*>(NewSystemDialog::pDia);
       else
        return dynamic_cast<QWidget*>(pImp);
@@ -131,7 +132,7 @@ const char* TSubModule::GetHtml()
 
 void TSubModule::CmHelp()
 {
-    if(pVisor->ProfileMode == true && nRT==RT_PARAM)
+    if(pVisor->ProfileMode && nRT==RT_PARAM)
          pVisorImp->OpenHelp( GetHtml(), NUMSET );
     else
          pVisorImp->OpenHelp( GetHtml() );
@@ -267,7 +268,7 @@ TCModule::GetKeyofRecord( const char *oldKey, const char *strTitle,
 string  TCModule::makeKeyFilter()
 {
     string strfilt;
-    if( pVisor->ProfileMode == true &&
+    if( pVisor->ProfileMode &&
          ( RT_PARAM == nRT || RT_SYSEQ== nRT || RT_PROCES== nRT ||
      RT_GTDEMO== nRT || RT_UNSPACE== nRT || RT_DUALTH== nRT || RT_GEM2MT== nRT ) )
     {
@@ -290,7 +291,7 @@ bool  TCModule::testKeyFilter()
 {
   if( Filter.empty() || Filter== ALLKEY)
       return true;
-  if( pVisor->ProfileMode == true &&
+  if( pVisor->ProfileMode &&
        ( RT_PARAM == nRT || RT_SYSEQ== nRT || RT_PROCES== nRT ||
          RT_UNSPACE== nRT || RT_DUALTH== nRT || RT_GEM2MT== nRT ) )
   {
@@ -344,7 +345,7 @@ TCModule::RecSave( const char *key, bool onOld )
             db->Rep( Rnum );
     contentsChanged = false;
 
-    if( pVisor->ProfileMode == true && ( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA ) )
+    if( pVisor->ProfileMode && ( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA ) )
       TMulti::sm->GetPM()->pTPD = -1; // to reload thermodynamic data base
 }
 
@@ -398,7 +399,7 @@ TCModule::CmSaveAs()
 {
     try
     {
-        if( pVisor->ProfileMode == true &&
+        if( pVisor->ProfileMode &&
            ( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA && nRT != RT_PHASE) )
             Error( GetName(), "Please, do it in Database mode!");
 
@@ -464,7 +465,7 @@ TCModule::CmDelete()
         if( nRT == RT_PARAM )
             Error( GetName(), "This record cannot be deleted!");
 
-        if( pVisor->ProfileMode == true && nRT < RT_SYSEQ )
+        if( pVisor->ProfileMode && nRT < RT_SYSEQ )
             Error( GetName(), "Please, do it in Database mode!");
 
         std::string str=db->PackKey();
@@ -507,7 +508,7 @@ TCModule::CmShow( const char *key )
 {
     try
     {
-        if( pVisor->ProfileMode == true &&
+        if( pVisor->ProfileMode &&
                 ( nRT >= RT_SYSEQ || nRT == RT_PARAM )  )
             Error( GetName(), "Invalid command in Project mode!");
 
@@ -556,7 +557,7 @@ TCModule::CmFilter()
        auto Nrec = db->GetKeyList( Filter.c_str(), aKey, anR );
        if( Nrec >= 1 )
        {
-        if( pVisor->ProfileMode == true )
+        if( pVisor->ProfileMode )
           RecordLoadinProfile( aKey[0].c_str() );
        else
           RecInput( aKey[0].c_str() );
@@ -576,7 +577,7 @@ TCModule::CmNext()
 {
     try
     {
-       uint i_next = 0;
+       size_t i_next = 0;
        if( ! MessageToSave() )
 	    return;
 
@@ -600,7 +601,7 @@ TCModule::CmNext()
               break;
             }
         }
-       if( pVisor->ProfileMode == true )
+       if( pVisor->ProfileMode )
           RecordLoadinProfile( aKey[i_next].c_str() );
        else
           RecInput( aKey[i_next].c_str() );
@@ -619,7 +620,7 @@ TCModule::CmPrevious()
 {
     try
     {
-       uint i_next = 0;
+       size_t i_next = 0;
        if( ! MessageToSave() )
     	return;
 
@@ -644,7 +645,7 @@ TCModule::CmPrevious()
               break;
             }
         }
-       if( pVisor->ProfileMode == true )
+       if( pVisor->ProfileMode )
           RecordLoadinProfile( aKey[i_next].c_str() );
        else
           RecInput( aKey[i_next].c_str() );
@@ -713,9 +714,9 @@ TCModule::CmDerive()
 {
     try
     {
-        if( pVisor->ProfileMode != true && ( nRT == RT_PARAM || nRT >= RT_SYSEQ ) )
+        if( !pVisor->ProfileMode && ( nRT == RT_PARAM || nRT >= RT_SYSEQ ) )
             Error( GetName(), "Please, do it in Project mode!");
-        if( pVisor->ProfileMode == true &&
+        if( pVisor->ProfileMode &&
              ( nRT < RT_SYSEQ && nRT != RT_SDATA ) )
             Error( GetName(), "Please, do it in Database mode!");
 
@@ -757,7 +758,7 @@ TCModule::CmCalc()
 {
     try
     {
-        if( pVisor->ProfileMode != true && ( nRT == RT_PARAM || nRT >= RT_SYSEQ ) )
+        if( !pVisor->ProfileMode && ( nRT == RT_PARAM || nRT >= RT_SYSEQ ) )
             Error( GetName(), "Please, do it in Project mode!");
         //--if( pVisor->ProfileMode == true &&
         //--     ( nRT < RT_SYSEQ && nRT != RT_SDATA ) )
@@ -943,7 +944,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
                    " key  '";
             msg += key;
             msg += "'.\n Maybe, database file is not linked to chain\n";
-            if(pVisor->ProfileMode == true)
+            if(pVisor->ProfileMode)
                 Error( GetName(), msg.c_str() );
             msg +=  "Create new record?";
             if( !vfQuestion(window(), GetName(), msg ))

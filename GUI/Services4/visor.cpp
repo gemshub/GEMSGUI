@@ -18,8 +18,11 @@
 //
 #include <qapplication.h>
 #include <iostream>
+#ifdef __unix
 #include <unistd.h>
-//using namespace std;
+//#else
+//#include <io.h>
+#endif
 
 #include <QDir>
 #include <QString>
@@ -410,9 +413,9 @@ TVisor::toDAT()
     // begin signature
     visor_dat << SigBEG;
 
-    int n = aMod.size();
+    auto n = aMod.size();
     visor_dat.write((char *) &n, sizeof n);
-    for (int ii = 0; ii < n; ii++)
+    for (size_t ii = 0; ii < n; ii++)
         aWinInfo[ii]->toDAT(visor_dat);
 
     // end signature
@@ -554,7 +557,7 @@ TVisor::toWinCFG()
 	f_win_ini << "axis_label_font_string\t=\t\"" << 
            pVisorImp->getAxisLabelFont().toString().toStdString() << "\"" << endl;
 
-    int win_num = aWinInfo.size();
+    auto win_num = aWinInfo.size();
     f_win_ini << "number_of_windows\t=\t" << win_num << endl;
     f_win_ini << "config_autosave\t=\t" << pVisorImp->getConfigAutosave() << endl;
 
@@ -575,7 +578,7 @@ TVisor::toWinCFG()
             "Error writing configurator file (windows.conf)" );
 
 //    f_win_ini << "# Format of the file and the order should be exactly the same" << endl;
-    for (int ii = 0; ii < win_num; ii++)
+    for (size_t ii = 0; ii < win_num; ii++)
         aWinInfo[ii]->toWinCFG(f_win_ini);
 
     f_win_ini.close();
@@ -1013,7 +1016,7 @@ TVisor::deleteDBDir(const char *dir)
                 {
                     path = dir;
                     path += "/";
-                    path += aFiles[ii].c_str();
+                    path += aFiles[ii];
                     //cout << path << endl;
                     rt[jj]->Close();
                     rt[jj]->DelFile(path);

@@ -960,7 +960,7 @@ bool TGEM2MT::CalcBoxFluxModel( char /*mode*/ )
 //--------------------------------------------------------------------
 // Integration process
 
-const long int NMAX = 800;
+//const long int NMAX = 800;
 const long int KM = 8;
 const double UROUND = 1.73e-18;
 const double FAC1 = 2.e-2;

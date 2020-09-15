@@ -69,7 +69,7 @@ protected:
     void icadd(  std::vector<ICTERM>& itt_, const char *icn,
                  const char *iso, int val, double csto );
     void icadd(  std::vector<ICTERM>& itt_, ICTERM it );
-    int ictcomp( std::vector<ICTERM>& itt_, int ii, string& ick, int val );
+    int ictcomp( std::vector<ICTERM>& itt_, size_t ii, string& ick, int val );
 
 
     inline bool iscapl( char ch )  // is cap letter
@@ -126,15 +126,15 @@ public:
     ~TFormula();
 
     //--- Selectors
-    const char* GetCn( int ii ) const
+    const char* GetCn( size_t ii ) const
     {
         return aCn[ii].c_str();
     }
-    double GetSC( int ii ) const
+    double GetSC( size_t ii ) const
     {
         return aSC[ii];
     }
-    short GetVal( int ii ) const
+    short GetVal( size_t ii ) const
     {
         return aVal[ii];
     }
@@ -142,7 +142,7 @@ public:
     {
         return aZ;
     }
-    int GetIn() const
+    size_t GetIn() const
     {
         return aCn.size();
     }
@@ -156,8 +156,8 @@ public:
     //--- Value manipulation
     void fixup_ics( char* ICs );
     void SetFormula( const char * StrForm ); // and ce_fscan
-    int Fmwtz( double &Z, double &mW, double &eSm, short *lAn );
-    int Fmwtz( double &Z, double &mW, double &eSm, short *lAn, double &Nj );
+    size_t Fmwtz( double &Z, double &mW, double &eSm, short *lAn );
+    size_t Fmwtz( double &Z, double &mW, double &eSm, short *lAn, double &Nj );
     void TestIC( const char *key, int N, char *ICsym );
     void Stm_line( int N, double *Sml, char *ICsym, short *ICval );
     void Reset();

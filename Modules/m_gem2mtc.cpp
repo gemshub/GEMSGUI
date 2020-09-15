@@ -843,7 +843,7 @@ void TGEM2MT::Expr_analyze( int obj_num )
           LinkNode1(0);
         }
 
-        if( pVisor->ProfileMode == true )
+        if( pVisor->ProfileMode )
         {
             mupL = TRMults::sm->GetMU()->L;
             pmpL = TMulti::sm->GetPM()->L;

@@ -88,7 +88,7 @@ class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
    //int tableChangeRow( int row, tableSetupData& d);
    int tableInsertRow( tableSetupData& d);
    int tableInsertRow( int nO, int ndx, const char * andName);
-   int tableDeleteRow( int row );
+   size_t tableDeleteRow( int row );
    void tableShowRow( int row );
    // working with static list
    int staticFindRow( int nO, int ndx);

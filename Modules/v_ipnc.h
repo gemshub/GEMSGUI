@@ -127,7 +127,7 @@ public:
     void GetEquat( char *txt );
     void CalcEquat();
     void PrintEquat( char *s, fstream& f);
-    int nEquat() const
+    size_t nEquat() const
     {
         return aEq.size();
     }

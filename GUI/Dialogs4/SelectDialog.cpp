@@ -35,7 +35,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     pList->setFont( pVisorImp->getCellFont() );
 
     setWindowTitle(title);
-    unsigned int lens=30;
+    size_t lens=30;
     for( size_t ii=0; ii<list.size(); ii++ )
     {
         pList->addItem(list[ii].c_str());
@@ -67,7 +67,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     pList->setFont( pVisorImp->getCellFont() );
 
     setWindowTitle(title);
-    unsigned int lens=30;
+    size_t lens=30;
     for( size_t ii=0; ii<list.size(); ii++ )
     {
         pList->addItem(list[ii].c_str());
@@ -100,7 +100,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     setWindowTitle(title);
 
     pList->setSelectionMode(QAbstractItemView::MultiSelection); //pList->setMultiSelection(true);
-    unsigned int lens=30;
+    size_t lens=30;
     for( size_t ii=0; ii<list.size(); ii++ )
     {
         pList->addItem(list[ii].c_str());

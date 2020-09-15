@@ -148,41 +148,41 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
     strncpy( usp->UnICn[0], "Det.(m_t)",  NAME_SIZE );
     strncpy( usp->UnICn[1], "Filt<m_t>",  NAME_SIZE );
     strncpy( usp->UnICn[2], "2SigFilt",  NAME_SIZE );
-    strncpy( usp->UnICn[3], "DomPA<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[3], "DomPA-m_t",  NAME_SIZE );
     strncpy( usp->UnICn[4], "2SigDomPA",  NAME_SIZE );
-    strncpy( usp->UnICn[5], "qLapl<m_t>",  NAME_SIZE );
-    strncpy( usp->UnICn[6], "qHurv<m_t>",  NAME_SIZE );
-    strncpy( usp->UnICn[7], "qWald<m_t>",  NAME_SIZE );
-    strncpy( usp->UnICn[8], "qHome<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[5], "qLapl-m_t",  NAME_SIZE );
+    strncpy( usp->UnICn[6], "qHurv-m_t",  NAME_SIZE );
+    strncpy( usp->UnICn[7], "qWald-m_t",  NAME_SIZE );
+    strncpy( usp->UnICn[8], "qHome-m_t",  NAME_SIZE );
     strncpy( usp->UnICn[9], "reserved",  NAME_SIZE );
 
     strncpy( usp->UgDCn[0], "Det.(UIP)",  NAME_SIZE );
     strncpy( usp->UgDCn[1], "Filt<UIP>",  NAME_SIZE );
     strncpy( usp->UgDCn[2], "2SigFilt",  NAME_SIZE );
-    strncpy( usp->UgDCn[3], "DomPA<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[3], "DomPA-UIP",  NAME_SIZE );
     strncpy( usp->UgDCn[4], "2SigDomPA",  NAME_SIZE );
-    strncpy( usp->UgDCn[5], "qLapl<UIP>",  NAME_SIZE );
-    strncpy( usp->UgDCn[6], "qHurv<UIP>",  NAME_SIZE );
-    strncpy( usp->UgDCn[7], "qWald<UIP>",  NAME_SIZE );
-    strncpy( usp->UgDCn[8], "qHome<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[5], "qLapl-UIP",  NAME_SIZE );
+    strncpy( usp->UgDCn[6], "qHurv-UIP",  NAME_SIZE );
+    strncpy( usp->UgDCn[7], "qWald-UIP",  NAME_SIZE );
+    strncpy( usp->UgDCn[8], "qHome-UIP",  NAME_SIZE );
     strncpy( usp->UgDCn[9], "reserved",  NAME_SIZE );
 
     strncpy( usp->UaDCn[0], "Det.(act)",  NAME_SIZE );
     strncpy( usp->UaDCn[1], "Filt<act>",  NAME_SIZE );
     strncpy( usp->UaDCn[2], "2SigFilt",  NAME_SIZE );
-    strncpy( usp->UaDCn[3], "DomPA<act>",  NAME_SIZE );
+    strncpy( usp->UaDCn[3], "DomPA-act",  NAME_SIZE );
     strncpy( usp->UaDCn[4], "2SigDomPA",  NAME_SIZE );
-    strncpy( usp->UaDCn[5], "qLapl<act>",  NAME_SIZE );
-    strncpy( usp->UaDCn[6], "qHurv<act>",  NAME_SIZE );
-    strncpy( usp->UaDCn[7], "qWald<act>",  NAME_SIZE );
-    strncpy( usp->UaDCn[8], "qHome<act>",  NAME_SIZE );
+    strncpy( usp->UaDCn[5], "qLapl-act",  NAME_SIZE );
+    strncpy( usp->UaDCn[6], "qHurv-act",  NAME_SIZE );
+    strncpy( usp->UaDCn[7], "qWald-act",  NAME_SIZE );
+    strncpy( usp->UaDCn[8], "qHome-act",  NAME_SIZE );
     strncpy( usp->UaDCn[9], "reserved",  NAME_SIZE );
 
     strncpy( usp->UnDCAn[0], "Adap(UIP)",  NAME_SIZE );
     strncpy( usp->UnDCAn[1], "HintAdap",  NAME_SIZE );
     strncpy( usp->UnDCAn[2], "min(UIP)",  NAME_SIZE );
     strncpy( usp->UnDCAn[3], "max(UIP)",  NAME_SIZE );
-    strncpy( usp->UnDCAn[4], "AdapF<UIP>",  NAME_SIZE );
+    strncpy( usp->UnDCAn[4], "AdapF-UIP",  NAME_SIZE );
     strncpy( usp->UnDCAn[5], "2SigAdapF",  NAME_SIZE );
     strncpy( usp->UnDCAn[6], "reserved",  NAME_SIZE );
     strncpy( usp->UnDCAn[7], "reserved",  NAME_SIZE );
@@ -535,7 +535,7 @@ void TUnSpace::text_analyze( int nObj)
         TProfil* PRof = TProfil::pm;
         int mupL=0, pmpL =0;
 
-        if( pVisor->ProfileMode == true )
+        if( pVisor->ProfileMode )
         {
             mupL = TRMults::sm->GetMU()->L;
             pmpL = TMulti::sm->GetPM()->L;

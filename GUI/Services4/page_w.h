@@ -54,7 +54,7 @@ class TCPage:
     std::vector< std::shared_ptr<TObjectTable>> aFields;
     std::vector<int> aTypes;
     
-    int getFieldCnt() const
+    size_t getFieldCnt() const
     {
         return rInfo.aFieldInfo.size();
     }
@@ -114,7 +114,7 @@ class TCWindow: public QWidget
 
     int getPageCnt() const
     {
-        return rInfo.aPageInfo.size();
+        return static_cast<int>(rInfo.aPageInfo.size());
     }
 
     TSubModule& getCModule() const

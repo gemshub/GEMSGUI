@@ -109,64 +109,6 @@ void Gcvt(double number, size_t ndigit, char *buf)
 }
 
 
-const int bGRAN = 20;
-
-// Get Path of file and Reading list of file names from it, return number of files
-char  (* f_getfiles(const char *f_name, char *Path, 
-		long int& nElem, char delim ))[fileNameLength]
-{
-  int ii, bSize = bGRAN;
-  char  (*filesList)[fileNameLength];
-  char  (*filesListNew)[fileNameLength];
-  filesList = new char[bSize][fileNameLength];
-  std::string name;
-
-// Get path
-   std::string path_;
-   std::string flst_name = f_name;
-   size_t pos = flst_name.rfind("/");
-   path_ = "";
-   if( pos < string::npos )
-      path_ = flst_name.substr(0, pos+1);
-   strncpy( Path, path_.c_str(), 256-fileNameLength);
-   Path[255] = '\0';
-     
-//  open file stream for the file names list file
-   fstream f_lst( f_name/*flst_name.c_str()*/, ios::in );
-   ErrorIf( !f_lst.good(), f_name, "Fileopen error");
-
-// Reading list of names from file	
-  nElem = 0;
-  while( !f_lst.eof() )
-  {
-	f_getline( f_lst, name, delim);
-    if( nElem >= bSize )
-    {    bSize = bSize+bGRAN;
-         filesListNew = new char[bSize][fileNameLength];
-         for( ii=0; ii<nElem-1; ii++ )
-		   strncpy( filesListNew[ii], filesList[ii], fileNameLength);
-	     delete[] filesList;
-		 filesList =  filesListNew;
-	}
-    strncpy( filesList[nElem], name.c_str(), fileNameLength);
-	filesList[nElem][fileNameLength-1] = '\0';
-    nElem++; 
-  }
-  
-  // Realloc memory for reading size
-  if( nElem != bSize )
-  {    
-    filesListNew = new char[nElem][fileNameLength];
-    for(  ii=0; ii<nElem; ii++ )
-	  strncpy( filesListNew[ii], filesList[ii], fileNameLength);
-	delete[] filesList;
-	filesList =  filesListNew;
-  }
-
-  return filesList;	
-}
-
-
 string curDate()
 {
     struct tm *time_now;
@@ -357,7 +299,7 @@ void
           else
             data_str = to_templ;
 
-      data_str.substr(0, len_);
+      data_str = data_str.substr(0, len_);
       if( data_str == old_str )
       {
           size_t ii1 = data_str.length()-1;
@@ -415,8 +357,8 @@ void
    }
 //   size_t jj, ik;
    int jj, ik;      // Bugfix 11.04.2006
-    jj = from_templ.length()-1;
-    ik = data_str.length()-1;
+    jj = static_cast<int>(from_templ.length())-1;
+    ik = static_cast<int>(data_str.length())-1;
     k =  data_str.length();
     while( jj >= 0 && ik >= 0  )
     {
@@ -436,7 +378,7 @@ void
    }
    data_str = string( data_str, 0, k );
    data_str += to_templ;
-   data_str.substr(0, len_);
+   data_str = data_str.substr(0, len_);
    if( data_str == old_str )
    {
        size_t ii1 = data_str.length()-1;

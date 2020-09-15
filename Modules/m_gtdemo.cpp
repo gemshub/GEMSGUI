@@ -95,7 +95,7 @@ TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
 // test TGtDemo key to calc mode
 void TGtDemo::keyTest( const char *key )
 {
-    if( pVisor->ProfileMode == true )
+    if( pVisor->ProfileMode  )
     { // test project key
         std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
@@ -424,7 +424,7 @@ TGtDemo::MakeQuery()
         }
         gdp->lNam0 = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlnam ]->Alloc( 1,
                      dimPclnam, MAXGRNAME));
-        for(short ii=0; ii< min<short>( namesLines.size(),gdp->dimXY[1]); ii++)
+        for(size_t ii=0; ii< min<size_t>( namesLines.size(),gdp->dimXY[1]); ii++)
         {
           strncpy( gdp->lNam0[ii+ndxy], namesLines[ii].c_str(), MAXGRNAME );
         }
@@ -502,7 +502,7 @@ void TGtDemo::bld_rec_list( )
     TCIntArray aMrk2;
     std::string str;
     char *key_p;
-    int i, Nr;
+    int i;
     short rtlen = rt[gdp->nRT]->KeyLen();
 
 AGAIN:
@@ -529,7 +529,7 @@ AGAINRC:    //get  keypart
         //str = vfKeyTemplEdit(window(), "Please, set a record key filter ", gdp->nRT, gdp->wcrk );
         //      if(  str== "" )   Bugfix 19.12.00  DAK
         //          goto AGAINRC;
-        Nr = rt[gdp->nRT]->GetKeyList( gdp->wcrk/*str.c_str()*/, aRklist, anRk );
+        auto Nr = rt[gdp->nRT]->GetKeyList( gdp->wcrk/*str.c_str()*/, aRklist, anRk );
         if( Nr<1 )
         {
             if( vfQuestion(window(), GetName(),
@@ -598,7 +598,7 @@ TGtDemo::RecBuild( const char *key, int mode  )
     if( gdp->nRT == RT_PROCES  ||  gdp->nRT == RT_UNSPACE )
         gdp->nRT = RT_SYSEQ;
 
-    if( pVisor->ProfileMode != true  && gdp->nRT >= RT_SYSEQ )
+    if( !pVisor->ProfileMode  && gdp->nRT >= RT_SYSEQ )
         Error( GetName(), "E02GDexec: Please, do it in the Equilibria Calculation mode" );
 
     if( ret == VF_CANCEL )
@@ -651,7 +651,7 @@ void TGtDemo::gd_text_analyze()
         TProfil* PRof = TProfil::pm;
         int mupL=0, pmpL =0;
 
-        if( pVisor->ProfileMode == true )
+        if( pVisor->ProfileMode  )
         {
             mupL = TRMults::sm->GetMU()->L;
             pmpL = TMulti::sm->GetPM()->L;
@@ -703,7 +703,7 @@ TGtDemo::gd_rec_read( int nI )
     memset( gdp->Wkb, 0, MAXRKEYLEN );
     strncpy( gdp->Wkb, gdp->rkey+nI*gdp->rtLen, gdp->rtLen );
 
-    if( gdp->nRT == RT_SYSEQ && pVisor->ProfileMode == true )
+    if( gdp->nRT == RT_SYSEQ && pVisor->ProfileMode )
     {
         TProfil* PRof = TProfil::pm;
         PRof->loadSystat( gdp->Wkb );
@@ -742,7 +742,7 @@ TGtDemo::gd_rec_read( int nI )
 void
 TGtDemo::RecCalc( const char *key )
 {
-    if( pVisor->ProfileMode != true  && gdp->nRT == RT_SYSEQ )
+    if( !pVisor->ProfileMode  && gdp->nRT == RT_SYSEQ )
         Error( GetName(), "E02GDexec: Please, do it in the Equilibria Calculation mode" );
     TCModule::RecCalc(key);
 

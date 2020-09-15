@@ -857,7 +857,7 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
     /* Question of get effective ion radii of aqueous species */
     if( (php->PphC == PH_AQUEL) && php->scoef )
     {
-        if( pVisor->ProfileMode == true || vfQuestion(window(), GetName(),
+        if( pVisor->ProfileMode || vfQuestion(window(), GetName(),
         		"Parameters of aqueous species: Collect from DComp/ReacDC records?"))
         {
             pa0 = 1;
@@ -982,7 +982,7 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
             }
             if( Kielland && pa0 )  /* Helgeson */
             { if( Z < 0.01 ) s(i,0) = 0;
-                if( Z > 0.99 ) s(i,0) = 3.84;
+                if( Z > 0.99 ) s(i,0) = 3.84f;
                 /* do it by HKF ! */    //  3.72 !
             }
         }
@@ -1324,7 +1324,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
           TCStringArray aDclist1;
           TCIntArray anRDc1;
           Nrc += rt[RT_REACDC]->GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
-          for(uint kk=0; kk<aDclist1.size(); kk++)
+          for(size_t kk=0; kk<aDclist1.size(); kk++)
           {
             aRclist.push_back(aDclist1[kk]);
             anRRc.push_back(anRDc1[kk]);

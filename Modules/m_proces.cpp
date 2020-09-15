@@ -18,9 +18,11 @@
 //-------------------------------------------------------------------
 //
 
-//#include <cmath>
-//#include <cstdio>
+#ifdef __unix
 #include <unistd.h>
+#else
+#include <io.h>
+#endif
 #include "m_proces.h"
 #include "m_syseq.h"
 #include "visor.h"
@@ -114,7 +116,7 @@ void TProcess::keyTest( const char *key )
 {
     char pkey[MAXRKEYLEN+10];
 
-    if( pVisor->ProfileMode == true )
+    if( pVisor->ProfileMode )
     { // test project key
         std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
@@ -566,7 +568,7 @@ pe[q].PvR1 = '-';    // AIA on:   KD: temporary for process create
 bool TProcess::check_input( const char * /*key*/, int /*Level*/ )
 {
     char pkey[MAXRKEYLEN+10];
-    if( pVisor->ProfileMode != true )
+    if( !pVisor->ProfileMode )
         return true;
 
     TProfil* PRof = dynamic_cast<TProfil*>(aMod[RT_PARAM].get());
@@ -835,7 +837,7 @@ TProcess::MakeQuery()
          }
          pep->lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclnam ]->Alloc( 1,
                     dimPclnam, MAXGRNAME));
-         for(int ii=0; ii< min<int>( namesLines.size(), pep->dimXY[1] ); ii++)
+         for(size_t ii=0; ii< min<size_t>( namesLines.size(), pep->dimXY[1] ); ii++)
          {
            strncpy(  pep->lNam[ii+ndxy], namesLines[ii].c_str(), MAXGRNAME );
          }
@@ -859,7 +861,7 @@ TProcess::RecBuild( const char *key, int mode  )
 
     TProfil *aPa=TProfil::pm;
     char tbuf[100];
-    if( pVisor->ProfileMode != true )
+    if( !pVisor->ProfileMode )
         Error( GetName(), "E09PErem: Please, do it in the Equilibria Calculation mode!" );
 
    int ret;
@@ -1218,7 +1220,7 @@ TProcess::RecCalc( const char *key )
     stepWise = false;
     showMss = 1L;
 
-    if( pVisor->ProfileMode != true )
+    if( !pVisor->ProfileMode )
         Error( GetName(), "E02PEexec: Please, do it in the Project mode!" );
 
 /*  char * */ text_fmt = nullptr;
