@@ -29,7 +29,9 @@
 #endif
 
 #include <QtHelp/QHelpEngine>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
 #include <QtHelp/QHelpLink>
+#endif
 #include <QtHelp/QHelpContentWidget>
 #include <QtHelp/QHelpIndexWidget>
 #include <QFileInfo>
@@ -299,8 +301,13 @@ void HelpWindow::showFind()
 {
     if( hEngine )
     {
-       auto query = hEngine->searchEngine()->queryWidget()->searchInput();
-       findLine->setText(query);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+        auto query = hEngine->searchEngine()->queryWidget()->searchInput();
+         findLine->setText(query);
+#else
+       QStringList query = hEngine->searchEngine()->queryWidget()->query().value(0).wordList;
+       findLine->setText(query.value(0));
+#endif
     }
 }
 
@@ -426,6 +433,7 @@ QUrl HelpWindow::showHelpForKeyword(const QString &keyword)
     if (!hEngine)
       return QUrl();
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     // finding full name, not subString
     //QMap<QString, QUrl> links = hEngine->indexModel()->linksForKeyword( keyword );
     auto links = hEngine->documentsForKeyword(keyword);
@@ -441,6 +449,24 @@ QUrl HelpWindow::showHelpForKeyword(const QString &keyword)
             if (links.count())
               return links.constBegin()->url;
     }
+
+#else
+    // finding full name, not subString
+    QMap<QString, QUrl> links = hEngine->indexModel()->linksForKeyword( keyword );
+    if (links.count())
+      return links.constBegin().value();
+
+    QString kwInternal = keyword;
+    int ndx = kwInternal.lastIndexOf('_');
+    if(ndx > -1)
+    {    kwInternal= kwInternal.remove(QRegExp("_[0-9]{1,3}")/*ndx*/);
+         links = hEngine->indexModel()->linksForKeyword( kwInternal );
+            if (links.count())
+              return links.constBegin().value();
+    }
+
+#endif
+
 
     //for old keywd list
     //    "objectlabel[indexN][indexM]", if sizeN >1 and sizeM > 1
@@ -531,8 +557,12 @@ SearchWidget::~SearchWidget()
 
 void SearchWidget::search() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
    auto query = srchEngine->queryWidget()->searchInput();
-   srchEngine->search(query);
+#else
+    QList<QHelpSearchQuery> query = srchEngine->queryWidget()->query();
+#endif
+    srchEngine->search(query);
 }
 
 void SearchWidget::searchingStarted()

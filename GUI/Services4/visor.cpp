@@ -413,9 +413,9 @@ TVisor::toDAT()
     // begin signature
     visor_dat << SigBEG;
 
-    auto n = aMod.size();
+    int n = aMod.size(); // Do not change type, used in configuration
     visor_dat.write((char *) &n, sizeof n);
-    for (size_t ii = 0; ii < n; ii++)
+    for (int ii = 0; ii < n; ii++)
         aWinInfo[ii]->toDAT(visor_dat);
 
     // end signature

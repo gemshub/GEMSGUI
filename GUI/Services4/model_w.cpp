@@ -1150,7 +1150,7 @@ void TObjectTable::CmCalc()
   	    return;
   	
      QModelIndex wIndex;
-     const QStringList rows = str.split(splitrow, Qt::KeepEmptyParts);
+     const QStringList rows = str.split(splitrow, QString::KeepEmptyParts/*Qt::KeepEmptyParts*/);
 
      int ii, jj;
      int rowNum = sel.N1;
@@ -1161,7 +1161,7 @@ void TObjectTable::CmCalc()
   	    //if( rows[it].isEmpty() ) sd 29/10/2008 
   		// continue;
 
-        const QStringList cells = rows[it].split('\t', Qt::KeepEmptyParts);
+        const QStringList cells = rows[it].split('\t', QString::KeepEmptyParts/*Qt::KeepEmptyParts*/);
   	    int cellNum = sel.M1;
   	    const int mLimit = (transpose) ? (sel.M1 + sel.N2-sel.N1) : sel.M2;
   	    for( int cellIt = 0;  cellIt < cells.count() && cellNum <= mLimit; cellIt++, cellNum++) 

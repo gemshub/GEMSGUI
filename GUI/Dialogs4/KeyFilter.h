@@ -17,7 +17,7 @@
 //-------------------------------------------------------------------
 #ifndef KeyFilter_h_
 #define KeyFilter_h_
-
+#include <memory>
 #include <QDialog>
 #include <QLineEdit>
 #include <QLabel>
